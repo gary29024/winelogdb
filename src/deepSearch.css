@@ -1,0 +1,2 @@
+.deep-search-panel>button{margin-top:10px}.deep-confirm{margin-top:14px;padding:16px;border:1px solid var(--line);border-radius:16px;background:#f7f8fa}.deep-confirm p{margin-top:0}.deep-confirm button+button{margin-left:8px}.deep-sources{display:grid;gap:7px;margin:18px 0}.deep-sources a{color:var(--wine);overflow-wrap:anywhere}.deep-search-panel small{color:var(--muted)}
+@media(max-width:700px){.deep-confirm button{width:100%}.deep-confirm button+button{margin:8px 0 0}.deep-search-panel dl{grid-template-columns:1fr}}
