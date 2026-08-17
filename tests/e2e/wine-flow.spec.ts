@@ -1,0 +1,2 @@
+import { test,expect } from '@playwright/test';
+test('multiple labels can be reviewed, saved and searched',async({page})=>{await page.goto('/upload');await expect(page.getByRole('heading',{name:/Add a tasting/})).toBeVisible();await expect(page.getByLabel(/Choose label photos/)).toHaveAttribute('multiple','');await page.goto('/?query=riesling&style=white');await expect(page.getByLabel('Search wines')).toHaveValue('riesling');await expect(page.getByLabel('Style')).toHaveValue('white')});
