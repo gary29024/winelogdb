@@ -2,6 +2,7 @@ ALTER TABLE wine_images ADD COLUMN captured_at TEXT;
 ALTER TABLE wine_images ADD COLUMN latitude REAL;
 ALTER TABLE wine_images ADD COLUMN longitude REAL;
 ALTER TABLE wine_images ADD COLUMN location_name TEXT;
+ALTER TABLE wine_images ADD COLUMN metadata_source TEXT NOT NULL DEFAULT 'none';
 
 CREATE TABLE tastings (
   id TEXT PRIMARY KEY,
