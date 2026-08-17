@@ -31,7 +31,7 @@ export function WineForm({initial,id,photos=[]}:{initial?:Partial<WineInput>;id?
       venue:String(fd.get('venue')||'').trim()||null,locationName:String(fd.get('locationName')||'').trim()||null,
       latitude:initial?.latitude??null,longitude:initial?.longitude??null,
       price:fd.get('price')?Number(fd.get('price')):null,currency:currency||null,
-      tags:[...new Set(String(fd.get('tags')||'').split(',').map(x=>x.trim()).filter(Boolean))],imageObjectKeys:initial?.imageObjectKeys??[],recognitionStatus:'complete',recognitionConfidence:initial?.recognitionConfidence??null
+      tags:[...new Set(String(fd.get('tags')||'').split(',').map(x=>x.trim()).filter(Boolean))],recognitionStatus:'complete',recognitionConfidence:initial?.recognitionConfidence??null
     };
     try{const result=await saveWine(input,id,id?[]:photos);const savedId=id??('id' in result?result.id:undefined);if(!savedId)throw new Error('Save response did not include a wine ID');nav(`/wines/${savedId}`)}catch(e){setError((e as Error).message);setBusy(false)}
   }
