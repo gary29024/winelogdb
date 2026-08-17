@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { WineForm } from '../wines/WineForm';
 import { recognitionSchema, type RecognitionResult } from '../recognition/schema';
 import { extractPhotoMetadata, type PhotoMetadata } from './photoMetadata';
@@ -12,10 +12,11 @@ async function dimensions(file:File){return new Promise<{width:number;height:num
 
 export function UploadPage(){
   const [items,setItems]=useState<Item[]>([]),[review,setReview]=useState<RecognitionResult>();
+  const cameraInput=useRef<HTMLInputElement>(null),libraryInput=useRef<HTMLInputElement>(null);
   function patch(i:number,p:Partial<Item>){setItems(xs=>xs.map((x,n)=>n===i?{...x,...p}:x))}
 
   async function choose(files:FileList|null){
-    if(!files)return;
+    if(!files?.length)return;
     const selected=[...files].map(file=>({file,preview:URL.createObjectURL(file),status:'reading metadata',progress:5} as Item));
     setItems(selected);
     const metadata=await Promise.all(selected.map(x=>extractPhotoMetadata(x.file)));
@@ -41,8 +42,18 @@ export function UploadPage(){
   }
 
   return <section>
-    <div className="hero compact"><p className="eyebrow">LABEL RECOGNITION</p><h1>Add a tasting, from label to library.</h1><p>Photo date and GPS are read first, then Gemini uses them as context for the drinking date and location suggestion.</p></div>
-    <label className="dropzone"><strong>Choose label photos</strong><span>JPEG, PNG, WebP or HEIC · 10 MB max each</span><input type="file" accept="image/*" capture="environment" multiple onChange={e=>void choose(e.target.files)}/></label>
+    <div className="hero compact"><p className="eyebrow">LABEL RECOGNITION</p><h1>Add a tasting, from label to library.</h1><p>Take a new photo or choose existing images. Photo date and GPS are read first, then Gemini uses them as context for the drinking date and location suggestion.</p></div>
+    <div className="photo-source-card">
+      <p className="eyebrow">ADD LABEL PHOTOS</p>
+      <h2>How would you like to add them?</h2>
+      <p>Up to 12 JPEG, PNG, WebP or HEIC images · 10 MB max each.</p>
+      <div className="photo-source-actions">
+        <button type="button" onClick={()=>cameraInput.current?.click()}>Take photo</button>
+        <button type="button" className="secondary" onClick={()=>libraryInput.current?.click()}>Choose from library / files</button>
+      </div>
+      <input ref={cameraInput} className="visually-hidden" type="file" accept="image/*" capture="environment" onChange={e=>void choose(e.target.files)}/>
+      <input ref={libraryInput} className="visually-hidden" type="file" accept="image/*" multiple onChange={e=>void choose(e.target.files)}/>
+    </div>
     {items.length>0&&<><ul className="upload-list" aria-live="polite">{items.map((x,i)=><li key={x.preview}><img src={x.preview} alt="Selected wine label preview"/><div><strong>{x.file.name}</strong><span>{x.status}{x.error&&`: ${x.error}`}</span>{x.metadata?.capturedAt&&<small>Photo date: {new Date(x.metadata.capturedAt).toLocaleString()}</small>}{x.metadata?.latitude!=null&&x.metadata?.longitude!=null&&<small>GPS: {x.metadata.latitude.toFixed(4)}, {x.metadata.longitude.toFixed(4)}</small>}<progress value={x.progress} max="100">{x.progress}%</progress></div>{x.status==='failed'&&<button onClick={upload}>Retry</button>}{x.result&&<button onClick={()=>setReview(x.result)}>Review</button>}</li>)}</ul><button onClick={upload} disabled={items.some(x=>x.status==='uploading'||x.status==='reading metadata')}>Upload & recognize</button></>}
     {review&&<div className="review"><h2>Review recognized details</h2><p>Photo metadata is deterministic when available; Gemini's label and place interpretation remains a suggestion. Correct anything before saving.</p><WineForm initial={{producer:review.producer??'',wineName:review.wineName??'',vintage:review.vintage,country:review.country,region:review.region,appellation:review.appellation,grapes:review.grapes,wineStyle:review.style,alcoholPercentage:review.alcoholPercentage,tastingDate:review.tastingDate,locationName:review.locationName,latitude:review.latitude,longitude:review.longitude,recognitionConfidence:review.confidence,recognitionStatus:'review'}}/></div>}
   </section>
