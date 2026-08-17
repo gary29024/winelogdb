@@ -83,13 +83,14 @@ export const wineRecordSchema = z.object({
   tastingName: optionalText, locationName: optionalText,
   latitude: optionalNumber(z.number().min(-90).max(90)), longitude: optionalNumber(z.number().min(-180).max(180)),
   deepSearch: deepSearchSchema.optional().nullable(),
+  imageIds: z.array(z.string().uuid()).max(30).default([]),
   imageObjectKeys: z.array(z.string().min(1)).max(30).default([]), recognitionStatus: z.enum(['pending','processing','review','complete','failed']).default('pending'),
   recognitionConfidence: optionalNumber(z.number().min(0).max(1)), createdAt: z.string().datetime(), updatedAt: z.string().datetime()
 });
 export type GrapeBlendEntry = z.infer<typeof grapeBlendEntrySchema>;
 export type DeepSearchResult = z.infer<typeof deepSearchSchema>;
 export type WineRecord = z.infer<typeof wineRecordSchema>;
-const wineInputBaseSchema = wineRecordSchema.omit({ id:true, ownerId:true, createdAt:true, updatedAt:true, deepSearch:true, imageObjectKeys:true }).superRefine((value,ctx)=>{
+const wineInputBaseSchema = wineRecordSchema.omit({ id:true, ownerId:true, createdAt:true, updatedAt:true, deepSearch:true, imageIds:true, imageObjectKeys:true }).superRefine((value,ctx)=>{
   const knownTotal=value.grapeBlend.reduce((sum,x)=>sum+(x.percentage??0),0);
   if(knownTotal>100.0001)ctx.addIssue({code:'custom',path:['grapeBlend'],message:'Known grape percentages cannot total more than 100%'});
 });
