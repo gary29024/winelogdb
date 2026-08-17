@@ -3,12 +3,12 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { WineForm } from '../wines/WineForm';
 import { recognitionSchema, type RecognitionResult } from '../recognition/schema';
 import { extractPhotoMetadata, type PhotoMetadata } from './photoMetadata';
+import { authHeaders,clearSession } from '../../lib/auth/client';
 
 type Item={file:File;preview:string;status:string;progress:number;id?:string;error?:string;result?:RecognitionResult;metadata?:PhotoMetadata};
 type UploadResult={id?:string;status:string;error?:string};
 type UploadResponse={results:UploadResult[]};
-const readError=(value:unknown)=>typeof value==='object'&&value!==null&&'error' in value&&typeof value.error==='string'?value.error:'Recognition failed';
-const token=()=>`Bearer ${localStorage.getItem('session')??''}`;
+const readError=(value:unknown)=>typeof value==='object'&&value!==null&&'error' in value&&typeof value.error==='string'?value.error:'Request failed';
 async function dimensions(file:File){return new Promise<{width:number;height:number}>((resolve,reject)=>{const img=new Image();img.onload=()=>{resolve({width:img.naturalWidth,height:img.naturalHeight});URL.revokeObjectURL(img.src)};img.onerror=reject;img.src=URL.createObjectURL(file)})}
 
 const textKeys=['producer','wineName','country','region','appellation','style','locationName'] as const;
@@ -31,17 +31,18 @@ function mergeRecognition(results:RecognitionResult[]):RecognitionResult{
 }
 
 export function UploadPage(){
-  const [items,setItems]=useState<Item[]>([]),[review,setReview]=useState<RecognitionResult>();
+  const [items,setItems]=useState<Item[]>([]),[review,setReview]=useState<RecognitionResult>(),[scanError,setScanError]=useState('');
   const input=useRef<HTMLInputElement>(null);
   const location=useLocation(),navigate=useNavigate();
   function patch(i:number,p:Partial<Item>){setItems(xs=>xs.map((x,n)=>n===i?{...x,...p}:x))}
+  function failAll(message:string){setItems(xs=>xs.map(x=>({...x,status:'failed',progress:0,error:message})));setScanError(message)}
 
   async function choose(files:File[]){
     if(!files.length)return;
     const selected=files.map(file=>({file,preview:URL.createObjectURL(file),status:'reading metadata',progress:5} as Item));
-    setReview(undefined);setItems(selected);
+    setScanError('');setReview(undefined);setItems(selected);
     const metadata=await Promise.all(selected.map(x=>extractPhotoMetadata(x.file)));
-    setItems(xs=>xs.map((x,i)=>({...x,metadata:metadata[i],status:'queued',progress:10})));
+    setItems(xs=>xs.map((x,i)=>({...x,metadata:metadata[i],status:'queued',progress:10,error:undefined})));
   }
 
   useEffect(()=>{
@@ -52,23 +53,32 @@ export function UploadPage(){
   },[]);
 
   async function upload(){
-    const fd=new FormData();
-    items.forEach(x=>fd.append('images',x.file));
-    fd.append('dimensions',JSON.stringify(await Promise.all(items.map(x=>dimensions(x.file)))));
-    fd.append('metadata',JSON.stringify(items.map(x=>x.metadata??{capturedAt:null,latitude:null,longitude:null})));
-    items.forEach((_,i)=>patch(i,{status:'uploading',progress:30}));
-    const r=await fetch('/api/uploads',{method:'POST',headers:{Authorization:token()},body:fd}),body=await r.json() as UploadResponse;
-    body.results.forEach((x,i)=>patch(i,{...x,progress:x.status==='uploaded'?60:0}));
-    const recognized:RecognitionResult[]=[];
-    for(let i=0;i<body.results.length;i++){
-      const x=body.results[i];if(!x.id)continue;
-      patch(i,{status:'recognizing',progress:75});
-      const rr=await fetch(`/api/recognition/${x.id}`,{method:'POST',headers:{Authorization:token()}});
-      const response:unknown=await rr.json();
-      if(rr.ok){const result=recognitionSchema.parse(response);recognized.push(result);patch(i,{status:'ready',progress:100,result})}
-      else patch(i,{status:'failed',error:readError(response),progress:60});
-    }
-    if(recognized.length)setReview(mergeRecognition(recognized));
+    try{
+      setScanError('');
+      const fd=new FormData();
+      items.forEach(x=>fd.append('images',x.file));
+      fd.append('dimensions',JSON.stringify(await Promise.all(items.map(x=>dimensions(x.file)))));
+      fd.append('metadata',JSON.stringify(items.map(x=>x.metadata??{capturedAt:null,latitude:null,longitude:null})));
+      items.forEach((_,i)=>patch(i,{status:'uploading',progress:30,error:undefined}));
+      const r=await fetch('/api/uploads',{method:'POST',headers:authHeaders(),body:fd});
+      const response:unknown=await r.json().catch(()=>({error:`Upload failed (${r.status})`}));
+      if(r.status===401){clearSession();navigate('/login',{replace:true});return}
+      if(!r.ok||typeof response!=='object'||response===null||!('results' in response)||!Array.isArray(response.results)){failAll(readError(response));return}
+      const body=response as UploadResponse;
+      body.results.forEach((x,i)=>patch(i,{...x,progress:x.status==='uploaded'?60:0}));
+      const recognized:RecognitionResult[]=[];
+      for(let i=0;i<body.results.length;i++){
+        const x=body.results[i];if(!x.id)continue;
+        patch(i,{status:'recognizing',progress:75});
+        const rr=await fetch(`/api/recognition/${x.id}`,{method:'POST',headers:authHeaders()});
+        const recognitionResponse:unknown=await rr.json().catch(()=>({error:`Recognition failed (${rr.status})`}));
+        if(rr.status===401){clearSession();navigate('/login',{replace:true});return}
+        if(rr.ok){const result=recognitionSchema.parse(recognitionResponse);recognized.push(result);patch(i,{status:'ready',progress:100,result})}
+        else patch(i,{status:'failed',error:readError(recognitionResponse),progress:60});
+      }
+      if(recognized.length)setReview(mergeRecognition(recognized));
+      else if(body.results.length)setScanError('No label could be identified. Check the error shown beside each photo and try again.');
+    }catch(e){failAll((e as Error).message||'Upload failed unexpectedly')}
   }
 
   return <section className="scan-page">
@@ -80,7 +90,7 @@ export function UploadPage(){
       <button type="button" className="scan-button" onClick={()=>input.current?.click()}>Scan Wine</button>
       <input ref={input} className="visually-hidden" type="file" accept="image/*" multiple onChange={e=>void choose(Array.from(e.target.files??[]))}/>
     </div>}
-    {items.length>0&&<><div className="scan-summary"><strong>{items.length} photo{items.length===1?'':'s'} selected</strong><span>All photos will be interpreted as the same wine.</span></div><ul className="upload-list" aria-live="polite">{items.map((x,i)=><li key={x.preview}><img src={x.preview} alt={`Wine label ${i+1}`}/><div><strong>{i===0?'Primary label':`Additional label ${i+1}`}</strong><span>{x.status}{x.error&&`: ${x.error}`}</span>{x.metadata?.capturedAt&&<small>Photo date: {new Date(x.metadata.capturedAt).toLocaleString()}</small>}<progress value={x.progress} max="100">{x.progress}%</progress></div></li>)}</ul><button className="wide-action" onClick={upload} disabled={items.some(x=>x.status==='uploading'||x.status==='reading metadata')}>Identify this wine</button><button type="button" className="rescan-link" onClick={()=>input.current?.click()}>Choose different photos</button><input ref={input} className="visually-hidden" type="file" accept="image/*" multiple onChange={e=>void choose(Array.from(e.target.files??[]))}/></>}
+    {items.length>0&&<><div className="scan-summary"><strong>{items.length} photo{items.length===1?'':'s'} selected</strong><span>All photos will be interpreted as the same wine.</span></div><ul className="upload-list" aria-live="polite">{items.map((x,i)=><li key={x.preview}><img src={x.preview} alt={`Wine label ${i+1}`}/><div><strong>{i===0?'Primary label':`Additional label ${i+1}`}</strong><span>{x.status}{x.error&&`: ${x.error}`}</span>{x.metadata?.capturedAt&&<small>Photo date: {new Date(x.metadata.capturedAt).toLocaleString()}</small>}<progress value={x.progress} max="100">{x.progress}%</progress></div></li>)}</ul>{scanError&&<p role="alert" className="scan-error">{scanError}</p>}<button className="wide-action" onClick={upload} disabled={items.some(x=>x.status==='uploading'||x.status==='recognizing'||x.status==='reading metadata')}>Identify this wine</button><button type="button" className="rescan-link" onClick={()=>input.current?.click()}>Choose different photos</button><input ref={input} className="visually-hidden" type="file" accept="image/*" multiple onChange={e=>void choose(Array.from(e.target.files??[]))}/></>}
     {review&&<div className="review"><p className="eyebrow">REVIEW</p><h2>Combined identification</h2><p>WineLog merged the strongest details across all selected labels. Correct anything before saving.</p><WineForm initial={{producer:review.producer??'',wineName:review.wineName??'',vintage:review.vintage,country:review.country,region:review.region,appellation:review.appellation,grapes:review.grapes,grapeBlend:review.grapeBlend,wineStyle:review.style,alcoholPercentage:review.alcoholPercentage,tastingDate:review.tastingDate,locationName:review.locationName,latitude:review.latitude,longitude:review.longitude,recognitionConfidence:review.confidence,recognitionStatus:'review'}}/></div>}
   </section>
 }
