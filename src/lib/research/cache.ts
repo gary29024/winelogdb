@@ -41,9 +41,11 @@ export async function loadResearchCache(db:D1Database,owner:string,targets:Resea
     if(!row)return null;
     const payload=parseJson<Record<string,string>>(row.result_json,{});
     if(!scopeIsComplete(target.scope,payload))return null;
-    return [target.scope,{target,payload,sources:parseJson<ResearchSource[]>(row.sources_json,[]),model:row.model,researchedAt:row.researched_at} as CachedResearch] as const;
+    return {scope:target.scope,entry:{target,payload,sources:parseJson<ResearchSource[]>(row.sources_json,[]),model:row.model,researchedAt:row.researched_at} as CachedResearch};
   }));
-  return new Map<ResearchScope,CachedResearch>(found.filter((x):x is NonNullable<typeof x>=>Boolean(x)));
+  const cache=new Map<ResearchScope,CachedResearch>();
+  for(const item of found)if(item)cache.set(item.scope,item.entry);
+  return cache;
 }
 
 async function writeCache(db:D1Database,owner:string,entry:CachedResearch,replace:boolean){
