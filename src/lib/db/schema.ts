@@ -18,16 +18,30 @@ const optionalNumber=(schema:z.ZodNumber)=>z.preprocess(value=>{
 },schema.optional().nullable());
 
 const currentYearPlusOne=new Date().getUTCFullYear()+1;
-const vintageSchema=z.preprocess(value=>{
+const vintageSchema=z.unknown().transform((value,ctx):number|null=>{
   if(value==null)return null;
-  if(typeof value==='number')return value;
-  if(typeof value==='string'){
+  let numeric:number|undefined;
+  if(typeof value==='number')numeric=value;
+  else if(typeof value==='string'){
     const trimmed=value.trim();
     if(!trimmed)return null;
-    if(/^\d{4}$/.test(trimmed))return Number(trimmed);
+    if(/^\d{4}$/.test(trimmed))numeric=Number(trimmed);
   }
-  return value;
-},z.number({error:'Vintage must be a 4-digit year'}).int('Vintage must be a whole year').min(1000,'Vintage is too early').max(currentYearPlusOne,`Vintage cannot be later than ${currentYearPlusOne}`).nullable());
+  if(numeric===undefined||!Number.isFinite(numeric)){
+    const display=typeof value==='string'?JSON.stringify(value):String(value);
+    ctx.addIssue({code:'custom',message:`Vintage must be a 4-digit year; received ${display} (${typeof value})`});
+    return z.NEVER;
+  }
+  if(!Number.isInteger(numeric)){
+    ctx.addIssue({code:'custom',message:`Vintage must be a whole year; received ${numeric}`});
+    return z.NEVER;
+  }
+  if(numeric<1000||numeric>currentYearPlusOne){
+    ctx.addIssue({code:'custom',message:`Vintage must be between 1000 and ${currentYearPlusOne}; received ${numeric}`});
+    return z.NEVER;
+  }
+  return numeric;
+});
 const percentageSchema = optionalNumber(z.number().min(0).max(100));
 const currencySchema = z.preprocess(value=>{
   if(value==null)return value;
