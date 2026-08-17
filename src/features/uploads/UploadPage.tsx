@@ -11,9 +11,11 @@ const token=()=>`Bearer ${localStorage.getItem('session')??''}`;
 async function dimensions(file:File){return new Promise<{width:number;height:number}>((resolve,reject)=>{const img=new Image();img.onload=()=>{resolve({width:img.naturalWidth,height:img.naturalHeight});URL.revokeObjectURL(img.src)};img.onerror=reject;img.src=URL.createObjectURL(file)})}
 
 const textKeys=['producer','wineName','country','region','appellation','style','locationName'] as const;
+const metadataRank:Record<RecognitionResult['metadataSource'],number>={none:0,file_fallback:1,exif:2};
 function mergeRecognition(results:RecognitionResult[]):RecognitionResult{
   const ranked=[...results].sort((a,b)=>b.confidence-a.confidence);
-  const merged:RecognitionResult={grapes:[],confidence:ranked[0]?.confidence??0};
+  const metadataSource=ranked.reduce<RecognitionResult['metadataSource']>((best,x)=>metadataRank[x.metadataSource]>metadataRank[best]?x.metadataSource:best,'none');
+  const merged:RecognitionResult={grapes:[],confidence:ranked[0]?.confidence??0,metadataSource};
   for(const key of textKeys){const value=ranked.find(x=>x[key])?.[key];if(value)Object.assign(merged,{[key]:value})}
   merged.vintage=ranked.find(x=>x.vintage!=null)?.vintage??null;
   merged.alcoholPercentage=ranked.find(x=>x.alcoholPercentage!=null)?.alcoholPercentage??null;
