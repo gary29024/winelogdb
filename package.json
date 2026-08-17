@@ -10,7 +10,7 @@
     "test:watch": "vitest",
     "test:e2e": "playwright test",
     "lint": "eslint .",
-    "deploy": "npm run build && wrangler deploy",
+    "deploy": "npm run build && npm run db:migrate && wrangler deploy",
     "db:migrate:local": "wrangler d1 migrations apply DB --local",
     "db:migrate": "wrangler d1 migrations apply DB --remote"
   },
