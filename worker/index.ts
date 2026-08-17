@@ -1,20 +1,36 @@
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 import { GoogleGenerativeAI, SchemaType } from '@google/generative-ai';
-import { requireSession } from '../src/lib/auth/session';
+import { createSession, requireSession } from '../src/lib/auth/session';
 import { createObjectKey } from '../src/lib/r2/keys';
 import { deepSearchSchema, wineInputSchema, type WineInput } from '../src/lib/db/schema';
 import { dimensionsSchema, validateBatch } from '../src/features/uploads/validation';
 import { parseRecognition } from '../src/features/recognition/schema';
 
-type Bindings={DB:D1Database;WINE_IMAGES:R2Bucket;ASSETS:Fetcher;GEMINI_API_KEY:string;AUTH_SECRET:string;APP_URL:string;MAX_FILE_BYTES?:string;MAX_BATCH_FILES?:string};
+type Bindings={DB:D1Database;WINE_IMAGES:R2Bucket;ASSETS:Fetcher;GEMINI_API_KEY:string;AUTH_SECRET:string;APP_PASSWORD:string;APP_URL:string;MAX_FILE_BYTES?:string;MAX_BATCH_FILES?:string};
 type Variables={userId:string};
 type AppContext={Bindings:Bindings;Variables:Variables};
 type PhotoMetadata={capturedAt?:string|null;latitude?:number|null;longitude?:number|null;source?:'exif'|'file_fallback'|'none'};
 
 const app=new Hono<AppContext>();
 app.use('/api/*',cors({origin:(origin,c)=>origin===c.env.APP_URL?origin:null,credentials:true}));
-app.use('/api/*',async(c,next)=>{try{const s=await requireSession(c.req.header('Authorization'),c.env.AUTH_SECRET);c.set('userId',s.userId);await next();}catch{return c.json({error:'Unauthorized'},401)}});
+app.use('/api/*',async(c,next)=>{
+ if(c.req.path==='/api/auth/login')return next();
+ try{const s=await requireSession(c.req.header('Authorization'),c.env.AUTH_SECRET);c.set('userId',s.userId);await next()}catch{return c.json({error:'Unauthorized'},401)}
+});
+
+async function sameSecret(a:string,b:string){
+ const enc=new TextEncoder(),[ah,bh]=await Promise.all([crypto.subtle.digest('SHA-256',enc.encode(a)),crypto.subtle.digest('SHA-256',enc.encode(b))]);
+ const av=new Uint8Array(ah),bv=new Uint8Array(bh);let diff=0;for(let i=0;i<av.length;i++)diff|=av[i]^bv[i];return diff===0;
+}
+app.post('/api/auth/login',async c=>{
+ c.header('Cache-Control','no-store');
+ const body=await c.req.json().catch(()=>({})) as {password?:unknown};
+ const password=typeof body.password==='string'?body.password:'';
+ if(!password||!c.env.APP_PASSWORD||!(await sameSecret(password,c.env.APP_PASSWORD))){await new Promise(r=>setTimeout(r,400));return c.json({error:'Invalid password'},401)}
+ const token=await createSession('owner',c.env.AUTH_SECRET);
+ return c.json({token});
+});
 
 const parseJson=<T>(value:unknown,fallback:T):T=>{try{return JSON.parse(String(value)) as T}catch{return fallback}};
 const wineSelect=`SELECT w.*,
