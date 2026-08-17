@@ -2,6 +2,7 @@ import { useEffect,useState } from 'react';
 import { Link,useNavigate,useParams } from 'react-router-dom';
 import type { WineRecord } from '../../lib/db/schema';
 import { deepSearchWine,deleteWine,getWine } from './api';
+import '../../deepSearch.css';
 
 export function DetailPage(){
   const {id=''}=useParams(),nav=useNavigate(),[wine,setWine]=useState<WineRecord>(),[deepStage,setDeepStage]=useState(0),[deepBusy,setDeepBusy]=useState(false),[deepError,setDeepError]=useState('');
