@@ -8,6 +8,11 @@ import { authHeaders,clearSession } from '../../lib/auth/client';
 
 type Item={file:File;recognitionFile?:File;preview:string;status:string;progress:number;error?:string;metadata?:PhotoMetadata;width?:number;height?:number};
 const readError=(value:unknown)=>typeof value==='object'&&value!==null&&'error' in value&&typeof value.error==='string'?value.error:'Request failed';
+function suggestedTags(result:RecognitionResult){
+  const candidates=[result.country,result.region,result.appellation,...result.grapes,result.style];
+  const seen=new Set<string>();
+  return candidates.filter((x):x is string=>Boolean(x)).map(x=>x.trim()).filter(x=>{const k=x.toLocaleLowerCase();if(!x||seen.has(k))return false;seen.add(k);return true}).slice(0,8);
+}
 
 export function UploadPage(){
   const [items,setItems]=useState<Item[]>([]),[review,setReview]=useState<RecognitionResult>(),[scanError,setScanError]=useState('');
@@ -65,6 +70,6 @@ export function UploadPage(){
       <input ref={input} className="visually-hidden" type="file" accept="image/*" multiple onChange={e=>void choose(Array.from(e.target.files??[]))}/>
     </div>}
     {items.length>0&&<><div className="scan-summary"><strong>{items.length} photo{items.length===1?'':'s'} selected</strong><span>Recognition uses resized copies in one API call. Nothing is stored in R2 yet.</span></div><ul className="upload-list" aria-live="polite">{items.map((x,i)=><li key={x.preview}><img src={x.preview} alt={`Wine label ${i+1}`}/><div><strong>{i===0?'Primary label':`Additional label ${i+1}`}</strong><span>{x.status}{x.error&&`: ${x.error}`}</span>{x.metadata?.capturedAt&&<small>Photo date: {new Date(x.metadata.capturedAt).toLocaleString()}</small>}<progress value={x.progress} max="100">{x.progress}%</progress></div></li>)}</ul>{scanError&&<p role="alert" className="scan-error">{scanError}</p>}<button className="wide-action" onClick={identify} disabled={items.some(x=>x.status==='preparing'||x.status==='recognizing together')}>Identify this wine</button><button type="button" className="rescan-link" onClick={()=>input.current?.click()}>Choose different photos</button><input ref={input} className="visually-hidden" type="file" accept="image/*" multiple onChange={e=>void choose(Array.from(e.target.files??[]))}/></>}
-    {review&&<div className="review"><p className="eyebrow">REVIEW</p><h2>Combined identification</h2><p>Gemini interpreted all selected labels together. Correct anything before saving. The original photos are written to R2 only after the wine is successfully logged.</p><WineForm photos={photos} initial={{producer:review.producer??'',wineName:review.wineName??'',vintage:review.vintage,country:review.country,region:review.region,appellation:review.appellation,grapes:review.grapes,grapeBlend:review.grapeBlend,wineStyle:review.style,alcoholPercentage:review.alcoholPercentage,tastingDate:review.tastingDate,locationName:review.locationName,latitude:review.latitude,longitude:review.longitude,recognitionConfidence:review.confidence,recognitionStatus:'review'}}/></div>}
+    {review&&<div className="review"><p className="eyebrow">REVIEW</p><h2>Combined identification</h2><p>Gemini interpreted all selected labels together. Correct anything before saving. The original photos are written to R2 only after the wine is successfully logged.</p><WineForm photos={photos} initial={{producer:review.producer??'',wineName:review.wineName??'',vintage:review.vintage,country:review.country,region:review.region,appellation:review.appellation,grapes:review.grapes,grapeBlend:review.grapeBlend,wineStyle:review.style,alcoholPercentage:review.alcoholPercentage,tastingDate:review.tastingDate,locationName:review.locationName,latitude:review.latitude,longitude:review.longitude,tags:suggestedTags(review),recognitionConfidence:review.confidence,recognitionStatus:'review'}}/></div>}
   </section>
 }
