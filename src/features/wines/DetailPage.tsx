@@ -2,6 +2,7 @@ import { useEffect,useState } from 'react';
 import { Link,useNavigate,useParams } from 'react-router-dom';
 import type { DeepSearchResult,WineRecord } from '../../lib/db/schema';
 import { deleteWine,getWine } from './api';
+import '../../deepSearch.css';
 
 const token=()=>`Bearer ${localStorage.getItem('session')??''}`;
 export function DetailPage(){
