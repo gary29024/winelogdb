@@ -1,6 +1,7 @@
 import { useState,type FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { login } from '../../lib/auth/client';
+import '../../auth.css';
 
 export function LoginPage(){
   const nav=useNavigate();
