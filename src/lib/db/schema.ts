@@ -3,6 +3,16 @@ import { canonicalizeWineFields } from '../wine/canonicalize';
 
 export const wineStyles = ['red', 'white', 'rose', 'sparkling', 'dessert', 'fortified', 'orange', 'other'] as const;
 const optionalText = z.string().trim().max(500).optional().nullable();
+const vintageSchema = z.preprocess(value=>{
+  if(value==null)return value;
+  if(typeof value==='string'){
+    const trimmed=value.trim();
+    if(!trimmed)return null;
+    const numeric=Number(trimmed);
+    return Number.isFinite(numeric)?numeric:value;
+  }
+  return value;
+},z.number().int().min(1000).max(new Date().getUTCFullYear()+1).optional().nullable());
 export const grapeBlendEntrySchema = z.object({
   grape: z.string().trim().min(1).max(100),
   percentage: z.number().min(0).max(100).optional().nullable()
@@ -20,7 +30,7 @@ export const deepSearchSchema = z.object({
 });
 export const wineRecordSchema = z.object({
   id: z.string().uuid(), ownerId: z.string().min(1).max(128), producer: z.string().trim().min(1).max(200),
-  wineName: z.string().trim().min(1).max(200), vintage: z.number().int().min(1000).max(new Date().getUTCFullYear() + 1).optional().nullable(),
+  wineName: z.string().trim().min(1).max(200), vintage: vintageSchema,
   country: optionalText, region: optionalText, appellation: optionalText, grapes: z.array(z.string().trim().min(1).max(100)).max(30).default([]),
   grapeBlend: z.array(grapeBlendEntrySchema).max(30).default([]),
   wineStyle: z.enum(wineStyles).optional().nullable(), alcoholPercentage: z.number().min(0).max(100).optional().nullable(),
