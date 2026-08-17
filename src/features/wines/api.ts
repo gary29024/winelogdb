@@ -9,11 +9,8 @@ async function requireOk(r:Response,message:string){
   if(r.status===401){clearSession();throw new Error('Session expired. Please sign in again.')}
   if(!r.ok){
     const body=await r.json().catch(()=>({})) as {error?:string;issues?:ApiIssue[]};
-    if(body.issues?.length){
-      const detail=body.issues.map(x=>`${x.path?.join('.')||'wine'}: ${x.message||'invalid value'}`).join('; ');
-      throw new Error(`${body.error||message} — ${detail}`);
-    }
-    throw new Error(body.error||message);
+    const details=body.issues?.map(issue=>`${issue.path?.join('.')||'field'}: ${issue.message||'Invalid input'}`).join('; ');
+    throw new Error([body.error||message,details].filter(Boolean).join(' — '));
   }
 }
 export async function listWines(params:URLSearchParams):Promise<{items:WineRecord[];nextOffset:number|null}>{const r=await fetch(`/api/wines?${params}`,{headers:authHeaders()});await requireOk(r,'Could not load wines');return r.json()}
