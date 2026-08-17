@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { canonicalizeWineFields } from '../wine/canonicalize';
 
 export const wineStyles = ['red', 'white', 'rose', 'sparkling', 'dessert', 'fortified', 'orange', 'other'] as const;
 const optionalText = z.string().trim().max(500).optional().nullable();
@@ -35,5 +36,6 @@ export const wineRecordSchema = z.object({
 export type GrapeBlendEntry = z.infer<typeof grapeBlendEntrySchema>;
 export type DeepSearchResult = z.infer<typeof deepSearchSchema>;
 export type WineRecord = z.infer<typeof wineRecordSchema>;
-export const wineInputSchema = wineRecordSchema.omit({ id:true, ownerId:true, createdAt:true, updatedAt:true, deepSearch:true });
+const wineInputBaseSchema = wineRecordSchema.omit({ id:true, ownerId:true, createdAt:true, updatedAt:true, deepSearch:true });
+export const wineInputSchema = wineInputBaseSchema.transform(value=>canonicalizeWineFields(value));
 export type WineInput = z.infer<typeof wineInputSchema>;
