@@ -21,12 +21,14 @@ const app=new Hono<AppEnv>();
 app.post('/api/wines/:id/deep-search',async c=>{
   const origin=c.req.header('Origin');
   if(origin&&origin===c.env.APP_URL){c.header('Access-Control-Allow-Origin',origin);c.header('Vary','Origin')}
+  let userId:string;
+  try{userId=(await requireSession(c.req.header('Authorization'),c.env.AUTH_SECRET)).userId}
+  catch{return c.json({error:'Unauthorized'},401)}
+  const body=await c.req.json().catch(()=>({})) as {confirmation?:string;refresh?:'none'|'vintage'|'all'};
   try{
-    const session=await requireSession(c.req.header('Authorization'),c.env.AUTH_SECRET);
-    const body=await c.req.json().catch(()=>({})) as {confirmation?:string;refresh?:'none'|'vintage'|'all'};
-    const result=await runLayeredDeepSearch(c.env,session.userId,c.req.param('id'),body);
+    const result=await runLayeredDeepSearch(c.env,userId,c.req.param('id'),body);
     return c.json(result.body,result.status);
-  }catch{return c.json({error:'Unauthorized'},401)}
+  }catch{return c.json({error:'Deep Search failed unexpectedly'},500)}
 });
 
 // Everything except Deep Search stays on the existing, already-tested Worker app.
