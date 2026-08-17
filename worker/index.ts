@@ -3,7 +3,7 @@ import { cors } from 'hono/cors';
 import { GoogleGenerativeAI, SchemaType } from '@google/generative-ai';
 import { requireSession } from '../src/lib/auth/session';
 import { createObjectKey } from '../src/lib/r2/keys';
-import { wineInputSchema, type WineInput } from '../src/lib/db/schema';
+import { deepResearchSchema, wineInputSchema, type WineInput } from '../src/lib/db/schema';
 import { dimensionsSchema, validateBatch } from '../src/features/uploads/validation';
 import { parseRecognition } from '../src/features/recognition/schema';
 
@@ -11,6 +11,8 @@ type Bindings={DB:D1Database;WINE_IMAGES:R2Bucket;ASSETS:Fetcher;GEMINI_API_KEY:
 type Variables={userId:string};
 type AppContext={Bindings:Bindings;Variables:Variables};
 type PhotoMetadata={capturedAt?:string|null;latitude?:number|null;longitude?:number|null;source?:'exif'|'file_fallback'|'none'};
+
+type GeminiGroundedResponse={candidates?:Array<{content?:{parts?:Array<{text?:string}>};groundingMetadata?:{groundingChunks?:Array<{web?:{title?:string;uri?:string}}>}}>} ;
 
 const app=new Hono<AppContext>();
 app.use('/api/*',cors({origin:(origin,c)=>origin===c.env.APP_URL?origin:null,credentials:true}));
@@ -28,9 +30,10 @@ const wineSelect=`SELECT w.*,
 
 const mapWine=(r:Record<string,unknown>)=>({
  id:r.id,ownerId:r.owner_id,producer:r.producer,wineName:r.wine_name,vintage:r.vintage,country:r.country,region:r.region,appellation:r.appellation,
- grapes:JSON.parse(String(r.grapes_json)),wineStyle:r.wine_style,alcoholPercentage:r.alcohol_percentage,
+ grapes:JSON.parse(String(r.grapes_json)),grapeBlend:JSON.parse(String(r.grape_blend_json??'[]')),wineStyle:r.wine_style,alcoholPercentage:r.alcohol_percentage,
  tastingNotes:r.experience_notes??r.tasting_notes,rating:r.experience_rating??r.rating,tastingDate:r.experience_date??r.tasting_date,event:r.event,venue:r.venue,
  tastingName:r.tasting_name,locationName:r.location_name,latitude:r.latitude,longitude:r.longitude,
+ deepResearch:r.deep_research_json?JSON.parse(String(r.deep_research_json)):null,deepResearchedAt:r.deep_researched_at??null,
  price:r.price,currency:r.currency,tags:JSON.parse(String(r.tags_json)),imageObjectKeys:[],recognitionStatus:r.recognition_status,recognitionConfidence:r.recognition_confidence,
  createdAt:r.created_at,updatedAt:r.updated_at
 });
@@ -80,6 +83,7 @@ app.post('/api/wines',async c=>{
  const parsed=wineInputSchema.safeParse(await c.req.json());if(!parsed.success)return c.json({error:'Invalid wine',issues:parsed.error.issues},400);
  const w=parsed.data,id=crypto.randomUUID(),owner=c.get('userId'),now=new Date().toISOString();
  await c.env.DB.prepare(`INSERT INTO wines(id,owner_id,producer,wine_name,vintage,country,region,appellation,grapes_json,wine_style,alcohol_percentage,tasting_notes,rating,tasting_date,event,venue,price,currency,tags_json,recognition_status,recognition_confidence,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`).bind(id,owner,w.producer,w.wineName,w.vintage,w.country,w.region,w.appellation,JSON.stringify(w.grapes),w.wineStyle,w.alcoholPercentage,w.tastingNotes,w.rating,w.tastingDate,w.event,w.venue,w.price,w.currency,JSON.stringify(w.tags),w.recognitionStatus,w.recognitionConfidence,now,now).run();
+ await c.env.DB.prepare('UPDATE wines SET grape_blend_json=? WHERE id=? AND owner_id=?').bind(JSON.stringify(w.grapeBlend),id,owner).run();
  await saveExperience(c.env.DB,owner,id,w);
  return c.json({id},201);
 });
@@ -89,8 +93,31 @@ app.put('/api/wines/:id',async c=>{
  const x=parsed.data,id=c.req.param('id'),owner=c.get('userId');
  const res=await c.env.DB.prepare(`UPDATE wines SET producer=?,wine_name=?,vintage=?,country=?,region=?,appellation=?,grapes_json=?,wine_style=?,alcohol_percentage=?,tasting_notes=?,rating=?,tasting_date=?,event=?,venue=?,price=?,currency=?,tags_json=?,recognition_status=?,recognition_confidence=?,updated_at=? WHERE id=? AND owner_id=?`).bind(x.producer,x.wineName,x.vintage,x.country,x.region,x.appellation,JSON.stringify(x.grapes),x.wineStyle,x.alcoholPercentage,x.tastingNotes,x.rating,x.tastingDate,x.event,x.venue,x.price,x.currency,JSON.stringify(x.tags),x.recognitionStatus,x.recognitionConfidence,new Date().toISOString(),id,owner).run();
  if(!res.meta.changes)return c.json({error:'Not found'},404);
+ await c.env.DB.prepare('UPDATE wines SET grape_blend_json=? WHERE id=? AND owner_id=?').bind(JSON.stringify(x.grapeBlend),id,owner).run();
  await saveExperience(c.env.DB,owner,id,x,true);
  return c.json({ok:true});
+});
+
+app.post('/api/wines/:id/deep-search',async c=>{
+ const id=c.req.param('id'),owner=c.get('userId');
+ const wine=await c.env.DB.prepare('SELECT * FROM wines WHERE id=? AND owner_id=?').bind(id,owner).first<Record<string,unknown>>();
+ if(!wine)return c.json({error:'Not found'},404);
+ try{
+  const blend=JSON.parse(String(wine.grape_blend_json??'[]')) as Array<{grape:string;percentage?:number|null}>;
+  const prompt=`Research this exact wine using reliable web sources. Wine: ${String(wine.producer)} — ${String(wine.wine_name)}${wine.vintage?` ${String(wine.vintage)}`:''}. Region/appellation: ${[wine.region,wine.appellation,wine.country].filter(Boolean).join(', ')}. Known grapes/blend: ${blend.length?blend.map(x=>x.percentage!=null?`${x.grape} ${x.percentage}%`:x.grape).join(', '):String(wine.grapes_json)}. Return JSON only with keys summary, producerProfile, vintageQuality, terroir, winemaking, drinkingWindow, foodPairing, notableFacts. Focus on this producer/cuvée/vintage where sources support it. Distinguish vintage-specific facts from general producer practices. Do not invent precise facts when evidence is weak; say when information could not be verified.`;
+  const response=await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent',{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':c.env.GEMINI_API_KEY},body:JSON.stringify({contents:[{role:'user',parts:[{text:prompt}]}],tools:[{google_search:{}}],generationConfig:{responseMimeType:'application/json'}})});
+  if(!response.ok)throw new Error(`Gemini Deep Search failed (${response.status})`);
+  const raw=await response.json() as GeminiGroundedResponse,candidate=raw.candidates?.[0];
+  const text=candidate?.content?.parts?.map(p=>p.text??'').join('').trim();if(!text)throw new Error('Deep Search returned no content');
+  const cleaned=text.replace(/^```(?:json)?\s*|\s*```$/g,'');
+  const chunks=candidate?.groundingMetadata?.groundingChunks??[];
+  const sources=[...new Map(chunks.flatMap(x=>x.web?.uri?[{title:x.web.title||x.web.uri,url:x.web.uri}]:[]).map(x=>[x.url,x])).values()].slice(0,20);
+  const research=deepResearchSchema.parse({...JSON.parse(cleaned),sources});
+  const now=new Date().toISOString();
+  await c.env.DB.prepare('UPDATE wines SET deep_research_json=?,deep_researched_at=?,updated_at=? WHERE id=? AND owner_id=?').bind(JSON.stringify(research),now,now,id,owner).run();
+  const row=await c.env.DB.prepare(`${wineSelect} WHERE w.id=? AND w.owner_id=?`).bind(id,owner).first();
+  return c.json(mapWine(row as Record<string,unknown>));
+ }catch(e){return c.json({error:(e as Error).message},502)}
 });
 
 app.delete('/api/wines/:id',async c=>{const id=c.req.param('id'),owner=c.get('userId');const images=await c.env.DB.prepare('SELECT object_key FROM wine_images WHERE wine_id=? AND owner_id=?').bind(id,owner).all<{object_key:string}>();const deleted=await c.env.DB.prepare('DELETE FROM wines WHERE id=? AND owner_id=?').bind(id,owner).run();if(!deleted.meta.changes)return c.json({error:'Not found'},404);for(const image of images.results){const refs=await c.env.DB.prepare('SELECT COUNT(*) n FROM wine_images WHERE object_key=? AND wine_id IS NOT NULL').bind(image.object_key).first<{n:number}>();if(!refs?.n){await c.env.WINE_IMAGES.delete(image.object_key);await c.env.DB.prepare('DELETE FROM wine_images WHERE object_key=? AND wine_id IS NULL').bind(image.object_key).run()}}return c.body(null,204)});
@@ -128,12 +155,12 @@ app.post('/api/recognition/:id',async c=>{
   const latitude=typeof image.latitude==='number'?image.latitude:null,longitude=typeof image.longitude==='number'?image.longitude:null;
   const context=[capturedAt?`Photo captured at ${capturedAt}.`:'No reliable photo timestamp.',latitude!=null&&longitude!=null?`Photo GPS is ${latitude}, ${longitude}. Infer a concise human-readable location only if reasonably confident.`:'No GPS metadata.'].join(' ');
   const genAI=new GoogleGenerativeAI(c.env.GEMINI_API_KEY);
-  const model=genAI.getGenerativeModel({model:'gemini-3.1-flash-lite',generationConfig:{responseMimeType:'application/json',responseSchema:{type:SchemaType.OBJECT,properties:{producer:{type:SchemaType.STRING,nullable:true},wineName:{type:SchemaType.STRING,nullable:true},vintage:{type:SchemaType.NUMBER,nullable:true},country:{type:SchemaType.STRING,nullable:true},region:{type:SchemaType.STRING,nullable:true},appellation:{type:SchemaType.STRING,nullable:true},grapes:{type:SchemaType.ARRAY,items:{type:SchemaType.STRING}},style:{type:SchemaType.STRING,nullable:true},alcoholPercentage:{type:SchemaType.NUMBER,nullable:true},locationName:{type:SchemaType.STRING,nullable:true},confidence:{type:SchemaType.NUMBER}},required:['grapes','confidence']}}});
+  const model=genAI.getGenerativeModel({model:'gemini-3.1-flash-lite',generationConfig:{responseMimeType:'application/json',responseSchema:{type:SchemaType.OBJECT,properties:{producer:{type:SchemaType.STRING,nullable:true},wineName:{type:SchemaType.STRING,nullable:true},vintage:{type:SchemaType.NUMBER,nullable:true},country:{type:SchemaType.STRING,nullable:true},region:{type:SchemaType.STRING,nullable:true},appellation:{type:SchemaType.STRING,nullable:true},grapes:{type:SchemaType.ARRAY,items:{type:SchemaType.STRING}},grapeBlend:{type:SchemaType.ARRAY,items:{type:SchemaType.OBJECT,properties:{grape:{type:SchemaType.STRING},percentage:{type:SchemaType.NUMBER,nullable:true}},required:['grape']}},style:{type:SchemaType.STRING,nullable:true},alcoholPercentage:{type:SchemaType.NUMBER,nullable:true},locationName:{type:SchemaType.STRING,nullable:true},confidence:{type:SchemaType.NUMBER}},required:['grapes','grapeBlend','confidence']}}});
   let last:Error|undefined;
   for(let attempt=0;attempt<3;attempt++){
    try{
     const timeout=new Promise<never>((_,reject)=>setTimeout(()=>reject(new Error('Recognition timed out')),20000));
-    const response=await Promise.race([model.generateContent([`Extract the wine label fields. Use null when unknown. Confidence is 0 to 1. ${context} Do not invent a tasting date; the application derives it from photo metadata.`,{inlineData:{data:btoa(binary),mimeType:String(image.content_type)}}]),timeout]);
+    const response=await Promise.race([model.generateContent([`Extract the wine label fields. Use null when unknown. Confidence is 0 to 1. Return grapes as plain grape names for filtering. If an exact blend percentage is printed or clearly stated, also return grapeBlend entries such as {grape:'Merlot',percentage:85}; use null percentage when the grape is known but its share is not. ${context} Do not invent a tasting date; the application derives it from photo metadata.`,{inlineData:{data:btoa(binary),mimeType:String(image.content_type)}}]),timeout]);
     const result=parseRecognition(response.response.text());
     await c.env.DB.prepare("UPDATE wine_images SET recognition_status='review',location_name=? WHERE id=?").bind(result.locationName??null,image.id).run();
     return c.json({...result,tastingDate,latitude,longitude,metadataSource:(image.metadata_source||'none') as string});
