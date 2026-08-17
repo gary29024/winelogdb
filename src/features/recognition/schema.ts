@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { canonicalizeWineFields } from '../../lib/wine/canonicalize';
 const nullableText = z.string().trim().max(300).nullable().optional();
 const grapeBlendEntry = z.object({grape:z.string().trim().min(1).max(100),percentage:z.number().min(0).max(100).nullable().optional()});
 const wineStyles=['red','white','rose','sparkling','dessert','fortified','orange','other'] as const;
@@ -34,4 +35,8 @@ export const recognitionSchema = z.object({
   metadataSource: z.enum(['exif','file_fallback','none']).default('none')
 }).strict();
 export type RecognitionResult = z.infer<typeof recognitionSchema>;
-export function parseRecognition(raw: string): RecognitionResult { const cleaned=raw.replace(/^```(?:json)?\s*|\s*```$/g,''); return recognitionSchema.parse(JSON.parse(cleaned)); }
+export function parseRecognition(raw: string): RecognitionResult {
+  const cleaned=raw.replace(/^```(?:json)?\s*|\s*```$/g,'');
+  const parsed=recognitionSchema.parse(JSON.parse(cleaned));
+  return recognitionSchema.parse(canonicalizeWineFields(parsed));
+}
