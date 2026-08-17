@@ -18,24 +18,27 @@ export function WineForm({initial,id,photos=[]}:{initial?:Partial<WineInput>;id?
   const nav=useNavigate(),[busy,setBusy]=useState(false),[error,setError]=useState('');
   async function submit(e:FormEvent<HTMLFormElement>){
     e.preventDefault();setBusy(true);setError('');const fd=new FormData(e.currentTarget);
+    const producer=String(fd.get('producer')||'').trim(),wineName=String(fd.get('wineName')||'').trim();
+    if(!producer||!wineName){setError('Producer and wine name are required.');setBusy(false);return}
     const grapeBlend=parseBlend(String(fd.get('grapeBlend')||''));
+    const currency=String(fd.get('currency')||'').trim().toUpperCase();
     const input:WineInput={
-      producer:String(fd.get('producer')),wineName:String(fd.get('wineName')),vintage:fd.get('vintage')?Number(fd.get('vintage')):null,
-      country:String(fd.get('country')||'')||null,region:String(fd.get('region')||'')||null,appellation:String(fd.get('appellation')||'')||null,
+      producer,wineName,vintage:fd.get('vintage')?Number(fd.get('vintage')):null,
+      country:String(fd.get('country')||'').trim()||null,region:String(fd.get('region')||'').trim()||null,appellation:String(fd.get('appellation')||'').trim()||null,
       grapes:[...new Set(grapeBlend.map(x=>x.grape))],grapeBlend,wineStyle:(String(fd.get('wineStyle')||'')||null) as WineInput['wineStyle'],
       alcoholPercentage:fd.get('alcoholPercentage')?Number(fd.get('alcoholPercentage')):null,tastingNotes:String(fd.get('tastingNotes')||''),rating:fd.get('rating')?Number(fd.get('rating')):null,
-      tastingDate:String(fd.get('tastingDate')||'')||null,tastingName:String(fd.get('tastingName')||'')||null,event:initial?.event??null,
-      venue:String(fd.get('venue')||'')||null,locationName:String(fd.get('locationName')||'')||null,
+      tastingDate:String(fd.get('tastingDate')||'')||null,tastingName:String(fd.get('tastingName')||'').trim()||null,event:initial?.event??null,
+      venue:String(fd.get('venue')||'').trim()||null,locationName:String(fd.get('locationName')||'').trim()||null,
       latitude:initial?.latitude??null,longitude:initial?.longitude??null,
-      price:fd.get('price')?Number(fd.get('price')):null,currency:String(fd.get('currency')||'')||null,
-      tags:String(fd.get('tags')||'').split(',').map(x=>x.trim()).filter(Boolean),imageObjectKeys:initial?.imageObjectKeys??[],recognitionStatus:'complete',recognitionConfidence:initial?.recognitionConfidence??null
+      price:fd.get('price')?Number(fd.get('price')):null,currency:currency||null,
+      tags:[...new Set(String(fd.get('tags')||'').split(',').map(x=>x.trim()).filter(Boolean))],imageObjectKeys:initial?.imageObjectKeys??[],recognitionStatus:'complete',recognitionConfidence:initial?.recognitionConfidence??null
     };
     try{const result=await saveWine(input,id,id?[]:photos);const savedId=id??('id' in result?result.id:undefined);if(!savedId)throw new Error('Save response did not include a wine ID');nav(`/wines/${savedId}`)}catch(e){setError((e as Error).message);setBusy(false)}
   }
-  const field=(name:string,label:string,type='text',step?:string)=><label>{label}<input name={name} type={type} step={step} defaultValue={String(initial?.[name as keyof WineInput]??'')}/></label>;
+  const field=(name:string,label:string,type='text',step?:string,required=false)=><label>{label}<input name={name} type={type} step={step} required={required} defaultValue={String(initial?.[name as keyof WineInput]??'')}/></label>;
   return <form className="wine-form" onSubmit={submit}>
     <div className="form-grid">
-      {field('producer','Producer *')}{field('wineName','Wine name *')}{field('vintage','Vintage','number')}{field('country','Country')}{field('region','Region')}{field('appellation','Appellation')}
+      {field('producer','Producer *','text',undefined,true)}{field('wineName','Wine name *','text',undefined,true)}{field('vintage','Vintage','number')}{field('country','Country')}{field('region','Region')}{field('appellation','Appellation')}
       <label>Grapes / blend<input name="grapeBlend" defaultValue={blendText(initial)} placeholder="Merlot 95%, Cabernet Franc 5%"/><small>Percentages are optional. Separate grapes with commas.</small></label>
       <label>Style<select name="wineStyle" defaultValue={initial?.wineStyle??''}><option value="">Unknown</option>{['red','white','rose','sparkling','dessert','fortified','orange','other'].map(x=><option key={x}>{x}</option>)}</select></label>
       {field('alcoholPercentage','Alcohol %','number','0.1')}{field('rating','Rating / 100','number','0.5')}
