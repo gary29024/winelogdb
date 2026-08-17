@@ -1,4 +1,5 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { WineForm } from '../wines/WineForm';
 import { recognitionSchema, type RecognitionResult } from '../recognition/schema';
 import { extractPhotoMetadata, type PhotoMetadata } from './photoMetadata';
@@ -29,15 +30,23 @@ function mergeRecognition(results:RecognitionResult[]):RecognitionResult{
 export function UploadPage(){
   const [items,setItems]=useState<Item[]>([]),[review,setReview]=useState<RecognitionResult>();
   const input=useRef<HTMLInputElement>(null);
+  const location=useLocation(),navigate=useNavigate();
   function patch(i:number,p:Partial<Item>){setItems(xs=>xs.map((x,n)=>n===i?{...x,...p}:x))}
 
-  async function choose(files:FileList|null){
-    if(!files?.length)return;
-    const selected=[...files].map(file=>({file,preview:URL.createObjectURL(file),status:'reading metadata',progress:5} as Item));
+  async function choose(files:File[]){
+    if(!files.length)return;
+    const selected=files.map(file=>({file,preview:URL.createObjectURL(file),status:'reading metadata',progress:5} as Item));
     setReview(undefined);setItems(selected);
     const metadata=await Promise.all(selected.map(x=>extractPhotoMetadata(x.file)));
     setItems(xs=>xs.map((x,i)=>({...x,metadata:metadata[i],status:'queued',progress:10})));
   }
+
+  useEffect(()=>{
+    const incoming=(location.state as {scanFiles?:File[]}|null)?.scanFiles;
+    if(incoming?.length){void choose(incoming);navigate(location.pathname,{replace:true,state:null})}
+  // The route state is consumed once on entry from the bottom-sheet picker.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[]);
 
   async function upload(){
     const fd=new FormData();
@@ -61,14 +70,14 @@ export function UploadPage(){
 
   return <section className="scan-page">
     <div className="hero compact"><p className="eyebrow">SCAN WINE</p><h1>One wine, every useful label.</h1><p>Select the front, back, neck or additional labels together. WineLog treats the whole selection as one bottle and combines complementary recognition results.</p></div>
-    <div className="photo-source-card">
+    {items.length===0&&<div className="photo-source-card">
       <div className="scan-mark">＋</div>
       <h2>Scan a wine</h2>
-      <p>Your device chooser can use the camera, photo library or files. Select multiple images when they belong to the same wine.</p>
+      <p>Choose one or more photos of the same bottle. Your device chooser can use the camera, photo library or files.</p>
       <button type="button" className="scan-button" onClick={()=>input.current?.click()}>Scan Wine</button>
-      <input ref={input} className="visually-hidden" type="file" accept="image/*" multiple onChange={e=>void choose(e.target.files)}/>
-    </div>
-    {items.length>0&&<><div className="scan-summary"><strong>{items.length} photo{items.length===1?'':'s'} selected</strong><span>All photos will be interpreted as the same wine.</span></div><ul className="upload-list" aria-live="polite">{items.map((x,i)=><li key={x.preview}><img src={x.preview} alt={`Wine label ${i+1}`}/><div><strong>{i===0?'Primary label':`Additional label ${i+1}`}</strong><span>{x.status}{x.error&&`: ${x.error}`}</span>{x.metadata?.capturedAt&&<small>Photo date: {new Date(x.metadata.capturedAt).toLocaleString()}</small>}<progress value={x.progress} max="100">{x.progress}%</progress></div></li>)}</ul><button className="wide-action" onClick={upload} disabled={items.some(x=>x.status==='uploading'||x.status==='reading metadata')}>Identify this wine</button></>}
+      <input ref={input} className="visually-hidden" type="file" accept="image/*" multiple onChange={e=>void choose(Array.from(e.target.files??[]))}/>
+    </div>}
+    {items.length>0&&<><div className="scan-summary"><strong>{items.length} photo{items.length===1?'':'s'} selected</strong><span>All photos will be interpreted as the same wine.</span></div><ul className="upload-list" aria-live="polite">{items.map((x,i)=><li key={x.preview}><img src={x.preview} alt={`Wine label ${i+1}`}/><div><strong>{i===0?'Primary label':`Additional label ${i+1}`}</strong><span>{x.status}{x.error&&`: ${x.error}`}</span>{x.metadata?.capturedAt&&<small>Photo date: {new Date(x.metadata.capturedAt).toLocaleString()}</small>}<progress value={x.progress} max="100">{x.progress}%</progress></div></li>)}</ul><button className="wide-action" onClick={upload} disabled={items.some(x=>x.status==='uploading'||x.status==='reading metadata')}>Identify this wine</button><button type="button" className="rescan-link" onClick={()=>input.current?.click()}>Choose different photos</button><input ref={input} className="visually-hidden" type="file" accept="image/*" multiple onChange={e=>void choose(Array.from(e.target.files??[]))}/></>}
     {review&&<div className="review"><p className="eyebrow">REVIEW</p><h2>Combined identification</h2><p>WineLog merged the strongest details across all selected labels. Correct anything before saving.</p><WineForm initial={{producer:review.producer??'',wineName:review.wineName??'',vintage:review.vintage,country:review.country,region:review.region,appellation:review.appellation,grapes:review.grapes,wineStyle:review.style,alcoholPercentage:review.alcoholPercentage,tastingDate:review.tastingDate,locationName:review.locationName,latitude:review.latitude,longitude:review.longitude,recognitionConfidence:review.confidence,recognitionStatus:'review'}}/></div>}
   </section>
 }
