@@ -1,7 +1,8 @@
 import { z } from 'zod';
 export const ALLOWED_IMAGE_TYPES = new Set(['image/jpeg','image/png','image/webp','image/heic']);
 export const uploadLimits = { maxFiles: 12, maxBytes: 10 * 1024 * 1024, minDimension: 300, maxDimension: 12000 } as const;
-export function validateBatch(files: Pick<File,'type'|'size'|'name'>[], limits = uploadLimits) {
+type UploadLimits = { maxFiles:number; maxBytes:number; minDimension:number; maxDimension:number };
+export function validateBatch(files: Pick<File,'type'|'size'|'name'>[], limits:UploadLimits = uploadLimits) {
   if (!files.length) throw new Error('Select at least one image');
   if (files.length > limits.maxFiles) throw new Error(`A batch may contain at most ${limits.maxFiles} images`);
   return files.map(file => {
