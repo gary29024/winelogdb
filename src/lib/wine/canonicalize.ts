@@ -30,8 +30,18 @@ export const canonicalRegion=(value:string|null|undefined)=>fromMap(value,region
 export const canonicalAppellation=(value:string|null|undefined)=>fromMap(value,appellations);
 export const canonicalGrape=(value:string)=>fromMap(value,grapes)??value.trim();
 
-export function canonicalizeWineFields<T extends {country?:string|null;region?:string|null;appellation?:string|null;grapes?:string[];grapeBlend?:Array<{grape:string;percentage?:number|null}>}>(wine:T):T{
+function stripRepeatedProducer(producer:string|undefined|null,wineName:string|undefined|null){
+  if(!producer||!wineName)return wineName;
+  const p=producer.trim(),name=wineName.trim();
+  if(!p||!name)return wineName;
+  const escaped=p.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+  const stripped=name.replace(new RegExp(`^${escaped}(?:\\s*[-–—:|,]\\s*|\\s+)`,'i'),'').trim();
+  return stripped||name;
+}
+
+export function canonicalizeWineFields<T extends {producer?:string|null;wineName?:string|null;country?:string|null;region?:string|null;appellation?:string|null;grapes?:string[];grapeBlend?:Array<{grape:string;percentage?:number|null}>}>(wine:T):T{
   return {...wine,
+    wineName:stripRepeatedProducer(wine.producer,wine.wineName) as T['wineName'],
     country:canonicalCountry(wine.country) as T['country'],
     region:canonicalRegion(wine.region) as T['region'],
     appellation:canonicalAppellation(wine.appellation) as T['appellation'],
