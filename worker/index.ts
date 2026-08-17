@@ -51,15 +51,24 @@ const wineSelect=`SELECT w.*,
  (SELECT we.tasting_notes FROM wine_experiences we WHERE we.wine_id=w.id AND we.owner_id=w.owner_id ORDER BY we.created_at DESC LIMIT 1) AS experience_notes
  FROM wines w`;
 
-const mapWine=(r:Record<string,unknown>)=>({
+const mapWine=(r:Record<string,unknown>,imageIds:string[]=[])=>({
  id:r.id,ownerId:r.owner_id,producer:r.producer,wineName:r.wine_name,vintage:r.vintage,country:r.country,region:r.region,appellation:r.appellation,
  grapes:parseJson<string[]>(r.grapes_json,[]),grapeBlend:parseJson<Array<{grape:string;percentage?:number|null}>>(r.grape_blend_json,[]),wineStyle:r.wine_style,alcoholPercentage:r.alcohol_percentage,
  tastingNotes:r.experience_notes??r.tasting_notes,rating:r.experience_rating??r.rating,tastingDate:r.experience_date??r.tasting_date,event:r.event,venue:r.venue,
  tastingName:r.tasting_name,locationName:r.location_name,latitude:r.latitude,longitude:r.longitude,
  deepSearch:r.deep_search_json?parseJson(r.deep_search_json,null):null,
- price:r.price,currency:r.currency,tags:parseJson<string[]>(r.tags_json,[]),imageObjectKeys:[],recognitionStatus:r.recognition_status,recognitionConfidence:r.recognition_confidence,
+ price:r.price,currency:r.currency,tags:parseJson<string[]>(r.tags_json,[]),imageIds,imageObjectKeys:[],recognitionStatus:r.recognition_status,recognitionConfidence:r.recognition_confidence,
  createdAt:r.created_at,updatedAt:r.updated_at
 });
+
+async function mapWinesWithImages(db:D1Database,owner:string,rows:Record<string,unknown>[]){
+ if(!rows.length)return [];
+ const wineIds=rows.map(r=>String(r.id)),placeholders=wineIds.map(()=>'?').join(',');
+ const images=await db.prepare(`SELECT id,wine_id FROM wine_images WHERE owner_id=? AND wine_id IN (${placeholders}) ORDER BY rowid ASC`).bind(owner,...wineIds).all<{id:string;wine_id:string}>();
+ const byWine=new Map<string,string[]>();
+ for(const image of images.results){const list=byWine.get(image.wine_id)??[];list.push(image.id);byWine.set(image.wine_id,list)}
+ return rows.map(row=>mapWine(row,byWine.get(String(row.id))??[]));
+}
 
 async function resolveTasting(db:D1Database,owner:string,w:WineInput){
  if(!w.tastingName?.trim())return null;
@@ -97,10 +106,18 @@ app.get('/api/wines',async c=>{
  const orders:Record<string,string>={newest:'w.created_at DESC',oldest:'w.created_at ASC',rating:'w.rating DESC',producer:'w.producer COLLATE NOCASE',vintage:'w.vintage DESC'};
  const limit=Math.min(Number(q.limit)||24,100),offset=Math.max(Number(q.offset)||0,0);args.push(limit,offset);
  const rows=await c.env.DB.prepare(`${wineSelect} WHERE ${where} ORDER BY ${orders[q.sort]||orders.newest} LIMIT ? OFFSET ?`).bind(...args).all();
- return c.json({items:rows.results.map(r=>mapWine(r as Record<string,unknown>)),nextOffset:rows.results.length===limit?offset+limit:null});
+ const items=await mapWinesWithImages(c.env.DB,owner,rows.results as Record<string,unknown>[]);
+ return c.json({items,nextOffset:rows.results.length===limit?offset+limit:null});
 });
 
-app.get('/api/wines/:id',async c=>{const row=await c.env.DB.prepare(`${wineSelect} WHERE w.id=? AND w.owner_id=?`).bind(c.req.param('id'),c.get('userId')).first();return row?c.json(mapWine(row)):c.json({error:'Not found'},404)});
+app.get('/api/wines/:id',async c=>{
+ const id=c.req.param('id'),owner=c.get('userId');
+ const [row,images]=await Promise.all([
+  c.env.DB.prepare(`${wineSelect} WHERE w.id=? AND w.owner_id=?`).bind(id,owner).first(),
+  c.env.DB.prepare('SELECT id FROM wine_images WHERE wine_id=? AND owner_id=? ORDER BY rowid ASC').bind(id,owner).all<{id:string}>()
+ ]);
+ return row?c.json(mapWine(row as Record<string,unknown>,images.results.map(x=>x.id))):c.json({error:'Not found'},404)
+});
 
 app.post('/api/wines/:id/deep-search',async c=>{
  const body=await c.req.json().catch(()=>({})) as {confirmation?:string};
@@ -111,16 +128,32 @@ app.post('/api/wines/:id/deep-search',async c=>{
  const grapes=parseJson<string[]>(wine.grapes_json,[]),blend=parseJson<Array<{grape:string;percentage?:number|null}>>(wine.grape_blend_json,[]);
  const identity=[wine.producer,wine.wine_name,wine.vintage,wine.appellation,wine.region,wine.country].filter(Boolean).join(' | ');
  const prompt=`Research this exact wine using reliable public web sources and distinguish producer facts from vintage-specific facts. Wine: ${identity}. Grapes: ${grapes.join(', ')}. Known blend: ${blend.map(x=>`${x.grape}${x.percentage!=null?` ${x.percentage}%`:''}`).join(', ')||'unknown'}. Return JSON only with these string fields: summary, vintageQuality, producerDetails, winemakingTechniques, terroir, drinkingWindow. Be cautious: if a vintage-specific technique or blend cannot be verified, say so rather than generalizing from another vintage. Focus on factual producer history, vineyard/terroir, vintage conditions and quality, élevage/fermentation/vinification, and likely drinking window.`;
- const response=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${encodeURIComponent(c.env.GEMINI_API_KEY)}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{role:'user',parts:[{text:prompt}]}],tools:[{google_search:{}}],generationConfig:{responseMimeType:'application/json',responseSchema:{type:'OBJECT',properties:{summary:{type:'STRING'},vintageQuality:{type:'STRING'},producerDetails:{type:'STRING'},winemakingTechniques:{type:'STRING'},terroir:{type:'STRING'},drinkingWindow:{type:'STRING'}},required:['summary','vintageQuality','producerDetails','winemakingTechniques','terroir','drinkingWindow']}}})});
- if(!response.ok)return c.json({error:`Deep Search failed (${response.status})`},502);
- const gemini=await response.json() as {candidates?:Array<{content?:{parts?:Array<{text?:string}>};groundingMetadata?:{groundingChunks?:Array<{web?:{title?:string;uri?:string}}>} }>};
- const candidate=gemini.candidates?.[0],text=candidate?.content?.parts?.map(x=>x.text??'').join('')??'';
- const cleaned=text.replace(/^```(?:json)?\s*|\s*```$/g,'');
- let research:Record<string,unknown>;try{research=JSON.parse(cleaned) as Record<string,unknown>}catch{return c.json({error:'Deep Search returned an invalid structured response'},502)}
- const seen=new Set<string>(),sources=(candidate?.groundingMetadata?.groundingChunks??[]).flatMap(x=>x.web?.uri?[{title:x.web.title??x.web.uri,url:x.web.uri}]:[]).filter(x=>{if(seen.has(x.url))return false;seen.add(x.url);return true}).slice(0,20);
- const result=deepSearchSchema.parse({...research,sources,model:'gemini-3.6-flash',researchedAt:new Date().toISOString()});
- await c.env.DB.prepare('UPDATE wines SET deep_search_json=?,deep_search_model=?,deep_search_updated_at=?,updated_at=? WHERE id=? AND owner_id=?').bind(JSON.stringify(result),result.model,result.researchedAt,new Date().toISOString(),id,owner).run();
- return c.json(result);
+ const requestBody=JSON.stringify({contents:[{role:'user',parts:[{text:prompt}]}],tools:[{google_search:{}}],generationConfig:{responseMimeType:'application/json',responseSchema:{type:'OBJECT',properties:{summary:{type:'STRING'},vintageQuality:{type:'STRING'},producerDetails:{type:'STRING'},winemakingTechniques:{type:'STRING'},terroir:{type:'STRING'},drinkingWindow:{type:'STRING'}},required:['summary','vintageQuality','producerDetails','winemakingTechniques','terroir','drinkingWindow']}}});
+ let lastError='Deep Search failed';
+ for(let attempt=0;attempt<2;attempt++){
+  try{
+   const response=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${encodeURIComponent(c.env.GEMINI_API_KEY)}`,{method:'POST',headers:{'Content-Type':'application/json'},body:requestBody});
+   if(!response.ok){
+    lastError=`Deep Search failed (${response.status})`;
+    if(attempt===0&&(response.status===429||response.status>=500)){await new Promise(r=>setTimeout(r,900));continue}
+    return c.json({error:lastError},502);
+   }
+   const gemini=await response.json() as {candidates?:Array<{content?:{parts?:Array<{text?:string}>};groundingMetadata?:{groundingChunks?:Array<{web?:{title?:string;uri?:string}}>} }>};
+   const candidate=gemini.candidates?.[0],text=candidate?.content?.parts?.map(x=>x.text??'').join('')??'';
+   const cleaned=text.replace(/^```(?:json)?\s*|\s*```$/g,'');
+   let research:Record<string,unknown>;try{research=JSON.parse(cleaned) as Record<string,unknown>}catch{throw new Error('Deep Search returned an invalid structured response')}
+   const seen=new Set<string>(),sources=(candidate?.groundingMetadata?.groundingChunks??[]).flatMap(x=>x.web?.uri?[{title:x.web.title??x.web.uri,url:x.web.uri}]:[]).filter(x=>{if(seen.has(x.url))return false;seen.add(x.url);return true}).slice(0,20);
+   const parsed=deepSearchSchema.safeParse({...research,sources,model:'gemini-3.6-flash',researchedAt:new Date().toISOString()});
+   if(!parsed.success)throw new Error(`Deep Search returned invalid fields: ${parsed.error.issues.map(x=>x.path.join('.')||x.message).join(', ')}`);
+   const result=parsed.data;
+   await c.env.DB.prepare('UPDATE wines SET deep_search_json=?,deep_search_model=?,deep_search_updated_at=?,updated_at=? WHERE id=? AND owner_id=?').bind(JSON.stringify(result),result.model,result.researchedAt,new Date().toISOString(),id,owner).run();
+   return c.json(result);
+  }catch(e){
+   lastError=(e as Error).message||'Deep Search failed';
+   if(attempt===0){await new Promise(r=>setTimeout(r,900));continue}
+  }
+ }
+ return c.json({error:lastError},502);
 });
 
 app.post('/api/wines',async c=>{
