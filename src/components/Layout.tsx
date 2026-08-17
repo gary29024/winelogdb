@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
+import '../scanSheet.css';
 
 export function Layout(){
   const [scanSheetOpen,setScanSheetOpen]=useState(false);
