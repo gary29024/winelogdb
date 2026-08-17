@@ -17,7 +17,10 @@ const optionalNumber=(schema:z.ZodNumber)=>z.preprocess(value=>{
   return value;
 },schema.optional().nullable());
 
-const currentYearPlusOne=new Date().getUTCFullYear()+1;
+// Do not derive this limit from Date during module initialization. Cloudflare Workers
+// can initialize isolates with a frozen epoch clock, which previously produced 1971.
+// 2200 is only a corruption/sanity guard; vintage semantics are otherwise four-digit years.
+const MAX_VINTAGE_YEAR=2200;
 const vintageSchema=z.unknown().transform((value,ctx):number|null=>{
   if(value==null)return null;
   let numeric:number|undefined;
@@ -36,8 +39,8 @@ const vintageSchema=z.unknown().transform((value,ctx):number|null=>{
     ctx.addIssue({code:'custom',message:`Vintage must be a whole year; received ${numeric}`});
     return z.NEVER;
   }
-  if(numeric<1000||numeric>currentYearPlusOne){
-    ctx.addIssue({code:'custom',message:`Vintage must be between 1000 and ${currentYearPlusOne}; received ${numeric}`});
+  if(numeric<1000||numeric>MAX_VINTAGE_YEAR){
+    ctx.addIssue({code:'custom',message:`Vintage must be between 1000 and ${MAX_VINTAGE_YEAR}; received ${numeric}`});
     return z.NEVER;
   }
   return numeric;
