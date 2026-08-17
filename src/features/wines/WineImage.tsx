@@ -1,5 +1,6 @@
 import { useEffect,useState } from 'react';
 import { authHeaders } from '../../lib/auth/client';
+import '../../wineImages.css';
 
 export function WineImage({imageId,alt,className}:{imageId:string;alt:string;className?:string}){
   const [src,setSrc]=useState<string>();
