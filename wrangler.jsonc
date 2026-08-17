@@ -1,0 +1,10 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "winelogdb",
+  "main": "worker/index.ts",
+  "compatibility_date": "2026-08-01",
+  "assets": { "binding": "ASSETS", "directory": "./dist", "not_found_handling": "single-page-application" },
+  "d1_databases": [{ "binding": "DB", "database_name": "winelogdb", "database_id": "REPLACE_WITH_DATABASE_ID", "migrations_dir": "src/lib/db/migrations" }],
+  "r2_buckets": [{ "binding": "WINE_IMAGES", "bucket_name": "winelog-private" }],
+  "vars": { "APP_URL": "http://localhost:5173", "MAX_FILE_BYTES": "10485760", "MAX_BATCH_FILES": "12" }
+}

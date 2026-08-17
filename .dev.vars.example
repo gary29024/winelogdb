@@ -1,0 +1,3 @@
+GEMINI_API_KEY=replace-me
+AUTH_SECRET=use-at-least-32-random-characters
+APP_URL=http://localhost:5173
