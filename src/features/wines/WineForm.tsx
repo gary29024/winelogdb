@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { saveWine } from './api';
+import { saveWine, type WinePhoto } from './api';
 import type { GrapeBlendEntry, WineInput } from '../../lib/db/schema';
 
 function parseBlend(value:string):GrapeBlendEntry[]{
@@ -14,7 +14,7 @@ function blendText(initial?:Partial<WineInput>){
   return initial?.grapes?.join(', ')??'';
 }
 
-export function WineForm({initial,id}:{initial?:Partial<WineInput>;id?:string}){
+export function WineForm({initial,id,photos=[]}:{initial?:Partial<WineInput>;id?:string;photos?:WinePhoto[]}){
   const nav=useNavigate(),[busy,setBusy]=useState(false),[error,setError]=useState('');
   async function submit(e:FormEvent<HTMLFormElement>){
     e.preventDefault();setBusy(true);setError('');const fd=new FormData(e.currentTarget);
@@ -30,7 +30,7 @@ export function WineForm({initial,id}:{initial?:Partial<WineInput>;id?:string}){
       price:fd.get('price')?Number(fd.get('price')):null,currency:String(fd.get('currency')||'')||null,
       tags:String(fd.get('tags')||'').split(',').map(x=>x.trim()).filter(Boolean),imageObjectKeys:initial?.imageObjectKeys??[],recognitionStatus:'complete',recognitionConfidence:initial?.recognitionConfidence??null
     };
-    try{const result=await saveWine(input,id);const savedId=id??('id' in result?result.id:undefined);if(!savedId)throw new Error('Save response did not include a wine ID');nav(`/wines/${savedId}`)}catch(e){setError((e as Error).message);setBusy(false)}
+    try{const result=await saveWine(input,id,id?[]:photos);const savedId=id??('id' in result?result.id:undefined);if(!savedId)throw new Error('Save response did not include a wine ID');nav(`/wines/${savedId}`)}catch(e){setError((e as Error).message);setBusy(false)}
   }
   const field=(name:string,label:string,type='text',step?:string)=><label>{label}<input name={name} type={type} step={step} defaultValue={String(initial?.[name as keyof WineInput]??'')}/></label>;
   return <form className="wine-form" onSubmit={submit}>
@@ -44,6 +44,6 @@ export function WineForm({initial,id}:{initial?:Partial<WineInput>;id?:string}){
       {field('tastingDate','Drinking date','date')}{field('tastingName','Tasting / event group')}{field('venue','Venue')}{field('locationName','Detected / entered location')}
     </div><small>Use “Tasting / event group” to group wines from the same dinner, trip, class or formal tasting. GPS coordinates, when available from photo metadata, are retained internally but are not required.</small></fieldset>
     <div className="form-grid">{field('price','Price','number','0.01')}{field('currency','Currency (e.g. USD)')}{field('tags','Tags (comma separated)')}</div>
-    <label>Tasting notes<textarea name="tastingNotes" rows={5} defaultValue={initial?.tastingNotes}/></label>{error&&<p role="alert">{error}</p>}<button disabled={busy}>{busy?'Saving…':'Save wine'}</button>
+    <label>Tasting notes<textarea name="tastingNotes" rows={5} defaultValue={initial?.tastingNotes}/></label>{photos.length>0&&<p className="form-note">{photos.length} photo{photos.length===1?'':'s'} will be saved permanently only after this wine is successfully logged.</p>}{error&&<p role="alert">{error}</p>}<button disabled={busy}>{busy?'Saving…':'Save wine'}</button>
   </form>
 }

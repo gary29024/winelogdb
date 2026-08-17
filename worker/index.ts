@@ -33,6 +33,14 @@ app.post('/api/auth/login',async c=>{
 });
 
 const parseJson=<T>(value:unknown,fallback:T):T=>{try{return JSON.parse(String(value)) as T}catch{return fallback}};
+const normalizeMeta=(meta:PhotoMetadata|undefined)=>{
+ const latitude=typeof meta?.latitude==='number'&&meta.latitude>=-90&&meta.latitude<=90?meta.latitude:null;
+ const longitude=typeof meta?.longitude==='number'&&meta.longitude>=-180&&meta.longitude<=180?meta.longitude:null;
+ const capturedAt=typeof meta?.capturedAt==='string'&&!Number.isNaN(Date.parse(meta.capturedAt))?new Date(meta.capturedAt).toISOString():null;
+ const source:PhotoMetadata['source']=meta?.source==='exif'||meta?.source==='file_fallback'?meta.source:'none';
+ return {capturedAt,latitude,longitude,source};
+};
+async function fileToBase64(file:File){const bytes=new Uint8Array(await file.arrayBuffer());let binary='';for(let i=0;i<bytes.length;i+=32768)binary+=String.fromCharCode(...bytes.subarray(i,i+32768));return btoa(binary)}
 const wineSelect=`SELECT w.*,
  (SELECT t.name FROM wine_experiences we LEFT JOIN tastings t ON t.id=we.tasting_id WHERE we.wine_id=w.id AND we.owner_id=w.owner_id ORDER BY we.created_at DESC LIMIT 1) AS tasting_name,
  (SELECT we.consumed_at FROM wine_experiences we WHERE we.wine_id=w.id AND we.owner_id=w.owner_id ORDER BY we.created_at DESC LIMIT 1) AS experience_date,
@@ -116,11 +124,36 @@ app.post('/api/wines/:id/deep-search',async c=>{
 });
 
 app.post('/api/wines',async c=>{
- const parsed=wineInputSchema.safeParse(await c.req.json());if(!parsed.success)return c.json({error:'Invalid wine',issues:parsed.error.issues},400);
- const w=parsed.data,id=crypto.randomUUID(),owner=c.get('userId'),now=new Date().toISOString();
- await c.env.DB.prepare(`INSERT INTO wines(id,owner_id,producer,wine_name,vintage,country,region,appellation,grapes_json,grape_blend_json,wine_style,alcohol_percentage,tasting_notes,rating,tasting_date,event,venue,price,currency,tags_json,recognition_status,recognition_confidence,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`).bind(id,owner,w.producer,w.wineName,w.vintage,w.country,w.region,w.appellation,JSON.stringify(w.grapes),JSON.stringify(w.grapeBlend),w.wineStyle,w.alcoholPercentage,w.tastingNotes,w.rating,w.tastingDate,w.event,w.venue,w.price,w.currency,JSON.stringify(w.tags),w.recognitionStatus,w.recognitionConfidence,now,now).run();
- await saveExperience(c.env.DB,owner,id,w);
- return c.json({id},201);
+ const owner=c.get('userId'),id=crypto.randomUUID(),now=new Date().toISOString();
+ const multipart=(c.req.header('Content-Type')||'').includes('multipart/form-data');
+ if(!multipart){
+  const parsed=wineInputSchema.safeParse(await c.req.json());if(!parsed.success)return c.json({error:'Invalid wine',issues:parsed.error.issues},400);
+  const w=parsed.data;
+  await c.env.DB.prepare(`INSERT INTO wines(id,owner_id,producer,wine_name,vintage,country,region,appellation,grapes_json,grape_blend_json,wine_style,alcohol_percentage,tasting_notes,rating,tasting_date,event,venue,price,currency,tags_json,recognition_status,recognition_confidence,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`).bind(id,owner,w.producer,w.wineName,w.vintage,w.country,w.region,w.appellation,JSON.stringify(w.grapes),JSON.stringify(w.grapeBlend),w.wineStyle,w.alcoholPercentage,w.tastingNotes,w.rating,w.tastingDate,w.event,w.venue,w.price,w.currency,JSON.stringify(w.tags),w.recognitionStatus,w.recognitionConfidence,now,now).run();
+  await saveExperience(c.env.DB,owner,id,w);return c.json({id},201);
+ }
+ const form=await c.req.formData();
+ const parsed=wineInputSchema.safeParse(parseJson(form.get('wine'),null));if(!parsed.success)return c.json({error:'Invalid wine',issues:parsed.error.issues},400);
+ const w=parsed.data,files=form.getAll('images').filter((x):x is File=>x instanceof File);
+ try{validateBatch(files,{maxFiles:Number(c.env.MAX_BATCH_FILES)||12,maxBytes:Number(c.env.MAX_FILE_BYTES)||10485760,minDimension:300,maxDimension:12000})}catch(e){return c.json({error:(e as Error).message},400)}
+ const dimensions=parseJson<unknown[]>(form.get('dimensions'),[]),metadata=parseJson<PhotoMetadata[]>(form.get('metadata'),[]);
+ if(dimensions.length!==files.length||metadata.length!==files.length)return c.json({error:'Dimensions and metadata are required for every saved photo'},400);
+ const uploaded:Array<{key:string;imageId:string;file:File;dim:{width:number;height:number};meta:ReturnType<typeof normalizeMeta>}>=[];
+ try{
+  for(let i=0;i<files.length;i++){
+   const dim=dimensionsSchema.parse(dimensions[i]),meta=normalizeMeta(metadata[i]),file=files[i],key=createObjectKey(owner,file.type),imageId=crypto.randomUUID();
+   await c.env.WINE_IMAGES.put(key,file.stream(),{httpMetadata:{contentType:file.type},customMetadata:{ownerId:owner,wineId:id}});
+   uploaded.push({key,imageId,file,dim,meta});
+  }
+  const statements=[c.env.DB.prepare(`INSERT INTO wines(id,owner_id,producer,wine_name,vintage,country,region,appellation,grapes_json,grape_blend_json,wine_style,alcohol_percentage,tasting_notes,rating,tasting_date,event,venue,price,currency,tags_json,recognition_status,recognition_confidence,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`).bind(id,owner,w.producer,w.wineName,w.vintage,w.country,w.region,w.appellation,JSON.stringify(w.grapes),JSON.stringify(w.grapeBlend),w.wineStyle,w.alcoholPercentage,w.tastingNotes,w.rating,w.tastingDate,w.event,w.venue,w.price,w.currency,JSON.stringify(w.tags),w.recognitionStatus,w.recognitionConfidence,now,now),...uploaded.map(x=>c.env.DB.prepare(`INSERT INTO wine_images(id,owner_id,wine_id,object_key,content_type,byte_size,width,height,upload_status,recognition_status,captured_at,latitude,longitude,location_name,metadata_source,created_at) VALUES(?,?,?,?,?,?,?,?,'uploaded','complete',?,?,?,?,?,?)`).bind(x.imageId,owner,id,x.key,x.file.type,x.file.size,x.dim.width,x.dim.height,x.meta.capturedAt,x.meta.latitude,x.meta.longitude,w.locationName??null,x.meta.source,now))];
+  await c.env.DB.batch(statements);
+  await saveExperience(c.env.DB,owner,id,w);
+  return c.json({id},201);
+ }catch(e){
+  try{await c.env.DB.batch([c.env.DB.prepare('DELETE FROM wine_images WHERE wine_id=? AND owner_id=?').bind(id,owner),c.env.DB.prepare('DELETE FROM wines WHERE id=? AND owner_id=?').bind(id,owner)])}catch{}
+  await Promise.allSettled(uploaded.map(x=>c.env.WINE_IMAGES.delete(x.key)));
+  return c.json({error:(e as Error).message||'Could not save wine and photos'},500);
+ }
 });
 
 app.put('/api/wines/:id',async c=>{
@@ -132,54 +165,33 @@ app.put('/api/wines/:id',async c=>{
  return c.json({ok:true});
 });
 
-app.delete('/api/wines/:id',async c=>{const id=c.req.param('id'),owner=c.get('userId');const images=await c.env.DB.prepare('SELECT object_key FROM wine_images WHERE wine_id=? AND owner_id=?').bind(id,owner).all<{object_key:string}>();const deleted=await c.env.DB.prepare('DELETE FROM wines WHERE id=? AND owner_id=?').bind(id,owner).run();if(!deleted.meta.changes)return c.json({error:'Not found'},404);for(const image of images.results){const refs=await c.env.DB.prepare('SELECT COUNT(*) n FROM wine_images WHERE object_key=? AND wine_id IS NOT NULL').bind(image.object_key).first<{n:number}>();if(!refs?.n){await c.env.WINE_IMAGES.delete(image.object_key);await c.env.DB.prepare('DELETE FROM wine_images WHERE object_key=? AND wine_id IS NULL').bind(image.object_key).run()}}return c.body(null,204)});
-
-app.post('/api/uploads',async c=>{
- const form=await c.req.formData(),files=form.getAll('images').filter((x):x is File=>x instanceof File);
- try{validateBatch(files,{maxFiles:Number(c.env.MAX_BATCH_FILES)||12,maxBytes:Number(c.env.MAX_FILE_BYTES)||10485760,minDimension:300,maxDimension:12000})}catch(e){return c.json({error:(e as Error).message},400)}
- const dimensions=JSON.parse(String(form.get('dimensions')||'[]')) as unknown[],metadata=JSON.parse(String(form.get('metadata')||'[]')) as PhotoMetadata[];
- if(dimensions.length!==files.length)return c.json({error:'Dimensions required for every image'},400);
- const results=[];
- for(let i=0;i<files.length;i++){
-  const dim=dimensionsSchema.safeParse(dimensions[i]);if(!dim.success){results.push({name:files[i].name,status:'failed',error:'Invalid image dimensions'});continue}
-  const meta=metadata[i]??{},lat=typeof meta.latitude==='number'&&meta.latitude>=-90&&meta.latitude<=90?meta.latitude:null,lon=typeof meta.longitude==='number'&&meta.longitude>=-180&&meta.longitude<=180?meta.longitude:null;
-  const capturedAt=typeof meta.capturedAt==='string'&&!Number.isNaN(Date.parse(meta.capturedAt))?new Date(meta.capturedAt).toISOString():null;
-  const source=['exif','file_fallback'].includes(String(meta.source))?String(meta.source):'none';
-  const file=files[i],key=createObjectKey(c.get('userId'),file.type),imageId=crypto.randomUUID();
-  try{
-   await c.env.WINE_IMAGES.put(key,file.stream(),{httpMetadata:{contentType:file.type},customMetadata:{ownerId:c.get('userId')}});
-   await c.env.DB.prepare(`INSERT INTO wine_images(id,owner_id,object_key,content_type,byte_size,width,height,upload_status,captured_at,latitude,longitude,metadata_source,created_at) VALUES(?,?,?,?,?,?,?,'uploaded',?,?,?,?,?)`).bind(imageId,c.get('userId'),key,file.type,file.size,dim.data.width,dim.data.height,capturedAt,lat,lon,source,new Date().toISOString()).run();
-   results.push({id:imageId,name:file.name,status:'uploaded',objectKey:key});
-  }catch(e){await c.env.WINE_IMAGES.delete(key);results.push({name:file.name,status:'failed',error:(e as Error).message})}
- }
- return c.json({results},207);
-});
+app.delete('/api/wines/:id',async c=>{const id=c.req.param('id'),owner=c.get('userId');const images=await c.env.DB.prepare('SELECT object_key FROM wine_images WHERE wine_id=? AND owner_id=?').bind(id,owner).all<{object_key:string}>();const deleted=await c.env.DB.prepare('DELETE FROM wines WHERE id=? AND owner_id=?').bind(id,owner).run();if(!deleted.meta.changes)return c.json({error:'Not found'},404);for(const image of images.results){await c.env.WINE_IMAGES.delete(image.object_key);await c.env.DB.prepare('DELETE FROM wine_images WHERE object_key=?').bind(image.object_key).run()}return c.body(null,204)});
 
 app.get('/api/images/:id',async c=>{const row=await c.env.DB.prepare('SELECT object_key FROM wine_images WHERE id=? AND owner_id=?').bind(c.req.param('id'),c.get('userId')).first<{object_key:string}>();if(!row)return c.json({error:'Not found'},404);const obj=await c.env.WINE_IMAGES.get(row.object_key);if(!obj)return c.json({error:'Not found'},404);return new Response(obj.body,{headers:{'Content-Type':obj.httpMetadata?.contentType||'application/octet-stream','Cache-Control':'private, max-age=300','Content-Security-Policy':"default-src 'none'"}})});
 
-app.post('/api/recognition/:id',async c=>{
- const image=await c.env.DB.prepare('SELECT * FROM wine_images WHERE id=? AND owner_id=?').bind(c.req.param('id'),c.get('userId')).first<Record<string,unknown>>();if(!image)return c.json({error:'Not found'},404);
- await c.env.DB.prepare("UPDATE wine_images SET recognition_status='processing',error=NULL WHERE id=?").bind(image.id).run();
+app.post('/api/recognition',async c=>{
+ const form=await c.req.formData(),files=form.getAll('images').filter((x):x is File=>x instanceof File);
+ try{validateBatch(files,{maxFiles:Number(c.env.MAX_BATCH_FILES)||12,maxBytes:3*1024*1024,minDimension:300,maxDimension:2000})}catch(e){return c.json({error:(e as Error).message},400)}
+ const metadata=parseJson<PhotoMetadata[]>(form.get('metadata'),[]),normalized=files.map((_,i)=>normalizeMeta(metadata[i]));
+ const ranked=[...normalized].sort((a,b)=>(b.source==='exif'?2:b.source==='file_fallback'?1:0)-(a.source==='exif'?2:a.source==='file_fallback'?1:0));
+ const best=ranked[0]??normalizeMeta(undefined),tastingDate=best.capturedAt?.slice(0,10)??null;
+ const context=[best.capturedAt?`The strongest photo timestamp is ${best.capturedAt}.`:'No reliable photo timestamp.',best.latitude!=null&&best.longitude!=null?`The strongest photo GPS is ${best.latitude}, ${best.longitude}. Infer a concise human-readable location only if reasonably confident.`:'No reliable GPS metadata.'].join(' ');
  try{
-  const obj=await c.env.WINE_IMAGES.get(String(image.object_key));if(!obj)throw new Error('Image missing');
-  const bytes=new Uint8Array(await obj.arrayBuffer());let binary='';for(let i=0;i<bytes.length;i+=32768)binary+=String.fromCharCode(...bytes.subarray(i,i+32768));
-  const capturedAt=typeof image.captured_at==='string'?image.captured_at:null,tastingDate=capturedAt?capturedAt.slice(0,10):null;
-  const latitude=typeof image.latitude==='number'?image.latitude:null,longitude=typeof image.longitude==='number'?image.longitude:null;
-  const context=[capturedAt?`Photo captured at ${capturedAt}.`:'No reliable photo timestamp.',latitude!=null&&longitude!=null?`Photo GPS is ${latitude}, ${longitude}. Infer a concise human-readable location only if reasonably confident.`:'No GPS metadata.'].join(' ');
   const genAI=new GoogleGenerativeAI(c.env.GEMINI_API_KEY);
   const model=genAI.getGenerativeModel({model:'gemini-3.1-flash-lite',generationConfig:{responseMimeType:'application/json',responseSchema:{type:SchemaType.OBJECT,properties:{producer:{type:SchemaType.STRING,nullable:true},wineName:{type:SchemaType.STRING,nullable:true},vintage:{type:SchemaType.NUMBER,nullable:true},country:{type:SchemaType.STRING,nullable:true},region:{type:SchemaType.STRING,nullable:true},appellation:{type:SchemaType.STRING,nullable:true},grapes:{type:SchemaType.ARRAY,items:{type:SchemaType.STRING}},grapeBlend:{type:SchemaType.ARRAY,items:{type:SchemaType.OBJECT,properties:{grape:{type:SchemaType.STRING},percentage:{type:SchemaType.NUMBER,nullable:true}},required:['grape']}},style:{type:SchemaType.STRING,nullable:true},alcoholPercentage:{type:SchemaType.NUMBER,nullable:true},locationName:{type:SchemaType.STRING,nullable:true},confidence:{type:SchemaType.NUMBER}},required:['grapes','grapeBlend','confidence']}}});
+  const imageParts=await Promise.all(files.map(async file=>({inlineData:{data:await fileToBase64(file),mimeType:file.type}})));
+  const prompt=`All supplied images are labels or views of the SAME wine bottle. Analyze them jointly in one identification. Reconcile front, back, neck and supplementary labels rather than treating them as separate wines. First prioritize facts visible anywhere in the supplied images. After identifying the bottle, you may fill high-confidence canonical facts from general wine knowledge even when not printed verbatim: country, region, appellation, grape varieties, and broad wine style. Use null or an empty array when not reasonably confident. For style, return only one of: red, white, rose, sparkling, dessert, fortified, orange, other. Capture grape blend percentages only when explicitly visible in the supplied images; never invent vintage-specific percentages. Keep plain grape names in grapes and percentages in grapeBlend. Do not add producer history, vintage quality, terroir commentary, winemaking techniques, drinking windows, tasting notes, scores, or detailed research here; those belong to Deep Search. Confidence is 0 to 1 and should reflect confidence in the bottle identification. ${context} Do not invent a tasting date; the application derives it from photo metadata.`;
   let last:Error|undefined;
-  for(let attempt=0;attempt<3;attempt++){
+  for(let attempt=0;attempt<2;attempt++){
    try{
-    const timeout=new Promise<never>((_,reject)=>setTimeout(()=>reject(new Error('Recognition timed out')),20000));
-    const response=await Promise.race([model.generateContent([`Identify the exact wine shown, then return useful basic catalogue metadata. First prioritize facts visible on the label. After identifying the bottle, you may fill high-confidence canonical facts from general wine knowledge even when not printed verbatim: country, region, appellation, grape varieties, and broad wine style. Use null or an empty array when you are not reasonably confident. For style, return only one of: red, white, rose, sparkling, dessert, fortified, orange, other. Capture grape blend percentages only when they are visible on the label or otherwise explicitly stated in the provided image; never invent vintage-specific percentages. Keep plain grape names in grapes and percentages in grapeBlend. Do not add producer history, vintage quality, terroir commentary, winemaking techniques, drinking windows, tasting notes, scores, or other research here; those belong to Deep Search. Confidence is 0 to 1 and should reflect confidence in the bottle identification. ${context} Do not invent a tasting date; the application derives it from photo metadata.`,{inlineData:{data:btoa(binary),mimeType:String(image.content_type)}}]),timeout]);
+    const timeout=new Promise<never>((_,reject)=>setTimeout(()=>reject(new Error('Recognition timed out')),25000));
+    const response=await Promise.race([model.generateContent([prompt,...imageParts]),timeout]);
     const result=parseRecognition(response.response.text());
-    await c.env.DB.prepare("UPDATE wine_images SET recognition_status='review',location_name=? WHERE id=?").bind(result.locationName??null,image.id).run();
-    return c.json({...result,tastingDate,latitude,longitude,metadataSource:(image.metadata_source||'none') as string});
-   }catch(e){last=e as Error;if(attempt<2)await new Promise(r=>setTimeout(r,500*2**attempt))}
+    return c.json({...result,tastingDate,latitude:best.latitude,longitude:best.longitude,metadataSource:best.source});
+   }catch(e){last=e as Error;if(attempt===0)await new Promise(r=>setTimeout(r,500))}
   }
   throw last;
- }catch(e){await c.env.DB.prepare("UPDATE wine_images SET recognition_status='failed',error=? WHERE id=?").bind((e as Error).message,image.id).run();return c.json({error:(e as Error).message},502)}
+ }catch(e){return c.json({error:(e as Error).message||'Recognition failed'},502)}
 });
 
 app.all('*',c=>c.env.ASSETS.fetch(c.req.raw));
