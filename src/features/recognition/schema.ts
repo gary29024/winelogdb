@@ -8,6 +8,7 @@ export const recognitionSchema = z.object({
   region: nullableText,
   appellation: nullableText,
   grapes: z.array(z.string().trim().max(100)).max(20).default([]),
+  grapeBlend: z.array(z.object({grape:z.string().trim().max(100),percentage:z.number().min(0).max(100).nullable().optional()})).max(20).default([]),
   style: z.enum(['red','white','rose','sparkling','dessert','fortified','orange','other']).nullable().optional(),
   alcoholPercentage: z.number().min(0).max(100).nullable().optional(),
   confidence: z.number().min(0).max(1),
