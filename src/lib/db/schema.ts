@@ -2,8 +2,11 @@ import { z } from 'zod';
 import { canonicalizeWineFields } from '../wine/canonicalize';
 
 export const wineStyles = ['red', 'white', 'rose', 'sparkling', 'dessert', 'fortified', 'orange', 'other'] as const;
-const optionalText = z.string().trim().max(500).optional().nullable();
-const vintageSchema = z.preprocess(value=>{
+
+const blankToNull=(value:unknown)=>typeof value==='string'&&!value.trim()?null:value;
+const optionalText = z.preprocess(blankToNull,z.string().trim().max(500).optional().nullable());
+const optionalDate = z.preprocess(blankToNull,z.string().date().optional().nullable());
+const optionalNumber=(schema:z.ZodNumber)=>z.preprocess(value=>{
   if(value==null)return value;
   if(typeof value==='string'){
     const trimmed=value.trim();
@@ -12,10 +15,23 @@ const vintageSchema = z.preprocess(value=>{
     return Number.isFinite(numeric)?numeric:value;
   }
   return value;
-},z.number().int().min(1000).max(new Date().getUTCFullYear()+1).optional().nullable());
+},schema.optional().nullable());
+
+const vintageSchema = optionalNumber(z.number().int().min(1000).max(new Date().getUTCFullYear()+1));
+const percentageSchema = optionalNumber(z.number().min(0).max(100));
+const currencySchema = z.preprocess(value=>{
+  if(value==null)return value;
+  if(typeof value==='string'){
+    const trimmed=value.trim();
+    return trimmed?trimmed.toUpperCase():null;
+  }
+  return value;
+},z.string().regex(/^[A-Z]{3}$/,'Use a 3-letter currency code such as USD, EUR or HKD').optional().nullable());
+const wineStyleSchema = z.preprocess(value=>typeof value==='string'?value.trim().toLowerCase()||null:value,z.enum(wineStyles).optional().nullable());
+
 export const grapeBlendEntrySchema = z.object({
   grape: z.string().trim().min(1).max(100),
-  percentage: z.number().min(0).max(100).optional().nullable()
+  percentage: percentageSchema
 });
 export const deepSearchSchema = z.object({
   summary: z.string().trim().max(6000).default(''),
@@ -33,19 +49,22 @@ export const wineRecordSchema = z.object({
   wineName: z.string().trim().min(1).max(200), vintage: vintageSchema,
   country: optionalText, region: optionalText, appellation: optionalText, grapes: z.array(z.string().trim().min(1).max(100)).max(30).default([]),
   grapeBlend: z.array(grapeBlendEntrySchema).max(30).default([]),
-  wineStyle: z.enum(wineStyles).optional().nullable(), alcoholPercentage: z.number().min(0).max(100).optional().nullable(),
-  tastingNotes: z.string().trim().max(10000).default(''), rating: z.number().min(0).max(100).optional().nullable(),
-  tastingDate: z.string().date().optional().nullable(), event: optionalText, venue: optionalText, price: z.number().nonnegative().optional().nullable(),
-  currency: z.string().regex(/^[A-Z]{3}$/).optional().nullable(), tags: z.array(z.string().trim().min(1).max(50)).max(50).default([]),
+  wineStyle: wineStyleSchema, alcoholPercentage: optionalNumber(z.number().min(0).max(30)),
+  tastingNotes: z.string().trim().max(10000).default(''), rating: optionalNumber(z.number().min(0).max(100)),
+  tastingDate: optionalDate, event: optionalText, venue: optionalText, price: optionalNumber(z.number().nonnegative()),
+  currency: currencySchema, tags: z.array(z.string().trim().min(1).max(50)).max(50).default([]),
   tastingName: optionalText, locationName: optionalText,
-  latitude: z.number().min(-90).max(90).optional().nullable(), longitude: z.number().min(-180).max(180).optional().nullable(),
+  latitude: optionalNumber(z.number().min(-90).max(90)), longitude: optionalNumber(z.number().min(-180).max(180)),
   deepSearch: deepSearchSchema.optional().nullable(),
   imageObjectKeys: z.array(z.string().min(1)).max(30).default([]), recognitionStatus: z.enum(['pending','processing','review','complete','failed']).default('pending'),
-  recognitionConfidence: z.number().min(0).max(1).optional().nullable(), createdAt: z.string().datetime(), updatedAt: z.string().datetime()
+  recognitionConfidence: optionalNumber(z.number().min(0).max(1)), createdAt: z.string().datetime(), updatedAt: z.string().datetime()
 });
 export type GrapeBlendEntry = z.infer<typeof grapeBlendEntrySchema>;
 export type DeepSearchResult = z.infer<typeof deepSearchSchema>;
 export type WineRecord = z.infer<typeof wineRecordSchema>;
-const wineInputBaseSchema = wineRecordSchema.omit({ id:true, ownerId:true, createdAt:true, updatedAt:true, deepSearch:true });
+const wineInputBaseSchema = wineRecordSchema.omit({ id:true, ownerId:true, createdAt:true, updatedAt:true, deepSearch:true, imageObjectKeys:true }).superRefine((value,ctx)=>{
+  const knownTotal=value.grapeBlend.reduce((sum,x)=>sum+(x.percentage??0),0);
+  if(knownTotal>100.0001)ctx.addIssue({code:'custom',path:['grapeBlend'],message:'Known grape percentages cannot total more than 100%'});
+});
 export const wineInputSchema = wineInputBaseSchema.transform(value=>canonicalizeWineFields(value));
 export type WineInput = z.infer<typeof wineInputSchema>;
