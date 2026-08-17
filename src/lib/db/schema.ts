@@ -17,7 +17,17 @@ const optionalNumber=(schema:z.ZodNumber)=>z.preprocess(value=>{
   return value;
 },schema.optional().nullable());
 
-const vintageSchema = optionalNumber(z.number().int().min(1000).max(new Date().getUTCFullYear()+1));
+const currentYearPlusOne=new Date().getUTCFullYear()+1;
+const vintageSchema=z.preprocess(value=>{
+  if(value==null)return null;
+  if(typeof value==='number')return value;
+  if(typeof value==='string'){
+    const trimmed=value.trim();
+    if(!trimmed)return null;
+    if(/^\d{4}$/.test(trimmed))return Number(trimmed);
+  }
+  return value;
+},z.number({error:'Vintage must be a 4-digit year'}).int('Vintage must be a whole year').min(1000,'Vintage is too early').max(currentYearPlusOne,`Vintage cannot be later than ${currentYearPlusOne}`).nullable());
 const percentageSchema = optionalNumber(z.number().min(0).max(100));
 const currencySchema = z.preprocess(value=>{
   if(value==null)return value;
