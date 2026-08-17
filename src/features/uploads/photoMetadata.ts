@@ -4,44 +4,27 @@ export type PhotoMetadata = {
   capturedAt: string | null;
   latitude: number | null;
   longitude: number | null;
+  source: 'exif' | 'file_fallback' | 'none';
 };
 
 function toIso(value: unknown): string | null {
   if (value instanceof Date && !Number.isNaN(value.getTime())) return value.toISOString();
-  if (typeof value === 'string') {
-    const parsed = new Date(value);
-    if (!Number.isNaN(parsed.getTime())) return parsed.toISOString();
-  }
+  if (typeof value === 'string') { const parsed = new Date(value); if (!Number.isNaN(parsed.getTime())) return parsed.toISOString(); }
   return null;
 }
 
 export async function extractPhotoMetadata(file: File): Promise<PhotoMetadata> {
-  let capturedAt: string | null = null;
-  let latitude: number | null = null;
-  let longitude: number | null = null;
-
+  let capturedAt: string | null = null, latitude: number | null = null, longitude: number | null = null;
+  let source: PhotoMetadata['source'] = 'none';
   try {
-    const exif = await parse(file, {
-      pick: ['DateTimeOriginal', 'CreateDate', 'ModifyDate'],
-      translateValues: false,
-    }) as Record<string, unknown> | undefined;
+    const exif = await parse(file,{pick:['DateTimeOriginal','CreateDate','ModifyDate']}) as Record<string,unknown>|undefined;
     capturedAt = toIso(exif?.DateTimeOriginal) ?? toIso(exif?.CreateDate) ?? toIso(exif?.ModifyDate);
-  } catch {
-    // Some formats or privacy-stripped images have no readable EXIF timestamp.
-  }
-
+    if (capturedAt) source='exif';
+  } catch {}
   try {
-    const point = await gps(file);
-    if (point && Number.isFinite(point.latitude) && Number.isFinite(point.longitude)) {
-      latitude = point.latitude;
-      longitude = point.longitude;
-    }
-  } catch {
-    // GPS metadata is optional and commonly stripped by messaging/social apps.
-  }
-
-  // File.lastModified is only a fallback because it can reflect download/copy time rather than capture time.
-  if (!capturedAt && file.lastModified > 0) capturedAt = new Date(file.lastModified).toISOString();
-
-  return { capturedAt, latitude, longitude };
+    const point=await gps(file);
+    if(point&&Number.isFinite(point.latitude)&&Number.isFinite(point.longitude)){latitude=point.latitude;longitude=point.longitude;source='exif'}
+  } catch {}
+  if(!capturedAt&&file.lastModified>0){capturedAt=new Date(file.lastModified).toISOString();source='file_fallback'}
+  return {capturedAt,latitude,longitude,source};
 }
