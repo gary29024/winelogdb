@@ -4,7 +4,18 @@ import { authHeaders,clearSession } from '../../lib/auth/client';
 
 export type WinePhoto={file:File;metadata?:PhotoMetadata;width:number;height:number};
 
-async function requireOk(r:Response,message:string){if(r.status===401){clearSession();throw new Error('Session expired. Please sign in again.')}if(!r.ok){const body=await r.json().catch(()=>({})) as {error?:string};throw new Error(body.error||message)}}
+type ApiIssue={path?:Array<string|number>;message?:string};
+async function requireOk(r:Response,message:string){
+  if(r.status===401){clearSession();throw new Error('Session expired. Please sign in again.')}
+  if(!r.ok){
+    const body=await r.json().catch(()=>({})) as {error?:string;issues?:ApiIssue[]};
+    if(body.issues?.length){
+      const detail=body.issues.map(x=>`${x.path?.join('.')||'wine'}: ${x.message||'invalid value'}`).join('; ');
+      throw new Error(`${body.error||message} — ${detail}`);
+    }
+    throw new Error(body.error||message);
+  }
+}
 export async function listWines(params:URLSearchParams):Promise<{items:WineRecord[];nextOffset:number|null}>{const r=await fetch(`/api/wines?${params}`,{headers:authHeaders()});await requireOk(r,'Could not load wines');return r.json()}
 export async function getWine(id:string):Promise<WineRecord>{const r=await fetch(`/api/wines/${id}`,{headers:authHeaders()});await requireOk(r,'Wine not found');return r.json()}
 export async function saveWine(input:WineInput,id?:string,photos:WinePhoto[]=[]):Promise<{id:string}|{ok:true}>{
