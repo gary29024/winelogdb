@@ -2,6 +2,7 @@ import { useEffect,useState, type FormEvent } from 'react';
 import { Link,useNavigate } from 'react-router-dom';
 import { saveWine, type WinePhoto } from './api';
 import { resolveProducer,type ProducerResolution } from '../producers/api';
+import { resolveCuvee,type CuveeResolution } from '../cuvees/api';
 import type { GrapeBlendEntry, WineInput } from '../../lib/db/schema';
 import '../../producerResolution.css';
 
@@ -19,6 +20,9 @@ function blendText(initial?:Partial<WineInput>){
 export function WineForm({initial,id,photos=[]}:{initial?:Partial<WineInput>;id?:string;photos?:WinePhoto[]}){
   const nav=useNavigate(),[busy,setBusy]=useState(false),[error,setError]=useState('');
   const [producer,setProducer]=useState(String(initial?.producer??'')),[producerResolution,setProducerResolution]=useState<ProducerResolution|null>(null),[resolvingProducer,setResolvingProducer]=useState(false);
+  const [wineName,setWineName]=useState(String(initial?.wineName??'')),[appellation,setAppellation]=useState(String(initial?.appellation??'')),[wineStyle,setWineStyle]=useState(String(initial?.wineStyle??''));
+  const [cuveeResolution,setCuveeResolution]=useState<CuveeResolution|null>(null),[resolvingCuvee,setResolvingCuvee]=useState(false);
+  const matched=producerResolution?.matched?producerResolution.producer:undefined;
 
   useEffect(()=>{
     const name=producer.trim();
@@ -30,6 +34,16 @@ export function WineForm({initial,id,photos=[]}:{initial?:Partial<WineInput>;id?
     },250);
     return()=>{cancelled=true;clearTimeout(timer)};
   },[producer]);
+
+  useEffect(()=>{
+    const name=wineName.trim();
+    if(!matched?.id||!name){setCuveeResolution(null);setResolvingCuvee(false);return}
+    let cancelled=false;setResolvingCuvee(true);
+    const timer=setTimeout(()=>{
+      resolveCuvee(matched.id,name,appellation.trim()||null,wineStyle||null).then(result=>{if(!cancelled)setCuveeResolution(result)}).catch(()=>{if(!cancelled)setCuveeResolution(null)}).finally(()=>{if(!cancelled)setResolvingCuvee(false)});
+    },300);
+    return()=>{cancelled=true;clearTimeout(timer)};
+  },[matched?.id,wineName,appellation,wineStyle]);
 
   async function submit(e:FormEvent<HTMLFormElement>){
     e.preventDefault();setBusy(true);setError('');const fd=new FormData(e.currentTarget);
@@ -51,7 +65,7 @@ export function WineForm({initial,id,photos=[]}:{initial?:Partial<WineInput>;id?
     try{const result=await saveWine(input,id,id?[]:photos);const savedId=id??('id' in result?result.id:undefined);if(!savedId)throw new Error('Save response did not include a wine ID');nav(`/wines/${savedId}`)}catch(e){setError((e as Error).message);setBusy(false)}
   }
   const field=(name:string,label:string,type='text',step?:string,required=false)=><label>{label}<input name={name} type={type} step={step} required={required} defaultValue={String(initial?.[name as keyof WineInput]??'')}/></label>;
-  const matched=producerResolution?.matched?producerResolution.producer:undefined;
+  const matchedCuvee=cuveeResolution?.matched?cuveeResolution.cuvee:undefined;
   const hasGps=initial?.latitude!=null&&initial?.longitude!=null;
   const hasEstimatedPlace=hasGps&&Boolean(initial?.locationName?.trim());
   return <form className="wine-form" onSubmit={submit}>
@@ -61,9 +75,15 @@ export function WineForm({initial,id,photos=[]}:{initial?:Partial<WineInput>;id?
         {resolvingProducer?<span>Checking producer library…</span>:matched?<><strong>✓ Existing producer profile</strong><span>{matched.matchType==='alias'?`Matched via known alias “${matched.matchedName}” → `:''}{matched.canonicalName}</span><small>{matched.tastedCount} tasted · {matched.catalogCount} wines in researched range{matched.researchedAt?' · producer research available':''}</small><Link to={`/producers/${matched.id}`}>View producer profile</Link></>:<><strong>○ New producer</strong><span>No existing producer identity matches this name. A new profile will be created when the wine is saved.</span></>}
        </div>}
       </div>
-      {field('wineName','Wine name *','text',undefined,true)}{field('vintage','Vintage','number')}{field('country','Country')}{field('region','Region')}{field('appellation','Appellation')}
+      <div className="cuvee-field"><label>Wine name *<input name="wineName" type="text" required value={wineName} onChange={e=>setWineName(e.target.value)}/></label>
+       {matched&&wineName.trim()&&<div className={`producer-resolution cuvee-resolution ${matchedCuvee?'matched':'new'}`} aria-live="polite">
+        {resolvingCuvee?<span>Checking this producer’s cuvées…</span>:matchedCuvee?<><strong>✓ Existing cuvée</strong><span>{wineName.trim()===matchedCuvee.canonicalName?matchedCuvee.canonicalName:`${wineName.trim()} → ${matchedCuvee.canonicalName}`}</span><small>{matchedCuvee.matchType==='structured'?'Matched by stable producer + appellation/cuvée identity':matchedCuvee.matchType==='alias'?'Matched via a known cuvée name':'Canonical name already matches'}{matchedCuvee.catalogBacked?' · producer catalogue-backed':''}{matchedCuvee.vintages.length?` · tasted vintages ${matchedCuvee.vintages.join(', ')}`:''}</small></>:<><strong>○ New cuvée</strong><span>No existing cuvée identity for this producer matches this wine. WineLog will create one when saved.</span></>}
+       </div>}
+      </div>
+      {field('vintage','Vintage','number')}{field('country','Country')}{field('region','Region')}
+      <label>Appellation<input name="appellation" value={appellation} onChange={e=>setAppellation(e.target.value)}/></label>
       <label>Grapes / blend<input name="grapeBlend" defaultValue={blendText(initial)} placeholder="Merlot 95%, Cabernet Franc 5%"/><small>Percentages are optional. Separate grapes with commas.</small></label>
-      <label>Style<select name="wineStyle" defaultValue={initial?.wineStyle??''}><option value="">Unknown</option>{['red','white','rose','sparkling','dessert','fortified','orange','other'].map(x=><option key={x}>{x}</option>)}</select></label>
+      <label>Style<select name="wineStyle" value={wineStyle} onChange={e=>setWineStyle(e.target.value)}><option value="">Unknown</option>{['red','white','rose','sparkling','dessert','fortified','orange','other'].map(x=><option key={x}>{x}</option>)}</select></label>
       {field('alcoholPercentage','Alcohol %','number','0.1')}{field('rating','Rating / 100','number','0.5')}
     </div>
     <fieldset className="experience-fields"><legend>This drinking / tasting</legend><div className="form-grid">
