@@ -22,6 +22,37 @@ function catalogCategory(wine:ProducerDetail['catalog'][number]):CatalogCategory
  if(value.includes('red'))return 'red';
  return 'other';
 }
+const escapeRegExp=(value:string)=>value.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+function displayCatalogName(name:string,producer:ProducerDetail){
+ const aliases=[producer.canonicalName,...producer.aliases].filter(Boolean).sort((a,b)=>b.length-a.length);
+ for(const alias of aliases){
+  const match=new RegExp(`^${escapeRegExp(alias)}(?:\\s+|\\s*[-–—:]\\s*)`,'i');
+  const stripped=name.replace(match,'').trim();
+  if(stripped&&stripped!==name)return stripped;
+ }
+ return name;
+}
+function verboseCatalogStyle(value:unknown){
+ const text=String(value??'').trim();
+ return text.length>36||text.split(/\s+/).length>5||/[.;]/.test(text);
+}
+function catalogMeta(wine:ProducerDetail['catalog'][number],category:CatalogCategory){
+ const parts:string[]=[];
+ const add=(value:unknown)=>{const text=String(value??'').trim();if(!text)return;const key=normalizeProducerAlias(text);if(parts.some(existing=>normalizeProducerAlias(existing)===key))return;parts.push(text)};
+ add(wine.appellation);
+ const classification=String(wine.classification??'').trim(),appellation=String(wine.appellation??'').trim();
+ if(classification&&!normalizeProducerAlias(appellation).includes(normalizeProducerAlias(classification)))add(classification);
+ const style=String(wine.style??'').trim();add(style&&!verboseCatalogStyle(style)?style:categoryLabels[category]);
+ return parts;
+}
+function catalogNote(wine:ProducerDetail['catalog'][number]){
+ const explicit=String(wine.notes??'').trim(),style=String(wine.style??'').trim();
+ const full=explicit||(style&&verboseCatalogStyle(style)?style:'');
+ if(!full)return {short:'',full:''};
+ if(full.length<=180)return {short:full,full};
+ const clipped=full.slice(0,177).replace(/\s+\S*$/,'').trim();
+ return {short:`${clipped||full.slice(0,177)}…`,full};
+}
 
 export function ProducerDetailPage(){
  const {id=''}=useParams(),[producer,setProducer]=useState<ProducerDetail>(),[available,setAvailable]=useState<ProducerSummary[]>([]),[selectedAlias,setSelectedAlias]=useState(''),[primaryName,setPrimaryName]=useState(''),[loading,setLoading]=useState(true),[error,setError]=useState(''),[notice,setNotice]=useState(''),[researching,setResearching]=useState(false),[researchRun,setResearchRun]=useState<ProducerResearchRun|null>(null),[researchElapsed,setResearchElapsed]=useState(0),[merging,setMerging]=useState(false),[unlinking,setUnlinking]=useState(''),[savingPrimary,setSavingPrimary]=useState(false);
@@ -73,7 +104,7 @@ export function ProducerDetailPage(){
     {producer.contactEmail&&<div><span>Email</span><a href={`mailto:${producer.contactEmail}`}>{producer.contactEmail}</a></div>}
     {producer.contactPhone&&<div><span>Phone</span><a href={`tel:${producer.contactPhone.replace(/[^+\d]/g,'')}`}>{producer.contactPhone}</a></div>}
    </div>{producer.contactSources.length>0&&<div className="producer-contact-sources"><span>Gemini contact references</span>{producer.contactSources.map(source=><a key={source.url} href={source.url} target="_blank" rel="noreferrer">{source.title}</a>)}</div>}</div>}
-   {catalogGroups.map(group=><div className="producer-catalog-group" key={group.category}><h3>{group.label}<span>{group.wines.length}</span></h3><div className="producer-catalog">{group.wines.map((wine,index)=>{const tasted=tastedKeys.has(wineKey(wine.name));return <div className="catalog-row" key={`${wine.name}-${index}`}><div><strong>{wine.name}</strong><span>{[wine.appellation,wine.classification,wine.style].filter(Boolean).join(' · ')}</span>{wine.notes&&<small>{wine.notes}</small>}</div>{tasted&&<span className="tasted-badge">Tasted</span>}</div>})}</div></div>)}
+   {catalogGroups.map(group=><div className="producer-catalog-group" key={group.category}><h3>{group.label}<span>{group.wines.length}</span></h3><div className="producer-catalog">{group.wines.map((wine,index)=>{const displayName=displayCatalogName(wine.name,producer),tasted=tastedKeys.has(wineKey(displayName))||tastedKeys.has(wineKey(wine.name)),meta=catalogMeta(wine,group.category),note=catalogNote(wine);return <div className="catalog-row" key={`${wine.name}-${index}`}><div><strong>{displayName}</strong>{meta.length>0&&<span className="catalog-meta">{meta.join(' · ')}</span>}{note.short&&<small className="catalog-notes" title={note.full}>{note.short}</small>}</div>{tasted&&<span className="tasted-badge">Tasted</span>}</div>})}</div></div>)}
    {producer.sources.length>0&&<div className="producer-sources"><strong>Profile & range references</strong>{producer.sources.map(s=><a key={s.url} href={s.url} target="_blank" rel="noreferrer">{s.title}</a>)}</div>}{producer.researchedAt&&<small>Latest producer research: {producer.researchModel} · {new Date(producer.researchedAt).toLocaleDateString()}</small>}
   </section>
   <section className="detail-section"><p className="section-label">YOUR TASTINGS</p><h2>{producer.tastedWines.length} tasted wine{producer.tastedWines.length===1?'':'s'}</h2>{producer.tastedWines.length?<div className="producer-tasted">{producer.tastedWines.map(w=><Link to={`/wines/${w.id}`} className="tasted-row" key={w.id}><div className="tasted-thumb">{w.imageId?<WineImage imageId={w.imageId} alt={`${w.wineName} bottle`} className="tasted-thumb-image"/>:<span className="tasted-thumb-fallback">W</span>}</div><div className="tasted-copy"><strong>{w.wineName}</strong><span>{[w.vintage??'NV',w.appellation,w.region].filter(Boolean).join(' · ')}</span></div><div className="tasted-meta">{w.rating!=null&&<strong>{w.rating}</strong>}{w.tastingDate&&<span>{w.tastingDate}</span>}</div></Link>)}</div>:<p>No tasting records linked to this producer yet.</p>}</section>

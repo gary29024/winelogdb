@@ -1,7 +1,7 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "winelogdb",
-  "main": "worker/layered.ts",
+  "main": "worker/entry.ts",
   "compatibility_date": "2026-08-01",
   "keep_vars": true,
   "upload_source_maps": true,
