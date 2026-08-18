@@ -1,4 +1,5 @@
 import { deepSearchSchema, type DeepSearchResult } from '../db/schema';
+import { ensureProducerEntity } from '../producers/entities';
 import {
   assembleDeepSearch,
   buildResearchTargets,
@@ -8,12 +9,13 @@ import {
   splitDeepSearchResult,
   upsertResearchCache,
   type CachedResearch,
-  type ResearchScope
+  type ResearchScope,
+  type ResearchTarget
 } from './cache';
 
 type ResearchEnv={DB:D1Database;GEMINI_API_KEY:string};
 type DeepSearchRequest={confirmation?:string;refresh?:'none'|'vintage'|'all'};
-type WineRow={producer:string;wine_name:string;vintage:number|null;country:string|null;region:string|null;appellation:string|null;grapes_json:string;grape_blend_json:string};
+type WineRow={producer:string;producer_id:string|null;wine_name:string;vintage:number|null;country:string|null;region:string|null;appellation:string|null;grapes_json:string;grape_blend_json:string};
 type ApiResult={status:200|400|404|502;body:DeepSearchResult|{error:string}};
 type GeminiResponse={candidates?:Array<{content?:{parts?:Array<{text?:string}>};groundingMetadata?:{groundingChunks?:Array<{web?:{title?:string;uri?:string}}>} }>};
 
@@ -36,6 +38,23 @@ async function seedFromLegacy(db:D1Database,owner:string,wine:WineRow,targets:Re
   const seedEntries=splitDeepSearchResult(legacy.data,targets).filter(entry=>!cache.has(entry.target.scope));
   await Promise.all(seedEntries.map(entry=>seedResearchCache(db,owner,entry)));
   return seedEntries.length?loadResearchCache(db,owner,targets):cache;
+}
+
+async function bridgePreEntityCache(db:D1Database,owner:string,wine:WineRow,stableTargets:ResearchTarget[],cache:Map<ResearchScope,CachedResearch>){
+  if(cache.size===stableTargets.length)return cache;
+  const oldTargets=buildResearchTargets({producer:wine.producer,wineName:wine.wine_name,vintage:wine.vintage,country:wine.country,region:wine.region,appellation:wine.appellation});
+  const oldCache=await loadResearchCache(db,owner,oldTargets);
+  const additions:CachedResearch[]=[];
+  for(const stableTarget of stableTargets){
+    if(cache.has(stableTarget.scope))continue;
+    const old=oldCache.get(stableTarget.scope);
+    if(old)additions.push({...old,target:stableTarget});
+  }
+  if(additions.length){
+    await Promise.all(additions.map(entry=>seedResearchCache(db,owner,entry)));
+    return loadResearchCache(db,owner,stableTargets);
+  }
+  return cache;
 }
 
 function cachedContext(cache:Map<ResearchScope,CachedResearch>){
@@ -74,40 +93,41 @@ Make each non-empty field readable in the WineLog detail page without losing res
   for(let attempt=0;attempt<2;attempt++){
     try{
       const response=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${DEEP_SEARCH_MODEL}:generateContent?key=${encodeURIComponent(env.GEMINI_API_KEY)}`,{method:'POST',headers:{'Content-Type':'application/json'},body:requestBody});
-      if(!response.ok){
-        lastError=`Deep Search failed (${response.status})`;
-        if(attempt===0&&(response.status===429||response.status>=500)){await new Promise(r=>setTimeout(r,900));continue}
-        throw new Error(lastError);
-      }
+      if(!response.ok){lastError=`Deep Search failed (${response.status})`;if(attempt===0&&(response.status===429||response.status>=500)){await new Promise(r=>setTimeout(r,900));continue}throw new Error(lastError)}
       const gemini=await response.json() as GeminiResponse,candidate=gemini.candidates?.[0],text=candidate?.content?.parts?.map(x=>x.text??'').join('')??'';
       const cleaned=text.replace(/^```(?:json)?\s*|\s*```$/g,'');
       let research:Record<string,unknown>;try{research=JSON.parse(cleaned) as Record<string,unknown>}catch{throw new Error('Deep Search returned an invalid structured response')}
       const seen=new Set<string>(),sources=(candidate?.groundingMetadata?.groundingChunks??[]).flatMap(x=>x.web?.uri?[{title:x.web.title??x.web.uri,url:x.web.uri}]:[]).filter(x=>{if(seen.has(x.url))return false;seen.add(x.url);return true}).slice(0,20);
       const parsed=deepSearchSchema.safeParse({...research,sources,model:DEEP_SEARCH_MODEL,researchedAt:new Date().toISOString()});
       if(!parsed.success)throw new Error(`Deep Search returned invalid fields: ${parsed.error.issues.map(x=>x.path.join('.')||x.message).join(', ')}`);
-      const entries=splitDeepSearchResult(parsed.data,buildResearchTargets({producer:wine.producer,wineName:wine.wine_name,vintage:wine.vintage,country:wine.country,region:wine.region,appellation:wine.appellation})).filter(entry=>missing.includes(entry.target.scope));
+      const entries=splitDeepSearchResult(parsed.data,buildResearchTargets({producer:wine.producer,producerId:wine.producer_id,wineName:wine.wine_name,vintage:wine.vintage,country:wine.country,region:wine.region,appellation:wine.appellation})).filter(entry=>missing.includes(entry.target.scope));
       const incomplete=missing.filter(scope=>!entries.some(entry=>entry.target.scope===scope&&scopeIsComplete(scope,entry.payload)));
       if(incomplete.length)throw new Error(`Deep Search did not return complete ${incomplete.map(scope=>scopeNames[scope]).join(', ')} research`);
       return entries;
-    }catch(e){
-      lastError=(e as Error).message||'Deep Search failed';
-      if(attempt===0){await new Promise(r=>setTimeout(r,900));continue}
-    }
+    }catch(e){lastError=(e as Error).message||'Deep Search failed';if(attempt===0){await new Promise(r=>setTimeout(r,900));continue}}
   }
   throw new Error(lastError);
 }
 
 export async function runLayeredDeepSearch(env:ResearchEnv,owner:string,id:string,body:DeepSearchRequest):Promise<ApiResult>{
   if(body.confirmation!=='RUN_DEEP_SEARCH')return {status:400,body:{error:'Deep Search requires explicit confirmation'}};
-  const wine=await env.DB.prepare('SELECT producer,wine_name,vintage,country,region,appellation,grapes_json,grape_blend_json FROM wines WHERE id=? AND owner_id=?').bind(id,owner).first<WineRow>();
+  const wine=await env.DB.prepare('SELECT producer,producer_id,wine_name,vintage,country,region,appellation,grapes_json,grape_blend_json FROM wines WHERE id=? AND owner_id=?').bind(id,owner).first<WineRow>();
   if(!wine)return {status:404,body:{error:'Not found'}};
-  const targets=buildResearchTargets({producer:wine.producer,wineName:wine.wine_name,vintage:wine.vintage,country:wine.country,region:wine.region,appellation:wine.appellation});
+  if(!wine.producer_id){
+    const entity=await ensureProducerEntity(env.DB,owner,wine.producer);
+    wine.producer_id=entity.id;
+    await env.DB.prepare('UPDATE wines SET producer_id=? WHERE id=? AND owner_id=?').bind(entity.id,id,owner).run();
+  }else{
+    await ensureProducerEntity(env.DB,owner,wine.producer);
+  }
+  const targets=buildResearchTargets({producer:wine.producer,producerId:wine.producer_id,wineName:wine.wine_name,vintage:wine.vintage,country:wine.country,region:wine.region,appellation:wine.appellation});
   let cache=await loadResearchCache(env.DB,owner,targets);
+  cache=await bridgePreEntityCache(env.DB,owner,wine,targets,cache);
   cache=await seedFromLegacy(env.DB,owner,wine,targets,cache);
   const refresh=body.refresh??'none';
   const forceScopes=new Set<ResearchScope>(refresh==='all'?targets.map(x=>x.scope):refresh==='vintage'?(['vintage_context','wine_vintage'] as ResearchScope[]):[]);
   for(const scope of forceScopes)cache.delete(scope);
-  const missingTargets=targets.filter(target=>!cache.has(target.scope)),missingScopes=missingTargets.map(target=>target.scope);
+  const missingScopes=targets.filter(target=>!cache.has(target.scope)).map(target=>target.scope);
   if(missingScopes.length){
     try{
       const researched=await researchMissing(env,wine,missingScopes,cache);
