@@ -9,6 +9,13 @@ describe('cuvee identity',()=>{
     expect(a).toBe(b);
   });
 
+  it('treats a generic leading Cuvee descriptor as identity-neutral',()=>{
+    const a=cuveeSignature("Cuvée Palmes d'Or Brut",'Champagne');
+    const b=cuveeSignature("Palmes d'Or Brut",'Champagne');
+    expect(a).toBe(b);
+    expect(normalizeCuveeAlias("Cuvée Palmes d'Or Brut")).not.toBe(normalizeCuveeAlias("Palmes d'Or Brut"));
+  });
+
   it('normalizes 1er Cru and Premier Cru without broad fuzzy matching',()=>{
     expect(normalizeCuveeAlias('Vosne-Romanée 1er Cru Les Suchots')).toBe(normalizeCuveeAlias('Vosne-Romanée Premier Cru Les Suchots'));
     expect(cuveeSignature('Vosne-Romanée 1er Cru Les Suchots','Vosne-Romanée Premier Cru')).not.toBe(cuveeSignature('Vosne-Romanée 1er Cru Les Beaux Monts','Vosne-Romanée Premier Cru'));
