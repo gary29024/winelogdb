@@ -18,6 +18,7 @@ export type WineResearchRun={
 type Env={DB:D1Database;GEMINI_API_KEY:string};
 const now=()=>new Date().toISOString();
 const cleanRequestId=(value?:string)=>value&&/^[A-Za-z0-9_-]{8,64}$/.test(value)?value:crypto.randomUUID();
+const columns='request_id,wine_id,status,stage,refresh_mode,attempt,message,started_at,updated_at,completed_at,duration_ms';
 
 function mapRun(row:Record<string,unknown>):WineResearchRun{
   return {
@@ -29,15 +30,17 @@ function mapRun(row:Record<string,unknown>):WineResearchRun{
 }
 
 export async function getWineResearchRun(db:D1Database,owner:string,wineId:string,requestId:string){
-  const row=await db.prepare(`SELECT request_id,wine_id,status,stage,refresh_mode,attempt,message,started_at,updated_at,completed_at,duration_ms
-    FROM wine_research_runs WHERE owner_id=? AND wine_id=? AND request_id=?`).bind(owner,wineId,requestId).first<Record<string,unknown>>();
+  const row=await db.prepare(`SELECT ${columns} FROM wine_research_runs WHERE owner_id=? AND wine_id=? AND request_id=?`).bind(owner,wineId,requestId).first<Record<string,unknown>>();
+  return row?mapRun(row):null;
+}
+
+export async function getLatestWineResearchRun(db:D1Database,owner:string,wineId:string){
+  const row=await db.prepare(`SELECT ${columns} FROM wine_research_runs WHERE owner_id=? AND wine_id=? ORDER BY updated_at DESC LIMIT 1`).bind(owner,wineId).first<Record<string,unknown>>();
   return row?mapRun(row):null;
 }
 
 export async function getActiveWineResearchRun(db:D1Database,owner:string,wineId:string){
-  const row=await db.prepare(`SELECT request_id,wine_id,status,stage,refresh_mode,attempt,message,started_at,updated_at,completed_at,duration_ms
-    FROM wine_research_runs WHERE owner_id=? AND wine_id=? AND status='running' AND updated_at>datetime('now','-20 minutes')
-    ORDER BY updated_at DESC LIMIT 1`).bind(owner,wineId).first<Record<string,unknown>>();
+  const row=await db.prepare(`SELECT ${columns} FROM wine_research_runs WHERE owner_id=? AND wine_id=? AND status='running' AND updated_at>datetime('now','-20 minutes') ORDER BY updated_at DESC LIMIT 1`).bind(owner,wineId).first<Record<string,unknown>>();
   return row?mapRun(row):null;
 }
 
