@@ -1,5 +1,5 @@
 import { describe,expect,it } from 'vitest';
-import { normalizeProducerAlias,producerMatchKey } from '../../src/lib/producers/entities';
+import { normalizeProducerAlias,producerMatchKey,shouldSeedProducerCountry } from '../../src/lib/producers/entities';
 import { mergeSources,pickNewestResearch,shouldRestorePreMerge } from '../../src/lib/producers/merge';
 import { extractContactGrounding,normalizeProducerEmail,normalizeProducerPhone,safeInstagramUrl } from '../../src/lib/producers/research';
 import { buildResearchTargets } from '../../src/lib/research/cache';
@@ -21,6 +21,14 @@ describe('producer entity normalization',()=>{
     const b=buildResearchTargets({producer:'Dujac',producerId:'producer-1',wineName:'Clos de la Roche',vintage:2022,region:'Burgundy',appellation:'Clos de la Roche'});
     expect(a.find(x=>x.scope==='producer')?.cacheKey).toBe(b.find(x=>x.scope==='producer')?.cacheKey);
     expect(a.find(x=>x.scope==='wine_vintage')?.cacheKey).toBe(b.find(x=>x.scope==='wine_vintage')?.cacheKey);
+  });
+
+  it('uses identified wine country only as provisional producer-home metadata',()=>{
+    expect(shouldSeedProducerCountry(null,null,'France')).toBe(true);
+    expect(shouldSeedProducerCountry('',null,' France ')).toBe(true);
+    expect(shouldSeedProducerCountry('France',null,'United States')).toBe(false);
+    expect(shouldSeedProducerCountry(null,'2026-08-18T00:00:00.000Z','France')).toBe(false);
+    expect(shouldSeedProducerCountry(null,null,'')).toBe(false);
   });
 });
 
