@@ -5,6 +5,7 @@ import { ensureAllProducerLinks,linkWineProducer,seedProducerCountryFromWine } f
 import { cleanupOrphanCuvee,ensureAllCuveeLinksForProducer,ensureMissingCuveeLinks,linkWineCuvee,reconcileProducerCuvees,resolveExistingCuvee } from '../src/lib/cuvees/entities';
 import { ensureProducerCatalogCuveesSeeded } from '../src/lib/cuvees/catalogSeed';
 import { listJournalPage } from '../src/lib/journal/list';
+import { applyBatchExperienceUpdate,batchExperienceSchema } from '../src/lib/journal/batchExperience';
 
 type Bindings={DB:D1Database;WINE_IMAGES:R2Bucket;ASSETS:Fetcher;GEMINI_API_KEY:string;AUTH_SECRET:string;APP_PASSWORD:string;APP_URL:string;MAX_FILE_BYTES?:string;MAX_BATCH_FILES?:string};
 type AppEnv={Bindings:Bindings};
@@ -75,6 +76,14 @@ app.get('/api/journal',async c=>{
   cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
   if(Number(c.req.query('offset')||0)===0){try{await maybeScheduleIdentityMaintenance(c,owner)}catch(e){console.error(JSON.stringify({event:'identity-maintenance-schedule-failed',error:(e as Error).message}))}}
   try{return c.json(await listJournalPage(c.env.DB,owner,c.req.query()))}catch(e){console.error(JSON.stringify({event:'journal-list-failed',error:(e as Error).message}));return c.json({error:'Could not load Journal'},500)}
+});
+
+app.post('/api/journal/batch-experience',async c=>{
+  cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
+  const parsed=batchExperienceSchema.safeParse(await c.req.json().catch(()=>null));
+  if(!parsed.success)return c.json({error:'Invalid batch update',issues:parsed.error.issues},400);
+  try{return c.json(await applyBatchExperienceUpdate(c.env.DB,owner,parsed.data))}
+  catch(e){const message=(e as Error).message||'Could not update selected wines';return c.json({error:message},message.includes('no longer exist')?404:500)}
 });
 
 app.get('/api/wines',async c=>{
