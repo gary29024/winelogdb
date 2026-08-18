@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import '../scanSheet.css';
+import '../mobileViewport.css';
 
 const MOBILE_BROWSER_BOTTOM_VAR='--mobile-browser-bottom';
 
@@ -18,7 +19,8 @@ export function Layout(){
       frame=window.requestAnimationFrame(()=>{
         const layoutHeight=Math.max(window.innerHeight,document.documentElement.clientHeight);
         const visualBottom=viewport.offsetTop+viewport.height;
-        const covered=Math.max(0,Math.min(160,layoutHeight-visualBottom));
+        const keyboardLikely=viewport.height<layoutHeight*.72;
+        const covered=keyboardLikely?0:Math.max(0,Math.min(160,layoutHeight-visualBottom));
         document.documentElement.style.setProperty(MOBILE_BROWSER_BOTTOM_VAR,`${Math.round(covered)}px`);
       });
     };
