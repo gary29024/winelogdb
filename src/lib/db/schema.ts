@@ -21,7 +21,7 @@ const optionalNumber=(schema:z.ZodNumber)=>z.preprocess(value=>{
 // can initialize isolates with a frozen epoch clock, which previously produced 1971.
 // 2200 is only a corruption/sanity guard; vintage semantics are otherwise four-digit years.
 const MAX_VINTAGE_YEAR=2200;
-const vintageSchema=z.unknown().transform((value,ctx):number|null=>{
+const vintageSchema=z.unknown().optional().transform((value,ctx):number|null=>{
   if(value==null)return null;
   let numeric:number|undefined;
   if(typeof value==='number')numeric=value;

@@ -6,8 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "test": "vitest run",
-    "test:watch": "vitest",
+    "test": "vitest run tests/unit",
+    "test:watch": "vitest tests/unit",
     "test:e2e": "playwright test",
     "lint": "eslint .",
     "deploy": "npm run build && npm run db:migrate && wrangler deploy",
