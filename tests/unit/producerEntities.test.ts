@@ -1,7 +1,7 @@
 import { describe,expect,it } from 'vitest';
 import { normalizeProducerAlias,producerMatchKey } from '../../src/lib/producers/entities';
 import { mergeSources,pickNewestResearch,shouldRestorePreMerge } from '../../src/lib/producers/merge';
-import { normalizeProducerEmail,normalizeProducerPhone,safeInstagramUrl } from '../../src/lib/producers/research';
+import { extractContactGrounding,normalizeProducerEmail,normalizeProducerPhone,safeInstagramUrl } from '../../src/lib/producers/research';
 import { buildResearchTargets } from '../../src/lib/research/cache';
 
 describe('producer entity normalization',()=>{
@@ -36,6 +36,30 @@ describe('producer contact validation',()=>{
     expect(safeInstagramUrl('https://www.instagram.com/domaine_example/')).toBe('https://www.instagram.com/domaine_example/');
     expect(safeInstagramUrl('https://example.com/domaine_example')).toBeNull();
     expect(safeInstagramUrl('http://instagram.com/domaine_example')).toBeNull();
+  });
+
+  it('uses only Gemini grounding chunks attached to contact fields',()=>{
+    const text='{"officialWebsiteUrl":"https://domaine.example","instagramUrl":null,"contactEmail":"contact@domaine.example","contactPhone":"+33 3 80 00 00 00","profile":"Profile"}';
+    const emailStart=text.indexOf('"contactEmail"'),emailEnd=text.indexOf(',',emailStart);
+    const phoneStart=text.indexOf('"contactPhone"'),phoneEnd=text.indexOf(',',phoneStart);
+    const profileStart=text.indexOf('"profile"');
+    const result=extractContactGrounding(text,{
+      groundingChunks:[
+        {web:{title:'Official contact page',uri:'https://domaine.example/contact'}},
+        {web:{title:'La RVF',uri:'https://www.larvf.com/example'}},
+        {web:{title:'Unrelated profile source',uri:'https://example.org/profile'}}
+      ],
+      groundingSupports:[
+        {segment:{startIndex:emailStart,endIndex:emailEnd,text:text.slice(emailStart,emailEnd)},groundingChunkIndices:[0]},
+        {segment:{startIndex:phoneStart,endIndex:phoneEnd,text:text.slice(phoneStart,phoneEnd)},groundingChunkIndices:[1]},
+        {segment:{startIndex:profileStart,endIndex:text.length,text:text.slice(profileStart)},groundingChunkIndices:[2]}
+      ]
+    });
+    expect(result.fields.sort()).toEqual(['contactEmail','contactPhone']);
+    expect(result.sources).toEqual([
+      {title:'Official contact page',url:'https://domaine.example/contact'},
+      {title:'La RVF',url:'https://www.larvf.com/example'}
+    ]);
   });
 });
 
