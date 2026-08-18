@@ -7,10 +7,10 @@ export type BatchRecognitionJob=
   |{kind:'recognition_batch_poll';owner:string;sessionId:string;jobId:string;pollCount:number}
   |{kind:'recognition_batch_cleanup';owner:string;sessionId:string};
 
-type Env={DB:D1Database;WINE_IMAGES:R2Bucket;GEMINI_API_KEY:string;RESEARCH_QUEUE:Queue<unknown>};
+type Env={DB:D1Database;WINE_IMAGES:R2Bucket;GEMINI_API_KEY:string;MAX_FILE_BYTES?:string;RESEARCH_QUEUE:Queue<unknown>};
 type ItemRow={id:string;position:number;status:string;metadata_json:string;recognition_json:string|null;error:string|null;confirmed_wine_id:string|null};
 type ImageRow={id:string;item_id:string;original_object_key:string;recognition_object_key:string;content_type:string;byte_size:number;recognition_byte_size:number;width:number;height:number};
-type GoogleInlineResponse={response?:{candidates?:Array<{content?:{parts?:Array<{text?:string}>};finishReason?:string}>};error?:{message?:string}};
+type GoogleInlineResponse={metadata?:{key?:string};response?:{candidates?:Array<{content?:{parts?:Array<{text?:string}>};finishReason?:string}>};error?:{message?:string}};
 
 const INLINE_PREPARED_TARGET=12*1024*1024;
 const INLINE_JSON_HARD_LIMIT=19_000_000;
@@ -36,12 +36,14 @@ export async function createBatchSession(db:D1Database,owner:string){
   return {id,status:'uploading',createdAt:stamp,expiresAt};
 }
 
-export async function stageBatchItem(env:Pick<Env,'DB'|'WINE_IMAGES'>,owner:string,sessionId:string,form:FormData){
+export async function stageBatchItem(env:Pick<Env,'DB'|'WINE_IMAGES'|'MAX_FILE_BYTES'>,owner:string,sessionId:string,form:FormData){
   const session=await env.DB.prepare("SELECT status FROM batch_recognition_sessions WHERE id=? AND owner_id=?").bind(sessionId,owner).first<{status:string}>();
   if(!session)return {status:404 as const,body:{error:'Batch session not found'}};
   if(session.status!=='uploading')return {status:409 as const,body:{error:'This batch has already been submitted'}};
   const originals=form.getAll('originals').filter((x):x is File=>x instanceof File),prepared=form.getAll('recognitionImages').filter((x):x is File=>x instanceof File);
   if(!originals.length||originals.length!==prepared.length||originals.length>12)return {status:400 as const,body:{error:'Each wine needs 1–12 matching original and recognition images'}};
+  const maxOriginalBytes=Number(env.MAX_FILE_BYTES)||10*1024*1024;
+  if(originals.some(file=>file.size>maxOriginalBytes))return {status:413 as const,body:{error:`Each original photo must be ${Math.round(maxOriginalBytes/1024/1024)} MB or smaller`}};
   const position=Math.max(0,Number(form.get('position'))||0),metadata=String(form.get('metadata')||'[]'),dimensions=parseJson<Array<{width?:number;height?:number}>>(form.get('dimensions'),[]);
   const preparedBytes=prepared.reduce((sum,file)=>sum+file.size,0);
   if(preparedBytes>MAX_ITEM_PREPARED_BYTES)return {status:413 as const,body:{error:'This wine has too many prepared label bytes for inline Batch API recognition. Use fewer label photos.'}};
@@ -87,9 +89,9 @@ export async function listBatchSessions(db:D1Database,owner:string){
 }
 
 export async function getBatchImage(env:Pick<Env,'DB'|'WINE_IMAGES'>,owner:string,imageId:string){
-  const row=await env.DB.prepare(`SELECT bri.original_object_key,bri.content_type FROM batch_recognition_images bri JOIN batch_recognition_items i ON i.id=bri.item_id WHERE bri.id=? AND bri.owner_id=? AND i.owner_id=?`).bind(imageId,owner,owner).first<{original_object_key:string;content_type:string}>();
-  if(!row)return null;const object=await env.WINE_IMAGES.get(row.original_object_key);if(!object)return null;
-  return new Response(object.body,{headers:{'Content-Type':row.content_type,'Cache-Control':'private, max-age=3600'}});
+  const row=await env.DB.prepare(`SELECT bri.recognition_object_key FROM batch_recognition_images bri JOIN batch_recognition_items i ON i.id=bri.item_id WHERE bri.id=? AND bri.owner_id=? AND i.owner_id=?`).bind(imageId,owner,owner).first<{recognition_object_key:string}>();
+  if(!row)return null;const object=await env.WINE_IMAGES.get(row.recognition_object_key);if(!object)return null;
+  return new Response(object.body,{headers:{'Content-Type':'image/jpeg','Cache-Control':'private, max-age=3600'}});
 }
 
 export async function markSessionSubmitted(db:D1Database,owner:string,sessionId:string){
@@ -111,7 +113,7 @@ async function buildGoogleRequest(env:Env,item:ItemRow,images:ImageRow[]){
   const metadata=parseJson<RecognitionPhotoMetadata[]>(item.metadata_json,[]),{prompt}=buildRecognitionPrompt(metadata);
   const parts:Array<Record<string,unknown>>=[{text:prompt}];
   for(const image of images)parts.push({inlineData:{data:await r2Base64(env.WINE_IMAGES,image.recognition_object_key),mimeType:'image/jpeg'}});
-  return {request:{contents:[{role:'user',parts}],generation_config:{responseMimeType:'application/json',responseSchema:recognitionResponseSchema}},metadata:{key:item.id}};
+  return {request:{contents:[{role:'user',parts}],generationConfig:{responseMimeType:'application/json',responseSchema:recognitionResponseSchema}},metadata:{key:item.id}};
 }
 
 async function createGoogleBatch(env:Env,sessionId:string,index:number,entries:Array<{item:ItemRow;images:ImageRow[]}>){
@@ -120,7 +122,9 @@ async function createGoogleBatch(env:Env,sessionId:string,index:number,entries:A
   if(new TextEncoder().encode(body).byteLength>=INLINE_JSON_HARD_LIMIT)throw new Error('INLINE_BATCH_TOO_LARGE');
   const response=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${RECOGNITION_MODEL}:batchGenerateContent`,{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':env.GEMINI_API_KEY},body});
   if(!response.ok)throw new Error(`Gemini Batch API create failed (${response.status}): ${(await response.text()).slice(0,500)}`);
-  const created=await response.json() as {name?:string};if(!created.name?.startsWith('batches/'))throw new Error('Gemini Batch API did not return a batch name');return created.name;
+  const created=await response.json() as {name?:string;metadata?:{name?:string};response?:{name?:string}};
+  const name=[created.name,created.metadata?.name,created.response?.name].find(value=>value?.startsWith('batches/'));
+  if(!name)throw new Error('Gemini Batch API did not return a batch name');return name;
 }
 
 async function createChunkRecursively(env:Env,owner:string,sessionId:string,indexRef:{value:number},entries:Array<{item:ItemRow;images:ImageRow[]}>){
@@ -143,11 +147,20 @@ export async function processBatchSubmitJob(env:Env,owner:string,sessionId:strin
   await env.DB.prepare("UPDATE batch_recognition_sessions SET status=?,updated_at=? WHERE id=? AND owner_id=?").bind(Number(active?.count)?'running':'failed',now(),sessionId,owner).run();
 }
 
-function batchState(payload:Record<string,unknown>){return String(payload.state??(payload.metadata as Record<string,unknown>|undefined)?.state??'')}
+function batchState(payload:Record<string,unknown>){
+  const raw=String(payload.state??(payload.metadata as Record<string,unknown>|undefined)?.state??'');
+  return raw.startsWith('BATCH_STATE_')?`JOB_STATE_${raw.slice('BATCH_STATE_'.length)}`:raw;
+}
+function unwrapInlineResponses(value:unknown):GoogleInlineResponse[]{
+  if(Array.isArray(value))return value as GoogleInlineResponse[];
+  if(value&&typeof value==='object'&&Array.isArray((value as {inlinedResponses?:unknown}).inlinedResponses))return (value as {inlinedResponses:GoogleInlineResponse[]}).inlinedResponses;
+  return [];
+}
 function batchResponses(payload:Record<string,unknown>):GoogleInlineResponse[]{
-  const direct=(payload.dest as {inlinedResponses?:GoogleInlineResponse[]}|undefined)?.inlinedResponses;
-  const operation=(payload.response as {inlinedResponses?:GoogleInlineResponse[];dest?:{inlinedResponses?:GoogleInlineResponse[]}}|undefined);
-  return direct??operation?.inlinedResponses??operation?.dest?.inlinedResponses??[];
+  const direct=unwrapInlineResponses((payload.dest as {inlinedResponses?:unknown}|undefined)?.inlinedResponses);if(direct.length)return direct;
+  const operation=payload.response as {inlinedResponses?:unknown;dest?:{inlinedResponses?:unknown}}|undefined;
+  const responseDirect=unwrapInlineResponses(operation?.inlinedResponses);if(responseDirect.length)return responseDirect;
+  return unwrapInlineResponses(operation?.dest?.inlinedResponses);
 }
 
 async function finishSessionIfTerminal(db:D1Database,owner:string,sessionId:string){
@@ -166,9 +179,9 @@ export async function processBatchPollJob(env:Env,owner:string,sessionId:string,
   if(!terminal.has(state)){const delay=Math.min(300,15*Math.pow(2,Math.min(pollCount,4)));await env.RESEARCH_QUEUE.send({kind:'recognition_batch_poll',owner,sessionId,jobId,pollCount:pollCount+1},{delaySeconds:delay});return}
   const ids=parseJson<string[]>(job.item_ids_json,[]),stamp=now();
   if(state==='JOB_STATE_SUCCEEDED'){
-    const responses=batchResponses(payload);
+    const responses=batchResponses(payload),byMetadata=new Map(responses.map(response=>[response.metadata?.key,response]).filter((x):x is [string,GoogleInlineResponse]=>Boolean(x[0])));
     for(let i=0;i<ids.length;i++){
-      const itemId=ids[i],inline=responses[i];
+      const itemId=ids[i],inline=byMetadata.get(itemId)??responses[i];
       if(!inline?.response){await env.DB.prepare("UPDATE batch_recognition_items SET status='failed',error=?,updated_at=? WHERE id=? AND owner_id=?").bind(inline?.error?.message||'Gemini returned no batch result',stamp,itemId,owner).run();continue}
       try{
         const text=inline.response.candidates?.[0]?.content?.parts?.map(x=>x.text??'').join('')??'';if(!text)throw new Error('Gemini returned an empty recognition');
@@ -214,8 +227,9 @@ export async function processBatchCleanupJob(env:Env,owner:string,sessionId:stri
   const remaining=Date.parse(session.expires_at)-Date.now();if(remaining>0){await env.RESEARCH_QUEUE.send({kind:'recognition_batch_cleanup',owner,sessionId},{delaySeconds:Math.max(60,Math.min(86400,Math.ceil(remaining/1000)))});return}
   const {items,byItem}=await loadItems(env.DB,owner,sessionId),disposable=items.filter(x=>!['confirmed','rejected'].includes(x.status));
   for(const item of disposable){for(const image of byItem.get(item.id)??[]){await env.WINE_IMAGES.delete(image.original_object_key).catch(()=>undefined);await env.WINE_IMAGES.delete(image.recognition_object_key).catch(()=>undefined)}await env.DB.prepare('DELETE FROM batch_recognition_images WHERE owner_id=? AND item_id=?').bind(owner,item.id).run();}
-  await env.DB.batch([
-    env.DB.prepare("UPDATE batch_recognition_items SET status='expired',updated_at=? WHERE owner_id=? AND session_id=? AND status NOT IN ('confirmed','rejected')").bind(now(),owner,sessionId),
-    env.DB.prepare("UPDATE batch_recognition_sessions SET status='expired',updated_at=? WHERE id=? AND owner_id=?").bind(now(),sessionId,owner)
+  const stamp=now();await env.DB.batch([
+    env.DB.prepare("UPDATE batch_recognition_jobs SET status='failed',error='Staging expired',updated_at=? WHERE owner_id=? AND session_id=? AND status IN ('queued','running')").bind(stamp,owner,sessionId),
+    env.DB.prepare("UPDATE batch_recognition_items SET status='expired',updated_at=? WHERE owner_id=? AND session_id=? AND status NOT IN ('confirmed','rejected')").bind(stamp,owner,sessionId),
+    env.DB.prepare("UPDATE batch_recognition_sessions SET status='expired',updated_at=? WHERE id=? AND owner_id=?").bind(stamp,sessionId,owner)
   ]);
 }
