@@ -1,20 +1,39 @@
-import { useEffect,useState } from 'react';
+import { useEffect,useRef,useState } from 'react';
 import { authHeaders } from '../../lib/auth/client';
 import '../../wineImages.css';
 
 export function WineImage({imageId,alt,className}:{imageId:string;alt:string;className?:string}){
+  const placeholderRef=useRef<HTMLSpanElement|null>(null);
+  const [shouldLoad,setShouldLoad]=useState(false);
   const [src,setSrc]=useState<string>();
   const [failed,setFailed]=useState(false);
+
   useEffect(()=>{
+    setShouldLoad(false);setSrc(undefined);setFailed(false);
+  },[imageId]);
+
+  useEffect(()=>{
+    if(shouldLoad)return;
+    const node=placeholderRef.current;if(!node)return;
+    if(typeof IntersectionObserver==='undefined'){setShouldLoad(true);return}
+    const observer=new IntersectionObserver(entries=>{
+      if(entries.some(entry=>entry.isIntersecting)){setShouldLoad(true);observer.disconnect()}
+    },{rootMargin:'320px 0px'});
+    observer.observe(node);
+    return()=>observer.disconnect();
+  },[imageId,shouldLoad]);
+
+  useEffect(()=>{
+    if(!shouldLoad)return;
     let active=true,objectUrl:string|undefined;
-    setSrc(undefined);setFailed(false);
-    fetch(`/api/images/${imageId}`,{headers:authHeaders()})
+    fetch(`/api/images/${imageId}`,{headers:authHeaders(),cache:'default'})
       .then(async r=>{if(!r.ok)throw new Error(`Image failed (${r.status})`);return r.blob()})
       .then(blob=>{if(!active)return;objectUrl=URL.createObjectURL(blob);setSrc(objectUrl)})
       .catch(()=>{if(active)setFailed(true)});
     return()=>{active=false;if(objectUrl)URL.revokeObjectURL(objectUrl)};
-  },[imageId]);
+  },[imageId,shouldLoad]);
+
   if(failed)return <span className={`wine-image-fallback ${className??''}`} aria-label={`${alt} unavailable`}>W</span>;
-  if(!src)return <span className={`wine-image-loading ${className??''}`} aria-label={`${alt} loading`}/>;
-  return <img className={className} src={src} alt={alt}/>;
+  if(!src)return <span ref={placeholderRef} className={`wine-image-loading ${className??''}`} aria-label={`${alt} loading`}/>;
+  return <img className={className} src={src} alt={alt} loading="lazy" decoding="async"/>;
 }
