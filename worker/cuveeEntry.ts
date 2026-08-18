@@ -2,7 +2,8 @@ import { Hono } from 'hono';
 import entryApp from './entry';
 import { requireSession } from '../src/lib/auth/session';
 import { ensureAllProducerLinks,linkWineProducer } from '../src/lib/producers/entities';
-import { ensureAllCuveeLinksForProducer,ensureMissingCuveeLinks,linkWineCuvee,resolveExistingCuvee,syncProducerCatalogCuvees } from '../src/lib/cuvees/entities';
+import { ensureAllCuveeLinksForProducer,ensureMissingCuveeLinks,linkWineCuvee,resolveExistingCuvee } from '../src/lib/cuvees/entities';
+import { ensureProducerCatalogCuveesSeeded } from '../src/lib/cuvees/catalogSeed';
 
 type Bindings={DB:D1Database;WINE_IMAGES:R2Bucket;ASSETS:Fetcher;GEMINI_API_KEY:string;AUTH_SECRET:string;APP_PASSWORD:string;APP_URL:string;MAX_FILE_BYTES?:string;MAX_BATCH_FILES?:string};
 type AppEnv={Bindings:Bindings};
@@ -24,7 +25,7 @@ app.get('/api/cuvees/resolve',async c=>{
   const appellation=(c.req.query('appellation')||'').trim()||null,style=(c.req.query('style')||'').trim()||null;
   if(!producerId||!name)return c.json({matched:false,inputName:name});
   try{
-    await syncProducerCatalogCuvees(c.env.DB,owner,producerId);
+    await ensureProducerCatalogCuveesSeeded(c.env.DB,owner,producerId);
     const cuvee=await resolveExistingCuvee(c.env.DB,owner,producerId,name,appellation,style);
     return cuvee?c.json({matched:true,inputName:name,cuvee}):c.json({matched:false,inputName:name});
   }catch(e){return c.json({error:(e as Error).message||'Could not resolve cuvee'},500)}
