@@ -2,7 +2,7 @@ import { Hono } from 'hono';
 import baseApp from './index';
 import { requireSession } from '../src/lib/auth/session';
 import { runLayeredDeepSearch } from '../src/lib/research/deepSearch';
-import { ensureAllProducerLinks,mapProducerRow } from '../src/lib/producers/entities';
+import { ensureAllProducerLinks,linkWineProducer,mapProducerRow,resolveExistingProducer,setProducerPrimaryName } from '../src/lib/producers/entities';
 import { mergeProducerEntities,unlinkProducerMerge } from '../src/lib/producers/merge';
 import { runProducerResearch } from '../src/lib/producers/research';
 
@@ -12,6 +12,10 @@ const app=new Hono<AppEnv>();
 
 function cors(c:{req:{header:(name:string)=>string|undefined};env:Bindings;header:(name:string,value:string)=>void}){const origin=c.req.header('Origin');if(origin&&origin===c.env.APP_URL){c.header('Access-Control-Allow-Origin',origin);c.header('Vary','Origin')}}
 async function user(c:{req:{header:(name:string)=>string|undefined};env:Bindings}){return (await requireSession(c.req.header('Authorization'),c.env.AUTH_SECRET)).userId}
+async function linkSavedWine(db:D1Database,owner:string,wineId:string){
+  const row=await db.prepare('SELECT producer FROM wines WHERE owner_id=? AND id=?').bind(owner,wineId).first<{producer:string}>();
+  if(row?.producer?.trim())await linkWineProducer(db,owner,wineId,row.producer);
+}
 
 app.get('/api/producers',async c=>{
   cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
@@ -23,6 +27,16 @@ app.get('/api/producers',async c=>{
       FROM producers p WHERE p.owner_id=? ORDER BY coalesce(p.home_country,'~'),coalesce(p.home_region,'~'),p.canonical_name COLLATE NOCASE`).bind(owner).all<Record<string,unknown>>();
     return c.json({items:rows.results.map(r=>({id:String(r.id),canonicalName:String(r.canonical_name),homeCountry:r.home_country?String(r.home_country):null,homeRegion:r.home_region?String(r.home_region):null,homeLocality:r.home_locality?String(r.home_locality):null,tastedCount:Number(r.tasted_count)||0,catalogCount:Number(r.catalog_count)||0,researchedAt:r.researched_at?String(r.researched_at):null}))});
   }catch(e){return c.json({error:(e as Error).message||'Could not load producers'},500)}
+});
+
+app.get('/api/producers/resolve',async c=>{
+  cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
+  const name=(c.req.query('name')||'').trim();
+  if(!name)return c.json({matched:false,inputName:''});
+  try{
+    const producer=await resolveExistingProducer(c.env.DB,owner,name);
+    return producer?c.json({matched:true,inputName:name,producer}):c.json({matched:false,inputName:name});
+  }catch(e){return c.json({error:(e as Error).message||'Could not resolve producer'},500)}
 });
 
 app.get('/api/producers/:id',async c=>{
@@ -43,6 +57,13 @@ app.get('/api/producers/:id',async c=>{
     ]);
     return c.json({...mapProducerRow(row),aliases:aliases.results.map(x=>x.display_alias),researchHistoryCount:Number(history?.count)||0,linkedProducers:links.results.map(x=>({mergeId:x.id,producerId:x.source_producer_id,name:x.source_canonical_name,mergedAt:x.merged_at})),tastedWines:wines.results.map(w=>({id:String(w.id),wineName:String(w.wine_name),vintage:w.vintage==null?null:Number(w.vintage),appellation:w.appellation?String(w.appellation):null,region:w.region?String(w.region):null,country:w.country?String(w.country):null,tastingDate:w.tasting_date?String(w.tasting_date):null,rating:w.rating==null?null:Number(w.rating)}))});
   }catch(e){return c.json({error:(e as Error).message||'Could not load producer'},500)}
+});
+
+app.post('/api/producers/:id/primary-name',async c=>{
+  cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
+  const body=await c.req.json().catch(()=>({})) as {name?:string};
+  if(!body.name?.trim())return c.json({error:'Choose an existing producer name'},400);
+  try{return c.json(await setProducerPrimaryName(c.env.DB,owner,c.req.param('id'),body.name))}catch(e){const message=(e as Error).message||'Could not change primary name';return c.json({error:message},message.includes('existing')||message.includes('conflict')?400:500)}
 });
 
 app.post('/api/producers/:id/merge',async c=>{
@@ -69,6 +90,24 @@ app.post('/api/wines/:id/deep-search',async c=>{
   cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
   const body=await c.req.json().catch(()=>({})) as {confirmation?:string;refresh?:'none'|'vintage'|'all'};
   try{const result=await runLayeredDeepSearch(c.env,owner,c.req.param('id'),body);return c.json(result.body,result.status)}catch{return c.json({error:'Deep Search failed unexpectedly'},500)}
+});
+
+// Keep the existing save implementation as the source of truth. After it succeeds,
+// assign producer_id immediately using the same deterministic resolver used elsewhere.
+app.post('/api/wines',async c=>{
+  cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
+  const response=await baseApp.fetch(c.req.raw,c.env,c.executionCtx);
+  if(response.ok){
+    try{const body=await response.clone().json() as {id?:string};if(body.id)await linkSavedWine(c.env.DB,owner,body.id)}catch{}
+  }
+  return response;
+});
+
+app.put('/api/wines/:id',async c=>{
+  cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
+  const response=await baseApp.fetch(c.req.raw,c.env,c.executionCtx);
+  if(response.ok){try{await linkSavedWine(c.env.DB,owner,c.req.param('id'))}catch{}}
+  return response;
 });
 
 app.all('*',c=>baseApp.fetch(c.req.raw,c.env,c.executionCtx));
