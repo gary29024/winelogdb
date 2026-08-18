@@ -9,7 +9,7 @@ const stageLabel:Record<ProducerResearchRun['stage'],string>={preparing:'Prepari
 
 export function ProducerDetailPage(){
  const {id=''}=useParams(),[producer,setProducer]=useState<ProducerDetail>(),[available,setAvailable]=useState<ProducerSummary[]>([]),[selectedAlias,setSelectedAlias]=useState(''),[primaryName,setPrimaryName]=useState(''),[loading,setLoading]=useState(true),[error,setError]=useState(''),[notice,setNotice]=useState(''),[researching,setResearching]=useState(false),[researchRun,setResearchRun]=useState<ProducerResearchRun|null>(null),[researchElapsed,setResearchElapsed]=useState(0),[merging,setMerging]=useState(false),[unlinking,setUnlinking]=useState(''),[savingPrimary,setSavingPrimary]=useState(false);
- const researchPoll=useRef<number>(),researchClock=useRef<number>();
+ const researchPoll=useRef<number|undefined>(undefined),researchClock=useRef<number|undefined>(undefined);
  function stopResearchTimers(){if(researchPoll.current)window.clearInterval(researchPoll.current);if(researchClock.current)window.clearInterval(researchClock.current);researchPoll.current=undefined;researchClock.current=undefined}
  async function reload(){const [detail,directory]=await Promise.all([getProducer(id),listProducers()]);setProducer(detail);setPrimaryName(detail.canonicalName);setAvailable(directory.items.filter(x=>x.id!==id));setSelectedAlias('')}
  useEffect(()=>{reload().catch(e=>setError(e.message)).finally(()=>setLoading(false))},[id]);
