@@ -15,7 +15,7 @@ import {
 
 type ResearchEnv={DB:D1Database;GEMINI_API_KEY:string};
 type DeepSearchRequest={confirmation?:string;refresh?:'none'|'vintage'|'all'};
-type WineRow={producer:string;producer_id:string|null;wine_name:string;vintage:number|null;country:string|null;region:string|null;appellation:string|null;grapes_json:string;grape_blend_json:string};
+type WineRow={producer:string;producer_id:string|null;cuvee_id:string|null;wine_name:string;vintage:number|null;country:string|null;region:string|null;appellation:string|null;grapes_json:string;grape_blend_json:string};
 type ApiResult={status:200|400|404|502;body:DeepSearchResult|{error:string}};
 type GeminiResponse={candidates?:Array<{content?:{parts?:Array<{text?:string}>};groundingMetadata?:{groundingChunks?:Array<{web?:{title?:string;uri?:string}}>} }>};
 
@@ -40,15 +40,19 @@ async function seedFromLegacy(db:D1Database,owner:string,wine:WineRow,targets:Re
   return seedEntries.length?loadResearchCache(db,owner,targets):cache;
 }
 
-async function bridgePreEntityCache(db:D1Database,owner:string,wine:WineRow,stableTargets:ResearchTarget[],cache:Map<ResearchScope,CachedResearch>){
+async function bridgePriorCaches(db:D1Database,owner:string,wine:WineRow,stableTargets:ResearchTarget[],cache:Map<ResearchScope,CachedResearch>){
   if(cache.size===stableTargets.length)return cache;
-  const oldTargets=buildResearchTargets({producer:wine.producer,wineName:wine.wine_name,vintage:wine.vintage,country:wine.country,region:wine.region,appellation:wine.appellation});
-  const oldCache=await loadResearchCache(db,owner,oldTargets);
+  const priorTargetSets=[
+    buildResearchTargets({producer:wine.producer,producerId:wine.producer_id,wineName:wine.wine_name,vintage:wine.vintage,country:wine.country,region:wine.region,appellation:wine.appellation}),
+    buildResearchTargets({producer:wine.producer,wineName:wine.wine_name,vintage:wine.vintage,country:wine.country,region:wine.region,appellation:wine.appellation})
+  ];
   const additions:CachedResearch[]=[];
-  for(const stableTarget of stableTargets){
-    if(cache.has(stableTarget.scope))continue;
-    const old=oldCache.get(stableTarget.scope);
-    if(old)additions.push({...old,target:stableTarget});
+  for(const oldTargets of priorTargetSets){
+    const oldCache=await loadResearchCache(db,owner,oldTargets);
+    for(const stableTarget of stableTargets){
+      if(cache.has(stableTarget.scope)||additions.some(x=>x.target.scope===stableTarget.scope))continue;
+      const old=oldCache.get(stableTarget.scope);if(old)additions.push({...old,target:stableTarget});
+    }
   }
   if(additions.length){
     await Promise.all(additions.map(entry=>seedResearchCache(db,owner,entry)));
@@ -66,6 +70,8 @@ function cachedContext(cache:Map<ResearchScope,CachedResearch>){
     get('wine_vintage','summary')&&`Cached exact-wine summary: ${get('wine_vintage','summary')}`
   ].filter(Boolean).join('\n');
 }
+
+const researchTargets=(wine:WineRow)=>buildResearchTargets({producer:wine.producer,producerId:wine.producer_id,cuveeId:wine.cuvee_id,wineName:wine.wine_name,vintage:wine.vintage,country:wine.country,region:wine.region,appellation:wine.appellation});
 
 async function researchMissing(env:ResearchEnv,wine:WineRow,missing:ResearchScope[],cache:Map<ResearchScope,CachedResearch>){
   const grapes=parseJson<string[]>(wine.grapes_json,[]),blend=parseJson<Array<{grape:string;percentage?:number|null}>>(wine.grape_blend_json,[]);
@@ -100,7 +106,7 @@ Make each non-empty field readable in the WineLog detail page without losing res
       const seen=new Set<string>(),sources=(candidate?.groundingMetadata?.groundingChunks??[]).flatMap(x=>x.web?.uri?[{title:x.web.title??x.web.uri,url:x.web.uri}]:[]).filter(x=>{if(seen.has(x.url))return false;seen.add(x.url);return true}).slice(0,20);
       const parsed=deepSearchSchema.safeParse({...research,sources,model:DEEP_SEARCH_MODEL,researchedAt:new Date().toISOString()});
       if(!parsed.success)throw new Error(`Deep Search returned invalid fields: ${parsed.error.issues.map(x=>x.path.join('.')||x.message).join(', ')}`);
-      const entries=splitDeepSearchResult(parsed.data,buildResearchTargets({producer:wine.producer,producerId:wine.producer_id,wineName:wine.wine_name,vintage:wine.vintage,country:wine.country,region:wine.region,appellation:wine.appellation})).filter(entry=>missing.includes(entry.target.scope));
+      const entries=splitDeepSearchResult(parsed.data,researchTargets(wine)).filter(entry=>missing.includes(entry.target.scope));
       const incomplete=missing.filter(scope=>!entries.some(entry=>entry.target.scope===scope&&scopeIsComplete(scope,entry.payload)));
       if(incomplete.length)throw new Error(`Deep Search did not return complete ${incomplete.map(scope=>scopeNames[scope]).join(', ')} research`);
       return entries;
@@ -111,7 +117,7 @@ Make each non-empty field readable in the WineLog detail page without losing res
 
 export async function runLayeredDeepSearch(env:ResearchEnv,owner:string,id:string,body:DeepSearchRequest):Promise<ApiResult>{
   if(body.confirmation!=='RUN_DEEP_SEARCH')return {status:400,body:{error:'Deep Search requires explicit confirmation'}};
-  const wine=await env.DB.prepare('SELECT producer,producer_id,wine_name,vintage,country,region,appellation,grapes_json,grape_blend_json FROM wines WHERE id=? AND owner_id=?').bind(id,owner).first<WineRow>();
+  const wine=await env.DB.prepare('SELECT producer,producer_id,cuvee_id,wine_name,vintage,country,region,appellation,grapes_json,grape_blend_json FROM wines WHERE id=? AND owner_id=?').bind(id,owner).first<WineRow>();
   if(!wine)return {status:404,body:{error:'Not found'}};
   if(!wine.producer_id){
     const entity=await ensureProducerEntity(env.DB,owner,wine.producer);
@@ -120,9 +126,9 @@ export async function runLayeredDeepSearch(env:ResearchEnv,owner:string,id:strin
   }else{
     await ensureProducerEntity(env.DB,owner,wine.producer);
   }
-  const targets=buildResearchTargets({producer:wine.producer,producerId:wine.producer_id,wineName:wine.wine_name,vintage:wine.vintage,country:wine.country,region:wine.region,appellation:wine.appellation});
+  const targets=researchTargets(wine);
   let cache=await loadResearchCache(env.DB,owner,targets);
-  cache=await bridgePreEntityCache(env.DB,owner,wine,targets,cache);
+  cache=await bridgePriorCaches(env.DB,owner,wine,targets,cache);
   cache=await seedFromLegacy(env.DB,owner,wine,targets,cache);
   const refresh=body.refresh??'none';
   const forceScopes=new Set<ResearchScope>(refresh==='all'?targets.map(x=>x.scope):refresh==='vintage'?(['vintage_context','wine_vintage'] as ResearchScope[]):[]);
