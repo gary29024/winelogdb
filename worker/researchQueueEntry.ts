@@ -47,7 +47,7 @@ router.get('/api/wines/:id/deep-search-status',async c=>{
 });
 
 router.get('/api/batch-recognition/sessions',async c=>{cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}return c.json(await listBatchSessions(c.env.DB,owner))});
-router.post('/api/batch-recognition/sessions',async c=>{cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}const session=await createBatchSession(c.env.DB,owner);return c.json(session,201)});
+router.post('/api/batch-recognition/sessions',async c=>{cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}const session=await createBatchSession(c.env.DB,owner);c.env.RESEARCH_QUEUE.send({kind:'recognition_batch_cleanup',owner,sessionId:session.id},{delaySeconds:86400}).catch(e=>console.error(JSON.stringify({event:'batch-recognition-cleanup-schedule-failed',sessionId:session.id,error:(e as Error).message})));return c.json(session,201)});
 router.get('/api/batch-recognition/sessions/:id',async c=>{cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}const session=await getBatchSession(c.env.DB,owner,c.req.param('id'));return session?c.json(session):c.json({error:'Batch session not found'},404)});
 router.get('/api/batch-recognition/images/:id',async c=>{cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}const image=await getBatchImage(c.env,owner,c.req.param('id'));return image??c.json({error:'Image not found'},404)});
 
@@ -59,7 +59,7 @@ router.post('/api/batch-recognition/sessions/:id/items',async c=>{
 
 router.post('/api/batch-recognition/sessions/:id/submit',async c=>{
   cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}const sessionId=c.req.param('id'),marked=await markSessionSubmitted(c.env.DB,owner,sessionId);if(!marked.ok)return c.json({error:marked.error},409);
-  try{await c.env.RESEARCH_QUEUE.send({kind:'recognition_batch_submit',owner,sessionId});await c.env.RESEARCH_QUEUE.send({kind:'recognition_batch_cleanup',owner,sessionId},{delaySeconds:86400});return c.json({accepted:true,sessionId},202)}catch(e){await c.env.DB.prepare("UPDATE batch_recognition_sessions SET status='failed',updated_at=? WHERE id=? AND owner_id=?").bind(new Date().toISOString(),sessionId,owner).run();return c.json({error:(e as Error).message||'Could not queue batch recognition'},503)}
+  try{await c.env.RESEARCH_QUEUE.send({kind:'recognition_batch_submit',owner,sessionId});return c.json({accepted:true,sessionId},202)}catch(e){await c.env.DB.prepare("UPDATE batch_recognition_sessions SET status='failed',updated_at=? WHERE id=? AND owner_id=?").bind(new Date().toISOString(),sessionId,owner).run();return c.json({error:(e as Error).message||'Could not queue batch recognition'},503)}
 });
 
 router.post('/api/batch-recognition/sessions/:sessionId/items/:itemId/confirm',async c=>{
@@ -69,7 +69,7 @@ router.post('/api/batch-recognition/sessions/:sessionId/items/:itemId/confirm',a
   const createRequest=new Request(new URL('/api/wines',c.req.url),{method:'POST',headers,body:JSON.stringify(body.wine)}),created=await app.fetch(createRequest,c.env,c.executionCtx);
   if(!created.ok)return new Response(created.body,{status:created.status,headers:created.headers});
   const result=await created.json() as {id?:string};if(!result.id)return c.json({error:'Wine save did not return an ID'},500);
-  try{await attachConfirmedItem(c.env,owner,c.req.param('sessionId'),c.req.param('itemId'),result.id);return c.json({id:result.id})}catch(e){const rollback=new Request(new URL(`/api/wines/${result.id}`,c.req.url),{method:'DELETE',headers:new Headers(authorization?{Authorization:authorization}:undefined)});await app.fetch(rollback,c.env,c.executionCtx).catch(()=>undefined);return c.json({error:(e as Error).message||'Could not attach staged photos'},500)}
+  try{await attachConfirmedItem(c.env,owner,c.req.param('sessionId'),c.req.param('itemId'),result.id);return c.json({id:result.id})}catch(e){const rollback=new Request(new URL(`/api/wines/${result.id}`,c.req.url),{method:'DELETE',headers:new Headers(authorization?{Authorization:authorization}:undefined)});await Promise.resolve(app.fetch(rollback,c.env,c.executionCtx)).catch(()=>undefined);return c.json({error:(e as Error).message||'Could not attach staged photos'},500)}
 });
 
 router.post('/api/batch-recognition/sessions/:sessionId/items/:itemId/reject',async c=>{cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}await rejectBatchItem(c.env,owner,c.req.param('sessionId'),c.req.param('itemId'));return c.json({ok:true})});
