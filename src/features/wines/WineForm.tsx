@@ -1,7 +1,9 @@
-import { useState, type FormEvent } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect,useState, type FormEvent } from 'react';
+import { Link,useNavigate } from 'react-router-dom';
 import { saveWine, type WinePhoto } from './api';
+import { resolveProducer,type ProducerResolution } from '../producers/api';
 import type { GrapeBlendEntry, WineInput } from '../../lib/db/schema';
+import '../../producerResolution.css';
 
 function parseBlend(value:string):GrapeBlendEntry[]{
   return value.split(',').map(x=>x.trim()).filter(Boolean).map(part=>{
@@ -16,6 +18,19 @@ function blendText(initial?:Partial<WineInput>){
 
 export function WineForm({initial,id,photos=[]}:{initial?:Partial<WineInput>;id?:string;photos?:WinePhoto[]}){
   const nav=useNavigate(),[busy,setBusy]=useState(false),[error,setError]=useState('');
+  const [producer,setProducer]=useState(String(initial?.producer??'')),[producerResolution,setProducerResolution]=useState<ProducerResolution|null>(null),[resolvingProducer,setResolvingProducer]=useState(false);
+
+  useEffect(()=>{
+    const name=producer.trim();
+    if(!name){setProducerResolution(null);setResolvingProducer(false);return}
+    let cancelled=false;
+    setResolvingProducer(true);
+    const timer=setTimeout(()=>{
+      resolveProducer(name).then(result=>{if(!cancelled)setProducerResolution(result)}).catch(()=>{if(!cancelled)setProducerResolution(null)}).finally(()=>{if(!cancelled)setResolvingProducer(false)});
+    },250);
+    return()=>{cancelled=true;clearTimeout(timer)};
+  },[producer]);
+
   async function submit(e:FormEvent<HTMLFormElement>){
     e.preventDefault();setBusy(true);setError('');const fd=new FormData(e.currentTarget);
     const producer=String(fd.get('producer')||'').trim(),wineName=String(fd.get('wineName')||'').trim();
@@ -36,9 +51,15 @@ export function WineForm({initial,id,photos=[]}:{initial?:Partial<WineInput>;id?
     try{const result=await saveWine(input,id,id?[]:photos);const savedId=id??('id' in result?result.id:undefined);if(!savedId)throw new Error('Save response did not include a wine ID');nav(`/wines/${savedId}`)}catch(e){setError((e as Error).message);setBusy(false)}
   }
   const field=(name:string,label:string,type='text',step?:string,required=false)=><label>{label}<input name={name} type={type} step={step} required={required} defaultValue={String(initial?.[name as keyof WineInput]??'')}/></label>;
+  const matched=producerResolution?.matched?producerResolution.producer:undefined;
   return <form className="wine-form" onSubmit={submit}>
     <div className="form-grid">
-      {field('producer','Producer *','text',undefined,true)}{field('wineName','Wine name *','text',undefined,true)}{field('vintage','Vintage','number')}{field('country','Country')}{field('region','Region')}{field('appellation','Appellation')}
+      <div className="producer-field"><label>Producer *<input name="producer" type="text" required value={producer} onChange={e=>setProducer(e.target.value)}/></label>
+       {producer.trim()&&<div className={`producer-resolution ${matched?'matched':'new'}`} aria-live="polite">
+        {resolvingProducer?<span>Checking producer library…</span>:matched?<><strong>✓ Existing producer profile</strong><span>{matched.matchType==='alias'?`Matched via known alias “${matched.matchedName}” → `:''}{matched.canonicalName}</span><small>{matched.tastedCount} tasted · {matched.catalogCount} wines in researched range{matched.researchedAt?' · producer research available':''}</small><Link to={`/producers/${matched.id}`}>View producer profile</Link></>:<><strong>○ New producer</strong><span>No existing producer identity matches this name. A new profile will be created when the wine is saved.</span></>}
+       </div>}
+      </div>
+      {field('wineName','Wine name *','text',undefined,true)}{field('vintage','Vintage','number')}{field('country','Country')}{field('region','Region')}{field('appellation','Appellation')}
       <label>Grapes / blend<input name="grapeBlend" defaultValue={blendText(initial)} placeholder="Merlot 95%, Cabernet Franc 5%"/><small>Percentages are optional. Separate grapes with commas.</small></label>
       <label>Style<select name="wineStyle" defaultValue={initial?.wineStyle??''}><option value="">Unknown</option>{['red','white','rose','sparkling','dessert','fortified','orange','other'].map(x=><option key={x}>{x}</option>)}</select></label>
       {field('alcoholPercentage','Alcohol %','number','0.1')}{field('rating','Rating / 100','number','0.5')}
