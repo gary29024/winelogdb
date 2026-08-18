@@ -60,7 +60,7 @@ describe('R2 keys', () => {
 describe('Gemini parsing', () => {
   it('validates structured JSON', () => {
     expect(
-      parseRecognition('```json\n{"producer":"A","grapes":[],"confidence":.8}\n```').confidence,
+      parseRecognition('```json\n{"producer":"A","grapes":[],"confidence":0.8}\n```').confidence,
     ).toBe(0.8);
   });
 
