@@ -20,9 +20,10 @@ type ApiResult={status:200|400|404|502;body:DeepSearchResult|{error:string}};
 type GeminiResponse={candidates?:Array<{content?:{parts?:Array<{text?:string}>};groundingMetadata?:{groundingChunks?:Array<{web?:{title?:string;uri?:string}}>} }>};
 
 const DEEP_SEARCH_MODEL='gemini-3.7-flash';
+const DEEP_SEARCH_ATTEMPT_TIMEOUT_MS=360_000;
 const parseJson=<T>(raw:unknown,fallback:T):T=>{try{return JSON.parse(String(raw)) as T}catch{return fallback}};
-const scopeNames:Record<ResearchScope,string>={producer:'producer profile',terroir:'wine/cru terroir',vintage_context:'appellation/region vintage context',wine_vintage:'exact wine + vintage'};
-const scopeFields:Record<ResearchScope,string>={producer:'producerDetails',terroir:'terroir',vintage_context:'vintageQuality',wine_vintage:'summary, winemakingTechniques, drinkingWindow'};
+const scopeNames:Record<ResearchScope,string>={producer:'producer profile and general practices',terroir:'wine/cru terroir',vintage_context:'appellation/region vintage context',wine_vintage:'exact wine + vintage'};
+const scopeFields:Record<ResearchScope,string>={producer:'producerDetails, producerWinemakingPractices',terroir:'terroir',vintage_context:'vintageQuality',wine_vintage:'summary, winemakingTechniques, drinkingWindow'};
 
 async function saveSnapshot(db:D1Database,owner:string,id:string,result:DeepSearchResult){
   const now=new Date().toISOString();
@@ -65,6 +66,7 @@ function cachedContext(cache:Map<ResearchScope,CachedResearch>){
   const get=(scope:ResearchScope,field:string)=>cache.get(scope)?.payload[field]?.trim()||'';
   return [
     get('producer','producerDetails')&&`Cached producer profile: ${get('producer','producerDetails')}`,
+    get('producer','producerWinemakingPractices')&&`Cached producer-wide winemaking practices: ${get('producer','producerWinemakingPractices')}`,
     get('terroir','terroir')&&`Cached stable terroir: ${get('terroir','terroir')}`,
     get('vintage_context','vintageQuality')&&`Cached vintage context: ${get('vintage_context','vintageQuality')}`,
     get('wine_vintage','summary')&&`Cached exact-wine summary: ${get('wine_vintage','summary')}`
@@ -72,6 +74,31 @@ function cachedContext(cache:Map<ResearchScope,CachedResearch>){
 }
 
 const researchTargets=(wine:WineRow)=>buildResearchTargets({producer:wine.producer,producerId:wine.producer_id,cuveeId:wine.cuvee_id,wineName:wine.wine_name,vintage:wine.vintage,country:wine.country,region:wine.region,appellation:wine.appellation});
+
+async function seedProducerProfileResearch(db:D1Database,owner:string,wine:WineRow,targets:ResearchTarget[]){
+  if(!wine.producer_id)return;
+  const target=targets.find(x=>x.scope==='producer');if(!target)return;
+  const row=await db.prepare('SELECT profile,winemaking_practices,sources_json,research_model,researched_at FROM producers WHERE owner_id=? AND id=?').bind(owner,wine.producer_id).first<{profile:string;winemaking_practices:string;sources_json:string;research_model:string|null;researched_at:string|null}>();
+  if(!row?.profile?.trim()||!row.winemaking_practices?.trim())return;
+  await upsertResearchCache(db,owner,{target,payload:{producerDetails:row.profile.trim(),producerWinemakingPractices:row.winemaking_practices.trim()},sources:parseJson(row.sources_json,[]),model:row.research_model||'producer-research',researchedAt:row.researched_at||new Date().toISOString()});
+}
+
+async function syncProducerScope(db:D1Database,owner:string,wine:WineRow,entry:CachedResearch){
+  if(!wine.producer_id||entry.target.scope!=='producer')return;
+  const details=entry.payload.producerDetails?.trim()||'',practices=entry.payload.producerWinemakingPractices?.trim()||'';
+  if(!details&&!practices)return;
+  await db.prepare(`UPDATE producers SET
+    profile=CASE WHEN trim(coalesce(profile,''))='' THEN ? ELSE profile END,
+    winemaking_practices=CASE WHEN trim(coalesce(winemaking_practices,''))='' THEN ? ELSE winemaking_practices END,
+    updated_at=? WHERE owner_id=? AND id=?`).bind(details,practices,new Date().toISOString(),owner,wine.producer_id).run();
+}
+
+async function fetchGemini(url:string,body:string){
+  const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),DEEP_SEARCH_ATTEMPT_TIMEOUT_MS);
+  try{return await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body,signal:controller.signal})}
+  catch(e){if(controller.signal.aborted)throw new Error(`Deep Search timed out after ${DEEP_SEARCH_ATTEMPT_TIMEOUT_MS/60000} minutes while waiting for Gemini 3.7`);throw e}
+  finally{clearTimeout(timer)}
+}
 
 async function researchMissing(env:ResearchEnv,wine:WineRow,missing:ResearchScope[],cache:Map<ResearchScope,CachedResearch>){
   const grapes=parseJson<string[]>(wine.grapes_json,[]),blend=parseJson<Array<{grape:string;percentage?:number|null}>>(wine.grape_blend_json,[]);
@@ -83,23 +110,23 @@ async function researchMissing(env:ResearchEnv,wine:WineRow,missing:ResearchScop
 Missing scopes: ${requested}.
 
 Scope boundaries are strict:
-- producer profile: stable producer history, ownership, philosophy and producer-wide facts. Do not include vintage weather or facts specific to one cuvee unless they are genuinely producer-wide.
+- producer profile and general practices: producerDetails covers stable history, ownership, philosophy and producer-wide facts. producerWinemakingPractices covers only general domaine-wide viticulture/cellar practices and philosophy. Explicitly note when practices vary by cuvee or vintage. Do not present a vintage-specific percentage or technique here.
 - wine/cru terroir: stable facts about this exact wine, cru, vineyard or site such as classification, parcel/site identity, soils, exposition and enduring terroir. Do not include vintage weather.
 - appellation/region vintage context: for the stated vintage only, research growing-season weather, harvest conditions and quality at the most specific reliable appellation/region level. Do not include producer history.
-- exact wine + vintage: research this producer, wine and vintage combination. Include vintage-specific blend, vinification/elevage/whole-cluster/oak or other techniques only when verified for this vintage, plus a cautious drinking window and concise exact-wine summary. Never borrow a technique or blend from another vintage.
+- exact wine + vintage: summary, winemakingTechniques and drinkingWindow belong to this producer + cuvee + vintage combination. winemakingTechniques must contain only techniques verified for this exact wine/vintage (for example actual whole-cluster use, oak/elevage, extraction or blend). Do not copy a general producer habit into this field as though it were verified for this vintage. If exact-vintage technique cannot be verified, say that clearly and refer to the separate producer-wide practices only as context.
 
 Already cached facts must be reused as context rather than researched again:
 ${existing}
 
-Return JSON only with exactly these six string fields: summary, vintageQuality, producerDetails, winemakingTechniques, terroir, drinkingWindow. For fields belonging to scopes that are NOT listed as missing, return an empty string. For a requested field where a precise claim cannot be verified, state the uncertainty rather than substituting another vintage.
+Return JSON only with exactly these seven string fields: summary, vintageQuality, producerDetails, producerWinemakingPractices, winemakingTechniques, terroir, drinkingWindow. For fields belonging to scopes that are NOT listed as missing, return an empty string. For a requested field where a precise claim cannot be verified, state the uncertainty rather than substituting another vintage.
 
-Make each non-empty field readable in the WineLog detail page without losing research depth. Preserve important names, dates, classifications, site details, weather context, technical winemaking terms, drinking-window assumptions and uncertainty. Use short paragraphs separated by blank lines. When several discrete facts are clearer as a list, put each item on its own line prefixed with "- ". Do not add Markdown headings inside the field because the application already supplies section headings. Do not compress nuanced context merely to make the text shorter.`;
-  const requestBody=JSON.stringify({contents:[{role:'user',parts:[{text:prompt}]}],tools:[{google_search:{}}],generationConfig:{responseMimeType:'application/json',responseSchema:{type:'OBJECT',properties:{summary:{type:'STRING'},vintageQuality:{type:'STRING'},producerDetails:{type:'STRING'},winemakingTechniques:{type:'STRING'},terroir:{type:'STRING'},drinkingWindow:{type:'STRING'}},required:['summary','vintageQuality','producerDetails','winemakingTechniques','terroir','drinkingWindow']}}});
+Make each non-empty field readable in the WineLog detail page without losing research depth. Preserve important names, dates, classifications, site details, weather context, technical winemaking terms, drinking-window assumptions and uncertainty. Use short paragraphs separated by blank lines. When several discrete facts are clearer as a list, put each item on its own line prefixed with "- ". Do not add Markdown headings inside the field because the application already supplies section headings.`;
+  const requestBody=JSON.stringify({contents:[{role:'user',parts:[{text:prompt}]}],tools:[{google_search:{}}],generationConfig:{responseMimeType:'application/json',responseSchema:{type:'OBJECT',properties:{summary:{type:'STRING'},vintageQuality:{type:'STRING'},producerDetails:{type:'STRING'},producerWinemakingPractices:{type:'STRING'},winemakingTechniques:{type:'STRING'},terroir:{type:'STRING'},drinkingWindow:{type:'STRING'}},required:['summary','vintageQuality','producerDetails','producerWinemakingPractices','winemakingTechniques','terroir','drinkingWindow']}}});
   let lastError='Deep Search failed';
   for(let attempt=0;attempt<2;attempt++){
     try{
-      const response=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${DEEP_SEARCH_MODEL}:generateContent?key=${encodeURIComponent(env.GEMINI_API_KEY)}`,{method:'POST',headers:{'Content-Type':'application/json'},body:requestBody});
-      if(!response.ok){lastError=`Deep Search failed (${response.status})`;if(attempt===0&&(response.status===429||response.status>=500)){await new Promise(r=>setTimeout(r,900));continue}throw new Error(lastError)}
+      const response=await fetchGemini(`https://generativelanguage.googleapis.com/v1beta/models/${DEEP_SEARCH_MODEL}:generateContent?key=${encodeURIComponent(env.GEMINI_API_KEY)}`,requestBody);
+      if(!response.ok){lastError=`Deep Search failed (${response.status})`;if(attempt===0&&(response.status===429||response.status>=500)){await new Promise(r=>setTimeout(r,1200));continue}throw new Error(lastError)}
       const gemini=await response.json() as GeminiResponse,candidate=gemini.candidates?.[0],text=candidate?.content?.parts?.map(x=>x.text??'').join('')??'';
       const cleaned=text.replace(/^```(?:json)?\s*|\s*```$/g,'');
       let research:Record<string,unknown>;try{research=JSON.parse(cleaned) as Record<string,unknown>}catch{throw new Error('Deep Search returned an invalid structured response')}
@@ -110,7 +137,7 @@ Make each non-empty field readable in the WineLog detail page without losing res
       const incomplete=missing.filter(scope=>!entries.some(entry=>entry.target.scope===scope&&scopeIsComplete(scope,entry.payload)));
       if(incomplete.length)throw new Error(`Deep Search did not return complete ${incomplete.map(scope=>scopeNames[scope]).join(', ')} research`);
       return entries;
-    }catch(e){lastError=(e as Error).message||'Deep Search failed';if(attempt===0){await new Promise(r=>setTimeout(r,900));continue}}
+    }catch(e){lastError=(e as Error).message||'Deep Search failed';if(attempt===0){await new Promise(r=>setTimeout(r,1200));continue}}
   }
   throw new Error(lastError);
 }
@@ -127,6 +154,7 @@ export async function runLayeredDeepSearch(env:ResearchEnv,owner:string,id:strin
     await ensureProducerEntity(env.DB,owner,wine.producer);
   }
   const targets=researchTargets(wine);
+  await seedProducerProfileResearch(env.DB,owner,wine,targets);
   let cache=await loadResearchCache(env.DB,owner,targets);
   cache=await bridgePriorCaches(env.DB,owner,wine,targets,cache);
   cache=await seedFromLegacy(env.DB,owner,wine,targets,cache);
@@ -138,7 +166,7 @@ export async function runLayeredDeepSearch(env:ResearchEnv,owner:string,id:strin
     try{
       const researched=await researchMissing(env,wine,missingScopes,cache);
       await Promise.all(researched.map(entry=>upsertResearchCache(env.DB,owner,entry)));
-      for(const entry of researched)cache.set(entry.target.scope,entry);
+      for(const entry of researched){cache.set(entry.target.scope,entry);if(entry.target.scope==='producer')await syncProducerScope(env.DB,owner,wine,entry)}
     }catch(e){return {status:502,body:{error:(e as Error).message||'Deep Search failed'}}}
   }
   const stillMissing=targets.filter(target=>!cache.has(target.scope));
