@@ -2,11 +2,11 @@ import { authHeaders } from '../../lib/auth/client';
 import type { ProducerEntity } from '../../lib/producers/entities';
 
 export type ProducerSummary={id:string;canonicalName:string;homeCountry:string|null;homeRegion:string|null;homeLocality:string|null;tastedCount:number;catalogCount:number;researchedAt:string|null};
-export type TastedWine={id:string;wineName:string;vintage:number|null;appellation:string|null;region:string|null;country:string|null;tastingDate:string|null;rating:number|null};
+export type TastedWine={id:string;wineName:string;vintage:number|null;appellation:string|null;region:string|null;country:string|null;imageId:string|null;tastingDate:string|null;rating:number|null};
 export type LinkedProducer={mergeId:string;producerId:string;name:string;mergedAt:string};
 export type ProducerDetail=ProducerEntity&{aliases:string[];tastedWines:TastedWine[];researchHistoryCount:number;linkedProducers:LinkedProducer[]};
 export type ProducerResolution={matched:boolean;inputName:string;producer?:{id:string;canonicalName:string;matchedName:string;matchType:'canonical'|'alias'|'normalized';researchedAt:string|null;catalogCount:number;tastedCount:number}};
-export type ProducerResearchStage='preparing'|'searching'|'retrying'|'parsing'|'saving'|'complete'|'failed';
+export type ProducerResearchStage='preparing'|'searching'|'retrying'|'parsing'|'saving'|'image'|'complete'|'failed';
 export type ProducerResearchRun={requestId:string;producerId:string;status:'running'|'complete'|'failed';stage:ProducerResearchStage;attempt:number;message:string|null;startedAt:string;updatedAt:string;completedAt:string|null;durationMs:number|null};
 
 async function json<T>(r:Response,message:string):Promise<T>{const body=await r.json().catch(()=>({})) as T&{error?:string};if(!r.ok)throw new Error(body.error||message);return body}

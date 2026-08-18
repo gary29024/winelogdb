@@ -7,6 +7,13 @@ export type ProducerEntity={
   profile:string;
   catalog:Array<{name:string;appellation?:string|null;classification?:string|null;style?:string|null;notes?:string|null}>;
   sources:Array<{title:string;url:string}>;
+  officialWebsiteUrl:string|null;
+  instagramUrl:string|null;
+  contactEmail:string|null;
+  contactPhone:string|null;
+  contactSources:Array<{title:string;url:string}>;
+  heroImageAvailable:boolean;
+  heroImageSourceUrl:string|null;
   researchModel:string|null;
   researchedAt:string|null;
 };
@@ -118,6 +125,9 @@ export async function ensureAllProducerLinks(db:D1Database,owner:string){
 export function mapProducerRow(row:Record<string,unknown>):ProducerEntity{
   return {
     id:String(row.id),canonicalName:String(row.canonical_name),homeCountry:row.home_country?String(row.home_country):null,homeRegion:row.home_region?String(row.home_region):null,homeLocality:row.home_locality?String(row.home_locality):null,
-    profile:String(row.profile??''),catalog:parseJson(row.catalog_json,[]),sources:parseJson(row.sources_json,[]),researchModel:row.research_model?String(row.research_model):null,researchedAt:row.researched_at?String(row.researched_at):null
+    profile:String(row.profile??''),catalog:parseJson(row.catalog_json,[]),sources:parseJson(row.sources_json,[]),officialWebsiteUrl:row.official_website_url?String(row.official_website_url):null,
+    instagramUrl:row.instagram_url?String(row.instagram_url):null,contactEmail:row.contact_email?String(row.contact_email):null,contactPhone:row.contact_phone?String(row.contact_phone):null,contactSources:parseJson(row.contact_sources_json,[]),
+    heroImageAvailable:Boolean(row.hero_image_object_key),heroImageSourceUrl:row.hero_image_source_url?String(row.hero_image_source_url):null,
+    researchModel:row.research_model?String(row.research_model):null,researchedAt:row.researched_at?String(row.researched_at):null
   };
 }

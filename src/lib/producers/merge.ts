@@ -2,7 +2,12 @@ import { buildResearchTargets,scopeIsComplete,type ResearchScope } from '../rese
 import { normalizeProducerAlias } from './entities';
 
 type Source={title:string;url:string};
-type ProducerRow={id:string;canonical_name:string;match_key:string;home_country:string|null;home_region:string|null;home_locality:string|null;profile:string;catalog_json:string;sources_json:string;research_model:string|null;researched_at:string|null;created_at:string;updated_at:string};
+type ProducerRow={
+  id:string;canonical_name:string;match_key:string;home_country:string|null;home_region:string|null;home_locality:string|null;
+  official_website_url?:string|null;instagram_url?:string|null;contact_email?:string|null;contact_phone?:string|null;contact_sources_json?:string|null;
+  hero_image_object_key?:string|null;hero_image_source_url?:string|null;
+  profile:string;catalog_json:string;sources_json:string;research_model:string|null;researched_at:string|null;created_at:string;updated_at:string
+};
 type CacheRow={scope:ResearchScope;cache_key:string;subject_json:string;result_json:string;sources_json:string;model:string;researched_at:string;created_at:string;updated_at:string};
 type AliasRow={normalized_alias:string;display_alias:string};
 type HistoryRow={origin_producer_id:string;origin_name:string;research_type:string;payload_json:string;sources_json:string;model:string|null;researched_at:string|null};
@@ -12,6 +17,7 @@ type ArchiveInput={mergeId:string;originId:string;originName:string;type:string;
 
 const parseJson=<T>(raw:unknown,fallback:T):T=>{try{return JSON.parse(String(raw)) as T}catch{return fallback}};
 const time=(value:string|null|undefined)=>{const parsed=value?Date.parse(value):NaN;return Number.isFinite(parsed)?parsed:0};
+const producerColumns='id,canonical_name,match_key,home_country,home_region,home_locality,official_website_url,instagram_url,contact_email,contact_phone,contact_sources_json,hero_image_object_key,hero_image_source_url,profile,catalog_json,sources_json,research_model,researched_at,created_at,updated_at';
 
 export function mergeSources(...lists:Source[][]){
   const seen=new Set<string>();
@@ -50,8 +56,8 @@ function cacheUpsert(db:D1Database,owner:string,target:ReturnType<typeof buildRe
 export async function mergeProducerEntities(db:D1Database,owner:string,destinationId:string,sourceId:string){
   if(!destinationId||!sourceId||destinationId===sourceId)throw new Error('Choose a different producer to link');
   const [destination,source]=await Promise.all([
-    db.prepare('SELECT id,canonical_name,match_key,home_country,home_region,home_locality,profile,catalog_json,sources_json,research_model,researched_at,created_at,updated_at FROM producers WHERE owner_id=? AND id=?').bind(owner,destinationId).first<ProducerRow>(),
-    db.prepare('SELECT id,canonical_name,match_key,home_country,home_region,home_locality,profile,catalog_json,sources_json,research_model,researched_at,created_at,updated_at FROM producers WHERE owner_id=? AND id=?').bind(owner,sourceId).first<ProducerRow>()
+    db.prepare(`SELECT ${producerColumns} FROM producers WHERE owner_id=? AND id=?`).bind(owner,destinationId).first<ProducerRow>(),
+    db.prepare(`SELECT ${producerColumns} FROM producers WHERE owner_id=? AND id=?`).bind(owner,sourceId).first<ProducerRow>()
   ]);
   if(!destination||!source)throw new Error('Producer not found');
 
@@ -75,12 +81,18 @@ export async function mergeProducerEntities(db:D1Database,owner:string,destinati
 
   const producerResearch=[destination,source].filter(producerHasResearch);
   for(const row of producerResearch){
-    statements.push(archiveStatement(db,owner,destinationId,{mergeId,originId:row.id,originName:row.canonical_name,type:'producer_record',payload:JSON.stringify({homeCountry:row.home_country,homeRegion:row.home_region,homeLocality:row.home_locality,profile:row.profile,catalog:parseJson(row.catalog_json,[])}),sources:row.sources_json,model:row.research_model,researchedAt:row.researched_at},now));
+    statements.push(archiveStatement(db,owner,destinationId,{mergeId,originId:row.id,originName:row.canonical_name,type:'producer_record',payload:JSON.stringify({homeCountry:row.home_country,homeRegion:row.home_region,homeLocality:row.home_locality,officialWebsiteUrl:row.official_website_url??null,instagramUrl:row.instagram_url??null,contactEmail:row.contact_email??null,contactPhone:row.contact_phone??null,contactSources:parseJson(row.contact_sources_json,[]),heroImageObjectKey:row.hero_image_object_key??null,heroImageSourceUrl:row.hero_image_source_url??null,profile:row.profile,catalog:parseJson(row.catalog_json,[])}),sources:row.sources_json,model:row.research_model,researchedAt:row.researched_at},now));
   }
   const activeProducer=pickNewestResearch(producerResearch);
   if(activeProducer){
     const combined=mergeSources(parseJson<Source[]>(destination.sources_json,[]),parseJson<Source[]>(source.sources_json,[]));
-    statements.push(db.prepare(`UPDATE producers SET home_country=?,home_region=?,home_locality=?,profile=?,catalog_json=?,sources_json=?,research_model=?,researched_at=?,updated_at=? WHERE owner_id=? AND id=?`).bind(activeProducer.home_country,activeProducer.home_region,activeProducer.home_locality,activeProducer.profile,activeProducer.catalog_json,JSON.stringify(combined),activeProducer.research_model,activeProducer.researched_at,now,owner,destinationId));
+    const combinedContactSources=mergeSources(parseJson<Source[]>(destination.contact_sources_json,[]),parseJson<Source[]>(source.contact_sources_json,[]));
+    const mediaProducer=activeProducer.hero_image_object_key?activeProducer:destination.hero_image_object_key?destination:source.hero_image_object_key?source:activeProducer;
+    const officialWebsite=activeProducer.official_website_url??mediaProducer.official_website_url??destination.official_website_url??source.official_website_url??null;
+    const instagram=activeProducer.instagram_url??destination.instagram_url??source.instagram_url??null;
+    const contactEmail=activeProducer.contact_email??destination.contact_email??source.contact_email??null;
+    const contactPhone=activeProducer.contact_phone??destination.contact_phone??source.contact_phone??null;
+    statements.push(db.prepare(`UPDATE producers SET home_country=?,home_region=?,home_locality=?,official_website_url=?,instagram_url=?,contact_email=?,contact_phone=?,contact_sources_json=?,hero_image_object_key=?,hero_image_source_url=?,profile=?,catalog_json=?,sources_json=?,research_model=?,researched_at=?,updated_at=? WHERE owner_id=? AND id=?`).bind(activeProducer.home_country,activeProducer.home_region,activeProducer.home_locality,officialWebsite,instagram,contactEmail,contactPhone,JSON.stringify(combinedContactSources),mediaProducer.hero_image_object_key??null,mediaProducer.hero_image_source_url??null,activeProducer.profile,activeProducer.catalog_json,JSON.stringify(combined),activeProducer.research_model,activeProducer.researched_at,now,owner,destinationId));
   }
 
   const groups=new Map<string,{target:ReturnType<typeof buildResearchTargets>[number];rows:Array<CacheRow&{originId:string;originName:string}>}>();
@@ -133,7 +145,7 @@ export async function unlinkProducerMerge(db:D1Database,owner:string,destination
   if(!source||!destinationBefore)throw new Error('Merge history is incomplete and cannot be safely reversed');
 
   const [destination,currentSource,matchConflict,history,currentCaches]=await Promise.all([
-    db.prepare('SELECT id,canonical_name,match_key,home_country,home_region,home_locality,profile,catalog_json,sources_json,research_model,researched_at,created_at,updated_at FROM producers WHERE owner_id=? AND id=?').bind(owner,destinationId).first<ProducerRow>(),
+    db.prepare(`SELECT ${producerColumns} FROM producers WHERE owner_id=? AND id=?`).bind(owner,destinationId).first<ProducerRow>(),
     db.prepare('SELECT id FROM producers WHERE owner_id=? AND id=?').bind(owner,source.id).first<{id:string}>(),
     db.prepare('SELECT id FROM producers WHERE owner_id=? AND match_key=? AND id<>? LIMIT 1').bind(owner,source.match_key,source.id).first<{id:string}>(),
     db.prepare('SELECT origin_producer_id,origin_name,research_type,payload_json,sources_json,model,researched_at FROM producer_research_history WHERE owner_id=? AND merge_id=?').bind(owner,mergeId).all<HistoryRow>(),
@@ -150,8 +162,8 @@ export async function unlinkProducerMerge(db:D1Database,owner:string,destination
   }
 
   const now=new Date().toISOString(),statements:D1PreparedStatement[]=[];
-  statements.push(db.prepare(`INSERT INTO producers(id,owner_id,canonical_name,match_key,home_country,home_region,home_locality,profile,catalog_json,sources_json,research_model,researched_at,created_at,updated_at)
-    VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)`).bind(source.id,owner,source.canonical_name,source.match_key,source.home_country,source.home_region,source.home_locality,source.profile,source.catalog_json,source.sources_json,source.research_model,source.researched_at,source.created_at||now,now));
+  statements.push(db.prepare(`INSERT INTO producers(id,owner_id,canonical_name,match_key,home_country,home_region,home_locality,official_website_url,instagram_url,contact_email,contact_phone,contact_sources_json,hero_image_object_key,hero_image_source_url,profile,catalog_json,sources_json,research_model,researched_at,created_at,updated_at)
+    VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`).bind(source.id,owner,source.canonical_name,source.match_key,source.home_country,source.home_region,source.home_locality,source.official_website_url??null,source.instagram_url??null,source.contact_email??null,source.contact_phone??null,source.contact_sources_json??'[]',source.hero_image_object_key??null,source.hero_image_source_url??null,source.profile,source.catalog_json,source.sources_json,source.research_model,source.researched_at,source.created_at||now,now));
 
   for(const alias of aliases){
     statements.push(db.prepare(`INSERT INTO producer_aliases(owner_id,normalized_alias,producer_id,display_alias,created_at) VALUES(?,?,?,?,?)
@@ -194,7 +206,7 @@ export async function unlinkProducerMerge(db:D1Database,owner:string,destination
   }
 
   if(shouldRestorePreMerge(destination.updated_at,merge.merged_at)){
-    statements.push(db.prepare(`UPDATE producers SET canonical_name=?,match_key=?,home_country=?,home_region=?,home_locality=?,profile=?,catalog_json=?,sources_json=?,research_model=?,researched_at=?,updated_at=? WHERE owner_id=? AND id=?`).bind(destinationBefore.canonical_name,destinationBefore.match_key,destinationBefore.home_country,destinationBefore.home_region,destinationBefore.home_locality,destinationBefore.profile,destinationBefore.catalog_json,destinationBefore.sources_json,destinationBefore.research_model,destinationBefore.researched_at,now,owner,destinationId));
+    statements.push(db.prepare(`UPDATE producers SET canonical_name=?,match_key=?,home_country=?,home_region=?,home_locality=?,official_website_url=?,instagram_url=?,contact_email=?,contact_phone=?,contact_sources_json=?,hero_image_object_key=?,hero_image_source_url=?,profile=?,catalog_json=?,sources_json=?,research_model=?,researched_at=?,updated_at=? WHERE owner_id=? AND id=?`).bind(destinationBefore.canonical_name,destinationBefore.match_key,destinationBefore.home_country,destinationBefore.home_region,destinationBefore.home_locality,destinationBefore.official_website_url??null,destinationBefore.instagram_url??null,destinationBefore.contact_email??null,destinationBefore.contact_phone??null,destinationBefore.contact_sources_json??'[]',destinationBefore.hero_image_object_key??null,destinationBefore.hero_image_source_url??null,destinationBefore.profile,destinationBefore.catalog_json,destinationBefore.sources_json,destinationBefore.research_model,destinationBefore.researched_at,now,owner,destinationId));
   }
 
   statements.push(db.prepare('UPDATE producer_merges SET undone_at=? WHERE owner_id=? AND id=? AND undone_at IS NULL').bind(now,owner,mergeId));

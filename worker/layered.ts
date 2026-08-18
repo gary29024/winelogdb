@@ -46,6 +46,14 @@ app.get('/api/producers/:id/research-status',async c=>{
   try{const run=await getProducerResearchRun(c.env.DB,owner,c.req.param('id'),requestId);return run?c.json(run):c.json({error:'Research run not found'},404)}catch(e){return c.json({error:(e as Error).message||'Could not load research status'},500)}
 });
 
+app.get('/api/producers/:id/hero-image',async c=>{
+  cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
+  const row=await c.env.DB.prepare('SELECT hero_image_object_key FROM producers WHERE owner_id=? AND id=?').bind(owner,c.req.param('id')).first<{hero_image_object_key:string|null}>();
+  if(!row?.hero_image_object_key)return c.json({error:'Producer image not found'},404);
+  const obj=await c.env.WINE_IMAGES.get(row.hero_image_object_key);if(!obj)return c.json({error:'Producer image not found'},404);
+  return new Response(obj.body,{headers:{'Content-Type':obj.httpMetadata?.contentType||'application/octet-stream','Cache-Control':'private, max-age=3600','Content-Security-Policy':"default-src 'none'"}});
+});
+
 app.get('/api/producers/:id',async c=>{
   cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
   try{
@@ -55,6 +63,7 @@ app.get('/api/producers/:id',async c=>{
     const [aliases,wines,history,links]=await Promise.all([
       c.env.DB.prepare('SELECT display_alias FROM producer_aliases WHERE owner_id=? AND producer_id=? ORDER BY display_alias COLLATE NOCASE').bind(owner,c.req.param('id')).all<{display_alias:string}>(),
       c.env.DB.prepare(`SELECT w.id,w.wine_name,w.vintage,w.appellation,w.region,w.country,
+        (SELECT wi.id FROM wine_images wi WHERE wi.owner_id=w.owner_id AND wi.wine_id=w.id ORDER BY wi.rowid ASC LIMIT 1) AS image_id,
         coalesce((SELECT we.consumed_at FROM wine_experiences we WHERE we.owner_id=w.owner_id AND we.wine_id=w.id ORDER BY we.created_at DESC LIMIT 1),w.tasting_date) AS tasting_date,
         coalesce((SELECT we.rating FROM wine_experiences we WHERE we.owner_id=w.owner_id AND we.wine_id=w.id ORDER BY we.created_at DESC LIMIT 1),w.rating) AS rating
         FROM wines w WHERE w.owner_id=? AND w.producer_id=? ORDER BY coalesce(tasting_date,w.created_at) DESC,w.vintage DESC`).bind(owner,c.req.param('id')).all<Record<string,unknown>>(),
@@ -62,7 +71,7 @@ app.get('/api/producers/:id',async c=>{
       c.env.DB.prepare(`SELECT id,source_producer_id,source_canonical_name,merged_at FROM producer_merges
         WHERE owner_id=? AND destination_producer_id=? AND undone_at IS NULL ORDER BY merged_at DESC`).bind(owner,c.req.param('id')).all<{id:string;source_producer_id:string;source_canonical_name:string;merged_at:string}>()
     ]);
-    return c.json({...mapProducerRow(row),aliases:aliases.results.map(x=>x.display_alias),researchHistoryCount:Number(history?.count)||0,linkedProducers:links.results.map(x=>({mergeId:x.id,producerId:x.source_producer_id,name:x.source_canonical_name,mergedAt:x.merged_at})),tastedWines:wines.results.map(w=>({id:String(w.id),wineName:String(w.wine_name),vintage:w.vintage==null?null:Number(w.vintage),appellation:w.appellation?String(w.appellation):null,region:w.region?String(w.region):null,country:w.country?String(w.country):null,tastingDate:w.tasting_date?String(w.tasting_date):null,rating:w.rating==null?null:Number(w.rating)}))});
+    return c.json({...mapProducerRow(row),aliases:aliases.results.map(x=>x.display_alias),researchHistoryCount:Number(history?.count)||0,linkedProducers:links.results.map(x=>({mergeId:x.id,producerId:x.source_producer_id,name:x.source_canonical_name,mergedAt:x.merged_at})),tastedWines:wines.results.map(w=>({id:String(w.id),wineName:String(w.wine_name),vintage:w.vintage==null?null:Number(w.vintage),appellation:w.appellation?String(w.appellation):null,region:w.region?String(w.region):null,country:w.country?String(w.country):null,imageId:w.image_id?String(w.image_id):null,tastingDate:w.tasting_date?String(w.tasting_date):null,rating:w.rating==null?null:Number(w.rating)}))});
   }catch(e){return c.json({error:(e as Error).message||'Could not load producer'},500)}
 });
 
@@ -107,8 +116,6 @@ app.post('/api/wines/:id/deep-search',async c=>{
   try{const result=await runLayeredDeepSearch(c.env,owner,c.req.param('id'),body);return c.json(result.body,result.status)}catch{return c.json({error:'Deep Search failed unexpectedly'},500)}
 });
 
-// Keep the existing save implementation as the source of truth. After it succeeds,
-// assign producer_id immediately using the same deterministic resolver used elsewhere.
 app.post('/api/wines',async c=>{
   cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
   const response=await baseApp.fetch(c.req.raw,c.env,c.executionCtx);

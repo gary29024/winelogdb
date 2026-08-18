@@ -4,6 +4,7 @@
   "main": "worker/layered.ts",
   "compatibility_date": "2026-08-01",
   "keep_vars": true,
+  "upload_source_maps": true,
   "observability": {
     "enabled": true,
     "logs": { "enabled": true, "head_sampling_rate": 1 },
