@@ -2,7 +2,7 @@ import { Hono } from 'hono';
 import baseApp from './index';
 import { requireSession } from '../src/lib/auth/session';
 import { runLayeredDeepSearch } from '../src/lib/research/deepSearch';
-import { ensureAllProducerLinks,linkWineProducer,mapProducerRow,resolveExistingProducer,setProducerPrimaryName } from '../src/lib/producers/entities';
+import { ensureAllProducerLinks,linkWineProducer,mapProducerRow,normalizeProducerAlias,resolveExistingProducer,setProducerPrimaryName } from '../src/lib/producers/entities';
 import { mergeProducerEntities,unlinkProducerMerge } from '../src/lib/producers/merge';
 import { runProducerResearch } from '../src/lib/producers/research';
 
@@ -77,6 +77,14 @@ app.post('/api/producers/:id/unlink',async c=>{
   cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
   const body=await c.req.json().catch(()=>({})) as {confirmation?:string;mergeId?:string};
   if(body.confirmation!=='UNLINK_PRODUCER'||!body.mergeId)return c.json({error:'Producer unlink requires an existing linked producer and explicit confirmation'},400);
+  const guard=await c.env.DB.prepare(`SELECT p.canonical_name,m.source_canonical_name,m.source_aliases_json FROM producer_merges m
+    JOIN producers p ON p.owner_id=m.owner_id AND p.id=m.destination_producer_id
+    WHERE m.owner_id=? AND m.id=? AND m.destination_producer_id=? AND m.undone_at IS NULL`).bind(owner,body.mergeId,c.req.param('id')).first<{canonical_name:string;source_canonical_name:string;source_aliases_json:string}>();
+  if(guard){
+    const primary=normalizeProducerAlias(guard.canonical_name),sourceNames=new Set<string>([normalizeProducerAlias(guard.source_canonical_name)]);
+    try{for(const alias of JSON.parse(guard.source_aliases_json) as Array<{display_alias?:string}>){if(alias.display_alias)sourceNames.add(normalizeProducerAlias(alias.display_alias))}}catch{}
+    if(sourceNames.has(primary))return c.json({error:'Choose a primary name that belongs to the canonical producer before unlinking this producer'},400);
+  }
   try{return c.json(await unlinkProducerMerge(c.env.DB,owner,c.req.param('id'),body.mergeId))}catch(e){const message=(e as Error).message||'Could not unlink producer';return c.json({error:message},message.includes('not found')?404:400)}
 });
 
