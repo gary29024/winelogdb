@@ -1,6 +1,6 @@
 import { describe,expect,it } from 'vitest';
 import { normalizeProducerAlias,producerMatchKey } from '../../src/lib/producers/entities';
-import { mergeSources,pickNewestResearch } from '../../src/lib/producers/merge';
+import { mergeSources,pickNewestResearch,shouldRestorePreMerge } from '../../src/lib/producers/merge';
 import { buildResearchTargets } from '../../src/lib/research/cache';
 
 describe('producer entity normalization',()=>{
@@ -31,5 +31,11 @@ describe('producer research merge policy',()=>{
 
   it('combines sources without duplicating the same URL',()=>{
     expect(mergeSources([{title:'A',url:'https://a.test'}],[{title:'A again',url:'https://a.test'},{title:'B',url:'https://b.test'}])).toEqual([{title:'A',url:'https://a.test'},{title:'B',url:'https://b.test'}]);
+  });
+
+  it('restores pre-merge research only when the surviving record was not changed afterwards',()=>{
+    const mergedAt='2026-08-18T02:00:00.000Z';
+    expect(shouldRestorePreMerge('2026-08-18T02:00:00.000Z',mergedAt)).toBe(true);
+    expect(shouldRestorePreMerge('2026-08-18T02:00:01.000Z',mergedAt)).toBe(false);
   });
 });
