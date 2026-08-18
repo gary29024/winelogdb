@@ -1,14 +1,13 @@
 import { useEffect,useRef,useState } from 'react';
 import { Link,useSearchParams } from 'react-router-dom';
-import type { WineRecord } from '../../lib/db/schema';
-import { listWines } from './api';
+import { listWines,type JournalWine } from './api';
 import { WineImage } from './WineImage';
 import '../../journalMonths.css';
 
 const PAGE_SIZE=36;
 type ViewMode='grid'|'list';
-const journalDate=(wine:WineRecord)=>wine.tastingDate||wine.createdAt;
-const monthKey=(wine:WineRecord)=>journalDate(wine).slice(0,7);
+const journalDate=(wine:JournalWine)=>wine.tastingDate||wine.createdAt;
+const monthKey=(wine:JournalWine)=>journalDate(wine).slice(0,7);
 const monthLabel=(key:string)=>{
   const [year,month]=key.split('-').map(Number);
   return new Date(year,month-1,1).toLocaleDateString('en-US',{month:'short',year:'numeric'});
@@ -19,7 +18,7 @@ const initialView=():ViewMode=>{
   return saved==='list'||saved==='grid'?saved:'grid';
 };
 
-function WineCard({wine:w,view}:{wine:WineRecord;view:ViewMode}){
+function WineCard({wine:w,view}:{wine:JournalWine;view:ViewMode}){
   const image=w.imageIds[0]?<WineImage imageId={w.imageIds[0]} alt={`${w.producer} ${w.wineName} front label`} className="journal-wine-thumb"/>:<div className="bottle">{w.wineStyle?.slice(0,1).toUpperCase()||'W'}</div>;
   if(view==='grid')return <Link className="wine-card journal-card journal-grid-card" to={`/wines/${w.id}`}>
     <div className="journal-grid-media">{image}<strong className="journal-grid-vintage">{w.vintage??'NV'}</strong>{w.rating!=null&&<span className="journal-grid-score">{w.rating}</span>}</div>
@@ -30,7 +29,7 @@ function WineCard({wine:w,view}:{wine:WineRecord;view:ViewMode}){
 
 export function LibraryPage(){
   const [params,setParams]=useSearchParams();
-  const [data,setData]=useState<WineRecord[]>([]),[nextOffset,setNextOffset]=useState<number|null>(null),[error,setError]=useState(''),[loading,setLoading]=useState(true),[loadingMore,setLoadingMore]=useState(false);
+  const [data,setData]=useState<JournalWine[]>([]),[nextOffset,setNextOffset]=useState<number|null>(null),[error,setError]=useState(''),[loading,setLoading]=useState(true),[loadingMore,setLoadingMore]=useState(false);
   const [view,setViewState]=useState<ViewMode>(initialView),[queryDraft,setQueryDraft]=useState(()=>params.get('query')??'');
   const queryKey=params.toString(),queryKeyRef=useRef(queryKey);
   queryKeyRef.current=queryKey;
@@ -69,9 +68,9 @@ export function LibraryPage(){
   const sort=params.get('sort')??'newest';
   const chronological=sort==='newest'||sort==='oldest';
   const ordered=chronological?[...data].sort((a,b)=>sort==='oldest'?journalDate(a).localeCompare(journalDate(b)):journalDate(b).localeCompare(journalDate(a))):data;
-  const groups=chronological?ordered.reduce<Array<{key:string;items:WineRecord[]}>>((acc,wine)=>{const key=monthKey(wine),last=acc[acc.length-1];if(last?.key===key)last.items.push(wine);else acc.push({key,items:[wine]});return acc},[]):[];
+  const groups=chronological?ordered.reduce<Array<{key:string;items:JournalWine[]}>>((acc,wine)=>{const key=monthKey(wine),last=acc[acc.length-1];if(last?.key===key)last.items.push(wine);else acc.push({key,items:[wine]});return acc},[]):[];
   const collectionClass=`wine-grid journal-list ${view==='grid'?'journal-gallery':'journal-list-view'}`;
-  const renderItems=(items:WineRecord[])=><div className={collectionClass}>{items.map(w=><WineCard wine={w} view={view} key={w.id}/>)}</div>;
+  const renderItems=(items:JournalWine[])=><div className={collectionClass}>{items.map(w=><WineCard wine={w} view={view} key={w.id}/>)}</div>;
 
   return <section className="journal-page">
     <div className="hero journal-hero"><p className="eyebrow">YOUR JOURNAL</p><h1>Wines worth remembering.</h1><p>Search by bottle, place or tasting and keep every drinking experience together.</p></div>
