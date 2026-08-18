@@ -1,18 +1,36 @@
-import { useEffect,useMemo,useState } from 'react';
+import { useEffect,useMemo,useRef,useState } from 'react';
 import { Link,useParams } from 'react-router-dom';
-import { getProducer,listProducers,mergeProducer,researchProducer,setPrimaryProducerName,unlinkProducer,type LinkedProducer,type ProducerDetail,type ProducerSummary } from './api';
+import { getProducer,getProducerResearchStatus,listProducers,mergeProducer,researchProducer,setPrimaryProducerName,unlinkProducer,type LinkedProducer,type ProducerDetail,type ProducerResearchRun,type ProducerSummary } from './api';
 import { normalizeProducerAlias } from '../../lib/producers/entities';
 import '../../producer.css';
 
 const wineKey=(name:string)=>normalizeProducerAlias(name).replace(/\b(grand cru|premier cru|1er cru|village)\b/g,'').trim();
+const stageLabel:Record<ProducerResearchRun['stage'],string>={preparing:'Preparing research',searching:'Searching the web with Gemini',retrying:'Retrying research',parsing:'Validating Gemini response',saving:'Saving producer research',complete:'Research complete',failed:'Research failed'};
 
 export function ProducerDetailPage(){
- const {id=''}=useParams(),[producer,setProducer]=useState<ProducerDetail>(),[available,setAvailable]=useState<ProducerSummary[]>([]),[selectedAlias,setSelectedAlias]=useState(''),[primaryName,setPrimaryName]=useState(''),[loading,setLoading]=useState(true),[error,setError]=useState(''),[notice,setNotice]=useState(''),[researching,setResearching]=useState(false),[merging,setMerging]=useState(false),[unlinking,setUnlinking]=useState(''),[savingPrimary,setSavingPrimary]=useState(false);
+ const {id=''}=useParams(),[producer,setProducer]=useState<ProducerDetail>(),[available,setAvailable]=useState<ProducerSummary[]>([]),[selectedAlias,setSelectedAlias]=useState(''),[primaryName,setPrimaryName]=useState(''),[loading,setLoading]=useState(true),[error,setError]=useState(''),[notice,setNotice]=useState(''),[researching,setResearching]=useState(false),[researchRun,setResearchRun]=useState<ProducerResearchRun|null>(null),[researchElapsed,setResearchElapsed]=useState(0),[merging,setMerging]=useState(false),[unlinking,setUnlinking]=useState(''),[savingPrimary,setSavingPrimary]=useState(false);
+ const researchPoll=useRef<number|undefined>(undefined),researchClock=useRef<number|undefined>(undefined);
+ function stopResearchTimers(){if(researchPoll.current)window.clearInterval(researchPoll.current);if(researchClock.current)window.clearInterval(researchClock.current);researchPoll.current=undefined;researchClock.current=undefined}
  async function reload(){const [detail,directory]=await Promise.all([getProducer(id),listProducers()]);setProducer(detail);setPrimaryName(detail.canonicalName);setAvailable(directory.items.filter(x=>x.id!==id));setSelectedAlias('')}
  useEffect(()=>{reload().catch(e=>setError(e.message)).finally(()=>setLoading(false))},[id]);
+ useEffect(()=>()=>stopResearchTimers(),[]);
  const tastedKeys=useMemo(()=>new Set((producer?.tastedWines??[]).map(w=>wineKey(w.wineName))),[producer]);
  const linkedByName=useMemo(()=>new Map((producer?.linkedProducers??[]).map(link=>[normalizeProducerAlias(link.name),link])),[producer]);
- async function runResearch(){if(!confirm('Research this producer’s home location and current wine range with Gemini 3.7 Flash and Google Search?'))return;setResearching(true);setError('');setNotice('');try{const updated=await researchProducer(id);setProducer(p=>p?{...p,...updated}:p)}catch(e){setError((e as Error).message)}finally{setResearching(false)}}
+ async function runResearch(){
+  if(!confirm('Research this producer’s home location and current wine range with Gemini 3.7 Flash and Google Search?'))return;
+  stopResearchTimers();const requestId=crypto.randomUUID(),started=Date.now(),startedAt=new Date(started).toISOString();
+  setResearching(true);setResearchElapsed(0);setError('');setNotice('');setResearchRun({requestId,producerId:id,status:'running',stage:'preparing',attempt:0,message:'Starting producer research',startedAt,updatedAt:startedAt,completedAt:null,durationMs:null});
+  researchClock.current=window.setInterval(()=>setResearchElapsed(Math.floor((Date.now()-started)/1000)),1000);
+  researchPoll.current=window.setInterval(()=>{getProducerResearchStatus(id,requestId).then(setResearchRun).catch(()=>undefined)},1500);
+  try{
+   const updated=await researchProducer(id,requestId);setProducer(p=>p?{...p,...updated}:p);
+   const final=await getProducerResearchStatus(id,requestId).catch(()=>null);if(final)setResearchRun(final);
+   setNotice(`Producer research completed${final?.durationMs!=null?` in ${(final.durationMs/1000).toFixed(1)}s`:''}.`);
+  }catch(e){
+   const final=await getProducerResearchStatus(id,requestId).catch(()=>null);if(final)setResearchRun(final);
+   setError(`${(e as Error).message} · Research request ${requestId}`);
+  }finally{stopResearchTimers();setResearchElapsed(Math.floor((Date.now()-started)/1000));setResearching(false)}
+ }
  async function savePrimaryName(){if(!producer||!primaryName||primaryName===producer.canonicalName)return;setSavingPrimary(true);setError('');setNotice('');try{const result=await setPrimaryProducerName(id,primaryName);await reload();setNotice(`${result.canonicalName} is now the primary producer name. Bottle-level recognised names and research remain attached to the same producer identity.`)}catch(e){setError((e as Error).message)}finally{setSavingPrimary(false)}}
  async function addAlias(){const source=available.find(x=>x.id===selectedAlias);if(!producer||!source)return;const ok=confirm(`Link “${source.canonicalName}” to “${producer.canonicalName}”?\n\n${producer.canonicalName} will remain the canonical producer. All wines and aliases from ${source.canonicalName} will be linked here. If both names already have research, WineLog will keep the newest complete result active, combine sources, and preserve the previous research in history.`);if(!ok)return;setMerging(true);setError('');setNotice('');try{const result=await mergeProducer(id,source.id);await reload();setNotice(`${result.mergedName} is now linked as an alias of ${result.canonicalName}.`)}catch(e){setError((e as Error).message)}finally{setMerging(false)}}
  async function unlinkAlias(link:LinkedProducer){if(!producer)return;const ok=confirm(`Unlink “${link.name}” from “${producer.canonicalName}”?\n\nWineLog will recreate ${link.name} as a separate producer, move back the wines that belonged to it when it was linked, and restore its archived research. Research added to ${producer.canonicalName} after the link will stay with ${producer.canonicalName}.`);if(!ok)return;setUnlinking(link.mergeId);setError('');setNotice('');try{const result=await unlinkProducer(id,link.mergeId);await reload();setNotice(`${result.unlinkedName} has been restored as a separate producer.`)}catch(e){setError((e as Error).message)}finally{setUnlinking('')}}
@@ -27,7 +45,9 @@ export function ProducerDetailPage(){
    {available.length>0?<div className="alias-link-control"><select aria-label="Existing producer name to link" value={selectedAlias} onChange={e=>setSelectedAlias(e.target.value)}><option value="">Select an existing producer…</option>{available.map(item=><option key={item.id} value={item.id}>{item.canonicalName}</option>)}</select><button type="button" disabled={!selectedAlias||merging} onClick={addAlias}>{merging?'Linking…':'Add alias'}</button></div>:<small>No other producer names are available to link.</small>}
    {producer.researchHistoryCount>0&&<small>{producer.researchHistoryCount} prior research version{producer.researchHistoryCount===1?' is':'s are'} preserved in merge history.</small>}
   </section>
-  <section className="detail-section"><div className="producer-section-title"><div><p className="section-label">PRODUCER RESEARCH</p><h2>Profile & range</h2></div><button type="button" disabled={researching} onClick={runResearch}>{researching?'Researching…':producer.researchedAt?'Refresh producer research':'Research producer'}</button></div>{producer.profile?<p className="producer-profile">{producer.profile}</p>:<p>Research this producer to establish its physical base and a sourced current/recent wine range. This is stored once at producer level and reused.</p>}
+  <section className="detail-section"><div className="producer-section-title"><div><p className="section-label">PRODUCER RESEARCH</p><h2>Profile & range</h2></div><button type="button" disabled={researching} onClick={runResearch}>{researching?'Researching…':producer.researchedAt?'Refresh producer research':'Research producer'}</button></div>
+   {researchRun&&<div className={`producer-research-status ${researchRun.status}`} role="status" aria-live="polite"><div><strong>{stageLabel[researchRun.stage]}</strong><span>{researchRun.message}</span></div><div><strong>{researching?`${researchElapsed}s`:researchRun.durationMs!=null?`${(researchRun.durationMs/1000).toFixed(1)}s`:''}</strong><small>Request {researchRun.requestId}</small></div>{researching&&researchElapsed>=30&&<p>Still working. The request is active and WineLog is polling its server-side stage; the same request ID is searchable in Cloudflare Observability.</p>}</div>}
+   {producer.profile?<p className="producer-profile">{producer.profile}</p>:<p>Research this producer to establish its physical base and a sourced current/recent wine range. This is stored once at producer level and reused.</p>}
    {producer.catalog.length>0&&<div className="producer-catalog">{producer.catalog.map((wine,index)=>{const tasted=tastedKeys.has(wineKey(wine.name));return <div className="catalog-row" key={`${wine.name}-${index}`}><div><strong>{wine.name}</strong><span>{[wine.appellation,wine.classification,wine.style].filter(Boolean).join(' · ')}</span>{wine.notes&&<small>{wine.notes}</small>}</div>{tasted&&<span className="tasted-badge">Tasted</span>}</div>})}</div>}
    {producer.sources.length>0&&<div className="producer-sources"><strong>Sources</strong>{producer.sources.map(s=><a key={s.url} href={s.url} target="_blank" rel="noreferrer">{s.title}</a>)}</div>}{producer.researchedAt&&<small>Latest producer research: {producer.researchModel} · {new Date(producer.researchedAt).toLocaleDateString()}</small>}
   </section>

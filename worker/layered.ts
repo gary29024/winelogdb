@@ -4,7 +4,7 @@ import { requireSession } from '../src/lib/auth/session';
 import { runLayeredDeepSearch } from '../src/lib/research/deepSearch';
 import { ensureAllProducerLinks,linkWineProducer,mapProducerRow,normalizeProducerAlias,resolveExistingProducer,setProducerPrimaryName } from '../src/lib/producers/entities';
 import { mergeProducerEntities,unlinkProducerMerge } from '../src/lib/producers/merge';
-import { runProducerResearch } from '../src/lib/producers/research';
+import { getProducerResearchRun,runProducerResearch } from '../src/lib/producers/research';
 
 type Bindings={DB:D1Database;WINE_IMAGES:R2Bucket;ASSETS:Fetcher;GEMINI_API_KEY:string;AUTH_SECRET:string;APP_PASSWORD:string;APP_URL:string;MAX_FILE_BYTES?:string;MAX_BATCH_FILES?:string};
 type AppEnv={Bindings:Bindings};
@@ -37,6 +37,13 @@ app.get('/api/producers/resolve',async c=>{
     const producer=await resolveExistingProducer(c.env.DB,owner,name);
     return producer?c.json({matched:true,inputName:name,producer}):c.json({matched:false,inputName:name});
   }catch(e){return c.json({error:(e as Error).message||'Could not resolve producer'},500)}
+});
+
+app.get('/api/producers/:id/research-status',async c=>{
+  cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
+  const requestId=(c.req.query('requestId')||'').trim();
+  if(!requestId)return c.json({error:'requestId is required'},400);
+  try{const run=await getProducerResearchRun(c.env.DB,owner,c.req.param('id'),requestId);return run?c.json(run):c.json({error:'Research run not found'},404)}catch(e){return c.json({error:(e as Error).message||'Could not load research status'},500)}
 });
 
 app.get('/api/producers/:id',async c=>{
@@ -90,8 +97,8 @@ app.post('/api/producers/:id/unlink',async c=>{
 
 app.post('/api/producers/:id/research',async c=>{
   cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
-  const body=await c.req.json().catch(()=>({})) as {confirmation?:string};
-  try{const result=await runProducerResearch(c.env,owner,c.req.param('id'),body.confirmation);return c.json(result.body,result.status)}catch{return c.json({error:'Producer research failed unexpectedly'},500)}
+  const body=await c.req.json().catch(()=>({})) as {confirmation?:string;requestId?:string};
+  try{const result=await runProducerResearch(c.env,owner,c.req.param('id'),body.confirmation,body.requestId);return c.json(result.body,result.status)}catch(e){console.error(JSON.stringify({event:'producer_research',stage:'route_failed',producerId:c.req.param('id'),requestId:body.requestId,error:(e as Error).message||String(e)}));return c.json({error:'Producer research failed unexpectedly',researchRequestId:body.requestId},500)}
 });
 
 app.post('/api/wines/:id/deep-search',async c=>{
