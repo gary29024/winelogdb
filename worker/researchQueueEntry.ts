@@ -4,10 +4,11 @@ import { requireSession } from '../src/lib/auth/session';
 import { createQueuedProducerResearchRun,processProducerResearchJob } from '../src/lib/producers/backgroundResearch';
 import { getProducerResearchRun } from '../src/lib/producers/research';
 import { createWineResearchRun,getLatestWineResearchRun,getWineResearchRun,processWineResearchJob,updateWineResearchRun } from '../src/lib/research/backgroundJobs';
+import { attachConfirmedItem,createBatchSession,getBatchImage,getBatchSession,listBatchSessions,markSessionSubmitted,processBatchCleanupJob,processBatchPollJob,processBatchSubmitJob,rejectBatchItem,stageBatchItem,type BatchRecognitionJob } from './batchRecognition';
 
 type ProducerJob={kind:'producer';owner:string;producerId:string;requestId:string};
 type WineJob={kind:'wine';owner:string;wineId:string;requestId:string;refresh:'none'|'vintage'|'all'};
-type ResearchJob=ProducerJob|WineJob;
+type ResearchJob=ProducerJob|WineJob|BatchRecognitionJob;
 type Bindings={DB:D1Database;WINE_IMAGES:R2Bucket;ASSETS:Fetcher;GEMINI_API_KEY:string;AUTH_SECRET:string;APP_PASSWORD:string;APP_URL:string;MAX_FILE_BYTES?:string;MAX_BATCH_FILES?:string;RESEARCH_QUEUE:Queue<ResearchJob>};
 type AppEnv={Bindings:Bindings};
 const router=new Hono<AppEnv>();
@@ -23,51 +24,68 @@ router.post('/api/producers/:id/research',async c=>{
   cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
   const body=await c.req.json().catch(()=>({})) as {confirmation?:string;requestId?:string};if(body.confirmation!=='RUN_PRODUCER_RESEARCH')return c.json({error:'Producer research requires explicit confirmation'},400);
   const queued=await createQueuedProducerResearchRun(c.env.DB,owner,c.req.param('id'),body.requestId);if(!queued)return c.json({error:'Producer not found'},404);
-  if(queued.created){
-    try{await c.env.RESEARCH_QUEUE.send({kind:'producer',owner,producerId:c.req.param('id'),requestId:queued.requestId})}
-    catch(e){const error=(e as Error).message||'Could not queue producer research';await failProducerQueue(c.env.DB,owner,queued.requestId,error);return c.json({error,researchRequestId:queued.requestId},503)}
-  }
+  if(queued.created){try{await c.env.RESEARCH_QUEUE.send({kind:'producer',owner,producerId:c.req.param('id'),requestId:queued.requestId})}catch(e){const error=(e as Error).message||'Could not queue producer research';await failProducerQueue(c.env.DB,owner,queued.requestId,error);return c.json({error,researchRequestId:queued.requestId},503)}}
   return c.json({accepted:true,researchRequestId:queued.requestId,existing:!queued.created},202);
 });
 
 router.get('/api/producers/:id/research-status',async c=>{
   cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
-  const requestId=(c.req.query('requestId')||'').trim();
-  try{const run=requestId?await getProducerResearchRun(c.env.DB,owner,c.req.param('id'),requestId):await latestProducerRun(c.env.DB,owner,c.req.param('id'));return run?c.json(run):c.json({error:'Research run not found'},404)}catch(e){return c.json({error:(e as Error).message||'Could not load research status'},500)}
+  const requestId=(c.req.query('requestId')||'').trim();try{const run=requestId?await getProducerResearchRun(c.env.DB,owner,c.req.param('id'),requestId):await latestProducerRun(c.env.DB,owner,c.req.param('id'));return run?c.json(run):c.json({error:'Research run not found'},404)}catch(e){return c.json({error:(e as Error).message||'Could not load research status'},500)}
 });
 
 router.post('/api/wines/:id/deep-search',async c=>{
   cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
   const body=await c.req.json().catch(()=>({})) as {confirmation?:string;refresh?:'none'|'vintage'|'all';requestId?:string};if(body.confirmation!=='RUN_DEEP_SEARCH')return c.json({error:'Deep Search requires explicit confirmation'},400);
   const refresh=body.refresh==='all'||body.refresh==='vintage'?body.refresh:'none',queued=await createWineResearchRun(c.env.DB,owner,c.req.param('id'),refresh,body.requestId);if(!queued)return c.json({error:'Wine not found'},404);
-  if(queued.created){
-    try{await c.env.RESEARCH_QUEUE.send({kind:'wine',owner,wineId:c.req.param('id'),requestId:queued.run.requestId,refresh})}
-    catch(e){const error=(e as Error).message||'Could not queue Deep Search';await updateWineResearchRun(c.env.DB,owner,queued.run.requestId,'failed',error,'failed');return c.json({error,researchRequestId:queued.run.requestId},503)}
-  }
+  if(queued.created){try{await c.env.RESEARCH_QUEUE.send({kind:'wine',owner,wineId:c.req.param('id'),requestId:queued.run.requestId,refresh})}catch(e){const error=(e as Error).message||'Could not queue Deep Search';await updateWineResearchRun(c.env.DB,owner,queued.run.requestId,'failed',error,'failed');return c.json({error,researchRequestId:queued.run.requestId},503)}}
   return c.json({accepted:true,researchRequestId:queued.run.requestId,existing:!queued.created},202);
 });
 
 router.get('/api/wines/:id/deep-search-status',async c=>{
   cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
-  const requestId=(c.req.query('requestId')||'').trim();
-  try{const run=requestId?await getWineResearchRun(c.env.DB,owner,c.req.param('id'),requestId):await getLatestWineResearchRun(c.env.DB,owner,c.req.param('id'));return run?c.json(run):c.json({error:'Research run not found'},404)}catch(e){return c.json({error:(e as Error).message||'Could not load Deep Search status'},500)}
+  const requestId=(c.req.query('requestId')||'').trim();try{const run=requestId?await getWineResearchRun(c.env.DB,owner,c.req.param('id'),requestId):await getLatestWineResearchRun(c.env.DB,owner,c.req.param('id'));return run?c.json(run):c.json({error:'Research run not found'},404)}catch(e){return c.json({error:(e as Error).message||'Could not load Deep Search status'},500)}
 });
+
+router.get('/api/batch-recognition/sessions',async c=>{cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}return c.json(await listBatchSessions(c.env.DB,owner))});
+router.post('/api/batch-recognition/sessions',async c=>{cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}const session=await createBatchSession(c.env.DB,owner);c.env.RESEARCH_QUEUE.send({kind:'recognition_batch_cleanup',owner,sessionId:session.id},{delaySeconds:86400}).catch(e=>console.error(JSON.stringify({event:'batch-recognition-cleanup-schedule-failed',sessionId:session.id,error:(e as Error).message})));return c.json(session,201)});
+router.get('/api/batch-recognition/sessions/:id',async c=>{cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}const session=await getBatchSession(c.env.DB,owner,c.req.param('id'));return session?c.json(session):c.json({error:'Batch session not found'},404)});
+router.get('/api/batch-recognition/images/:id',async c=>{cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}const image=await getBatchImage(c.env,owner,c.req.param('id'));return image??c.json({error:'Image not found'},404)});
+
+router.post('/api/batch-recognition/sessions/:id/items',async c=>{
+  cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
+  const form=await c.req.formData().catch(()=>null);if(!form)return c.json({error:'Could not read staged wine photos'},400);
+  const result=await stageBatchItem(c.env,owner,c.req.param('id'),form);return c.json(result.body,result.status);
+});
+
+router.post('/api/batch-recognition/sessions/:id/submit',async c=>{
+  cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}const sessionId=c.req.param('id'),marked=await markSessionSubmitted(c.env.DB,owner,sessionId);if(!marked.ok)return c.json({error:marked.error},409);
+  try{await c.env.RESEARCH_QUEUE.send({kind:'recognition_batch_submit',owner,sessionId});return c.json({accepted:true,sessionId},202)}catch(e){await c.env.DB.prepare("UPDATE batch_recognition_sessions SET status='failed',updated_at=? WHERE id=? AND owner_id=?").bind(new Date().toISOString(),sessionId,owner).run();return c.json({error:(e as Error).message||'Could not queue batch recognition'},503)}
+});
+
+router.post('/api/batch-recognition/sessions/:sessionId/items/:itemId/confirm',async c=>{
+  cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
+  const body=await c.req.json().catch(()=>null) as {wine?:unknown}|null;if(!body?.wine)return c.json({error:'Wine data is required'},400);
+  const headers=new Headers({'Content-Type':'application/json'});const authorization=c.req.header('Authorization');if(authorization)headers.set('Authorization',authorization);
+  const createRequest=new Request(new URL('/api/wines',c.req.url),{method:'POST',headers,body:JSON.stringify(body.wine)}),created=await app.fetch(createRequest,c.env,c.executionCtx);
+  if(!created.ok)return new Response(created.body,{status:created.status,headers:created.headers});
+  const result=await created.json() as {id?:string};if(!result.id)return c.json({error:'Wine save did not return an ID'},500);
+  try{await attachConfirmedItem(c.env,owner,c.req.param('sessionId'),c.req.param('itemId'),result.id);return c.json({id:result.id})}catch(e){const rollback=new Request(new URL(`/api/wines/${result.id}`,c.req.url),{method:'DELETE',headers:new Headers(authorization?{Authorization:authorization}:undefined)});await Promise.resolve(app.fetch(rollback,c.env,c.executionCtx)).catch(()=>undefined);return c.json({error:(e as Error).message||'Could not attach staged photos'},500)}
+});
+
+router.post('/api/batch-recognition/sessions/:sessionId/items/:itemId/reject',async c=>{cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}await rejectBatchItem(c.env,owner,c.req.param('sessionId'),c.req.param('itemId'));return c.json({ok:true})});
 
 router.all('*',c=>app.fetch(c.req.raw,c.env,c.executionCtx));
 
 async function consume(batch:MessageBatch<ResearchJob>,env:Bindings){
-  for(const message of batch.messages){
-    const job=message.body;
-    try{
-      console.log(JSON.stringify({event:'research_queue',stage:'start',kind:job.kind,requestId:job.requestId}));
-      const result=job.kind==='producer'?await processProducerResearchJob(env,job.owner,job.producerId,job.requestId):await processWineResearchJob(env,job.owner,job.wineId,job.requestId,job.refresh);
-      console.log(JSON.stringify({event:'research_queue',stage:result.ok?'complete':'failed',kind:job.kind,requestId:job.requestId,...(!result.ok?{error:result.error}:{})}));
-      message.ack();
-    }catch(e){console.error(JSON.stringify({event:'research_queue',stage:'consumer_error',kind:job.kind,requestId:job.requestId,error:(e as Error).message||String(e)}));message.retry()}
-  }
+  for(const message of batch.messages){const job=message.body;try{
+    console.log(JSON.stringify({event:'research_queue',stage:'start',kind:job.kind,...('requestId' in job?{requestId:job.requestId}:{sessionId:job.sessionId})}));
+    if(job.kind==='producer'){const result=await processProducerResearchJob(env,job.owner,job.producerId,job.requestId);console.log(JSON.stringify({event:'research_queue',stage:result.ok?'complete':'failed',kind:job.kind,requestId:job.requestId,...(!result.ok?{error:result.error}:{})}));}
+    else if(job.kind==='wine'){const result=await processWineResearchJob(env,job.owner,job.wineId,job.requestId,job.refresh);console.log(JSON.stringify({event:'research_queue',stage:result.ok?'complete':'failed',kind:job.kind,requestId:job.requestId,...(!result.ok?{error:result.error}:{})}));}
+    else if(job.kind==='recognition_batch_submit')await processBatchSubmitJob(env,job.owner,job.sessionId);
+    else if(job.kind==='recognition_batch_poll')await processBatchPollJob(env,job.owner,job.sessionId,job.jobId,job.pollCount);
+    else if(job.kind==='recognition_batch_cleanup')await processBatchCleanupJob(env,job.owner,job.sessionId);
+    message.ack();
+  }catch(e){console.error(JSON.stringify({event:'research_queue',stage:'consumer_error',kind:job.kind,error:(e as Error).message||String(e)}));message.retry()}}
 }
 
-export default {
-  fetch(request:Request,env:Bindings,ctx:ExecutionContext){return router.fetch(request,env,ctx)},
-  queue(batch:MessageBatch<ResearchJob>,env:Bindings){return consume(batch,env)}
-};
+export default {fetch(request:Request,env:Bindings,ctx:ExecutionContext){return router.fetch(request,env,ctx)},queue(batch:MessageBatch<ResearchJob>,env:Bindings){return consume(batch,env)}};

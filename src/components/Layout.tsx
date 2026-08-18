@@ -34,9 +34,10 @@ export function Layout(){
 
     {scanSheetOpen&&<div className="scan-sheet-backdrop" onClick={closeScanSheet}>
       <section className="scan-sheet" role="dialog" aria-modal="true" aria-labelledby="scan-sheet-title" onClick={e=>e.stopPropagation()}>
-        <div className="scan-sheet-header"><div><p className="eyebrow">NEW TASTING</p><h2 id="scan-sheet-title">Add a wine</h2></div><button type="button" className="sheet-close" onClick={closeScanSheet} aria-label="Close">×</button></div>
-        <button type="button" className="scan-sheet-action" onClick={()=>scanInput.current?.click()}><span className="sheet-action-icon">⌁</span><span><strong>Scan Wine</strong><small>Camera, photo library or files</small></span></button>
-        <p className="scan-sheet-note">For one bottle, select the front label, back label and any additional labels together. WineLog combines them into one identification.</p>
+        <div className="scan-sheet-header"><div><p className="eyebrow">NEW TASTING</p><h2 id="scan-sheet-title">Add wine</h2></div><button type="button" className="sheet-close" onClick={closeScanSheet} aria-label="Close">×</button></div>
+        <button type="button" className="scan-sheet-action" onClick={()=>scanInput.current?.click()}><span className="sheet-action-icon">⌁</span><span><strong>Scan one wine</strong><small>Fast interactive recognition</small></span></button>
+        <button type="button" className="scan-sheet-action" onClick={()=>{closeScanSheet();navigate('/batch-scan')}}><span className="sheet-action-icon">▦</span><span><strong>Batch Scan</strong><small>Several wines · asynchronous lower-cost Gemini Batch API</small></span></button>
+        <p className="scan-sheet-note">For one bottle, select its front, back and additional labels together. In Batch Scan, each bottle gets its own section and remains a separate recognition request.</p>
         <button type="button" className="sheet-manual" onClick={()=>{closeScanSheet();navigate('/wines/new')}}>Add manually instead</button>
       </section>
     </div>}
