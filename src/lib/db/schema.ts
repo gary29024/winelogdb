@@ -64,6 +64,7 @@ export const deepSearchSchema = z.object({
   summary: z.string().trim().max(6000).default(''),
   vintageQuality: z.string().trim().max(4000).default(''),
   producerDetails: z.string().trim().max(5000).default(''),
+  producerWinemakingPractices: z.string().trim().max(5000).default(''),
   winemakingTechniques: z.string().trim().max(5000).default(''),
   terroir: z.string().trim().max(4000).default(''),
   drinkingWindow: z.string().trim().max(2000).default(''),
