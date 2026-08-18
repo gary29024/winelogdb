@@ -13,7 +13,14 @@ async function requireOk(r:Response,message:string){
     throw new Error([body.error||message,details].filter(Boolean).join(' — '));
   }
 }
-export async function listWines(params:URLSearchParams):Promise<{items:WineRecord[];nextOffset:number|null}>{const query=new URLSearchParams(params);if(!query.has('limit'))query.set('limit','100');const r=await fetch(`/api/wines?${query}`,{headers:authHeaders()});await requireOk(r,'Could not load wines');return r.json()}
+export async function listWines(params:URLSearchParams,options:{limit?:number;offset?:number;signal?:AbortSignal}={}):Promise<{items:WineRecord[];nextOffset:number|null}>{
+  const query=new URLSearchParams(params);
+  query.set('limit',String(options.limit??36));
+  query.set('offset',String(options.offset??0));
+  const r=await fetch(`/api/wines?${query}`,{headers:authHeaders(),signal:options.signal});
+  await requireOk(r,'Could not load wines');
+  return r.json();
+}
 export async function getWine(id:string):Promise<WineRecord>{const r=await fetch(`/api/wines/${id}`,{headers:authHeaders()});await requireOk(r,'Wine not found');return r.json()}
 export async function saveWine(input:WineInput,id?:string,photos:WinePhoto[]=[]):Promise<{id:string}|{ok:true}>{
   if(id){const r=await fetch(`/api/wines/${id}`,{method:'PUT',headers:authHeaders(true),body:JSON.stringify(input)});await requireOk(r,'Could not save wine');return r.json() as Promise<{ok:true}>}
