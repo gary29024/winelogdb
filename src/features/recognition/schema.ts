@@ -32,7 +32,9 @@ export const recognitionSchema = z.object({
   locationName: nullableText,
   latitude: z.number().min(-90).max(90).nullable().optional(),
   longitude: z.number().min(-180).max(180).nullable().optional(),
-  metadataSource: z.enum(['exif','file_fallback','none']).default('none')
+  metadataSource: z.enum(['exif','file_fallback','none']).default('none'),
+  requestId: z.string().uuid().optional(),
+  recognitionDurationMs: z.number().int().nonnegative().optional()
 }).strict();
 export type RecognitionResult = z.infer<typeof recognitionSchema>;
 export function parseRecognition(raw: string): RecognitionResult {
