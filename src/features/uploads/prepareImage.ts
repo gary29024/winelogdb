@@ -1,6 +1,6 @@
 export type PreparedImage={file:File;width:number;height:number};
 
-export async function prepareRecognitionImage(file:File,maxEdge=1800):Promise<PreparedImage>{
+export async function prepareRecognitionImage(file:File,maxEdge=1800,quality=0.84):Promise<PreparedImage>{
   const url=URL.createObjectURL(file);
   try{
     const img=await new Promise<HTMLImageElement>((resolve,reject)=>{
@@ -16,7 +16,7 @@ export async function prepareRecognitionImage(file:File,maxEdge=1800):Promise<Pr
     const canvas=document.createElement('canvas');canvas.width=targetWidth;canvas.height=targetHeight;
     const ctx=canvas.getContext('2d');if(!ctx)throw new Error('Image resizing is not available in this browser');
     ctx.drawImage(img,0,0,targetWidth,targetHeight);
-    const blob=await new Promise<Blob>((resolve,reject)=>canvas.toBlob(x=>x?resolve(x):reject(new Error(`${file.name}: image resize failed`)),'image/jpeg',0.84));
+    const blob=await new Promise<Blob>((resolve,reject)=>canvas.toBlob(x=>x?resolve(x):reject(new Error(`${file.name}: image resize failed`)),'image/jpeg',quality));
     const recognitionFile=new File([blob],file.name.replace(/\.[^.]+$/,'.jpg'),{type:'image/jpeg',lastModified:file.lastModified});
     return {file:recognitionFile,width,height};
   }finally{URL.revokeObjectURL(url)}
