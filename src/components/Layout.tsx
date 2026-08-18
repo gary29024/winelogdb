@@ -21,7 +21,7 @@ export function Layout(){
   return <>
     <header className="topbar">
       <NavLink className="brand" to="/">WineLog</NavLink>
-      <nav className="desktop-nav" aria-label="Main navigation"><NavLink to="/">Journal</NavLink><button type="button" className="top-scan-trigger" onClick={openScanSheet}>Scan Wine</button></nav>
+      <nav className="desktop-nav" aria-label="Main navigation"><NavLink to="/" end>Journal</NavLink><NavLink to="/producers">Producers</NavLink><button type="button" className="top-scan-trigger" onClick={openScanSheet}>Scan Wine</button></nav>
     </header>
     <main><Outlet/></main>
     <footer>Your private tasting notebook</footer>
@@ -29,6 +29,7 @@ export function Layout(){
     <nav className="mobile-nav" aria-label="Mobile navigation">
       <NavLink to="/" end><span className="nav-icon">▦</span><span>Journal</span></NavLink>
       <button type="button" className="scan-nav" onClick={openScanSheet} aria-haspopup="dialog"><span className="scan-plus">＋</span><span>Scan Wine</span></button>
+      <NavLink to="/producers"><span className="nav-icon">◫</span><span>Producers</span></NavLink>
     </nav>
 
     {scanSheetOpen&&<div className="scan-sheet-backdrop" onClick={closeScanSheet}>
