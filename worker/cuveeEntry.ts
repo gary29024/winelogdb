@@ -2,7 +2,7 @@ import { Hono } from 'hono';
 import entryApp from './entry';
 import { requireSession } from '../src/lib/auth/session';
 import { ensureAllProducerLinks,linkWineProducer } from '../src/lib/producers/entities';
-import { ensureAllCuveeLinksForProducer,ensureMissingCuveeLinks,linkWineCuvee,resolveExistingCuvee } from '../src/lib/cuvees/entities';
+import { cleanupOrphanCuvee,ensureAllCuveeLinksForProducer,ensureMissingCuveeLinks,linkWineCuvee,reconcileProducerCuvees,resolveExistingCuvee } from '../src/lib/cuvees/entities';
 import { ensureProducerCatalogCuveesSeeded } from '../src/lib/cuvees/catalogSeed';
 
 type Bindings={DB:D1Database;WINE_IMAGES:R2Bucket;ASSETS:Fetcher;GEMINI_API_KEY:string;AUTH_SECRET:string;APP_PASSWORD:string;APP_URL:string;MAX_FILE_BYTES?:string;MAX_BATCH_FILES?:string};
@@ -26,6 +26,7 @@ app.get('/api/cuvees/resolve',async c=>{
   if(!producerId||!name)return c.json({matched:false,inputName:name});
   try{
     await ensureProducerCatalogCuveesSeeded(c.env.DB,owner,producerId);
+    await reconcileProducerCuvees(c.env.DB,owner,producerId);
     const cuvee=await resolveExistingCuvee(c.env.DB,owner,producerId,name,appellation,style);
     return cuvee?c.json({matched:true,inputName:name,cuvee}):c.json({matched:false,inputName:name});
   }catch(e){return c.json({error:(e as Error).message||'Could not resolve cuvee'},500)}
@@ -101,6 +102,20 @@ app.put('/api/wines/:id',async c=>{
       if(requestedName&&before?.wine_name!==requestedName){await c.env.DB.prepare('UPDATE wines SET recognized_wine_name=?,cuvee_id=NULL WHERE owner_id=? AND id=?').bind(requestedName,owner,id).run()}
       await ensureWineIdentity(c.env.DB,owner,id);
     }catch{}
+  }
+  return response;
+});
+
+app.delete('/api/wines/:id',async c=>{
+  let owner:string;try{owner=await user(c)}catch{return entryApp.fetch(c.req.raw,c.env,c.executionCtx)}
+  const id=c.req.param('id');
+  const before=await c.env.DB.prepare('SELECT cuvee_id,producer_id FROM wines WHERE owner_id=? AND id=?').bind(owner,id).first<{cuvee_id:string|null;producer_id:string|null}>().catch(()=>null);
+  const response=await entryApp.fetch(c.req.raw,c.env,c.executionCtx);
+  if(response.ok&&before){
+    try{
+      await cleanupOrphanCuvee(c.env.DB,owner,before.cuvee_id);
+      if(before.producer_id)await reconcileProducerCuvees(c.env.DB,owner,before.producer_id);
+    }catch(e){console.error(JSON.stringify({event:'cuvee-delete-cleanup-failed',wineId:id,cuveeId:before.cuvee_id,error:(e as Error).message}))}
   }
   return response;
 });
