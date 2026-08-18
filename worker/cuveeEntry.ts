@@ -4,6 +4,7 @@ import { requireSession } from '../src/lib/auth/session';
 import { ensureAllProducerLinks,linkWineProducer } from '../src/lib/producers/entities';
 import { cleanupOrphanCuvee,ensureAllCuveeLinksForProducer,ensureMissingCuveeLinks,linkWineCuvee,reconcileProducerCuvees,resolveExistingCuvee } from '../src/lib/cuvees/entities';
 import { ensureProducerCatalogCuveesSeeded } from '../src/lib/cuvees/catalogSeed';
+import { listJournalPage } from '../src/lib/journal/list';
 
 type Bindings={DB:D1Database;WINE_IMAGES:R2Bucket;ASSETS:Fetcher;GEMINI_API_KEY:string;AUTH_SECRET:string;APP_PASSWORD:string;APP_URL:string;MAX_FILE_BYTES?:string;MAX_BATCH_FILES?:string};
 type AppEnv={Bindings:Bindings};
@@ -66,6 +67,12 @@ app.get('/api/images/:id',async c=>{
   const headers=new Headers(response.headers);
   headers.set('Cache-Control','private, max-age=86400, immutable');
   return new Response(response.body,{status:response.status,statusText:response.statusText,headers});
+});
+
+app.get('/api/journal',async c=>{
+  cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
+  if(Number(c.req.query('offset')||0)===0){try{await maybeScheduleIdentityMaintenance(c,owner)}catch(e){console.error(JSON.stringify({event:'identity-maintenance-schedule-failed',error:(e as Error).message}))}}
+  try{return c.json(await listJournalPage(c.env.DB,owner,c.req.query()))}catch(e){console.error(JSON.stringify({event:'journal-list-failed',error:(e as Error).message}));return c.json({error:'Could not load Journal'},500)}
 });
 
 app.get('/api/wines',async c=>{
