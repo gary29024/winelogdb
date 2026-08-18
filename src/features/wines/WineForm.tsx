@@ -3,6 +3,7 @@ import { Link,useNavigate } from 'react-router-dom';
 import { saveWine, type WinePhoto } from './api';
 import { resolveProducer,type ProducerResolution } from '../producers/api';
 import type { GrapeBlendEntry, WineInput } from '../../lib/db/schema';
+import '../../producerResolution.css';
 
 function parseBlend(value:string):GrapeBlendEntry[]{
   return value.split(',').map(x=>x.trim()).filter(Boolean).map(part=>{
