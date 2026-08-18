@@ -1,11 +1,39 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import '../scanSheet.css';
+
+const MOBILE_BROWSER_BOTTOM_VAR='--mobile-browser-bottom';
 
 export function Layout(){
   const [scanSheetOpen,setScanSheetOpen]=useState(false);
   const scanInput=useRef<HTMLInputElement>(null);
   const navigate=useNavigate();
+
+  useEffect(()=>{
+    const viewport=window.visualViewport;
+    if(!viewport)return;
+    let frame=0;
+    const update=()=>{
+      window.cancelAnimationFrame(frame);
+      frame=window.requestAnimationFrame(()=>{
+        const layoutHeight=Math.max(window.innerHeight,document.documentElement.clientHeight);
+        const visualBottom=viewport.offsetTop+viewport.height;
+        const covered=Math.max(0,Math.min(160,layoutHeight-visualBottom));
+        document.documentElement.style.setProperty(MOBILE_BROWSER_BOTTOM_VAR,`${Math.round(covered)}px`);
+      });
+    };
+    update();
+    viewport.addEventListener('resize',update);
+    viewport.addEventListener('scroll',update);
+    window.addEventListener('orientationchange',update);
+    return()=>{
+      window.cancelAnimationFrame(frame);
+      viewport.removeEventListener('resize',update);
+      viewport.removeEventListener('scroll',update);
+      window.removeEventListener('orientationchange',update);
+      document.documentElement.style.removeProperty(MOBILE_BROWSER_BOTTOM_VAR);
+    };
+  },[]);
 
   function startScan(files:FileList|null){
     if(!files?.length)return;
