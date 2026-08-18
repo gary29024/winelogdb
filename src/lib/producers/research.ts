@@ -18,6 +18,7 @@ class ResearchError extends Error{constructor(message:string,readonly retryable:
 const cleanRequestId=(value?:string)=>value&&/^[A-Za-z0-9_-]{8,64}$/.test(value)?value:crypto.randomUUID();
 const now=()=>new Date().toISOString();
 const sleep=(ms:number)=>new Promise(resolve=>setTimeout(resolve,ms));
+const parseJson=<T>(value:unknown,fallback:T):T=>{try{return JSON.parse(String(value)) as T}catch{return fallback}};
 
 function log(level:'log'|'warn'|'error',data:Record<string,unknown>){
   console[level](JSON.stringify({event:'producer_research',...data}));
@@ -215,7 +216,7 @@ Use empty strings or nulls when a scalar field cannot be verified. The range and
       const instagramUrl=safeInstagramUrl(parsed.instagramUrl)||(row.instagram_url?String(row.instagram_url):null);
       const contactEmail=normalizeProducerEmail(parsed.contactEmail)||(row.contact_email?String(row.contact_email):null);
       const contactPhone=normalizeProducerPhone(parsed.contactPhone)||(row.contact_phone?String(row.contact_phone):null);
-      const researchedContactSources=cleanContactSources(parsed.contactSources),existingContactSources=cleanContactSources(row.contact_sources_json?JSON.parse(String(row.contact_sources_json)):[]);
+      const researchedContactSources=cleanContactSources(parsed.contactSources),existingContactSources=cleanContactSources(parseJson(row.contact_sources_json,[]));
       const contactSources=researchedContactSources.length?researchedContactSources:existingContactSources;
       await updateRun(env.DB,owner,requestId,'saving',attempt,`Saving producer profile, contacts, ${range.length} catalog wine${range.length===1?'':'s'} and ${sources.length} research source${sources.length===1?'':'s'}`,'running',startedAt);
       const stamp=now();
