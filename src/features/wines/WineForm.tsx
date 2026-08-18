@@ -53,6 +53,7 @@ export function WineForm({initial,id,photos=[]}:{initial?:Partial<WineInput>;id?
   const field=(name:string,label:string,type='text',step?:string,required=false)=><label>{label}<input name={name} type={type} step={step} required={required} defaultValue={String(initial?.[name as keyof WineInput]??'')}/></label>;
   const matched=producerResolution?.matched?producerResolution.producer:undefined;
   const hasGps=initial?.latitude!=null&&initial?.longitude!=null;
+  const hasEstimatedPlace=hasGps&&Boolean(initial?.locationName?.trim());
   return <form className="wine-form" onSubmit={submit}>
     <div className="form-grid">
       <div className="producer-field"><label>Producer *<input name="producer" type="text" required value={producer} onChange={e=>setProducer(e.target.value)}/></label>
@@ -66,8 +67,9 @@ export function WineForm({initial,id,photos=[]}:{initial?:Partial<WineInput>;id?
       {field('alcoholPercentage','Alcohol %','number','0.1')}{field('rating','Rating / 100','number','0.5')}
     </div>
     <fieldset className="experience-fields"><legend>This drinking / tasting</legend><div className="form-grid">
-      {field('tastingDate','Drinking date','date')}{field('tastingName','Tasting / event group')}{field('venue','Venue')}{field('locationName','Place name (optional)')}
-    </div>{hasGps&&<div className="gps-readout"><strong>Photo GPS</strong><span>{Number(initial?.latitude).toFixed(6)}, {Number(initial?.longitude).toFixed(6)}</span><small>Read directly from the selected photo EXIF metadata. WineLog does not ask Gemini to guess a place name from these coordinates.</small></div>}<small>Use “Tasting / event group” to group wines from the same dinner, trip, class or formal tasting. GPS coordinates, when available from photo metadata, are retained exactly even if you leave the place name blank.</small></fieldset>
+      {field('tastingDate','Drinking date','date')}{field('tastingName','Tasting / event group')}{field('venue','Venue')}
+      <label>{hasGps?'Approximate place':'Place name (optional)'}<input name="locationName" type="text" defaultValue={String(initial?.locationName??'')}/>{hasEstimatedPlace&&<small>Suggested by Gemini from the photo GPS. Verify or edit this approximation before saving.</small>}</label>
+    </div>{hasGps&&<div className="gps-readout"><strong>Photo GPS</strong><span>{Number(initial?.latitude).toFixed(6)}, {Number(initial?.longitude).toFixed(6)}</span><small>These coordinates are read directly from EXIF and stored exactly. The place name above is only an approximate Gemini interpretation.</small></div>}<small>Use “Tasting / event group” to group wines from the same dinner, trip, class or formal tasting. Exact GPS remains attached even if you edit or clear the approximate place name.</small></fieldset>
     <div className="form-grid">{field('price','Price','number','0.01')}{field('currency','Currency (e.g. USD)')}{field('tags','Tags (comma separated)')}</div>
     <label>Tasting notes<textarea name="tastingNotes" rows={5} defaultValue={initial?.tastingNotes}/></label>{photos.length>0&&<p className="form-note">{photos.length} photo{photos.length===1?'':'s'} will be saved permanently only after this wine is successfully logged.</p>}{error&&<p role="alert">{error}</p>}<button disabled={busy}>{busy?'Saving…':'Save wine'}</button>
   </form>
