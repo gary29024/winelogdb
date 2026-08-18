@@ -1,13 +1,18 @@
-import { Hono } from 'hono';
+import { Hono,type Context } from 'hono';
 import entryApp from './entry';
 import { requireSession } from '../src/lib/auth/session';
 import { ensureAllProducerLinks,linkWineProducer } from '../src/lib/producers/entities';
 import { cleanupOrphanCuvee,ensureAllCuveeLinksForProducer,ensureMissingCuveeLinks,linkWineCuvee,reconcileProducerCuvees,resolveExistingCuvee } from '../src/lib/cuvees/entities';
 import { ensureProducerCatalogCuveesSeeded } from '../src/lib/cuvees/catalogSeed';
+import { listJournalPage } from '../src/lib/journal/list';
 
 type Bindings={DB:D1Database;WINE_IMAGES:R2Bucket;ASSETS:Fetcher;GEMINI_API_KEY:string;AUTH_SECRET:string;APP_PASSWORD:string;APP_URL:string;MAX_FILE_BYTES?:string;MAX_BATCH_FILES?:string};
 type AppEnv={Bindings:Bindings};
 const app=new Hono<AppEnv>();
+const IDENTITY_MAINTENANCE_KEY='identity-reconcile-v2';
+const MAINTENANCE_INTERVAL_MS=24*60*60*1000;
+const MAINTENANCE_LOCAL_CHECK_MS=60*60*1000;
+const maintenanceMemo=new Map<string,number>();
 
 function cors(c:{req:{header:(name:string)=>string|undefined};env:Bindings;header:(name:string,value:string)=>void}){const origin=c.req.header('Origin');if(origin&&origin===c.env.APP_URL){c.header('Access-Control-Allow-Origin',origin);c.header('Vary','Origin')}}
 async function user(c:{req:{header:(name:string)=>string|undefined};env:Bindings}){return (await requireSession(c.req.header('Authorization'),c.env.AUTH_SECRET)).userId}
@@ -17,6 +22,30 @@ async function ensureWineIdentity(db:D1Database,owner:string,wineId:string){
   if(!wine)return;
   if(!wine.producer_id&&wine.producer?.trim())await linkWineProducer(db,owner,wineId,wine.producer);
   await linkWineCuvee(db,owner,wineId);
+}
+
+async function maybeScheduleIdentityMaintenance(c:Context<AppEnv>,owner:string){
+  const now=Date.now(),lastLocal=maintenanceMemo.get(owner)??0;
+  if(now-lastLocal<MAINTENANCE_LOCAL_CHECK_MS)return;
+  maintenanceMemo.set(owner,now);
+  const state=await c.env.DB.prepare('SELECT last_run_at FROM maintenance_state WHERE owner_id=? AND maintenance_key=?').bind(owner,IDENTITY_MAINTENANCE_KEY).first<{last_run_at:string}>();
+  const lastRun=Date.parse(state?.last_run_at??'');
+  if(Number.isFinite(lastRun)&&now-lastRun<MAINTENANCE_INTERVAL_MS)return;
+  const nowIso=new Date(now).toISOString(),cutoffIso=new Date(now-MAINTENANCE_INTERVAL_MS).toISOString();
+  const claim=await c.env.DB.prepare(`INSERT INTO maintenance_state(owner_id,maintenance_key,last_run_at) VALUES(?,?,?)
+    ON CONFLICT(owner_id,maintenance_key) DO UPDATE SET last_run_at=excluded.last_run_at
+    WHERE maintenance_state.last_run_at<?`).bind(owner,IDENTITY_MAINTENANCE_KEY,nowIso,cutoffIso).run();
+  if(!claim.meta.changes)return;
+  c.executionCtx.waitUntil((async()=>{
+    try{
+      await ensureAllProducerLinks(c.env.DB,owner);
+      await ensureMissingCuveeLinks(c.env.DB,owner);
+      console.log(JSON.stringify({event:'identity-maintenance-complete',owner,key:IDENTITY_MAINTENANCE_KEY}));
+    }catch(e){
+      console.error(JSON.stringify({event:'identity-maintenance-failed',owner,key:IDENTITY_MAINTENANCE_KEY,error:(e as Error).message}));
+      await c.env.DB.prepare('DELETE FROM maintenance_state WHERE owner_id=? AND maintenance_key=?').bind(owner,IDENTITY_MAINTENANCE_KEY).run().catch(()=>{});
+    }
+  })());
 }
 
 app.get('/api/cuvees/resolve',async c=>{
@@ -32,9 +61,23 @@ app.get('/api/cuvees/resolve',async c=>{
   }catch(e){return c.json({error:(e as Error).message||'Could not resolve cuvee'},500)}
 });
 
+app.get('/api/images/:id',async c=>{
+  const response=await entryApp.fetch(c.req.raw,c.env,c.executionCtx);
+  if(!response.ok)return response;
+  const headers=new Headers(response.headers);
+  headers.set('Cache-Control','private, max-age=86400, immutable');
+  return new Response(response.body,{status:response.status,statusText:response.statusText,headers});
+});
+
+app.get('/api/journal',async c=>{
+  cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
+  if(Number(c.req.query('offset')||0)===0){try{await maybeScheduleIdentityMaintenance(c,owner)}catch(e){console.error(JSON.stringify({event:'identity-maintenance-schedule-failed',error:(e as Error).message}))}}
+  try{return c.json(await listJournalPage(c.env.DB,owner,c.req.query()))}catch(e){console.error(JSON.stringify({event:'journal-list-failed',error:(e as Error).message}));return c.json({error:'Could not load Journal'},500)}
+});
+
 app.get('/api/wines',async c=>{
   let owner:string;try{owner=await user(c)}catch{return entryApp.fetch(c.req.raw,c.env,c.executionCtx)}
-  try{await ensureAllProducerLinks(c.env.DB,owner);await ensureMissingCuveeLinks(c.env.DB,owner)}catch{}
+  if(Number(c.req.query('offset')||0)===0){try{await maybeScheduleIdentityMaintenance(c,owner)}catch(e){console.error(JSON.stringify({event:'identity-maintenance-schedule-failed',error:(e as Error).message}))}}
   return entryApp.fetch(c.req.raw,c.env,c.executionCtx);
 });
 
