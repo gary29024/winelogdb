@@ -11,6 +11,7 @@ type JournalRow={
   grapes_json:string;
   wine_style:string|null;
   rating:number|null;
+  venue:string|null;
   journal_date:string;
   created_at:string;
   tasting_name:string|null;
@@ -44,7 +45,7 @@ export async function listJournalPage(db:D1Database,owner:string,q:JournalListQu
     vintage:'w.vintage DESC, w.producer COLLATE NOCASE ASC, w.wine_name COLLATE NOCASE ASC, w.id ASC'
   };
   const limit=Math.min(Math.max(Number(q.limit)||36,1),72),offset=Math.max(Number(q.offset)||0,0);args.push(limit,offset);
-  const rows=await db.prepare(`SELECT w.id,w.producer,w.wine_name,w.vintage,w.country,w.region,w.appellation,w.grapes_json,w.wine_style,w.rating,
+  const rows=await db.prepare(`SELECT w.id,w.producer,w.wine_name,w.vintage,w.country,w.region,w.appellation,w.grapes_json,w.wine_style,w.rating,w.venue,
     coalesce(w.tasting_date,w.created_at) AS journal_date,w.created_at,
     (SELECT t.name FROM wine_experiences we LEFT JOIN tastings t ON t.id=we.tasting_id WHERE we.wine_id=w.id AND we.owner_id=w.owner_id ORDER BY we.created_at DESC LIMIT 1) AS tasting_name,
     (SELECT wi.id FROM wine_images wi WHERE wi.owner_id=w.owner_id AND wi.wine_id=w.id ORDER BY wi.rowid ASC LIMIT 1) AS image_id
@@ -60,6 +61,7 @@ export async function listJournalPage(db:D1Database,owner:string,q:JournalListQu
     grapes:parseJson<string[]>(row.grapes_json,[]),
     wineStyle:row.wine_style??null,
     tastingName:row.tasting_name??null,
+    venue:row.venue??null,
     rating:row.rating==null?null:Number(row.rating),
     tastingDate:row.journal_date??null,
     imageIds:row.image_id?[row.image_id]:[],
