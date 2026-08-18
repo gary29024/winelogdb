@@ -18,7 +18,7 @@ function blendText(initial?:Partial<WineInput>){
 }
 
 type WineFormProps={initial?:Partial<WineInput>;id?:string;photos?:WinePhoto[];onSave?:(input:WineInput)=>Promise<{id:string}>;onSaved?:(id:string)=>void;submitLabel?:string};
-export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel}:{initial?:Partial<WineInput>;id?:string;photos?:WinePhoto[];onSave?:(input:WineInput)=>Promise<{id:string}>;onSaved?:(id:string)=>void;submitLabel?:string}){
+export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel}:WineFormProps){
   const nav=useNavigate(),[busy,setBusy]=useState(false),[error,setError]=useState('');
   const [producer,setProducer]=useState(String(initial?.producer??'')),[producerResolution,setProducerResolution]=useState<ProducerResolution|null>(null),[resolvingProducer,setResolvingProducer]=useState(false);
   const [wineName,setWineName]=useState(String(initial?.wineName??'')),[appellation,setAppellation]=useState(String(initial?.appellation??'')),[wineStyle,setWineStyle]=useState(String(initial?.wineStyle??''));
