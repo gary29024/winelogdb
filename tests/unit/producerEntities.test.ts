@@ -7,10 +7,11 @@ describe('producer entity normalization',()=>{
     expect(normalizeProducerAlias("Domaine Test Père & Fils")).toBe('domaine test pere and fils');
   });
 
-  it('treats common domaine prefixes and family suffixes as the same match key',()=>{
-    expect(producerMatchKey('Domaine Dujac')).toBe('dujac');
+  it('keeps potentially distinguishing producer words in automatic match keys',()=>{
+    expect(producerMatchKey('Domaine Dujac')).toBe('domaine dujac');
     expect(producerMatchKey('Dujac')).toBe('dujac');
-    expect(producerMatchKey('Domaine Test Père et Fils')).toBe('test');
+    expect(producerMatchKey('Domaine Test Père et Fils')).toBe('domaine test pere et fils');
+    expect(producerMatchKey('Domaine Test')).not.toBe(producerMatchKey('Domaine Test Père et Fils'));
   });
 
   it('keys producer research by stable producer id instead of display spelling',()=>{
