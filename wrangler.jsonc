@@ -4,6 +4,11 @@
   "main": "worker/layered.ts",
   "compatibility_date": "2026-08-01",
   "keep_vars": true,
+  "observability": {
+    "enabled": true,
+    "logs": { "head_sampling_rate": 1 },
+    "traces": { "enabled": true, "head_sampling_rate": 1 }
+  },
   "assets": { "binding": "ASSETS", "directory": "./dist", "not_found_handling": "single-page-application" },
   "d1_databases": [{ "binding": "DB", "database_name": "winelogdb", "database_id": "c0f85b35-4210-4541-a807-162e258e083d", "migrations_dir": "src/lib/db/migrations" }],
   "r2_buckets": [{ "binding": "WINE_IMAGES", "bucket_name": "winelog-private" }],
