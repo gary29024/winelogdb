@@ -8,7 +8,8 @@ export type BatchRecognitionItem={id:string;position:number;status:'staged'|'sub
 export type BatchRecognitionSession=BatchSessionSummary&{items:BatchRecognitionItem[]};
 
 type StagePhoto={original:File;recognition:File;metadata:PhotoMetadata;width:number;height:number};
-async function read<T>(r:Response,message:string):Promise<T>{const body=await r.json().catch(()=>({}));if(!r.ok)throw new Error(typeof body?.error==='string'?body.error:`${message} (${r.status})`);return body as T}
+type ApiErrorBody={error?:unknown};
+async function read<T>(r:Response,message:string):Promise<T>{const body=await r.json().catch(()=>({})) as ApiErrorBody&Record<string,unknown>;if(!r.ok)throw new Error(typeof body.error==='string'?body.error:`${message} (${r.status})`);return body as T}
 export async function listBatchSessions(){return read<{items:BatchSessionSummary[]}>(await fetch('/api/batch-recognition/sessions',{headers:authHeaders()}),'Could not load Batch Scan sessions')}
 export async function createBatchSession(){return read<{id:string;status:string;createdAt:string;expiresAt:string}>(await fetch('/api/batch-recognition/sessions',{method:'POST',headers:authHeaders(true),body:'{}'}),'Could not create Batch Scan')}
 export async function getBatchSession(id:string){return read<BatchRecognitionSession>(await fetch(`/api/batch-recognition/sessions/${id}`,{headers:authHeaders()}),'Could not load Batch Scan')}
