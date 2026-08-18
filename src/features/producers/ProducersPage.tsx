@@ -2,6 +2,7 @@ import { useEffect,useMemo,useState } from 'react';
 import { Link } from 'react-router-dom';
 import { listProducers,type ProducerSummary } from './api';
 import '../../producer.css';
+import './search.css';
 
 const unknownLast=(a:string,b:string)=>{
  const aUnknown=/not researched$/i.test(a),bUnknown=/not researched$/i.test(b);
