@@ -40,7 +40,7 @@ export function cuveeSignature(name:string,appellation:string|null|undefined,pro
   const normalized=normalizeCuveeAlias(`${stripped} ${appellation??''}`);
   const tokens=normalized.split(/\s+/).filter(Boolean).filter(token=>{
     if(/^\d{4}$/.test(token))return false;
-    // Monopole describes ownership of the same named site rather than a separate vintage/cuvee identity.
+    // Monopole is an ownership descriptor for the same named site; AOC is generic classification text.
     return !['monopole','aoc'].includes(token);
   });
   return [...new Set(tokens)].sort().join(' ');
@@ -55,14 +55,25 @@ async function producerNames(db:D1Database,owner:string,producerId:string){
 }
 
 const styleCompatible=(stored:string|null|undefined,incoming:string|null|undefined)=>!stored||!incoming||normalizeCuveeAlias(stored)===normalizeCuveeAlias(incoming);
+const appellationCompatible=(stored:string|null|undefined,incoming:string|null|undefined)=>!stored||!incoming||normalizeCuveeAlias(stored)===normalizeCuveeAlias(incoming);
 const mapEntity=(row:CuveeRow):CuveeEntity=>({id:row.id,producerId:row.producer_id,canonicalName:row.canonical_name,appellation:row.appellation??null,wineStyle:row.wine_style??null,catalogBacked:Boolean(row.catalog_backed)});
+
+async function aliasMatch(db:D1Database,owner:string,producerId:string,normalizedAlias:string,appellation?:string|null){
+  const appKey=normalizeCuveeAlias(appellation??'');
+  if(appKey){
+    return (await db.prepare(`SELECT c.*,a.display_alias FROM cuvee_aliases a JOIN cuvees c ON c.owner_id=a.owner_id AND c.id=a.cuvee_id
+      WHERE a.owner_id=? AND a.producer_id=? AND a.normalized_alias=? AND a.appellation_key=? LIMIT 1`).bind(owner,producerId,normalizedAlias,appKey).first<CuveeRow>())??null;
+  }
+  const rows=await db.prepare(`SELECT c.*,a.display_alias FROM cuvee_aliases a JOIN cuvees c ON c.owner_id=a.owner_id AND c.id=a.cuvee_id
+    WHERE a.owner_id=? AND a.producer_id=? AND a.normalized_alias=? LIMIT 2`).bind(owner,producerId,normalizedAlias).all<CuveeRow>();
+  return rows.results.length===1?rows.results[0]:null;
+}
 
 export async function resolveExistingCuvee(db:D1Database,owner:string,producerId:string,name:string,appellation?:string|null,wineStyle?:string|null):Promise<CuveeResolution|null>{
   const candidate=name.trim();if(!candidate)return null;
   const names=await producerNames(db,owner,producerId),cleaned=stripKnownProducerPrefix(candidate,names),aliasKey=normalizeCuveeAlias(cleaned);
-  const byAlias=await db.prepare(`SELECT c.*,a.display_alias FROM cuvee_aliases a JOIN cuvees c ON c.owner_id=a.owner_id AND c.id=a.cuvee_id
-    WHERE a.owner_id=? AND a.producer_id=? AND a.normalized_alias=? LIMIT 1`).bind(owner,producerId,aliasKey).first<CuveeRow>();
-  let row:CuveeRow|null=byAlias??null,matchType:CuveeResolution['matchType']='alias';
+  let row=await aliasMatch(db,owner,producerId,aliasKey,appellation),matchType:CuveeResolution['matchType']='alias';
+  if(row&&(!styleCompatible(row.wine_style,wineStyle)||!appellationCompatible(row.appellation,appellation)))row=null;
   if(!row){
     const signature=cuveeSignature(cleaned,appellation,names);
     row=(await db.prepare('SELECT * FROM cuvees WHERE owner_id=? AND producer_id=? AND signature_key=? LIMIT 1').bind(owner,producerId,signature).first<CuveeRow>())??null;
@@ -78,8 +89,8 @@ export async function resolveExistingCuvee(db:D1Database,owner:string,producerId
 export async function ensureCuveeEntity(db:D1Database,owner:string,producerId:string,name:string,appellation?:string|null,wineStyle?:string|null,catalogBacked=false){
   const raw=name.trim();if(!raw)throw new Error('Wine name is required');
   const names=await producerNames(db,owner,producerId),canonical=stripKnownProducerPrefix(raw,names),aliasKey=normalizeCuveeAlias(canonical),signature=cuveeSignature(canonical,appellation,names),now=new Date().toISOString();
-  let row=(await db.prepare(`SELECT c.* FROM cuvee_aliases a JOIN cuvees c ON c.owner_id=a.owner_id AND c.id=a.cuvee_id
-    WHERE a.owner_id=? AND a.producer_id=? AND a.normalized_alias=? LIMIT 1`).bind(owner,producerId,aliasKey).first<CuveeRow>())??null;
+  let row=await aliasMatch(db,owner,producerId,aliasKey,appellation);
+  if(row&&(!styleCompatible(row.wine_style,wineStyle)||!appellationCompatible(row.appellation,appellation)))row=null;
   if(!row)row=(await db.prepare('SELECT * FROM cuvees WHERE owner_id=? AND producer_id=? AND signature_key=? LIMIT 1').bind(owner,producerId,signature).first<CuveeRow>())??null;
   if(row&&!styleCompatible(row.wine_style,wineStyle))row=null;
   if(!row){
@@ -99,11 +110,12 @@ export async function ensureCuveeEntity(db:D1Database,owner:string,producerId:st
     await db.prepare('UPDATE wines SET wine_name=? WHERE owner_id=? AND cuvee_id=?').bind(canonical,owner,row.id).run();
     row={...row,canonical_name:canonical,appellation:appellation??row.appellation,wine_style:wineStyle??row.wine_style,catalog_backed:1};
   }
+  const appKey=normalizeCuveeAlias(appellation??row.appellation??'');
   for(const alias of new Set([raw,canonical])){
     const normalized=normalizeCuveeAlias(stripKnownProducerPrefix(alias,names));if(!normalized)continue;
-    await db.prepare(`INSERT INTO cuvee_aliases(owner_id,producer_id,normalized_alias,cuvee_id,display_alias,created_at) VALUES(?,?,?,?,?,?)
-      ON CONFLICT(owner_id,producer_id,normalized_alias) DO UPDATE SET cuvee_id=excluded.cuvee_id,display_alias=excluded.display_alias`)
-      .bind(owner,producerId,normalized,row.id,alias,now).run();
+    await db.prepare(`INSERT INTO cuvee_aliases(owner_id,producer_id,normalized_alias,appellation_key,cuvee_id,display_alias,created_at) VALUES(?,?,?,?,?,?,?)
+      ON CONFLICT(owner_id,producer_id,normalized_alias,appellation_key) DO UPDATE SET cuvee_id=excluded.cuvee_id,display_alias=excluded.display_alias`)
+      .bind(owner,producerId,normalized,appKey,row.id,alias,now).run();
   }
   return mapEntity(row);
 }
@@ -133,4 +145,13 @@ export async function ensureAllCuveeLinksForProducer(db:D1Database,owner:string,
   await syncProducerCatalogCuvees(db,owner,producerId);
   const rows=await db.prepare('SELECT id FROM wines WHERE owner_id=? AND producer_id=? ORDER BY created_at ASC').bind(owner,producerId).all<{id:string}>();
   for(const row of rows.results)await linkWineCuvee(db,owner,row.id);
+}
+
+export async function ensureMissingCuveeLinks(db:D1Database,owner:string){
+  const producers=await db.prepare(`SELECT DISTINCT producer_id FROM wines WHERE owner_id=? AND producer_id IS NOT NULL AND producer_id<>'' AND (cuvee_id IS NULL OR cuvee_id='')`).bind(owner).all<{producer_id:string}>();
+  for(const producer of producers.results){
+    await syncProducerCatalogCuvees(db,owner,producer.producer_id);
+    const wines=await db.prepare(`SELECT id FROM wines WHERE owner_id=? AND producer_id=? AND (cuvee_id IS NULL OR cuvee_id='') ORDER BY created_at ASC`).bind(owner,producer.producer_id).all<{id:string}>();
+    for(const wine of wines.results)await linkWineCuvee(db,owner,wine.id);
+  }
 }
