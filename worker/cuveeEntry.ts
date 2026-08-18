@@ -42,6 +42,9 @@ app.get('/api/wines/:id',async c=>{
   return entryApp.fetch(c.req.raw,c.env,c.executionCtx);
 });
 
+// Keep the existing producer resolver out of the dynamic producer-detail hook below.
+app.get('/api/producers/resolve',c=>entryApp.fetch(c.req.raw,c.env,c.executionCtx));
+
 app.get('/api/producers/:id',async c=>{
   let owner:string;try{owner=await user(c)}catch{return entryApp.fetch(c.req.raw,c.env,c.executionCtx)}
   try{await ensureAllProducerLinks(c.env.DB,owner);await ensureAllCuveeLinksForProducer(c.env.DB,owner,c.req.param('id'))}catch{}
@@ -51,7 +54,25 @@ app.get('/api/producers/:id',async c=>{
 app.post('/api/producers/:id/research',async c=>{
   const response=await entryApp.fetch(c.req.raw,c.env,c.executionCtx);
   if(response.ok){
-    try{const owner=await user(c);await syncProducerCatalogCuvees(c.env.DB,owner,c.req.param('id'));await ensureAllCuveeLinksForProducer(c.env.DB,owner,c.req.param('id'))}catch{}
+    try{const owner=await user(c);await ensureAllCuveeLinksForProducer(c.env.DB,owner,c.req.param('id'))}catch{}
+  }
+  return response;
+});
+
+app.post('/api/producers/:id/merge',async c=>{
+  const response=await entryApp.fetch(c.req.raw,c.env,c.executionCtx);
+  if(response.ok){try{const owner=await user(c);await ensureAllCuveeLinksForProducer(c.env.DB,owner,c.req.param('id'))}catch{}}
+  return response;
+});
+
+app.post('/api/producers/:id/unlink',async c=>{
+  const response=await entryApp.fetch(c.req.raw,c.env,c.executionCtx);
+  if(response.ok){
+    try{
+      const owner=await user(c),body=await response.clone().json() as {restoredProducerId?:string};
+      await ensureAllCuveeLinksForProducer(c.env.DB,owner,c.req.param('id'));
+      if(body.restoredProducerId)await ensureAllCuveeLinksForProducer(c.env.DB,owner,body.restoredProducerId);
+    }catch{}
   }
   return response;
 });
@@ -70,8 +91,16 @@ app.post('/api/wines',async c=>{
 
 app.put('/api/wines/:id',async c=>{
   let owner:string;try{owner=await user(c)}catch{return entryApp.fetch(c.req.raw,c.env,c.executionCtx)}
+  const id=c.req.param('id'),before=await c.env.DB.prepare('SELECT wine_name FROM wines WHERE owner_id=? AND id=?').bind(owner,id).first<{wine_name:string}>().catch(()=>null);
+  let requestedName:string|null=null;
+  try{const body=await c.req.raw.clone().json() as {wineName?:unknown};if(typeof body.wineName==='string'&&body.wineName.trim())requestedName=body.wineName.trim()}catch{}
   const response=await entryApp.fetch(c.req.raw,c.env,c.executionCtx);
-  if(response.ok){try{await ensureWineIdentity(c.env.DB,owner,c.req.param('id'))}catch{}}
+  if(response.ok){
+    try{
+      if(requestedName&&before?.wine_name!==requestedName){await c.env.DB.prepare('UPDATE wines SET recognized_wine_name=?,cuvee_id=NULL WHERE owner_id=? AND id=?').bind(requestedName,owner,id).run()}
+      await ensureWineIdentity(c.env.DB,owner,id);
+    }catch{}
+  }
   return response;
 });
 
