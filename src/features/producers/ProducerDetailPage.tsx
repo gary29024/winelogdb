@@ -7,7 +7,7 @@ import { normalizeProducerAlias } from '../../lib/producers/entities';
 import '../../producer.css';
 
 const wineKey=(name:string)=>normalizeProducerAlias(name).replace(/\b(grand cru|premier cru|1er cru|village)\b/g,'').trim();
-const stageLabel:Record<ProducerResearchRun['stage'],string>={preparing:'Preparing research',searching:'Searching the web with Gemini',retrying:'Retrying Gemini research',parsing:'Validating Gemini response',saving:'Saving producer research',image:'Finding a domaine image',complete:'Research complete',failed:'Research failed'};
+const stageLabel:Record<ProducerResearchRun['stage'],string>={preparing:'Queued for research',searching:'Researching in the background',retrying:'Retrying Gemini research',parsing:'Validating Gemini response',saving:'Saving producer research',image:'Finding a domaine image',complete:'Research complete',failed:'Research failed'};
 type CatalogCategory='red'|'white'|'rose'|'sparkling'|'dessert'|'fortified'|'orange'|'other';
 const categoryOrder:CatalogCategory[]=['red','white','rose','sparkling','dessert','fortified','orange','other'];
 const categoryLabels:Record<CatalogCategory,string>={red:'Red',white:'White',rose:'Rosé',sparkling:'Sparkling',dessert:'Dessert / sweet',fortified:'Fortified',orange:'Orange',other:'Other'};
@@ -59,8 +59,26 @@ export function ProducerDetailPage(){
  const researchPoll=useRef<number|undefined>(undefined),researchClock=useRef<number|undefined>(undefined);
  function stopResearchTimers(){if(researchPoll.current)window.clearInterval(researchPoll.current);if(researchClock.current)window.clearInterval(researchClock.current);researchPoll.current=undefined;researchClock.current=undefined}
  async function reload(){const [detail,directory]=await Promise.all([getProducer(id),listProducers()]);setProducer(detail);setPrimaryName(detail.canonicalName);setAvailable(directory.items.filter(x=>x.id!==id));setSelectedAlias('')}
- useEffect(()=>{reload().catch(e=>setError(e.message)).finally(()=>setLoading(false))},[id]);
- useEffect(()=>()=>stopResearchTimers(),[]);
+ function watchResearch(run:ProducerResearchRun){
+  stopResearchTimers();setResearchRun(run);setResearching(run.status==='running');
+  const started=Date.parse(run.startedAt);setResearchElapsed(Number.isFinite(started)?Math.max(0,Math.floor((Date.now()-started)/1000)):0);
+  if(run.status!=='running')return;
+  researchClock.current=window.setInterval(()=>setResearchElapsed(Number.isFinite(started)?Math.max(0,Math.floor((Date.now()-started)/1000)):0),1000);
+  const poll=async()=>{
+   const next=await getProducerResearchStatus(id,run.requestId).catch(()=>null);if(!next)return;setResearchRun(next);
+   if(next.status==='running')return;
+   stopResearchTimers();setResearching(false);setResearchElapsed(next.durationMs!=null?Math.floor(next.durationMs/1000):researchElapsed);
+   if(next.status==='complete'){await reload().catch(()=>undefined);setNotice(`Producer research completed${next.durationMs!=null?` in ${(next.durationMs/1000).toFixed(1)}s`:''}.`);setError('')}
+   else setError(`${next.message||'Producer research failed.'} · Research request ${next.requestId}`);
+  };
+  researchPoll.current=window.setInterval(()=>void poll(),2000);void poll();
+ }
+ useEffect(()=>{
+  let active=true;
+  Promise.all([reload(),getProducerResearchStatus(id).catch(()=>null)]).then(([,run])=>{if(active&&run)watchResearch(run)}).catch(e=>{if(active)setError(e.message)}).finally(()=>{if(active)setLoading(false)});
+  return()=>{active=false;stopResearchTimers()};
+ // eslint-disable-next-line react-hooks/exhaustive-deps
+ },[id]);
  const tastedKeys=useMemo(()=>new Set((producer?.tastedWines??[]).map(w=>wineKey(w.wineName))),[producer]);
  const linkedByName=useMemo(()=>new Map((producer?.linkedProducers??[]).map(link=>[normalizeProducerAlias(link.name),link])),[producer]);
  const catalogGroups=useMemo(()=>{
@@ -74,20 +92,12 @@ export function ProducerDetailPage(){
   return [...map.values()].map(wines=>({name:wines[0]?.wineName??'',wines:[...wines].sort((a,b)=>(b.vintage??-1)-(a.vintage??-1))}));
  },[producer]);
  async function runResearch(){
-  if(!confirm('Research this producer’s home location, public contact details and current wine range with Gemini + Google Search? WineLog will also try to save a header image from the verified official website when available.'))return;
-  stopResearchTimers();const requestId=crypto.randomUUID(),started=Date.now(),startedAt=new Date(started).toISOString();
-  setResearching(true);setResearchElapsed(0);setError('');setNotice('');setResearchRun({requestId,producerId:id,status:'running',stage:'preparing',attempt:0,message:'Starting producer research',startedAt,updatedAt:startedAt,completedAt:null,durationMs:null});
-  researchClock.current=window.setInterval(()=>setResearchElapsed(Math.floor((Date.now()-started)/1000)),1000);
-  researchPoll.current=window.setInterval(()=>{getProducerResearchStatus(id,requestId).then(setResearchRun).catch(()=>undefined)},1500);
+  if(!confirm('Research this producer’s home location, public contacts, producer-wide winemaking practices and current/recent wine range with Gemini + Google Search? The job runs in the background and continues even if you close WineLog.'))return;
+  setError('');setNotice('');
   try{
-   const updated=await researchProducer(id,requestId);setProducer(p=>p?{...p,...updated}:p);
-   const final=await getProducerResearchStatus(id,requestId).catch(()=>null);if(final)setResearchRun(final);
-   setNotice(`Producer research completed${final?.durationMs!=null?` in ${(final.durationMs/1000).toFixed(1)}s`:''}.`);
-  }catch(e){
-   const final=await getProducerResearchStatus(id,requestId).catch(()=>null);if(final)setResearchRun(final);
-   const message=(e as Error).message;
-   setError(`${message}${message.includes('(503)')?' — Gemini is temporarily unavailable; WineLog retried Gemini 3.7 before using the 3.6 fallback. Please try again later if both fail.':''} · Research request ${requestId}`);
-  }finally{stopResearchTimers();setResearchElapsed(Math.floor((Date.now()-started)/1000));setResearching(false)}
+   const accepted=await researchProducer(id);const run=await getProducerResearchStatus(id,accepted.researchRequestId);
+   if(run)watchResearch(run);else setNotice('Producer research has been queued in the background. You can leave this page safely.');
+  }catch(e){setError((e as Error).message)}
  }
  async function savePrimaryName(){if(!producer||!primaryName||primaryName===producer.canonicalName)return;setSavingPrimary(true);setError('');setNotice('');try{const result=await setPrimaryProducerName(id,primaryName);await reload();setNotice(`${result.canonicalName} is now the primary producer name. Bottle-level recognised names and research remain attached to the same producer identity.`)}catch(e){setError((e as Error).message)}finally{setSavingPrimary(false)}}
  async function addAlias(){const source=available.find(x=>x.id===selectedAlias);if(!producer||!source)return;const ok=confirm(`Link “${source.canonicalName}” to “${producer.canonicalName}”?\n\n${producer.canonicalName} will remain the canonical producer. All wines and aliases from ${source.canonicalName} will be linked here. If both names already have research, WineLog will keep the newest complete result active, combine sources, and preserve the previous research in history.`);if(!ok)return;setMerging(true);setError('');setNotice('');try{const result=await mergeProducer(id,source.id);await reload();setNotice(`${result.mergedName} is now linked as an alias of ${result.canonicalName}.`)}catch(e){setError((e as Error).message)}finally{setMerging(false)}}
@@ -100,9 +110,10 @@ export function ProducerDetailPage(){
    <div className="producer-header-content"><p className="eyebrow">PRODUCER</p><h1>{producer.canonicalName}</h1><p>{location||'Home location not researched yet'}</p>{producer.officialWebsiteUrl&&<a className="producer-site-link" href={producer.officialWebsiteUrl} target="_blank" rel="noreferrer">Official website ↗</a>}{producer.aliases.length>1&&<small>Known aliases: {producer.aliases.join(' · ')}</small>}</div>
   </header>
   {error&&<p className="producer-error" role="alert">{error}</p>}{notice&&<p className="producer-notice" role="status">{notice}</p>}
-  <section className="detail-section"><div className="producer-section-title"><div><p className="section-label">PRODUCER RESEARCH</p><h2>Profile & range</h2></div><button type="button" disabled={researching} onClick={runResearch}>{researching?'Researching…':producer.researchedAt?'Refresh producer research':'Research producer'}</button></div>
-   {researchRun&&<div className={`producer-research-status ${researchRun.status}`} role="status" aria-live="polite"><div><strong>{stageLabel[researchRun.stage]}</strong><span>{researchRun.message}</span></div><div><strong>{researching?`${researchElapsed}s`:researchRun.durationMs!=null?`${(researchRun.durationMs/1000).toFixed(1)}s`:''}</strong><small>Request {researchRun.requestId}</small></div>{researching&&researchElapsed>=30&&<p>Still working. WineLog is polling the server-side stage; the same request ID is searchable in Cloudflare Observability.</p>}</div>}
-   {producer.profile?<p className="producer-profile">{producer.profile}</p>:<p>Research this producer to establish its physical base, broad region and commune, public contact details, official website, header image and a sourced current/recent wine range. Producer-level research is stored and reused.</p>}
+  <section className="detail-section"><div className="producer-section-title"><div><p className="section-label">PRODUCER RESEARCH</p><h2>Profile & range</h2></div><button type="button" disabled={researching} onClick={runResearch}>{researching?'Research running…':producer.researchedAt?'Refresh producer research':'Research producer'}</button></div>
+   {researchRun&&<div className={`producer-research-status ${researchRun.status}`} role="status" aria-live="polite"><div><strong>{stageLabel[researchRun.stage]}</strong><span>{researchRun.message}</span></div><div><strong>{researching?`${researchElapsed}s`:researchRun.durationMs!=null?`${(researchRun.durationMs/1000).toFixed(1)}s`:''}</strong><small>Request {researchRun.requestId}</small></div>{researching&&<p>This is a background job. You can leave this page or close WineLog; the saved result will appear automatically when you return.</p>}</div>}
+   {producer.profile?<p className="producer-profile">{producer.profile}</p>:<p>Research this producer to establish its physical base, broad region and commune, public contact details, official website, general producer-wide practices, header image and a sourced current/recent wine range.</p>}
+   {producer.winemakingPractices&&<div className="producer-practices"><p className="section-label">GENERAL WINEMAKING PRACTICES</p><p className="producer-profile">{producer.winemakingPractices}</p><small>Producer-wide context only. Exact cuvée/vintage techniques are researched separately on the wine page.</small></div>}
    {hasContact&&<div className="producer-contact"><p className="section-label">CONTACT</p><div className="producer-contact-grid">
     {producer.officialWebsiteUrl&&<div><span>Website</span><a href={producer.officialWebsiteUrl} target="_blank" rel="noreferrer">Official website ↗</a></div>}
     {producer.instagramUrl&&<div><span>Instagram</span><a href={producer.instagramUrl} target="_blank" rel="noreferrer">Instagram ↗</a></div>}

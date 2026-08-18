@@ -1,7 +1,7 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "winelogdb",
-  "main": "worker/cuveeEntry.ts",
+  "main": "worker/researchQueueEntry.ts",
   "compatibility_date": "2026-08-01",
   "keep_vars": true,
   "upload_source_maps": true,
@@ -13,5 +13,17 @@
   "assets": { "binding": "ASSETS", "directory": "./dist", "not_found_handling": "single-page-application" },
   "d1_databases": [{ "binding": "DB", "database_name": "winelogdb", "database_id": "c0f85b35-4210-4541-a807-162e258e083d", "migrations_dir": "src/lib/db/migrations" }],
   "r2_buckets": [{ "binding": "WINE_IMAGES", "bucket_name": "winelog-private" }],
+  "queues": {
+    "producers": [{ "binding": "RESEARCH_QUEUE", "queue": "winelog-research" }],
+    "consumers": [{
+      "queue": "winelog-research",
+      "max_batch_size": 1,
+      "max_batch_timeout": 5,
+      "max_retries": 2,
+      "retry_delay": 60,
+      "dead_letter_queue": "winelog-research-dlq",
+      "max_concurrency": 2
+    }]
+  },
   "vars": { "MAX_FILE_BYTES": "10485760", "MAX_BATCH_FILES": "12" }
 }

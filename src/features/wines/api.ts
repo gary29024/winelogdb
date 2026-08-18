@@ -19,6 +19,8 @@ export type JournalWine={
   imageIds:string[];
   createdAt:string;
 };
+export type WineResearchStage='queued'|'researching'|'saving'|'complete'|'failed';
+export type WineResearchRun={requestId:string;wineId:string;status:'running'|'complete'|'failed';stage:WineResearchStage;refresh:'none'|'vintage'|'all';attempt:number;message:string|null;startedAt:string;updatedAt:string;completedAt:string|null;durationMs:number|null};
 
 type ApiIssue={path?:Array<string|number>;message?:string};
 async function requireOk(r:Response,message:string){
@@ -50,3 +52,9 @@ export async function saveWine(input:WineInput,id?:string,photos:WinePhoto[]=[])
   const r=await fetch('/api/wines',{method:'POST',headers:authHeaders(true),body:JSON.stringify(input)});await requireOk(r,'Could not save wine');return r.json() as Promise<{id:string}>;
 }
 export async function deleteWine(id:string){const r=await fetch(`/api/wines/${id}`,{method:'DELETE',headers:authHeaders()});await requireOk(r,'Could not delete wine')}
+export async function startWineDeepSearch(id:string,refresh:'none'|'vintage'|'all',requestId=crypto.randomUUID()){
+  const r=await fetch(`/api/wines/${id}/deep-search`,{method:'POST',headers:authHeaders(true),body:JSON.stringify({confirmation:'RUN_DEEP_SEARCH',refresh,requestId})});await requireOk(r,'Could not queue Deep Search');return r.json() as Promise<{accepted:true;researchRequestId:string;existing:boolean}>;
+}
+export async function getWineDeepSearchStatus(id:string,requestId?:string){
+  const suffix=requestId?`?requestId=${encodeURIComponent(requestId)}`:'';const r=await fetch(`/api/wines/${id}/deep-search-status${suffix}`,{headers:authHeaders()});if(r.status===404)return null;await requireOk(r,'Could not load Deep Search status');return r.json() as Promise<WineResearchRun>;
+}

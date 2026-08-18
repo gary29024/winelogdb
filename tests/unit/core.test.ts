@@ -3,6 +3,7 @@ import { wineInputSchema } from '../../src/lib/db/schema';
 import { createObjectKey } from '../../src/lib/r2/keys';
 import { parseRecognition } from '../../src/features/recognition/schema';
 import { validateBatch } from '../../src/features/uploads/validation';
+import { shouldRetryRecognitionFailure } from '../../src/lib/recognition/retryPolicy';
 
 describe('metadata validation', () => {
   it('rejects impossible wine data', () => {
@@ -68,6 +69,18 @@ describe('Gemini parsing', () => {
     expect(() =>
       parseRecognition('{"grapes":[],"confidence":1,"admin":true}'),
     ).toThrow();
+  });
+});
+
+describe('recognition retry policy', () => {
+  it('never duplicates a request after the hard timeout', () => {
+    expect(shouldRetryRecognitionFailure({status:null,timedOut:true,networkError:true})).toBe(false);
+  });
+
+  it('allows one retry for explicit transient upstream failures', () => {
+    expect(shouldRetryRecognitionFailure({status:503,timedOut:false,networkError:false})).toBe(true);
+    expect(shouldRetryRecognitionFailure({status:429,timedOut:false,networkError:false})).toBe(true);
+    expect(shouldRetryRecognitionFailure({status:400,timedOut:false,networkError:false})).toBe(false);
   });
 });
 

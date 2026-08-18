@@ -7,7 +7,12 @@ import { prepareRecognitionImage } from './prepareImage';
 import { authHeaders,clearSession } from '../../lib/auth/client';
 
 type Item={file:File;recognitionFile?:File;preview:string;status:string;progress:number;error?:string;metadata?:PhotoMetadata;width?:number;height?:number};
-const readError=(value:unknown)=>typeof value==='object'&&value!==null&&'error' in value&&typeof value.error==='string'?value.error:'Request failed';
+type RecognitionErrorBody={error?:unknown;requestId?:unknown};
+const readError=(value:unknown)=>{
+  const body=typeof value==='object'&&value!==null?value as RecognitionErrorBody:{};
+  const message=typeof body.error==='string'?body.error:'Request failed';
+  return typeof body.requestId==='string'?`${message} · Request ${body.requestId}`:message;
+};
 function suggestedTags(result:RecognitionResult){
   const candidates=[result.country,result.region,result.appellation,...result.grapes,result.style];
   const seen=new Set<string>();
@@ -15,10 +20,10 @@ function suggestedTags(result:RecognitionResult){
 }
 
 export function UploadPage(){
-  const [items,setItems]=useState<Item[]>([]),[review,setReview]=useState<RecognitionResult>(),[scanError,setScanError]=useState('');
+  const [items,setItems]=useState<Item[]>([]),[review,setReview]=useState<RecognitionResult>(),[scanError,setScanError]=useState(''),[identifying,setIdentifying]=useState(false);
   const input=useRef<HTMLInputElement>(null);
   const location=useLocation(),navigate=useNavigate();
-  function failAll(message:string){setItems(xs=>xs.map(x=>({...x,status:'failed',progress:0,error:message})));setScanError(message)}
+  function failAll(message:string){setItems(xs=>xs.map(x=>({...x,status:'failed',progress:0,error:message})));setScanError(message);setIdentifying(false)}
 
   async function choose(files:File[]){
     if(!files.length)return;
@@ -41,21 +46,26 @@ export function UploadPage(){
   },[]);
 
   async function identify(){
+    let slowTimer:number|undefined;
     try{
       setScanError('');setReview(undefined);
       if(items.some(x=>!x.recognitionFile||!x.width||!x.height)){failAll('One or more photos are not ready. Choose the photos again.');return}
+      setIdentifying(true);
       setItems(xs=>xs.map(x=>({...x,status:'recognizing together',progress:60,error:undefined})));
+      slowTimer=window.setTimeout(()=>setItems(xs=>xs.map(x=>({...x,status:'still identifying — Gemini is taking longer than usual',progress:75}))),30_000);
       const fd=new FormData();
       items.forEach(x=>fd.append('images',x.recognitionFile!));
       fd.append('metadata',JSON.stringify(items.map(x=>x.metadata??{capturedAt:null,latitude:null,longitude:null,source:'none'})));
       const rr=await fetch('/api/recognition',{method:'POST',headers:authHeaders(),body:fd});
-      const response:unknown=await rr.json().catch(()=>({error:`Recognition failed (${rr.status})`}));
+      const response:unknown=await rr.json().catch(()=>({error:`Recognition failed (${rr.status})`,requestId:rr.headers.get('X-WineLog-Request-Id')}));
       if(rr.status===401){clearSession();navigate('/login',{replace:true});return}
       if(!rr.ok){failAll(readError(response));return}
       const result=recognitionSchema.parse(response);
-      setItems(xs=>xs.map(x=>({...x,status:'identified',progress:100,error:undefined})));
+      const duration=result.recognitionDurationMs!=null?` in ${(result.recognitionDurationMs/1000).toFixed(1)}s`:'';
+      setItems(xs=>xs.map(x=>({...x,status:`identified${duration}`,progress:100,error:undefined})));
       setReview(result);
     }catch(e){failAll((e as Error).message||'Recognition failed unexpectedly')}
+    finally{if(slowTimer!==undefined)window.clearTimeout(slowTimer);setIdentifying(false)}
   }
 
   const photos=items.filter(x=>x.width&&x.height).map(x=>({file:x.file,metadata:x.metadata,width:x.width!,height:x.height!}));
@@ -69,7 +79,7 @@ export function UploadPage(){
       <button type="button" className="scan-button" onClick={()=>input.current?.click()}>Scan Wine</button>
       <input ref={input} className="visually-hidden" type="file" accept="image/*" multiple onChange={e=>void choose(Array.from(e.target.files??[]))}/>
     </div>}
-    {items.length>0&&<><div className="scan-summary"><strong>{items.length} photo{items.length===1?'':'s'} selected</strong><span>Recognition uses resized copies in one API call. Nothing is stored in R2 yet.</span></div><ul className="upload-list" aria-live="polite">{items.map((x,i)=><li key={x.preview}><img src={x.preview} alt={`Wine label ${i+1}`}/><div><strong>{i===0?'Primary label':`Additional label ${i+1}`}</strong><span>{x.status}{x.error&&`: ${x.error}`}</span>{x.metadata?.capturedAt&&<small>Photo date: {new Date(x.metadata.capturedAt).toLocaleString()}</small>}{x.metadata?.latitude!=null&&x.metadata?.longitude!=null&&<small>Photo GPS: {x.metadata.latitude.toFixed(6)}, {x.metadata.longitude.toFixed(6)}</small>}<progress value={x.progress} max="100">{x.progress}%</progress></div></li>)}</ul>{scanError&&<p role="alert" className="scan-error">{scanError}</p>}<button className="wide-action" onClick={identify} disabled={items.some(x=>x.status==='preparing'||x.status==='recognizing together')}>Identify this wine</button><button type="button" className="rescan-link" onClick={()=>input.current?.click()}>Choose different photos</button><input ref={input} className="visually-hidden" type="file" accept="image/*" multiple onChange={e=>void choose(Array.from(e.target.files??[]))}/></>}
+    {items.length>0&&<><div className="scan-summary"><strong>{items.length} photo{items.length===1?'':'s'} selected</strong><span>Recognition uses resized copies in one API call. Nothing is stored in R2 yet.</span></div><ul className="upload-list" aria-live="polite">{items.map((x,i)=><li key={x.preview}><img src={x.preview} alt={`Wine label ${i+1}`}/><div><strong>{i===0?'Primary label':`Additional label ${i+1}`}</strong><span>{x.status}{x.error&&`: ${x.error}`}</span>{x.metadata?.capturedAt&&<small>Photo date: {new Date(x.metadata.capturedAt).toLocaleString()}</small>}{x.metadata?.latitude!=null&&x.metadata?.longitude!=null&&<small>Photo GPS: {x.metadata.latitude.toFixed(6)}, {x.metadata.longitude.toFixed(6)}</small>}<progress value={x.progress} max="100">{x.progress}%</progress></div></li>)}</ul>{scanError&&<p role="alert" className="scan-error">{scanError}</p>}<button className="wide-action" onClick={identify} disabled={identifying||items.some(x=>x.status==='preparing')}>{identifying?'Identifying…':'Identify this wine'}</button><button type="button" className="rescan-link" disabled={identifying} onClick={()=>input.current?.click()}>Choose different photos</button><input ref={input} className="visually-hidden" type="file" accept="image/*" multiple onChange={e=>void choose(Array.from(e.target.files??[]))}/></>}
     {review&&<div className="review"><p className="eyebrow">REVIEW</p><h2>Combined identification</h2><p>Gemini interpreted all selected labels together. Correct anything before saving. Exact photo coordinates are retained from EXIF; when GPS exists, Gemini may also suggest an approximate human-readable place that you can verify or edit. The original photos are written to R2 only after the wine is successfully logged.</p><WineForm photos={photos} initial={{producer:review.producer??'',wineName:review.wineName??'',vintage:review.vintage,country:review.country,region:review.region,appellation:review.appellation,grapes:review.grapes,grapeBlend:review.grapeBlend,wineStyle:review.style,alcoholPercentage:review.alcoholPercentage,tastingDate:review.tastingDate,locationName:review.locationName,latitude:review.latitude,longitude:review.longitude,tags:suggestedTags(review),recognitionConfidence:review.confidence,recognitionStatus:'review'}}/></div>}
   </section>
 }

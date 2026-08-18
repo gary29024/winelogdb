@@ -29,7 +29,7 @@ export function buildResearchTargets(wine:ResearchWine):ResearchTarget[]{
 }
 
 export function fieldsForScope(scope:ResearchScope){
-  if(scope==='producer')return ['producerDetails'] as const;
+  if(scope==='producer')return ['producerDetails','producerWinemakingPractices'] as const;
   if(scope==='terroir')return ['terroir'] as const;
   if(scope==='vintage_context')return ['vintageQuality'] as const;
   return ['summary','winemakingTechniques','drinkingWindow'] as const;
@@ -55,7 +55,7 @@ export const seedResearchCache=(db:D1Database,owner:string,entry:CachedResearch)
 export const upsertResearchCache=(db:D1Database,owner:string,entry:CachedResearch)=>writeCache(db,owner,entry,true);
 
 export function splitDeepSearchResult(result:DeepSearchResult,targets:ResearchTarget[]){
-  const byScope:Record<ResearchScope,Record<string,string>>={producer:{producerDetails:result.producerDetails},terroir:{terroir:result.terroir},vintage_context:{vintageQuality:result.vintageQuality},wine_vintage:{summary:result.summary,winemakingTechniques:result.winemakingTechniques,drinkingWindow:result.drinkingWindow}};
+  const byScope:Record<ResearchScope,Record<string,string>>={producer:{producerDetails:result.producerDetails,producerWinemakingPractices:result.producerWinemakingPractices},terroir:{terroir:result.terroir},vintage_context:{vintageQuality:result.vintageQuality},wine_vintage:{summary:result.summary,winemakingTechniques:result.winemakingTechniques,drinkingWindow:result.drinkingWindow}};
   return targets.map(target=>({target,payload:byScope[target.scope],sources:result.sources,model:result.model,researchedAt:result.researchedAt} satisfies CachedResearch)).filter(entry=>scopeIsComplete(entry.target.scope,entry.payload));
 }
 
@@ -65,5 +65,5 @@ export function assembleDeepSearch(cache:Map<ResearchScope,CachedResearch>,targe
   const seen=new Set<string>();const sources=entries.flatMap(x=>x.sources).filter(source=>{if(!source.url||seen.has(source.url))return false;seen.add(source.url);return true}).slice(0,20);
   const timestamps=entries.map(x=>Date.parse(x.researchedAt)).filter(Number.isFinite);const researchedAt=timestamps.length?new Date(Math.max(...timestamps)).toISOString():new Date().toISOString();
   const latestEntry=[...entries].sort((a,b)=>Date.parse(b.researchedAt)-Date.parse(a.researchedAt))[0];
-  return {summary:payload('wine_vintage').summary??'',vintageQuality:payload('vintage_context').vintageQuality??'',producerDetails:payload('producer').producerDetails??'',winemakingTechniques:payload('wine_vintage').winemakingTechniques??'',terroir:payload('terroir').terroir??'',drinkingWindow:payload('wine_vintage').drinkingWindow??'',sources,model:latestEntry?.model??'gemini-3.7-flash',researchedAt};
+  return {summary:payload('wine_vintage').summary??'',vintageQuality:payload('vintage_context').vintageQuality??'',producerDetails:payload('producer').producerDetails??'',producerWinemakingPractices:payload('producer').producerWinemakingPractices??'',winemakingTechniques:payload('wine_vintage').winemakingTechniques??'',terroir:payload('terroir').terroir??'',drinkingWindow:payload('wine_vintage').drinkingWindow??'',sources,model:latestEntry?.model??'gemini-3.7-flash',researchedAt};
 }
