@@ -7,7 +7,21 @@ import { normalizeProducerAlias } from '../../lib/producers/entities';
 import '../../producer.css';
 
 const wineKey=(name:string)=>normalizeProducerAlias(name).replace(/\b(grand cru|premier cru|1er cru|village)\b/g,'').trim();
-const stageLabel:Record<ProducerResearchRun['stage'],string>={preparing:'Preparing research',searching:'Searching the web with Gemini',retrying:'Trying a fallback',parsing:'Validating Gemini response',saving:'Saving producer research',image:'Finding a domaine image',complete:'Research complete',failed:'Research failed'};
+const stageLabel:Record<ProducerResearchRun['stage'],string>={preparing:'Preparing research',searching:'Searching the web with Gemini',retrying:'Retrying Gemini research',parsing:'Validating Gemini response',saving:'Saving producer research',image:'Finding a domaine image',complete:'Research complete',failed:'Research failed'};
+type CatalogCategory='red'|'white'|'rose'|'sparkling'|'dessert'|'fortified'|'orange'|'other';
+const categoryOrder:CatalogCategory[]=['red','white','rose','sparkling','dessert','fortified','orange','other'];
+const categoryLabels:Record<CatalogCategory,string>={red:'Red',white:'White',rose:'Rosé',sparkling:'Sparkling',dessert:'Dessert / sweet',fortified:'Fortified',orange:'Orange',other:'Other'};
+function catalogCategory(wine:ProducerDetail['catalog'][number]):CatalogCategory{
+ const value=String(wine.category??wine.style??'other').toLowerCase();
+ if(value.includes('sparkling')||value.includes('champagne'))return 'sparkling';
+ if(value.includes('white'))return 'white';
+ if(value.includes('rosé')||value.includes('rose'))return 'rose';
+ if(value.includes('dessert')||value.includes('sweet'))return 'dessert';
+ if(value.includes('fortified'))return 'fortified';
+ if(value.includes('orange'))return 'orange';
+ if(value.includes('red'))return 'red';
+ return 'other';
+}
 
 export function ProducerDetailPage(){
  const {id=''}=useParams(),[producer,setProducer]=useState<ProducerDetail>(),[available,setAvailable]=useState<ProducerSummary[]>([]),[selectedAlias,setSelectedAlias]=useState(''),[primaryName,setPrimaryName]=useState(''),[loading,setLoading]=useState(true),[error,setError]=useState(''),[notice,setNotice]=useState(''),[researching,setResearching]=useState(false),[researchRun,setResearchRun]=useState<ProducerResearchRun|null>(null),[researchElapsed,setResearchElapsed]=useState(0),[merging,setMerging]=useState(false),[unlinking,setUnlinking]=useState(''),[savingPrimary,setSavingPrimary]=useState(false);
@@ -18,6 +32,11 @@ export function ProducerDetailPage(){
  useEffect(()=>()=>stopResearchTimers(),[]);
  const tastedKeys=useMemo(()=>new Set((producer?.tastedWines??[]).map(w=>wineKey(w.wineName))),[producer]);
  const linkedByName=useMemo(()=>new Map((producer?.linkedProducers??[]).map(link=>[normalizeProducerAlias(link.name),link])),[producer]);
+ const catalogGroups=useMemo(()=>{
+  const map=new Map<CatalogCategory,ProducerDetail['catalog']>();
+  for(const wine of producer?.catalog??[]){const category=catalogCategory(wine),list=map.get(category)??[];list.push(wine);map.set(category,list)}
+  return categoryOrder.flatMap(category=>{const wines=map.get(category);return wines?.length?[{category,label:categoryLabels[category],wines}]:[]});
+ },[producer]);
  async function runResearch(){
   if(!confirm('Research this producer’s home location, public contact details and current wine range with Gemini + Google Search? WineLog will also try to save a header image from the verified official website when available.'))return;
   stopResearchTimers();const requestId=crypto.randomUUID(),started=Date.now(),startedAt=new Date(started).toISOString();
@@ -31,7 +50,7 @@ export function ProducerDetailPage(){
   }catch(e){
    const final=await getProducerResearchStatus(id,requestId).catch(()=>null);if(final)setResearchRun(final);
    const message=(e as Error).message;
-   setError(`${message}${message.includes('(503)')?' — Gemini is temporarily unavailable; the fallback model was also unable to complete the request. Please try again later.':''} · Research request ${requestId}`);
+   setError(`${message}${message.includes('(503)')?' — Gemini is temporarily unavailable; WineLog retried Gemini 3.7 before using the 3.6 fallback. Please try again later if both fail.':''} · Research request ${requestId}`);
   }finally{stopResearchTimers();setResearchElapsed(Math.floor((Date.now()-started)/1000));setResearching(false)}
  }
  async function savePrimaryName(){if(!producer||!primaryName||primaryName===producer.canonicalName)return;setSavingPrimary(true);setError('');setNotice('');try{const result=await setPrimaryProducerName(id,primaryName);await reload();setNotice(`${result.canonicalName} is now the primary producer name. Bottle-level recognised names and research remain attached to the same producer identity.`)}catch(e){setError((e as Error).message)}finally{setSavingPrimary(false)}}
@@ -47,15 +66,15 @@ export function ProducerDetailPage(){
   {error&&<p className="producer-error" role="alert">{error}</p>}{notice&&<p className="producer-notice" role="status">{notice}</p>}
   <section className="detail-section"><div className="producer-section-title"><div><p className="section-label">PRODUCER RESEARCH</p><h2>Profile & range</h2></div><button type="button" disabled={researching} onClick={runResearch}>{researching?'Researching…':producer.researchedAt?'Refresh producer research':'Research producer'}</button></div>
    {researchRun&&<div className={`producer-research-status ${researchRun.status}`} role="status" aria-live="polite"><div><strong>{stageLabel[researchRun.stage]}</strong><span>{researchRun.message}</span></div><div><strong>{researching?`${researchElapsed}s`:researchRun.durationMs!=null?`${(researchRun.durationMs/1000).toFixed(1)}s`:''}</strong><small>Request {researchRun.requestId}</small></div>{researching&&researchElapsed>=30&&<p>Still working. WineLog is polling the server-side stage; the same request ID is searchable in Cloudflare Observability.</p>}</div>}
-   {producer.profile?<p className="producer-profile">{producer.profile}</p>:<p>Research this producer to establish its physical base, public contact details, official website, header image and a sourced current/recent wine range. Producer-level research is stored and reused.</p>}
+   {producer.profile?<p className="producer-profile">{producer.profile}</p>:<p>Research this producer to establish its physical base, broad region and commune, public contact details, official website, header image and a sourced current/recent wine range. Producer-level research is stored and reused.</p>}
    {hasContact&&<div className="producer-contact"><p className="section-label">CONTACT</p><div className="producer-contact-grid">
     {producer.officialWebsiteUrl&&<div><span>Website</span><a href={producer.officialWebsiteUrl} target="_blank" rel="noreferrer">Official website ↗</a></div>}
     {producer.instagramUrl&&<div><span>Instagram</span><a href={producer.instagramUrl} target="_blank" rel="noreferrer">Instagram ↗</a></div>}
     {producer.contactEmail&&<div><span>Email</span><a href={`mailto:${producer.contactEmail}`}>{producer.contactEmail}</a></div>}
     {producer.contactPhone&&<div><span>Phone</span><a href={`tel:${producer.contactPhone.replace(/[^+\d]/g,'')}`}>{producer.contactPhone}</a></div>}
-   </div>{producer.contactSources.length>0&&<div className="producer-contact-sources"><span>Contact sources</span>{producer.contactSources.map(source=><a key={source.url} href={source.url} target="_blank" rel="noreferrer">{source.title}</a>)}</div>}</div>}
-   {producer.catalog.length>0&&<div className="producer-catalog">{producer.catalog.map((wine,index)=>{const tasted=tastedKeys.has(wineKey(wine.name));return <div className="catalog-row" key={`${wine.name}-${index}`}><div><strong>{wine.name}</strong><span>{[wine.appellation,wine.classification,wine.style].filter(Boolean).join(' · ')}</span>{wine.notes&&<small>{wine.notes}</small>}</div>{tasted&&<span className="tasted-badge">Tasted</span>}</div>})}</div>}
-   {producer.sources.length>0&&<div className="producer-sources"><strong>Research sources</strong>{producer.sources.map(s=><a key={s.url} href={s.url} target="_blank" rel="noreferrer">{s.title}</a>)}</div>}{producer.researchedAt&&<small>Latest producer research: {producer.researchModel} · {new Date(producer.researchedAt).toLocaleDateString()}</small>}
+   </div>{producer.contactSources.length>0&&<div className="producer-contact-sources"><span>Gemini contact references</span>{producer.contactSources.map(source=><a key={source.url} href={source.url} target="_blank" rel="noreferrer">{source.title}</a>)}</div>}</div>}
+   {catalogGroups.map(group=><div className="producer-catalog-group" key={group.category}><h3>{group.label}<span>{group.wines.length}</span></h3><div className="producer-catalog">{group.wines.map((wine,index)=>{const tasted=tastedKeys.has(wineKey(wine.name));return <div className="catalog-row" key={`${wine.name}-${index}`}><div><strong>{wine.name}</strong><span>{[wine.appellation,wine.classification,wine.style].filter(Boolean).join(' · ')}</span>{wine.notes&&<small>{wine.notes}</small>}</div>{tasted&&<span className="tasted-badge">Tasted</span>}</div>})}</div></div>)}
+   {producer.sources.length>0&&<div className="producer-sources"><strong>Profile & range references</strong>{producer.sources.map(s=><a key={s.url} href={s.url} target="_blank" rel="noreferrer">{s.title}</a>)}</div>}{producer.researchedAt&&<small>Latest producer research: {producer.researchModel} · {new Date(producer.researchedAt).toLocaleDateString()}</small>}
   </section>
   <section className="detail-section"><p className="section-label">YOUR TASTINGS</p><h2>{producer.tastedWines.length} tasted wine{producer.tastedWines.length===1?'':'s'}</h2>{producer.tastedWines.length?<div className="producer-tasted">{producer.tastedWines.map(w=><Link to={`/wines/${w.id}`} className="tasted-row" key={w.id}><div className="tasted-thumb">{w.imageId?<WineImage imageId={w.imageId} alt={`${w.wineName} bottle`} className="tasted-thumb-image"/>:<span className="tasted-thumb-fallback">W</span>}</div><div className="tasted-copy"><strong>{w.wineName}</strong><span>{[w.vintage??'NV',w.appellation,w.region].filter(Boolean).join(' · ')}</span></div><div className="tasted-meta">{w.rating!=null&&<strong>{w.rating}</strong>}{w.tastingDate&&<span>{w.tastingDate}</span>}</div></Link>)}</div>:<p>No tasting records linked to this producer yet.</p>}</section>
   <section className="detail-section producer-identity"><p className="section-label">IDENTITY & ALIASES</p><h2>Known producer names</h2>

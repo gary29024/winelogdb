@@ -5,6 +5,7 @@ import { runLayeredDeepSearch } from '../src/lib/research/deepSearch';
 import { ensureAllProducerLinks,linkWineProducer,mapProducerRow,normalizeProducerAlias,resolveExistingProducer,setProducerPrimaryName } from '../src/lib/producers/entities';
 import { mergeProducerEntities,unlinkProducerMerge } from '../src/lib/producers/merge';
 import { getProducerResearchRun,runProducerResearch } from '../src/lib/producers/research';
+import { selectRecognitionMetadata,type RecognitionPhotoMetadata } from '../src/lib/uploads/metadataSelection';
 
 type Bindings={DB:D1Database;WINE_IMAGES:R2Bucket;ASSETS:Fetcher;GEMINI_API_KEY:string;AUTH_SECRET:string;APP_PASSWORD:string;APP_URL:string;MAX_FILE_BYTES?:string;MAX_BATCH_FILES?:string};
 type AppEnv={Bindings:Bindings};
@@ -12,6 +13,7 @@ const app=new Hono<AppEnv>();
 
 function cors(c:{req:{header:(name:string)=>string|undefined};env:Bindings;header:(name:string,value:string)=>void}){const origin=c.req.header('Origin');if(origin&&origin===c.env.APP_URL){c.header('Access-Control-Allow-Origin',origin);c.header('Vary','Origin')}}
 async function user(c:{req:{header:(name:string)=>string|undefined};env:Bindings}){return (await requireSession(c.req.header('Authorization'),c.env.AUTH_SECRET)).userId}
+const parseJson=<T>(value:unknown,fallback:T):T=>{try{return JSON.parse(String(value)) as T}catch{return fallback}};
 async function linkSavedWine(db:D1Database,owner:string,wineId:string){
   const row=await db.prepare('SELECT producer FROM wines WHERE owner_id=? AND id=?').bind(owner,wineId).first<{producer:string}>();
   if(row?.producer?.trim())await linkWineProducer(db,owner,wineId,row.producer);
@@ -108,6 +110,21 @@ app.post('/api/producers/:id/research',async c=>{
   cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
   const body=await c.req.json().catch(()=>({})) as {confirmation?:string;requestId?:string};
   try{const result=await runProducerResearch(c.env,owner,c.req.param('id'),body.confirmation,body.requestId);return c.json(result.body,result.status)}catch(e){console.error(JSON.stringify({event:'producer_research',stage:'route_failed',producerId:c.req.param('id'),requestId:body.requestId,error:(e as Error).message||String(e)}));return c.json({error:'Producer research failed unexpectedly',researchRequestId:body.requestId},500)}
+});
+
+app.post('/api/recognition',async c=>{
+  cors(c);try{await user(c)}catch{return c.json({error:'Unauthorized'},401)}
+  let selected=selectRecognitionMetadata([]);
+  try{
+    const form=await c.req.raw.clone().formData();
+    selected=selectRecognitionMetadata(parseJson<RecognitionPhotoMetadata[]>(form.get('metadata'),[]));
+  }catch{}
+  const response=await baseApp.fetch(c.req.raw,c.env,c.executionCtx);
+  if(!response.ok)return response;
+  try{
+    const body=await response.clone().json() as Record<string,unknown>;
+    return c.json({...body,locationName:null,tastingDate:selected.capturedAt?.slice(0,10)??null,latitude:selected.latitude,longitude:selected.longitude,metadataSource:selected.gpsSource==='exif'?'exif':selected.timestampSource});
+  }catch{return response}
 });
 
 app.post('/api/wines/:id/deep-search',async c=>{

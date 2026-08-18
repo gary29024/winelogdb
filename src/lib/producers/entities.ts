@@ -5,7 +5,7 @@ export type ProducerEntity={
   homeRegion:string|null;
   homeLocality:string|null;
   profile:string;
-  catalog:Array<{name:string;appellation?:string|null;classification?:string|null;style?:string|null;notes?:string|null}>;
+  catalog:Array<{name:string;category?:'red'|'white'|'rose'|'sparkling'|'dessert'|'fortified'|'orange'|'other';appellation?:string|null;classification?:string|null;style?:string|null;notes?:string|null}>;
   sources:Array<{title:string;url:string}>;
   officialWebsiteUrl:string|null;
   instagramUrl:string|null;

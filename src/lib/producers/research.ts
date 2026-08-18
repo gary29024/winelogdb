@@ -3,16 +3,23 @@ import { mapProducerRow } from './entities';
 
 type Env={DB:D1Database;WINE_IMAGES:R2Bucket;GEMINI_API_KEY:string};
 type ContactSource={title:string;url:string};
-type ProducerResearch={homeCountry:string;homeRegion:string;homeLocality:string;officialWebsiteUrl:string|null;instagramUrl:string|null;contactEmail:string|null;contactPhone:string|null;contactSources:ContactSource[];profile:string;range:Array<{name:string;appellation?:string|null;classification?:string|null;style?:string|null;notes?:string|null}>};
-type GeminiResponse={candidates?:Array<{content?:{parts?:Array<{text?:string}>};groundingMetadata?:{groundingChunks?:Array<{web?:{title?:string;uri?:string}}>} }>};
+type ContactField='officialWebsiteUrl'|'instagramUrl'|'contactEmail'|'contactPhone';
+type CatalogCategory='red'|'white'|'rose'|'sparkling'|'dessert'|'fortified'|'orange'|'other';
+type GroundingChunk={web?:{title?:string;uri?:string}};
+type GroundingSupport={segment?:{startIndex?:number;endIndex?:number;text?:string};groundingChunkIndices?:number[]};
+type GroundingMetadata={groundingChunks?:GroundingChunk[];groundingSupports?:GroundingSupport[]};
+type ProducerResearch={homeCountry:string;homeRegion:string;homeLocality:string;officialWebsiteUrl:string|null;instagramUrl:string|null;contactEmail:string|null;contactPhone:string|null;profile:string;range:Array<{name:string;category:CatalogCategory;appellation?:string|null;classification?:string|null;style?:string|null;notes?:string|null}>};
+type GeminiResponse={candidates?:Array<{content?:{parts?:Array<{text?:string}>};groundingMetadata?:GroundingMetadata}>};
 export type ProducerResearchStage='preparing'|'searching'|'retrying'|'parsing'|'saving'|'image'|'complete'|'failed';
 export type ProducerResearchRun={requestId:string;producerId:string;status:'running'|'complete'|'failed';stage:ProducerResearchStage;attempt:number;message:string|null;startedAt:string;updatedAt:string;completedAt:string|null;durationMs:number|null};
-const MODELS=['gemini-3.7-flash','gemini-3.6-flash'] as const;
+const RESEARCH_ATTEMPTS=['gemini-3.7-flash','gemini-3.7-flash','gemini-3.6-flash'] as const;
+const CATALOG_CATEGORIES=new Set<CatalogCategory>(['red','white','rose','sparkling','dessert','fortified','orange','other']);
 const ATTEMPT_TIMEOUT_MS=45_000;
 const PAGE_TIMEOUT_MS=8_000;
 const IMAGE_TIMEOUT_MS=10_000;
 const MAX_PAGE_BYTES=384*1024;
 const MAX_HERO_BYTES=5*1024*1024;
+const CONTACT_FIELDS:ContactField[]=['officialWebsiteUrl','instagramUrl','contactEmail','contactPhone'];
 
 class ResearchError extends Error{constructor(message:string,readonly retryable:boolean){super(message)}}
 const cleanRequestId=(value?:string)=>value&&/^[A-Za-z0-9_-]{8,64}$/.test(value)?value:crypto.randomUUID();
@@ -66,6 +73,46 @@ function safeHttpsUrl(value:unknown,base?:string){
     url.hash='';
     return url;
   }catch{return null}
+}
+
+function jsonFieldRange(text:string,field:ContactField){
+  const key=`"${field}"`,start=text.indexOf(key);if(start<0)return null;
+  const colon=text.indexOf(':',start+key.length);if(colon<0)return null;
+  let end=colon+1;while(end<text.length&&/\s/.test(text[end]))end++;
+  if(text[end]==='"'){
+    end++;let escaped=false;
+    for(;end<text.length;end++){
+      const char=text[end];
+      if(escaped){escaped=false;continue}
+      if(char==='\\'){escaped=true;continue}
+      if(char==='"'){end++;break}
+    }
+  }else{
+    while(end<text.length&&!/[},\n]/.test(text[end]))end++;
+  }
+  return {start,end};
+}
+
+export function extractContactGrounding(text:string,metadata?:GroundingMetadata){
+  const ranges=new Map<ContactField,{start:number;end:number}>();
+  for(const field of CONTACT_FIELDS){const range=jsonFieldRange(text,field);if(range)ranges.set(field,range)}
+  const groundedFields=new Set<ContactField>(),sources=new Map<string,ContactSource>(),chunks=metadata?.groundingChunks??[];
+  for(const support of metadata?.groundingSupports??[]){
+    const segment=support.segment,segmentStart=segment?.startIndex,segmentEnd=segment?.endIndex;
+    const touched=CONTACT_FIELDS.filter(field=>{
+      const range=ranges.get(field);if(!range)return false;
+      if(Number.isFinite(segmentStart)&&Number.isFinite(segmentEnd))return Number(segmentStart)<range.end&&Number(segmentEnd)>range.start;
+      return Boolean(segment?.text&&segment.text.includes(field));
+    });
+    if(!touched.length)continue;
+    let hasWebSource=false;
+    for(const index of support.groundingChunkIndices??[]){
+      const web=chunks[index]?.web,url=safeHttpsUrl(web?.uri)?.toString();if(!url)continue;
+      hasWebSource=true;if(!sources.has(url))sources.set(url,{title:web?.title?.trim()||new URL(url).hostname,url});
+    }
+    if(hasWebSource)for(const field of touched)groundedFields.add(field);
+  }
+  return {fields:[...groundedFields],sources:[...sources.values()].slice(0,10)};
 }
 
 export function normalizeProducerEmail(value:unknown){
@@ -164,60 +211,67 @@ export async function runProducerResearch(env:Env,owner:string,id:string,confirm
   const row=await env.DB.prepare('SELECT * FROM producers WHERE owner_id=? AND id=?').bind(owner,id).first<Record<string,unknown>>();
   if(!row)return {status:404 as const,body:{error:'Producer not found'}};
   const requestId=cleanRequestId(requestedId),startedAt=await startRun(env.DB,owner,id,requestId),startedMs=Date.now(),name=String(row.canonical_name);
-  log('log',{requestId,producerId:id,producer:name,stage:'preparing',models:MODELS});
-  const prompt=`Research the wine producer ${JSON.stringify(name)} using reliable public web sources. Prioritize the producer's official website for identity, location and business contact information, then reputable wine sources for the producer profile and range.
+  log('log',{requestId,producerId:id,producer:name,stage:'preparing',models:RESEARCH_ATTEMPTS});
+  const prompt=`Research the wine producer ${JSON.stringify(name)} using reliable public web sources. Prioritize the producer's official website for identity, physical location and business contact information, then reputable wine sources for the producer profile and range.
 
-Return the producer's PHYSICAL HOME/BASE location, not the regions or appellations where its wines are produced. For example, homeRegion means where the domaine/estate/company is based.
+LOCATION RULES FOR DIRECTORY NAVIGATION:
+- Return the producer's PHYSICAL HOME/BASE, not the regions or appellations where its wines are produced.
+- homeRegion must be a BROAD, stable wine-region grouping suitable for an index, for example Burgundy, Champagne, Bordeaux, Loire Valley, Rhône Valley, Alsace, Jura, Tuscany, Piedmont, Mosel or Napa Valley. Do not return a department/province/administrative region when a recognized broad wine region applies.
+- homeLocality must be the producer's COMMUNE / municipality / village / town / city, for example Morey-Saint-Denis, Vosne-Romanée or Chouilly. Preserve official spelling and accents.
 
-Also identify the producer's current or most recently documented wine range as completely as reliable public sources allow. Do not invent cuvees. If a wine is seasonal, discontinued, uncertain, negociant-only, or not clearly current, explain that briefly in notes. Preserve official spellings and appellation names.
+Also identify the producer's current or most recently documented wine range as completely as reliable public sources allow. Do not invent cuvees. Categorize every range entry as exactly one of: red, white, rose, sparkling, dessert, fortified, orange, other. Use the wine's actual broad style, not the color of its label or packaging. If a wine is seasonal, discontinued, uncertain, negociant-only, or not clearly current, explain that briefly in notes. Preserve official spellings and appellation names.
 
 CONTACT RULES:
 - officialWebsiteUrl: only the verified official HTTPS website. Never substitute an importer, retailer, social page or directory.
 - instagramUrl: only a clearly official Instagram account belonging to this producer/domaine. Otherwise null.
 - contactEmail and contactPhone: public BUSINESS contact details for the producer. Prefer the official website/contact page. If the official site does not publish them, La Revue du vin de France / larvf.com is an acceptable secondary source for French domaines. Do not return private personal contact details, guessed addresses or inferred phone numbers.
-- contactSources: direct public URLs that support the returned contact details, such as the official contact page, official Instagram profile, or the relevant LARVF producer page. Do not include a source that does not actually support a returned contact field.
+- Make sure Google Search grounding supports the contact fields you return. WineLog derives displayed contact references from Gemini's groundingSupports/groundingChunks; do not return a separate source list inside the JSON.
 - If sources conflict or a detail cannot be verified, return null rather than guessing.
 
 Return JSON only with:
-- homeCountry: country where the producer is based
-- homeRegion: administrative/wine region where the producer is based
-- homeLocality: village/town/city where the producer is based
+- homeCountry: country where the producer is physically based
+- homeRegion: broad wine region where the producer is physically based
+- homeLocality: commune / municipality where the producer is physically based
 - officialWebsiteUrl: verified official HTTPS website, or null
 - instagramUrl: verified official Instagram HTTPS profile, or null
 - contactEmail: verified public producer/business email, or null
 - contactPhone: verified public producer/business phone as published, including country code when available, or null
-- contactSources: array of objects with title and url supporting the contact details
 - profile: concise but substantive producer overview
-- range: array of objects with name, appellation, classification, style, notes
+- range: array of objects with name, category, appellation, classification, style, notes
 
-Use empty strings or nulls when a scalar field cannot be verified. The range and contactSources may be empty.`;
-  const requestBody=JSON.stringify({contents:[{role:'user',parts:[{text:prompt}]}],tools:[{google_search:{}}],generationConfig:{responseMimeType:'application/json',responseSchema:{type:'OBJECT',properties:{homeCountry:{type:'STRING'},homeRegion:{type:'STRING'},homeLocality:{type:'STRING'},officialWebsiteUrl:{type:'STRING',nullable:true},instagramUrl:{type:'STRING',nullable:true},contactEmail:{type:'STRING',nullable:true},contactPhone:{type:'STRING',nullable:true},contactSources:{type:'ARRAY',items:{type:'OBJECT',properties:{title:{type:'STRING'},url:{type:'STRING'}},required:['title','url']}},profile:{type:'STRING'},range:{type:'ARRAY',items:{type:'OBJECT',properties:{name:{type:'STRING'},appellation:{type:'STRING',nullable:true},classification:{type:'STRING',nullable:true},style:{type:'STRING',nullable:true},notes:{type:'STRING',nullable:true}},required:['name']}}},required:['homeCountry','homeRegion','homeLocality','officialWebsiteUrl','instagramUrl','contactEmail','contactPhone','contactSources','profile','range']}}});
+Use empty strings or nulls when a scalar field cannot be verified. The range may be empty.`;
+  const requestBody=JSON.stringify({contents:[{role:'user',parts:[{text:prompt}]}],tools:[{google_search:{}}],generationConfig:{responseMimeType:'application/json',responseSchema:{type:'OBJECT',properties:{homeCountry:{type:'STRING'},homeRegion:{type:'STRING'},homeLocality:{type:'STRING'},officialWebsiteUrl:{type:'STRING',nullable:true},instagramUrl:{type:'STRING',nullable:true},contactEmail:{type:'STRING',nullable:true},contactPhone:{type:'STRING',nullable:true},profile:{type:'STRING'},range:{type:'ARRAY',items:{type:'OBJECT',properties:{name:{type:'STRING'},category:{type:'STRING',enum:['red','white','rose','sparkling','dessert','fortified','orange','other']},appellation:{type:'STRING',nullable:true},classification:{type:'STRING',nullable:true},style:{type:'STRING',nullable:true},notes:{type:'STRING',nullable:true}},required:['name','category']}}},required:['homeCountry','homeRegion','homeLocality','officialWebsiteUrl','instagramUrl','contactEmail','contactPhone','profile','range']}}});
   let lastError='Producer research failed';
-  for(let attempt=1;attempt<=MODELS.length;attempt++){
-    const model=MODELS[attempt-1];
+  for(let attempt=1;attempt<=RESEARCH_ATTEMPTS.length;attempt++){
+    const model=RESEARCH_ATTEMPTS[attempt-1],previousModel=attempt>1?RESEARCH_ATTEMPTS[attempt-2]:null;
     try{
-      await updateRun(env.DB,owner,requestId,'searching',attempt,attempt===1?`Searching reliable web sources with ${model}`:`Trying fallback model ${model}`,'running',startedAt);
+      const stageMessage=attempt===1?`Searching reliable web sources with ${model}`:model===previousModel?`Retrying ${model} after a transient failure`:`Trying fallback model ${model}`;
+      await updateRun(env.DB,owner,requestId,'searching',attempt,stageMessage,'running',startedAt);
       log('log',{requestId,producerId:id,stage:'searching',attempt,elapsedMs:Date.now()-startedMs,model});
       const response=await fetchGemini(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(env.GEMINI_API_KEY)}`,requestBody);
       log('log',{requestId,producerId:id,stage:'gemini_response',attempt,httpStatus:response.status,elapsedMs:Date.now()-startedMs,model});
       if(!response.ok){
-        const retryable=response.status===408||response.status===429||response.status>=500;
+        const upstreamBody=(await response.text().catch(()=>'' )).slice(0,800);
+        log('warn',{requestId,producerId:id,stage:'gemini_error_body',attempt,httpStatus:response.status,model,upstreamBody});
+        const retryable=response.status===404||response.status===408||response.status===429||response.status>=500;
         throw new ResearchError(`Producer research failed (${response.status})`,retryable);
       }
       await updateRun(env.DB,owner,requestId,'parsing',attempt,`${model} responded; validating the researched producer profile, contacts and range`,'running',startedAt);
       const gemini=await response.json() as GeminiResponse,candidate=gemini.candidates?.[0],text=candidate?.content?.parts?.map(x=>x.text??'').join('')??'';
       let parsed:ProducerResearch;
       try{parsed=JSON.parse(text.replace(/^```(?:json)?\s*|\s*```$/g,'')) as ProducerResearch}catch{throw new ResearchError('Producer research returned invalid JSON',true)}
-      if(!parsed||typeof parsed.profile!=='string'||!Array.isArray(parsed.range)||!Array.isArray(parsed.contactSources))throw new ResearchError('Producer research returned an invalid structured response',true);
-      const range=parsed.range.filter(x=>x&&typeof x.name==='string'&&x.name.trim()).slice(0,120);
+      if(!parsed||typeof parsed.profile!=='string'||!Array.isArray(parsed.range))throw new ResearchError('Producer research returned an invalid structured response',true);
+      const range=parsed.range.filter(x=>x&&typeof x.name==='string'&&x.name.trim()).slice(0,120).map(x=>({...x,category:CATALOG_CATEGORIES.has(x.category)?x.category:'other' as CatalogCategory}));
       const seen=new Set<string>(),sources=(candidate?.groundingMetadata?.groundingChunks??[]).flatMap(x=>x.web?.uri?[{title:x.web.title??x.web.uri,url:x.web.uri}]:[]).filter(x=>{if(seen.has(x.url))return false;seen.add(x.url);return true}).slice(0,20);
-      const parsedOfficial=safeHttpsUrl(parsed.officialWebsiteUrl)?.toString()??null;
-      const officialWebsiteUrl=parsedOfficial||(row.official_website_url?String(row.official_website_url):null);
-      const instagramUrl=safeInstagramUrl(parsed.instagramUrl)||(row.instagram_url?String(row.instagram_url):null);
-      const contactEmail=normalizeProducerEmail(parsed.contactEmail)||(row.contact_email?String(row.contact_email):null);
-      const contactPhone=normalizeProducerPhone(parsed.contactPhone)||(row.contact_phone?String(row.contact_phone):null);
-      const researchedContactSources=cleanContactSources(parsed.contactSources),existingContactSources=cleanContactSources(parseJson(row.contact_sources_json,[]));
-      const contactSources=researchedContactSources.length?researchedContactSources:existingContactSources;
+      const contactGrounding=extractContactGrounding(text,candidate?.groundingMetadata),groundedFields=new Set(contactGrounding.fields);
+      const parsedOfficial=safeHttpsUrl(parsed.officialWebsiteUrl)?.toString()??null,parsedInstagram=safeInstagramUrl(parsed.instagramUrl),parsedEmail=normalizeProducerEmail(parsed.contactEmail),parsedPhone=normalizeProducerPhone(parsed.contactPhone);
+      const officialWebsiteUrl=(parsedOfficial&&groundedFields.has('officialWebsiteUrl')?parsedOfficial:null)||(row.official_website_url?String(row.official_website_url):null);
+      const instagramUrl=(parsedInstagram&&groundedFields.has('instagramUrl')?parsedInstagram:null)||(row.instagram_url?String(row.instagram_url):null);
+      const contactEmail=(parsedEmail&&groundedFields.has('contactEmail')?parsedEmail:null)||(row.contact_email?String(row.contact_email):null);
+      const contactPhone=(parsedPhone&&groundedFields.has('contactPhone')?parsedPhone:null)||(row.contact_phone?String(row.contact_phone):null);
+      const existingContactSources=cleanContactSources(parseJson(row.contact_sources_json,[]));
+      const acceptedNewContact=Boolean((parsedOfficial&&groundedFields.has('officialWebsiteUrl'))||(parsedInstagram&&groundedFields.has('instagramUrl'))||(parsedEmail&&groundedFields.has('contactEmail'))||(parsedPhone&&groundedFields.has('contactPhone')));
+      const contactSources=acceptedNewContact?contactGrounding.sources:existingContactSources;
       await updateRun(env.DB,owner,requestId,'saving',attempt,`Saving producer profile, contacts, ${range.length} catalog wine${range.length===1?'':'s'} and ${sources.length} research source${sources.length===1?'':'s'}`,'running',startedAt);
       const stamp=now();
       await env.DB.prepare('UPDATE producers SET home_country=?,home_region=?,home_locality=?,official_website_url=?,instagram_url=?,contact_email=?,contact_phone=?,contact_sources_json=?,profile=?,catalog_json=?,sources_json=?,research_model=?,researched_at=?,updated_at=? WHERE owner_id=? AND id=?').bind(parsed.homeCountry?.trim()||null,parsed.homeRegion?.trim()||null,parsed.homeLocality?.trim()||null,officialWebsiteUrl,instagramUrl,contactEmail,contactPhone,JSON.stringify(contactSources),parsed.profile.trim(),JSON.stringify(range),JSON.stringify(sources),model,stamp,stamp,owner,id).run();
@@ -240,22 +294,22 @@ Use empty strings or nulls when a scalar field cannot be verified. The range and
 
       const updated=await env.DB.prepare('SELECT * FROM producers WHERE owner_id=? AND id=?').bind(owner,id).first<Record<string,unknown>>();
       const contactCount=[officialWebsiteUrl,instagramUrl,contactEmail,contactPhone].filter(Boolean).length;
-      await updateRun(env.DB,owner,requestId,'complete',attempt,`Research complete: ${range.length} catalog wine${range.length===1?'':'s'}, ${contactCount} contact field${contactCount===1?'':'s'}, ${sources.length} source${sources.length===1?'':'s'}${heroStored?', domaine image saved':''}`,'complete',startedAt);
-      log('log',{requestId,producerId:id,stage:'complete',attempt,durationMs:Date.now()-startedMs,catalogCount:range.length,contactCount,sourceCount:sources.length,heroStored,model});
+      await updateRun(env.DB,owner,requestId,'complete',attempt,`Research complete: ${range.length} catalog wine${range.length===1?'':'s'}, ${contactCount} contact field${contactCount===1?'':'s'}, ${contactSources.length} grounded contact reference${contactSources.length===1?'':'s'}${heroStored?', domaine image saved':''}`,'complete',startedAt);
+      log('log',{requestId,producerId:id,stage:'complete',attempt,durationMs:Date.now()-startedMs,catalogCount:range.length,contactCount,contactReferenceCount:contactSources.length,sourceCount:sources.length,heroStored,model});
       return {status:200 as const,body:{...mapProducerRow(updated!),researchRequestId:requestId}};
     }catch(e){
       const err=e instanceof ResearchError?e:new ResearchError((e as Error).message||lastError,true);lastError=err.message;
-      const canRetry=attempt<MODELS.length&&err.retryable,nextModel=canRetry?MODELS[attempt]:null;
+      const canRetry=attempt<RESEARCH_ATTEMPTS.length&&err.retryable,nextModel=canRetry?RESEARCH_ATTEMPTS[attempt]:null;
       log(canRetry?'warn':'error',{requestId,producerId:id,stage:canRetry?'retrying':'failed',attempt,elapsedMs:Date.now()-startedMs,error:lastError,retryable:err.retryable,model,nextModel});
       if(canRetry){
-        const delay=1200+Math.floor(Math.random()*700);
-        await updateRun(env.DB,owner,requestId,'retrying',attempt,`${lastError}. Retrying with ${nextModel} after a short backoff…`,'running',startedAt);
+        const sameModel=nextModel===model,delay=sameModel?1200+Math.floor(Math.random()*900):500+Math.floor(Math.random()*500);
+        await updateRun(env.DB,owner,requestId,'retrying',attempt,`${lastError}. ${sameModel?`Retrying ${model}`:`Falling back to ${nextModel}`} after a short backoff…`,'running',startedAt);
         await sleep(delay);continue;
       }
       await updateRun(env.DB,owner,requestId,'failed',attempt,lastError,'failed',startedAt);
       return {status:502 as const,body:{error:lastError,researchRequestId:requestId}};
     }
   }
-  await updateRun(env.DB,owner,requestId,'failed',MODELS.length,lastError,'failed',startedAt);
+  await updateRun(env.DB,owner,requestId,'failed',RESEARCH_ATTEMPTS.length,lastError,'failed',startedAt);
   return {status:502 as const,body:{error:lastError,researchRequestId:requestId}};
 }
