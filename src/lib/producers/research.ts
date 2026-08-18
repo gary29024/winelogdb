@@ -4,14 +4,16 @@ import { mapProducerRow } from './entities';
 type Env={DB:D1Database;WINE_IMAGES:R2Bucket;GEMINI_API_KEY:string};
 type ContactSource={title:string;url:string};
 type ContactField='officialWebsiteUrl'|'instagramUrl'|'contactEmail'|'contactPhone';
+type CatalogCategory='red'|'white'|'rose'|'sparkling'|'dessert'|'fortified'|'orange'|'other';
 type GroundingChunk={web?:{title?:string;uri?:string}};
 type GroundingSupport={segment?:{startIndex?:number;endIndex?:number;text?:string};groundingChunkIndices?:number[]};
 type GroundingMetadata={groundingChunks?:GroundingChunk[];groundingSupports?:GroundingSupport[]};
-type ProducerResearch={homeCountry:string;homeRegion:string;homeLocality:string;officialWebsiteUrl:string|null;instagramUrl:string|null;contactEmail:string|null;contactPhone:string|null;profile:string;range:Array<{name:string;appellation?:string|null;classification?:string|null;style?:string|null;notes?:string|null}>};
+type ProducerResearch={homeCountry:string;homeRegion:string;homeLocality:string;officialWebsiteUrl:string|null;instagramUrl:string|null;contactEmail:string|null;contactPhone:string|null;profile:string;range:Array<{name:string;category:CatalogCategory;appellation?:string|null;classification?:string|null;style?:string|null;notes?:string|null}>};
 type GeminiResponse={candidates?:Array<{content?:{parts?:Array<{text?:string}>};groundingMetadata?:GroundingMetadata}>};
 export type ProducerResearchStage='preparing'|'searching'|'retrying'|'parsing'|'saving'|'image'|'complete'|'failed';
 export type ProducerResearchRun={requestId:string;producerId:string;status:'running'|'complete'|'failed';stage:ProducerResearchStage;attempt:number;message:string|null;startedAt:string;updatedAt:string;completedAt:string|null;durationMs:number|null};
-const MODELS=['gemini-3.7-flash','gemini-3.6-flash'] as const;
+const RESEARCH_ATTEMPTS=['gemini-3.7-flash','gemini-3.7-flash','gemini-3.6-flash'] as const;
+const CATALOG_CATEGORIES=new Set<CatalogCategory>(['red','white','rose','sparkling','dessert','fortified','orange','other']);
 const ATTEMPT_TIMEOUT_MS=45_000;
 const PAGE_TIMEOUT_MS=8_000;
 const IMAGE_TIMEOUT_MS=10_000;
@@ -209,7 +211,7 @@ export async function runProducerResearch(env:Env,owner:string,id:string,confirm
   const row=await env.DB.prepare('SELECT * FROM producers WHERE owner_id=? AND id=?').bind(owner,id).first<Record<string,unknown>>();
   if(!row)return {status:404 as const,body:{error:'Producer not found'}};
   const requestId=cleanRequestId(requestedId),startedAt=await startRun(env.DB,owner,id,requestId),startedMs=Date.now(),name=String(row.canonical_name);
-  log('log',{requestId,producerId:id,producer:name,stage:'preparing',models:MODELS});
+  log('log',{requestId,producerId:id,producer:name,stage:'preparing',models:RESEARCH_ATTEMPTS});
   const prompt=`Research the wine producer ${JSON.stringify(name)} using reliable public web sources. Prioritize the producer's official website for identity, physical location and business contact information, then reputable wine sources for the producer profile and range.
 
 LOCATION RULES FOR DIRECTORY NAVIGATION:
@@ -217,7 +219,7 @@ LOCATION RULES FOR DIRECTORY NAVIGATION:
 - homeRegion must be a BROAD, stable wine-region grouping suitable for an index, for example Burgundy, Champagne, Bordeaux, Loire Valley, Rhône Valley, Alsace, Jura, Tuscany, Piedmont, Mosel or Napa Valley. Do not return a department/province/administrative region when a recognized broad wine region applies.
 - homeLocality must be the producer's COMMUNE / municipality / village / town / city, for example Morey-Saint-Denis, Vosne-Romanée or Chouilly. Preserve official spelling and accents.
 
-Also identify the producer's current or most recently documented wine range as completely as reliable public sources allow. Do not invent cuvees. If a wine is seasonal, discontinued, uncertain, negociant-only, or not clearly current, explain that briefly in notes. Preserve official spellings and appellation names.
+Also identify the producer's current or most recently documented wine range as completely as reliable public sources allow. Do not invent cuvees. Categorize every range entry as exactly one of: red, white, rose, sparkling, dessert, fortified, orange, other. Use the wine's actual broad style, not the color of its label or packaging. If a wine is seasonal, discontinued, uncertain, negociant-only, or not clearly current, explain that briefly in notes. Preserve official spellings and appellation names.
 
 CONTACT RULES:
 - officialWebsiteUrl: only the verified official HTTPS website. Never substitute an importer, retailer, social page or directory.
@@ -235,20 +237,23 @@ Return JSON only with:
 - contactEmail: verified public producer/business email, or null
 - contactPhone: verified public producer/business phone as published, including country code when available, or null
 - profile: concise but substantive producer overview
-- range: array of objects with name, appellation, classification, style, notes
+- range: array of objects with name, category, appellation, classification, style, notes
 
 Use empty strings or nulls when a scalar field cannot be verified. The range may be empty.`;
-  const requestBody=JSON.stringify({contents:[{role:'user',parts:[{text:prompt}]}],tools:[{google_search:{}}],generationConfig:{responseMimeType:'application/json',responseSchema:{type:'OBJECT',properties:{homeCountry:{type:'STRING'},homeRegion:{type:'STRING'},homeLocality:{type:'STRING'},officialWebsiteUrl:{type:'STRING',nullable:true},instagramUrl:{type:'STRING',nullable:true},contactEmail:{type:'STRING',nullable:true},contactPhone:{type:'STRING',nullable:true},profile:{type:'STRING'},range:{type:'ARRAY',items:{type:'OBJECT',properties:{name:{type:'STRING'},appellation:{type:'STRING',nullable:true},classification:{type:'STRING',nullable:true},style:{type:'STRING',nullable:true},notes:{type:'STRING',nullable:true}},required:['name']}}},required:['homeCountry','homeRegion','homeLocality','officialWebsiteUrl','instagramUrl','contactEmail','contactPhone','profile','range']}}});
+  const requestBody=JSON.stringify({contents:[{role:'user',parts:[{text:prompt}]}],tools:[{google_search:{}}],generationConfig:{responseMimeType:'application/json',responseSchema:{type:'OBJECT',properties:{homeCountry:{type:'STRING'},homeRegion:{type:'STRING'},homeLocality:{type:'STRING'},officialWebsiteUrl:{type:'STRING',nullable:true},instagramUrl:{type:'STRING',nullable:true},contactEmail:{type:'STRING',nullable:true},contactPhone:{type:'STRING',nullable:true},profile:{type:'STRING'},range:{type:'ARRAY',items:{type:'OBJECT',properties:{name:{type:'STRING'},category:{type:'STRING',enum:['red','white','rose','sparkling','dessert','fortified','orange','other']},appellation:{type:'STRING',nullable:true},classification:{type:'STRING',nullable:true},style:{type:'STRING',nullable:true},notes:{type:'STRING',nullable:true}},required:['name','category']}}},required:['homeCountry','homeRegion','homeLocality','officialWebsiteUrl','instagramUrl','contactEmail','contactPhone','profile','range']}}});
   let lastError='Producer research failed';
-  for(let attempt=1;attempt<=MODELS.length;attempt++){
-    const model=MODELS[attempt-1];
+  for(let attempt=1;attempt<=RESEARCH_ATTEMPTS.length;attempt++){
+    const model=RESEARCH_ATTEMPTS[attempt-1],previousModel=attempt>1?RESEARCH_ATTEMPTS[attempt-2]:null;
     try{
-      await updateRun(env.DB,owner,requestId,'searching',attempt,attempt===1?`Searching reliable web sources with ${model}`:`Trying fallback model ${model}`,'running',startedAt);
+      const stageMessage=attempt===1?`Searching reliable web sources with ${model}`:model===previousModel?`Retrying ${model} after a transient failure`:`Trying fallback model ${model}`;
+      await updateRun(env.DB,owner,requestId,'searching',attempt,stageMessage,'running',startedAt);
       log('log',{requestId,producerId:id,stage:'searching',attempt,elapsedMs:Date.now()-startedMs,model});
       const response=await fetchGemini(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(env.GEMINI_API_KEY)}`,requestBody);
       log('log',{requestId,producerId:id,stage:'gemini_response',attempt,httpStatus:response.status,elapsedMs:Date.now()-startedMs,model});
       if(!response.ok){
-        const retryable=response.status===408||response.status===429||response.status>=500;
+        const upstreamBody=(await response.text().catch(()=>'' )).slice(0,800);
+        log('warn',{requestId,producerId:id,stage:'gemini_error_body',attempt,httpStatus:response.status,model,upstreamBody});
+        const retryable=response.status===404||response.status===408||response.status===429||response.status>=500;
         throw new ResearchError(`Producer research failed (${response.status})`,retryable);
       }
       await updateRun(env.DB,owner,requestId,'parsing',attempt,`${model} responded; validating the researched producer profile, contacts and range`,'running',startedAt);
@@ -256,7 +261,7 @@ Use empty strings or nulls when a scalar field cannot be verified. The range may
       let parsed:ProducerResearch;
       try{parsed=JSON.parse(text.replace(/^```(?:json)?\s*|\s*```$/g,'')) as ProducerResearch}catch{throw new ResearchError('Producer research returned invalid JSON',true)}
       if(!parsed||typeof parsed.profile!=='string'||!Array.isArray(parsed.range))throw new ResearchError('Producer research returned an invalid structured response',true);
-      const range=parsed.range.filter(x=>x&&typeof x.name==='string'&&x.name.trim()).slice(0,120);
+      const range=parsed.range.filter(x=>x&&typeof x.name==='string'&&x.name.trim()).slice(0,120).map(x=>({...x,category:CATALOG_CATEGORIES.has(x.category)?x.category:'other' as CatalogCategory}));
       const seen=new Set<string>(),sources=(candidate?.groundingMetadata?.groundingChunks??[]).flatMap(x=>x.web?.uri?[{title:x.web.title??x.web.uri,url:x.web.uri}]:[]).filter(x=>{if(seen.has(x.url))return false;seen.add(x.url);return true}).slice(0,20);
       const contactGrounding=extractContactGrounding(text,candidate?.groundingMetadata),groundedFields=new Set(contactGrounding.fields);
       const parsedOfficial=safeHttpsUrl(parsed.officialWebsiteUrl)?.toString()??null,parsedInstagram=safeInstagramUrl(parsed.instagramUrl),parsedEmail=normalizeProducerEmail(parsed.contactEmail),parsedPhone=normalizeProducerPhone(parsed.contactPhone);
@@ -294,17 +299,17 @@ Use empty strings or nulls when a scalar field cannot be verified. The range may
       return {status:200 as const,body:{...mapProducerRow(updated!),researchRequestId:requestId}};
     }catch(e){
       const err=e instanceof ResearchError?e:new ResearchError((e as Error).message||lastError,true);lastError=err.message;
-      const canRetry=attempt<MODELS.length&&err.retryable,nextModel=canRetry?MODELS[attempt]:null;
+      const canRetry=attempt<RESEARCH_ATTEMPTS.length&&err.retryable,nextModel=canRetry?RESEARCH_ATTEMPTS[attempt]:null;
       log(canRetry?'warn':'error',{requestId,producerId:id,stage:canRetry?'retrying':'failed',attempt,elapsedMs:Date.now()-startedMs,error:lastError,retryable:err.retryable,model,nextModel});
       if(canRetry){
-        const delay=1200+Math.floor(Math.random()*700);
-        await updateRun(env.DB,owner,requestId,'retrying',attempt,`${lastError}. Retrying with ${nextModel} after a short backoff…`,'running',startedAt);
+        const sameModel=nextModel===model,delay=sameModel?1200+Math.floor(Math.random()*900):500+Math.floor(Math.random()*500);
+        await updateRun(env.DB,owner,requestId,'retrying',attempt,`${lastError}. ${sameModel?`Retrying ${model}`:`Falling back to ${nextModel}`} after a short backoff…`,'running',startedAt);
         await sleep(delay);continue;
       }
       await updateRun(env.DB,owner,requestId,'failed',attempt,lastError,'failed',startedAt);
       return {status:502 as const,body:{error:lastError,researchRequestId:requestId}};
     }
   }
-  await updateRun(env.DB,owner,requestId,'failed',MODELS.length,lastError,'failed',startedAt);
+  await updateRun(env.DB,owner,requestId,'failed',RESEARCH_ATTEMPTS.length,lastError,'failed',startedAt);
   return {status:502 as const,body:{error:lastError,researchRequestId:requestId}};
 }
