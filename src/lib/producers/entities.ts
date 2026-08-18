@@ -42,6 +42,10 @@ export function producerMatchKey(value:string){
   return normalizeProducerAlias(value);
 }
 
+export function shouldSeedProducerCountry(homeCountry:string|null|undefined,researchedAt:string|null|undefined,wineCountry:string|null|undefined){
+  return !String(homeCountry??'').trim()&&!String(researchedAt??'').trim()&&Boolean(String(wineCountry??'').trim());
+}
+
 type ResolutionRow={id:string;canonical_name:string;display_alias?:string|null;researched_at:string|null;catalog_count:number;tasted_count:number};
 const mapResolution=(row:ResolutionRow,matchType:ProducerResolution['matchType']):ProducerResolution=>({
   id:row.id,
@@ -75,7 +79,16 @@ export async function resolveExistingProducer(db:D1Database,owner:string,name:st
   return legacy?mapResolution(legacy,'canonical'):null;
 }
 
-export async function ensureProducerEntity(db:D1Database,owner:string,name:string){
+export async function seedProducerCountryFromWine(db:D1Database,owner:string,producerId:string,wineCountry?:string|null){
+  const country=String(wineCountry??'').trim();
+  if(!country)return false;
+  const result=await db.prepare(`UPDATE producers SET home_country=?,updated_at=?
+    WHERE owner_id=? AND id=? AND researched_at IS NULL AND trim(coalesce(home_country,''))=''`)
+    .bind(country,new Date().toISOString(),owner,producerId).run();
+  return Boolean(result.meta.changes);
+}
+
+export async function ensureProducerEntity(db:D1Database,owner:string,name:string,provisionalCountry?:string|null){
   const canonical=name.trim();
   if(!canonical)throw new Error('Producer name is required');
   const alias=normalizeProducerAlias(canonical),matchKey=producerMatchKey(canonical),now=new Date().toISOString();
@@ -94,6 +107,7 @@ export async function ensureProducerEntity(db:D1Database,owner:string,name:strin
   }
   if(!found)throw new Error('Could not resolve producer entity');
   await db.prepare('INSERT INTO producer_aliases(owner_id,normalized_alias,producer_id,display_alias,created_at) VALUES(?,?,?,?,?) ON CONFLICT(owner_id,normalized_alias) DO UPDATE SET producer_id=excluded.producer_id,display_alias=excluded.display_alias').bind(owner,alias,found.id,canonical,now).run();
+  await seedProducerCountryFromWine(db,owner,found.id,provisionalCountry);
   // Do not rewrite match_key here when a known alias is encountered. match_key follows
   // the user-selected primary/canonical name and only changes via setProducerPrimaryName.
   return found;
@@ -112,15 +126,15 @@ export async function setProducerPrimaryName(db:D1Database,owner:string,producer
   return {id:producerId,canonicalName:alias.display_alias};
 }
 
-export async function linkWineProducer(db:D1Database,owner:string,wineId:string,producerName:string){
-  const entity=await ensureProducerEntity(db,owner,producerName);
+export async function linkWineProducer(db:D1Database,owner:string,wineId:string,producerName:string,wineCountry?:string|null){
+  const entity=await ensureProducerEntity(db,owner,producerName,wineCountry);
   await db.prepare('UPDATE wines SET producer_id=? WHERE owner_id=? AND id=?').bind(entity.id,owner,wineId).run();
   return entity;
 }
 
 export async function ensureAllProducerLinks(db:D1Database,owner:string){
-  const rows=await db.prepare('SELECT id,producer FROM wines WHERE owner_id=? AND (producer_id IS NULL OR producer_id=\'\')').bind(owner).all<{id:string;producer:string}>();
-  for(const row of rows.results){if(row.producer?.trim())await linkWineProducer(db,owner,row.id,row.producer)}
+  const rows=await db.prepare('SELECT id,producer,country FROM wines WHERE owner_id=? AND (producer_id IS NULL OR producer_id=\'\')').bind(owner).all<{id:string;producer:string;country:string|null}>();
+  for(const row of rows.results){if(row.producer?.trim())await linkWineProducer(db,owner,row.id,row.producer,row.country)}
 }
 
 export function mapProducerRow(row:Record<string,unknown>):ProducerEntity{
