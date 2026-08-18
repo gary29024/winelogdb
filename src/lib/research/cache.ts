@@ -5,7 +5,7 @@ export type ResearchScope=typeof researchScopes[number];
 export type ResearchSource={title:string;url:string};
 export type ResearchTarget={scope:ResearchScope;cacheKey:string;subject:Record<string,string|number|null>};
 export type CachedResearch={target:ResearchTarget;payload:Record<string,string>;sources:ResearchSource[];model:string;researchedAt:string};
-export type ResearchWine={producer?:unknown;producerId?:unknown;wineName?:unknown;vintage?:unknown;country?:unknown;region?:unknown;appellation?:unknown};
+export type ResearchWine={producer?:unknown;producerId?:unknown;cuveeId?:unknown;wineName?:unknown;vintage?:unknown;country?:unknown;region?:unknown;appellation?:unknown};
 
 type CacheRow={scope:ResearchScope;cache_key:string;subject_json:string;result_json:string;sources_json:string;model:string;researched_at:string};
 
@@ -15,15 +15,16 @@ const normalized=(value:unknown)=>text(value).normalize('NFD').replace(/[\u0300-
 const makeKey=(...parts:unknown[])=>JSON.stringify(parts.map(normalized));
 
 export function buildResearchTargets(wine:ResearchWine):ResearchTarget[]{
-  const producer=text(wine.producer),producerId=text(wine.producerId),wineName=text(wine.wineName),country=text(wine.country),region=text(wine.region),appellation=text(wine.appellation);
+  const producer=text(wine.producer),producerId=text(wine.producerId),cuveeId=text(wine.cuveeId),wineName=text(wine.wineName),country=text(wine.country),region=text(wine.region),appellation=text(wine.appellation);
   const vintage=typeof wine.vintage==='number'&&Number.isFinite(wine.vintage)?wine.vintage:null;
   const producerIdentity=producerId?`producer:${producerId}`:producer;
+  const wineIdentity=cuveeId?`cuvee:${cuveeId}`:wineName;
   const targets:ResearchTarget[]=[
     {scope:'producer',cacheKey:makeKey(producerIdentity),subject:{producer,producerId:producerId||null}},
-    {scope:'terroir',cacheKey:makeKey(producerIdentity,wineName,appellation,region,country),subject:{producer,producerId:producerId||null,wineName,appellation:appellation||null,region:region||null,country:country||null}}
+    {scope:'terroir',cacheKey:makeKey(producerIdentity,wineIdentity,appellation,region,country),subject:{producer,producerId:producerId||null,cuveeId:cuveeId||null,wineName,appellation:appellation||null,region:region||null,country:country||null}}
   ];
   if(vintage!=null)targets.push({scope:'vintage_context',cacheKey:makeKey(country,region,appellation,vintage),subject:{country:country||null,region:region||null,appellation:appellation||null,vintage}});
-  targets.push({scope:'wine_vintage',cacheKey:makeKey(producerIdentity,wineName,vintage??'NV',appellation,region,country),subject:{producer,producerId:producerId||null,wineName,vintage,appellation:appellation||null,region:region||null,country:country||null}});
+  targets.push({scope:'wine_vintage',cacheKey:makeKey(producerIdentity,wineIdentity,vintage??'NV',appellation,region,country),subject:{producer,producerId:producerId||null,cuveeId:cuveeId||null,wineName,vintage,appellation:appellation||null,region:region||null,country:country||null}});
   return targets;
 }
 
