@@ -13,26 +13,26 @@ export function Layout(){
   useEffect(()=>{
     const viewport=window.visualViewport;
     if(!viewport)return;
-    let frame=0;
+    let frame=0,maxVisualHeight=viewport.height;
     const update=()=>{
       window.cancelAnimationFrame(frame);
       frame=window.requestAnimationFrame(()=>{
-        const layoutHeight=Math.max(window.innerHeight,document.documentElement.clientHeight);
-        const visualBottom=viewport.offsetTop+viewport.height;
-        const keyboardLikely=viewport.height<layoutHeight*.72;
-        const covered=keyboardLikely?0:Math.max(0,Math.min(160,layoutHeight-visualBottom));
+        maxVisualHeight=Math.max(maxVisualHeight,viewport.height);
+        const keyboardLikely=viewport.height<maxVisualHeight*.72;
+        const covered=keyboardLikely?0:Math.max(0,Math.min(160,maxVisualHeight-viewport.height-viewport.offsetTop));
         document.documentElement.style.setProperty(MOBILE_BROWSER_BOTTOM_VAR,`${Math.round(covered)}px`);
       });
     };
+    const resetForOrientation=()=>{maxVisualHeight=viewport.height;update()};
     update();
     viewport.addEventListener('resize',update);
     viewport.addEventListener('scroll',update);
-    window.addEventListener('orientationchange',update);
+    window.addEventListener('orientationchange',resetForOrientation);
     return()=>{
       window.cancelAnimationFrame(frame);
       viewport.removeEventListener('resize',update);
       viewport.removeEventListener('scroll',update);
-      window.removeEventListener('orientationchange',update);
+      window.removeEventListener('orientationchange',resetForOrientation);
       document.documentElement.style.removeProperty(MOBILE_BROWSER_BOTTOM_VAR);
     };
   },[]);
