@@ -1,7 +1,7 @@
 import { Hono,type Context } from 'hono';
 import entryApp from './entry';
 import { requireSession } from '../src/lib/auth/session';
-import { ensureAllProducerLinks,linkWineProducer } from '../src/lib/producers/entities';
+import { ensureAllProducerLinks,linkWineProducer,seedProducerCountryFromWine } from '../src/lib/producers/entities';
 import { cleanupOrphanCuvee,ensureAllCuveeLinksForProducer,ensureMissingCuveeLinks,linkWineCuvee,reconcileProducerCuvees,resolveExistingCuvee } from '../src/lib/cuvees/entities';
 import { ensureProducerCatalogCuveesSeeded } from '../src/lib/cuvees/catalogSeed';
 import { listJournalPage } from '../src/lib/journal/list';
@@ -18,9 +18,11 @@ function cors(c:{req:{header:(name:string)=>string|undefined};env:Bindings;heade
 async function user(c:{req:{header:(name:string)=>string|undefined};env:Bindings}){return (await requireSession(c.req.header('Authorization'),c.env.AUTH_SECRET)).userId}
 
 async function ensureWineIdentity(db:D1Database,owner:string,wineId:string){
-  const wine=await db.prepare('SELECT producer,producer_id FROM wines WHERE owner_id=? AND id=?').bind(owner,wineId).first<{producer:string;producer_id:string|null}>();
+  const wine=await db.prepare('SELECT producer,producer_id,country FROM wines WHERE owner_id=? AND id=?').bind(owner,wineId).first<{producer:string;producer_id:string|null;country:string|null}>();
   if(!wine)return;
-  if(!wine.producer_id&&wine.producer?.trim())await linkWineProducer(db,owner,wineId,wine.producer);
+  let producerId=wine.producer_id;
+  if(!producerId&&wine.producer?.trim())producerId=(await linkWineProducer(db,owner,wineId,wine.producer,wine.country)).id;
+  else if(producerId)await seedProducerCountryFromWine(db,owner,producerId,wine.country);
   await linkWineCuvee(db,owner,wineId);
 }
 
