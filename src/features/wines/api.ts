@@ -14,6 +14,7 @@ export type JournalWine={
   grapes:string[];
   wineStyle:string|null;
   tastingName:string|null;
+  venue:string|null;
   rating:number|null;
   tastingDate:string|null;
   imageIds:string[];
@@ -21,6 +22,7 @@ export type JournalWine={
 };
 export type WineResearchStage='queued'|'researching'|'saving'|'complete'|'failed';
 export type WineResearchRun={requestId:string;wineId:string;status:'running'|'complete'|'failed';stage:WineResearchStage;refresh:'none'|'vintage'|'all';attempt:number;message:string|null;startedAt:string;updatedAt:string;completedAt:string|null;durationMs:number|null};
+export type JournalBatchPatch={tastingName?:string|null;venue?:string|null};
 
 type ApiIssue={path?:Array<string|number>;message?:string};
 async function requireOk(r:Response,message:string){
@@ -38,6 +40,11 @@ export async function listWines(params:URLSearchParams,options:{limit?:number;of
   const r=await fetch(`/api/journal?${query}`,{headers:authHeaders(),signal:options.signal});
   await requireOk(r,'Could not load wines');
   return r.json();
+}
+export async function batchUpdateJournalExperience(ids:string[],patch:JournalBatchPatch){
+  const r=await fetch('/api/journal/batch-experience',{method:'POST',headers:authHeaders(true),body:JSON.stringify({ids,...patch})});
+  await requireOk(r,'Could not update selected wines');
+  return r.json() as Promise<{updated:number;tastingName?:string|null;venue?:string|null}>;
 }
 export async function getWine(id:string):Promise<WineRecord>{const r=await fetch(`/api/wines/${id}`,{headers:authHeaders()});await requireOk(r,'Wine not found');return r.json()}
 export async function saveWine(input:WineInput,id?:string,photos:WinePhoto[]=[]):Promise<{id:string}|{ok:true}>{
