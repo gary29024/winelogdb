@@ -14,7 +14,27 @@ const emptyWine=():DraftWine=>({key:crypto.randomUUID(),photos:[],preparing:fals
 function suggestedTags(result:RecognitionResult){const seen=new Set<string>();return [result.country,result.region,result.appellation,...result.grapes,result.style].filter((x):x is string=>Boolean(x)).map(x=>x.trim()).filter(x=>{const k=x.toLowerCase();if(!x||seen.has(k))return false;seen.add(k);return true}).slice(0,8)}
 function recognitionInitial(r:RecognitionResult):Partial<WineInput>{return {producer:r.producer??'',wineName:r.wineName??'',vintage:r.vintage,country:r.country,region:r.region,appellation:r.appellation,grapes:r.grapes,grapeBlend:r.grapeBlend,wineStyle:r.style,alcoholPercentage:r.alcoholPercentage,tastingDate:r.tastingDate,locationName:r.locationName,latitude:r.latitude,longitude:r.longitude,tags:suggestedTags(r),recognitionConfidence:r.confidence,recognitionStatus:'review'}}
 
-function BatchImage({id,alt}:{id:string;alt:string}){const [src,setSrc]=useState('');useEffect(()=>{let active=true,url='';fetch(batchImageUrl(id),{headers:authHeaders()}).then(r=>{if(!r.ok)throw new Error('image');return r.blob()}).then(blob=>{if(active){url=URL.createObjectURL(blob);setSrc(url)}}).catch(()=>undefined);return()=>{active=false;if(url)URL.revokeObjectURL(url)}},[id]);return src?<img src={src} alt={alt}/>:<div className="batch-image-placeholder">Wine</div>}
+function BatchImage({id,alt}:{id:string;alt:string}){
+  const [src,setSrc]=useState(''),[state,setState]=useState<'loading'|'ready'|'error'>('loading'),[retryKey,setRetryKey]=useState(0);
+  useEffect(()=>{
+    let active=true,url='',timer:number|undefined;const controller=new AbortController();setSrc('');setState('loading');
+    async function load(attempt:number){
+      try{
+        const response=await fetch(batchImageUrl(id),{headers:authHeaders(),cache:'no-store',signal:controller.signal});if(!response.ok)throw new Error(`Preview failed (${response.status})`);
+        const blob=await response.blob();if(!active)return;url=URL.createObjectURL(blob);setSrc(url);setState('ready');
+      }catch{
+        if(!active||controller.signal.aborted)return;
+        if(attempt<2){timer=window.setTimeout(()=>void load(attempt+1),600*(attempt+1));return}
+        setState('error');
+      }
+    }
+    void load(0);
+    return()=>{active=false;controller.abort();if(timer)window.clearTimeout(timer);if(url)URL.revokeObjectURL(url)};
+  },[id,retryKey]);
+  if(state==='ready'&&src)return <img src={src} alt={alt}/>;
+  if(state==='error')return <button type="button" className="batch-image-placeholder batch-image-retry" onClick={()=>setRetryKey(x=>x+1)} aria-label={`Retry ${alt} preview`}><span>Preview unavailable</span><small>Retry</small></button>;
+  return <div className="batch-image-placeholder batch-image-loading" role="status" aria-label={`${alt} loading`}>Loading…</div>;
+}
 
 export function BatchScanPage(){
   const [drafts,setDrafts]=useState<DraftWine[]>([emptyWine(),emptyWine()]),[session,setSession]=useState<BatchRecognitionSession|null>(null),[submitting,setSubmitting]=useState(false),[error,setError]=useState(''),[notice,setNotice]=useState(''),[reviewId,setReviewId]=useState<string|null>(null),[history,setHistory]=useState<Array<{id:string;status:string;totalItems:number;confirmedItems:number;updatedAt:string}>>([]);
