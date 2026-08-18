@@ -3,6 +3,7 @@ import { Link,useSearchParams } from 'react-router-dom';
 import type { WineRecord } from '../../lib/db/schema';
 import { listWines } from './api';
 import { WineImage } from './WineImage';
+import '../../journalMonths.css';
 
 const journalDate=(wine:WineRecord)=>wine.tastingDate||wine.createdAt;
 const monthKey=(wine:WineRecord)=>journalDate(wine).slice(0,7);
