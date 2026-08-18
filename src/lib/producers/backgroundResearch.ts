@@ -35,7 +35,7 @@ function sourcesFrom(metadata?:GroundingMetadata){
   for(const chunk of metadata?.groundingChunks??[]){const web=chunk.web,url=safeHttpsUrl(web?.uri)?.toString();if(!url||seen.has(url))continue;seen.add(url);sources.push({title:web?.title?.trim()||new URL(url).hostname,url});if(sources.length>=20)break}
   return sources;
 }
-function mergeSources(...lists:ResearchSource[][]){const seen=new Set<string>();return lists.flat().filter(x=>x.url&&!seen.has(x.url)&&Boolean(seen.add(x.url))).slice(0,30)}
+function mergeSources(...lists:ResearchSource[][]){const seen=new Set<string>();return lists.flat().filter(x=>{if(!x.url||seen.has(x.url))return false;seen.add(x.url);return true}).slice(0,30)}
 function cleanContactSources(value:unknown){
   if(!Array.isArray(value))return [] as ResearchSource[];const seen=new Set<string>(),out:ResearchSource[]=[];
   for(const x of value){if(!x||typeof x!=='object')continue;const item=x as {title?:unknown;url?:unknown},url=safeHttpsUrl(item.url)?.toString();if(!url||seen.has(url))continue;seen.add(url);out.push({title:typeof item.title==='string'&&item.title.trim()?item.title.trim():new URL(url).hostname,url})}
@@ -64,35 +64,6 @@ export async function createQueuedProducerResearchRun(db:D1Database,owner:string
   return {requestId,created:true};
 }
 
-async function geminiPhase(env:Env,requestId:string,producerId:string,phase:Phase,prompt:string,schema:Record<string,unknown>){
-  const models=[MODEL_PRIMARY,MODEL_FALLBACK] as const,timeouts=phase==='profile'?PROFILE_TIMEOUTS:CATALOG_TIMEOUTS;
-  let lastError=`${phase} research failed`;
-  for(let index=0;index<models.length;index++){
-    const model=models[index],timeoutMs=timeouts[index],controller=new AbortController(),timer=setTimeout(()=>controller.abort(),timeoutMs),started=Date.now();
-    try{
-      await updateRun(env.DB,'__OWNER__',requestId,'searching',index+1,`Researching producer ${phase} with ${model}`);
-    }catch{}
-    try{
-      const body=JSON.stringify({contents:[{role:'user',parts:[{text:prompt}]}],tools:[{google_search:{}}],generationConfig:{responseMimeType:'application/json',responseSchema:schema}});
-      log('log',{requestId,producerId,phase,stage:'gemini_start',model,attempt:index+1,timeoutMs});
-      const response=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(env.GEMINI_API_KEY)}`,{method:'POST',headers:{'Content-Type':'application/json'},body,signal:controller.signal});
-      const elapsedMs=Date.now()-started;
-      if(!response.ok){const errorText=(await response.text().catch(()=>'' )).slice(0,800);lastError=`${phase} research failed (${response.status})`;log('warn',{requestId,producerId,phase,stage:'gemini_error',model,httpStatus:response.status,elapsedMs,errorText});if(index===0&&(response.status===408||response.status===429||response.status>=500||response.status===404)){await sleep(1200);continue}throw new Error(lastError)}
-      const json=await response.json() as GeminiResponse,candidate=json.candidates?.[0],text=candidate?.content?.parts?.map(p=>p.text??'').join('')??'';
-      const cleaned=text.replace(/^```(?:json)?\s*|\s*```$/g,'');let parsed:unknown;try{parsed=JSON.parse(cleaned)}catch{throw new Error(`${phase} research returned invalid JSON`)}
-      log('log',{requestId,producerId,phase,stage:'gemini_complete',model,elapsedMs});
-      return {parsed,text,metadata:candidate?.groundingMetadata,model,sources:sourcesFrom(candidate?.groundingMetadata)};
-    }catch(e){
-      if(controller.signal.aborted)lastError=`${phase} research timed out after ${Math.round(timeoutMs/1000)} seconds on ${model}`;else lastError=(e as Error).message||lastError;
-      log(index===0?'warn':'error',{requestId,producerId,phase,stage:'gemini_request_error',model,error:lastError});
-      if(index===0){await sleep(1200);continue}throw new Error(lastError);
-    }finally{clearTimeout(timer)}
-  }
-  throw new Error(lastError);
-}
-
-// The owner is deliberately passed separately here so job rows stay owner-scoped even though
-// the Gemini phase helper itself has no user-facing request context.
 async function phaseWithStatus(env:Env,owner:string,requestId:string,producerId:string,phase:Phase,prompt:string,schema:Record<string,unknown>){
   const models=[MODEL_PRIMARY,MODEL_FALLBACK] as const,timeouts=phase==='profile'?PROFILE_TIMEOUTS:CATALOG_TIMEOUTS;let lastError=`${phase} research failed`;
   for(let index=0;index<models.length;index++){
