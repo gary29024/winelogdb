@@ -3,6 +3,7 @@ import baseApp from './index';
 import { requireSession } from '../src/lib/auth/session';
 import { runLayeredDeepSearch } from '../src/lib/research/deepSearch';
 import { ensureAllProducerLinks,mapProducerRow } from '../src/lib/producers/entities';
+import { mergeProducerEntities } from '../src/lib/producers/merge';
 import { runProducerResearch } from '../src/lib/producers/research';
 
 type Bindings={DB:D1Database;WINE_IMAGES:R2Bucket;ASSETS:Fetcher;GEMINI_API_KEY:string;AUTH_SECRET:string;APP_PASSWORD:string;APP_URL:string;MAX_FILE_BYTES?:string;MAX_BATCH_FILES?:string};
@@ -30,15 +31,23 @@ app.get('/api/producers/:id',async c=>{
     await ensureAllProducerLinks(c.env.DB,owner);
     const row=await c.env.DB.prepare('SELECT * FROM producers WHERE owner_id=? AND id=?').bind(owner,c.req.param('id')).first<Record<string,unknown>>();
     if(!row)return c.json({error:'Producer not found'},404);
-    const [aliases,wines]=await Promise.all([
+    const [aliases,wines,history]=await Promise.all([
       c.env.DB.prepare('SELECT display_alias FROM producer_aliases WHERE owner_id=? AND producer_id=? ORDER BY display_alias COLLATE NOCASE').bind(owner,c.req.param('id')).all<{display_alias:string}>(),
       c.env.DB.prepare(`SELECT w.id,w.wine_name,w.vintage,w.appellation,w.region,w.country,
         coalesce((SELECT we.consumed_at FROM wine_experiences we WHERE we.owner_id=w.owner_id AND we.wine_id=w.id ORDER BY we.created_at DESC LIMIT 1),w.tasting_date) AS tasting_date,
         coalesce((SELECT we.rating FROM wine_experiences we WHERE we.owner_id=w.owner_id AND we.wine_id=w.id ORDER BY we.created_at DESC LIMIT 1),w.rating) AS rating
-        FROM wines w WHERE w.owner_id=? AND w.producer_id=? ORDER BY coalesce(tasting_date,w.created_at) DESC,w.vintage DESC`).bind(owner,c.req.param('id')).all<Record<string,unknown>>()
+        FROM wines w WHERE w.owner_id=? AND w.producer_id=? ORDER BY coalesce(tasting_date,w.created_at) DESC,w.vintage DESC`).bind(owner,c.req.param('id')).all<Record<string,unknown>>(),
+      c.env.DB.prepare('SELECT count(*) AS count FROM producer_research_history WHERE owner_id=? AND producer_id=?').bind(owner,c.req.param('id')).first<{count:number}>()
     ]);
-    return c.json({...mapProducerRow(row),aliases:aliases.results.map(x=>x.display_alias),tastedWines:wines.results.map(w=>({id:String(w.id),wineName:String(w.wine_name),vintage:w.vintage==null?null:Number(w.vintage),appellation:w.appellation?String(w.appellation):null,region:w.region?String(w.region):null,country:w.country?String(w.country):null,tastingDate:w.tasting_date?String(w.tasting_date):null,rating:w.rating==null?null:Number(w.rating)}))});
+    return c.json({...mapProducerRow(row),aliases:aliases.results.map(x=>x.display_alias),researchHistoryCount:Number(history?.count)||0,tastedWines:wines.results.map(w=>({id:String(w.id),wineName:String(w.wine_name),vintage:w.vintage==null?null:Number(w.vintage),appellation:w.appellation?String(w.appellation):null,region:w.region?String(w.region):null,country:w.country?String(w.country):null,tastingDate:w.tasting_date?String(w.tasting_date):null,rating:w.rating==null?null:Number(w.rating)}))});
   }catch(e){return c.json({error:(e as Error).message||'Could not load producer'},500)}
+});
+
+app.post('/api/producers/:id/merge',async c=>{
+  cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
+  const body=await c.req.json().catch(()=>({})) as {confirmation?:string;sourceProducerId?:string};
+  if(body.confirmation!=='MERGE_PRODUCER'||!body.sourceProducerId)return c.json({error:'Producer merge requires an existing producer selection and explicit confirmation'},400);
+  try{return c.json(await mergeProducerEntities(c.env.DB,owner,c.req.param('id'),body.sourceProducerId))}catch(e){const message=(e as Error).message||'Could not link producer';return c.json({error:message},message==='Producer not found'?404:400)}
 });
 
 app.post('/api/producers/:id/research',async c=>{
