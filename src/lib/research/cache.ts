@@ -75,6 +75,7 @@ export function assembleDeepSearch(cache:Map<ResearchScope,CachedResearch>,targe
   const sources=entries.flatMap(x=>x.sources).filter(source=>{if(!source.url||seen.has(source.url))return false;seen.add(source.url);return true}).slice(0,20);
   const timestamps=entries.map(x=>Date.parse(x.researchedAt)).filter(Number.isFinite);
   const researchedAt=timestamps.length?new Date(Math.max(...timestamps)).toISOString():new Date().toISOString();
+  const latestEntry=[...entries].sort((a,b)=>Date.parse(b.researchedAt)-Date.parse(a.researchedAt))[0];
   return {
     summary:payload('wine_vintage').summary??'',
     vintageQuality:payload('vintage_context').vintageQuality??'',
@@ -83,7 +84,7 @@ export function assembleDeepSearch(cache:Map<ResearchScope,CachedResearch>,targe
     terroir:payload('terroir').terroir??'',
     drinkingWindow:payload('wine_vintage').drinkingWindow??'',
     sources,
-    model:entries.find(x=>x.model)?.model??'gemini-3.6-flash',
+    model:latestEntry?.model??'gemini-3.7-flash',
     researchedAt
   };
 }
