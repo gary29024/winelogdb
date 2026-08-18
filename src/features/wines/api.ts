@@ -3,6 +3,22 @@ import type { PhotoMetadata } from '../uploads/photoMetadata';
 import { authHeaders,clearSession } from '../../lib/auth/client';
 
 export type WinePhoto={file:File;metadata?:PhotoMetadata;width:number;height:number};
+export type JournalWine={
+  id:string;
+  producer:string;
+  wineName:string;
+  vintage:number|null;
+  country:string|null;
+  region:string|null;
+  appellation:string|null;
+  grapes:string[];
+  wineStyle:string|null;
+  tastingName:string|null;
+  rating:number|null;
+  tastingDate:string|null;
+  imageIds:string[];
+  createdAt:string;
+};
 
 type ApiIssue={path?:Array<string|number>;message?:string};
 async function requireOk(r:Response,message:string){
@@ -13,11 +29,11 @@ async function requireOk(r:Response,message:string){
     throw new Error([body.error||message,details].filter(Boolean).join(' — '));
   }
 }
-export async function listWines(params:URLSearchParams,options:{limit?:number;offset?:number;signal?:AbortSignal}={}):Promise<{items:WineRecord[];nextOffset:number|null}>{
+export async function listWines(params:URLSearchParams,options:{limit?:number;offset?:number;signal?:AbortSignal}={}):Promise<{items:JournalWine[];nextOffset:number|null}>{
   const query=new URLSearchParams(params);
   query.set('limit',String(options.limit??36));
   query.set('offset',String(options.offset??0));
-  const r=await fetch(`/api/wines?${query}`,{headers:authHeaders(),signal:options.signal});
+  const r=await fetch(`/api/journal?${query}`,{headers:authHeaders(),signal:options.signal});
   await requireOk(r,'Could not load wines');
   return r.json();
 }
