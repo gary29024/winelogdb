@@ -1,0 +1,2 @@
+.journal-months{display:grid;gap:28px}.journal-month{display:grid;gap:10px}.journal-month-heading{margin:0;padding:0 2px;color:#71809b;font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase}.journal-month .journal-list{margin:0}
+@media(max-width:700px){.journal-months{gap:24px}.journal-month{gap:8px}.journal-month-heading{padding:0 4px;font-size:.78rem}.journal-month .journal-list{border-top:1px solid var(--line)}}
