@@ -17,10 +17,11 @@ CREATE TABLE IF NOT EXISTS cuvee_aliases (
   owner_id TEXT NOT NULL,
   producer_id TEXT NOT NULL,
   normalized_alias TEXT NOT NULL,
+  appellation_key TEXT NOT NULL DEFAULT '',
   cuvee_id TEXT NOT NULL,
   display_alias TEXT NOT NULL,
   created_at TEXT NOT NULL,
-  PRIMARY KEY (owner_id, producer_id, normalized_alias)
+  PRIMARY KEY (owner_id, producer_id, normalized_alias, appellation_key)
 );
 
 ALTER TABLE wines ADD COLUMN cuvee_id TEXT;
