@@ -2,7 +2,7 @@ import { Hono } from 'hono';
 import baseApp from './index';
 import { requireSession } from '../src/lib/auth/session';
 import { runLayeredDeepSearch } from '../src/lib/research/deepSearch';
-import { linkWineProducer,mapProducerRow,normalizeProducerAlias,resolveExistingProducer,setProducerPrimaryName } from '../src/lib/producers/entities';
+import { linkWineProducer,mapProducerRow,normalizeProducerAlias,resolveExistingProducer,setPrimaryProducerName } from '../src/lib/producers/entities';
 import { mergeProducerEntities,unlinkProducerMerge } from '../src/lib/producers/merge';
 import { getProducerResearchRun,runProducerResearch } from '../src/lib/producers/research';
 import { selectRecognitionMetadata,type RecognitionPhotoMetadata } from '../src/lib/uploads/metadataSelection';
