@@ -31,9 +31,9 @@ function transactionDone(transaction:IDBTransaction){return new Promise<void>((r
 export async function savePendingBatchWines(sessionId:string,wines:Array<{position:number;photos:PendingBatchPhoto[]}>){
   const db=await openDb();
   try{
-    const transaction=db.transaction(STORE,'readwrite'),store=transaction.objectStore(STORE);
+    const transaction=db.transaction(STORE,'readwrite'),done=transactionDone(transaction),store=transaction.objectStore(STORE);
     for(const wine of wines)store.put({key:key(sessionId,wine.position),sessionId,position:wine.position,photos:wine.photos} satisfies StoredBatchWine);
-    await transactionDone(transaction);
+    await done;
   }finally{db.close()}
 }
 
@@ -42,22 +42,23 @@ export async function listPendingBatchWines(sessionId:string):Promise<PendingBat
   try{
     const transaction=db.transaction(STORE,'readonly'),index=transaction.objectStore(STORE).index('sessionId');
     const rows=await requestResult(index.getAll(IDBKeyRange.only(sessionId)) as IDBRequest<StoredBatchWine[]>);
-    await transactionDone(transaction);
     return rows.sort((a,b)=>a.position-b.position).map(({sessionId:storedSessionId,position,photos})=>({sessionId:storedSessionId,position,photos}));
   }finally{db.close()}
 }
 
 export async function removePendingBatchWine(sessionId:string,position:number){
   const db=await openDb();
-  try{const transaction=db.transaction(STORE,'readwrite');transaction.objectStore(STORE).delete(key(sessionId,position));await transactionDone(transaction)}finally{db.close()}
+  try{const transaction=db.transaction(STORE,'readwrite'),done=transactionDone(transaction);transaction.objectStore(STORE).delete(key(sessionId,position));await done}finally{db.close()}
 }
 
 export async function clearPendingBatchSession(sessionId:string){
   const db=await openDb();
   try{
-    const transaction=db.transaction(STORE,'readwrite'),store=transaction.objectStore(STORE),index=store.index('sessionId');
+    const readTransaction=db.transaction(STORE,'readonly'),index=readTransaction.objectStore(STORE).index('sessionId');
     const keys=await requestResult(index.getAllKeys(IDBKeyRange.only(sessionId)));
+    if(!keys.length)return;
+    const writeTransaction=db.transaction(STORE,'readwrite'),done=transactionDone(writeTransaction),store=writeTransaction.objectStore(STORE);
     for(const storedKey of keys)store.delete(storedKey);
-    await transactionDone(transaction);
+    await done;
   }finally{db.close()}
 }
