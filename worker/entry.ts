@@ -39,8 +39,8 @@ app.get('/api/wines/:id',async c=>{
   const meta=await c.env.DB.prepare('SELECT producer_id,favorite FROM wines WHERE owner_id=? AND id=?').bind(owner,c.req.param('id')).first<{producer_id:string|null;favorite:number|null}>();
   if(!meta)return response;
   try{
-    const body=await response.json() as Record<string,unknown>;
-    const headers=new Headers(response.headers);headers.set('Content-Type','application/json; charset=utf-8');
+    const body=await response.clone().json() as Record<string,unknown>;
+    const headers=new Headers(response.headers);headers.set('Content-Type','application/json; charset=utf-8');headers.delete('Content-Length');
     return new Response(JSON.stringify({...body,producerId:meta.producer_id??null,favorite:Boolean(meta.favorite)}),{status:response.status,statusText:response.statusText,headers});
   }catch{return response}
 });
