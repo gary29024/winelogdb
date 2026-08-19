@@ -14,7 +14,7 @@ function similarity(source:TastedCuveeGroup,target:ProducerDetail['catalogCuvees
   if(sa&&ta&&sa===ta)score+=.45;
   if(normalizeCuveeAlias(source.name)===normalizeCuveeAlias(target.canonicalName))score+=.5;
   const sourceStyle=cuveeStyleFamily(source.wineStyle),targetStyle=cuveeStyleFamily(target.wineStyle);
-  if(sourceStyle&&targetStyle)score+=sourceStyle===targetStyle?.4:-.8;
+  if(sourceStyle&&targetStyle)score+=sourceStyle===targetStyle?0.4:-0.8;
   return score;
 }
 
