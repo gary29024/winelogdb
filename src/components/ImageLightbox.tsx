@@ -5,15 +5,16 @@ import '../imageLightbox.css';
 type ImageLightboxProps={src:string;alt:string;onClose:()=>void};
 
 export function ImageLightbox({src,alt,onClose}:ImageLightboxProps){
-  const closeRef=useRef<HTMLButtonElement>(null);
+  const closeRef=useRef<HTMLButtonElement>(null),onCloseRef=useRef(onClose);
+  onCloseRef.current=onClose;
   useEffect(()=>{
     const previousOverflow=document.body.style.overflow;
     document.body.style.overflow='hidden';
-    const onKeyDown=(event:KeyboardEvent)=>{if(event.key==='Escape')onClose()};
+    const onKeyDown=(event:KeyboardEvent)=>{if(event.key==='Escape')onCloseRef.current()};
     window.addEventListener('keydown',onKeyDown);
     closeRef.current?.focus();
     return()=>{window.removeEventListener('keydown',onKeyDown);document.body.style.overflow=previousOverflow};
-  },[onClose]);
+  },[]);
 
   return createPortal(
     <div className="photo-lightbox" role="dialog" aria-modal="true" aria-label={`Enlarged ${alt}`} onMouseDown={event=>{if(event.target===event.currentTarget)onClose()}}>
