@@ -132,13 +132,11 @@ app.get('/api/producers/:id',async c=>{
   const response=await entryApp.fetch(c.req.raw,c.env,c.executionCtx);
   if(!response.ok)return response;
   try{
-    const [body,state,wines]=await Promise.all([
-      response.clone().json() as Promise<Record<string,unknown>&{tastedWines?:Array<Record<string,unknown>&{id?:unknown}>}>,
-      getProducerCuveeCatalogState(c.env.DB,owner,producerId),
-      c.env.DB.prepare('SELECT id,cuvee_id FROM wines WHERE owner_id=? AND producer_id=?').bind(owner,producerId).all<{id:string;cuvee_id:string|null}>()
+    const [body,state]=await Promise.all([
+      response.clone().json() as Promise<Record<string,unknown>&{tastedWines?:Array<Record<string,unknown>&{id?:unknown;cuveeId?:unknown}>}>,
+      getProducerCuveeCatalogState(c.env.DB,owner,producerId)
     ]);
-    const cuveeByWine=new Map(wines.results.map(wine=>[wine.id,wine.cuvee_id] as const));
-    const tastedWines=(body.tastedWines??[]).map(wine=>{const wineId=String(wine.id??'');return {...wine,cuveeId:cuveeByWine.get(wineId)??null,catalogCuveeId:state.wineCatalogTargets[wineId]??null}});
+    const tastedWines=(body.tastedWines??[]).map(wine=>{const wineId=String(wine.id??'');return {...wine,cuveeId:typeof wine.cuveeId==='string'?wine.cuveeId:null,catalogCuveeId:state.wineCatalogTargets[wineId]??null}});
     const headers=new Headers(response.headers);headers.delete('Content-Length');headers.set('Content-Type','application/json; charset=utf-8');
     return new Response(JSON.stringify({...body,tastedWines,catalogCuvees:state.catalogCuvees,cuveeCatalogLinks:state.cuveeCatalogLinks}),{status:response.status,statusText:response.statusText,headers});
   }catch(e){console.error(JSON.stringify({event:'producer-cuvee-catalog-state-failed',producerId,error:(e as Error).message}));return response}
