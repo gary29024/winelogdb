@@ -73,7 +73,7 @@ export function LibraryPage(){
     setData(previous=>previous.map(item=>item.id===wine.id?{...item,favorite:next}:item));
     try{
       await setWineFavorite(wine.id,next);
-      if(favoriteOnly&&!next)setData(previous=>previous.filter(item=>item.id!==wine.id));
+      if(favoriteOnly&&!next)setRefreshSeq(value=>value+1);
     }catch(e){
       setData(previous=>previous.map(item=>item.id===wine.id?{...item,favorite:wine.favorite}:item));setError((e as Error).message);
     }finally{setFavoriteBusy(previous=>{const copy=new Set(previous);copy.delete(wine.id);return copy})}
