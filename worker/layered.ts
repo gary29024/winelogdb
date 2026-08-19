@@ -2,7 +2,7 @@ import { Hono } from 'hono';
 import baseApp from './index';
 import { requireSession } from '../src/lib/auth/session';
 import { runLayeredDeepSearch } from '../src/lib/research/deepSearch';
-import { linkWineProducer,mapProducerRow,normalizeProducerAlias,resolveExistingProducer,setPrimaryProducerName } from '../src/lib/producers/entities';
+import { linkWineProducer,mapProducerRow,normalizeProducerAlias,resolveExistingProducer,setProducerPrimaryName } from '../src/lib/producers/entities';
 import { mergeProducerEntities,unlinkProducerMerge } from '../src/lib/producers/merge';
 import { getProducerResearchRun,runProducerResearch } from '../src/lib/producers/research';
 import { selectRecognitionMetadata,type RecognitionPhotoMetadata } from '../src/lib/uploads/metadataSelection';
@@ -80,7 +80,7 @@ app.post('/api/producers/:id/primary-name',async c=>{
   cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
   const body=await c.req.json().catch(()=>({})) as {name?:string};
   if(!body.name?.trim())return c.json({error:'Choose an existing producer name'},400);
-  try{return c.json(await setPrimaryProducerName(c.env.DB,owner,c.req.param('id'),body.name))}catch(e){const message=(e as Error).message||'Could not change primary name';return c.json({error:message},message.includes('existing')||message.includes('conflict')?400:500)}
+  try{return c.json(await setProducerPrimaryName(c.env.DB,owner,c.req.param('id'),body.name))}catch(e){const message=(e as Error).message||'Could not change primary name';return c.json({error:message},message.includes('existing')||message.includes('conflict')?400:500)}
 });
 
 app.post('/api/producers/:id/merge',async c=>{
