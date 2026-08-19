@@ -1,9 +1,10 @@
 import { useEffect,useMemo,useRef,useState } from 'react';
 import { Link,useSearchParams } from 'react-router-dom';
-import { batchUpdateJournalExperience,listWines,type JournalWine } from './api';
+import { batchUpdateJournalExperience,listWines,setWineFavorite,type JournalWine } from './api';
 import { WineImage } from './WineImage';
 import '../../journalMonths.css';
 import '../../journalBatch.css';
+import '../../favorites.css';
 
 const PAGE_SIZE=36;
 const MAX_BATCH_SELECTION=500;
@@ -25,13 +26,13 @@ const sharedText=(values:Array<string|null>)=>{
   return {value:first,mixed:values.some(value=>(value??'')!==first)};
 };
 
-function WineCard({wine:w,view,selecting,selected,onToggle}:{wine:JournalWine;view:ViewMode;selecting:boolean;selected:boolean;onToggle:()=>void}){
+function WineCard({wine:w,view,selecting,selected,onToggle,onFavorite,favoriteBusy}:{wine:JournalWine;view:ViewMode;selecting:boolean;selected:boolean;onToggle:()=>void;onFavorite:(next:boolean)=>void;favoriteBusy:boolean}){
   const image=w.imageIds[0]?<WineImage imageId={w.imageIds[0]} alt={`${w.producer} ${w.wineName} front label`} className="journal-wine-thumb"/>:<div className="bottle">{w.wineStyle?.slice(0,1).toUpperCase()||'W'}</div>;
   const className=`wine-card journal-card ${view==='grid'?'journal-grid-card':''}${selecting?' journal-selectable-card':''}${selected?' selected':''}`;
   const selectionMark=selecting?<span className="journal-select-mark" aria-hidden="true">{selected?'✓':''}</span>:null;
   const content=view==='grid'?<>{selectionMark}<div className="journal-grid-media">{image}<strong className="journal-grid-vintage">{w.vintage??'NV'}</strong>{w.rating!=null&&<span className="journal-grid-score">{w.rating}</span>}</div><div className="wine-card-body"><h2 title={w.wineName}>{w.wineName}</h2><p className="producer" title={w.producer}>{w.producer}</p></div></>:<>{selectionMark}{image}<div className="wine-card-body"><div className="wine-card-top"><h2>{w.wineName}</h2><strong>{w.vintage??'NV'}</strong></div><p className="producer">{w.producer}</p><span>{[w.appellation,w.region,w.country].filter(Boolean).join(' · ')}</span>{w.grapes.length>0&&<span className="grapes">{w.grapes.join(' · ')}</span>}{w.tastingName&&<span className="tasting-chip">{w.tastingName}</span>}{w.venue&&<span className="journal-venue">{w.venue}</span>}{w.rating!=null&&<span className="score-chip">{w.rating}</span>}</div></>;
   if(selecting)return <button type="button" className={className} aria-pressed={selected} aria-label={`${selected?'Deselect':'Select'} ${w.producer} ${w.wineName}`} onClick={onToggle}>{content}</button>;
-  return <Link className={className} to={`/wines/${w.id}`}>{content}</Link>;
+  return <div className={`journal-card-shell ${view==='grid'?'grid':'list'}`}><Link className={className} to={`/wines/${w.id}`}>{content}</Link><button type="button" className={`journal-favorite-button${w.favorite?' active':''}`} aria-pressed={w.favorite} aria-label={`${w.favorite?'Remove':'Add'} ${w.producer} ${w.wineName} ${w.favorite?'from':'to'} favorites`} disabled={favoriteBusy} onClick={()=>onFavorite(!w.favorite)}>{w.favorite?'♥':'♡'}</button></div>;
 }
 
 export function LibraryPage(){
@@ -39,10 +40,12 @@ export function LibraryPage(){
   const [data,setData]=useState<JournalWine[]>([]),[nextOffset,setNextOffset]=useState<number|null>(null),[error,setError]=useState(''),[loading,setLoading]=useState(true),[loadingMore,setLoadingMore]=useState(false);
   const [view,setViewState]=useState<ViewMode>(initialView),[queryDraft,setQueryDraft]=useState(()=>params.get('query')??''),[refreshSeq,setRefreshSeq]=useState(0);
   const [selecting,setSelecting]=useState(false),[selectedIds,setSelectedIds]=useState<Set<string>>(()=>new Set());
+  const [favoriteBusy,setFavoriteBusy]=useState<Set<string>>(()=>new Set());
   const [batchOpen,setBatchOpen]=useState(false),[batchBusy,setBatchBusy]=useState(false),[batchError,setBatchError]=useState(''),[batchNotice,setBatchNotice]=useState('');
   const [changeEvent,setChangeEvent]=useState(false),[changeVenue,setChangeVenue]=useState(false),[eventValue,setEventValue]=useState(''),[venueValue,setVenueValue]=useState(''),[eventMixed,setEventMixed]=useState(false),[venueMixed,setVenueMixed]=useState(false);
   const queryKey=params.toString(),queryKeyRef=useRef(queryKey);
   queryKeyRef.current=queryKey;
+  const favoriteOnly=params.get('favorite')==='1';
   const selectedWines=useMemo(()=>data.filter(wine=>selectedIds.has(wine.id)),[data,selectedIds]);
 
   function update(k:string,v:string,replace=true){
@@ -63,6 +66,17 @@ export function LibraryPage(){
     const event=sharedText(selectedWines.map(w=>w.tastingName)),venue=sharedText(selectedWines.map(w=>w.venue));
     setEventValue(event.mixed?'':event.value);setVenueValue(venue.mixed?'':venue.value);setEventMixed(event.mixed);setVenueMixed(venue.mixed);
     setChangeEvent(false);setChangeVenue(false);setBatchError('');setBatchOpen(true);
+  }
+  async function toggleFavorite(wine:JournalWine,next:boolean){
+    if(favoriteBusy.has(wine.id))return;
+    setError('');setFavoriteBusy(previous=>new Set(previous).add(wine.id));
+    setData(previous=>previous.map(item=>item.id===wine.id?{...item,favorite:next}:item));
+    try{
+      await setWineFavorite(wine.id,next);
+      if(favoriteOnly&&!next)setRefreshSeq(value=>value+1);
+    }catch(e){
+      setData(previous=>previous.map(item=>item.id===wine.id?{...item,favorite:wine.favorite}:item));setError((e as Error).message);
+    }finally{setFavoriteBusy(previous=>{const copy=new Set(previous);copy.delete(wine.id);return copy})}
   }
 
   useEffect(()=>{
@@ -111,15 +125,16 @@ export function LibraryPage(){
   const ordered=chronological?[...data].sort((a,b)=>sort==='oldest'?journalDate(a).localeCompare(journalDate(b)):journalDate(b).localeCompare(journalDate(a))):data;
   const groups=chronological?ordered.reduce<Array<{key:string;items:JournalWine[]}>>((acc,wine)=>{const key=monthKey(wine),last=acc[acc.length-1];if(last?.key===key)last.items.push(wine);else acc.push({key,items:[wine]});return acc},[]):[];
   const collectionClass=`wine-grid journal-list ${view==='grid'?'journal-gallery':'journal-list-view'}`;
-  const renderItems=(items:JournalWine[])=><div className={collectionClass}>{items.map(w=><WineCard wine={w} view={view} selecting={selecting} selected={selectedIds.has(w.id)} onToggle={()=>toggleSelection(w.id)} key={w.id}/>)}</div>;
+  const renderItems=(items:JournalWine[])=><div className={collectionClass}>{items.map(w=><WineCard wine={w} view={view} selecting={selecting} selected={selectedIds.has(w.id)} onToggle={()=>toggleSelection(w.id)} onFavorite={next=>void toggleFavorite(w,next)} favoriteBusy={favoriteBusy.has(w.id)} key={w.id}/>)}</div>;
 
   return <section className="journal-page">
     <div className="hero journal-hero"><p className="eyebrow">YOUR JOURNAL</p><h1>Wines worth remembering.</h1><p>Search by bottle, place or tasting and keep every drinking experience together.</p></div>
+    <div className="journal-scope-tabs" role="tablist" aria-label="Journal scope"><button type="button" role="tab" aria-selected={!favoriteOnly} className={!favoriteOnly?'active':''} onClick={()=>update('favorite','')}>All wines</button><button type="button" role="tab" aria-selected={favoriteOnly} className={favoriteOnly?'active':''} onClick={()=>update('favorite','1')}>♥ Favorites</button></div>
     <form className="filters journal-filters" onSubmit={e=>e.preventDefault()}><label className="search">Search<input aria-label="Search wines" type="search" value={queryDraft} onChange={e=>setQueryDraft(e.target.value)} placeholder="Search wines, makers, regions…"/></label><div className="filter-pills"><label>Tasting<input value={params.get('tasting')??''} onChange={e=>update('tasting',e.target.value)} placeholder="Tasting / event"/></label><label>Country<input value={params.get('country')??''} onChange={e=>update('country',e.target.value)} placeholder="Country"/></label><label>Style<select value={params.get('style')??''} onChange={e=>update('style',e.target.value)}><option value="">Style</option>{['red','white','rose','sparkling','dessert','fortified','orange'].map(x=><option key={x}>{x}</option>)}</select></label><label>Score<input type="number" min="0" max="100" value={params.get('rating')??''} onChange={e=>update('rating',e.target.value)} placeholder="Score"/></label><label>Sort<select value={sort} onChange={e=>update('sort',e.target.value)}><option value="newest">Newest drinking date</option><option value="oldest">Oldest drinking date</option><option value="rating">Rating</option><option value="producer">Producer</option><option value="vintage">Vintage</option></select></label></div></form>
     {batchNotice&&<p className="journal-batch-notice" role="status">{batchNotice}</p>}
     {batchError&&!batchOpen&&<p className="journal-page-error" role="alert">{batchError}</p>}
-    <div className={`journal-viewbar${selecting?' selecting':''}`}><span>{selecting?`${selectedIds.size} selected`:data.length?`${data.length} loaded`:'Journal'}</span>{selecting?<div className="journal-selection-actions"><button type="button" onClick={selectAllLoaded} disabled={!data.length}>Select all loaded</button><button type="button" onClick={()=>setSelectedIds(new Set())} disabled={!selectedIds.size}>Clear</button><button type="button" className="primary" onClick={openBatchEditor} disabled={!selectedIds.size}>Edit event / venue</button><button type="button" onClick={stopSelecting}>Done</button></div>:<div className="journal-view-actions"><button type="button" className="journal-select-toggle" onClick={()=>{setSelecting(true);setBatchNotice('')}} disabled={!data.length}>Select</button><div className="journal-view-toggle" role="group" aria-label="Journal layout"><button type="button" className={view==='list'?'active':''} aria-pressed={view==='list'} onClick={()=>setView('list')}>List</button><button type="button" className={view==='grid'?'active':''} aria-pressed={view==='grid'} onClick={()=>setView('grid')}>Grid</button></div></div>}</div>
-    {loading?<p aria-live="polite">Pouring your collection…</p>:error&&!data.length?<p role="alert">{error}</p>:data.length?(chronological?<div className="journal-months">{groups.map(group=><section className="journal-month" key={group.key}><h2 className="journal-month-heading">{monthLabel(group.key)}</h2>{renderItems(group.items)}</section>)}</div>:renderItems(data)):<div className="empty"><span>⌁</span><h2>Your journal is empty</h2><p>Scan a bottle label to add your first wine.</p><Link className="button" to="/upload">Scan Wine</Link></div>}
+    <div className={`journal-viewbar${selecting?' selecting':''}`}><span>{selecting?`${selectedIds.size} selected`:data.length?`${data.length} loaded`:(favoriteOnly?'Favorites':'Journal')}</span>{selecting?<div className="journal-selection-actions"><button type="button" onClick={selectAllLoaded} disabled={!data.length}>Select all loaded</button><button type="button" onClick={()=>setSelectedIds(new Set())} disabled={!selectedIds.size}>Clear</button><button type="button" className="primary" onClick={openBatchEditor} disabled={!selectedIds.size}>Edit event / venue</button><button type="button" onClick={stopSelecting}>Done</button></div>:<div className="journal-view-actions"><button type="button" className="journal-select-toggle" onClick={()=>{setSelecting(true);setBatchNotice('')}} disabled={!data.length}>Select</button><div className="journal-view-toggle" role="group" aria-label="Journal layout"><button type="button" className={view==='list'?'active':''} aria-pressed={view==='list'} onClick={()=>setView('list')}>List</button><button type="button" className={view==='grid'?'active':''} aria-pressed={view==='grid'} onClick={()=>setView('grid')}>Grid</button></div></div>}</div>
+    {loading?<p aria-live="polite">Pouring your collection…</p>:error&&!data.length?<p role="alert">{error}</p>:data.length?(chronological?<div className="journal-months">{groups.map(group=><section className="journal-month" key={group.key}><h2 className="journal-month-heading">{monthLabel(group.key)}</h2>{renderItems(group.items)}</section>)}</div>:renderItems(data)):favoriteOnly?<div className="empty favorite-empty"><span>♡</span><h2>No favorite wines yet</h2><p>Tap the heart on a Journal card or wine page to keep special bottles here.</p><button type="button" onClick={()=>update('favorite','')}>Show all wines</button></div>:<div className="empty"><span>⌁</span><h2>Your journal is empty</h2><p>Scan a bottle label to add your first wine.</p><Link className="button" to="/upload">Scan Wine</Link></div>}
     {error&&data.length>0&&<p className="journal-page-error" role="alert">{error}</p>}
     {nextOffset!=null&&<div className="journal-load-more"><button type="button" onClick={loadMore} disabled={loadingMore}>{loadingMore?'Loading…':`Load ${PAGE_SIZE} more`}</button></div>}
     {batchOpen&&<div className="journal-batch-backdrop" role="presentation" onClick={()=>{if(!batchBusy)setBatchOpen(false)}}><div className="journal-batch-sheet" role="dialog" aria-modal="true" aria-labelledby="journal-batch-title" onClick={e=>e.stopPropagation()}><div className="journal-batch-heading"><div><p className="eyebrow">BATCH UPDATE</p><h2 id="journal-batch-title">{selectedIds.size} wine{selectedIds.size===1?'':'s'} selected</h2></div><button type="button" className="journal-batch-close" onClick={()=>setBatchOpen(false)} disabled={batchBusy} aria-label="Close batch editor">×</button></div><p>Enable only the fields you want to change. An enabled blank field clears that value; unchecked fields stay untouched.</p><label className="journal-batch-toggle"><input type="checkbox" checked={changeEvent} onChange={e=>setChangeEvent(e.target.checked)}/><span>Change tasting / event group</span></label><input className="journal-batch-input" type="text" value={eventValue} onChange={e=>setEventValue(e.target.value)} disabled={!changeEvent} placeholder={eventMixed?'Mixed events — enter replacement':'Event name; blank clears'}/><label className="journal-batch-toggle"><input type="checkbox" checked={changeVenue} onChange={e=>setChangeVenue(e.target.checked)}/><span>Change venue</span></label><input className="journal-batch-input" type="text" value={venueValue} onChange={e=>setVenueValue(e.target.value)} disabled={!changeVenue} placeholder={venueMixed?'Mixed venues — enter replacement':'Venue; blank clears'}/>{batchError&&<p className="journal-page-error" role="alert">{batchError}</p>}<div className="journal-batch-actions"><button type="button" onClick={()=>setBatchOpen(false)} disabled={batchBusy}>Cancel</button><button type="button" className="primary" onClick={submitBatch} disabled={batchBusy||(!changeEvent&&!changeVenue)}>{batchBusy?'Updating…':`Update ${selectedIds.size} wine${selectedIds.size===1?'':'s'}`}</button></div></div></div>}

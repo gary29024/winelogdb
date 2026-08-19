@@ -15,11 +15,13 @@ export type JournalWine={
   wineStyle:string|null;
   tastingName:string|null;
   venue:string|null;
+  favorite:boolean;
   rating:number|null;
   tastingDate:string|null;
   imageIds:string[];
   createdAt:string;
 };
+export type WineDetail=WineRecord&{favorite:boolean;producerId:string|null};
 export type WineResearchStage='queued'|'researching'|'saving'|'complete'|'failed';
 export type WineResearchRun={requestId:string;wineId:string;status:'running'|'complete'|'failed';stage:WineResearchStage;refresh:'none'|'vintage'|'all';attempt:number;message:string|null;startedAt:string;updatedAt:string;completedAt:string|null;durationMs:number|null};
 export type JournalBatchPatch={tastingName?:string|null;venue?:string|null};
@@ -46,7 +48,12 @@ export async function batchUpdateJournalExperience(ids:string[],patch:JournalBat
   await requireOk(r,'Could not update selected wines');
   return r.json() as Promise<{updated:number;tastingName?:string|null;venue?:string|null}>;
 }
-export async function getWine(id:string):Promise<WineRecord>{const r=await fetch(`/api/wines/${id}`,{headers:authHeaders()});await requireOk(r,'Wine not found');return r.json()}
+export async function getWine(id:string):Promise<WineDetail>{const r=await fetch(`/api/wines/${id}`,{headers:authHeaders()});await requireOk(r,'Wine not found');return r.json()}
+export async function setWineFavorite(id:string,favorite:boolean){
+  const r=await fetch(`/api/wines/${id}/favorite`,{method:'PUT',headers:authHeaders(true),body:JSON.stringify({favorite})});
+  await requireOk(r,'Could not update favorite');
+  return r.json() as Promise<{id:string;favorite:boolean}>;
+}
 export async function saveWine(input:WineInput,id?:string,photos:WinePhoto[]=[]):Promise<{id:string}|{ok:true}>{
   if(id){const r=await fetch(`/api/wines/${id}`,{method:'PUT',headers:authHeaders(true),body:JSON.stringify(input)});await requireOk(r,'Could not save wine');return r.json() as Promise<{ok:true}>}
   if(photos.length){
