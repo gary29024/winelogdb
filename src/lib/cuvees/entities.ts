@@ -50,6 +50,24 @@ export function cuveeSignature(name:string,appellation:string|null|undefined,pro
   return [...new Set(tokens)].sort().join(' ');
 }
 
+export function cuveeStyleFamily(value:string|null|undefined){
+  const normalized=normalizeCuveeAlias(value??'');
+  if(!normalized)return '';
+  const words=new Set(normalized.split(/\s+/));
+  if(words.has('sparkling')||words.has('champagne')||words.has('petillant')||words.has('mousseux'))return 'sparkling';
+  if(words.has('white')||words.has('blanc'))return 'white';
+  if(words.has('rose'))return 'rose';
+  if(words.has('red')||words.has('rouge'))return 'red';
+  if(words.has('orange'))return 'orange';
+  if(words.has('fortified')||words.has('port')||words.has('sherry')||words.has('madeira'))return 'fortified';
+  return normalized;
+}
+
+export function cuveeIdentitySignature(name:string,appellation:string|null|undefined,wineStyle:string|null|undefined,producerNames:string[]=[]){
+  const base=cuveeSignature(name,appellation,producerNames),style=cuveeStyleFamily(wineStyle);
+  return style?`${base}::style:${style}`:base;
+}
+
 async function producerNames(db:D1Database,owner:string,producerId:string){
   const [producer,aliases]=await Promise.all([
     db.prepare('SELECT canonical_name FROM producers WHERE owner_id=? AND id=?').bind(owner,producerId).first<{canonical_name:string}>(),
@@ -58,7 +76,7 @@ async function producerNames(db:D1Database,owner:string,producerId:string){
   return [producer?.canonical_name??'',...aliases.results.map(x=>x.display_alias)].filter(Boolean);
 }
 
-const styleCompatible=(stored:string|null|undefined,incoming:string|null|undefined)=>!stored||!incoming||normalizeCuveeAlias(stored)===normalizeCuveeAlias(incoming);
+const styleCompatible=(stored:string|null|undefined,incoming:string|null|undefined)=>{const a=cuveeStyleFamily(stored),b=cuveeStyleFamily(incoming);return !a||!b||a===b};
 const appellationCompatible=(stored:string|null|undefined,incoming:string|null|undefined)=>!stored||!incoming||normalizeCuveeAlias(stored)===normalizeCuveeAlias(incoming);
 const mapEntity=(row:CuveeRow):CuveeEntity=>({id:row.id,producerId:row.producer_id,canonicalName:row.canonical_name,appellation:row.appellation??null,wineStyle:row.wine_style??null,catalogBacked:Boolean(row.catalog_backed)});
 
@@ -71,6 +89,26 @@ async function aliasMatch(db:D1Database,owner:string,producerId:string,normalize
   const rows=await db.prepare(`SELECT c.*,a.display_alias FROM cuvee_aliases a JOIN cuvees c ON c.owner_id=a.owner_id AND c.id=a.cuvee_id
     WHERE a.owner_id=? AND a.producer_id=? AND a.normalized_alias=? LIMIT 2`).bind(owner,producerId,normalizedAlias).all<CuveeRow>();
   return rows.results.length===1?rows.results[0]:null;
+}
+
+async function signatureMatch(db:D1Database,owner:string,producerId:string,baseSignature:string,identitySignature:string,appellation?:string|null,wineStyle?:string|null){
+  const rows=await db.prepare(`SELECT * FROM cuvees WHERE owner_id=? AND producer_id=? AND (signature_key=? OR signature_key=? OR signature_key LIKE ?)`)
+    .bind(owner,producerId,identitySignature,baseSignature,`${baseSignature}::style:%`).all<CuveeRow>();
+  const compatible=rows.results.filter(row=>styleCompatible(row.wine_style,wineStyle)&&appellationCompatible(row.appellation,appellation));
+  const exact=compatible.find(row=>row.signature_key===identitySignature);if(exact)return exact;
+  return compatible.length===1?compatible[0]:null;
+}
+
+async function adoptIdentitySignature(db:D1Database,owner:string,row:CuveeRow,identitySignature:string,wineStyle?:string|null){
+  if(!cuveeStyleFamily(wineStyle)||row.signature_key===identitySignature)return row;
+  try{
+    await db.prepare('UPDATE cuvees SET signature_key=?,wine_style=coalesce(wine_style,?),updated_at=? WHERE owner_id=? AND id=?')
+      .bind(identitySignature,wineStyle??null,new Date().toISOString(),owner,row.id).run();
+    return {...row,signature_key:identitySignature,wine_style:row.wine_style??wineStyle??null};
+  }catch{
+    const exact=await db.prepare('SELECT * FROM cuvees WHERE owner_id=? AND producer_id=? AND signature_key=? LIMIT 1').bind(owner,row.producer_id,identitySignature).first<CuveeRow>();
+    return exact&&styleCompatible(exact.wine_style,wineStyle)?exact:row;
+  }
 }
 
 function mergeSources(a:ResearchSource[],b:ResearchSource[]){
@@ -115,26 +153,19 @@ export async function reconcileProducerCuvees(db:D1Database,owner:string,produce
   const names=await producerNames(db,owner,producerId);
   const rows=await db.prepare(`SELECT c.*,(SELECT count(*) FROM wines w WHERE w.owner_id=c.owner_id AND w.cuvee_id=c.id) AS wine_count
     FROM cuvees c WHERE c.owner_id=? AND c.producer_id=? ORDER BY c.created_at ASC`).bind(owner,producerId).all<CuveeRow>();
-  const grouped=new Map<string,CuveeRow[]>();
+  const logical:{base:string;rows:CuveeRow[]}[]=[];
   for(const row of rows.results){
-    const signature=cuveeSignature(row.canonical_name,row.appellation,names);if(!signature)continue;
-    const compatible=(grouped.get(signature)??[]).find(candidate=>styleCompatible(candidate.wine_style,row.wine_style)&&appellationCompatible(candidate.appellation,row.appellation));
-    if(compatible){grouped.get(signature)!.push(row)}else grouped.set(`${signature}::${row.id}`,[row]);
+    const base=cuveeSignature(row.canonical_name,row.appellation,names);if(!base)continue;
+    const group=logical.find(item=>item.base===base&&item.rows.every(candidate=>styleCompatible(candidate.wine_style,row.wine_style)&&appellationCompatible(candidate.appellation,row.appellation)));
+    if(group)group.rows.push(row);else logical.push({base,rows:[row]});
   }
-  // Rebuild groups without the unique suffix for compatible rows while keeping incompatible wines separate.
-  const logical=new Map<string,CuveeRow[]>();
-  for(const row of rows.results){
-    const signature=cuveeSignature(row.canonical_name,row.appellation,names);if(!signature)continue;
-    let key=signature;
-    const existing=logical.get(key);
-    if(existing&&!existing.every(candidate=>styleCompatible(candidate.wine_style,row.wine_style)&&appellationCompatible(candidate.appellation,row.appellation)))key=`${signature}::${row.id}`;
-    logical.set(key,[...(logical.get(key)??[]),row]);
-  }
-  for(const group of logical.values()){
-    const signature=cuveeSignature(group[0].canonical_name,group[0].appellation,names);
-    if(group.length===1){if(group[0].signature_key!==signature)await db.prepare('UPDATE cuvees SET signature_key=?,updated_at=? WHERE owner_id=? AND id=?').bind(signature,new Date().toISOString(),owner,group[0].id).run();continue}
-    const ranked=[...group].sort((a,b)=>Number(b.catalog_backed)-Number(a.catalog_backed)||Number(b.wine_count??0)-Number(a.wine_count??0)||String(a.created_at??'').localeCompare(String(b.created_at??'')));
-    const survivor=ranked[0];
+  for(const group of logical){
+    const ranked=[...group.rows].sort((a,b)=>Number(b.catalog_backed)-Number(a.catalog_backed)||Number(Boolean(b.wine_style))-Number(Boolean(a.wine_style))||Number(b.wine_count??0)-Number(a.wine_count??0)||String(a.created_at??'').localeCompare(String(b.created_at??'')));
+    const survivor=ranked[0],signature=cuveeIdentitySignature(survivor.canonical_name,survivor.appellation,survivor.wine_style,names);
+    if(group.rows.length===1){
+      if(survivor.signature_key!==signature)await adoptIdentitySignature(db,owner,survivor,signature,survivor.wine_style);
+      continue;
+    }
     for(const source of ranked.slice(1))await mergeCuveeEntities(db,owner,survivor,source,signature);
     await db.prepare('UPDATE wines SET wine_name=? WHERE owner_id=? AND cuvee_id=?').bind(survivor.canonical_name,owner,survivor.id).run();
   }
@@ -155,14 +186,12 @@ export async function cleanupOrphanCuvee(db:D1Database,owner:string,cuveeId:stri
 export async function resolveExistingCuvee(db:D1Database,owner:string,producerId:string,name:string,appellation?:string|null,wineStyle?:string|null):Promise<CuveeResolution|null>{
   const candidate=name.trim();if(!candidate)return null;
   const names=await producerNames(db,owner,producerId),cleaned=stripKnownProducerPrefix(candidate,names),aliasKey=normalizeCuveeAlias(cleaned);
+  const baseSignature=cuveeSignature(cleaned,appellation,names),identitySignature=cuveeIdentitySignature(cleaned,appellation,wineStyle,names);
   let row=await aliasMatch(db,owner,producerId,aliasKey,appellation),matchType:CuveeResolution['matchType']='alias';
   if(row&&(!styleCompatible(row.wine_style,wineStyle)||!appellationCompatible(row.appellation,appellation)))row=null;
-  if(!row){
-    const signature=cuveeSignature(cleaned,appellation,names);
-    row=(await db.prepare('SELECT * FROM cuvees WHERE owner_id=? AND producer_id=? AND signature_key=? LIMIT 1').bind(owner,producerId,signature).first<CuveeRow>())??null;
-    matchType='structured';
-  }
+  if(!row){row=await signatureMatch(db,owner,producerId,baseSignature,identitySignature,appellation,wineStyle);matchType='structured'}
   if(!row||!styleCompatible(row.wine_style,wineStyle))return null;
+  row=await adoptIdentitySignature(db,owner,row,identitySignature,wineStyle);
   if(normalizeCuveeAlias(row.canonical_name)===aliasKey)matchType='canonical';
   const vintages=await db.prepare('SELECT DISTINCT vintage FROM wines WHERE owner_id=? AND cuvee_id=? AND vintage IS NOT NULL ORDER BY vintage DESC').bind(owner,row.id).all<{vintage:number}>();
   const count=await db.prepare('SELECT count(*) AS count FROM wines WHERE owner_id=? AND cuvee_id=?').bind(owner,row.id).first<{count:number}>();
@@ -171,22 +200,24 @@ export async function resolveExistingCuvee(db:D1Database,owner:string,producerId
 
 export async function ensureCuveeEntity(db:D1Database,owner:string,producerId:string,name:string,appellation?:string|null,wineStyle?:string|null,catalogBacked=false){
   const raw=name.trim();if(!raw)throw new Error('Wine name is required');
-  const names=await producerNames(db,owner,producerId),canonical=stripKnownProducerPrefix(raw,names),aliasKey=normalizeCuveeAlias(canonical),signature=cuveeSignature(canonical,appellation,names),now=new Date().toISOString();
+  const names=await producerNames(db,owner,producerId),canonical=stripKnownProducerPrefix(raw,names),aliasKey=normalizeCuveeAlias(canonical),baseSignature=cuveeSignature(canonical,appellation,names),identitySignature=cuveeIdentitySignature(canonical,appellation,wineStyle,names),now=new Date().toISOString();
   let row=await aliasMatch(db,owner,producerId,aliasKey,appellation);
   if(row&&(!styleCompatible(row.wine_style,wineStyle)||!appellationCompatible(row.appellation,appellation)))row=null;
-  if(!row)row=(await db.prepare('SELECT * FROM cuvees WHERE owner_id=? AND producer_id=? AND signature_key=? LIMIT 1').bind(owner,producerId,signature).first<CuveeRow>())??null;
+  if(!row)row=await signatureMatch(db,owner,producerId,baseSignature,identitySignature,appellation,wineStyle);
   if(row&&!styleCompatible(row.wine_style,wineStyle))row=null;
+  if(row)row=await adoptIdentitySignature(db,owner,row,identitySignature,wineStyle);
   if(!row){
     const id=crypto.randomUUID();
     try{
       await db.prepare(`INSERT INTO cuvees(id,owner_id,producer_id,canonical_name,signature_key,appellation,wine_style,catalog_backed,created_at,updated_at)
-        VALUES(?,?,?,?,?,?,?,?,?,?)`).bind(id,owner,producerId,canonical,signature,appellation??null,wineStyle??null,catalogBacked?1:0,now,now).run();
-      row={id,producer_id:producerId,canonical_name:canonical,signature_key:signature,appellation:appellation??null,wine_style:wineStyle??null,catalog_backed:catalogBacked?1:0,created_at:now};
+        VALUES(?,?,?,?,?,?,?,?,?,?)`).bind(id,owner,producerId,canonical,identitySignature,appellation??null,wineStyle??null,catalogBacked?1:0,now,now).run();
+      row={id,producer_id:producerId,canonical_name:canonical,signature_key:identitySignature,appellation:appellation??null,wine_style:wineStyle??null,catalog_backed:catalogBacked?1:0,created_at:now};
     }catch{
-      row=(await db.prepare('SELECT * FROM cuvees WHERE owner_id=? AND producer_id=? AND signature_key=? LIMIT 1').bind(owner,producerId,signature).first<CuveeRow>())??null;
+      const exact=await db.prepare('SELECT * FROM cuvees WHERE owner_id=? AND producer_id=? AND signature_key=? LIMIT 1').bind(owner,producerId,identitySignature).first<CuveeRow>();
+      row=exact&&styleCompatible(exact.wine_style,wineStyle)&&appellationCompatible(exact.appellation,appellation)?exact:null;
     }
   }
-  if(!row)throw new Error('Could not resolve cuvee entity');
+  if(!row)throw new Error('Could not resolve a style-compatible cuvee entity');
   if(catalogBacked&&!row.catalog_backed){
     await db.prepare('UPDATE cuvees SET canonical_name=?,appellation=coalesce(?,appellation),wine_style=coalesce(?,wine_style),catalog_backed=1,updated_at=? WHERE owner_id=? AND id=?')
       .bind(canonical,appellation??null,wineStyle??null,now,owner,row.id).run();
