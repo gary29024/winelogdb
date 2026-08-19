@@ -4,6 +4,7 @@ import { requireSession } from '../src/lib/auth/session';
 import { ensureAllProducerLinks,linkWineProducer,seedProducerCountryFromWine } from '../src/lib/producers/entities';
 import { cleanupOrphanCuvee,ensureAllCuveeLinksForProducer,ensureMissingCuveeLinks,linkWineCuvee,reconcileProducerCuvees,resolveExistingCuvee } from '../src/lib/cuvees/entities';
 import { ensureProducerCatalogCuveesSeeded } from '../src/lib/cuvees/catalogSeed';
+import { changeCuveeCatalogLink,changeCuveeCatalogLinkSchema,createCuveeCatalogLink,createCuveeCatalogLinkSchema,getProducerCuveeCatalogState,unlinkCuveeCatalogLink,unlinkCuveeCatalogLinkSchema } from '../src/lib/cuvees/catalogLinks';
 import { listJournalPage } from '../src/lib/journal/list';
 import { applyBatchExperienceUpdate,batchExperienceSchema } from '../src/lib/journal/batchExperience';
 
@@ -101,10 +102,47 @@ app.get('/api/wines/:id',async c=>{
 // Keep the existing producer resolver out of the dynamic producer-detail hook below.
 app.get('/api/producers/resolve',c=>entryApp.fetch(c.req.raw,c.env,c.executionCtx));
 
+app.post('/api/producers/:id/cuvee-links',async c=>{
+  cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
+  const parsed=createCuveeCatalogLinkSchema.safeParse(await c.req.json().catch(()=>null));
+  if(!parsed.success)return c.json({error:'Invalid cuvée catalog link',issues:parsed.error.issues},400);
+  try{return c.json(await createCuveeCatalogLink(c.env.DB,owner,c.req.param('id'),parsed.data.sourceCuveeId,parsed.data.catalogCuveeId),201)}
+  catch(e){const message=(e as Error).message||'Could not link cuvée to catalog';return c.json({error:message},message.includes('not found')?404:400)}
+});
+
+app.put('/api/producers/:id/cuvee-links/:linkId',async c=>{
+  cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
+  const parsed=changeCuveeCatalogLinkSchema.safeParse(await c.req.json().catch(()=>null));
+  if(!parsed.success)return c.json({error:'Invalid cuvée catalog link change',issues:parsed.error.issues},400);
+  try{return c.json(await changeCuveeCatalogLink(c.env.DB,owner,c.req.param('id'),c.req.param('linkId'),parsed.data.catalogCuveeId))}
+  catch(e){const message=(e as Error).message||'Could not change cuvée catalog link';return c.json({error:message},message.includes('not found')?404:400)}
+});
+
+app.post('/api/producers/:id/cuvee-links/:linkId/unlink',async c=>{
+  cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
+  const parsed=unlinkCuveeCatalogLinkSchema.safeParse(await c.req.json().catch(()=>null));
+  if(!parsed.success)return c.json({error:'Invalid cuvée catalog unlink',issues:parsed.error.issues},400);
+  try{return c.json(await unlinkCuveeCatalogLink(c.env.DB,owner,c.req.param('id'),c.req.param('linkId')))}
+  catch(e){const message=(e as Error).message||'Could not unlink cuvée from catalog';return c.json({error:message},message.includes('not found')?404:400)}
+});
+
 app.get('/api/producers/:id',async c=>{
   let owner:string;try{owner=await user(c)}catch{return entryApp.fetch(c.req.raw,c.env,c.executionCtx)}
-  try{await ensureAllProducerLinks(c.env.DB,owner);await ensureAllCuveeLinksForProducer(c.env.DB,owner,c.req.param('id'))}catch{}
-  return entryApp.fetch(c.req.raw,c.env,c.executionCtx);
+  const producerId=c.req.param('id');
+  try{await ensureAllProducerLinks(c.env.DB,owner);await ensureAllCuveeLinksForProducer(c.env.DB,owner,producerId)}catch{}
+  const response=await entryApp.fetch(c.req.raw,c.env,c.executionCtx);
+  if(!response.ok)return response;
+  try{
+    const [body,state,wines]=await Promise.all([
+      response.clone().json() as Promise<Record<string,unknown>&{tastedWines?:Array<Record<string,unknown>&{id?:unknown}>}>,
+      getProducerCuveeCatalogState(c.env.DB,owner,producerId),
+      c.env.DB.prepare('SELECT id,cuvee_id FROM wines WHERE owner_id=? AND producer_id=?').bind(owner,producerId).all<{id:string;cuvee_id:string|null}>()
+    ]);
+    const cuveeByWine=new Map(wines.results.map(wine=>[wine.id,wine.cuvee_id] as const));
+    const tastedWines=(body.tastedWines??[]).map(wine=>{const wineId=String(wine.id??'');return {...wine,cuveeId:cuveeByWine.get(wineId)??null,catalogCuveeId:state.wineCatalogTargets[wineId]??null}});
+    const headers=new Headers(response.headers);headers.delete('Content-Length');headers.set('Content-Type','application/json; charset=utf-8');
+    return new Response(JSON.stringify({...body,tastedWines,catalogCuvees:state.catalogCuvees,cuveeCatalogLinks:state.cuveeCatalogLinks}),{status:response.status,statusText:response.statusText,headers});
+  }catch(e){console.error(JSON.stringify({event:'producer-cuvee-catalog-state-failed',producerId,error:(e as Error).message}));return response}
 });
 
 app.post('/api/producers/:id/research',async c=>{
