@@ -1,4 +1,5 @@
 import { createObjectKey } from '../r2/keys';
+import { reconcileProducerCuvees,syncProducerCatalogCuvees } from '../cuvees/entities';
 import { extractContactGrounding,normalizeProducerEmail,normalizeProducerPhone,safeInstagramUrl } from './research';
 import { mapProducerRow } from './entities';
 
@@ -119,6 +120,11 @@ export async function processProducerResearchJob(env:Env,owner:string,producerId
     await updateRun(env.DB,owner,requestId,'saving',1,`Saving producer profile, practices, contacts and ${range.length} catalogue wine${range.length===1?'':'s'}`);
     await env.DB.prepare('UPDATE producers SET home_country=?,home_region=?,home_locality=?,official_website_url=?,instagram_url=?,contact_email=?,contact_phone=?,contact_sources_json=?,profile=?,winemaking_practices=?,catalog_json=?,sources_json=?,research_model=?,researched_at=?,updated_at=? WHERE owner_id=? AND id=?')
       .bind(profile.homeCountry?.trim()||null,profile.homeRegion?.trim()||null,profile.homeLocality?.trim()||null,official,instagram,email,phone,JSON.stringify(contactSources),profile.profile.trim(),profile.winemakingPractices.trim(),JSON.stringify(range),JSON.stringify(sources),model,stamp,stamp,owner,producerId).run();
+    try{
+      await updateRun(env.DB,owner,requestId,'saving',1,'Finalizing producer catalogue identities');
+      await syncProducerCatalogCuvees(env.DB,owner,producerId);
+      await reconcileProducerCuvees(env.DB,owner,producerId);
+    }catch(e){log('warn',{requestId,producerId,stage:'catalog_identity_sync_failed',error:(e as Error).message})}
     let heroStored=false;if(official){await updateRun(env.DB,owner,requestId,'image',1,'Looking for a domaine image on the verified official website');try{const hero=await heroImage(env,owner,official);if(hero){const old=row.hero_image_object_key?String(row.hero_image_object_key):null;await env.DB.prepare('UPDATE producers SET hero_image_object_key=?,hero_image_source_url=?,updated_at=? WHERE owner_id=? AND id=?').bind(hero.objectKey,hero.sourceUrl,now(),owner,producerId).run();heroStored=true;if(old&&old!==hero.objectKey)await env.WINE_IMAGES.delete(old).catch(()=>undefined)}}catch(e){log('warn',{requestId,producerId,stage:'hero_skipped',error:(e as Error).message})}}
     await updateRun(env.DB,owner,requestId,'complete',1,`Research complete: profile, producer practices and ${range.length} catalogue wine${range.length===1?'':'s'}${heroStored?', domaine image saved':''}`,'complete');
     log('log',{requestId,producerId,stage:'complete',durationMs:Date.now()-started,profileModel:profilePhase.model,catalogModel:catalogPhase.model,catalogCount:range.length});
