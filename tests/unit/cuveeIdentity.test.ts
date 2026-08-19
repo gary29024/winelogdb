@@ -1,5 +1,5 @@
 import { describe,expect,it } from 'vitest';
-import { cuveeSignature,normalizeCuveeAlias,stripKnownProducerPrefix } from '../../src/lib/cuvees/entities';
+import { cuveeIdentitySignature,cuveeSignature,cuveeStyleFamily,normalizeCuveeAlias,stripKnownProducerPrefix } from '../../src/lib/cuvees/entities';
 import { buildResearchTargets } from '../../src/lib/research/cache';
 
 describe('cuvee identity',()=>{
@@ -25,6 +25,21 @@ describe('cuvee identity',()=>{
     expect(stripKnownProducerPrefix('Domaine Dujac Clos de la Roche',['Domaine Dujac','Dujac'])).toBe('Clos de la Roche');
     expect(stripKnownProducerPrefix('Dujac Clos de la Roche',['Domaine Dujac','Dujac'])).toBe('Clos de la Roche');
     expect(stripKnownProducerPrefix('Clos de la Roche',['Domaine Dujac','Dujac'])).toBe('Clos de la Roche');
+  });
+
+  it('keeps same-name red and white releases as separate stable identities',()=>{
+    const red=cuveeIdentitySignature('Plexus','Barossa','Red');
+    const white=cuveeIdentitySignature('Plexus','Barossa','White');
+    expect(red).not.toBe(white);
+    expect(red).toContain('::style:red');
+    expect(white).toContain('::style:white');
+  });
+
+  it('normalizes common style wording before using it as an identity discriminator',()=>{
+    expect(cuveeStyleFamily('Still red wine')).toBe('red');
+    expect(cuveeStyleFamily('Rouge')).toBe('red');
+    expect(cuveeStyleFamily('White wine')).toBe('white');
+    expect(cuveeStyleFamily('Blanc')).toBe('white');
   });
 
   it('keeps Deep Search keys stable when the display spelling changes for one cuvee ID',()=>{
