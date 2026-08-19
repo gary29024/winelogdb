@@ -1,14 +1,18 @@
 import { Hono } from 'hono';
 import app from './cuveeEntry';
 import { requireSession } from '../src/lib/auth/session';
-import { createQueuedProducerResearchRun,processProducerResearchJob } from '../src/lib/producers/backgroundResearch';
+import { createQueuedProducerResearchRun } from '../src/lib/producers/backgroundResearch';
+import { pollProducerBatchResearch,startProducerBatchResearch } from '../src/lib/producers/batchResearch';
 import { getProducerResearchRun } from '../src/lib/producers/research';
-import { createWineResearchRun,getLatestWineResearchRun,getWineResearchRun,processWineResearchJob,updateWineResearchRun } from '../src/lib/research/backgroundJobs';
+import { createWineResearchRun,getLatestWineResearchRun,getWineResearchRun,updateWineResearchRun } from '../src/lib/research/backgroundJobs';
+import { pollWineBatchResearch,startWineBatchResearch } from '../src/lib/research/batchWineResearch';
 import { attachConfirmedItem,createBatchSession,getBatchImage,getBatchSession,listBatchSessions,markSessionSubmitted,processBatchCleanupJob,processBatchPollJob,processBatchSubmitJob,rejectBatchItem,removeBatchSession,stageBatchItem,type BatchRecognitionJob } from './batchRecognition';
 
 type ProducerJob={kind:'producer';owner:string;producerId:string;requestId:string};
+type ProducerBatchPollJob={kind:'producer_batch_poll';owner:string;producerId:string;requestId:string;jobId:string;pollCount:number};
 type WineJob={kind:'wine';owner:string;wineId:string;requestId:string;refresh:'none'|'vintage'|'all'};
-type ResearchJob=ProducerJob|WineJob|BatchRecognitionJob;
+type WineBatchPollJob={kind:'wine_batch_poll';owner:string;wineId:string;requestId:string;jobId:string;pollCount:number};
+type ResearchJob=ProducerJob|ProducerBatchPollJob|WineJob|WineBatchPollJob|BatchRecognitionJob;
 type Bindings={DB:D1Database;WINE_IMAGES:R2Bucket;ASSETS:Fetcher;GEMINI_API_KEY:string;AUTH_SECRET:string;APP_PASSWORD:string;APP_URL:string;MAX_FILE_BYTES?:string;MAX_BATCH_FILES?:string;RESEARCH_QUEUE:Queue<ResearchJob>};
 type AppEnv={Bindings:Bindings};
 const router=new Hono<AppEnv>();
@@ -80,8 +84,10 @@ router.all('*',c=>app.fetch(c.req.raw,c.env,c.executionCtx));
 async function consume(batch:MessageBatch<ResearchJob>,env:Bindings){
   for(const message of batch.messages){const job=message.body;try{
     console.log(JSON.stringify({event:'research_queue',stage:'start',kind:job.kind,...('requestId' in job?{requestId:job.requestId}:{sessionId:job.sessionId})}));
-    if(job.kind==='producer'){const result=await processProducerResearchJob(env,job.owner,job.producerId,job.requestId);console.log(JSON.stringify({event:'research_queue',stage:result.ok?'complete':'failed',kind:job.kind,requestId:job.requestId,...(!result.ok?{error:result.error}:{})}));}
-    else if(job.kind==='wine'){const result=await processWineResearchJob(env,job.owner,job.wineId,job.requestId,job.refresh);console.log(JSON.stringify({event:'research_queue',stage:result.ok?'complete':'failed',kind:job.kind,requestId:job.requestId,...(!result.ok?{error:result.error}:{})}));}
+    if(job.kind==='producer'){const result=await startProducerBatchResearch(env,job.owner,job.producerId,job.requestId);console.log(JSON.stringify({event:'research_queue',stage:result.ok?'batch_submitted':'failed',kind:job.kind,requestId:job.requestId,...(!result.ok?{error:result.error}:{})}));}
+    else if(job.kind==='producer_batch_poll')await pollProducerBatchResearch(env,job.owner,job.producerId,job.requestId,job.jobId,job.pollCount);
+    else if(job.kind==='wine'){const result=await startWineBatchResearch(env,job.owner,job.wineId,job.requestId,job.refresh);console.log(JSON.stringify({event:'research_queue',stage:result.ok?(result.cached?'cache_complete':'batch_submitted'):'failed',kind:job.kind,requestId:job.requestId,...(!result.ok?{error:result.error}:{})}));}
+    else if(job.kind==='wine_batch_poll')await pollWineBatchResearch(env,job.owner,job.wineId,job.requestId,job.jobId,job.pollCount);
     else if(job.kind==='recognition_batch_submit')await processBatchSubmitJob(env,job.owner,job.sessionId);
     else if(job.kind==='recognition_batch_poll')await processBatchPollJob(env,job.owner,job.sessionId,job.jobId,job.pollCount);
     else if(job.kind==='recognition_batch_cleanup')await processBatchCleanupJob(env,job.owner,job.sessionId);
