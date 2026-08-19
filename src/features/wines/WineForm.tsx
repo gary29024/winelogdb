@@ -22,7 +22,7 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel}:WineF
   const nav=useNavigate(),[busy,setBusy]=useState(false),[error,setError]=useState('');
   const [producer,setProducer]=useState(String(initial?.producer??'')),[producerResolution,setProducerResolution]=useState<ProducerResolution|null>(null),[resolvingProducer,setResolvingProducer]=useState(false);
   const [wineName,setWineName]=useState(String(initial?.wineName??'')),[appellation,setAppellation]=useState(String(initial?.appellation??'')),[wineStyle,setWineStyle]=useState(String(initial?.wineStyle??''));
-  const [cuveeResolution,setCuveeResolution]=useState<CuveeResolution|null>(null),[resolvingCuvee,setResolvingCuvee]=useState(false);
+  const [cuveeResolution,setCuveeResolution]=useState<CuveeResolution|null>(null),[resolvingCuvee,setResolvingCuvee]=useState(false),[preferCuveePrimaryName,setPreferCuveePrimaryName]=useState(false);
   const matched=producerResolution?.matched?producerResolution.producer:undefined;
 
   useEffect(()=>{
@@ -42,6 +42,10 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel}:WineF
     return()=>{cancelled=true;clearTimeout(timer)};
   },[matched?.id,wineName,appellation,wineStyle]);
 
+  const matchedCuvee=cuveeResolution?.matched?cuveeResolution.cuvee:undefined;
+  const canPreferPrimary=Boolean(id&&matchedCuvee&&wineName.trim()&&wineName.trim()!==matchedCuvee.canonicalName);
+  useEffect(()=>{if(!canPreferPrimary)setPreferCuveePrimaryName(false)},[canPreferPrimary]);
+
   async function submit(e:FormEvent<HTMLFormElement>){
     e.preventDefault();setBusy(true);setError('');const fd=new FormData(e.currentTarget);
     const producer=String(fd.get('producer')||'').trim(),wineName=String(fd.get('wineName')||'').trim();
@@ -58,17 +62,17 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel}:WineF
       price:fd.get('price')?Number(fd.get('price')):null,currency:currency||null,
       tags:[...new Set(String(fd.get('tags')||'').split(',').map(x=>x.trim()).filter(Boolean))],recognitionStatus:'complete',recognitionConfidence:initial?.recognitionConfidence??null
     };
-    try{const result=onSave?await onSave(input):await saveWine(input,id,id?[]:photos);const savedId=id??('id' in result?result.id:undefined);if(!savedId)throw new Error('Save response did not include a wine ID');if(onSaved)onSaved(savedId);else nav(`/wines/${savedId}`)}catch(e){setError((e as Error).message);setBusy(false)}
+    try{const result=onSave?await onSave(input):await saveWine(input,id,id?[]:photos,{preferCuveePrimaryName:canPreferPrimary&&preferCuveePrimaryName});const savedId=id??('id' in result?result.id:undefined);if(!savedId)throw new Error('Save response did not include a wine ID');if(onSaved)onSaved(savedId);else nav(`/wines/${savedId}`)}catch(e){setError((e as Error).message);setBusy(false)}
   }
   const field=(name:string,label:string,type='text',step?:string,required=false)=><label>{label}<input name={name} type={type} step={step} required={required} defaultValue={String(initial?.[name as keyof WineInput]??'')}/></label>;
-  const matchedCuvee=cuveeResolution?.matched?cuveeResolution.cuvee:undefined,hasGps=initial?.latitude!=null&&initial?.longitude!=null,hasEstimatedPlace=hasGps&&Boolean(initial?.locationName?.trim());
+  const hasGps=initial?.latitude!=null&&initial?.longitude!=null,hasEstimatedPlace=hasGps&&Boolean(initial?.locationName?.trim());
   return <form className="wine-form" onSubmit={submit}>
     <div className="form-grid">
       <div className="producer-field"><label>Producer *<input name="producer" type="text" required value={producer} onChange={e=>setProducer(e.target.value)}/></label>
        {producer.trim()&&<div className={`producer-resolution ${matched?'matched':'new'}`} aria-live="polite">{resolvingProducer?<span>Checking producer library…</span>:matched?<><strong>✓ Existing producer profile</strong><span>{matched.matchType==='alias'?`Matched via known alias “${matched.matchedName}” → `:''}{matched.canonicalName}</span><small>{matched.tastedCount} tasted · {matched.catalogCount} wines in researched range{matched.researchedAt?' · producer research available':''}</small><Link to={`/producers/${matched.id}`}>View producer profile</Link></>:<><strong>○ New producer</strong><span>No existing producer identity matches this name. A new profile will be created when the wine is saved.</span></>}</div>}
       </div>
       <div className="cuvee-field"><label>Wine name *<input name="wineName" type="text" required value={wineName} onChange={e=>setWineName(e.target.value)}/></label>
-       {matched&&wineName.trim()&&<div className={`producer-resolution cuvee-resolution ${matchedCuvee?'matched':'new'}`} aria-live="polite">{resolvingCuvee?<span>Checking this producer’s cuvées…</span>:matchedCuvee?<><strong>✓ Existing cuvée</strong><span>{wineName.trim()===matchedCuvee.canonicalName?matchedCuvee.canonicalName:`${wineName.trim()} → ${matchedCuvee.canonicalName}`}</span><small>{matchedCuvee.matchType==='structured'?'Matched by stable producer + appellation/cuvée identity':matchedCuvee.matchType==='alias'?'Matched via a known cuvée name':'Canonical name already matches'}{matchedCuvee.catalogBacked?' · producer catalogue-backed':''}{matchedCuvee.vintages.length?` · tasted vintages ${matchedCuvee.vintages.join(', ')}`:''}</small></>:<><strong>○ New cuvée</strong><span>No existing cuvée identity for this producer matches this wine. WineLog will create one when saved.</span></>}</div>}
+       {matched&&wineName.trim()&&<div className={`producer-resolution cuvee-resolution ${matchedCuvee?'matched':'new'}`} aria-live="polite">{resolvingCuvee?<span>Checking this producer’s cuvées…</span>:matchedCuvee?<><strong>✓ Existing cuvée</strong><span>{wineName.trim()===matchedCuvee.canonicalName?matchedCuvee.canonicalName:`${wineName.trim()} → ${matchedCuvee.canonicalName}`}</span><small>{matchedCuvee.matchType==='structured'?'Matched by stable producer + appellation/cuvée identity':matchedCuvee.matchType==='alias'?'Matched via a known cuvée name':'Same canonical cuvée identity'}{matchedCuvee.catalogBacked?' · producer catalogue-backed':''}{matchedCuvee.vintages.length?` · tasted vintages ${matchedCuvee.vintages.join(', ')}`:''}</small>{canPreferPrimary&&<label className="cuvee-primary-choice"><input type="checkbox" checked={preferCuveePrimaryName} onChange={e=>setPreferCuveePrimaryName(e.target.checked)}/><span>Use “{wineName.trim()}” as the primary cuvée name when saving</span><small>The cuvée ID stays the same; the old wording remains a searchable alias for every vintage.</small></label>}</>:<><strong>○ New cuvée</strong><span>No existing cuvée identity for this producer matches this wine. WineLog will create one when saved.</span></>}</div>}
       </div>
       {field('vintage','Vintage','number')}{field('country','Country')}{field('region','Region')}
       <label>Appellation<input name="appellation" value={appellation} onChange={e=>setAppellation(e.target.value)}/></label>
