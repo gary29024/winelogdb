@@ -4,6 +4,7 @@ import { parseStructuredJsonText } from '../producers/structuredJson';
 import { assembleDeepSearch,buildResearchTargets,loadResearchCache,scopeIsComplete,seedResearchCache,splitDeepSearchResult,upsertResearchCache,type CachedResearch,type ResearchScope,type ResearchSource,type ResearchTarget } from './cache';
 import { createResearchBatchJob,finishResearchBatchJob,getResearchBatchJob,touchResearchBatchJob } from './batchJobStore';
 import { createGeminiBatch,fetchGeminiBatch,inlineFinishReason,inlineGroundingMetadata,inlineResponseText,isTerminalBatchState,responsesByKey,type GeminiBatchRequest,type GroundingMetadata } from './geminiBatch';
+import { researchBatchErrorPollDelay,researchBatchPollDelay } from './batchRetryPolicy';
 import { updateWineResearchRun } from './backgroundJobs';
 
 type Env={DB:D1Database;GEMINI_API_KEY:string;RESEARCH_QUEUE:Queue<unknown>};
@@ -85,7 +86,7 @@ async function finalize(env:Env,owner:string,wineId:string,wine:WineRow,targets:
 async function submitAttempt(env:Env,owner:string,wineId:string,requestId:string,attempt:number,scopes:ResearchScope[]){
   const wine=await loadWine(env.DB,owner,wineId);if(!wine)throw new Error('Wine not found');const targets=researchTargets(wine),cache=await loadResearchCache(env.DB,owner,targets),entry=buildRequest(wine,scopes,cache),model=attempt===1?PRIMARY_MODEL:FALLBACK_MODEL,googleName=await createGeminiBatch(env.GEMINI_API_KEY,model,`winelog-wine-${requestId}-${attempt}`,[entry]);
   const jobId=await createResearchBatchJob(env.DB,{owner,requestId,targetKind:'wine',targetId:wineId,googleBatchName:googleName,model,attempt,keys:scopes});await updateWineResearchRun(env.DB,owner,requestId,'researching',attempt===1?`Submitted ${scopes.length} missing Deep Search scope${scopes.length===1?'':'s'} to Gemini Batch`:`Retrying only ${scopes.length} incomplete scope${scopes.length===1?'':'s'} with the fallback Gemini Batch model`,'running',attempt);
-  await env.RESEARCH_QUEUE.send({kind:'wine_batch_poll',owner,wineId,requestId,jobId,pollCount:0},{delaySeconds:15});log('log',{requestId,wineId,stage:'batch_submitted',attempt,model,scopes,googleName});
+  await env.RESEARCH_QUEUE.send({kind:'wine_batch_poll',owner,wineId,requestId,jobId,pollCount:0},{delaySeconds:researchBatchPollDelay(0)});log('log',{requestId,wineId,stage:'batch_submitted',attempt,model,scopes,googleName});
 }
 
 export async function startWineBatchResearch(env:Env,owner:string,wineId:string,requestId:string,refresh:'none'|'vintage'|'all'){
@@ -96,14 +97,22 @@ export async function startWineBatchResearch(env:Env,owner:string,wineId:string,
 }
 
 async function retryOrFail(env:Env,owner:string,wineId:string,requestId:string,attempt:number,failed:ResearchScope[],errors:string[]){
-  if(attempt===1&&failed.length){await submitAttempt(env,owner,wineId,requestId,2,failed);return}
+  if(attempt===1&&failed.length){
+    try{await submitAttempt(env,owner,wineId,requestId,2,failed);return}
+    catch(e){
+      const fallbackError=(e as Error).message||'Fallback Gemini Batch submission failed';
+      await updateWineResearchRun(env.DB,owner,requestId,'failed',`Deep Search saved any successful scopes, but the retry for ${failed.map(scope=>scopeNames[scope]).join(', ')} could not be submitted: ${fallbackError}`,'failed',2);
+      log('error',{requestId,wineId,stage:'fallback_submit_failed',attempt:2,failed,error:fallbackError});
+      return;
+    }
+  }
   await updateWineResearchRun(env.DB,owner,requestId,'failed',`Deep Search saved any successful scopes but could not complete ${failed.map(scope=>scopeNames[scope]).join(', ')}: ${errors.join('; ')}`,'failed',attempt);
 }
 
 export async function pollWineBatchResearch(env:Env,owner:string,wineId:string,requestId:string,jobId:string,pollCount:number){
   const job=await getResearchBatchJob(env.DB,owner,jobId);if(!job||job.status!=='running')return;const scopes=job.keys as ResearchScope[],fetched=await fetchGeminiBatch(env.GEMINI_API_KEY,job.googleBatchName);
-  if(!fetched.ok){if(fetched.status===429||fetched.status>=500){await touchResearchBatchJob(env.DB,owner,jobId);await env.RESEARCH_QUEUE.send({kind:'wine_batch_poll',owner,wineId,requestId,jobId,pollCount:pollCount+1},{delaySeconds:Math.min(300,30*Math.max(1,pollCount+1))});return}await finishResearchBatchJob(env.DB,owner,jobId,'failed',fetched.error);await retryOrFail(env,owner,wineId,requestId,job.attempt,scopes,[fetched.error]);return}
-  if(!isTerminalBatchState(fetched.state)){await touchResearchBatchJob(env.DB,owner,jobId);await updateWineResearchRun(env.DB,owner,requestId,'researching',`Gemini Batch is processing ${scopes.length} Deep Search scope${scopes.length===1?'':'s'}`,'running',job.attempt);await env.RESEARCH_QUEUE.send({kind:'wine_batch_poll',owner,wineId,requestId,jobId,pollCount:pollCount+1},{delaySeconds:Math.min(300,15*Math.pow(2,Math.min(pollCount,4)))});return}
+  if(!fetched.ok){if(fetched.status===429||fetched.status>=500){await touchResearchBatchJob(env.DB,owner,jobId);await env.RESEARCH_QUEUE.send({kind:'wine_batch_poll',owner,wineId,requestId,jobId,pollCount:pollCount+1},{delaySeconds:researchBatchErrorPollDelay(pollCount)});return}await finishResearchBatchJob(env.DB,owner,jobId,'failed',fetched.error);await retryOrFail(env,owner,wineId,requestId,job.attempt,scopes,[fetched.error]);return}
+  if(!isTerminalBatchState(fetched.state)){await touchResearchBatchJob(env.DB,owner,jobId);await updateWineResearchRun(env.DB,owner,requestId,'researching',`Gemini Batch is processing ${scopes.length} Deep Search scope${scopes.length===1?'':'s'}`,'running',job.attempt);await env.RESEARCH_QUEUE.send({kind:'wine_batch_poll',owner,wineId,requestId,jobId,pollCount:pollCount+1},{delaySeconds:researchBatchPollDelay(pollCount)});return}
   if(fetched.state!=='JOB_STATE_SUCCEEDED'){const error=String((fetched.payload.error as {message?:unknown}|undefined)?.message||`Gemini batch ended with ${fetched.state}`);await finishResearchBatchJob(env.DB,owner,jobId,'failed',error);await retryOrFail(env,owner,wineId,requestId,job.attempt,scopes,[error]);return}
   await updateWineResearchRun(env.DB,owner,requestId,'saving','Saving completed Gemini Batch Deep Search scopes','running',job.attempt);
   const inline=responsesByKey(fetched.responses).get(BATCH_KEY)??fetched.responses[0];if(!inline?.response){const error=inline?.error?.message||'Gemini returned no wine research result';await finishResearchBatchJob(env.DB,owner,jobId,'failed',error);await retryOrFail(env,owner,wineId,requestId,job.attempt,scopes,[error]);return}
