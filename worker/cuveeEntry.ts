@@ -3,6 +3,7 @@ import entryApp from './entry';
 import { requireSession } from '../src/lib/auth/session';
 import { ensureAllProducerLinks,linkWineProducer,seedProducerCountryFromWine } from '../src/lib/producers/entities';
 import { cleanupOrphanCuvee,ensureAllCuveeLinksForProducer,ensureMissingCuveeLinks,linkWineCuvee,reconcileProducerCuvees,resolveExistingCuvee } from '../src/lib/cuvees/entities';
+import { setCuveePrimaryName } from '../src/lib/cuvees/primaryName';
 import { ensureProducerCatalogCuveesSeeded } from '../src/lib/cuvees/catalogSeed';
 import { changeCuveeCatalogLink,changeCuveeCatalogLinkSchema,createCuveeCatalogLink,createCuveeCatalogLinkSchema,getProducerCuveeCatalogState,unlinkCuveeCatalogLink,unlinkCuveeCatalogLinkSchema } from '../src/lib/cuvees/catalogLinks';
 import { listJournalPage } from '../src/lib/journal/list';
@@ -177,14 +178,26 @@ app.post('/api/wines',async c=>{
 app.put('/api/wines/:id',async c=>{
   let owner:string;try{owner=await user(c)}catch{return entryApp.fetch(c.req.raw,c.env,c.executionCtx)}
   const id=c.req.param('id'),before=await c.env.DB.prepare('SELECT wine_name FROM wines WHERE owner_id=? AND id=?').bind(owner,id).first<{wine_name:string}>().catch(()=>null);
-  let requestedName:string|null=null;
-  try{const body=await c.req.raw.clone().json() as {wineName?:unknown};if(typeof body.wineName==='string'&&body.wineName.trim())requestedName=body.wineName.trim()}catch{}
+  let requestedName:string|null=null,preferCuveePrimaryName=false;
+  try{
+    const body=await c.req.raw.clone().json() as {wineName?:unknown;preferCuveePrimaryName?:unknown};
+    if(typeof body.wineName==='string'&&body.wineName.trim())requestedName=body.wineName.trim();
+    preferCuveePrimaryName=body.preferCuveePrimaryName===true;
+  }catch{}
   const response=await entryApp.fetch(c.req.raw,c.env,c.executionCtx);
   if(response.ok){
     try{
       if(requestedName&&before?.wine_name!==requestedName){await c.env.DB.prepare('UPDATE wines SET recognized_wine_name=?,cuvee_id=NULL WHERE owner_id=? AND id=?').bind(requestedName,owner,id).run()}
       await ensureWineIdentity(c.env.DB,owner,id);
-    }catch{}
+      if(requestedName&&preferCuveePrimaryName){
+        const linked=await c.env.DB.prepare('SELECT cuvee_id FROM wines WHERE owner_id=? AND id=?').bind(owner,id).first<{cuvee_id:string|null}>();
+        if(!linked?.cuvee_id)throw new Error('Wine has no cuvée identity to rename');
+        await setCuveePrimaryName(c.env.DB,owner,linked.cuvee_id,requestedName);
+      }
+    }catch(e){
+      console.error(JSON.stringify({event:'wine-cuvee-primary-name-failed',wineId:id,error:(e as Error).message}));
+      if(preferCuveePrimaryName)return c.json({error:(e as Error).message||'Could not update primary cuvée name'},400);
+    }
   }
   return response;
 });
