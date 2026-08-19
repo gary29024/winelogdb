@@ -1,5 +1,5 @@
 import { describe,expect,it } from 'vitest';
-import { chunkItemsByPreparedBytes } from '../../worker/batchRecognition';
+import { chunkItemsByPreparedBytes,isBatchUploadComplete } from '../../worker/batchRecognition';
 import { buildRecognitionPrompt } from '../../src/lib/recognition/geminiRequest';
 
 describe('Batch Scan payload splitting',()=>{
@@ -10,6 +10,11 @@ describe('Batch Scan payload splitting',()=>{
   it('does not split one wine even when it alone exceeds the target',()=>{
     const items=[{id:'a',preparedBytes:12}];
     expect(chunkItemsByPreparedBytes(items,10)).toEqual([items]);
+  });
+  it('does not submit a partially uploaded expected batch',()=>{
+    expect(isBatchUploadComplete(12,19)).toBe(false);
+    expect(isBatchUploadComplete(19,19)).toBe(true);
+    expect(isBatchUploadComplete(2,0)).toBe(true);
   });
 });
 

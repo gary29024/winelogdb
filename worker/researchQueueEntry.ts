@@ -4,7 +4,7 @@ import { requireSession } from '../src/lib/auth/session';
 import { createQueuedProducerResearchRun,processProducerResearchJob } from '../src/lib/producers/backgroundResearch';
 import { getProducerResearchRun } from '../src/lib/producers/research';
 import { createWineResearchRun,getLatestWineResearchRun,getWineResearchRun,processWineResearchJob,updateWineResearchRun } from '../src/lib/research/backgroundJobs';
-import { attachConfirmedItem,createBatchSession,getBatchImage,getBatchSession,listBatchSessions,markSessionSubmitted,processBatchCleanupJob,processBatchPollJob,processBatchSubmitJob,rejectBatchItem,stageBatchItem,type BatchRecognitionJob } from './batchRecognition';
+import { attachConfirmedItem,createBatchSession,getBatchImage,getBatchSession,listBatchSessions,markSessionSubmitted,processBatchCleanupJob,processBatchPollJob,processBatchSubmitJob,rejectBatchItem,removeBatchSession,stageBatchItem,type BatchRecognitionJob } from './batchRecognition';
 
 type ProducerJob={kind:'producer';owner:string;producerId:string;requestId:string};
 type WineJob={kind:'wine';owner:string;wineId:string;requestId:string;refresh:'none'|'vintage'|'all'};
@@ -47,8 +47,9 @@ router.get('/api/wines/:id/deep-search-status',async c=>{
 });
 
 router.get('/api/batch-recognition/sessions',async c=>{cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}return c.json(await listBatchSessions(c.env.DB,owner))});
-router.post('/api/batch-recognition/sessions',async c=>{cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}const session=await createBatchSession(c.env.DB,owner);c.env.RESEARCH_QUEUE.send({kind:'recognition_batch_cleanup',owner,sessionId:session.id},{delaySeconds:86400}).catch(e=>console.error(JSON.stringify({event:'batch-recognition-cleanup-schedule-failed',sessionId:session.id,error:(e as Error).message})));return c.json(session,201)});
+router.post('/api/batch-recognition/sessions',async c=>{cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}const body=await c.req.json().catch(()=>({})) as {expectedItems?:unknown},expectedItems=Math.floor(Number(body.expectedItems)||0);if(expectedItems<2||expectedItems>500)return c.json({error:'Batch Scan requires 2–500 wines'},400);const session=await createBatchSession(c.env.DB,owner,expectedItems);c.env.RESEARCH_QUEUE.send({kind:'recognition_batch_cleanup',owner,sessionId:session.id},{delaySeconds:86400}).catch(e=>console.error(JSON.stringify({event:'batch-recognition-cleanup-schedule-failed',sessionId:session.id,error:(e as Error).message})));return c.json(session,201)});
 router.get('/api/batch-recognition/sessions/:id',async c=>{cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}const session=await getBatchSession(c.env.DB,owner,c.req.param('id'));return session?c.json(session):c.json({error:'Batch session not found'},404)});
+router.delete('/api/batch-recognition/sessions/:id',async c=>{cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}const result=await removeBatchSession(c.env,owner,c.req.param('id'));return c.json(result.body,result.status)});
 router.get('/api/batch-recognition/images/:id',async c=>{cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}const image=await getBatchImage(c.env,owner,c.req.param('id'));return image??c.json({error:'Image not found'},404)});
 
 router.post('/api/batch-recognition/sessions/:id/items',async c=>{
