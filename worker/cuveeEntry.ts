@@ -129,7 +129,6 @@ app.post('/api/producers/:id/cuvee-links/:linkId/unlink',async c=>{
 app.get('/api/producers/:id',async c=>{
   let owner:string;try{owner=await user(c)}catch{return entryApp.fetch(c.req.raw,c.env,c.executionCtx)}
   const producerId=c.req.param('id');
-  try{await ensureAllProducerLinks(c.env.DB,owner);await ensureAllCuveeLinksForProducer(c.env.DB,owner,producerId)}catch{}
   const response=await entryApp.fetch(c.req.raw,c.env,c.executionCtx);
   if(!response.ok)return response;
   try{
@@ -145,13 +144,7 @@ app.get('/api/producers/:id',async c=>{
   }catch(e){console.error(JSON.stringify({event:'producer-cuvee-catalog-state-failed',producerId,error:(e as Error).message}));return response}
 });
 
-app.post('/api/producers/:id/research',async c=>{
-  const response=await entryApp.fetch(c.req.raw,c.env,c.executionCtx);
-  if(response.ok){
-    try{const owner=await user(c);await ensureAllCuveeLinksForProducer(c.env.DB,owner,c.req.param('id'))}catch{}
-  }
-  return response;
-});
+app.post('/api/producers/:id/research',c=>entryApp.fetch(c.req.raw,c.env,c.executionCtx));
 
 app.post('/api/producers/:id/merge',async c=>{
   const response=await entryApp.fetch(c.req.raw,c.env,c.executionCtx);
