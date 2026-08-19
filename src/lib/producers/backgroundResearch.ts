@@ -2,6 +2,7 @@ import { createObjectKey } from '../r2/keys';
 import { reconcileProducerCuvees,syncProducerCatalogCuvees } from '../cuvees/entities';
 import { extractContactGrounding,normalizeProducerEmail,normalizeProducerPhone,safeInstagramUrl } from './research';
 import { mapProducerRow } from './entities';
+import { parseStructuredJsonText } from './structuredJson';
 
 type Env={DB:D1Database;WINE_IMAGES:R2Bucket;GEMINI_API_KEY:string};
 type ResearchSource={title:string;url:string};
@@ -13,7 +14,7 @@ type ProfileResult={
 type CatalogWine={name:string;category:CatalogCategory;appellation?:string|null;classification?:string|null;style?:string|null;notes?:string|null};
 type CatalogResult={range:CatalogWine[]};
 type GroundingMetadata={groundingChunks?:Array<{web?:{title?:string;uri?:string}}> ;groundingSupports?:Array<{segment?:{startIndex?:number;endIndex?:number;text?:string};groundingChunkIndices?:number[]}>};
-type GeminiResponse={candidates?:Array<{content?:{parts?:Array<{text?:string}>};groundingMetadata?:GroundingMetadata}>;usageMetadata?:Record<string,unknown>;error?:{message?:string}};
+type GeminiResponse={candidates?:Array<{content?:{parts?:Array<{text?:string}>};groundingMetadata?:GroundingMetadata;finishReason?:string}>;usageMetadata?:Record<string,unknown>;error?:{message?:string}};
 
 type Phase='profile'|'catalog';
 const CATEGORIES=new Set<CatalogCategory>(['red','white','rose','sparkling','dessert','fortified','orange','other']);
@@ -68,17 +69,21 @@ export async function createQueuedProducerResearchRun(db:D1Database,owner:string
 async function phaseWithStatus(env:Env,owner:string,requestId:string,producerId:string,phase:Phase,prompt:string,schema:Record<string,unknown>){
   const models=[MODEL_PRIMARY,MODEL_FALLBACK] as const,timeouts=phase==='profile'?PROFILE_TIMEOUTS:CATALOG_TIMEOUTS;let lastError=`${phase} research failed`;
   for(let index=0;index<models.length;index++){
-    const model=models[index],timeoutMs=timeouts[index],controller=new AbortController(),timer=setTimeout(()=>controller.abort(),timeoutMs),started=Date.now();
+    const model=models[index],timeoutMs=timeouts[index],maxOutputTokens=phase==='catalog'?16_384:8_192,controller=new AbortController(),timer=setTimeout(()=>controller.abort(),timeoutMs),started=Date.now();
     await updateRun(env.DB,owner,requestId,'searching',index+1,index===0?`Researching producer ${phase} with ${model}`:`Trying ${model} for producer ${phase} after the 3.7 attempt did not complete`);
     try{
-      const body=JSON.stringify({contents:[{role:'user',parts:[{text:prompt}]}],tools:[{google_search:{}}],generationConfig:{responseMimeType:'application/json',responseSchema:schema}});
-      log('log',{requestId,producerId,phase,stage:'gemini_start',model,attempt:index+1,timeoutMs});
+      const body=JSON.stringify({contents:[{role:'user',parts:[{text:prompt}]}],tools:[{google_search:{}}],generationConfig:{responseMimeType:'application/json',responseSchema:schema,maxOutputTokens}});
+      log('log',{requestId,producerId,phase,stage:'gemini_start',model,attempt:index+1,timeoutMs,maxOutputTokens});
       const response=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(env.GEMINI_API_KEY)}`,{method:'POST',headers:{'Content-Type':'application/json'},body,signal:controller.signal});
       const elapsedMs=Date.now()-started;
       if(!response.ok){const errorText=(await response.text().catch(()=>'' )).slice(0,800);lastError=`${phase} research failed (${response.status})`;log('warn',{requestId,producerId,phase,stage:'gemini_error',model,httpStatus:response.status,elapsedMs,errorText});if(index===0&&(response.status===404||response.status===408||response.status===429||response.status>=500)){await sleep(1200);continue}throw new Error(lastError)}
-      const json=await response.json() as GeminiResponse,candidate=json.candidates?.[0],text=candidate?.content?.parts?.map(p=>p.text??'').join('')??'';
-      let parsed:unknown;try{parsed=JSON.parse(text.replace(/^```(?:json)?\s*|\s*```$/g,''))}catch{throw new Error(`${phase} research returned invalid JSON`)}
-      log('log',{requestId,producerId,phase,stage:'gemini_complete',model,elapsedMs});
+      const json=await response.json() as GeminiResponse,candidate=json.candidates?.[0],text=candidate?.content?.parts?.map(p=>p.text??'').join('')??'',finishReason=candidate?.finishReason??null;
+      let parsed:unknown;
+      try{parsed=parseStructuredJsonText(text)}catch{
+        log('warn',{requestId,producerId,phase,stage:'json_parse_failed',model,elapsedMs,finishReason,textLength:text.length,textPreview:text.slice(0,700),usageMetadata:json.usageMetadata??null});
+        throw new Error(finishReason==='MAX_TOKENS'?`${phase} research returned invalid JSON because Gemini output was truncated`:`${phase} research returned invalid JSON`);
+      }
+      log('log',{requestId,producerId,phase,stage:'gemini_complete',model,elapsedMs,finishReason,textLength:text.length});
       return {parsed,text,metadata:candidate?.groundingMetadata,model,sources:sourcesFrom(candidate?.groundingMetadata)};
     }catch(e){
       if(controller.signal.aborted)lastError=`${phase} research timed out after ${Math.round(timeoutMs/1000)} seconds on ${model}`;else lastError=(e as Error).message||lastError;
