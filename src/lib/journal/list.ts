@@ -16,6 +16,7 @@ type JournalRow={
   venue:string|null;
   favorite:number|null;
   journal_date:string;
+  photo_sort_at:string;
   created_at:string;
   tasting_name:string|null;
   image_id:string|null;
@@ -42,15 +43,19 @@ export async function listJournalPage(db:D1Database,owner:string,q:JournalListQu
   }
 
   const orders:Record<string,string>={
-    newest:'journal_date DESC, w.id DESC',
-    oldest:'journal_date ASC, w.id ASC',
-    rating:'w.rating DESC, journal_date DESC, w.id DESC',
+    newest:'journal_date DESC, photo_sort_at DESC, w.created_at DESC, w.id DESC',
+    oldest:'journal_date ASC, photo_sort_at ASC, w.created_at ASC, w.id ASC',
+    rating:'w.rating DESC, journal_date DESC, photo_sort_at DESC, w.created_at DESC, w.id DESC',
     producer:'w.producer COLLATE NOCASE ASC, w.wine_name COLLATE NOCASE ASC, w.vintage DESC, w.id ASC',
     vintage:'w.vintage DESC, w.producer COLLATE NOCASE ASC, w.wine_name COLLATE NOCASE ASC, w.id ASC'
   };
   const limit=Math.min(Math.max(Number(q.limit)||36,1),72),offset=Math.max(Number(q.offset)||0,0);args.push(limit,offset);
   const rows=await db.prepare(`SELECT w.id,w.producer,w.wine_name,w.vintage,w.country,w.region,w.appellation,w.grapes_json,w.wine_style,w.rating,w.venue,w.favorite,
-    coalesce(w.tasting_date,w.created_at) AS journal_date,w.created_at,
+    coalesce(w.tasting_date,w.created_at) AS journal_date,
+    coalesce((SELECT wi.captured_at FROM wine_images wi
+      WHERE wi.owner_id=w.owner_id AND wi.wine_id=w.id AND wi.captured_at IS NOT NULL
+      ORDER BY CASE WHEN wi.metadata_source='exif' THEN 0 ELSE 1 END,wi.captured_at ASC,wi.rowid ASC LIMIT 1),w.created_at) AS photo_sort_at,
+    w.created_at,
     (SELECT t.name FROM wine_experiences we LEFT JOIN tastings t ON t.id=we.tasting_id WHERE we.wine_id=w.id AND we.owner_id=w.owner_id ORDER BY we.created_at DESC LIMIT 1) AS tasting_name,
     (SELECT wi.id FROM wine_images wi WHERE wi.owner_id=w.owner_id AND wi.wine_id=w.id ORDER BY wi.rowid ASC LIMIT 1) AS image_id
     FROM wines w WHERE ${where} ORDER BY ${orders[q.sort??'']||orders.newest} LIMIT ? OFFSET ?`).bind(...args).all<JournalRow>();
