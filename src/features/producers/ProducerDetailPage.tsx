@@ -3,10 +3,11 @@ import { Link,useParams } from 'react-router-dom';
 import { WineImage } from '../wines/WineImage';
 import { getProducer,getProducerResearchStatus,listProducers,mergeProducer,researchProducer,setPrimaryProducerName,unlinkProducer,type LinkedProducer,type ProducerDetail,type ProducerResearchRun,type ProducerSummary } from './api';
 import { ProducerHeroImage } from './ProducerHeroImage';
+import { CuveeCatalogLinks } from './CuveeCatalogLinks';
 import { normalizeProducerAlias } from '../../lib/producers/entities';
+import { normalizeCuveeAlias } from '../../lib/cuvees/entities';
 import '../../producer.css';
 
-const wineKey=(name:string)=>normalizeProducerAlias(name).replace(/\b(grand cru|premier cru|1er cru|village)\b/g,'').trim();
 const stageLabel:Record<ProducerResearchRun['stage'],string>={preparing:'Queued for research',searching:'Researching in the background',retrying:'Retrying Gemini research',parsing:'Validating Gemini response',saving:'Saving producer research',image:'Finding a domaine image',complete:'Research complete',failed:'Research failed'};
 type CatalogCategory='red'|'white'|'rose'|'sparkling'|'dessert'|'fortified'|'orange'|'other';
 const categoryOrder:CatalogCategory[]=['red','white','rose','sparkling','dessert','fortified','orange','other'];
@@ -31,6 +32,13 @@ function displayCatalogName(name:string,producer:ProducerDetail){
   if(stripped&&stripped!==name)return stripped;
  }
  return name;
+}
+function catalogCuveeFor(wine:ProducerDetail['catalog'][number],producer:ProducerDetail){
+ const raw=normalizeCuveeAlias(String(wine.name??'')),display=normalizeCuveeAlias(displayCatalogName(String(wine.name??''),producer)),app=normalizeCuveeAlias(String(wine.appellation??''));
+ const candidates=producer.catalogCuvees.filter(item=>{const key=normalizeCuveeAlias(item.canonicalName);return key===raw||key===display});
+ if(candidates.length<=1)return candidates[0];
+ if(app){const exact=candidates.find(item=>normalizeCuveeAlias(item.appellation??'')===app);if(exact)return exact}
+ return candidates[0];
 }
 function verboseCatalogStyle(value:unknown){
  const text=String(value??'').trim();
@@ -79,7 +87,6 @@ export function ProducerDetailPage(){
   return()=>{active=false;stopResearchTimers()};
  // eslint-disable-next-line react-hooks/exhaustive-deps
  },[id]);
- const tastedKeys=useMemo(()=>new Set((producer?.tastedWines??[]).map(w=>wineKey(w.wineName))),[producer]);
  const linkedByName=useMemo(()=>new Map((producer?.linkedProducers??[]).map(link=>[normalizeProducerAlias(link.name),link])),[producer]);
  const catalogGroups=useMemo(()=>{
   const map=new Map<CatalogCategory,ProducerDetail['catalog']>();
@@ -88,7 +95,7 @@ export function ProducerDetailPage(){
  },[producer]);
  const tastedGroups=useMemo(()=>{
   const map=new Map<string,ProducerDetail['tastedWines']>();
-  for(const wine of producer?.tastedWines??[]){const key=normalizeProducerAlias(wine.wineName),list=map.get(key)??[];list.push(wine);map.set(key,list)}
+  for(const wine of producer?.tastedWines??[]){const key=wine.cuveeId??normalizeProducerAlias(wine.wineName),list=map.get(key)??[];list.push(wine);map.set(key,list)}
   return [...map.values()].map(wines=>({name:wines[0]?.wineName??'',wines:[...wines].sort((a,b)=>(b.vintage??-1)-(a.vintage??-1))}));
  },[producer]);
  async function runResearch(){
@@ -120,10 +127,12 @@ export function ProducerDetailPage(){
     {producer.contactEmail&&<div><span>Email</span><a href={`mailto:${producer.contactEmail}`}>{producer.contactEmail}</a></div>}
     {producer.contactPhone&&<div><span>Phone</span><a href={`tel:${producer.contactPhone.replace(/[^+\d]/g,'')}`}>{producer.contactPhone}</a></div>}
    </div>{producer.contactSources.length>0&&<div className="producer-contact-sources"><span>Gemini contact references</span>{producer.contactSources.map(source=><a key={source.url} href={source.url} target="_blank" rel="noreferrer">{source.title}</a>)}</div>}</div>}
-   {catalogGroups.map(group=><div className="producer-catalog-group" key={group.category}><h3>{group.label}<span>{group.wines.length}</span></h3><div className="producer-catalog">{group.wines.map((wine,index)=>{const displayName=displayCatalogName(wine.name,producer),tasted=tastedKeys.has(wineKey(displayName))||tastedKeys.has(wineKey(wine.name)),meta=catalogMeta(wine,group.category),note=catalogNote(wine);return <div className="catalog-row" key={`${wine.name}-${index}`}><div><strong>{displayName}</strong>{meta.length>0&&<span className="catalog-meta">{meta.join(' · ')}</span>}{note.short&&<small className="catalog-notes" title={note.full}>{note.short}</small>}</div>{tasted&&<span className="tasted-badge">Tasted</span>}</div>})}</div></div>)}
+   {catalogGroups.map(group=><div className="producer-catalog-group" key={group.category}><h3>{group.label}<span>{group.wines.length}</span></h3><div className="producer-catalog">{group.wines.map((wine,index)=>{const displayName=displayCatalogName(wine.name,producer),catalogIdentity=catalogCuveeFor(wine,producer),meta=catalogMeta(wine,group.category),note=catalogNote(wine);return <div className="catalog-row" key={`${wine.name}-${index}`}><div><strong>{displayName}</strong>{meta.length>0&&<span className="catalog-meta">{meta.join(' · ')}</span>}{note.short&&<small className="catalog-notes" title={note.full}>{note.short}</small>}</div>{Boolean(catalogIdentity?.tastedCount)&&<span className="tasted-badge">Tasted{catalogIdentity&&catalogIdentity.tastedCount>1?` · ${catalogIdentity.tastedCount}`:''}</span>}</div>})}</div></div>)}
    {producer.sources.length>0&&<div className="producer-sources"><strong>Profile & range references</strong>{producer.sources.map(s=><a key={s.url} href={s.url} target="_blank" rel="noreferrer">{s.title}</a>)}</div>}{producer.researchedAt&&<small>Latest producer research: {producer.researchModel} · {new Date(producer.researchedAt).toLocaleDateString()}</small>}
   </section>
-  <section className="detail-section"><p className="section-label">YOUR TASTINGS</p><h2>{tastedGroups.length} cuvée{tastedGroups.length===1?'':'s'} · {producer.tastedWines.length} tasting{producer.tastedWines.length===1?'':'s'}</h2>{tastedGroups.length?<div className="producer-tasted-groups">{tastedGroups.map(group=><div className="tasted-cuvee-group" key={normalizeProducerAlias(group.name)}><div className="tasted-cuvee-title"><strong>{group.name}</strong><span>{[...new Set(group.wines.map(w=>w.vintage??'NV'))].join(' · ')}</span></div><div className="producer-tasted">{group.wines.map(w=><Link to={`/wines/${w.id}`} className="tasted-row tasted-vintage-row" key={w.id}><div className="tasted-thumb">{w.imageId?<WineImage imageId={w.imageId} alt={`${w.wineName} ${w.vintage??'NV'} bottle`} className="tasted-thumb-image"/>:<span className="tasted-thumb-fallback">W</span>}</div><div className="tasted-copy"><strong>{w.vintage??'NV'}</strong><span>{[w.appellation,w.region].filter(Boolean).join(' · ')}</span></div><div className="tasted-meta">{w.rating!=null&&<strong>{w.rating}</strong>}{w.tastingDate&&<span>{w.tastingDate}</span>}</div></Link>)}</div></div>)}</div>:<p>No tasting records linked to this producer yet.</p>}</section>
+  <section className="detail-section"><p className="section-label">YOUR TASTINGS</p><h2>{tastedGroups.length} cuvée{tastedGroups.length===1?'':'s'} · {producer.tastedWines.length} tasting{producer.tastedWines.length===1?'':'s'}</h2>{tastedGroups.length?<div className="producer-tasted-groups">{tastedGroups.map(group=><div className="tasted-cuvee-group" key={group.wines[0]?.cuveeId??normalizeProducerAlias(group.name)}><div className="tasted-cuvee-title"><strong>{group.name}</strong><span>{[...new Set(group.wines.map(w=>w.vintage??'NV'))].join(' · ')}</span></div><div className="producer-tasted">{group.wines.map(w=><Link to={`/wines/${w.id}`} className="tasted-row tasted-vintage-row" key={w.id}><div className="tasted-thumb">{w.imageId?<WineImage imageId={w.imageId} alt={`${w.wineName} ${w.vintage??'NV'} bottle`} className="tasted-thumb-image"/>:<span className="tasted-thumb-fallback">W</span>}</div><div className="tasted-copy"><strong>{w.vintage??'NV'}</strong><span>{[w.appellation,w.region].filter(Boolean).join(' · ')}</span></div><div className="tasted-meta">{w.rating!=null&&<strong>{w.rating}</strong>}{w.tastingDate&&<span>{w.tastingDate}</span>}</div></Link>)}</div></div>)}</div>:<p>No tasting records linked to this producer yet.</p>}
+   <CuveeCatalogLinks producer={producer} onChanged={reload}/>
+  </section>
   <section className="detail-section producer-identity"><p className="section-label">IDENTITY & ALIASES</p><h2>Known producer names</h2>
    <div className="primary-name-control"><label>Primary display name<select value={primaryName} onChange={e=>setPrimaryName(e.target.value)}>{producer.aliases.map(alias=><option key={alias} value={alias}>{alias}</option>)}</select></label><button type="button" disabled={savingPrimary||!primaryName||primaryName===producer.canonicalName} onClick={savePrimaryName}>{savingPrimary?'Saving…':'Set primary'}</button></div>
    <p className="producer-help">The primary name is used in the Producers directory and profile heading. Changing it does not rewrite the producer name recorded on individual bottles, change the stable producer ID, or regenerate research.</p>
