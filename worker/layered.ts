@@ -63,7 +63,7 @@ app.get('/api/producers/:id',async c=>{
     if(!row)return c.json({error:'Producer not found'},404);
     const [aliases,wines,history,links]=await Promise.all([
       c.env.DB.prepare('SELECT display_alias FROM producer_aliases WHERE owner_id=? AND producer_id=? ORDER BY display_alias COLLATE NOCASE').bind(owner,c.req.param('id')).all<{display_alias:string}>(),
-      c.env.DB.prepare(`SELECT w.id,w.wine_name,w.vintage,w.appellation,w.region,w.country,w.wine_style,w.grapes_json,
+      c.env.DB.prepare(`SELECT w.id,w.cuvee_id,w.wine_name,w.vintage,w.appellation,w.region,w.country,w.wine_style,w.grapes_json,
         (SELECT wi.id FROM wine_images wi WHERE wi.owner_id=w.owner_id AND wi.wine_id=w.id ORDER BY wi.rowid ASC LIMIT 1) AS image_id,
         coalesce((SELECT we.consumed_at FROM wine_experiences we WHERE we.owner_id=w.owner_id AND we.wine_id=w.id ORDER BY we.created_at DESC LIMIT 1),w.tasting_date) AS tasting_date,
         coalesce((SELECT we.rating FROM wine_experiences we WHERE we.owner_id=w.owner_id AND we.wine_id=w.id ORDER BY we.created_at DESC LIMIT 1),w.rating) AS rating
@@ -72,7 +72,7 @@ app.get('/api/producers/:id',async c=>{
       c.env.DB.prepare(`SELECT id,source_producer_id,source_canonical_name,merged_at FROM producer_merges
         WHERE owner_id=? AND destination_producer_id=? AND undone_at IS NULL ORDER BY merged_at DESC`).bind(owner,c.req.param('id')).all<{id:string;source_producer_id:string;source_canonical_name:string;merged_at:string}>()
     ]);
-    return c.json({...mapProducerRow(row),aliases:aliases.results.map(x=>x.display_alias),researchHistoryCount:Number(history?.count)||0,linkedProducers:links.results.map(x=>({mergeId:x.id,producerId:x.source_producer_id,name:x.source_canonical_name,mergedAt:x.merged_at})),tastedWines:wines.results.map(w=>({id:String(w.id),wineName:String(w.wine_name),vintage:w.vintage==null?null:Number(w.vintage),appellation:w.appellation?String(w.appellation):null,region:w.region?String(w.region):null,country:w.country?String(w.country):null,wineStyle:w.wine_style?String(w.wine_style):null,grapes:parseJson<unknown[]>(w.grapes_json,[]).map(String).filter(Boolean),imageId:w.image_id?String(w.image_id):null,tastingDate:w.tasting_date?String(w.tasting_date):null,rating:w.rating==null?null:Number(w.rating)}))});
+    return c.json({...mapProducerRow(row),aliases:aliases.results.map(x=>x.display_alias),researchHistoryCount:Number(history?.count)||0,linkedProducers:links.results.map(x=>({mergeId:x.id,producerId:x.source_producer_id,name:x.source_canonical_name,mergedAt:x.merged_at})),tastedWines:wines.results.map(w=>({id:String(w.id),cuveeId:w.cuvee_id?String(w.cuvee_id):null,wineName:String(w.wine_name),vintage:w.vintage==null?null:Number(w.vintage),appellation:w.appellation?String(w.appellation):null,region:w.region?String(w.region):null,country:w.country?String(w.country):null,wineStyle:w.wine_style?String(w.wine_style):null,grapes:parseJson<unknown[]>(w.grapes_json,[]).map(String).filter(Boolean),imageId:w.image_id?String(w.image_id):null,tastingDate:w.tasting_date?String(w.tasting_date):null,rating:w.rating==null?null:Number(w.rating)}))});
   }catch(e){return c.json({error:(e as Error).message||'Could not load producer'},500)}
 });
 
