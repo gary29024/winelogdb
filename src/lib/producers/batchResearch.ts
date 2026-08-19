@@ -1,6 +1,7 @@
 import { createObjectKey } from '../r2/keys';
 import { createResearchBatchJob,finishResearchBatchJob,getResearchBatchJob,touchResearchBatchJob } from '../research/batchJobStore';
 import { createGeminiBatch,fetchGeminiBatch,inlineFinishReason,inlineGroundingMetadata,inlineResponseText,isTerminalBatchState,responsesByKey,type GeminiBatchRequest,type GroundingMetadata } from '../research/geminiBatch';
+import { researchBatchErrorPollDelay,researchBatchPollDelay } from '../research/batchRetryPolicy';
 import { reconcileProducerCuvees,syncProducerCatalogCuvees } from '../cuvees/entities';
 import { extractContactGrounding,normalizeProducerEmail,normalizeProducerPhone,safeInstagramUrl } from './research';
 import { parseStructuredJsonText } from './structuredJson';
@@ -19,7 +20,6 @@ const CATEGORIES=new Set<CatalogCategory>(['red','white','rose','sparkling','des
 const PAGE_TIMEOUT_MS=8_000,IMAGE_TIMEOUT_MS=10_000,MAX_PAGE_BYTES=384*1024,MAX_HERO_BYTES=5*1024*1024;
 const now=()=>new Date().toISOString();
 const parseJson=<T>(value:unknown,fallback:T):T=>{try{return JSON.parse(String(value)) as T}catch{return fallback}};
-const sleepDelay=(pollCount:number)=>Math.min(300,15*Math.pow(2,Math.min(pollCount,4)));
 
 function log(level:'log'|'warn'|'error',data:Record<string,unknown>){console[level](JSON.stringify({event:'producer_batch_research',...data}))}
 async function updateRun(db:D1Database,owner:string,requestId:string,stage:string,attempt:number,message:string,status:'running'|'complete'|'failed'='running'){
@@ -74,7 +74,7 @@ async function submitAttempt(env:Env,owner:string,producerId:string,requestId:st
   const model=attempt===1?PRIMARY_MODEL:FALLBACK_MODEL,entries=batchEntries(producer.canonical_name,keys),googleName=await createGeminiBatch(env.GEMINI_API_KEY,model,`winelog-producer-${requestId}-${attempt}`,entries);
   const jobId=await createResearchBatchJob(env.DB,{owner,requestId,targetKind:'producer',targetId:producerId,googleBatchName:googleName,model,attempt,keys});
   await updateRun(env.DB,owner,requestId,'searching',attempt,attempt===1?'Producer profile and catalogue submitted to Gemini Batch':'Retrying only failed producer research with the fallback Gemini Batch model');
-  await env.RESEARCH_QUEUE.send({kind:'producer_batch_poll',owner,producerId,requestId,jobId,pollCount:0},{delaySeconds:15});
+  await env.RESEARCH_QUEUE.send({kind:'producer_batch_poll',owner,producerId,requestId,jobId,pollCount:0},{delaySeconds:researchBatchPollDelay(0)});
   log('log',{requestId,producerId,stage:'batch_submitted',attempt,model,keys,googleName});
   return jobId;
 }
@@ -106,7 +106,17 @@ async function saveCatalog(env:Env,owner:string,producerId:string,catalog:Catalo
 }
 
 async function retryOrFail(env:Env,owner:string,producerId:string,requestId:string,attempt:number,failed:ProducerBatchKey[],errors:string[]){
-  if(attempt===1&&failed.length){await submitAttempt(env,owner,producerId,requestId,2,failed);return}
+  if(attempt===1&&failed.length){
+    try{await submitAttempt(env,owner,producerId,requestId,2,failed);return}
+    catch(e){
+      const fallbackError=(e as Error).message||'Fallback Gemini Batch submission failed';
+      const saved=failed.length===1?(failed[0]==='profile'?'catalogue':'profile'):null;
+      const message=saved?`Producer ${saved} was saved, but ${failed[0]} retry could not be submitted: ${fallbackError}`:`Producer research retry could not be submitted: ${fallbackError}`;
+      await updateRun(env.DB,owner,requestId,'failed',2,message,'failed');
+      log('error',{requestId,producerId,stage:'fallback_submit_failed',attempt:2,failed,error:fallbackError});
+      return;
+    }
+  }
   const saved=failed.length===1?(failed[0]==='profile'?'catalogue':'profile'):null;
   const message=saved?`Producer ${saved} was saved, but ${failed[0]} research failed: ${errors.join('; ')}`:`Producer research failed: ${errors.join('; ')}`;
   await updateRun(env.DB,owner,requestId,'failed',attempt,message,'failed');
@@ -116,10 +126,10 @@ export async function pollProducerBatchResearch(env:Env,owner:string,producerId:
   const job=await getResearchBatchJob(env.DB,owner,jobId);if(!job||job.status!=='running')return;
   const fetched=await fetchGeminiBatch(env.GEMINI_API_KEY,job.googleBatchName);
   if(!fetched.ok){
-    if(fetched.status===429||fetched.status>=500){await touchResearchBatchJob(env.DB,owner,jobId);await env.RESEARCH_QUEUE.send({kind:'producer_batch_poll',owner,producerId,requestId,jobId,pollCount:pollCount+1},{delaySeconds:Math.min(300,30*Math.max(1,pollCount+1))});return}
+    if(fetched.status===429||fetched.status>=500){await touchResearchBatchJob(env.DB,owner,jobId);await env.RESEARCH_QUEUE.send({kind:'producer_batch_poll',owner,producerId,requestId,jobId,pollCount:pollCount+1},{delaySeconds:researchBatchErrorPollDelay(pollCount)});return}
     await finishResearchBatchJob(env.DB,owner,jobId,'failed',fetched.error);await retryOrFail(env,owner,producerId,requestId,job.attempt,job.keys as ProducerBatchKey[],[fetched.error]);return;
   }
-  if(!isTerminalBatchState(fetched.state)){await touchResearchBatchJob(env.DB,owner,jobId);await updateRun(env.DB,owner,requestId,'searching',job.attempt,`Gemini Batch is processing producer ${job.keys.join(' + ')} research`);await env.RESEARCH_QUEUE.send({kind:'producer_batch_poll',owner,producerId,requestId,jobId,pollCount:pollCount+1},{delaySeconds:sleepDelay(pollCount)});return}
+  if(!isTerminalBatchState(fetched.state)){await touchResearchBatchJob(env.DB,owner,jobId);await updateRun(env.DB,owner,requestId,'searching',job.attempt,`Gemini Batch is processing producer ${job.keys.join(' + ')} research`);await env.RESEARCH_QUEUE.send({kind:'producer_batch_poll',owner,producerId,requestId,jobId,pollCount:pollCount+1},{delaySeconds:researchBatchPollDelay(pollCount)});return}
   if(fetched.state!=='JOB_STATE_SUCCEEDED'){
     const error=String((fetched.payload.error as {message?:unknown}|undefined)?.message||`Gemini batch ended with ${fetched.state}`);await finishResearchBatchJob(env.DB,owner,jobId,'failed',error);await retryOrFail(env,owner,producerId,requestId,job.attempt,job.keys as ProducerBatchKey[],[error]);return;
   }
