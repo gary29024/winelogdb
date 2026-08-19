@@ -1,7 +1,8 @@
 import { createObjectKey } from '../r2/keys';
 import { createResearchBatchJob,finishResearchBatchJob,getResearchBatchJob,touchResearchBatchJob } from '../research/batchJobStore';
+import { cancelGeminiBatch } from '../research/cancelResearch';
 import { createGeminiBatch,fetchGeminiBatch,inlineFinishReason,inlineGroundingMetadata,inlineResponseText,isTerminalBatchState,responsesByKey,type GeminiBatchRequest,type GroundingMetadata } from '../research/geminiBatch';
-import { researchBatchErrorPollDelay,researchBatchPollDelay } from '../research/batchRetryPolicy';
+import { researchBatchErrorPollDelay,researchBatchPollDelay,researchBatchStallAction,researchBatchTransientAction } from '../research/batchRetryPolicy';
 import { reconcileProducerCuvees,syncProducerCatalogCuvees } from '../cuvees/entities';
 import { extractContactGrounding,normalizeProducerEmail,normalizeProducerPhone,safeInstagramUrl } from './research';
 import { parseStructuredJsonText } from './structuredJson';
@@ -68,20 +69,38 @@ function batchEntries(name:string,keys:ProducerBatchKey[]):GeminiBatchRequest[]{
   return keys.map(key=>{const definition=definitions[key];return {key,request:{contents:[{role:'user',parts:[{text:definition.prompt}]}],tools:[{google_search:{}}],generationConfig:{responseMimeType:'application/json',responseSchema:definition.schema,maxOutputTokens:definition.maxOutputTokens}}}});
 }
 
+async function cancelAttemptBatch(env:Env,requestId:string,producerId:string,attempt:number,googleName:string,reason:string){
+  const cancelled=await cancelGeminiBatch(env.GEMINI_API_KEY,googleName);
+  if(!cancelled.ok)log('warn',{requestId,producerId,stage:'batch_cancel_failed',attempt,googleName,reason,status:cancelled.status,error:cancelled.error});
+}
+
 async function submitAttempt(env:Env,owner:string,producerId:string,requestId:string,attempt:number,keys:ProducerBatchKey[]){
   const producer=await env.DB.prepare('SELECT canonical_name FROM producers WHERE owner_id=? AND id=?').bind(owner,producerId).first<{canonical_name:string}>();
   if(!producer)throw new Error('Producer not found');
-  const model=attempt===1?PRIMARY_MODEL:FALLBACK_MODEL,entries=batchEntries(producer.canonical_name,keys),googleName=await createGeminiBatch(env.GEMINI_API_KEY,model,`winelog-producer-${requestId}-${attempt}`,entries);
-  const jobId=await createResearchBatchJob(env.DB,{owner,requestId,targetKind:'producer',targetId:producerId,googleBatchName:googleName,model,attempt,keys});
-  await updateRun(env.DB,owner,requestId,'searching',attempt,attempt===1?'Producer profile and catalogue submitted to Gemini Batch':'Retrying only failed producer research with the fallback Gemini Batch model');
-  await env.RESEARCH_QUEUE.send({kind:'producer_batch_poll',owner,producerId,requestId,jobId,pollCount:0},{delaySeconds:researchBatchPollDelay(0)});
-  log('log',{requestId,producerId,stage:'batch_submitted',attempt,model,keys,googleName});
-  return jobId;
+  const model=attempt===1?PRIMARY_MODEL:FALLBACK_MODEL,entries=batchEntries(producer.canonical_name,keys);let googleName:string|undefined,jobId:string|undefined;
+  try{
+    googleName=await createGeminiBatch(env.GEMINI_API_KEY,model,`winelog-producer-${requestId}-${attempt}`,entries);
+    jobId=await createResearchBatchJob(env.DB,{owner,requestId,targetKind:'producer',targetId:producerId,googleBatchName:googleName,model,attempt,keys});
+    await updateRun(env.DB,owner,requestId,attempt===1?'searching':'retrying',attempt,attempt===1?'Producer profile and catalogue submitted to Gemini 3.7 Batch':`Switching ${keys.join(' + ')} research to Gemini 3.6 Batch`);
+    await env.RESEARCH_QUEUE.send({kind:'producer_batch_poll',owner,producerId,requestId,jobId,pollCount:0},{delaySeconds:researchBatchPollDelay(0)});
+    log('log',{requestId,producerId,stage:'batch_submitted',attempt,model,keys,googleName});
+    return jobId;
+  }catch(e){
+    const error=(e as Error).message||'Producer Batch submission failed';
+    if(jobId)await finishResearchBatchJob(env.DB,owner,jobId,'failed',`Batch setup failed: ${error}`).catch(()=>undefined);
+    if(googleName)await cancelAttemptBatch(env,requestId,producerId,attempt,googleName,'submission setup failed');
+    throw e;
+  }
 }
 
 export async function startProducerBatchResearch(env:Env,owner:string,producerId:string,requestId:string){
-  try{await submitAttempt(env,owner,producerId,requestId,1,['profile','catalog']);return {ok:true as const}}
-  catch(e){const error=(e as Error).message||'Could not submit producer research batch';await updateRun(env.DB,owner,requestId,'failed',1,error,'failed').catch(()=>undefined);return {ok:false as const,error}}
+  const keys:ProducerBatchKey[]=['profile','catalog'];
+  try{await submitAttempt(env,owner,producerId,requestId,1,keys);return {ok:true as const}}
+  catch(e){
+    const primaryError=(e as Error).message||'Gemini 3.7 Batch submission failed';log('warn',{requestId,producerId,stage:'primary_submit_failed',attempt:1,error:primaryError});
+    try{await submitAttempt(env,owner,producerId,requestId,2,keys);return {ok:true as const}}
+    catch(fallback){const error=`Gemini 3.7 submission failed (${primaryError}); Gemini 3.6 fallback also failed: ${(fallback as Error).message||'unknown error'}`;await updateRun(env.DB,owner,requestId,'failed',2,error,'failed').catch(()=>undefined);return {ok:false as const,error}}
+  }
 }
 
 async function saveProfile(env:Env,owner:string,producerId:string,requestId:string,profile:ProfileResult,text:string,metadata:GroundingMetadata|undefined,model:string){
@@ -126,10 +145,24 @@ export async function pollProducerBatchResearch(env:Env,owner:string,producerId:
   const job=await getResearchBatchJob(env.DB,owner,jobId);if(!job||job.status!=='running')return;
   const fetched=await fetchGeminiBatch(env.GEMINI_API_KEY,job.googleBatchName);
   if(!fetched.ok){
-    if(fetched.status===429||fetched.status>=500){await touchResearchBatchJob(env.DB,owner,jobId);await env.RESEARCH_QUEUE.send({kind:'producer_batch_poll',owner,producerId,requestId,jobId,pollCount:pollCount+1},{delaySeconds:researchBatchErrorPollDelay(pollCount)});return}
+    if(fetched.status===429||fetched.status>=500){
+      const action=researchBatchTransientAction(job.attempt,pollCount);
+      if(action==='retry'){await touchResearchBatchJob(env.DB,owner,jobId);await env.RESEARCH_QUEUE.send({kind:'producer_batch_poll',owner,producerId,requestId,jobId,pollCount:pollCount+1},{delaySeconds:researchBatchErrorPollDelay(pollCount)});return}
+      const error=`${job.model} Batch status remained unavailable after ${pollCount+1} checks: ${fetched.error}`;
+      await finishResearchBatchJob(env.DB,owner,jobId,'failed',error);await cancelAttemptBatch(env,requestId,producerId,job.attempt,job.googleBatchName,'status endpoint repeatedly unavailable');
+      log('warn',{requestId,producerId,stage:action==='fallback'?'primary_status_failover':'fallback_status_failed',attempt:job.attempt,model:job.model,pollCount,error});
+      await retryOrFail(env,owner,producerId,requestId,job.attempt,job.keys as ProducerBatchKey[],[error]);return;
+    }
     await finishResearchBatchJob(env.DB,owner,jobId,'failed',fetched.error);await retryOrFail(env,owner,producerId,requestId,job.attempt,job.keys as ProducerBatchKey[],[fetched.error]);return;
   }
-  if(!isTerminalBatchState(fetched.state)){await touchResearchBatchJob(env.DB,owner,jobId);await updateRun(env.DB,owner,requestId,'searching',job.attempt,`Gemini Batch is processing producer ${job.keys.join(' + ')} research`);await env.RESEARCH_QUEUE.send({kind:'producer_batch_poll',owner,producerId,requestId,jobId,pollCount:pollCount+1},{delaySeconds:researchBatchPollDelay(pollCount)});return}
+  if(!isTerminalBatchState(fetched.state)){
+    const action=researchBatchStallAction(job.attempt,pollCount);
+    if(action==='retry'){await touchResearchBatchJob(env.DB,owner,jobId);await updateRun(env.DB,owner,requestId,job.attempt===1?'searching':'retrying',job.attempt,`Gemini Batch is processing producer ${job.keys.join(' + ')} research`);await env.RESEARCH_QUEUE.send({kind:'producer_batch_poll',owner,producerId,requestId,jobId,pollCount:pollCount+1},{delaySeconds:researchBatchPollDelay(pollCount)});return}
+    const error=`${job.model} Batch did not complete within WineLog's ${job.attempt===1?'primary failover':'fallback'} window (last state ${fetched.state||'unknown'})`;
+    await finishResearchBatchJob(env.DB,owner,jobId,'failed',error);await cancelAttemptBatch(env,requestId,producerId,job.attempt,job.googleBatchName,'batch exceeded failover window');
+    log('warn',{requestId,producerId,stage:action==='fallback'?'primary_stall_failover':'fallback_stall_failed',attempt:job.attempt,model:job.model,pollCount,state:fetched.state,error});
+    await retryOrFail(env,owner,producerId,requestId,job.attempt,job.keys as ProducerBatchKey[],[error]);return;
+  }
   if(fetched.state!=='JOB_STATE_SUCCEEDED'){
     const error=String((fetched.payload.error as {message?:unknown}|undefined)?.message||`Gemini batch ended with ${fetched.state}`);await finishResearchBatchJob(env.DB,owner,jobId,'failed',error);await retryOrFail(env,owner,producerId,requestId,job.attempt,job.keys as ProducerBatchKey[],[error]);return;
   }

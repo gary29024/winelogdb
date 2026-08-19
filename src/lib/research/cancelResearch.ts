@@ -23,7 +23,7 @@ export function nextCancelSweepDelay(pass:number){
   return null;
 }
 
-async function cancelGoogleBatch(apiKey:string,name:string){
+export async function cancelGeminiBatch(apiKey:string,name:string){
   const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),CANCEL_TIMEOUT_MS);
   try{
     const response=await fetch(geminiBatchCancelUrl(name),{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':apiKey},body:'{}',signal:controller.signal});
@@ -54,7 +54,7 @@ async function cancelTrackedBatches(env:Env,owner:string,kind:ResearchTargetKind
       WHERE owner_id=? AND request_id=? AND target_kind=? AND target_id=? AND status='running'`).bind(CANCEL_MESSAGE,stamp,owner,requestId,kind,targetId).run();
   }
   const names=[...new Set(rows.map(row=>row.google_batch_name).filter(Boolean))];
-  const remote=await Promise.all(names.map(name=>cancelGoogleBatch(env.GEMINI_API_KEY,name)));
+  const remote=await Promise.all(names.map(name=>cancelGeminiBatch(env.GEMINI_API_KEY,name)));
   return {tracked:names.length,remote};
 }
 
