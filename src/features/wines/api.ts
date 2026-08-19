@@ -25,6 +25,7 @@ export type WineDetail=WineRecord&{favorite:boolean;producerId:string|null};
 export type WineResearchStage='queued'|'researching'|'saving'|'complete'|'failed';
 export type WineResearchRun={requestId:string;wineId:string;status:'running'|'complete'|'failed';stage:WineResearchStage;refresh:'none'|'vintage'|'all';attempt:number;message:string|null;startedAt:string;updatedAt:string;completedAt:string|null;durationMs:number|null};
 export type JournalBatchPatch={tastingName?:string|null;venue?:string|null};
+export type SaveWineOptions={preferCuveePrimaryName?:boolean};
 
 type ApiIssue={path?:Array<string|number>;message?:string};
 async function requireOk(r:Response,message:string){
@@ -54,8 +55,11 @@ export async function setWineFavorite(id:string,favorite:boolean){
   await requireOk(r,'Could not update favorite');
   return r.json() as Promise<{id:string;favorite:boolean}>;
 }
-export async function saveWine(input:WineInput,id?:string,photos:WinePhoto[]=[]):Promise<{id:string}|{ok:true}>{
-  if(id){const r=await fetch(`/api/wines/${id}`,{method:'PUT',headers:authHeaders(true),body:JSON.stringify(input)});await requireOk(r,'Could not save wine');return r.json() as Promise<{ok:true}>}
+export async function saveWine(input:WineInput,id?:string,photos:WinePhoto[]=[],options:SaveWineOptions={}):Promise<{id:string}|{ok:true}>{
+  if(id){
+    const body=options.preferCuveePrimaryName?{...input,preferCuveePrimaryName:true}:input;
+    const r=await fetch(`/api/wines/${id}`,{method:'PUT',headers:authHeaders(true),body:JSON.stringify(body)});await requireOk(r,'Could not save wine');return r.json() as Promise<{ok:true}>;
+  }
   if(photos.length){
     const fd=new FormData();fd.append('wine',JSON.stringify(input));
     photos.forEach(x=>fd.append('images',x.file));
