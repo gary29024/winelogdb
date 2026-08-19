@@ -30,21 +30,31 @@ export function chunkItemsByPreparedBytes<T extends {preparedBytes:number}>(item
   return chunks;
 }
 
-export async function createBatchSession(db:D1Database,owner:string){
-  const id=crypto.randomUUID(),stamp=now(),expiresAt=new Date(Date.now()+SESSION_TTL_MS).toISOString();
-  await db.prepare(`INSERT INTO batch_recognition_sessions(id,owner_id,status,total_items,confirmed_items,created_at,updated_at,expires_at) VALUES(?,?,'uploading',0,0,?,?,?)`).bind(id,owner,stamp,stamp,expiresAt).run();
-  return {id,status:'uploading',createdAt:stamp,expiresAt};
+export function isBatchUploadComplete(totalItems:number,expectedItems:number){return expectedItems<=0?totalItems>=2:totalItems===expectedItems&&expectedItems>=2}
+
+export async function createBatchSession(db:D1Database,owner:string,expectedItems=0){
+  const expected=Math.max(0,Math.floor(Number(expectedItems)||0)),id=crypto.randomUUID(),stamp=now(),expiresAt=new Date(Date.now()+SESSION_TTL_MS).toISOString();
+  await db.prepare(`INSERT INTO batch_recognition_sessions(id,owner_id,status,total_items,expected_items,confirmed_items,created_at,updated_at,expires_at) VALUES(?,?,'uploading',0,?,0,?,?,?)`).bind(id,owner,expected,stamp,stamp,expiresAt).run();
+  return {id,status:'uploading',expectedItems:expected,createdAt:stamp,expiresAt};
+}
+
+async function existingStagedItem(db:D1Database,owner:string,sessionId:string,position:number){
+  return db.prepare(`SELECT i.id,count(bri.id) AS photo_count,coalesce(sum(bri.recognition_byte_size),0) AS prepared_bytes
+    FROM batch_recognition_items i LEFT JOIN batch_recognition_images bri ON bri.owner_id=i.owner_id AND bri.item_id=i.id
+    WHERE i.owner_id=? AND i.session_id=? AND i.position=? GROUP BY i.id LIMIT 1`).bind(owner,sessionId,position).first<{id:string;photo_count:number;prepared_bytes:number}>();
 }
 
 export async function stageBatchItem(env:Pick<Env,'DB'|'WINE_IMAGES'|'MAX_FILE_BYTES'>,owner:string,sessionId:string,form:FormData){
-  const session=await env.DB.prepare("SELECT status FROM batch_recognition_sessions WHERE id=? AND owner_id=?").bind(sessionId,owner).first<{status:string}>();
+  const session=await env.DB.prepare("SELECT status,expected_items FROM batch_recognition_sessions WHERE id=? AND owner_id=?").bind(sessionId,owner).first<{status:string;expected_items:number}>();
   if(!session)return {status:404 as const,body:{error:'Batch session not found'}};
   if(session.status!=='uploading')return {status:409 as const,body:{error:'This batch has already been submitted'}};
   const originals=form.getAll('originals').filter((x):x is File=>x instanceof File),prepared=form.getAll('recognitionImages').filter((x):x is File=>x instanceof File);
   if(!originals.length||originals.length!==prepared.length||originals.length>12)return {status:400 as const,body:{error:'Each wine needs 1–12 matching original and recognition images'}};
   const maxOriginalBytes=Number(env.MAX_FILE_BYTES)||10*1024*1024;
   if(originals.some(file=>file.size>maxOriginalBytes))return {status:413 as const,body:{error:`Each original photo must be ${Math.round(maxOriginalBytes/1024/1024)} MB or smaller`}};
-  const position=Math.max(0,Number(form.get('position'))||0),metadata=String(form.get('metadata')||'[]'),dimensions=parseJson<Array<{width?:number;height?:number}>>(form.get('dimensions'),[]);
+  const position=Math.max(0,Number(form.get('position'))||0),metadata=String(form.get('metadata')||'[]'),dimensions=parseJson<Array<{width?:number;height?:number}>>(form.get('dimensions'),[]),expected=Math.max(0,Number(session.expected_items)||0);
+  if(expected&&position>=expected)return {status:400 as const,body:{error:'This wine position is outside the expected batch size'}};
+  const existing=await existingStagedItem(env.DB,owner,sessionId,position);if(existing)return {status:200 as const,body:{id:existing.id,position,photoCount:Number(existing.photo_count)||0,preparedBytes:Number(existing.prepared_bytes)||0,resumed:true}};
   const preparedBytes=prepared.reduce((sum,file)=>sum+file.size,0);
   if(preparedBytes>MAX_ITEM_PREPARED_BYTES)return {status:413 as const,body:{error:'This wine has too many prepared label bytes for inline Batch API recognition. Use fewer label photos.'}};
   const itemId=crypto.randomUUID(),stamp=now(),stored:Array<{originalKey:string;recognitionKey:string}>=[];
@@ -66,6 +76,7 @@ export async function stageBatchItem(env:Pick<Env,'DB'|'WINE_IMAGES'|'MAX_FILE_B
   }catch(e){
     await Promise.all(stored.flatMap(x=>[env.WINE_IMAGES.delete(x.originalKey),env.WINE_IMAGES.delete(x.recognitionKey)]).map(p=>p.catch(()=>undefined)));
     await env.DB.prepare('DELETE FROM batch_recognition_items WHERE id=? AND owner_id=?').bind(itemId,owner).run().catch(()=>undefined);
+    const raced=await existingStagedItem(env.DB,owner,sessionId,position).catch(()=>null);if(raced)return {status:200 as const,body:{id:raced.id,position,photoCount:Number(raced.photo_count)||0,preparedBytes:Number(raced.prepared_bytes)||0,resumed:true}};
     return {status:500 as const,body:{error:(e as Error).message||'Could not stage this wine'}};
   }
 }
@@ -78,14 +89,14 @@ async function loadItems(db:D1Database,owner:string,sessionId:string){
 }
 
 export async function getBatchSession(db:D1Database,owner:string,sessionId:string){
-  const session=await db.prepare('SELECT id,status,total_items,confirmed_items,created_at,updated_at,expires_at FROM batch_recognition_sessions WHERE id=? AND owner_id=?').bind(sessionId,owner).first<Record<string,unknown>>();
+  const session=await db.prepare('SELECT id,status,total_items,expected_items,confirmed_items,created_at,updated_at,expires_at FROM batch_recognition_sessions WHERE id=? AND owner_id=?').bind(sessionId,owner).first<Record<string,unknown>>();
   if(!session)return null;const {items,byItem}=await loadItems(db,owner,sessionId);
-  return {id:String(session.id),status:String(session.status),totalItems:Number(session.total_items)||0,confirmedItems:Number(session.confirmed_items)||0,createdAt:String(session.created_at),updatedAt:String(session.updated_at),expiresAt:String(session.expires_at),items:items.map(item=>({id:item.id,position:item.position,status:item.status,recognition:item.recognition_json?parseJson(item.recognition_json,null):null,error:item.error,confirmedWineId:item.confirmed_wine_id,imageIds:(byItem.get(item.id)??[]).map(x=>x.id)}))};
+  return {id:String(session.id),status:String(session.status),totalItems:Number(session.total_items)||0,expectedItems:Number(session.expected_items)||0,confirmedItems:Number(session.confirmed_items)||0,createdAt:String(session.created_at),updatedAt:String(session.updated_at),expiresAt:String(session.expires_at),items:items.map(item=>({id:item.id,position:item.position,status:item.status,recognition:item.recognition_json?parseJson(item.recognition_json,null):null,error:item.error,confirmedWineId:item.confirmed_wine_id,imageIds:(byItem.get(item.id)??[]).map(x=>x.id)}))};
 }
 
 export async function listBatchSessions(db:D1Database,owner:string){
-  const rows=await db.prepare(`SELECT id,status,total_items,confirmed_items,created_at,updated_at,expires_at FROM batch_recognition_sessions WHERE owner_id=? ORDER BY updated_at DESC LIMIT 12`).bind(owner).all<Record<string,unknown>>();
-  return {items:rows.results.map(r=>({id:String(r.id),status:String(r.status),totalItems:Number(r.total_items)||0,confirmedItems:Number(r.confirmed_items)||0,createdAt:String(r.created_at),updatedAt:String(r.updated_at),expiresAt:String(r.expires_at)}))};
+  const rows=await db.prepare(`SELECT id,status,total_items,expected_items,confirmed_items,created_at,updated_at,expires_at FROM batch_recognition_sessions WHERE owner_id=? ORDER BY updated_at DESC LIMIT 12`).bind(owner).all<Record<string,unknown>>();
+  return {items:rows.results.map(r=>({id:String(r.id),status:String(r.status),totalItems:Number(r.total_items)||0,expectedItems:Number(r.expected_items)||0,confirmedItems:Number(r.confirmed_items)||0,createdAt:String(r.created_at),updatedAt:String(r.updated_at),expiresAt:String(r.expires_at)}))};
 }
 
 export async function getBatchImage(env:Pick<Env,'DB'|'WINE_IMAGES'>,owner:string,imageId:string){
@@ -95,16 +106,27 @@ export async function getBatchImage(env:Pick<Env,'DB'|'WINE_IMAGES'>,owner:strin
 }
 
 export async function markSessionSubmitted(db:D1Database,owner:string,sessionId:string){
-  const session=await db.prepare('SELECT status,total_items FROM batch_recognition_sessions WHERE id=? AND owner_id=?').bind(sessionId,owner).first<{status:string;total_items:number}>();
+  const session=await db.prepare('SELECT status,total_items,expected_items FROM batch_recognition_sessions WHERE id=? AND owner_id=?').bind(sessionId,owner).first<{status:string;total_items:number;expected_items:number}>();
   if(!session)return {ok:false,error:'Batch session not found'};
   if(session.status!=='uploading')return {ok:false,error:'This batch has already been submitted'};
-  if(Number(session.total_items)<2)return {ok:false,error:'Batch Scan requires at least two wines'};
+  const total=Number(session.total_items)||0,expected=Number(session.expected_items)||0;
+  if(!isBatchUploadComplete(total,expected))return {ok:false,error:expected?`Only ${total} of ${expected} wines have uploaded. Resume or cancel this batch before submitting.`:'Batch Scan requires at least two wines'};
   const stamp=now();
   await db.batch([
     db.prepare("UPDATE batch_recognition_items SET status='submitted',updated_at=? WHERE owner_id=? AND session_id=? AND status='staged'").bind(stamp,owner,sessionId),
     db.prepare("UPDATE batch_recognition_sessions SET status='queued',updated_at=? WHERE id=? AND owner_id=?").bind(stamp,sessionId,owner)
   ]);
   return {ok:true};
+}
+
+export async function removeBatchSession(env:Pick<Env,'DB'|'WINE_IMAGES'>,owner:string,sessionId:string){
+  const session=await env.DB.prepare('SELECT status,confirmed_items FROM batch_recognition_sessions WHERE id=? AND owner_id=?').bind(sessionId,owner).first<{status:string;confirmed_items:number}>();
+  if(!session)return {status:404 as const,body:{error:'Batch session not found'}};
+  if(session.status==='queued'||session.status==='running')return {status:409 as const,body:{error:'This batch is already processing with Gemini. It can be removed after processing finishes.'}};
+  const images=await env.DB.prepare(`SELECT bri.original_object_key,bri.recognition_object_key FROM batch_recognition_images bri JOIN batch_recognition_items i ON i.id=bri.item_id WHERE bri.owner_id=? AND i.owner_id=? AND i.session_id=?`).bind(owner,owner,sessionId).all<{original_object_key:string;recognition_object_key:string}>();
+  await Promise.all(images.results.flatMap(image=>[env.WINE_IMAGES.delete(image.original_object_key),env.WINE_IMAGES.delete(image.recognition_object_key)]).map(request=>request.catch(()=>undefined)));
+  await env.DB.prepare('DELETE FROM batch_recognition_sessions WHERE id=? AND owner_id=?').bind(sessionId,owner).run();
+  return {status:200 as const,body:{ok:true,confirmedItems:Number(session.confirmed_items)||0}};
 }
 
 async function r2Base64(bucket:R2Bucket,key:string){const object=await bucket.get(key);if(!object)throw new Error('A staged recognition image is missing');const bytes=new Uint8Array(await object.arrayBuffer());let binary='';for(let i=0;i<bytes.length;i+=32768)binary+=String.fromCharCode(...bytes.subarray(i,i+32768));return btoa(binary)}
