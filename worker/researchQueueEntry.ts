@@ -6,7 +6,8 @@ import { pollProducerBatchResearch,startProducerBatchResearch } from '../src/lib
 import { getProducerResearchRun } from '../src/lib/producers/research';
 import { createWineResearchRun,getLatestWineResearchRun,getWineResearchRun,updateWineResearchRun } from '../src/lib/research/backgroundJobs';
 import { pollWineBatchResearch,startWineBatchResearch } from '../src/lib/research/batchWineResearch';
-import { attachConfirmedItem,createBatchSession,getBatchImage,getBatchSession,listBatchSessions,markSessionSubmitted,processBatchCleanupJob,processBatchPollJob,processBatchSubmitJob,rejectBatchItem,removeBatchSession,stageBatchItem,type BatchRecognitionJob } from './batchRecognition';
+import { createBatchSession,getBatchImage,getBatchSession,listBatchSessions,markSessionSubmitted,processBatchCleanupJob,processBatchPollJob,processBatchSubmitJob,rejectBatchItem,removeBatchSession,stageBatchItem,type BatchRecognitionJob } from './batchRecognition';
+import { attachConfirmedItemWithMetadata } from './batchPromotion';
 
 type ProducerJob={kind:'producer';owner:string;producerId:string;requestId:string};
 type ProducerBatchPollJob={kind:'producer_batch_poll';owner:string;producerId:string;requestId:string;jobId:string;pollCount:number};
@@ -74,7 +75,7 @@ router.post('/api/batch-recognition/sessions/:sessionId/items/:itemId/confirm',a
   const createRequest=new Request(new URL('/api/wines',c.req.url),{method:'POST',headers,body:JSON.stringify(body.wine)}),created=await app.fetch(createRequest,c.env,c.executionCtx);
   if(!created.ok)return new Response(created.body,{status:created.status,headers:created.headers});
   const result=await created.json() as {id?:string};if(!result.id)return c.json({error:'Wine save did not return an ID'},500);
-  try{await attachConfirmedItem(c.env,owner,c.req.param('sessionId'),c.req.param('itemId'),result.id);return c.json({id:result.id})}catch(e){const rollback=new Request(new URL(`/api/wines/${result.id}`,c.req.url),{method:'DELETE',headers:new Headers(authorization?{Authorization:authorization}:undefined)});await Promise.resolve(app.fetch(rollback,c.env,c.executionCtx)).catch(()=>undefined);return c.json({error:(e as Error).message||'Could not attach staged photos'},500)}
+  try{await attachConfirmedItemWithMetadata(c.env,owner,c.req.param('sessionId'),c.req.param('itemId'),result.id);return c.json({id:result.id})}catch(e){const rollback=new Request(new URL(`/api/wines/${result.id}`,c.req.url),{method:'DELETE',headers:new Headers(authorization?{Authorization:authorization}:undefined)});await Promise.resolve(app.fetch(rollback,c.env,c.executionCtx)).catch(()=>undefined);return c.json({error:(e as Error).message||'Could not attach staged photos'},500)}
 });
 
 router.post('/api/batch-recognition/sessions/:sessionId/items/:itemId/reject',async c=>{cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}await rejectBatchItem(c.env,owner,c.req.param('sessionId'),c.req.param('itemId'));return c.json({ok:true})});
