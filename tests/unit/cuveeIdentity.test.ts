@@ -27,6 +27,11 @@ describe('cuvee identity',()=>{
     expect(stripKnownProducerPrefix('Clos de la Roche',['Domaine Dujac','Dujac'])).toBe('Clos de la Roche');
   });
 
+  it('keeps punctuation-only display corrections on the same identity',()=>{
+    expect(normalizeCuveeAlias('“Hirsch Vineyard” Rosé')).toBe(normalizeCuveeAlias('Hirsch Vineyard Rosé'));
+    expect(cuveeIdentitySignature('“Hirsch Vineyard” Rosé',null,'rose')).toBe(cuveeIdentitySignature('Hirsch Vineyard Rosé',null,'rose'));
+  });
+
   it('keeps same-name red and white releases as separate stable identities',()=>{
     const red=cuveeIdentitySignature('Plexus','Barossa','Red');
     const white=cuveeIdentitySignature('Plexus','Barossa','White');
