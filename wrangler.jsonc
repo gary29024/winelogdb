@@ -21,8 +21,7 @@
       "max_batch_timeout": 5,
       "max_retries": 2,
       "retry_delay": 60,
-      "dead_letter_queue": "winelog-research-dlq",
-      "max_concurrency": 2
+      "dead_letter_queue": "winelog-research-dlq"
     }]
   },
   "vars": { "MAX_FILE_BYTES": "10485760", "MAX_BATCH_FILES": "12" }
