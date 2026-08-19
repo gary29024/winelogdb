@@ -1,5 +1,5 @@
 import { describe,expect,it } from 'vitest';
-import { extractBatchResponses,inlineResponseText,isTerminalBatchState,normalizeBatchState,responsesByKey } from '../../src/lib/research/geminiBatch';
+import { bypassPrimaryGeminiBatchOnce,clearPrimaryGeminiBatchBypass,createGeminiBatch,extractBatchResponses,inlineResponseText,isTerminalBatchState,normalizeBatchState,responsesByKey } from '../../src/lib/research/geminiBatch';
 
 describe('Gemini Batch helpers',()=>{
   it('normalizes Gemini batch state names',()=>{
@@ -23,5 +23,12 @@ describe('Gemini Batch helpers',()=>{
   it('also accepts operation response inline results',()=>{
     const payload={response:{dest:{inlinedResponses:[{metadata:{key:'wine-research'},response:{candidates:[{content:{parts:[{text:'{}'}]}}]}}]}}};
     expect(extractBatchResponses(payload)[0]?.metadata?.key).toBe('wine-research');
+  });
+
+  it('can bypass one primary Batch create without making a network call',async()=>{
+    const requestId='123e4567-e89b-12d3-a456-426614174000';
+    bypassPrimaryGeminiBatchOnce(requestId);
+    await expect(createGeminiBatch('unused','gemini-3.7-flash',`winelog-producer-${requestId}-1`,[{key:'profile',request:{}}])).rejects.toThrow('temporarily in cooldown');
+    clearPrimaryGeminiBatchBypass(requestId);
   });
 });

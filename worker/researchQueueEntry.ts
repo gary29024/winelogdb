@@ -5,8 +5,11 @@ import { createQueuedProducerResearchRun } from '../src/lib/producers/background
 import { pollProducerBatchResearch,startProducerBatchResearch } from '../src/lib/producers/batchResearch';
 import { getProducerResearchRun } from '../src/lib/producers/research';
 import { createWineResearchRun,getLatestWineResearchRun,getWineResearchRun,updateWineResearchRun } from '../src/lib/research/backgroundJobs';
+import { getResearchBatchJob } from '../src/lib/research/batchJobStore';
 import { pollWineBatchResearch,startWineBatchResearch } from '../src/lib/research/batchWineResearch';
 import { cancelResearchRun,isResearchRunRunning,nextCancelSweepDelay,sweepCancelledResearch,type ResearchTargetKind } from '../src/lib/research/cancelResearch';
+import { bypassPrimaryGeminiBatchOnce,clearPrimaryGeminiBatchBypass } from '../src/lib/research/geminiBatch';
+import { markPrimaryResearchUnavailable,shouldBypassPrimaryResearch } from '../src/lib/research/modelHealth';
 import { createBatchSession,getBatchImage,getBatchSession,listBatchSessions,markSessionSubmitted,processBatchCleanupJob,processBatchPollJob,processBatchSubmitJob,rejectBatchItem,removeBatchSession,stageBatchItem,type BatchRecognitionJob } from './batchRecognition';
 import { attachConfirmedItemWithMetadata } from './batchPromotion';
 
@@ -29,6 +32,20 @@ async function failProducerQueue(db:D1Database,owner:string,requestId:string,mes
 async function scheduleCancelSweep(env:Bindings,owner:string,targetKind:ResearchTargetKind,targetId:string,requestId:string){
   await env.RESEARCH_QUEUE.send({kind:'research_cancel_sweep',owner,targetKind,targetId,requestId,pass:0},{delaySeconds:5}).catch(e=>console.error(JSON.stringify({event:'research_cancel_sweep_schedule_failed',targetKind,targetId,requestId,error:(e as Error).message})))
 }
+async function preparePrimaryRouting(env:Bindings,owner:string,requestId:string){
+  const bypass=await shouldBypassPrimaryResearch(env.DB,owner);if(bypass){bypassPrimaryGeminiBatchOnce(requestId);console.warn(JSON.stringify({event:'research_model_route',requestId,stage:'primary_cooldown',route:'gemini-3.6-flash'}))}return bypass;
+}
+async function noteFallbackUse(env:Bindings,owner:string,jobId:string,requestId:string,kind:'producer'|'wine',pollCount:number){
+  if(pollCount!==0)return;const tracked=await getResearchBatchJob(env.DB,owner,jobId).catch(()=>null);if(!tracked||tracked.attempt!==2)return;
+  if(!(await shouldBypassPrimaryResearch(env.DB,owner)))await markPrimaryResearchUnavailable(env.DB,owner,`${kind} research fell back from Gemini 3.7 to Gemini 3.6`);
+  console.warn(JSON.stringify({event:'research_model_route',requestId,stage:'fallback_active',kind,route:'gemini-3.6-flash'}));
+}
+async function harvestProducerJobs(env:Bindings,owner:string,producerId:string,requestId:string,jobIds:string[]){
+  for(const jobId of jobIds)await pollProducerBatchResearch(env,owner,producerId,requestId,jobId,0).catch(e=>console.error(JSON.stringify({event:'research_cancel_harvest_failed',kind:'producer',requestId,jobId,error:(e as Error).message})));
+}
+async function harvestWineJobs(env:Bindings,owner:string,wineId:string,requestId:string,jobIds:string[]){
+  for(const jobId of jobIds)await pollWineBatchResearch(env,owner,wineId,requestId,jobId,0).catch(e=>console.error(JSON.stringify({event:'research_cancel_harvest_failed',kind:'wine',requestId,jobId,error:(e as Error).message})));
+}
 
 router.post('/api/producers/:id/research',async c=>{
   cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
@@ -45,10 +62,11 @@ router.get('/api/producers/:id/research-status',async c=>{
 
 router.post('/api/producers/:id/research-cancel',async c=>{
   cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
-  const body=await c.req.json().catch(()=>({})) as {confirmation?:string;requestId?:string},requestId=String(body.requestId||'').trim();
+  const body=await c.req.json().catch(()=>({})) as {confirmation?:string;requestId?:string},requestId=String(body.requestId||'').trim(),producerId=c.req.param('id');
   if(body.confirmation!=='CANCEL_PRODUCER_RESEARCH'||!requestId)return c.json({error:'Producer research cancellation requires the active request ID'},400);
-  const result=await cancelResearchRun(c.env,owner,'producer',c.req.param('id'),requestId);
-  if(result.status===200&&result.body.cancelled)void scheduleCancelSweep(c.env,owner,'producer',c.req.param('id'),requestId);
+  const result=await cancelResearchRun(c.env,owner,'producer',producerId,requestId);
+  if(result.status===200&&result.body.harvestJobIds.length)await harvestProducerJobs(c.env,owner,producerId,requestId,result.body.harvestJobIds);
+  if(result.status===200&&result.body.cancelled)void scheduleCancelSweep(c.env,owner,'producer',producerId,requestId);
   return c.json(result.body,result.status);
 });
 
@@ -67,10 +85,11 @@ router.get('/api/wines/:id/deep-search-status',async c=>{
 
 router.post('/api/wines/:id/deep-search-cancel',async c=>{
   cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
-  const body=await c.req.json().catch(()=>({})) as {confirmation?:string;requestId?:string},requestId=String(body.requestId||'').trim();
+  const body=await c.req.json().catch(()=>({})) as {confirmation?:string;requestId?:string},requestId=String(body.requestId||'').trim(),wineId=c.req.param('id');
   if(body.confirmation!=='CANCEL_DEEP_SEARCH'||!requestId)return c.json({error:'Deep Search cancellation requires the active request ID'},400);
-  const result=await cancelResearchRun(c.env,owner,'wine',c.req.param('id'),requestId);
-  if(result.status===200&&result.body.cancelled)void scheduleCancelSweep(c.env,owner,'wine',c.req.param('id'),requestId);
+  const result=await cancelResearchRun(c.env,owner,'wine',wineId,requestId);
+  if(result.status===200&&result.body.harvestJobIds.length)await harvestWineJobs(c.env,owner,wineId,requestId,result.body.harvestJobIds);
+  if(result.status===200&&result.body.cancelled)void scheduleCancelSweep(c.env,owner,'wine',wineId,requestId);
   return c.json(result.body,result.status);
 });
 
@@ -110,16 +129,17 @@ async function consume(batch:MessageBatch<ResearchJob>,env:Bindings){
     console.log(JSON.stringify({event:'research_queue',stage:'start',kind:job.kind,...('requestId' in job?{requestId:job.requestId}:{sessionId:job.sessionId})}));
     if(job.kind==='producer'){
       if(!(await isResearchRunRunning(env.DB,job.owner,'producer',job.producerId,job.requestId)))console.log(JSON.stringify({event:'research_queue',stage:'cancelled_before_submit',kind:job.kind,requestId:job.requestId}));
-      else{const result=await startProducerBatchResearch(env,job.owner,job.producerId,job.requestId);console.log(JSON.stringify({event:'research_queue',stage:result.ok?'batch_submitted':'failed',kind:job.kind,requestId:job.requestId,...(!result.ok?{error:result.error}:{})}))}
+      else{await preparePrimaryRouting(env,job.owner,job.requestId);try{const result=await startProducerBatchResearch(env,job.owner,job.producerId,job.requestId);console.log(JSON.stringify({event:'research_queue',stage:result.ok?'batch_submitted':'failed',kind:job.kind,requestId:job.requestId,...(!result.ok?{error:result.error}:{})}))}finally{clearPrimaryGeminiBatchBypass(job.requestId)}}
     }
-    else if(job.kind==='producer_batch_poll')await pollProducerBatchResearch(env,job.owner,job.producerId,job.requestId,job.jobId,job.pollCount);
+    else if(job.kind==='producer_batch_poll'){await noteFallbackUse(env,job.owner,job.jobId,job.requestId,'producer',job.pollCount);await pollProducerBatchResearch(env,job.owner,job.producerId,job.requestId,job.jobId,job.pollCount)}
     else if(job.kind==='wine'){
       if(!(await isResearchRunRunning(env.DB,job.owner,'wine',job.wineId,job.requestId)))console.log(JSON.stringify({event:'research_queue',stage:'cancelled_before_submit',kind:job.kind,requestId:job.requestId}));
-      else{const result=await startWineBatchResearch(env,job.owner,job.wineId,job.requestId,job.refresh);console.log(JSON.stringify({event:'research_queue',stage:result.ok?(result.cached?'cache_complete':'batch_submitted'):'failed',kind:job.kind,requestId:job.requestId,...(!result.ok?{error:result.error}:{})}))}
+      else{await preparePrimaryRouting(env,job.owner,job.requestId);try{const result=await startWineBatchResearch(env,job.owner,job.wineId,job.requestId,job.refresh);console.log(JSON.stringify({event:'research_queue',stage:result.ok?(result.cached?'cache_complete':'batch_submitted'):'failed',kind:job.kind,requestId:job.requestId,...(!result.ok?{error:result.error}:{})}))}finally{clearPrimaryGeminiBatchBypass(job.requestId)}}
     }
-    else if(job.kind==='wine_batch_poll')await pollWineBatchResearch(env,job.owner,job.wineId,job.requestId,job.jobId,job.pollCount);
+    else if(job.kind==='wine_batch_poll'){await noteFallbackUse(env,job.owner,job.jobId,job.requestId,'wine',job.pollCount);await pollWineBatchResearch(env,job.owner,job.wineId,job.requestId,job.jobId,job.pollCount)}
     else if(job.kind==='research_cancel_sweep'){
-      await sweepCancelledResearch(env,job.owner,job.targetKind,job.targetId,job.requestId);
+      const swept=await sweepCancelledResearch(env,job.owner,job.targetKind,job.targetId,job.requestId);
+      if(swept.harvestJobIds.length){if(job.targetKind==='producer')await harvestProducerJobs(env,job.owner,job.targetId,job.requestId,swept.harvestJobIds);else await harvestWineJobs(env,job.owner,job.targetId,job.requestId,swept.harvestJobIds)}
       const delay=nextCancelSweepDelay(job.pass);if(delay!=null)await env.RESEARCH_QUEUE.send({...job,pass:job.pass+1},{delaySeconds:delay});
     }
     else if(job.kind==='recognition_batch_submit')await processBatchSubmitJob(env,job.owner,job.sessionId);

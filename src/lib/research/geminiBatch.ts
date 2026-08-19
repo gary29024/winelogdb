@@ -10,6 +10,26 @@ export type GroundingMetadata={
 };
 
 const BATCH_TERMINAL_STATES=new Set(['JOB_STATE_SUCCEEDED','JOB_STATE_FAILED','JOB_STATE_CANCELLED','JOB_STATE_EXPIRED']);
+const PRIMARY_MODEL='gemini-3.7-flash';
+const primaryBypassRequests=new Set<string>();
+
+export function bypassPrimaryGeminiBatchOnce(requestId:string){
+  if(requestId)primaryBypassRequests.add(requestId);
+}
+
+export function clearPrimaryGeminiBatchBypass(requestId:string){
+  primaryBypassRequests.delete(requestId);
+}
+
+function consumePrimaryBypass(model:string,displayName:string){
+  if(model!==PRIMARY_MODEL)return false;
+  for(const requestId of primaryBypassRequests){
+    if(!displayName.includes(requestId))continue;
+    primaryBypassRequests.delete(requestId);
+    return true;
+  }
+  return false;
+}
 
 export function normalizeBatchState(payload:Record<string,unknown>){
   const raw=String(payload.state??(payload.metadata as Record<string,unknown>|undefined)?.state??'');
@@ -40,6 +60,7 @@ export function responsesByKey(responses:GeminiInlineResponse[]){
 
 export async function createGeminiBatch(apiKey:string,model:string,displayName:string,entries:GeminiBatchRequest[]){
   if(!entries.length)throw new Error('Gemini Batch requires at least one request');
+  if(consumePrimaryBypass(model,displayName))throw new Error('Gemini 3.7 Batch bypassed because the primary research model is temporarily in cooldown');
   const requests=entries.map(entry=>({request:entry.request,metadata:{key:entry.key}}));
   const body=JSON.stringify({batch:{display_name:displayName,input_config:{requests:{requests}}}});
   const response=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:batchGenerateContent`,{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':apiKey},body});
