@@ -9,6 +9,7 @@ export async function createResearchBatchJob(db:D1Database,input:{owner:string;r
   const id=crypto.randomUUID(),stamp=now();
   await db.prepare(`INSERT INTO research_batch_jobs(id,owner_id,request_id,target_kind,target_id,google_batch_name,model,attempt,keys_json,status,created_at,updated_at)
     VALUES(?,?,?,?,?,?,?,?,?,'running',?,?)`).bind(id,input.owner,input.requestId,input.targetKind,input.targetId,input.googleBatchName,input.model,input.attempt,JSON.stringify(input.keys),stamp,stamp).run();
+  await db.prepare("DELETE FROM research_batch_jobs WHERE owner_id=? AND status<>'running' AND updated_at<datetime('now','-30 days')").bind(input.owner).run().catch(()=>undefined);
   return id;
 }
 
