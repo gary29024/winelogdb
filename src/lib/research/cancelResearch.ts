@@ -1,3 +1,5 @@
+import { fetchGeminiBatch } from './geminiBatch';
+
 export type ResearchTargetKind='producer'|'wine';
 
 type Env={DB:D1Database;GEMINI_API_KEY:string};
@@ -47,15 +49,20 @@ async function markRunCancelled(db:D1Database,owner:string,kind:ResearchTargetKi
 }
 
 async function cancelTrackedBatches(env:Env,owner:string,kind:ResearchTargetKind,targetId:string,requestId:string){
-  const rows=await trackedBatches(env.DB,owner,kind,targetId,requestId),stamp=now();
-  const running=rows.filter(row=>row.status==='running');
-  if(running.length){
-    await env.DB.prepare(`UPDATE research_batch_jobs SET status='failed',error=?,updated_at=?
-      WHERE owner_id=? AND request_id=? AND target_kind=? AND target_id=? AND status='running'`).bind(CANCEL_MESSAGE,stamp,owner,requestId,kind,targetId).run();
+  const rows=await trackedBatches(env.DB,owner,kind,targetId,requestId),stamp=now(),harvestJobIds:string[]=[],cancelRows:BatchRow[]=[];
+  for(const row of rows){
+    if(row.status!=='running'){cancelRows.push(row);continue}
+    const fetched=await fetchGeminiBatch(env.GEMINI_API_KEY,row.google_batch_name).catch(()=>null);
+    if(fetched?.ok&&fetched.state==='JOB_STATE_SUCCEEDED'){harvestJobIds.push(row.id);continue}
+    cancelRows.push(row);
   }
-  const names=[...new Set(rows.map(row=>row.google_batch_name).filter(Boolean))];
+  for(const row of cancelRows.filter(row=>row.status==='running')){
+    await env.DB.prepare(`UPDATE research_batch_jobs SET status='failed',error=?,updated_at=? WHERE owner_id=? AND id=? AND status='running'`)
+      .bind(CANCEL_MESSAGE,stamp,owner,row.id).run();
+  }
+  const names=[...new Set(cancelRows.map(row=>row.google_batch_name).filter(Boolean))];
   const remote=await Promise.all(names.map(name=>cancelGeminiBatch(env.GEMINI_API_KEY,name)));
-  return {tracked:names.length,remote};
+  return {tracked:rows.length,remote,harvestJobIds};
 }
 
 export async function isResearchRunRunning(db:D1Database,owner:string,kind:ResearchTargetKind,targetId:string,requestId:string){
@@ -68,10 +75,10 @@ export async function cancelResearchRun(env:Env,owner:string,kind:ResearchTarget
   const config=targetConfig[kind];
   const row=await env.DB.prepare(`SELECT status FROM ${config.table} WHERE owner_id=? AND request_id=? AND ${config.targetColumn}=?`).bind(owner,requestId,targetId).first<{status:string}>();
   if(!row)return {status:404 as const,body:{error:'Research run not found'}};
-  if(row.status!=='running')return {status:200 as const,body:{ok:true,cancelled:false,alreadyTerminal:true,requestId}};
+  if(row.status!=='running')return {status:200 as const,body:{ok:true,cancelled:false,alreadyTerminal:true,requestId,harvestJobIds:[] as string[]}};
   await markRunCancelled(env.DB,owner,kind,targetId,requestId);
   const batches=await cancelTrackedBatches(env,owner,kind,targetId,requestId);
-  return {status:200 as const,body:{ok:true,cancelled:true,alreadyTerminal:false,requestId,trackedBatches:batches.tracked,remoteCancellation:batches.remote}};
+  return {status:200 as const,body:{ok:true,cancelled:true,alreadyTerminal:false,requestId,trackedBatches:batches.tracked,remoteCancellation:batches.remote,harvestJobIds:batches.harvestJobIds}};
 }
 
 export async function sweepCancelledResearch(env:Env,owner:string,kind:ResearchTargetKind,targetId:string,requestId:string){
