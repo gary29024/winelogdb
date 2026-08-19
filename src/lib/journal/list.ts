@@ -1,3 +1,5 @@
+import { favoriteOnlyQuery } from './favorite';
+
 export type JournalListQuery=Record<string,string|undefined>;
 
 type JournalRow={
@@ -12,6 +14,7 @@ type JournalRow={
   wine_style:string|null;
   rating:number|null;
   venue:string|null;
+  favorite:number|null;
   journal_date:string;
   created_at:string;
   tasting_name:string|null;
@@ -29,6 +32,7 @@ export async function listJournalPage(db:D1Database,owner:string,q:JournalListQu
     const value=key==='vintage'?(q.vintage??vintageSearch):q[key];
     if(value){where+=` AND ${col}=?`;args.push(value)}
   }
+  if(favoriteOnlyQuery(q.favorite))where+=' AND w.favorite=1';
   if(q.rating){where+=' AND w.rating>=?';args.push(Number(q.rating))}
   if(q.grape){where+=' AND EXISTS (SELECT 1 FROM json_each(w.grapes_json) WHERE value=?)';args.push(q.grape)}
   if(q.tasting){where+=' AND EXISTS (SELECT 1 FROM wine_experiences we JOIN tastings t ON t.id=we.tasting_id WHERE we.wine_id=w.id AND we.owner_id=? AND lower(t.name) LIKE lower(?))';args.push(owner,`%${q.tasting}%`)}
@@ -45,7 +49,7 @@ export async function listJournalPage(db:D1Database,owner:string,q:JournalListQu
     vintage:'w.vintage DESC, w.producer COLLATE NOCASE ASC, w.wine_name COLLATE NOCASE ASC, w.id ASC'
   };
   const limit=Math.min(Math.max(Number(q.limit)||36,1),72),offset=Math.max(Number(q.offset)||0,0);args.push(limit,offset);
-  const rows=await db.prepare(`SELECT w.id,w.producer,w.wine_name,w.vintage,w.country,w.region,w.appellation,w.grapes_json,w.wine_style,w.rating,w.venue,
+  const rows=await db.prepare(`SELECT w.id,w.producer,w.wine_name,w.vintage,w.country,w.region,w.appellation,w.grapes_json,w.wine_style,w.rating,w.venue,w.favorite,
     coalesce(w.tasting_date,w.created_at) AS journal_date,w.created_at,
     (SELECT t.name FROM wine_experiences we LEFT JOIN tastings t ON t.id=we.tasting_id WHERE we.wine_id=w.id AND we.owner_id=w.owner_id ORDER BY we.created_at DESC LIMIT 1) AS tasting_name,
     (SELECT wi.id FROM wine_images wi WHERE wi.owner_id=w.owner_id AND wi.wine_id=w.id ORDER BY wi.rowid ASC LIMIT 1) AS image_id
@@ -62,6 +66,7 @@ export async function listJournalPage(db:D1Database,owner:string,q:JournalListQu
     wineStyle:row.wine_style??null,
     tastingName:row.tasting_name??null,
     venue:row.venue??null,
+    favorite:Boolean(row.favorite),
     rating:row.rating==null?null:Number(row.rating),
     tastingDate:row.journal_date??null,
     imageIds:row.image_id?[row.image_id]:[],
