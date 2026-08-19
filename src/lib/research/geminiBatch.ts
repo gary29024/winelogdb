@@ -17,6 +17,10 @@ export function bypassPrimaryGeminiBatchOnce(requestId:string){
   if(requestId)primaryBypassRequests.add(requestId);
 }
 
+export function clearPrimaryGeminiBatchBypass(requestId:string){
+  primaryBypassRequests.delete(requestId);
+}
+
 function consumePrimaryBypass(model:string,displayName:string){
   if(model!==PRIMARY_MODEL)return false;
   for(const requestId of primaryBypassRequests){
