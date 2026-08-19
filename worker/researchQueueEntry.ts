@@ -6,6 +6,7 @@ import { pollProducerBatchResearch,startProducerBatchResearch } from '../src/lib
 import { getProducerResearchRun } from '../src/lib/producers/research';
 import { createWineResearchRun,getLatestWineResearchRun,getWineResearchRun,updateWineResearchRun } from '../src/lib/research/backgroundJobs';
 import { pollWineBatchResearch,startWineBatchResearch } from '../src/lib/research/batchWineResearch';
+import { cancelResearchRun,isResearchRunRunning,nextCancelSweepDelay,sweepCancelledResearch,type ResearchTargetKind } from '../src/lib/research/cancelResearch';
 import { createBatchSession,getBatchImage,getBatchSession,listBatchSessions,markSessionSubmitted,processBatchCleanupJob,processBatchPollJob,processBatchSubmitJob,rejectBatchItem,removeBatchSession,stageBatchItem,type BatchRecognitionJob } from './batchRecognition';
 import { attachConfirmedItemWithMetadata } from './batchPromotion';
 
@@ -13,7 +14,8 @@ type ProducerJob={kind:'producer';owner:string;producerId:string;requestId:strin
 type ProducerBatchPollJob={kind:'producer_batch_poll';owner:string;producerId:string;requestId:string;jobId:string;pollCount:number};
 type WineJob={kind:'wine';owner:string;wineId:string;requestId:string;refresh:'none'|'vintage'|'all'};
 type WineBatchPollJob={kind:'wine_batch_poll';owner:string;wineId:string;requestId:string;jobId:string;pollCount:number};
-type ResearchJob=ProducerJob|ProducerBatchPollJob|WineJob|WineBatchPollJob|BatchRecognitionJob;
+type CancelResearchSweepJob={kind:'research_cancel_sweep';owner:string;targetKind:ResearchTargetKind;targetId:string;requestId:string;pass:number};
+type ResearchJob=ProducerJob|ProducerBatchPollJob|WineJob|WineBatchPollJob|CancelResearchSweepJob|BatchRecognitionJob;
 type Bindings={DB:D1Database;WINE_IMAGES:R2Bucket;ASSETS:Fetcher;GEMINI_API_KEY:string;AUTH_SECRET:string;APP_PASSWORD:string;APP_URL:string;MAX_FILE_BYTES?:string;MAX_BATCH_FILES?:string;RESEARCH_QUEUE:Queue<ResearchJob>};
 type AppEnv={Bindings:Bindings};
 const router=new Hono<AppEnv>();
@@ -24,6 +26,9 @@ async function user(c:{req:{header:(name:string)=>string|undefined};env:Bindings
 function mapProducerRun(row:Record<string,unknown>){return {requestId:String(row.request_id),producerId:String(row.producer_id),status:String(row.status),stage:String(row.stage),attempt:Number(row.attempt)||0,message:row.message?String(row.message):null,startedAt:String(row.started_at),updatedAt:String(row.updated_at),completedAt:row.completed_at?String(row.completed_at):null,durationMs:row.duration_ms==null?null:Number(row.duration_ms)}}
 async function latestProducerRun(db:D1Database,owner:string,producerId:string){const row=await db.prepare(`SELECT request_id,producer_id,status,stage,attempt,message,started_at,updated_at,completed_at,duration_ms FROM producer_research_runs WHERE owner_id=? AND producer_id=? ORDER BY updated_at DESC LIMIT 1`).bind(owner,producerId).first<Record<string,unknown>>();return row?mapProducerRun(row):null}
 async function failProducerQueue(db:D1Database,owner:string,requestId:string,message:string){const stamp=new Date().toISOString();await db.prepare(`UPDATE producer_research_runs SET status='failed',stage='failed',message=?,updated_at=?,completed_at=?,duration_ms=cast((julianday(?)-julianday(started_at))*86400000 as integer) WHERE owner_id=? AND request_id=?`).bind(message,stamp,stamp,stamp,owner,requestId).run().catch(()=>undefined)}
+async function scheduleCancelSweep(env:Bindings,owner:string,targetKind:ResearchTargetKind,targetId:string,requestId:string){
+  await env.RESEARCH_QUEUE.send({kind:'research_cancel_sweep',owner,targetKind,targetId,requestId,pass:0},{delaySeconds:5}).catch(e=>console.error(JSON.stringify({event:'research_cancel_sweep_schedule_failed',targetKind,targetId,requestId,error:(e as Error).message})))
+}
 
 router.post('/api/producers/:id/research',async c=>{
   cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
@@ -38,6 +43,15 @@ router.get('/api/producers/:id/research-status',async c=>{
   const requestId=(c.req.query('requestId')||'').trim();try{const run=requestId?await getProducerResearchRun(c.env.DB,owner,c.req.param('id'),requestId):await latestProducerRun(c.env.DB,owner,c.req.param('id'));return run?c.json(run):c.json({error:'Research run not found'},404)}catch(e){return c.json({error:(e as Error).message||'Could not load research status'},500)}
 });
 
+router.post('/api/producers/:id/research-cancel',async c=>{
+  cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
+  const body=await c.req.json().catch(()=>({})) as {confirmation?:string;requestId?:string},requestId=String(body.requestId||'').trim();
+  if(body.confirmation!=='CANCEL_PRODUCER_RESEARCH'||!requestId)return c.json({error:'Producer research cancellation requires the active request ID'},400);
+  const result=await cancelResearchRun(c.env,owner,'producer',c.req.param('id'),requestId);
+  if(result.status===200&&result.body.cancelled)void scheduleCancelSweep(c.env,owner,'producer',c.req.param('id'),requestId);
+  return c.json(result.body,result.status);
+});
+
 router.post('/api/wines/:id/deep-search',async c=>{
   cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
   const body=await c.req.json().catch(()=>({})) as {confirmation?:string;refresh?:'none'|'vintage'|'all';requestId?:string};if(body.confirmation!=='RUN_DEEP_SEARCH')return c.json({error:'Deep Search requires explicit confirmation'},400);
@@ -49,6 +63,15 @@ router.post('/api/wines/:id/deep-search',async c=>{
 router.get('/api/wines/:id/deep-search-status',async c=>{
   cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
   const requestId=(c.req.query('requestId')||'').trim();try{const run=requestId?await getWineResearchRun(c.env.DB,owner,c.req.param('id'),requestId):await getLatestWineResearchRun(c.env.DB,owner,c.req.param('id'));return run?c.json(run):c.json({error:'Research run not found'},404)}catch(e){return c.json({error:(e as Error).message||'Could not load Deep Search status'},500)}
+});
+
+router.post('/api/wines/:id/deep-search-cancel',async c=>{
+  cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
+  const body=await c.req.json().catch(()=>({})) as {confirmation?:string;requestId?:string},requestId=String(body.requestId||'').trim();
+  if(body.confirmation!=='CANCEL_DEEP_SEARCH'||!requestId)return c.json({error:'Deep Search cancellation requires the active request ID'},400);
+  const result=await cancelResearchRun(c.env,owner,'wine',c.req.param('id'),requestId);
+  if(result.status===200&&result.body.cancelled)void scheduleCancelSweep(c.env,owner,'wine',c.req.param('id'),requestId);
+  return c.json(result.body,result.status);
 });
 
 router.get('/api/batch-recognition/sessions',async c=>{cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}return c.json(await listBatchSessions(c.env.DB,owner))});
@@ -85,10 +108,20 @@ router.all('*',c=>app.fetch(c.req.raw,c.env,c.executionCtx));
 async function consume(batch:MessageBatch<ResearchJob>,env:Bindings){
   for(const message of batch.messages){const job=message.body;try{
     console.log(JSON.stringify({event:'research_queue',stage:'start',kind:job.kind,...('requestId' in job?{requestId:job.requestId}:{sessionId:job.sessionId})}));
-    if(job.kind==='producer'){const result=await startProducerBatchResearch(env,job.owner,job.producerId,job.requestId);console.log(JSON.stringify({event:'research_queue',stage:result.ok?'batch_submitted':'failed',kind:job.kind,requestId:job.requestId,...(!result.ok?{error:result.error}:{})}));}
+    if(job.kind==='producer'){
+      if(!(await isResearchRunRunning(env.DB,job.owner,'producer',job.producerId,job.requestId)))console.log(JSON.stringify({event:'research_queue',stage:'cancelled_before_submit',kind:job.kind,requestId:job.requestId}));
+      else{const result=await startProducerBatchResearch(env,job.owner,job.producerId,job.requestId);console.log(JSON.stringify({event:'research_queue',stage:result.ok?'batch_submitted':'failed',kind:job.kind,requestId:job.requestId,...(!result.ok?{error:result.error}:{})}))}
+    }
     else if(job.kind==='producer_batch_poll')await pollProducerBatchResearch(env,job.owner,job.producerId,job.requestId,job.jobId,job.pollCount);
-    else if(job.kind==='wine'){const result=await startWineBatchResearch(env,job.owner,job.wineId,job.requestId,job.refresh);console.log(JSON.stringify({event:'research_queue',stage:result.ok?(result.cached?'cache_complete':'batch_submitted'):'failed',kind:job.kind,requestId:job.requestId,...(!result.ok?{error:result.error}:{})}));}
+    else if(job.kind==='wine'){
+      if(!(await isResearchRunRunning(env.DB,job.owner,'wine',job.wineId,job.requestId)))console.log(JSON.stringify({event:'research_queue',stage:'cancelled_before_submit',kind:job.kind,requestId:job.requestId}));
+      else{const result=await startWineBatchResearch(env,job.owner,job.wineId,job.requestId,job.refresh);console.log(JSON.stringify({event:'research_queue',stage:result.ok?(result.cached?'cache_complete':'batch_submitted'):'failed',kind:job.kind,requestId:job.requestId,...(!result.ok?{error:result.error}:{})}))}
+    }
     else if(job.kind==='wine_batch_poll')await pollWineBatchResearch(env,job.owner,job.wineId,job.requestId,job.jobId,job.pollCount);
+    else if(job.kind==='research_cancel_sweep'){
+      await sweepCancelledResearch(env,job.owner,job.targetKind,job.targetId,job.requestId);
+      const delay=nextCancelSweepDelay(job.pass);if(delay!=null)await env.RESEARCH_QUEUE.send({...job,pass:job.pass+1},{delaySeconds:delay});
+    }
     else if(job.kind==='recognition_batch_submit')await processBatchSubmitJob(env,job.owner,job.sessionId);
     else if(job.kind==='recognition_batch_poll')await processBatchPollJob(env,job.owner,job.sessionId,job.jobId,job.pollCount);
     else if(job.kind==='recognition_batch_cleanup')await processBatchCleanupJob(env,job.owner,job.sessionId);

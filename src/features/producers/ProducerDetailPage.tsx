@@ -1,7 +1,7 @@
 import { useEffect,useMemo,useRef,useState } from 'react';
 import { Link,useParams } from 'react-router-dom';
 import { WineImage } from '../wines/WineImage';
-import { getProducer,getProducerResearchStatus,listProducers,mergeProducer,researchProducer,setPrimaryProducerName,unlinkProducer,type LinkedProducer,type ProducerDetail,type ProducerResearchRun,type ProducerSummary } from './api';
+import { cancelProducerResearch,getProducer,getProducerResearchStatus,listProducers,mergeProducer,researchProducer,setPrimaryProducerName,unlinkProducer,type LinkedProducer,type ProducerDetail,type ProducerResearchRun,type ProducerSummary } from './api';
 import { ProducerHeroImage } from './ProducerHeroImage';
 import { CuveeCatalogLinks,type TastedCuveeGroup } from './CuveeCatalogLinks';
 import { normalizeProducerAlias } from '../../lib/producers/entities';
@@ -65,7 +65,7 @@ function catalogNote(wine:ProducerDetail['catalog'][number]){
 }
 
 export function ProducerDetailPage(){
- const {id=''}=useParams(),[producer,setProducer]=useState<ProducerDetail>(),[available,setAvailable]=useState<ProducerSummary[]>([]),[availableLoaded,setAvailableLoaded]=useState(false),[selectedAlias,setSelectedAlias]=useState(''),[primaryName,setPrimaryName]=useState(''),[loading,setLoading]=useState(true),[error,setError]=useState(''),[notice,setNotice]=useState(''),[researching,setResearching]=useState(false),[researchRun,setResearchRun]=useState<ProducerResearchRun|null>(null),[researchElapsed,setResearchElapsed]=useState(0),[merging,setMerging]=useState(false),[unlinking,setUnlinking]=useState(''),[savingPrimary,setSavingPrimary]=useState(false);
+ const {id=''}=useParams(),[producer,setProducer]=useState<ProducerDetail>(),[available,setAvailable]=useState<ProducerSummary[]>([]),[availableLoaded,setAvailableLoaded]=useState(false),[selectedAlias,setSelectedAlias]=useState(''),[primaryName,setPrimaryName]=useState(''),[loading,setLoading]=useState(true),[error,setError]=useState(''),[notice,setNotice]=useState(''),[researching,setResearching]=useState(false),[researchRun,setResearchRun]=useState<ProducerResearchRun|null>(null),[researchElapsed,setResearchElapsed]=useState(0),[researchCancelling,setResearchCancelling]=useState(false),[merging,setMerging]=useState(false),[unlinking,setUnlinking]=useState(''),[savingPrimary,setSavingPrimary]=useState(false);
  const researchPoll=useRef<number|undefined>(undefined),researchClock=useRef<number|undefined>(undefined);
  function stopResearchTimers(){if(researchPoll.current)window.clearInterval(researchPoll.current);if(researchClock.current)window.clearInterval(researchClock.current);researchPoll.current=undefined;researchClock.current=undefined}
  async function reload(){const detail=await getProducer(id);setProducer(detail);setPrimaryName(detail.canonicalName);setSelectedAlias('')}
@@ -113,6 +113,15 @@ export function ProducerDetailPage(){
    if(run)watchResearch(run);else setNotice('Producer research has been queued in the background. You can leave this page safely.');
   }catch(e){setError((e as Error).message)}
  }
+ async function cancelResearch(){
+  if(!researchRun||researchRun.status!=='running'||researchCancelling)return;
+  if(!confirm('Cancel this producer Deep Search? Any profile or catalogue data already saved will be kept.'))return;
+  setResearchCancelling(true);setError('');setNotice('');
+  try{
+   const result=await cancelProducerResearch(id,researchRun.requestId);stopResearchTimers();setResearching(false);setResearchRun(null);await reload().catch(()=>undefined);
+   setNotice(result.alreadyTerminal?'Producer research had already reached a terminal state.':'Producer Deep Search cancelled. Any profile or catalogue data already saved was kept.');
+  }catch(e){setError((e as Error).message)}finally{setResearchCancelling(false)}
+ }
  async function savePrimaryName(){if(!producer||!primaryName||primaryName===producer.canonicalName)return;setSavingPrimary(true);setError('');setNotice('');try{const result=await setPrimaryProducerName(id,primaryName);await reload();setNotice(`${result.canonicalName} is now the primary producer name. Bottle-level recognised names and research remain attached to the same producer identity.`)}catch(e){setError((e as Error).message)}finally{setSavingPrimary(false)}}
  async function addAlias(){const source=available.find(x=>x.id===selectedAlias);if(!producer||!source)return;const ok=confirm(`Link “${source.canonicalName}” to “${producer.canonicalName}”?\n\n${producer.canonicalName} will remain the canonical producer. All wines and aliases from ${source.canonicalName} will be linked here. If both names already have research, WineLog will keep the newest complete result active, combine sources, and preserve the previous research in history.`);if(!ok)return;setMerging(true);setError('');setNotice('');try{const result=await mergeProducer(id,source.id);await reload();void refreshAvailable().catch(()=>undefined);setNotice(`${result.mergedName} is now linked as an alias of ${result.canonicalName}.`)}catch(e){setError((e as Error).message)}finally{setMerging(false)}}
  async function unlinkAlias(link:LinkedProducer){if(!producer)return;const ok=confirm(`Unlink “${link.name}” from “${producer.canonicalName}”?\n\nWineLog will recreate ${link.name} as a separate producer, move back the wines that belonged to it when it was linked, and restore its archived research. Research added to ${producer.canonicalName} after the link will stay with ${producer.canonicalName}.`);if(!ok)return;setUnlinking(link.mergeId);setError('');setNotice('');try{const result=await unlinkProducer(id,link.mergeId);await reload();void refreshAvailable().catch(()=>undefined);setNotice(`${result.unlinkedName} has been restored as a separate producer.`)}catch(e){setError((e as Error).message)}finally{setUnlinking('')}}
@@ -125,7 +134,7 @@ export function ProducerDetailPage(){
   </header>
   {error&&<p className="producer-error" role="alert">{error}</p>}{notice&&<p className="producer-notice" role="status">{notice}</p>}
   <section className="detail-section"><div className="producer-section-title"><div><p className="section-label">PRODUCER RESEARCH</p><h2>Profile & range</h2></div><button type="button" disabled={researching} onClick={runResearch}>{researching?'Research running…':producer.researchedAt?'Refresh producer research':'Research producer'}</button></div>
-   {researchRun&&<div className={`producer-research-status ${researchRun.status}`} role="status" aria-live="polite"><div><strong>{stageLabel[researchRun.stage]}</strong><span>{researchRun.message}</span></div><div><strong>{researching?`${researchElapsed}s`:researchRun.durationMs!=null?`${(researchRun.durationMs/1000).toFixed(1)}s`:''}</strong><small>Request {researchRun.requestId}</small></div>{researching&&<p>This is a background job. You can leave this page or close WineLog; the saved result will appear automatically when you return.</p>}</div>}
+   {researchRun&&<div className={`producer-research-status ${researchRun.status}`} role="status" aria-live="polite"><div><strong>{stageLabel[researchRun.stage]}</strong><span>{researchRun.message}</span></div><div><strong>{researching?`${researchElapsed}s`:researchRun.durationMs!=null?`${(researchRun.durationMs/1000).toFixed(1)}s`:''}</strong><small>Request {researchRun.requestId}</small></div>{researching&&<><p>This is a background job. You can leave this page or close WineLog; the saved result will appear automatically when you return.</p><button type="button" className="secondary-danger" disabled={researchCancelling} onClick={cancelResearch}>{researchCancelling?'Cancelling…':'Cancel Deep Search'}</button></>}</div>}
    {producer.profile?<p className="producer-profile">{producer.profile}</p>:<p>Research this producer to establish its physical base, broad region and commune, public contact details, official website, general producer-wide practices, header image and a sourced current/recent wine range.</p>}
    {producer.winemakingPractices&&<div className="producer-practices"><p className="section-label">GENERAL WINEMAKING PRACTICES</p><p className="producer-profile">{producer.winemakingPractices}</p><small>Producer-wide context only. Exact cuvée/vintage techniques are researched separately on the wine page.</small></div>}
    {hasContact&&<div className="producer-contact"><p className="section-label">CONTACT</p><div className="producer-contact-grid">
