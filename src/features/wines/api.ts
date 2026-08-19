@@ -26,6 +26,7 @@ export type WineResearchStage='queued'|'researching'|'saving'|'complete'|'failed
 export type WineResearchRun={requestId:string;wineId:string;status:'running'|'complete'|'failed';stage:WineResearchStage;refresh:'none'|'vintage'|'all';attempt:number;message:string|null;startedAt:string;updatedAt:string;completedAt:string|null;durationMs:number|null};
 export type JournalBatchPatch={tastingName?:string|null;venue?:string|null};
 export type SaveWineOptions={preferCuveePrimaryName?:boolean};
+export type WineResearchCancelResult={ok:true;cancelled:boolean;alreadyTerminal:boolean;requestId:string;trackedBatches?:number;remoteCancellation?:Array<{name:string;ok:boolean;status:number;error?:string}>};
 
 type ApiIssue={path?:Array<string|number>;message?:string};
 async function requireOk(r:Response,message:string){
@@ -75,4 +76,7 @@ export async function startWineDeepSearch(id:string,refresh:'none'|'vintage'|'al
 }
 export async function getWineDeepSearchStatus(id:string,requestId?:string){
   const suffix=requestId?`?requestId=${encodeURIComponent(requestId)}`:'';const r=await fetch(`/api/wines/${id}/deep-search-status${suffix}`,{headers:authHeaders()});if(r.status===404)return null;await requireOk(r,'Could not load Deep Search status');return r.json() as Promise<WineResearchRun>;
+}
+export async function cancelWineDeepSearch(id:string,requestId:string){
+  const r=await fetch(`/api/wines/${id}/deep-search-cancel`,{method:'POST',headers:authHeaders(true),body:JSON.stringify({confirmation:'CANCEL_DEEP_SEARCH',requestId})});await requireOk(r,'Could not cancel Deep Search');return r.json() as Promise<WineResearchCancelResult>;
 }

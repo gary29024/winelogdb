@@ -1,6 +1,6 @@
 import { useEffect,useRef,useState,type ReactNode } from 'react';
 import { Link,useNavigate,useParams } from 'react-router-dom';
-import { deleteWine,getWine,getWineDeepSearchStatus,setWineFavorite,startWineDeepSearch,type WineDetail,type WineResearchRun } from './api';
+import { cancelWineDeepSearch,deleteWine,getWine,getWineDeepSearchStatus,setWineFavorite,startWineDeepSearch,type WineDetail,type WineResearchRun } from './api';
 import { WineImage } from './WineImage';
 import '../../deepSearch.css';
 import '../../favorites.css';
@@ -26,7 +26,7 @@ function ResearchText({text}:{text:string}){
 }
 
 export function DetailPage(){
- const {id=''}=useParams(),nav=useNavigate(),[wine,setWine]=useState<WineDetail>(),[favoriteBusy,setFavoriteBusy]=useState(false),[deepState,setDeepState]=useState<DeepState>('idle'),[deepError,setDeepError]=useState(''),[deepRun,setDeepRun]=useState<WineResearchRun|null>(null),[deepElapsed,setDeepElapsed]=useState(0),[deepNotice,setDeepNotice]=useState(''),[selectedImage,setSelectedImage]=useState<string>();
+ const {id=''}=useParams(),nav=useNavigate(),[wine,setWine]=useState<WineDetail>(),[favoriteBusy,setFavoriteBusy]=useState(false),[deepState,setDeepState]=useState<DeepState>('idle'),[deepError,setDeepError]=useState(''),[deepRun,setDeepRun]=useState<WineResearchRun|null>(null),[deepElapsed,setDeepElapsed]=useState(0),[deepNotice,setDeepNotice]=useState(''),[deepCancelling,setDeepCancelling]=useState(false),[selectedImage,setSelectedImage]=useState<string>();
  const pollRef=useRef<number|undefined>(undefined),clockRef=useRef<number|undefined>(undefined);
  function stopDeepTimers(){if(pollRef.current)window.clearInterval(pollRef.current);if(clockRef.current)window.clearInterval(clockRef.current);pollRef.current=undefined;clockRef.current=undefined}
  async function reloadWine(){const next=await getWine(id);setWine(next);return next}
@@ -57,6 +57,15 @@ export function DetailPage(){
    if(run)watchDeepSearch(run);else setDeepNotice('Deep Search has been queued in the background. You can leave this page safely.');
   }catch(e){setDeepError((e as Error).message);setDeepState('error')}
  }
+ async function cancelDeepSearch(){
+  if(!deepRun||deepRun.status!=='running'||deepCancelling)return;
+  if(!confirm('Cancel this Deep Search? Any producer, terroir, vintage or wine research already saved will be kept.'))return;
+  setDeepCancelling(true);setDeepError('');
+  try{
+   const result=await cancelWineDeepSearch(id,deepRun.requestId);stopDeepTimers();await reloadWine().catch(()=>undefined);setDeepRun(null);setDeepState('idle');
+   setDeepNotice(result.alreadyTerminal?'Deep Search had already reached a terminal state.':'Deep Search cancelled. Any research already saved was kept.');
+  }catch(e){setDeepError((e as Error).message);setDeepState('running')}finally{setDeepCancelling(false)}
+ }
  async function toggleFavorite(){
   if(!wine||favoriteBusy)return;const next=!wine.favorite;setFavoriteBusy(true);setWine({...wine,favorite:next});
   try{await setWineFavorite(id,next)}catch(e){setWine(current=>current?{...current,favorite:!next}:current);setDeepNotice((e as Error).message)}finally{setFavoriteBusy(false)}
@@ -76,7 +85,7 @@ export function DetailPage(){
    {deepState==='idle'&&<button type="button" onClick={()=>setDeepState('confirm-usage')}>{deep?'Refresh vintage research':'Deep Search'}</button>}
    {deepState==='confirm-usage'&&<div className="deep-confirm"><p>{deep?'This refresh keeps cached producer-wide practices and stable terroir research, and re-runs only vintage-sensitive research for this wine.':'WineLog checks permanent caches first and queues Gemini 3.7 Flash with Google Search only for missing research scopes.'} The background job continues even if you close WineLog. API usage may be incurred. Continue?</p><button type="button" onClick={()=>setDeepState('confirm-final')}>Continue</button><button type="button" className="secondary-danger" onClick={()=>setDeepState('idle')}>Cancel</button></div>}
    {deepState==='confirm-final'&&<div className="deep-confirm"><p>{deep?'Final confirmation: queue refreshed vintage context and exact wine-vintage research now?':'Final confirmation: queue this wine’s grounded Deep Search now?'}</p><button type="button" onClick={runDeepSearch}>{deep?'Queue vintage refresh':'Queue Deep Search'}</button><button type="button" className="secondary-danger" onClick={()=>setDeepState('idle')}>Cancel</button></div>}
-   {deepState==='running'&&<div className="deep-running" role="status"><span className="deep-spinner" aria-hidden="true"/><div><strong>{deepRun?deepStage[deepRun.stage]:'Queueing Deep Search…'}</strong><p>{deepRun?.message||'Preparing the background job.'}</p><small>{deepElapsed}s{deepRun?` · Request ${deepRun.requestId}`:''}</small><p>You can leave this page or close WineLog. The Queue continues independently and the saved result will appear when you return.</p></div></div>}
+   {deepState==='running'&&<div className="deep-running" role="status"><span className="deep-spinner" aria-hidden="true"/><div><strong>{deepRun?deepStage[deepRun.stage]:'Queueing Deep Search…'}</strong><p>{deepRun?.message||'Preparing the background job.'}</p><small>{deepElapsed}s{deepRun?` · Request ${deepRun.requestId}`:''}</small><p>You can leave this page or close WineLog. The Queue continues independently and the saved result will appear when you return.</p><button type="button" className="secondary-danger" disabled={!deepRun||deepCancelling} onClick={cancelDeepSearch}>{deepCancelling?'Cancelling…':'Cancel Deep Search'}</button></div></div>}
    {deepState==='error'&&<div className="deep-error" role="alert"><strong>Deep Search did not complete.</strong><p>{deepError||deepRun?.message||'The background research job failed before a result was saved.'}</p><button type="button" onClick={runDeepSearch}>Retry Deep Search</button><button type="button" className="secondary-danger" onClick={()=>setDeepState('idle')}>Close</button></div>}
   </section>
   <section className="detail-section experience-panel"><p className="section-label">YOUR EXPERIENCE</p><dl>{[['Drinking date',wine.tastingDate],['Tasting / event',wine.tastingName],['Venue',wine.venue],['Location',wine.locationName]].filter(x=>x[1]).map(([k,v])=><div key={String(k)}><dt>{k}</dt><dd>{v}</dd></div>)}</dl></section><p>{wine.tags.map(t=><span className="tag" key={t}>#{t}</span>)}</p><div className="actions"><Link className="button" to={`/wines/${id}/edit`}>Edit tasting</Link><button className="danger secondary-danger" onClick={async()=>{if(confirm('Delete this wine?')){await deleteWine(id);nav('/')}}}>Delete</button></div>
