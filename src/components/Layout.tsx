@@ -1,11 +1,41 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import '../scanSheet.css';
+import '../mobileViewport.css';
+
+const MOBILE_BROWSER_BOTTOM_VAR='--mobile-browser-bottom';
 
 export function Layout(){
   const [scanSheetOpen,setScanSheetOpen]=useState(false);
   const scanInput=useRef<HTMLInputElement>(null);
   const navigate=useNavigate();
+
+  useEffect(()=>{
+    const viewport=window.visualViewport;
+    if(!viewport)return;
+    let frame=0,maxVisualHeight=viewport.height;
+    const update=()=>{
+      window.cancelAnimationFrame(frame);
+      frame=window.requestAnimationFrame(()=>{
+        maxVisualHeight=Math.max(maxVisualHeight,viewport.height);
+        const keyboardLikely=viewport.height<maxVisualHeight*.72;
+        const covered=keyboardLikely?0:Math.max(0,Math.min(160,maxVisualHeight-viewport.height-viewport.offsetTop));
+        document.documentElement.style.setProperty(MOBILE_BROWSER_BOTTOM_VAR,`${Math.round(covered)}px`);
+      });
+    };
+    const resetForOrientation=()=>{maxVisualHeight=viewport.height;update()};
+    update();
+    viewport.addEventListener('resize',update);
+    viewport.addEventListener('scroll',update);
+    window.addEventListener('orientationchange',resetForOrientation);
+    return()=>{
+      window.cancelAnimationFrame(frame);
+      viewport.removeEventListener('resize',update);
+      viewport.removeEventListener('scroll',update);
+      window.removeEventListener('orientationchange',resetForOrientation);
+      document.documentElement.style.removeProperty(MOBILE_BROWSER_BOTTOM_VAR);
+    };
+  },[]);
 
   function startScan(files:FileList|null){
     if(!files?.length)return;
