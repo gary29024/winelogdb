@@ -2,8 +2,10 @@ import { useEffect,useRef,useState,type ReactNode } from 'react';
 import { Link,useNavigate,useParams } from 'react-router-dom';
 import { cancelWineDeepSearch,deleteWine,getWine,getWineDeepSearchStatus,setWineFavorite,startWineDeepSearch,type WineDetail,type WineResearchRun } from './api';
 import { WineImage } from './WineImage';
+import { structureValueLabel } from '../../lib/wine/tastingStructure';
 import '../../deepSearch.css';
 import '../../favorites.css';
+import '../../wineFormCompact.css';
 
 type DeepState='idle'|'confirm-usage'|'confirm-final'|'running'|'error';
 const deepStage:Record<WineResearchRun['stage'],string>={queued:'Queued for background research',researching:'Researching with Gemini 3.7 Flash',saving:'Saving Deep Search result',complete:'Research complete',failed:'Research failed'};
@@ -72,13 +74,17 @@ export function DetailPage(){
  }
  if(!wine)return <p aria-live="polite">Loading wine…</p>;
  const blend=wine.grapeBlend.length?wine.grapeBlend.map(x=>`${x.grape}${x.percentage!=null?` ${x.percentage}%`:''}`):wine.grapes;
- const deep=wine.deepSearch;
+ const deep=wine.deepSearch,structure=wine.tastingStructure;
+ const structureItems=structure?[
+  ['Flavour intensity',structure.flavourIntensity],['Acidity',structure.acidity],['Tannin',structure.tannin],['Body',structure.body],['Finish',structure.finish],['Perceived alcohol',structure.alcohol]
+ ].filter((item):item is [string,string]=>Boolean(item[1])):[];
  return <article className="detail wine-detail"><Link className="back-pill" to="/">← Journal</Link>
   <section className="wine-identity">
    {wine.imageIds.length?<div className="detail-gallery" aria-label={`${wine.wineName} photos`}>{wine.imageIds.map((imageId,index)=><button type="button" className="detail-photo-button" key={imageId} onClick={()=>setSelectedImage(imageId)} aria-label={`Open photo ${index+1} of ${wine.imageIds.length}`}><WineImage imageId={imageId} alt={`${wine.producer} ${wine.wineName} photo ${index+1}`} className="detail-photo"/></button>)}</div>:<div className="detail-bottle">{wine.wineStyle?.slice(0,1).toUpperCase()||'W'}</div>}
    <p className="eyebrow">{wine.vintage??'NON-VINTAGE'} · {wine.wineStyle??'WINE'}</p><h1>{wine.wineName}</h1><h2>{wine.producerId?<Link className="detail-producer-link" to={`/producers/${wine.producerId}`}>{wine.producer}</Link>:wine.producer}</h2><div className="detail-favorite-row"><button type="button" className={`detail-favorite-button${wine.favorite?' active':''}`} aria-pressed={wine.favorite} onClick={()=>void toggleFavorite()} disabled={favoriteBusy}><span className="heart" aria-hidden="true">{wine.favorite?'♥':'♡'}</span>{wine.favorite?'Favorite':'Add to favorites'}</button></div><div className="detail-pills">{wine.appellation&&<span>{wine.appellation}</span>}{blend.map(g=><span key={g}>{g}</span>)}{wine.rating!=null&&<strong>{wine.rating} / 100</strong>}</div>
   </section>
   {wine.tastingNotes&&<section className="detail-section"><p className="section-label">SENSORY NOTES</p><blockquote>{wine.tastingNotes}</blockquote></section>}
+  {structureItems.length>0&&<section className="detail-section"><p className="section-label">STRUCTURE</p><dl className="tasting-structure-summary">{structureItems.map(([label,value])=><div key={label}><dt>{label}</dt><dd>{structureValueLabel[value]??value}</dd></div>)}</dl><p className="structure-section-note">Perceived tasting structure; label ABV is shown separately in Wine details.</p></section>}
   <section className="detail-section"><p className="section-label">WINE DETAILS</p><dl>{[['Region',[wine.region,wine.country].filter(Boolean).join(', ')],['Appellation',wine.appellation],['Grapes / blend',blend.join(', ')],['Alcohol',wine.alcoholPercentage&&`${wine.alcoholPercentage}%`]].filter(x=>x[1]).map(([k,v])=><div key={String(k)}><dt>{k}</dt><dd>{v}</dd></div>)}</dl></section>
   <section className="detail-section deep-search-panel"><p className="section-label">DEEP SEARCH</p>{deep?<><div className="deep-summary"><ResearchText text={deep.summary}/></div><div className="deep-research-sections">{[['Vintage quality',deep.vintageQuality],['Producer',deep.producerDetails],['Producer-wide practices',deep.producerWinemakingPractices],['This wine / vintage winemaking',deep.winemakingTechniques],['Terroir',deep.terroir],['Drinking window',deep.drinkingWindow]].filter(x=>x[1]).map(([k,v])=><section className="deep-research-section" key={String(k)}><h3>{k}</h3><ResearchText text={String(v)}/>{k==='Producer-wide practices'&&<small>General domaine context; not automatically treated as verified for this exact vintage.</small>}</section>)}</div>{deep.sources.length>0&&<div className="deep-sources"><strong>Sources</strong>{deep.sources.map(s=><a key={s.url} href={s.url} target="_blank" rel="noreferrer">{s.title}</a>)}</div>}<small>Latest research model: {deep.model} · {new Date(deep.researchedAt).toLocaleDateString()} · reusable research is stored permanently</small></>:<p>Enrich this wine with grounded research. WineLog reuses stored producer practices, terroir and vintage research whenever the scope matches.</p>}
    {deepNotice&&<p className="producer-notice" role="status">{deepNotice}</p>}
