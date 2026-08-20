@@ -1,4 +1,5 @@
 import type { WineInput, WineRecord } from '../../lib/db/schema';
+import type { TastingStructure } from '../../lib/wine/tastingStructure';
 import type { PhotoMetadata } from '../uploads/photoMetadata';
 import { authHeaders,clearSession } from '../../lib/auth/client';
 
@@ -21,7 +22,7 @@ export type JournalWine={
   imageIds:string[];
   createdAt:string;
 };
-export type WineDetail=WineRecord&{favorite:boolean;producerId:string|null};
+export type WineDetail=WineRecord&{favorite:boolean;producerId:string|null;tastingStructure:TastingStructure|null};
 export type WineResearchStage='queued'|'researching'|'saving'|'complete'|'failed';
 export type WineResearchRun={requestId:string;wineId:string;status:'running'|'complete'|'failed';stage:WineResearchStage;refresh:'none'|'vintage'|'all';attempt:number;message:string|null;startedAt:string;updatedAt:string;completedAt:string|null;durationMs:number|null};
 export type JournalBatchPatch={tastingName?:string|null;venue?:string|null};
@@ -32,9 +33,9 @@ type ApiIssue={path?:Array<string|number>;message?:string};
 async function requireOk(r:Response,message:string){
   if(r.status===401){clearSession();throw new Error('Session expired. Please sign in again.')}
   if(!r.ok){
-    const body=await r.json().catch(()=>({})) as {error?:string;issues?:ApiIssue[]};
+    const body=await r.json().catch(()=>({})) as {error?:string;issues?:ApiIssue[];details?:string};
     const details=body.issues?.map(issue=>`${issue.path?.join('.')||'field'}: ${issue.message||'Invalid input'}`).join('; ');
-    throw new Error([body.error||message,details].filter(Boolean).join(' — '));
+    throw new Error([body.error||message,details||body.details].filter(Boolean).join(' — '));
   }
 }
 export async function listWines(params:URLSearchParams,options:{limit?:number;offset?:number;signal?:AbortSignal}={}):Promise<{items:JournalWine[];nextOffset:number|null}>{
@@ -51,6 +52,9 @@ export async function batchUpdateJournalExperience(ids:string[],patch:JournalBat
   return r.json() as Promise<{updated:number;tastingName?:string|null;venue?:string|null}>;
 }
 export async function getWine(id:string):Promise<WineDetail>{const r=await fetch(`/api/wines/${id}`,{headers:authHeaders()});await requireOk(r,'Wine not found');return r.json()}
+export async function saveWineTastingStructure(id:string,structure:TastingStructure|null){
+  const r=await fetch(`/api/wines/${id}/tasting-structure`,{method:'PUT',headers:authHeaders(true),body:JSON.stringify({structure})});await requireOk(r,'Could not save tasting structure');return r.json() as Promise<{ok:true}>;
+}
 export async function setWineFavorite(id:string,favorite:boolean){
   const r=await fetch(`/api/wines/${id}/favorite`,{method:'PUT',headers:authHeaders(true),body:JSON.stringify({favorite})});
   await requireOk(r,'Could not update favorite');
