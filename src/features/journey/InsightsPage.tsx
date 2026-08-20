@@ -4,7 +4,7 @@ import { getJourneyData,type JourneyData } from './api';
 import { buildStructureProfile,structureDisplay } from './model';
 import '../../journey.css';
 
-const journalHref=(params:Record<string,string>)=>`/?${new URLSearchParams(params).toString()}`;
+const journalHref=(params:Record<string,string>)=>`/journal?${new URLSearchParams(params).toString()}`;
 const rating=(value:number|null)=>value==null?'—':value.toFixed(1);
 const money=(currency:string,value:number|null)=>{
   if(value==null)return '—';
