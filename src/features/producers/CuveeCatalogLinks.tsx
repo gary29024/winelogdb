@@ -49,12 +49,13 @@ export function CuveeCatalogLinks({producer,group,onChanged}:{producer:ProducerD
     try{await unlinkTastedCuveeFromCatalog(producer.id,link.id);await onChanged()}catch(e){setError((e as Error).message)}finally{setBusy(false)}
   }
 
-  if(!producer.catalogCuvees.length||!group.cuveeId||directMatch)return null;
+  if(!producer.catalogCuvees.length||!group.cuveeId)return null;
+  if(directMatch)return <div className="cuvee-inline-admin" aria-label="Catalog mapping"><span>Catalog matched</span></div>;
   return <>
     <div className="cuvee-inline-admin" aria-label="Catalog mapping">
       {error&&<small className="cuvee-inline-error" role="alert">{error}</small>}
-      {!link&&<button type="button" disabled={busy} onClick={openLink}>Link</button>}
-      {link&&<><button type="button" disabled={busy} onClick={openLink}>Change</button><span aria-hidden="true">·</span><button type="button" className="secondary-danger" disabled={busy} onClick={()=>void unlink()}>Unlink</button></>}
+      {!link&&<button type="button" disabled={busy} onClick={openLink}>Link catalog</button>}
+      {link&&<><button type="button" disabled={busy} onClick={openLink}>Change link</button><span aria-hidden="true">·</span><button type="button" className="secondary-danger" disabled={busy} onClick={()=>void unlink()}>Unlink</button></>}
     </div>
     {open&&<div className="cuvee-link-backdrop" onClick={close} role="presentation"><div className="cuvee-link-sheet" role="dialog" aria-modal="true" aria-labelledby="cuvee-link-title" onClick={e=>e.stopPropagation()}><div className="cuvee-link-sheet-head"><div><p className="eyebrow">CATALOG LINK</p><h3 id="cuvee-link-title">{group.name}</h3><small>{[group.wineStyle,group.grapes.length?group.grapes.join(' / '):null,group.appellation].filter(Boolean).join(' · ')}</small></div><button type="button" onClick={close} disabled={busy} aria-label="Close catalog link">×</button></div><label>Corresponding producer catalog wine<select value={selectedCatalogId} onChange={e=>setSelectedCatalogId(e.target.value)} disabled={busy}>{ranked.map((target,index)=>{const score=similarity(group,target),suggested=index===0&&score>=.45;return <option key={target.id} value={target.id}>{suggested?'Suggested · ':''}{targetLabel(target)}</option>})}</select></label><p>Only an existing catalog wine can be selected. WineLog uses style as a strong discriminator, so same-name red and white wines remain separate identities.</p>{error&&<p className="producer-error" role="alert">{error}</p>}<div className="cuvee-link-actions"><button type="button" onClick={close} disabled={busy}>Cancel</button><button type="button" onClick={()=>void save()} disabled={busy||!selectedCatalogId}>{busy?'Saving…':link?'Change link':'Confirm link'}</button></div></div></div>}
   </>;
