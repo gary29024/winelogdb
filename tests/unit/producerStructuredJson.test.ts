@@ -1,5 +1,5 @@
 import { describe,expect,it } from 'vitest';
-import { firstBalancedJsonObject,parseStructuredJsonText } from '../../src/lib/producers/structuredJson';
+import { firstBalancedJsonObject,hasLikelyEmbeddedJsonFragment,parseStructuredJsonText } from '../../src/lib/producers/structuredJson';
 
 describe('producer structured JSON parsing',()=>{
   it('parses normal JSON',()=>{
@@ -19,5 +19,19 @@ describe('producer structured JSON parsing',()=>{
 
   it('rejects truncated JSON instead of silently repairing missing structure',()=>{
     expect(()=>parseStructuredJsonText('{"range":[{"name":"A"}]')).toThrow('Invalid structured JSON');
+  });
+
+  it('detects an escaped next-record fragment swallowed into a catalogue field',()=>{
+    const corrupted='Still dry white唱 notes null},{';
+    expect(hasLikelyEmbeddedJsonFragment(corrupted)).toBe(true);
+    const payload=JSON.stringify({range:[{name:'Affinités Chardonnay',category:'white',style:corrupted}]});
+    expect(()=>parseStructuredJsonText(payload)).toThrow('Structured JSON contains an embedded record fragment');
+  });
+
+  it('detects leaked JSON keys without rejecting ordinary prose punctuation',()=>{
+    expect(hasLikelyEmbeddedJsonFragment('Sparkling brut nature')).toBe(false);
+    expect(hasLikelyEmbeddedJsonFragment('brace } inside string')).toBe(false);
+    expect(hasLikelyEmbeddedJsonFragment('notes: null')).toBe(true);
+    expect(()=>parseStructuredJsonText(JSON.stringify({profile:'The estate bottles without fining or filtration.'}))).not.toThrow();
   });
 });
