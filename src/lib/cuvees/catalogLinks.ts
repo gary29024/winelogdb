@@ -36,6 +36,7 @@ type CuveeRow={id:string;producer_id:string;canonical_name:string;signature_key:
 type LinkRow={id:string;source_cuvee_id:string;catalog_cuvee_id:string;source_name:string;source_appellation:string|null;catalog_name:string;catalog_appellation:string|null;created_at:string};
 type WineCuveeRow={id:string;cuvee_id:string|null;vintage:number|null};
 type CatalogWine={name?:unknown;category?:unknown;appellation?:unknown;style?:unknown};
+type FailedResearchRun={request_id:string;message:string|null};
 const parseJson=<T>(value:unknown,fallback:T):T=>{try{return JSON.parse(String(value)) as T}catch{return fallback}};
 
 function mapLink(row:LinkRow):CuveeCatalogLink{return {id:row.id,sourceCuveeId:row.source_cuvee_id,sourceName:row.source_name,sourceAppellation:row.source_appellation??null,catalogCuveeId:row.catalog_cuvee_id,catalogName:row.catalog_name,catalogAppellation:row.catalog_appellation??null,createdAt:row.created_at}}
@@ -117,10 +118,29 @@ async function catalogIdentityNeedsRepair(db:D1Database,owner:string,producerId:
   return false;
 }
 
+function isRecoverableCatalogIndexingFailure(message:string|null|undefined){
+  const text=String(message??'').toLowerCase();
+  return text.includes('catalog')&&text.includes('like or glob pattern too complex');
+}
+
+async function markRecoveredCatalogIndexingRun(db:D1Database,owner:string,producerId:string){
+  const run=await db.prepare(`SELECT request_id,message FROM producer_research_runs
+    WHERE owner_id=? AND producer_id=? AND status='failed' ORDER BY updated_at DESC LIMIT 1`).bind(owner,producerId).first<FailedResearchRun>();
+  if(!run||!isRecoverableCatalogIndexingFailure(run.message))return false;
+  const stamp=new Date().toISOString();
+  const result=await db.prepare(`UPDATE producer_research_runs SET status='complete',stage='complete',message=?,updated_at=?
+    WHERE owner_id=? AND producer_id=? AND request_id=? AND status='failed'`)
+    .bind('Producer research completed. Saved catalogue identities were repaired.',stamp,owner,producerId,run.request_id).run();
+  return Boolean(result.meta.changes);
+}
+
 export async function getProducerCuveeCatalogState(db:D1Database,owner:string,producerId:string){
   let catalogRows=await loadCatalogRows(db,owner,producerId);
   if(await catalogIdentityNeedsRepair(db,owner,producerId,catalogRows.results)){
-    try{await syncProducerCatalogCuvees(db,owner,producerId);catalogRows=await loadCatalogRows(db,owner,producerId)}catch(e){console.warn(JSON.stringify({event:'producer-catalog-identity-repair-failed',producerId,error:(e as Error).message}))}
+    try{
+      await syncProducerCatalogCuvees(db,owner,producerId);catalogRows=await loadCatalogRows(db,owner,producerId);
+      if(!(await catalogIdentityNeedsRepair(db,owner,producerId,catalogRows.results)))await markRecoveredCatalogIndexingRun(db,owner,producerId);
+    }catch(e){console.warn(JSON.stringify({event:'producer-catalog-identity-repair-failed',producerId,error:(e as Error).message}))}
   }
   const [linkRows,wines]=await Promise.all([
     db.prepare(`SELECT l.id,l.source_cuvee_id,l.catalog_cuvee_id,s.canonical_name AS source_name,s.appellation AS source_appellation,
