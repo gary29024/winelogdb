@@ -68,6 +68,11 @@ export function cuveeIdentitySignature(name:string,appellation:string|null|undef
   return style?`${base}::style:${style}`:base;
 }
 
+export function cuveeSignatureMatches(storedSignature:string,baseSignature:string,identitySignature:string){
+  if(storedSignature===identitySignature||storedSignature===baseSignature)return true;
+  return Boolean(baseSignature)&&storedSignature.startsWith(`${baseSignature}::style:`);
+}
+
 async function producerNames(db:D1Database,owner:string,producerId:string){
   const [producer,aliases]=await Promise.all([
     db.prepare('SELECT canonical_name FROM producers WHERE owner_id=? AND id=?').bind(owner,producerId).first<{canonical_name:string}>(),
@@ -92,9 +97,11 @@ async function aliasMatch(db:D1Database,owner:string,producerId:string,normalize
 }
 
 async function signatureMatch(db:D1Database,owner:string,producerId:string,baseSignature:string,identitySignature:string,appellation?:string|null,wineStyle?:string|null){
-  const rows=await db.prepare(`SELECT * FROM cuvees WHERE owner_id=? AND producer_id=? AND (signature_key=? OR signature_key=? OR signature_key LIKE ?)`)
-    .bind(owner,producerId,identitySignature,baseSignature,`${baseSignature}::style:%`).all<CuveeRow>();
-  const compatible=rows.results.filter(row=>styleCompatible(row.wine_style,wineStyle)&&appellationCompatible(row.appellation,appellation));
+  // Avoid SQL LIKE/GLOB here. D1/SQLite imposes a pattern-complexity limit, so a malformed
+  // or unexpectedly long catalog identity must never be able to abort producer research.
+  const rows=await db.prepare('SELECT * FROM cuvees WHERE owner_id=? AND producer_id=?').bind(owner,producerId).all<CuveeRow>();
+  const matching=rows.results.filter(row=>cuveeSignatureMatches(row.signature_key,baseSignature,identitySignature));
+  const compatible=matching.filter(row=>styleCompatible(row.wine_style,wineStyle)&&appellationCompatible(row.appellation,appellation));
   const exact=compatible.find(row=>row.signature_key===identitySignature);if(exact)return exact;
   return compatible.length===1?compatible[0]:null;
 }
