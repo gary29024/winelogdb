@@ -7,7 +7,10 @@ const MOBILE_BROWSER_BOTTOM_VAR='--mobile-browser-bottom';
 const preloadUpload=()=>void import('../features/uploads/UploadPage');
 const preloadBatchScan=()=>void import('../features/uploads/BatchScanPage');
 const preloadWineForm=()=>void import('../features/wines/WineForm');
+const preloadJournal=()=>void import('../features/wines/LibraryPage');
 const preloadProducers=()=>void import('../features/producers/ProducersPage');
+const preloadPassport=()=>void import('../features/journey/PassportPage');
+const preloadInsights=()=>void import('../features/journey/InsightsPage');
 
 export function Layout(){
   const [scanSheetOpen,setScanSheetOpen]=useState(false);
@@ -55,15 +58,17 @@ export function Layout(){
   return <>
     <header className="topbar">
       <NavLink className="brand" to="/">WineLog</NavLink>
-      <nav className="desktop-nav" aria-label="Main navigation"><NavLink to="/" end>Journal</NavLink><NavLink to="/producers" onPointerEnter={preloadProducers} onFocus={preloadProducers}>Producers</NavLink><button type="button" className="top-scan-trigger" onClick={openScanSheet}>Scan Wine</button></nav>
+      <nav className="desktop-nav" aria-label="Main navigation"><NavLink to="/" end onPointerEnter={preloadPassport} onFocus={preloadPassport}>Passport</NavLink><NavLink to="/journal" onPointerEnter={preloadJournal} onFocus={preloadJournal}>Journal</NavLink><NavLink to="/producers" onPointerEnter={preloadProducers} onFocus={preloadProducers}>Producers</NavLink><NavLink to="/insights" onPointerEnter={preloadInsights} onFocus={preloadInsights}>Insights</NavLink><button type="button" className="top-scan-trigger" onClick={openScanSheet}>Scan Wine</button></nav>
     </header>
     <main><Outlet/></main>
     <footer>Your private tasting notebook</footer>
 
     <nav className="mobile-nav" aria-label="Mobile navigation">
-      <NavLink to="/" end><span className="nav-icon">▦</span><span>Journal</span></NavLink>
+      <NavLink to="/" end onPointerDown={preloadPassport} onFocus={preloadPassport}><span className="nav-icon">◇</span><span>Passport</span></NavLink>
+      <NavLink to="/journal" onPointerDown={preloadJournal} onFocus={preloadJournal}><span className="nav-icon">▦</span><span>Journal</span></NavLink>
       <button type="button" className="scan-nav" onClick={openScanSheet} aria-haspopup="dialog"><span className="scan-plus">＋</span><span>Scan Wine</span></button>
       <NavLink to="/producers" onPointerDown={preloadProducers} onFocus={preloadProducers}><span className="nav-icon">◫</span><span>Producers</span></NavLink>
+      <NavLink to="/insights" onPointerDown={preloadInsights} onFocus={preloadInsights}><span className="nav-icon">⌁</span><span>Insights</span></NavLink>
     </nav>
 
     {scanSheetOpen&&<div className="scan-sheet-backdrop" onClick={closeScanSheet}>
