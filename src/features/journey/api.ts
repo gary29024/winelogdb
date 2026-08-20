@@ -20,9 +20,19 @@ export type JourneyData={
   structures:StructureSample[];
 };
 
-export async function getJourneyData(signal?:AbortSignal):Promise<JourneyData>{
-  const response=await fetch('/api/journey',{headers:authHeaders(),signal});
-  if(response.status===401){clearSession();throw new Error('Session expired. Please sign in again.')}
-  if(!response.ok){const body=await response.json().catch(()=>({})) as {error?:string};throw new Error(body.error||'Could not load Wine Journey')}
-  return response.json();
+let cached:{expires:number;data:JourneyData}|null=null;
+let pending:Promise<JourneyData>|null=null;
+
+export function getJourneyData():Promise<JourneyData>{
+  if(cached&&cached.expires>Date.now())return Promise.resolve(cached.data);
+  if(pending)return pending;
+  pending=(async()=>{
+    const response=await fetch('/api/journey',{headers:authHeaders()});
+    if(response.status===401){clearSession();throw new Error('Session expired. Please sign in again.')}
+    if(!response.ok){const body=await response.json().catch(()=>({})) as {error?:string};throw new Error(body.error||'Could not load Wine Journey')}
+    const data=await response.json() as JourneyData;
+    cached={data,expires:Date.now()+30_000};
+    return data;
+  })().finally(()=>{pending=null});
+  return pending;
 }
