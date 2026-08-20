@@ -19,7 +19,7 @@ export type TastingStructure=z.infer<typeof tastingStructureSchema>;
 export type TastingStructureKey=keyof TastingStructure;
 
 export function hasTastingStructure(value:TastingStructure|null|undefined){
-  return Boolean(value&&Object.values(value).some(item=>item!=null&&item!==''));
+  return Boolean(value&&Object.values(value).some(item=>item!=null));
 }
 
 export const structureValueLabel:Record<string,string>={
