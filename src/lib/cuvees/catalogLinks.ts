@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { cuveeIdentitySignature,syncProducerCatalogCuvees } from './entities';
 
 const uuid=z.string().uuid();
 export const createCuveeCatalogLinkSchema=z.object({
@@ -31,9 +32,12 @@ export type CuveeCatalogLink={
   createdAt:string;
 };
 
-type CuveeRow={id:string;producer_id:string;canonical_name:string;appellation:string|null;wine_style:string|null;catalog_backed:number};
+type CuveeRow={id:string;producer_id:string;canonical_name:string;signature_key:string;appellation:string|null;wine_style:string|null;catalog_backed:number};
 type LinkRow={id:string;source_cuvee_id:string;catalog_cuvee_id:string;source_name:string;source_appellation:string|null;catalog_name:string;catalog_appellation:string|null;created_at:string};
 type WineCuveeRow={id:string;cuvee_id:string|null;vintage:number|null};
+type CatalogWine={name?:unknown;category?:unknown;appellation?:unknown;style?:unknown};
+type FailedResearchRun={request_id:string;message:string|null};
+const parseJson=<T>(value:unknown,fallback:T):T=>{try{return JSON.parse(String(value)) as T}catch{return fallback}};
 
 function mapLink(row:LinkRow):CuveeCatalogLink{return {id:row.id,sourceCuveeId:row.source_cuvee_id,sourceName:row.source_name,sourceAppellation:row.source_appellation??null,catalogCuveeId:row.catalog_cuvee_id,catalogName:row.catalog_name,catalogAppellation:row.catalog_appellation??null,createdAt:row.created_at}}
 
@@ -44,7 +48,7 @@ export function catalogTargetForCuvee(cuveeId:string|null|undefined,catalogIds:R
 }
 
 async function getCuvee(db:D1Database,owner:string,id:string){
-  return db.prepare('SELECT id,producer_id,canonical_name,appellation,wine_style,catalog_backed FROM cuvees WHERE owner_id=? AND id=?').bind(owner,id).first<CuveeRow>();
+  return db.prepare('SELECT id,producer_id,canonical_name,signature_key,appellation,wine_style,catalog_backed FROM cuvees WHERE owner_id=? AND id=?').bind(owner,id).first<CuveeRow>();
 }
 async function requireCatalogPair(db:D1Database,owner:string,producerId:string,sourceId:string,catalogId:string){
   const [source,catalog]=await Promise.all([getCuvee(db,owner,sourceId),getCuvee(db,owner,catalogId)]);
@@ -93,10 +97,52 @@ export async function unlinkCuveeCatalogLink(db:D1Database,owner:string,producer
   return {id:linkId,sourceCuveeId:link.source_cuvee_id,catalogCuveeId:link.catalog_cuvee_id,unlinked:true};
 }
 
+async function loadCatalogRows(db:D1Database,owner:string,producerId:string){
+  return db.prepare(`SELECT id,producer_id,canonical_name,signature_key,appellation,wine_style,catalog_backed FROM cuvees
+    WHERE owner_id=? AND producer_id=? AND catalog_backed=1 ORDER BY canonical_name COLLATE NOCASE`).bind(owner,producerId).all<CuveeRow>();
+}
+
+async function catalogIdentityNeedsRepair(db:D1Database,owner:string,producerId:string,rows:CuveeRow[]){
+  const [producer,aliases]=await Promise.all([
+    db.prepare('SELECT canonical_name,catalog_json FROM producers WHERE owner_id=? AND id=?').bind(owner,producerId).first<{canonical_name:string;catalog_json:string}>(),
+    db.prepare('SELECT display_alias FROM producer_aliases WHERE owner_id=? AND producer_id=?').bind(owner,producerId).all<{display_alias:string}>()
+  ]);
+  const catalog=parseJson<CatalogWine[]>(producer?.catalog_json,[]);if(!catalog.length)return false;
+  const names=[producer?.canonical_name??'',...aliases.results.map(x=>x.display_alias)].filter(Boolean),actual=new Set(rows.map(row=>row.signature_key));
+  for(const item of catalog){
+    const name=typeof item.name==='string'?item.name.trim():'';if(!name)continue;
+    const appellation=typeof item.appellation==='string'&&item.appellation.trim()?item.appellation.trim():null;
+    const style=typeof item.category==='string'&&item.category.trim()?item.category.trim():typeof item.style==='string'&&item.style.trim()?item.style.trim():null;
+    const expected=cuveeIdentitySignature(name,appellation,style,names);if(expected&&!actual.has(expected))return true;
+  }
+  return false;
+}
+
+function isRecoverableCatalogIndexingFailure(message:string|null|undefined){
+  const text=String(message??'').toLowerCase();
+  return text.includes('catalog')&&text.includes('like or glob pattern too complex');
+}
+
+async function markRecoveredCatalogIndexingRun(db:D1Database,owner:string,producerId:string){
+  const run=await db.prepare(`SELECT request_id,message FROM producer_research_runs
+    WHERE owner_id=? AND producer_id=? AND status='failed' ORDER BY updated_at DESC LIMIT 1`).bind(owner,producerId).first<FailedResearchRun>();
+  if(!run||!isRecoverableCatalogIndexingFailure(run.message))return false;
+  const stamp=new Date().toISOString();
+  const result=await db.prepare(`UPDATE producer_research_runs SET status='complete',stage='complete',message=?,updated_at=?
+    WHERE owner_id=? AND producer_id=? AND request_id=? AND status='failed'`)
+    .bind('Producer research completed. Saved catalogue identities were repaired.',stamp,owner,producerId,run.request_id).run();
+  return Boolean(result.meta.changes);
+}
+
 export async function getProducerCuveeCatalogState(db:D1Database,owner:string,producerId:string){
-  const [catalogRows,linkRows,wines]=await Promise.all([
-    db.prepare(`SELECT id,producer_id,canonical_name,appellation,wine_style,catalog_backed FROM cuvees
-      WHERE owner_id=? AND producer_id=? AND catalog_backed=1 ORDER BY canonical_name COLLATE NOCASE`).bind(owner,producerId).all<CuveeRow>(),
+  let catalogRows=await loadCatalogRows(db,owner,producerId);
+  if(await catalogIdentityNeedsRepair(db,owner,producerId,catalogRows.results)){
+    try{
+      await syncProducerCatalogCuvees(db,owner,producerId);catalogRows=await loadCatalogRows(db,owner,producerId);
+      if(!(await catalogIdentityNeedsRepair(db,owner,producerId,catalogRows.results)))await markRecoveredCatalogIndexingRun(db,owner,producerId);
+    }catch(e){console.warn(JSON.stringify({event:'producer-catalog-identity-repair-failed',producerId,error:(e as Error).message}))}
+  }
+  const [linkRows,wines]=await Promise.all([
     db.prepare(`SELECT l.id,l.source_cuvee_id,l.catalog_cuvee_id,s.canonical_name AS source_name,s.appellation AS source_appellation,
       d.canonical_name AS catalog_name,d.appellation AS catalog_appellation,l.created_at
       FROM cuvee_catalog_links l

@@ -1,5 +1,6 @@
 import { describe,expect,it } from 'vitest';
 import { catalogTargetForCuvee,changeCuveeCatalogLinkSchema,createCuveeCatalogLinkSchema,unlinkCuveeCatalogLinkSchema } from '../../src/lib/cuvees/catalogLinks';
+import { cuveeSignatureMatches } from '../../src/lib/cuvees/entities';
 
 describe('cuvee catalog links',()=>{
   it('uses a direct catalog identity before manual mappings',()=>{
@@ -17,5 +18,19 @@ describe('cuvee catalog links',()=>{
     expect(createCuveeCatalogLinkSchema.safeParse({confirmation:'YES',sourceCuveeId:source,catalogCuveeId:catalog}).success).toBe(false);
     expect(changeCuveeCatalogLinkSchema.safeParse({confirmation:'CHANGE_CUVEE_CATALOG_LINK',catalogCuveeId:catalog}).success).toBe(true);
     expect(unlinkCuveeCatalogLinkSchema.safeParse({confirmation:'UNLINK_CUVEE_FROM_CATALOG'}).success).toBe(true);
+  });
+
+  it('matches style signature variants without SQLite LIKE patterns',()=>{
+    const base='hirsch rose vineyard',identity=`${base}::style:sparkling`;
+    expect(cuveeSignatureMatches(identity,base,identity)).toBe(true);
+    expect(cuveeSignatureMatches(base,base,identity)).toBe(true);
+    expect(cuveeSignatureMatches(`${base}::style:rose`,base,identity)).toBe(true);
+    expect(cuveeSignatureMatches('charles heintz vineyard::style:sparkling',base,identity)).toBe(false);
+  });
+
+  it('handles identities longer than SQLite LIKE pattern limits in JavaScript',()=>{
+    const base='x'.repeat(60_000),identity=`${base}::style:sparkling`;
+    expect(cuveeSignatureMatches(identity,base,identity)).toBe(true);
+    expect(cuveeSignatureMatches(`${base}::style:white`,base,identity)).toBe(true);
   });
 });
