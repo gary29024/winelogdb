@@ -17,7 +17,6 @@ export const recognitionResponseSchema={
 } as const;
 
 const nullableString={anyOf:[{type:'string'},{type:'null'}]} as const;
-const nullableNumber={anyOf:[{type:'number'},{type:'null'}]} as const;
 
 export const recognitionResponseJsonSchema={
   type:'object',
@@ -32,7 +31,7 @@ export const recognitionResponseJsonSchema={
     grapes:{type:'array',maxItems:20,items:{type:'string'}},
     grapeBlend:{type:'array',maxItems:20,items:{type:'object',additionalProperties:false,properties:{grape:{type:'string'},percentage:{anyOf:[{type:'number',minimum:0,maximum:100},{type:'null'}]}},required:['grape']}},
     style:{anyOf:[{type:'string',enum:['red','white','rose','sparkling','dessert','fortified','orange','other']},{type:'null'}]},
-    alcoholPercentage:{...nullableNumber,minimum:0,maximum:100},
+    alcoholPercentage:{anyOf:[{type:'number',minimum:0,maximum:100},{type:'null'}]},
     locationName:nullableString,
     confidence:{type:'number',minimum:0,maximum:1}
   },
