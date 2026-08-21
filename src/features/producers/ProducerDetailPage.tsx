@@ -5,6 +5,7 @@ import { cancelProducerResearch,getProducer,getProducerResearchStatus,listProduc
 import { ProducerHeroImage } from './ProducerHeroImage';
 import { CuveeCatalogLinks,type TastedCuveeGroup } from './CuveeCatalogLinks';
 import { normalizeProducerAlias } from '../../lib/producers/entities';
+import { stripProducerCatalogPrefix } from '../../lib/producers/catalogName';
 import { cuveeStyleFamily,normalizeCuveeAlias } from '../../lib/cuvees/entities';
 import '../../producer.css';
 
@@ -23,16 +24,7 @@ function catalogCategory(wine:ProducerDetail['catalog'][number]):CatalogCategory
  if(value.includes('red'))return 'red';
  return 'other';
 }
-const escapeRegExp=(value:string)=>value.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
-function displayCatalogName(name:string,producer:ProducerDetail){
- const aliases=[producer.canonicalName,...producer.aliases].filter(Boolean).sort((a,b)=>b.length-a.length);
- for(const alias of aliases){
-  const match=new RegExp(`^${escapeRegExp(alias)}(?:\\s+|\\s*[-–—:]\\s*)`,'i');
-  const stripped=name.replace(match,'').trim();
-  if(stripped&&stripped!==name)return stripped;
- }
- return name;
-}
+function displayCatalogName(name:string,producer:ProducerDetail){return stripProducerCatalogPrefix(name,[producer.canonicalName,...producer.aliases])}
 function catalogCuveeFor(wine:ProducerDetail['catalog'][number],producer:ProducerDetail){
  const raw=normalizeCuveeAlias(String(wine.name??'')),display=normalizeCuveeAlias(displayCatalogName(String(wine.name??''),producer)),app=normalizeCuveeAlias(String(wine.appellation??'')),style=cuveeStyleFamily(String(wine.category??wine.style??''));
  const candidates=producer.catalogCuvees.filter(item=>{const key=normalizeCuveeAlias(item.canonicalName);return key===raw||key===display});
@@ -130,19 +122,19 @@ export function ProducerDetailPage(){
  return <article className="producer-detail"><Link className="back-pill" to="/producers">← Producers</Link>
   <header className={`producer-header${producer.heroImageAvailable?' has-hero':''}`}>
    {producer.heroImageAvailable&&<ProducerHeroImage producerId={producer.id} alt={`${producer.canonicalName} domaine`}/>}<div className="producer-header-shade"/>
-   <div className="producer-header-content"><p className="eyebrow">PRODUCER</p><h1>{producer.canonicalName}</h1><p>{location||'Home location not researched yet'}</p>{producer.officialWebsiteUrl&&<a className="producer-site-link" href={producer.officialWebsiteUrl} target="_blank" rel="noreferrer">Official website ↗</a>}{producer.aliases.length>1&&<small>Known aliases: {producer.aliases.join(' · ')}</small>}</div>
+   <div className="producer-header-content"><p className="eyebrow">PRODUCER</p><h1>{producer.canonicalName}</h1><p>{location||'Home location not researched yet'}</p>{producer.aliases.length>1&&<small>Known aliases: {producer.aliases.join(' · ')}</small>}</div>
   </header>
   {error&&<p className="producer-error" role="alert">{error}</p>}{notice&&<p className="producer-notice" role="status">{notice}</p>}
   <section className="detail-section"><div className="producer-section-title"><div><p className="section-label">PRODUCER RESEARCH</p><h2>Profile & range</h2></div><button type="button" disabled={researching} onClick={runResearch}>{researching?'Research running…':producer.researchedAt?'Refresh producer research':'Research producer'}</button></div>
    {researchRun&&<div className={`producer-research-status ${researchRun.status}`} role="status" aria-live="polite"><div><strong>{stageLabel[researchRun.stage]}</strong><span>{researchRun.message}</span></div><div><strong>{researching?`${researchElapsed}s`:researchRun.durationMs!=null?`${(researchRun.durationMs/1000).toFixed(1)}s`:''}</strong><small>Request {researchRun.requestId}</small></div>{researching&&<><p>This is a background job. You can leave this page or close WineLog; the saved result will appear automatically when you return.</p><button type="button" className="secondary-danger" disabled={researchCancelling} onClick={cancelResearch}>{researchCancelling?'Cancelling…':'Cancel Deep Search'}</button></>}</div>}
    {producer.profile?<p className="producer-profile">{producer.profile}</p>:<p>Research this producer to establish its physical base, broad region and commune, public contact details, official website, general producer-wide practices, header image and a sourced current/recent wine range.</p>}
    {producer.winemakingPractices&&<div className="producer-practices"><p className="section-label">GENERAL WINEMAKING PRACTICES</p><p className="producer-profile">{producer.winemakingPractices}</p><small>Producer-wide context only. Exact cuvée/vintage techniques are researched separately on the wine page.</small></div>}
-   {hasContact&&<div className="producer-contact"><p className="section-label">CONTACT</p><div className="producer-contact-grid">
+   {producer.researchedAt&&<div className="producer-contact"><p className="section-label">CONTACT</p>{hasContact?<div className="producer-contact-grid">
     {producer.officialWebsiteUrl&&<div><span>Website</span><a href={producer.officialWebsiteUrl} target="_blank" rel="noreferrer">Official website ↗</a></div>}
     {producer.instagramUrl&&<div><span>Instagram</span><a href={producer.instagramUrl} target="_blank" rel="noreferrer">Instagram ↗</a></div>}
     {producer.contactEmail&&<div><span>Email</span><a href={`mailto:${producer.contactEmail}`}>{producer.contactEmail}</a></div>}
     {producer.contactPhone&&<div><span>Phone</span><a href={`tel:${producer.contactPhone.replace(/[^+\d]/g,'')}`}>{producer.contactPhone}</a></div>}
-   </div>{producer.contactSources.length>0&&<div className="producer-contact-sources"><span>Gemini contact references</span>{producer.contactSources.map(source=><a key={source.url} href={source.url} target="_blank" rel="noreferrer">{source.title}</a>)}</div>}</div>}
+   </div>:<p className="producer-help">No verified public contact found in this research run. WineLog keeps uncertain contact details out rather than guessing.</p>}{producer.contactSources.length>0&&<div className="producer-contact-sources"><span>Contact references</span>{producer.contactSources.map(source=><a key={source.url} href={source.url} target="_blank" rel="noreferrer">{source.title}</a>)}</div>}</div>}
    {catalogGroups.map(group=><div className="producer-catalog-group" key={group.category}><h3>{group.label}<span>{group.wines.length}</span></h3><div className="producer-catalog">{group.wines.map((wine,index)=>{const displayName=displayCatalogName(wine.name,producer),catalogIdentity=catalogCuveeFor(wine,producer),meta=catalogMeta(wine,group.category),note=catalogNote(wine);return <div className="catalog-row" key={`${wine.name}-${index}`}><div><strong>{displayName}</strong>{meta.length>0&&<span className="catalog-meta">{meta.join(' · ')}</span>}{note.short&&<small className="catalog-notes" title={note.full}>{note.short}</small>}</div>{Boolean(catalogIdentity?.tastedCount)&&<span className="tasted-badge">Tasted{catalogIdentity&&catalogIdentity.tastedCount>1?` · ${catalogIdentity.tastedCount}`:''}</span>}</div>})}</div></div>)}
    {producer.sources.length>0&&<div className="producer-sources"><strong>Profile & range references</strong>{producer.sources.map(s=><a key={s.url} href={s.url} target="_blank" rel="noreferrer">{s.title}</a>)}</div>}{producer.researchedAt&&<small>Latest producer research: {producer.researchModel} · {new Date(producer.researchedAt).toLocaleDateString()}</small>}
   </section>
