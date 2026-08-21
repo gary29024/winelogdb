@@ -3,6 +3,7 @@ import { parseRecognition } from '../src/features/recognition/schema';
 import { selectRecognitionMetadata,type RecognitionPhotoMetadata } from '../src/lib/uploads/metadataSelection';
 import { shouldRetryRecognitionFailure } from '../src/lib/recognition/retryPolicy';
 import { requireSession } from '../src/lib/auth/session';
+import { handleGroupRecognitionRequest } from './groupRecognitionHandler';
 
 type RecognitionBindings={GEMINI_API_KEY:string;AUTH_SECRET:string;MAX_BATCH_FILES?:string};
 type GeminiResponse={
@@ -39,6 +40,7 @@ const responseSchema={
 };
 
 export async function handleRecognitionRequest(request:Request,env:RecognitionBindings){
+  if(request.headers.get('X-WineLog-Recognition-Mode')==='group')return handleGroupRecognitionRequest(request,env);
   const requestId=crypto.randomUUID(),startedAt=Date.now();
   try{await requireSession(request.headers.get('Authorization')??undefined,env.AUTH_SECRET)}catch{return json({error:'Unauthorized',requestId},401,requestId)}
 
