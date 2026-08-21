@@ -4,7 +4,7 @@ import { cuveeStyleFamily,normalizeCuveeAlias } from '../../lib/cuvees/entities'
 import { changeTastedCuveeCatalogLink,linkTastedCuveeToCatalog,unlinkTastedCuveeFromCatalog,type ProducerDetail,type TastedWine } from './api';
 import '../../cuveeCatalogLinks.css';
 
-export type TastedCuveeGroup={cuveeId:string|null;name:string;appellation:string|null;wineStyle:string|null;grapes:string[];wines:TastedWine[]};
+export type TastedCuveeGroup={cuveeId:string|null;catalogCuveeId:string|null;name:string;appellation:string|null;wineStyle:string|null;grapes:string[];releaseFamily:boolean;wines:TastedWine[]};
 type CatalogTarget=CatalogPresentationChoice;
 
 const tokens=(value:string)=>new Set(normalizeCuveeAlias(value).split(/\s+/).filter(Boolean).filter(x=>!['grand','premier','cru','village','wine','cuvee'].includes(x)));
@@ -38,7 +38,7 @@ export function CuveeCatalogLinks({producer,group,onChanged}:{producer:ProducerD
     return best&&similarity(group,best)>=.45?best:null;
   },[linkable,group]);
   const choiceGroups=useMemo(()=>CATALOG_HIERARCHY_LABELS.flatMap(hierarchy=>{const items=choices.filter(target=>target.hierarchy===hierarchy);return items.length?[{hierarchy,items}]:[]}),[choices]);
-  const catalogTargetId=group.wines.find(wine=>wine.catalogCuveeId)?.catalogCuveeId??null;
+  const catalogTargetId=group.catalogCuveeId??group.wines.find(wine=>wine.catalogCuveeId)?.catalogCuveeId??null;
   const directMatch=Boolean(catalogTargetId&&!link);
 
   function openLink(){
@@ -65,7 +65,7 @@ export function CuveeCatalogLinks({producer,group,onChanged}:{producer:ProducerD
   }
 
   if(!choices.length||!group.cuveeId)return null;
-  if(directMatch)return <div className="cuvee-inline-admin" aria-label="Catalog mapping"><span>Catalog matched</span></div>;
+  if(directMatch)return <div className="cuvee-inline-admin" aria-label="Catalog mapping"><span>{group.releaseFamily?'Catalog matched · edition family':'Catalog matched'}</span></div>;
   const unresolved=choices.length-linkable.length;
   return <>
     <div className="cuvee-inline-admin" aria-label="Catalog mapping">
