@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { cuveeIdentitySignature,syncProducerCatalogCuvees } from './entities';
+import { cuveeIdentitySignature,ensureCuveeEntity } from './entities';
 
 const uuid=z.string().uuid();
 export const createCuveeCatalogLinkSchema=z.object({
@@ -118,6 +118,22 @@ async function catalogIdentityNeedsRepair(db:D1Database,owner:string,producerId:
   return false;
 }
 
+async function repairCatalogIdentitiesIndependently(db:D1Database,owner:string,producerId:string){
+  const producer=await db.prepare('SELECT catalog_json FROM producers WHERE owner_id=? AND id=?').bind(owner,producerId).first<{catalog_json:string}>();
+  const catalog=parseJson<CatalogWine[]>(producer?.catalog_json,[]),issues:string[]=[];
+  for(const item of catalog){
+    const name=typeof item.name==='string'?item.name.trim():'';if(!name)continue;
+    const appellation=typeof item.appellation==='string'&&item.appellation.trim()?item.appellation.trim():null;
+    const style=typeof item.category==='string'&&item.category.trim()?item.category.trim():typeof item.style==='string'&&item.style.trim()?item.style.trim():null;
+    try{await ensureCuveeEntity(db,owner,producerId,name,appellation,style,true)}
+    catch(e){
+      const error=(e as Error).message||'Could not index catalog cuvée';issues.push(`${name}: ${error}`);
+      console.warn(JSON.stringify({event:'producer-catalog-identity-item-repair-failed',producerId,name,appellation,style,error}));
+    }
+  }
+  return issues;
+}
+
 function isRecoverableCatalogIndexingFailure(message:string|null|undefined){
   const text=String(message??'').toLowerCase();
   return text.includes('catalog')&&text.includes('like or glob pattern too complex');
@@ -138,8 +154,10 @@ export async function getProducerCuveeCatalogState(db:D1Database,owner:string,pr
   let catalogRows=await loadCatalogRows(db,owner,producerId);
   if(await catalogIdentityNeedsRepair(db,owner,producerId,catalogRows.results)){
     try{
-      await syncProducerCatalogCuvees(db,owner,producerId);catalogRows=await loadCatalogRows(db,owner,producerId);
-      if(!(await catalogIdentityNeedsRepair(db,owner,producerId,catalogRows.results)))await markRecoveredCatalogIndexingRun(db,owner,producerId);
+      const issues=await repairCatalogIdentitiesIndependently(db,owner,producerId);catalogRows=await loadCatalogRows(db,owner,producerId);
+      const stillMissing=await catalogIdentityNeedsRepair(db,owner,producerId,catalogRows.results);
+      if(!stillMissing)await markRecoveredCatalogIndexingRun(db,owner,producerId);
+      if(issues.length)console.warn(JSON.stringify({event:'producer-catalog-identity-repair-partial',producerId,issueCount:issues.length}));
     }catch(e){console.warn(JSON.stringify({event:'producer-catalog-identity-repair-failed',producerId,error:(e as Error).message}))}
   }
   const [linkRows,wines]=await Promise.all([
