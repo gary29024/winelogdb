@@ -6,6 +6,7 @@ import { linkWineProducer,mapProducerRow,normalizeProducerAlias,resolveExistingP
 import { mergeProducerEntities,unlinkProducerMerge } from '../src/lib/producers/merge';
 import { getProducerResearchRun,runProducerResearch } from '../src/lib/producers/research';
 import { selectRecognitionMetadata,type RecognitionPhotoMetadata } from '../src/lib/uploads/metadataSelection';
+import { canonicalCatalogEntries,type CatalogPresentationLike } from '../src/lib/cuvees/catalogPresentation';
 
 type Bindings={DB:D1Database;WINE_IMAGES:R2Bucket;ASSETS:Fetcher;GEMINI_API_KEY:string;AUTH_SECRET:string;APP_PASSWORD:string;APP_URL:string;MAX_FILE_BYTES?:string;MAX_BATCH_FILES?:string};
 type AppEnv={Bindings:Bindings};
@@ -13,6 +14,11 @@ const app=new Hono<AppEnv>();
 
 async function user(c:{req:{header:(name:string)=>string|undefined};env:Bindings}){return (await requireSession(c.req.header('Authorization'),c.env.AUTH_SECRET)).userId}
 const parseJson=<T>(value:unknown,fallback:T):T=>{try{return JSON.parse(String(value)) as T}catch{return fallback}};
+function catalogEntries(value:unknown){
+  const parsed=parseJson<unknown>(value,[]);
+  if(!Array.isArray(parsed))return [] as CatalogPresentationLike[];
+  return parsed.filter((item):item is CatalogPresentationLike=>Boolean(item&&typeof item==='object'&&typeof (item as {name?:unknown}).name==='string'));
+}
 async function linkSavedWine(db:D1Database,owner:string,wineId:string){
   const row=await db.prepare('SELECT producer FROM wines WHERE owner_id=? AND id=?').bind(owner,wineId).first<{producer:string}>();
   if(row?.producer?.trim())await linkWineProducer(db,owner,wineId,row.producer);
@@ -21,11 +27,19 @@ async function linkSavedWine(db:D1Database,owner:string,wineId:string){
 app.get('/api/producers',async c=>{
   cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
   try{
-    const rows=await c.env.DB.prepare(`SELECT p.id,p.canonical_name,p.home_country,p.home_region,p.home_locality,p.researched_at,
-      (SELECT count(*) FROM wines w WHERE w.owner_id=p.owner_id AND w.producer_id=p.id) AS tasted_count,
-      coalesce(json_array_length(p.catalog_json),0) AS catalog_count
-      FROM producers p WHERE p.owner_id=? ORDER BY coalesce(p.home_country,'~'),coalesce(p.home_region,'~'),p.canonical_name COLLATE NOCASE`).bind(owner).all<Record<string,unknown>>();
-    return c.json({items:rows.results.map(r=>({id:String(r.id),canonicalName:String(r.canonical_name),homeCountry:r.home_country?String(r.home_country):null,homeRegion:r.home_region?String(r.home_region):null,homeLocality:r.home_locality?String(r.home_locality):null,tastedCount:Number(r.tasted_count)||0,catalogCount:Number(r.catalog_count)||0,researchedAt:r.researched_at?String(r.researched_at):null}))});
+    const [rows,aliases]=await Promise.all([
+      c.env.DB.prepare(`SELECT p.id,p.canonical_name,p.home_country,p.home_region,p.home_locality,p.researched_at,p.catalog_json,
+        (SELECT count(*) FROM wines w WHERE w.owner_id=p.owner_id AND w.producer_id=p.id) AS tasted_count
+        FROM producers p WHERE p.owner_id=? ORDER BY coalesce(p.home_country,'~'),coalesce(p.home_region,'~'),p.canonical_name COLLATE NOCASE`).bind(owner).all<Record<string,unknown>>(),
+      c.env.DB.prepare('SELECT producer_id,display_alias FROM producer_aliases WHERE owner_id=? ORDER BY display_alias COLLATE NOCASE').bind(owner).all<{producer_id:string;display_alias:string}>()
+    ]);
+    const aliasesByProducer=new Map<string,string[]>();
+    for(const alias of aliases.results){const list=aliasesByProducer.get(alias.producer_id)??[];list.push(alias.display_alias);aliasesByProducer.set(alias.producer_id,list)}
+    return c.json({items:rows.results.map(r=>{
+      const id=String(r.id),canonicalName=String(r.canonical_name),producerNames=[canonicalName,...(aliasesByProducer.get(id)??[])];
+      const catalogCount=canonicalCatalogEntries(catalogEntries(r.catalog_json),producerNames).length;
+      return {id,canonicalName,homeCountry:r.home_country?String(r.home_country):null,homeRegion:r.home_region?String(r.home_region):null,homeLocality:r.home_locality?String(r.home_locality):null,tastedCount:Number(r.tasted_count)||0,catalogCount,researchedAt:r.researched_at?String(r.researched_at):null};
+    })});
   }catch(e){return c.json({error:(e as Error).message||'Could not load producers'},500)}
 });
 
