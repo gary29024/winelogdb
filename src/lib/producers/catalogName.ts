@@ -18,5 +18,5 @@ export function stripProducerCatalogPrefix(value:string,producerNames:string[]=[
 
 export function catalogNameInitial(value:string,producerNames:string[]=[]){
   const stripped=stripProducerCatalogPrefix(value,producerNames).normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim();
-  const match=stripped.match(/[A-Za-z]/);return match?match[0].toUpperCase():null;
+  const significant=stripped.match(/[A-Za-z0-9]/)?.[0]??'';return /^[A-Za-z]$/.test(significant)?significant.toUpperCase():null;
 }
