@@ -15,17 +15,22 @@ function contactHref(type:ManualProducerContactType,value:string){
 }
 
 function ContactValue({type,value}:{type:ManualProducerContactType;value:string}){
- const href=contactHref(type,value);return href?<a href={href} target={type==='website'||type==='instagram'?'_blank':undefined} rel={type==='website'||type==='instagram'?'noreferrer':undefined}>{value}{type==='website'||type==='instagram'?' ↗':''}</a>:<span className="producer-contact-value">{value}</span>;
+ const href=contactHref(type,value),external=type==='website'||type==='instagram';
+ if(!href)return <span className="producer-contact-value">{value}</span>;
+ return <a href={href} target={external?'_blank':undefined} rel={external?'noreferrer':undefined}>{external?'Open ↗':value}</a>;
 }
 
 export function ProducerContacts({producer,onChanged}:Props){
  const [draft,setDraft]=useState<Draft>(EMPTY),[editingId,setEditingId]=useState<string|null>(null),[showForm,setShowForm]=useState(false),[saving,setSaving]=useState(false),[localError,setLocalError]=useState('');
- const verified=[
-  producer.officialWebsiteUrl?{label:'Website',type:'website' as const,value:producer.officialWebsiteUrl}:null,
-  producer.instagramUrl?{label:'Instagram',type:'instagram' as const,value:producer.instagramUrl}:null,
+ const verifiedLinks=[
+  producer.officialWebsiteUrl?{label:'Website',value:producer.officialWebsiteUrl}:null,
+  producer.instagramUrl?{label:'Instagram',value:producer.instagramUrl}:null
+ ].filter((x):x is NonNullable<typeof x>=>Boolean(x));
+ const verifiedDetails=[
   producer.contactEmail?{label:'Email',type:'email' as const,value:producer.contactEmail}:null,
   producer.contactPhone?{label:'Phone',type:'phone' as const,value:producer.contactPhone}:null
  ].filter((x):x is NonNullable<typeof x>=>Boolean(x));
+ const hasVerified=verifiedLinks.length>0||verifiedDetails.length>0;
  function startAdd(){setEditingId(null);setDraft(EMPTY);setLocalError('');setShowForm(true)}
  function startEdit(contact:ManualProducerContact){setEditingId(contact.id);setDraft({type:contact.type,label:contact.label??'',value:contact.value,note:contact.note??''});setLocalError('');setShowForm(true)}
  function cancel(){setShowForm(false);setEditingId(null);setDraft(EMPTY);setLocalError('')}
@@ -34,7 +39,10 @@ export function ProducerContacts({producer,onChanged}:Props){
  return <div className="producer-contact">
   <div className="producer-contact-head"><p className="section-label">CONTACT</p><button type="button" className="producer-contact-add" onClick={startAdd}>+ Add contact</button></div>
   <div className="producer-contact-group"><div className="producer-contact-group-title"><strong>Verified by research</strong></div>
-   {producer.researchedAt?(verified.length?<div className="producer-contact-compact">{verified.map(item=><div className="producer-contact-row" key={`${item.type}-${item.value}`}><span>{item.label}</span><ContactValue type={item.type} value={item.value}/></div>)}</div>:<p className="producer-contact-empty">No verified public contact found in this research run.</p>):<p className="producer-contact-empty">Producer contact research has not been run yet.</p>}
+   {producer.researchedAt?(hasVerified?<>
+    {verifiedLinks.length>0&&<div className="producer-contact-direct-links">{verifiedLinks.map(item=><a className="producer-contact-direct-link" key={item.label} href={item.value} target="_blank" rel="noreferrer"><span>{item.label}</span><span aria-hidden="true">↗</span></a>)}</div>}
+    {verifiedDetails.length>0&&<div className="producer-contact-compact">{verifiedDetails.map(item=><div className="producer-contact-row" key={`${item.type}-${item.value}`}><span>{item.label}</span><ContactValue type={item.type} value={item.value}/></div>)}</div>}
+   </>:<p className="producer-contact-empty">No verified public contact found in this research run.</p>):<p className="producer-contact-empty">Producer contact research has not been run yet.</p>}
    {producer.contactSources.length>0&&<details className="producer-contact-sources"><summary>{producer.contactSources.length} contact reference{producer.contactSources.length===1?'':'s'}</summary><div>{producer.contactSources.map(source=><a key={source.url} href={source.url} target="_blank" rel="noreferrer">{source.title}</a>)}</div></details>}
   </div>
   <div className="producer-contact-group supplementary"><div className="producer-contact-group-title"><strong>Supplementary contacts</strong><small>Added by you · kept separate from Deep Search</small></div>
