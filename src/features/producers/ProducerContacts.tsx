@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { createSupplementaryContact,deleteSupplementaryContact,updateSupplementaryContact,type ManualProducerContact,type ManualProducerContactType,type ProducerDetail } from './api';
+import '../../producerContacts.css';
 
 type Props={producer:ProducerDetail;onChanged:()=>Promise<void>};
 type Draft={type:ManualProducerContactType;label:string;value:string;note:string};
