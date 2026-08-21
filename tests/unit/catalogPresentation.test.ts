@@ -1,5 +1,5 @@
 import { describe,expect,it } from 'vitest';
-import { canonicalCatalogEntries,catalogHierarchyLabel } from '../../src/lib/cuvees/catalogPresentation';
+import { canonicalCatalogEntries,catalogChoicesForPresentation,catalogHierarchyLabel } from '../../src/lib/cuvees/catalogPresentation';
 
 describe('catalog presentation',()=>{
   it('collapses producer-prefixed duplicates onto one canonical catalog entry',()=>{
@@ -31,5 +31,32 @@ describe('catalog presentation',()=>{
     ],['Domaine Example']);
     expect(result.map(item=>item.name)).toEqual(['A Grand','B Grand','B Premier','A Village','Z Regional']);
     expect(result.map(catalogHierarchyLabel)).toEqual(['Grand Cru','Grand Cru','Premier Cru / 1er Cru','Village / appellation','Regional']);
+  });
+
+  it('builds link choices from the same canonical catalog and keeps unresolved wines visible',()=>{
+    const catalog=[
+      {name:"Successeurs Corton Grand Cru 'Les Renardes'",category:'red',appellation:'Corton',classification:'Grand Cru'},
+      {name:'Corton Les Rognets Grand Cru',category:'red',appellation:'Corton',classification:'Grand Cru'},
+      {name:'Aloxe-Corton 1er Cru La Toppe au Vert',category:'red',appellation:'Aloxe-Corton',classification:'Premier Cru'},
+      {name:'Clos de Vougeot Grand Cru',category:'red',appellation:'Clos de Vougeot',classification:'Grand Cru'},
+      {name:'Corton Les Renardes Grand Cru',category:'red',appellation:'Corton',classification:'Grand Cru'}
+    ];
+    const rows=[
+      {id:'clos',canonicalName:'Clos de Vougeot Grand Cru',appellation:'Clos de Vougeot',wineStyle:'red'},
+      {id:'rognets',canonicalName:'Corton Les Rognets Grand Cru',appellation:'Corton',wineStyle:'red'},
+      {id:'successeurs',canonicalName:"Successeurs Corton Grand Cru 'Les Renardes'",appellation:'Corton',wineStyle:'red'},
+      {id:'toppe',canonicalName:'Aloxe-Corton 1er Cru La Toppe au Vert',appellation:'Aloxe-Corton',wineStyle:'red'}
+    ];
+    const choices=catalogChoicesForPresentation(catalog,['Thibault Liger-Belair'],rows);
+    expect(choices.map(item=>item.canonicalName)).toEqual([
+      'Clos de Vougeot Grand Cru',
+      'Corton Les Renardes Grand Cru',
+      'Corton Les Rognets Grand Cru',
+      "Successeurs Corton Grand Cru 'Les Renardes'",
+      'Aloxe-Corton 1er Cru La Toppe au Vert'
+    ]);
+    expect(choices).toHaveLength(canonicalCatalogEntries(catalog,['Thibault Liger-Belair']).length);
+    expect(choices.find(item=>item.canonicalName==='Corton Les Renardes Grand Cru')).toMatchObject({id:null,hierarchy:'Grand Cru',issue:'Catalog identity needs repair'});
+    expect(choices.filter(item=>item.id)).toHaveLength(4);
   });
 });
