@@ -1,5 +1,5 @@
 import { describe,expect,it } from 'vitest';
-import { canonicalCatalogEntries,catalogChoicesForPresentation,catalogHierarchyLabel } from '../../src/lib/cuvees/catalogPresentation';
+import { canonicalCatalogEntries,catalogChoicesForPresentation,catalogHierarchyLabel,catalogRowsForPresentation } from '../../src/lib/cuvees/catalogPresentation';
 
 describe('catalog presentation',()=>{
   it('collapses producer-prefixed duplicates onto one canonical catalog entry',()=>{
@@ -58,5 +58,14 @@ describe('catalog presentation',()=>{
     expect(choices).toHaveLength(canonicalCatalogEntries(catalog,['Thibault Liger-Belair']).length);
     expect(choices.find(item=>item.canonicalName==='Corton Les Renardes Grand Cru')).toMatchObject({id:null,hierarchy:'Grand Cru',issue:'Catalog identity needs repair'});
     expect(choices.filter(item=>item.id)).toHaveLength(4);
+  });
+
+  it('uses catalog wording while preserving the matching D1 identity and tasting stats',()=>{
+    const catalog=[{name:'Clos de Vougeot Grand Cru',category:'red',appellation:'Clos de Vougeot',classification:'Grand Cru'}];
+    const rows=[{id:'clos',canonicalName:'Clos Vougeot Grand Cru',appellation:'Clos de Vougeot',wineStyle:'red',tastedCount:1,tastedVintages:[2023]}];
+    const choices=catalogChoicesForPresentation(catalog,['Thibault Liger-Belair'],rows);
+    expect(choices[0]).toMatchObject({id:'clos',canonicalName:'Clos de Vougeot Grand Cru',issue:null});
+    const projected=catalogRowsForPresentation(catalog,['Thibault Liger-Belair'],rows);
+    expect(projected[0]).toMatchObject({id:'clos',canonicalName:'Clos de Vougeot Grand Cru',tastedCount:1,tastedVintages:[2023]});
   });
 });
