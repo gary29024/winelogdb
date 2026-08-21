@@ -97,7 +97,7 @@ async function jobForAttempt(db:D1Database,owner:string,requestId:string,attempt
 }
 async function supersedeAutomaticFallback(env:Env,owner:string,requestId:string){
   const fallback=await jobForAttempt(env.DB,owner,requestId,2);if(!fallback||fallback.status!=='running')return;
-  const cancelled=await cancelGeminiBatch(env.GEMINI_API_KEY,fallback.googleBatchName);if(!cancelled.ok)log('warn',{requestId,stage:'superseded_fallback_cancel_failed',jobId:fallback.id,error:cancelled.error??`HTTP ${cancelled.status}`});
+  const cancelled=await cancelGeminiBatch(env.GEMINI_API_KEY,fallback.googleBatchName);if(!cancelled.ok)log('warn',{requestId,stage:'superseded_fallback_cancel_failed',jobId:fallback.id,error:cancelled.error});
   await env.DB.prepare('DELETE FROM research_batch_jobs WHERE owner_id=? AND id=?').bind(owner,fallback.id).run();
   log('log',{requestId,stage:'superseded_full_fallback',jobId:fallback.id});
 }
