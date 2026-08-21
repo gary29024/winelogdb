@@ -1,0 +1,3 @@
+/* The official website belongs in the structured Contact block. The header already
+   identifies the producer and location, so repeating the same link there is noise. */
+.producer-detail .producer-header .producer-site-link{display:none!important}
