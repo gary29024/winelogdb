@@ -1,11 +1,12 @@
 import { authHeaders } from '../../lib/auth/client';
 import type { ProducerEntity } from '../../lib/producers/entities';
-import type { CatalogCuveeSummary,CuveeCatalogLink } from '../../lib/cuvees/catalogLinks';
+import { canonicalCatalogEntries } from '../../lib/cuvees/catalogPresentation';
+import type { CatalogChoice,CatalogCuveeSummary,CuveeCatalogLink } from '../../lib/cuvees/catalogLinks';
 
 export type ProducerSummary={id:string;canonicalName:string;homeCountry:string|null;homeRegion:string|null;homeLocality:string|null;tastedCount:number;catalogCount:number;researchedAt:string|null};
 export type TastedWine={id:string;wineName:string;vintage:number|null;appellation:string|null;region:string|null;country:string|null;wineStyle:string|null;grapes:string[];imageId:string|null;tastingDate:string|null;rating:number|null;cuveeId:string|null;catalogCuveeId:string|null};
 export type LinkedProducer={mergeId:string;producerId:string;name:string;mergedAt:string};
-export type ProducerDetail=ProducerEntity&{aliases:string[];tastedWines:TastedWine[];researchHistoryCount:number;linkedProducers:LinkedProducer[];catalogCuvees:CatalogCuveeSummary[];cuveeCatalogLinks:CuveeCatalogLink[]};
+export type ProducerDetail=ProducerEntity&{aliases:string[];tastedWines:TastedWine[];researchHistoryCount:number;linkedProducers:LinkedProducer[];catalogCuvees:CatalogCuveeSummary[];catalogChoices:CatalogChoice[];cuveeCatalogLinks:CuveeCatalogLink[]};
 export type ProducerResolution={matched:boolean;inputName:string;producer?:{id:string;canonicalName:string;matchedName:string;matchType:'canonical'|'alias'|'normalized';researchedAt:string|null;catalogCount:number;tastedCount:number}};
 export type ProducerResearchStage='preparing'|'searching'|'retrying'|'parsing'|'saving'|'image'|'complete'|'failed';
 export type ProducerResearchRun={requestId:string;producerId:string;status:'running'|'complete'|'failed';stage:ProducerResearchStage;attempt:number;message:string|null;startedAt:string;updatedAt:string;completedAt:string|null;durationMs:number|null};
@@ -14,7 +15,7 @@ export type ResearchCancelResult={ok:true;cancelled:boolean;alreadyTerminal:bool
 async function json<T>(r:Response,message:string):Promise<T>{const body=await r.json().catch(()=>({})) as T&{error?:string};if(!r.ok)throw new Error(body.error||message);return body}
 export const listProducers=()=>fetch('/api/producers',{headers:authHeaders()}).then(r=>json<{items:ProducerSummary[]}>(r,'Could not load producers'));
 export const resolveProducer=(name:string)=>fetch(`/api/producers/resolve?name=${encodeURIComponent(name)}`,{headers:authHeaders()}).then(r=>json<ProducerResolution>(r,'Could not resolve producer'));
-export const getProducer=(id:string)=>fetch(`/api/producers/${id}`,{headers:authHeaders()}).then(r=>json<ProducerDetail>(r,'Producer not found'));
+export const getProducer=(id:string)=>fetch(`/api/producers/${id}`,{headers:authHeaders()}).then(r=>json<ProducerDetail>(r,'Producer not found')).then(detail=>({...detail,catalog:canonicalCatalogEntries(detail.catalog,[detail.canonicalName,...detail.aliases])}));
 export const setPrimaryProducerName=(id:string,name:string)=>fetch(`/api/producers/${id}/primary-name`,{method:'POST',headers:authHeaders(true),body:JSON.stringify({name})}).then(r=>json<{id:string;canonicalName:string}>(r,'Could not change primary name'));
 export const getProducerResearchStatus=(id:string,requestId?:string)=>{
   const suffix=requestId?`?requestId=${encodeURIComponent(requestId)}`:'';
