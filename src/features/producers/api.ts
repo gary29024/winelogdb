@@ -2,14 +2,16 @@ import { authHeaders } from '../../lib/auth/client';
 import type { ProducerEntity } from '../../lib/producers/entities';
 import { canonicalCatalogEntries,catalogRowsForPresentation } from '../../lib/cuvees/catalogPresentation';
 import type { CatalogCuveeSummary,CuveeCatalogLink } from '../../lib/cuvees/catalogLinks';
+import { matchCuveeReleaseVariantToCatalog } from '../../lib/cuvees/releaseVariants';
 
 export type ProducerSummary={id:string;canonicalName:string;homeCountry:string|null;homeRegion:string|null;homeLocality:string|null;tastedCount:number;catalogCount:number;researchedAt:string|null};
-export type TastedWine={id:string;wineName:string;vintage:number|null;appellation:string|null;region:string|null;country:string|null;wineStyle:string|null;grapes:string[];imageId:string|null;tastingDate:string|null;rating:number|null;cuveeId:string|null;catalogCuveeId:string|null};
+export type TastedWine={id:string;wineName:string;vintage:number|null;appellation:string|null;region:string|null;country:string|null;wineStyle:string|null;grapes:string[];imageId:string|null;tastingDate:string|null;rating:number|null;cuveeId:string|null;catalogCuveeId:string|null;releaseParentCuveeId?:string|null;releaseParentName?:string|null;releaseDesignation?:string|null;releaseSequence?:number|null};
 export type LinkedProducer={mergeId:string;producerId:string;name:string;mergedAt:string};
 export type ManualProducerContactType='email'|'phone'|'website'|'instagram'|'other';
 export type ManualProducerContact={id:string;type:ManualProducerContactType;label:string|null;value:string;note:string|null;createdAt:string;updatedAt:string};
 export type ManualProducerContactInput={type:ManualProducerContactType;label?:string;value:string;note?:string};
-export type ProducerDetail=ProducerEntity&{aliases:string[];tastedWines:TastedWine[];researchHistoryCount:number;linkedProducers:LinkedProducer[];catalogCuvees:CatalogCuveeSummary[];cuveeCatalogLinks:CuveeCatalogLink[];supplementaryContacts:ManualProducerContact[]};
+export type ProducerCatalogCuvee=CatalogCuveeSummary&{tastedReleases?:string[]};
+export type ProducerDetail=ProducerEntity&{aliases:string[];tastedWines:TastedWine[];researchHistoryCount:number;linkedProducers:LinkedProducer[];catalogCuvees:ProducerCatalogCuvee[];cuveeCatalogLinks:CuveeCatalogLink[];supplementaryContacts:ManualProducerContact[]};
 export type ProducerResolution={matched:boolean;inputName:string;producer?:{id:string;canonicalName:string;matchedName:string;matchType:'canonical'|'alias'|'normalized';researchedAt:string|null;catalogCount:number;tastedCount:number}};
 export type ProducerResearchStage='preparing'|'searching'|'retrying'|'parsing'|'saving'|'image'|'complete'|'failed';
 export type ProducerResearchRun={requestId:string;producerId:string;status:'running'|'complete'|'failed';stage:ProducerResearchStage;attempt:number;message:string|null;startedAt:string;updatedAt:string;completedAt:string|null;durationMs:number|null};
@@ -20,7 +22,21 @@ export const listProducers=()=>fetch('/api/producers',{headers:authHeaders()}).t
 export const resolveProducer=(name:string)=>fetch(`/api/producers/resolve?name=${encodeURIComponent(name)}`,{headers:authHeaders()}).then(r=>json<ProducerResolution>(r,'Could not resolve producer'));
 export const getProducer=(id:string)=>fetch(`/api/producers/${id}`,{headers:authHeaders()}).then(r=>json<ProducerDetail>(r,'Producer not found')).then(detail=>{
   const producerNames=[detail.canonicalName,...detail.aliases],catalog=canonicalCatalogEntries(detail.catalog,producerNames);
-  return {...detail,catalog,supplementaryContacts:detail.supplementaryContacts??[],catalogCuvees:catalogRowsForPresentation(catalog,producerNames,detail.catalogCuvees)};
+  const catalogCuvees=catalogRowsForPresentation(catalog,producerNames,detail.catalogCuvees);
+  const releaseCounts=new Map<string,number>(),releaseNames=new Map<string,Map<number,string>>();
+  const tastedWines=detail.tastedWines.map(wine=>{
+    const match=matchCuveeReleaseVariantToCatalog({name:wine.wineName,appellation:wine.appellation,wineStyle:wine.wineStyle},catalogCuvees,producerNames);
+    const compatible=Boolean(match&&(!wine.catalogCuveeId||wine.catalogCuveeId===match.catalogCuveeId));
+    if(!match||!compatible)return {...wine,releaseParentCuveeId:null,releaseParentName:null,releaseDesignation:null,releaseSequence:null};
+    if(!wine.catalogCuveeId)releaseCounts.set(match.catalogCuveeId,(releaseCounts.get(match.catalogCuveeId)??0)+1);
+    const releases=releaseNames.get(match.catalogCuveeId)??new Map<number,string>();releases.set(match.variant.sequence,match.variant.designation);releaseNames.set(match.catalogCuveeId,releases);
+    return {...wine,catalogCuveeId:wine.catalogCuveeId??match.catalogCuveeId,releaseParentCuveeId:match.catalogCuveeId,releaseParentName:match.catalogName,releaseDesignation:match.variant.designation,releaseSequence:match.variant.sequence};
+  });
+  const catalogWithReleases=catalogCuvees.map(row=>{
+    const releases=releaseNames.get(row.id),tastedReleases=releases?[...releases.entries()].sort((a,b)=>b[0]-a[0]).map(([,label])=>label):[];
+    return {...row,tastedCount:row.tastedCount+(releaseCounts.get(row.id)??0),tastedReleases};
+  });
+  return {...detail,catalog,supplementaryContacts:detail.supplementaryContacts??[],tastedWines,catalogCuvees:catalogWithReleases};
 });
 export const setPrimaryProducerName=(id:string,name:string)=>fetch(`/api/producers/${id}/primary-name`,{method:'POST',headers:authHeaders(true),body:JSON.stringify({name})}).then(r=>json<{id:string;canonicalName:string}>(r,'Could not change primary name'));
 export const getProducerResearchStatus=(id:string,requestId?:string)=>{
