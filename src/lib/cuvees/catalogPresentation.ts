@@ -1,4 +1,4 @@
-import { cuveeIdentitySignature,normalizeCuveeAlias,stripKnownProducerPrefix } from './entities';
+import { cuveeIdentitySignature,cuveeStyleFamily,normalizeCuveeAlias,stripKnownProducerPrefix } from './entities';
 
 export type CatalogPresentationLike={
   name:string;
@@ -11,6 +11,17 @@ export type CatalogPresentationLike={
 
 export const CATALOG_HIERARCHY_LABELS=['Grand Cru','Premier Cru / 1er Cru','Village / appellation','Regional','Other / unclassified'] as const;
 export type CatalogHierarchyLabel=(typeof CATALOG_HIERARCHY_LABELS)[number];
+export type CatalogIdentityRowLike={id:string;canonicalName:string;appellation:string|null;wineStyle:string|null};
+export type CatalogPresentationChoice={
+  key:string;
+  id:string|null;
+  canonicalName:string;
+  appellation:string|null;
+  wineStyle:string|null;
+  classification:string|null;
+  hierarchy:CatalogHierarchyLabel;
+  issue:string|null;
+};
 
 function normalizedText(wine:CatalogPresentationLike){
   return normalizeCuveeAlias([wine.classification,wine.appellation,wine.name].filter(Boolean).join(' '));
@@ -61,4 +72,33 @@ export function canonicalCatalogEntries<T extends CatalogPresentationLike>(catal
     } as T);
   }
   return [...byKey.values()].sort((a,b)=>compareCatalogPresentation(a,b,producerNames));
+}
+
+function compatibleCatalogRow(item:CatalogPresentationLike,row:CatalogIdentityRowLike,producerNames:string[]){
+  const itemName=normalizeCuveeAlias(stripKnownProducerPrefix(item.name,producerNames)),rowName=normalizeCuveeAlias(stripKnownProducerPrefix(row.canonicalName,producerNames));
+  if(!itemName||itemName!==rowName)return false;
+  const itemStyle=cuveeStyleFamily(item.category??item.style),rowStyle=cuveeStyleFamily(row.wineStyle);
+  if(itemStyle&&rowStyle&&itemStyle!==rowStyle)return false;
+  const itemApp=normalizeCuveeAlias(item.appellation??''),rowApp=normalizeCuveeAlias(row.appellation??'');
+  return !itemApp||!rowApp||itemApp===rowApp;
+}
+
+export function catalogChoicesForPresentation<T extends CatalogPresentationLike>(catalog:T[],producerNames:string[],rows:CatalogIdentityRowLike[]):CatalogPresentationChoice[]{
+  const canonical=canonicalCatalogEntries(catalog,producerNames),used=new Set<string>();
+  return canonical.map(item=>{
+    const key=catalogPresentationKey(item,producerNames),available=rows.filter(row=>!used.has(row.id));
+    let row=available.find(candidate=>catalogPresentationKey({name:candidate.canonicalName,appellation:candidate.appellation,style:candidate.wineStyle},producerNames)===key);
+    if(!row){const compatible=available.filter(candidate=>compatibleCatalogRow(item,candidate,producerNames));if(compatible.length===1)row=compatible[0]}
+    if(row)used.add(row.id);
+    return {
+      key,
+      id:row?.id??null,
+      canonicalName:row?.canonicalName??stripKnownProducerPrefix(item.name,producerNames),
+      appellation:(item.appellation??row?.appellation??null)||null,
+      wineStyle:(item.category??item.style??row?.wineStyle??null)||null,
+      classification:item.classification??null,
+      hierarchy:catalogHierarchyLabel(item),
+      issue:row?null:'Catalog identity needs repair'
+    };
+  });
 }
