@@ -1,3 +1,4 @@
+import { discardProducerCatalogStage } from '../producers/catalogResearchStage';
 import { fetchGeminiBatch } from './geminiBatch';
 
 export type ResearchTargetKind='producer'|'wine';
@@ -78,10 +79,12 @@ export async function cancelResearchRun(env:Env,owner:string,kind:ResearchTarget
   if(row.status!=='running')return {status:200 as const,body:{ok:true,cancelled:false,alreadyTerminal:true,requestId,harvestJobIds:[] as string[]}};
   await markRunCancelled(env.DB,owner,kind,targetId,requestId);
   const batches=await cancelTrackedBatches(env,owner,kind,targetId,requestId);
+  if(kind==='producer')await discardProducerCatalogStage(env.DB,owner,requestId).catch(()=>undefined);
   return {status:200 as const,body:{ok:true,cancelled:true,alreadyTerminal:false,requestId,trackedBatches:batches.tracked,remoteCancellation:batches.remote,harvestJobIds:batches.harvestJobIds}};
 }
 
 export async function sweepCancelledResearch(env:Env,owner:string,kind:ResearchTargetKind,targetId:string,requestId:string){
   await markRunCancelled(env.DB,owner,kind,targetId,requestId,true).catch(()=>undefined);
+  if(kind==='producer')await discardProducerCatalogStage(env.DB,owner,requestId).catch(()=>undefined);
   return cancelTrackedBatches(env,owner,kind,targetId,requestId);
 }
