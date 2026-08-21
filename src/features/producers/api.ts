@@ -1,5 +1,6 @@
 import { authHeaders } from '../../lib/auth/client';
 import type { ProducerEntity } from '../../lib/producers/entities';
+import { canonicalCatalogEntries } from '../../lib/cuvees/catalogPresentation';
 import type { CatalogChoice,CatalogCuveeSummary,CuveeCatalogLink } from '../../lib/cuvees/catalogLinks';
 
 export type ProducerSummary={id:string;canonicalName:string;homeCountry:string|null;homeRegion:string|null;homeLocality:string|null;tastedCount:number;catalogCount:number;researchedAt:string|null};
@@ -14,7 +15,7 @@ export type ResearchCancelResult={ok:true;cancelled:boolean;alreadyTerminal:bool
 async function json<T>(r:Response,message:string):Promise<T>{const body=await r.json().catch(()=>({})) as T&{error?:string};if(!r.ok)throw new Error(body.error||message);return body}
 export const listProducers=()=>fetch('/api/producers',{headers:authHeaders()}).then(r=>json<{items:ProducerSummary[]}>(r,'Could not load producers'));
 export const resolveProducer=(name:string)=>fetch(`/api/producers/resolve?name=${encodeURIComponent(name)}`,{headers:authHeaders()}).then(r=>json<ProducerResolution>(r,'Could not resolve producer'));
-export const getProducer=(id:string)=>fetch(`/api/producers/${id}`,{headers:authHeaders()}).then(r=>json<ProducerDetail>(r,'Producer not found'));
+export const getProducer=(id:string)=>fetch(`/api/producers/${id}`,{headers:authHeaders()}).then(r=>json<ProducerDetail>(r,'Producer not found')).then(detail=>({...detail,catalog:canonicalCatalogEntries(detail.catalog,[detail.canonicalName,...detail.aliases])}));
 export const setPrimaryProducerName=(id:string,name:string)=>fetch(`/api/producers/${id}/primary-name`,{method:'POST',headers:authHeaders(true),body:JSON.stringify({name})}).then(r=>json<{id:string;canonicalName:string}>(r,'Could not change primary name'));
 export const getProducerResearchStatus=(id:string,requestId?:string)=>{
   const suffix=requestId?`?requestId=${encodeURIComponent(requestId)}`:'';
