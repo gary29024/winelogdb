@@ -15,6 +15,11 @@ const readError=(value:unknown)=>{
   const message=typeof body.error==='string'?body.error:'Request failed';
   return typeof body.requestId==='string'?`${message} · Request ${body.requestId}`:message;
 };
+async function readResponse(response:Response){
+  const requestId=response.headers.get('X-WineLog-Request-Id')??undefined,text=await response.text();
+  if(!text)return {error:`Recognition failed (${response.status})`,requestId};
+  try{return JSON.parse(text) as unknown}catch{return {error:text.slice(0,700),requestId}}
+}
 function suggestedTags(result:RecognitionResult){
   const candidates=[result.country,result.region,result.appellation,...result.grapes,result.style];
   const seen=new Set<string>();
@@ -59,7 +64,7 @@ export function UploadPage(){
       items.forEach(x=>fd.append('images',x.recognitionFile!));
       fd.append('metadata',JSON.stringify(items.map(x=>x.metadata??{capturedAt:null,latitude:null,longitude:null,source:'none'})));
       const rr=await fetch('/api/recognition',{method:'POST',headers:authHeaders(),body:fd});
-      const response:unknown=await rr.json().catch(()=>({error:`Recognition failed (${rr.status})`,requestId:rr.headers.get('X-WineLog-Request-Id')}));
+      const response=await readResponse(rr);
       if(rr.status===401){clearSession();navigate('/login',{replace:true});return}
       if(!rr.ok){failAll(readError(response));return}
       const result=recognitionSchema.parse(response);
@@ -84,5 +89,5 @@ export function UploadPage(){
     {items.length>0&&<><div className="scan-summary"><strong>{items.length} photo{items.length===1?'':'s'} selected</strong><span>{review?'Identification complete · tap a photo to enlarge it':'Recognition uses resized copies in one API call. Nothing is stored in R2 yet.'}</span></div><ul className="upload-list" aria-live="polite">{items.map((x,i)=>{const alt=`Wine label ${i+1}`;return <li key={x.preview}>{review?<button type="button" className="photo-lightbox-trigger" onClick={()=>setLightbox({src:x.preview,alt})} aria-label={`Enlarge ${alt}`}><img src={x.preview} alt={alt}/></button>:<img src={x.preview} alt={alt}/>}<div><strong>{i===0?'Primary label':`Additional label ${i+1}`}</strong><span>{x.status}{x.error&&`: ${x.error}`}</span>{x.metadata?.capturedAt&&<small>Photo date: {new Date(x.metadata.capturedAt).toLocaleString()}</small>}{x.metadata?.latitude!=null&&x.metadata?.longitude!=null&&<small>Photo GPS: {x.metadata.latitude.toFixed(6)}, {x.metadata.longitude.toFixed(6)}</small>}<progress value={x.progress} max="100">{x.progress}%</progress></div></li>})}</ul>{scanError&&<p role="alert" className="scan-error">{scanError}</p>}<button className="wide-action" onClick={identify} disabled={identifying||items.some(x=>x.status==='preparing')}>{identifying?'Identifying…':'Identify this wine'}</button><button type="button" className="rescan-link" disabled={identifying} onClick={()=>input.current?.click()}>Choose different photos</button><input ref={input} className="visually-hidden" type="file" accept="image/*" multiple onChange={e=>void choose(Array.from(e.target.files??[]))}/></>}
     {review&&<div className="review"><p className="eyebrow">REVIEW</p><h2>Combined identification</h2><p>Gemini interpreted all selected labels together. Tap any label thumbnail above to inspect the original at a larger size, then correct anything before saving. Exact photo coordinates are retained from EXIF; when GPS exists, Gemini may also suggest an approximate human-readable place that you can verify or edit. The original photos are written to R2 only after the wine is successfully logged.</p><WineForm photos={photos} initial={{producer:review.producer??'',wineName:review.wineName??'',vintage:review.vintage,country:review.country,region:review.region,appellation:review.appellation,grapes:review.grapes,grapeBlend:review.grapeBlend,wineStyle:review.style,alcoholPercentage:review.alcoholPercentage,tastingDate:review.tastingDate,locationName:review.locationName,latitude:review.latitude,longitude:review.longitude,tags:suggestedTags(review),recognitionConfidence:review.confidence,recognitionStatus:'review'}}/></div>}
     {lightbox&&<ImageLightbox src={lightbox.src} alt={lightbox.alt} onClose={()=>setLightbox(null)}/>} 
-  </section>
+  </section>;
 }
