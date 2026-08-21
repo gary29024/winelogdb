@@ -9,7 +9,7 @@ export async function prepareProducerCatalogStage(db:D1Database,owner:string,pro
   const stamp=now();
   await db.batch([
     db.prepare('DELETE FROM producer_catalog_research_stage WHERE owner_id=? AND request_id=?').bind(owner,requestId),
-    db.prepare("DELETE FROM producer_catalog_research_stage WHERE updated_at<datetime('now','-7 days')").bind()
+    db.prepare("DELETE FROM producer_catalog_research_stage WHERE updated_at<datetime('now','-7 days')")
   ]);
   return stamp;
 }
@@ -27,6 +27,10 @@ export async function listProducerCatalogStage<T=Record<string,unknown>>(db:D1Da
   const rows=await db.prepare(`SELECT slice_key,range_json,sources_json,model FROM producer_catalog_research_stage
     WHERE owner_id=? AND producer_id=? AND request_id=? ORDER BY slice_key`).bind(owner,producerId,requestId).all<{slice_key:string;range_json:string;sources_json:string;model:string}>();
   return rows.results.map(row=>({sliceKey:row.slice_key,range:parseJson<T[]>(row.range_json,[]),sources:parseJson<CatalogStageSource[]>(row.sources_json,[]),model:row.model}));
+}
+
+export async function clearProducerCatalogSliceStage(db:D1Database,owner:string,requestId:string){
+  await db.prepare("DELETE FROM producer_catalog_research_stage WHERE owner_id=? AND request_id=? AND slice_key LIKE 'catalog_slice_%'").bind(owner,requestId).run();
 }
 
 export async function discardProducerCatalogStage(db:D1Database,owner:string,requestId:string){
