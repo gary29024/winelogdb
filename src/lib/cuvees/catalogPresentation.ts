@@ -83,17 +83,25 @@ function compatibleCatalogRow(item:CatalogPresentationLike,row:CatalogIdentityRo
   return !itemApp||!rowApp||itemApp===rowApp;
 }
 
+export function catalogIdentityForPresentation(item:CatalogPresentationLike,producerNames:string[],rows:CatalogIdentityRowLike[]){
+  const key=catalogPresentationKey(item,producerNames);
+  const exact=rows.filter(candidate=>catalogPresentationKey({name:candidate.canonicalName,appellation:candidate.appellation,style:candidate.wineStyle},producerNames)===key);
+  if(exact.length===1)return exact[0];
+  const compatible=rows.filter(candidate=>compatibleCatalogRow(item,candidate,producerNames));
+  return compatible.length===1?compatible[0]:null;
+}
+
 export function catalogChoicesForPresentation<T extends CatalogPresentationLike>(catalog:T[],producerNames:string[],rows:CatalogIdentityRowLike[]):CatalogPresentationChoice[]{
   const canonical=canonicalCatalogEntries(catalog,producerNames),used=new Set<string>();
   return canonical.map(item=>{
-    const key=catalogPresentationKey(item,producerNames),available=rows.filter(row=>!used.has(row.id));
-    let row=available.find(candidate=>catalogPresentationKey({name:candidate.canonicalName,appellation:candidate.appellation,style:candidate.wineStyle},producerNames)===key);
-    if(!row){const compatible=available.filter(candidate=>compatibleCatalogRow(item,candidate,producerNames));if(compatible.length===1)row=compatible[0]}
+    const key=catalogPresentationKey(item,producerNames),available=rows.filter(row=>!used.has(row.id)),row=catalogIdentityForPresentation(item,producerNames,available);
     if(row)used.add(row.id);
     return {
       key,
       id:row?.id??null,
-      canonicalName:row?.canonicalName??stripKnownProducerPrefix(item.name,producerNames),
+      // The research catalog is the authoritative presentation layer. D1 row names are
+      // identity metadata and may contain older wording such as "Clos Vougeot".
+      canonicalName:stripKnownProducerPrefix(item.name,producerNames),
       appellation:(item.appellation??row?.appellation??null)||null,
       wineStyle:(item.category??item.style??row?.wineStyle??null)||null,
       classification:item.classification??null,
@@ -101,4 +109,9 @@ export function catalogChoicesForPresentation<T extends CatalogPresentationLike>
       issue:row?null:'Catalog identity needs repair'
     };
   });
+}
+
+export function catalogRowsForPresentation<T extends CatalogIdentityRowLike>(catalog:CatalogPresentationLike[],producerNames:string[],rows:T[]):T[]{
+  const choices=catalogChoicesForPresentation(catalog,producerNames,rows),presentationById=new Map(choices.flatMap(choice=>choice.id?[[choice.id,choice.canonicalName] as const]:[]));
+  return rows.map(row=>{const canonicalName=presentationById.get(row.id);return canonicalName&&canonicalName!==row.canonicalName?{...row,canonicalName}:row});
 }
