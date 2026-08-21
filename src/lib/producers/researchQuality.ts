@@ -34,6 +34,27 @@ export function mergeCatalogRanges<T extends CatalogLike>(previous:T[],researche
   return {range:output,researchedCount:researchedKeys.size,retainedCount};
 }
 
+export function catalogTextQualityIssue(value:unknown,field:string,maxLength:number){
+  if(value==null)return null;
+  if(typeof value!=='string')return `${field} is not text`;
+  const text=value.trim();if(!text)return null;
+  if(text.length>maxLength)return `${field} is unexpectedly long`;
+  if(/([A-Za-z0-9])\1{7,}/i.test(text))return `${field} contains a repeated-character run`;
+  if(/\S{72,}/.test(text))return `${field} contains an implausibly long token`;
+  const compact=text.replace(/\s+/g,'');
+  if(compact.length>=48){const counts=new Map<string,number>();for(const char of compact.toLowerCase())counts.set(char,(counts.get(char)??0)+1);const dominant=Math.max(0,...counts.values());if(dominant/compact.length>.58)return `${field} has abnormally low character diversity`}
+  return null;
+}
+
+export function assertCatalogTextQuality(value:unknown,field:string,maxLength:number){
+  const issue=catalogTextQualityIssue(value,field,maxLength);if(issue)throw new Error(`Catalogue quality check failed: ${issue}`);
+}
+
+export function suspiciousCatalogShrink(previousCount:number,nextCount:number){
+  if(previousCount<8)return false;
+  return nextCount<Math.max(4,Math.ceil(previousCount*.5));
+}
+
 const decodeHref=(value:string)=>value.replace(/&amp;/gi,'&').replace(/&#38;/g,'&').trim();
 const hrefs=(html:string)=>[...(html.match(/<a\b[^>]*\bhref\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]+)[^>]*>/gi)??[])].map(tag=>tag.match(/\bhref\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/i)?.slice(1).find(Boolean)).filter((x):x is string=>Boolean(x)).map(decodeHref);
 function visibleText(html:string){
