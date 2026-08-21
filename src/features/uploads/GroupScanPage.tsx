@@ -6,15 +6,21 @@ import type { WinePhoto } from '../wines/api';
 import { groupRecognitionSchema,type GroupRecognitionWine } from '../recognition/groupSchema';
 import { authHeaders,clearSession } from '../../lib/auth/client';
 import { extractPhotoMetadata,type PhotoMetadata } from './photoMetadata';
-import { prepareRecognitionImage } from './prepareImage';
+import { prepareRecognitionImageWithinBytes } from './prepareImage';
 import { cropGroupPhoto } from './cropGroupPhoto';
 import '../../groupScan.css';
 
+const GROUP_RECOGNITION_TARGET_BYTES=Math.floor(2.5*1024*1024);
 type SourcePhoto={file:File;recognitionFile:File;metadata:PhotoMetadata;preview:string;width:number;height:number};
 type ReviewItem={key:string;recognition:GroupRecognitionWine|null;crop:WinePhoto|null;cropPreview:string|null;savedId:string|null;removed:boolean;manual:boolean};
 type ErrorBody={error?:unknown;requestId?:unknown};
 
 function readError(value:unknown){const body=typeof value==='object'&&value!==null?value as ErrorBody:{};const message=typeof body.error==='string'?body.error:'Request failed';return typeof body.requestId==='string'?`${message} · Request ${body.requestId}`:message}
+async function readResponse(response:Response){
+  const requestId=response.headers.get('X-WineLog-Request-Id')??undefined,text=await response.text();
+  if(!text)return {error:`Group recognition failed (${response.status})`,requestId};
+  try{return JSON.parse(text) as unknown}catch{return {error:text.slice(0,700),requestId}}
+}
 function suggestedTags(result:GroupRecognitionWine){const seen=new Set<string>();return [result.country,result.region,result.appellation,...result.grapes,result.style].filter((x):x is string=>Boolean(x)).map(x=>x.trim()).filter(x=>{const key=x.toLowerCase();if(!x||seen.has(key))return false;seen.add(key);return true}).slice(0,8)}
 function asDataUrl(file:File){return new Promise<string>((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(String(reader.result??''));reader.onerror=()=>reject(new Error('Could not preview detected crop'));reader.readAsDataURL(file)})}
 
@@ -28,17 +34,19 @@ export function GroupScanPage(){
   async function choose(file:File|undefined){
     if(!file)return;setError('');setNotice('');setItems([]);setActiveKey(null);setUnresolvedCount(0);
     try{
-      const [metadata,prepared]=await Promise.all([extractPhotoMetadata(file),prepareRecognitionImage(file,1800,.84)]);
+      const [metadata,prepared]=await Promise.all([extractPhotoMetadata(file),prepareRecognitionImageWithinBytes(file,GROUP_RECOGNITION_TARGET_BYTES)]);
       const preview=URL.createObjectURL(file);setPhoto(current=>{if(current?.preview)URL.revokeObjectURL(current.preview);return {file,recognitionFile:prepared.file,metadata,preview,width:prepared.width,height:prepared.height}});
+      setNotice(`Recognition copy prepared at ${(prepared.file.size/1048576).toFixed(1)} MB. The original photo stays local for bottle crops.`);
     }catch(e){setError((e as Error).message||'Could not prepare this group photo')}
   }
 
   async function identify(){
     if(!photo||identifying)return;setIdentifying(true);setError('');setNotice('');setItems([]);setActiveKey(null);setUnresolvedCount(0);
     try{
+      if(photo.recognitionFile.size>GROUP_RECOGNITION_TARGET_BYTES)throw new Error(`Recognition copy is still too large (${(photo.recognitionFile.size/1048576).toFixed(1)} MB). Choose the photo again so WineLog can recompress it.`);
       const fd=new FormData();fd.append('images',photo.recognitionFile);fd.append('metadata',JSON.stringify([photo.metadata]));
       const response=await fetch('/api/recognition',{method:'POST',headers:{...authHeaders(),'X-WineLog-Recognition-Mode':'group'},body:fd});
-      const payload:unknown=await response.json().catch(()=>({error:`Group recognition failed (${response.status})`,requestId:response.headers.get('X-WineLog-Request-Id')}));
+      const payload=await readResponse(response);
       if(response.status===401){clearSession();navigate('/login',{replace:true});return}
       if(!response.ok)throw new Error(readError(payload));
       const result=groupRecognitionSchema.parse(payload);
