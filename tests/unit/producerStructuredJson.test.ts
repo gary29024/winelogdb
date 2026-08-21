@@ -28,6 +28,21 @@ describe('producer structured JSON parsing',()=>{
     expect(()=>parseStructuredJsonText(payload)).toThrow('Structured JSON contains an embedded record fragment');
   });
 
+  it('clears weak leaked labels from optional catalogue fields instead of failing the whole range',()=>{
+    const payload=JSON.stringify({range:[{
+      name:'Clos Example Grand Cru',category:'red',appellation:'Clos Example',classification:'Grand Cru',
+      style:'Still dry red; classification: "Grand Cru"',notes:'notes: null'
+    }]});
+    expect(parseStructuredJsonText(payload)).toEqual({range:[{
+      name:'Clos Example Grand Cru',category:'red',appellation:'Clos Example',classification:'Grand Cru',style:null,notes:null
+    }]});
+  });
+
+  it('still rejects weak record leakage in a catalogue identity name',()=>{
+    const payload=JSON.stringify({range:[{name:'name: "Other wine"',category:'red'}]});
+    expect(()=>parseStructuredJsonText(payload)).toThrow('Structured JSON contains an embedded record fragment at root.range[0].name');
+  });
+
   it('detects leaked JSON keys without rejecting ordinary prose punctuation',()=>{
     expect(hasLikelyEmbeddedJsonFragment('Sparkling brut nature')).toBe(false);
     expect(hasLikelyEmbeddedJsonFragment('brace } inside string')).toBe(false);
