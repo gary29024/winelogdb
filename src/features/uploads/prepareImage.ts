@@ -1,6 +1,7 @@
 export type PreparedImage={file:File;width:number;height:number};
 
 type EncodeAttempt={maxEdge:number;quality:number};
+const DEFAULT_RECOGNITION_MAX_BYTES=Math.floor(2.5*1024*1024);
 
 async function loadImage(file:File){
   const url=URL.createObjectURL(file);
@@ -24,14 +25,24 @@ async function encodeJpeg(file:File,img:HTMLImageElement,maxEdge:number,quality:
   return new File([blob],file.name.replace(/\.[^.]+$/,'.jpg'),{type:'image/jpeg',lastModified:file.lastModified});
 }
 
+function adaptiveAttempts(maxEdge:number,quality:number):EncodeAttempt[]{
+  return [
+    {maxEdge,quality},
+    {maxEdge:Math.max(900,Math.round(maxEdge*.92)),quality:Math.min(quality,.78)},
+    {maxEdge:Math.max(850,Math.round(maxEdge*.84)),quality:Math.min(quality,.72)},
+    {maxEdge:Math.max(800,Math.round(maxEdge*.74)),quality:Math.min(quality,.66)},
+    {maxEdge:Math.max(750,Math.round(maxEdge*.66)),quality:Math.min(quality,.60)},
+    {maxEdge:Math.max(700,Math.round(maxEdge*.58)),quality:Math.min(quality,.54)},
+    {maxEdge:700,quality:.48}
+  ];
+}
+
 export async function prepareRecognitionImage(file:File,maxEdge=1800,quality=0.84):Promise<PreparedImage>{
-  const img=await loadImage(file),width=img.naturalWidth,height=img.naturalHeight;
-  if(!width||!height)throw new Error(`${file.name}: invalid image dimensions`);
-  return {file:await encodeJpeg(file,img,maxEdge,quality),width,height};
+  return prepareRecognitionImageWithinBytes(file,DEFAULT_RECOGNITION_MAX_BYTES,adaptiveAttempts(maxEdge,quality));
 }
 
 export async function prepareRecognitionImageWithinBytes(file:File,maxBytes:number,attempts:EncodeAttempt[]=[
-  {maxEdge:2000,quality:.84},{maxEdge:1850,quality:.78},{maxEdge:1700,quality:.72},{maxEdge:1500,quality:.66},{maxEdge:1350,quality:.60},{maxEdge:1200,quality:.55},{maxEdge:1050,quality:.50}
+  {maxEdge:2000,quality:.84},{maxEdge:1850,quality:.78},{maxEdge:1700,quality:.72},{maxEdge:1500,quality:.66},{maxEdge:1350,quality:.60},{maxEdge:1200,quality:.55},{maxEdge:1050,quality:.50},{maxEdge:900,quality:.46}
 ]):Promise<PreparedImage>{
   const img=await loadImage(file),width=img.naturalWidth,height=img.naturalHeight;
   if(!width||!height)throw new Error(`${file.name}: invalid image dimensions`);
