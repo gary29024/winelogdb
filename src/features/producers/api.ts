@@ -1,12 +1,12 @@
 import { authHeaders } from '../../lib/auth/client';
 import type { ProducerEntity } from '../../lib/producers/entities';
 import { canonicalCatalogEntries } from '../../lib/cuvees/catalogPresentation';
-import type { CatalogChoice,CatalogCuveeSummary,CuveeCatalogLink } from '../../lib/cuvees/catalogLinks';
+import type { CatalogCuveeSummary,CuveeCatalogLink } from '../../lib/cuvees/catalogLinks';
 
 export type ProducerSummary={id:string;canonicalName:string;homeCountry:string|null;homeRegion:string|null;homeLocality:string|null;tastedCount:number;catalogCount:number;researchedAt:string|null};
 export type TastedWine={id:string;wineName:string;vintage:number|null;appellation:string|null;region:string|null;country:string|null;wineStyle:string|null;grapes:string[];imageId:string|null;tastingDate:string|null;rating:number|null;cuveeId:string|null;catalogCuveeId:string|null};
 export type LinkedProducer={mergeId:string;producerId:string;name:string;mergedAt:string};
-export type ProducerDetail=ProducerEntity&{aliases:string[];tastedWines:TastedWine[];researchHistoryCount:number;linkedProducers:LinkedProducer[];catalogCuvees:CatalogCuveeSummary[];catalogChoices:CatalogChoice[];cuveeCatalogLinks:CuveeCatalogLink[]};
+export type ProducerDetail=ProducerEntity&{aliases:string[];tastedWines:TastedWine[];researchHistoryCount:number;linkedProducers:LinkedProducer[];catalogCuvees:CatalogCuveeSummary[];cuveeCatalogLinks:CuveeCatalogLink[]};
 export type ProducerResolution={matched:boolean;inputName:string;producer?:{id:string;canonicalName:string;matchedName:string;matchType:'canonical'|'alias'|'normalized';researchedAt:string|null;catalogCount:number;tastedCount:number}};
 export type ProducerResearchStage='preparing'|'searching'|'retrying'|'parsing'|'saving'|'image'|'complete'|'failed';
 export type ProducerResearchRun={requestId:string;producerId:string;status:'running'|'complete'|'failed';stage:ProducerResearchStage;attempt:number;message:string|null;startedAt:string;updatedAt:string;completedAt:string|null;durationMs:number|null};
