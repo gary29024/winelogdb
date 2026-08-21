@@ -1,5 +1,5 @@
 import { describe,expect,it } from 'vitest';
-import { cuveeIdentitySignature,cuveeSignature,cuveeStyleFamily,normalizeCuveeAlias,stripKnownProducerPrefix } from '../../src/lib/cuvees/entities';
+import { cuveeIdentityCandidateCompatible,cuveeIdentitySignature,cuveeSignature,cuveeStyleFamily,normalizeCuveeAlias,stripKnownProducerPrefix } from '../../src/lib/cuvees/entities';
 import { buildResearchTargets } from '../../src/lib/research/cache';
 
 describe('cuvee identity',()=>{
@@ -45,6 +45,22 @@ describe('cuvee identity',()=>{
     expect(cuveeStyleFamily('Rouge')).toBe('red');
     expect(cuveeStyleFamily('White wine')).toBe('white');
     expect(cuveeStyleFamily('Blanc')).toBe('white');
+  });
+
+  it('accepts exact style-aware identity despite harmless appellation wording differences',()=>{
+    const tasted=cuveeIdentitySignature('Corton Grand Cru “Les Renardes”','Corton Grand Cru','red');
+    const catalog=cuveeIdentitySignature('Corton Les Renardes Grand Cru','Corton','red');
+    const base=cuveeSignature('Corton Les Renardes Grand Cru','Corton');
+    expect(tasted).toBe(catalog);
+    expect(cuveeIdentityCandidateCompatible(tasted,base,catalog,'Corton Grand Cru','Corton','red','red')).toBe(true);
+    expect(cuveeIdentityCandidateCompatible(tasted,base,catalog,'Corton Grand Cru','Corton','red','white')).toBe(false);
+  });
+
+  it('keeps appellation protection for weaker legacy/base-signature matches',()=>{
+    const identity=cuveeIdentitySignature('Corton Les Renardes Grand Cru','Corton','red');
+    const base=cuveeSignature('Corton Les Renardes Grand Cru','Corton');
+    expect(cuveeIdentityCandidateCompatible(base,base,identity,'Corton Grand Cru','Corton','red','red')).toBe(false);
+    expect(cuveeIdentityCandidateCompatible(base,base,identity,'Corton','Corton','red','red')).toBe(true);
   });
 
   it('keeps Deep Search keys stable when the display spelling changes for one cuvee ID',()=>{
