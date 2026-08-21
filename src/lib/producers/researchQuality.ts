@@ -13,7 +13,8 @@ const styleFamily=(value:unknown)=>{
 };
 
 export function catalogIdentityKey(wine:CatalogLike){
-  const name=normalize(wine.name),appellation=normalize(wine.appellation),style=styleFamily(wine.category??wine.style);
+  const name=normalize(wine.name);if(!name)return '';
+  const appellation=normalize(wine.appellation),style=styleFamily(wine.category??wine.style);
   return `${name}::${appellation}::${style}`;
 }
 
