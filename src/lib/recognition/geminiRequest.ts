@@ -2,6 +2,9 @@ import { selectRecognitionMetadata,type RecognitionPhotoMetadata } from '../uplo
 
 export const RECOGNITION_MODEL='gemini-3.1-flash-lite';
 
+// Legacy OpenAPI-style schema retained for Gemini Batch compatibility. New synchronous
+// recognition calls use recognitionResponseJsonSchema below because Google's current
+// generateContent API marks responseSchema as deprecated in favor of JSON Schema.
 export const recognitionResponseSchema={
   type:'OBJECT',
   properties:{
@@ -9,6 +12,28 @@ export const recognitionResponseSchema={
     grapes:{type:'ARRAY',items:{type:'STRING'}},
     grapeBlend:{type:'ARRAY',items:{type:'OBJECT',properties:{grape:{type:'STRING'},percentage:{type:'NUMBER',nullable:true}},required:['grape']}},
     style:{type:'STRING',nullable:true},alcoholPercentage:{type:'NUMBER',nullable:true},locationName:{type:'STRING',nullable:true},confidence:{type:'NUMBER'}
+  },
+  required:['grapes','grapeBlend','confidence']
+} as const;
+
+const nullableString={anyOf:[{type:'string'},{type:'null'}]} as const;
+
+export const recognitionResponseJsonSchema={
+  type:'object',
+  additionalProperties:false,
+  properties:{
+    producer:nullableString,
+    wineName:nullableString,
+    vintage:{anyOf:[{type:'integer',minimum:1000,maximum:2200},{type:'null'}]},
+    country:nullableString,
+    region:nullableString,
+    appellation:nullableString,
+    grapes:{type:'array',maxItems:20,items:{type:'string'}},
+    grapeBlend:{type:'array',maxItems:20,items:{type:'object',additionalProperties:false,properties:{grape:{type:'string'},percentage:{anyOf:[{type:'number',minimum:0,maximum:100},{type:'null'}]}},required:['grape']}},
+    style:{anyOf:[{type:'string',enum:['red','white','rose','sparkling','dessert','fortified','orange','other']},{type:'null'}]},
+    alcoholPercentage:{anyOf:[{type:'number',minimum:0,maximum:100},{type:'null'}]},
+    locationName:nullableString,
+    confidence:{type:'number',minimum:0,maximum:1}
   },
   required:['grapes','grapeBlend','confidence']
 } as const;

@@ -1,6 +1,7 @@
 import { validateBatch } from '../src/features/uploads/validation';
 import { parseRecognition } from '../src/features/recognition/schema';
-import { selectRecognitionMetadata,type RecognitionPhotoMetadata } from '../src/lib/uploads/metadataSelection';
+import { buildRecognitionPrompt,recognitionResponseJsonSchema,RECOGNITION_MODEL } from '../src/lib/recognition/geminiRequest';
+import type { RecognitionPhotoMetadata } from '../src/lib/uploads/metadataSelection';
 import { shouldRetryRecognitionFailure } from '../src/lib/recognition/retryPolicy';
 import { requireSession } from '../src/lib/auth/session';
 import { handleGroupRecognitionRequest } from './groupRecognitionHandler';
@@ -12,7 +13,7 @@ type GeminiResponse={
   error?:{message?:string;code?:number;status?:string};
 };
 
-const MODEL='gemini-3.1-flash-lite';
+const MODEL=RECOGNITION_MODEL;
 const HARD_TIMEOUT_MS=60_000;
 const parseJson=<T>(value:unknown,fallback:T):T=>{try{return JSON.parse(String(value)) as T}catch{return fallback}};
 
@@ -28,16 +29,26 @@ function json(body:unknown,status=200,requestId?:string){
   return new Response(JSON.stringify(body),{status,headers});
 }
 
-const responseSchema={
-  type:'OBJECT',
-  properties:{
-    producer:{type:'STRING',nullable:true},wineName:{type:'STRING',nullable:true},vintage:{type:'NUMBER',nullable:true},country:{type:'STRING',nullable:true},region:{type:'STRING',nullable:true},appellation:{type:'STRING',nullable:true},
-    grapes:{type:'ARRAY',items:{type:'STRING'}},
-    grapeBlend:{type:'ARRAY',items:{type:'OBJECT',properties:{grape:{type:'STRING'},percentage:{type:'NUMBER',nullable:true}},required:['grape']}},
-    style:{type:'STRING',nullable:true},alcoholPercentage:{type:'NUMBER',nullable:true},locationName:{type:'STRING',nullable:true},confidence:{type:'NUMBER'}
-  },
-  required:['grapes','grapeBlend','confidence']
-};
+function geminiErrorMessage(raw:string,status:number){
+  try{
+    const parsed=JSON.parse(raw) as {error?:{message?:unknown;status?:unknown;code?:unknown}};
+    const message=typeof parsed.error?.message==='string'?parsed.error.message.trim():'';
+    const providerStatus=typeof parsed.error?.status==='string'?parsed.error.status.trim():'';
+    if(message)return `${providerStatus?`${providerStatus}: `:''}${message}`.replace(/\s+/g,' ').slice(0,700);
+  }catch{/* plain-text provider error */}
+  const cleaned=raw.replace(/\s+/g,' ').trim();
+  return cleaned.slice(0,700)||`HTTP ${status}`;
+}
+
+function looksLikeStructuredOutputRejection(raw:string){
+  return /response.?schema|response.?json.?schema|response.?format|generation.?config|structured.?output|unknown (?:name|field)|schema/i.test(raw);
+}
+
+async function postGemini(body:string,apiKey:string,signal:AbortSignal){
+  return fetch(`https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`,{
+    method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':apiKey},body,signal
+  });
+}
 
 export async function handleRecognitionRequest(request:Request,env:RecognitionBindings){
   if(request.headers.get('X-WineLog-Recognition-Mode')==='group')return handleGroupRecognitionRequest(request,env);
@@ -50,33 +61,41 @@ export async function handleRecognitionRequest(request:Request,env:RecognitionBi
   try{validateBatch(files,{maxFiles:Number(env.MAX_BATCH_FILES)||12,maxBytes:3*1024*1024,minDimension:300,maxDimension:2000})}catch(e){return json({error:(e as Error).message,requestId},400,requestId)}
   if(!files.length)return json({error:'Choose at least one wine photo',requestId},400,requestId);
 
-  const metadata=parseJson<RecognitionPhotoMetadata[]>(form.get('metadata'),[]),selected=selectRecognitionMetadata(metadata);
-  const context=[
-    selected.capturedAt?`The strongest photo timestamp is ${selected.capturedAt}.`:'No reliable photo timestamp.',
-    selected.latitude!=null&&selected.longitude!=null?`The exact EXIF GPS is ${selected.latitude}, ${selected.longitude}. Infer only an approximate concise human-readable place name when reasonably confident; never alter the coordinates.`:'No reliable GPS metadata.'
-  ].join(' ');
-  const prompt=`All supplied images are labels or views of the SAME wine bottle. Analyze them jointly in one identification. Reconcile front, back, neck and supplementary labels rather than treating them as separate wines. First prioritize facts visible anywhere in the supplied images. After identifying the bottle, you may fill high-confidence canonical facts from general wine knowledge even when not printed verbatim: country, region, appellation, grape varieties, and broad wine style. Use null or an empty array when not reasonably confident. For style, return only one of: red, white, rose, sparkling, dessert, fortified, orange, other. Capture grape blend percentages only when explicitly visible in the supplied images; never invent vintage-specific percentages. Keep plain grape names in grapes and percentages in grapeBlend. Do not add producer history, vintage quality, terroir commentary, winemaking techniques, drinking windows, tasting notes, scores, or detailed research here; those belong to Deep Search. Confidence is 0 to 1 and should reflect confidence in the bottle identification. ${context} Do not invent a tasting date; the application derives it from photo metadata.`;
+  const metadata=parseJson<RecognitionPhotoMetadata[]>(form.get('metadata'),[]),{prompt,selected}=buildRecognitionPrompt(metadata);
   const imageParts=await Promise.all(files.map(async file=>({inlineData:{data:await fileToBase64(file),mimeType:file.type}})));
-  const requestBody=JSON.stringify({contents:[{role:'user',parts:[{text:prompt},...imageParts]}],generationConfig:{responseMimeType:'application/json',responseSchema}});
+  const contents=[{role:'user',parts:[{text:prompt},...imageParts]}];
+  const requestBody=JSON.stringify({contents,generationConfig:{responseMimeType:'application/json',responseJsonSchema:recognitionResponseJsonSchema}});
+  const schemaFreeBody=JSON.stringify({contents,generationConfig:{responseMimeType:'application/json'}});
   const totalInputBytes=files.reduce((sum,file)=>sum+file.size,0);
-  console.log(JSON.stringify({event:'recognition-start',requestId,model:MODEL,photoCount:files.length,inputBytes:totalInputBytes}));
+  console.log(JSON.stringify({event:'recognition-start',requestId,model:MODEL,photoCount:files.length,inputBytes:totalInputBytes,schemaMode:'json-schema'}));
 
   for(let attempt=1;attempt<=2;attempt++){
     const attemptStarted=Date.now(),controller=new AbortController();let timedOut=false;
     const timer=setTimeout(()=>{timedOut=true;controller.abort()},HARD_TIMEOUT_MS);
     try{
-      const response=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`,{
-        method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':env.GEMINI_API_KEY},body:requestBody,signal:controller.signal
-      });
+      let response=await postGemini(requestBody,env.GEMINI_API_KEY,controller.signal),schemaFallback=false,primaryError='';
+      if(response.status===400){
+        primaryError=(await response.text()).slice(0,2000);
+        if(looksLikeStructuredOutputRejection(primaryError)){
+          schemaFallback=true;
+          console.warn(JSON.stringify({event:'recognition-schema-fallback',requestId,model:MODEL,attempt,error:geminiErrorMessage(primaryError,400)}));
+          response=await postGemini(schemaFreeBody,env.GEMINI_API_KEY,controller.signal);
+        }else{
+          clearTimeout(timer);
+          const geminiLatencyMs=Date.now()-attemptStarted,message=geminiErrorMessage(primaryError,400);
+          console.error(JSON.stringify({event:'recognition-upstream-error',requestId,model:MODEL,attempt,status:400,geminiLatencyMs,error:primaryError}));
+          return json({error:`Gemini rejected the recognition request (400): ${message}`,requestId},502,requestId);
+        }
+      }
       clearTimeout(timer);
       const geminiLatencyMs=Date.now()-attemptStarted;
       if(!response.ok){
-        const errorText=(await response.text()).slice(0,1500);
-        console.error(JSON.stringify({event:'recognition-upstream-error',requestId,model:MODEL,attempt,status:response.status,geminiLatencyMs,error:errorText}));
+        const errorText=(await response.text()).slice(0,2000),message=geminiErrorMessage(errorText,response.status);
+        console.error(JSON.stringify({event:'recognition-upstream-error',requestId,model:MODEL,attempt,status:response.status,geminiLatencyMs,schemaFallback,primaryError:primaryError||undefined,error:errorText}));
         if(attempt===1&&shouldRetryRecognitionFailure({status:response.status,timedOut:false,networkError:false})){
           await new Promise(r=>setTimeout(r,700+Math.floor(Math.random()*500)));continue;
         }
-        return json({error:`Recognition failed (${response.status})`,requestId},502,requestId);
+        return json({error:`Gemini recognition failed (${response.status}): ${message}`,requestId},502,requestId);
       }
       const payload=await response.json() as GeminiResponse;
       const candidate=payload.candidates?.[0],text=candidate?.content?.parts?.map(part=>part.text??'').join('')??'';
@@ -84,7 +103,7 @@ export async function handleRecognitionRequest(request:Request,env:RecognitionBi
       const result=parseRecognition(text);
       const locationName=selected.gpsSource==='exif'&&result.locationName?.trim()?result.locationName.trim():null;
       const durationMs=Date.now()-startedAt;
-      console.log(JSON.stringify({event:'recognition-complete',requestId,model:MODEL,attempt,geminiLatencyMs,durationMs,finishReason:candidate?.finishReason??null,promptTokens:payload.usageMetadata?.promptTokenCount??null,outputTokens:payload.usageMetadata?.candidatesTokenCount??null,totalTokens:payload.usageMetadata?.totalTokenCount??null}));
+      console.log(JSON.stringify({event:'recognition-complete',requestId,model:MODEL,attempt,geminiLatencyMs,durationMs,schemaFallback,finishReason:candidate?.finishReason??null,promptTokens:payload.usageMetadata?.promptTokenCount??null,outputTokens:payload.usageMetadata?.candidatesTokenCount??null,totalTokens:payload.usageMetadata?.totalTokenCount??null}));
       return json({...result,locationName,tastingDate:selected.capturedAt?.slice(0,10)??null,latitude:selected.latitude,longitude:selected.longitude,metadataSource:selected.gpsSource==='exif'?'exif':selected.timestampSource,requestId,recognitionDurationMs:durationMs},200,requestId);
     }catch(e){
       clearTimeout(timer);
