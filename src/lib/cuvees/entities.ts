@@ -83,6 +83,13 @@ async function producerNames(db:D1Database,owner:string,producerId:string){
 
 const styleCompatible=(stored:string|null|undefined,incoming:string|null|undefined)=>{const a=cuveeStyleFamily(stored),b=cuveeStyleFamily(incoming);return !a||!b||a===b};
 const appellationCompatible=(stored:string|null|undefined,incoming:string|null|undefined)=>!stored||!incoming||normalizeCuveeAlias(stored)===normalizeCuveeAlias(incoming);
+export function cuveeIdentityCandidateCompatible(storedSignature:string,baseSignature:string,identitySignature:string,storedAppellation:string|null|undefined,incomingAppellation:string|null|undefined,storedStyle:string|null|undefined,incomingStyle:string|null|undefined){
+  if(!cuveeSignatureMatches(storedSignature,baseSignature,identitySignature)||!styleCompatible(storedStyle,incomingStyle))return false;
+  // An exact style-aware signature already encodes the normalized name + appellation token set.
+  // Allow harmless metadata wording differences (for example "Corton Grand Cru" vs "Corton")
+  // only on that strongest match. Legacy/base-signature matches still require appellation agreement.
+  return storedSignature===identitySignature||appellationCompatible(storedAppellation,incomingAppellation);
+}
 const mapEntity=(row:CuveeRow):CuveeEntity=>({id:row.id,producerId:row.producer_id,canonicalName:row.canonical_name,appellation:row.appellation??null,wineStyle:row.wine_style??null,catalogBacked:Boolean(row.catalog_backed)});
 
 async function aliasMatch(db:D1Database,owner:string,producerId:string,normalizedAlias:string,appellation?:string|null){
@@ -100,8 +107,7 @@ async function signatureMatch(db:D1Database,owner:string,producerId:string,baseS
   // Avoid SQL LIKE/GLOB here. D1/SQLite imposes a pattern-complexity limit, so a malformed
   // or unexpectedly long catalog identity must never be able to abort producer research.
   const rows=await db.prepare('SELECT * FROM cuvees WHERE owner_id=? AND producer_id=?').bind(owner,producerId).all<CuveeRow>();
-  const matching=rows.results.filter(row=>cuveeSignatureMatches(row.signature_key,baseSignature,identitySignature));
-  const compatible=matching.filter(row=>styleCompatible(row.wine_style,wineStyle)&&appellationCompatible(row.appellation,appellation));
+  const compatible=rows.results.filter(row=>cuveeIdentityCandidateCompatible(row.signature_key,baseSignature,identitySignature,row.appellation,appellation,row.wine_style,wineStyle));
   const exact=compatible.find(row=>row.signature_key===identitySignature);if(exact)return exact;
   return compatible.length===1?compatible[0]:null;
 }
@@ -221,7 +227,7 @@ export async function ensureCuveeEntity(db:D1Database,owner:string,producerId:st
       row={id,producer_id:producerId,canonical_name:canonical,signature_key:identitySignature,appellation:appellation??null,wine_style:wineStyle??null,catalog_backed:catalogBacked?1:0,created_at:now};
     }catch{
       const exact=await db.prepare('SELECT * FROM cuvees WHERE owner_id=? AND producer_id=? AND signature_key=? LIMIT 1').bind(owner,producerId,identitySignature).first<CuveeRow>();
-      row=exact&&styleCompatible(exact.wine_style,wineStyle)&&appellationCompatible(exact.appellation,appellation)?exact:null;
+      row=exact&&cuveeIdentityCandidateCompatible(exact.signature_key,baseSignature,identitySignature,exact.appellation,appellation,exact.wine_style,wineStyle)?exact:null;
     }
   }
   if(!row)throw new Error('Could not resolve a style-compatible cuvee entity');
