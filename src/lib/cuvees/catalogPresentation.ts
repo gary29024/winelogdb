@@ -1,4 +1,5 @@
-import { cuveeIdentitySignature,cuveeStyleFamily,normalizeCuveeAlias,stripKnownProducerPrefix } from './entities';
+import { cuveeIdentitySignature,cuveeStyleFamily,normalizeCuveeAlias } from './entities';
+import { stripProducerCatalogPrefix } from '../producers/catalogName';
 
 export type CatalogPresentationLike={
   name:string;
@@ -42,13 +43,14 @@ export function catalogHierarchyLabel(wine:CatalogPresentationLike):CatalogHiera
 }
 
 export function catalogPresentationKey(wine:CatalogPresentationLike,producerNames:string[]=[]){
-  const key=cuveeIdentitySignature(wine.name,wine.appellation,wine.category??wine.style,producerNames);
-  return key||normalizeCuveeAlias([wine.name,wine.appellation,wine.category??wine.style].filter(Boolean).join(' '));
+  const cleanName=stripProducerCatalogPrefix(wine.name,producerNames);
+  const key=cuveeIdentitySignature(cleanName,wine.appellation,wine.category??wine.style);
+  return key||normalizeCuveeAlias([cleanName,wine.appellation,wine.category??wine.style].filter(Boolean).join(' '));
 }
 
 export function compareCatalogPresentation(a:CatalogPresentationLike,b:CatalogPresentationLike,producerNames:string[]=[]){
   const hierarchy=catalogHierarchyRank(a)-catalogHierarchyRank(b);if(hierarchy)return hierarchy;
-  const aName=stripKnownProducerPrefix(a.name,producerNames),bName=stripKnownProducerPrefix(b.name,producerNames);
+  const aName=stripProducerCatalogPrefix(a.name,producerNames),bName=stripProducerCatalogPrefix(b.name,producerNames);
   const byName=aName.localeCompare(bName,undefined,{sensitivity:'base',numeric:true});if(byName)return byName;
   const byApp=String(a.appellation??'').localeCompare(String(b.appellation??''),undefined,{sensitivity:'base',numeric:true});if(byApp)return byApp;
   return String(a.category??a.style??'').localeCompare(String(b.category??b.style??''),undefined,{sensitivity:'base',numeric:true});
@@ -61,8 +63,6 @@ export function canonicalCatalogEntries<T extends CatalogPresentationLike>(catal
     const key=catalogPresentationKey(item,producerNames);if(!key)continue;
     const existing=byKey.get(key);
     if(!existing){byKey.set(key,item);continue}
-    // Refresh results are stored before retained historical entries. Preserve the newer
-    // wording while filling any metadata that only existed on the older duplicate.
     byKey.set(key,{...existing,
       category:existing.category??item.category,
       appellation:existing.appellation??item.appellation,
@@ -75,7 +75,7 @@ export function canonicalCatalogEntries<T extends CatalogPresentationLike>(catal
 }
 
 function compatibleCatalogRow(item:CatalogPresentationLike,row:CatalogIdentityRowLike,producerNames:string[]){
-  const itemName=normalizeCuveeAlias(stripKnownProducerPrefix(item.name,producerNames)),rowName=normalizeCuveeAlias(stripKnownProducerPrefix(row.canonicalName,producerNames));
+  const itemName=normalizeCuveeAlias(stripProducerCatalogPrefix(item.name,producerNames)),rowName=normalizeCuveeAlias(stripProducerCatalogPrefix(row.canonicalName,producerNames));
   if(!itemName||itemName!==rowName)return false;
   const itemStyle=cuveeStyleFamily(item.category??item.style),rowStyle=cuveeStyleFamily(row.wineStyle);
   if(itemStyle&&rowStyle&&itemStyle!==rowStyle)return false;
@@ -99,9 +99,7 @@ export function catalogChoicesForPresentation<T extends CatalogPresentationLike>
     return {
       key,
       id:row?.id??null,
-      // The research catalog is the authoritative presentation layer. D1 row names are
-      // identity metadata and may contain older wording such as "Clos Vougeot".
-      canonicalName:stripKnownProducerPrefix(item.name,producerNames),
+      canonicalName:stripProducerCatalogPrefix(item.name,producerNames),
       appellation:(item.appellation??row?.appellation??null)||null,
       wineStyle:(item.category??item.style??row?.wineStyle??null)||null,
       classification:item.classification??null,

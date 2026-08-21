@@ -18,6 +18,15 @@ describe('producer research quality',()=>{
     expect(merged.retainedCount).toBe(1);
   });
 
+  it('deduplicates a retained producer-prefixed wine against a cleaned refreshed name',()=>{
+    const previous=[{name:'Domaine Pierre Vincent Volnay 1er Cru Le Ronceret',category:'red',appellation:'Volnay Premier Cru'}];
+    const researched=[{name:'Volnay 1er Cru Le Ronceret',category:'red',appellation:'Volnay Premier Cru'}];
+    const merged=mergeCatalogRanges(previous,researched,150,['Pierre Vincent']);
+    expect(merged.range).toHaveLength(1);
+    expect(merged.range[0].name).toBe('Volnay 1er Cru Le Ronceret');
+    expect(merged.retainedCount).toBe(0);
+  });
+
   it('keeps same-name wines separate when their style differs',()=>{
     const merged=mergeCatalogRanges([{name:'Tradition',category:'white'}],[{name:'Tradition',category:'red'}]);
     expect(merged.range).toHaveLength(2);
@@ -35,5 +44,12 @@ describe('producer research quality',()=>{
       instagramUrls:['https://www.instagram.com/domaine.example/'],
       contactLinks:['https://domaine.example/contact-us']
     });
+  });
+
+  it('extracts plain-text first-party email and phone details without requiring mailto/tel links',()=>{
+    const html=`<main><p>Email: contact@pierre-vincent.fr</p><p>Téléphone : +33 3 80 21 40 55</p></main><script>const fake='ignore@example.test';</script>`;
+    const result=extractOfficialContactCandidates(html,'https://pierre-vincent.fr/');
+    expect(result.emails).toEqual(['contact@pierre-vincent.fr']);
+    expect(result.phones).toEqual(['+33 3 80 21 40 55']);
   });
 });

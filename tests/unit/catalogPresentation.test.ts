@@ -13,6 +13,16 @@ describe('catalog presentation',()=>{
     expect(result[0].notes).toBe('Older retained wording');
   });
 
+  it('treats generic Domaine plus the known producer name as presentation-only',()=>{
+    const catalog=[
+      {name:'Domaine Pierre Vincent Volnay 1er Cru Le Ronceret',category:'red',appellation:'Volnay Premier Cru',classification:'Premier Cru'},
+      {name:'Volnay 1er Cru Le Ronceret',category:'red',appellation:'Volnay Premier Cru',classification:'Premier Cru'}
+    ];
+    const rows=[{id:'ronceret',canonicalName:'Volnay 1er Cru Le Ronceret',appellation:'Volnay Premier Cru',wineStyle:'red'}];
+    expect(canonicalCatalogEntries(catalog,['Pierre Vincent'])).toHaveLength(1);
+    expect(catalogChoicesForPresentation(catalog,['Pierre Vincent'],rows)[0]).toMatchObject({id:'ronceret',canonicalName:'Volnay 1er Cru Le Ronceret'});
+  });
+
   it('keeps same-name wines separate when style differs',()=>{
     const result=canonicalCatalogEntries([
       {name:'Tradition',category:'red',appellation:'Bourgogne'},
