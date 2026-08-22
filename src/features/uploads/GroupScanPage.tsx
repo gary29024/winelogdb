@@ -1,13 +1,16 @@
-import { useMemo,useRef,useState } from 'react';
+import { useEffect,useMemo,useRef,useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { WineForm } from '../wines/WineForm';
 import type { WineInput } from '../../lib/db/schema';
 import type { WinePhoto } from '../wines/api';
 import { groupRecognitionSchema,type GroupRecognitionWine } from '../recognition/groupSchema';
+import { resolveProducer } from '../producers/api';
+import { resolveCuvee } from '../cuvees/api';
 import { authHeaders,clearSession } from '../../lib/auth/client';
 import { extractPhotoMetadata,type PhotoMetadata } from './photoMetadata';
 import { prepareRecognitionImageWithinBytes } from './prepareImage';
 import { cropGroupPhoto } from './cropGroupPhoto';
+import { deleteGroupScanSession,getGroupScanSession,listGroupScanSessions,saveGroupScanSession,type GroupScanHistoryItem } from './groupScanStore';
 import '../../groupScan.css';
 
 const GROUP_RECOGNITION_TARGET_BYTES=Math.floor(2.5*1024*1024);
@@ -23,16 +26,39 @@ async function readResponse(response:Response){
 }
 function suggestedTags(result:GroupRecognitionWine){const seen=new Set<string>();return [result.country,result.region,result.appellation,...result.grapes,result.style].filter((x):x is string=>Boolean(x)).map(x=>x.trim()).filter(x=>{const key=x.toLowerCase();if(!x||seen.has(key))return false;seen.add(key);return true}).slice(0,8)}
 function asDataUrl(file:File){return new Promise<string>((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(String(reader.result??''));reader.onerror=()=>reject(new Error('Could not preview detected crop'));reader.readAsDataURL(file)})}
+async function alignToExistingCuvee(result:GroupRecognitionWine){
+  try{
+    const producer=await resolveProducer(result.producer);
+    if(!producer.matched||!producer.producer)return result;
+    // Group recognition often gets the wine name right while ancillary appellation metadata
+    // varies from one photograph to another. Resolve the exact producer + name first without
+    // appellation; the backend only returns a match when that identity is unambiguous.
+    const cuvee=await resolveCuvee(producer.producer.id,result.wineName,null,result.style??null);
+    if(!cuvee.matched||!cuvee.cuvee)return {...result,producer:producer.producer.canonicalName};
+    return {...result,producer:producer.producer.canonicalName,wineName:cuvee.cuvee.canonicalName,appellation:cuvee.cuvee.appellation??result.appellation};
+  }catch{return result}
+}
 
 export function GroupScanPage(){
   const [photo,setPhoto]=useState<SourcePhoto|null>(null),[items,setItems]=useState<ReviewItem[]>([]),[activeKey,setActiveKey]=useState<string|null>(null),[unresolvedCount,setUnresolvedCount]=useState(0),[identifying,setIdentifying]=useState(false),[error,setError]=useState(''),[notice,setNotice]=useState('');
+  const [sessionId,setSessionId]=useState<string|null>(null),[sessionCreatedAt,setSessionCreatedAt]=useState<string|null>(null),[history,setHistory]=useState<GroupScanHistoryItem[]>([]);
   const input=useRef<HTMLInputElement>(null),navigate=useNavigate();
   const visibleItems=items.filter(item=>!item.removed),savedCount=visibleItems.filter(item=>item.savedId).length,pendingCount=visibleItems.filter(item=>!item.savedId).length;
   const active=items.find(item=>item.key===activeKey&&!item.removed)??null;
   const allFinished=visibleItems.length>0&&pendingCount===0;
 
+  async function refreshHistory(){try{setHistory(await listGroupScanSessions())}catch{/* Group Scan still works when local persistence is unavailable. */}}
+  useEffect(()=>{void refreshHistory()},[]);
+  useEffect(()=>{
+    if(!sessionId||!sessionCreatedAt||!photo||!items.length)return;
+    const timer=window.setTimeout(()=>{
+      void saveGroupScanSession({id:sessionId,createdAt:sessionCreatedAt,updatedAt:new Date().toISOString(),photo:photo.recognitionFile,metadata:photo.metadata,width:photo.width,height:photo.height,unresolvedCount,items:items.map(item=>({key:item.key,recognition:item.recognition,crop:item.crop,savedId:item.savedId,removed:item.removed,manual:item.manual}))}).then(refreshHistory).catch(()=>undefined);
+    },180);
+    return()=>window.clearTimeout(timer);
+  },[sessionId,sessionCreatedAt,photo,items,unresolvedCount]);
+
   async function choose(file:File|undefined){
-    if(!file)return;setError('');setNotice('');setItems([]);setActiveKey(null);setUnresolvedCount(0);
+    if(!file)return;setError('');setNotice('');setItems([]);setActiveKey(null);setUnresolvedCount(0);setSessionId(null);setSessionCreatedAt(null);
     try{
       const [metadata,prepared]=await Promise.all([extractPhotoMetadata(file),prepareRecognitionImageWithinBytes(file,GROUP_RECOGNITION_TARGET_BYTES)]);
       const preview=URL.createObjectURL(file);setPhoto(current=>{if(current?.preview)URL.revokeObjectURL(current.preview);return {file,recognitionFile:prepared.file,metadata,preview,width:prepared.width,height:prepared.height}});
@@ -49,11 +75,12 @@ export function GroupScanPage(){
       const payload=await readResponse(response);
       if(response.status===401){clearSession();navigate('/login',{replace:true});return}
       if(!response.ok)throw new Error(readError(payload));
-      const result=groupRecognitionSchema.parse(payload);
-      const reviewed=await Promise.all(result.wines.map(async wine=>{
+      const result=groupRecognitionSchema.parse(payload),aligned=await Promise.all(result.wines.map(alignToExistingCuvee));
+      const reviewed=await Promise.all(aligned.map(async wine=>{
         const crop=await cropGroupPhoto(photo.file,wine.boundingBox,photo.metadata),cropPreview=await asDataUrl(crop.file);
         return {key:crypto.randomUUID(),recognition:wine,crop,cropPreview,savedId:null,removed:false,manual:false} satisfies ReviewItem;
       }));
+      const id=sessionId??crypto.randomUUID(),createdAt=sessionCreatedAt??new Date().toISOString();setSessionId(id);setSessionCreatedAt(createdAt);
       setItems(reviewed);setUnresolvedCount(result.unresolvedCount);setActiveKey(reviewed[0]?.key??null);
       const duration=result.recognitionDurationMs!=null?` in ${(result.recognitionDurationMs/1000).toFixed(1)}s`:'';
       setNotice(`${reviewed.length} distinct wine${reviewed.length===1?'':'s'} identified${duration}. Review each result before saving.`);
@@ -62,8 +89,24 @@ export function GroupScanPage(){
     finally{setIdentifying(false)}
   }
 
+  async function resumeStored(id:string){
+    setError('');setNotice('');
+    try{
+      const stored=await getGroupScanSession(id);if(!stored)throw new Error('This saved group scan is no longer available on this device.');
+      const preview=URL.createObjectURL(stored.photo),restored=await Promise.all(stored.items.map(async item=>({...item,cropPreview:item.crop?await asDataUrl(item.crop.file):null} satisfies ReviewItem)));
+      setPhoto(current=>{if(current?.preview)URL.revokeObjectURL(current.preview);return {file:stored.photo,recognitionFile:stored.photo,metadata:stored.metadata,preview,width:stored.width,height:stored.height}});
+      setSessionId(stored.id);setSessionCreatedAt(stored.createdAt);setItems(restored);setUnresolvedCount(stored.unresolvedCount);
+      setActiveKey(restored.find(item=>!item.removed&&!item.savedId)?.key??null);
+      setNotice(`Restored ${restored.filter(item=>!item.removed).length} wine${restored.filter(item=>!item.removed).length===1?'':'s'} from this device. Saved and pending review states were preserved.`);
+    }catch(e){setError((e as Error).message||'Could not restore this group scan')}
+  }
+  async function removeStored(id:string){
+    if(!confirm('Remove this Group Photo history entry from this device? Wines already saved to WineLog will not be deleted.'))return;
+    try{await deleteGroupScanSession(id);if(sessionId===id){setSessionId(null);setSessionCreatedAt(null);setItems([]);setActiveKey(null);setUnresolvedCount(0)}await refreshHistory()}catch(e){setError((e as Error).message||'Could not remove group scan history')}
+  }
+
   function removeItem(key:string){setItems(current=>current.map(item=>item.key===key?{...item,removed:true}:item));if(activeKey===key)setActiveKey(null)}
-  function addMissedWine(){const item:ReviewItem={key:crypto.randomUUID(),recognition:null,crop:null,cropPreview:null,savedId:null,removed:false,manual:true};setItems(current=>[...current,item]);setActiveKey(item.key)}
+  function addMissedWine(){const item:ReviewItem={key:crypto.randomUUID(),recognition:null,crop:null,cropPreview:null,savedId:null,removed:false,manual:true};if(!sessionId){setSessionId(crypto.randomUUID());setSessionCreatedAt(new Date().toISOString())}setItems(current=>[...current,item]);setActiveKey(item.key)}
   function markSaved(key:string,id:string){setItems(current=>current.map(item=>item.key===key?{...item,savedId:id}:item));setActiveKey(null)}
 
   const initial=useMemo<Partial<WineInput>>(()=>{
@@ -90,5 +133,7 @@ export function GroupScanPage(){
     {active&&!active.savedId&&!active.removed&&<section className="group-edit-panel"><div className="group-edit-head"><div><p className="eyebrow">{active.manual?'MANUAL ADDITION':'CHECK DETECTION'}</p><h2>{active.recognition?.wineName||'Add missed wine'}</h2></div>{active.cropPreview&&<img src={active.cropPreview} alt="Crop used for this wine"/>}</div><p>Review this wine independently. Saving it creates one normal WineLog record. For detected wines, only this bottle crop is attached — the full group photo is not duplicated across every record.</p><WineForm key={active.key} initial={initial} photos={active.crop?[active.crop]:[]} submitLabel="Save this wine" onSaved={id=>markSaved(active.key,id)}/></section>}
 
     {allFinished&&<div className="producer-notice group-complete"><strong>Group photo complete.</strong><span>{savedCount} wine{savedCount===1?'':'s'} saved as separate tasting records.</span><button type="button" onClick={()=>navigate('/journal')}>Open Journal</button></div>}
+
+    {history.length>0&&<section className="group-history"><div className="group-history-head"><div><p className="eyebrow">RECENT GROUP SCANS</p><h2>Resume without scanning again.</h2></div><small>Saved on this device</small></div><div className="group-history-list">{history.map(entry=><article key={entry.id} className={`group-history-card${sessionId===entry.id?' current':''}`}><div><strong>{entry.firstWineName||`${entry.totalItems} detected wines`}</strong><span>{new Date(entry.updatedAt).toLocaleString()} · {entry.savedItems} saved · {entry.pendingItems} pending</span></div><div><button type="button" onClick={()=>void resumeStored(entry.id)}>{sessionId===entry.id?'Reload':'Resume'}</button><button type="button" className="secondary-danger" onClick={()=>void removeStored(entry.id)}>Remove</button></div></article>)}</div></section>}
   </section>;
 }
