@@ -1,6 +1,7 @@
 import { validateBatch } from '../src/features/uploads/validation';
 import { parseGroupRecognition } from '../src/features/recognition/groupSchema';
 import { RECOGNITION_MODEL } from '../src/lib/recognition/geminiRequest';
+import { shouldRetryGroupWithoutStructuredSchema } from '../src/lib/recognition/structuredFallback';
 import { selectRecognitionMetadata,type RecognitionPhotoMetadata } from '../src/lib/uploads/metadataSelection';
 import { shouldRetryRecognitionFailure } from '../src/lib/recognition/retryPolicy';
 import { requireSession } from '../src/lib/auth/session';
@@ -34,7 +35,6 @@ function geminiErrorMessage(raw:string,status:number){
   const cleaned=raw.replace(/\s+/g,' ').trim();
   return cleaned.slice(0,700)||`HTTP ${status}`;
 }
-function looksLikeStructuredOutputRejection(raw:string){return /response.?schema|response.?json.?schema|response.?format|generation.?config|structured.?output|unknown (?:name|field)|schema/i.test(raw)}
 async function postGemini(body:string,apiKey:string,signal:AbortSignal){return fetch(`https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`,{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':apiKey},body,signal})}
 
 export async function handleGroupRecognitionRequest(request:Request,env:Bindings){
@@ -64,17 +64,11 @@ export async function handleGroupRecognitionRequest(request:Request,env:Bindings
     const attemptStarted=Date.now(),controller=new AbortController();let timedOut=false;const timer=setTimeout(()=>{timedOut=true;controller.abort()},HARD_TIMEOUT_MS);
     try{
       let response=await postGemini(requestBody,env.GEMINI_API_KEY,controller.signal),schemaFallback=false,primaryError='';
-      if(response.status===400){
+      if(shouldRetryGroupWithoutStructuredSchema(response.status)){
         primaryError=(await response.text()).slice(0,2000);
-        if(looksLikeStructuredOutputRejection(primaryError)){
-          schemaFallback=true;
-          console.warn(JSON.stringify({event:'group-recognition-schema-fallback',requestId,model:MODEL,attempt,error:geminiErrorMessage(primaryError,400)}));
-          response=await postGemini(schemaFreeBody,env.GEMINI_API_KEY,controller.signal);
-        }else{
-          clearTimeout(timer);const geminiLatencyMs=Date.now()-attemptStarted,message=geminiErrorMessage(primaryError,400);
-          console.error(JSON.stringify({event:'group-recognition-upstream-error',requestId,attempt,status:400,geminiLatencyMs,error:primaryError}));
-          return json({error:`Gemini rejected group recognition (400): ${message}`,requestId},502,requestId)
-        }
+        schemaFallback=true;
+        console.warn(JSON.stringify({event:'group-recognition-schema-fallback',requestId,model:MODEL,attempt,error:geminiErrorMessage(primaryError,response.status)}));
+        response=await postGemini(schemaFreeBody,env.GEMINI_API_KEY,controller.signal);
       }
       clearTimeout(timer);const geminiLatencyMs=Date.now()-attemptStarted;
       if(!response.ok){const errorText=(await response.text()).slice(0,2000),message=geminiErrorMessage(errorText,response.status);console.error(JSON.stringify({event:'group-recognition-upstream-error',requestId,attempt,status:response.status,geminiLatencyMs,schemaFallback,primaryError:primaryError||undefined,error:errorText}));if(attempt===1&&shouldRetryRecognitionFailure({status:response.status,timedOut:false,networkError:false})){await new Promise(r=>setTimeout(r,700+Math.floor(Math.random()*500)));continue}return json({error:`Gemini group recognition failed (${response.status}): ${message}`,requestId},502,requestId)}
