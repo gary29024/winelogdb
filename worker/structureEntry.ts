@@ -1,6 +1,7 @@
 import app from './researchQueueEntry';
 import { requireSession } from '../src/lib/auth/session';
 import { hasTastingStructure,tastingStructureSchema,type TastingStructure } from '../src/lib/wine/tastingStructure';
+import { groupSourcePhotosForWine,handleGroupRecognitionSessionRequest } from './groupRecognitionSessions';
 
 type Bindings=Parameters<typeof app.fetch>[1];
 type QueueBatch=Parameters<typeof app.queue>[0];
@@ -40,6 +41,7 @@ function exactWineId(pathname:string){const match=pathname.match(/^\/api\/wines\
 export default {
   async fetch(request:Request,env:Bindings,ctx:ExecutionContext){
     const url=new URL(request.url),wineId=exactWineId(url.pathname);
+    const groupSessionResponse=await handleGroupRecognitionSessionRequest(request,env);if(groupSessionResponse)return groupSessionResponse;
 
     if(request.method==='PUT'&&url.pathname.match(/^\/api\/wines\/[^/]+\/tasting-structure$/)){
       let ownerId:string;try{ownerId=await owner(request,env)}catch{return jsonResponse({error:'Unauthorized'},401)}
@@ -53,9 +55,9 @@ export default {
       const response=await app.fetch(request,env,ctx);if(!response.ok)return response;
       let ownerId:string;try{ownerId=await owner(request,env)}catch{return response}
       try{
-        const [body,row]=await Promise.all([response.clone().json() as Promise<Record<string,unknown>>,env.DB.prepare('SELECT structure_json FROM wine_tasting_structures WHERE owner_id=? AND wine_id=?').bind(ownerId,wineId).first<{structure_json:string}>()]);
+        const [body,row,groupSourcePhotos]=await Promise.all([response.clone().json() as Promise<Record<string,unknown>>,env.DB.prepare('SELECT structure_json FROM wine_tasting_structures WHERE owner_id=? AND wine_id=?').bind(ownerId,wineId).first<{structure_json:string}>(),groupSourcePhotosForWine(env.DB,ownerId,wineId)]);
         let structure:TastingStructure|null=null;if(row?.structure_json){const parsed=tastingStructureSchema.safeParse(JSON.parse(row.structure_json));if(parsed.success&&hasTastingStructure(parsed.data))structure=parsed.data}
-        return jsonResponse({...body,tastingStructure:structure},response.status,new Headers(response.headers));
+        return jsonResponse({...body,tastingStructure:structure,groupSourcePhotos},response.status,new Headers(response.headers));
       }catch{return response}
     }
 
@@ -63,9 +65,7 @@ export default {
       const structure=await extractStructure(request);if(structure.error)return jsonResponse({error:'Invalid tasting structure',details:structure.error},400);
       const response=await app.fetch(request,env,ctx);if(!response.ok||!structure.present)return response;
       let ownerId:string;try{ownerId=await owner(request,env)}catch{return response}
-      try{
-        const id=wineId??String((await response.clone().json() as {id?:unknown}).id??'');if(id)await persistStructure(env.DB,ownerId,id,structure.structure);
-      }catch(e){console.error(JSON.stringify({event:'tasting-structure-save-failed',wineId,error:(e as Error).message}))}
+      try{const id=wineId??String((await response.clone().json() as {id?:unknown}).id??'');if(id)await persistStructure(env.DB,ownerId,id,structure.structure)}catch(e){console.error(JSON.stringify({event:'tasting-structure-save-failed',wineId,error:(e as Error).message}))}
       return response;
     }
 
