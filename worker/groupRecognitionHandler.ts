@@ -1,7 +1,7 @@
 import { validateBatch } from '../src/features/uploads/validation';
 import { parseGroupRecognition } from '../src/features/recognition/groupSchema';
 import { RECOGNITION_MODEL } from '../src/lib/recognition/geminiRequest';
-import { shouldRetryWithoutStructuredSchema } from '../src/lib/recognition/structuredFallback';
+import { shouldRetryGroupWithoutStructuredSchema } from '../src/lib/recognition/structuredFallback';
 import { selectRecognitionMetadata,type RecognitionPhotoMetadata } from '../src/lib/uploads/metadataSelection';
 import { shouldRetryRecognitionFailure } from '../src/lib/recognition/retryPolicy';
 import { requireSession } from '../src/lib/auth/session';
@@ -64,7 +64,7 @@ export async function handleGroupRecognitionRequest(request:Request,env:Bindings
     const attemptStarted=Date.now(),controller=new AbortController();let timedOut=false;const timer=setTimeout(()=>{timedOut=true;controller.abort()},HARD_TIMEOUT_MS);
     try{
       let response=await postGemini(requestBody,env.GEMINI_API_KEY,controller.signal),schemaFallback=false,primaryError='';
-      if(shouldRetryWithoutStructuredSchema(response.status)){
+      if(shouldRetryGroupWithoutStructuredSchema(response.status)){
         primaryError=(await response.text()).slice(0,2000);
         schemaFallback=true;
         console.warn(JSON.stringify({event:'group-recognition-schema-fallback',requestId,model:MODEL,attempt,error:geminiErrorMessage(primaryError,response.status)}));
