@@ -2,9 +2,9 @@ import { describe, expect, it } from 'vitest';
 import { wineInputSchema } from '../../src/lib/db/schema';
 import { createObjectKey } from '../../src/lib/r2/keys';
 import { parseRecognition } from '../../src/features/recognition/schema';
+import { parseGroupRecognition } from '../../src/features/recognition/groupSchema';
 import { validateBatch } from '../../src/features/uploads/validation';
 import { shouldRetryRecognitionFailure } from '../../src/lib/recognition/retryPolicy';
-import { shouldRetryGroupWithoutStructuredSchema } from '../../src/lib/recognition/structuredFallback';
 
 describe('metadata validation', () => {
   it('rejects impossible wine data', () => {
@@ -71,6 +71,18 @@ describe('Gemini parsing', () => {
       parseRecognition('{"grapes":[],"confidence":1,"admin":true}'),
     ).toThrow();
   });
+
+  it('accepts the requested Group Photo object envelope', () => {
+    const result=parseGroupRecognition(JSON.stringify({wines:[{producer:'Henri Giraud',wineName:'Fût de Chêne',vintage:null,country:'France',region:'Champagne',appellation:'Champagne',grapes:[],grapeBlend:[],style:'sparkling',alcoholPercentage:null,locationName:null,confidence:0.9,boundingBox:{xMin:10,yMin:20,xMax:300,yMax:900}}],unresolvedCount:1}));
+    expect(result.wines).toHaveLength(1);
+    expect(result.unresolvedCount).toBe(1);
+  });
+
+  it('safely wraps a schema-free Group Photo top-level array', () => {
+    const result=parseGroupRecognition(JSON.stringify([{producer:'Henri Giraud',wineName:'Fût de Chêne',vintage:null,country:'France',region:'Champagne',appellation:'Champagne',grapes:[],grapeBlend:[],style:'sparkling',alcoholPercentage:null,locationName:null,confidence:0.9,boundingBox:{xMin:10,yMin:20,xMax:300,yMax:900}}]));
+    expect(result.wines).toHaveLength(1);
+    expect(result.unresolvedCount).toBe(0);
+  });
 });
 
 describe('recognition retry policy', () => {
@@ -82,13 +94,6 @@ describe('recognition retry policy', () => {
     expect(shouldRetryRecognitionFailure({status:503,timedOut:false,networkError:false})).toBe(true);
     expect(shouldRetryRecognitionFailure({status:429,timedOut:false,networkError:false})).toBe(true);
     expect(shouldRetryRecognitionFailure({status:400,timedOut:false,networkError:false})).toBe(false);
-  });
-
-  it('drops structured output for any Group Photo provider 400', () => {
-    expect(shouldRetryGroupWithoutStructuredSchema(400)).toBe(true);
-    expect(shouldRetryGroupWithoutStructuredSchema(401)).toBe(false);
-    expect(shouldRetryGroupWithoutStructuredSchema(429)).toBe(false);
-    expect(shouldRetryGroupWithoutStructuredSchema(503)).toBe(false);
   });
 });
 

@@ -57,8 +57,13 @@ export function dedupeGroupRecognitionWines(wines:GroupRecognitionWine[]){
   return [...byIdentity.values()].sort((a,b)=>a.boundingBox.xMin-b.boundingBox.xMin||a.boundingBox.yMin-b.boundingBox.yMin);
 }
 
+function normalizeGroupEnvelope(value:unknown){
+  if(Array.isArray(value))return {wines:value,unresolvedCount:0};
+  return value;
+}
+
 export function parseGroupRecognition(raw:string):GroupRecognitionResult{
   const cleaned=raw.replace(/^```(?:json)?\s*|\s*```$/g,'');
-  const parsed=groupRecognitionSchema.parse(JSON.parse(cleaned));
+  const parsed=groupRecognitionSchema.parse(normalizeGroupEnvelope(JSON.parse(cleaned)));
   return {...parsed,wines:dedupeGroupRecognitionWines(parsed.wines)};
 }
