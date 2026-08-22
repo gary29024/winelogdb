@@ -116,9 +116,12 @@ async function imageResponse(env:Env,ownerId:string,sessionId:string,kind:'previ
 }
 async function linkWine(request:Request,env:Env,ownerId:string,sessionId:string,clientKey:string){
   const body=await request.json().catch(()=>({})) as {wineId?:unknown},wineId=typeof body.wineId==='string'?body.wineId.trim():'';if(!wineId)return json({error:'Wine ID is required'},400);
-  const [wine,item]=await Promise.all([env.DB.prepare('SELECT id FROM wines WHERE owner_id=? AND id=?').bind(ownerId,wineId).first<{id:string}>(),env.DB.prepare('SELECT id FROM group_recognition_items WHERE owner_id=? AND session_id=? AND client_key=?').bind(ownerId,sessionId,clientKey).first<{id:string}>()]);
-  if(!wine)return json({error:'Wine not found'},404);if(!item)return json({error:'Group Photo item not found'},404);
-  const stamp=now();await env.DB.batch([env.DB.prepare('UPDATE group_recognition_items SET saved_wine_id=?,updated_at=? WHERE owner_id=? AND id=?').bind(wineId,stamp,ownerId,item.id),env.DB.prepare("UPDATE group_recognition_sessions SET retained=1,status='retained',expires_at=NULL,updated_at=? WHERE owner_id=? AND id=?").bind(stamp,ownerId,sessionId)]);return json({ok:true,wineId,sessionId,clientKey})
+  const [wine,session]=await Promise.all([env.DB.prepare('SELECT id FROM wines WHERE owner_id=? AND id=?').bind(ownerId,wineId).first<{id:string}>(),env.DB.prepare('SELECT id FROM group_recognition_sessions WHERE owner_id=? AND id=?').bind(ownerId,sessionId).first<{id:string}>()]);
+  if(!wine)return json({error:'Wine not found'},404);if(!session)return json({error:'Group Photo session not found'},404);
+  let item=await env.DB.prepare('SELECT id FROM group_recognition_items WHERE owner_id=? AND session_id=? AND client_key=?').bind(ownerId,sessionId,clientKey).first<{id:string}>();
+  const stamp=now();
+  if(!item){const id=crypto.randomUUID();await env.DB.prepare(`INSERT INTO group_recognition_items(id,owner_id,session_id,client_key,position,recognition_json,saved_wine_id,removed,manual,created_at,updated_at) VALUES(?,?,?,?,999,NULL,?,0,1,?,?)`).bind(id,ownerId,sessionId,clientKey,wineId,stamp,stamp).run();item={id}}
+  await env.DB.batch([env.DB.prepare('UPDATE group_recognition_items SET saved_wine_id=?,updated_at=? WHERE owner_id=? AND id=?').bind(wineId,stamp,ownerId,item.id),env.DB.prepare("UPDATE group_recognition_sessions SET retained=1,status='retained',expires_at=NULL,updated_at=? WHERE owner_id=? AND id=?").bind(stamp,ownerId,sessionId)]);return json({ok:true,wineId,sessionId,clientKey})
 }
 async function removeSession(env:Env,ownerId:string,sessionId:string){
   const linked=await env.DB.prepare('SELECT count(*) AS count FROM group_recognition_items WHERE owner_id=? AND session_id=? AND saved_wine_id IS NOT NULL').bind(ownerId,sessionId).first<{count:number}>();if(Number(linked?.count)>0)return json({error:'This Group Photo is linked to saved wines and is retained as source context.'},409);
