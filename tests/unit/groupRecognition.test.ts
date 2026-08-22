@@ -1,5 +1,6 @@
 import { describe,expect,it } from 'vitest';
 import { dedupeGroupRecognitionWines,groupRecognitionSchema } from '../../src/features/recognition/groupSchema';
+import { groupCropRegion } from '../../src/features/uploads/cropGroupPhoto';
 
 const wine=(overrides:Record<string,unknown>={})=>({
   producer:'Krug',wineName:'Grande Cuvée 170ème Édition',vintage:null,country:'France',region:'Champagne',appellation:'Champagne',grapes:['Pinot Noir','Chardonnay'],grapeBlend:[],style:'sparkling',alcoholPercentage:null,locationName:null,confidence:.8,boundingBox:{xMin:100,yMin:100,xMax:300,yMax:900},...overrides
@@ -33,5 +34,17 @@ describe('group photo recognition',()=>{
   it('canonicalizes producer-prefixed wine names during dedupe',()=>{
     const result=dedupeGroupRecognitionWines([wine({wineName:'Krug Grande Cuvée 170ème Édition'})] as never);
     expect(result[0].wineName).toBe('Grande Cuvée 170ème Édition');
+  });
+
+  it('expands a tall detected bottle to a centred square crop when the source has room',()=>{
+    const region=groupCropRegion(2400,1600,{xMin:420,yMin:120,xMax:560,yMax:880});
+    expect(region.sourceWidth).toBe(region.sourceHeight);
+    expect(region.sx).toBeGreaterThanOrEqual(0);
+    expect(region.sy).toBeGreaterThanOrEqual(0);
+    expect(region.sx+region.sourceWidth).toBeLessThanOrEqual(2400);
+    expect(region.sy+region.sourceHeight).toBeLessThanOrEqual(1600);
+    const detectedCenterX=((420+560)/2)/1000*2400;
+    const cropCenterX=region.sx+region.sourceWidth/2;
+    expect(Math.abs(cropCenterX-detectedCenterX)).toBeLessThan(2);
   });
 });
