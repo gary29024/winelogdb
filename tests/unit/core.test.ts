@@ -4,7 +4,7 @@ import { createObjectKey } from '../../src/lib/r2/keys';
 import { parseRecognition } from '../../src/features/recognition/schema';
 import { validateBatch } from '../../src/features/uploads/validation';
 import { shouldRetryRecognitionFailure } from '../../src/lib/recognition/retryPolicy';
-import { shouldRetryWithoutStructuredSchema } from '../../src/lib/recognition/structuredFallback';
+import { shouldRetryGroupWithoutStructuredSchema } from '../../src/lib/recognition/structuredFallback';
 
 describe('metadata validation', () => {
   it('rejects impossible wine data', () => {
@@ -84,11 +84,11 @@ describe('recognition retry policy', () => {
     expect(shouldRetryRecognitionFailure({status:400,timedOut:false,networkError:false})).toBe(false);
   });
 
-  it('drops structured output for any provider 400 because Gemini can return only INVALID_ARGUMENT', () => {
-    expect(shouldRetryWithoutStructuredSchema(400)).toBe(true);
-    expect(shouldRetryWithoutStructuredSchema(401)).toBe(false);
-    expect(shouldRetryWithoutStructuredSchema(429)).toBe(false);
-    expect(shouldRetryWithoutStructuredSchema(503)).toBe(false);
+  it('drops structured output for any Group Photo provider 400', () => {
+    expect(shouldRetryGroupWithoutStructuredSchema(400)).toBe(true);
+    expect(shouldRetryGroupWithoutStructuredSchema(401)).toBe(false);
+    expect(shouldRetryGroupWithoutStructuredSchema(429)).toBe(false);
+    expect(shouldRetryGroupWithoutStructuredSchema(503)).toBe(false);
   });
 });
 
