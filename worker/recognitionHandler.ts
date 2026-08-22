@@ -1,7 +1,6 @@
 import { validateBatch } from '../src/features/uploads/validation';
 import { parseRecognition } from '../src/features/recognition/schema';
 import { buildRecognitionPrompt,recognitionResponseJsonSchema,RECOGNITION_MODEL } from '../src/lib/recognition/geminiRequest';
-import { shouldRetryWithoutStructuredSchema } from '../src/lib/recognition/structuredFallback';
 import type { RecognitionPhotoMetadata } from '../src/lib/uploads/metadataSelection';
 import { shouldRetryRecognitionFailure } from '../src/lib/recognition/retryPolicy';
 import { requireSession } from '../src/lib/auth/session';
@@ -41,6 +40,10 @@ function geminiErrorMessage(raw:string,status:number){
   return cleaned.slice(0,700)||`HTTP ${status}`;
 }
 
+function looksLikeStructuredOutputRejection(raw:string){
+  return /response.?schema|response.?json.?schema|response.?format|generation.?config|structured.?output|unknown (?:name|field)|schema/i.test(raw);
+}
+
 async function postGemini(body:string,apiKey:string,signal:AbortSignal){
   return fetch(`https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`,{
     method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':apiKey},body,signal
@@ -71,11 +74,18 @@ export async function handleRecognitionRequest(request:Request,env:RecognitionBi
     const timer=setTimeout(()=>{timedOut=true;controller.abort()},HARD_TIMEOUT_MS);
     try{
       let response=await postGemini(requestBody,env.GEMINI_API_KEY,controller.signal),schemaFallback=false,primaryError='';
-      if(shouldRetryWithoutStructuredSchema(response.status)){
+      if(response.status===400){
         primaryError=(await response.text()).slice(0,2000);
-        schemaFallback=true;
-        console.warn(JSON.stringify({event:'recognition-schema-fallback',requestId,model:MODEL,attempt,error:geminiErrorMessage(primaryError,response.status)}));
-        response=await postGemini(schemaFreeBody,env.GEMINI_API_KEY,controller.signal);
+        if(looksLikeStructuredOutputRejection(primaryError)){
+          schemaFallback=true;
+          console.warn(JSON.stringify({event:'recognition-schema-fallback',requestId,model:MODEL,attempt,error:geminiErrorMessage(primaryError,400)}));
+          response=await postGemini(schemaFreeBody,env.GEMINI_API_KEY,controller.signal);
+        }else{
+          clearTimeout(timer);
+          const geminiLatencyMs=Date.now()-attemptStarted,message=geminiErrorMessage(primaryError,400);
+          console.error(JSON.stringify({event:'recognition-upstream-error',requestId,model:MODEL,attempt,status:400,geminiLatencyMs,error:primaryError}));
+          return json({error:`Gemini rejected the recognition request (400): ${message}`,requestId},502,requestId);
+        }
       }
       clearTimeout(timer);
       const geminiLatencyMs=Date.now()-attemptStarted;
