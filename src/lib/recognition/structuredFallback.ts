@@ -1,3 +1,3 @@
-export function shouldRetryWithoutStructuredSchema(status:number){
+export function shouldRetryGroupWithoutStructuredSchema(status:number){
   return status===400;
 }
