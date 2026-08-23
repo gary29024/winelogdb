@@ -65,7 +65,7 @@ export function CuveeCatalogLinks({producer,group,onChanged}:{producer:ProducerD
   }
 
   if(!choices.length||!group.cuveeId)return null;
-  if(directMatch)return <div className="cuvee-inline-admin" aria-label="Catalog mapping"><span>{group.releaseFamily?'Catalog matched · edition family':'Catalog matched'}</span></div>;
+  if(directMatch)return <div className="cuvee-inline-admin" aria-label="Catalog mapping"><span>{group.releaseFamily?'Catalog matched · release family':'Catalog matched'}</span></div>;
   const unresolved=choices.length-linkable.length;
   return <>
     <div className="cuvee-inline-admin" aria-label="Catalog mapping">
