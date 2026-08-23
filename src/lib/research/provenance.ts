@@ -15,7 +15,7 @@ const normalize=(value:string)=>value.normalize('NFD').replace(/[\u0300-\u036f]/
 const tokens=(value:string)=>new Set(normalize(value).split(/\s+/).filter(token=>token.length>1&&!STOP_WORDS.has(token)));
 const roundRatio=(value:number)=>Math.round(value*100)/100;
 
-function claimUnits(value:string){
+export function splitResearchClaims(value:string){
   const out:string[]=[];
   for(const rawBlock of value.split(/\r?\n+/)){
     const block=rawBlock.trim().replace(/^[-•]\s+/,'');if(!block)continue;
@@ -54,7 +54,7 @@ function supports(metadata:GroundingMetadata|undefined){
 }
 
 export function buildFieldProvenance(value:string,metadata?:GroundingMetadata):ResearchFieldProvenance{
-  const grounded=supports(metadata),claims=claimUnits(value).map<ResearchClaimProvenance>(claim=>{
+  const grounded=supports(metadata),claims=splitResearchClaims(value).map<ResearchClaimProvenance>(claim=>{
     if(explicitResearchStatus(claim))return {claim,supportStatus:'uncertainty',sourceTier:'none',sources:[]};
     let best=0;const matched:ClaimSource[]=[];const seen=new Set<string>();
     for(const support of grounded){const score=overlapScore(claim,support.text);if(score<.35)continue;best=Math.max(best,score);for(const source of support.sources){if(seen.has(source.url))continue;seen.add(source.url);matched.push(source)}}
