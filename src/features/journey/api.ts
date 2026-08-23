@@ -8,6 +8,20 @@ export type StyleStat={style:string;wines:number;ratedWines:number;averageRating
 export type ProducerInsight={producer:string;wines:number;ratedWines:number;averageRating:number|null;favorites:number};
 export type CurrencyInsight={currency:string;wines:number;averagePrice:number|null;averageRating:number|null};
 export type YearInsight={year:string;wines:number;ratedWines:number;averageRating:number|null};
+export type GrapeStat={grape:string;wines:number};
+export type RecentTasting={
+  id:string;
+  producer:string;
+  wineName:string;
+  vintage:number|null;
+  country:string|null;
+  region:string|null;
+  appellation:string|null;
+  rating:number|null;
+  tastingDate:string|null;
+  createdAt:string;
+  imageId:string|null;
+};
 export type JourneyData={
   summary:JourneySummary;
   countries:CountryStat[];
@@ -18,6 +32,8 @@ export type JourneyData={
   currencies:CurrencyInsight[];
   years:YearInsight[];
   structures:StructureSample[];
+  grapes:GrapeStat[];
+  recentTastings:RecentTasting[];
 };
 
 let cached:{expires:number;data:JourneyData}|null=null;
