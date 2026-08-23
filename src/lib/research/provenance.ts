@@ -2,10 +2,10 @@ import type { DeepSearchProvenance as StoredDeepSearchProvenance } from '../db/s
 import type { GroundingMetadata } from './geminiBatch';
 import { bestResearchSourceTier,explicitResearchStatus,type DeepResearchField,type ResearchSourceTier } from './qualityGate';
 
-export type ClaimSupportStatus='supported'|'partial'|'unsupported'|'uncertainty';
+export type ClaimSupportStatus='supported'|'partial'|'unsupported'|'uncertainty'|'conflicting';
 export type ClaimSource={title:string;url:string};
 export type ResearchClaimProvenance={claim:string;supportStatus:ClaimSupportStatus;sourceTier:ResearchSourceTier;sources:ClaimSource[]};
-export type ResearchFieldProvenance={claimCount:number;supportedCount:number;partialCount:number;unsupportedCount:number;uncertaintyCount:number;directSupportRatio:number;claims:ResearchClaimProvenance[]};
+export type ResearchFieldProvenance={claimCount:number;supportedCount:number;partialCount:number;unsupportedCount:number;uncertaintyCount:number;conflictingCount:number;directSupportRatio:number;claims:ResearchClaimProvenance[]};
 export type DeepSearchProvenance=StoredDeepSearchProvenance;
 
 export const deepResearchFields:DeepResearchField[]=['summary','vintageQuality','producerDetails','producerWinemakingPractices','winemakingTechniques','terroir','drinkingWindow'];
@@ -53,6 +53,12 @@ function supports(metadata:GroundingMetadata|undefined){
   return (metadata?.groundingSupports??[]).map(item=>({text:item.segment?.text?.trim()||'',sources:segmentSources(metadata,item.groundingChunkIndices)})).filter(item=>item.text&&item.sources.length);
 }
 
+export function summarizeFieldProvenance(claims:ResearchClaimProvenance[]):ResearchFieldProvenance{
+  const supportedCount=claims.filter(item=>item.supportStatus==='supported').length,partialCount=claims.filter(item=>item.supportStatus==='partial').length,unsupportedCount=claims.filter(item=>item.supportStatus==='unsupported').length,uncertaintyCount=claims.filter(item=>item.supportStatus==='uncertainty').length,conflictingCount=claims.filter(item=>item.supportStatus==='conflicting').length;
+  const asserted=supportedCount+conflictingCount+partialCount+unsupportedCount,directSupportRatio=asserted?roundRatio((supportedCount+conflictingCount+partialCount*.5)/asserted):1;
+  return {claimCount:claims.length,supportedCount,partialCount,unsupportedCount,uncertaintyCount,conflictingCount,directSupportRatio,claims};
+}
+
 export function buildFieldProvenance(value:string,metadata?:GroundingMetadata):ResearchFieldProvenance{
   const grounded=supports(metadata),claims=splitResearchClaims(value).map<ResearchClaimProvenance>(claim=>{
     if(explicitResearchStatus(claim))return {claim,supportStatus:'uncertainty',sourceTier:'none',sources:[]};
@@ -61,9 +67,7 @@ export function buildFieldProvenance(value:string,metadata?:GroundingMetadata):R
     const direct=matched.slice(0,5),supportStatus:ClaimSupportStatus=best>=.72&&direct.length?'supported':best>=.35&&direct.length?'partial':'unsupported';
     return {claim,supportStatus,sourceTier:bestResearchSourceTier(direct),sources:direct};
   });
-  const supportedCount=claims.filter(item=>item.supportStatus==='supported').length,partialCount=claims.filter(item=>item.supportStatus==='partial').length,unsupportedCount=claims.filter(item=>item.supportStatus==='unsupported').length,uncertaintyCount=claims.filter(item=>item.supportStatus==='uncertainty').length;
-  const asserted=supportedCount+partialCount+unsupportedCount,directSupportRatio=asserted?roundRatio((supportedCount+partialCount*.5)/asserted):1;
-  return {claimCount:claims.length,supportedCount,partialCount,unsupportedCount,uncertaintyCount,directSupportRatio,claims};
+  return summarizeFieldProvenance(claims);
 }
 
 export function buildDeepSearchProvenance(payload:Partial<Record<DeepResearchField,string>>,metadata?:GroundingMetadata):DeepSearchProvenance{
