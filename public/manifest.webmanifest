@@ -1,0 +1,18 @@
+{
+  "name": "WineLog",
+  "short_name": "WineLog",
+  "description": "Your private wine tasting notebook and passport.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f7f8fa",
+  "theme_color": "#10182d",
+  "icons": [
+    {
+      "src": "/icons/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
