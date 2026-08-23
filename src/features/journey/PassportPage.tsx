@@ -1,12 +1,35 @@
 import { useEffect,useMemo,useState } from 'react';
 import { Link } from 'react-router-dom';
-import { getJourneyData,type JourneyData } from './api';
+import { WineImage } from '../wines/WineImage';
+import { getJourneyData,type JourneyData,type RecentTasting } from './api';
 import { nextMilestones,unlockedAchievements,type MilestoneKey } from './model';
 import '../../journey.css';
 
 const journalHref=(params:Record<string,string>)=>`/journal?${new URLSearchParams(params).toString()}`;
-const rating=(value:number|null)=>value==null?'—':value.toFixed(1);
 const achievementIcon:Record<MilestoneKey,string>={totalWines:'◇',producers:'⌂',appellations:'✦',countries:'◎',structuredTastings:'✓'};
+const grapeColors=['#a8172d','#e1bd45','#5b1621','#563080','#724060','#d98939'];
+const flags:Record<string,string>={France:'🇫🇷',Italy:'🇮🇹',Spain:'🇪🇸',Portugal:'🇵🇹',Germany:'🇩🇪',Australia:'🇦🇺','United States':'🇺🇸','United Kingdom':'🇬🇧',Argentina:'🇦🇷',Chile:'🇨🇱','South Africa':'🇿🇦','New Zealand':'🇳🇿',Austria:'🇦🇹',Greece:'🇬🇷',Hungary:'🇭🇺'};
+
+function tastingDate(item:RecentTasting){
+  const raw=item.tastingDate||item.createdAt;
+  const date=new Date(item.tastingDate?`${item.tastingDate}T00:00:00`:raw);
+  if(Number.isNaN(date.getTime()))return '';
+  return new Intl.DateTimeFormat(undefined,{month:'short',day:'numeric'}).format(date);
+}
+
+function PassportMap(){return <svg className="passport-world-map" viewBox="0 0 300 138" aria-hidden="true">
+  <g className="passport-map-land">
+    <path d="M18 45 35 29l28-8 24 8 8 17-10 14-17 3-8 13-17-1-7-12-18-4Z"/>
+    <path d="m74 79 11 5 8 17-6 25-11 9-8-20 2-16-8-12Z"/>
+    <path d="m126 38 17-9 22 4 8 10-7 8-14-2-7 8-12-4Z"/>
+    <path d="m146 58 20 2 14 15-2 20-12 20-11-7-7-23-11-13Z"/>
+    <path d="m174 37 26-10 42 8 35 22-5 16-25 1-14 10-19-4-14-13-18 2-10-11Z"/>
+    <path d="m239 97 21-6 18 9-2 15-14 10-18-7Z"/>
+  </g>
+  <g className="passport-map-pins">
+    <circle cx="151" cy="45" r="5"/><circle cx="162" cy="48" r="4"/><circle cx="172" cy="51" r="3.5"/><circle cx="52" cy="59" r="4"/><circle cx="232" cy="105" r="4"/>
+  </g>
+</svg>}
 
 export function PassportPage(){
   const [data,setData]=useState<JourneyData|null>(null),[error,setError]=useState('');
@@ -20,17 +43,16 @@ export function PassportPage(){
   const wineMilestone=milestones.find(item=>item.key==='totalWines')??milestones[0];
   const progressPercent=Math.round((wineMilestone?.progress??0)*100);
   const remaining=Math.max(0,(wineMilestone?.target??summary.totalWines)-summary.totalWines);
-  const topRegion=data.regions[0];
+  const grapes=data.grapes??[];
+  const recent=data.recentTastings??[];
   const summaryStats=[
-    {icon:'◇',value:summary.totalWines,label:'Wines tasted',detail:`${summary.vintages} vintages`},
+    {icon:'♧',value:summary.totalWines,label:'Wines tasted',detail:`${summary.vintages} vintages`},
     {icon:'◎',value:summary.regions,label:'Regions explored',detail:`${summary.countries} countries`},
-    {icon:'⌂',value:summary.producers,label:'Producers logged',detail:`${summary.favorites} favourites`},
-    {icon:'✦',value:summary.appellations,label:'Appellations',detail:`${summary.structuredTastings} structured`}
+    {icon:'⌂',value:summary.producers,label:'Producers logged',detail:`${summary.appellations} appellations`}
   ];
 
   return <section className="journey-page passport-page">
     <header className="passport-intro">
-      <p className="eyebrow">WINE PASSPORT</p>
       <h1>Passport</h1>
       <p>Your tasting journey at a glance.</p>
     </header>
@@ -38,23 +60,12 @@ export function PassportPage(){
     <section className="passport-summary-card" aria-labelledby="passport-summary-heading">
       <div className="passport-summary-copy">
         <p className="section-label" id="passport-summary-heading">PASSPORT SUMMARY</p>
-        <div className="passport-stat-grid">
-          {summaryStats.map(item=><article key={item.label}>
-            <span className="passport-stat-icon" aria-hidden="true">{item.icon}</span>
-            <strong>{item.value}</strong>
-            <span>{item.label}</span>
-            <small>{item.detail}</small>
-          </article>)}
-        </div>
+        <div className="passport-stat-grid">{summaryStats.map(item=><article key={item.label}>
+          <span className="passport-stat-icon" aria-hidden="true">{item.icon}</span>
+          <strong>{item.value}</strong><span>{item.label}</span><small>{item.detail}</small>
+        </article>)}</div>
       </div>
-      <aside className="passport-stamp-panel" aria-label="WineLog passport highlight">
-        <div className="passport-emblem" aria-hidden="true"><span>W</span><small>WINELOG</small></div>
-        <div className="passport-highlight">
-          <span>{topRegion?'Most explored':'Keep exploring'}</span>
-          <strong>{topRegion?.region??'Your wine world'}</strong>
-          <small>{topRegion?[topRegion.country,`${topRegion.wines} wines`].filter(Boolean).join(' · '):'Every bottle adds another stamp.'}</small>
-        </div>
-      </aside>
+      <div className="passport-map-wrap"><PassportMap/></div>
     </section>
 
     <section className="passport-progress-card">
@@ -62,59 +73,55 @@ export function PassportPage(){
       <div className="passport-progress-copy">
         <p className="section-label">YOUR WINE JOURNEY</p>
         <h2>{remaining?`${remaining} wines to your next stamp`:'Next stamp unlocked'}</h2>
-        <p>{wineMilestone?`${summary.totalWines} / ${wineMilestone.target} wines logged`:`${summary.totalWines} wines logged`}</p>
+        <p>{wineMilestone?`${summary.totalWines} / ${wineMilestone.target} wines tasted`:`${summary.totalWines} wines tasted`}</p>
         <div className="passport-progress-line" aria-hidden="true"><span style={{width:`${progressPercent}%`}}/></div>
       </div>
-      <Link className="passport-soft-link" to="/journal">View journal</Link>
+      <a className="passport-soft-link" href="#passport-achievements">View levels</a>
     </section>
 
-    <div className="passport-dashboard-grid">
-      <section className="journey-card passport-rank-card">
-        <div className="journey-section-heading"><div><p className="section-label">TOP REGIONS</p><h2>Most explored</h2></div><span>{summary.regions}</span></div>
-        {data.regions.length?<div className="passport-rank-list">{data.regions.slice(0,5).map((item,index)=><Link to={journalHref({query:item.region})} key={`${item.country}-${item.region}`}>
-          <span className="passport-rank-number">{String(index+1).padStart(2,'0')}</span>
-          <div><strong>{item.region}</strong><small>{item.country||'Region'} · {item.producers} producers</small></div>
-          <b>{item.wines}</b>
-        </Link>)}</div>:<p className="journey-muted">Regions appear here as your passport grows.</p>}
+    <div className="passport-pair-grid">
+      <section className="passport-mini-card">
+        <div className="passport-card-heading"><div><h2>Top regions</h2><span>By wines tasted</span></div></div>
+        {data.regions.length?<div className="passport-compact-list">{data.regions.slice(0,5).map(item=><Link to={journalHref({query:item.region})} key={`${item.country}-${item.region}`}>
+          <span className="passport-region-flag" aria-hidden="true">{flags[item.country??'']??'•'}</span>
+          <div><strong>{item.region}</strong><small>{item.country||'Region'}</small></div><b>{item.wines}</b>
+        </Link>)}</div>:<p className="passport-empty-mini">Regions appear as your journal grows.</p>}
+        <Link className="passport-card-link" to="/insights">View all regions <span>›</span></Link>
       </section>
 
-      <section className="journey-card passport-rank-card">
-        <div className="journey-section-heading"><div><p className="section-label">COUNTRIES</p><h2>Places tasted</h2></div><span>{summary.countries}</span></div>
-        {data.countries.length?<div className="passport-rank-list">{data.countries.slice(0,5).map((item,index)=><Link to={journalHref({country:item.country})} key={item.country}>
-          <span className="passport-rank-number">{String(index+1).padStart(2,'0')}</span>
-          <div><strong>{item.country}</strong><small>{item.producers} producers · {item.appellations} appellations</small></div>
-          <b>{item.averageRating==null?item.wines:rating(item.averageRating)}</b>
-        </Link>)}</div>:<p className="journey-muted">Country information appears as you log identified wines.</p>}
+      <section className="passport-mini-card">
+        <div className="passport-card-heading"><div><h2>Top grapes</h2><span>By wines tasted</span></div></div>
+        {grapes.length?<div className="passport-compact-list passport-grape-list">{grapes.slice(0,5).map((item,index)=><Link to={journalHref({query:item.grape})} key={item.grape}>
+          <span className="passport-grape-dot" style={{backgroundColor:grapeColors[index%grapeColors.length]}} aria-hidden="true"/>
+          <div><strong>{item.grape}</strong></div><b>{item.wines}</b>
+        </Link>)}</div>:<p className="passport-empty-mini">Grapes appear as your journal grows.</p>}
+        <Link className="passport-card-link" to="/journal">View all grapes <span>›</span></Link>
       </section>
     </div>
 
-    <div className="passport-dashboard-grid passport-achievement-row">
-      <section className="journey-card">
-        <div className="journey-section-heading"><div><p className="section-label">ACHIEVEMENTS</p><h2>Stamps collected</h2></div><span>{achievements.length}</span></div>
-        {achievements.length?<div className="passport-achievement-grid">{achievements.map(item=><article key={item.key}>
-          <span className="passport-achievement-badge" aria-hidden="true">{achievementIcon[item.key]}</span>
-          <div><strong>{item.value}</strong><span>{item.label}</span><small>Milestone unlocked</small></div>
-        </article>)}</div>:<p className="journey-muted">Your first achievement unlocks at ten logged wines.</p>}
+    <div className="passport-pair-grid passport-secondary-grid">
+      <section className="passport-mini-card">
+        <div className="passport-card-heading"><div><h2>Recent tastings</h2></div><Link to="/journal">View all</Link></div>
+        {recent.length?<div className="passport-recent-list">{recent.slice(0,2).map(item=><Link to={`/wines/${item.id}`} key={item.id}>
+          <span className="passport-recent-image">{item.imageId?<WineImage imageId={item.imageId} alt={`${item.producer} ${item.wineName}`}/>:<span className="passport-recent-fallback">W</span>}</span>
+          <div className="passport-recent-copy"><strong>{item.wineName}{item.vintage?` ${item.vintage}`:''}</strong><small>{[item.producer,item.region||item.country].filter(Boolean).join(' · ')}</small></div>
+          <span className="passport-recent-date">{tastingDate(item)}</span>
+        </Link>)}</div>:<p className="passport-empty-mini">Your latest tastings will appear here.</p>}
       </section>
 
-      <section className="journey-card">
-        <div className="journey-section-heading"><div><p className="section-label">NEXT STAMPS</p><h2>Within reach</h2></div></div>
-        <div className="passport-milestone-list">{milestones.map(item=><div className="passport-milestone" key={item.key}>
-          <div><strong>{item.label}</strong><span>{item.current} / {item.target}</span></div>
-          <div className="passport-milestone-track"><span style={{width:`${Math.round(item.progress*100)}%`}}/></div>
-        </div>)}</div>
+      <section className="passport-mini-card" id="passport-achievements">
+        <div className="passport-card-heading"><div><h2>Achievements</h2></div><span>{achievements.length} stamps</span></div>
+        {achievements.length?<div className="passport-stamp-list">{achievements.slice(0,2).map(item=><article key={item.key}>
+          <span className={`passport-badge passport-badge-${item.key}`} aria-hidden="true">{achievementIcon[item.key]}</span>
+          <div><strong>{item.label}</strong><small>{item.value} milestone reached</small></div>
+        </article>)}{achievements.length>2&&<p className="passport-more-stamps">+{achievements.length-2} more stamps collected</p>}</div>:<p className="passport-empty-mini">Your first stamp unlocks at ten logged wines.</p>}
       </section>
     </div>
-
-    <section className="journey-card passport-spectrum-card">
-      <div className="journey-section-heading"><div><p className="section-label">TASTING SPECTRUM</p><h2>Your styles</h2></div></div>
-      {data.styles.length?<div className="passport-style-grid">{data.styles.map(item=><Link to={journalHref({style:item.style})} key={item.style}><strong>{item.wines}</strong><span>{item.style}</span><small>{item.averageRating==null?'Logged wines':`${rating(item.averageRating)} avg rating`}</small></Link>)}</div>:<p className="journey-muted">Wine styles appear here as your journal grows.</p>}
-    </section>
 
     <section className="passport-story-card">
       <div className="passport-mini-cover" aria-hidden="true"><span>W</span><small>PASSPORT</small></div>
-      <div><p className="section-label">YOUR PASSPORT. YOUR STORY.</p><h2>Every bottle leaves a mark.</h2><p>Keep exploring producers, regions and appellations one tasting at a time.</p></div>
-      <Link className="passport-primary-link" to="/journal">Open journal</Link>
+      <div><h2>Your passport. Your story.</h2><p>Every bottle leaves a mark. Keep exploring.</p></div>
+      <Link className="passport-primary-link" to="/upload">Add a tasting</Link>
     </section>
   </section>;
 }
