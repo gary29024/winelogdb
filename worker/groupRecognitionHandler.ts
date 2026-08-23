@@ -4,8 +4,9 @@ import { RECOGNITION_MODEL } from '../src/lib/recognition/geminiRequest';
 import { selectRecognitionMetadata,type RecognitionPhotoMetadata } from '../src/lib/uploads/metadataSelection';
 import { shouldRetryRecognitionFailure } from '../src/lib/recognition/retryPolicy';
 import { requireSession } from '../src/lib/auth/session';
+import { postGeminiGenerateContent,type GeminiTransportBindings } from './geminiTransport';
 
-type Bindings={GEMINI_API_KEY:string;AUTH_SECRET:string};
+type Bindings=GeminiTransportBindings&{AUTH_SECRET:string};
 type GeminiResponse={candidates?:Array<{content?:{parts?:Array<{text?:string}>};finishReason?:string}>;usageMetadata?:{promptTokenCount?:number;candidatesTokenCount?:number;totalTokenCount?:number};error?:{message?:string}};
 const MODEL=RECOGNITION_MODEL;
 const HARD_TIMEOUT_MS=60_000;
@@ -25,7 +26,6 @@ function geminiErrorMessage(raw:string,status:number){
   const cleaned=raw.replace(/\s+/g,' ').trim();
   return cleaned.slice(0,700)||`HTTP ${status}`;
 }
-async function postGemini(body:string,apiKey:string,signal:AbortSignal){return fetch(`https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`,{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':apiKey},body,signal})}
 
 export async function handleGroupRecognitionRequest(request:Request,env:Bindings){
   const requestId=crypto.randomUUID(),startedAt=Date.now();
@@ -52,12 +52,12 @@ export async function handleGroupRecognitionRequest(request:Request,env:Bindings
   for(let attempt=1;attempt<=2;attempt++){
     const attemptStarted=Date.now(),controller=new AbortController();let timedOut=false;const timer=setTimeout(()=>{timedOut=true;controller.abort()},HARD_TIMEOUT_MS);
     try{
-      const response=await postGemini(requestBody,env.GEMINI_API_KEY,controller.signal);
+      const transport=await postGeminiGenerateContent(env,MODEL,requestBody,controller.signal,{feature:'recognition',mode:'group',requestId}),response=transport.response,provider=transport.provider;
       clearTimeout(timer);const geminiLatencyMs=Date.now()-attemptStarted;
-      if(!response.ok){const errorText=(await response.text()).slice(0,2000),message=geminiErrorMessage(errorText,response.status);console.error(JSON.stringify({event:'group-recognition-upstream-error',requestId,attempt,status:response.status,geminiLatencyMs,error:errorText}));if(attempt===1&&shouldRetryRecognitionFailure({status:response.status,timedOut:false,networkError:false})){await new Promise(r=>setTimeout(r,700+Math.floor(Math.random()*500)));continue}return json({error:`Gemini group recognition failed (${response.status}): ${message}`,requestId},502,requestId)}
+      if(!response.ok){const errorText=(await response.text()).slice(0,2000),message=geminiErrorMessage(errorText,response.status);console.error(JSON.stringify({event:'group-recognition-upstream-error',requestId,model:MODEL,provider,attempt,status:response.status,geminiLatencyMs,error:errorText}));if(attempt===1&&shouldRetryRecognitionFailure({status:response.status,timedOut:false,networkError:false})){await new Promise(r=>setTimeout(r,700+Math.floor(Math.random()*500)));continue}return json({error:`Gemini group recognition failed (${response.status}): ${message}`,requestId},502,requestId)}
       const payload=await response.json() as GeminiResponse,candidate=payload.candidates?.[0],text=candidate?.content?.parts?.map(part=>part.text??'').join('')??'';if(!text)throw new Error('Gemini returned no group recognition result');
       const result=parseGroupRecognition(text),durationMs=Date.now()-startedAt;
-      console.log(JSON.stringify({event:'group-recognition-complete',requestId,model:MODEL,attempt,geminiLatencyMs,durationMs,wines:result.wines.length,unresolvedCount:result.unresolvedCount,finishReason:candidate?.finishReason??null,promptTokens:payload.usageMetadata?.promptTokenCount??null,outputTokens:payload.usageMetadata?.candidatesTokenCount??null,totalTokens:payload.usageMetadata?.totalTokenCount??null}));
+      console.log(JSON.stringify({event:'group-recognition-complete',requestId,model:MODEL,provider,attempt,geminiLatencyMs,durationMs,wines:result.wines.length,unresolvedCount:result.unresolvedCount,finishReason:candidate?.finishReason??null,promptTokens:payload.usageMetadata?.promptTokenCount??null,outputTokens:payload.usageMetadata?.candidatesTokenCount??null,totalTokens:payload.usageMetadata?.totalTokenCount??null}));
       return json({...result,requestId,recognitionDurationMs:durationMs},200,requestId);
     }catch(e){clearTimeout(timer);const geminiLatencyMs=Date.now()-attemptStarted;if(timedOut){console.error(JSON.stringify({event:'group-recognition-timeout',requestId,attempt,geminiLatencyMs}));return json({error:'Group recognition timed out after 60 seconds. Please try again.',requestId},504,requestId)}const message=(e as Error).message||'Group recognition failed';console.error(JSON.stringify({event:'group-recognition-error',requestId,attempt,geminiLatencyMs,error:message}));if(attempt===1){await new Promise(r=>setTimeout(r,700+Math.floor(Math.random()*500)));continue}return json({error:`Group recognition returned invalid JSON: ${message}`,requestId},502,requestId)}
   }
