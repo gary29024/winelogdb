@@ -24,5 +24,12 @@
       "dead_letter_queue": "winelog-research-dlq"
     }]
   },
-  "vars": { "MAX_FILE_BYTES": "10485760", "MAX_BATCH_FILES": "12" }
+  "vars": {
+    "MAX_FILE_BYTES": "10485760",
+    "MAX_BATCH_FILES": "12",
+    "AI_GATEWAY_ACCOUNT_ID": "82854e9a6f6a543e9b3abf53d29a08ee",
+    "AI_GATEWAY_ID": "winelog",
+    "VERTEX_PROJECT_ID": "gen-lang-client-0265199037",
+    "VERTEX_REGION": "global"
+  }
 }

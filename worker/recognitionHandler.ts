@@ -5,8 +5,9 @@ import type { RecognitionPhotoMetadata } from '../src/lib/uploads/metadataSelect
 import { shouldRetryRecognitionFailure } from '../src/lib/recognition/retryPolicy';
 import { requireSession } from '../src/lib/auth/session';
 import { handleGroupRecognitionRequest } from './groupRecognitionHandler';
+import { postGeminiGenerateContent,type GeminiTransportBindings } from './geminiTransport';
 
-type RecognitionBindings={GEMINI_API_KEY:string;AUTH_SECRET:string;MAX_BATCH_FILES?:string};
+type RecognitionBindings=GeminiTransportBindings&{AUTH_SECRET:string;MAX_BATCH_FILES?:string};
 type GeminiResponse={
   candidates?:Array<{content?:{parts?:Array<{text?:string}>};finishReason?:string}>;
   usageMetadata?:{promptTokenCount?:number;candidatesTokenCount?:number;totalTokenCount?:number};
@@ -44,12 +45,6 @@ function looksLikeStructuredOutputRejection(raw:string){
   return /response.?schema|response.?json.?schema|response.?format|generation.?config|structured.?output|unknown (?:name|field)|schema/i.test(raw);
 }
 
-async function postGemini(body:string,apiKey:string,signal:AbortSignal){
-  return fetch(`https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`,{
-    method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':apiKey},body,signal
-  });
-}
-
 export async function handleRecognitionRequest(request:Request,env:RecognitionBindings){
   if(request.headers.get('X-WineLog-Recognition-Mode')==='group')return handleGroupRecognitionRequest(request,env);
   const requestId=crypto.randomUUID(),startedAt=Date.now();
@@ -73,17 +68,17 @@ export async function handleRecognitionRequest(request:Request,env:RecognitionBi
     const attemptStarted=Date.now(),controller=new AbortController();let timedOut=false;
     const timer=setTimeout(()=>{timedOut=true;controller.abort()},HARD_TIMEOUT_MS);
     try{
-      let response=await postGemini(requestBody,env.GEMINI_API_KEY,controller.signal),schemaFallback=false,primaryError='';
+      let transport=await postGeminiGenerateContent(env,MODEL,requestBody,controller.signal,{feature:'recognition',mode:'single',requestId}),response=transport.response,provider=transport.provider,schemaFallback=false,primaryError='';
       if(response.status===400){
         primaryError=(await response.text()).slice(0,2000);
         if(looksLikeStructuredOutputRejection(primaryError)){
           schemaFallback=true;
-          console.warn(JSON.stringify({event:'recognition-schema-fallback',requestId,model:MODEL,attempt,error:geminiErrorMessage(primaryError,400)}));
-          response=await postGemini(schemaFreeBody,env.GEMINI_API_KEY,controller.signal);
+          console.warn(JSON.stringify({event:'recognition-schema-fallback',requestId,model:MODEL,provider,attempt,error:geminiErrorMessage(primaryError,400)}));
+          transport=await postGeminiGenerateContent(env,MODEL,schemaFreeBody,controller.signal,{feature:'recognition',mode:'single-schema-fallback',requestId});response=transport.response;provider=transport.provider;
         }else{
           clearTimeout(timer);
           const geminiLatencyMs=Date.now()-attemptStarted,message=geminiErrorMessage(primaryError,400);
-          console.error(JSON.stringify({event:'recognition-upstream-error',requestId,model:MODEL,attempt,status:400,geminiLatencyMs,error:primaryError}));
+          console.error(JSON.stringify({event:'recognition-upstream-error',requestId,model:MODEL,provider,attempt,status:400,geminiLatencyMs,error:primaryError}));
           return json({error:`Gemini rejected the recognition request (400): ${message}`,requestId},502,requestId);
         }
       }
@@ -91,7 +86,7 @@ export async function handleRecognitionRequest(request:Request,env:RecognitionBi
       const geminiLatencyMs=Date.now()-attemptStarted;
       if(!response.ok){
         const errorText=(await response.text()).slice(0,2000),message=geminiErrorMessage(errorText,response.status);
-        console.error(JSON.stringify({event:'recognition-upstream-error',requestId,model:MODEL,attempt,status:response.status,geminiLatencyMs,schemaFallback,primaryError:primaryError||undefined,error:errorText}));
+        console.error(JSON.stringify({event:'recognition-upstream-error',requestId,model:MODEL,provider,attempt,status:response.status,geminiLatencyMs,schemaFallback,primaryError:primaryError||undefined,error:errorText}));
         if(attempt===1&&shouldRetryRecognitionFailure({status:response.status,timedOut:false,networkError:false})){
           await new Promise(r=>setTimeout(r,700+Math.floor(Math.random()*500)));continue;
         }
@@ -103,7 +98,7 @@ export async function handleRecognitionRequest(request:Request,env:RecognitionBi
       const result=parseRecognition(text);
       const locationName=selected.gpsSource==='exif'&&result.locationName?.trim()?result.locationName.trim():null;
       const durationMs=Date.now()-startedAt;
-      console.log(JSON.stringify({event:'recognition-complete',requestId,model:MODEL,attempt,geminiLatencyMs,durationMs,schemaFallback,finishReason:candidate?.finishReason??null,promptTokens:payload.usageMetadata?.promptTokenCount??null,outputTokens:payload.usageMetadata?.candidatesTokenCount??null,totalTokens:payload.usageMetadata?.totalTokenCount??null}));
+      console.log(JSON.stringify({event:'recognition-complete',requestId,model:MODEL,provider,attempt,geminiLatencyMs,durationMs,schemaFallback,finishReason:candidate?.finishReason??null,promptTokens:payload.usageMetadata?.promptTokenCount??null,outputTokens:payload.usageMetadata?.candidatesTokenCount??null,totalTokens:payload.usageMetadata?.totalTokenCount??null}));
       return json({...result,locationName,tastingDate:selected.capturedAt?.slice(0,10)??null,latitude:selected.latitude,longitude:selected.longitude,metadataSource:selected.gpsSource==='exif'?'exif':selected.timestampSource,requestId,recognitionDurationMs:durationMs},200,requestId);
     }catch(e){
       clearTimeout(timer);
