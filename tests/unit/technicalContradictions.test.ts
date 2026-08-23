@@ -27,6 +27,12 @@ describe('cross-source technical contradiction audit',()=>{
     expect(technicalContradictionScopePasses('wine_vintage',data,audit.provenance)).toBe(true);
   });
 
+  it('recognizes written percent wording as the same technical metric',()=>{
+    const a='Source A reports 30 percent new oak.',b='Source B reports 50 per cent new oak.',audit=auditTechnicalContradictions(payload(`${a}\n${b}`),provenance([supported(a,'https://a.example/tech'),supported(b,'https://b.example/tech')]));
+    expect(audit.conflicts).toHaveLength(1);
+    expect(audit.conflicts[0].metric).toBe('new_oak_percentage');
+  });
+
   it('does not invent a contradiction when independent sources agree on the same value',()=>{
     const a='Source A reports 30% new oak.',b='Source B also reports 30% new oak.',audit=auditTechnicalContradictions(payload(`${a}\n${b}`),provenance([supported(a,'https://a.example/tech'),supported(b,'https://b.example/tech')]));
     expect(audit.conflicts).toEqual([]);
