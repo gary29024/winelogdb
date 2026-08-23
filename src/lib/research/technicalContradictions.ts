@@ -92,9 +92,9 @@ function independentSources(a:Observation,b:Observation){
 }
 function equivalent(a:Observation,b:Observation){return Math.abs(a.value-b.value)<=Math.max(a.tolerance,b.tolerance)}
 function uniqueObservations(items:Observation[]){const seen=new Set<string>();return items.filter(item=>{const key=`${item.field}:${item.claimIndex}`;if(seen.has(key))return false;seen.add(key);return true})}
-function conflictAcknowledged(payload:Record<string,string>){return STRICT_FIELDS.some(field=>CONFLICT_SIGNAL.test(payload[field]??''))}
+function conflictAcknowledged(payload:Record<string,unknown>){return STRICT_FIELDS.some(field=>CONFLICT_SIGNAL.test(typeof payload[field]==='string'?payload[field] as string:''))}
 
-export function auditTechnicalContradictions(payload:Record<string,string>,provenance?:DeepSearchProvenance):TechnicalContradictionAudit{
+export function auditTechnicalContradictions(payload:Record<string,unknown>,provenance?:DeepSearchProvenance):TechnicalContradictionAudit{
   const next=cloneProvenance(provenance);if(!next)return {provenance:undefined,conflicts:[],unacknowledged:[]};
   const observations:Observation[]=[];for(const field of STRICT_FIELDS){const evidence=next.fields[field];if(!evidence)continue;evidence.claims.forEach((claim,index)=>observations.push(...observationsForClaim(field,index,claim)))}
   const grouped=new Map<TechnicalConflictMetric,Observation[]>();for(const observation of observations){const list=grouped.get(observation.metric)??[];list.push(observation);grouped.set(observation.metric,list)}
@@ -107,8 +107,8 @@ export function auditTechnicalContradictions(payload:Record<string,string>,prove
   return {provenance:next,conflicts,unacknowledged:conflicts.filter(item=>!item.acknowledged)};
 }
 
-export function technicalContradictionScopePasses(scope:string,payload:Record<string,string>,provenance?:DeepSearchProvenance){return scope!=='wine_vintage'||auditTechnicalContradictions(payload,provenance).unacknowledged.length===0}
-export function technicalContradictionFailureMessage(payload:Record<string,string>,provenance?:DeepSearchProvenance){
+export function technicalContradictionScopePasses(scope:string,payload:Record<string,unknown>,provenance?:DeepSearchProvenance){return scope!=='wine_vintage'||auditTechnicalContradictions(payload,provenance).unacknowledged.length===0}
+export function technicalContradictionFailureMessage(payload:Record<string,unknown>,provenance?:DeepSearchProvenance){
   const conflicts=auditTechnicalContradictions(payload,provenance).unacknowledged;if(!conflicts.length)return null;
   const examples=conflicts.slice(0,3).map(item=>`${item.label}: ${item.observations.map(observation=>observation.displayValue).join(' vs ')}`).join(' | ');
   return `Cross-source evidence contains ${conflicts.length} unresolved technical disagreement${conflicts.length===1?'':'s'}. The exact-wine result must explicitly disclose the conflict instead of silently choosing one value${examples?`: ${examples}`:''}`;
