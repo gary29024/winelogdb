@@ -8,11 +8,11 @@ type Env=GeminiTransportBindings&{DB:D1Database;WINE_IMAGES:R2Bucket;RESEARCH_QU
 type ItemRow={id:string;metadata_json:string;status:string};
 type ImageRow={recognition_object_key:string};
 type JobRow={id:string;google_batch_name:string|null;item_ids_json:string;status:string;updated_at:string};
-type GeminiResponse={candidates?:Array<{content?:{parts?:Array<{text?:string}>};finishReason?:string}>;usageMetadata?:{promptTokenCount?:number;candidatesTokenCount?:number;totalTokenCount?:number}};
+type GeminiResponse={candidates?:Array<{content?:{parts?:Array<{text?:string}>};finishReason?:string}>;usageMetadata?:{promptTokenCount?:number;candidatesTokenCount?:number;totalTokenCount?:number;trafficType?:string}};
 
 const JOB_PREFIX='vertex-item/';
-const HARD_TIMEOUT_MS=90_000;
-const STALE_RUNNING_MS=5*60*1000;
+const HARD_TIMEOUT_MS=600_000;
+const STALE_RUNNING_MS=12*60*1000;
 const now=()=>new Date().toISOString();
 const parseJson=<T>(raw:unknown,fallback:T):T=>{try{return JSON.parse(String(raw)) as T}catch{return fallback}};
 
@@ -90,8 +90,7 @@ export async function processVertexBatchPollJob(env:Env,owner:string,sessionId:s
   if(!job||!job.google_batch_name?.startsWith(JOB_PREFIX))return false;
   if(job.status==='complete'||job.status==='failed')return true;
   if(job.status==='running'){
-    const age=Date.now()-Date.parse(job.updated_at||now());
-    if(age<STALE_RUNNING_MS){await env.RESEARCH_QUEUE.send({kind:'recognition_batch_poll',owner,sessionId,jobId,pollCount:pollCount+1},{delaySeconds:Math.min(60,15*(pollCount+1))});return true}
+    const age=Date.now()-Date.parse(job.updated_at||now());if(age<STALE_RUNNING_MS)return true;
     await env.DB.prepare("UPDATE batch_recognition_jobs SET status='queued',updated_at=? WHERE id=? AND owner_id=? AND status='running'").bind(now(),jobId,owner).run();job={...job,status:'queued'};
   }
   const claimed=await env.DB.prepare("UPDATE batch_recognition_jobs SET status='running',error=NULL,updated_at=? WHERE id=? AND owner_id=? AND status='queued'").bind(now(),jobId,owner).run();
@@ -107,14 +106,14 @@ export async function processVertexBatchPollJob(env:Env,owner:string,sessionId:s
     const body=JSON.stringify({contents:[{role:'user',parts}],generationConfig:{responseMimeType:'application/json',responseJsonSchema:recognitionResponseJsonSchema}}),controller=new AbortController();let timedOut=false;
     const timer=setTimeout(()=>{timedOut=true;controller.abort()},HARD_TIMEOUT_MS);
     let response:Response;
-    try{({response}=await postGeminiGenerateContent(env,RECOGNITION_MODEL,body,controller.signal,{feature:'recognition',mode:'batch',session:sessionId,item:itemId}))}catch(e){
-      clearTimeout(timer);const message=timedOut?'Batch recognition timed out':(e as Error).message||'Batch recognition request failed';
+    try{({response}=await postGeminiGenerateContent(env,RECOGNITION_MODEL,body,controller.signal,{feature:'recognition',mode:'batch',session:sessionId,item:itemId,tier:'flex'},{serviceTier:'flex',serverTimeoutSeconds:600}))}catch(e){
+      clearTimeout(timer);const message=timedOut?'Batch recognition Flex request timed out':(e as Error).message||'Batch recognition Flex request failed';
       if(pollCount<2&&shouldRetryRecognitionFailure({status:null,timedOut,networkError:!timedOut})){await retryLater(env,owner,sessionId,jobId,pollCount,message);return true}
       await failJob(env,owner,sessionId,jobId,itemId,message);return true;
     }
     clearTimeout(timer);
     if(!response.ok){
-      const raw=(await response.text().catch(()=>'' )).slice(0,2000),message=`Vertex batch recognition failed (${response.status}): ${errorMessage(raw,response.status)}`;
+      const raw=(await response.text().catch(()=>'' )).slice(0,2000),message=`Vertex Flex batch recognition failed (${response.status}): ${errorMessage(raw,response.status)}`;
       if(pollCount<2&&shouldRetryRecognitionFailure({status:response.status,timedOut:false,networkError:false})){await retryLater(env,owner,sessionId,jobId,pollCount,message);return true}
       await failJob(env,owner,sessionId,jobId,itemId,message);return true;
     }
@@ -124,7 +123,7 @@ export async function processVertexBatchPollJob(env:Env,owner:string,sessionId:s
       env.DB.prepare("UPDATE batch_recognition_items SET status='ready',recognition_json=?,error=NULL,updated_at=? WHERE id=? AND owner_id=? AND status='submitted'").bind(JSON.stringify(result),stamp,itemId,owner),
       env.DB.prepare("UPDATE batch_recognition_jobs SET status='complete',error=NULL,updated_at=? WHERE id=? AND owner_id=?").bind(stamp,jobId,owner)
     ]);
-    console.log(JSON.stringify({event:'vertex-batch-recognition-complete',sessionId,itemId,model:RECOGNITION_MODEL,finishReason:candidate?.finishReason??null,promptTokens:payload.usageMetadata?.promptTokenCount??null,outputTokens:payload.usageMetadata?.candidatesTokenCount??null,totalTokens:payload.usageMetadata?.totalTokenCount??null}));
+    console.log(JSON.stringify({event:'vertex-flex-batch-recognition-complete',sessionId,itemId,model:RECOGNITION_MODEL,trafficType:payload.usageMetadata?.trafficType??null,finishReason:candidate?.finishReason??null,promptTokens:payload.usageMetadata?.promptTokenCount??null,outputTokens:payload.usageMetadata?.candidatesTokenCount??null,totalTokens:payload.usageMetadata?.totalTokenCount??null}));
     await finishSessionIfTerminal(env.DB,owner,sessionId);return true;
-  }catch(e){await failJob(env,owner,sessionId,jobId,itemId,(e as Error).message||'Could not process Vertex batch recognition');return true}
+  }catch(e){await failJob(env,owner,sessionId,jobId,itemId,(e as Error).message||'Could not process Vertex Flex batch recognition');return true}
 }
