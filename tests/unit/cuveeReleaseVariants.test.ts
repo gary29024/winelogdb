@@ -64,7 +64,9 @@ describe('cuvée release variants',()=>{
     expect(matchCuveeReleaseVariantToCatalog({name:'90-16',appellation:'Ratafia Champenois',wineStyle:'fortified'},giraudRows)).toEqual({
       catalogCuveeId:'ratafia19',catalogName:'Solera Ratafia Champenois',variant:{kind:'reserve_span',parentName:'',designation:'90-16',sequence:9016}
     });
-    expect(matchCuveeReleaseVariantToCatalog({name:'90-20',appellation:'Champagne',wineStyle:'sparkling'},giraudRows)).toBeNull();
+    expect(matchCuveeReleaseVariantToCatalog({name:'90-20',appellation:'Champagne',wineStyle:'sparkling'},giraudRows)).toEqual({
+      catalogCuveeId:'pr21',catalogName:'PR',variant:{kind:'reserve_span',parentName:'',designation:'90-20',sequence:9020}
+    });
   });
 
   it('uses one deterministic latest catalog anchor when several releases of the same family exist',()=>{
@@ -85,5 +87,10 @@ describe('cuvée release variants',()=>{
       {id:'other20',canonicalName:'Another Cuvée MV20',appellation:'Champagne',wineStyle:'sparkling'}
     ];
     expect(matchCuveeReleaseVariantToCatalog({name:'MV19',appellation:'Champagne',wineStyle:'sparkling'},ambiguousMv)).toBeNull();
+    const ambiguousReserve=[
+      {id:'pr21',canonicalName:'PR 90-21',appellation:'Champagne',wineStyle:'sparkling'},
+      {id:'other21',canonicalName:'Other Reserve 90-21',appellation:'Champagne',wineStyle:'sparkling'}
+    ];
+    expect(matchCuveeReleaseVariantToCatalog({name:'90-20',appellation:'Champagne',wineStyle:'sparkling'},ambiguousReserve)).toBeNull();
   });
 });
