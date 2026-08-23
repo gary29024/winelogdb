@@ -67,13 +67,22 @@ app.get('/api/journey',async c=>{
       GROUP BY substr(COALESCE(NULLIF(tasting_date,''),created_at),1,4) ORDER BY year DESC LIMIT 8`).bind(owner),
     c.env.DB.prepare(`SELECT s.structure_json,w.rating FROM wine_tasting_structures s
       JOIN wines w ON w.owner_id=s.owner_id AND w.id=s.wine_id
-      WHERE s.owner_id=? AND s.structure_json<>'{}'`).bind(owner)
+      WHERE s.owner_id=? AND s.structure_json<>'{}'`).bind(owner),
+    c.env.DB.prepare(`SELECT MIN(trim(CAST(g.value AS TEXT))) grape,COUNT(DISTINCT w.id) wines
+      FROM wines w,json_each(CASE WHEN json_valid(w.grapes_json) THEN w.grapes_json ELSE '[]' END) g
+      WHERE w.owner_id=? AND trim(CAST(g.value AS TEXT))<>''
+      GROUP BY lower(trim(CAST(g.value AS TEXT))) ORDER BY wines DESC,grape ASC LIMIT 10`).bind(owner),
+    c.env.DB.prepare(`SELECT w.id,w.producer,w.wine_name,w.vintage,NULLIF(trim(w.country),'') country,
+      NULLIF(trim(w.region),'') region,NULLIF(trim(w.appellation),'') appellation,w.rating,
+      NULLIF(w.tasting_date,'') tasting_date,w.created_at,
+      (SELECT wi.id FROM wine_images wi WHERE wi.owner_id=w.owner_id AND wi.wine_id=w.id ORDER BY wi.created_at ASC LIMIT 1) image_id
+      FROM wines w WHERE w.owner_id=?
+      ORDER BY COALESCE(NULLIF(w.tasting_date,''),w.created_at) DESC,w.created_at DESC LIMIT 4`).bind(owner)
   ];
   const results=await c.env.DB.batch(statements);
   const first=<T extends Record<string,unknown>>(index:number)=>(results[index]?.results?.[0]??{}) as T;
   const rows=<T extends Record<string,unknown>>(index:number)=>(results[index]?.results??[]) as T[];
   const summary=first<Record<string,unknown>>(0),structured=first<Record<string,unknown>>(1);
-  const mapRating=<T extends Record<string,unknown>>(row:T)=>({...row,averageRating:numberOrNull(row.average_rating)});
   const structures=rows<{structure_json:unknown;rating:unknown}>(9).flatMap(row=>{
     try{return [{structure:JSON.parse(String(row.structure_json||'{}')) as Record<string,string>,rating:numberOrNull(row.rating)}]}
     catch{return []}
@@ -89,7 +98,13 @@ app.get('/api/journey',async c=>{
     producers:rows<Record<string,unknown>>(6).map(row=>({producer:String(row.producer),wines:Number(row.wines),ratedWines:Number(row.rated_wines),averageRating:numberOrNull(row.average_rating),favorites:Number(row.favorites??0)})),
     currencies:rows<Record<string,unknown>>(7).map(row=>({currency:String(row.currency),wines:Number(row.wines),averagePrice:numberOrNull(row.average_price),averageRating:numberOrNull(row.average_rating)})),
     years:rows<Record<string,unknown>>(8).map(row=>({year:String(row.year),wines:Number(row.wines),ratedWines:Number(row.rated_wines),averageRating:numberOrNull(row.average_rating)})),
-    structures
+    structures,
+    grapes:rows<Record<string,unknown>>(10).map(row=>({grape:String(row.grape),wines:Number(row.wines)})),
+    recentTastings:rows<Record<string,unknown>>(11).map(row=>({
+      id:String(row.id),producer:String(row.producer),wineName:String(row.wine_name),vintage:row.vintage==null?null:Number(row.vintage),
+      country:row.country==null?null:String(row.country),region:row.region==null?null:String(row.region),appellation:row.appellation==null?null:String(row.appellation),
+      rating:numberOrNull(row.rating),tastingDate:row.tasting_date==null?null:String(row.tasting_date),createdAt:String(row.created_at),imageId:row.image_id==null?null:String(row.image_id)
+    }))
   });
 });
 
