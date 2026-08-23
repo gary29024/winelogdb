@@ -1,6 +1,7 @@
 import { deepSearchProvenanceSchema,type DeepSearchProvenance,type DeepSearchResult } from '../db/schema';
 import { assessResearchScope,buildDeepResearchQuality } from './qualityGate';
 import { highRiskTechnicalScopePasses } from './technicalClaimGate';
+import { auditTechnicalContradictions,disputedTechnicalClaimCount,technicalContradictionScopePasses } from './technicalContradictions';
 
 export const researchScopes=['producer','terroir','vintage_context','wine_vintage'] as const;
 export type ResearchScope=typeof researchScopes[number];
@@ -39,19 +40,20 @@ export function fieldsForScope(scope:ResearchScope){
 }
 export function scopeIsComplete(scope:ResearchScope,payload:Record<string,string>){return fieldsForScope(scope).every(field=>Boolean(payload[field]?.trim()));}
 export function scopePassesQuality(scope:ResearchScope,payload:Record<string,string>,target:ResearchTarget,sources:ResearchSource[],provenance?:DeepSearchProvenance){
-  return scopeIsComplete(scope,payload)&&assessResearchScope(scope,payload,target.subject,sources).pass&&highRiskTechnicalScopePasses(scope,payload,provenance);
+  return scopeIsComplete(scope,payload)&&assessResearchScope(scope,payload,target.subject,sources).pass&&highRiskTechnicalScopePasses(scope,payload,provenance)&&technicalContradictionScopePasses(scope,payload,provenance);
 }
 function provenanceForScope(provenance:DeepSearchProvenance|undefined,scope:ResearchScope){
   if(!provenance)return undefined;const fields:DeepSearchProvenance['fields']={};
   for(const field of fieldsForScope(scope)){const item=provenance.fields[field];if(item)fields[field]=item}
   return Object.keys(fields).length?{version:1 as const,fields}:undefined;
 }
+function auditedProvenance(scope:ResearchScope,payload:Record<string,string>,provenance?:DeepSearchProvenance){return scope==='wine_vintage'?auditTechnicalContradictions(payload,provenance).provenance:provenance}
 
 export async function loadResearchCache(db:D1Database,owner:string,targets:ResearchTarget[]){
   const found=await Promise.all(targets.map(async target=>{
     const row=await db.prepare('SELECT scope,cache_key,subject_json,result_json,sources_json,provenance_json,model,researched_at FROM research_cache WHERE owner_id=? AND scope=? AND cache_key=?').bind(owner,target.scope,target.cacheKey).first<CacheRow>();
     if(!row)return null;
-    const payload=parseJson<Record<string,string>>(row.result_json,{}),sources=parseJson<ResearchSource[]>(row.sources_json,[]),provenance=parseProvenance(row.provenance_json);if(!scopePassesQuality(target.scope,payload,target,sources,provenance))return null;
+    const payload=parseJson<Record<string,string>>(row.result_json,{}),sources=parseJson<ResearchSource[]>(row.sources_json,[]),provenance=auditedProvenance(target.scope,payload,parseProvenance(row.provenance_json));if(!scopePassesQuality(target.scope,payload,target,sources,provenance))return null;
     return {scope:target.scope,entry:{target,payload,sources,provenance,model:row.model,researchedAt:row.researched_at} as CachedResearch};
   }));
   const cache=new Map<ResearchScope,CachedResearch>();for(const item of found)if(item)cache.set(item.scope,item.entry);return cache;
@@ -67,7 +69,7 @@ export const upsertResearchCache=(db:D1Database,owner:string,entry:CachedResearc
 
 export function splitDeepSearchResult(result:DeepSearchResult,targets:ResearchTarget[]){
   const byScope:Record<ResearchScope,Record<string,string>>={producer:{producerDetails:result.producerDetails,producerWinemakingPractices:result.producerWinemakingPractices},terroir:{terroir:result.terroir},vintage_context:{vintageQuality:result.vintageQuality},wine_vintage:{summary:result.summary,winemakingTechniques:result.winemakingTechniques,drinkingWindow:result.drinkingWindow}};
-  return targets.map(target=>{const provenance=provenanceForScope(result.provenance,target.scope);return {target,payload:byScope[target.scope],sources:result.sources,provenance,model:result.model,researchedAt:result.researchedAt} satisfies CachedResearch}).filter(entry=>scopePassesQuality(entry.target.scope,entry.payload,entry.target,entry.sources,entry.provenance));
+  return targets.map(target=>{const raw=provenanceForScope(result.provenance,target.scope),provenance=auditedProvenance(target.scope,byScope[target.scope],raw);return {target,payload:byScope[target.scope],sources:result.sources,provenance,model:result.model,researchedAt:result.researchedAt} satisfies CachedResearch}).filter(entry=>scopePassesQuality(entry.target.scope,entry.payload,entry.target,entry.sources,entry.provenance));
 }
 
 export function assembleDeepSearch(cache:Map<ResearchScope,CachedResearch>,targets:ResearchTarget[]):DeepSearchResult{
@@ -76,7 +78,7 @@ export function assembleDeepSearch(cache:Map<ResearchScope,CachedResearch>,targe
   const seen=new Set<string>();const sources=entries.flatMap(x=>x.sources).filter(source=>{if(!source.url||seen.has(source.url))return false;seen.add(source.url);return true}).slice(0,20);
   const timestamps=entries.map(x=>Date.parse(x.researchedAt)).filter(Number.isFinite);const researchedAt=timestamps.length?new Date(Math.max(...timestamps)).toISOString():new Date().toISOString();
   const latestEntry=[...entries].sort((a,b)=>Date.parse(b.researchedAt)-Date.parse(a.researchedAt))[0];
-  const quality=buildDeepResearchQuality(entries.map(entry=>({scope:entry.target.scope,payload:entry.payload,subject:entry.target.subject,sources:entry.sources})));
   const provenanceFields:DeepSearchProvenance['fields']={};for(const entry of entries)if(entry.provenance)Object.assign(provenanceFields,entry.provenance.fields);const provenance=Object.keys(provenanceFields).length?{version:1 as const,fields:provenanceFields}:undefined;
+  const baseQuality=buildDeepResearchQuality(entries.map(entry=>({scope:entry.target.scope,payload:entry.payload,subject:entry.target.subject,sources:entry.sources}))),disputedCount=disputedTechnicalClaimCount(provenance),quality=disputedCount?{...baseQuality,status:'mixed' as const,warnings:[...new Set([...baseQuality.warnings,'cross-source-technical-conflict'])].slice(0,20)}:baseQuality;
   return {summary:payload('wine_vintage').summary??'',vintageQuality:payload('vintage_context').vintageQuality??'',producerDetails:payload('producer').producerDetails??'',producerWinemakingPractices:payload('producer').producerWinemakingPractices??'',winemakingTechniques:payload('wine_vintage').winemakingTechniques??'',terroir:payload('terroir').terroir??'',drinkingWindow:payload('wine_vintage').drinkingWindow??'',sources,model:latestEntry?.model??'gemini-3.7-flash',researchedAt,quality,provenance};
 }
