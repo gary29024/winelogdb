@@ -36,7 +36,7 @@ export function highRiskTechnicalViolations(payload:Record<string,string>,proven
     for(const claim of splitResearchClaims(value)){
       const reasons=highRiskTechnicalReasons(claim);if(!reasons.length||explicitResearchStatus(claim))continue;
       const evidence=provenanceClaims.get(claim.trim()),status=evidence?.supportStatus??'missing';
-      if(status==='supported'||status==='uncertainty')continue;
+      if(status==='supported'||status==='conflicting'||status==='uncertainty')continue;
       violations.push({field,claim,reasons,supportStatus:status});
     }
   }
