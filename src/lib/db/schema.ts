@@ -60,18 +60,39 @@ export const grapeBlendEntrySchema = z.object({
   grape: z.string().trim().min(1).max(100),
   percentage: percentageSchema
 });
+const researchSourceTierSchema=z.enum(['authoritative','specialist','grounded','none']);
 const researchFieldQualitySchema=z.object({
   status:z.enum(['verified','not_found','conflicting','not_applicable']),
-  sourceTier:z.enum(['authoritative','specialist','grounded','none']),
+  sourceTier:researchSourceTierSchema,
   score:z.number().min(0).max(100),
   warnings:z.array(z.string().trim().max(200)).max(10).default([])
 });
 export const deepSearchQualitySchema=z.object({
   status:z.enum(['verified','mixed','limited']),
   score:z.number().min(0).max(100),
-  sourceTier:z.enum(['authoritative','specialist','grounded','none']),
+  sourceTier:researchSourceTierSchema,
   warnings:z.array(z.string().trim().max(200)).max(20).default([]),
   fields:z.record(z.string(),researchFieldQualitySchema).default({})
+});
+const researchClaimSourceSchema=z.object({title:z.string().trim().max(300),url:z.string().url()});
+const researchClaimProvenanceSchema=z.object({
+  claim:z.string().trim().min(1).max(1500),
+  supportStatus:z.enum(['supported','partial','unsupported','uncertainty']),
+  sourceTier:researchSourceTierSchema,
+  sources:z.array(researchClaimSourceSchema).max(5).default([])
+});
+const researchFieldProvenanceSchema=z.object({
+  claimCount:z.number().int().min(0).max(60),
+  supportedCount:z.number().int().min(0).max(60),
+  partialCount:z.number().int().min(0).max(60),
+  unsupportedCount:z.number().int().min(0).max(60),
+  uncertaintyCount:z.number().int().min(0).max(60),
+  directSupportRatio:z.number().min(0).max(1),
+  claims:z.array(researchClaimProvenanceSchema).max(60).default([])
+});
+export const deepSearchProvenanceSchema=z.object({
+  version:z.literal(1),
+  fields:z.record(z.string(),researchFieldProvenanceSchema).default({})
 });
 export const deepSearchSchema = z.object({
   summary: z.string().trim().max(6000).default(''),
@@ -84,7 +105,8 @@ export const deepSearchSchema = z.object({
   sources: z.array(z.object({ title: z.string().trim().max(300), url: z.string().url() })).max(20).default([]),
   model: z.string().trim().max(100),
   researchedAt: z.string().datetime(),
-  quality:deepSearchQualitySchema.optional()
+  quality:deepSearchQualitySchema.optional(),
+  provenance:deepSearchProvenanceSchema.optional()
 });
 export const wineRecordSchema = z.object({
   id: z.string().uuid(), ownerId: z.string().min(1).max(128), producer: z.string().trim().min(1).max(200),
@@ -104,6 +126,7 @@ export const wineRecordSchema = z.object({
 });
 export type GrapeBlendEntry = z.infer<typeof grapeBlendEntrySchema>;
 export type DeepSearchResult = z.infer<typeof deepSearchSchema>;
+export type DeepSearchProvenance = z.infer<typeof deepSearchProvenanceSchema>;
 export type WineRecord = z.infer<typeof wineRecordSchema>;
 const wineInputBaseSchema = wineRecordSchema.omit({ id:true, ownerId:true, createdAt:true, updatedAt:true, deepSearch:true, imageIds:true, imageObjectKeys:true }).superRefine((value,ctx)=>{
   const knownTotal=value.grapeBlend.reduce((sum,x)=>sum+(x.percentage??0),0);
