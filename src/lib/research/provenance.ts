@@ -1,3 +1,4 @@
+import type { DeepSearchProvenance as StoredDeepSearchProvenance } from '../db/schema';
 import type { GroundingMetadata } from './geminiBatch';
 import { bestResearchSourceTier,explicitResearchStatus,type DeepResearchField,type ResearchSourceTier } from './qualityGate';
 
@@ -5,7 +6,7 @@ export type ClaimSupportStatus='supported'|'partial'|'unsupported'|'uncertainty'
 export type ClaimSource={title:string;url:string};
 export type ResearchClaimProvenance={claim:string;supportStatus:ClaimSupportStatus;sourceTier:ResearchSourceTier;sources:ClaimSource[]};
 export type ResearchFieldProvenance={claimCount:number;supportedCount:number;partialCount:number;unsupportedCount:number;uncertaintyCount:number;directSupportRatio:number;claims:ResearchClaimProvenance[]};
-export type DeepSearchProvenance={version:1;fields:Partial<Record<DeepResearchField,ResearchFieldProvenance>>};
+export type DeepSearchProvenance=StoredDeepSearchProvenance;
 
 export const deepResearchFields:DeepResearchField[]=['summary','vintageQuality','producerDetails','producerWinemakingPractices','winemakingTechniques','terroir','drinkingWindow'];
 
@@ -73,7 +74,7 @@ export function buildDeepSearchProvenance(payload:Partial<Record<DeepResearchFie
 
 export function provenanceForFields(provenance:DeepSearchProvenance|undefined,fields:readonly string[]):DeepSearchProvenance|undefined{
   if(!provenance)return undefined;const picked:DeepSearchProvenance['fields']={};
-  for(const field of fields){const item=provenance.fields[field as DeepResearchField];if(item)picked[field as DeepResearchField]=item}
+  for(const field of fields){const item=provenance.fields[field];if(item)picked[field]=item}
   return Object.keys(picked).length?{version:1,fields:picked}:undefined;
 }
 
