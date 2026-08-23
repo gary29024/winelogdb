@@ -7,6 +7,7 @@ export type HighRiskTechnicalViolation={field:DeepResearchField;claim:string;rea
 
 const STRICT_FIELDS=new Set<DeepResearchField>(['summary','winemakingTechniques']);
 const MONTH='(?:jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)?|jul(?:y)?|aug(?:ust)?|sep(?:t(?:ember)?)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)';
+const PERCENTAGE=/\b\d+(?:\.\d+)?\s*(?:%|percent\b|per\s+cent\b)/i;
 const TECHNICAL_DURATION=/\b(?:aged|ageing|aging|matured|maturation|elevage|élevage|macerat(?:ed|ion)|ferment(?:ed|ation)|lees?|barrel|oak|tank|bottle|rest(?:ed|ing))\b[^.!?]{0,90}\b\d+(?:\.\d+)?\s*(?:months?|days?|weeks?|years?)\b|\b\d+(?:\.\d+)?\s*(?:months?|days?|weeks?|years?)\b[^.!?]{0,90}\b(?:aged|ageing|aging|matured|maturation|elevage|élevage|macerat(?:ed|ion)|ferment(?:ed|ation)|lees?|barrel|oak|tank|bottle|rest(?:ed|ing))\b/i;
 const DOSAGE_OR_CONCENTRATION=/\b\d+(?:\.\d+)?\s*(?:g\s*\/?\s*l|mg\s*\/?\s*l|grams?\s+per\s+lit(?:re|er)|milligrams?\s+per\s+lit(?:re|er)|brix|°\s*brix)\b/i;
 const EVENT_DATE=new RegExp(`\\b(?:disgorg(?:ed|ement)?|bottl(?:ed|ing)|tirage|harvest(?:ed|ing)?)\\b[^.!?]{0,70}(?:\\b(?:19|20)\\d{2}\\b|\\b${MONTH}\\b|\\b\\d{1,2}[\\/-]\\d{1,2}[\\/-]\\d{2,4}\\b)`,'i');
@@ -16,7 +17,7 @@ const YIELD_OR_DENSITY=/\b\d+(?:\.\d+)?\s*(?:hl\s*\/?\s*ha|kg\s*\/?\s*ha|ton(?:n
 
 export function highRiskTechnicalReasons(claim:string):HighRiskTechnicalReason[]{
   const reasons:HighRiskTechnicalReason[]=[];
-  if(/\b\d+(?:\.\d+)?\s*%\b/.test(claim))reasons.push('percentage');
+  if(PERCENTAGE.test(claim))reasons.push('percentage');
   if(TECHNICAL_DURATION.test(claim))reasons.push('duration');
   if(DOSAGE_OR_CONCENTRATION.test(claim))reasons.push('dosage_or_concentration');
   if(EVENT_DATE.test(claim))reasons.push('disgorgement_or_bottling_date');
