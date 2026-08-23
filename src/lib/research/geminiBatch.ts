@@ -20,8 +20,8 @@ const BATCH_TERMINAL_STATES=new Set(['JOB_STATE_SUCCEEDED','JOB_STATE_FAILED','J
 const PRIMARY_MODEL='gemini-3.7-flash';
 const EMULATED_PREFIX='vertex-batches/';
 const EMULATED_TTL_MS=48*60*60*1000;
-const RUNNING_STALE_MS=8*60*1000;
-const REQUEST_TIMEOUT_MS=360_000;
+const RUNNING_STALE_MS=12*60*1000;
+const REQUEST_TIMEOUT_MS=600_000;
 const primaryBypassRequests=new Set<string>();
 const gatewayRuntimeByApiKey=new Map<string,GatewayRuntime>();
 const gatewayKeys=['CF_AI_GATEWAY_TOKEN','AI_GATEWAY_ACCOUNT_ID','AI_GATEWAY_ID','VERTEX_PROJECT_ID','VERTEX_REGION'] as const;
@@ -121,14 +121,14 @@ async function executeVertexEntry(env:GatewayRuntimeEnv,model:string,displayName
   for(let attempt=1;attempt<=2;attempt++){
     const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),REQUEST_TIMEOUT_MS);
     try{
-      const {response}=await postGeminiGenerateContent(env,model,body,controller.signal,{...featureMetadata(displayName,entry.key),attempt});
+      const {response}=await postGeminiGenerateContent(env,model,body,controller.signal,{...featureMetadata(displayName,entry.key),attempt,tier:'flex'},{serviceTier:'flex',serverTimeoutSeconds:600});
       clearTimeout(timer);
       if(response.ok)return {metadata:{key:entry.key},response:await response.json() as GeminiInlineResponse['response']};
       lastStatus=response.status;lastError=(await response.text().catch(()=>'' )).replace(/\s+/g,' ').trim().slice(0,700)||`HTTP ${response.status}`;
       if(attempt===1&&(response.status===429||response.status>=500)){await new Promise(resolve=>setTimeout(resolve,900));continue}
       return {metadata:{key:entry.key},error:{message:lastError,status:lastStatus}};
     }catch(e){
-      clearTimeout(timer);lastError=controller.signal.aborted?`Vertex request timed out after ${REQUEST_TIMEOUT_MS/60000} minutes`:(e as Error).message||'Vertex request failed';
+      clearTimeout(timer);lastError=controller.signal.aborted?`Vertex Flex request timed out after ${REQUEST_TIMEOUT_MS/60000} minutes`:(e as Error).message||'Vertex Flex request failed';
       if(attempt===1){await new Promise(resolve=>setTimeout(resolve,900));continue}
       return {metadata:{key:entry.key},error:{message:lastError,status:lastStatus||0}};
     }
@@ -161,7 +161,7 @@ async function executeStoredVertexBatch(env:GatewayRuntimeEnv,name:string,row:St
     const result={state:'JOB_STATE_SUCCEEDED',dest:{inlinedResponses:responses},completedAt:now()};
     await db.prepare("UPDATE vertex_batch_emulation_jobs SET state='JOB_STATE_SUCCEEDED',requests_json='[]',result_json=?,error=NULL,updated_at=? WHERE id=? AND state='JOB_STATE_RUNNING'").bind(JSON.stringify(result),now(),id).run();
   }catch(e){
-    const error=(e as Error).message||'Queued Vertex batch failed',result={state:'JOB_STATE_FAILED',error:{message:error}};
+    const error=(e as Error).message||'Queued Vertex Flex batch failed',result={state:'JOB_STATE_FAILED',error:{message:error}};
     await db.prepare("UPDATE vertex_batch_emulation_jobs SET state='JOB_STATE_FAILED',requests_json='[]',result_json=?,error=?,updated_at=? WHERE id=? AND state='JOB_STATE_RUNNING'").bind(JSON.stringify(result),error,now(),id).run();
   }
   return (await storedVertexBatch(db,name))??row;
