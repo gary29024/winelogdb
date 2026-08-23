@@ -3,11 +3,10 @@ import { Link } from 'react-router-dom';
 import { WineImage } from '../wines/WineImage';
 import { getJourneyData,type JourneyData,type RecentTasting } from './api';
 import { nextMilestones,unlockedAchievements,type MilestoneKey } from './model';
+import { grapeColorFor } from './passportVisuals';
 import '../../journey.css';
 
 const journalHref=(params:Record<string,string>)=>`/journal?${new URLSearchParams(params).toString()}`;
-const achievementIcon:Record<MilestoneKey,string>={totalWines:'◇',producers:'⌂',appellations:'✦',countries:'◎',structuredTastings:'✓'};
-const grapeColors=['#a8172d','#e1bd45','#5b1621','#563080','#724060','#d98939'];
 const flags:Record<string,string>={France:'🇫🇷',Italy:'🇮🇹',Spain:'🇪🇸',Portugal:'🇵🇹',Germany:'🇩🇪',Australia:'🇦🇺','United States':'🇺🇸','United Kingdom':'🇬🇧',Argentina:'🇦🇷',Chile:'🇨🇱','South Africa':'🇿🇦','New Zealand':'🇳🇿',Austria:'🇦🇹',Greece:'🇬🇷',Hungary:'🇭🇺'};
 
 type PassportStatIconKind='wines'|'regions'|'producers';
@@ -25,6 +24,15 @@ function PassportStatIcon({kind}:{kind:PassportStatIconKind}){
     <path d="M4.2 20V9.6L12 4l7.8 5.6V20"/>
     <path d="M7.2 9.8h9.6M8 20v-5.2h3.1V20m1.8 0v-5.2H16V20M5.8 20h12.4" className="passport-icon-detail"/>
   </svg>;
+}
+
+function AchievementIcon({kind}:{kind:MilestoneKey}){
+  const common={width:18,height:18,viewBox:'0 0 24 24',fill:'none',stroke:'currentColor',strokeWidth:1.7,strokeLinecap:'round' as const,strokeLinejoin:'round' as const,'aria-hidden':true};
+  if(kind==='totalWines')return <svg {...common}><path d="M8 3h8l-1 6.5a3 3 0 0 1-6 0L8 3Z"/><path d="M12 12.5V20M8.5 20h7"/></svg>;
+  if(kind==='producers')return <svg {...common}><path d="M4.5 20V9.5L12 4l7.5 5.5V20"/><path d="M7.5 10h9M8.2 20v-5h3v5m1.6 0v-5h3v5M5.5 20h13"/></svg>;
+  if(kind==='appellations')return <svg {...common}><path d="M12 21s6-5.5 6-11a6 6 0 1 0-12 0c0 5.5 6 11 6 11Z"/><circle cx="12" cy="10" r="2.2"/></svg>;
+  if(kind==='countries')return <svg {...common}><circle cx="12" cy="12" r="8"/><path d="M4 12h16M12 4c2.3 2.2 3.5 4.9 3.5 8S14.3 17.8 12 20M12 4C9.7 6.2 8.5 8.9 8.5 12S9.7 17.8 12 20"/></svg>;
+  return <svg {...common}><rect x="6" y="4" width="12" height="16" rx="2"/><path d="M9 8h6M9 12h3M9 16l1.5 1.5L15 13"/></svg>;
 }
 
 function tastingDate(item:RecentTasting){
@@ -115,8 +123,8 @@ export function PassportPage(){
 
       <section className="passport-mini-card">
         <div className="passport-card-heading"><div><h2>Top grapes</h2><span>By wines tasted</span></div></div>
-        {grapes.length?<div className="passport-compact-list passport-grape-list">{grapes.slice(0,5).map((item,index)=><Link to={journalHref({query:item.grape})} key={item.grape}>
-          <span className="passport-grape-dot" style={{backgroundColor:grapeColors[index%grapeColors.length]}} aria-hidden="true"/>
+        {grapes.length?<div className="passport-compact-list passport-grape-list">{grapes.slice(0,5).map(item=><Link to={journalHref({query:item.grape})} key={item.grape}>
+          <span className="passport-grape-dot" style={{backgroundColor:grapeColorFor(item.grape)}} aria-hidden="true"/>
           <div><strong>{item.grape}</strong></div><b>{item.wines}</b>
         </Link>)}</div>:<p className="passport-empty-mini">Grapes appear as your journal grows.</p>}
         <Link className="passport-card-link" to="/journal">View all grapes <span>›</span></Link>
@@ -136,7 +144,7 @@ export function PassportPage(){
       <section className="passport-mini-card" id="passport-achievements">
         <div className="passport-card-heading"><div><h2>Achievements</h2></div><span>{achievements.length} stamps</span></div>
         {achievements.length?<div className="passport-stamp-list">{achievements.slice(0,2).map(item=><article key={item.key}>
-          <span className={`passport-badge passport-badge-${item.key}`} aria-hidden="true">{achievementIcon[item.key]}</span>
+          <span className={`passport-badge passport-badge-${item.key}`} aria-hidden="true"><AchievementIcon kind={item.key}/></span>
           <div><strong>{item.label}</strong><small>{item.value} milestone reached</small></div>
         </article>)}{achievements.length>2&&<p className="passport-more-stamps">+{achievements.length-2} more stamps collected</p>}</div>:<p className="passport-empty-mini">Your first stamp unlocks at ten logged wines.</p>}
       </section>
