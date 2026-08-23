@@ -1,15 +1,29 @@
 import app from './researchQueueEntry';
 import { requireSession } from '../src/lib/auth/session';
+import { configureGeminiBatchGateway } from '../src/lib/research/geminiBatch';
 import { hasTastingStructure,tastingStructureSchema,type TastingStructure } from '../src/lib/wine/tastingStructure';
 import { groupSourcePhotosForWine,handleGroupRecognitionSessionRequest } from './groupRecognitionSessions';
+import { resolveGeminiTransport,type GeminiTransportBindings } from './geminiTransport';
+import { processVertexBatchPollJob,processVertexBatchSubmitJob } from './vertexBatchRecognition';
 
-type Bindings=Parameters<typeof app.fetch>[1];
+type Bindings=Parameters<typeof app.fetch>[1]&GeminiTransportBindings;
 type QueueBatch=Parameters<typeof app.queue>[0];
+type QueueJob={kind?:string;owner?:string;sessionId?:string;jobId?:string;pollCount?:number};
 
 type StructurePayload={present:boolean;structure:TastingStructure|null;error?:string};
 
 async function owner(request:Request,env:Bindings){return (await requireSession(request.headers.get('Authorization')??undefined,env.AUTH_SECRET)).userId}
 function jsonResponse(body:unknown,status=200,headers?:Headers){const out=new Headers(headers);out.delete('Content-Length');out.set('Content-Type','application/json; charset=utf-8');return new Response(JSON.stringify(body),{status,headers:out})}
+function configureBatchGateway(env:Bindings){return configureGeminiBatchGateway(env.GEMINI_API_KEY,env)}
+
+async function failBatchGatewayConfig(env:Bindings,job:QueueJob,error:string){
+  const ownerId=String(job.owner||''),sessionId=String(job.sessionId||'');if(!ownerId||!sessionId)return;
+  const stamp=new Date().toISOString();
+  await env.DB.batch([
+    env.DB.prepare("UPDATE batch_recognition_sessions SET status='failed',updated_at=? WHERE id=? AND owner_id=?").bind(stamp,sessionId,ownerId),
+    env.DB.prepare("UPDATE batch_recognition_items SET status='failed',error=?,updated_at=? WHERE session_id=? AND owner_id=? AND status='submitted'").bind(error,stamp,sessionId,ownerId)
+  ]).catch(e=>console.error(JSON.stringify({event:'vertex-batch-config-fail-save',sessionId,error:(e as Error).message})));
+}
 
 async function extractStructure(request:Request):Promise<StructurePayload>{
   try{
@@ -40,6 +54,7 @@ function exactWineId(pathname:string){const match=pathname.match(/^\/api\/wines\
 
 export default {
   async fetch(request:Request,env:Bindings,ctx:ExecutionContext){
+    configureBatchGateway(env);
     const url=new URL(request.url),wineId=exactWineId(url.pathname);
     const groupSessionResponse=await handleGroupRecognitionSessionRequest(request,env);if(groupSessionResponse)return groupSessionResponse;
 
@@ -76,5 +91,23 @@ export default {
 
     return app.fetch(request,env,ctx);
   },
-  queue(batch:QueueBatch,env:Bindings){return app.queue(batch,env)}
+  async queue(batch:QueueBatch,env:Bindings){
+    configureBatchGateway(env);
+    if(batch.messages.length!==1)return app.queue(batch,env);
+    const message=batch.messages[0],job=message.body as QueueJob;
+    if(job.kind!=='recognition_batch_submit'&&job.kind!=='recognition_batch_poll')return app.queue(batch,env);
+    let provider;
+    try{provider=resolveGeminiTransport(env)}catch(e){const error=(e as Error).message||'AI Gateway configuration is invalid';await failBatchGatewayConfig(env,job,error);console.error(JSON.stringify({event:'vertex-batch-config-error',kind:job.kind,sessionId:job.sessionId,error}));message.ack();return}
+    if(provider!=='vertex-ai-gateway')return app.queue(batch,env);
+    try{
+      const ownerId=String(job.owner||''),sessionId=String(job.sessionId||'');if(!ownerId||!sessionId)throw new Error('Batch recognition queue job is missing owner or session');
+      if(job.kind==='recognition_batch_submit')await processVertexBatchSubmitJob(env,ownerId,sessionId);
+      else{
+        const jobId=String(job.jobId||'');if(!jobId)throw new Error('Batch recognition poll is missing job ID');
+        const handled=await processVertexBatchPollJob(env,ownerId,sessionId,jobId,Math.max(0,Number(job.pollCount)||0));
+        if(!handled)return app.queue(batch,env);
+      }
+      message.ack();
+    }catch(e){console.error(JSON.stringify({event:'vertex-batch-queue-error',kind:job.kind,sessionId:job.sessionId,error:(e as Error).message||String(e)}));message.retry()}
+  }
 };
