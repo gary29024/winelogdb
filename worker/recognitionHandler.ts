@@ -1,6 +1,7 @@
 import { validateBatch } from '../src/features/uploads/validation';
 import { parseRecognition } from '../src/features/recognition/schema';
 import { buildRecognitionPrompt,recognitionResponseJsonSchema,RECOGNITION_MODEL } from '../src/lib/recognition/geminiRequest';
+import { preferEscalatedRecognition,recognitionEscalationReasons,RECOGNITION_ESCALATION_MODEL } from '../src/lib/recognition/escalation';
 import type { RecognitionPhotoMetadata } from '../src/lib/uploads/metadataSelection';
 import { shouldRetryRecognitionFailure } from '../src/lib/recognition/retryPolicy';
 import { requireSession } from '../src/lib/auth/session';
@@ -43,6 +44,40 @@ function geminiErrorMessage(raw:string,status:number){
 
 function looksLikeStructuredOutputRejection(raw:string){
   return /response.?schema|response.?json.?schema|response.?format|generation.?config|structured.?output|unknown (?:name|field)|schema/i.test(raw);
+}
+
+async function tryEscalatedRecognition(
+  env:RecognitionBindings,
+  requestId:string,
+  requestBody:string,
+  schemaFreeBody:string,
+  primary:ReturnType<typeof parseRecognition>,
+  reasons:string[]
+){
+  const startedAt=Date.now(),controller=new AbortController();let timedOut=false,schemaFallback=false;
+  const timer=setTimeout(()=>{timedOut=true;controller.abort()},HARD_TIMEOUT_MS);
+  console.log(JSON.stringify({event:'recognition-escalation-start',requestId,fromModel:MODEL,toModel:RECOGNITION_ESCALATION_MODEL,reasons,primaryConfidence:primary.confidence}));
+  try{
+    let transport=await postGeminiGenerateContent(env,RECOGNITION_ESCALATION_MODEL,requestBody,controller.signal,{feature:'recognition',mode:'single-escalation',requestId}),response=transport.response,provider=transport.provider;
+    if(response.status===400){
+      const raw=(await response.text()).slice(0,2000);
+      if(looksLikeStructuredOutputRejection(raw)){
+        schemaFallback=true;
+        transport=await postGeminiGenerateContent(env,RECOGNITION_ESCALATION_MODEL,schemaFreeBody,controller.signal,{feature:'recognition',mode:'single-escalation-fallback',requestId});response=transport.response;provider=transport.provider;
+      }else{
+        clearTimeout(timer);console.warn(JSON.stringify({event:'recognition-escalation-skipped',requestId,model:RECOGNITION_ESCALATION_MODEL,provider,status:400,reasons,error:geminiErrorMessage(raw,400)}));return {result:primary,used:false};
+      }
+    }
+    clearTimeout(timer);
+    if(!response.ok){const raw=(await response.text()).slice(0,2000);console.warn(JSON.stringify({event:'recognition-escalation-skipped',requestId,model:RECOGNITION_ESCALATION_MODEL,provider,status:response.status,reasons,error:geminiErrorMessage(raw,response.status)}));return {result:primary,used:false}}
+    const payload=await response.json() as GeminiResponse,candidate=payload.candidates?.[0],text=candidate?.content?.parts?.map(part=>part.text??'').join('')??'';
+    if(!text)throw new Error('Gemini 3.7 returned no recognition result');
+    const escalated=parseRecognition(text),result=preferEscalatedRecognition(primary,escalated),used=result===escalated;
+    console.log(JSON.stringify({event:'recognition-escalation-complete',requestId,model:RECOGNITION_ESCALATION_MODEL,provider,reasons,used,schemaFallback,primaryConfidence:primary.confidence,escalatedConfidence:escalated.confidence,latencyMs:Date.now()-startedAt,finishReason:candidate?.finishReason??null,promptTokens:payload.usageMetadata?.promptTokenCount??null,outputTokens:payload.usageMetadata?.candidatesTokenCount??null,totalTokens:payload.usageMetadata?.totalTokenCount??null}));
+    return {result,used};
+  }catch(e){
+    clearTimeout(timer);console.warn(JSON.stringify({event:'recognition-escalation-skipped',requestId,model:RECOGNITION_ESCALATION_MODEL,reasons,timedOut,latencyMs:Date.now()-startedAt,error:(e as Error).message||'Escalation failed'}));return {result:primary,used:false};
+  }
 }
 
 export async function handleRecognitionRequest(request:Request,env:RecognitionBindings){
@@ -95,10 +130,12 @@ export async function handleRecognitionRequest(request:Request,env:RecognitionBi
       const payload=await response.json() as GeminiResponse;
       const candidate=payload.candidates?.[0],text=candidate?.content?.parts?.map(part=>part.text??'').join('')??'';
       if(!text)throw new Error('Gemini returned no recognition result');
-      const result=parseRecognition(text);
+      const primary=parseRecognition(text),escalationReasons=recognitionEscalationReasons(primary,{schemaFallback});
+      const escalation=escalationReasons.length?await tryEscalatedRecognition(env,requestId,requestBody,schemaFreeBody,primary,escalationReasons):{result:primary,used:false};
+      const result=escalation.result,finalModel=escalation.used?RECOGNITION_ESCALATION_MODEL:MODEL;
       const locationName=selected.gpsSource==='exif'&&result.locationName?.trim()?result.locationName.trim():null;
       const durationMs=Date.now()-startedAt;
-      console.log(JSON.stringify({event:'recognition-complete',requestId,model:MODEL,provider,attempt,geminiLatencyMs,durationMs,schemaFallback,finishReason:candidate?.finishReason??null,promptTokens:payload.usageMetadata?.promptTokenCount??null,outputTokens:payload.usageMetadata?.candidatesTokenCount??null,totalTokens:payload.usageMetadata?.totalTokenCount??null}));
+      console.log(JSON.stringify({event:'recognition-complete',requestId,model:finalModel,primaryModel:MODEL,escalated:escalation.used,escalationReasons,provider,attempt,geminiLatencyMs,durationMs,schemaFallback,finishReason:candidate?.finishReason??null,promptTokens:payload.usageMetadata?.promptTokenCount??null,outputTokens:payload.usageMetadata?.candidatesTokenCount??null,totalTokens:payload.usageMetadata?.totalTokenCount??null}));
       return json({...result,locationName,tastingDate:selected.capturedAt?.slice(0,10)??null,latitude:selected.latitude,longitude:selected.longitude,metadataSource:selected.gpsSource==='exif'?'exif':selected.timestampSource,requestId,recognitionDurationMs:durationMs},200,requestId);
     }catch(e){
       clearTimeout(timer);
