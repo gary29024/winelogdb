@@ -1,4 +1,5 @@
 import type { DeepSearchResult } from '../db/schema';
+import { assessResearchScope,buildDeepResearchQuality } from './qualityGate';
 
 export const researchScopes=['producer','terroir','vintage_context','wine_vintage'] as const;
 export type ResearchScope=typeof researchScopes[number];
@@ -35,13 +36,16 @@ export function fieldsForScope(scope:ResearchScope){
   return ['summary','winemakingTechniques','drinkingWindow'] as const;
 }
 export function scopeIsComplete(scope:ResearchScope,payload:Record<string,string>){return fieldsForScope(scope).every(field=>Boolean(payload[field]?.trim()));}
+export function scopePassesQuality(scope:ResearchScope,payload:Record<string,string>,target:ResearchTarget,sources:ResearchSource[]){
+  return scopeIsComplete(scope,payload)&&assessResearchScope(scope,payload,target.subject,sources).pass;
+}
 
 export async function loadResearchCache(db:D1Database,owner:string,targets:ResearchTarget[]){
   const found=await Promise.all(targets.map(async target=>{
     const row=await db.prepare('SELECT scope,cache_key,subject_json,result_json,sources_json,model,researched_at FROM research_cache WHERE owner_id=? AND scope=? AND cache_key=?').bind(owner,target.scope,target.cacheKey).first<CacheRow>();
     if(!row)return null;
-    const payload=parseJson<Record<string,string>>(row.result_json,{});if(!scopeIsComplete(target.scope,payload))return null;
-    return {scope:target.scope,entry:{target,payload,sources:parseJson<ResearchSource[]>(row.sources_json,[]),model:row.model,researchedAt:row.researched_at} as CachedResearch};
+    const payload=parseJson<Record<string,string>>(row.result_json,{}),sources=parseJson<ResearchSource[]>(row.sources_json,[]);if(!scopePassesQuality(target.scope,payload,target,sources))return null;
+    return {scope:target.scope,entry:{target,payload,sources,model:row.model,researchedAt:row.researched_at} as CachedResearch};
   }));
   const cache=new Map<ResearchScope,CachedResearch>();for(const item of found)if(item)cache.set(item.scope,item.entry);return cache;
 }
@@ -56,7 +60,7 @@ export const upsertResearchCache=(db:D1Database,owner:string,entry:CachedResearc
 
 export function splitDeepSearchResult(result:DeepSearchResult,targets:ResearchTarget[]){
   const byScope:Record<ResearchScope,Record<string,string>>={producer:{producerDetails:result.producerDetails,producerWinemakingPractices:result.producerWinemakingPractices},terroir:{terroir:result.terroir},vintage_context:{vintageQuality:result.vintageQuality},wine_vintage:{summary:result.summary,winemakingTechniques:result.winemakingTechniques,drinkingWindow:result.drinkingWindow}};
-  return targets.map(target=>({target,payload:byScope[target.scope],sources:result.sources,model:result.model,researchedAt:result.researchedAt} satisfies CachedResearch)).filter(entry=>scopeIsComplete(entry.target.scope,entry.payload));
+  return targets.map(target=>({target,payload:byScope[target.scope],sources:result.sources,model:result.model,researchedAt:result.researchedAt} satisfies CachedResearch)).filter(entry=>scopePassesQuality(entry.target.scope,entry.payload,entry.target,entry.sources));
 }
 
 export function assembleDeepSearch(cache:Map<ResearchScope,CachedResearch>,targets:ResearchTarget[]):DeepSearchResult{
@@ -65,5 +69,6 @@ export function assembleDeepSearch(cache:Map<ResearchScope,CachedResearch>,targe
   const seen=new Set<string>();const sources=entries.flatMap(x=>x.sources).filter(source=>{if(!source.url||seen.has(source.url))return false;seen.add(source.url);return true}).slice(0,20);
   const timestamps=entries.map(x=>Date.parse(x.researchedAt)).filter(Number.isFinite);const researchedAt=timestamps.length?new Date(Math.max(...timestamps)).toISOString():new Date().toISOString();
   const latestEntry=[...entries].sort((a,b)=>Date.parse(b.researchedAt)-Date.parse(a.researchedAt))[0];
-  return {summary:payload('wine_vintage').summary??'',vintageQuality:payload('vintage_context').vintageQuality??'',producerDetails:payload('producer').producerDetails??'',producerWinemakingPractices:payload('producer').producerWinemakingPractices??'',winemakingTechniques:payload('wine_vintage').winemakingTechniques??'',terroir:payload('terroir').terroir??'',drinkingWindow:payload('wine_vintage').drinkingWindow??'',sources,model:latestEntry?.model??'gemini-3.7-flash',researchedAt};
+  const quality=buildDeepResearchQuality(entries.map(entry=>({scope:entry.target.scope,payload:entry.payload,subject:entry.target.subject,sources:entry.sources})));
+  return {summary:payload('wine_vintage').summary??'',vintageQuality:payload('vintage_context').vintageQuality??'',producerDetails:payload('producer').producerDetails??'',producerWinemakingPractices:payload('producer').producerWinemakingPractices??'',winemakingTechniques:payload('wine_vintage').winemakingTechniques??'',terroir:payload('terroir').terroir??'',drinkingWindow:payload('wine_vintage').drinkingWindow??'',sources,model:latestEntry?.model??'gemini-3.7-flash',researchedAt,quality};
 }
