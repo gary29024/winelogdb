@@ -10,6 +10,23 @@ const achievementIcon:Record<MilestoneKey,string>={totalWines:'◇',producers:'�
 const grapeColors=['#a8172d','#e1bd45','#5b1621','#563080','#724060','#d98939'];
 const flags:Record<string,string>={France:'🇫🇷',Italy:'🇮🇹',Spain:'🇪🇸',Portugal:'🇵🇹',Germany:'🇩🇪',Australia:'🇦🇺','United States':'🇺🇸','United Kingdom':'🇬🇧',Argentina:'🇦🇷',Chile:'🇨🇱','South Africa':'🇿🇦','New Zealand':'🇳🇿',Austria:'🇦🇹',Greece:'🇬🇷',Hungary:'🇭🇺'};
 
+type PassportStatIconKind='wines'|'regions'|'producers';
+
+function PassportStatIcon({kind}:{kind:PassportStatIconKind}){
+  if(kind==='wines')return <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+    <path d="M12 3.2 20.8 12 12 20.8 3.2 12 12 3.2Z"/>
+    <path d="M8.8 12h6.4M12 8.8v6.4" className="passport-icon-detail"/>
+  </svg>;
+  if(kind==='regions')return <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+    <circle cx="12" cy="12" r="8.2"/>
+    <path d="M3.8 12h16.4M12 3.8c2.4 2.3 3.7 5 3.7 8.2S14.4 17.9 12 20.2M12 3.8C9.6 6.1 8.3 8.8 8.3 12s1.3 5.9 3.7 8.2" className="passport-icon-detail"/>
+  </svg>;
+  return <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+    <path d="M4.2 20V9.6L12 4l7.8 5.6V20"/>
+    <path d="M7.2 9.8h9.6M8 20v-5.2h3.1V20m1.8 0v-5.2H16V20M5.8 20h12.4" className="passport-icon-detail"/>
+  </svg>;
+}
+
 function tastingDate(item:RecentTasting){
   const raw=item.tastingDate||item.createdAt;
   const date=new Date(item.tastingDate?`${item.tastingDate}T00:00:00`:raw);
@@ -17,17 +34,24 @@ function tastingDate(item:RecentTasting){
   return new Intl.DateTimeFormat(undefined,{month:'short',day:'numeric'}).format(date);
 }
 
-function PassportMap(){return <svg className="passport-world-map" viewBox="0 0 300 138" aria-hidden="true">
+function PassportMap(){return <svg className="passport-world-map" viewBox="0 0 360 170" aria-hidden="true">
   <g className="passport-map-land">
-    <path d="M18 45 35 29l28-8 24 8 8 17-10 14-17 3-8 13-17-1-7-12-18-4Z"/>
-    <path d="m74 79 11 5 8 17-6 25-11 9-8-20 2-16-8-12Z"/>
-    <path d="m126 38 17-9 22 4 8 10-7 8-14-2-7 8-12-4Z"/>
-    <path d="m146 58 20 2 14 15-2 20-12 20-11-7-7-23-11-13Z"/>
-    <path d="m174 37 26-10 42 8 35 22-5 16-25 1-14 10-19-4-14-13-18 2-10-11Z"/>
-    <path d="m239 97 21-6 18 9-2 15-14 10-18-7Z"/>
+    <path d="M16 54C19 42 28 32 43 28l20-2 14 6 17 1 11 8-5 9-13 5-7 12-12 2-5 10-9 6-9-8-1-12-11-5-11 3-6-9Z"/>
+    <path d="M74 91c8 2 16 8 19 16l-1 15-6 10-3 14-7 8-6-13 1-10-5-8 4-10-3-8 7-14Z"/>
+    <path d="M92 16c8-7 18-10 28-7l7 10-7 8-13 4-11-5-4-10Z"/>
+    <path d="M153 48l9-8 15-2 11 5 7 8-5 7-10 0-7 4-7-4-8 1-5-11Z"/>
+    <path d="M171 66c9-4 18-3 26 2l7 11-3 15-8 11-3 16-9 10-8-11-1-15-7-10 4-10-3-11 5-8Z"/>
+    <path d="M191 43c13-14 32-20 54-18l19 5 14 8 18 2 19 10 9 10-5 8-16 4-13 8-13-2-13 7-12-5-13-1-8-8-14 2-9-8-12 0-7-8-8-14Z"/>
+    <path d="M300 108c8-7 19-8 29-3l9 7-3 10-9 7-14-1-9-7-3-13Z"/>
+    <path d="M337 132l6 2 3 6-5 5-6-4 2-9Z"/>
+    <path d="M275 86l5 2 2 5-4 3-4-5 1-5Z"/>
+    <path d="M291 92l4 2 2 4-4 2-3-4 1-4Z"/>
   </g>
   <g className="passport-map-pins">
-    <circle cx="151" cy="45" r="5"/><circle cx="162" cy="48" r="4"/><circle cx="172" cy="51" r="3.5"/><circle cx="52" cy="59" r="4"/><circle cx="232" cy="105" r="4"/>
+    <g transform="translate(172 53)"><circle className="passport-map-pin-ring" r="5.5"/><circle r="2.4"/></g>
+    <g transform="translate(184 56)"><circle className="passport-map-pin-ring" r="5"/><circle r="2.1"/></g>
+    <g transform="translate(71 61)"><circle className="passport-map-pin-ring" r="5"/><circle r="2.1"/></g>
+    <g transform="translate(315 117)"><circle className="passport-map-pin-ring" r="5"/><circle r="2.1"/></g>
   </g>
 </svg>}
 
@@ -45,10 +69,10 @@ export function PassportPage(){
   const remaining=Math.max(0,(wineMilestone?.target??summary.totalWines)-summary.totalWines);
   const grapes=data.grapes??[];
   const recent=data.recentTastings??[];
-  const summaryStats=[
-    {icon:'♧',value:summary.totalWines,label:'Wines tasted',detail:`${summary.vintages} vintages`},
-    {icon:'◎',value:summary.regions,label:'Regions explored',detail:`${summary.countries} countries`},
-    {icon:'⌂',value:summary.producers,label:'Producers logged',detail:`${summary.appellations} appellations`}
+  const summaryStats:{kind:PassportStatIconKind;value:number;label:string;detail:string}[]=[
+    {kind:'wines',value:summary.totalWines,label:'Wines tasted',detail:`${summary.vintages} vintages`},
+    {kind:'regions',value:summary.regions,label:'Regions explored',detail:`${summary.countries} countries`},
+    {kind:'producers',value:summary.producers,label:'Producers logged',detail:`${summary.appellations} appellations`}
   ];
 
   return <section className="journey-page passport-page">
@@ -61,7 +85,7 @@ export function PassportPage(){
       <div className="passport-summary-copy">
         <p className="section-label" id="passport-summary-heading">PASSPORT SUMMARY</p>
         <div className="passport-stat-grid">{summaryStats.map(item=><article key={item.label}>
-          <span className="passport-stat-icon" aria-hidden="true">{item.icon}</span>
+          <span className="passport-stat-icon" aria-hidden="true"><PassportStatIcon kind={item.kind}/></span>
           <strong>{item.value}</strong><span>{item.label}</span><small>{item.detail}</small>
         </article>)}</div>
       </div>
