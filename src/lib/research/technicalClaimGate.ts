@@ -12,7 +12,8 @@ const TECHNICAL_DURATION=/\b(?:aged|ageing|aging|matured|maturation|elevage|éle
 const DOSAGE_OR_CONCENTRATION=/\b\d+(?:\.\d+)?\s*(?:g\s*\/?\s*l|mg\s*\/?\s*l|grams?\s+per\s+lit(?:re|er)|milligrams?\s+per\s+lit(?:re|er)|brix|°\s*brix)\b/i;
 const EVENT_DATE=new RegExp(`\\b(?:disgorg(?:ed|ement)?|bottl(?:ed|ing)|tirage|harvest(?:ed|ing)?)\\b[^.!?]{0,70}(?:\\b(?:19|20)\\d{2}\\b|\\b${MONTH}\\b|\\b\\d{1,2}[\\/-]\\d{1,2}[\\/-]\\d{2,4}\\b)`,'i');
 const TEMPERATURE=/\b\d+(?:\.\d+)?\s*(?:°\s*c|°c|degrees?\s+c(?:elsius)?)\b/i;
-const VESSEL_SIZE=/\b\d+(?:\.\d+)?\s*(?:l|litres?|liters?)\b[^.!?]{0,55}\b(?:barrel|cask|tank|amphora|foudre|demi[- ]?muid|vat)\b|\b(?:barrel|cask|tank|amphora|foudre|demi[- ]?muid|vat)\b[^.!?]{0,55}\b\d+(?:\.\d+)?\s*(?:l|litres?|liters?)\b/i;
+const VESSEL='(?:barrels?|casks?|tanks?|amphorae?|foudres?|demi[- ]?muids?|vats?)';
+const VESSEL_SIZE=new RegExp(`\\b\\d+(?:\\.\\d+)?\\s*(?:l|litres?|liters?)\\b[^.!?]{0,55}\\b${VESSEL}\\b|\\b${VESSEL}\\b[^.!?]{0,55}\\b\\d+(?:\\.\\d+)?\\s*(?:l|litres?|liters?)\\b`,'i');
 const YIELD_OR_DENSITY=/\b\d+(?:\.\d+)?\s*(?:hl\s*\/?\s*ha|kg\s*\/?\s*ha|ton(?:ne)?s?\s*\/?\s*ha|vines?\s*\/?\s*ha|vines?\s+per\s+hectare)\b/i;
 
 export function highRiskTechnicalReasons(claim:string):HighRiskTechnicalReason[]{
