@@ -90,7 +90,8 @@ export async function processVertexBatchPollJob(env:Env,owner:string,sessionId:s
   if(!job||!job.google_batch_name?.startsWith(JOB_PREFIX))return false;
   if(job.status==='complete'||job.status==='failed')return true;
   if(job.status==='running'){
-    const age=Date.now()-Date.parse(job.updated_at||now());if(age<STALE_RUNNING_MS)return true;
+    const age=Date.now()-Date.parse(job.updated_at||now());
+    if(age<STALE_RUNNING_MS){await env.RESEARCH_QUEUE.send({kind:'recognition_batch_poll',owner,sessionId,jobId,pollCount:pollCount+1},{delaySeconds:Math.min(60,15*(pollCount+1))});return true}
     await env.DB.prepare("UPDATE batch_recognition_jobs SET status='queued',updated_at=? WHERE id=? AND owner_id=? AND status='running'").bind(now(),jobId,owner).run();job={...job,status:'queued'};
   }
   const claimed=await env.DB.prepare("UPDATE batch_recognition_jobs SET status='running',error=NULL,updated_at=? WHERE id=? AND owner_id=? AND status='queued'").bind(now(),jobId,owner).run();
