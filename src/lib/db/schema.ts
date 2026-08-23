@@ -77,7 +77,7 @@ export const deepSearchQualitySchema=z.object({
 const researchClaimSourceSchema=z.object({title:z.string().trim().max(300),url:z.string().url()});
 const researchClaimProvenanceSchema=z.object({
   claim:z.string().trim().min(1).max(1500),
-  supportStatus:z.enum(['supported','partial','unsupported','uncertainty']),
+  supportStatus:z.enum(['supported','partial','unsupported','uncertainty','conflicting']),
   sourceTier:researchSourceTierSchema,
   sources:z.array(researchClaimSourceSchema).max(5).default([])
 });
@@ -87,6 +87,7 @@ const researchFieldProvenanceSchema=z.object({
   partialCount:z.number().int().min(0).max(60),
   unsupportedCount:z.number().int().min(0).max(60),
   uncertaintyCount:z.number().int().min(0).max(60),
+  conflictingCount:z.number().int().min(0).max(60).default(0),
   directSupportRatio:z.number().min(0).max(1),
   claims:z.array(researchClaimProvenanceSchema).max(60).default([])
 });
