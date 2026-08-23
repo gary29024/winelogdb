@@ -11,6 +11,8 @@ export type GroundingMetadata={
   groundingSupports?:Array<{segment?:{startIndex?:number;endIndex?:number;text?:string};groundingChunkIndices?:number[]}>;
 };
 
+export type VertexFlexUsage={trafficType:string|null;flexConfirmed:boolean;promptTokens:number|null;outputTokens:number|null;totalTokens:number|null};
+
 type GatewayRuntimeEnv=GeminiTransportBindings&{DB:D1Database};
 type GatewayRuntime={kind:'ready';env:GatewayRuntimeEnv}|{kind:'incomplete';missing:string[]};
 type StoredVertexBatch={id:string;model:string;display_name:string;requests_json:string;result_json:string|null;state:string;error:string|null;updated_at:string};
@@ -29,6 +31,7 @@ const credentialKey=(apiKey:unknown)=>String(apiKey??'');
 const text=(value:unknown)=>typeof value==='string'?value.trim():'';
 const now=()=>new Date().toISOString();
 const parseJson=<T>(value:unknown,fallback:T):T=>{try{return JSON.parse(String(value)) as T}catch{return fallback}};
+const finiteNumber=(value:unknown)=>typeof value==='number'&&Number.isFinite(value)?value:null;
 
 export function configureGeminiBatchGateway(apiKey:unknown,env:GatewayRuntimeEnv){
   const key=credentialKey(apiKey),configured=gatewayKeys.filter(name=>Boolean(text(env[name])));
@@ -85,6 +88,17 @@ export function responsesByKey(responses:GeminiInlineResponse[]){
   return new Map(responses.map(response=>[response.metadata?.key,response] as const).filter((entry):entry is [string,GeminiInlineResponse]=>Boolean(entry[0])));
 }
 
+export function vertexFlexUsage(response:GeminiInlineResponse['response']):VertexFlexUsage{
+  const usage=response?.usageMetadata??{},trafficType=typeof usage.trafficType==='string'?usage.trafficType:null;
+  return {
+    trafficType,
+    flexConfirmed:trafficType==='ON_DEMAND_FLEX',
+    promptTokens:finiteNumber(usage.promptTokenCount),
+    outputTokens:finiteNumber(usage.candidatesTokenCount),
+    totalTokens:finiteNumber(usage.totalTokenCount)
+  };
+}
+
 export function normalizeVertexGenerateContentRequest(request:Record<string,unknown>){
   const normalized=parseJson<Record<string,unknown>>(JSON.stringify(request),{}),tools=normalized.tools;
   if(Array.isArray(tools))normalized.tools=tools.map(tool=>{
@@ -121,9 +135,14 @@ async function executeVertexEntry(env:GatewayRuntimeEnv,model:string,displayName
   for(let attempt=1;attempt<=2;attempt++){
     const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),REQUEST_TIMEOUT_MS);
     try{
-      const {response}=await postGeminiGenerateContent(env,model,body,controller.signal,{...featureMetadata(displayName,entry.key),attempt,tier:'flex'},{serviceTier:'flex',serverTimeoutSeconds:600});
+      const metadata=featureMetadata(displayName,entry.key);
+      const {response}=await postGeminiGenerateContent(env,model,body,controller.signal,{...metadata,attempt,tier:'flex'},{serviceTier:'flex',serverTimeoutSeconds:600});
       clearTimeout(timer);
-      if(response.ok)return {metadata:{key:entry.key},response:await response.json() as GeminiInlineResponse['response']};
+      if(response.ok){
+        const payload=await response.json() as GeminiInlineResponse['response'],usage=vertexFlexUsage(payload);
+        console.log(JSON.stringify({event:'vertex-flex-usage',model,...metadata,attempt,...usage}));
+        return {metadata:{key:entry.key},response:payload};
+      }
       lastStatus=response.status;lastError=(await response.text().catch(()=>'' )).replace(/\s+/g,' ').trim().slice(0,700)||`HTTP ${response.status}`;
       if(attempt===1&&(response.status===429||response.status>=500)){await new Promise(resolve=>setTimeout(resolve,900));continue}
       return {metadata:{key:entry.key},error:{message:lastError,status:lastStatus}};
