@@ -1,5 +1,5 @@
 import { describe,expect,it } from 'vitest';
-import { bypassPrimaryGeminiBatchOnce,clearPrimaryGeminiBatchBypass,createGeminiBatch,extractBatchResponses,inlineResponseText,isEmulatedGeminiBatchName,isTerminalBatchState,normalizeBatchState,normalizeVertexGenerateContentRequest,responsesByKey } from '../../src/lib/research/geminiBatch';
+import { bypassPrimaryGeminiBatchOnce,clearPrimaryGeminiBatchBypass,createGeminiBatch,extractBatchResponses,inlineResponseText,isEmulatedGeminiBatchName,isTerminalBatchState,normalizeBatchState,normalizeVertexGenerateContentRequest,responsesByKey,vertexFlexUsage } from '../../src/lib/research/geminiBatch';
 
 describe('Gemini Batch helpers',()=>{
   it('normalizes Gemini batch state names',()=>{
@@ -23,6 +23,15 @@ describe('Gemini Batch helpers',()=>{
   it('also accepts operation response inline results',()=>{
     const payload={response:{dest:{inlinedResponses:[{metadata:{key:'wine-research'},response:{candidates:[{content:{parts:[{text:'{}'}]}}]}}]}}};
     expect(extractBatchResponses(payload)[0]?.metadata?.key).toBe('wine-research');
+  });
+
+  it('summarizes Flex traffic classification without retaining response payload content',()=>{
+    expect(vertexFlexUsage({usageMetadata:{trafficType:'ON_DEMAND_FLEX',promptTokenCount:1200,candidatesTokenCount:340,totalTokenCount:1540}})).toEqual({
+      trafficType:'ON_DEMAND_FLEX',flexConfirmed:true,promptTokens:1200,outputTokens:340,totalTokens:1540
+    });
+    expect(vertexFlexUsage({usageMetadata:{trafficType:'ON_DEMAND',promptTokenCount:'1200'}})).toEqual({
+      trafficType:'ON_DEMAND',flexConfirmed:false,promptTokens:null,outputTokens:null,totalTokens:null
+    });
   });
 
   it('normalizes Developer API Google Search tool names for Vertex generateContent',()=>{
