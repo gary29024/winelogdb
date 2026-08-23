@@ -158,7 +158,7 @@ async function executeStoredVertexBatch(env:GatewayRuntimeEnv,name:string,row:St
     const entries=parseJson<GeminiBatchRequest[]>(row.requests_json,[]);
     if(!entries.length)throw new Error('Queued Vertex batch has no requests');
     const responses=await mapLimit(entries,3,(entry)=>executeVertexEntry(env,row.model,row.display_name,entry));
-    const result={state:'JOB_STATE_SUCCEEDED',dest:{inlinedResponses:responses}},completedAt:now();
+    const result={state:'JOB_STATE_SUCCEEDED',dest:{inlinedResponses:responses},completedAt:now()};
     await db.prepare("UPDATE vertex_batch_emulation_jobs SET state='JOB_STATE_SUCCEEDED',requests_json='[]',result_json=?,error=NULL,updated_at=? WHERE id=? AND state='JOB_STATE_RUNNING'").bind(JSON.stringify(result),now(),id).run();
   }catch(e){
     const error=(e as Error).message||'Queued Vertex batch failed',result={state:'JOB_STATE_FAILED',error:{message:error}};
