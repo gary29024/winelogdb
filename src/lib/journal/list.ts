@@ -24,6 +24,11 @@ type JournalRow={
 
 const parseJson=<T>(value:unknown,fallback:T):T=>{try{return JSON.parse(String(value)) as T}catch{return fallback}};
 
+export function sliceJournalPage<T>(rows:T[],limit:number,offset:number){
+  const items=rows.slice(0,limit);
+  return {items,nextOffset:rows.length>limit?offset+limit:null};
+}
+
 export async function listJournalPage(db:D1Database,owner:string,q:JournalListQuery){
   const args:unknown[]=[owner];let where='w.owner_id=?';
   const filters:[string,string][]=[['vintage','w.vintage'],['country','w.country'],['region','w.region'],['style','w.wine_style'],['tastingDate','w.tasting_date']];
@@ -49,7 +54,7 @@ export async function listJournalPage(db:D1Database,owner:string,q:JournalListQu
     producer:'w.producer COLLATE NOCASE ASC, w.wine_name COLLATE NOCASE ASC, w.vintage DESC, w.id ASC',
     vintage:'w.vintage DESC, w.producer COLLATE NOCASE ASC, w.wine_name COLLATE NOCASE ASC, w.id ASC'
   };
-  const limit=Math.min(Math.max(Number(q.limit)||36,1),72),offset=Math.max(Number(q.offset)||0,0);args.push(limit,offset);
+  const limit=Math.min(Math.max(Number(q.limit)||36,1),72),offset=Math.max(Number(q.offset)||0,0),queryLimit=limit+1;args.push(queryLimit,offset);
   const rows=await db.prepare(`SELECT w.id,w.producer,w.wine_name,w.vintage,w.country,w.region,w.appellation,w.grapes_json,w.wine_style,w.rating,w.venue,w.favorite,
     coalesce(w.tasting_date,w.created_at) AS journal_date,
     coalesce((SELECT wi.captured_at FROM wine_images wi
@@ -59,7 +64,8 @@ export async function listJournalPage(db:D1Database,owner:string,q:JournalListQu
     (SELECT t.name FROM wine_experiences we LEFT JOIN tastings t ON t.id=we.tasting_id WHERE we.wine_id=w.id AND we.owner_id=w.owner_id ORDER BY we.created_at DESC LIMIT 1) AS tasting_name,
     (SELECT wi.id FROM wine_images wi WHERE wi.owner_id=w.owner_id AND wi.wine_id=w.id ORDER BY wi.rowid ASC LIMIT 1) AS image_id
     FROM wines w WHERE ${where} ORDER BY ${orders[q.sort??'']||orders.newest} LIMIT ? OFFSET ?`).bind(...args).all<JournalRow>();
-  const items=rows.results.map(row=>({
+  const page=sliceJournalPage(rows.results,limit,offset);
+  const items=page.items.map(row=>({
     id:row.id,
     producer:row.producer,
     wineName:row.wine_name,
@@ -77,5 +83,5 @@ export async function listJournalPage(db:D1Database,owner:string,q:JournalListQu
     imageIds:row.image_id?[row.image_id]:[],
     createdAt:row.created_at
   }));
-  return {items,nextOffset:rows.results.length===limit?offset+limit:null};
+  return {items,nextOffset:page.nextOffset};
 }
