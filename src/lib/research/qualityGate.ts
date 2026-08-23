@@ -24,7 +24,7 @@ function sourceTier(source:ResearchSourceLike):ResearchSourceTier{
   const h=host(source.url);if(!h)return 'none';
   if(h.endsWith('.gov')||h.endsWith('.gov.uk')||h.endsWith('.gouv.fr')||h.endsWith('.edu')||AUTHORITATIVE_HOSTS.some(item=>matchesHost(h,item)))return 'authoritative';
   if(SPECIALIST_HOSTS.some(item=>matchesHost(h,item)))return 'specialist';
-  return /^https:/.test(source.url)?'grounded':'none';
+  return /^https:/i.test(source.url)?'grounded':'none';
 }
 export function bestResearchSourceTier(sources:ResearchSourceLike[]):ResearchSourceTier{
   let best:ResearchSourceTier='none';for(const source of sources){const tier=sourceTier(source);if(TIER_RANK[tier]>TIER_RANK[best])best=tier}return best;
@@ -35,7 +35,7 @@ export function explicitResearchStatus(value:string):ResearchFieldStatus|null{
   const text=firstText(value);if(!text)return null;
   if(/\bnot applicable\b|\bdoes not apply\b/.test(text))return 'not_applicable';
   if(/\bconflicting\b|\bsources? (?:disagree|conflict)\b|\bcannot reconcile\b|\binconsistent sources?\b/.test(text))return 'conflicting';
-  if(/\bcould not (?:be )?verified\b|\bunable to verify\b|\bcannot be confirmed\b|\bnot publicly (?:available|documented)\b|\bno reliable (?:public )?(?:source|evidence|information)\b|\bnot found in reliable\b|\bunverified\b/.test(text))return 'not_found';
+  if(/\bcould not (?:be )?verified\b|\bcannot be verified\b|\bunable to verify\b|\bcannot be confirmed\b|\bnot publicly (?:available|documented)\b|\bno reliable (?:public )?(?:source|evidence|information)\b|\bnot found in reliable\b|\bunverified\b/.test(text))return 'not_found';
   return null;
 }
 
