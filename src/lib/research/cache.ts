@@ -1,5 +1,6 @@
 import { deepSearchProvenanceSchema,type DeepSearchProvenance,type DeepSearchResult } from '../db/schema';
 import { assessResearchScope,buildDeepResearchQuality } from './qualityGate';
+import { highRiskTechnicalScopePasses } from './technicalClaimGate';
 
 export const researchScopes=['producer','terroir','vintage_context','wine_vintage'] as const;
 export type ResearchScope=typeof researchScopes[number];
@@ -37,8 +38,8 @@ export function fieldsForScope(scope:ResearchScope){
   return ['summary','winemakingTechniques','drinkingWindow'] as const;
 }
 export function scopeIsComplete(scope:ResearchScope,payload:Record<string,string>){return fieldsForScope(scope).every(field=>Boolean(payload[field]?.trim()));}
-export function scopePassesQuality(scope:ResearchScope,payload:Record<string,string>,target:ResearchTarget,sources:ResearchSource[]){
-  return scopeIsComplete(scope,payload)&&assessResearchScope(scope,payload,target.subject,sources).pass;
+export function scopePassesQuality(scope:ResearchScope,payload:Record<string,string>,target:ResearchTarget,sources:ResearchSource[],provenance?:DeepSearchProvenance){
+  return scopeIsComplete(scope,payload)&&assessResearchScope(scope,payload,target.subject,sources).pass&&highRiskTechnicalScopePasses(scope,payload,provenance);
 }
 function provenanceForScope(provenance:DeepSearchProvenance|undefined,scope:ResearchScope){
   if(!provenance)return undefined;const fields:DeepSearchProvenance['fields']={};
@@ -50,8 +51,8 @@ export async function loadResearchCache(db:D1Database,owner:string,targets:Resea
   const found=await Promise.all(targets.map(async target=>{
     const row=await db.prepare('SELECT scope,cache_key,subject_json,result_json,sources_json,provenance_json,model,researched_at FROM research_cache WHERE owner_id=? AND scope=? AND cache_key=?').bind(owner,target.scope,target.cacheKey).first<CacheRow>();
     if(!row)return null;
-    const payload=parseJson<Record<string,string>>(row.result_json,{}),sources=parseJson<ResearchSource[]>(row.sources_json,[]);if(!scopePassesQuality(target.scope,payload,target,sources))return null;
-    return {scope:target.scope,entry:{target,payload,sources,provenance:parseProvenance(row.provenance_json),model:row.model,researchedAt:row.researched_at} as CachedResearch};
+    const payload=parseJson<Record<string,string>>(row.result_json,{}),sources=parseJson<ResearchSource[]>(row.sources_json,[]),provenance=parseProvenance(row.provenance_json);if(!scopePassesQuality(target.scope,payload,target,sources,provenance))return null;
+    return {scope:target.scope,entry:{target,payload,sources,provenance,model:row.model,researchedAt:row.researched_at} as CachedResearch};
   }));
   const cache=new Map<ResearchScope,CachedResearch>();for(const item of found)if(item)cache.set(item.scope,item.entry);return cache;
 }
@@ -66,7 +67,7 @@ export const upsertResearchCache=(db:D1Database,owner:string,entry:CachedResearc
 
 export function splitDeepSearchResult(result:DeepSearchResult,targets:ResearchTarget[]){
   const byScope:Record<ResearchScope,Record<string,string>>={producer:{producerDetails:result.producerDetails,producerWinemakingPractices:result.producerWinemakingPractices},terroir:{terroir:result.terroir},vintage_context:{vintageQuality:result.vintageQuality},wine_vintage:{summary:result.summary,winemakingTechniques:result.winemakingTechniques,drinkingWindow:result.drinkingWindow}};
-  return targets.map(target=>({target,payload:byScope[target.scope],sources:result.sources,provenance:provenanceForScope(result.provenance,target.scope),model:result.model,researchedAt:result.researchedAt} satisfies CachedResearch)).filter(entry=>scopePassesQuality(entry.target.scope,entry.payload,entry.target,entry.sources));
+  return targets.map(target=>{const provenance=provenanceForScope(result.provenance,target.scope);return {target,payload:byScope[target.scope],sources:result.sources,provenance,model:result.model,researchedAt:result.researchedAt} satisfies CachedResearch}).filter(entry=>scopePassesQuality(entry.target.scope,entry.payload,entry.target,entry.sources,entry.provenance));
 }
 
 export function assembleDeepSearch(cache:Map<ResearchScope,CachedResearch>,targets:ResearchTarget[]):DeepSearchResult{
