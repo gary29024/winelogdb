@@ -1,17 +1,44 @@
+import { postGeminiGenerateContent,type GeminiTransportBindings } from '../../../worker/geminiTransport';
+
 export type GeminiBatchRequest={key:string;request:Record<string,unknown>};
 export type GeminiInlineResponse={
   metadata?:{key?:string};
   response?:{candidates?:Array<{content?:{parts?:Array<{text?:string}>};groundingMetadata?:GroundingMetadata;finishReason?:string}>;usageMetadata?:Record<string,unknown>};
-  error?:{message?:string};
+  error?:{message?:string;status?:number};
 };
 export type GroundingMetadata={
   groundingChunks?:Array<{web?:{title?:string;uri?:string}}>;
   groundingSupports?:Array<{segment?:{startIndex?:number;endIndex?:number;text?:string};groundingChunkIndices?:number[]}>;
 };
 
+type GatewayRuntimeEnv=GeminiTransportBindings&{DB:D1Database};
+type GatewayRuntime={kind:'ready';env:GatewayRuntimeEnv}|{kind:'incomplete';missing:string[]};
+type StoredVertexBatch={id:string;model:string;display_name:string;requests_json:string;result_json:string|null;state:string;error:string|null;updated_at:string};
+type FetchOptions={execute?:boolean};
+
 const BATCH_TERMINAL_STATES=new Set(['JOB_STATE_SUCCEEDED','JOB_STATE_FAILED','JOB_STATE_CANCELLED','JOB_STATE_EXPIRED']);
 const PRIMARY_MODEL='gemini-3.7-flash';
+const EMULATED_PREFIX='vertex-batches/';
+const EMULATED_TTL_MS=48*60*60*1000;
+const RUNNING_STALE_MS=8*60*1000;
+const REQUEST_TIMEOUT_MS=360_000;
 const primaryBypassRequests=new Set<string>();
+const gatewayRuntimeByApiKey=new Map<string,GatewayRuntime>();
+const gatewayKeys=['CF_AI_GATEWAY_TOKEN','AI_GATEWAY_ACCOUNT_ID','AI_GATEWAY_ID','VERTEX_PROJECT_ID','VERTEX_REGION'] as const;
+const credentialKey=(apiKey:unknown)=>String(apiKey??'');
+const text=(value:unknown)=>typeof value==='string'?value.trim():'';
+const now=()=>new Date().toISOString();
+const parseJson=<T>(value:unknown,fallback:T):T=>{try{return JSON.parse(String(value)) as T}catch{return fallback}};
+
+export function configureGeminiBatchGateway(apiKey:unknown,env:GatewayRuntimeEnv){
+  const key=credentialKey(apiKey),configured=gatewayKeys.filter(name=>Boolean(text(env[name])));
+  if(configured.length===gatewayKeys.length){gatewayRuntimeByApiKey.set(key,{kind:'ready',env});return 'ready' as const}
+  if(configured.length){gatewayRuntimeByApiKey.set(key,{kind:'incomplete',missing:gatewayKeys.filter(name=>!text(env[name]))});return 'incomplete' as const}
+  gatewayRuntimeByApiKey.delete(key);return 'none' as const;
+}
+
+export function clearGeminiBatchGateway(apiKey:unknown){gatewayRuntimeByApiKey.delete(credentialKey(apiKey))}
+export function isEmulatedGeminiBatchName(name:string){return name.startsWith(EMULATED_PREFIX)&&/^[A-Za-z0-9-]+$/.test(name.slice(EMULATED_PREFIX.length))}
 
 export function bypassPrimaryGeminiBatchOnce(requestId:string){
   if(requestId)primaryBypassRequests.add(requestId);
@@ -58,9 +85,100 @@ export function responsesByKey(responses:GeminiInlineResponse[]){
   return new Map(responses.map(response=>[response.metadata?.key,response] as const).filter((entry):entry is [string,GeminiInlineResponse]=>Boolean(entry[0])));
 }
 
+export function normalizeVertexGenerateContentRequest(request:Record<string,unknown>){
+  const normalized=parseJson<Record<string,unknown>>(JSON.stringify(request),{}),tools=normalized.tools;
+  if(Array.isArray(tools))normalized.tools=tools.map(tool=>{
+    if(!tool||typeof tool!=='object')return tool;
+    const record={...(tool as Record<string,unknown>)};
+    if('google_search' in record&&!('googleSearch' in record)){record.googleSearch=record.google_search;delete record.google_search}
+    if('google_search_retrieval' in record&&!('googleSearchRetrieval' in record)){record.googleSearchRetrieval=record.google_search_retrieval;delete record.google_search_retrieval}
+    return record;
+  });
+  return normalized;
+}
+
+function gatewayRuntime(apiKey:unknown){
+  const runtime=gatewayRuntimeByApiKey.get(credentialKey(apiKey));
+  if(runtime?.kind==='incomplete')throw new Error(`AI Gateway configuration is incomplete: missing ${runtime.missing.join(', ')}`);
+  return runtime?.kind==='ready'?runtime.env:null;
+}
+
+function featureMetadata(displayName:string,key:string){
+  if(displayName.startsWith('winelog-producer-'))return {feature:'research',mode:'producer',batch_key:key};
+  if(displayName.startsWith('winelog-wine-'))return {feature:'research',mode:'wine',batch_key:key};
+  return {feature:'batch',mode:'queued',batch_key:key};
+}
+
+async function mapLimit<T,R>(items:T[],limit:number,fn:(item:T,index:number)=>Promise<R>){
+  const output=new Array<R>(items.length);let cursor=0;
+  const workers=Array.from({length:Math.min(Math.max(1,limit),items.length)},async()=>{while(true){const index=cursor++;if(index>=items.length)return;output[index]=await fn(items[index],index)}});
+  await Promise.all(workers);return output;
+}
+
+async function executeVertexEntry(env:GatewayRuntimeEnv,model:string,displayName:string,entry:GeminiBatchRequest):Promise<GeminiInlineResponse>{
+  const body=JSON.stringify(normalizeVertexGenerateContentRequest(entry.request));
+  let lastError='Vertex request failed',lastStatus=0;
+  for(let attempt=1;attempt<=2;attempt++){
+    const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),REQUEST_TIMEOUT_MS);
+    try{
+      const {response}=await postGeminiGenerateContent(env,model,body,controller.signal,{...featureMetadata(displayName,entry.key),attempt});
+      clearTimeout(timer);
+      if(response.ok)return {metadata:{key:entry.key},response:await response.json() as GeminiInlineResponse['response']};
+      lastStatus=response.status;lastError=(await response.text().catch(()=>'' )).replace(/\s+/g,' ').trim().slice(0,700)||`HTTP ${response.status}`;
+      if(attempt===1&&(response.status===429||response.status>=500)){await new Promise(resolve=>setTimeout(resolve,900));continue}
+      return {metadata:{key:entry.key},error:{message:lastError,status:lastStatus}};
+    }catch(e){
+      clearTimeout(timer);lastError=controller.signal.aborted?`Vertex request timed out after ${REQUEST_TIMEOUT_MS/60000} minutes`:(e as Error).message||'Vertex request failed';
+      if(attempt===1){await new Promise(resolve=>setTimeout(resolve,900));continue}
+      return {metadata:{key:entry.key},error:{message:lastError,status:lastStatus||0}};
+    }
+  }
+  return {metadata:{key:entry.key},error:{message:lastError,status:lastStatus}};
+}
+
+async function storedVertexBatch(db:D1Database,name:string){
+  const id=name.slice(EMULATED_PREFIX.length);
+  return db.prepare('SELECT id,model,display_name,requests_json,result_json,state,error,updated_at FROM vertex_batch_emulation_jobs WHERE id=?').bind(id).first<StoredVertexBatch>();
+}
+
+function storedPayload(row:StoredVertexBatch){
+  const payload=parseJson<Record<string,unknown>>(row.result_json,{state:row.state,error:row.error?{message:row.error}:undefined});
+  if(!payload.state)payload.state=row.state;return payload;
+}
+
+async function executeStoredVertexBatch(env:GatewayRuntimeEnv,name:string,row:StoredVertexBatch){
+  const db=env.DB,id=row.id,stamp=now();
+  if(row.state==='JOB_STATE_RUNNING'&&Date.now()-Date.parse(row.updated_at||stamp)>RUNNING_STALE_MS){
+    await db.prepare("UPDATE vertex_batch_emulation_jobs SET state='JOB_STATE_PENDING',updated_at=? WHERE id=? AND state='JOB_STATE_RUNNING'").bind(stamp,id).run();row.state='JOB_STATE_PENDING';
+  }
+  if(row.state!=='JOB_STATE_PENDING')return row;
+  const claimed=await db.prepare("UPDATE vertex_batch_emulation_jobs SET state='JOB_STATE_RUNNING',updated_at=? WHERE id=? AND state='JOB_STATE_PENDING'").bind(stamp,id).run();
+  if(Number(claimed.meta.changes||0)===0)return (await storedVertexBatch(db,name))??row;
+  try{
+    const entries=parseJson<GeminiBatchRequest[]>(row.requests_json,[]);
+    if(!entries.length)throw new Error('Queued Vertex batch has no requests');
+    const responses=await mapLimit(entries,3,(entry)=>executeVertexEntry(env,row.model,row.display_name,entry));
+    const result={state:'JOB_STATE_SUCCEEDED',dest:{inlinedResponses:responses}},completedAt:now();
+    await db.prepare("UPDATE vertex_batch_emulation_jobs SET state='JOB_STATE_SUCCEEDED',requests_json='[]',result_json=?,error=NULL,updated_at=? WHERE id=? AND state='JOB_STATE_RUNNING'").bind(JSON.stringify(result),now(),id).run();
+  }catch(e){
+    const error=(e as Error).message||'Queued Vertex batch failed',result={state:'JOB_STATE_FAILED',error:{message:error}};
+    await db.prepare("UPDATE vertex_batch_emulation_jobs SET state='JOB_STATE_FAILED',requests_json='[]',result_json=?,error=?,updated_at=? WHERE id=? AND state='JOB_STATE_RUNNING'").bind(JSON.stringify(result),error,now(),id).run();
+  }
+  return (await storedVertexBatch(db,name))??row;
+}
+
 export async function createGeminiBatch(apiKey:string,model:string,displayName:string,entries:GeminiBatchRequest[]){
   if(!entries.length)throw new Error('Gemini Batch requires at least one request');
   if(consumePrimaryBypass(model,displayName))throw new Error('Gemini 3.7 Batch bypassed because the primary research model is temporarily in cooldown');
+  const runtime=gatewayRuntime(apiKey);
+  if(runtime){
+    const id=crypto.randomUUID(),stamp=now(),expiresAt=new Date(Date.now()+EMULATED_TTL_MS).toISOString();
+    await runtime.DB.prepare('DELETE FROM vertex_batch_emulation_jobs WHERE expires_at<?').bind(stamp).run().catch(()=>undefined);
+    await runtime.DB.prepare(`INSERT INTO vertex_batch_emulation_jobs(id,model,display_name,requests_json,result_json,state,error,created_at,updated_at,expires_at)
+      VALUES(?,?,?,?,NULL,'JOB_STATE_PENDING',NULL,?,?,?)`).bind(id,model,displayName,JSON.stringify(entries),stamp,stamp,expiresAt).run();
+    return `${EMULATED_PREFIX}${id}`;
+  }
+  if(!text(apiKey))throw new Error('No Gemini batch transport is configured');
   const requests=entries.map(entry=>({request:entry.request,metadata:{key:entry.key}}));
   const body=JSON.stringify({batch:{display_name:displayName,input_config:{requests:{requests}}}});
   const response=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:batchGenerateContent`,{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':apiKey},body});
@@ -71,9 +189,25 @@ export async function createGeminiBatch(apiKey:string,model:string,displayName:s
   return name;
 }
 
-export async function fetchGeminiBatch(apiKey:string,googleBatchName:string){
+export async function fetchGeminiBatch(apiKey:string,googleBatchName:string,options:FetchOptions={}){
+  if(isEmulatedGeminiBatchName(googleBatchName)){
+    const runtime=gatewayRuntime(apiKey);if(!runtime)return {ok:false as const,status:503,error:'AI Gateway runtime is unavailable for this queued Vertex batch'};
+    let row=await storedVertexBatch(runtime.DB,googleBatchName);if(!row)return {ok:false as const,status:404,error:'Queued Vertex batch not found'};
+    if(options.execute!==false&&!isTerminalBatchState(row.state))row=await executeStoredVertexBatch(runtime,googleBatchName,row);
+    const payload=storedPayload(row);return {ok:true as const,payload,state:normalizeBatchState(payload),responses:extractBatchResponses(payload)};
+  }
   const response=await fetch(`https://generativelanguage.googleapis.com/v1beta/${googleBatchName}`,{headers:{'x-goog-api-key':apiKey}});
   if(!response.ok)return {ok:false as const,status:response.status,error:`Gemini batch status failed (${response.status}): ${(await response.text().catch(()=>'' )).slice(0,500)}`};
   const payload=await response.json() as Record<string,unknown>;
   return {ok:true as const,payload,state:normalizeBatchState(payload),responses:extractBatchResponses(payload)};
+}
+
+export async function cancelEmulatedGeminiBatch(apiKey:string,name:string){
+  if(!isEmulatedGeminiBatchName(name))return {name,ok:false as const,status:400,error:'Not a queued Vertex batch'};
+  const runtime=gatewayRuntime(apiKey);if(!runtime)return {name,ok:false as const,status:503,error:'AI Gateway runtime is unavailable for this queued Vertex batch'};
+  const id=name.slice(EMULATED_PREFIX.length),stamp=now(),result={state:'JOB_STATE_CANCELLED',error:{message:'Cancelled by user'}};
+  const existing=await runtime.DB.prepare('SELECT state FROM vertex_batch_emulation_jobs WHERE id=?').bind(id).first<{state:string}>();
+  if(!existing)return {name,ok:false as const,status:404,error:'Queued Vertex batch not found'};
+  if(!isTerminalBatchState(existing.state))await runtime.DB.prepare("UPDATE vertex_batch_emulation_jobs SET state='JOB_STATE_CANCELLED',requests_json='[]',result_json=?,error=?,updated_at=? WHERE id=? AND state IN ('JOB_STATE_PENDING','JOB_STATE_RUNNING')").bind(JSON.stringify(result),'Cancelled by user',stamp,id).run();
+  return {name,ok:true as const,status:200};
 }
