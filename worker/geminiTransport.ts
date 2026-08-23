@@ -8,7 +8,9 @@ export type GeminiTransportBindings={
 };
 
 export type GeminiTransportProvider='vertex-ai-gateway'|'gemini-developer-api';
+export type GeminiServiceTier='standard'|'flex';
 type MetadataValue=string|number|boolean;
+type RequestOptions={serviceTier?:GeminiServiceTier;serverTimeoutSeconds?:number};
 
 const gatewayKeys=['CF_AI_GATEWAY_TOKEN','AI_GATEWAY_ACCOUNT_ID','AI_GATEWAY_ID','VERTEX_PROJECT_ID','VERTEX_REGION'] as const;
 const text=(value:unknown)=>typeof value==='string'?value.trim():'';
@@ -41,7 +43,8 @@ export async function postGeminiGenerateContent(
   model:string,
   body:string,
   signal:AbortSignal,
-  metadata?:Record<string,MetadataValue>
+  metadata?:Record<string,MetadataValue>,
+  options:RequestOptions={}
 ):Promise<{response:Response;provider:GeminiTransportProvider}>{
   const provider=resolveGeminiTransport(env);
   if(provider==='vertex-ai-gateway'){
@@ -51,6 +54,12 @@ export async function postGeminiGenerateContent(
       'cf-aig-collect-log-payload':'false'
     });
     const tagged=metadataHeader(metadata);if(tagged)headers.set('cf-aig-metadata',tagged);
+    if(options.serviceTier==='flex'){
+      if(text(env.VERTEX_REGION)!=='global')throw new Error('Vertex Flex PayGo requires VERTEX_REGION=global');
+      headers.set('X-Vertex-AI-LLM-Request-Type','shared');
+      headers.set('X-Vertex-AI-LLM-Shared-Request-Type','flex');
+      if(options.serverTimeoutSeconds)headers.set('X-Server-Timeout',String(Math.max(1,Math.floor(options.serverTimeoutSeconds))));
+    }
     const response=await fetch(vertexGenerateContentUrl(env,model),{method:'POST',headers,body,signal});
     return {response,provider};
   }
