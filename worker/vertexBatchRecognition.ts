@@ -1,5 +1,6 @@
 import { parseRecognition } from '../src/features/recognition/schema';
 import { buildRecognitionPrompt,recognitionResponseJsonSchema,RECOGNITION_MODEL } from '../src/lib/recognition/geminiRequest';
+import { preferEscalatedRecognition,recognitionEscalationReasons,RECOGNITION_ESCALATION_MODEL } from '../src/lib/recognition/escalation';
 import type { RecognitionPhotoMetadata } from '../src/lib/uploads/metadataSelection';
 import { shouldRetryRecognitionFailure } from '../src/lib/recognition/retryPolicy';
 import { postGeminiGenerateContent,type GeminiTransportBindings } from './geminiTransport';
@@ -27,6 +28,20 @@ function errorMessage(raw:string,status:number){
     const providerStatus=typeof parsed.error?.status==='string'?parsed.error.status.trim():'';if(message)return `${providerStatus?`${providerStatus}: `:''}${message}`.replace(/\s+/g,' ').slice(0,700);
   }catch{/* plain text */}
   return raw.replace(/\s+/g,' ').trim().slice(0,700)||`HTTP ${status}`;
+}
+
+async function tryEscalatedBatchRecognition(env:Env,sessionId:string,itemId:string,body:string,primary:ReturnType<typeof parseRecognition>,reasons:string[]){
+  const startedAt=Date.now(),controller=new AbortController();let timedOut=false;const timer=setTimeout(()=>{timedOut=true;controller.abort()},HARD_TIMEOUT_MS);
+  console.log(JSON.stringify({event:'vertex-flex-batch-recognition-escalation-start',sessionId,itemId,fromModel:RECOGNITION_MODEL,toModel:RECOGNITION_ESCALATION_MODEL,reasons,primaryConfidence:primary.confidence}));
+  try{
+    const transport=await postGeminiGenerateContent(env,RECOGNITION_ESCALATION_MODEL,body,controller.signal,{feature:'recognition',mode:'batch-escalation',session:sessionId,item:itemId,tier:'flex'},{serviceTier:'flex',serverTimeoutSeconds:600}),response=transport.response,provider=transport.provider;
+    clearTimeout(timer);
+    if(!response.ok){const raw=(await response.text().catch(()=>'' )).slice(0,2000);console.warn(JSON.stringify({event:'vertex-flex-batch-recognition-escalation-skipped',sessionId,itemId,model:RECOGNITION_ESCALATION_MODEL,provider,status:response.status,reasons,error:errorMessage(raw,response.status)}));return {result:primary,used:false,trafficType:null}}
+    const payload=await response.json() as GeminiResponse,candidate=payload.candidates?.[0],text=candidate?.content?.parts?.map(part=>part.text??'').join('')??'';if(!text)throw new Error('Vertex Gemini 3.7 returned an empty recognition');
+    const escalated=parseRecognition(text),result=preferEscalatedRecognition(primary,escalated),used=result===escalated;
+    console.log(JSON.stringify({event:'vertex-flex-batch-recognition-escalation-complete',sessionId,itemId,model:RECOGNITION_ESCALATION_MODEL,provider,reasons,used,trafficType:payload.usageMetadata?.trafficType??null,primaryConfidence:primary.confidence,escalatedConfidence:escalated.confidence,latencyMs:Date.now()-startedAt,finishReason:candidate?.finishReason??null,promptTokens:payload.usageMetadata?.promptTokenCount??null,outputTokens:payload.usageMetadata?.candidatesTokenCount??null,totalTokens:payload.usageMetadata?.totalTokenCount??null}));
+    return {result,used,trafficType:payload.usageMetadata?.trafficType??null};
+  }catch(e){clearTimeout(timer);console.warn(JSON.stringify({event:'vertex-flex-batch-recognition-escalation-skipped',sessionId,itemId,model:RECOGNITION_ESCALATION_MODEL,reasons,timedOut,latencyMs:Date.now()-startedAt,error:(e as Error).message||'Escalation failed'}));return {result:primary,used:false,trafficType:null}}
 }
 
 async function finishSessionIfTerminal(db:D1Database,owner:string,sessionId:string){
@@ -118,12 +133,12 @@ export async function processVertexBatchPollJob(env:Env,owner:string,sessionId:s
       await failJob(env,owner,sessionId,jobId,itemId,message);return true;
     }
     const payload=await response.json() as GeminiResponse,candidate=payload.candidates?.[0],text=candidate?.content?.parts?.map(part=>part.text??'').join('')??'';if(!text)throw new Error('Vertex returned an empty recognition');
-    const base=parseRecognition(text),result={...base,locationName:selected.gpsSource==='exif'&&base.locationName?.trim()?base.locationName.trim():null,tastingDate:selected.capturedAt?.slice(0,10)??null,latitude:selected.latitude,longitude:selected.longitude,metadataSource:selected.gpsSource==='exif'?'exif':selected.timestampSource,requestId:itemId},stamp=now();
+    const primary=parseRecognition(text),escalationReasons=recognitionEscalationReasons(primary),escalation=escalationReasons.length?await tryEscalatedBatchRecognition(env,sessionId,itemId,body,primary,escalationReasons):{result:primary,used:false,trafficType:null},base=escalation.result,result={...base,locationName:selected.gpsSource==='exif'&&base.locationName?.trim()?base.locationName.trim():null,tastingDate:selected.capturedAt?.slice(0,10)??null,latitude:selected.latitude,longitude:selected.longitude,metadataSource:selected.gpsSource==='exif'?'exif':selected.timestampSource,requestId:itemId},stamp=now();
     await env.DB.batch([
       env.DB.prepare("UPDATE batch_recognition_items SET status='ready',recognition_json=?,error=NULL,updated_at=? WHERE id=? AND owner_id=? AND status='submitted'").bind(JSON.stringify(result),stamp,itemId,owner),
       env.DB.prepare("UPDATE batch_recognition_jobs SET status='complete',error=NULL,updated_at=? WHERE id=? AND owner_id=?").bind(stamp,jobId,owner)
     ]);
-    console.log(JSON.stringify({event:'vertex-flex-batch-recognition-complete',sessionId,itemId,model:RECOGNITION_MODEL,trafficType:payload.usageMetadata?.trafficType??null,finishReason:candidate?.finishReason??null,promptTokens:payload.usageMetadata?.promptTokenCount??null,outputTokens:payload.usageMetadata?.candidatesTokenCount??null,totalTokens:payload.usageMetadata?.totalTokenCount??null}));
+    console.log(JSON.stringify({event:'vertex-flex-batch-recognition-complete',sessionId,itemId,model:escalation.used?RECOGNITION_ESCALATION_MODEL:RECOGNITION_MODEL,primaryModel:RECOGNITION_MODEL,escalated:escalation.used,escalationReasons,trafficType:escalation.used?(escalation.trafficType??null):(payload.usageMetadata?.trafficType??null),finishReason:candidate?.finishReason??null,promptTokens:payload.usageMetadata?.promptTokenCount??null,outputTokens:payload.usageMetadata?.candidatesTokenCount??null,totalTokens:payload.usageMetadata?.totalTokenCount??null}));
     await finishSessionIfTerminal(env.DB,owner,sessionId);return true;
   }catch(e){await failJob(env,owner,sessionId,jobId,itemId,(e as Error).message||'Could not process Vertex Flex batch recognition');return true}
 }
