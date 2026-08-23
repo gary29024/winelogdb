@@ -1,5 +1,5 @@
 import { discardProducerCatalogStage } from '../producers/catalogResearchStage';
-import { fetchGeminiBatch } from './geminiBatch';
+import { cancelEmulatedGeminiBatch,fetchGeminiBatch,isEmulatedGeminiBatchName } from './geminiBatch';
 
 export type ResearchTargetKind='producer'|'wine';
 
@@ -27,6 +27,7 @@ export function nextCancelSweepDelay(pass:number){
 }
 
 export async function cancelGeminiBatch(apiKey:string,name:string){
+  if(isEmulatedGeminiBatchName(name))return cancelEmulatedGeminiBatch(apiKey,name);
   const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),CANCEL_TIMEOUT_MS);
   try{
     const response=await fetch(geminiBatchCancelUrl(name),{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':apiKey},body:'{}',signal:controller.signal});
@@ -53,7 +54,7 @@ async function cancelTrackedBatches(env:Env,owner:string,kind:ResearchTargetKind
   const rows=await trackedBatches(env.DB,owner,kind,targetId,requestId),stamp=now(),harvestJobIds:string[]=[],cancelRows:BatchRow[]=[];
   for(const row of rows){
     if(row.status!=='running'){cancelRows.push(row);continue}
-    const fetched=await fetchGeminiBatch(env.GEMINI_API_KEY,row.google_batch_name).catch(()=>null);
+    const fetched=await fetchGeminiBatch(env.GEMINI_API_KEY,row.google_batch_name,{execute:false}).catch(()=>null);
     if(fetched?.ok&&fetched.state==='JOB_STATE_SUCCEEDED'){harvestJobIds.push(row.id);continue}
     cancelRows.push(row);
   }
