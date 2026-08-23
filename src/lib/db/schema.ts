@@ -60,6 +60,19 @@ export const grapeBlendEntrySchema = z.object({
   grape: z.string().trim().min(1).max(100),
   percentage: percentageSchema
 });
+const researchFieldQualitySchema=z.object({
+  status:z.enum(['verified','not_found','conflicting','not_applicable']),
+  sourceTier:z.enum(['authoritative','specialist','grounded','none']),
+  score:z.number().min(0).max(100),
+  warnings:z.array(z.string().trim().max(200)).max(10).default([])
+});
+export const deepSearchQualitySchema=z.object({
+  status:z.enum(['verified','mixed','limited']),
+  score:z.number().min(0).max(100),
+  sourceTier:z.enum(['authoritative','specialist','grounded','none']),
+  warnings:z.array(z.string().trim().max(200)).max(20).default([]),
+  fields:z.record(z.string(),researchFieldQualitySchema).default({})
+});
 export const deepSearchSchema = z.object({
   summary: z.string().trim().max(6000).default(''),
   vintageQuality: z.string().trim().max(4000).default(''),
@@ -70,7 +83,8 @@ export const deepSearchSchema = z.object({
   drinkingWindow: z.string().trim().max(2000).default(''),
   sources: z.array(z.object({ title: z.string().trim().max(300), url: z.string().url() })).max(20).default([]),
   model: z.string().trim().max(100),
-  researchedAt: z.string().datetime()
+  researchedAt: z.string().datetime(),
+  quality:deepSearchQualitySchema.optional()
 });
 export const wineRecordSchema = z.object({
   id: z.string().uuid(), ownerId: z.string().min(1).max(128), producer: z.string().trim().min(1).max(200),
