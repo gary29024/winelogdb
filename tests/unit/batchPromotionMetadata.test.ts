@@ -1,5 +1,5 @@
 import { describe,expect,it } from 'vitest';
-import { permanentBatchPhotoMetadata } from '../../worker/batchPromotion';
+import { mergeConfirmedWineIdentity,permanentBatchPhotoMetadata } from '../../worker/batchPromotion';
 
 describe('Batch Scan permanent photo metadata',()=>{
   it('preserves and normalizes EXIF capture metadata',()=>{
@@ -29,6 +29,19 @@ describe('Batch Scan permanent photo metadata',()=>{
       longitude:null,
       locationName:null,
       metadataSource:'none'
+    });
+  });
+});
+
+describe('Batch Scan confirmed card identity',()=>{
+  it('uses the final edited wine identity while preserving other recognition fields',()=>{
+    const recognition={producer:'Old Producer',wineName:'Old Cuvee',vintage:2011,country:'United States',confidence:1};
+    expect(mergeConfirmedWineIdentity(recognition,{producer:'Ayoub Wines',wine_name:'Ayoub Estate Pinot Noir',vintage:2011})).toEqual({
+      producer:'Ayoub Wines',
+      wineName:'Ayoub Estate Pinot Noir',
+      vintage:2011,
+      country:'United States',
+      confidence:1
     });
   });
 });
