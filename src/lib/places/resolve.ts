@@ -23,6 +23,7 @@ const byName=(()=>{
   return index;
 })();
 
+
 const TIER_DEPTH:Record<PlaceTier,number>={country:0,area:1,region:2,subregion:3,appellation:4};
 
 export function ancestry(place:PlaceNode):PlaceNode[]{
@@ -33,19 +34,31 @@ export function ancestry(place:PlaceNode):PlaceNode[]{
 
 const isAncestor=(candidate:PlaceNode,place:PlaceNode)=>ancestry(place).some(step=>step.id===candidate.id&&step.id!==place.id);
 
-// "Vosne-Romanée 1er Cru Les Suchots" names the Vosne-Romanée appellation; the
-// climat after the marker is part of the wine, not of the legal origin. Grand
-// cru names that are appellations in their own right - Charmes-Chambertin,
-// Chablis Grand Cru - are nodes in the tree and match exactly before this runs.
-const CRU_MARKER=/\b(?:premier|1er|1ere|1|grand)\s+cru\b/;
-
+/**
+ * A place name, or the longest known place it starts with.
+ *
+ * "Vosne-Romanée 1er Cru Les Suchots", "Vosne-Romanée Les Suchots" and plain
+ * "Vosne Romanee Suchots" all name the Vosne-Romanée appellation - the climat
+ * is part of the wine, not of the legal origin - and recognition writes all
+ * three. Matching on a cru marker only caught the first, so the same wine still
+ * landed under three different appellations.
+ *
+ * Only a place below the region tier may be reached by dropping a suffix. A
+ * broader prefix would swallow the rest of the name: "Bourgogne Hautes Côtes de
+ * Nuits" starts with "Bourgogne", and reading it as Burgundy would lose which
+ * appellation the wine actually came from.
+ */
 export function lookupPlace(value:string|null|undefined):PlaceNode[]{
   if(!value)return [];
-  const exact=byName.get(key(value));
+  const normalized=key(value);
+  const exact=byName.get(normalized);
   if(exact)return exact;
-  const marker=CRU_MARKER.exec(key(value));
-  if(!marker||marker.index===0)return [];
-  return byName.get(key(value).slice(0,marker.index).trim())??[];
+  const tokens=normalized.split(' ');
+  for(let take=tokens.length-1;take>0;take-=1){
+    const specific=(byName.get(tokens.slice(0,take).join(' '))??[]).filter(place=>TIER_DEPTH[place.tier]>TIER_DEPTH.region);
+    if(specific.length)return specific;
+  }
+  return [];
 }
 
 export type PlaceInput={country?:string|null;region?:string|null;appellation?:string|null};

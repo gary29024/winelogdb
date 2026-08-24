@@ -90,12 +90,25 @@ describe('resolving which field a place belongs in',()=>{
     expect(at('France','Gevrey-Chambertin','Charmes-Chambertin')).toEqual(['France','Burgundy','Charmes-Chambertin']);
   });
 
-  it('reads a premier cru as its village appellation, climat and all',()=>{
-    // The AOC is Vosne-Romanee Premier Cru; Les Suchots is a climat and belongs
-    // to the wine name, so every spelling settles on the one appellation.
-    expect(at('France','Burgundy','Vosne-Romanée Premier Cru Les Suchots')).toEqual(['France','Burgundy','Vosne-Romanée']);
-    expect(at('France','Burgundy','Vosne-Romanée 1er Cru')).toEqual(['France','Burgundy','Vosne-Romanée']);
+  it('reads a premier cru as its village appellation however it is written',()=>{
+    // The climat belongs to the wine, not to the legal origin. Recognition
+    // writes all of these, with and without the cru marker, so all of them have
+    // to land on one appellation or the journal splits the same wine again.
+    for(const spelling of ['Vosne-Romanée Premier Cru Les Suchots','Vosne-Romanée 1er Cru Les Suchots',
+      'Vosne-Romanée Les Suchots','Vosne Romanee Suchots','Vosne-Romanée 1er Cru']){
+      expect(at('France','Burgundy',spelling)).toEqual(['France','Burgundy','Vosne-Romanée']);
+    }
     expect(at('France','Burgundy','Gevrey-Chambertin 1er Cru Les Cazetiers')).toEqual(['France','Burgundy','Gevrey-Chambertin']);
+    expect(at('France','Bordeaux','Saint-Émilion Grand Cru Classé')).toEqual(['France','Bordeaux','Saint-Émilion']);
+  });
+
+  it('only reaches a specific place by dropping a suffix',()=>{
+    // "Bourgogne Hautes Côtes de Nuits" starts with "Bourgogne". Reading a
+    // region-level prefix would throw away which appellation the wine came from.
+    expect(at('France','Burgundy','Bourgogne Hautes Côtes de Nuits')).toEqual(['France','Burgundy','Bourgogne Hautes Côtes de Nuits']);
+    expect(at('United States','Napa Valley','Napa Valley Something Else')).toEqual(['United States','Napa Valley','Napa Valley Something Else']);
+    // A climat on its own names no appellation the tree knows.
+    expect(at('France','Burgundy','Les Suchots')).toEqual(['France','Burgundy','Les Suchots']);
   });
 
   it('keeps a cru appellation that is spelled out in full',()=>{
@@ -227,11 +240,26 @@ describe('the generated backfill migration',()=>{
   });
 
   it('maps the bare cru forms the resolver reads as a village appellation',()=>{
-    const bare=mapped.find(row=>row.spelling==='Vosne-Romanée 1er Cru');
-    expect(bare).toMatchObject({region:'Burgundy',appellation:'Vosne-Romanée'});
+    expect(mapped.find(row=>row.spelling==='Vosne-Romanée 1er Cru'))
+      .toMatchObject({region:'Burgundy',appellation:'Vosne-Romanée'});
     // An appellation that is a cru in its own right keeps its own reading.
     expect(mapped.find(row=>row.spelling==='Chablis Grand Cru'))
       .toMatchObject({region:'Burgundy',appellation:'Chablis Grand Cru'});
+  });
+
+  it('carries the punctuation variants SQL cannot fold for itself',()=>{
+    // The resolver normalises before matching; the migration compares literals,
+    // so "Vosne Romanee Suchots" only settles if the de-hyphenated spelling is
+    // in the map for the prefix match to find.
+    expect(mapped.some(row=>row.spelling==='Vosne Romanee')).toBe(true);
+    expect(mapped.some(row=>row.spelling==='Vosne-Romanée')).toBe(true);
+  });
+
+  it('reads the longest known appellation a value starts with',()=>{
+    expect(sql).toContain("substr(trim(COALESCE(wines.appellation,'')),1,length(p.spelling)+1)=p.spelling||' '");
+    expect(sql).toContain('ORDER BY length(p.spelling) DESC LIMIT 1');
+    // Only below-region places, so a region prefix cannot swallow the rest.
+    expect(sql).toContain('WHERE p.depth>2 AND length(p.spelling)<length');
   });
 
   it('cleans up the lookup table it creates',()=>{

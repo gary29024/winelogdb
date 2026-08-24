@@ -25,9 +25,11 @@ const quote=(value:string|null)=>value==null?'NULL':`'${value.replace(/'/g,"''")
 function spellings(place:PlaceNode){
   const forms=new Set<string>();
   for(const value of [place.name,...place.aliases]){
-    forms.add(value);
-    forms.add(value.normalize('NFD').replace(/[\u0300-\u036f]/g,''));
-    forms.add(value.replace(/’/g,"'"));
+    for(const form of [value,value.normalize('NFD').replace(/[\u0300-\u036f]/g,'')]){
+      forms.add(form);
+      forms.add(form.replace(/’/g,"'"));
+      forms.add(form.replace(/-/g,' '));
+    }
   }
   return [...forms].filter(Boolean);
 }
@@ -46,9 +48,11 @@ const header=[
   '-- rate between the model and the tree can be measured later.',
   '--',
   '-- An appellation the tree does not carry is left exactly as recorded rather',
-  '-- than cleared, and a premier cru followed by a named climat ("Vosne-Romanee',
-  '-- 1er Cru Les Suchots") keeps its recorded spelling here - SQL cannot strip at',
-  '-- the marker the way the resolver does, so only the bare cru forms are mapped.',
+  '-- than cleared. A value that starts with a known appellation is read as that',
+  '-- appellation, so "Vosne-Romanee 1er Cru Les Suchots", "Vosne-Romanee Les',
+  '-- Suchots" and "Vosne Romanee Suchots" all settle on Vosne-Romanee, the same',
+  '-- way the runtime resolver reads them. Only a place below the region tier can',
+  '-- be reached this way, so "Bourgogne Hautes Cotes de Nuits" is not swallowed.',
   '',
   'ALTER TABLE wines ADD COLUMN recognized_region TEXT;',
   'ALTER TABLE wines ADD COLUMN recognized_appellation TEXT;',
@@ -103,9 +107,15 @@ const deepest=(column:string)=>`(SELECT p.${column} FROM place_backfill_map p
     WHERE p.spelling IN (trim(COALESCE(wines.region,'')),trim(COALESCE(wines.appellation,'')))
     ORDER BY p.depth DESC LIMIT 1)`;
 
+const prefixMatch=`(SELECT p.appellation FROM place_backfill_map p
+      WHERE p.depth>2 AND length(p.spelling)<length(trim(COALESCE(wines.appellation,'')))
+        AND substr(trim(COALESCE(wines.appellation,'')),1,length(p.spelling)+1)=p.spelling||' '
+      ORDER BY length(p.spelling) DESC LIMIT 1)`;
+
 const appellationExpression=`COALESCE(
     (SELECT p.appellation FROM place_backfill_map p
       WHERE p.spelling=trim(COALESCE(wines.appellation,'')) AND p.depth>2),
+    ${prefixMatch},
     CASE WHEN trim(COALESCE(wines.appellation,''))<>''
       AND NOT EXISTS (SELECT 1 FROM place_backfill_map p WHERE p.spelling=trim(wines.appellation))
       THEN wines.appellation END,
