@@ -17,6 +17,7 @@ export const recognitionResponseSchema={
 } as const;
 
 const nullableString={anyOf:[{type:'string'},{type:'null'}]} as const;
+const recognitionVintageJsonSchema={anyOf:[{type:'integer',minimum:1000,maximum:2200},{type:'null'}]} as const;
 
 export const recognitionResponseJsonSchema={
   type:'object',
@@ -24,7 +25,7 @@ export const recognitionResponseJsonSchema={
   properties:{
     producer:nullableString,
     wineName:nullableString,
-    vintage:{anyOf:[{type:'integer',minimum:1000,maximum:2200},{type:'null'}]},
+    vintage:recognitionVintageJsonSchema,
     country:nullableString,
     region:nullableString,
     appellation:nullableString,
@@ -36,6 +37,44 @@ export const recognitionResponseJsonSchema={
     confidence:{type:'number',minimum:0,maximum:1}
   },
   required:['grapes','grapeBlend','confidence']
+} as const;
+
+export const groupRecognitionResponseJsonSchema={
+  type:'object',
+  additionalProperties:false,
+  properties:{
+    wines:{
+      type:'array',
+      maxItems:12,
+      items:{
+        type:'object',
+        additionalProperties:false,
+        properties:{
+          producer:{type:'string'},
+          wineName:{type:'string'},
+          vintage:recognitionVintageJsonSchema,
+          country:nullableString,
+          region:nullableString,
+          appellation:nullableString,
+          grapes:{type:'array',maxItems:20,items:{type:'string'}},
+          grapeBlend:{type:'array',maxItems:20,items:{type:'object',additionalProperties:false,properties:{grape:{type:'string'},percentage:{anyOf:[{type:'number',minimum:0,maximum:100},{type:'null'}]}},required:['grape']}},
+          style:{anyOf:[{type:'string',enum:['red','white','rose','sparkling','dessert','fortified','orange','other']},{type:'null'}]},
+          alcoholPercentage:{anyOf:[{type:'number',minimum:0,maximum:100},{type:'null'}]},
+          locationName:nullableString,
+          confidence:{type:'number',minimum:0,maximum:1},
+          boundingBox:{
+            type:'object',
+            additionalProperties:false,
+            properties:{xMin:{type:'number',minimum:0,maximum:1000},yMin:{type:'number',minimum:0,maximum:1000},xMax:{type:'number',minimum:0,maximum:1000},yMax:{type:'number',minimum:0,maximum:1000}},
+            required:['xMin','yMin','xMax','yMax']
+          }
+        },
+        required:['producer','wineName','vintage','country','region','appellation','grapes','grapeBlend','style','alcoholPercentage','locationName','confidence','boundingBox']
+      }
+    },
+    unresolvedCount:{type:'integer',minimum:0,maximum:30}
+  },
+  required:['wines','unresolvedCount']
 } as const;
 
 export function buildRecognitionPrompt(metadata:RecognitionPhotoMetadata[]){
