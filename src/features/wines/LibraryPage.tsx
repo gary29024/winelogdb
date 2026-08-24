@@ -1,5 +1,5 @@
 import { useEffect,useMemo,useState } from 'react';
-import { Link,useSearchParams } from 'react-router-dom';
+import { Link,Navigate,useSearchParams } from 'react-router-dom';
 import { batchUpdateJournalExperience,listWines,setWineFavorite,type JournalWine } from './api';
 import { WineImage } from './WineImage';
 import '../../journalMonths.css';
@@ -17,6 +17,17 @@ const monthLabel=(key:string)=>{
   const [year,month]=key.split('-').map(Number);
   return new Date(year,month-1,1).toLocaleDateString('en-US',{month:'short',year:'numeric'});
 };
+/**
+ * The filters you left the journal with, so returning from a wine lands back on
+ * the list you were reading rather than a reset one. Session-scoped on purpose:
+ * a filter from last week reappearing would be a surprise, not a convenience.
+ */
+const JOURNAL_FILTER_KEY='winelog-journal-filters';
+const savedJournalFilters=()=>{
+  if(typeof window==='undefined')return '';
+  try{return window.sessionStorage.getItem(JOURNAL_FILTER_KEY)??''}catch{return ''}
+};
+
 const initialView=():ViewMode=>{
   if(typeof window==='undefined')return 'grid';
   const saved=window.localStorage.getItem('winelog-journal-view');
@@ -40,6 +51,10 @@ function WineCard({wine:w,view,selecting,selected,onToggle,onFavorite,favoriteBu
 export function LibraryPage(){
   const [params,setParams]=useSearchParams();
   const [data,setData]=useState<JournalWine[]>([]),[nextOffset,setNextOffset]=useState<number|null>(null),[error,setError]=useState(''),[loading,setLoading]=useState(true);
+  // A URL that carries its own filters always wins, so a deep link or a link in
+  // from Insights is never overridden by what was stored.
+  const [restoreFilters]=useState(()=>params.toString()?'':savedJournalFilters());
+  const restoring=Boolean(restoreFilters)&&!params.toString();
   const [view,setViewState]=useState<ViewMode>(initialView),[queryDraft,setQueryDraft]=useState(()=>params.get('query')??''),[refreshSeq,setRefreshSeq]=useState(0);
   const [selecting,setSelecting]=useState(false),[selectedIds,setSelectedIds]=useState<Set<string>>(()=>new Set());
   const [favoriteBusy,setFavoriteBusy]=useState<Set<string>>(()=>new Set());
@@ -87,11 +102,17 @@ export function LibraryPage(){
   }
 
   useEffect(()=>{
+    if(restoring)return;
+    try{window.sessionStorage.setItem(JOURNAL_FILTER_KEY,queryKey)}catch{}
+  },[queryKey,restoring]);
+
+  useEffect(()=>{
     const timer=window.setTimeout(()=>{if((params.get('query')??'')!==queryDraft)update('query',queryDraft)},350);
     return()=>window.clearTimeout(timer);
   },[queryDraft]);
 
   useEffect(()=>{
+    if(restoring)return;
     const controller=new AbortController();
     setLoading(true);setError('');setData([]);setNextOffset(null);setSelectedIds(new Set());setSelecting(false);setBatchOpen(false);
     listWines(params,{limit:PAGE_SIZE,offset:currentOffset,signal:controller.signal})
@@ -99,7 +120,7 @@ export function LibraryPage(){
       .catch(e=>{if(e?.name!=='AbortError')setError(e.message)})
       .finally(()=>{if(!controller.signal.aborted)setLoading(false)});
     return()=>controller.abort();
-  },[queryKey,refreshSeq]);
+  },[queryKey,refreshSeq,restoring]);
 
   async function submitBatch(){
     if(!selectedIds.size)return;
@@ -124,10 +145,12 @@ export function LibraryPage(){
   const renderItems=(items:JournalWine[])=><div className={collectionClass}>{items.map(w=><WineCard wine={w} view={view} selecting={selecting} selected={selectedIds.has(w.id)} onToggle={()=>toggleSelection(w.id)} onFavorite={next=>void toggleFavorite(w,next)} favoriteBusy={favoriteBusy.has(w.id)} key={w.id}/>)}</div>;
   const hasPrevious=currentOffset>0,hasNext=nextOffset!=null;
 
+  if(restoring)return <Navigate to={{pathname:'/journal',search:restoreFilters}} replace/>;
+
   return <section className="journal-page">
     <div className="hero journal-hero"><p className="eyebrow">YOUR JOURNAL</p><h1>Wines worth remembering.</h1><p>Search by bottle, place or tasting and keep every drinking experience together.</p></div>
     <div className="journal-scope-tabs" role="tablist" aria-label="Journal scope"><button type="button" role="tab" aria-selected={!favoriteOnly} className={!favoriteOnly?'active':''} onClick={()=>update('favorite','')}>All wines</button><button type="button" role="tab" aria-selected={favoriteOnly} className={favoriteOnly?'active':''} onClick={()=>update('favorite','1')}>♥ Favorites</button></div>
-    <form className="filters journal-filters" onSubmit={e=>e.preventDefault()}><label className="search">Search<input aria-label="Search wines" type="search" value={queryDraft} onChange={e=>setQueryDraft(e.target.value)} placeholder="Search wines, makers, regions…"/></label><div className="filter-pills"><label>Tasting<input value={params.get('tasting')??''} onChange={e=>update('tasting',e.target.value)} placeholder="Tasting / event"/></label><label>Country<input value={params.get('country')??''} onChange={e=>update('country',e.target.value)} placeholder="Country"/></label><label>Style<select value={params.get('style')??''} onChange={e=>update('style',e.target.value)}><option value="">Style</option>{['red','white','rose','sparkling','dessert','fortified','orange'].map(x=><option key={x}>{x}</option>)}</select></label><label>Score<input type="number" min="0" max="100" value={params.get('rating')??''} onChange={e=>update('rating',e.target.value)} placeholder="Score"/></label><label>Sort<select value={sort} onChange={e=>update('sort',e.target.value)}><option value="newest">Newest drinking date</option><option value="oldest">Oldest drinking date</option><option value="rating">Rating</option><option value="producer">Producer</option><option value="vintage">Vintage</option></select></label></div></form>
+    <form className="filters journal-filters" onSubmit={e=>e.preventDefault()}><label className="search">Search<input aria-label="Search wines" type="search" value={queryDraft} onChange={e=>setQueryDraft(e.target.value)} placeholder="Search wines, makers, regions…"/></label><div className="filter-pills"><label className="filter-month">Month<input type="month" aria-label="Drinking month" value={params.get('month')??''} onChange={e=>update('month',e.target.value)}/></label><label>Tasting<input value={params.get('tasting')??''} onChange={e=>update('tasting',e.target.value)} placeholder="Tasting / event"/></label><label>Country<input value={params.get('country')??''} onChange={e=>update('country',e.target.value)} placeholder="Country"/></label><label>Style<select value={params.get('style')??''} onChange={e=>update('style',e.target.value)}><option value="">Style</option>{['red','white','rose','sparkling','dessert','fortified','orange'].map(x=><option key={x}>{x}</option>)}</select></label><label>Score<input type="number" min="0" max="100" value={params.get('rating')??''} onChange={e=>update('rating',e.target.value)} placeholder="Score"/></label><label>Sort<select value={sort} onChange={e=>update('sort',e.target.value)}><option value="newest">Newest drinking date</option><option value="oldest">Oldest drinking date</option><option value="rating">Rating</option><option value="producer">Producer</option><option value="vintage">Vintage</option></select></label></div></form>
     {batchNotice&&<p className="journal-batch-notice" role="status">{batchNotice}</p>}
     {batchError&&!batchOpen&&<p className="journal-page-error" role="alert">{batchError}</p>}
     <div className={`journal-viewbar${selecting?' selecting':''}`}><span>{selecting?`${selectedIds.size} selected`:data.length?`Page ${currentPage} · ${data.length} wine${data.length===1?'':'s'}`:(favoriteOnly?'Favorites':'Journal')}</span>{selecting?<div className="journal-selection-actions"><button type="button" onClick={selectAllOnPage} disabled={!data.length}>Select all on page</button><button type="button" onClick={()=>setSelectedIds(new Set())} disabled={!selectedIds.size}>Clear</button><button type="button" className="primary" onClick={openBatchEditor} disabled={!selectedIds.size}>Edit event / venue</button><button type="button" onClick={stopSelecting}>Done</button></div>:<div className="journal-view-actions"><button type="button" className="journal-select-toggle" onClick={()=>{setSelecting(true);setBatchNotice('')}} disabled={!data.length}>Select</button><div className="journal-view-toggle" role="group" aria-label="Journal layout"><button type="button" className={view==='list'?'active':''} aria-pressed={view==='list'} onClick={()=>setView('list')}>List</button><button type="button" className={view==='grid'?'active':''} aria-pressed={view==='grid'} onClick={()=>setView('grid')}>Grid</button></div></div>}</div>
