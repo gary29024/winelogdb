@@ -1,5 +1,5 @@
 import { describe,expect,it } from 'vitest';
-import { chunkItemsByPreparedBytes,isBatchUploadComplete } from '../../worker/batchRecognition';
+import { canRetrySubmittedBatch,chunkItemsByPreparedBytes,isBatchUploadComplete } from '../../worker/batchRecognition';
 import { buildRecognitionPrompt } from '../../src/lib/recognition/geminiRequest';
 
 describe('Batch Scan payload splitting',()=>{
@@ -15,6 +15,14 @@ describe('Batch Scan payload splitting',()=>{
     expect(isBatchUploadComplete(12,19)).toBe(false);
     expect(isBatchUploadComplete(19,19)).toBe(true);
     expect(isBatchUploadComplete(2,0)).toBe(true);
+  });
+  it('requeues only orphaned submitted items after processing has become terminal',()=>{
+    expect(canRetrySubmittedBatch('ready',2,0)).toBe(true);
+    expect(canRetrySubmittedBatch('partial',1,0)).toBe(true);
+    expect(canRetrySubmittedBatch('failed',3,0)).toBe(true);
+    expect(canRetrySubmittedBatch('running',2,0)).toBe(false);
+    expect(canRetrySubmittedBatch('ready',2,1)).toBe(false);
+    expect(canRetrySubmittedBatch('ready',0,0)).toBe(false);
   });
 });
 
