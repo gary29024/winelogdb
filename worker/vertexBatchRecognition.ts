@@ -17,6 +17,12 @@ const STALE_RUNNING_MS=12*60*1000;
 const now=()=>new Date().toISOString();
 const parseJson=<T>(raw:unknown,fallback:T):T=>{try{return JSON.parse(String(raw)) as T}catch{return fallback}};
 
+export function shouldRequeueVertexJob(status:string,updatedAt:string,at=Date.now()){
+  if(status==='queued')return true;
+  if(status!=='running')return false;
+  const age=at-Date.parse(updatedAt);return !Number.isFinite(age)||age>=STALE_RUNNING_MS;
+}
+
 async function r2Base64(bucket:R2Bucket,key:string){
   const object=await bucket.get(key);if(!object)throw new Error('A staged recognition image is missing');
   const bytes=new Uint8Array(await object.arrayBuffer());let binary='';for(let i=0;i<bytes.length;i+=32768)binary+=String.fromCharCode(...bytes.subarray(i,i+32768));return btoa(binary);
@@ -78,7 +84,14 @@ export async function processVertexBatchSubmitJob(env:Env,owner:string,sessionId
   const toQueue:Array<{id:string}>=[],stamp=now();
   for(const item of items.results){
     const existing=existingByItem.get(item.id);
-    if(existing){if(existing.status==='queued')toQueue.push({id:existing.id});continue}
+    if(existing){
+      if(existing.status==='queued'){toQueue.push({id:existing.id});continue}
+      if(shouldRequeueVertexJob(existing.status,existing.updated_at)){
+        const reset=await env.DB.prepare("UPDATE batch_recognition_jobs SET status='queued',error='Recovered stale running recognition lease',updated_at=? WHERE id=? AND owner_id=? AND status='running' AND updated_at=?").bind(stamp,existing.id,owner,existing.updated_at).run();
+        if(Number(reset.meta.changes||0)){toQueue.push({id:existing.id});console.warn(JSON.stringify({event:'vertex-flex-batch-recognition-stale-requeued',sessionId,itemId:item.id,jobId:existing.id,previousUpdatedAt:existing.updated_at}))}
+      }
+      continue;
+    }
     const id=crypto.randomUUID();
     await env.DB.prepare("INSERT INTO batch_recognition_jobs(id,owner_id,session_id,google_batch_name,item_ids_json,status,error,created_at,updated_at) VALUES(?,?,?,?,?,'queued',NULL,?,?)").bind(id,owner,sessionId,`${JOB_PREFIX}${item.id}`,JSON.stringify([item.id]),stamp,stamp).run();
     toQueue.push({id});
@@ -121,12 +134,14 @@ export async function processVertexBatchPollJob(env:Env,owner:string,sessionId:s
     const body=JSON.stringify({contents:[{role:'user',parts}],generationConfig:{responseMimeType:'application/json',responseJsonSchema:recognitionResponseJsonSchema}}),controller=new AbortController();let timedOut=false;
     const timer=setTimeout(()=>{timedOut=true;controller.abort()},HARD_TIMEOUT_MS);
     let response:Response;
+    console.log(JSON.stringify({event:'vertex-flex-batch-recognition-gateway-start',sessionId,itemId,jobId,model:RECOGNITION_MODEL,route:'cloudflare-ai-gateway'}));
     try{({response}=await postGeminiGenerateContent(env,RECOGNITION_MODEL,body,controller.signal,{feature:'recognition',mode:'batch',session:sessionId,item:itemId,tier:'flex'},{serviceTier:'flex',serverTimeoutSeconds:600}))}catch(e){
       clearTimeout(timer);const message=timedOut?'Batch recognition Flex request timed out':(e as Error).message||'Batch recognition Flex request failed';
       if(pollCount<2&&shouldRetryRecognitionFailure({status:null,timedOut,networkError:!timedOut})){await retryLater(env,owner,sessionId,jobId,pollCount,message);return true}
       await failJob(env,owner,sessionId,jobId,itemId,message);return true;
     }
     clearTimeout(timer);
+    console.log(JSON.stringify({event:'vertex-flex-batch-recognition-gateway-response',sessionId,itemId,jobId,model:RECOGNITION_MODEL,status:response.status,route:'cloudflare-ai-gateway'}));
     if(!response.ok){
       const raw=(await response.text().catch(()=>'' )).slice(0,2000),message=`Vertex Flex batch recognition failed (${response.status}): ${errorMessage(raw,response.status)}`;
       if(pollCount<2&&shouldRetryRecognitionFailure({status:response.status,timedOut:false,networkError:false})){await retryLater(env,owner,sessionId,jobId,pollCount,message);return true}
