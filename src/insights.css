@@ -1,0 +1,67 @@
+.journey-muted.small{font-size:.72rem}
+
+.favorite-columns{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.favorite-column-title{margin:0 0 8px;color:#8b96aa;font-size:.66rem;font-weight:800;letter-spacing:.09em;text-transform:uppercase}
+.favorite-column ol{display:grid;gap:7px;margin:0;padding:0;list-style:none;counter-reset:none}
+.favorite-column a{position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-rows:auto auto;align-items:center;gap:1px 10px;padding:8px 11px;overflow:hidden;border-radius:11px;background:#f7f8fa;text-decoration:none}
+.favorite-rate-bar{position:absolute;inset:0}
+.favorite-rate-bar>span{display:block;height:100%;border-radius:11px;background:linear-gradient(90deg,#f2e3e7,#fbf6f1)}
+.favorite-column strong,.favorite-column small,.favorite-column b{position:relative;z-index:1}
+.favorite-column strong{grid-area:1/1;overflow:hidden;font-size:.8rem;text-overflow:ellipsis;white-space:nowrap}
+.favorite-column small{grid-area:2/1;color:#8b96aa;font-size:.63rem}
+.favorite-column b{grid-area:1/2/3/3;align-self:center;font-family:'Playfair Display',serif;font-size:1.05rem;font-variant-numeric:tabular-nums}
+
+.discovery-dial{display:grid;justify-items:start;gap:2px;padding:14px 16px;border-radius:14px;background:linear-gradient(130deg,#f7f8fa,#fbf8f2)}
+.discovery-dial strong{font-family:'Playfair Display',serif;font-size:2.4rem;line-height:1}
+.discovery-dial small{color:#7f8aa0;font-size:.72rem}
+.discovery-facets{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:12px}
+.discovery-facets article{display:grid;gap:1px;padding:9px 10px;border:1px solid #eaeef4;border-radius:11px}
+.discovery-facets strong{font-family:'Playfair Display',serif;font-size:1.3rem;line-height:1}
+.discovery-facets span{color:#8b96aa;font-size:.63rem}
+
+.cadence-chart{display:flex;align-items:flex-end;gap:5px;padding-top:6px}
+.cadence-bar{display:grid;justify-items:center;gap:5px;flex:1;min-width:0}
+.cadence-track{display:flex;align-items:flex-end;width:100%;height:96px}
+.cadence-track>span{display:block;width:100%;min-height:2px;border-radius:4px 4px 2px 2px;background:linear-gradient(180deg,#2c3e63,#10182d)}
+.cadence-bar small{overflow:hidden;color:#98a2b4;font-size:.55rem;white-space:nowrap}
+
+.age-headline{display:grid;gap:2px;margin:0 0 12px}
+.age-headline strong{font-family:'Playfair Display',serif;font-size:1.85rem;line-height:1}
+.age-headline span{color:#7f8aa0;font-size:.72rem}
+.age-bands{display:flex;align-items:flex-end;gap:6px}
+.age-bands article{display:grid;justify-items:center;gap:4px;flex:1;min-width:0}
+.age-band-bar{display:flex;align-items:flex-end;width:100%;height:84px}
+.age-band-bar>span{display:block;width:100%;min-height:2px;border-radius:4px 4px 2px 2px;background:linear-gradient(180deg,#c3a877,#a98a55)}
+.age-bands small{overflow:hidden;color:#98a2b4;font-size:.55rem;white-space:nowrap}
+.age-bands b{font-size:.7rem;font-variant-numeric:tabular-nums}
+
+.mix-groups{display:grid;gap:18px}
+.mix-bar{display:flex;height:14px;overflow:hidden;border-radius:999px;background:#eef1f5}
+.mix-bar>span{min-width:2px;height:100%;background:#8794ab}
+.mix-bar>span:nth-child(2n){background:#a6b1c4}
+.mix-bar>span:nth-child(3n){background:#c0c8d6}
+.mix-legend{display:flex;flex-wrap:wrap;gap:6px 14px;margin:9px 0 0;padding:0;list-style:none}
+.mix-legend li{display:flex;align-items:center;gap:6px;font-size:.72rem}
+.mix-legend b{color:#7f8aa0;font-variant-numeric:tabular-nums}
+.mix-swatch{width:9px;height:9px;border-radius:3px;background:#8794ab}
+
+.insights-gate-note{margin:14px 2px 0;color:#98a2b4;font-size:.7rem;text-align:center}
+.insights-gate-note:first-letter{text-transform:uppercase}
+
+@media(max-width:760px){
+  .favorite-columns{grid-template-columns:minmax(0,1fr);gap:14px}
+  .favorite-column a{padding:7px 9px}
+  .discovery-dial{padding:12px 13px}
+  .discovery-dial strong{font-size:2rem}
+  .discovery-facets{gap:7px;margin-top:9px}
+  .discovery-facets article{padding:7px 8px}
+  .discovery-facets strong{font-size:1.1rem}
+  .cadence-track{height:78px}
+  .cadence-chart{gap:3px}
+  .cadence-bar small{font-size:.48rem}
+  .age-band-bar{height:70px}
+  .age-bands{gap:4px}
+  .age-bands small{font-size:.48rem}
+  .age-headline strong{font-size:1.55rem}
+  .mix-legend{gap:5px 10px;font-size:.66rem}
+}

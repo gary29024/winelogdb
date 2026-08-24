@@ -2,13 +2,18 @@ import { authHeaders,clearSession } from '../../lib/auth/client';
 import type { JourneySummary,StructureSample } from './model';
 
 export type CountryStat={country:string;wines:number;producers:number;appellations:number;averageRating:number|null};
-export type RegionStat={country:string|null;region:string;wines:number;producers:number;appellations:number;averageRating:number|null};
+export type RegionStat={country:string|null;region:string;wines:number;producers:number;appellations:number;averageRating:number|null;favorites:number};
 export type AppellationStat={country:string|null;region:string|null;appellation:string;wines:number;averageRating:number|null};
-export type StyleStat={style:string;wines:number;ratedWines:number;averageRating:number|null};
-export type ProducerInsight={producer:string;wines:number;ratedWines:number;averageRating:number|null;favorites:number};
+export type StyleStat={style:string;wines:number;ratedWines:number;averageRating:number|null;favorites:number};
+export type ProducerInsight={producer:string;wines:number;ratedWines:number;averageRating:number|null;favorites:number;lastTasted:string|null};
 export type CurrencyInsight={currency:string;wines:number;averagePrice:number|null;averageRating:number|null};
 export type YearInsight={year:string;wines:number;ratedWines:number;averageRating:number|null};
-export type GrapeStat={grape:string;wines:number};
+export type GrapeStat={grape:string;wines:number;favorites:number};
+/** How many of the most recent tastings were a first from that producer, region or country. */
+export type DiscoveryStat={tastings:number;newProducers:number;newRegions:number;newCountries:number};
+export type MonthStat={month:string;wines:number;favorites:number};
+/** One bucket of the "how old was the bottle when it was opened" histogram. */
+export type DrinkingAgeStat={age:number;wines:number};
 export type RecentTasting={
   id:string;
   producer:string;
@@ -33,6 +38,9 @@ export type JourneyData={
   years:YearInsight[];
   structures:StructureSample[];
   grapes:GrapeStat[];
+  discovery:DiscoveryStat;
+  months:MonthStat[];
+  drinkingAges:DrinkingAgeStat[];
   recentTastings:RecentTasting[];
 };
 
