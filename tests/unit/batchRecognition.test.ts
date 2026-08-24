@@ -1,5 +1,6 @@
 import { describe,expect,it } from 'vitest';
 import { canRetrySubmittedBatch,chunkItemsByPreparedBytes,countConfirmedBatchItems,isBatchUploadComplete,unclaimedSubmittedItems } from '../../worker/batchRecognition';
+import { shouldRequeueVertexJob } from '../../worker/vertexBatchRecognition';
 import { buildRecognitionPrompt } from '../../src/lib/recognition/geminiRequest';
 
 describe('Batch Scan payload splitting',()=>{
@@ -16,22 +17,27 @@ describe('Batch Scan payload splitting',()=>{
     expect(isBatchUploadComplete(19,19)).toBe(true);
     expect(isBatchUploadComplete(2,0)).toBe(true);
   });
-  it('allows waiting recognition to be recovered even while the session still says running',()=>{
-    expect(canRetrySubmittedBatch('queued',2)).toBe(true);
-    expect(canRetrySubmittedBatch('running',2)).toBe(true);
+  it('permits recovery for waiting items even while a stale session says running',()=>{
     expect(canRetrySubmittedBatch('ready',2)).toBe(true);
     expect(canRetrySubmittedBatch('partial',1)).toBe(true);
     expect(canRetrySubmittedBatch('failed',3)).toBe(true);
-    expect(canRetrySubmittedBatch('uploading',2)).toBe(false);
-    expect(canRetrySubmittedBatch('complete',2)).toBe(false);
+    expect(canRetrySubmittedBatch('running',2)).toBe(true);
+    expect(canRetrySubmittedBatch('queued',2)).toBe(true);
     expect(canRetrySubmittedBatch('running',0)).toBe(false);
   });
-  it('does not resubmit submitted items already claimed by an active Gemini job',()=>{
-    const items=[{id:'a',status:'submitted'},{id:'b',status:'submitted'},{id:'c',status:'ready'}];
-    expect(unclaimedSubmittedItems(items,new Set(['b'])).map(item=>item.id)).toEqual(['a']);
+  it('does not resubmit waiting items already claimed by an active Gemini job',()=>{
+    const items=[{id:'a',status:'submitted'},{id:'b',status:'submitted'},{id:'c',status:'confirmed'}];
+    expect(unclaimedSubmittedItems(items,new Set(['a'])).map(item=>item.id)).toEqual(['b']);
   });
-  it('derives the confirmed count from item state instead of a stale session counter',()=>{
+  it('derives confirmed counts from item state instead of a stale session counter',()=>{
     expect(countConfirmedBatchItems([{status:'confirmed'},{status:'ready'},{status:'confirmed'},{status:'submitted'}])).toBe(2);
+  });
+  it('requeues queued or expired running Vertex jobs but preserves a live request lease',()=>{
+    const now=Date.parse('2026-08-24T08:00:00.000Z');
+    expect(shouldRequeueVertexJob('queued','2026-08-24T07:59:59.000Z',now)).toBe(true);
+    expect(shouldRequeueVertexJob('running','2026-08-24T07:55:00.000Z',now)).toBe(false);
+    expect(shouldRequeueVertexJob('running','2026-08-24T07:47:00.000Z',now)).toBe(true);
+    expect(shouldRequeueVertexJob('complete','2026-08-24T07:00:00.000Z',now)).toBe(false);
   });
 });
 
