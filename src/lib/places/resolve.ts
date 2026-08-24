@@ -35,6 +35,37 @@ export function ancestry(place:PlaceNode):PlaceNode[]{
 const isAncestor=(candidate:PlaceNode,place:PlaceNode)=>ancestry(place).some(step=>step.id===candidate.id&&step.id!==place.id);
 
 /**
+ * Denomination tokens that trail a place name without being part of it. A
+ * closed list, so stripping them is safe at any tier - unlike dropping an
+ * arbitrary suffix, which is only allowed to reach a specific place.
+ *
+ * Without this the behaviour split on where the tree happened to file a place:
+ * "Barolo DOCG" lost its suffix because Barolo is an appellation, while "Rioja
+ * DOCa" and "Douro DOC" kept theirs because those are regions.
+ */
+const DENOMINATION=/ (?:docg|doca|doc|dop|do|igt|igp|aoc|aop|ava|dac|qba)$/;
+
+/**
+ * Ageing and selection tiers, longest first. These are not places and not crus -
+ * a Barolo Riserva is neither a different appellation nor a grand cru - so they
+ * come off the appellation the same way a denomination does. What they are not
+ * is disposable: canonicalizeWineFields moves the term to the wine name, which
+ * is where a label carries it.
+ *
+ * "Classico" is deliberately absent: Chianti Classico is its own appellation.
+ */
+export const AGEING_TERMS=['gran selezione','gran reserva','garrafeira','riserva','reserva','crianza','superiore'] as const;
+const AGEING=new RegExp(` (?:${AGEING_TERMS.join('|')})$`);
+
+/** The ageing tier a place value names, in the casing the label would use. */
+export function ageingTerm(value:string|null|undefined):string|null{
+  if(!value)return null;
+  const match=AGEING.exec(key(value));
+  if(!match)return null;
+  return match[0].trim().replace(/\b[a-z]/g,letter=>letter.toUpperCase());
+}
+
+/**
  * A place name, or the longest known place it starts with.
  *
  * "Vosne-Romanée 1er Cru Les Suchots", "Vosne-Romanée Les Suchots" and plain
@@ -48,24 +79,13 @@ const isAncestor=(candidate:PlaceNode,place:PlaceNode)=>ancestry(place).some(ste
  * Nuits" starts with "Bourgogne", and reading it as Burgundy would lose which
  * appellation the wine actually came from.
  */
-/**
- * Denomination tokens that trail a place name without being part of it. A
- * closed list, so stripping them is safe at any tier - unlike dropping an
- * arbitrary suffix, which is only allowed to reach a specific place.
- *
- * Without this the behaviour split on where the tree happened to file a place:
- * "Barolo DOCG" lost its suffix because Barolo is an appellation, while "Rioja
- * DOCa" and "Douro DOC" kept theirs because those are regions.
- */
-const DENOMINATION=/ (?:docg|doca|doc|dop|do|igt|igp|aoc|aop|ava|dac|qba)$/;
-
 export function lookupPlace(value:string|null|undefined):PlaceNode[]{
   if(!value)return [];
   const normalized=key(value);
   const exact=byName.get(normalized);
   if(exact)return exact;
-  for(let trimmedValue=normalized;DENOMINATION.test(trimmedValue);){
-    trimmedValue=trimmedValue.replace(DENOMINATION,'');
+  for(let trimmedValue=normalized;DENOMINATION.test(trimmedValue)||AGEING.test(trimmedValue);){
+    trimmedValue=trimmedValue.replace(DENOMINATION,'').replace(AGEING,'');
     const match=byName.get(trimmedValue);
     if(match)return match;
   }

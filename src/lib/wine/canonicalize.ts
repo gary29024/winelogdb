@@ -1,4 +1,4 @@
-import { resolvePlace } from '../places/resolve';
+import { ageingTerm,resolvePlace } from '../places/resolve';
 
 const key=(value:string)=>value.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[’'`]/g,'').replace(/[^a-z0-9]+/g,' ').trim();
 
@@ -53,8 +53,13 @@ export function canonicalizeWineFields<T extends {producer?:string|null;wineName
     // appellation, so the wine name gets a say in reading it.
     wineName:wine.wineName
   });
+  // An ageing tier is not a place, so it comes off the appellation - but it is
+  // on the label, so it moves to the wine name rather than being dropped.
+  const ageing=ageingTerm(wine.appellation);
+  const named=stripRepeatedProducer(wine.producer,wine.wineName);
+  const carriesAgeing=ageing&&named&&key(named).includes(key(ageing));
   return {...wine,
-    wineName:stripRepeatedProducer(wine.producer,wine.wineName) as T['wineName'],
+    wineName:(ageing&&!carriesAgeing?`${named??''} ${ageing}`.trim():named) as T['wineName'],
     country:place.country as T['country'],
     region:place.region as T['region'],
     appellation:place.appellation as T['appellation'],

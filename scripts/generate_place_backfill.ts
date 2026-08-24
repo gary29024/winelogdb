@@ -12,7 +12,7 @@
  * Usage: npx vite-node scripts/generate_place_backfill.ts > src/lib/db/migrations/0032_place_hierarchy.sql
  */
 import { PLACES,type PlaceNode } from '../src/lib/places/hierarchy';
-import { ancestry,resolvePlace } from '../src/lib/places/resolve';
+import { AGEING_TERMS,ancestry,resolvePlace } from '../src/lib/places/resolve';
 
 const TIER_DEPTH={country:0,area:1,region:2,subregion:3,appellation:4} as const;
 
@@ -119,7 +119,8 @@ for(let index=0;index<values.length;index+=120){
 // resolver strips these before matching at any tier; SQL cannot fold case or
 // punctuation, so the suffix test is spelled out and applied as a pre-pass.
 const DENOMINATIONS=['DOCG','DOCA','DOC','DOP','DO','IGT','IGP','AOC','AOP','AVA','DAC','QBA'];
-const strippedAppellation=`CASE\n${DENOMINATIONS.map(token=>
+const AGEING=AGEING_TERMS.map(term=>term.replace(/\b[a-z]/g,letter=>letter.toUpperCase()));
+const strippedAppellation=`CASE\n${[...DENOMINATIONS,...AGEING].map(token=>
   `    WHEN upper(trim(wines.appellation)) LIKE '% ${token}' THEN trim(substr(trim(wines.appellation),1,length(trim(wines.appellation))-${token.length+1}))`
 ).join('\n')}\n    ELSE trim(wines.appellation) END`;
 
@@ -150,6 +151,15 @@ process.stdout.write([...header,
   '',
   ...chunks,
   '',
+  '-- An ageing tier is not a place, so it comes off the appellation - but it is',
+  '-- on the label, so it moves to the wine name first rather than being dropped.',
+  '-- Longest term first, so "Gran Reserva" is not shortened to "Reserva".',
+  ...AGEING.flatMap(term=>[
+    `UPDATE wines SET wine_name=trim(COALESCE(wine_name,'')||' ${term}')`,
+    `  WHERE upper(trim(COALESCE(recognized_appellation,''))) LIKE '% ${term.toUpperCase()}'`,
+    `    AND upper(COALESCE(wine_name,'')) NOT LIKE '%${term.toUpperCase()}%';`,
+    ''
+  ]),
   '-- "Oakville, Napa Valley" is two places, not one name, and recognition writes',
   '-- them in either order. Keep whichever part the tree files deeper. Limited to a',
   '-- single separator: a longer list is left exactly as recorded rather than risk',

@@ -2785,6 +2785,30 @@ INSERT INTO place_backfill_map(spelling,depth,region,appellation,country) VALUES
   ('Yountville 1er Cru',4,'Napa Valley','Yountville','United States'),
   ('Yountville Grand Cru',4,'Napa Valley','Yountville','United States'),
   ('Yountville Premier Cru',4,'Napa Valley','Yountville','United States');
+-- An ageing tier is not a place, so it comes off the appellation - but it is
+-- on the label, so it moves to the wine name first rather than being dropped.
+-- Longest term first, so "Gran Reserva" is not shortened to "Reserva".
+UPDATE wines SET wine_name=trim(COALESCE(wine_name,'')||' Gran Selezione')
+  WHERE upper(trim(COALESCE(recognized_appellation,''))) LIKE '% GRAN SELEZIONE'
+    AND upper(COALESCE(wine_name,'')) NOT LIKE '%GRAN SELEZIONE%';
+UPDATE wines SET wine_name=trim(COALESCE(wine_name,'')||' Gran Reserva')
+  WHERE upper(trim(COALESCE(recognized_appellation,''))) LIKE '% GRAN RESERVA'
+    AND upper(COALESCE(wine_name,'')) NOT LIKE '%GRAN RESERVA%';
+UPDATE wines SET wine_name=trim(COALESCE(wine_name,'')||' Garrafeira')
+  WHERE upper(trim(COALESCE(recognized_appellation,''))) LIKE '% GARRAFEIRA'
+    AND upper(COALESCE(wine_name,'')) NOT LIKE '%GARRAFEIRA%';
+UPDATE wines SET wine_name=trim(COALESCE(wine_name,'')||' Riserva')
+  WHERE upper(trim(COALESCE(recognized_appellation,''))) LIKE '% RISERVA'
+    AND upper(COALESCE(wine_name,'')) NOT LIKE '%RISERVA%';
+UPDATE wines SET wine_name=trim(COALESCE(wine_name,'')||' Reserva')
+  WHERE upper(trim(COALESCE(recognized_appellation,''))) LIKE '% RESERVA'
+    AND upper(COALESCE(wine_name,'')) NOT LIKE '%RESERVA%';
+UPDATE wines SET wine_name=trim(COALESCE(wine_name,'')||' Crianza')
+  WHERE upper(trim(COALESCE(recognized_appellation,''))) LIKE '% CRIANZA'
+    AND upper(COALESCE(wine_name,'')) NOT LIKE '%CRIANZA%';
+UPDATE wines SET wine_name=trim(COALESCE(wine_name,'')||' Superiore')
+  WHERE upper(trim(COALESCE(recognized_appellation,''))) LIKE '% SUPERIORE'
+    AND upper(COALESCE(wine_name,'')) NOT LIKE '%SUPERIORE%';
 -- "Oakville, Napa Valley" is two places, not one name, and recognition writes
 -- them in either order. Keep whichever part the tree files deeper. Limited to a
 -- single separator: a longer list is left exactly as recorded rather than risk
@@ -2814,6 +2838,13 @@ UPDATE wines SET appellation=CASE
     WHEN upper(trim(wines.appellation)) LIKE '% AVA' THEN trim(substr(trim(wines.appellation),1,length(trim(wines.appellation))-4))
     WHEN upper(trim(wines.appellation)) LIKE '% DAC' THEN trim(substr(trim(wines.appellation),1,length(trim(wines.appellation))-4))
     WHEN upper(trim(wines.appellation)) LIKE '% QBA' THEN trim(substr(trim(wines.appellation),1,length(trim(wines.appellation))-4))
+    WHEN upper(trim(wines.appellation)) LIKE '% Gran Selezione' THEN trim(substr(trim(wines.appellation),1,length(trim(wines.appellation))-15))
+    WHEN upper(trim(wines.appellation)) LIKE '% Gran Reserva' THEN trim(substr(trim(wines.appellation),1,length(trim(wines.appellation))-13))
+    WHEN upper(trim(wines.appellation)) LIKE '% Garrafeira' THEN trim(substr(trim(wines.appellation),1,length(trim(wines.appellation))-11))
+    WHEN upper(trim(wines.appellation)) LIKE '% Riserva' THEN trim(substr(trim(wines.appellation),1,length(trim(wines.appellation))-8))
+    WHEN upper(trim(wines.appellation)) LIKE '% Reserva' THEN trim(substr(trim(wines.appellation),1,length(trim(wines.appellation))-8))
+    WHEN upper(trim(wines.appellation)) LIKE '% Crianza' THEN trim(substr(trim(wines.appellation),1,length(trim(wines.appellation))-8))
+    WHEN upper(trim(wines.appellation)) LIKE '% Superiore' THEN trim(substr(trim(wines.appellation),1,length(trim(wines.appellation))-10))
     ELSE trim(wines.appellation) END
 WHERE trim(COALESCE(wines.appellation,''))<>''
   AND (CASE
@@ -2829,6 +2860,13 @@ WHERE trim(COALESCE(wines.appellation,''))<>''
     WHEN upper(trim(wines.appellation)) LIKE '% AVA' THEN trim(substr(trim(wines.appellation),1,length(trim(wines.appellation))-4))
     WHEN upper(trim(wines.appellation)) LIKE '% DAC' THEN trim(substr(trim(wines.appellation),1,length(trim(wines.appellation))-4))
     WHEN upper(trim(wines.appellation)) LIKE '% QBA' THEN trim(substr(trim(wines.appellation),1,length(trim(wines.appellation))-4))
+    WHEN upper(trim(wines.appellation)) LIKE '% Gran Selezione' THEN trim(substr(trim(wines.appellation),1,length(trim(wines.appellation))-15))
+    WHEN upper(trim(wines.appellation)) LIKE '% Gran Reserva' THEN trim(substr(trim(wines.appellation),1,length(trim(wines.appellation))-13))
+    WHEN upper(trim(wines.appellation)) LIKE '% Garrafeira' THEN trim(substr(trim(wines.appellation),1,length(trim(wines.appellation))-11))
+    WHEN upper(trim(wines.appellation)) LIKE '% Riserva' THEN trim(substr(trim(wines.appellation),1,length(trim(wines.appellation))-8))
+    WHEN upper(trim(wines.appellation)) LIKE '% Reserva' THEN trim(substr(trim(wines.appellation),1,length(trim(wines.appellation))-8))
+    WHEN upper(trim(wines.appellation)) LIKE '% Crianza' THEN trim(substr(trim(wines.appellation),1,length(trim(wines.appellation))-8))
+    WHEN upper(trim(wines.appellation)) LIKE '% Superiore' THEN trim(substr(trim(wines.appellation),1,length(trim(wines.appellation))-10))
     ELSE trim(wines.appellation) END)<>trim(wines.appellation)
   AND EXISTS (SELECT 1 FROM place_backfill_map p WHERE p.spelling=(CASE
     WHEN upper(trim(wines.appellation)) LIKE '% DOCG' THEN trim(substr(trim(wines.appellation),1,length(trim(wines.appellation))-5))
@@ -2843,6 +2881,13 @@ WHERE trim(COALESCE(wines.appellation,''))<>''
     WHEN upper(trim(wines.appellation)) LIKE '% AVA' THEN trim(substr(trim(wines.appellation),1,length(trim(wines.appellation))-4))
     WHEN upper(trim(wines.appellation)) LIKE '% DAC' THEN trim(substr(trim(wines.appellation),1,length(trim(wines.appellation))-4))
     WHEN upper(trim(wines.appellation)) LIKE '% QBA' THEN trim(substr(trim(wines.appellation),1,length(trim(wines.appellation))-4))
+    WHEN upper(trim(wines.appellation)) LIKE '% Gran Selezione' THEN trim(substr(trim(wines.appellation),1,length(trim(wines.appellation))-15))
+    WHEN upper(trim(wines.appellation)) LIKE '% Gran Reserva' THEN trim(substr(trim(wines.appellation),1,length(trim(wines.appellation))-13))
+    WHEN upper(trim(wines.appellation)) LIKE '% Garrafeira' THEN trim(substr(trim(wines.appellation),1,length(trim(wines.appellation))-11))
+    WHEN upper(trim(wines.appellation)) LIKE '% Riserva' THEN trim(substr(trim(wines.appellation),1,length(trim(wines.appellation))-8))
+    WHEN upper(trim(wines.appellation)) LIKE '% Reserva' THEN trim(substr(trim(wines.appellation),1,length(trim(wines.appellation))-8))
+    WHEN upper(trim(wines.appellation)) LIKE '% Crianza' THEN trim(substr(trim(wines.appellation),1,length(trim(wines.appellation))-8))
+    WHEN upper(trim(wines.appellation)) LIKE '% Superiore' THEN trim(substr(trim(wines.appellation),1,length(trim(wines.appellation))-10))
     ELSE trim(wines.appellation) END));
 UPDATE wines SET
   region=(SELECT p.region FROM place_backfill_map p

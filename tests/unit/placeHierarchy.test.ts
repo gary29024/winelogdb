@@ -253,6 +253,29 @@ describe('place compatibility',()=>{
 });
 
 describe('canonicalizeWineFields',()=>{
+  it('moves an ageing tier to the wine name instead of dropping it',()=>{
+    // Riserva is neither a place nor a cru, so it leaves the appellation - but
+    // it is on the label, and stripping it silently was losing it outright.
+    expect(canonicalizeWineFields({country:'Italy',region:'Piedmont',appellation:'Barolo Riserva',wineName:'Monprivato'}))
+      .toMatchObject({appellation:'Barolo',wineName:'Monprivato Riserva'});
+    expect(canonicalizeWineFields({country:'Italy',region:'Tuscany',appellation:'Chianti Classico Gran Selezione',wineName:'Vigna del Sorbo'}))
+      .toMatchObject({appellation:'Chianti Classico',wineName:'Vigna del Sorbo Gran Selezione'});
+  });
+
+  it('does not repeat a tier the wine name already carries',()=>{
+    expect(canonicalizeWineFields({country:'Spain',region:'Rioja',appellation:'Rioja Reserva',wineName:'Imperial Reserva'}))
+      .toMatchObject({wineName:'Imperial Reserva'});
+  });
+
+  it('reads an ageing tier the same way at any tier of place',()=>{
+    // "Barolo Riserva" reached Barolo through the prefix rule while "Rioja Gran
+    // Reserva" kept its suffix, because Rioja is a region.
+    expect(at('Spain','Rioja','Rioja Gran Reserva')).toEqual(at('Spain','Rioja','Rioja'));
+    expect(at('Italy','Piedmont','Barolo Riserva')).toEqual(at('Italy','Piedmont','Barolo'));
+    // Classico is part of the appellation, not an ageing tier.
+    expect(at('Italy','Tuscany','Chianti Classico')).toEqual(['Italy','Tuscany','Chianti Classico']);
+  });
+
   it('records the cru tier beside the place',()=>{
     expect(canonicalizeWineFields({country:'France',region:'Burgundy',appellation:'Vosne-Romanée 1er Cru Les Suchots'}))
       .toMatchObject({appellation:'Vosne-Romanée',classification:'premier_cru'});
