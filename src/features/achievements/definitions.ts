@@ -1,10 +1,11 @@
 import type { AchievementDefinition,AchievementDefinitionItem } from './types';
+import { expandedAchievementDefinitions } from './expandedDefinitions';
 
 const producer=(id:string,label:string,...producerNames:string[]):AchievementDefinitionItem=>({id,label,selector:{type:'producer',producerNames}});
 const vintage=(id:string,label:string,producerNames:string[],cuveeNames:string[],year:number,note?:string):AchievementDefinitionItem=>({id,label,note,selector:{type:'wine_vintage',producerNames,cuveeNames,vintage:year}});
 const appellation=(id:string,label:string,...appellationNames:string[]):AchievementDefinitionItem=>({id,label,selector:{type:'appellation',appellationNames}});
 
-export const achievementDefinitions:AchievementDefinition[]=[
+const coreAchievementDefinitions:AchievementDefinition[]=[
   {
     id:'bordeaux-first-growths',
     title:'Bordeaux First Growths',
@@ -74,5 +75,7 @@ export const achievementDefinitions:AchievementDefinition[]=[
     ]
   }
 ];
+
+export const achievementDefinitions:AchievementDefinition[]=[coreAchievementDefinitions[0],...expandedAchievementDefinitions.slice(0,10),coreAchievementDefinitions[1],...expandedAchievementDefinitions.slice(10,14),coreAchievementDefinitions[2],...expandedAchievementDefinitions.slice(14)];
 
 export function getAchievementDefinition(id:string){return achievementDefinitions.find(item=>item.id===id)??null}
