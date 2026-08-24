@@ -126,6 +126,29 @@ describe('resolving which field a place belongs in',()=>{
     expect(at('United States','Napa Valley','Some Unmapped Bench')).toEqual(['United States','Napa Valley','Some Unmapped Bench']);
   });
 
+  it('reads a separator list as places, whichever order they arrive in',()=>{
+    // Recognition writes "Oakville, Napa Valley" and "Napa Valley, Oakville" for
+    // the same bottle. Both are a list of places, not a name, so both settle on
+    // the narrowest one named.
+    for(const spelling of ['Oakville, Napa Valley','Napa Valley, Oakville','Napa Valley / Oakville',
+      'Oakville, Napa Valley, California']){
+      expect(at('United States','California',spelling)).toEqual(['United States','Napa Valley','Oakville']);
+    }
+    expect(at('France','Burgundy','Côte de Nuits, Gevrey-Chambertin')).toEqual(['France','Burgundy','Gevrey-Chambertin']);
+    expect(at('France','Burgundy','Gevrey-Chambertin, Côte de Nuits')).toEqual(['France','Burgundy','Gevrey-Chambertin']);
+  });
+
+  it('drops a denomination suffix at any tier, not only where the tree files a place deep',()=>{
+    // Before this the behaviour split on tier: "Barolo DOCG" lost its suffix
+    // because Barolo is an appellation, while "Rioja DOCa" kept it.
+    expect(at('Italy','Tuscany','Chianti Classico DOCG')).toEqual(['Italy','Tuscany','Chianti Classico']);
+    expect(at('Italy','Piedmont','Barolo DOCG')).toEqual(['Italy','Piedmont','Barolo']);
+    expect(at('France','Burgundy','Vosne-Romanée AOC')).toEqual(['France','Burgundy','Vosne-Romanée']);
+    // A region-tier place reads the same with or without its denomination.
+    expect(at('Spain','Rioja','Rioja DOCa')).toEqual(at('Spain','Rioja','Rioja'));
+    expect(at('Portugal','Douro','Douro DOC')).toEqual(at('Portugal','Douro','Douro'));
+  });
+
   it('reports nothing to resolve for an empty wine',()=>{
     expect(resolvePlace({})).toMatchObject({country:null,region:null,appellation:null,path:[],placeId:null,unresolved:[]});
   });
@@ -311,6 +334,18 @@ describe('the generated backfill migration',()=>{
     expect(sql).toContain('ORDER BY length(p.spelling) DESC LIMIT 1');
     // Only below-region places, so a region prefix cannot swallow the rest.
     expect(sql).toContain('WHERE p.depth>2 AND length(p.spelling)<length');
+  });
+
+  it('reads a two-part list the same way the resolver does',()=>{
+    expect(sql).toContain("length(wines.appellation)-length(replace(wines.appellation,',',''))=1");
+    expect(sql).toContain('ORDER BY p.depth DESC LIMIT 1');
+  });
+
+  it('strips a denomination only when the stripped form is a place it knows',()=>{
+    expect(sql).toContain("WHEN upper(trim(wines.appellation)) LIKE '% DOCG'");
+    // Unqualified `appellation` inside the subquery would bind to the map's own
+    // column, which silently truncated every unknown appellation.
+    expect(sql).not.toMatch(/LIKE '% DOCG' THEN trim\(substr\(trim\(appellation\)/);
   });
 
   it('cleans up the lookup table it creates',()=>{

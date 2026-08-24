@@ -48,11 +48,35 @@ const isAncestor=(candidate:PlaceNode,place:PlaceNode)=>ancestry(place).some(ste
  * Nuits" starts with "Bourgogne", and reading it as Burgundy would lose which
  * appellation the wine actually came from.
  */
+/**
+ * Denomination tokens that trail a place name without being part of it. A
+ * closed list, so stripping them is safe at any tier - unlike dropping an
+ * arbitrary suffix, which is only allowed to reach a specific place.
+ *
+ * Without this the behaviour split on where the tree happened to file a place:
+ * "Barolo DOCG" lost its suffix because Barolo is an appellation, while "Rioja
+ * DOCa" and "Douro DOC" kept theirs because those are regions.
+ */
+const DENOMINATION=/ (?:docg|doca|doc|dop|do|igt|igp|aoc|aop|ava|dac|qba)$/;
+
 export function lookupPlace(value:string|null|undefined):PlaceNode[]{
   if(!value)return [];
   const normalized=key(value);
   const exact=byName.get(normalized);
   if(exact)return exact;
+  for(let trimmedValue=normalized;DENOMINATION.test(trimmedValue);){
+    trimmedValue=trimmedValue.replace(DENOMINATION,'');
+    const match=byName.get(trimmedValue);
+    if(match)return match;
+  }
+  // "Oakville, Napa Valley" is two places, not one name, and recognition writes
+  // them in either order. Read every part and keep the narrowest, so the list
+  // settles on the same appellation whichever way round it arrived.
+  const parts=value.split(/[,/|;]/).map(part=>part.trim()).filter(Boolean);
+  if(parts.length>1){
+    const listed=parts.flatMap(part=>lookupPlace(part));
+    if(listed.length)return [pickAnchor(listed)!];
+  }
   const tokens=normalized.split(' ');
   for(let take=tokens.length-1;take>0;take-=1){
     const specific=(byName.get(tokens.slice(0,take).join(' '))??[]).filter(place=>TIER_DEPTH[place.tier]>TIER_DEPTH.region);

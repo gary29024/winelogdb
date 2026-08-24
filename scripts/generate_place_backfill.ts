@@ -115,6 +115,14 @@ for(let index=0;index<values.length;index+=120){
   chunks.push(`INSERT INTO place_backfill_map(spelling,depth,region,appellation,country) VALUES\n  ${values.slice(index,index+120).join(',\n  ')};`);
 }
 
+// Denomination tokens that trail a place name without being part of it. The
+// resolver strips these before matching at any tier; SQL cannot fold case or
+// punctuation, so the suffix test is spelled out and applied as a pre-pass.
+const DENOMINATIONS=['DOCG','DOCA','DOC','DOP','DO','IGT','IGP','AOC','AOP','AVA','DAC','QBA'];
+const strippedAppellation=`CASE\n${DENOMINATIONS.map(token=>
+  `    WHEN upper(trim(wines.appellation)) LIKE '% ${token}' THEN trim(substr(trim(wines.appellation),1,length(trim(wines.appellation))-${token.length+1}))`
+).join('\n')}\n    ELSE trim(wines.appellation) END`;
+
 // The deepest place named by either column wins, matching resolvePlace.
 const deepest=(column:string)=>`(SELECT p.${column} FROM place_backfill_map p
     WHERE p.spelling IN (trim(COALESCE(wines.region,'')),trim(COALESCE(wines.appellation,'')))
@@ -141,6 +149,28 @@ process.stdout.write([...header,
   ');',
   '',
   ...chunks,
+  '',
+  '-- "Oakville, Napa Valley" is two places, not one name, and recognition writes',
+  '-- them in either order. Keep whichever part the tree files deeper. Limited to a',
+  '-- single separator: a longer list is left exactly as recorded rather than risk',
+  '-- truncating it, and the resolver settles it on the next write.',
+  `UPDATE wines SET appellation=(SELECT p.spelling FROM place_backfill_map p`,
+  `    WHERE p.spelling IN (trim(substr(wines.appellation,1,instr(wines.appellation,',')-1)),`,
+  `      trim(substr(wines.appellation,instr(wines.appellation,',')+1)))`,
+  `    ORDER BY p.depth DESC LIMIT 1)`,
+  `WHERE instr(COALESCE(wines.appellation,''),',')>0`,
+  `  AND length(wines.appellation)-length(replace(wines.appellation,',',''))=1`,
+  `  AND EXISTS (SELECT 1 FROM place_backfill_map p`,
+  `    WHERE p.spelling IN (trim(substr(wines.appellation,1,instr(wines.appellation,',')-1)),`,
+  `      trim(substr(wines.appellation,instr(wines.appellation,',')+1))));`,
+  '',
+  '-- Drop a trailing denomination so that "Chianti Classico DOCG", "Rioja DOCa"',
+  '-- and "Douro DOC" all reach the place they name. Only where the stripped form',
+  '-- is a place the tree carries, so an unknown appellation is never truncated.',
+  `UPDATE wines SET appellation=${strippedAppellation}`,
+  `WHERE trim(COALESCE(wines.appellation,''))<>''`,
+  `  AND (${strippedAppellation})<>trim(wines.appellation)`,
+  `  AND EXISTS (SELECT 1 FROM place_backfill_map p WHERE p.spelling=(${strippedAppellation}));`,
   '',
   'UPDATE wines SET',
   `  region=${deepest('region')},`,
