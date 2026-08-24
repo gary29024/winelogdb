@@ -5,6 +5,7 @@ import { applyJournalVintageSearch } from '../src/lib/journal/searchQuery';
 import { favoriteUpdateSchema } from '../src/lib/journal/favorite';
 import { requireSession } from '../src/lib/auth/session';
 import { handleRecognitionRequest } from './recognitionHandler';
+import { loadAchievementProgress } from './achievementHandler';
 
 type Bindings={DB:D1Database;WINE_IMAGES:R2Bucket;ASSETS:Fetcher;GEMINI_API_KEY:string;AUTH_SECRET:string;APP_PASSWORD:string;APP_URL:string;MAX_FILE_BYTES?:string;MAX_BATCH_FILES?:string};
 type AppEnv={Bindings:Bindings};
@@ -20,6 +21,12 @@ app.get('/api/wines',c=>{
   if(!applyJournalVintageSearch(url))return layeredApp.fetch(c.req.raw,c.env,c.executionCtx);
   const request=new Request(url.toString(),{method:'GET',headers:c.req.raw.headers});
   return layeredApp.fetch(request,c.env,c.executionCtx);
+});
+
+app.get('/api/achievements',async c=>{
+  let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
+  try{return c.json(await loadAchievementProgress(c.env.DB,owner))}
+  catch(error){console.error('Could not load achievements',error);return c.json({error:'Could not load wine collections'},500)}
 });
 
 app.get('/api/journey',async c=>{
