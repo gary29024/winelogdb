@@ -25,7 +25,7 @@ type AchievementContext={
   options:AchievementCatalogueOptions;
 };
 
-export const ACHIEVEMENT_DEFINITION_VERSION=2;
+export const ACHIEVEMENT_DEFINITION_VERSION=3;
 const parseJson=<T>(value:unknown,fallback:T):T=>{try{return JSON.parse(String(value)) as T}catch{return fallback}};
 
 function groupedAliases<T extends {display_alias:string}>(rows:T[],id:(row:T)=>string){
@@ -69,7 +69,6 @@ function rowToStored(row:CustomCollectionRow):StoredCustomAchievementCollection|
   const items=parseJson<CustomAchievementManualItem[]>(row.items_json,[]),ruleRaw=row.rule_json?parseJson<unknown>(row.rule_json,null):null,parsedRule=ruleRaw?achievementCatalogueRuleSchema.safeParse(ruleRaw):null;
   return {id:row.id,title:row.title,subtitle:row.subtitle,icon,mode,items,rule:parsedRule?.success?parsedRule.data:null};
 }
-
 
 async function cachedAchievementProgress(db:D1Database,owner:string,revision:number):Promise<AchievementProgress[]|null>{
   try{
