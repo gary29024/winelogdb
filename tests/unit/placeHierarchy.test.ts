@@ -74,6 +74,44 @@ describe('resolving which field a place belongs in',()=>{
     expect(place.placeId).toBeNull();
   });
 
+  it('keeps a grand cru as the appellation it legally is',()=>{
+    // A Charmes-Chambertin is not a Gevrey-Chambertin: the grand cru is its own
+    // AOC, so it sits beside the village rather than under it.
+    expect(at('France','Burgundy','Charmes-Chambertin')).toEqual(['France','Burgundy','Charmes-Chambertin']);
+    expect(at('France','Burgundy','Clos de la Roche')).toEqual(['France','Burgundy','Clos de la Roche']);
+    expect(at('France','Burgundy','Corton-Charlemagne')).toEqual(['France','Burgundy','Corton-Charlemagne']);
+    expect(placesCompatible('Gevrey-Chambertin','Charmes-Chambertin')).toBe(false);
+  });
+
+  it('never lets another field overwrite what the appellation field named',()=>{
+    // Recognition sometimes puts the commune in region and the grand cru in
+    // appellation. Reading the region field first would rewrite Charmes to
+    // Gevrey and silently change which wine this is.
+    expect(at('France','Gevrey-Chambertin','Charmes-Chambertin')).toEqual(['France','Burgundy','Charmes-Chambertin']);
+  });
+
+  it('reads a premier cru as its village appellation, climat and all',()=>{
+    // The AOC is Vosne-Romanee Premier Cru; Les Suchots is a climat and belongs
+    // to the wine name, so every spelling settles on the one appellation.
+    expect(at('France','Burgundy','Vosne-Romanée Premier Cru Les Suchots')).toEqual(['France','Burgundy','Vosne-Romanée']);
+    expect(at('France','Burgundy','Vosne-Romanée 1er Cru')).toEqual(['France','Burgundy','Vosne-Romanée']);
+    expect(at('France','Burgundy','Gevrey-Chambertin 1er Cru Les Cazetiers')).toEqual(['France','Burgundy','Gevrey-Chambertin']);
+  });
+
+  it('keeps a cru appellation that is spelled out in full',()=>{
+    // "Chablis Grand Cru" is an appellation in its own right, so the exact match
+    // has to win before the premier-cru reading strips at the marker.
+    expect(at('France','Burgundy','Chablis Grand Cru')).toEqual(['France','Burgundy','Chablis Grand Cru']);
+    expect(at('France','Alsace','Alsace Grand Cru')).toEqual(['France','Alsace','Alsace Grand Cru']);
+  });
+
+  it('never drops an appellation the tree does not carry',()=>{
+    // The regression this guards: the tree used to answer with the region alone
+    // and the unknown appellation was written away as null.
+    expect(at('France','Burgundy','Bourgogne Hautes Côtes de Nuits')).toEqual(['France','Burgundy','Bourgogne Hautes Côtes de Nuits']);
+    expect(at('United States','Napa Valley','Some Unmapped Bench')).toEqual(['United States','Napa Valley','Some Unmapped Bench']);
+  });
+
   it('reports nothing to resolve for an empty wine',()=>{
     expect(resolvePlace({})).toMatchObject({country:null,region:null,appellation:null,path:[],placeId:null,unresolved:[]});
   });
@@ -177,8 +215,27 @@ describe('the generated backfill migration',()=>{
     expect(drifted).toEqual([]);
   });
 
+  it('keeps an appellation the tree does not carry instead of clearing it',()=>{
+    // Without this arm the UPDATE fired on the region match and wrote the
+    // unknown appellation away as NULL.
+    expect(sql).toContain('NOT EXISTS (SELECT 1 FROM place_backfill_map p WHERE p.spelling=trim(wines.appellation))');
+    expect(sql).toContain('THEN wines.appellation END');
+  });
+
+  it('lets the appellation field settle its own column',()=>{
+    expect(sql).toContain("WHERE p.spelling=trim(COALESCE(wines.appellation,'')) AND p.depth>2");
+  });
+
+  it('maps the bare cru forms the resolver reads as a village appellation',()=>{
+    const bare=mapped.find(row=>row.spelling==='Vosne-Romanée 1er Cru');
+    expect(bare).toMatchObject({region:'Burgundy',appellation:'Vosne-Romanée'});
+    // An appellation that is a cru in its own right keeps its own reading.
+    expect(mapped.find(row=>row.spelling==='Chablis Grand Cru'))
+      .toMatchObject({region:'Burgundy',appellation:'Chablis Grand Cru'});
+  });
+
   it('cleans up the lookup table it creates',()=>{
     expect(sql).toContain('CREATE TABLE place_backfill_map');
-    expect(sql.trimEnd().endsWith('-- 814 spellings across 635 tree nodes.')||sql.includes('DROP TABLE place_backfill_map;')).toBe(true);
+    expect(sql).toContain('DROP TABLE place_backfill_map;');
   });
 });

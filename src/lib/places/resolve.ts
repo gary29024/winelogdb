@@ -33,9 +33,19 @@ export function ancestry(place:PlaceNode):PlaceNode[]{
 
 const isAncestor=(candidate:PlaceNode,place:PlaceNode)=>ancestry(place).some(step=>step.id===candidate.id&&step.id!==place.id);
 
+// "Vosne-Romanée 1er Cru Les Suchots" names the Vosne-Romanée appellation; the
+// climat after the marker is part of the wine, not of the legal origin. Grand
+// cru names that are appellations in their own right - Charmes-Chambertin,
+// Chablis Grand Cru - are nodes in the tree and match exactly before this runs.
+const CRU_MARKER=/\b(?:premier|1er|1ere|1|grand)\s+cru\b/;
+
 export function lookupPlace(value:string|null|undefined):PlaceNode[]{
   if(!value)return [];
-  return byName.get(key(value))??[];
+  const exact=byName.get(key(value));
+  if(exact)return exact;
+  const marker=CRU_MARKER.exec(key(value));
+  if(!marker||marker.index===0)return [];
+  return byName.get(key(value).slice(0,marker.index).trim())??[];
 }
 
 export type PlaceInput={country?:string|null;region?:string|null;appellation?:string|null};
@@ -73,13 +83,22 @@ export function resolvePlace(input:PlaceInput):ResolvedPlace{
 
   const chain=ancestry(anchor);
   const at=(tier:PlaceTier)=>chain.find(step=>step.tier===tier)?.name??null;
-  const belowRegion=TIER_DEPTH[anchor.tier]>TIER_DEPTH.region;
+  const below=(place:PlaceNode)=>TIER_DEPTH[place.tier]>TIER_DEPTH.region;
+  // What the appellation field itself named beats what another field implies:
+  // given region Gevrey-Chambertin and appellation Charmes-Chambertin, the wine
+  // is a Charmes, and reading the region field would quietly rewrite it.
+  const own=pickAnchor(candidates[0].matches);
+  const appellation=own&&below(own)?own.name
+    // A name the tree does not carry is still the most specific thing known
+    // about the wine, so it is kept rather than dropped.
+    :input.appellation?.trim()&&!candidates[0].matches.length?input.appellation.trim()
+    :below(anchor)?anchor.name:null;
   return {
     country:at('country')??trimmed(input.country),
-    region:at('region')??(belowRegion?null:anchor.name),
     // An area such as California is not a growing region; it stays in the
     // region column only because there is nothing narrower to put there.
-    appellation:belowRegion?anchor.name:null,
+    region:at('region')??(below(anchor)?null:anchor.name),
+    appellation,
     path:chain.map(step=>step.id),
     placeId:anchor.id,
     unresolved
@@ -107,7 +126,11 @@ function pickAnchor(matches:readonly PlaceNode[]):PlaceNode|null{
 export function placesCompatible(left:string|null|undefined,right:string|null|undefined){
   if(!left||!right)return true;
   if(key(left)===key(right))return true;
-  const leftMatches=lookupPlace(left),rightMatches=lookupPlace(right);
+  // Exact nodes only. The premier-cru reading is right for deciding which field
+  // a place belongs in, but too loose for identity: cuvee matching deliberately
+  // keeps "Corton Grand Cru" and "Corton" apart on a weak signature match, and
+  // stripping at the marker would quietly merge them.
+  const leftMatches=byName.get(key(left))??[],rightMatches=byName.get(key(right))??[];
   if(!leftMatches.length||!rightMatches.length)return false;
   return leftMatches.some(a=>rightMatches.some(b=>a.id===b.id||isAncestor(a,b)||isAncestor(b,a)));
 }

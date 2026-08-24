@@ -44,6 +44,11 @@ const header=[
   '-- recognized_region and recognized_appellation keep what was there before this',
   '-- ran, so a wrong entry in the place tree stays recoverable and the disagreement',
   '-- rate between the model and the tree can be measured later.',
+  '--',
+  '-- An appellation the tree does not carry is left exactly as recorded rather',
+  '-- than cleared, and a premier cru followed by a named climat ("Vosne-Romanee',
+  '-- 1er Cru Les Suchots") keeps its recorded spelling here - SQL cannot strip at',
+  '-- the marker the way the resolver does, so only the bare cru forms are mapped.',
   '',
   'ALTER TABLE wines ADD COLUMN recognized_region TEXT;',
   'ALTER TABLE wines ADD COLUMN recognized_appellation TEXT;',
@@ -68,6 +73,21 @@ for(const place of PLACES){
     if(existing&&existing.depth<=depth)continue;
     rows.set(spelling,{spelling,depth,region:resolved.region,appellation:resolved.appellation,country});
   }
+  // The resolver reads "Vosne-Romanee 1er Cru" as the village appellation. SQL
+  // cannot strip at the marker, so the bare cru forms are listed instead. A form
+  // that is already a node in its own right - "Chablis Grand Cru" - is never
+  // overwritten. A cru followed by a named climat is not enumerable and keeps
+  // its recorded spelling; see the header note.
+  // A node that already names a cru ("Chablis Grand Cru") takes no suffix: the
+  // resolver strips at the first marker, so the doubled form would not agree.
+  if(place.tier!=='appellation'||/\b(?:premier|1er|grand)\s+cru\b/i.test(place.name))continue;
+  for(const suffix of [' Premier Cru',' 1er Cru',' Grand Cru']){
+    for(const base of spellings(place)){
+      const spelling=`${base}${suffix}`;
+      if(rows.has(spelling))continue;
+      rows.set(spelling,{spelling,depth,region:resolved.region,appellation:resolved.appellation,country});
+    }
+  }
 }
 
 const values=[...rows.values()].sort((a,b)=>a.spelling.localeCompare(b.spelling))
@@ -83,6 +103,14 @@ const deepest=(column:string)=>`(SELECT p.${column} FROM place_backfill_map p
     WHERE p.spelling IN (trim(COALESCE(wines.region,'')),trim(COALESCE(wines.appellation,'')))
     ORDER BY p.depth DESC LIMIT 1)`;
 
+const appellationExpression=`COALESCE(
+    (SELECT p.appellation FROM place_backfill_map p
+      WHERE p.spelling=trim(COALESCE(wines.appellation,'')) AND p.depth>2),
+    CASE WHEN trim(COALESCE(wines.appellation,''))<>''
+      AND NOT EXISTS (SELECT 1 FROM place_backfill_map p WHERE p.spelling=trim(wines.appellation))
+      THEN wines.appellation END,
+    ${deepest('appellation')})`;
+
 process.stdout.write([...header,
   'CREATE TABLE place_backfill_map (',
   '  spelling TEXT PRIMARY KEY, depth INTEGER NOT NULL,',
@@ -93,7 +121,7 @@ process.stdout.write([...header,
   '',
   'UPDATE wines SET',
   `  region=${deepest('region')},`,
-  `  appellation=${deepest('appellation')},`,
+  `  appellation=${appellationExpression},`,
   `  country=CASE WHEN trim(COALESCE(country,''))='' THEN ${deepest('country')} ELSE country END`,
   `WHERE EXISTS (SELECT 1 FROM place_backfill_map p`,
   `  WHERE p.spelling IN (trim(COALESCE(wines.region,'')),trim(COALESCE(wines.appellation,''))));`,

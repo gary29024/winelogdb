@@ -94,12 +94,21 @@ const tree:readonly Draft[]=[
     region('Burgundy',['Bourgogne'],[
       sub('Côte de Nuits',[],appellations(
         'Gevrey-Chambertin','Morey-Saint-Denis','Chambolle-Musigny','Vougeot','Vosne-Romanée',
-        'Nuits-Saint-Georges','Fixin','Marsannay','Côte de Nuits-Villages'
+        'Nuits-Saint-Georges','Fixin','Marsannay','Côte de Nuits-Villages',
+        // Grand crus are standalone AOCs, so they are siblings of the villages
+        // rather than children: a Charmes-Chambertin is not a Gevrey-Chambertin.
+        'Chambertin','Chambertin-Clos de Bèze','Charmes-Chambertin','Mazoyères-Chambertin',
+        'Griotte-Chambertin','Chapelle-Chambertin','Latricières-Chambertin','Mazis-Chambertin',
+        'Ruchottes-Chambertin','Clos de la Roche','Clos Saint-Denis','Clos des Lambrays',
+        'Clos de Tart','Bonnes-Mares','Musigny','Clos de Vougeot','Échezeaux','Grands Échezeaux',
+        'Romanée-Conti','La Tâche','Richebourg','Romanée-Saint-Vivant','La Romanée','La Grande Rue'
       )),
       sub('Côte de Beaune',[],appellations(
         'Aloxe-Corton','Pernand-Vergelesses','Savigny-lès-Beaune','Beaune','Pommard','Volnay',
         'Meursault','Puligny-Montrachet','Chassagne-Montrachet','Saint-Aubin','Santenay',
-        'Auxey-Duresses','Monthélie','Saint-Romain','Ladoix','Chorey-lès-Beaune','Côte de Beaune-Villages'
+        'Auxey-Duresses','Monthélie','Saint-Romain','Ladoix','Chorey-lès-Beaune','Côte de Beaune-Villages',
+        'Corton','Corton-Charlemagne','Charlemagne','Montrachet','Chevalier-Montrachet',
+        'Bâtard-Montrachet','Bienvenues-Bâtard-Montrachet','Criots-Bâtard-Montrachet'
       )),
       sub('Côte Chalonnaise',[],appellations('Mercurey','Givry','Rully','Montagny','Bouzeron')),
       sub('Mâconnais',[],appellations('Pouilly-Fuissé','Saint-Véran','Viré-Clessé','Mâcon-Villages')),
