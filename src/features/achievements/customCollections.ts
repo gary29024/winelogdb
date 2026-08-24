@@ -37,10 +37,6 @@ export type StoredCustomAchievementCollection={
   rule:AchievementCatalogueRule|null;
 };
 
-function producerNames(id:string,options:AchievementCatalogueOptions){
-  const producer=options.producers.find(item=>item.id===id);
-  return producer?[producer.name]:[];
-}
 function producerByIdOrName(id:string,name:string,options:AchievementCatalogueOptions){
   return options.producers.find(item=>item.id===id)??options.producers.find(item=>normalizeAchievementIdentity(item.name)===normalizeAchievementIdentity(name));
 }
@@ -56,7 +52,8 @@ function appellationItem(name:string):AchievementDefinitionItem{
   const clean=name.trim();return {id:`appellation:${normalizeAchievementIdentity(clean)}`,label:clean,selector:{type:'appellation',appellationNames:[clean]}};
 }
 function dedupe(items:Array<AchievementDefinitionItem|null>){
-  const seen=new Set<string>();return items.filter((item):item is AchievementDefinitionItem=>Boolean(item)&&!seen.has(item.id)&&Boolean(seen.add(item.id)));
+  const seen=new Set<string>();
+  return items.filter((item):item is AchievementDefinitionItem=>{if(!item||seen.has(item.id))return false;seen.add(item.id);return true});
 }
 
 export function materializeManualAchievementItems(items:CustomAchievementManualItem[],options:AchievementCatalogueOptions){
