@@ -66,8 +66,8 @@ async function requireCatalogPair(db:D1Database,owner:string,producerId:string,s
   if(!source||!catalog)throw new Error('Cuvée not found');
   if(source.producer_id!==producerId||catalog.producer_id!==producerId)throw new Error('Both cuvées must belong to this producer');
   if(source.id===catalog.id)throw new Error('This tasted wine is already the selected catalog cuvée');
-  if(Boolean(source.catalog_backed))throw new Error('A catalog-backed cuvée does not need a manual catalog link');
-  if(!Boolean(catalog.catalog_backed))throw new Error('Choose an existing wine from this producer’s catalog');
+  if(source.catalog_backed)throw new Error('A catalog-backed cuvée does not need a manual catalog link');
+  if(!catalog.catalog_backed)throw new Error('Choose an existing wine from this producer’s catalog');
   return {source,catalog};
 }
 

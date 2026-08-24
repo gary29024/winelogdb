@@ -6,7 +6,7 @@ import {
 } from '../src/features/achievements/customCollections';
 import { currentOwnerRevision,missingTable } from '../src/lib/db/ownerRevision';
 import type {
-  AchievementCatalogueOptions,AchievementCatalogueRule,AchievementCuveeIdentity,AchievementIconKey,AchievementMatchMode,AchievementProducerIdentity,AchievementProgress,AchievementWine,CustomAchievementInput,CustomAchievementManualItem
+  AchievementCatalogueOptions,AchievementCatalogueRule,AchievementCuveeIdentity,AchievementIconKey,AchievementMatchMode,AchievementProducerIdentity,AchievementProgress,AchievementWine,CustomAchievementManualItem
 } from '../src/features/achievements/types';
 
 type WineRow={id:string;producer_id:string|null;cuvee_id:string|null;producer:string;wine_name:string;vintage:number|null;appellation:string|null};

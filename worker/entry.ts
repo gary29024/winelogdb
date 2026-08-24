@@ -1,5 +1,4 @@
 import { Hono } from 'hono';
-import baseApp from './index';
 import layeredApp from './layered';
 import { applyJournalVintageSearch } from '../src/lib/journal/searchQuery';
 import { favoriteUpdateSchema } from '../src/lib/journal/favorite';

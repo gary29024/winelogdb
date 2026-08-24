@@ -87,7 +87,7 @@ function cleanContactSources(value:unknown){
   for(const raw of value){if(!raw||typeof raw!=='object')continue;const item=raw as {title?:unknown;url?:unknown},url=safeHttpsUrl(item.url)?.toString();if(!url||seen.has(url))continue;seen.add(url);out.push({title:typeof item.title==='string'&&item.title.trim()?item.title.trim():new URL(url).hostname,url})}
   return out.slice(0,10);
 }
-const attr=(tag:string,name:string)=>tag.match(new RegExp(`\b${name}\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))`,'i'))?.slice(1).find(Boolean)??null;
+export const htmlAttribute=(tag:string,name:string)=>tag.match(new RegExp(`\\b${name}\\s*=\\s*(?:"([^"]*)"|'([^']*)'|([^\\s>]+))`,'i'))?.slice(1).find(Boolean)??null;
 async function limited(response:Response,max:number){if(!response.body)return null;const reader=response.body.getReader(),chunks:Uint8Array[]=[];let total=0;try{while(true){const {done,value}=await reader.read();if(done)break;if(!value)continue;total+=value.byteLength;if(total>max){await reader.cancel();return null}chunks.push(value)}}finally{reader.releaseLock()}const out=new Uint8Array(total);let offset=0;for(const chunk of chunks){out.set(chunk,offset);offset+=chunk.byteLength}return out}
 async function safeFetch(url:URL,timeout:number,accept:string){const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),timeout);try{return await fetch(url,{headers:{Accept:accept},signal:controller.signal})}finally{clearTimeout(timer)}}
 async function htmlPage(url:URL){
@@ -111,7 +111,7 @@ async function officialWebsiteContacts(official:string){
 async function heroImage(env:Env,owner:string,official:string){
   const site=safeHttpsUrl(official);if(!site)return null;const page=await safeFetch(site,PAGE_TIMEOUT_MS,'text/html,application/xhtml+xml');if(!page.ok||!(page.headers.get('Content-Type')||'').includes('text/html'))return null;
   const pageBytes=await limited(page,MAX_PAGE_BYTES);if(!pageBytes)return null;const html=new TextDecoder().decode(pageBytes);let image:URL|null=null;
-  for(const tag of html.match(/<meta\b[^>]*>/gi)??[]){const key=String(attr(tag,'property')||attr(tag,'name')||'').toLowerCase();if(!['og:image','og:image:secure_url','twitter:image','twitter:image:src'].includes(key))continue;image=safeHttpsUrl(String(attr(tag,'content')||'').replace(/&amp;/g,'&'),site.toString());if(image)break}
+  for(const tag of html.match(/<meta\b[^>]*>/gi)??[]){const key=String(htmlAttribute(tag,'property')||htmlAttribute(tag,'name')||'').toLowerCase();if(!['og:image','og:image:secure_url','twitter:image','twitter:image:src'].includes(key))continue;image=safeHttpsUrl(String(htmlAttribute(tag,'content')||'').replace(/&amp;/g,'&'),site.toString());if(image)break}
   if(!image)return null;const response=await safeFetch(image,IMAGE_TIMEOUT_MS,'image/avif,image/webp,image/png,image/jpeg');if(!response.ok)return null;const contentType=(response.headers.get('Content-Type')||'').split(';')[0].trim().toLowerCase();if(!['image/jpeg','image/png','image/webp','image/avif'].includes(contentType))return null;
   const bytes=await limited(response,MAX_HERO_BYTES);if(!bytes||bytes.byteLength<1024)return null;const objectKey=createObjectKey(owner,contentType);await env.WINE_IMAGES.put(objectKey,bytes,{httpMetadata:{contentType},customMetadata:{kind:'producer-hero',source:image.toString()}});return {objectKey,sourceUrl:image.toString()};
 }
