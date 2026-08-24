@@ -72,10 +72,33 @@ describe('Gemini parsing', () => {
     ).toThrow();
   });
 
+  it('normalizes a quoted four-digit vintage from recognition', () => {
+    const result=parseRecognition(JSON.stringify({producer:'A',wineName:'B',vintage:'2019',grapes:[],grapeBlend:[],confidence:0.8}));
+    expect(result.vintage).toBe(2019);
+  });
+
+  it('treats explicit release identifiers as non-vintage instead of invalid years', () => {
+    expect(parseRecognition(JSON.stringify({producer:'Henri Giraud',wineName:'Fût de Chêne MV20',vintage:'MV20',grapes:[],grapeBlend:[],confidence:0.9})).vintage).toBeNull();
+    expect(parseRecognition(JSON.stringify({producer:'Krug',wineName:'Grande Cuvée 173ème Édition',vintage:'173ème Édition',grapes:[],grapeBlend:[],confidence:0.9})).vintage).toBeNull();
+    expect(parseRecognition(JSON.stringify({producer:'Henri Giraud',wineName:'PR 90-21',vintage:'90-21',grapes:[],grapeBlend:[],confidence:0.9})).vintage).toBeNull();
+  });
+
   it('accepts the requested Group Photo object envelope', () => {
     const result=parseGroupRecognition(JSON.stringify({wines:[{producer:'Henri Giraud',wineName:'Fût de Chêne',vintage:null,country:'France',region:'Champagne',appellation:'Champagne',grapes:[],grapeBlend:[],style:'sparkling',alcoholPercentage:null,locationName:null,confidence:0.9,boundingBox:{xMin:10,yMin:20,xMax:300,yMax:900}}],unresolvedCount:1}));
     expect(result.wines).toHaveLength(1);
     expect(result.unresolvedCount).toBe(1);
+  });
+
+  it('normalizes quoted and non-vintage Group Photo vintage values', () => {
+    const result=parseGroupRecognition(JSON.stringify({wines:[
+      {producer:'Domaine A',wineName:'Wine A',vintage:'2019',country:'France',region:null,appellation:null,grapes:[],grapeBlend:[],style:'red',alcoholPercentage:null,locationName:null,confidence:0.9,boundingBox:{xMin:10,yMin:20,xMax:300,yMax:900}},
+      {producer:'Champagne B',wineName:'Cuvée B',vintage:'NV',country:'France',region:'Champagne',appellation:'Champagne',grapes:[],grapeBlend:[],style:'sparkling',alcoholPercentage:null,locationName:null,confidence:0.85,boundingBox:{xMin:350,yMin:20,xMax:620,yMax:900}}
+    ],unresolvedCount:0}));
+    expect(result.wines.map(wine=>wine.vintage)).toEqual([2019,null]);
+  });
+
+  it('still rejects arbitrary vintage text rather than guessing', () => {
+    expect(()=>parseGroupRecognition(JSON.stringify({wines:[{producer:'A',wineName:'B',vintage:'probably 2019',country:null,region:null,appellation:null,grapes:[],grapeBlend:[],style:null,alcoholPercentage:null,locationName:null,confidence:0.8,boundingBox:{xMin:10,yMin:20,xMax:300,yMax:900}}],unresolvedCount:0}))).toThrow();
   });
 
   it('safely wraps a schema-free Group Photo top-level array', () => {
