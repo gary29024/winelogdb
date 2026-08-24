@@ -31,6 +31,7 @@ export function chunkItemsByPreparedBytes<T extends {preparedBytes:number}>(item
 }
 
 export function isBatchUploadComplete(totalItems:number,expectedItems:number){return expectedItems<=0?totalItems>=2:totalItems===expectedItems&&expectedItems>=2}
+export function canRetrySubmittedBatch(status:string,submittedItems:number,activeJobs:number){return submittedItems>0&&activeJobs===0&&['ready','partial','failed'].includes(status)}
 
 export async function createBatchSession(db:D1Database,owner:string,expectedItems=0){
   const expected=Math.max(0,Math.floor(Number(expectedItems)||0)),id=crypto.randomUUID(),stamp=now(),expiresAt=new Date(Date.now()+SESSION_TTL_MS).toISOString();
@@ -108,15 +109,22 @@ export async function getBatchImage(env:Pick<Env,'DB'|'WINE_IMAGES'>,owner:strin
 export async function markSessionSubmitted(db:D1Database,owner:string,sessionId:string){
   const session=await db.prepare('SELECT status,total_items,expected_items FROM batch_recognition_sessions WHERE id=? AND owner_id=?').bind(sessionId,owner).first<{status:string;total_items:number;expected_items:number}>();
   if(!session)return {ok:false,error:'Batch session not found'};
-  if(session.status!=='uploading')return {ok:false,error:'This batch has already been submitted'};
-  const total=Number(session.total_items)||0,expected=Number(session.expected_items)||0;
-  if(!isBatchUploadComplete(total,expected))return {ok:false,error:expected?`Only ${total} of ${expected} wines have uploaded. Resume or cancel this batch before submitting.`:'Batch Scan requires at least two wines'};
-  const stamp=now();
-  await db.batch([
-    db.prepare("UPDATE batch_recognition_items SET status='submitted',updated_at=? WHERE owner_id=? AND session_id=? AND status='staged'").bind(stamp,owner,sessionId),
-    db.prepare("UPDATE batch_recognition_sessions SET status='queued',updated_at=? WHERE id=? AND owner_id=?").bind(stamp,sessionId,owner)
+  const total=Number(session.total_items)||0,expected=Number(session.expected_items)||0,stamp=now();
+  if(session.status==='uploading'){
+    if(!isBatchUploadComplete(total,expected))return {ok:false,error:expected?`Only ${total} of ${expected} wines have uploaded. Resume or cancel this batch before submitting.`:'Batch Scan requires at least two wines'};
+    await db.batch([
+      db.prepare("UPDATE batch_recognition_items SET status='submitted',updated_at=? WHERE owner_id=? AND session_id=? AND status='staged'").bind(stamp,owner,sessionId),
+      db.prepare("UPDATE batch_recognition_sessions SET status='queued',updated_at=? WHERE id=? AND owner_id=?").bind(stamp,sessionId,owner)
+    ]);
+    return {ok:true,recovered:false};
+  }
+  const [submitted,active]=await Promise.all([
+    db.prepare("SELECT count(*) AS count FROM batch_recognition_items WHERE owner_id=? AND session_id=? AND status='submitted'").bind(owner,sessionId).first<{count:number}>(),
+    db.prepare("SELECT count(*) AS count FROM batch_recognition_jobs WHERE owner_id=? AND session_id=? AND status IN ('queued','running')").bind(owner,sessionId).first<{count:number}>()
   ]);
-  return {ok:true};
+  if(!canRetrySubmittedBatch(session.status,Number(submitted?.count)||0,Number(active?.count)||0))return {ok:false,error:'This batch has already been submitted'};
+  await db.prepare("UPDATE batch_recognition_sessions SET status='queued',updated_at=? WHERE id=? AND owner_id=?").bind(stamp,sessionId,owner).run();
+  return {ok:true,recovered:true};
 }
 
 export async function removeBatchSession(env:Pick<Env,'DB'|'WINE_IMAGES'>,owner:string,sessionId:string){
