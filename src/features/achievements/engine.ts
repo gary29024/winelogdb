@@ -36,12 +36,17 @@ function normalizedSet(values:string[]){return new Set(values.map(normalizeAchie
 function matchesName(value:string|undefined|null,names:Set<string>){return Boolean(value&&names.has(normalizeAchievementIdentity(value)))}
 function matchesAppellation(value:string|undefined|null,names:string[]|undefined){return !names?.length||matchesName(value,normalizedSet(names))}
 
-function resolveProducer(selector:AchievementSelector,indexes:IdentityIndexes){
+function resolveProducer(selector:AchievementSelector,registry:AchievementIdentityRegistry,indexes:IdentityIndexes){
+  if(selector.type!=='appellation'&&selector.producerId&&registry.producers.some(item=>item.id===selector.producerId))return selector.producerId;
   const names=selectorProducerNames(selector);return names.length?uniqueIndexedId(names,indexes.producerNames):undefined;
 }
 
 function resolveCuvee(selector:AchievementSelector,producerId:string|undefined,registry:AchievementIdentityRegistry,indexes:IdentityIndexes){
   if(!producerId||(selector.type!=='cuvee'&&selector.type!=='wine_vintage'))return undefined;
+  if(selector.cuveeId){
+    const direct=registry.cuvees.find(item=>item.id===selector.cuveeId&&item.producerId===producerId);
+    if(direct&&matchesAppellation(direct.appellation,selector.appellationNames))return direct.id;
+  }
   const producerIndex=indexes.cuveeNames.get(producerId);if(!producerIndex)return undefined;
   const ids=new Set<string>();
   for(const name of selector.cuveeNames){for(const id of producerIndex.get(normalizeAchievementIdentity(name))??[])ids.add(id)}
@@ -73,7 +78,7 @@ function directMatches(selector:AchievementSelector,producerId:string|undefined,
 }
 
 function progressItem(definitionItem:AchievementDefinition['items'][number],registry:AchievementIdentityRegistry,indexes:IdentityIndexes,wines:AchievementWine[]):AchievementItemProgress{
-  const resolvedProducerId=resolveProducer(definitionItem.selector,indexes),resolvedCuveeId=resolveCuvee(definitionItem.selector,resolvedProducerId,registry,indexes);
+  const resolvedProducerId=resolveProducer(definitionItem.selector,registry,indexes),resolvedCuveeId=resolveCuvee(definitionItem.selector,resolvedProducerId,registry,indexes);
   const direct=directMatches(definitionItem.selector,resolvedProducerId,resolvedCuveeId,wines),possible=direct.length?[]:rawPossibleMatches(definitionItem.selector,wines),matched=direct.length?direct:possible;
   const vintages=[...new Set(matched.map(wine=>wine.vintage).filter((value):value is number=>typeof value==='number'))].sort((a,b)=>a-b);
   return {
