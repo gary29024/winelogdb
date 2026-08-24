@@ -36,6 +36,7 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel}:WineF
   const nav=useNavigate(),[busy,setBusy]=useState(false),[error,setError]=useState('');
   const [producer,setProducer]=useState(String(initial?.producer??'')),[producerResolution,setProducerResolution]=useState<ProducerResolution|null>(null),[resolvingProducer,setResolvingProducer]=useState(false);
   const [wineName,setWineName]=useState(String(initial?.wineName??'')),[appellation,setAppellation]=useState(String(initial?.appellation??'')),[wineStyle,setWineStyle]=useState(String(initial?.wineStyle??''));
+  const [cruOverride,setCruOverride]=useState(String(initial?.classificationOverride??''));
   const [cuveeResolution,setCuveeResolution]=useState<CuveeResolution|null>(null),[resolvingCuvee,setResolvingCuvee]=useState(false),[preferCuveePrimaryName,setPreferCuveePrimaryName]=useState(false);
   const [structure,setStructure]=useState<TastingStructure>(()=>({...initial?.tastingStructure})),[structureOpen,setStructureOpen]=useState(()=>hasTastingStructure(initial?.tastingStructure??null));
   const matched=producerResolution?.matched?producerResolution.producer:undefined;
@@ -76,6 +77,7 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel}:WineF
       // Derived server-side, but sent back so an edit does not clear a tier the
       // label text no longer carries.
       classification:initial?.classification??null,
+      classificationOverride:(cruOverride||null) as WineInput['classificationOverride'],
       grapes:[...new Set(grapeBlend.map(x=>x.grape))],grapeBlend,wineStyle:(String(fd.get('wineStyle')||'')||null) as WineInput['wineStyle'],
       alcoholPercentage:fd.get('alcoholPercentage')?Number(fd.get('alcoholPercentage')):null,tastingNotes:String(fd.get('tastingNotes')||''),rating:fd.get('rating')?Number(fd.get('rating')):null,
       tastingDate:String(fd.get('tastingDate')||'')||null,tastingName:String(fd.get('tastingName')||'').trim()||null,event:initial?.event??null,
@@ -104,7 +106,14 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel}:WineF
 
     <div className="wine-compact-row three">{field('vintage','Vintage','number')}<label>Style<select name="wineStyle" value={wineStyle} onChange={e=>setWineStyle(e.target.value)}><option value="">Unknown</option>{['red','white','rose','sparkling','dessert','fortified','orange','other'].map(x=><option key={x}>{x}</option>)}</select></label>{field('alcoholPercentage','Alcohol %','number','0.1')}</div>
     <div className="wine-compact-row two">{field('country','Country')}{field('region','Region')}</div>
-    <label className="full-field">Appellation<input name="appellation" value={appellation} onChange={e=>setAppellation(e.target.value)}/></label>
+    <div className="wine-compact-row appellation-row"><label>Appellation<input name="appellation" value={appellation} onChange={e=>setAppellation(e.target.value)}/></label>
+      <label>Cru level<select name="classificationOverride" value={cruOverride} onChange={e=>setCruOverride(e.target.value)}>
+        <option value="">Auto</option>
+        <option value="grand_cru">Grand Cru</option>
+        <option value="premier_cru">Premier Cru</option>
+        <option value="village">Village</option>
+        <option value="none">Not classified</option>
+      </select><small>{cruOverride?'Set by hand; WineLog will not change it.':'Read from the appellation and the label.'}</small></label></div>
     <label className="full-field">Grapes / blend<input name="grapeBlend" defaultValue={blendText(initial)} placeholder="Merlot 95%, Cabernet Franc 5%"/><small>Percentages are optional. Separate grapes with commas.</small></label>
 
     <details className="structure-fields structure-disclosure" open={structureOpen} onToggle={e=>setStructureOpen(e.currentTarget.open)}><summary><span>Structure</span><small>Optional</small></summary><div className="structure-disclosure-body"><small className="structure-helper">Tap the value itself. Tap the selected value again to clear it.</small>{structureFields.map(item=><div className="structure-row" key={item.key}><span>{item.label}</span><div className="structure-options" role="group" aria-label={item.label}>{item.options.map(([value,label])=><button key={value} type="button" className={`structure-option${structure[item.key]===value?' selected':''}`} aria-pressed={structure[item.key]===value} onClick={()=>chooseStructure(item.key,value)}>{label}</button>)}</div></div>)}</div></details>

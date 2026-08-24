@@ -49,13 +49,16 @@ function stripRepeatedProducer(producer:string|undefined|null,wineName:string|un
  * the tree. Everything else defers to what the place says now, so correcting an
  * appellation corrects the tier with it.
  */
-function classification(stored:string|null|undefined,derived:string|null,spoken:string|null){
+function classification(override:string|null|undefined,stored:string|null|undefined,derived:string|null,spoken:string|null){
+  // A tier chosen by hand outranks everything, the label text included: it is
+  // there precisely for the bottles the derivation cannot read.
+  if(override)return override==='none'?null:override;
   if(spoken)return spoken;
   if(stored==='premier_cru'&&derived==='village')return stored;
   return derived??stored??null;
 }
 
-export function canonicalizeWineFields<T extends {producer?:string|null;wineName?:string|null;country?:string|null;region?:string|null;appellation?:string|null;classification?:string|null;grapes?:string[];grapeBlend?:Array<{grape:string;percentage?:number|null}>}>(wine:T):T{
+export function canonicalizeWineFields<T extends {producer?:string|null;wineName?:string|null;country?:string|null;region?:string|null;appellation?:string|null;classification?:string|null;classificationOverride?:string|null;grapes?:string[];grapeBlend?:Array<{grape:string;percentage?:number|null}>}>(wine:T):T{
   // Spelling first, so the tree is asked about "Burgundy" rather than
   // "Bourgogne", then placement: which of region and appellation each name
   // belongs in is decided by the hierarchy, not by the slot it arrived in.
@@ -80,7 +83,7 @@ export function canonicalizeWineFields<T extends {producer?:string|null;wineName
     // Normalising the place consumes the cru marker, so by the second save the
     // text no longer says "1er Cru" and re-deriving would downgrade a premier
     // cru to village. See classification() for what survives a re-save.
-    classification:classification(wine.classification,place.classification,
+    classification:classification(wine.classificationOverride,wine.classification,place.classification,
       classifyFromText(wine.appellation,wine.wineName)) as T['classification'],
     grapes:wine.grapes?.map(canonicalGrape) as T['grapes'],
     grapeBlend:wine.grapeBlend?.map(x=>({...x,grape:canonicalGrape(x.grape)})) as T['grapeBlend']
