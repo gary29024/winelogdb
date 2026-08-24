@@ -1,8 +1,10 @@
 import { z } from 'zod';
 import { canonicalizeWineFields } from '../../lib/wine/canonicalize';
+import { normalizeRecognitionVintage } from './vintage';
 const nullableText = z.string().trim().max(300).nullable().optional();
 const grapeBlendEntry = z.object({grape:z.string().trim().min(1).max(100),percentage:z.number().min(0).max(100).nullable().optional()});
 const wineStyles=['red','white','rose','sparkling','dessert','fortified','orange','other'] as const;
+const recognitionVintageSchema=z.preprocess(normalizeRecognitionVintage,z.number().int().min(1000).max(2200).nullable().optional());
 function normalizeStyle(value:unknown){
   if(value==null||value==='')return value;
   const s=String(value).trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
@@ -19,7 +21,7 @@ function normalizeStyle(value:unknown){
 export const recognitionSchema = z.object({
   producer: nullableText,
   wineName: nullableText,
-  vintage: z.number().int().min(1000).max(2200).nullable().optional(),
+  vintage: recognitionVintageSchema,
   country: nullableText,
   region: nullableText,
   appellation: nullableText,
