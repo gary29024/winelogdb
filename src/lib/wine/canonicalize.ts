@@ -1,3 +1,5 @@
+import { ageingTerm,resolvePlace } from '../places/resolve';
+
 const key=(value:string)=>value.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[’'`]/g,'').replace(/[^a-z0-9]+/g,' ').trim();
 
 const countries:Record<string,string>={
@@ -39,12 +41,31 @@ function stripRepeatedProducer(producer:string|undefined|null,wineName:string|un
   return stripped||name;
 }
 
-export function canonicalizeWineFields<T extends {producer?:string|null;wineName?:string|null;country?:string|null;region?:string|null;appellation?:string|null;grapes?:string[];grapeBlend?:Array<{grape:string;percentage?:number|null}>}>(wine:T):T{
+export function canonicalizeWineFields<T extends {producer?:string|null;wineName?:string|null;country?:string|null;region?:string|null;appellation?:string|null;classification?:string|null;grapes?:string[];grapeBlend?:Array<{grape:string;percentage?:number|null}>}>(wine:T):T{
+  // Spelling first, so the tree is asked about "Burgundy" rather than
+  // "Bourgogne", then placement: which of region and appellation each name
+  // belongs in is decided by the hierarchy, not by the slot it arrived in.
+  const place=resolvePlace({
+    country:canonicalCountry(wine.country),
+    region:canonicalRegion(wine.region),
+    appellation:canonicalAppellation(wine.appellation),
+    // The cru tier is usually printed on the label rather than in the
+    // appellation, so the wine name gets a say in reading it.
+    wineName:wine.wineName
+  });
+  // An ageing tier is not a place, so it comes off the appellation - but it is
+  // on the label, so it moves to the wine name rather than being dropped.
+  const ageing=ageingTerm(wine.appellation);
+  const named=stripRepeatedProducer(wine.producer,wine.wineName);
+  const carriesAgeing=ageing&&named&&key(named).includes(key(ageing));
   return {...wine,
-    wineName:stripRepeatedProducer(wine.producer,wine.wineName) as T['wineName'],
-    country:canonicalCountry(wine.country) as T['country'],
-    region:canonicalRegion(wine.region) as T['region'],
-    appellation:canonicalAppellation(wine.appellation) as T['appellation'],
+    wineName:(ageing&&!carriesAgeing?`${named??''} ${ageing}`.trim():named) as T['wineName'],
+    country:place.country as T['country'],
+    region:place.region as T['region'],
+    appellation:place.appellation as T['appellation'],
+    // Normalising the place drops the climat that carried the tier, so the tier
+    // is recorded beside it rather than lost.
+    classification:(place.classification??wine.classification??null) as T['classification'],
     grapes:wine.grapes?.map(canonicalGrape) as T['grapes'],
     grapeBlend:wine.grapeBlend?.map(x=>({...x,grape:canonicalGrape(x.grape)})) as T['grapeBlend']
   };

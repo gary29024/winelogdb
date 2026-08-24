@@ -112,7 +112,10 @@ export const deepSearchSchema = z.object({
 export const wineRecordSchema = z.object({
   id: z.string().uuid(), ownerId: z.string().min(1).max(128), producer: z.string().trim().min(1).max(200),
   wineName: z.string().trim().min(1).max(200), vintage: vintageSchema,
-  country: optionalText, region: optionalText, appellation: optionalText, grapes: z.array(z.string().trim().min(1).max(100)).max(30).default([]),
+  country: optionalText, region: optionalText, appellation: optionalText,
+  // Derived from the place tree and the label text on the way in, so callers
+  // never have to supply it.
+  classification: z.enum(['grand_cru','premier_cru','village']).nullable().optional().default(null), grapes: z.array(z.string().trim().min(1).max(100)).max(30).default([]),
   grapeBlend: z.array(grapeBlendEntrySchema).max(30).default([]),
   wineStyle: wineStyleSchema, alcoholPercentage: optionalNumber(z.number().min(0).max(30)),
   tastingNotes: z.string().trim().max(10000).default(''), rating: optionalNumber(z.number().min(0).max(100)),

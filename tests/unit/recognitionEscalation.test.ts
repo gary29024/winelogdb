@@ -3,7 +3,7 @@ import { buildRecognitionPrompt } from '../../src/lib/recognition/geminiRequest'
 import { groupRecognitionEscalationReasons,preferEscalatedRecognition,recognitionEscalationReasons,RECOGNITION_ESCALATION_CONFIDENCE,RECOGNITION_ESCALATION_MODEL } from '../../src/lib/recognition/escalation';
 
 const primary=(overrides:Record<string,unknown>={})=>({
-  producer:'Domaine Test',wineName:'Premier Cru',vintage:2020,country:'France',region:'Burgundy',appellation:'Volnay Premier Cru',grapes:['Pinot Noir'],grapeBlend:[],style:'red' as const,alcoholPercentage:null,confidence:0.95,tastingDate:null,locationName:null,latitude:null,longitude:null,metadataSource:'none' as const,...overrides
+  producer:'Domaine Test',wineName:'Premier Cru',vintage:2020,country:'France',region:'Burgundy',appellation:'Volnay Premier Cru',classification:'premier_cru' as const,grapes:['Pinot Noir'],grapeBlend:[],style:'red' as const,alcoholPercentage:null,confidence:0.95,tastingDate:null,locationName:null,latitude:null,longitude:null,metadataSource:'none' as const,...overrides
 });
 
 describe('selective wine-label escalation',()=>{

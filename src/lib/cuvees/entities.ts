@@ -1,4 +1,5 @@
 import { buildResearchTargets, type ResearchSource } from '../research/cache';
+import { placesCompatible } from '../places/resolve';
 
 export type CuveeEntity={
   id:string;
@@ -82,7 +83,11 @@ async function producerNames(db:D1Database,owner:string,producerId:string){
 }
 
 const styleCompatible=(stored:string|null|undefined,incoming:string|null|undefined)=>{const a=cuveeStyleFamily(stored),b=cuveeStyleFamily(incoming);return !a||!b||a===b};
-const appellationCompatible=(stored:string|null|undefined,incoming:string|null|undefined)=>!stored||!incoming||normalizeCuveeAlias(stored)===normalizeCuveeAlias(incoming);
+// Two appellations that name one place at different depths - "Napa Valley" and
+// "Oakville" - are the same origin, and a cuvée recorded under either must not
+// fork into two entities just because recognition resolved to a different depth.
+const appellationCompatible=(stored:string|null|undefined,incoming:string|null|undefined)=>
+  !stored||!incoming||normalizeCuveeAlias(stored)===normalizeCuveeAlias(incoming)||placesCompatible(stored,incoming);
 export function cuveeIdentityCandidateCompatible(storedSignature:string,baseSignature:string,identitySignature:string,storedAppellation:string|null|undefined,incomingAppellation:string|null|undefined,storedStyle:string|null|undefined,incomingStyle:string|null|undefined){
   if(!cuveeSignatureMatches(storedSignature,baseSignature,identitySignature)||!styleCompatible(storedStyle,incomingStyle))return false;
   // An exact style-aware signature already encodes the normalized name + appellation token set.
