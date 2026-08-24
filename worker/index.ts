@@ -53,8 +53,8 @@ const wineSelect=`SELECT w.*,
  LEFT JOIN wine_experiences we ON we.id=(SELECT le.id FROM wine_experiences le WHERE le.owner_id=w.owner_id AND le.wine_id=w.id ORDER BY le.created_at DESC LIMIT 1)
  LEFT JOIN tastings t ON t.owner_id=we.owner_id AND t.id=we.tasting_id`;
 
-const mapWine=(r:Record<string,unknown>,imageIds:string[]=[])=>({
- id:r.id,ownerId:r.owner_id,producer:r.producer,wineName:r.wine_name,vintage:r.vintage,country:r.country,region:r.region,appellation:r.appellation,
+export const mapWine=(r:Record<string,unknown>,imageIds:string[]=[])=>({
+ id:r.id,ownerId:r.owner_id,producer:r.producer,wineName:r.wine_name,vintage:r.vintage,country:r.country,region:r.region,appellation:r.appellation,classification:r.classification??null,
  grapes:parseJson<string[]>(r.grapes_json,[]),grapeBlend:parseJson<Array<{grape:string;percentage?:number|null}>>(r.grape_blend_json,[]),wineStyle:r.wine_style,alcoholPercentage:r.alcohol_percentage,
  tastingNotes:r.experience_notes??r.tasting_notes,rating:r.experience_rating??r.rating,tastingDate:r.experience_date??r.tasting_date,event:r.event,venue:r.venue,
  tastingName:r.tasting_name,locationName:r.location_name,latitude:r.latitude,longitude:r.longitude,
