@@ -1,0 +1,290 @@
+/**
+ * A wine place tree, used to decide which of `region` and `appellation` a name
+ * belongs in rather than trusting whichever slot recognition happened to pick.
+ *
+ * Old World labels carry a convention strong enough that a model is consistent
+ * about them. New World appellations nest three or four deep - California ›
+ * Napa Valley › Oakville - with no convention about which two levels to emit,
+ * so the same wine comes back as region "Napa Valley" / appellation "Oakville"
+ * one day and region "California" / appellation "Napa Valley" the next.
+ *
+ * Tiers, broadest first. Only `region` ever fills the region column; anything
+ * below it fills appellation. `area` exists so that "California" and "South
+ * Australia" resolve to something without being mistaken for growing regions,
+ * and `subregion` so that "Côte de Nuits" keeps Burgundy in the region column
+ * the way the journal already records it.
+ */
+export type PlaceTier='country'|'area'|'region'|'subregion'|'appellation';
+
+export type PlaceNode={
+  id:string;
+  name:string;
+  tier:PlaceTier;
+  parent:string|null;
+  aliases:readonly string[];
+};
+
+type Draft={name:string;tier:PlaceTier;aliases:readonly string[];children:readonly Draft[]};
+
+const node=(tier:PlaceTier)=>(name:string,aliases:readonly string[]=[],children:readonly Draft[]=[]):Draft=>
+  ({name,tier,aliases,children});
+
+const country=node('country'),area=node('area'),region=node('region'),sub=node('subregion'),appellation=node('appellation');
+
+/** Shorthand for a run of appellations that carry no aliases of their own. */
+const appellations=(...names:string[]):Draft[]=>names.map(name=>appellation(name));
+
+const tree:readonly Draft[]=[
+  country('United States',['USA','U.S.A.','US','United States of America','America'],[
+    area('California',[],[
+      area('North Coast',[],[
+        region('Napa Valley',['Napa'],appellations(
+          'Oakville','Rutherford','St. Helena','Stags Leap District','Yountville','Calistoga',
+          'Howell Mountain','Spring Mountain District','Mount Veeder','Diamond Mountain District',
+          'Atlas Peak','Coombsville','Oak Knoll District','Chiles Valley','Wild Horse Valley'
+        ).concat(appellation('Los Carneros',['Carneros','Napa Carneros']))),
+        region('Sonoma County',['Sonoma'],appellations(
+          'Russian River Valley','Sonoma Coast','Alexander Valley','Dry Creek Valley','Chalk Hill',
+          'Knights Valley','Bennett Valley','Sonoma Valley','Fort Ross-Seaview','Petaluma Gap',
+          'Moon Mountain District','Rockpile','Green Valley of Russian River Valley','Sonoma Mountain'
+        )),
+        region('Mendocino County',['Mendocino'],appellations('Anderson Valley','Yorkville Highlands','Potter Valley')),
+        region('Lake County',[],appellations('Red Hills Lake County','Guenoc Valley'))
+      ]),
+      area('Central Coast',[],[
+        region('Santa Barbara County',['Santa Barbara'],appellations(
+          'Sta. Rita Hills','Santa Maria Valley','Ballard Canyon','Happy Canyon of Santa Barbara',
+          'Los Olivos District','Santa Ynez Valley','Alisos Canyon'
+        )),
+        region('Monterey County',['Monterey'],appellations('Santa Lucia Highlands','Arroyo Seco','Chalone','Carmel Valley')),
+        region('San Luis Obispo County',['San Luis Obispo'],appellations(
+          'Paso Robles','Edna Valley','Arroyo Grande Valley','Willow Creek District','Adelaida District','Templeton Gap District'
+        )),
+        region('Santa Cruz Mountains',[],[]),
+        region('Ballard Canyon',[],[])
+      ]),
+      region('Sierra Foothills',[],appellations('El Dorado','Amador County','Fiddletown','Fair Play','Shenandoah Valley')),
+      region('Lodi',[],[]),
+      region('Livermore Valley',[],[]),
+      region('Napa-Sonoma',[],[])
+    ]),
+    area('Oregon',[],[
+      region('Willamette Valley',[],appellations(
+        'Dundee Hills','Eola-Amity Hills','Yamhill-Carlton','Ribbon Ridge','Chehalem Mountains',
+        'McMinnville','Laurelwood District','Van Duzer Corridor','Tualatin Hills','Lower Long Tom'
+      )),
+      region('Southern Oregon',[],appellations('Umpqua Valley','Rogue Valley','Applegate Valley','Elkton Oregon'))
+    ]),
+    area('Washington',['Washington State'],[
+      region('Columbia Valley',[],appellations(
+        'Walla Walla Valley','Yakima Valley','Red Mountain','Horse Heaven Hills','Wahluke Slope',
+        'Rattlesnake Hills','Royal Slope','Candy Mountain','The Rocks District of Milton-Freewater'
+      )),
+      region('Puget Sound',[],[])
+    ]),
+    area('New York',['New York State'],[
+      region('Finger Lakes',[],appellations('Seneca Lake','Cayuga Lake','Keuka Lake')),
+      region('Long Island',[],appellations('North Fork of Long Island','The Hamptons'))
+    ]),
+    area('Virginia',[],[region('Monticello',[],[])]),
+    area('Texas',[],[region('Texas Hill Country',[],[])])
+  ]),
+
+  country('France',[],[
+    region('Burgundy',['Bourgogne'],[
+      sub('Côte de Nuits',[],appellations(
+        'Gevrey-Chambertin','Morey-Saint-Denis','Chambolle-Musigny','Vougeot','Vosne-Romanée',
+        'Nuits-Saint-Georges','Fixin','Marsannay','Côte de Nuits-Villages'
+      )),
+      sub('Côte de Beaune',[],appellations(
+        'Aloxe-Corton','Pernand-Vergelesses','Savigny-lès-Beaune','Beaune','Pommard','Volnay',
+        'Meursault','Puligny-Montrachet','Chassagne-Montrachet','Saint-Aubin','Santenay',
+        'Auxey-Duresses','Monthélie','Saint-Romain','Ladoix','Chorey-lès-Beaune','Côte de Beaune-Villages'
+      )),
+      sub('Côte Chalonnaise',[],appellations('Mercurey','Givry','Rully','Montagny','Bouzeron')),
+      sub('Mâconnais',[],appellations('Pouilly-Fuissé','Saint-Véran','Viré-Clessé','Mâcon-Villages')),
+      sub('Chablis',[],appellations('Petit Chablis','Chablis Grand Cru','Chablis Premier Cru')),
+      appellation('Bourgogne Rouge'),appellation('Bourgogne Blanc'),appellation('Bourgogne Aligoté')
+    ]),
+    region('Bordeaux',[],[
+      sub('Médoc',[],appellations('Margaux','Pauillac','Saint-Julien','Saint-Estèphe','Haut-Médoc','Listrac-Médoc','Moulis-en-Médoc')),
+      sub('Graves',[],appellations('Pessac-Léognan','Sauternes','Barsac','Cérons')),
+      sub('Right Bank',[],appellations('Saint-Émilion','Pomerol','Fronsac','Lalande-de-Pomerol','Castillon Côtes de Bordeaux')),
+      appellation('Entre-Deux-Mers')
+    ]),
+    region('Champagne',[],appellations('Montagne de Reims','Côte des Blancs','Vallée de la Marne','Côte des Bar','Aÿ','Cramant','Le Mesnil-sur-Oger')),
+    region('Rhône',['Rhone','Rhône Valley','Rhone Valley'],[
+      sub('Northern Rhône',['Northern Rhone'],appellations('Côte-Rôtie','Hermitage','Crozes-Hermitage','Cornas','Saint-Joseph','Condrieu','Château-Grillet','Saint-Péray')),
+      sub('Southern Rhône',['Southern Rhone'],appellations('Châteauneuf-du-Pape','Gigondas','Vacqueyras','Rasteau','Lirac','Tavel','Vinsobres','Cairanne','Côtes du Rhône','Côtes du Rhône Villages'))
+    ]),
+    region('Loire',['Loire Valley'],appellations(
+      'Sancerre','Pouilly-Fumé','Vouvray','Chinon','Bourgueil','Saumur-Champigny','Savennières',
+      'Muscadet Sèvre et Maine','Anjou','Quincy','Menetou-Salon','Coteaux du Layon','Saumur'
+    )),
+    region('Alsace',[],appellations('Alsace Grand Cru')),
+    region('Beaujolais',[],appellations('Morgon','Fleurie','Moulin-à-Vent','Brouilly','Côte de Brouilly','Juliénas','Chénas','Chiroubles','Régnié','Saint-Amour','Beaujolais-Villages')),
+    region('Languedoc',['Languedoc-Roussillon'],appellations('Corbières','Minervois','Faugères','Pic Saint-Loup','Saint-Chinian','Fitou','Picpoul de Pinet')),
+    region('Roussillon',[],appellations('Côtes du Roussillon','Collioure','Banyuls','Maury')),
+    region('Provence',[],appellations('Bandol','Côtes de Provence','Cassis','Palette','Coteaux d’Aix-en-Provence')),
+    region('Jura',[],appellations('Arbois','Château-Chalon','Côtes du Jura','L’Étoile')),
+    region('Savoie',[],[]),
+    region('South West France',['Sud-Ouest'],appellations('Cahors','Madiran','Jurançon','Bergerac','Irouléguy')),
+    region('Corsica',['Corse'],[])
+  ]),
+
+  country('Italy',[],[
+    region('Piedmont',['Piemonte'],appellations(
+      'Barolo','Barbaresco','Barbera d’Alba','Barbera d’Asti','Dolcetto d’Alba','Roero',
+      'Langhe','Gattinara','Ghemme','Nebbiolo d’Alba','Moscato d’Asti','Alta Langa'
+    )),
+    region('Tuscany',['Toscana'],appellations(
+      'Brunello di Montalcino','Chianti Classico','Chianti','Vino Nobile di Montepulciano',
+      'Bolgheri','Maremma Toscana','Rosso di Montalcino','Carmignano','Montecucco'
+    )),
+    region('Veneto',[],appellations('Amarone della Valpolicella','Valpolicella','Soave','Bardolino','Prosecco','Valpolicella Ripasso','Recioto della Valpolicella')),
+    region('Friuli-Venezia Giulia',['Friuli'],appellations('Collio','Colli Orientali del Friuli','Carso','Isonzo')),
+    region('Trentino-Alto Adige',['Alto Adige','Südtirol','Trentino'],[]),
+    region('Lombardy',['Lombardia'],appellations('Franciacorta','Valtellina','Oltrepò Pavese')),
+    region('Sicily',['Sicilia'],appellations('Etna','Vittoria','Cerasuolo di Vittoria','Noto')),
+    region('Campania',[],appellations('Taurasi','Fiano di Avellino','Greco di Tufo','Aglianico del Taburno')),
+    region('Abruzzo',[],appellations('Montepulciano d’Abruzzo','Trebbiano d’Abruzzo')),
+    region('Marche',[],appellations('Verdicchio dei Castelli di Jesi','Conero','Verdicchio di Matelica')),
+    region('Umbria',[],appellations('Montefalco Sagrantino','Orvieto')),
+    region('Puglia',['Apulia'],appellations('Primitivo di Manduria','Salice Salentino','Castel del Monte')),
+    region('Sardinia',['Sardegna'],appellations('Cannonau di Sardegna','Vermentino di Gallura'))
+  ]),
+
+  country('Spain',['España'],[
+    region('Rioja',[],appellations('Rioja Alta','Rioja Alavesa','Rioja Oriental','Rioja Baja')),
+    region('Ribera del Duero',[],[]),
+    region('Priorat',['Priorato'],[]),
+    region('Rías Baixas',['Rias Baixas'],[]),
+    region('Catalonia',['Catalunya','Cataluña'],appellations('Penedès','Montsant','Cava','Costers del Segre','Empordà','Terra Alta')),
+    region('Jerez',['Sherry','Jerez-Xérès-Sherry'],[]),
+    region('Castilla y León',[],appellations('Toro','Rueda','Bierzo','Cigales')),
+    region('Navarra',[],[]),
+    region('Galicia',[],appellations('Ribeira Sacra','Valdeorras','Ribeiro','Monterrei')),
+    region('Andalusia',['Andalucía'],appellations('Montilla-Moriles','Málaga'))
+  ]),
+
+  country('Portugal',[],[
+    region('Douro',[],appellations('Port','Douro Superior','Cima Corgo','Baixo Corgo')),
+    region('Dão',['Dao'],[]),
+    region('Bairrada',[],[]),
+    region('Alentejo',[],[]),
+    region('Vinho Verde',[],appellations('Monção e Melgaço')),
+    region('Lisboa',['Estremadura'],appellations('Colares','Bucelas')),
+    region('Setúbal',[],[]),
+    region('Madeira',[],[])
+  ]),
+
+  country('Germany',['Deutschland'],[
+    region('Mosel',['Mosel-Saar-Ruwer'],appellations('Saar','Ruwer','Bernkastel','Piesport','Ürzig','Wehlen','Erden','Graach')),
+    region('Rheingau',[],appellations('Rüdesheim','Johannisberg','Erbach','Hochheim')),
+    region('Rheinhessen',[],appellations('Nierstein','Nackenheim','Westhofen')),
+    region('Pfalz',[],appellations('Forst','Deidesheim','Ruppertsberg','Wachenheim')),
+    region('Nahe',[],[]),region('Baden',[],[]),region('Württemberg',[],[]),
+    region('Franken',['Franconia'],[]),region('Ahr',[],[]),region('Saale-Unstrut',[],[])
+  ]),
+
+  country('Austria',['Österreich'],[
+    region('Wachau',[],[]),region('Kamptal',[],[]),region('Kremstal',[],[]),
+    region('Burgenland',[],appellations('Neusiedlersee','Leithaberg','Eisenberg','Mittelburgenland')),
+    region('Weinviertel',[],[]),region('Thermenregion',[],[]),region('Steiermark',['Styria'],[]),
+    region('Wien',['Vienna'],[]),region('Traisental',[],[]),region('Carnuntum',[],[])
+  ]),
+
+  country('Australia',[],[
+    area('South Australia',[],[
+      region('Barossa Valley',['Barossa'],[]),region('Eden Valley',[],[]),region('McLaren Vale',[],[]),
+      region('Clare Valley',[],[]),region('Coonawarra',[],[]),region('Adelaide Hills',[],[]),
+      region('Padthaway',[],[]),region('Wrattonbully',[],[]),region('Langhorne Creek',[],[])
+    ]),
+    area('Victoria',[],[
+      region('Yarra Valley',[],[]),region('Mornington Peninsula',[],[]),region('Heathcote',[],[]),
+      region('Rutherglen',[],[]),region('Geelong',[],[]),region('Grampians',[],[]),region('Beechworth',[],[])
+    ]),
+    area('New South Wales',[],[region('Hunter Valley',['Hunter'],[]),region('Orange',[],[]),region('Mudgee',[],[]),region('Canberra District',[],[])]),
+    area('Western Australia',[],[region('Margaret River',[],[]),region('Great Southern',[],[]),region('Frankland River',[],[])]),
+    area('Tasmania',[],[region('Tamar Valley',[],[]),region('Coal River Valley',[],[])])
+  ]),
+
+  country('New Zealand',[],[
+    region('Marlborough',[],appellations('Wairau Valley','Awatere Valley','Southern Valleys')),
+    region('Central Otago',[],appellations('Bannockburn','Gibbston','Bendigo','Cromwell','Wanaka')),
+    region('Hawke’s Bay',['Hawkes Bay','Hawke s Bay'],appellations('Gimblett Gravels','Bridge Pa Triangle')),
+    region('Martinborough',['Wairarapa'],[]),region('Nelson',[],[]),region('Waipara Valley',['North Canterbury'],[]),
+    region('Gisborne',[],[]),region('Waiheke Island',[],[]),region('Auckland',[],[])
+  ]),
+
+  country('Argentina',[],[
+    region('Mendoza',[],[
+      sub('Uco Valley',['Valle de Uco'],appellations('Gualtallary','Altamira','La Consulta','San Pablo','Vista Flores','Los Chacayes')),
+      sub('Luján de Cuyo',['Lujan de Cuyo'],appellations('Agrelo','Las Compuertas','Vistalba','Perdriel')),
+      sub('Maipú',['Maipu'],[])
+    ]),
+    region('Salta',[],appellations('Cafayate')),
+    region('Patagonia',[],appellations('Río Negro','Neuquén')),
+    region('San Juan',[],[])
+  ]),
+
+  country('Chile',[],[
+    region('Colchagua Valley',['Colchagua'],[]),region('Maipo Valley',['Maipo'],appellations('Puente Alto','Pirque')),
+    region('Casablanca Valley',['Casablanca'],[]),region('San Antonio Valley',[],appellations('Leyda Valley')),
+    region('Cachapoal Valley',['Cachapoal'],appellations('Apalta')),region('Maule Valley',['Maule'],[]),
+    region('Limarí Valley',['Limarí'],[]),region('Itata Valley',['Itata'],[]),region('Aconcagua Valley',['Aconcagua'],[]),
+    region('Bío Bío Valley',['Bio Bio'],[]),region('Elqui Valley',['Elqui'],[]),region('Curicó Valley',['Curico'],[])
+  ]),
+
+  country('South Africa',[],[
+    region('Stellenbosch',[],appellations('Simonsberg-Stellenbosch','Jonkershoek Valley','Banghoek','Polkadraai Hills')),
+    region('Swartland',[],appellations('Riebeekberg','Paardeberg')),
+    region('Franschhoek',['Franschhoek Valley'],[]),region('Walker Bay',[],appellations('Hemel-en-Aarde Valley','Hemel-en-Aarde Ridge')),
+    region('Paarl',[],appellations('Simonsberg-Paarl','Voor Paardeberg')),
+    region('Constantia',[],[]),region('Elgin',[],[]),region('Robertson',[],[]),region('Breedekloof',[],[]),region('Darling',[],[])
+  ]),
+
+  country('Greece',['Hellas'],[
+    region('Santorini',[],[]),region('Nemea',[],[]),region('Naoussa',[],[]),
+    region('Mantinia',[],[]),region('Crete',[],[]),region('Macedonia',[],[])
+  ]),
+  country('Hungary',['Magyarország'],[region('Tokaj',['Tokaji'],[]),region('Eger',[],[]),region('Villány',[],[]),region('Szekszárd',[],[])]),
+  country('Israel',[],[region('Galilee',['Galil'],appellations('Upper Galilee')),region('Judean Hills',[],[]),region('Golan Heights',[],[])]),
+  country('Lebanon',[],[region('Bekaa Valley',['Beqaa Valley'],[])]),
+  country('Georgia',[],[region('Kakheti',[],appellations('Kindzmarauli','Tsinandali')),region('Kartli',[],[]),region('Imereti',[],[])]),
+  country('Slovenia',[],[region('Primorska',[],appellations('Goriška Brda','Vipava Valley')),region('Podravje',[],[]),region('Posavje',[],[])]),
+  country('Croatia',[],[region('Istria',['Istra'],[]),region('Dalmatia',[],appellations('Pelješac','Dingač'))]),
+  country('Switzerland',['Suisse','Schweiz'],[region('Valais',[],[]),region('Vaud',[],appellations('Lavaux','Chablais')),region('Genève',['Geneva'],[]),region('Ticino',[],[]),region('Neuchâtel',[],[])]),
+  country('Canada',[],[
+    area('British Columbia',[],[region('Okanagan Valley',[],appellations('Naramata Bench','Golden Mile Bench','Black Sage Bench'))]),
+    area('Ontario',[],[region('Niagara Peninsula',[],appellations('Beamsville Bench','Twenty Mile Bench','Four Mile Creek')),region('Prince Edward County',[],[])])
+  ]),
+  country('Uruguay',[],[region('Canelones',[],[]),region('Maldonado',[],[])]),
+  country('Brazil',[],[region('Serra Gaúcha',[],appellations('Vale dos Vinhedos')),region('Campanha',[],[])]),
+  country('Mexico',[],[region('Valle de Guadalupe',[],[])]),
+  country('China',[],[region('Ningxia',[],[]),region('Shandong',[],[])]),
+  country('Japan',[],[region('Yamanashi',[],[]),region('Nagano',[],[]),region('Hokkaido',[],[])]),
+  country('England',['United Kingdom','UK','Great Britain'],[region('Sussex',[],[]),region('Kent',[],[]),region('Hampshire',[],[]),region('Essex',[],[])]),
+  country('Romania',[],[region('Dealu Mare',[],[]),region('Recaș',[],[])]),
+  country('Bulgaria',[],[region('Thracian Valley',[],[]),region('Danubian Plain',[],[])]),
+  country('Moldova',[],[region('Codru',[],[]),region('Ștefan Vodă',[],[])]),
+  country('Turkey',['Türkiye'],[region('Thrace',[],[]),region('Cappadocia',[],[])]),
+  country('India',[],[region('Nashik',[],[])])
+];
+
+const slug=(value:string)=>value.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+
+function flatten(){
+  const nodes:PlaceNode[]=[];
+  const walk=(draft:Draft,parent:string|null)=>{
+    // Prefixing with the parent keeps "Chablis" in Burgundy distinct from any
+    // later namesake, without the ids depending on tree order.
+    const id=parent?`${parent}/${slug(draft.name)}`:slug(draft.name);
+    nodes.push({id,name:draft.name,tier:draft.tier,parent,aliases:draft.aliases});
+    for(const child of draft.children)walk(child,id);
+  };
+  for(const draft of tree)walk(draft,null);
+  return nodes;
+}
+
+export const PLACES:readonly PlaceNode[]=flatten();

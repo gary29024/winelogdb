@@ -16,7 +16,20 @@ export const recognitionResponseSchema={
   required:['grapes','grapeBlend','confidence']
 } as const;
 
+/**
+ * Three place fields with no stated meaning left the model to guess which two
+ * levels of a nested hierarchy to emit. Old World labels carry a convention
+ * strong enough to be stable; AVAs nest three or four deep, so the same wine
+ * came back as Napa Valley/Oakville one day and California/Napa Valley the next.
+ *
+ * The server re-derives the levels from a place tree either way, but saying it
+ * here means the tree is usually confirming the answer rather than repairing it.
+ */
+export const PLACE_LEVEL_RULE='For place fields, region is the principal growing region a wine person would name in conversation (Napa Valley, Sonoma County, Burgundy, Barossa Valley, Mosel, Rioja, Mendoza), and appellation is the narrowest legally defined origin that applies (Oakville, Russian River Valley, Gevrey-Chambertin, Barolo, Rioja Alta, Gualtallary). Broad multi-region designations such as California, South Australia, South Eastern Australia, Vin de France or Columbia Valley are not principal regions: put one in region only when nothing narrower is known, and never in appellation. When only one place is known, put it at the level it actually belongs to and leave the other null rather than repeating it in both. Examples: an Oakville Cabernet is region Napa Valley, appellation Oakville; a wine labelled only Napa Valley is region Napa Valley, appellation null; a Gevrey-Chambertin is region Burgundy, appellation Gevrey-Chambertin.';
+
 const nullableString={anyOf:[{type:'string'},{type:'null'}]} as const;
+const regionField={anyOf:[{type:'string'},{type:'null'}],description:'Principal growing region, e.g. Napa Valley, Burgundy, Barossa Valley. Not a broad multi-region designation such as California unless nothing narrower is known.'} as const;
+const appellationField={anyOf:[{type:'string'},{type:'null'}],description:'Narrowest legally defined origin, e.g. Oakville, Gevrey-Chambertin, Barolo. Null when only the region is known.'} as const;
 const recognitionVintageJsonSchema={anyOf:[{type:'integer',minimum:1000,maximum:2200},{type:'null'}]} as const;
 
 export const recognitionResponseJsonSchema={
@@ -27,8 +40,8 @@ export const recognitionResponseJsonSchema={
     wineName:nullableString,
     vintage:recognitionVintageJsonSchema,
     country:nullableString,
-    region:nullableString,
-    appellation:nullableString,
+    region:regionField,
+    appellation:appellationField,
     grapes:{type:'array',maxItems:20,items:{type:'string'}},
     grapeBlend:{type:'array',maxItems:20,items:{type:'object',additionalProperties:false,properties:{grape:{type:'string'},percentage:{anyOf:[{type:'number',minimum:0,maximum:100},{type:'null'}]}},required:['grape']}},
     style:{anyOf:[{type:'string',enum:['red','white','rose','sparkling','dessert','fortified','orange','other']},{type:'null'}]},
@@ -54,8 +67,8 @@ export const groupRecognitionResponseJsonSchema={
           wineName:{type:'string'},
           vintage:recognitionVintageJsonSchema,
           country:nullableString,
-          region:nullableString,
-          appellation:nullableString,
+          region:regionField,
+          appellation:appellationField,
           grapes:{type:'array',maxItems:20,items:{type:'string'}},
           grapeBlend:{type:'array',maxItems:20,items:{type:'object',additionalProperties:false,properties:{grape:{type:'string'},percentage:{anyOf:[{type:'number',minimum:0,maximum:100},{type:'null'}]}},required:['grape']}},
           style:{anyOf:[{type:'string',enum:['red','white','rose','sparkling','dessert','fortified','orange','other']},{type:'null'}]},
@@ -83,6 +96,6 @@ export function buildRecognitionPrompt(metadata:RecognitionPhotoMetadata[]){
     selected.capturedAt?`The strongest photo timestamp is ${selected.capturedAt}.`:'No reliable photo timestamp.',
     selected.latitude!=null&&selected.longitude!=null?`The exact EXIF GPS is ${selected.latitude}, ${selected.longitude}. Infer only an approximate concise human-readable place name when reasonably confident; never alter the coordinates.`:'No reliable GPS metadata.'
   ].join(' ');
-  const prompt=`All supplied images are labels or views of the SAME wine bottle. Analyze them jointly in one identification. Reconcile front, back, neck and supplementary labels rather than treating them as separate wines. Producer, wineName and vintage are identity-critical: return them only when supported by visible label or bottle evidence in the supplied images. Do not invent, complete, or substitute producer, cuvee/wine name, or vintage from general wine knowledge; use null when the identity text or vintage is not reasonably readable, including non-vintage wines. After the visible identity is established, you may fill high-confidence canonical facts from general wine knowledge even when not printed verbatim only for country, region, appellation, grape varieties, and broad wine style. Use null or an empty array when not reasonably confident. For style, return only one of: red, white, rose, sparkling, dessert, fortified, orange, other. Capture grape blend percentages only when explicitly visible in the supplied images; never invent vintage-specific percentages. Keep plain grape names in grapes and percentages in grapeBlend. Do not add producer history, vintage quality, terroir commentary, winemaking techniques, drinking windows, tasting notes, scores, or detailed research here; those belong to Deep Search. Confidence is 0 to 1 and should reflect confidence in the specific bottle identity, especially the visible producer and wineName rather than confidence in broad regional knowledge. ${context} Do not invent a tasting date; the application derives it from photo metadata.`;
+  const prompt=`All supplied images are labels or views of the SAME wine bottle. Analyze them jointly in one identification. Reconcile front, back, neck and supplementary labels rather than treating them as separate wines. Producer, wineName and vintage are identity-critical: return them only when supported by visible label or bottle evidence in the supplied images. Do not invent, complete, or substitute producer, cuvee/wine name, or vintage from general wine knowledge; use null when the identity text or vintage is not reasonably readable, including non-vintage wines. After the visible identity is established, you may fill high-confidence canonical facts from general wine knowledge even when not printed verbatim only for country, region, appellation, grape varieties, and broad wine style. Use null or an empty array when not reasonably confident. ${PLACE_LEVEL_RULE} For style, return only one of: red, white, rose, sparkling, dessert, fortified, orange, other. Capture grape blend percentages only when explicitly visible in the supplied images; never invent vintage-specific percentages. Keep plain grape names in grapes and percentages in grapeBlend. Do not add producer history, vintage quality, terroir commentary, winemaking techniques, drinking windows, tasting notes, scores, or detailed research here; those belong to Deep Search. Confidence is 0 to 1 and should reflect confidence in the specific bottle identity, especially the visible producer and wineName rather than confidence in broad regional knowledge. ${context} Do not invent a tasting date; the application derives it from photo metadata.`;
   return {prompt,selected};
 }
