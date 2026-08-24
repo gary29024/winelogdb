@@ -1,6 +1,7 @@
 import { useEffect,useRef } from 'react';
 import { createPortal } from 'react-dom';
 import '../imageLightbox.css';
+import { AppIcon } from './AppIcons';
 
 type ImageLightboxProps={src:string;alt:string;onClose:()=>void};
 
@@ -18,7 +19,7 @@ export function ImageLightbox({src,alt,onClose}:ImageLightboxProps){
 
   return createPortal(
     <div className="photo-lightbox" role="dialog" aria-modal="true" aria-label={`Enlarged ${alt}`} onMouseDown={event=>{if(event.target===event.currentTarget)onClose()}}>
-      <button ref={closeRef} type="button" className="photo-lightbox-close" onClick={onClose} aria-label="Close enlarged photo">×</button>
+      <button ref={closeRef} type="button" className="photo-lightbox-close" onClick={onClose} aria-label="Close enlarged photo"><AppIcon kind="close"/></button>
       <div className="photo-lightbox-content">
         <img src={src} alt={alt}/>
         <small>Tap outside the photo or press Esc to close.</small>

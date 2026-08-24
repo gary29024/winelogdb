@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
+import { AppIcon } from './AppIcons';
 import '../scanSheet.css';
 import '../mobileViewport.css';
 
@@ -16,6 +17,8 @@ const preloadInsights=()=>void import('../features/journey/InsightsPage');
 export function Layout(){
   const [scanSheetOpen,setScanSheetOpen]=useState(false);
   const scanInput=useRef<HTMLInputElement>(null);
+  const sheet=useRef<HTMLElement>(null);
+  const scanTrigger=useRef<HTMLButtonElement>(null);
   const navigate=useNavigate();
 
   useEffect(()=>{
@@ -45,6 +48,24 @@ export function Layout(){
     };
   },[]);
 
+  const closeScanSheet=useCallback(()=>setScanSheetOpen(false),[]);
+
+  // While the sheet is up: lock the page behind it, close on Escape, and hand focus to the sheet.
+  useEffect(()=>{
+    if(!scanSheetOpen)return;
+    const opener=scanTrigger.current;
+    const previousOverflow=document.body.style.overflow;
+    document.body.style.overflow='hidden';
+    sheet.current?.focus();
+    const onKeyDown=(event:KeyboardEvent)=>{if(event.key==='Escape'){event.preventDefault();closeScanSheet()}};
+    document.addEventListener('keydown',onKeyDown);
+    return()=>{
+      document.removeEventListener('keydown',onKeyDown);
+      document.body.style.overflow=previousOverflow;
+      opener?.focus();
+    };
+  },[scanSheetOpen,closeScanSheet]);
+
   function startScan(files:FileList|null){
     if(!files?.length)return;
     const scanFiles=Array.from(files);
@@ -54,7 +75,7 @@ export function Layout(){
   }
 
   function openScanSheet(){preloadUpload();preloadGroupScan();setScanSheetOpen(true)}
-  function closeScanSheet(){setScanSheetOpen(false)}
+  function goFromSheet(path:string){closeScanSheet();navigate(path)}
 
   return <>
     <header className="topbar">
@@ -65,21 +86,22 @@ export function Layout(){
     <footer>Your private tasting notebook</footer>
 
     <nav className="mobile-nav" aria-label="Mobile navigation">
-      <NavLink to="/" end onPointerDown={preloadPassport} onFocus={preloadPassport}><span className="nav-icon">◇</span><span>Passport</span></NavLink>
-      <NavLink to="/journal" onPointerDown={preloadJournal} onFocus={preloadJournal}><span className="nav-icon">▦</span><span>Journal</span></NavLink>
-      <button type="button" className="scan-nav" onClick={openScanSheet} aria-haspopup="dialog"><span className="scan-plus">＋</span><span>Scan Wine</span></button>
-      <NavLink to="/producers" onPointerDown={preloadProducers} onFocus={preloadProducers}><span className="nav-icon">◫</span><span>Producers</span></NavLink>
-      <NavLink to="/insights" onPointerDown={preloadInsights} onFocus={preloadInsights}><span className="nav-icon">⌁</span><span>Insights</span></NavLink>
+      <NavLink to="/" end onPointerDown={preloadPassport} onFocus={preloadPassport}><span className="nav-icon"><AppIcon kind="passport"/></span><span className="nav-label">Passport</span></NavLink>
+      <NavLink to="/journal" onPointerDown={preloadJournal} onFocus={preloadJournal}><span className="nav-icon"><AppIcon kind="journal"/></span><span className="nav-label">Journal</span></NavLink>
+      <button ref={scanTrigger} type="button" className="scan-nav" onClick={openScanSheet} aria-haspopup="dialog" aria-expanded={scanSheetOpen}><span className="scan-plus"><AppIcon kind="scan"/></span><span className="nav-label">Scan Wine</span></button>
+      <NavLink to="/producers" onPointerDown={preloadProducers} onFocus={preloadProducers}><span className="nav-icon"><AppIcon kind="producers"/></span><span className="nav-label">Producers</span></NavLink>
+      <NavLink to="/insights" onPointerDown={preloadInsights} onFocus={preloadInsights}><span className="nav-icon"><AppIcon kind="insights"/></span><span className="nav-label">Insights</span></NavLink>
     </nav>
 
     {scanSheetOpen&&<div className="scan-sheet-backdrop" onClick={closeScanSheet}>
-      <section className="scan-sheet" role="dialog" aria-modal="true" aria-labelledby="scan-sheet-title" onClick={e=>e.stopPropagation()}>
-        <div className="scan-sheet-header"><div><p className="eyebrow">NEW TASTING</p><h2 id="scan-sheet-title">Add wine</h2></div><button type="button" className="sheet-close" onClick={closeScanSheet} aria-label="Close">×</button></div>
-        <button type="button" className="scan-sheet-action" onPointerDown={preloadUpload} onClick={()=>scanInput.current?.click()}><span className="sheet-action-icon">⌁</span><span><strong>Single Wine</strong><small>One bottle · one or more label photos</small></span></button>
-        <button type="button" className="scan-sheet-action" onPointerDown={preloadGroupScan} onClick={()=>{closeScanSheet();navigate('/group-scan')}}><span className="sheet-action-icon">▥</span><span><strong>Group Photo</strong><small>One photo · detect and log several different wines</small></span></button>
-        <button type="button" className="scan-sheet-action" onPointerDown={preloadBatchScan} onClick={()=>{closeScanSheet();navigate('/batch-scan')}}><span className="sheet-action-icon">▦</span><span><strong>Batch Scan</strong><small>Several wines · separate photos/sections · asynchronous Gemini Batch API</small></span></button>
+      <section ref={sheet} tabIndex={-1} className="scan-sheet" role="dialog" aria-modal="true" aria-labelledby="scan-sheet-title" onClick={e=>e.stopPropagation()}>
+        <span className="sheet-grabber" aria-hidden="true"/>
+        <div className="scan-sheet-header"><div><p className="eyebrow">NEW TASTING</p><h2 id="scan-sheet-title">Add wine</h2></div><button type="button" className="sheet-close" onClick={closeScanSheet} aria-label="Close"><AppIcon kind="close"/></button></div>
+        <button type="button" className="scan-sheet-action" onPointerDown={preloadUpload} onClick={()=>scanInput.current?.click()}><span className="sheet-action-icon"><AppIcon kind="single-wine"/></span><span><strong>Single Wine</strong><small>One bottle · one or more label photos</small></span></button>
+        <button type="button" className="scan-sheet-action" onPointerDown={preloadGroupScan} onClick={()=>goFromSheet('/group-scan')}><span className="sheet-action-icon"><AppIcon kind="group-photo"/></span><span><strong>Group Photo</strong><small>One photo · detect and log several different wines</small></span></button>
+        <button type="button" className="scan-sheet-action" onPointerDown={preloadBatchScan} onClick={()=>goFromSheet('/batch-scan')}><span className="sheet-action-icon"><AppIcon kind="batch-scan"/></span><span><strong>Batch Scan</strong><small>Several wines · separate photos/sections · asynchronous Gemini Batch API</small></span></button>
         <p className="scan-sheet-note"><strong>Single Wine</strong> combines several views of one bottle. <strong>Group Photo</strong> splits one lineup photo into distinct wines. <strong>Batch Scan</strong> processes many separately photographed wines in the background.</p>
-        <button type="button" className="sheet-manual" onPointerDown={preloadWineForm} onClick={()=>{closeScanSheet();navigate('/wines/new')}}>Add manually instead</button>
+        <button type="button" className="sheet-manual" onPointerDown={preloadWineForm} onClick={()=>goFromSheet('/wines/new')}><span className="sheet-manual-icon"><AppIcon kind="pen"/></span>Add manually instead</button>
       </section>
     </div>}
     <input ref={scanInput} className="visually-hidden" type="file" accept="image/*" multiple onChange={e=>startScan(e.target.files)}/>
