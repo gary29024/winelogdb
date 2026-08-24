@@ -79,7 +79,8 @@ async function cachedAchievementProgress(db:D1Database,owner:string,revision:num
 }
 async function storeAchievementProgress(db:D1Database,owner:string,revision:number,result:AchievementProgress[]){
   try{await db.prepare(`INSERT INTO achievement_progress_cache(owner_id,revision,definition_version,result_json,updated_at) VALUES(?,?,?,?,?)
-    ON CONFLICT(owner_id) DO UPDATE SET revision=excluded.revision,definition_version=excluded.definition_version,result_json=excluded.result_json,updated_at=excluded.updated_at`)
+    ON CONFLICT(owner_id) DO UPDATE SET revision=excluded.revision,definition_version=excluded.definition_version,result_json=excluded.result_json,updated_at=excluded.updated_at
+    WHERE achievement_progress_cache.revision<>excluded.revision OR achievement_progress_cache.definition_version<>excluded.definition_version`)
     .bind(owner,revision,ACHIEVEMENT_DEFINITION_VERSION,JSON.stringify(result),new Date().toISOString()).run()}
   catch(error){if(!missingTable(error))throw error}
 }
@@ -96,13 +97,15 @@ async function computeAchievementProgress(db:D1Database,owner:string){
   return buildAllAchievementProgress([...achievementDefinitions,...customDefinitions],{producers:context.producers,cuvees:context.cuvees},context.wines,matchModes);
 }
 
-export async function loadAchievementProgress(db:D1Database,owner:string,attempt=0):Promise<AchievementProgress[]>{
+// The revision travels with the result so the route can turn it into an ETag and
+// answer an unchanged client with 304 rather than re-serializing the whole payload.
+export async function loadAchievementProgress(db:D1Database,owner:string,attempt=0):Promise<{revision:number|null;progress:AchievementProgress[]}>{
   const revision=await currentOwnerRevision(db,owner);
-  if(revision!==null){const cached=await cachedAchievementProgress(db,owner,revision);if(cached)return cached}
+  if(revision!==null){const cached=await cachedAchievementProgress(db,owner,revision);if(cached)return {revision,progress:cached}}
   const result=await computeAchievementProgress(db,owner),after=await currentOwnerRevision(db,owner);
   if(revision!==null&&after!==null&&after!==revision&&attempt===0)return loadAchievementProgress(db,owner,1);
   if(after!==null)await storeAchievementProgress(db,owner,after,result);
-  return result;
+  return {revision:after,progress:result};
 }
 
 export async function loadAchievementCatalogueOptions(db:D1Database,owner:string){return (await loadAchievementContext(db,owner)).options}
@@ -159,6 +162,6 @@ export async function setAchievementMatchMode(db:D1Database,owner:string,id:stri
   const now=new Date().toISOString();
   try{await db.prepare(`INSERT INTO achievement_collection_preferences(owner_id,collection_id,match_mode,created_at,updated_at) VALUES(?,?,?,?,?)
     ON CONFLICT(owner_id,collection_id) DO UPDATE SET match_mode=excluded.match_mode,updated_at=excluded.updated_at`).bind(owner,id,mode,now,now).run()}
-  catch(error){if(missingTable(error))return {ok:false as const,error:'Run the latest database migrations before changing counting mode'};throw error}
+  catch(error){if(missingTable(error))return {ok:false as const,error:'Achievement preference migration is not applied yet'};throw error}
   return {ok:true as const,matchMode:mode};
 }
