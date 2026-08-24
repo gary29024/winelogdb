@@ -1,10 +1,15 @@
 import { useEffect,useMemo,useState } from 'react';
 import { Link } from 'react-router-dom';
 import { WineImage } from '../wines/WineImage';
+import { AchievementIcon as CollectionAchievementIcon } from '../achievements/AchievementIcon';
+import { getAchievementProgress } from '../achievements/api';
+import { passportCollectionKicker,passportCollectionSummary,selectPassportCollections } from '../achievements/passportPreview';
+import type { AchievementProgress } from '../achievements/types';
 import { getJourneyData,type JourneyData,type RecentTasting } from './api';
 import { nextMilestones,unlockedAchievements,type MilestoneKey } from './model';
 import { grapeColorFor } from './passportVisuals';
 import '../../journey.css';
+import '../../achievementPassport.css';
 
 const journalHref=(params:Record<string,string>)=>`/journal?${new URLSearchParams(params).toString()}`;
 const flags:Record<string,string>={France:'🇫🇷',Italy:'🇮🇹',Spain:'🇪🇸',Portugal:'🇵🇹',Germany:'🇩🇪',Australia:'🇦🇺','United States':'🇺🇸','United Kingdom':'🇬🇧',Argentina:'🇦🇷',Chile:'🇨🇱','South Africa':'🇿🇦','New Zealand':'🇳🇿',Austria:'🇦🇹',Greece:'🇬🇷',Hungary:'🇭🇺'};
@@ -65,9 +70,13 @@ function PassportMap(){return <svg className="passport-world-map" viewBox="0 0 3
 
 export function PassportPage(){
   const [data,setData]=useState<JourneyData|null>(null),[error,setError]=useState('');
+  const [collections,setCollections]=useState<AchievementProgress[]|null>(null),[collectionsError,setCollectionsError]=useState('');
   useEffect(()=>{let active=true;getJourneyData().then(result=>{if(active)setData(result)}).catch(e=>{if(active)setError((e as Error).message)});return()=>{active=false}},[]);
+  useEffect(()=>{let active=true;getAchievementProgress().then(result=>{if(active)setCollections(result)}).catch(e=>{if(active)setCollectionsError((e as Error).message)});return()=>{active=false}},[]);
   const milestones=useMemo(()=>data?nextMilestones(data.summary):[],[data]);
   const achievements=useMemo(()=>data?unlockedAchievements(data.summary):[],[data]);
+  const featuredCollections=useMemo(()=>collections?selectPassportCollections(collections):[],[collections]);
+  const collectionsSummary=useMemo(()=>collections?passportCollectionSummary(collections):null,[collections]);
   if(error)return <section className="journey-page"><p role="alert">{error}</p></section>;
   if(!data)return <section className="journey-page"><p aria-live="polite">Stamping your Wine Passport…</p></section>;
 
@@ -111,6 +120,25 @@ export function PassportPage(){
       <a className="passport-soft-link" href="#passport-achievements">View levels</a>
     </section>
 
+    <section className="passport-collections-card" aria-labelledby="passport-collections-heading">
+      <div className="passport-collections-heading">
+        <div><p className="section-label">WINE COLLECTIONS</p><h2 id="passport-collections-heading">Explore your next stamps</h2><p>Iconic estates, historic tastings and regional challenges — updated automatically from your journal.</p></div>
+        <div className="passport-collections-summary">{collectionsSummary&&<span><strong>{collectionsSummary.complete}</strong><small>complete</small></span>}<Link to="/achievements">View all{collectionsSummary?` ${collectionsSummary.total}`:''} <span>›</span></Link></div>
+      </div>
+      {collectionsError?<p className="passport-collections-error">Wine Collections could not be loaded right now.<Link to="/achievements">Open collections</Link></p>:!collections?<p className="passport-collections-loading" aria-live="polite">Checking your collection progress…</p>:<>
+        <div className="passport-collection-preview-grid">{featuredCollections.map(collection=>{
+          const {definition}=collection;
+          return <Link className={`passport-collection-preview${collection.complete?' passport-collection-preview-complete':''}`} to={`/achievements/${definition.id}`} key={definition.id}>
+            <span className={`passport-collection-preview-icon passport-collection-preview-icon-${definition.icon}`} aria-hidden="true"><CollectionAchievementIcon kind={definition.icon}/></span>
+            <div className="passport-collection-preview-copy"><small>{passportCollectionKicker(collection)}</small><strong>{definition.title}</strong></div>
+            <span className="passport-collection-preview-percent">{collection.percent}%</span>
+            <div className="passport-collection-preview-progress"><span className="passport-collection-preview-bar" aria-hidden="true"><span style={{width:`${collection.percent}%`}}/></span><small>{collection.completed} / {collection.total} tasted</small></div>
+          </Link>;
+        })}</div>
+        {collectionsSummary&&collectionsSummary.possible>0&&<p className="passport-collections-repair">{collectionsSummary.possible} possible {collectionsSummary.possible===1?'match needs':'matches need'} identity linking before they count.</p>}
+      </>}
+    </section>
+
     <div className="passport-pair-grid">
       <section className="passport-mini-card">
         <div className="passport-card-heading"><div><h2>Top regions</h2><span>By wines tasted</span></div></div>
@@ -142,11 +170,11 @@ export function PassportPage(){
       </section>
 
       <section className="passport-mini-card" id="passport-achievements">
-        <div className="passport-card-heading"><div><h2>Achievements</h2></div><span>{achievements.length} stamps</span></div>
+        <div className="passport-card-heading"><div><h2>Journey stamps</h2></div><span>{achievements.length} stamps</span></div>
         {achievements.length?<div className="passport-stamp-list">{achievements.slice(0,2).map(item=><article key={item.key}>
           <span className={`passport-badge passport-badge-${item.key}`} aria-hidden="true"><AchievementIcon kind={item.key}/></span>
           <div><strong>{item.label}</strong><small>{item.value} milestone reached</small></div>
-        </article>)}{achievements.length>2&&<p className="passport-more-stamps">+{achievements.length-2} more stamps collected</p>}</div>:<p className="passport-empty-mini">Your first stamp unlocks at ten logged wines.</p>}
+        </article>)}{achievements.length>2&&<p className="passport-more-stamps">+{achievements.length-2} more stamps collected</p>}</div>:<p className="passport-empty-mini">Your first journey stamp unlocks at ten logged wines.</p>}
       </section>
     </div>
 
