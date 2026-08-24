@@ -1,5 +1,5 @@
-export type AchievementCategory='iconic-estates'|'historic-tastings'|'regional-exploration';
-export type AchievementIconKey='first-growth'|'judgment-paris'|'beaujolais-crus'|'bordeaux-classification'|'sauternes'|'graves'|'saint-emilion'|'burgundy-grand-cru'|'gevrey-grand-cru'|'rhone-crus';
+export type AchievementCategory='iconic-estates'|'historic-tastings'|'regional-exploration'|'guide-selections';
+export type AchievementIconKey='first-growth'|'judgment-paris'|'beaujolais-crus'|'bordeaux-classification'|'sauternes'|'graves'|'saint-emilion'|'burgundy-grand-cru'|'gevrey-grand-cru'|'rhone-crus'|'michelin-grapes';
 export type AchievementItemStatus='tasted'|'possible'|'pending';
 
 export type ProducerSelector={
@@ -38,6 +38,14 @@ export type AchievementDefinitionItem={
 
 export type AchievementReference={title:string;url:string};
 
+export type AchievementSeries={
+  id:string;
+  authority:string;
+  region:string;
+  edition:number;
+  tier:string;
+};
+
 export type AchievementDefinition={
   id:string;
   title:string;
@@ -46,6 +54,7 @@ export type AchievementDefinition={
   icon:AchievementIconKey;
   items:AchievementDefinitionItem[];
   references:AchievementReference[];
+  series?:AchievementSeries;
 };
 
 export type AchievementProducerIdentity={
