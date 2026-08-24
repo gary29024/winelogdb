@@ -31,7 +31,9 @@ export function chunkItemsByPreparedBytes<T extends {preparedBytes:number}>(item
 }
 
 export function isBatchUploadComplete(totalItems:number,expectedItems:number){return expectedItems<=0?totalItems>=2:totalItems===expectedItems&&expectedItems>=2}
-export function canRetrySubmittedBatch(status:string,submittedItems:number,activeJobs:number){return submittedItems>0&&activeJobs===0&&['ready','partial','failed'].includes(status)}
+export function canRetrySubmittedBatch(status:string,submittedItems:number){return submittedItems>0&&['queued','running','ready','partial','failed'].includes(status)}
+export function unclaimedSubmittedItems<T extends {id:string;status:string}>(items:T[],claimedIds:ReadonlySet<string>){return items.filter(item=>item.status==='submitted'&&!claimedIds.has(item.id))}
+export function countConfirmedBatchItems(items:Array<{status:string}>){return items.reduce((count,item)=>count+(item.status==='confirmed'?1:0),0)}
 
 export async function createBatchSession(db:D1Database,owner:string,expectedItems=0){
   const expected=Math.max(0,Math.floor(Number(expectedItems)||0)),id=crypto.randomUUID(),stamp=now(),expiresAt=new Date(Date.now()+SESSION_TTL_MS).toISOString();
@@ -91,12 +93,14 @@ async function loadItems(db:D1Database,owner:string,sessionId:string){
 
 export async function getBatchSession(db:D1Database,owner:string,sessionId:string){
   const session=await db.prepare('SELECT id,status,total_items,expected_items,confirmed_items,created_at,updated_at,expires_at FROM batch_recognition_sessions WHERE id=? AND owner_id=?').bind(sessionId,owner).first<Record<string,unknown>>();
-  if(!session)return null;const {items,byItem}=await loadItems(db,owner,sessionId);
-  return {id:String(session.id),status:String(session.status),totalItems:Number(session.total_items)||0,expectedItems:Number(session.expected_items)||0,confirmedItems:Number(session.confirmed_items)||0,createdAt:String(session.created_at),updatedAt:String(session.updated_at),expiresAt:String(session.expires_at),items:items.map(item=>({id:item.id,position:item.position,status:item.status,recognition:item.recognition_json?parseJson(item.recognition_json,null):null,error:item.error,confirmedWineId:item.confirmed_wine_id,imageIds:(byItem.get(item.id)??[]).map(x=>x.id)}))};
+  if(!session)return null;const {items,byItem}=await loadItems(db,owner,sessionId),confirmedItems=countConfirmedBatchItems(items);
+  return {id:String(session.id),status:String(session.status),totalItems:Number(session.total_items)||0,expectedItems:Number(session.expected_items)||0,confirmedItems,createdAt:String(session.created_at),updatedAt:String(session.updated_at),expiresAt:String(session.expires_at),items:items.map(item=>({id:item.id,position:item.position,status:item.status,recognition:item.recognition_json?parseJson(item.recognition_json,null):null,error:item.error,confirmedWineId:item.confirmed_wine_id,imageIds:(byItem.get(item.id)??[]).map(x=>x.id)}))};
 }
 
 export async function listBatchSessions(db:D1Database,owner:string){
-  const rows=await db.prepare(`SELECT id,status,total_items,expected_items,confirmed_items,created_at,updated_at,expires_at FROM batch_recognition_sessions WHERE owner_id=? ORDER BY updated_at DESC LIMIT 12`).bind(owner).all<Record<string,unknown>>();
+  const rows=await db.prepare(`SELECT s.id,s.status,s.total_items,s.expected_items,
+    (SELECT count(*) FROM batch_recognition_items i WHERE i.owner_id=s.owner_id AND i.session_id=s.id AND i.status='confirmed') AS confirmed_items,
+    s.created_at,s.updated_at,s.expires_at FROM batch_recognition_sessions s WHERE s.owner_id=? ORDER BY s.updated_at DESC LIMIT 12`).bind(owner).all<Record<string,unknown>>();
   return {items:rows.results.map(r=>({id:String(r.id),status:String(r.status),totalItems:Number(r.total_items)||0,expectedItems:Number(r.expected_items)||0,confirmedItems:Number(r.confirmed_items)||0,createdAt:String(r.created_at),updatedAt:String(r.updated_at),expiresAt:String(r.expires_at)}))};
 }
 
@@ -120,10 +124,10 @@ export async function markSessionSubmitted(db:D1Database,owner:string,sessionId:
   }
   const [submitted,active]=await Promise.all([
     db.prepare("SELECT count(*) AS count FROM batch_recognition_items WHERE owner_id=? AND session_id=? AND status='submitted'").bind(owner,sessionId).first<{count:number}>(),
-    db.prepare("SELECT count(*) AS count FROM batch_recognition_jobs WHERE owner_id=? AND session_id=? AND status IN ('queued','running')").bind(owner,sessionId).first<{count:number}>()
-  ]);
-  if(!canRetrySubmittedBatch(session.status,Number(submitted?.count)||0,Number(active?.count)||0))return {ok:false,error:'This batch has already been submitted'};
-  await db.prepare("UPDATE batch_recognition_sessions SET status='queued',updated_at=? WHERE id=? AND owner_id=?").bind(stamp,sessionId,owner).run();
+    db.prepare("SELECT count(*) AS count FROM batch_recognition_jobs WHERE owner_id=? AND session_id=? AND status='running'").bind(owner,sessionId).first<{count:number}>()
+  ]),submittedCount=Number(submitted?.count)||0,activeCount=Number(active?.count)||0;
+  if(!canRetrySubmittedBatch(session.status,submittedCount))return {ok:false,error:'This batch has no waiting recognition to retry'};
+  await db.prepare("UPDATE batch_recognition_sessions SET status=?,updated_at=? WHERE id=? AND owner_id=?").bind(activeCount?'running':'queued',stamp,sessionId,owner).run();
   return {ok:true,recovered:true};
 }
 
@@ -170,11 +174,17 @@ async function createChunkRecursively(env:Env,owner:string,sessionId:string,inde
 }
 
 export async function processBatchSubmitJob(env:Env,owner:string,sessionId:string){
-  const {items,byItem}=await loadItems(env.DB,owner,sessionId),submitted=items.filter(x=>x.status==='submitted');if(!submitted.length)return;
-  const entries=submitted.map(item=>({item,images:byItem.get(item.id)??[],preparedBytes:(byItem.get(item.id)??[]).reduce((sum,x)=>sum+Number(x.recognition_byte_size),0)}));
-  const chunks=chunkItemsByPreparedBytes(entries);const indexRef={value:1};for(const chunk of chunks)await createChunkRecursively(env,owner,sessionId,indexRef,chunk);
+  const {items,byItem}=await loadItems(env.DB,owner,sessionId),activeJobs=await env.DB.prepare("SELECT id,item_ids_json,status FROM batch_recognition_jobs WHERE owner_id=? AND session_id=? AND status='running'").bind(owner,sessionId).all<{id:string;item_ids_json:string;status:string}>(),claimedIds=new Set<string>();
+  for(const job of activeJobs.results)for(const itemId of parseJson<string[]>(job.item_ids_json,[]))claimedIds.add(itemId);
+  for(const job of activeJobs.results)await env.RESEARCH_QUEUE.send({kind:'recognition_batch_poll',owner,sessionId,jobId:job.id,pollCount:0}).catch(e=>console.error(JSON.stringify({event:'batch-recognition-recovery-poll-failed',sessionId,jobId:job.id,error:(e as Error).message})));
+  const submitted=unclaimedSubmittedItems(items,claimedIds);
+  if(submitted.length){
+    const entries=submitted.map(item=>({item,images:byItem.get(item.id)??[],preparedBytes:(byItem.get(item.id)??[]).reduce((sum,x)=>sum+Number(x.recognition_byte_size),0)}));
+    const chunks=chunkItemsByPreparedBytes(entries),indexRef={value:activeJobs.results.length+1};for(const chunk of chunks)await createChunkRecursively(env,owner,sessionId,indexRef,chunk);
+  }
   const active=await env.DB.prepare("SELECT count(*) AS count FROM batch_recognition_jobs WHERE owner_id=? AND session_id=? AND status='running'").bind(owner,sessionId).first<{count:number}>();
-  await env.DB.prepare("UPDATE batch_recognition_sessions SET status=?,updated_at=? WHERE id=? AND owner_id=?").bind(Number(active?.count)?'running':'failed',now(),sessionId,owner).run();
+  if(Number(active?.count)){await env.DB.prepare("UPDATE batch_recognition_sessions SET status='running',updated_at=? WHERE id=? AND owner_id=?").bind(now(),sessionId,owner).run();return}
+  await finishSessionIfTerminal(env.DB,owner,sessionId);
 }
 
 function batchState(payload:Record<string,unknown>){
@@ -203,11 +213,17 @@ async function finishSessionIfTerminal(db:D1Database,owner:string,sessionId:stri
 
 export async function processBatchPollJob(env:Env,owner:string,sessionId:string,jobId:string,pollCount:number){
   const job=await env.DB.prepare('SELECT google_batch_name,item_ids_json,status FROM batch_recognition_jobs WHERE id=? AND owner_id=? AND session_id=?').bind(jobId,owner,sessionId).first<{google_batch_name:string;item_ids_json:string;status:string}>();if(!job||job.status!=='running')return;
-  const response=await fetch(`https://generativelanguage.googleapis.com/v1beta/${job.google_batch_name}`,{headers:{'x-goog-api-key':env.GEMINI_API_KEY}});
-  if(!response.ok){if(response.status===429||response.status>=500){await env.RESEARCH_QUEUE.send({kind:'recognition_batch_poll',owner,sessionId,jobId,pollCount:pollCount+1},{delaySeconds:Math.min(300,30*Math.max(1,pollCount+1))});return}throw new Error(`Gemini batch status failed (${response.status})`)}
+  const ids=parseJson<string[]>(job.item_ids_json,[]),response=await fetch(`https://generativelanguage.googleapis.com/v1beta/${job.google_batch_name}`,{headers:{'x-goog-api-key':env.GEMINI_API_KEY}});
+  if(!response.ok){
+    const stamp=now();
+    if(response.status===429||response.status>=500){await env.DB.prepare("UPDATE batch_recognition_jobs SET updated_at=? WHERE id=? AND owner_id=?").bind(stamp,jobId,owner).run();await env.RESEARCH_QUEUE.send({kind:'recognition_batch_poll',owner,sessionId,jobId,pollCount:pollCount+1},{delaySeconds:Math.min(300,30*Math.max(1,pollCount+1))});return}
+    const error=`Gemini batch status failed (${response.status})`;
+    await env.DB.prepare("UPDATE batch_recognition_jobs SET status='failed',error=?,updated_at=? WHERE id=? AND owner_id=?").bind(error,stamp,jobId,owner).run();
+    await finishSessionIfTerminal(env.DB,owner,sessionId);return;
+  }
   const payload=await response.json() as Record<string,unknown>,state=batchState(payload),terminal=new Set(['JOB_STATE_SUCCEEDED','JOB_STATE_FAILED','JOB_STATE_CANCELLED','JOB_STATE_EXPIRED']);
-  if(!terminal.has(state)){const delay=Math.min(300,15*Math.pow(2,Math.min(pollCount,4)));await env.RESEARCH_QUEUE.send({kind:'recognition_batch_poll',owner,sessionId,jobId,pollCount:pollCount+1},{delaySeconds:delay});return}
-  const ids=parseJson<string[]>(job.item_ids_json,[]),stamp=now();
+  if(!terminal.has(state)){const stamp=now(),delay=Math.min(300,15*Math.pow(2,Math.min(pollCount,4)));await env.DB.prepare("UPDATE batch_recognition_jobs SET updated_at=? WHERE id=? AND owner_id=?").bind(stamp,jobId,owner).run();await env.RESEARCH_QUEUE.send({kind:'recognition_batch_poll',owner,sessionId,jobId,pollCount:pollCount+1},{delaySeconds:delay});return}
+  const stamp=now();
   if(state==='JOB_STATE_SUCCEEDED'){
     const responses=batchResponses(payload),byMetadata=new Map(responses.map(response=>[response.metadata?.key,response]).filter((x):x is [string,GoogleInlineResponse]=>Boolean(x[0])));
     for(let i=0;i<ids.length;i++){
@@ -236,6 +252,7 @@ export async function attachConfirmedItem(env:Pick<Env,'DB'|'WINE_IMAGES'>,owner
   const images=await env.DB.prepare('SELECT * FROM batch_recognition_images WHERE owner_id=? AND item_id=? ORDER BY created_at').bind(owner,itemId).all<ImageRow>(),stamp=now();
   const statements:D1PreparedStatement[]=[];for(const image of images.results)statements.push(env.DB.prepare(`INSERT INTO wine_images(id,owner_id,wine_id,object_key,content_type,byte_size,width,height,upload_status,recognition_status,error,created_at) VALUES(?,?,?,?,?,?,?,?, 'uploaded','complete',NULL,?)`).bind(crypto.randomUUID(),owner,wineId,image.original_object_key,image.content_type,image.byte_size,image.width,image.height,stamp));
   statements.push(env.DB.prepare("UPDATE batch_recognition_items SET status='confirmed',confirmed_wine_id=?,updated_at=? WHERE id=? AND owner_id=?").bind(wineId,stamp,itemId,owner));
+  statements.push(env.DB.prepare("UPDATE batch_recognition_sessions SET confirmed_items=confirmed_items+1,updated_at=? WHERE id=? AND owner_id=?").bind(stamp,sessionId,owner));
   if(statements.length)await env.DB.batch(statements);
   await Promise.all(images.results.map(x=>env.WINE_IMAGES.delete(x.recognition_object_key).catch(()=>undefined)));
   await env.DB.prepare('DELETE FROM batch_recognition_images WHERE owner_id=? AND item_id=?').bind(owner,itemId).run();
