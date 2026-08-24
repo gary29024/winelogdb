@@ -1,11 +1,11 @@
 import { describe,expect,it } from 'vitest';
-import { loadJourneySummary } from '../../worker/journeyHandler';
+import { JOURNEY_PAYLOAD_VERSION,loadJourneySummary } from '../../worker/journeyHandler';
 import { etagMatches,revisionETag } from '../../src/lib/db/ownerRevision';
 import { createD1Stub } from './support/d1Stub';
 
 const aggregateSql=/FROM wines WHERE owner_id=\?/;
 
-function cachedStub(revision:number,cachedRevision:number|null,payloadVersion=1){
+function cachedStub(revision:number,cachedRevision:number|null,payloadVersion=JOURNEY_PAYLOAD_VERSION){
   return createD1Stub(sql=>{
     if(/FROM achievement_cache_state/.test(sql))return {first:{revision}};
     if(/FROM journey_summary_cache/.test(sql))return {first:cachedRevision===null?null:{revision:cachedRevision,payload_version:payloadVersion,result_json:JSON.stringify({summary:{totalWines:7}})}};
@@ -32,7 +32,7 @@ describe('Wine Journey summary cache',()=>{
   });
 
   it('rebuilds when the cached payload was written by an older payload version',async()=>{
-    const stub=cachedStub(12,12,0);
+    const stub=cachedStub(12,12,JOURNEY_PAYLOAD_VERSION-1);
     await loadJourneySummary(stub.db,'owner');
     expect(stub.matching(aggregateSql).length).toBeGreaterThan(0);
   });
