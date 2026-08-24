@@ -9,6 +9,7 @@ import { normalizeProducerAlias } from '../../lib/producers/entities';
 import { stripProducerCatalogPrefix } from '../../lib/producers/catalogName';
 import { cuveeStyleFamily,normalizeCuveeAlias } from '../../lib/cuvees/entities';
 import '../../producer.css';
+import { startBackoffPoll,type Poller } from '../../lib/polling/backoff';
 
 const stageLabel:Record<ProducerResearchRun['stage'],string>={preparing:'Queued for research',searching:'Researching in the background',retrying:'Retrying Gemini research',parsing:'Validating Gemini response',saving:'Saving producer research',image:'Finding a domaine image',complete:'Research complete',failed:'Research failed'};
 type CatalogCategory='red'|'white'|'rose'|'sparkling'|'dessert'|'fortified'|'orange'|'other';
@@ -60,8 +61,8 @@ function sourceHost(value:string){try{return new URL(value).hostname.toLowerCase
 
 export function ProducerDetailPage(){
  const {id=''}=useParams(),[producer,setProducer]=useState<ProducerDetail>(),[available,setAvailable]=useState<ProducerSummary[]>([]),[availableLoaded,setAvailableLoaded]=useState(false),[selectedAlias,setSelectedAlias]=useState(''),[primaryName,setPrimaryName]=useState(''),[loading,setLoading]=useState(true),[error,setError]=useState(''),[notice,setNotice]=useState(''),[researching,setResearching]=useState(false),[researchRun,setResearchRun]=useState<ProducerResearchRun|null>(null),[researchElapsed,setResearchElapsed]=useState(0),[researchCancelling,setResearchCancelling]=useState(false),[merging,setMerging]=useState(false),[unlinking,setUnlinking]=useState(''),[savingPrimary,setSavingPrimary]=useState(false);
- const researchPoll=useRef<number|undefined>(undefined),researchClock=useRef<number|undefined>(undefined);
- function stopResearchTimers(){if(researchPoll.current)window.clearInterval(researchPoll.current);if(researchClock.current)window.clearInterval(researchClock.current);researchPoll.current=undefined;researchClock.current=undefined}
+ const researchPoll=useRef<Poller|undefined>(undefined),researchClock=useRef<number|undefined>(undefined);
+ function stopResearchTimers(){researchPoll.current?.stop();if(researchClock.current)window.clearInterval(researchClock.current);researchPoll.current=undefined;researchClock.current=undefined}
  async function reload(){const detail=await getProducer(id);setProducer(detail);setPrimaryName(detail.canonicalName);setSelectedAlias('')}
  async function refreshAvailable(){const directory=await listProducers();setAvailable(directory.items.filter(x=>x.id!==id));setAvailableLoaded(true);setSelectedAlias('')}
  function watchResearch(run:ProducerResearchRun){
@@ -76,7 +77,7 @@ export function ProducerDetailPage(){
    if(next.status==='complete'){await reload().catch(()=>undefined);setNotice(`Producer research completed${next.durationMs!=null?` in ${(next.durationMs/1000).toFixed(1)}s`:''}.`);setError('')}
    else setError(`${next.message||'Producer research failed.'} · Research request ${next.requestId}`);
   };
-  researchPoll.current=window.setInterval(()=>void poll(),2000);void poll();
+  researchPoll.current=startBackoffPoll(poll);void poll();
  }
  useEffect(()=>{
   let active=true,aliasTimer:number|undefined;

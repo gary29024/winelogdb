@@ -9,6 +9,7 @@ import { prepareRecognitionImage } from './prepareImage';
 import { batchImageUrl,confirmBatchWine,createBatchSession,getBatchSession,listBatchSessions,rejectBatchWine,removeBatchSession,stageBatchWine,submitBatchSession,type BatchRecognitionItem,type BatchRecognitionSession,type BatchSessionSummary } from './batchApi';
 import { clearPendingBatchSession,listPendingBatchWines,removePendingBatchWine,savePendingBatchWines,type PendingBatchPhoto,type PendingBatchWine } from './batchUploadStore';
 import '../../batchScan.css';
+import { startBackoffPoll,type Poller } from '../../lib/polling/backoff';
 
 type PreparedPhoto=PendingBatchPhoto&{metadata:PhotoMetadata;preview:string};
 type DraftWine={key:string;photos:PreparedPhoto[];preparing:boolean;error:string};
@@ -45,13 +46,13 @@ function BatchImage({id,alt,onOpen}:{id:string;alt:string;onOpen?:(src:string)=>
 
 export function BatchScanPage(){
   const [drafts,setDrafts]=useState<DraftWine[]>([emptyWine(),emptyWine()]),[session,setSession]=useState<BatchRecognitionSession|null>(null),[submitting,setSubmitting]=useState(false),[cancelling,setCancelling]=useState(false),[error,setError]=useState(''),[notice,setNotice]=useState(''),[reviewId,setReviewId]=useState<string|null>(null),[history,setHistory]=useState<BatchSessionSummary[]>([]),[uploadProgress,setUploadProgress]=useState<UploadProgress|null>(null),[pendingLocal,setPendingLocal]=useState(0),[checkingPending,setCheckingPending]=useState(false),[lightbox,setLightbox]=useState<LightboxPhoto|null>(null);
-  const poll=useRef<number|undefined>(undefined),uploadAbort=useRef<AbortController|null>(null),cancelledSessions=useRef(new Set<string>());
+  const poll=useRef<Poller|undefined>(undefined),uploadAbort=useRef<AbortController|null>(null),cancelledSessions=useRef(new Set<string>());
   const populated=drafts.filter(x=>x.photos.length),readyToSubmit=populated.length>=2&&!drafts.some(x=>x.preparing||x.error);
   const reviewItem=session?.items.find(x=>x.id===reviewId)??null;
   const readyItems=useMemo(()=>session?.items.filter(x=>x.status==='ready')??[],[session]);
-  function stopPoll(){if(poll.current)window.clearInterval(poll.current);poll.current=undefined}
+  function stopPoll(){poll.current?.stop();poll.current=undefined}
   async function refreshPendingState(id:string){setCheckingPending(true);try{setPendingLocal((await listPendingBatchWines(id)).length)}catch{setPendingLocal(0)}finally{setCheckingPending(false)}}
-  async function refreshSession(id:string){const next=await getBatchSession(id);setSession(next);if(next.status==='uploading')void refreshPendingState(id);else{setPendingLocal(0);setCheckingPending(false)}if(['queued','running'].includes(next.status)&&!poll.current)poll.current=window.setInterval(()=>void refreshSession(id).catch(()=>undefined),10000);if(!['queued','running'].includes(next.status))stopPoll();return next}
+  async function refreshSession(id:string){const next=await getBatchSession(id);setSession(next);if(next.status==='uploading')void refreshPendingState(id);else{setPendingLocal(0);setCheckingPending(false)}if(['queued','running'].includes(next.status)&&!poll.current)poll.current=startBackoffPoll(()=>refreshSession(id).then(()=>undefined).catch(()=>undefined),{initialMs:10000,maxMs:30000});if(!['queued','running'].includes(next.status))stopPoll();return next}
   useEffect(()=>{let active=true;listBatchSessions().then(async result=>{if(!active)return;setHistory(result.items);const resumable=result.items.find(x=>['uploading','queued','running','ready','partial'].includes(x.status));if(resumable)await refreshSession(resumable.id)}).catch(()=>undefined);return()=>{active=false;stopPoll();uploadAbort.current?.abort()}},[]);
 
   async function choose(index:number,files:File[]){if(!files.length)return;setError('');setDrafts(xs=>xs.map((x,i)=>i===index?{...x,preparing:true,error:''}:x));try{const prepared=await Promise.all(files.map(async file=>{const [metadata,image]=await Promise.all([extractPhotoMetadata(file),prepareRecognitionImage(file,1600,0.80)]);return {original:file,recognition:image.file,metadata,width:image.width,height:image.height,preview:URL.createObjectURL(file)}}));setDrafts(xs=>xs.map((x,i)=>i===index?{...x,photos:prepared,preparing:false,error:''}:x))}catch(e){setDrafts(xs=>xs.map((x,i)=>i===index?{...x,preparing:false,error:(e as Error).message}:x))}}

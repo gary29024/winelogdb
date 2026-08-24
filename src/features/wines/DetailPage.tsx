@@ -9,6 +9,7 @@ import '../../deepSearch.css';
 import '../../favorites.css';
 import '../../wineFormCompact.css';
 import '../../groupSource.css';
+import { startBackoffPoll,type Poller } from '../../lib/polling/backoff';
 
 type DeepState='idle'|'confirm-usage'|'confirm-final'|'running'|'error';
 type DeepField='summary'|'vintageQuality'|'producerDetails'|'producerWinemakingPractices'|'winemakingTechniques'|'terroir'|'drinkingWindow';
@@ -29,14 +30,14 @@ function ClaimEvidence({deep,field}:{deep:DeepSearchResult;field:DeepField}){
 
 export function DetailPage(){
  const {id=''}=useParams(),nav=useNavigate(),[wine,setWine]=useState<WineDetail>(),[favoriteBusy,setFavoriteBusy]=useState(false),[deepState,setDeepState]=useState<DeepState>('idle'),[deepError,setDeepError]=useState(''),[deepRun,setDeepRun]=useState<WineResearchRun|null>(null),[deepElapsed,setDeepElapsed]=useState(0),[deepNotice,setDeepNotice]=useState(''),[deepCancelling,setDeepCancelling]=useState(false),[selectedImage,setSelectedImage]=useState<string>(),[selectedGroupSource,setSelectedGroupSource]=useState<string>();
- const pollRef=useRef<number|undefined>(undefined),clockRef=useRef<number|undefined>(undefined);
- function stopDeepTimers(){if(pollRef.current)window.clearInterval(pollRef.current);if(clockRef.current)window.clearInterval(clockRef.current);pollRef.current=undefined;clockRef.current=undefined}
+ const pollRef=useRef<Poller|undefined>(undefined),clockRef=useRef<number|undefined>(undefined);
+ function stopDeepTimers(){pollRef.current?.stop();if(clockRef.current)window.clearInterval(clockRef.current);pollRef.current=undefined;clockRef.current=undefined}
  async function reloadWine(){const next=await getWine(id);setWine(next);return next}
  function watchDeepSearch(run:WineResearchRun){
   stopDeepTimers();setDeepRun(run);setDeepState(run.status==='running'?'running':run.status==='failed'?'error':'idle');const started=Date.parse(run.startedAt);setDeepElapsed(Number.isFinite(started)?Math.max(0,Math.floor((Date.now()-started)/1000)):0);if(run.status!=='running')return;
   clockRef.current=window.setInterval(()=>setDeepElapsed(Number.isFinite(started)?Math.max(0,Math.floor((Date.now()-started)/1000)):0),1000);
   const poll=async()=>{const next=await getWineDeepSearchStatus(id,run.requestId).catch(()=>null);if(!next)return;setDeepRun(next);if(next.status==='running')return;stopDeepTimers();setDeepElapsed(next.durationMs!=null?Math.floor(next.durationMs/1000):deepElapsed);if(next.status==='complete'){await reloadWine().catch(()=>undefined);setDeepState('idle');setDeepError('');setDeepNotice(`Deep Search completed${next.durationMs!=null?` in ${(next.durationMs/1000).toFixed(1)}s`:''}.`)}else{setDeepError(`${next.message||'The background Deep Search failed.'} · Request ${next.requestId}`);setDeepState('error')}};
-  pollRef.current=window.setInterval(()=>void poll(),2000);void poll();
+  pollRef.current=startBackoffPoll(poll);void poll();
  }
  useEffect(()=>{let active=true;Promise.all([getWine(id),getWineDeepSearchStatus(id).catch(()=>null)]).then(([next,run])=>{if(!active)return;setWine(next);if(run?.status==='running')watchDeepSearch(run)}).catch(()=>undefined);return()=>{active=false;stopDeepTimers()}// eslint-disable-next-line react-hooks/exhaustive-deps
  },[id]);
