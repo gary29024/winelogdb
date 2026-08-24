@@ -39,6 +39,7 @@ export async function listJournalPage(db:D1Database,owner:string,q:JournalListQu
     if(value){where+=` AND ${col}=?`;args.push(value)}
   }
   if(favoriteOnlyQuery(q.favorite))where+=' AND w.favorite=1';
+  if(q.month){where+=" AND substr(coalesce(nullif(w.tasting_date,''),w.created_at),1,7)=?";args.push(q.month)}
   if(q.rating){where+=' AND w.rating>=?';args.push(Number(q.rating))}
   if(q.grape){where+=' AND EXISTS (SELECT 1 FROM json_each(w.grapes_json) WHERE value=?)';args.push(q.grape)}
   if(q.tasting){where+=' AND EXISTS (SELECT 1 FROM wine_experiences we JOIN tastings t ON t.id=we.tasting_id WHERE we.wine_id=w.id AND we.owner_id=? AND lower(t.name) LIKE lower(?))';args.push(owner,`%${q.tasting}%`)}
