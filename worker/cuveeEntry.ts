@@ -1,8 +1,9 @@
 import { Hono,type Context } from 'hono';
 import entryApp from './entry';
 import { requireSession } from '../src/lib/auth/session';
-import { ensureAllProducerLinks,linkWineProducer,seedProducerCountryFromWine } from '../src/lib/producers/entities';
-import { cleanupOrphanCuvee,ensureAllCuveeLinksForProducer,ensureMissingCuveeLinks,linkWineCuvee,reconcileProducerCuvees,resolveExistingCuvee } from '../src/lib/cuvees/entities';
+import { ensureAllProducerLinks } from '../src/lib/producers/entities';
+import { cleanupOrphanCuvee,ensureAllCuveeLinksForProducer,ensureMissingCuveeLinks,reconcileProducerCuvees,resolveExistingCuvee } from '../src/lib/cuvees/entities';
+import { ensureWineIdentity } from '../src/lib/wine/identity';
 import { setCuveePrimaryName } from '../src/lib/cuvees/primaryName';
 import { ensureProducerCatalogCuveesSeeded } from '../src/lib/cuvees/catalogSeed';
 import { changeCuveeCatalogLink,changeCuveeCatalogLinkSchema,createCuveeCatalogLink,createCuveeCatalogLinkSchema,getProducerCuveeCatalogState,unlinkCuveeCatalogLink,unlinkCuveeCatalogLinkSchema } from '../src/lib/cuvees/catalogLinks';
@@ -19,15 +20,6 @@ const maintenanceMemo=new Map<string,number>();
 
 function cors(c:{req:{header:(name:string)=>string|undefined};env:Bindings;header:(name:string,value:string)=>void}){const origin=c.req.header('Origin');if(origin&&origin===c.env.APP_URL){c.header('Access-Control-Allow-Origin',origin);c.header('Vary','Origin')}}
 async function user(c:{req:{header:(name:string)=>string|undefined};env:Bindings}){return (await requireSession(c.req.header('Authorization'),c.env.AUTH_SECRET)).userId}
-
-async function ensureWineIdentity(db:D1Database,owner:string,wineId:string){
-  const wine=await db.prepare('SELECT producer,producer_id,country FROM wines WHERE owner_id=? AND id=?').bind(owner,wineId).first<{producer:string;producer_id:string|null;country:string|null}>();
-  if(!wine)return;
-  let producerId=wine.producer_id;
-  if(!producerId&&wine.producer?.trim())producerId=(await linkWineProducer(db,owner,wineId,wine.producer,wine.country)).id;
-  else if(producerId)await seedProducerCountryFromWine(db,owner,producerId,wine.country);
-  await linkWineCuvee(db,owner,wineId);
-}
 
 async function maybeScheduleIdentityMaintenance(c:Context<AppEnv>,owner:string){
   const now=Date.now(),lastLocal=maintenanceMemo.get(owner)??0;

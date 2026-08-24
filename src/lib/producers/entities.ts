@@ -106,7 +106,9 @@ export async function ensureProducerEntity(db:D1Database,owner:string,name:strin
     }
   }
   if(!found)throw new Error('Could not resolve producer entity');
-  await db.prepare('INSERT INTO producer_aliases(owner_id,normalized_alias,producer_id,display_alias,created_at) VALUES(?,?,?,?,?) ON CONFLICT(owner_id,normalized_alias) DO UPDATE SET producer_id=excluded.producer_id,display_alias=excluded.display_alias').bind(owner,alias,found.id,canonical,now).run();
+  // Guard the conflict branch: re-resolving a producer that is already correctly
+  // aliased is a read-path operation and must not charge a D1 row write.
+  await db.prepare('INSERT INTO producer_aliases(owner_id,normalized_alias,producer_id,display_alias,created_at) VALUES(?,?,?,?,?) ON CONFLICT(owner_id,normalized_alias) DO UPDATE SET producer_id=excluded.producer_id,display_alias=excluded.display_alias WHERE producer_aliases.producer_id<>excluded.producer_id OR producer_aliases.display_alias<>excluded.display_alias').bind(owner,alias,found.id,canonical,now).run();
   await seedProducerCountryFromWine(db,owner,found.id,provisionalCountry);
   // Do not rewrite match_key here when a known alias is encountered. match_key follows
   // the user-selected primary/canonical name and only changes via setProducerPrimaryName.
@@ -128,7 +130,9 @@ export async function setProducerPrimaryName(db:D1Database,owner:string,producer
 
 export async function linkWineProducer(db:D1Database,owner:string,wineId:string,producerName:string,wineCountry?:string|null){
   const entity=await ensureProducerEntity(db,owner,producerName,wineCountry);
-  await db.prepare('UPDATE wines SET producer_id=? WHERE owner_id=? AND id=?').bind(entity.id,owner,wineId).run();
+  // Only write when the link actually changes; every wines UPDATE also bumps the
+  // achievement cache revision and forces a full progress recompute.
+  await db.prepare('UPDATE wines SET producer_id=? WHERE owner_id=? AND id=? AND coalesce(producer_id,\'\')<>?').bind(entity.id,owner,wineId,entity.id).run();
   return entity;
 }
 

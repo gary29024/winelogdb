@@ -238,12 +238,16 @@ export async function ensureCuveeEntity(db:D1Database,owner:string,producerId:st
     row={...row,canonical_name:canonical,appellation:appellation??row.appellation,wine_style:wineStyle??row.wine_style,catalog_backed:1};
   }
   const appKey=normalizeCuveeAlias(appellation??row.appellation??'');
-  for(const alias of new Set([raw,canonical])){
-    const normalized=normalizeCuveeAlias(stripKnownProducerPrefix(alias,names));if(!normalized)continue;
-    await db.prepare(`INSERT INTO cuvee_aliases(owner_id,producer_id,normalized_alias,appellation_key,cuvee_id,display_alias,created_at) VALUES(?,?,?,?,?,?,?)
-      ON CONFLICT(owner_id,producer_id,normalized_alias,appellation_key) DO UPDATE SET cuvee_id=excluded.cuvee_id,display_alias=excluded.display_alias`)
-      .bind(owner,producerId,normalized,appKey,row.id,alias,now).run();
-  }
+  const aliasRows=[...new Set([raw,canonical])]
+    .map(alias=>({alias,normalized:normalizeCuveeAlias(stripKnownProducerPrefix(alias,names))}))
+    .filter(entry=>Boolean(entry.normalized));
+  // The conflict branch is guarded so an alias that is already correct is not rewritten.
+  // ensureCuveeEntity runs on read paths too, and an unconditional upsert charged a D1
+  // row write (and an achievement cache invalidation) for every one of those calls.
+  if(aliasRows.length)await db.batch(aliasRows.map(entry=>db.prepare(`INSERT INTO cuvee_aliases(owner_id,producer_id,normalized_alias,appellation_key,cuvee_id,display_alias,created_at) VALUES(?,?,?,?,?,?,?)
+      ON CONFLICT(owner_id,producer_id,normalized_alias,appellation_key) DO UPDATE SET cuvee_id=excluded.cuvee_id,display_alias=excluded.display_alias
+      WHERE cuvee_aliases.cuvee_id<>excluded.cuvee_id OR cuvee_aliases.display_alias<>excluded.display_alias`)
+      .bind(owner,producerId,entry.normalized,appKey,row.id,entry.alias,now)));
   return mapEntity(row);
 }
 
@@ -259,11 +263,15 @@ export async function syncProducerCatalogCuvees(db:D1Database,owner:string,produ
 }
 
 export async function linkWineCuvee(db:D1Database,owner:string,wineId:string){
-  const wine=await db.prepare(`SELECT id,producer_id,wine_name,recognized_wine_name,appellation,wine_style FROM wines WHERE owner_id=? AND id=?`).bind(owner,wineId).first<{id:string;producer_id:string|null;wine_name:string;recognized_wine_name:string|null;appellation:string|null;wine_style:string|null}>();
+  const wine=await db.prepare(`SELECT id,producer_id,cuvee_id,wine_name,recognized_wine_name,appellation,wine_style FROM wines WHERE owner_id=? AND id=?`).bind(owner,wineId).first<{id:string;producer_id:string|null;cuvee_id:string|null;wine_name:string;recognized_wine_name:string|null;appellation:string|null;wine_style:string|null}>();
   if(!wine?.producer_id||!wine.wine_name?.trim())return null;
   const sourceName=wine.recognized_wine_name?.trim()||wine.wine_name.trim();
   const entity=await ensureCuveeEntity(db,owner,wine.producer_id,sourceName,wine.appellation,wine.wine_style,false);
-  await db.prepare(`UPDATE wines SET cuvee_id=?,recognized_wine_name=coalesce(recognized_wine_name,?),wine_name=? WHERE owner_id=? AND id=?`)
+  // Skip the write when the wine already carries this identity. An unconditional
+  // UPDATE here burned a D1 row write per call and, through the achievement cache
+  // triggers, invalidated cached progress on every wine that was merely read.
+  const settled=wine.cuvee_id===entity.id&&wine.wine_name===entity.canonicalName&&wine.recognized_wine_name!=null;
+  if(!settled)await db.prepare(`UPDATE wines SET cuvee_id=?,recognized_wine_name=coalesce(recognized_wine_name,?),wine_name=? WHERE owner_id=? AND id=?`)
     .bind(entity.id,wine.wine_name,entity.canonicalName,owner,wineId).run();
   return entity;
 }

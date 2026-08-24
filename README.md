@@ -42,6 +42,41 @@ No bucket CORS policy is needed because uploads and image reads pass through the
 
 The migration creates owner/filter/sort indexes and an FTS5 table for producer, name, region, grapes, notes, event, and tags. API filtering supports vintage, country, region, style, minimum rating, and event, plus stable `limit`/`offset` loading and sorts for newest, oldest, rating, producer, and vintage. The UI stores all selections in URL query parameters so views are bookmarkable. Production write paths should maintain `wine_search` using D1 triggers or application transactions when enabling FTS queries at scale.
 
+## Staying inside the D1 free tier
+
+D1's free plan is metered on rows read and rows written per day, so the design goal
+is that browsing the notebook costs almost nothing and only real edits write.
+
+- **Reads never write.** Opening a wine used to re-derive its producer and cuvée
+  links on every request, which cost a `wines` UPDATE and two alias upserts per view
+  — and, through the achievement cache triggers, invalidated cached progress each
+  time. Identity is now backfilled only when a link is genuinely missing, and every
+  remaining upsert on those paths carries a `WHERE` guard so an unchanged row is not
+  rewritten.
+- **The landing page is cached.** `/api/journey` ran twelve aggregate scans of the
+  owner's wines on every visit. Results are cached in `journey_summary_cache`, keyed
+  on the shared owner revision in `achievement_cache_state`, so an unchanged journal
+  costs two indexed lookups. Achievement progress uses the same revision.
+- **Conditional requests.** `/api/journey` and `/api/achievements` return a
+  revision-tagged `ETag` with `Cache-Control: private, max-age=0, must-revalidate`.
+  A client that already holds the current revision gets a `304` for the price of the
+  revision lookup, with no recompute and no response body.
+- **One join instead of seven subqueries.** The shared wine projection resolves the
+  latest experience through a single indexed join rather than seven correlated
+  subqueries per row, which mattered most on list pages.
+- **Covering indexes for photo lookups.** `idx_wine_images_owner_wine_id` and
+  `idx_wine_images_owner_wine_captured` keep the Journal's per-wine photo and
+  capture-timestamp lookups index-only. The capture lookup sits in the Journal's
+  `ORDER BY`, so it is evaluated for every candidate row, not just the page.
+- **Backed-off polling.** Background Deep Search, producer research and batch scans
+  poll status with an increasing interval instead of a flat two-second timer, so a
+  ten-minute run costs tens of status reads rather than hundreds.
+
+When adding a query, prefer one statement that returns what a screen needs over a
+per-row lookup, and give any new write on a read path a `WHERE` guard. If a new
+cached payload reads a table that does not yet bump `achievement_cache_state`, add
+its triggers in the same migration.
+
 ## Backup and recovery
 
 Schedule `wrangler d1 export DB --remote --output backups/winelog-YYYY-MM-DD.sql` and R2 replication or `rclone sync` to a second private bucket. Encrypt backups, restrict service tokens, test restores quarterly, and apply retention policy. To recover: disable writes, restore the latest D1 export into a new database, restore R2 objects preserving their keys, update bindings, apply any later migrations, validate record/image counts, and redeploy before re-enabling traffic.

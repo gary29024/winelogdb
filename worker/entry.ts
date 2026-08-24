@@ -5,16 +5,25 @@ import { applyJournalVintageSearch } from '../src/lib/journal/searchQuery';
 import { favoriteUpdateSchema } from '../src/lib/journal/favorite';
 import { requireSession } from '../src/lib/auth/session';
 import { handleRecognitionRequest } from './recognitionHandler';
-import { createCustomAchievementCollection,deleteCustomAchievementCollection,loadAchievementCatalogueOptions,loadAchievementProgress,setAchievementMatchMode,updateCustomAchievementCollection } from './achievementHandler';
+import { ACHIEVEMENT_DEFINITION_VERSION,createCustomAchievementCollection,deleteCustomAchievementCollection,loadAchievementCatalogueOptions,loadAchievementProgress,setAchievementMatchMode,updateCustomAchievementCollection } from './achievementHandler';
+import { JOURNEY_PAYLOAD_VERSION,loadJourneySummary } from './journeyHandler';
+import { etagMatches,revisionETag } from '../src/lib/db/ownerRevision';
 
 type Bindings={DB:D1Database;WINE_IMAGES:R2Bucket;ASSETS:Fetcher;GEMINI_API_KEY:string;AUTH_SECRET:string;APP_PASSWORD:string;APP_URL:string;MAX_FILE_BYTES?:string;MAX_BATCH_FILES?:string};
 type AppEnv={Bindings:Bindings};
 const app=new Hono<AppEnv>();
 
 async function user(c:{req:{header:(name:string)=>string|undefined};env:Bindings}){return (await requireSession(c.req.header('Authorization'),c.env.AUTH_SECRET)).userId}
-const numberOrNull=(value:unknown)=>value==null?null:Number(value);
 
 app.post('/api/recognition',c=>handleRecognitionRequest(c.req.raw,c.env));
+
+// Private, owner-scoped payloads: the browser may reuse them, shared caches may not.
+// The ETag carries the owner revision, so an unchanged journal revalidates for the
+// cost of one indexed lookup instead of a full recompute or a repeated response body.
+function privateRevalidated(c:{header:(name:string,value:string)=>void},etag:string|null){
+  c.header('Cache-Control','private, max-age=0, must-revalidate');
+  if(etag)c.header('ETag',etag);
+}
 
 app.get('/api/wines',c=>{
   const url=new URL(c.req.raw.url);
@@ -60,94 +69,24 @@ app.put('/api/achievements/:id/match-mode',async c=>{
 });
 app.get('/api/achievements',async c=>{
   let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
-  try{return c.json(await loadAchievementProgress(c.env.DB,owner))}
-  catch(error){console.error('Could not load achievements',error);return c.json({error:'Could not load wine collections'},500)}
+  try{
+    const {revision,progress}=await loadAchievementProgress(c.env.DB,owner);
+    const etag=revision===null?null:revisionETag('achievements',ACHIEVEMENT_DEFINITION_VERSION,revision);
+    if(etag&&etagMatches(c.req.header('If-None-Match'),etag)){privateRevalidated(c,etag);return c.body(null,304)}
+    privateRevalidated(c,etag);
+    return c.json(progress);
+  }catch(error){console.error('Could not load achievements',error);return c.json({error:'Could not load wine collections'},500)}
 });
 
 app.get('/api/journey',async c=>{
   let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
-  const statements=[
-    c.env.DB.prepare(`SELECT COUNT(*) total_wines,
-      COUNT(DISTINCT COALESCE(producer_id,lower(trim(producer)))) producers,
-      COUNT(DISTINCT NULLIF(trim(country),'')) countries,
-      COUNT(DISTINCT NULLIF(trim(region),'')) regions,
-      COUNT(DISTINCT NULLIF(trim(appellation),'')) appellations,
-      COUNT(DISTINCT vintage) vintages,
-      SUM(CASE WHEN favorite=1 THEN 1 ELSE 0 END) favorites,
-      AVG(rating) average_rating,COUNT(rating) rated_wines,
-      SUM(CASE WHEN price IS NOT NULL THEN 1 ELSE 0 END) priced_wines
-      FROM wines WHERE owner_id=?`).bind(owner),
-    c.env.DB.prepare(`SELECT COUNT(*) structured_tastings FROM wine_tasting_structures
-      WHERE owner_id=? AND structure_json<>'{}'`).bind(owner),
-    c.env.DB.prepare(`SELECT trim(country) country,COUNT(*) wines,
-      COUNT(DISTINCT COALESCE(producer_id,lower(trim(producer)))) producers,
-      COUNT(DISTINCT NULLIF(trim(appellation),'')) appellations,AVG(rating) average_rating
-      FROM wines WHERE owner_id=? AND country IS NOT NULL AND trim(country)<>''
-      GROUP BY trim(country) ORDER BY wines DESC,country ASC LIMIT 20`).bind(owner),
-    c.env.DB.prepare(`SELECT NULLIF(trim(country),'') country,trim(region) region,COUNT(*) wines,
-      COUNT(DISTINCT COALESCE(producer_id,lower(trim(producer)))) producers,
-      COUNT(DISTINCT NULLIF(trim(appellation),'')) appellations,AVG(rating) average_rating
-      FROM wines WHERE owner_id=? AND region IS NOT NULL AND trim(region)<>''
-      GROUP BY NULLIF(trim(country),''),trim(region) ORDER BY wines DESC,region ASC LIMIT 20`).bind(owner),
-    c.env.DB.prepare(`SELECT NULLIF(trim(country),'') country,NULLIF(trim(region),'') region,trim(appellation) appellation,
-      COUNT(*) wines,AVG(rating) average_rating FROM wines
-      WHERE owner_id=? AND appellation IS NOT NULL AND trim(appellation)<>''
-      GROUP BY NULLIF(trim(country),''),NULLIF(trim(region),''),trim(appellation)
-      ORDER BY wines DESC,appellation ASC LIMIT 24`).bind(owner),
-    c.env.DB.prepare(`SELECT wine_style style,COUNT(*) wines,COUNT(rating) rated_wines,AVG(rating) average_rating
-      FROM wines WHERE owner_id=? AND wine_style IS NOT NULL AND trim(wine_style)<>''
-      GROUP BY wine_style ORDER BY wines DESC,style ASC`).bind(owner),
-    c.env.DB.prepare(`SELECT MAX(producer) producer,COUNT(*) wines,COUNT(rating) rated_wines,AVG(rating) average_rating,
-      SUM(CASE WHEN favorite=1 THEN 1 ELSE 0 END) favorites FROM wines
-      WHERE owner_id=? GROUP BY COALESCE(producer_id,lower(trim(producer)))
-      HAVING COUNT(rating)>=2 ORDER BY average_rating DESC,wines DESC,producer ASC LIMIT 10`).bind(owner),
-    c.env.DB.prepare(`SELECT upper(trim(currency)) currency,COUNT(*) wines,AVG(price) average_price,AVG(rating) average_rating
-      FROM wines WHERE owner_id=? AND price IS NOT NULL AND currency IS NOT NULL AND trim(currency)<>''
-      GROUP BY upper(trim(currency)) ORDER BY wines DESC,currency ASC LIMIT 8`).bind(owner),
-    c.env.DB.prepare(`SELECT substr(COALESCE(NULLIF(tasting_date,''),created_at),1,4) year,COUNT(*) wines,
-      COUNT(rating) rated_wines,AVG(rating) average_rating FROM wines WHERE owner_id=?
-      GROUP BY substr(COALESCE(NULLIF(tasting_date,''),created_at),1,4) ORDER BY year DESC LIMIT 8`).bind(owner),
-    c.env.DB.prepare(`SELECT s.structure_json,w.rating FROM wine_tasting_structures s
-      JOIN wines w ON w.owner_id=s.owner_id AND w.id=s.wine_id
-      WHERE s.owner_id=? AND s.structure_json<>'{}'`).bind(owner),
-    c.env.DB.prepare(`SELECT MIN(trim(CAST(g.value AS TEXT))) grape,COUNT(DISTINCT w.id) wines
-      FROM wines w,json_each(CASE WHEN json_valid(w.grapes_json) THEN w.grapes_json ELSE '[]' END) g
-      WHERE w.owner_id=? AND trim(CAST(g.value AS TEXT))<>''
-      GROUP BY lower(trim(CAST(g.value AS TEXT))) ORDER BY wines DESC,grape ASC LIMIT 10`).bind(owner),
-    c.env.DB.prepare(`SELECT w.id,w.producer,w.wine_name,w.vintage,NULLIF(trim(w.country),'') country,
-      NULLIF(trim(w.region),'') region,NULLIF(trim(w.appellation),'') appellation,w.rating,
-      NULLIF(w.tasting_date,'') tasting_date,w.created_at,
-      (SELECT wi.id FROM wine_images wi WHERE wi.owner_id=w.owner_id AND wi.wine_id=w.id ORDER BY wi.created_at ASC LIMIT 1) image_id
-      FROM wines w WHERE w.owner_id=?
-      ORDER BY COALESCE(NULLIF(w.tasting_date,''),w.created_at) DESC,w.created_at DESC LIMIT 4`).bind(owner)
-  ];
-  const results=await c.env.DB.batch(statements);
-  const first=<T extends Record<string,unknown>>(index:number)=>(results[index]?.results?.[0]??{}) as T;
-  const rows=<T extends Record<string,unknown>>(index:number)=>(results[index]?.results??[]) as T[];
-  const summary=first<Record<string,unknown>>(0),structured=first<Record<string,unknown>>(1);
-  const structures=rows<{structure_json:unknown;rating:unknown}>(9).flatMap(row=>{
-    try{return [{structure:JSON.parse(String(row.structure_json||'{}')) as Record<string,string>,rating:numberOrNull(row.rating)}]}
-    catch{return []}
-  });
-  return c.json({
-    summary:{
-      totalWines:Number(summary.total_wines??0),producers:Number(summary.producers??0),countries:Number(summary.countries??0),regions:Number(summary.regions??0),appellations:Number(summary.appellations??0),vintages:Number(summary.vintages??0),favorites:Number(summary.favorites??0),averageRating:numberOrNull(summary.average_rating),ratedWines:Number(summary.rated_wines??0),pricedWines:Number(summary.priced_wines??0),structuredTastings:Number(structured.structured_tastings??0)
-    },
-    countries:rows<Record<string,unknown>>(2).map(row=>({country:String(row.country),wines:Number(row.wines),producers:Number(row.producers),appellations:Number(row.appellations),averageRating:numberOrNull(row.average_rating)})),
-    regions:rows<Record<string,unknown>>(3).map(row=>({country:row.country==null?null:String(row.country),region:String(row.region),wines:Number(row.wines),producers:Number(row.producers),appellations:Number(row.appellations),averageRating:numberOrNull(row.average_rating)})),
-    appellations:rows<Record<string,unknown>>(4).map(row=>({country:row.country==null?null:String(row.country),region:row.region==null?null:String(row.region),appellation:String(row.appellation),wines:Number(row.wines),averageRating:numberOrNull(row.average_rating)})),
-    styles:rows<Record<string,unknown>>(5).map(row=>({style:String(row.style),wines:Number(row.wines),ratedWines:Number(row.rated_wines),averageRating:numberOrNull(row.average_rating)})),
-    producers:rows<Record<string,unknown>>(6).map(row=>({producer:String(row.producer),wines:Number(row.wines),ratedWines:Number(row.rated_wines),averageRating:numberOrNull(row.average_rating),favorites:Number(row.favorites??0)})),
-    currencies:rows<Record<string,unknown>>(7).map(row=>({currency:String(row.currency),wines:Number(row.wines),averagePrice:numberOrNull(row.average_price),averageRating:numberOrNull(row.average_rating)})),
-    years:rows<Record<string,unknown>>(8).map(row=>({year:String(row.year),wines:Number(row.wines),ratedWines:Number(row.rated_wines),averageRating:numberOrNull(row.average_rating)})),
-    structures,
-    grapes:rows<Record<string,unknown>>(10).map(row=>({grape:String(row.grape),wines:Number(row.wines)})),
-    recentTastings:rows<Record<string,unknown>>(11).map(row=>({
-      id:String(row.id),producer:String(row.producer),wineName:String(row.wine_name),vintage:row.vintage==null?null:Number(row.vintage),
-      country:row.country==null?null:String(row.country),region:row.region==null?null:String(row.region),appellation:row.appellation==null?null:String(row.appellation),
-      rating:numberOrNull(row.rating),tastingDate:row.tasting_date==null?null:String(row.tasting_date),createdAt:String(row.created_at),imageId:row.image_id==null?null:String(row.image_id)
-    }))
-  });
+  try{
+    const {revision,payload}=await loadJourneySummary(c.env.DB,owner);
+    const etag=revision===null?null:revisionETag('journey',JOURNEY_PAYLOAD_VERSION,revision);
+    if(etag&&etagMatches(c.req.header('If-None-Match'),etag)){privateRevalidated(c,etag);return c.body(null,304)}
+    privateRevalidated(c,etag);
+    return c.json(payload);
+  }catch(error){console.error('Could not load Wine Journey',error);return c.json({error:'Could not load Wine Journey'},500)}
 });
 
 app.put('/api/wines/:id/favorite',async c=>{
@@ -161,17 +100,20 @@ app.put('/api/wines/:id/favorite',async c=>{
   return c.json({id,favorite:parsed.data.favorite});
 });
 
+// The wine row already carries producer_id and favorite, and the base handler now
+// maps both. Only fall back to a second read for a body that predates that mapping,
+// so the common detail view costs one wines lookup instead of two.
 app.get('/api/wines/:id',async c=>{
   const response=await layeredApp.fetch(c.req.raw,c.env,c.executionCtx);
   if(!response.ok)return response;
+  let body:Record<string,unknown>;
+  try{body=await response.clone().json() as Record<string,unknown>}catch{return response}
+  if('producerId' in body&&'favorite' in body)return response;
   let owner:string;try{owner=await user(c)}catch{return response}
   const meta=await c.env.DB.prepare('SELECT producer_id,favorite FROM wines WHERE owner_id=? AND id=?').bind(owner,c.req.param('id')).first<{producer_id:string|null;favorite:number|null}>();
   if(!meta)return response;
-  try{
-    const body=await response.clone().json() as Record<string,unknown>;
-    const headers=new Headers(response.headers);headers.set('Content-Type','application/json; charset=utf-8');headers.delete('Content-Length');
-    return new Response(JSON.stringify({...body,producerId:meta.producer_id??null,favorite:Boolean(meta.favorite)}),{status:response.status,statusText:response.statusText,headers});
-  }catch{return response}
+  const headers=new Headers(response.headers);headers.set('Content-Type','application/json; charset=utf-8');headers.delete('Content-Length');
+  return new Response(JSON.stringify({...body,producerId:meta.producer_id??null,favorite:Boolean(meta.favorite)}),{status:response.status,statusText:response.statusText,headers});
 });
 
 app.all('*',c=>layeredApp.fetch(c.req.raw,c.env,c.executionCtx));

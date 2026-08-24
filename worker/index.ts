@@ -42,20 +42,23 @@ const normalizeMeta=(meta:PhotoMetadata|undefined)=>{
 };
 async function fileToBase64(file:File){const bytes=new Uint8Array(await file.arrayBuffer());let binary='';for(let i=0;i<bytes.length;i+=32768)binary+=String.fromCharCode(...bytes.subarray(i,i+32768));return btoa(binary)}
 const wineSelect=`SELECT w.*,
- (SELECT t.name FROM wine_experiences we LEFT JOIN tastings t ON t.id=we.tasting_id WHERE we.wine_id=w.id AND we.owner_id=w.owner_id ORDER BY we.created_at DESC LIMIT 1) AS tasting_name,
- (SELECT we.consumed_at FROM wine_experiences we WHERE we.wine_id=w.id AND we.owner_id=w.owner_id ORDER BY we.created_at DESC LIMIT 1) AS experience_date,
- (SELECT we.location_name FROM wine_experiences we WHERE we.wine_id=w.id AND we.owner_id=w.owner_id ORDER BY we.created_at DESC LIMIT 1) AS location_name,
- (SELECT we.latitude FROM wine_experiences we WHERE we.wine_id=w.id AND we.owner_id=w.owner_id ORDER BY we.created_at DESC LIMIT 1) AS latitude,
- (SELECT we.longitude FROM wine_experiences we WHERE we.wine_id=w.id AND we.owner_id=w.owner_id ORDER BY we.created_at DESC LIMIT 1) AS longitude,
- (SELECT we.rating FROM wine_experiences we WHERE we.wine_id=w.id AND we.owner_id=w.owner_id ORDER BY we.created_at DESC LIMIT 1) AS experience_rating,
- (SELECT we.tasting_notes FROM wine_experiences we WHERE we.wine_id=w.id AND we.owner_id=w.owner_id ORDER BY we.created_at DESC LIMIT 1) AS experience_notes
- FROM wines w`;
+ t.name AS tasting_name,
+ we.consumed_at AS experience_date,
+ we.location_name AS location_name,
+ we.latitude AS latitude,
+ we.longitude AS longitude,
+ we.rating AS experience_rating,
+ we.tasting_notes AS experience_notes
+ FROM wines w
+ LEFT JOIN wine_experiences we ON we.id=(SELECT le.id FROM wine_experiences le WHERE le.owner_id=w.owner_id AND le.wine_id=w.id ORDER BY le.created_at DESC LIMIT 1)
+ LEFT JOIN tastings t ON t.owner_id=we.owner_id AND t.id=we.tasting_id`;
 
 const mapWine=(r:Record<string,unknown>,imageIds:string[]=[])=>({
  id:r.id,ownerId:r.owner_id,producer:r.producer,wineName:r.wine_name,vintage:r.vintage,country:r.country,region:r.region,appellation:r.appellation,
  grapes:parseJson<string[]>(r.grapes_json,[]),grapeBlend:parseJson<Array<{grape:string;percentage?:number|null}>>(r.grape_blend_json,[]),wineStyle:r.wine_style,alcoholPercentage:r.alcohol_percentage,
  tastingNotes:r.experience_notes??r.tasting_notes,rating:r.experience_rating??r.rating,tastingDate:r.experience_date??r.tasting_date,event:r.event,venue:r.venue,
  tastingName:r.tasting_name,locationName:r.location_name,latitude:r.latitude,longitude:r.longitude,
+ producerId:r.producer_id??null,favorite:Boolean(r.favorite),
  deepSearch:r.deep_search_json?parseJson(r.deep_search_json,null):null,
  price:r.price,currency:r.currency,tags:parseJson<string[]>(r.tags_json,[]),imageIds,imageObjectKeys:[],recognitionStatus:r.recognition_status,recognitionConfidence:r.recognition_confidence,
  createdAt:r.created_at,updatedAt:r.updated_at
@@ -198,7 +201,19 @@ app.put('/api/wines/:id',async c=>{
  return c.json({ok:true});
 });
 
-app.delete('/api/wines/:id',async c=>{const id=c.req.param('id'),owner=c.get('userId');const images=await c.env.DB.prepare('SELECT object_key FROM wine_images WHERE wine_id=? AND owner_id=?').bind(id,owner).all<{object_key:string}>();const deleted=await c.env.DB.prepare('DELETE FROM wines WHERE id=? AND owner_id=?').bind(id,owner).run();if(!deleted.meta.changes)return c.json({error:'Not found'},404);for(const image of images.results){await c.env.WINE_IMAGES.delete(image.object_key);await c.env.DB.prepare('DELETE FROM wine_images WHERE object_key=?').bind(image.object_key).run()}return c.body(null,204)});
+app.delete('/api/wines/:id',async c=>{
+ const id=c.req.param('id'),owner=c.get('userId');
+ const images=await c.env.DB.prepare('SELECT object_key FROM wine_images WHERE wine_id=? AND owner_id=?').bind(id,owner).all<{object_key:string}>();
+ const deleted=await c.env.DB.prepare('DELETE FROM wines WHERE id=? AND owner_id=?').bind(id,owner).run();
+ if(!deleted.meta.changes)return c.json({error:'Not found'},404);
+ // One statement and one R2 batch for the whole set: deleting a twelve-photo wine
+ // used to cost twelve serial D1 round trips.
+ if(images.results.length){
+  await c.env.DB.batch(images.results.map(image=>c.env.DB.prepare('DELETE FROM wine_images WHERE object_key=?').bind(image.object_key)));
+  await Promise.allSettled(images.results.map(image=>c.env.WINE_IMAGES.delete(image.object_key)));
+ }
+ return c.body(null,204);
+});
 
 app.get('/api/images/:id',async c=>{const row=await c.env.DB.prepare('SELECT object_key FROM wine_images WHERE id=? AND owner_id=?').bind(c.req.param('id'),c.get('userId')).first<{object_key:string}>();if(!row)return c.json({error:'Not found'},404);const obj=await c.env.WINE_IMAGES.get(row.object_key);if(!obj)return c.json({error:'Not found'},404);return new Response(obj.body,{headers:{'Content-Type':obj.httpMetadata?.contentType||'application/octet-stream','Cache-Control':'private, max-age=300','Content-Security-Policy':"default-src 'none'"}})});
 
