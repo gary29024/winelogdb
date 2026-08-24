@@ -6,6 +6,7 @@ import { recognitionSchema, type RecognitionResult } from '../recognition/schema
 import { extractPhotoMetadata, type PhotoMetadata } from './photoMetadata';
 import { prepareRecognitionImage } from './prepareImage';
 import { authHeaders,clearSession } from '../../lib/auth/client';
+import { AppIcon } from '../../components/AppIcons';
 
 type Item={file:File;recognitionFile?:File;preview:string;status:string;progress:number;error?:string;metadata?:PhotoMetadata;width?:number;height?:number};
 type RecognitionErrorBody={error?:unknown;requestId?:unknown};
@@ -80,7 +81,7 @@ export function UploadPage(){
   return <section className="scan-page">
     <div className="hero compact"><p className="eyebrow">SCAN WINE</p><h1>One wine, every useful label.</h1><p>Select the front, back, neck or additional labels together. WineLog sends the set to Gemini as one bottle, while the original photos stay on your device until you save the wine.</p></div>
     {items.length===0&&<div className="photo-source-card">
-      <div className="scan-mark">＋</div>
+      <div className="scan-mark"><AppIcon kind="scan"/></div>
       <h2>Scan a wine</h2>
       <p>Choose one or more photos of the same bottle. Your device chooser can use the camera, photo library or files.</p>
       <button type="button" className="scan-button" onClick={()=>input.current?.click()}>Scan Wine</button>

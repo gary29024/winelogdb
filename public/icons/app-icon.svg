@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="WineLog">
+  <defs>
+    <linearGradient id="field" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#222f4e"/><stop offset="1" stop-color="#0b111f"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.42" r="0.62">
+      <stop offset="0" stop-color="#c51f45" stop-opacity="0.22"/><stop offset="1" stop-color="#c51f45" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="512" height="512" fill="url(#field)"/>
+  <rect width="512" height="512" fill="url(#glow)"/>
+  <path d="M256.0 216.34 L256.0 411.32" stroke="#f6f1e7" stroke-width="24.41" stroke-linecap="round"/>
+  <rect x="168.46" y="408.67" width="175.09" height="26.53" rx="13.26" fill="#f6f1e7"/>
+  <path d="M136.6 132.78 A121.77 121.77 0 1 0 375.4 132.78 Z" fill="#c51f45"/>
+  <path d="M197.64 159.3 L216.21 217.67" stroke="#e03b60" stroke-opacity="0.85" stroke-width="14.59" stroke-linecap="round"/>
+  <path d="M142.7 87.68 A132.64 132.64 0 1 0 369.3 87.68 Z" fill="none" stroke="#f6f1e7" stroke-width="21.75" stroke-linejoin="round"/>
+</svg>
