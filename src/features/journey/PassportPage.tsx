@@ -8,6 +8,7 @@ import type { AchievementProgress } from '../achievements/types';
 import { getJourneyData,type JourneyData,type RecentTasting } from './api';
 import { nextMilestones,unlockedAchievements,type MilestoneKey } from './model';
 import { grapeColorFor } from './passportVisuals';
+import { PassportMap } from './PassportMap';
 import '../../journey.css';
 import '../../achievementPassport.css';
 
@@ -47,27 +48,6 @@ function tastingDate(item:RecentTasting){
   return new Intl.DateTimeFormat(undefined,{month:'short',day:'numeric'}).format(date);
 }
 
-function PassportMap(){return <svg className="passport-world-map" viewBox="0 0 360 170" aria-hidden="true">
-  <g className="passport-map-land">
-    <path d="M16 54C19 42 28 32 43 28l20-2 14 6 17 1 11 8-5 9-13 5-7 12-12 2-5 10-9 6-9-8-1-12-11-5-11 3-6-9Z"/>
-    <path d="M74 91c8 2 16 8 19 16l-1 15-6 10-3 14-7 8-6-13 1-10-5-8 4-10-3-8 7-14Z"/>
-    <path d="M92 16c8-7 18-10 28-7l7 10-7 8-13 4-11-5-4-10Z"/>
-    <path d="M153 48l9-8 15-2 11 5 7 8-5 7-10 0-7 4-7-4-8 1-5-11Z"/>
-    <path d="M171 66c9-4 18-3 26 2l7 11-3 15-8 11-3 16-9 10-8-11-1-15-7-10 4-10-3-11 5-8Z"/>
-    <path d="M191 43c13-14 32-20 54-18l19 5 14 8 18 2 19 10 9 10-5 8-16 4-13 8-13-2-13 7-12-5-13-1-8-8-14 2-9-8-12 0-7-8-8-14Z"/>
-    <path d="M300 108c8-7 19-8 29-3l9 7-3 10-9 7-14-1-9-7-3-13Z"/>
-    <path d="M337 132l6 2 3 6-5 5-6-4 2-9Z"/>
-    <path d="M275 86l5 2 2 5-4 3-4-5 1-5Z"/>
-    <path d="M291 92l4 2 2 4-4 2-3-4 1-4Z"/>
-  </g>
-  <g className="passport-map-pins">
-    <g transform="translate(172 53)"><circle className="passport-map-pin-ring" r="5.5"/><circle r="2.4"/></g>
-    <g transform="translate(184 56)"><circle className="passport-map-pin-ring" r="5"/><circle r="2.1"/></g>
-    <g transform="translate(71 61)"><circle className="passport-map-pin-ring" r="5"/><circle r="2.1"/></g>
-    <g transform="translate(315 117)"><circle className="passport-map-pin-ring" r="5"/><circle r="2.1"/></g>
-  </g>
-</svg>}
-
 export function PassportPage(){
   const [data,setData]=useState<JourneyData|null>(null),[error,setError]=useState('');
   const [collections,setCollections]=useState<AchievementProgress[]|null>(null),[collectionsError,setCollectionsError]=useState('');
@@ -106,7 +86,7 @@ export function PassportPage(){
           <strong>{item.value}</strong><span>{item.label}</span><small>{item.detail}</small>
         </article>)}</div>
       </div>
-      <div className="passport-map-wrap"><PassportMap/></div>
+      <div className="passport-map-wrap"><PassportMap countries={data.countries}/></div>
     </section>
 
     <section className="passport-progress-card">
