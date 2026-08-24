@@ -56,6 +56,7 @@ const header=[
   '',
   'ALTER TABLE wines ADD COLUMN recognized_region TEXT;',
   'ALTER TABLE wines ADD COLUMN recognized_appellation TEXT;',
+  'ALTER TABLE wines ADD COLUMN classification TEXT;',
   '',
   "UPDATE wines SET recognized_region=region WHERE recognized_region IS NULL AND trim(COALESCE(region,''))<>'';",
   "UPDATE wines SET recognized_appellation=appellation WHERE recognized_appellation IS NULL AND trim(COALESCE(appellation,''))<>'';",
@@ -77,22 +78,34 @@ for(const place of PLACES){
     if(existing&&existing.depth<=depth)continue;
     rows.set(spelling,{spelling,depth,region:resolved.region,appellation:resolved.appellation,country});
   }
-  // The resolver reads "Vosne-Romanee 1er Cru" as the village appellation. SQL
-  // cannot strip at the marker, so the bare cru forms are listed instead. A form
-  // that is already a node in its own right - "Chablis Grand Cru" - is never
-  // overwritten. A cru followed by a named climat is not enumerable and keeps
-  // its recorded spelling; see the header note.
-  // A node that already names a cru ("Chablis Grand Cru") takes no suffix: the
-  // resolver strips at the first marker, so the doubled form would not agree.
+}
+
+// Bare cru forms, in a second pass so that a spelling which is a node in its own
+// right - "Saint-Emilion Grand Cru", "Chablis Grand Cru" - always wins over the
+// same text generated as a suffix of its parent village.
+for(const place of PLACES){
+  // A node that already names a cru takes no suffix: the resolver reads the
+  // first marker, so the doubled form would not agree with it.
   if(place.tier!=='appellation'||/\b(?:premier|1er|grand)\s+cru\b/i.test(place.name))continue;
+  const resolved=resolvePlace({country:null,region:place.name,appellation:null});
+  if(resolved.placeId!==place.id)continue;
+  const country=ancestry(place).find(step=>step.tier==='country')?.name??null;
   for(const suffix of [' Premier Cru',' 1er Cru',' Grand Cru']){
     for(const base of spellings(place)){
       const spelling=`${base}${suffix}`;
       if(rows.has(spelling))continue;
-      rows.set(spelling,{spelling,depth,region:resolved.region,appellation:resolved.appellation,country});
+      rows.set(spelling,{spelling,depth:TIER_DEPTH[place.tier],region:resolved.region,appellation:resolved.appellation,country});
     }
   }
 }
+
+// Appellations the tree marks as crus in their own right, and as villages.
+const grandCruNames=PLACES.filter(place=>place.classification==='grand_cru').map(place=>quote(place.name));
+const villageNames=PLACES.filter(place=>place.classification==='village').map(place=>quote(place.name));
+const grandCruStatements=grandCruNames.length?[
+  "UPDATE wines SET classification='grand_cru'",
+  `  WHERE classification IS NULL AND appellation IN (${grandCruNames.join(',')});`
+]:[];
 
 const values=[...rows.values()].sort((a,b)=>a.spelling.localeCompare(b.spelling))
   .map(row=>`(${quote(row.spelling)},${row.depth},${quote(row.region)},${quote(row.appellation)},${quote(row.country)})`);
@@ -135,6 +148,29 @@ process.stdout.write([...header,
   `  country=CASE WHEN trim(COALESCE(country,''))='' THEN ${deepest('country')} ELSE country END`,
   `WHERE EXISTS (SELECT 1 FROM place_backfill_map p`,
   `  WHERE p.spelling IN (trim(COALESCE(wines.region,'')),trim(COALESCE(wines.appellation,''))));`,
+  '',
+  '',
+  '-- The cru tier is read from what was recorded before the place was normalised,',
+  '-- because folding "Vosne-Romanee 1er Cru Les Suchots" into the village',
+  '-- appellation is exactly what loses it. An appellation that is a place in its',
+  '-- own right ("Saint-Emilion Grand Cru", "Chablis Grand Cru") is never read as',
+  '-- a tier, so it is excluded by the map lookup.',
+  "UPDATE wines SET classification='premier_cru'",
+  "  WHERE classification IS NULL AND (lower(COALESCE(recognized_appellation,'')||' '||COALESCE(wine_name,''))",
+  "    GLOB '*[0-9a-z ]1er cru*' OR lower(COALESCE(recognized_appellation,'')||' '||COALESCE(wine_name,'')) GLOB '1er cru*'",
+  "    OR lower(COALESCE(recognized_appellation,'')||' '||COALESCE(wine_name,'')) LIKE '%premier cru%');",
+  '',
+  "UPDATE wines SET classification='grand_cru'",
+  "  WHERE classification IS NULL",
+  "    AND lower(COALESCE(recognized_appellation,'')||' '||COALESCE(wine_name,'')) LIKE '%grand cru%'",
+  '    AND NOT EXISTS (SELECT 1 FROM place_backfill_map p WHERE p.spelling=trim(COALESCE(wines.recognized_appellation,\'\')));',
+  '',
+  ...grandCruStatements,
+  '',
+  "UPDATE wines SET classification='village'",
+  '  WHERE classification IS NULL AND appellation IS NOT NULL',
+  '    AND trim(COALESCE(recognized_appellation,\'\'))=trim(COALESCE(appellation,\'\'))',
+  `    AND appellation IN (${villageNames.join(',')});`,
   '',
   'DROP TABLE place_backfill_map;',
   '',

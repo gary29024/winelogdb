@@ -61,7 +61,39 @@ export function lookupPlace(value:string|null|undefined):PlaceNode[]{
   return [];
 }
 
-export type PlaceInput={country?:string|null;region?:string|null;appellation?:string|null};
+/**
+ * Where a wine sits in a classified hierarchy. `premier_cru` is never its own
+ * appellation - Vosne-Romanée 1er Cru Les Suchots is recorded under the
+ * Vosne-Romanée appellation - so it is read off the label text rather than the
+ * tree, and the tier survives the place normalisation instead of being lost
+ * with the climat.
+ */
+export type WineClassification='grand_cru'|'premier_cru'|'village';
+
+const GRAND_CRU=/\bgrand[s]?\s+cru\b/;
+const PREMIER_CRU=/\b(?:premier|1er|1ere)\s+cru\b/;
+
+/**
+ * Read the cru tier from whatever text the label gave us. The appellation field
+ * is asked first; the wine name is the fallback, because recognition often puts
+ * "1er Cru Les Suchots" there instead.
+ *
+ * "Saint-Émilion Grand Cru" is an appellation, not a classification, and would
+ * otherwise read every Saint-Émilion as a grand cru - so a value that resolves
+ * to a place in its own right is never read as a tier.
+ */
+export function classifyFromText(...values:readonly (string|null|undefined)[]):WineClassification|null{
+  for(const value of values){
+    if(!value)continue;
+    const normalized=key(value);
+    if(byName.has(normalized))continue;
+    if(PREMIER_CRU.test(normalized))return 'premier_cru';
+    if(GRAND_CRU.test(normalized))return 'grand_cru';
+  }
+  return null;
+}
+
+export type PlaceInput={country?:string|null;region?:string|null;appellation?:string|null;wineName?:string|null};
 export type ResolvedPlace={
   country:string|null;
   region:string|null;
@@ -69,6 +101,8 @@ export type ResolvedPlace={
   /** Root-to-leaf ids of the narrowest place that resolved, for roll-up counting. */
   path:string[];
   placeId:string|null;
+  /** The cru tier, from the label text where it says one and the tree otherwise. */
+  classification:WineClassification|null;
   /** Input values that matched nothing in the tree, kept so nothing is silently dropped. */
   unresolved:string[];
 };
@@ -89,9 +123,12 @@ export function resolvePlace(input:PlaceInput):ResolvedPlace{
   const unresolved=candidates.filter(entry=>entry.value&&entry.value.trim()&&!entry.matches.length)
     .map(entry=>entry.value!.trim());
 
+  // Text evidence outranks the tree: the tree says Vosne-Romanée is a village,
+  // and "Vosne-Romanée 1er Cru Les Suchots" says this particular bottle is not.
+  const spoken=classifyFromText(input.appellation,input.wineName);
   if(!anchor)return {
     country:trimmed(input.country),region:trimmed(input.region),appellation:trimmed(input.appellation),
-    path:[],placeId:null,unresolved
+    path:[],placeId:null,classification:spoken,unresolved
   };
 
   const chain=ancestry(anchor);
@@ -114,11 +151,25 @@ export function resolvePlace(input:PlaceInput):ResolvedPlace{
     appellation,
     path:chain.map(step=>step.id),
     placeId:anchor.id,
+    classification:spoken??villageIfCertain((own??anchor).classification,candidates[0].value),
     unresolved
   };
 }
 
 function trimmed(value:string|null|undefined){const text=value?.trim();return text||null}
+
+/**
+ * A village reading is only asserted when the appellation matched exactly.
+ * "Vosne Romanee Suchots" reaches Vosne-Romanée by dropping a suffix we could
+ * not interpret; that trailing text may well be a premier cru climat, so the
+ * honest answer is that the tier is unknown rather than village. A grand cru
+ * survives an inexact match, because there the named place is itself the cru.
+ */
+function villageIfCertain(classification:WineClassification|undefined,value:string|null|undefined){
+  if(!classification)return null;
+  if(classification!=='village')return classification;
+  return value&&byName.has(key(value))?classification:null;
+}
 
 /**
  * The deepest candidate wins, and a candidate that sits under another candidate

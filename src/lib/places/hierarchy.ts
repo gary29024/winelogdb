@@ -16,15 +16,24 @@
  */
 export type PlaceTier='country'|'area'|'region'|'subregion'|'appellation';
 
+/**
+ * Where an appellation sits in a classified hierarchy, when its country has one.
+ * A grand cru is an appellation in its own right, so the tree carries it; the
+ * premier cru tier is never a separate appellation and is read off the label
+ * text instead. Left undefined wherever there is no such system to report.
+ */
+export type PlaceClassification='grand_cru'|'village';
+
 export type PlaceNode={
   id:string;
   name:string;
   tier:PlaceTier;
   parent:string|null;
   aliases:readonly string[];
+  classification?:PlaceClassification;
 };
 
-type Draft={name:string;tier:PlaceTier;aliases:readonly string[];children:readonly Draft[]};
+type Draft={name:string;tier:PlaceTier;aliases:readonly string[];children:readonly Draft[];classification?:PlaceClassification};
 
 const node=(tier:PlaceTier)=>(name:string,aliases:readonly string[]=[],children:readonly Draft[]=[]):Draft=>
   ({name,tier,aliases,children});
@@ -33,6 +42,9 @@ const country=node('country'),area=node('area'),region=node('region'),sub=node('
 
 /** Shorthand for a run of appellations that carry no aliases of their own. */
 const appellations=(...names:string[]):Draft[]=>names.map(name=>appellation(name));
+const classified=(classification:PlaceClassification)=>(...names:string[]):Draft[]=>
+  names.map(name=>({...appellation(name),classification}));
+const grandCrus=classified('grand_cru'),villages=classified('village');
 
 const tree:readonly Draft[]=[
   country('United States',['USA','U.S.A.','US','United States of America','America'],[
@@ -92,33 +104,33 @@ const tree:readonly Draft[]=[
 
   country('France',[],[
     region('Burgundy',['Bourgogne'],[
-      sub('Côte de Nuits',[],appellations(
-        'Gevrey-Chambertin','Morey-Saint-Denis','Chambolle-Musigny','Vougeot','Vosne-Romanée',
-        'Nuits-Saint-Georges','Fixin','Marsannay','Côte de Nuits-Villages',
+      sub('Côte de Nuits',[],[
+        ...villages('Gevrey-Chambertin','Morey-Saint-Denis','Chambolle-Musigny','Vougeot','Vosne-Romanée',
+          'Nuits-Saint-Georges','Fixin','Marsannay','Côte de Nuits-Villages'),
         // Grand crus are standalone AOCs, so they are siblings of the villages
         // rather than children: a Charmes-Chambertin is not a Gevrey-Chambertin.
-        'Chambertin','Chambertin-Clos de Bèze','Charmes-Chambertin','Mazoyères-Chambertin',
-        'Griotte-Chambertin','Chapelle-Chambertin','Latricières-Chambertin','Mazis-Chambertin',
-        'Ruchottes-Chambertin','Clos de la Roche','Clos Saint-Denis','Clos des Lambrays',
-        'Clos de Tart','Bonnes-Mares','Musigny','Clos de Vougeot','Échezeaux','Grands Échezeaux',
-        'Romanée-Conti','La Tâche','Richebourg','Romanée-Saint-Vivant','La Romanée','La Grande Rue'
-      )),
-      sub('Côte de Beaune',[],appellations(
-        'Aloxe-Corton','Pernand-Vergelesses','Savigny-lès-Beaune','Beaune','Pommard','Volnay',
-        'Meursault','Puligny-Montrachet','Chassagne-Montrachet','Saint-Aubin','Santenay',
-        'Auxey-Duresses','Monthélie','Saint-Romain','Ladoix','Chorey-lès-Beaune','Côte de Beaune-Villages',
-        'Corton','Corton-Charlemagne','Charlemagne','Montrachet','Chevalier-Montrachet',
-        'Bâtard-Montrachet','Bienvenues-Bâtard-Montrachet','Criots-Bâtard-Montrachet'
-      )),
+        ...grandCrus('Chambertin','Chambertin-Clos de Bèze','Charmes-Chambertin','Mazoyères-Chambertin',
+          'Griotte-Chambertin','Chapelle-Chambertin','Latricières-Chambertin','Mazis-Chambertin',
+          'Ruchottes-Chambertin','Clos de la Roche','Clos Saint-Denis','Clos des Lambrays',
+          'Clos de Tart','Bonnes-Mares','Musigny','Clos de Vougeot','Échezeaux','Grands Échezeaux',
+          'Romanée-Conti','La Tâche','Richebourg','Romanée-Saint-Vivant','La Romanée','La Grande Rue')
+      ]),
+      sub('Côte de Beaune',[],[
+        ...villages('Aloxe-Corton','Pernand-Vergelesses','Savigny-lès-Beaune','Beaune','Pommard','Volnay',
+          'Meursault','Puligny-Montrachet','Chassagne-Montrachet','Saint-Aubin','Santenay',
+          'Auxey-Duresses','Monthélie','Saint-Romain','Ladoix','Chorey-lès-Beaune','Côte de Beaune-Villages'),
+        ...grandCrus('Corton','Corton-Charlemagne','Charlemagne','Montrachet','Chevalier-Montrachet',
+          'Bâtard-Montrachet','Bienvenues-Bâtard-Montrachet','Criots-Bâtard-Montrachet')
+      ]),
       sub('Côte Chalonnaise',[],appellations('Mercurey','Givry','Rully','Montagny','Bouzeron')),
       sub('Mâconnais',[],appellations('Pouilly-Fuissé','Saint-Véran','Viré-Clessé','Mâcon-Villages')),
-      sub('Chablis',[],appellations('Petit Chablis','Chablis Grand Cru','Chablis Premier Cru')),
+      sub('Chablis',[],[appellation('Petit Chablis'),...grandCrus('Chablis Grand Cru'),appellation('Chablis Premier Cru')]),
       appellation('Bourgogne Rouge'),appellation('Bourgogne Blanc'),appellation('Bourgogne Aligoté')
     ]),
     region('Bordeaux',[],[
       sub('Médoc',[],appellations('Margaux','Pauillac','Saint-Julien','Saint-Estèphe','Haut-Médoc','Listrac-Médoc','Moulis-en-Médoc')),
       sub('Graves',[],appellations('Pessac-Léognan','Sauternes','Barsac','Cérons')),
-      sub('Right Bank',[],appellations('Saint-Émilion','Pomerol','Fronsac','Lalande-de-Pomerol','Castillon Côtes de Bordeaux')),
+      sub('Right Bank',[],appellations('Saint-Émilion','Saint-Émilion Grand Cru','Pomerol','Fronsac','Lalande-de-Pomerol','Castillon Côtes de Bordeaux')),
       appellation('Entre-Deux-Mers')
     ]),
     region('Champagne',[],appellations('Montagne de Reims','Côte des Blancs','Vallée de la Marne','Côte des Bar','Aÿ','Cramant','Le Mesnil-sur-Oger')),
@@ -130,7 +142,7 @@ const tree:readonly Draft[]=[
       'Sancerre','Pouilly-Fumé','Vouvray','Chinon','Bourgueil','Saumur-Champigny','Savennières',
       'Muscadet Sèvre et Maine','Anjou','Quincy','Menetou-Salon','Coteaux du Layon','Saumur'
     )),
-    region('Alsace',[],appellations('Alsace Grand Cru')),
+    region('Alsace',[],grandCrus('Alsace Grand Cru')),
     region('Beaujolais',[],appellations('Morgon','Fleurie','Moulin-à-Vent','Brouilly','Côte de Brouilly','Juliénas','Chénas','Chiroubles','Régnié','Saint-Amour','Beaujolais-Villages')),
     region('Languedoc',['Languedoc-Roussillon'],appellations('Corbières','Minervois','Faugères','Pic Saint-Loup','Saint-Chinian','Fitou','Picpoul de Pinet')),
     region('Roussillon',[],appellations('Côtes du Roussillon','Collioure','Banyuls','Maury')),
@@ -289,7 +301,8 @@ function flatten(){
     // Prefixing with the parent keeps "Chablis" in Burgundy distinct from any
     // later namesake, without the ids depending on tree order.
     const id=parent?`${parent}/${slug(draft.name)}`:slug(draft.name);
-    nodes.push({id,name:draft.name,tier:draft.tier,parent,aliases:draft.aliases});
+    nodes.push({id,name:draft.name,tier:draft.tier,parent,aliases:draft.aliases,
+      ...(draft.classification?{classification:draft.classification}:{})});
     for(const child of draft.children)walk(child,id);
   };
   for(const draft of tree)walk(draft,null);

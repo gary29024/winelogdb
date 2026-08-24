@@ -16,18 +16,15 @@
 -- Suchots" and "Vosne Romanee Suchots" all settle on Vosne-Romanee, the same
 -- way the runtime resolver reads them. Only a place below the region tier can
 -- be reached this way, so "Bourgogne Hautes Cotes de Nuits" is not swallowed.
-
 ALTER TABLE wines ADD COLUMN recognized_region TEXT;
 ALTER TABLE wines ADD COLUMN recognized_appellation TEXT;
-
+ALTER TABLE wines ADD COLUMN classification TEXT;
 UPDATE wines SET recognized_region=region WHERE recognized_region IS NULL AND trim(COALESCE(region,''))<>'';
 UPDATE wines SET recognized_appellation=appellation WHERE recognized_appellation IS NULL AND trim(COALESCE(appellation,''))<>'';
-
 CREATE TABLE place_backfill_map (
   spelling TEXT PRIMARY KEY, depth INTEGER NOT NULL,
   region TEXT, appellation TEXT, country TEXT
 );
-
 INSERT INTO place_backfill_map(spelling,depth,region,appellation,country) VALUES
   ('Abruzzo',2,'Abruzzo',NULL,'Italy'),
   ('Aconcagua',2,'Aconcagua Valley',NULL,'Chile'),
@@ -2213,8 +2210,8 @@ INSERT INTO place_backfill_map(spelling,depth,region,appellation,country) VALUES
   ('Saint Émilion',4,'Bordeaux','Saint-Émilion','France'),
   ('Saint Emilion 1er Cru',4,'Bordeaux','Saint-Émilion','France'),
   ('Saint Émilion 1er Cru',4,'Bordeaux','Saint-Émilion','France'),
-  ('Saint Emilion Grand Cru',4,'Bordeaux','Saint-Émilion','France'),
-  ('Saint Émilion Grand Cru',4,'Bordeaux','Saint-Émilion','France'),
+  ('Saint Emilion Grand Cru',4,'Bordeaux','Saint-Émilion Grand Cru','France'),
+  ('Saint Émilion Grand Cru',4,'Bordeaux','Saint-Émilion Grand Cru','France'),
   ('Saint Emilion Premier Cru',4,'Bordeaux','Saint-Émilion','France'),
   ('Saint Émilion Premier Cru',4,'Bordeaux','Saint-Émilion','France'),
   ('Saint Estephe',4,'Bordeaux','Saint-Estèphe','France'),
@@ -2269,8 +2266,8 @@ INSERT INTO place_backfill_map(spelling,depth,region,appellation,country) VALUES
   ('Saint-Émilion',4,'Bordeaux','Saint-Émilion','France'),
   ('Saint-Emilion 1er Cru',4,'Bordeaux','Saint-Émilion','France'),
   ('Saint-Émilion 1er Cru',4,'Bordeaux','Saint-Émilion','France'),
-  ('Saint-Emilion Grand Cru',4,'Bordeaux','Saint-Émilion','France'),
-  ('Saint-Émilion Grand Cru',4,'Bordeaux','Saint-Émilion','France'),
+  ('Saint-Emilion Grand Cru',4,'Bordeaux','Saint-Émilion Grand Cru','France'),
+  ('Saint-Émilion Grand Cru',4,'Bordeaux','Saint-Émilion Grand Cru','France'),
   ('Saint-Emilion Premier Cru',4,'Bordeaux','Saint-Émilion','France'),
   ('Saint-Émilion Premier Cru',4,'Bordeaux','Saint-Émilion','France'),
   ('Saint-Estephe',4,'Bordeaux','Saint-Estèphe','France'),
@@ -2788,7 +2785,6 @@ INSERT INTO place_backfill_map(spelling,depth,region,appellation,country) VALUES
   ('Yountville 1er Cru',4,'Napa Valley','Yountville','United States'),
   ('Yountville Grand Cru',4,'Napa Valley','Yountville','United States'),
   ('Yountville Premier Cru',4,'Napa Valley','Yountville','United States');
-
 UPDATE wines SET
   region=(SELECT p.region FROM place_backfill_map p
     WHERE p.spelling IN (trim(COALESCE(wines.region,'')),trim(COALESCE(wines.appellation,'')))
@@ -2811,7 +2807,24 @@ UPDATE wines SET
     ORDER BY p.depth DESC LIMIT 1) ELSE country END
 WHERE EXISTS (SELECT 1 FROM place_backfill_map p
   WHERE p.spelling IN (trim(COALESCE(wines.region,'')),trim(COALESCE(wines.appellation,''))));
-
+-- The cru tier is read from what was recorded before the place was normalised,
+-- because folding "Vosne-Romanee 1er Cru Les Suchots" into the village
+-- appellation is exactly what loses it. An appellation that is a place in its
+-- own right ("Saint-Emilion Grand Cru", "Chablis Grand Cru") is never read as
+-- a tier, so it is excluded by the map lookup.
+UPDATE wines SET classification='premier_cru'
+  WHERE classification IS NULL AND (lower(COALESCE(recognized_appellation,'')||' '||COALESCE(wine_name,''))
+    GLOB '*[0-9a-z ]1er cru*' OR lower(COALESCE(recognized_appellation,'')||' '||COALESCE(wine_name,'')) GLOB '1er cru*'
+    OR lower(COALESCE(recognized_appellation,'')||' '||COALESCE(wine_name,'')) LIKE '%premier cru%');
+UPDATE wines SET classification='grand_cru'
+  WHERE classification IS NULL
+    AND lower(COALESCE(recognized_appellation,'')||' '||COALESCE(wine_name,'')) LIKE '%grand cru%'
+    AND NOT EXISTS (SELECT 1 FROM place_backfill_map p WHERE p.spelling=trim(COALESCE(wines.recognized_appellation,'')));
+UPDATE wines SET classification='grand_cru'
+  WHERE classification IS NULL AND appellation IN ('Chambertin','Chambertin-Clos de Bèze','Charmes-Chambertin','Mazoyères-Chambertin','Griotte-Chambertin','Chapelle-Chambertin','Latricières-Chambertin','Mazis-Chambertin','Ruchottes-Chambertin','Clos de la Roche','Clos Saint-Denis','Clos des Lambrays','Clos de Tart','Bonnes-Mares','Musigny','Clos de Vougeot','Échezeaux','Grands Échezeaux','Romanée-Conti','La Tâche','Richebourg','Romanée-Saint-Vivant','La Romanée','La Grande Rue','Corton','Corton-Charlemagne','Charlemagne','Montrachet','Chevalier-Montrachet','Bâtard-Montrachet','Bienvenues-Bâtard-Montrachet','Criots-Bâtard-Montrachet','Chablis Grand Cru','Alsace Grand Cru');
+UPDATE wines SET classification='village'
+  WHERE classification IS NULL AND appellation IS NOT NULL
+    AND trim(COALESCE(recognized_appellation,''))=trim(COALESCE(appellation,''))
+    AND appellation IN ('Gevrey-Chambertin','Morey-Saint-Denis','Chambolle-Musigny','Vougeot','Vosne-Romanée','Nuits-Saint-Georges','Fixin','Marsannay','Côte de Nuits-Villages','Aloxe-Corton','Pernand-Vergelesses','Savigny-lès-Beaune','Beaune','Pommard','Volnay','Meursault','Puligny-Montrachet','Chassagne-Montrachet','Saint-Aubin','Santenay','Auxey-Duresses','Monthélie','Saint-Romain','Ladoix','Chorey-lès-Beaune','Côte de Beaune-Villages');
 DROP TABLE place_backfill_map;
-
--- 2737 spellings across 667 tree nodes.
+-- 2737 spellings across 668 tree nodes.

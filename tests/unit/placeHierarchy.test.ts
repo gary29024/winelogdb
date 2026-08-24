@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { resolve as resolvePath } from 'node:path';
 import { describe,expect,it } from 'vitest';
 import { PLACES } from '../../src/lib/places/hierarchy';
-import { ancestry,lookupPlace,placeRollup,placesCompatible,resolvePlace } from '../../src/lib/places/resolve';
+import { ancestry,classifyFromText,lookupPlace,placeRollup,placesCompatible,resolvePlace } from '../../src/lib/places/resolve';
 import { canonicalizeWineFields } from '../../src/lib/wine/canonicalize';
 import { cuveeIdentityCandidateCompatible,cuveeIdentitySignature,cuveeSignature } from '../../src/lib/cuvees/entities';
 
@@ -99,7 +99,8 @@ describe('resolving which field a place belongs in',()=>{
       expect(at('France','Burgundy',spelling)).toEqual(['France','Burgundy','Vosne-Romanée']);
     }
     expect(at('France','Burgundy','Gevrey-Chambertin 1er Cru Les Cazetiers')).toEqual(['France','Burgundy','Gevrey-Chambertin']);
-    expect(at('France','Bordeaux','Saint-Émilion Grand Cru Classé')).toEqual(['France','Bordeaux','Saint-Émilion']);
+    // Saint-Émilion Grand Cru is itself an appellation, so the longer prefix wins.
+    expect(at('France','Bordeaux','Saint-Émilion Grand Cru Classé')).toEqual(['France','Bordeaux','Saint-Émilion Grand Cru']);
   });
 
   it('only reaches a specific place by dropping a suffix',()=>{
@@ -127,6 +128,47 @@ describe('resolving which field a place belongs in',()=>{
 
   it('reports nothing to resolve for an empty wine',()=>{
     expect(resolvePlace({})).toMatchObject({country:null,region:null,appellation:null,path:[],placeId:null,unresolved:[]});
+  });
+});
+
+describe('cru classification',()=>{
+  const tier=(appellation:string,wineName?:string)=>
+    resolvePlace({country:'France',region:'Burgundy',appellation,wineName}).classification;
+
+  it('keeps the tier that normalising the place would otherwise throw away',()=>{
+    // The climat is folded into the village appellation, so without this a
+    // premier cru and a village wine become indistinguishable.
+    expect(tier('Vosne-Romanée 1er Cru Les Suchots')).toBe('premier_cru');
+    expect(tier('Vosne-Romanée Premier Cru')).toBe('premier_cru');
+    expect(tier('Vosne-Romanée','Les Suchots 1er Cru')).toBe('premier_cru');
+    expect(tier('Vosne-Romanée')).toBe('village');
+  });
+
+  it('reads a grand cru from the tree, since there the cru is the appellation',()=>{
+    expect(tier('Charmes-Chambertin')).toBe('grand_cru');
+    expect(tier('Corton-Charlemagne')).toBe('grand_cru');
+    expect(tier('Chablis Grand Cru')).toBe('grand_cru');
+    expect(resolvePlace({country:'France',region:'Alsace',appellation:'Alsace Grand Cru'}).classification).toBe('grand_cru');
+  });
+
+  it('does not read an appellation that merely contains "grand cru" as a tier',()=>{
+    // Saint-Émilion Grand Cru is an AOC covering most of the commune, not a
+    // classification, so reading it as one would promote nearly every bottle.
+    const place=resolvePlace({country:'France',region:'Bordeaux',appellation:'Saint-Émilion Grand Cru'});
+    expect(place.appellation).toBe('Saint-Émilion Grand Cru');
+    expect(place.classification).toBeNull();
+  });
+
+  it('says nothing rather than guessing when the label left text it could not read',()=>{
+    // "Vosne Romanee Suchots" reaches the village by dropping a suffix, and that
+    // suffix may well be a premier cru climat. Claiming village would be a guess.
+    expect(tier('Vosne Romanee Suchots')).toBeNull();
+    expect(tier('Charmes-Chambertin Vieilles Vignes')).toBe('grand_cru');
+  });
+
+  it('has no tier to report where there is no such system',()=>{
+    expect(resolvePlace({country:'United States',region:'Napa Valley',appellation:'Oakville'}).classification).toBeNull();
+    expect(classifyFromText(null,undefined)).toBeNull();
   });
 });
 
@@ -188,6 +230,15 @@ describe('place compatibility',()=>{
 });
 
 describe('canonicalizeWineFields',()=>{
+  it('records the cru tier beside the place',()=>{
+    expect(canonicalizeWineFields({country:'France',region:'Burgundy',appellation:'Vosne-Romanée 1er Cru Les Suchots'}))
+      .toMatchObject({appellation:'Vosne-Romanée',classification:'premier_cru'});
+    expect(canonicalizeWineFields({country:'France',region:'Burgundy',appellation:'Charmes-Chambertin'}))
+      .toMatchObject({appellation:'Charmes-Chambertin',classification:'grand_cru'});
+    expect(canonicalizeWineFields({country:'United States',region:'Napa Valley',appellation:'Oakville'}))
+      .toMatchObject({classification:null});
+  });
+
   it('re-slots places on every write path, not just recognition',()=>{
     expect(canonicalizeWineFields({country:'USA',region:'California',appellation:'Oakville'}))
       .toMatchObject({country:'United States',region:'Napa Valley',appellation:'Oakville'});

@@ -25,6 +25,7 @@ export const recognitionSchema = z.object({
   country: nullableText,
   region: nullableText,
   appellation: nullableText,
+  classification: z.enum(['grand_cru','premier_cru','village']).nullable().optional().default(null),
   grapes: z.array(z.string().trim().max(100)).max(20).default([]),
   grapeBlend: z.array(grapeBlendEntry).max(20).default([]),
   style: z.preprocess(normalizeStyle,z.enum(wineStyles).nullable().optional()),

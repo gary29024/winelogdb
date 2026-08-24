@@ -41,20 +41,26 @@ function stripRepeatedProducer(producer:string|undefined|null,wineName:string|un
   return stripped||name;
 }
 
-export function canonicalizeWineFields<T extends {producer?:string|null;wineName?:string|null;country?:string|null;region?:string|null;appellation?:string|null;grapes?:string[];grapeBlend?:Array<{grape:string;percentage?:number|null}>}>(wine:T):T{
+export function canonicalizeWineFields<T extends {producer?:string|null;wineName?:string|null;country?:string|null;region?:string|null;appellation?:string|null;classification?:string|null;grapes?:string[];grapeBlend?:Array<{grape:string;percentage?:number|null}>}>(wine:T):T{
   // Spelling first, so the tree is asked about "Burgundy" rather than
   // "Bourgogne", then placement: which of region and appellation each name
   // belongs in is decided by the hierarchy, not by the slot it arrived in.
   const place=resolvePlace({
     country:canonicalCountry(wine.country),
     region:canonicalRegion(wine.region),
-    appellation:canonicalAppellation(wine.appellation)
+    appellation:canonicalAppellation(wine.appellation),
+    // The cru tier is usually printed on the label rather than in the
+    // appellation, so the wine name gets a say in reading it.
+    wineName:wine.wineName
   });
   return {...wine,
     wineName:stripRepeatedProducer(wine.producer,wine.wineName) as T['wineName'],
     country:place.country as T['country'],
     region:place.region as T['region'],
     appellation:place.appellation as T['appellation'],
+    // Normalising the place drops the climat that carried the tier, so the tier
+    // is recorded beside it rather than lost.
+    classification:(place.classification??wine.classification??null) as T['classification'],
     grapes:wine.grapes?.map(canonicalGrape) as T['grapes'],
     grapeBlend:wine.grapeBlend?.map(x=>({...x,grape:canonicalGrape(x.grape)})) as T['grapeBlend']
   };
