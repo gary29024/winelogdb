@@ -5,7 +5,7 @@ import { applyJournalVintageSearch } from '../src/lib/journal/searchQuery';
 import { favoriteUpdateSchema } from '../src/lib/journal/favorite';
 import { requireSession } from '../src/lib/auth/session';
 import { handleRecognitionRequest } from './recognitionHandler';
-import { loadAchievementProgress } from './achievementHandler';
+import { createCustomAchievementCollection,deleteCustomAchievementCollection,loadAchievementCatalogueOptions,loadAchievementProgress,updateCustomAchievementCollection } from './achievementHandler';
 
 type Bindings={DB:D1Database;WINE_IMAGES:R2Bucket;ASSETS:Fetcher;GEMINI_API_KEY:string;AUTH_SECRET:string;APP_PASSWORD:string;APP_URL:string;MAX_FILE_BYTES?:string;MAX_BATCH_FILES?:string};
 type AppEnv={Bindings:Bindings};
@@ -23,6 +23,33 @@ app.get('/api/wines',c=>{
   return layeredApp.fetch(request,c.env,c.executionCtx);
 });
 
+app.get('/api/achievements/catalogue-options',async c=>{
+  let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
+  try{return c.json(await loadAchievementCatalogueOptions(c.env.DB,owner))}
+  catch(error){console.error('Could not load achievement catalogue options',error);return c.json({error:'Could not load catalogue targets'},500)}
+});
+app.post('/api/achievements/custom',async c=>{
+  let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
+  try{
+    const result=await createCustomAchievementCollection(c.env.DB,owner,await c.req.json().catch(()=>null));
+    if(!result.ok)return c.json({error:result.error,issues:result.issues},400);
+    return c.json({id:result.id},201);
+  }catch(error){console.error('Could not create achievement collection',error);return c.json({error:'Could not create collection'},500)}
+});
+app.put('/api/achievements/custom/:id',async c=>{
+  let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
+  try{
+    const result=await updateCustomAchievementCollection(c.env.DB,owner,c.req.param('id'),await c.req.json().catch(()=>null));
+    if(!result.ok)return c.json({error:result.error,issues:result.issues},'notFound' in result&&result.notFound?404:400);
+    return c.json({id:result.id});
+  }catch(error){console.error('Could not update achievement collection',error);return c.json({error:'Could not update collection'},500)}
+});
+app.delete('/api/achievements/custom/:id',async c=>{
+  let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
+  const body=await c.req.json().catch(()=>null) as {confirmation?:string}|null;if(body?.confirmation!=='DELETE_COLLECTION')return c.json({error:'Deletion confirmation is required'},400);
+  try{const result=await deleteCustomAchievementCollection(c.env.DB,owner,c.req.param('id'));return result.deleted?c.json({deleted:true}):c.json({error:'Collection not found'},404)}
+  catch(error){console.error('Could not delete achievement collection',error);return c.json({error:'Could not delete collection'},500)}
+});
 app.get('/api/achievements',async c=>{
   let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
   try{return c.json(await loadAchievementProgress(c.env.DB,owner))}
