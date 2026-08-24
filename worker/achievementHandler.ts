@@ -1,11 +1,11 @@
-import { achievementDefinitions } from '../src/features/achievements/definitions';
+import { achievementDefinitions } from '../src/features/achievements/curatedLaunch';
 import { buildAllAchievementProgress,normalizeAchievementIdentity } from '../src/features/achievements/engine';
 import {
   achievementCatalogueRuleSchema,customAchievementInputSchema,materializeCatalogueAchievementItems,materializeCustomAchievementDefinition,materializeManualAchievementItems,normalizedCustomAchievementInput,
   type StoredCustomAchievementCollection
 } from '../src/features/achievements/customCollections';
 import type {
-  AchievementCatalogueOptions,AchievementCatalogueRule,AchievementCuveeIdentity,AchievementIconKey,AchievementProducerIdentity,AchievementWine,CustomAchievementInput,CustomAchievementManualItem
+  AchievementCatalogueOptions,AchievementCatalogueRule,AchievementCuveeIdentity,AchievementIconKey,AchievementMatchMode,AchievementProducerIdentity,AchievementProgress,AchievementWine,CustomAchievementInput,CustomAchievementManualItem
 } from '../src/features/achievements/types';
 
 type WineRow={id:string;producer_id:string|null;cuvee_id:string|null;producer:string;wine_name:string;vintage:number|null;appellation:string|null};
@@ -14,6 +14,8 @@ type ProducerAliasRow={producer_id:string;display_alias:string};
 type CuveeRow={id:string;producer_id:string;canonical_name:string;appellation:string|null;wine_style:string|null;catalog_backed:number};
 type CuveeAliasRow={cuvee_id:string;display_alias:string};
 type CustomCollectionRow={id:string;title:string;subtitle:string;icon:string;mode:string;items_json:string;rule_json:string|null};
+type CacheRow={revision:number;definition_version:number;result_json:string};
+type PreferenceRow={collection_id:string;match_mode:string};
 
 type AchievementContext={
   producers:AchievementProducerIdentity[];
@@ -22,13 +24,14 @@ type AchievementContext={
   options:AchievementCatalogueOptions;
 };
 
+const ACHIEVEMENT_DEFINITION_VERSION=2;
 const parseJson=<T>(value:unknown,fallback:T):T=>{try{return JSON.parse(String(value)) as T}catch{return fallback}};
+const missingTable=(error:unknown)=>String(error).toLowerCase().includes('no such table');
 function groupedAliases<T extends {display_alias:string}>(rows:T[],id:(row:T)=>string){
   const result=new Map<string,string[]>();
   for(const row of rows){const key=id(row),values=result.get(key)??[];if(row.display_alias&&!values.includes(row.display_alias))values.push(row.display_alias);result.set(key,values)}
   return result;
 }
-function uniqueByNormalized(values:string[]){const seen=new Set<string>();return values.filter(value=>{const key=normalizeAchievementIdentity(value);return Boolean(key)&&!seen.has(key)&&Boolean(seen.add(key))})}
 
 async function loadAchievementContext(db:D1Database,owner:string):Promise<AchievementContext>{
   const [winesResult,producersResult,producerAliasesResult,cuveesResult,cuveeAliasesResult]=await Promise.all([
@@ -57,7 +60,7 @@ async function loadAchievementContext(db:D1Database,owner:string):Promise<Achiev
 
 async function loadCustomRows(db:D1Database,owner:string){
   try{return (await db.prepare(`SELECT id,title,subtitle,icon,mode,items_json,rule_json FROM achievement_custom_collections WHERE owner_id=? ORDER BY created_at ASC`).bind(owner).all<CustomCollectionRow>()).results}
-  catch(error){if(String(error).toLowerCase().includes('no such table'))return [];throw error}
+  catch(error){if(missingTable(error))return [];throw error}
 }
 function rowToStored(row:CustomCollectionRow):StoredCustomAchievementCollection|null{
   const icon=row.icon as AchievementIconKey;if(!['first-growth','judgment-paris','beaujolais-crus','bordeaux-classification','sauternes','graves','saint-emilion','burgundy-grand-cru','gevrey-grand-cru','rhone-crus','michelin-grapes'].includes(icon))return null;
@@ -66,10 +69,43 @@ function rowToStored(row:CustomCollectionRow):StoredCustomAchievementCollection|
   return {id:row.id,title:row.title,subtitle:row.subtitle,icon,mode,items,rule:parsedRule?.success?parsedRule.data:null};
 }
 
-export async function loadAchievementProgress(db:D1Database,owner:string){
-  const context=await loadAchievementContext(db,owner),customRows=await loadCustomRows(db,owner);
+async function currentAchievementRevision(db:D1Database,owner:string):Promise<number|null>{
+  try{const row=await db.prepare('SELECT revision FROM achievement_cache_state WHERE owner_id=?').bind(owner).first<{revision:number}>();return Number(row?.revision??0)}
+  catch(error){if(missingTable(error))return null;throw error}
+}
+async function cachedAchievementProgress(db:D1Database,owner:string,revision:number):Promise<AchievementProgress[]|null>{
+  try{
+    const row=await db.prepare('SELECT revision,definition_version,result_json FROM achievement_progress_cache WHERE owner_id=?').bind(owner).first<CacheRow>();
+    if(!row||Number(row.revision)!==revision||Number(row.definition_version)!==ACHIEVEMENT_DEFINITION_VERSION)return null;
+    const parsed=parseJson<AchievementProgress[]|null>(row.result_json,null);return Array.isArray(parsed)?parsed:null;
+  }catch(error){if(missingTable(error))return null;throw error}
+}
+async function storeAchievementProgress(db:D1Database,owner:string,revision:number,result:AchievementProgress[]){
+  try{await db.prepare(`INSERT INTO achievement_progress_cache(owner_id,revision,definition_version,result_json,updated_at) VALUES(?,?,?,?,?)
+    ON CONFLICT(owner_id) DO UPDATE SET revision=excluded.revision,definition_version=excluded.definition_version,result_json=excluded.result_json,updated_at=excluded.updated_at`)
+    .bind(owner,revision,ACHIEVEMENT_DEFINITION_VERSION,JSON.stringify(result),new Date().toISOString()).run()}
+  catch(error){if(!missingTable(error))throw error}
+}
+async function loadMatchModes(db:D1Database,owner:string):Promise<Record<string,AchievementMatchMode>>{
+  try{
+    const rows=(await db.prepare('SELECT collection_id,match_mode FROM achievement_collection_preferences WHERE owner_id=?').bind(owner).all<PreferenceRow>()).results,result:Record<string,AchievementMatchMode>={};
+    for(const row of rows){if(row.match_mode==='exact'||row.match_mode==='cuvee'||row.match_mode==='producer')result[row.collection_id]=row.match_mode}
+    return result;
+  }catch(error){if(missingTable(error))return {};throw error}
+}
+async function computeAchievementProgress(db:D1Database,owner:string){
+  const [context,customRows,matchModes]=await Promise.all([loadAchievementContext(db,owner),loadCustomRows(db,owner),loadMatchModes(db,owner)]);
   const customDefinitions=customRows.map(rowToStored).filter((row):row is StoredCustomAchievementCollection=>Boolean(row)).map(row=>materializeCustomAchievementDefinition(row,context.options));
-  return buildAllAchievementProgress([...achievementDefinitions,...customDefinitions],{producers:context.producers,cuvees:context.cuvees},context.wines);
+  return buildAllAchievementProgress([...achievementDefinitions,...customDefinitions],{producers:context.producers,cuvees:context.cuvees},context.wines,matchModes);
+}
+
+export async function loadAchievementProgress(db:D1Database,owner:string,attempt=0):Promise<AchievementProgress[]>{
+  const revision=await currentAchievementRevision(db,owner);
+  if(revision!==null){const cached=await cachedAchievementProgress(db,owner,revision);if(cached)return cached}
+  const result=await computeAchievementProgress(db,owner),after=await currentAchievementRevision(db,owner);
+  if(revision!==null&&after!==null&&after!==revision&&attempt===0)return loadAchievementProgress(db,owner,1);
+  if(after!==null)await storeAchievementProgress(db,owner,after,result);
+  return result;
 }
 
 export async function loadAchievementCatalogueOptions(db:D1Database,owner:string){return (await loadAchievementContext(db,owner)).options}
@@ -110,4 +146,22 @@ export async function updateCustomAchievementCollection(db:D1Database,owner:stri
 export async function deleteCustomAchievementCollection(db:D1Database,owner:string,id:string){
   const result=await db.prepare('DELETE FROM achievement_custom_collections WHERE owner_id=? AND id=?').bind(owner,id).run();
   return {deleted:Boolean(result.meta.changes)};
+}
+
+export async function setAchievementMatchMode(db:D1Database,owner:string,id:string,input:unknown){
+  const body=input as {matchMode?:unknown}|null,mode=body?.matchMode;
+  if(mode!=='exact'&&mode!=='cuvee'&&mode!=='producer')return {ok:false as const,error:'Match mode must be exact, cuvee or producer'};
+  const definition=achievementDefinitions.find(item=>item.id===id);
+  if(!definition)return {ok:false as const,notFound:true as const,error:'Collection not found'};
+  if(!definition.items.some(item=>item.selector.type==='wine_vintage'))return {ok:false as const,error:'This collection does not have vintage-specific targets'};
+  if(mode==='exact'){
+    try{await db.prepare('DELETE FROM achievement_collection_preferences WHERE owner_id=? AND collection_id=?').bind(owner,id).run()}
+    catch(error){if(!missingTable(error))throw error}
+    return {ok:true as const,matchMode:mode};
+  }
+  const now=new Date().toISOString();
+  try{await db.prepare(`INSERT INTO achievement_collection_preferences(owner_id,collection_id,match_mode,created_at,updated_at) VALUES(?,?,?,?,?)
+    ON CONFLICT(owner_id,collection_id) DO UPDATE SET match_mode=excluded.match_mode,updated_at=excluded.updated_at`).bind(owner,id,mode,now,now).run()}
+  catch(error){if(missingTable(error))return {ok:false as const,error:'Achievement preference migration is not applied yet'};throw error}
+  return {ok:true as const,matchMode:mode};
 }

@@ -9,7 +9,7 @@ function collection(id:string,{completed=0,total=10,possible=0,series=false}:{co
       id,title:id,subtitle:id,category:series?'guide-selections':'iconic-estates',icon:series?'michelin-grapes':'first-growth',items:[],references:[],
       ...(series?{series:{id:'michelin-grapes',authority:'MICHELIN Guide',region:'Burgundy',edition:2026,tier:'three'}}:{})
     },
-    completed,possible,pending:Math.max(0,total-completed-possible),total,percent:total?Math.round(completed/total*100):0,complete,items:[]
+    completed,possible,pending:Math.max(0,total-completed-possible),total,percent:total?Math.round(completed/total*100):0,complete,items:[],matchMode:'exact',supportsRelaxedMatching:false
   };
 }
 

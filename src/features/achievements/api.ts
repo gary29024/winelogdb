@@ -1,5 +1,5 @@
 import { authHeaders,clearSession } from '../../lib/auth/client';
-import type { AchievementCatalogueOptions,AchievementProgress,CustomAchievementInput } from './types';
+import type { AchievementCatalogueOptions,AchievementMatchMode,AchievementProgress,CustomAchievementInput } from './types';
 
 let cached:{expires:number;data:AchievementProgress[]}|null=null;
 let pending:Promise<AchievementProgress[]>|null=null;
@@ -33,4 +33,8 @@ export async function saveCustomAchievement(input:CustomAchievementInput,id?:str
 export async function deleteCustomAchievement(id:string){
   const response=await fetch(`/api/achievements/custom/${id}`,{method:'DELETE',headers:authHeaders(true),body:JSON.stringify({confirmation:'DELETE_COLLECTION'})});
   const result=await requireJson<{deleted:true}>(response,'Could not delete collection');invalidateAchievementProgress();return result;
+}
+export async function setAchievementMatchMode(id:string,matchMode:AchievementMatchMode){
+  const response=await fetch(`/api/achievements/${id}/match-mode`,{method:'PUT',headers:authHeaders(true),body:JSON.stringify({matchMode})});
+  const result=await requireJson<{matchMode:AchievementMatchMode}>(response,'Could not update collection matching');invalidateAchievementProgress();return result;
 }

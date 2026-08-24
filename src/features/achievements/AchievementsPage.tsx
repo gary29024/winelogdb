@@ -29,6 +29,7 @@ export function AchievementsPage(){
   const mine=collections.filter(item=>item.definition.editable),curated=collections.filter(item=>!item.definition.editable);
 
   return <section className="achievements-page">
+    <Link className="achievement-back achievements-passport-back" to="/">‹ Passport</Link>
     <header className="achievements-hero"><div><p className="achievements-eyebrow">ACHIEVEMENTS</p><h1>Wine Collections</h1><p>Iconic estates, historic tastings and regions to explore. Every collection updates automatically from your journal.</p></div><div className="achievements-hero-side"><div className="achievements-summary" aria-label="Collection progress"><span><strong>{summary.complete}</strong><small>Complete</small></span><span><strong>{summary.active}</strong><small>In progress</small></span><span><strong>{collections.length}</strong><small>Collections</small></span></div><Link className="collection-create-link" to="/achievements/new">＋ New collection</Link></div></header>
     {summary.possible>0&&<aside className="achievements-repair-note"><strong>{summary.possible} possible {summary.possible===1?'match':'matches'}</strong><span>Older tastings may need identity linking before they can count as completed checklist items.</span></aside>}
 

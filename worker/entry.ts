@@ -5,7 +5,7 @@ import { applyJournalVintageSearch } from '../src/lib/journal/searchQuery';
 import { favoriteUpdateSchema } from '../src/lib/journal/favorite';
 import { requireSession } from '../src/lib/auth/session';
 import { handleRecognitionRequest } from './recognitionHandler';
-import { createCustomAchievementCollection,deleteCustomAchievementCollection,loadAchievementCatalogueOptions,loadAchievementProgress,updateCustomAchievementCollection } from './achievementHandler';
+import { createCustomAchievementCollection,deleteCustomAchievementCollection,loadAchievementCatalogueOptions,loadAchievementProgress,setAchievementMatchMode,updateCustomAchievementCollection } from './achievementHandler';
 
 type Bindings={DB:D1Database;WINE_IMAGES:R2Bucket;ASSETS:Fetcher;GEMINI_API_KEY:string;AUTH_SECRET:string;APP_PASSWORD:string;APP_URL:string;MAX_FILE_BYTES?:string;MAX_BATCH_FILES?:string};
 type AppEnv={Bindings:Bindings};
@@ -49,6 +49,14 @@ app.delete('/api/achievements/custom/:id',async c=>{
   const body=await c.req.json().catch(()=>null) as {confirmation?:string}|null;if(body?.confirmation!=='DELETE_COLLECTION')return c.json({error:'Deletion confirmation is required'},400);
   try{const result=await deleteCustomAchievementCollection(c.env.DB,owner,c.req.param('id'));return result.deleted?c.json({deleted:true}):c.json({error:'Collection not found'},404)}
   catch(error){console.error('Could not delete achievement collection',error);return c.json({error:'Could not delete collection'},500)}
+});
+app.put('/api/achievements/:id/match-mode',async c=>{
+  let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
+  try{
+    const result=await setAchievementMatchMode(c.env.DB,owner,c.req.param('id'),await c.req.json().catch(()=>null));
+    if(!result.ok)return c.json({error:result.error},'notFound' in result&&result.notFound?404:400);
+    return c.json({matchMode:result.matchMode});
+  }catch(error){console.error('Could not update achievement match mode',error);return c.json({error:'Could not update collection matching'},500)}
 });
 app.get('/api/achievements',async c=>{
   let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
