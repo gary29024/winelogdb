@@ -1,4 +1,4 @@
-import { ageingTerm,resolvePlace } from '../places/resolve';
+import { ageingTerm,classifyFromText,resolvePlace } from '../places/resolve';
 
 const key=(value:string)=>value.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[’'`]/g,'').replace(/[^a-z0-9]+/g,' ').trim();
 
@@ -41,6 +41,20 @@ function stripRepeatedProducer(producer:string|undefined|null,wineName:string|un
   return stripped||name;
 }
 
+/**
+ * The tree can say village or grand cru - both facts about the appellation - but
+ * it can never say premier cru, because that is never its own appellation. So a
+ * recorded premier cru is the one reading re-derivation cannot recover once the
+ * marker has been normalised off the appellation, and the only one that outlives
+ * the tree. Everything else defers to what the place says now, so correcting an
+ * appellation corrects the tier with it.
+ */
+function classification(stored:string|null|undefined,derived:string|null,spoken:string|null){
+  if(spoken)return spoken;
+  if(stored==='premier_cru'&&derived==='village')return stored;
+  return derived??stored??null;
+}
+
 export function canonicalizeWineFields<T extends {producer?:string|null;wineName?:string|null;country?:string|null;region?:string|null;appellation?:string|null;classification?:string|null;grapes?:string[];grapeBlend?:Array<{grape:string;percentage?:number|null}>}>(wine:T):T{
   // Spelling first, so the tree is asked about "Burgundy" rather than
   // "Bourgogne", then placement: which of region and appellation each name
@@ -63,9 +77,11 @@ export function canonicalizeWineFields<T extends {producer?:string|null;wineName
     country:place.country as T['country'],
     region:place.region as T['region'],
     appellation:place.appellation as T['appellation'],
-    // Normalising the place drops the climat that carried the tier, so the tier
-    // is recorded beside it rather than lost.
-    classification:(place.classification??wine.classification??null) as T['classification'],
+    // Normalising the place consumes the cru marker, so by the second save the
+    // text no longer says "1er Cru" and re-deriving would downgrade a premier
+    // cru to village. See classification() for what survives a re-save.
+    classification:classification(wine.classification,place.classification,
+      classifyFromText(wine.appellation,wine.wineName)) as T['classification'],
     grapes:wine.grapes?.map(canonicalGrape) as T['grapes'],
     grapeBlend:wine.grapeBlend?.map(x=>({...x,grape:canonicalGrape(x.grape)})) as T['grapeBlend']
   };

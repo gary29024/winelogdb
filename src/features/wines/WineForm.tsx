@@ -73,7 +73,9 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel}:WineF
     const input:WineFormInput={
       producer,wineName,vintage:fd.get('vintage')?Number(fd.get('vintage')):null,
       country:String(fd.get('country')||'').trim()||null,region:String(fd.get('region')||'').trim()||null,appellation:String(fd.get('appellation')||'').trim()||null,
-      classification:null,
+      // Derived server-side, but sent back so an edit does not clear a tier the
+      // label text no longer carries.
+      classification:initial?.classification??null,
       grapes:[...new Set(grapeBlend.map(x=>x.grape))],grapeBlend,wineStyle:(String(fd.get('wineStyle')||'')||null) as WineInput['wineStyle'],
       alcoholPercentage:fd.get('alcoholPercentage')?Number(fd.get('alcoholPercentage')):null,tastingNotes:String(fd.get('tastingNotes')||''),rating:fd.get('rating')?Number(fd.get('rating')):null,
       tastingDate:String(fd.get('tastingDate')||'')||null,tastingName:String(fd.get('tastingName')||'').trim()||null,event:initial?.event??null,

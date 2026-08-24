@@ -26,6 +26,7 @@ const journal=(over:Partial<JourneyData>={}):JourneyData=>({
     {grape:'Chardonnay',wines:14,favorites:2}],
   discovery:{tastings:30,newProducers:12,newRegions:5,newCountries:1},
   months:[{month:'2026-08',wines:5,favorites:2},{month:'2026-07',wines:4,favorites:1}],
+  classifications:[{classification:'grand_cru',wines:4,favorites:3},{classification:'premier_cru',wines:9,favorites:4},{classification:'village',wines:18,favorites:5}],
   drinkingAges:[{age:2,wines:9},{age:4,wines:14},{age:8,wines:6}],
   recentTastings:[],
   ...over

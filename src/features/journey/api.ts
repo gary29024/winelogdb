@@ -12,6 +12,8 @@ export type GrapeStat={grape:string;wines:number;favorites:number};
 /** How many of the most recent tastings were a first from that producer, region or country. */
 export type DiscoveryStat={tastings:number;newProducers:number;newRegions:number;newCountries:number};
 export type MonthStat={month:string;wines:number;favorites:number};
+/** How many wines sit at each cru tier, where the wine's country has one. */
+export type ClassificationStat={classification:string;wines:number;favorites:number};
 /** One bucket of the "how old was the bottle when it was opened" histogram. */
 export type DrinkingAgeStat={age:number;wines:number};
 export type RecentTasting={
@@ -40,6 +42,7 @@ export type JourneyData={
   grapes:GrapeStat[];
   discovery:DiscoveryStat;
   months:MonthStat[];
+  classifications:ClassificationStat[];
   drinkingAges:DrinkingAgeStat[];
   recentTastings:RecentTasting[];
 };

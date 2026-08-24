@@ -2,7 +2,7 @@ import { currentOwnerRevision,missingTable } from '../src/lib/db/ownerRevision';
 
 // Bump when the shape of the payload below changes, so caches written by an older
 // deployment are recomputed rather than served.
-export const JOURNEY_PAYLOAD_VERSION=2;
+export const JOURNEY_PAYLOAD_VERSION=3;
 
 const numberOrNull=(value:unknown)=>value==null?null:Number(value);
 const parseJson=<T>(value:unknown,fallback:T):T=>{try{return JSON.parse(String(value)) as T}catch{return fallback}};
@@ -99,6 +99,12 @@ export async function buildJourneyPayload(db:D1Database,owner:string){
     db.prepare(`SELECT substr(COALESCE(NULLIF(tasting_date,''),created_at),1,7) month,COUNT(*) wines,
       SUM(CASE WHEN favorite=1 THEN 1 ELSE 0 END) favorites FROM wines WHERE owner_id=?
       GROUP BY month ORDER BY month DESC LIMIT 18`).bind(owner),
+    // Where a wine sits in a classified hierarchy, for the countries that have
+    // one. Null everywhere else, so the card only appears when there is a mix.
+    db.prepare(`SELECT classification,COUNT(*) wines,
+      SUM(CASE WHEN favorite=1 THEN 1 ELSE 0 END) favorites FROM wines
+      WHERE owner_id=? AND classification IS NOT NULL AND trim(classification)<>''
+      GROUP BY classification`).bind(owner),
     // How old a bottle is when it gets opened. Ages are bucketed in SQL so the
     // payload stays a histogram rather than one row per wine.
     db.prepare(`SELECT CAST(substr(COALESCE(NULLIF(tasting_date,''),created_at),1,4) AS INTEGER)-vintage age,
@@ -132,7 +138,8 @@ export async function buildJourneyPayload(db:D1Database,owner:string){
       return {tastings:Number(row.tastings??0),newProducers:Number(row.new_producers??0),newRegions:Number(row.new_regions??0),newCountries:Number(row.new_countries??0)};
     })(),
     months:rows<Record<string,unknown>>(13).map(row=>({month:String(row.month),wines:Number(row.wines),favorites:Number(row.favorites??0)})),
-    drinkingAges:rows<Record<string,unknown>>(14).map(row=>({age:Number(row.age),wines:Number(row.wines)})),
+    classifications:rows<Record<string,unknown>>(14).map(row=>({classification:String(row.classification),wines:Number(row.wines),favorites:Number(row.favorites??0)})),
+    drinkingAges:rows<Record<string,unknown>>(15).map(row=>({age:Number(row.age),wines:Number(row.wines)})),
     recentTastings:rows<Record<string,unknown>>(11).map(row=>({
       id:String(row.id),producer:String(row.producer),wineName:String(row.wine_name),vintage:row.vintage==null?null:Number(row.vintage),
       country:row.country==null?null:String(row.country),region:row.region==null?null:String(row.region),appellation:row.appellation==null?null:String(row.appellation),
