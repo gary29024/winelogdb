@@ -12,3 +12,4 @@ test-results/
 # CI installs with bun and no lockfile is tracked; keep a locally generated
 # npm lockfile out of the repository so it cannot pin a different resolution.
 package-lock.json
+bun.lock

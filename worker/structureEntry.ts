@@ -28,14 +28,14 @@ async function failBatchGatewayConfig(env:Bindings,job:QueueJob,error:string){
 async function extractStructure(request:Request):Promise<StructurePayload>{
   try{
     const type=request.headers.get('Content-Type')||'';
-    let raw:unknown,record:Record<string,unknown>|null=null;
+    let record:Record<string,unknown>|null=null;
     if(type.includes('multipart/form-data')){
       const form=await request.clone().formData();const wine=form.get('wine');
       if(typeof wine!=='string')return {present:false,structure:null};
       record=JSON.parse(wine) as Record<string,unknown>;
     }else record=await request.clone().json() as Record<string,unknown>;
     if(!record||typeof record!=='object'||!Object.prototype.hasOwnProperty.call(record,'tastingStructure'))return {present:false,structure:null};
-    raw=record.tastingStructure;
+    const raw=record.tastingStructure;
     if(raw==null)return {present:true,structure:null};
     const parsed=tastingStructureSchema.safeParse(raw);if(!parsed.success)return {present:true,structure:null,error:parsed.error.issues.map(issue=>`${issue.path.join('.')||'structure'}: ${issue.message}`).join('; ')};
     return {present:true,structure:hasTastingStructure(parsed.data)?parsed.data:null};

@@ -81,7 +81,7 @@ export function extractOfficialContactCandidates(html:string,baseUrl:string):Off
   }
   const text=visibleText(html);
   for(const match of text.matchAll(/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/gi))add(emails,match[0]);
-  for(const match of text.matchAll(/(?:\b(?:tel(?:ephone)?|tél(?:éphone)?|phone)\.?\s*[:：]?\s*)(\+?\d[\d\s().\/-]{6,}\d)/gi))add(phones,match[1]);
-  for(const match of text.matchAll(/(?:^|\s)(\+\d[\d\s().\/-]{6,}\d)(?=\s|$)/g))add(phones,match[1]);
+  for(const match of text.matchAll(/(?:\b(?:tel(?:ephone)?|tél(?:éphone)?|phone)\.?\s*[:：]?\s*)(\+?\d[\d\s()./-]{6,}\d)/gi))add(phones,match[1]);
+  for(const match of text.matchAll(/(?:^|\s)(\+\d[\d\s()./-]{6,}\d)(?=\s|$)/g))add(phones,match[1]);
   return {emails:emails.slice(0,10),phones:phones.slice(0,10),instagramUrls:instagramUrls.slice(0,10),contactLinks:contactLinks.slice(0,5)};
 }
