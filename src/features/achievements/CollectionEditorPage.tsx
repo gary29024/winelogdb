@@ -1,4 +1,4 @@
-import { useEffect,useMemo,useState } from 'react';
+import { useEffect,useMemo,useState,type FormEvent } from 'react';
 import { Link,useNavigate,useParams } from 'react-router-dom';
 import { AchievementIcon } from './AchievementIcon';
 import { catalogueRuleTargetCount } from './customCollections';
@@ -12,21 +12,22 @@ type ManualKind=CustomAchievementManualItem['type'];
 const emptyOptions:AchievementCatalogueOptions={producers:[],cuvees:[],appellations:[],regions:[]};
 const regionKey=(country:string|null|undefined,region:string)=>`${country??''}\u001f${region}`;
 
-function manualItemsFromProgress(collection:AchievementProgress|null){
-  if(!collection||collection.definition.origin!=='custom')return [] as CustomAchievementManualItem[];
-  return collection.definition.items.flatMap(item=>{
+function manualItemsFromProgress(collection:AchievementProgress|null):CustomAchievementManualItem[]{
+  if(!collection||collection.definition.origin!=='custom')return [];
+  const result:CustomAchievementManualItem[]=[];
+  for(const item of collection.definition.items){
     const selector=item.selector;
-    if(selector.type==='producer'&&selector.producerId)return [{type:'producer' as const,producerId:selector.producerId}];
-    if(selector.type==='cuvee'&&selector.cuveeId)return [{type:'cuvee' as const,cuveeId:selector.cuveeId}];
-    if(selector.type==='appellation'&&selector.appellationNames[0])return [{type:'appellation' as const,appellation:selector.appellationNames[0]}];
-    return [];
-  });
+    if(selector.type==='producer'&&selector.producerId)result.push({type:'producer',producerId:selector.producerId});
+    else if(selector.type==='cuvee'&&selector.cuveeId)result.push({type:'cuvee',cuveeId:selector.cuveeId});
+    else if(selector.type==='appellation'&&selector.appellationNames[0])result.push({type:'appellation',appellation:selector.appellationNames[0]});
+  }
+  return result;
 }
 function itemKey(item:CustomAchievementManualItem){return item.type==='producer'?`p:${item.producerId}`:item.type==='cuvee'?`c:${item.cuveeId}`:`a:${item.appellation.toLowerCase()}`}
 
 export function CollectionEditorPage(){
   const {id}=useParams(),navigate=useNavigate(),editing=Boolean(id);
-  const [options,setOptions]=useState<AchievementCatalogueOptions>(emptyOptions),[collection,setCollection]=useState<AchievementProgress|null>(null),[loading,setLoading]=useState(true),[error,setError]=useState(''),[saving,setSaving]=useState(false);
+  const [options,setOptions]=useState<AchievementCatalogueOptions>(emptyOptions),[loading,setLoading]=useState(true),[error,setError]=useState(''),[saving,setSaving]=useState(false);
   const [title,setTitle]=useState(''),[subtitle,setSubtitle]=useState(''),[icon,setIcon]=useState<AchievementIconKey>('burgundy-grand-cru'),[mode,setMode]=useState<'catalogue'|'manual'>('catalogue');
   const [smartKind,setSmartKind]=useState<SmartKind>('producer_cuvees'),[smartValue,setSmartValue]=useState('');
   const [manualKind,setManualKind]=useState<ManualKind>('producer'),[manualValue,setManualValue]=useState(''),[manualQuery,setManualQuery]=useState(''),[manualItems,setManualItems]=useState<CustomAchievementManualItem[]>([]);
@@ -37,7 +38,7 @@ export function CollectionEditorPage(){
       setOptions(catalogue);
       if(editing){
         const found=collections.find(item=>item.definition.id===id)??null;if(!found?.definition.editable){setError(found?'Curated collections cannot be edited.':'Collection not found.');setLoading(false);return}
-        setCollection(found);setTitle(found.definition.title);setSubtitle(found.definition.subtitle);setIcon(found.definition.icon);
+        setTitle(found.definition.title);setSubtitle(found.definition.subtitle);setIcon(found.definition.icon);
         if(found.definition.origin==='catalogue'&&found.definition.catalogueRule){const rule=found.definition.catalogueRule;setMode('catalogue');setSmartKind(rule.type);setSmartValue(rule.type==='producer_cuvees'?rule.producerId:rule.type==='appellation_producers'?rule.appellation:regionKey(rule.country,rule.region))}
         else{setMode('manual');setManualItems(manualItemsFromProgress(found))}
       }
@@ -65,7 +66,7 @@ export function CollectionEditorPage(){
   }),[manualItems,options]);
 
   function addManual(){if(!manualValue)return;const item:CustomAchievementManualItem=manualKind==='producer'?{type:'producer',producerId:manualValue}:manualKind==='cuvee'?{type:'cuvee',cuveeId:manualValue}:{type:'appellation',appellation:manualValue};setManualItems(current=>current.some(existing=>itemKey(existing)===itemKey(item))?current:[...current,item]);setManualValue('')}
-  async function save(event:React.FormEvent){
+  async function save(event:FormEvent){
     event.preventDefault();setError('');
     const input:CustomAchievementInput={title,subtitle,icon,mode,...(mode==='manual'?{items:manualItems}:{rule:smartRule??undefined})};
     try{setSaving(true);const result=await saveCustomAchievement(input,id);navigate(`/achievements/${result.id}`,{replace:true})}catch(e){setError((e as Error).message);setSaving(false)}
@@ -80,7 +81,7 @@ export function CollectionEditorPage(){
     <form className="collection-editor-form" onSubmit={save}>
       {error&&<p className="collection-editor-error" role="alert">{error}</p>}
       <section className="collection-editor-card"><div className="collection-editor-heading"><span>1</span><div><h2>Collection details</h2><p>Name the challenge and choose its visual stamp.</p></div></div>
-        <label className="collection-field"><span>Title</span><input required maxLength={80} value={title} onChange={e=>setTitle(e.target.value)} placeholder="e.g. My Chambolle-MUSIGNY producers"/></label>
+        <label className="collection-field"><span>Title</span><input required maxLength={80} value={title} onChange={e=>setTitle(e.target.value)} placeholder="e.g. My Chambolle-Musigny producers"/></label>
         <label className="collection-field"><span>Description</span><textarea maxLength={180} rows={2} value={subtitle} onChange={e=>setSubtitle(e.target.value)} placeholder="What are you trying to complete?"/></label>
         <div className="collection-field"><span>Icon</span><div className="collection-icon-picker">{icons.map(value=><button type="button" aria-label={`Use ${value} icon`} aria-pressed={icon===value} className={icon===value?'active':''} onClick={()=>setIcon(value)} key={value}><AchievementIcon kind={value}/></button>)}</div></div>
       </section>
