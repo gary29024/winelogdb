@@ -1,5 +1,6 @@
 import type { AchievementDefinition,AchievementDefinitionItem } from './types';
 import { expandedAchievementDefinitions } from './expandedDefinitions';
+import { michelinAchievementDefinitions } from './michelinDefinitions';
 
 const producer=(id:string,label:string,...producerNames:string[]):AchievementDefinitionItem=>({id,label,selector:{type:'producer',producerNames}});
 const vintage=(id:string,label:string,producerNames:string[],cuveeNames:string[],year:number,note?:string):AchievementDefinitionItem=>({id,label,note,selector:{type:'wine_vintage',producerNames,cuveeNames,vintage:year}});
@@ -62,20 +63,25 @@ const coreAchievementDefinitions:AchievementDefinition[]=[
     icon:'beaujolais-crus',
     references:[{title:'Inter Beaujolais · The 10 Beaujolais Crus',url:'https://www.beaujolais.com/wp-content/uploads/sites/2/2020/09/Carnet-Beaujolais-EN.pdf'}],
     items:[
-      appellation('brouilly','Brouilly','Brouilly'),
-      appellation('cote-de-brouilly','Côte de Brouilly','Côte de Brouilly','Cote de Brouilly','Côte-de-Brouilly'),
-      appellation('regnie','Régnié','Régnié','Regnie'),
-      appellation('morgon','Morgon','Morgon'),
-      appellation('chiroubles','Chiroubles','Chiroubles'),
-      appellation('fleurie','Fleurie','Fleurie'),
-      appellation('moulin-a-vent','Moulin-à-Vent','Moulin-à-Vent','Moulin a Vent','Moulin-a-Vent'),
-      appellation('chenas','Chénas','Chénas','Chenas'),
-      appellation('julienas','Juliénas','Juliénas','Julienas'),
-      appellation('saint-amour','Saint-Amour','Saint-Amour','Saint Amour')
+      appellation('brouilly','Brouilly','Brouilly'),appellation('cote-de-brouilly','Côte de Brouilly','Côte de Brouilly','Cote de Brouilly','Côte-de-Brouilly'),
+      appellation('regnie','Régnié','Régnié','Regnie'),appellation('morgon','Morgon','Morgon'),appellation('chiroubles','Chiroubles','Chiroubles'),
+      appellation('fleurie','Fleurie','Fleurie'),appellation('moulin-a-vent','Moulin-à-Vent','Moulin-à-Vent','Moulin a Vent','Moulin-a-Vent'),
+      appellation('chenas','Chénas','Chénas','Chenas'),appellation('julienas','Juliénas','Juliénas','Julienas'),appellation('saint-amour','Saint-Amour','Saint-Amour','Saint Amour')
     ]
   }
 ];
 
-export const achievementDefinitions:AchievementDefinition[]=[coreAchievementDefinitions[0],...expandedAchievementDefinitions.slice(0,10),coreAchievementDefinitions[1],...expandedAchievementDefinitions.slice(10,14),coreAchievementDefinitions[2],...expandedAchievementDefinitions.slice(14)];
+const allDefinitions=[...coreAchievementDefinitions,...expandedAchievementDefinitions,...michelinAchievementDefinitions];
+const launchIds=[
+  'bordeaux-first-growths','bordeaux-second-growths','bordeaux-1855-red-classified-growths','sauternes-barsac-top-1855','sauternes-barsac-second-growths','sauternes-barsac-1855-all','graves-crus-classes',
+  'judgment-of-paris-1976','saint-emilion-2022-premiers','burgundy-33-grand-crus','cote-de-nuits-24-grand-crus','cote-de-beaune-8-grand-crus','beaujolais-ten-crus','gevrey-nine-grand-crus','northern-rhone-eight-crus','southern-rhone-ten-crus',
+  'michelin-grapes-burgundy-2026-three','michelin-grapes-burgundy-2026-two','michelin-grapes-burgundy-2026-one','michelin-grapes-burgundy-2026-selected'
+] as const;
+
+export const achievementDefinitions:AchievementDefinition[]=launchIds.map(id=>{
+  const definition=allDefinitions.find(item=>item.id===id);
+  if(!definition)throw new Error(`Missing launch achievement definition: ${id}`);
+  return definition;
+});
 
 export function getAchievementDefinition(id:string){return achievementDefinitions.find(item=>item.id===id)??null}
