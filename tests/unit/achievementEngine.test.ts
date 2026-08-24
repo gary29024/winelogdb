@@ -63,6 +63,14 @@ describe('achievement engine',()=>{
     expect(result.items[0]).toMatchObject({status:'tasted',tastedWineIds:['w-morgon'],tastedVintages:[2022]});
   });
 
+  it('retroactively evaluates wines that were already in the journal before achievements existed',()=>{
+    const firstGrowth=getAchievementDefinition('bordeaux-first-growths');
+    expect(firstGrowth).not.toBeNull();
+    const result=buildAchievementProgress(firstGrowth!,registry,wines);
+    expect(result).toMatchObject({completed:1,total:5,percent:20,complete:false});
+    expect(result.items.find(item=>item.id==='lafite-rothschild')).toMatchObject({status:'tasted',tastedWineIds:['w-lafite']});
+  });
+
   it('does not treat ambiguous producer aliases as a confirmed identity',()=>{
     const ambiguous:AchievementIdentityRegistry={producers:[{id:'a',canonicalName:'Estate A',aliases:['Shared Name']},{id:'b',canonicalName:'Estate B',aliases:['Shared Name']}],cuvees:[]};
     const linked:AchievementWine={id:'w',producerId:'a',producer:'Estate A',wineName:'Wine',vintage:2020};
@@ -73,15 +81,33 @@ describe('achievement engine',()=>{
 });
 
 describe('starter achievement definitions',()=>{
-  it('ships the three curated starter collections with stable item counts',()=>{
+  it('ships twenty curated launch collections with stable item counts',()=>{
     expect(achievementDefinitions.map(item=>[item.id,item.items.length])).toEqual([
       ['bordeaux-first-growths',5],
+      ['bordeaux-second-growths',14],
+      ['bordeaux-third-growths',14],
+      ['bordeaux-fourth-growths',10],
+      ['bordeaux-fifth-growths',18],
+      ['bordeaux-1855-red-classified-growths',61],
+      ['bordeaux-1855-red-appellations',6],
+      ['sauternes-barsac-top-1855',12],
+      ['sauternes-barsac-second-growths',15],
+      ['sauternes-barsac-1855-all',27],
+      ['graves-crus-classes',14],
       ['judgment-of-paris-1976',20],
-      ['beaujolais-ten-crus',10]
+      ['saint-emilion-2022-premiers',14],
+      ['burgundy-33-grand-crus',33],
+      ['cote-de-nuits-24-grand-crus',24],
+      ['cote-de-beaune-8-grand-crus',8],
+      ['beaujolais-ten-crus',10],
+      ['gevrey-nine-grand-crus',9],
+      ['northern-rhone-eight-crus',8],
+      ['southern-rhone-ten-crus',10]
     ]);
   });
 
-  it('keeps curation references attached to each collection',()=>{
+  it('keeps curation references attached to every launch collection',()=>{
+    expect(achievementDefinitions).toHaveLength(20);
     for(const definition of achievementDefinitions){
       expect(definition.references.length).toBeGreaterThan(0);
       expect(definition.references.every(reference=>reference.url.startsWith('https://'))).toBe(true);
