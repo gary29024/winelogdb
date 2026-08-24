@@ -1,19 +1,36 @@
 import { authHeaders,clearSession } from '../../lib/auth/client';
-import type { AchievementProgress } from './types';
+import type { AchievementCatalogueOptions,AchievementProgress,CustomAchievementInput } from './types';
 
 let cached:{expires:number;data:AchievementProgress[]}|null=null;
 let pending:Promise<AchievementProgress[]>|null=null;
 
+async function requireJson<T>(response:Response,message:string):Promise<T>{
+  if(response.status===401){clearSession();throw new Error('Session expired. Please sign in again.')}
+  const body=await response.json().catch(()=>({})) as T&{error?:string;issues?:Array<{path?:Array<string|number>;message?:string}>};
+  if(!response.ok){const details=body.issues?.map(issue=>`${issue.path?.join('.')||'field'}: ${issue.message||'Invalid input'}`).join('; ');throw new Error([body.error||message,details].filter(Boolean).join(' — '))}
+  return body;
+}
+export function invalidateAchievementProgress(){cached=null;pending=null}
 export function getAchievementProgress():Promise<AchievementProgress[]>{
   if(cached&&cached.expires>Date.now())return Promise.resolve(cached.data);
   if(pending)return pending;
   pending=(async()=>{
     const response=await fetch('/api/achievements',{headers:authHeaders()});
-    if(response.status===401){clearSession();throw new Error('Session expired. Please sign in again.')}
-    if(!response.ok){const body=await response.json().catch(()=>({})) as {error?:string};throw new Error(body.error||'Could not load wine collections')}
-    const data=await response.json() as AchievementProgress[];
+    const data=await requireJson<AchievementProgress[]>(response,'Could not load wine collections');
     cached={data,expires:Date.now()+30_000};
     return data;
   })().finally(()=>{pending=null});
   return pending;
+}
+export async function getAchievementCatalogueOptions(){
+  const response=await fetch('/api/achievements/catalogue-options',{headers:authHeaders()});
+  return requireJson<AchievementCatalogueOptions>(response,'Could not load catalogue targets');
+}
+export async function saveCustomAchievement(input:CustomAchievementInput,id?:string){
+  const response=await fetch(id?`/api/achievements/custom/${id}`:'/api/achievements/custom',{method:id?'PUT':'POST',headers:authHeaders(true),body:JSON.stringify(input)});
+  const result=await requireJson<{id:string}>(response,id?'Could not update collection':'Could not create collection');invalidateAchievementProgress();return result;
+}
+export async function deleteCustomAchievement(id:string){
+  const response=await fetch(`/api/achievements/custom/${id}`,{method:'DELETE',headers:authHeaders(true),body:JSON.stringify({confirmation:'DELETE_COLLECTION'})});
+  const result=await requireJson<{deleted:true}>(response,'Could not delete collection');invalidateAchievementProgress();return result;
 }
