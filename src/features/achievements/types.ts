@@ -1,5 +1,5 @@
 export type AchievementCategory='iconic-estates'|'historic-tastings'|'regional-exploration';
-export type AchievementIconKey='first-growth'|'judgment-paris'|'beaujolais-crus';
+export type AchievementIconKey='first-growth'|'judgment-paris'|'beaujolais-crus'|'bordeaux-classification'|'sauternes'|'graves'|'saint-emilion'|'burgundy-grand-cru'|'gevrey-grand-cru'|'rhone-crus';
 export type AchievementItemStatus='tasted'|'possible'|'pending';
 
 export type ProducerSelector={
