@@ -28,10 +28,6 @@ function geminiErrorMessage(raw:string,status:number){
   return cleaned.slice(0,700)||`HTTP ${status}`;
 }
 
-function looksLikeStructuredOutputRejection(raw:string){
-  return /response.?schema|response.?json.?schema|response.?format|generation.?config|structured.?output|unknown (?:name|field)|schema/i.test(raw);
-}
-
 async function tryEscalatedGroupRecognition(env:Bindings,requestId:string,requestBody:string,schemaFreeBody:string,primary:ReturnType<typeof parseGroupRecognition>,reasons:string[]){
   const startedAt=Date.now(),controller=new AbortController();let timedOut=false,schemaFallback=false;const timer=setTimeout(()=>{timedOut=true;controller.abort()},HARD_TIMEOUT_MS);
   console.log(JSON.stringify({event:'group-recognition-escalation-start',requestId,fromModel:MODEL,toModel:RECOGNITION_ESCALATION_MODEL,reasons,primaryWines:primary.wines.length,primaryUnresolved:primary.unresolvedCount}));
@@ -39,12 +35,9 @@ async function tryEscalatedGroupRecognition(env:Bindings,requestId:string,reques
     let transport=await postGeminiGenerateContent(env,RECOGNITION_ESCALATION_MODEL,requestBody,controller.signal,{feature:'recognition',mode:'group-escalation',requestId}),response=transport.response,provider=transport.provider;
     if(response.status===400){
       const raw=(await response.text()).slice(0,2000);
-      if(looksLikeStructuredOutputRejection(raw)){
-        schemaFallback=true;
-        transport=await postGeminiGenerateContent(env,RECOGNITION_ESCALATION_MODEL,schemaFreeBody,controller.signal,{feature:'recognition',mode:'group-escalation-fallback',requestId});response=transport.response;provider=transport.provider;
-      }else{
-        clearTimeout(timer);console.warn(JSON.stringify({event:'group-recognition-escalation-skipped',requestId,model:RECOGNITION_ESCALATION_MODEL,provider,status:400,reasons,error:geminiErrorMessage(raw,400)}));return {result:primary,used:false};
-      }
+      schemaFallback=true;
+      console.warn(JSON.stringify({event:'group-recognition-escalation-schema-fallback',requestId,model:RECOGNITION_ESCALATION_MODEL,provider,status:400,reasons,error:geminiErrorMessage(raw,400)}));
+      transport=await postGeminiGenerateContent(env,RECOGNITION_ESCALATION_MODEL,schemaFreeBody,controller.signal,{feature:'recognition',mode:'group-escalation-fallback',requestId});response=transport.response;provider=transport.provider;
     }
     clearTimeout(timer);
     if(!response.ok){const raw=(await response.text()).slice(0,2000);console.warn(JSON.stringify({event:'group-recognition-escalation-skipped',requestId,model:RECOGNITION_ESCALATION_MODEL,provider,status:response.status,reasons,error:geminiErrorMessage(raw,response.status)}));return {result:primary,used:false}}
@@ -85,15 +78,9 @@ export async function handleGroupRecognitionRequest(request:Request,env:Bindings
       let transport=await postGeminiGenerateContent(env,MODEL,requestBody,controller.signal,{feature:'recognition',mode:'group',requestId}),response=transport.response,provider=transport.provider,schemaFallback=false,primaryError='';
       if(response.status===400){
         primaryError=(await response.text()).slice(0,2000);
-        if(looksLikeStructuredOutputRejection(primaryError)){
-          schemaFallback=true;
-          console.warn(JSON.stringify({event:'group-recognition-schema-fallback',requestId,model:MODEL,provider,attempt,error:geminiErrorMessage(primaryError,400)}));
-          transport=await postGeminiGenerateContent(env,MODEL,schemaFreeBody,controller.signal,{feature:'recognition',mode:'group-schema-fallback',requestId});response=transport.response;provider=transport.provider;
-        }else{
-          clearTimeout(timer);const geminiLatencyMs=Date.now()-attemptStarted,message=geminiErrorMessage(primaryError,400);
-          console.error(JSON.stringify({event:'group-recognition-upstream-error',requestId,model:MODEL,provider,attempt,status:400,geminiLatencyMs,error:primaryError}));
-          return json({error:`Gemini rejected the group recognition request (400): ${message}`,requestId},502,requestId);
-        }
+        schemaFallback=true;
+        console.warn(JSON.stringify({event:'group-recognition-schema-fallback',requestId,model:MODEL,provider,attempt,error:geminiErrorMessage(primaryError,400)}));
+        transport=await postGeminiGenerateContent(env,MODEL,schemaFreeBody,controller.signal,{feature:'recognition',mode:'group-schema-fallback',requestId});response=transport.response;provider=transport.provider;
       }
       clearTimeout(timer);const geminiLatencyMs=Date.now()-attemptStarted;
       if(!response.ok){const errorText=(await response.text()).slice(0,2000),message=geminiErrorMessage(errorText,response.status);console.error(JSON.stringify({event:'group-recognition-upstream-error',requestId,model:MODEL,provider,attempt,status:response.status,geminiLatencyMs,schemaFallback,primaryError:primaryError||undefined,error:errorText}));if(attempt===1&&shouldRetryRecognitionFailure({status:response.status,timedOut:false,networkError:false})){await new Promise(r=>setTimeout(r,700+Math.floor(Math.random()*500)));continue}return json({error:`Gemini group recognition failed (${response.status}): ${message}`,requestId},502,requestId)}
