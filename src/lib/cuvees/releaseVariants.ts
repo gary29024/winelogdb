@@ -1,4 +1,4 @@
-import { cuveeStyleFamily,normalizeCuveeAlias,stripKnownProducerPrefix } from './entities';
+import { cuveeSignature,cuveeStyleFamily,normalizeCuveeAlias,stripKnownProducerPrefix } from './entities';
 
 export type CuveeReleaseKind='edition'|'multi_vintage'|'reserve_span';
 
@@ -36,6 +36,17 @@ const RESERVE_SPAN=/^(.*?)\s*((8\d|9\d)\s*[-–—/]\s*(\d{2}))\s*$/i;
 
 function compactDesignation(value:string){return value.replace(/\s+/g,' ').replace(/\s*([-–—/])\s*/g,'$1').trim()}
 
+/**
+ * The identity of a release family, insensitive to the order its words are
+ * written in. A catalogue lists "Ratafia Champenois Solera" while the bottles
+ * read "Solera Ratafia Champenois 90-16" and "… 90-19"; those are one wine and
+ * two releases of it, and comparing the names as written kept them apart.
+ *
+ * This is the token-set identity the rest of the app already uses for a cuvee,
+ * so a release family and a cuvee agree on what counts as the same wine.
+ */
+function releaseFamilyKey(value:string,producerNames:string[]){return cuveeSignature(value,null,producerNames)}
+
 export function parseCuveeReleaseVariant(value:string,producerNames:string[]=[]):CuveeReleaseVariant|null{
   const clean=stripKnownProducerPrefix(value,producerNames).trim();
   const edition=clean.match(EDITION_SUFFIX)??clean.match(EDITION_PREFIX);
@@ -70,11 +81,11 @@ function compatibleStyle(a:string|null|undefined,b:string|null|undefined){
 function candidateFor(row:ReleaseCatalogRow,producerNames:string[]):ReleaseCatalogCandidate{
   const displayName=stripKnownProducerPrefix(row.canonicalName,producerNames).trim();
   const variant=parseCuveeReleaseVariant(row.canonicalName,producerNames);
-  return {row,variant,familyKey:normalizeCuveeAlias(variant?.parentName??displayName),displayName};
+  return {row,variant,familyKey:releaseFamilyKey(variant?.parentName??displayName,producerNames),displayName};
 }
 
 function genericReleaseParent(variant:CuveeReleaseVariant){
-  const key=normalizeCuveeAlias(variant.parentName);
+  const key=releaseFamilyKey(variant.parentName,[]);
   return !key||(variant.kind==='multi_vintage'&&key==='mv');
 }
 
@@ -99,7 +110,7 @@ export function matchCuveeReleaseVariantToCatalog(
   producerNames:string[]=[]
 ):ReleaseCatalogMatch|null{
   const variant=parseCuveeReleaseVariant(source.name,producerNames);if(!variant)return null;
-  const parentKey=normalizeCuveeAlias(variant.parentName);
+  const parentKey=releaseFamilyKey(variant.parentName,producerNames);
   const compatible=catalogRows.filter(row=>compatibleAppellation(source.appellation,row.appellation)&&compatibleStyle(source.wineStyle,row.wineStyle)).map(row=>candidateFor(row,producerNames));
 
   if(parentKey){
