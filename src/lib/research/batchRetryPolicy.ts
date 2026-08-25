@@ -9,6 +9,20 @@ export function researchBatchPollDelay(pollCount:number){
   return 900;
 }
 
+/**
+ * How long to wait before the first status poll.
+ *
+ * The real Batch API runs on its own schedule, so polling it sooner than
+ * fifteen seconds only spends reads on an answer that is not ready. The Vertex
+ * gateway path differs in a way that matters for latency: submitting there only
+ * writes a pending row, and the first poll is what actually calls the model. On
+ * that path the fifteen seconds are not spent waiting for work, they are spent
+ * before any work starts.
+ */
+export function researchBatchFirstPollDelay(startsOnFirstPoll:boolean){
+  return startsOnFirstPoll?0:researchBatchPollDelay(0);
+}
+
 export function researchBatchErrorPollDelay(pollCount:number){
   if(pollCount<=0)return 30;
   if(pollCount===1)return 60;
