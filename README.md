@@ -207,6 +207,26 @@ per-row lookup, and give any new write on a read path a `WHERE` guard. If a new
 cached payload reads a table that does not yet bump `achievement_cache_state`, add
 its triggers in the same migration.
 
+## Deep Search latency
+
+Research runs through the Gemini Batch API, or through an emulation of it over
+the Vertex AI Gateway when one is configured. The two have opposite latency
+shapes, and the polling schedule has to know which it is talking to.
+
+The real Batch API starts work when the batch is submitted and runs on its own
+schedule, so the first status poll waits fifteen seconds; polling sooner only
+spends a read on an answer that cannot be ready. The gateway emulation is the
+reverse: submitting writes a pending row and returns, and **the first poll is
+what calls the model**. Waiting fifteen seconds there is not waiting for work,
+it is waiting before any work begins - on every wine and every producer.
+`researchBatchFirstPollDelay` therefore polls the emulated path immediately and
+leaves the real one alone. Later polls keep the existing backoff on both, so a
+long run never becomes a tight loop.
+
+Everything else about the run is unchanged: same model, same grounding, same
+quality gate, same retries. Cached scopes still complete without any model call
+at all, which remains the fastest path by a wide margin.
+
 ## Which model researches, and enforcing grounding
 
 Deep Search runs on `gemini-3.7-flash` with `gemini-3.6-flash` as the

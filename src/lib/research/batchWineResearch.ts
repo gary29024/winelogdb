@@ -5,9 +5,9 @@ import { assembleDeepSearch,buildResearchTargets,fieldsForScope,loadResearchCach
 import { orderModelsByGrounding,recordGroundingObservation } from './modelHealth';
 import { createResearchBatchJob,finishResearchBatchJob,getResearchBatchJob,touchResearchBatchJob } from './batchJobStore';
 import { cancelGeminiBatch } from './cancelResearch';
-import { createGeminiBatch,describeResponseSchema,fetchGeminiBatch,groundedGenerationConfig,inlineFinishReason,inlineGroundingMetadata,inlineResponseText,isTerminalBatchState,responsesByKey,type GeminiBatchRequest,type GroundingMetadata } from './geminiBatch';
+import { createGeminiBatch,describeResponseSchema,fetchGeminiBatch,groundedGenerationConfig,inlineFinishReason,inlineGroundingMetadata,inlineResponseText,isEmulatedGeminiBatchName,isTerminalBatchState,responsesByKey,type GeminiBatchRequest,type GroundingMetadata } from './geminiBatch';
 import { buildDeepSearchProvenance } from './provenance';
-import { researchBatchErrorPollDelay,researchBatchPollDelay,researchBatchStallAction,researchBatchTransientAction } from './batchRetryPolicy';
+import { researchBatchErrorPollDelay,researchBatchFirstPollDelay,researchBatchPollDelay,researchBatchStallAction,researchBatchTransientAction } from './batchRetryPolicy';
 import { highRiskTechnicalFailureMessage } from './technicalClaimGate';
 import { auditTechnicalContradictions,technicalContradictionFailureMessage } from './technicalContradictions';
 import { updateWineResearchRun } from './backgroundJobs';
@@ -128,7 +128,7 @@ async function submitAttempt(env:Env,owner:string,wineId:string,requestId:string
       attempt===1?`Submitted ${scopeCount} to ${model} Batch`
       :attempt===2?`Switching ${scopeCount} to ${model} Batch`
       :`Retrying ${scopeCount} on ${model} Batch after an ungrounded answer`,'running',attempt);
-    await env.RESEARCH_QUEUE.send({kind:'wine_batch_poll',owner,wineId,requestId,jobId,pollCount:0},{delaySeconds:researchBatchPollDelay(0)});log('log',{requestId,wineId,stage:'batch_submitted',attempt,model,scopes,googleName});
+    await env.RESEARCH_QUEUE.send({kind:'wine_batch_poll',owner,wineId,requestId,jobId,pollCount:0},{delaySeconds:researchBatchFirstPollDelay(isEmulatedGeminiBatchName(googleName))});log('log',{requestId,wineId,stage:'batch_submitted',attempt,model,scopes,googleName});
   }catch(e){
     const error=(e as Error).message||'Wine Batch submission failed';
     if(jobId)await finishResearchBatchJob(env.DB,owner,jobId,'failed',`Batch setup failed: ${error}`).catch(()=>undefined);
