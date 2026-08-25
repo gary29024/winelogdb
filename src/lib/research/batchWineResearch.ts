@@ -16,6 +16,15 @@ type WineRow={producer:string;producer_id:string|null;cuvee_id:string|null;wine_
 type ResearchRow={deep_search_json:string};
 const PRIMARY_MODEL='gemini-3.7-flash';
 const FALLBACK_MODEL='gemini-3.6-flash';
+/**
+ * Attempt three returns to the primary model on purpose. The fallback exists
+ * for availability, and an availability fallback that answers without Google
+ * Search grounding cannot satisfy a grounded-research gate however good its
+ * prose is - so retrying a quality failure there is a call that cannot succeed.
+ * Only an ungrounded answer earns the third attempt; see retryOrFail.
+ */
+export const modelForAttempt=(attempt:number)=>attempt===2?FALLBACK_MODEL:PRIMARY_MODEL;
+const MAX_ATTEMPTS=3;
 const BATCH_KEY='wine-research';
 const now=()=>new Date().toISOString();
 const parseJson=<T>(raw:unknown,fallback:T):T=>{try{return JSON.parse(String(raw)) as T}catch{return fallback}};
@@ -96,11 +105,15 @@ async function cancelAttemptBatch(env:Env,requestId:string,wineId:string,attempt
 }
 
 async function submitAttempt(env:Env,owner:string,wineId:string,requestId:string,attempt:number,scopes:ResearchScope[],feedback:ScopeFeedback={}){
-  const wine=await loadWine(env.DB,owner,wineId);if(!wine)throw new Error('Wine not found');const targets=researchTargets(wine),cache=await loadResearchCache(env.DB,owner,targets),entry=buildRequest(wine,scopes,cache,feedback),model=attempt===1?PRIMARY_MODEL:FALLBACK_MODEL;let googleName:string|undefined,jobId:string|undefined;
+  const wine=await loadWine(env.DB,owner,wineId);if(!wine)throw new Error('Wine not found');const targets=researchTargets(wine),cache=await loadResearchCache(env.DB,owner,targets),entry=buildRequest(wine,scopes,cache,feedback),model=modelForAttempt(attempt);let googleName:string|undefined,jobId:string|undefined;
   try{
     googleName=await createGeminiBatch(env.GEMINI_API_KEY,model,`winelog-wine-${requestId}-${attempt}`,[entry]);
     jobId=await createResearchBatchJob(env.DB,{owner,requestId,targetKind:'wine',targetId:wineId,googleBatchName:googleName,model,attempt,keys:scopes});
-    await updateWineResearchRun(env.DB,owner,requestId,'researching',attempt===1?`Submitted ${scopes.length} missing Deep Search scope${scopes.length===1?'':'s'} to Gemini 3.7 Batch`:`Switching ${scopes.length} unfinished Deep Search scope${scopes.length===1?'':'s'} to Gemini 3.6 Batch`,'running',attempt);
+    const scopeCount=`${scopes.length} Deep Search scope${scopes.length===1?'':'s'}`;
+    await updateWineResearchRun(env.DB,owner,requestId,'researching',
+      attempt===1?`Submitted ${scopeCount} to ${model} Batch`
+      :attempt===2?`Switching ${scopeCount} to ${model} Batch`
+      :`Retrying ${scopeCount} on ${model} Batch after an ungrounded answer`,'running',attempt);
     await env.RESEARCH_QUEUE.send({kind:'wine_batch_poll',owner,wineId,requestId,jobId,pollCount:0},{delaySeconds:researchBatchPollDelay(0)});log('log',{requestId,wineId,stage:'batch_submitted',attempt,model,scopes,googleName});
   }catch(e){
     const error=(e as Error).message||'Wine Batch submission failed';
@@ -122,13 +135,31 @@ export async function startWineBatchResearch(env:Env,owner:string,wineId:string,
   }
 }
 
-async function retryOrFail(env:Env,owner:string,wineId:string,requestId:string,attempt:number,failed:ResearchScope[],errors:string[],feedback:ScopeFeedback={}){
-  if(attempt===1&&failed.length){
-    try{await submitAttempt(env,owner,wineId,requestId,2,failed,feedback);return}
+/**
+ * Decide whether a failed attempt is worth another call.
+ *
+ * A quality failure gets the availability fallback once, as before. An answer
+ * that came back with no grounding at all is not a quality failure: the model
+ * did not search, so nothing it wrote could ever pass. That earns one more
+ * attempt on the primary model, which is the one observed to ground - but never
+ * on the model that just failed to, which would only repeat itself.
+ */
+export function nextResearchAttempt(attempt:number,ungrounded:boolean){
+  if(attempt>=MAX_ATTEMPTS)return null;
+  if(attempt===1)return 2;
+  if(!ungrounded)return null;
+  const next=attempt+1;
+  return modelForAttempt(next)===modelForAttempt(attempt)?null:next;
+}
+
+async function retryOrFail(env:Env,owner:string,wineId:string,requestId:string,attempt:number,failed:ResearchScope[],errors:string[],feedback:ScopeFeedback={},ungrounded=false){
+  const next=failed.length?nextResearchAttempt(attempt,ungrounded):null;
+  if(next){
+    try{await submitAttempt(env,owner,wineId,requestId,next,failed,feedback);return}
     catch(e){
-      const fallbackError=(e as Error).message||'Fallback Gemini Batch submission failed';
-      await updateWineResearchRun(env.DB,owner,requestId,'failed',`Deep Search saved any successful scopes, but the retry for ${failed.map(scope=>scopeNames[scope]).join(', ')} could not be submitted: ${fallbackError}`,'failed',2);
-      log('error',{requestId,wineId,stage:'fallback_submit_failed',attempt:2,failed,error:fallbackError});
+      const submitError=(e as Error).message||'Gemini Batch submission failed';
+      await updateWineResearchRun(env.DB,owner,requestId,'failed',`Deep Search saved any successful scopes, but the retry for ${failed.map(scope=>scopeNames[scope]).join(', ')} could not be submitted: ${submitError}`,'failed',next);
+      log('error',{requestId,wineId,stage:'retry_submit_failed',attempt:next,model:modelForAttempt(next),failed,error:submitError});
       return;
     }
   }
@@ -150,7 +181,7 @@ export async function pollWineBatchResearch(env:Env,owner:string,wineId:string,r
   }
   if(!isTerminalBatchState(fetched.state)){
     const action=researchBatchStallAction(job.attempt,pollCount);
-    if(action==='retry'){await touchResearchBatchJob(env.DB,owner,jobId);await updateWineResearchRun(env.DB,owner,requestId,'researching',`Gemini ${job.attempt===1?'3.7':'3.6'} Batch is processing ${scopes.length} Deep Search scope${scopes.length===1?'':'s'}`,'running',job.attempt);await env.RESEARCH_QUEUE.send({kind:'wine_batch_poll',owner,wineId,requestId,jobId,pollCount:pollCount+1},{delaySeconds:researchBatchPollDelay(pollCount)});return}
+    if(action==='retry'){await touchResearchBatchJob(env.DB,owner,jobId);await updateWineResearchRun(env.DB,owner,requestId,'researching',`${job.model} Batch is processing ${scopes.length} Deep Search scope${scopes.length===1?'':'s'}`,'running',job.attempt);await env.RESEARCH_QUEUE.send({kind:'wine_batch_poll',owner,wineId,requestId,jobId,pollCount:pollCount+1},{delaySeconds:researchBatchPollDelay(pollCount)});return}
     const error=`${job.model} Batch did not complete within WineLog's ${job.attempt===1?'primary failover':'fallback'} window (last state ${fetched.state||'unknown'})`;
     await finishResearchBatchJob(env.DB,owner,jobId,'failed',error);await cancelAttemptBatch(env,requestId,wineId,job.attempt,job.googleBatchName,'batch exceeded failover window');
     log('warn',{requestId,wineId,stage:action==='fallback'?'primary_stall_failover':'fallback_stall_failed',attempt:job.attempt,model:job.model,pollCount,state:fetched.state,error});
@@ -159,7 +190,7 @@ export async function pollWineBatchResearch(env:Env,owner:string,wineId:string,r
   if(fetched.state!=='JOB_STATE_SUCCEEDED'){const error=String((fetched.payload.error as {message?:unknown}|undefined)?.message||`Gemini batch ended with ${fetched.state}`);await finishResearchBatchJob(env.DB,owner,jobId,'failed',error);await retryOrFail(env,owner,wineId,requestId,job.attempt,scopes,[error]);return}
   await updateWineResearchRun(env.DB,owner,requestId,'saving','Saving completed Gemini Batch Deep Search scopes','running',job.attempt);
   const inline=responsesByKey(fetched.responses).get(BATCH_KEY)??fetched.responses[0];if(!inline?.response){const error=inline?.error?.message||'Gemini returned no wine research result';await finishResearchBatchJob(env.DB,owner,jobId,'failed',error);await retryOrFail(env,owner,wineId,requestId,job.attempt,scopes,[error]);return}
-  const text=inlineResponseText(inline),finishReason=inlineFinishReason(inline);let failed=[...scopes],errors:string[]=[],feedback:ScopeFeedback={};
+  const text=inlineResponseText(inline),finishReason=inlineFinishReason(inline);let failed=[...scopes],errors:string[]=[],feedback:ScopeFeedback={},ungrounded=false;
   // Recorded whatever happens next: when a run fails because nothing was
   // grounded, these two counts are the difference between a diagnosable report
   // and a shrug.
@@ -187,7 +218,7 @@ export async function pollWineBatchResearch(env:Env,owner:string,wineId:string,r
       // An ungrounded response fails every scope on the same warning. Reporting
       // the exact-wine technical gate there names a symptom of one scope as the
       // cause of all four, which is what an owner reads and cannot act on.
-      const ungrounded=warningsByScope.length>0&&warningsByScope.every(list=>list.includes('no-grounding-source'));
+      ungrounded=warningsByScope.length>0&&warningsByScope.every(list=>list.includes('no-grounding-source'));
       const exactPayload={summary:parsed.data.summary,winemakingTechniques:parsed.data.winemakingTechniques,drinkingWindow:parsed.data.drinkingWindow},conflictError=failed.includes('wine_vintage')?technicalContradictionFailureMessage(exactPayload,rawProvenance):null,technicalError=failed.includes('wine_vintage')?highRiskTechnicalFailureMessage(exactPayload,provenance):null;
       errors=[ungrounded
         ?`${job.model} answered without grounding: the response carried ${grounding.chunks} web source${grounding.chunks===1?'':'s'} and ${grounding.supports} grounding segment${grounding.supports===1?'':'s'}, so no scope could be verified and nothing was saved. Google Search grounding was requested; this is a search or provider failure rather than a problem with the wine.`
@@ -195,6 +226,6 @@ export async function pollWineBatchResearch(env:Env,owner:string,wineId:string,r
     }else await finalize(env,owner,wineId,wine,targets);
   }catch(e){errors=[`${(e as Error).message}${finishReason?` (${finishReason})`:''}`];log('warn',{requestId,wineId,stage:'batch_result_failed',attempt:job.attempt,model:job.model,finishReason,textLength:text.length,textPreview:text.slice(0,500),error:(e as Error).message})}
   await finishResearchBatchJob(env.DB,owner,jobId,failed.length?'failed':'complete',failed.length?errors.join('; '):null);
-  if(failed.length){await retryOrFail(env,owner,wineId,requestId,job.attempt,failed,errors,feedback);return}
+  if(failed.length){await retryOrFail(env,owner,wineId,requestId,job.attempt,failed,errors,feedback,ungrounded);return}
   await updateWineResearchRun(env.DB,owner,requestId,'complete','Gemini Batch Deep Search complete with claim evidence and contradiction audit','complete',job.attempt);log('log',{requestId,wineId,stage:'complete',attempt:job.attempt,model:job.model,scopes});
 }

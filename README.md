@@ -176,6 +176,21 @@ per-row lookup, and give any new write on a read path a `WHERE` guard. If a new
 cached payload reads a table that does not yet bump `achievement_cache_state`, add
 its triggers in the same migration.
 
+## Which model a research retry uses
+
+Deep Search runs on `gemini-3.7-flash` and falls back to `gemini-3.6-flash` for
+availability. The fallback is not interchangeable for research: an answer that
+comes back without Google Search grounding cannot satisfy the quality gate
+however well written it is, so retrying a quality failure on a model that did
+not search is a call that cannot succeed.
+
+An attempt is therefore retried on what the failure actually was. A grounded
+answer that fails the gate gets the fallback once and then stops, because
+failing twice on grounded evidence is a research limit rather than an
+infrastructure one. An answer with no grounding at all earns one further attempt
+on the primary model, and never on the model that just produced it. Three
+attempts is the ceiling.
+
 ## Diagnosing a Deep Search failure
 
 Two log streams matter, and they answer different questions.
