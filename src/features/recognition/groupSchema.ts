@@ -25,9 +25,14 @@ export const groupRecognitionWineSchema=z.object({
   region:nullableText,
   appellation:nullableText,
   // Filled by canonicalizeWineFields during dedupe, not by the model: the
-  // region and appellation as the label was read, before re-slotting.
+  // region and appellation as the label was read, before re-slotting, and the
+  // cru tier read off the appellation and wine name. The object is strict and
+  // is parsed again by the browser and by the session store, so every field
+  // canonicalisation adds has to have a home here or the whole scan is
+  // rejected. groupSchemaAcceptsCanonicalFields pins that.
   recognizedRegion:nullableText,
   recognizedAppellation:nullableText,
+  classification:z.enum(['grand_cru','premier_cru','village']).nullable().optional(),
   grapes:z.array(z.string().trim().max(100)).max(20).default([]),
   grapeBlend:z.array(grapeBlendEntry).max(20).default([]),
   style:z.enum(wineStyles).nullable().optional(),
