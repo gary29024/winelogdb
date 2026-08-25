@@ -176,20 +176,35 @@ per-row lookup, and give any new write on a read path a `WHERE` guard. If a new
 cached payload reads a table that does not yet bump `achievement_cache_state`, add
 its triggers in the same migration.
 
-## Which model a research retry uses
+## Which model researches, and enforcing grounding
 
-Deep Search runs on `gemini-3.7-flash` and falls back to `gemini-3.6-flash` for
-availability. The fallback is not interchangeable for research: an answer that
-comes back without Google Search grounding cannot satisfy the quality gate
-however well written it is, so retrying a quality failure on a model that did
-not search is a call that cannot succeed.
+Deep Search runs on `gemini-3.7-flash` with `gemini-3.6-flash` as the
+availability fallback. The two are not interchangeable for research: an answer
+that comes back without Google Search grounding cannot satisfy the quality gate
+however well written it is, so a call to a model that did not search cannot
+succeed whatever it returns.
 
-An attempt is therefore retried on what the failure actually was. A grounded
-answer that fails the gate gets the fallback once and then stops, because
-failing twice on grounded evidence is a research limit rather than an
-infrastructure one. An answer with no grounding at all earns one further attempt
-on the primary model, and never on the model that just produced it. Three
-attempts is the ceiling.
+Which model grounds is **observed, not assumed**. Evidence has pointed both
+ways, and it varies by serving mode, so `research_model_health` records what
+each model did with each grounded request: a model seen to ground is tried
+first, one seen to answer ungrounded is routed around for six hours, and a
+model that grounds again clears its own cooldown with no intervention. If the
+health table cannot be read, routing falls back to the configured order, so a
+migration that has not run yet degrades to the previous behaviour rather than
+failing.
+
+Retries follow what the failure was. A grounded answer that fails the gate gets
+a second opinion and then stops, because failing twice on real evidence is a
+research limit rather than an infrastructure one. An answer with no grounding at
+all earns one further attempt, on a different model. Three attempts is the
+ceiling.
+
+There is no API flag that guarantees grounding, so enforcement is three things
+together: every research prompt — wine, producer profile and catalogue slices —
+opens by requiring the model to search before answering and to say plainly that
+a fact could not be verified rather than write an ungrounded one; the search
+tool is declared on every request; and the gate rejects what comes back
+ungrounded anyway. The first is a request, the third is the enforcement.
 
 ## Diagnosing a Deep Search failure
 
