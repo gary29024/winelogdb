@@ -26,6 +26,7 @@ async function openForm(initial:Record<string,unknown>){
 type SelectLike={value:string;options:ArrayLike<{value:string}>;dispatchEvent(event:Event):boolean};
 
 const node=()=>host!.querySelector('select[name="classificationOverride"]')!;
+const appellationHelp=()=>host!.querySelector('input[name="appellation"]')?.parentElement?.querySelector('small')?.textContent??'';
 const select=()=>node() as unknown as SelectLike;
 const helper=()=>node().parentElement?.querySelector('small')?.textContent??'';
 const base={producer:'Domaine Dujac',wineName:'Les Suchots',country:'France',region:'Burgundy',appellation:'Vosne-Romanée'};
@@ -81,5 +82,31 @@ describe('Setting the cru tier by hand',()=>{
     });
     await act(async()=>{host!.querySelector('form')!.dispatchEvent(new Event('submit',{bubbles:true,cancelable:true}))});
     expect(saved).toMatchObject({classificationOverride:null});
+  });
+});
+
+describe('Reading the denomination back in the form',()=>{
+  it('names the denomination the appellation resolves to',async()=>{
+    // The question the helper answers: was "Chianti Classico" understood as the
+    // DOCG, given the form will not let the term be typed into the field.
+    await openForm({producer:'Fontodi',wineName:'Filetta',country:'Italy',region:'Tuscany',appellation:'Chianti Classico'});
+    expect(appellationHelp()).toContain('DOCG');
+  });
+
+  it('says where the term goes when nothing has resolved yet',async()=>{
+    await openForm({producer:'x',wineName:'y',country:'',region:'',appellation:''});
+    expect(appellationHelp()).toContain('leave DOC / DOCG / AVA off');
+  });
+
+  it('follows what is being typed, not what was saved',async()=>{
+    await openForm(base);
+    expect(appellationHelp()).toContain('AOC');
+    await act(async()=>{
+      const field=host!.querySelector('input[name="appellation"]') as HTMLInputElement;
+      const setter=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value')!.set!;
+      setter.call(field,'Barolo');
+      field.dispatchEvent(new Event('input',{bubbles:true}));
+    });
+    expect(appellationHelp()).toContain('DOCG');
   });
 });

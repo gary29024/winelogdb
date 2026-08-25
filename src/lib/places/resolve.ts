@@ -147,6 +147,13 @@ export type ResolvedPlace={
   placeId:string|null;
   /** The cru tier, from the label text where it says one and the tree otherwise. */
   classification:WineClassification|null;
+  /**
+   * The denomination in force at the narrowest place that resolved - DOCG, AOC,
+   * AVA. Null unless the tree knows that place, because the denomination is a
+   * legal fact about it and guessing one from the country would put "AVA"
+   * beside any American name recognition happened to invent.
+   */
+  denomination:string|null;
   /** Input values that matched nothing in the tree, kept so nothing is silently dropped. */
   unresolved:string[];
 };
@@ -172,7 +179,7 @@ export function resolvePlace(input:PlaceInput):ResolvedPlace{
   const spoken=classifyFromText(input.appellation,input.wineName);
   if(!anchor)return {
     country:trimmed(input.country),region:trimmed(input.region),appellation:trimmed(input.appellation),
-    path:[],placeId:null,classification:spoken,unresolved
+    path:[],placeId:null,classification:spoken,denomination:null,unresolved
   };
 
   const chain=ancestry(anchor);
@@ -182,11 +189,12 @@ export function resolvePlace(input:PlaceInput):ResolvedPlace{
   // given region Gevrey-Chambertin and appellation Charmes-Chambertin, the wine
   // is a Charmes, and reading the region field would quietly rewrite it.
   const own=pickAnchor(candidates[0].matches);
-  const appellation=own&&below(own)?own.name
-    // A name the tree does not carry is still the most specific thing known
-    // about the wine, so it is kept rather than dropped.
-    :input.appellation?.trim()&&!candidates[0].matches.length?input.appellation.trim()
-    :below(anchor)?anchor.name:null;
+  // A name the tree does not carry is still the most specific thing known about
+  // the wine, so it is kept verbatim rather than dropped - but with no node
+  // behind it, there is nothing to read a denomination off.
+  const verbatim=input.appellation?.trim()&&!candidates[0].matches.length?input.appellation.trim():null;
+  const appellationNode=own&&below(own)?own:verbatim?null:below(anchor)?anchor:null;
+  const appellation=appellationNode?.name??verbatim;
   return {
     country:at('country')??trimmed(input.country),
     // An area such as California is not a growing region; it stays in the
@@ -196,11 +204,40 @@ export function resolvePlace(input:PlaceInput):ResolvedPlace{
     path:chain.map(step=>step.id),
     placeId:anchor.id,
     classification:spoken??villageIfCertain((own??anchor).classification,candidates[0].value),
+    // A verbatim appellation is the narrowest thing the wine names, and the tree
+    // knows nothing about it - so the region's denomination is not the wine's.
+    denomination:verbatim?null:denominationInForce(appellationNode??anchor),
     unresolved
   };
 }
 
 function trimmed(value:string|null|undefined){const text=value?.trim();return text||null}
+
+/**
+ * The denomination in force at a place: its own where it carries one, and its
+ * country's otherwise. Most appellations do not name their scheme - the tree
+ * marks Barolo as DOCG and lets the other 300 Italian entries inherit DOC from
+ * Italy - so the answer is nearly always an inherited one.
+ *
+ * How far down an inherited default reaches is the country's to say. Old World
+ * defaults stop at the appellation tier, because above it they are often simply
+ * false: Bourgogne is an AOC but Burgundy is not, and Chianti is a DOCG but
+ * Tuscany is nothing at all - so an Old World region says a denomination only
+ * where the tree marks it with one, as Rioja and Priorat are. New World schemes
+ * reach the region tier, where Napa Valley and Barossa Valley are themselves the
+ * registration.
+ */
+function denominationInForce(place:PlaceNode|null):string|null{
+  // A country's denomination is the default it lends its appellations, never a
+  // statement about the country: France is not an AOC.
+  if(!place||place.tier==='country')return null;
+  if(place.denomination)return place.denomination;
+  for(const step of ancestry(place).reverse()){
+    if(!step.denomination)continue;
+    return TIER_DEPTH[place.tier]>=TIER_DEPTH[step.denominationFrom??'appellation']?step.denomination:null;
+  }
+  return null;
+}
 
 /**
  * A village reading is only asserted when the appellation matched exactly.

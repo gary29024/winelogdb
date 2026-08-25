@@ -24,6 +24,10 @@ export const groupRecognitionWineSchema=z.object({
   country:nullableText,
   region:nullableText,
   appellation:nullableText,
+  // Filled by canonicalizeWineFields during dedupe, not by the model: the
+  // region and appellation as the label was read, before re-slotting.
+  recognizedRegion:nullableText,
+  recognizedAppellation:nullableText,
   grapes:z.array(z.string().trim().max(100)).max(20).default([]),
   grapeBlend:z.array(grapeBlendEntry).max(20).default([]),
   style:z.enum(wineStyles).nullable().optional(),

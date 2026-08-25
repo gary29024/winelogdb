@@ -1,4 +1,5 @@
 import { useEffect,useState, type FormEvent } from 'react';
+import { resolvePlace } from '../../lib/places/resolve';
 import { Link,useNavigate } from 'react-router-dom';
 import { saveWine,saveWineTastingStructure, type WinePhoto } from './api';
 import { resolveProducer,type ProducerResolution } from '../producers/api';
@@ -74,6 +75,11 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel}:WineF
     const input:WineFormInput={
       producer,wineName,vintage:fd.get('vintage')?Number(fd.get('vintage')):null,
       country:String(fd.get('country')||'').trim()||null,region:String(fd.get('region')||'').trim()||null,appellation:String(fd.get('appellation')||'').trim()||null,
+      // The reading the wine arrived with, sent back untouched. Recognition
+      // hands the form values it has already normalised, so re-deriving from
+      // the fields would record WineLog's answer as the label's.
+      recognizedRegion:initial?.recognizedRegion??null,
+      recognizedAppellation:initial?.recognizedAppellation??null,
       // Derived server-side, but sent back so an edit does not clear a tier the
       // label text no longer carries.
       classification:initial?.classification??null,
@@ -94,6 +100,9 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel}:WineF
       if(onSaved)onSaved(savedId);else nav(`/wines/${savedId}`);
     }catch(e){setError((e as Error).message);setBusy(false)}
   }
+  // The tree, not the typist, holds the denomination: showing what it reads back
+  // is what tells you a "Chianti Classico" you typed was understood as a DOCG.
+  const denomination=resolvePlace({country:String(initial?.country??'')||null,region:String(initial?.region??'')||null,appellation}).denomination;
   const field=(name:string,label:string,type='text',step?:string,required=false)=><label>{label}<input name={name} type={type} step={step} required={required} defaultValue={String(initial?.[name as keyof WineInput]??'')}/></label>;
   const hasGps=initial?.latitude!=null&&initial?.longitude!=null,hasEstimatedPlace=hasGps&&Boolean(initial?.locationName?.trim());
   return <form className="wine-form wine-form-compact" onSubmit={submit}>
@@ -106,7 +115,7 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel}:WineF
 
     <div className="wine-compact-row three">{field('vintage','Vintage','number')}<label>Style<select name="wineStyle" value={wineStyle} onChange={e=>setWineStyle(e.target.value)}><option value="">Unknown</option>{['red','white','rose','sparkling','dessert','fortified','orange','other'].map(x=><option key={x}>{x}</option>)}</select></label>{field('alcoholPercentage','Alcohol %','number','0.1')}</div>
     <div className="wine-compact-row two">{field('country','Country')}{field('region','Region')}</div>
-    <div className="wine-compact-row appellation-row"><label>Appellation<input name="appellation" value={appellation} onChange={e=>setAppellation(e.target.value)}/></label>
+    <div className="wine-compact-row appellation-row"><label>Appellation<input name="appellation" value={appellation} onChange={e=>setAppellation(e.target.value)}/><small>{denomination?`Recognized as a ${denomination}; no need to type it.`:'The denomination is read from the name, so leave DOC / DOCG / AVA off.'}</small></label>
       <label>Cru level<select name="classificationOverride" value={cruOverride} onChange={e=>setCruOverride(e.target.value)}>
         <option value="">Auto</option>
         <option value="grand_cru">Grand Cru</option>

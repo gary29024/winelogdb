@@ -70,7 +70,9 @@ describe('Cru tier on the wine detail',()=>{
   it('keeps the appellation as its own pill',async()=>{
     const page=await render(wine());
     const pills=[...page.querySelectorAll('.detail-pills span')].map(node=>node.textContent);
-    expect(pills).toContain('Charmes-Chambertin');
+    // The denomination rides inside the appellation pill; the cru tier gets one
+    // of its own, because it describes the wine rather than the place.
+    expect(pills).toContain('Charmes-ChambertinAOC');
     expect(pills).toContain('Grand Cru');
   });
 });

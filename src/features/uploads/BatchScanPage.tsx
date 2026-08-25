@@ -19,7 +19,7 @@ const RECOVERY_STALE_MS=90_000;
 const RETRY_LOCK_MS=90_000;
 const emptyWine=():DraftWine=>({key:crypto.randomUUID(),photos:[],preparing:false,error:''});
 function suggestedTags(result:RecognitionResult){const seen=new Set<string>();return [result.country,result.region,result.appellation,...result.grapes,result.style].filter((x):x is string=>Boolean(x)).map(x=>x.trim()).filter(x=>{const k=x.toLowerCase();if(!x||seen.has(k))return false;seen.add(k);return true}).slice(0,8)}
-function recognitionInitial(r:RecognitionResult):Partial<WineInput>{return {producer:r.producer??'',wineName:r.wineName??'',vintage:r.vintage,country:r.country,region:r.region,appellation:r.appellation,grapes:r.grapes,grapeBlend:r.grapeBlend,wineStyle:r.style,alcoholPercentage:r.alcoholPercentage,tastingDate:r.tastingDate,locationName:r.locationName,latitude:r.latitude,longitude:r.longitude,tags:suggestedTags(r),recognitionConfidence:r.confidence,recognitionStatus:'review'}}
+function recognitionInitial(r:RecognitionResult):Partial<WineInput>{return {producer:r.producer??'',wineName:r.wineName??'',vintage:r.vintage,country:r.country,region:r.region,appellation:r.appellation,recognizedRegion:r.recognizedRegion,recognizedAppellation:r.recognizedAppellation,grapes:r.grapes,grapeBlend:r.grapeBlend,wineStyle:r.style,alcoholPercentage:r.alcoholPercentage,tastingDate:r.tastingDate,locationName:r.locationName,latitude:r.latitude,longitude:r.longitude,tags:suggestedTags(r),recognitionConfidence:r.confidence,recognitionStatus:'review'}}
 
 function BatchImage({id,alt,onOpen}:{id:string;alt:string;onOpen?:(src:string)=>void}){
   const [src,setSrc]=useState(''),[state,setState]=useState<'loading'|'ready'|'error'>('loading'),[retryKey,setRetryKey]=useState(0);

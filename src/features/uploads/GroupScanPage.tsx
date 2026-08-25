@@ -95,7 +95,7 @@ export function GroupScanPage(){
   const initial=useMemo<Partial<WineInput>>(()=>{
     if(!active)return {};const r=active.recognition,m=photo?.metadata;
     if(!r)return {tastingDate:m?.capturedAt?.slice(0,10)??null,latitude:m?.latitude??null,longitude:m?.longitude??null,recognitionStatus:'review'};
-    return {producer:r.producer,wineName:r.wineName,vintage:r.vintage??null,country:r.country??null,region:r.region??null,appellation:r.appellation??null,grapes:r.grapes,grapeBlend:r.grapeBlend,wineStyle:r.style??null,alcoholPercentage:r.alcoholPercentage??null,tastingDate:m?.capturedAt?.slice(0,10)??null,locationName:r.locationName??null,latitude:m?.latitude??null,longitude:m?.longitude??null,tags:suggestedTags(r),recognitionConfidence:r.confidence,recognitionStatus:'review'};
+    return {producer:r.producer,wineName:r.wineName,vintage:r.vintage??null,country:r.country??null,region:r.region??null,appellation:r.appellation??null,recognizedRegion:r.recognizedRegion??null,recognizedAppellation:r.recognizedAppellation??null,grapes:r.grapes,grapeBlend:r.grapeBlend,wineStyle:r.style??null,alcoholPercentage:r.alcoholPercentage??null,tastingDate:m?.capturedAt?.slice(0,10)??null,locationName:r.locationName??null,latitude:m?.latitude??null,longitude:m?.longitude??null,tags:suggestedTags(r),recognitionConfidence:r.confidence,recognitionStatus:'review'};
   },[active,photo]);
 
   return <section className="group-scan-page">
