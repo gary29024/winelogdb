@@ -69,12 +69,59 @@ describe('the tier backfill for wines already logged',()=>{
 
   it('covers every name the tree newly classifies',()=>{
     for(const name of ['Chablis','Mercurey','Givry','Rully','Montagny','Bouzeron',
-      'Pouilly-Fuissé','Saint-Véran','Viré-Clessé','Chablis Premier Cru'])
+      'Pouilly-Fuissé','Saint-Véran','Viré-Clessé','Côte de Beaune','Irancy','Saint-Bris','Chablis Premier Cru'])
       expect(sql,name).toContain(`'${name}'`);
   });
 
   it('leaves a tier that was cleared by hand cleared',()=>{
     // A NULL classification beside an override is a decision, not a gap.
     expect(sql.match(/classification IS NULL AND classification_override IS NULL/g)).toHaveLength(2);
+  });
+});
+
+describe('The tier below the villages',()=>{
+  it('reads Burgundy’s regional appellations as AOCs with no cru tier',()=>{
+    // These are real appellations and say so, but a Hautes Côtes is not a
+    // village; counting one as such would inflate the cru mix on Insights.
+    for(const name of ['Bourgogne Hautes Côtes de Nuits','Bourgogne Hautes Côtes de Beaune',
+      'Bourgogne Côte Chalonnaise','Bourgogne Passe-Tout-Grains','Coteaux Bourguignons',
+      'Crémant de Bourgogne','Mâcon','Bourgogne Rouge'])
+      expect(burgundy(name),name).toMatchObject({classification:null,denomination:'AOC'});
+  });
+
+  it('settles the short forms on one spelling',()=>{
+    // Recognition writes the Hautes Côtes with and without the Bourgogne prefix,
+    // and with either hyphenation, which forked one appellation into four.
+    for(const name of ['Hautes Côtes de Nuits','Hautes-Cotes de Nuits','hautes cotes de nuits'])
+      expect(burgundy(name).appellation,name).toBe('Bourgogne Hautes Côtes de Nuits');
+    expect(burgundy('Macon').appellation).toBe('Mâcon');
+    expect(burgundy('Vézelay').appellation).toBe('Bourgogne Vézelay');
+  });
+
+  it('reads the Grand Auxerrois village AOCs as villages',()=>{
+    expect(burgundy('Irancy').classification).toBe('village');
+    expect(burgundy('Saint-Bris').classification).toBe('village');
+  });
+});
+
+describe('Côte de Beaune, which names two things',()=>{
+  it('is a village where the appellation field names it',()=>{
+    // The AOC on the hill above Beaune. A label saying only "Côte de Beaune"
+    // means that wine, not the stretch of hillside.
+    expect(burgundy('Côte de Beaune')).toMatchObject({classification:'village',denomination:'AOC'});
+  });
+
+  it('is only the subregion where the region field named it',()=>{
+    // Recognition routinely writes the subregion in the region field, and that
+    // is not a claim about the wine's tier.
+    expect(resolvePlace({country:'France',region:'Côte de Beaune',appellation:null}))
+      .toMatchObject({appellation:'Côte de Beaune',classification:null});
+    expect(resolvePlace({country:'France',region:'Côte de Beaune',appellation:'Volnay'}))
+      .toMatchObject({appellation:'Volnay',classification:'village'});
+  });
+
+  it('keeps Côte de Nuits unclassified, which is not an AOC',()=>{
+    expect(burgundy('Côte de Nuits')).toMatchObject({classification:null,denomination:null});
+    expect(burgundy('Côte de Nuits-Villages').classification).toBe('village');
   });
 });
