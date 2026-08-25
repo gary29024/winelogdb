@@ -240,16 +240,29 @@ function denominationInForce(place:PlaceNode|null):string|null{
 }
 
 /**
- * A village reading is only asserted when the appellation matched exactly.
- * "Vosne Romanee Suchots" reaches Vosne-Romanée by dropping a suffix we could
- * not interpret; that trailing text may well be a premier cru climat, so the
- * honest answer is that the tier is unknown rather than village. A grand cru
- * survives an inexact match, because there the named place is itself the cru.
+ * A village reading is only asserted when the appellation named nothing beyond
+ * the place. "Vosne Romanee Suchots" reaches Vosne-Romanée by dropping a suffix
+ * we could not interpret; that trailing text may well be a premier cru climat,
+ * so the honest answer is that the tier is unknown rather than village. A grand
+ * cru survives an inexact match, because there the named place is itself the cru.
+ *
+ * A trailing denomination or ageing tier does not count as unread text: both are
+ * closed lists, so "Chablis AOC" and "Chianti Classico DOCG" name their place
+ * and nothing else, with no room left for a hidden climat.
  */
 function villageIfCertain(classification:WineClassification|undefined,value:string|null|undefined){
   if(!classification)return null;
   if(classification!=='village')return classification;
-  return value&&byName.has(key(value))?classification:null;
+  return value&&namesOnlyThePlace(value)?classification:null;
+}
+
+function namesOnlyThePlace(value:string){
+  let normalized=key(value);
+  for(;;){
+    if(byName.has(normalized))return true;
+    if(!DENOMINATION.test(normalized)&&!AGEING.test(normalized))return false;
+    normalized=normalized.replace(DENOMINATION,'').replace(AGEING,'');
+  }
 }
 
 /**
