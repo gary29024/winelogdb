@@ -67,6 +67,37 @@ rather than served. Four things keep that gate honest.
 The result's quality status, score and any warnings are shown on the wine page,
 so a rejection is diagnosable rather than an opaque failure.
 
+## The wine page's Deep Search layout
+
+A complete result covers six scopes plus a summary, each with its own claim
+evidence, so shown at full length it pushed the rest of the wine page well
+below the fold. The six research sections — vintage quality, producer,
+producer-wide practices, this wine's winemaking, terroir, drinking window —
+are collapsible accordions, closed by default with a compact evidence count
+("`8 direct`") on the header so a section is worth opening or skipping without
+opening it first. The summary stays open always, since it is the one thing
+worth reading regardless. An expand/collapse-all control sits above the list,
+and which sections a reader leaves open is remembered in `localStorage` across
+visits and wines — a reader who always wants Terroir open does not have to
+reopen it every time.
+
+The quality status moves into a compact pill beside the DEEP SEARCH label,
+visible without scrolling; the detailed warning box beneath the summary
+appears only when there is a warning to explain, not for a clean `verified`
+result.
+
+Sources are grouped by host rather than listed flat, because Gemini's grounding
+metadata often carries no page title, so several links on one host used to
+render as identical-looking rows — `wine.com` three times over with no way to
+tell the pages apart. Grouped, the host appears once with a count, and each
+link underneath falls back to its URL path when the title is just the
+hostname repeated. The list itself is collapsed behind a `<details>` summarising
+the source and site counts, since the same references already appear beside
+the specific claims they support (see Evidence below); the grouped list is
+kept as the complete bibliography for a reader who wants to see everything
+that was searched at once; the exact evidence for a given sentence is what
+the per-section Evidence link is for.
+
 ## Producer catalogue corrections
 
 Producer research rebuilds `catalog_json` from scratch on every run, and the

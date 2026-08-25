@@ -1,4 +1,4 @@
-import { useEffect,useRef,useState,type ReactNode } from 'react';
+import { useEffect,useMemo,useRef,useState,type ReactNode } from 'react';
 import { Link,useNavigate,useParams } from 'react-router-dom';
 import type { DeepSearchResult } from '../../lib/db/schema';
 import { cancelWineDeepSearch,deleteWine,getWine,getWineDeepSearchStatus,setWineFavorite,startWineDeepSearch,type WineDetail,type WineResearchRun } from './api';
@@ -18,6 +18,32 @@ type DeepState='idle'|'confirm-usage'|'confirm-final'|'running'|'error';
 type DeepField='summary'|'vintageQuality'|'producerDetails'|'producerWinemakingPractices'|'winemakingTechniques'|'terroir'|'drinkingWindow';
 const deepStage:Record<WineResearchRun['stage'],string>={queued:'Queued for background research',researching:'Researching with Gemini 3.7 Flash',saving:'Saving Deep Search result',complete:'Research complete',failed:'Research failed'};
 const claimStatusLabel={supported:'Direct support',partial:'Partial support',unsupported:'No direct citation',uncertainty:'Explicit uncertainty',conflicting:'Conflicting sources'} as const;
+const DEEP_FIELDS:DeepField[]=['summary','vintageQuality','producerDetails','producerWinemakingPractices','winemakingTechniques','terroir','drinkingWindow'];
+const DEEP_OPEN_FIELDS_KEY='winelog.deepSearch.openFields';
+function readOpenDeepFields():Set<DeepField>{
+ try{
+  const raw=window.localStorage.getItem(DEEP_OPEN_FIELDS_KEY);if(!raw)return new Set();
+  const parsed=JSON.parse(raw) as unknown;
+  return new Set(Array.isArray(parsed)?parsed.filter((x):x is DeepField=>DEEP_FIELDS.includes(x as DeepField)):[]);
+ }catch{return new Set()}
+}
+function writeOpenDeepFields(next:Set<DeepField>){try{window.localStorage.setItem(DEEP_OPEN_FIELDS_KEY,JSON.stringify([...next]))}catch{/* storage unavailable */}}
+
+function sourceHost(url:string){try{return new URL(url).hostname.toLowerCase().replace(/^www\./,'')}catch{return ''}}
+/** Gemini grounding often gives no page title, so several links on one host all
+ * render as the bare hostname. Falling back to the last path segment turns
+ * "wine.com / wine.com / wine.com" into three links a reader can tell apart. */
+function sourceLinkLabel(source:{title:string;url:string},host:string){
+ const title=source.title?.trim();
+ if(title&&title.toLowerCase().replace(/^www\./,'')!==host)return title;
+ try{
+  const segments=new URL(source.url).pathname.split('/').filter(Boolean),last=segments[segments.length-1];
+  const decoded=last?decodeURIComponent(last).replace(/\.(?:html?|php|aspx?)$/i,'').replace(/[-_]+/g,' ').trim():'';
+  if(decoded)return decoded;
+ }catch{/* fall through to host */}
+ return host||title||source.url;
+}
+
 
 function wineSearcherUrl(producer:string,wineName:string,vintage:number|null|undefined){const query=[producer,wineName,vintage!=null?String(vintage):''].map(x=>String(x).trim()).filter(Boolean).join(' ');return `https://www.wine-searcher.com/find/${encodeURIComponent(query).replace(/%20/g,'+')}`}
 function formatPrice(price:number|null|undefined,currency:string|null|undefined){if(price==null)return null;const amount=new Intl.NumberFormat('en-US',{maximumFractionDigits:2}).format(price);return currency?`${currency} ${amount}`:amount}
@@ -44,6 +70,18 @@ function ResearchQuality({deep}:{deep:DeepSearchResult}){
  </div>;
 }
 
+function DeepSources({sources}:{sources:DeepSearchResult['sources']}){
+ const groups=useMemo(()=>{
+  const map=new Map<string,typeof sources>();
+  for(const source of sources){const host=sourceHost(source.url)||'other sources',list=map.get(host)??[];list.push(source);map.set(host,list)}
+  return [...map.entries()].sort(([,a],[,b])=>b.length-a.length);
+ },[sources]);
+ if(!sources.length)return null;
+ return <details className="deep-sources"><summary>{sources.length} source{sources.length===1?'':'s'} · {groups.length} site{groups.length===1?'':'s'}</summary>
+  <div className="deep-sources-list">{groups.map(([host,items])=><div className="deep-source-group" key={host}><strong>{host}</strong>{items.map(item=><a key={item.url} href={item.url} target="_blank" rel="noreferrer">{sourceLinkLabel(item,host)}</a>)}</div>)}</div>
+ </details>;
+}
+
 function ClaimEvidence({deep,field}:{deep:DeepSearchResult;field:DeepField}){
  const evidence=deep.provenance?.fields[field];if(!evidence?.claims.length)return null;
  return <details className="claim-evidence"><summary>Evidence · {evidence.supportedCount} direct{evidence.conflictingCount?` · ${evidence.conflictingCount} disputed`:''}{evidence.partialCount?` · ${evidence.partialCount} partial`:''}{evidence.unsupportedCount?` · ${evidence.unsupportedCount} unsupported`:''}{evidence.uncertaintyCount?` · ${evidence.uncertaintyCount} uncertain`:''}</summary><ol>{evidence.claims.map((item,index)=><li key={`${field}-${index}`}><div className="claim-evidence-head"><span className={`claim-status ${item.supportStatus}`}>{claimStatusLabel[item.supportStatus]}</span>{item.sourceTier!=='none'&&<span className="claim-tier">{item.sourceTier}</span>}</div><p>{item.claim}</p>{item.sources.length>0&&<div className="claim-links">{item.sources.map(source=><a key={source.url} href={source.url} target="_blank" rel="noreferrer">{source.title}</a>)}</div>}</li>)}</ol><small>Direct evidence uses Gemini grounding segments mapped to the individual claim. “No direct citation” means the overall research may be grounded, but WineLog could not deterministically tie that statement to a specific grounding segment. “Conflicting sources” means independently grounded source-specific values disagree, so WineLog preserves the dispute instead of choosing one figure.</small></details>;
@@ -52,7 +90,7 @@ function ClaimEvidence({deep,field}:{deep:DeepSearchResult;field:DeepField}){
 const classificationLabel:Record<string,string>={grand_cru:'Grand Cru',premier_cru:'Premier Cru',village:'Village'};
 
 export function DetailPage(){
- const {id=''}=useParams(),nav=useNavigate(),[wine,setWine]=useState<WineDetail>(),[favoriteBusy,setFavoriteBusy]=useState(false),[deepState,setDeepState]=useState<DeepState>('idle'),[deepError,setDeepError]=useState(''),[deepRun,setDeepRun]=useState<WineResearchRun|null>(null),[deepElapsed,setDeepElapsed]=useState(0),[deepNotice,setDeepNotice]=useState(''),[deepCancelling,setDeepCancelling]=useState(false),[selectedImage,setSelectedImage]=useState<string>(),[selectedGroupSource,setSelectedGroupSource]=useState<string>();
+ const {id=''}=useParams(),nav=useNavigate(),[wine,setWine]=useState<WineDetail>(),[favoriteBusy,setFavoriteBusy]=useState(false),[deepState,setDeepState]=useState<DeepState>('idle'),[deepError,setDeepError]=useState(''),[deepRun,setDeepRun]=useState<WineResearchRun|null>(null),[deepElapsed,setDeepElapsed]=useState(0),[deepNotice,setDeepNotice]=useState(''),[deepCancelling,setDeepCancelling]=useState(false),[selectedImage,setSelectedImage]=useState<string>(),[selectedGroupSource,setSelectedGroupSource]=useState<string>(),[openDeepFields,setOpenDeepFields]=useState<Set<DeepField>>(readOpenDeepFields);
  const pollRef=useRef<Poller|undefined>(undefined),clockRef=useRef<number|undefined>(undefined);
  function stopDeepTimers(){pollRef.current?.stop();if(clockRef.current)window.clearInterval(clockRef.current);pollRef.current=undefined;clockRef.current=undefined}
  async function reloadWine(){const next=await getWine(id);setWine(next);return next}
@@ -67,6 +105,8 @@ export function DetailPage(){
  async function runDeepSearch(){setDeepState('running');setDeepError('');setDeepNotice('');try{const accepted=await startWineDeepSearch(id,wine?.deepSearch?'vintage':'none'),run=await getWineDeepSearchStatus(id,accepted.researchRequestId);if(run)watchDeepSearch(run);else setDeepNotice('Deep Search has been queued in the background. You can leave this page safely.')}catch(e){setDeepError((e as Error).message);setDeepState('error')}}
  async function cancelDeepSearch(){if(!deepRun||deepRun.status!=='running'||deepCancelling)return;if(!confirm('Cancel this Deep Search? Any producer, terroir, vintage or wine research already saved will be kept.'))return;setDeepCancelling(true);setDeepError('');try{const result=await cancelWineDeepSearch(id,deepRun.requestId);stopDeepTimers();await reloadWine().catch(()=>undefined);setDeepRun(null);setDeepState('idle');setDeepNotice(result.alreadyTerminal?'Deep Search had already reached a terminal state.':'Deep Search cancelled. Any research already saved was kept.')}catch(e){setDeepError((e as Error).message);setDeepState('running')}finally{setDeepCancelling(false)}}
  async function toggleFavorite(){if(!wine||favoriteBusy)return;const next=!wine.favorite;setFavoriteBusy(true);setWine({...wine,favorite:next});try{await setWineFavorite(id,next)}catch(e){setWine(current=>current?{...current,favorite:!next}:current);setDeepNotice((e as Error).message)}finally{setFavoriteBusy(false)}}
+ function toggleDeepField(field:DeepField){setOpenDeepFields(current=>{const next=new Set(current);if(next.has(field))next.delete(field);else next.add(field);writeOpenDeepFields(next);return next})}
+ function toggleAllDeepFields(fields:DeepField[]){setOpenDeepFields(current=>{const allOpen=fields.every(field=>current.has(field)),next=new Set(current);for(const field of fields){if(allOpen)next.delete(field);else next.add(field)}writeOpenDeepFields(next);return next})}
  if(!wine)return <p aria-live="polite">Loading wine…</p>;
  // Derived rather than stored: the denomination is a fact about the appellation,
  // so reading it from the tree at display time keeps every wine current with the
@@ -95,7 +135,32 @@ export function DetailPage(){
   {wine.tastingNotes&&<section className="detail-section"><p className="section-label">SENSORY NOTES</p><blockquote>{wine.tastingNotes}</blockquote></section>}
   <section className="detail-section"><p className="section-label">WINE DETAILS</p><dl>{[['Region',denominatedRegion],['Appellation',denominatedAppellation],['As recorded',asRecorded],['Grapes / blend',blend.join(', ')],['Alcohol',wine.alcoholPercentage&&`${wine.alcoholPercentage}%`]].filter(x=>x[1]).map(([k,v])=><div key={String(k)}><dt>{k}</dt><dd>{v}</dd></div>)}</dl></section>
   {structureItems.length>0&&<section className="detail-section structure-detail-section"><p className="section-label">STRUCTURE</p><dl className="tasting-structure-summary">{structureItems.map(([label,value])=><div key={label}><dt>{label}</dt><dd>{structureValueLabel[value]??value}</dd></div>)}</dl><p className="structure-section-note">Perceived structure; label ABV appears in Wine details.</p></section>}
-  <section className="detail-section deep-search-panel"><p className="section-label">DEEP SEARCH</p>{deep?<><div className="deep-summary"><ResearchText text={deep.summary}/><ClaimEvidence deep={deep} field="summary"/></div><div className="deep-research-sections">{researchSections.map(([label,field,value])=><section className="deep-research-section" key={field}><h3>{label}</h3><ResearchText text={value}/>{field==='producerWinemakingPractices'&&<small>General domaine context; not automatically treated as verified for this exact vintage.</small>}<ClaimEvidence deep={deep} field={field}/></section>)}</div>{deep.sources.length>0&&<div className="deep-sources"><strong>Sources</strong>{deep.sources.map(s=><a key={s.url} href={s.url} target="_blank" rel="noreferrer">{s.title}</a>)}</div>}<ResearchQuality deep={deep}/><small>Latest research model: {deep.model} · {new Date(deep.researchedAt).toLocaleDateString()} · reusable research is stored permanently</small></>:<p>Enrich this wine with grounded research. WineLog reuses stored producer practices, terroir and vintage research whenever the scope matches.</p>}
+  <section className="detail-section deep-search-panel">
+   <div className="deep-panel-head"><p className="section-label">DEEP SEARCH</p>{deep?.quality&&<span className={`deep-quality-pill ${deep.quality.status}`}>{qualityStatusLabel[deep.quality.status]??deep.quality.status} · {deep.quality.score}/100</span>}</div>
+   {deep?<>
+    {deep.quality&&deep.quality.warnings.length>0&&<ResearchQuality deep={deep}/>}
+    <div className="deep-summary"><ResearchText text={deep.summary}/><ClaimEvidence deep={deep} field="summary"/></div>
+    {researchSections.length>0&&<div className="deep-research-sections">
+     <div className="deep-sections-head"><span>{researchSections.length} research section{researchSections.length===1?'':'s'}</span><button type="button" className="deep-toggle-all" onClick={()=>toggleAllDeepFields(researchSections.map(([,field])=>field))}>{researchSections.every(([,field])=>openDeepFields.has(field))?'Collapse all':'Expand all'}</button></div>
+     {researchSections.map(([label,field,value])=>{
+      const open=openDeepFields.has(field),evidence=deep.provenance?.fields[field],panelId=`deep-section-${field}`;
+      return <section className={`deep-research-section${open?'':' is-collapsed'}`} key={field}>
+       <h3><button type="button" className="deep-section-toggle" aria-expanded={open} aria-controls={panelId} onClick={()=>toggleDeepField(field)}>
+        <span className="deep-section-name">{label}</span>
+        {Boolean(evidence?.claimCount)&&<span className="deep-section-meta">{evidence!.supportedCount} direct{evidence!.conflictingCount?` · ${evidence!.conflictingCount} disputed`:''}</span>}
+        <span className="deep-chevron" aria-hidden="true"/>
+       </button></h3>
+       <div className="deep-section-body" id={panelId} hidden={!open}>
+        <ResearchText text={value}/>
+        {field==='producerWinemakingPractices'&&<small>General domaine context; not automatically treated as verified for this exact vintage.</small>}
+        <ClaimEvidence deep={deep} field={field}/>
+       </div>
+      </section>;
+     })}
+    </div>}
+    <DeepSources sources={deep.sources}/>
+    <small>Latest research model: {deep.model} · {new Date(deep.researchedAt).toLocaleDateString()} · reusable research is stored permanently</small>
+   </>:<p>Enrich this wine with grounded research. WineLog reuses stored producer practices, terroir and vintage research whenever the scope matches.</p>}
    {deepNotice&&<p className="producer-notice" role="status">{deepNotice}</p>}{deepState==='idle'&&<button type="button" onClick={()=>setDeepState('confirm-usage')}>{deep?'Refresh vintage research':'Deep Search'}</button>}{deepState==='confirm-usage'&&<div className="deep-confirm"><p>{deep?'This refresh keeps cached producer-wide practices and stable terroir research, and re-runs only vintage-sensitive research for this wine.':'WineLog checks permanent caches first and queues Gemini 3.7 Flash with Google Search only for missing research scopes.'} The background job continues even if you close WineLog. API usage may be incurred. Continue?</p><button type="button" onClick={()=>setDeepState('confirm-final')}>Continue</button><button type="button" className="secondary-danger" onClick={()=>setDeepState('idle')}>Cancel</button></div>}{deepState==='confirm-final'&&<div className="deep-confirm"><p>{deep?'Final confirmation: queue refreshed vintage context and exact wine-vintage research now?':'Final confirmation: queue this wine’s grounded Deep Search now?'}</p><button type="button" onClick={runDeepSearch}>{deep?'Queue vintage refresh':'Queue Deep Search'}</button><button type="button" className="secondary-danger" onClick={()=>setDeepState('idle')}>Cancel</button></div>}{deepState==='running'&&<div className="deep-running" role="status"><span className="deep-spinner" aria-hidden="true"/><div><strong>{deepRun?deepStage[deepRun.stage]:'Queueing Deep Search…'}</strong><p>{deepRun?.message||'Preparing the background job.'}</p><small>{deepElapsed}s{deepRun?` · Request ${deepRun.requestId}`:''}</small><p>You can leave this page or close WineLog. The Queue continues independently and the saved result will appear when you return.</p><button type="button" className="secondary-danger" disabled={!deepRun||deepCancelling} onClick={cancelDeepSearch}>{deepCancelling?'Cancelling…':'Cancel Deep Search'}</button></div></div>}{deepState==='error'&&<div className="deep-error" role="alert"><strong>Deep Search did not complete.</strong><p>{deepError||deepRun?.message||'The background research job failed before a result was saved.'}</p><button type="button" onClick={runDeepSearch}>Retry Deep Search</button><button type="button" className="secondary-danger" onClick={()=>setDeepState('idle')}>Close</button></div>}
   </section>
   <section className="detail-section experience-panel"><p className="section-label">YOUR EXPERIENCE</p><dl>{[['Drinking date',wine.tastingDate],['Tasting / event',wine.tastingName],['Venue',wine.venue],['Location',wine.locationName],['Price',price]].filter(x=>x[1]).map(([k,v])=><div key={String(k)}><dt>{k}</dt><dd>{v}</dd></div>)}</dl></section><p>{wine.tags.map(t=><span className="tag" key={t}>#{t}</span>)}</p><div className="actions"><Link className="button" to={`/wines/${id}/edit`}>Edit tasting</Link><button className="danger secondary-danger" onClick={async()=>{if(confirm('Delete this wine?')){await deleteWine(id);nav('/')}}}>Delete</button></div>
