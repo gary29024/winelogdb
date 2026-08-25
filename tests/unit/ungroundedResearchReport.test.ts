@@ -52,3 +52,32 @@ describe('an ungrounded Deep Search response',()=>{
     expect(scopeQualityWarnings(target.scope,{producerDetails:'',producerWinemakingPractices:''},target,[{title:'a',url:'https://example.com/a'}])).toContain('missing-field');
   });
 });
+
+import { modelForAttempt,nextResearchAttempt } from '../../src/lib/research/batchWineResearch';
+
+describe('what a failed attempt is retried on',()=>{
+  it('sends the availability fallback a quality failure once',()=>{
+    expect(nextResearchAttempt(1,false)).toBe(2);
+    expect(modelForAttempt(1)).toBe('gemini-3.7-flash');
+    expect(modelForAttempt(2)).toBe('gemini-3.6-flash');
+  });
+
+  it('stops after the fallback when the answer was grounded but poor',()=>{
+    // A grounded answer that fails the gate twice is a research limit, not an
+    // infrastructure one, so a third call would just spend tokens.
+    expect(nextResearchAttempt(2,false)).toBeNull();
+  });
+
+  it('gives an ungrounded fallback answer one more go on the grounded model',()=>{
+    // The observed failure: 3.7 grounds and saves three scopes, the exact-wine
+    // scope is retried on 3.6, and 3.6 answers with zero grounding - which no
+    // gate can ever accept, so the retry path could never succeed.
+    expect(nextResearchAttempt(2,true)).toBe(3);
+    expect(modelForAttempt(3)).toBe('gemini-3.7-flash');
+  });
+
+  it('never retries an ungrounded answer on the model that just produced it',()=>{
+    expect(nextResearchAttempt(3,true)).toBeNull();
+    expect(modelForAttempt(3)).not.toBe(modelForAttempt(2));
+  });
+});
