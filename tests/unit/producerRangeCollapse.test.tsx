@@ -17,18 +17,22 @@ const detail={
     {name:'Charmes-Chambertin',category:'red',appellation:'Charmes-Chambertin',classification:'Grand Cru',style:null,notes:null},
     {name:'Morey-Saint-Denis Blanc',category:'white',appellation:'Morey-Saint-Denis',classification:null,style:null,notes:null}
   ],
-  catalogCuvees:[],cuveeCatalogLinks:[],tastedWines:[],linkedProducers:[],supplementaryContacts:[],
+  catalogCuvees:[],cuveeCatalogLinks:[],tastedWines:[],linkedProducers:[],supplementaryContacts:[],catalogDecisions:[],
   researchHistoryCount:0,sources:[],researchModel:null,researchedAt:null
 };
 
 let root:Root|null=null,host:HTMLDivElement|null=null;
 
-async function render(){
-  vi.stubGlobal('fetch',vi.fn(async(url:string)=>{
+let posted:Array<{url:string;body:unknown}>=[];
+
+async function render(over:Record<string,unknown>={}){
+  posted=[];
+  vi.stubGlobal('fetch',vi.fn(async(url:string,init?:RequestInit)=>{
     const target=String(url);
+    if(init?.method==='POST'){posted.push({url:target,body:JSON.parse(String(init.body??'{}'))});return new Response(JSON.stringify({id:'d1',deleted:true}),{status:200,headers:{'content-type':'application/json'}})}
     if(target.includes('/research-status'))return new Response(null,{status:404});
     if(target.endsWith('/api/producers'))return new Response(JSON.stringify({items:[]}),{status:200,headers:{'content-type':'application/json'}});
-    return new Response(JSON.stringify(detail),{status:200,headers:{'content-type':'application/json'}});
+    return new Response(JSON.stringify({...detail,...over}),{status:200,headers:{'content-type':'application/json'}});
   }));
   vi.resetModules();
   const {ProducerDetailPage}=await import('../../src/features/producers/ProducerDetailPage');
@@ -44,10 +48,12 @@ const toggles=()=>[...(host?.querySelectorAll('.catalog-group-toggle')??[])] as 
 const panels=()=>[...(host?.querySelectorAll('.producer-catalog')??[])] as HTMLElement[];
 const click=async(button:HTMLButtonElement)=>{await act(async()=>{button.click()})};
 
-beforeEach(()=>{window.localStorage.clear()});
+const fixButtons=()=>[...(host?.querySelectorAll('.catalog-fix')??[])] as HTMLButtonElement[];
+
+beforeEach(()=>{window.localStorage.clear();vi.spyOn(window,'confirm').mockReturnValue(true)});
 afterEach(()=>{
   if(root)act(()=>root!.unmount());
-  host?.remove();root=null;host=null;vi.unstubAllGlobals();window.localStorage.clear();
+  host?.remove();root=null;host=null;vi.unstubAllGlobals();vi.restoreAllMocks();window.localStorage.clear();
 });
 
 describe('Producer wine range',()=>{
@@ -90,6 +96,46 @@ describe('Producer wine range',()=>{
     await render();
     expect(toggles()[0].getAttribute('aria-expanded')).toBe('true');
     expect(toggles()[1].getAttribute('aria-expanded')).toBe('false');
+  });
+
+  it('records a duplicate as merged into the wine that is kept',async()=>{
+    await render();
+    // Rows sort by classification then name, so Charmes-Chambertin is first.
+    await click(fixButtons()[0]);
+    const select=host!.querySelector('.catalog-fix-merge select') as unknown as HTMLSelectElement;
+    // Every other wine in the range is offered as the survivor, across styles.
+    expect([...select.options].slice(1).map(option=>option.textContent)).toEqual([
+      'Clos de la Roche · Red','Morey-Saint-Denis Blanc · Morey-Saint-Denis · White'
+    ]);
+    const merge=host!.querySelector('.catalog-fix-merge button') as HTMLButtonElement;
+    expect(merge.disabled).toBe(true);
+    select.value=select.options[1].value;
+    await act(async()=>{select.dispatchEvent(new Event('change',{bubbles:true}))});
+    await click(host!.querySelector('.catalog-fix-merge button') as HTMLButtonElement);
+    const request=posted.find(item=>item.url.includes('/catalog-decisions'));
+    expect(request?.body).toMatchObject({
+      confirmation:'CORRECT_PRODUCER_CATALOG',decision:'merge',
+      sourceName:'Charmes-Chambertin',targetName:'Clos de la Roche'
+    });
+  });
+
+  it('hides a wine from the range without choosing a merge target',async()=>{
+    await render();
+    await click(fixButtons()[1]);
+    await click(host!.querySelector('.catalog-fix-panel > button.secondary-danger') as HTMLButtonElement);
+    const request=posted.find(item=>item.url.includes('/catalog-decisions'));
+    expect(request?.body).toMatchObject({decision:'hide',sourceName:'Clos de la Roche',targetKey:null});
+  });
+
+  it('lists applied corrections with an undo control',async()=>{
+    await render({catalogDecisions:[
+      {id:'d1',decision:'merge',sourceKey:'s1',sourceName:'Clos de la Roche Grand Cru',targetKey:'t1',targetName:'Clos de la Roche',createdAt:'2026-01-01T00:00:00.000Z',updatedAt:'2026-01-01T00:00:00.000Z'}
+    ]});
+    const correction=host!.querySelector('.catalog-correction');
+    expect(correction?.querySelector('strong')?.textContent).toBe('Clos de la Roche Grand Cru');
+    expect(correction?.querySelector('span')?.textContent).toBe('Merged into Clos de la Roche');
+    await click(correction!.querySelector('button') as HTMLButtonElement);
+    expect(posted.some(item=>/\/catalog-decisions\/d1\/undo$/.test(item.url))).toBe(true);
   });
 
   it('survives local storage that refuses the range preference',async()=>{

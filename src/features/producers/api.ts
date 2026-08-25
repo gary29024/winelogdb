@@ -2,6 +2,7 @@ import { authHeaders } from '../../lib/auth/client';
 import type { ProducerEntity } from '../../lib/producers/entities';
 import { canonicalCatalogEntries,catalogRowsForPresentation } from '../../lib/cuvees/catalogPresentation';
 import type { CatalogCuveeSummary,CuveeCatalogLink } from '../../lib/cuvees/catalogLinks';
+import type { CatalogDecision,CatalogDecisionKind } from '../../lib/producers/catalogDecisions';
 import { matchCuveeReleaseVariantToCatalog } from '../../lib/cuvees/releaseVariants';
 
 export type ProducerSummary={id:string;canonicalName:string;homeCountry:string|null;homeRegion:string|null;homeLocality:string|null;tastedCount:number;catalogCount:number;researchedAt:string|null};
@@ -11,7 +12,7 @@ export type ManualProducerContactType='email'|'phone'|'website'|'instagram'|'oth
 export type ManualProducerContact={id:string;type:ManualProducerContactType;label:string|null;value:string;note:string|null;createdAt:string;updatedAt:string};
 export type ManualProducerContactInput={type:ManualProducerContactType;label?:string;value:string;note?:string};
 export type ProducerCatalogCuvee=CatalogCuveeSummary&{tastedReleases?:string[]};
-export type ProducerDetail=ProducerEntity&{aliases:string[];tastedWines:TastedWine[];researchHistoryCount:number;linkedProducers:LinkedProducer[];catalogCuvees:ProducerCatalogCuvee[];cuveeCatalogLinks:CuveeCatalogLink[];supplementaryContacts:ManualProducerContact[]};
+export type ProducerDetail=ProducerEntity&{aliases:string[];tastedWines:TastedWine[];researchHistoryCount:number;linkedProducers:LinkedProducer[];catalogCuvees:ProducerCatalogCuvee[];cuveeCatalogLinks:CuveeCatalogLink[];supplementaryContacts:ManualProducerContact[];catalogDecisions:CatalogDecision[]};
 export type ProducerResolution={matched:boolean;inputName:string;producer?:{id:string;canonicalName:string;matchedName:string;matchType:'canonical'|'alias'|'normalized';researchedAt:string|null;catalogCount:number;tastedCount:number}};
 export type ProducerResearchStage='preparing'|'searching'|'retrying'|'parsing'|'saving'|'image'|'complete'|'failed';
 export type ProducerResearchRun={requestId:string;producerId:string;status:'running'|'complete'|'failed';stage:ProducerResearchStage;attempt:number;message:string|null;startedAt:string;updatedAt:string;completedAt:string|null;durationMs:number|null};
@@ -36,7 +37,7 @@ export const getProducer=(id:string)=>fetch(`/api/producers/${id}`,{headers:auth
     const releases=releaseNames.get(row.id),tastedReleases=releases?[...releases.entries()].sort((a,b)=>b[0]-a[0]).map(([,label])=>label):[];
     return {...row,tastedCount:row.tastedCount+(releaseCounts.get(row.id)??0),tastedReleases};
   });
-  return {...detail,catalog,supplementaryContacts:detail.supplementaryContacts??[],tastedWines,catalogCuvees:catalogWithReleases};
+  return {...detail,catalog,supplementaryContacts:detail.supplementaryContacts??[],catalogDecisions:detail.catalogDecisions??[],tastedWines,catalogCuvees:catalogWithReleases};
 });
 export const setPrimaryProducerName=(id:string,name:string)=>fetch(`/api/producers/${id}/primary-name`,{method:'POST',headers:authHeaders(true),body:JSON.stringify({name})}).then(r=>json<{id:string;canonicalName:string}>(r,'Could not change primary name'));
 export const getProducerResearchStatus=(id:string,requestId?:string)=>{
@@ -53,3 +54,11 @@ export const deleteSupplementaryContact=(producerId:string,contactId:string)=>fe
 export const linkTastedCuveeToCatalog=(producerId:string,sourceCuveeId:string,catalogCuveeId:string)=>fetch(`/api/producers/${producerId}/cuvee-links`,{method:'POST',headers:authHeaders(true),body:JSON.stringify({confirmation:'LINK_CUVEE_TO_CATALOG',sourceCuveeId,catalogCuveeId})}).then(r=>json<{id:string;sourceCuveeId:string;catalogCuveeId:string;existing:boolean}>(r,'Could not link tasted cuvée to catalog'));
 export const changeTastedCuveeCatalogLink=(producerId:string,linkId:string,catalogCuveeId:string)=>fetch(`/api/producers/${producerId}/cuvee-links/${linkId}`,{method:'PUT',headers:authHeaders(true),body:JSON.stringify({confirmation:'CHANGE_CUVEE_CATALOG_LINK',catalogCuveeId})}).then(r=>json<{id:string;sourceCuveeId:string;catalogCuveeId:string;changed:boolean}>(r,'Could not change catalog link'));
 export const unlinkTastedCuveeFromCatalog=(producerId:string,linkId:string)=>fetch(`/api/producers/${producerId}/cuvee-links/${linkId}/unlink`,{method:'POST',headers:authHeaders(true),body:JSON.stringify({confirmation:'UNLINK_CUVEE_FROM_CATALOG'})}).then(r=>json<{id:string;sourceCuveeId:string;catalogCuveeId:string;unlinked:boolean}>(r,'Could not unlink tasted cuvée from catalog'));
+
+export const saveProducerCatalogDecision=(producerId:string,input:{decision:CatalogDecisionKind;sourceKey:string;sourceName:string;targetKey?:string|null;targetName?:string|null})=>
+  fetch(`/api/producers/${producerId}/catalog-decisions`,{method:'POST',headers:authHeaders(true),body:JSON.stringify({confirmation:'CORRECT_PRODUCER_CATALOG',...input})})
+    .then(r=>json<CatalogDecision>(r,'Could not save the catalogue correction'));
+export const undoProducerCatalogDecision=(producerId:string,decisionId:string)=>
+  fetch(`/api/producers/${producerId}/catalog-decisions/${decisionId}/undo`,{method:'POST',headers:authHeaders(true),body:JSON.stringify({confirmation:'UNDO_PRODUCER_CATALOG_CORRECTION'})})
+    .then(r=>json<{id:string;deleted:true}>(r,'Could not undo the catalogue correction'));
+export type { CatalogDecision,CatalogDecisionKind };

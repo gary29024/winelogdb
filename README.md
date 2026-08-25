@@ -42,6 +42,27 @@ No bucket CORS policy is needed because uploads and image reads pass through the
 
 The migration creates owner/filter/sort indexes and an FTS5 table for producer, name, region, grapes, notes, event, and tags. API filtering supports vintage, country, region, style, minimum rating, and event, plus stable `limit`/`offset` loading and sorts for newest, oldest, rating, producer, and vintage. The UI stores all selections in URL query parameters so views are bookmarkable. Production write paths should maintain `wine_search` using D1 triggers or application transactions when enabling FTS queries at scale.
 
+## Producer catalogue corrections
+
+Producer research rebuilds `catalog_json` from scratch on every run, and the
+range is researched as six alphabetical slices in parallel. The same wine named
+differently in two slices ("Clos de la Roche" and "Domaine X Clos de la Roche
+Grand Cru") therefore arrives twice, and no normalizer can safely decide whether
+two similar names are one cuvee or two — collapsing "Chambolle-Musigny" into
+"Chambolle-Musigny 1er Cru" would lose a real wine.
+
+Storage-time and display-time dedupe now share one identity key
+(`catalogPresentationKey`), so a wine the producer page shows as a single row is
+stored as a single row. What survives that is resolved by hand and remembered:
+`producer_catalog_decisions` records a decision (`merge` into a surviving wine,
+or `hide`) against a stable cuvee signature rather than against a row, and
+`applyCatalogDecisions` re-applies it on every read and after every research
+run. A resolved duplicate cannot come back.
+
+The catalogue completeness guard counts both sides after those corrections, so
+hiding duplicates never reads as a suspicious shrink. Corrections are listed
+with an undo control under the producer's wine range.
+
 ## Staying inside the D1 free tier
 
 D1's free plan is metered on rows read and rows written per day, so the design goal

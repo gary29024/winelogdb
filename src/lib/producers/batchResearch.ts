@@ -7,6 +7,7 @@ import { researchBatchErrorPollDelay,researchBatchPollDelay,researchBatchStallAc
 import { clearProducerCatalogSliceStage,discardProducerCatalogStage,listProducerCatalogStage,prepareProducerCatalogStage,stageProducerCatalogParts } from './catalogResearchStage';
 import { extractContactGrounding,normalizeProducerEmail,normalizeProducerPhone,safeInstagramUrl } from './research';
 import { assertCatalogTextQuality,extractOfficialContactCandidates,mergeCatalogRanges,suspiciousCatalogShrink } from './researchQuality';
+import { applyCatalogDecisions,listCatalogDecisions } from './catalogDecisions';
 import { catalogNameInitial,stripProducerCatalogPrefix } from './catalogName';
 import { parseStructuredJsonText } from './structuredJson';
 
@@ -173,9 +174,16 @@ async function stageCatalogParts(env:Env,owner:string,producerId:string,requestI
 async function finalizeCatalogStage(env:Env,owner:string,producerId:string,requestId:string):Promise<CatalogSaveSummary|null>{
   const staged=await listProducerCatalogStage<CatalogWine>(env.DB,owner,producerId,requestId),catalogRows=staged.filter(row=>parseSliceKey(row.sliceKey));
   if(!catalogStageCoverageComplete(catalogRows.map(row=>row.sliceKey)))return null;
-  const names=await producerNames(env.DB,owner,producerId),researched=catalogRows.flatMap(row=>row.range),deduped=mergeCatalogRanges([],researched,150,names).range;
+  const names=await producerNames(env.DB,owner,producerId),researched=catalogRows.flatMap(row=>row.range);
   const row=await env.DB.prepare('SELECT catalog_json,sources_json FROM producers WHERE owner_id=? AND id=?').bind(owner,producerId).first<{catalog_json:string;sources_json:string}>();
-  const parsedPrevious=parseJson<unknown>(row?.catalog_json,[]),previous=(Array.isArray(parsedPrevious)?parsedPrevious:[]).filter(item=>item&&typeof item==='object'&&typeof (item as {name?:unknown}).name==='string') as CatalogWine[],previousCount=mergeCatalogRanges([],previous,150,names).range.length;
+  const parsedPrevious=parseJson<unknown>(row?.catalog_json,[]),previous=(Array.isArray(parsedPrevious)?parsedPrevious:[]).filter(item=>item&&typeof item==='object'&&typeof (item as {name?:unknown}).name==='string') as CatalogWine[];
+  // Manual corrections are re-applied to the freshly researched range, so a
+  // duplicate the owner already resolved cannot return. The completeness guard
+  // then compares like with like: both sides are counted after the same
+  // decisions, so resolving duplicates never reads as a suspicious shrink.
+  const decisions=await listCatalogDecisions(env.DB,owner,producerId);
+  const corrected=applyCatalogDecisions(mergeCatalogRanges([],researched,150,names).range,decisions,names),deduped=corrected.range;
+  const previousCount=applyCatalogDecisions(mergeCatalogRanges([],previous,150,names).range,decisions,names).range.length;
   if(suspiciousCatalogShrink(previousCount,deduped.length))throw new Error(`Catalogue completeness guard rejected a suspicious shrink from ${previousCount} to ${deduped.length} wines`);
   const profileStage=staged.find(item=>item.sliceKey===PROFILE_SOURCE_KEY),baseSources=profileStage?profileStage.sources:parseJson<ResearchSource[]>(row?.sources_json,[]),sources=mergeSources(baseSources,...catalogRows.map(item=>item.sources));
   const models=[...new Set(catalogRows.map(item=>item.model).filter(Boolean))],stamp=now();
@@ -183,6 +191,7 @@ async function finalizeCatalogStage(env:Env,owner:string,producerId:string,reque
   const syncIssues:string[]=[];
   for(const item of deduped){const identityName=stripProducerCatalogPrefix(item.name,names);try{await ensureCuveeEntity(env.DB,owner,producerId,identityName,item.appellation??null,item.category??item.style??null,true)}catch(e){const error=(e as Error).message||'Unknown cuvée identity error';syncIssues.push(`${identityName}: ${error}`);log('warn',{producerId,stage:'catalog_cuvee_sync_skipped',wine:identityName,error})}}
   try{await reconcileProducerCuvees(env.DB,owner,producerId)}catch(e){const error=(e as Error).message||'Cuvée reconciliation failed';syncIssues.push(`reconciliation: ${error}`);log('warn',{producerId,stage:'catalog_reconcile_skipped',error})}
+  if(corrected.hiddenCount||corrected.mergedCount)log('log',{producerId,stage:'catalog_decisions_applied',hidden:corrected.hiddenCount,merged:corrected.mergedCount});
   return {catalogCount:deduped.length,researchedCount:deduped.length,retainedCount:0,syncIssues};
 }
 
