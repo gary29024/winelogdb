@@ -1,0 +1,662 @@
+{
+  "source": "hand-transcribed",
+  "endpoint": "https://webgate.ec.europa.eu/eambrosia-api/api/v1/geographical-indications",
+  "fetchedAt": null,
+  "note": "Seeded from the place tree because this environment’s egress policy denies webgate.ec.europa.eu. Run `npm run gi:sync` where that host is reachable to replace this with the register’s own list; the drift test then reports every name the two disagree on.",
+  "counts": {
+    "IT": 119,
+    "FR": 11
+  },
+  "entries": [
+    {
+      "name": "Atlantique",
+      "country": "FR",
+      "denomination": "IGP"
+    },
+    {
+      "name": "Aveyron",
+      "country": "FR",
+      "denomination": "IGP"
+    },
+    {
+      "name": "Comté Tolosan",
+      "country": "FR",
+      "denomination": "IGP"
+    },
+    {
+      "name": "Comtés Rhodaniens",
+      "country": "FR",
+      "denomination": "IGP"
+    },
+    {
+      "name": "Côtes de Gascogne",
+      "country": "FR",
+      "denomination": "IGP"
+    },
+    {
+      "name": "Île de Beauté",
+      "country": "FR",
+      "denomination": "IGP"
+    },
+    {
+      "name": "Landes",
+      "country": "FR",
+      "denomination": "IGP"
+    },
+    {
+      "name": "Méditerranée",
+      "country": "FR",
+      "denomination": "IGP"
+    },
+    {
+      "name": "Pays d’Oc",
+      "country": "FR",
+      "denomination": "IGP"
+    },
+    {
+      "name": "Périgord",
+      "country": "FR",
+      "denomination": "IGP"
+    },
+    {
+      "name": "Val de Loire",
+      "country": "FR",
+      "denomination": "IGP"
+    },
+    {
+      "name": "Allerona",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Alta Valle della Greve",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Alto Livenza",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Alto Mincio",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Arghillà",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Avola",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Barbagia",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Basilicata",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Benaco Bresciano",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Beneventano",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Bergamasca",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Bettona",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Bianco di Castelfranco Emilia",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Calabria",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Camarro",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Campania",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Cannara",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Catalanesca del Monte Somma",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Civitella d’Agliano",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Colli Aprutini",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Colli Cimini",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Colli del Limbara",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Colli della Toscana Centrale",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Colli di Salerno",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Colli Trevigiani",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Collina del Milanese",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Colline Frentane",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Colline Pescaresi",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Colline Savonesi",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Colline Teatine",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Conselvano",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Costa Etrusco Romana",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Costa Toscana",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Costa Viola",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Daunia",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Del Vastese",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Delle Venezie",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Dugenta",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Emilia",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Epomeo",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Esaro",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Fontanarossa di Cerda",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Forlì",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Fortana del Taro",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Frusinate",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Golfo dei Poeti La Spezia",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Isola dei Nuraghi",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Lazio",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Liguria di Levante",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Lipuda",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Locride",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Marca Trevigiana",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Marche",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Marmilla",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Mitterberg",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Modena",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Montecastelli",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Montenetto di Brescia",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Murgia",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Narni",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Nurra",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Ogliastra",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Osco",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Paestum",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Palizzi",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Parteolla",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Pellaro",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Planargia",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Pompeiano",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Provincia di Mantova",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Provincia di Nuoro",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Provincia di Pavia",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Provincia di Verona",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Puglia",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Quistello",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Ravenna",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Roccamonfina",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Romangia",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Ronchi di Brescia",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Ronchi Varesini",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Rotae",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Rubicone",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Sabbioneta",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Salemi",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Salento",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Salina",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Scilla",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Sebino",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Sibiola",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Sillaro",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Spello",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Tarantino",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Terrazze dell’Imperiese",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Terrazze Retiche di Sondrio",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Terre Aquilane",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Terre del Volturno",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Terre di Chieti",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Terre di Veleja",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Terre Lariane",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Terre Siciliane",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Tharros",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Toscana",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Trexenta",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Umbria",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Val di Magra",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Val di Neto",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Val Tidone",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Valcamonica",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Valdamato",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Vallagarina",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Valle Belice",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Valle d’Itria",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Valle dei Crati",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Valle del Tirso",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Valli di Porto Pino",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Veneto",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Veneto Orientale",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Venezia Giulia",
+      "country": "IT",
+      "denomination": "IGT"
+    },
+    {
+      "name": "Vigneti delle Dolomiti",
+      "country": "IT",
+      "denomination": "IGT"
+    }
+  ]
+}
