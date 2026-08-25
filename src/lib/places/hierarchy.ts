@@ -22,7 +22,13 @@ export type PlaceTier='country'|'area'|'region'|'subregion'|'appellation';
  * premier cru tier is never a separate appellation and is read off the label
  * text instead. Left undefined wherever there is no such system to report.
  */
-export type PlaceClassification='grand_cru'|'village';
+/**
+ * A cru tier a place holds in its own right. "premier_cru" is here for the one
+ * shape that breaks the usual rule - Chablis Premier Cru is itself an AOC,
+ * where everywhere else in Burgundy a premier cru is a climat inside a village
+ * appellation and has to be read off the label instead.
+ */
+export type PlaceClassification='grand_cru'|'premier_cru'|'village';
 
 /**
  * The denomination an appellation holds - DOCG, AOC, AVA. Unlike the cru tier
@@ -63,7 +69,7 @@ const country=node('country'),area=node('area'),region=node('region'),sub=node('
 const appellations=(...names:string[]):Draft[]=>names.map(name=>appellation(name));
 const classified=(classification:PlaceClassification)=>(...names:string[]):Draft[]=>
   names.map(name=>({...appellation(name),classification}));
-const grandCrus=classified('grand_cru'),villages=classified('village');
+const grandCrus=classified('grand_cru'),premierCrus=classified('premier_cru'),villages=classified('village');
 /** Appellations that hold a denomination other than the one they inherit. */
 const denominated=(denomination:string)=>(...names:string[]):Draft[]=>
   names.map(name=>({...appellation(name),denomination}));
@@ -152,17 +158,40 @@ const tree:readonly Draft[]=[
           'Clos de Tart','Bonnes-Mares','Musigny','Clos de Vougeot','Échezeaux','Grands Échezeaux',
           'Romanée-Conti','La Tâche','Richebourg','Romanée-Saint-Vivant','La Romanée','La Grande Rue')
       ]),
-      sub('Côte de Beaune',[],[
+      // Like Chablis, both a subregion and a village AOC in its own right - the
+      // small one on the hill above Beaune. Only a wine whose appellation field
+      // names it reads as a village; villageIfCertain already withholds the tier
+      // where the name came from the region field instead.
+      {...sub('Côte de Beaune',[],[
         ...villages('Aloxe-Corton','Pernand-Vergelesses','Savigny-lès-Beaune','Beaune','Pommard','Volnay',
           'Meursault','Puligny-Montrachet','Chassagne-Montrachet','Saint-Aubin','Santenay',
           'Auxey-Duresses','Monthélie','Saint-Romain','Ladoix','Chorey-lès-Beaune','Côte de Beaune-Villages'),
         ...grandCrus('Corton','Corton-Charlemagne','Charlemagne','Montrachet','Chevalier-Montrachet',
           'Bâtard-Montrachet','Bienvenues-Bâtard-Montrachet','Criots-Bâtard-Montrachet')
-      ]),
-      sub('Côte Chalonnaise',[],appellations('Mercurey','Givry','Rully','Montagny','Bouzeron')),
-      sub('Mâconnais',[],appellations('Pouilly-Fuissé','Saint-Véran','Viré-Clessé','Mâcon-Villages')),
-      sub('Chablis',[],[appellation('Petit Chablis'),...grandCrus('Chablis Grand Cru'),appellation('Chablis Premier Cru')]),
-      appellation('Bourgogne Rouge'),appellation('Bourgogne Blanc'),appellation('Bourgogne Aligoté')
+      ]),classification:'village' as const,denomination:'AOC'},
+      sub('Côte Chalonnaise',[],villages('Mercurey','Givry','Rully','Montagny','Bouzeron')),
+      // Mâcon-Villages is a regional appellation despite the name, so it is not
+      // one of the village AOCs beside it.
+      sub('Mâconnais',[],[...villages('Pouilly-Fuissé','Saint-Véran','Viré-Clessé'),
+        appellation('Mâcon-Villages'),appellation('Mâcon',['Macon'])]),
+      // Chablis is both a subregion holding its own pyramid and the village AOC
+      // at the middle of it. The tier says container, so the village reading and
+      // the AOC are stated here rather than inherited: a denomination only
+      // reaches the appellation tier, and Chablis sits one above it.
+      {...sub('Chablis',[],[appellation('Petit Chablis'),...premierCrus('Chablis Premier Cru'),...grandCrus('Chablis Grand Cru')]),
+        classification:'village' as const,denomination:'AOC'},
+      // Village AOCs of the Grand Auxerrois, which has no subregion of its own
+      // here - they sit beside Chablis rather than inside it.
+      ...villages('Irancy','Saint-Bris'),
+      // Regional appellations: Burgundy's base tier, and deliberately unclassified.
+      // They are AOCs, so they say so, but a Hautes Côtes is not a village and
+      // counting it as one would inflate the cru mix on Insights.
+      appellation('Bourgogne Rouge'),appellation('Bourgogne Blanc'),appellation('Bourgogne Aligoté'),
+      appellation('Bourgogne Hautes Côtes de Nuits',['Hautes Côtes de Nuits']),
+      appellation('Bourgogne Hautes Côtes de Beaune',['Hautes Côtes de Beaune']),
+      appellation('Bourgogne Côte Chalonnaise'),appellation('Bourgogne Côte d’Or',['Bourgogne Cote d\'Or']),
+      appellation('Bourgogne Passe-Tout-Grains'),appellation('Bourgogne Vézelay',['Vézelay']),
+      appellation('Coteaux Bourguignons'),appellation('Crémant de Bourgogne')
     ]),
     region('Bordeaux',[],[
       sub('Médoc',[],appellations('Margaux','Pauillac','Saint-Julien','Saint-Estèphe','Haut-Médoc','Listrac-Médoc','Moulis-en-Médoc')),
