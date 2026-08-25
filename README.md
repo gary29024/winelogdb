@@ -26,14 +26,18 @@ npm run db:migrate:local
 npm run dev
 ```
 
-The application expects the host authentication layer to issue an HS256 bearer token whose subject is the stable owner ID. Set `AUTH_SECRET` to at least 32 random bytes. For production, integrate the sign-in provider or Cloudflare Access at the same boundary; every API query additionally scopes records by owner.
+WineLog is single-tenant: one deployment belongs to one person. `POST /api/auth/login` compares a submitted password against `APP_PASSWORD` in constant time and, on success, issues an HS256 bearer token that expires after seven days; every API query additionally scopes records by owner. Set `AUTH_SECRET` to at least 32 random bytes, and rotate it to invalidate every issued token at once. Put Cloudflare Access in front of the origin if you want a second factor ahead of the password.
 
 ## Cloudflare setup and deployment
 
-1. Create private resources: `wrangler d1 create winelogdb` and `wrangler r2 bucket create winelog-private`.
-2. Put the returned D1 ID in `wrangler.jsonc`. Keep the R2 bucket private.
-3. Add secrets: `wrangler secret put GEMINI_API_KEY` and `wrangler secret put AUTH_SECRET`.
-4. Set `APP_URL` in `wrangler.jsonc` to the exact production origin.
+**[SETUP.md](SETUP.md) is the step-by-step guide** for deploying your own copy,
+including the two Gemini transports, the queue and dead-letter queue, first
+login, verification and troubleshooting. In outline:
+
+1. Create the resources: `wrangler d1 create winelogdb`, `wrangler r2 bucket create winelog-private`, and `wrangler queues create` for both `winelog-research` and `winelog-research-dlq`.
+2. Put the returned D1 ID in `wrangler.jsonc`, replacing the one committed there. Keep the R2 bucket private.
+3. Add secrets: `APP_PASSWORD`, `AUTH_SECRET`, `GEMINI_API_KEY`, and `CF_AI_GATEWAY_TOKEN` if calling Vertex through AI Gateway.
+4. Set `APP_URL` in `wrangler.jsonc` to the exact deployed origin, then redeploy.
 5. Apply schema with `npm run db:migrate`, then run `npm run deploy`.
 
 No bucket CORS policy is needed because uploads and image reads pass through the authenticated Worker. If direct signed uploads are introduced later, restrict CORS to the exact application origin, required `PUT`/`HEAD` methods and content headers; never use `*` with credentials. Store object keys—not URLs, API credentials, or signatures—in D1.
