@@ -85,12 +85,23 @@ const denominatedCountry=(denomination:string)=>(name:string,aliases:readonly st
 const denominatedRegion=(denomination:string)=>(name:string,aliases:readonly string[]=[],children:readonly Draft[]=[]):Draft=>
   ({...region(name,aliases,children),denomination});
 const doRegion=denominatedRegion('DO'),docRegion=denominatedRegion('DOC');
-/** A country whose denomination covers every named place below the state tier. */
-const regionwideCountry=(denomination:string)=>(name:string,aliases:readonly string[]=[],children:readonly Draft[]=[]):Draft=>
-  ({...denominatedCountry(denomination)(name,aliases,children),denominationFrom:'region'});
+/**
+ * A country whose denomination covers every named place from `from` down.
+ * Defaults to the region tier, which is where the American AVAs and the South
+ * African WOs start; Australia opens one tier higher, because its states and
+ * zones are GIs in their own right and appear on labels as such.
+ */
+const schemeCountry=(denomination:string,from:PlaceTier='region')=>(name:string,aliases:readonly string[]=[],children:readonly Draft[]=[]):Draft=>
+  ({...denominatedCountry(denomination)(name,aliases,children),denominationFrom:from});
+/**
+ * An Australian zone: a GI that groups regions, sitting between the state and
+ * the region. It uses the area tier because that is the only slot above region,
+ * so a state holds areas holding areas - the shape the GI register actually has.
+ */
+const zone=area;
 
 const tree:readonly Draft[]=[
-  regionwideCountry('AVA')('United States',['USA','U.S.A.','US','United States of America','America'],[
+  schemeCountry('AVA')('United States',['USA','U.S.A.','US','United States of America','America'],[
     area('California',[],[
       area('North Coast',[],[
         region('Napa Valley',['Napa'],appellations(
@@ -284,22 +295,41 @@ const tree:readonly Draft[]=[
     region('Wien',['Vienna'],[]),region('Traisental',[],[]),region('Carnuntum',[],[])
   ]),
 
-  regionwideCountry('GI')('Australia',[],[
+  schemeCountry('GI','area')('Australia',[],[
     area('South Australia',[],[
-      region('Barossa Valley',['Barossa'],[]),region('Eden Valley',[],[]),region('McLaren Vale',[],[]),
-      region('Clare Valley',[],[]),region('Coonawarra',[],[]),region('Adelaide Hills',[],[]),
-      region('Padthaway',[],[]),region('Wrattonbully',[],[]),region('Langhorne Creek',[],[])
+      // Barossa is the zone; Barossa Valley and Eden Valley are the two regions
+      // inside it. They are different GIs, and a wine labelled Barossa is
+      // usually a blend across both - so the zone is not an alias of the valley.
+      zone('Barossa',[],[region('Barossa Valley',[],[]),region('Eden Valley',[],[])]),
+      zone('Fleurieu',[],[region('McLaren Vale',[],[]),region('Langhorne Creek',[],[])]),
+      zone('Mount Lofty Ranges',[],[region('Adelaide Hills',[],[]),region('Clare Valley',[],[])]),
+      zone('Limestone Coast',[],[region('Coonawarra',[],[]),region('Padthaway',[],[]),region('Wrattonbully',[],[])])
     ]),
     area('Victoria',[],[
-      region('Yarra Valley',[],[]),region('Mornington Peninsula',[],[]),region('Heathcote',[],[]),
-      region('Rutherglen',[],[]),region('Geelong',[],[]),region('Grampians',[],[]),region('Beechworth',[],[])
+      zone('Port Phillip',[],[region('Yarra Valley',[],[]),region('Mornington Peninsula',[],[]),region('Geelong',[],[])]),
+      zone('Central Victoria',[],[region('Heathcote',[],[])]),
+      zone('North East Victoria',[],[region('Rutherglen',[],[]),region('Beechworth',[],[])]),
+      zone('Western Victoria',[],[region('Grampians',[],[])])
     ]),
-    area('New South Wales',[],[region('Hunter Valley',['Hunter'],[]),region('Orange',[],[]),region('Mudgee',[],[]),region('Canberra District',[],[])]),
-    area('Western Australia',[],[region('Margaret River',[],[]),region('Great Southern',[],[]),region('Frankland River',[],[])]),
+    area('New South Wales',[],[
+      // The register calls the zone Hunter Valley and the region inside it
+      // Hunter, but the zone holds that one region alone, so splitting them
+      // would fork a name every label uses without changing what it rolls up to.
+      region('Hunter Valley',['Hunter'],[]),
+      zone('Central Ranges',[],[region('Orange',[],[]),region('Mudgee',[],[])]),
+      zone('Southern New South Wales',[],[region('Canberra District',[],[])])
+    ]),
+    area('Western Australia',[],[
+      zone('South West Australia',[],[
+        region('Margaret River',[],[]),
+        // Frankland River is a subregion of Great Southern, not a sibling of it.
+        region('Great Southern',[],[sub('Frankland River',[],[])])
+      ])
+    ]),
     area('Tasmania',[],[region('Tamar Valley',[],[]),region('Coal River Valley',[],[])])
   ]),
 
-  regionwideCountry('GI')('New Zealand',[],[
+  schemeCountry('GI')('New Zealand',[],[
     region('Marlborough',[],appellations('Wairau Valley','Awatere Valley','Southern Valleys')),
     region('Central Otago',[],appellations('Bannockburn','Gibbston','Bendigo','Cromwell','Wanaka')),
     region('Hawke’s Bay',['Hawkes Bay','Hawke s Bay'],appellations('Gimblett Gravels','Bridge Pa Triangle')),
@@ -307,7 +337,7 @@ const tree:readonly Draft[]=[
     region('Gisborne',[],[]),region('Waiheke Island',[],[]),region('Auckland',[],[])
   ]),
 
-  regionwideCountry('IG')('Argentina',[],[
+  schemeCountry('IG')('Argentina',[],[
     region('Mendoza',[],[
       sub('Uco Valley',['Valle de Uco'],appellations('Gualtallary','Altamira','La Consulta','San Pablo','Vista Flores','Los Chacayes')),
       sub('Luján de Cuyo',['Lujan de Cuyo'],appellations('Agrelo','Las Compuertas','Vistalba','Perdriel')),
@@ -318,7 +348,7 @@ const tree:readonly Draft[]=[
     region('San Juan',[],[])
   ]),
 
-  regionwideCountry('DO')('Chile',[],[
+  schemeCountry('DO')('Chile',[],[
     region('Colchagua Valley',['Colchagua'],[]),region('Maipo Valley',['Maipo'],appellations('Puente Alto','Pirque')),
     region('Casablanca Valley',['Casablanca'],[]),region('San Antonio Valley',[],appellations('Leyda Valley')),
     region('Cachapoal Valley',['Cachapoal'],appellations('Apalta')),region('Maule Valley',['Maule'],[]),
@@ -326,7 +356,7 @@ const tree:readonly Draft[]=[
     region('Bío Bío Valley',['Bio Bio'],[]),region('Elqui Valley',['Elqui'],[]),region('Curicó Valley',['Curico'],[])
   ]),
 
-  regionwideCountry('WO')('South Africa',[],[
+  schemeCountry('WO')('South Africa',[],[
     region('Stellenbosch',[],appellations('Simonsberg-Stellenbosch','Jonkershoek Valley','Banghoek','Polkadraai Hills')),
     region('Swartland',[],appellations('Riebeekberg','Paardeberg')),
     region('Franschhoek',['Franschhoek Valley'],[]),region('Walker Bay',[],appellations('Hemel-en-Aarde Valley','Hemel-en-Aarde Ridge')),
@@ -345,7 +375,7 @@ const tree:readonly Draft[]=[
   country('Slovenia',[],[region('Primorska',[],appellations('Goriška Brda','Vipava Valley')),region('Podravje',[],[]),region('Posavje',[],[])]),
   country('Croatia',[],[region('Istria',['Istra'],[]),region('Dalmatia',[],appellations('Pelješac','Dingač'))]),
   country('Switzerland',['Suisse','Schweiz'],[region('Valais',[],[]),region('Vaud',[],appellations('Lavaux','Chablais')),region('Genève',['Geneva'],[]),region('Ticino',[],[]),region('Neuchâtel',[],[])]),
-  regionwideCountry('VQA')('Canada',[],[
+  schemeCountry('VQA')('Canada',[],[
     area('British Columbia',[],[region('Okanagan Valley',[],appellations('Naramata Bench','Golden Mile Bench','Black Sage Bench'))]),
     area('Ontario',[],[region('Niagara Peninsula',[],appellations('Beamsville Bench','Twenty Mile Bench','Four Mile Creek')),region('Prince Edward County',[],[])])
   ]),

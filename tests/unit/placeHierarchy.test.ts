@@ -317,12 +317,31 @@ describe('the generated backfill migration',()=>{
     expect(sql.indexOf('recognized_region=region')).toBeLessThan(sql.indexOf('DROP TABLE place_backfill_map'));
   });
 
+  /**
+   * Spellings the tree has since re-read. 0032 has run and cannot be
+   * regenerated, so a later migration moves the stored rows instead - and the
+   * entry here names it, so an exemption cannot be claimed without one.
+   */
+  const remapped:Record<string,string>={
+    Barossa:'0035_barossa_zone',
+    'Frankland River':'0035_barossa_zone'
+  };
+
   it('agrees with the runtime resolver on every spelling it maps',()=>{
     const drifted=mapped.filter(row=>{
       const place=resolvePlace({country:null,region:row.spelling,appellation:null});
       return place.region!==row.region||place.appellation!==row.appellation||place.country!==row.country;
     });
-    expect(drifted).toEqual([]);
+    expect(drifted.map(row=>row.spelling).filter(spelling=>!spelling||!remapped[spelling])).toEqual([]);
+  });
+
+  it('has a migration behind every spelling exempted from that',()=>{
+    // Otherwise the exemption list becomes a place to hide drift: the tree would
+    // read a wine one way and the rows already stored another, for good.
+    for(const [spelling,migration] of Object.entries(remapped)){
+      const sql=readFileSync(resolvePath(process.cwd(),`src/lib/db/migrations/${migration}.sql`),'utf8');
+      expect(sql,spelling).toContain(spelling);
+    }
   });
 
   it('keeps an appellation the tree does not carry instead of clearing it',()=>{
