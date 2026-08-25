@@ -17,7 +17,7 @@ button,a,label[role=button],summary{touch-action:manipulation}
 .app-icon{display:block;width:100%;height:100%}
 /* Slots that used to hold a text glyph and now hold an SVG. */
 .scan-mark .app-icon{width:34px;height:34px}
-.empty>span{display:grid;place-items:center;color:#b3bdcd}
+.empty>span{display:grid;place-items:center;color:var(--ink-8)}
 .empty>span .app-icon{width:52px;height:52px}
 .journal-favorite-button .app-icon{width:17px;height:17px}
 .detail-favorite-button .heart{display:grid;place-items:center;width:15px;height:15px}
@@ -39,13 +39,13 @@ button,a,label[role=button],summary{touch-action:manipulation}
   .nav-label{font-size:.68rem;letter-spacing:.01em;line-height:1.1}
   .mobile-nav a.active .nav-icon{transform:translateY(-1px)}
   /* Active tab gets a small marker under the label instead of colour alone. */
-  .mobile-nav a.active::after{content:"";position:absolute;bottom:0;width:16px;height:2.5px;border-radius:999px;background:var(--wine)}
+  .mobile-nav a.active::after{content:"";position:absolute;bottom:0;width:16px;height:2.5px;border-radius:var(--r-pill);background:var(--wine)}
   .mobile-nav a:active .nav-icon,.mobile-nav button.scan-nav:active .scan-plus{transform:scale(.93)}
 
   .scan-nav{transform:translateY(-14px)}
-  .scan-plus{width:52px;height:52px;border-radius:18px;display:grid;place-items:center;background:linear-gradient(160deg,#1b2743,#10182d);color:#fff;box-shadow:0 10px 22px #10182d33;transition:transform .18s ease,background .18s ease}
+  .scan-plus{width:52px;height:52px;border-radius:var(--r-lg);display:grid;place-items:center;background:linear-gradient(160deg,var(--ink-2),var(--ink));color:var(--paper);box-shadow:0 10px 22px #10182d33;transition:transform .18s ease,background .18s ease}
   .scan-plus .app-icon{width:26px;height:26px}
-  .scan-nav[aria-expanded=true] .scan-plus{background:linear-gradient(160deg,#d82b52,#c51f45)}
+  .scan-nav[aria-expanded=true] .scan-plus{background:linear-gradient(160deg,#d82b52,var(--wine))}
 
   /* 16px is the threshold below which iOS zooms the viewport on focus. The :not() chain also
      buys enough specificity to beat the per-page input sizes. */
