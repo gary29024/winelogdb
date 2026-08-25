@@ -176,6 +176,32 @@ per-row lookup, and give any new write on a read path a `WHERE` guard. If a new
 cached payload reads a table that does not yet bump `achievement_cache_state`, add
 its triggers in the same migration.
 
+## Diagnosing a Deep Search failure
+
+Two log streams matter, and they answer different questions.
+
+**Workers Logs** carry WineLog's own structured records and are enabled at full
+sampling in `wrangler.jsonc`. Every batch result logs `stage:"batch_result"`
+with the model, attempt, finish reason, response length and — the fields that
+matter when a run fails ungrounded — `chunks` and `supports`, the counts of
+grounding chunks and grounding segments the response carried. Follow them live
+with `wrangler tail --format pretty`, or search the Workers Logs view for
+`batch_result`. Zero on both counts means the model answered without searching,
+which fails every research scope at once.
+
+**AI Gateway logs** carry the raw request and response bodies, and only for
+traffic that goes through the gateway. Body collection is decided per request by
+the `cf-aig-collect-log-payload` header, which overrides the gateway's own
+setting — so while WineLog sends `false`, no dashboard toggle can turn payload
+logging on. Set the `AI_GATEWAY_LOG_PAYLOADS` var to `"true"` and redeploy to
+collect them, then set it back: these payloads are whole research prompts and
+answers, which is both a lot of storage and a copy of the owner's data living
+outside D1.
+
+Reach for the gateway payloads only when the Workers Logs counts are not enough
+— typically to see whether `groundingMetadata` is absent from the response or
+merely shaped differently from what the parser expects.
+
 ## Backup and recovery
 
 Schedule `wrangler d1 export DB --remote --output backups/winelog-YYYY-MM-DD.sql` and R2 replication or `rclone sync` to a second private bucket. Encrypt backups, restrict service tokens, test restores quarterly, and apply retention policy. To recover: disable writes, restore the latest D1 export into a new database, restore R2 objects preserving their keys, update bindings, apply any later migrations, validate record/image counts, and redeploy before re-enabling traffic.

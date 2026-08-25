@@ -1,7 +1,7 @@
 import { deepSearchSchema,type DeepSearchResult } from '../db/schema';
 import { ensureProducerEntity } from '../producers/entities';
 import { parseStructuredJsonText } from '../producers/structuredJson';
-import { assembleDeepSearch,buildResearchTargets,fieldsForScope,loadResearchCache,scopeIsComplete,scopeRetryFeedback,seedResearchCache,splitDeepSearchResult,upsertResearchCache,type CachedResearch,type ResearchScope,type ResearchSource,type ResearchTarget } from './cache';
+import { assembleDeepSearch,buildResearchTargets,fieldsForScope,loadResearchCache,scopeIsComplete,scopeQualityWarnings,scopeRetryFeedback,seedResearchCache,splitDeepSearchResult,upsertResearchCache,type CachedResearch,type ResearchScope,type ResearchSource,type ResearchTarget } from './cache';
 import { createResearchBatchJob,finishResearchBatchJob,getResearchBatchJob,touchResearchBatchJob } from './batchJobStore';
 import { cancelGeminiBatch } from './cancelResearch';
 import { createGeminiBatch,fetchGeminiBatch,inlineFinishReason,inlineGroundingMetadata,inlineResponseText,isTerminalBatchState,responsesByKey,type GeminiBatchRequest,type GroundingMetadata } from './geminiBatch';
@@ -160,8 +160,14 @@ export async function pollWineBatchResearch(env:Env,owner:string,wineId:string,r
   await updateWineResearchRun(env.DB,owner,requestId,'saving','Saving completed Gemini Batch Deep Search scopes','running',job.attempt);
   const inline=responsesByKey(fetched.responses).get(BATCH_KEY)??fetched.responses[0];if(!inline?.response){const error=inline?.error?.message||'Gemini returned no wine research result';await finishResearchBatchJob(env.DB,owner,jobId,'failed',error);await retryOrFail(env,owner,wineId,requestId,job.attempt,scopes,[error]);return}
   const text=inlineResponseText(inline),finishReason=inlineFinishReason(inline);let failed=[...scopes],errors:string[]=[],feedback:ScopeFeedback={};
+  // Recorded whatever happens next: when a run fails because nothing was
+  // grounded, these two counts are the difference between a diagnosable report
+  // and a shrug.
+  const groundingMetadata=inlineGroundingMetadata(inline);
+  const grounding={chunks:groundingMetadata?.groundingChunks?.length??0,supports:groundingMetadata?.groundingSupports?.length??0};
+  log('log',{requestId,wineId,stage:'batch_result',attempt:job.attempt,model:job.model,scopes,finishReason,textLength:text.length,...grounding});
   try{
-    const metadata=inlineGroundingMetadata(inline),raw=parseStructuredJsonText(text) as Record<string,unknown>,parsed=deepSearchSchema.safeParse({...raw,sources:sourcesFrom(metadata),model:`${job.model} (batch)`,researchedAt:now()});if(!parsed.success)throw new Error(`Deep Search returned invalid fields: ${parsed.error.issues.map(x=>x.path.join('.')||x.message).join(', ')}`);
+    const metadata=groundingMetadata,raw=parseStructuredJsonText(text) as Record<string,unknown>,parsed=deepSearchSchema.safeParse({...raw,sources:sourcesFrom(metadata),model:`${job.model} (batch)`,researchedAt:now()});if(!parsed.success)throw new Error(`Deep Search returned invalid fields: ${parsed.error.issues.map(x=>x.path.join('.')||x.message).join(', ')}`);
     const rawProvenance=buildDeepSearchProvenance(parsed.data,metadata),conflictAudit=auditTechnicalContradictions(parsed.data,rawProvenance),provenance=conflictAudit.provenance,researched:DeepSearchResult={...parsed.data,provenance};
     const wine=await loadWine(env.DB,owner,wineId);if(!wine)throw new Error('Wine not found');const targets=researchTargets(wine),entries=splitDeepSearchResult(researched,targets).filter(entry=>scopes.includes(entry.target.scope));failed=scopes.filter(scope=>!entries.some(entry=>entry.target.scope===scope&&scopeIsComplete(scope,entry.payload)));
     const completeEntries=entries.filter(entry=>scopeIsComplete(entry.target.scope,entry.payload));for(const entry of completeEntries){await upsertResearchCache(env.DB,owner,entry);if(entry.target.scope==='producer')await syncProducerScope(env.DB,owner,wine,entry)}
@@ -174,8 +180,18 @@ export async function pollWineBatchResearch(env:Env,owner:string,wineId:string,r
         const notes=scopeRetryFeedback(scope,payloadFor(scope),target,researched.sources,provenance);
         return notes.length?[[scope,notes] as const]:[];
       }));
+      const warningsByScope=failed.map(scope=>{
+        const target=targets.find(item=>item.scope===scope);
+        return target?scopeQualityWarnings(scope,payloadFor(scope),target,researched.sources):[];
+      });
+      // An ungrounded response fails every scope on the same warning. Reporting
+      // the exact-wine technical gate there names a symptom of one scope as the
+      // cause of all four, which is what an owner reads and cannot act on.
+      const ungrounded=warningsByScope.length>0&&warningsByScope.every(list=>list.includes('no-grounding-source'));
       const exactPayload={summary:parsed.data.summary,winemakingTechniques:parsed.data.winemakingTechniques,drinkingWindow:parsed.data.drinkingWindow},conflictError=failed.includes('wine_vintage')?technicalContradictionFailureMessage(exactPayload,rawProvenance):null,technicalError=failed.includes('wine_vintage')?highRiskTechnicalFailureMessage(exactPayload,provenance):null;
-      errors=[conflictError??technicalError??`Gemini response was incomplete or failed the research quality gate for ${failed.map(scope=>scopeNames[scope]).join(', ')}`];
+      errors=[ungrounded
+        ?`${job.model} answered without grounding: the response carried ${grounding.chunks} web source${grounding.chunks===1?'':'s'} and ${grounding.supports} grounding segment${grounding.supports===1?'':'s'}, so no scope could be verified and nothing was saved. Google Search grounding was requested; this is a search or provider failure rather than a problem with the wine.`
+        :conflictError??technicalError??`Gemini response was incomplete or failed the research quality gate for ${failed.map(scope=>scopeNames[scope]).join(', ')} (${[...new Set(warningsByScope.flat())].join(', ')||'no reason recorded'})`];
     }else await finalize(env,owner,wineId,wine,targets);
   }catch(e){errors=[`${(e as Error).message}${finishReason?` (${finishReason})`:''}`];log('warn',{requestId,wineId,stage:'batch_result_failed',attempt:job.attempt,model:job.model,finishReason,textLength:text.length,textPreview:text.slice(0,500),error:(e as Error).message})}
   await finishResearchBatchJob(env.DB,owner,jobId,failed.length?'failed':'complete',failed.length?errors.join('; '):null);

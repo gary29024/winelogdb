@@ -5,6 +5,8 @@ export type GeminiTransportBindings={
   AI_GATEWAY_ID?:string;
   VERTEX_PROJECT_ID?:string;
   VERTEX_REGION?:string;
+  /** "true" asks AI Gateway to store request and response bodies. See collectLogPayload. */
+  AI_GATEWAY_LOG_PAYLOADS?:string;
 };
 
 export type GeminiTransportProvider='vertex-ai-gateway'|'gemini-developer-api';
@@ -32,6 +34,24 @@ export function vertexGenerateContentUrl(env:GeminiTransportBindings,model:strin
   return `https://gateway.ai.cloudflare.com/v1/${encodeURIComponent(account)}/${encodeURIComponent(gateway)}/google-vertex-ai/v1/projects/${encodeURIComponent(project)}/locations/${encodeURIComponent(region)}/publishers/google/models/${encodeURIComponent(model)}:generateContent`;
 }
 
+/**
+ * Whether AI Gateway should store the request and response bodies.
+ *
+ * `cf-aig-collect-log-payload` is decided per request and overrides the
+ * gateway's own setting, so while this is sent as "false" no dashboard toggle
+ * can turn payload logging on. It stays off by default because the payloads are
+ * whole research prompts and answers, which is both a lot of storage and a copy
+ * of the owner's data sitting outside D1. Set AI_GATEWAY_LOG_PAYLOADS="true"
+ * to collect them while diagnosing a specific failure, then set it back.
+ *
+ * Only the gateway transport is affected. Requests that go straight to
+ * generativelanguage.googleapis.com never reach AI Gateway, so nothing about
+ * them is logged there whatever this says.
+ */
+export function collectLogPayload(env:GeminiTransportBindings){
+  return text(env.AI_GATEWAY_LOG_PAYLOADS).toLowerCase()==='true';
+}
+
 function metadataHeader(metadata?:Record<string,MetadataValue>){
   if(!metadata)return null;
   const entries=Object.entries(metadata).filter(([,value])=>['string','number','boolean'].includes(typeof value)).slice(0,5);
@@ -51,7 +71,7 @@ export async function postGeminiGenerateContent(
     const headers=new Headers({
       'Content-Type':'application/json',
       'cf-aig-authorization':`Bearer ${text(env.CF_AI_GATEWAY_TOKEN)}`,
-      'cf-aig-collect-log-payload':'false'
+      'cf-aig-collect-log-payload':collectLogPayload(env)?'true':'false'
     });
     const tagged=metadataHeader(metadata);if(tagged)headers.set('cf-aig-metadata',tagged);
     if(options.serviceTier==='flex'){

@@ -30,6 +30,10 @@
     "AI_GATEWAY_ACCOUNT_ID": "82854e9a6f6a543e9b3abf53d29a08ee",
     "AI_GATEWAY_ID": "winelog",
     "VERTEX_PROJECT_ID": "gen-lang-client-0265199037",
-    "VERTEX_REGION": "global"
+    "VERTEX_REGION": "global",
+    // "true" makes AI Gateway store whole request and response bodies. Turn it
+    // on to inspect a failing Gemini response, then turn it back off: these are
+    // full research prompts and answers.
+    "AI_GATEWAY_LOG_PAYLOADS": "false"
   }
 }
