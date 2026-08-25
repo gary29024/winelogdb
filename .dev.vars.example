@@ -1,3 +1,19 @@
-GEMINI_API_KEY=replace-me
+# Local-only secrets. Copy to .dev.vars and fill in; never commit .dev.vars.
+# These mirror the secrets set with `wrangler secret put` for a deployment.
+
+# The password you log in with.
+APP_PASSWORD=choose-a-local-password
+
+# Signing key for session tokens. At least 32 random characters:
+#   openssl rand -base64 48
 AUTH_SECRET=use-at-least-32-random-characters
+
+# https://aistudio.google.com/apikey
+GEMINI_API_KEY=replace-me
+
+# The exact origin the browser loads, checked against for CORS.
 APP_URL=http://localhost:5173
+
+# Only when calling Vertex AI through Cloudflare AI Gateway. Leave unset to use
+# the Gemini API directly; setting only some gateway values fails at runtime.
+# CF_AI_GATEWAY_TOKEN=replace-me
