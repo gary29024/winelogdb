@@ -176,6 +176,46 @@ per-row lookup, and give any new write on a read path a `WHERE` guard. If a new
 cached payload reads a table that does not yet bump `achievement_cache_state`, add
 its triggers in the same migration.
 
+## Which model researches, and enforcing grounding
+
+Deep Search runs on `gemini-3.7-flash` with `gemini-3.6-flash` as the
+availability fallback. The two are not interchangeable for research: an answer
+that comes back without Google Search grounding cannot satisfy the quality gate
+however well written it is, so a call to a model that did not search cannot
+succeed whatever it returns.
+
+Which model grounds is **observed, not assumed**. Evidence has pointed both
+ways, and it varies by serving mode, so `research_model_health` records what
+each model did with each grounded request: a model seen to ground is tried
+first, one seen to answer ungrounded is routed around for six hours, and a
+model that grounds again clears its own cooldown with no intervention. If the
+health table cannot be read, routing falls back to the configured order, so a
+migration that has not run yet degrades to the previous behaviour rather than
+failing.
+
+Retries follow what the failure was. A grounded answer that fails the gate gets
+a second opinion and then stops, because failing twice on real evidence is a
+research limit rather than an infrastructure one. An answer with no grounding at
+all earns one further attempt, on a different model. Three attempts is the
+ceiling.
+
+**Grounding and controlled generation cannot share a request.** Declaring the
+search tool while also setting `responseMimeType` and a `responseSchema` asks
+the API for two things it will not do at once, and what comes back is
+well-formed JSON with the grounding silently dropped — which the gate then
+rejects for having no sources. Grounded requests therefore send no schema and
+ask for JSON in the prompt; the schema stays the single definition of the
+contract and is rendered into the prompt from itself by `describeResponseSchema`,
+so the two cannot drift. Responses are parsed with the existing tolerant reader
+rather than trusted to be bare JSON.
+
+There is no API flag that guarantees grounding, so enforcement is three things
+together: every research prompt — wine, producer profile and catalogue slices —
+opens by requiring the model to search before answering and to say plainly that
+a fact could not be verified rather than write an ungrounded one; the search
+tool is declared on every request; and the gate rejects what comes back
+ungrounded anyway. The first is a request, the third is the enforcement.
+
 ## Diagnosing a Deep Search failure
 
 Two log streams matter, and they answer different questions.

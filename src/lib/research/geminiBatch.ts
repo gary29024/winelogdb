@@ -230,3 +230,38 @@ export async function cancelEmulatedGeminiBatch(apiKey:string,name:string){
   if(!isTerminalBatchState(existing.state))await runtime.DB.prepare("UPDATE vertex_batch_emulation_jobs SET state='JOB_STATE_CANCELLED',requests_json='[]',result_json=?,error=?,updated_at=? WHERE id=? AND state IN ('JOB_STATE_PENDING','JOB_STATE_RUNNING')").bind(JSON.stringify(result),'Cancelled by user',stamp,id).run();
   return {name,ok:true as const,status:200};
 }
+/**
+ * Google Search grounding and controlled generation cannot be used together.
+ * A request that declares the search tool *and* sets responseMimeType with a
+ * responseSchema is asking for two things the API will not do at once, and what
+ * comes back is a well-formed JSON answer with the grounding silently dropped -
+ * which the research gate then rejects, having no sources to verify against.
+ *
+ * Grounded requests therefore ask for JSON in the prompt instead. The schema
+ * stays the single definition of the contract and is rendered into the prompt
+ * from here, so the two cannot drift apart.
+ */
+export function groundedGenerationConfig(maxOutputTokens:number){return {maxOutputTokens}}
+
+type SchemaNode={type?:string;properties?:Record<string,SchemaNode>;items?:SchemaNode;required?:string[];enum?:string[];nullable?:boolean};
+
+function describeSchemaNode(node:SchemaNode,indent:string,required:boolean):string[]{
+  const type=String(node.type??'STRING').toUpperCase();
+  if(type==='OBJECT'&&node.properties){
+    const requiredFields=new Set(node.required??[]);
+    return Object.entries(node.properties).flatMap(([name,child])=>{
+      const childType=String(child.type??'STRING').toUpperCase();
+      const suffix=child.enum?.length?` (one of: ${child.enum.join(', ')})`:child.nullable?' (or null)':'';
+      const head=`${indent}- ${name}: ${childType.toLowerCase()}${suffix}${requiredFields.has(name)?'':' (optional)'}`;
+      return childType==='OBJECT'||childType==='ARRAY'?[head,...describeSchemaNode(child,`${indent}  `,requiredFields.has(name))]:[head];
+    });
+  }
+  if(type==='ARRAY'&&node.items)return describeSchemaNode(node.items,indent,required);
+  return [];
+}
+
+/** The response contract as prompt text, rendered from the schema itself. */
+export function describeResponseSchema(schema:Record<string,unknown>){
+  const lines=describeSchemaNode(schema as SchemaNode,'',true);
+  return lines.length?`Return one JSON object and nothing else: no prose before or after it, and no Markdown code fence. Fields:\n${lines.join('\n')}`:'';
+}
