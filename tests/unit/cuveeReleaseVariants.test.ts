@@ -94,3 +94,58 @@ describe('cuvée release variants',()=>{
     expect(matchCuveeReleaseVariantToCatalog({name:'90-20',appellation:'Champagne',wineStyle:'sparkling'},ambiguousReserve)).toBeNull();
   });
 });
+
+describe('a release family whose words are written in a different order',()=>{
+  // A producer catalogue lists "Ratafia Champenois Solera" while the bottles
+  // read "Solera Ratafia Champenois 90-16" and "… 90-19". Those are one wine and
+  // two releases of it, but comparing the names as written kept them apart, so
+  // each bottle stood alone instead of sitting under a shared cuvée.
+  const reorderedRows=[
+    {id:'ratafia',canonicalName:'Ratafia Champenois Solera',appellation:'Ratafia Champenois',wineStyle:'Fortified sweet'},
+    {id:'fut',canonicalName:'Fût de Chêne MV20',appellation:'Champagne',wineStyle:'sparkling'}
+  ];
+  const release=(name:string)=>matchCuveeReleaseVariantToCatalog(
+    {name,appellation:'Ratafia Champenois',wineStyle:'fortified'},reorderedRows,['Henri Giraud']);
+
+  it('finds the catalogue wine the bottle belongs to',()=>{
+    expect(release('Solera Ratafia Champenois 90-19')).toMatchObject({catalogCuveeId:'ratafia',variant:{designation:'90-19',sequence:9019}});
+  });
+
+  it('puts both releases under the same catalogue wine',()=>{
+    const older=release('Solera Ratafia Champenois 90-16'),newer=release('Solera Ratafia Champenois 90-19');
+    expect(older?.catalogCuveeId).toBe(newer?.catalogCuveeId);
+    // The sequence still separates them, so the group can order its releases.
+    expect(older?.variant.sequence).toBeLessThan(newer!.variant.sequence);
+  });
+
+  it('still refuses a wine whose style belongs to a different cuvée',()=>{
+    // Word order is not a licence to merge across styles: Henri Giraud's rosé
+    // and fortified wines share words but are not the same wine.
+    expect(matchCuveeReleaseVariantToCatalog(
+      {name:'Solera Ratafia Champenois 90-19',appellation:'Ratafia Champenois',wineStyle:'rose'},
+      reorderedRows,['Henri Giraud'])).toBeNull();
+  });
+
+  it('still refuses a wine from a different appellation',()=>{
+    expect(matchCuveeReleaseVariantToCatalog(
+      {name:'Solera Ratafia Champenois 90-19',appellation:'Champagne',wineStyle:'fortified'},
+      reorderedRows,['Henri Giraud'])).toBeNull();
+  });
+
+  it('does not merge two wines that merely share a word',()=>{
+    const rows=[
+      {id:'blanc',canonicalName:'Solera Blanc',appellation:'Champagne',wineStyle:'sparkling'},
+      {id:'rouge',canonicalName:'Solera Rouge',appellation:'Champagne',wineStyle:'sparkling'}
+    ];
+    // Two candidate families, neither of them the wine's own, so the honest
+    // answer is no match rather than a guess between them.
+    expect(matchCuveeReleaseVariantToCatalog(
+      {name:'Solera Blanc de Blancs 90-19',appellation:'Champagne',wineStyle:'sparkling'},rows,['Henri Giraud'])).toBeNull();
+  });
+
+  it('leaves a catalogue written in the same order as the bottle working as before',()=>{
+    expect(matchCuveeReleaseVariantToCatalog(
+      {name:'Solera Ratafia Champenois 90-21',appellation:'Ratafia Champenois',wineStyle:'fortified'},
+      giraudRows,['Henri Giraud'])).toMatchObject({catalogCuveeId:'ratafia19'});
+  });
+});
