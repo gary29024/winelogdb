@@ -2,7 +2,7 @@ import { useEffect,useMemo,useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getJourneyData,type GrapeStat,type JourneyData,type RegionStat,type StyleStat } from './api';
 import { buildStructureProfile,structureDisplay } from './model';
-import { buildCadence,buildDrinkingAge,buildMix,favoriteRates,readDiscovery,showsRatingInsights,showsStructureInsights } from './insights';
+import { buildCadence,buildCruMix,buildDrinkingAge,buildMix,favoriteRates,readDiscovery,showsRatingInsights,showsStructureInsights } from './insights';
 import { grapeColorFor } from './passportVisuals';
 import '../../journey.css';
 import '../../insights.css';
@@ -50,6 +50,7 @@ export function InsightsPage(){
   const discovery=useMemo(()=>readDiscovery(data?.discovery??{tastings:0,newProducers:0,newRegions:0,newCountries:0}),[data]);
   const cadence=useMemo(()=>buildCadence(data?.months??[]),[data]);
   const drinkingAge=useMemo(()=>buildDrinkingAge(data?.drinkingAges??[]),[data]);
+  const cruMix=useMemo(()=>buildCruMix(data?.classifications??[]),[data]);
   const grapeMix=useMemo(()=>buildMix(data?.grapes??[],grape=>({label:grape.grape,wines:grape.wines})),[data]);
   const styleMix=useMemo(()=>buildMix(data?.styles??[],style=>({label:style.style,wines:style.wines})),[data]);
   const favoriteGrapes=useMemo(()=>favoriteRates<GrapeStat>(data?.grapes??[],grape=>grape),[data]);
@@ -141,6 +142,16 @@ export function InsightsPage(){
         </>:<p className="journey-muted">Vintages and tasting dates together show how long your bottles wait.</p>}
       </section>
     </div>
+
+    {cruMix.length>0&&<section className="journey-card"><div className="journey-section-heading"><div><p className="section-label">CRU LEVEL</p><h2>How high you drink</h2></div><span>{cruMix.reduce((total,tier)=>total+tier.wines,0)}</span></div>
+      <div className="cru-mix">{cruMix.map(tier=><article className={`cru-tier cru-tier-${tier.key}`} key={tier.key}>
+        <span className="cru-tier-bar" aria-hidden="true"><span style={{width:percent(tier.share)}}/></span>
+        <strong>{tier.label}</strong>
+        <small>{tier.wines} {tier.wines===1?'wine':'wines'}{tier.favorites?` · ${tier.favorites} favorite${tier.favorites===1?'':'s'}`:''}</small>
+        <b>{percent(tier.share)}</b>
+      </article>)}</div>
+      <p className="journey-muted">Counted only where the wine's country classifies its vineyards, so most of the New World sits outside this.</p>
+    </section>}
 
     <section className="journey-card"><div className="journey-section-heading"><div><p className="section-label">THE MIX</p><h2>What fills your journal</h2></div></div>
       {grapeMix.length||styleMix.length?<div className="mix-groups">

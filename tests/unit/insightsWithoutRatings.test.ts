@@ -1,7 +1,7 @@
 import { describe,expect,it } from 'vitest';
 import type { DrinkingAgeStat,GrapeStat,MonthStat } from '../../src/features/journey/api';
 import type { JourneySummary } from '../../src/features/journey/model';
-import { buildCadence,buildDrinkingAge,buildMix,coverage,favoriteRates,readDiscovery,showsRatingInsights,showsStructureInsights } from '../../src/features/journey/insights';
+import { buildCadence,buildCruMix,buildDrinkingAge,buildMix,coverage,favoriteRates,readDiscovery,showsRatingInsights,showsStructureInsights } from '../../src/features/journey/insights';
 
 const summary=(over:Partial<JourneySummary>={}):JourneySummary=>({
   totalWines:100,producers:40,countries:8,regions:20,appellations:30,vintages:12,favorites:14,
@@ -149,5 +149,36 @@ describe('mix',()=>{
 
   it('is empty when nothing has been identified',()=>{
     expect(buildMix([],()=>({label:'',wines:0}))).toEqual([]);
+  });
+});
+
+describe('cru mix',()=>{
+  const rows=[{classification:'village',wines:18,favorites:5},
+    {classification:'grand_cru',wines:4,favorites:3},
+    {classification:'premier_cru',wines:9,favorites:4}];
+
+  it('reads down the hierarchy, not by how many you drink',()=>{
+    // The point of the card is the shape of the pyramid, so village leading on
+    // volume must not put it at the top.
+    expect(buildCruMix(rows).map(tier=>tier.key)).toEqual(['grand_cru','premier_cru','village']);
+  });
+
+  it('shares out of the classified wines only',()=>{
+    const mix=buildCruMix(rows);
+    expect(mix.find(tier=>tier.key==='grand_cru')).toMatchObject({wines:4,favorites:3});
+    expect(mix.reduce((total,tier)=>total+tier.share,0)).toBeCloseTo(1);
+  });
+
+  it('drops a tier the journal has none of rather than showing an empty band',()=>{
+    expect(buildCruMix([{classification:'village',wines:3,favorites:0}]).map(tier=>tier.key)).toEqual(['village']);
+  });
+
+  it('has nothing to show for a journal with no classified wines',()=>{
+    expect(buildCruMix([])).toEqual([]);
+    expect(buildCruMix([{classification:'village',wines:0,favorites:0}])).toEqual([]);
+  });
+
+  it('ignores a tier it does not know',()=>{
+    expect(buildCruMix([{classification:'grosses_gewachs',wines:5,favorites:1}])).toEqual([]);
   });
 });

@@ -1,4 +1,4 @@
-import type { DiscoveryStat,DrinkingAgeStat,MonthStat } from './api';
+import type { ClassificationStat,DiscoveryStat,DrinkingAgeStat,MonthStat } from './api';
 import type { JourneySummary } from './model';
 
 /**
@@ -141,4 +141,27 @@ export function buildMix<T>(items:readonly T[],read:(item:T)=>{label:string;wine
   const rest=tail.reduce((sum,entry)=>sum+entry.wines,0);
   if(rest>0)slices.push({label:'Other',wines:rest,share:rest/total});
   return slices;
+}
+
+export type CruTier={key:string;label:string;wines:number;favorites:number;share:number};
+
+/**
+ * The cru mix, in hierarchy order rather than by volume - the point of the card
+ * is the shape of the pyramid, and sorting by count would scramble it. Tiers the
+ * journal has none of are dropped, so a cellar with no grand cru does not carry
+ * an empty band.
+ */
+const CRU_ORDER:{key:string;label:string}[]=[
+  {key:'grand_cru',label:'Grand Cru'},
+  {key:'premier_cru',label:'Premier Cru'},
+  {key:'village',label:'Village'}
+];
+
+export function buildCruMix(rows:readonly ClassificationStat[]):CruTier[]{
+  const total=rows.reduce((sum,row)=>sum+row.wines,0);
+  if(!total)return [];
+  return CRU_ORDER.flatMap(tier=>{
+    const row=rows.find(entry=>entry.classification===tier.key);
+    return row&&row.wines>0?[{...tier,wines:row.wines,favorites:row.favorites,share:row.wines/total}]:[];
+  });
 }

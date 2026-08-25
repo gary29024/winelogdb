@@ -45,6 +45,21 @@
 .mix-legend b{color:#7f8aa0;font-variant-numeric:tabular-nums}
 .mix-swatch{width:9px;height:9px;border-radius:3px;background:#8794ab}
 
+.cru-mix{display:grid;gap:8px}
+.cru-tier{position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-rows:auto auto;align-items:center;gap:1px 10px;padding:10px 13px;overflow:hidden;border-radius:12px;background:#f7f8fa}
+/* The bar sits behind the text so the row reads as one band, and the tint runs
+   grand cru gold to village grey - the same gold the Passport map and the detail
+   pill already use for a cru. */
+.cru-tier-bar{position:absolute;inset:0}
+.cru-tier-bar>span{display:block;height:100%;border-radius:12px;background:#eef1f5}
+.cru-tier-grand_cru .cru-tier-bar>span{background:linear-gradient(90deg,#e7d3a6,#f6edda)}
+.cru-tier-premier_cru .cru-tier-bar>span{background:linear-gradient(90deg,#efe3c9,#faf5ea)}
+.cru-tier-village .cru-tier-bar>span{background:linear-gradient(90deg,#dde3ec,#f2f5f8)}
+.cru-tier strong,.cru-tier small,.cru-tier b{position:relative;z-index:1}
+.cru-tier strong{grid-area:1/1;font-size:.86rem}
+.cru-tier small{grid-area:2/1;color:#7f8aa0;font-size:.66rem}
+.cru-tier b{grid-area:1/2/3/3;align-self:center;font-family:'Playfair Display',serif;font-size:1.15rem;font-variant-numeric:tabular-nums}
+
 .insights-gate-note{margin:14px 2px 0;color:#98a2b4;font-size:.7rem;text-align:center}
 .insights-gate-note:first-letter{text-transform:uppercase}
 
@@ -64,4 +79,6 @@
   .age-bands small{font-size:.48rem}
   .age-headline strong{font-size:1.55rem}
   .mix-legend{gap:5px 10px;font-size:.66rem}
+  .cru-tier{padding:9px 11px}
+  .cru-tier b{font-size:1.05rem}
 }
