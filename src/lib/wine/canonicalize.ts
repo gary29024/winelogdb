@@ -58,7 +58,16 @@ function classification(override:string|null|undefined,stored:string|null|undefi
   return derived??stored??null;
 }
 
-export function canonicalizeWineFields<T extends {producer?:string|null;wineName?:string|null;country?:string|null;region?:string|null;appellation?:string|null;classification?:string|null;classificationOverride?:string|null;grapes?:string[];grapeBlend?:Array<{grape:string;percentage?:number|null}>}>(wine:T):T{
+/**
+ * What arrived in a place field, kept verbatim. Normalisation rewrites the
+ * region and appellation columns - "Oakville, Napa Valley" becomes Napa Valley
+ * / Oakville - and without this there would be no record of what the label
+ * actually said, so a mis-slotted reading could never be told from a correct
+ * one after the fact.
+ */
+const asRead=(value:string|null|undefined)=>{const text=value?.trim();return text||null};
+
+export function canonicalizeWineFields<T extends {producer?:string|null;wineName?:string|null;country?:string|null;region?:string|null;appellation?:string|null;recognizedRegion?:string|null;recognizedAppellation?:string|null;classification?:string|null;classificationOverride?:string|null;grapes?:string[];grapeBlend?:Array<{grape:string;percentage?:number|null}>}>(wine:T):T{
   // Spelling first, so the tree is asked about "Burgundy" rather than
   // "Bourgogne", then placement: which of region and appellation each name
   // belongs in is decided by the hierarchy, not by the slot it arrived in.
@@ -80,6 +89,11 @@ export function canonicalizeWineFields<T extends {producer?:string|null;wineName
     country:place.country as T['country'],
     region:place.region as T['region'],
     appellation:place.appellation as T['appellation'],
+    // Only ever the first reading: the write layer keeps whatever is already
+    // stored, so re-saving a wine does not overwrite the original with the
+    // normalised value the form now shows.
+    recognizedRegion:(asRead(wine.recognizedRegion)??asRead(wine.region)) as T['recognizedRegion'],
+    recognizedAppellation:(asRead(wine.recognizedAppellation)??asRead(wine.appellation)) as T['recognizedAppellation'],
     // Normalising the place consumes the cru marker, so by the second save the
     // text no longer says "1er Cru" and re-deriving would downgrade a premier
     // cru to village. See classification() for what survives a re-save.

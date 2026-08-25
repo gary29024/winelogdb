@@ -25,6 +25,12 @@ export const recognitionSchema = z.object({
   country: nullableText,
   region: nullableText,
   appellation: nullableText,
+  // Not asked of the model: canonicalizeWineFields fills these with the region
+  // and appellation as they arrived, before it re-slots them, and the form
+  // carries them into the saved wine. Without a home here the reading would be
+  // dropped between recognition and the row.
+  recognizedRegion: nullableText,
+  recognizedAppellation: nullableText,
   classification: z.enum(['grand_cru','premier_cru','village']).nullable().optional().default(null),
   grapes: z.array(z.string().trim().max(100)).max(20).default([]),
   grapeBlend: z.array(grapeBlendEntry).max(20).default([]),

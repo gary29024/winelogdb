@@ -19,3 +19,16 @@
   background:#f6f8fa;
   color:#6b7789;
 }
+
+/* The denomination rides inside the appellation pill rather than beside it: it
+   is not a second place, it is the scheme that place is registered under, and a
+   pill of its own would read as another origin on a 430px screen. */
+.detail-pills .detail-denomination{
+  margin-left:.4em;
+  padding-left:.4em;
+  border-left:1px solid var(--line);
+  color:#7c8798;
+  font-size:.74rem;
+  font-weight:700;
+  letter-spacing:.06em;
+}

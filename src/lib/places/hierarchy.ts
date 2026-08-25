@@ -24,6 +24,16 @@ export type PlaceTier='country'|'area'|'region'|'subregion'|'appellation';
  */
 export type PlaceClassification='grand_cru'|'village';
 
+/**
+ * The denomination an appellation holds - DOCG, AOC, AVA. Unlike the cru tier
+ * this is a fact about the place rather than the bottle: every Chianti Classico
+ * is DOCG, so it belongs here and not on the wine.
+ *
+ * Inherited down the tree, so a country sets the common case once and only the
+ * exceptions are named. Italy is the exception that matters: DOCG and DOC sit
+ * side by side, so its DOCGs are listed one by one and everything else falls
+ * back to DOC - erring toward the lesser claim where memory is uncertain.
+ */
 export type PlaceNode={
   id:string;
   name:string;
@@ -31,9 +41,18 @@ export type PlaceNode={
   parent:string|null;
   aliases:readonly string[];
   classification?:PlaceClassification;
+  denomination?:string;
+  /**
+   * The shallowest tier a country's denomination reaches. New World schemes are
+   * the whole map below the state tier - every AVA, GI and WO is one, at
+   * whatever depth the tree files it - while Old World defaults stop at the
+   * appellation, because Burgundy and Tuscany are administrative rather than
+   * legal names.
+   */
+  denominationFrom?:PlaceTier;
 };
 
-type Draft={name:string;tier:PlaceTier;aliases:readonly string[];children:readonly Draft[];classification?:PlaceClassification};
+type Draft={name:string;tier:PlaceTier;aliases:readonly string[];children:readonly Draft[];classification?:PlaceClassification;denomination?:string;denominationFrom?:PlaceTier};
 
 const node=(tier:PlaceTier)=>(name:string,aliases:readonly string[]=[],children:readonly Draft[]=[]):Draft=>
   ({name,tier,aliases,children});
@@ -45,9 +64,27 @@ const appellations=(...names:string[]):Draft[]=>names.map(name=>appellation(name
 const classified=(classification:PlaceClassification)=>(...names:string[]):Draft[]=>
   names.map(name=>({...appellation(name),classification}));
 const grandCrus=classified('grand_cru'),villages=classified('village');
+/** Appellations that hold a denomination other than the one they inherit. */
+const denominated=(denomination:string)=>(...names:string[]):Draft[]=>
+  names.map(name=>({...appellation(name),denomination}));
+const docg=denominated('DOCG');
+const denominatedCountry=(denomination:string)=>(name:string,aliases:readonly string[]=[],children:readonly Draft[]=[]):Draft=>
+  ({...country(name,aliases,children),denomination});
+/**
+ * A region that is itself a denomination rather than an administrative area.
+ * Marking matters here because a region never inherits its country's default:
+ * Rioja and Ribera del Duero are DOs, while Catalonia and Castilla y León are
+ * only where several of them happen to sit.
+ */
+const denominatedRegion=(denomination:string)=>(name:string,aliases:readonly string[]=[],children:readonly Draft[]=[]):Draft=>
+  ({...region(name,aliases,children),denomination});
+const doRegion=denominatedRegion('DO'),docRegion=denominatedRegion('DOC');
+/** A country whose denomination covers every named place below the state tier. */
+const regionwideCountry=(denomination:string)=>(name:string,aliases:readonly string[]=[],children:readonly Draft[]=[]):Draft=>
+  ({...denominatedCountry(denomination)(name,aliases,children),denominationFrom:'region'});
 
 const tree:readonly Draft[]=[
-  country('United States',['USA','U.S.A.','US','United States of America','America'],[
+  regionwideCountry('AVA')('United States',['USA','U.S.A.','US','United States of America','America'],[
     area('California',[],[
       area('North Coast',[],[
         region('Napa Valley',['Napa'],appellations(
@@ -102,7 +139,7 @@ const tree:readonly Draft[]=[
     area('Texas',[],[region('Texas Hill Country',[],[])])
   ]),
 
-  country('France',[],[
+  denominatedCountry('AOC')('France',[],[
     region('Burgundy',['Bourgogne'],[
       sub('Côte de Nuits',[],[
         ...villages('Gevrey-Chambertin','Morey-Saint-Denis','Chambolle-Musigny','Vougeot','Vosne-Romanée',
@@ -153,47 +190,50 @@ const tree:readonly Draft[]=[
     region('Corsica',['Corse'],[])
   ]),
 
-  country('Italy',[],[
-    region('Piedmont',['Piemonte'],appellations(
-      'Barolo','Barbaresco','Barbera d’Alba','Barbera d’Asti','Dolcetto d’Alba','Roero',
-      'Langhe','Gattinara','Ghemme','Nebbiolo d’Alba','Moscato d’Asti','Alta Langa'
-    )),
-    region('Tuscany',['Toscana'],appellations(
-      'Brunello di Montalcino','Chianti Classico','Chianti','Vino Nobile di Montepulciano',
-      'Bolgheri','Maremma Toscana','Rosso di Montalcino','Carmignano','Montecucco'
-    )),
-    region('Veneto',[],appellations('Amarone della Valpolicella','Valpolicella','Soave','Bardolino','Prosecco','Valpolicella Ripasso','Recioto della Valpolicella')),
+  denominatedCountry('DOC')('Italy',[],[
+    region('Piedmont',['Piemonte'],[
+      ...docg('Barolo','Barbaresco','Barbera d’Asti','Roero','Gattinara','Ghemme','Moscato d’Asti','Alta Langa'),
+      ...appellations('Barbera d’Alba','Dolcetto d’Alba','Langhe','Nebbiolo d’Alba')
+    ]),
+    region('Tuscany',['Toscana'],[
+      ...docg('Brunello di Montalcino','Chianti Classico','Chianti','Vino Nobile di Montepulciano','Carmignano'),
+      ...appellations('Bolgheri','Maremma Toscana','Rosso di Montalcino','Montecucco')
+    ]),
+    region('Veneto',[],[
+      ...docg('Amarone della Valpolicella','Recioto della Valpolicella'),
+      ...appellations('Valpolicella','Soave','Bardolino','Prosecco','Valpolicella Ripasso')
+    ]),
     region('Friuli-Venezia Giulia',['Friuli'],appellations('Collio','Colli Orientali del Friuli','Carso','Isonzo')),
     region('Trentino-Alto Adige',['Alto Adige','Südtirol','Trentino'],[]),
-    region('Lombardy',['Lombardia'],appellations('Franciacorta','Valtellina','Oltrepò Pavese')),
-    region('Sicily',['Sicilia'],appellations('Etna','Vittoria','Cerasuolo di Vittoria','Noto')),
-    region('Campania',[],appellations('Taurasi','Fiano di Avellino','Greco di Tufo','Aglianico del Taburno')),
+    region('Lombardy',['Lombardia'],[...docg('Franciacorta'),...appellations('Valtellina','Oltrepò Pavese')]),
+    region('Sicily',['Sicilia'],[...docg('Cerasuolo di Vittoria'),...appellations('Etna','Vittoria','Noto')]),
+    region('Campania',[],docg('Taurasi','Fiano di Avellino','Greco di Tufo','Aglianico del Taburno')),
     region('Abruzzo',[],appellations('Montepulciano d’Abruzzo','Trebbiano d’Abruzzo')),
-    region('Marche',[],appellations('Verdicchio dei Castelli di Jesi','Conero','Verdicchio di Matelica')),
-    region('Umbria',[],appellations('Montefalco Sagrantino','Orvieto')),
+    region('Marche',[],[...docg('Conero'),...appellations('Verdicchio dei Castelli di Jesi','Verdicchio di Matelica')]),
+    region('Umbria',[],[...docg('Montefalco Sagrantino'),...appellations('Orvieto')]),
     region('Puglia',['Apulia'],appellations('Primitivo di Manduria','Salice Salentino','Castel del Monte')),
-    region('Sardinia',['Sardegna'],appellations('Cannonau di Sardegna','Vermentino di Gallura'))
+    region('Sardinia',['Sardegna'],[...docg('Vermentino di Gallura'),...appellations('Cannonau di Sardegna')])
   ]),
 
-  country('Spain',['España'],[
-    region('Rioja',[],appellations('Rioja Alta','Rioja Alavesa','Rioja Oriental','Rioja Baja')),
-    region('Ribera del Duero',[],[]),
-    region('Priorat',['Priorato'],[]),
-    region('Rías Baixas',['Rias Baixas'],[]),
+  denominatedCountry('DO')('Spain',['España'],[
+    denominatedRegion('DOCa')('Rioja',[],appellations('Rioja Alta','Rioja Alavesa','Rioja Oriental','Rioja Baja')),
+    doRegion('Ribera del Duero'),
+    denominatedRegion('DOQ')('Priorat',['Priorato']),
+    doRegion('Rías Baixas',['Rias Baixas']),
     region('Catalonia',['Catalunya','Cataluña'],appellations('Penedès','Montsant','Cava','Costers del Segre','Empordà','Terra Alta')),
-    region('Jerez',['Sherry','Jerez-Xérès-Sherry'],[]),
+    doRegion('Jerez',['Sherry','Jerez-Xérès-Sherry']),
     region('Castilla y León',[],appellations('Toro','Rueda','Bierzo','Cigales')),
-    region('Navarra',[],[]),
+    doRegion('Navarra'),
     region('Galicia',[],appellations('Ribeira Sacra','Valdeorras','Ribeiro','Monterrei')),
     region('Andalusia',['Andalucía'],appellations('Montilla-Moriles','Málaga'))
   ]),
 
-  country('Portugal',[],[
-    region('Douro',[],appellations('Port','Douro Superior','Cima Corgo','Baixo Corgo')),
-    region('Dão',['Dao'],[]),
-    region('Bairrada',[],[]),
-    region('Alentejo',[],[]),
-    region('Vinho Verde',[],appellations('Monção e Melgaço')),
+  denominatedCountry('DOC')('Portugal',[],[
+    docRegion('Douro',[],appellations('Port','Douro Superior','Cima Corgo','Baixo Corgo')),
+    docRegion('Dão',['Dao']),
+    docRegion('Bairrada'),
+    docRegion('Alentejo'),
+    docRegion('Vinho Verde',[],appellations('Monção e Melgaço')),
     region('Lisboa',['Estremadura'],appellations('Colares','Bucelas')),
     region('Setúbal',[],[]),
     region('Madeira',[],[])
@@ -208,14 +248,14 @@ const tree:readonly Draft[]=[
     region('Franken',['Franconia'],[]),region('Ahr',[],[]),region('Saale-Unstrut',[],[])
   ]),
 
-  country('Austria',['Österreich'],[
+  denominatedCountry('DAC')('Austria',['Österreich'],[
     region('Wachau',[],[]),region('Kamptal',[],[]),region('Kremstal',[],[]),
     region('Burgenland',[],appellations('Neusiedlersee','Leithaberg','Eisenberg','Mittelburgenland')),
     region('Weinviertel',[],[]),region('Thermenregion',[],[]),region('Steiermark',['Styria'],[]),
     region('Wien',['Vienna'],[]),region('Traisental',[],[]),region('Carnuntum',[],[])
   ]),
 
-  country('Australia',[],[
+  regionwideCountry('GI')('Australia',[],[
     area('South Australia',[],[
       region('Barossa Valley',['Barossa'],[]),region('Eden Valley',[],[]),region('McLaren Vale',[],[]),
       region('Clare Valley',[],[]),region('Coonawarra',[],[]),region('Adelaide Hills',[],[]),
@@ -230,7 +270,7 @@ const tree:readonly Draft[]=[
     area('Tasmania',[],[region('Tamar Valley',[],[]),region('Coal River Valley',[],[])])
   ]),
 
-  country('New Zealand',[],[
+  regionwideCountry('GI')('New Zealand',[],[
     region('Marlborough',[],appellations('Wairau Valley','Awatere Valley','Southern Valleys')),
     region('Central Otago',[],appellations('Bannockburn','Gibbston','Bendigo','Cromwell','Wanaka')),
     region('Hawke’s Bay',['Hawkes Bay','Hawke s Bay'],appellations('Gimblett Gravels','Bridge Pa Triangle')),
@@ -238,7 +278,7 @@ const tree:readonly Draft[]=[
     region('Gisborne',[],[]),region('Waiheke Island',[],[]),region('Auckland',[],[])
   ]),
 
-  country('Argentina',[],[
+  regionwideCountry('IG')('Argentina',[],[
     region('Mendoza',[],[
       sub('Uco Valley',['Valle de Uco'],appellations('Gualtallary','Altamira','La Consulta','San Pablo','Vista Flores','Los Chacayes')),
       sub('Luján de Cuyo',['Lujan de Cuyo'],appellations('Agrelo','Las Compuertas','Vistalba','Perdriel')),
@@ -249,7 +289,7 @@ const tree:readonly Draft[]=[
     region('San Juan',[],[])
   ]),
 
-  country('Chile',[],[
+  regionwideCountry('DO')('Chile',[],[
     region('Colchagua Valley',['Colchagua'],[]),region('Maipo Valley',['Maipo'],appellations('Puente Alto','Pirque')),
     region('Casablanca Valley',['Casablanca'],[]),region('San Antonio Valley',[],appellations('Leyda Valley')),
     region('Cachapoal Valley',['Cachapoal'],appellations('Apalta')),region('Maule Valley',['Maule'],[]),
@@ -257,7 +297,7 @@ const tree:readonly Draft[]=[
     region('Bío Bío Valley',['Bio Bio'],[]),region('Elqui Valley',['Elqui'],[]),region('Curicó Valley',['Curico'],[])
   ]),
 
-  country('South Africa',[],[
+  regionwideCountry('WO')('South Africa',[],[
     region('Stellenbosch',[],appellations('Simonsberg-Stellenbosch','Jonkershoek Valley','Banghoek','Polkadraai Hills')),
     region('Swartland',[],appellations('Riebeekberg','Paardeberg')),
     region('Franschhoek',['Franschhoek Valley'],[]),region('Walker Bay',[],appellations('Hemel-en-Aarde Valley','Hemel-en-Aarde Ridge')),
@@ -276,7 +316,7 @@ const tree:readonly Draft[]=[
   country('Slovenia',[],[region('Primorska',[],appellations('Goriška Brda','Vipava Valley')),region('Podravje',[],[]),region('Posavje',[],[])]),
   country('Croatia',[],[region('Istria',['Istra'],[]),region('Dalmatia',[],appellations('Pelješac','Dingač'))]),
   country('Switzerland',['Suisse','Schweiz'],[region('Valais',[],[]),region('Vaud',[],appellations('Lavaux','Chablais')),region('Genève',['Geneva'],[]),region('Ticino',[],[]),region('Neuchâtel',[],[])]),
-  country('Canada',[],[
+  regionwideCountry('VQA')('Canada',[],[
     area('British Columbia',[],[region('Okanagan Valley',[],appellations('Naramata Bench','Golden Mile Bench','Black Sage Bench'))]),
     area('Ontario',[],[region('Niagara Peninsula',[],appellations('Beamsville Bench','Twenty Mile Bench','Four Mile Creek')),region('Prince Edward County',[],[])])
   ]),
@@ -302,7 +342,9 @@ function flatten(){
     // later namesake, without the ids depending on tree order.
     const id=parent?`${parent}/${slug(draft.name)}`:slug(draft.name);
     nodes.push({id,name:draft.name,tier:draft.tier,parent,aliases:draft.aliases,
-      ...(draft.classification?{classification:draft.classification}:{})});
+      ...(draft.classification?{classification:draft.classification}:{}),
+      ...(draft.denomination?{denomination:draft.denomination}:{}),
+      ...(draft.denominationFrom?{denominationFrom:draft.denominationFrom}:{})});
     for(const child of draft.children)walk(child,id);
   };
   for(const draft of tree)walk(draft,null);

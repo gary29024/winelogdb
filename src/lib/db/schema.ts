@@ -113,6 +113,10 @@ export const wineRecordSchema = z.object({
   id: z.string().uuid(), ownerId: z.string().min(1).max(128), producer: z.string().trim().min(1).max(200),
   wineName: z.string().trim().min(1).max(200), vintage: vintageSchema,
   country: optionalText, region: optionalText, appellation: optionalText,
+  // The region and appellation as they first arrived, before the place tree
+  // re-slotted them. Set on the way in from the supplied values, so callers
+  // never populate these directly.
+  recognizedRegion: optionalText, recognizedAppellation: optionalText,
   // Derived from the place tree and the label text on the way in, so callers
   // never have to supply it.
   classification: z.enum(['grand_cru','premier_cru','village']).nullable().optional().default(null),

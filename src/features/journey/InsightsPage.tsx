@@ -150,7 +150,7 @@ export function InsightsPage(){
         <small>{tier.wines} {tier.wines===1?'wine':'wines'}{tier.favorites?` · ${tier.favorites} favorite${tier.favorites===1?'':'s'}`:''}</small>
         <b>{percent(tier.share)}</b>
       </article>)}</div>
-      <p className="journey-muted">Counted only where the wine's country classifies its vineyards, so most of the New World sits outside this.</p>
+      <p className="journey-muted">Counted where WineLog can read a cru tier - Burgundy today - so a bottle without one is not missing, just outside the scheme.</p>
     </section>}
 
     <section className="journey-card"><div className="journey-section-heading"><div><p className="section-label">THE MIX</p><h2>What fills your journal</h2></div></div>
