@@ -19,7 +19,14 @@ const byName=(()=>{
     if(bucket){if(!bucket.includes(place))bucket.push(place)}
     else index.set(normalized,[place]);
   };
-  for(const place of PLACES){add(place.name,place);for(const alias of place.aliases)add(alias,place)}
+  // A node that requires its denomination is reachable only through the aliases
+  // that carry the marker: "Toscana" belongs to the region, "Toscana IGT" to
+  // the zone. Registering its bare name would let the zone win on tier depth
+  // and quietly re-read every Tuscan region reference as an IGT.
+  for(const place of PLACES){
+    if(!place.denominationRequired)add(place.name,place);
+    for(const alias of place.aliases)add(alias,place);
+  }
   return index;
 })();
 
@@ -44,6 +51,24 @@ const isAncestor=(candidate:PlaceNode,place:PlaceNode)=>ancestry(place).some(ste
  * DOCa" and "Douro DOC" kept theirs because those are regions.
  */
 const DENOMINATION=/ (?:docg|doca|doc|dop|do|igt|igp|aoc|aop|ava|dac|qba)$/;
+/**
+ * The geographic-indication marker a label spells out. IGT and IGP are the two
+ * the tree cannot supply by inheritance - Italy's default is DOC and France's
+ * AOC - so a zone missing from the tree would otherwise show no denomination at
+ * all. Reading it off the label is the honest fallback: the bottle said so.
+ *
+ * Only these two. A label that says "Barolo DOC" is simply wrong, and the tree,
+ * which knows Barolo is DOCG, must keep the last word.
+ */
+const LABEL_DENOMINATION=/ (igt|igp)$/;
+export function labelDenomination(value:string|null|undefined):string|null{
+  const match=value?key(value).match(LABEL_DENOMINATION):null;
+  return match?match[1].toUpperCase():null;
+}
+/** The same value with a marker we have already read stripped off. */
+function withoutLabelDenomination(value:string){
+  return value.replace(/[\s,]+(?:IGT|IGP)\s*$/i,'').trim()||value;
+}
 
 /**
  * Ageing and selection tiers, longest first. These are not places and not crus -
@@ -177,9 +202,12 @@ export function resolvePlace(input:PlaceInput):ResolvedPlace{
   // Text evidence outranks the tree: the tree says Vosne-Romanée is a village,
   // and "Vosne-Romanée 1er Cru Les Suchots" says this particular bottle is not.
   const spoken=classifyFromText(input.appellation,input.wineName);
+  const spelled=labelDenomination(input.appellation);
+  const named=trimmed(input.appellation);
   if(!anchor)return {
-    country:trimmed(input.country),region:trimmed(input.region),appellation:trimmed(input.appellation),
-    path:[],placeId:null,classification:spoken,denomination:null,unresolved
+    country:trimmed(input.country),region:trimmed(input.region),
+    appellation:named&&spelled?withoutLabelDenomination(named):named,
+    path:[],placeId:null,classification:spoken,denomination:spelled,unresolved
   };
 
   const chain=ancestry(anchor);
@@ -192,7 +220,10 @@ export function resolvePlace(input:PlaceInput):ResolvedPlace{
   // A name the tree does not carry is still the most specific thing known about
   // the wine, so it is kept verbatim rather than dropped - but with no node
   // behind it, there is nothing to read a denomination off.
-  const verbatim=input.appellation?.trim()&&!candidates[0].matches.length?input.appellation.trim():null;
+  // A marker we have read is not part of the place's name: "Salento IGT" is
+  // stored as Salento with IGT beside it, the same shape as "Barolo DOCG".
+  const verbatimRaw=input.appellation?.trim()&&!candidates[0].matches.length?input.appellation.trim():null;
+  const verbatim=verbatimRaw&&spelled?withoutLabelDenomination(verbatimRaw):verbatimRaw;
   const appellationNode=own&&below(own)?own:verbatim?null:below(anchor)?anchor:null;
   const appellation=appellationNode?.name??verbatim;
   return {
@@ -206,7 +237,7 @@ export function resolvePlace(input:PlaceInput):ResolvedPlace{
     classification:spoken??villageIfCertain((own??anchor).classification,candidates[0].value),
     // A verbatim appellation is the narrowest thing the wine names, and the tree
     // knows nothing about it - so the region's denomination is not the wine's.
-    denomination:verbatim?null:denominationInForce(appellationNode??anchor),
+    denomination:verbatim?spelled:denominationInForce(appellationNode??anchor,spelled),
     unresolved
   };
 }
@@ -227,11 +258,15 @@ function trimmed(value:string|null|undefined){const text=value?.trim();return te
  * reach the region tier, where Napa Valley and Barossa Valley are themselves the
  * registration.
  */
-function denominationInForce(place:PlaceNode|null):string|null{
+function denominationInForce(place:PlaceNode|null,spelled:string|null):string|null{
   // A country's denomination is the default it lends its appellations, never a
   // statement about the country: France is not an AOC.
-  if(!place||place.tier==='country')return null;
+  if(!place||place.tier==='country')return spelled;
   if(place.denomination)return place.denomination;
+  // A marker the label spelled out beats an inherited default. The tree knows
+  // Italy is mostly DOC; it does not know that this particular zone is one of
+  // the hundred-odd IGTs, and the bottle does.
+  if(spelled)return spelled;
   for(const step of ancestry(place).reverse()){
     if(!step.denomination)continue;
     return TIER_DEPTH[place.tier]>=TIER_DEPTH[step.denominationFrom??'appellation']?step.denomination:null;

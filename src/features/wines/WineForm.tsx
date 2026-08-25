@@ -115,7 +115,7 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel}:WineF
 
     <div className="wine-compact-row three">{field('vintage','Vintage','number')}<label>Style<select name="wineStyle" value={wineStyle} onChange={e=>setWineStyle(e.target.value)}><option value="">Unknown</option>{['red','white','rose','sparkling','dessert','fortified','orange','other'].map(x=><option key={x}>{x}</option>)}</select></label>{field('alcoholPercentage','Alcohol %','number','0.1')}</div>
     <div className="wine-compact-row two">{field('country','Country')}{field('region','Region')}</div>
-    <div className="wine-compact-row appellation-row"><label>Appellation<input name="appellation" value={appellation} onChange={e=>setAppellation(e.target.value)}/><small>{denomination?`Recognized as a ${denomination}; no need to type it.`:'The denomination is read from the name, so leave DOC / DOCG / AVA off.'}</small></label>
+    <div className="wine-compact-row appellation-row"><label>Appellation<input name="appellation" value={appellation} onChange={e=>setAppellation(e.target.value)}/><small>{denomination?`Recognized as a ${denomination}; no need to type it.`:'The denomination is read from the name, so leave DOC / DOCG / AVA off — but keep IGT or IGP, which tells a zone apart from the region it shares a name with.'}</small></label>
       <label>Cru level<select name="classificationOverride" value={cruOverride} onChange={e=>setCruOverride(e.target.value)}>
         <option value="">Auto</option>
         <option value="grand_cru">Grand Cru</option>

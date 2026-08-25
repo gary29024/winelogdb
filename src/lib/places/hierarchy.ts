@@ -49,6 +49,17 @@ export type PlaceNode={
   classification?:PlaceClassification;
   denomination?:string;
   /**
+   * Whether the label must spell the denomination out for this node to match.
+   *
+   * Italy's broad IGT zones are named after the region they cover, and the tree
+   * can only hold one meaning per name: "Toscana" the administrative region and
+   * "Toscana" the IGT zone are different places. The label is what separates
+   * them, so these nodes answer to "Toscana IGT" and leave the bare name to the
+   * region. Zones with a name of their own - Terre Siciliane, Salento - need no
+   * such marker and match either way.
+   */
+  denominationRequired?:boolean;
+  /**
    * The shallowest tier a country's denomination reaches. New World schemes are
    * the whole map below the state tier - every AVA, GI and WO is one, at
    * whatever depth the tree files it - while Old World defaults stop at the
@@ -58,7 +69,7 @@ export type PlaceNode={
   denominationFrom?:PlaceTier;
 };
 
-type Draft={name:string;tier:PlaceTier;aliases:readonly string[];children:readonly Draft[];classification?:PlaceClassification;denomination?:string;denominationFrom?:PlaceTier};
+type Draft={name:string;tier:PlaceTier;aliases:readonly string[];children:readonly Draft[];classification?:PlaceClassification;denomination?:string;denominationRequired?:boolean;denominationFrom?:PlaceTier};
 
 const node=(tier:PlaceTier)=>(name:string,aliases:readonly string[]=[],children:readonly Draft[]=[]):Draft=>
   ({name,tier,aliases,children});
@@ -74,6 +85,19 @@ const grandCrus=classified('grand_cru'),premierCrus=classified('premier_cru'),vi
 const denominated=(denomination:string)=>(...names:string[]):Draft[]=>
   names.map(name=>({...appellation(name),denomination}));
 const docg=denominated('DOCG');
+/**
+ * A geographic-indication zone: IGT in Italy, IGP in France. These are real
+ * appellations that the country default cannot express - Italy's default is DOC
+ * and France's AOC - so every one a wine might carry has to be named. Where the
+ * zone shares its name with the region it covers, the label's marker is what
+ * picks it out, so the bare name is left to the region.
+ */
+const geographic=(denomination:string)=>(...names:string[]):Draft[]=>
+  names.map(name=>({...appellation(name,[`${name} ${denomination}`]),denomination}));
+const geographicRegionwide=(denomination:string)=>(...names:string[]):Draft[]=>
+  names.map(name=>({...appellation(name,[`${name} ${denomination}`]),denomination,denominationRequired:true}));
+const igt=geographic('IGT'),igtRegion=geographicRegionwide('IGT');
+const igp=geographic('IGP');
 const denominatedCountry=(denomination:string)=>(name:string,aliases:readonly string[]=[],children:readonly Draft[]=[]):Draft=>
   ({...country(name,aliases,children),denomination});
 /**
@@ -85,6 +109,12 @@ const denominatedCountry=(denomination:string)=>(name:string,aliases:readonly st
 const denominatedRegion=(denomination:string)=>(name:string,aliases:readonly string[]=[],children:readonly Draft[]=[]):Draft=>
   ({...region(name,aliases,children),denomination});
 const doRegion=denominatedRegion('DO'),docRegion=denominatedRegion('DOC');
+/**
+ * A multi-region IGP that is itself the denomination, in the same shape as
+ * Rioja or Priorat: nothing administrative shares its name, so the bare name
+ * resolves and carries IGP without the label having to spell it out.
+ */
+const igpRegionwide=denominatedRegion('IGP');
 /** A country whose denomination covers every named place below the state tier. */
 const regionwideCountry=(denomination:string)=>(name:string,aliases:readonly string[]=[],children:readonly Draft[]=[]):Draft=>
   ({...denominatedCountry(denomination)(name,aliases,children),denominationFrom:'region'});
@@ -215,33 +245,119 @@ const tree:readonly Draft[]=[
     region('Provence',[],appellations('Bandol','Côtes de Provence','Cassis','Palette','Coteaux d’Aix-en-Provence')),
     region('Jura',[],appellations('Arbois','Château-Chalon','Côtes du Jura','L’Étoile')),
     region('Savoie',[],[]),
-    region('South West France',['Sud-Ouest'],appellations('Cahors','Madiran','Jurançon','Bergerac','Irouléguy')),
-    region('Corsica',['Corse'],[])
+    region('South West France',['Sud-Ouest'],[
+      ...appellations('Cahors','Madiran','Jurançon','Bergerac','Irouléguy'),
+      ...igp('Comté Tolosan','Côtes de Gascogne','Périgord','Landes','Aveyron')
+    ]),
+    region('Corsica',['Corse'],igp('Île de Beauté')),
+    // France's regional IGPs cover several administrative regions each, so they
+    // sit beside them rather than inside one. Pays d'Oc alone is a tenth of the
+    // country's output and was previously unresolvable.
+    igpRegionwide('Pays d’Oc',['Oc']),
+    igpRegionwide('Méditerranée'),
+    igpRegionwide('Val de Loire'),
+    igpRegionwide('Atlantique'),
+    igpRegionwide('Comtés Rhodaniens')
   ]),
 
+  // Italy names its DOCGs and its IGTs one by one; everything between them
+  // inherits DOC. A zone that spans regions - Delle Venezie, Vigneti delle
+  // Dolomiti - is filed once, under the region it is most often labelled from,
+  // because one name may mean only one place in the tree.
   denominatedCountry('DOC')('Italy',[],[
+    // Piedmont registers no IGT at all: every wine it makes is DOC or DOCG.
     region('Piedmont',['Piemonte'],[
       ...docg('Barolo','Barbaresco','Barbera d’Asti','Roero','Gattinara','Ghemme','Moscato d’Asti','Alta Langa'),
       ...appellations('Barbera d’Alba','Dolcetto d’Alba','Langhe','Nebbiolo d’Alba')
     ]),
     region('Tuscany',['Toscana'],[
       ...docg('Brunello di Montalcino','Chianti Classico','Chianti','Vino Nobile di Montepulciano','Carmignano'),
-      ...appellations('Bolgheri','Bolgheri Sassicaia','Maremma Toscana','Rosso di Montalcino','Montecucco')
+      ...appellations('Bolgheri','Bolgheri Sassicaia','Maremma Toscana','Rosso di Montalcino','Montecucco'),
+      ...igtRegion('Toscana'),
+      ...igt('Alta Valle della Greve','Colli della Toscana Centrale','Costa Toscana','Montecastelli','Val di Magra')
     ]),
     region('Veneto',[],[
       ...docg('Amarone della Valpolicella','Recioto della Valpolicella'),
-      ...appellations('Valpolicella','Soave','Bardolino','Prosecco','Valpolicella Ripasso')
+      ...appellations('Valpolicella','Soave','Bardolino','Prosecco','Valpolicella Ripasso'),
+      ...igtRegion('Veneto'),
+      ...igt('Colli Trevigiani','Conselvano','Marca Trevigiana','Provincia di Verona','Veneto Orientale'),
+      // Delle Venezie and Alto Livenza run into Friuli and Trentino as well.
+      // Filing a shared zone fixes the region it reports, so each sits under
+      // the one it is most often labelled from rather than the one it touches
+      // first alphabetically.
+      ...igt('Delle Venezie','Alto Livenza')
     ]),
-    region('Friuli-Venezia Giulia',['Friuli'],appellations('Collio','Colli Orientali del Friuli','Carso','Isonzo')),
-    region('Trentino-Alto Adige',['Alto Adige','Südtirol','Trentino'],[]),
-    region('Lombardy',['Lombardia'],[...docg('Franciacorta'),...appellations('Valtellina','Oltrepò Pavese')]),
-    region('Sicily',['Sicilia'],[...docg('Cerasuolo di Vittoria'),...appellations('Etna','Vittoria','Noto')]),
-    region('Campania',[],docg('Taurasi','Fiano di Avellino','Greco di Tufo','Aglianico del Taburno')),
-    region('Abruzzo',[],appellations('Montepulciano d’Abruzzo','Trebbiano d’Abruzzo')),
-    region('Marche',[],[...docg('Conero'),...appellations('Verdicchio dei Castelli di Jesi','Verdicchio di Matelica')]),
-    region('Umbria',[],[...docg('Montefalco Sagrantino'),...appellations('Orvieto')]),
-    region('Puglia',['Apulia'],appellations('Primitivo di Manduria','Salice Salentino','Castel del Monte')),
-    region('Sardinia',['Sardegna'],[...docg('Vermentino di Gallura'),...appellations('Cannonau di Sardegna')])
+    region('Friuli-Venezia Giulia',['Friuli'],[
+      ...appellations('Collio','Colli Orientali del Friuli','Carso','Isonzo'),
+      ...igt('Venezia Giulia')
+    ]),
+    region('Trentino-Alto Adige',['Alto Adige','Südtirol','Trentino'],
+      igt('Mitterberg','Vallagarina','Vigneti delle Dolomiti')),
+    region('Lombardy',['Lombardia'],[
+      ...docg('Franciacorta'),...appellations('Valtellina','Oltrepò Pavese'),
+      ...igt('Alto Mincio','Benaco Bresciano','Bergamasca','Collina del Milanese','Montenetto di Brescia',
+        'Provincia di Mantova','Provincia di Pavia','Quistello','Ronchi di Brescia','Ronchi Varesini',
+        'Sabbioneta','Sebino','Terrazze Retiche di Sondrio','Terre Lariane','Valcamonica')
+    ]),
+    region('Sicily',['Sicilia'],[
+      ...docg('Cerasuolo di Vittoria'),...appellations('Etna','Vittoria','Noto'),
+      ...igt('Avola','Camarro','Fontanarossa di Cerda','Salemi','Salina','Terre Siciliane','Valle Belice')
+    ]),
+    region('Campania',[],[
+      ...docg('Taurasi','Fiano di Avellino','Greco di Tufo','Aglianico del Taburno'),
+      ...igtRegion('Campania'),
+      ...igt('Beneventano','Catalanesca del Monte Somma','Colli di Salerno','Dugenta','Epomeo',
+        'Paestum','Pompeiano','Roccamonfina','Terre del Volturno')
+    ]),
+    region('Abruzzo',[],[
+      ...appellations('Montepulciano d’Abruzzo','Trebbiano d’Abruzzo'),
+      ...igt('Colli Aprutini','Colline Frentane','Colline Pescaresi','Colline Teatine','Del Vastese',
+        'Terre Aquilane','Terre di Chieti')
+    ]),
+    region('Marche',[],[
+      ...docg('Conero'),...appellations('Verdicchio dei Castelli di Jesi','Verdicchio di Matelica'),
+      ...igtRegion('Marche')
+    ]),
+    region('Umbria',[],[
+      ...docg('Montefalco Sagrantino'),...appellations('Orvieto'),
+      ...igtRegion('Umbria'),
+      ...igt('Allerona','Bettona','Cannara','Narni','Spello')
+    ]),
+    region('Puglia',['Apulia'],[
+      ...appellations('Primitivo di Manduria','Salice Salentino','Castel del Monte'),
+      ...igtRegion('Puglia'),
+      ...igt('Daunia','Murgia','Salento','Tarantino','Valle d’Itria')
+    ]),
+    region('Sardinia',['Sardegna'],[
+      ...docg('Vermentino di Gallura'),...appellations('Cannonau di Sardegna'),
+      ...igt('Barbagia','Colli del Limbara','Isola dei Nuraghi','Marmilla','Nurra','Ogliastra','Parteolla',
+        'Planargia','Provincia di Nuoro','Romangia','Sibiola','Tharros','Trexenta','Valle del Tirso',
+        'Valli di Porto Pino')
+    ]),
+    region('Emilia-Romagna',[],[
+      ...appellations('Lambrusco di Sorbara','Colli Bolognesi','Romagna'),
+      ...igt('Bianco di Castelfranco Emilia','Emilia','Forlì','Fortana del Taro','Modena','Ravenna',
+        'Rubicone','Sillaro','Terre di Veleja','Val Tidone')
+    ]),
+    region('Lazio',[],[
+      ...appellations('Frascati','Cesanese del Piglio','Est! Est!! Est!!! di Montefiascone'),
+      ...igtRegion('Lazio'),
+      ...igt('Civitella d’Agliano','Colli Cimini','Costa Etrusco Romana','Frusinate')
+    ]),
+    region('Calabria',[],[
+      ...appellations('Cirò','Savuto'),
+      ...igtRegion('Calabria'),
+      ...igt('Arghillà','Costa Viola','Esaro','Lipuda','Locride','Palizzi','Pellaro','Scilla',
+        'Val di Neto','Valdamato','Valle dei Crati')
+    ]),
+    region('Basilicata',[],[...appellations('Aglianico del Vulture'),...igtRegion('Basilicata')]),
+    region('Liguria',[],[
+      ...appellations('Cinque Terre','Rossese di Dolceacqua','Colli di Luni'),
+      ...igt('Colline Savonesi','Golfo dei Poeti La Spezia','Liguria di Levante','Terrazze dell’Imperiese')
+    ]),
+    region('Molise',[],[...appellations('Biferno'),...igt('Osco','Rotae')]),
+    // Valle d'Aosta registers no IGT either; its one DOC covers the whole region.
+    region('Valle d’Aosta',['Vallée d’Aoste'],appellations('Valle d’Aosta'))
   ]),
 
   denominatedCountry('DO')('Spain',['España'],[
@@ -373,6 +489,7 @@ function flatten(){
     nodes.push({id,name:draft.name,tier:draft.tier,parent,aliases:draft.aliases,
       ...(draft.classification?{classification:draft.classification}:{}),
       ...(draft.denomination?{denomination:draft.denomination}:{}),
+      ...(draft.denominationRequired?{denominationRequired:true}:{}),
       ...(draft.denominationFrom?{denominationFrom:draft.denominationFrom}:{})});
     for(const child of draft.children)walk(child,id);
   };

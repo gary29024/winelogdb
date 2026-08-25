@@ -88,6 +88,37 @@ The catalogue completeness guard counts both sides after those corrections, so
 hiding duplicates never reads as a suspicious shrink. Corrections are listed
 with an undo control under the producer's wine range.
 
+## Geographic indications: IGT and IGP
+
+The place tree treats a denomination as a fact about the place rather than the
+bottle, so every Chianti Classico is DOCG without the label saying so. Italy's
+IGT zones broke that model in a way worth knowing about: they are named after
+the regions they cover, and one name can mean only one place in the tree, so
+"Toscana" resolved to the administrative region and the appellation was dropped
+entirely — every Super Tuscan stored no appellation at all.
+
+IGT zones are therefore appellation-tier nodes carrying `denomination:'IGT'`,
+and the label is what separates a zone from its region. A zone whose name
+collides with a region — Toscana, Umbria, Veneto, Marche, Campania, Puglia,
+Lazio, Calabria, Basilicata — is marked `denominationRequired` and answers only
+to the spelled-out form, leaving the bare name to the region. Zones with a name
+of their own, such as Terre Siciliane or Salento, match either way.
+
+France's multi-region IGPs (Pays d'Oc, Méditerranée, Val de Loire, Atlantique,
+Comtés Rhodaniens) share nothing with an administrative name, so they are
+denominated regions in the same shape as Rioja and Priorat.
+
+The tree carries the full Italian list, but a national register is a moving
+target and this one was transcribed by hand. Where a zone is missing, the
+resolver falls back to the marker the label spells out: an unknown "… IGT"
+still reads as IGT, with the marker stripped from the stored name and the raw
+value reported as unresolved so nothing is silently dropped. Only IGT and IGP
+are read this way. A label claiming "Barolo DOC" is simply wrong, and the tree,
+which knows Barolo is DOCG, keeps the last word.
+
+Two Italian regions register no IGT at all — Piedmont and Valle d'Aosta — and
+the tree says so explicitly rather than leaving it to look like an omission.
+
 ## Staying inside the D1 free tier
 
 D1's free plan is metered on rows read and rows written per day, so the design goal

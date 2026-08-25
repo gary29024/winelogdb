@@ -33,7 +33,9 @@ export function catalogHierarchyRank(wine:CatalogPresentationLike){
   if(words.has('grand')&&words.has('cru'))return 0;
   if(words.has('premier')&&words.has('cru'))return 1;
   if(words.has('village')||words.has('communal'))return 2;
-  if(words.has('regional')||text.includes('bourgogne')||text.includes('coteaux bourguignons')||text.includes('vin de france')||words.has('igp'))return 3;
+  // IGT sits beside IGP: both are the regional tier, and omitting IGT dropped
+  // every Italian one into "Other / unclassified".
+  if(words.has('regional')||text.includes('bourgogne')||text.includes('coteaux bourguignons')||text.includes('vin de france')||words.has('igp')||words.has('igt'))return 3;
   if(String(wine.appellation??'').trim()||String(wine.classification??'').trim())return 2;
   return 4;
 }
