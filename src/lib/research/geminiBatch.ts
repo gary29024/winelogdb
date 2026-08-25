@@ -123,7 +123,26 @@ function featureMetadata(displayName:string,key:string){
   return {feature:'batch',mode:'queued',batch_key:key};
 }
 
-async function mapLimit<T,R>(items:T[],limit:number,fn:(item:T,index:number)=>Promise<R>){
+/**
+ * How many entries of a queued Vertex batch run at once.
+ *
+ * Six is the platform ceiling rather than a guess: a Worker may hold many
+ * connections open, but only six may sit in the initial "waiting for headers"
+ * phase, and a seventh queues until one of those gets its headers back. A
+ * grounded research call spends nearly all of its life in that phase, so asking
+ * for more than six would queue inside the runtime and only make this number
+ * lie about what is happening.
+ *
+ * It also covers a producer research run in one wave: that submits the profile
+ * plus five alphabetical catalogue slices, six entries, which at the previous
+ * limit of three took two waves and about twice the wall time for no reason. A
+ * seventh slice would silently cost a second wave again, so the relationship
+ * between the slice count and this number is pinned by a test.
+ */
+export const VERTEX_BATCH_CONCURRENCY=6;
+
+/** Exported for the concurrency test; not part of the batch surface. */
+export async function mapLimit<T,R>(items:T[],limit:number,fn:(item:T,index:number)=>Promise<R>){
   const output=new Array<R>(items.length);let cursor=0;
   const workers=Array.from({length:Math.min(Math.max(1,limit),items.length)},async()=>{while(true){const index=cursor++;if(index>=items.length)return;output[index]=await fn(items[index],index)}});
   await Promise.all(workers);return output;
@@ -176,7 +195,7 @@ async function executeStoredVertexBatch(env:GatewayRuntimeEnv,name:string,row:St
   try{
     const entries=parseJson<GeminiBatchRequest[]>(row.requests_json,[]);
     if(!entries.length)throw new Error('Queued Vertex batch has no requests');
-    const responses=await mapLimit(entries,3,(entry)=>executeVertexEntry(env,row.model,row.display_name,entry));
+    const responses=await mapLimit(entries,VERTEX_BATCH_CONCURRENCY,(entry)=>executeVertexEntry(env,row.model,row.display_name,entry));
     const result={state:'JOB_STATE_SUCCEEDED',dest:{inlinedResponses:responses},completedAt:now()};
     await db.prepare("UPDATE vertex_batch_emulation_jobs SET state='JOB_STATE_SUCCEEDED',requests_json='[]',result_json=?,error=NULL,updated_at=? WHERE id=? AND state='JOB_STATE_RUNNING'").bind(JSON.stringify(result),now(),id).run();
   }catch(e){
