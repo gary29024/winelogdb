@@ -226,7 +226,7 @@ const tree:readonly Draft[]=[
     ]),
     region('Tuscany',['Toscana'],[
       ...docg('Brunello di Montalcino','Chianti Classico','Chianti','Vino Nobile di Montepulciano','Carmignano'),
-      ...appellations('Bolgheri','Maremma Toscana','Rosso di Montalcino','Montecucco')
+      ...appellations('Bolgheri','Bolgheri Sassicaia','Maremma Toscana','Rosso di Montalcino','Montecucco')
     ]),
     region('Veneto',[],[
       ...docg('Amarone della Valpolicella','Recioto della Valpolicella'),
