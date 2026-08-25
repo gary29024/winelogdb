@@ -50,6 +50,12 @@ const RETRY_INSTRUCTIONS:Record<string,string>={
   'vintage-specific-detail-in-producer-scope':'a vintage-specific figure appeared in the producer-wide scope — keep producerWinemakingPractices to habits that hold across vintages, and note where practice varies'
 };
 
+/** The gate warnings a scope's content raises, as codes rather than prose. */
+export function scopeQualityWarnings(scope:ResearchScope,payload:Record<string,string>,target:ResearchTarget,sources:ResearchSource[]){
+  const missing=fieldsForScope(scope).some(field=>!payload[field]?.trim())?['missing-field']:[];
+  return [...new Set([...missing,...assessResearchScope(scope,payload,target.subject,sources).warnings])];
+}
+
 /**
  * Turn a scope's quality-gate rejection into instructions the model can act on.
  * A retry that re-sends a byte-identical prompt asks the same question the same
