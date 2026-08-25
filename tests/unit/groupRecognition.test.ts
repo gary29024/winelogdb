@@ -1,5 +1,5 @@
 import { describe,expect,it } from 'vitest';
-import { dedupeGroupRecognitionWines,groupRecognitionSchema } from '../../src/features/recognition/groupSchema';
+import { dedupeGroupRecognitionWines,groupRecognitionSchema,groupRecognitionWineSchema,parseGroupRecognition } from '../../src/features/recognition/groupSchema';
 import { groupCropRegion } from '../../src/features/uploads/cropGroupPhoto';
 
 const wine=(overrides:Record<string,unknown>={})=>({
@@ -34,6 +34,39 @@ describe('group photo recognition',()=>{
   it('canonicalizes producer-prefixed wine names during dedupe',()=>{
     const result=dedupeGroupRecognitionWines([wine({wineName:'Krug Grande Cuvée 170ème Édition'})] as never);
     expect(result[0].wineName).toBe('Grande Cuvée 170ème Édition');
+  });
+
+  it('survives the round trip the worker actually performs',()=>{
+    // The reported failure: every group scan came back
+    // {code:'unrecognized_keys',keys:['classification'],path:['wines',0]}. The
+    // worker canonicalises during dedupe, which fills fields the model was
+    // never asked for, then the browser re-parses that response with this same
+    // strict schema. A field with no home here rejects the entire scan.
+    const overWire=JSON.parse(JSON.stringify(parseGroupRecognition(JSON.stringify({wines:[
+      wine({producer:'Domaine Leflaive',wineName:'Puligny-Montrachet 1er Cru Clavoillon',vintage:2021,region:'Burgundy',appellation:'Puligny-Montrachet 1er Cru',style:'white'}),
+      wine({producer:'Domaine Leflaive',wineName:'Bourgogne Blanc',vintage:2021,region:'Burgundy',appellation:'Bourgogne',style:'white',boundingBox:{xMin:500,yMin:100,xMax:700,yMax:900}})
+    ],unresolvedCount:0}))));
+    const parsed=groupRecognitionSchema.safeParse(overWire);
+    expect(parsed.success).toBe(true);
+    expect(parsed.success&&parsed.data.wines.map(item=>item.classification)).toEqual(['premier_cru',null]);
+  });
+
+  it('accepts every field canonicalisation adds, not just the ones known today',()=>{
+    // A guard on the class of bug rather than the one instance: the next field
+    // canonicalizeWineFields learns to fill should fail here, in CI, rather
+    // than in the browser after a real scan.
+    const canonical=dedupeGroupRecognitionWines([wine()] as never)[0];
+    const result=groupRecognitionWineSchema.safeParse(canonical);
+    expect(result.success?[]:result.error.issues.flatMap(issue=>issue.code==='unrecognized_keys'?issue.keys:[])).toEqual([]);
+  });
+
+  it('accepts a canonicalised wine on the way into server session history',()=>{
+    // groupRecognitionSessions parses each stored item with this same schema,
+    // so the save that keeps a scan resumable across devices failed too.
+    const canonical=JSON.parse(JSON.stringify(dedupeGroupRecognitionWines([
+      wine({wineName:'Chambertin Grand Cru',region:'Burgundy',appellation:'Chambertin Grand Cru',style:'red'})
+    ] as never)[0]));
+    expect(groupRecognitionWineSchema.safeParse(canonical).success).toBe(true);
   });
 
   it('expands a tall detected bottle to a centred square crop when the source has room',()=>{
