@@ -77,3 +77,44 @@ describe('the grounding instruction',()=>{
     expect(sql).not.toMatch(/DROP\s+TABLE/i);
   });
 });
+
+import { describeResponseSchema,groundedGenerationConfig } from '../../src/lib/research/geminiBatch';
+
+describe('grounding and controlled generation cannot share a request',()=>{
+  const research=['src/lib/research/batchWineResearch.ts','src/lib/producers/batchResearch.ts'].map(path=>readFileSync(path,'utf8'));
+
+  it('sends no responseSchema on a request that declares the search tool',()=>{
+    // The API will not do both. A request asking for each returns well-formed
+    // JSON with the grounding quietly dropped, which the gate then rejects for
+    // having no sources - the failure that started this.
+    for(const source of research){
+      expect(source).toMatch(/google_search/);
+      expect(source).not.toMatch(/responseMimeType/);
+      expect(source).not.toMatch(/responseSchema:/);
+    }
+  });
+
+  it('keeps only the output ceiling in the generation config',()=>{
+    expect(groundedGenerationConfig(4096)).toEqual({maxOutputTokens:4096});
+  });
+
+  it('renders the contract from the schema so the two cannot drift',()=>{
+    const contract=describeResponseSchema({type:'OBJECT',properties:{
+      summary:{type:'STRING'},
+      vintage:{type:'STRING',nullable:true},
+      category:{type:'STRING',enum:['red','white']}
+    },required:['summary','category']});
+    expect(contract).toContain('no Markdown code fence');
+    expect(contract).toContain('- summary: string');
+    expect(contract).toContain('- vintage: string (or null) (optional)');
+    expect(contract).toContain('- category: string (one of: red, white)');
+  });
+
+  it('describes the fields inside an array of objects',()=>{
+    const contract=describeResponseSchema({type:'OBJECT',properties:{
+      range:{type:'ARRAY',items:{type:'OBJECT',properties:{name:{type:'STRING'}},required:['name']}}
+    },required:['range']});
+    expect(contract).toContain('- range: array');
+    expect(contract).toContain('- name: string');
+  });
+});

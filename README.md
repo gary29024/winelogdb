@@ -199,6 +199,16 @@ research limit rather than an infrastructure one. An answer with no grounding at
 all earns one further attempt, on a different model. Three attempts is the
 ceiling.
 
+**Grounding and controlled generation cannot share a request.** Declaring the
+search tool while also setting `responseMimeType` and a `responseSchema` asks
+the API for two things it will not do at once, and what comes back is
+well-formed JSON with the grounding silently dropped — which the gate then
+rejects for having no sources. Grounded requests therefore send no schema and
+ask for JSON in the prompt; the schema stays the single definition of the
+contract and is rendered into the prompt from itself by `describeResponseSchema`,
+so the two cannot drift. Responses are parsed with the existing tolerant reader
+rather than trusted to be bare JSON.
+
 There is no API flag that guarantees grounding, so enforcement is three things
 together: every research prompt — wine, producer profile and catalogue slices —
 opens by requiring the model to search before answering and to say plainly that
