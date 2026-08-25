@@ -108,7 +108,7 @@ const denominatedCountry=(denomination:string)=>(name:string,aliases:readonly st
  */
 const denominatedRegion=(denomination:string)=>(name:string,aliases:readonly string[]=[],children:readonly Draft[]=[]):Draft=>
   ({...region(name,aliases,children),denomination});
-const doRegion=denominatedRegion('DO'),docRegion=denominatedRegion('DOC');
+const doRegion=denominatedRegion('DO'),docRegion=denominatedRegion('DOC'),aocRegion=denominatedRegion('AOC');
 /**
  * A multi-region IGP that is itself the denomination, in the same shape as
  * Rioja or Priorat: nothing administrative shares its name, so the bare name
@@ -229,7 +229,13 @@ const tree:readonly Draft[]=[
       sub('Right Bank',[],appellations('Saint-Émilion','Saint-Émilion Grand Cru','Pomerol','Fronsac','Lalande-de-Pomerol','Castillon Côtes de Bordeaux')),
       appellation('Entre-Deux-Mers')
     ]),
-    region('Champagne',[],appellations('Montagne de Reims','Côte des Blancs','Vallée de la Marne','Côte des Bar','Aÿ','Cramant','Le Mesnil-sur-Oger')),
+    // Champagne, Alsace and Beaujolais are each a single appellation covering
+    // the whole region they name, in the same shape as Rioja - unlike Burgundy
+    // or Tuscany, which are collective names holding many appellations. Without
+    // marking them the country default stops above the region tier, so a wine
+    // recorded as "Champagne" showed no denomination while the same wine
+    // recorded under its village showed AOC.
+    aocRegion('Champagne',[],appellations('Montagne de Reims','Côte des Blancs','Vallée de la Marne','Côte des Bar','Aÿ','Cramant','Le Mesnil-sur-Oger')),
     region('Rhône',['Rhone','Rhône Valley','Rhone Valley'],[
       sub('Northern Rhône',['Northern Rhone'],appellations('Côte-Rôtie','Hermitage','Crozes-Hermitage','Cornas','Saint-Joseph','Condrieu','Château-Grillet','Saint-Péray')),
       sub('Southern Rhône',['Southern Rhone'],appellations('Châteauneuf-du-Pape','Gigondas','Vacqueyras','Rasteau','Lirac','Tavel','Vinsobres','Cairanne','Côtes du Rhône','Côtes du Rhône Villages'))
@@ -238,8 +244,8 @@ const tree:readonly Draft[]=[
       'Sancerre','Pouilly-Fumé','Vouvray','Chinon','Bourgueil','Saumur-Champigny','Savennières',
       'Muscadet Sèvre et Maine','Anjou','Quincy','Menetou-Salon','Coteaux du Layon','Saumur'
     )),
-    region('Alsace',[],grandCrus('Alsace Grand Cru')),
-    region('Beaujolais',[],appellations('Morgon','Fleurie','Moulin-à-Vent','Brouilly','Côte de Brouilly','Juliénas','Chénas','Chiroubles','Régnié','Saint-Amour','Beaujolais-Villages')),
+    aocRegion('Alsace',[],grandCrus('Alsace Grand Cru')),
+    aocRegion('Beaujolais',[],appellations('Morgon','Fleurie','Moulin-à-Vent','Brouilly','Côte de Brouilly','Juliénas','Chénas','Chiroubles','Régnié','Saint-Amour','Beaujolais-Villages')),
     region('Languedoc',['Languedoc-Roussillon'],appellations('Corbières','Minervois','Faugères','Pic Saint-Loup','Saint-Chinian','Fitou','Picpoul de Pinet')),
     region('Roussillon',[],appellations('Côtes du Roussillon','Collioure','Banyuls','Maury')),
     region('Provence',[],appellations('Bandol','Côtes de Provence','Cassis','Palette','Coteaux d’Aix-en-Provence')),

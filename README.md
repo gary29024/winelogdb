@@ -108,16 +108,38 @@ France's multi-region IGPs (Pays d'Oc, Méditerranée, Val de Loire, Atlantique,
 Comtés Rhodaniens) share nothing with an administrative name, so they are
 denominated regions in the same shape as Rioja and Priorat.
 
-The tree carries the full Italian list, but a national register is a moving
-target and this one was transcribed by hand. Where a zone is missing, the
-resolver falls back to the marker the label spells out: an unknown "… IGT"
-still reads as IGT, with the marker stripped from the stored name and the raw
-value reported as unresolved so nothing is silently dropped. Only IGT and IGP
-are read this way. A label claiming "Barolo DOC" is simply wrong, and the tree,
-which knows Barolo is DOCG, keeps the last word.
+Where a zone is missing from the tree, the resolver falls back to the marker the
+label spells out: an unknown "… IGT" still reads as IGT, with the marker
+stripped from the stored name and the raw value reported as unresolved so
+nothing is silently dropped. Only IGT and IGP are read this way. A label
+claiming "Barolo DOC" is simply wrong, and the tree, which knows Barolo is
+DOCG, keeps the last word.
+
+The names themselves are meant to come from eAmbrosia, the Commission's Union
+register, rather than from anyone's memory. `npm run gi:sync` fetches the wine
+geographical indications and rewrites `src/lib/places/giRegister.json`; the
+register owns the names, the tree owns where each zone sits, and
+`giRegisterDrift.test.ts` reports every name the two disagree on. A sync that
+comes back with an implausibly short list refuses to overwrite the file rather
+than quietly shrinking it.
+
+`giRegister.json` records its own provenance in `source`. It ships seeded from
+the tree — `"hand-transcribed"` — because the environment this was written in
+denies egress to `webgate.ec.europa.eu`, so the comparison is circular until
+the first real sync. Run `npm run gi:sync` somewhere that host is reachable and
+commit the result; any name that was wrong will fail the drift test on the same
+run.
 
 Two Italian regions register no IGT at all — Piedmont and Valle d'Aosta — and
 the tree says so explicitly rather than leaving it to look like an omission.
+
+The same "a region that is itself an appellation" idea covers Champagne, Alsace
+and Beaujolais, which are each a single AOC over the whole region they name.
+Without marking them the country default stopped above the region tier, so a
+wine recorded as "Champagne" showed no denomination while the same wine
+recorded under its village showed AOC. Burgundy and Tuscany stay unmarked: they
+are collective names holding many appellations, and that is the rule the tier
+cut-off exists to protect.
 
 ## Staying inside the D1 free tier
 

@@ -122,3 +122,32 @@ describe('the zone list',()=>{
     }
   });
 });
+
+describe('regions that are themselves an appellation',()=>{
+  const denomination=(region:string,appellation:string|null=null)=>resolvePlace({country:'France',region,appellation}).denomination;
+
+  it('gives Champagne its AOC however specifically the wine was recorded',()=>{
+    // Champagne AOC covers the whole delimited zone, so the region and the
+    // appellation are one place. A wine recorded under a village already read
+    // AOC by inheritance; recorded as plain "Champagne" it read nothing.
+    expect(denomination('Champagne')).toBe('AOC');
+    expect(denomination('Champagne','Champagne')).toBe('AOC');
+    expect(denomination('Champagne','Aÿ')).toBe('AOC');
+    expect(denomination('Champagne','Le Mesnil-sur-Oger')).toBe('AOC');
+  });
+
+  it('does the same for the other regions that are one appellation',()=>{
+    expect(denomination('Alsace')).toBe('AOC');
+    expect(denomination('Beaujolais')).toBe('AOC');
+    expect(denomination('Beaujolais','Morgon')).toBe('AOC');
+  });
+
+  it('still says nothing for a region that only holds appellations',()=>{
+    // The rule this preserves: Burgundy is not an AOC, and Tuscany is nothing
+    // at all, however many appellations sit inside them.
+    expect(denomination('Burgundy')).toBeNull();
+    expect(denomination('Loire')).toBeNull();
+    expect(denomination('Provence')).toBeNull();
+    expect(resolvePlace({country:'Italy',region:'Tuscany',appellation:null}).denomination).toBeNull();
+  });
+});

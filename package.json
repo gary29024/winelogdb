@@ -12,7 +12,8 @@
     "lint": "eslint .",
     "deploy": "npm run build && npm run db:migrate && wrangler deploy",
     "db:migrate:local": "wrangler d1 migrations apply DB --local",
-    "db:migrate": "wrangler d1 migrations apply DB --remote"
+    "db:migrate": "wrangler d1 migrations apply DB --remote",
+    "gi:sync": "vite-node scripts/sync_gi_register.ts"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
