@@ -7,6 +7,32 @@ export type BatchSessionSummary={id:string;status:string;totalItems:number;expec
 export type BatchRecognitionItem={id:string;position:number;status:'staged'|'submitted'|'ready'|'failed'|'confirmed'|'rejected'|'expired';recognition:RecognitionResult|null;error:string|null;confirmedWineId:string|null;imageIds:string[]};
 export type BatchRecognitionSession=BatchSessionSummary&{items:BatchRecognitionItem[]};
 
+/**
+ * Fold a freshly fetched session back into the Recent batches list.
+ *
+ * A session payload already carries every field that list shows, so keeping the
+ * two in step costs no extra request. Confirming a wine refreshed only the open
+ * session, so "N confirmed" in Recent batches kept whatever it said when the
+ * page was first opened - a batch could read "0 confirmed" directly after
+ * saving every wine in it, until the next full reload.
+ *
+ * Order is deliberately left alone. The list is sorted newest-first when it is
+ * fetched, and re-sorting on every poll tick or save would make rows jump under
+ * the reader while they work. The same array is returned when nothing actually
+ * changed, so a poll that finds no news costs no re-render.
+ */
+export function mergeSessionIntoHistory(history:BatchSessionSummary[],session:BatchRecognitionSession):BatchSessionSummary[]{
+  const summary:BatchSessionSummary={id:session.id,status:session.status,totalItems:session.totalItems,expectedItems:session.expectedItems,confirmedItems:session.confirmedItems,createdAt:session.createdAt,updatedAt:session.updatedAt,expiresAt:session.expiresAt};
+  let changed=false;
+  const next=history.map(entry=>{
+    if(entry.id!==summary.id)return entry;
+    const same=entry.status===summary.status&&entry.totalItems===summary.totalItems&&entry.expectedItems===summary.expectedItems&&entry.confirmedItems===summary.confirmedItems&&entry.updatedAt===summary.updatedAt;
+    if(same)return entry;
+    changed=true;return {...entry,...summary};
+  });
+  return changed?next:history;
+}
+
 type StagePhoto={original:File;recognition:File;metadata:PhotoMetadata;width:number;height:number};
 type ApiErrorBody={error?:unknown};
 export class BatchApiError extends Error{constructor(message:string,readonly status:number){super(message);this.name='BatchApiError'}}
