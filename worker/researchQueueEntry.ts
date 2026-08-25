@@ -1,9 +1,8 @@
 import { Hono } from 'hono';
 import app from './cuveeEntry';
 import { requireSession } from '../src/lib/auth/session';
-import { createQueuedProducerResearchRun } from '../src/lib/producers/backgroundResearch';
 import { pollProducerBatchResearch,startProducerBatchResearch } from '../src/lib/producers/batchResearch';
-import { getProducerResearchRun } from '../src/lib/producers/research';
+import { createQueuedProducerResearchRun,getProducerResearchRun } from '../src/lib/producers/research';
 import { createWineResearchRun,getLatestWineResearchRun,getWineResearchRun,updateWineResearchRun } from '../src/lib/research/backgroundJobs';
 import { getResearchBatchJob } from '../src/lib/research/batchJobStore';
 import { pollWineBatchResearch,startWineBatchResearch } from '../src/lib/research/batchWineResearch';

@@ -1,23 +1,13 @@
-import { stripProducerCatalogPrefix } from './catalogName';
+import { catalogPresentationKey } from '../cuvees/catalogPresentation';
 
 export type CatalogLike={name:string;category?:string|null;appellation?:string|null;classification?:string|null;style?:string|null;notes?:string|null};
 
-const normalize=(value:unknown)=>String(value??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/&/g,' and ').replace(/[’'`]/g,'').replace(/[^a-z0-9]+/g,' ').trim();
-const styleFamily=(value:unknown)=>{
-  const text=normalize(value),words=new Set(text.split(/\s+/).filter(Boolean));
-  if(words.has('sparkling')||words.has('champagne')||words.has('petillant')||words.has('mousseux'))return 'sparkling';
-  if(words.has('white')||words.has('blanc'))return 'white';
-  if(words.has('rose'))return 'rose';
-  if(words.has('red')||words.has('rouge'))return 'red';
-  if(words.has('orange'))return 'orange';
-  if(words.has('fortified')||words.has('port')||words.has('sherry')||words.has('madeira'))return 'fortified';
-  return text;
-};
-
+// Storage-time dedupe deliberately shares the display-time identity key. When
+// the two disagreed, a wine the producer page already showed as one row was
+// still stored as several, inflating the range count, the completeness guard's
+// floor and the cuvee identities derived from it.
 export function catalogIdentityKey(wine:CatalogLike,producerNames:string[]=[]){
-  const name=normalize(stripProducerCatalogPrefix(wine.name,producerNames));if(!name)return '';
-  const appellation=normalize(wine.appellation),style=styleFamily(wine.category??wine.style);
-  return `${name}::${appellation}::${style}`;
+  return catalogPresentationKey(wine,producerNames);
 }
 
 export function mergeCatalogRanges<T extends CatalogLike>(previous:T[],researched:T[],limit=150,producerNames:string[]=[]){

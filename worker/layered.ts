@@ -1,11 +1,11 @@
 import { Hono } from 'hono';
 import baseApp from './index';
 import { requireSession } from '../src/lib/auth/session';
-import { runLayeredDeepSearch } from '../src/lib/research/deepSearch';
 import { linkWineProducer,mapProducerRow,normalizeProducerAlias,resolveExistingProducer,setProducerPrimaryName } from '../src/lib/producers/entities';
 import { mergeProducerEntities,unlinkProducerMerge } from '../src/lib/producers/merge';
-import { getProducerResearchRun,runProducerResearch } from '../src/lib/producers/research';
+import { getProducerResearchRun } from '../src/lib/producers/research';
 import { createManualProducerContact,deleteManualProducerContact,listManualProducerContacts,updateManualProducerContact } from '../src/lib/producers/manualContacts';
+import { applyCatalogDecisions,deleteCatalogDecision,listCatalogDecisions,saveCatalogDecision } from '../src/lib/producers/catalogDecisions';
 import { selectRecognitionMetadata,type RecognitionPhotoMetadata } from '../src/lib/uploads/metadataSelection';
 import { canonicalCatalogEntries,type CatalogPresentationLike } from '../src/lib/cuvees/catalogPresentation';
 
@@ -77,7 +77,7 @@ app.get('/api/producers/:id',async c=>{
   try{
     const row=await c.env.DB.prepare('SELECT * FROM producers WHERE owner_id=? AND id=?').bind(owner,c.req.param('id')).first<Record<string,unknown>>();
     if(!row)return c.json({error:'Producer not found'},404);
-    const [aliases,wines,history,links,supplementaryContacts]=await Promise.all([
+    const [aliases,wines,history,links,supplementaryContacts,catalogDecisions]=await Promise.all([
       c.env.DB.prepare('SELECT display_alias FROM producer_aliases WHERE owner_id=? AND producer_id=? ORDER BY display_alias COLLATE NOCASE').bind(owner,c.req.param('id')).all<{display_alias:string}>(),
       c.env.DB.prepare(`SELECT w.id,w.cuvee_id,w.wine_name,w.vintage,w.appellation,w.region,w.country,w.wine_style,w.grapes_json,
         (SELECT wi.id FROM wine_images wi WHERE wi.owner_id=w.owner_id AND wi.wine_id=w.id ORDER BY wi.rowid ASC LIMIT 1) AS image_id,
@@ -87,9 +87,12 @@ app.get('/api/producers/:id',async c=>{
       c.env.DB.prepare('SELECT count(*) AS count FROM producer_research_history WHERE owner_id=? AND producer_id=?').bind(owner,c.req.param('id')).first<{count:number}>(),
       c.env.DB.prepare(`SELECT id,source_producer_id,source_canonical_name,merged_at FROM producer_merges
         WHERE owner_id=? AND destination_producer_id=? AND undone_at IS NULL ORDER BY merged_at DESC`).bind(owner,c.req.param('id')).all<{id:string;source_producer_id:string;source_canonical_name:string;merged_at:string}>(),
-      listManualProducerContacts(c.env.DB,owner,c.req.param('id'))
+      listManualProducerContacts(c.env.DB,owner,c.req.param('id')),
+      listCatalogDecisions(c.env.DB,owner,c.req.param('id'))
     ]);
-    return c.json({...mapProducerRow(row),aliases:aliases.results.map(x=>x.display_alias),researchHistoryCount:Number(history?.count)||0,linkedProducers:links.results.map(x=>({mergeId:x.id,producerId:x.source_producer_id,name:x.source_canonical_name,mergedAt:x.merged_at})),supplementaryContacts,tastedWines:wines.results.map(w=>({id:String(w.id),cuveeId:w.cuvee_id?String(w.cuvee_id):null,wineName:String(w.wine_name),vintage:w.vintage==null?null:Number(w.vintage),appellation:w.appellation?String(w.appellation):null,region:w.region?String(w.region):null,country:w.country?String(w.country):null,wineStyle:w.wine_style?String(w.wine_style):null,grapes:parseJson<unknown[]>(w.grapes_json,[]).map(String).filter(Boolean),imageId:w.image_id?String(w.image_id):null,tastingDate:w.tasting_date?String(w.tasting_date):null,rating:w.rating==null?null:Number(w.rating)}))});
+    const entity=mapProducerRow(row),producerNames=[entity.canonicalName,...aliases.results.map(x=>x.display_alias)];
+    const correctedCatalog=applyCatalogDecisions(entity.catalog,catalogDecisions,producerNames).range;
+    return c.json({...entity,catalog:correctedCatalog,catalogDecisions,aliases:aliases.results.map(x=>x.display_alias),researchHistoryCount:Number(history?.count)||0,linkedProducers:links.results.map(x=>({mergeId:x.id,producerId:x.source_producer_id,name:x.source_canonical_name,mergedAt:x.merged_at})),supplementaryContacts,tastedWines:wines.results.map(w=>({id:String(w.id),cuveeId:w.cuvee_id?String(w.cuvee_id):null,wineName:String(w.wine_name),vintage:w.vintage==null?null:Number(w.vintage),appellation:w.appellation?String(w.appellation):null,region:w.region?String(w.region):null,country:w.country?String(w.country):null,wineStyle:w.wine_style?String(w.wine_style):null,grapes:parseJson<unknown[]>(w.grapes_json,[]).map(String).filter(Boolean),imageId:w.image_id?String(w.image_id):null,tastingDate:w.tasting_date?String(w.tasting_date):null,rating:w.rating==null?null:Number(w.rating)}))});
   }catch(e){return c.json({error:(e as Error).message||'Could not load producer'},500)}
 });
 
@@ -140,10 +143,20 @@ app.post('/api/producers/:id/unlink',async c=>{
   try{return c.json(await unlinkProducerMerge(c.env.DB,owner,c.req.param('id'),body.mergeId))}catch(e){const message=(e as Error).message||'Could not unlink producer';return c.json({error:message},message.includes('not found')?404:400)}
 });
 
-app.post('/api/producers/:id/research',async c=>{
+app.post('/api/producers/:id/catalog-decisions',async c=>{
   cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
-  const body=await c.req.json().catch(()=>({})) as {confirmation?:string;requestId?:string};
-  try{const result=await runProducerResearch(c.env,owner,c.req.param('id'),body.confirmation,body.requestId);return c.json(result.body,result.status)}catch(e){console.error(JSON.stringify({event:'producer_research',stage:'route_failed',producerId:c.req.param('id'),requestId:body.requestId,error:(e as Error).message||String(e)}));return c.json({error:'Producer research failed unexpectedly',researchRequestId:body.requestId},500)}
+  const body=await c.req.json().catch(()=>({})) as {confirmation?:string;decision?:unknown;sourceKey?:unknown;sourceName?:unknown;targetKey?:unknown;targetName?:unknown};
+  if(body.confirmation!=='CORRECT_PRODUCER_CATALOG')return c.json({error:'A catalogue correction requires explicit confirmation'},400);
+  try{return c.json(await saveCatalogDecision(c.env.DB,owner,c.req.param('id'),body))}
+  catch(e){const message=(e as Error).message||'Could not save the catalogue correction';return c.json({error:message},message.includes('not found')?404:400)}
+});
+
+app.post('/api/producers/:id/catalog-decisions/:decisionId/undo',async c=>{
+  cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
+  const body=await c.req.json().catch(()=>({})) as {confirmation?:string};
+  if(body.confirmation!=='UNDO_PRODUCER_CATALOG_CORRECTION')return c.json({error:'Undoing a catalogue correction requires explicit confirmation'},400);
+  try{return c.json(await deleteCatalogDecision(c.env.DB,owner,c.req.param('id'),c.req.param('decisionId')))}
+  catch(e){const message=(e as Error).message||'Could not undo the catalogue correction';return c.json({error:message},message.includes('not found')?404:400)}
 });
 
 app.post('/api/recognition',async c=>{
@@ -159,12 +172,6 @@ app.post('/api/recognition',async c=>{
     const body=await response.clone().json() as Record<string,unknown>;
     return c.json({...body,locationName:null,tastingDate:selected.capturedAt?.slice(0,10)??null,latitude:selected.latitude,longitude:selected.longitude,metadataSource:selected.gpsSource==='exif'?'exif':selected.timestampSource});
   }catch{return response}
-});
-
-app.post('/api/wines/:id/deep-search',async c=>{
-  cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
-  const body=await c.req.json().catch(()=>({})) as {confirmation?:string;refresh?:'none'|'vintage'|'all'};
-  try{const result=await runLayeredDeepSearch(c.env,owner,c.req.param('id'),body);return c.json(result.body,result.status)}catch{return c.json({error:'Deep Search failed unexpectedly'},500)}
 });
 
 app.post('/api/wines',async c=>{

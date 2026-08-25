@@ -1,5 +1,3 @@
-import { runLayeredDeepSearch } from './deepSearch';
-
 export type WineResearchStage='queued'|'researching'|'saving'|'complete'|'failed';
 export type WineResearchRun={
   requestId:string;
@@ -15,7 +13,6 @@ export type WineResearchRun={
   durationMs:number|null;
 };
 
-type Env={DB:D1Database;GEMINI_API_KEY:string};
 const now=()=>new Date().toISOString();
 const cleanRequestId=(value?:string)=>value&&/^[A-Za-z0-9_-]{8,64}$/.test(value)?value:crypto.randomUUID();
 const columns='request_id,wine_id,status,stage,refresh_mode,attempt,message,started_at,updated_at,completed_at,duration_ms';
@@ -60,22 +57,4 @@ export async function updateWineResearchRun(db:D1Database,owner:string,requestId
   const stamp=now(),done=status==='running'?null:stamp,duration=done&&row?.started_at?Math.max(0,Date.parse(done)-Date.parse(row.started_at)):null;
   await db.prepare('UPDATE wine_research_runs SET status=?,stage=?,attempt=?,message=?,updated_at=?,completed_at=?,duration_ms=? WHERE owner_id=? AND request_id=?')
     .bind(status,stage,attempt,message,stamp,done,duration,owner,requestId).run();
-}
-
-export async function processWineResearchJob(env:Env,owner:string,wineId:string,requestId:string,refresh:'none'|'vintage'|'all'){
-  await updateWineResearchRun(env.DB,owner,requestId,'researching','Running grounded Gemini Deep Search in the background');
-  try{
-    const result=await runLayeredDeepSearch(env,owner,wineId,{confirmation:'RUN_DEEP_SEARCH',refresh});
-    if(result.status!==200){
-      const error='error' in result.body?result.body.error:'Deep Search failed';
-      await updateWineResearchRun(env.DB,owner,requestId,'failed',error,'failed');
-      return {ok:false,error};
-    }
-    await updateWineResearchRun(env.DB,owner,requestId,'complete','Deep Search complete and saved to this wine','complete');
-    return {ok:true};
-  }catch(e){
-    const error=(e as Error).message||'Deep Search failed unexpectedly';
-    await updateWineResearchRun(env.DB,owner,requestId,'failed',error,'failed').catch(()=>undefined);
-    return {ok:false,error};
-  }
 }

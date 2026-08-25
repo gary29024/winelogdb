@@ -1,12 +1,13 @@
 import { useEffect,useMemo,useRef,useState } from 'react';
 import { Link,useParams } from 'react-router-dom';
 import { WineImage } from '../wines/WineImage';
-import { cancelProducerResearch,getProducer,getProducerResearchStatus,listProducers,mergeProducer,researchProducer,setPrimaryProducerName,unlinkProducer,type LinkedProducer,type ProducerDetail,type ProducerResearchRun,type ProducerSummary } from './api';
+import { cancelProducerResearch,getProducer,getProducerResearchStatus,listProducers,mergeProducer,researchProducer,saveProducerCatalogDecision,setPrimaryProducerName,undoProducerCatalogDecision,unlinkProducer,type CatalogDecision,type LinkedProducer,type ProducerDetail,type ProducerResearchRun,type ProducerSummary } from './api';
 import { ProducerHeroImage } from './ProducerHeroImage';
 import { ProducerContacts } from './ProducerContacts';
 import { CuveeCatalogLinks,type TastedCuveeGroup } from './CuveeCatalogLinks';
 import { normalizeProducerAlias } from '../../lib/producers/entities';
 import { stripProducerCatalogPrefix } from '../../lib/producers/catalogName';
+import { catalogDecisionKey,catalogDecisionLabel } from '../../lib/producers/catalogDecisions';
 import { cuveeStyleFamily,normalizeCuveeAlias } from '../../lib/cuvees/entities';
 import '../../producer.css';
 import { startBackoffPoll,type Poller } from '../../lib/polling/backoff';
@@ -15,6 +16,15 @@ const stageLabel:Record<ProducerResearchRun['stage'],string>={preparing:'Queued 
 type CatalogCategory='red'|'white'|'rose'|'sparkling'|'dessert'|'fortified'|'orange'|'other';
 const categoryOrder:CatalogCategory[]=['red','white','rose','sparkling','dessert','fortified','orange','other'];
 const categoryLabels:Record<CatalogCategory,string>={red:'Red',white:'White',rose:'Rosé',sparkling:'Sparkling',dessert:'Dessert / sweet',fortified:'Fortified',orange:'Orange',other:'Other'};
+const RANGE_COLLAPSE_KEY='winelog.producerRange.collapsed';
+function readCollapsedCategories():Set<CatalogCategory>{
+ try{
+  const raw=window.localStorage.getItem(RANGE_COLLAPSE_KEY);if(!raw)return new Set();
+  const parsed=JSON.parse(raw) as unknown;
+  return new Set(Array.isArray(parsed)?parsed.filter((x):x is CatalogCategory=>categoryOrder.includes(x as CatalogCategory)):[]);
+ }catch{return new Set()}
+}
+function writeCollapsedCategories(next:Set<CatalogCategory>){try{window.localStorage.setItem(RANGE_COLLAPSE_KEY,JSON.stringify([...next]))}catch{/* storage unavailable */}}
 function catalogCategory(wine:ProducerDetail['catalog'][number]):CatalogCategory{
  const value=String(wine.category??wine.style??'other').toLowerCase();
  if(value.includes('sparkling')||value.includes('champagne'))return 'sparkling';
@@ -60,7 +70,7 @@ function catalogNote(wine:ProducerDetail['catalog'][number]){
 function sourceHost(value:string){try{return new URL(value).hostname.toLowerCase().replace(/^www\./,'')}catch{return ''}}
 
 export function ProducerDetailPage(){
- const {id=''}=useParams(),[producer,setProducer]=useState<ProducerDetail>(),[available,setAvailable]=useState<ProducerSummary[]>([]),[availableLoaded,setAvailableLoaded]=useState(false),[selectedAlias,setSelectedAlias]=useState(''),[primaryName,setPrimaryName]=useState(''),[loading,setLoading]=useState(true),[error,setError]=useState(''),[notice,setNotice]=useState(''),[researching,setResearching]=useState(false),[researchRun,setResearchRun]=useState<ProducerResearchRun|null>(null),[researchElapsed,setResearchElapsed]=useState(0),[researchCancelling,setResearchCancelling]=useState(false),[merging,setMerging]=useState(false),[unlinking,setUnlinking]=useState(''),[savingPrimary,setSavingPrimary]=useState(false);
+ const {id=''}=useParams(),[producer,setProducer]=useState<ProducerDetail>(),[available,setAvailable]=useState<ProducerSummary[]>([]),[availableLoaded,setAvailableLoaded]=useState(false),[selectedAlias,setSelectedAlias]=useState(''),[primaryName,setPrimaryName]=useState(''),[loading,setLoading]=useState(true),[error,setError]=useState(''),[notice,setNotice]=useState(''),[researching,setResearching]=useState(false),[researchRun,setResearchRun]=useState<ProducerResearchRun|null>(null),[researchElapsed,setResearchElapsed]=useState(0),[researchCancelling,setResearchCancelling]=useState(false),[merging,setMerging]=useState(false),[unlinking,setUnlinking]=useState(''),[savingPrimary,setSavingPrimary]=useState(false),[collapsedCategories,setCollapsedCategories]=useState<Set<CatalogCategory>>(readCollapsedCategories),[fixingKey,setFixingKey]=useState(''),[mergeTargetKey,setMergeTargetKey]=useState(''),[catalogBusy,setCatalogBusy]=useState(false);
  const researchPoll=useRef<Poller|undefined>(undefined),researchClock=useRef<number|undefined>(undefined);
  function stopResearchTimers(){researchPoll.current?.stop();if(researchClock.current)window.clearInterval(researchClock.current);researchPoll.current=undefined;researchClock.current=undefined}
  async function reload(){const detail=await getProducer(id);setProducer(detail);setPrimaryName(detail.canonicalName);setSelectedAlias('')}
@@ -91,10 +101,55 @@ export function ProducerDetailPage(){
  },[id]);
  const linkedByName=useMemo(()=>new Map((producer?.linkedProducers??[]).map(link=>[normalizeProducerAlias(link.name),link])),[producer]);
  const catalogGroups=useMemo(()=>{
+  if(!producer)return [];
   const map=new Map<CatalogCategory,ProducerDetail['catalog']>();
-  for(const wine of producer?.catalog??[]){const category=catalogCategory(wine),list=map.get(category)??[];list.push(wine);map.set(category,list)}
-  return categoryOrder.flatMap(category=>{const wines=map.get(category);return wines?.length?[{category,label:categoryLabels[category],wines}]:[]});
+  for(const wine of producer.catalog){const category=catalogCategory(wine),list=map.get(category)??[];list.push(wine);map.set(category,list)}
+  return categoryOrder.flatMap(category=>{
+   const wines=map.get(category);if(!wines?.length)return [];
+   const rows=wines.map((wine,index)=>{
+    const identity=catalogCuveeFor(wine,producer),producerNames=[producer.canonicalName,...producer.aliases];
+    return {key:`${wine.name}-${index}`,displayName:displayCatalogName(wine.name,producer),identity,meta:catalogMeta(wine,category),note:catalogNote(wine),releaseCount:identity?.tastedReleases?.length??0,
+     decisionKey:catalogDecisionKey(wine,producerNames),label:catalogDecisionLabel(wine,producerNames),category};
+   });
+   return [{category,label:categoryLabels[category],rows,tasted:rows.filter(row=>Boolean(row.identity?.tastedCount)).length}];
+  });
  },[producer]);
+ const catalogTotals=useMemo(()=>catalogGroups.reduce((totals,group)=>({wines:totals.wines+group.rows.length,tasted:totals.tasted+group.tasted}),{wines:0,tasted:0}),[catalogGroups]);
+ const catalogRowIndex=useMemo(()=>catalogGroups.flatMap(group=>group.rows.map(row=>({decisionKey:row.decisionKey,label:row.label,groupLabel:group.label}))).filter(row=>row.decisionKey),[catalogGroups]);
+ const allCategoriesCollapsed=catalogGroups.length>0&&catalogGroups.every(group=>collapsedCategories.has(group.category));
+ function startFixing(decisionKey:string){setFixingKey(current=>current===decisionKey?'':decisionKey);setMergeTargetKey('');setError('')}
+ async function applyCatalogDecision(row:{decisionKey:string;label:string},decision:'merge'|'hide'){
+  if(!producer||catalogBusy)return;
+  const target=decision==='merge'?catalogRowIndex.find(item=>item.decisionKey===mergeTargetKey):undefined;
+  if(decision==='merge'&&!target)return;
+  const ok=confirm(decision==='hide'
+   ?`Hide “${row.label}” from ${producer.canonicalName}’s range?\n\nThe wine is removed from the researched range and future producer research will not bring it back. Your own tastings are not deleted. You can undo this under Manual catalogue corrections.`
+   :`Record “${row.label}” as the same wine as “${target!.label}”?\n\nOnly “${target!.label}” will be listed, and future producer research will keep applying this correction. Your own tastings are not deleted. You can undo this under Manual catalogue corrections.`);
+  if(!ok)return;
+  setCatalogBusy(true);setError('');setNotice('');
+  try{
+   await saveProducerCatalogDecision(id,{decision,sourceKey:row.decisionKey,sourceName:row.label,targetKey:target?.decisionKey??null,targetName:target?.label??null});
+   await reload();setFixingKey('');setMergeTargetKey('');
+   setNotice(decision==='hide'?`“${row.label}” is hidden from the range. Producer research will not restore it.`:`“${row.label}” is now recorded as the same wine as “${target!.label}”.`);
+  }catch(e){setError((e as Error).message)}finally{setCatalogBusy(false)}
+ }
+ async function undoCatalogDecision(decision:CatalogDecision){
+  if(!producer||catalogBusy)return;
+  if(!confirm(`Undo this catalogue correction?\n\n“${decision.sourceName}” will be listed again the next time producer research returns it.`))return;
+  setCatalogBusy(true);setError('');setNotice('');
+  try{await undoProducerCatalogDecision(id,decision.id);await reload();setNotice(`The correction for “${decision.sourceName}” has been undone.`)}
+  catch(e){setError((e as Error).message)}finally{setCatalogBusy(false)}
+ }
+ function toggleCategory(category:CatalogCategory){
+  setCollapsedCategories(current=>{const next=new Set(current);if(next.has(category))next.delete(category);else next.add(category);writeCollapsedCategories(next);return next});
+ }
+ function toggleAllCategories(){
+  setCollapsedCategories(current=>{
+   const next=new Set(current);
+   for(const group of catalogGroups){if(allCategoriesCollapsed)next.delete(group.category);else next.add(group.category)}
+   writeCollapsedCategories(next);return next;
+  });
+ }
  const tastedGroups=useMemo<TastedCuveeGroup[]>(()=>{
   const map=new Map<string,ProducerDetail['tastedWines']>();
   for(const wine of producer?.tastedWines??[]){const style=cuveeStyleFamily(wine.wineStyle)||'unknown',key=wine.releaseParentCuveeId?`release:${wine.releaseParentCuveeId}::${style}`:`${wine.cuveeId??normalizeProducerAlias(wine.wineName)}::${style}`,list=map.get(key)??[];list.push(wine);map.set(key,list)}
@@ -137,7 +192,50 @@ export function ProducerDetailPage(){
    {producer.profile?<p className="producer-profile">{producer.profile}</p>:<p>Research this producer to establish its physical base, broad region and commune, public contact details, official website, general producer-wide practices, header image and a sourced current/recent wine range.</p>}
    {producer.winemakingPractices&&<div className="producer-practices"><p className="section-label">GENERAL WINEMAKING PRACTICES</p><p className="producer-profile">{producer.winemakingPractices}</p><small>Producer-wide context only. Exact cuvée/vintage techniques are researched separately on the wine page.</small></div>}
    <ProducerContacts producer={producer} onChanged={reload}/>
-   {catalogGroups.map(group=><div className="producer-catalog-group" key={group.category}><h3>{group.label}<span>{group.wines.length}</span></h3><div className="producer-catalog">{group.wines.map((wine,index)=>{const displayName=displayCatalogName(wine.name,producer),catalogIdentity=catalogCuveeFor(wine,producer),meta=catalogMeta(wine,group.category),note=catalogNote(wine),releaseCount=catalogIdentity?.tastedReleases?.length??0;return <div className="catalog-row" key={`${wine.name}-${index}`}><div style={{minWidth:0}}><strong>{displayName}</strong>{meta.length>0&&<span className="catalog-meta">{meta.join(' · ')}</span>}{note.short&&<small className="catalog-notes" style={{overflowWrap:'anywhere',wordBreak:'break-word'}} title={note.full}>{note.short}</small>}</div>{Boolean(catalogIdentity?.tastedCount)&&<span className="tasted-badge">Tasted{releaseCount?` · ${releaseCount} release${releaseCount===1?'':'s'}`:catalogIdentity&&catalogIdentity.tastedCount>1?` · ${catalogIdentity.tastedCount}`:''}</span>}</div>})}</div></div>)}
+   {catalogGroups.length>0&&<div className="producer-range">
+    <div className="producer-range-head">
+     <div><p className="section-label">WINE RANGE</p><strong>{catalogTotals.wines} wine{catalogTotals.wines===1?'':'s'} · {catalogGroups.length} style{catalogGroups.length===1?'':'s'}{catalogTotals.tasted?` · ${catalogTotals.tasted} tasted`:''}</strong></div>
+     <button type="button" className="range-toggle-all" onClick={toggleAllCategories}>{allCategoriesCollapsed?'Expand all':'Collapse all'}</button>
+    </div>
+    {catalogGroups.map(group=>{
+     const collapsed=collapsedCategories.has(group.category),panelId=`producer-range-${group.category}`;
+     return <section className={`producer-catalog-group${collapsed?' is-collapsed':''}`} key={group.category}>
+      <h3><button type="button" className="catalog-group-toggle" aria-expanded={!collapsed} aria-controls={panelId} onClick={()=>toggleCategory(group.category)}>
+       <span className={`catalog-swatch ${group.category}`} aria-hidden="true"/>
+       <span className="catalog-group-name">{group.label}</span>
+       <span className="catalog-group-count">{group.rows.length}</span>
+       {group.tasted>0&&<span className="catalog-group-tasted">{group.tasted} tasted</span>}
+       <span className="catalog-chevron" aria-hidden="true"/>
+      </button></h3>
+      <div className="producer-catalog" id={panelId} hidden={collapsed}>{group.rows.map(row=>{
+       const fixing=Boolean(row.decisionKey)&&fixingKey===row.decisionKey,mergeChoices=catalogRowIndex.filter(item=>item.decisionKey!==row.decisionKey);
+       return <div className={`catalog-row${fixing?' is-fixing':''}`} key={row.key}>
+        <div style={{minWidth:0}}><strong>{row.displayName}</strong>{row.meta.length>0&&<span className="catalog-meta">{row.meta.join(' · ')}</span>}{row.note.short&&<small className="catalog-notes" style={{overflowWrap:'anywhere',wordBreak:'break-word'}} title={row.note.full}>{row.note.short}</small>}</div>
+        <div className="catalog-row-actions">
+         {Boolean(row.identity?.tastedCount)&&<span className="tasted-badge">Tasted{row.releaseCount?` · ${row.releaseCount} release${row.releaseCount===1?'':'s'}`:row.identity&&row.identity.tastedCount>1?` · ${row.identity.tastedCount}`:''}</span>}
+         {Boolean(row.decisionKey)&&<button type="button" className="catalog-fix" aria-expanded={fixing} onClick={()=>startFixing(row.decisionKey)}>{fixing?'Close':'Duplicate?'}</button>}
+        </div>
+        {fixing&&<div className="catalog-fix-panel">
+         <p>Is “{row.label}” a duplicate of another wine in this range, or not a real wine at all? Producer research keeps re-applying whichever you choose.</p>
+         {mergeChoices.length>0?<div className="catalog-fix-merge">
+          <label>Same wine as<select value={mergeTargetKey} onChange={e=>setMergeTargetKey(e.target.value)} aria-label={`Wine to merge ${row.label} into`}><option value="">Choose the wine to keep…</option>{mergeChoices.map(item=><option key={item.decisionKey} value={item.decisionKey}>{item.label} · {item.groupLabel}</option>)}</select></label>
+          <button type="button" disabled={!mergeTargetKey||catalogBusy} onClick={()=>applyCatalogDecision(row,'merge')}>{catalogBusy?'Saving…':'Merge'}</button>
+         </div>:<small>No other wine in this range to merge into.</small>}
+         <button type="button" className="secondary-danger" disabled={catalogBusy} onClick={()=>applyCatalogDecision(row,'hide')}>Hide from range</button>
+        </div>}
+       </div>;
+      })}</div>
+     </section>;
+    })}
+    {producer.catalogDecisions.length>0&&<details className="catalog-corrections">
+     <summary>{producer.catalogDecisions.length} manual catalogue correction{producer.catalogDecisions.length===1?'':'s'}</summary>
+     {producer.catalogDecisions.map(decision=><div className="catalog-correction" key={decision.id}>
+      <div><strong>{decision.sourceName}</strong><span>{decision.decision==='merge'?`Merged into ${decision.targetName??'another wine'}`:'Hidden from the range'}</span></div>
+      <button type="button" disabled={catalogBusy} onClick={()=>undoCatalogDecision(decision)}>Undo</button>
+     </div>)}
+     <small>Corrections are re-applied after every producer research run, so a resolved duplicate does not come back.</small>
+    </details>}
+   </div>}
    {producer.sources.length>0&&<details className="producer-sources"><summary>{producer.sources.length} profile & range reference{producer.sources.length===1?'':'s'}{sourceWebsiteCount?` · ${sourceWebsiteCount} website${sourceWebsiteCount===1?'':'s'}`:''}</summary>{producer.sources.map(s=><a key={s.url} href={s.url} target="_blank" rel="noreferrer">{s.title}</a>)}</details>}{producer.researchedAt&&<small>Latest producer research: {producer.researchModel} · {new Date(producer.researchedAt).toLocaleDateString()}</small>}
   </section>
   <section className="detail-section"><p className="section-label">YOUR TASTINGS</p><h2>{tastedGroups.length} cuvée{tastedGroups.length===1?'':'s'} · {producer.tastedWines.length} tasting{producer.tastedWines.length===1?'':'s'}</h2>{tastedGroups.length?<div className="producer-tasted-groups">{tastedGroups.map(group=>{const releaseCount=group.releaseFamily?new Set(group.wines.map(w=>w.releaseDesignation).filter(Boolean)).size:0,identityMeta=[releaseCount?`${releaseCount} release${releaseCount===1?'':'s'}`:null,group.wineStyle,group.grapes.length?group.grapes.join(' / '):null].filter(Boolean).join(' · ');return <div className="tasted-cuvee-group" key={`${group.catalogCuveeId??group.cuveeId??normalizeProducerAlias(group.name)}-${cuveeStyleFamily(group.wineStyle)||'unknown'}`}><div className="tasted-cuvee-title"><div><strong>{group.name}</strong>{identityMeta&&<small>{identityMeta}</small>}</div></div><div className="producer-tasted">{group.wines.map((w,index)=>{const release=String(w.releaseDesignation??'').trim(),subline=[release?(w.vintage??'NV'):null,w.appellation,w.region].filter(Boolean).join(' · ');return <div className="tasted-row tasted-vintage-row" key={w.id}><Link to={`/wines/${w.id}`} className="tasted-row-link"><div className="tasted-thumb">{w.imageId?<WineImage imageId={w.imageId} alt={`${w.wineName} ${w.vintage??'NV'} bottle`} className="tasted-thumb-image"/>:<span className="tasted-thumb-fallback">W</span>}</div><div className="tasted-copy"><strong>{release||w.vintage||'NV'}</strong><span>{subline}</span></div></Link><div className="tasted-meta">{w.rating!=null&&<strong>{w.rating}</strong>}{w.tastingDate&&<span>{w.tastingDate}</span>}{index===0&&<CuveeCatalogLinks producer={producer} group={group} onChanged={reload}/>}</div></div>})}</div></div>})}</div>:<p>No tasting records linked to this producer yet.</p>}

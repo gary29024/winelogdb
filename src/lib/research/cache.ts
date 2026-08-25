@@ -42,6 +42,30 @@ export function scopeIsComplete(scope:ResearchScope,payload:Record<string,string
 export function scopePassesQuality(scope:ResearchScope,payload:Record<string,string>,target:ResearchTarget,sources:ResearchSource[],provenance?:DeepSearchProvenance){
   return scopeIsComplete(scope,payload)&&assessResearchScope(scope,payload,target.subject,sources).pass&&highRiskTechnicalScopePasses(scope,payload,provenance)&&technicalContradictionScopePasses(scope,payload,provenance);
 }
+const RETRY_INSTRUCTIONS:Record<string,string>={
+  'missing-field':'a required field was empty — return substantive text for every field of this scope, or an explicit statement that the fact could not be verified',
+  'no-grounding-source':'no web source backed this scope — ground every claim in a retrievable public source rather than answering from memory',
+  'wrong-vintage-reference':'the text asserted a year other than the requested vintage without ever naming it — write about the requested vintage, and mark any other year clearly as historical or comparative context',
+  'general-practice-presented-as-exact-vintage':'a general domaine habit was presented as verified for this exact vintage — either cite the technique for this vintage specifically, or say plainly that exact-vintage technique could not be verified',
+  'vintage-specific-detail-in-producer-scope':'a vintage-specific figure appeared in the producer-wide scope — keep producerWinemakingPractices to habits that hold across vintages, and note where practice varies'
+};
+
+/**
+ * Turn a scope's quality-gate rejection into instructions the model can act on.
+ * A retry that re-sends a byte-identical prompt asks the same question the same
+ * way and tends to fail the same way, so the retry carries the gate's reasons.
+ */
+export function scopeRetryFeedback(scope:ResearchScope,payload:Record<string,string>,target:ResearchTarget,sources:ResearchSource[],provenance?:DeepSearchProvenance){
+  const notes:string[]=[];
+  for(const field of fieldsForScope(scope))if(!payload[field]?.trim())notes.push(RETRY_INSTRUCTIONS['missing-field']);
+  for(const warning of assessResearchScope(scope,payload,target.subject,sources).warnings){
+    const instruction=RETRY_INSTRUCTIONS[warning];if(instruction&&!notes.includes(instruction))notes.push(instruction);
+  }
+  if(!highRiskTechnicalScopePasses(scope,payload,provenance))notes.push('a high-risk exact technical value was not directly supported by a cited source — either attribute the figure to the source that states it, or omit it and say it could not be verified');
+  if(!technicalContradictionScopePasses(scope,payload,provenance))notes.push('sources disagreed on an exact technical value and the disagreement was hidden — keep each source-specific value as its own sentence and state explicitly that the sources conflict');
+  return [...new Set(notes)];
+}
+
 function provenanceForScope(provenance:DeepSearchProvenance|undefined,scope:ResearchScope){
   if(!provenance)return undefined;const fields:DeepSearchProvenance['fields']={};
   for(const field of fieldsForScope(scope)){const item=provenance.fields[field];if(item)fields[field]=item}
