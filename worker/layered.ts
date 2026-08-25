@@ -1,10 +1,9 @@
 import { Hono } from 'hono';
 import baseApp from './index';
 import { requireSession } from '../src/lib/auth/session';
-import { runLayeredDeepSearch } from '../src/lib/research/deepSearch';
 import { linkWineProducer,mapProducerRow,normalizeProducerAlias,resolveExistingProducer,setProducerPrimaryName } from '../src/lib/producers/entities';
 import { mergeProducerEntities,unlinkProducerMerge } from '../src/lib/producers/merge';
-import { getProducerResearchRun,runProducerResearch } from '../src/lib/producers/research';
+import { getProducerResearchRun } from '../src/lib/producers/research';
 import { createManualProducerContact,deleteManualProducerContact,listManualProducerContacts,updateManualProducerContact } from '../src/lib/producers/manualContacts';
 import { applyCatalogDecisions,deleteCatalogDecision,listCatalogDecisions,saveCatalogDecision } from '../src/lib/producers/catalogDecisions';
 import { selectRecognitionMetadata,type RecognitionPhotoMetadata } from '../src/lib/uploads/metadataSelection';
@@ -160,12 +159,6 @@ app.post('/api/producers/:id/catalog-decisions/:decisionId/undo',async c=>{
   catch(e){const message=(e as Error).message||'Could not undo the catalogue correction';return c.json({error:message},message.includes('not found')?404:400)}
 });
 
-app.post('/api/producers/:id/research',async c=>{
-  cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
-  const body=await c.req.json().catch(()=>({})) as {confirmation?:string;requestId?:string};
-  try{const result=await runProducerResearch(c.env,owner,c.req.param('id'),body.confirmation,body.requestId);return c.json(result.body,result.status)}catch(e){console.error(JSON.stringify({event:'producer_research',stage:'route_failed',producerId:c.req.param('id'),requestId:body.requestId,error:(e as Error).message||String(e)}));return c.json({error:'Producer research failed unexpectedly',researchRequestId:body.requestId},500)}
-});
-
 app.post('/api/recognition',async c=>{
   cors(c);try{await user(c)}catch{return c.json({error:'Unauthorized'},401)}
   let selected=selectRecognitionMetadata([]);
@@ -179,12 +172,6 @@ app.post('/api/recognition',async c=>{
     const body=await response.clone().json() as Record<string,unknown>;
     return c.json({...body,locationName:null,tastingDate:selected.capturedAt?.slice(0,10)??null,latitude:selected.latitude,longitude:selected.longitude,metadataSource:selected.gpsSource==='exif'?'exif':selected.timestampSource});
   }catch{return response}
-});
-
-app.post('/api/wines/:id/deep-search',async c=>{
-  cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
-  const body=await c.req.json().catch(()=>({})) as {confirmation?:string;refresh?:'none'|'vintage'|'all'};
-  try{const result=await runLayeredDeepSearch(c.env,owner,c.req.param('id'),body);return c.json(result.body,result.status)}catch{return c.json({error:'Deep Search failed unexpectedly'},500)}
 });
 
 app.post('/api/wines',async c=>{

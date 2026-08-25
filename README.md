@@ -42,6 +42,31 @@ No bucket CORS policy is needed because uploads and image reads pass through the
 
 The migration creates owner/filter/sort indexes and an FTS5 table for producer, name, region, grapes, notes, event, and tags. API filtering supports vintage, country, region, style, minimum rating, and event, plus stable `limit`/`offset` loading and sorts for newest, oldest, rating, producer, and vintage. The UI stores all selections in URL query parameters so views are bookmarkable. Production write paths should maintain `wine_search` using D1 triggers or application transactions when enabling FTS queries at scale.
 
+## Deep Search quality gate
+
+Research is cached per scope and every scope passes a quality gate on write and
+again on read, so a cached entry that no longer meets the bar is re-researched
+rather than served. Four things keep that gate honest.
+
+- **Vintage references.** A field is rejected only when it asserts a year that
+  is not the requested vintage. Years introduced as history or comparison
+  ("converted to biodynamics in 2008", "picked later than 2015") are context,
+  not a claim about which wine this is, and no longer fail the scope.
+- **Source tiering.** Appellation bodies, consorzi and regulatory councils are
+  recognised across Europe and the New World, not just France and Napa, and
+  independent corroboration raises a field's score. A well-sourced wine outside
+  the named host lists can now reach `verified`; previously it was capped at
+  `mixed` however good its sources were.
+- **Retries carry the reason.** When the gate rejects a scope, the fallback
+  attempt is told what was wrong instead of re-sending an identical prompt.
+- **One implementation each.** `batchWineResearch.ts` and `batchResearch.ts` are
+  the only wine and producer researchers. Three earlier generations sat behind
+  shadowed routes where they could neither run nor be noticed; a test now pins
+  route ownership so a duplicate cannot creep back.
+
+The result's quality status, score and any warnings are shown on the wine page,
+so a rejection is diagnosable rather than an opaque failure.
+
 ## Producer catalogue corrections
 
 Producer research rebuilds `catalog_json` from scratch on every run, and the
