@@ -96,7 +96,7 @@ export function CollectionEditorPage(){
           <div className="collection-selected-targets">{manualLabels.length?manualLabels.map(item=><div key={item.key}><span><strong>{item.label}</strong><small>{item.meta}</small></span><button type="button" aria-label={`Remove ${item.label}`} onClick={()=>setManualItems(current=>current.filter(entry=>itemKey(entry)!==item.key))}>×</button></div>):<p>No targets selected yet. Choose only canonical names already available in WineLog.</p>}</div>
         </div>}
       </section>
-      <div className="collection-editor-actions"><Link to={id?`/achievements/${id}`:'/achievements'}>Cancel</Link><button type="submit" disabled={saving||!title.trim()||(mode==='catalogue'&&!smartRule)||(mode==='manual'&&!manualItems.length)}>{saving?'Saving…':editing?'Save changes':'Create collection'}</button></div>
+      <div className="collection-editor-actions"><Link to={id?`/achievements/${id}`:'/achievements'}>Cancel</Link><button type="submit" className="primary" disabled={saving||!title.trim()||(mode==='catalogue'&&!smartRule)||(mode==='manual'&&!manualItems.length)}>{saving?'Saving…':editing?'Save changes':'Create collection'}</button></div>
     </form>
   </section>;
 }

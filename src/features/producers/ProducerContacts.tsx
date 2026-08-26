@@ -37,7 +37,7 @@ export function ProducerContacts({producer,onChanged}:Props){
  async function save(){if(saving)return;setSaving(true);setLocalError('');try{if(editingId)await updateSupplementaryContact(producer.id,editingId,draft);else await createSupplementaryContact(producer.id,draft);await onChanged();cancel()}catch(e){setLocalError((e as Error).message)}finally{setSaving(false)}}
  async function remove(contact:ManualProducerContact){if(!confirm(`Delete ${contact.label||LABELS[contact.type]}: ${contact.value}?`))return;setLocalError('');try{await deleteSupplementaryContact(producer.id,contact.id);await onChanged();if(editingId===contact.id)cancel()}catch(e){setLocalError((e as Error).message)}}
  return <div className="producer-contact">
-  <div className="producer-contact-head"><p className="section-label">CONTACT</p><button type="button" className="producer-contact-add" onClick={startAdd}>+ Add contact</button></div>
+  <div className="producer-contact-head"><p className="section-label">Contact</p><button type="button" className="producer-contact-add" onClick={startAdd}>+ Add contact</button></div>
   <div className="producer-contact-group"><div className="producer-contact-group-title"><strong>Verified by research</strong></div>
    {producer.researchedAt?(hasVerified?<>
     {verifiedLinks.length>0&&<div className="producer-contact-direct-links">{verifiedLinks.map(item=><a className="producer-contact-direct-link" key={item.label} href={item.value} target="_blank" rel="noreferrer"><span>{item.label}</span><span aria-hidden="true">↗</span></a>)}</div>}
