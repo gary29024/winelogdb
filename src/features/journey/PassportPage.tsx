@@ -6,7 +6,7 @@ import { getAchievementProgress } from '../achievements/api';
 import { passportCollectionKicker,passportCollectionSummary,selectPassportCollections } from '../achievements/passportPreview';
 import type { AchievementProgress } from '../achievements/types';
 import { getJourneyData,type JourneyData,type RecentTasting } from './api';
-import { journeyLadder,nextMilestones,unlockedAchievements } from './model';
+import { journeyLadder,nextMilestones,stampTotals } from './model';
 import { grapeColorFor } from './passportVisuals';
 import { PassportMap } from './PassportMap';
 import '../../journey.css';
@@ -47,11 +47,11 @@ export function PassportPage(){
   useEffect(()=>{let active=true;getJourneyData().then(result=>{if(active)setData(result)}).catch(e=>{if(active)setError((e as Error).message)});return()=>{active=false}},[]);
   useEffect(()=>{let active=true;getAchievementProgress().then(result=>{if(active)setCollections(result)}).catch(e=>{if(active)setCollectionsError((e as Error).message)});return()=>{active=false}},[]);
   const milestones=useMemo(()=>data?nextMilestones(data.summary):[],[data]);
-  const achievements=useMemo(()=>data?unlockedAchievements(data.summary):[],[data]);
   const ladder=useMemo(()=>data?journeyLadder(data.summary):[],[data]);
   // The track that needs the fewest tastings to earn its next stamp - the one
   // worth naming when there is only room to name one.
   const nextStamp=useMemo(()=>ladder.filter(track=>track.next).sort((a,b)=>a.remaining-b.remaining)[0]??null,[ladder]);
+  const stamps=useMemo(()=>stampTotals(ladder),[ladder]);
   const featuredCollections=useMemo(()=>collections?selectPassportCollections(collections):[],[collections]);
   const collectionsSummary=useMemo(()=>collections?passportCollectionSummary(collections):null,[collections]);
   if(error)return <section className="journey-page"><p role="alert">{error}</p></section>;
@@ -152,7 +152,7 @@ export function PassportPage(){
             goes to see what they are collecting. This card sits beside Recent
             tastings in a pair, so it has a height to keep to: what is earned,
             and the one stamp that is closest. */}
-        <p className="passport-stamp-count"><strong>{achievements.length}</strong> earned across {ladder.length} tracks</p>
+        <p className="passport-stamp-count"><strong>{stamps.earned}</strong> of {stamps.total} stamps earned</p>
         {nextStamp
           ?<p className="passport-empty-mini">Closest: <strong>{nextStamp.remaining} more</strong> {nextStamp.label.toLowerCase()} to reach {nextStamp.next!.value}.</p>
           :<p className="passport-empty-mini">Every journey stamp collected.</p>}

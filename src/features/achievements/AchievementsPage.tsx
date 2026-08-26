@@ -4,7 +4,7 @@ import { AchievementIcon } from './AchievementIcon';
 import { getAchievementProgress } from './api';
 import type { AchievementProgress } from './types';
 import { getJourneyData,type JourneyData } from '../journey/api';
-import { journeyLadder } from '../journey/model';
+import { journeyLadder,stampTotals } from '../journey/model';
 import { JourneyStampIcon } from '../journey/JourneyStampIcon';
 import '../../achievementPassport.css';
 import '../../achievements.css';
@@ -36,7 +36,7 @@ export function AchievementsPage(){
   if(error)return <section className="achievements-page"><p role="alert">{error}</p></section>;
   if(!collections||!summary)return <section className="achievements-page"><p aria-live="polite">Checking your collection stamps…</p></section>;
   const ladder=journey?journeyLadder(journey.summary):[];
-  const earnedStamps=ladder.reduce((total,track)=>total+track.earned,0);
+  const earnedStamps=stampTotals(ladder).earned;
   const mine=collections.filter(item=>item.definition.editable),curated=collections.filter(item=>!item.definition.editable);
 
   return <section className="achievements-page">

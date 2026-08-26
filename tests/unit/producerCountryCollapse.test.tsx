@@ -115,6 +115,26 @@ describe('the producer library by country',()=>{
     expect(named('Italy').getAttribute('aria-expanded')).toBe('false');
   });
 
+  it('states the size of the library once',async()=>{
+    // It was printed twice: a caption under the search field and again in the
+    // header above the countries, in two different sizes, which read as two
+    // different numbers rather than one fact.
+    await render();
+    const counts=[...host!.querySelectorAll('*')]
+      .filter(el=>el.children.length===0&&/\d+\s+producers?\b/.test(el.textContent??''))
+      .map(el=>el.textContent);
+    expect(counts).toEqual(['3 countries · 4 producers']);
+  });
+
+  it('says how much of the library a search matched',async()=>{
+    await render();
+    await type('gaja');
+    const counts=[...host!.querySelectorAll('*')]
+      .filter(el=>el.children.length===0&&/\d+\s+(?:of\s+\d+\s+)?producers?\b/.test(el.textContent??''))
+      .map(el=>el.textContent);
+    expect(counts).toEqual(['1 country · 1 of 4 producers']);
+  });
+
   it('does not make a single country collapsible',async()=>{
     // Collapsing the only group on the page hides everything and navigates
     // nowhere, so a one-country library keeps the plain heading.

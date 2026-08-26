@@ -2,7 +2,7 @@ import { describe,expect,it } from 'vitest';
 import { journeyLadder,nextMilestones } from '../../src/features/journey/model';
 
 const summary=(over:Partial<Record<string,number>>={})=>({
-  totalWines:0,producers:0,appellations:0,countries:0,structuredTastings:0,
+  totalWines:0,producers:0,appellations:0,regions:0,countries:0,vintages:0,structuredTastings:0,
   ...over
 } as Parameters<typeof journeyLadder>[0]);
 
@@ -38,11 +38,11 @@ describe('the stamp ladder',()=>{
     // so there was nowhere to see what was being collected.
     const ladder=journeyLadder(summary({totalWines:858}));
     expect(ladder.map(track=>track.key))
-      .toEqual(['totalWines','producers','appellations','countries','structuredTastings']);
+      .toEqual(['totalWines','producers','appellations','regions','countries','vintages','structuredTastings']);
     const wines=ladder[0];
-    expect(wines.stamps.map(stamp=>stamp.value)).toEqual([10,25,50,100,200,500,1000]);
+    expect(wines.stamps.map(stamp=>stamp.value)).toEqual([10,25,50,100,200,500,1000,2000,3000,5000]);
     expect(wines.earned).toBe(6);
-    expect(wines.total).toBe(7);
+    expect(wines.total).toBe(10);
   });
 
   it('marks exactly one stamp as next',()=>{
@@ -59,10 +59,19 @@ describe('the stamp ladder',()=>{
   it('has nothing next once a track is finished',()=>{
     // The milestone sets are finite. Inventing a further stamp would promise
     // something the app never awards.
-    const wines=journeyLadder(summary({totalWines:1200}))[0];
+    const wines=journeyLadder(summary({totalWines:6000}))[0];
     expect(wines.stamps.every(stamp=>stamp.earned)).toBe(true);
     expect(wines.next).toBeNull();
     expect(wines.remaining).toBe(0);
+  });
+
+  it('keeps a stamp ahead of a journal this size',()=>{
+    // The reported problem: at 957 wines, 566 producers and 214 appellations
+    // three tracks had collected every stamp, so the section read as finished
+    // rather than as something still being collected.
+    const ladder=journeyLadder(summary({totalWines:957,producers:566,appellations:214,regions:120,countries:20,vintages:45,structuredTastings:0}));
+    const finished=ladder.filter(track=>track.next===null).map(track=>track.key);
+    expect(finished).toEqual([]);
   });
 
   it('starts empty rather than broken',()=>{
