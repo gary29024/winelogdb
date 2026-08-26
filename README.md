@@ -40,6 +40,10 @@ login, verification and troubleshooting. In outline:
 4. Set `APP_URL` in `wrangler.jsonc` to the exact deployed origin, then redeploy.
 5. Apply schema with `npm run db:migrate`, then run `npm run deploy`.
 
+Deploying from GitHub instead of a laptop works as well — see
+[Deploying from GitHub instead](SETUP.md#deploying-from-github-instead) for the
+build command to use and what to do when a push does not trigger a build.
+
 No bucket CORS policy is needed because uploads and image reads pass through the authenticated Worker. If direct signed uploads are introduced later, restrict CORS to the exact application origin, required `PUT`/`HEAD` methods and content headers; never use `*` with credentials. Store object keys—not URLs, API credentials, or signatures—in D1.
 
 ## Search
