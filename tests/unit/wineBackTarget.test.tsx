@@ -2,6 +2,8 @@
 import { act } from 'react';
 import { createRoot,type Root } from 'react-dom/client';
 import { MemoryRouter,Route,Routes } from 'react-router-dom';
+import { readFileSync,readdirSync } from 'node:fs';
+import { join } from 'node:path';
 import { afterEach,describe,expect,it,vi } from 'vitest';
 
 declare global{var IS_REACT_ACT_ENVIRONMENT:boolean}
@@ -125,5 +127,42 @@ describe('the back link on a wine',()=>{
     act(()=>root?.unmount());host?.remove();
     const back=await renderWine(null);   // no state, as after a refresh
     expect(back.getAttribute('href')).toBe('/producers/p1');
+  });
+});
+
+describe('every page that links into a wine',()=>{
+  it('hands over a target the wine will actually accept',()=>{
+    // A rejected target falls back to the journal silently, so a call site that
+    // gets it wrong looks like the feature simply not working rather than like
+    // a bug. Catch it here instead.
+    const walk=(dir:string):string[]=>readdirSync(dir,{withFileTypes:true})
+      .flatMap(entry=>entry.isDirectory()?walk(join(dir,entry.name)):[join(dir,entry.name)]);
+    const sources=walk(join(process.cwd(),'src')).filter(path=>path.endsWith('.tsx'))
+      .map(path=>({file:path.split('/').pop()!,code:readFileSync(path,'utf8')}));
+
+    const callSites=sources.flatMap(({file,code})=>
+      [...code.matchAll(/linkFrom\(/g)].map(match=>{
+        // take the balanced argument so a ternary inside it is not truncated
+        let depth=0,end=match.index!+match[0].length-1;
+        for(let at=end;at<code.length;at++){
+          if('([{`'.includes(code[at]))depth++;
+          else if(')]}'.includes(code[at])&&--depth===0){end=at;break}
+        }
+        return {file,arg:code.slice(match.index!+match[0].length,end)};
+      }));
+    // journal, producer, batch, group photo, passport, achievement
+    expect(callSites.length).toBeGreaterThanOrEqual(6);
+
+    const rejected=callSites.flatMap(site=>{
+      const afterTo=site.arg.split(/\bto:/).slice(1).join(' ');
+      // every string literal the `to` can evaluate to, ternary branches included
+      const literals=[...afterTo.matchAll(/`([^`]*)`|'([^']*)'/g)]
+        .map(match=>(match[1]??match[2]).replace(/\$\{[^}]*\}/g,'x'))
+        .filter(literal=>literal.startsWith('/')||literal.includes('://')||literal.startsWith('javascript'));
+      return literals
+        .filter(literal=>!backTargetFromState(linkFrom({to:literal,label:'x'})))
+        .map(literal=>`${site.file}: ${literal}`);
+    });
+    expect(rejected).toEqual([]);
   });
 });
