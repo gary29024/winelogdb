@@ -3,6 +3,8 @@ import app from './cuveeEntry';
 import { requireSession } from '../src/lib/auth/session';
 import { pollProducerBatchResearch,startProducerBatchResearch } from '../src/lib/producers/batchResearch';
 import { createQueuedProducerResearchRun,getProducerResearchRun } from '../src/lib/producers/research';
+import { activeCampaignId,advanceCampaign,cancelCampaign,countUnresearchedProducers,createCampaign,dismissCampaign,readCampaign,typicalProducerRunMs,unresearchedProducers,
+  CAMPAIGN_CONCURRENCY,CAMPAIGN_MAX_PRODUCERS,CAMPAIGN_TICK_SECONDS,GEMINI_REQUESTS_PER_PRODUCER } from '../src/lib/producers/researchCampaign';
 import { createWineResearchRun,getLatestWineResearchRun,getWineResearchRun,updateWineResearchRun } from '../src/lib/research/backgroundJobs';
 import { getResearchBatchJob } from '../src/lib/research/batchJobStore';
 import { pollWineBatchResearch,startWineBatchResearch } from '../src/lib/research/batchWineResearch';
@@ -16,8 +18,9 @@ type ProducerJob={kind:'producer';owner:string;producerId:string;requestId:strin
 type ProducerBatchPollJob={kind:'producer_batch_poll';owner:string;producerId:string;requestId:string;jobId:string;pollCount:number};
 type WineJob={kind:'wine';owner:string;wineId:string;requestId:string;refresh:'none'|'vintage'|'all'};
 type WineBatchPollJob={kind:'wine_batch_poll';owner:string;wineId:string;requestId:string;jobId:string;pollCount:number};
+type ProducerCampaignTickJob={kind:'producer_campaign_tick';owner:string;campaignId:string};
 type CancelResearchSweepJob={kind:'research_cancel_sweep';owner:string;targetKind:ResearchTargetKind;targetId:string;requestId:string;pass:number};
-type ResearchJob=ProducerJob|ProducerBatchPollJob|WineJob|WineBatchPollJob|CancelResearchSweepJob|BatchRecognitionJob;
+type ResearchJob=ProducerJob|ProducerBatchPollJob|ProducerCampaignTickJob|WineJob|WineBatchPollJob|CancelResearchSweepJob|BatchRecognitionJob;
 type Bindings={DB:D1Database;WINE_IMAGES:R2Bucket;ASSETS:Fetcher;GEMINI_API_KEY:string;AUTH_SECRET:string;APP_PASSWORD:string;APP_URL:string;MAX_FILE_BYTES?:string;MAX_BATCH_FILES?:string;RESEARCH_QUEUE:Queue<ResearchJob>};
 type AppEnv={Bindings:Bindings};
 const router=new Hono<AppEnv>();
@@ -52,6 +55,55 @@ router.post('/api/producers/:id/research',async c=>{
   const queued=await createQueuedProducerResearchRun(c.env.DB,owner,c.req.param('id'),body.requestId);if(!queued)return c.json({error:'Producer not found'},404);
   if(queued.created){try{await c.env.RESEARCH_QUEUE.send({kind:'producer',owner,producerId:c.req.param('id'),requestId:queued.requestId})}catch(e){const error=(e as Error).message||'Could not queue producer research';await failProducerQueue(c.env.DB,owner,queued.requestId,error);return c.json({error,researchRequestId:queued.requestId},503)}}
   return c.json({accepted:true,researchRequestId:queued.requestId,existing:!queued.created},202);
+});
+
+// Batch producer research. The plan is shown before anything is queued: how
+// many producers have never been researched, how many this run would take, and
+// what that costs in grounded Gemini requests and wall-clock time.
+router.get('/api/producers/research-batch/plan',async c=>{
+  cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
+  const requested=Number(c.req.query('limit')??0);
+  const unresearched=await countUnresearchedProducers(c.env.DB,owner);
+  const willRun=Math.max(0,Math.min(unresearched,CAMPAIGN_MAX_PRODUCERS,Number.isFinite(requested)&&requested>0?Math.floor(requested):unresearched));
+  const perProducerMs=await typicalProducerRunMs(c.env.DB,owner);
+  return c.json({
+    unresearched,willRun,maxPerRun:CAMPAIGN_MAX_PRODUCERS,concurrency:CAMPAIGN_CONCURRENCY,
+    geminiRequests:willRun*GEMINI_REQUESTS_PER_PRODUCER,
+    perProducerMs,
+    estimatedMs:perProducerMs==null?null:Math.round(perProducerMs*willRun/CAMPAIGN_CONCURRENCY),
+    active:await activeCampaignId(c.env.DB,owner)
+  });
+});
+
+router.get('/api/producers/research-batch',async c=>{
+  cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
+  return c.json({campaign:await readCampaign(c.env.DB,owner)});
+});
+
+router.post('/api/producers/research-batch',async c=>{
+  cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
+  const body=await c.req.json().catch(()=>({})) as {confirmation?:string;limit?:number};
+  if(body.confirmation!=='RUN_PRODUCER_RESEARCH_BATCH')return c.json({error:'Batch producer research requires explicit confirmation'},400);
+  if(await activeCampaignId(c.env.DB,owner))return c.json({error:'A batch producer research run is already in progress'},409);
+  const producers=await unresearchedProducers(c.env.DB,owner,Number(body.limit)||CAMPAIGN_MAX_PRODUCERS);
+  if(!producers.length)return c.json({error:'Every producer has been researched already'},400);
+  const campaignId=await createCampaign(c.env,owner,producers);
+  if(!campaignId)return c.json({error:'Could not start the batch'},500);
+  try{await c.env.RESEARCH_QUEUE.send({kind:'producer_campaign_tick',owner,campaignId})}
+  catch(e){await cancelCampaign(c.env.DB,owner,campaignId);return c.json({error:(e as Error).message||'Could not queue the batch'},503)}
+  return c.json({accepted:true,campaign:await readCampaign(c.env.DB,owner,campaignId)},202);
+});
+
+router.post('/api/producers/research-batch/:id/cancel',async c=>{
+  cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
+  await cancelCampaign(c.env.DB,owner,c.req.param('id'));
+  return c.json({campaign:await readCampaign(c.env.DB,owner,c.req.param('id'))});
+});
+
+router.post('/api/producers/research-batch/:id/dismiss',async c=>{
+  cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
+  await dismissCampaign(c.env.DB,owner,c.req.param('id'));
+  return c.json({campaign:await readCampaign(c.env.DB,owner,c.req.param('id'))});
 });
 
 router.get('/api/producers/:id/research-status',async c=>{
@@ -125,10 +177,15 @@ router.all('*',c=>app.fetch(c.req.raw,c.env,c.executionCtx));
 
 async function consume(batch:MessageBatch<ResearchJob>,env:Bindings){
   for(const message of batch.messages){const job=message.body;try{
-    console.log(JSON.stringify({event:'research_queue',stage:'start',kind:job.kind,...('requestId' in job?{requestId:job.requestId}:{sessionId:job.sessionId})}));
+    console.log(JSON.stringify({event:'research_queue',stage:'start',kind:job.kind,...('requestId' in job?{requestId:job.requestId}:'sessionId' in job?{sessionId:job.sessionId}:{campaignId:job.campaignId})}));
     if(job.kind==='producer'){
       if(!(await isResearchRunRunning(env.DB,job.owner,'producer',job.producerId,job.requestId)))console.log(JSON.stringify({event:'research_queue',stage:'cancelled_before_submit',kind:job.kind,requestId:job.requestId}));
       else{await preparePrimaryRouting(env,job.owner,job.requestId);try{const result=await startProducerBatchResearch(env,job.owner,job.producerId,job.requestId);console.log(JSON.stringify({event:'research_queue',stage:result.ok?'batch_submitted':'failed',kind:job.kind,requestId:job.requestId,...(!result.ok?{error:result.error}:{})}))}finally{clearPrimaryGeminiBatchBypass(job.requestId)}}
+    }
+    else if(job.kind==='producer_campaign_tick'){
+      const progress=await advanceCampaign(env,job.owner,job.campaignId);
+      console.log(JSON.stringify({event:'research_queue',stage:progress.done?'campaign_complete':'campaign_tick',kind:job.kind,campaignId:job.campaignId,...progress}));
+      if(!progress.done)await env.RESEARCH_QUEUE.send(job,{delaySeconds:CAMPAIGN_TICK_SECONDS});
     }
     else if(job.kind==='producer_batch_poll'){await noteFallbackUse(env,job.owner,job.jobId,job.requestId,'producer',job.pollCount);await pollProducerBatchResearch(env,job.owner,job.producerId,job.requestId,job.jobId,job.pollCount)}
     else if(job.kind==='wine'){

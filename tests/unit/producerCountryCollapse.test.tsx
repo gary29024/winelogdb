@@ -32,6 +32,11 @@ async function render(items=library){
   return host;
 }
 
+// Every leaf that states the size of the library, ignoring the batch-research
+// link - it counts something else (producers never researched) and says so.
+const libraryCounts=()=>[...(host?.querySelectorAll('*')??[])]
+  .filter(el=>el.children.length===0&&!el.closest('.research-campaign,.research-campaign-link')&&/\d+\s+(?:of\s+\d+\s+)?producers?\b/.test(el.textContent??''))
+  .map(el=>el.textContent);
 const toggles=()=>[...(host?.querySelectorAll('.country-group-toggle')??[])] as HTMLButtonElement[];
 const bodies=()=>[...(host?.querySelectorAll('.producer-country-body')??[])] as HTMLElement[];
 const named=(country:string)=>toggles().find(button=>button.querySelector('.country-group-name')?.textContent===country)!;
@@ -113,6 +118,32 @@ describe('the producer library by country',()=>{
     await type('');
     expect(named('France').getAttribute('aria-expanded')).toBe('true');
     expect(named('Italy').getAttribute('aria-expanded')).toBe('false');
+  });
+
+  it('states the size of the library once',async()=>{
+    // It was printed twice: a caption under the search field and again in the
+    // header above the countries, in two different sizes, which read as two
+    // different numbers rather than one fact.
+    await render();
+    expect(libraryCounts()).toEqual(['3 countries · 4 producers']);
+  });
+
+  it('says how much of the library a search matched',async()=>{
+    await render();
+    await type('gaja');
+    expect(libraryCounts()).toEqual(['1 country · 1 of 4 producers']);
+  });
+
+  it('sends batch research to its own page rather than sitting on this one',async()=>{
+    // The library is a list you scan; a batch run is something you set going
+    // and come back to. Only the one line stays here.
+    await render();
+    const entry=host!.querySelector('.research-campaign-link') as HTMLAnchorElement;
+    expect(entry).toBeTruthy();
+    expect(entry.getAttribute('href')).toBe('/producers/research-batch');
+    expect(entry.textContent).toContain('4 producers never researched');
+    expect(host!.querySelector('.research-campaign-choices')).toBeNull();
+    expect(host!.querySelector('.research-campaign-confirm')).toBeNull();
   });
 
   it('does not make a single country collapsible',async()=>{

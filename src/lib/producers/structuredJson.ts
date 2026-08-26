@@ -28,6 +28,11 @@ function hasWeakCatalogFieldLeakage(value:string){
   const text=value.trim();if(!text)return false;
   if(new RegExp(`\\b${structuredKey}\\b\\s*[:=]\\s*(?:null|true|false|["'])`,'i').test(text))return true;
   if(new RegExp(`\\b${structuredKey}\\b\\s+(?:null|true|false)\\b`,'i').test(text))return true;
+  // A field path left dangling on the end of the value: "Still dry white唱.notes".
+  // The same swallowed-record glitch as the cases above, but the model stopped
+  // before writing the value, so there is no colon or literal to key off - only
+  // a key name hanging off a full stop where a sentence cannot continue.
+  if(new RegExp(`\\.\\s*${structuredKey}\\s*$`,'i').test(text))return true;
   return false;
 }
 

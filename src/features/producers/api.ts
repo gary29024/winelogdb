@@ -61,4 +61,27 @@ export const saveProducerCatalogDecision=(producerId:string,input:{decision:Cata
 export const undoProducerCatalogDecision=(producerId:string,decisionId:string)=>
   fetch(`/api/producers/${producerId}/catalog-decisions/${decisionId}/undo`,{method:'POST',headers:authHeaders(true),body:JSON.stringify({confirmation:'UNDO_PRODUCER_CATALOG_CORRECTION'})})
     .then(r=>json<{id:string;deleted:true}>(r,'Could not undo the catalogue correction'));
+export type ResearchCampaignItem={producerId:string;producerName:string;status:'pending'|'running'|'complete'|'failed'|'skipped';message:string|null};
+export type ResearchCampaign={
+  id:string;status:'running'|'complete'|'cancelled';requested:number;concurrency:number;
+  createdAt:string;updatedAt:string;finishedAt:string|null;dismissedAt:string|null;
+  counts:Record<ResearchCampaignItem['status'],number>;failures:ResearchCampaignItem[];running:ResearchCampaignItem[];
+};
+export type ResearchCampaignPlan={unresearched:number;willRun:number;maxPerRun:number;concurrency:number;geminiRequests:number;perProducerMs:number|null;estimatedMs:number|null;active:string|null};
+
+export const getResearchCampaignPlan=(limit?:number)=>
+  fetch(`/api/producers/research-batch/plan${limit?`?limit=${limit}`:''}`,{headers:authHeaders()})
+    .then(r=>json<ResearchCampaignPlan>(r,'Could not work out what a batch run would involve'));
+export const getResearchCampaign=()=>
+  fetch('/api/producers/research-batch',{headers:authHeaders()}).then(r=>json<{campaign:ResearchCampaign|null}>(r,'Could not load the batch run')).then(r=>r.campaign);
+export const startResearchCampaign=(limit:number)=>
+  fetch('/api/producers/research-batch',{method:'POST',headers:authHeaders(true),body:JSON.stringify({confirmation:'RUN_PRODUCER_RESEARCH_BATCH',limit})})
+    .then(r=>json<{accepted:true;campaign:ResearchCampaign}>(r,'The batch run could not be queued')).then(r=>r.campaign);
+export const cancelResearchCampaign=(id:string)=>
+  fetch(`/api/producers/research-batch/${id}/cancel`,{method:'POST',headers:authHeaders(true),body:'{}'})
+    .then(r=>json<{campaign:ResearchCampaign|null}>(r,'Could not stop the batch run')).then(r=>r.campaign);
+export const dismissResearchCampaign=(id:string)=>
+  fetch(`/api/producers/research-batch/${id}/dismiss`,{method:'POST',headers:authHeaders(true),body:'{}'})
+    .then(r=>json<{campaign:ResearchCampaign|null}>(r,'Could not clear the batch run')).then(r=>r.campaign);
+
 export type { CatalogDecision,CatalogDecisionKind };

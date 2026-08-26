@@ -12,7 +12,7 @@ export type JourneySummary={
   structuredTastings:number;
 };
 
-export type MilestoneKey='totalWines'|'producers'|'appellations'|'countries'|'structuredTastings';
+export type MilestoneKey='totalWines'|'producers'|'appellations'|'regions'|'countries'|'vintages'|'structuredTastings';
 /**
  * `progress` is progress through the *current* band, not from zero: at 858
  * wines with stamps at 500 and 1000 it is 72%, not 86%. Whatever renders it has
@@ -20,13 +20,24 @@ export type MilestoneKey='totalWines'|'producers'|'appellations'|'countries'|'st
  * words "858 / 1000" is a contradiction the reader has to resolve.
  */
 export type Milestone={key:MilestoneKey;label:string;current:number;target:number;previous:number;progress:number};
-export type Achievement={key:MilestoneKey;label:string;value:number};
 
+/**
+ * The ladders run past where the journal is now on purpose. A track whose last
+ * stamp is already collected stops saying anything - it reads as finished
+ * rather than as something being collected - and at 957 wines, 566 producers
+ * and 200-plus appellations three of the five original tracks had run out.
+ *
+ * Countries is the exception: the list of countries anyone can realistically
+ * drink from is finite, so 50 stays the last stamp rather than inventing one
+ * nobody can reach.
+ */
 const milestoneSets:Array<{key:MilestoneKey;label:string;thresholds:number[]}>= [
-  {key:'totalWines',label:'Wines logged',thresholds:[10,25,50,100,200,500,1000]},
-  {key:'producers',label:'Producers explored',thresholds:[10,25,50,100,200,500]},
-  {key:'appellations',label:'Appellations explored',thresholds:[10,25,50,100,200]},
+  {key:'totalWines',label:'Wines logged',thresholds:[10,25,50,100,200,500,1000,2000,3000,5000]},
+  {key:'producers',label:'Producers explored',thresholds:[10,25,50,100,200,500,750,1000,1500]},
+  {key:'appellations',label:'Appellations explored',thresholds:[10,25,50,100,200,300,500,750]},
+  {key:'regions',label:'Regions explored',thresholds:[10,25,50,100,200]},
   {key:'countries',label:'Countries explored',thresholds:[5,10,20,30,50]},
+  {key:'vintages',label:'Vintages spanned',thresholds:[10,20,30,50,75,100]},
   {key:'structuredTastings',label:'Structured tastings',thresholds:[10,25,50,100,250,500]}
 ];
 
@@ -66,12 +77,14 @@ export function journeyLadder(summary:JourneySummary):LadderTrack[]{
   });
 }
 
-export function unlockedAchievements(summary:JourneySummary):Achievement[]{
-  return milestoneSets.flatMap(set=>{
-    const current=summary[set.key];
-    const reached=[...set.thresholds].reverse().find(value=>value<=current);
-    return reached?[{key:set.key,label:set.label,value:reached}]:[];
-  });
+/**
+ * Stamps across every track. Both pages that report a stamp count use this, so
+ * the passport card and the Milestones header cannot drift apart - they were
+ * counting different things (one per track versus every stamp) and reported 4
+ * and 20 for the same collection.
+ */
+export function stampTotals(ladder:LadderTrack[]){
+  return ladder.reduce((total,track)=>({earned:total.earned+track.earned,total:total.total+track.total}),{earned:0,total:0});
 }
 
 export type StructureKey='flavourIntensity'|'acidity'|'tannin'|'body'|'finish'|'alcohol';
