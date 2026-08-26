@@ -22,7 +22,7 @@ export type JournalWine={
   imageIds:string[];
   createdAt:string;
 };
-export type GroupSourcePhoto={sessionId:string;createdAt:string};
+export type GroupSourcePhoto={sessionId:string;createdAt:string;capturedAt:string|null};
 export type WineDetail=WineRecord&{favorite:boolean;producerId:string|null;tastingStructure:TastingStructure|null;groupSourcePhotos:GroupSourcePhoto[]};
 export type WineResearchStage='queued'|'researching'|'saving'|'complete'|'failed';
 export type WineResearchRun={requestId:string;wineId:string;status:'running'|'complete'|'failed';stage:WineResearchStage;refresh:'none'|'vintage'|'all';attempt:number;message:string|null;startedAt:string;updatedAt:string;completedAt:string|null;durationMs:number|null};

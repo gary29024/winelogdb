@@ -62,6 +62,23 @@ describe('mobile shell',()=>{
     expect(document.activeElement).toBe(trigger);
   });
 
+  it('sends every capture route to its own page, Single Wine included',()=>{
+    // Single Wine used to open the OS file chooser straight from the sheet,
+    // while the other two navigated - so it skipped the page that explains what
+    // it does and what it will use the photos for. The hidden input that made
+    // that possible is gone with it.
+    host=document.createElement('div');document.body.appendChild(host);
+    root=createRoot(host);
+    act(()=>{root!.render(<MemoryRouter initialEntries={['/']}><Routes><Route element={<Layout/>}>
+      <Route index element={<p>Passport page</p>}/>
+      <Route path="upload" element={<p>Single wine page</p>}/>
+    </Route></Routes></MemoryRouter>)});
+    expect(host.querySelector('input[type=file]')).toBeNull();
+    click(host.querySelector('.mobile-nav .scan-nav')!);
+    click(labelled(document.querySelector('[role=dialog]')!,'Single Wine')!);
+    expect(host.textContent).toContain('Single wine page');
+  });
+
   it('offers all three capture routes plus a manual fallback',()=>{
     const shell=renderShell();
     click(shell.querySelector('.mobile-nav .scan-nav')!);

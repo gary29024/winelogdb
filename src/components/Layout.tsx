@@ -16,7 +16,6 @@ const preloadInsights=()=>void import('../features/journey/InsightsPage');
 
 export function Layout(){
   const [scanSheetOpen,setScanSheetOpen]=useState(false);
-  const scanInput=useRef<HTMLInputElement>(null);
   const sheet=useRef<HTMLElement>(null);
   const scanTrigger=useRef<HTMLButtonElement>(null);
   const usedKeyboard=useRef(false);
@@ -68,13 +67,6 @@ export function Layout(){
     };
   },[scanSheetOpen,closeScanSheet]);
 
-  function startScan(files:FileList|null){
-    if(!files?.length)return;
-    const scanFiles=Array.from(files);
-    setScanSheetOpen(false);
-    navigate('/upload',{state:{scanFiles}});
-    if(scanInput.current)scanInput.current.value='';
-  }
 
   function openScanSheet(event:MouseEvent<HTMLButtonElement>){
     // A click synthesised from Enter or Space reports detail 0; a real tap or
@@ -107,13 +99,12 @@ export function Layout(){
       <section ref={sheet} tabIndex={-1} className="scan-sheet" role="dialog" aria-modal="true" aria-labelledby="scan-sheet-title" onClick={e=>e.stopPropagation()}>
         <span className="sheet-grabber" aria-hidden="true"/>
         <div className="scan-sheet-header"><div><p className="eyebrow">NEW TASTING</p><h2 id="scan-sheet-title">Add wine</h2></div><button type="button" className="sheet-close" onClick={closeScanSheet} aria-label="Close"><AppIcon kind="close"/></button></div>
-        <button type="button" className="scan-sheet-action" onPointerDown={preloadUpload} onClick={()=>scanInput.current?.click()}><span className="sheet-action-icon"><AppIcon kind="single-wine"/></span><span><strong>Single Wine</strong><small>One bottle · one or more label photos</small></span></button>
+        <button type="button" className="scan-sheet-action" onPointerDown={preloadUpload} onClick={()=>goFromSheet('/upload')}><span className="sheet-action-icon"><AppIcon kind="single-wine"/></span><span><strong>Single Wine</strong><small>One bottle · one or more label photos</small></span></button>
         <button type="button" className="scan-sheet-action" onPointerDown={preloadGroupScan} onClick={()=>goFromSheet('/group-scan')}><span className="sheet-action-icon"><AppIcon kind="group-photo"/></span><span><strong>Group Photo</strong><small>One photo · detect and log several different wines</small></span></button>
         <button type="button" className="scan-sheet-action" onPointerDown={preloadBatchScan} onClick={()=>goFromSheet('/batch-scan')}><span className="sheet-action-icon"><AppIcon kind="batch-scan"/></span><span><strong>Batch Scan</strong><small>Several wines · separate photos/sections · asynchronous Gemini Batch API</small></span></button>
         <p className="scan-sheet-note"><strong>Single Wine</strong> combines several views of one bottle. <strong>Group Photo</strong> splits one lineup photo into distinct wines. <strong>Batch Scan</strong> processes many separately photographed wines in the background.</p>
         <button type="button" className="sheet-manual" onPointerDown={preloadWineForm} onClick={()=>goFromSheet('/wines/new')}><span className="sheet-manual-icon"><AppIcon kind="pen"/></span>Add manually instead</button>
       </section>
     </div>}
-    <input ref={scanInput} className="visually-hidden" type="file" accept="image/*" multiple onChange={e=>startScan(e.target.files)}/>
   </>
 }

@@ -182,6 +182,48 @@ describe('back to the journal you left',()=>{
   });
 });
 
+describe('the group photo a wine came from',()=>{
+  it('is dated by when the photo was taken, not when it was uploaded',async()=>{
+    // A lineup photographed at dinner and uploaded the next morning belongs to
+    // the dinner. The session stores both: capturedAt from EXIF, created_at
+    // from the upload.
+    vi.stubGlobal('fetch',vi.fn(async(url:string)=>new Response(
+      JSON.stringify(String(url).includes('/research')?{runs:[]}:{...wine,id:'w1',
+        groupSourcePhotos:[{sessionId:'s1',createdAt:'2026-08-26T09:00:00.000Z',capturedAt:'2026-08-24T20:30:00.000Z'}]}),
+      {status:200,headers:{'content-type':'application/json'}})));
+    vi.resetModules();
+    const {DetailPage}=await import('../../src/features/wines/DetailPage');
+    host=document.createElement('div');document.body.appendChild(host);
+    root=createRoot(host);
+    await act(async()=>{root!.render(<MemoryRouter initialEntries={['/wines/w1']}>
+      <Routes><Route path="/wines/:id" element={<DetailPage/>}/></Routes></MemoryRouter>)});
+    const stamp=host.querySelector('.group-source-button > span:last-child')?.textContent;
+    expect(stamp).toBe(new Date('2026-08-24T20:30:00.000Z').toLocaleDateString());
+    expect(stamp).not.toBe(new Date('2026-08-26T09:00:00.000Z').toLocaleDateString());
+  });
+
+  it('falls back to the upload date when the camera recorded nothing',async()=>{
+    // A screenshot, or a photo stripped of EXIF by a messaging app.
+    vi.stubGlobal('fetch',vi.fn(async(url:string)=>new Response(
+      JSON.stringify(String(url).includes('/research')?{runs:[]}:{...wine,id:'w1',
+        groupSourcePhotos:[{sessionId:'s1',createdAt:'2026-08-26T09:00:00.000Z',capturedAt:null}]}),
+      {status:200,headers:{'content-type':'application/json'}})));
+    vi.resetModules();
+    const {DetailPage}=await import('../../src/features/wines/DetailPage');
+    host=document.createElement('div');document.body.appendChild(host);
+    root=createRoot(host);
+    await act(async()=>{root!.render(<MemoryRouter initialEntries={['/wines/w1']}>
+      <Routes><Route path="/wines/:id" element={<DetailPage/>}/></Routes></MemoryRouter>)});
+    expect(host.querySelector('.group-source-button > span:last-child')?.textContent)
+      .toBe(new Date('2026-08-26T09:00:00.000Z').toLocaleDateString());
+  });
+
+  afterEach(()=>{
+    act(()=>root?.unmount());host?.remove();root=null;host=null;
+    vi.unstubAllGlobals();window.sessionStorage.clear();
+  });
+});
+
 describe('every page that links into a wine',()=>{
   it('hands over a target the wine will actually accept',()=>{
     // A rejected target falls back to the journal silently, so a call site that

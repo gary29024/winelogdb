@@ -130,8 +130,12 @@ async function removeSession(env:Env,ownerId:string,sessionId:string){
 }
 
 export async function groupSourcePhotosForWine(db:D1Database,ownerId:string,wineId:string){
-  const rows=await db.prepare(`SELECT DISTINCT s.id,s.created_at FROM group_recognition_sessions s JOIN group_recognition_items i ON i.owner_id=s.owner_id AND i.session_id=s.id WHERE s.owner_id=? AND i.saved_wine_id=? AND i.removed=0 ORDER BY s.created_at DESC`).bind(ownerId,wineId).all<{id:string;created_at:string}>();
-  return rows.results.map(row=>({sessionId:row.id,createdAt:row.created_at}));
+  const rows=await db.prepare(`SELECT DISTINCT s.id,s.created_at,s.metadata_json FROM group_recognition_sessions s JOIN group_recognition_items i ON i.owner_id=s.owner_id AND i.session_id=s.id WHERE s.owner_id=? AND i.saved_wine_id=? AND i.removed=0 ORDER BY s.created_at DESC`).bind(ownerId,wineId).all<{id:string;created_at:string;metadata_json:string}>();
+  // capturedAt is when the photo was taken, read from EXIF at upload; created_at
+  // is when it reached WineLog. A photo taken at dinner and uploaded the next
+  // morning belongs to the dinner, so the capture time is what gets shown
+  // whenever the camera recorded one.
+  return rows.results.map(row=>({sessionId:row.id,createdAt:row.created_at,capturedAt:asMetadata(parseJson<unknown>(row.metadata_json,null)).capturedAt}));
 }
 
 export async function handleGroupRecognitionSessionRequest(request:Request,env:Env){
