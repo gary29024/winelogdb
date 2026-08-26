@@ -3,6 +3,7 @@ import { cancelResearchCampaign,dismissResearchCampaign,getResearchCampaign,getR
   type ResearchCampaign,type ResearchCampaignPlan } from './api';
 import { startBackoffPoll,type Poller } from '../../lib/polling/backoff';
 import { campaignSummary,planSummary } from './campaignCopy';
+import { CampaignItemList } from './ResearchCampaignHistory';
 import '../../researchCampaign.css';
 
 const CHOICES=[10,25,50,100] as const;
@@ -82,7 +83,14 @@ export function ResearchCampaignPanel({unresearchedHint,onFinished}:{unresearche
     <div className="research-campaign-head"><strong>{outcome.status==='cancelled'?'Batch research stopped':'Batch research finished'}</strong><span>{campaignSummary(outcome)}</span></div>
     {outcome.failures.length>0&&<ul className="research-campaign-failures">{outcome.failures.map(item=>
       <li key={item.producerId}><strong>{item.producerName}</strong><span>{item.message||'Research failed.'}</span></li>)}</ul>}
-    <p className="research-campaign-note">Failed producers stay unresearched, so the next batch picks them up again.</p>
+    {/* The failures are listed above; this is the rest of the run, which is
+        otherwise invisible - a finished batch should be able to say which
+        producers it researched. */}
+    {outcome.items.some(item=>item.status!=='failed')&&<details className="campaign-outcome-items">
+      <summary>{outcome.counts.complete} researched{outcome.counts.skipped?` · ${outcome.counts.skipped} skipped`:''}</summary>
+      <CampaignItemList items={outcome.items.filter(item=>item.status!=='failed')}/>
+    </details>}
+    {outcome.failures.length>0&&<p className="research-campaign-note">Failed producers stay unresearched, so the next batch picks them up again.</p>}
     <button type="button" onClick={clear}>Dismiss</button>
   </section>;
 

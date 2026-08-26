@@ -7,7 +7,7 @@ const plan=(over:Partial<ResearchCampaignPlan>={}):ResearchCampaignPlan=>({
 });
 const campaign=(over:Partial<ResearchCampaign>={}):ResearchCampaign=>({
   id:'c1',status:'running',requested:25,concurrency:2,createdAt:'',updatedAt:'',finishedAt:null,dismissedAt:null,
-  counts:{pending:20,running:2,complete:3,failed:0,skipped:0},failures:[],running:[],...over
+  counts:{pending:20,running:2,complete:3,failed:0,skipped:0},items:[],failures:[],running:[],...over
 });
 
 describe('what a batch run is going to cost',()=>{

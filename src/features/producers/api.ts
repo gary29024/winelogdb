@@ -65,7 +65,12 @@ export type ResearchCampaignItem={producerId:string;producerName:string;status:'
 export type ResearchCampaign={
   id:string;status:'running'|'complete'|'cancelled';requested:number;concurrency:number;
   createdAt:string;updatedAt:string;finishedAt:string|null;dismissedAt:string|null;
-  counts:Record<ResearchCampaignItem['status'],number>;failures:ResearchCampaignItem[];running:ResearchCampaignItem[];
+  counts:Record<ResearchCampaignItem['status'],number>;
+  items:ResearchCampaignItem[];failures:ResearchCampaignItem[];running:ResearchCampaignItem[];
+};
+export type ResearchCampaignSummary={
+  id:string;status:ResearchCampaign['status'];requested:number;createdAt:string;finishedAt:string|null;
+  counts:Record<ResearchCampaignItem['status'],number>;
 };
 export type ResearchCampaignPlan={unresearched:number;willRun:number;maxPerRun:number;concurrency:number;geminiRequests:number;perProducerMs:number|null;estimatedMs:number|null;active:string|null};
 
@@ -77,6 +82,12 @@ export const getResearchCampaign=()=>
 export const startResearchCampaign=(limit:number)=>
   fetch('/api/producers/research-batch',{method:'POST',headers:authHeaders(true),body:JSON.stringify({confirmation:'RUN_PRODUCER_RESEARCH_BATCH',limit})})
     .then(r=>json<{accepted:true;campaign:ResearchCampaign}>(r,'The batch run could not be queued')).then(r=>r.campaign);
+export const listResearchCampaigns=(limit=10)=>
+  fetch(`/api/producers/research-batch/history?limit=${limit}`,{headers:authHeaders()})
+    .then(r=>json<{campaigns:ResearchCampaignSummary[]}>(r,'Could not load past batch runs')).then(r=>r.campaigns);
+export const getResearchCampaignById=(id:string)=>
+  fetch(`/api/producers/research-batch/${id}`,{headers:authHeaders()})
+    .then(r=>json<{campaign:ResearchCampaign}>(r,'Could not load that batch run')).then(r=>r.campaign);
 export const cancelResearchCampaign=(id:string)=>
   fetch(`/api/producers/research-batch/${id}/cancel`,{method:'POST',headers:authHeaders(true),body:'{}'})
     .then(r=>json<{campaign:ResearchCampaign|null}>(r,'Could not stop the batch run')).then(r=>r.campaign);

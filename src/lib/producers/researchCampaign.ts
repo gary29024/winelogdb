@@ -16,6 +16,16 @@ import { createQueuedProducerResearchRun } from './research';
 export const CAMPAIGN_CONCURRENCY=2;
 export const CAMPAIGN_TICK_SECONDS=30;
 export const CAMPAIGN_MAX_PRODUCERS=200;
+/**
+ * How long a producer may hold a lane without its run saying anything.
+ *
+ * A healthy run touches producer_research_runs on every poll, and the widest
+ * poll gap in the retry policy is fifteen minutes, so three times that is well
+ * clear of a slow Gemini batch. Past it the run is not slow, it is gone - a
+ * queue message that never arrived - and without this the campaign would tick
+ * every thirty seconds forever waiting for a status that will never change.
+ */
+export const CAMPAIGN_STALE_RUN_MS=45*60*1000;
 /** A profile request plus five catalogue slices, per producer. */
 export const GEMINI_REQUESTS_PER_PRODUCER=6;
 
@@ -25,8 +35,15 @@ export type Campaign={
   id:string;status:'running'|'complete'|'cancelled';requested:number;concurrency:number;
   createdAt:string;updatedAt:string;finishedAt:string|null;dismissedAt:string|null;
   counts:Record<CampaignItemStatus,number>;
+  /** Every producer in the run, so a finished run can show what it did, not only what it could not do. */
+  items:CampaignItem[];
   failures:CampaignItem[];
   running:CampaignItem[];
+};
+/** A past run as it appears in the list of runs: counts, not producers. */
+export type CampaignSummary={
+  id:string;status:'running'|'complete'|'cancelled';requested:number;
+  createdAt:string;finishedAt:string|null;counts:Record<CampaignItemStatus,number>;
 };
 export type CampaignEnv={DB:D1Database;RESEARCH_QUEUE:Queue<unknown>};
 
@@ -99,14 +116,44 @@ export async function readCampaign(db:D1Database,owner:string,campaignId?:string
   const counts=emptyCounts();
   for(const item of items)counts[item.status]=(counts[item.status]??0)+1;
   const shape=(item:typeof items[number]):CampaignItem=>({producerId:item.producer_id,producerName:item.producer_name,status:item.status,message:item.message});
+  const shaped=items.map(shape);
   return {
     id:String(head.id),status:head.status as Campaign['status'],requested:Number(head.requested),concurrency:Number(head.concurrency),
     createdAt:String(head.created_at),updatedAt:String(head.updated_at),
     finishedAt:head.finished_at?String(head.finished_at):null,dismissedAt:head.dismissed_at?String(head.dismissed_at):null,
     counts,
-    failures:items.filter(item=>item.status==='failed').map(shape),
-    running:items.filter(item=>item.status==='running').map(shape)
+    items:shaped,
+    failures:shaped.filter(item=>item.status==='failed'),
+    running:shaped.filter(item=>item.status==='running')
   };
+}
+
+/**
+ * Recent runs, newest first. Counts are aggregated in SQL rather than by
+ * reading every run's producers: the list says how each run went, and only the
+ * run someone opens needs its producers.
+ */
+export async function listCampaigns(db:D1Database,owner:string,limit=10):Promise<CampaignSummary[]>{
+  const capped=Math.max(1,Math.min(50,Math.floor(limit)||10));
+  const {results}=await db.prepare(
+    `SELECT c.id,c.status,c.requested,c.created_at,c.finished_at,
+       SUM(CASE WHEN i.status='complete' THEN 1 ELSE 0 END) AS complete,
+       SUM(CASE WHEN i.status='failed' THEN 1 ELSE 0 END) AS failed,
+       SUM(CASE WHEN i.status='skipped' THEN 1 ELSE 0 END) AS skipped,
+       SUM(CASE WHEN i.status='running' THEN 1 ELSE 0 END) AS running,
+       SUM(CASE WHEN i.status='pending' THEN 1 ELSE 0 END) AS pending
+     FROM producer_research_campaigns c
+     LEFT JOIN producer_research_campaign_items i ON i.campaign_id=c.id
+     WHERE c.owner_id=? GROUP BY c.id ORDER BY c.created_at DESC LIMIT ?`
+  ).bind(owner,capped).all<Record<string,unknown>>();
+  return (results??[]).map(row=>({
+    id:String(row.id),status:row.status as CampaignSummary['status'],requested:Number(row.requested),
+    createdAt:String(row.created_at),finishedAt:row.finished_at?String(row.finished_at):null,
+    counts:{
+      pending:Number(row.pending??0),running:Number(row.running??0),complete:Number(row.complete??0),
+      failed:Number(row.failed??0),skipped:Number(row.skipped??0)
+    }
+  }));
 }
 
 /**
@@ -128,13 +175,21 @@ export async function advanceCampaign(env:CampaignEnv,owner:string,campaignId:st
   // Settle anything that has reached a terminal state in producer_research_runs.
   for(const item of items.filter(row=>row.status==='running'&&row.request_id)){
     const run=await env.DB.prepare(
-      `SELECT status,message FROM producer_research_runs WHERE owner_id=? AND request_id=?`
-    ).bind(owner,item.request_id).first<{status:string;message:string|null}>();
+      `SELECT status,message,updated_at FROM producer_research_runs WHERE owner_id=? AND request_id=?`
+    ).bind(owner,item.request_id).first<{status:string;message:string|null;updated_at:string}>();
     if(!run){
       await setItem(env.DB,campaignId,item.producer_id,'failed','The research run disappeared before it finished.',stamp);
       item.status='failed';continue;
     }
-    if(run.status==='running')continue;
+    if(run.status==='running'){
+      const last=Date.parse(run.updated_at??'');
+      if(Number.isFinite(last)&&Date.now()-last>CAMPAIGN_STALE_RUN_MS){
+        await setItem(env.DB,campaignId,item.producer_id,'failed',
+          'The research run stopped reporting, so the batch moved on. Research this producer on its own to see what happened.',stamp);
+        item.status='failed';
+      }
+      continue;
+    }
     const status:CampaignItemStatus=run.status==='complete'?'complete':'failed';
     await setItem(env.DB,campaignId,item.producer_id,status,run.message,stamp);
     item.status=status;
