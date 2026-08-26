@@ -79,3 +79,23 @@ describe('section labels',()=>{
     expect(shouting).toEqual([]);
   });
 });
+
+describe('chips',()=>{
+  it('lets a chip wrap wherever something constrains its width',()=>{
+    // The chip primitive sets white-space:nowrap, which is right for a status
+    // pill and wrong for a two-word category label in an 80px column: the
+    // collection card's "REGIONAL EXPLORER" could no longer wrap and spilled
+    // 39px past the card. A chip that is given a max-width has to be allowed to
+    // use a second line.
+    const base=rules.find(rule=>rule.selector.startsWith('.chip,'));
+    expect(base,'the chip primitive should exist in styles.css').toBeTruthy();
+    expect(base!.body).toContain('white-space:nowrap');
+    const aliases=base!.selector.split(',').map(part=>part.trim());
+
+    const constrained=aliases.filter(alias=>rules.some(rule=>
+      rule.selector.split(',').map(part=>part.trim()).includes(alias)&&/(?:^|;)\s*max-width\s*:/.test(rule.body)));
+    const cannotWrap=constrained.filter(alias=>!rules.some(rule=>
+      rule.selector.split(',').map(part=>part.trim()).includes(alias)&&/white-space:\s*normal/.test(rule.body)));
+    expect(cannotWrap).toEqual([]);
+  });
+});
