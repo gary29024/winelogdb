@@ -6,7 +6,7 @@ import { getAchievementProgress } from '../achievements/api';
 import { passportCollectionKicker,passportCollectionSummary,selectPassportCollections } from '../achievements/passportPreview';
 import type { AchievementProgress } from '../achievements/types';
 import { getJourneyData,type JourneyData,type RecentTasting } from './api';
-import { journeyLadder,nextMilestones,unlockedAchievements,type MilestoneKey } from './model';
+import { journeyLadder,nextMilestones,unlockedAchievements } from './model';
 import { grapeColorFor } from './passportVisuals';
 import { PassportMap } from './PassportMap';
 import '../../journey.css';
@@ -33,14 +33,6 @@ function PassportStatIcon({kind}:{kind:PassportStatIconKind}){
   </svg>;
 }
 
-function AchievementIcon({kind}:{kind:MilestoneKey}){
-  const common={width:18,height:18,viewBox:'0 0 24 24',fill:'none',stroke:'currentColor',strokeWidth:1.7,strokeLinecap:'round' as const,strokeLinejoin:'round' as const,'aria-hidden':true};
-  if(kind==='totalWines')return <svg {...common}><path d="M8 3h8l-1 6.5a3 3 0 0 1-6 0L8 3Z"/><path d="M12 12.5V20M8.5 20h7"/></svg>;
-  if(kind==='producers')return <svg {...common}><path d="M4.5 20V9.5L12 4l7.5 5.5V20"/><path d="M7.5 10h9M8.2 20v-5h3v5m1.6 0v-5h3v5M5.5 20h13"/></svg>;
-  if(kind==='appellations')return <svg {...common}><path d="M12 21s6-5.5 6-11a6 6 0 1 0-12 0c0 5.5 6 11 6 11Z"/><circle cx="12" cy="10" r="2.2"/></svg>;
-  if(kind==='countries')return <svg {...common}><circle cx="12" cy="12" r="8"/><path d="M4 12h16M12 4c2.3 2.2 3.5 4.9 3.5 8S14.3 17.8 12 20M12 4C9.7 6.2 8.5 8.9 8.5 12S9.7 17.8 12 20"/></svg>;
-  return <svg {...common}><rect x="6" y="4" width="12" height="16" rx="2"/><path d="M9 8h6M9 12h3M9 16l1.5 1.5L15 13"/></svg>;
-}
 
 function tastingDate(item:RecentTasting){
   const raw=item.tastingDate||item.createdAt;
@@ -57,6 +49,9 @@ export function PassportPage(){
   const milestones=useMemo(()=>data?nextMilestones(data.summary):[],[data]);
   const achievements=useMemo(()=>data?unlockedAchievements(data.summary):[],[data]);
   const ladder=useMemo(()=>data?journeyLadder(data.summary):[],[data]);
+  // The track that needs the fewest tastings to earn its next stamp - the one
+  // worth naming when there is only room to name one.
+  const nextStamp=useMemo(()=>ladder.filter(track=>track.next).sort((a,b)=>a.remaining-b.remaining)[0]??null,[ladder]);
   const featuredCollections=useMemo(()=>collections?selectPassportCollections(collections):[],[collections]);
   const collectionsSummary=useMemo(()=>collections?passportCollectionSummary(collections):null,[collections]);
   if(error)return <section className="journey-page"><p role="alert">{error}</p></section>;
@@ -151,31 +146,18 @@ export function PassportPage(){
         </Link>)}</div>:<p className="passport-empty-mini">Your latest tastings will appear here.</p>}
       </section>
 
-      <section className="passport-mini-card passport-levels" id="passport-achievements">
-        <div className="passport-card-heading"><div><h2>Journey stamps</h2></div><span>{achievements.length} earned</span></div>
-        <p className="passport-levels-note">Every stamp on every track. Filled ones are yours; the outlined one is next.</p>
-        <ul className="passport-ladder">{ladder.map(track=><li key={track.key} className="passport-track">
-          <div className="passport-track-head">
-            <span className={`passport-badge passport-badge-${track.key}`} aria-hidden="true"><AchievementIcon kind={track.key}/></span>
-            <strong>{track.label}</strong>
-            <span className="passport-track-count">{track.earned} / {track.total}</span>
-          </div>
-          <ol className="passport-stamps">{track.stamps.map(stamp=><li key={stamp.value}
-            className={`passport-stamp${stamp.earned?' is-earned':''}${stamp.next?' is-next':''}`}
-            aria-label={`${stamp.value} ${track.label.toLowerCase()}${stamp.earned?' - earned':stamp.next?' - next stamp':''}`}>
-            {stamp.value}
-          </li>)}</ol>
-          <small>{track.next
-            ?`${track.remaining} more to reach ${track.next.value}`
-            :`Every ${track.label.toLowerCase()} stamp collected`}</small>
-        </li>)}</ul>
+      <section className="passport-mini-card" id="passport-achievements">
+        <div className="passport-card-heading"><div><h2>Journey stamps</h2></div><Link to="/achievements">View all</Link></div>
+        {/* The full ladder lives with the collections, which is where someone
+            goes to see what they are collecting. This card sits beside Recent
+            tastings in a pair, so it has a height to keep to: what is earned,
+            and the one stamp that is closest. */}
+        <p className="passport-stamp-count"><strong>{achievements.length}</strong> earned across {ladder.length} tracks</p>
+        {nextStamp
+          ?<p className="passport-empty-mini">Closest: <strong>{nextStamp.remaining} more</strong> {nextStamp.label.toLowerCase()} to reach {nextStamp.next!.value}.</p>
+          :<p className="passport-empty-mini">Every journey stamp collected.</p>}
       </section>
     </div>
 
-    <section className="passport-story-card">
-      <div className="passport-mini-cover" aria-hidden="true"><span>W</span><small>PASSPORT</small></div>
-      <div><h2>Your passport. Your story.</h2><p>Every bottle leaves a mark. Keep exploring.</p></div>
-      <Link className="passport-primary-link" to="/upload">Add a tasting</Link>
-    </section>
   </section>;
 }
