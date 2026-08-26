@@ -1,10 +1,10 @@
 import { describe,expect,it } from 'vitest';
 import { createD1Stub } from './support/d1Stub';
-import { advanceCampaign,CAMPAIGN_CONCURRENCY,typicalProducerRunMs,unresearchedProducers,
+import { advanceCampaign,CAMPAIGN_CONCURRENCY,CAMPAIGN_STALE_RUN_MS,typicalProducerRunMs,unresearchedProducers,
   type CampaignItemStatus } from '../../src/lib/producers/researchCampaign';
 
 type Item={producer_id:string;producer_name:string;request_id:string|null;status:CampaignItemStatus;message:string|null};
-type Run={status:'running'|'complete'|'failed';message:string|null};
+type Run={status:'running'|'complete'|'failed';message:string|null;updatedAt?:string};
 
 /**
  * A campaign is a small state machine over two tables, so the double keeps
@@ -19,9 +19,9 @@ function world(items:Item[],runs:Record<string,Run>={},campaignStatus='running')
     const text=sql.replace(/\s+/g,' ').trim();
     if(/^SELECT status FROM producer_research_campaigns/.test(text))return {first:{status:state.campaignStatus}};
     if(/FROM producer_research_campaign_items WHERE campaign_id=\? ORDER BY/.test(text))return {all:state.items.map(item=>({...item}))};
-    if(/SELECT status,message FROM producer_research_runs/.test(text)){
+    if(/SELECT status,message,updated_at FROM producer_research_runs/.test(text)){
       const run=state.runs[String(args[1])];
-      return {first:run?{status:run.status,message:run.message}:null};
+      return {first:run?{status:run.status,message:run.message,updated_at:run.updatedAt??new Date().toISOString()}:null};
     }
     if(/SELECT request_id FROM producer_research_runs/.test(text))return {first:null};
     if(/SELECT id FROM producers WHERE owner_id=\? AND id=\?/.test(text))
@@ -82,6 +82,31 @@ describe('a batch producer research run',()=>{
     expect(state.items.find(item=>item.producer_id==='a')?.status).toBe('running');
     expect(progress.started).toBe(CAMPAIGN_CONCURRENCY-1);
     expect(queued).toHaveLength(CAMPAIGN_CONCURRENCY-1);
+  });
+
+  it('gives up on a producer whose run has stopped reporting',async()=>{
+    // Every poll of a healthy run touches producer_research_runs, and the
+    // widest gap in the retry policy is fifteen minutes. Past three times that
+    // the run is not slow, it is gone - a queue message that never arrived -
+    // and without this the campaign ticks every thirty seconds forever.
+    const stale=new Date(Date.now()-CAMPAIGN_STALE_RUN_MS-60_000).toISOString();
+    const {env,state}=world(
+      [{producer_id:'a',producer_name:'A',request_id:'r-a',status:'running',message:null},pending('b'),pending('c')],
+      {'r-a':{status:'running',message:'Searching',updatedAt:stale}});
+    await advanceCampaign(env,'owner','c1');
+    expect(state.items.find(item=>item.producer_id==='a')?.status).toBe('failed');
+    expect(state.items.find(item=>item.producer_id==='a')?.message).toContain('stopped reporting');
+    // and the lane it was holding is filled
+    expect(state.items.filter(item=>item.status==='running').map(item=>item.producer_id)).toEqual(['b','c']);
+  });
+
+  it('keeps waiting for a run that is merely slow',async()=>{
+    const recent=new Date(Date.now()-CAMPAIGN_STALE_RUN_MS+60_000).toISOString();
+    const {env,state}=world(
+      [{producer_id:'a',producer_name:'A',request_id:'r-a',status:'running',message:null},pending('b')],
+      {'r-a':{status:'running',message:'Gemini is processing 6 parts',updatedAt:recent}});
+    await advanceCampaign(env,'owner','c1');
+    expect(state.items.find(item=>item.producer_id==='a')?.status).toBe('running');
   });
 
   it('finishes when nothing is left, and reports how it ended',async()=>{

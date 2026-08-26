@@ -16,6 +16,16 @@ import { createQueuedProducerResearchRun } from './research';
 export const CAMPAIGN_CONCURRENCY=2;
 export const CAMPAIGN_TICK_SECONDS=30;
 export const CAMPAIGN_MAX_PRODUCERS=200;
+/**
+ * How long a producer may hold a lane without its run saying anything.
+ *
+ * A healthy run touches producer_research_runs on every poll, and the widest
+ * poll gap in the retry policy is fifteen minutes, so three times that is well
+ * clear of a slow Gemini batch. Past it the run is not slow, it is gone - a
+ * queue message that never arrived - and without this the campaign would tick
+ * every thirty seconds forever waiting for a status that will never change.
+ */
+export const CAMPAIGN_STALE_RUN_MS=45*60*1000;
 /** A profile request plus five catalogue slices, per producer. */
 export const GEMINI_REQUESTS_PER_PRODUCER=6;
 
@@ -128,13 +138,21 @@ export async function advanceCampaign(env:CampaignEnv,owner:string,campaignId:st
   // Settle anything that has reached a terminal state in producer_research_runs.
   for(const item of items.filter(row=>row.status==='running'&&row.request_id)){
     const run=await env.DB.prepare(
-      `SELECT status,message FROM producer_research_runs WHERE owner_id=? AND request_id=?`
-    ).bind(owner,item.request_id).first<{status:string;message:string|null}>();
+      `SELECT status,message,updated_at FROM producer_research_runs WHERE owner_id=? AND request_id=?`
+    ).bind(owner,item.request_id).first<{status:string;message:string|null;updated_at:string}>();
     if(!run){
       await setItem(env.DB,campaignId,item.producer_id,'failed','The research run disappeared before it finished.',stamp);
       item.status='failed';continue;
     }
-    if(run.status==='running')continue;
+    if(run.status==='running'){
+      const last=Date.parse(run.updated_at??'');
+      if(Number.isFinite(last)&&Date.now()-last>CAMPAIGN_STALE_RUN_MS){
+        await setItem(env.DB,campaignId,item.producer_id,'failed',
+          'The research run stopped reporting, so the batch moved on. Research this producer on its own to see what happened.',stamp);
+        item.status='failed';
+      }
+      continue;
+    }
     const status:CampaignItemStatus=run.status==='complete'?'complete':'failed';
     await setItem(env.DB,campaignId,item.producer_id,status,run.message,stamp);
     item.status=status;
