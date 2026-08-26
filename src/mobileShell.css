@@ -29,11 +29,11 @@ button,a,label[role=button],summary{touch-action:manipulation}
 .topbar{height:calc(74px + var(--app-safe-top));padding-top:var(--app-safe-top);padding-left:max(5vw,24px,var(--app-safe-left));padding-right:max(5vw,24px,var(--app-safe-right))}
 
 @media(max-width:700px){
-  .topbar{height:calc(58px + var(--app-safe-top));padding-left:max(var(--app-gutter),var(--app-safe-left));padding-right:max(var(--app-gutter),var(--app-safe-right));background:#ffffffe8;backdrop-filter:saturate(180%) blur(14px);-webkit-backdrop-filter:saturate(180%) blur(14px)}
+  .topbar{height:calc(58px + var(--app-safe-top));padding-left:max(var(--app-gutter),var(--app-safe-left));padding-right:max(var(--app-gutter),var(--app-safe-right));background:color-mix(in srgb,var(--paper) 91%,transparent);backdrop-filter:saturate(180%) blur(14px);-webkit-backdrop-filter:saturate(180%) blur(14px)}
   /* Bottom padding clears the tab bar, the home indicator and any collapsing browser chrome. */
   main{padding:14px max(var(--app-gutter),var(--app-safe-left)) calc(var(--app-nav-height) + 26px + var(--mobile-browser-bottom,0px)) max(var(--app-gutter),var(--app-safe-right))}
 
-  .mobile-nav{height:var(--app-nav-height);padding-bottom:var(--app-safe-bottom);padding-left:max(6px,var(--app-safe-left));padding-right:max(6px,var(--app-safe-right));background:#fffffff2;backdrop-filter:saturate(180%) blur(16px);-webkit-backdrop-filter:saturate(180%) blur(16px);box-shadow:0 -1px 0 #0000000d}
+  .mobile-nav{height:var(--app-nav-height);padding-bottom:var(--app-safe-bottom);padding-left:max(6px,var(--app-safe-left));padding-right:max(6px,var(--app-safe-right));background:color-mix(in srgb,var(--paper) 95%,transparent);backdrop-filter:saturate(180%) blur(16px);-webkit-backdrop-filter:saturate(180%) blur(16px);box-shadow:0 -1px 0 #0000000d}
   .mobile-nav a,.mobile-nav button.scan-nav{position:relative;min-height:48px;align-content:center;gap:3px;padding:4px 0}
   .nav-icon{width:25px;height:25px;display:grid;place-items:center;transition:transform .18s ease,color .18s ease}
   .nav-label{font-size:.68rem;letter-spacing:.01em;line-height:1.1}

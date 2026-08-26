@@ -61,8 +61,50 @@ describe('design tokens',()=>{
 
   it('leaves no raw hex inside the token block itself beyond the declarations',()=>{
     // Guards the substitution pass: a colour written into :root as part of a
-    // rule rather than a token would be invisible to every other stylesheet.
+    // rule rather than a token is invisible to every other stylesheet - and,
+    // since :root also sets the document's own colour and background, it is
+    // what pins the whole page to one theme.
     const notADeclaration=root.replace(/--[a-z0-9-]+:\s*#[0-9a-f]{3,8}/g,'');
-    expect(notADeclaration.match(/#[0-9a-f]{3,8}/g)??[]).toEqual(['#10182d','#f7f8fa']);
+    expect(notADeclaration.match(/#[0-9a-f]{3,8}/g)??[]).toEqual([]);
+  });
+
+  it('never pins a background to one theme while letting its text follow the other',()=>{
+    // The failure dark mode actually produced: a rule that hard-codes a
+    // near-white background but no colour inherits --ink, which flips to near
+    // white in dark mode and renders the element unreadable. That is how the
+    // open Deep Search section header became white-on-white. Pin both or
+    // neither.
+    const textless=[
+      // progress-bar fills and an image placeholder - no text sits on these, so
+      // a fixed light fill is a deliberate choice rather than a theme bug
+      '.favorite-rate-bar>span','.cru-tier-grand_cru .cru-tier-bar>span',
+      '.cru-tier-premier_cru .cru-tier-bar>span','.passport-recent-image'
+    ];
+    const luminance=(hex:string)=>[1,3,5].reduce((sum,at)=>sum+parseInt(hex.slice(at,at+2),16),0)/3;
+    const pinned=sheets.flatMap(sheet=>{
+      const css=sheet.name==='styles.css'
+        ?sheet.css.slice(sheet.css.indexOf('}',sheet.css.indexOf(':root{'))+1)
+        :sheet.css;
+      return [...css.replace(/\/\*[\s\S]*?\*\//g,'').matchAll(/([^{}]+)\{([^}]*)\}/g)]
+        .filter(rule=>!/(?:^|;)\s*color\s*:/.test(rule[2]))
+        .filter(rule=>(rule[2].match(/background(?:-color)?:[^;}]*?(#[0-9a-f]{6})(?![0-9a-f])/gi)??[])
+          .some(match=>luminance(/#[0-9a-f]{6}/i.exec(match)![0])>210))
+        .map(rule=>rule[1].trim())
+        .filter(selector=>!textless.includes(selector));
+    });
+    expect(pinned).toEqual([]);
+  });
+
+  it('answers prefers-color-scheme by redefining tokens, not by repeating rules',()=>{
+    // The point of the token layer: dark mode should be a second palette, not a
+    // second stylesheet. Anything other than custom-property declarations inside
+    // the dark block means a component rule has been duplicated.
+    const dark=/@media\s*\(prefers-color-scheme:\s*dark\)\s*\{\s*:root\{([^}]*)\}/.exec(styles);
+    expect(dark,'styles.css should carry a dark palette').toBeTruthy();
+    const declarations=dark![1].replace(/\/\*[\s\S]*?\*\//g,'').split(';').map(part=>part.trim()).filter(Boolean);
+    expect(declarations.filter(part=>!/^(--[a-z0-9-]+|color-scheme)\s*:/.test(part))).toEqual([]);
+    // and every token it redefines must already exist in the light palette
+    const redefined=declarations.filter(part=>part.startsWith('--')).map(part=>part.split(':')[0].trim());
+    expect(redefined.filter(token=>!tokens.has(token))).toEqual([]);
   });
 });
