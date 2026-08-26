@@ -226,6 +226,23 @@ Getting `APP_URL` wrong does not break the page, but API calls fail the CORS
 origin check. If you later put the app on a custom domain, update `APP_URL` to
 match and redeploy.
 
+### Deploying from GitHub instead
+
+If you connect the repository to Cloudflare Workers Builds, a push to `main`
+builds and deploys on its own. Two things are worth knowing:
+
+- **Set the build command to `npm run deploy`**, not `wrangler deploy`. Only
+  the npm script runs `db:migrate`, and a release that adds a migration will
+  otherwise deploy code against a schema that does not have its tables yet —
+  the feature 500s while everything else looks fine. If your build command is
+  the bare `wrangler deploy`, run `npm run db:migrate` yourself before merging.
+- **The build follows the push event, not the merge.** If GitHub does not emit
+  one — it happens, and the sign is that no CI run appears for the merge commit
+  either — nothing builds even though `main` moved. Deploy the current `main`
+  from the Cloudflare dashboard (Workers → your worker → Builds → retry the
+  latest commit), or run `npm run deploy` locally. Merging something else on
+  top works too, but only because it produces a fresh push event.
+
 ---
 
 ## Step 8 — Log in
