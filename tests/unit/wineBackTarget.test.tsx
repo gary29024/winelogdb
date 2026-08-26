@@ -130,6 +130,58 @@ describe('the back link on a wine',()=>{
   });
 });
 
+describe('back to the journal you left',()=>{
+  it('carries the search, the filters and the page you were on',()=>{
+    // The journal keeps nine things in the query string - query, favorite,
+    // month, offset, country, rating, sort, style, tasting. A bare /journal
+    // would drop all of them and land on an unfiltered page one, which is the
+    // place you were trying not to go back to.
+    const target={to:'/journal?query=roumier&style=red&offset=40',label:'Journal'};
+    expect(backTargetFromState(linkFrom(target))).toEqual(target);
+  });
+
+  it('keeps the plain journal when nothing is filtered',()=>{
+    expect(JOURNAL_BACK.to).toBe('/journal');
+  });
+
+  it('is what the journal page actually hands over',async()=>{
+    // The whole chain rather than the shape: render the journal with filters
+    // in the URL, click through to the wine, and read the back link.
+    const journalWine={
+      id:'w1',producer:'Domaine Georges Roumier',wineName:'Les Amoureuses',vintage:2019,
+      country:'France',region:'Burgundy',appellation:'Chambolle-Musigny 1er Cru',
+      grapes:['Pinot Noir'],wineStyle:'red',rating:97,favorite:false,imageIds:[],
+      tastingName:null,venue:null,tastingDate:null,createdAt:'2026-01-01T00:00:00.000Z'
+    };
+    vi.stubGlobal('fetch',vi.fn(async(url:string)=>{
+      const path=String(url);
+      const body=path.includes('/research')?{runs:[]}
+        :/\/api\/wines\/w1(\?|$)/.test(path)?{...wine,id:'w1'}
+        :{items:[journalWine],total:1};
+      return new Response(JSON.stringify(body),{status:200,headers:{'content-type':'application/json'}});
+    }));
+    vi.resetModules();
+    const {LibraryPage}=await import('../../src/features/wines/LibraryPage');
+    const {DetailPage}=await import('../../src/features/wines/DetailPage');
+    host=document.createElement('div');document.body.appendChild(host);
+    root=createRoot(host);
+    await act(async()=>{root!.render(
+      <MemoryRouter initialEntries={['/journal?query=roumier&style=red&offset=40']}>
+        <Routes>
+          <Route path="/journal" element={<LibraryPage/>}/>
+          <Route path="/wines/:id" element={<DetailPage/>}/>
+        </Routes>
+      </MemoryRouter>)});
+    const card=host.querySelector('a.wine-card') as HTMLAnchorElement;
+    expect(card,'the journal should have rendered a wine card').toBeTruthy();
+    await act(async()=>{card.dispatchEvent(new MouseEvent('click',{bubbles:true,cancelable:true,button:0}))});
+    const back=host.querySelector('.back-pill') as HTMLAnchorElement;
+    expect(back,'the wine should have rendered').toBeTruthy();
+    expect(back.getAttribute('href')).toBe('/journal?query=roumier&style=red&offset=40');
+    expect(back.textContent).toBe('← Journal');
+  });
+});
+
 describe('every page that links into a wine',()=>{
   it('hands over a target the wine will actually accept',()=>{
     // A rejected target falls back to the journal silently, so a call site that
