@@ -13,7 +13,13 @@ export type JourneySummary={
 };
 
 export type MilestoneKey='totalWines'|'producers'|'appellations'|'countries'|'structuredTastings';
-export type Milestone={key:MilestoneKey;label:string;current:number;target:number;progress:number};
+/**
+ * `progress` is progress through the *current* band, not from zero: at 858
+ * wines with stamps at 500 and 1000 it is 72%, not 86%. Whatever renders it has
+ * to say so, which is what `previous` is for - a ring reading 72% beside the
+ * words "858 / 1000" is a contradiction the reader has to resolve.
+ */
+export type Milestone={key:MilestoneKey;label:string;current:number;target:number;previous:number;progress:number};
 export type Achievement={key:MilestoneKey;label:string;value:number};
 
 const milestoneSets:Array<{key:MilestoneKey;label:string;thresholds:number[]}>= [
@@ -30,7 +36,33 @@ export function nextMilestones(summary:JourneySummary):Milestone[]{
     const target=set.thresholds.find(value=>value>current)??Math.ceil((current+1)/100)*100;
     const previous=[...set.thresholds].reverse().find(value=>value<=current)??0;
     const span=Math.max(1,target-previous);
-    return {key:set.key,label:set.label,current,target,progress:Math.max(0,Math.min(1,(current-previous)/span))};
+    return {key:set.key,label:set.label,current,target,previous,progress:Math.max(0,Math.min(1,(current-previous)/span))};
+  });
+}
+
+/** One stamp on a track: a threshold, and whether it has been reached. */
+export type LadderStamp={value:number;earned:boolean;next:boolean};
+export type LadderTrack={key:MilestoneKey;label:string;current:number;earned:number;total:number;next:LadderStamp|null;remaining:number;stamps:LadderStamp[]};
+
+/**
+ * Every stamp on every track, so the passport can show what is being collected
+ * rather than only the two most recently earned. A track past its last listed
+ * threshold has no next stamp - the milestone sets are finite, and inventing
+ * one would promise something the app does not award.
+ */
+export function journeyLadder(summary:JourneySummary):LadderTrack[]{
+  return milestoneSets.map(set=>{
+    const current=summary[set.key];
+    const nextValue=set.thresholds.find(value=>value>current)??null;
+    const stamps=set.thresholds.map(value=>({value,earned:value<=current,next:value===nextValue}));
+    return {
+      key:set.key,label:set.label,current,
+      earned:stamps.filter(stamp=>stamp.earned).length,
+      total:stamps.length,
+      next:stamps.find(stamp=>stamp.next)??null,
+      remaining:nextValue===null?0:nextValue-current,
+      stamps
+    };
   });
 }
 

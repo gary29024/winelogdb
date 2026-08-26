@@ -6,7 +6,7 @@ import { getAchievementProgress } from '../achievements/api';
 import { passportCollectionKicker,passportCollectionSummary,selectPassportCollections } from '../achievements/passportPreview';
 import type { AchievementProgress } from '../achievements/types';
 import { getJourneyData,type JourneyData,type RecentTasting } from './api';
-import { nextMilestones,unlockedAchievements,type MilestoneKey } from './model';
+import { journeyLadder,nextMilestones,unlockedAchievements,type MilestoneKey } from './model';
 import { grapeColorFor } from './passportVisuals';
 import { PassportMap } from './PassportMap';
 import '../../journey.css';
@@ -56,6 +56,7 @@ export function PassportPage(){
   useEffect(()=>{let active=true;getAchievementProgress().then(result=>{if(active)setCollections(result)}).catch(e=>{if(active)setCollectionsError((e as Error).message)});return()=>{active=false}},[]);
   const milestones=useMemo(()=>data?nextMilestones(data.summary):[],[data]);
   const achievements=useMemo(()=>data?unlockedAchievements(data.summary):[],[data]);
+  const ladder=useMemo(()=>data?journeyLadder(data.summary):[],[data]);
   const featuredCollections=useMemo(()=>collections?selectPassportCollections(collections):[],[collections]);
   const collectionsSummary=useMemo(()=>collections?passportCollectionSummary(collections):null,[collections]);
   if(error)return <section className="journey-page"><p role="alert">{error}</p></section>;
@@ -95,7 +96,7 @@ export function PassportPage(){
       <div className="passport-progress-copy">
         <p className="section-label">Your wine journey</p>
         <h2>{remaining?`${remaining} wines to your next stamp`:'Next stamp unlocked'}</h2>
-        <p>{wineMilestone?`${summary.totalWines} / ${wineMilestone.target} wines tasted`:`${summary.totalWines} wines tasted`}</p>
+        <p>{wineMilestone?`${summary.totalWines} tasted · ${summary.totalWines-wineMilestone.previous} of ${wineMilestone.target-wineMilestone.previous} since your last stamp`:`${summary.totalWines} wines tasted`}</p>
         <div className="passport-progress-line" aria-hidden="true"><span style={{width:`${progressPercent}%`}}/></div>
       </div>
       <a className="passport-soft-link" href="#passport-achievements">View levels</a>
@@ -150,12 +151,24 @@ export function PassportPage(){
         </Link>)}</div>:<p className="passport-empty-mini">Your latest tastings will appear here.</p>}
       </section>
 
-      <section className="passport-mini-card" id="passport-achievements">
-        <div className="passport-card-heading"><div><h2>Journey stamps</h2></div><span>{achievements.length} stamps</span></div>
-        {achievements.length?<div className="passport-stamp-list">{achievements.slice(0,2).map(item=><article key={item.key}>
-          <span className={`passport-badge passport-badge-${item.key}`} aria-hidden="true"><AchievementIcon kind={item.key}/></span>
-          <div><strong>{item.label}</strong><small>{item.value} milestone reached</small></div>
-        </article>)}{achievements.length>2&&<p className="passport-more-stamps">+{achievements.length-2} more stamps collected</p>}</div>:<p className="passport-empty-mini">Your first journey stamp unlocks at ten logged wines.</p>}
+      <section className="passport-mini-card passport-levels" id="passport-achievements">
+        <div className="passport-card-heading"><div><h2>Journey stamps</h2></div><span>{achievements.length} earned</span></div>
+        <p className="passport-levels-note">Every stamp on every track. Filled ones are yours; the outlined one is next.</p>
+        <ul className="passport-ladder">{ladder.map(track=><li key={track.key} className="passport-track">
+          <div className="passport-track-head">
+            <span className={`passport-badge passport-badge-${track.key}`} aria-hidden="true"><AchievementIcon kind={track.key}/></span>
+            <strong>{track.label}</strong>
+            <span className="passport-track-count">{track.earned} / {track.total}</span>
+          </div>
+          <ol className="passport-stamps">{track.stamps.map(stamp=><li key={stamp.value}
+            className={`passport-stamp${stamp.earned?' is-earned':''}${stamp.next?' is-next':''}`}
+            aria-label={`${stamp.value} ${track.label.toLowerCase()}${stamp.earned?' - earned':stamp.next?' - next stamp':''}`}>
+            {stamp.value}
+          </li>)}</ol>
+          <small>{track.next
+            ?`${track.remaining} more to reach ${track.next.value}`
+            :`Every ${track.label.toLowerCase()} stamp collected`}</small>
+        </li>)}</ul>
       </section>
     </div>
 
