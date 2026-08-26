@@ -32,6 +32,11 @@ async function render(items=library){
   return host;
 }
 
+// Every leaf that states the size of the library, ignoring the batch-research
+// panel - it counts something else (producers never researched) and says so.
+const libraryCounts=()=>[...(host?.querySelectorAll('*')??[])]
+  .filter(el=>el.children.length===0&&!el.closest('.research-campaign')&&/\d+\s+(?:of\s+\d+\s+)?producers?\b/.test(el.textContent??''))
+  .map(el=>el.textContent);
 const toggles=()=>[...(host?.querySelectorAll('.country-group-toggle')??[])] as HTMLButtonElement[];
 const bodies=()=>[...(host?.querySelectorAll('.producer-country-body')??[])] as HTMLElement[];
 const named=(country:string)=>toggles().find(button=>button.querySelector('.country-group-name')?.textContent===country)!;
@@ -120,19 +125,13 @@ describe('the producer library by country',()=>{
     // header above the countries, in two different sizes, which read as two
     // different numbers rather than one fact.
     await render();
-    const counts=[...host!.querySelectorAll('*')]
-      .filter(el=>el.children.length===0&&/\d+\s+producers?\b/.test(el.textContent??''))
-      .map(el=>el.textContent);
-    expect(counts).toEqual(['3 countries · 4 producers']);
+    expect(libraryCounts()).toEqual(['3 countries · 4 producers']);
   });
 
   it('says how much of the library a search matched',async()=>{
     await render();
     await type('gaja');
-    const counts=[...host!.querySelectorAll('*')]
-      .filter(el=>el.children.length===0&&/\d+\s+(?:of\s+\d+\s+)?producers?\b/.test(el.textContent??''))
-      .map(el=>el.textContent);
-    expect(counts).toEqual(['1 country · 1 of 4 producers']);
+    expect(libraryCounts()).toEqual(['1 country · 1 of 4 producers']);
   });
 
   it('does not make a single country collapsible',async()=>{

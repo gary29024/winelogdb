@@ -1,0 +1,27 @@
+.research-campaign{display:grid;gap:8px;margin:0 0 16px;padding:12px 14px;border:1px solid var(--line);border-radius:var(--r-md);background:var(--paper)}
+.research-campaign-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.research-campaign-head strong{font:600 .88rem 'DM Sans',sans-serif;color:var(--ink)}
+.research-campaign-head span{color:var(--ink-6);font-size:.76rem}
+.research-campaign-head button{flex:0 0 auto;border:1px solid var(--line);border-radius:var(--r-pill);background:var(--paper);color:var(--wine);padding:6px 13px;font:700 .74rem 'DM Sans',sans-serif;cursor:pointer}
+.research-campaign-head button:hover{border-color:var(--ink-8);background:var(--ground)}
+.research-campaign-confirm{display:grid;gap:8px;padding-top:9px;border-top:1px solid var(--line)}
+.research-campaign-choices{display:flex;gap:6px;flex-wrap:wrap}
+.research-campaign-choices button{border:1px solid var(--line);border-radius:var(--r-pill);background:var(--paper);color:var(--ink-4);padding:6px 13px;font:600 .76rem 'DM Sans',sans-serif;cursor:pointer}
+.research-campaign-choices button.is-chosen{border-color:var(--ink);background:var(--ink);color:var(--on-accent)}
+.research-campaign-cost{margin:0;color:var(--ink-2);font-size:.82rem;font-weight:600}
+.research-campaign-note{margin:0;color:var(--ink-6);font-size:.74rem;line-height:1.45}
+.research-campaign-error{margin:0;color:var(--bad-ink);font-size:.76rem}
+.research-campaign-actions{display:flex;gap:8px;flex-wrap:wrap}
+.research-campaign-bar{height:5px;border-radius:var(--r-pill);background:var(--ground);overflow:hidden}
+.research-campaign-bar>span{display:block;height:100%;border-radius:var(--r-pill);background:var(--wine);transition:width .4s ease}
+.research-campaign-now{margin:0;color:var(--ink-5);font-size:.76rem;overflow:hidden;text-overflow:ellipsis}
+.research-campaign-failures{display:grid;gap:6px;margin:0;padding:0;list-style:none}
+.research-campaign-failures li{display:grid;gap:2px;padding:8px 10px;border:1px solid var(--bad-line);border-radius:var(--r-sm);background:var(--bad-wash)}
+.research-campaign-failures strong{font:600 .8rem 'DM Sans',sans-serif;color:var(--bad-ink)}
+.research-campaign-failures span{color:var(--ink-5);font-size:.73rem}
+.research-campaign.is-outcome{border-color:var(--line-mid)}
+@media(max-width:700px){
+  .research-campaign{padding:11px 11px;margin-bottom:13px}
+  .research-campaign-head strong{font-size:.82rem}
+  .research-campaign-actions button{flex:1 1 auto}
+}
