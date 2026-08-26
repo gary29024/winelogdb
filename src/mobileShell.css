@@ -11,7 +11,7 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 body{min-height:100dvh}
 button,a,label,summary,input,select,textarea{-webkit-tap-highlight-color:transparent}
 button,a,label[role=button],summary{touch-action:manipulation}
-:focus-visible{outline:2px solid var(--wine);outline-offset:2px}
+
 
 /* Icons render at the size of their slot and inherit the surrounding colour. */
 .app-icon{display:block;width:100%;height:100%}
