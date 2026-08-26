@@ -1,8 +1,9 @@
 import { useEffect,useMemo,useRef,useState,type ReactNode } from 'react';
-import { Link,useNavigate,useParams } from 'react-router-dom';
+import { Link,useLocation,useNavigate,useParams } from 'react-router-dom';
 import type { DeepSearchResult } from '../../lib/db/schema';
 import { cancelWineDeepSearch,deleteWine,getWine,getWineDeepSearchStatus,setWineFavorite,startWineDeepSearch,type WineDetail,type WineResearchRun } from './api';
 import { WineImage } from './WineImage';
+import { backTargetFromState,JOURNAL_BACK,readBackTarget,rememberBackTarget } from './backTarget';
 import { GroupSourceImage } from '../uploads/GroupSourceImage';
 import { structureValueLabel } from '../../lib/wine/tastingStructure';
 import { resolvePlace } from '../../lib/places/resolve';
@@ -90,7 +91,7 @@ function ClaimEvidence({deep,field}:{deep:DeepSearchResult;field:DeepField}){
 const classificationLabel:Record<string,string>={grand_cru:'Grand Cru',premier_cru:'Premier Cru',village:'Village'};
 
 export function DetailPage(){
- const {id=''}=useParams(),nav=useNavigate(),[wine,setWine]=useState<WineDetail>(),[favoriteBusy,setFavoriteBusy]=useState(false),[deepState,setDeepState]=useState<DeepState>('idle'),[deepError,setDeepError]=useState(''),[deepRun,setDeepRun]=useState<WineResearchRun|null>(null),[deepElapsed,setDeepElapsed]=useState(0),[deepNotice,setDeepNotice]=useState(''),[deepCancelling,setDeepCancelling]=useState(false),[selectedImage,setSelectedImage]=useState<string>(),[selectedGroupSource,setSelectedGroupSource]=useState<string>(),[openDeepFields,setOpenDeepFields]=useState<Set<DeepField>>(readOpenDeepFields);
+ const {id=''}=useParams(),nav=useNavigate(),{state}=useLocation(),[wine,setWine]=useState<WineDetail>(),[favoriteBusy,setFavoriteBusy]=useState(false),[deepState,setDeepState]=useState<DeepState>('idle'),[deepError,setDeepError]=useState(''),[deepRun,setDeepRun]=useState<WineResearchRun|null>(null),[deepElapsed,setDeepElapsed]=useState(0),[deepNotice,setDeepNotice]=useState(''),[deepCancelling,setDeepCancelling]=useState(false),[selectedImage,setSelectedImage]=useState<string>(),[selectedGroupSource,setSelectedGroupSource]=useState<string>(),[openDeepFields,setOpenDeepFields]=useState<Set<DeepField>>(readOpenDeepFields);
  const pollRef=useRef<Poller|undefined>(undefined),clockRef=useRef<number|undefined>(undefined);
  function stopDeepTimers(){pollRef.current?.stop();if(clockRef.current)window.clearInterval(clockRef.current);pollRef.current=undefined;clockRef.current=undefined}
  async function reloadWine(){const next=await getWine(id);setWine(next);return next}
@@ -107,6 +108,14 @@ export function DetailPage(){
  async function toggleFavorite(){if(!wine||favoriteBusy)return;const next=!wine.favorite;setFavoriteBusy(true);setWine({...wine,favorite:next});try{await setWineFavorite(id,next)}catch(e){setWine(current=>current?{...current,favorite:!next}:current);setDeepNotice((e as Error).message)}finally{setFavoriteBusy(false)}}
  function toggleDeepField(field:DeepField){setOpenDeepFields(current=>{const next=new Set(current);if(next.has(field))next.delete(field);else next.add(field);writeOpenDeepFields(next);return next})}
  function toggleAllDeepFields(fields:DeepField[]){setOpenDeepFields(current=>{const allOpen=fields.every(field=>current.has(field)),next=new Set(current);for(const field of fields){if(allOpen)next.delete(field);else next.add(field)}writeOpenDeepFields(next);return next})}
+ // Whoever linked here says where back goes; the stored copy carries it through
+ // a reload or a trip out to the edit page, and the journal is the fallback for
+ // a wine opened from a bookmark or a shared link.
+ const back=useMemo(()=>{
+  const handed=backTargetFromState(state);
+  if(handed){rememberBackTarget(id,handed);return handed}
+  return readBackTarget(id)??JOURNAL_BACK;
+ },[state,id]);
  if(!wine)return <p aria-live="polite">Loading wine…</p>;
  // Derived rather than stored: the denomination is a fact about the appellation,
  // so reading it from the tree at display time keeps every wine current with the
@@ -126,7 +135,7 @@ export function DetailPage(){
  const researchSections=deep?([
   ['Vintage quality','vintageQuality',deep.vintageQuality],['Producer','producerDetails',deep.producerDetails],['Producer-wide practices','producerWinemakingPractices',deep.producerWinemakingPractices],['This wine / vintage winemaking','winemakingTechniques',deep.winemakingTechniques],['Terroir','terroir',deep.terroir],['Drinking window','drinkingWindow',deep.drinkingWindow]
  ] as Array<[string,DeepField,string]>).filter(([, ,value])=>Boolean(value)):[];
- return <article className="detail wine-detail"><Link className="back-pill" to="/">← Journal</Link>
+ return <article className="detail wine-detail"><Link className="back-pill" to={back.to}>← {back.label}</Link>
   <section className="wine-identity">
    {wine.imageIds.length?<div className="detail-gallery" aria-label={`${wine.wineName} photos`}>{wine.imageIds.map((imageId,index)=><button type="button" className="detail-photo-button" key={imageId} onClick={()=>setSelectedImage(imageId)} aria-label={`Open photo ${index+1} of ${wine.imageIds.length}`}><WineImage imageId={imageId} alt={`${wine.producer} ${wine.wineName} photo ${index+1}`} className="detail-photo"/></button>)}</div>:<div className="detail-bottle">{wine.wineStyle?.slice(0,1).toUpperCase()||'W'}</div>}
    {wine.groupSourcePhotos.length>0&&<div className="group-source-context"><div className="group-source-heading"><span>GROUP PHOTO</span><small>Source context · bottle crop shown above</small></div><div className="group-source-gallery">{wine.groupSourcePhotos.map(source=><button type="button" key={source.sessionId} className="group-source-button" onClick={()=>setSelectedGroupSource(source.sessionId)} aria-label="Open source Group Photo"><GroupSourceImage sessionId={source.sessionId} alt={`${wine.producer} ${wine.wineName} source group photo`} className="group-source-photo"/><span>{new Date(source.createdAt).toLocaleDateString()}</span></button>)}</div></div>}

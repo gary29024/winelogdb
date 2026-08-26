@@ -11,6 +11,7 @@ import { grapeColorFor } from './passportVisuals';
 import { PassportMap } from './PassportMap';
 import '../../journey.css';
 import '../../achievementPassport.css';
+import { linkFrom } from '../wines/backTarget';
 
 const journalHref=(params:Record<string,string>)=>`/journal?${new URLSearchParams(params).toString()}`;
 const flags:Record<string,string>={France:'🇫🇷',Italy:'🇮🇹',Spain:'🇪🇸',Portugal:'🇵🇹',Germany:'🇩🇪',Australia:'🇦🇺','United States':'🇺🇸','United Kingdom':'🇬🇧',Argentina:'🇦🇷',Chile:'🇨🇱','South Africa':'🇿🇦','New Zealand':'🇳🇿',Austria:'🇦🇹',Greece:'🇬🇷',Hungary:'🇭🇺'};
@@ -142,7 +143,7 @@ export function PassportPage(){
     <div className="passport-pair-grid passport-secondary-grid">
       <section className="passport-mini-card">
         <div className="passport-card-heading"><div><h2>Recent tastings</h2></div><Link to="/journal">View all</Link></div>
-        {recent.length?<div className="passport-recent-list">{recent.slice(0,2).map(item=><Link to={`/wines/${item.id}`} key={item.id}>
+        {recent.length?<div className="passport-recent-list">{recent.slice(0,2).map(item=><Link to={`/wines/${item.id}`} state={linkFrom({to:'/',label:'Passport'})} key={item.id}>
           <span className="passport-recent-image">{item.imageId?<WineImage imageId={item.imageId} alt={`${item.producer} ${item.wineName}`}/>:<span className="passport-recent-fallback">W</span>}</span>
           <div className="passport-recent-copy"><strong>{item.wineName}{item.vintage?` ${item.vintage}`:''}</strong><small>{[item.producer,item.region||item.country].filter(Boolean).join(' · ')}</small></div>
           <span className="passport-recent-date">{tastingDate(item)}</span>

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState, type MouseEvent } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { AppIcon } from './AppIcons';
 import '../scanSheet.css';
@@ -19,6 +19,7 @@ export function Layout(){
   const scanInput=useRef<HTMLInputElement>(null);
   const sheet=useRef<HTMLElement>(null);
   const scanTrigger=useRef<HTMLButtonElement>(null);
+  const usedKeyboard=useRef(false);
   const navigate=useNavigate();
 
   useEffect(()=>{
@@ -57,12 +58,13 @@ export function Layout(){
     const previousOverflow=document.body.style.overflow;
     document.body.style.overflow='hidden';
     sheet.current?.focus();
-    const onKeyDown=(event:KeyboardEvent)=>{if(event.key==='Escape'){event.preventDefault();closeScanSheet()}};
+    // Escape means they are on the keyboard now, whatever opened the sheet.
+    const onKeyDown=(event:KeyboardEvent)=>{if(event.key==='Escape'){event.preventDefault();usedKeyboard.current=true;closeScanSheet()}};
     document.addEventListener('keydown',onKeyDown);
     return()=>{
       document.removeEventListener('keydown',onKeyDown);
       document.body.style.overflow=previousOverflow;
-      opener?.focus();
+      if(usedKeyboard.current)opener?.focus();
     };
   },[scanSheetOpen,closeScanSheet]);
 
@@ -74,7 +76,15 @@ export function Layout(){
     if(scanInput.current)scanInput.current.value='';
   }
 
-  function openScanSheet(){preloadUpload();preloadGroupScan();setScanSheetOpen(true)}
+  function openScanSheet(event:MouseEvent<HTMLButtonElement>){
+    // A click synthesised from Enter or Space reports detail 0; a real tap or
+    // mouse press reports 1 or more. Returning focus to the trigger on close is
+    // the dialog pattern, but for someone who tapped it only produces a focus
+    // ring around the nav item they just used, so it is kept for the people it
+    // is actually for.
+    usedKeyboard.current=event.detail===0;
+    preloadUpload();preloadGroupScan();setScanSheetOpen(true)
+  }
   function goFromSheet(path:string){closeScanSheet();navigate(path)}
 
   return <>

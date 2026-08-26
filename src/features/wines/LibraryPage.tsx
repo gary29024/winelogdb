@@ -1,5 +1,6 @@
 import { useEffect,useMemo,useState } from 'react';
 import { pourFamily } from '../../lib/wine/pourFamily';
+import { JOURNAL_BACK,linkFrom,type BackTarget } from './backTarget';
 import { Link,Navigate,useSearchParams } from 'react-router-dom';
 import { batchUpdateJournalExperience,listWines,setWineFavorite,type JournalWine } from './api';
 import { WineImage } from './WineImage';
@@ -40,17 +41,24 @@ const sharedText=(values:Array<string|null>)=>{
   return {value:first,mixed:values.some(value=>(value??'')!==first)};
 };
 
-function WineCard({wine:w,view,selecting,selected,onToggle,onFavorite,favoriteBusy}:{wine:JournalWine;view:ViewMode;selecting:boolean;selected:boolean;onToggle:()=>void;onFavorite:(next:boolean)=>void;favoriteBusy:boolean}){
+function WineCard({wine:w,view,selecting,selected,onToggle,onFavorite,favoriteBusy,backTo}:{wine:JournalWine;view:ViewMode;selecting:boolean;selected:boolean;onToggle:()=>void;onFavorite:(next:boolean)=>void;favoriteBusy:boolean;backTo:BackTarget}){
   const image=w.imageIds[0]?<WineImage imageId={w.imageIds[0]} alt={`${w.producer} ${w.wineName} front label`} className="journal-wine-thumb"/>:<div className={`bottle bottle-${pourFamily(w.wineStyle)}`}>{w.wineStyle?.slice(0,1).toUpperCase()||'W'}</div>;
   const className=`wine-card journal-card ${view==='grid'?'journal-grid-card':''}${selecting?' journal-selectable-card':''}${selected?' selected':''}`;
   const selectionMark=selecting?<span className="journal-select-mark" aria-hidden="true">{selected?'✓':''}</span>:null;
   const content=view==='grid'?<>{selectionMark}<div className="journal-grid-media">{image}<strong className="journal-grid-vintage">{w.vintage??'NV'}</strong>{w.rating!=null&&<span className="journal-grid-score">{w.rating}</span>}</div><div className="wine-card-body"><h2 title={w.wineName}>{w.wineName}</h2><p className="producer" title={w.producer}>{w.producer}</p></div></>:<>{selectionMark}{image}<div className="wine-card-body"><div className="wine-card-top"><h2>{w.wineName}</h2><strong>{w.vintage??'NV'}</strong></div><p className="producer">{w.producer}</p><span className="journal-meta">{[[w.appellation,w.region,w.country].filter(Boolean).join(' · '),w.grapes.join(' · ')].filter(Boolean).join(' · ')}</span>{w.tastingName&&<span className="tasting-chip">{w.tastingName}</span>}{w.venue&&<span className="journal-venue">{w.venue}</span>}{w.rating!=null&&<span className="score-chip">{w.rating}</span>}</div></>;
   if(selecting)return <button type="button" className={className} aria-pressed={selected} aria-label={`${selected?'Deselect':'Select'} ${w.producer} ${w.wineName}`} onClick={onToggle}>{content}</button>;
-  return <div className={`journal-card-shell ${view==='grid'?'grid':'list'}`}><Link className={className} to={`/wines/${w.id}`}>{content}</Link><button type="button" className={`journal-favorite-button${w.favorite?' active':''}`} aria-pressed={w.favorite} aria-label={`${w.favorite?'Remove':'Add'} ${w.producer} ${w.wineName} ${w.favorite?'from':'to'} favorites`} disabled={favoriteBusy} onClick={()=>onFavorite(!w.favorite)}><AppIcon kind={w.favorite?'heart-filled':'heart'}/></button></div>;
+  return <div className={`journal-card-shell ${view==='grid'?'grid':'list'}`}><Link className={className} to={`/wines/${w.id}`} state={linkFrom(backTo)}>{content}</Link><button type="button" className={`journal-favorite-button${w.favorite?' active':''}`} aria-pressed={w.favorite} aria-label={`${w.favorite?'Remove':'Add'} ${w.producer} ${w.wineName} ${w.favorite?'from':'to'} favorites`} disabled={favoriteBusy} onClick={()=>onFavorite(!w.favorite)}><AppIcon kind={w.favorite?'heart-filled':'heart'}/></button></div>;
 }
 
 export function LibraryPage(){
   const [params,setParams]=useSearchParams();
+  // The search, the filters and the page you are on all live in the query
+  // string, so back from a wine has to carry it - otherwise it lands on an
+  // unfiltered page one, which is the place you were trying not to go.
+  const backToJournal=useMemo<BackTarget>(()=>{
+    const search=params.toString();
+    return search?{to:`/journal?${search}`,label:'Journal'}:JOURNAL_BACK;
+  },[params]);
   const [data,setData]=useState<JournalWine[]>([]),[nextOffset,setNextOffset]=useState<number|null>(null),[error,setError]=useState(''),[loading,setLoading]=useState(true);
   // A URL that carries its own filters always wins, so a deep link or a link in
   // from Insights is never overridden by what was stored.
@@ -143,7 +151,7 @@ export function LibraryPage(){
   const ordered=chronological?[...data].sort((a,b)=>sort==='oldest'?journalDate(a).localeCompare(journalDate(b)):journalDate(b).localeCompare(journalDate(a))):data;
   const groups=chronological?ordered.reduce<Array<{key:string;items:JournalWine[]}>>((acc,wine)=>{const key=monthKey(wine),last=acc[acc.length-1];if(last?.key===key)last.items.push(wine);else acc.push({key,items:[wine]});return acc},[]):[];
   const collectionClass=`wine-grid journal-list ${view==='grid'?'journal-gallery':'journal-list-view'}`;
-  const renderItems=(items:JournalWine[])=><div className={collectionClass}>{items.map(w=><WineCard wine={w} view={view} selecting={selecting} selected={selectedIds.has(w.id)} onToggle={()=>toggleSelection(w.id)} onFavorite={next=>void toggleFavorite(w,next)} favoriteBusy={favoriteBusy.has(w.id)} key={w.id}/>)}</div>;
+  const renderItems=(items:JournalWine[])=><div className={collectionClass}>{items.map(w=><WineCard wine={w} backTo={backToJournal} view={view} selecting={selecting} selected={selectedIds.has(w.id)} onToggle={()=>toggleSelection(w.id)} onFavorite={next=>void toggleFavorite(w,next)} favoriteBusy={favoriteBusy.has(w.id)} key={w.id}/>)}</div>;
   const hasPrevious=currentOffset>0,hasNext=nextOffset!=null;
 
   if(restoring)return <Navigate to={{pathname:'/journal',search:restoreFilters}} replace/>;
