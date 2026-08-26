@@ -12,5 +12,5 @@ export function LoginPage(){
     try{await login(String(fd.get('password')||''));nav('/',{replace:true})}
     catch(e){setError((e as Error).message);setBusy(false)}
   }
-  return <main className="login-page"><section className="login-card"><p className="eyebrow">PRIVATE WINE JOURNAL</p><h1>Sign in to WineLog</h1><p>Enter the private app password configured in Cloudflare.</p><form onSubmit={submit}><label>Password<input name="password" type="password" autoComplete="current-password" required autoFocus/></label>{error&&<p role="alert" className="login-error">{error}</p>}<button className="wide-action" disabled={busy}>{busy?'Signing in…':'Sign in'}</button></form></section></main>
+  return <main className="login-page"><section className="login-card"><p className="eyebrow">PRIVATE WINE JOURNAL</p><h1>Sign in to WineLog</h1><p>Enter the private app password configured in Cloudflare.</p><form onSubmit={submit}><label>Password<input name="password" type="password" autoComplete="current-password" required autoFocus/></label>{error&&<p role="alert" className="login-error">{error}</p>}<button className="wide-action primary" disabled={busy}>{busy?'Signing in…':'Sign in'}</button></form></section></main>
 }

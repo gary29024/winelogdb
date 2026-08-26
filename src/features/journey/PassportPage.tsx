@@ -80,7 +80,7 @@ export function PassportPage(){
 
     <section className="passport-summary-card" aria-labelledby="passport-summary-heading">
       <div className="passport-summary-copy">
-        <p className="section-label" id="passport-summary-heading">PASSPORT SUMMARY</p>
+        <p className="section-label" id="passport-summary-heading">Passport summary</p>
         <div className="passport-stat-grid">{summaryStats.map(item=><article key={item.label}>
           <span className="passport-stat-icon" aria-hidden="true"><PassportStatIcon kind={item.kind}/></span>
           <strong>{item.value}</strong><span>{item.label}</span><small>{item.detail}</small>
@@ -92,7 +92,7 @@ export function PassportPage(){
     <section className="passport-progress-card">
       <div className="passport-progress-ring" role="img" aria-label={`${progressPercent}% progress to the next wine milestone`} style={{background:`conic-gradient(#10182d ${progressPercent}%,#e8ecf2 0)`}}><span>{progressPercent}%</span></div>
       <div className="passport-progress-copy">
-        <p className="section-label">YOUR WINE JOURNEY</p>
+        <p className="section-label">Your wine journey</p>
         <h2>{remaining?`${remaining} wines to your next stamp`:'Next stamp unlocked'}</h2>
         <p>{wineMilestone?`${summary.totalWines} / ${wineMilestone.target} wines tasted`:`${summary.totalWines} wines tasted`}</p>
         <div className="passport-progress-line" aria-hidden="true"><span style={{width:`${progressPercent}%`}}/></div>
@@ -102,7 +102,7 @@ export function PassportPage(){
 
     <section className="passport-collections-card" aria-labelledby="passport-collections-heading">
       <div className="passport-collections-heading">
-        <div><p className="section-label">WINE COLLECTIONS</p><h2 id="passport-collections-heading">Explore your next stamps</h2><p>Iconic estates, historic tastings and regional challenges — updated automatically from your journal.</p></div>
+        <div><p className="section-label">Wine collections</p><h2 id="passport-collections-heading">Explore your next stamps</h2><p>Iconic estates, historic tastings and regional challenges — updated automatically from your journal.</p></div>
         <div className="passport-collections-summary">{collectionsSummary&&<span><strong>{collectionsSummary.complete}</strong><small>complete</small></span>}<Link to="/achievements">View all{collectionsSummary?` ${collectionsSummary.total}`:''} <span>›</span></Link></div>
       </div>
       {collectionsError?<p className="passport-collections-error">Wine Collections could not be loaded right now.<Link to="/achievements">Open collections</Link></p>:!collections?<p className="passport-collections-loading" aria-live="polite">Checking your collection progress…</p>:<>

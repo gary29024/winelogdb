@@ -140,6 +140,6 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel}:WineF
     <label className="full-field">Tags (comma separated)<input name="tags" defaultValue={initial?.tags?.join(', ')??''}/></label>
     {photos.length>0&&<p className="form-note">{photos.length} photo{photos.length===1?'':'s'} will be saved permanently only after this wine is successfully logged.</p>}
     {error&&<p role="alert">{error}</p>}
-    <div className="wine-form-actions">{id&&<button type="button" className="wine-edit-cancel" disabled={busy} onClick={()=>nav(`/wines/${id}`)}>Cancel</button>}<button type="submit" disabled={busy}>{busy?'Saving…':submitLabel??'Save wine'}</button></div>
+    <div className="wine-form-actions">{id&&<button type="button" className="wine-edit-cancel quiet" disabled={busy} onClick={()=>nav(`/wines/${id}`)}>Cancel</button>}<button type="submit" className="primary" disabled={busy}>{busy?'Saving…':submitLabel??'Save wine'}</button></div>
   </form>
 }

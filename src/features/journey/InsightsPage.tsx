@@ -78,7 +78,7 @@ export function InsightsPage(){
     </div>
 
     <div className="journey-two-column">
-      <section className="journey-card"><div className="journey-section-heading"><div><p className="section-label">PRODUCERS</p><h2>You keep coming back to</h2></div></div>
+      <section className="journey-card"><div className="journey-section-heading"><div><p className="section-label">Producers</p><h2>You keep coming back to</h2></div></div>
         {data.producers.length?<div className="insight-rank-list">{data.producers.map((item,index)=>{
           const since=sinceLabel(item.lastTasted);
           return <Link to={journalHref({query:item.producer})} key={item.producer}>
@@ -93,7 +93,7 @@ export function InsightsPage(){
         })}</div>:<p className="journey-muted">Log a second bottle from any producer and this fills in.</p>}
       </section>
 
-      <section className="journey-card"><div className="journey-section-heading"><div><p className="section-label">EXPLORATION</p><h2>{discovery?discovery.phrase:'Your next frontier'}</h2></div></div>
+      <section className="journey-card"><div className="journey-section-heading"><div><p className="section-label">Exploration</p><h2>{discovery?discovery.phrase:'Your next frontier'}</h2></div></div>
         {discovery?<>
           <div className="discovery-dial" role="img" aria-label={`${discovery.percent}% of your last ${data.discovery.tastings} tastings came from a producer new to you`}>
             <strong>{discovery.percent}%</strong>
@@ -106,7 +106,7 @@ export function InsightsPage(){
       </section>
     </div>
 
-    <section className="journey-card"><div className="journey-section-heading"><div><p className="section-label">WHAT EARNS A HEART</p><h2>Your favorites, by the numbers</h2></div><span>{summary.favorites}</span></div>
+    <section className="journey-card"><div className="journey-section-heading"><div><p className="section-label">What earns a heart</p><h2>Your favorites, by the numbers</h2></div><span>{summary.favorites}</span></div>
       {summary.favorites?<>
         <div className="favorite-columns">
           <FavoriteColumn title="Grapes" rows={favoriteGrapes} label={grape=>grape.grape} href={grape=>journalHref({query:grape.grape})}/>
@@ -118,7 +118,7 @@ export function InsightsPage(){
     </section>
 
     <div className="journey-two-column">
-      <section className="journey-card"><div className="journey-section-heading"><div><p className="section-label">RHYTHM</p><h2>Your tasting year</h2></div>{cadence.streak>1&&<span>{cadence.streak}-month run</span>}</div>
+      <section className="journey-card"><div className="journey-section-heading"><div><p className="section-label">Rhythm</p><h2>Your tasting year</h2></div>{cadence.streak>1&&<span>{cadence.streak}-month run</span>}</div>
         {cadence.months.length?<>
           <div className="cadence-chart" role="img" aria-label={cadence.months.map(month=>`${monthName(month.month)}: ${month.wines}`).join(', ')}>
             {cadence.months.map(month=><span className="cadence-bar" key={month.month} title={`${monthName(month.month)}: ${month.wines} wine${month.wines===1?'':'s'}`}>
@@ -132,7 +132,7 @@ export function InsightsPage(){
         </>:<p className="journey-muted">Tasting dates build this chart.</p>}
       </section>
 
-      <section className="journey-card"><div className="journey-section-heading"><div><p className="section-label">CELLAR AGE</p><h2>When you open them</h2></div>{drinkingAge&&<span>{drinkingAge.wines}</span>}</div>
+      <section className="journey-card"><div className="journey-section-heading"><div><p className="section-label">Cellar age</p><h2>When you open them</h2></div>{drinkingAge&&<span>{drinkingAge.wines}</span>}</div>
         {drinkingAge?<>
           <p className="age-headline"><strong>{drinkingAge.median} years</strong><span>median age at opening · middle half {drinkingAge.typicalFrom}–{drinkingAge.typicalTo} years</span></p>
           <div className="age-bands">{drinkingAge.bands.map(band=><article key={band.label}>
@@ -143,7 +143,7 @@ export function InsightsPage(){
       </section>
     </div>
 
-    {cruMix.length>0&&<section className="journey-card"><div className="journey-section-heading"><div><p className="section-label">CRU LEVEL</p><h2>How high you drink</h2></div><span>{cruMix.reduce((total,tier)=>total+tier.wines,0)}</span></div>
+    {cruMix.length>0&&<section className="journey-card"><div className="journey-section-heading"><div><p className="section-label">Cru level</p><h2>How high you drink</h2></div><span>{cruMix.reduce((total,tier)=>total+tier.wines,0)}</span></div>
       <div className="cru-mix">{cruMix.map(tier=><article className={`cru-tier cru-tier-${tier.key}`} key={tier.key}>
         <span className="cru-tier-bar" aria-hidden="true"><span style={{width:percent(tier.share)}}/></span>
         <strong>{tier.label}</strong>
@@ -153,7 +153,7 @@ export function InsightsPage(){
       <p className="journey-muted">Counted where WineLog can read a cru tier - Burgundy today - so a bottle without one is not missing, just outside the scheme.</p>
     </section>}
 
-    <section className="journey-card"><div className="journey-section-heading"><div><p className="section-label">THE MIX</p><h2>What fills your journal</h2></div></div>
+    <section className="journey-card"><div className="journey-section-heading"><div><p className="section-label">The mix</p><h2>What fills your journal</h2></div></div>
       {grapeMix.length||styleMix.length?<div className="mix-groups">
         {[{title:'Grapes',slices:grapeMix,tint:(label:string)=>grapeColorFor(label)},
           {title:'Styles',slices:styleMix,tint:()=>undefined}].filter(group=>group.slices.length).map(group=><div className="mix-group" key={group.title}>
@@ -169,20 +169,20 @@ export function InsightsPage(){
       </div>:<p className="journey-muted">Grape and style breakdowns appear once wines have been identified.</p>}
     </section>
 
-    {withStructure&&<section className="journey-card palate-card"><div className="journey-section-heading"><div><p className="section-label">YOUR PALATE</p><h2>Typical tasting structure</h2></div><span>{summary.structuredTastings}</span></div>
+    {withStructure&&<section className="journey-card palate-card"><div className="journey-section-heading"><div><p className="section-label">Your palate</p><h2>Typical tasting structure</h2></div><span>{summary.structuredTastings}</span></div>
       <div className="palate-table"><div className="palate-head"><span>Structure</span><span>All</span><span>{profile.topRatedCutoff==null?'Top rated':`${profile.topRatedCutoff}+`}</span></div>{profile.rows.map(row=><div className="palate-row" key={row.key}><strong>{row.label}</strong><span>{row.all?structureDisplay[row.all]??row.all:'—'}</span><span>{row.top?structureDisplay[row.top]??row.top:'—'}</span></div>)}</div>
       <p className="journey-muted">“Top rated” uses the highest-rated quarter of your structured tastings{profile.topRatedCutoff!=null?` (currently ${profile.topRatedCutoff}+; ${profile.topRatedCount} tastings)`:''}. It updates automatically as your journal grows.</p>
     </section>}
 
-    {withRatings&&<section className="journey-card"><div className="journey-section-heading"><div><p className="section-label">STYLES</p><h2>What you rate highest</h2></div></div>
+    {withRatings&&<section className="journey-card"><div className="journey-section-heading"><div><p className="section-label">Styles</p><h2>What you rate highest</h2></div></div>
       {data.styles.length?<div className="insight-rank-list">{[...data.styles].sort((a,b)=>(b.averageRating??-1)-(a.averageRating??-1)||b.wines-a.wines).map((item,index)=><Link to={journalHref({style:item.style})} key={item.style}><span className="rank-number">{index+1}</span><div><strong className="capitalize">{item.style}</strong><small>{item.wines} wines · {item.ratedWines} rated</small></div><b>{rating(item.averageRating)}</b></Link>)}</div>:<p className="journey-muted">Style insights appear once wines have been identified.</p>}
     </section>}
 
-    <section className="journey-card"><div className="journey-section-heading"><div><p className="section-label">OVER TIME</p><h2>Your tasting history by year</h2></div></div>
+    <section className="journey-card"><div className="journey-section-heading"><div><p className="section-label">Over time</p><h2>Your tasting history by year</h2></div></div>
       <div className="year-insight-grid">{data.years.map(item=><article key={item.year}><strong>{item.year}</strong><span>{item.wines} wines</span>{withRatings&&item.ratedWines>0&&<small>{rating(item.averageRating)} average rating</small>}</article>)}</div>
     </section>
 
-    <section className="journey-card"><div className="journey-section-heading"><div><p className="section-label">PRICE</p><h2>What you have recorded</h2></div><span>{summary.pricedWines}</span></div>
+    <section className="journey-card"><div className="journey-section-heading"><div><p className="section-label">Price</p><h2>What you have recorded</h2></div><span>{summary.pricedWines}</span></div>
       {data.currencies.length?<div className="currency-grid">{data.currencies.map(item=><article key={item.currency}><div><strong>{item.currency}</strong><span>{item.wines} priced wines</span></div><div><b>{money(item.currency,item.averagePrice)}</b><small>{withRatings&&item.averageRating!=null?`${rating(item.averageRating)} avg rating`:`${item.wines} logged`}</small></div></article>)}</div>:<p className="journey-muted">Record purchase or tasting prices to see separate summaries for each currency. WineLog does not mix currencies into a misleading value score.</p>}
     </section>
 
