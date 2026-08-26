@@ -79,3 +79,41 @@ describe('section labels',()=>{
     expect(shouting).toEqual([]);
   });
 });
+
+describe('focus indicator',()=>{
+  it('draws exactly one, for the whole app',()=>{
+    // There were three: a global wine ring declared identically in two
+    // stylesheets, plus a button-only override in a neutral grey that quietly
+    // won on specificity. A grey rounded rectangle around a control reads as a
+    // border rather than as "the browser is here", which is how it was
+    // reported.
+    const rings=rules
+      .filter(rule=>/:focus-visible/.test(rule.selector)&&/outline\s*:/.test(rule.body))
+      .filter(rule=>!/outline:\s*none/.test(rule.body))
+      .map(rule=>`${rule.sheet} ${rule.selector}`).sort();
+    expect(rings).toEqual([
+      'styles.css :focus-visible',
+      // the only exceptions: both sit on a photo or a dark overlay, where the
+      // wine accent would disappear
+      'imageLightbox.css .photo-lightbox-trigger:focus-visible',
+      'imageLightbox.css .photo-lightbox-close:focus-visible'
+    ].sort());
+  });
+
+  it('leaves the scan sheet without one',()=>{
+    // The sheet is focused on open so keyboard and screen-reader context moves
+    // into it, but it is a tabindex=-1 container rather than something you can
+    // act on, so a ring around it says nothing. Being bottom-anchored, only its
+    // top edge showed - a stray red line across the sheet.
+    const suppressed=rules.find(rule=>/^\.scan-sheet:focus\b/.test(rule.selector));
+    expect(suppressed,'.scan-sheet should suppress its focus ring').toBeTruthy();
+    expect(suppressed!.body).toContain('outline:none');
+  });
+
+  it('gives the scan trigger a radius of its own',()=>{
+    // It sets border:0 but still inherits the generic button radius, and the
+    // ring follows that - so the shape has to be chosen rather than left over.
+    const trigger=rules.find(rule=>rule.selector==='.mobile-nav button.scan-nav'&&/appearance/.test(rule.body));
+    expect(trigger!.body).toContain('border-radius:');
+  });
+});
