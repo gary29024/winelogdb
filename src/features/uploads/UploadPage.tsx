@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ImageLightbox } from '../../components/ImageLightbox';
 import { WineForm } from '../wines/WineForm';
 import { recognitionSchema, type RecognitionResult } from '../recognition/schema';
@@ -30,7 +30,7 @@ function suggestedTags(result:RecognitionResult){
 export function UploadPage(){
   const [items,setItems]=useState<Item[]>([]),[review,setReview]=useState<RecognitionResult>(),[scanError,setScanError]=useState(''),[identifying,setIdentifying]=useState(false),[lightbox,setLightbox]=useState<LightboxPhoto|null>(null);
   const input=useRef<HTMLInputElement>(null);
-  const location=useLocation(),navigate=useNavigate();
+  const navigate=useNavigate();
   function failAll(message:string){setItems(xs=>xs.map(x=>({...x,status:'failed',progress:0,error:message})));setScanError(message);setIdentifying(false)}
 
   async function choose(files:File[]){
@@ -45,13 +45,6 @@ export function UploadPage(){
       setItems(xs=>xs.map((x,i)=>({...x,metadata:metadata[i],recognitionFile:prepared[i].file,width:prepared[i].width,height:prepared[i].height,status:'ready to identify',progress:25,error:undefined})));
     }catch(e){failAll((e as Error).message||'Could not prepare the selected photos')}
   }
-
-  useEffect(()=>{
-    const incoming=(location.state as {scanFiles?:File[]}|null)?.scanFiles;
-    if(incoming?.length){void choose(incoming);navigate(location.pathname,{replace:true,state:null})}
-  // The route state is consumed once on entry from the bottom-sheet picker.
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[]);
 
   async function identify(){
     let slowTimer:number|undefined;
