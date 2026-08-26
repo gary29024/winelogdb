@@ -122,6 +122,7 @@ export function InsightsPage(){
         {cadence.months.length?<>
           <div className="cadence-chart" role="img" aria-label={cadence.months.map(month=>`${monthName(month.month)}: ${month.wines}`).join(', ')}>
             {cadence.months.map(month=><span className="cadence-bar" key={month.month} title={`${monthName(month.month)}: ${month.wines} wine${month.wines===1?'':'s'}`}>
+              <b>{month.wines}</b>
               <span className="cadence-track"><span style={{height:`${Math.round(month.wines/busiestMonthBar*100)}%`}}/></span>
               <small>{month.label}</small>
             </span>)}

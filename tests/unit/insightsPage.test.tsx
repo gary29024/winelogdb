@@ -68,6 +68,19 @@ describe('Insights for a journal that rarely scores wines',()=>{
     expect(text(page)).toContain('What fills your journal');
   });
 
+  it('puts the number on every bar of the tasting year',async()=>{
+    // The chart showed the shape of the year but never its size: the count was
+    // only in the bar's hover title, which a phone cannot show at all.
+    const page=await render(journal({months:[{month:'2026-08',wines:5,favorites:2},{month:'2026-07',wines:4,favorites:1}]}));
+    const counts=[...page.querySelectorAll('.cadence-bar')].map(bar=>bar.querySelector('b')?.textContent);
+    expect(counts.length).toBeGreaterThan(0);
+    expect(counts.every(count=>count!=null&&/^\d+$/.test(count))).toBe(true);
+    expect(counts).toContain('5');
+    expect(counts).toContain('4');
+    // Months with nothing logged still say so rather than showing a bare gap.
+    expect(counts).toContain('0');
+  });
+
   it('hides the rating and structure cards and says so once',async()=>{
     const page=await render(journal());
     expect(text(page)).not.toContain('Typical tasting structure');
