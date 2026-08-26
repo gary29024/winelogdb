@@ -33,9 +33,9 @@ async function render(items=library){
 }
 
 // Every leaf that states the size of the library, ignoring the batch-research
-// panel - it counts something else (producers never researched) and says so.
+// link - it counts something else (producers never researched) and says so.
 const libraryCounts=()=>[...(host?.querySelectorAll('*')??[])]
-  .filter(el=>el.children.length===0&&!el.closest('.research-campaign')&&/\d+\s+(?:of\s+\d+\s+)?producers?\b/.test(el.textContent??''))
+  .filter(el=>el.children.length===0&&!el.closest('.research-campaign,.research-campaign-link')&&/\d+\s+(?:of\s+\d+\s+)?producers?\b/.test(el.textContent??''))
   .map(el=>el.textContent);
 const toggles=()=>[...(host?.querySelectorAll('.country-group-toggle')??[])] as HTMLButtonElement[];
 const bodies=()=>[...(host?.querySelectorAll('.producer-country-body')??[])] as HTMLElement[];
@@ -132,6 +132,18 @@ describe('the producer library by country',()=>{
     await render();
     await type('gaja');
     expect(libraryCounts()).toEqual(['1 country · 1 of 4 producers']);
+  });
+
+  it('sends batch research to its own page rather than sitting on this one',async()=>{
+    // The library is a list you scan; a batch run is something you set going
+    // and come back to. Only the one line stays here.
+    await render();
+    const entry=host!.querySelector('.research-campaign-link') as HTMLAnchorElement;
+    expect(entry).toBeTruthy();
+    expect(entry.getAttribute('href')).toBe('/producers/research-batch');
+    expect(entry.textContent).toContain('4 producers never researched');
+    expect(host!.querySelector('.research-campaign-choices')).toBeNull();
+    expect(host!.querySelector('.research-campaign-confirm')).toBeNull();
   });
 
   it('does not make a single country collapsible',async()=>{
