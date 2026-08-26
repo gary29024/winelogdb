@@ -15,19 +15,15 @@ function loadImage(file:File){
 export function groupCropRegion(width:number,height:number,box:GroupBoundingBox){
   const marginX=Math.max(12,(box.xMax-box.xMin)*.08),marginY=Math.max(12,(box.yMax-box.yMin)*.08);
   const xMin=Math.max(0,box.xMin-marginX),yMin=Math.max(0,box.yMin-marginY),xMax=Math.min(1000,box.xMax+marginX),yMax=Math.min(1000,box.yMax+marginY);
-  let sx=Math.max(0,Math.floor((xMin/1000)*width)),sy=Math.max(0,Math.floor((yMin/1000)*height));
+  const sx=Math.max(0,Math.floor((xMin/1000)*width)),sy=Math.max(0,Math.floor((yMin/1000)*height));
   let sourceWidth=Math.max(1,Math.ceil(((xMax-xMin)/1000)*width)),sourceHeight=Math.max(1,Math.ceil(((yMax-yMin)/1000)*height));
   sourceWidth=Math.min(sourceWidth,width-sx);sourceHeight=Math.min(sourceHeight,height-sy);
-  // Producer/Journal thumbnails are close to square. Expand the shorter axis around the
-  // detected bottle when the source image has room, so cover thumbnails stay centred on
-  // the bottle instead of clipping down to the neck or capsule.
-  const side=Math.max(sourceWidth,sourceHeight);
-  if(side<=width&&side<=height){
-    const centerX=sx+sourceWidth/2,centerY=sy+sourceHeight/2;
-    sx=Math.max(0,Math.min(width-side,Math.round(centerX-side/2)));
-    sy=Math.max(0,Math.min(height-side,Math.round(centerY-side/2)));
-    sourceWidth=side;sourceHeight=side;
-  }
+  // The crop keeps the bottle's own shape. It used to be squared up to suit
+  // near-square thumbnails, but a bottle is roughly one part wide to five tall,
+  // so squaring a 141x531 detection produced a 531x531 crop that reached far
+  // enough sideways to take in the bottle standing next to it - which is the
+  // one thing a group photo exists to separate. Measured on the reported photo,
+  // the squared crop overlapped its neighbour by 124px; this one by 5.
   return {sx,sy,sourceWidth,sourceHeight};
 }
 

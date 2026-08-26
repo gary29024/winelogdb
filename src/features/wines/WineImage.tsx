@@ -1,5 +1,6 @@
 import { useEffect,useRef,useState } from 'react';
 import { authHeaders } from '../../lib/auth/client';
+import { labelFocusPosition } from '../../lib/wine/labelFocus';
 import '../../wineImages.css';
 
 export function WineImage({imageId,alt,className}:{imageId:string;alt:string;className?:string}){
@@ -7,9 +8,12 @@ export function WineImage({imageId,alt,className}:{imageId:string;alt:string;cla
   const [shouldLoad,setShouldLoad]=useState(false);
   const [src,setSrc]=useState<string>();
   const [failed,setFailed]=useState(false);
+  // Measured off the loaded image rather than plumbed through the API, so it
+  // works the same in the journal list, on the detail page and in the passport.
+  const [objectPosition,setObjectPosition]=useState<string>();
 
   useEffect(()=>{
-    setShouldLoad(false);setSrc(undefined);setFailed(false);
+    setShouldLoad(false);setSrc(undefined);setFailed(false);setObjectPosition(undefined);
   },[imageId]);
 
   useEffect(()=>{
@@ -35,5 +39,6 @@ export function WineImage({imageId,alt,className}:{imageId:string;alt:string;cla
 
   if(failed)return <span className={`wine-image-fallback ${className??''}`} aria-label={`${alt} unavailable`}>W</span>;
   if(!src)return <span ref={placeholderRef} className={`wine-image-loading ${className??''}`} aria-label={`${alt} loading`}/>;
-  return <img className={className} src={src} alt={alt} loading="lazy" decoding="async"/>;
+  return <img className={className} src={src} alt={alt} loading="lazy" decoding="async" style={objectPosition?{objectPosition}:undefined}
+    onLoad={event=>setObjectPosition(labelFocusPosition(event.currentTarget.naturalWidth,event.currentTarget.naturalHeight))}/>;
 }
