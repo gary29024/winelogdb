@@ -6,6 +6,7 @@ import { ProducerHeroImage } from './ProducerHeroImage';
 import { ProducerContacts } from './ProducerContacts';
 import { CuveeCatalogLinks,type TastedCuveeGroup } from './CuveeCatalogLinks';
 import { normalizeProducerAlias } from '../../lib/producers/entities';
+import { catalogNote,verboseCatalogStyle } from '../../lib/producers/catalogNote';
 import { stripProducerCatalogPrefix } from '../../lib/producers/catalogName';
 import { catalogDecisionKey,catalogDecisionLabel } from '../../lib/producers/catalogDecisions';
 import { cuveeStyleFamily,normalizeCuveeAlias } from '../../lib/cuvees/entities';
@@ -47,10 +48,6 @@ function catalogCuveeFor(wine:ProducerDetail['catalog'][number],producer:Produce
  if(app){const exact=narrowed.find(item=>normalizeCuveeAlias(item.appellation??'')===app);if(exact)return exact}
  return narrowed[0];
 }
-function verboseCatalogStyle(value:unknown){
- const text=String(value??'').trim();
- return text.length>36||text.split(/\s+/).length>5||/[.;]/.test(text);
-}
 function catalogMeta(wine:ProducerDetail['catalog'][number],category:CatalogCategory){
  const parts:string[]=[];
  const add=(value:unknown)=>{const text=String(value??'').trim();if(!text)return;const key=normalizeProducerAlias(text);if(parts.some(existing=>normalizeProducerAlias(existing)===key))return;parts.push(text)};
@@ -59,14 +56,6 @@ function catalogMeta(wine:ProducerDetail['catalog'][number],category:CatalogCate
  if(classification&&!normalizeProducerAlias(appellation).includes(normalizeProducerAlias(classification)))add(classification);
  const style=String(wine.style??'').trim();add(style&&!verboseCatalogStyle(style)?style:categoryLabels[category]);
  return parts;
-}
-function catalogNote(wine:ProducerDetail['catalog'][number]){
- const explicit=String(wine.notes??'').trim(),style=String(wine.style??'').trim();
- const full=explicit||(style&&verboseCatalogStyle(style)?style:'');
- if(!full)return {short:'',full:''};
- if(full.length<=180)return {short:full,full};
- const clipped=full.slice(0,177).replace(/\s+\S*$/,'').trim();
- return {short:`${clipped||full.slice(0,177)}…`,full};
 }
 function sourceHost(value:string){try{return new URL(value).hostname.toLowerCase().replace(/^www\./,'')}catch{return ''}}
 
@@ -109,7 +98,7 @@ export function ProducerDetailPage(){
    const wines=map.get(category);if(!wines?.length)return [];
    const rows=wines.map((wine,index)=>{
     const identity=catalogCuveeFor(wine,producer),producerNames=[producer.canonicalName,...producer.aliases];
-    return {key:`${wine.name}-${index}`,displayName:displayCatalogName(wine.name,producer),identity,meta:catalogMeta(wine,category),note:catalogNote(wine),releaseCount:identity?.tastedReleases?.length??0,
+    return {key:`${wine.name}-${index}`,displayName:displayCatalogName(wine.name,producer),identity,meta:catalogMeta(wine,category),note:catalogNote(wine.notes,wine.style),releaseCount:identity?.tastedReleases?.length??0,
      decisionKey:catalogDecisionKey(wine,producerNames),label:catalogDecisionLabel(wine,producerNames),category};
    });
    return [{category,label:categoryLabels[category],rows,tasted:rows.filter(row=>Boolean(row.identity?.tastedCount)).length}];
