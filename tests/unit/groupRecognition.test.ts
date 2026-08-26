@@ -69,15 +69,43 @@ describe('group photo recognition',()=>{
     expect(groupRecognitionWineSchema.safeParse(canonical).success).toBe(true);
   });
 
-  it('expands a tall detected bottle to a centred square crop when the source has room',()=>{
-    const region=groupCropRegion(2400,1600,{xMin:420,yMin:120,xMax:560,yMax:880});
-    expect(region.sourceWidth).toBe(region.sourceHeight);
+  it('crops a bottle to its own shape instead of squaring it up',()=>{
+    // The crop used to expand the short axis to match the long one, to suit
+    // near-square thumbnails. A bottle is about one part wide to five tall, so
+    // that reached far enough sideways to take in whichever bottles were
+    // standing next to it - the one thing a group photo exists to separate.
+    const region=groupCropRegion(1290,1295,{xMin:459,yMin:224,xMax:544,yMax:577});
+    expect(region.sourceWidth).toBeLessThan(region.sourceHeight/2);
     expect(region.sx).toBeGreaterThanOrEqual(0);
     expect(region.sy).toBeGreaterThanOrEqual(0);
-    expect(region.sx+region.sourceWidth).toBeLessThanOrEqual(2400);
-    expect(region.sy+region.sourceHeight).toBeLessThanOrEqual(1600);
-    const detectedCenterX=((420+560)/2)/1000*2400;
-    const cropCenterX=region.sx+region.sourceWidth/2;
-    expect(Math.abs(cropCenterX-detectedCenterX)).toBeLessThan(2);
+    expect(region.sx+region.sourceWidth).toBeLessThanOrEqual(1290);
+    expect(region.sy+region.sourceHeight).toBeLessThanOrEqual(1295);
+  });
+
+  it('leaves the bottle standing next to it out of frame',()=>{
+    // Measured on the reported photo: squaring produced a 531x531 crop that
+    // overlapped the neighbouring bottle by 124px. The margin is the only
+    // overlap now.
+    const neighbour={xMin:552,xMax:648};
+    const region=groupCropRegion(1290,1295,{xMin:459,yMin:224,xMax:544,yMax:577});
+    const overlap=Math.max(0,(region.sx+region.sourceWidth)-(neighbour.xMin/1000)*1290);
+    expect(Math.round(overlap)).toBeLessThan(12);
+  });
+
+  it('keeps a little air around the bottle rather than shaving its edges',()=>{
+    // A detection sits tight to the glass; without a margin the crop clips the
+    // shoulders and the label runs to the edge.
+    const box={xMin:400,yMin:200,xMax:500,yMax:800};
+    const region=groupCropRegion(1000,1000,box);
+    expect(region.sx).toBeLessThan(400);
+    expect(region.sx+region.sourceWidth).toBeGreaterThan(500);
+  });
+
+  it('never reaches outside the photo for a bottle at the edge',()=>{
+    const region=groupCropRegion(1000,1000,{xMin:0,yMin:0,xMax:120,yMax:990});
+    expect(region.sx).toBe(0);
+    expect(region.sy).toBe(0);
+    expect(region.sx+region.sourceWidth).toBeLessThanOrEqual(1000);
+    expect(region.sy+region.sourceHeight).toBeLessThanOrEqual(1000);
   });
 });
