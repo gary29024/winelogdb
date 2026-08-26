@@ -1,6 +1,6 @@
 import { describe,expect,it } from 'vitest';
 import { createD1Stub } from './support/d1Stub';
-import { advanceCampaign,CAMPAIGN_CONCURRENCY,CAMPAIGN_STALE_RUN_MS,typicalProducerRunMs,unresearchedProducers,
+import { advanceCampaign,CAMPAIGN_CONCURRENCY,CAMPAIGN_STALE_RUN_MS,listCampaigns,readCampaign,typicalProducerRunMs,unresearchedProducers,
   type CampaignItemStatus } from '../../src/lib/producers/researchCampaign';
 
 type Item={producer_id:string;producer_name:string;request_id:string|null;status:CampaignItemStatus;message:string|null};
@@ -175,5 +175,47 @@ describe('how long a batch run will take',()=>{
   it('claims nothing when there is nothing to measure',async()=>{
     const stub=createD1Stub(()=>({all:[]}));
     expect(await typicalProducerRunMs(stub.db,'owner')).toBeNull();
+  });
+});
+
+describe('what a finished run can be asked about',()=>{
+  const rows=[
+    {producer_id:'a',producer_name:'Domaine A',request_id:'r-a',status:'complete',message:'Researched 12 wines'},
+    {producer_id:'b',producer_name:'Domaine B',request_id:'r-b',status:'failed',message:'Gemini returned nothing'},
+    {producer_id:'c',producer_name:'Domaine C',request_id:null,status:'skipped',message:'Removed before its turn.'}
+  ];
+  const head={id:'c1',status:'complete',requested:3,concurrency:2,created_at:'2026-08-27T10:00:00.000Z',
+    updated_at:'2026-08-27T10:40:00.000Z',finished_at:'2026-08-27T10:40:00.000Z',dismissed_at:null};
+
+  it('names every producer it touched, researched ones included',async()=>{
+    // The run reported only its failures, so a finished batch could not tell
+    // you which producers it had actually researched.
+    const stub=createD1Stub(sql=>/FROM producer_research_campaigns/.test(sql)?{first:head}
+      :/FROM producer_research_campaign_items/.test(sql)?{all:rows}:undefined);
+    const campaign=await readCampaign(stub.db,'owner','c1');
+    expect(campaign!.items.map(item=>[item.producerName,item.status]))
+      .toEqual([['Domaine A','complete'],['Domaine B','failed'],['Domaine C','skipped']]);
+    expect(campaign!.counts).toMatchObject({complete:1,failed:1,skipped:1});
+    expect(campaign!.failures.map(item=>item.producerName)).toEqual(['Domaine B']);
+  });
+
+  it('lists past runs by their counts rather than by reading every producer',async()=>{
+    const stub=createD1Stub(sql=>/FROM producer_research_campaigns c/.test(sql)?{all:[
+      {id:'c2',status:'running',requested:25,created_at:'2026-08-27T12:00:00.000Z',finished_at:null,
+        complete:4,failed:0,skipped:0,running:2,pending:19},
+      {id:'c1',status:'complete',requested:10,created_at:'2026-08-26T09:00:00.000Z',finished_at:'2026-08-26T10:10:00.000Z',
+        complete:9,failed:1,skipped:0,running:0,pending:0}
+    ]}:undefined);
+    const runs=await listCampaigns(stub.db,'owner');
+    expect(runs.map(run=>run.id)).toEqual(['c2','c1']);
+    expect(runs[1].counts).toEqual({pending:0,running:0,complete:9,failed:1,skipped:0});
+    // One aggregate query, not one per run.
+    expect(stub.calls).toHaveLength(1);
+  });
+
+  it('keeps a single run\'s history request bounded',async()=>{
+    const stub=createD1Stub(()=>({all:[]}));
+    await listCampaigns(stub.db,'owner',500);
+    expect(stub.calls[0].args[1]).toBe(50);
   });
 });

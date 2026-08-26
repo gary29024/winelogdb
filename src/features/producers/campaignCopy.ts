@@ -29,3 +29,14 @@ export function campaignSummary(campaign:ResearchCampaign){
   if(skipped)parts.push(`${skipped} skipped`);
   return parts.join(' · ');
 }
+
+/** How a past run reads in the list of runs. */
+export function campaignOutcomeLine(counts:Record<string,number>){
+  const parts:string[]=[];
+  if(counts.complete)parts.push(`${counts.complete} researched`);
+  if(counts.failed)parts.push(`${counts.failed} failed`);
+  if(counts.skipped)parts.push(`${counts.skipped} skipped`);
+  const live=(counts.running??0)+(counts.pending??0);
+  if(live)parts.push(`${live} still to go`);
+  return parts.join(' · ')||'Nothing to do';
+}

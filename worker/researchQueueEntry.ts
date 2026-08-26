@@ -3,7 +3,7 @@ import app from './cuveeEntry';
 import { requireSession } from '../src/lib/auth/session';
 import { pollProducerBatchResearch,startProducerBatchResearch } from '../src/lib/producers/batchResearch';
 import { createQueuedProducerResearchRun,getProducerResearchRun } from '../src/lib/producers/research';
-import { activeCampaignId,advanceCampaign,cancelCampaign,countUnresearchedProducers,createCampaign,dismissCampaign,readCampaign,typicalProducerRunMs,unresearchedProducers,
+import { activeCampaignId,advanceCampaign,cancelCampaign,countUnresearchedProducers,createCampaign,dismissCampaign,listCampaigns,readCampaign,typicalProducerRunMs,unresearchedProducers,
   CAMPAIGN_CONCURRENCY,CAMPAIGN_MAX_PRODUCERS,CAMPAIGN_TICK_SECONDS,GEMINI_REQUESTS_PER_PRODUCER } from '../src/lib/producers/researchCampaign';
 import { createWineResearchRun,getLatestWineResearchRun,getWineResearchRun,updateWineResearchRun } from '../src/lib/research/backgroundJobs';
 import { getResearchBatchJob } from '../src/lib/research/batchJobStore';
@@ -92,6 +92,17 @@ router.post('/api/producers/research-batch',async c=>{
   try{await c.env.RESEARCH_QUEUE.send({kind:'producer_campaign_tick',owner,campaignId})}
   catch(e){await cancelCampaign(c.env.DB,owner,campaignId);return c.json({error:(e as Error).message||'Could not queue the batch'},503)}
   return c.json({accepted:true,campaign:await readCampaign(c.env.DB,owner,campaignId)},202);
+});
+
+router.get('/api/producers/research-batch/history',async c=>{
+  cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
+  return c.json({campaigns:await listCampaigns(c.env.DB,owner,Number(c.req.query('limit')??10))});
+});
+
+router.get('/api/producers/research-batch/:id',async c=>{
+  cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
+  const campaign=await readCampaign(c.env.DB,owner,c.req.param('id'));
+  return campaign?c.json({campaign}):c.json({error:'Batch run not found'},404);
 });
 
 router.post('/api/producers/research-batch/:id/cancel',async c=>{

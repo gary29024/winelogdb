@@ -35,8 +35,15 @@ export type Campaign={
   id:string;status:'running'|'complete'|'cancelled';requested:number;concurrency:number;
   createdAt:string;updatedAt:string;finishedAt:string|null;dismissedAt:string|null;
   counts:Record<CampaignItemStatus,number>;
+  /** Every producer in the run, so a finished run can show what it did, not only what it could not do. */
+  items:CampaignItem[];
   failures:CampaignItem[];
   running:CampaignItem[];
+};
+/** A past run as it appears in the list of runs: counts, not producers. */
+export type CampaignSummary={
+  id:string;status:'running'|'complete'|'cancelled';requested:number;
+  createdAt:string;finishedAt:string|null;counts:Record<CampaignItemStatus,number>;
 };
 export type CampaignEnv={DB:D1Database;RESEARCH_QUEUE:Queue<unknown>};
 
@@ -109,14 +116,44 @@ export async function readCampaign(db:D1Database,owner:string,campaignId?:string
   const counts=emptyCounts();
   for(const item of items)counts[item.status]=(counts[item.status]??0)+1;
   const shape=(item:typeof items[number]):CampaignItem=>({producerId:item.producer_id,producerName:item.producer_name,status:item.status,message:item.message});
+  const shaped=items.map(shape);
   return {
     id:String(head.id),status:head.status as Campaign['status'],requested:Number(head.requested),concurrency:Number(head.concurrency),
     createdAt:String(head.created_at),updatedAt:String(head.updated_at),
     finishedAt:head.finished_at?String(head.finished_at):null,dismissedAt:head.dismissed_at?String(head.dismissed_at):null,
     counts,
-    failures:items.filter(item=>item.status==='failed').map(shape),
-    running:items.filter(item=>item.status==='running').map(shape)
+    items:shaped,
+    failures:shaped.filter(item=>item.status==='failed'),
+    running:shaped.filter(item=>item.status==='running')
   };
+}
+
+/**
+ * Recent runs, newest first. Counts are aggregated in SQL rather than by
+ * reading every run's producers: the list says how each run went, and only the
+ * run someone opens needs its producers.
+ */
+export async function listCampaigns(db:D1Database,owner:string,limit=10):Promise<CampaignSummary[]>{
+  const capped=Math.max(1,Math.min(50,Math.floor(limit)||10));
+  const {results}=await db.prepare(
+    `SELECT c.id,c.status,c.requested,c.created_at,c.finished_at,
+       SUM(CASE WHEN i.status='complete' THEN 1 ELSE 0 END) AS complete,
+       SUM(CASE WHEN i.status='failed' THEN 1 ELSE 0 END) AS failed,
+       SUM(CASE WHEN i.status='skipped' THEN 1 ELSE 0 END) AS skipped,
+       SUM(CASE WHEN i.status='running' THEN 1 ELSE 0 END) AS running,
+       SUM(CASE WHEN i.status='pending' THEN 1 ELSE 0 END) AS pending
+     FROM producer_research_campaigns c
+     LEFT JOIN producer_research_campaign_items i ON i.campaign_id=c.id
+     WHERE c.owner_id=? GROUP BY c.id ORDER BY c.created_at DESC LIMIT ?`
+  ).bind(owner,capped).all<Record<string,unknown>>();
+  return (results??[]).map(row=>({
+    id:String(row.id),status:row.status as CampaignSummary['status'],requested:Number(row.requested),
+    createdAt:String(row.created_at),finishedAt:row.finished_at?String(row.finished_at):null,
+    counts:{
+      pending:Number(row.pending??0),running:Number(row.running??0),complete:Number(row.complete??0),
+      failed:Number(row.failed??0),skipped:Number(row.skipped??0)
+    }
+  }));
 }
 
 /**

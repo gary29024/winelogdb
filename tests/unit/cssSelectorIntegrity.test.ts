@@ -40,7 +40,8 @@ const composedAtRuntime=new Set([
   '.wine-image-loading.journal-wine-thumb',
   '.wine-image-fallback.journal-wine-thumb',
   '.research-campaign-link.is-running>span:first-child',        // the modifier is chosen in a variable above the JSX
-  '.scan-nav.active .scan-plus'                                 // NavLink writes `active` itself
+  '.scan-nav.active .scan-plus',                                // NavLink writes `active` itself
+  '.campaign-item.is-running>span'                              // the status suffix is interpolated: `campaign-item is-${item.status}`
 ]);
 
 describe('selectors that can never match',()=>{
