@@ -15,3 +15,9 @@
 .producer-country.is-collapsed>h2 .country-group-toggle{border-radius:var(--r-md)}
 .producer-countries-head{margin-bottom:14px}
 @media(max-width:700px){.country-group-name{font-size:1.15rem}.producer-country-body{padding:12px 11px 2px}}
+
+.alias-link-load{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:14px 0 8px}
+.alias-link-load small{color:var(--bad-ink);font-size:.76rem}
+.producer-load-error{display:grid;justify-items:start;gap:10px;padding:14px 16px;border:1px solid var(--bad-line);border-radius:var(--r-md);background:var(--bad-wash)}
+.producer-load-error p{margin:0;color:var(--bad-ink)}
+.producer-load-error button{border:1px solid var(--bad-line);border-radius:var(--r-pill);background:var(--paper);color:var(--bad-ink);padding:7px 15px;font:700 .78rem 'DM Sans',sans-serif;cursor:pointer}

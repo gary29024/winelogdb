@@ -1,5 +1,5 @@
 import { useEffect,useMemo,useRef,useState } from 'react';
-import { Link,useParams } from 'react-router-dom';
+import { Link,useLocation,useParams } from 'react-router-dom';
 import { WineImage } from '../wines/WineImage';
 import { cancelProducerResearch,getProducer,getProducerResearchStatus,listProducers,mergeProducer,researchProducer,saveProducerCatalogDecision,setPrimaryProducerName,undoProducerCatalogDecision,unlinkProducer,type CatalogDecision,type LinkedProducer,type ProducerDetail,type ProducerResearchRun,type ProducerSummary } from './api';
 import { ProducerHeroImage } from './ProducerHeroImage';
@@ -12,7 +12,7 @@ import { catalogDecisionKey,catalogDecisionLabel } from '../../lib/producers/cat
 import { cuveeStyleFamily,normalizeCuveeAlias } from '../../lib/cuvees/entities';
 import '../../producer.css';
 import { startBackoffPoll,type Poller } from '../../lib/polling/backoff';
-import { linkFrom } from '../wines/backTarget';
+import { backTargetFromState,linkFrom,readBackTarget,rememberBackTarget,PRODUCERS_BACK } from '../wines/backTarget';
 
 const stageLabel:Record<ProducerResearchRun['stage'],string>={preparing:'Queued for research',searching:'Researching in the background',retrying:'Retrying Gemini research',parsing:'Validating Gemini response',saving:'Saving producer research',image:'Finding a domaine image',complete:'Research complete',failed:'Research failed'};
 type CatalogCategory='red'|'white'|'rose'|'sparkling'|'dessert'|'fortified'|'orange'|'other';
@@ -60,11 +60,18 @@ function catalogMeta(wine:ProducerDetail['catalog'][number],category:CatalogCate
 function sourceHost(value:string){try{return new URL(value).hostname.toLowerCase().replace(/^www\./,'')}catch{return ''}}
 
 export function ProducerDetailPage(){
- const {id=''}=useParams(),[producer,setProducer]=useState<ProducerDetail>(),[available,setAvailable]=useState<ProducerSummary[]>([]),[availableLoaded,setAvailableLoaded]=useState(false),[selectedAlias,setSelectedAlias]=useState(''),[primaryName,setPrimaryName]=useState(''),[loading,setLoading]=useState(true),[error,setError]=useState(''),[notice,setNotice]=useState(''),[researching,setResearching]=useState(false),[researchRun,setResearchRun]=useState<ProducerResearchRun|null>(null),[researchElapsed,setResearchElapsed]=useState(0),[researchCancelling,setResearchCancelling]=useState(false),[merging,setMerging]=useState(false),[unlinking,setUnlinking]=useState(''),[savingPrimary,setSavingPrimary]=useState(false),[collapsedCategories,setCollapsedCategories]=useState<Set<CatalogCategory>>(readCollapsedCategories),[fixingKey,setFixingKey]=useState(''),[mergeTargetKey,setMergeTargetKey]=useState(''),[catalogBusy,setCatalogBusy]=useState(false);
+ const {id=''}=useParams(),{state:navState}=useLocation(),[producer,setProducer]=useState<ProducerDetail>(),[available,setAvailable]=useState<ProducerSummary[]>([]),[availableLoaded,setAvailableLoaded]=useState(false),[availableLoading,setAvailableLoading]=useState(false),[availableError,setAvailableError]=useState(''),[selectedAlias,setSelectedAlias]=useState(''),[primaryName,setPrimaryName]=useState(''),[loading,setLoading]=useState(true),[error,setError]=useState(''),[notice,setNotice]=useState(''),[researching,setResearching]=useState(false),[researchRun,setResearchRun]=useState<ProducerResearchRun|null>(null),[researchElapsed,setResearchElapsed]=useState(0),[researchCancelling,setResearchCancelling]=useState(false),[merging,setMerging]=useState(false),[unlinking,setUnlinking]=useState(''),[savingPrimary,setSavingPrimary]=useState(false),[collapsedCategories,setCollapsedCategories]=useState<Set<CatalogCategory>>(readCollapsedCategories),[fixingKey,setFixingKey]=useState(''),[mergeTargetKey,setMergeTargetKey]=useState(''),[catalogBusy,setCatalogBusy]=useState(false);
  const researchPoll=useRef<Poller|undefined>(undefined),researchClock=useRef<number|undefined>(undefined);
  function stopResearchTimers(){researchPoll.current?.stop();if(researchClock.current)window.clearInterval(researchClock.current);researchPoll.current=undefined;researchClock.current=undefined}
  async function reload(){const detail=await getProducer(id);setProducer(detail);setPrimaryName(detail.canonicalName);setSelectedAlias('')}
  async function refreshAvailable(){const directory=await listProducers();setAvailable(directory.items.filter(x=>x.id!==id));setAvailableLoaded(true);setSelectedAlias('')}
+ // The whole producer directory is a big read, and linking an alias is rare, so
+ // it is fetched when someone asks to link rather than on every producer visit.
+ async function loadAvailable(){
+  if(availableLoading)return;
+  setAvailableLoading(true);setAvailableError('');
+  try{await refreshAvailable()}catch(e){setAvailableError((e as Error).message||'Could not load producer names')}finally{setAvailableLoading(false)}
+ }
  function watchResearch(run:ProducerResearchRun){
   stopResearchTimers();setResearchRun(run);setResearching(run.status==='running');
   const started=Date.parse(run.startedAt);setResearchElapsed(Number.isFinite(started)?Math.max(0,Math.floor((Date.now()-started)/1000)):0);
@@ -80,13 +87,12 @@ export function ProducerDetailPage(){
   researchPoll.current=startBackoffPoll(poll);void poll();
  }
  useEffect(()=>{
-  let active=true,aliasTimer:number|undefined;
-  setLoading(true);setProducer(undefined);setAvailable([]);setAvailableLoaded(false);setError('');
+  let active=true;
+  setLoading(true);setProducer(undefined);setAvailable([]);setAvailableLoaded(false);setAvailableError('');setError('');
   Promise.all([reload(),getProducerResearchStatus(id).catch(()=>null)]).then(([,run])=>{
    if(!active)return;if(run)watchResearch(run);
-   aliasTimer=window.setTimeout(()=>{void listProducers().then(directory=>{if(!active)return;setAvailable(directory.items.filter(x=>x.id!==id));setAvailableLoaded(true)}).catch(()=>{if(active)setAvailableLoaded(true)})},250);
   }).catch(e=>{if(active)setError(e.message)}).finally(()=>{if(active)setLoading(false)});
-  return()=>{active=false;if(aliasTimer)window.clearTimeout(aliasTimer);stopResearchTimers()};
+  return()=>{active=false;stopResearchTimers()};
  // eslint-disable-next-line react-hooks/exhaustive-deps
  },[id]);
  const linkedByName=useMemo(()=>new Map((producer?.linkedProducers??[]).map(link=>[normalizeProducerAlias(link.name),link])),[producer]);
@@ -169,9 +175,21 @@ export function ProducerDetailPage(){
  async function savePrimaryName(){if(!producer||!primaryName||primaryName===producer.canonicalName)return;setSavingPrimary(true);setError('');setNotice('');try{const result=await setPrimaryProducerName(id,primaryName);await reload();setNotice(`${result.canonicalName} is now the primary producer name. Bottle-level recognised names and research remain attached to the same producer identity.`)}catch(e){setError((e as Error).message)}finally{setSavingPrimary(false)}}
  async function addAlias(){const source=available.find(x=>x.id===selectedAlias);if(!producer||!source)return;const ok=confirm(`Link “${source.canonicalName}” to “${producer.canonicalName}”?\n\n${producer.canonicalName} will remain the canonical producer. All wines and aliases from ${source.canonicalName} will be linked here. If both names already have research, WineLog will keep the newest complete result active, combine sources, and preserve the previous research in history.`);if(!ok)return;setMerging(true);setError('');setNotice('');try{const result=await mergeProducer(id,source.id);await reload();void refreshAvailable().catch(()=>undefined);setNotice(`${result.mergedName} is now linked as an alias of ${result.canonicalName}.`)}catch(e){setError((e as Error).message)}finally{setMerging(false)}}
  async function unlinkAlias(link:LinkedProducer){if(!producer)return;const ok=confirm(`Unlink “${link.name}” from “${producer.canonicalName}”?\n\nWineLog will recreate ${link.name} as a separate producer, move back the wines that belonged to it when it was linked, and restore its archived research. Research added to ${producer.canonicalName} after the link will stay with ${producer.canonicalName}.`);if(!ok)return;setUnlinking(link.mergeId);setError('');setNotice('');try{const result=await unlinkProducer(id,link.mergeId);await reload();void refreshAvailable().catch(()=>undefined);setNotice(`${result.unlinkedName} has been restored as a separate producer.`)}catch(e){setError((e as Error).message)}finally{setUnlinking('')}}
- if(loading)return <p>Loading producer…</p>;if(!producer)return <p role="alert">{error||'Producer not found'}</p>;
+ // A producer is reached from the library or from a batch run, and the useful
+ // way back is the one it was reached from. The stored copy carries it through
+ // a reload, and the library is the fallback for a bookmarked producer.
+ const back=useMemo(()=>{
+  const handed=backTargetFromState(navState);
+  if(handed){rememberBackTarget(id,handed,'producer');return handed}
+  return readBackTarget(id,'producer')??PRODUCERS_BACK;
+ },[navState,id]);
+ if(loading)return <p>Loading producer…</p>;
+ // A producer that could not be fetched is worth asking for again: without this
+ // the message stayed until the app was restarted.
+ if(!producer)return <div className="producer-load-error" role="alert"><p>{error||'Producer not found'}</p>
+  <button type="button" onClick={()=>{setLoading(true);setError('');void reload().catch(e=>setError((e as Error).message)).finally(()=>setLoading(false))}}>Try again</button></div>;
  const location=[producer.homeLocality,producer.homeRegion,producer.homeCountry].filter(Boolean).join(', '),primaryKey=normalizeProducerAlias(producer.canonicalName),sourceWebsiteCount=new Set(producer.sources.map(source=>sourceHost(source.url)).filter(Boolean)).size;
- return <article className="producer-detail"><Link className="back-pill" to="/producers">← Producers</Link>
+ return <article className="producer-detail"><Link className="back-pill" to={back.to}>← {back.label}</Link>
   <header className={`producer-header${producer.heroImageAvailable?' has-hero':''}`}>
    {producer.heroImageAvailable&&<ProducerHeroImage producerId={producer.id} alt={`${producer.canonicalName} domaine`}/>}<div className="producer-header-shade"/>
    <div className="producer-header-content"><p className="eyebrow">PRODUCER</p><h1>{producer.canonicalName}</h1><p>{location||'Home location not researched yet'}</p>{producer.aliases.length>1&&<small>Known aliases: {producer.aliases.join(' · ')}</small>}</div>
@@ -234,7 +252,7 @@ export function ProducerDetailPage(){
    <div className="primary-name-control"><label>Primary display name<select value={primaryName} onChange={e=>setPrimaryName(e.target.value)}>{producer.aliases.map(alias=><option key={alias} value={alias}>{alias}</option>)}</select></label><button type="button" disabled={savingPrimary||!primaryName||primaryName===producer.canonicalName} onClick={savePrimaryName}>{savingPrimary?'Saving…':'Set primary'}</button></div>
    <p className="producer-help">The primary name is used in the Producers directory and profile heading. Changing it does not rewrite the producer name recorded on individual bottles, change the stable producer ID, or regenerate research.</p>
    <div className="alias-chips">{producer.aliases.map(alias=>{const normalized=normalizeProducerAlias(alias),link=linkedByName.get(normalized),isPrimary=normalized===primaryKey;return <span className="alias-chip" key={alias}>{alias}{isPrimary&&<em>Primary</em>}{link&&!isPrimary&&<button type="button" disabled={unlinking===link.mergeId} onClick={()=>unlinkAlias(link)}>{unlinking===link.mergeId?'Unlinking…':'Unlink'}</button>}{link&&isPrimary&&<small>Choose another primary before unlinking</small>}</span>})}</div><p className="producer-help">Add alias only links another producer name that already exists in your WineLog database. It does not accept free-text names or create a new identity. Linked producer identities can be unlinked again from here.</p>
-   {!availableLoaded?<small>Loading available producer names…</small>:available.length>0?<div className="alias-link-control"><select aria-label="Existing producer name to link" value={selectedAlias} onChange={e=>setSelectedAlias(e.target.value)}><option value="">Select an existing producer…</option>{available.map(item=><option key={item.id} value={item.id}>{item.canonicalName}</option>)}</select><button type="button" disabled={!selectedAlias||merging} onClick={addAlias}>{merging?'Linking…':'Add alias'}</button></div>:<small>No other producer names are available to link.</small>}
+   {!availableLoaded?<div className="alias-link-load"><button type="button" disabled={availableLoading} onClick={()=>{void loadAvailable()}}>{availableLoading?'Loading producer names…':'Choose a producer to link'}</button>{availableError&&<small role="alert">{availableError}</small>}</div>:available.length>0?<div className="alias-link-control"><select aria-label="Existing producer name to link" value={selectedAlias} onChange={e=>setSelectedAlias(e.target.value)}><option value="">Select an existing producer…</option>{available.map(item=><option key={item.id} value={item.id}>{item.canonicalName}</option>)}</select><button type="button" disabled={!selectedAlias||merging} onClick={addAlias}>{merging?'Linking…':'Add alias'}</button></div>:<small>No other producer names are available to link.</small>}
    {producer.researchHistoryCount>0&&<small>{producer.researchHistoryCount} prior research version{producer.researchHistoryCount===1?' is':'s are'} preserved in merge history.</small>}
   </section>
  </article>

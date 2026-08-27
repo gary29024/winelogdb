@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { getResearchCampaignById,listResearchCampaigns,
   type ResearchCampaign,type ResearchCampaignItem,type ResearchCampaignSummary } from './api';
 import { campaignOutcomeLine } from './campaignCopy';
+import { BATCH_RESEARCH_BACK,linkFrom } from '../wines/backTarget';
 import '../../researchCampaign.css';
 
 const when=(value:string)=>{
@@ -18,7 +19,10 @@ export function CampaignItemList({items}:{items:ResearchCampaignItem[]}){
   const sorted=[...items].sort((a,b)=>order.indexOf(a.status)-order.indexOf(b.status)||a.producerName.localeCompare(b.producerName));
   return <ul className="campaign-item-list">{sorted.map(item=>
     <li key={item.producerId} className={`campaign-item is-${item.status}`}>
-      <Link to={`/producers/${item.producerId}`}>{item.producerName}</Link>
+      {/* The batch run is where this producer was found, so it is where its
+          back link goes - otherwise checking one failure loses the list of the
+          others. */}
+      <Link to={`/producers/${item.producerId}`} state={linkFrom(BATCH_RESEARCH_BACK)}>{item.producerName}</Link>
       <span>{item.status==='complete'?'Researched':item.status==='failed'?'Failed':item.status==='skipped'?'Skipped':item.status==='running'?'Researching…':'Waiting'}</span>
       {item.message&&item.status!=='complete'&&<small>{item.message}</small>}
     </li>)}</ul>;

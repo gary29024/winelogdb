@@ -16,8 +16,16 @@
 export type BackTarget={to:string;label:string};
 
 export const JOURNAL_BACK:BackTarget={to:'/journal',label:'Journal'};
+export const PRODUCERS_BACK:BackTarget={to:'/producers',label:'Producers'};
+export const BATCH_RESEARCH_BACK:BackTarget={to:'/producers/research-batch',label:'Batch Deep Search'};
 
-const KEY='winelog.wineBack';
+/**
+ * One entry per kind of page that offers a way back. Producers keep their own
+ * so opening a wine from a producer cannot overwrite how the producer itself
+ * gets back to the batch run that linked to it.
+ */
+type BackScope='wine'|'producer';
+const KEY:Record<BackScope,string>={wine:'winelog.wineBack',producer:'winelog.producerBack'};
 
 const isTarget=(value:unknown):value is BackTarget=>{
   if(!value||typeof value!=='object')return false;
@@ -33,15 +41,15 @@ export function backTargetFromState(state:unknown):BackTarget|null{
   return isTarget(from)?from:null;
 }
 
-export function rememberBackTarget(wineId:string,target:BackTarget){
-  try{window.sessionStorage.setItem(KEY,JSON.stringify({wineId,...target}))}catch{/* storage unavailable */}
+export function rememberBackTarget(id:string,target:BackTarget,scope:BackScope='wine'){
+  try{window.sessionStorage.setItem(KEY[scope],JSON.stringify({wineId:id,...target}))}catch{/* storage unavailable */}
 }
 
-export function readBackTarget(wineId:string):BackTarget|null{
+export function readBackTarget(id:string,scope:BackScope='wine'):BackTarget|null{
   try{
-    const raw=window.sessionStorage.getItem(KEY);if(!raw)return null;
+    const raw=window.sessionStorage.getItem(KEY[scope]);if(!raw)return null;
     const parsed=JSON.parse(raw) as{wineId?:unknown}&Partial<BackTarget>;
-    if(parsed?.wineId!==wineId||!isTarget(parsed))return null;
+    if(parsed?.wineId!==id||!isTarget(parsed))return null;
     return {to:parsed.to,label:parsed.label};
   }catch{return null}
 }

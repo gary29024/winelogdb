@@ -57,10 +57,58 @@ function jsonFieldRange(text:string,field:ContactField){
   return {start,end};
 }
 
+/**
+ * How long a run may go without saying anything before it is treated as dead.
+ *
+ * Every poll of a live run writes to producer_research_runs, and the widest gap
+ * in the retry policy is fifteen minutes. Past three times that the run is not
+ * slow: the queue message that would have advanced it never arrived. Without
+ * this the producer page spins on "Researching in the background" forever - one
+ * was seen at 22,965 seconds - and the row stays 'running' in history.
+ */
+export const STALLED_RUN_MS=45*60*1000;
+
+export function isStalledRun(row:{status:string;updated_at?:unknown;updatedAt?:unknown},nowMs=Date.now()){
+  if(row.status!=='running')return false;
+  const stamp=Date.parse(String(row.updated_at??row.updatedAt??''));
+  return Number.isFinite(stamp)&&nowMs-stamp>STALLED_RUN_MS;
+}
+
+export const STALLED_RUN_MESSAGE='Research stopped reporting and was marked failed. Nothing was saved; run it again when you want to retry.';
+
+/**
+ * Marks a stalled run failed on the way out, so reading its status is what
+ * repairs it. Cheaper and more reliable than a sweep: the rows anyone looks at
+ * are exactly the rows worth repairing.
+ */
+export async function markRunStalled(db:D1Database,owner:string,requestId:string,message=STALLED_RUN_MESSAGE,stamp=new Date().toISOString()){
+  await db.prepare(`UPDATE producer_research_runs SET status='failed',stage='failed',message=?,updated_at=?,completed_at=?,
+      duration_ms=cast((julianday(?)-julianday(started_at))*86400000 as integer)
+    WHERE owner_id=? AND request_id=? AND status='running'`)
+    .bind(message,stamp,stamp,stamp,owner,requestId).run().catch(()=>undefined);
+  return stamp;
+}
+
+async function settleStalledRun(db:D1Database,owner:string,run:ProducerResearchRun):Promise<ProducerResearchRun>{
+  const stamp=await markRunStalled(db,owner,run.requestId);
+  const started=Date.parse(run.startedAt);
+  return {...run,status:'failed',stage:'failed',message:STALLED_RUN_MESSAGE,updatedAt:stamp,completedAt:stamp,
+    durationMs:Number.isFinite(started)?Math.max(0,Date.parse(stamp)-started):run.durationMs};
+}
+
+export async function settleIfStalled(db:D1Database,owner:string,run:ProducerResearchRun|null){
+  if(!run||!isStalledRun({status:run.status,updatedAt:run.updatedAt}))return run;
+  return settleStalledRun(db,owner,run);
+}
+
 export async function getProducerResearchRun(db:D1Database,owner:string,producerId:string,requestId:string):Promise<ProducerResearchRun|null>{
   const row=await db.prepare(`SELECT request_id,producer_id,status,stage,attempt,message,started_at,updated_at,completed_at,duration_ms
     FROM producer_research_runs WHERE owner_id=? AND producer_id=? AND request_id=?`).bind(owner,producerId,requestId).first<Record<string,unknown>>();
   if(!row)return null;
+  return settleIfStalled(db,owner,mapRunRow(row));
+}
+
+export function mapRunRow(row:Record<string,unknown>):ProducerResearchRun{
   return {requestId:String(row.request_id),producerId:String(row.producer_id),status:String(row.status) as ProducerResearchRun['status'],stage:String(row.stage) as ProducerResearchStage,attempt:Number(row.attempt)||0,message:row.message?String(row.message):null,startedAt:String(row.started_at),updatedAt:String(row.updated_at),completedAt:row.completed_at?String(row.completed_at):null,durationMs:row.duration_ms==null?null:Number(row.duration_ms)};
 }
 
