@@ -9,7 +9,7 @@ import type {
   AchievementCatalogueOptions,AchievementCatalogueRule,AchievementCuveeIdentity,AchievementIconKey,AchievementMatchMode,AchievementProducerIdentity,AchievementProgress,AchievementWine,CustomAchievementManualItem
 } from '../src/features/achievements/types';
 
-type WineRow={id:string;producer_id:string|null;cuvee_id:string|null;producer:string;wine_name:string;vintage:number|null;appellation:string|null};
+type WineRow={id:string;producer_id:string|null;cuvee_id:string|null;producer:string;wine_name:string;vintage:number|null;appellation:string|null;tasting_date:string|null};
 type ProducerRow={id:string;canonical_name:string;home_country:string|null;home_region:string|null};
 type ProducerAliasRow={producer_id:string;display_alias:string};
 type CuveeRow={id:string;producer_id:string;canonical_name:string;appellation:string|null;wine_style:string|null;catalog_backed:number};
@@ -34,7 +34,7 @@ type AchievementContext={
  * from before it - which is how five new collections shipped and stayed
  * invisible. curatedCollectionFingerprint in the tests fails until this moves.
  */
-export const ACHIEVEMENT_DEFINITION_VERSION=5;
+export const ACHIEVEMENT_DEFINITION_VERSION=6;
 const parseJson=<T>(value:unknown,fallback:T):T=>{try{return JSON.parse(String(value)) as T}catch{return fallback}};
 
 function groupedAliases<T extends {display_alias:string}>(rows:T[],id:(row:T)=>string){
@@ -45,7 +45,11 @@ function groupedAliases<T extends {display_alias:string}>(rows:T[],id:(row:T)=>s
 
 async function loadAchievementContext(db:D1Database,owner:string):Promise<AchievementContext>{
   const [winesResult,producersResult,producerAliasesResult,cuveesResult,cuveeAliasesResult]=await Promise.all([
-    db.prepare(`SELECT id,producer_id,cuvee_id,producer,wine_name,vintage,NULLIF(trim(appellation),'') appellation FROM wines WHERE owner_id=?`).bind(owner).all<WineRow>(),
+    // Ordered, because the checklist links to one of these and an unordered
+    // read hands back whatever the query plan produced - which is how "View
+    // tasting" ended up pointing somewhere different between two page loads.
+    db.prepare(`SELECT id,producer_id,cuvee_id,producer,wine_name,vintage,NULLIF(trim(appellation),'') appellation,tasting_date
+      FROM wines WHERE owner_id=? ORDER BY tasting_date IS NULL,tasting_date DESC,id ASC`).bind(owner).all<WineRow>(),
     db.prepare(`SELECT id,canonical_name,NULLIF(trim(home_country),'') home_country,NULLIF(trim(home_region),'') home_region FROM producers WHERE owner_id=?`).bind(owner).all<ProducerRow>(),
     db.prepare(`SELECT producer_id,display_alias FROM producer_aliases WHERE owner_id=?`).bind(owner).all<ProducerAliasRow>(),
     db.prepare(`SELECT id,producer_id,canonical_name,NULLIF(trim(appellation),'') appellation,NULLIF(trim(wine_style),'') wine_style,catalog_backed FROM cuvees WHERE owner_id=?`).bind(owner).all<CuveeRow>(),
@@ -54,7 +58,7 @@ async function loadAchievementContext(db:D1Database,owner:string):Promise<Achiev
   const producerAliases=groupedAliases(producerAliasesResult.results,row=>row.producer_id),cuveeAliases=groupedAliases(cuveeAliasesResult.results,row=>row.cuvee_id);
   const producers:AchievementProducerIdentity[]=producersResult.results.map(row=>({id:row.id,canonicalName:row.canonical_name,aliases:producerAliases.get(row.id)??[],country:row.home_country,region:row.home_region}));
   const cuvees:AchievementCuveeIdentity[]=cuveesResult.results.map(row=>({id:row.id,producerId:row.producer_id,canonicalName:row.canonical_name,aliases:cuveeAliases.get(row.id)??[],appellation:row.appellation,wineStyle:row.wine_style,catalogBacked:Boolean(row.catalog_backed)}));
-  const wines:AchievementWine[]=winesResult.results.map(row=>({id:row.id,producerId:row.producer_id,cuveeId:row.cuvee_id,producer:row.producer,wineName:row.wine_name,vintage:row.vintage,appellation:row.appellation}));
+  const wines:AchievementWine[]=winesResult.results.map(row=>({id:row.id,producerId:row.producer_id,cuveeId:row.cuvee_id,producer:row.producer,wineName:row.wine_name,vintage:row.vintage,appellation:row.appellation,tastingDate:row.tasting_date}));
   const catalogCount=new Map<string,number>();for(const cuvee of cuvees){if(cuvee.catalogBacked)catalogCount.set(cuvee.producerId,(catalogCount.get(cuvee.producerId)??0)+1)}
   const producerOptions=producers.map(producer=>({id:producer.id,name:producer.canonicalName,country:producer.country??null,region:producer.region??null,catalogCount:catalogCount.get(producer.id)??0})).sort((a,b)=>a.name.localeCompare(b.name));
   const producerName=new Map(producerOptions.map(item=>[item.id,item.name]));

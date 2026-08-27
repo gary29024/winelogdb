@@ -1,5 +1,5 @@
 import type {
-  AchievementCuveeIdentity,AchievementDefinition,AchievementIdentityRegistry,AchievementItemProgress,AchievementMatchMode,AchievementProgress,AchievementProducerIdentity,AchievementSelector,AchievementWine,SiteSelector
+  AchievementCuveeIdentity,AchievementDefinition,AchievementIdentityRegistry,AchievementItemProgress,AchievementMatchMode,AchievementProgress,AchievementProducerIdentity,AchievementSelector,AchievementVintageLink,AchievementWine,SiteSelector
 } from './types';
 
 export function normalizeAchievementIdentity(value:string){
@@ -93,13 +93,42 @@ function directMatches(selector:AchievementSelector,producerId:string|undefined,
   return wines.filter(wine=>wine.cuveeId===cuveeId&&(selector.type!=='wine_vintage'||matchMode!=='exact'||wine.vintage===selector.vintage));
 }
 
+/**
+ * Which tasting a checklist row opens.
+ *
+ * The wines arrive ordered by tasting date, but a row that matched several
+ * still has to choose one, and taking whatever came first meant the link could
+ * point somewhere different between two loads. The order here is deliberate:
+ * the vintage the target actually names, then the most recent tasting, then the
+ * id so it is stable across a cache rebuild.
+ */
+const tastedAt=(wine:AchievementWine)=>{const at=Date.parse(String(wine.tastingDate??''));return Number.isFinite(at)?at:-Infinity};
+
+function orderMatches(matched:AchievementWine[],selector:AchievementSelector){
+  const wanted=selector.type==='wine_vintage'?selector.vintage:null;
+  const named=(wine:AchievementWine)=>wanted!=null&&wine.vintage===wanted?1:0;
+  return [...matched].sort((a,b)=>named(b)-named(a)||tastedAt(b)-tastedAt(a)||a.id.localeCompare(b.id));
+}
+
+/**
+ * One link per tasted vintage, so a row with five of them does not have to pick
+ * a favourite. The wines are already ordered, so the first of each vintage is
+ * its most recent tasting.
+ */
+function vintageLinks(ordered:AchievementWine[]):AchievementVintageLink[]{
+  const best=new Map<number,string>();
+  for(const wine of ordered)if(typeof wine.vintage==='number'&&!best.has(wine.vintage))best.set(wine.vintage,wine.id);
+  return [...best.entries()].sort((a,b)=>a[0]-b[0]).map(([vintage,wineId])=>({vintage,wineId}));
+}
+
 function progressItem(definitionItem:AchievementDefinition['items'][number],registry:AchievementIdentityRegistry,indexes:IdentityIndexes,wines:AchievementWine[],matchMode:AchievementMatchMode):AchievementItemProgress{
   const resolvedProducerId=resolveProducer(definitionItem.selector,registry,indexes),resolvedCuveeId=resolveCuvee(definitionItem.selector,resolvedProducerId,registry,indexes);
   const direct=directMatches(definitionItem.selector,resolvedProducerId,resolvedCuveeId,registry,wines,matchMode),possible=direct.length?[]:rawPossibleMatches(definitionItem.selector,wines,matchMode),matched=direct.length?direct:possible;
-  const vintages=[...new Set(matched.map(wine=>wine.vintage).filter((value):value is number=>typeof value==='number'))].sort((a,b)=>a-b);
+  const ordered=orderMatches(matched,definitionItem.selector);
+  const links=vintageLinks(ordered),vintages=links.map(link=>link.vintage);
   return {
     id:definitionItem.id,label:definitionItem.label,note:definitionItem.note,status:direct.length?'tasted':possible.length?'possible':'pending',
-    tastedWineIds:matched.map(wine=>wine.id),tastedVintages:vintages,
+    tastedWineIds:ordered.map(wine=>wine.id),tastedVintages:vintages,tastedVintageLinks:links,
     ...(resolvedProducerId?{resolvedProducerId}:{}),...(resolvedCuveeId?{resolvedCuveeId}:{})
   };
 }

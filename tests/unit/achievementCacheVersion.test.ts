@@ -17,10 +17,15 @@ describe('the curated set and its cache key',()=>{
     // touches neither the owner's data nor their revision, so five new
     // collections shipped and the page kept showing twenty from cache.
     //
-    // If this fails: the curated set changed. Bump
-    // ACHIEVEMENT_DEFINITION_VERSION, then put the new fingerprint here.
+    // The version also has to move when the cached payload changes shape
+    // rather than its contents - per-vintage links were added to every
+    // checklist item, which the fingerprint cannot see because no collection
+    // gained or lost a target.
+    //
+    // If this fails: the curated set changed, or the payload did. Bump
+    // ACHIEVEMENT_DEFINITION_VERSION, then put the new pair here.
     expect({version:ACHIEVEMENT_DEFINITION_VERSION,fingerprint:curatedCollectionFingerprint()})
-      .toEqual({version:5,fingerprint:'c41962fd'});
+      .toEqual({version:6,fingerprint:'c41962fd'});
   });
 
   it('changes the fingerprint when a collection is added or resized',()=>{
