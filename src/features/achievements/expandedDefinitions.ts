@@ -160,6 +160,139 @@ const washingtonBenchmarks:readonly NamedEntry[]=[
   ['Betz Family Winery','Betz Family']
 ] as const;
 
+/**
+ * Club Trésors de Champagne - the grower association whose members bottle a
+ * Special Club cuvee in the shared bottle. Membership changes, so the subtitle
+ * says "current members" and the reference is the club's own roster.
+ */
+const specialClub:readonly NamedEntry[]=[
+  ['Agrapart & Fils','Agrapart'],
+  ['Bereche & Fils','Bérêche & Fils','Bereche','Bérêche'],
+  ['Chartogne-Taillet'],
+  ['Claude Cazals','Cazals'],
+  ['De Sousa & Fils','De Sousa'],
+  ['Doyard'],
+  ['Franck Bonville'],
+  ['Gaston Chiquet'],
+  ['Hugues Godmé','Hugues Godme','Godmé'],
+  ['Guiborat','Guiborat Fils'],
+  ['J. Lassalle','Lassalle'],
+  ['Lacourte-Godbillon'],
+  ['Lancelot-Pienne'],
+  ['Marc Hébrart','Marc Hebrart'],
+  ['Moussé Fils','Mousse Fils'],
+  ['Paul Bara'],
+  ['Pierre Gimonnet & Fils','Pierre Gimonnet','Gimonnet'],
+  ['Pierre Paillard'],
+  ['Péhu-Simonet','Pehu-Simonet'],
+  ['Roger Coulon'],
+  ['Vazart-Coquart & Fils','Vazart-Coquart'],
+  ['Vilmart & Cie','Vilmart']
+] as const;
+
+/**
+ * The grandes marques and prestige houses. Curated: the Syndicat de Grandes
+ * Marques was dissolved in 1997 and nothing official replaced it, so the
+ * subtitle says curated rather than implying a classification.
+ */
+const prestigeChampagneHouses:readonly NamedEntry[]=[
+  ['Krug'],['Bollinger'],['Louis Roederer','Roederer'],['Salon','Champagne Salon'],
+  ['Dom Pérignon','Dom Perignon'],['Pol Roger'],['Taittinger'],['Billecart-Salmon','Billecart Salmon'],
+  ['Philipponnat'],['Jacquesson'],['Charles Heidsieck'],['Veuve Clicquot','Veuve Clicquot Ponsardin'],
+  ['Perrier-Jouët','Perrier-Jouet'],['Ruinart'],['Laurent-Perrier','Laurent Perrier'],
+  ['Deutz'],['Bruno Paillard'],['Henriot']
+] as const;
+
+/**
+ * The Domaine's own bottlings. A cuvee selector rather than a producer one: the
+ * point is to work through the monopoles and grand crus one at a time, and a
+ * producer selector would tick the whole card off the first bottle.
+ */
+const drcNames=['Domaine de la Romanée-Conti','Domaine de la Romanee-Conti','DRC','Romanée-Conti','Romanee-Conti'] as const;
+const drcWines:ReadonlyArray<readonly [string,...string[]]>=[
+  ['Romanée-Conti','Romanee-Conti','La Romanée-Conti'],
+  ['La Tâche','La Tache'],
+  ['Richebourg'],
+  ['Romanée-Saint-Vivant','Romanee-Saint-Vivant','Romanée St Vivant'],
+  ['Grands Échezeaux','Grands Echezeaux'],
+  ['Échezeaux','Echezeaux'],
+  ['Montrachet','Le Montrachet'],
+  ['Corton'],
+  ['Corton-Charlemagne','Corton Charlemagne'],
+  ['Cuvée Duvault-Blochet','Cuvee Duvault-Blochet','Vosne-Romanée 1er Cru Cuvée Duvault-Blochet']
+] as const;
+
+/**
+ * Barolo's celebrated MGAs. There are 181 official ones - a list to consult
+ * rather than a checklist to finish - so this is a curated twelve. Like the
+ * Chablis climats they are named on the label rather than being appellations of
+ * their own, so the cuvee name identifies them and Barolo is the appellation.
+ */
+const baroloCrus:ReadonlyArray<readonly [string,...string[]]>=[
+  ['Cannubi'],['Brunate'],['Cerequio'],['Bussia'],['Ginestra'],['Monprivato'],
+  ['Rocche dell’Annunziata','Rocche dell Annunziata','Rocche dellAnnunziata'],
+  ['Vigna Rionda','Vignarionda'],['Francia'],['Falletto'],['Villero'],['Lazzarito']
+] as const;
+
+/**
+ * The wines that made Tuscany's reputation outside its appellations. A cuvee
+ * selector: Tignanello is a wine, not an estate, and Antinori make a great deal
+ * that is not it.
+ */
+const superTuscans:ReadonlyArray<readonly [string,string,...string[]]>=[
+  ['Tenuta San Guido','Sassicaia','Bolgheri Sassicaia'],
+  ['Ornellaia','Ornellaia','Tenuta dell’Ornellaia'],
+  ['Ornellaia','Masseto'],
+  ['Antinori','Tignanello','Marchesi Antinori Tignanello'],
+  ['Antinori','Solaia'],
+  ['Antinori','Guado al Tasso'],
+  ['Montevertine','Le Pergole Torte'],
+  ['Fontodi','Flaccianello della Pieve','Flaccianello'],
+  ['Isole e Olena','Cepparello'],
+  ['Tua Rita','Redigaffi'],
+  ['Le Macchiole','Messorio'],
+  ['Le Macchiole','Paleo Rosso','Paleo'],
+  ['Fattoria Le Pupille','Saffredi'],
+  ['San Giusto a Rentennano','Percarlo'],
+  ['Querciabella','Camartina'],
+  ['Castello dei Rampolla','Sammarco']
+] as const;
+
+/** Tuscany's appellations, which is the tier a bottle actually records. */
+const tuscanAppellations:readonly string[]=[
+  'Chianti Classico','Brunello di Montalcino','Vino Nobile di Montepulciano','Carmignano',
+  'Bolgheri','Bolgheri Sassicaia','Rosso di Montalcino','Maremma Toscana','Chianti','Montecucco'
+];
+
+/** One wine of one producer: both names have to match, so a second label cannot tick it. */
+const cuveeItems=(prefix:string,entries:ReadonlyArray<readonly [string,string,...string[]]>):AchievementDefinitionItem[]=>
+  entries.map(([producer,label,...aliases])=>({
+    id:`${prefix}-${slug(label)}`,label,
+    selector:{type:'cuvee',producerNames:[producer],cuveeNames:[label,...aliases]}
+  }));
+
+/** Every wine of one domaine, keyed on the cuvee name. */
+const domaineCuveeItems=(prefix:string,producerNames:readonly string[],wines:ReadonlyArray<readonly [string,...string[]]>):AchievementDefinitionItem[]=>
+  wines.map(([label,...aliases])=>({
+    id:`${prefix}-${slug(label)}`,label,
+    selector:{type:'cuvee',producerNames:[...producerNames],cuveeNames:[label,...aliases]}
+  }));
+
+/**
+ * A named vineyard inside one appellation, whoever bottles it. The appellation
+ * list carries the bare site name too: a climat or an MGA is often what lands in
+ * the appellation field even though it is not an appellation.
+ */
+const siteItems=(prefix:string,appellation:string,sites:ReadonlyArray<readonly [string,...string[]]>):AchievementDefinitionItem[]=>
+  sites.map(([label,...aliases])=>({
+    id:`${prefix}-${slug(label)}`,label,
+    selector:{
+      type:'site',
+      cuveeNames:[label,...aliases,`${appellation} ${label}`,...aliases.map(alias=>`${appellation} ${alias}`)],
+      appellationNames:[appellation,label,...aliases,`${appellation} ${label}`]
+    }
+  }));
+
 export const expandedAchievementDefinitions:AchievementDefinition[]=[
   {id:'bordeaux-second-growths',title:'Bordeaux Second Growths',subtitle:'Taste all 14 Deuxièmes Crus of the 1855 red-wine classification.',category:'iconic-estates',icon:'bordeaux-classification',references:[{title:'Conseil des Grands Crus Classés en 1855 · Classification',url:gcc1855}],items:producerItems('second',secondGrowths)},
   {id:'bordeaux-third-growths',title:'Bordeaux Third Growths',subtitle:'Taste all 14 Troisièmes Crus of the 1855 red-wine classification.',category:'iconic-estates',icon:'bordeaux-classification',references:[{title:'Conseil des Grands Crus Classés en 1855 · Classification',url:gcc1855}],items:producerItems('third',thirdGrowths)},
@@ -173,6 +306,12 @@ export const expandedAchievementDefinitions:AchievementDefinition[]=[
   {id:'graves-crus-classes',title:'Graves Crus Classés',subtitle:'Taste all 14 estates in the permanent Graves classification.',category:'iconic-estates',icon:'graves',references:[{title:'Union des Crus Classés de Graves · Presentation',url:graves}],items:producerItems('graves',gravesClassed)},
   {id:'saint-emilion-2022-premiers',title:'Saint-Émilion 2022 Premiers Grands Crus Classés',subtitle:'Taste all 14 Premiers Grands Crus Classés in the 2022 classification.',category:'iconic-estates',icon:'saint-emilion',references:[{title:'INAO · Saint-Émilion grand cru 2022 classification',url:saintEmilion}],items:producerItems('stemilion2022',saintEmilionPremiers2022)},
   {id:'pomerol-benchmark-estates',title:'Pomerol Benchmark Estates',subtitle:'Pomerol has no classification; a curated set of 16 estates that define the appellation.',category:'iconic-estates',icon:'saint-emilion',references:[{title:'Syndicat Viticole de Pomerol',url:'https://www.vins-pomerol.fr/en/'}],items:producerItems('pomerol',pomerolEstates)},
+  {id:'champagne-special-club',title:'Club Trésors de Champagne',subtitle:'Taste a Special Club cuvee from each current member of the growers’ club.',category:'iconic-estates',icon:'beaujolais-crus',references:[{title:'Club Trésors de Champagne · The club',url:'https://www.clubtresorsdechampagne.com/en/the-club/'}],items:producerItems('special-club',specialClub)},
+  {id:'champagne-prestige-houses',title:'Champagne’s Prestige Houses',subtitle:'A curated 18: the grandes marques, which have had no official list since 1997.',category:'iconic-estates',icon:'first-growth',references:[{title:'Comité Champagne',url:'https://www.champagne.fr/en/'}],items:producerItems('prestige-champagne',prestigeChampagneHouses)},
+  {id:'domaine-romanee-conti',title:'Domaine de la Romanée-Conti',subtitle:'Work through all ten wines the Domaine bottles, from Échezeaux to the monopoles.',category:'iconic-estates',icon:'burgundy-grand-cru',references:[{title:'Domaine de la Romanée-Conti',url:'https://www.romanee-conti.fr/'}],items:domaineCuveeItems('drc',drcNames,drcWines)},
+  {id:'barolo-great-crus',title:'The Great Crus of Barolo',subtitle:'A curated twelve of Barolo’s 181 MGAs, the ones a label wears like a name.',category:'regional-exploration',icon:'rhone-crus',references:[{title:'Langhe Vini · Barolo DOCG',url:'https://www.langhevini.it/en/barolo-docg/'}],items:siteItems('barolo','Barolo',baroloCrus)},
+  {id:'super-tuscans',title:'Super Tuscans',subtitle:'Sixteen wines that built Tuscany’s reputation outside its appellations.',category:'iconic-estates',icon:'saint-emilion',references:[{title:'Consorzio Vino Chianti Classico',url:'https://www.consorziovinochianticlassico.it/en/'}],items:cuveeItems('super-tuscan',superTuscans)},
+  {id:'tuscany-appellations',title:'Tuscan Appellation Explorer',subtitle:'Taste across ten Tuscan appellations, from Chianti Classico to Bolgheri.',category:'regional-exploration',icon:'graves',references:[{title:'Consorzio Vino Chianti Classico',url:'https://www.consorziovinochianticlassico.it/en/'}],items:appellationItems('tuscany',tuscanAppellations)},
   {id:'napa-historic-estates',title:'Napa Valley Historic Estates',subtitle:'Taste a wine from 12 Napa estates that were making wine before the modern era.',category:'iconic-estates',icon:'judgment-paris',references:[{title:'Napa Valley Vintners',url:'https://napavintners.com/'}],items:producerItems('napa-historic',napaHistoricEstates)},
   {id:'napa-cult-cabernets',title:'Napa Cult Cabernets',subtitle:'A curated ten: the Napa cabernets sold by allocation rather than distribution.',category:'iconic-estates',icon:'first-growth',references:[{title:'Napa Valley Vintners',url:'https://napavintners.com/'}],items:producerItems('napa-cult',napaCultCabernets)},
   {id:'oregon-pinot-pioneers',title:'Oregon Pinot Pioneers',subtitle:'Taste the ten wineries that established Willamette Valley Pinot Noir.',category:'iconic-estates',icon:'beaujolais-crus',references:[{title:'Willamette Valley Wineries Association',url:'https://www.willamettewines.com/'}],items:producerItems('oregon-pioneer',oregonPinotPioneers)},

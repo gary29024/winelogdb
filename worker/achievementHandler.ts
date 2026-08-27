@@ -34,7 +34,7 @@ type AchievementContext={
  * from before it - which is how five new collections shipped and stayed
  * invisible. curatedCollectionFingerprint in the tests fails until this moves.
  */
-export const ACHIEVEMENT_DEFINITION_VERSION=4;
+export const ACHIEVEMENT_DEFINITION_VERSION=5;
 const parseJson=<T>(value:unknown,fallback:T):T=>{try{return JSON.parse(String(value)) as T}catch{return fallback}};
 
 function groupedAliases<T extends {display_alias:string}>(rows:T[],id:(row:T)=>string){
