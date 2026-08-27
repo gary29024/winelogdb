@@ -2,8 +2,8 @@ import { Hono } from 'hono';
 import app from './cuveeEntry';
 import { requireSession } from '../src/lib/auth/session';
 import { pollProducerBatchResearch,startProducerBatchResearch } from '../src/lib/producers/batchResearch';
-import { createQueuedProducerResearchRun,getProducerResearchRun } from '../src/lib/producers/research';
-import { activeCampaignId,advanceCampaign,cancelCampaign,countUnresearchedProducers,createCampaign,dismissCampaign,listCampaigns,measuredSearchesPerRequest,readCampaign,typicalProducerRunMs,unresearchedProducers,
+import { createQueuedProducerResearchRun,getProducerResearchRun,mapRunRow,settleIfStalled } from '../src/lib/producers/research';
+import { activeCampaignId,advanceCampaign,cancelCampaign,countUnresearchedProducers,createCampaign,dismissCampaign,listCampaigns,measuredSearchesPerRequest,readCampaign,reviveCampaignIfStalled,typicalProducerRunMs,unresearchedProducers,
   ASSUMED_SEARCHES_PER_REQUEST,CAMPAIGN_CONCURRENCY,CAMPAIGN_MAX_PRODUCERS,CAMPAIGN_TICK_SECONDS,GEMINI_REQUESTS_PER_PRODUCER } from '../src/lib/producers/researchCampaign';
 import { createWineResearchRun,getLatestWineResearchRun,getWineResearchRun,updateWineResearchRun } from '../src/lib/research/backgroundJobs';
 import { getResearchBatchJob } from '../src/lib/research/batchJobStore';
@@ -28,8 +28,7 @@ const router=new Hono<AppEnv>();
 function cors(c:{req:{header:(name:string)=>string|undefined};env:Bindings;header:(name:string,value:string)=>void}){const origin=c.req.header('Origin');if(origin&&origin===c.env.APP_URL){c.header('Access-Control-Allow-Origin',origin);c.header('Vary','Origin')}}
 async function user(c:{req:{header:(name:string)=>string|undefined};env:Bindings}){return (await requireSession(c.req.header('Authorization'),c.env.AUTH_SECRET)).userId}
 
-function mapProducerRun(row:Record<string,unknown>){return {requestId:String(row.request_id),producerId:String(row.producer_id),status:String(row.status),stage:String(row.stage),attempt:Number(row.attempt)||0,message:row.message?String(row.message):null,startedAt:String(row.started_at),updatedAt:String(row.updated_at),completedAt:row.completed_at?String(row.completed_at):null,durationMs:row.duration_ms==null?null:Number(row.duration_ms)}}
-async function latestProducerRun(db:D1Database,owner:string,producerId:string){const row=await db.prepare(`SELECT request_id,producer_id,status,stage,attempt,message,started_at,updated_at,completed_at,duration_ms FROM producer_research_runs WHERE owner_id=? AND producer_id=? ORDER BY updated_at DESC LIMIT 1`).bind(owner,producerId).first<Record<string,unknown>>();return row?mapProducerRun(row):null}
+async function latestProducerRun(db:D1Database,owner:string,producerId:string){const row=await db.prepare(`SELECT request_id,producer_id,status,stage,attempt,message,started_at,updated_at,completed_at,duration_ms FROM producer_research_runs WHERE owner_id=? AND producer_id=? ORDER BY updated_at DESC LIMIT 1`).bind(owner,producerId).first<Record<string,unknown>>();return row?settleIfStalled(db,owner,mapRunRow(row)):null}
 async function failProducerQueue(db:D1Database,owner:string,requestId:string,message:string){const stamp=new Date().toISOString();await db.prepare(`UPDATE producer_research_runs SET status='failed',stage='failed',message=?,updated_at=?,completed_at=?,duration_ms=cast((julianday(?)-julianday(started_at))*86400000 as integer) WHERE owner_id=? AND request_id=?`).bind(message,stamp,stamp,stamp,owner,requestId).run().catch(()=>undefined)}
 async function scheduleCancelSweep(env:Bindings,owner:string,targetKind:ResearchTargetKind,targetId:string,requestId:string){
   await env.RESEARCH_QUEUE.send({kind:'research_cancel_sweep',owner,targetKind,targetId,requestId,pass:0},{delaySeconds:5}).catch(e=>console.error(JSON.stringify({event:'research_cancel_sweep_schedule_failed',targetKind,targetId,requestId,error:(e as Error).message})))
@@ -82,7 +81,7 @@ router.get('/api/producers/research-batch/plan',async c=>{
 
 router.get('/api/producers/research-batch',async c=>{
   cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
-  return c.json({campaign:await readCampaign(c.env.DB,owner)});
+  return c.json({campaign:await reviveCampaignIfStalled(c.env,owner,await readCampaign(c.env.DB,owner))});
 });
 
 router.post('/api/producers/research-batch',async c=>{
@@ -191,6 +190,28 @@ router.post('/api/batch-recognition/sessions/:sessionId/items/:itemId/reject',as
 
 router.all('*',c=>app.fetch(c.req.raw,c.env,c.executionCtx));
 
+/**
+ * Retries configured for the research queue in wrangler.jsonc. A message that
+ * fails this many times is dead-lettered, and nothing consumes that queue - so
+ * this is the last moment the run can be told it is over.
+ */
+const QUEUE_MAX_ATTEMPTS=3;
+const isFinalAttempt=(attempts:number|undefined)=>Number(attempts??0)>=QUEUE_MAX_ATTEMPTS;
+
+/**
+ * The run row outlives the queue message. Without this a job that exhausts its
+ * retries leaves producer_research_runs at 'running' forever, and the producer
+ * page polls a run that will never move - one was seen still "researching"
+ * after six hours.
+ */
+async function abandonResearchJob(env:Bindings,job:ResearchJob,error:string){
+  const message=`Research stopped after repeated failures: ${error}`;
+  if(job.kind==='producer'||job.kind==='producer_batch_poll')await failProducerQueue(env.DB,job.owner,job.requestId,message);
+  else if(job.kind==='wine'||job.kind==='wine_batch_poll')await updateWineResearchRun(env.DB,job.owner,job.requestId,'failed',message,'failed').catch(()=>undefined);
+  else return;
+  console.error(JSON.stringify({event:'research_queue',stage:'abandoned',kind:job.kind,requestId:job.requestId}));
+}
+
 async function consume(batch:MessageBatch<ResearchJob>,env:Bindings){
   for(const message of batch.messages){const job=message.body;try{
     console.log(JSON.stringify({event:'research_queue',stage:'start',kind:job.kind,...('requestId' in job?{requestId:job.requestId}:'sessionId' in job?{sessionId:job.sessionId}:{campaignId:job.campaignId})}));
@@ -218,7 +239,12 @@ async function consume(batch:MessageBatch<ResearchJob>,env:Bindings){
     else if(job.kind==='recognition_batch_poll')await processBatchPollJob(env,job.owner,job.sessionId,job.jobId,job.pollCount);
     else if(job.kind==='recognition_batch_cleanup')await processBatchCleanupJob(env,job.owner,job.sessionId);
     message.ack();
-  }catch(e){console.error(JSON.stringify({event:'research_queue',stage:'consumer_error',kind:job.kind,error:(e as Error).message||String(e)}));message.retry()}}
+  }catch(e){
+    const error=(e as Error).message||String(e);
+    console.error(JSON.stringify({event:'research_queue',stage:'consumer_error',kind:job.kind,attempts:message.attempts,error}));
+    if(isFinalAttempt(message.attempts))await abandonResearchJob(env,job,error);
+    message.retry();
+  }}
 }
 
 export default {fetch(request:Request,env:Bindings,ctx:ExecutionContext){return router.fetch(request,env,ctx)},queue(batch:MessageBatch<ResearchJob>,env:Bindings){return consume(batch,env)}};

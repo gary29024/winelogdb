@@ -17,7 +17,9 @@
 .research-campaign-now{margin:0;color:var(--ink-5);font-size:.76rem;overflow:hidden;text-overflow:ellipsis}
 .research-campaign-failures{display:grid;gap:6px;margin:0;padding:0;list-style:none}
 .research-campaign-failures li{display:grid;gap:2px;padding:8px 10px;border:1px solid var(--bad-line);border-radius:var(--r-sm);background:var(--bad-wash)}
-.research-campaign-failures strong{font:600 .8rem 'DM Sans',sans-serif;color:var(--bad-ink)}
+.research-campaign-failures strong,.research-campaign-failures>li>a{font:600 .8rem 'DM Sans',sans-serif;color:var(--bad-ink)}
+.research-campaign-failures>li>a{justify-self:start;text-decoration:none}
+.research-campaign-failures>li>a:hover{text-decoration:underline}
 .research-campaign-failures span{color:var(--ink-5);font-size:.73rem}
 .research-campaign.is-outcome{border-color:var(--line-mid)}
 @media(max-width:700px){

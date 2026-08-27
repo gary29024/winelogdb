@@ -1,7 +1,9 @@
 import { useCallback,useEffect,useMemo,useRef,useState } from 'react';
 import { cancelResearchCampaign,dismissResearchCampaign,getResearchCampaign,getResearchCampaignPlan,startResearchCampaign,
   type ResearchCampaign,type ResearchCampaignPlan } from './api';
+import { Link } from 'react-router-dom';
 import { startBackoffPoll,type Poller } from '../../lib/polling/backoff';
+import { BATCH_RESEARCH_BACK,linkFrom } from '../wines/backTarget';
 import { campaignSummary,planSummary } from './campaignCopy';
 import { CampaignItemList } from './ResearchCampaignHistory';
 import '../../researchCampaign.css';
@@ -82,7 +84,9 @@ export function ResearchCampaignPanel({unresearchedHint,onFinished}:{unresearche
   if(outcome)return <section className="research-campaign is-outcome" role="status">
     <div className="research-campaign-head"><strong>{outcome.status==='cancelled'?'Batch research stopped':'Batch research finished'}</strong><span>{campaignSummary(outcome)}</span></div>
     {outcome.failures.length>0&&<ul className="research-campaign-failures">{outcome.failures.map(item=>
-      <li key={item.producerId}><strong>{item.producerName}</strong><span>{item.message||'Research failed.'}</span></li>)}</ul>}
+      <li key={item.producerId}>
+        <Link to={`/producers/${item.producerId}`} state={linkFrom(BATCH_RESEARCH_BACK)}>{item.producerName}</Link>
+        <span>{item.message||'Research failed.'}</span></li>)}</ul>}
     {/* The failures are listed above; this is the rest of the run, which is
         otherwise invisible - a finished batch should be able to say which
         producers it researched. */}

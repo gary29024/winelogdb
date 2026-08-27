@@ -1,4 +1,4 @@
-import { createQueuedProducerResearchRun } from './research';
+import { createQueuedProducerResearchRun,markRunStalled,STALLED_RUN_MS } from './research';
 
 /**
  * Batch producer research.
@@ -25,7 +25,7 @@ export const CAMPAIGN_MAX_PRODUCERS=200;
  * queue message that never arrived - and without this the campaign would tick
  * every thirty seconds forever waiting for a status that will never change.
  */
-export const CAMPAIGN_STALE_RUN_MS=45*60*1000;
+export const CAMPAIGN_STALE_RUN_MS=STALLED_RUN_MS;
 /**
  * A profile request plus one whole-range catalogue request. A range that does
  * not fit one answer is split and re-asked, so this is the floor rather than a
@@ -61,6 +61,7 @@ export type CampaignSummary={
 export type CampaignEnv={DB:D1Database;RESEARCH_QUEUE:Queue<unknown>};
 
 const now=()=>new Date().toISOString();
+const STALLED_ITEM_MESSAGE='The research run stopped reporting, so the batch moved on. Nothing was saved; research this producer again when you want to retry.';
 const emptyCounts=():Record<CampaignItemStatus,number>=>({pending:0,running:0,complete:0,failed:0,skipped:0});
 
 /** Producers that have never completed a research run, oldest additions first. */
@@ -211,8 +212,11 @@ export async function advanceCampaign(env:CampaignEnv,owner:string,campaignId:st
     if(run.status==='running'){
       const last=Date.parse(run.updated_at??'');
       if(Number.isFinite(last)&&Date.now()-last>CAMPAIGN_STALE_RUN_MS){
-        await setItem(env.DB,campaignId,item.producer_id,'failed',
-          'The research run stopped reporting, so the batch moved on. Research this producer on its own to see what happened.',stamp);
+        // Fail the run row too, not only the campaign item: otherwise the
+        // producer's own page keeps polling a run nothing will ever advance,
+        // and shows "Researching in the background" for as long as it is open.
+        await markRunStalled(env.DB,owner,String(item.request_id),STALLED_ITEM_MESSAGE,stamp);
+        await setItem(env.DB,campaignId,item.producer_id,'failed',STALLED_ITEM_MESSAGE,stamp);
         item.status='failed';
       }
       continue;
@@ -269,6 +273,34 @@ export async function cancelCampaign(db:D1Database,owner:string,campaignId:strin
     .bind(stamp,campaignId).run();
   await db.prepare(`UPDATE producer_research_campaigns SET status='cancelled',updated_at=?,finished_at=? WHERE owner_id=? AND id=? AND status='running'`)
     .bind(stamp,stamp,owner,campaignId).run();
+}
+
+/**
+ * A campaign only moves when its tick message arrives, and a message can be
+ * lost - the queue drops it after its retries, or a deploy lands mid-flight.
+ * When that happens the run sits at 'running' with nothing behind it, which is
+ * what "the failed run just hanged there" looks like from the page.
+ *
+ * Four tick intervals of silence is well past any healthy gap, so reading the
+ * campaign re-queues the tick. The timestamp is touched at the same time, so a
+ * page polling every few seconds cannot queue more than one.
+ */
+export const CAMPAIGN_TICK_LOST_MS=CAMPAIGN_TICK_SECONDS*4*1000;
+
+export function tickLooksLost(campaign:{status:string;updatedAt:string},nowMs=Date.now()){
+  if(campaign.status!=='running')return false;
+  const stamp=Date.parse(campaign.updatedAt);
+  return Number.isFinite(stamp)&&nowMs-stamp>CAMPAIGN_TICK_LOST_MS;
+}
+
+export async function reviveCampaignIfStalled(env:CampaignEnv,owner:string,campaign:Campaign|null){
+  if(!campaign||!tickLooksLost(campaign))return campaign;
+  const stamp=now();
+  await env.DB.prepare(`UPDATE producer_research_campaigns SET updated_at=? WHERE owner_id=? AND id=? AND status='running'`)
+    .bind(stamp,owner,campaign.id).run().catch(()=>undefined);
+  try{await env.RESEARCH_QUEUE.send({kind:'producer_campaign_tick',owner,campaignId:campaign.id})}
+  catch(e){console.error(JSON.stringify({event:'campaign_revive_failed',campaignId:campaign.id,error:(e as Error).message}))}
+  return {...campaign,updatedAt:stamp};
 }
 
 export async function dismissCampaign(db:D1Database,owner:string,campaignId:string){

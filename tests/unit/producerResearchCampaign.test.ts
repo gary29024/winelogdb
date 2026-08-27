@@ -31,6 +31,11 @@ function world(items:Item[],runs:Record<string,Run>={},campaignStatus='running')
       if(item){item.status=args[0] as CampaignItemStatus;item.message=args[1] as string|null}
       return undefined;
     }
+    if(/^UPDATE producer_research_runs SET status='failed'/.test(text)){
+      const run=state.runs[String(args[5])];
+      if(run&&run.status==='running'){run.status='failed';run.message=String(args[0])}
+      return undefined;
+    }
     if(/^UPDATE producer_research_campaign_items SET status='running'/.test(text)){
       const item=state.items.find(row=>row.producer_id===args[3]);
       if(item){item.status='running';item.request_id=String(args[0]);state.runs[String(args[0])]={status:'running',message:null}}
@@ -98,6 +103,10 @@ describe('a batch producer research run',()=>{
     expect(state.items.find(item=>item.producer_id==='a')?.message).toContain('stopped reporting');
     // and the lane it was holding is filled
     expect(state.items.filter(item=>item.status==='running').map(item=>item.producer_id)).toEqual(['b','c']);
+    // The run row is failed too, or the producer's own page would keep polling
+    // a run nothing will ever advance - reported as a Deep Search that hung.
+    expect(state.runs['r-a'].status).toBe('failed');
+    expect(state.runs['r-a'].message).toContain('stopped reporting');
   });
 
   it('keeps waiting for a run that is merely slow',async()=>{
