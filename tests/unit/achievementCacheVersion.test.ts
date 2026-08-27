@@ -20,7 +20,7 @@ describe('the curated set and its cache key',()=>{
     // If this fails: the curated set changed. Bump
     // ACHIEVEMENT_DEFINITION_VERSION, then put the new fingerprint here.
     expect({version:ACHIEVEMENT_DEFINITION_VERSION,fingerprint:curatedCollectionFingerprint()})
-      .toEqual({version:4,fingerprint:'7d77c626'});
+      .toEqual({version:5,fingerprint:'c41962fd'});
   });
 
   it('changes the fingerprint when a collection is added or resized',()=>{
