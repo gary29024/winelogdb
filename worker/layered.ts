@@ -9,6 +9,7 @@ import { applyCatalogDecisions,deleteCatalogDecision,listCatalogDecisions,saveCa
 import { selectRecognitionMetadata,type RecognitionPhotoMetadata } from '../src/lib/uploads/metadataSelection';
 import { canonicalCatalogEntries,type CatalogPresentationLike } from '../src/lib/cuvees/catalogPresentation';
 import { usageSummary } from '../src/lib/usage/aiUsage';
+import { seedAiUsageOnce } from '../src/lib/usage/seedFromResearchJobs';
 import { readAiRates,type AiRateEnv } from '../src/lib/usage/rates';
 
 type Bindings={DB:D1Database;WINE_IMAGES:R2Bucket;ASSETS:Fetcher;GEMINI_API_KEY:string;AUTH_SECRET:string;APP_PASSWORD:string;APP_URL:string;MAX_FILE_BYTES?:string;MAX_BATCH_FILES?:string}&AiRateEnv;
@@ -33,7 +34,13 @@ async function linkSavedWine(db:D1Database,owner:string,wineId:string){
 app.get('/api/usage/spend',async c=>{
   cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
   const days=Number(c.req.query('days')??30);
-  try{return c.json(await usageSummary(c.env.DB,owner,readAiRates(c.env),Number.isFinite(days)?days:30))}
+  try{
+    // Once, on the first read: the search counts research jobs have been
+    // recording all along predate the ledger, and the monthly allowance is
+    // counted in exactly those.
+    await seedAiUsageOnce(c.env.DB,owner).catch(()=>null);
+    return c.json(await usageSummary(c.env.DB,owner,readAiRates(c.env),Number.isFinite(days)?days:30));
+  }
   catch(e){return c.json({error:(e as Error).message||'Could not load AI spend'},500)}
 });
 
