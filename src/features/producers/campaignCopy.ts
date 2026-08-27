@@ -14,7 +14,11 @@ export function formatDuration(ms:number){
  * with no completed runs to measure, the time is simply not claimed.
  */
 export function planSummary(plan:ResearchCampaignPlan){
-  const parts=[`${plan.willRun} producer${plan.willRun===1?'':'s'}`,`${plan.geminiRequests} grounded Gemini requests`];
+  // Searches lead, because that is what grounding is billed on: a request can
+  // run several, and the count comes from this library's own measured runs when
+  // it has any.
+  const parts=[`${plan.willRun} producer${plan.willRun===1?'':'s'}`,
+    `about ${plan.searchQueries} Google searches over ${plan.geminiRequests} grounded requests`];
   if(plan.estimatedMs!=null)parts.push(`about ${formatDuration(plan.estimatedMs)} at ${plan.concurrency} at a time`);
   return parts.join(' · ');
 }

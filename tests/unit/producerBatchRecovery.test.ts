@@ -1,12 +1,30 @@
 import { describe,expect,it } from 'vitest';
-import { catalogDefaultChunkKeys,catalogSubsliceKeysFor,shouldUseChunkedCatalogRecovery } from '../../src/lib/producers/batchResearch';
+import { catalogDefaultChunkKeys,catalogRecoveryChunkKeys,catalogStageCoverageComplete,catalogSubsliceKeysFor,shouldUseChunkedCatalogRecovery } from '../../src/lib/producers/batchResearch';
 
 describe('producer catalogue bounded research',()=>{
-  it('uses bounded alphabetical catalogue slices by default',()=>{
-    expect(catalogDefaultChunkKeys).toEqual([
+  it('asks for the whole range in one request by default',()=>{
+    // Grounding is billed per search the model runs, and five lettered slices
+    // were five grounded requests for a producer who makes eight wines.
+    expect(catalogDefaultChunkKeys).toEqual(['catalog_slice_a_z_other']);
+  });
+
+  it('keeps the lettered slices for a run that has to start over',()=>{
+    // A finalize failure means the one-request range was rejected as
+    // incomplete, so the retry is the exhaustive one.
+    expect(catalogRecoveryChunkKeys).toEqual([
       'catalog_slice_a_e','catalog_slice_f_j','catalog_slice_k_o','catalog_slice_p_t','catalog_slice_u_z_other'
     ]);
-    expect(new Set(catalogDefaultChunkKeys).size).toBe(catalogDefaultChunkKeys.length);
+    expect(new Set(catalogRecoveryChunkKeys).size).toBe(catalogRecoveryChunkKeys.length);
+    expect(catalogStageCoverageComplete(catalogRecoveryChunkKeys)).toBe(true);
+  });
+
+  it('splits the whole range into halves that still cover it',()=>{
+    // The ladder a producer only climbs when one answer will not hold the
+    // range: A-Z becomes A-M and N-Z, and either half can split again.
+    const halves=catalogSubsliceKeysFor('catalog_slice_a_z_other');
+    expect(halves).toEqual(['catalog_slice_a_m','catalog_slice_n_z_other']);
+    expect(catalogStageCoverageComplete(halves)).toBe(true);
+    expect(catalogStageCoverageComplete(catalogSubsliceKeysFor('catalog_slice_a_m'))).toBe(false);
   });
 
   it('treats any structured catalogue parsing failure as a slice-level retry condition',()=>{

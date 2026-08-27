@@ -23,4 +23,10 @@ export async function finishResearchBatchJob(db:D1Database,owner:string,id:strin
   await db.prepare('UPDATE research_batch_jobs SET status=?,error=?,updated_at=? WHERE owner_id=? AND id=?').bind(status,error??null,now(),owner,id).run();
 }
 
+/** Records the billed unit for a completed submission. Never fatal: a missing count costs visibility, not correctness. */
+export async function recordResearchSearchQueries(db:D1Database,owner:string,id:string,count:number){
+  if(!Number.isFinite(count)||count<=0)return;
+  await db.prepare('UPDATE research_batch_jobs SET search_queries=? WHERE owner_id=? AND id=?').bind(Math.round(count),owner,id).run();
+}
+
 export async function touchResearchBatchJob(db:D1Database,owner:string,id:string){await db.prepare('UPDATE research_batch_jobs SET updated_at=? WHERE owner_id=? AND id=?').bind(now(),owner,id).run()}

@@ -26,8 +26,21 @@ export const CAMPAIGN_MAX_PRODUCERS=200;
  * every thirty seconds forever waiting for a status that will never change.
  */
 export const CAMPAIGN_STALE_RUN_MS=45*60*1000;
-/** A profile request plus five catalogue slices, per producer. */
-export const GEMINI_REQUESTS_PER_PRODUCER=6;
+/**
+ * A profile request plus one whole-range catalogue request. A range that does
+ * not fit one answer is split and re-asked, so this is the floor rather than a
+ * promise.
+ */
+export const GEMINI_REQUESTS_PER_PRODUCER=2;
+/**
+ * Searches per grounded request when this library has never measured any.
+ *
+ * Grounding is billed per search the model runs, not per request. Measured on
+ * this app's own traffic before the prompts asked it to search sparingly, a
+ * request averaged around seven; the estimate prefers the owner's own recent
+ * numbers and only falls back to this.
+ */
+export const ASSUMED_SEARCHES_PER_REQUEST=4;
 
 export type CampaignItemStatus='pending'|'running'|'complete'|'failed'|'skipped';
 export type CampaignItem={producerId:string;producerName:string;status:CampaignItemStatus;message:string|null};
@@ -78,6 +91,20 @@ export async function typicalProducerRunMs(db:D1Database,owner:string){
   const values=(results??[]).map(row=>Number(row.duration_ms)).filter(value=>Number.isFinite(value)&&value>0).sort((a,b)=>a-b);
   if(!values.length)return null;
   return values[Math.floor(values.length/2)];
+}
+
+/**
+ * Searches per grounded request, from this owner's own completed submissions.
+ * Only jobs that recorded a count are considered - a zero means the column
+ * predates the metering, not that nothing was searched.
+ */
+export async function measuredSearchesPerRequest(db:D1Database,owner:string){
+  const row=await db.prepare(
+    `SELECT SUM(search_queries) AS searches, SUM(json_array_length(keys_json)) AS requests
+     FROM research_batch_jobs WHERE owner_id=? AND search_queries>0 AND created_at>datetime('now','-30 days')`
+  ).bind(owner).first<{searches:number|null;requests:number|null}>();
+  const searches=Number(row?.searches??0),requests=Number(row?.requests??0);
+  return requests>0&&searches>0?searches/requests:null;
 }
 
 export async function activeCampaignId(db:D1Database,owner:string){

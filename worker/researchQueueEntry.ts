@@ -3,8 +3,8 @@ import app from './cuveeEntry';
 import { requireSession } from '../src/lib/auth/session';
 import { pollProducerBatchResearch,startProducerBatchResearch } from '../src/lib/producers/batchResearch';
 import { createQueuedProducerResearchRun,getProducerResearchRun } from '../src/lib/producers/research';
-import { activeCampaignId,advanceCampaign,cancelCampaign,countUnresearchedProducers,createCampaign,dismissCampaign,listCampaigns,readCampaign,typicalProducerRunMs,unresearchedProducers,
-  CAMPAIGN_CONCURRENCY,CAMPAIGN_MAX_PRODUCERS,CAMPAIGN_TICK_SECONDS,GEMINI_REQUESTS_PER_PRODUCER } from '../src/lib/producers/researchCampaign';
+import { activeCampaignId,advanceCampaign,cancelCampaign,countUnresearchedProducers,createCampaign,dismissCampaign,listCampaigns,measuredSearchesPerRequest,readCampaign,typicalProducerRunMs,unresearchedProducers,
+  ASSUMED_SEARCHES_PER_REQUEST,CAMPAIGN_CONCURRENCY,CAMPAIGN_MAX_PRODUCERS,CAMPAIGN_TICK_SECONDS,GEMINI_REQUESTS_PER_PRODUCER } from '../src/lib/producers/researchCampaign';
 import { createWineResearchRun,getLatestWineResearchRun,getWineResearchRun,updateWineResearchRun } from '../src/lib/research/backgroundJobs';
 import { getResearchBatchJob } from '../src/lib/research/batchJobStore';
 import { pollWineBatchResearch,startWineBatchResearch } from '../src/lib/research/batchWineResearch';
@@ -66,9 +66,14 @@ router.get('/api/producers/research-batch/plan',async c=>{
   const unresearched=await countUnresearchedProducers(c.env.DB,owner);
   const willRun=Math.max(0,Math.min(unresearched,CAMPAIGN_MAX_PRODUCERS,Number.isFinite(requested)&&requested>0?Math.floor(requested):unresearched));
   const perProducerMs=await typicalProducerRunMs(c.env.DB,owner);
+  const searchesPerRequest=await measuredSearchesPerRequest(c.env.DB,owner);
+  const geminiRequests=willRun*GEMINI_REQUESTS_PER_PRODUCER;
   return c.json({
     unresearched,willRun,maxPerRun:CAMPAIGN_MAX_PRODUCERS,concurrency:CAMPAIGN_CONCURRENCY,
-    geminiRequests:willRun*GEMINI_REQUESTS_PER_PRODUCER,
+    geminiRequests,
+    // Grounding bills per search, so this is the number that maps to money.
+    searchQueries:Math.round(geminiRequests*(searchesPerRequest??ASSUMED_SEARCHES_PER_REQUEST)),
+    searchesPerRequest,
     perProducerMs,
     estimatedMs:perProducerMs==null?null:Math.round(perProducerMs*willRun/CAMPAIGN_CONCURRENCY),
     active:await activeCampaignId(c.env.DB,owner)
