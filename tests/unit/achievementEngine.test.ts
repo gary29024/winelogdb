@@ -72,15 +72,16 @@ describe('achievement engine',()=>{
 });
 
 describe('starter achievement definitions',()=>{
-  it('ships twenty curated launch collections with stable item counts',()=>{
+  it('ships twenty-five curated launch collections with stable item counts',()=>{
     expect(achievementDefinitions.map(item=>[item.id,item.items.length])).toEqual([
       ['bordeaux-first-growths',5],['bordeaux-second-growths',14],['bordeaux-1855-red-classified-growths',61],['sauternes-barsac-top-1855',12],['sauternes-barsac-second-growths',15],['sauternes-barsac-1855-all',27],['graves-crus-classes',14],
-      ['judgment-of-paris-1976',20],['saint-emilion-2022-premiers',14],['burgundy-33-grand-crus',33],['cote-de-nuits-24-grand-crus',24],['cote-de-beaune-8-grand-crus',8],['beaujolais-ten-crus',10],['gevrey-nine-grand-crus',9],['northern-rhone-eight-crus',8],['southern-rhone-ten-crus',10],
+      ['judgment-of-paris-1976',20],['saint-emilion-2022-premiers',14],['pomerol-benchmark-estates',16],['burgundy-33-grand-crus',33],['cote-de-nuits-24-grand-crus',24],['cote-de-beaune-8-grand-crus',8],['beaujolais-ten-crus',10],['gevrey-nine-grand-crus',9],['northern-rhone-eight-crus',8],['southern-rhone-ten-crus',10],
+      ['napa-historic-estates',12],['napa-cult-cabernets',10],['oregon-pinot-pioneers',10],['washington-benchmark-estates',10],
       ['michelin-grapes-burgundy-2026-three',9],['michelin-grapes-burgundy-2026-two',20],['michelin-grapes-burgundy-2026-one',33],['michelin-grapes-burgundy-2026-selected',32]
     ]);
   });
   it('keeps curation references attached to every launch collection',()=>{
-    expect(achievementDefinitions).toHaveLength(20);
+    expect(achievementDefinitions).toHaveLength(25);
     for(const definition of achievementDefinitions){expect(definition.references.length).toBeGreaterThan(0);expect(definition.references.every(reference=>reference.url.startsWith('https://'))).toBe(true)}
     expect(getAchievementDefinition('judgment-of-paris-1976')?.items.some(item=>item.id==='ridge-monte-bello-1971')).toBe(true);
     expect(getAchievementDefinition('michelin-grapes-burgundy-2026-three')?.references[0]?.url).toContain('michelin.com/en/publications/products-and-services/the-michelin-guide-first-grape-selection-burgundy-france');

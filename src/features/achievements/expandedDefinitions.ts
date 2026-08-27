@@ -69,6 +69,97 @@ const gevreyGrandCrus=coteDeNuitsGrandCrus.slice(0,9);
 const northernRhone=['Château-Grillet','Condrieu','Cornas','Côte-Rôtie','Crozes-Hermitage','Hermitage','Saint-Joseph','Saint-Péray'] as const;
 const southernRhone=['Beaumes-de-Venise','Cairanne','Châteauneuf-du-Pape','Gigondas','Laudun','Lirac','Rasteau','Tavel','Vacqueyras','Vinsobres'] as const;
 
+/**
+ * Pomerol has never been classified - no 1855, no Saint-Émilion-style revision -
+ * so this is a curated set of the appellation's benchmark estates rather than an
+ * official list, and it says so in its subtitle. Producer-level: a Pomerol
+ * estate's reputation rests on one wine, and second labels are rare enough that
+ * requiring the grand vin by name would cost more matches than it saves.
+ */
+const pomerolEstates:readonly NamedEntry[]=[
+  ['Pétrus','Petrus','Château Pétrus'],
+  ['Château Lafleur','Lafleur'],
+  ['Vieux Château Certan','VCC'],
+  ['Le Pin','Château Le Pin'],
+  ['Château Trotanoy','Trotanoy'],
+  ["Château L’Église-Clinet","Château L'Église-Clinet","Chateau LEglise-Clinet","L’Église-Clinet"],
+  ['Château La Conseillante','La Conseillante'],
+  ["Château L’Évangile","Château L'Évangile","L’Évangile"],
+  ['Château La Fleur-Pétrus','La Fleur-Pétrus','Château La Fleur Pétrus'],
+  ['Château Clinet','Clinet'],
+  ['Château Hosanna','Hosanna'],
+  ['Château Latour à Pomerol','Latour à Pomerol'],
+  ['Château Le Gay','Le Gay'],
+  ['Château Nénin','Nénin'],
+  ['Château Gazin','Gazin'],
+  ['Château Petit-Village','Petit-Village','Château Petit Village']
+] as const;
+
+/**
+ * Napa estates that were already making wine before the modern era - several
+ * founded in the nineteenth century, all of them still working. Founding dates
+ * are what puts an estate on this list, not scores.
+ */
+const napaHistoricEstates:readonly NamedEntry[]=[
+  ['Charles Krug','Charles Krug Winery'],
+  ['Beringer','Beringer Vineyards'],
+  ['Inglenook','Niebaum-Coppola','Rubicon Estate'],
+  ['Schramsberg','Schramsberg Vineyards'],
+  ['Beaulieu Vineyard','BV'],
+  ['Freemark Abbey'],
+  ['Louis M. Martini','Louis Martini'],
+  ['Mayacamas','Mayacamas Vineyards'],
+  ['Stony Hill','Stony Hill Vineyard'],
+  ['Heitz Cellar','Heitz Wine Cellars','Heitz'],
+  ['Chateau Montelena','Château Montelena'],
+  ['Robert Mondavi','Robert Mondavi Winery']
+] as const;
+
+/**
+ * The Napa cabernets that trade on allocation rather than distribution. Curated,
+ * like the Pomerol list: there is no body that names them.
+ */
+const napaCultCabernets:readonly NamedEntry[]=[
+  ['Screaming Eagle'],
+  ['Harlan Estate','Harlan'],
+  ['Colgin Cellars','Colgin'],
+  ['Bryant Family Vineyard','Bryant Estate','Bryant Family'],
+  ['Dalla Valle Vineyards','Dalla Valle'],
+  ['Abreu Vineyards','Abreu'],
+  ['Scarecrow','Scarecrow Wine'],
+  ['Schrader Cellars','Schrader'],
+  ['Hundred Acre'],
+  ['Eisele Vineyard','Araujo Estate','Araujo']
+] as const;
+
+/** The wineries that established Willamette Valley Pinot Noir from 1965 onward. */
+const oregonPinotPioneers:readonly NamedEntry[]=[
+  ['The Eyrie Vineyards','Eyrie Vineyards','Eyrie'],
+  ['Ponzi Vineyards','Ponzi'],
+  ['Adelsheim Vineyard','Adelsheim'],
+  ['Sokol Blosser','Sokol Blosser Winery'],
+  ['Erath','Erath Winery','Knudsen Erath'],
+  ['Elk Cove Vineyards','Elk Cove'],
+  ['Domaine Drouhin Oregon','Domaine Drouhin'],
+  ['Bethel Heights Vineyard','Bethel Heights'],
+  ['Cristom Vineyards','Cristom'],
+  ['Beaux Frères']
+] as const;
+
+/** Washington's benchmark estates, mostly Walla Walla and the Columbia Valley. */
+const washingtonBenchmarks:readonly NamedEntry[]=[
+  ['Quilceda Creek'],
+  ['Leonetti Cellar','Leonetti'],
+  ['Woodward Canyon'],
+  ['Andrew Will','Andrew Will Winery'],
+  ['Cayuse Vineyards','Cayuse'],
+  ['Figgins','Figgins Family Wine Estates'],
+  ['DeLille Cellars','DeLille'],
+  ["L'Ecole No 41","L’Ecole No 41",'LEcole No 41'],
+  ['Chateau Ste. Michelle','Château Ste. Michelle','Chateau Ste Michelle'],
+  ['Betz Family Winery','Betz Family']
+] as const;
+
 export const expandedAchievementDefinitions:AchievementDefinition[]=[
   {id:'bordeaux-second-growths',title:'Bordeaux Second Growths',subtitle:'Taste all 14 Deuxièmes Crus of the 1855 red-wine classification.',category:'iconic-estates',icon:'bordeaux-classification',references:[{title:'Conseil des Grands Crus Classés en 1855 · Classification',url:gcc1855}],items:producerItems('second',secondGrowths)},
   {id:'bordeaux-third-growths',title:'Bordeaux Third Growths',subtitle:'Taste all 14 Troisièmes Crus of the 1855 red-wine classification.',category:'iconic-estates',icon:'bordeaux-classification',references:[{title:'Conseil des Grands Crus Classés en 1855 · Classification',url:gcc1855}],items:producerItems('third',thirdGrowths)},
@@ -81,6 +172,11 @@ export const expandedAchievementDefinitions:AchievementDefinition[]=[
   {id:'sauternes-barsac-1855-all',title:'All 1855 Sauternes & Barsac Growths',subtitle:'The complete current 27-estate Sauternes & Barsac classification.',category:'iconic-estates',icon:'sauternes',references:[{title:'Conseil des Grands Crus Classés en 1855 · Sauternes & Barsac',url:gcc1855}],items:producerItems('sauternes-all',sauternes1855)},
   {id:'graves-crus-classes',title:'Graves Crus Classés',subtitle:'Taste all 14 estates in the permanent Graves classification.',category:'iconic-estates',icon:'graves',references:[{title:'Union des Crus Classés de Graves · Presentation',url:graves}],items:producerItems('graves',gravesClassed)},
   {id:'saint-emilion-2022-premiers',title:'Saint-Émilion 2022 Premiers Grands Crus Classés',subtitle:'Taste all 14 Premiers Grands Crus Classés in the 2022 classification.',category:'iconic-estates',icon:'saint-emilion',references:[{title:'INAO · Saint-Émilion grand cru 2022 classification',url:saintEmilion}],items:producerItems('stemilion2022',saintEmilionPremiers2022)},
+  {id:'pomerol-benchmark-estates',title:'Pomerol Benchmark Estates',subtitle:'Pomerol has no classification; a curated set of 16 estates that define the appellation.',category:'iconic-estates',icon:'saint-emilion',references:[{title:'Syndicat Viticole de Pomerol',url:'https://www.vins-pomerol.fr/en/'}],items:producerItems('pomerol',pomerolEstates)},
+  {id:'napa-historic-estates',title:'Napa Valley Historic Estates',subtitle:'Taste a wine from 12 Napa estates that were making wine before the modern era.',category:'iconic-estates',icon:'judgment-paris',references:[{title:'Napa Valley Vintners',url:'https://napavintners.com/'}],items:producerItems('napa-historic',napaHistoricEstates)},
+  {id:'napa-cult-cabernets',title:'Napa Cult Cabernets',subtitle:'A curated ten: the Napa cabernets sold by allocation rather than distribution.',category:'iconic-estates',icon:'first-growth',references:[{title:'Napa Valley Vintners',url:'https://napavintners.com/'}],items:producerItems('napa-cult',napaCultCabernets)},
+  {id:'oregon-pinot-pioneers',title:'Oregon Pinot Pioneers',subtitle:'Taste the ten wineries that established Willamette Valley Pinot Noir.',category:'iconic-estates',icon:'beaujolais-crus',references:[{title:'Willamette Valley Wineries Association',url:'https://www.willamettewines.com/'}],items:producerItems('oregon-pioneer',oregonPinotPioneers)},
+  {id:'washington-benchmark-estates',title:'Washington Benchmark Estates',subtitle:'Ten estates that set the standard for Washington reds.',category:'iconic-estates',icon:'graves',references:[{title:'Washington State Wine Commission',url:'https://www.washingtonwine.org/'}],items:producerItems('washington',washingtonBenchmarks)},
   {id:'burgundy-33-grand-crus',title:'Burgundy Grand Cru Explorer',subtitle:'Taste wine from all 33 Grand Cru appellations of Bourgogne.',category:'regional-exploration',icon:'burgundy-grand-cru',references:[{title:'Bourgogne Wines · Grand Cru appellations',url:burgundy}],items:appellationItems('burgundy33',burgundyGrandCrus,true)},
   {id:'cote-de-nuits-24-grand-crus',title:'Côte de Nuits Grand Crus',subtitle:'Taste all 24 Grand Cru appellations of the Côte de Nuits.',category:'regional-exploration',icon:'burgundy-grand-cru',references:[{title:'Bourgogne Wines · Appellations',url:burgundy}],items:appellationItems('nuits24',coteDeNuitsGrandCrus,true)},
   {id:'cote-de-beaune-8-grand-crus',title:'Côte de Beaune Grand Crus',subtitle:'Taste all 8 Grand Cru appellations of the Côte de Beaune.',category:'regional-exploration',icon:'burgundy-grand-cru',references:[{title:'Bourgogne Wines · Appellations',url:burgundy}],items:appellationItems('beaune8',coteDeBeauneGrandCrus,true)},

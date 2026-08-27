@@ -47,6 +47,6 @@ export const achievementDefinitions:AchievementDefinition[]=[
   ...additionalAchievementDefinitions
 ];
 
-if(achievementDefinitions.length!==20)throw new Error(`Expected 20 curated launch collections, found ${achievementDefinitions.length}`);
+if(achievementDefinitions.length!==25)throw new Error(`Expected 25 curated launch collections, found ${achievementDefinitions.length}`);
 
 export function getAchievementDefinition(id:string){return achievementDefinitions.find(item=>item.id===id)??null}

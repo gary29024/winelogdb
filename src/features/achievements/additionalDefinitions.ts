@@ -6,9 +6,23 @@ const producerItems=(prefix:string,entries:readonly NamedEntry[]):AchievementDef
   const values=typeof entry==='string'?[entry]:[entry[0],...entry.slice(1)],label=values[0];
   return {id:`${prefix}-${slug(label)}`,label,selector:{type:'producer',producerNames:values}};
 });
+/**
+ * One Chablis Grand Cru climat.
+ *
+ * The appellation list has to include the bare climat name. The climats are
+ * lieux-dits inside the single Chablis Grand Cru AOC rather than appellations
+ * of their own, so the place hierarchy does not know them - and a bottle
+ * labelled "Chablis Grand Cru Bougros" is recorded with the appellation
+ * "Bougros", which matched none of the composed forms. The cuvee name still has
+ * to match as well, so the loose appellation cannot pull in a village Chablis.
+ */
 const chablisSite=(name:string,...aliases:string[]):AchievementDefinitionItem=>({
   id:`chablis-grand-cru-${slug(name)}`,label:name,
-  selector:{type:'site',cuveeNames:[name,...aliases,`Chablis Grand Cru ${name}`,`Chablis ${name} Grand Cru`,`${name} Chablis Grand Cru`],appellationNames:['Chablis Grand Cru',`Chablis Grand Cru ${name}`,`Chablis ${name} Grand Cru`,`${name} Grand Cru`]}
+  selector:{
+    type:'site',
+    cuveeNames:[name,...aliases,`Chablis Grand Cru ${name}`,`Chablis ${name} Grand Cru`,`${name} Chablis Grand Cru`],
+    appellationNames:[name,...aliases,'Chablis','Chablis Grand Cru',`Chablis Grand Cru ${name}`,`Chablis ${name} Grand Cru`,`${name} Grand Cru`]
+  }
 });
 
 const australianFamilies:readonly NamedEntry[]=[
