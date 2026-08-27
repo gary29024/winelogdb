@@ -23,6 +23,22 @@ export const kindLabels:Record<AiUsageKind,string>={
 export type AiUsageEvent={
   kind:AiUsageKind;runId:string;targetId?:string|null;model:string;
   requests?:number;searchQueries?:number;promptTokens?:number;outputTokens?:number;
+  /**
+   * How many wines this call covered. Recognition is quoted per wine, so a
+   * group photo of nine bottles is nine; a batch item is one; a second call on
+   * the same wine (an escalation) is zero, or it would count twice.
+   */
+  units?:number;
+};
+
+/**
+ * What a kind's cost is naturally quoted in. Research is per run because a run
+ * is one producer or one wine; recognition is per wine because a run is a
+ * session or a photograph, and how many bottles were in it is the whole
+ * difference between a cheap run and an expensive one.
+ */
+export const unitOf:Record<AiUsageKind,'run'|'wine'>={
+  producer_research:'run',wine_research:'run',scan_single:'wine',scan_batch:'wine',scan_group:'wine'
 };
 
 /** Cloudflare's Analytics Engine, when a dataset is bound. */
@@ -34,7 +50,7 @@ const whole=(value:unknown)=>{const parsed=Math.round(Number(value)||0);return p
 export const RAW_EVENT_RETENTION_DAYS=90;
 
 export async function recordAiUsage(env:AiUsageEnv,owner:string,event:AiUsageEvent){
-  const requests=whole(event.requests??1),searchQueries=whole(event.searchQueries);
+  const requests=whole(event.requests??1),searchQueries=whole(event.searchQueries),units=whole(event.units);
   const promptTokens=whole(event.promptTokens),outputTokens=whole(event.outputTokens);
   if(!requests&&!searchQueries&&!promptTokens&&!outputTokens)return;
   // The row is stamped in UTC, but it is filed under the month Google's
@@ -42,18 +58,19 @@ export async function recordAiUsage(env:AiUsageEnv,owner:string,event:AiUsageEve
   const stamp=new Date().toISOString(),month=billingMonth();
   try{
     await env.DB.batch([
-      env.DB.prepare(`INSERT INTO ai_usage_events(id,owner_id,kind,run_id,target_id,model,requests,search_queries,prompt_tokens,output_tokens,created_at)
-        VALUES(?,?,?,?,?,?,?,?,?,?,?)`)
-        .bind(crypto.randomUUID(),owner,event.kind,event.runId,event.targetId??null,event.model,requests,searchQueries,promptTokens,outputTokens,stamp),
-      env.DB.prepare(`INSERT INTO ai_usage_monthly(owner_id,month,kind,requests,search_queries,prompt_tokens,output_tokens,updated_at)
-        VALUES(?,?,?,?,?,?,?,?)
+      env.DB.prepare(`INSERT INTO ai_usage_events(id,owner_id,kind,run_id,target_id,model,requests,search_queries,prompt_tokens,output_tokens,units,created_at)
+        VALUES(?,?,?,?,?,?,?,?,?,?,?,?)`)
+        .bind(crypto.randomUUID(),owner,event.kind,event.runId,event.targetId??null,event.model,requests,searchQueries,promptTokens,outputTokens,units,stamp),
+      env.DB.prepare(`INSERT INTO ai_usage_monthly(owner_id,month,kind,requests,search_queries,prompt_tokens,output_tokens,units,updated_at)
+        VALUES(?,?,?,?,?,?,?,?,?)
         ON CONFLICT(owner_id,month,kind) DO UPDATE SET
           requests=ai_usage_monthly.requests+excluded.requests,
           search_queries=ai_usage_monthly.search_queries+excluded.search_queries,
           prompt_tokens=ai_usage_monthly.prompt_tokens+excluded.prompt_tokens,
           output_tokens=ai_usage_monthly.output_tokens+excluded.output_tokens,
+          units=ai_usage_monthly.units+excluded.units,
           updated_at=excluded.updated_at`)
-        .bind(owner,month,event.kind,requests,searchQueries,promptTokens,outputTokens,stamp),
+        .bind(owner,month,event.kind,requests,searchQueries,promptTokens,outputTokens,units,stamp),
       env.DB.prepare(`DELETE FROM ai_usage_events WHERE owner_id=? AND created_at<datetime('now','-${RAW_EVENT_RETENTION_DAYS} days')`).bind(owner)
     ]);
   }catch(e){console.error(JSON.stringify({event:'ai_usage_write_failed',kind:event.kind,error:(e as Error).message}))}
@@ -63,7 +80,7 @@ export async function recordAiUsage(env:AiUsageEnv,owner:string,event:AiUsageEve
     env.AI_USAGE?.writeDataPoint({
       indexes:[event.kind],
       blobs:[event.kind,event.model,event.runId,owner],
-      doubles:[requests,searchQueries,promptTokens,outputTokens]
+      doubles:[requests,searchQueries,promptTokens,outputTokens,units]
     });
   }catch(e){console.error(JSON.stringify({event:'ai_usage_analytics_failed',kind:event.kind,error:(e as Error).message}))}
 }
@@ -71,7 +88,13 @@ export async function recordAiUsage(env:AiUsageEnv,owner:string,event:AiUsageEve
 export type KindSpend={
   kind:AiUsageKind;label:string;runs:number;requests:number;
   searchQueries:number;promptTokens:number;outputTokens:number;
-  costPerRun:number;cost:number;searchesPerRun:number;
+  cost:number;searchesPerRun:number;
+  /** Wines covered, for the kinds quoted per wine. */
+  units:number;
+  /** What the figure is per - 'run' or 'wine' - and the figure itself. */
+  unit:'run'|'wine';unitCount:number;costPerUnit:number;
+  /** Kept for callers that still want the run figure whatever the unit is. */
+  costPerRun:number;
 };
 export type UsageSummary={
   currency:string;days:number;
@@ -83,7 +106,7 @@ export type UsageSummary={
   empty:boolean;
 };
 
-type EventRow={kind:string;model:string;requests:number;search_queries:number;prompt_tokens:number;output_tokens:number};
+type EventRow={kind:string;model:string;requests:number;search_queries:number;prompt_tokens:number;output_tokens:number;units:number};
 type RunRow={kind:string;runs:number};
 type MonthRow={search_queries:number;prompt_tokens:number;output_tokens:number};
 
@@ -95,7 +118,7 @@ export async function usageSummary(db:D1Database,owner:string,rates:AiRates,days
   // a run that used two models would be counted twice.
   const [events,runs,monthTotals]=await Promise.all([
     db.prepare(`SELECT kind,model,sum(requests) AS requests,sum(search_queries) AS search_queries,
-        sum(prompt_tokens) AS prompt_tokens,sum(output_tokens) AS output_tokens
+        sum(prompt_tokens) AS prompt_tokens,sum(output_tokens) AS output_tokens,sum(units) AS units
       FROM ai_usage_events WHERE owner_id=? AND created_at>datetime('now','-${window} days') GROUP BY kind,model`).bind(owner).all<EventRow>(),
     db.prepare(`SELECT kind,count(DISTINCT run_id) AS runs FROM ai_usage_events
       WHERE owner_id=? AND created_at>datetime('now','-${window} days') GROUP BY kind`).bind(owner).all<RunRow>(),
@@ -108,17 +131,23 @@ export async function usageSummary(db:D1Database,owner:string,rates:AiRates,days
     const totals:UsageTotals={searchQueries:Number(row.search_queries)||0,promptTokens:Number(row.prompt_tokens)||0,outputTokens:Number(row.output_tokens)||0};
     const kind=row.kind as AiUsageKind;
     const entry=byKind.get(kind)??{kind,label:kindLabels[kind]??kind,runs:runsByKind.get(kind)??0,requests:0,
-      searchQueries:0,promptTokens:0,outputTokens:0,cost:0,costPerRun:0,searchesPerRun:0};
-    entry.requests+=Number(row.requests)||0;
+      searchQueries:0,promptTokens:0,outputTokens:0,units:0,cost:0,costPerRun:0,
+      unit:unitOf[kind]??'run',unitCount:0,costPerUnit:0,searchesPerRun:0};
+    entry.requests+=Number(row.requests)||0;entry.units+=Number(row.units)||0;
     entry.searchQueries+=totals.searchQueries;entry.promptTokens+=totals.promptTokens;entry.outputTokens+=totals.outputTokens;
     entry.cost+=toLocal(marginalCostUsd(totals,rates,row.model),rates);
     byKind.set(kind,entry);
   }
-  const kinds=[...byKind.values()].map(entry=>({
-    ...entry,
-    costPerRun:entry.runs?entry.cost/entry.runs:0,
-    searchesPerRun:entry.runs?entry.searchQueries/entry.runs:0
-  })).sort((a,b)=>b.cost-a.cost);
+  const kinds=[...byKind.values()].map(entry=>{
+    // A per-wine kind with no counted wines - all its events predate the
+    // column - falls back to the run figure rather than dividing by nothing.
+    const unit=entry.unit==='wine'&&entry.units>0?'wine' as const:'run' as const;
+    const unitCount=unit==='wine'?entry.units:entry.runs;
+    return {...entry,unit,unitCount,
+      costPerUnit:unitCount?entry.cost/unitCount:0,
+      costPerRun:entry.runs?entry.cost/entry.runs:0,
+      searchesPerRun:entry.runs?entry.searchQueries/entry.runs:0};
+  }).sort((a,b)=>b.cost-a.cost);
   const monthUsage:UsageTotals={
     searchQueries:Number(monthTotals?.search_queries)||0,
     promptTokens:Number(monthTotals?.prompt_tokens)||0,
