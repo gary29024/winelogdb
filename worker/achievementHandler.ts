@@ -25,7 +25,16 @@ type AchievementContext={
   options:AchievementCatalogueOptions;
 };
 
-export const ACHIEVEMENT_DEFINITION_VERSION=3;
+/**
+ * Bumped whenever the curated set changes.
+ *
+ * Progress is cached per owner keyed by (data revision, this version), and the
+ * same pair becomes the ETag. Adding a collection changes neither the owner's
+ * data nor their revision, so without a bump the cache keeps serving the set
+ * from before it - which is how five new collections shipped and stayed
+ * invisible. curatedCollectionFingerprint in the tests fails until this moves.
+ */
+export const ACHIEVEMENT_DEFINITION_VERSION=4;
 const parseJson=<T>(value:unknown,fallback:T):T=>{try{return JSON.parse(String(value)) as T}catch{return fallback}};
 
 function groupedAliases<T extends {display_alias:string}>(rows:T[],id:(row:T)=>string){
