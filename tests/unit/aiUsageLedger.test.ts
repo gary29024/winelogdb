@@ -187,3 +187,34 @@ describe('every path that spends money is metered',()=>{
     expect(new Set(sources.map(([,kind])=>kind.replace(/kind:'|'/g,'')))).toEqual(new Set(AI_USAGE_KINDS));
   });
 });
+
+describe('the billing month',()=>{
+  // Google resets the free searches at midnight Pacific on the 1st. From Hong
+  // Kong that is mid-afternoon on the 1st, so a UTC month key would file the
+  // hours in between under the wrong month - at exactly the boundary where the
+  // allowance matters.
+  it('follows Pacific midnight, not UTC midnight',async()=>{
+    const { billingMonth }=await import('../../src/lib/usage/billingPeriod');
+    // 22:00 on 31 August in Los Angeles, already 1 September in UTC
+    expect(billingMonth(new Date('2026-09-01T05:00:00Z'))).toBe('2026-08');
+    // 01:00 on 1 September in Los Angeles: the allowance has reset
+    expect(billingMonth(new Date('2026-09-01T08:00:00Z'))).toBe('2026-09');
+  });
+
+  it('holds across both daylight-saving changes',async()=>{
+    const { billingMonth }=await import('../../src/lib/usage/billingPeriod');
+    // PST (UTC-8): 1 January resets at 08:00 UTC
+    expect(billingMonth(new Date('2026-01-01T07:59:00Z'))).toBe('2025-12');
+    expect(billingMonth(new Date('2026-01-01T08:00:00Z'))).toBe('2026-01');
+    // PDT (UTC-7): 1 July resets at 07:00 UTC
+    expect(billingMonth(new Date('2026-07-01T06:59:00Z'))).toBe('2026-06');
+    expect(billingMonth(new Date('2026-07-01T07:00:00Z'))).toBe('2026-07');
+  });
+
+  it('says when the allowance next resets, as a real instant',async()=>{
+    const { nextBillingReset }=await import('../../src/lib/usage/billingPeriod');
+    expect(nextBillingReset(new Date('2026-08-27T02:00:00Z')).toISOString()).toBe('2026-09-01T07:00:00.000Z');
+    // and across the year boundary, in standard time
+    expect(nextBillingReset(new Date('2026-12-20T00:00:00Z')).toISOString()).toBe('2027-01-01T08:00:00.000Z');
+  });
+});

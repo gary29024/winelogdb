@@ -17,6 +17,16 @@ const money=(currency:string,value:number)=>{
 };
 const count=(value:number)=>new Intl.NumberFormat().format(Math.round(value));
 const oneDecimal=(value:number)=>value.toFixed(1);
+/**
+ * The allowance resets at midnight Pacific on the 1st, which from most of the
+ * world is some other date and time entirely - so it is shown in the reader's
+ * own clock rather than in Google's.
+ */
+const resetLabel=(iso:string)=>{
+  const at=new Date(iso);
+  if(Number.isNaN(at.getTime()))return '';
+  return new Intl.DateTimeFormat(undefined,{day:'numeric',month:'short',hour:'numeric',minute:'2-digit'}).format(at);
+};
 
 export function AiSpendCard(){
   const [spend,setSpend]=useState<UsageSummary|null>(null);
@@ -59,6 +69,7 @@ export function AiSpendCard(){
         <small>{month.freeRemaining>0
           ?`${count(month.freeRemaining)} free searches left`
           :`${count(month.billableSearches)} past the free allowance`}</small>
+        {month.resetsAt&&<small>resets {resetLabel(month.resetsAt)}</small>}
       </div>
     </div>
     <p className="journey-muted ai-spend-note">
