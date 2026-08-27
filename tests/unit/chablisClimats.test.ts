@@ -56,4 +56,42 @@ describe('the seven Chablis Grand Cru climats',()=>{
       cuvees:[{id:'c-vaudesir',producerId:'p-fevre',canonicalName:'Chablis Grand Cru Vaudesir',aliases:[],appellation:'Vaudesir'}]};
     expect(item([vaudesir],'Vaudésir',identities).status).toBe('tasted');
   });
+
+  it('will not tick a climat from a wine that merely mentions it',()=>{
+    // The question this answers: the appellation list is loose, so does the
+    // collection start catching lieux-dits elsewhere? It does not - both the
+    // cuvee name and the appellation are matched whole, never as substrings.
+    const elsewhere:AchievementWine[]=[
+      // A Chablis Premier Cru whose climat happens to share a word.
+      {id:'w-1er',producerId:'p-fevre',cuveeId:'c-1er',producer:'Domaine William Fevre',
+        wineName:'Chablis 1er Cru Montée de Tonnerre',vintage:2020,appellation:'Chablis Premier Cru'},
+      // Chassagne has a Blanchot Dessus; it is not the Chablis Blanchot.
+      {id:'w-blanchot-dessus',producerId:'p-other',cuveeId:'c-bd',producer:'Domaine Elsewhere',
+        wineName:'Chassagne-Montrachet 1er Cru Blanchot Dessus',vintage:2019,appellation:'Chassagne-Montrachet'},
+      // A Loire wine called Les Clos - a name used up and down France.
+      {id:'w-sancerre',producerId:'p-loire',cuveeId:'c-clos',producer:'Domaine Loire',
+        wineName:'Les Clos',vintage:2022,appellation:'Sancerre'}
+    ];
+    const identities:AchievementIdentityRegistry={
+      producers:[...registry.producers,{id:'p-other',canonicalName:'Domaine Elsewhere',aliases:[]},{id:'p-loire',canonicalName:'Domaine Loire',aliases:[]}],
+      cuvees:[
+        {id:'c-1er',producerId:'p-fevre',canonicalName:'Chablis 1er Cru Montée de Tonnerre',aliases:[],appellation:'Chablis Premier Cru'},
+        {id:'c-bd',producerId:'p-other',canonicalName:'Chassagne-Montrachet 1er Cru Blanchot Dessus',aliases:[],appellation:'Chassagne-Montrachet'},
+        {id:'c-clos',producerId:'p-loire',canonicalName:'Les Clos',aliases:[],appellation:'Sancerre'}
+      ]
+    };
+    expect(progress(elsewhere,identities).completed).toBe(0);
+  });
+
+  it('needs the appellation to be a Chablis one even when the name fits',()=>{
+    // "Les Clos" on its own is only a Chablis Grand Cru if the appellation says
+    // so; from anywhere else it is a different vineyard with the same name.
+    const strayLesClos:AchievementWine={id:'w-stray',producerId:'p-loire',cuveeId:'c-stray',
+      producer:'Domaine Loire',wineName:'Les Clos',vintage:2021,appellation:'Chinon'};
+    const identities:AchievementIdentityRegistry={
+      producers:[{id:'p-loire',canonicalName:'Domaine Loire',aliases:[]}],
+      cuvees:[{id:'c-stray',producerId:'p-loire',canonicalName:'Les Clos',aliases:[],appellation:'Chinon'}]
+    };
+    expect(progress([strayLesClos],identities).completed).toBe(0);
+  });
 });

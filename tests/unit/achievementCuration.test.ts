@@ -29,7 +29,9 @@ const historic:AchievementDefinition={
 
 describe('curated achievement launch set',()=>{
   it('keeps the curated set intact while replacing the five overlapping French cards',()=>{
-    expect(achievementDefinitions).toHaveLength(25);
+    // No fixed size - the curated set is meant to grow - but the five cards
+    // these replaced must stay gone.
+    expect(achievementDefinitions.length).toBeGreaterThanOrEqual(25);
     const ids=new Set(achievementDefinitions.map(item=>item.id));
     for(const removed of ['bordeaux-second-growths','sauternes-barsac-second-growths','cote-de-nuits-24-grand-crus','cote-de-beaune-8-grand-crus','gevrey-nine-grand-crus'])expect(ids.has(removed)).toBe(false);
     expect(achievementDefinitions.find(item=>item.id==='chablis-seven-grand-cru-climats')?.items).toHaveLength(7);

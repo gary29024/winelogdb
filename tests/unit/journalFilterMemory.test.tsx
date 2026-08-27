@@ -88,3 +88,39 @@ describe('Journal filter memory',()=>{
     expect(journalCalls()).toHaveLength(1);
   });
 });
+
+describe('clearing the journal filters',()=>{
+  const reset=()=>[...(host?.querySelectorAll('button')??[])].find(button=>button.textContent==='Reset filters');
+
+  it('offers nothing to reset on a plain journal',async()=>{
+    await openJournal('/journal');
+    expect(reset()).toBeUndefined();
+  });
+
+  it('puts the journal back to its default in one press',async()=>{
+    // Filters accumulate and are restored on the way back from a wine, so
+    // without this the only way to a plain journal was editing the URL.
+    await openJournal('/journal?query=roumier&style=red&country=France&sort=rating&offset=40');
+    expect(reset()).toBeDefined();
+    await act(async()=>{reset()!.click()});
+    expect(search()).toBe('');
+    expect(reset()).toBeUndefined();
+  });
+
+  it('forgets the filters it had remembered',async()=>{
+    // Otherwise the next visit restores exactly what was just cleared.
+    await openJournal('/journal?style=red&month=2026-08');
+    expect(window.sessionStorage.getItem(KEY)).toBeTruthy();
+    await act(async()=>{reset()!.click()});
+    expect(window.sessionStorage.getItem(KEY)??'').toBe('');
+  });
+
+  it('reloads the list once, unfiltered',async()=>{
+    await openJournal('/journal?style=red');
+    const before=journalCalls().length;
+    await act(async()=>{reset()!.click()});
+    const after=journalCalls().slice(before);
+    expect(after.length).toBeGreaterThan(0);
+    expect(after.every(url=>!url.includes('style='))).toBe(true);
+  });
+});
