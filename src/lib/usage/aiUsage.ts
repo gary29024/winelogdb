@@ -1,4 +1,5 @@
 import { marginalCostUsd,monthCostUsd,toLocal,type AiRates,type UsageTotals } from './rates';
+import { billingMonth,nextBillingReset,BILLING_TIME_ZONE } from './billingPeriod';
 
 /**
  * The AI usage ledger: one row per Gemini call, tagged with the run it belongs
@@ -36,7 +37,9 @@ export async function recordAiUsage(env:AiUsageEnv,owner:string,event:AiUsageEve
   const requests=whole(event.requests??1),searchQueries=whole(event.searchQueries);
   const promptTokens=whole(event.promptTokens),outputTokens=whole(event.outputTokens);
   if(!requests&&!searchQueries&&!promptTokens&&!outputTokens)return;
-  const stamp=new Date().toISOString(),month=stamp.slice(0,7);
+  // The row is stamped in UTC, but it is filed under the month Google's
+  // allowance is counted in, which resets at midnight Pacific.
+  const stamp=new Date().toISOString(),month=billingMonth();
   try{
     await env.DB.batch([
       env.DB.prepare(`INSERT INTO ai_usage_events(id,owner_id,kind,run_id,target_id,model,requests,search_queries,prompt_tokens,output_tokens,created_at)
@@ -73,7 +76,9 @@ export type KindSpend={
 export type UsageSummary={
   currency:string;days:number;
   kinds:KindSpend[];
-  month:{month:string;searchQueries:number;freeRemaining:number;cost:number;billableSearches:number};
+  month:{month:string;searchQueries:number;freeRemaining:number;cost:number;billableSearches:number;
+    /** When the allowance next resets, so the page can say it in the reader's own time. */
+    resetsAt:string;timeZone:string};
   /** True once nothing has been metered yet, so the page can say so rather than showing zeros. */
   empty:boolean;
 };
@@ -84,7 +89,7 @@ type MonthRow={search_queries:number;prompt_tokens:number;output_tokens:number};
 
 export async function usageSummary(db:D1Database,owner:string,rates:AiRates,days=30):Promise<UsageSummary>{
   const window=Math.max(1,Math.min(RAW_EVENT_RETENTION_DAYS,Math.floor(days)||30));
-  const month=new Date().toISOString().slice(0,7);
+  const month=billingMonth();
   // Grouped by model as well as kind, because a run can escalate to a second
   // model and the two are not priced the same. Runs are counted separately, or
   // a run that used two models would be counted twice.
@@ -123,6 +128,7 @@ export async function usageSummary(db:D1Database,owner:string,rates:AiRates,days
     currency:rates.currency,days:window,kinds,
     month:{
       month,searchQueries:monthUsage.searchQueries,
+      resetsAt:nextBillingReset().toISOString(),timeZone:BILLING_TIME_ZONE,
       freeRemaining:Math.max(0,rates.groundingFreePerMonth-monthUsage.searchQueries),
       billableSearches:Math.max(0,monthUsage.searchQueries-rates.groundingFreePerMonth),
       cost:toLocal(monthCostUsd(monthUsage,rates),rates)
