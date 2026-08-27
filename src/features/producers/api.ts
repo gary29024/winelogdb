@@ -72,7 +72,7 @@ export type ResearchCampaignSummary={
   id:string;status:ResearchCampaign['status'];requested:number;createdAt:string;finishedAt:string|null;
   counts:Record<ResearchCampaignItem['status'],number>;
 };
-export type ResearchCampaignPlan={unresearched:number;willRun:number;maxPerRun:number;concurrency:number;geminiRequests:number;perProducerMs:number|null;estimatedMs:number|null;active:string|null};
+export type ResearchCampaignPlan={unresearched:number;willRun:number;maxPerRun:number;concurrency:number;geminiRequests:number;searchQueries:number;searchesPerRequest:number|null;perProducerMs:number|null;estimatedMs:number|null;active:string|null};
 
 export const getResearchCampaignPlan=(limit?:number)=>
   fetch(`/api/producers/research-batch/plan${limit?`?limit=${limit}`:''}`,{headers:authHeaders()})

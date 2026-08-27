@@ -1,6 +1,6 @@
 import { describe,expect,it } from 'vitest';
 import { VERTEX_BATCH_CONCURRENCY,mapLimit } from '../../src/lib/research/geminiBatch';
-import { catalogDefaultChunkKeys } from '../../src/lib/producers/batchResearch';
+import { catalogDefaultChunkKeys,catalogRecoveryChunkKeys } from '../../src/lib/producers/batchResearch';
 
 /** Runs `count` tasks through mapLimit and reports the peak overlap reached. */
 async function peakConcurrency(count:number,limit:number){
@@ -26,10 +26,11 @@ async function peakConcurrency(count:number,limit:number){
 
 describe('how many research calls run at once',()=>{
   it('runs a producer research submission in a single wave',()=>{
-    // A run submits the profile plus every alphabetical catalogue slice. At the
-    // previous limit of three that was two waves and about twice the wall time.
+    // A run submits the profile plus the catalogue request. The lettered
+    // slices, when a range needs them, are also one wave.
     const producerEntries=['profile',...catalogDefaultChunkKeys].length;
-    expect(producerEntries).toBe(6);
+    expect(producerEntries).toBe(2);
+    expect(['profile',...catalogRecoveryChunkKeys].length).toBeLessThanOrEqual(VERTEX_BATCH_CONCURRENCY);
     expect(producerEntries).toBeLessThanOrEqual(VERTEX_BATCH_CONCURRENCY);
   });
 

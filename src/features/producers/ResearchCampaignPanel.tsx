@@ -112,7 +112,8 @@ export function ResearchCampaignPanel({unresearchedHint,onFinished}:{unresearche
       <p className="research-campaign-cost">{plan?planSummary(plan):'Working out what this would involve…'}</p>
       <p className="research-campaign-note">
         Only producers that have never been researched are queued, {plan?.concurrency??2} at a time. Each one runs a grounded
-        profile and five catalogue slices through Gemini Batch, so this bills real API usage.
+        profile and one whole-range catalogue request; a range too long for one answer is split and asked again. Grounding is
+        billed per search the model runs{plan?.searchesPerRequest?` - yours have averaged ${plan.searchesPerRequest.toFixed(1)} per request`:''}, so this bills real API usage.
       </p>
       {error&&<p className="research-campaign-error" role="alert">{error}</p>}
       <div className="research-campaign-actions">

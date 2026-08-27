@@ -1,8 +1,8 @@
 import { createObjectKey } from '../r2/keys';
 import { ensureCuveeEntity,reconcileProducerCuvees } from '../cuvees/entities';
-import { createResearchBatchJob,finishResearchBatchJob,getResearchBatchJob,touchResearchBatchJob,type ResearchBatchJob } from '../research/batchJobStore';
+import { createResearchBatchJob,finishResearchBatchJob,getResearchBatchJob,recordResearchSearchQueries,touchResearchBatchJob,type ResearchBatchJob } from '../research/batchJobStore';
 import { cancelGeminiBatch } from '../research/cancelResearch';
-import { createGeminiBatch,describeResponseSchema,fetchGeminiBatch,groundedGenerationConfig,inlineFinishReason,inlineGroundingMetadata,inlineResponseText,isEmulatedGeminiBatchName,isTerminalBatchState,responsesByKey,type GeminiBatchRequest,type GroundingMetadata } from '../research/geminiBatch';
+import { countSearchQueries,createGeminiBatch,describeResponseSchema,fetchGeminiBatch,groundedGenerationConfig,inlineFinishReason,inlineGroundingMetadata,inlineResponseText,isEmulatedGeminiBatchName,isTerminalBatchState,responsesByKey,type GeminiBatchRequest,type GroundingMetadata } from '../research/geminiBatch';
 import { researchBatchErrorPollDelay,researchBatchFirstPollDelay,researchBatchPollDelay,researchBatchStallAction,researchBatchTransientAction } from '../research/batchRetryPolicy';
 import { clearProducerCatalogSliceStage,discardProducerCatalogStage,listProducerCatalogStage,prepareProducerCatalogStage,stageProducerCatalogParts } from './catalogResearchStage';
 import { extractContactGrounding,normalizeProducerEmail,normalizeProducerPhone,safeInstagramUrl } from './research';
@@ -15,7 +15,7 @@ type Env={DB:D1Database;WINE_IMAGES:R2Bucket;GEMINI_API_KEY:string;RESEARCH_QUEU
 type CatalogCategory='red'|'white'|'rose'|'sparkling'|'dessert'|'fortified'|'orange'|'other';
 type ProfileResult={homeCountry:string;homeRegion:string;homeLocality:string;officialWebsiteUrl:string|null;instagramUrl:string|null;contactEmail:string|null;contactPhone:string|null;profile:string;winemakingPractices:string};
 type CatalogWine={name:string;category:CatalogCategory;appellation?:string|null;classification?:string|null;style?:string|null;notes?:string|null};
-type CatalogResult={range:CatalogWine[]};
+type CatalogResult={range:CatalogWine[];rangeComplete?:boolean|null};
 type ResearchSource={title:string;url:string};
 type CatalogSaveSummary={catalogCount:number;researchedCount:number;retainedCount:number;syncIssues:string[]};
 type CatalogSlice={key:string;start:string|null;end:string|null;includeOther:boolean;label:string};
@@ -32,8 +32,21 @@ const parseJson=<T>(value:unknown,fallback:T):T=>{try{return JSON.parse(String(v
 const sliceKey=(start:string|null,end:string|null,includeOther=false)=>start&&end?`catalog_slice_${start.toLowerCase()}_${end.toLowerCase()}${includeOther?'_other':''}`:'catalog_slice_other';
 const makeSlice=(start:string|null,end:string|null,includeOther=false):CatalogSlice=>({key:sliceKey(start,end,includeOther),start,end,includeOther,label:start&&end?(start===end?start:`${start}–${end}`)+(includeOther?' / other':''):'Other / non-letter'});
 const BASE_SLICES=[makeSlice('A','E'),makeSlice('F','J'),makeSlice('K','O'),makeSlice('P','T'),makeSlice('U','Z',true)] as const;
-export const catalogDefaultChunkKeys=BASE_SLICES.map(slice=>slice.key);
-export const catalogRecoveryChunkKeys=catalogDefaultChunkKeys;
+/**
+ * A research run starts with the whole range in one request rather than five
+ * lettered slices.
+ *
+ * Grounding on Gemini 3 is billed per search the model runs, not per request,
+ * and a producer with eight wines was paying for five grounded requests where
+ * one covers the range. Completeness is not traded away: an answer that runs
+ * out of output budget, or says it could not finish, is split in half and
+ * re-asked - which is the same ladder the five slices used to be, entered only
+ * when a producer actually needs it.
+ */
+const FULL_CATALOG_SLICE=makeSlice('A','Z',true);
+export const catalogDefaultChunkKeys=[FULL_CATALOG_SLICE.key];
+/** The lettered slices, used when a whole attempt has to be re-run. */
+export const catalogRecoveryChunkKeys=BASE_SLICES.map(slice=>slice.key);
 
 function log(level:'log'|'warn'|'error',data:Record<string,unknown>){console[level](JSON.stringify({event:'producer_chunked_research',...data}))}
 function parseSliceKey(key:string):CatalogSlice|null{
@@ -118,11 +131,30 @@ async function heroImage(env:Env,owner:string,official:string){
 }
 
 const profileSchema={type:'OBJECT',properties:{homeCountry:{type:'STRING'},homeRegion:{type:'STRING'},homeLocality:{type:'STRING'},officialWebsiteUrl:{type:'STRING',nullable:true},instagramUrl:{type:'STRING',nullable:true},contactEmail:{type:'STRING',nullable:true},contactPhone:{type:'STRING',nullable:true},profile:{type:'STRING'},winemakingPractices:{type:'STRING'}},required:['homeCountry','homeRegion','homeLocality','officialWebsiteUrl','instagramUrl','contactEmail','contactPhone','profile','winemakingPractices']};
-const catalogSchema={type:'OBJECT',properties:{range:{type:'ARRAY',items:{type:'OBJECT',properties:{name:{type:'STRING'},category:{type:'STRING',enum:['red','white','rose','sparkling','dessert','fortified','orange','other']},appellation:{type:'STRING',nullable:true},classification:{type:'STRING',nullable:true},style:{type:'STRING',nullable:true},notes:{type:'STRING',nullable:true}},required:['name','category']}}},required:['range']};
-function profilePrompt(name:string){return `You must use the Google Search tool before answering, and every factual claim must come from a page you actually retrieved in this request. Do not answer from prior knowledge, and do not reconstruct a plausible answer for something you did not find. If the search tool is unavailable or returns nothing usable, say exactly that in the affected fields rather than writing an ungrounded answer: WineLog rejects an ungrounded response outright, so an honest "could not be verified" is worth more than confident prose.\n\nResearch the wine producer ${JSON.stringify(name)} using reliable public web sources. Prioritize the official producer website for identity, physical location, business contacts and producer-wide winemaking information. Return concise factual research only.\n\nLOCATION: homeCountry is the physical country; homeRegion is a broad wine region such as Burgundy, Champagne, Bordeaux, Tuscany, Piedmont, Mosel or Napa Valley; homeLocality is the commune/town where the producer is based. Do not use the regions where its wines happen to be produced.\n\nWINEMAKING PRACTICES: winemakingPractices is for stable producer-wide philosophy and practices only. State variability where practices differ by cuvee or vintage.\n\nCONTACTS: return only verified public business contacts. officialWebsiteUrl must be the official HTTPS site. instagramUrl must clearly be the official producer account. Prefer official first-party sources; return null when uncertain. WineLog will independently inspect the official site, including plain-text public email/phone information.\n\nReturn JSON only with homeCountry, homeRegion, homeLocality, officialWebsiteUrl, instagramUrl, contactEmail, contactPhone, profile, winemakingPractices.`}
+const catalogSchema={type:'OBJECT',properties:{rangeComplete:{type:'BOOLEAN',nullable:true},range:{type:'ARRAY',items:{type:'OBJECT',properties:{name:{type:'STRING'},category:{type:'STRING',enum:['red','white','rose','sparkling','dessert','fortified','orange','other']},appellation:{type:'STRING',nullable:true},classification:{type:'STRING',nullable:true},style:{type:'STRING',nullable:true},notes:{type:'STRING',nullable:true}},required:['name','category']}}},required:['range']};
+/**
+ * Search budget lines shared by both prompts.
+ *
+ * Grounding is billed per search the model runs. "Every entry must come from a
+ * page you retrieved" was being read as "search once per entry", which is how a
+ * single request came to average seven searches. Provenance is unchanged - the
+ * claim still has to come from a retrieved page - but a producer's own range
+ * page carries the whole catalogue, so the instruction now says to go there
+ * first and re-use it rather than starting again for each wine.
+ */
+const SEARCH_BUDGET=(maxSearches:number)=>`Search efficiently: use at most ${maxSearches} Google searches in this request. Start with the producer's own website, which usually carries everything you need on one or two pages, then a reputable reference or importer page if something is still missing. Do not run a separate search for each wine or each field - read the pages you already retrieved. If your budget runs out, answer from the pages you did retrieve rather than guessing.`;
+
+function profilePrompt(name:string){return `You must use the Google Search tool before answering, and every factual claim must come from a page you actually retrieved in this request. Do not answer from prior knowledge, and do not reconstruct a plausible answer for something you did not find. If the search tool is unavailable or returns nothing usable, say exactly that in the affected fields rather than writing an ungrounded answer: WineLog rejects an ungrounded response outright, so an honest "could not be verified" is worth more than confident prose.\n\nResearch the wine producer ${JSON.stringify(name)} using reliable public web sources. Prioritize the official producer website for identity, physical location, business contacts and producer-wide winemaking information. Return concise factual research only.\n\nLOCATION: homeCountry is the physical country; homeRegion is a broad wine region such as Burgundy, Champagne, Bordeaux, Tuscany, Piedmont, Mosel or Napa Valley; homeLocality is the commune/town where the producer is based. Do not use the regions where its wines happen to be produced.\n\nWINEMAKING PRACTICES: winemakingPractices is for stable producer-wide philosophy and practices only. State variability where practices differ by cuvee or vintage.\n\nCONTACTS: return only verified public business contacts. officialWebsiteUrl must be the official HTTPS site. instagramUrl must clearly be the official producer account. Prefer official first-party sources; return null when uncertain. WineLog will independently inspect the official site, including plain-text public email/phone information.\n\nReturn JSON only with homeCountry, homeRegion, homeLocality, officialWebsiteUrl, instagramUrl, contactEmail, contactPhone, profile, winemakingPractices.\n\n${SEARCH_BUDGET(5)}`}
 function slicePrompt(name:string,slice:CatalogSlice){
+  const whole=slice.start==='A'&&slice.end==='Z'&&slice.includeOther;
   const rule=slice.start&&slice.end?`${slice.start} through ${slice.end}${slice.includeOther?', plus non-letter/digit/symbol initials':''}`:'non-letter/digit/symbol initials only';
-  return `You must use the Google Search tool before answering, and every catalogue entry must come from a page you actually retrieved in this request. Do not answer from prior knowledge and do not invent cuvees. If the search tool is unavailable or returns nothing usable, return an empty range rather than a remembered one.\n\nResearch one bounded alphabetical slice of the current or most recently documented wine range of ${JSON.stringify(name)} using reliable public web sources. WineLog stages every slice and only replaces the visible catalogue after the complete range passes validation.\n\nSLICE: return ONLY wines whose first significant wine/cuvee-name initial belongs to ${slice.label} (${rule}). Determine the initial after removing a repeated producer name and a leading generic Domaine, Maison, Château/Chateau, Estate, Winery, Weingut, Bodega, Tenuta or Azienda Agricola prefix when it merely repeats the producer identity. Treat accented Latin initials as their base letter.\n\nNAME FIELD: return the wine/cuvee name only. NEVER prepend the producer, domaine, estate or house name. For example, return "Volnay 1er Cru Le Ronceret", not "Domaine Example Volnay 1er Cru Le Ronceret".\n\nSearch across complementary sources where available: official producer range/product pages and technical sheets; recent official importer/distributor portfolios; reputable regional or specialist wine references. Cross-check omissions and alternate spellings. Preserve official wine and appellation spellings and do not invent cuvees.\n\nFor every wine return exactly name, category, appellation, classification, style and notes. category must be one of red, white, rose, sparkling, dessert, fortified, orange, other. Keep style to a very short phrase such as Still dry red, Still dry white or Sparkling brut. notes must be null unless one short current-status caveat is genuinely necessary. Do not pad fields with repeated characters or filler. Return JSON only as {"range":[...]}.`;
+  return `${whole?'':''}You must use the Google Search tool before answering, and every catalogue entry must come from a page you actually retrieved in this request. Do not answer from prior knowledge and do not invent cuvees. If the search tool is unavailable or returns nothing usable, return an empty range rather than a remembered one.\n\nResearch the ${whole?'complete current or most recently documented wine range':'following bounded alphabetical slice of the current or most recently documented wine range'} of ${JSON.stringify(name)} using reliable public web sources. WineLog stages every slice and only replaces the visible catalogue after the complete range passes validation.\n\n${whole?'COVERAGE: return every current cuvee, whatever its initial. If you cannot fit the whole range in the output budget, return what you have and say so in rangeComplete rather than silently stopping.':`SLICE: return ONLY wines whose first significant wine/cuvee-name initial belongs to ${slice.label} (${rule}).`} Determine the initial after removing a repeated producer name and a leading generic Domaine, Maison, Château/Chateau, Estate, Winery, Weingut, Bodega, Tenuta or Azienda Agricola prefix when it merely repeats the producer identity. Treat accented Latin initials as their base letter.\n\nNAME FIELD: return the wine/cuvee name only. NEVER prepend the producer, domaine, estate or house name. For example, return "Volnay 1er Cru Le Ronceret", not "Domaine Example Volnay 1er Cru Le Ronceret".\n\nSearch across complementary sources where available: official producer range/product pages and technical sheets; recent official importer/distributor portfolios; reputable regional or specialist wine references. Cross-check omissions and alternate spellings. Preserve official wine and appellation spellings and do not invent cuvees.\n\nFor every wine return exactly name, category, appellation, classification, style and notes. category must be one of red, white, rose, sparkling, dessert, fortified, orange, other. Keep style to a very short phrase such as Still dry red, Still dry white or Sparkling brut. notes must be null unless one short current-status caveat is genuinely necessary. Do not pad fields with repeated characters or filler. Return JSON only as {"range":[...]}.\n\n${SEARCH_BUDGET(whole?8:4)}`;
+}
+/** The prompt a research key sends, exposed so the search budget can be asserted. */
+export function researchPromptFor(name:string,key:string){
+  if(key==='profile')return profilePrompt(name);
+  const slice=parseSliceKey(key);if(!slice)throw new Error(`Unknown producer research key ${key}`);
+  return slicePrompt(name,slice);
 }
 function requestForKey(name:string,key:string):GeminiBatchRequest{
   if(key==='profile')return {key,request:{contents:[{role:'user',parts:[{text:`${profilePrompt(name)}\n\n${describeResponseSchema(profileSchema)}`}]}],tools:[{google_search:{}}],generationConfig:groundedGenerationConfig(8192)}};
@@ -239,25 +271,50 @@ export async function pollProducerBatchResearch(env:Env,owner:string,producerId:
   }
   if(fetched.state!=='JOB_STATE_SUCCEEDED'){await retryTransportFailure(env,owner,producerId,requestId,job,String((fetched.payload.error as {message?:unknown}|undefined)?.message||`Gemini batch ended with ${fetched.state}`));return}
 
+  // Recorded before anything else can fail: the searches were billed whatever
+  // happens to the parsing.
+  await recordResearchSearchQueries(env.DB,owner,job.id,countSearchQueries(fetched.responses)).catch(()=>undefined);
   await setRunState(env.DB,owner,requestId,'running','parsing',job.attempt,'Validating producer profile and staging independent catalogue slices');
-  const byKey=responsesByKey(fetched.responses),failed:string[]=[],errors=new Map<string,string>(),parts:ParsedCatalogPart[]=[],names=await producerNames(env.DB,owner,producerId);
+  const byKey=responsesByKey(fetched.responses),failed:string[]=[],incomplete:string[]=[],errors=new Map<string,string>(),parts:ParsedCatalogPart[]=[],names=await producerNames(env.DB,owner,producerId);
   for(const key of job.keys){
     const inline=byKey.get(key);if(!inline?.response){failed.push(key);errors.set(key,`${key}: ${inline?.error?.message||'Gemini returned no result'}`);continue}
     const text=inlineResponseText(inline),finishReason=inlineFinishReason(inline);if(finishReason==='MAX_TOKENS'){failed.push(key);errors.set(key,`${key}: output reached MAX_TOKENS`);continue}
     try{
       const parsed=parseStructuredJsonText(text);
       if(key==='profile')await saveProfile(env,owner,producerId,requestId,parsed as ProfileResult,text,inlineGroundingMetadata(inline),job.model);
-      else{const slice=parseSliceKey(key);if(!slice)throw new Error('Unknown catalogue slice');const catalog=parsed as CatalogResult;if(!catalog||!Array.isArray(catalog.range))throw new Error('invalid catalogue fields');parts.push({range:normalizeCatalogRange(catalog,slice,names),slice,metadata:inlineGroundingMetadata(inline)})}
+      else{
+        const slice=parseSliceKey(key);if(!slice)throw new Error('Unknown catalogue slice');
+        const catalog=parsed as CatalogResult;if(!catalog||!Array.isArray(catalog.range))throw new Error('invalid catalogue fields');
+        parts.push({range:normalizeCatalogRange(catalog,slice,names),slice,metadata:inlineGroundingMetadata(inline)});
+        // The whole-range request can say it ran out of room. Keeping what it
+        // did return and asking for the halves is the same ladder MAX_TOKENS
+        // takes, entered before anything is lost.
+        if(catalog.rangeComplete===false)incomplete.push(key);
+      }
     }catch(e){failed.push(key);errors.set(key,`${key}: ${(e as Error).message}${finishReason?` (${finishReason})`:''}`);log('warn',{requestId,producerId,stage:'result_failed',key,attempt:job.attempt,finishReason,error:(e as Error).message,textLength:text.length,textPreview:text.slice(0,300)})}
   }
   if(parts.length){await setRunState(env.DB,owner,requestId,'running','saving',job.attempt,`Staging ${parts.length} validated catalogue slice${parts.length===1?'':'s'}; the visible range remains unchanged until coverage is complete`);try{await stageCatalogParts(env,owner,producerId,requestId,parts,job.model)}catch(e){const error=`catalog stage: ${(e as Error).message}`;for(const part of parts){failed.push(part.slice.key);errors.set(part.slice.key,error)}}}
+
+  // A slice that reported itself unfinished is asked again in halves, before
+  // the coverage check sees a complete-looking range that is not one.
+  if(incomplete.length&&job.attempt<MAX_CATALOG_ATTEMPT){
+    const halves=[...new Set(incomplete.flatMap(key=>catalogSubsliceKeysFor(key)))];
+    if(halves.length){
+      try{
+        await setRunState(env.DB,owner,requestId,'running','retrying',job.attempt,`The range did not fit one answer; asking for ${halves.length} narrower slices`);
+        await finishResearchBatchJob(env.DB,owner,job.id,'complete').catch(()=>undefined);
+        await submitBatch(env,owner,producerId,requestId,job.attempt+1,job.model,halves);
+        return;
+      }catch(e){log('warn',{requestId,producerId,stage:'incomplete_split_failed',error:(e as Error).message})}
+    }
+  }
 
   let catalogSummary:CatalogSaveSummary|null=null,finalizeError='';
   try{catalogSummary=await finalizeCatalogStage(env,owner,producerId,requestId)}catch(e){finalizeError=(e as Error).message||'Catalogue finalization failed'}
   if(finalizeError){
     await finishResearchBatchJob(env.DB,owner,job.id,'failed',finalizeError).catch(()=>undefined);
     if(job.attempt===1){
-      try{await clearProducerCatalogSliceStage(env.DB,owner,requestId);const retryKeys=[...new Set([...failed.filter(key=>key==='profile'),...catalogDefaultChunkKeys])];await submitBatch(env,owner,producerId,requestId,2,FALLBACK_MODEL,retryKeys);return}
+      try{await clearProducerCatalogSliceStage(env.DB,owner,requestId);const retryKeys=[...new Set([...failed.filter(key=>key==='profile'),...catalogRecoveryChunkKeys])];await submitBatch(env,owner,producerId,requestId,2,FALLBACK_MODEL,retryKeys);return}
       catch(e){await failRun(env,owner,producerId,requestId,job,`${finalizeError}; focused full-catalog fallback could not be submitted: ${(e as Error).message}`);return}
     }
     await discardProducerCatalogStage(env.DB,owner,requestId).catch(()=>undefined);await setRunState(env.DB,owner,requestId,'failed','failed',job.attempt,`${finalizeError}. The previous visible catalogue was kept unchanged.`);return;

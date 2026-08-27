@@ -47,6 +47,10 @@ export const achievementDefinitions:AchievementDefinition[]=[
   ...additionalAchievementDefinitions
 ];
 
-if(achievementDefinitions.length!==20)throw new Error(`Expected 20 curated launch collections, found ${achievementDefinitions.length}`);
+// No fixed count: the set grows. What has to hold is that every card is
+// reachable and distinct - a duplicate id would make two collections share one
+// page and one progress row.
+const duplicate=achievementDefinitions.find((definition,index)=>achievementDefinitions.findIndex(item=>item.id===definition.id)!==index);
+if(duplicate)throw new Error(`Duplicate curated collection id: ${duplicate.id}`);
 
 export function getAchievementDefinition(id:string){return achievementDefinitions.find(item=>item.id===id)??null}

@@ -9,6 +9,8 @@ export type GeminiInlineResponse={
 export type GroundingMetadata={
   groundingChunks?:Array<{web?:{title?:string;uri?:string}}>;
   groundingSupports?:Array<{segment?:{startIndex?:number;endIndex?:number;text?:string};groundingChunkIndices?:number[]}>;
+  /** Every search the model actually ran. On Gemini 3 this is the billed unit. */
+  webSearchQueries?:string[];
 };
 
 export type VertexFlexUsage={trafficType:string|null;flexConfirmed:boolean;promptTokens:number|null;outputTokens:number|null;totalTokens:number|null};
@@ -83,6 +85,16 @@ export function isTerminalBatchState(state:string){return BATCH_TERMINAL_STATES.
 export function inlineResponseText(response:GeminiInlineResponse){return response.response?.candidates?.[0]?.content?.parts?.map(part=>part.text??'').join('')??''}
 export function inlineFinishReason(response:GeminiInlineResponse){return response.response?.candidates?.[0]?.finishReason??null}
 export function inlineGroundingMetadata(response:GeminiInlineResponse){return response.response?.candidates?.[0]?.groundingMetadata}
+
+/**
+ * How many Google searches a completed batch ran.
+ *
+ * Grounding on Gemini 3 is billed per search, not per request, so this is the
+ * number that matters for cost - and it is only knowable from the response.
+ */
+export function countSearchQueries(responses:GeminiInlineResponse[]){
+  return responses.reduce((total,response)=>total+(inlineGroundingMetadata(response)?.webSearchQueries?.length??0),0);
+}
 
 export function responsesByKey(responses:GeminiInlineResponse[]){
   return new Map(responses.map(response=>[response.metadata?.key,response] as const).filter((entry):entry is [string,GeminiInlineResponse]=>Boolean(entry[0])));
