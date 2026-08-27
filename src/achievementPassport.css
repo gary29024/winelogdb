@@ -27,3 +27,13 @@
   .passport-stamp{min-width:34px;height:24px;padding:0 7px;font-size:.66rem}
   .passport-levels-note{font-size:.76rem}
 }
+
+@media(prefers-color-scheme:dark){
+  /* The tint carries the collection's identity, so each keeps its hue and
+     swaps ends rather than flattening into one neutral. */
+  .passport-collection-preview-icon-first-growth,.passport-collection-preview-icon-bordeaux-classification,.passport-collection-preview-icon-sauternes,.passport-collection-preview-icon-graves,.passport-collection-preview-icon-saint-emilion{background:#2b211b;color:#dcbca4}
+  .passport-collection-preview-icon-judgment-paris{background:#22233a;color:#b9bad8}
+  .passport-collection-preview-icon-beaujolais-crus,.passport-collection-preview-icon-rhone-crus{background:#2e1e28;color:#dda6c0}
+  .passport-collection-preview-icon-burgundy-grand-cru,.passport-collection-preview-icon-gevrey-grand-cru{background:#272036;color:#c3aed2}
+  .passport-collection-preview-icon-michelin-grapes{background:#2a2418;color:#d6c288}
+}
