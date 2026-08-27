@@ -36,8 +36,10 @@ export type AchievementDefinition={
 export type AchievementProducerIdentity={id:string;canonicalName:string;aliases?:string[];country?:string|null;region?:string|null};
 export type AchievementCuveeIdentity={id:string;producerId:string;canonicalName:string;aliases?:string[];appellation?:string|null;wineStyle?:string|null;catalogBacked?:boolean};
 export type AchievementIdentityRegistry={producers:AchievementProducerIdentity[];cuvees:AchievementCuveeIdentity[]};
-export type AchievementWine={id:string;producerId?:string|null;cuveeId?:string|null;producer:string;wineName:string;vintage?:number|null;appellation?:string|null};
-export type AchievementItemProgress={id:string;label:string;note?:string;status:AchievementItemStatus;tastedWineIds:string[];tastedVintages:number[];resolvedProducerId?:string;resolvedCuveeId?:string};
+export type AchievementWine={id:string;producerId?:string|null;cuveeId?:string|null;producer:string;wineName:string;vintage?:number|null;appellation?:string|null;tastingDate?:string|null};
+/** One tasted vintage and the tasting to open for it: the most recent of that vintage. */
+export type AchievementVintageLink={vintage:number;wineId:string};
+export type AchievementItemProgress={id:string;label:string;note?:string;status:AchievementItemStatus;tastedWineIds:string[];tastedVintages:number[];tastedVintageLinks:AchievementVintageLink[];resolvedProducerId?:string;resolvedCuveeId?:string};
 export type AchievementProgress={definition:AchievementDefinition;completed:number;possible:number;pending:number;total:number;percent:number;complete:boolean;items:AchievementItemProgress[];matchMode:AchievementMatchMode;supportsRelaxedMatching:boolean};
 
 export type AchievementCatalogueProducerOption={id:string;name:string;country:string|null;region:string|null;catalogCount:number};

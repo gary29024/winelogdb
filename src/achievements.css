@@ -2,7 +2,8 @@
 @media(max-width:900px){.collection-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.achievements-hero{align-items:flex-start;flex-direction:column}.achievements-summary{width:100%;grid-template-columns:repeat(3,1fr)}.achievements-summary span{min-width:0}}
 @media(max-width:600px){.achievements-page{padding-top:3px}.achievements-hero{gap:16px;margin-bottom:14px}.achievements-hero h1{font-size:2rem}.achievements-summary{gap:6px}.achievements-summary span{padding:9px 10px;border-radius:var(--r-md)}.achievements-summary strong{font-size:1.25rem}.achievements-summary small{font-size:.61rem}.achievements-repair-note{align-items:flex-start;flex-direction:column;gap:3px}.collection-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.collection-card{min-height:245px;padding:12px;border-radius:var(--r-md)}.collection-icon{width:42px;height:42px;border-radius:var(--r-md)}.collection-icon svg{width:27px;height:27px}.collection-category{max-width:80px;font-size:.6rem}.collection-card-copy{margin-top:13px}.collection-card-copy h2{font-size:.95rem}.collection-card-copy p{font-size:.7rem;line-height:1.38}.collection-card-progress{margin-top:13px}.collection-card-progress strong{font-size:1.3rem}.collection-card-progress small{display:none}.collection-percent{font-size:.7rem}.collection-card-foot{font-size:.67rem}.achievement-detail-hero{grid-template-columns:auto 1fr;padding:14px;gap:12px}.achievement-detail-icon{width:54px;height:54px}.achievement-detail-icon svg{width:34px;height:34px}.achievement-detail-score{grid-column:1/-1;display:flex;align-items:baseline;justify-content:space-between;text-align:left;padding-top:9px;border-top:1px solid var(--sunken)}.achievement-detail-score strong{font-size:1.6rem}.achievement-detail-score small{margin:0}.achievement-detail-progress{padding-left:14px;padding-right:14px}.achievement-checklist-card,.achievement-reference-card{padding:14px;border-radius:var(--r-md)}.achievement-check-row{grid-template-columns:28px minmax(0,1fr);padding:11px 1px}.achievement-check-mark{width:26px;height:26px}.achievement-check-status{grid-column:2;text-align:left;display:flex;align-items:center;gap:9px}.achievement-check-status a{margin:0}.achievement-detail-progress>div:last-child{flex-direction:column;gap:3px}}
 @media(max-width:370px){.collection-grid{grid-template-columns:1fr}.collection-card{min-height:220px}}
-
+.achievement-check-vintages a{color:var(--wine);font-weight:700;text-decoration:none}
+.achievement-check-vintages a:hover{text-decoration:underline}
 @media(prefers-color-scheme:dark){
   /* The tint carries the collection's identity, so each keeps its hue and
      swaps ends rather than flattening into one neutral. */
@@ -12,3 +13,4 @@
   .collection-icon-burgundy-grand-cru,.collection-icon-gevrey-grand-cru{background:#272036;color:#c3aed2}
   .collection-icon-michelin-grapes{background:#2a2418;color:#d6c288}
 }
+

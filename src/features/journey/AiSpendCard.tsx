@@ -52,14 +52,21 @@ export function AiSpendCard(){
       <div><p className="section-label">AI spend</p><h2>What each run costs</h2></div>
       <span>last {spend.days} days</span>
     </div>
-    <div className="ai-spend-grid">{spend.kinds.map(kind=><article key={kind.kind}>
-      <div><strong>{kind.label}</strong><span>{count(kind.runs)} run{kind.runs===1?'':'s'}</span></div>
-      <div><b>{money(spend.currency,kind.costPerRun)}</b><small>per run</small></div>
-      <footer>
-        {money(spend.currency,kind.cost)} total · {count(kind.requests)} request{kind.requests===1?'':'s'}
-        {kind.searchQueries>0&&<> · {oneDecimal(kind.searchesPerRun)} searches/run</>}
-      </footer>
-    </article>)}</div>
+    {/* Recognition is quoted per wine, research per run. A batch scan session
+        of a dozen bottles and a group photo of nine are not comparable to each
+        other, let alone to a producer Deep Search, until they are. */}
+    <div className="ai-spend-grid">{spend.kinds.map(kind=>{
+      const unit=kind.unit==='wine'?'wine':'run',count_=kind.unitCount??kind.runs;
+      return <article key={kind.kind}>
+        <div><strong>{kind.label}</strong><span>{count(count_)} {unit}{count_===1?'':'s'}</span></div>
+        <div><b>{money(spend.currency,kind.costPerUnit??kind.costPerRun)}</b><small>per {unit}</small></div>
+        <footer>
+          {money(spend.currency,kind.cost)} total · {count(kind.requests)} request{kind.requests===1?'':'s'}
+          {unit==='wine'&&kind.runs>0&&<> · {count(kind.runs)} run{kind.runs===1?'':'s'}</>}
+          {kind.searchQueries>0&&<> · {oneDecimal(kind.searchesPerRun)} searches/run</>}
+        </footer>
+      </article>;
+    })}</div>
     {/* The free allowance resets monthly and is the reason the bill is a step
         function rather than a slope, so it is worth seeing before it runs out. */}
     <div className={`ai-spend-month${month.freeRemaining===0?' is-billing':''}`}>

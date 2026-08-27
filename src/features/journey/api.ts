@@ -64,7 +64,7 @@ export function getJourneyData():Promise<JourneyData>{
   return pending;
 }
 
-export type KindSpend={kind:string;label:string;runs:number;requests:number;searchQueries:number;promptTokens:number;outputTokens:number;cost:number;costPerRun:number;searchesPerRun:number};
+export type KindSpend={kind:string;label:string;runs:number;requests:number;searchQueries:number;promptTokens:number;outputTokens:number;units:number;unit:'run'|'wine';unitCount:number;costPerUnit:number;cost:number;costPerRun:number;searchesPerRun:number};
 export type UsageSummary={
   currency:string;days:number;kinds:KindSpend[];empty:boolean;
   month:{month:string;searchQueries:number;freeRemaining:number;billableSearches:number;cost:number;resetsAt:string;timeZone:string};
