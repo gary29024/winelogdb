@@ -121,7 +121,7 @@
 .chip.bad,.deep-quality-pill.limited{border-color:var(--bad-line);background:var(--bad-wash);color:var(--bad)}
 /* These two sit inside .wine-card, whose span rule would otherwise make them
    full-width blocks; that is what the original !important was defending. */
-.tasting-chip,.score-chip{display:inline-flex!important;margin-top:10px}.tasting-chip{background:#f3edf8;color:#6d28a8!important}.score-chip{color:var(--paper)!important}.empty{text-align:center;padding:70px 20px;border:1px dashed var(--line-strong);border-radius:var(--r-lg);background:var(--paper)}.empty>span{font-size:4rem}/* Three tiers of action. The default is the quiet outlined one, so a page ends
+.tasting-chip,.score-chip{display:inline-flex!important;margin-top:10px}.tasting-chip{background:var(--pour-sweet);color:var(--pour-sweet-ink)!important}.score-chip{color:var(--paper)!important}.empty{text-align:center;padding:70px 20px;border:1px dashed var(--line-strong);border-radius:var(--r-lg);background:var(--paper)}.empty>span{font-size:4rem}/* Three tiers of action. The default is the quiet outlined one, so a page ends
    up with exactly as many filled buttons as it has primary actions - which is
    almost always one. Before this, the bare button element was a solid dark pill,
    so Remove, Open, Resume and Save this wine all shouted equally and the reader
