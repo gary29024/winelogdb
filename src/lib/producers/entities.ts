@@ -31,8 +31,22 @@ export type ProducerResolution={
 
 const parseJson=<T>(value:unknown,fallback:T):T=>{try{return JSON.parse(String(value)) as T}catch{return fallback}};
 
+/**
+ * The identity key for a producer name.
+ *
+ * Letters and digits from any script, not only ASCII. Keeping `[a-z0-9]` alone
+ * mapped every name written entirely in Chinese, Japanese, Korean, Cyrillic,
+ * Greek, Hebrew or Arabic to the empty string, so the first such producer
+ * claimed the empty key and every later one silently resolved to it: 赤恋葡萄酒
+ * and 联合丹麓酒庄 became one producer. Latin names are unchanged - the NFD pass
+ * above has already removed the accents, and \p{L} covers a-z.
+ *
+ * The fallback keeps a name made only of punctuation distinct from another one;
+ * an empty key must never be something two different names can share.
+ */
 export function normalizeProducerAlias(value:string){
-  return value.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/&/g,' and ').replace(/[’'`]/g,'').replace(/[^a-z0-9]+/g,' ').trim();
+  const key=value.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/&/g,' and ').replace(/[’'`]/g,'').replace(/[^\p{L}\p{N}]+/gu,' ').trim();
+  return key||value.trim().toLowerCase();
 }
 
 // Automatic identity matching is intentionally conservative. Do not strip words such

@@ -23,10 +23,14 @@ type ResearchRow={scope:'terroir'|'wine_vintage';cache_key:string;subject_json:s
 const parseJson=<T>(value:unknown,fallback:T):T=>{try{return JSON.parse(String(value)) as T}catch{return fallback}};
 const escapeRegExp=(value:string)=>value.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
 
+/** The same rule as producer identity, and for the same reason: an ASCII-only
+ *  key fused every cuvée whose name has no Latin characters. See
+ *  normalizeProducerAlias. */
 export function normalizeCuveeAlias(value:string){
-  return value.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase()
+  const key=value.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase()
     .replace(/\b1(?:er|ère|ere)\b/g,'premier')
-    .replace(/&/g,' and ').replace(/[’'`]/g,'').replace(/[^a-z0-9]+/g,' ').trim();
+    .replace(/&/g,' and ').replace(/[’'`]/g,'').replace(/[^\p{L}\p{N}]+/gu,' ').trim();
+  return key||value.trim().toLowerCase();
 }
 
 export function stripKnownProducerPrefix(value:string,producerNames:string[]){
