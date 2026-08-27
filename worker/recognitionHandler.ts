@@ -7,8 +7,11 @@ import { shouldRetryRecognitionFailure } from '../src/lib/recognition/retryPolic
 import { requireSession } from '../src/lib/auth/session';
 import { handleGroupRecognitionRequest } from './groupRecognitionHandler';
 import { postGeminiGenerateContent,type GeminiTransportBindings } from './geminiTransport';
+import { recordAiUsage,type AnalyticsSink } from '../src/lib/usage/aiUsage';
 
-type RecognitionBindings=GeminiTransportBindings&{AUTH_SECRET:string;MAX_BATCH_FILES?:string};
+type RecognitionBindings=GeminiTransportBindings&{AUTH_SECRET:string;MAX_BATCH_FILES?:string;DB:D1Database;AI_USAGE?:AnalyticsSink};
+/** What this call billed, so the caller can meter the primary and any escalation separately. */
+const usageOf=(payload:GeminiResponse)=>({promptTokens:payload.usageMetadata?.promptTokenCount??0,outputTokens:payload.usageMetadata?.candidatesTokenCount??0});
 type GeminiResponse={
   candidates?:Array<{content?:{parts?:Array<{text?:string}>};finishReason?:string}>;
   usageMetadata?:{promptTokenCount?:number;candidatesTokenCount?:number;totalTokenCount?:number};
@@ -65,25 +68,30 @@ async function tryEscalatedRecognition(
         schemaFallback=true;
         transport=await postGeminiGenerateContent(env,RECOGNITION_ESCALATION_MODEL,schemaFreeBody,controller.signal,{feature:'recognition',mode:'single-escalation-fallback',requestId});response=transport.response;provider=transport.provider;
       }else{
-        clearTimeout(timer);console.warn(JSON.stringify({event:'recognition-escalation-skipped',requestId,model:RECOGNITION_ESCALATION_MODEL,provider,status:400,reasons,error:geminiErrorMessage(raw,400)}));return {result:primary,used:false};
+        clearTimeout(timer);console.warn(JSON.stringify({event:'recognition-escalation-skipped',requestId,model:RECOGNITION_ESCALATION_MODEL,provider,status:400,reasons,error:geminiErrorMessage(raw,400)}));return {result:primary,used:false,usage:null};
       }
     }
     clearTimeout(timer);
-    if(!response.ok){const raw=(await response.text()).slice(0,2000);console.warn(JSON.stringify({event:'recognition-escalation-skipped',requestId,model:RECOGNITION_ESCALATION_MODEL,provider,status:response.status,reasons,error:geminiErrorMessage(raw,response.status)}));return {result:primary,used:false}}
+    if(!response.ok){const raw=(await response.text()).slice(0,2000);console.warn(JSON.stringify({event:'recognition-escalation-skipped',requestId,model:RECOGNITION_ESCALATION_MODEL,provider,status:response.status,reasons,error:geminiErrorMessage(raw,response.status)}));return {result:primary,used:false,usage:null}}
     const payload=await response.json() as GeminiResponse,candidate=payload.candidates?.[0],text=candidate?.content?.parts?.map(part=>part.text??'').join('')??'';
     if(!text)throw new Error('Gemini 3.7 returned no recognition result');
     const escalated=parseRecognition(text),result=preferEscalatedRecognition(primary,escalated),used=result===escalated;
     console.log(JSON.stringify({event:'recognition-escalation-complete',requestId,model:RECOGNITION_ESCALATION_MODEL,provider,reasons,used,schemaFallback,primaryConfidence:primary.confidence,escalatedConfidence:escalated.confidence,latencyMs:Date.now()-startedAt,finishReason:candidate?.finishReason??null,promptTokens:payload.usageMetadata?.promptTokenCount??null,outputTokens:payload.usageMetadata?.candidatesTokenCount??null,totalTokens:payload.usageMetadata?.totalTokenCount??null}));
-    return {result,used};
+    return {result,used,usage:usageOf(payload)};
   }catch(e){
-    clearTimeout(timer);console.warn(JSON.stringify({event:'recognition-escalation-skipped',requestId,model:RECOGNITION_ESCALATION_MODEL,reasons,timedOut,latencyMs:Date.now()-startedAt,error:(e as Error).message||'Escalation failed'}));return {result:primary,used:false};
+    clearTimeout(timer);console.warn(JSON.stringify({event:'recognition-escalation-skipped',requestId,model:RECOGNITION_ESCALATION_MODEL,reasons,timedOut,latencyMs:Date.now()-startedAt,error:(e as Error).message||'Escalation failed'}));return {result:primary,used:false,usage:null};
   }
+}
+
+async function meterRecognition(env:RecognitionBindings,owner:string,requestId:string,calls:Array<{model:string;promptTokens:number;outputTokens:number}>){
+  for(const call of calls)await recordAiUsage(env,owner,{kind:'scan_single',runId:requestId,model:call.model,requests:1,promptTokens:call.promptTokens,outputTokens:call.outputTokens});
 }
 
 export async function handleRecognitionRequest(request:Request,env:RecognitionBindings){
   if(request.headers.get('X-WineLog-Recognition-Mode')==='group')return handleGroupRecognitionRequest(request,env);
   const requestId=crypto.randomUUID(),startedAt=Date.now();
-  try{await requireSession(request.headers.get('Authorization')??undefined,env.AUTH_SECRET)}catch{return json({error:'Unauthorized',requestId},401,requestId)}
+  let owner:string;
+  try{owner=(await requireSession(request.headers.get('Authorization')??undefined,env.AUTH_SECRET)).userId}catch{return json({error:'Unauthorized',requestId},401,requestId)}
 
   let form:FormData;
   try{form=await request.formData()}catch{return json({error:'Could not read recognition request',requestId},400,requestId)}
@@ -131,11 +139,14 @@ export async function handleRecognitionRequest(request:Request,env:RecognitionBi
       const candidate=payload.candidates?.[0],text=candidate?.content?.parts?.map(part=>part.text??'').join('')??'';
       if(!text)throw new Error('Gemini returned no recognition result');
       const primary=parseRecognition(text),escalationReasons=recognitionEscalationReasons(primary,{schemaFallback});
-      const escalation=escalationReasons.length?await tryEscalatedRecognition(env,requestId,requestBody,schemaFreeBody,primary,escalationReasons):{result:primary,used:false};
+      const escalation=escalationReasons.length?await tryEscalatedRecognition(env,requestId,requestBody,schemaFreeBody,primary,escalationReasons):{result:primary,used:false,usage:null};
       const result=escalation.result,finalModel=escalation.used?RECOGNITION_ESCALATION_MODEL:MODEL;
       const locationName=selected.gpsSource==='exif'&&result.locationName?.trim()?result.locationName.trim():null;
       const durationMs=Date.now()-startedAt;
       console.log(JSON.stringify({event:'recognition-complete',requestId,model:finalModel,primaryModel:MODEL,escalated:escalation.used,escalationReasons,provider,attempt,geminiLatencyMs,durationMs,schemaFallback,finishReason:candidate?.finishReason??null,promptTokens:payload.usageMetadata?.promptTokenCount??null,outputTokens:payload.usageMetadata?.candidatesTokenCount??null,totalTokens:payload.usageMetadata?.totalTokenCount??null}));
+      // Metered per model: an escalation is a second billed call at a second
+      // model's rate, and rolling them together would hide it.
+      await meterRecognition(env,owner,requestId,[{model:MODEL,...usageOf(payload)},...(escalation.usage?[{model:RECOGNITION_ESCALATION_MODEL,...escalation.usage}]:[])]);
       return json({...result,locationName,tastingDate:selected.capturedAt?.slice(0,10)??null,latitude:selected.latitude,longitude:selected.longitude,metadataSource:selected.gpsSource==='exif'?'exif':selected.timestampSource,requestId,recognitionDurationMs:durationMs},200,requestId);
     }catch(e){
       clearTimeout(timer);

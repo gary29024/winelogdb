@@ -8,8 +8,10 @@ import { createManualProducerContact,deleteManualProducerContact,listManualProdu
 import { applyCatalogDecisions,deleteCatalogDecision,listCatalogDecisions,saveCatalogDecision } from '../src/lib/producers/catalogDecisions';
 import { selectRecognitionMetadata,type RecognitionPhotoMetadata } from '../src/lib/uploads/metadataSelection';
 import { canonicalCatalogEntries,type CatalogPresentationLike } from '../src/lib/cuvees/catalogPresentation';
+import { usageSummary } from '../src/lib/usage/aiUsage';
+import { readAiRates,type AiRateEnv } from '../src/lib/usage/rates';
 
-type Bindings={DB:D1Database;WINE_IMAGES:R2Bucket;ASSETS:Fetcher;GEMINI_API_KEY:string;AUTH_SECRET:string;APP_PASSWORD:string;APP_URL:string;MAX_FILE_BYTES?:string;MAX_BATCH_FILES?:string};
+type Bindings={DB:D1Database;WINE_IMAGES:R2Bucket;ASSETS:Fetcher;GEMINI_API_KEY:string;AUTH_SECRET:string;APP_PASSWORD:string;APP_URL:string;MAX_FILE_BYTES?:string;MAX_BATCH_FILES?:string}&AiRateEnv;
 type AppEnv={Bindings:Bindings};
 const app=new Hono<AppEnv>();
 
@@ -24,6 +26,16 @@ async function linkSavedWine(db:D1Database,owner:string,wineId:string){
   const row=await db.prepare('SELECT producer FROM wines WHERE owner_id=? AND id=?').bind(owner,wineId).first<{producer:string}>();
   if(row?.producer?.trim())await linkWineProducer(db,owner,wineId,row.producer);
 }
+
+// What the AI has cost, per run. Read from the same ledger the Analytics Engine
+// data points come from, priced at read time so a rate correction in
+// wrangler.jsonc reprices history rather than only what happens next.
+app.get('/api/usage/spend',async c=>{
+  cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
+  const days=Number(c.req.query('days')??30);
+  try{return c.json(await usageSummary(c.env.DB,owner,readAiRates(c.env),Number.isFinite(days)?days:30))}
+  catch(e){return c.json({error:(e as Error).message||'Could not load AI spend'},500)}
+});
 
 app.get('/api/producers',async c=>{
   cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}

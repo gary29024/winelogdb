@@ -4,6 +4,7 @@ import { getJourneyData,type GrapeStat,type JourneyData,type RegionStat,type Sty
 import { buildStructureProfile,structureDisplay } from './model';
 import { buildCadence,buildCruMix,buildDrinkingAge,buildMix,favoriteRates,readDiscovery,showsRatingInsights,showsStructureInsights } from './insights';
 import { grapeColorFor } from './passportVisuals';
+import { AiSpendCard } from './AiSpendCard';
 import '../../journey.css';
 import '../../insights.css';
 
@@ -186,6 +187,8 @@ export function InsightsPage(){
     <section className="journey-card"><div className="journey-section-heading"><div><p className="section-label">Price</p><h2>What you have recorded</h2></div><span>{summary.pricedWines}</span></div>
       {data.currencies.length?<div className="currency-grid">{data.currencies.map(item=><article key={item.currency}><div><strong>{item.currency}</strong><span>{item.wines} priced wines</span></div><div><b>{money(item.currency,item.averagePrice)}</b><small>{withRatings&&item.averageRating!=null?`${rating(item.averageRating)} avg rating`:`${item.wines} logged`}</small></div></article>)}</div>:<p className="journey-muted">Record purchase or tasting prices to see separate summaries for each currency. WineLog does not mix currencies into a misleading value score.</p>}
     </section>
+
+    <AiSpendCard/>
 
     {(!withRatings||!withStructure)&&<p className="insights-gate-note">
       {[!withRatings?'rating':'',!withStructure?'structure':''].filter(Boolean).join(' and ')} insights stay hidden until they cover more of your journal — everything above works without them.
