@@ -2,22 +2,23 @@
    pill beside the appellation, with grand cru carrying the gold the Passport map
    already uses for a visited place. */
 .detail-pills .detail-classification{
-  border-color:#e6dcc8;
-  background:#faf7f0;
-  color:#7a6636;
+  border-color:var(--warn-line);
+  background:var(--warn-wash);
+  color:var(--warn);
   font-size:.86rem;
   font-weight:600;
   letter-spacing:.02em;
 }
 .detail-pills .detail-classification-grand_cru{
-  border-color:#d8c191;
-  background:#f6edda;
-  color:#6b5522;
+  border-color:var(--warn-line);
+  background:var(--warn-wash);
+  color:var(--warn);
+  font-weight:700;
 }
 .detail-pills .detail-classification-village{
   border-color:var(--line);
   background:var(--ground);
-  color:#6b7789;
+  color:var(--ink-6);
 }
 
 /* The denomination rides inside the appellation pill rather than beside it: it
