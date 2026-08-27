@@ -12,7 +12,7 @@ const summary=(overrides:Record<string,unknown>={})=>({
     {kind:'producer_research',label:'Producer Deep Search',runs:12,requests:24,searchQueries:168,promptTokens:17460,outputTokens:44400,cost:19.33,costPerRun:1.61,searchesPerRun:14},
     {kind:'scan_single',label:'Single scan',runs:40,requests:44,searchQueries:0,promptTokens:52000,outputTokens:13000,cost:0.38,costPerRun:0.0095,searchesPerRun:0}
   ],
-  month:{month:'2026-08',searchQueries:4200,freeRemaining:800,billableSearches:0,cost:0},
+  month:{month:'2026-08',searchQueries:4200,freeRemaining:800,billableSearches:0,cost:0,resetsAt:'2026-09-01T07:00:00.000Z',timeZone:'America/Los_Angeles'},
   ...overrides
 });
 
@@ -43,16 +43,24 @@ describe('the AI spend card',()=>{
   it('shows the free allowance while it lasts, and the overage once it is gone',async()=>{
     let page=await render(summary());
     expect(page.textContent).toContain('800 free searches left');
+    // The card is handed the reset as an instant and must render it in the
+    // reader's own clock - midnight Pacific on 1 September is 15:00 that day in
+    // Hong Kong - rather than reading the date out of the ISO string. Comparing
+    // against the same conversion keeps this true wherever the suite runs; that
+    // the instant itself is Pacific midnight is tested in the ledger.
+    const reset=[...page.querySelectorAll('.ai-spend-month small')].at(-1)!.textContent!;
+    const local=new Intl.DateTimeFormat(undefined,{day:'numeric',month:'short',hour:'numeric',minute:'2-digit'}).format(new Date('2026-09-01T07:00:00.000Z'));
+    expect(reset).toBe(`resets ${local}`);
     expect(page.querySelector('.ai-spend-month.is-billing')).toBeNull();
 
     act(()=>root?.unmount());host?.remove();
-    page=await render(summary({month:{month:'2026-08',searchQueries:12183,freeRemaining:0,billableSearches:7183,cost:788.71}}));
+    page=await render(summary({month:{month:'2026-08',searchQueries:12183,freeRemaining:0,billableSearches:7183,cost:788.71,resetsAt:'2026-09-01T07:00:00.000Z',timeZone:'America/Los_Angeles'}}));
     expect(page.textContent).toContain('7,183 past the free allowance');
     expect(page.querySelector('.ai-spend-month.is-billing'),'the month should read as billing once the allowance is gone').not.toBeNull();
   });
 
   it('says nothing is metered rather than showing a wall of zeros',async()=>{
-    const page=await render({currency:'HKD',days:30,kinds:[],empty:true,month:{month:'2026-08',searchQueries:0,freeRemaining:5000,billableSearches:0,cost:0}});
+    const page=await render({currency:'HKD',days:30,kinds:[],empty:true,month:{month:'2026-08',searchQueries:0,freeRemaining:5000,billableSearches:0,cost:0,resetsAt:'2026-09-01T07:00:00.000Z',timeZone:'America/Los_Angeles'}});
     expect(page.textContent).toContain('Nothing metered yet');
     expect(page.querySelector('.ai-spend-grid')).toBeNull();
   });
