@@ -84,7 +84,11 @@ async function tryEscalatedRecognition(
 }
 
 async function meterRecognition(env:RecognitionBindings,owner:string,requestId:string,calls:Array<{model:string;promptTokens:number;outputTokens:number}>){
-  for(const call of calls)await recordAiUsage(env,owner,{kind:'scan_single',runId:requestId,model:call.model,requests:1,promptTokens:call.promptTokens,outputTokens:call.outputTokens});
+  // A single scan is one wine however many photos of it were sent, and the
+  // escalation is a second call on that same wine - so only the first call
+  // carries the count.
+  for(const [index,call] of calls.entries())
+    await recordAiUsage(env,owner,{kind:'scan_single',runId:requestId,model:call.model,requests:1,units:index===0?1:0,promptTokens:call.promptTokens,outputTokens:call.outputTokens});
 }
 
 export async function handleRecognitionRequest(request:Request,env:RecognitionBindings){

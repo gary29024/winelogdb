@@ -47,8 +47,10 @@ export async function seedAiUsageOnce(db:D1Database,owner:string){
       const kind=kindFor(job.target_kind),month=billingMonth(new Date(job.created_at)),searches=Math.max(0,Math.round(Number(job.search_queries)||0));
       const key=`${month}|${kind}`,bucket=months.get(key)??{month,kind,requests:0,searchQueries:0};
       bucket.requests+=1;bucket.searchQueries+=searches;months.set(key,bucket);
-      return db.prepare(`INSERT INTO ai_usage_events(id,owner_id,kind,run_id,target_id,model,requests,search_queries,prompt_tokens,output_tokens,created_at)
-        VALUES(?,?,?,?,?,?,?,?,0,0,?)`)
+      // Research is quoted per run, so these carry no wine count - and tokens
+      // were never recorded against them.
+      return db.prepare(`INSERT INTO ai_usage_events(id,owner_id,kind,run_id,target_id,model,requests,search_queries,prompt_tokens,output_tokens,units,created_at)
+        VALUES(?,?,?,?,?,?,?,?,0,0,0,?)`)
         .bind(crypto.randomUUID(),owner,kind,job.request_id,job.target_id??null,job.model||'unknown',1,searches,job.created_at);
     });
     for(const bucket of months.values())statements.push(db.prepare(

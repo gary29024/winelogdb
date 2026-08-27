@@ -50,7 +50,7 @@ function ledger(){
     const sql=raw.replace(/\s+/g,' ').trim();
     if(/^INSERT INTO ai_usage_events/.test(sql)){
       events.push({owner_id:args[1],kind:args[2],run_id:args[3],target_id:args[4],model:args[5],
-        requests:Number(args[6]),search_queries:Number(args[7]),prompt_tokens:Number(args[8]),output_tokens:Number(args[9])});
+        requests:Number(args[6]),search_queries:Number(args[7]),prompt_tokens:Number(args[8]),output_tokens:Number(args[9]),units:Number(args[10])});
       return undefined;
     }
     if(/^INSERT INTO ai_usage_monthly/.test(sql)){
@@ -64,8 +64,8 @@ function ledger(){
     if(/^SELECT kind,model,sum\(requests\)/.test(sql)){
       const grouped=new Map<string,Row>();
       for(const row of events){
-        const key=`${row.kind}|${row.model}`,entry=grouped.get(key)??{kind:row.kind,model:row.model,requests:0,search_queries:0,prompt_tokens:0,output_tokens:0};
-        for(const field of ['requests','search_queries','prompt_tokens','output_tokens'])entry[field]=Number(entry[field])+Number(row[field]);
+        const key=`${row.kind}|${row.model}`,entry=grouped.get(key)??{kind:row.kind,model:row.model,requests:0,search_queries:0,prompt_tokens:0,output_tokens:0,units:0};
+        for(const field of ['requests','search_queries','prompt_tokens','output_tokens','units'])entry[field]=Number(entry[field])+Number(row[field]);
         grouped.set(key,entry);
       }
       return {all:[...grouped.values()]};
@@ -133,9 +133,9 @@ describe('the usage ledger',()=>{
 
   it('writes the same numbers to Analytics Engine',async()=>{
     const {env,analytics}=ledger();
-    await recordAiUsage(env,'owner',{kind:'scan_group',runId:'g-1',model:'gemini-3.6-flash',requests:1,promptTokens:9000,outputTokens:800});
+    await recordAiUsage(env,'owner',{kind:'scan_group',runId:'g-1',model:'gemini-3.6-flash',requests:1,units:9,promptTokens:9000,outputTokens:800});
     expect(analytics).toHaveLength(1);
-    expect(analytics[0]).toMatchObject({indexes:['scan_group'],doubles:[1,0,9000,800]});
+    expect(analytics[0]).toMatchObject({indexes:['scan_group'],doubles:[1,0,9000,800,9]});
     expect(analytics[0].blobs).toContain('gemini-3.6-flash');
   });
 
@@ -216,5 +216,63 @@ describe('the billing month',()=>{
     expect(nextBillingReset(new Date('2026-08-27T02:00:00Z')).toISOString()).toBe('2026-09-01T07:00:00.000Z');
     // and across the year boundary, in standard time
     expect(nextBillingReset(new Date('2026-12-20T00:00:00Z')).toISOString()).toBe('2027-01-01T08:00:00.000Z');
+  });
+});
+
+describe('what a cost is quoted per',()=>{
+  // Reported as: "is the batch scan cost per run or per wine?" - and it was per
+  // session, so a run of twelve bottles and a run of one read the same. The
+  // context differs enough between the three recognition modes that only a
+  // per-wine figure compares.
+  it('quotes recognition per wine and research per run',async()=>{
+    const {env}=ledger();
+    // one batch session, three wines
+    for(const item of ['i-1','i-2','i-3'])
+      await recordAiUsage(env,'owner',{kind:'scan_batch',runId:'session-1',targetId:item,model:'gemini-3.6-flash',requests:1,units:1,promptTokens:1000,outputTokens:250});
+    // one producer run, two grounded requests
+    for(const searches of [5,9])
+      await recordAiUsage(env,'owner',{kind:'producer_research',runId:'r-1',model:'gemini-3.7-flash',requests:1,searchQueries:searches,promptTokens:700,outputTokens:1800});
+
+    const summary=await usageSummary(env.DB,'owner',DEFAULT_RATES);
+    const batch=summary.kinds.find(kind=>kind.kind==='scan_batch')!;
+    expect(batch.unit).toBe('wine');
+    expect(batch.unitCount).toBe(3);
+    expect(batch.runs,'one session').toBe(1);
+    expect(batch.costPerUnit).toBeCloseTo(batch.cost/3,9);
+
+    const producer=summary.kinds.find(kind=>kind.kind==='producer_research')!;
+    expect(producer.unit).toBe('run');
+    expect(producer.unitCount).toBe(1);
+    expect(producer.costPerUnit).toBeCloseTo(producer.cost,9);
+  });
+
+  it('counts a wine once when its recognition escalated',async()=>{
+    const {env}=ledger();
+    await recordAiUsage(env,'owner',{kind:'scan_single',runId:'scan-1',model:'gemini-3.6-flash',requests:1,units:1,promptTokens:1200,outputTokens:300});
+    await recordAiUsage(env,'owner',{kind:'scan_single',runId:'scan-1',model:'gemini-3.7-flash',requests:1,units:0,promptTokens:1200,outputTokens:300});
+    const scan=(await usageSummary(env.DB,'owner',DEFAULT_RATES)).kinds.find(kind=>kind.kind==='scan_single')!;
+    expect(scan.unitCount).toBe(1);
+    expect(scan.requests).toBe(2);
+    expect(scan.costPerUnit).toBe(scan.cost);
+  });
+
+  it('counts every wine a group photo produced, from one request',async()=>{
+    const {env}=ledger();
+    await recordAiUsage(env,'owner',{kind:'scan_group',runId:'g-1',model:'gemini-3.6-flash',requests:1,units:9,promptTokens:9000,outputTokens:1500});
+    const group=(await usageSummary(env.DB,'owner',DEFAULT_RATES)).kinds.find(kind=>kind.kind==='scan_group')!;
+    expect(group.unitCount).toBe(9);
+    expect(group.runs).toBe(1);
+    expect(group.costPerUnit).toBeCloseTo(group.cost/9,9);
+  });
+
+  it('falls back to the run figure for recognition recorded before wines were counted',async()=>{
+    // Events written by the first release carry no unit count; dividing by
+    // nothing would be worse than quoting the run.
+    const {env}=ledger();
+    await recordAiUsage(env,'owner',{kind:'scan_batch',runId:'old-session',model:'m',requests:1,promptTokens:900,outputTokens:200});
+    const batch=(await usageSummary(env.DB,'owner',DEFAULT_RATES)).kinds.find(kind=>kind.kind==='scan_batch')!;
+    expect(batch.unit).toBe('run');
+    expect(batch.unitCount).toBe(1);
+    expect(batch.costPerUnit).toBe(batch.cost);
   });
 });
