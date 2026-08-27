@@ -2,6 +2,7 @@ import { Hono,type Context } from 'hono';
 import entryApp from './entry';
 import { requireSession } from '../src/lib/auth/session';
 import { ensureAllProducerLinks } from '../src/lib/producers/entities';
+import { repairIdentityKeys } from '../src/lib/producers/identityRepair';
 import { cleanupOrphanCuvee,ensureAllCuveeLinksForProducer,ensureMissingCuveeLinks,reconcileProducerCuvees,resolveExistingCuvee } from '../src/lib/cuvees/entities';
 import { ensureWineIdentity } from '../src/lib/wine/identity';
 import { setCuveePrimaryName } from '../src/lib/cuvees/primaryName';
@@ -14,6 +15,12 @@ type Bindings={DB:D1Database;WINE_IMAGES:R2Bucket;ASSETS:Fetcher;GEMINI_API_KEY:
 type AppEnv={Bindings:Bindings};
 const app=new Hono<AppEnv>();
 const IDENTITY_MAINTENANCE_KEY='identity-reconcile-v2';
+/**
+ * One-shot, not a schedule: it repairs keys written by the old ASCII-only
+ * normalizer. The claim row is the record that it has run, so a second pass
+ * only happens if the first threw or ran out of its write budget.
+ */
+const IDENTITY_REPAIR_KEY='identity-key-unicode-repair-v1';
 const MAINTENANCE_INTERVAL_MS=24*60*60*1000;
 const MAINTENANCE_LOCAL_CHECK_MS=60*60*1000;
 const maintenanceMemo=new Map<string,number>();
@@ -45,6 +52,25 @@ async function maybeScheduleIdentityMaintenance(c:Context<AppEnv>,owner:string){
   })());
 }
 
+async function maybeRepairIdentityKeys(c:Context<AppEnv>,owner:string){
+  const nowIso=new Date().toISOString();
+  const claim=await c.env.DB.prepare(`INSERT INTO maintenance_state(owner_id,maintenance_key,last_run_at) VALUES(?,?,?)
+    ON CONFLICT(owner_id,maintenance_key) DO NOTHING`).bind(owner,IDENTITY_REPAIR_KEY,nowIso).run();
+  if(!claim.meta.changes)return;
+  c.executionCtx.waitUntil((async()=>{
+    try{
+      const report=await repairIdentityKeys(c.env.DB,owner);
+      console.log(JSON.stringify({event:'identity-key-repair-complete',owner,...report}));
+      // A capped pass left work behind, so the claim is released and the next
+      // request picks the rest up.
+      if(report.capped)await c.env.DB.prepare('DELETE FROM maintenance_state WHERE owner_id=? AND maintenance_key=?').bind(owner,IDENTITY_REPAIR_KEY).run().catch(()=>{});
+    }catch(e){
+      console.error(JSON.stringify({event:'identity-key-repair-failed',owner,error:(e as Error).message}));
+      await c.env.DB.prepare('DELETE FROM maintenance_state WHERE owner_id=? AND maintenance_key=?').bind(owner,IDENTITY_REPAIR_KEY).run().catch(()=>{});
+    }
+  })());
+}
+
 app.get('/api/cuvees/resolve',async c=>{
   cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
   const producerId=(c.req.query('producerId')||'').trim(),name=(c.req.query('name')||'').trim();
@@ -68,7 +94,7 @@ app.get('/api/images/:id',async c=>{
 
 app.get('/api/journal',async c=>{
   cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
-  if(Number(c.req.query('offset')||0)===0){try{await maybeScheduleIdentityMaintenance(c,owner)}catch(e){console.error(JSON.stringify({event:'identity-maintenance-schedule-failed',error:(e as Error).message}))}}
+  if(Number(c.req.query('offset')||0)===0){try{await maybeRepairIdentityKeys(c,owner);await maybeScheduleIdentityMaintenance(c,owner)}catch(e){console.error(JSON.stringify({event:'identity-maintenance-schedule-failed',error:(e as Error).message}))}}
   try{return c.json(await listJournalPage(c.env.DB,owner,c.req.query()))}catch(e){console.error(JSON.stringify({event:'journal-list-failed',error:(e as Error).message}));return c.json({error:'Could not load Journal'},500)}
 });
 
@@ -82,7 +108,7 @@ app.post('/api/journal/batch-experience',async c=>{
 
 app.get('/api/wines',async c=>{
   let owner:string;try{owner=await user(c)}catch{return entryApp.fetch(c.req.raw,c.env,c.executionCtx)}
-  if(Number(c.req.query('offset')||0)===0){try{await maybeScheduleIdentityMaintenance(c,owner)}catch(e){console.error(JSON.stringify({event:'identity-maintenance-schedule-failed',error:(e as Error).message}))}}
+  if(Number(c.req.query('offset')||0)===0){try{await maybeRepairIdentityKeys(c,owner);await maybeScheduleIdentityMaintenance(c,owner)}catch(e){console.error(JSON.stringify({event:'identity-maintenance-schedule-failed',error:(e as Error).message}))}}
   return entryApp.fetch(c.req.raw,c.env,c.executionCtx);
 });
 
