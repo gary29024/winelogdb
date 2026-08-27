@@ -9,8 +9,8 @@ globalThis.IS_REACT_ACT_ENVIRONMENT=true;
 const summary=(overrides:Record<string,unknown>={})=>({
   currency:'HKD',days:30,empty:false,
   kinds:[
-    {kind:'producer_research',label:'Producer Deep Search',runs:12,requests:24,searchQueries:168,promptTokens:17460,outputTokens:44400,cost:19.33,costPerRun:1.61,searchesPerRun:14},
-    {kind:'scan_single',label:'Single scan',runs:40,requests:44,searchQueries:0,promptTokens:52000,outputTokens:13000,cost:0.38,costPerRun:0.0095,searchesPerRun:0}
+    {kind:'producer_research',label:'Producer Deep Search',runs:12,requests:24,searchQueries:168,promptTokens:17460,outputTokens:44400,cost:19.33,costPerRun:1.61,searchesPerRun:14,units:0,unit:'run',unitCount:12,costPerUnit:1.61},
+    {kind:'scan_batch',label:'Batch scan',runs:3,requests:38,searchQueries:0,promptTokens:52000,outputTokens:13000,cost:0.69,costPerRun:0.23,searchesPerRun:0,units:36,unit:'wine',unitCount:36,costPerUnit:0.019}
   ],
   month:{month:'2026-08',searchQueries:4200,freeRemaining:800,billableSearches:0,cost:0,resetsAt:'2026-09-01T07:00:00.000Z',timeZone:'America/Los_Angeles'},
   ...overrides
@@ -33,6 +33,12 @@ describe('the AI spend card',()=>{
     const page=await render(summary());
     expect(page.textContent).toContain('Producer Deep Search');
     expect(page.textContent).toContain('12 runs');
+    // Recognition is quoted per wine: a session of a dozen bottles and a
+    // session of one are not the same run.
+    expect(page.textContent).toContain('36 wines');
+    expect(page.textContent).toContain('per wine');
+    // and the run count stays visible, so the session is still findable
+    expect(page.textContent).toContain('3 runs');
     expect(page.textContent).toContain('14.0 searches/run');
     // the per-run figure is the headline, in the configured currency
     const headline=page.querySelector('.ai-spend-grid article b')!;
