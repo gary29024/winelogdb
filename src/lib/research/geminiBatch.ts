@@ -96,6 +96,14 @@ export function countSearchQueries(responses:GeminiInlineResponse[]){
   return responses.reduce((total,response)=>total+(inlineGroundingMetadata(response)?.webSearchQueries?.length??0),0);
 }
 
+/** Tokens billed across a batch's responses, for the usage ledger. */
+export function countUsageTokens(responses:GeminiInlineResponse[]){
+  return responses.reduce((total,response)=>{
+    const usage=vertexFlexUsage(response.response);
+    return {promptTokens:total.promptTokens+(usage.promptTokens??0),outputTokens:total.outputTokens+(usage.outputTokens??0)};
+  },{promptTokens:0,outputTokens:0});
+}
+
 export function responsesByKey(responses:GeminiInlineResponse[]){
   return new Map(responses.map(response=>[response.metadata?.key,response] as const).filter((entry):entry is [string,GeminiInlineResponse]=>Boolean(entry[0])));
 }

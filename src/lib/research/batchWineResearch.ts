@@ -5,14 +5,15 @@ import { assembleDeepSearch,buildResearchTargets,fieldsForScope,loadResearchCach
 import { orderModelsByGrounding,recordGroundingObservation } from './modelHealth';
 import { createResearchBatchJob,finishResearchBatchJob,recordResearchSearchQueries,getResearchBatchJob,touchResearchBatchJob } from './batchJobStore';
 import { cancelGeminiBatch } from './cancelResearch';
-import { countSearchQueries,createGeminiBatch,describeResponseSchema,fetchGeminiBatch,groundedGenerationConfig,inlineFinishReason,inlineGroundingMetadata,inlineResponseText,isEmulatedGeminiBatchName,isTerminalBatchState,responsesByKey,type GeminiBatchRequest,type GroundingMetadata } from './geminiBatch';
+import { countSearchQueries,countUsageTokens,createGeminiBatch,describeResponseSchema,fetchGeminiBatch,groundedGenerationConfig,inlineFinishReason,inlineGroundingMetadata,inlineResponseText,isEmulatedGeminiBatchName,isTerminalBatchState,responsesByKey,type GeminiBatchRequest,type GroundingMetadata } from './geminiBatch';
 import { buildDeepSearchProvenance } from './provenance';
 import { researchBatchErrorPollDelay,researchBatchFirstPollDelay,researchBatchPollDelay,researchBatchStallAction,researchBatchTransientAction } from './batchRetryPolicy';
 import { highRiskTechnicalFailureMessage } from './technicalClaimGate';
 import { auditTechnicalContradictions,technicalContradictionFailureMessage } from './technicalContradictions';
 import { updateWineResearchRun } from './backgroundJobs';
+import { recordAiUsage,type AnalyticsSink } from '../usage/aiUsage';
 
-type Env={DB:D1Database;GEMINI_API_KEY:string;RESEARCH_QUEUE:Queue<unknown>};
+type Env={DB:D1Database;GEMINI_API_KEY:string;RESEARCH_QUEUE:Queue<unknown>;AI_USAGE?:AnalyticsSink};
 type WineRow={producer:string;producer_id:string|null;cuvee_id:string|null;wine_name:string;vintage:number|null;country:string|null;region:string|null;appellation:string|null;grapes_json:string;grape_blend_json:string};
 type ResearchRow={deep_search_json:string};
 const PRIMARY_MODEL='gemini-3.7-flash';
@@ -202,6 +203,8 @@ export async function pollWineBatchResearch(env:Env,owner:string,wineId:string,r
   if(fetched.state!=='JOB_STATE_SUCCEEDED'){const error=String((fetched.payload.error as {message?:unknown}|undefined)?.message||`Gemini batch ended with ${fetched.state}`);await finishResearchBatchJob(env.DB,owner,jobId,'failed',error);await retryOrFail(env,owner,wineId,requestId,job.attempt,scopes,[error],{},false,[job.model]);return}
   await updateWineResearchRun(env.DB,owner,requestId,'saving','Saving completed Gemini Batch Deep Search scopes','running',job.attempt);
   await recordResearchSearchQueries(env.DB,owner,job.id,countSearchQueries(fetched.responses)).catch(()=>undefined);
+  await recordAiUsage(env,owner,{kind:'wine_research',runId:requestId,targetId:wineId,model:job.model,
+    requests:fetched.responses.length,searchQueries:countSearchQueries(fetched.responses),...countUsageTokens(fetched.responses)});
   const inline=responsesByKey(fetched.responses).get(BATCH_KEY)??fetched.responses[0];if(!inline?.response){const error=inline?.error?.message||'Gemini returned no wine research result';await finishResearchBatchJob(env.DB,owner,jobId,'failed',error);await retryOrFail(env,owner,wineId,requestId,job.attempt,scopes,[error],{},false,[job.model]);return}
   const text=inlineResponseText(inline),finishReason=inlineFinishReason(inline);let failed=[...scopes],errors:string[]=[],feedback:ScopeFeedback={},ungrounded=false;
   // Recorded whatever happens next: when a run fails because nothing was

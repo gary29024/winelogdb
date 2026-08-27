@@ -24,6 +24,10 @@
       "dead_letter_queue": "winelog-research-dlq"
     }]
   },
+  // One data point per Gemini call, so spend is a time series the dashboard can
+  // chart and alert on. D1 keeps the same numbers for the in-app panel; this is
+  // what makes them visible in Cloudflare without a query.
+  "analytics_engine_datasets": [{ "binding": "AI_USAGE", "dataset": "winelog_ai_usage" }],
   "vars": {
     "MAX_FILE_BYTES": "10485760",
     "MAX_BATCH_FILES": "12",
@@ -34,6 +38,19 @@
     // "true" makes AI Gateway store whole request and response bodies. Turn it
     // on to inspect a failing Gemini response, then turn it back off: these are
     // full research prompts and answers.
-    "AI_GATEWAY_LOG_PAYLOADS": "false"
+    "AI_GATEWAY_LOG_PAYLOADS": "false",
+    // What a Gemini call costs. Every one of these is a price a provider can
+    // change without telling us, so they are config: correcting one is an edit
+    // here, not a deploy of new logic. Grounding is billed per Google Search
+    // query the model runs, past a monthly free allowance, and that is where
+    // the money goes - tokens are a rounding error beside it.
+    "AI_COST_CURRENCY": "HKD",
+    "AI_COST_FX_PER_USD": "7.843",
+    "AI_COST_GROUNDING_USD_PER_1K": "14",
+    "AI_COST_GROUNDING_FREE_PER_MONTH": "5000",
+    "AI_COST_INPUT_USD_PER_M": "0.30",
+    "AI_COST_OUTPUT_USD_PER_M": "2.50",
+    // Optional per-model overrides, as {"model":{"input":usdPerM,"output":usdPerM}}.
+    "AI_COST_MODEL_RATES": "{}"
   }
 }

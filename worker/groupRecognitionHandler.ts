@@ -6,8 +6,11 @@ import { selectRecognitionMetadata,type RecognitionPhotoMetadata } from '../src/
 import { shouldRetryRecognitionFailure } from '../src/lib/recognition/retryPolicy';
 import { requireSession } from '../src/lib/auth/session';
 import { postGeminiGenerateContent,type GeminiTransportBindings } from './geminiTransport';
+import { recordAiUsage,type AnalyticsSink } from '../src/lib/usage/aiUsage';
 
-type Bindings=GeminiTransportBindings&{AUTH_SECRET:string};
+type Bindings=GeminiTransportBindings&{AUTH_SECRET:string;DB:D1Database;AI_USAGE?:AnalyticsSink};
+/** What this call billed, so the primary and any escalation are metered apart. */
+const usageOf=(payload:GeminiResponse)=>({promptTokens:payload.usageMetadata?.promptTokenCount??0,outputTokens:payload.usageMetadata?.candidatesTokenCount??0});
 type GeminiResponse={candidates?:Array<{content?:{parts?:Array<{text?:string}>};finishReason?:string}>;usageMetadata?:{promptTokenCount?:number;candidatesTokenCount?:number;totalTokenCount?:number};error?:{message?:string}};
 const MODEL=RECOGNITION_MODEL;
 const HARD_TIMEOUT_MS=60_000;
@@ -40,18 +43,19 @@ async function tryEscalatedGroupRecognition(env:Bindings,requestId:string,reques
       transport=await postGeminiGenerateContent(env,RECOGNITION_ESCALATION_MODEL,schemaFreeBody,controller.signal,{feature:'recognition',mode:'group-escalation-fallback',requestId});response=transport.response;provider=transport.provider;
     }
     clearTimeout(timer);
-    if(!response.ok){const raw=(await response.text()).slice(0,2000);console.warn(JSON.stringify({event:'group-recognition-escalation-skipped',requestId,model:RECOGNITION_ESCALATION_MODEL,provider,status:response.status,reasons,error:geminiErrorMessage(raw,response.status)}));return {result:primary,used:false}}
+    if(!response.ok){const raw=(await response.text()).slice(0,2000);console.warn(JSON.stringify({event:'group-recognition-escalation-skipped',requestId,model:RECOGNITION_ESCALATION_MODEL,provider,status:response.status,reasons,error:geminiErrorMessage(raw,response.status)}));return {result:primary,used:false,usage:null}}
     const payload=await response.json() as GeminiResponse,candidate=payload.candidates?.[0],text=candidate?.content?.parts?.map(part=>part.text??'').join('')??'';
     if(!text)throw new Error('Gemini 3.7 returned no group recognition result');
     const escalated=parseGroupRecognition(text),used=escalated.wines.length>0||primary.wines.length===0,result=used?escalated:primary;
     console.log(JSON.stringify({event:'group-recognition-escalation-complete',requestId,model:RECOGNITION_ESCALATION_MODEL,provider,reasons,used,schemaFallback,primaryWines:primary.wines.length,escalatedWines:escalated.wines.length,primaryUnresolved:primary.unresolvedCount,escalatedUnresolved:escalated.unresolvedCount,latencyMs:Date.now()-startedAt,finishReason:candidate?.finishReason??null,promptTokens:payload.usageMetadata?.promptTokenCount??null,outputTokens:payload.usageMetadata?.candidatesTokenCount??null,totalTokens:payload.usageMetadata?.totalTokenCount??null}));
-    return {result,used};
-  }catch(e){clearTimeout(timer);console.warn(JSON.stringify({event:'group-recognition-escalation-skipped',requestId,model:RECOGNITION_ESCALATION_MODEL,reasons,timedOut,schemaFallback,latencyMs:Date.now()-startedAt,error:(e as Error).message||'Escalation failed'}));return {result:primary,used:false}}
+    return {result,used,usage:usageOf(payload)};
+  }catch(e){clearTimeout(timer);console.warn(JSON.stringify({event:'group-recognition-escalation-skipped',requestId,model:RECOGNITION_ESCALATION_MODEL,reasons,timedOut,schemaFallback,latencyMs:Date.now()-startedAt,error:(e as Error).message||'Escalation failed'}));return {result:primary,used:false,usage:null}}
 }
 
 export async function handleGroupRecognitionRequest(request:Request,env:Bindings){
   const requestId=crypto.randomUUID(),startedAt=Date.now();
-  try{await requireSession(request.headers.get('Authorization')??undefined,env.AUTH_SECRET)}catch{return json({error:'Unauthorized',requestId},401,requestId)}
+  let owner:string;
+  try{owner=(await requireSession(request.headers.get('Authorization')??undefined,env.AUTH_SECRET)).userId}catch{return json({error:'Unauthorized',requestId},401,requestId)}
   let form:FormData;
   try{form=await request.formData()}catch(e){
     const message=(e as Error).message||'Could not read group recognition request';
@@ -85,8 +89,10 @@ export async function handleGroupRecognitionRequest(request:Request,env:Bindings
       clearTimeout(timer);const geminiLatencyMs=Date.now()-attemptStarted;
       if(!response.ok){const errorText=(await response.text()).slice(0,2000),message=geminiErrorMessage(errorText,response.status);console.error(JSON.stringify({event:'group-recognition-upstream-error',requestId,model:MODEL,provider,attempt,status:response.status,geminiLatencyMs,schemaFallback,primaryError:primaryError||undefined,error:errorText}));if(attempt===1&&shouldRetryRecognitionFailure({status:response.status,timedOut:false,networkError:false})){await new Promise(r=>setTimeout(r,700+Math.floor(Math.random()*500)));continue}return json({error:`Gemini group recognition failed (${response.status}): ${message}`,requestId},502,requestId)}
       const payload=await response.json() as GeminiResponse,candidate=payload.candidates?.[0],text=candidate?.content?.parts?.map(part=>part.text??'').join('')??'';if(!text)throw new Error('Gemini returned no group recognition result');
-      const primary=parseGroupRecognition(text),escalationReasons=groupRecognitionEscalationReasons(primary),escalation=escalationReasons.length?await tryEscalatedGroupRecognition(env,requestId,requestBody,schemaFreeBody,primary,escalationReasons):{result:primary,used:false},result=escalation.result,durationMs=Date.now()-startedAt,finalModel=escalation.used?RECOGNITION_ESCALATION_MODEL:MODEL;
+      const primary=parseGroupRecognition(text),escalationReasons=groupRecognitionEscalationReasons(primary),escalation=escalationReasons.length?await tryEscalatedGroupRecognition(env,requestId,requestBody,schemaFreeBody,primary,escalationReasons):{result:primary,used:false,usage:null},result=escalation.result,durationMs=Date.now()-startedAt,finalModel=escalation.used?RECOGNITION_ESCALATION_MODEL:MODEL;
       console.log(JSON.stringify({event:'group-recognition-complete',requestId,model:finalModel,primaryModel:MODEL,escalated:escalation.used,escalationReasons,provider,attempt,geminiLatencyMs,durationMs,schemaFallback,wines:result.wines.length,unresolvedCount:result.unresolvedCount,finishReason:candidate?.finishReason??null,promptTokens:payload.usageMetadata?.promptTokenCount??null,outputTokens:payload.usageMetadata?.candidatesTokenCount??null,totalTokens:payload.usageMetadata?.totalTokenCount??null}));
+      for(const call of [{model:MODEL,...usageOf(payload)},...(escalation.usage?[{model:RECOGNITION_ESCALATION_MODEL,...escalation.usage}]:[])])
+        await recordAiUsage(env,owner,{kind:'scan_group',runId:requestId,model:call.model,requests:1,promptTokens:call.promptTokens,outputTokens:call.outputTokens});
       return json({...result,requestId,recognitionDurationMs:durationMs},200,requestId);
     }catch(e){clearTimeout(timer);const geminiLatencyMs=Date.now()-attemptStarted;if(timedOut){console.error(JSON.stringify({event:'group-recognition-timeout',requestId,attempt,geminiLatencyMs}));return json({error:'Group recognition timed out after 60 seconds. Please try again.',requestId},504,requestId)}const message=(e as Error).message||'Group recognition failed';console.error(JSON.stringify({event:'group-recognition-error',requestId,attempt,geminiLatencyMs,error:message}));if(attempt===1){await new Promise(r=>setTimeout(r,700+Math.floor(Math.random()*500)));continue}return json({error:`Group recognition returned invalid JSON: ${message}`,requestId},502,requestId)}
   }

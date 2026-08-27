@@ -63,3 +63,16 @@ export function getJourneyData():Promise<JourneyData>{
   })().finally(()=>{pending=null});
   return pending;
 }
+
+export type KindSpend={kind:string;label:string;runs:number;requests:number;searchQueries:number;promptTokens:number;outputTokens:number;cost:number;costPerRun:number;searchesPerRun:number};
+export type UsageSummary={
+  currency:string;days:number;kinds:KindSpend[];empty:boolean;
+  month:{month:string;searchQueries:number;freeRemaining:number;billableSearches:number;cost:number};
+};
+
+export async function getAiSpend(days=30):Promise<UsageSummary>{
+  const response=await fetch(`/api/usage/spend?days=${days}`,{headers:authHeaders()});
+  if(response.status===401){clearSession();throw new Error('Session expired. Please sign in again.')}
+  if(!response.ok){const body=await response.json().catch(()=>({})) as {error?:string};throw new Error(body.error||'Could not load AI spend')}
+  return response.json() as Promise<UsageSummary>;
+}
