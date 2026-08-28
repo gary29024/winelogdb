@@ -62,7 +62,7 @@ describe('Recent batches after saving a wine',()=>{
     // that nothing reads.
     const merged=mergeSessionIntoHistory([summary({id:'b1'})],session({
       id:'b1',confirmedItems:2,
-      items:[{id:'i1',position:0,status:'confirmed',recognition:null,error:null,confirmedWineId:'w1',imageIds:['img1']}]
+      items:[{id:'i1',position:0,status:'confirmed',recognition:null,error:null,saved:null,confirmedWineId:'w1',imageIds:['img1']}]
     }));
     expect(merged[0]).not.toHaveProperty('items');
   });
