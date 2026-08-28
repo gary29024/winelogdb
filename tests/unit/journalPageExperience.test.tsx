@@ -65,12 +65,16 @@ describe('Journal result navigation',()=>{
       :new Response(JSON.stringify({items:[journalWine(['image-select-cache'])],nextOffset:null,total:1}),{status:200,headers:{'content-type':'application/json'}}));
     const page=await render('/journal',fetcher);await flush();
     const loadedImage=page.querySelector('img.journal-wine-thumb');
+    const selectionMark=page.querySelector('.journal-select-mark') as HTMLSpanElement;
     expect(loadedImage).not.toBeNull();
+    expect(selectionMark.style.display).toBe('none');
     const imageCalls=()=>fetcher.mock.calls.filter(([url])=>String(url).startsWith('/api/images/')).length;
     expect(imageCalls()).toBe(1);
     const select=[...page.querySelectorAll('button')].find(button=>button.textContent==='Select')!;
     await act(async()=>{select.dispatchEvent(new MouseEvent('click',{bubbles:true}))});await flush();
     expect(page.querySelector('img.journal-wine-thumb')).toBe(loadedImage);
+    expect(page.querySelector('.journal-select-mark')).toBe(selectionMark);
+    expect(selectionMark.style.display).toBe('grid');
     expect(imageCalls()).toBe(1);
   });
 });
