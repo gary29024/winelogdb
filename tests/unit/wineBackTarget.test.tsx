@@ -172,7 +172,7 @@ describe('back to the journal you left',()=>{
           <Route path="/wines/:id" element={<DetailPage/>}/>
         </Routes>
       </MemoryRouter>)});
-    const card=host.querySelector('a.wine-card') as HTMLAnchorElement;
+    const card=host.querySelector('a.journal-open-action') as HTMLAnchorElement;
     expect(card,'the journal should have rendered a wine card').toBeTruthy();
     await act(async()=>{card.dispatchEvent(new MouseEvent('click',{bubbles:true,cancelable:true,button:0}))});
     const back=host.querySelector('.back-pill') as HTMLAnchorElement;
