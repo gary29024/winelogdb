@@ -55,8 +55,12 @@ export async function listJournalPage(db:D1Database,owner:string,q:JournalListQu
     producer:'w.producer COLLATE NOCASE ASC, w.wine_name COLLATE NOCASE ASC, w.vintage DESC, w.id ASC',
     vintage:'w.vintage DESC, w.producer COLLATE NOCASE ASC, w.wine_name COLLATE NOCASE ASC, w.id ASC'
   };
-  const limit=Math.min(Math.max(Number(q.limit)||36,1),72),offset=Math.max(Number(q.offset)||0,0),queryLimit=limit+1;args.push(queryLimit,offset);
-  const rows=await db.prepare(`SELECT w.id,w.producer,w.wine_name,w.vintage,w.country,w.region,w.appellation,w.grapes_json,w.wine_style,w.rating,w.venue,w.favorite,
+  const limit=Math.min(Math.max(Number(q.limit)||36,1),72),offset=Math.max(Number(q.offset)||0,0);
+  // Count and page share the exact same predicate and travel in one D1 batch.
+  // The old limit+1 query could answer only "is there another page?", which
+  // made an exact result count and direct page navigation impossible.
+  const countStatement=db.prepare(`SELECT count(*) AS total FROM wines w WHERE ${where}`).bind(...args);
+  const pageStatement=db.prepare(`SELECT w.id,w.producer,w.wine_name,w.vintage,w.country,w.region,w.appellation,w.grapes_json,w.wine_style,w.rating,w.venue,w.favorite,
     coalesce(w.tasting_date,w.created_at) AS journal_date,
     coalesce((SELECT wi.captured_at FROM wine_images wi
       WHERE wi.owner_id=w.owner_id AND wi.wine_id=w.id AND wi.captured_at IS NOT NULL
@@ -64,9 +68,11 @@ export async function listJournalPage(db:D1Database,owner:string,q:JournalListQu
     w.created_at,
     (SELECT t.name FROM wine_experiences we LEFT JOIN tastings t ON t.id=we.tasting_id WHERE we.wine_id=w.id AND we.owner_id=w.owner_id ORDER BY we.created_at DESC LIMIT 1) AS tasting_name,
     (SELECT wi.id FROM wine_images wi WHERE wi.owner_id=w.owner_id AND wi.wine_id=w.id ORDER BY wi.rowid ASC LIMIT 1) AS image_id
-    FROM wines w WHERE ${where} ORDER BY ${orders[q.sort??'']||orders.newest} LIMIT ? OFFSET ?`).bind(...args).all<JournalRow>();
-  const page=sliceJournalPage(rows.results,limit,offset);
-  const items=page.items.map(row=>({
+    FROM wines w WHERE ${where} ORDER BY ${orders[q.sort??'']||orders.newest} LIMIT ? OFFSET ?`).bind(...args,limit,offset);
+  const [countResult,rowsResult]=await db.batch([countStatement,pageStatement]);
+  const total=Number((countResult.results[0] as {total?:unknown}|undefined)?.total??0);
+  const rows=rowsResult.results as JournalRow[];
+  const items=rows.map(row=>({
     id:row.id,
     producer:row.producer,
     wineName:row.wine_name,
@@ -84,5 +90,5 @@ export async function listJournalPage(db:D1Database,owner:string,q:JournalListQu
     imageIds:row.image_id?[row.image_id]:[],
     createdAt:row.created_at
   }));
-  return {items,nextOffset:page.nextOffset};
+  return {items,nextOffset:offset+limit<total?offset+limit:null,total};
 }

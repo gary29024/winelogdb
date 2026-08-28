@@ -1,6 +1,7 @@
 import { useEffect,useMemo,useRef,useState } from 'react';
 import { Link,useLocation,useParams } from 'react-router-dom';
 import { WineImage } from '../wines/WineImage';
+import { producerLinkChoices } from '../../lib/producers/linkChoices';
 import { cancelProducerResearch,getProducer,getProducerResearchStatus,listProducers,mergeProducer,researchProducer,saveProducerCatalogDecision,setPrimaryProducerName,undoProducerCatalogDecision,unlinkProducer,type CatalogDecision,type LinkedProducer,type ProducerDetail,type ProducerResearchRun,type ProducerSummary } from './api';
 import { ProducerHeroImage } from './ProducerHeroImage';
 import { ProducerContacts } from './ProducerContacts';
@@ -64,7 +65,7 @@ export function ProducerDetailPage(){
  const researchPoll=useRef<Poller|undefined>(undefined),researchClock=useRef<number|undefined>(undefined);
  function stopResearchTimers(){researchPoll.current?.stop();if(researchClock.current)window.clearInterval(researchClock.current);researchPoll.current=undefined;researchClock.current=undefined}
  async function reload(){const detail=await getProducer(id);setProducer(detail);setPrimaryName(detail.canonicalName);setSelectedAlias('')}
- async function refreshAvailable(){const directory=await listProducers();setAvailable(directory.items.filter(x=>x.id!==id));setAvailableLoaded(true);setSelectedAlias('')}
+ async function refreshAvailable(){const directory=await listProducers();setAvailable(producerLinkChoices(directory.items,id));setAvailableLoaded(true);setSelectedAlias('')}
  // The whole producer directory is a big read, and linking an alias is rare, so
  // it is fetched when someone asks to link rather than on every producer visit.
  async function loadAvailable(){

@@ -35,7 +35,7 @@ async function requireOk(r:Response,message:string){
   if(r.status===401){clearSession();throw new Error('Session expired. Please sign in again.')}
   if(!r.ok){const body=await r.json().catch(()=>({})) as {error?:string;issues?:ApiIssue[];details?:string};const details=body.issues?.map(issue=>`${issue.path?.join('.')||'field'}: ${issue.message||'Invalid input'}`).join('; ');throw new Error([body.error||message,details||body.details].filter(Boolean).join(' — '))}
 }
-export async function listWines(params:URLSearchParams,options:{limit?:number;offset?:number;signal?:AbortSignal}={}):Promise<{items:JournalWine[];nextOffset:number|null}>{
+export async function listWines(params:URLSearchParams,options:{limit?:number;offset?:number;signal?:AbortSignal}={}):Promise<{items:JournalWine[];nextOffset:number|null;total:number}>{
   const query=new URLSearchParams(params);query.set('limit',String(options.limit??36));query.set('offset',String(options.offset??0));const r=await fetch(`/api/journal?${query}`,{headers:authHeaders(),signal:options.signal});await requireOk(r,'Could not load wines');return r.json();
 }
 export async function batchUpdateJournalExperience(ids:string[],patch:JournalBatchPatch){const r=await fetch('/api/journal/batch-experience',{method:'POST',headers:authHeaders(true),body:JSON.stringify({ids,...patch})});await requireOk(r,'Could not update selected wines');return r.json() as Promise<{updated:number;tastingName?:string|null;venue?:string|null}>}
