@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { getJourneyData,type GrapeStat,type JourneyData,type RegionStat,type StyleStat } from './api';
 import { buildStructureProfile,structureDisplay } from './model';
 import { buildCadence,buildCruMix,buildDrinkingAge,buildMix,favoriteRates,readDiscovery,showsRatingInsights,showsStructureInsights } from './insights';
-import { grapeColorFor } from './passportVisuals';
+import { grapeColorFor,styleColorKeyFor } from './passportVisuals';
 import { AiSpendCard } from './AiSpendCard';
 import '../../journey.css';
 import '../../insights.css';
@@ -157,14 +157,14 @@ export function InsightsPage(){
 
     <section className="journey-card"><div className="journey-section-heading"><div><p className="section-label">The mix</p><h2>What fills your journal</h2></div></div>
       {grapeMix.length||styleMix.length?<div className="mix-groups">
-        {[{title:'Grapes',slices:grapeMix,tint:(label:string)=>grapeColorFor(label)},
-          {title:'Styles',slices:styleMix,tint:()=>undefined}].filter(group=>group.slices.length).map(group=><div className="mix-group" key={group.title}>
+        {[{title:'Grapes',slices:grapeMix,tint:(label:string)=>grapeColorFor(label),colorClass:()=>undefined},
+          {title:'Styles',slices:styleMix,tint:()=>undefined,colorClass:(label:string)=>`mix-style-${styleColorKeyFor(label)}`}].filter(group=>group.slices.length).map(group=><div className="mix-group" key={group.title}>
           <p className="favorite-column-title">{group.title}</p>
           <div className="mix-bar" role="img" aria-label={group.slices.map(slice=>`${slice.label} ${percent(slice.share)}`).join(', ')}>
-            {group.slices.map(slice=><span key={slice.label} style={{width:percent(slice.share),backgroundColor:group.tint(slice.label)}} title={`${slice.label}: ${slice.wines}`}/>)}
+            {group.slices.map(slice=><span className={group.colorClass(slice.label)} key={slice.label} style={{width:percent(slice.share),backgroundColor:group.tint(slice.label)}} title={`${slice.label}: ${slice.wines}`}/>)}
           </div>
           <ul className="mix-legend">{group.slices.map(slice=><li key={slice.label}>
-            <span className="mix-swatch" style={{backgroundColor:group.tint(slice.label)}} aria-hidden="true"/>
+            <span className={`mix-swatch ${group.colorClass(slice.label)??''}`} style={{backgroundColor:group.tint(slice.label)}} aria-hidden="true"/>
             <span className="capitalize">{slice.label}</span><b>{percent(slice.share)}</b>
           </li>)}</ul>
         </div>)}

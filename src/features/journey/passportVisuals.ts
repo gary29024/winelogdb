@@ -26,6 +26,13 @@ const namedGrapeColors:Record<string,string>={
 
 const fallbackGrapeColors=['#8f3448','#c5a744','#5b2738','#6c4b87','#827151','#486f62'];
 
+export type WineStyleColorKey='red'|'white'|'sparkling'|'dessert'|'rose'|'orange'|'fortified'|'other';
+
+const namedStyleColors:Record<string,WineStyleColorKey>={
+  red:'red',white:'white',sparkling:'sparkling',dessert:'dessert',rose:'rose',
+  orange:'orange',fortified:'fortified',other:'other'
+};
+
 export function normalizeGrapeName(value:string){
   return value.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
 }
@@ -35,4 +42,8 @@ export function grapeColorFor(grape:string){
   if(named)return named;
   let hash=0;for(const char of normalized)hash=(hash*31+char.charCodeAt(0))>>>0;
   return fallbackGrapeColors[hash%fallbackGrapeColors.length];
+}
+
+export function styleColorKeyFor(style:string):WineStyleColorKey{
+  return namedStyleColors[normalizeGrapeName(style)]??'other';
 }

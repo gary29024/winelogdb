@@ -47,6 +47,13 @@
   --pour-sparkling:#eef3fa;--pour-sparkling-ink:#1d5183;
   --pour-sweet:#f3ecf6;--pour-sweet-ink:#6d4b8a;
 
+  /* Semantic colours for charts that compare wine styles. These are stronger
+     than the pour washes because adjacent slices need to be distinguishable at
+     a glance, while still following the light/dark theme. */
+  --style-red:#a8172d;--style-white:#c5a93f;--style-sparkling:#4f7fa8;
+  --style-dessert:#76508f;--style-rose:#d7788e;--style-orange:#d97b35;
+  --style-fortified:#5b2a3a;--style-other:#7d899c;
+
   /* Corners: chip, thumbnail, panel, card, pill. */
   --r-xs:6px;--r-sm:10px;--r-md:14px;--r-lg:20px;--r-pill:999px;
 
@@ -86,6 +93,10 @@
     --pour-rose:#2e1a20;--pour-rose-ink:#f0a3b4;
     --pour-sparkling:#17222f;--pour-sparkling-ink:#8fbde8;
     --pour-sweet:#221a2b;--pour-sweet-ink:#bfa3d8;
+
+    --style-red:#e35b76;--style-white:#d9bd61;--style-sparkling:#75a8d4;
+    --style-dessert:#b18acc;--style-rose:#ec9aae;--style-orange:#ef9d59;
+    --style-fortified:#bc6f88;--style-other:#7e8ba1;
   }
 }*{box-sizing:border-box}
 /* One focus indicator for the whole app. The accent reads as "the browser is

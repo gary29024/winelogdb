@@ -68,6 +68,15 @@ describe('Insights for a journal that rarely scores wines',()=>{
     expect(text(page)).toContain('What fills your journal');
   });
 
+  it('colors style slices by wine style and renders the Village share',async()=>{
+    const page=await render(journal());
+    const styleGroup=[...page.querySelectorAll('.mix-group')].find(group=>text(group).includes('Styles'))!;
+    const colors=[...styleGroup.querySelectorAll('.mix-swatch')].map(swatch=>swatch.className);
+    expect(colors).toEqual(['mix-swatch mix-style-red','mix-swatch mix-style-white']);
+    const village=page.querySelector('.cru-tier-village .cru-tier-bar > span') as HTMLElement;
+    expect(village.style.width).toBe('58%');
+  });
+
   it('puts the number on every bar of the tasting year',async()=>{
     // The chart showed the shape of the year but never its size: the count was
     // only in the bar's hover title, which a phone cannot show at all.
