@@ -4,7 +4,9 @@ import type { RecognitionResult } from '../recognition/schema';
 import type { PhotoMetadata } from './photoMetadata';
 
 export type BatchSessionSummary={id:string;status:string;totalItems:number;expectedItems:number;confirmedItems:number;createdAt:string;updatedAt:string;expiresAt:string};
-export type BatchRecognitionItem={id:string;position:number;status:'staged'|'submitted'|'ready'|'failed'|'confirmed'|'rejected'|'expired';recognition:RecognitionResult|null;error:string|null;confirmedWineId:string|null;imageIds:string[]};
+export type BatchRecognitionItem={id:string;position:number;status:'staged'|'submitted'|'ready'|'failed'|'confirmed'|'rejected'|'expired';recognition:RecognitionResult|null;error:string|null;confirmedWineId:string|null;
+  /** The saved wine as it stands now, once confirmed - the reading above is the scan, and goes stale the moment the wine is edited. */
+  saved:{producer:string;wineName:string;vintage:number|null}|null;imageIds:string[]};
 export type BatchRecognitionSession=BatchSessionSummary&{items:BatchRecognitionItem[]};
 
 /**

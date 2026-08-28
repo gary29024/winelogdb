@@ -8,7 +8,7 @@ export type BatchRecognitionJob=
   |{kind:'recognition_batch_cleanup';owner:string;sessionId:string};
 
 type Env={DB:D1Database;WINE_IMAGES:R2Bucket;GEMINI_API_KEY:string;MAX_FILE_BYTES?:string;RESEARCH_QUEUE:Queue<unknown>};
-type ItemRow={id:string;position:number;status:string;metadata_json:string;recognition_json:string|null;error:string|null;confirmed_wine_id:string|null};
+type ItemRow={id:string;position:number;status:string;metadata_json:string;recognition_json:string|null;error:string|null;confirmed_wine_id:string|null;saved_producer:string|null;saved_wine_name:string|null;saved_vintage:number|null};
 type ImageRow={id:string;item_id:string;original_object_key:string;recognition_object_key:string;content_type:string;byte_size:number;recognition_byte_size:number;width:number;height:number};
 type GoogleInlineResponse={metadata?:{key?:string};response?:{candidates?:Array<{content?:{parts?:Array<{text?:string}>};finishReason?:string}>};error?:{message?:string}};
 
@@ -85,16 +85,28 @@ export async function stageBatchItem(env:Pick<Env,'DB'|'WINE_IMAGES'|'MAX_FILE_B
 }
 
 async function loadItems(db:D1Database,owner:string,sessionId:string){
-  const items=await db.prepare('SELECT id,position,status,metadata_json,recognition_json,error,confirmed_wine_id FROM batch_recognition_items WHERE owner_id=? AND session_id=? ORDER BY position,id').bind(owner,sessionId).all<ItemRow>();
+  // A confirmed item carries what was recognised, which is a record of the
+  // scan and stops being true the moment the wine is edited. The saved wine is
+  // joined so a card can show what it actually points at; a wine deleted since
+  // leaves the join empty and the card falls back to the reading.
+  const items=await db.prepare(`SELECT i.id,i.position,i.status,i.metadata_json,i.recognition_json,i.error,i.confirmed_wine_id,
+      w.producer AS saved_producer,w.wine_name AS saved_wine_name,w.vintage AS saved_vintage
+    FROM batch_recognition_items i LEFT JOIN wines w ON w.owner_id=i.owner_id AND w.id=i.confirmed_wine_id
+    WHERE i.owner_id=? AND i.session_id=? ORDER BY i.position,i.id`).bind(owner,sessionId).all<ItemRow>();
   const images=await db.prepare(`SELECT bri.* FROM batch_recognition_images bri JOIN batch_recognition_items i ON i.id=bri.item_id WHERE bri.owner_id=? AND i.session_id=? ORDER BY i.position,bri.created_at`).bind(owner,sessionId).all<ImageRow>();
   const byItem=new Map<string,ImageRow[]>();for(const image of images.results){const list=byItem.get(image.item_id)??[];list.push(image);byItem.set(image.item_id,list)}
   return {items:items.results,byItem};
 }
 
+/** The wine a confirmed item points at, as it stands now rather than as it was read. */
+const savedWine=(item:ItemRow)=>item.confirmed_wine_id&&item.saved_wine_name
+  ?{producer:item.saved_producer??'',wineName:item.saved_wine_name,vintage:item.saved_vintage??null}
+  :null;
+
 export async function getBatchSession(db:D1Database,owner:string,sessionId:string){
   const session=await db.prepare('SELECT id,status,total_items,expected_items,confirmed_items,created_at,updated_at,expires_at FROM batch_recognition_sessions WHERE id=? AND owner_id=?').bind(sessionId,owner).first<Record<string,unknown>>();
   if(!session)return null;const {items,byItem}=await loadItems(db,owner,sessionId),confirmedItems=countConfirmedBatchItems(items);
-  return {id:String(session.id),status:String(session.status),totalItems:Number(session.total_items)||0,expectedItems:Number(session.expected_items)||0,confirmedItems,createdAt:String(session.created_at),updatedAt:String(session.updated_at),expiresAt:String(session.expires_at),items:items.map(item=>({id:item.id,position:item.position,status:item.status,recognition:item.recognition_json?parseJson(item.recognition_json,null):null,error:item.error,confirmedWineId:item.confirmed_wine_id,imageIds:(byItem.get(item.id)??[]).map(x=>x.id)}))};
+  return {id:String(session.id),status:String(session.status),totalItems:Number(session.total_items)||0,expectedItems:Number(session.expected_items)||0,confirmedItems,createdAt:String(session.created_at),updatedAt:String(session.updated_at),expiresAt:String(session.expires_at),items:items.map(item=>({id:item.id,position:item.position,status:item.status,recognition:item.recognition_json?parseJson(item.recognition_json,null):null,error:item.error,confirmedWineId:item.confirmed_wine_id,saved:savedWine(item),imageIds:(byItem.get(item.id)??[]).map(x=>x.id)}))};
 }
 
 export async function listBatchSessions(db:D1Database,owner:string){
