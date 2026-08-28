@@ -46,6 +46,13 @@ describe('What the label was read as',()=>{
     expect(canonicalizeWineFields({...first})).toMatchObject({
       recognizedRegion:'California',recognizedAppellation:'Oakville, Napa Valley'});
   });
+
+  it('captures a corrected Austrian region as the new reading',()=>{
+    expect(canonicalizeWineFields(wine({country:'Austria',region:'Weinviertel',appellation:null,
+      recognizedRegion:null,recognizedAppellation:null}))).toMatchObject({
+      country:'Austria',region:'Weinviertel',appellation:null,recognizedRegion:'Weinviertel',recognizedAppellation:null
+    });
+  });
 });
 
 describe('Writing the reading to the row',()=>{

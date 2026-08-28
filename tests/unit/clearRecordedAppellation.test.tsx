@@ -26,7 +26,7 @@ async function saveWith(edit:(form:HTMLElement)=>void){
   await act(async()=>{root!.render(<MemoryRouter>
     <WineForm id="w1" initial={initial as never} onSave={async input=>{saved.push(input as never);return {id:'w1'}}}/>
   </MemoryRouter>)});
-  edit(host);
+  await act(async()=>edit(host!));
   await act(async()=>{host!.querySelector('form')!.requestSubmit()});
   return saved[0];
 }
@@ -49,14 +49,27 @@ describe('the reading a wine arrived with',()=>{
     // leaves it there. Clearing the field is how you take it back.
     const saved=await saveWith(host=>setValue(field(host,'appellation'),''));
     expect(saved).toMatchObject({appellation:null,recognizedAppellation:null});
-    // The region reading is untouched: only the cleared field loses its own.
-    expect(saved).toMatchObject({recognizedRegion:'Tuscany'});
+    // The detail presents region/appellation as one recorded pair, so a place
+    // correction replaces that pair together rather than leaving half stale.
+    expect(saved).toMatchObject({recognizedRegion:null});
   });
 
-  it('stays when the appellation is corrected rather than emptied',async()=>{
-    // A correction still leaves something for the reading to annotate, and the
-    // difference between the two is the point of showing it.
+  it('is replaced when the appellation is corrected rather than emptied',async()=>{
     const saved=await saveWith(host=>setValue(field(host,'appellation'),'Toscana'));
-    expect(saved).toMatchObject({appellation:'Toscana',recognizedAppellation:'Todcana'});
+    expect(saved).toMatchObject({appellation:'Toscana',recognizedAppellation:null,recognizedRegion:null});
+  });
+
+  it('retires a legacy reading whose normalized field is already blank',async()=>{
+    // Older rows can contain recognized_appellation even though appellation is
+    // null. The form already looks blank, so comparing only the visible before
+    // and after values made this impossible to remove.
+    const saved:Record<string,unknown>[]=[];
+    vi.stubGlobal('fetch',vi.fn(async()=>new Response(JSON.stringify({}),{status:200,headers:{'content-type':'application/json'}})));
+    vi.resetModules();
+    const {WineForm}=await import('../../src/features/wines/WineForm');
+    host=document.createElement('div');document.body.appendChild(host);root=createRoot(host);
+    await act(async()=>{root!.render(<MemoryRouter><WineForm id="w1" initial={{...initial,appellation:null} as never} onSave={async input=>{saved.push(input as never);return {id:'w1'}}}/></MemoryRouter>)});
+    await act(async()=>{host!.querySelector('form')!.requestSubmit()});
+    expect(saved[0]).toMatchObject({appellation:null,recognizedAppellation:null,recognizedRegion:null});
   });
 });
