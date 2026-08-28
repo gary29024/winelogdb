@@ -67,19 +67,26 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel}:WineF
     setStructure(current=>({...current,[key]:current[key]===value?null:value}) as TastingStructure);
   }
 
+  /** True when this save empties a field that had something in it. */
+  const cleared=(before:string|null|undefined,now:string|null)=>Boolean(before?.trim())&&!now;
+
   async function submit(e:FormEvent<HTMLFormElement>){
     e.preventDefault();setBusy(true);setError('');const fd=new FormData(e.currentTarget);
     const producer=String(fd.get('producer')||'').trim(),wineName=String(fd.get('wineName')||'').trim();
     if(!producer||!wineName){setError('Producer and wine name are required.');setBusy(false);return}
     const grapeBlend=parseBlend(String(fd.get('grapeBlend')||'')),currency=String(fd.get('currency')||'').trim().toUpperCase(),tastingStructure=hasTastingStructure(structure)?structure:null;
+    const region=String(fd.get('region')||'').trim()||null,appellation=String(fd.get('appellation')||'').trim()||null;
     const input:WineFormInput={
       producer,wineName,vintage:fd.get('vintage')?Number(fd.get('vintage')):null,
-      country:String(fd.get('country')||'').trim()||null,region:String(fd.get('region')||'').trim()||null,appellation:String(fd.get('appellation')||'').trim()||null,
-      // The reading the wine arrived with, sent back untouched. Recognition
+      country:String(fd.get('country')||'').trim()||null,region,appellation,
+      // The reading the wine arrived with, sent back untouched - recognition
       // hands the form values it has already normalised, so re-deriving from
-      // the fields would record WineLog's answer as the label's.
-      recognizedRegion:initial?.recognizedRegion??null,
-      recognizedAppellation:initial?.recognizedAppellation??null,
+      // the fields would record WineLog's answer as the label's. Clearing the
+      // field the reading annotates clears the reading with it: emptying an
+      // appellation and still being shown what it used to say, with no way to
+      // remove it, is the report this answers.
+      recognizedRegion:cleared(initial?.region,region)?null:initial?.recognizedRegion??null,
+      recognizedAppellation:cleared(initial?.appellation,appellation)?null:initial?.recognizedAppellation??null,
       // Derived server-side, but sent back so an edit does not clear a tier the
       // label text no longer carries.
       classification:initial?.classification??null,

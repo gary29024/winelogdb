@@ -52,19 +52,23 @@ describe('Writing the reading to the row',()=>{
   it('sends both columns on an update',async()=>{
     const {status,sql,args}=await put(wine());
     expect(status).toBe(200);
-    expect(sql).toContain('recognized_region=COALESCE(recognized_region,?)');
-    expect(sql).toContain('recognized_appellation=COALESCE(recognized_appellation,?)');
+    expect(sql).toContain('recognized_region=?');
+    expect(sql).toContain('recognized_appellation=?');
     expect(args).toContain('California');
     expect(args).toContain('Oakville, Napa Valley');
   });
 
-  it('lets the stored reading win, so the first one is the one kept',async()=>{
-    // COALESCE, not assignment: a row backfilled by 0032 or written on insert
-    // already holds the original, and every later save must leave it there.
+  it('takes the reading the caller sends, so a wrong one can be taken back',async()=>{
+    // This was COALESCE, which made the first reading permanent. The first save
+    // cannot tell a label from a typo someone typed into the review form, so a
+    // hand-entered appellation was filed as what the bottle said and shown back
+    // as "AS RECORDED" with no way to remove it. The form round-trips the
+    // reading it loaded, so preserving it is the caller's job, and clearing the
+    // field it describes clears it.
     const {sql}=await put(wine());
-    const assignments=sql.slice(sql.indexOf('SET')).split(',recognized_');
-    expect(assignments[1]).toMatch(/^region=COALESCE/);
-    expect(assignments[2]).toMatch(/^appellation=COALESCE/);
+    expect(sql).not.toContain('COALESCE(recognized_');
+    const {args}=await put(wine({recognizedRegion:null,recognizedAppellation:null,region:null,appellation:null}));
+    expect(args.filter(value=>value==='Oakville, Napa Valley')).toEqual([]);
   });
 
   it('reads both columns back out into the response',()=>{
