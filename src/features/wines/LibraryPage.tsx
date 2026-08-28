@@ -54,7 +54,7 @@ function WineCard({wine:w,view,selecting,selected,onToggle,onFavorite,favoriteBu
   // Keep the card's descendants stable when selection mode changes. WineImage
   // owns the loaded object URL, so replacing this subtree makes a loaded photo
   // flash back through its loading state even when the URL itself is cached.
-  const selectionMark=<span className="journal-select-mark" aria-hidden="true">{selected?'✓':''}</span>;
+  const selectionMark=<span className="journal-select-mark" aria-hidden="true" style={{display:selecting?'grid':'none'}}>{selected?'✓':''}</span>;
   const content=view==='grid'?<>{selectionMark}<div className="journal-grid-media">{image}<strong className="journal-grid-vintage">{w.vintage??'NV'}</strong>{w.rating!=null&&<span className="journal-grid-score">{w.rating}</span>}</div><div className="wine-card-body"><h2 title={w.wineName}>{w.wineName}</h2><p className="producer" title={w.producer}>{w.producer}</p></div></>:<>{selectionMark}{image}<div className="wine-card-body"><div className="wine-card-top"><h2>{w.wineName}</h2><strong>{w.vintage??'NV'}</strong></div><p className="producer">{w.producer}</p><span className="journal-meta">{[[w.appellation,w.region,w.country].filter(Boolean).join(' · '),w.grapes.join(' · ')].filter(Boolean).join(' · ')}</span>{w.tastingName&&<span className="tasting-chip">{w.tastingName}</span>}{w.venue&&<span className="journal-venue">{w.venue}</span>}{w.rating!=null&&<span className="score-chip">{w.rating}</span>}</div></>;
   const label=`${w.producer} ${w.wineName}`;
   return <div className={`journal-card-shell ${view==='grid'?'grid':'list'}${selecting?' selecting':''}`}>
