@@ -38,6 +38,7 @@ describe('Journal result navigation',()=>{
     });
     const page=await render('/journal?query=Austria',fetcher);
     expect(page.querySelector('.journal-viewbar')?.textContent).toContain('73 matching wines · Page 1 of 3');
+    expect(page.querySelector('.journal-view-actions')?.classList.contains('with-reset')).toBe(true);
     const input=page.querySelector('[aria-label="Journal page number"]') as HTMLInputElement;
     await act(async()=>{const setter=Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype,'value')!.set!;setter.call(input,'3');input.dispatchEvent(new Event('input',{bubbles:true}))});
     await act(async()=>{page.querySelector('.journal-page-picker')!.dispatchEvent(new Event('submit',{bubbles:true,cancelable:true}))});
@@ -52,7 +53,7 @@ describe('Journal result navigation',()=>{
     expect(page.querySelector('.journal-viewbar')?.textContent).toContain('0 matching wines · Page 1 of 1');
   });
 
-  it('does not request an already-loaded photo again when selection mode remounts the card',async()=>{
+  it('keeps an already-loaded photo mounted when selection mode opens',async()=>{
     const NativeURL=URL;
     class ImageURL extends NativeURL{
       static createObjectURL(){return 'blob:wine-photo'}
@@ -63,12 +64,13 @@ describe('Journal result navigation',()=>{
       ?new Response(new Blob(['photo'],{type:'image/jpeg'}),{status:200})
       :new Response(JSON.stringify({items:[journalWine(['image-select-cache'])],nextOffset:null,total:1}),{status:200,headers:{'content-type':'application/json'}}));
     const page=await render('/journal',fetcher);await flush();
-    expect(page.querySelector('img.journal-wine-thumb')).not.toBeNull();
+    const loadedImage=page.querySelector('img.journal-wine-thumb');
+    expect(loadedImage).not.toBeNull();
     const imageCalls=()=>fetcher.mock.calls.filter(([url])=>String(url).startsWith('/api/images/')).length;
     expect(imageCalls()).toBe(1);
     const select=[...page.querySelectorAll('button')].find(button=>button.textContent==='Select')!;
     await act(async()=>{select.dispatchEvent(new MouseEvent('click',{bubbles:true}))});await flush();
-    expect(page.querySelector('img.journal-wine-thumb')).not.toBeNull();
+    expect(page.querySelector('img.journal-wine-thumb')).toBe(loadedImage);
     expect(imageCalls()).toBe(1);
   });
 });
