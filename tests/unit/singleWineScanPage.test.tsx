@@ -86,10 +86,13 @@ describe('the single wine page',()=>{
     await pick('front.jpg','back.jpg');
     await click(button('Identify this wine')!);
 
-    expect(calls).toHaveLength(1);
-    expect(calls[0].url).toBe('/api/recognition');
-    expect(calls[0].body.getAll('images')).toHaveLength(2);
-    expect(JSON.parse(calls[0].body.get('metadata') as string)).toHaveLength(2);
+    // Filtered rather than counted: the review mounts WineForm, which reads
+    // /api/tastings/active for its prefill. What matters here is that the two
+    // photos went up as one bottle in one recognition request.
+    const recognitions=calls.filter(call=>call.url==='/api/recognition');
+    expect(recognitions).toHaveLength(1);
+    expect(recognitions[0].body.getAll('images')).toHaveLength(2);
+    expect(JSON.parse(recognitions[0].body.get('metadata') as string)).toHaveLength(2);
 
     expect(host!.querySelector('.review h2')?.textContent).toBe('Combined identification');
     expect(host!.textContent).toContain('identified in 4.2s');

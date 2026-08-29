@@ -1,4 +1,4 @@
-import { useEffect,useState, type FormEvent } from 'react';
+import { useEffect,useRef,useState, type FormEvent } from 'react';
 import { resolvePlace } from '../../lib/places/resolve';
 import { Link,useNavigate } from 'react-router-dom';
 import { saveWine,saveWineTastingStructure, type WinePhoto } from './api';
@@ -6,6 +6,7 @@ import { resolveProducer,type ProducerResolution } from '../producers/api';
 import { resolveCuvee,type CuveeResolution } from '../cuvees/api';
 import type { GrapeBlendEntry, WineInput } from '../../lib/db/schema';
 import { hasTastingStructure,type TastingStructure,type TastingStructureKey } from '../../lib/wine/tastingStructure';
+import { refreshActiveTasting,useActiveTasting } from '../tastings/useActiveTasting';
 import '../../producerResolution.css';
 import '../../wineFormCompact.css';
 
@@ -41,6 +42,33 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel}:WineF
   const [cuveeResolution,setCuveeResolution]=useState<CuveeResolution|null>(null),[resolvingCuvee,setResolvingCuvee]=useState(false),[preferCuveePrimaryName,setPreferCuveePrimaryName]=useState(false);
   const [structure,setStructure]=useState<TastingStructure>(()=>({...initial?.tastingStructure})),[structureOpen,setStructureOpen]=useState(()=>hasTastingStructure(initial?.tastingStructure??null));
   const matched=producerResolution?.matched?producerResolution.producer:undefined;
+  // The three fields an open tasting fills in. They are state rather than
+  // defaultValue because the tasting arrives asynchronously, and an uncontrolled
+  // input cannot pick up a value that lands after it has mounted.
+  const [tastingName,setTastingName]=useState(String(initial?.tastingName??''));
+  const [venue,setVenue]=useState(String(initial?.venue??''));
+  const [tastingDate,setTastingDate]=useState(String(initial?.tastingDate??''));
+  const {tasting:activeTasting}=useActiveTasting();
+  const prefilled=useRef(false);
+
+  /**
+   * Prefill from the open tasting, once.
+   *
+   * The ref means it can never stomp typing, and `id` means editing an existing
+   * wine never prefills - a bottle from March must not be captured by tonight.
+   *
+   * The date is the one field where the tasting overrides what the form was
+   * given: recognition supplies tastingDate from photo EXIF, and an old photo's
+   * timestamp winning would look like a deliberate date change and silently end
+   * the tasting. Someone declaring "I am at this tasting" outranks a file stamp.
+   */
+  useEffect(()=>{
+    if(id||prefilled.current||!activeTasting)return;
+    prefilled.current=true;
+    setTastingName(current=>current||activeTasting.name);
+    setVenue(current=>current||activeTasting.venue||'');
+    if(activeTasting.tastingDate)setTastingDate(activeTasting.tastingDate);
+  },[id,activeTasting]);
 
   useEffect(()=>{
     const name=producer.trim();
@@ -110,6 +138,9 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel}:WineF
       const result=onSave?await onSave(input):await saveWine(input,id,id?[]:photos,{preferCuveePrimaryName:canPreferPrimary&&preferCuveePrimaryName});
       const savedId=id??('id' in result?result.id:undefined);if(!savedId)throw new Error('Save response did not include a wine ID');
       if(onSave)await saveWineTastingStructure(savedId,tastingStructure);
+      // A save can have closed the open tasting - a wine dated another day ends
+      // it server-side - so the cached answer is no longer trustworthy.
+      if(!id)void refreshActiveTasting();
       if(onSaved)onSaved(savedId);else nav(`/wines/${savedId}`);
     }catch(e){setError((e as Error).message);setBusy(false)}
   }
@@ -143,9 +174,10 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel}:WineF
     <label className="full-field">Tasting notes<textarea name="tastingNotes" rows={4} defaultValue={initial?.tastingNotes}/></label>
 
     <fieldset className="experience-fields"><legend>This drinking / tasting</legend>
-      <div className="wine-compact-row three">{field('tastingDate','Drinking date','date')}{field('rating','Rating / 100','number','0.5')}<label>Price<div className="price-currency-inputs"><input name="currency" type="text" inputMode="text" maxLength={3} defaultValue={String(initial?.currency??'')} placeholder="HKD" aria-label="Currency"/><input name="price" type="number" step="0.01" defaultValue={String(initial?.price??'')} placeholder="0" aria-label="Price"/></div></label></div>
-      <label className="full-field">Tasting / event group<input name="tastingName" type="text" defaultValue={String(initial?.tastingName??'')}/></label>
-      <div className="wine-compact-row two">{field('venue','Venue')}<label>{hasGps?'Approximate place':'Place name'}<input name="locationName" type="text" defaultValue={String(initial?.locationName??'')}/>{hasEstimatedPlace&&<small>Suggested by Gemini from the photo GPS. Verify or edit this approximation before saving.</small>}</label></div>
+      <div className="wine-compact-row three"><label>Drinking date<input name="tastingDate" type="date" value={tastingDate} onChange={e=>setTastingDate(e.target.value)}/></label>{field('rating','Rating / 100','number','0.5')}<label>Price<div className="price-currency-inputs"><input name="currency" type="text" inputMode="text" maxLength={3} defaultValue={String(initial?.currency??'')} placeholder="HKD" aria-label="Currency"/><input name="price" type="number" step="0.01" defaultValue={String(initial?.price??'')} placeholder="0" aria-label="Price"/></div></label></div>
+      <label className="full-field">Tasting / event group<input name="tastingName" type="text" value={tastingName} onChange={e=>setTastingName(e.target.value)}/></label>
+      {!id&&activeTasting&&<p className="tasting-prefill-note">Prefilled from your open tasting — <strong>{activeTasting.name}</strong>. Change any of these to log this bottle outside it.</p>}
+      <div className="wine-compact-row two"><label>Venue<input name="venue" type="text" value={venue} onChange={e=>setVenue(e.target.value)}/></label><label>{hasGps?'Approximate place':'Place name'}<input name="locationName" type="text" defaultValue={String(initial?.locationName??'')}/>{hasEstimatedPlace&&<small>Suggested by Gemini from the photo GPS. Verify or edit this approximation before saving.</small>}</label></div>
       {hasGps&&<div className="gps-readout"><strong>Photo GPS</strong><span>{Number(initial?.latitude).toFixed(6)}, {Number(initial?.longitude).toFixed(6)}</span><small>These coordinates are read directly from EXIF and stored exactly. The place name above is only an approximate Gemini interpretation.</small></div>}
       <small>Use “Tasting / event group” to group wines from the same dinner, trip, class or formal tasting. Exact GPS remains attached even if you edit or clear the approximate place name.</small>
     </fieldset>

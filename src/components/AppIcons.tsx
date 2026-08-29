@@ -1,7 +1,7 @@
 export type AppIconKey=
   |'passport'|'journal'|'producers'|'insights'
   |'scan'|'single-wine'|'group-photo'|'batch-scan'
-  |'pen'|'close'|'search'|'heart'|'heart-filled';
+  |'tasting'|'pen'|'close'|'search'|'heart'|'heart-filled';
 
 const frame={viewBox:'0 0 24 24',fill:'none',stroke:'currentColor',strokeWidth:1.6,strokeLinecap:'round' as const,strokeLinejoin:'round' as const,focusable:'false' as const,'aria-hidden':true};
 
@@ -20,6 +20,8 @@ export function AppIcon({kind}:{kind:AppIconKey}){
   if(kind==='batch-scan')return <svg {...frame} className="app-icon"><rect x="3" y="3" width="7.4" height="7.4" rx="2"/><rect x="13.6" y="3" width="7.4" height="7.4" rx="2"/><rect x="3" y="13.6" width="7.4" height="7.4" rx="2"/><circle cx="17.3" cy="17.3" r="3.7"/><path d="M17.3 15.4v2l1.4.9"/></svg>;
   if(kind==='search')return <svg {...frame} className="app-icon"><circle cx="10.6" cy="10.6" r="6.35"/><path d="m15.4 15.4 5 5"/></svg>;
   if(kind==='heart'||kind==='heart-filled')return <svg {...frame} className="app-icon" fill={kind==='heart-filled'?'currentColor':'none'}><path d="M12 20.3c-.33 0-.65-.11-.92-.32C7.5 17.1 3.4 13.6 3.4 9.6A4.6 4.6 0 0 1 12 7.1a4.6 4.6 0 0 1 8.6 2.5c0 4-4.1 7.5-7.68 10.38-.27.21-.59.32-.92.32Z"/></svg>;
+  // Tasting: two glasses tilted towards each other - an evening rather than a bottle.
+  if(kind==='tasting')return <svg {...frame} className="app-icon"><path d="M4.1 3.4h6.2l-.9 4.65a2.35 2.35 0 0 1-4.6 0Z"/><path d="M7.2 11.15v6.9M5.35 18.05h3.7"/><path d="M13.7 6.15h6.2l-.9 4.65a2.35 2.35 0 0 1-4.6 0Z"/><path d="M16.8 13.9v6.7M14.95 20.6h3.7"/></svg>;
   if(kind==='pen')return <svg {...frame} className="app-icon"><path d="M4 20h4.2l9.6-9.6a2.4 2.4 0 0 0-3.4-3.4L4.8 16.6Z"/><path d="M13.8 8.2l3.4 3.4"/><path d="M4 20l1-4"/></svg>;
   return <svg {...frame} className="app-icon"><path d="M6.6 6.6l10.8 10.8M17.4 6.6 6.6 17.4"/></svg>;
 }
