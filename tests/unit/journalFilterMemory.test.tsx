@@ -157,3 +157,30 @@ describe('resetting the filters',()=>{
     expect((host.querySelector('.filter-month input') as HTMLInputElement).value).toBe('');
   });
 });
+
+describe('returning to a remembered search',()=>{
+  it('puts the search back in the box, not only in the URL',async()=>{
+    // Reported: the results were still the earlier search, but the search bar
+    // was empty - a journal reading "19 matching wines" with nothing typed.
+    // queryDraft was seeded from the params of the first render, which are
+    // still empty because the restore is a <Navigate>, and that re-renders
+    // rather than remounts, so the initialiser never ran again.
+    const urls:string[]=[];
+    vi.stubGlobal('fetch',vi.fn(async(url:string)=>{
+      urls.push(String(url));
+      return new Response(JSON.stringify({items:[],nextOffset:null,total:19}),
+        {status:200,headers:{'content-type':'application/json'}});
+    }));
+    sessionStorage.setItem('winelog-journal-filters','query=chambertin');
+    vi.resetModules();
+    const {LibraryPage}=await import('../../src/features/wines/LibraryPage');
+    host=document.createElement('div');document.body.appendChild(host);root=createRoot(host);
+    await act(async()=>{root!.render(<MemoryRouter initialEntries={['/journal']}><LibraryPage/></MemoryRouter>)});
+    await act(async()=>{await new Promise(resolve=>setTimeout(resolve,450))});
+
+    expect((host.querySelector('input[type=search]') as HTMLInputElement).value).toBe('chambertin');
+    // And the debounce no longer fights the restore. It used to clear the query
+    // and have it put straight back, which fetched the same page twice.
+    expect(urls.filter(url=>url.includes('/api/journal')||url.includes('/api/wines'))).toHaveLength(1);
+  });
+});
