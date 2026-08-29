@@ -123,6 +123,24 @@ describe('finding the tastings you have logged',()=>{
     expect(link?.getAttribute('href')).toBe('/tastings');
   });
 
+  it('sits in the journal beside the All wines / Favorites switch',async()=>{
+    // Deliberately a sibling of the tablist rather than a child of it: a
+    // role="tablist" may only contain tabs, and this is a link to another page.
+    stubApi({'/api/tastings/active':{tasting:null},'/api/wines':{items:[],nextOffset:null,total:0},
+      '/api/journal':{items:[],nextOffset:null,total:0}});
+    vi.resetModules();
+    const {LibraryPage}=await import('../../src/features/wines/LibraryPage');
+    host=document.createElement('div');document.body.appendChild(host);root=createRoot(host);
+    await act(async()=>{root!.render(<MemoryRouter initialEntries={['/journal']}><LibraryPage/></MemoryRouter>)});
+
+    const link=host.querySelector('.journal-tastings-link') as HTMLAnchorElement;
+    expect(link?.getAttribute('href')).toBe('/tastings');
+    const row=host.querySelector('.journal-scope-row')!;
+    expect(link.parentElement).toBe(row);
+    expect(link.closest('[role="tablist"]')).toBeNull();
+    expect(row.querySelector('.journal-scope-tabs')).toBeTruthy();
+  });
+
   it('keeps the mobile tab bar at five, which is what fits',async()=>{
     // A sixth tab does not fit at 390px, so the phone route in is the journal's
     // own link rather than another tab.
