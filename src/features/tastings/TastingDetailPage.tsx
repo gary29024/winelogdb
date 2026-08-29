@@ -114,10 +114,13 @@ export function TastingDetailPage(){
 
     {!editing&&<div className="tasting-actions">
       {open
-        ?<button type="button" className="primary" onClick={()=>void run(()=>endTasting(id))} disabled={busy}>End tasting</button>
+        ?<button type="button" onClick={()=>void run(()=>endTasting(id))} disabled={busy}>End tasting</button>
         :<button type="button" onClick={()=>void run(()=>reopenTasting(id))} disabled={busy}>Reopen tasting</button>}
-      <Link className="button" to={`/journal?attachTo=${id}`}>Add wines from the journal</Link>
-      <Link className="button" to={`/tastings/${id}/sheet`}>Scan the wine list</Link>
+      {/* The thing you actually do all evening. Without it the only way to log a
+          bottle from the page you are sitting on was the nav's Scan Wine, which
+          is two taps away from the tasting you are already looking at. */}
+      {open&&<Link className="button primary" to="/upload">Log a wine</Link>}
+      <Link className="button" to={`/journal?attachTo=${id}`}>Add from journal</Link>
       <button type="button" onClick={()=>setEditing(true)} disabled={busy}>Rename / venue</button>
       <button type="button" className="quiet" onClick={()=>void removeTasting()} disabled={busy}>Delete</button>
     </div>}

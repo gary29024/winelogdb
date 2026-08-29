@@ -17,6 +17,7 @@ const preloadProducers=()=>void import('../features/producers/ProducersPage');
 const preloadPassport=()=>void import('../features/journey/PassportPage');
 const preloadInsights=()=>void import('../features/journey/InsightsPage');
 const preloadTastings=()=>void import('../features/tastings/TastingDetailPage');
+const preloadTastingList=()=>void import('../features/tastings/TastingsPage');
 
 export function Layout(){
   const [scanSheetOpen,setScanSheetOpen]=useState(false);
@@ -97,7 +98,7 @@ export function Layout(){
   return <>
     <header className="topbar">
       <NavLink className="brand" to="/">WineLog</NavLink>
-      <nav className="desktop-nav" aria-label="Main navigation"><NavLink to="/" end onPointerEnter={preloadPassport} onFocus={preloadPassport}>Passport</NavLink><NavLink to="/journal" onPointerEnter={preloadJournal} onFocus={preloadJournal}>Journal</NavLink><NavLink to="/producers" onPointerEnter={preloadProducers} onFocus={preloadProducers}>Producers</NavLink><NavLink to="/insights" onPointerEnter={preloadInsights} onFocus={preloadInsights}>Insights</NavLink><button type="button" className="top-scan-trigger" onClick={openScanSheet}>Scan Wine</button></nav>
+      <nav className="desktop-nav" aria-label="Main navigation"><NavLink to="/" end onPointerEnter={preloadPassport} onFocus={preloadPassport}>Passport</NavLink><NavLink to="/journal" onPointerEnter={preloadJournal} onFocus={preloadJournal}>Journal</NavLink><NavLink to="/tastings" onPointerEnter={preloadTastingList} onFocus={preloadTastingList}>Tastings</NavLink><NavLink to="/producers" onPointerEnter={preloadProducers} onFocus={preloadProducers}>Producers</NavLink><NavLink to="/insights" onPointerEnter={preloadInsights} onFocus={preloadInsights}>Insights</NavLink><button type="button" className="top-scan-trigger" onClick={openScanSheet}>Scan Wine</button></nav>
     </header>
     <main><LiveTastingStrip/><Outlet/></main>
     <footer>Your private tasting notebook</footer>

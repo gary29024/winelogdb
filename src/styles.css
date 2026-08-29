@@ -137,7 +137,7 @@
    almost always one. Before this, the bare button element was a solid dark pill,
    so Remove, Open, Resume and Save this wine all shouted equally and the reader
    had no way to find the one that mattered. Reach for .primary deliberately. */
-.button,button{display:inline-block;border:1px solid var(--line-strong);border-radius:var(--r-sm);background:var(--paper);color:var(--ink);padding:11px 19px;font:600 1rem inherit;text-decoration:none;cursor:pointer;transition:background .15s ease,border-color .15s ease}
+.button,button{display:inline-block;border:1px solid var(--line-strong);border-radius:var(--r-sm);background:var(--paper);color:var(--ink);padding:11px 19px;font:600 1rem 'DM Sans',sans-serif;text-decoration:none;cursor:pointer;transition:background .15s ease,border-color .15s ease}
 .button:hover,button:hover:not(:disabled){border-color:var(--ink-7);background:var(--ground)}
 button:disabled{opacity:.55;cursor:default}
 /* The action the screen exists for. */

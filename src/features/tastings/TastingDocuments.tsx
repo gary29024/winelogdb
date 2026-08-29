@@ -1,4 +1,5 @@
 import { useEffect,useRef,useState } from 'react';
+import { Link } from 'react-router-dom';
 import { authHeaders } from '../../lib/auth/client';
 import { ImageLightbox } from '../../components/ImageLightbox';
 import { deleteTastingDocument,uploadTastingDocuments,type TastingDocument } from './api';
@@ -55,8 +56,15 @@ export function TastingDocuments({tastingId,documents,onChange}:{tastingId:strin
   }
 
   return <section className="tasting-documents">
-    <div className="tasting-documents-head"><h2>Wine list</h2><button type="button" onClick={()=>input.current?.click()} disabled={busy}>{busy?'Working…':documents.length?'Add pages':'Add wine list'}</button></div>
+    <div className="tasting-documents-head"><h2>Wine list</h2></div>
     <p className="tasting-documents-note">Photograph the printed list handed out at the tasting. It keeps the prices, importer and flight order that the bottles themselves never carry, and it is kept for as long as the tasting is.</p>
+    {/* Both wine-list actions live here, together. They used to be split - one
+        in the page's action row, one on this card - which read as two ways to
+        do the same thing rather than as reading the list versus just keeping it. */}
+    <div className="tasting-documents-actions">
+      <Link className="button primary" to={`/tastings/${tastingId}/sheet`}>Scan &amp; read prices</Link>
+      <button type="button" onClick={()=>input.current?.click()} disabled={busy}>{busy?'Working…':documents.length?'Add more pages':'Just keep a photo'}</button>
+    </div>
     {error&&<p className="tasting-error" role="alert">{error}</p>}
     {documents.length>0&&<ul className="tasting-document-strip">{documents.map((document,index)=>
       <DocumentThumb key={document.id} document={document} index={index} busy={busy} onOpen={(src,alt)=>setLightbox({src,alt})} onRemove={()=>void remove(document.id)}/>)}</ul>}

@@ -28,6 +28,33 @@ const isState=(selector:string)=>/:hover|:active|:focus|::|\.active\b|scan-plus|
 const stylesAButton=(selector:string)=>/\bbutton\b/.test(selector)||[...buttonClasses].some(name=>selector.includes(`.${name}`));
 const declares=(body:string,property:string)=>new RegExp(`(?:^|;)\\s*${property}\\s*:`).test(body);
 
+describe('the font shorthand',()=>{
+  it('never names inherit as the family, which silently voids the whole rule',()=>{
+    // `font:600 1rem inherit` parses as invalid and is DROPPED: a CSS-wide
+    // keyword is only legal as a property's entire value, never as one
+    // component of a shorthand. Every <button> in the app therefore rendered at
+    // the browser default - 13.33px Arial, weight 400 - while <a class="button">
+    // inherited 16px DM Sans, so the two looked like different controls
+    // wherever they sat in the same row. Measured in Chromium, not deduced.
+    const offenders=rules
+      .filter(rule=>/(?:^|;)\s*font\s*:/.test(rule.body))
+      .filter(rule=>[...rule.body.matchAll(/(?:^|;)\s*font\s*:\s*([^;}]+)/g)]
+        .some(match=>{
+          const value=match[1].trim();
+          // `font:inherit` on its own is the legal form and is used elsewhere.
+          return value!=='inherit'&&/\b(inherit|initial|unset|revert)\b/.test(value);
+        }))
+      .map(rule=>`${rule.sheet} ${rule.selector}`);
+    expect(offenders).toEqual([]);
+  });
+
+  it('gives the base button an explicit family, so it is not left to the browser',()=>{
+    const base=rules.filter(rule=>rule.selector==='.button,button');
+    expect(base.length,'the base button tier should exist').toBeGreaterThan(0);
+    expect(base.map(rule=>rule.body).join(';')).toMatch(/font:[^;}]*'DM Sans'/);
+  });
+});
+
 describe('button tiers',()=>{
   it('gives every button on a filled background an explicit text colour',()=>{
     // The base button used to be a solid dark pill, so anything that painted its

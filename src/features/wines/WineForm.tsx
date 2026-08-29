@@ -48,8 +48,10 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel}:WineF
   const [tastingName,setTastingName]=useState(String(initial?.tastingName??''));
   const [venue,setVenue]=useState(String(initial?.venue??''));
   const [tastingDate,setTastingDate]=useState(String(initial?.tastingDate??''));
-  const {tasting:activeTasting}=useActiveTasting();
+  const {tasting:activeTasting,loading:tastingLoading}=useActiveTasting();
   const prefilled=useRef(false);
+  // Editing an existing wine never joins a tasting, so it never waits on one.
+  const waitingForTasting=!id&&tastingLoading;
 
   /**
    * Prefill from the open tasting, once.
@@ -185,6 +187,12 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel}:WineF
     <label className="full-field">Tags (comma separated)<input name="tags" defaultValue={initial?.tags?.join(', ')??''}/></label>
     {photos.length>0&&<p className="form-note">{photos.length} photo{photos.length===1?'':'s'} will be saved permanently only after this wine is successfully logged.</p>}
     {error&&<p role="alert">{error}</p>}
-    <div className="wine-form-actions">{id&&<button type="button" className="wine-edit-cancel quiet" disabled={busy} onClick={()=>nav(`/wines/${id}`)}>Cancel</button>}<button type="submit" className="primary" disabled={busy}>{busy?'Saving…':submitLabel??'Save wine'}</button></div>
+    {/* Saving before the open-tasting probe answers used to post a null
+        tastingName, so a bottle logged in the first moments after an app load
+        was silently created outside the evening. The probe is one indexed query
+        and its answer is cached for the rest of the session, so this is a
+        flicker on the first save and nothing afterwards - and it fails open: if
+        the probe errors, loading clears and the save proceeds untasted. */}
+    <div className="wine-form-actions">{id&&<button type="button" className="wine-edit-cancel quiet" disabled={busy} onClick={()=>nav(`/wines/${id}`)}>Cancel</button>}<button type="submit" className="primary" disabled={busy||waitingForTasting}>{busy?'Saving…':waitingForTasting?'Checking tasting…':submitLabel??'Save wine'}</button></div>
   </form>
 }
