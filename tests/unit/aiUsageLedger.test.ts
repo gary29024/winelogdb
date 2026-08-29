@@ -273,6 +273,22 @@ describe('what a cost is quoted per',()=>{
     expect(group.costPerUnit).toBeCloseTo(group.cost/9,9);
   });
 
+  it('files a multi-page wine list under its own kind, priced per wine',async()=>{
+    // A sheet is several calls - one per photographed page - covering one
+    // evening's wines. The panel should show one Tasting sheet line whose unit
+    // is the wine, not seven runs of something unnamed, since a 200-wine list
+    // and a 12-wine one are not the same purchase.
+    const {env}=ledger();
+    await recordAiUsage(env,'owner',{kind:'scan_sheet',runId:'page-1',model:'gemini-3.1-flash-lite',requests:1,units:80,promptTokens:20000,outputTokens:12000});
+    await recordAiUsage(env,'owner',{kind:'scan_sheet',runId:'page-2',model:'gemini-3.1-flash-lite',requests:1,units:64,promptTokens:18000,outputTokens:9000});
+    const sheet=(await usageSummary(env.DB,'owner',DEFAULT_RATES)).kinds.find(kind=>kind.kind==='scan_sheet')!;
+    expect(sheet.label).toBe('Tasting sheet');
+    expect(sheet.unit).toBe('wine');
+    expect(sheet.unitCount).toBe(144);
+    expect(sheet.runs).toBe(2);
+    expect(sheet.costPerUnit).toBeCloseTo(sheet.cost/144,9);
+  });
+
   it('falls back to the run figure for recognition recorded before wines were counted',async()=>{
     // Events written by the first release carry no unit count; dividing by
     // nothing would be worse than quoting the run.
