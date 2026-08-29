@@ -112,6 +112,25 @@ describe('one tasting page',()=>{
   });
 });
 
+describe('finding the tastings you have logged',()=>{
+  it('is reachable from the shell, not only from a tasting already open',async()=>{
+    // The list page shipped with no way in: the only links to it were the back
+    // pills on a tasting's own page, which you could reach only while one was
+    // open. So a finished evening was unreachable the next morning.
+    await renderShell(null);
+    const nav=host!.querySelector('.desktop-nav')!;
+    const link=[...nav.querySelectorAll('a')].find(node=>node.textContent==='Tastings');
+    expect(link?.getAttribute('href')).toBe('/tastings');
+  });
+
+  it('keeps the mobile tab bar at five, which is what fits',async()=>{
+    // A sixth tab does not fit at 390px, so the phone route in is the journal's
+    // own link rather than another tab.
+    await renderShell(null);
+    expect(host!.querySelector('.mobile-nav')!.textContent).toBe('PassportJournalScan WineProducersInsights');
+  });
+});
+
 describe('the scan sheet',()=>{
   const openSheet=async()=>{
     const trigger=host!.querySelector('.mobile-nav .scan-nav')!;

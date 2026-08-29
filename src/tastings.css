@@ -71,6 +71,8 @@
 
 /* The line under the wine form's event fields when an evening is open. */
 .tasting-prefill-note{margin:-4px 0 10px;color:var(--ink-6);font-size:.76rem;line-height:1.45}
+.journal-tastings-link{display:inline-flex;align-items:center;gap:6px;margin-top:10px;padding:8px 14px;border:1px solid var(--line);border-radius:var(--r-pill);background:var(--paper);color:var(--ink-3);font:600 .82rem 'DM Sans',sans-serif;text-decoration:none}
+.journal-tastings-link:hover{border-color:var(--ink-8);background:var(--ground)}
 .journal-attach-banner{margin:12px 0 0;padding:11px 13px;border:1px solid var(--wine-line);border-radius:var(--r-md);background:var(--paper);color:var(--ink-5);font-size:.82rem;line-height:1.5}
 
 @media(max-width:700px){
