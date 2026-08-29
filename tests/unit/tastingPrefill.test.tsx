@@ -73,6 +73,31 @@ describe('the wine form while a tasting is open',()=>{
     expect(field('tastingDate').value).toBe('2026-08-28');
   });
 
+  it('will not save a wine before it knows whether an evening is open',async()=>{
+    // Reported as "how do I ensure a wine is logged if I leave the tasting page
+    // midway". The tasting is server state, so leaving the page is safe - but
+    // saving in the moments *before* /api/tastings/active answers posted a null
+    // tastingName, and the bottle was created outside the evening with nothing
+    // said. The probe is one indexed query, cached for the rest of the session,
+    // so this holds the button for a flicker on the first save and never again.
+    const hold={release:()=>{}};
+    await mount({},tasting,hold);
+    const submit=[...host!.querySelectorAll('button')].find(node=>node.type==='submit')!;
+    expect(submit.disabled).toBe(true);
+    expect(submit.textContent).toBe('Checking tasting…');
+    await act(async()=>{hold.release()});
+    expect(submit.disabled).toBe(false);
+    expect(field('tastingName').value).toBe('Burgundy portfolio');
+  });
+
+  it('does not hold up editing an existing wine, which joins nothing',async()=>{
+    const hold={release:()=>{}};
+    await mount({id:'w1',initial:{producer:'Ridge',wineName:'Monte Bello'}},tasting,hold);
+    const submit=[...host!.querySelectorAll('button')].find(node=>node.type==='submit')!;
+    expect(submit.disabled).toBe(false);
+    await act(async()=>{hold.release()});
+  });
+
   it('leaves an existing wine alone when it is edited',async()=>{
     // A bottle from March must not be captured by tonight.
     await mount({id:'w1',initial:{producer:'Ridge',wineName:'Monte Bello',tastingName:'March dinner',venue:'Home',tastingDate:'2026-03-14'}});
