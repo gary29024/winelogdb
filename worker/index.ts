@@ -6,6 +6,7 @@ import { createObjectKey } from '../src/lib/r2/keys';
 import { wineInputSchema,type WineInput } from '../src/lib/db/schema';
 import { dimensionsSchema, validateBatch } from '../src/features/uploads/validation';
 import { parseRecognition } from '../src/features/recognition/schema';
+import { closeOpenTastingIfDayChanged, touchTastingActivity } from '../src/lib/tastings/session';
 
 type Bindings={DB:D1Database;WINE_IMAGES:R2Bucket;ASSETS:Fetcher;GEMINI_API_KEY:string;AUTH_SECRET:string;APP_PASSWORD:string;APP_URL:string;MAX_FILE_BYTES?:string;MAX_BATCH_FILES?:string};
 type Variables={userId:string};
@@ -96,6 +97,14 @@ async function saveExperience(db:D1Database,owner:string,wineId:string,w:WineInp
   }
  }
  await db.prepare('INSERT INTO wine_experiences(id,owner_id,wine_id,tasting_id,consumed_at,latitude,longitude,location_name,rating,tasting_notes,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)').bind(crypto.randomUUID(),owner,wineId,tastingId,w.tastingDate??null,w.latitude??null,w.longitude??null,w.locationName??w.venue??null,w.rating??null,w.tastingNotes??'',now,now).run();
+ // Only a newly logged bottle says anything about the evening. This must not
+ // run on the update path: editing a wine from March while tonight's tasting is
+ // open would close it on the March date, and re-editing an old bottle would
+ // keep a finished tasting alive.
+ if(!updateExisting){
+  await closeOpenTastingIfDayChanged(db,owner,w.tastingDate);
+  await touchTastingActivity(db,owner,tastingId);
+ }
 }
 
 app.get('/api/wines',async c=>{

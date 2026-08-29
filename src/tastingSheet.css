@@ -1,0 +1,43 @@
+/* Reading the printed wine list: parse controls, the sticky summary, and a
+   review that has to stay usable at two hundred rows. */
+
+.tasting-sheet-page{max-width:880px;margin:auto}
+.tasting-sheet-actions{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 14px}
+.tasting-sheet-actions>button{flex:1 1 auto}
+.tasting-sheet-notice{margin:0 0 10px;color:var(--ink-5);font-size:.84rem}
+.tasting-sheet-warning{margin:0 0 10px;padding:10px 12px;border:1px solid var(--warn-line);border-radius:var(--r-md);background:var(--warn-wash);color:var(--warn);font-size:.82rem;line-height:1.5}
+
+/* Sticky because the actions must be reachable without scrolling past two
+   hundred rows to find them. */
+.tasting-sheet-summary{position:sticky;top:0;z-index:5;display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;margin:0 0 14px;padding:12px 14px;border:1px solid var(--line);border-radius:var(--r-md);background:var(--paper)}
+.tasting-sheet-counts{margin:0;flex:1 1 auto;color:var(--ink-5);font-size:.84rem}
+.tasting-sheet-counts strong{color:var(--ink);font-size:.95rem}
+.tasting-sheet-currency{display:flex;align-items:center;gap:7px;font:600 .76rem 'DM Sans',sans-serif;color:var(--ink-5)}
+.tasting-sheet-currency input{width:72px;text-transform:uppercase}
+.tasting-sheet-buttons{display:flex;gap:8px;flex-wrap:wrap}
+
+.tasting-sheet-section{margin-bottom:12px}
+.tasting-sheet-section-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:7px 2px}
+.tasting-sheet-toggle{border:0;background:transparent;color:var(--ink);font:700 .82rem 'DM Sans',sans-serif;padding:4px 2px;display:flex;align-items:center;gap:7px;text-align:left}
+.tasting-sheet-toggle small{color:var(--ink-6);font-weight:600}
+.tasting-sheet-select-all{border:1px solid var(--line);background:var(--paper);color:var(--ink-4);border-radius:var(--r-pill);padding:4px 12px;font:600 .74rem 'DM Sans',sans-serif;flex:0 0 auto}
+
+.tasting-sheet-rows{display:grid;gap:6px;margin:0;padding:0;list-style:none}
+.tasting-sheet-row{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:12px;padding:9px 12px;border:1px solid var(--line);border-radius:var(--r-md);background:var(--paper)}
+.tasting-sheet-row.is-new{border-color:var(--wine-line)}
+.tasting-sheet-pick{display:flex;align-items:flex-start;gap:10px;min-width:0;cursor:pointer}
+.tasting-sheet-pick input{margin-top:3px;flex:0 0 auto}
+.tasting-sheet-wine{display:grid;gap:1px;min-width:0}
+.tasting-sheet-wine strong{font:600 .93rem 'DM Sans',sans-serif;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tasting-sheet-wine>span{color:var(--wine);font-size:.8rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tasting-sheet-wine small{color:var(--ink-6);font-size:.72rem}
+.tasting-sheet-price{font:700 .92rem 'DM Sans',sans-serif;color:var(--ink-2);font-variant-numeric:tabular-nums;text-align:right}
+.tasting-sheet-price select{font-size:.82rem;padding:5px 7px}
+
+@media(max-width:700px){
+  .tasting-sheet-summary{padding:10px 11px;gap:8px 10px}
+  .tasting-sheet-buttons{width:100%}
+  .tasting-sheet-buttons button{flex:1 1 auto}
+  .tasting-sheet-row{padding:9px 10px;gap:10px}
+  .tasting-sheet-wine strong{font-size:.88rem}
+}

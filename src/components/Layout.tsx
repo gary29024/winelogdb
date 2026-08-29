@@ -1,6 +1,9 @@
 import { useCallback, useEffect, useRef, useState, type MouseEvent } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { AppIcon } from './AppIcons';
+import { LiveTastingStrip } from '../features/tastings/LiveTastingStrip';
+import { StartTastingSheet } from '../features/tastings/StartTastingSheet';
+import { useActiveTasting } from '../features/tastings/useActiveTasting';
 import '../scanSheet.css';
 import '../mobileViewport.css';
 
@@ -13,9 +16,15 @@ const preloadJournal=()=>void import('../features/wines/LibraryPage');
 const preloadProducers=()=>void import('../features/producers/ProducersPage');
 const preloadPassport=()=>void import('../features/journey/PassportPage');
 const preloadInsights=()=>void import('../features/journey/InsightsPage');
+const preloadTastings=()=>void import('../features/tastings/TastingDetailPage');
 
 export function Layout(){
   const [scanSheetOpen,setScanSheetOpen]=useState(false);
+  const [startTastingOpen,setStartTastingOpen]=useState(false);
+  // Destructured under another name so the class template below cannot emit a
+  // bare `tasting` token: the button-tier and selector guards read those
+  // templates as the set of classes a <button> can carry.
+  const {tasting:liveTasting}=useActiveTasting();
   const sheet=useRef<HTMLElement>(null);
   const scanTrigger=useRef<HTMLButtonElement>(null);
   const usedKeyboard=useRef(false);
@@ -78,13 +87,19 @@ export function Layout(){
     preloadUpload();preloadGroupScan();setScanSheetOpen(true)
   }
   function goFromSheet(path:string){closeScanSheet();navigate(path)}
+  // With an evening already running this button opens it rather than starting a
+  // second one - the server allows only one open tasting at a time anyway.
+  function tastingFromSheet(){
+    closeScanSheet();
+    if(liveTasting)navigate(`/tastings/${liveTasting.id}`);else setStartTastingOpen(true);
+  }
 
   return <>
     <header className="topbar">
       <NavLink className="brand" to="/">WineLog</NavLink>
       <nav className="desktop-nav" aria-label="Main navigation"><NavLink to="/" end onPointerEnter={preloadPassport} onFocus={preloadPassport}>Passport</NavLink><NavLink to="/journal" onPointerEnter={preloadJournal} onFocus={preloadJournal}>Journal</NavLink><NavLink to="/producers" onPointerEnter={preloadProducers} onFocus={preloadProducers}>Producers</NavLink><NavLink to="/insights" onPointerEnter={preloadInsights} onFocus={preloadInsights}>Insights</NavLink><button type="button" className="top-scan-trigger" onClick={openScanSheet}>Scan Wine</button></nav>
     </header>
-    <main><Outlet/></main>
+    <main><LiveTastingStrip/><Outlet/></main>
     <footer>Your private tasting notebook</footer>
 
     <nav className="mobile-nav" aria-label="Mobile navigation">
@@ -98,13 +113,20 @@ export function Layout(){
     {scanSheetOpen&&<div className="scan-sheet-backdrop" onClick={closeScanSheet}>
       <section ref={sheet} tabIndex={-1} className="scan-sheet" role="dialog" aria-modal="true" aria-labelledby="scan-sheet-title" onClick={e=>e.stopPropagation()}>
         <span className="sheet-grabber" aria-hidden="true"/>
-        <div className="scan-sheet-header"><div><p className="eyebrow">NEW TASTING</p><h2 id="scan-sheet-title">Add wine</h2></div><button type="button" className="sheet-close" onClick={closeScanSheet} aria-label="Close"><AppIcon kind="close"/></button></div>
-        <button type="button" className="scan-sheet-action" onPointerDown={preloadUpload} onClick={()=>goFromSheet('/upload')}><span className="sheet-action-icon"><AppIcon kind="single-wine"/></span><span><strong>Single Wine</strong><small>One bottle · one or more label photos</small></span></button>
-        <button type="button" className="scan-sheet-action" onPointerDown={preloadGroupScan} onClick={()=>goFromSheet('/group-scan')}><span className="sheet-action-icon"><AppIcon kind="group-photo"/></span><span><strong>Group Photo</strong><small>One photo · detect and log several different wines</small></span></button>
-        <button type="button" className="scan-sheet-action" onPointerDown={preloadBatchScan} onClick={()=>goFromSheet('/batch-scan')}><span className="sheet-action-icon"><AppIcon kind="batch-scan"/></span><span><strong>Batch Scan</strong><small>Several wines · separate photos/sections · asynchronous Gemini Batch API</small></span></button>
-        <p className="scan-sheet-note"><strong>Single Wine</strong> combines several views of one bottle. <strong>Group Photo</strong> splits one lineup photo into distinct wines. <strong>Batch Scan</strong> processes many separately photographed wines in the background.</p>
+        <div className="scan-sheet-header"><div>{/* "NEW TASTING" until the sheet grew a Start Tasting action, which meant
+            something else entirely and made the heading read as its label. */}
+        <p className="eyebrow">ADD TO WINELOG</p><h2 id="scan-sheet-title">Add wine</h2></div><button type="button" className="sheet-close" onClick={closeScanSheet} aria-label="Close"><AppIcon kind="close"/></button></div>
+        <div className="scan-sheet-grid">
+          <button type="button" className="scan-sheet-action" onPointerDown={preloadUpload} onClick={()=>goFromSheet('/upload')}><span className="sheet-action-icon"><AppIcon kind="single-wine"/></span><span><strong>Single Wine</strong><small>One bottle</small></span></button>
+          <button type="button" className="scan-sheet-action" onPointerDown={preloadGroupScan} onClick={()=>goFromSheet('/group-scan')}><span className="sheet-action-icon"><AppIcon kind="group-photo"/></span><span><strong>Group Photo</strong><small>One lineup shot</small></span></button>
+          <button type="button" className="scan-sheet-action" onPointerDown={preloadBatchScan} onClick={()=>goFromSheet('/batch-scan')}><span className="sheet-action-icon"><AppIcon kind="batch-scan"/></span><span><strong>Batch Scan</strong><small>Many wines, in the background</small></span></button>
+          <button type="button" className={`scan-sheet-action${liveTasting?' is-live':''}`} onPointerDown={preloadTastings} onClick={tastingFromSheet}><span className="sheet-action-icon"><AppIcon kind="tasting"/></span><span><strong>{liveTasting?'Tasting in progress':'Start Tasting'}</strong><small>{liveTasting?liveTasting.name:'Log an evening together'}</small></span></button>
+        </div>
+        <p className="scan-sheet-note"><strong>Single Wine</strong> combines several views of one bottle. <strong>Group Photo</strong> splits one lineup photo into distinct wines. <strong>Batch Scan</strong> processes many separately photographed wines in the background. <strong>Start Tasting</strong> opens an evening that every wine you log then joins.</p>
         <button type="button" className="sheet-manual" onPointerDown={preloadWineForm} onClick={()=>goFromSheet('/wines/new')}><span className="sheet-manual-icon"><AppIcon kind="pen"/></span>Add manually instead</button>
       </section>
     </div>}
+
+    {startTastingOpen&&<StartTastingSheet onClose={()=>setStartTastingOpen(false)} onStarted={started=>{setStartTastingOpen(false);navigate(`/tastings/${started.id}`)}}/>}
   </>
 }

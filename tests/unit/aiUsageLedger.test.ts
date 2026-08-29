@@ -166,21 +166,29 @@ describe('the usage ledger',()=>{
 });
 
 describe('every path that spends money is metered',()=>{
-  // A meter is only worth having if it covers everything. These are the five
+  // A meter is only worth having if it covers everything. These are the six
   // places WineLog calls Gemini; a new one added without a ledger write would
   // be invisible in both the panel and the Cloudflare time series.
+  //
+  // Group Photo and Tasting Sheet declare their kind in a mode spec and hand it
+  // to visionRecognition, which owns the retry, the escalation and the ledger
+  // write for both. So the check is "this file declares its kind, and the write
+  // happens either here or in the module it delegates to" - which is still the
+  // thing that matters, and still fails if a mode is added that meters nothing.
   const sources:Array<[string,string]>=[
     ['src/lib/producers/batchResearch.ts',"kind:'producer_research'"],
     ['src/lib/research/batchWineResearch.ts',"kind:'wine_research'"],
     ['worker/recognitionHandler.ts',"kind:'scan_single'"],
     ['worker/vertexBatchRecognition.ts',"kind:'scan_batch'"],
-    ['worker/groupRecognitionHandler.ts',"kind:'scan_group'"]
+    ['worker/groupRecognitionHandler.ts',"kind:'scan_group'"],
+    ['worker/sheetRecognitionHandler.ts',"kind:'scan_sheet'"]
   ];
   it.each(sources)('%s records usage',async(path,kind)=>{
     const { readFileSync }=await import('node:fs');
     const source=readFileSync(path,'utf8');
-    expect(source).toContain('recordAiUsage');
+    const delegated=/from '\.\/visionRecognition'/.test(source);
     expect(source).toContain(kind);
+    expect(delegated?readFileSync('worker/visionRecognition.ts','utf8'):source).toContain('recordAiUsage');
   });
 
   it('covers every kind the ledger knows about',()=>{
@@ -263,6 +271,22 @@ describe('what a cost is quoted per',()=>{
     expect(group.unitCount).toBe(9);
     expect(group.runs).toBe(1);
     expect(group.costPerUnit).toBeCloseTo(group.cost/9,9);
+  });
+
+  it('files a multi-page wine list under its own kind, priced per wine',async()=>{
+    // A sheet is several calls - one per photographed page - covering one
+    // evening's wines. The panel should show one Tasting sheet line whose unit
+    // is the wine, not seven runs of something unnamed, since a 200-wine list
+    // and a 12-wine one are not the same purchase.
+    const {env}=ledger();
+    await recordAiUsage(env,'owner',{kind:'scan_sheet',runId:'page-1',model:'gemini-3.1-flash-lite',requests:1,units:80,promptTokens:20000,outputTokens:12000});
+    await recordAiUsage(env,'owner',{kind:'scan_sheet',runId:'page-2',model:'gemini-3.1-flash-lite',requests:1,units:64,promptTokens:18000,outputTokens:9000});
+    const sheet=(await usageSummary(env.DB,'owner',DEFAULT_RATES)).kinds.find(kind=>kind.kind==='scan_sheet')!;
+    expect(sheet.label).toBe('Tasting sheet');
+    expect(sheet.unit).toBe('wine');
+    expect(sheet.unitCount).toBe(144);
+    expect(sheet.runs).toBe(2);
+    expect(sheet.costPerUnit).toBeCloseTo(sheet.cost/144,9);
   });
 
   it('falls back to the run figure for recognition recorded before wines were counted',async()=>{

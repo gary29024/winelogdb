@@ -10,6 +10,14 @@ import { ensureProducerCatalogCuveesSeeded } from '../src/lib/cuvees/catalogSeed
 import { changeCuveeCatalogLink,changeCuveeCatalogLinkSchema,createCuveeCatalogLink,createCuveeCatalogLinkSchema,getProducerCuveeCatalogState,unlinkCuveeCatalogLink,unlinkCuveeCatalogLinkSchema } from '../src/lib/cuvees/catalogLinks';
 import { listJournalPage } from '../src/lib/journal/list';
 import { applyBatchExperienceUpdate,batchExperienceSchema } from '../src/lib/journal/batchExperience';
+import { deleteTasting,endTasting,listTastings,readActiveTasting,readTastingRow,readTastingWines,reopenTasting,startTasting,updateTasting } from '../src/lib/tastings/session';
+import { attachTastingWinesSchema,attachWinesToTasting,detachWineFromTasting } from '../src/lib/tastings/attach';
+import { addTastingDocuments,deleteTastingDocument,listTastingDocuments,readTastingDocument,tastingDocumentKeys } from '../src/lib/tastings/documents';
+import { matchSheetWines,readLineupForMatching } from '../src/lib/tastings/sheetMatch';
+import { applySheetPrices,createSheetWines,sheetPricesSchema,sheetWinesSchema } from '../src/lib/tastings/sheetWrite';
+import { sheetPageWasCutShort,sheetResumeLine } from '../src/features/recognition/sheetSchema';
+import { sheetRecognitionSpec } from './sheetRecognitionHandler';
+import { runVisionRecognition } from './visionRecognition';
 
 type Bindings={DB:D1Database;WINE_IMAGES:R2Bucket;ASSETS:Fetcher;GEMINI_API_KEY:string;AUTH_SECRET:string;APP_PASSWORD:string;APP_URL:string;MAX_FILE_BYTES?:string;MAX_BATCH_FILES?:string};
 type AppEnv={Bindings:Bindings};
@@ -232,6 +240,201 @@ app.delete('/api/wines/:id',async c=>{
     }catch(e){console.error(JSON.stringify({event:'cuvee-delete-cleanup-failed',wineId:id,cuveeId:before.cuvee_id,error:(e as Error).message}))}
   }
   return response;
+});
+
+/**
+ * Tastings.
+ *
+ * These live here rather than in entry because they are their own feature
+ * rather than a hook on an existing wine route, and cuveeEntry is where the
+ * app's own D1-backed endpoints have collected. Every one takes the same
+ * preamble as the journal routes above: CORS, then the session, then a 401.
+ *
+ * Route order matters: the literal segments are registered before the dynamic
+ * :id so that /api/tastings/active is not read as a tasting called "active".
+ */
+const ISO_DATE=/^\d{4}-\d{2}-\d{2}$/;
+const tastingError=(e:unknown,fallback:string)=>{
+  const message=(e as Error).message||fallback;
+  return {message,status:(message.includes('no longer exist')?404:400) as 404|400};
+};
+
+app.post('/api/tastings',async c=>{
+  cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
+  const body=await c.req.json().catch(()=>null) as {name?:unknown;tastingDate?:unknown;venue?:unknown}|null;
+  const name=typeof body?.name==='string'?body.name.trim():'';
+  const tastingDate=typeof body?.tastingDate==='string'?body.tastingDate.trim():'';
+  if(!name)return c.json({error:'A tasting needs a name'},400);
+  // The date is the client's local one on purpose - see startTasting.
+  if(!ISO_DATE.test(tastingDate))return c.json({error:'A tasting needs a date as YYYY-MM-DD'},400);
+  try{return c.json({tasting:await startTasting(c.env.DB,owner,{name,tastingDate,venue:typeof body?.venue==='string'?body.venue:null})},201)}
+  catch(e){console.error(JSON.stringify({event:'tasting-start-failed',error:(e as Error).message}));return c.json({error:'Could not start the tasting'},500)}
+});
+
+// Always 200, never 404: "nothing is open" is an answer, and the client reads
+// this on every app load.
+app.get('/api/tastings/active',async c=>{
+  cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
+  try{return c.json({tasting:await readActiveTasting(c.env.DB,owner)})}
+  catch(e){console.error(JSON.stringify({event:'tasting-active-failed',error:(e as Error).message}));return c.json({tasting:null})}
+});
+
+app.get('/api/tastings',async c=>{
+  cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
+  try{return c.json({items:await listTastings(c.env.DB,owner,Number(c.req.query('limit'))||50)})}
+  catch(e){console.error(JSON.stringify({event:'tasting-list-failed',error:(e as Error).message}));return c.json({error:'Could not load tastings'},500)}
+});
+
+app.get('/api/tastings/documents/:id',async c=>{
+  cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
+  const response=await readTastingDocument(c.env,owner,c.req.param('id')).catch(()=>null);
+  return response??c.json({error:'Not found'},404);
+});
+
+app.delete('/api/tastings/documents/:id',async c=>{
+  cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
+  const removed=await deleteTastingDocument(c.env,owner,c.req.param('id')).catch(()=>false);
+  return removed?c.body(null,204):c.json({error:'Not found'},404);
+});
+
+app.get('/api/tastings/:id',async c=>{
+  cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
+  const id=c.req.param('id');
+  try{
+    const tasting=await readTastingRow(c.env.DB,owner,id);
+    if(!tasting)return c.json({error:'Not found'},404);
+    const [wines,documents]=await Promise.all([readTastingWines(c.env.DB,owner,id),listTastingDocuments(c.env.DB,owner,id)]);
+    return c.json({tasting,wines,documents});
+  }catch(e){console.error(JSON.stringify({event:'tasting-read-failed',error:(e as Error).message}));return c.json({error:'Could not load the tasting'},500)}
+});
+
+app.put('/api/tastings/:id',async c=>{
+  cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
+  const body=await c.req.json().catch(()=>null) as {name?:unknown;venue?:unknown}|null;
+  const patch:{name?:string;venue?:string|null}={};
+  if(typeof body?.name==='string')patch.name=body.name;
+  if(body!==null&&'venue' in body)patch.venue=typeof body.venue==='string'?body.venue:null;
+  try{
+    const tasting=await updateTasting(c.env.DB,owner,c.req.param('id'),patch);
+    return tasting?c.json({tasting}):c.json({error:'Not found'},404);
+  }catch(e){
+    const message=(e as Error).message||'Could not update the tasting';
+    // Renaming onto a name+date that already exists trips the identity index.
+    if(/UNIQUE|constraint/i.test(message))return c.json({error:'You already have a tasting with that name on that date'},409);
+    return c.json({error:message},400);
+  }
+});
+
+app.post('/api/tastings/:id/end',async c=>{
+  cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
+  try{
+    const tasting=await endTasting(c.env.DB,owner,c.req.param('id'));
+    return tasting?c.json({tasting}):c.json({error:'Not found'},404);
+  }catch(e){return c.json({error:(e as Error).message||'Could not end the tasting'},500)}
+});
+
+app.post('/api/tastings/:id/reopen',async c=>{
+  cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
+  try{
+    const tasting=await reopenTasting(c.env.DB,owner,c.req.param('id'));
+    return tasting?c.json({tasting}):c.json({error:'Not found'},404);
+  }catch(e){return c.json({error:(e as Error).message||'Could not reopen the tasting'},500)}
+});
+
+app.post('/api/tastings/:id/wines',async c=>{
+  cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
+  const parsed=attachTastingWinesSchema.safeParse(await c.req.json().catch(()=>null));
+  if(!parsed.success)return c.json({error:'Invalid wine selection',issues:parsed.error.issues},400);
+  try{return c.json(await attachWinesToTasting(c.env.DB,owner,c.req.param('id'),parsed.data.ids))}
+  catch(e){const {message,status}=tastingError(e,'Could not add the selected wines');return c.json({error:message},status)}
+});
+
+app.delete('/api/tastings/:id/wines/:wineId',async c=>{
+  cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
+  try{
+    const {detached}=await detachWineFromTasting(c.env.DB,owner,c.req.param('id'),c.req.param('wineId'));
+    return detached?c.body(null,204):c.json({error:'Not found'},404);
+  }catch(e){return c.json({error:(e as Error).message||'Could not remove the wine'},500)}
+});
+
+// The sheet usually arrives at the end, so this is deliberately not gated on
+// the tasting still being open.
+app.post('/api/tastings/:id/documents',async c=>{
+  cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
+  const form=await c.req.formData().catch(()=>null);
+  const files=(form?.getAll('documents')??[]).filter((value):value is File=>value instanceof File);
+  try{return c.json({documents:await addTastingDocuments(c.env,owner,c.req.param('id'),files)},201)}
+  catch(e){const {message,status}=tastingError(e,'Could not save the wine list');return c.json({error:message},status)}
+});
+
+/**
+ * Reading the printed wine list.
+ *
+ * One page per call - a trade tasting list runs to a hundred wines or more, and
+ * one request carrying every page would be cut off mid-array and lose the tail
+ * without saying so. The client photographs pages, posts them one at a time and
+ * merges; `afterLine` continues a page that reported itself cut short.
+ *
+ * Rows come back already matched against the evening's lineup, because the
+ * lineup has to be loaded exactly once and the client should not have to know
+ * how WineLog decides two wines are the same one.
+ */
+app.post('/api/tastings/:id/sheet/parse',async c=>{
+  cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
+  const tastingId=c.req.param('id');
+  const tasting=await c.env.DB.prepare('SELECT id FROM tastings WHERE owner_id=? AND id=?').bind(owner,tastingId).first<{id:string}>();
+  if(!tasting)return c.json({error:'That tasting no longer exists'},404);
+  const outcome=await runVisionRecognition(c.req.raw,c.env,sheetRecognitionSpec);
+  if(!outcome.ok)return outcome.response;
+  const page=outcome.result;
+  try{
+    const lineup=await readLineupForMatching(c.env.DB,owner,tastingId);
+    return c.json({
+      currency:page.currency??null,
+      unresolvedCount:page.unresolvedCount,
+      // Both halves of "was this page cut short": the model's own flag and the
+      // finish reason. Either one means there is more paper to read.
+      truncated:sheetPageWasCutShort(page,outcome.finishReason),
+      resumeAfterLine:sheetResumeLine(page),
+      matches:matchSheetWines(page.wines,lineup),
+      requestId:outcome.requestId,recognitionDurationMs:outcome.durationMs
+    });
+  }catch(e){
+    console.error(JSON.stringify({event:'tasting-sheet-match-failed',error:(e as Error).message}));
+    return c.json({error:'Read the wine list, but could not match it against this tasting'},500);
+  }
+});
+
+app.post('/api/tastings/:id/sheet/prices',async c=>{
+  cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
+  const parsed=sheetPricesSchema.safeParse(await c.req.json().catch(()=>null));
+  if(!parsed.success)return c.json({error:'Invalid sheet prices',issues:parsed.error.issues},400);
+  try{return c.json(await applySheetPrices(c.env.DB,owner,c.req.param('id'),parsed.data))}
+  catch(e){const {message,status}=tastingError(e,'Could not fill in those prices');return c.json({error:message},status)}
+});
+
+app.post('/api/tastings/:id/sheet/wines',async c=>{
+  cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
+  const parsed=sheetWinesSchema.safeParse(await c.req.json().catch(()=>null));
+  if(!parsed.success)return c.json({error:'Invalid sheet wines',issues:parsed.error.issues},400);
+  try{return c.json(await createSheetWines(c.env.DB,owner,c.req.param('id'),parsed.data),201)}
+  catch(e){const {message,status}=tastingError(e,'Could not add those wines');return c.json({error:message},status)}
+});
+
+app.delete('/api/tastings/:id',async c=>{
+  cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
+  const body=await c.req.json().catch(()=>null) as {confirmation?:unknown}|null;
+  if(body?.confirmation!=='DELETE_TASTING')return c.json({error:'Deleting a tasting needs a confirmation'},400);
+  const id=c.req.param('id');
+  try{
+    // Read the keys first: the FK cascades the document rows away, so after the
+    // delete there is nothing left to tell R2 about.
+    const keys=await tastingDocumentKeys(c.env.DB,owner,id);
+    const deleted=await deleteTasting(c.env.DB,owner,id);
+    if(!deleted)return c.json({error:'Not found'},404);
+    if(keys.length)await Promise.allSettled(keys.map(key=>c.env.WINE_IMAGES.delete(key)));
+    return c.body(null,204);
+  }catch(e){console.error(JSON.stringify({event:'tasting-delete-failed',error:(e as Error).message}));return c.json({error:'Could not delete the tasting'},500)}
 });
 
 app.all('*',c=>entryApp.fetch(c.req.raw,c.env,c.executionCtx));

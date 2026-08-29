@@ -1,7 +1,8 @@
 import { useEffect,useMemo,useState } from 'react';
 import { pourFamily } from '../../lib/wine/pourFamily';
 import { JOURNAL_BACK,linkFrom,type BackTarget } from './backTarget';
-import { Link,Navigate,useSearchParams } from 'react-router-dom';
+import { Link,Navigate,useNavigate,useSearchParams } from 'react-router-dom';
+import { attachWinesToTasting,getTasting } from '../tastings/api';
 import { batchUpdateJournalExperience,listWines,setWineFavorite,type JournalWine } from './api';
 import { WineImage } from './WineImage';
 import '../../journalMonths.css';
@@ -66,7 +67,7 @@ function WineCard({wine:w,view,selecting,selected,onToggle,onFavorite,favoriteBu
 }
 
 export function LibraryPage(){
-  const [params,setParams]=useSearchParams();
+  const [params,setParams]=useSearchParams(),navigate=useNavigate();
   // The search, the filters and the page you are on all live in the query
   // string, so back from a wine has to carry it - otherwise it lands on an
   // unfiltered page one, which is the place you were trying not to go.
@@ -89,6 +90,14 @@ export function LibraryPage(){
   const totalPages=Math.max(1,Math.ceil(total/PAGE_SIZE));
   const queryKey=params.toString();
   const favoriteOnly=params.get('favorite')==='1';
+  /**
+   * Adding already-logged wines to a tasting reuses this page's own selection
+   * mode rather than growing a second picker: the cap, "select all on page" and
+   * every filter come along for free, which is the point - you find last night's
+   * bottles with the filters you already know.
+   */
+  const attachTo=params.get('attachTo')??'';
+  const [attachName,setAttachName]=useState('');
   const selectedWines=useMemo(()=>data.filter(wine=>selectedIds.has(wine.id)),[data,selectedIds]);
 
   function update(k:string,v:string,replace=true){
@@ -144,15 +153,38 @@ export function LibraryPage(){
   useEffect(()=>setPageDraft(String(currentPage)),[currentPage]);
 
   useEffect(()=>{
+    if(!attachTo){setAttachName('');return}
+    let active=true;
+    getTasting(attachTo).then(detail=>{if(active)setAttachName(detail.tasting.name)}).catch(()=>{if(active)setAttachName('')});
+    return()=>{active=false};
+  },[attachTo]);
+
+  useEffect(()=>{
     if(restoring)return;
     const controller=new AbortController();
-    setLoading(true);setError('');setData([]);setNextOffset(null);setTotal(0);setSelectedIds(new Set());setSelecting(false);setBatchOpen(false);
+    // Selection mode stays on while attaching: it is the whole reason this page
+    // was opened, and a page change must not silently drop it.
+    setLoading(true);setError('');setData([]);setNextOffset(null);setTotal(0);setSelectedIds(new Set());setSelecting(Boolean(attachTo));setBatchOpen(false);
     listWines(params,{limit:PAGE_SIZE,offset:currentOffset,signal:controller.signal})
       .then(result=>{setData(result.items);setNextOffset(result.nextOffset);setTotal(result.total)})
       .catch(e=>{if(e?.name!=='AbortError')setError(e.message)})
       .finally(()=>{if(!controller.signal.aborted)setLoading(false)});
     return()=>controller.abort();
-  },[queryKey,refreshSeq,restoring]);
+  },[queryKey,refreshSeq,restoring,attachTo]);
+
+  function leaveAttachMode(){
+    setSelectedIds(new Set());setSelecting(false);setBatchError('');
+    setParams(previous=>{const n=new URLSearchParams(previous);n.delete('attachTo');return n},{replace:true});
+  }
+
+  async function submitAttach(){
+    if(!attachTo||!selectedIds.size)return;
+    setBatchBusy(true);setBatchError('');
+    try{
+      await attachWinesToTasting(attachTo,[...selectedIds]);
+      navigate(`/tastings/${attachTo}`);
+    }catch(e){setBatchError((e as Error).message)}finally{setBatchBusy(false)}
+  }
 
   async function submitBatch(){
     if(!selectedIds.size)return;
@@ -174,7 +206,8 @@ export function LibraryPage(){
   // wine, so there was no way to get to a plain journal short of editing the
   // URL. This clears the lot, including what was remembered.
   const filtersApplied=FILTER_KEYS.some(key=>(params.get(key)??'')!=='')||queryDraft!=='';
-  const resetFilters=()=>{setQueryDraft('');forgetJournalFilters();setParams(new URLSearchParams(),{replace:false})};
+  // Clearing filters must not also cancel an attach: that is what Done is for.
+  const resetFilters=()=>{setQueryDraft('');forgetJournalFilters();setParams(attachTo?new URLSearchParams({attachTo}):new URLSearchParams(),{replace:false})};
   const chronological=sort==='newest'||sort==='oldest';
   const ordered=chronological?[...data].sort((a,b)=>sort==='oldest'?journalDate(a).localeCompare(journalDate(b)):journalDate(b).localeCompare(journalDate(a))):data;
   const groups=chronological?ordered.reduce<Array<{key:string;items:JournalWine[]}>>((acc,wine)=>{const key=monthKey(wine),last=acc[acc.length-1];if(last?.key===key)last.items.push(wine);else acc.push({key,items:[wine]});return acc},[]):[];
@@ -189,9 +222,12 @@ export function LibraryPage(){
     <div className="hero journal-hero"><p className="eyebrow">YOUR JOURNAL</p><h1>Wines worth remembering.</h1><p>Search by bottle, place or tasting and keep every drinking experience together.</p></div>
     <div className="journal-scope-tabs" role="tablist" aria-label="Journal scope"><button type="button" role="tab" aria-selected={!favoriteOnly} className={!favoriteOnly?'active':''} onClick={()=>update('favorite','')}>All wines</button><button type="button" role="tab" aria-selected={favoriteOnly} className={favoriteOnly?'active':''} onClick={()=>update('favorite','1')}>♥ Favorites</button></div>
     <form className="filters journal-filters" onSubmit={e=>e.preventDefault()}><label className="search">Search<input aria-label="Search wines" type="search" value={queryDraft} onChange={e=>setQueryDraft(e.target.value)} placeholder="Search wines, makers, regions…"/></label><div className="filter-pills"><label className="filter-month">Month<input type="month" aria-label="Drinking month" value={params.get('month')??''} onChange={e=>update('month',e.target.value)}/></label><label>Tasting<input value={params.get('tasting')??''} onChange={e=>update('tasting',e.target.value)} placeholder="Tasting / event"/></label><label>Country<input value={params.get('country')??''} onChange={e=>update('country',e.target.value)} placeholder="Country"/></label><label>Style<select value={params.get('style')??''} onChange={e=>update('style',e.target.value)}><option value="">Style</option>{['red','white','rose','sparkling','dessert','fortified','orange'].map(x=><option key={x}>{x}</option>)}</select></label><label>Score<input type="number" min="0" max="100" value={params.get('rating')??''} onChange={e=>update('rating',e.target.value)} placeholder="Score"/></label><label>Sort<select value={sort} onChange={e=>update('sort',e.target.value)}><option value="newest">Newest drinking date</option><option value="oldest">Oldest drinking date</option><option value="rating">Rating</option><option value="producer">Producer</option><option value="vintage">Vintage</option></select></label></div></form>
+    {attachTo&&<p className="journal-attach-banner" role="status">Pick the wines that were poured at <strong>{attachName||'this tasting'}</strong>, then tap Add. Filters and search still work, and the wines themselves are not changed — only which evening they belong to.</p>}
     {batchNotice&&<p className="journal-batch-notice" role="status">{batchNotice}</p>}
     {batchError&&!batchOpen&&<p className="journal-page-error" role="alert">{batchError}</p>}
-    <div className={`journal-viewbar${selecting?' selecting':''}`}><span>{selecting?`${selectedIds.size} selected · ${resultLabel}`:!loading&&(filtersApplied||total>0)?`${resultLabel} · Page ${currentPage} of ${totalPages}`:(favoriteOnly?'Favorites':'Journal')}</span>{selecting?<div className="journal-selection-actions"><button type="button" onClick={selectAllOnPage} disabled={!data.length}>Select all on page</button><button type="button" onClick={()=>setSelectedIds(new Set())} disabled={!selectedIds.size}>Clear</button><button type="button" className="primary" onClick={openBatchEditor} disabled={!selectedIds.size}>Edit event / venue</button><button type="button" onClick={stopSelecting} className="quiet">Done</button></div>:<div className={`journal-view-actions${filtersApplied?' with-reset':''}`}>{filtersApplied&&<button type="button" className="journal-filter-reset" onClick={resetFilters}>Reset filters</button>}<button type="button" className="journal-select-toggle" onClick={()=>{setSelecting(true);setBatchNotice('')}} disabled={!data.length}>Select</button><div className="journal-view-toggle" role="group" aria-label="Journal layout"><button type="button" className={view==='list'?'active':''} aria-pressed={view==='list'} onClick={()=>setView('list')}>List</button><button type="button" className={view==='grid'?'active':''} aria-pressed={view==='grid'} onClick={()=>setView('grid')}>Grid</button></div></div>}</div>
+    <div className={`journal-viewbar${selecting?' selecting':''}`}><span>{selecting?`${selectedIds.size} selected · ${resultLabel}`:!loading&&(filtersApplied||total>0)?`${resultLabel} · Page ${currentPage} of ${totalPages}`:(favoriteOnly?'Favorites':'Journal')}</span>{selecting?<div className="journal-selection-actions"><button type="button" onClick={selectAllOnPage} disabled={!data.length}>Select all on page</button><button type="button" onClick={()=>setSelectedIds(new Set())} disabled={!selectedIds.size}>Clear</button>{attachTo
+      ?<button type="button" className="primary" onClick={()=>void submitAttach()} disabled={!selectedIds.size||batchBusy}>{batchBusy?'Adding…':`Add ${selectedIds.size} to ${attachName||'tasting'}`}</button>
+      :<button type="button" className="primary" onClick={openBatchEditor} disabled={!selectedIds.size}>Edit event / venue</button>}<button type="button" onClick={attachTo?leaveAttachMode:stopSelecting} className="quiet">Done</button></div>:<div className={`journal-view-actions${filtersApplied?' with-reset':''}`}>{filtersApplied&&<button type="button" className="journal-filter-reset" onClick={resetFilters}>Reset filters</button>}<button type="button" className="journal-select-toggle" onClick={()=>{setSelecting(true);setBatchNotice('')}} disabled={!data.length}>Select</button><div className="journal-view-toggle" role="group" aria-label="Journal layout"><button type="button" className={view==='list'?'active':''} aria-pressed={view==='list'} onClick={()=>setView('list')}>List</button><button type="button" className={view==='grid'?'active':''} aria-pressed={view==='grid'} onClick={()=>setView('grid')}>Grid</button></div></div>}</div>
     {loading?<p aria-live="polite">Pouring your collection…</p>:error&&!data.length?<p role="alert">{error}</p>:data.length?(chronological?<div className="journal-months">{groups.map(group=><section className="journal-month" key={group.key}><h2 className="journal-month-heading">{monthLabel(group.key)}</h2>{renderItems(group.items)}</section>)}</div>:renderItems(data)):favoriteOnly?<div className="empty favorite-empty"><span><AppIcon kind="heart"/></span><h2>No favorite wines yet</h2><p>Tap the heart on a Journal card or wine page to keep special bottles here.</p><button type="button" onClick={()=>update('favorite','')}>Show all wines</button></div>:<div className="empty"><span><AppIcon kind="journal"/></span><h2>Your journal is empty</h2><p>Scan a bottle label to add your first wine.</p><Link className="button" to="/upload">Scan Wine</Link></div>}
     {error&&data.length>0&&<p className="journal-page-error" role="alert">{error}</p>}
     {total>0&&<nav className="journal-pagination" aria-label="Journal pages"><button type="button" disabled={!hasPrevious||loading} onClick={()=>goToOffset(currentOffset-PAGE_SIZE)}>← Previous</button><form className="journal-page-picker" onSubmit={event=>{event.preventDefault();goToPage()}}><label>Page <input type="number" min="1" max={totalPages} inputMode="numeric" aria-label="Journal page number" value={pageDraft} onChange={event=>setPageDraft(event.target.value)}/> of {totalPages}</label><button type="submit" disabled={loading||pageDraft===String(currentPage)}>Go</button><span>{resultLabel}</span></form><button type="button" disabled={!hasNext||loading} onClick={()=>goToOffset(nextOffset??currentOffset+PAGE_SIZE)}>Next →</button></nav>}

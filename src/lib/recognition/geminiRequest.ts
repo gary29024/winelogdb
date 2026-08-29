@@ -90,6 +90,55 @@ export const groupRecognitionResponseJsonSchema={
   required:['wines','unresolvedCount']
 } as const;
 
+/**
+ * One page of a printed wine list. No bounding box - there is no bottle to crop
+ * - and a priceOptions array rather than a price, because a list line often
+ * carries more than one number and picking between them is the reader's job.
+ */
+export const sheetRecognitionResponseJsonSchema={
+  type:'object',
+  additionalProperties:false,
+  properties:{
+    wines:{
+      type:'array',
+      maxItems:80,
+      items:{
+        type:'object',
+        additionalProperties:false,
+        properties:{
+          producer:{type:'string'},
+          wineName:{type:'string'},
+          vintage:recognitionVintageJsonSchema,
+          country:nullableString,
+          region:regionField,
+          appellation:appellationField,
+          grapes:{type:'array',maxItems:20,items:{type:'string'}},
+          grapeBlend:{type:'array',maxItems:20,items:{type:'object',additionalProperties:false,properties:{grape:{type:'string'},percentage:{anyOf:[{type:'number',minimum:0,maximum:100},{type:'null'}]}},required:['grape']}},
+          style:{anyOf:[{type:'string',enum:['red','white','rose','sparkling','dessert','fortified','orange','other']},{type:'null'}]},
+          alcoholPercentage:{anyOf:[{type:'number',minimum:0,maximum:100},{type:'null'}]},
+          priceOptions:{
+            type:'array',maxItems:4,
+            description:'Every price printed against this wine. Empty when the list shows no price for it.',
+            items:{type:'object',additionalProperties:false,properties:{
+              amount:{type:'number',minimum:0},
+              label:{anyOf:[{type:'string'},{type:'null'}],description:'What the sheet calls this price, e.g. bottle, glass, member. Null when only one is printed.'}
+            },required:['amount','label']}
+          },
+          section:{anyOf:[{type:'string'},{type:'null'}],description:'The flight or heading this wine is printed under.'},
+          lineNumber:{anyOf:[{type:'integer',minimum:0,maximum:2000},{type:'null'}],description:'1-based position of this wine down the page.'},
+          confidence:{type:'number',minimum:0,maximum:1}
+        },
+        required:['producer','wineName','vintage','country','region','appellation','grapes','grapeBlend','style','alcoholPercentage','priceOptions','section','lineNumber','confidence']
+      }
+    },
+    currency:{anyOf:[{type:'string'},{type:'null'}],description:'One ISO 4217 code for the whole sheet, e.g. HKD, EUR, USD.'},
+    unresolvedCount:{type:'integer',minimum:0,maximum:200},
+    truncated:{type:'boolean',description:'True when wines remain on this page that did not fit in the response.'},
+    lastLineNumber:{anyOf:[{type:'integer',minimum:0,maximum:2000},{type:'null'}]}
+  },
+  required:['wines','currency','unresolvedCount','truncated','lastLineNumber']
+} as const;
+
 export function buildRecognitionPrompt(metadata:RecognitionPhotoMetadata[]){
   const selected=selectRecognitionMetadata(metadata);
   const context=[
