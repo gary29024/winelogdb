@@ -73,6 +73,32 @@ describe('one tasting page',()=>{
     expect(host!.textContent).toContain('In progress');
   });
 
+  it('offers to log a wine from the page you are sitting on',async()=>{
+    // Reported: there was no way to save a wine from here at all. During a
+    // tasting this is the thing you do repeatedly, so needing the nav's Scan
+    // Wine - two taps from the evening already on screen - was the wrong shape.
+    await renderDetail({tasting,documents:[],wines:[]});
+    const log=[...host!.querySelectorAll('a')].find(node=>node.textContent==='Log a wine');
+    expect(log).toBeTruthy();
+    expect(log?.getAttribute('href')).toBe('/upload');
+  });
+
+  it('drops that offer once the evening is over',async()=>{
+    // A closed tasting no longer captures new saves, so the button would be a
+    // lie: the wine would be logged outside it.
+    await renderDetail({tasting:{...tasting,endedAt:'2026-08-28T23:00:00.000Z'},documents:[],wines:[]});
+    expect([...host!.querySelectorAll('a')].some(node=>node.textContent==='Log a wine')).toBe(false);
+  });
+
+  it('offers the wine list once, on the card that holds it',async()=>{
+    // The scan entry used to sit in the action row as well as on the Wine list
+    // card, so two buttons on one screen looked like the same thing twice.
+    await renderDetail({tasting,documents:[],wines:[]});
+    const scans=[...host!.querySelectorAll('a')].filter(node=>node.getAttribute('href')==='/tastings/t1/sheet');
+    expect(scans).toHaveLength(1);
+    expect(scans[0].closest('.tasting-documents')).toBeTruthy();
+  });
+
   it('says what an empty evening is waiting for',async()=>{
     await renderDetail({tasting,documents:[],wines:[]});
     expect(host!.querySelector('.tasting-empty')?.textContent).toContain('Every wine you log while this is open joins it');
@@ -82,7 +108,7 @@ describe('one tasting page',()=>{
     // The sheet is handed out at the end, so this control cannot be gated on
     // the evening still being open.
     await renderDetail({tasting:{...tasting,endedAt:'2026-08-28T23:00:00.000Z'},documents:[],wines:[]});
-    expect(host!.querySelector('.tasting-documents')?.textContent).toContain('Add wine list');
+    expect(host!.querySelector('.tasting-documents')?.textContent).toContain('Scan & read prices');
   });
 });
 

@@ -61,6 +61,8 @@
 .tasting-documents-head h2{margin:0;font-size:1.25rem}
 .tasting-documents-head button{flex:0 0 auto}
 .tasting-documents-note{margin:.5rem 0 0;color:var(--ink-6);font-size:.79rem;line-height:1.5}
+.tasting-documents-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.tasting-documents-actions>*{flex:1 1 auto;text-align:center}
 .tasting-document-strip{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0 0;padding:0;list-style:none}
 .tasting-document{position:relative}
 .tasting-document img{width:92px;height:118px;border-radius:var(--r-sm);object-fit:cover;display:block}
