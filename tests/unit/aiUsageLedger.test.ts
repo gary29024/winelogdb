@@ -166,21 +166,29 @@ describe('the usage ledger',()=>{
 });
 
 describe('every path that spends money is metered',()=>{
-  // A meter is only worth having if it covers everything. These are the five
+  // A meter is only worth having if it covers everything. These are the six
   // places WineLog calls Gemini; a new one added without a ledger write would
   // be invisible in both the panel and the Cloudflare time series.
+  //
+  // Group Photo and Tasting Sheet declare their kind in a mode spec and hand it
+  // to visionRecognition, which owns the retry, the escalation and the ledger
+  // write for both. So the check is "this file declares its kind, and the write
+  // happens either here or in the module it delegates to" - which is still the
+  // thing that matters, and still fails if a mode is added that meters nothing.
   const sources:Array<[string,string]>=[
     ['src/lib/producers/batchResearch.ts',"kind:'producer_research'"],
     ['src/lib/research/batchWineResearch.ts',"kind:'wine_research'"],
     ['worker/recognitionHandler.ts',"kind:'scan_single'"],
     ['worker/vertexBatchRecognition.ts',"kind:'scan_batch'"],
-    ['worker/groupRecognitionHandler.ts',"kind:'scan_group'"]
+    ['worker/groupRecognitionHandler.ts',"kind:'scan_group'"],
+    ['worker/sheetRecognitionHandler.ts',"kind:'scan_sheet'"]
   ];
   it.each(sources)('%s records usage',async(path,kind)=>{
     const { readFileSync }=await import('node:fs');
     const source=readFileSync(path,'utf8');
-    expect(source).toContain('recordAiUsage');
+    const delegated=/from '\.\/visionRecognition'/.test(source);
     expect(source).toContain(kind);
+    expect(delegated?readFileSync('worker/visionRecognition.ts','utf8'):source).toContain('recordAiUsage');
   });
 
   it('covers every kind the ledger knows about',()=>{

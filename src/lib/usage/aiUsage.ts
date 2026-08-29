@@ -9,7 +9,7 @@ import { billingMonth,nextBillingReset,BILLING_TIME_ZONE } from './billingPeriod
  * product; this is the meter beside it, and a meter that can break the thing it
  * measures is worse than no meter.
  */
-export const AI_USAGE_KINDS=['producer_research','wine_research','scan_single','scan_batch','scan_group'] as const;
+export const AI_USAGE_KINDS=['producer_research','wine_research','scan_single','scan_batch','scan_group','scan_sheet'] as const;
 export type AiUsageKind=typeof AI_USAGE_KINDS[number];
 
 export const kindLabels:Record<AiUsageKind,string>={
@@ -17,7 +17,8 @@ export const kindLabels:Record<AiUsageKind,string>={
   wine_research:'Wine Deep Search',
   scan_single:'Single scan',
   scan_batch:'Batch scan',
-  scan_group:'Group photo'
+  scan_group:'Group photo',
+  scan_sheet:'Tasting sheet'
 };
 
 export type AiUsageEvent={
@@ -38,7 +39,7 @@ export type AiUsageEvent={
  * difference between a cheap run and an expensive one.
  */
 export const unitOf:Record<AiUsageKind,'run'|'wine'>={
-  producer_research:'run',wine_research:'run',scan_single:'wine',scan_batch:'wine',scan_group:'wine'
+  producer_research:'run',wine_research:'run',scan_single:'wine',scan_batch:'wine',scan_group:'wine',scan_sheet:'wine'
 };
 
 /** Cloudflare's Analytics Engine, when a dataset is bound. */

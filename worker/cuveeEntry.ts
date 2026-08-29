@@ -13,6 +13,11 @@ import { applyBatchExperienceUpdate,batchExperienceSchema } from '../src/lib/jou
 import { deleteTasting,endTasting,listTastings,readActiveTasting,readTastingRow,readTastingWines,reopenTasting,startTasting,updateTasting } from '../src/lib/tastings/session';
 import { attachTastingWinesSchema,attachWinesToTasting,detachWineFromTasting } from '../src/lib/tastings/attach';
 import { addTastingDocuments,deleteTastingDocument,listTastingDocuments,readTastingDocument,tastingDocumentKeys } from '../src/lib/tastings/documents';
+import { matchSheetWines,readLineupForMatching } from '../src/lib/tastings/sheetMatch';
+import { applySheetPrices,createSheetWines,sheetPricesSchema,sheetWinesSchema } from '../src/lib/tastings/sheetWrite';
+import { sheetPageWasCutShort,sheetResumeLine } from '../src/features/recognition/sheetSchema';
+import { sheetRecognitionSpec } from './sheetRecognitionHandler';
+import { runVisionRecognition } from './visionRecognition';
 
 type Bindings={DB:D1Database;WINE_IMAGES:R2Bucket;ASSETS:Fetcher;GEMINI_API_KEY:string;AUTH_SECRET:string;APP_PASSWORD:string;APP_URL:string;MAX_FILE_BYTES?:string;MAX_BATCH_FILES?:string};
 type AppEnv={Bindings:Bindings};
@@ -360,6 +365,60 @@ app.post('/api/tastings/:id/documents',async c=>{
   const files=(form?.getAll('documents')??[]).filter((value):value is File=>value instanceof File);
   try{return c.json({documents:await addTastingDocuments(c.env,owner,c.req.param('id'),files)},201)}
   catch(e){const {message,status}=tastingError(e,'Could not save the wine list');return c.json({error:message},status)}
+});
+
+/**
+ * Reading the printed wine list.
+ *
+ * One page per call - a trade tasting list runs to a hundred wines or more, and
+ * one request carrying every page would be cut off mid-array and lose the tail
+ * without saying so. The client photographs pages, posts them one at a time and
+ * merges; `afterLine` continues a page that reported itself cut short.
+ *
+ * Rows come back already matched against the evening's lineup, because the
+ * lineup has to be loaded exactly once and the client should not have to know
+ * how WineLog decides two wines are the same one.
+ */
+app.post('/api/tastings/:id/sheet/parse',async c=>{
+  cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
+  const tastingId=c.req.param('id');
+  const tasting=await c.env.DB.prepare('SELECT id FROM tastings WHERE owner_id=? AND id=?').bind(owner,tastingId).first<{id:string}>();
+  if(!tasting)return c.json({error:'That tasting no longer exists'},404);
+  const outcome=await runVisionRecognition(c.req.raw,c.env,sheetRecognitionSpec);
+  if(!outcome.ok)return outcome.response;
+  const page=outcome.result;
+  try{
+    const lineup=await readLineupForMatching(c.env.DB,owner,tastingId);
+    return c.json({
+      currency:page.currency??null,
+      unresolvedCount:page.unresolvedCount,
+      // Both halves of "was this page cut short": the model's own flag and the
+      // finish reason. Either one means there is more paper to read.
+      truncated:sheetPageWasCutShort(page,outcome.finishReason),
+      resumeAfterLine:sheetResumeLine(page),
+      matches:matchSheetWines(page.wines,lineup),
+      requestId:outcome.requestId,recognitionDurationMs:outcome.durationMs
+    });
+  }catch(e){
+    console.error(JSON.stringify({event:'tasting-sheet-match-failed',error:(e as Error).message}));
+    return c.json({error:'Read the wine list, but could not match it against this tasting'},500);
+  }
+});
+
+app.post('/api/tastings/:id/sheet/prices',async c=>{
+  cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
+  const parsed=sheetPricesSchema.safeParse(await c.req.json().catch(()=>null));
+  if(!parsed.success)return c.json({error:'Invalid sheet prices',issues:parsed.error.issues},400);
+  try{return c.json(await applySheetPrices(c.env.DB,owner,c.req.param('id'),parsed.data))}
+  catch(e){const {message,status}=tastingError(e,'Could not fill in those prices');return c.json({error:message},status)}
+});
+
+app.post('/api/tastings/:id/sheet/wines',async c=>{
+  cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
+  const parsed=sheetWinesSchema.safeParse(await c.req.json().catch(()=>null));
+  if(!parsed.success)return c.json({error:'Invalid sheet wines',issues:parsed.error.issues},400);
+  try{return c.json(await createSheetWines(c.env.DB,owner,c.req.param('id'),parsed.data),201)}
+  catch(e){const {message,status}=tastingError(e,'Could not add those wines');return c.json({error:message},status)}
 });
 
 app.delete('/api/tastings/:id',async c=>{

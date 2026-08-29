@@ -66,6 +66,47 @@ export const uploadTastingDocuments=(id:string,files:File[])=>{
     .then(r=>json<{documents:TastingDocument[]}>(r,'Could not save the wine list'));
 };
 
+export type SheetPriceOption={amount:number;label:string|null};
+export type SheetWine={
+  producer:string;wineName:string;vintage:number|null;
+  country:string|null;region:string|null;appellation:string|null;
+  style:string|null;grapes:string[];priceOptions:SheetPriceOption[];
+  section:string|null;lineNumber:number|null;confidence:number;
+};
+export type SheetMatch=
+  |{status:'matched';wine:SheetWine;wineId:string;hasPrice:boolean;currentPrice:number|null;currentCurrency:string|null}
+  |{status:'new';wine:SheetWine};
+export type SheetPageResult={
+  currency:string|null;unresolvedCount:number;truncated:boolean;resumeAfterLine:number|null;
+  matches:SheetMatch[];requestId:string;recognitionDurationMs:number;
+};
+
+/** One page per call — see the sheet route. `afterLine` continues a page that was cut short. */
+export const parseTastingSheetPage=(id:string,page:File,afterLine?:number|null)=>{
+  const form=new FormData();
+  form.append('images',page);
+  form.append('metadata',JSON.stringify([{capturedAt:null,latitude:null,longitude:null,source:'none'}]));
+  if(afterLine)form.append('afterLine',String(afterLine));
+  return fetch(`/api/tastings/${id}/sheet/parse`,{method:'POST',headers:authHeaders(),body:form})
+    .then(r=>json<SheetPageResult>(r,'Could not read that wine list page'));
+};
+
+export const fillTastingSheetPrices=(id:string,currency:string,prices:Array<{wineId:string;price:number}>)=>
+  fetch(`/api/tastings/${id}/sheet/prices`,{method:'POST',headers:authHeaders(true),body:JSON.stringify({currency,prices})})
+    .then(r=>json<{filled:number;skipped:number}>(r,'Could not fill in those prices'));
+
+export const createTastingSheetWines=(id:string,body:{currency:string|null;tastingDate:string|null;venue:string|null;wines:Array<Record<string,unknown>>})=>
+  fetch(`/api/tastings/${id}/sheet/wines`,{method:'POST',headers:authHeaders(true),body:JSON.stringify(body)})
+    .then(r=>json<{created:number;wineIds:string[]}>(r,'Could not add those wines'));
+
+/** A wine list already in R2, fetched back as a file so it can be re-read without the paper. */
+export async function readTastingDocumentFile(documentId:string,name='wine-list.jpg'){
+  const response=await fetch(`/api/tastings/documents/${documentId}`,{headers:authHeaders()});
+  if(!response.ok)throw new Error('Could not load that wine list page');
+  const blob=await response.blob();
+  return new File([blob],name,{type:blob.type||'image/jpeg'});
+}
+
 export async function deleteTastingDocument(documentId:string){
   const response=await fetch(`/api/tastings/documents/${documentId}`,{method:'DELETE',headers:authHeaders()});
   if(response.status===401){clearSession();throw new Error('Session expired. Please sign in again.')}

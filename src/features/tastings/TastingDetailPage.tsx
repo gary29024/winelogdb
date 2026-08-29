@@ -117,6 +117,7 @@ export function TastingDetailPage(){
         ?<button type="button" className="primary" onClick={()=>void run(()=>endTasting(id))} disabled={busy}>End tasting</button>
         :<button type="button" onClick={()=>void run(()=>reopenTasting(id))} disabled={busy}>Reopen tasting</button>}
       <Link className="button" to={`/journal?attachTo=${id}`}>Add wines from the journal</Link>
+      <Link className="button" to={`/tastings/${id}/sheet`}>Scan the wine list</Link>
       <button type="button" onClick={()=>setEditing(true)} disabled={busy}>Rename / venue</button>
       <button type="button" className="quiet" onClick={()=>void removeTasting()} disabled={busy}>Delete</button>
     </div>}
