@@ -1,4 +1,4 @@
-import { useEffect,useMemo,useState } from 'react';
+import { useEffect,useMemo,useRef,useState } from 'react';
 import { pourFamily } from '../../lib/wine/pourFamily';
 import { JOURNAL_BACK,linkFrom,type BackTarget } from './backTarget';
 import { Link,Navigate,useNavigate,useSearchParams } from 'react-router-dom';
@@ -100,8 +100,26 @@ export function LibraryPage(){
   const [attachName,setAttachName]=useState('');
   const selectedWines=useMemo(()=>data.filter(wine=>selectedIds.has(wine.id)),[data,selectedIds]);
 
+  /**
+   * The query string as it stands right now.
+   *
+   * react-router hands setSearchParams(fn) the params from the render that
+   * created the setter, not the URL as it is when the setter runs. Anything
+   * deferred therefore rebuilds from a snapshot taken before the user's last
+   * action - which is how Reset filters cleared the search and then put the
+   * month back: the 350ms debounce fired afterwards, took the pre-reset params,
+   * removed `query` from them, and wrote the rest back.
+   *
+   * Same latest-value ref the lightbox uses for its close handler.
+   */
+  const liveParams=useRef(params);
+  liveParams.current=params;
+
   function update(k:string,v:string,replace=true){
-    setParams(previous=>{const n=new URLSearchParams(previous);v?n.set(k,v):n.delete(k);n.delete('offset');return n},{replace});
+    const next=new URLSearchParams(liveParams.current);
+    v?next.set(k,v):next.delete(k);
+    next.delete('offset');
+    setParams(next,{replace});
   }
   function goToOffset(offset:number){
     const next=Math.max(0,Math.floor(offset/PAGE_SIZE)*PAGE_SIZE);
@@ -146,7 +164,10 @@ export function LibraryPage(){
   },[queryKey,restoring]);
 
   useEffect(()=>{
-    const timer=window.setTimeout(()=>{if((params.get('query')??'')!==queryDraft)update('query',queryDraft)},350);
+    // Compared against the live URL, not the render's copy: after a reset the
+    // draft and the URL agree, so there is nothing to write and nothing to
+    // resurrect.
+    const timer=window.setTimeout(()=>{if((liveParams.current.get('query')??'')!==queryDraft)update('query',queryDraft)},350);
     return()=>window.clearTimeout(timer);
   },[queryDraft]);
 

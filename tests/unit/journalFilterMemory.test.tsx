@@ -124,3 +124,36 @@ describe('clearing the journal filters',()=>{
     expect(after.every(url=>!url.includes('style='))).toBe(true);
   });
 });
+
+describe('resetting the filters',()=>{
+  it('clears the month as well as the search, and it stays cleared',async()=>{
+    // Reported: type a wine name, pick a month, press Reset - the name goes and
+    // the month stays. The reset itself was fine; the 350ms search debounce
+    // fired afterwards holding the pre-reset query string, dropped `query` from
+    // it and wrote the rest back, so the month returned a third of a second
+    // later. The URL trail was "" -> ?query -> ?query&month -> "" -> ?month.
+    vi.stubGlobal('fetch',vi.fn(async()=>new Response(JSON.stringify({items:[],nextOffset:null,total:0}),
+      {status:200,headers:{'content-type':'application/json'}})));
+    vi.resetModules();
+    const {LibraryPage}=await import('../../src/features/wines/LibraryPage');
+    host=document.createElement('div');document.body.appendChild(host);root=createRoot(host);
+    await act(async()=>{root!.render(<MemoryRouter initialEntries={['/journal']}><LibraryPage/></MemoryRouter>)});
+
+    const setValue=async(el:HTMLInputElement,value:string)=>{
+      const setter=Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype,'value')!.set!;
+      await act(async()=>{setter.call(el,value);el.dispatchEvent(new Event('input',{bubbles:true}))});
+    };
+    await setValue(host.querySelector('input[type=search]') as HTMLInputElement,'chambertin');
+    await act(async()=>{await new Promise(resolve=>setTimeout(resolve,420))});
+    await setValue(host.querySelector('.filter-month input') as HTMLInputElement,'2026-08');
+    expect((host.querySelector('.filter-month input') as HTMLInputElement).value).toBe('2026-08');
+
+    const reset=[...host.querySelectorAll('button')].find(button=>button.textContent==='Reset filters')!;
+    await act(async()=>{reset.dispatchEvent(new MouseEvent('click',{bubbles:true}))});
+    // Past the debounce, which is where it used to come back.
+    await act(async()=>{await new Promise(resolve=>setTimeout(resolve,450))});
+
+    expect((host.querySelector('input[type=search]') as HTMLInputElement).value).toBe('');
+    expect((host.querySelector('.filter-month input') as HTMLInputElement).value).toBe('');
+  });
+});
