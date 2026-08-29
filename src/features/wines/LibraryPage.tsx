@@ -80,7 +80,19 @@ export function LibraryPage(){
   // from Insights is never overridden by what was stored.
   const [restoreFilters]=useState(()=>params.toString()?'':savedJournalFilters());
   const restoring=Boolean(restoreFilters)&&!params.toString();
-  const [view,setViewState]=useState<ViewMode>(initialView),[queryDraft,setQueryDraft]=useState(()=>params.get('query')??''),[refreshSeq,setRefreshSeq]=useState(0);
+  /**
+   * The search box is the one filter with a copy outside the URL, so it is the
+   * one that can disagree with it.
+   *
+   * Seeded from the filters about to be restored rather than from the params of
+   * this first render, which are still empty: the restore is a <Navigate>, and
+   * that re-renders rather than remounts, so a useState initialiser never runs
+   * again. Left as-is the box came back blank while the URL still carried the
+   * query - a journal that said "19 matching wines" with nothing typed in it -
+   * and the debounce then fought the restore, clearing the query and having it
+   * put back, which cost two identical page requests on every return.
+   */
+  const [view,setViewState]=useState<ViewMode>(initialView),[queryDraft,setQueryDraft]=useState(()=>(restoreFilters?new URLSearchParams(restoreFilters):params).get('query')??''),[refreshSeq,setRefreshSeq]=useState(0);
   const [pageDraft,setPageDraft]=useState('1');
   const [selecting,setSelecting]=useState(false),[selectedIds,setSelectedIds]=useState<Set<string>>(()=>new Set());
   const [favoriteBusy,setFavoriteBusy]=useState<Set<string>>(()=>new Set());
