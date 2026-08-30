@@ -2,9 +2,17 @@ import { describe,expect,it } from 'vitest';
 import { ACHIEVEMENT_DEFINITION_VERSION } from '../../worker/achievementHandler';
 import { achievementDefinitions } from '../../src/features/achievements/curatedLaunch';
 
-/** A stable summary of the curated set: which collections exist and how big each is. */
+/**
+ * A stable summary of the curated set: which collections exist, and which
+ * targets each holds in which order.
+ *
+ * The order is part of it because the cached payload carries it. Counting items
+ * was not enough: reordering the Graves estates by what they are classified for
+ * changed no count, so this stayed green while the cache kept serving the old
+ * order under new headings.
+ */
 function curatedCollectionFingerprint(){
-  const shape=achievementDefinitions.map(definition=>`${definition.id}:${definition.items.length}`).sort().join('|');
+  const shape=achievementDefinitions.map(definition=>`${definition.id}:${definition.items.map(item=>item.id).join(',')}`).sort().join('|');
   let hash=0;
   for(const character of shape)hash=(Math.imul(hash,31)+character.charCodeAt(0))|0;
   return (hash>>>0).toString(16);
@@ -25,13 +33,13 @@ describe('the curated set and its cache key',()=>{
     // If this fails: the curated set changed, or the payload did. Bump
     // ACHIEVEMENT_DEFINITION_VERSION, then put the new pair here.
     expect({version:ACHIEVEMENT_DEFINITION_VERSION,fingerprint:curatedCollectionFingerprint()})
-      .toEqual({version:6,fingerprint:'c41962fd'});
+      .toEqual({version:7,fingerprint:'accfadcb'});
   });
 
   it('changes the fingerprint when a collection is added or resized',()=>{
     // The guard is only worth having if it actually moves.
     const before=curatedCollectionFingerprint();
-    const extra=[...achievementDefinitions.map(definition=>`${definition.id}:${definition.items.length}`),'new-collection:5'].sort().join('|');
+    const extra=[...achievementDefinitions.map(definition=>`${definition.id}:${definition.items.map(item=>item.id).join(',')}`),'new-collection:a,b'].sort().join('|');
     let hash=0;for(const character of extra)hash=(Math.imul(hash,31)+character.charCodeAt(0))|0;
     expect((hash>>>0).toString(16)).not.toBe(before);
   });

@@ -1,6 +1,20 @@
+import { gravesClassifiedFor,saintEmilionPremierRank } from './expandedDefinitions';
+
 export type AchievementChecklistHeading={section:string|null;subsection:string|null};
 
-export function achievementChecklistHeading(definitionId:string,index:number):AchievementChecklistHeading{
+/**
+ * The heading one checklist row sits under.
+ *
+ * Most collections answer from the position, because their lists are written in
+ * rank order and a position is all the caller has ever needed. The two Bordeaux
+ * collections whose heading is a fact about the estate rather than a place in a
+ * list answer from the item id instead: the checklist is served from a
+ * per-owner cache that can be a release behind, and a stale order turned a
+ * position into a wrong claim about a real wine.
+ */
+export function achievementChecklistHeading(definitionId:string,index:number,itemId?:string):AchievementChecklistHeading{
+  const byId=itemId?gravesClassifiedFor[itemId]??saintEmilionPremierRank[itemId]:undefined;
+  if(byId)return {section:byId,subsection:null};
   if(definitionId==='bordeaux-1855-red-classified-growths'){
     if(index<5)return {section:'First Growths · Premiers Crus',subsection:null};
     if(index<19)return {section:'Second Growths · Deuxièmes Crus',subsection:null};
@@ -25,21 +39,10 @@ export function achievementChecklistHeading(definitionId:string,index:number):Ac
       ?{section:'Superior First Growth · Premier Cru Supérieur',subsection:null}
       :{section:'First Growths · Premiers Crus',subsection:null};
   }
-  // Graves ranks nothing; it classifies an estate for red, for white, or for
-  // both, so that is the only division there is to show. The list is ordered to
-  // match.
-  if(definitionId==='graves-crus-classes'){
-    if(index<6)return {section:'Classified for red and white',subsection:null};
-    if(index<12)return {section:'Classified for red',subsection:null};
-    return {section:'Classified for white',subsection:null};
-  }
-  // The two ranks of Saint-Émilion's Premiers, which is what the 2022
-  // classification is remembered for.
-  if(definitionId==='saint-emilion-2022-premiers'){
-    return index<2
-      ?{section:'Premier Grand Cru Classé A',subsection:null}
-      :{section:'Premier Grand Cru Classé B',subsection:null};
-  }
+  // Graves and the Saint-Émilion Premiers are answered by id above. The lists
+  // are still ordered by classification so each heading's estates sit together,
+  // since the page heads consecutive runs - but the ordering only affects how
+  // tidily they group, never which heading an estate gets.
   if(definitionId==='burgundy-33-grand-crus'){
     if(index===0)return {section:'Chablis',subsection:'Chablis Grand Cru'};
     if(index<=24){

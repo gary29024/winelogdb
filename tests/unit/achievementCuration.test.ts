@@ -107,28 +107,33 @@ describe('master checklist section headings',()=>{
     expect(heads.filter(head=>head?.includes('Second Growths'))).toHaveLength(15);
   });
 
-  it('splits Graves by what each estate is classified for, which is its only division',()=>{
-    expect(achievementChecklistHeading('graves-crus-classes',0).section).toBe('Classified for red and white');
-    expect(achievementChecklistHeading('graves-crus-classes',5).section).toBe('Classified for red and white');
-    expect(achievementChecklistHeading('graves-crus-classes',6).section).toBe('Classified for red');
-    expect(achievementChecklistHeading('graves-crus-classes',11).section).toBe('Classified for red');
-    expect(achievementChecklistHeading('graves-crus-classes',12).section).toBe('Classified for white');
-  });
+  it('names the classification from the estate, not from where it sits in the list',async()=>{
+    // The bug this replaces: the checklist is served from a per-owner cache
+    // that can be a release behind, so headings laid over a stale order put
+    // Château Pape Clément under "Classified for white", which it is not. A
+    // stale order may now group untidily; it can no longer make a false claim.
+    const { achievementDefinitions:all }=await import('../../src/features/achievements/curatedLaunch');
+    const graves=all.find(definition=>definition.id==='graves-crus-classes')!;
+    const pape=graves.items.find(item=>item.label.includes('Pape Clément'))!;
+    const couhins=graves.items.find(item=>item.label==='Château Couhins')!;
+    // asked for at positions that belong to entirely different headings
+    expect(achievementChecklistHeading('graves-crus-classes',0,pape.id).section).toBe('Classified for red');
+    expect(achievementChecklistHeading('graves-crus-classes',13,pape.id).section).toBe('Classified for red');
+    expect(achievementChecklistHeading('graves-crus-classes',0,couhins.id).section).toBe('Classified for white');
 
-  it('splits the Saint-Émilion Premiers into A and B',()=>{
-    // The gap between them is what the 2022 classification is remembered for.
-    expect(achievementChecklistHeading('saint-emilion-2022-premiers',0).section).toBe('Premier Grand Cru Classé A');
-    expect(achievementChecklistHeading('saint-emilion-2022-premiers',1).section).toBe('Premier Grand Cru Classé A');
-    expect(achievementChecklistHeading('saint-emilion-2022-premiers',2).section).toBe('Premier Grand Cru Classé B');
+    const stEmilion=all.find(definition=>definition.id==='saint-emilion-2022-premiers')!;
+    const figeac=stEmilion.items.find(item=>item.label.includes('Figeac'))!;
+    expect(achievementChecklistHeading('saint-emilion-2022-premiers',9,figeac.id).section).toBe('Premier Grand Cru Classé A');
   });
 
   it('files each Graves and Saint-Émilion estate under the right heading',async()=>{
-    // Same guard as the 1855 sweets: the boundaries are indexes into
-    // hand-written lists, so they are checked against the lists themselves.
+    // Graves classifies an estate for red, for white, or for both; that is its
+    // only division. Saint-Émilion's Premiers come in two ranks, and the gap
+    // between them is what the 2022 classification is remembered for.
     const { achievementDefinitions:all }=await import('../../src/features/achievements/curatedLaunch');
     const labelsUnder=(id:string,section:string)=>{
       const collection=all.find(definition=>definition.id===id)!;
-      return collection.items.filter((_,index)=>achievementChecklistHeading(id,index).section===section).map(item=>item.label);
+      return collection.items.filter((item,index)=>achievementChecklistHeading(id,index,item.id).section===section).map(item=>item.label);
     };
     expect(labelsUnder('saint-emilion-2022-premiers','Premier Grand Cru Classé A'))
       .toEqual(['Château Figeac','Château Pavie']);

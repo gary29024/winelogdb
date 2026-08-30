@@ -4,6 +4,24 @@ const slug=(value:string)=>value.normalize('NFD').replace(/[\u0300-\u036f]/g,'')
 type NamedEntry=string|readonly [string,...string[]];
 const names=(entry:NamedEntry)=>typeof entry==='string'?[entry]:[entry[0],...entry.slice(1)];
 const producerItems=(prefix:string,entries:readonly NamedEntry[]):AchievementDefinitionItem[]=>entries.map(entry=>{const [label,...aliases]=names(entry);return {id:`${prefix}-${slug(label)}`,label,selector:{type:'producer',producerNames:[label,...aliases]}}});
+/**
+ * Which heading each estate belongs under, keyed by the item id the checklist
+ * will carry.
+ *
+ * Built from the very arrays that build the items, so the two cannot disagree -
+ * and keyed by id rather than by position, because the checklist is served from
+ * a per-owner cache that can be a release behind. An out-of-date order makes a
+ * position-keyed heading confidently wrong: Château Pape Clément was shown as
+ * classified for white, which it is not. Wrong facts about real wines are worse
+ * than an oddly grouped list, so the estate carries its own answer.
+ */
+const sectionsById=(prefix:string,groups:Record<string,readonly NamedEntry[]>)=>{
+  const result:Record<string,string>={};
+  for(const [section,entries] of Object.entries(groups))
+    for(const entry of entries)result[`${prefix}-${slug(names(entry)[0])}`]=section;
+  return result;
+};
+
 const appellationItems=(prefix:string,entries:readonly string[],grandCru=false):AchievementDefinitionItem[]=>entries.map(label=>{
   const variants=grandCru&&!/grand cru/i.test(label)?[label,`${label} Grand Cru`,`Grand Cru ${label}`]:[label];
   return {id:`${prefix}-${slug(label)}`,label,selector:{type:'appellation',appellationNames:[...variants,`${label} AOC`,`AOC ${label}`]}};
@@ -83,6 +101,16 @@ const saintEmilionPremiersB:readonly NamedEntry[]=[
   'Château Beau-Séjour Bécot','Château Beauséjour Héritiers Duffau-Lagarrosse','Château Bélair-Monange','Château Canon','Château Canon La Gaffelière','Château Larcis Ducasse','Château Pavie Macquin','Château Troplong Mondot','Château TrotteVieille','Château Valandraud','Clos Fourtet','La Mondotte'
 ];
 const saintEmilionPremiers2022=[...saintEmilionPremiersA,...saintEmilionPremiersB] as const;
+
+export const gravesClassifiedFor=sectionsById('graves',{
+  'Classified for red and white':gravesRedAndWhite,
+  'Classified for red':gravesRedOnly,
+  'Classified for white':gravesWhiteOnly
+});
+export const saintEmilionPremierRank=sectionsById('stemilion2022',{
+  'Premier Grand Cru Classé A':saintEmilionPremiersA,
+  'Premier Grand Cru Classé B':saintEmilionPremiersB
+});
 
 const coteDeNuitsGrandCrus=[
   'Chambertin','Chambertin-Clos de Bèze','Chapelle-Chambertin','Charmes-Chambertin','Griotte-Chambertin','Latricières-Chambertin','Mazis-Chambertin','Mazoyères-Chambertin','Ruchottes-Chambertin',
