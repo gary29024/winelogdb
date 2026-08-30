@@ -7,3 +7,7 @@ html,body,#root{width:100%;max-width:100%;overflow-x:hidden}body{overscroll-beha
    room than a text pill before "August 2026" starts clipping. */
 .filter-pills label.filter-month{min-width:158px}
 @media(max-width:700px){.filter-pills label.filter-month{min-width:150px}}
+/* Keeps the tier's hover fill off a button that paints no surface of its own:
+   button:hover:not(:disabled) is (0,2,1) and a class alone is (0,1,0), so
+   without this the pointer arriving turns a ghost control opaque. */
+.journal-view-toggle button:hover:not(:disabled){background:0 0}

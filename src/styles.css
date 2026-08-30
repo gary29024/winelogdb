@@ -143,6 +143,13 @@ button:disabled{opacity:.55;cursor:default}
 /* The action the screen exists for. */
 .primary{background:var(--ink);border-color:var(--ink);color:var(--paper)}
 .primary:hover:not(:disabled){background:var(--ink-2);border-color:var(--ink-2)}
+/* A button that gives itself a transparent background needs a :hover form too,
+   and one specific enough to clear button:hover:not(:disabled) above - an
+   element plus two pseudo-classes. Without it the tier's fill wins on hover and
+   paints an opaque block: on a full-bleed hit target laid over a card that
+   covered the photo and the title, and on iOS, where a tap leaves :hover stuck
+   until you tap somewhere else, the card stayed blanked while you scrolled past
+   it. buttonTiers holds every transparent button to declaring one. */
 /* Navigation and dismissal: reachable, not competing. */
 .quiet{border-color:transparent;background:transparent;color:var(--ink-4)}
 .quiet:hover:not(:disabled){border-color:transparent;background:var(--sunken);color:var(--ink-2)}

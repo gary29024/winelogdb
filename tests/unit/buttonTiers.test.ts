@@ -164,3 +164,37 @@ describe('chips',()=>{
     expect(cannotWrap).toEqual([]);
   });
 });
+
+describe('a button that paints no background of its own',()=>{
+  /**
+   * The global tier gives every <button> a paper background, and
+   * `button:hover:not(:disabled)` fills it on hover at specificity (0,2,1). A
+   * class alone is (0,1,0), so a rule that says `background:transparent` loses
+   * the moment the pointer arrives - and an escape has to be an element plus
+   * two pseudo-classes to clear it, which is the shape `.quiet:hover:not
+   * (:disabled)` already uses.
+   */
+  const transparent=/(?:^|;)\s*background\s*:\s*(?:0 0|transparent|none)\s*(?:;|$)/;
+  const ghosts=rules.filter(rule=>
+    !isState(rule.selector)&&stylesAButton(rule.selector)&&transparent.test(rule.body));
+
+  it('declares a hover state specific enough to keep it transparent',()=>{
+    // Reported twice: in the journal's selection mode the card's full-bleed hit
+    // target is a <button>, so hovering it painted var(--ground) over the whole
+    // card at z-index 5 - under the tick at z-index 6, over the photo and the
+    // title. On iOS a tap leaves :hover stuck until you tap somewhere else, so
+    // the card stayed blanked while you scrolled past it. Measured in Chromium
+    // before and after: rgba(247,248,250,.74) then rgba(0,0,0,0).
+    const missing=ghosts.filter(ghost=>{
+      const base=ghost.selector.split(',').map(part=>part.trim());
+      return !rules.some(rule=>
+        /:hover/.test(rule.selector)&&/:not\(\s*:disabled\s*\)/.test(rule.selector)&&
+        base.some(part=>rule.selector.split(',').some(other=>other.trim().startsWith(part))));
+    }).map(ghost=>`${ghost.sheet}: ${ghost.selector}`);
+    expect(missing,'transparent buttons whose hover the tier fill would win').toEqual([]);
+  });
+
+  it('has ghosts to check, so the guard is not passing on an empty set',()=>{
+    expect(ghosts.length).toBeGreaterThan(3);
+  });
+});
