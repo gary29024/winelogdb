@@ -3,7 +3,7 @@ import entryApp from './entry';
 import { requireSession } from '../src/lib/auth/session';
 import { ensureAllProducerLinks } from '../src/lib/producers/entities';
 import { repairIdentityKeys } from '../src/lib/producers/identityRepair';
-import { cleanupOrphanCuvee,ensureAllCuveeLinksForProducer,ensureMissingCuveeLinks,reconcileProducerCuvees,resolveExistingCuvee } from '../src/lib/cuvees/entities';
+import { cleanupOrphanCuvee,cuveeStyleFamily,ensureAllCuveeLinksForProducer,ensureMissingCuveeLinks,normalizeCuveeAlias,reconcileProducerCuvees,resolveExistingCuvee } from '../src/lib/cuvees/entities';
 import { ensureWineIdentity } from '../src/lib/wine/identity';
 import { setCuveePrimaryName } from '../src/lib/cuvees/primaryName';
 import { ensureProducerCatalogCuveesSeeded } from '../src/lib/cuvees/catalogSeed';
@@ -203,18 +203,51 @@ app.post('/api/wines',async c=>{
 
 app.put('/api/wines/:id',async c=>{
   let owner:string;try{owner=await user(c)}catch{return entryApp.fetch(c.req.raw,c.env,c.executionCtx)}
-  const id=c.req.param('id'),before=await c.env.DB.prepare('SELECT wine_name FROM wines WHERE owner_id=? AND id=?').bind(owner,id).first<{wine_name:string}>().catch(()=>null);
+  const id=c.req.param('id');
+  const before=await c.env.DB.prepare('SELECT wine_name,appellation,wine_style FROM wines WHERE owner_id=? AND id=?')
+    .bind(owner,id).first<{wine_name:string;appellation:string|null;wine_style:string|null}>().catch(()=>null);
   let requestedName:string|null=null,preferCuveePrimaryName=false;
+  // Undefined means "the body did not say", which is not the same as "cleared":
+  // a caller that omits a field must not look like one that emptied it.
+  let requestedAppellation:string|null|undefined,requestedStyle:string|null|undefined;
   try{
-    const body=await c.req.raw.clone().json() as {wineName?:unknown;preferCuveePrimaryName?:unknown};
+    const body=await c.req.raw.clone().json() as Record<string,unknown>;
     if(typeof body.wineName==='string'&&body.wineName.trim())requestedName=body.wineName.trim();
+    if('appellation' in body)requestedAppellation=typeof body.appellation==='string'?body.appellation:null;
+    if('wineStyle' in body)requestedStyle=typeof body.wineStyle==='string'?body.wineStyle:null;
     preferCuveePrimaryName=body.preferCuveePrimaryName===true;
   }catch{}
   const response=await entryApp.fetch(c.req.raw,c.env,c.executionCtx);
   if(response.ok){
     try{
-      if(requestedName&&before?.wine_name!==requestedName){await c.env.DB.prepare('UPDATE wines SET recognized_wine_name=?,cuvee_id=NULL WHERE owner_id=? AND id=?').bind(requestedName,owner,id).run()}
+      /**
+       * A cuvée is keyed on the name, the appellation and the style together,
+       * so a correction to any of the three can move a wine to a different one.
+       * Only a rename used to clear the link, which meant fixing an appellation
+       * left the wine attached to the cuvée its old one had created - reported
+       * as two Testamattas under one producer that would not come together, and
+       * could not be brought together, because ensureWineIdentity does nothing
+       * for a wine that already has a link.
+       */
+      const renamed=Boolean(requestedName&&before?.wine_name!==requestedName);
+      const identityChanged=Boolean(before)&&(renamed
+        ||(requestedAppellation!==undefined&&normalizeCuveeAlias(before?.appellation??'')!==normalizeCuveeAlias(requestedAppellation??''))
+        ||(requestedStyle!==undefined&&cuveeStyleFamily(before?.wine_style)!==cuveeStyleFamily(requestedStyle)));
+      if(renamed)await c.env.DB.prepare('UPDATE wines SET recognized_wine_name=?,cuvee_id=NULL WHERE owner_id=? AND id=?').bind(requestedName,owner,id).run();
+      else if(identityChanged)await c.env.DB.prepare('UPDATE wines SET cuvee_id=NULL WHERE owner_id=? AND id=?').bind(owner,id).run();
       await ensureWineIdentity(c.env.DB,owner,id);
+      /**
+       * And settle the producer afterwards, so a correction takes effect now.
+       * The sweep ran on producer research, a producer merge and a wine delete -
+       * never on the edit that fixed the wine - so a duplicate cuvée outlived
+       * the mistake that made it. Guarded on something identity-relevant having
+       * changed: it reads every cuvée of the producer, which is not a price
+       * worth paying on a save that only moved a tasting note.
+       */
+      if(identityChanged){
+        const linked=await c.env.DB.prepare('SELECT producer_id FROM wines WHERE owner_id=? AND id=?').bind(owner,id).first<{producer_id:string|null}>();
+        if(linked?.producer_id)await reconcileProducerCuvees(c.env.DB,owner,linked.producer_id);
+      }
       if(requestedName&&preferCuveePrimaryName){
         const linked=await c.env.DB.prepare('SELECT cuvee_id FROM wines WHERE owner_id=? AND id=?').bind(owner,id).first<{cuvee_id:string|null}>();
         if(!linked?.cuvee_id)throw new Error('Wine has no cuvée identity to rename');
