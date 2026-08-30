@@ -164,6 +164,79 @@ app.post('/api/wines',async c=>{
  }
 });
 
+/**
+ * Photographs for a wine that already exists.
+ *
+ * Until now a photo could only arrive when the wine did: POST /api/wines takes
+ * multipart, PUT /api/wines/:id never touched wine_images, and the form had no
+ * file input at all. So a wine created any other way - read off a printed wine
+ * list, typed in by hand - could never have a picture, and the only way to get
+ * one was to delete it and scan the bottle, losing the price and the evening it
+ * was attached to.
+ *
+ * Same contract as creation, minus the wine: the originals are stored, capped
+ * the same way, with their dimensions and capture metadata. R2 objects written
+ * before a failing insert are deleted again, or a rolled-back upload would be
+ * billed storage nothing points at.
+ */
+app.post('/api/wines/:id/images',async c=>{
+ const id=c.req.param('id'),owner=c.get('userId'),now=new Date().toISOString();
+ const wine=await c.env.DB.prepare('SELECT id,location_name FROM wines WHERE id=? AND owner_id=?').bind(id,owner).first<{id:string;location_name:string|null}>();
+ if(!wine)return c.json({error:'That wine no longer exists'},404);
+ let form:FormData;
+ try{form=await c.req.formData()}catch{return c.json({error:'Could not read the photos'},400)}
+ const files=form.getAll('images').filter((x):x is File=>x instanceof File);
+ if(!files.length)return c.json({error:'Choose at least one photo'},400);
+ const existing=await c.env.DB.prepare('SELECT count(*) AS count FROM wine_images WHERE wine_id=? AND owner_id=?').bind(id,owner).first<{count:number}>();
+ const maxFiles=Number(c.env.MAX_BATCH_FILES)||12;
+ // Counted against what the wine already has, not against this upload alone,
+ // or the cap is one that any number of uploads walks straight past.
+ if(Number(existing?.count??0)+files.length>maxFiles)return c.json({error:`A wine can hold ${maxFiles} photos, and this one already has ${Number(existing?.count??0)}`},400);
+ try{validateBatch(files,{maxFiles,maxBytes:Number(c.env.MAX_FILE_BYTES)||10485760,minDimension:300,maxDimension:12000})}catch(e){return c.json({error:(e as Error).message},400)}
+ const dimensions=parseJson<unknown[]>(form.get('dimensions'),[]),metadata=parseJson<PhotoMetadata[]>(form.get('metadata'),[]);
+ if(dimensions.length!==files.length||metadata.length!==files.length)return c.json({error:'Dimensions and metadata are required for every saved photo'},400);
+ const uploaded:Array<{key:string;imageId:string;file:File;dim:{width:number;height:number};meta:ReturnType<typeof normalizeMeta>}>=[];
+ try{
+  for(let i=0;i<files.length;i++){
+   const dim=dimensionsSchema.parse(dimensions[i]),meta=normalizeMeta(metadata[i]),file=files[i],key=createObjectKey(owner,file.type),imageId=crypto.randomUUID();
+   await c.env.WINE_IMAGES.put(key,file.stream(),{httpMetadata:{contentType:file.type},customMetadata:{ownerId:owner,wineId:id}});
+   uploaded.push({key,imageId,file,dim,meta});
+  }
+  await c.env.DB.batch([
+   ...uploaded.map(x=>c.env.DB.prepare(`INSERT INTO wine_images(id,owner_id,wine_id,object_key,content_type,byte_size,width,height,upload_status,recognition_status,captured_at,latitude,longitude,location_name,metadata_source,created_at) VALUES(?,?,?,?,?,?,?,?,'uploaded','complete',?,?,?,?,?,?)`)
+     .bind(x.imageId,owner,id,x.key,x.file.type,x.file.size,x.dim.width,x.dim.height,x.meta.capturedAt,x.meta.latitude,x.meta.longitude,wine.location_name??null,x.meta.source,now)),
+   c.env.DB.prepare('UPDATE wines SET updated_at=? WHERE id=? AND owner_id=?').bind(now,id,owner)
+  ]);
+  return c.json({imageIds:uploaded.map(x=>x.imageId)},201);
+ }catch(e){
+  await Promise.allSettled(uploaded.map(x=>c.env.WINE_IMAGES.delete(x.key)));
+  return c.json({error:(e as Error).message||'Could not save the photos'},500);
+ }
+});
+
+/**
+ * One photograph removed, rather than all of them.
+ *
+ * Deleting a wine has always taken its images with it, but there was no way to
+ * drop a single bad frame - and now that a photo is easy to add to an existing
+ * wine, it is just as easy to add the wrong one. The R2 object goes with the
+ * row: an object nothing points at is storage billed forever for a photo nobody
+ * can see, and the row is what points at it.
+ */
+app.delete('/api/wines/:id/images/:imageId',async c=>{
+ const id=c.req.param('id'),imageId=c.req.param('imageId'),owner=c.get('userId');
+ const image=await c.env.DB.prepare('SELECT object_key FROM wine_images WHERE id=? AND wine_id=? AND owner_id=?')
+   .bind(imageId,id,owner).first<{object_key:string}>();
+ if(!image)return c.json({error:'That photo no longer exists'},404);
+ await c.env.DB.prepare('DELETE FROM wine_images WHERE id=? AND wine_id=? AND owner_id=?').bind(imageId,id,owner).run();
+ // After the row, and forgiving: a bucket delete that fails leaves an orphan
+ // worth pennies, while failing the request would leave a photo the owner has
+ // already been told is gone.
+ await c.env.WINE_IMAGES.delete(image.object_key).catch(()=>undefined);
+ await c.env.DB.prepare('UPDATE wines SET updated_at=? WHERE id=? AND owner_id=?').bind(new Date().toISOString(),id,owner).run();
+ return c.json({ok:true});
+});
+
 app.put('/api/wines/:id',async c=>{
  const parsed=wineInputSchema.safeParse(await c.req.json());if(!parsed.success)return c.json({error:'Invalid wine',issues:parsed.error.issues},400);
  const x=parsed.data,id=c.req.param('id'),owner=c.get('userId');

@@ -117,3 +117,14 @@ export async function deleteTastingDocument(documentId:string){
   if(response.status===401){clearSession();throw new Error('Session expired. Please sign in again.')}
   if(!response.ok)throw new Error('Could not remove that wine list page');
 }
+
+/** Is this wine already in this evening? Asked before a scan creates a second copy. */
+export type TastingWineMatch={wineId:string;producer:string;wineName:string;vintage:number|null};
+export async function matchTastingWine(tastingId:string,wine:{producer:string;wineName:string;vintage:number|null}){
+  const query=new URLSearchParams({producer:wine.producer,wineName:wine.wineName});
+  if(wine.vintage!=null)query.set('vintage',String(wine.vintage));
+  const r=await fetch(`/api/tastings/${tastingId}/wine-match?${query}`,{headers:authHeaders()});
+  if(!r.ok)return null;
+  const body=await r.json().catch(()=>({match:null})) as {match:TastingWineMatch|null};
+  return body.match;
+}

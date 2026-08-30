@@ -13,7 +13,7 @@ import { applyBatchExperienceUpdate,batchExperienceSchema } from '../src/lib/jou
 import { deleteTasting,endTasting,listTastings,readActiveTasting,readTastingRow,readTastingWines,reopenTasting,startTasting,updateTasting } from '../src/lib/tastings/session';
 import { attachTastingWinesSchema,attachWinesToTasting,detachWineFromTasting } from '../src/lib/tastings/attach';
 import { addTastingDocuments,deleteTastingDocument,listTastingDocuments,readTastingDocument,tastingDocumentKeys } from '../src/lib/tastings/documents';
-import { matchSheetWines,readLineupForMatching } from '../src/lib/tastings/sheetMatch';
+import { findLineupWine,matchSheetWines,readLineupForMatching } from '../src/lib/tastings/sheetMatch';
 import { applySheetPrices,createSheetWines,sheetPricesSchema,sheetWinesSchema } from '../src/lib/tastings/sheetWrite';
 import { sheetPageWasCutShort,sheetResumeLine } from '../src/features/recognition/sheetSchema';
 import { sheetRecognitionSpec } from './sheetRecognitionHandler';
@@ -379,6 +379,36 @@ app.post('/api/tastings/:id/documents',async c=>{
  * lineup has to be loaded exactly once and the client should not have to know
  * how WineLog decides two wines are the same one.
  */
+/**
+ * Is this wine already in this evening?
+ *
+ * Asked by the scan form before it creates anything. A bottle photographed at a
+ * tasting whose printed list was read an hour earlier is the same wine as the
+ * row that reading created - and the create path has no dedupe, so saving it
+ * makes a second copy: one with the price and no photo, one with the photo and
+ * no price, both in the same lineup.
+ *
+ * Scoped to the tasting rather than the whole library on purpose. A bottle
+ * drunk last March is a different pour, and attaching tonight's photograph to
+ * it would be wrong; what is being asked is only "is this one of tonight's".
+ */
+app.get('/api/tastings/:id/wine-match',async c=>{
+  cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
+  const producer=(c.req.query('producer')??'').trim(),wineName=(c.req.query('wineName')??'').trim();
+  if(!producer||!wineName)return c.json({match:null});
+  const rawVintage=c.req.query('vintage'),vintage=rawVintage&&/^\d{3,4}$/.test(rawVintage)?Number(rawVintage):null;
+  try{
+    const lineup=await readLineupForMatching(c.env.DB,owner,c.req.param('id'));
+    const found=findLineupWine(lineup,producer,wineName,vintage);
+    return c.json({match:found?{wineId:found.wineId,producer:found.producer,wineName:found.wineName,vintage:found.vintage}:null});
+  }catch(e){
+    // A failed probe must never block a save; the worst case is the duplicate
+    // that was made before this existed.
+    console.warn(JSON.stringify({event:'tasting-wine-match-failed',error:(e as Error).message}));
+    return c.json({match:null});
+  }
+});
+
 app.post('/api/tastings/:id/sheet/parse',async c=>{
   cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
   const tastingId=c.req.param('id');

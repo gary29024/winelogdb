@@ -21,3 +21,7 @@
 .producer-load-error{display:grid;justify-items:start;gap:10px;padding:14px 16px;border:1px solid var(--bad-line);border-radius:var(--r-md);background:var(--bad-wash)}
 .producer-load-error p{margin:0;color:var(--bad-ink)}
 .producer-load-error button{border:1px solid var(--bad-line);border-radius:var(--r-pill);background:var(--paper);color:var(--bad-ink);padding:7px 15px;font:700 .78rem 'DM Sans',sans-serif;cursor:pointer}
+/* Keeps the tier's hover fill off a button that paints no surface of its own:
+   button:hover:not(:disabled) is (0,2,1) and a class alone is (0,1,0), so
+   without this the pointer arriving turns a ghost control opaque. */
+.alias-chip button:hover:not(:disabled){background:0 0}

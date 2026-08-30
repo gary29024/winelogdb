@@ -58,6 +58,19 @@ export function buildLineupIndex(lineup:LineupWine[]){
   return index;
 }
 
+/**
+ * One wine looked up in the evening, by the same keys the sheet matching uses.
+ *
+ * Used when a bottle is photographed at a tasting that already holds it - read
+ * off the printed list an hour earlier, say - so the scan can offer to add its
+ * photo to that wine rather than create a second copy of it.
+ */
+export function findLineupWine(lineup:LineupWine[],producer:string,wineName:string,vintage:number|null|undefined){
+  const index=buildLineupIndex(lineup);
+  return wineKeys(producer,wineName,vintage).map(candidate=>index.get(candidate))
+    .find((match):match is LineupWine=>match!==undefined)??null;
+}
+
 export function matchSheetWines(wines:SheetWine[],lineup:LineupWine[]):SheetMatch[]{
   const index=buildLineupIndex(lineup);
   // One wine in the evening can only claim one printed line. Without this a

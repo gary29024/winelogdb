@@ -37,6 +37,18 @@ function adaptiveAttempts(maxEdge:number,quality:number):EncodeAttempt[]{
   ];
 }
 
+/**
+ * The pixel size of a file, without re-encoding it.
+ *
+ * Saving a photo sends the original and its dimensions separately, so a screen
+ * that stores a picture as-is - rather than preparing a smaller copy for
+ * recognition - still has to measure it.
+ */
+export async function imageSize(file:File):Promise<{width:number;height:number}>{
+  const img=await loadImage(file);
+  return {width:img.naturalWidth,height:img.naturalHeight};
+}
+
 export async function prepareRecognitionImage(file:File,maxEdge=1800,quality=0.84):Promise<PreparedImage>{
   return prepareRecognitionImageWithinBytes(file,DEFAULT_RECOGNITION_MAX_BYTES,adaptiveAttempts(maxEdge,quality));
 }

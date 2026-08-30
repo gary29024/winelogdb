@@ -36,7 +36,7 @@
 /* Quiet: throwing the reading away is the one action here that cannot be
    undone without paying for another scan. */
 .tasting-sheet-discard{border-color:transparent;background:0 0;color:var(--ink-6)}
-.tasting-sheet-discard:hover{color:var(--danger);border-color:var(--line)}
+.tasting-sheet-discard:hover:not(:disabled){color:var(--danger);border-color:var(--line);background:0 0}
 
 .tasting-sheet-section{margin-bottom:12px}
 .tasting-sheet-section-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:7px 2px}
@@ -67,3 +67,7 @@
   .tasting-sheet-row{padding:9px 10px;gap:10px}
   .tasting-sheet-wine strong{font-size:.88rem}
 }
+/* Keeps the tier's hover fill off a button that paints no surface of its own:
+   button:hover:not(:disabled) is (0,2,1) and a class alone is (0,1,0), so
+   without this the pointer arriving turns a ghost control opaque. */
+.tasting-sheet-toggle:hover:not(:disabled){background:0 0}

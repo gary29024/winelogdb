@@ -47,3 +47,7 @@
   .scan-sheet-grid .scan-sheet-action strong{font-size:.94rem}
   .scan-sheet-grid .sheet-action-icon{width:36px;height:36px}
 }
+/* Keeps the tier's hover fill off a button that paints no surface of its own:
+   button:hover:not(:disabled) is (0,2,1) and a class alone is (0,1,0), so
+   without this the pointer arriving turns a ghost control opaque. */
+.mobile-nav button.scan-nav:hover:not(:disabled),.rescan-link:hover:not(:disabled),.sheet-close:hover:not(:disabled),.top-scan-trigger:hover:not(:disabled){background:0 0}

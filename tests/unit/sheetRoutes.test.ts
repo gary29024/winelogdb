@@ -134,3 +134,51 @@ describe('when a wine list is worth a second, stronger look',()=>{
     expect(sheetEscalationReasons(unpriced)).toEqual([]);
   });
 });
+
+describe('is this wine already in the evening',()=>{
+  // The create path has no dedupe, so photographing a bottle whose printed line
+  // was read an hour earlier makes a second copy of it: one row with the price
+  // and no photo, one with the photo and no price, both in the same lineup.
+  async function ask(query:Record<string,string>,lineup?:Array<Record<string,unknown>>){
+    const stub=createD1Stub(sql=>/FROM wine_experiences we JOIN wines w/.test(sql)
+      ?{all:lineup??[{wine_id:'w1',producer:'Domaine Dujac',wine_name:'Morey-Saint-Denis',vintage:2019,
+        producer_id:'p1',cuvee_id:'c1',price:1280,currency:'HKD'}]}:undefined);
+    const response=await app.fetch(new Request(`https://x/api/tastings/t1/wine-match?${new URLSearchParams(query)}`,{
+      headers:{authorization:`Bearer ${await createSession('owner',AUTH_SECRET)}`}
+    }),{DB:stub.db,AUTH_SECRET,APP_URL:'https://x',APP_PASSWORD:'p',GEMINI_API_KEY:'k'} as never);
+    return {body:(await response.json()) as {match:{wineId:string}|null},stub};
+  }
+
+  it('finds the wine the printed list already created',async()=>{
+    const {body}=await ask({producer:'Domaine Dujac',wineName:'Morey-Saint-Denis',vintage:'2019'});
+    expect(body.match?.wineId).toBe('w1');
+  });
+
+  it('matches through the producer prefix a list prints and a journal does not',async()=>{
+    const {body}=await ask({producer:'Domaine Dujac',wineName:'Domaine Dujac Morey-Saint-Denis',vintage:'2019'});
+    expect(body.match?.wineId).toBe('w1');
+  });
+
+  it('does not confuse two vintages of one cuvée',async()=>{
+    // An evening pours both, and they are two wines.
+    const {body}=await ask({producer:'Domaine Dujac',wineName:'Morey-Saint-Denis',vintage:'2020'});
+    expect(body.match).toBeNull();
+  });
+
+  it('answers nothing rather than guessing from half a name',async()=>{
+    const {body,stub}=await ask({producer:'Domaine Dujac'});
+    expect(body.match).toBeNull();
+    expect(stub.calls,'and does not read the lineup to say so').toHaveLength(0);
+  });
+
+  it('never blocks a save when the lookup itself fails',async()=>{
+    // The worst case has to stay the duplicate that was made before this
+    // existed, not a scan that cannot be saved at all.
+    const stub=createD1Stub(()=>{throw new Error('D1 is having a day')});
+    const response=await app.fetch(new Request('https://x/api/tastings/t1/wine-match?producer=A&wineName=B',{
+      headers:{authorization:`Bearer ${await createSession('owner',AUTH_SECRET)}`}
+    }),{DB:stub.db,AUTH_SECRET,APP_URL:'https://x',APP_PASSWORD:'p',GEMINI_API_KEY:'k'} as never);
+    expect(response.status).toBe(200);
+    expect(((await response.json()) as {match:null}).match).toBeNull();
+  });
+});
