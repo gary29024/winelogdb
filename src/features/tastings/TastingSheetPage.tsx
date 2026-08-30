@@ -29,6 +29,8 @@ export function TastingSheetPage(){
   const [rows,setRows]=useState<Row[]>([]),[currency,setCurrency]=useState('');
   const [busy,setBusy]=useState(''),[error,setError]=useState(''),[notice,setNotice]=useState('');
   const [unresolved,setUnresolved]=useState(0),[partial,setPartial]=useState(false);
+  /** Photographed and saved, not yet read. Reading is a separate, paid step. */
+  const [staged,setStaged]=useState<File[]>([]);
   const [collapsed,setCollapsed]=useState<Set<string>>(()=>new Set());
 
   useEffect(()=>{
@@ -103,15 +105,45 @@ export function TastingSheetPage(){
     }catch(e){setError((e as Error).message||'Could not read the wine list')}finally{setBusy('')}
   }
 
-  /** Photographing the sheet stores it too: the paper is the record of the evening. */
+  /**
+   * Photographing the sheet saves it. It does not read it.
+   *
+   * Reported as: the scan fired the moment the photos were chosen. Reading a
+   * list is the most expensive single action in the app - one AI call per page,
+   * on a sheet that can run to seven of them - and firing it on a file picker
+   * means a mis-shot page or a wrong tasting costs money before anyone has
+   * looked at the screen. So this stores the paper, which is the half worth
+   * having unconditionally, and waits to be told to read it. Same shape as
+   * scanning a bottle: choose, then press.
+   */
   async function choosePages(files:File[]){
     if(!files.length)return;
+    setBusy('save');setError('');setNotice('');
     try{
       const {documents:added}=await uploadTastingDocuments(id,files);
       setDocuments(current=>[...current,...added]);
-    }catch(e){setError(`Read the list, but could not store it: ${(e as Error).message}`)}
-    await readPages(files);
+      setNotice(`${files.length} page${files.length===1?'':'s'} saved to this tasting. Nothing has been read yet.`);
+    }catch(e){
+      // The photos are still worth reading even if storing them failed, so they
+      // are staged either way and the failure is said plainly.
+      setError(`Could not store the wine list: ${(e as Error).message}`);
+    }finally{setBusy('')}
+    setStaged(current=>[...current,...files]);
     if(input.current)input.current.value='';
+  }
+
+  async function readStaged(){
+    const files=staged;
+    if(!files.length)return;
+    await readPages(files);
+    setStaged([]);
+  }
+
+  /** Kept as paper and left unread - no AI call, and the photos stay attached. */
+  function keepWithoutReading(){
+    const kept=staged.length;
+    setStaged([]);setError('');
+    setNotice(`${kept} page${kept===1?'':'s'} kept with this tasting. Nothing was read, so nothing was charged.`);
   }
 
   async function readStored(){
@@ -176,11 +208,15 @@ export function TastingSheetPage(){
   return <article className="tasting-sheet-page">
     <Link className="back-pill" to={`/tastings/${id}`}>← {tasting?.name??'Tasting'}</Link>
     <div className="hero compact"><p className="eyebrow">WINE LIST</p><h1>Read the printed list.</h1>
-      <p>Photograph each page of the handout. WineLog reads the wines and their prices, matches them against this tasting, and lets you fill the prices in and add anything missing. Each page is one AI call, so a long list costs more than a short one.</p></div>
+      <p>Photograph each page of the handout and it is saved to this tasting straight away. Reading it is a separate press: WineLog then reads the wines and their prices, matches them against this tasting, and lets you fill the prices in and add anything missing. Each page read is one AI call, so a long list costs more than a short one — and a list you only wanted to keep costs nothing.</p></div>
 
     <div className="tasting-sheet-actions">
-      <button type="button" className="primary" disabled={working} onClick={()=>input.current?.click()}>{busy==='parse'?'Reading…':'Photograph the list'}</button>
-      {documents.length>0&&<button type="button" disabled={working} onClick={()=>void readStored()}>Re-read the {documents.length} stored page{documents.length===1?'':'s'}</button>}
+      <button type="button" className={staged.length?'':'primary'} disabled={working} onClick={()=>input.current?.click()}>{busy==='save'?'Saving…':'Photograph the list'}</button>
+      {staged.length>0&&<>
+        <button type="button" className="primary" disabled={working} onClick={()=>void readStaged()}>{busy==='parse'?'Reading…':`Read ${staged.length} page${staged.length===1?'':'s'}`}</button>
+        <button type="button" disabled={working} onClick={keepWithoutReading}>Just keep them</button>
+      </>}
+      {documents.length>0&&staged.length===0&&<button type="button" disabled={working} onClick={()=>void readStored()}>{busy==='parse'?'Reading…':`Re-read the ${documents.length} stored page${documents.length===1?'':'s'}`}</button>}
       <input ref={input} className="visually-hidden" type="file" accept="image/*" multiple onChange={event=>void choosePages(Array.from(event.target.files??[]))}/>
     </div>
 

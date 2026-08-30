@@ -55,20 +55,47 @@ export const sheetWineSchema=z.object({
   /** Where it sits on the page, so a cut-short page can be continued from here. */
   lineNumber:z.number().int().min(0).max(2000).nullable().optional(),
   confidence:z.number().min(0).max(1)
-}).strict();
+});
+// Deliberately not .strict(). A hundred-wine sheet is one call and a whole
+// evening's paper; throwing all of it away because the model volunteered one
+// key nobody asked for is the wrong trade. Reported as a wine list that failed
+// to read at all because a `currency` had been printed on every row rather than
+// on the envelope - useful information, and it took the page down with it.
+// Unknown keys are dropped instead, and a row currency is lifted to the
+// envelope below rather than lost. What .strict() used to guard - that every
+// field canonicalizeWineFields adds has a home here - is asserted directly in
+// the tests, where a stripped field fails on its value rather than on a throw.
+
+/**
+ * One currency for the sheet, not one per row. A list is printed in a single
+ * currency, and asking per row invites HK$ / $ / ¥ drift down the page.
+ *
+ * A code that cannot be read becomes null rather than an error: the review
+ * screen asks for the currency and will not write a price without it, so an
+ * unreadable one costs a moment's typing, while throwing would cost the eighty
+ * wines printed underneath it. Case is forgiven; a symbol is not a code.
+ */
+const sheetCurrencyField=z.preprocess(
+  value=>typeof value==='string'&&/^[A-Za-z]{3}$/.test(value.trim())?value.trim().toUpperCase():value,
+  z.string().regex(/^[A-Z]{3}$/).nullable().catch(null).default(null)
+);
 
 export const sheetPageSchema=z.object({
   wines:z.array(sheetWineSchema).max(80),
-  /**
-   * One currency for the sheet, not one per row. A list is printed in a single
-   * currency, and asking per row invites HK$ / $ / ¥ drift down the page.
-   */
-  currency:z.string().trim().regex(/^[A-Z]{3}$/).nullable().optional(),
-  unresolvedCount:z.number().int().min(0).max(200).default(0),
+  currency:sheetCurrencyField,
+  unresolvedCount:z.number().int().min(0).max(200).catch(0).default(0),
   /** The model's own report that it ran out of room. Corroborated by finishReason. */
-  truncated:z.boolean().default(false),
-  lastLineNumber:z.number().int().min(0).max(2000).nullable().optional()
-}).strict();
+  truncated:z.boolean().catch(false).default(false),
+  lastLineNumber:z.number().int().min(0).max(2000).nullable().catch(null).default(null)
+});
+
+/**
+ * The envelope, with its wines still unread.
+ *
+ * Rows are validated one at a time below rather than as an array, so one line
+ * the model garbled costs that line instead of the page it was printed on.
+ */
+const sheetEnvelopeSchema=sheetPageSchema.extend({wines:z.array(z.unknown()).default([])});
 
 export type SheetPriceOption=z.infer<typeof sheetPriceOptionSchema>;
 export type SheetWine=z.infer<typeof sheetWineSchema>;
@@ -105,14 +132,43 @@ export function mergeSheetWines(pages:SheetWine[][]){
 }
 
 function normalizeSheetEnvelope(value:unknown){
-  if(Array.isArray(value))return {wines:value,unresolvedCount:0,truncated:false};
-  return value;
+  if(Array.isArray(value))return {wines:value};
+  return value&&typeof value==='object'?value as Record<string,unknown>:{};
+}
+
+/**
+ * A currency the model printed on every row instead of on the envelope.
+ *
+ * It was asked for once, at the top, and sometimes answers per wine anyway.
+ * That is still the sheet's currency, so it is lifted rather than dropped - the
+ * commonest code wins, which is the right reading of a list printed in one
+ * currency with a stray misread somewhere down the page.
+ */
+function liftRowCurrency(envelope:Record<string,unknown>){
+  if(typeof envelope.currency==='string'&&envelope.currency.trim())return envelope;
+  const counts=new Map<string,number>();
+  for(const row of Array.isArray(envelope.wines)?envelope.wines:[]){
+    const value=(row as Record<string,unknown>|null)?.currency;
+    if(typeof value!=='string')continue;
+    const code=value.trim().toUpperCase();
+    if(/^[A-Z]{3}$/.test(code))counts.set(code,(counts.get(code)??0)+1);
+  }
+  const best=[...counts.entries()].sort((a,b)=>b[1]-a[1])[0];
+  return best?{...envelope,currency:best[0]}:envelope;
 }
 
 export function parseSheetPage(raw:string):SheetPage{
   const cleaned=raw.replace(/^```(?:json)?\s*|\s*```$/g,'');
-  const parsed=sheetPageSchema.parse(normalizeSheetEnvelope(JSON.parse(cleaned)));
-  return {...parsed,wines:mergeSheetWines([parsed.wines])};
+  const envelope=sheetEnvelopeSchema.parse(liftRowCurrency(normalizeSheetEnvelope(JSON.parse(cleaned))));
+  // A line that will not parse is counted, not thrown: unresolvedCount already
+  // means "printed lines this read could not turn into a wine", and the review
+  // screen already tells you to add those by hand rather than guessing.
+  const wines:SheetWine[]=[];let unreadable=0;
+  for(const row of envelope.wines){
+    const parsed=sheetWineSchema.safeParse(row);
+    if(parsed.success)wines.push(parsed.data);else unreadable++;
+  }
+  return {...envelope,wines:mergeSheetWines([wines]),unresolvedCount:Math.min(200,envelope.unresolvedCount+unreadable)};
 }
 
 /**

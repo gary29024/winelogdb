@@ -4,6 +4,10 @@
 .tasting-sheet-page{max-width:880px;margin:auto}
 .tasting-sheet-actions{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 14px}
 .tasting-sheet-actions>button{flex:1 1 auto}
+/* Whichever action is the decision on the screen takes the full width and the
+   rest share the row under it: first the photographing, then - once pages are
+   staged - reading them, which is the press that costs money. */
+.tasting-sheet-actions>button.primary{flex:1 1 100%}
 .tasting-sheet-notice{margin:0 0 10px;color:var(--ink-5);font-size:.84rem}
 .tasting-sheet-warning{margin:0 0 10px;padding:10px 12px;border:1px solid var(--warn-line);border-radius:var(--r-md);background:var(--warn-wash);color:var(--warn);font-size:.82rem;line-height:1.5}
 
