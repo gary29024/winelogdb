@@ -181,13 +181,23 @@ app.post('/api/wines',async c=>{
  */
 app.post('/api/wines/:id/images',async c=>{
  const id=c.req.param('id'),owner=c.get('userId'),now=new Date().toISOString();
- const wine=await c.env.DB.prepare('SELECT id,location_name FROM wines WHERE id=? AND owner_id=?').bind(id,owner).first<{id:string;location_name:string|null}>();
+ let wine:{id:string}|null,existing:{count:number;location_name:string|null}|null;
+ // Both reads are guarded: a throw out here escapes into a bare 500 whose body
+ // is not JSON, so the browser shows a generic failure instead of the reason.
+ // That is exactly how selecting a column wines does not have - location_name
+ // lives on wine_images - surfaced as "could not add the photos".
+ try{
+  wine=await c.env.DB.prepare('SELECT id FROM wines WHERE id=? AND owner_id=?').bind(id,owner).first<{id:string}>();
+  // The place is carried from the photos the wine already has rather than from
+  // the wine, which does not record one.
+  existing=await c.env.DB.prepare('SELECT count(*) AS count,max(location_name) AS location_name FROM wine_images WHERE wine_id=? AND owner_id=?')
+    .bind(id,owner).first<{count:number;location_name:string|null}>();
+ }catch(e){return c.json({error:(e as Error).message||'Could not read that wine'},500)}
  if(!wine)return c.json({error:'That wine no longer exists'},404);
  let form:FormData;
  try{form=await c.req.formData()}catch{return c.json({error:'Could not read the photos'},400)}
  const files=form.getAll('images').filter((x):x is File=>x instanceof File);
  if(!files.length)return c.json({error:'Choose at least one photo'},400);
- const existing=await c.env.DB.prepare('SELECT count(*) AS count FROM wine_images WHERE wine_id=? AND owner_id=?').bind(id,owner).first<{count:number}>();
  const maxFiles=Number(c.env.MAX_BATCH_FILES)||12;
  // Counted against what the wine already has, not against this upload alone,
  // or the cap is one that any number of uploads walks straight past.
@@ -204,7 +214,7 @@ app.post('/api/wines/:id/images',async c=>{
   }
   await c.env.DB.batch([
    ...uploaded.map(x=>c.env.DB.prepare(`INSERT INTO wine_images(id,owner_id,wine_id,object_key,content_type,byte_size,width,height,upload_status,recognition_status,captured_at,latitude,longitude,location_name,metadata_source,created_at) VALUES(?,?,?,?,?,?,?,?,'uploaded','complete',?,?,?,?,?,?)`)
-     .bind(x.imageId,owner,id,x.key,x.file.type,x.file.size,x.dim.width,x.dim.height,x.meta.capturedAt,x.meta.latitude,x.meta.longitude,wine.location_name??null,x.meta.source,now)),
+     .bind(x.imageId,owner,id,x.key,x.file.type,x.file.size,x.dim.width,x.dim.height,x.meta.capturedAt,x.meta.latitude,x.meta.longitude,existing?.location_name??null,x.meta.source,now)),
    c.env.DB.prepare('UPDATE wines SET updated_at=? WHERE id=? AND owner_id=?').bind(now,id,owner)
   ]);
   return c.json({imageIds:uploaded.map(x=>x.imageId)},201);

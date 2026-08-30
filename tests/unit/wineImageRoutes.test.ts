@@ -14,8 +14,8 @@ const photo=(name='bottle.jpg',bytes=2048)=>
  */
 function stubWine(existing:number,reply:(sql:string,args:unknown[])=>StubReply|undefined=()=>undefined){
   return createD1Stub((sql,args)=>{
-    if(/SELECT id,location_name FROM wines/.test(sql))return {first:{id:'w1',location_name:'Clubhouse'}};
-    if(/count\(\*\) AS count FROM wine_images/.test(sql))return {first:{count:existing}};
+    if(/SELECT id FROM wines/.test(sql))return {first:{id:'w1'}};
+    if(/count\(\*\) AS count,max\(location_name\)/.test(sql))return {first:{count:existing,location_name:'Clubhouse'}};
     return reply(sql,args);
   });
 }
@@ -59,14 +59,14 @@ describe('adding photos to a wine that already exists',()=>{
     const args=stub.calls.find(call=>/INSERT INTO wine_images/.test(call.sql))!.args;
     expect(args).toContain('2026-08-28T19:00:00.000Z');
     expect(args).toContain(22.3);
-    // the wine's own place, not one invented for the photo
+    // carried from the photos the wine already has - `wines` records no place
     expect(args).toContain('Clubhouse');
   });
 
   it('will not add photos to a wine that is not yours',async()=>{
     // The lookup is scoped by owner, so someone else's id reads as gone rather
     // than as forbidden - the same answer whether or not the wine exists.
-    const stub=createD1Stub(sql=>/SELECT id,location_name FROM wines/.test(sql)?{first:null}:undefined);
+    const stub=createD1Stub(sql=>/SELECT id FROM wines/.test(sql)?{first:null}:undefined);
     const {response,put}=await post([photo()],{stub});
     expect(response.status).toBe(404);
     expect(put,'nothing written before the check').toHaveLength(0);
