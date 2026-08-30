@@ -76,9 +76,14 @@ export type SheetWine={
 export type SheetMatch=
   |{status:'matched';wine:SheetWine;wineId:string;hasPrice:boolean;currentPrice:number|null;currentCurrency:string|null}
   |{status:'new';wine:SheetWine};
+/** One wine already logged in the evening, offered as a target to match against. */
+export type SheetLineupWine={
+  wineId:string;producer:string;wineName:string;vintage:number|null;
+  hasPrice:boolean;price:number|null;currency:string|null;
+};
 export type SheetPageResult={
   currency:string|null;unresolvedCount:number;truncated:boolean;resumeAfterLine:number|null;
-  matches:SheetMatch[];requestId:string;recognitionDurationMs:number;
+  matches:SheetMatch[];lineup?:SheetLineupWine[];requestId:string;recognitionDurationMs:number;
 };
 
 /** One page per call — see the sheet route. `afterLine` continues a page that was cut short. */

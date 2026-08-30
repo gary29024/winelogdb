@@ -397,6 +397,13 @@ app.post('/api/tastings/:id/sheet/parse',async c=>{
       truncated:sheetPageWasCutShort(page,outcome.finishReason),
       resumeAfterLine:sheetResumeLine(page),
       matches:matchSheetWines(page.wines,lineup),
+      // The evening's wines, so a row the normalisation could not match can be
+      // pointed at one by hand instead of being forced to create a duplicate.
+      // Already loaded for the matching above, so this costs no extra query.
+      lineup:lineup.map(wine=>({
+        wineId:wine.wineId,producer:wine.producer,wineName:wine.wineName,vintage:wine.vintage,
+        hasPrice:wine.price!=null,price:wine.price,currency:wine.currency
+      })),
       requestId:outcome.requestId,recognitionDurationMs:outcome.durationMs
     });
   }catch(e){

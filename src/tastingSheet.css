@@ -42,6 +42,10 @@
 
 .tasting-sheet-rows{display:grid;gap:6px;margin:0;padding:0;list-style:none}
 .tasting-sheet-row{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:12px;padding:9px 12px;border:1px solid var(--line);border-radius:var(--r-md);background:var(--paper)}
+/* Pointing a printed line at a wine already in the evening. Full width under
+   the name rather than beside it: the wine names it lists are long, and a
+   narrow select truncates exactly the part that tells them apart. */
+.tasting-sheet-match{margin-top:6px;width:100%;max-width:100%;font-size:.78rem;padding:5px 8px}
 .tasting-sheet-row.is-new{border-color:var(--wine-line)}
 .tasting-sheet-pick{display:flex;align-items:flex-start;gap:10px;min-width:0;cursor:pointer}
 .tasting-sheet-pick input{margin-top:3px;flex:0 0 auto}
