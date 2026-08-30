@@ -1,7 +1,7 @@
 import { useEffect,useMemo,useRef,useState,type ReactNode } from 'react';
 import { Link,useLocation,useNavigate,useParams } from 'react-router-dom';
 import type { DeepSearchResult } from '../../lib/db/schema';
-import { addWineImages,cancelWineDeepSearch,deleteWine,getWine,getWineDeepSearchStatus,setWineFavorite,startWineDeepSearch,type WineDetail,type WineResearchRun } from './api';
+import { addWineImages,cancelWineDeepSearch,deleteWine,deleteWineImage,getWine,getWineDeepSearchStatus,setWineFavorite,startWineDeepSearch,type WineDetail,type WineResearchRun } from './api';
 import { extractPhotoMetadata } from '../uploads/photoMetadata';
 import { imageSize } from '../uploads/prepareImage';
 import { WineImage } from './WineImage';
@@ -133,6 +133,15 @@ export function DetailPage(){
   finally{setPhotoBusy(false);if(photoInput.current)photoInput.current.value=''}
  }
 
+ /** One frame dropped. Easy to add a photo now means easy to add the wrong one. */
+ async function removePhoto(imageId:string){
+  if(photoBusy||!confirm('Remove this photo? The wine and everything else about it stay.'))return;
+  setPhotoBusy(true);setPhotoError('');
+  try{await deleteWineImage(id,imageId);await reloadWine()}
+  catch(e){setPhotoError((e as Error).message||'Could not remove that photo')}
+  finally{setPhotoBusy(false)}
+ }
+
  async function toggleFavorite(){if(!wine||favoriteBusy)return;const next=!wine.favorite;setFavoriteBusy(true);setWine({...wine,favorite:next});try{await setWineFavorite(id,next)}catch(e){setWine(current=>current?{...current,favorite:!next}:current);setDeepNotice((e as Error).message)}finally{setFavoriteBusy(false)}}
  function toggleDeepField(field:DeepField){setOpenDeepFields(current=>{const next=new Set(current);if(next.has(field))next.delete(field);else next.add(field);writeOpenDeepFields(next);return next})}
  function toggleAllDeepFields(fields:DeepField[]){setOpenDeepFields(current=>{const allOpen=fields.every(field=>current.has(field)),next=new Set(current);for(const field of fields){if(allOpen)next.delete(field);else next.add(field)}writeOpenDeepFields(next);return next})}
@@ -165,7 +174,7 @@ export function DetailPage(){
  ] as Array<[string,DeepField,string]>).filter(([, ,value])=>Boolean(value)):[];
  return <article className="detail wine-detail"><Link className="back-pill" to={back.to}>← {back.label}</Link>
   <section className="wine-identity">
-   {wine.imageIds.length?<div className="detail-gallery" aria-label={`${wine.wineName} photos`}>{wine.imageIds.map((imageId,index)=><button type="button" className="detail-photo-button" key={imageId} onClick={()=>setSelectedImage(imageId)} aria-label={`Open photo ${index+1} of ${wine.imageIds.length}`}><WineImage imageId={imageId} alt={`${wine.producer} ${wine.wineName} photo ${index+1}`} className="detail-photo"/></button>)}</div>:<div className="detail-bottle">{wine.wineStyle?.slice(0,1).toUpperCase()||'W'}</div>}
+   {wine.imageIds.length?<div className="detail-gallery" aria-label={`${wine.wineName} photos`}>{wine.imageIds.map((imageId,index)=><span className="detail-photo-slot" key={imageId}><button type="button" className="detail-photo-button" onClick={()=>setSelectedImage(imageId)} aria-label={`Open photo ${index+1} of ${wine.imageIds.length}`}><WineImage imageId={imageId} alt={`${wine.producer} ${wine.wineName} photo ${index+1}`} className="detail-photo"/></button><button type="button" className="detail-photo-remove" disabled={photoBusy} onClick={()=>void removePhoto(imageId)} aria-label={`Remove photo ${index+1}`}>×</button></span>)}</div>:<div className="detail-bottle">{wine.wineStyle?.slice(0,1).toUpperCase()||'W'}</div>}
    <div className="detail-photo-add">
     <button type="button" className="quiet" disabled={photoBusy} onClick={()=>photoInput.current?.click()}>
      {photoBusy?'Adding…':wine.imageIds.length?'Add another photo':'Add a photo'}

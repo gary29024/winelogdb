@@ -59,6 +59,12 @@ export async function addWineImages(id:string,photos:WinePhoto[]){
   return r.json() as Promise<{imageIds:string[]}>;
 }
 
+export async function deleteWineImage(wineId:string,imageId:string){
+  const r=await fetch(`/api/wines/${wineId}/images/${imageId}`,{method:'DELETE',headers:authHeaders()});
+  await requireOk(r,'Could not remove that photo');
+  return r.json() as Promise<{ok:true}>;
+}
+
 export async function saveWine(input:WineInput,id?:string,photos:WinePhoto[]=[],options:SaveWineOptions={}):Promise<{id:string}|{ok:true}>{
   if(id){const body=options.preferCuveePrimaryName?{...input,preferCuveePrimaryName:true}:input;const r=await fetch(`/api/wines/${id}`,{method:'PUT',headers:authHeaders(true),body:JSON.stringify(body)});await requireOk(r,'Could not save wine');return r.json() as Promise<{ok:true}>}
   if(photos.length){const fd=new FormData();fd.append('wine',JSON.stringify(input));photos.forEach(x=>fd.append('images',x.file));fd.append('dimensions',JSON.stringify(photos.map(x=>({width:x.width,height:x.height}))));fd.append('metadata',JSON.stringify(photos.map(x=>x.metadata??{capturedAt:null,latitude:null,longitude:null,source:'none'})));const r=await fetch('/api/wines',{method:'POST',headers:authHeaders(),body:fd});await requireOk(r,'Could not save wine and photos');return r.json() as Promise<{id:string}>}

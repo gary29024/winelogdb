@@ -21,14 +21,16 @@ const json=(body:unknown)=>new Response(JSON.stringify(body),{status:200,headers
  * module level on purpose - one read per app load - which would otherwise leak
  * between these cases.
  */
-let lastPath='';
-async function mount(props:Record<string,unknown>={},active:unknown=tasting,hold?:{release:()=>void}){
-  lastPath='';
-  vi.stubGlobal('fetch',vi.fn(async(url:string)=>{
+let lastPath='',calls:Array<[string,RequestInit|undefined]>=[];
+async function mount(props:Record<string,unknown>={},active:unknown=tasting,hold?:{release:()=>void},match:unknown=null){
+  lastPath='';calls=[];
+  vi.stubGlobal('fetch',vi.fn(async(url:string,init?:RequestInit)=>{
+    calls.push([String(url),init]);
     if(String(url).includes('/api/tastings/active')){
       if(hold)await new Promise<void>(resolve=>{hold.release=resolve});
       return json({tasting:active});
     }
+    if(String(url).includes('/wine-match'))return json({match});
     if(String(url).includes('/api/producers/resolve'))return json({matched:false,inputName:''});
     if(String(url)==='/api/wines')return json({id:'saved-wine'});
     return json({});
@@ -162,5 +164,54 @@ describe('the wine form while a tasting is open',()=>{
     expect(field('tastingName').value).toBe('');
     expect(field('tastingDate').value).toBe('');
     expect(host!.textContent).not.toContain('Prefilled from your open tasting');
+  });
+});
+
+describe('a bottle the evening already holds',()=>{
+  // The create path has no dedupe. Photographing a bottle whose printed line was
+  // read off the wine list an hour earlier made a second copy of it: one row
+  // with the price and no photo, one with the photo and no price, both in the
+  // same lineup. Merging silently would be wrong too - a tasting really does
+  // pour two bottles of one cuvée - so the choice is offered.
+  const photo={file:new File([new Uint8Array([1,2,3])],'bottle.jpg',{type:'image/jpeg'}),width:1200,height:1600};
+  const already={wineId:'w1',producer:'Domaine Dujac',wineName:'Morey-Saint-Denis',vintage:2019};
+  const scanned={producer:'Domaine Dujac',wineName:'Morey-Saint-Denis',vintage:2019};
+  const settle=async()=>{await act(async()=>{await new Promise(resolve=>setTimeout(resolve,450))})};
+  const named=(text:string)=>[...host!.querySelectorAll('button')].find(node=>node.textContent?.includes(text));
+
+  it('offers to add the photo to it rather than making a second copy',async()=>{
+    await mount({photos:[photo],initial:scanned},tasting,undefined,already);
+    await settle();
+    expect(host!.textContent).toContain('is already in this tasting');
+    await act(async()=>{named('Add this photo to it')!.click()});
+    expect(calls.some(([url])=>url.includes('/api/wines/w1/images')),'the photo went to the wine that existed').toBe(true);
+    expect(calls.some(([url,init])=>url==='/api/wines'&&init?.method==='POST'),'nothing new was created').toBe(false);
+  });
+
+  it('still lets a second bottle of the same cuvée be logged',async()=>{
+    await mount({photos:[photo],initial:scanned},tasting,undefined,already);
+    await settle();
+    await act(async()=>{named('Save a separate wine')!.click()});
+    expect(host!.textContent).not.toContain('is already in this tasting');
+  });
+
+  it('says nothing when the evening does not hold it',async()=>{
+    await mount({photos:[photo],initial:scanned});
+    await settle();
+    expect(host!.textContent).not.toContain('is already in this tasting');
+  });
+
+  it('does not ask at all when editing a wine, which cannot duplicate anything',async()=>{
+    await mount({id:'w9',photos:[photo],initial:scanned},tasting,undefined,already);
+    await settle();
+    expect(calls.some(([url])=>url.includes('/wine-match'))).toBe(false);
+  });
+
+  it('does not ask when there are no photos to attach',async()=>{
+    // Without a photograph there is nothing the existing wine gains, and the
+    // duplicate may well be the second bottle it looks like.
+    await mount({initial:scanned},tasting,undefined,already);
+    await settle();
+    expect(calls.some(([url])=>url.includes('/wine-match'))).toBe(false);
   });
 });

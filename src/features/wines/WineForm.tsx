@@ -1,12 +1,13 @@
 import { useEffect,useRef,useState, type FormEvent } from 'react';
 import { resolvePlace } from '../../lib/places/resolve';
 import { Link,useNavigate } from 'react-router-dom';
-import { saveWine,saveWineTastingStructure, type WinePhoto } from './api';
+import { addWineImages,saveWine,saveWineTastingStructure, type WinePhoto } from './api';
 import { resolveProducer,type ProducerResolution } from '../producers/api';
 import { resolveCuvee,type CuveeResolution } from '../cuvees/api';
 import type { GrapeBlendEntry, WineInput } from '../../lib/db/schema';
 import { hasTastingStructure,type TastingStructure,type TastingStructureKey } from '../../lib/wine/tastingStructure';
 import { refreshActiveTasting,useActiveTasting } from '../tastings/useActiveTasting';
+import { matchTastingWine,type TastingWineMatch } from '../tastings/api';
 import '../../producerResolution.css';
 import '../../wineFormCompact.css';
 
@@ -39,6 +40,9 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel}:WineF
   const [producer,setProducer]=useState(String(initial?.producer??'')),[producerResolution,setProducerResolution]=useState<ProducerResolution|null>(null),[resolvingProducer,setResolvingProducer]=useState(false);
   const [wineName,setWineName]=useState(String(initial?.wineName??'')),[appellation,setAppellation]=useState(String(initial?.appellation??'')),[wineStyle,setWineStyle]=useState(String(initial?.wineStyle??''));
   const [cruOverride,setCruOverride]=useState(String(initial?.classificationOverride??''));
+  // Controlled so the duplicate probe can key on it: 2019 and 2020 of one cuvée
+  // are two wines, and an evening pours both.
+  const [vintageInput,setVintageInput]=useState(initial?.vintage==null?'':String(initial.vintage));
   const [cuveeResolution,setCuveeResolution]=useState<CuveeResolution|null>(null),[resolvingCuvee,setResolvingCuvee]=useState(false),[preferCuveePrimaryName,setPreferCuveePrimaryName]=useState(false);
   const [structure,setStructure]=useState<TastingStructure>(()=>({...initial?.tastingStructure})),[structureOpen,setStructureOpen]=useState(()=>hasTastingStructure(initial?.tastingStructure??null));
   const matched=producerResolution?.matched?producerResolution.producer:undefined;
@@ -50,8 +54,50 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel}:WineF
   const [tastingDate,setTastingDate]=useState(String(initial?.tastingDate??''));
   const {tasting:activeTasting,loading:tastingLoading}=useActiveTasting();
   const prefilled=useRef(false);
+  /**
+   * The wine in tonight's lineup that this photograph is probably of.
+   *
+   * The create path has no dedupe, so photographing a bottle whose printed line
+   * was read an hour earlier makes a second copy of it: one row with the price
+   * and no photo, one with the photo and no price, both in the same evening.
+   * Rather than merge silently - which would be wrong for the two bottles of
+   * one cuvée a tasting really does sometimes pour - the choice is offered.
+   */
+  const [duplicate,setDuplicate]=useState<TastingWineMatch|null>(null);
+  const [dismissedDuplicate,setDismissedDuplicate]=useState(false);
+  const [attaching,setAttaching]=useState(false);
   // Editing an existing wine never joins a tasting, so it never waits on one.
   const waitingForTasting=!id&&tastingLoading;
+
+  /**
+   * Asked only where a duplicate can actually be made: a new wine, carrying
+   * photographs, being logged into an evening that is open. Editing, and the
+   * batch and group flows that run their own review, never ask.
+   */
+  useEffect(()=>{
+    if(id||!photos.length||!activeTasting||dismissedDuplicate)return;
+    const name=producer.trim(),cuvee=wineName.trim();
+    if(!name||!cuvee){setDuplicate(null);return}
+    let live=true;
+    const timer=setTimeout(()=>{
+      void matchTastingWine(activeTasting.id,{producer:name,wineName:cuvee,vintage:/^\d{3,4}$/.test(vintageInput.trim())?Number(vintageInput.trim()):null})
+        .then(match=>{if(live)setDuplicate(match)})
+        .catch(()=>undefined);
+    },400);
+    return()=>{live=false;clearTimeout(timer)};
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[id,photos.length,activeTasting?.id,dismissedDuplicate,producer,wineName,vintageInput]);
+
+  /** Adds the photographs to the wine already in the evening, making nothing new. */
+  async function attachToExisting(){
+    if(!duplicate||attaching)return;
+    setAttaching(true);setError('');
+    try{
+      await addWineImages(duplicate.wineId,photos);
+      if(onSaved)onSaved(duplicate.wineId);else nav(`/wines/${duplicate.wineId}`);
+    }catch(e){setError((e as Error).message||'Could not add the photos to that wine')}
+    finally{setAttaching(false)}
+  }
 
   /**
    * Prefill from the open tasting, once.
@@ -166,6 +212,15 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel}:WineF
   const field=(name:string,label:string,type='text',step?:string,required=false)=><label>{label}<input name={name} type={type} step={step} required={required} defaultValue={String(initial?.[name as keyof WineInput]??'')}/></label>;
   const hasGps=initial?.latitude!=null&&initial?.longitude!=null,hasEstimatedPlace=hasGps&&Boolean(initial?.locationName?.trim());
   return <form className="wine-form wine-form-compact" onSubmit={submit}>
+    {duplicate&&<div className="wine-duplicate-note" role="status">
+      <p><strong>{duplicate.wineName}</strong>{duplicate.vintage?` ${duplicate.vintage}`:''} is already in this tasting{duplicate.producer?`, under ${duplicate.producer}`:''}. Saving this would make a second copy of it.</p>
+      <div className="wine-duplicate-actions">
+        <button type="button" className="primary" disabled={attaching||busy} onClick={()=>void attachToExisting()}>
+          {attaching?'Adding…':`Add ${photos.length===1?'this photo':`these ${photos.length} photos`} to it`}
+        </button>
+        <button type="button" className="quiet" disabled={attaching||busy} onClick={()=>{setDismissedDuplicate(true);setDuplicate(null)}}>Save a separate wine</button>
+      </div>
+    </div>}
     <div className="producer-field"><label>Producer *<input name="producer" type="text" required value={producer} onChange={e=>setProducer(e.target.value)}/></label>
       {producer.trim()&&(resolvingProducer?<div className="producer-resolution matched"><span>Checking producer library…</span></div>:matched?<details className="producer-resolution matched compact-resolution"><summary>✓ Existing producer · {matched.canonicalName}</summary><div className="compact-resolution-body"><span>{matched.matchType==='alias'?`Matched via known alias “${matched.matchedName}” → `:''}{matched.canonicalName}</span><small>{matched.tastedCount} tasted · {matched.catalogCount} wines in researched range{matched.researchedAt?' · producer research available':''}</small><Link to={`/producers/${matched.id}`}>View producer profile</Link></div></details>:<div className="producer-resolution new"><strong>○ New producer</strong><span>No existing producer identity matches this name. A new profile will be created when the wine is saved.</span></div>)}
     </div>
@@ -173,7 +228,7 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel}:WineF
       {matched&&wineName.trim()&&(resolvingCuvee?<div className="producer-resolution cuvee-resolution matched"><span>Checking this producer’s cuvées…</span></div>:matchedCuvee?<><details className="producer-resolution cuvee-resolution matched compact-resolution"><summary>✓ Existing cuvée · {matchedCuvee.canonicalName}</summary><div className="compact-resolution-body"><span>{wineName.trim()===matchedCuvee.canonicalName?matchedCuvee.canonicalName:`${wineName.trim()} → ${matchedCuvee.canonicalName}`}</span><small>{matchedCuvee.matchType==='structured'?'Matched by stable producer + appellation/cuvée identity':matchedCuvee.matchType==='alias'?'Matched via a known cuvée name':'Same canonical cuvée identity'}{matchedCuvee.catalogBacked?' · producer catalogue-backed':''}{matchedCuvee.vintages.length?` · tasted vintages ${matchedCuvee.vintages.join(', ')}`:''}</small></div></details>{canPreferPrimary&&<label className="cuvee-primary-choice"><input type="checkbox" checked={preferCuveePrimaryName} onChange={e=>setPreferCuveePrimaryName(e.target.checked)}/><span>Use “{wineName.trim()}” as the primary cuvée name when saving</span><small>The cuvée ID stays the same; the old wording remains a searchable alias for every vintage.</small></label>}</>:<div className="producer-resolution cuvee-resolution new"><strong>○ New cuvée</strong><span>No existing cuvée identity for this producer matches this wine. WineLog will create one when saved.</span></div>)}
     </div>
 
-    <div className="wine-compact-row three">{field('vintage','Vintage','number')}<label>Style<select name="wineStyle" value={wineStyle} onChange={e=>setWineStyle(e.target.value)}><option value="">Unknown</option>{['red','white','rose','sparkling','dessert','fortified','orange','other'].map(x=><option key={x}>{x}</option>)}</select></label>{field('alcoholPercentage','Alcohol %','number','0.1')}</div>
+    <div className="wine-compact-row three"><label>Vintage<input name="vintage" type="number" value={vintageInput} onChange={e=>setVintageInput(e.target.value)}/></label><label>Style<select name="wineStyle" value={wineStyle} onChange={e=>setWineStyle(e.target.value)}><option value="">Unknown</option>{['red','white','rose','sparkling','dessert','fortified','orange','other'].map(x=><option key={x}>{x}</option>)}</select></label>{field('alcoholPercentage','Alcohol %','number','0.1')}</div>
     <div className="wine-compact-row two">{field('country','Country')}{field('region','Region')}</div>
     <div className="wine-compact-row appellation-row"><label>Appellation<input name="appellation" value={appellation} onChange={e=>setAppellation(e.target.value)}/><small>{denomination?`Recognized as a ${denomination}; no need to type it.`:'The denomination is read from the name, so leave DOC / DOCG / AVA off — but keep IGT or IGP, which tells a zone apart from the region it shares a name with.'}</small></label>
       <label>Cru level<select name="classificationOverride" value={cruOverride} onChange={e=>setCruOverride(e.target.value)}>

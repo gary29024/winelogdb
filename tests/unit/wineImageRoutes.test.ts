@@ -101,3 +101,46 @@ describe('adding photos to a wine that already exists',()=>{
     expect(deleted,'the orphan is cleaned up').toEqual(put);
   });
 });
+
+describe('removing one photo',()=>{
+  async function del(reply:(sql:string,args:unknown[])=>StubReply|undefined){
+    const db=createD1Stub(reply);
+    const deleted:string[]=[];
+    const response=await app.fetch(new Request('https://x/api/wines/w1/images/i1',{
+      method:'DELETE',headers:{authorization:`Bearer ${await createSession('owner',AUTH_SECRET)}`}
+    }),{DB:db.db,WINE_IMAGES:{delete:async(key:string)=>{deleted.push(key)}},
+      AUTH_SECRET,APP_URL:'https://x',APP_PASSWORD:'p',GEMINI_API_KEY:'k'} as never);
+    return {response,deleted,stub:db};
+  }
+  const found=(sql:string)=>/SELECT object_key FROM wine_images/.test(sql)?{first:{object_key:'owner/abc.jpg'}}:undefined;
+
+  it('drops the row and the object behind it',async()=>{
+    // An object nothing points at is storage billed forever for a photo nobody
+    // can see, and the row is what points at it.
+    const {response,deleted,stub}=await del(found);
+    expect(response.status).toBe(200);
+    expect(stub.calls.some(call=>/DELETE FROM wine_images/.test(call.sql))).toBe(true);
+    expect(deleted).toEqual(['owner/abc.jpg']);
+  });
+
+  it('will not remove a photo from a wine that is not yours',async()=>{
+    // The lookup is scoped by wine and owner together, so a photo of someone
+    // else's wine reads as gone.
+    const {response,deleted,stub}=await del(()=>({first:null}));
+    expect(response.status).toBe(404);
+    expect(deleted).toHaveLength(0);
+    expect(stub.calls.some(call=>/DELETE FROM wine_images/.test(call.sql))).toBe(false);
+  });
+
+  it('still reports success when the bucket delete fails',async()=>{
+    // The row is gone, so the owner has been told the photo is. Failing now
+    // would leave them looking at a photo the app says does not exist; an
+    // orphan in the bucket is worth pennies by comparison.
+    const db=createD1Stub(found);
+    const response=await app.fetch(new Request('https://x/api/wines/w1/images/i1',{
+      method:'DELETE',headers:{authorization:`Bearer ${await createSession('owner',AUTH_SECRET)}`}
+    }),{DB:db.db,WINE_IMAGES:{delete:async()=>{throw new Error('R2 is having a day')}},
+      AUTH_SECRET,APP_URL:'https://x',APP_PASSWORD:'p',GEMINI_API_KEY:'k'} as never);
+    expect(response.status).toBe(200);
+  });
+});

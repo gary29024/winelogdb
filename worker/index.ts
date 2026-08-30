@@ -214,6 +214,29 @@ app.post('/api/wines/:id/images',async c=>{
  }
 });
 
+/**
+ * One photograph removed, rather than all of them.
+ *
+ * Deleting a wine has always taken its images with it, but there was no way to
+ * drop a single bad frame - and now that a photo is easy to add to an existing
+ * wine, it is just as easy to add the wrong one. The R2 object goes with the
+ * row: an object nothing points at is storage billed forever for a photo nobody
+ * can see, and the row is what points at it.
+ */
+app.delete('/api/wines/:id/images/:imageId',async c=>{
+ const id=c.req.param('id'),imageId=c.req.param('imageId'),owner=c.get('userId');
+ const image=await c.env.DB.prepare('SELECT object_key FROM wine_images WHERE id=? AND wine_id=? AND owner_id=?')
+   .bind(imageId,id,owner).first<{object_key:string}>();
+ if(!image)return c.json({error:'That photo no longer exists'},404);
+ await c.env.DB.prepare('DELETE FROM wine_images WHERE id=? AND wine_id=? AND owner_id=?').bind(imageId,id,owner).run();
+ // After the row, and forgiving: a bucket delete that fails leaves an orphan
+ // worth pennies, while failing the request would leave a photo the owner has
+ // already been told is gone.
+ await c.env.WINE_IMAGES.delete(image.object_key).catch(()=>undefined);
+ await c.env.DB.prepare('UPDATE wines SET updated_at=? WHERE id=? AND owner_id=?').bind(new Date().toISOString(),id,owner).run();
+ return c.json({ok:true});
+});
+
 app.put('/api/wines/:id',async c=>{
  const parsed=wineInputSchema.safeParse(await c.req.json());if(!parsed.success)return c.json({error:'Invalid wine',issues:parsed.error.issues},400);
  const x=parsed.data,id=c.req.param('id'),owner=c.get('userId');
