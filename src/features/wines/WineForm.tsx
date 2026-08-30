@@ -143,7 +143,21 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel}:WineF
       // A save can have closed the open tasting - a wine dated another day ends
       // it server-side - so the cached answer is no longer trustworthy.
       if(!id)void refreshActiveTasting();
-      if(onSaved)onSaved(savedId);else nav(`/wines/${savedId}`);
+      /**
+       * Logging at a tasting is a repeated act, so a save goes back to the
+       * evening rather than on to the bottle: the lineup is both the receipt
+       * for what was just saved and where the next one is logged from. Landing
+       * on the wine meant backing out of it fourteen times a night.
+       *
+       * Only when it actually joined. Change the event or the date - the way
+       * you log something outside the evening - and you get the wine, as
+       * before. Group Photo and Batch Scan pass onSaved and keep their own
+       * review flow, which already returns you to their list.
+       */
+      const joined=!id&&activeTasting&&input.tastingName===activeTasting.name
+        &&(input.tastingDate??null)===(activeTasting.tastingDate??null);
+      if(onSaved)onSaved(savedId);
+      else nav(joined&&activeTasting?`/tastings/${activeTasting.id}`:`/wines/${savedId}`);
     }catch(e){setError((e as Error).message);setBusy(false)}
   }
   // The tree, not the typist, holds the denomination: showing what it reads back
