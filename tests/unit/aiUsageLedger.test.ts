@@ -1,6 +1,6 @@
 import { afterEach,describe,expect,it,vi } from 'vitest';
 import { createD1Stub } from './support/d1Stub';
-import { recordAiUsage,usageSummary,AI_USAGE_KINDS,kindLabels } from '../../src/lib/usage/aiUsage';
+import { geminiCallTokens,recordAiUsage,usageSummary,AI_USAGE_KINDS,kindLabels } from '../../src/lib/usage/aiUsage';
 import { DEFAULT_RATES,marginalCostUsd,monthCostUsd,readAiRates,tokenCostUsd,toLocal } from '../../src/lib/usage/rates';
 
 describe('the rates',()=>{
@@ -264,6 +264,35 @@ describe('every path that spends money is metered',()=>{
 
   it('covers every kind the ledger knows about',()=>{
     expect(new Set(sources.map(([,kind])=>kind.replace(/kind:'|'/g,'')))).toEqual(new Set(AI_USAGE_KINDS));
+  });
+
+  it('bills thinking tokens as output, which is how Google prices them',()=>{
+    // Google's pricing table labels the row "Output price (including thinking
+    // tokens)" but reports them apart from the answer, in thoughtsTokenCount.
+    // Counting only candidatesTokenCount undercounts the expensive half of the
+    // bill - output bills at six times input on the recognition model.
+    expect(geminiCallTokens({promptTokenCount:1800,candidatesTokenCount:350,thoughtsTokenCount:900}))
+      .toEqual({promptTokens:1800,outputTokens:1250});
+    // a reply that did not think is unchanged
+    expect(geminiCallTokens({promptTokenCount:1800,candidatesTokenCount:350})).toEqual({promptTokens:1800,outputTokens:350});
+    expect(geminiCallTokens(undefined)).toEqual({promptTokens:0,outputTokens:0});
+  });
+
+  it('leaves no metering path reading the answer tokens without the thinking ones',async()=>{
+    // The undercount is invisible in every other way: the call succeeds, the
+    // wine is right, and only the spend panel is quietly low. So the pairing is
+    // asserted rather than trusted to survive the next edit.
+    const { readFileSync }=await import('node:fs');
+    for(const path of ['worker/recognitionHandler.ts','worker/visionRecognition.ts','worker/vertexBatchRecognition.ts','src/lib/research/geminiBatch.ts']){
+      const source=readFileSync(path,'utf8');
+      for(const line of source.split('\n')){
+        if(!line.includes('candidatesTokenCount'))continue;
+        // the diagnostic logs report the two apart on purpose; metering adds them
+        const metering=!line.includes('console.');
+        if(metering)expect(line,`${path}: ${line.trim()}`).toContain('thoughtsTokenCount');
+      }
+      expect(source,path).toContain('thoughtsTokenCount');
+    }
   });
 
   it('records the flex tier on the one path that bills at it',async()=>{

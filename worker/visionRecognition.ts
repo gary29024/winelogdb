@@ -4,7 +4,7 @@ import { shouldRetryRecognitionFailure } from '../src/lib/recognition/retryPolic
 import { RECOGNITION_ESCALATION_MODEL } from '../src/lib/recognition/escalation';
 import { requireSession } from '../src/lib/auth/session';
 import { postGeminiGenerateContent,type GeminiTransportBindings } from './geminiTransport';
-import { recordAiUsage,type AiUsageKind,type AnalyticsSink } from '../src/lib/usage/aiUsage';
+import { geminiCallTokens,recordAiUsage,type AiUsageKind,type AnalyticsSink } from '../src/lib/usage/aiUsage';
 
 /**
  * One photograph in, several wines out.
@@ -55,12 +55,12 @@ export type VisionBindings=GeminiTransportBindings&{AUTH_SECRET:string;DB:D1Data
 
 type GeminiResponse={
   candidates?:Array<{content?:{parts?:Array<{text?:string}>};finishReason?:string}>;
-  usageMetadata?:{promptTokenCount?:number;candidatesTokenCount?:number;totalTokenCount?:number};
+  usageMetadata?:{promptTokenCount?:number;candidatesTokenCount?:number;thoughtsTokenCount?:number;totalTokenCount?:number};
   error?:{message?:string};
 };
 
 /** What this call billed, so the primary and any escalation are metered apart. */
-const usageOf=(payload:GeminiResponse)=>({promptTokens:payload.usageMetadata?.promptTokenCount??0,outputTokens:payload.usageMetadata?.candidatesTokenCount??0});
+const usageOf=(payload:GeminiResponse)=>geminiCallTokens(payload.usageMetadata);
 const HARD_TIMEOUT_MS=60_000;
 const parseJson=<V>(value:unknown,fallback:V):V=>{try{return JSON.parse(String(value)) as V}catch{return fallback}};
 
@@ -98,7 +98,7 @@ async function tryEscalated<T>(env:VisionBindings,spec:RecognitionModeSpec<T>,re
     const payload=await response.json() as GeminiResponse,candidate=payload.candidates?.[0],text=candidate?.content?.parts?.map(part=>part.text??'').join('')??'';
     if(!text)throw new Error(`Gemini 3.7 returned no ${spec.mode} recognition result`);
     const escalated=spec.parse(text),used=spec.wineCount(escalated)>0||spec.wineCount(primary)===0,result=used?escalated:primary;
-    console.log(JSON.stringify({event:`${spec.mode}-recognition-escalation-complete`,requestId,model:RECOGNITION_ESCALATION_MODEL,provider,reasons,used,schemaFallback,primaryWines:spec.wineCount(primary),escalatedWines:spec.wineCount(escalated),...prefixed('primary',spec.logFields?.(primary)??{}),...prefixed('escalated',spec.logFields?.(escalated)??{}),latencyMs:Date.now()-startedAt,finishReason:candidate?.finishReason??null,promptTokens:payload.usageMetadata?.promptTokenCount??null,outputTokens:payload.usageMetadata?.candidatesTokenCount??null,totalTokens:payload.usageMetadata?.totalTokenCount??null}));
+    console.log(JSON.stringify({event:`${spec.mode}-recognition-escalation-complete`,requestId,model:RECOGNITION_ESCALATION_MODEL,provider,reasons,used,schemaFallback,primaryWines:spec.wineCount(primary),escalatedWines:spec.wineCount(escalated),...prefixed('primary',spec.logFields?.(primary)??{}),...prefixed('escalated',spec.logFields?.(escalated)??{}),latencyMs:Date.now()-startedAt,finishReason:candidate?.finishReason??null,promptTokens:payload.usageMetadata?.promptTokenCount??null,outputTokens:payload.usageMetadata?.candidatesTokenCount??null,thinkingTokens:payload.usageMetadata?.thoughtsTokenCount??null,totalTokens:payload.usageMetadata?.totalTokenCount??null}));
     return {result,used,usage:usageOf(payload),finishReason:used?candidate?.finishReason??null:null};
   }catch(e){clearTimeout(timer);console.warn(JSON.stringify({event:`${spec.mode}-recognition-escalation-skipped`,requestId,model:RECOGNITION_ESCALATION_MODEL,reasons,timedOut,schemaFallback,latencyMs:Date.now()-startedAt,error:(e as Error).message||'Escalation failed'}));return {result:primary,used:false,usage:null,finishReason:null}}
 }
@@ -162,7 +162,7 @@ export async function runVisionRecognition<T>(request:Request,env:VisionBindings
       const escalation=escalationReasons.length?await tryEscalated(env,spec,requestId,requestBody,schemaFreeBody,primary,escalationReasons):{result:primary,used:false,usage:null,finishReason:null};
       const result=escalation.result,durationMs=Date.now()-startedAt,finalModel=escalation.used?RECOGNITION_ESCALATION_MODEL:spec.model;
       const wineCount=spec.wineCount(result);
-      console.log(JSON.stringify({event:`${spec.mode}-recognition-complete`,requestId,model:finalModel,primaryModel:spec.model,escalated:escalation.used,escalationReasons,provider,attempt,geminiLatencyMs,durationMs,schemaFallback,wines:wineCount,...(spec.logFields?.(result)??{}),finishReason:candidate?.finishReason??null,promptTokens:payload.usageMetadata?.promptTokenCount??null,outputTokens:payload.usageMetadata?.candidatesTokenCount??null,totalTokens:payload.usageMetadata?.totalTokenCount??null}));
+      console.log(JSON.stringify({event:`${spec.mode}-recognition-complete`,requestId,model:finalModel,primaryModel:spec.model,escalated:escalation.used,escalationReasons,provider,attempt,geminiLatencyMs,durationMs,schemaFallback,wines:wineCount,...(spec.logFields?.(result)??{}),finishReason:candidate?.finishReason??null,promptTokens:payload.usageMetadata?.promptTokenCount??null,outputTokens:payload.usageMetadata?.candidatesTokenCount??null,thinkingTokens:payload.usageMetadata?.thoughtsTokenCount??null,totalTokens:payload.usageMetadata?.totalTokenCount??null}));
       // One photograph, however many wines were on it - which is exactly why
       // this cannot be quoted per run. The escalation is a second billed call
       // covering the same wines, so it carries zero units or they count twice.

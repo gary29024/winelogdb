@@ -21,6 +21,8 @@ export const kindLabels:Record<AiUsageKind,string>={
   scan_sheet:'Tasting sheet'
 };
 
+const whole=(value:unknown)=>{const parsed=Math.round(Number(value)||0);return parsed>0?parsed:0};
+
 export type AiUsageEvent={
   kind:AiUsageKind;runId:string;targetId?:string|null;model:string;
   requests?:number;searchQueries?:number;promptTokens?:number;outputTokens?:number;
@@ -52,11 +54,25 @@ export const unitOf:Record<AiUsageKind,'run'|'wine'>={
   producer_research:'run',wine_research:'run',scan_single:'wine',scan_batch:'wine',scan_group:'wine',scan_sheet:'wine'
 };
 
+/**
+ * What one Gemini reply billed.
+ *
+ * Thinking tokens are priced as output - Google's own table labels the row
+ * "Output price (including thinking tokens)" - but they are reported apart
+ * from the answer, in `thoughtsTokenCount` rather than `candidatesTokenCount`.
+ * Reading only the latter undercounts the expensive half of the bill on models
+ * whose whole point is that they think: output bills at six times input on the
+ * recognition model and five times on the escalation one.
+ */
+export const geminiCallTokens=(usage?:{promptTokenCount?:unknown;candidatesTokenCount?:unknown;thoughtsTokenCount?:unknown}|null)=>({
+  promptTokens:whole(usage?.promptTokenCount),
+  outputTokens:whole(usage?.candidatesTokenCount)+whole(usage?.thoughtsTokenCount)
+});
+
 /** Cloudflare's Analytics Engine, when a dataset is bound. */
 export type AnalyticsSink={writeDataPoint:(point:{blobs?:string[];doubles?:number[];indexes?:string[]})=>void};
 export type AiUsageEnv={DB:D1Database;AI_USAGE?:AnalyticsSink};
 
-const whole=(value:unknown)=>{const parsed=Math.round(Number(value)||0);return parsed>0?parsed:0};
 /** Raw events are the per-run detail; past this the monthly rollup is the record. */
 export const RAW_EVENT_RETENTION_DAYS=90;
 

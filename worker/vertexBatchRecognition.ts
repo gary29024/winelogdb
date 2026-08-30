@@ -4,15 +4,15 @@ import { preferEscalatedRecognition,recognitionEscalationReasons,RECOGNITION_ESC
 import type { RecognitionPhotoMetadata } from '../src/lib/uploads/metadataSelection';
 import { shouldRetryRecognitionFailure } from '../src/lib/recognition/retryPolicy';
 import { postGeminiGenerateContent,type GeminiTransportBindings } from './geminiTransport';
-import { recordAiUsage,type AnalyticsSink } from '../src/lib/usage/aiUsage';
+import { geminiCallTokens,recordAiUsage,type AnalyticsSink } from '../src/lib/usage/aiUsage';
 
 type Env=GeminiTransportBindings&{DB:D1Database;WINE_IMAGES:R2Bucket;RESEARCH_QUEUE:Queue<unknown>;AI_USAGE?:AnalyticsSink};
 /** What this call billed, so the primary and any escalation are metered apart. */
-const usageOf=(payload:GeminiResponse)=>({promptTokens:payload.usageMetadata?.promptTokenCount??0,outputTokens:payload.usageMetadata?.candidatesTokenCount??0});
+const usageOf=(payload:GeminiResponse)=>geminiCallTokens(payload.usageMetadata);
 type ItemRow={id:string;metadata_json:string;status:string};
 type ImageRow={recognition_object_key:string};
 type JobRow={id:string;google_batch_name:string|null;item_ids_json:string;status:string;updated_at:string};
-type GeminiResponse={candidates?:Array<{content?:{parts?:Array<{text?:string}>};finishReason?:string}>;usageMetadata?:{promptTokenCount?:number;candidatesTokenCount?:number;totalTokenCount?:number;trafficType?:string}};
+type GeminiResponse={candidates?:Array<{content?:{parts?:Array<{text?:string}>};finishReason?:string}>;usageMetadata?:{promptTokenCount?:number;candidatesTokenCount?:number;thoughtsTokenCount?:number;totalTokenCount?:number;trafficType?:string}};
 
 const JOB_PREFIX='vertex-item/';
 const HARD_TIMEOUT_MS=600_000;
@@ -48,7 +48,7 @@ async function tryEscalatedBatchRecognition(env:Env,sessionId:string,itemId:stri
     if(!response.ok){const raw=(await response.text().catch(()=>'' )).slice(0,2000);console.warn(JSON.stringify({event:'vertex-flex-batch-recognition-escalation-skipped',sessionId,itemId,model:RECOGNITION_ESCALATION_MODEL,provider,status:response.status,reasons,error:errorMessage(raw,response.status)}));return {result:primary,used:false,trafficType:null,usage:null}}
     const payload=await response.json() as GeminiResponse,candidate=payload.candidates?.[0],text=candidate?.content?.parts?.map(part=>part.text??'').join('')??'';if(!text)throw new Error('Vertex Gemini 3.7 returned an empty recognition');
     const escalated=parseRecognition(text),result=preferEscalatedRecognition(primary,escalated),used=result===escalated;
-    console.log(JSON.stringify({event:'vertex-flex-batch-recognition-escalation-complete',sessionId,itemId,model:RECOGNITION_ESCALATION_MODEL,provider,reasons,used,trafficType:payload.usageMetadata?.trafficType??null,primaryConfidence:primary.confidence,escalatedConfidence:escalated.confidence,latencyMs:Date.now()-startedAt,finishReason:candidate?.finishReason??null,promptTokens:payload.usageMetadata?.promptTokenCount??null,outputTokens:payload.usageMetadata?.candidatesTokenCount??null,totalTokens:payload.usageMetadata?.totalTokenCount??null}));
+    console.log(JSON.stringify({event:'vertex-flex-batch-recognition-escalation-complete',sessionId,itemId,model:RECOGNITION_ESCALATION_MODEL,provider,reasons,used,trafficType:payload.usageMetadata?.trafficType??null,primaryConfidence:primary.confidence,escalatedConfidence:escalated.confidence,latencyMs:Date.now()-startedAt,finishReason:candidate?.finishReason??null,promptTokens:payload.usageMetadata?.promptTokenCount??null,outputTokens:payload.usageMetadata?.candidatesTokenCount??null,thinkingTokens:payload.usageMetadata?.thoughtsTokenCount??null,totalTokens:payload.usageMetadata?.totalTokenCount??null}));
     return {result,used,trafficType:payload.usageMetadata?.trafficType??null,usage:usageOf(payload)};
   }catch(e){clearTimeout(timer);console.warn(JSON.stringify({event:'vertex-flex-batch-recognition-escalation-skipped',sessionId,itemId,model:RECOGNITION_ESCALATION_MODEL,reasons,timedOut,latencyMs:Date.now()-startedAt,error:(e as Error).message||'Escalation failed'}));return {result:primary,used:false,trafficType:null,usage:null}}
 }
@@ -162,7 +162,7 @@ export async function processVertexBatchPollJob(env:Env,owner:string,sessionId:s
     // standard, so the tier is recorded or the ledger doubles the bill.
     for(const [index,call] of [{model:RECOGNITION_MODEL,...usageOf(payload)},...(escalation.usage?[{model:RECOGNITION_ESCALATION_MODEL,...escalation.usage}]:[])].entries())
       await recordAiUsage(env,owner,{kind:'scan_batch',runId:sessionId,targetId:itemId,model:call.model,tier:'flex',requests:1,units:index===0?1:0,promptTokens:call.promptTokens,outputTokens:call.outputTokens});
-    console.log(JSON.stringify({event:'vertex-flex-batch-recognition-complete',sessionId,itemId,model:escalation.used?RECOGNITION_ESCALATION_MODEL:RECOGNITION_MODEL,primaryModel:RECOGNITION_MODEL,escalated:escalation.used,escalationReasons,trafficType:escalation.used?(escalation.trafficType??null):(payload.usageMetadata?.trafficType??null),finishReason:candidate?.finishReason??null,promptTokens:payload.usageMetadata?.promptTokenCount??null,outputTokens:payload.usageMetadata?.candidatesTokenCount??null,totalTokens:payload.usageMetadata?.totalTokenCount??null}));
+    console.log(JSON.stringify({event:'vertex-flex-batch-recognition-complete',sessionId,itemId,model:escalation.used?RECOGNITION_ESCALATION_MODEL:RECOGNITION_MODEL,primaryModel:RECOGNITION_MODEL,escalated:escalation.used,escalationReasons,trafficType:escalation.used?(escalation.trafficType??null):(payload.usageMetadata?.trafficType??null),finishReason:candidate?.finishReason??null,promptTokens:payload.usageMetadata?.promptTokenCount??null,outputTokens:payload.usageMetadata?.candidatesTokenCount??null,thinkingTokens:payload.usageMetadata?.thoughtsTokenCount??null,totalTokens:payload.usageMetadata?.totalTokenCount??null}));
     await finishSessionIfTerminal(env.DB,owner,sessionId);return true;
   }catch(e){await failJob(env,owner,sessionId,jobId,itemId,(e as Error).message||'Could not process Vertex Flex batch recognition');return true}
 }
