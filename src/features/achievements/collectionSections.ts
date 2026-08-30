@@ -8,6 +8,23 @@ export function achievementChecklistHeading(definitionId:string,index:number):Ac
     if(index<43)return {section:'Fourth Growths · Quatrièmes Crus',subsection:null};
     return {section:'Fifth Growths · Cinquièmes Crus',subsection:null};
   }
+  // The sweet-wine half of 1855, which has three ranks rather than the reds'
+  // five: Yquem alone at the top, then eleven Premiers and fifteen Seconds.
+  // Yquem gets its own heading rather than sitting unremarked at the head of
+  // the Premiers - being the only Premier Cru Supérieur ever awarded is the
+  // single most quotable fact about the classification.
+  if(definitionId==='sauternes-barsac-1855-all'){
+    if(index===0)return {section:'Superior First Growth · Premier Cru Supérieur',subsection:null};
+    if(index<12)return {section:'First Growths · Premiers Crus',subsection:null};
+    return {section:'Second Growths · Seconds Crus',subsection:null};
+  }
+  // The Top Growths collection is Yquem plus the eleven Premiers, so it spans
+  // two ranks too and reads the same way.
+  if(definitionId==='sauternes-barsac-top-1855'){
+    return index===0
+      ?{section:'Superior First Growth · Premier Cru Supérieur',subsection:null}
+      :{section:'First Growths · Premiers Crus',subsection:null};
+  }
   if(definitionId==='burgundy-33-grand-crus'){
     if(index===0)return {section:'Chablis',subsection:'Chablis Grand Cru'};
     if(index<=24){

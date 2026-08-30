@@ -77,6 +77,36 @@ describe('master checklist section headings',()=>{
     expect(achievementChecklistHeading('bordeaux-1855-red-classified-growths',43).section).toContain('Fifth');
   });
 
+  it('splits Sauternes & Barsac 1855 by growth, with Yquem on its own',()=>{
+    // Twenty-seven estates in one undifferentiated list reads as a wall. The
+    // reds have been split by growth since launch; the sweets are the same
+    // classification and were not.
+    expect(achievementChecklistHeading('sauternes-barsac-1855-all',0).section).toContain('Premier Cru Supérieur');
+    expect(achievementChecklistHeading('sauternes-barsac-1855-all',1).section).toContain('First Growths');
+    expect(achievementChecklistHeading('sauternes-barsac-1855-all',11).section).toContain('First Growths');
+    expect(achievementChecklistHeading('sauternes-barsac-1855-all',12).section).toContain('Second Growths');
+    expect(achievementChecklistHeading('sauternes-barsac-1855-all',26).section).toContain('Second Growths');
+  });
+
+  it('splits the Top Growths collection at Yquem too, since it spans two ranks',()=>{
+    expect(achievementChecklistHeading('sauternes-barsac-top-1855',0).section).toContain('Premier Cru Supérieur');
+    expect(achievementChecklistHeading('sauternes-barsac-top-1855',1).section).toContain('First Growths');
+  });
+
+  it('puts every 1855 sweet estate under the heading its rank belongs to',async()=>{
+    // The boundaries are indexes into a hand-written list, so they are checked
+    // against the list itself rather than trusted: a growth added or reordered
+    // upstream would otherwise silently file estates under the wrong rank.
+    const { achievementDefinitions:all }=await import('../../src/features/achievements/curatedLaunch');
+    const collection=all.find(definition=>definition.id==='sauternes-barsac-1855-all')!;
+    expect(collection.items).toHaveLength(27);
+    expect(collection.items[0].label).toContain('Yquem');
+    const heads=collection.items.map((_,index)=>achievementChecklistHeading('sauternes-barsac-1855-all',index).section);
+    expect(heads.filter(head=>head?.includes('Supérieur'))).toHaveLength(1);
+    expect(heads.filter(head=>head?.includes('First Growths'))).toHaveLength(11);
+    expect(heads.filter(head=>head?.includes('Second Growths'))).toHaveLength(15);
+  });
+
   it('splits Burgundy Grand Crus by Chablis, Côte de Nuits communes and Côte de Beaune hills',()=>{
     expect(achievementChecklistHeading('burgundy-33-grand-crus',0)).toMatchObject({section:'Chablis'});
     expect(achievementChecklistHeading('burgundy-33-grand-crus',1)).toMatchObject({section:'Côte de Nuits',subsection:'Gevrey-Chambertin'});

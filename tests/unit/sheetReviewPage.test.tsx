@@ -55,7 +55,9 @@ const button=(text:string)=>[...host!.querySelectorAll('button')].find(node=>nod
  * Choosing photographs saves them; reading them is a separate press, so every
  * case that wants a parse asks for one the way a person would.
  */
-const read=async()=>{await act(async()=>{button('Read ')!.click()})};
+const byText=(pattern:RegExp)=>[...host!.querySelectorAll('button')].find(node=>pattern.test(node.textContent??''));
+const read=async()=>{await act(async()=>{byText(/^Read \d+ page/)!.click()})};
+const readSaved=async()=>{await act(async()=>{byText(/^Read \d+ saved page/)!.click()})};
 const choose=async(files:File[])=>{await pick(files);await read()};
 
 const parsed=(matches:unknown[],overrides:Record<string,unknown>={})=>
@@ -144,10 +146,6 @@ describe('the wine list review',()=>{
     expect(host!.textContent).toContain('Photograph that page in two halves');
   });
 
-  it('offers to re-read the list already stored, without the paper',async()=>{
-    await mount([parsed([{status:'new',wine:wine()}])]);
-    expect(button('Re-read the 1 stored page')).toBeTruthy();
-  });
 });
 
 describe('choosing the photographs',()=>{
@@ -182,6 +180,41 @@ describe('choosing the photographs',()=>{
     expect((globalThis.fetch as ReturnType<typeof vi.fn>).mock.calls
       .filter(call=>String(call[0]).includes('/sheet/parse'))).toHaveLength(0);
     expect(host.textContent).toContain('nothing was charged');
-    expect(button('Read ')).toBeUndefined();
+    expect(byText(/^Read \d+ page/),'nothing staged is waiting to be read').toBeUndefined();
+    // and the page it kept is now offered from storage, which is the point of
+    // keeping it: the prices can be read off it another day.
+    expect(byText(/^Read \d+ saved page/)).toBeTruthy();
+  });
+});
+
+describe('reading a list saved on an earlier visit',()=>{
+  it('reads the stored pages without asking for the paper again',async()=>{
+    // Reported as: "the list was just saved in the first place, but I want to
+    // read the prices later on". The photograph is in a bin by then; the copy
+    // in R2 is what this screen is for.
+    const host=await mount([parsed([{status:'new',wine:wine({wineName:'Bonnes-Mares'})}])]);
+    expect(host.textContent).toContain('Pages already saved');
+    await readSaved();
+    const calls=(globalThis.fetch as ReturnType<typeof vi.fn>).mock.calls.map(call=>String(call[0]));
+    expect(calls.some(url=>url.includes('/api/tastings/documents/d1')),'fetched off the stored copy').toBe(true);
+    expect(calls.filter(url=>url.includes('/sheet/parse'))).toHaveLength(1);
+    expect(host.textContent).toContain('Bonnes-Mares');
+  });
+
+  it('will not spend a second call on pages it has just read',async()=>{
+    // Each page is an AI call, and the button sits right there afterwards.
+    const host=await mount([parsed([{status:'new',wine:wine()}])]);
+    await readSaved();
+    expect(byText(/^Read 0 saved page/)?.disabled,'unticked once read').toBe(true);
+    expect(host.textContent).toContain('Pages already saved');
+  });
+
+  it('reads only the pages that are ticked',async()=>{
+    const host=await mount([parsed([{status:'new',wine:wine()}])]);
+    const boxes=[...host.querySelectorAll('.tasting-sheet-stored-page input')] as HTMLInputElement[];
+    expect(boxes,'one per saved page, ticked on arrival').toHaveLength(1);
+    expect(boxes[0].checked).toBe(true);
+    await act(async()=>{boxes[0].click()});
+    expect(byText(/^Read 0 saved page/)?.disabled).toBe(true);
   });
 });
