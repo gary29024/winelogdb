@@ -52,12 +52,37 @@ const sauternesSecond:readonly NamedEntry[]=[
 ];
 const sauternes1855=[...sauternesTop,...sauternesSecond] as const;
 
-const gravesClassed:readonly NamedEntry[]=[
-  'Château Bouscaut','Château Carbonnieux','Domaine de Chevalier','Château Couhins','Château Couhins-Lurton','Château de Fieuzal','Château Haut-Bailly','Château Haut-Brion','Château Latour-Martillac','Château Malartic-Lagravière','Château La Mission Haut-Brion','Château Olivier','Château Pape Clément','Château Smith Haut Lafitte'
+/**
+ * The Graves classification does not rank; it classifies an estate for red, for
+ * white, or for both, which is the only division it has. Ordered by that so the
+ * checklist can head each run - the detail page groups consecutive items, so a
+ * heading needs its estates together.
+ *
+ * The counts come out at twelve classified for red and eight for white, against
+ * the thirteen and nine of 1959. The difference is exactly the two estates since
+ * absorbed into Château La Mission Haut-Brion: La Tour Haut-Brion for the red
+ * and Laville Haut-Brion for the white. La Mission is filed under red, which is
+ * how the Union des Crus Classés de Graves lists it today.
+ */
+const gravesRedAndWhite:readonly NamedEntry[]=[
+  'Château Bouscaut','Château Carbonnieux','Domaine de Chevalier','Château Latour-Martillac','Château Malartic-Lagravière','Château Olivier'
 ];
-const saintEmilionPremiers2022:readonly NamedEntry[]=[
-  'Château Beau-Séjour Bécot','Château Beauséjour Héritiers Duffau-Lagarrosse','Château Bélair-Monange','Château Canon','Château Canon La Gaffelière','Château Figeac','Château Larcis Ducasse','Château Pavie','Château Pavie Macquin','Château Troplong Mondot','Château TrotteVieille','Château Valandraud','Clos Fourtet','La Mondotte'
+const gravesRedOnly:readonly NamedEntry[]=[
+  'Château de Fieuzal','Château Haut-Bailly','Château Haut-Brion','Château La Mission Haut-Brion','Château Pape Clément','Château Smith Haut Lafitte'
 ];
+const gravesWhiteOnly:readonly NamedEntry[]=['Château Couhins','Château Couhins-Lurton'];
+const gravesClassed=[...gravesRedAndWhite,...gravesRedOnly,...gravesWhiteOnly] as const;
+/**
+ * Saint-Émilion's Premiers Grands Crus Classés come in two ranks, and the gap
+ * between them is the whole story of the 2022 classification: Ausone and Cheval
+ * Blanc withdrew from it, and Figeac was promoted to join Pavie as an A. Listing
+ * all fourteen as one rank loses that.
+ */
+const saintEmilionPremiersA:readonly NamedEntry[]=['Château Figeac','Château Pavie'];
+const saintEmilionPremiersB:readonly NamedEntry[]=[
+  'Château Beau-Séjour Bécot','Château Beauséjour Héritiers Duffau-Lagarrosse','Château Bélair-Monange','Château Canon','Château Canon La Gaffelière','Château Larcis Ducasse','Château Pavie Macquin','Château Troplong Mondot','Château TrotteVieille','Château Valandraud','Clos Fourtet','La Mondotte'
+];
+const saintEmilionPremiers2022=[...saintEmilionPremiersA,...saintEmilionPremiersB] as const;
 
 const coteDeNuitsGrandCrus=[
   'Chambertin','Chambertin-Clos de Bèze','Chapelle-Chambertin','Charmes-Chambertin','Griotte-Chambertin','Latricières-Chambertin','Mazis-Chambertin','Mazoyères-Chambertin','Ruchottes-Chambertin',

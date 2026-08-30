@@ -51,6 +51,14 @@ const pick=async(files:File[])=>{
 };
 const page=(name:string)=>new File([new Uint8Array([1,2,3])],name,{type:'image/jpeg'});
 const button=(text:string)=>[...host!.querySelectorAll('button')].find(node=>node.textContent?.includes(text));
+/**
+ * Choosing photographs saves them; reading them is a separate press, so every
+ * case that wants a parse asks for one the way a person would.
+ */
+const byText=(pattern:RegExp)=>[...host!.querySelectorAll('button')].find(node=>pattern.test(node.textContent??''));
+const read=async()=>{await act(async()=>{byText(/^Read \d+ page/)!.click()})};
+const readSaved=async()=>{await act(async()=>{byText(/^Read \d+ saved page/)!.click()})};
+const choose=async(files:File[])=>{await pick(files);await read()};
 
 const parsed=(matches:unknown[],overrides:Record<string,unknown>={})=>
   ({currency:'HKD',unresolvedCount:0,truncated:false,resumeAfterLine:null,matches,requestId:'r',recognitionDurationMs:1,...overrides});
@@ -63,7 +71,7 @@ describe('the wine list review',()=>{
       {status:'matched',wine:wine(),wineId:'w1',hasPrice:false,currentPrice:null,currentCurrency:null},
       {status:'matched',wine:wine({wineName:'Clos de la Roche',lineNumber:2}),wineId:'w2',hasPrice:true,currentPrice:980,currentCurrency:'HKD'}
     ])]);
-    await pick([page('list.jpg')]);
+    await choose([page('list.jpg')]);
     const boxes=[...host!.querySelectorAll('.tasting-sheet-row input[type=checkbox]')] as HTMLInputElement[];
     expect(boxes.map(box=>box.checked)).toEqual([true,false]);
     expect(boxes[1].disabled).toBe(true);
@@ -72,14 +80,14 @@ describe('the wine list review',()=>{
 
   it('ticks a wine the evening does not have, for creation',async()=>{
     await mount([parsed([{status:'new',wine:wine({wineName:'Bonnes-Mares'})}])]);
-    await pick([page('list.jpg')]);
+    await choose([page('list.jpg')]);
     expect(button('Add 1 wine')?.disabled).toBe(false);
     expect(button('Fill 0 price')?.disabled).toBe(true);
   });
 
   it('reads the currency once for the sheet',async()=>{
     await mount([parsed([{status:'new',wine:wine()}])]);
-    await pick([page('list.jpg')]);
+    await choose([page('list.jpg')]);
     expect((host!.querySelector('.tasting-sheet-currency input') as HTMLInputElement).value).toBe('HKD');
   });
 
@@ -90,7 +98,7 @@ describe('the wine list review',()=>{
       ...Array.from({length:60},(_,index)=>({status:'new',wine:wine({wineName:`Red ${index}`,section:'FLIGHT 2 — REDS',lineNumber:index+41})}))
     ];
     await mount([parsed(matches)]);
-    await pick([page('list.jpg')]);
+    await choose([page('list.jpg')]);
     const sections=[...host!.querySelectorAll('.tasting-sheet-section')];
     expect(sections).toHaveLength(2);
     expect(host!.querySelectorAll('.tasting-sheet-row')).toHaveLength(100);
@@ -100,7 +108,7 @@ describe('the wine list review',()=>{
   it('collapses a flight so a hundred rows can be got past',async()=>{
     const matches=Array.from({length:30},(_,index)=>({status:'new',wine:wine({wineName:`Red ${index}`,lineNumber:index+1})}));
     await mount([parsed(matches)]);
-    await pick([page('list.jpg')]);
+    await choose([page('list.jpg')]);
     await act(async()=>{host!.querySelector('.tasting-sheet-toggle')?.dispatchEvent(new MouseEvent('click',{bubbles:true}))});
     expect(host!.querySelectorAll('.tasting-sheet-row')).toHaveLength(0);
     // Collapsed, not deselected: the count is still there to act on.
@@ -112,14 +120,14 @@ describe('the wine list review',()=>{
       parsed([{status:'new',wine:wine({wineName:'Page one wine'})}]),
       parsed([{status:'new',wine:wine({wineName:'Page two wine',lineNumber:1})}])
     ]);
-    await pick([page('one.jpg'),page('two.jpg')]);
+    await choose([page('one.jpg'),page('two.jpg')]);
     expect(host!.querySelectorAll('.tasting-sheet-row')).toHaveLength(2);
     expect(host!.textContent).toContain('read from 2 pages');
   });
 
   it('counts a wine reprinted at a page break once',async()=>{
     await mount([parsed([{status:'new',wine:wine({wineName:'Repeated'})}])]);
-    await pick([page('one.jpg'),page('two.jpg')]);
+    await choose([page('one.jpg'),page('two.jpg')]);
     expect(host!.querySelectorAll('.tasting-sheet-row')).toHaveLength(1);
   });
 
@@ -128,18 +136,85 @@ describe('the wine list review',()=>{
       parsed([{status:'new',wine:wine({wineName:'First',lineNumber:40})}],{truncated:true,resumeAfterLine:40}),
       parsed([{status:'new',wine:wine({wineName:'Second',lineNumber:41})}])
     ]);
-    await pick([page('long.jpg')]);
+    await choose([page('long.jpg')]);
     expect(host!.querySelectorAll('.tasting-sheet-row')).toHaveLength(2);
   });
 
   it('says so when even the continuations could not finish a page',async()=>{
     await mount([parsed([{status:'new',wine:wine()}],{truncated:true,resumeAfterLine:40})]);
-    await pick([page('long.jpg')]);
+    await choose([page('long.jpg')]);
     expect(host!.textContent).toContain('Photograph that page in two halves');
   });
 
-  it('offers to re-read the list already stored, without the paper',async()=>{
-    await mount([parsed([{status:'new',wine:wine()}])]);
-    expect(button('Re-read the 1 stored page')).toBeTruthy();
+});
+
+describe('choosing the photographs',()=>{
+  it('saves the pages without reading them, and waits to be told',async()=>{
+    // Reported as: the scan fired the moment the photos were chosen. One AI
+    // call per page, on a sheet that can run to seven, spent before anyone had
+    // looked at the screen.
+    const host=await mount([parsed([{status:'new',wine:wine()}])]);
+    await pick([page('one.jpg'),page('two.jpg')]);
+    const calls=(globalThis.fetch as ReturnType<typeof vi.fn>).mock.calls.map(call=>String(call[0]));
+    expect(calls.filter(url=>url.includes('/sheet/parse')),'nothing read yet').toHaveLength(0);
+    expect(calls.some(url=>url.includes('/documents')),'but the paper is kept').toBe(true);
+    expect(host.textContent).toContain('2 pages saved to this tasting');
+    expect(button('Read 2 pages')).toBeTruthy();
+  });
+
+  it('reads them only once the button is pressed',async()=>{
+    const host=await mount([parsed([{status:'new',wine:wine({wineName:'Bonnes-Mares'})}])]);
+    await pick([page('one.jpg')]);
+    await read();
+    expect((globalThis.fetch as ReturnType<typeof vi.fn>).mock.calls
+      .filter(call=>String(call[0]).includes('/sheet/parse'))).toHaveLength(1);
+    expect(host.textContent).toContain('Bonnes-Mares');
+  });
+
+  it('lets the pages be kept unread, which costs nothing',async()=>{
+    // The other half of the same fix: a list you photographed only to have a
+    // record of should not have to be read to be stored.
+    const host=await mount([parsed([{status:'new',wine:wine()}])]);
+    await pick([page('one.jpg')]);
+    await act(async()=>{button('Just keep them')!.click()});
+    expect((globalThis.fetch as ReturnType<typeof vi.fn>).mock.calls
+      .filter(call=>String(call[0]).includes('/sheet/parse'))).toHaveLength(0);
+    expect(host.textContent).toContain('nothing was charged');
+    expect(byText(/^Read \d+ page/),'nothing staged is waiting to be read').toBeUndefined();
+    // and the page it kept is now offered from storage, which is the point of
+    // keeping it: the prices can be read off it another day.
+    expect(byText(/^Read \d+ saved page/)).toBeTruthy();
+  });
+});
+
+describe('reading a list saved on an earlier visit',()=>{
+  it('reads the stored pages without asking for the paper again',async()=>{
+    // Reported as: "the list was just saved in the first place, but I want to
+    // read the prices later on". The photograph is in a bin by then; the copy
+    // in R2 is what this screen is for.
+    const host=await mount([parsed([{status:'new',wine:wine({wineName:'Bonnes-Mares'})}])]);
+    expect(host.textContent).toContain('Pages already saved');
+    await readSaved();
+    const calls=(globalThis.fetch as ReturnType<typeof vi.fn>).mock.calls.map(call=>String(call[0]));
+    expect(calls.some(url=>url.includes('/api/tastings/documents/d1')),'fetched off the stored copy').toBe(true);
+    expect(calls.filter(url=>url.includes('/sheet/parse'))).toHaveLength(1);
+    expect(host.textContent).toContain('Bonnes-Mares');
+  });
+
+  it('will not spend a second call on pages it has just read',async()=>{
+    // Each page is an AI call, and the button sits right there afterwards.
+    const host=await mount([parsed([{status:'new',wine:wine()}])]);
+    await readSaved();
+    expect(byText(/^Read 0 saved page/)?.disabled,'unticked once read').toBe(true);
+    expect(host.textContent).toContain('Pages already saved');
+  });
+
+  it('reads only the pages that are ticked',async()=>{
+    const host=await mount([parsed([{status:'new',wine:wine()}])]);
+    const boxes=[...host.querySelectorAll('.tasting-sheet-stored-page input')] as HTMLInputElement[];
+    expect(boxes,'one per saved page, ticked on arrival').toHaveLength(1);
+    expect(boxes[0].checked).toBe(true);
+    await act(async()=>{boxes[0].click()});
+    expect(byText(/^Read 0 saved page/)?.disabled).toBe(true);
   });
 });

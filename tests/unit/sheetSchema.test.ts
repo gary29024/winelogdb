@@ -38,8 +38,18 @@ describe('reading a printed wine list',()=>{
     expect('currency' in parsed.wines[0]).toBe(false);
   });
 
-  it('rejects a currency that is not a three-letter code',()=>{
-    expect(()=>parseSheetPage(page([line()],{currency:'HK$'}))).toThrow();
+  it('drops a currency that is not a three-letter code, and keeps the wines',()=>{
+    // This used to throw, which meant a symbol where a code was asked for cost
+    // the eighty wines printed underneath it. The review screen asks for the
+    // currency and will not write a price without one, so an unreadable code
+    // costs a moment's typing instead.
+    const parsed=parseSheetPage(page([line()],{currency:'HK$'}));
+    expect(parsed.currency).toBeNull();
+    expect(parsed.wines).toHaveLength(1);
+  });
+
+  it('forgives the case of a real code',()=>{
+    expect(parseSheetPage(page([line()],{currency:'hkd'})).currency).toBe('HKD');
   });
 
   it('survives the canonicalisation it performs on the way through',()=>{
@@ -48,6 +58,51 @@ describe('reading a printed wine list',()=>{
     // would reject the whole page.
     const parsed=parseSheetPage(page([line({appellation:'Chambertin Grand Cru',wineName:'Chambertin'})]));
     expect(parsed.wines[0].classification).toBe('grand_cru');
+  });
+});
+
+describe('a model that did not answer in the shape it was asked for',()=>{
+  // All of these were one read of a real printed list, and every one of them
+  // used to take the whole page down with it.
+
+  it('lifts a currency printed on every row up to the sheet',()=>{
+    // Reported from a live scan: "Unrecognized key: currency" at wines[0]
+    // through wines[6]. The model was told to report one currency for the
+    // sheet and reported it per wine instead - right answer, wrong place.
+    const parsed=parseSheetPage(JSON.stringify({
+      wines:[{...JSON.parse(JSON.stringify(line())),currency:'HKD'},
+        {...JSON.parse(JSON.stringify(line({wineName:'Clos de la Roche',lineNumber:2}))),currency:'HKD'}],
+      unresolvedCount:0,truncated:false,lastLineNumber:2
+    }));
+    expect(parsed.wines).toHaveLength(2);
+    expect(parsed.currency,'read off the rows rather than lost').toBe('HKD');
+    expect('currency' in parsed.wines[0],'and not left on the wine').toBe(false);
+  });
+
+  it('takes the commonest row currency when they disagree',()=>{
+    const row=(code:string,name:string)=>({...JSON.parse(JSON.stringify(line({wineName:name}))),currency:code});
+    const parsed=parseSheetPage(JSON.stringify({wines:[row('HKD','A'),row('HKD','B'),row('USD','C')]}));
+    expect(parsed.currency).toBe('HKD');
+  });
+
+  it('ignores any other key it was never asked for',()=>{
+    const parsed=parseSheetPage(page([{...JSON.parse(JSON.stringify(line())),tastingNote:'lovely',rank:3}]));
+    expect(parsed.wines).toHaveLength(1);
+    expect('tastingNote' in parsed.wines[0]).toBe(false);
+  });
+
+  it('loses only the line it garbled, not the page it was printed on',()=>{
+    // A hundred-wine sheet is one call and a whole evening's paper. One row
+    // with no producer should cost that row.
+    const parsed=parseSheetPage(page([line(),{wineName:'No producer here',confidence:.5},line({wineName:'Clos',lineNumber:3})]));
+    expect(parsed.wines.map(w=>w.wineName)).toEqual(['Morey-Saint-Denis','Clos']);
+    expect(parsed.unresolvedCount,'counted, so the screen can say to add it by hand').toBe(1);
+  });
+
+  it('still reads a page returned as a bare array of wines',()=>{
+    const parsed=parseSheetPage(JSON.stringify([line()]));
+    expect(parsed.wines).toHaveLength(1);
+    expect(parsed.currency).toBeNull();
   });
 });
 

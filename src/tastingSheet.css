@@ -4,7 +4,25 @@
 .tasting-sheet-page{max-width:880px;margin:auto}
 .tasting-sheet-actions{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 14px}
 .tasting-sheet-actions>button{flex:1 1 auto}
+/* Whichever action is the decision on the screen takes the full width and the
+   rest share the row under it: first the photographing, then - once pages are
+   staged - reading them, which is the press that costs money. */
+.tasting-sheet-actions>button.primary{flex:1 1 100%}
 .tasting-sheet-notice{margin:0 0 10px;color:var(--ink-5);font-size:.84rem}
+
+/* Pages saved on a previous visit, so a list kept as paper can be read for its
+   prices later without photographing it again. Shown as thumbnails because
+   choosing which page to spend a call on means seeing which page it is. */
+.tasting-sheet-stored{margin:0 0 16px;padding:14px 16px;border:1px solid var(--line);border-radius:var(--r-lg);background:var(--paper)}
+.tasting-sheet-stored-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.tasting-sheet-stored-head h2{margin:0;font-size:1.05rem}
+.tasting-sheet-stored-note{margin:.4rem 0 0;color:var(--ink-6);font-size:.79rem;line-height:1.5}
+.tasting-sheet-stored-pages{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0;padding:0;list-style:none}
+.tasting-sheet-stored-page label{display:grid;gap:4px;justify-items:center;padding:6px;border:1px solid var(--line);border-radius:var(--r-md);cursor:pointer}
+.tasting-sheet-stored-page.is-picked label{border-color:var(--wine);background:var(--ground)}
+.tasting-sheet-stored-page img,.tasting-sheet-stored-page .tasting-document-loading{width:86px;height:112px;border-radius:var(--r-sm);object-fit:cover;background:var(--sunken);display:block}
+.tasting-sheet-stored-page small{color:var(--ink-6);font-size:.72rem}
+.tasting-sheet-stored>button{width:100%}
 .tasting-sheet-warning{margin:0 0 10px;padding:10px 12px;border:1px solid var(--warn-line);border-radius:var(--r-md);background:var(--warn-wash);color:var(--warn);font-size:.82rem;line-height:1.5}
 
 /* Sticky because the actions must be reachable without scrolling past two

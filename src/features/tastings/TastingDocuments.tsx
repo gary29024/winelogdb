@@ -1,7 +1,7 @@
-import { useEffect,useRef,useState } from 'react';
+import { useRef,useState } from 'react';
 import { Link } from 'react-router-dom';
-import { authHeaders } from '../../lib/auth/client';
 import { ImageLightbox } from '../../components/ImageLightbox';
+import { useDocumentUrl } from './useDocumentUrl';
 import { deleteTastingDocument,uploadTastingDocuments,type TastingDocument } from './api';
 import '../../tastings.css';
 
@@ -11,19 +11,6 @@ import '../../tastings.css';
  * Available on a closed tasting as much as an open one, because the sheet is
  * usually handed out at the end - or turns up the next day.
  */
-function useDocumentUrl(documentId:string){
-  const [src,setSrc]=useState<string>();
-  useEffect(()=>{
-    let active=true,created='';
-    fetch(`/api/tastings/documents/${documentId}`,{headers:authHeaders()})
-      .then(response=>{if(!response.ok)throw new Error('unavailable');return response.blob()})
-      .then(blob=>{if(!active)return;created=URL.createObjectURL(blob);setSrc(created)})
-      .catch(()=>undefined);
-    return()=>{active=false;if(created)URL.revokeObjectURL(created)};
-  },[documentId]);
-  return src;
-}
-
 function DocumentThumb({document:doc,index,onOpen,onRemove,busy}:{document:TastingDocument;index:number;onOpen:(src:string,alt:string)=>void;onRemove:()=>void;busy:boolean}){
   const src=useDocumentUrl(doc.id),alt=`Wine list page ${index+1}`;
   return <li className="tasting-document">

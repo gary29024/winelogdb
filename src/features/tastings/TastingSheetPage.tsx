@@ -1,6 +1,7 @@
 import { useEffect,useMemo,useRef,useState } from 'react';
 import { Link,useParams } from 'react-router-dom';
 import { prepareRecognitionImageWithinBytes } from '../uploads/prepareImage';
+import { useDocumentUrl } from './useDocumentUrl';
 import { createTastingSheetWines,fillTastingSheetPrices,getTasting,parseTastingSheetPage,readTastingDocumentFile,
   uploadTastingDocuments,type SheetMatch,type Tasting,type TastingDocument } from './api';
 import '../../tastingSheet.css';
@@ -22,6 +23,18 @@ const rowPrice=(match:SheetMatch)=>match.wine.priceOptions[0]?.amount??null;
 /** Ticked by default only where the write is the obvious one. */
 const defaultSelected=(match:SheetMatch)=>match.status==='new'?true:!match.hasPrice&&match.wine.priceOptions.length>0;
 
+/** One saved page, shown large enough to tell which page it is before paying to read it. */
+function StoredPage({documentId,index,checked,disabled,onToggle}:{documentId:string;index:number;checked:boolean;disabled:boolean;onToggle:()=>void}){
+  const src=useDocumentUrl(documentId),alt=`Wine list page ${index+1}`;
+  return <li className={`tasting-sheet-stored-page${checked?' is-picked':''}`}>
+    <label>
+      <input type="checkbox" checked={checked} disabled={disabled} onChange={onToggle}/>
+      {src?<img src={src} alt={alt}/>:<span className="tasting-document-loading" aria-label={`${alt} loading`}/>}
+      <small>Page {index+1}</small>
+    </label>
+  </li>;
+}
+
 export function TastingSheetPage(){
   const {id=''}=useParams();
   const input=useRef<HTMLInputElement>(null);
@@ -29,12 +42,21 @@ export function TastingSheetPage(){
   const [rows,setRows]=useState<Row[]>([]),[currency,setCurrency]=useState('');
   const [busy,setBusy]=useState(''),[error,setError]=useState(''),[notice,setNotice]=useState('');
   const [unresolved,setUnresolved]=useState(0),[partial,setPartial]=useState(false);
+  /** Photographed and saved, not yet read. Reading is a separate, paid step. */
+  const [staged,setStaged]=useState<File[]>([]);
+  /** Which saved pages the next read should cover. */
+  const [picked,setPicked]=useState<Set<string>>(()=>new Set());
   const [collapsed,setCollapsed]=useState<Set<string>>(()=>new Set());
 
   useEffect(()=>{
     if(!id)return;
     let active=true;
-    getTasting(id).then(detail=>{if(active){setTasting(detail.tasting);setDocuments(detail.documents)}})
+    getTasting(id).then(detail=>{if(active){
+      setTasting(detail.tasting);setDocuments(detail.documents);
+      // Arriving at this screen with pages already saved almost always means
+      // reading them, so they start ticked and reading is one press.
+      setPicked(new Set(detail.documents.map(document=>document.id)));
+    }})
       .catch(e=>{if(active)setError((e as Error).message)});
     return()=>{active=false};
   },[id]);
@@ -103,25 +125,75 @@ export function TastingSheetPage(){
     }catch(e){setError((e as Error).message||'Could not read the wine list')}finally{setBusy('')}
   }
 
-  /** Photographing the sheet stores it too: the paper is the record of the evening. */
+  /**
+   * Photographing the sheet saves it. It does not read it.
+   *
+   * Reported as: the scan fired the moment the photos were chosen. Reading a
+   * list is the most expensive single action in the app - one AI call per page,
+   * on a sheet that can run to seven of them - and firing it on a file picker
+   * means a mis-shot page or a wrong tasting costs money before anyone has
+   * looked at the screen. So this stores the paper, which is the half worth
+   * having unconditionally, and waits to be told to read it. Same shape as
+   * scanning a bottle: choose, then press.
+   */
   async function choosePages(files:File[]){
     if(!files.length)return;
+    setBusy('save');setError('');setNotice('');
     try{
       const {documents:added}=await uploadTastingDocuments(id,files);
       setDocuments(current=>[...current,...added]);
-    }catch(e){setError(`Read the list, but could not store it: ${(e as Error).message}`)}
-    await readPages(files);
+      setNotice(`${files.length} page${files.length===1?'':'s'} saved to this tasting. Nothing has been read yet.`);
+    }catch(e){
+      // The photos are still worth reading even if storing them failed, so they
+      // are staged either way and the failure is said plainly.
+      setError(`Could not store the wine list: ${(e as Error).message}`);
+    }finally{setBusy('')}
+    setStaged(current=>[...current,...files]);
     if(input.current)input.current.value='';
   }
 
+  async function readStaged(){
+    const files=staged;
+    if(!files.length)return;
+    await readPages(files);
+    setStaged([]);setPicked(new Set());
+  }
+
+  /** Kept as paper and left unread - no AI call, and the photos stay attached. */
+  function keepWithoutReading(){
+    const kept=staged.length;
+    setStaged([]);setError('');
+    setNotice(`${kept} page${kept===1?'':'s'} kept with this tasting. Nothing was read, so nothing was charged.`);
+  }
+
+  /**
+   * Reading a list that was photographed earlier, off the copy already in R2.
+   *
+   * Reported as: "in case the list was just saved in the first place but I want
+   * to read the prices later on". Storing the paper and reading it are separate
+   * steps now, so the second one has to be reachable on its own - and without
+   * the paper, which by then is in a bin somewhere. This is what keeping the
+   * original in R2 bought.
+   *
+   * Per page rather than all of them, because each one is an AI call: a sheet
+   * read last week and added to this week should cost the new pages only.
+   */
   async function readStored(){
-    if(!documents.length)return;
+    const chosen=documents.filter(document=>picked.has(document.id));
+    if(!chosen.length)return;
     setBusy('parse');setError('');
     try{
-      const files=await Promise.all(documents.map((document,index)=>readTastingDocumentFile(document.id,`page-${index+1}.jpg`)));
+      const files=await Promise.all(chosen.map((document,index)=>readTastingDocumentFile(document.id,`page-${index+1}.jpg`)));
       await readPages(files);
-    }catch(e){setError((e as Error).message||'Could not re-read the stored wine list');setBusy('')}
+      // Unticked once read, so a second press cannot quietly pay for the same
+      // pages twice. A fresh visit starts them ticked again.
+      setPicked(new Set());
+    }catch(e){setError((e as Error).message||'Could not read the stored wine list');setBusy('')}
   }
+
+  const toggleStored=(documentId:string)=>setPicked(current=>{
+    const next=new Set(current);next.has(documentId)?next.delete(documentId):next.add(documentId);return next;
+  });
 
   // The patch is deliberately narrow rather than Partial<Row>: spreading a
   // partial of a discriminated union widens `status` and loses the narrowing
@@ -176,13 +248,34 @@ export function TastingSheetPage(){
   return <article className="tasting-sheet-page">
     <Link className="back-pill" to={`/tastings/${id}`}>← {tasting?.name??'Tasting'}</Link>
     <div className="hero compact"><p className="eyebrow">WINE LIST</p><h1>Read the printed list.</h1>
-      <p>Photograph each page of the handout. WineLog reads the wines and their prices, matches them against this tasting, and lets you fill the prices in and add anything missing. Each page is one AI call, so a long list costs more than a short one.</p></div>
+      <p>Photograph each page of the handout and it is saved to this tasting straight away. Reading it is a separate press: WineLog then reads the wines and their prices, matches them against this tasting, and lets you fill the prices in and add anything missing. Each page read is one AI call, so a long list costs more than a short one — and a list you only wanted to keep costs nothing.</p></div>
 
     <div className="tasting-sheet-actions">
-      <button type="button" className="primary" disabled={working} onClick={()=>input.current?.click()}>{busy==='parse'?'Reading…':'Photograph the list'}</button>
-      {documents.length>0&&<button type="button" disabled={working} onClick={()=>void readStored()}>Re-read the {documents.length} stored page{documents.length===1?'':'s'}</button>}
+      <button type="button" className={staged.length?'':'primary'} disabled={working} onClick={()=>input.current?.click()}>{busy==='save'?'Saving…':'Photograph the list'}</button>
+      {staged.length>0&&<>
+        <button type="button" className="primary" disabled={working} onClick={()=>void readStaged()}>{busy==='parse'?'Reading…':`Read ${staged.length} page${staged.length===1?'':'s'}`}</button>
+        <button type="button" disabled={working} onClick={keepWithoutReading}>Just keep them</button>
+      </>}
       <input ref={input} className="visually-hidden" type="file" accept="image/*" multiple onChange={event=>void choosePages(Array.from(event.target.files??[]))}/>
     </div>
+
+    {documents.length>0&&staged.length===0&&<section className="tasting-sheet-stored">
+      <div className="tasting-sheet-stored-head">
+        <h2>Pages already saved</h2>
+        <button type="button" className="tasting-sheet-select-all"
+          onClick={()=>setPicked(picked.size===documents.length?new Set():new Set(documents.map(document=>document.id)))}>
+          {picked.size===documents.length?'None':'All'}
+        </button>
+      </div>
+      <p className="tasting-sheet-stored-note">Read the prices off a list photographed earlier, without the paper. Each page you tick is one AI call.</p>
+      <ul className="tasting-sheet-stored-pages">
+        {documents.map((document,index)=>
+          <StoredPage key={document.id} documentId={document.id} index={index} checked={picked.has(document.id)} disabled={working} onToggle={()=>toggleStored(document.id)}/>)}
+      </ul>
+      <button type="button" className="primary" disabled={working||!picked.size} onClick={()=>void readStored()}>
+        {busy==='parse'?'Reading…':`Read ${picked.size} saved page${picked.size===1?'':'s'}`}
+      </button>
+    </section>}
 
     {notice&&<p className="tasting-sheet-notice" role="status">{notice}</p>}
     {error&&<p className="tasting-error" role="alert">{error}</p>}
