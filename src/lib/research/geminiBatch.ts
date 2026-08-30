@@ -110,11 +110,15 @@ export function responsesByKey(responses:GeminiInlineResponse[]){
 
 export function vertexFlexUsage(response:GeminiInlineResponse['response']):VertexFlexUsage{
   const usage=response?.usageMetadata??{},trafficType=typeof usage.trafficType==='string'?usage.trafficType:null;
+  // Thinking tokens bill at the output rate but are reported apart from the
+  // answer, so the two are added. Null still means "not reported" rather than
+  // zero, which is why this is not a plain sum.
+  const answer=finiteNumber(usage.candidatesTokenCount),thinking=finiteNumber(usage.thoughtsTokenCount);
   return {
     trafficType,
     flexConfirmed:trafficType==='ON_DEMAND_FLEX',
     promptTokens:finiteNumber(usage.promptTokenCount),
-    outputTokens:finiteNumber(usage.candidatesTokenCount),
+    outputTokens:answer===null&&thinking===null?null:(answer??0)+(thinking??0),
     totalTokens:finiteNumber(usage.totalTokenCount)
   };
 }
