@@ -40,6 +40,19 @@ async function renderDetail(detail:unknown){
   return host;
 }
 
+async function renderList(items:unknown[]){
+  stubApi({'/api/tastings/active':{tasting:null},'/api/tastings':{items}});
+  vi.resetModules();
+  const {TastingsPage}=await import('../../src/features/tastings/TastingsPage');
+  host=document.createElement('div');document.body.appendChild(host);root=createRoot(host);
+  await act(async()=>{root!.render(<MemoryRouter><TastingsPage/></MemoryRouter>)});
+  return host;
+}
+const summary=(over:Record<string,unknown>={})=>({...tasting,startedAt:null,endedAt:null,wineCount:3,averageRating:92.5,...over});
+const headings=()=>[...host!.querySelectorAll('.tasting-month-heading')].map(node=>node.textContent);
+const namesIn=(index:number)=>[...host!.querySelectorAll('.tasting-month')[index].querySelectorAll('.tasting-row-name')]
+  .map(node=>node.textContent?.replace('In progress',''));
+
 async function renderShell(active:unknown){
   stubApi({'/api/tastings/active':{tasting:active}});
   vi.resetModules();
@@ -146,6 +159,55 @@ describe('finding the tastings you have logged',()=>{
     // own link rather than another tab.
     await renderShell(null);
     expect(host!.querySelector('.mobile-nav')!.textContent).toBe('PassportJournalScan WineProducersInsights');
+  });
+});
+
+describe('the tastings list, grouped by month',()=>{
+  it('splits the evenings into months, newest first',async()=>{
+    await renderList([
+      summary({id:'a',name:'August late',tastingDate:'2026-08-29'}),
+      summary({id:'b',name:'August early',tastingDate:'2026-08-02'}),
+      summary({id:'c',name:'July one',tastingDate:'2026-07-14'})
+    ]);
+    expect(headings()).toEqual(['Aug 2026','Jul 2026']);
+    expect(namesIn(0)).toEqual(['August late','August early']);
+    expect(namesIn(1)).toEqual(['July one']);
+  });
+
+  it('files an undated tasting by when it was created',async()=>{
+    await renderList([summary({id:'a',name:'Undated',tastingDate:null,createdAt:'2026-06-11T10:00:00.000Z'})]);
+    expect(headings()).toEqual(['Jun 2026']);
+  });
+
+  it('leads its own month with the open one, not the whole page',async()=>{
+    // The server pins the open tasting to the very top, which would put a
+    // reopened July evening under an August heading. Grouped, it belongs to the
+    // month it actually happened in - the live strip is what makes it findable.
+    await renderList([
+      summary({id:'open',name:'Reopened July',tastingDate:'2026-07-20',startedAt:'2026-07-20T10:00:00.000Z'}),
+      summary({id:'a',name:'August one',tastingDate:'2026-08-15'}),
+      summary({id:'b',name:'July other',tastingDate:'2026-07-28'})
+    ]);
+    expect(headings()).toEqual(['Aug 2026','Jul 2026']);
+    expect(namesIn(0)).toEqual(['August one']);
+    expect(namesIn(1)).toEqual(['July other','Reopened July']);
+    expect(host!.querySelector('.tasting-row.is-open')?.textContent).toContain('Reopened July');
+  });
+
+  it('never repeats a month heading, however the rows arrive',async()=>{
+    // The reduce only starts a new group when the key changes, so an unsorted
+    // list would produce Aug, Jul, Aug rather than two groups.
+    await renderList([
+      summary({id:'a',name:'One',tastingDate:'2026-08-02'}),
+      summary({id:'b',name:'Two',tastingDate:'2026-07-14'}),
+      summary({id:'c',name:'Three',tastingDate:'2026-08-29'})
+    ]);
+    expect(headings()).toEqual(['Aug 2026','Jul 2026']);
+  });
+
+  it('still says so when there is nothing to group',async()=>{
+    await renderList([]);
+    expect(host!.querySelector('.empty')?.textContent).toContain('No tastings yet');
   });
 });
 
