@@ -2,6 +2,7 @@ import { useEffect,useMemo,useRef,useState } from 'react';
 import { Link,useParams } from 'react-router-dom';
 import { prepareRecognitionImageWithinBytes } from '../uploads/prepareImage';
 import { useDocumentUrl } from './useDocumentUrl';
+import { clearSheetDraft,readSheetDraft,sheetDraftAge,writeSheetDraft } from './sheetDraftStore';
 import { createTastingSheetWines,fillTastingSheetPrices,getTasting,parseTastingSheetPage,readTastingDocumentFile,
   uploadTastingDocuments,type SheetLineupWine,type SheetMatch,type Tasting,type TastingDocument } from './api';
 import '../../tastingSheet.css';
@@ -61,6 +62,16 @@ export function TastingSheetPage(){
   /** Which saved pages the next read should cover. */
   const [picked,setPicked]=useState<Set<string>>(()=>new Set());
   const [collapsed,setCollapsed]=useState<Set<string>>(()=>new Set());
+  /** When the restored reading was made, so the screen can say what it is showing. */
+  const [restoredAt,setRestoredAt]=useState('');
+  /**
+   * Whether the stored reading has been looked for yet.
+   *
+   * Without this the save effect fires once on mount with no rows and deletes
+   * the very draft the load is about to restore - opening the screen would wipe
+   * the reading every time, which is the opposite of the point.
+   */
+  const [hydrated,setHydrated]=useState(false);
 
   useEffect(()=>{
     if(!id)return;
@@ -70,6 +81,15 @@ export function TastingSheetPage(){
       // Arriving at this screen with pages already saved almost always means
       // reading them, so they start ticked and reading is one press.
       setPicked(new Set(detail.documents.map(document=>document.id)));
+      // A reading already paid for is picked back up rather than asked for
+      // again. Restored after the tasting loads so a stale draft cannot outlive
+      // the tasting it belongs to.
+      const draft=readSheetDraft(id);
+      if(draft){
+        setRows(draft.rows);setLineup(draft.lineup);setCurrency(draft.currency);
+        setUnresolved(draft.unresolved);setPartial(draft.partial);setRestoredAt(draft.savedAt);
+      }
+      setHydrated(true);
     }})
       .catch(e=>{if(active)setError((e as Error).message)});
     return()=>{active=false};
@@ -86,6 +106,13 @@ export function TastingSheetPage(){
   const alreadyPriced=matched.filter(rowHasPrice).length;
   /** A wine one row claims is not offered to the others, or two rows fight over it. */
   const claimed=new Set(rows.map(row=>row.manualWineId).filter((id):id is string=>Boolean(id)));
+
+  // Written on every edit rather than on leaving: there is no reliable "leaving"
+  // on a phone, where the screen is closed by switching apps.
+  useEffect(()=>{
+    if(!id||!hydrated)return;
+    writeSheetDraft(id,{rows,lineup,currency,unresolved,partial});
+  },[id,hydrated,rows,lineup,currency,unresolved,partial]);
 
   const sections=useMemo(()=>{
     const groups=new Map<string,Row[]>();
@@ -140,7 +167,7 @@ export function TastingSheetPage(){
       });
       setRows(deduped.map((match,index)=>({...match,key:`${index}`,chosenPrice:rowPrice(match),selected:defaultSelected(match),manualWineId:null})));
       if(sheetCurrency)setCurrency(sheetCurrency);
-      setUnresolved(unresolvedTotal);setPartial(anyPartial);
+      setUnresolved(unresolvedTotal);setPartial(anyPartial);setRestoredAt('');
       setNotice(`${deduped.length} wine${deduped.length===1?'':'s'} read from ${files.length} page${files.length===1?'':'s'}.`);
     }catch(e){setError((e as Error).message||'Could not read the wine list')}finally{setBusy('')}
   }
@@ -183,6 +210,14 @@ export function TastingSheetPage(){
     if(!files.length)return;
     await readPages(files);
     setStaged([]);setPicked(new Set());
+  }
+
+  /** Throws away the reading, which is the only thing that ever does. */
+  function discardReading(){
+    if(rows.length&&!confirm('Discard this reading? The pages stay saved, but reading them again costs another scan.'))return;
+    clearSheetDraft(id);
+    setRows([]);setLineup([]);setCurrency('');setUnresolved(0);setPartial(false);setRestoredAt('');
+    setNotice('Reading discarded. The photographed pages are still saved.');
   }
 
   /** Kept as paper and left unread - no AI call, and the photos stay attached. */
@@ -305,6 +340,7 @@ export function TastingSheetPage(){
       </button>
     </section>}
 
+    {restoredAt&&<p className="tasting-sheet-notice" role="status">Showing the list read on {sheetDraftAge(restoredAt)}. Nothing was scanned again — pick up where you left off, or Discard to start over.</p>}
     {notice&&<p className="tasting-sheet-notice" role="status">{notice}</p>}
     {error&&<p className="tasting-error" role="alert">{error}</p>}
     {partial&&<p className="tasting-sheet-warning" role="alert">A page listed more wines than could be read in one go, even after continuing. Photograph that page in two halves to catch the rest.</p>}
@@ -317,6 +353,7 @@ export function TastingSheetPage(){
         <div className="tasting-sheet-buttons">
           <button type="button" className="primary" disabled={working||!selectedPrices.length} onClick={()=>void fillPrices()}>{busy==='prices'?'Filling…':`Fill ${selectedPrices.length} price${selectedPrices.length===1?'':'s'}`}</button>
           <button type="button" disabled={working||!selectedNew.length} onClick={()=>void addWines()}>{busy==='wines'?'Adding…':`Add ${selectedNew.length} wine${selectedNew.length===1?'':'s'}`}</button>
+          <button type="button" className="tasting-sheet-discard" disabled={working} onClick={discardReading}>Discard</button>
         </div>
       </div>
 

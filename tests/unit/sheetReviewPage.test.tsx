@@ -18,7 +18,7 @@ const wine=(overrides:Record<string,unknown>={})=>({
 });
 
 let root:Root|null=null,host:HTMLDivElement|null=null;
-afterEach(()=>{act(()=>root?.unmount());host?.remove();root=null;host=null;vi.unstubAllGlobals()});
+afterEach(()=>{act(()=>root?.unmount());host?.remove();root=null;host=null;vi.unstubAllGlobals();window.localStorage.clear()});
 
 const json=(body:unknown)=>new Response(JSON.stringify(body),{status:200,headers:{'content-type':'application/json'}});
 
@@ -62,6 +62,7 @@ const read=async()=>{await act(async()=>{byText(/^Read \d+ page/)!.click()})};
 const readSaved=async()=>{await act(async()=>{byText(/^Read \d+ saved page/)!.click()})};
 const choose=async(files:File[])=>{await pick(files);await read()};
 
+const pickersIn=(node:HTMLElement)=>[...node.querySelectorAll('.tasting-sheet-match')] as unknown as HTMLSelectElement[];
 const parsed=(matches:unknown[],overrides:Record<string,unknown>={})=>
   ({currency:'HKD',unresolvedCount:0,truncated:false,resumeAfterLine:null,matches,lineup:[],requestId:'r',recognitionDurationMs:1,...overrides});
 const logged=(overrides:Record<string,unknown>={})=>
@@ -230,7 +231,7 @@ describe('a printed line the reading could not match',()=>{
   // was to create a second copy of a wine already in the evening - which loses
   // the price and doubles the wine.
   const unmatched=(lineup:unknown[])=>parsed([{status:'new',wine:wine({wineName:"'MV20' Aÿ Grand Cru Brut"})}],{lineup});
-  const pickers=()=>[...host!.querySelectorAll('.tasting-sheet-match')] as unknown as HTMLSelectElement[];
+  const pickers=()=>pickersIn(host!);
   const picker=()=>pickers()[0];
   const pick=async(value:string)=>{
     const select=picker()!;
@@ -295,5 +296,63 @@ describe('a printed line the reading could not match',()=>{
     await choose([page('list.jpg')]);
     expect(picker()).toBeUndefined();
     expect(button('Add 1 wine')).toBeTruthy();
+  });
+});
+
+describe('a reading already paid for',()=>{
+  // Reading a list is the most expensive thing the app does - one AI call per
+  // page, on a sheet that can run to seven - and closing the screen used to
+  // throw the whole result away. Coming back to fill the prices in later meant
+  // paying to read the same paper again.
+  const oneRow=()=>parsed([{status:'new',wine:wine({wineName:'Bonnes-Mares'})}]);
+
+  it('is still there after the screen is closed and reopened',async()=>{
+    await mount([oneRow()]);
+    await choose([page('list.jpg')]);
+    expect(host!.textContent).toContain('Bonnes-Mares');
+
+    // reopened later: no parse call is made, and the rows come back
+    const host2=await mount([oneRow()]);
+    expect(host2.textContent).toContain('Bonnes-Mares');
+    expect(host2.textContent).toContain('Showing the list read on');
+    expect((globalThis.fetch as ReturnType<typeof vi.fn>).mock.calls
+      .filter(call=>String(call[0]).includes('/sheet/parse')),'nothing rescanned').toHaveLength(0);
+  });
+
+  it('keeps the choices made against it, not just the wines',async()=>{
+    await mount([parsed([{status:'new',wine:wine()}],{lineup:[logged()]})]);
+    await choose([page('list.jpg')]);
+    await act(async()=>{
+      const select=pickersIn(host!)[0];
+      const setter=Object.getOwnPropertyDescriptor(window.HTMLSelectElement.prototype,'value')!.set!;
+      setter.call(select,'w1');select.dispatchEvent(new Event('change',{bubbles:true}));
+    });
+    expect(host!.textContent).toContain('Matched by you to MV20');
+
+    const host2=await mount([oneRow()]);
+    expect(host2.textContent,'the hand-made match survives too').toContain('Matched by you to MV20');
+  });
+
+  it('goes only when it is thrown away on purpose',async()=>{
+    await mount([oneRow()]);
+    await choose([page('list.jpg')]);
+    vi.stubGlobal('confirm',()=>true);
+    await act(async()=>{button('Discard')!.click()});
+    expect(host!.textContent).not.toContain('Bonnes-Mares');
+    expect(host!.textContent).toContain('pages are still saved');
+
+    const host2=await mount([oneRow()]);
+    expect(host2.textContent).not.toContain('Bonnes-Mares');
+  });
+
+  it('is superseded by a fresh reading rather than merged with it',async()=>{
+    await mount([oneRow()]);
+    await choose([page('list.jpg')]);
+    const host2=await mount([parsed([{status:'new',wine:wine({wineName:'Clos de Tart'})}])]);
+    expect(host2.textContent).toContain('Showing the list read on');
+    await choose([page('again.jpg')]);
+    expect(host2.textContent).toContain('Clos de Tart');
+    expect(host2.textContent).not.toContain('Bonnes-Mares');
+    expect(host2.textContent,'and it is no longer billed as restored').not.toContain('Showing the list read on');
   });
 });
