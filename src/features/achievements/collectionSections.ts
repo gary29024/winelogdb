@@ -25,6 +25,21 @@ export function achievementChecklistHeading(definitionId:string,index:number):Ac
       ?{section:'Superior First Growth · Premier Cru Supérieur',subsection:null}
       :{section:'First Growths · Premiers Crus',subsection:null};
   }
+  // Graves ranks nothing; it classifies an estate for red, for white, or for
+  // both, so that is the only division there is to show. The list is ordered to
+  // match.
+  if(definitionId==='graves-crus-classes'){
+    if(index<6)return {section:'Classified for red and white',subsection:null};
+    if(index<12)return {section:'Classified for red',subsection:null};
+    return {section:'Classified for white',subsection:null};
+  }
+  // The two ranks of Saint-Émilion's Premiers, which is what the 2022
+  // classification is remembered for.
+  if(definitionId==='saint-emilion-2022-premiers'){
+    return index<2
+      ?{section:'Premier Grand Cru Classé A',subsection:null}
+      :{section:'Premier Grand Cru Classé B',subsection:null};
+  }
   if(definitionId==='burgundy-33-grand-crus'){
     if(index===0)return {section:'Chablis',subsection:'Chablis Grand Cru'};
     if(index<=24){

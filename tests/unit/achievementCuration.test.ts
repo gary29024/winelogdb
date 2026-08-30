@@ -107,6 +107,60 @@ describe('master checklist section headings',()=>{
     expect(heads.filter(head=>head?.includes('Second Growths'))).toHaveLength(15);
   });
 
+  it('splits Graves by what each estate is classified for, which is its only division',()=>{
+    expect(achievementChecklistHeading('graves-crus-classes',0).section).toBe('Classified for red and white');
+    expect(achievementChecklistHeading('graves-crus-classes',5).section).toBe('Classified for red and white');
+    expect(achievementChecklistHeading('graves-crus-classes',6).section).toBe('Classified for red');
+    expect(achievementChecklistHeading('graves-crus-classes',11).section).toBe('Classified for red');
+    expect(achievementChecklistHeading('graves-crus-classes',12).section).toBe('Classified for white');
+  });
+
+  it('splits the Saint-Émilion Premiers into A and B',()=>{
+    // The gap between them is what the 2022 classification is remembered for.
+    expect(achievementChecklistHeading('saint-emilion-2022-premiers',0).section).toBe('Premier Grand Cru Classé A');
+    expect(achievementChecklistHeading('saint-emilion-2022-premiers',1).section).toBe('Premier Grand Cru Classé A');
+    expect(achievementChecklistHeading('saint-emilion-2022-premiers',2).section).toBe('Premier Grand Cru Classé B');
+  });
+
+  it('files each Graves and Saint-Émilion estate under the right heading',async()=>{
+    // Same guard as the 1855 sweets: the boundaries are indexes into
+    // hand-written lists, so they are checked against the lists themselves.
+    const { achievementDefinitions:all }=await import('../../src/features/achievements/curatedLaunch');
+    const labelsUnder=(id:string,section:string)=>{
+      const collection=all.find(definition=>definition.id===id)!;
+      return collection.items.filter((_,index)=>achievementChecklistHeading(id,index).section===section).map(item=>item.label);
+    };
+    expect(labelsUnder('saint-emilion-2022-premiers','Premier Grand Cru Classé A'))
+      .toEqual(['Château Figeac','Château Pavie']);
+    expect(labelsUnder('saint-emilion-2022-premiers','Premier Grand Cru Classé B')).toHaveLength(12);
+
+    // Twelve classified for red and eight for white, against the thirteen and
+    // nine of 1959 - the difference is exactly La Tour Haut-Brion and Laville
+    // Haut-Brion, both since absorbed into Château La Mission Haut-Brion.
+    const both=labelsUnder('graves-crus-classes','Classified for red and white');
+    const redOnly=labelsUnder('graves-crus-classes','Classified for red');
+    const whiteOnly=labelsUnder('graves-crus-classes','Classified for white');
+    expect(both).toHaveLength(6);
+    expect(redOnly).toHaveLength(6);
+    expect(whiteOnly).toEqual(['Château Couhins','Château Couhins-Lurton']);
+    expect(both.length+redOnly.length,'classified for red').toBe(12);
+    expect(both.length+whiteOnly.length,'classified for white').toBe(8);
+    expect(redOnly).toContain('Château Haut-Brion');
+    expect(both).toContain('Domaine de Chevalier');
+  });
+
+  it('keeps every reordered collection at the size it always was',async()=>{
+    // Reordering by rank must not quietly drop or duplicate an estate, and the
+    // item ids are built from the labels, so progress already recorded against
+    // them survives the move.
+    const { achievementDefinitions:all }=await import('../../src/features/achievements/curatedLaunch');
+    for(const [id,size] of [['graves-crus-classes',14],['saint-emilion-2022-premiers',14]] as const){
+      const items=all.find(definition=>definition.id===id)!.items;
+      expect(items,id).toHaveLength(size);
+      expect(new Set(items.map(item=>item.id)).size,`${id} has no duplicates`).toBe(size);
+    }
+  });
+
   it('splits Burgundy Grand Crus by Chablis, Côte de Nuits communes and Côte de Beaune hills',()=>{
     expect(achievementChecklistHeading('burgundy-33-grand-crus',0)).toMatchObject({section:'Chablis'});
     expect(achievementChecklistHeading('burgundy-33-grand-crus',1)).toMatchObject({section:'Côte de Nuits',subsection:'Gevrey-Chambertin'});
