@@ -32,6 +32,27 @@ type Row=SheetMatch&{key:string;chosenPrice:number|null;selected:boolean;manualW
 /** The wine this row will write to, matched or pointed by hand. */
 const targetWineId=(row:Row)=>row.status==='matched'?row.wineId:row.manualWineId;
 
+/**
+ * What one wine in the evening is called, in a list of them.
+ *
+ * The producer leads, because that is what tells them apart: a tasting of
+ * Montalcino puts four "Brunello di Montalcino" in the lineup and the vintage
+ * alone does not say whose. Dropped from the front of the cuvée where the wine
+ * was logged with it already there, so a name does not read twice.
+ */
+const lineupLabel=(wine:SheetLineupWine)=>{
+  const producer=wine.producer.trim(),name=wine.wineName.trim();
+  const bare=producer&&name.toLowerCase().startsWith(producer.toLowerCase())
+    ? name.slice(producer.length).replace(/^[\s\u2013\u2014:-]+/,'').trim()||name
+    : name;
+  return [producer,bare,wine.vintage?String(wine.vintage):'NV'].filter(Boolean).join(' · ')
+    +(wine.hasPrice?' (already priced)':'');
+};
+
+/** Producer first, so one maker's bottles sit together however the lineup was poured. */
+const byLabel=(a:SheetLineupWine,b:SheetLineupWine)=>
+  a.producer.localeCompare(b.producer)||a.wineName.localeCompare(b.wineName)||(a.vintage??0)-(b.vintage??0);
+
 const rowPrice=(match:SheetMatch)=>match.wine.priceOptions[0]?.amount??null;
 /** Ticked by default only where the write is the obvious one. */
 const defaultSelected=(match:SheetMatch)=>match.status==='new'?true:!match.hasPrice&&match.wine.priceOptions.length>0;
@@ -378,7 +399,7 @@ export function TastingSheetPage(){
                   <small>{row.status==='matched'
                     ?row.hasPrice?`Already logged · already priced${row.currentPrice!=null?` at ${row.currentCurrency??''} ${row.currentPrice}`:''}`:'Already logged'
                     :pointedAt
-                      ?`Matched by you to ${pointedAt.wineName}${pointedAt.hasPrice?' · already priced':''}`
+                      ?`Matched by you to ${lineupLabel(pointedAt)}`
                       :'Not in this tasting yet'}</small>
                   {row.status==='new'&&lineup.length>0&&<select className="tasting-sheet-match" value={row.manualWineId??''}
                     aria-label={`Match ${row.wine.wineName} to a wine in this tasting`}
@@ -391,10 +412,8 @@ export function TastingSheetPage(){
                       setRow(row.key,{manualWineId:picked,selected:picked?!priceOf(picked)?.hasPrice:true});
                     }}>
                     <option value="">Add as a new wine</option>
-                    {lineup.filter(wine=>wine.wineId===row.manualWineId||!claimed.has(wine.wineId)).map(wine=>
-                      <option key={wine.wineId} value={wine.wineId}>
-                        {wine.wineName}{wine.vintage?` · ${wine.vintage}`:''}{wine.hasPrice?' (already priced)':''}
-                      </option>)}
+                    {[...lineup].filter(wine=>wine.wineId===row.manualWineId||!claimed.has(wine.wineId)).sort(byLabel).map(wine=>
+                      <option key={wine.wineId} value={wine.wineId}>{lineupLabel(wine)}</option>)}
                   </select>}
                 </span>
               </label>
