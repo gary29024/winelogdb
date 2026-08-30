@@ -1,4 +1,4 @@
-import { describe,expect,it } from 'vitest';
+import { afterEach,describe,expect,it,vi } from 'vitest';
 import { createD1Stub } from './support/d1Stub';
 import { recordAiUsage,usageSummary,AI_USAGE_KINDS,kindLabels } from '../../src/lib/usage/aiUsage';
 import { DEFAULT_RATES,marginalCostUsd,monthCostUsd,readAiRates,tokenCostUsd,toLocal } from '../../src/lib/usage/rates';
@@ -25,6 +25,74 @@ describe('the rates',()=>{
     expect(tokenCostUsd({searchQueries:0,promptTokens:1e6,outputTokens:1e6},rates,'gemini-3.7-flash')).toBeCloseTo(2.8,6);
   });
 
+  it('prices a call at the rate in force on the day it ran, not today\'s',()=>{
+    // The reason rates are dated at all. Google published Gemini 3.7 Flash at
+    // an introductory price with an end date; when that date passes, last
+    // month's runs must still show what last month cost. A panel that quietly
+    // restates the past is worse than no panel.
+    const rates=readAiRates({AI_COST_MODEL_RATES:JSON.stringify({
+      'gemini-3.7-flash':[{from:'2026-01-01',input:0.75,output:3.75},{from:'2027-01-01',input:1.5,output:7.5}]
+    })});
+    const million={searchQueries:0,promptTokens:1e6,outputTokens:1e6};
+    expect(tokenCostUsd(million,rates,'gemini-3.7-flash',{on:'2026-08-30'})).toBeCloseTo(4.5,6);
+    expect(tokenCostUsd(million,rates,'gemini-3.7-flash',{on:'2026-12-31'})).toBeCloseTo(4.5,6);
+    // the morning the introductory period ends, with no edit to the config
+    expect(tokenCostUsd(million,rates,'gemini-3.7-flash',{on:'2027-01-01'})).toBeCloseTo(9,6);
+  });
+
+  it('prices a date older than every window at the oldest one, not the generic default',()=>{
+    // A rate first recorded in June is still the best evidence of what May
+    // cost. Falling through to the unlisted-model default would make a model
+    // we have priced look unpriced for its own history.
+    const rates=readAiRates({AI_COST_MODEL_RATES:JSON.stringify({'m':[{from:'2026-06-01',input:1,output:1}]})});
+    expect(tokenCostUsd({searchQueries:0,promptTokens:1e6,outputTokens:0},rates,'m',{on:'2026-05-01'})).toBeCloseTo(1,6);
+  });
+
+  it('bills the flex tier at half, which is why batch scans queue there',()=>{
+    // Recorded as: "why is the batch scan more expensive per wine than a single
+    // scan?" - it was not. Every batch call goes out on Vertex's flex tier at
+    // about half of standard, and the ledger priced it by the model alone, so
+    // it showed roughly double what Google charged.
+    const rates=readAiRates({
+      AI_COST_MODEL_RATES:JSON.stringify({'gemini-3.1-flash-lite':[{from:'2026-01-01',input:0.25,output:1.5}]}),
+      AI_COST_TIER_MULTIPLIERS:JSON.stringify({flex:0.5})
+    });
+    const call={searchQueries:0,promptTokens:1e6,outputTokens:1e6},on='2026-08-30';
+    expect(tokenCostUsd(call,rates,'gemini-3.1-flash-lite',{on})).toBeCloseTo(1.75,6);
+    expect(tokenCostUsd(call,rates,'gemini-3.1-flash-lite',{on,tier:'flex'})).toBeCloseTo(0.875,6);
+    // an unknown tier is standard rather than free
+    expect(tokenCostUsd(call,rates,'gemini-3.1-flash-lite',{on,tier:'made-up'})).toBeCloseTo(1.75,6);
+  });
+
+  it('dates the grounding rate too, since that is where the money goes',()=>{
+    const rates=readAiRates({AI_COST_GROUNDING_RATES:JSON.stringify([
+      {from:'2026-01-01',usdPer1k:14},{from:'2026-10-01',usdPer1k:20}
+    ])});
+    const run={searchQueries:1000,promptTokens:0,outputTokens:0};
+    expect(marginalCostUsd(run,rates,undefined,{on:'2026-09-30'})).toBeCloseTo(14,6);
+    expect(marginalCostUsd(run,rates,undefined,{on:'2026-10-01'})).toBeCloseTo(20,6);
+  });
+
+  it('still reads the flat per-model shape the first release wrote',()=>{
+    // Config already deployed must not start pricing at the default because a
+    // new shape exists.
+    const rates=readAiRates({AI_COST_MODEL_RATES:JSON.stringify({'m':{input:0.1,output:0.4}})});
+    expect(tokenCostUsd({searchQueries:0,promptTokens:1e6,outputTokens:1e6},rates,'m',{on:'2019-01-01'})).toBeCloseTo(0.5,6);
+  });
+
+  it('keeps a nonsense tier or window from pricing everything at zero',()=>{
+    const rates=readAiRates({
+      AI_COST_MODEL_RATES:JSON.stringify({'m':[{from:'nonsense',input:'free',output:2}]}),
+      AI_COST_TIER_MULTIPLIERS:'{"flex":0}',
+      AI_COST_GROUNDING_RATES:'not json'
+    });
+    // an unreadable amount falls back to the generic default, not to nothing
+    expect(tokenCostUsd({searchQueries:0,promptTokens:1e6,outputTokens:0},rates,'m')).toBeCloseTo(DEFAULT_RATES.inputUsdPerM,6);
+    expect(rates.tierMultipliers.flex,'a zero multiplier would make the tier free').toBe(1);
+    expect(rates.groundingWindows).toEqual([]);
+    expect(marginalCostUsd({searchQueries:1000,promptTokens:0,outputTokens:0},rates)).toBeCloseTo(DEFAULT_RATES.groundingUsdPer1k,6);
+  });
+
   it('reproduces the invoice that anchors the grounding rate',()=>{
     // 12,183 searches in a month billed HKD 788.73, which is the free 5,000
     // deducted and the rest at $14/1,000.
@@ -49,8 +117,9 @@ function ledger(){
   const stub=createD1Stub((raw,args)=>{
     const sql=raw.replace(/\s+/g,' ').trim();
     if(/^INSERT INTO ai_usage_events/.test(sql)){
-      events.push({owner_id:args[1],kind:args[2],run_id:args[3],target_id:args[4],model:args[5],
-        requests:Number(args[6]),search_queries:Number(args[7]),prompt_tokens:Number(args[8]),output_tokens:Number(args[9]),units:Number(args[10])});
+      events.push({owner_id:args[1],kind:args[2],run_id:args[3],target_id:args[4],model:args[5],tier:args[6],
+        requests:Number(args[7]),search_queries:Number(args[8]),prompt_tokens:Number(args[9]),output_tokens:Number(args[10]),
+        units:Number(args[11]),day:String(args[12]).slice(0,10)});
       return undefined;
     }
     if(/^INSERT INTO ai_usage_monthly/.test(sql)){
@@ -61,10 +130,11 @@ function ledger(){
       else monthly.push({owner_id:owner,month,kind,requests,search_queries:searches,prompt_tokens:input,output_tokens:output});
       return undefined;
     }
-    if(/^SELECT kind,model,sum\(requests\)/.test(sql)){
+    if(/^SELECT kind,model,tier,date\(created_at\) AS day,sum\(requests\)/.test(sql)){
       const grouped=new Map<string,Row>();
       for(const row of events){
-        const key=`${row.kind}|${row.model}`,entry=grouped.get(key)??{kind:row.kind,model:row.model,requests:0,search_queries:0,prompt_tokens:0,output_tokens:0,units:0};
+        const key=`${row.kind}|${row.model}|${row.tier}|${row.day}`;
+        const entry=grouped.get(key)??{kind:row.kind,model:row.model,tier:row.tier,day:row.day,requests:0,search_queries:0,prompt_tokens:0,output_tokens:0,units:0};
         for(const field of ['requests','search_queries','prompt_tokens','output_tokens','units'])entry[field]=Number(entry[field])+Number(row[field]);
         grouped.set(key,entry);
       }
@@ -137,6 +207,7 @@ describe('the usage ledger',()=>{
     expect(analytics).toHaveLength(1);
     expect(analytics[0]).toMatchObject({indexes:['scan_group'],doubles:[1,0,9000,800,9]});
     expect(analytics[0].blobs).toContain('gemini-3.6-flash');
+    expect(analytics[0].blobs,'the tier, so the time series can be priced too').toContain('standard');
   });
 
   it('never lets a metering failure break the call it is measuring',async()=>{
@@ -193,6 +264,17 @@ describe('every path that spends money is metered',()=>{
 
   it('covers every kind the ledger knows about',()=>{
     expect(new Set(sources.map(([,kind])=>kind.replace(/kind:'|'/g,'')))).toEqual(new Set(AI_USAGE_KINDS));
+  });
+
+  it('records the flex tier on the one path that bills at it',async()=>{
+    // The batch worker sends serviceTier:'flex' and is the only caller that
+    // does. If the tier stops reaching the ledger the cost silently doubles,
+    // which is exactly the bug this pairing exists to prevent - so the two are
+    // asserted together rather than trusted to stay in step.
+    const { readFileSync }=await import('node:fs');
+    const source=readFileSync('worker/vertexBatchRecognition.ts','utf8');
+    expect(source).toContain("serviceTier:'flex'");
+    expect(source).toContain("tier:'flex'");
   });
 });
 
@@ -298,5 +380,43 @@ describe('what a cost is quoted per',()=>{
     expect(batch.unit).toBe('run');
     expect(batch.unitCount).toBe(1);
     expect(batch.costPerUnit).toBe(batch.cost);
+  });
+});
+
+describe('what a price change does to the history',()=>{
+  afterEach(()=>{vi.useRealTimers()});
+  const at=(iso:string)=>{vi.setSystemTime(new Date(iso))};
+
+  it('leaves last month at last month\'s price when a new one takes effect',async()=>{
+    // The whole point of appending a window instead of overwriting a rate.
+    vi.useFakeTimers();
+    const {env}=ledger();
+    const rates=readAiRates({AI_COST_FX_PER_USD:'1',AI_COST_MODEL_RATES:JSON.stringify({
+      'gemini-3.7-flash':[{from:'2026-01-01',input:1,output:1},{from:'2026-08-20',input:2,output:2}]
+    })});
+    at('2026-08-19T04:00:00Z');
+    await recordAiUsage(env,'owner',{kind:'wine_research',runId:'before',model:'gemini-3.7-flash',requests:1,promptTokens:1e6,outputTokens:0});
+    at('2026-08-21T04:00:00Z');
+    await recordAiUsage(env,'owner',{kind:'wine_research',runId:'after',model:'gemini-3.7-flash',requests:1,promptTokens:1e6,outputTokens:0});
+    at('2026-08-30T04:00:00Z');
+    const research=(await usageSummary(env.DB,'owner',rates)).kinds.find(kind=>kind.kind==='wine_research')!;
+    // 1 dollar for the older run and 2 for the newer, not 4 for both
+    expect(research.cost).toBeCloseTo(3,6);
+  });
+
+  it('halves a batch scan because it was billed on flex',async()=>{
+    vi.useFakeTimers();at('2026-08-30T04:00:00Z');
+    const {env}=ledger();
+    const rates=readAiRates({AI_COST_FX_PER_USD:'1',
+      AI_COST_MODEL_RATES:JSON.stringify({'gemini-3.1-flash-lite':[{from:'2026-01-01',input:1,output:1}]}),
+      AI_COST_TIER_MULTIPLIERS:JSON.stringify({flex:0.5})});
+    const call={model:'gemini-3.1-flash-lite',requests:1,units:1,promptTokens:1e6,outputTokens:0} as const;
+    await recordAiUsage(env,'owner',{kind:'scan_single',runId:'s-1',...call});
+    await recordAiUsage(env,'owner',{kind:'scan_batch',runId:'b-1',targetId:'i-1',tier:'flex',...call});
+    const summary=await usageSummary(env.DB,'owner',rates);
+    const single=summary.kinds.find(kind=>kind.kind==='scan_single')!;
+    const batch=summary.kinds.find(kind=>kind.kind==='scan_batch')!;
+    expect(single.costPerUnit).toBeCloseTo(1,6);
+    expect(batch.costPerUnit,'the same call queued on flex').toBeCloseTo(0.5,6);
   });
 });

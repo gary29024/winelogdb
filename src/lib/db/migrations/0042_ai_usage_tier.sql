@@ -1,0 +1,13 @@
+-- Which service tier the call was billed on.
+--
+-- Batch recognition queues every call on Vertex's flex tier, which bills about
+-- half of standard; single and group scans run on standard. The ledger priced
+-- both by the model alone, so the tier was invisible and every batch scan was
+-- recorded at roughly twice what Google charged for it - which read on the
+-- spend panel as batch costing more per wine than scanning one bottle at a
+-- time, the opposite of what it does.
+--
+-- Rows written before this column existed were standard-tier or flex-tier
+-- alike, and there is no way to tell them apart now; 'standard' is the default
+-- because it is the one that does not understate a bill.
+ALTER TABLE ai_usage_events ADD COLUMN tier TEXT NOT NULL DEFAULT 'standard';

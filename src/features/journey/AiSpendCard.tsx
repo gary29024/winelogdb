@@ -80,8 +80,10 @@ export function AiSpendCard(){
       </div>
     </div>
     <p className="journey-muted ai-spend-note">
-      Priced from the rates in the Worker configuration. Grounding is billed per search the model runs, which is most of this;
-      tokens are the rest. Costs are recomputed from the rates each time, so correcting a rate reprices the history too.
+      Priced from the dated rates in the Worker configuration, each run at the price in force on the day it ran and the tier it
+      was billed on - batch scans queue on the flex tier, at about half of standard. Grounding is billed per search the model
+      runs, which is most of this; tokens are the rest. A price that changes from a date leaves earlier runs at what they cost;
+      correcting a rate that was always wrong reprices the history, as it should.
     </p>
   </section>;
 }

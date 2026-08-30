@@ -46,11 +46,36 @@
     // the money goes - tokens are a rounding error beside it.
     "AI_COST_CURRENCY": "HKD",
     "AI_COST_FX_PER_USD": "7.843",
-    "AI_COST_GROUNDING_USD_PER_1K": "14",
     "AI_COST_GROUNDING_FREE_PER_MONTH": "5000",
+    // The fallback for a model with no price of its own below. Nothing the app
+    // calls today lands here; it exists so an unrecognised model still costs
+    // something rather than nothing.
     "AI_COST_INPUT_USD_PER_M": "0.30",
     "AI_COST_OUTPUT_USD_PER_M": "2.50",
-    // Optional per-model overrides, as {"model":{"input":usdPerM,"output":usdPerM}}.
-    "AI_COST_MODEL_RATES": "{}"
+    //
+    // ---- HOW TO RECORD A PRICE CHANGE ----------------------------------
+    // Do not overwrite a rate that has changed: APPEND a window with the date
+    // it takes effect. Every usage event is priced by the window in force on
+    // the day it happened, so appending leaves last month's figures alone and
+    // the new price starts on its own date with no further edit. Overwrite
+    // only to CORRECT a number that was always wrong - that should reprice the
+    // history, because the old figure was never true.
+    // A window can be dated into the future: the entry below for 2027-01-01 is
+    // the end of Gemini 3.7 Flash's introductory pricing, already loaded.
+    // --------------------------------------------------------------------
+    //
+    // USD per million tokens, per model, oldest window first. The flat form
+    // {"model":{"input":n,"output":n}} is still accepted and means "always".
+    // Standard-tier list prices; the tier multipliers below do the rest.
+    "AI_COST_MODEL_RATES": "{\"gemini-3.1-flash-lite\":[{\"from\":\"2026-01-01\",\"input\":0.25,\"output\":1.50}],\"gemini-3.7-flash\":[{\"from\":\"2026-01-01\",\"input\":0.75,\"output\":3.75},{\"from\":\"2027-01-01\",\"input\":1.50,\"output\":7.50}]}",
+    // What each service tier bills relative to standard. Batch recognition
+    // queues on flex on purpose; priority is here for completeness, nothing
+    // asks for it today.
+    "AI_COST_TIER_MULTIPLIERS": "{\"flex\":0.5,\"priority\":1.8}",
+    // USD per 1,000 grounded Google Search queries, same dated shape. This is
+    // the largest line on the bill, so it gets its own history.
+    "AI_COST_GROUNDING_RATES": "[{\"from\":\"2026-01-01\",\"usdPer1k\":14}]",
+    // Used only for dates before the first grounding window above.
+    "AI_COST_GROUNDING_USD_PER_1K": "14"
   }
 }

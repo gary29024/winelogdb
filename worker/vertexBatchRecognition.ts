@@ -157,9 +157,11 @@ export async function processVertexBatchPollJob(env:Env,owner:string,sessionId:s
       env.DB.prepare("UPDATE batch_recognition_jobs SET status='complete',error=NULL,updated_at=? WHERE id=? AND owner_id=?").bind(stamp,jobId,owner)
     ]);
     // The session is the run: a batch of twelve photos is one thing the owner
-    // started, so its cost is the sum of its items.
+    // started, so its cost is the sum of its items. Both calls go out on the
+    // flex tier - see the serviceTier above - which bills about half of
+    // standard, so the tier is recorded or the ledger doubles the bill.
     for(const [index,call] of [{model:RECOGNITION_MODEL,...usageOf(payload)},...(escalation.usage?[{model:RECOGNITION_ESCALATION_MODEL,...escalation.usage}]:[])].entries())
-      await recordAiUsage(env,owner,{kind:'scan_batch',runId:sessionId,targetId:itemId,model:call.model,requests:1,units:index===0?1:0,promptTokens:call.promptTokens,outputTokens:call.outputTokens});
+      await recordAiUsage(env,owner,{kind:'scan_batch',runId:sessionId,targetId:itemId,model:call.model,tier:'flex',requests:1,units:index===0?1:0,promptTokens:call.promptTokens,outputTokens:call.outputTokens});
     console.log(JSON.stringify({event:'vertex-flex-batch-recognition-complete',sessionId,itemId,model:escalation.used?RECOGNITION_ESCALATION_MODEL:RECOGNITION_MODEL,primaryModel:RECOGNITION_MODEL,escalated:escalation.used,escalationReasons,trafficType:escalation.used?(escalation.trafficType??null):(payload.usageMetadata?.trafficType??null),finishReason:candidate?.finishReason??null,promptTokens:payload.usageMetadata?.promptTokenCount??null,outputTokens:payload.usageMetadata?.candidatesTokenCount??null,totalTokens:payload.usageMetadata?.totalTokenCount??null}));
     await finishSessionIfTerminal(env.DB,owner,sessionId);return true;
   }catch(e){await failJob(env,owner,sessionId,jobId,itemId,(e as Error).message||'Could not process Vertex Flex batch recognition');return true}

@@ -30,7 +30,17 @@ export type AiUsageEvent={
    * the same wine (an escalation) is zero, or it would count twice.
    */
   units?:number;
+  /**
+   * The service tier the call was billed on. Batch recognition queues on flex,
+   * which bills about half of standard, so leaving it off overstates every
+   * batch scan by roughly double.
+   */
+  tier?:AiUsageTier;
 };
+
+/** Vertex bills the same model differently by tier; the ledger has to know which. */
+export const AI_USAGE_TIERS=['standard','flex','priority'] as const;
+export type AiUsageTier=typeof AI_USAGE_TIERS[number];
 
 /**
  * What a kind's cost is naturally quoted in. Research is per run because a run
@@ -56,12 +66,12 @@ export async function recordAiUsage(env:AiUsageEnv,owner:string,event:AiUsageEve
   if(!requests&&!searchQueries&&!promptTokens&&!outputTokens)return;
   // The row is stamped in UTC, but it is filed under the month Google's
   // allowance is counted in, which resets at midnight Pacific.
-  const stamp=new Date().toISOString(),month=billingMonth();
+  const stamp=new Date().toISOString(),month=billingMonth(),tier=event.tier??'standard';
   try{
     await env.DB.batch([
-      env.DB.prepare(`INSERT INTO ai_usage_events(id,owner_id,kind,run_id,target_id,model,requests,search_queries,prompt_tokens,output_tokens,units,created_at)
-        VALUES(?,?,?,?,?,?,?,?,?,?,?,?)`)
-        .bind(crypto.randomUUID(),owner,event.kind,event.runId,event.targetId??null,event.model,requests,searchQueries,promptTokens,outputTokens,units,stamp),
+      env.DB.prepare(`INSERT INTO ai_usage_events(id,owner_id,kind,run_id,target_id,model,tier,requests,search_queries,prompt_tokens,output_tokens,units,created_at)
+        VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)`)
+        .bind(crypto.randomUUID(),owner,event.kind,event.runId,event.targetId??null,event.model,tier,requests,searchQueries,promptTokens,outputTokens,units,stamp),
       env.DB.prepare(`INSERT INTO ai_usage_monthly(owner_id,month,kind,requests,search_queries,prompt_tokens,output_tokens,units,updated_at)
         VALUES(?,?,?,?,?,?,?,?,?)
         ON CONFLICT(owner_id,month,kind) DO UPDATE SET
@@ -80,7 +90,7 @@ export async function recordAiUsage(env:AiUsageEnv,owner:string,event:AiUsageEve
   try{
     env.AI_USAGE?.writeDataPoint({
       indexes:[event.kind],
-      blobs:[event.kind,event.model,event.runId,owner],
+      blobs:[event.kind,event.model,event.runId,owner,tier],
       doubles:[requests,searchQueries,promptTokens,outputTokens,units]
     });
   }catch(e){console.error(JSON.stringify({event:'ai_usage_analytics_failed',kind:event.kind,error:(e as Error).message}))}
@@ -107,20 +117,24 @@ export type UsageSummary={
   empty:boolean;
 };
 
-type EventRow={kind:string;model:string;requests:number;search_queries:number;prompt_tokens:number;output_tokens:number;units:number};
+type EventRow={kind:string;model:string;tier:string;day:string;requests:number;search_queries:number;prompt_tokens:number;output_tokens:number;units:number};
 type RunRow={kind:string;runs:number};
 type MonthRow={search_queries:number;prompt_tokens:number;output_tokens:number};
 
 export async function usageSummary(db:D1Database,owner:string,rates:AiRates,days=30):Promise<UsageSummary>{
   const window=Math.max(1,Math.min(RAW_EVENT_RETENTION_DAYS,Math.floor(days)||30));
   const month=billingMonth();
-  // Grouped by model as well as kind, because a run can escalate to a second
-  // model and the two are not priced the same. Runs are counted separately, or
-  // a run that used two models would be counted twice.
+  // Grouped by model, tier and day as well as kind, because all three change
+  // what a call cost: a run can escalate to a second model, batch recognition
+  // bills on flex at about half of standard, and a price that changed part-way
+  // through the window has to price each side of the change at its own rate.
+  // The window is 90 days at most, so this is a handful of rows either way.
+  // Runs are counted separately, or a run spanning two of those buckets would
+  // be counted twice.
   const [events,runs,monthTotals]=await Promise.all([
-    db.prepare(`SELECT kind,model,sum(requests) AS requests,sum(search_queries) AS search_queries,
+    db.prepare(`SELECT kind,model,tier,date(created_at) AS day,sum(requests) AS requests,sum(search_queries) AS search_queries,
         sum(prompt_tokens) AS prompt_tokens,sum(output_tokens) AS output_tokens,sum(units) AS units
-      FROM ai_usage_events WHERE owner_id=? AND created_at>datetime('now','-${window} days') GROUP BY kind,model`).bind(owner).all<EventRow>(),
+      FROM ai_usage_events WHERE owner_id=? AND created_at>datetime('now','-${window} days') GROUP BY kind,model,tier,day`).bind(owner).all<EventRow>(),
     db.prepare(`SELECT kind,count(DISTINCT run_id) AS runs FROM ai_usage_events
       WHERE owner_id=? AND created_at>datetime('now','-${window} days') GROUP BY kind`).bind(owner).all<RunRow>(),
     db.prepare(`SELECT sum(search_queries) AS search_queries,sum(prompt_tokens) AS prompt_tokens,sum(output_tokens) AS output_tokens
@@ -136,7 +150,8 @@ export async function usageSummary(db:D1Database,owner:string,rates:AiRates,days
       unit:unitOf[kind]??'run',unitCount:0,costPerUnit:0,searchesPerRun:0};
     entry.requests+=Number(row.requests)||0;entry.units+=Number(row.units)||0;
     entry.searchQueries+=totals.searchQueries;entry.promptTokens+=totals.promptTokens;entry.outputTokens+=totals.outputTokens;
-    entry.cost+=toLocal(marginalCostUsd(totals,rates,row.model),rates);
+    // Priced as it was billed: at that day's rate, on that call's tier.
+    entry.cost+=toLocal(marginalCostUsd(totals,rates,row.model,{on:row.day,tier:row.tier}),rates);
     byKind.set(kind,entry);
   }
   const kinds=[...byKind.values()].map(entry=>{
