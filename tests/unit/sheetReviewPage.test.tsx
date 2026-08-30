@@ -246,7 +246,7 @@ describe('a printed line the reading could not match',()=>{
     expect(button('Add 1 wine'),'the only offer before').toBeTruthy();
 
     await pick('w1');
-    expect(host.textContent).toContain('Matched by you to MV20');
+    expect(host.textContent).toContain('Matched by you to Henri Giraud · MV20');
     expect(button('Fill 1 price'),'now a price to fill').toBeTruthy();
     expect(button('Add 0 wines'),'and no longer a wine to create').toBeTruthy();
   });
@@ -327,10 +327,10 @@ describe('a reading already paid for',()=>{
       const setter=Object.getOwnPropertyDescriptor(window.HTMLSelectElement.prototype,'value')!.set!;
       setter.call(select,'w1');select.dispatchEvent(new Event('change',{bubbles:true}));
     });
-    expect(host!.textContent).toContain('Matched by you to MV20');
+    expect(host!.textContent).toContain('Matched by you to Henri Giraud · MV20');
 
     const host2=await mount([oneRow()]);
-    expect(host2.textContent,'the hand-made match survives too').toContain('Matched by you to MV20');
+    expect(host2.textContent,'the hand-made match survives too').toContain('Matched by you to Henri Giraud · MV20');
   });
 
   it('goes only when it is thrown away on purpose',async()=>{
@@ -354,5 +354,36 @@ describe('a reading already paid for',()=>{
     expect(host2.textContent).toContain('Clos de Tart');
     expect(host2.textContent).not.toContain('Bonnes-Mares');
     expect(host2.textContent,'and it is no longer billed as restored').not.toContain('Showing the list read on');
+  });
+});
+
+describe('naming the wines you can point a line at',()=>{
+  it('leads with the producer, because that is what tells them apart',async()=>{
+    // Reported from a Montalcino tasting: the list read "Brunello di Montalcino
+    // · 2017", "Brunello di Montalcino · 2018", "Brunello di Montalcino · 2019"
+    // and there was no way to see whose was whose.
+    await mount([parsed([{status:'new',wine:wine({wineName:'Brunello di Montalcino'})}],{lineup:[
+      logged({wineId:'a',producer:'Siro Pacenti',wineName:'Brunello di Montalcino',vintage:2019}),
+      logged({wineId:'b',producer:'Il Poggione',wineName:'Brunello di Montalcino',vintage:2017})
+    ]})]);
+    await choose([page('list.jpg')]);
+    const labels=[...pickersIn(host!)[0].options].map(option=>option.textContent?.trim());
+    expect(labels).toEqual(['Add as a new wine','Il Poggione · Brunello di Montalcino · 2017','Siro Pacenti · Brunello di Montalcino · 2019']);
+  });
+
+  it('does not say a producer twice when the cuvée was logged with it',async()=>{
+    await mount([parsed([{status:'new',wine:wine()}],{lineup:[
+      logged({wineId:'a',producer:'Pian delle Vigne',wineName:'Pian delle Vigne Brunello di Montalcino',vintage:2019})
+    ]})]);
+    await choose([page('list.jpg')]);
+    expect([...pickersIn(host!)[0].options][1].textContent?.trim())
+      .toBe('Pian delle Vigne · Brunello di Montalcino · 2019');
+  });
+
+  it('says NV rather than nothing for a wine with no vintage',async()=>{
+    await mount([parsed([{status:'new',wine:wine()}],{lineup:[logged({hasPrice:true})]})]);
+    await choose([page('list.jpg')]);
+    expect([...pickersIn(host!)[0].options][1].textContent?.trim())
+      .toBe('Henri Giraud · MV20 · NV (already priced)');
   });
 });
