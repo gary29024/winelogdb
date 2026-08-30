@@ -69,82 +69,67 @@ describe('historic collection counting modes',()=>{
 });
 
 describe('master checklist section headings',()=>{
-  it('splits Bordeaux 1855 by growth',()=>{
-    expect(achievementChecklistHeading('bordeaux-1855-red-classified-growths',0).section).toContain('First');
-    expect(achievementChecklistHeading('bordeaux-1855-red-classified-growths',5).section).toContain('Second');
-    expect(achievementChecklistHeading('bordeaux-1855-red-classified-growths',19).section).toContain('Third');
-    expect(achievementChecklistHeading('bordeaux-1855-red-classified-growths',33).section).toContain('Fourth');
-    expect(achievementChecklistHeading('bordeaux-1855-red-classified-growths',43).section).toContain('Fifth');
-  });
+  const load=async()=>(await import('../../src/features/achievements/curatedLaunch')).achievementDefinitions;
+  const headingsOf=async(id:string)=>{
+    const collection=(await load()).find(definition=>definition.id===id)!;
+    return collection.items.map(item=>({label:item.label,...achievementChecklistHeading(id,item.id)}));
+  };
+  const under=async(id:string,section:string,subsection?:string)=>
+    (await headingsOf(id)).filter(row=>row.section===section&&(subsection===undefined||row.subsection===subsection)).map(row=>row.label);
 
-  it('splits Sauternes & Barsac 1855 by growth, with Yquem on its own',()=>{
-    // Twenty-seven estates in one undifferentiated list reads as a wall. The
-    // reds have been split by growth since launch; the sweets are the same
-    // classification and were not.
-    expect(achievementChecklistHeading('sauternes-barsac-1855-all',0).section).toContain('Premier Cru Supérieur');
-    expect(achievementChecklistHeading('sauternes-barsac-1855-all',1).section).toContain('First Growths');
-    expect(achievementChecklistHeading('sauternes-barsac-1855-all',11).section).toContain('First Growths');
-    expect(achievementChecklistHeading('sauternes-barsac-1855-all',12).section).toContain('Second Growths');
-    expect(achievementChecklistHeading('sauternes-barsac-1855-all',26).section).toContain('Second Growths');
-  });
-
-  it('splits the Top Growths collection at Yquem too, since it spans two ranks',()=>{
-    expect(achievementChecklistHeading('sauternes-barsac-top-1855',0).section).toContain('Premier Cru Supérieur');
-    expect(achievementChecklistHeading('sauternes-barsac-top-1855',1).section).toContain('First Growths');
-  });
-
-  it('puts every 1855 sweet estate under the heading its rank belongs to',async()=>{
-    // The boundaries are indexes into a hand-written list, so they are checked
-    // against the list itself rather than trusted: a growth added or reordered
-    // upstream would otherwise silently file estates under the wrong rank.
-    const { achievementDefinitions:all }=await import('../../src/features/achievements/curatedLaunch');
-    const collection=all.find(definition=>definition.id==='sauternes-barsac-1855-all')!;
-    expect(collection.items).toHaveLength(27);
-    expect(collection.items[0].label).toContain('Yquem');
-    const heads=collection.items.map((_,index)=>achievementChecklistHeading('sauternes-barsac-1855-all',index).section);
-    expect(heads.filter(head=>head?.includes('Supérieur'))).toHaveLength(1);
-    expect(heads.filter(head=>head?.includes('First Growths'))).toHaveLength(11);
-    expect(heads.filter(head=>head?.includes('Second Growths'))).toHaveLength(15);
-  });
-
-  it('names the classification from the estate, not from where it sits in the list',async()=>{
-    // The bug this replaces: the checklist is served from a per-owner cache
-    // that can be a release behind, so headings laid over a stale order put
-    // Château Pape Clément under "Classified for white", which it is not. A
-    // stale order may now group untidily; it can no longer make a false claim.
-    const { achievementDefinitions:all }=await import('../../src/features/achievements/curatedLaunch');
-    const graves=all.find(definition=>definition.id==='graves-crus-classes')!;
+  it('names a heading from the wine, not from where it sits in the list',async()=>{
+    // The bug this replaces. Checklists are served from a per-owner cache that
+    // can be a release behind, so a heading chosen by position was laid over a
+    // stale order and put Château Pape Clément under "Classified for white",
+    // which it is not. A stale order may now group the page untidily; it can no
+    // longer make a false claim about a wine.
+    const graves=(await load()).find(definition=>definition.id==='graves-crus-classes')!;
     const pape=graves.items.find(item=>item.label.includes('Pape Clément'))!;
-    const couhins=graves.items.find(item=>item.label==='Château Couhins')!;
-    // asked for at positions that belong to entirely different headings
-    expect(achievementChecklistHeading('graves-crus-classes',0,pape.id).section).toBe('Classified for red');
-    expect(achievementChecklistHeading('graves-crus-classes',13,pape.id).section).toBe('Classified for red');
-    expect(achievementChecklistHeading('graves-crus-classes',0,couhins.id).section).toBe('Classified for white');
-
-    const stEmilion=all.find(definition=>definition.id==='saint-emilion-2022-premiers')!;
-    const figeac=stEmilion.items.find(item=>item.label.includes('Figeac'))!;
-    expect(achievementChecklistHeading('saint-emilion-2022-premiers',9,figeac.id).section).toBe('Premier Grand Cru Classé A');
+    expect(achievementChecklistHeading('graves-crus-classes',pape.id).section).toBe('Classified for red');
+    // and the answer does not depend on the collection's order at all
+    expect(achievementChecklistHeading('graves-crus-classes','graves-chateau-couhins').section).toBe('Classified for white');
   });
 
-  it('files each Graves and Saint-Émilion estate under the right heading',async()=>{
-    // Graves classifies an estate for red, for white, or for both; that is its
-    // only division. Saint-Émilion's Premiers come in two ranks, and the gap
-    // between them is what the 2022 classification is remembered for.
-    const { achievementDefinitions:all }=await import('../../src/features/achievements/curatedLaunch');
-    const labelsUnder=(id:string,section:string)=>{
-      const collection=all.find(definition=>definition.id===id)!;
-      return collection.items.filter((item,index)=>achievementChecklistHeading(id,index,item.id).section===section).map(item=>item.label);
-    };
-    expect(labelsUnder('saint-emilion-2022-premiers','Premier Grand Cru Classé A'))
-      .toEqual(['Château Figeac','Château Pavie']);
-    expect(labelsUnder('saint-emilion-2022-premiers','Premier Grand Cru Classé B')).toHaveLength(12);
+  it('gives every item in every divided collection a heading',async()=>{
+    // The strong guard. A list and its headings are built from the same arrays,
+    // so an estate added, renamed or moved without a matching heading shows up
+    // here rather than as a silent gap on the page.
+    const { checklistHeadings }=await import('../../src/features/achievements/expandedDefinitions');
+    for(const id of Object.keys(checklistHeadings)){
+      const rows=await headingsOf(id);
+      expect(rows.length,`${id} exists and has items`).toBeGreaterThan(0);
+      const missing=rows.filter(row=>!row.section).map(row=>row.label);
+      expect(missing,`${id} has an item with no heading`).toEqual([]);
+      // no heading entry may go unused either, which is how a typo shows itself
+      expect(Object.keys(checklistHeadings[id]).length,`${id} has an unused heading entry`).toBe(rows.length);
+    }
+  });
 
+  it('splits the 1855 reds into their five growths',async()=>{
+    expect(await under('bordeaux-1855-red-classified-growths','First Growths · Premiers Crus')).toHaveLength(5);
+    expect(await under('bordeaux-1855-red-classified-growths','Second Growths · Deuxièmes Crus')).toHaveLength(14);
+    expect(await under('bordeaux-1855-red-classified-growths','Third Growths · Troisièmes Crus')).toHaveLength(14);
+    expect(await under('bordeaux-1855-red-classified-growths','Fourth Growths · Quatrièmes Crus')).toHaveLength(10);
+    expect(await under('bordeaux-1855-red-classified-growths','Fifth Growths · Cinquièmes Crus')).toHaveLength(18);
+    expect(await under('bordeaux-1855-red-classified-growths','First Growths · Premiers Crus')).toContain('Château Haut-Brion');
+  });
+
+  it('splits the 1855 sweets by growth, with Yquem on its own',async()=>{
+    expect(await under('sauternes-barsac-1855-all','Superior First Growth · Premier Cru Supérieur')).toEqual(['Château d’Yquem']);
+    expect(await under('sauternes-barsac-1855-all','First Growths · Premiers Crus')).toHaveLength(11);
+    expect(await under('sauternes-barsac-1855-all','Second Growths · Seconds Crus')).toHaveLength(15);
+    // the Top Growths collection spans two of those ranks and reads the same way
+    expect(await under('sauternes-barsac-top-1855','Superior First Growth · Premier Cru Supérieur')).toEqual(['Château d’Yquem']);
+    expect(await under('sauternes-barsac-top-1855','First Growths · Premiers Crus')).toHaveLength(11);
+  });
+
+  it('splits Graves by what each estate is classified for, which is its only division',async()=>{
     // Twelve classified for red and eight for white, against the thirteen and
     // nine of 1959 - the difference is exactly La Tour Haut-Brion and Laville
     // Haut-Brion, both since absorbed into Château La Mission Haut-Brion.
-    const both=labelsUnder('graves-crus-classes','Classified for red and white');
-    const redOnly=labelsUnder('graves-crus-classes','Classified for red');
-    const whiteOnly=labelsUnder('graves-crus-classes','Classified for white');
+    const both=await under('graves-crus-classes','Classified for red and white');
+    const redOnly=await under('graves-crus-classes','Classified for red');
+    const whiteOnly=await under('graves-crus-classes','Classified for white');
     expect(both).toHaveLength(6);
     expect(redOnly).toHaveLength(6);
     expect(whiteOnly).toEqual(['Château Couhins','Château Couhins-Lurton']);
@@ -154,23 +139,31 @@ describe('master checklist section headings',()=>{
     expect(both).toContain('Domaine de Chevalier');
   });
 
+  it('splits the Saint-Émilion Premiers into A and B',async()=>{
+    // The gap between them is what the 2022 classification is remembered for.
+    expect(await under('saint-emilion-2022-premiers','Premier Grand Cru Classé A')).toEqual(['Château Figeac','Château Pavie']);
+    expect(await under('saint-emilion-2022-premiers','Premier Grand Cru Classé B')).toHaveLength(12);
+  });
+
+  it('splits Burgundy Grand Crus by Chablis, Côte de Nuits communes and Côte de Beaune hills',async()=>{
+    expect(await under('burgundy-33-grand-crus','Chablis')).toEqual(['Chablis Grand Cru']);
+    expect(await under('burgundy-33-grand-crus','Côte de Nuits','Gevrey-Chambertin')).toHaveLength(9);
+    expect(await under('burgundy-33-grand-crus','Côte de Nuits','Morey-Saint-Denis')).toHaveLength(4);
+    expect(await under('burgundy-33-grand-crus','Côte de Nuits','Chambolle-Musigny / Morey-Saint-Denis'),
+      'Bonnes-Mares straddles the two communes').toEqual(['Bonnes-Mares']);
+    expect(await under('burgundy-33-grand-crus','Côte de Nuits','Vosne-Romanée / Flagey-Échezeaux')).toHaveLength(8);
+    expect(await under('burgundy-33-grand-crus','Côte de Beaune')).toHaveLength(8);
+  });
+
   it('keeps every reordered collection at the size it always was',async()=>{
     // Reordering by rank must not quietly drop or duplicate an estate, and the
     // item ids are built from the labels, so progress already recorded against
     // them survives the move.
-    const { achievementDefinitions:all }=await import('../../src/features/achievements/curatedLaunch');
-    for(const [id,size] of [['graves-crus-classes',14],['saint-emilion-2022-premiers',14]] as const){
+    const all=await load();
+    for(const [id,size] of [['graves-crus-classes',14],['saint-emilion-2022-premiers',14],['sauternes-barsac-top-1855',12]] as const){
       const items=all.find(definition=>definition.id===id)!.items;
       expect(items,id).toHaveLength(size);
       expect(new Set(items.map(item=>item.id)).size,`${id} has no duplicates`).toBe(size);
     }
-  });
-
-  it('splits Burgundy Grand Crus by Chablis, Côte de Nuits communes and Côte de Beaune hills',()=>{
-    expect(achievementChecklistHeading('burgundy-33-grand-crus',0)).toMatchObject({section:'Chablis'});
-    expect(achievementChecklistHeading('burgundy-33-grand-crus',1)).toMatchObject({section:'Côte de Nuits',subsection:'Gevrey-Chambertin'});
-    expect(achievementChecklistHeading('burgundy-33-grand-crus',10)).toMatchObject({section:'Côte de Nuits',subsection:'Morey-Saint-Denis'});
-    expect(achievementChecklistHeading('burgundy-33-grand-crus',25).section).toBe('Côte de Beaune');
-    expect(achievementChecklistHeading('burgundy-33-grand-crus',28).subsection).toContain('Montrachet');
   });
 });

@@ -15,10 +15,13 @@ const producerItems=(prefix:string,entries:readonly NamedEntry[]):AchievementDef
  * classified for white, which it is not. Wrong facts about real wines are worse
  * than an oddly grouped list, so the estate carries its own answer.
  */
-const sectionsById=(prefix:string,groups:Record<string,readonly NamedEntry[]>)=>{
-  const result:Record<string,string>={};
-  for(const [section,entries] of Object.entries(groups))
-    for(const entry of entries)result[`${prefix}-${slug(names(entry)[0])}`]=section;
+export type ChecklistHeading={section:string;subsection:string|null};
+type SectionGroup={section:string;subsection?:string;entries:readonly NamedEntry[]};
+const sectionsById=(prefix:string,groups:readonly SectionGroup[])=>{
+  const result:Record<string,ChecklistHeading>={};
+  for(const group of groups)
+    for(const entry of group.entries)
+      result[`${prefix}-${slug(names(entry)[0])}`]={section:group.section,subsection:group.subsection??null};
   return result;
 };
 
@@ -62,9 +65,11 @@ const fifthGrowths:readonly NamedEntry[]=[
 const red1855=[...firstGrowths,...secondGrowths,...thirdGrowths,...fourthGrowths,...fifthGrowths] as const;
 const red1855Appellations=['Pauillac','Margaux','Saint-Julien','Saint-Estèphe','Haut-Médoc','Pessac-Léognan'] as const;
 
-const sauternesTop:readonly NamedEntry[]=[
-  "Château d’Yquem",'Château La Tour Blanche','Château Lafaurie-Peyraguey','Clos Haut-Peyraguey','Château de Rayne-Vigneau','Château Suduiraut','Château Coutet','Château Climens','Château Guiraud','Château Rieussec','Château Rabaud-Promis','Château Sigalas-Rabaud'
+const sauternesPremierSuperieur:readonly NamedEntry[]=["Château d’Yquem"];
+const sauternesPremiers:readonly NamedEntry[]=[
+  'Château La Tour Blanche','Château Lafaurie-Peyraguey','Clos Haut-Peyraguey','Château de Rayne-Vigneau','Château Suduiraut','Château Coutet','Château Climens','Château Guiraud','Château Rieussec','Château Rabaud-Promis','Château Sigalas-Rabaud'
 ];
+const sauternesTop=[...sauternesPremierSuperieur,...sauternesPremiers] as const;
 const sauternesSecond:readonly NamedEntry[]=[
   'Château de Myrat','Château Doisy Daëne','Château Doisy-Dubroca','Château Doisy-Védrines',"Château d’Arche",'Château Filhot','Château Broustet','Château Nairac','Château Caillou','Château Suau','Château de Malle','Château Romer','Château Romer-du-Hayot','Château Lamothe','Château Lamothe-Guignard'
 ];
@@ -102,15 +107,6 @@ const saintEmilionPremiersB:readonly NamedEntry[]=[
 ];
 const saintEmilionPremiers2022=[...saintEmilionPremiersA,...saintEmilionPremiersB] as const;
 
-export const gravesClassifiedFor=sectionsById('graves',{
-  'Classified for red and white':gravesRedAndWhite,
-  'Classified for red':gravesRedOnly,
-  'Classified for white':gravesWhiteOnly
-});
-export const saintEmilionPremierRank=sectionsById('stemilion2022',{
-  'Premier Grand Cru Classé A':saintEmilionPremiersA,
-  'Premier Grand Cru Classé B':saintEmilionPremiersB
-});
 
 const coteDeNuitsGrandCrus=[
   'Chambertin','Chambertin-Clos de Bèze','Chapelle-Chambertin','Charmes-Chambertin','Griotte-Chambertin','Latricières-Chambertin','Mazis-Chambertin','Mazoyères-Chambertin','Ruchottes-Chambertin',
@@ -118,7 +114,66 @@ const coteDeNuitsGrandCrus=[
 ] as const;
 const coteDeBeauneGrandCrus=['Corton','Charlemagne','Corton-Charlemagne','Montrachet','Chevalier-Montrachet','Bâtard-Montrachet','Bienvenues-Bâtard-Montrachet','Criots-Bâtard-Montrachet'] as const;
 const burgundyGrandCrus=['Chablis Grand Cru',...coteDeNuitsGrandCrus,...coteDeBeauneGrandCrus] as const;
+/** Which commune each Grand Cru sits in, for the checklist's subheadings. */
 const gevreyGrandCrus=coteDeNuitsGrandCrus.slice(0,9);
+const moreySoleClimats=['Clos Saint-Denis','Clos de la Roche','Clos des Lambrays','Clos de Tart'] as const;
+const vosneClimats=['Échezeaux','Grands Échezeaux','La Grande Rue','La Romanée','La Tâche','Richebourg','Romanée-Conti','Romanée-Saint-Vivant'] as const;
+const cortonClimats=['Corton','Charlemagne','Corton-Charlemagne'] as const;
+const montrachetClimats=['Montrachet','Chevalier-Montrachet','Bâtard-Montrachet','Bienvenues-Bâtard-Montrachet','Criots-Bâtard-Montrachet'] as const;
+
+/**
+ * Every checklist heading, keyed by the item it belongs to.
+ *
+ * A growth, a classification and a commune are all facts about the wine, not
+ * about where it happens to sit in an array - so none of them is answered from
+ * a position any more. The checklist is served from a per-owner cache that can
+ * be a release behind, and reordering the Graves list once put Château Pape
+ * Clément under "Classified for white", which it is not. Keying by id means the
+ * worst a stale order can now do is group the page untidily.
+ *
+ * Built from the same arrays that build the items, so a list and its headings
+ * cannot drift apart, and a test holds every item in every headed collection to
+ * having an entry here.
+ */
+export const checklistHeadings:Record<string,Record<string,ChecklistHeading>>={
+  'bordeaux-1855-red-classified-growths':sectionsById('red1855',[
+    {section:'First Growths · Premiers Crus',entries:firstGrowths},
+    {section:'Second Growths · Deuxièmes Crus',entries:secondGrowths},
+    {section:'Third Growths · Troisièmes Crus',entries:thirdGrowths},
+    {section:'Fourth Growths · Quatrièmes Crus',entries:fourthGrowths},
+    {section:'Fifth Growths · Cinquièmes Crus',entries:fifthGrowths}
+  ]),
+  'sauternes-barsac-1855-all':sectionsById('sauternes-all',[
+    {section:'Superior First Growth · Premier Cru Supérieur',entries:sauternesPremierSuperieur},
+    {section:'First Growths · Premiers Crus',entries:sauternesPremiers},
+    {section:'Second Growths · Seconds Crus',entries:sauternesSecond}
+  ]),
+  'sauternes-barsac-top-1855':sectionsById('sauternes-top',[
+    {section:'Superior First Growth · Premier Cru Supérieur',entries:sauternesPremierSuperieur},
+    {section:'First Growths · Premiers Crus',entries:sauternesPremiers}
+  ]),
+  'graves-crus-classes':sectionsById('graves',[
+    {section:'Classified for red and white',entries:gravesRedAndWhite},
+    {section:'Classified for red',entries:gravesRedOnly},
+    {section:'Classified for white',entries:gravesWhiteOnly}
+  ]),
+  'saint-emilion-2022-premiers':sectionsById('stemilion2022',[
+    {section:'Premier Grand Cru Classé A',entries:saintEmilionPremiersA},
+    {section:'Premier Grand Cru Classé B',entries:saintEmilionPremiersB}
+  ]),
+  'burgundy-33-grand-crus':sectionsById('burgundy33',[
+    {section:'Chablis',subsection:'Chablis Grand Cru',entries:['Chablis Grand Cru']},
+    {section:'Côte de Nuits',subsection:'Gevrey-Chambertin',entries:gevreyGrandCrus},
+    {section:'Côte de Nuits',subsection:'Morey-Saint-Denis',entries:moreySoleClimats},
+    {section:'Côte de Nuits',subsection:'Chambolle-Musigny / Morey-Saint-Denis',entries:['Bonnes-Mares']},
+    {section:'Côte de Nuits',subsection:'Chambolle-Musigny',entries:['Musigny']},
+    {section:'Côte de Nuits',subsection:'Vougeot',entries:['Clos de Vougeot']},
+    {section:'Côte de Nuits',subsection:'Vosne-Romanée / Flagey-Échezeaux',entries:vosneClimats},
+    {section:'Côte de Beaune',subsection:'Corton hill · Aloxe-Corton / Pernand-Vergelesses / Ladoix-Serrigny',entries:cortonClimats},
+    {section:'Côte de Beaune',subsection:'Montrachet hill · Puligny-Montrachet / Chassagne-Montrachet',entries:montrachetClimats}
+  ])
+};
+
 const northernRhone=['Château-Grillet','Condrieu','Cornas','Côte-Rôtie','Crozes-Hermitage','Hermitage','Saint-Joseph','Saint-Péray'] as const;
 const southernRhone=['Beaumes-de-Venise','Cairanne','Châteauneuf-du-Pape','Gigondas','Laudun','Lirac','Rasteau','Tavel','Vacqueyras','Vinsobres'] as const;
 
