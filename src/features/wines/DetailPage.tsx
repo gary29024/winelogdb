@@ -1,7 +1,9 @@
 import { useEffect,useMemo,useRef,useState,type ReactNode } from 'react';
 import { Link,useLocation,useNavigate,useParams } from 'react-router-dom';
 import type { DeepSearchResult } from '../../lib/db/schema';
-import { cancelWineDeepSearch,deleteWine,getWine,getWineDeepSearchStatus,setWineFavorite,startWineDeepSearch,type WineDetail,type WineResearchRun } from './api';
+import { addWineImages,cancelWineDeepSearch,deleteWine,getWine,getWineDeepSearchStatus,setWineFavorite,startWineDeepSearch,type WineDetail,type WineResearchRun } from './api';
+import { extractPhotoMetadata } from '../uploads/photoMetadata';
+import { imageSize } from '../uploads/prepareImage';
 import { WineImage } from './WineImage';
 import { backTargetFromState,JOURNAL_BACK,readBackTarget,rememberBackTarget } from './backTarget';
 import { GroupSourceImage } from '../uploads/GroupSourceImage';
@@ -91,7 +93,8 @@ function ClaimEvidence({deep,field}:{deep:DeepSearchResult;field:DeepField}){
 const classificationLabel:Record<string,string>={grand_cru:'Grand Cru',premier_cru:'Premier Cru',village:'Village'};
 
 export function DetailPage(){
- const {id=''}=useParams(),nav=useNavigate(),{state}=useLocation(),[wine,setWine]=useState<WineDetail>(),[favoriteBusy,setFavoriteBusy]=useState(false),[deepState,setDeepState]=useState<DeepState>('idle'),[deepError,setDeepError]=useState(''),[deepRun,setDeepRun]=useState<WineResearchRun|null>(null),[deepElapsed,setDeepElapsed]=useState(0),[deepNotice,setDeepNotice]=useState(''),[deepCancelling,setDeepCancelling]=useState(false),[selectedImage,setSelectedImage]=useState<string>(),[selectedGroupSource,setSelectedGroupSource]=useState<string>(),[openDeepFields,setOpenDeepFields]=useState<Set<DeepField>>(readOpenDeepFields);
+ const {id=''}=useParams(),nav=useNavigate(),{state}=useLocation(),[wine,setWine]=useState<WineDetail>(),[favoriteBusy,setFavoriteBusy]=useState(false),[deepState,setDeepState]=useState<DeepState>('idle'),[deepError,setDeepError]=useState(''),[deepRun,setDeepRun]=useState<WineResearchRun|null>(null),[deepElapsed,setDeepElapsed]=useState(0),[deepNotice,setDeepNotice]=useState(''),[deepCancelling,setDeepCancelling]=useState(false),[selectedImage,setSelectedImage]=useState<string>(),[selectedGroupSource,setSelectedGroupSource]=useState<string>(),[openDeepFields,setOpenDeepFields]=useState<Set<DeepField>>(readOpenDeepFields),[photoBusy,setPhotoBusy]=useState(false),[photoError,setPhotoError]=useState('');
+ const photoInput=useRef<HTMLInputElement|null>(null);
  const pollRef=useRef<Poller|undefined>(undefined),clockRef=useRef<number|undefined>(undefined);
  function stopDeepTimers(){pollRef.current?.stop();if(clockRef.current)window.clearInterval(clockRef.current);pollRef.current=undefined;clockRef.current=undefined}
  async function reloadWine(){const next=await getWine(id);setWine(next);return next}
@@ -105,6 +108,31 @@ export function DetailPage(){
  },[id]);
  async function runDeepSearch(){setDeepState('running');setDeepError('');setDeepNotice('');try{const accepted=await startWineDeepSearch(id,wine?.deepSearch?'vintage':'none'),run=await getWineDeepSearchStatus(id,accepted.researchRequestId);if(run)watchDeepSearch(run);else setDeepNotice('Deep Search has been queued in the background. You can leave this page safely.')}catch(e){setDeepError((e as Error).message);setDeepState('error')}}
  async function cancelDeepSearch(){if(!deepRun||deepRun.status!=='running'||deepCancelling)return;if(!confirm('Cancel this Deep Search? Any producer, terroir, vintage or wine research already saved will be kept.'))return;setDeepCancelling(true);setDeepError('');try{const result=await cancelWineDeepSearch(id,deepRun.requestId);stopDeepTimers();await reloadWine().catch(()=>undefined);setDeepRun(null);setDeepState('idle');setDeepNotice(result.alreadyTerminal?'Deep Search had already reached a terminal state.':'Deep Search cancelled. Any research already saved was kept.')}catch(e){setDeepError((e as Error).message);setDeepState('running')}finally{setDeepCancelling(false)}}
+ /**
+  * Photographs added to a wine that already exists.
+  *
+  * A wine read off a printed list, or typed in by hand, could never have a
+  * picture: photos only ever arrived with the wine itself. Getting one meant
+  * deleting the wine and scanning the bottle, which threw away the price and
+  * the evening it was attached to.
+  *
+  * The original is sent, not a resized copy - this is the record, and the
+  * server reads the capture time and place off the file it stores.
+  */
+ async function addPhotos(files:File[]){
+  if(!files.length||photoBusy)return;
+  setPhotoBusy(true);setPhotoError('');
+  try{
+   const photos=await Promise.all(files.map(async file=>{
+    const [metadata,size]=await Promise.all([extractPhotoMetadata(file),imageSize(file)]);
+    return {file,metadata,width:size.width,height:size.height};
+   }));
+   await addWineImages(id,photos);
+   await reloadWine();
+  }catch(e){setPhotoError((e as Error).message||'Could not add the photos')}
+  finally{setPhotoBusy(false);if(photoInput.current)photoInput.current.value=''}
+ }
+
  async function toggleFavorite(){if(!wine||favoriteBusy)return;const next=!wine.favorite;setFavoriteBusy(true);setWine({...wine,favorite:next});try{await setWineFavorite(id,next)}catch(e){setWine(current=>current?{...current,favorite:!next}:current);setDeepNotice((e as Error).message)}finally{setFavoriteBusy(false)}}
  function toggleDeepField(field:DeepField){setOpenDeepFields(current=>{const next=new Set(current);if(next.has(field))next.delete(field);else next.add(field);writeOpenDeepFields(next);return next})}
  function toggleAllDeepFields(fields:DeepField[]){setOpenDeepFields(current=>{const allOpen=fields.every(field=>current.has(field)),next=new Set(current);for(const field of fields){if(allOpen)next.delete(field);else next.add(field)}writeOpenDeepFields(next);return next})}
@@ -138,6 +166,14 @@ export function DetailPage(){
  return <article className="detail wine-detail"><Link className="back-pill" to={back.to}>← {back.label}</Link>
   <section className="wine-identity">
    {wine.imageIds.length?<div className="detail-gallery" aria-label={`${wine.wineName} photos`}>{wine.imageIds.map((imageId,index)=><button type="button" className="detail-photo-button" key={imageId} onClick={()=>setSelectedImage(imageId)} aria-label={`Open photo ${index+1} of ${wine.imageIds.length}`}><WineImage imageId={imageId} alt={`${wine.producer} ${wine.wineName} photo ${index+1}`} className="detail-photo"/></button>)}</div>:<div className="detail-bottle">{wine.wineStyle?.slice(0,1).toUpperCase()||'W'}</div>}
+   <div className="detail-photo-add">
+    <button type="button" className="quiet" disabled={photoBusy} onClick={()=>photoInput.current?.click()}>
+     {photoBusy?'Adding…':wine.imageIds.length?'Add another photo':'Add a photo'}
+    </button>
+    <input ref={photoInput} className="visually-hidden" type="file" accept="image/*" multiple
+     onChange={event=>void addPhotos(Array.from(event.target.files??[]))}/>
+   </div>
+   {photoError&&<p className="detail-photo-error" role="alert">{photoError}</p>}
    {wine.groupSourcePhotos.length>0&&<div className="group-source-context"><div className="group-source-heading"><span>GROUP PHOTO</span><small>Source context · bottle crop shown above</small></div><div className="group-source-gallery">{wine.groupSourcePhotos.map(source=><button type="button" key={source.sessionId} className="group-source-button" onClick={()=>setSelectedGroupSource(source.sessionId)} aria-label="Open source Group Photo"><GroupSourceImage sessionId={source.sessionId} alt={`${wine.producer} ${wine.wineName} source group photo`} className="group-source-photo"/><span>{new Date(source.capturedAt??source.createdAt).toLocaleDateString()}</span></button>)}</div></div>}
    <p className="eyebrow">{wine.vintage??'NON-VINTAGE'} · {wine.wineStyle??'WINE'}</p><h1>{wine.wineName}</h1><h2>{wine.producerId?<Link className="detail-producer-link" to={`/producers/${wine.producerId}`}>{wine.producer}</Link>:wine.producer}</h2><div className="detail-favorite-row"><button type="button" className={`detail-favorite-button${wine.favorite?' active':''}`} aria-pressed={wine.favorite} onClick={()=>void toggleFavorite()} disabled={favoriteBusy}><span className="heart" aria-hidden="true"><AppIcon kind={wine.favorite?'heart-filled':'heart'}/></span>{wine.favorite?'Favorite':'Add to favorites'}</button><a className="detail-wine-searcher-link" href={wineSearcherUrl(wine.producer,wine.wineName,wine.vintage)} target="_blank" rel="noopener noreferrer">Find on Wine-Searcher <span aria-hidden="true">↗</span></a></div><div className="detail-pills">{wine.appellation&&<span>{wine.appellation}{denomination&&<small className="detail-denomination">{denomination}</small>}</span>}{!wine.appellation&&wine.region&&denomination&&<span>{wine.region}<small className="detail-denomination">{denomination}</small></span>}{wine.classification&&<span className={`detail-classification detail-classification-${wine.classification}`}>{classificationLabel[wine.classification]}</span>}{blend.map(g=><span key={g}>{g}</span>)}{wine.rating!=null&&<strong>{wine.rating} / 100</strong>}</div>
   </section>

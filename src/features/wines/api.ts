@@ -42,6 +42,23 @@ export async function batchUpdateJournalExperience(ids:string[],patch:JournalBat
 export async function getWine(id:string):Promise<WineDetail>{const r=await fetch(`/api/wines/${id}`,{headers:authHeaders()});await requireOk(r,'Wine not found');const wine=await r.json() as WineDetail;return {...wine,groupSourcePhotos:wine.groupSourcePhotos??[]}}
 export async function saveWineTastingStructure(id:string,structure:TastingStructure|null){const r=await fetch(`/api/wines/${id}/tasting-structure`,{method:'PUT',headers:authHeaders(true),body:JSON.stringify({structure})});await requireOk(r,'Could not save tasting structure');return r.json() as Promise<{ok:true}>}
 export async function setWineFavorite(id:string,favorite:boolean){const r=await fetch(`/api/wines/${id}/favorite`,{method:'PUT',headers:authHeaders(true),body:JSON.stringify({favorite})});await requireOk(r,'Could not update favorite');return r.json() as Promise<{id:string;favorite:boolean}>}
+/**
+ * Photographs for a wine that already exists.
+ *
+ * Same shape the create path sends - the original file, its dimensions and its
+ * capture metadata - because the server stores the original and reads the EXIF
+ * off it. A wine logged off a printed list can be given its bottle later.
+ */
+export async function addWineImages(id:string,photos:WinePhoto[]){
+  const fd=new FormData();
+  photos.forEach(photo=>fd.append('images',photo.file));
+  fd.append('dimensions',JSON.stringify(photos.map(photo=>({width:photo.width,height:photo.height}))));
+  fd.append('metadata',JSON.stringify(photos.map(photo=>photo.metadata??{capturedAt:null,latitude:null,longitude:null,source:'none'})));
+  const r=await fetch(`/api/wines/${id}/images`,{method:'POST',headers:authHeaders(),body:fd});
+  await requireOk(r,'Could not add the photos');
+  return r.json() as Promise<{imageIds:string[]}>;
+}
+
 export async function saveWine(input:WineInput,id?:string,photos:WinePhoto[]=[],options:SaveWineOptions={}):Promise<{id:string}|{ok:true}>{
   if(id){const body=options.preferCuveePrimaryName?{...input,preferCuveePrimaryName:true}:input;const r=await fetch(`/api/wines/${id}`,{method:'PUT',headers:authHeaders(true),body:JSON.stringify(body)});await requireOk(r,'Could not save wine');return r.json() as Promise<{ok:true}>}
   if(photos.length){const fd=new FormData();fd.append('wine',JSON.stringify(input));photos.forEach(x=>fd.append('images',x.file));fd.append('dimensions',JSON.stringify(photos.map(x=>({width:x.width,height:x.height}))));fd.append('metadata',JSON.stringify(photos.map(x=>x.metadata??{capturedAt:null,latitude:null,longitude:null,source:'none'})));const r=await fetch('/api/wines',{method:'POST',headers:authHeaders(),body:fd});await requireOk(r,'Could not save wine and photos');return r.json() as Promise<{id:string}>}
