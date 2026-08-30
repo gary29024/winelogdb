@@ -33,6 +33,10 @@
 .tasting-sheet-currency{display:flex;align-items:center;gap:7px;font:600 .76rem 'DM Sans',sans-serif;color:var(--ink-5)}
 .tasting-sheet-currency input{width:72px;text-transform:uppercase}
 .tasting-sheet-buttons{display:flex;gap:8px;flex-wrap:wrap}
+/* Quiet: throwing the reading away is the one action here that cannot be
+   undone without paying for another scan. */
+.tasting-sheet-discard{border-color:transparent;background:0 0;color:var(--ink-6)}
+.tasting-sheet-discard:hover{color:var(--danger);border-color:var(--line)}
 
 .tasting-sheet-section{margin-bottom:12px}
 .tasting-sheet-section-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:7px 2px}
@@ -42,6 +46,10 @@
 
 .tasting-sheet-rows{display:grid;gap:6px;margin:0;padding:0;list-style:none}
 .tasting-sheet-row{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:12px;padding:9px 12px;border:1px solid var(--line);border-radius:var(--r-md);background:var(--paper)}
+/* Pointing a printed line at a wine already in the evening. Full width under
+   the name rather than beside it: the wine names it lists are long, and a
+   narrow select truncates exactly the part that tells them apart. */
+.tasting-sheet-match{margin-top:6px;width:100%;max-width:100%;font-size:.78rem;padding:5px 8px}
 .tasting-sheet-row.is-new{border-color:var(--wine-line)}
 .tasting-sheet-pick{display:flex;align-items:flex-start;gap:10px;min-width:0;cursor:pointer}
 .tasting-sheet-pick input{margin-top:3px;flex:0 0 auto}

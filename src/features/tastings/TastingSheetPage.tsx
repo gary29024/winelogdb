@@ -2,8 +2,9 @@ import { useEffect,useMemo,useRef,useState } from 'react';
 import { Link,useParams } from 'react-router-dom';
 import { prepareRecognitionImageWithinBytes } from '../uploads/prepareImage';
 import { useDocumentUrl } from './useDocumentUrl';
+import { clearSheetDraft,readSheetDraft,sheetDraftAge,writeSheetDraft } from './sheetDraftStore';
 import { createTastingSheetWines,fillTastingSheetPrices,getTasting,parseTastingSheetPage,readTastingDocumentFile,
-  uploadTastingDocuments,type SheetMatch,type Tasting,type TastingDocument } from './api';
+  uploadTastingDocuments,type SheetLineupWine,type SheetMatch,type Tasting,type TastingDocument } from './api';
 import '../../tastingSheet.css';
 
 /**
@@ -17,7 +18,19 @@ import '../../tastingSheet.css';
 const SHEET_TARGET_BYTES=Math.floor(2.5*1024*1024);
 const MAX_CONTINUATIONS=2;
 
-type Row=SheetMatch&{key:string;chosenPrice:number|null;selected:boolean};
+/**
+ * `manualWineId` is a wine the reader pointed this row at themselves.
+ *
+ * The printed name and the logged one often are not the same string - a sheet
+ * says "'MV20' Aÿ Grand Cru Brut" where the bottle was logged as "MV20" - and
+ * no normalisation is going to close that. Without a way to say so, the only
+ * offer is to create a second copy of a wine already in the evening, which is
+ * worse than not reading the price at all.
+ */
+type Row=SheetMatch&{key:string;chosenPrice:number|null;selected:boolean;manualWineId:string|null};
+
+/** The wine this row will write to, matched or pointed by hand. */
+const targetWineId=(row:Row)=>row.status==='matched'?row.wineId:row.manualWineId;
 
 const rowPrice=(match:SheetMatch)=>match.wine.priceOptions[0]?.amount??null;
 /** Ticked by default only where the write is the obvious one. */
@@ -40,6 +53,8 @@ export function TastingSheetPage(){
   const input=useRef<HTMLInputElement>(null);
   const [tasting,setTasting]=useState<Tasting|null>(null),[documents,setDocuments]=useState<TastingDocument[]>([]);
   const [rows,setRows]=useState<Row[]>([]),[currency,setCurrency]=useState('');
+  /** The evening's wines, as targets for a row the reading could not match. */
+  const [lineup,setLineup]=useState<SheetLineupWine[]>([]);
   const [busy,setBusy]=useState(''),[error,setError]=useState(''),[notice,setNotice]=useState('');
   const [unresolved,setUnresolved]=useState(0),[partial,setPartial]=useState(false);
   /** Photographed and saved, not yet read. Reading is a separate, paid step. */
@@ -47,6 +62,16 @@ export function TastingSheetPage(){
   /** Which saved pages the next read should cover. */
   const [picked,setPicked]=useState<Set<string>>(()=>new Set());
   const [collapsed,setCollapsed]=useState<Set<string>>(()=>new Set());
+  /** When the restored reading was made, so the screen can say what it is showing. */
+  const [restoredAt,setRestoredAt]=useState('');
+  /**
+   * Whether the stored reading has been looked for yet.
+   *
+   * Without this the save effect fires once on mount with no rows and deletes
+   * the very draft the load is about to restore - opening the screen would wipe
+   * the reading every time, which is the opposite of the point.
+   */
+  const [hydrated,setHydrated]=useState(false);
 
   useEffect(()=>{
     if(!id)return;
@@ -56,17 +81,38 @@ export function TastingSheetPage(){
       // Arriving at this screen with pages already saved almost always means
       // reading them, so they start ticked and reading is one press.
       setPicked(new Set(detail.documents.map(document=>document.id)));
+      // A reading already paid for is picked back up rather than asked for
+      // again. Restored after the tasting loads so a stale draft cannot outlive
+      // the tasting it belongs to.
+      const draft=readSheetDraft(id);
+      if(draft){
+        setRows(draft.rows);setLineup(draft.lineup);setCurrency(draft.currency);
+        setUnresolved(draft.unresolved);setPartial(draft.partial);setRestoredAt(draft.savedAt);
+      }
+      setHydrated(true);
     }})
       .catch(e=>{if(active)setError((e as Error).message)});
     return()=>{active=false};
   },[id]);
 
-  const matched=rows.filter(row=>row.status==='matched');
-  const priceable=rows.filter(row=>row.status==='matched'&&!row.hasPrice&&row.chosenPrice!=null);
-  const creatable=rows.filter(row=>row.status==='new');
+  const priceOf=(wineId:string)=>lineup.find(wine=>wine.wineId===wineId);
+  /** Whether the wine this row writes to already carries a price of its own. */
+  const rowHasPrice=(row:Row)=>row.status==='matched'?row.hasPrice:Boolean(row.manualWineId&&priceOf(row.manualWineId)?.hasPrice);
+  const matched=rows.filter(row=>targetWineId(row));
+  const priceable=matched.filter(row=>!rowHasPrice(row)&&row.chosenPrice!=null);
+  const creatable=rows.filter(row=>row.status==='new'&&!row.manualWineId);
   const selectedPrices=priceable.filter(row=>row.selected);
   const selectedNew=creatable.filter(row=>row.selected);
-  const alreadyPriced=matched.filter(row=>row.status==='matched'&&row.hasPrice).length;
+  const alreadyPriced=matched.filter(rowHasPrice).length;
+  /** A wine one row claims is not offered to the others, or two rows fight over it. */
+  const claimed=new Set(rows.map(row=>row.manualWineId).filter((id):id is string=>Boolean(id)));
+
+  // Written on every edit rather than on leaving: there is no reliable "leaving"
+  // on a phone, where the screen is closed by switching apps.
+  useEffect(()=>{
+    if(!id||!hydrated)return;
+    writeSheetDraft(id,{rows,lineup,currency,unresolved,partial});
+  },[id,hydrated,rows,lineup,currency,unresolved,partial]);
 
   const sections=useMemo(()=>{
     const groups=new Map<string,Row[]>();
@@ -84,6 +130,7 @@ export function TastingSheetPage(){
     let afterLine:number|null=null,sheetCurrency='',wasPartial=false,unresolvedHere=0;
     for(let pass=0;pass<=MAX_CONTINUATIONS;pass++){
       const result=await parseTastingSheetPage(id,prepared.file,afterLine);
+      if(result.lineup)setLineup(result.lineup);
       collected.push(...result.matches);
       unresolvedHere+=result.unresolvedCount;
       if(result.currency&&!sheetCurrency)sheetCurrency=result.currency;
@@ -118,9 +165,9 @@ export function TastingSheetPage(){
         if(seen.has(key))return false;
         seen.add(key);return true;
       });
-      setRows(deduped.map((match,index)=>({...match,key:`${index}`,chosenPrice:rowPrice(match),selected:defaultSelected(match)})));
+      setRows(deduped.map((match,index)=>({...match,key:`${index}`,chosenPrice:rowPrice(match),selected:defaultSelected(match),manualWineId:null})));
       if(sheetCurrency)setCurrency(sheetCurrency);
-      setUnresolved(unresolvedTotal);setPartial(anyPartial);
+      setUnresolved(unresolvedTotal);setPartial(anyPartial);setRestoredAt('');
       setNotice(`${deduped.length} wine${deduped.length===1?'':'s'} read from ${files.length} page${files.length===1?'':'s'}.`);
     }catch(e){setError((e as Error).message||'Could not read the wine list')}finally{setBusy('')}
   }
@@ -141,7 +188,13 @@ export function TastingSheetPage(){
     setBusy('save');setError('');setNotice('');
     try{
       const {documents:added}=await uploadTastingDocuments(id,files);
-      setDocuments(current=>[...current,...added]);
+      // Merged by id rather than appended: a double tap, or a refresh landing
+      // between the upload and this, would otherwise list the same page twice
+      // and offer to pay to read it twice.
+      setDocuments(current=>{
+        const seen=new Set(current.map(document=>document.id));
+        return [...current,...(added??[]).filter(document=>!seen.has(document.id))];
+      });
       setNotice(`${files.length} page${files.length===1?'':'s'} saved to this tasting. Nothing has been read yet.`);
     }catch(e){
       // The photos are still worth reading even if storing them failed, so they
@@ -157,6 +210,14 @@ export function TastingSheetPage(){
     if(!files.length)return;
     await readPages(files);
     setStaged([]);setPicked(new Set());
+  }
+
+  /** Throws away the reading, which is the only thing that ever does. */
+  function discardReading(){
+    if(rows.length&&!confirm('Discard this reading? The pages stay saved, but reading them again costs another scan.'))return;
+    clearSheetDraft(id);
+    setRows([]);setLineup([]);setCurrency('');setUnresolved(0);setPartial(false);setRestoredAt('');
+    setNotice('Reading discarded. The photographed pages are still saved.');
   }
 
   /** Kept as paper and left unread - no AI call, and the photos stay attached. */
@@ -198,7 +259,7 @@ export function TastingSheetPage(){
   // The patch is deliberately narrow rather than Partial<Row>: spreading a
   // partial of a discriminated union widens `status` and loses the narrowing
   // every read of these rows depends on.
-  type RowPatch={selected?:boolean;chosenPrice?:number|null};
+  type RowPatch={selected?:boolean;chosenPrice?:number|null;manualWineId?:string|null};
   function setRow(key:string,patch:RowPatch){setRows(current=>current.map(row=>row.key===key?{...row,...patch}:row))}
   function toggleSection(name:string,rowsIn:Row[],next:boolean){
     const keys=new Set(rowsIn.map(row=>row.key));
@@ -212,10 +273,12 @@ export function TastingSheetPage(){
     setBusy('prices');setError('');
     try{
       const result=await fillTastingSheetPrices(id,currency.trim().toUpperCase(),
-        selectedPrices.map(row=>({wineId:(row as Extract<Row,{status:'matched'}>).wineId,price:row.chosenPrice as number})));
+        selectedPrices.map(row=>({wineId:targetWineId(row) as string,price:row.chosenPrice as number})));
       setNotice(`${result.filled} price${result.filled===1?'':'s'} filled in.`);
       // Narrowed rather than spread over the union: only a matched row has a
       // price to have been filled, and TypeScript is right to insist.
+      const filledIds=new Set(selectedPrices.map(row=>targetWineId(row)));
+      setLineup(current=>current.map(wine=>filledIds.has(wine.wineId)?{...wine,hasPrice:true}:wine));
       setRows(current=>current.map(row=>{
         if(!selectedPrices.some(picked=>picked.key===row.key))return row;
         return row.status==='matched'
@@ -277,6 +340,7 @@ export function TastingSheetPage(){
       </button>
     </section>}
 
+    {restoredAt&&<p className="tasting-sheet-notice" role="status">Showing the list read on {sheetDraftAge(restoredAt)}. Nothing was scanned again — pick up where you left off, or Discard to start over.</p>}
     {notice&&<p className="tasting-sheet-notice" role="status">{notice}</p>}
     {error&&<p className="tasting-error" role="alert">{error}</p>}
     {partial&&<p className="tasting-sheet-warning" role="alert">A page listed more wines than could be read in one go, even after continuing. Photograph that page in two halves to catch the rest.</p>}
@@ -289,6 +353,7 @@ export function TastingSheetPage(){
         <div className="tasting-sheet-buttons">
           <button type="button" className="primary" disabled={working||!selectedPrices.length} onClick={()=>void fillPrices()}>{busy==='prices'?'Filling…':`Fill ${selectedPrices.length} price${selectedPrices.length===1?'':'s'}`}</button>
           <button type="button" disabled={working||!selectedNew.length} onClick={()=>void addWines()}>{busy==='wines'?'Adding…':`Add ${selectedNew.length} wine${selectedNew.length===1?'':'s'}`}</button>
+          <button type="button" className="tasting-sheet-discard" disabled={working} onClick={discardReading}>Discard</button>
         </div>
       </div>
 
@@ -302,14 +367,35 @@ export function TastingSheetPage(){
             <button type="button" className="tasting-sheet-select-all" onClick={()=>toggleSection(name,sectionRows,!allOn)}>{allOn?'None':'All'}</button>
           </div>
           {open&&<ul className="tasting-sheet-rows">{sectionRows.map(row=>{
-            const usable=row.status==='new'||!row.hasPrice;
-            return <li key={row.key} className={`tasting-sheet-row${row.status==='new'?' is-new':''}`}>
+            const priced=rowHasPrice(row),usable=!priced;
+            const pointedAt=row.manualWineId?priceOf(row.manualWineId):undefined;
+            return <li key={row.key} className={`tasting-sheet-row${row.status==='new'&&!row.manualWineId?' is-new':''}`}>
               <label className="tasting-sheet-pick">
                 <input type="checkbox" checked={row.selected} disabled={!usable} onChange={event=>setRow(row.key,{selected:event.target.checked})}/>
                 <span className="tasting-sheet-wine">
                   <strong>{row.wine.wineName}</strong>
                   <span>{row.wine.producer}{row.wine.vintage?` · ${row.wine.vintage}`:' · NV'}</span>
-                  <small>{row.status==='new'?'Not in this tasting yet':row.hasPrice?`Already logged · already priced${row.currentPrice!=null?` at ${row.currentCurrency??''} ${row.currentPrice}`:''}`:'Already logged'}</small>
+                  <small>{row.status==='matched'
+                    ?row.hasPrice?`Already logged · already priced${row.currentPrice!=null?` at ${row.currentCurrency??''} ${row.currentPrice}`:''}`:'Already logged'
+                    :pointedAt
+                      ?`Matched by you to ${pointedAt.wineName}${pointedAt.hasPrice?' · already priced':''}`
+                      :'Not in this tasting yet'}</small>
+                  {row.status==='new'&&lineup.length>0&&<select className="tasting-sheet-match" value={row.manualWineId??''}
+                    aria-label={`Match ${row.wine.wineName} to a wine in this tasting`}
+                    onChange={event=>{
+                      const picked=event.target.value||null;
+                      // Pointing at a wine that already carries a price leaves
+                      // the row unticked, the same rule an automatic match
+                      // follows: a number you entered yourself is not replaced
+                      // by one read off paper.
+                      setRow(row.key,{manualWineId:picked,selected:picked?!priceOf(picked)?.hasPrice:true});
+                    }}>
+                    <option value="">Add as a new wine</option>
+                    {lineup.filter(wine=>wine.wineId===row.manualWineId||!claimed.has(wine.wineId)).map(wine=>
+                      <option key={wine.wineId} value={wine.wineId}>
+                        {wine.wineName}{wine.vintage?` · ${wine.vintage}`:''}{wine.hasPrice?' (already priced)':''}
+                      </option>)}
+                  </select>}
                 </span>
               </label>
               <div className="tasting-sheet-price">

@@ -18,15 +18,17 @@ const wine=(overrides:Record<string,unknown>={})=>({
 });
 
 let root:Root|null=null,host:HTMLDivElement|null=null;
-afterEach(()=>{act(()=>root?.unmount());host?.remove();root=null;host=null;vi.unstubAllGlobals()});
+afterEach(()=>{act(()=>root?.unmount());host?.remove();root=null;host=null;vi.unstubAllGlobals();window.localStorage.clear()});
 
 const json=(body:unknown)=>new Response(JSON.stringify(body),{status:200,headers:{'content-type':'application/json'}});
 
 async function mount(parseBodies:unknown[]){
-  let parseIndex=0;
+  let parseIndex=0,uploadIndex=0;
   vi.stubGlobal('fetch',vi.fn(async(url:string)=>{
     const path=String(url);
     if(path.includes('/sheet/parse'))return json(parseBodies[Math.min(parseIndex++,parseBodies.length-1)]);
+    // Uploading returns the pages it just stored, not the whole tasting.
+    if(path.includes('/documents'))return json({documents:[{id:`up${uploadIndex++}`,contentType:'image/jpeg',byteSize:1,createdAt:'x'}]});
     if(path.includes('/api/tastings/t1'))return json({tasting,wines:[],documents:[{id:'d1',contentType:'image/jpeg',byteSize:1,createdAt:'x'}]});
     return json({});
   }));
@@ -60,8 +62,11 @@ const read=async()=>{await act(async()=>{byText(/^Read \d+ page/)!.click()})};
 const readSaved=async()=>{await act(async()=>{byText(/^Read \d+ saved page/)!.click()})};
 const choose=async(files:File[])=>{await pick(files);await read()};
 
+const pickersIn=(node:HTMLElement)=>[...node.querySelectorAll('.tasting-sheet-match')] as unknown as HTMLSelectElement[];
 const parsed=(matches:unknown[],overrides:Record<string,unknown>={})=>
-  ({currency:'HKD',unresolvedCount:0,truncated:false,resumeAfterLine:null,matches,requestId:'r',recognitionDurationMs:1,...overrides});
+  ({currency:'HKD',unresolvedCount:0,truncated:false,resumeAfterLine:null,matches,lineup:[],requestId:'r',recognitionDurationMs:1,...overrides});
+const logged=(overrides:Record<string,unknown>={})=>
+  ({wineId:'w1',producer:'Henri Giraud',wineName:'MV20',vintage:null,hasPrice:false,price:null,currency:null,...overrides});
 
 describe('the wine list review',()=>{
   it('ticks a logged wine that has no price, and leaves a priced one alone',async()=>{
@@ -216,5 +221,138 @@ describe('reading a list saved on an earlier visit',()=>{
     expect(boxes[0].checked).toBe(true);
     await act(async()=>{boxes[0].click()});
     expect(byText(/^Read 0 saved page/)?.disabled).toBe(true);
+  });
+});
+
+describe('a printed line the reading could not match',()=>{
+  // Reported from a real order form: every line came back "Not in this tasting
+  // yet" because the sheet prints "'MV20' Aÿ Grand Cru Brut" where the bottle
+  // was logged as "MV20". No normalisation closes that gap, and the only offer
+  // was to create a second copy of a wine already in the evening - which loses
+  // the price and doubles the wine.
+  const unmatched=(lineup:unknown[])=>parsed([{status:'new',wine:wine({wineName:"'MV20' Aÿ Grand Cru Brut"})}],{lineup});
+  const pickers=()=>pickersIn(host!);
+  const picker=()=>pickers()[0];
+  const pick=async(value:string)=>{
+    const select=picker()!;
+    const setter=Object.getOwnPropertyDescriptor(window.HTMLSelectElement.prototype,'value')!.set!;
+    await act(async()=>{setter.call(select,value);select.dispatchEvent(new Event('change',{bubbles:true}))});
+  };
+
+  it('can be pointed at a wine already logged, instead of duplicating it',async()=>{
+    const host=await mount([unmatched([logged()])]);
+    await choose([page('list.jpg')]);
+    expect(host.textContent).toContain('Not in this tasting yet');
+    expect(button('Add 1 wine'),'the only offer before').toBeTruthy();
+
+    await pick('w1');
+    expect(host.textContent).toContain('Matched by you to MV20');
+    expect(button('Fill 1 price'),'now a price to fill').toBeTruthy();
+    expect(button('Add 0 wines'),'and no longer a wine to create').toBeTruthy();
+  });
+
+  it('writes the price to the wine it was pointed at',async()=>{
+    const host=await mount([unmatched([logged()])]);
+    await choose([page('list.jpg')]);
+    await pick('w1');
+    vi.stubGlobal('confirm',()=>true);
+    await act(async()=>{button('Fill 1 price')!.click()});
+    const call=(globalThis.fetch as ReturnType<typeof vi.fn>).mock.calls
+      .find(entry=>String(entry[0]).includes('/sheet/prices'))!;
+    expect(JSON.parse(String((call[1] as RequestInit).body))).toMatchObject({
+      currency:'HKD',prices:[{wineId:'w1',price:1280}]
+    });
+    expect(host.textContent).toBeTruthy();
+  });
+
+  it('leaves a wine that already has a price unticked when pointed at',async()=>{
+    // Same rule an automatic match follows: a number entered by hand is not
+    // replaced by one read off paper.
+    await mount([unmatched([logged({hasPrice:true,price:980,currency:'HKD'})])]);
+    await choose([page('list.jpg')]);
+    await pick('w1');
+    expect(host!.textContent).toContain('already priced');
+    expect(button('Fill 0 prices')?.disabled,'nothing to overwrite').toBe(true);
+  });
+
+  it('does not offer one wine to two different lines',async()=>{
+    // Two printed lines both pointed at the same bottle would write one price
+    // twice and lose the other.
+    await mount([parsed([
+      {status:'new',wine:wine({wineName:"'MV20' Aÿ Grand Cru Brut"})},
+      {status:'new',wine:wine({wineName:'Ratafia Solera'})}
+    ],{lineup:[logged(),logged({wineId:'w2',wineName:'Esprit Nature'})]})]);
+    await choose([page('list.jpg')]);
+    const selects=pickers();
+    expect(selects).toHaveLength(2);
+    const setter=Object.getOwnPropertyDescriptor(window.HTMLSelectElement.prototype,'value')!.set!;
+    await act(async()=>{setter.call(selects[0],'w1');selects[0].dispatchEvent(new Event('change',{bubbles:true}))});
+    const remaining=[...pickers()[1].options].map(option=>option.value);
+    expect(remaining,'the claimed wine is gone from the other line').toEqual(['','w2']);
+  });
+
+  it('offers nothing to point at when the evening has no wines yet',async()=>{
+    await mount([unmatched([])]);
+    await choose([page('list.jpg')]);
+    expect(picker()).toBeUndefined();
+    expect(button('Add 1 wine')).toBeTruthy();
+  });
+});
+
+describe('a reading already paid for',()=>{
+  // Reading a list is the most expensive thing the app does - one AI call per
+  // page, on a sheet that can run to seven - and closing the screen used to
+  // throw the whole result away. Coming back to fill the prices in later meant
+  // paying to read the same paper again.
+  const oneRow=()=>parsed([{status:'new',wine:wine({wineName:'Bonnes-Mares'})}]);
+
+  it('is still there after the screen is closed and reopened',async()=>{
+    await mount([oneRow()]);
+    await choose([page('list.jpg')]);
+    expect(host!.textContent).toContain('Bonnes-Mares');
+
+    // reopened later: no parse call is made, and the rows come back
+    const host2=await mount([oneRow()]);
+    expect(host2.textContent).toContain('Bonnes-Mares');
+    expect(host2.textContent).toContain('Showing the list read on');
+    expect((globalThis.fetch as ReturnType<typeof vi.fn>).mock.calls
+      .filter(call=>String(call[0]).includes('/sheet/parse')),'nothing rescanned').toHaveLength(0);
+  });
+
+  it('keeps the choices made against it, not just the wines',async()=>{
+    await mount([parsed([{status:'new',wine:wine()}],{lineup:[logged()]})]);
+    await choose([page('list.jpg')]);
+    await act(async()=>{
+      const select=pickersIn(host!)[0];
+      const setter=Object.getOwnPropertyDescriptor(window.HTMLSelectElement.prototype,'value')!.set!;
+      setter.call(select,'w1');select.dispatchEvent(new Event('change',{bubbles:true}));
+    });
+    expect(host!.textContent).toContain('Matched by you to MV20');
+
+    const host2=await mount([oneRow()]);
+    expect(host2.textContent,'the hand-made match survives too').toContain('Matched by you to MV20');
+  });
+
+  it('goes only when it is thrown away on purpose',async()=>{
+    await mount([oneRow()]);
+    await choose([page('list.jpg')]);
+    vi.stubGlobal('confirm',()=>true);
+    await act(async()=>{button('Discard')!.click()});
+    expect(host!.textContent).not.toContain('Bonnes-Mares');
+    expect(host!.textContent).toContain('pages are still saved');
+
+    const host2=await mount([oneRow()]);
+    expect(host2.textContent).not.toContain('Bonnes-Mares');
+  });
+
+  it('is superseded by a fresh reading rather than merged with it',async()=>{
+    await mount([oneRow()]);
+    await choose([page('list.jpg')]);
+    const host2=await mount([parsed([{status:'new',wine:wine({wineName:'Clos de Tart'})}])]);
+    expect(host2.textContent).toContain('Showing the list read on');
+    await choose([page('again.jpg')]);
+    expect(host2.textContent).toContain('Clos de Tart');
+    expect(host2.textContent).not.toContain('Bonnes-Mares');
+    expect(host2.textContent,'and it is no longer billed as restored').not.toContain('Showing the list read on');
   });
 });
