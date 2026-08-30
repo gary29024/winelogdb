@@ -347,15 +347,26 @@ const baroloCrus:ReadonlyArray<readonly [string,...string[]]>=[
  * selector: Tignanello is a wine, not an estate, and Antinori make a great deal
  * that is not it.
  */
-const superTuscans:ReadonlyArray<readonly [string,string,...string[]]>=[
+/**
+ * [producer or its names, cuvée, ...cuvée aliases].
+ *
+ * The producer takes a list because a house is not always written the way the
+ * curator wrote it. Tignanello was recorded here under "Antinori" while the
+ * bottle says Marchesi Antinori, and producer names are matched by exact
+ * equality after normalising - so the item failed at the producer before its
+ * cuvée was ever considered, and a wine that was plainly in the collection went
+ * unchecked. Only variants that appear on a real label are listed; a guess here
+ * ticks a box for a wine nobody drank.
+ */
+const superTuscans:ReadonlyArray<readonly [string|readonly string[],string,...string[]]>=[
   ['Tenuta San Guido','Sassicaia','Bolgheri Sassicaia'],
-  ['Ornellaia','Ornellaia','Tenuta dell’Ornellaia'],
-  ['Ornellaia','Masseto'],
-  ['Antinori','Tignanello','Marchesi Antinori Tignanello'],
-  ['Antinori','Solaia'],
-  ['Antinori','Guado al Tasso'],
+  [['Ornellaia','Tenuta dell’Ornellaia'],'Ornellaia','Tenuta dell’Ornellaia'],
+  [['Ornellaia','Tenuta dell’Ornellaia'],'Masseto'],
+  [['Antinori','Marchesi Antinori'],'Tignanello','Marchesi Antinori Tignanello'],
+  [['Antinori','Marchesi Antinori'],'Solaia'],
+  [['Antinori','Marchesi Antinori'],'Guado al Tasso'],
   ['Montevertine','Le Pergole Torte'],
-  ['Fontodi','Flaccianello della Pieve','Flaccianello'],
+  [['Fontodi','Tenuta Fontodi'],'Flaccianello della Pieve','Flaccianello'],
   ['Isole e Olena','Cepparello'],
   ['Tua Rita','Redigaffi'],
   ['Le Macchiole','Messorio'],
@@ -373,10 +384,10 @@ const tuscanAppellations:readonly string[]=[
 ];
 
 /** One wine of one producer: both names have to match, so a second label cannot tick it. */
-const cuveeItems=(prefix:string,entries:ReadonlyArray<readonly [string,string,...string[]]>):AchievementDefinitionItem[]=>
+const cuveeItems=(prefix:string,entries:ReadonlyArray<readonly [string|readonly string[],string,...string[]]>):AchievementDefinitionItem[]=>
   entries.map(([producer,label,...aliases])=>({
     id:`${prefix}-${slug(label)}`,label,
-    selector:{type:'cuvee',producerNames:[producer],cuveeNames:[label,...aliases]}
+    selector:{type:'cuvee',producerNames:typeof producer==='string'?[producer]:[...producer],cuveeNames:[label,...aliases]}
   }));
 
 /** Every wine of one domaine, keyed on the cuvee name. */

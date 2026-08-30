@@ -167,3 +167,58 @@ describe('master checklist section headings',()=>{
     }
   });
 });
+
+describe('a house written the way the label writes it',()=>{
+  // Reported as a Tignanello that stayed unchecked in Super Tuscans. The item
+  // named its producer "Antinori" while the bottle was logged as "Marchesi
+  // Antinori", and producer names match by exact equality after normalising -
+  // so it failed at the producer before the cuvée was looked at. The entry even
+  // anticipated the spelling in its *cuvée* alias, which is never reached.
+  const selectorOf=async(collection:string,label:string)=>{
+    const { achievementDefinitions:all }=await import('../../src/features/achievements/curatedLaunch');
+    const item=all.find(definition=>definition.id===collection)!.items.find(entry=>entry.label===label)!;
+    return item.selector as {type:string;producerNames:string[];cuveeNames:string[]};
+  };
+
+  it('accepts the producer under either name',async()=>{
+    const tignanello=await selectorOf('super-tuscans','Tignanello');
+    expect(tignanello.producerNames).toContain('Antinori');
+    expect(tignanello.producerNames).toContain('Marchesi Antinori');
+    // and the cuvée aliases it always had are untouched
+    expect(tignanello.cuveeNames).toContain('Marchesi Antinori Tignanello');
+  });
+
+  it('carries the same names to that house\'s other wines',async()=>{
+    // Solaia and Guado al Tasso were unchecked for exactly the same reason.
+    for(const label of ['Solaia','Guado al Tasso'])
+      expect((await selectorOf('super-tuscans',label)).producerNames,label).toContain('Marchesi Antinori');
+  });
+
+  it('does the same for the other houses a label names differently',async()=>{
+    for(const [label,alias] of [['Ornellaia','Tenuta dell’Ornellaia'],['Masseto','Tenuta dell’Ornellaia'],
+      ['Flaccianello della Pieve','Tenuta Fontodi']] as const)
+      expect((await selectorOf('super-tuscans',label)).producerNames,label).toContain(alias);
+  });
+
+  it('leaves a house with one name alone',async()=>{
+    // An alias nobody puts on a label would tick a box for a wine nobody drank.
+    expect((await selectorOf('super-tuscans','Le Pergole Torte')).producerNames).toEqual(['Montevertine']);
+  });
+
+  it('ticks the bottle that was going unchecked, through the real engine',async()=>{
+    // The point of all of it: a Tignanello logged the way the label reads.
+    const { achievementDefinitions:all }=await import('../../src/features/achievements/curatedLaunch');
+    const superTuscans=all.find(definition=>definition.id==='super-tuscans')!;
+    const antinori:AchievementIdentityRegistry={
+      producers:[{id:'antinori',canonicalName:'Marchesi Antinori'}],
+      cuvees:[{id:'tignanello',producerId:'antinori',canonicalName:'Tignanello'}]
+    };
+    const poured:AchievementWine[]=[{id:'tig-2022',producerId:'antinori',cuveeId:'tignanello',
+      producer:'Marchesi Antinori',wineName:'Tignanello',vintage:2022,appellation:null}];
+    const progress=buildAchievementProgress(superTuscans,antinori,poured);
+    expect(progress.items.find(item=>item.label==='Tignanello'))
+      .toMatchObject({status:'tasted',tastedWineIds:['tig-2022']});
+    // and a house that was never poured is not ticked by the change
+    expect(progress.items.find(item=>item.label==='Sassicaia')?.status).not.toBe('tasted');
+  });
+});

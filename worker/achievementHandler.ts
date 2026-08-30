@@ -33,10 +33,11 @@ type AchievementContext={
  * data nor their revision, so without a bump the cache keeps serving the set
  * from before it - which is how five new collections shipped and stayed
  * invisible, and later how the Graves estates kept their old order while new
- * headings were laid over it, filing Pape Clément under white.
+ * headings were laid over it, filing Pape Clément under white, and how a
+ * producer alias added to a checklist item would tick nothing.
  * curatedCollectionFingerprint in the tests fails until this moves.
  */
-export const ACHIEVEMENT_DEFINITION_VERSION=7;
+export const ACHIEVEMENT_DEFINITION_VERSION=8;
 const parseJson=<T>(value:unknown,fallback:T):T=>{try{return JSON.parse(String(value)) as T}catch{return fallback}};
 
 function groupedAliases<T extends {display_alias:string}>(rows:T[],id:(row:T)=>string){
