@@ -20,7 +20,7 @@ export function AchievementDetailPage(){
   if(!collection)return <section className="achievements-page"><Link className="achievement-back" to="/achievements">‹ Wine Collections</Link><h1>Collection not found</h1></section>;
   const {definition}=collection;
   const groups=collection.items.reduce<Array<{key:string;section:string|null;subsection:string|null;items:Array<{item:AchievementProgress['items'][number];index:number}>}>>((result,item,index)=>{
-    const heading=achievementChecklistHeading(definition.id,index),key=`${heading.section??''}|${heading.subsection??''}`,last=result[result.length-1];
+    const heading=achievementChecklistHeading(definition.id,item.id),key=`${heading.section??''}|${heading.subsection??''}`,last=result[result.length-1];
     if(last?.key===key)last.items.push({item,index});else result.push({key,section:heading.section,subsection:heading.subsection,items:[{item,index}]});
     return result;
   },[]);
