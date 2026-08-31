@@ -78,3 +78,33 @@ describe('the AI spend card',()=>{
     expect(page.textContent).toBe('');
   });
 });
+
+describe('how small a cost can be and still be read',()=>{
+  it('shows three decimals under a unit, because that is where the scans live',async()=>{
+    // Reported as every recognition line reading the same 0.01. A scanned wine
+    // costs a few thousandths, so two decimals collapsed batch, single, group
+    // and sheet onto one number and said nothing about which was dear.
+    const page=await render(summary({kinds:[
+      {kind:'scan_batch',label:'Batch scan',runs:1,requests:12,searchQueries:0,promptTokens:1,outputTokens:1,
+        cost:0.046,costPerRun:0.046,searchesPerRun:0,units:12,unit:'wine',unitCount:12,costPerUnit:0.0038},
+      {kind:'scan_single',label:'Single scan',runs:4,requests:4,searchQueries:0,promptTokens:1,outputTokens:1,
+        cost:0.03,costPerRun:0.0076,searchesPerRun:0,units:4,unit:'wine',unitCount:4,costPerUnit:0.0076}
+    ]}));
+    expect(page.textContent,'batch').toContain('0.004');
+    expect(page.textContent,'single, and told apart from batch').toContain('0.008');
+  });
+
+  it('keeps two decimals on a figure of its own size, and drops them on a big one',async()=>{
+    // A producer run is read in cents, and a month total in dollars: three
+    // decimals on either would be noise rather than detail.
+    const page=await render(summary({
+      kinds:[{kind:'producer_research',label:'Producer Deep Search',runs:12,requests:12,searchQueries:168,
+        promptTokens:1,outputTokens:1,cost:19.32,costPerRun:1.61,searchesPerRun:14,units:0,unit:'run',unitCount:12,costPerUnit:1.61}],
+      month:{month:'2026-08',searchQueries:12183,freeRemaining:0,billableSearches:7183,cost:788.71,
+        resetsAt:'2026-09-01T07:00:00.000Z',timeZone:'America/Los_Angeles'}
+    }));
+    expect(page.textContent).toContain('1.61');
+    expect(page.textContent).toContain('789');
+    expect(page.textContent,'no thousandths on a figure that does not need them').not.toContain('1.610');
+  });
+});

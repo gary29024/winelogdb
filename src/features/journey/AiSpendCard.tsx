@@ -10,8 +10,13 @@ import { getAiSpend,type UsageSummary } from './api';
  * calls happen, so "what does one producer Deep Search cost" is a number rather
  * than an estimate.
  */
+// Three decimals under a unit, because that is where the interesting numbers
+// live: a scanned wine costs a few thousandths, and two decimals rounded every
+// one of them to the same 0.01 - which said nothing about which mode or which
+// model was the expensive one. Whole units above a hundred; a month total does
+// not need its cents.
 const money=(currency:string,value:number)=>{
-  const digits=value>0&&value<1?2:value<100?2:0;
+  const digits=value>0&&value<1?3:value<100?2:0;
   try{return new Intl.NumberFormat(undefined,{style:'currency',currency,maximumFractionDigits:digits,minimumFractionDigits:digits}).format(value)}
   catch{return `${currency} ${value.toFixed(digits)}`}
 };
