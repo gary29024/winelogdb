@@ -77,8 +77,10 @@ export function LibraryPage(){
   },[params]);
   const [data,setData]=useState<JournalWine[]>([]),[nextOffset,setNextOffset]=useState<number|null>(null),[total,setTotal]=useState(0),[error,setError]=useState(''),[loading,setLoading]=useState(true);
   // A URL that carries its own filters always wins, so a deep link or a link in
-  // from Insights is never overridden by what was stored.
-  const [restoreFilters]=useState(()=>params.toString()?'':savedJournalFilters());
+  // from Insights is never overridden by what was stored. Once the remembered
+  // filters have been applied they are consumed: otherwise clearing the URL
+  // later would make the original snapshot restore itself a second time.
+  const [restoreFilters,setRestoreFilters]=useState(()=>params.toString()?'':savedJournalFilters());
   const restoring=Boolean(restoreFilters)&&!params.toString();
   /**
    * The search box is the one filter with a copy outside the URL, so it is the
@@ -176,6 +178,13 @@ export function LibraryPage(){
   },[queryKey,restoring]);
 
   useEffect(()=>{
+    // <Navigate> re-renders this component rather than remounting it. Retire
+    // the initial saved snapshot once it has produced a real URL so Reset can
+    // later clear that URL without the same snapshot immediately coming back.
+    if(restoreFilters&&queryKey)setRestoreFilters('');
+  },[restoreFilters,queryKey]);
+
+  useEffect(()=>{
     // Compared against the live URL, not the render's copy: after a reset the
     // draft and the URL agree, so there is nothing to write and nothing to
     // resurrect.
@@ -240,7 +249,7 @@ export function LibraryPage(){
   // URL. This clears the lot, including what was remembered.
   const filtersApplied=FILTER_KEYS.some(key=>(params.get(key)??'')!=='')||queryDraft!=='';
   // Clearing filters must not also cancel an attach: that is what Done is for.
-  const resetFilters=()=>{setQueryDraft('');forgetJournalFilters();setParams(attachTo?new URLSearchParams({attachTo}):new URLSearchParams(),{replace:false})};
+  const resetFilters=()=>{setRestoreFilters('');setQueryDraft('');forgetJournalFilters();setParams(attachTo?new URLSearchParams({attachTo}):new URLSearchParams(),{replace:false})};
   const chronological=sort==='newest'||sort==='oldest';
   const ordered=chronological?[...data].sort((a,b)=>sort==='oldest'?journalDate(a).localeCompare(journalDate(b)):journalDate(b).localeCompare(journalDate(a))):data;
   const groups=chronological?ordered.reduce<Array<{key:string;items:JournalWine[]}>>((acc,wine)=>{const key=monthKey(wine),last=acc[acc.length-1];if(last?.key===key)last.items.push(wine);else acc.push({key,items:[wine]});return acc},[]):[];
@@ -272,6 +281,6 @@ export function LibraryPage(){
     {loading?<p aria-live="polite">Pouring your collection…</p>:error&&!data.length?<p role="alert">{error}</p>:data.length?(chronological?<div className="journal-months">{groups.map(group=><section className="journal-month" key={group.key}><h2 className="journal-month-heading">{monthLabel(group.key)}</h2>{renderItems(group.items)}</section>)}</div>:renderItems(data)):favoriteOnly?<div className="empty favorite-empty"><span><AppIcon kind="heart"/></span><h2>No favorite wines yet</h2><p>Tap the heart on a Journal card or wine page to keep special bottles here.</p><button type="button" onClick={()=>update('favorite','')}>Show all wines</button></div>:<div className="empty"><span><AppIcon kind="journal"/></span><h2>Your journal is empty</h2><p>Scan a bottle label to add your first wine.</p><Link className="button" to="/upload">Scan Wine</Link></div>}
     {error&&data.length>0&&<p className="journal-page-error" role="alert">{error}</p>}
     {total>0&&<nav className="journal-pagination" aria-label="Journal pages"><button type="button" disabled={!hasPrevious||loading} onClick={()=>goToOffset(currentOffset-PAGE_SIZE)}>← Previous</button><form className="journal-page-picker" onSubmit={event=>{event.preventDefault();goToPage()}}><label>Page <input type="number" min="1" max={totalPages} inputMode="numeric" aria-label="Journal page number" value={pageDraft} onChange={event=>setPageDraft(event.target.value)}/> of {totalPages}</label><button type="submit" disabled={loading||pageDraft===String(currentPage)}>Go</button><span>{resultLabel}</span></form><button type="button" disabled={!hasNext||loading} onClick={()=>goToOffset(nextOffset??currentOffset+PAGE_SIZE)}>Next →</button></nav>}
-    {batchOpen&&<div className="journal-batch-backdrop" role="presentation" onClick={()=>{if(!batchBusy)setBatchOpen(false)}}><div className="journal-batch-sheet" role="dialog" aria-modal="true" aria-labelledby="journal-batch-title" onClick={e=>e.stopPropagation()}><div className="journal-batch-heading"><div><p className="eyebrow">BATCH UPDATE</p><h2 id="journal-batch-title">{selectedIds.size} wine{selectedIds.size===1?'':'s'} selected</h2></div><button type="button" className="journal-batch-close" onClick={()=>setBatchOpen(false)} disabled={batchBusy} aria-label="Close batch editor">×</button></div><p>Enable only the fields you want to change. An enabled blank field clears that value; unchecked fields stay untouched.</p><label className="journal-batch-toggle"><input type="checkbox" checked={changeEvent} onChange={e=>setChangeEvent(e.target.checked)}/><span>Change tasting / event group</span></label><input className="journal-batch-input" type="text" value={eventValue} onChange={e=>setEventValue(e.target.value)} disabled={!changeEvent} placeholder={eventMixed?'Mixed events — enter replacement':'Event name; blank clears'}/><label className="journal-batch-toggle"><input type="checkbox" checked={changeVenue} onChange={e=>setChangeVenue(e.target.checked)}/><span>Change venue</span></label><input className="journal-batch-input" type="text" value={venueValue} onChange={e=>setVenueValue(e.target.value)} disabled={!changeVenue} placeholder={venueMixed?'Mixed venues — enter replacement':'Venue; blank clears'}/>{batchError&&<p className="journal-page-error" role="alert">{batchError}</p>}<div className="journal-batch-actions"><button type="button" onClick={()=>setBatchOpen(false)} disabled={batchBusy}>Cancel</button><button type="button" className="primary" onClick={submitBatch} disabled={batchBusy||(!changeEvent&&!changeVenue)}>{batchBusy?'Updating…':`Update ${selectedIds.size} wine${selectedIds.size===1?'':'s'}`}</button></div></div></div>}
+    {batchOpen&&<div className="journal-batch-backdrop" role="presentation" onClick={()=>{if(!batchBusy)setBatchOpen(false)}}><div className="journal-batch-sheet" role="dialog" aria-modal="true" aria-labelledby="journal-batch-title" onClick={e=>e.stopPropagation()}><div className="journal-batch-heading"><div><p className="eyebrow">BATCH UPDATE</p><h2 id="journal-batch-title">{selectedIds.size} wine{selectedIds.size===1?'':'s'} selected</h2></div><button type="button" className="journal-batch-close" onClick={()=>setBatchOpen(false)} disabled={batchBusy} aria-label="Close batch editor">×</button></div><p>Enable only the fields you want to change. An enabled blank field clears that value; unchecked fields stay untouched.</p><label className="journal-batch-toggle"><input type="checkbox" checked={changeEvent} onChange={e=>setChangeEvent(e.target.checked)}/><span>Change tasting / event group</span></label><input className="journal-batch-input" type="text" value={eventValue} onChange={e=>setEventValue(e.target.value)} disabled={!changeEvent} placeholder={eventMixed?'Mixed events — enter replacement':'Event name; blank clears'}/><label className="journal-batch-toggle"><input type="checkbox" checked={changeVenue} onChange={e=>setChangeVenue(e.target.checked)}/><span>Change venue</span></label><input className="journal-batch-input" type="text" value={venueValue} onChange={e=>setVenueValue(e.target.value)} disabled={!changeVenue} placeholder={venueMixed?'Mixed venues — enter replacement':'Venue name; blank clears'}/>{batchError&&<p className="journal-page-error" role="alert">{batchError}</p>}<div className="journal-batch-actions"><button type="button" onClick={()=>setBatchOpen(false)} disabled={batchBusy}>Cancel</button><button type="button" className="primary" onClick={submitBatch} disabled={batchBusy||(!changeEvent&&!changeVenue)}>{batchBusy?'Updating…':`Update ${selectedIds.size} wine${selectedIds.size===1?'':'s'}`}</button></div></div></div>}
   </section>
 }
