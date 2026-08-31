@@ -1,6 +1,6 @@
 import { describe,expect,it } from 'vitest';
 import { canRetrySubmittedBatch,chunkItemsByPreparedBytes,countConfirmedBatchItems,isBatchUploadComplete,unclaimedSubmittedItems } from '../../worker/batchRecognition';
-import { shouldRequeueVertexJob } from '../../worker/vertexBatchRecognition';
+import { isRetryableR2ReadError,r2ReadRetryDelay,shouldRequeueVertexJob } from '../../worker/vertexBatchRecognition';
 import { buildRecognitionPrompt } from '../../src/lib/recognition/geminiRequest';
 
 describe('Batch Scan payload splitting',()=>{
@@ -38,6 +38,14 @@ describe('Batch Scan payload splitting',()=>{
     expect(shouldRequeueVertexJob('running','2026-08-24T07:55:00.000Z',now)).toBe(false);
     expect(shouldRequeueVertexJob('running','2026-08-24T07:47:00.000Z',now)).toBe(true);
     expect(shouldRequeueVertexJob('complete','2026-08-24T07:00:00.000Z',now)).toBe(false);
+  });
+  it('treats Cloudflare R2 same-object read throttling as transient',()=>{
+    expect(isRetryableR2ReadError(new Error('get: Reduce your rate of simultaneous reads on the same object. (10058)'))).toBe(true);
+    expect(isRetryableR2ReadError(new Error('Reduce your rate of simultaneous reads on the same object'))).toBe(true);
+    expect(isRetryableR2ReadError(new Error('A staged recognition image is missing'))).toBe(false);
+  });
+  it('backs off repeated R2 reads exponentially with a cap',()=>{
+    expect([0,1,2,3,4].map(r2ReadRetryDelay)).toEqual([250,500,1000,2000,2000]);
   });
 });
 
