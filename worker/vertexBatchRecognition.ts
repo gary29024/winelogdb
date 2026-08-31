@@ -17,8 +17,11 @@ type GeminiResponse={candidates?:Array<{content?:{parts?:Array<{text?:string}>};
 const JOB_PREFIX='vertex-item/';
 const HARD_TIMEOUT_MS=600_000;
 const STALE_RUNNING_MS=12*60*1000;
+const R2_READ_MAX_ATTEMPTS=4;
+const R2_READ_BASE_DELAY_MS=250;
 const now=()=>new Date().toISOString();
 const parseJson=<T>(raw:unknown,fallback:T):T=>{try{return JSON.parse(String(raw)) as T}catch{return fallback}};
+const sleep=(ms:number)=>new Promise<void>(resolve=>setTimeout(resolve,ms));
 
 export function shouldRequeueVertexJob(status:string,updatedAt:string,at=Date.now()){
   if(status==='queued')return true;
@@ -26,9 +29,26 @@ export function shouldRequeueVertexJob(status:string,updatedAt:string,at=Date.no
   const age=at-Date.parse(updatedAt);return !Number.isFinite(age)||age>=STALE_RUNNING_MS;
 }
 
+export function isRetryableR2ReadError(error:unknown){
+  const message=error instanceof Error?error.message:String(error??'');
+  return /\(10058\)/.test(message)||/Reduce your rate of simultaneous reads on the same object/i.test(message);
+}
+
+export function r2ReadRetryDelay(attempt:number){return Math.min(2000,R2_READ_BASE_DELAY_MS*2**Math.max(0,attempt))}
+
 async function r2Base64(bucket:R2Bucket,key:string){
-  const object=await bucket.get(key);if(!object)throw new Error('A staged recognition image is missing');
-  const bytes=new Uint8Array(await object.arrayBuffer());let binary='';for(let i=0;i<bytes.length;i+=32768)binary+=String.fromCharCode(...bytes.subarray(i,i+32768));return btoa(binary);
+  for(let attempt=0;attempt<R2_READ_MAX_ATTEMPTS;attempt++){
+    try{
+      const object=await bucket.get(key);if(!object)throw new Error('A staged recognition image is missing');
+      const bytes=new Uint8Array(await object.arrayBuffer());let binary='';for(let i=0;i<bytes.length;i+=32768)binary+=String.fromCharCode(...bytes.subarray(i,i+32768));return btoa(binary);
+    }catch(error){
+      if(!isRetryableR2ReadError(error)||attempt===R2_READ_MAX_ATTEMPTS-1)throw error;
+      const delayMs=r2ReadRetryDelay(attempt)+Math.floor(Math.random()*100);
+      console.warn(JSON.stringify({event:'vertex-flex-batch-r2-read-retry',attempt:attempt+1,delayMs,error:error instanceof Error?error.message:String(error)}));
+      await sleep(delayMs);
+    }
+  }
+  throw new Error('Could not read staged recognition image');
 }
 
 function errorMessage(raw:string,status:number){
@@ -164,5 +184,9 @@ export async function processVertexBatchPollJob(env:Env,owner:string,sessionId:s
       await recordAiUsage(env,owner,{kind:'scan_batch',runId:sessionId,targetId:itemId,model:call.model,tier:'flex',requests:1,units:index===0?1:0,promptTokens:call.promptTokens,outputTokens:call.outputTokens});
     console.log(JSON.stringify({event:'vertex-flex-batch-recognition-complete',sessionId,itemId,model:escalation.used?RECOGNITION_ESCALATION_MODEL:RECOGNITION_MODEL,primaryModel:RECOGNITION_MODEL,escalated:escalation.used,escalationReasons,trafficType:escalation.used?(escalation.trafficType??null):(payload.usageMetadata?.trafficType??null),finishReason:candidate?.finishReason??null,promptTokens:payload.usageMetadata?.promptTokenCount??null,outputTokens:payload.usageMetadata?.candidatesTokenCount??null,thinkingTokens:payload.usageMetadata?.thoughtsTokenCount??null,totalTokens:payload.usageMetadata?.totalTokenCount??null}));
     await finishSessionIfTerminal(env.DB,owner,sessionId);return true;
-  }catch(e){await failJob(env,owner,sessionId,jobId,itemId,(e as Error).message||'Could not process Vertex Flex batch recognition');return true}
+  }catch(e){
+    const message=(e as Error).message||'Could not process Vertex Flex batch recognition';
+    if(isRetryableR2ReadError(e)&&pollCount<2){await retryLater(env,owner,sessionId,jobId,pollCount,`Temporary image storage read contention: ${message}`);return true}
+    await failJob(env,owner,sessionId,jobId,itemId,isRetryableR2ReadError(e)?'Image storage stayed busy after repeated retries. Retry this wine.':message);return true;
+  }
 }
