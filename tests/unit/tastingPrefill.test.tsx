@@ -22,6 +22,7 @@ const json=(body:unknown)=>new Response(JSON.stringify(body),{status:200,headers
  * between these cases.
  */
 let lastPath='',calls:Array<[string,RequestInit|undefined]>=[];
+let producerResolution:unknown=null;
 async function mount(props:Record<string,unknown>={},active:unknown=tasting,hold?:{release:()=>void},match:unknown=null){
   lastPath='';calls=[];
   vi.stubGlobal('fetch',vi.fn(async(url:string,init?:RequestInit)=>{
@@ -31,7 +32,7 @@ async function mount(props:Record<string,unknown>={},active:unknown=tasting,hold
       return json({tasting:active});
     }
     if(String(url).includes('/wine-match'))return json({match});
-    if(String(url).includes('/api/producers/resolve'))return json({matched:false,inputName:''});
+    if(String(url).includes('/api/producers/resolve'))return json(producerResolution??{matched:false,inputName:''});
     if(String(url)==='/api/wines')return json({id:'saved-wine'});
     return json({});
   }));
@@ -213,5 +214,43 @@ describe('a bottle the evening already holds',()=>{
     await mount({initial:scanned},tasting,undefined,already);
     await settle();
     expect(calls.some(([url])=>url.includes('/wine-match'))).toBe(false);
+  });
+});
+
+describe('the house the library already knows',()=>{
+  // The resolve has always run and has always reported a match; it just left the
+  // field as the label read it, so the same producer entered under two spellings
+  // that both resolved to it and consistency depended on noticing.
+  const field=(name:string)=>host!.querySelector(`[name="${name}"]`) as HTMLInputElement;
+  const settle=async()=>{await act(async()=>{await new Promise(resolve=>setTimeout(resolve,400))})};
+
+  afterEach(()=>{producerResolution=null});
+
+  it('saves the wine under the name the library uses',async()=>{
+    producerResolution={matched:true,inputName:'Antinori',
+      producer:{id:'p1',canonicalName:'Marchesi Antinori',matchedName:'Antinori',matchType:'alias',researchedAt:null,catalogCount:0,tastedCount:9}};
+    await mount({initial:{producer:'Antinori',wineName:'Tignanello'}});
+    await settle();
+    expect(field('producer').value).toBe('Marchesi Antinori');
+    expect(host!.textContent,'and says it did, and that it is reversible').toContain('Saved under the name your library uses');
+  });
+
+  it('offers a near miss rather than taking it',async()=>{
+    // Containment is a strong hint and a poor decision - "Margaux" sits inside
+    // "Château Margaux" and also inside a village nobody meant.
+    producerResolution={matched:false,inputName:'Antinori',suggestion:{id:'p1',canonicalName:'Marchesi Antinori',tastedCount:9}};
+    await mount({initial:{producer:'Antinori',wineName:'Tignanello'}});
+    await settle();
+    expect(field('producer').value,'untouched until asked').toBe('Antinori');
+    expect(host!.textContent).toContain('Did you mean');
+    await act(async()=>{[...host!.querySelectorAll('button')].find(node=>node.textContent==='Use it')!.click()});
+    expect(field('producer').value).toBe('Marchesi Antinori');
+  });
+
+  it('leaves a producer the library does not know alone',async()=>{
+    await mount({initial:{producer:'Somebody New',wineName:'A Wine'}});
+    await settle();
+    expect(field('producer').value).toBe('Somebody New');
+    expect(host!.textContent).not.toContain('Did you mean');
   });
 });

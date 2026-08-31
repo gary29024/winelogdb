@@ -38,6 +38,8 @@ type WineFormProps={initial?:WineFormInitial;id?:string;photos?:WinePhoto[];onSa
 export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel}:WineFormProps){
   const nav=useNavigate(),[busy,setBusy]=useState(false),[error,setError]=useState('');
   const [producer,setProducer]=useState(String(initial?.producer??'')),[producerResolution,setProducerResolution]=useState<ProducerResolution|null>(null),[resolvingProducer,setResolvingProducer]=useState(false);
+  /** The spelling the library uses, once it has been taken - so the screen can say it did. */
+  const [adoptedProducer,setAdoptedProducer]=useState('');
   const [wineName,setWineName]=useState(String(initial?.wineName??'')),[appellation,setAppellation]=useState(String(initial?.appellation??'')),[wineStyle,setWineStyle]=useState(String(initial?.wineStyle??''));
   const [cruOverride,setCruOverride]=useState(String(initial?.classificationOverride??''));
   // Controlled so the duplicate probe can key on it: 2019 and 2020 of one cuvée
@@ -46,6 +48,7 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel}:WineF
   const [cuveeResolution,setCuveeResolution]=useState<CuveeResolution|null>(null),[resolvingCuvee,setResolvingCuvee]=useState(false),[preferCuveePrimaryName,setPreferCuveePrimaryName]=useState(false);
   const [structure,setStructure]=useState<TastingStructure>(()=>({...initial?.tastingStructure})),[structureOpen,setStructureOpen]=useState(()=>hasTastingStructure(initial?.tastingStructure??null));
   const matched=producerResolution?.matched?producerResolution.producer:undefined;
+  const suggestion=producerResolution?.matched?undefined:producerResolution?.suggestion;
   // The three fields an open tasting fills in. They are state rather than
   // defaultValue because the tasting arrives asynchronously, and an uncontrolled
   // input cannot pick up a value that lands after it has mounted.
@@ -117,6 +120,27 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel}:WineF
     setVenue(current=>current||activeTasting.venue||'');
     if(activeTasting.tastingDate)setTastingDate(activeTasting.tastingDate);
   },[id,activeTasting]);
+
+  /**
+   * The library already knew this house, so the wine is saved under the name the
+   * library uses.
+   *
+   * The resolve has always run and has always reported a match; it just left the
+   * field as the label read it. So the same producer entered under two spellings
+   * that both resolve to it, and consistency depended on noticing. Adopting the
+   * canonical name costs nothing - the lookup is made either way - and it is
+   * typed over freely, which is what makes it safe to do without asking.
+   *
+   * Only when the field still holds the name that was resolved: the probe is
+   * debounced, and landing on top of newer typing would be worse than the drift
+   * it is fixing.
+   */
+  useEffect(()=>{
+    const canonical=producerResolution?.matched?producerResolution.producer?.canonicalName:undefined;
+    if(!canonical||producer.trim()!==producerResolution?.inputName||producer===canonical)return;
+    setProducer(canonical);
+    setAdoptedProducer(canonical);
+  },[producerResolution,producer]);
 
   useEffect(()=>{
     const name=producer.trim();
@@ -222,6 +246,11 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel}:WineF
       </div>
     </div>}
     <div className="producer-field"><label>Producer *<input name="producer" type="text" required value={producer} onChange={e=>setProducer(e.target.value)}/></label>
+      {adoptedProducer&&producer===adoptedProducer&&<p className="producer-adopted">Saved under the name your library uses. Type over it to keep what the label said.</p>}
+      {suggestion&&<div className="producer-resolution producer-suggestion">
+        <span>Did you mean <strong>{suggestion.canonicalName}</strong>? {suggestion.tastedCount} wine{suggestion.tastedCount===1?'':'s'} logged.</span>
+        <button type="button" onClick={()=>{setProducer(suggestion.canonicalName);setAdoptedProducer('')}}>Use it</button>
+      </div>}
       {producer.trim()&&(resolvingProducer?<div className="producer-resolution matched"><span>Checking producer library…</span></div>:matched?<details className="producer-resolution matched compact-resolution"><summary>✓ Existing producer · {matched.canonicalName}</summary><div className="compact-resolution-body"><span>{matched.matchType==='alias'?`Matched via known alias “${matched.matchedName}” → `:''}{matched.canonicalName}</span><small>{matched.tastedCount} tasted · {matched.catalogCount} wines in researched range{matched.researchedAt?' · producer research available':''}</small><Link to={`/producers/${matched.id}`}>View producer profile</Link></div></details>:<div className="producer-resolution new"><strong>○ New producer</strong><span>No existing producer identity matches this name. A new profile will be created when the wine is saved.</span></div>)}
     </div>
     <div className="cuvee-field"><label>Wine name *<input name="wineName" type="text" required value={wineName} onChange={e=>setWineName(e.target.value)}/></label>
