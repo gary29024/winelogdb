@@ -1,7 +1,7 @@
 import { Hono,type Context } from 'hono';
 import entryApp from './entry';
 import { requireSession } from '../src/lib/auth/session';
-import { ensureAllProducerLinks } from '../src/lib/producers/entities';
+import { ensureAllProducerLinks,refreshProducerHomeCountry } from '../src/lib/producers/entities';
 import { repairIdentityKeys } from '../src/lib/producers/identityRepair';
 import { cleanupOrphanCuvee,cuveeStyleFamily,ensureAllCuveeLinksForProducer,ensureMissingCuveeLinks,normalizeCuveeAlias,reconcileProducerCuvees,resolveExistingCuvee } from '../src/lib/cuvees/entities';
 import { ensureWineIdentity } from '../src/lib/wine/identity';
@@ -204,17 +204,18 @@ app.post('/api/wines',async c=>{
 app.put('/api/wines/:id',async c=>{
   let owner:string;try{owner=await user(c)}catch{return entryApp.fetch(c.req.raw,c.env,c.executionCtx)}
   const id=c.req.param('id');
-  const before=await c.env.DB.prepare('SELECT wine_name,appellation,wine_style FROM wines WHERE owner_id=? AND id=?')
-    .bind(owner,id).first<{wine_name:string;appellation:string|null;wine_style:string|null}>().catch(()=>null);
+  const before=await c.env.DB.prepare('SELECT wine_name,appellation,wine_style,country FROM wines WHERE owner_id=? AND id=?')
+    .bind(owner,id).first<{wine_name:string;appellation:string|null;wine_style:string|null;country:string|null}>().catch(()=>null);
   let requestedName:string|null=null,preferCuveePrimaryName=false;
   // Undefined means "the body did not say", which is not the same as "cleared":
   // a caller that omits a field must not look like one that emptied it.
-  let requestedAppellation:string|null|undefined,requestedStyle:string|null|undefined;
+  let requestedAppellation:string|null|undefined,requestedStyle:string|null|undefined,requestedCountry:string|null|undefined;
   try{
     const body=await c.req.raw.clone().json() as Record<string,unknown>;
     if(typeof body.wineName==='string'&&body.wineName.trim())requestedName=body.wineName.trim();
     if('appellation' in body)requestedAppellation=typeof body.appellation==='string'?body.appellation:null;
     if('wineStyle' in body)requestedStyle=typeof body.wineStyle==='string'?body.wineStyle:null;
+    if('country' in body)requestedCountry=typeof body.country==='string'?body.country:null;
     preferCuveePrimaryName=body.preferCuveePrimaryName===true;
   }catch{}
   const response=await entryApp.fetch(c.req.raw,c.env,c.executionCtx);
@@ -244,9 +245,27 @@ app.put('/api/wines/:id',async c=>{
        * changed: it reads every cuvée of the producer, which is not a price
        * worth paying on a save that only moved a tasting note.
        */
-      if(identityChanged){
+      /**
+       * A corrected country has to reach the producer too. Its home country is
+       * seeded from the first wine ever filed under it and then left alone, so
+       * the producers page kept grouping a domaine under the country it was
+       * first seen in however many times the wine was fixed - which is how one
+       * English estate sat under United Kingdom while its neighbours sat under
+       * England.
+       *
+       * The trigger is the text having been edited, not the place having moved:
+       * retyping United Kingdom as England names the same country, and that is
+       * precisely the edit someone makes to unstick a producer filed under the
+       * other spelling. refreshProducerHomeCountry writes only when its answer
+       * actually changes, so the cost of a no-op edit is two reads, and nothing
+       * at all on a save that only moved a rating.
+       */
+      const countryChanged=Boolean(before)&&requestedCountry!==undefined
+        &&(before?.country??'').trim().toLowerCase()!==(requestedCountry??'').trim().toLowerCase();
+      if(identityChanged||countryChanged){
         const linked=await c.env.DB.prepare('SELECT producer_id FROM wines WHERE owner_id=? AND id=?').bind(owner,id).first<{producer_id:string|null}>();
-        if(linked?.producer_id)await reconcileProducerCuvees(c.env.DB,owner,linked.producer_id);
+        if(linked?.producer_id&&identityChanged)await reconcileProducerCuvees(c.env.DB,owner,linked.producer_id);
+        if(linked?.producer_id&&countryChanged)await refreshProducerHomeCountry(c.env.DB,owner,linked.producer_id);
       }
       if(requestedName&&preferCuveePrimaryName){
         const linked=await c.env.DB.prepare('SELECT cuvee_id FROM wines WHERE owner_id=? AND id=?').bind(owner,id).first<{cuvee_id:string|null}>();

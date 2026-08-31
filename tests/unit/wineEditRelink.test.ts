@@ -16,12 +16,12 @@ const wineBody=(overrides:Record<string,unknown>={})=>({
 });
 
 /** The wine as stored before the edit: named Testamatta, filed under an appellation. */
-const stored={wine_name:'Testamatta',appellation:'Toscana IGT',wine_style:'red'};
+const stored={wine_name:'Testamatta',appellation:'Toscana IGT',wine_style:'red',country:'Italy'};
 
 async function edit(body:Record<string,unknown>,before:Record<string,unknown>=stored,
   reply:(sql:string,args:unknown[])=>StubReply|undefined=()=>undefined){
   const stub=createD1Stub((sql,args)=>{
-    if(/SELECT wine_name,appellation,wine_style FROM wines/.test(sql))return {first:before};
+    if(/SELECT wine_name,appellation,wine_style,country FROM wines/.test(sql))return {first:before};
     if(/SELECT producer_id FROM wines/.test(sql))return {first:{producer_id:'p1'}};
     if(/SELECT producer,producer_id,cuvee_id,country FROM wines/.test(sql))return {first:{producer:'Bibi Graetz',producer_id:'p1',cuvee_id:'c1',country:'Italy'}};
     if(/FROM cuvees c WHERE c.owner_id=\? AND c.producer_id=\?/.test(sql))return {all:[]};
@@ -87,5 +87,44 @@ describe('editing a wine re-resolves the cuvée it belongs to',()=>{
     // the link over spacing would undo the grouping it is meant to protect.
     const {cleared}=await edit(wineBody({appellation:'toscana  igt'}));
     expect(cleared).toBe(false);
+  });
+});
+
+describe('correcting a wine country reaches its producer',()=>{
+  // Reported as one English estate filed under United Kingdom while its
+  // neighbours sat under England. A producer's home country is seeded from the
+  // first wine ever filed under it and then never revisited, so amending the
+  // wine changed wines.country and nothing else - the producers page kept the
+  // country the producer was first seen in, whatever the wine said afterwards.
+
+  const homeRead=/SELECT home_country,researched_at FROM producers/;
+  const settleReply=(sql:string)=>homeRead.test(sql)?{first:{home_country:'United Kingdom',researched_at:null}}
+    :/GROUP BY trim\(country\)/.test(sql)?{all:[{country:'England',wines:1}]}:undefined;
+  const rewrote=(stub:{calls:Array<{sql:string}>})=>
+    stub.calls.some(call=>/UPDATE producers SET home_country=/.test(call.sql.replace(/\s+/g,' ')));
+
+  it('settles the producer when the country is corrected',async()=>{
+    const {stub}=await edit(wineBody({country:'France',region:null}),{...stored,country:'Italy'},settleReply);
+    expect(rewrote(stub)).toBe(true);
+  });
+
+  it('settles it for a change of spelling too, which is the edit that unsticks it',async()=>{
+    // England and the United Kingdom are one country, so nothing about the wine
+    // has moved - but this is exactly the correction someone makes to pull a
+    // producer out of the wrong panel, and it has to do something.
+    const {stub}=await edit(wineBody({country:'England',region:null}),{...stored,country:'United Kingdom'},settleReply);
+    expect(rewrote(stub)).toBe(true);
+    expect(stub.writes().some(call=>call.args[0]==='England')).toBe(true);
+  });
+
+  it('spends nothing on an edit that left the country where it was',async()=>{
+    const {stub}=await edit(wineBody({tastingNotes:'Lovely'}));
+    expect(stub.matching(homeRead)).toHaveLength(0);
+  });
+
+  it('does not read a missing country as a cleared one',async()=>{
+    const partial=wineBody();delete (partial as Record<string,unknown>).country;
+    const {stub}=await edit(partial);
+    expect(stub.matching(homeRead)).toHaveLength(0);
   });
 });

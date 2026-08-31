@@ -1,6 +1,7 @@
 import { Hono } from 'hono';
 import baseApp from './index';
 import { requireSession } from '../src/lib/auth/session';
+import { canonicalCountryName } from '../src/lib/wine/canonicalize';
 import { linkWineProducer,mapProducerRow,normalizeProducerAlias,resolveExistingProducer,setProducerPrimaryName,suggestExistingProducer } from '../src/lib/producers/entities';
 import { mergeProducerEntities,unlinkProducerMerge } from '../src/lib/producers/merge';
 import { getProducerResearchRun } from '../src/lib/producers/research';
@@ -58,7 +59,9 @@ app.get('/api/producers',async c=>{
     return c.json({items:rows.results.map(r=>{
       const id=String(r.id),canonicalName=String(r.canonical_name),producerNames=[canonicalName,...(aliasesByProducer.get(id)??[])];
       const catalogCount=canonicalCatalogEntries(catalogEntries(r.catalog_json),producerNames).length;
-      return {id,canonicalName,homeCountry:r.home_country?String(r.home_country):null,homeRegion:r.home_region?String(r.home_region):null,homeLocality:r.home_locality?String(r.home_locality):null,tastedCount:Number(r.tasted_count)||0,catalogCount,researchedAt:r.researched_at?String(r.researched_at):null};
+      // One name per country, so two spellings of one place cannot open two
+      // panels on the producers page.
+      return {id,canonicalName,homeCountry:r.home_country?canonicalCountryName(String(r.home_country))??null:null,homeRegion:r.home_region?String(r.home_region):null,homeLocality:r.home_locality?String(r.home_locality):null,tastedCount:Number(r.tasted_count)||0,catalogCount,researchedAt:r.researched_at?String(r.researched_at):null};
     })});
   }catch(e){return c.json({error:(e as Error).message||'Could not load producers'},500)}
 });

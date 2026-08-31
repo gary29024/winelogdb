@@ -1,3 +1,5 @@
+import { canonicalCountryName } from '../wine/canonicalize';
+
 export type ProducerEntity={
   id:string;
   canonicalName:string;
@@ -58,6 +60,23 @@ export function producerMatchKey(value:string){
 
 export function shouldSeedProducerCountry(homeCountry:string|null|undefined,researchedAt:string|null|undefined,wineCountry:string|null|undefined){
   return !String(homeCountry??'').trim()&&!String(researchedAt??'').trim()&&Boolean(String(wineCountry??'').trim());
+}
+
+/**
+ * Which country a producer is filed under, given the countries of its wines.
+ * The commonest wins, so one mis-typed bottle does not move a domaine, and ties
+ * break alphabetically so the answer never depends on row order. Names are
+ * canonicalised first: England and the United Kingdom are one place, and a
+ * producer split across the two spellings has all its wines in one country.
+ */
+export function pickProducerHomeCountry(rows:readonly {country:string|null;wines:number}[]):string|null{
+  const tally=new Map<string,number>();
+  for(const row of rows){
+    const name=canonicalCountryName(String(row.country??'').trim());
+    if(name)tally.set(name,(tally.get(name)??0)+(Number(row.wines)||0));
+  }
+  if(!tally.size)return null;
+  return [...tally.entries()].sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0]))[0][0];
 }
 
 export type ProducerSuggestion={id:string;canonicalName:string;tastedCount:number};
@@ -139,13 +158,47 @@ export async function suggestExistingProducer(db:D1Database,owner:string,name:st
   return {id:hits[0].id,canonicalName:hits[0].canonical_name,tastedCount:Number(hits[0].tasted_count)||0};
 }
 
+/**
+ * A first wine's country, taken as the producer's home while nothing better is
+ * known. It only fills a blank: at this point the wine is not linked yet, so
+ * there is nothing to count, and a producer that has been researched has a real
+ * answer that a wine's country must not overwrite.
+ */
 export async function seedProducerCountryFromWine(db:D1Database,owner:string,producerId:string,wineCountry?:string|null){
-  const country=String(wineCountry??'').trim();
+  const country=canonicalCountryName(String(wineCountry??'').trim())??'';
   if(!country)return false;
   const result=await db.prepare(`UPDATE producers SET home_country=?,updated_at=?
     WHERE owner_id=? AND id=? AND researched_at IS NULL AND trim(coalesce(home_country,''))=''`)
     .bind(country,new Date().toISOString(),owner,producerId).run();
   return Boolean(result.meta.changes);
+}
+
+/**
+ * Re-derive an unresearched producer's home country from the wines actually
+ * filed under it, so correcting a wine's country moves the producer with it.
+ *
+ * The seed above fires once, on the first wine, and only into a blank - which
+ * left the producers page showing wherever a producer was first seen, for good.
+ * Amending the wine changed `wines.country` and nothing else, because
+ * ensureWineIdentity returns early for a wine that already has both links, so
+ * the correction had nowhere to land.
+ *
+ * The commonest country among the producer's wines wins rather than the newest,
+ * so one mis-typed bottle does not move a domaine; ties break alphabetically so
+ * the answer does not depend on row order. Research still outranks all of it.
+ */
+export async function refreshProducerHomeCountry(db:D1Database,owner:string,producerId:string){
+  const producer=await db.prepare(`SELECT home_country,researched_at FROM producers WHERE owner_id=? AND id=?`)
+    .bind(owner,producerId).first<{home_country:string|null;researched_at:string|null}>();
+  if(!producer||producer.researched_at)return false;
+  const {results}=await db.prepare(`SELECT trim(country) country,count(*) wines FROM wines
+    WHERE owner_id=? AND producer_id=? AND trim(coalesce(country,''))<>'' GROUP BY trim(country)`)
+    .bind(owner,producerId).all<{country:string;wines:number}>();
+  const country=pickProducerHomeCountry(results??[]);
+  if(!country||country===(producer.home_country??''))return false;
+  await db.prepare('UPDATE producers SET home_country=?,updated_at=? WHERE owner_id=? AND id=? AND researched_at IS NULL')
+    .bind(country,new Date().toISOString(),owner,producerId).run();
+  return true;
 }
 
 export async function ensureProducerEntity(db:D1Database,owner:string,name:string,provisionalCountry?:string|null){
@@ -203,7 +256,7 @@ export async function ensureAllProducerLinks(db:D1Database,owner:string){
 
 export function mapProducerRow(row:Record<string,unknown>):ProducerEntity{
   return {
-    id:String(row.id),canonicalName:String(row.canonical_name),homeCountry:row.home_country?String(row.home_country):null,homeRegion:row.home_region?String(row.home_region):null,homeLocality:row.home_locality?String(row.home_locality):null,
+    id:String(row.id),canonicalName:String(row.canonical_name),homeCountry:row.home_country?canonicalCountryName(String(row.home_country))??null:null,homeRegion:row.home_region?String(row.home_region):null,homeLocality:row.home_locality?String(row.home_locality):null,
     profile:String(row.profile??''),winemakingPractices:String(row.winemaking_practices??''),catalog:parseJson(row.catalog_json,[]),sources:parseJson(row.sources_json,[]),officialWebsiteUrl:row.official_website_url?String(row.official_website_url):null,
     instagramUrl:row.instagram_url?String(row.instagram_url):null,contactEmail:row.contact_email?String(row.contact_email):null,contactPhone:row.contact_phone?String(row.contact_phone):null,contactSources:parseJson(row.contact_sources_json,[]),
     heroImageAvailable:Boolean(row.hero_image_object_key),heroImageSourceUrl:row.hero_image_source_url?String(row.hero_image_source_url):null,

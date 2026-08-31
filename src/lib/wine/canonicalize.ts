@@ -28,6 +28,18 @@ const grapes:Record<string,string>={
 
 function fromMap(value:string|null|undefined,map:Record<string,string>){if(!value)return value;return map[key(value)]??value.trim()}
 export const canonicalCountry=(value:string|null|undefined)=>fromMap(value,countries);
+/**
+ * The one name a country is filed under. The map above settles spelling ("usa"
+ * to United States); the place tree settles synonyms, which is where the answer
+ * for England, the United Kingdom, the UK and Great Britain comes from. Use this
+ * anywhere a country is stored or grouped on, so two names for one place cannot
+ * become two entries.
+ */
+export function canonicalCountryName(value:string|null|undefined){
+  const spelled=canonicalCountry(value);
+  if(!spelled)return spelled;
+  return resolvePlace({country:spelled}).country??spelled;
+}
 export const canonicalRegion=(value:string|null|undefined)=>fromMap(value,regions);
 export const canonicalAppellation=(value:string|null|undefined)=>fromMap(value,appellations);
 export const canonicalGrape=(value:string)=>fromMap(value,grapes)??value.trim();
