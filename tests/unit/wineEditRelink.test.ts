@@ -98,8 +98,8 @@ describe('correcting a wine country reaches its producer',()=>{
   // country the producer was first seen in, whatever the wine said afterwards.
 
   const homeRead=/SELECT home_country,researched_at FROM producers/;
-  const settleReply=(sql:string)=>homeRead.test(sql)?{first:{home_country:'United Kingdom',researched_at:null}}
-    :/GROUP BY trim\(country\)/.test(sql)?{all:[{country:'England',wines:1}]}:undefined;
+  const settleReply=(sql:string)=>homeRead.test(sql)?{first:{home_country:'England',researched_at:null}}
+    :/GROUP BY trim\(country\)/.test(sql)?{all:[{country:'United Kingdom',wines:1}]}:undefined;
   const rewrote=(stub:{calls:Array<{sql:string}>})=>
     stub.calls.some(call=>/UPDATE producers SET home_country=/.test(call.sql.replace(/\s+/g,' ')));
 
@@ -112,9 +112,9 @@ describe('correcting a wine country reaches its producer',()=>{
     // England and the United Kingdom are one country, so nothing about the wine
     // has moved - but this is exactly the correction someone makes to pull a
     // producer out of the wrong panel, and it has to do something.
-    const {stub}=await edit(wineBody({country:'England',region:null}),{...stored,country:'United Kingdom'},settleReply);
+    const {stub}=await edit(wineBody({country:'United Kingdom',region:null}),{...stored,country:'England'},settleReply);
     expect(rewrote(stub)).toBe(true);
-    expect(stub.writes().some(call=>call.args[0]==='England')).toBe(true);
+    expect(stub.writes().some(call=>call.args[0]==='United Kingdom')).toBe(true);
   });
 
   it('spends nothing on an edit that left the country where it was',async()=>{
