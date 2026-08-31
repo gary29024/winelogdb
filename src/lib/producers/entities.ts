@@ -60,6 +60,7 @@ export function shouldSeedProducerCountry(homeCountry:string|null|undefined,rese
   return !String(homeCountry??'').trim()&&!String(researchedAt??'').trim()&&Boolean(String(wineCountry??'').trim());
 }
 
+export type ProducerSuggestion={id:string;canonicalName:string;tastedCount:number};
 type ResolutionRow={id:string;canonical_name:string;display_alias?:string|null;researched_at:string|null;catalog_count:number;tasted_count:number};
 const mapResolution=(row:ResolutionRow,matchType:ProducerResolution['matchType']):ProducerResolution=>({
   id:row.id,
@@ -91,6 +92,51 @@ export async function resolveExistingProducer(db:D1Database,owner:string,name:st
     (SELECT count(*) FROM wines w WHERE w.owner_id=p.owner_id AND w.producer_id=p.id) AS tasted_count
     FROM producers p WHERE p.owner_id=? AND lower(trim(p.canonical_name))=lower(trim(?)) LIMIT 1`).bind(owner,candidate).first<ResolutionRow>();
   return legacy?mapResolution(legacy,'canonical'):null;
+}
+
+/**
+ * A house the reader almost certainly means, when nothing matched exactly.
+ *
+ * The exact resolvers above are deliberately conservative - "Domaine", "Château"
+ * and "Pere et Fils" can be the whole difference between two real producers, so
+ * they are never stripped. That is right for matching automatically and wrong
+ * for saying nothing at all: a label read as "Antinori" against a library
+ * holding "Marchesi Antinori" silently makes a second producer, and the two are
+ * only ever joined by hand afterwards.
+ *
+ * So this proposes rather than decides. One name's words being wholly contained
+ * in another's is the signal, and it has to point at exactly one producer: a
+ * candidate that fits two houses is precisely the case where guessing is worst.
+ */
+const GENERIC_PRODUCER_WORDS=new Set(['chateau','domaine','tenuta','castello','weingut','bodega','bodegas','quinta','clos','maison','cantina','azienda','agricola','estate','winery','vineyard','vineyards','cellars','fattoria','marchesi','famille','family','de','del','della','dell','di','du','la','le','les','el','and']);
+
+/**
+ * The words of a name, with an elided article counted as its own.
+ *
+ * normalizeProducerAlias drops an apostrophe without putting anything in its
+ * place, which is right for a key - "d'Yquem" and "dYquem" must land together -
+ * and wrong for asking which words a name is made of: it turns "Tenuta
+ * dell'Ornellaia" into two words, one of them "dellornellaia", so the Ornellaia
+ * inside it is invisible. Split here, and only here.
+ */
+const producerWords=(value:string)=>new Set(normalizeProducerAlias(value.replace(/[’'`]/g,' ')).split(' ').filter(Boolean));
+const contains=(outer:Set<string>,inner:Set<string>)=>[...inner].every(word=>outer.has(word));
+
+export async function suggestExistingProducer(db:D1Database,owner:string,name:string):Promise<ProducerSuggestion|null>{
+  const words=producerWords(name);
+  // A bare "Château" belongs to every house that has one; a name that is only
+  // generic words carries no signal to contain anything by.
+  if(!words.size||[...words].every(word=>GENERIC_PRODUCER_WORDS.has(word)))return null;
+  const {results}=await db.prepare(`SELECT p.id,p.canonical_name,
+    (SELECT count(*) FROM wines w WHERE w.owner_id=p.owner_id AND w.producer_id=p.id) AS tasted_count
+    FROM producers p WHERE p.owner_id=?`).bind(owner).all<{id:string;canonical_name:string;tasted_count:number}>();
+  const hits=(results??[]).filter(row=>{
+    const stored=producerWords(row.canonical_name);
+    if(!stored.size||stored.size===words.size)return false;
+    return contains(stored,words)||contains(words,stored);
+  });
+  if(hits.length!==1)return null;
+  return {id:hits[0].id,canonicalName:hits[0].canonical_name,tastedCount:Number(hits[0].tasted_count)||0};
 }
 
 export async function seedProducerCountryFromWine(db:D1Database,owner:string,producerId:string,wineCountry?:string|null){

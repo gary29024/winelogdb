@@ -1,7 +1,7 @@
 import { Hono } from 'hono';
 import baseApp from './index';
 import { requireSession } from '../src/lib/auth/session';
-import { linkWineProducer,mapProducerRow,normalizeProducerAlias,resolveExistingProducer,setProducerPrimaryName } from '../src/lib/producers/entities';
+import { linkWineProducer,mapProducerRow,normalizeProducerAlias,resolveExistingProducer,setProducerPrimaryName,suggestExistingProducer } from '../src/lib/producers/entities';
 import { mergeProducerEntities,unlinkProducerMerge } from '../src/lib/producers/merge';
 import { getProducerResearchRun } from '../src/lib/producers/research';
 import { createManualProducerContact,deleteManualProducerContact,listManualProducerContacts,updateManualProducerContact } from '../src/lib/producers/manualContacts';
@@ -72,7 +72,11 @@ app.get('/api/producers/resolve',async c=>{
   if(!name)return c.json({matched:false,inputName:''});
   try{
     const producer=await resolveExistingProducer(c.env.DB,owner,name);
-    return producer?c.json({matched:true,inputName:name,producer}):c.json({matched:false,inputName:name});
+    if(producer)return c.json({matched:true,inputName:name,producer});
+    // Only when nothing matched: the scan of the producer list is cheap but it
+    // is not free, and a name that already resolved has nothing to suggest.
+    const suggestion=await suggestExistingProducer(c.env.DB,owner,name).catch(()=>null);
+    return c.json({matched:false,inputName:name,...(suggestion?{suggestion}:{})});
   }catch(e){return c.json({error:(e as Error).message||'Could not resolve producer'},500)}
 });
 
