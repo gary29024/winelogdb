@@ -174,7 +174,7 @@ describe('a button that paints no background of its own',()=>{
    * two pseudo-classes to clear it, which is the shape `.quiet:hover:not
    * (:disabled)` already uses.
    */
-  const transparent=/(?:^|;)\s*background\s*:\s*(?:0 0|transparent|none)\s*(?:;|$)/;
+  const transparent=/(?:^|;)\s*background\s*:\s*(?:0 0|transparent|none|#[0-9a-f]{8}|rgba\([^)]*\))\s*(?:;|$)/i;
   const ghosts=rules.filter(rule=>
     !isState(rule.selector)&&stylesAButton(rule.selector)&&transparent.test(rule.body));
 
