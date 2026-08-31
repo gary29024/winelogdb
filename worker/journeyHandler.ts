@@ -2,7 +2,7 @@ import { currentOwnerRevision,missingTable } from '../src/lib/db/ownerRevision';
 
 // Bump when the shape of the payload below changes, so caches written by an older
 // deployment are recomputed rather than served.
-export const JOURNEY_PAYLOAD_VERSION=3;
+export const JOURNEY_PAYLOAD_VERSION=4;
 
 const numberOrNull=(value:unknown)=>value==null?null:Number(value);
 const parseJson=<T>(value:unknown,fallback:T):T=>{try{return JSON.parse(String(value)) as T}catch{return fallback}};
@@ -21,11 +21,15 @@ export async function buildJourneyPayload(db:D1Database,owner:string){
       FROM wines WHERE owner_id=?`).bind(owner),
     db.prepare(`SELECT COUNT(*) structured_tastings FROM wine_tasting_structures
       WHERE owner_id=? AND structure_json<>'{}'`).bind(owner),
+    // Every country, not a top slice: this list is what stamps the Passport map,
+    // so a truncated one silently pins the country count at the limit and leaves
+    // the countries past it off the map entirely. There are fewer than two
+    // hundred of them in the world, so the row count is bounded by reality.
     db.prepare(`SELECT trim(country) country,COUNT(*) wines,
       COUNT(DISTINCT COALESCE(producer_id,lower(trim(producer)))) producers,
       COUNT(DISTINCT NULLIF(trim(appellation),'')) appellations,AVG(rating) average_rating
       FROM wines WHERE owner_id=? AND country IS NOT NULL AND trim(country)<>''
-      GROUP BY trim(country) ORDER BY wines DESC,country ASC LIMIT 20`).bind(owner),
+      GROUP BY trim(country) ORDER BY wines DESC,country ASC`).bind(owner),
     db.prepare(`SELECT NULLIF(trim(country),'') country,trim(region) region,COUNT(*) wines,
       COUNT(DISTINCT COALESCE(producer_id,lower(trim(producer)))) producers,
       COUNT(DISTINCT NULLIF(trim(appellation),'')) appellations,AVG(rating) average_rating,
