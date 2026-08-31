@@ -20,11 +20,12 @@ function stub(homeCountry:string|null,researchedAt:string|null,wines:Array<{coun
 }
 
 describe('one name per country',()=>{
-  it('files the United Kingdom, the UK and England as one place',()=>{
-    expect(canonicalCountryName('United Kingdom')).toBe('England');
-    expect(canonicalCountryName('UK')).toBe('England');
-    expect(canonicalCountryName('Great Britain')).toBe('England');
-    expect(canonicalCountryName('England')).toBe('England');
+  it('files England, the UK and Great Britain under the United Kingdom',()=>{
+    expect(canonicalCountryName('England')).toBe('United Kingdom');
+    expect(canonicalCountryName('UK')).toBe('United Kingdom');
+    expect(canonicalCountryName('Great Britain')).toBe('United Kingdom');
+    expect(canonicalCountryName('Wales')).toBe('United Kingdom');
+    expect(canonicalCountryName('United Kingdom')).toBe('United Kingdom');
   });
 
   it('leaves a country the tree does not carry exactly as written',()=>{
@@ -34,7 +35,7 @@ describe('one name per country',()=>{
   });
 
   it('reports the canonical name for a producer already stored under a synonym',()=>{
-    expect(mapProducerRow(producerRow('United Kingdom')).homeCountry).toBe('England');
+    expect(mapProducerRow(producerRow('England')).homeCountry).toBe('United Kingdom');
     expect(mapProducerRow(producerRow(null)).homeCountry).toBeNull();
   });
 });
@@ -45,8 +46,8 @@ describe('which country a producer is filed under',()=>{
   });
 
   it('counts two spellings of one country together',()=>{
-    expect(pickProducerHomeCountry([{country:'United Kingdom',wines:1},{country:'England',wines:2}])).toBe('England');
-    expect(pickProducerHomeCountry([{country:'United Kingdom',wines:3},{country:'France',wines:2}])).toBe('England');
+    expect(pickProducerHomeCountry([{country:'United Kingdom',wines:1},{country:'England',wines:2}])).toBe('United Kingdom');
+    expect(pickProducerHomeCountry([{country:'England',wines:3},{country:'France',wines:2}])).toBe('United Kingdom');
   });
 
   it('breaks a tie the same way every time',()=>{
@@ -62,27 +63,27 @@ describe('which country a producer is filed under',()=>{
 
 describe('a corrected wine country reaches the producer',()=>{
   it('moves an unresearched producer to where its wines now say',async()=>{
-    const db=stub('United Kingdom',null,[{country:'England',wines:2}]);
+    const db=stub('England',null,[{country:'United Kingdom',wines:2}]);
     expect(await refreshProducerHomeCountry(db.db,'owner','producer-1')).toBe(true);
     const [write]=db.writes();
     expect(write.sql).toMatch(/UPDATE producers SET home_country=/);
-    expect(write.args[0]).toBe('England');
+    expect(write.args[0]).toBe('United Kingdom');
   });
 
   it('leaves a researched producer alone: research knows where the domaine is',async()=>{
-    const db=stub('United Kingdom','2026-08-01T00:00:00.000Z',[{country:'England',wines:2}]);
+    const db=stub('England','2026-08-01T00:00:00.000Z',[{country:'United Kingdom',wines:2}]);
     expect(await refreshProducerHomeCountry(db.db,'owner','producer-1')).toBe(false);
     expect(db.writes()).toHaveLength(0);
   });
 
   it('does not write when the answer has not moved',async()=>{
-    const db=stub('England',null,[{country:'England',wines:2},{country:'United Kingdom',wines:1}]);
+    const db=stub('United Kingdom',null,[{country:'England',wines:2},{country:'United Kingdom',wines:1}]);
     expect(await refreshProducerHomeCountry(db.db,'owner','producer-1')).toBe(false);
     expect(db.writes()).toHaveLength(0);
   });
 
   it('does not blank a home country when every wine has lost its own',async()=>{
-    const db=stub('England',null,[]);
+    const db=stub('United Kingdom',null,[]);
     expect(await refreshProducerHomeCountry(db.db,'owner','producer-1')).toBe(false);
     expect(db.writes()).toHaveLength(0);
   });
@@ -105,6 +106,6 @@ describe('the producers page groups by one name per country',()=>{
       {waitUntil:()=>undefined,passThroughOnException:()=>undefined} as never);
     expect(response.status).toBe(200);
     const {items}=await response.json() as {items:Array<{homeCountry:string|null}>};
-    expect(items.map(item=>item.homeCountry)).toEqual(['England','England']);
+    expect(items.map(item=>item.homeCountry)).toEqual(['United Kingdom','United Kingdom']);
   });
 });

@@ -317,12 +317,40 @@ describe('the generated backfill migration',()=>{
     expect(sql.indexOf('recognized_region=region')).toBeLessThan(sql.indexOf('DROP TABLE place_backfill_map'));
   });
 
+  /**
+   * A country the tree has since renamed, read out of the migration that
+   * re-points the rows 0032 wrote. 0032 has already run, so it cannot be
+   * regenerated to follow a later rename - the repair has to be its own
+   * migration, and this is what says one happened.
+   */
+  const renamed=new Map<string,string>();
+  {
+    const repair=readFileSync(resolvePath(process.cwd(),'src/lib/db/migrations/0043_united_kingdom_country_name.sql'),'utf8');
+    const [,to,from]=repair.match(/UPDATE wines SET country='([^']+)'\s*WHERE trim\(COALESCE\(country,''\)\) IN \(([^)]+)\)/)??[];
+    for(const value of (from??'').split(',')) {
+      const name=value.trim().replace(/^'|'$/g,'');
+      if(name)renamed.set(name,to);
+    }
+  }
+
+  // What the shipped row says once the repair migration has run over it.
+  const repaired=(value:string|null)=>value==null?null:renamed.get(value)??value;
+
   it('agrees with the runtime resolver on every spelling it maps',()=>{
     const drifted=mapped.filter(row=>{
       const place=resolvePlace({country:null,region:row.spelling,appellation:null});
-      return place.region!==row.region||place.appellation!==row.appellation||place.country!==row.country;
+      return place.region!==repaired(row.region)||place.appellation!==row.appellation||place.country!==repaired(row.country);
     });
     expect(drifted).toEqual([]);
+  });
+
+  it('renames every spelling of a renamed country, not just the one it was filed under',()=>{
+    // Leaving an alias behind would put a wine saved as "Great Britain" in a
+    // panel of its own, which is the split this whole change exists to close.
+    const [target]=[...new Set(renamed.values())];
+    expect(target).toBe('United Kingdom');
+    const spoken=lookupPlace(target).flatMap(place=>[place.name,...place.aliases]);
+    for(const name of spoken)expect(name===target||renamed.has(name),`${name} is left behind`).toBe(true);
   });
 
   it('keeps an appellation the tree does not carry instead of clearing it',()=>{

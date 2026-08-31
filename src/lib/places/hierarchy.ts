@@ -476,7 +476,10 @@ const tree:readonly Draft[]=[
   country('Mexico',[],[region('Valle de Guadalupe',[],[])]),
   country('China',[],[region('Ningxia',[],[]),region('Shandong',[],[])]),
   country('Japan',[],[region('Yamanashi',[],[]),region('Nagano',[],[]),region('Hokkaido',[],[])]),
-  country('England',['United Kingdom','UK','Great Britain'],[region('Sussex',[],[]),region('Kent',[],[]),region('Hampshire',[],[]),region('Essex',[],[])]),
+  // Filed under the sovereign state rather than the home nation, which is what
+  // the Passport map already calls it and what a wine label carrying "Product of
+  // the United Kingdom" says. England, Wales and Scotland all answer to it.
+  country('United Kingdom',['England','UK','Great Britain','Wales','Scotland'],[region('Sussex',[],[]),region('Kent',[],[]),region('Hampshire',[],[]),region('Essex',[],[])]),
   country('Romania',[],[region('Dealu Mare',[],[]),region('Recaș',[],[])]),
   country('Bulgaria',[],[region('Thracian Valley',[],[]),region('Danubian Plain',[],[])]),
   country('Moldova',[],[region('Codru',[],[]),region('Ștefan Vodă',[],[])]),
