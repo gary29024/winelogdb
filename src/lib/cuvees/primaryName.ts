@@ -9,8 +9,21 @@ export async function setCuveePrimaryName(db:D1Database,owner:string,cuveeId:str
     db.prepare('SELECT display_alias FROM producer_aliases WHERE owner_id=? AND producer_id=?').bind(owner,row.producer_id).all<{display_alias:string}>()
   ]);
   const producerNames=[producer?.canonical_name??'',...aliases.results.map(x=>x.display_alias)].filter(Boolean);
-  const canonicalName=stripKnownProducerPrefix(requestedName.trim(),producerNames).trim();
-  if(!canonicalName)throw new Error('Primary cuvée name is required');
+  /**
+   * Taken as typed. Stripping a known producer prefix is right when a name is
+   * being canonicalised automatically - nobody wants the domaine repeated in
+   * front of every cuvée it makes - but this is someone asking, in as many
+   * words, for this wording. Reducing it silently made the request a no-op
+   * reported as a success: Cusumano's Etna wines are labelled Alta Mora, the
+   * journal knows Alta Mora as a producer alias, and so "Alta Mora Feudo di
+   * Mezzo" came back out as the "Feudo di Mezzo" the cuvée was already called.
+   *
+   * Identity is unaffected: resolveExistingCuvee and cuveeIdentitySignature
+   * strip the prefix for themselves, so the cuvée still answers to both names
+   * and still keys on the same signature.
+   */
+  const canonicalName=requestedName.trim();
+  if(!canonicalName||!stripKnownProducerPrefix(canonicalName,producerNames).trim())throw new Error('Primary cuvée name is required');
   if(canonicalName===row.canonical_name)return {id:row.id,canonicalName};
 
   const resolved=await resolveExistingCuvee(db,owner,row.producer_id,canonicalName,row.appellation,row.wine_style);
