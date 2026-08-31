@@ -1,5 +1,5 @@
 import { describe,expect,it } from 'vitest';
-import { JOURNEY_PAYLOAD_VERSION,loadJourneySummary } from '../../worker/journeyHandler';
+import { buildJourneyPayload,JOURNEY_PAYLOAD_VERSION,loadJourneySummary } from '../../worker/journeyHandler';
 import { etagMatches,revisionETag } from '../../src/lib/db/ownerRevision';
 import { createD1Stub } from './support/d1Stub';
 
@@ -57,6 +57,17 @@ describe('Wine Journey summary cache',()=>{
     const {revision,payload}=await loadJourneySummary(stub.db,'owner');
     expect(revision).toBeNull();
     expect(payload).toHaveProperty('summary');
+  });
+});
+
+describe('the country breakdown behind the Passport map',()=>{
+  it('reads every country, because a truncated list pins the map at the limit',async()=>{
+    const countries=Array.from({length:26},(_,index)=>({country:`Country ${index}`,wines:26-index}));
+    const stub=createD1Stub(sql=>/GROUP BY trim\(country\)/.test(sql)?{all:countries}:undefined);
+    const payload=await buildJourneyPayload(stub.db,'owner') as {countries:unknown[]};
+    const statement=stub.matching(/GROUP BY trim\(country\)/)[0];
+    expect(statement.sql).not.toMatch(/limit/i);
+    expect(payload.countries).toHaveLength(26);
   });
 });
 
