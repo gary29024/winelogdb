@@ -77,8 +77,10 @@ export function LibraryPage(){
   },[params]);
   const [data,setData]=useState<JournalWine[]>([]),[nextOffset,setNextOffset]=useState<number|null>(null),[total,setTotal]=useState(0),[error,setError]=useState(''),[loading,setLoading]=useState(true);
   // A URL that carries its own filters always wins, so a deep link or a link in
-  // from Insights is never overridden by what was stored.
-  const [restoreFilters]=useState(()=>params.toString()?'':savedJournalFilters());
+  // from Insights is never overridden by what was stored. Once the remembered
+  // filters have been applied they are consumed: otherwise clearing the URL
+  // later would make the original snapshot restore itself a second time.
+  const [restoreFilters,setRestoreFilters]=useState(()=>params.toString()?'':savedJournalFilters());
   const restoring=Boolean(restoreFilters)&&!params.toString();
   /**
    * The search box is the one filter with a copy outside the URL, so it is the
@@ -176,6 +178,13 @@ export function LibraryPage(){
   },[queryKey,restoring]);
 
   useEffect(()=>{
+    // <Navigate> re-renders this component rather than remounting it. Retire
+    // the initial saved snapshot once it has produced a real URL so Reset can
+    // later clear that URL without the same snapshot immediately coming back.
+    if(restoreFilters&&queryKey)setRestoreFilters('');
+  },[restoreFilters,queryKey]);
+
+  useEffect(()=>{
     // Compared against the live URL, not the render's copy: after a reset the
     // draft and the URL agree, so there is nothing to write and nothing to
     // resurrect.
@@ -240,7 +249,7 @@ export function LibraryPage(){
   // URL. This clears the lot, including what was remembered.
   const filtersApplied=FILTER_KEYS.some(key=>(params.get(key)??'')!=='')||queryDraft!=='';
   // Clearing filters must not also cancel an attach: that is what Done is for.
-  const resetFilters=()=>{setQueryDraft('');forgetJournalFilters();setParams(attachTo?new URLSearchParams({attachTo}):new URLSearchParams(),{replace:false})};
+  const resetFilters=()=>{setRestoreFilters('');setQueryDraft('');forgetJournalFilters();setParams(attachTo?new URLSearchParams({attachTo}):new URLSearchParams(),{replace:false})};
   const chronological=sort==='newest'||sort==='oldest';
   const ordered=chronological?[...data].sort((a,b)=>sort==='oldest'?journalDate(a).localeCompare(journalDate(b)):journalDate(b).localeCompare(journalDate(a))):data;
   const groups=chronological?ordered.reduce<Array<{key:string;items:JournalWine[]}>>((acc,wine)=>{const key=monthKey(wine),last=acc[acc.length-1];if(last?.key===key)last.items.push(wine);else acc.push({key,items:[wine]});return acc},[]):[];

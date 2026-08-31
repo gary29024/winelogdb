@@ -123,6 +123,30 @@ describe('clearing the journal filters',()=>{
     expect(after.length).toBeGreaterThan(0);
     expect(after.every(url=>!url.includes('style='))).toBe(true);
   });
+
+  it('does not resurrect a search that was restored from session memory',async()=>{
+    // Repro: search for "rosado", open a wine, then return through a bare
+    // Journal route. The remembered query is restored with <Navigate>. Before
+    // this regression fix that initial restore snapshot stayed live forever,
+    // so Reset made the URL empty and immediately triggered the same restore a
+    // second time. The box was blank but the results still carried query=rosado.
+    window.sessionStorage.setItem(KEY,'query=rosado');
+    await openJournal('/journal');
+    expect(search()).toBe('?query=rosado');
+    expect((host!.querySelector('input[type=search]') as HTMLInputElement).value).toBe('rosado');
+
+    const before=journalCalls().length;
+    await act(async()=>{reset()!.click()});
+    await act(async()=>{await new Promise(resolve=>setTimeout(resolve,450))});
+
+    expect(search()).toBe('');
+    expect((host!.querySelector('input[type=search]') as HTMLInputElement).value).toBe('');
+    expect(reset()).toBeUndefined();
+    expect(window.sessionStorage.getItem(KEY)??'').toBe('');
+    const after=journalCalls().slice(before);
+    expect(after.length).toBeGreaterThan(0);
+    expect(after.every(url=>!url.includes('query='))).toBe(true);
+  });
 });
 
 describe('resetting the filters',()=>{
