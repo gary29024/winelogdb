@@ -1,5 +1,6 @@
 import { achievementDefinitions as previousLaunch } from './definitions';
 import { additionalAchievementDefinitions } from './additionalDefinitions';
+import { pfvAndAmericanAvaDefinitions } from './pfvAndAmericanAvas';
 import type { AchievementDefinition,AchievementDefinitionItem } from './types';
 
 const removed=new Set([
@@ -44,7 +45,8 @@ function applyCuratedMatchingSemantics(definition:AchievementDefinition):Achieve
 
 export const achievementDefinitions:AchievementDefinition[]=[
   ...previousLaunch.filter(definition=>!removed.has(definition.id)).map(applyCuratedMatchingSemantics),
-  ...additionalAchievementDefinitions
+  ...additionalAchievementDefinitions,
+  ...pfvAndAmericanAvaDefinitions
 ];
 
 // No fixed count: the set grows. What has to hold is that every card is
