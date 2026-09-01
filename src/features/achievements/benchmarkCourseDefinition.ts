@@ -23,6 +23,21 @@ const namedCuvees:Record<string,NamedCuveeTarget[]>={
   'benchmark-edmond-vatan':[
     {label:'Clos la Néore',cuveeNames:['Clos la Néore','Clos la Neore'],note:'Sancerre · Sauvignon Blanc'}
   ],
+  'benchmark-chateau-pavie':[
+    {label:'Château Pavie',cuveeNames:['Château Pavie','Chateau Pavie'],note:'Saint-Émilion benchmark'}
+  ],
+  'benchmark-chateau-figeac':[
+    {label:'Château Figeac',cuveeNames:['Château Figeac','Chateau Figeac','Château-Figeac','Chateau-Figeac'],note:'Saint-Émilion benchmark'}
+  ],
+  'benchmark-chateau-angelus':[
+    {label:'Château Angélus',cuveeNames:['Château Angélus','Chateau Angélus','Chateau Angelus'],note:'Saint-Émilion benchmark'}
+  ],
+  'benchmark-chateau-ausone':[
+    {label:'Château Ausone',cuveeNames:['Château Ausone','Chateau Ausone'],note:'Saint-Émilion benchmark'}
+  ],
+  'benchmark-chateau-cheval-blanc':[
+    {label:'Château Cheval Blanc',cuveeNames:['Château Cheval Blanc','Chateau Cheval Blanc'],note:'Saint-Émilion benchmark'}
+  ],
   'benchmark-e-guigal':[
     {label:'La Doriane',cuveeNames:['La Doriane','Condrieu La Doriane'],note:'Condrieu',subsection:'Condrieu'},
     {label:'La Turque',cuveeNames:['La Turque','Côte-Rôtie La Turque','Cote-Rotie La Turque'],note:'Côte-Rôtie',subsection:'Côte-Rôtie'},
@@ -95,27 +110,38 @@ function specificItems(item:AchievementDefinitionItem):AchievementDefinitionItem
   if(!targets||item.selector.type!=='producer')return [item];
   return targets.map(target=>({
     id:`${item.id}-cuvee-${slug(target.label)}`,
-    label:`${item.label} — ${target.label}`,
+    label:item.label===target.label?target.label:`${item.label} — ${target.label}`,
     note:target.note,
     selector:{type:'cuvee',producerNames:item.selector.producerNames,cuveeNames:target.cuveeNames}
   }));
 }
 
+const chrisRingland:AchievementDefinitionItem={
+  id:'benchmark-chris-ringland-cuvee-dry-grown-barossa-ranges-shiraz',
+  label:'Chris Ringland — Dry Grown Barossa Ranges Shiraz',
+  note:'Barossa Ranges · Shiraz',
+  selector:{type:'cuvee',producerNames:['Chris Ringland','Ringland Vintners'],cuveeNames:['Dry Grown Barossa Ranges Shiraz','Dry Grown Barossa Ranges']}
+};
+
+const transformed=benchmarkProducerDefinition.items.flatMap(specificItems);
+const courseItems=transformed.flatMap(item=>item.id==='benchmark-yering-station'?[item,chrisRingland]:[item]);
+
 export const benchmarkCourseDefinition:AchievementDefinition={
   ...benchmarkProducerDefinition,
   title:'World Benchmark Producers & Cuvées',
   subtitle:'One course-derived tasting checklist. Producer-only examples count at producer level; specifically named wines must match that cuvée.',
-  items:benchmarkProducerDefinition.items.flatMap(specificItems)
+  items:courseItems
 };
 
-export const benchmarkCourseHeadings:Record<string,{section:string;subsection:string|null}>=Object.fromEntries(
-  benchmarkProducerDefinition.items.flatMap(item=>{
+export const benchmarkCourseHeadings:Record<string,{section:string;subsection:string|null}>=Object.fromEntries([
+  ...benchmarkProducerDefinition.items.flatMap(item=>{
     const base=benchmarkProducerHeadings[item.id]??{section:null,subsection:null};
     const targets=namedCuvees[item.id];
-    if(!targets)return [[item.id,base]];
+    if(!targets)return [[item.id,base] as const];
     return targets.map(target=>[
       `${item.id}-cuvee-${slug(target.label)}`,
       {section:base.section,subsection:target.subsection??base.subsection}
-    ]);
-  })
-);
+    ] as const);
+  }),
+  [chrisRingland.id,{section:'Australia',subsection:'Barossa Ranges'}]
+]);
