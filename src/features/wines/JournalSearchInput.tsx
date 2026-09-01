@@ -11,16 +11,22 @@ type Props={value:string;resetSeq:number;onCommit:(value:string)=>void};
  */
 export function JournalSearchInput({value,resetSeq,onCommit}:Props){
   const [draft,setDraft]=useState(value);
-  const latestCommit=useRef(onCommit);
+  const latestCommit=useRef(onCommit),timerRef=useRef<number|null>(null);
   latestCommit.current=onCommit;
 
-  useEffect(()=>setDraft(value),[value,resetSeq]);
-
   useEffect(()=>{
-    if(draft===value)return;
-    const timer=window.setTimeout(()=>latestCommit.current(draft),SEARCH_DEBOUNCE_MS);
-    return()=>window.clearTimeout(timer);
-  },[draft,value]);
+    if(timerRef.current!=null){window.clearTimeout(timerRef.current);timerRef.current=null}
+    setDraft(value);
+  },[value,resetSeq]);
 
-  return <label className="search">Search<input aria-label="Search wines" type="search" value={draft} onChange={event=>setDraft(event.target.value)} placeholder="Search wines, makers, regions…"/></label>;
+  useEffect(()=>()=>{if(timerRef.current!=null)window.clearTimeout(timerRef.current)},[]);
+
+  function change(next:string){
+    setDraft(next);
+    if(timerRef.current!=null)window.clearTimeout(timerRef.current);
+    if(next===value){timerRef.current=null;return}
+    timerRef.current=window.setTimeout(()=>{timerRef.current=null;latestCommit.current(next)},SEARCH_DEBOUNCE_MS);
+  }
+
+  return <label className="search">Search<input aria-label="Search wines" type="search" value={draft} onChange={event=>change(event.target.value)} placeholder="Search wines, makers, regions…"/></label>;
 }
