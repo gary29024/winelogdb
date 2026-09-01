@@ -37,7 +37,7 @@ type AchievementContext={
  * producer alias added to a checklist item would tick nothing.
  * curatedCollectionFingerprint in the tests fails until this moves.
  */
-export const ACHIEVEMENT_DEFINITION_VERSION=9;
+export const ACHIEVEMENT_DEFINITION_VERSION=10;
 const parseJson=<T>(value:unknown,fallback:T):T=>{try{return JSON.parse(String(value)) as T}catch{return fallback}};
 
 function groupedAliases<T extends {display_alias:string}>(rows:T[],id:(row:T)=>string){

@@ -1,3 +1,4 @@
+import { benchmarkCourseHeadings } from './benchmarkCourseDefinition';
 import { checklistHeadings } from './expandedDefinitions';
 
 export type AchievementChecklistHeading={section:string|null;subsection:string|null};
@@ -19,5 +20,6 @@ const NONE:AchievementChecklistHeading={section:null,subsection:null};
  * how tidily the page groups - never what a wine is called.
  */
 export function achievementChecklistHeading(definitionId:string,itemId:string):AchievementChecklistHeading{
+  if(definitionId==='world-benchmark-producers')return benchmarkCourseHeadings[itemId]??NONE;
   return checklistHeadings[definitionId]?.[itemId]??NONE;
 }

@@ -47,7 +47,7 @@ describe('the curated set and its cache key',()=>{
     // If this fails: the curated set changed, or the payload did. Bump
     // ACHIEVEMENT_DEFINITION_VERSION, then put the new pair here.
     expect({version:ACHIEVEMENT_DEFINITION_VERSION,fingerprint:curatedCollectionFingerprint()})
-      .toEqual({version:9,fingerprint:'5b959383'});
+      .toEqual({version:10,fingerprint:'f8ac2c63'});
   });
 
   it('changes the fingerprint when a collection is added or resized',()=>{
