@@ -36,10 +36,6 @@ type AchievementContext={
  * headings were laid over it, filing Pape Clément under white, and how a
  * producer alias added to a checklist item would tick nothing.
  * curatedCollectionFingerprint in the tests fails until this moves.
- *
- * Version 10 introduces the course-derived World Benchmark card, including its
- * mixed producer/cuvée selectors. It has not shipped at an earlier shape, so
- * refinements made within this PR deliberately remain version 10.
  */
 export const ACHIEVEMENT_DEFINITION_VERSION=10;
 const parseJson=<T>(value:unknown,fallback:T):T=>{try{return JSON.parse(String(value)) as T}catch{return fallback}};
@@ -107,7 +103,7 @@ async function storeAchievementProgress(db:D1Database,owner:string,revision:numb
 async function loadMatchModes(db:D1Database,owner:string):Promise<Record<string,AchievementMatchMode>>{
   try{
     const rows=(await db.prepare('SELECT collection_id,match_mode FROM achievement_collection_preferences WHERE owner_id=?').bind(owner).all<PreferenceRow>()).results,result:Record<string,AchievementMatchMode>={};
-    for(const row of rows){if(row.match_mode==='exact'||row.match_mode==='cuvee'||row.match_mode==='producer')result[row.collection_id]=row.match_mode;
+    for(const row of rows){if(row.match_mode==='exact'||row.match_mode==='cuvee'||row.match_mode==='producer')result[row.collection_id]=row.match_mode}
     return result;
   }catch(error){if(missingTable(error))return {};throw error}
 }
