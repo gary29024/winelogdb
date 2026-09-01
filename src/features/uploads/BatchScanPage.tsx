@@ -3,11 +3,11 @@ import { ImageLightbox } from '../../components/ImageLightbox';
 import { WineForm } from '../wines/WineForm';
 import type { WineInput } from '../../lib/db/schema';
 import type { RecognitionResult } from '../recognition/schema';
-import { authHeaders } from '../../lib/auth/client';
 import { extractPhotoMetadata,type PhotoMetadata } from './photoMetadata';
 import { prepareRecognitionImage } from './prepareImage';
-import { batchImageUrl,confirmBatchWine,createBatchSession,getBatchSession,listBatchSessions,mergeSessionIntoHistory,rejectBatchWine,removeBatchSession,stageBatchWine,submitBatchSession,type BatchRecognitionItem,type BatchRecognitionSession,type BatchSessionSummary } from './batchApi';
+import { confirmBatchWine,createBatchSession,getBatchSession,listBatchSessions,mergeSessionIntoHistory,rejectBatchWine,removeBatchSession,stageBatchWine,submitBatchSession,type BatchRecognitionItem,type BatchRecognitionSession,type BatchSessionSummary } from './batchApi';
 import { clearPendingBatchSession,listPendingBatchWines,removePendingBatchWine,savePendingBatchWines,type PendingBatchPhoto,type PendingBatchWine } from './batchUploadStore';
+import { loadBatchPreviewBlob } from './batchPreviewCache';
 import '../../batchScan.css';
 import { startBackoffPoll,type Poller } from '../../lib/polling/backoff';
 import { Link,useSearchParams } from 'react-router-dom';
@@ -26,23 +26,15 @@ function recognitionInitial(r:RecognitionResult):Partial<WineInput>{return {prod
 function BatchImage({id,alt,onOpen}:{id:string;alt:string;onOpen?:(src:string)=>void}){
   const [src,setSrc]=useState(''),[state,setState]=useState<'loading'|'ready'|'error'>('loading'),[retryKey,setRetryKey]=useState(0);
   useEffect(()=>{
-    let active=true,url='',timer:number|undefined;const controller=new AbortController();setSrc('');setState('loading');
-    async function load(attempt:number){
-      try{
-        const response=await fetch(batchImageUrl(id),{headers:authHeaders(),cache:'no-store',signal:controller.signal});if(!response.ok)throw new Error(`Preview failed (${response.status})`);
-        const blob=await response.blob();if(!active)return;url=URL.createObjectURL(blob);setSrc(url);setState('ready');
-      }catch{
-        if(!active||controller.signal.aborted)return;
-        if(attempt<2){timer=window.setTimeout(()=>void load(attempt+1),600*(attempt+1));return}
-        setState('error');
-      }
-    }
-    void load(0);
-    return()=>{active=false;controller.abort();if(timer)window.clearTimeout(timer);if(url)URL.revokeObjectURL(url)};
+    let active=true,url='';setSrc('');setState('loading');
+    loadBatchPreviewBlob(id)
+      .then(blob=>{if(!active)return;url=URL.createObjectURL(blob);setSrc(url);setState('ready')})
+      .catch(()=>{if(active)setState('error')});
+    return()=>{active=false;if(url)URL.revokeObjectURL(url)};
   },[id,retryKey]);
   if(state==='ready'&&src){
-    if(onOpen)return <button type="button" className="photo-lightbox-trigger" onClick={()=>onOpen(src)} aria-label={`Enlarge ${alt}`}><img src={src} alt={alt}/></button>;
-    return <img src={src} alt={alt}/>;
+    if(onOpen)return <button type="button" className="photo-lightbox-trigger" onClick={()=>onOpen(src)} aria-label={`Enlarge ${alt}`}><img src={src} alt={alt} loading="lazy" decoding="async"/></button>;
+    return <img src={src} alt={alt} loading="lazy" decoding="async"/>;
   }
   if(state==='error')return <button type="button" className="batch-image-placeholder batch-image-retry" onClick={()=>setRetryKey(x=>x+1)} aria-label={`Retry ${alt} preview`}><span>Preview unavailable</span><small>Retry</small></button>;
   return <div className="batch-image-placeholder batch-image-loading" role="status" aria-label={`${alt} loading`}>Loading…</div>;
