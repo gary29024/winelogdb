@@ -33,9 +33,11 @@ const structureFields=[
 
 type WineFormInput=WineInput&{tastingStructure?:TastingStructure|null};
 type WineFormInitial=Partial<WineInput>&{tastingStructure?:TastingStructure|null};
-type WineFormProps={initial?:WineFormInitial;id?:string;photos?:WinePhoto[];onSave?:(input:WineFormInput)=>Promise<{id:string}>;onSaved?:(id:string)=>void;submitLabel?:string};
+type WineFormProps={initial?:WineFormInitial;id?:string;photos?:WinePhoto[];onSave?:(input:WineFormInput)=>Promise<{id:string}>;onSaved?:(id:string)=>void;submitLabel?:string;
+  /** The cellar line this bottle came from, so saving takes it off the count. */
+  holdingId?:string};
 
-export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel}:WineFormProps){
+export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,holdingId}:WineFormProps){
   const nav=useNavigate(),[busy,setBusy]=useState(false),[error,setError]=useState('');
   const [producer,setProducer]=useState(String(initial?.producer??'')),[producerResolution,setProducerResolution]=useState<ProducerResolution|null>(null),[resolvingProducer,setResolvingProducer]=useState(false);
   /** The spelling the library uses, once it has been taken - so the screen can say it did. */
@@ -207,7 +209,7 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel}:WineF
       tastingStructure
     };
     try{
-      const result=onSave?await onSave(input):await saveWine(input,id,id?[]:photos,{preferCuveePrimaryName:canPreferPrimary&&preferCuveePrimaryName});
+      const result=onSave?await onSave(input):await saveWine(input,id,id?[]:photos,{preferCuveePrimaryName:canPreferPrimary&&preferCuveePrimaryName,holdingId});
       const savedId=id??('id' in result?result.id:undefined);if(!savedId)throw new Error('Save response did not include a wine ID');
       if(onSave)await saveWineTastingStructure(savedId,tastingStructure);
       // A save can have closed the open tasting - a wine dated another day ends

@@ -230,7 +230,18 @@ export function resolvePlace(input:PlaceInput):ResolvedPlace{
     country:at('country')??trimmed(input.country),
     // An area such as California is not a growing region; it stays in the
     // region column only because there is nothing narrower to put there.
-    region:at('region')??(below(anchor)?null:anchor.name),
+    //
+    // A country is different. When the only thing the tree recognised is the
+    // country - a wine from a region it has never heard of - writing the
+    // country's name into the region column threw away the one thing the writer
+    // knew and the tree did not. Keep what they wrote; the country column
+    // already says the country.
+    //
+    // Only where the region text is genuinely unknown, though. A region field
+    // holding one of the country's own names - "Great Britain" for the United
+    // Kingdom - is that country said twice, and it is canonicalised rather than
+    // kept as typed.
+    region:at('region')??(below(anchor)?null:anchor.tier==='country'&&!candidates[1].matches.length?trimmed(input.region)??anchor.name:anchor.name),
     appellation,
     path:chain.map(step=>step.id),
     placeId:anchor.id,
