@@ -19,7 +19,7 @@ async function openJournal(at:string){
   requested=[];
   vi.stubGlobal('fetch',vi.fn(async(url:string)=>{
     requested.push(String(url));
-    return new Response(JSON.stringify({items:[],nextOffset:null}),{status:200,headers:{'content-type':'application/json'}});
+    return new Response(JSON.stringify({items:[],nextOffset:null,total:0}),{status:200,headers:{'content-type':'application/json'}});
   }));
   vi.resetModules();
   const {LibraryPage}=await import('../../src/features/wines/LibraryPage');
@@ -66,8 +66,8 @@ describe('Journal filter memory',()=>{
   });
 
   it('still holds the restored page once the search debounce has settled',async()=>{
-    // The debounce writes the query param, and any write clears offset. Coming
-    // back to page two has to survive that, not silently land on page one.
+    // The search input receives the restored query directly from the URL, so it
+    // must not emit a second commit that clears the restored offset.
     window.sessionStorage.setItem(KEY,'query=Dujac&offset=36');
     await openJournal('/journal');
     await act(async()=>{await new Promise(resolve=>setTimeout(resolve,400))});
@@ -86,6 +86,33 @@ describe('Journal filter memory',()=>{
     await openJournal('/journal');
     expect(search()).toBe('');
     expect(journalCalls()).toHaveLength(1);
+  });
+});
+
+describe('Journal search responsiveness',()=>{
+  it('keeps rapid typing local and commits one settled search',async()=>{
+    await openJournal('/journal');
+    const input=host!.querySelector('input[type=search]') as HTMLInputElement;
+    const setter=Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype,'value')!.set!;
+    const before=journalCalls().length;
+
+    await act(async()=>{
+      for(const value of ['r','ro','ros','rosa','rosad','rosado']){
+        setter.call(input,value);
+        input.dispatchEvent(new Event('input',{bubbles:true}));
+      }
+    });
+
+    // The controlled input has already caught up with the finger, while the
+    // expensive URL/list state has not moved yet.
+    expect(input.value).toBe('rosado');
+    expect(search()).toBe('');
+    expect(journalCalls()).toHaveLength(before);
+
+    await act(async()=>{await new Promise(resolve=>setTimeout(resolve,340))});
+    expect(search()).toBe('?query=rosado');
+    expect(journalCalls()).toHaveLength(before+1);
+    expect(journalCalls().at(-1)).toContain('query=rosado');
   });
 });
 
@@ -152,10 +179,7 @@ describe('clearing the journal filters',()=>{
 describe('resetting the filters',()=>{
   it('clears the month as well as the search, and it stays cleared',async()=>{
     // Reported: type a wine name, pick a month, press Reset - the name goes and
-    // the month stays. The reset itself was fine; the 350ms search debounce
-    // fired afterwards holding the pre-reset query string, dropped `query` from
-    // it and wrote the rest back, so the month returned a third of a second
-    // later. The URL trail was "" -> ?query -> ?query&month -> "" -> ?month.
+    // the month stays. Reset must also cancel any pending search commit.
     vi.stubGlobal('fetch',vi.fn(async()=>new Response(JSON.stringify({items:[],nextOffset:null,total:0}),
       {status:200,headers:{'content-type':'application/json'}})));
     vi.resetModules();
@@ -174,7 +198,6 @@ describe('resetting the filters',()=>{
 
     const reset=[...host.querySelectorAll('button')].find(button=>button.textContent==='Reset filters')!;
     await act(async()=>{reset.dispatchEvent(new MouseEvent('click',{bubbles:true}))});
-    // Past the debounce, which is where it used to come back.
     await act(async()=>{await new Promise(resolve=>setTimeout(resolve,450))});
 
     expect((host.querySelector('input[type=search]') as HTMLInputElement).value).toBe('');
@@ -186,9 +209,6 @@ describe('returning to a remembered search',()=>{
   it('puts the search back in the box, not only in the URL',async()=>{
     // Reported: the results were still the earlier search, but the search bar
     // was empty - a journal reading "19 matching wines" with nothing typed.
-    // queryDraft was seeded from the params of the first render, which are
-    // still empty because the restore is a <Navigate>, and that re-renders
-    // rather than remounts, so the initialiser never ran again.
     const urls:string[]=[];
     vi.stubGlobal('fetch',vi.fn(async(url:string)=>{
       urls.push(String(url));
@@ -203,8 +223,6 @@ describe('returning to a remembered search',()=>{
     await act(async()=>{await new Promise(resolve=>setTimeout(resolve,450))});
 
     expect((host.querySelector('input[type=search]') as HTMLInputElement).value).toBe('chambertin');
-    // And the debounce no longer fights the restore. It used to clear the query
-    // and have it put straight back, which fetched the same page twice.
     expect(urls.filter(url=>url.includes('/api/journal')||url.includes('/api/wines'))).toHaveLength(1);
   });
 });
