@@ -1,0 +1,53 @@
+/* Bottles you hold. Tokens only, one selector per line, per the house rules. */
+.cellar-page .journal-hero p:last-child{max-width:52ch}
+
+.cellar-filters .cellar-search{width:100%;padding:var(--s3) var(--s4);border:1px solid var(--line);border-radius:var(--r-md);background:var(--paper);color:var(--ink)}
+.cellar-viewbar{align-items:center}
+.cellar-add-trigger{white-space:nowrap}
+
+.cellar-list{display:grid;gap:var(--s3)}
+.cellar-card{display:grid;grid-template-columns:auto 1fr;gap:var(--s3);padding:var(--s4);border:1px solid var(--line);border-radius:var(--r-md);background:var(--paper)}
+.cellar-card-body{min-width:0;display:grid;gap:var(--s1)}
+.cellar-card-top{display:flex;align-items:baseline;justify-content:space-between;gap:var(--s3)}
+.cellar-card-top h2{margin:0;font-size:1.05rem;overflow-wrap:anywhere}
+.cellar-card-top strong{color:var(--ink-5);font-variant-numeric:tabular-nums}
+.cellar-card .producer{margin:0;color:var(--ink-4)}
+.cellar-meta{color:var(--muted);font-size:.85rem}
+.cellar-bottles{color:var(--ink-3);font-weight:600;font-size:.9rem}
+.cellar-location{color:var(--muted);font-size:.8rem}
+.cellar-card-actions{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:var(--s2)}
+.cellar-count-actions{display:flex;gap:var(--s2)}
+.cellar-drop{color:var(--bad-ink)}
+
+.cellar-empty p{max-width:46ch;margin-inline:auto}
+
+.cellar-sheet-backdrop{position:fixed;inset:0;z-index:60;display:grid;place-items:center;padding:var(--s4);background:#10182d70}
+.cellar-sheet{width:min(34rem,100%);max-height:88vh;overflow-y:auto;display:grid;gap:var(--s3);padding:var(--s5);border-radius:var(--r-lg);background:var(--paper);color:var(--ink)}
+.cellar-sheet-head{display:flex;align-items:flex-start;justify-content:space-between;gap:var(--s3)}
+.cellar-sheet-head h2{margin:0}
+.cellar-sheet-close{border:0;background:none;color:var(--ink-5);font-size:1.4rem;line-height:1;padding:0 var(--s2)}
+.cellar-sheet-close:hover:not(:disabled){background:none;color:var(--ink)}
+.cellar-sheet-note{margin:0;color:var(--muted);font-size:.85rem}
+.cellar-field{display:grid;gap:var(--s1);font-size:.85rem;color:var(--ink-4)}
+.cellar-field input,.cellar-field select,.cellar-field textarea{padding:var(--s3);border:1px solid var(--line);border-radius:var(--r-sm);background:var(--paper);color:var(--ink);font:inherit}
+.cellar-field small{color:var(--muted)}
+.cellar-row{display:grid;grid-template-columns:1fr 1fr;gap:var(--s3)}
+.cellar-resolution{margin:0;padding:var(--s2) var(--s3);border:1px solid var(--good-line);border-radius:var(--r-sm);background:var(--good-wash);color:var(--good-ink);font-size:.85rem;font-weight:600}
+.cellar-hint{margin:0;color:var(--muted);font-size:.8rem}
+.cellar-error{margin:0;color:var(--bad-ink);font-size:.85rem}
+.cellar-sheet-actions{display:flex;justify-content:flex-end;gap:var(--s2)}
+
+.cellar-open-note{display:grid;gap:var(--s1);padding:var(--s3) var(--s4);border:1px solid var(--line);border-radius:var(--r-md);background:var(--ground)}
+.cellar-open-note span{color:var(--muted);font-size:.85rem}
+
+.detail-cellar-strip{display:flex;flex-wrap:wrap;align-items:center;gap:var(--s2);margin-top:var(--s3);padding:var(--s2) var(--s3);border:1px solid var(--line-mid);border-radius:var(--r-pill);background:var(--ground)}
+.detail-cellar-label{color:var(--muted);font-size:.75rem;letter-spacing:.08em;text-transform:uppercase}
+.detail-cellar-line{display:flex;align-items:center;gap:var(--s2)}
+.detail-cellar-where{color:var(--muted);font-size:.8rem}
+.detail-cellar-open{color:var(--wine-ink);font-weight:600;font-size:.85rem}
+
+@media (max-width:520px){
+  .cellar-row{grid-template-columns:1fr}
+  .cellar-card-actions{flex-direction:column;align-items:stretch}
+  .cellar-count-actions{justify-content:space-between}
+}

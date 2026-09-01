@@ -9,6 +9,9 @@ import { setCuveePrimaryName } from '../src/lib/cuvees/primaryName';
 import { ensureProducerCatalogCuveesSeeded } from '../src/lib/cuvees/catalogSeed';
 import { changeCuveeCatalogLink,changeCuveeCatalogLinkSchema,createCuveeCatalogLink,createCuveeCatalogLinkSchema,getProducerCuveeCatalogState,unlinkCuveeCatalogLink,unlinkCuveeCatalogLinkSchema } from '../src/lib/cuvees/catalogLinks';
 import { listJournalPage } from '../src/lib/journal/list';
+import { listCellarPage } from '../src/lib/cellar/list';
+import { addHolding,deleteHolding,holdingsForWine,readHolding,takeBottleFromHolding,updateHolding } from '../src/lib/cellar/holdings';
+import { cellarInputSchema,cellarPatchSchema } from '../src/lib/cellar/schema';
 import { applyBatchExperienceUpdate,batchExperienceSchema } from '../src/lib/journal/batchExperience';
 import { deleteTasting,endTasting,listTastings,readActiveTasting,readTastingRow,readTastingWines,reopenTasting,startTasting,updateTasting } from '../src/lib/tastings/session';
 import { attachTastingWinesSchema,attachWinesToTasting,detachWineFromTasting } from '../src/lib/tastings/attach';
@@ -196,8 +199,25 @@ app.post('/api/wines/:id/deep-search',async c=>{
 
 app.post('/api/wines',async c=>{
   let owner:string;try{owner=await user(c)}catch{return entryApp.fetch(c.req.raw,c.env,c.executionCtx)}
+  // Carried as a query parameter rather than in the body: this route takes JSON
+  // and multipart alike, and a query string is readable in both without cloning
+  // a photo upload to look for one field.
+  const holdingId=(c.req.query('holding')||'').trim();
   const response=await entryApp.fetch(c.req.raw,c.env,c.executionCtx);
-  if(response.ok){try{const body=await response.clone().json() as {id?:string};if(body.id)await ensureWineIdentity(c.env.DB,owner,body.id)}catch{}}
+  if(response.ok){
+    try{const body=await response.clone().json() as {id?:string};if(body.id)await ensureWineIdentity(c.env.DB,owner,body.id)}catch{}
+    /**
+     * And only now does the bottle leave the cellar.
+     *
+     * Taking it when the form opened would lose a bottle every time someone
+     * backed out; taking it here means the count drops exactly when a record of
+     * drinking it exists. A holding that has already gone - the last bottle
+     * taken on another device - is not worth failing the save for: the wine is
+     * saved either way.
+     */
+    if(holdingId)await takeBottleFromHolding(c.env.DB,owner,holdingId)
+      .catch(e=>console.error(JSON.stringify({event:'cellar-take-failed',holdingId,error:(e as Error).message})));
+  }
   return response;
 });
 
@@ -292,6 +312,67 @@ app.delete('/api/wines/:id',async c=>{
     }catch(e){console.error(JSON.stringify({event:'cuvee-delete-cleanup-failed',wineId:id,cuveeId:before.cuvee_id,error:(e as Error).message}))}
   }
   return response;
+});
+
+/**
+ * The cellar.
+ *
+ * Bottles you hold, which is the one thing the journal has never recorded. They
+ * live in their own table so that no count in the app can see them: a holding
+ * is not a wine you drank, and it must stay out of every statistic until it is.
+ * That is why nothing here touches wines, and why the only route that does is
+ * the wine POST above, which takes the bottle once the drinking is recorded.
+ */
+app.get('/api/cellar',async c=>{
+  cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
+  try{return c.json(await listCellarPage(c.env.DB,owner,c.req.query()))}
+  catch(e){console.error(JSON.stringify({event:'cellar-list-failed',error:(e as Error).message}));return c.json({error:'Could not load your cellar'},500)}
+});
+
+app.post('/api/cellar',async c=>{
+  cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
+  const parsed=cellarInputSchema.safeParse(await c.req.json().catch(()=>null));
+  if(!parsed.success)return c.json({error:'Invalid cellar entry',issues:parsed.error.issues},400);
+  try{return c.json({holding:await addHolding(c.env.DB,owner,parsed.data)},201)}
+  catch(e){console.error(JSON.stringify({event:'cellar-add-failed',error:(e as Error).message}));return c.json({error:'Could not add those bottles'},500)}
+});
+
+app.get('/api/cellar/:id',async c=>{
+  cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
+  const holding=await readHolding(c.env.DB,owner,c.req.param('id')).catch(()=>null);
+  return holding?c.json({holding}):c.json({error:'Not found'},404);
+});
+
+app.put('/api/cellar/:id',async c=>{
+  cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
+  const parsed=cellarPatchSchema.safeParse(await c.req.json().catch(()=>null));
+  if(!parsed.success)return c.json({error:'Invalid cellar entry',issues:parsed.error.issues},400);
+  try{
+    const holding=await updateHolding(c.env.DB,owner,c.req.param('id'),parsed.data);
+    return holding?c.json({holding}):c.json({error:'Not found'},404);
+  }catch(e){console.error(JSON.stringify({event:'cellar-update-failed',error:(e as Error).message}));return c.json({error:'Could not update those bottles'},500)}
+});
+
+// Gone, not drunk. Sold, given away or broken leaves no wines row behind, which
+// is exactly the difference between this and opening one.
+app.delete('/api/cellar/:id',async c=>{
+  cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
+  const removed=await deleteHolding(c.env.DB,owner,c.req.param('id')).catch(()=>false);
+  return removed?c.body(null,204):c.json({error:'Not found'},404);
+});
+
+// What the wine detail page needs to offer "open a bottle", and nothing else.
+// Kept off the wine read itself so a page that shows no cellar strip pays for
+// no cellar query.
+app.get('/api/wines/:id/cellar',async c=>{
+  cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
+  try{
+    const wine=await c.env.DB.prepare('SELECT producer,wine_name,vintage,cuvee_id FROM wines WHERE owner_id=? AND id=?')
+      .bind(owner,c.req.param('id')).first<{producer:string;wine_name:string;vintage:number|null;cuvee_id:string|null}>();
+    if(!wine)return c.json({error:'Not found'},404);
+    const holdings=await holdingsForWine(c.env.DB,owner,{cuveeId:wine.cuvee_id,producer:wine.producer,wineName:wine.wine_name,vintage:wine.vintage==null?null:Number(wine.vintage)});
+    return c.json({holdings});
+  }catch(e){console.error(JSON.stringify({event:'cellar-for-wine-failed',error:(e as Error).message}));return c.json({holdings:[]})}
 });
 
 /**

@@ -1,10 +1,12 @@
 import { lazy,Suspense,useEffect,useState,type ReactNode } from 'react';
-import { BrowserRouter,Navigate,Route,Routes,useParams } from 'react-router-dom';
+import { BrowserRouter,Navigate,Route,Routes,useParams,useSearchParams } from 'react-router-dom';
 import { Layout } from './components/Layout';
 import { hasSession } from './lib/auth/client';
 import type { WineRecord } from './lib/db/schema';
 
 const LibraryPage=lazy(()=>import('./features/wines/LibraryPage').then(module=>({default:module.LibraryPage})));
+const CellarPage=lazy(()=>import('./features/cellar/CellarPage'));
+const OpenBottlePage=lazy(()=>import('./features/cellar/OpenBottlePage').then(module=>({default:module.OpenBottlePage})));
 const DetailPage=lazy(()=>import('./features/wines/DetailPage').then(module=>({default:module.DetailPage})));
 const UploadPage=lazy(()=>import('./features/uploads/UploadPage').then(module=>({default:module.UploadPage})));
 const GroupScanPage=lazy(()=>import('./features/uploads/GroupScanPage').then(module=>({default:module.GroupScanPage})));
@@ -37,4 +39,23 @@ function Edit(){
 function RequireSession({children}:{children:ReactNode}){return hasSession()?children:<Navigate to="/login" replace/>}
 function RouteFallback(){return <p className="route-loading" aria-live="polite">Loading…</p>}
 
-export default function App(){return <BrowserRouter><Suspense fallback={<RouteFallback/>}><Routes><Route path="/login" element={<LoginPage/>}/><Route element={<RequireSession><Layout/></RequireSession>}><Route index element={<PassportPage/>}/><Route path="passport" element={<Navigate to="/" replace/>}/><Route path="journal" element={<LibraryPage/>}/><Route path="producers" element={<ProducersPage/>}/><Route path="producers/research-batch" element={<ResearchCampaignPage/>}/><Route path="producers/:id" element={<ProducerDetailPage/>}/><Route path="insights" element={<InsightsPage/>}/><Route path="achievements" element={<AchievementsPage/>}/><Route path="achievements/new" element={<CollectionEditorPage/>}/><Route path="achievements/:id/edit" element={<CollectionEditorPage/>}/><Route path="achievements/:id" element={<AchievementDetailPage/>}/><Route path="tastings" element={<TastingsPage/>}/><Route path="tastings/:id" element={<TastingDetailPage/>}/><Route path="tastings/:id/sheet" element={<TastingSheetPage/>}/><Route path="upload" element={<UploadPage/>}/><Route path="group-scan" element={<GroupScanPage/>}/><Route path="batch-scan" element={<BatchScanPage/>}/><Route path="wines/new" element={<section><h1>Add wine</h1><WineForm/></section>}/><Route path="wines/:id" element={<DetailPage/>}/><Route path="wines/:id/edit" element={<Edit/>}/></Route></Routes></Suspense></BrowserRouter>}
+/**
+ * One address, two records. The cellar is a scope of the Journal rather than a
+ * page of its own - the mobile nav is full at five tabs, and bottles you hold
+ * are the same wines by the same producers - but they are separate queries over
+ * separate tables, so the switch happens at the route rather than inside a page
+ * that would then fetch both.
+ */
+// A bottle out of the cellar is still an ordinary new wine, so it is the same
+// address with the holding named on it rather than a route of its own.
+function NewWineRoute(){
+  const [params]=useSearchParams();
+  return params.get('holding')?<OpenBottlePage/>:<section><h1>Add wine</h1><WineForm/></section>;
+}
+
+function JournalRoute(){
+  const [params]=useSearchParams();
+  return params.get('scope')==='cellar'?<CellarPage/>:<LibraryPage/>;
+}
+
+export default function App(){return <BrowserRouter><Suspense fallback={<RouteFallback/>}><Routes><Route path="/login" element={<LoginPage/>}/><Route element={<RequireSession><Layout/></RequireSession>}><Route index element={<PassportPage/>}/><Route path="passport" element={<Navigate to="/" replace/>}/><Route path="journal" element={<JournalRoute/>}/><Route path="producers" element={<ProducersPage/>}/><Route path="producers/research-batch" element={<ResearchCampaignPage/>}/><Route path="producers/:id" element={<ProducerDetailPage/>}/><Route path="insights" element={<InsightsPage/>}/><Route path="achievements" element={<AchievementsPage/>}/><Route path="achievements/new" element={<CollectionEditorPage/>}/><Route path="achievements/:id/edit" element={<CollectionEditorPage/>}/><Route path="achievements/:id" element={<AchievementDetailPage/>}/><Route path="tastings" element={<TastingsPage/>}/><Route path="tastings/:id" element={<TastingDetailPage/>}/><Route path="tastings/:id/sheet" element={<TastingSheetPage/>}/><Route path="upload" element={<UploadPage/>}/><Route path="group-scan" element={<GroupScanPage/>}/><Route path="batch-scan" element={<BatchScanPage/>}/><Route path="wines/new" element={<NewWineRoute/>}/><Route path="wines/:id" element={<DetailPage/>}/><Route path="wines/:id/edit" element={<Edit/>}/></Route></Routes></Suspense></BrowserRouter>}

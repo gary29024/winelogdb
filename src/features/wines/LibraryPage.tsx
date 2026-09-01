@@ -6,6 +6,7 @@ import { attachWinesToTasting,getTasting } from '../tastings/api';
 import { batchUpdateJournalExperience,listWines,setWineFavorite,type JournalWine } from './api';
 import { WineImage } from './WineImage';
 import { JournalSearchInput } from './JournalSearchInput';
+import { JournalScopeTabs } from './JournalScopeTabs';
 import '../../journalMonths.css';
 import '../../journalBatch.css';
 import '../../journalPagination.css';
@@ -250,7 +251,7 @@ export function LibraryPage(){
         wines, so the journal is where it belongs - and it shares this row
         rather than sitting inside the tablist, which may only contain tabs. */}
     <div className="journal-scope-row">
-      <div className="journal-scope-tabs" role="tablist" aria-label="Journal scope"><button type="button" role="tab" aria-selected={!favoriteOnly} className={!favoriteOnly?'active':''} onClick={()=>update('favorite','')}>All wines</button><button type="button" role="tab" aria-selected={favoriteOnly} className={favoriteOnly?'active':''} onClick={()=>update('favorite','1')}>♥ Favorites</button></div>
+      <JournalScopeTabs scope={favoriteOnly?'favorites':'tasted'}/>
       <Link className="journal-tastings-link" to="/tastings">Browse your tastings <span aria-hidden="true">›</span></Link>
     </div>
     <form className="filters journal-filters" onSubmit={e=>e.preventDefault()}><JournalSearchInput value={params.get('query')??''} resetSeq={searchResetSeq} onCommit={value=>update('query',value)}/><div className="filter-pills"><label className="filter-month">Month<input type="month" aria-label="Drinking month" value={params.get('month')??''} onChange={e=>update('month',e.target.value)}/></label><label>Tasting<input value={params.get('tasting')??''} onChange={e=>update('tasting',e.target.value)} placeholder="Tasting / event"/></label><label>Country<input value={params.get('country')??''} onChange={e=>update('country',e.target.value)} placeholder="Country"/></label><label>Style<select value={params.get('style')??''} onChange={e=>update('style',e.target.value)}><option value="">Style</option>{['red','white','rose','sparkling','dessert','fortified','orange'].map(x=><option key={x}>{x}</option>)}</select></label><label>Score<input type="number" min="0" max="100" value={params.get('rating')??''} onChange={e=>update('rating',e.target.value)} placeholder="Score"/></label><label>Sort<select value={sort} onChange={e=>update('sort',e.target.value)}><option value="newest">Newest drinking date</option><option value="oldest">Oldest drinking date</option><option value="rating">Rating</option><option value="producer">Producer</option><option value="vintage">Vintage</option></select></label></div></form>
