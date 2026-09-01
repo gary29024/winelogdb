@@ -14,13 +14,15 @@ describe('the world benchmark producer and cuvee collection',()=>{
   it('stays one card while expanding explicitly named wines into their own targets',()=>{
     expect(benchmarkCourseDefinition.id).toBe('world-benchmark-producers');
     expect(benchmarkCourseDefinition.title).toBe('World Benchmark Producers & Cuvées');
-    expect(benchmarkCourseDefinition.items).toHaveLength(142);
-    expect(new Set(benchmarkCourseDefinition.items.map(entry=>entry.id)).size).toBe(142);
-    expect(new Set(labels()).size).toBe(142);
+    expect(benchmarkCourseDefinition.items).toHaveLength(143);
+    expect(new Set(benchmarkCourseDefinition.items.map(entry=>entry.id)).size).toBe(143);
+    expect(new Set(labels()).size).toBe(143);
     expect(item('Keller').selector.type).toBe('producer');
     expect(item('E. Guigal — La Turque').selector.type).toBe('cuvee');
     expect(item('Tenuta San Guido — Sassicaia').selector.type).toBe('cuvee');
     expect(item('Penfolds — Yattarna').selector.type).toBe('cuvee');
+    expect(item('Chris Ringland — Dry Grown Barossa Ranges Shiraz').selector.type).toBe('cuvee');
+    expect(item('Château Pavie').selector.type).toBe('cuvee');
   });
 
   it('keeps regional series inside that one card, including finer headings for named Rhone wines',()=>{
@@ -29,6 +31,7 @@ describe('the world benchmark producer and cuvee collection',()=>{
     expect(achievementChecklistHeading(benchmarkCourseDefinition.id,item('E. Guigal — La Turque').id)).toEqual({section:'France',subsection:'Côte-Rôtie'});
     expect(achievementChecklistHeading(benchmarkCourseDefinition.id,item("E. Guigal — Vignes de l'Hospice").id)).toEqual({section:'France',subsection:'Saint-Joseph'});
     expect(achievementChecklistHeading(benchmarkCourseDefinition.id,item('Giuseppe Rinaldi').id)).toEqual({section:'Italy',subsection:'Barolo'});
+    expect(achievementChecklistHeading(benchmarkCourseDefinition.id,item('Chris Ringland — Dry Grown Barossa Ranges Shiraz').id)).toEqual({section:'Australia',subsection:'Barossa Ranges'});
     expect(achievementChecklistHeading(benchmarkCourseDefinition.id,item('Harlan Estate').id)).toEqual({section:'United States',subsection:'Napa Valley'});
     expect(achievementChecklistHeading(benchmarkCourseDefinition.id,item('Domaine Serene').id)).toEqual({section:'United States',subsection:'Oregon Pinot Noir'});
   });
