@@ -183,6 +183,8 @@ const benchmarkGroups:BenchmarkGroup[]=[
   ]},
 ];
 
+// Producer-only source list. benchmarkCourseDefinition upgrades rows to cuvée
+// targets wherever the course explicitly names a particular wine.
 const benchmarkItems:AchievementDefinitionItem[]=benchmarkGroups.flatMap(group=>group.entries.map(entry=>({
   id:`benchmark-${slug(entry.label)}`,label:entry.label,note:entry.note,selector:{type:'producer',producerNames:entry.producerNames}
 })));
