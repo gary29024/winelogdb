@@ -1,6 +1,7 @@
-import { useEffect,useState } from 'react';
+import { useEffect,useMemo,useState } from 'react';
 import { addToCellar,type CellarHolding } from './api';
 import { getProducer,resolveProducer } from '../producers/api';
+import { resolvePlace } from '../../lib/places/resolve';
 
 /** A wine this producer is known to make, however the app came to know it. */
 type KnownWine={name:string;appellation:string|null;style:string|null};
@@ -25,6 +26,7 @@ const STYLES=['red','white','rose','sparkling','dessert','fortified','orange'];
 export function AddToCellarSheet({onClose,onAdded}:{onClose:()=>void;onAdded:(holding:CellarHolding)=>void}){
   const [producer,setProducer]=useState(''),[wineName,setWineName]=useState('');
   const [vintage,setVintage]=useState(''),[appellation,setAppellation]=useState(''),[style,setStyle]=useState('');
+  const [country,setCountry]=useState(''),[region,setRegion]=useState('');
   const [bottles,setBottles]=useState('1'),[size,setSize]=useState('750');
   const [price,setPrice]=useState(''),[currency,setCurrency]=useState(''),[purchasedAt,setPurchasedAt]=useState('');
   const [merchant,setMerchant]=useState(''),[location,setLocation]=useState(''),[notes,setNotes]=useState('');
@@ -67,6 +69,23 @@ export function AddToCellarSheet({onClose,onAdded}:{onClose:()=>void;onAdded:(ho
     return()=>{live=false;window.clearTimeout(timer)};
   },[producer]);
 
+  /**
+   * Where the place tree files this appellation, worked out as you type.
+   *
+   * Pure and local - the same resolvePlace a wine save runs, so what is shown
+   * here is what will be stored, and it costs no request and no token. The tree
+   * carries most of the wine world at region level, but not all of it, and an
+   * appellation it has never heard of would otherwise be filed under no country
+   * at all: invisible to the country filter, and a bottle that would take no
+   * stamp on the Passport when it is eventually opened.
+   */
+  const derived=useMemo(()=>{
+    const named=appellation.trim();
+    if(!named)return null;
+    const place=resolvePlace({country:country.trim()||null,region:region.trim()||null,appellation:named});
+    return {country:place.country,region:place.region,appellation:place.appellation,known:Boolean(place.placeId)};
+  },[appellation,country,region]);
+
   function pick(name:string){
     const entry=choices.find(choice=>choice.name===name);
     if(!entry)return;
@@ -82,7 +101,7 @@ export function AddToCellarSheet({onClose,onAdded}:{onClose:()=>void;onAdded:(ho
         producer:known?.canonicalName&&known.canonicalName.toLowerCase()===producer.trim().toLowerCase()?known.canonicalName:producer.trim(),
         wineName:wineName.trim(),
         vintage:vintage.trim()?Number(vintage.trim()):null,
-        country:null,region:null,appellation:appellation.trim()||null,
+        country:country.trim()||null,region:region.trim()||null,appellation:appellation.trim()||null,
         wineStyle:style||null,
         bottles:Number(bottles)||1,bottleSizeMl:Number(size)||750,
         purchasePrice:price.trim()?Number(price.trim()):null,
@@ -120,8 +139,15 @@ export function AddToCellarSheet({onClose,onAdded}:{onClose:()=>void;onAdded:(ho
       </div>
       <label className="cellar-field">Appellation
         <input value={appellation} onChange={event=>setAppellation(event.target.value)} placeholder="Etna, Barolo, Pauillac…"/>
-        <small>The region and country are filled in from this when you save.</small>
+        <small>The region and country are filled in from this where the place tree knows it.</small>
       </label>
+      {derived&&(derived.known
+        ?<p className="cellar-resolution">✓ Filed under {[derived.appellation,derived.region,derived.country].filter(Boolean).join(' · ')}</p>
+        :<p className="cellar-unresolved">The place tree does not carry “{appellation.trim()}”. Name the country yourself, or these bottles are filed under nowhere — no country filter finds them, and the wine takes no stamp when you open it.</p>)}
+      <div className="cellar-row">
+        <label className="cellar-field">Country<input value={country} onChange={event=>setCountry(event.target.value)} placeholder={derived?.country??'Country'}/></label>
+        <label className="cellar-field">Region<input value={region} onChange={event=>setRegion(event.target.value)} placeholder={derived?.region??'Region'}/></label>
+      </div>
 
       <div className="cellar-row">
         <label className="cellar-field">Bottles *<input inputMode="numeric" value={bottles} onChange={event=>setBottles(event.target.value)}/></label>
