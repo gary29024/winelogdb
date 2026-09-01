@@ -83,7 +83,8 @@ export function AddToCellarSheet({onClose,onAdded}:{onClose:()=>void;onAdded:(ho
     const named=appellation.trim();
     if(!named)return null;
     const place=resolvePlace({country:country.trim()||null,region:region.trim()||null,appellation:named});
-    return {country:place.country,region:place.region,appellation:place.appellation,known:Boolean(place.placeId)};
+    return {country:place.country,region:place.region,appellation:place.appellation,
+      denomination:place.denomination,known:Boolean(place.placeId)};
   },[appellation,country,region]);
 
   function pick(name:string){
@@ -139,10 +140,10 @@ export function AddToCellarSheet({onClose,onAdded}:{onClose:()=>void;onAdded:(ho
       </div>
       <label className="cellar-field">Appellation
         <input value={appellation} onChange={event=>setAppellation(event.target.value)} placeholder="Etna, Barolo, Pauillac…"/>
-        <small>The region and country are filled in from this where the place tree knows it.</small>
+        <small>Or the region — the tree decides which column a name belongs in, so Napa Valley files the same either way.</small>
       </label>
       {derived&&(derived.known
-        ?<p className="cellar-resolution">✓ Filed under {[derived.appellation,derived.region,derived.country].filter(Boolean).join(' · ')}</p>
+        ?<p className="cellar-resolution">✓ Filed under {[derived.appellation,derived.region,derived.country].filter(Boolean).join(' · ')}{derived.denomination&&<small> · recognised as {derived.denomination}, no need to type it</small>}</p>
         :<p className="cellar-unresolved">The place tree does not carry “{appellation.trim()}”. Name the country yourself, or these bottles are filed under nowhere — no country filter finds them, and the wine takes no stamp when you open it.</p>)}
       <div className="cellar-row">
         <label className="cellar-field">Country<input value={country} onChange={event=>setCountry(event.target.value)} placeholder={derived?.country??'Country'}/></label>

@@ -69,3 +69,4 @@
 .bottle-difference-read{font-weight:600;color:var(--ink)}
 .bottle-difference-actions{display:flex;flex-wrap:wrap;gap:var(--s2)}
 .cellar-unresolved{margin:0;padding:var(--s2) var(--s3);border:1px solid var(--warn-line);border-radius:var(--r-sm);background:var(--warn-wash);color:var(--warn);font-size:.82rem;line-height:1.45}
+.cellar-resolution small{font-weight:500;color:var(--good-ink);opacity:.85}

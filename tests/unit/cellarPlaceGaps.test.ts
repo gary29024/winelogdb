@@ -60,3 +60,31 @@ describe('a region the tree has never heard of',()=>{
     expect(entry({appellation:null,country:'Italy',region:'Piemonte'}).region).toBe('Piedmont');
   });
 });
+
+describe('a name that is a region and an appellation at once',()=>{
+  // Napa Valley is an AVA, and it is also the region every sub-AVA sits in.
+  // The tree files it at region tier, so the column it arrived in does not
+  // decide the column it lands in - which is the whole point of resolvePlace.
+  it('files the same whichever box it was typed into',()=>{
+    const asAppellation=entry({appellation:'Napa Valley'});
+    const asRegion=entry({appellation:null,region:'Napa Valley'});
+    expect(asAppellation).toMatchObject({country:'United States',region:'Napa Valley',appellation:null});
+    expect(asRegion).toMatchObject({country:'United States',region:'Napa Valley',appellation:null});
+  });
+
+  it('reads the alias and the spelt-out denomination the same way',()=>{
+    expect(entry({appellation:'Napa'})).toMatchObject({region:'Napa Valley',appellation:null});
+    expect(entry({appellation:'Napa Valley AVA'})).toMatchObject({region:'Napa Valley',appellation:null});
+  });
+
+  it('fills the parent in from a sub-AVA named on its own',()=>{
+    expect(entry({appellation:'Oakville'})).toMatchObject({country:'United States',region:'Napa Valley',appellation:'Oakville'});
+    expect(entry({appellation:'Rutherford'})).toMatchObject({region:'Napa Valley',appellation:'Rutherford'});
+  });
+
+  it('leaves the appellation empty rather than repeating the region in it',()=>{
+    // A wine that names nothing narrower than Napa Valley has no appellation,
+    // and saying "Napa Valley · Napa Valley" would be the region twice.
+    expect(entry({appellation:'Napa Valley'}).appellation).toBeNull();
+  });
+});
