@@ -41,7 +41,8 @@ describe('Group Photo image cache',()=>{
 
     forgetGroupSessionImages('session-2');
     const restored=await loadGroupImageBlob(url);
-    expect(await restored.text()).toBe('network');
+    expect(restored.size).toBe(7);
+    expect(restored.type).toBe('image/jpeg');
     expect(fetchMock).toHaveBeenCalledTimes(1);
   });
 
@@ -53,7 +54,9 @@ describe('Group Photo image cache',()=>{
     const url=groupPreviewImageUrl('session-3');
 
     await expect(loadGroupImageBlob(url)).rejects.toThrow('503');
-    expect(await (await loadGroupImageBlob(url)).text()).toBe('ok');
+    const restored=await loadGroupImageBlob(url);
+    expect(restored.size).toBe(2);
+    expect(restored.type).toBe('image/jpeg');
     expect(fetchMock).toHaveBeenCalledTimes(2);
   });
 });
