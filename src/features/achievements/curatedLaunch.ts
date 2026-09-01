@@ -1,5 +1,6 @@
 import { achievementDefinitions as previousLaunch } from './definitions';
 import { additionalAchievementDefinitions } from './additionalDefinitions';
+import { benchmarkProducerDefinition } from './benchmarkProducerDefinitions';
 import { pfvAndAmericanAvaDefinitions } from './pfvAndAmericanAvas';
 import type { AchievementDefinition,AchievementDefinitionItem } from './types';
 
@@ -46,7 +47,8 @@ function applyCuratedMatchingSemantics(definition:AchievementDefinition):Achieve
 export const achievementDefinitions:AchievementDefinition[]=[
   ...previousLaunch.filter(definition=>!removed.has(definition.id)).map(applyCuratedMatchingSemantics),
   ...additionalAchievementDefinitions,
-  ...pfvAndAmericanAvaDefinitions
+  ...pfvAndAmericanAvaDefinitions,
+  benchmarkProducerDefinition
 ];
 
 // No fixed count: the set grows. What has to hold is that every card is
