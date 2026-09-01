@@ -108,11 +108,12 @@ const namedCuvees:Record<string,NamedCuveeTarget[]>={
 function specificItems(item:AchievementDefinitionItem):AchievementDefinitionItem[]{
   const targets=namedCuvees[item.id];
   if(!targets||item.selector.type!=='producer')return [item];
+  const producerNames=item.selector.producerNames;
   return targets.map(target=>({
     id:`${item.id}-cuvee-${slug(target.label)}`,
     label:item.label===target.label?target.label:`${item.label} — ${target.label}`,
     note:target.note,
-    selector:{type:'cuvee',producerNames:item.selector.producerNames,cuveeNames:target.cuveeNames}
+    selector:{type:'cuvee',producerNames,cuveeNames:target.cuveeNames}
   }));
 }
 
