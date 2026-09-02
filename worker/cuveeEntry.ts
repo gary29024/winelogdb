@@ -328,12 +328,16 @@ app.delete('/api/wines/:id',async c=>{
  * POST is the button, and it is the only thing in the app that spends a search
  * on a drinking window.
  */
-const vintageSubject=(source:{country?:unknown;region?:unknown;appellation?:unknown;vintage?:unknown;wineStyle?:unknown}):VintageSubject=>({
+const vintageSubject=(source:{country?:unknown;region?:unknown;appellation?:unknown;vintage?:unknown;wineStyle?:unknown;classification?:unknown}):VintageSubject=>({
   country:typeof source.country==='string'?source.country:null,
   region:typeof source.region==='string'?source.region:null,
   appellation:typeof source.appellation==='string'?source.appellation:null,
   vintage:Number(source.vintage)||null,
-  wineStyle:typeof source.wineStyle==='string'?source.wineStyle:null
+  wineStyle:typeof source.wineStyle==='string'?source.wineStyle:null,
+  // Carried so the prompt quotes the right usual window: a Chambertin-Clos de
+  // Bèze was being told wines like it are worth drinking for four to twelve
+  // years, which is what Burgundy red says when nobody mentions the grand cru.
+  classification:typeof source.classification==='string'?source.classification:null
 });
 
 app.get('/api/maturity/vintage',async c=>{

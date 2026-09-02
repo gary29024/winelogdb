@@ -13,7 +13,14 @@ export type VintageWindow={
 
 /** What a wine needs to name before a vintage can be looked up for it. */
 export type VintageSubject={country?:string|null;region?:string|null;appellation?:string|null;
-  vintage?:number|null;wineStyle?:string|null};
+  vintage?:number|null;wineStyle?:string|null;
+  /**
+   * The cru tier, used only to work out the baseline the model is told about.
+   * Deliberately absent from the cache key: a growing season is the same one
+   * for the grand cru and the village wine beside it, and the shift has to
+   * stay transferable between them.
+   */
+  classification?:string|null};
 
 const normalized=(value:unknown)=>String(value??'').normalize('NFD').replace(/[̀-ͯ]/g,'')
   .toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();

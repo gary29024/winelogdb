@@ -28,8 +28,10 @@ describe('the request that asks about a vintage',()=>{
   it('still refuses an answer nothing was retrieved for',()=>{
     // The guard was right; it was the request that was wrong. An ungrounded
     // answer is a memory dressed as research, and this feature exists to tell
-    // those apart.
-    expect(handler).toMatch(/if\(!parsed\.sources\.length\)throw/);
+    // those apart. vintageLookupReply covers the behaviour against a real reply;
+    // this only holds the refusal in place.
+    expect(handler).toMatch(/!wasGrounded\(payload,parsed\.sources\)/);
+    expect(handler).toMatch(/Nothing was retrieved for this vintage/);
   });
 });
 
