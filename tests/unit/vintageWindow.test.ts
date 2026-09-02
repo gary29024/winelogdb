@@ -1,5 +1,5 @@
 import { describe,expect,it } from 'vitest';
-import { askableVintage,maturityPair,vintageCacheKey,vintageWindowSchema,windowShift } from '../../src/lib/maturity/vintageWindow';
+import { askableVintage,maturityPair,vintageCacheKey,vintageCell,vintageWindowSchema,windowShift } from '../../src/lib/maturity/vintageWindow';
 
 const barolo={country:'Italy',region:'Piedmont',appellation:'Barolo',vintage:2019,wineStyle:'red',classification:null};
 const found=(overrides:Record<string,unknown>={})=>({country:'Italy',region:'Piedmont',appellation:null,
@@ -41,6 +41,47 @@ describe('which vintage question is being asked',()=>{
   it('keeps the years apart',()=>{
     expect(vintageCacheKey({appellation:'Barolo',vintage:2019,wineStyle:'red'}))
       .not.toBe(vintageCacheKey({appellation:'Barolo',vintage:2020,wineStyle:'red'}));
+  });
+
+  it('gives a named grand cru its own answer',()=>{
+    // A few hectares with its own aspect and drainage, written up by name in
+    // every vintage report. What 2011 did in Chambertin-Clos de Bèze is worth
+    // its own search; what it did in the Charmes down the slope is a different
+    // answer, and a reader of both would notice.
+    const beze={appellation:'Chambertin-Clos de Bèze',vintage:2011,wineStyle:'red'};
+    const charmes={appellation:'Charmes-Chambertin',vintage:2011,wineStyle:'red'};
+    expect(vintageCacheKey(beze)).not.toBe(vintageCacheKey(charmes));
+    expect(vintageCell(beze).scope).toBe('appellation');
+    expect(vintageCell(beze).label).toBe('Chambertin-Clos de Bèze');
+  });
+
+  it('leaves village and premier cru on the region, where nobody would see the difference',()=>{
+    // The exception is the grand cru, not the appellation. A village Gevrey and
+    // a Morey-Saint-Denis share the region's story, and keying them apart would
+    // buy a search per village for one year's weather.
+    const gevrey={appellation:'Gevrey-Chambertin',vintage:2011,wineStyle:'red'};
+    const morey={appellation:'Morey-Saint-Denis',vintage:2011,wineStyle:'red'};
+    expect(vintageCacheKey(gevrey)).toBe(vintageCacheKey(morey));
+    expect(vintageCell(gevrey).scope).toBe('region');
+    expect(vintageCell(gevrey).label).toBe('Burgundy');
+    // and a premier cru named on the label is still that village's wine
+    expect(vintageCacheKey({...gevrey,classification:'premier_cru'})).toBe(vintageCacheKey(gevrey));
+  });
+
+  it('does not read a grand cru out of an appellation that is merely called one',()=>{
+    // "Saint-Émilion Grand Cru" is the name of an appellation, not a cru tier,
+    // and the tier comes from the tree rather than from the words.
+    const cell=vintageCell({appellation:'Saint-Émilion Grand Cru',vintage:2016,wineStyle:'red'});
+    expect(cell.scope).toBe('region');
+  });
+
+  it('keeps a grand cru apart from its own region, and from the other colour',()=>{
+    const beze={appellation:'Chambertin-Clos de Bèze',vintage:2011,wineStyle:'red'};
+    expect(vintageCacheKey(beze)).not.toBe(vintageCacheKey({region:'Burgundy',vintage:2011,wineStyle:'red'}));
+    expect(vintageCacheKey(beze)).not.toBe(vintageCacheKey({...beze,wineStyle:'white'}));
+    expect(vintageCacheKey(beze)).not.toBe(vintageCacheKey({...beze,vintage:2012}));
+    // two producers of the same grand cru are still one question
+    expect(vintageCacheKey(beze)).toBe(vintageCacheKey({...beze,region:'Burgundy',country:'France'}));
   });
 
   it('refuses to ask about a wine with no year, or nowhere',()=>{

@@ -25,17 +25,18 @@ describe('the request that asks about a vintage',()=>{
     expect(handler).toMatch(/groundedGenerationConfig\(/);
   });
 
-  it('asks for a note about the region, not about the bottle that asked',()=>{
-    // The answer is filed per region, year and style: a Chambertin-Clos de Bèze
-    // and a Charmes-Chambertin are one Burgundy 2011, and the second reads the
-    // first's for nothing. What it must not read is three sentences about the
-    // other wine, which is exactly what came back - "This weather profile
-    // endowed 2011 Chambertin-Clos de Bèze with..." on a Charmes-Chambertin.
-    expect(handler).toMatch(/The note is kept for every \$\{style\} of \$\{subject\.vintage\} from \$\{region\}/);
+  it('asks for a note about the cell the answer is filed in',()=>{
+    // A village Gevrey and a premier cru beside it share a Burgundy 2011, so a
+    // note naming one vineyard would be wrong on the other - which is what came
+    // back: "This weather profile endowed 2011 Chambertin-Clos de Bèze with..."
+    // shown on a Charmes-Chambertin. A named grand cru is its own cell, and
+    // there the vineyard is exactly what the note should be about.
+    expect(handler).toMatch(/The note is kept for every \$\{style\} of \$\{subject\.vintage\} from \$\{cell\.label\}/);
     expect(handler).toMatch(/do not name a producer, an estate or a single vineyard in it/);
-    // and the region it names is the one the cache key resolves to, not the
-    // region column, which a bottle edited across France can still be carrying
-    expect(handler).toMatch(/const cell=resolvePlace\(/);
+    expect(handler).toMatch(/write it about that vineyard in that year/);
+    // and the place it names is the cell's, not the region column, which a
+    // bottle edited across France can still be carrying
+    expect(handler).toMatch(/const cell=vintageCell\(subject\)/);
   });
 
   it('still refuses an answer nothing was retrieved for',()=>{

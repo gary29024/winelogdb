@@ -1,7 +1,6 @@
 import { geminiCallTokens,recordAiUsage,type AnalyticsSink } from '../src/lib/usage/aiUsage';
-import { askableVintage,readVintageWindow,vintageWindowSchema,writeVintageWindow,type VintageSubject } from '../src/lib/maturity/vintageWindow';
+import { askableVintage,readVintageWindow,vintageCell,vintageWindowSchema,writeVintageWindow,type VintageCell,type VintageSubject } from '../src/lib/maturity/vintageWindow';
 import { maturityFor } from '../src/lib/maturity/ageing';
-import { resolvePlace } from '../src/lib/places/resolve';
 import { describeResponseSchema,groundedGenerationConfig } from '../src/lib/research/geminiBatch';
 import { postGeminiGenerateContent,type GeminiTransportBindings } from './geminiTransport';
 
@@ -51,10 +50,19 @@ const place=(subject:VintageSubject)=>[subject.appellation,subject.region,subjec
  * the window from scratch would spend a search re-deriving what a lookup
  * already knows.
  */
-function prompt(subject:VintageSubject,baseline:{from:number;to:number}|null,region:string){
+function prompt(subject:VintageSubject,baseline:{from:number;to:number}|null,cell:VintageCell){
   const where=place(subject),style=subject.wineStyle?`${subject.wineStyle} wine`:'wine';
   const usual=baseline?`Wines like this are usually worth drinking between ${baseline.from} and ${baseline.to}.`
     :'No typical window is known for this combination.';
+  /**
+   * Who the note is being written for, which is not always the bottle that
+   * asked. A region cell is read by every wine of that style from that region,
+   * so a note naming one vineyard would be wrong on all the others; a grand cru
+   * cell is read only by that vineyard, and naming it is the point.
+   */
+  const kept=cell.scope==='appellation'
+    ?`The note is kept for every ${style} of ${subject.vintage} from ${cell.label} itself, so write it about that vineyard in that year: what the season did there, and how the wines of ${cell.label} turned out. Name the vineyard and the year; do not name a producer or an estate.`
+    :`The note is kept for every ${style} of ${subject.vintage} from ${cell.label}, not for the bottling named above, so write it about the growing season in ${cell.label}: name the year, and do not name a producer, an estate or a single vineyard in it.`;
   return `You must use the Google Search tool before answering, and every claim must come from a page you actually retrieved in this request. Do not answer from prior knowledge and do not reconstruct a plausible answer. If the search tool is unavailable or returns nothing usable about this vintage, return null for both years and say so in the note.
 
 For ${style} from ${where}, vintage ${subject.vintage}: what is the drinking window, as calendar years?
@@ -63,7 +71,7 @@ ${usual} Your job is the vintage: say where ${subject.vintage} sits against that
 
 drinkFrom and drinkTo are calendar years, not ages, and they are for a wine of the kind described above rather than for the region's longest-lived bottling. Return null for both rather than guessing if no source discusses this vintage in this place.
 
-The note is kept for every ${style} of ${subject.vintage} from ${region}, not for the bottling named above, so write it about the growing season in ${region}: name the year, and do not name a producer, an estate or a single vineyard in it. Keep it to three sentences.`;
+${kept} Keep it to three sentences.`;
 }
 
 /**
@@ -145,7 +153,7 @@ type Attempt={model:string;billed:Billed|null}&
  * meter either way.
  */
 async function ask(env:VintageWindowBindings,subject:VintageSubject,baseline:{from:number;to:number}|null,
-  region:string,model:string,requestId:string,timeoutMs:number):Promise<Attempt>{
+  cell:VintageCell,model:string,requestId:string,timeoutMs:number):Promise<Attempt>{
   const vintage=subject.vintage as number;
   const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),timeoutMs);
   let billed:Billed|null=null;
@@ -162,7 +170,7 @@ async function ask(env:VintageWindowBindings,subject:VintageSubject,baseline:{fr
      * the request tagging with it.
      */
     const {response}=await postGeminiGenerateContent(env,model,JSON.stringify({
-      contents:[{role:'user',parts:[{text:`${prompt(subject,baseline,region)}\n\n${describeResponseSchema(responseSchema)}`}]}],
+      contents:[{role:'user',parts:[{text:`${prompt(subject,baseline,cell)}\n\n${describeResponseSchema(responseSchema)}`}]}],
       tools:[{google_search:{}}],
       generationConfig:groundedGenerationConfig(2048)
     }),controller.signal,{kind:'vintage_window',vintage,requestId,model});
@@ -221,22 +229,21 @@ export async function researchVintageWindow(env:VintageWindowBindings,owner:stri
   const table=maturityFor(subject),vintage=subject.vintage as number;
   const baseline=table?{from:vintage+table.window.from,to:vintage+table.window.to}:null;
   /**
-   * The cell the answer is filed under, which is where the note has to be about.
+   * The cell the answer is filed under, which is what the note has to be about.
    *
-   * A Chambertin-Clos de Bèze and a Charmes-Chambertin are one Burgundy 2011,
-   * and the second reads the first's answer for nothing - which is the whole
-   * design. What it must not read is three sentences about the other wine, so
-   * the prompt is told which place the note is being kept for.
+   * A village Gevrey and a premier cru beside it are one Burgundy 2011 and
+   * share an answer, so a note naming one vineyard would be wrong on the other.
+   * A named grand cru is its own cell and its own answer, so there the vineyard
+   * is exactly what the note should be about.
    */
-  const cell=resolvePlace({country:subject.country??null,region:subject.region??null,appellation:subject.appellation??null});
-  const region=cell.region??cell.country??subject.region??subject.country??place(subject);
+  const cell=vintageCell(subject);
 
-  let attempt=await ask(env,subject,baseline,region,MODEL,requestId,TIMEOUT_MS);
+  let attempt=await ask(env,subject,baseline,cell,MODEL,requestId,TIMEOUT_MS);
   if(!attempt.ok){
     await meter(env,owner,requestId,attempt,0);
     console.warn(JSON.stringify({event:'vintage-window-escalation',requestId,vintage,
       fromModel:MODEL,toModel:ESCALATION_MODEL,reason:attempt.reason,error:attempt.error.message}));
-    const escalated=await ask(env,subject,baseline,region,ESCALATION_MODEL,requestId,ESCALATION_TIMEOUT_MS);
+    const escalated=await ask(env,subject,baseline,cell,ESCALATION_MODEL,requestId,ESCALATION_TIMEOUT_MS);
     // Both models refused, so the reader gets the stronger one's reason: it is
     // the more informative of the two and the one that was asked last.
     if(!escalated.ok){await meter(env,owner,requestId,escalated,0);throw escalated.error}
