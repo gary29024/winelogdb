@@ -28,6 +28,7 @@ export function CellarScope(){
   const [total,setTotal]=useState(0),[bottles,setBottles]=useState(0);
   const [loading,setLoading]=useState(true),[error,setError]=useState('');
   const [adding,setAdding]=useState(false),[busyId,setBusyId]=useState('');
+  const [editing,setEditing]=useState<CellarHolding|null>(null);
   const [reloadSeq,setReloadSeq]=useState(0);
 
   const offset=Math.max(Number(params.get('offset'))||0,0);
@@ -121,6 +122,7 @@ export function CellarScope(){
           <div className="cellar-count-actions">
             <button type="button" className="quiet" disabled={busyId===holding.id||holding.bottles<=1} onClick={()=>void adjust(holding,-1)} aria-label={`One fewer bottle of ${holding.wineName}`}>−</button>
             <button type="button" className="quiet" disabled={busyId===holding.id} onClick={()=>void adjust(holding,1)} aria-label={`One more bottle of ${holding.wineName}`}>+</button>
+            <button type="button" className="quiet" disabled={busyId===holding.id} onClick={()=>setEditing(holding)}>Edit</button>
             <button type="button" className="quiet cellar-drop" disabled={busyId===holding.id} onClick={()=>void drop(holding)}>Remove</button>
           </div>
         </div>
@@ -133,5 +135,6 @@ export function CellarScope(){
     </nav>}
 
     {adding&&<AddToCellarSheet onClose={()=>setAdding(false)} onAdded={()=>{setAdding(false);setReloadSeq(seq=>seq+1)}}/>}
+    {editing&&<AddToCellarSheet holding={editing} onClose={()=>setEditing(null)} onAdded={()=>{setEditing(null);setReloadSeq(seq=>seq+1)}}/>}
   </>;
 }

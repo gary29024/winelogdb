@@ -22,16 +22,19 @@
 .cellar-empty p{max-width:46ch;margin-inline:auto}
 
 .cellar-sheet-backdrop{position:fixed;inset:0;z-index:60;display:grid;place-items:center;padding:var(--s4);background:#10182d70}
-.cellar-sheet{width:min(34rem,100%);max-height:88vh;overflow-y:auto;display:grid;gap:var(--s3);padding:var(--s5);border-radius:var(--r-lg);background:var(--paper);color:var(--ink)}
+/* Tighter than the page forms on purpose: this is a sheet over a list, and
+   every row of gap is a row of scrolling on a phone. */
+.cellar-sheet{width:min(34rem,100%);max-height:88vh;overflow-y:auto;display:grid;gap:var(--s2);padding:var(--s4);border-radius:var(--r-lg);background:var(--paper);color:var(--ink)}
 .cellar-sheet-head{display:flex;align-items:flex-start;justify-content:space-between;gap:var(--s3)}
 .cellar-sheet-head h2{margin:0}
 .cellar-sheet-close{border:0;background:none;color:var(--ink-5);font-size:1.4rem;line-height:1;padding:0 var(--s2)}
 .cellar-sheet-close:hover:not(:disabled){background:none;color:var(--ink)}
 .cellar-sheet-note{margin:0;color:var(--muted);font-size:.85rem}
 .cellar-field{display:grid;gap:var(--s1);font-size:.85rem;color:var(--ink-4)}
-.cellar-field input,.cellar-field select,.cellar-field textarea{padding:var(--s3);border:1px solid var(--line);border-radius:var(--r-sm);background:var(--paper);color:var(--ink);font:inherit}
+.cellar-field input,.cellar-field select,.cellar-field textarea{min-width:0;padding:var(--s2) var(--s3);border:1px solid var(--line);border-radius:var(--r-sm);background:var(--paper);color:var(--ink);font:inherit}
 .cellar-field small{color:var(--muted)}
-.cellar-row{display:grid;grid-template-columns:1fr 1fr;gap:var(--s3)}
+.cellar-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:var(--s2)}
+.cellar-row.stack-narrow{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
 .cellar-resolution{margin:0;padding:var(--s2) var(--s3);border:1px solid var(--good-line);border-radius:var(--r-sm);background:var(--good-wash);color:var(--good-ink);font-size:.85rem;font-weight:600}
 .cellar-hint{margin:0;color:var(--muted);font-size:.8rem}
 .cellar-error{margin:0;color:var(--bad-ink);font-size:.85rem}
@@ -47,7 +50,7 @@
 .detail-cellar-open{color:var(--wine-ink);font-weight:600;font-size:.85rem}
 
 @media (max-width:520px){
-  .cellar-row{grid-template-columns:1fr}
+  .cellar-row.stack-narrow{grid-template-columns:minmax(0,1fr)}
   .cellar-card-actions{flex-direction:column;align-items:stretch}
   .cellar-count-actions{justify-content:space-between}
 }
@@ -72,3 +75,5 @@
 .cellar-resolution small{font-weight:500;color:var(--good-ink);opacity:.85}
 .cellar-resolution.checking{border-color:var(--line);background:var(--ground);color:var(--ink-5);font-weight:500}
 .cellar-new-producer{margin:0;padding:var(--s2) var(--s3);border:1px solid var(--line);border-radius:var(--r-sm);background:var(--ground);color:var(--ink-5);font-size:.82rem;line-height:1.45}
+.open-bottle-head{display:flex;align-items:baseline;justify-content:space-between;gap:var(--s3)}
+.open-bottle-back{color:var(--ink-5);font-size:.85rem;font-weight:600}

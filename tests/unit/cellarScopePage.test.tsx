@@ -66,3 +66,24 @@ describe('the cellar scope of the Journal',()=>{
     expect(screen.getByRole('tab',{name:'Tasted'}).getAttribute('aria-selected')).toBe('false');
   });
 });
+
+describe('getting to the cellar, and back out of it',()=>{
+  beforeEach(()=>{cleanup();vi.unstubAllGlobals()});
+
+  it('warms the cellar page on the press rather than on arrival',async()=>{
+    // The chunk used to be fetched by the tap that needed it, queued behind
+    // every wine photo the journal still had in flight - which is exactly when
+    // someone reaches for another scope.
+    const source=await import('node:fs').then(fs=>fs.readFileSync('src/features/wines/JournalScopeTabs.tsx','utf8'));
+    expect(source).toMatch(/onPointerDown=\{warm\(value\)\}/);
+    expect(source).toMatch(/import\('\.\.\/cellar\/CellarPage'\)/);
+  });
+
+  it('lets you leave the open-bottle form without taking the bottle',async()=>{
+    // Nothing is decremented on the way in, so backing out must cost nothing -
+    // and there has to be a way to back out.
+    const source=await import('node:fs').then(fs=>fs.readFileSync('src/features/cellar/OpenBottlePage.tsx','utf8'));
+    expect(source).toMatch(/to="\/journal\?scope=cellar"/);
+    expect(source).toMatch(/Cancel/);
+  });
+});
