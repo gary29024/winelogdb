@@ -30,7 +30,7 @@ describe('the request that asks about a vintage',()=>{
     // answer is a memory dressed as research, and this feature exists to tell
     // those apart. vintageLookupReply covers the behaviour against a real reply;
     // this only holds the refusal in place.
-    expect(handler).toMatch(/!wasGrounded\(payload,parsed\.sources\)/);
+    expect(handler).toMatch(/!wasGrounded\(payload,parsed\.data\.sources\)/);
     expect(handler).toMatch(/Nothing was retrieved for this vintage/);
   });
 });
@@ -48,11 +48,25 @@ describe('how the request reaches Gemini',()=>{
     expect(code).not.toMatch(/generativelanguage\.googleapis\.com/);
   });
 
-  it('asks the model the grounded paths ask',()=>{
-    // Whether it searches at all is the only thing that matters here: an
-    // ungrounded answer is thrown away, so a model that grounds unreliably
-    // spends the call and returns nothing.
-    expect(handler).toMatch(/const MODEL='gemini-3\.7-flash'/);
+  it('asks the cheap model, and keeps the strong one for when it is needed',()=>{
+    // The work is retrieval, not reasoning, and flash-lite retrieves. What
+    // argued against it was whether it would search at all - an ungrounded
+    // answer is thrown away - and that is answered by asking the stronger model
+    // on the calls where it did not, rather than by paying for it every time.
+    // vintageModelEscalation covers the behaviour; this holds the pair in place.
+    expect(handler).toMatch(/const MODEL='gemini-3\.1-flash-lite'/);
+    expect(handler).toMatch(/const ESCALATION_MODEL='gemini-3\.7-flash'/);
+  });
+
+  it('bounds the pair, and gives the thinking model the longer half',()=>{
+    // A person is waiting on a button, so the two attempts share a budget
+    // rather than each taking the old one. Flash-lite does not think before it
+    // writes and needs less of it than the model it escalates to.
+    const code=handler.replace(/\/\*[\s\S]*?\*\//g,'').replace(/^\s*\/\/.*$/gm,'');
+    const primary=Number(code.match(/const TIMEOUT_MS=([\d_]+)/)![1].replace(/_/g,''));
+    const escalation=Number(code.match(/const ESCALATION_TIMEOUT_MS=([\d_]+)/)![1].replace(/_/g,''));
+    expect(primary).toBeLessThan(escalation);
+    expect(primary+escalation).toBeLessThanOrEqual(90_000);
   });
 
   it('surfaces what the provider said when it refuses',()=>{

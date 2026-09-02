@@ -7,19 +7,38 @@ import { postGeminiGenerateContent,type GeminiTransportBindings } from './gemini
 export type VintageWindowBindings=GeminiTransportBindings&{DB:D1Database;AI_USAGE?:AnalyticsSink};
 
 /**
- * The model the grounded paths use, not the cheap one.
+ * The cheap model first, the grounded paths' model only when it has to be.
  *
- * The question is narrow and the answer is four fields, which argued for
- * flash-lite - but what matters here is whether the model actually searches,
- * and grounding is what producer and wine research chose 3.7 Flash for. An
- * answer that arrives without sources is rejected outright by this handler, so
- * a model that grounds unreliably does not save money: it spends a call and
- * returns nothing.
+ * The question is narrow and the work is retrieval, not reasoning: the search
+ * tool fetches the pages and the model reads three of them and returns two
+ * integers and three sentences. Flash-lite is priced at a third of 3.7 Flash
+ * per token and does not spend thinking tokens on top, which on a call this
+ * shape is five to eight times cheaper.
+ *
+ * What argued against it was never the wine knowledge - it was whether it
+ * would actually search, because an answer with no grounding receipt is
+ * rejected outright below and a model that grounds unreliably spends the call
+ * and returns nothing. That is a question with an answer rather than a reason
+ * to pay: ask the cheap one, and where what comes back is not a grounded,
+ * well-shaped answer, ask the expensive one once. The common case pays
+ * flash-lite; 3.7 Flash is paid for only on the calls that would otherwise
+ * have failed and returned nothing at all.
+ *
+ * Both attempts are metered under the one run, so the spend panel shows what
+ * the pair cost and how often the second one is needed. If it never fires, the
+ * escalation can go.
  */
-const MODEL='gemini-3.7-flash';
-// Grounded calls carry a search round trip before the model writes anything,
-// so the budget is the research paths' rather than a plain call's.
-const TIMEOUT_MS=45_000;
+const MODEL='gemini-3.1-flash-lite';
+const ESCALATION_MODEL='gemini-3.7-flash';
+/**
+ * Grounded calls carry a search round trip before the model writes anything,
+ * so the budget is the research paths' rather than a plain call's - but split
+ * across the two attempts rather than doubled, because a person is waiting on
+ * a button. Flash-lite does not think before it writes and gets the shorter
+ * half; the escalation, which does, gets the longer one.
+ */
+const TIMEOUT_MS=30_000;
+const ESCALATION_TIMEOUT_MS=45_000;
 
 const place=(subject:VintageSubject)=>[subject.appellation,subject.region,subject.country].filter(Boolean).join(', ');
 
@@ -108,12 +127,25 @@ const wasGrounded=(payload:GeminiResponse,sources:Array<{url:string}>)=>
   Boolean(payload.candidates?.[0]?.groundingMetadata?.groundingChunks?.length)
   ||sources.some(source=>source.url.includes(GROUNDING_HOST));
 
-export async function researchVintageWindow(env:VintageWindowBindings,owner:string,subject:VintageSubject,requestId:string){
-  if(!askableVintage(subject))throw new Error('A vintage and a place are needed before a year can be looked up');
-  const table=maturityFor(subject),vintage=subject.vintage as number;
-  const baseline=table?{from:vintage+table.window.from,to:vintage+table.window.to}:null;
-  const controller=new AbortController();
-  const timer=setTimeout(()=>controller.abort(),TIMEOUT_MS);
+type Answer=ReturnType<typeof vintageWindowSchema.parse>;
+/** What one call billed, whether or not its answer turned out to be usable. */
+type Billed={searchQueries:number;promptTokens:number;outputTokens:number};
+type Attempt={model:string;billed:Billed|null}&
+  ({ok:true;answer:Answer}|{ok:false;reason:string;error:Error});
+
+/**
+ * One model's go at the question.
+ *
+ * Every way this can fail returns rather than throws, because a failure here is
+ * a reason to ask the other model rather than the end of the request - and
+ * because the call still billed on its way to failing, which the caller has to
+ * meter either way.
+ */
+async function ask(env:VintageWindowBindings,subject:VintageSubject,baseline:{from:number;to:number}|null,
+  model:string,requestId:string,timeoutMs:number):Promise<Attempt>{
+  const vintage=subject.vintage as number;
+  const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),timeoutMs);
+  let billed:Billed|null=null;
   try{
     /**
      * Through the same transport as every other call in the app.
@@ -126,33 +158,79 @@ export async function researchVintageWindow(env:VintageWindowBindings,owner:stri
      * configured, and carries the authorization, the payload-logging rule and
      * the request tagging with it.
      */
-    const {response}=await postGeminiGenerateContent(env,MODEL,JSON.stringify({
+    const {response}=await postGeminiGenerateContent(env,model,JSON.stringify({
       contents:[{role:'user',parts:[{text:`${prompt(subject,baseline)}\n\n${describeResponseSchema(responseSchema)}`}]}],
       tools:[{google_search:{}}],
       generationConfig:groundedGenerationConfig(2048)
-    }),controller.signal,{kind:'vintage_window',vintage,requestId});
+    }),controller.signal,{kind:'vintage_window',vintage,requestId,model});
     if(!response.ok){
       const detail=(await response.text().catch(()=>'')).slice(0,400);
-      throw new Error(`Vintage lookup failed (${response.status})${detail?`: ${detail}`:''}`);
+      return {model,billed,ok:false,reason:`http-${response.status}`,
+        error:new Error(`Vintage lookup failed (${response.status})${detail?`: ${detail}`:''}`)};
     }
     const payload=await response.json() as GeminiResponse;
-    const text=payload.candidates?.[0]?.content?.parts?.map(part=>part.text??'').join('')??'';
-    if(!text)throw new Error('The vintage lookup came back empty');
-    const answer=parseJson(text) as {sources?:unknown};
-    const parsed=vintageWindowSchema.parse({...answer,sources:groundedSources(payload,answer.sources)});
-    // An answer nothing was retrieved for is a memory, not research, and this
-    // whole feature exists so the two are told apart.
-    if(!parsed.sources.length||!wasGrounded(payload,parsed.sources))
-      throw new Error('Nothing was retrieved for this vintage, so there is nothing to show');
     const tokens=geminiCallTokens(payload.usageMetadata);
-    await recordAiUsage(env,owner,{kind:'vintage_window',runId:requestId,model:MODEL,requests:1,units:1,
+    billed={
       // The searches the model actually ran, not an assumed one. Grounding is
       // billed per query and it is most of what this costs, so guessing here
       // would misprice the panel that exists to say what it cost.
       searchQueries:payload.candidates?.[0]?.groundingMetadata?.webSearchQueries?.length??1,
-      promptTokens:tokens.promptTokens,outputTokens:tokens.outputTokens});
-    return writeVintageWindow(env.DB,owner,subject,parsed,baseline,MODEL);
+      promptTokens:tokens.promptTokens,outputTokens:tokens.outputTokens
+    };
+    const text=payload.candidates?.[0]?.content?.parts?.map(part=>part.text??'').join('')??'';
+    if(!text)return {model,billed,ok:false,reason:'empty',error:new Error('The vintage lookup came back empty')};
+    let answer:{sources?:unknown};
+    // A weaker model garbling the JSON is the risk that comes with a weaker
+    // model, so it is a reason to escalate rather than a 500.
+    try{answer=parseJson(text) as {sources?:unknown}}
+    catch{return {model,billed,ok:false,reason:'unparseable',error:new Error('The vintage lookup did not come back as JSON')}}
+    const parsed=vintageWindowSchema.safeParse({...answer,sources:groundedSources(payload,answer.sources)});
+    if(!parsed.success)return {model,billed,ok:false,reason:'invalid-shape',
+      error:new Error(`The vintage lookup came back in the wrong shape: ${parsed.error.issues.map(issue=>issue.message).join('; ')}`)};
+    // An answer nothing was retrieved for is a memory, not research, and this
+    // whole feature exists so the two are told apart.
+    if(!parsed.data.sources.length||!wasGrounded(payload,parsed.data.sources))
+      return {model,billed,ok:false,reason:'ungrounded',
+        error:new Error('Nothing was retrieved for this vintage, so there is nothing to show')};
+    return {model,billed,ok:true,answer:parsed.data};
+  }catch(e){
+    return {model,billed,ok:false,reason:controller.signal.aborted?'timeout':'transport',
+      error:e instanceof Error?e:new Error('The vintage lookup could not be made')};
   }finally{clearTimeout(timer)}
+}
+
+/**
+ * What the call cost, recorded whether or not its answer was kept.
+ *
+ * A rejected answer is not a free one: the tokens were spent and the search
+ * was run. Leaving those out is what would make the cheap-first pairing look
+ * cheaper than it is, which is the one thing this panel must not do.
+ */
+const meter=(env:VintageWindowBindings,owner:string,requestId:string,attempt:Attempt,units:number)=>
+  attempt.billed
+    ?recordAiUsage(env,owner,{kind:'vintage_window',runId:requestId,model:attempt.model,requests:1,units,
+      searchQueries:attempt.billed.searchQueries,
+      promptTokens:attempt.billed.promptTokens,outputTokens:attempt.billed.outputTokens})
+    :Promise.resolve();
+
+export async function researchVintageWindow(env:VintageWindowBindings,owner:string,subject:VintageSubject,requestId:string){
+  if(!askableVintage(subject))throw new Error('A vintage and a place are needed before a year can be looked up');
+  const table=maturityFor(subject),vintage=subject.vintage as number;
+  const baseline=table?{from:vintage+table.window.from,to:vintage+table.window.to}:null;
+
+  let attempt=await ask(env,subject,baseline,MODEL,requestId,TIMEOUT_MS);
+  if(!attempt.ok){
+    await meter(env,owner,requestId,attempt,0);
+    console.warn(JSON.stringify({event:'vintage-window-escalation',requestId,vintage,
+      fromModel:MODEL,toModel:ESCALATION_MODEL,reason:attempt.reason,error:attempt.error.message}));
+    const escalated=await ask(env,subject,baseline,ESCALATION_MODEL,requestId,ESCALATION_TIMEOUT_MS);
+    // Both models refused, so the reader gets the stronger one's reason: it is
+    // the more informative of the two and the one that was asked last.
+    if(!escalated.ok){await meter(env,owner,requestId,escalated,0);throw escalated.error}
+    attempt=escalated;
+  }
+  await meter(env,owner,requestId,attempt,1);
+  return writeVintageWindow(env.DB,owner,subject,attempt.answer,baseline,attempt.model);
 }
 
 export const cachedVintageWindow=(env:VintageWindowBindings,owner:string,subject:VintageSubject)=>
