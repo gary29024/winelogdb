@@ -2,6 +2,7 @@ import { geminiCallTokens,recordAiUsage,type AnalyticsSink } from '../src/lib/us
 import { askableVintage,readVintageWindow,vintageCell,vintageWindowSchema,writeVintageWindow,type VintageCell,type VintageSubject } from '../src/lib/maturity/vintageWindow';
 import { maturityFor } from '../src/lib/maturity/ageing';
 import { describeResponseSchema,groundedGenerationConfig } from '../src/lib/research/geminiBatch';
+import { firstBalancedJsonObject } from '../src/lib/producers/structuredJson';
 import { postGeminiGenerateContent,type GeminiTransportBindings } from './geminiTransport';
 
 export type VintageWindowBindings=GeminiTransportBindings&{DB:D1Database;AI_USAGE?:AnalyticsSink};
@@ -39,6 +40,19 @@ const ESCALATION_MODEL='gemini-3.7-flash';
  */
 const TIMEOUT_MS=30_000;
 const ESCALATION_TIMEOUT_MS=45_000;
+/**
+ * Room to answer in, which is not the same as room to write in.
+ *
+ * Thinking tokens count against this cap as well as billing as output, so a
+ * model that thinks before it writes can spend the whole budget on thoughts and
+ * return a sentence cut off mid-object - which arrives here as a reply that is
+ * not JSON. The answer itself is four fields and three sentences and never
+ * needed two thousand; the escalation gets the larger share because it is the
+ * one that thinks. Only tokens actually produced are billed, so a cap that is
+ * never reached costs nothing.
+ */
+const OUTPUT_TOKENS=4096;
+const ESCALATION_OUTPUT_TOKENS=8192;
 
 const place=(subject:VintageSubject)=>[subject.appellation,subject.region,subject.country].filter(Boolean).join(', ');
 
@@ -97,7 +111,28 @@ type GeminiResponse={
   usageMetadata?:{promptTokenCount?:number;candidatesTokenCount?:number;thoughtsTokenCount?:number};
 };
 
-const parseJson=(raw:string)=>JSON.parse(raw.replace(/^```(?:json)?\s*|\s*```$/g,''));
+/**
+ * The JSON out of a grounded reply, wherever in it the model put it.
+ *
+ * This used to require the whole reply to be JSON, stripping a fence only if it
+ * sat at both ends - and a grounded model does not oblige. It writes a
+ * sentence first, or appends its citations after the object, or fences it
+ * mid-reply, and every one of those came back as "did not come back as JSON"
+ * with a perfectly good answer inside it.
+ *
+ * Three attempts, cheapest first: the whole thing, a fenced block anywhere in
+ * it, then the first balanced object - the same scan the producer catalogue
+ * uses for the same reason, reused rather than written twice.
+ */
+function parseJson(raw:string){
+  const text=raw.replace(/^\uFEFF/,'').trim();
+  const fenced=text.match(/```(?:json)?\s*([\s\S]*?)```/i)?.[1]?.trim();
+  for(const candidate of [text,fenced,firstBalancedJsonObject(text)]){
+    if(!candidate)continue;
+    try{return JSON.parse(candidate) as unknown}catch{/* try the next shape */}
+  }
+  throw new Error('No JSON object in the reply');
+}
 
 /** A Vertex grounding redirect: the search tool's own receipt for a page. */
 const GROUNDING_HOST='vertexaisearch.cloud.google.com';
@@ -163,7 +198,7 @@ type Attempt={model:string;billed:Billed|null;detail?:Detail}&
  * meter either way.
  */
 async function ask(env:VintageWindowBindings,subject:VintageSubject,baseline:{from:number;to:number}|null,
-  cell:VintageCell,model:string,requestId:string,timeoutMs:number):Promise<Attempt>{
+  cell:VintageCell,model:string,requestId:string,timeoutMs:number,outputTokens:number):Promise<Attempt>{
   const vintage=subject.vintage as number;
   const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),timeoutMs);
   let billed:Billed|null=null;
@@ -182,7 +217,7 @@ async function ask(env:VintageWindowBindings,subject:VintageSubject,baseline:{fr
     const {response}=await postGeminiGenerateContent(env,model,JSON.stringify({
       contents:[{role:'user',parts:[{text:`${prompt(subject,baseline,cell)}\n\n${describeResponseSchema(responseSchema)}`}]}],
       tools:[{google_search:{}}],
-      generationConfig:groundedGenerationConfig(2048)
+      generationConfig:groundedGenerationConfig(outputTokens)
     }),controller.signal,{kind:'vintage_window',vintage,requestId,model});
     if(!response.ok){
       const detail=(await response.text().catch(()=>'')).slice(0,400);
@@ -208,7 +243,14 @@ async function ask(env:VintageWindowBindings,subject:VintageSubject,baseline:{fr
     // A weaker model garbling the JSON is the risk that comes with a weaker
     // model, so it is a reason to escalate rather than a 500.
     try{answer=parseJson(text) as {sources?:unknown}}
-    catch{return {model,billed,detail,ok:false,reason:'unparseable',error:new Error('The vintage lookup did not come back as JSON')}}
+    catch{
+      // Told apart because they need different answers: a truncated reply wants
+      // more room, and an unreadable one wants a different model.
+      const cut=candidate?.finishReason==='MAX_TOKENS';
+      return {model,billed,detail,ok:false,reason:cut?'truncated':'unparseable',
+        error:new Error(cut?'The vintage lookup ran out of room before it finished answering'
+          :'The vintage lookup did not come back as JSON')};
+    }
     const parsed=vintageWindowSchema.safeParse({...answer,sources:groundedSources(payload,answer.sources)});
     if(!parsed.success)return {model,billed,detail,ok:false,reason:'invalid-shape',
       error:new Error(`The vintage lookup came back in the wrong shape: ${parsed.error.issues.map(issue=>issue.message).join('; ')}`)};
@@ -258,7 +300,7 @@ export async function researchVintageWindow(env:VintageWindowBindings,owner:stri
    */
   const cell=vintageCell(subject);
 
-  let attempt=await ask(env,subject,baseline,cell,MODEL,requestId,TIMEOUT_MS);
+  let attempt=await ask(env,subject,baseline,cell,MODEL,requestId,TIMEOUT_MS,OUTPUT_TOKENS);
   if(!attempt.ok){
     await meter(env,owner,requestId,attempt,0);
     // Everything needed to tell why, in the Worker log rather than in the
@@ -267,7 +309,7 @@ export async function researchVintageWindow(env:VintageWindowBindings,owner:stri
     // outside D1 in the meantime.
     console.warn(JSON.stringify({event:'vintage-window-escalation',requestId,vintage,cell:cell.label,
       fromModel:MODEL,toModel:ESCALATION_MODEL,reason:attempt.reason,error:attempt.error.message,...attempt.detail}));
-    const escalated=await ask(env,subject,baseline,cell,ESCALATION_MODEL,requestId,ESCALATION_TIMEOUT_MS);
+    const escalated=await ask(env,subject,baseline,cell,ESCALATION_MODEL,requestId,ESCALATION_TIMEOUT_MS,ESCALATION_OUTPUT_TOKENS);
     // Both models refused, so the reader gets the stronger one's reason: it is
     // the more informative of the two and the one that was asked last.
     if(!escalated.ok){
