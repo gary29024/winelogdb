@@ -170,10 +170,21 @@ export function marginalCostUsd(totals:UsageTotals,rates:AiRates,model?:string,c
   return totals.searchQueries*groundingRateOn(rates,context.on)/1000+tokenCostUsd(totals,rates,model,context);
 }
 
-/** What a whole month costs, with the free search allowance applied once. */
+/**
+ * What a month's grounding costs, with the free allowance applied once.
+ *
+ * Separate from the tokens because the allowance is a property of the month
+ * rather than of any one call: a month's searches have to be totalled before
+ * any of them can be known to be billable. The tokens beside them are summed
+ * per model and tier instead, which is why the caller adds the two.
+ */
+export function monthGroundingUsd(searchQueries:number,rates:AiRates,on?:string){
+  return Math.max(0,searchQueries-rates.groundingFreePerMonth)*groundingRateOn(rates,on)/1000;
+}
+
+/** What a whole month costs, priced at one fallback rate for every token. */
 export function monthCostUsd(totals:UsageTotals,rates:AiRates,on?:string){
-  const billable=Math.max(0,totals.searchQueries-rates.groundingFreePerMonth);
-  return billable*groundingRateOn(rates,on)/1000+tokenCostUsd(totals,rates,undefined,{on});
+  return monthGroundingUsd(totals.searchQueries,rates,on)+tokenCostUsd(totals,rates,undefined,{on});
 }
 
 export const toLocal=(usd:number,rates:AiRates)=>usd*rates.fxPerUsd;

@@ -8,7 +8,7 @@ import { ACHIEVEMENT_DEFINITION_VERSION,createCustomAchievementCollection,delete
 import { JOURNEY_PAYLOAD_VERSION,loadJourneySummary } from './journeyHandler';
 import { etagMatches,revisionETag } from '../src/lib/db/ownerRevision';
 
-type Bindings={DB:D1Database;WINE_IMAGES:R2Bucket;ASSETS:Fetcher;GEMINI_API_KEY:string;AUTH_SECRET:string;APP_PASSWORD:string;APP_URL:string;MAX_FILE_BYTES?:string;MAX_BATCH_FILES?:string};
+type Bindings={DB:D1Database;WINE_IMAGES:R2Bucket;ASSETS:Fetcher;GEMINI_API_KEY?:string;AUTH_SECRET:string;APP_PASSWORD:string;APP_URL:string;MAX_FILE_BYTES?:string;MAX_BATCH_FILES?:string};
 type AppEnv={Bindings:Bindings};
 const app=new Hono<AppEnv>();
 

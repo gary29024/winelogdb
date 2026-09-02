@@ -13,7 +13,7 @@ import { auditTechnicalContradictions,technicalContradictionFailureMessage } fro
 import { updateWineResearchRun } from './backgroundJobs';
 import { recordAiUsage,type AnalyticsSink } from '../usage/aiUsage';
 
-type Env={DB:D1Database;GEMINI_API_KEY:string;RESEARCH_QUEUE:Queue<unknown>;AI_USAGE?:AnalyticsSink};
+type Env={DB:D1Database;GEMINI_API_KEY?:string;RESEARCH_QUEUE:Queue<unknown>;AI_USAGE?:AnalyticsSink};
 type WineRow={producer:string;producer_id:string|null;cuvee_id:string|null;wine_name:string;vintage:number|null;country:string|null;region:string|null;appellation:string|null;grapes_json:string;grape_blend_json:string};
 type ResearchRow={deep_search_json:string};
 const PRIMARY_MODEL='gemini-3.7-flash';

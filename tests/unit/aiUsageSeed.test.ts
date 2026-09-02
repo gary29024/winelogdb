@@ -31,10 +31,10 @@ function world(jobs:Job[],firstEvent:string|null=null){
       return undefined;
     }
     if(/^INSERT INTO ai_usage_monthly/.test(sql)){
-      const [,month,kind,requests,searches]=args as [string,string,string,number,number];
-      const row=monthly.find(item=>item.month===month&&item.kind===kind);
+      const [,month,kind,model,requests,searches]=args as [string,string,string,string,number,number];
+      const row=monthly.find(item=>item.month===month&&item.kind===kind&&item.model===model);
       if(row){row.requests=Number(row.requests)+requests;row.search_queries=Number(row.search_queries)+searches}
-      else monthly.push({month,kind,requests,search_queries:searches});
+      else monthly.push({month,kind,model,requests,search_queries:searches});
       return undefined;
     }
     return undefined;
@@ -58,6 +58,9 @@ describe('seeding the ledger from research jobs',()=>{
     expect(seeded).toMatchObject({events:3,searchQueries:30});
     expect(monthly.find(row=>row.kind==='producer_research')).toMatchObject({month:'2026-08',requests:2,search_queries:23});
     expect(monthly.find(row=>row.kind==='wine_research')).toMatchObject({month:'2026-08',requests:1,search_queries:7});
+    // The model each job ran on is carried into the rollup, which is what the
+    // month is priced from once these events have been pruned.
+    expect(monthly.every(row=>row.model==='gemini-3.7-flash')).toBe(true);
     // Tokens were never recorded against these jobs, so they seed as zero
     // rather than as a guess.
     expect(events.every(row=>row.tokensAreLiteralZero)).toBe(true);

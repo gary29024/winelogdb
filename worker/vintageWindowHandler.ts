@@ -2,16 +2,24 @@ import { geminiCallTokens,recordAiUsage,type AnalyticsSink } from '../src/lib/us
 import { askableVintage,readVintageWindow,vintageWindowSchema,writeVintageWindow,type VintageSubject } from '../src/lib/maturity/vintageWindow';
 import { maturityFor } from '../src/lib/maturity/ageing';
 import { describeResponseSchema,groundedGenerationConfig } from '../src/lib/research/geminiBatch';
+import { postGeminiGenerateContent,type GeminiTransportBindings } from './geminiTransport';
 
-export type VintageWindowBindings={DB:D1Database;GEMINI_API_KEY:string;AI_USAGE?:AnalyticsSink};
+export type VintageWindowBindings=GeminiTransportBindings&{DB:D1Database;AI_USAGE?:AnalyticsSink};
 
 /**
- * The model that answers this. The cheap one: the question is narrow, the
- * answer is four fields, and what costs money here is the search rather than
- * the thinking.
+ * The model the grounded paths use, not the cheap one.
+ *
+ * The question is narrow and the answer is four fields, which argued for
+ * flash-lite - but what matters here is whether the model actually searches,
+ * and grounding is what producer and wine research chose 3.7 Flash for. An
+ * answer that arrives without sources is rejected outright by this handler, so
+ * a model that grounds unreliably does not save money: it spends a call and
+ * returns nothing.
  */
-const MODEL='gemini-3.1-flash-lite';
-const TIMEOUT_MS=30_000;
+const MODEL='gemini-3.7-flash';
+// Grounded calls carry a search round trip before the model writes anything,
+// so the budget is the research paths' rather than a plain call's.
+const TIMEOUT_MS=45_000;
 
 const place=(subject:VintageSubject)=>[subject.appellation,subject.region,subject.country].filter(Boolean).join(', ');
 
@@ -54,28 +62,51 @@ const responseSchema={type:'OBJECT',properties:{
 },required:['drinkFrom','drinkTo','note','sources']};
 
 type GeminiResponse={
-  candidates?:Array<{content?:{parts?:Array<{text?:string}>};groundingMetadata?:{groundingChunks?:Array<{web?:{title?:string;uri?:string}}>}}>;
+  candidates?:Array<{content?:{parts?:Array<{text?:string}>};groundingMetadata?:{
+    groundingChunks?:Array<{web?:{title?:string;uri?:string}}>;webSearchQueries?:string[]}}>;
   usageMetadata?:{promptTokenCount?:number;candidatesTokenCount?:number;thoughtsTokenCount?:number};
 };
 
 const parseJson=(raw:string)=>JSON.parse(raw.replace(/^```(?:json)?\s*|\s*```$/g,''));
 
-/**
- * What the search actually retrieved, as the sources shown on screen.
- *
- * Taken from the grounding metadata rather than from the model's own list: a
- * model asked for its sources will happily invent them, and the metadata is the
- * record of pages the tool really fetched.
- */
-function groundedSources(payload:GeminiResponse){
-  const chunks=payload.candidates?.[0]?.groundingMetadata?.groundingChunks??[];
-  const seen=new Set<string>(),sources:Array<{title:string;url:string}>=[];
-  for(const chunk of chunks){
-    const url=chunk.web?.uri;if(!url||seen.has(url))continue;
-    seen.add(url);sources.push({title:(chunk.web?.title||url).slice(0,300),url});
+/** A Vertex grounding redirect: the search tool's own receipt for a page. */
+const GROUNDING_HOST='vertexaisearch.cloud.google.com';
+
+const dedupe=(sources:Array<{title?:unknown;url?:unknown}>)=>{
+  const seen=new Set<string>(),kept:Array<{title:string;url:string}>=[];
+  for(const source of sources){
+    const url=typeof source?.url==='string'?source.url.trim():'';
+    if(!url||seen.has(url))continue;
+    seen.add(url);
+    kept.push({title:String(source?.title||url).slice(0,300),url});
   }
-  return sources.slice(0,12);
+  return kept.slice(0,12);
+};
+
+/**
+ * The pages the search actually fetched.
+ *
+ * Grounding metadata is the authoritative record and is preferred whenever the
+ * reply carries it. It often does not: on this endpoint the citations come back
+ * inside the model's own JSON, as vertexaisearch grounding-redirect links -
+ * which are issued by the search tool and are therefore a receipt rather than a
+ * claim, whatever the model says about them.
+ *
+ * Reading only the metadata is what made this feature report "nothing was
+ * retrieved" for answers that had plainly retrieved three sources: the list was
+ * overwritten with an empty one and the answer thrown away.
+ */
+function groundedSources(payload:GeminiResponse,fromReply:unknown){
+  const chunks=payload.candidates?.[0]?.groundingMetadata?.groundingChunks??[];
+  const metadata=dedupe(chunks.map(chunk=>({title:chunk.web?.title,url:chunk.web?.uri})));
+  if(metadata.length)return metadata;
+  return dedupe(Array.isArray(fromReply)?fromReply as Array<{title?:unknown;url?:unknown}>:[]);
 }
+
+/** Whether anything here came from the search tool rather than from memory. */
+const wasGrounded=(payload:GeminiResponse,sources:Array<{url:string}>)=>
+  Boolean(payload.candidates?.[0]?.groundingMetadata?.groundingChunks?.length)
+  ||sources.some(source=>source.url.includes(GROUNDING_HOST));
 
 export async function researchVintageWindow(env:VintageWindowBindings,owner:string,subject:VintageSubject,requestId:string){
   if(!askableVintage(subject))throw new Error('A vintage and a place are needed before a year can be looked up');
@@ -84,26 +115,42 @@ export async function researchVintageWindow(env:VintageWindowBindings,owner:stri
   const controller=new AbortController();
   const timer=setTimeout(()=>controller.abort(),TIMEOUT_MS);
   try{
-    const response=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`,{
-      method:'POST',signal:controller.signal,
-      headers:{'Content-Type':'application/json','x-goog-api-key':env.GEMINI_API_KEY},
-      body:JSON.stringify({
-        contents:[{role:'user',parts:[{text:`${prompt(subject,baseline)}\n\n${describeResponseSchema(responseSchema)}`}]}],
-        tools:[{google_search:{}}],
-        generationConfig:groundedGenerationConfig(2048)
-      })
-    });
-    if(!response.ok)throw new Error(`Vintage lookup failed (${response.status})`);
+    /**
+     * Through the same transport as every other call in the app.
+     *
+     * This handler posted to generativelanguage.googleapis.com by hand, which
+     * is the one path that never reaches AI Gateway - so the lookup was
+     * invisible there, and on a deployment configured for Vertex through the
+     * gateway it had no working credential at all. postGeminiGenerateContent
+     * decides between the gateway and the developer API from what is actually
+     * configured, and carries the authorization, the payload-logging rule and
+     * the request tagging with it.
+     */
+    const {response}=await postGeminiGenerateContent(env,MODEL,JSON.stringify({
+      contents:[{role:'user',parts:[{text:`${prompt(subject,baseline)}\n\n${describeResponseSchema(responseSchema)}`}]}],
+      tools:[{google_search:{}}],
+      generationConfig:groundedGenerationConfig(2048)
+    }),controller.signal,{kind:'vintage_window',vintage,requestId});
+    if(!response.ok){
+      const detail=(await response.text().catch(()=>'')).slice(0,400);
+      throw new Error(`Vintage lookup failed (${response.status})${detail?`: ${detail}`:''}`);
+    }
     const payload=await response.json() as GeminiResponse;
     const text=payload.candidates?.[0]?.content?.parts?.map(part=>part.text??'').join('')??'';
     if(!text)throw new Error('The vintage lookup came back empty');
-    const parsed=vintageWindowSchema.parse({...parseJson(text),sources:groundedSources(payload)});
+    const answer=parseJson(text) as {sources?:unknown};
+    const parsed=vintageWindowSchema.parse({...answer,sources:groundedSources(payload,answer.sources)});
     // An answer nothing was retrieved for is a memory, not research, and this
     // whole feature exists so the two are told apart.
-    if(!parsed.sources.length)throw new Error('Nothing was retrieved for this vintage, so there is nothing to show');
+    if(!parsed.sources.length||!wasGrounded(payload,parsed.sources))
+      throw new Error('Nothing was retrieved for this vintage, so there is nothing to show');
     const tokens=geminiCallTokens(payload.usageMetadata);
     await recordAiUsage(env,owner,{kind:'vintage_window',runId:requestId,model:MODEL,requests:1,units:1,
-      searchQueries:1,promptTokens:tokens.promptTokens,outputTokens:tokens.outputTokens});
+      // The searches the model actually ran, not an assumed one. Grounding is
+      // billed per query and it is most of what this costs, so guessing here
+      // would misprice the panel that exists to say what it cost.
+      searchQueries:payload.candidates?.[0]?.groundingMetadata?.webSearchQueries?.length??1,
+      promptTokens:tokens.promptTokens,outputTokens:tokens.outputTokens});
     return writeVintageWindow(env.DB,owner,subject,parsed,baseline,MODEL);
   }finally{clearTimeout(timer)}
 }

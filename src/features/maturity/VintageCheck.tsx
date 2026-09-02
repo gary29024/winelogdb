@@ -27,7 +27,7 @@ export function VintageCheck({wine}:{wine:Wine}){
   const [researched,setResearched]=useState<VintageWindow|null>(null);
   const [busy,setBusy]=useState(false),[error,setError]=useState('');
   const subject:VintageSubject={country:wine.country,region:wine.region,appellation:wine.appellation,
-    vintage:wine.vintage,wineStyle:wine.wineStyle};
+    vintage:wine.vintage,wineStyle:wine.wineStyle,classification:wine.classification};
   const askable=Boolean(wine.vintage&&(wine.appellation||wine.region||wine.country));
   /**
    * The place the lookup is actually keyed on, rather than the region column.

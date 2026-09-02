@@ -21,7 +21,7 @@ type WineBatchPollJob={kind:'wine_batch_poll';owner:string;wineId:string;request
 type ProducerCampaignTickJob={kind:'producer_campaign_tick';owner:string;campaignId:string};
 type CancelResearchSweepJob={kind:'research_cancel_sweep';owner:string;targetKind:ResearchTargetKind;targetId:string;requestId:string;pass:number};
 type ResearchJob=ProducerJob|ProducerBatchPollJob|ProducerCampaignTickJob|WineJob|WineBatchPollJob|CancelResearchSweepJob|BatchRecognitionJob;
-type Bindings={DB:D1Database;WINE_IMAGES:R2Bucket;ASSETS:Fetcher;GEMINI_API_KEY:string;AUTH_SECRET:string;APP_PASSWORD:string;APP_URL:string;MAX_FILE_BYTES?:string;MAX_BATCH_FILES?:string;RESEARCH_QUEUE:Queue<ResearchJob>};
+type Bindings={DB:D1Database;WINE_IMAGES:R2Bucket;ASSETS:Fetcher;GEMINI_API_KEY?:string;AUTH_SECRET:string;APP_PASSWORD:string;APP_URL:string;MAX_FILE_BYTES?:string;MAX_BATCH_FILES?:string;RESEARCH_QUEUE:Queue<ResearchJob>};
 type AppEnv={Bindings:Bindings};
 const router=new Hono<AppEnv>();
 

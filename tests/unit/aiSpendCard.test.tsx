@@ -48,21 +48,45 @@ describe('the AI spend card',()=>{
 
   it('shows the free allowance while it lasts, and the overage once it is gone',async()=>{
     let page=await render(summary());
-    expect(page.textContent).toContain('800 free searches left');
+    expect(page.textContent).toContain('800 free left');
     // The card is handed the reset as an instant and must render it in the
     // reader's own clock - midnight Pacific on 1 September is 15:00 that day in
     // Hong Kong - rather than reading the date out of the ISO string. Comparing
     // against the same conversion keeps this true wherever the suite runs; that
     // the instant itself is Pacific midnight is tested in the ledger.
-    const reset=[...page.querySelectorAll('.ai-spend-month small')].at(-1)!.textContent!;
+    const reset=[...page.querySelectorAll('.ai-spend-month span')].at(-1)!.textContent!;
     const local=new Intl.DateTimeFormat(undefined,{day:'numeric',month:'short',hour:'numeric',minute:'2-digit'}).format(new Date('2026-09-01T07:00:00.000Z'));
-    expect(reset).toBe(`resets ${local}`);
+    expect(reset).toBe(`Allowance resets ${local}`);
     expect(page.querySelector('.ai-spend-month.is-billing')).toBeNull();
 
     act(()=>root?.unmount());host?.remove();
     page=await render(summary({month:{month:'2026-08',searchQueries:12183,freeRemaining:0,billableSearches:7183,cost:788.71,resetsAt:'2026-09-01T07:00:00.000Z',timeZone:'America/Los_Angeles'}}));
     expect(page.textContent).toContain('7,183 past the free allowance');
     expect(page.querySelector('.ai-spend-month.is-billing'),'the month should read as billing once the allowance is gone').not.toBeNull();
+  });
+
+  it('says what the month figure is, so it is not read as the price of the searches',async()=>{
+    // The complaint that prompted this: nought grounded searches and a figure
+    // beside them, which reads as the searches having cost money. They had not
+    // - the allowance had not been touched, and every cent of it was tokens.
+    const page=await render(summary({month:{month:'2026-08',searchQueries:0,freeRemaining:5000,billableSearches:0,
+      cost:0.104,resetsAt:'2026-09-01T07:00:00.000Z',timeZone:'America/Los_Angeles'}}));
+    const tile=page.querySelector('.ai-spend-month')!;
+    expect(tile.textContent).toContain('total · tokens only, searches still free');
+    // and once the allowance is gone the same figure says what is in it
+    act(()=>root?.unmount());host?.remove();
+    const billing=await render(summary({month:{month:'2026-08',searchQueries:12183,freeRemaining:0,billableSearches:7183,
+      cost:788.71,resetsAt:'2026-09-01T07:00:00.000Z',timeZone:'America/Los_Angeles'}}));
+    expect(billing.querySelector('.ai-spend-month')!.textContent).toContain('tokens and 7,183 billed searches');
+  });
+
+  it('names the two periods, which are not the same period',async()=>{
+    // The cards are a rolling 30 days and the tile is the billing month, so ten
+    // deep searches above nought grounded searches below is not a contradiction
+    // - but only if the card says which is which.
+    const page=await render(summary());
+    expect(page.querySelector('.journey-section-heading span')!.textContent).toBe('last 30 days');
+    expect(page.querySelector('.ai-spend-month strong')!.textContent).toBe('This billing month');
   });
 
   it('says nothing is metered rather than showing a wall of zeros',async()=>{

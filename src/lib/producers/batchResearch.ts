@@ -12,7 +12,7 @@ import { applyCatalogDecisions,listCatalogDecisions } from './catalogDecisions';
 import { catalogNameInitial,stripProducerCatalogPrefix } from './catalogName';
 import { parseStructuredJsonText } from './structuredJson';
 
-type Env={DB:D1Database;WINE_IMAGES:R2Bucket;GEMINI_API_KEY:string;RESEARCH_QUEUE:Queue<unknown>;AI_USAGE?:AnalyticsSink};
+type Env={DB:D1Database;WINE_IMAGES:R2Bucket;GEMINI_API_KEY?:string;RESEARCH_QUEUE:Queue<unknown>;AI_USAGE?:AnalyticsSink};
 type CatalogCategory='red'|'white'|'rose'|'sparkling'|'dessert'|'fortified'|'orange'|'other';
 type ProfileResult={homeCountry:string;homeRegion:string;homeLocality:string;officialWebsiteUrl:string|null;instagramUrl:string|null;contactEmail:string|null;contactPhone:string|null;profile:string;winemakingPractices:string};
 type CatalogWine={name:string;category:CatalogCategory;appellation?:string|null;classification?:string|null;style?:string|null;notes?:string|null};

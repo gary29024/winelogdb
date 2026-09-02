@@ -8,7 +8,7 @@ import { dimensionsSchema, validateBatch } from '../src/features/uploads/validat
 import { parseRecognition } from '../src/features/recognition/schema';
 import { closeOpenTastingIfDayChanged, touchTastingActivity } from '../src/lib/tastings/session';
 
-type Bindings={DB:D1Database;WINE_IMAGES:R2Bucket;ASSETS:Fetcher;GEMINI_API_KEY:string;AUTH_SECRET:string;APP_PASSWORD:string;APP_URL:string;MAX_FILE_BYTES?:string;MAX_BATCH_FILES?:string};
+type Bindings={DB:D1Database;WINE_IMAGES:R2Bucket;ASSETS:Fetcher;GEMINI_API_KEY?:string;AUTH_SECRET:string;APP_PASSWORD:string;APP_URL:string;MAX_FILE_BYTES?:string;MAX_BATCH_FILES?:string};
 type Variables={userId:string};
 type AppContext={Bindings:Bindings;Variables:Variables};
 type PhotoMetadata={capturedAt?:string|null;latitude?:number|null;longitude?:number|null;source?:'exif'|'file_fallback'|'none'};
@@ -280,6 +280,11 @@ app.post('/api/recognition',async c=>{
  const best=ranked[0]??normalizeMeta(undefined),tastingDate=best.capturedAt?.slice(0,10)??null;
  const context=[best.capturedAt?`The strongest photo timestamp is ${best.capturedAt}.`:'No reliable photo timestamp.',best.latitude!=null&&best.longitude!=null?`The strongest photo GPS is ${best.latitude}, ${best.longitude}. Infer a concise human-readable location only if reasonably confident.`:'No reliable GPS metadata.'].join(' ');
  try{
+  // Shadowed: entry.ts answers /api/recognition through the shared transport and
+  // never delegates here. Kept because deleting a route is not this change's job,
+  // but it now says what it would need rather than sending an undefined key and
+  // failing as an unreadable 401.
+  if(!c.env.GEMINI_API_KEY?.trim())return c.json({error:'This path needs GEMINI_API_KEY; recognition runs through AI Gateway instead.'},501);
   const genAI=new GoogleGenerativeAI(c.env.GEMINI_API_KEY);
   const model=genAI.getGenerativeModel({model:'gemini-3.1-flash-lite',generationConfig:{responseMimeType:'application/json',responseSchema:{type:SchemaType.OBJECT,properties:{producer:{type:SchemaType.STRING,nullable:true},wineName:{type:SchemaType.STRING,nullable:true},vintage:{type:SchemaType.NUMBER,nullable:true},country:{type:SchemaType.STRING,nullable:true},region:{type:SchemaType.STRING,nullable:true},appellation:{type:SchemaType.STRING,nullable:true},grapes:{type:SchemaType.ARRAY,items:{type:SchemaType.STRING}},grapeBlend:{type:SchemaType.ARRAY,items:{type:SchemaType.OBJECT,properties:{grape:{type:SchemaType.STRING},percentage:{type:SchemaType.NUMBER,nullable:true}},required:['grape']}},style:{type:SchemaType.STRING,nullable:true},alcoholPercentage:{type:SchemaType.NUMBER,nullable:true},locationName:{type:SchemaType.STRING,nullable:true},confidence:{type:SchemaType.NUMBER}},required:['grapes','grapeBlend','confidence']}}});
   const imageParts=await Promise.all(files.map(async file=>({inlineData:{data:await fileToBase64(file),mimeType:file.type}})));

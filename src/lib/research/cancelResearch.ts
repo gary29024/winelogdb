@@ -3,7 +3,7 @@ import { cancelEmulatedGeminiBatch,fetchGeminiBatch,isEmulatedGeminiBatchName } 
 
 export type ResearchTargetKind='producer'|'wine';
 
-type Env={DB:D1Database;GEMINI_API_KEY:string};
+type Env={DB:D1Database;GEMINI_API_KEY?:string};
 type BatchRow={id:string;google_batch_name:string;status:string;error:string|null};
 
 const CANCEL_MESSAGE='Cancelled by user';
@@ -26,11 +26,13 @@ export function nextCancelSweepDelay(pass:number){
   return null;
 }
 
-export async function cancelGeminiBatch(apiKey:string,name:string){
+export async function cancelGeminiBatch(apiKey:string|undefined,name:string){
   if(isEmulatedGeminiBatchName(name))return cancelEmulatedGeminiBatch(apiKey,name);
+  const developerKey=typeof apiKey==='string'?apiKey.trim():'';
+  if(!developerKey)return {name,ok:false as const,status:503,error:'Gemini cancel needs GEMINI_API_KEY when AI Gateway is not configured'};
   const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),CANCEL_TIMEOUT_MS);
   try{
-    const response=await fetch(geminiBatchCancelUrl(name),{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':apiKey},body:'{}',signal:controller.signal});
+    const response=await fetch(geminiBatchCancelUrl(name),{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':developerKey},body:'{}',signal:controller.signal});
     if(response.ok)return {name,ok:true as const,status:response.status};
     return {name,ok:false as const,status:response.status,error:(await response.text().catch(()=>'' )).slice(0,500)||`Gemini cancel failed (${response.status})`};
   }catch(e){return {name,ok:false as const,status:0,error:controller.signal.aborted?'Gemini cancel request timed out':(e as Error).message||'Gemini cancel request failed'}}

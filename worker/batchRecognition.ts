@@ -7,7 +7,7 @@ export type BatchRecognitionJob=
   |{kind:'recognition_batch_poll';owner:string;sessionId:string;jobId:string;pollCount:number}
   |{kind:'recognition_batch_cleanup';owner:string;sessionId:string};
 
-type Env={DB:D1Database;WINE_IMAGES:R2Bucket;GEMINI_API_KEY:string;MAX_FILE_BYTES?:string;RESEARCH_QUEUE:Queue<unknown>};
+type Env={DB:D1Database;WINE_IMAGES:R2Bucket;GEMINI_API_KEY?:string;MAX_FILE_BYTES?:string;RESEARCH_QUEUE:Queue<unknown>};
 type ItemRow={id:string;position:number;status:string;metadata_json:string;recognition_json:string|null;error:string|null;confirmed_wine_id:string|null;saved_producer:string|null;saved_wine_name:string|null;saved_vintage:number|null};
 type ImageRow={id:string;item_id:string;original_object_key:string;recognition_object_key:string;content_type:string;byte_size:number;recognition_byte_size:number;width:number;height:number};
 type GoogleInlineResponse={metadata?:{key?:string};response?:{candidates?:Array<{content?:{parts?:Array<{text?:string}>};finishReason?:string}>};error?:{message?:string}};
@@ -17,6 +17,21 @@ const INLINE_JSON_HARD_LIMIT=19_000_000;
 const MAX_ITEM_PREPARED_BYTES=10*1024*1024;
 const SESSION_TTL_MS=7*24*60*60*1000;
 const now=()=>new Date().toISOString();
+/**
+ * The developer-API credential, demanded rather than assumed.
+ *
+ * This file is the direct Gemini Batch path, reached only when AI Gateway is
+ * not configured - structureEntry sends every batch to Vertex through the
+ * gateway when it is. On a gateway-only deployment GEMINI_API_KEY is absent by
+ * design, and sending it as an undefined header would fail as an unreadable
+ * 401 rather than as the configuration problem it is.
+ */
+const developerApiKey=(env:{GEMINI_API_KEY?:string})=>{
+  const key=env.GEMINI_API_KEY?.trim();
+  if(!key)throw new Error('Batch recognition fell back to the Gemini developer API, which needs GEMINI_API_KEY. Configure AI Gateway, or set the key.');
+  return key;
+};
+
 const parseJson=<T>(raw:unknown,fallback:T):T=>{try{return JSON.parse(String(raw)) as T}catch{return fallback}};
 const safeOwner=(owner:string)=>owner.replace(/[^a-zA-Z0-9_-]/g,'_').slice(0,128);
 
@@ -166,7 +181,7 @@ async function createGoogleBatch(env:Env,sessionId:string,index:number,entries:A
   const requests=[] as unknown[];for(const entry of entries)requests.push(await buildGoogleRequest(env,entry.item,entry.images));
   const body=JSON.stringify({batch:{display_name:`winelog-${sessionId}-${index}`,input_config:{requests:{requests}}}});
   if(new TextEncoder().encode(body).byteLength>=INLINE_JSON_HARD_LIMIT)throw new Error('INLINE_BATCH_TOO_LARGE');
-  const response=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${RECOGNITION_MODEL}:batchGenerateContent`,{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':env.GEMINI_API_KEY},body});
+  const response=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${RECOGNITION_MODEL}:batchGenerateContent`,{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':developerApiKey(env)},body});
   if(!response.ok)throw new Error(`Gemini Batch API create failed (${response.status}): ${(await response.text()).slice(0,500)}`);
   const created=await response.json() as {name?:string;metadata?:{name?:string};response?:{name?:string}};
   const name=[created.name,created.metadata?.name,created.response?.name].find(value=>value?.startsWith('batches/'));
@@ -225,7 +240,7 @@ async function finishSessionIfTerminal(db:D1Database,owner:string,sessionId:stri
 
 export async function processBatchPollJob(env:Env,owner:string,sessionId:string,jobId:string,pollCount:number){
   const job=await env.DB.prepare('SELECT google_batch_name,item_ids_json,status FROM batch_recognition_jobs WHERE id=? AND owner_id=? AND session_id=?').bind(jobId,owner,sessionId).first<{google_batch_name:string;item_ids_json:string;status:string}>();if(!job||job.status!=='running')return;
-  const ids=parseJson<string[]>(job.item_ids_json,[]),response=await fetch(`https://generativelanguage.googleapis.com/v1beta/${job.google_batch_name}`,{headers:{'x-goog-api-key':env.GEMINI_API_KEY}});
+  const ids=parseJson<string[]>(job.item_ids_json,[]),response=await fetch(`https://generativelanguage.googleapis.com/v1beta/${job.google_batch_name}`,{headers:{'x-goog-api-key':developerApiKey(env)}});
   if(!response.ok){
     const stamp=now();
     if(response.status===429||response.status>=500){await env.DB.prepare("UPDATE batch_recognition_jobs SET updated_at=? WHERE id=? AND owner_id=?").bind(stamp,jobId,owner).run();await env.RESEARCH_QUEUE.send({kind:'recognition_batch_poll',owner,sessionId,jobId,pollCount:pollCount+1},{delaySeconds:Math.min(300,30*Math.max(1,pollCount+1))});return}

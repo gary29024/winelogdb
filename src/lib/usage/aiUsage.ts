@@ -1,4 +1,4 @@
-import { marginalCostUsd,monthCostUsd,toLocal,type AiRates,type UsageTotals } from './rates';
+import { marginalCostUsd,monthGroundingUsd,tokenCostUsd,toLocal,type AiRates,type UsageTotals } from './rates';
 import { billingMonth,nextBillingReset,BILLING_TIME_ZONE } from './billingPeriod';
 
 /**
@@ -92,16 +92,18 @@ export async function recordAiUsage(env:AiUsageEnv,owner:string,event:AiUsageEve
       env.DB.prepare(`INSERT INTO ai_usage_events(id,owner_id,kind,run_id,target_id,model,tier,requests,search_queries,prompt_tokens,output_tokens,units,created_at)
         VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)`)
         .bind(crypto.randomUUID(),owner,event.kind,event.runId,event.targetId??null,event.model,tier,requests,searchQueries,promptTokens,outputTokens,units,stamp),
-      env.DB.prepare(`INSERT INTO ai_usage_monthly(owner_id,month,kind,requests,search_queries,prompt_tokens,output_tokens,units,updated_at)
-        VALUES(?,?,?,?,?,?,?,?,?)
-        ON CONFLICT(owner_id,month,kind) DO UPDATE SET
+      // Rolled up by model and tier as well as kind, because those two decide
+      // the price and the rollup outlives the events it is made from.
+      env.DB.prepare(`INSERT INTO ai_usage_monthly(owner_id,month,kind,model,tier,requests,search_queries,prompt_tokens,output_tokens,units,updated_at)
+        VALUES(?,?,?,?,?,?,?,?,?,?,?)
+        ON CONFLICT(owner_id,month,kind,model,tier) DO UPDATE SET
           requests=ai_usage_monthly.requests+excluded.requests,
           search_queries=ai_usage_monthly.search_queries+excluded.search_queries,
           prompt_tokens=ai_usage_monthly.prompt_tokens+excluded.prompt_tokens,
           output_tokens=ai_usage_monthly.output_tokens+excluded.output_tokens,
           units=ai_usage_monthly.units+excluded.units,
           updated_at=excluded.updated_at`)
-        .bind(owner,month,event.kind,requests,searchQueries,promptTokens,outputTokens,units,stamp),
+        .bind(owner,month,event.kind,event.model,tier,requests,searchQueries,promptTokens,outputTokens,units,stamp),
       env.DB.prepare(`DELETE FROM ai_usage_events WHERE owner_id=? AND created_at<datetime('now','-${RAW_EVENT_RETENTION_DAYS} days')`).bind(owner)
     ]);
   }catch(e){console.error(JSON.stringify({event:'ai_usage_write_failed',kind:event.kind,error:(e as Error).message}))}
@@ -139,7 +141,7 @@ export type UsageSummary={
 
 type EventRow={kind:string;model:string;tier:string;day:string;requests:number;search_queries:number;prompt_tokens:number;output_tokens:number;units:number};
 type RunRow={kind:string;runs:number};
-type MonthRow={search_queries:number;prompt_tokens:number;output_tokens:number};
+type MonthRow={kind:string;model:string;tier:string;search_queries:number;prompt_tokens:number;output_tokens:number};
 
 export async function usageSummary(db:D1Database,owner:string,rates:AiRates,days=30):Promise<UsageSummary>{
   const window=Math.max(1,Math.min(RAW_EVENT_RETENTION_DAYS,Math.floor(days)||30));
@@ -157,8 +159,11 @@ export async function usageSummary(db:D1Database,owner:string,rates:AiRates,days
       FROM ai_usage_events WHERE owner_id=? AND created_at>datetime('now','-${window} days') GROUP BY kind,model,tier,day`).bind(owner).all<EventRow>(),
     db.prepare(`SELECT kind,count(DISTINCT run_id) AS runs FROM ai_usage_events
       WHERE owner_id=? AND created_at>datetime('now','-${window} days') GROUP BY kind`).bind(owner).all<RunRow>(),
-    db.prepare(`SELECT sum(search_queries) AS search_queries,sum(prompt_tokens) AS prompt_tokens,sum(output_tokens) AS output_tokens
-      FROM ai_usage_monthly WHERE owner_id=? AND month=?`).bind(owner,month).first<MonthRow>()
+    // Per model and tier, not one summed row: the fallback rate is not what a
+    // 3.7 run or a flex batch was billed at, and pricing the month with it put
+    // a different number under the same runs the cards above priced properly.
+    db.prepare(`SELECT kind,model,tier,search_queries,prompt_tokens,output_tokens
+      FROM ai_usage_monthly WHERE owner_id=? AND month=?`).bind(owner,month).all<MonthRow>()
   ]);
   const runsByKind=new Map((runs.results??[]).map(row=>[row.kind,Number(row.runs)||0]));
   const byKind=new Map<string,KindSpend>();
@@ -184,11 +189,19 @@ export async function usageSummary(db:D1Database,owner:string,rates:AiRates,days
       costPerRun:entry.runs?entry.cost/entry.runs:0,
       searchesPerRun:entry.runs?entry.searchQueries/entry.runs:0};
   }).sort((a,b)=>b.cost-a.cost);
-  const monthUsage:UsageTotals={
-    searchQueries:Number(monthTotals?.search_queries)||0,
-    promptTokens:Number(monthTotals?.prompt_tokens)||0,
-    outputTokens:Number(monthTotals?.output_tokens)||0
-  };
+  const monthRows=monthTotals.results??[];
+  const monthUsage=monthRows.reduce<UsageTotals>((totals,row)=>({
+    searchQueries:totals.searchQueries+(Number(row.search_queries)||0),
+    promptTokens:totals.promptTokens+(Number(row.prompt_tokens)||0),
+    outputTokens:totals.outputTokens+(Number(row.output_tokens)||0)
+  }),{searchQueries:0,promptTokens:0,outputTokens:0});
+  // Tokens at each row's own model and tier, then the allowance applied once
+  // to the month's searches as a whole. The rollup keeps no day, so a rate that
+  // changed part-way through the month prices the whole of it at today's - the
+  // one thing here the per-day cards can say and this cannot.
+  const monthTokenUsd=monthRows.reduce((total,row)=>total+tokenCostUsd(
+    {searchQueries:0,promptTokens:Number(row.prompt_tokens)||0,outputTokens:Number(row.output_tokens)||0},
+    rates,row.model,{tier:row.tier}),0);
   return {
     currency:rates.currency,days:window,kinds,
     month:{
@@ -196,7 +209,7 @@ export async function usageSummary(db:D1Database,owner:string,rates:AiRates,days
       resetsAt:nextBillingReset().toISOString(),timeZone:BILLING_TIME_ZONE,
       freeRemaining:Math.max(0,rates.groundingFreePerMonth-monthUsage.searchQueries),
       billableSearches:Math.max(0,monthUsage.searchQueries-rates.groundingFreePerMonth),
-      cost:toLocal(monthCostUsd(monthUsage,rates),rates)
+      cost:toLocal(monthGroundingUsd(monthUsage.searchQueries,rates)+monthTokenUsd,rates)
     },
     empty:kinds.length===0&&monthUsage.searchQueries===0&&monthUsage.promptTokens===0
   };

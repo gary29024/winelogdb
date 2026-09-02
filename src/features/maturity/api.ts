@@ -8,6 +8,7 @@ const params=(subject:VintageSubject)=>{
   if(subject.appellation)query.set('appellation',subject.appellation);
   if(subject.vintage!=null)query.set('vintage',String(subject.vintage));
   if(subject.wineStyle)query.set('wineStyle',subject.wineStyle);
+  if(subject.classification)query.set('classification',subject.classification);
   return query;
 };
 

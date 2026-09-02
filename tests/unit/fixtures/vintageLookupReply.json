@@ -1,0 +1,16 @@
+{
+  "candidates": [
+    {
+      "content": {
+        "parts": [
+          {
+            "text": "{\n  \"drinkFrom\": 2015,\n  \"drinkTo\": 2028,\n  \"note\": \"The 2011 growing season in Burgundy was challenging.\",\n  \"sources\": [\n    {\"title\": \"2011 Louis Jadot Chambertin-Clos de Beze - CellarTracker\", \"url\": \"https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQGaY6cAUVOSMk1Z\"},\n    {\"title\": \"Domaine Robert Groffier Chambertin Clos-de-Beze Grand Cru 2011 - Vinous\", \"url\": \"https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQEbZOtmIlRCUpGp\"},\n    {\"title\": \"2011 Red Burgundy\", \"url\": \"https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQEG-dihlg4ykrBx\"}\n  ]\n}"
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP"
+    }
+  ],
+  "usageMetadata": {"promptTokenCount": 314, "candidatesTokenCount": 686, "totalTokenCount": 1000}
+}

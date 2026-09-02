@@ -36,7 +36,7 @@ login, verification and troubleshooting. In outline:
 
 1. Create the resources: `wrangler d1 create winelogdb`, `wrangler r2 bucket create winelog-private`, and `wrangler queues create` for both `winelog-research` and `winelog-research-dlq`.
 2. Put the returned D1 ID in `wrangler.jsonc`, replacing the one committed there. Keep the R2 bucket private.
-3. Add secrets: `APP_PASSWORD`, `AUTH_SECRET`, `GEMINI_API_KEY`, and `CF_AI_GATEWAY_TOKEN` if calling Vertex through AI Gateway.
+3. Add secrets: `APP_PASSWORD`, `AUTH_SECRET`, and then whichever Gemini transport you are using — `GEMINI_API_KEY` for the direct API, or `CF_AI_GATEWAY_TOKEN` for Vertex through AI Gateway. The gateway does not use the key, so on that path leave it unset.
 4. Set `APP_URL` in `wrangler.jsonc` to the exact deployed origin, then redeploy.
 5. Apply schema with `npm run db:migrate`, then run `npm run deploy`.
 
