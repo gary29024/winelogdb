@@ -23,8 +23,16 @@ CREATE TABLE IF NOT EXISTS vintage_windows (
   appellation TEXT,
   vintage INTEGER NOT NULL,
   wine_style TEXT,
-  drink_from INTEGER,
-  drink_to INTEGER,
+  -- The shift, in years, not the window itself.
+  --
+  -- A cell holds a whole region: Piedmont red 2019 is Barolo and Dolcetto
+  -- d'Alba alike, and their usual windows are eight-to-twenty-five and
+  -- two-to-ten. Storing the years a source gave for one of them and showing
+  -- them against the other would be badly wrong. What a vintage report actually
+  -- tells you is how the year went - two years later, five years longer - and
+  -- that transfers: it is applied to each wine's own calculated window.
+  shift_from INTEGER,
+  shift_to INTEGER,
   vintage_note TEXT NOT NULL DEFAULT '',
   sources_json TEXT NOT NULL DEFAULT '[]',
   model TEXT,

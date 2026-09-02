@@ -32,7 +32,7 @@ For ${style} from ${where}, vintage ${subject.vintage}: what is the drinking win
 
 ${usual} Your job is the vintage: say where ${subject.vintage} sits against that, and why - growing season, harvest conditions, the structure of the wines. A cool or difficult year usually shortens the window; a great one lengthens it.
 
-drinkFrom and drinkTo are calendar years, not ages. Return null for both rather than guessing if no source discusses this vintage in this place. Keep the note to three sentences, and name the year explicitly rather than writing about the region in general.`;
+drinkFrom and drinkTo are calendar years, not ages, and they are for a wine of the kind described above rather than for the region's longest-lived bottling. Return null for both rather than guessing if no source discusses this vintage in this place. Keep the note to three sentences, and name the year explicitly rather than writing about the region in general.`;
 }
 
 const responseSchema={type:'OBJECT',properties:{
@@ -92,7 +92,7 @@ export async function researchVintageWindow(env:VintageWindowBindings,owner:stri
     const tokens=geminiCallTokens(payload.usageMetadata);
     await recordAiUsage(env,owner,{kind:'vintage_window',runId:requestId,model:MODEL,requests:1,units:1,
       searchQueries:1,promptTokens:tokens.promptTokens,outputTokens:tokens.outputTokens});
-    return writeVintageWindow(env.DB,owner,subject,parsed,MODEL);
+    return writeVintageWindow(env.DB,owner,subject,parsed,baseline,MODEL);
   }finally{clearTimeout(timer)}
 }
 

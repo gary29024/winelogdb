@@ -6,7 +6,8 @@ export type ResearchSource={title:string;url:string};
 export type VintageWindow={
   country:string|null;region:string|null;appellation:string|null;
   vintage:number;wineStyle:string|null;
-  drinkFrom:number|null;drinkTo:number|null;
+  /** Years the vintage moves the usual window at each end; +2 opens two later. */
+  shiftFrom:number|null;shiftTo:number|null;
   note:string;sources:ResearchSource[];model:string|null;researchedAt:string;
 };
 
@@ -72,13 +73,13 @@ const text=(value:unknown)=>{const trimmed=String(value??'').trim();return trimm
 export const mapVintageWindow=(row:Row):VintageWindow=>({
   country:text(row.country),region:text(row.region),appellation:text(row.appellation),
   vintage:Number(row.vintage),wineStyle:text(row.wine_style),
-  drinkFrom:row.drink_from==null?null:Number(row.drink_from),
-  drinkTo:row.drink_to==null?null:Number(row.drink_to),
+  shiftFrom:row.shift_from==null?null:Number(row.shift_from),
+  shiftTo:row.shift_to==null?null:Number(row.shift_to),
   note:String(row.vintage_note??''),sources:parseJson<ResearchSource[]>(row.sources_json,[]),
   model:text(row.model),researchedAt:String(row.researched_at)
 });
 
-const columns='country,region,appellation,vintage,wine_style,drink_from,drink_to,vintage_note,sources_json,model,researched_at';
+const columns='country,region,appellation,vintage,wine_style,shift_from,shift_to,vintage_note,sources_json,model,researched_at';
 
 export async function readVintageWindow(db:D1Database,owner:string,subject:VintageSubject){
   if(!askableVintage(subject))return null;
@@ -87,17 +88,27 @@ export async function readVintageWindow(db:D1Database,owner:string,subject:Vinta
   return row?mapVintageWindow(row):null;
 }
 
+/**
+ * Store what the year did, not what one wine's window was.
+ *
+ * The source answers in calendar years for the wine that asked, because that is
+ * how a vintage report is written. What is kept is the difference from that
+ * wine's usual window - which is the part that holds for every other wine in
+ * the region, and the reason one search can answer for all of them.
+ */
 export async function writeVintageWindow(db:D1Database,owner:string,subject:VintageSubject,
-  answer:z.infer<typeof vintageWindowSchema>,model:string){
+  answer:z.infer<typeof vintageWindowSchema>,baseline:{from:number;to:number}|null,model:string){
   const place=resolvePlace({country:subject.country??null,region:subject.region??null,appellation:subject.appellation??null});
   const stamp=new Date().toISOString();
-  await db.prepare(`INSERT INTO vintage_windows(id,owner_id,cache_key,country,region,appellation,vintage,wine_style,drink_from,drink_to,vintage_note,sources_json,model,researched_at,created_at,updated_at)
+  const shiftFrom=answer.drinkFrom!=null&&baseline?answer.drinkFrom-baseline.from:null;
+  const shiftTo=answer.drinkTo!=null&&baseline?answer.drinkTo-baseline.to:null;
+  await db.prepare(`INSERT INTO vintage_windows(id,owner_id,cache_key,country,region,appellation,vintage,wine_style,shift_from,shift_to,vintage_note,sources_json,model,researched_at,created_at,updated_at)
     VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
-    ON CONFLICT(owner_id,cache_key) DO UPDATE SET drink_from=excluded.drink_from,drink_to=excluded.drink_to,
+    ON CONFLICT(owner_id,cache_key) DO UPDATE SET shift_from=excluded.shift_from,shift_to=excluded.shift_to,
       vintage_note=excluded.vintage_note,sources_json=excluded.sources_json,model=excluded.model,
       researched_at=excluded.researched_at,updated_at=excluded.updated_at`)
     .bind(crypto.randomUUID(),owner,vintageCacheKey(subject),place.country,place.region,place.appellation,
-      subject.vintage,subject.wineStyle??null,answer.drinkFrom,answer.drinkTo,answer.note,
+      subject.vintage,subject.wineStyle??null,shiftFrom,shiftTo,answer.note,
       JSON.stringify(answer.sources),model,stamp,stamp,stamp).run();
   return readVintageWindow(db,owner,subject);
 }
@@ -123,11 +134,14 @@ export function maturityPair(wine:VintageSubject&{classification?:string|null},
   const calculated=table&&vintage!=null
     ?{from:vintage+table.window.from,to:vintage+table.window.to,label:table.basis.label}
     :null;
-  const window=researched&&researched.drinkFrom!=null&&researched.drinkTo!=null
-    ?{from:researched.drinkFrom,to:researched.drinkTo,note:researched.note,
-      sources:researched.sources,researchedAt:researched.researchedAt}
+  // The year's shift, applied to this wine's own window. A Piedmont 2019 that
+  // ran two years late runs two years late for the Barolo and for the Dolcetto
+  // alike, even though their windows are nothing like each other.
+  const shifted=calculated&&researched&&researched.shiftFrom!=null&&researched.shiftTo!=null
+    ?{from:calculated.from+researched.shiftFrom,to:calculated.to+researched.shiftTo,
+      note:researched.note,sources:researched.sources,researchedAt:researched.researchedAt}
     :null;
-  return {calculated,researched:window};
+  return {calculated,researched:shifted};
 }
 
 /** Years the two answers disagree by, for the line that says so. */

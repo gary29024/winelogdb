@@ -2,8 +2,8 @@ import { describe,expect,it } from 'vitest';
 import { askableVintage,maturityPair,vintageCacheKey,vintageWindowSchema,windowShift } from '../../src/lib/maturity/vintageWindow';
 
 const barolo={country:'Italy',region:'Piedmont',appellation:'Barolo',vintage:2019,wineStyle:'red',classification:null};
-const found=(overrides:Record<string,unknown>={})=>({country:'Italy',region:'Piedmont',appellation:'Barolo',
-  vintage:2019,wineStyle:'red',drinkFrom:2029,drinkTo:2049,note:'A warm, early year.',
+const found=(overrides:Record<string,unknown>={})=>({country:'Italy',region:'Piedmont',appellation:null,
+  vintage:2019,wineStyle:'red',shiftFrom:2,shiftTo:5,note:'A warm, early year.',
   sources:[{title:'A wine paper',url:'https://example.com/2019'}],model:'m',researchedAt:'2026-09-02T00:00:00.000Z',...overrides});
 
 describe('which vintage question is being asked',()=>{
@@ -86,7 +86,24 @@ describe('the two answers, side by side',()=>{
 
   it('shows nothing researched when the search found no years to give',()=>{
     // A note with no window is not a window.
-    expect(maturityPair(barolo,found({drinkFrom:null,drinkTo:null})).researched).toBeNull();
+    expect(maturityPair(barolo,found({shiftFrom:null,shiftTo:null})).researched).toBeNull();
+  });
+
+  it('applies one region-wide answer correctly to two very different wines',()=>{
+    // The reason a shift is stored rather than a window. Piedmont red 2019 is
+    // Barolo and Dolcetto d'Alba alike, and their usual windows are eight-to-
+    // twenty-five and two-to-ten. Storing the years a source gave for one and
+    // showing them against the other would be badly wrong.
+    const dolcetto={country:'Italy',region:'Piedmont',appellation:"Dolcetto d'Alba",vintage:2019,wineStyle:'red',classification:null};
+    expect(maturityPair(barolo,found()).researched).toMatchObject({from:2029,to:2049});
+    expect(maturityPair(dolcetto,found()).researched).toMatchObject({from:2023,to:2034});
+  });
+
+  it('says nothing researched for a wine it has no window of its own to move',()=>{
+    // A shift needs something to shift. Without a calculated window there is
+    // nothing to apply it to, and inventing one would be worse than silence.
+    const unknown={country:null,region:null,appellation:null,vintage:2019,wineStyle:null,classification:null};
+    expect(maturityPair(unknown,found()).researched).toBeNull();
   });
 
   it('still answers for a wine the ageing table has no entry for',()=>{
