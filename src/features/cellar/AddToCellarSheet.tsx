@@ -1,4 +1,4 @@
-import { useEffect,useMemo,useState } from 'react';
+import { useEffect,useMemo,useRef,useState } from 'react';
 import { addToCellar,updateHolding,type CellarHolding } from './api';
 import { VintageCheck } from '../maturity/VintageCheck';
 import { getProducer,resolveProducer,type ProducerResolution } from '../producers/api';
@@ -43,6 +43,8 @@ export function AddToCellarSheet({onClose,onAdded,holding}:{onClose:()=>void;onA
   const [adopted,setAdopted]=useState('');
   const [choices,setChoices]=useState<KnownWine[]>([]);
   const [busy,setBusy]=useState(false),[error,setError]=useState('');
+  /** The place the boxes were last filled from, so typing in them is not stomped. */
+  const filledFrom=useRef<string|null>(null);
 
   const matched=resolution?.matched?resolution.producer:undefined;
   const suggestion=resolution?.matched?undefined:resolution?.suggestion;
@@ -129,6 +131,26 @@ export function AddToCellarSheet({onClose,onAdded,holding}:{onClose:()=>void;onA
     return {country:place.country,region:place.region,appellation:place.appellation,
       denomination:place.denomination,known:Boolean(place.placeId)};
   },[appellation,country,region]);
+
+  /**
+   * Follow the appellation with the country and the region.
+   *
+   * Editing a Salon into a Charmes-Chambertin left Champagne sitting in the
+   * region box, and the box is what gets sent - so the bottle was saved as a
+   * Burgundy grand cru in Champagne. The save re-derives the place either way,
+   * but the form should not have shown one answer and stored another.
+   *
+   * Only when the tree actually recognised somewhere, and only once per place:
+   * a country typed by hand for a place the tree has never heard of is the
+   * whole reason these boxes exist, and must not be overwritten.
+   */
+  useEffect(()=>{
+    const placeId=derived?.known?`${derived.country}|${derived.region}`:null;
+    if(!placeId||filledFrom.current===placeId)return;
+    filledFrom.current=placeId;
+    setCountry(derived?.country??'');
+    setRegion(derived?.region??'');
+  },[derived]);
 
   function pick(name:string){
     const entry=choices.find(choice=>choice.name===name);

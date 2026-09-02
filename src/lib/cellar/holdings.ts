@@ -1,5 +1,7 @@
 import { normalizeProducerAlias,resolveExistingProducer } from '../producers/entities';
 import { normalizeCuveeAlias,resolveExistingCuvee,stripKnownProducerPrefix } from '../cuvees/entities';
+import { canonicalizeWineFields } from '../wine/canonicalize';
+import { resolvePlace } from '../places/resolve';
 import type { CellarInput,CellarPatch } from './schema';
 
 export type CellarHolding={
@@ -17,6 +19,8 @@ type Row=Record<string,unknown>;
 const text=(value:unknown)=>{const trimmed=String(value??'').trim();return trimmed||null};
 const num=(value:unknown)=>value==null?null:Number(value);
 const now=()=>new Date().toISOString();
+const derivedTier=(row:Row)=>resolvePlace({country:text(row.country),region:text(row.region),
+  appellation:text(row.appellation)}).classification??null;
 
 export const mapHolding=(row:Row):CellarHolding=>({
   id:String(row.id),
@@ -25,7 +29,13 @@ export const mapHolding=(row:Row):CellarHolding=>({
   producer:String(row.producer),wineName:String(row.wine_name),
   vintage:row.vintage==null?null:Number(row.vintage),
   country:text(row.country),region:text(row.region),appellation:text(row.appellation),
-  wineStyle:text(row.wine_style),classification:text(row.classification),
+  wineStyle:text(row.wine_style),
+  // Derived where it is missing, rather than trusted blindly. Rows written
+  // before this was kept properly - and any row whose tier an edit had already
+  // forgotten - come back right on the next read instead of waiting for someone
+  // to notice a grand cru with a village window. A place that carries no tier
+  // still derives none, so this invents nothing.
+  classification:text(row.classification)??derivedTier(row),
   bottles:Number(row.bottles)||0,bottleSizeMl:Number(row.bottle_size_ml)||750,
   purchasePrice:num(row.purchase_price),currency:text(row.currency),
   purchasedAt:text(row.purchased_at),merchant:text(row.merchant),location:text(row.location),
@@ -104,31 +114,36 @@ export async function addHolding(db:D1Database,owner:string,input:CellarInput):P
     location:input.location??null,notes:input.notes??'',createdAt:stamp,updatedAt:stamp};
 }
 
-const patchColumns:Array<[keyof CellarPatch,string]>=[
-  ['producer','producer'],['wineName','wine_name'],['vintage','vintage'],['country','country'],['region','region'],
-  ['appellation','appellation'],['wineStyle','wine_style'],['classification','classification'],
-  ['bottles','bottles'],['bottleSizeMl','bottle_size_ml'],['purchasePrice','purchase_price'],['currency','currency'],
-  ['purchasedAt','purchased_at'],['merchant','merchant'],['location','location'],['notes','notes']
-];
 
-/** Editing to nought bottles is the same statement as drinking the last one. */
+/**
+ * Correct a line, and let the place tree answer again.
+ *
+ * The patch is merged onto what is stored and the whole thing re-canonicalised,
+ * for the same reason a wine save does it: correcting the appellation from
+ * Gevrey-Chambertin to Charmes-Chambertin has to move the cru tier with it, and
+ * the tier is what decides whether the drinking window reads eight-to-
+ * twenty-five years or four-to-twelve.
+ *
+ * Editing to nought bottles is the same statement as drinking the last one.
+ */
 export async function updateHolding(db:D1Database,owner:string,id:string,patch:CellarPatch){
   const current=await readHolding(db,owner,id);
   if(!current)return null;
   if(patch.bottles===0){await deleteHolding(db,owner,id);return {...current,bottles:0}}
-  const sets:string[]=[],args:unknown[]=[];
-  for(const [key,column] of patchColumns){
-    if(!(key in patch))continue;
-    sets.push(`${column}=?`);args.push(patch[key]??null);
-  }
-  if(!sets.length)return current;
-  const producer=patch.producer??current.producer,wineName=patch.wineName??current.wineName;
-  const vintage=patch.vintage===undefined?current.vintage:patch.vintage;
-  const size=patch.bottleSizeMl??current.bottleSizeMl;
-  sets.push('match_key=?');args.push(cellarMatchKey(producer,wineName,vintage,size));
-  const stamp=now();
-  sets.push('updated_at=?');args.push(stamp);
-  await db.prepare(`UPDATE cellar_holdings SET ${sets.join(',')} WHERE owner_id=? AND id=?`).bind(...args,owner,id).run();
+  const merged={...current,...patch};
+  const place=canonicalizeWineFields({producer:merged.producer,wineName:merged.wineName,
+    country:merged.country,region:merged.region,appellation:merged.appellation,
+    classification:merged.classification,classificationOverride:null});
+  const next={...merged,country:place.country??null,region:place.region??null,
+    appellation:place.appellation??null,classification:place.classification??null};
+  const stamp=new Date().toISOString();
+  await db.prepare(`UPDATE cellar_holdings SET producer=?,wine_name=?,vintage=?,country=?,region=?,appellation=?,
+    wine_style=?,classification=?,bottles=?,bottle_size_ml=?,purchase_price=?,currency=?,purchased_at=?,
+    merchant=?,location=?,notes=?,match_key=?,updated_at=? WHERE owner_id=? AND id=?`)
+    .bind(next.producer,next.wineName,next.vintage,next.country,next.region,next.appellation,
+      next.wineStyle,next.classification,next.bottles,next.bottleSizeMl,next.purchasePrice,next.currency,
+      next.purchasedAt,next.merchant,next.location,next.notes,
+      cellarMatchKey(next.producer,next.wineName,next.vintage,next.bottleSizeMl),stamp,owner,id).run();
   return readHolding(db,owner,id);
 }
 
