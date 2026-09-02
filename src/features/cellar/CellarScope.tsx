@@ -142,8 +142,14 @@ export function CellarScope(){
       <button type="button" disabled={offset+PAGE_SIZE>=total||loading} onClick={()=>update('offset',String(offset+PAGE_SIZE))}>Next →</button>
     </nav>}
 
-    {adding&&<AddToCellarSheet onClose={()=>setAdding(false)} onAdded={()=>{setAdding(false);setReloadSeq(seq=>seq+1)}}/>}
+    {/* A vintage looked up inside a sheet changes the rows behind it, and the
+        obvious way out of the sheet after pressing the button is Cancel - which
+        saves nothing and so reloaded nothing. The star only appeared on the
+        next visit to the page. */}
+    {adding&&<AddToCellarSheet onClose={()=>setAdding(false)} onAdded={()=>{setAdding(false);setReloadSeq(seq=>seq+1)}}
+      onVintageResearched={()=>setReloadSeq(seq=>seq+1)}/>}
     {editing&&<AddToCellarSheet holding={editing} onClose={()=>setEditing(null)} onAdded={()=>{setEditing(null);setReloadSeq(seq=>seq+1)}}
+      onVintageResearched={()=>setReloadSeq(seq=>seq+1)}
       onRemove={async holding=>{const removed=await drop(holding);if(removed)setEditing(null)}}/>}
   </>;
 }

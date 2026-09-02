@@ -28,7 +28,7 @@ const STYLES=['red','white','rose','sparkling','dessert','fortified','orange'];
  * Nothing here calls the AI. A cellar bottle already has an identity; that is
  * what recognition exists to find.
  */
-export function AddToCellarSheet({onClose,onAdded,holding,onRemove}:{onClose:()=>void;onAdded:(holding:CellarHolding)=>void;
+export function AddToCellarSheet({onClose,onAdded,holding,onRemove,onVintageResearched}:{onClose:()=>void;onAdded:(holding:CellarHolding)=>void;
   /** An existing line, to correct rather than add to. */
   holding?:CellarHolding;
   /**
@@ -36,7 +36,9 @@ export function AddToCellarSheet({onClose,onAdded,holding,onRemove}:{onClose:()=
    * than on the row: it is the rarest thing done to a holding and the only one
    * that cannot be undone, so it belongs behind the screen you open on purpose.
    */
-  onRemove?:(holding:CellarHolding)=>Promise<void>|void}){
+  onRemove?:(holding:CellarHolding)=>Promise<void>|void;
+  /** A vintage was looked up from in here, so whatever is behind this sheet is stale. */
+  onVintageResearched?:()=>void}){
   const editing=Boolean(holding);
   const [producer,setProducer]=useState(holding?.producer??''),[wineName,setWineName]=useState(holding?.wineName??'');
   const [vintage,setVintage]=useState(holding?.vintage!=null?String(holding.vintage):''),[appellation,setAppellation]=useState(holding?.appellation??''),[style,setStyle]=useState(holding?.wineStyle??'');
@@ -228,7 +230,7 @@ export function AddToCellarSheet({onClose,onAdded,holding,onRemove}:{onClose:()=
           already has - which costs nothing - and one being edited follows the
           appellation as it is changed. It renders nothing until there is a
           vintage and a place, because until then there is nothing to say. */}
-      <VintageCheck wine={asking}/>
+      <VintageCheck wine={asking} onResearched={onVintageResearched}/>
 
       <label className="cellar-field">Producer *
         <input value={producer} onChange={event=>setProducer(event.target.value)} placeholder="Domaine, château or estate" autoFocus/>

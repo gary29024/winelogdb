@@ -115,6 +115,36 @@ describe('the cellar scope of the Journal',()=>{
       .some(([url,init])=>String(url)==='/api/cellar/h1'&&(init as RequestInit|undefined)?.method==='DELETE')).toBe(true));
   });
 
+  it('refreshes the rows when a vintage is looked up from inside a sheet',async()=>{
+    // Reported as: the star does not appear until you leave the page and come
+    // back. Cancel is the obvious way out of the sheet after pressing the
+    // button - it saves nothing, so it reloaded nothing, and the rows behind
+    // kept the window they had before the search.
+    const window_={country:'France',region:'Champagne',appellation:null,vintage:2020,wineStyle:'red',
+      shiftFrom:1,shiftTo:2,note:'n',sources:[{title:'A page',url:'https://vertexaisearch.cloud.google.com/x'}],
+      model:'m',researchedAt:'2026-09-02T00:00:00.000Z'};
+    vi.stubGlobal('fetch',vi.fn(async(input:RequestInfo|URL,init?:RequestInit)=>{
+      const url=String(input);
+      if(url.startsWith('/api/maturity/vintage'))
+        return new Response(JSON.stringify({window:init?.method==='POST'?window_:null}),{status:200,headers:{'content-type':'application/json'}});
+      if(url.startsWith('/api/cellar'))
+        return new Response(JSON.stringify({items:[{...holding,vintageWindow:null}],total:1,bottles:6,nextOffset:null}),{status:200,headers:{'content-type':'application/json'}});
+      return new Response(JSON.stringify({items:[],total:0,nextOffset:null}),{status:200,headers:{'content-type':'application/json'}});
+    }));
+    vi.resetModules();
+    const {default:CellarPage}=await import('../../src/features/cellar/CellarPage');
+    render(<MemoryRouter initialEntries={['/journal?scope=cellar']}><CellarPage/></MemoryRouter>);
+    await screen.findByText('Feudo di Mezzo');
+    const listed=()=>(globalThis.fetch as ReturnType<typeof vi.fn>).mock.calls
+      .filter(([url])=>String(url).startsWith('/api/cellar')).length;
+    const before=listed();
+    fireEvent.click(screen.getByRole('button',{name:'Edit'}));
+    fireEvent.click(await screen.findByRole('button',{name:'Look up 2020'}));
+    // The answer is filed per region and year, so it is not only this bottle's:
+    // every row in the cell has a window it did not have a moment ago.
+    await waitFor(()=>expect(listed()).toBeGreaterThan(before));
+  });
+
   it('reads as the journal list does on a phone',async()=>{
     // A stack of bordered cards fitted two to a screen. The rows share one
     // panel and a hairline apiece, the same treatment the journal already uses.

@@ -22,7 +22,13 @@ const years=(value:number)=>`${value>0?'+':''}${value}`;
  * a growing season does not change, and every wine you own from that cell reads
  * the same answer afterwards for nothing.
  */
-export function VintageCheck({wine}:{wine:Wine}){
+export function VintageCheck({wine,onResearched}:{wine:Wine;
+  /**
+   * A search just landed. The answer is filed per region and year, so it is not
+   * only this wine's: every bottle in the cell now has a window it did not have
+   * a moment ago, and a list showing them is stale until it is told.
+   */
+  onResearched?:()=>void}){
   const [researched,setResearched]=useState<VintageWindow|null>(null);
   const [busy,setBusy]=useState(false),[error,setError]=useState('');
   const subject:VintageSubject={country:wine.country,region:wine.region,appellation:wine.appellation,
@@ -74,7 +80,7 @@ export function VintageCheck({wine}:{wine:Wine}){
    */
   async function look(again=false){
     setBusy(true);setError('');
-    try{const {window}=await lookUpVintageWindow(subject,again);setResearched(window)}
+    try{const {window}=await lookUpVintageWindow(subject,again);setResearched(window);if(window)onResearched?.()}
     catch(e){setError((e as Error).message||'Could not look up that vintage')}
     finally{setBusy(false)}
   }
