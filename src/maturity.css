@@ -1,0 +1,15 @@
+/* When a bottle is worth opening. Tokens only, one selector-block per line. */
+.maturity-line{display:flex;flex-wrap:wrap;align-items:baseline;gap:var(--s2);margin-top:var(--s3);padding:var(--s2) var(--s3);border:1px solid var(--line-mid);border-radius:var(--r-md);background:var(--ground)}
+.maturity-line strong{font-size:.9rem}
+.maturity-window{color:var(--ink-4);font-variant-numeric:tabular-nums}
+.maturity-line small{flex:1 1 100%;color:var(--muted);font-size:.76rem}
+.maturity-dot{display:inline-flex;align-items:center;gap:var(--s1);font-size:.78rem;font-weight:600;color:var(--ink-4)}
+.maturity-dot-mark{width:9px;height:9px;border-radius:var(--r-pill);background:var(--ink-7);flex:0 0 auto}
+.maturity-hold .maturity-dot-mark{background:var(--pour-sparkling-ink)}
+.maturity-ready .maturity-dot-mark{background:var(--good)}
+.maturity-mature .maturity-dot-mark{background:var(--warn)}
+.maturity-past-peak .maturity-dot-mark{background:var(--ink-7)}
+.maturity-hold strong{color:var(--pour-sparkling-ink)}
+.maturity-ready strong{color:var(--good-ink)}
+.maturity-mature strong{color:var(--warn)}
+.maturity-past-peak strong{color:var(--ink-5)}

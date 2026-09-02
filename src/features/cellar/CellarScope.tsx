@@ -3,6 +3,7 @@ import { useNavigate,useSearchParams } from 'react-router-dom';
 import { pourFamily } from '../../lib/wine/pourFamily';
 import { bottleLabel,listCellar,removeHolding,updateHolding,type CellarHolding } from './api';
 import { AddToCellarSheet } from './AddToCellarSheet';
+import { DrinkingWindow } from '../maturity/DrinkingWindow';
 
 const PAGE_SIZE=36;
 const SORTS:Array<[string,string]>=[['vintage','Vintage, newest'],['oldestVintage','Vintage, oldest'],['producer','Producer'],['bottles','Most bottles'],['added','Recently added'],['purchased','Recently bought']];
@@ -112,6 +113,7 @@ export function CellarScope(){
           <p className="producer">{holding.producer}</p>
           <span className="cellar-meta">{[holding.appellation,holding.region,holding.country].filter(Boolean).join(' · ')}</span>
           <span className="cellar-bottles">{bottleLabel(holding)}</span>
+          <DrinkingWindow wine={holding} compact/>
           {holding.location&&<span className="cellar-location">{holding.location}</span>}
         </div>
         <div className="cellar-card-actions">
