@@ -12,11 +12,15 @@
 .cellar-card-top h2{margin:0;font-size:1.05rem;overflow-wrap:anywhere}
 .cellar-card-top strong{color:var(--ink-5);font-variant-numeric:tabular-nums}
 .cellar-card .producer{margin:0;color:var(--ink-4)}
-.cellar-meta{color:var(--muted);font-size:.85rem}
+/* One line, cut rather than wrapped: an appellation, a region and a country is
+   a long string and it is the least of what the row says. */
+.cellar-meta{overflow:hidden;color:var(--muted);font-size:.85rem;white-space:nowrap;text-overflow:ellipsis}
+.cellar-state{display:flex;flex-wrap:wrap;align-items:center;gap:var(--s1) var(--s2)}
 .cellar-bottles{color:var(--ink-3);font-weight:600;font-size:.9rem}
 .cellar-location{color:var(--muted);font-size:.8rem}
 .cellar-card-actions{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:var(--s2)}
-.cellar-count-actions{display:flex;gap:var(--s2)}
+.cellar-count-actions{display:flex;align-items:center;gap:var(--s1)}
+.cellar-count-actions .quiet{padding:var(--s1) var(--s2)}
 .cellar-drop{color:var(--bad-ink)}
 
 .cellar-empty p{max-width:46ch;margin-inline:auto}
@@ -49,10 +53,22 @@
 .detail-cellar-where{color:var(--muted);font-size:.8rem}
 .detail-cellar-open{color:var(--wine-ink);font-weight:600;font-size:.85rem}
 
+/* On a phone the cellar reads as the journal list does: rows in one panel,
+   divided by a hairline, rather than a stack of bordered cards. Two cards to a
+   screen is not a list you can scan. */
+@media (max-width:700px){
+  .cellar-list{gap:0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--paper)}
+  .cellar-card{gap:var(--s3);padding:var(--s3) var(--s2);border:0;border-bottom:1px solid var(--sunken);border-radius:0}
+  .cellar-card:last-child{border-bottom:0}
+  .cellar-card .bottle{width:46px;height:62px}
+  .cellar-card-top h2{font-family:'DM Sans',sans-serif;font-size:1rem}
+  .cellar-card .producer{font-size:.92rem}
+  .cellar-card-actions button{padding:var(--s2) var(--s3);font-size:.9rem}
+  .cellar-count-actions .quiet{padding:var(--s2)}
+}
+
 @media (max-width:520px){
   .cellar-row.stack-narrow{grid-template-columns:minmax(0,1fr)}
-  .cellar-card-actions{flex-direction:column;align-items:stretch}
-  .cellar-count-actions{justify-content:space-between}
 }
 
 .bottle-photo-prompt{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:var(--s3);margin:var(--s4) 0;padding:var(--s3) var(--s4);border:1px dashed var(--line-strong);border-radius:var(--r-md);background:var(--ground)}

@@ -113,9 +113,14 @@ export function CellarScope(){
           <div className="cellar-card-top"><h2>{holding.wineName}</h2><strong>{holding.vintage??'NV'}</strong></div>
           <p className="producer">{holding.producer}</p>
           <span className="cellar-meta">{[holding.appellation,holding.region,holding.country].filter(Boolean).join(' · ')}</span>
-          <span className="cellar-bottles">{bottleLabel(holding)}</span>
-          <DrinkingWindow wine={holding} compact researched={holding.vintageWindow??null}/>
-          {holding.location&&<span className="cellar-location">{holding.location}</span>}
+          {/* Count, readiness and rack on one line. Three facts of a few words
+              each had a line apiece, which on a phone is three lines of mostly
+              white space and two cards to a screen. */}
+          <span className="cellar-state">
+            <span className="cellar-bottles">{bottleLabel(holding)}</span>
+            <DrinkingWindow wine={holding} compact researched={holding.vintageWindow??null}/>
+            {holding.location&&<span className="cellar-location">{holding.location}</span>}
+          </span>
         </div>
         <div className="cellar-card-actions">
           <button type="button" className="primary" disabled={busyId===holding.id} onClick={()=>void take(holding)}>Open a bottle</button>

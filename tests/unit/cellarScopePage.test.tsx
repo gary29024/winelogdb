@@ -59,6 +59,30 @@ describe('the cellar scope of the Journal',()=>{
     expect(open).toBeTruthy();
   });
 
+  it('keeps the count, the readiness and the rack on one row',async()=>{
+    // Three facts of a few words each had a line apiece, which on a phone is
+    // three lines of mostly white space and two cards to a screen.
+    stubFetch({items:[{...holding,vintageWindow:null}],total:1,bottles:6,nextOffset:null});
+    const {container}=await renderCellar();
+    await screen.findByText('Feudo di Mezzo');
+    const state=container.querySelector('.cellar-state')!;
+    expect(state.querySelector('.cellar-bottles')!.textContent).toBe('6 bottles');
+    expect(state.querySelector('.maturity-dot')).not.toBeNull();
+    expect(state.querySelector('.cellar-location')!.textContent).toBe('Rack 3');
+  });
+
+  it('reads as the journal list does on a phone',async()=>{
+    // A stack of bordered cards fitted two to a screen. The rows share one
+    // panel and a hairline apiece, the same treatment the journal already uses.
+    const css=(await import('node:fs')).readFileSync('src/cellar.css','utf8');
+    const phone=css.match(/@media \(max-width:700px\)\{[\s\S]*?\n\}/)![0];
+    expect(phone).toMatch(/\.cellar-card\{[^}]*border:0/);
+    expect(phone).toMatch(/\.cellar-card\{[^}]*border-bottom:1px solid var\(--sunken\)/);
+    expect(phone).toMatch(/\.cellar-list\{[^}]*gap:0/);
+    // and the actions stay on one row rather than stacking into three
+    expect(css).not.toMatch(/\.cellar-card-actions\{[^}]*flex-direction:column/);
+  });
+
   it('marks the cellar tab as the one being shown',async()=>{
     stubFetch({items:[],total:0,bottles:0,nextOffset:null});
     await renderCellar();
