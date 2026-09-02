@@ -20,7 +20,14 @@ export type VintageSubject={country?:string|null;region?:string|null;appellation
    * for the grand cru and the village wine beside it, and the shift has to
    * stay transferable between them.
    */
-  classification?:string|null};
+  classification?:string|null;
+  /**
+   * The house and the bottling, for the same reason and with the same rule.
+   * A Dom Perignon keeps far longer than the Champagne beside it, so its
+   * baseline is its own - but 2008 in Champagne is one growing season for all
+   * of them, so neither name goes anywhere near the key.
+   */
+  producer?:string|null;wineName?:string|null};
 
 const normalized=(value:unknown)=>String(value??'').normalize('NFD').replace(/[̀-ͯ]/g,'')
   .toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();

@@ -39,6 +39,15 @@ describe('the request that asks about a vintage',()=>{
     expect(handler).toMatch(/const cell=vintageCell\(subject\)/);
   });
 
+  it('carries the house and the bottling to the prompt, not to the cell',()=>{
+    // The route dropped them, so a Dom Perignon was told wines like it are
+    // worth drinking for three to fifteen years - what Champagne says when
+    // nobody mentions the cuvee - and the answer was anchored to that.
+    const route=readFileSync('worker/cuveeEntry.ts','utf8');
+    expect(route).toMatch(/producer:typeof source\.producer==='string'/);
+    expect(route).toMatch(/wineName:typeof source\.wineName==='string'/);
+  });
+
   it('still refuses an answer nothing was retrieved for',()=>{
     // The guard was right; it was the request that was wrong. An ungrounded
     // answer is a memory dressed as research, and this feature exists to tell

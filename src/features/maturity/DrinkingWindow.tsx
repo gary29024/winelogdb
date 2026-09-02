@@ -3,7 +3,9 @@ import { shiftVerdict,type VintageWindow } from '../../lib/maturity/vintageWindo
 import '../../maturity.css';
 
 type Wine={country?:string|null;region?:string|null;appellation?:string|null;
-  classification?:string|null;wineStyle?:string|null;vintage?:number|null};
+  classification?:string|null;wineStyle?:string|null;vintage?:number|null;
+  /** Read only to recognise a bottling the region's window would misjudge. */
+  producer?:string|null;wineName?:string|null};
 
 /**
  * When a bottle is worth opening, said in one line.

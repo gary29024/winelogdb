@@ -84,6 +84,15 @@ describe('which vintage question is being asked',()=>{
     expect(vintageCacheKey(beze)).toBe(vintageCacheKey({...beze,region:'Burgundy',country:'France'}));
   });
 
+  it('ignores the house and the bottling, which are the baseline and not the cell',()=>{
+    // A Dom Perignon keeps far longer than the Champagne beside it, so its
+    // usual window is its own - but 2008 in Champagne is one growing season for
+    // every house in it, and paying per cuvee for that would be paying twice.
+    const year={country:'France',region:'Champagne',vintage:2008,wineStyle:'sparkling'};
+    expect(vintageCacheKey({...year,producer:'Dom Pérignon',wineName:'Vintage'}))
+      .toBe(vintageCacheKey({...year,producer:'Pol Roger',wineName:'Brut Vintage'}));
+  });
+
   it('refuses to ask about a wine with no year, or nowhere',()=>{
     expect(askableVintage({appellation:'Barolo',vintage:null})).toBe(false);
     expect(askableVintage({vintage:2019})).toBe(false);
@@ -104,6 +113,26 @@ describe('what a source is allowed to say',()=>{
     // Better than a year invented to fill the field.
     const parsed=vintageWindowSchema.parse({drinkFrom:null,drinkTo:null,note:'No source discusses it.',sources:[]});
     expect(parsed.drinkFrom).toBeNull();
+  });
+});
+
+describe('the usual window a source is measured against',()=>{
+  it("is the bottling's own where the region cannot describe it",()=>{
+    // The shift is regional and transfers to everything in the cell; the
+    // baseline it moves is the wine's. A Salon and the Champagne beside it read
+    // the same year and land in different places, which is the point.
+    const year=new Date().getFullYear();
+    const shift={country:'France',region:'Champagne',appellation:null,vintage:year-20,wineStyle:'sparkling',
+      shiftFrom:2,shiftTo:3,note:'n',sources:[],model:'m',researchedAt:'x'};
+    const salon=maturityPair({country:'France',region:'Champagne',vintage:year-20,wineStyle:'sparkling',
+      producer:'Salon',wineName:'Le Mesnil'},shift);
+    const other=maturityPair({country:'France',region:'Champagne',vintage:year-20,wineStyle:'sparkling',
+      producer:'A Grower',wineName:'Brut'},shift);
+    expect(salon.calculated).toEqual({from:year-8,to:year+25,label:'Salon'});
+    expect(other.calculated).toEqual({from:year-17,to:year-5,label:'Champagne'});
+    // and the year's shift lands on each of them from where they actually start
+    expect(salon.researched?.from).toBe(year-6);
+    expect(other.researched?.from).toBe(year-15);
   });
 });
 

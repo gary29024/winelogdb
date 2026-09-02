@@ -152,13 +152,15 @@ export function AddToCellarSheet({onClose,onAdded,holding,onRemove}:{onClose:()=
    * wine it used to be until the form was saved and reopened.
    */
   const asking=useMemo(()=>({
+    producer:producer.trim()||null,
+    wineName:wineName.trim()||null,
     country:country.trim()||derived?.country||null,
     region:region.trim()||derived?.region||null,
     appellation:appellation.trim()||null,
     vintage:/^\d{4}$/.test(vintage.trim())?Number(vintage.trim()):null,
     wineStyle:style||null,
     classification:derived?.classification??holding?.classification??null
-  }),[country,region,appellation,vintage,style,derived,holding]);
+  }),[producer,wineName,country,region,appellation,vintage,style,derived,holding]);
 
   /**
    * Follow the appellation with the country and the region.
