@@ -111,3 +111,28 @@ describe('the two answers, side by side',()=>{
     expect(pair.calculated).toEqual({from:2021,to:2027,label:'a red wine'});
   });
 });
+
+describe('a second bottle from a place already looked up',()=>{
+  it('is not a second question, whoever made it',()=>{
+    // The producer is not part of the subject at all, so it cannot reach the
+    // key: a new Barolo from a house you have never bought before reads the
+    // answer already stored, and spends nothing.
+    expect(vintageCacheKey({appellation:'Barolo',vintage:2019,wineStyle:'red'}))
+      .toBe(vintageCacheKey({appellation:'Barolo',vintage:2019,wineStyle:'red'}));
+  });
+
+  it('and reads the same years, because the window is the appellation\'s',()=>{
+    const one={country:'Italy',region:'Piedmont',appellation:'Barolo',vintage:2019,wineStyle:'red',classification:null};
+    const another={...one};
+    expect(maturityPair(another,found()).researched).toEqual(maturityPair(one,found()).researched);
+  });
+
+  it('reaches a neighbouring appellation too, at its own window',()=>{
+    // The year is regional, so Barbaresco reads Barolo's lookup - but through
+    // its own shorter window rather than Barolo's.
+    const barbaresco={country:'Italy',region:'Piedmont',appellation:'Barbaresco',vintage:2019,wineStyle:'red',classification:null};
+    expect(vintageCacheKey(barbaresco)).toBe(vintageCacheKey(barolo));
+    expect(maturityPair(barbaresco,found()).researched).toMatchObject({from:2027,to:2044});
+    expect(maturityPair(barolo,found()).researched).toMatchObject({from:2029,to:2049});
+  });
+});
