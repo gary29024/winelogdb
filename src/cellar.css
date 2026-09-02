@@ -17,6 +17,7 @@
 .cellar-meta{overflow:hidden;color:var(--muted);font-size:.85rem;white-space:nowrap;text-overflow:ellipsis}
 .cellar-state{display:flex;flex-wrap:wrap;align-items:center;gap:var(--s1) var(--s2)}
 .cellar-bottles{color:var(--ink-3);font-weight:600;font-size:.9rem}
+.cellar-price{color:var(--ink-4);font-size:.85rem;font-variant-numeric:tabular-nums}
 .cellar-location{color:var(--muted);font-size:.8rem}
 .cellar-card-actions{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:var(--s2)}
 .cellar-count-actions{display:flex;align-items:center;gap:var(--s1)}
@@ -42,7 +43,8 @@
 .cellar-resolution{margin:0;padding:var(--s2) var(--s3);border:1px solid var(--good-line);border-radius:var(--r-sm);background:var(--good-wash);color:var(--good-ink);font-size:.85rem;font-weight:600}
 .cellar-hint{margin:0;color:var(--muted);font-size:.8rem}
 .cellar-error{margin:0;color:var(--bad-ink);font-size:.85rem}
-.cellar-sheet-actions{display:flex;justify-content:flex-end;gap:var(--s2)}
+.cellar-sheet-actions{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:var(--s2)}
+.cellar-sheet-drop{margin-right:auto;padding-left:0}
 
 .cellar-open-note{display:grid;gap:var(--s1);padding:var(--s3) var(--s4);border:1px solid var(--line);border-radius:var(--r-md);background:var(--ground)}
 .cellar-open-note span{color:var(--muted);font-size:.85rem}

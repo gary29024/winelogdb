@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { describe,expect,it,vi,beforeEach } from 'vitest';
-import { cleanup,render,screen,waitFor } from '@testing-library/react';
+import { cleanup,fireEvent,render,screen,waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 
 const holding={id:'h1',producerId:'p1',cuveeId:'c1',producer:'Cusumano',wineName:'Feudo di Mezzo',vintage:2020,
@@ -69,6 +69,50 @@ describe('the cellar scope of the Journal',()=>{
     expect(state.querySelector('.cellar-bottles')!.textContent).toBe('6 bottles');
     expect(state.querySelector('.maturity-dot')).not.toBeNull();
     expect(state.querySelector('.cellar-location')!.textContent).toBe('Rack 3');
+  });
+
+  it('says what the bottles cost, which is why the price was recorded',async()=>{
+    stubFetch({items:[{...holding,vintageWindow:null}],total:1,bottles:6,nextOffset:null});
+    const {container}=await renderCellar();
+    await screen.findByText('Feudo di Mezzo');
+    // Per bottle first - it is what the form asks for and what compares between
+    // two lines - then the lot, which is what is actually on the rack.
+    const price=container.querySelector('.cellar-state .cellar-price')!.textContent!;
+    expect(price).toMatch(/280/);
+    expect(price).toMatch(/× 6/);
+    expect(price).toMatch(/1,680/);
+  });
+
+  it('quotes one bottle once, without a multiplier',async()=>{
+    stubFetch({items:[{...holding,bottles:1,vintageWindow:null}],total:1,bottles:1,nextOffset:null});
+    const {container}=await renderCellar();
+    await screen.findByText('Feudo di Mezzo');
+    const price=container.querySelector('.cellar-price')!.textContent!;
+    expect(price).toMatch(/280/);
+    expect(price).not.toMatch(/×/);
+  });
+
+  it('says nothing where no price was recorded',async()=>{
+    stubFetch({items:[{...holding,purchasePrice:null,vintageWindow:null}],total:1,bottles:6,nextOffset:null});
+    const {container}=await renderCellar();
+    await screen.findByText('Feudo di Mezzo');
+    expect(container.querySelector('.cellar-price')).toBeNull();
+  });
+
+  it('keeps removal off the row and behind the sheet',async()=>{
+    // The rarest thing done to a holding and the only irreversible one. The
+    // width it took on every row is the price of a bottle instead.
+    stubFetch({items:[{...holding,vintageWindow:null}],total:1,bottles:6,nextOffset:null});
+    await renderCellar();
+    await screen.findByText('Feudo di Mezzo');
+    expect(screen.queryByRole('button',{name:'Remove'})).toBeNull();
+    fireEvent.click(screen.getByRole('button',{name:'Edit'}));
+    const remove=await screen.findByRole('button',{name:'Remove these bottles'});
+    // and it still asks first, and still deletes the line it was opened on
+    vi.stubGlobal('confirm',vi.fn(()=>true));
+    fireEvent.click(remove);
+    await waitFor(()=>expect((globalThis.fetch as ReturnType<typeof vi.fn>).mock.calls
+      .some(([url,init])=>String(url)==='/api/cellar/h1'&&(init as RequestInit|undefined)?.method==='DELETE')).toBe(true));
   });
 
   it('reads as the journal list does on a phone',async()=>{

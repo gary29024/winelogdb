@@ -79,6 +79,29 @@ export async function holdingsForWine(wineId:string):Promise<CellarHolding[]>{
   return Array.isArray(body?.holdings)?body.holdings as CellarHolding[]:[];
 }
 
+/**
+ * What the bottles cost, short enough for a list row.
+ *
+ * The price is per bottle, which is what the form asks for and what compares
+ * between two lines. Where a line holds more than one, the lot follows it: the
+ * per-bottle figure is the one you remember paying and the lot is the one that
+ * says what is sitting on the rack.
+ *
+ * Falls back to the code and the number where the currency is not one the
+ * browser knows - a typed three-letter code is not guaranteed to be real.
+ */
+export function priceLabel(holding:Pick<CellarHolding,'purchasePrice'|'currency'|'bottles'>){
+  if(holding.purchasePrice==null)return null;
+  const money=(value:number)=>{
+    const rounded=Math.round(value*100)/100;
+    if(!holding.currency)return new Intl.NumberFormat(undefined,{maximumFractionDigits:2}).format(rounded);
+    try{return new Intl.NumberFormat(undefined,{style:'currency',currency:holding.currency,maximumFractionDigits:rounded<100?2:0}).format(rounded)}
+    catch{return `${holding.currency} ${new Intl.NumberFormat(undefined,{maximumFractionDigits:2}).format(rounded)}`}
+  };
+  const each=money(holding.purchasePrice);
+  return holding.bottles>1?`${each} × ${holding.bottles} · ${money(holding.purchasePrice*holding.bottles)}`:each;
+}
+
 /** "6 bottles · 750ml", or the format when it is not an ordinary bottle. */
 export function bottleLabel(holding:Pick<CellarHolding,'bottles'|'bottleSizeMl'>){
   const count=`${holding.bottles} bottle${holding.bottles===1?'':'s'}`;
