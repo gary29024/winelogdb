@@ -141,6 +141,12 @@ Setting *some* of them raises
 `AI Gateway configuration is incomplete: missing …` on the first research call.
 Setting *none* falls back to Option A. There is no partial mode.
 
+On this option `GEMINI_API_KEY` is not used and should be left unset: the
+resolver checks the five gateway variables before it looks at the key, so
+every call goes to Vertex through the gateway. The few direct-API fallbacks
+that remain refuse with a message naming the key rather than calling out
+without a credential.
+
 Leave `AI_GATEWAY_LOG_PAYLOADS` at `"false"`. Turn it on only to debug a
 specific failing response, then turn it back off — it stores entire research
 prompts and answers.
@@ -158,7 +164,7 @@ npx wrangler secret put APP_PASSWORD
 # Signing key for session tokens — at least 32 random characters
 npx wrangler secret put AUTH_SECRET
 
-# Your Gemini API key
+# Only for Option A — the gateway path does not use it
 npx wrangler secret put GEMINI_API_KEY
 
 # Only for Option B
