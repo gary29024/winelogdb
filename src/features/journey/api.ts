@@ -1,4 +1,5 @@
 import { authHeaders,clearSession } from '../../lib/auth/client';
+import { registerSummaryCache } from '../../lib/cache/summaryCaches';
 import type { JourneySummary,StructureSample } from './model';
 
 export type CountryStat={country:string;wines:number;producers:number;appellations:number;averageRating:number|null};
@@ -49,6 +50,8 @@ export type JourneyData={
 
 let cached:{expires:number;data:JourneyData}|null=null;
 let pending:Promise<JourneyData>|null=null;
+export function invalidateJourneyData(){cached=null;pending=null}
+registerSummaryCache(invalidateJourneyData);
 
 export function getJourneyData():Promise<JourneyData>{
   if(cached&&cached.expires>Date.now())return Promise.resolve(cached.data);
