@@ -114,7 +114,7 @@ export function CellarScope(){
           <p className="producer">{holding.producer}</p>
           <span className="cellar-meta">{[holding.appellation,holding.region,holding.country].filter(Boolean).join(' · ')}</span>
           <span className="cellar-bottles">{bottleLabel(holding)}</span>
-          <DrinkingWindow wine={holding} compact/>
+          <DrinkingWindow wine={holding} compact researched={holding.vintageWindow??null}/>
           {holding.location&&<span className="cellar-location">{holding.location}</span>}
         </div>
         <div className="cellar-card-actions">

@@ -6,6 +6,7 @@
 .maturity-dot{display:inline-flex;align-items:center;gap:var(--s1);font-size:.78rem;font-weight:600;color:var(--ink-4)}
 .maturity-dot-mark{width:9px;height:9px;border-radius:var(--r-pill);background:var(--ink-7);flex:0 0 auto}
 .maturity-dot-window{color:var(--muted);font-weight:500;font-variant-numeric:tabular-nums}
+.maturity-dot-researched{color:var(--wine-ink);font-size:.7rem}
 .maturity-hold .maturity-dot-mark{background:var(--pour-sparkling-ink)}
 .maturity-ready .maturity-dot-mark{background:var(--good)}
 .maturity-mature .maturity-dot-mark{background:var(--warn)}

@@ -1,4 +1,5 @@
 import { authHeaders,clearSession } from '../../lib/auth/client';
+import type { VintageWindow } from '../../lib/maturity/vintageWindow';
 
 export type CellarHolding={
   id:string;producerId:string|null;cuveeId:string|null;
@@ -9,6 +10,11 @@ export type CellarHolding={
   purchasePrice:number|null;currency:string|null;purchasedAt:string|null;
   merchant:string|null;location:string|null;notes:string;
   createdAt:string;updatedAt:string;
+  /**
+   * What the vintage lookup already knows about this year, where the list
+   * carried it. Absent on the single-holding reads, which have no card to draw.
+   */
+  vintageWindow?:VintageWindow|null;
 };
 export type CellarInput={
   producer:string;wineName:string;vintage:number|null;

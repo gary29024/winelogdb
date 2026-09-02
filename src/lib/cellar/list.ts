@@ -1,4 +1,8 @@
 import { mapHolding,type CellarHolding } from './holdings';
+import { readVintageWindows,vintageWindowFor,type VintageWindow } from '../maturity/vintageWindow';
+
+/** A holding plus what the vintage lookup already knows about its year. */
+export type CellarListItem=CellarHolding&{vintageWindow:VintageWindow|null};
 
 export type CellarListQuery=Record<string,string|undefined>;
 
@@ -49,6 +53,12 @@ export async function listCellarPage(db:D1Database,owner:string,q:CellarListQuer
   ]);
   const summary=countResult.results[0] as {total?:unknown;bottles?:unknown}|undefined;
   const total=Number(summary?.total??0);
-  const items:CellarHolding[]=(rowsResult.results as Record<string,unknown>[]).map(mapHolding);
+  const holdings=(rowsResult.results as Record<string,unknown>[]).map(mapHolding);
+  // One further read, and only one, so the card can show the window a search
+  // was already paid for rather than the rule of thumb beside it. The keys
+  // collapse to the distinct region-year-style cells on the page first, which
+  // for a cellar is a great deal fewer than the rows.
+  const windows=await readVintageWindows(db,owner,holdings);
+  const items:CellarListItem[]=holdings.map(holding=>({...holding,vintageWindow:vintageWindowFor(windows,holding)}));
   return {items,total,bottles:Number(summary?.bottles??0),nextOffset:offset+limit<total?offset+limit:null};
 }
