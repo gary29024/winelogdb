@@ -123,11 +123,11 @@ function ledger(){
       return undefined;
     }
     if(/^INSERT INTO ai_usage_monthly/.test(sql)){
-      const [owner,month,kind,requests,searches,input,output]=args as [string,string,string,number,number,number,number];
-      const row=monthly.find(item=>item.owner_id===owner&&item.month===month&&item.kind===kind);
+      const [owner,month,kind,model,tier,requests,searches,input,output]=args as [string,string,string,string,string,number,number,number,number];
+      const row=monthly.find(item=>item.owner_id===owner&&item.month===month&&item.kind===kind&&item.model===model&&item.tier===tier);
       if(row){row.requests=Number(row.requests)+requests;row.search_queries=Number(row.search_queries)+searches;
         row.prompt_tokens=Number(row.prompt_tokens)+input;row.output_tokens=Number(row.output_tokens)+output}
-      else monthly.push({owner_id:owner,month,kind,requests,search_queries:searches,prompt_tokens:input,output_tokens:output});
+      else monthly.push({owner_id:owner,month,kind,model,tier,requests,search_queries:searches,prompt_tokens:input,output_tokens:output});
       return undefined;
     }
     if(/^SELECT kind,model,tier,date\(created_at\) AS day,sum\(requests\)/.test(sql)){
@@ -148,10 +148,7 @@ function ledger(){
       return {all:[...runs.entries()].map(([kind,set])=>({kind,runs:set.size}))};
     }
     if(/FROM ai_usage_monthly WHERE owner_id=\? AND month=\?/.test(sql)){
-      const rows=monthly.filter(row=>row.month===args[1]);
-      return {first:{search_queries:rows.reduce((n,row)=>n+Number(row.search_queries),0),
-        prompt_tokens:rows.reduce((n,row)=>n+Number(row.prompt_tokens),0),
-        output_tokens:rows.reduce((n,row)=>n+Number(row.output_tokens),0)}};
+      return {all:monthly.filter(row=>row.month===args[1])};
     }
     return undefined;
   });
@@ -199,6 +196,43 @@ describe('the usage ledger',()=>{
     expect(summary.month.freeRemaining).toBe(0);
     expect(summary.month.billableSearches).toBe(200);
     expect(summary.month.cost).toBeCloseTo(200*0.014*DEFAULT_RATES.fxPerUsd,4);
+  });
+
+  it('prices the month by the model and tier each call was billed on',async()=>{
+    // The rollup used to keep only (owner, month, kind), so the month figure
+    // was priced at the fallback rate for everything while the cards above it
+    // priced each call properly. Same runs, two numbers, and the month was the
+    // wrong one.
+    const {env}=ledger();
+    const rates=readAiRates({AI_COST_FX_PER_USD:'1',
+      AI_COST_MODEL_RATES:JSON.stringify({
+        'gemini-3.7-flash':[{from:'2026-01-01',input:10,output:10}],
+        'gemini-3.1-flash-lite':[{from:'2026-01-01',input:1,output:1}]}),
+      AI_COST_TIER_MULTIPLIERS:JSON.stringify({flex:0.5})});
+    await recordAiUsage(env,'owner',{kind:'wine_research',runId:'w-1',model:'gemini-3.7-flash',requests:1,promptTokens:1e6,outputTokens:0});
+    await recordAiUsage(env,'owner',{kind:'scan_batch',runId:'b-1',model:'gemini-3.1-flash-lite',tier:'flex',requests:1,units:1,promptTokens:1e6,outputTokens:0});
+    const summary=await usageSummary(env.DB,'owner',rates);
+    // 10 for the research run and half of 1 for the batch scan it queued on
+    // flex - not 0.3 apiece at the fallback rate
+    expect(summary.month.cost).toBeCloseTo(10.5,6);
+    // and it is the figure the cards above it add up to, which is the whole
+    // point: one month, one number, however it is arrived at
+    expect(summary.month.cost).toBeCloseTo(summary.kinds.reduce((total,kind)=>total+kind.cost,0),6);
+  });
+
+  it("keeps a kind's models apart in the record that outlives the events",async()=>{
+    // Raw events are pruned at ninety days; the rollup is what is left. A row
+    // that has forgotten which model it was can never be priced again.
+    const {env,monthly}=ledger();
+    await recordAiUsage(env,'owner',{kind:'scan_single',runId:'s-1',model:'gemini-3.1-flash-lite',requests:1,units:1,promptTokens:900,outputTokens:100});
+    await recordAiUsage(env,'owner',{kind:'scan_single',runId:'s-1',model:'gemini-3.7-flash',requests:1,promptTokens:900,outputTokens:100});
+    await recordAiUsage(env,'owner',{kind:'scan_batch',runId:'b-1',model:'gemini-3.1-flash-lite',tier:'flex',requests:1,units:1,promptTokens:900,outputTokens:100});
+    expect(monthly).toHaveLength(3);
+    expect(monthly.map(row=>[row.kind,row.model,row.tier])).toEqual([
+      ['scan_single','gemini-3.1-flash-lite','standard'],
+      ['scan_single','gemini-3.7-flash','standard'],
+      ['scan_batch','gemini-3.1-flash-lite','flex']
+    ]);
   });
 
   it('writes the same numbers to Analytics Engine',async()=>{

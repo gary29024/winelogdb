@@ -42,10 +42,11 @@ export async function seedAiUsageOnce(db:D1Database,owner:string){
     const jobs=results??[];
     if(!jobs.length)return {events:0,months:0,searchQueries:0};
 
-    const months=new Map<string,{month:string;kind:string;requests:number;searchQueries:number}>();
+    const months=new Map<string,{month:string;kind:string;model:string;requests:number;searchQueries:number}>();
     const statements=jobs.map(job=>{
       const kind=kindFor(job.target_kind),month=billingMonth(new Date(job.created_at)),searches=Math.max(0,Math.round(Number(job.search_queries)||0));
-      const key=`${month}|${kind}`,bucket=months.get(key)??{month,kind,requests:0,searchQueries:0};
+      const model=job.model||'unknown';
+      const key=`${month}|${kind}|${model}`,bucket=months.get(key)??{month,kind,model,requests:0,searchQueries:0};
       bucket.requests+=1;bucket.searchQueries+=searches;months.set(key,bucket);
       // Research is quoted per run, so these carry no wine count - and tokens
       // were never recorded against them.
@@ -54,13 +55,13 @@ export async function seedAiUsageOnce(db:D1Database,owner:string){
         .bind(crypto.randomUUID(),owner,kind,job.request_id,job.target_id??null,job.model||'unknown',1,searches,job.created_at);
     });
     for(const bucket of months.values())statements.push(db.prepare(
-      `INSERT INTO ai_usage_monthly(owner_id,month,kind,requests,search_queries,prompt_tokens,output_tokens,updated_at)
-       VALUES(?,?,?,?,?,0,0,?)
-       ON CONFLICT(owner_id,month,kind) DO UPDATE SET
+      `INSERT INTO ai_usage_monthly(owner_id,month,kind,model,tier,requests,search_queries,prompt_tokens,output_tokens,updated_at)
+       VALUES(?,?,?,?,'standard',?,?,0,0,?)
+       ON CONFLICT(owner_id,month,kind,model,tier) DO UPDATE SET
          requests=ai_usage_monthly.requests+excluded.requests,
          search_queries=ai_usage_monthly.search_queries+excluded.search_queries,
          updated_at=excluded.updated_at`)
-      .bind(owner,bucket.month,bucket.kind,bucket.requests,bucket.searchQueries,stamp));
+      .bind(owner,bucket.month,bucket.kind,bucket.model,bucket.requests,bucket.searchQueries,stamp));
     for(let index=0;index<statements.length;index+=WRITE_CHUNK)await db.batch(statements.slice(index,index+WRITE_CHUNK));
     const seeded={events:jobs.length,months:months.size,searchQueries:[...months.values()].reduce((total,bucket)=>total+bucket.searchQueries,0)};
     console.log(JSON.stringify({event:'ai_usage_seeded',owner,...seeded}));
