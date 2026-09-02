@@ -1,5 +1,5 @@
 import { useEffect,useRef,useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { Link,useSearchParams } from 'react-router-dom';
 import { WineForm } from '../wines/WineForm';
 import { extractPhotoMetadata } from '../uploads/photoMetadata';
 import { prepareRecognitionImage } from '../uploads/prepareImage';
@@ -108,7 +108,13 @@ export function OpenBottlePage(){
   if(state==='missing'||!holding||!entry)return <section><h1>Add wine</h1><p className="cellar-hint">Those bottles are no longer in your cellar, so this is an ordinary new wine.</p><WineForm/></section>;
 
   return <section className="open-bottle-page">
-    <h1>Open a bottle</h1>
+    <div className="open-bottle-head">
+      <h1>Open a bottle</h1>
+      {/* Changing your mind must cost nothing: the bottle is only taken off the
+          count when this form is saved, so leaving here leaves the cellar as it
+          was. */}
+      <Link className="open-bottle-back" to="/journal?scope=cellar">Cancel</Link>
+    </div>
     <p className="cellar-open-note">
       <strong>{holding.producer} · {holding.wineName} {holding.vintage??'NV'}</strong>
       <span>{bottleLabel(holding)} in your cellar. Saving logs the tasting and takes one off the count.</span>

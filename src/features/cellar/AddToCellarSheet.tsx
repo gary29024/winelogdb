@@ -1,5 +1,6 @@
 import { useEffect,useMemo,useState } from 'react';
-import { addToCellar,type CellarHolding } from './api';
+import { addToCellar,updateHolding,type CellarHolding } from './api';
+import { VintageCheck } from '../maturity/VintageCheck';
 import { getProducer,resolveProducer,type ProducerResolution } from '../producers/api';
 import { resolvePlace } from '../../lib/places/resolve';
 // The suggestion banner is the scan form's, down to the class names, so it is
@@ -26,13 +27,16 @@ const STYLES=['red','white','rose','sparkling','dessert','fortified','orange'];
  * Nothing here calls the AI. A cellar bottle already has an identity; that is
  * what recognition exists to find.
  */
-export function AddToCellarSheet({onClose,onAdded}:{onClose:()=>void;onAdded:(holding:CellarHolding)=>void}){
-  const [producer,setProducer]=useState(''),[wineName,setWineName]=useState('');
-  const [vintage,setVintage]=useState(''),[appellation,setAppellation]=useState(''),[style,setStyle]=useState('');
-  const [country,setCountry]=useState(''),[region,setRegion]=useState('');
-  const [bottles,setBottles]=useState('1'),[size,setSize]=useState('750');
-  const [price,setPrice]=useState(''),[currency,setCurrency]=useState(''),[purchasedAt,setPurchasedAt]=useState('');
-  const [merchant,setMerchant]=useState(''),[location,setLocation]=useState(''),[notes,setNotes]=useState('');
+export function AddToCellarSheet({onClose,onAdded,holding}:{onClose:()=>void;onAdded:(holding:CellarHolding)=>void;
+  /** An existing line, to correct rather than add to. */
+  holding?:CellarHolding}){
+  const editing=Boolean(holding);
+  const [producer,setProducer]=useState(holding?.producer??''),[wineName,setWineName]=useState(holding?.wineName??'');
+  const [vintage,setVintage]=useState(holding?.vintage!=null?String(holding.vintage):''),[appellation,setAppellation]=useState(holding?.appellation??''),[style,setStyle]=useState(holding?.wineStyle??'');
+  const [country,setCountry]=useState(holding?.country??''),[region,setRegion]=useState(holding?.region??'');
+  const [bottles,setBottles]=useState(holding?String(holding.bottles):'1'),[size,setSize]=useState(String(holding?.bottleSizeMl??750));
+  const [price,setPrice]=useState(holding?.purchasePrice!=null?String(holding.purchasePrice):''),[currency,setCurrency]=useState(holding?.currency??''),[purchasedAt,setPurchasedAt]=useState(holding?.purchasedAt??'');
+  const [merchant,setMerchant]=useState(holding?.merchant??''),[location,setLocation]=useState(holding?.location??''),[notes,setNotes]=useState(holding?.notes??'');
   const [resolution,setResolution]=useState<ProducerResolution|null>(null),[resolving,setResolving]=useState(false);
   /** The spelling the library uses, once it has been taken - so the screen can say it did. */
   const [adopted,setAdopted]=useState('');
@@ -135,20 +139,23 @@ export function AddToCellarSheet({onClose,onAdded}:{onClose:()=>void;onAdded:(ho
 
   async function submit(){
     setError('');setBusy(true);
+    // One shape for both, because a correction and a first entry describe the
+    // same bottle. The only difference is which row it lands in.
+    const entry={
+      producer:producer.trim(),
+      wineName:wineName.trim(),
+      vintage:vintage.trim()?Number(vintage.trim()):null,
+      country:country.trim()||null,region:region.trim()||null,appellation:appellation.trim()||null,
+      wineStyle:style||null,
+      bottles:Number(bottles)||1,bottleSizeMl:Number(size)||750,
+      purchasePrice:price.trim()?Number(price.trim()):null,
+      currency:currency.trim().toUpperCase()||null,purchasedAt:purchasedAt||null,
+      merchant:merchant.trim()||null,location:location.trim()||null,notes:notes.trim()
+    };
     try{
-      const holding=await addToCellar({
-        producer:producer.trim(),
-        wineName:wineName.trim(),
-        vintage:vintage.trim()?Number(vintage.trim()):null,
-        country:country.trim()||null,region:region.trim()||null,appellation:appellation.trim()||null,
-        wineStyle:style||null,
-        bottles:Number(bottles)||1,bottleSizeMl:Number(size)||750,
-        purchasePrice:price.trim()?Number(price.trim()):null,
-        currency:currency.trim()||null,purchasedAt:purchasedAt||null,
-        merchant:merchant.trim()||null,location:location.trim()||null,notes:notes.trim()
-      });
-      onAdded(holding);
-    }catch(e){setError((e as Error).message||'Could not add those bottles')}
+      const saved=editing?await updateHolding(holding!.id,entry):await addToCellar(entry);
+      if(saved)onAdded(saved);else onClose();
+    }catch(e){setError((e as Error).message||(editing?'Could not save those changes':'Could not add those bottles'))}
     finally{setBusy(false)}
   }
 
@@ -156,10 +163,15 @@ export function AddToCellarSheet({onClose,onAdded}:{onClose:()=>void;onAdded:(ho
   return <div className="cellar-sheet-backdrop" role="presentation" onClick={()=>{if(!busy)onClose()}}>
     <div className="cellar-sheet" role="dialog" aria-modal="true" aria-labelledby="cellar-add-title" onClick={event=>event.stopPropagation()}>
       <div className="cellar-sheet-head">
-        <div><p className="eyebrow">PUT BOTTLES AWAY</p><h2 id="cellar-add-title">Add to cellar</h2></div>
+        <div><p className="eyebrow">{editing?'BOTTLES YOU HOLD':'PUT BOTTLES AWAY'}</p><h2 id="cellar-add-title">{editing?holding!.wineName:'Add to cellar'}</h2></div>
         <button type="button" className="cellar-sheet-close" onClick={onClose} disabled={busy} aria-label="Close">×</button>
       </div>
       <p className="cellar-sheet-note">These bottles stay out of your journal and out of every statistic until you open one.</p>
+
+      {/* Where a cellar bottle's drinking window belongs: this is the screen you
+          are on when you are deciding whether to open it, and the only one that
+          exists for a wine you have not drunk. */}
+      {editing&&<VintageCheck wine={holding!}/>}
 
       <label className="cellar-field">Producer *
         <input value={producer} onChange={event=>setProducer(event.target.value)} placeholder="Domaine, château or estate" autoFocus/>
@@ -203,7 +215,7 @@ export function AddToCellarSheet({onClose,onAdded}:{onClose:()=>void;onAdded:(ho
       </div>
       <div className="cellar-row">
         <label className="cellar-field">Paid<input inputMode="decimal" value={price} onChange={event=>setPrice(event.target.value)} placeholder="Per bottle"/></label>
-        <label className="cellar-field">Currency<input value={currency} onChange={event=>setCurrency(event.target.value)} placeholder="HKD" maxLength={3}/></label>
+        <label className="cellar-field">Currency<input value={currency} onChange={event=>setCurrency(event.target.value.toUpperCase())} placeholder="HKD" maxLength={3} autoCapitalize="characters" spellCheck={false}/></label>
       </div>
       <div className="cellar-row">
         <label className="cellar-field">Bought<input type="date" value={purchasedAt} onChange={event=>setPurchasedAt(event.target.value)}/></label>
@@ -215,7 +227,7 @@ export function AddToCellarSheet({onClose,onAdded}:{onClose:()=>void;onAdded:(ho
       {error&&<p className="cellar-error" role="alert">{error}</p>}
       <div className="cellar-sheet-actions">
         <button type="button" onClick={onClose} disabled={busy}>Cancel</button>
-        <button type="button" className="primary" onClick={()=>void submit()} disabled={!ready||busy}>{busy?'Adding…':`Add ${Number(bottles)||1} bottle${Number(bottles)===1?'':'s'}`}</button>
+        <button type="button" className="primary" onClick={()=>void submit()} disabled={!ready||busy}>{busy?(editing?'Saving…':'Adding…'):editing?'Save changes':`Add ${Number(bottles)||1} bottle${Number(bottles)===1?'':'s'}`}</button>
       </div>
     </div>
   </div>;

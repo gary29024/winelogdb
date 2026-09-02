@@ -72,3 +72,5 @@
 .cellar-resolution small{font-weight:500;color:var(--good-ink);opacity:.85}
 .cellar-resolution.checking{border-color:var(--line);background:var(--ground);color:var(--ink-5);font-weight:500}
 .cellar-new-producer{margin:0;padding:var(--s2) var(--s3);border:1px solid var(--line);border-radius:var(--r-sm);background:var(--ground);color:var(--ink-5);font-size:.82rem;line-height:1.45}
+.open-bottle-head{display:flex;align-items:baseline;justify-content:space-between;gap:var(--s3)}
+.open-bottle-back{color:var(--ink-5);font-size:.85rem;font-weight:600}
