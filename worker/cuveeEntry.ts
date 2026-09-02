@@ -10,6 +10,8 @@ import { ensureProducerCatalogCuveesSeeded } from '../src/lib/cuvees/catalogSeed
 import { changeCuveeCatalogLink,changeCuveeCatalogLinkSchema,createCuveeCatalogLink,createCuveeCatalogLinkSchema,getProducerCuveeCatalogState,unlinkCuveeCatalogLink,unlinkCuveeCatalogLinkSchema } from '../src/lib/cuvees/catalogLinks';
 import { listJournalPage } from '../src/lib/journal/list';
 import { listCellarPage } from '../src/lib/cellar/list';
+import { cachedVintageWindow,researchVintageWindow } from './vintageWindowHandler';
+import { askableVintage,type VintageSubject } from '../src/lib/maturity/vintageWindow';
 import { addHolding,deleteHolding,holdingsForWine,readHolding,takeBottleFromHolding,updateHolding } from '../src/lib/cellar/holdings';
 import { cellarInputSchema,cellarPatchSchema } from '../src/lib/cellar/schema';
 import { applyBatchExperienceUpdate,batchExperienceSchema } from '../src/lib/journal/batchExperience';
@@ -312,6 +314,52 @@ app.delete('/api/wines/:id',async c=>{
     }catch(e){console.error(JSON.stringify({event:'cuvee-delete-cleanup-failed',wineId:id,cuveeId:before.cuvee_id,error:(e as Error).message}))}
   }
   return response;
+});
+
+/**
+ * What a vintage did to a drinking window.
+ *
+ * The calculated window needs no route at all - it is a lookup in the place
+ * tree the browser already has. This is only the other half: what a source says
+ * about the year, which is the one thing a table cannot know.
+ *
+ * Two routes on purpose. The GET reads what has already been found and never
+ * calls anything, so a wine page costs one indexed read and no grounding. The
+ * POST is the button, and it is the only thing in the app that spends a search
+ * on a drinking window.
+ */
+const vintageSubject=(source:{country?:unknown;region?:unknown;appellation?:unknown;vintage?:unknown;wineStyle?:unknown}):VintageSubject=>({
+  country:typeof source.country==='string'?source.country:null,
+  region:typeof source.region==='string'?source.region:null,
+  appellation:typeof source.appellation==='string'?source.appellation:null,
+  vintage:Number(source.vintage)||null,
+  wineStyle:typeof source.wineStyle==='string'?source.wineStyle:null
+});
+
+app.get('/api/maturity/vintage',async c=>{
+  cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
+  const subject=vintageSubject(c.req.query());
+  if(!askableVintage(subject))return c.json({window:null});
+  try{return c.json({window:await cachedVintageWindow(c.env,owner,subject)})}
+  catch(e){console.error(JSON.stringify({event:'vintage-window-read-failed',error:(e as Error).message}));return c.json({window:null})}
+});
+
+app.post('/api/maturity/vintage',async c=>{
+  cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
+  const body=await c.req.json().catch(()=>({})) as Record<string,unknown>;
+  const subject=vintageSubject(body);
+  if(!askableVintage(subject))return c.json({error:'A vintage and a place are needed before a year can be looked up'},400);
+  try{
+    // Already found is already paid for. A growing season does not change, so a
+    // second press on the same region and vintage spends nothing.
+    const existing=await cachedVintageWindow(c.env,owner,subject);
+    if(existing&&body.refresh!==true)return c.json({window:existing,cached:true});
+    const found=await researchVintageWindow(c.env,owner,subject,crypto.randomUUID());
+    return c.json({window:found,cached:false});
+  }catch(e){
+    console.error(JSON.stringify({event:'vintage-window-failed',error:(e as Error).message}));
+    return c.json({error:(e as Error).message||'Could not look up that vintage'},502);
+  }
 });
 
 /**

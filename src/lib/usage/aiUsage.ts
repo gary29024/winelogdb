@@ -9,7 +9,7 @@ import { billingMonth,nextBillingReset,BILLING_TIME_ZONE } from './billingPeriod
  * product; this is the meter beside it, and a meter that can break the thing it
  * measures is worse than no meter.
  */
-export const AI_USAGE_KINDS=['producer_research','wine_research','scan_single','scan_batch','scan_group','scan_sheet'] as const;
+export const AI_USAGE_KINDS=['producer_research','wine_research','scan_single','scan_batch','scan_group','scan_sheet','vintage_window'] as const;
 export type AiUsageKind=typeof AI_USAGE_KINDS[number];
 
 export const kindLabels:Record<AiUsageKind,string>={
@@ -18,7 +18,8 @@ export const kindLabels:Record<AiUsageKind,string>={
   scan_single:'Single scan',
   scan_batch:'Batch scan',
   scan_group:'Group photo',
-  scan_sheet:'Tasting sheet'
+  scan_sheet:'Tasting sheet',
+  vintage_window:'Vintage window'
 };
 
 const whole=(value:unknown)=>{const parsed=Math.round(Number(value)||0);return parsed>0?parsed:0};
@@ -51,7 +52,10 @@ export type AiUsageTier=typeof AI_USAGE_TIERS[number];
  * difference between a cheap run and an expensive one.
  */
 export const unitOf:Record<AiUsageKind,'run'|'wine'>={
-  producer_research:'run',wine_research:'run',scan_single:'wine',scan_batch:'wine',scan_group:'wine',scan_sheet:'wine'
+  producer_research:'run',wine_research:'run',scan_single:'wine',scan_batch:'wine',scan_group:'wine',scan_sheet:'wine',
+  // Priced per run, because one call answers for a whole region and vintage -
+  // every wine you own from that cell, not the one that asked.
+  vintage_window:'run'
 };
 
 /**

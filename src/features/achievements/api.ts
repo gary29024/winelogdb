@@ -1,4 +1,5 @@
 import { authHeaders,clearSession } from '../../lib/auth/client';
+import { registerSummaryCache } from '../../lib/cache/summaryCaches';
 import type { AchievementCatalogueOptions,AchievementMatchMode,AchievementProgress,CustomAchievementInput } from './types';
 
 let cached:{expires:number;data:AchievementProgress[]}|null=null;
@@ -11,6 +12,7 @@ async function requireJson<T>(response:Response,message:string):Promise<T>{
   return body;
 }
 export function invalidateAchievementProgress(){cached=null;pending=null}
+registerSummaryCache(invalidateAchievementProgress);
 export function getAchievementProgress():Promise<AchievementProgress[]>{
   if(cached&&cached.expires>Date.now())return Promise.resolve(cached.data);
   if(pending)return pending;

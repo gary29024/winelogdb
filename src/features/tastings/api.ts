@@ -1,4 +1,5 @@
 import { authHeaders,clearSession } from '../../lib/auth/client';
+import { summariesChanged } from '../../lib/cache/summaryCaches';
 import type { Tasting,TastingSummary,TastingWine } from '../../lib/tastings/session';
 import type { TastingDocument } from '../../lib/tastings/documents';
 
@@ -45,18 +46,20 @@ export const reopenTasting=(id:string)=>
 
 export const attachWinesToTasting=(id:string,ids:string[])=>
   fetch(`/api/tastings/${id}/wines`,{method:'POST',headers:authHeaders(true),body:JSON.stringify({ids})})
-    .then(r=>json<{attached:number}>(r,'Could not add the selected wines'));
+    .then(r=>{summariesChanged();return json<{attached:number}>(r,'Could not add the selected wines')});
 
 export async function detachWineFromTasting(id:string,wineId:string){
   const response=await fetch(`/api/tastings/${id}/wines/${wineId}`,{method:'DELETE',headers:authHeaders()});
   if(response.status===401){clearSession();throw new Error('Session expired. Please sign in again.')}
   if(!response.ok)throw new Error('Could not remove the wine from this tasting');
+  summariesChanged();
 }
 
 export async function deleteTasting(id:string){
   const response=await fetch(`/api/tastings/${id}`,{method:'DELETE',headers:authHeaders(true),body:JSON.stringify({confirmation:'DELETE_TASTING'})});
   if(response.status===401){clearSession();throw new Error('Session expired. Please sign in again.')}
   if(!response.ok)throw new Error('Could not delete the tasting');
+  summariesChanged();
 }
 
 export const uploadTastingDocuments=(id:string,files:File[])=>{
@@ -98,11 +101,11 @@ export const parseTastingSheetPage=(id:string,page:File,afterLine?:number|null)=
 
 export const fillTastingSheetPrices=(id:string,currency:string,prices:Array<{wineId:string;price:number}>)=>
   fetch(`/api/tastings/${id}/sheet/prices`,{method:'POST',headers:authHeaders(true),body:JSON.stringify({currency,prices})})
-    .then(r=>json<{filled:number;skipped:number}>(r,'Could not fill in those prices'));
+    .then(r=>{summariesChanged();return json<{filled:number;skipped:number}>(r,'Could not fill in those prices')});
 
 export const createTastingSheetWines=(id:string,body:{currency:string|null;tastingDate:string|null;venue:string|null;wines:Array<Record<string,unknown>>})=>
   fetch(`/api/tastings/${id}/sheet/wines`,{method:'POST',headers:authHeaders(true),body:JSON.stringify(body)})
-    .then(r=>json<{created:number;wineIds:string[]}>(r,'Could not add those wines'));
+    .then(r=>{summariesChanged();return json<{created:number;wineIds:string[]}>(r,'Could not add those wines')});
 
 /** A wine list already in R2, fetched back as a file so it can be re-read without the paper. */
 export async function readTastingDocumentFile(documentId:string,name='wine-list.jpg'){
