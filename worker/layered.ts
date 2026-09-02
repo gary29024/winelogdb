@@ -13,7 +13,7 @@ import { usageSummary } from '../src/lib/usage/aiUsage';
 import { seedAiUsageOnce } from '../src/lib/usage/seedFromResearchJobs';
 import { readAiRates,type AiRateEnv } from '../src/lib/usage/rates';
 
-type Bindings={DB:D1Database;WINE_IMAGES:R2Bucket;ASSETS:Fetcher;GEMINI_API_KEY:string;AUTH_SECRET:string;APP_PASSWORD:string;APP_URL:string;MAX_FILE_BYTES?:string;MAX_BATCH_FILES?:string}&AiRateEnv;
+type Bindings={DB:D1Database;WINE_IMAGES:R2Bucket;ASSETS:Fetcher;GEMINI_API_KEY?:string;AUTH_SECRET:string;APP_PASSWORD:string;APP_URL:string;MAX_FILE_BYTES?:string;MAX_BATCH_FILES?:string}&AiRateEnv;
 type AppEnv={Bindings:Bindings};
 const app=new Hono<AppEnv>();
 

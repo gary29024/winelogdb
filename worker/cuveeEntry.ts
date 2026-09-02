@@ -24,7 +24,7 @@ import { sheetPageWasCutShort,sheetResumeLine } from '../src/features/recognitio
 import { sheetRecognitionSpec } from './sheetRecognitionHandler';
 import { runVisionRecognition } from './visionRecognition';
 
-type Bindings={DB:D1Database;WINE_IMAGES:R2Bucket;ASSETS:Fetcher;GEMINI_API_KEY:string;AUTH_SECRET:string;APP_PASSWORD:string;APP_URL:string;MAX_FILE_BYTES?:string;MAX_BATCH_FILES?:string};
+type Bindings={DB:D1Database;WINE_IMAGES:R2Bucket;ASSETS:Fetcher;GEMINI_API_KEY?:string;AUTH_SECRET:string;APP_PASSWORD:string;APP_URL:string;MAX_FILE_BYTES?:string;MAX_BATCH_FILES?:string};
 type AppEnv={Bindings:Bindings};
 const app=new Hono<AppEnv>();
 const IDENTITY_MAINTENANCE_KEY='identity-reconcile-v2';

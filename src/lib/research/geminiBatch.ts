@@ -229,7 +229,13 @@ async function executeStoredVertexBatch(env:GatewayRuntimeEnv,name:string,row:St
   return (await storedVertexBatch(db,name))??row;
 }
 
-export async function createGeminiBatch(apiKey:string,model:string,displayName:string,entries:GeminiBatchRequest[]){
+/**
+ * apiKey is a credential handle, not necessarily a credential. On a
+ * gateway-only deployment it is undefined, and credentialKey reads that as ''
+ * - the same '' configureGeminiBatchGateway registered the gateway runtime
+ * under, so the request still goes out through AI Gateway.
+ */
+export async function createGeminiBatch(apiKey:string|undefined,model:string,displayName:string,entries:GeminiBatchRequest[]){
   if(!entries.length)throw new Error('Gemini Batch requires at least one request');
   if(consumePrimaryBypass(model,displayName))throw new Error('Gemini 3.7 Batch bypassed because the primary research model is temporarily in cooldown');
   const runtime=gatewayRuntime(apiKey);
@@ -240,10 +246,11 @@ export async function createGeminiBatch(apiKey:string,model:string,displayName:s
       VALUES(?,?,?,?,NULL,'JOB_STATE_PENDING',NULL,?,?,?)`).bind(id,model,displayName,JSON.stringify(entries),stamp,stamp,expiresAt).run();
     return `${EMULATED_PREFIX}${id}`;
   }
-  if(!text(apiKey))throw new Error('No Gemini batch transport is configured');
+  const developerKey=text(apiKey);
+  if(!developerKey)throw new Error('No Gemini batch transport is configured');
   const requests=entries.map(entry=>({request:entry.request,metadata:{key:entry.key}}));
   const body=JSON.stringify({batch:{display_name:displayName,input_config:{requests:{requests}}}});
-  const response=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:batchGenerateContent`,{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':apiKey},body});
+  const response=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:batchGenerateContent`,{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':developerKey},body});
   if(!response.ok)throw new Error(`Gemini Batch API create failed (${response.status}): ${(await response.text().catch(()=>'' )).slice(0,500)}`);
   const created=await response.json() as {name?:string;metadata?:{name?:string};response?:{name?:string}};
   const name=[created.name,created.metadata?.name,created.response?.name].find(value=>value?.startsWith('batches/'));
@@ -251,20 +258,22 @@ export async function createGeminiBatch(apiKey:string,model:string,displayName:s
   return name;
 }
 
-export async function fetchGeminiBatch(apiKey:string,googleBatchName:string,options:FetchOptions={}){
+export async function fetchGeminiBatch(apiKey:string|undefined,googleBatchName:string,options:FetchOptions={}){
   if(isEmulatedGeminiBatchName(googleBatchName)){
     const runtime=gatewayRuntime(apiKey);if(!runtime)return {ok:false as const,status:503,error:'AI Gateway runtime is unavailable for this queued Vertex batch'};
     let row=await storedVertexBatch(runtime.DB,googleBatchName);if(!row)return {ok:false as const,status:404,error:'Queued Vertex batch not found'};
     if(options.execute!==false&&!isTerminalBatchState(row.state))row=await executeStoredVertexBatch(runtime,googleBatchName,row);
     const payload=storedPayload(row);return {ok:true as const,payload,state:normalizeBatchState(payload),responses:extractBatchResponses(payload)};
   }
-  const response=await fetch(`https://generativelanguage.googleapis.com/v1beta/${googleBatchName}`,{headers:{'x-goog-api-key':apiKey}});
+  const developerKey=text(apiKey);
+  if(!developerKey)return {ok:false as const,status:503,error:'Gemini batch status needs GEMINI_API_KEY when AI Gateway is not configured'};
+  const response=await fetch(`https://generativelanguage.googleapis.com/v1beta/${googleBatchName}`,{headers:{'x-goog-api-key':developerKey}});
   if(!response.ok)return {ok:false as const,status:response.status,error:`Gemini batch status failed (${response.status}): ${(await response.text().catch(()=>'' )).slice(0,500)}`};
   const payload=await response.json() as Record<string,unknown>;
   return {ok:true as const,payload,state:normalizeBatchState(payload),responses:extractBatchResponses(payload)};
 }
 
-export async function cancelEmulatedGeminiBatch(apiKey:string,name:string){
+export async function cancelEmulatedGeminiBatch(apiKey:string|undefined,name:string){
   if(!isEmulatedGeminiBatchName(name))return {name,ok:false as const,status:400,error:'Not a queued Vertex batch'};
   const runtime=gatewayRuntime(apiKey);if(!runtime)return {name,ok:false as const,status:503,error:'AI Gateway runtime is unavailable for this queued Vertex batch'};
   const id=name.slice(EMULATED_PREFIX.length),stamp=now(),result={state:'JOB_STATE_CANCELLED',error:{message:'Cancelled by user'}};
