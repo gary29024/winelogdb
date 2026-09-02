@@ -13,3 +13,14 @@
 .maturity-ready strong{color:var(--good-ink)}
 .maturity-mature strong{color:var(--warn)}
 .maturity-past-peak strong{color:var(--ink-5)}
+
+.vintage-check{display:grid;gap:var(--s2);margin-top:var(--s3)}
+.vintage-ask{display:flex;flex-wrap:wrap;align-items:center;gap:var(--s2)}
+.vintage-ask small{flex:1 1 18rem;color:var(--muted);font-size:.76rem;line-height:1.45}
+.vintage-researched{padding:var(--s3);border:1px solid var(--wine-line);border-radius:var(--r-md);background:var(--paper)}
+.vintage-researched-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:var(--s2)}
+.vintage-shift{color:var(--wine-ink);font-size:.78rem;font-weight:600}
+.vintage-note{margin:var(--s2) 0 0;color:var(--ink-4);font-size:.85rem;line-height:1.5}
+.vintage-sources{margin-top:var(--s2);color:var(--muted);font-size:.76rem}
+.vintage-sources ul{margin:var(--s1) 0 0;padding-left:var(--s4)}
+.vintage-sources a{color:var(--ink-4)}

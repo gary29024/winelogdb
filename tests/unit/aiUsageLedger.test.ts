@@ -252,7 +252,8 @@ describe('every path that spends money is metered',()=>{
     ['worker/recognitionHandler.ts',"kind:'scan_single'"],
     ['worker/vertexBatchRecognition.ts',"kind:'scan_batch'"],
     ['worker/groupRecognitionHandler.ts',"kind:'scan_group'"],
-    ['worker/sheetRecognitionHandler.ts',"kind:'scan_sheet'"]
+    ['worker/sheetRecognitionHandler.ts',"kind:'scan_sheet'"],
+    ['worker/vintageWindowHandler.ts',"kind:'vintage_window'"]
   ];
   it.each(sources)('%s records usage',async(path,kind)=>{
     const { readFileSync }=await import('node:fs');

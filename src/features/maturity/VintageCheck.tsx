@@ -1,0 +1,79 @@
+import { useEffect,useState } from 'react';
+import { maturityPair,windowShift,type VintageSubject,type VintageWindow } from '../../lib/maturity/vintageWindow';
+import { getVintageWindow,lookUpVintageWindow } from './api';
+import { DrinkingWindow } from './DrinkingWindow';
+import '../../maturity.css';
+
+type Wine=VintageSubject&{classification?:string|null};
+
+const sameYears=(shift:{from:number;to:number}|null)=>shift!=null&&shift.from===0&&shift.to===0;
+const years=(value:number)=>`${value>0?'+':''}${value}`;
+
+/**
+ * Both answers about when to open a bottle, kept apart on purpose.
+ *
+ * The calculated window comes from the place and the style and never changes.
+ * The researched one is what a source said about this particular year. Where
+ * they differ, the difference is the whole point - a cold vintage that pulled
+ * the window in, a great one that pushed it out - so neither replaces the
+ * other and both stay on screen with their basis named.
+ *
+ * A search is spent only on the button, and only once per region and vintage:
+ * a growing season does not change, and every wine you own from that cell reads
+ * the same answer afterwards for nothing.
+ */
+export function VintageCheck({wine}:{wine:Wine}){
+  const [researched,setResearched]=useState<VintageWindow|null>(null);
+  const [busy,setBusy]=useState(false),[error,setError]=useState('');
+  const subject:VintageSubject={country:wine.country,region:wine.region,appellation:wine.appellation,
+    vintage:wine.vintage,wineStyle:wine.wineStyle};
+  const askable=Boolean(wine.vintage&&(wine.appellation||wine.region||wine.country));
+
+  useEffect(()=>{
+    if(!askable)return;
+    let live=true;
+    getVintageWindow(subject).then(found=>{if(live)setResearched(found)}).catch(()=>{});
+    return()=>{live=false};
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[askable,wine.country,wine.region,wine.appellation,wine.vintage,wine.wineStyle]);
+
+  async function look(){
+    setBusy(true);setError('');
+    try{const {window}=await lookUpVintageWindow(subject);setResearched(window)}
+    catch(e){setError((e as Error).message||'Could not look up that vintage')}
+    finally{setBusy(false)}
+  }
+
+  const pair=maturityPair(wine,researched);
+  const shift=windowShift(pair);
+  if(!pair.calculated&&!pair.researched&&!askable)return null;
+
+  return <div className="vintage-check">
+    <DrinkingWindow wine={wine}/>
+
+    {pair.researched
+      ?<div className="vintage-researched">
+        <div className="vintage-researched-head">
+          <strong>{wine.vintage} in {researched?.region||researched?.country||wine.region||wine.country}</strong>
+          <span className="maturity-window">Drink {pair.researched.from}–{pair.researched.to}</span>
+          {shift&&!sameYears(shift)&&<span className="vintage-shift">{years(shift.from)} / {years(shift.to)} on the usual</span>}
+          {sameYears(shift)&&<span className="vintage-shift">Same as the usual window</span>}
+        </div>
+        {pair.researched.note&&<p className="vintage-note">{pair.researched.note}</p>}
+        <details className="vintage-sources">
+          <summary>{pair.researched.sources.length} source{pair.researched.sources.length===1?'':'s'} · looked up {pair.researched.researchedAt.slice(0,10)}</summary>
+          <ul>{pair.researched.sources.map(source=><li key={source.url}>
+            <a href={source.url} target="_blank" rel="noopener noreferrer">{source.title}</a>
+          </li>)}</ul>
+        </details>
+      </div>
+      :askable&&<div className="vintage-ask">
+        <button type="button" onClick={()=>void look()} disabled={busy}>
+          {busy?'Searching…':`Look up ${wine.vintage}`}
+        </button>
+        <small>One search, kept for every wine you own from {wine.region||wine.country} {wine.vintage} — the year is a regional fact. The window above stays either way.</small>
+      </div>}
+
+    {error&&<p className="cellar-error" role="alert">{error}</p>}
+  </div>;
+}
