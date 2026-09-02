@@ -1,7 +1,10 @@
 import { useEffect,useMemo,useState } from 'react';
 import { addToCellar,type CellarHolding } from './api';
-import { getProducer,resolveProducer } from '../producers/api';
+import { getProducer,resolveProducer,type ProducerResolution } from '../producers/api';
 import { resolvePlace } from '../../lib/places/resolve';
+// The suggestion banner is the scan form's, down to the class names, so it is
+// the same control in both places rather than a second one that looks like it.
+import '../../producerResolution.css';
 
 /** A wine this producer is known to make, however the app came to know it. */
 type KnownWine={name:string;appellation:string|null;style:string|null};
@@ -30,44 +33,79 @@ export function AddToCellarSheet({onClose,onAdded}:{onClose:()=>void;onAdded:(ho
   const [bottles,setBottles]=useState('1'),[size,setSize]=useState('750');
   const [price,setPrice]=useState(''),[currency,setCurrency]=useState(''),[purchasedAt,setPurchasedAt]=useState('');
   const [merchant,setMerchant]=useState(''),[location,setLocation]=useState(''),[notes,setNotes]=useState('');
-  const [known,setKnown]=useState<{id:string;canonicalName:string}|null>(null);
+  const [resolution,setResolution]=useState<ProducerResolution|null>(null),[resolving,setResolving]=useState(false);
+  /** The spelling the library uses, once it has been taken - so the screen can say it did. */
+  const [adopted,setAdopted]=useState('');
   const [choices,setChoices]=useState<KnownWine[]>([]);
   const [busy,setBusy]=useState(false),[error,setError]=useState('');
 
-  // Which producer this is, and what it makes. Both are lookups the app has
-  // already paid for: the producer identity, and the catalogue that producer
-  // research wrote. Debounced so typing a name is not a request per keystroke.
+  const matched=resolution?.matched?resolution.producer:undefined;
+  const suggestion=resolution?.matched?undefined:resolution?.suggestion;
+
+  /**
+   * Which producer this is, on the same mechanism the scan form uses and
+   * against the same endpoint: an exact match, or a suggestion where one name
+   * contains the other. Debounced so typing is not a request per keystroke.
+   */
   useEffect(()=>{
     const name=producer.trim();
-    if(!name){setKnown(null);setChoices([]);return}
-    let live=true;const timer=window.setTimeout(async()=>{
-      try{
-        const resolution=await resolveProducer(name);
-        if(!live)return;
-        const match=resolution.producer;
-        if(!match){setKnown(null);setChoices([]);return}
-        setKnown({id:match.id,canonicalName:match.canonicalName});
-        const detail=await getProducer(match.id).catch(()=>null);
-        if(!live||!detail)return;
-        // Three sources, all already paid for: the cuvees you have drunk, the
-        // producer's researched range, and the catalogue entries research wrote
-        // as plain text. Cuvees first, because a wine you have opened is the
-        // more likely one to be buying again.
-        const known:KnownWine[]=[
-          ...detail.catalogCuvees.map(cuvee=>({name:cuvee.canonicalName,appellation:cuvee.appellation,style:cuvee.wineStyle})),
-          ...detail.tastedWines.map(wine=>({name:wine.wineName,appellation:wine.appellation,style:wine.wineStyle})),
-          ...detail.catalog.map(entry=>({name:entry.name,appellation:entry.appellation??null,style:entry.style??entry.category??null}))
-        ];
-        const seen=new Set<string>();
-        setChoices(known.filter(entry=>{
-          const key=entry.name?.trim().toLowerCase();
-          if(!key||seen.has(key))return false;
-          seen.add(key);return true;
-        }));
-      }catch{if(live){setKnown(null);setChoices([])}}
-    },400);
-    return()=>{live=false;window.clearTimeout(timer)};
+    if(!name){setResolution(null);setResolving(false);return}
+    let cancelled=false;
+    setResolving(true);
+    const timer=window.setTimeout(()=>{
+      resolveProducer(name)
+        .then(result=>{if(!cancelled)setResolution(result)})
+        .catch(()=>{if(!cancelled)setResolution(null)})
+        .finally(()=>{if(!cancelled)setResolving(false)});
+    },250);
+    return()=>{cancelled=true;window.clearTimeout(timer)};
   },[producer]);
+
+  /**
+   * The library already knew this house, so the bottles are filed under the name
+   * the library uses.
+   *
+   * It matters more here than on a wine form. A holding stores the producer as
+   * text, and that text is what creates the producer when the bottle is finally
+   * opened - so a spelling that drifted at the cellar door becomes a duplicate
+   * producer months later, long after anyone could connect the two.
+   *
+   * Only when the field still holds the name that was resolved: the probe is
+   * debounced, and landing on top of newer typing would be worse than the drift
+   * it is fixing.
+   */
+  useEffect(()=>{
+    const canonical=matched?.canonicalName;
+    if(!canonical||producer.trim()!==resolution?.inputName||producer===canonical)return;
+    setProducer(canonical);
+    setAdopted(canonical);
+  },[matched,resolution,producer]);
+
+  // What this producer makes, for the wine-name list. A second lookup only once
+  // there is a producer to ask about, and one the app has already paid for.
+  useEffect(()=>{
+    if(!matched?.id){setChoices([]);return}
+    let live=true;
+    getProducer(matched.id).then(detail=>{
+      if(!live||!detail)return;
+      // Three sources, all already paid for: the cuvees you have drunk, the
+      // producer's researched range, and the catalogue entries research wrote
+      // as plain text. Cuvees first, because a wine you have opened is the more
+      // likely one to be buying again.
+      const known:KnownWine[]=[
+        ...detail.catalogCuvees.map(cuvee=>({name:cuvee.canonicalName,appellation:cuvee.appellation,style:cuvee.wineStyle})),
+        ...detail.tastedWines.map(wine=>({name:wine.wineName,appellation:wine.appellation,style:wine.wineStyle})),
+        ...detail.catalog.map(entry=>({name:entry.name,appellation:entry.appellation??null,style:entry.style??entry.category??null}))
+      ];
+      const seen=new Set<string>();
+      setChoices(known.filter(entry=>{
+        const key=entry.name?.trim().toLowerCase();
+        if(!key||seen.has(key))return false;
+        seen.add(key);return true;
+      }));
+    }).catch(()=>{if(live)setChoices([])});
+    return()=>{live=false};
+  },[matched?.id]);
 
   /**
    * Where the place tree files this appellation, worked out as you type.
@@ -99,7 +137,7 @@ export function AddToCellarSheet({onClose,onAdded}:{onClose:()=>void;onAdded:(ho
     setError('');setBusy(true);
     try{
       const holding=await addToCellar({
-        producer:known?.canonicalName&&known.canonicalName.toLowerCase()===producer.trim().toLowerCase()?known.canonicalName:producer.trim(),
+        producer:producer.trim(),
         wineName:wineName.trim(),
         vintage:vintage.trim()?Number(vintage.trim()):null,
         country:country.trim()||null,region:region.trim()||null,appellation:appellation.trim()||null,
@@ -126,7 +164,16 @@ export function AddToCellarSheet({onClose,onAdded}:{onClose:()=>void;onAdded:(ho
       <label className="cellar-field">Producer *
         <input value={producer} onChange={event=>setProducer(event.target.value)} placeholder="Domaine, château or estate" autoFocus/>
       </label>
-      {known&&<p className="cellar-resolution">✓ Existing producer · {known.canonicalName}</p>}
+      {suggestion&&<div className="producer-resolution producer-suggestion">
+        <span>Did you mean <strong>{suggestion.canonicalName}</strong>? {suggestion.tastedCount} wine{suggestion.tastedCount===1?'':'s'} logged.</span>
+        <button type="button" onClick={()=>{setProducer(suggestion.canonicalName);setAdopted('')}}>Use it</button>
+      </div>}
+      {producer.trim()&&(resolving
+        ?<p className="cellar-resolution checking">Checking producer library…</p>
+        :matched
+          ?<p className="cellar-resolution">✓ Existing producer · {matched.canonicalName}<small> · {matched.tastedCount} tasted{matched.catalogCount?` · ${matched.catalogCount} in researched range`:''}</small></p>
+          :<p className="cellar-new-producer">○ New to the library. These bottles are filed under the name as typed — nothing is created in Producers until you open one.</p>)}
+      {adopted&&adopted===producer&&<p className="cellar-hint">Filed under the library's spelling, {adopted}. Type over it if that is wrong.</p>}
 
       <label className="cellar-field">Wine name *
         <input list="cellar-known-wines" value={wineName} onChange={event=>{setWineName(event.target.value);pick(event.target.value)}} placeholder="Cuvée or bottling"/>
