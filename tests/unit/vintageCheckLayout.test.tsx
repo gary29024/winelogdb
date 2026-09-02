@@ -52,7 +52,9 @@ describe('the vintage block above the form',()=>{
     expect(folded,'the note lives inside the disclosure').not.toBeNull();
     expect(folded.open,'and it starts closed').toBe(false);
     // The sources went in with it, so one summary line carries both
-    expect(folded.querySelector('summary')!.textContent).toBe('Why this vintage · 2 sources · 2026-09-02');
+    // and which model answered, which two requests in the gateway log will not
+    // say without payload logging turned on
+    expect(folded.querySelector('summary')!.textContent).toBe('Why this vintage · 2 sources · 2026-09-02 · gemini-3.7-flash');
     expect(folded.querySelectorAll('a')).toHaveLength(2);
   });
 

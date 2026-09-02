@@ -45,6 +45,53 @@ const stored=(db:ReturnType<typeof createD1Stub>)=>
 const metered=(db:ReturnType<typeof createD1Stub>)=>
   db.writes().filter(call=>/INSERT INTO ai_usage_events/.test(call.sql)).map(call=>({model:call.args[5],units:call.args[11]}));
 
+/** A grounded reply that says something before it answers, which they do. */
+const answer={drinkFrom:2021,drinkTo:2036,note:'A cool year.',
+  sources:[{title:'A page',url:'https://vertexaisearch.cloud.google.com/grounding-api-redirect/abc'}]};
+const wrapped=(text:string,finishReason='STOP')=>({
+  candidates:[{content:{parts:[{text}]},finishReason}],
+  usageMetadata:{promptTokenCount:300,candidatesTokenCount:400}
+});
+
+describe('reading the JSON out of a grounded reply',()=>{
+  beforeEach(()=>vi.unstubAllGlobals());
+  afterEach(()=>vi.unstubAllGlobals());
+
+  it('takes the answer whatever the model wrapped it in',async()=>{
+    // Reported as "The vintage lookup did not come back as JSON". A grounded
+    // model writes a sentence first, or fences the object mid-reply, or appends
+    // its citations after it - and the answer was thrown away every time.
+    for(const text of [
+      `Here is what I found.\n${JSON.stringify(answer)}`,
+      `Sure:\n\`\`\`json\n${JSON.stringify(answer)}\n\`\`\`\nHope that helps.`,
+      `${JSON.stringify(answer)}\n\nSources: frw.co.uk, drouhin.com`
+    ]){
+      const {db,seen,env}=world(wrapped(text));
+      await expect(researchVintageWindow(env,'owner',subject,'r1')).resolves.toBeTruthy();
+      expect(seen,'and the cheap model answered, so nothing escalated').toEqual(['gemini-3.1-flash-lite']);
+      expect(stored(db)).toHaveLength(1);
+      vi.unstubAllGlobals();
+    }
+  });
+
+  it('tells a reply that ran out of room from one it cannot read',async()=>{
+    // Different failures wanting different answers: a truncated reply needs
+    // more room, an unreadable one needs a different model. Thinking tokens
+    // count against the cap, so the model that thinks is the one that hits it.
+    const {env}=world(wrapped('{"drinkFrom":2021,"drinkTo":','MAX_TOKENS'));
+    await expect(researchVintageWindow(env,'owner',subject,'r1'))
+      .rejects.toThrow(/ran out of room/);
+  });
+
+  it('gives the model that thinks the larger share of it',async()=>{
+    const handler=(await import('node:fs')).readFileSync('worker/vintageWindowHandler.ts','utf8');
+    const primary=Number(handler.match(/const OUTPUT_TOKENS=([\d_]+)/)![1].replace(/_/g,''));
+    const escalation=Number(handler.match(/const ESCALATION_OUTPUT_TOKENS=([\d_]+)/)![1].replace(/_/g,''));
+    expect(primary).toBeGreaterThan(2048);
+    expect(escalation).toBeGreaterThan(primary);
+  });
+});
+
 describe('asking the cheap model first',()=>{
   beforeEach(()=>vi.unstubAllGlobals());
   afterEach(()=>vi.unstubAllGlobals());
