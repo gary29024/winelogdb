@@ -99,12 +99,11 @@
 .ai-spend-grid>article>div:nth-child(2) b{font:700 1.02rem 'DM Sans',sans-serif;color:var(--ink);white-space:nowrap}
 .ai-spend-grid>article>div:nth-child(2) small{color:var(--ink-6);font-size:.68rem}
 .ai-spend-grid>article footer{grid-column:1/-1;padding-top:7px;margin-top:4px;border-top:1px solid var(--sunken);line-height:1.4}
-.ai-spend-month{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:4px 12px;margin-top:10px;padding:12px 14px;border:1px solid var(--line-mid);border-radius:var(--r-md);background:var(--ground)}
-.ai-spend-month>div:first-child{display:grid;gap:2px;min-width:0}
-.ai-spend-month strong{font:600 .86rem 'DM Sans',sans-serif}
-.ai-spend-month span,.ai-spend-month small{color:var(--ink-6);font-size:.73rem}
-.ai-spend-month>div:nth-child(2){display:grid;justify-items:end;gap:1px}
-.ai-spend-month b{font:700 1.02rem 'DM Sans',sans-serif;white-space:nowrap}
+.ai-spend-month{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:baseline;gap:2px 12px;margin-top:10px;padding:12px 14px;border:1px solid var(--line-mid);border-radius:var(--r-md);background:var(--ground)}
+.ai-spend-month strong{grid-column:1;min-width:0;font:600 .86rem 'DM Sans',sans-serif}
+.ai-spend-month b{grid-column:2;grid-row:1;font:700 1.02rem 'DM Sans',sans-serif;white-space:nowrap}
+/* Each fact gets the whole tile: one line, truncated rather than wrapped. */
+.ai-spend-month span{grid-column:1/-1;min-width:0;overflow:hidden;color:var(--ink-6);font-size:.73rem;white-space:nowrap;text-overflow:ellipsis}
 .ai-spend-month.is-billing{border-color:var(--bad-line);background:var(--bad-wash)}
 .ai-spend-month.is-billing b{color:var(--bad-ink)}
 .ai-spend-note{margin-top:9px;font-size:.72rem;line-height:1.5}

@@ -2,6 +2,7 @@ import { describe,expect,it } from 'vitest';
 import { addHolding,cellarMatchKey,takeBottleFromHolding,updateHolding } from '../../src/lib/cellar/holdings';
 import { cellarInputSchema } from '../../src/lib/cellar/schema';
 import { listCellarPage } from '../../src/lib/cellar/list';
+import { vintageCacheKey } from '../../src/lib/maturity/vintageWindow';
 import { createD1Stub,type StubReply } from './support/d1Stub';
 
 const input=(overrides:Record<string,unknown>={})=>cellarInputSchema.parse({
@@ -117,8 +118,21 @@ describe('taking a bottle out',()=>{
 });
 
 describe('the cellar list',()=>{
-  const page=(rows:Array<Record<string,unknown>>,total=rows.length,bottles=0)=>createD1Stub(sql=>
-    /count\(\*\) AS total/.test(sql)?{all:[{total,bottles}]}:{all:rows});
+  const page=(rows:Array<Record<string,unknown>>,total=rows.length,bottles=0,windows:Array<Record<string,unknown>>=[])=>
+    createD1Stub(sql=>{
+      if(/count\(\*\) AS total/.test(sql))return {all:[{total,bottles}]};
+      if(/FROM vintage_windows/.test(sql))return {all:windows};
+      return {all:rows};
+    });
+  // Keyed the way the lookup keys it: the region and the year, not the
+  // appellation, so every Sicilian red of that vintage reads the same cell.
+  const windowRow=(overrides:Record<string,unknown>={})=>({
+    cache_key:vintageCacheKey({country:'Italy',region:'Sicily',appellation:'Etna',vintage:2020,wineStyle:'red'}),
+    country:'Italy',region:'Sicily',appellation:null,vintage:2020,wine_style:'red',
+    shift_from:2,shift_to:-1,vintage_note:'A hot year on the mountain.',
+    sources_json:'[{"title":"A source","url":"https://example.test/a"}]',
+    model:'gemini-3.7-flash',researched_at:'2026-09-02T01:00:00.000Z',...overrides
+  });
 
   it('counts wines and bottles as different facts',async()=>{
     const db=page([holdingRow()],1,6);
@@ -131,6 +145,30 @@ describe('the cellar list',()=>{
     const db=page([holdingRow()]);
     await listCellarPage(db.db,'owner',{});
     expect(db.matching(/ORDER BY c.vintage DESC/)).toHaveLength(1);
+  });
+
+  it('carries the vintage a search was already paid for',async()=>{
+    const db=page([holdingRow()],1,6,[windowRow()]);
+    const [item]=(await listCellarPage(db.db,'owner',{})).items;
+    expect(item.vintageWindow).toMatchObject({shiftFrom:2,shiftTo:-1,region:'Sicily'});
+  });
+
+  it('asks for those windows once, not once a row',async()=>{
+    // Twelve bottles of Sicilian red from 2020 are one cell. Resolving a key
+    // and reading a row apiece would be a query per row on a page of seventy-two.
+    const rows=Array.from({length:6},(_,index)=>holdingRow({id:`h${index}`,wine_name:`Wine ${index}`}));
+    const db=page(rows,rows.length,rows.length,[windowRow()]);
+    await listCellarPage(db.db,'owner',{});
+    const reads=db.sql().filter(sql=>/FROM vintage_windows/.test(sql));
+    expect(reads).toHaveLength(1);
+    expect(reads[0].match(/\?/g)??[],'the owner and the one distinct cell').toHaveLength(2);
+  });
+
+  it('asks for nothing where no holding has a year to ask about',async()=>{
+    const db=page([holdingRow({vintage:null})],1,1);
+    const [item]=(await listCellarPage(db.db,'owner',{})).items;
+    expect(db.sql().some(sql=>/FROM vintage_windows/.test(sql))).toBe(false);
+    expect(item.vintageWindow).toBeNull();
   });
 
   it('never reads a wines row',async()=>{

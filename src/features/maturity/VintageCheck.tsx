@@ -69,9 +69,12 @@ export function VintageCheck({wine}:{wine:Wine}){
           {shift&&!sameYears(shift)&&<span className="vintage-shift">{years(shift.from)} / {years(shift.to)} on the usual</span>}
           {sameYears(shift)&&<span className="vintage-shift">Same as the usual window</span>}
         </div>
-        {pair.researched.note&&<p className="vintage-note">{pair.researched.note}</p>}
+        {/* The note and the sources fold away together. The years and the
+            shift are the answer; the prose behind them ran to six lines on a
+            phone, which pushed the form it sits above off the screen. */}
         <details className="vintage-sources">
-          <summary>{pair.researched.sources.length} source{pair.researched.sources.length===1?'':'s'} · looked up {pair.researched.researchedAt.slice(0,10)}</summary>
+          <summary>Why this vintage · {pair.researched.sources.length} source{pair.researched.sources.length===1?'':'s'} · {pair.researched.researchedAt.slice(0,10)}</summary>
+          {pair.researched.note&&<p className="vintage-note">{pair.researched.note}</p>}
           <ul>{pair.researched.sources.map(source=><li key={source.url}>
             <a href={source.url} target="_blank" rel="noopener noreferrer">{source.title}</a>
           </li>)}</ul>

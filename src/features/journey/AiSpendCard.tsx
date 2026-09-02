@@ -79,23 +79,23 @@ export function AiSpendCard(){
         beside the search count with the allowance under it - which read as the
         price of those searches. It is usually the opposite: until the 5,000 are
         gone the searches are the free half and every cent of this is tokens. So
-        the number says what is in it, the searches and the allowance are kept
-        together on the other side, and the period is named, because the cards
-        above are the last 30 days while this is the billing month. */}
+        the number says what is in it, and the period is named, because the
+        cards above are the last 30 days while this is the billing month.
+
+        The amount sits on the title's row and each fact gets the tile's whole
+        width beneath it. Sharing a row with the amount left the facts a phone's
+        half-width, where every one of them wrapped: three short lines became
+        six, which is the opposite of a summary. */}
     <div className={`ai-spend-month${month.freeRemaining===0?' is-billing':''}`}>
-      <div>
-        <strong>This billing month</strong>
-        <span>{count(month.searchQueries)} grounded searches · {month.freeRemaining>0
-          ?`${count(month.freeRemaining)} free left`
-          :`${count(month.billableSearches)} past the free allowance`}</span>
-        {month.resetsAt&&<span>Allowance resets {resetLabel(month.resetsAt)}</span>}
-      </div>
-      <div>
-        <b>{money(spend.currency,month.cost)}</b>
-        <small>{month.billableSearches>0
-          ?`total · tokens and ${count(month.billableSearches)} billed searches`
-          :'total · tokens only, searches still free'}</small>
-      </div>
+      <strong>This billing month</strong>
+      <b>{money(spend.currency,month.cost)}</b>
+      <span>{count(month.searchQueries)} grounded searches · {month.freeRemaining>0
+        ?`${count(month.freeRemaining)} free left`
+        :`${count(month.billableSearches)} past the allowance`}</span>
+      <span>{month.billableSearches>0
+        ?`Tokens plus ${count(month.billableSearches)} billed searches`
+        :'Tokens only — searches still free'}</span>
+      {month.resetsAt&&<span>Allowance resets {resetLabel(month.resetsAt)}</span>}
     </div>
     <p className="journey-muted ai-spend-note">
       Priced from the dated rates in the Worker configuration, each run at the price in force on the day it ran and the tier it

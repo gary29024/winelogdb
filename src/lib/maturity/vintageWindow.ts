@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { resolvePlace } from '../places/resolve';
-import { maturityFor,type MaturityWindow } from './ageing';
+import { maturityFor,type MaturityVerdict,type MaturityWindow,type Readiness } from './ageing';
 
 export type ResearchSource={title:string;url:string};
 export type VintageWindow={
@@ -96,6 +96,33 @@ export async function readVintageWindow(db:D1Database,owner:string,subject:Vinta
 }
 
 /**
+ * The windows already found for a page of wines, in one read.
+ *
+ * A list is the one place the per-wine lookup would be wrong: resolving a cache
+ * key and reading a row per holding is a query per row on a page of up to
+ * seventy-two. The keys collapse first - a cellar of Burgundy reds from one
+ * year is a single cell however many bottles are in it - so what goes to D1 is
+ * one indexed read over the handful that survive.
+ */
+const KEY_CHUNK=50;
+
+export async function readVintageWindows(db:D1Database,owner:string,subjects:VintageSubject[]){
+  const found=new Map<string,VintageWindow>();
+  const keys=[...new Set(subjects.filter(askableVintage).map(vintageCacheKey))];
+  for(let index=0;index<keys.length;index+=KEY_CHUNK){
+    const slice=keys.slice(index,index+KEY_CHUNK);
+    const {results}=await db.prepare(`SELECT cache_key,${columns} FROM vintage_windows
+      WHERE owner_id=? AND cache_key IN (${slice.map(()=>'?').join(',')})`).bind(owner,...slice).all<Row>();
+    for(const row of results??[])found.set(String(row.cache_key),mapVintageWindow(row));
+  }
+  return found;
+}
+
+/** The window found for one subject, out of a map readVintageWindows filled. */
+export const vintageWindowFor=(found:Map<string,VintageWindow>,subject:VintageSubject)=>
+  askableVintage(subject)?found.get(vintageCacheKey(subject))??null:null;
+
+/**
  * Store what the year did, not what one wine's window was.
  *
  * The source answers in calendar years for the wine that asked, because that is
@@ -149,6 +176,30 @@ export function maturityPair(wine:VintageSubject&{classification?:string|null},
       note:researched.note,sources:researched.sources,researchedAt:researched.researchedAt}
     :null;
   return {calculated,researched:shifted};
+}
+
+/**
+ * The verdict a researched year moves, where one has been paid for.
+ *
+ * A list has room for one window, and the researched one is the better answer:
+ * it is what a source said about this particular growing season, and a search
+ * was spent to find it out. The shift is applied to this wine's own window, so
+ * a grand cru and the village wine beside it move by the same two years from
+ * different starting points, and the readiness is worked out again from the
+ * years that result rather than carried over from the ones that did not.
+ *
+ * Falls back to the calculated verdict where nothing has been researched, or
+ * where a shift would invert the window - a stored answer is not a licence to
+ * print a window that ends before it opens.
+ */
+export function shiftVerdict(verdict:MaturityVerdict,researched:VintageWindow|null,
+  year=new Date().getFullYear()):{verdict:MaturityVerdict;researched:boolean}{
+  if(!researched||researched.shiftFrom==null||researched.shiftTo==null)return {verdict,researched:false};
+  const drinkFrom=verdict.drinkFrom+researched.shiftFrom,drinkTo=verdict.drinkTo+researched.shiftTo;
+  if(drinkTo<drinkFrom)return {verdict,researched:false};
+  const readiness:Readiness=year<drinkFrom?'hold':year>drinkTo?'past-peak'
+    :year>=drinkFrom+(drinkTo-drinkFrom)*2/3?'mature':'ready';
+  return {verdict:{...verdict,drinkFrom,drinkTo,readiness,opensIn:Math.max(0,drinkFrom-year)},researched:true};
 }
 
 /** Years the two answers disagree by, for the line that says so. */

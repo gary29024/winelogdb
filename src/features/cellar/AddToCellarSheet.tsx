@@ -28,9 +28,15 @@ const STYLES=['red','white','rose','sparkling','dessert','fortified','orange'];
  * Nothing here calls the AI. A cellar bottle already has an identity; that is
  * what recognition exists to find.
  */
-export function AddToCellarSheet({onClose,onAdded,holding}:{onClose:()=>void;onAdded:(holding:CellarHolding)=>void;
+export function AddToCellarSheet({onClose,onAdded,holding,onRemove}:{onClose:()=>void;onAdded:(holding:CellarHolding)=>void;
   /** An existing line, to correct rather than add to. */
-  holding?:CellarHolding}){
+  holding?:CellarHolding;
+  /**
+   * Dropping the line entirely. Only offered while editing, and here rather
+   * than on the row: it is the rarest thing done to a holding and the only one
+   * that cannot be undone, so it belongs behind the screen you open on purpose.
+   */
+  onRemove?:(holding:CellarHolding)=>Promise<void>|void}){
   const editing=Boolean(holding);
   const [producer,setProducer]=useState(holding?.producer??''),[wineName,setWineName]=useState(holding?.wineName??'');
   const [vintage,setVintage]=useState(holding?.vintage!=null?String(holding.vintage):''),[appellation,setAppellation]=useState(holding?.appellation??''),[style,setStyle]=useState(holding?.wineStyle??'');
@@ -253,6 +259,8 @@ export function AddToCellarSheet({onClose,onAdded,holding}:{onClose:()=>void;onA
 
       {error&&<p className="cellar-error" role="alert">{error}</p>}
       <div className="cellar-sheet-actions">
+        {editing&&onRemove&&<button type="button" className="quiet cellar-drop cellar-sheet-drop" disabled={busy}
+          onClick={()=>void onRemove(holding!)}>Remove these bottles</button>}
         <button type="button" onClick={onClose} disabled={busy}>Cancel</button>
         <button type="button" className="primary" onClick={()=>void submit()} disabled={!ready||busy}>{busy?(editing?'Saving…':'Adding…'):editing?'Save changes':`Add ${Number(bottles)||1} bottle${Number(bottles)===1?'':'s'}`}</button>
       </div>

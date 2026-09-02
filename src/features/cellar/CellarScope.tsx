@@ -1,7 +1,7 @@
 import { useCallback,useEffect,useMemo,useState } from 'react';
 import { useNavigate,useSearchParams } from 'react-router-dom';
 import { pourFamily } from '../../lib/wine/pourFamily';
-import { bottleLabel,listCellar,removeHolding,updateHolding,type CellarHolding } from './api';
+import { bottleLabel,listCellar,priceLabel,removeHolding,updateHolding,type CellarHolding } from './api';
 import { AddToCellarSheet } from './AddToCellarSheet';
 import { DrinkingWindow } from '../maturity/DrinkingWindow';
 
@@ -65,10 +65,10 @@ export function CellarScope(){
   }
 
   async function drop(holding:CellarHolding){
-    if(!window.confirm(`Remove ${holding.bottles} bottle${holding.bottles===1?'':'s'} of ${holding.wineName} from your cellar? This does not log a tasting.`))return;
+    if(!window.confirm(`Remove ${holding.bottles} bottle${holding.bottles===1?'':'s'} of ${holding.wineName} from your cellar? This does not log a tasting.`))return false;
     setBusyId(holding.id);
-    try{await removeHolding(holding.id);setReloadSeq(seq=>seq+1)}
-    catch(e){setError((e as Error).message||'Could not remove those bottles')}
+    try{await removeHolding(holding.id);setReloadSeq(seq=>seq+1);return true}
+    catch(e){setError((e as Error).message||'Could not remove those bottles');return false}
     finally{setBusyId('')}
   }
 
@@ -113,17 +113,25 @@ export function CellarScope(){
           <div className="cellar-card-top"><h2>{holding.wineName}</h2><strong>{holding.vintage??'NV'}</strong></div>
           <p className="producer">{holding.producer}</p>
           <span className="cellar-meta">{[holding.appellation,holding.region,holding.country].filter(Boolean).join(' · ')}</span>
-          <span className="cellar-bottles">{bottleLabel(holding)}</span>
-          <DrinkingWindow wine={holding} compact/>
-          {holding.location&&<span className="cellar-location">{holding.location}</span>}
+          {/* Count, readiness and rack on one line. Three facts of a few words
+              each had a line apiece, which on a phone is three lines of mostly
+              white space and two cards to a screen. */}
+          <span className="cellar-state">
+            <span className="cellar-bottles">{bottleLabel(holding)}</span>
+            {priceLabel(holding)&&<span className="cellar-price">{priceLabel(holding)}</span>}
+            <DrinkingWindow wine={holding} compact researched={holding.vintageWindow??null}/>
+            {holding.location&&<span className="cellar-location">{holding.location}</span>}
+          </span>
         </div>
         <div className="cellar-card-actions">
           <button type="button" className="primary" disabled={busyId===holding.id} onClick={()=>void take(holding)}>Open a bottle</button>
           <div className="cellar-count-actions">
             <button type="button" className="quiet" disabled={busyId===holding.id||holding.bottles<=1} onClick={()=>void adjust(holding,-1)} aria-label={`One fewer bottle of ${holding.wineName}`}>−</button>
             <button type="button" className="quiet" disabled={busyId===holding.id} onClick={()=>void adjust(holding,1)} aria-label={`One more bottle of ${holding.wineName}`}>+</button>
+            {/* Removing a line lives in the sheet rather than on the row. It is
+                the rarest thing done to a holding and the only irreversible
+                one, and the width it took here is the price of a bottle. */}
             <button type="button" className="quiet" disabled={busyId===holding.id} onClick={()=>setEditing(holding)}>Edit</button>
-            <button type="button" className="quiet cellar-drop" disabled={busyId===holding.id} onClick={()=>void drop(holding)}>Remove</button>
           </div>
         </div>
       </article>)}</div>}
@@ -135,6 +143,7 @@ export function CellarScope(){
     </nav>}
 
     {adding&&<AddToCellarSheet onClose={()=>setAdding(false)} onAdded={()=>{setAdding(false);setReloadSeq(seq=>seq+1)}}/>}
-    {editing&&<AddToCellarSheet holding={editing} onClose={()=>setEditing(null)} onAdded={()=>{setEditing(null);setReloadSeq(seq=>seq+1)}}/>}
+    {editing&&<AddToCellarSheet holding={editing} onClose={()=>setEditing(null)} onAdded={()=>{setEditing(null);setReloadSeq(seq=>seq+1)}}
+      onRemove={async holding=>{const removed=await drop(holding);if(removed)setEditing(null)}}/>}
   </>;
 }
