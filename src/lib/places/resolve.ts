@@ -5,6 +5,17 @@ const key=(value:string)=>value.normalize('NFD').replace(/[\u0300-\u036f]/g,'').
 const byId=new Map(PLACES.map(place=>[place.id,place]));
 
 /**
+ * The cru tier a place holds in its own right.
+ *
+ * Deliberately not what resolvePlace returns: that prefers a tier read off the
+ * label text, which is how "Gevrey-Chambertin Premier Cru" reports premier_cru
+ * from a village appellation. This is the tree's own answer about the place,
+ * which is what a caller keying on the place needs.
+ */
+export const placeClassification=(placeId:string|null|undefined)=>
+  placeId?byId.get(placeId)?.classification??null:null;
+
+/**
  * Name (and alias) to node. A bare name can be ambiguous - "Chablis" is a
  * Burgundy subregion, "Ballard Canyon" is both a Santa Barbara appellation and
  * a region - so each key holds every candidate and the caller disambiguates

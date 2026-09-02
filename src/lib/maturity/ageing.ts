@@ -42,6 +42,83 @@ const BY_STYLE:Record<WineStyle,MaturityWindow>={
   dessert:w(3,20),fortified:w(3,30),orange:w(1,6),other:w(1,5)
 };
 
+/**
+ * Bottlings that outlive the rule of thumb for where they are made.
+ *
+ * The table below answers by place, which is right almost everywhere: what a
+ * Pommard keeps for is a fact about Pommard. Champagne is where it breaks. A
+ * vintage Champagne is filed under one window for the whole region, and a
+ * prestige cuvee is not that wine - a Salon or a Krug is built to be opened at
+ * twenty-five years and is only starting at fifteen, so the region's figure
+ * reads them as past their peak while they are still climbing. The difference
+ * is the house and the cuvee, and no amount of place data will ever carry it.
+ *
+ * So this is the exception, and it is deliberately a short, named list rather
+ * than a rule. It claims nothing about a wine it does not name: an unlisted
+ * Champagne falls through to the region exactly as before, which is the right
+ * answer for most of them. Adding one is a line, and the label is what the
+ * screen will say the window came from - so it has to be the name a person
+ * would recognise.
+ *
+ * `within` keeps each entry inside the place it is about, so a producer
+ * somewhere else who happens to share a name cannot inherit a Champagne window.
+ */
+type Keeper={
+  /** What the screen calls the answer: "Typical for Dom Perignon". */
+  label:string;
+  /** Matched against the producer and the wine name together, normalised. */
+  match:RegExp;
+  /** A second pattern, where a house makes both long and short keepers. */
+  cuvee?:RegExp;
+  /** The place-tree id this only counts inside. */
+  within:string;
+  window:MaturityWindow;
+};
+
+const CHAMPAGNE='france/champagne';
+
+const KEEPERS:readonly Keeper[]=[
+  // Houses whose vintage wines are long keepers whatever the bottling.
+  {label:'Salon',match:/\bsalon\b/,within:CHAMPAGNE,window:w(12,45)},
+  {label:'Krug',match:/\bkrug\b/,within:CHAMPAGNE,window:w(10,40)},
+  // Bollinger makes both, so the cuvee decides.
+  {label:'Bollinger',match:/\bbollinger\b/,cuvee:/\bgrande annee\b|\br d\b|\bvieilles vignes\b/,within:CHAMPAGNE,window:w(8,35)},
+  // Named prestige cuvees.
+  {label:'Dom Perignon',match:/\bdom perignon\b/,within:CHAMPAGNE,window:w(8,35)},
+  {label:'Cristal',match:/\bcristal\b/,within:CHAMPAGNE,window:w(8,35)},
+  {label:'Clos des Goisses',match:/\bclos des goisses\b/,within:CHAMPAGNE,window:w(8,35)},
+  {label:'Blanc des Millenaires',match:/\bblanc des millenaires\b/,within:CHAMPAGNE,window:w(10,35)},
+  {label:'Comtes de Champagne',match:/\bcomtes de champagne\b/,within:CHAMPAGNE,window:w(8,30)},
+  {label:'Dom Ruinart',match:/\bdom ruinart\b/,within:CHAMPAGNE,window:w(8,30)},
+  {label:'Sir Winston Churchill',match:/\bwinston churchill\b/,within:CHAMPAGNE,window:w(8,30)},
+  {label:'La Grande Dame',match:/\bgrande dame\b/,within:CHAMPAGNE,window:w(7,30)},
+  {label:'Grand Siecle',match:/\bgrand siecle\b/,within:CHAMPAGNE,window:w(6,30)},
+  {label:'Belle Epoque',match:/\bbelle epoque\b/,within:CHAMPAGNE,window:w(6,25)},
+  {label:'Cuvee William Deutz',match:/\bwilliam deutz\b/,within:CHAMPAGNE,window:w(6,25)}
+];
+
+/** Accents off, punctuation to spaces: "R.D." and "Perrier-Jouet" have to match. */
+const plainName=(value:unknown)=>String(value??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+  .toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
+
+/**
+ * The house and the cuvee are read together, because which field a name lands
+ * in is not reliable: Dom Perignon is a producer on one bottle and a cuvee
+ * under Moet on the next, and a scan can put the house in front of the wine
+ * name as well as in the producer box.
+ */
+function keeperFor(producer:unknown,wineName:unknown,path:readonly string[]):Maturity|null{
+  const text=plainName(`${String(producer??'')} ${String(wineName??'')}`);
+  if(!text)return null;
+  for(const keeper of KEEPERS){
+    if(!path.includes(keeper.within))continue;
+    if(!keeper.match.test(text))continue;
+    if(keeper.cuvee&&!keeper.cuvee.test(text))continue;
+    return {window:keeper.window,basis:{placeId:null,label:keeper.label}};
+  }
+  return null;
+}
+
 const AGEING:Record<string,AgeingEntry>={
   // France
   'france/burgundy':{byStyle:{red:w(4,12),white:w(3,10)},
@@ -152,10 +229,16 @@ const fromEntry=(entry:AgeingEntry,classification:PlaceClassification|null,style
  * than being quietly treated as red.
  */
 export function maturityFor(wine:{country?:string|null;region?:string|null;appellation?:string|null;
-  classification?:string|null;wineStyle?:string|null}):Maturity|null{
+  classification?:string|null;wineStyle?:string|null;
+  /** Read only by the keeper list, and only to recognise a named bottling. */
+  producer?:string|null;wineName?:string|null}):Maturity|null{
   const style=(wine.wineStyle??null) as WineStyle|null;
   const classification=(wine.classification??null) as PlaceClassification|null;
   const place=resolvePlace({country:wine.country??null,region:wine.region??null,appellation:wine.appellation??null});
+  // A named bottling outranks its region, because it is the more specific fact
+  // about the wine in the glass and the one the region cannot express.
+  const keeper=keeperFor(wine.producer,wine.wineName,place.path);
+  if(keeper)return keeper;
   // Narrowest first: Barolo before Piedmont before Italy.
   for(const placeId of [...place.path].reverse()){
     const entry=AGEING[placeId];

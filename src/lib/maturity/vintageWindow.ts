@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { resolvePlace } from '../places/resolve';
+import { placeClassification,resolvePlace } from '../places/resolve';
 import { maturityFor,type MaturityVerdict,type MaturityWindow,type Readiness } from './ageing';
 
 export type ResearchSource={title:string;url:string};
@@ -20,35 +20,65 @@ export type VintageSubject={country?:string|null;region?:string|null;appellation
    * for the grand cru and the village wine beside it, and the shift has to
    * stay transferable between them.
    */
-  classification?:string|null};
+  classification?:string|null;
+  /**
+   * The house and the bottling, for the same reason and with the same rule.
+   * A Dom Perignon keeps far longer than the Champagne beside it, so its
+   * baseline is its own - but 2008 in Champagne is one growing season for all
+   * of them, so neither name goes anywhere near the key.
+   */
+  producer?:string|null;wineName?:string|null};
 
 const normalized=(value:unknown)=>String(value??'').normalize('NFD').replace(/[̀-ͯ]/g,'')
   .toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
 
+/** Where an answer is filed, and what to call that place on screen. */
+export type VintageCell={key:string;scope:'appellation'|'region';label:string};
+
 /**
  * The cell a vintage answer belongs to.
  *
- * The region and the year, not the appellation and the year. A growing season
- * is a regional fact - Oakville and Rutherford had the same 2019, and so did
- * Barolo and Barbaresco - and it is how vintage reports are actually written.
- * Keying any narrower would buy a search per sub-appellation for one year's
- * weather, which is the cost this whole design exists to avoid.
+ * The region and the year, as a rule. A growing season is mostly a regional
+ * fact - Oakville and Rutherford had the same 2019, and so did Barolo and
+ * Barbaresco - and it is how vintage reports are written. Keying every
+ * appellation separately would buy a search per sub-appellation for one year's
+ * weather, which is the cost this design exists to avoid.
  *
- * The place goes through the tree first, so a spelling, an alias and a sub-AVA
- * all arrive at the same region. What the appellation still decides is the
- * calculated window beside this one, where the difference between a grand cru
- * and a village wine is the whole point.
+ * A grand cru is the exception, and it is the tree that says so. A named
+ * grand cru vineyard is a few hectares with its own aspect and drainage, and
+ * the vintage reports are written about it by name: what 2011 did in
+ * Chambertin-Clos de Bèze is worth its own answer, where what it did in a
+ * village Gevrey and in a premier cru beside it is the region's story either
+ * way. So a place the tree carries as grand_cru keys on itself, and everything
+ * else keys on its region - which is also where the reader would notice the
+ * difference and where they would not.
+ *
+ * The tier comes from the tree rather than from resolvePlace's answer, which
+ * prefers what the label text says: "Gevrey-Chambertin Premier Cru" reports
+ * premier_cru while standing on a village appellation, and "Saint-Émilion
+ * Grand Cru" is an appellation name rather than a cru tier at all.
+ *
+ * The place goes through the tree first either way, so a spelling, an alias and
+ * a sub-AVA all arrive at the same cell.
  *
  * Style is part of the key because a year is not equally kind to everything a
- * region makes: 2021 in Burgundy was a frost year for the reds and a fine one
+ * place makes: 2021 in Burgundy was a frost year for the reds and a fine one
  * for the whites.
  */
-export function vintageCacheKey(subject:VintageSubject){
+export function vintageCell(subject:VintageSubject):VintageCell{
   const place=resolvePlace({country:subject.country??null,region:subject.region??null,appellation:subject.appellation??null});
-  const where=`${normalized(place.country)}|${normalized(place.region)}`;
+  const grandCru=Boolean(place.appellation)&&placeClassification(place.placeId)==='grand_cru';
+  const region=`${normalized(place.country)}|${normalized(place.region)}`;
+  const where=grandCru?normalized(place.appellation):region;
+  // Nothing resolved at all: the words as typed are the only cell there is.
   const anchor=where==='|'?normalized([subject.appellation,subject.region,subject.country].filter(Boolean).join(' ')):where;
-  return JSON.stringify([anchor,subject.vintage??'NV',normalized(subject.wineStyle)]);
+  const label=(grandCru?place.appellation:place.region??place.country)
+    ??subject.region??subject.country??subject.appellation??'';
+  return {key:JSON.stringify([anchor,subject.vintage??'NV',normalized(subject.wineStyle)]),
+    scope:grandCru?'appellation':'region',label};
 }
+
+export const vintageCacheKey=(subject:VintageSubject)=>vintageCell(subject).key;
 
 /** A subject worth asking about: a year, and somewhere for the year to be about. */
 export function askableVintage(subject:VintageSubject){

@@ -1,6 +1,5 @@
 import { useEffect,useState } from 'react';
-import { maturityPair,windowShift,type VintageSubject,type VintageWindow } from '../../lib/maturity/vintageWindow';
-import { resolvePlace } from '../../lib/places/resolve';
+import { maturityPair,vintageCell,windowShift,type VintageSubject,type VintageWindow } from '../../lib/maturity/vintageWindow';
 import { getVintageWindow,lookUpVintageWindow } from './api';
 import { DrinkingWindow } from './DrinkingWindow';
 import '../../maturity.css';
@@ -27,29 +26,55 @@ export function VintageCheck({wine}:{wine:Wine}){
   const [researched,setResearched]=useState<VintageWindow|null>(null);
   const [busy,setBusy]=useState(false),[error,setError]=useState('');
   const subject:VintageSubject={country:wine.country,region:wine.region,appellation:wine.appellation,
-    vintage:wine.vintage,wineStyle:wine.wineStyle,classification:wine.classification};
+    vintage:wine.vintage,wineStyle:wine.wineStyle,classification:wine.classification,
+    // For the baseline the model is quoted, never for the cell: a Dom Perignon
+    // keeps far longer than the Champagne beside it, but they had the same year.
+    producer:wine.producer,wineName:wine.wineName};
   const askable=Boolean(wine.vintage&&(wine.appellation||wine.region||wine.country));
   /**
-   * The place the lookup is actually keyed on, rather than the region column.
-   * A bottle edited from a Salon into a Charmes-Chambertin can still be carrying
-   * Champagne in that column, and offering "one search for every wine from
-   * Champagne 2013" while asking about Burgundy is a promise about the wrong
-   * cell.
+   * The cell the lookup is actually keyed on, rather than the region column.
+   *
+   * A bottle edited from a Salon into a Charmes-Chambertin can still be
+   * carrying Champagne in that column, and offering "one search for every wine
+   * from Champagne 2013" while asking about Burgundy is a promise about the
+   * wrong cell. A grand cru is its own cell, so there the promise is narrower
+   * and the screen should say so.
    */
-  const where=resolvePlace({country:wine.country??null,region:wine.region??null,appellation:wine.appellation??null});
-  const asked=where.region??where.country??wine.region??wine.country;
+  const cell=askable?vintageCell(subject):null;
+  const asked=cell?.label||wine.region||wine.country;
+
+  /**
+   * What is already known about this cell, keyed on the cell rather than on the
+   * boxes.
+   *
+   * The subject can come from a form being typed into, where every keystroke in
+   * the appellation is a new object but almost none of them are a new cell -
+   * the key resolves through the place tree, so a Gevrey-Chambertin and a
+   * Morey-Saint-Denis are the same Burgundy. The short wait is for the ones
+   * that do change it: half a word typed is a cell of its own, and asking about
+   * each is a request nobody wanted.
+   */
+  const cellKey=cell?.key??'';
 
   useEffect(()=>{
-    if(!askable)return;
+    if(!cellKey){setResearched(null);return}
     let live=true;
-    getVintageWindow(subject).then(found=>{if(live)setResearched(found)}).catch(()=>{});
-    return()=>{live=false};
+    const timer=setTimeout(()=>{
+      getVintageWindow(subject).then(found=>{if(live)setResearched(found)}).catch(()=>{});
+    },300);
+    return()=>{live=false;clearTimeout(timer)};
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[askable,wine.country,wine.region,wine.appellation,wine.vintage,wine.wineStyle]);
+  },[cellKey]);
 
-  async function look(){
+  /**
+   * The search itself. `again` spends a fresh one on a cell that already has an
+   * answer, which is the only way to replace a note written before the prompt
+   * was - or one that reads as being about the bottle that happened to ask
+   * rather than about the year.
+   */
+  async function look(again=false){
     setBusy(true);setError('');
-    try{const {window}=await lookUpVintageWindow(subject);setResearched(window)}
+    try{const {window}=await lookUpVintageWindow(subject,again);setResearched(window)}
     catch(e){setError((e as Error).message||'Could not look up that vintage')}
     finally{setBusy(false)}
   }
@@ -64,7 +89,7 @@ export function VintageCheck({wine}:{wine:Wine}){
     {pair.researched
       ?<div className="vintage-researched">
         <div className="vintage-researched-head">
-          <strong>{wine.vintage} in {researched?.region||researched?.country||asked}</strong>
+          <strong>{wine.vintage} in {asked}</strong>
           <span className="maturity-window">Drink {pair.researched.from}–{pair.researched.to}</span>
           {shift&&!sameYears(shift)&&<span className="vintage-shift">{years(shift.from)} / {years(shift.to)} on the usual</span>}
           {sameYears(shift)&&<span className="vintage-shift">Same as the usual window</span>}
@@ -78,6 +103,15 @@ export function VintageCheck({wine}:{wine:Wine}){
           <ul>{pair.researched.sources.map(source=><li key={source.url}>
             <a href={source.url} target="_blank" rel="noopener noreferrer">{source.title}</a>
           </li>)}</ul>
+          {/* Inside the disclosure on purpose: a stored answer is meant to be
+              reused, and a button that spends a search should not sit next to
+              one that does not. */}
+          <p className="vintage-again">
+            <button type="button" className="quiet" onClick={()=>void look(true)} disabled={busy}>
+              {busy?'Searching…':'Look it up again'}
+            </button>
+            <small>Spends one search and replaces this for every wine you own from {asked} {wine.vintage}.</small>
+          </p>
         </details>
       </div>
       :askable&&<div className="vintage-ask">
