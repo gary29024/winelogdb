@@ -20,15 +20,20 @@ export function DrinkingWindow({wine,compact=false}:{wine:Wine;compact?:boolean}
   const verdict=maturityVerdict(wine);
   if(!verdict)return null;
   const {readiness}=verdict;
+  // The list badge carries the years as well as the verdict: "Ready" answers
+  // whether to open it, but not the question underneath - by when. This is the
+  // rule-of-thumb window, the same one the verdict is derived from, so the two
+  // cannot disagree with each other.
   if(compact)return <span className={`maturity-dot maturity-${readiness}`} title={`${readinessLabel[readiness]} · ${windowLabel(verdict)}`}>
     <span className="maturity-dot-mark" aria-hidden="true"/>
     <span>{readinessLabel[readiness]}</span>
+    <span className="maturity-dot-window">{windowLabel(verdict)}</span>
   </span>;
   return <div className={`maturity-line maturity-${readiness}`}>
     <span className="maturity-dot-mark" aria-hidden="true"/>
     <strong>{readinessLabel[readiness]}</strong>
     <span className="maturity-window">Drink {windowLabel(verdict)}</span>
-    <small>{verdict.basis.placeId?`Typical for ${verdict.basis.label}`:`Typical for ${verdict.basis.label}`} — a rule of thumb, not research{opensNote(readiness,verdict.opensIn)}</small>
+    <small>Typical for {verdict.basis.label} — a rule of thumb, not research{opensNote(readiness,verdict.opensIn)}</small>
   </div>;
 }
 

@@ -38,9 +38,14 @@ describe('the drinking window on a wine',()=>{
     expect(container.firstChild).toBeNull();
   });
 
-  it('shrinks to a badge on a list, keeping the window in the title',()=>{
+  it('shrinks to a badge on a list, and still says by when',()=>{
+    // "Ready" answers whether to open it; the years answer the question
+    // underneath, which is the one a cellar list is being scanned for. They
+    // used to live in the title attribute, where a phone cannot reach them.
     render(<DrinkingWindow wine={barolo(new Date().getFullYear()-12)} compact/>);
-    const badge=screen.getByText('Ready').closest('.maturity-dot');
-    expect(String(badge?.getAttribute('title'))).toMatch(/Ready · \d{4}–\d{4}/);
+    const badge=screen.getByText('Ready').closest('.maturity-dot')!;
+    expect(badge.textContent).toMatch(/Ready\s*\d{4}–\d{4}/);
+    expect(badge.querySelector('.maturity-dot-window')?.textContent).toMatch(/^\d{4}–\d{4}$/);
+    expect(String(badge.getAttribute('title'))).toMatch(/Ready · \d{4}–\d{4}/);
   });
 });

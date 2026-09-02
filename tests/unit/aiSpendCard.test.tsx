@@ -61,7 +61,7 @@ describe('the AI spend card',()=>{
 
     act(()=>root?.unmount());host?.remove();
     page=await render(summary({month:{month:'2026-08',searchQueries:12183,freeRemaining:0,billableSearches:7183,cost:788.71,resetsAt:'2026-09-01T07:00:00.000Z',timeZone:'America/Los_Angeles'}}));
-    expect(page.textContent).toContain('7,183 past the free allowance');
+    expect(page.textContent).toContain('7,183 past the allowance');
     expect(page.querySelector('.ai-spend-month.is-billing'),'the month should read as billing once the allowance is gone').not.toBeNull();
   });
 
@@ -72,12 +72,26 @@ describe('the AI spend card',()=>{
     const page=await render(summary({month:{month:'2026-08',searchQueries:0,freeRemaining:5000,billableSearches:0,
       cost:0.104,resetsAt:'2026-09-01T07:00:00.000Z',timeZone:'America/Los_Angeles'}}));
     const tile=page.querySelector('.ai-spend-month')!;
-    expect(tile.textContent).toContain('total · tokens only, searches still free');
+    expect(tile.textContent).toContain('Tokens only — searches still free');
     // and once the allowance is gone the same figure says what is in it
     act(()=>root?.unmount());host?.remove();
     const billing=await render(summary({month:{month:'2026-08',searchQueries:12183,freeRemaining:0,billableSearches:7183,
       cost:788.71,resetsAt:'2026-09-01T07:00:00.000Z',timeZone:'America/Los_Angeles'}}));
-    expect(billing.querySelector('.ai-spend-month')!.textContent).toContain('tokens and 7,183 billed searches');
+    expect(billing.querySelector('.ai-spend-month')!.textContent).toContain('Tokens plus 7,183 billed searches');
+  });
+
+  it('gives each fact of the month its own line, unwrapped',async()=>{
+    // On a phone the facts shared a row with the amount, so every one of them
+    // wrapped: three short lines became six. They span the tile now, and are
+    // truncated rather than wrapped if one ever will not fit.
+    const page=await render(summary());
+    const lines=[...page.querySelectorAll('.ai-spend-month span')];
+    expect(lines).toHaveLength(3);
+    expect(lines[0].textContent).toBe('4,200 grounded searches · 800 free left');
+    expect(lines.every(line=>line.tagName==='SPAN')).toBe(true);
+    const css=(await import('node:fs')).readFileSync('src/insights.css','utf8');
+    expect(css).toMatch(/\.ai-spend-month span\{[^}]*white-space:nowrap/);
+    expect(css).toMatch(/\.ai-spend-month span\{[^}]*grid-column:1\/-1/);
   });
 
   it('names the two periods, which are not the same period',async()=>{
