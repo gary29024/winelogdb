@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { afterEach,beforeEach,describe,expect,it,vi } from 'vitest';
-import { cleanup,render,screen,waitFor } from '@testing-library/react';
+import { cleanup,fireEvent,render,screen,waitFor } from '@testing-library/react';
 import { VintageCheck } from '../../src/features/maturity/VintageCheck';
 
 const clos={country:'France',region:'Burgundy',appellation:'Chambertin-Clos de Bèze',
@@ -54,6 +54,25 @@ describe('the vintage block above the form',()=>{
     // The sources went in with it, so one summary line carries both
     expect(folded.querySelector('summary')!.textContent).toBe('Why this vintage · 2 sources · 2026-09-02');
     expect(folded.querySelectorAll('a')).toHaveLength(2);
+  });
+
+  it('offers a fresh search on a cell that already has an answer',async()=>{
+    // Reported as: no button to do the search again. A stored note written
+    // about the bottling that happened to ask - "2011 Chambertin-Clos de Bèze"
+    // on a Charmes-Chambertin - was unreplaceable, because the button only
+    // existed while there was nothing there.
+    const posts:Array<Record<string,unknown>>=[];
+    vi.stubGlobal('fetch',vi.fn(async(input:RequestInfo|URL,init?:RequestInit)=>{
+      if(init?.method==='POST')posts.push(JSON.parse(String(init.body)) as Record<string,unknown>);
+      return new Response(JSON.stringify({window:stored}),{status:200,headers:{'content-type':'application/json'}});
+    }));
+    render(<VintageCheck wine={clos}/>);
+    const again=await screen.findByRole('button',{name:'Look it up again'});
+    // and it says what pressing it costs, and who else it changes the answer for
+    expect(screen.getByText(/Spends one search/)).toBeTruthy();
+    fireEvent.click(again);
+    await waitFor(()=>expect(posts).toHaveLength(1));
+    expect(posts[0].refresh,'a refresh, not another read of the cache').toBe(true);
   });
 
   it('still offers the search when nothing has been looked up',async()=>{

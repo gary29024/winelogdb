@@ -32,3 +32,6 @@
 .vintage-sources{margin-top:var(--s2);color:var(--muted);font-size:.76rem}
 .vintage-sources ul{margin:var(--s1) 0 0;padding-left:var(--s4)}
 .vintage-sources a{color:var(--ink-4)}
+.vintage-again{display:flex;flex-wrap:wrap;align-items:center;gap:var(--s1) var(--s2);margin:var(--s2) 0 0}
+.vintage-again button{padding:var(--s1) var(--s2);font-size:.8rem}
+.vintage-again small{flex:1 1 14rem;color:var(--muted);font-size:.74rem;line-height:1.4}

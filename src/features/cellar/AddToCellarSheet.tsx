@@ -135,8 +135,30 @@ export function AddToCellarSheet({onClose,onAdded,holding,onRemove}:{onClose:()=
     if(!named)return null;
     const place=resolvePlace({country:country.trim()||null,region:region.trim()||null,appellation:named});
     return {country:place.country,region:place.region,appellation:place.appellation,
+      // The cru tier the save will store. Carried here so the drinking window
+      // above the form is the grand cru's rather than the village wine's before
+      // anything has been written.
+      classification:place.classification,
       denomination:place.denomination,known:Boolean(place.placeId)};
   },[appellation,country,region]);
+
+  /**
+   * The wine as the boxes currently describe it, which is what the window above
+   * should answer about.
+   *
+   * It used to be the saved holding, and only while editing - so adding a
+   * bottle showed no window at all even where the year had already been looked
+   * up and would have cost nothing, and editing one showed the window of the
+   * wine it used to be until the form was saved and reopened.
+   */
+  const asking=useMemo(()=>({
+    country:country.trim()||derived?.country||null,
+    region:region.trim()||derived?.region||null,
+    appellation:appellation.trim()||null,
+    vintage:/^\d{4}$/.test(vintage.trim())?Number(vintage.trim()):null,
+    wineStyle:style||null,
+    classification:derived?.classification??holding?.classification??null
+  }),[country,region,appellation,vintage,style,derived,holding]);
 
   /**
    * Follow the appellation with the country and the region.
@@ -199,8 +221,12 @@ export function AddToCellarSheet({onClose,onAdded,holding,onRemove}:{onClose:()=
 
       {/* Where a cellar bottle's drinking window belongs: this is the screen you
           are on when you are deciding whether to open it, and the only one that
-          exists for a wine you have not drunk. */}
-      {editing&&<VintageCheck wine={holding!}/>}
+          exists for a wine you have not drunk. It reads the boxes rather than
+          the saved row, so a bottle being added gets the answer the year
+          already has - which costs nothing - and one being edited follows the
+          appellation as it is changed. It renders nothing until there is a
+          vintage and a place, because until then there is nothing to say. */}
+      <VintageCheck wine={asking}/>
 
       <label className="cellar-field">Producer *
         <input value={producer} onChange={event=>setProducer(event.target.value)} placeholder="Domaine, château or estate" autoFocus/>

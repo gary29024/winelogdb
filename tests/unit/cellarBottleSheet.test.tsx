@@ -26,6 +26,43 @@ async function openSheet(props:Record<string,unknown>={}){
   return render(<MemoryRouter><AddToCellarSheet onClose={()=>{}} onAdded={()=>{}} {...props}/></MemoryRouter>);
 }
 
+describe('the drinking window while a bottle is being added',()=>{
+  beforeEach(()=>{cleanup();vi.unstubAllGlobals()});
+
+  it('answers from the boxes, before anything is saved',async()=>{
+    // It used to render only while editing, and only from the saved row - so
+    // adding a bottle showed no window at all, even where the year had already
+    // been looked up and reading it would have cost nothing.
+    stub();
+    const {container}=await openSheet();
+    fireEvent.change(screen.getByLabelText(/Appellation/),{target:{value:'Barolo'}});
+    fireEvent.change(screen.getByLabelText(/Vintage/),{target:{value:'2014'}});
+    fireEvent.change(screen.getByLabelText(/Style/),{target:{value:'red'}});
+    await waitFor(()=>expect(container.querySelector('.maturity-line')).not.toBeNull());
+    expect(screen.getByText(/Typical for Barolo/)).toBeTruthy();
+    expect(screen.getByText('Drink 2022–2039')).toBeTruthy();
+  });
+
+  it('says nothing at all until there is a year to say it about',async()=>{
+    // A wine with no vintage is not a young wine, it is a wine with no clock.
+    stub();
+    const {container}=await openSheet();
+    fireEvent.change(screen.getByLabelText(/Appellation/),{target:{value:'Barolo'}});
+    await waitFor(()=>expect((screen.getByLabelText(/Country/) as HTMLInputElement).value).toBe('Italy'));
+    expect(container.querySelector('.vintage-check')).toBeNull();
+  });
+
+  it('follows the appellation when a bottle is changed into another wine',async()=>{
+    // Editing a Salon into a Charmes-Chambertin used to leave the Champagne
+    // window above the form until the sheet was saved and reopened.
+    stub();
+    const {container}=await openSheet({holding});
+    await waitFor(()=>expect(container.querySelector('.maturity-line')).not.toBeNull());
+    fireEvent.change(screen.getByLabelText(/Appellation/),{target:{value:'Charmes-Chambertin'}});
+    await waitFor(()=>expect(screen.getByText(/Typical for Charmes-Chambertin/)).toBeTruthy());
+  });
+});
+
 describe('correcting a bottle already put away',()=>{
   beforeEach(()=>{cleanup();vi.unstubAllGlobals()});
 
