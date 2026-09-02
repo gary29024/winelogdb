@@ -92,7 +92,7 @@ const responseSchema={type:'OBJECT',properties:{
 },required:['drinkFrom','drinkTo','note','sources']};
 
 type GeminiResponse={
-  candidates?:Array<{content?:{parts?:Array<{text?:string}>};groundingMetadata?:{
+  candidates?:Array<{content?:{parts?:Array<{text?:string}>};finishReason?:string;groundingMetadata?:{
     groundingChunks?:Array<{web?:{title?:string;uri?:string}}>;webSearchQueries?:string[]}}>;
   usageMetadata?:{promptTokenCount?:number;candidatesTokenCount?:number;thoughtsTokenCount?:number};
 };
@@ -141,7 +141,17 @@ const wasGrounded=(payload:GeminiResponse,sources:Array<{url:string}>)=>
 type Answer=ReturnType<typeof vintageWindowSchema.parse>;
 /** What one call billed, whether or not its answer turned out to be usable. */
 type Billed={searchQueries:number;promptTokens:number;outputTokens:number};
-type Attempt={model:string;billed:Billed|null}&
+/**
+ * Enough about a refused reply to tell why, from the Worker log alone.
+ *
+ * AI Gateway stores no bodies unless payload logging is turned on, and turning
+ * it on to catch an intermittent failure means keeping every research prompt
+ * and answer outside D1 in the meantime. This is the cheap half of that: the
+ * shape of what came back, and the first few hundred characters of it, only on
+ * the calls that failed.
+ */
+type Detail=Record<string,unknown>;
+type Attempt={model:string;billed:Billed|null;detail?:Detail}&
   ({ok:true;answer:Answer}|{ok:false;reason:string;error:Error});
 
 /**
@@ -176,7 +186,7 @@ async function ask(env:VintageWindowBindings,subject:VintageSubject,baseline:{fr
     }),controller.signal,{kind:'vintage_window',vintage,requestId,model});
     if(!response.ok){
       const detail=(await response.text().catch(()=>'')).slice(0,400);
-      return {model,billed,ok:false,reason:`http-${response.status}`,
+      return {model,billed,detail:{status:response.status,body:detail.slice(0,300)},ok:false,reason:`http-${response.status}`,
         error:new Error(`Vintage lookup failed (${response.status})${detail?`: ${detail}`:''}`)};
     }
     const payload=await response.json() as GeminiResponse;
@@ -188,22 +198,32 @@ async function ask(env:VintageWindowBindings,subject:VintageSubject,baseline:{fr
       searchQueries:payload.candidates?.[0]?.groundingMetadata?.webSearchQueries?.length??1,
       promptTokens:tokens.promptTokens,outputTokens:tokens.outputTokens
     };
-    const text=payload.candidates?.[0]?.content?.parts?.map(part=>part.text??'').join('')??'';
-    if(!text)return {model,billed,ok:false,reason:'empty',error:new Error('The vintage lookup came back empty')};
+    const candidate=payload.candidates?.[0];
+    const text=candidate?.content?.parts?.map(part=>part.text??'').join('')??'';
+    const detail:Detail={finishReason:candidate?.finishReason??null,
+      metadataChunks:candidate?.groundingMetadata?.groundingChunks?.length??0,
+      searchQueries:billed.searchQueries,replyChars:text.length,reply:text.slice(0,300)};
+    if(!text)return {model,billed,detail,ok:false,reason:'empty',error:new Error('The vintage lookup came back empty')};
     let answer:{sources?:unknown};
     // A weaker model garbling the JSON is the risk that comes with a weaker
     // model, so it is a reason to escalate rather than a 500.
     try{answer=parseJson(text) as {sources?:unknown}}
-    catch{return {model,billed,ok:false,reason:'unparseable',error:new Error('The vintage lookup did not come back as JSON')}}
+    catch{return {model,billed,detail,ok:false,reason:'unparseable',error:new Error('The vintage lookup did not come back as JSON')}}
     const parsed=vintageWindowSchema.safeParse({...answer,sources:groundedSources(payload,answer.sources)});
-    if(!parsed.success)return {model,billed,ok:false,reason:'invalid-shape',
+    if(!parsed.success)return {model,billed,detail,ok:false,reason:'invalid-shape',
       error:new Error(`The vintage lookup came back in the wrong shape: ${parsed.error.issues.map(issue=>issue.message).join('; ')}`)};
     // An answer nothing was retrieved for is a memory, not research, and this
     // whole feature exists so the two are told apart.
-    if(!parsed.data.sources.length||!wasGrounded(payload,parsed.data.sources))
-      return {model,billed,ok:false,reason:'ungrounded',
+    // Counted apart from the sources themselves: a reply with five citations
+    // and no redirect among them is a model citing its own memory, and the log
+    // has to say which of the two happened.
+    const sources=parsed.data.sources;
+    detail.sources=sources.length;
+    detail.redirects=sources.filter(source=>source.url.includes(GROUNDING_HOST)).length;
+    if(!sources.length||!wasGrounded(payload,sources))
+      return {model,billed,detail,ok:false,reason:'ungrounded',
         error:new Error('Nothing was retrieved for this vintage, so there is nothing to show')};
-    return {model,billed,ok:true,answer:parsed.data};
+    return {model,billed,detail,ok:true,answer:parsed.data};
   }catch(e){
     return {model,billed,ok:false,reason:controller.signal.aborted?'timeout':'transport',
       error:e instanceof Error?e:new Error('The vintage lookup could not be made')};
@@ -241,14 +261,28 @@ export async function researchVintageWindow(env:VintageWindowBindings,owner:stri
   let attempt=await ask(env,subject,baseline,cell,MODEL,requestId,TIMEOUT_MS);
   if(!attempt.ok){
     await meter(env,owner,requestId,attempt,0);
-    console.warn(JSON.stringify({event:'vintage-window-escalation',requestId,vintage,
-      fromModel:MODEL,toModel:ESCALATION_MODEL,reason:attempt.reason,error:attempt.error.message}));
+    // Everything needed to tell why, in the Worker log rather than in the
+    // gateway's - which stores no bodies unless payload logging is on, and
+    // turning that on to catch this would keep every research prompt and answer
+    // outside D1 in the meantime.
+    console.warn(JSON.stringify({event:'vintage-window-escalation',requestId,vintage,cell:cell.label,
+      fromModel:MODEL,toModel:ESCALATION_MODEL,reason:attempt.reason,error:attempt.error.message,...attempt.detail}));
     const escalated=await ask(env,subject,baseline,cell,ESCALATION_MODEL,requestId,ESCALATION_TIMEOUT_MS);
     // Both models refused, so the reader gets the stronger one's reason: it is
     // the more informative of the two and the one that was asked last.
-    if(!escalated.ok){await meter(env,owner,requestId,escalated,0);throw escalated.error}
+    if(!escalated.ok){
+      await meter(env,owner,requestId,escalated,0);
+      console.error(JSON.stringify({event:'vintage-window-refused',requestId,vintage,cell:cell.label,
+        model:escalated.model,reason:escalated.reason,error:escalated.error.message,...escalated.detail}));
+      throw escalated.error;
+    }
     attempt=escalated;
   }
+  // Which model actually answered, so the escalation rate is countable from the
+  // log as well as from requests against runs on the spend panel.
+  console.log(JSON.stringify({event:'vintage-window-answered',requestId,vintage,cell:cell.label,
+    model:attempt.model,escalated:attempt.model!==MODEL,
+    sources:attempt.detail?.sources??null,redirects:attempt.detail?.redirects??null}));
   await meter(env,owner,requestId,attempt,1);
   return writeVintageWindow(env.DB,owner,subject,attempt.answer,baseline,attempt.model);
 }

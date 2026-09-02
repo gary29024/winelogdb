@@ -48,12 +48,27 @@ describe('the request that asks about a vintage',()=>{
     expect(route).toMatch(/wineName:typeof source\.wineName==='string'/);
   });
 
+  it('says why a reply was refused, without payload logging being on',()=>{
+    // Two requests for one lookup means the cheap model was refused, and AI
+    // Gateway stores no bodies unless payload logging is turned on - which to
+    // catch an intermittent failure would mean keeping every research prompt
+    // and answer outside D1 in the meantime. The Worker log carries the shape
+    // of the reply and the first of its text instead, only when it failed.
+    expect(handler).toMatch(/finishReason:candidate\?\.finishReason/);
+    expect(handler).toMatch(/metadataChunks:/);
+    expect(handler).toMatch(/redirects:/);
+    expect(handler).toMatch(/reply:text\.slice\(0,300\)/);
+    expect(handler).toMatch(/\.\.\.attempt\.detail/);
+    // and which model answered in the end, so the escalation rate is countable
+    expect(handler).toMatch(/event:'vintage-window-answered'/);
+  });
+
   it('still refuses an answer nothing was retrieved for',()=>{
     // The guard was right; it was the request that was wrong. An ungrounded
     // answer is a memory dressed as research, and this feature exists to tell
     // those apart. vintageLookupReply covers the behaviour against a real reply;
     // this only holds the refusal in place.
-    expect(handler).toMatch(/!wasGrounded\(payload,parsed\.data\.sources\)/);
+    expect(handler).toMatch(/!wasGrounded\(payload,sources\)/);
     expect(handler).toMatch(/Nothing was retrieved for this vintage/);
   });
 });

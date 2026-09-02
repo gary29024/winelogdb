@@ -104,7 +104,11 @@ export function VintageCheck({wine,onResearched}:{wine:Wine;
             shift are the answer; the prose behind them ran to six lines on a
             phone, which pushed the form it sits above off the screen. */}
         <details className="vintage-sources">
-          <summary>Why this vintage · {pair.researched.sources.length} source{pair.researched.sources.length===1?'':'s'} · {pair.researched.researchedAt.slice(0,10)}</summary>
+          {/* The model is on the summary line because it is the one thing the
+              gateway log will not tell you without payload logging turned on:
+              two requests for one lookup means the cheap model was refused, and
+              this says which one the answer on screen came from. */}
+          <summary>Why this vintage · {pair.researched.sources.length} source{pair.researched.sources.length===1?'':'s'} · {pair.researched.researchedAt.slice(0,10)}{researched?.model?` · ${researched.model}`:''}</summary>
           {pair.researched.note&&<p className="vintage-note">{pair.researched.note}</p>}
           <ul>{pair.researched.sources.map(source=><li key={source.url}>
             <a href={source.url} target="_blank" rel="noopener noreferrer">{source.title}</a>
