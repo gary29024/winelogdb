@@ -73,22 +73,36 @@ export function AiSpendCard(){
       </article>;
     })}</div>
     {/* The free allowance resets monthly and is the reason the bill is a step
-        function rather than a slope, so it is worth seeing before it runs out. */}
+        function rather than a slope, so it is worth seeing before it runs out.
+
+        The figure is the month's whole bill, and it used to sit unlabelled
+        beside the search count with the allowance under it - which read as the
+        price of those searches. It is usually the opposite: until the 5,000 are
+        gone the searches are the free half and every cent of this is tokens. So
+        the number says what is in it, the searches and the allowance are kept
+        together on the other side, and the period is named, because the cards
+        above are the last 30 days while this is the billing month. */}
     <div className={`ai-spend-month${month.freeRemaining===0?' is-billing':''}`}>
-      <div><strong>This month</strong><span>{count(month.searchQueries)} grounded searches</span></div>
+      <div>
+        <strong>This billing month</strong>
+        <span>{count(month.searchQueries)} grounded searches · {month.freeRemaining>0
+          ?`${count(month.freeRemaining)} free left`
+          :`${count(month.billableSearches)} past the free allowance`}</span>
+        {month.resetsAt&&<span>Allowance resets {resetLabel(month.resetsAt)}</span>}
+      </div>
       <div>
         <b>{money(spend.currency,month.cost)}</b>
-        <small>{month.freeRemaining>0
-          ?`${count(month.freeRemaining)} free searches left`
-          :`${count(month.billableSearches)} past the free allowance`}</small>
-        {month.resetsAt&&<small>resets {resetLabel(month.resetsAt)}</small>}
+        <small>{month.billableSearches>0
+          ?`total · tokens and ${count(month.billableSearches)} billed searches`
+          :'total · tokens only, searches still free'}</small>
       </div>
     </div>
     <p className="journey-muted ai-spend-note">
       Priced from the dated rates in the Worker configuration, each run at the price in force on the day it ran and the tier it
       was billed on - batch scans queue on the flex tier, at about half of standard. Grounding is billed per search the model
-      runs, which is most of this; tokens are the rest. A price that changes from a date leaves earlier runs at what they cost;
-      correcting a rate that was always wrong reprices the history, as it should.
+      runs, and is what dominates once the free allowance is gone; tokens are the rest, and until then all of it. A price that
+      changes from a date leaves earlier runs at what they cost; correcting a rate that was always wrong reprices the history,
+      as it should.
     </p>
   </section>;
 }
