@@ -6,6 +6,7 @@ import { resolvePlace } from '../../lib/places/resolve';
 // The suggestion banner is the scan form's, down to the class names, so it is
 // the same control in both places rather than a second one that looks like it.
 import '../../producerResolution.css';
+import '../../wineFormCompact.css';
 
 /** A wine this producer is known to make, however the app came to know it. */
 type KnownWine={name:string;appellation:string|null;style:string|null};
@@ -199,11 +200,11 @@ export function AddToCellarSheet({onClose,onAdded,holding}:{onClose:()=>void;onA
       </div>
       <label className="cellar-field">Appellation
         <input value={appellation} onChange={event=>setAppellation(event.target.value)} placeholder="Etna, Barolo, Pauillac…"/>
-        <small>Or the region — the tree decides which column a name belongs in, so Napa Valley files the same either way.</small>
+        {!derived&&<small>Or the region — the tree decides which column a name belongs in.</small>}
       </label>
       {derived&&(derived.known
         ?<p className="cellar-resolution">✓ Filed under {[derived.appellation,derived.region,derived.country].filter(Boolean).join(' · ')}{derived.denomination&&<small> · recognised as {derived.denomination}, no need to type it</small>}</p>
-        :<p className="cellar-unresolved">The place tree does not carry “{appellation.trim()}”. Name the country yourself, or these bottles are filed under nowhere — no country filter finds them, and the wine takes no stamp when you open it.</p>)}
+        :<p className="cellar-unresolved">“{appellation.trim()}” is not in the place tree — name the country below, or these bottles are filed under nowhere.</p>)}
       <div className="cellar-row">
         <label className="cellar-field">Country<input value={country} onChange={event=>setCountry(event.target.value)} placeholder={derived?.country??'Country'}/></label>
         <label className="cellar-field">Region<input value={region} onChange={event=>setRegion(event.target.value)} placeholder={derived?.region??'Region'}/></label>
@@ -213,16 +214,20 @@ export function AddToCellarSheet({onClose,onAdded,holding}:{onClose:()=>void;onA
         <label className="cellar-field">Bottles *<input inputMode="numeric" value={bottles} onChange={event=>setBottles(event.target.value)}/></label>
         <label className="cellar-field">Format<select value={size} onChange={event=>setSize(event.target.value)}>{SIZES.map(([ml,label])=><option key={ml} value={ml}>{label}</option>)}</select></label>
       </div>
-      <div className="cellar-row">
-        <label className="cellar-field">Paid<input inputMode="decimal" value={price} onChange={event=>setPrice(event.target.value)} placeholder="Per bottle"/></label>
-        <label className="cellar-field">Currency<input value={currency} onChange={event=>setCurrency(event.target.value.toUpperCase())} placeholder="HKD" maxLength={3} autoCapitalize="characters" spellCheck={false}/></label>
-      </div>
-      <div className="cellar-row">
+      <div className="cellar-row stack-narrow">
+        <label className="cellar-field">Paid
+          <div className="price-currency-inputs">
+            <input value={currency} onChange={event=>setCurrency(event.target.value.toUpperCase())} placeholder="HKD" maxLength={3} autoCapitalize="characters" spellCheck={false} aria-label="Currency"/>
+            <input inputMode="decimal" value={price} onChange={event=>setPrice(event.target.value)} placeholder="Per bottle" aria-label="Price"/>
+          </div>
+        </label>
         <label className="cellar-field">Bought<input type="date" value={purchasedAt} onChange={event=>setPurchasedAt(event.target.value)}/></label>
-        <label className="cellar-field">From<input value={merchant} onChange={event=>setMerchant(event.target.value)} placeholder="Merchant"/></label>
       </div>
-      <label className="cellar-field">Where it is<input value={location} onChange={event=>setLocation(event.target.value)} placeholder="Rack, case, offsite…"/></label>
-      <label className="cellar-field">Notes<textarea rows={2} value={notes} onChange={event=>setNotes(event.target.value)} placeholder="Anything worth remembering about these bottles"/></label>
+      <div className="cellar-row">
+        <label className="cellar-field">From<input value={merchant} onChange={event=>setMerchant(event.target.value)} placeholder="Merchant"/></label>
+        <label className="cellar-field">Where it is<input value={location} onChange={event=>setLocation(event.target.value)} placeholder="Rack or case"/></label>
+      </div>
+      <label className="cellar-field">Notes<textarea rows={2} value={notes} onChange={event=>setNotes(event.target.value)} placeholder="Anything worth remembering"/></label>
 
       {error&&<p className="cellar-error" role="alert">{error}</p>}
       <div className="cellar-sheet-actions">
