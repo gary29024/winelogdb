@@ -79,3 +79,32 @@ describe('the currency box',()=>{
     expect(field.value).toBe('HKD');
   });
 });
+
+describe('changing which wine a line is',()=>{
+  beforeEach(()=>{cleanup();vi.unstubAllGlobals()});
+
+  it('moves the region with the appellation, instead of leaving the old one',async()=>{
+    // Reported: a Salon edited into a Charmes-Chambertin kept Champagne in the
+    // region box - and the box is what gets sent, so the bottle was saved as a
+    // Burgundy grand cru in Champagne.
+    const calls=stub();
+    await openSheet({holding});
+    expect((screen.getByLabelText(/Region/) as HTMLInputElement).value).toBe('Champagne');
+    fireEvent.change(screen.getByLabelText(/Appellation/),{target:{value:'Charmes-Chambertin'}});
+    await waitFor(()=>expect((screen.getByLabelText(/Region/) as HTMLInputElement).value).toBe('Burgundy'));
+    expect((screen.getByLabelText(/Country/) as HTMLInputElement).value).toBe('France');
+
+    fireEvent.click(screen.getByRole('button',{name:'Save changes'}));
+    await waitFor(()=>expect(calls.some(call=>call.method==='PUT')).toBe(true));
+    const [put]=calls.filter(call=>call.method==='PUT');
+    expect((put.body as {region:string}).region).toBe('Burgundy');
+  });
+
+  it('leaves a country typed by hand alone, which is why the boxes exist',async()=>{
+    stub();
+    await openSheet();
+    fireEvent.change(screen.getByLabelText(/Appellation/),{target:{value:'Cloudbreak Ridge'}});
+    fireEvent.change(screen.getByLabelText(/Country/),{target:{value:'New Zealand'}});
+    await waitFor(()=>expect((screen.getByLabelText(/Country/) as HTMLInputElement).value).toBe('New Zealand'));
+  });
+});
