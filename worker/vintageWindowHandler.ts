@@ -1,6 +1,7 @@
 import { geminiCallTokens,recordAiUsage,type AnalyticsSink } from '../src/lib/usage/aiUsage';
 import { askableVintage,readVintageWindow,vintageWindowSchema,writeVintageWindow,type VintageSubject } from '../src/lib/maturity/vintageWindow';
 import { maturityFor } from '../src/lib/maturity/ageing';
+import { describeResponseSchema,groundedGenerationConfig } from '../src/lib/research/geminiBatch';
 
 export type VintageWindowBindings={DB:D1Database;GEMINI_API_KEY:string;AI_USAGE?:AnalyticsSink};
 
@@ -35,6 +36,17 @@ ${usual} Your job is the vintage: say where ${subject.vintage} sits against that
 drinkFrom and drinkTo are calendar years, not ages, and they are for a wine of the kind described above rather than for the region's longest-lived bottling. Return null for both rather than guessing if no source discusses this vintage in this place. Keep the note to three sentences, and name the year explicitly rather than writing about the region in general.`;
 }
 
+/**
+ * Rendered into the prompt, never sent as a responseSchema.
+ *
+ * Google Search grounding and controlled generation cannot both be used on one
+ * request: declaring the search tool alongside responseMimeType and a
+ * responseSchema gets a well-formed JSON answer back with the grounding
+ * silently dropped. This whole feature then rejects its own answer for having
+ * no sources, which is exactly what it did - "nothing was retrieved for this
+ * vintage", every time, because nothing ever was. geminiBatch documents the
+ * same trap for the research paths; this is the same trap.
+ */
 const responseSchema={type:'OBJECT',properties:{
   drinkFrom:{type:'INTEGER',nullable:true},drinkTo:{type:'INTEGER',nullable:true},
   note:{type:'STRING'},
@@ -76,9 +88,9 @@ export async function researchVintageWindow(env:VintageWindowBindings,owner:stri
       method:'POST',signal:controller.signal,
       headers:{'Content-Type':'application/json','x-goog-api-key':env.GEMINI_API_KEY},
       body:JSON.stringify({
-        contents:[{role:'user',parts:[{text:prompt(subject,baseline)}]}],
+        contents:[{role:'user',parts:[{text:`${prompt(subject,baseline)}\n\n${describeResponseSchema(responseSchema)}`}]}],
         tools:[{google_search:{}}],
-        generationConfig:{maxOutputTokens:2048,responseMimeType:'application/json',responseSchema}
+        generationConfig:groundedGenerationConfig(2048)
       })
     });
     if(!response.ok)throw new Error(`Vintage lookup failed (${response.status})`);

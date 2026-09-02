@@ -1,5 +1,6 @@
 import { useEffect,useState } from 'react';
 import { maturityPair,windowShift,type VintageSubject,type VintageWindow } from '../../lib/maturity/vintageWindow';
+import { resolvePlace } from '../../lib/places/resolve';
 import { getVintageWindow,lookUpVintageWindow } from './api';
 import { DrinkingWindow } from './DrinkingWindow';
 import '../../maturity.css';
@@ -28,6 +29,15 @@ export function VintageCheck({wine}:{wine:Wine}){
   const subject:VintageSubject={country:wine.country,region:wine.region,appellation:wine.appellation,
     vintage:wine.vintage,wineStyle:wine.wineStyle};
   const askable=Boolean(wine.vintage&&(wine.appellation||wine.region||wine.country));
+  /**
+   * The place the lookup is actually keyed on, rather than the region column.
+   * A bottle edited from a Salon into a Charmes-Chambertin can still be carrying
+   * Champagne in that column, and offering "one search for every wine from
+   * Champagne 2013" while asking about Burgundy is a promise about the wrong
+   * cell.
+   */
+  const where=resolvePlace({country:wine.country??null,region:wine.region??null,appellation:wine.appellation??null});
+  const asked=where.region??where.country??wine.region??wine.country;
 
   useEffect(()=>{
     if(!askable)return;
@@ -54,7 +64,7 @@ export function VintageCheck({wine}:{wine:Wine}){
     {pair.researched
       ?<div className="vintage-researched">
         <div className="vintage-researched-head">
-          <strong>{wine.vintage} in {researched?.region||researched?.country||wine.region||wine.country}</strong>
+          <strong>{wine.vintage} in {researched?.region||researched?.country||asked}</strong>
           <span className="maturity-window">Drink {pair.researched.from}–{pair.researched.to}</span>
           {shift&&!sameYears(shift)&&<span className="vintage-shift">{years(shift.from)} / {years(shift.to)} on the usual</span>}
           {sameYears(shift)&&<span className="vintage-shift">Same as the usual window</span>}
@@ -71,7 +81,7 @@ export function VintageCheck({wine}:{wine:Wine}){
         <button type="button" onClick={()=>void look()} disabled={busy}>
           {busy?'Searching…':`Look up ${wine.vintage}`}
         </button>
-        <small>One search, kept for every wine you own from {wine.region||wine.country} {wine.vintage} — the year is a regional fact. The window above stays either way.</small>
+        <small>One search, kept for every wine you own from {asked} {wine.vintage} — the year is a regional fact. The window above stays either way.</small>
       </div>}
 
     {error&&<p className="cellar-error" role="alert">{error}</p>}
