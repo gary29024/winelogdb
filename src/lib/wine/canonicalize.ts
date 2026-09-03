@@ -1,4 +1,5 @@
 import { ageingTerm,classifyFromText,resolvePlace } from '../places/resolve';
+import { canonicalGrapeName } from './grapes';
 
 const key=(value:string)=>value.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[’'`]/g,'').replace(/[^a-z0-9]+/g,' ').trim();
 
@@ -20,12 +21,6 @@ const appellations:Record<string,string>={
   beaune:'Beaune','corton charlemagne':'Corton-Charlemagne','cote de nuits villages':'Côte de Nuits-Villages','cote de beaune villages':'Côte de Beaune-Villages'
 };
 
-const grapes:Record<string,string>={
-  'pinot noir':'Pinot Noir',chardonnay:'Chardonnay','cabernet sauvignon':'Cabernet Sauvignon','cabernet franc':'Cabernet Franc',merlot:'Merlot',syrah:'Syrah',shiraz:'Shiraz',
-  grenache:'Grenache',mourvedre:'Mourvèdre','petit verdot':'Petit Verdot',malbec:'Malbec',riesling:'Riesling','sauvignon blanc':'Sauvignon Blanc',
-  'chenin blanc':'Chenin Blanc','pinot gris':'Pinot Gris','pinot grigio':'Pinot Grigio',nebbiolo:'Nebbiolo',sangiovese:'Sangiovese',tempranillo:'Tempranillo'
-};
-
 function fromMap(value:string|null|undefined,map:Record<string,string>){if(!value)return value;return map[key(value)]??value.trim()}
 export const canonicalCountry=(value:string|null|undefined)=>fromMap(value,countries);
 /**
@@ -42,7 +37,15 @@ export function canonicalCountryName(value:string|null|undefined){
 }
 export const canonicalRegion=(value:string|null|undefined)=>fromMap(value,regions);
 export const canonicalAppellation=(value:string|null|undefined)=>fromMap(value,appellations);
-export const canonicalGrape=(value:string)=>fromMap(value,grapes)??value.trim();
+/**
+ * The name a grape is filed under.
+ *
+ * This was a twenty-entry spelling map with no synonyms in it, so it fixed
+ * capitalisation and nothing else: a journal holding Pinot Noir, Pinot Nero and
+ * Spätburgunder held three grapes in every count and filter. The table it now
+ * reads carries the other names each grape is sold under.
+ */
+export const canonicalGrape=(value:string)=>canonicalGrapeName(value)||value.trim();
 
 function stripRepeatedProducer(producer:string|undefined|null,wineName:string|undefined|null){
   if(!producer||!wineName)return wineName;
