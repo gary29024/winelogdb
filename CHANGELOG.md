@@ -1,6 +1,54 @@
 # Changelog
 
-All notable WineLogDB changes are summarized here by shipped impact. For v1.0.0, this consolidates all merged pull requests through #185 rather than duplicating the full PR-by-PR history.
+All notable WineLogDB changes are summarized here by shipped impact. Each stable release consolidates merged pull requests rather than duplicating the full PR-by-PR history.
+
+## [1.1.0] - 2026-09-03
+
+### Cellar and bottle maturity
+
+- Added a dedicated **In cellar** scope for bottles owned but not yet drunk. Cellar holdings live outside `wines`, so they do not count as tasted wines, producer experience, Passport progress, Insights statistics or collection progress until a bottle is actually opened.
+- Added manual cellar entry/editing with bottle count, format, purchase price/currency, merchant and storage location, while resolving only against producer/cuvée identities that already exist instead of creating untasted library entities.
+- Added an **Open bottle** flow that transfers the holding into the normal wine log on save, decrements the cellar quantity only after a successful save, carries purchase price into the wine record and optionally checks a label photo for disagreements without silently applying them.
+- Made cellar entry and editing practical on mobile with producer matching/near-miss suggestions, a substantially shorter sheet, edit/cancel paths, currency normalization and prefetching of the lazy cellar route.
+- Added deterministic drinking-window guidance from the place hierarchy and wine style, including cru-tier-aware Burgundy rules and named prestige-Champagne exceptions.
+- Added on-demand grounded vintage assessment. The researched shift is cached by the appropriate vintage cell, shown alongside the rule-of-thumb window, and never runs automatically.
+- Refined vintage cells so named Burgundy grand crus can receive site-specific assessments while village/premier-cru wines continue to share broader regional vintage context; prestige Champagne retains its cuvée-specific baseline.
+- Routed vintage lookup through the shared Gemini transport, using the lower-cost grounded model first and escalating only on provider/grounding/shape failure; added robust grounded-response parsing, source/model diagnostics, refresh support and correct per-attempt metering.
+
+### Collections, Passport and journal semantics
+
+- Added curated collections for **Primum Familiae Vini · The 12 Families**, **Napa Valley · 17 Nested AVAs** and **Willamette Valley · 11 Nested AVAs**.
+- Added one **World Benchmark Producers & Cuvées** collection containing 143 course-derived targets. Producer-only examples remain producer-level goals, while specifically named wines use cuvée-level matching so another wine from the same house cannot complete the target.
+- Prevented artificial double counting in the benchmark collection: when the course names a specific wine such as Sassicaia, La Turque or Yattarna, that cuvée replaces the broad producer target rather than sitting beside it.
+- Expanded Passport mapping beyond one dot per large country. Geographically spread countries can now render canonical wine-region markers, with fallback to the country marker for unknown regions, and the payload no longer truncates the region set before the map can use it.
+- Folded grape synonyms for counting and filtering while preserving the wording stored on each bottle. For example Pinot Nero/Spätburgunder/Blauburgunder aggregate under Pinot Noir in Insights/Passport, without rewriting the wine label text.
+- Added local grape-name suggestions in the wine form and kept deliberately style-distinct names such as Syrah/Shiraz and Pinot Gris/Pinot Grigio separate.
+- Reconciled derived country/region/appellation/grape/style tags when a wine is edited while preserving hand-written tags and respecting a previously deleted suggested tag.
+
+### Journal, scanning and frontend performance
+
+- Fixed Journal Reset after a remembered search so a cleared query cannot silently restore itself while leaving the search box blank.
+- Kept rapid Journal search typing local to a small input component, debounced only the settled URL/API update, retained current results while refreshing and memoized chronological grouping.
+- Added a D1 expression index for the Journal's real chronological sort, `coalesce(tasting_date, created_at)`, reducing the candidate set that needs secondary sorting during pagination.
+- Treated Cloudflare R2 same-object throttling (`10058`) during Batch Scan as transient: retry locally with backoff, then use the existing delayed queue retry before marking an item failed, without billing Gemini when storage failed first.
+- Added browser-memory reuse for Batch Scan previews and Group Photo originals/previews/crops, including in-flight request deduplication and bounded caches, reducing repeat private R2 reads without weakening authenticated `no-store` delivery.
+- Isolated research elapsed-time clocks into a tiny leaf component so one-second timers no longer re-render entire wine/producer detail pages.
+- Added explicit summary-cache invalidation after wine/tasting writes so Passport, Insights and collection progress do not remain stale in the client after a mutation.
+
+### AI usage, configuration and diagnostics
+
+- Corrected monthly AI usage rollups to preserve model and service tier, so billing-month totals use the same underlying rates as the detailed workflow cards instead of repricing mixed usage at a fallback model.
+- Clarified the AI spend tile as **This billing month**, separated token cost from grounding-search allowance/cost and retained enough precision for small recognition costs.
+- Removed the requirement for a direct `GEMINI_API_KEY` when the Cloudflare AI Gateway / Vertex configuration is complete; partially configured gateway environments now fail clearly instead of silently attempting a keyless direct call.
+- Improved vintage-lookup failure diagnostics without enabling full payload logging: rejection logs now include finish reason, grounding/search/source shape and a bounded reply excerpt, while successful UI summaries identify the model that answered.
+
+### Reliability and release integrity
+
+- v1.1.0 consolidates all merged product work after the v1.0.0 tag through PR #207; unmerged work is excluded.
+- Release baseline before metadata: `main` at `24a8ca7c816d52ac41b3c8d33f3f361e7120008d` (merged PR #207), whose CI completed successfully.
+- New schema migrations since v1.0.0 are `0044_journal_date_index.sql`, `0045_cellar_holdings.sql`, `0046_vintage_windows.sql` and `0047_ai_usage_monthly_model.sql`.
+- Latest shipped migration for this release: `0047_ai_usage_monthly_model.sql`.
+- Production upgrades must use `npm run deploy` so the remote D1 migrations run before the Worker is deployed.
 
 ## [1.0.0] - 2026-08-31
 
