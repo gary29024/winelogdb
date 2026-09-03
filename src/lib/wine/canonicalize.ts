@@ -1,5 +1,5 @@
 import { ageingTerm,classifyFromText,resolvePlace } from '../places/resolve';
-import { canonicalGrapeName } from './grapes';
+import { displayGrapeName } from './grapes';
 
 const key=(value:string)=>value.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[’'`]/g,'').replace(/[^a-z0-9]+/g,' ').trim();
 
@@ -38,14 +38,15 @@ export function canonicalCountryName(value:string|null|undefined){
 export const canonicalRegion=(value:string|null|undefined)=>fromMap(value,regions);
 export const canonicalAppellation=(value:string|null|undefined)=>fromMap(value,appellations);
 /**
- * The name a grape is filed under.
+ * How a grape is spelled, not what it is counted as.
  *
- * This was a twenty-entry spelling map with no synonyms in it, so it fixed
- * capitalisation and nothing else: a journal holding Pinot Noir, Pinot Nero and
- * Spätburgunder held three grapes in every count and filter. The table it now
- * reads carries the other names each grape is sold under.
+ * A bottle that says Pinot Nero says Pinot Nero, and the app has no business
+ * rewriting the label - so this fixes the capitals and the accent of the name
+ * that was typed and stops there. Folding Pinot Nero in with Pinot Noir is a
+ * question for the statistics, and canonicalGrapeName answers it where they are
+ * counted rather than where they are stored.
  */
-export const canonicalGrape=(value:string)=>canonicalGrapeName(value)||value.trim();
+export const canonicalGrape=(value:string)=>displayGrapeName(value)||value.trim();
 
 function stripRepeatedProducer(producer:string|undefined|null,wineName:string|undefined|null){
   if(!producer||!wineName)return wineName;

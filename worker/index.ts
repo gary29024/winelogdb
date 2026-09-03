@@ -1,4 +1,5 @@
 import { Hono } from 'hono';
+import { grapeGroup } from '../src/lib/wine/grapes';
 import { cors } from 'hono/cors';
 import { GoogleGenerativeAI, SchemaType } from '@google/generative-ai';
 import { createSession, requireSession } from '../src/lib/auth/session';
@@ -112,7 +113,8 @@ app.get('/api/wines',async c=>{
  const filters:[string,string][]=[['vintage','w.vintage'],['country','w.country'],['region','w.region'],['style','w.wine_style'],['tastingDate','w.tasting_date']];
  for(const [key,col] of filters)if(q[key]){where+=` AND ${col}=?`;args.push(q[key])}
  if(q.rating){where+=' AND w.rating>=?';args.push(Number(q.rating))}
- if(q.grape){where+=' AND EXISTS (SELECT 1 FROM json_each(w.grapes_json) WHERE value=?)';args.push(q.grape)}
+ // Every name the grape answers to; the label keeps its own spelling.
+ if(q.grape){const names=grapeGroup(q.grape);where+=` AND EXISTS (SELECT 1 FROM json_each(w.grapes_json) WHERE lower(trim(CAST(value AS TEXT))) IN (${names.map(()=>'?').join(',')}))`;args.push(...names.map(name=>name.toLowerCase()))}
  if(q.tasting){where+=' AND EXISTS (SELECT 1 FROM wine_experiences we JOIN tastings t ON t.id=we.tasting_id WHERE we.wine_id=w.id AND we.owner_id=? AND lower(t.name) LIKE lower(?))';args.push(owner,`%${q.tasting}%`)}
  if(q.query){const clean=q.query.replace(/[^\p{L}\p{N}\s]/gu,' ').trim();if(clean){where+=' AND (w.id IN (SELECT wine_id FROM wine_search WHERE wine_search MATCH ? AND owner_id=?) OR EXISTS (SELECT 1 FROM wine_experiences we JOIN tastings t ON t.id=we.tasting_id WHERE we.wine_id=w.id AND we.owner_id=? AND lower(t.name) LIKE lower(?)))';args.push(clean+'*',owner,owner,`%${q.query}%`)}}
  const orders:Record<string,string>={newest:'w.created_at DESC',oldest:'w.created_at ASC',rating:'w.rating DESC',producer:'w.producer COLLATE NOCASE',vintage:'w.vintage DESC'};

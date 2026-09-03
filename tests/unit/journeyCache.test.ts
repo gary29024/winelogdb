@@ -115,8 +115,19 @@ describe('what the Passport map is told about',()=>{
   });
 
   it('recomputes what is already cached, since the shape it holds has changed',()=>{
-    // A cached payload carries the old twenty regions; without a version bump
-    // the map would keep reading them until the next wine was saved.
-    expect(JOURNEY_PAYLOAD_VERSION).toBeGreaterThanOrEqual(5);
+    // A cached payload carries the old twenty regions, and grape rows that were
+    // never folded; without a version bump both would keep being served until
+    // the next wine was saved.
+    expect(JOURNEY_PAYLOAD_VERSION).toBeGreaterThanOrEqual(6);
+  });
+
+  it('counts every spelling of a grape before it takes the top rows',()=>{
+    // Pinot Nero and Pinot Noir are two rows in SQL and one grape afterwards, so
+    // a slice taken before they were added together is a slice of the wrong
+    // numbers - the same mistake the regions list was making one query above.
+    const grapes=query('GROUP BY lower(trim(CAST(g.value AS TEXT)))');
+    expect(Number(grapes.match(/LIMIT (\d+)/)![1])).toBeGreaterThanOrEqual(400);
+    expect(handler).toMatch(/grapes:foldGrapes\(/);
+    expect(handler).toMatch(/const GRAPE_ROWS=14/);
   });
 });

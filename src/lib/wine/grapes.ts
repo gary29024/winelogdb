@@ -24,7 +24,7 @@ export type GrapeEntry={
 
 export const GRAPES:readonly GrapeEntry[]=[
   // Red
-  {name:'Pinot Noir',also:['Pinot Nero','Spatburgunder','Spätburgunder','Blauburgunder','Pinot Negro','Blauer Spatburgunder'],common:true},
+  {name:'Pinot Noir',also:['Pinot Nero','Spätburgunder','Blauburgunder','Pinot Negro','Blauer Spatburgunder'],common:true},
   {name:'Cabernet Sauvignon',also:['Cab Sauv','Cabernet-Sauvignon'],common:true},
   {name:'Merlot',common:true},
   {name:'Syrah',also:['Serine'],common:true},
@@ -34,12 +34,12 @@ export const GRAPES:readonly GrapeEntry[]=[
   {name:'Tempranillo',also:['Tinto Fino','Tinta del Pais','Tinta de Toro','Cencibel','Ull de Llebre','Aragonez','Tinta Roriz'],common:true},
   {name:'Grenache',also:['Garnacha','Garnacha Tinta','Cannonau','Granaxa','Alicante'],common:true},
   {name:'Mourvèdre',also:['Monastrell','Mataro'],common:true},
-  {name:'Carignan',also:['Carinena','Cariñena','Mazuelo','Carignano','Samso']},
-  {name:'Cinsault',also:['Cinsaut','Ottavianello']},
+  {name:'Carignan',also:['Carinena','Mazuelo','Carignano','Samso']},
+  {name:'Cinsault',also:['Ottavianello']},
   {name:'Cabernet Franc',also:['Bouchet','Breton','Bouchy']},
   {name:'Petit Verdot'},
-  {name:'Malbec',also:['Cot','Côt','Auxerrois','Pressac']},
-  {name:'Carmenère',also:['Carmenere','Grande Vidure']},
+  {name:'Malbec',also:['Cot','Auxerrois','Pressac']},
+  {name:'Carmenère',also:['Grande Vidure']},
   {name:'Barbera'},
   {name:'Dolcetto',also:['Ormeasco']},
   {name:'Corvina',also:['Corvina Veronese','Cruina']},
@@ -47,7 +47,7 @@ export const GRAPES:readonly GrapeEntry[]=[
   {name:'Montepulciano'},
   {name:'Primitivo',also:['Zinfandel','Crljenak Kastelanski','Tribidrag']},
   {name:'Touriga Nacional'},
-  {name:'Blaufränkisch',also:['Blaufrankisch','Lemberger','Kekfrankos','Kékfrankos','Frankovka']},
+  {name:'Blaufränkisch',also:['Lemberger','Frankovka']},
   {name:'Zweigelt',also:['Blauer Zweigelt','Rotburger']},
   {name:'St. Laurent',also:['Sankt Laurent','Saint Laurent','Svatovavrinecke']},
   {name:'Gamay',also:['Gamay Noir','Gamay Noir a Jus Blanc']},
@@ -71,15 +71,15 @@ export const GRAPES:readonly GrapeEntry[]=[
   {name:'Chenin Blanc',also:['Steen','Pineau de la Loire'],common:true},
   {name:'Pinot Gris',also:['Grauburgunder','Rulander','Ruländer','Malvoisie'],common:true},
   {name:'Pinot Grigio',common:true},
-  {name:'Pinot Blanc',also:['Pinot Bianco','Weissburgunder','Weißburgunder','Klevner']},
-  {name:'Gewürztraminer',also:['Gewurztraminer','Traminer Aromatico','Traminer']},
-  {name:'Grüner Veltliner',also:['Gruner Veltliner','Weissgipfler']},
+  {name:'Pinot Blanc',also:['Pinot Bianco','Weissburgunder','Klevner']},
+  {name:'Gewürztraminer',also:['Traminer Aromatico','Traminer']},
+  {name:'Grüner Veltliner',also:['Weissgipfler']},
   {name:'Viognier'},
   {name:'Marsanne'},
   {name:'Roussanne',also:['Bergeron']},
   {name:'Sémillon',also:['Semillon']},
   {name:'Muscadet',also:['Melon de Bourgogne','Melon B']},
-  {name:'Albariño',also:['Albarino','Alvarinho']},
+  {name:'Albariño',also:['Alvarinho']},
   {name:'Verdejo'},
   {name:'Godello'},
   {name:'Viura',also:['Macabeo','Maccabeu']},
@@ -97,11 +97,11 @@ export const GRAPES:readonly GrapeEntry[]=[
   {name:'Assyrtiko'},
   {name:'Furmint'},
   {name:'Silvaner',also:['Sylvaner','Gruner Silvaner']},
-  {name:'Müller-Thurgau',also:['Muller-Thurgau','Rivaner']},
+  {name:'Müller-Thurgau',also:['Rivaner']},
   {name:'Torrontés',also:['Torrontes']},
   {name:'Colombard',also:['French Colombard']},
   {name:'Palomino',also:['Listan Blanco','Palomino Fino']},
-  {name:'Pedro Ximénez',also:['Pedro Ximenez','PX']},
+  {name:'Pedro Ximénez',also:['PX']},
   {name:'Moscatel',also:['Muscat','Moscato','Muscat Blanc a Petits Grains','Muskateller']},
   {name:'Aligoté',also:['Aligote']},
   {name:'Savagnin',also:['Traminer Blanc','Naturé']}
@@ -110,17 +110,61 @@ export const GRAPES:readonly GrapeEntry[]=[
 const key=(value:string)=>value.normalize('NFD').replace(/[̀-ͯ]/g,'')
   .toLowerCase().replace(/[’'`]/g,'').replace(/[^a-z0-9]+/g,' ').trim();
 
+/** Normalised name -> the grape it is counted as. */
 const byKey=new Map<string,string>();
+/** Normalised name -> how the table spells that same name, accents and all. */
+const spellings=new Map<string,string>();
 for(const entry of GRAPES){
   byKey.set(key(entry.name),entry.name);
-  for(const alias of entry.also??[])byKey.set(key(alias),entry.name);
+  spellings.set(key(entry.name),entry.name);
+  for(const alias of entry.also??[]){
+    byKey.set(key(alias),entry.name);
+    // An alias that differs from the canonical name only by a hyphen or an
+    // accent normalises to the same key, and must not take the spelling over:
+    // "Cabernet-Sauvignon" is listed so it matches, not so it replaces.
+    if(!spellings.has(key(alias)))spellings.set(key(alias),alias);
+  }
 }
 
-/** The name this grape is filed under, or the text as typed where it is unknown. */
+/**
+ * The name this grape is grouped under. **Not** what to show.
+ *
+ * Only counting uses this. A bottle that says Pinot Nero says Pinot Nero, and
+ * the app has no business rewriting the label - but a journal that counts it
+ * apart from its Pinot Noir is counting one vine twice, which is what every
+ * total, filter and insight was doing. So the stored value stays as the label
+ * read it and this is the key the statistics fold on.
+ */
 export function canonicalGrapeName(value:string|null|undefined){
   const text=(value??'').trim();
   if(!text)return text;
   return byKey.get(key(text))??text;
+}
+
+/**
+ * The same name, spelled the way the table spells it.
+ *
+ * This is what gets stored: "pinot nero" becomes "Pinot Nero" and
+ * "spatburgunder" becomes "Spätburgunder" - the accent and the capitals the
+ * label has, and not one letter more. A grape the table does not know is kept
+ * exactly as typed.
+ */
+export function displayGrapeName(value:string|null|undefined){
+  const text=(value??'').trim();
+  if(!text)return text;
+  return spellings.get(key(text))??text;
+}
+
+/**
+ * Every name this grape answers to, for a filter that has to match what is
+ * actually stored. Asking the journal for Pinot Noir has to return the bottle
+ * filed as Pinot Nero, or the count on the insight and the list behind it
+ * disagree.
+ */
+export function grapeGroup(value:string|null|undefined){
+  const canonical=canonicalGrapeName(value);
+  const entry=GRAPES.find(item=>item.name===canonical);
+  return entry?[entry.name,...entry.also??[]]:canonical?[canonical]:[];
 }
 
 /** Whether the table has an opinion about this name at all. */
