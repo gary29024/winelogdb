@@ -1,9 +1,11 @@
 import { describe,expect,it } from 'vitest';
-import type { CountryStat } from '../../src/features/journey/api';
-import { buildMapMarkers,countryAnchor,landDotPaths,mapCaption,MAP_HEIGHT,MAP_WIDTH,MARKER_MAX_DRIFT,projectPoint } from '../../src/features/journey/worldMap';
-import { COUNTRY_ANCHORS,LAND_MASK,MAP_CELL,MAP_COLUMNS,MAP_ROWS } from '../../src/features/journey/worldMapData';
+import type { CountryStat,RegionStat } from '../../src/features/journey/api';
+import { buildMapMarkers,countryAnchor,countryIsSpread,landDotPaths,mapCaption,MAP_HEIGHT,MAP_WIDTH,MARKER_MAX_DRIFT,projectPoint,regionAnchor,regionSpread } from '../../src/features/journey/worldMap';
+import { COUNTRY_ANCHORS,LAND_MASK,MAP_CELL,MAP_COLUMNS,MAP_ROWS,REGION_ANCHORS } from '../../src/features/journey/worldMapData';
 
 const country=(name:string,wines:number):CountryStat=>({country:name,wines,producers:0,appellations:0,averageRating:null});
+const region=(inCountry:string,name:string,wines:number):RegionStat=>
+  ({country:inCountry,region:name,wines,producers:0,appellations:0,averageRating:null,favorites:0});
 
 function maskAt(x:number,y:number){
   const row=Math.floor(y/MAP_CELL),column=Math.floor(x/MAP_CELL);
@@ -99,6 +101,97 @@ describe('markers',()=>{
     expect(markers).toHaveLength(1);
     expect(markers[0].wines).toBe(9);
     expect(unplaced).toBe(0);
+  });
+});
+
+describe('countries too wide for one dot',()=>{
+  it('measures how far apart a country\'s regions are rather than keeping a list',()=>{
+    // The rule is the halo: past it the lit patch around one region no longer
+    // reaches the next, which is where a single dot starts telling lies.
+    expect(countryIsSpread('United States')).toBe(true);
+    expect(countryIsSpread('Australia')).toBe(true);
+    expect(countryIsSpread('Canada')).toBe(true);
+    expect(countryIsSpread('Argentina')).toBe(true);
+    expect(countryIsSpread('New Zealand')).toBe(true);
+    // South Africa's regions are all within an hour of Cape Town, and it is in
+    // the anchor table precisely so the rule can be seen excluding it.
+    expect(regionSpread('South Africa')).toBeLessThan(3);
+    expect(countryIsSpread('South Africa')).toBe(false);
+    // France has no region anchors at all, so it is one dot by having nothing
+    // to say otherwise.
+    expect(countryIsSpread('France')).toBe(false);
+  });
+
+  it('puts every region anchor on a land cell, so no dot floats in open water',()=>{
+    const afloat=Object.entries(REGION_ANCHORS).flatMap(([inCountry,regions])=>
+      Object.entries(regions).filter(([,[latitude,longitude]])=>{
+        const {x,y}=projectPoint(latitude,longitude);
+        return maskAt(x,y)!=='#';
+      }).map(([name])=>`${inCountry}/${name}`));
+    expect(afloat).toEqual([]);
+  });
+
+  it('gives a spread country a dot per region instead of one for the lot',()=>{
+    // The report: a Willamette Valley and a Finger Lakes both showing as
+    // California, three thousand miles from where the wine is.
+    const {markers}=buildMapMarkers([country('United States',30)],[
+      region('United States','Napa Valley',12),
+      region('United States','Willamette Valley',10),
+      region('United States','Finger Lakes',8)
+    ]);
+    expect(markers).toHaveLength(3);
+    expect(markers.map(m=>m.region).sort()).toEqual(['Finger Lakes','Napa Valley','Willamette Valley']);
+    const finger=markers.find(m=>m.region==='Finger Lakes')!;
+    const napa=markers.find(m=>m.region==='Napa Valley')!;
+    expect(finger.anchorX).toBeGreaterThan(napa.anchorX+30);
+    expect(finger.wines).toBe(8);
+    expect(markers.every(m=>m.country==='United States')).toBe(true);
+  });
+
+  it('leaves a country whose regions sit together as the single dot it is',()=>{
+    const {markers}=buildMapMarkers([country('South Africa',9)],[
+      region('South Africa','Stellenbosch',5),region('South Africa','Swartland',4)
+    ]);
+    expect(markers).toHaveLength(1);
+    expect(markers[0].region).toBeNull();
+    expect(markers[0].wines).toBe(9);
+  });
+
+  it('falls back to the country where no region of it resolved',()=>{
+    // Wines filed under the country alone, or a region the anchors do not
+    // carry. A journal never loses a stamp it has earned.
+    const {markers}=buildMapMarkers([country('United States',6)],[region('United States','Ozark Mountain',6)]);
+    expect(markers).toHaveLength(1);
+    expect(markers[0].region).toBeNull();
+    expect(markers[0].wines).toBe(6);
+  });
+
+  it('ignores regions of countries that are not drawn that way',()=>{
+    const {markers}=buildMapMarkers([country('France',40)],[region('France','Burgundy',40)]);
+    expect(markers).toHaveLength(1);
+    expect(markers[0].region).toBeNull();
+  });
+
+  it('keeps every marker separately addressable',()=>{
+    const {markers}=buildMapMarkers([country('United States',20),country('Australia',9)],[
+      region('United States','Napa Valley',12),region('United States','Columbia Valley',8),
+      region('Australia','Barossa Valley',5),region('Australia','Margaret River',4)
+    ]);
+    expect(new Set(markers.map(m=>m.id)).size).toBe(markers.length);
+    expect(markers).toHaveLength(4);
+  });
+
+  it('reads the region names the place tree stores, accents and all',()=>{
+    expect(regionAnchor('New Zealand','Hawke\u2019s Bay')).not.toBeNull();
+    expect(regionAnchor('New Zealand',"Hawke's Bay")).toEqual(regionAnchor('New Zealand','Hawke\u2019s Bay'));
+    expect(regionAnchor('Argentina','Lujan de Cuyo')).toEqual(regionAnchor('Argentina','Luj\u00e1n de Cuyo'));
+    expect(regionAnchor('France','Burgundy')).toBeNull();
+  });
+
+  it('still counts countries in the caption, not dots',()=>{
+    // A passport counts countries. Twelve American dots are one stamp.
+    expect(mapCaption([country('United States',30),country('France',10)]))
+      .toBe('2 countries stamped · United States leads with 30');
   });
 });
 

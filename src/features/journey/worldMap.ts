@@ -1,5 +1,5 @@
-import type { CountryStat } from './api';
-import { COUNTRY_ALIASES,COUNTRY_ANCHORS,LAND_MASK,MAP_CELL,MAP_COLUMNS,MAP_LAT_BOTTOM,MAP_LAT_TOP } from './worldMapData';
+import type { CountryStat,RegionStat } from './api';
+import { COUNTRY_ALIASES,COUNTRY_ANCHORS,LAND_MASK,MAP_CELL,MAP_COLUMNS,MAP_LAT_BOTTOM,MAP_LAT_TOP,REGION_ANCHORS } from './worldMapData';
 
 // The map is drawn in an equirectangular projection at one SVG unit per degree,
 // so the viewBox is simply the window the generator rasterised.
@@ -21,16 +21,58 @@ const SEPARATION_GAP=.7;
 /** How far a marker may be pushed from its country, in degrees. */
 export const MARKER_MAX_DRIFT=7;
 
-export type MapMarker={country:string;wines:number;x:number;y:number;radius:number;anchorX:number;anchorY:number};
+export type MapMarker={
+  /** Unique per marker, because a country can now carry several. */
+  id:string;
+  country:string;
+  /** The region this stands for, where it stands for one rather than a country. */
+  region:string|null;
+  wines:number;x:number;y:number;radius:number;anchorX:number;anchorY:number;
+};
 
 export function normalizeCountryName(value:string){
   return value.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
 }
 
-export function countryAnchor(country:string):readonly [number,number]|null{
+const countryKey=(country:string)=>{
   const key=normalizeCountryName(country);
-  if(!key)return null;
-  return COUNTRY_ANCHORS[key]??COUNTRY_ANCHORS[COUNTRY_ALIASES[key]??'']??null;
+  if(!key)return '';
+  return COUNTRY_ANCHORS[key]?key:COUNTRY_ALIASES[key]??'';
+};
+
+export function countryAnchor(country:string):readonly [number,number]|null{
+  return COUNTRY_ANCHORS[countryKey(country)]??null;
+}
+
+/**
+ * How far apart a country's wine regions are, as the diagonal of the box that
+ * holds them, in degrees.
+ *
+ * This is the whole rule for whether a country is drawn as one dot or several,
+ * and it is computed rather than listed so nobody has to remember to keep a
+ * list right. Eight degrees is about nine hundred kilometres, and it is the
+ * halo radius: past it the lit patch around one region no longer covers the
+ * next, which is exactly the point at which a single dot starts telling lies.
+ */
+const SPREAD_DEGREES=HALO_RADIUS;
+
+const regionAnchorsByCountry=new Map<string,Map<string,readonly [number,number]>>(
+  Object.entries(REGION_ANCHORS).map(([country,regions])=>[country,
+    new Map(Object.entries(regions).map(([region,anchor])=>[normalizeCountryName(region),anchor]))]));
+
+export function regionSpread(country:string){
+  const regions=regionAnchorsByCountry.get(countryKey(country));
+  if(!regions||regions.size<2)return 0;
+  const points=[...regions.values()];
+  const lats=points.map(point=>point[0]),longitudes=points.map(point=>point[1]);
+  return Math.hypot(Math.max(...lats)-Math.min(...lats),Math.max(...longitudes)-Math.min(...longitudes));
+}
+
+/** Whether this country's regions are far enough apart to be worth their own dots. */
+export const countryIsSpread=(country:string)=>regionSpread(country)>SPREAD_DEGREES;
+
+export function regionAnchor(country:string,region:string):readonly [number,number]|null{
+  return regionAnchorsByCountry.get(countryKey(country))?.get(normalizeCountryName(region))??null;
 }
 
 export function projectPoint(latitude:number,longitude:number){
@@ -56,28 +98,59 @@ function dotPath(dots:{x:number;y:number}[],radius:number){
 }
 
 /**
- * Place one marker per country the journal knows about, largest last so the
- * busiest countries paint over their neighbours rather than under them.
+ * Place the markers the journal has earned, largest last so the busiest paint
+ * over their neighbours rather than under them.
+ *
+ * One per country, except where a country's regions are too far apart for one
+ * dot to stand for them - the United States, Australia, Argentina, Chile,
+ * New Zealand, Canada - which get a dot per region the journal actually holds.
+ * Which countries those are is worked out from the anchors themselves rather
+ * than listed, so South Africa, whose regions all sit within an hour of Cape
+ * Town, stays the single dot it should be.
+ *
+ * Regions are optional: called without them this behaves exactly as it did, and
+ * the caption still counts countries that way.
+ *
  * Countries whose name does not resolve to an anchor are reported separately so
  * the caller can still count them honestly.
  */
-export function buildMapMarkers(countries:readonly CountryStat[]){
+export function buildMapMarkers(countries:readonly CountryStat[],regions:readonly RegionStat[]=[]){
   const placed=new Map<string,MapMarker>();
   let unplaced=0;
+  const byCountry=new Map<string,RegionStat[]>();
+  for(const region of regions){
+    if(!region.country)continue;
+    const key=countryKey(region.country);
+    if(!key||!countryIsSpread(region.country))continue;
+    (byCountry.get(key)??byCountry.set(key,[]).get(key)!).push(region);
+  }
+  const put=(id:string,country:string,region:string|null,wines:number,anchor:readonly [number,number])=>{
+    const existing=placed.get(id);
+    if(existing){existing.wines+=wines;return}
+    const {x,y}=projectPoint(anchor[0],anchor[1]);
+    placed.set(id,{id,country,region,wines,x,y,radius:MIN_MARKER,anchorX:x,anchorY:y});
+  };
   for(const entry of countries){
     const anchor=countryAnchor(entry.country);
     if(!anchor){unplaced+=1;continue}
-    const key=`${anchor[0]},${anchor[1]}`,existing=placed.get(key);
-    if(existing){existing.wines+=entry.wines;continue}
-    const {x,y}=projectPoint(anchor[0],anchor[1]);
-    placed.set(key,{country:entry.country,wines:entry.wines,x,y,radius:MIN_MARKER,anchorX:x,anchorY:y});
+    // A spread country is drawn by its regions. Where none of them resolved -
+    // wines filed under the country alone - it falls back to the one dot, so a
+    // journal never loses a stamp it has earned.
+    const own=byCountry.get(countryKey(entry.country))??[];
+    const drawn=own.filter(region=>regionAnchor(entry.country,region.region));
+    if(drawn.length){
+      for(const region of drawn)put(`${countryKey(entry.country)}/${normalizeCountryName(region.region)}`,
+        entry.country,region.region,region.wines,regionAnchor(entry.country,region.region)!);
+      continue;
+    }
+    put(`${anchor[0]},${anchor[1]}`,entry.country,null,entry.wines,anchor);
   }
   const markers=[...placed.values()];
   const busiest=markers.reduce((most,marker)=>Math.max(most,marker.wines),0);
   for(const marker of markers)marker.radius=busiest>0
     ?MIN_MARKER+(MAX_MARKER-MIN_MARKER)*Math.sqrt(Math.min(1,marker.wines/busiest))
     :MIN_MARKER;
-  markers.sort((a,b)=>a.wines-b.wines||a.country.localeCompare(b.country));
+  markers.sort((a,b)=>a.wines-b.wines||a.id.localeCompare(b.id));
   separate(markers);
   return {markers,unplaced};
 }
