@@ -2,6 +2,7 @@ import { useEffect,useMemo,useRef,useState } from 'react';
 import { useNavigate,useSearchParams } from 'react-router-dom';
 import { WineForm } from '../wines/WineForm';
 import type { WineInput } from '../../lib/db/schema';
+import { derivedTags } from '../wines/wineTags';
 import type { WinePhoto } from '../wines/api';
 import { groupRecognitionSchema,type GroupRecognitionWine } from '../recognition/groupSchema';
 import { resolveProducer } from '../producers/api';
@@ -23,7 +24,6 @@ type ErrorBody={error?:unknown;requestId?:unknown};
 
 function readError(value:unknown){const body=typeof value==='object'&&value!==null?value as ErrorBody:{};const message=typeof body.error==='string'?body.error:'Request failed';return typeof body.requestId==='string'?`${message} · Request ${body.requestId}`:message}
 async function readResponse(response:Response){const requestId=response.headers.get('X-WineLog-Request-Id')??undefined,text=await response.text();if(!text)return {error:`Group recognition failed (${response.status})`,requestId};try{return JSON.parse(text) as unknown}catch{return {error:text.slice(0,700),requestId}}}
-function suggestedTags(result:GroupRecognitionWine){const seen=new Set<string>();return [result.country,result.region,result.appellation,...result.grapes,result.style].filter((x):x is string=>Boolean(x)).map(x=>x.trim()).filter(x=>{const key=x.toLowerCase();if(!x||seen.has(key))return false;seen.add(key);return true}).slice(0,8)}
 function asDataUrl(file:File){return new Promise<string>((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(String(reader.result??''));reader.onerror=()=>reject(new Error('Could not preview detected crop'));reader.readAsDataURL(file)})}
 async function alignToExistingCuvee(result:GroupRecognitionWine){
   try{
@@ -129,7 +129,7 @@ export function GroupScanPage(){
   const initial=useMemo<Partial<WineInput>>(()=>{
     if(!active)return {};const r=active.recognition,m=photo?.metadata;
     if(!r)return {tastingDate:m?.capturedAt?.slice(0,10)??null,latitude:m?.latitude??null,longitude:m?.longitude??null,recognitionStatus:'review'};
-    return {producer:r.producer,wineName:r.wineName,vintage:r.vintage??null,country:r.country??null,region:r.region??null,appellation:r.appellation??null,recognizedRegion:r.recognizedRegion??null,recognizedAppellation:r.recognizedAppellation??null,grapes:r.grapes,grapeBlend:r.grapeBlend,wineStyle:r.style??null,alcoholPercentage:r.alcoholPercentage??null,tastingDate:m?.capturedAt?.slice(0,10)??null,locationName:r.locationName??null,latitude:m?.latitude??null,longitude:m?.longitude??null,tags:suggestedTags(r),recognitionConfidence:r.confidence,recognitionStatus:'review'};
+    return {producer:r.producer,wineName:r.wineName,vintage:r.vintage??null,country:r.country??null,region:r.region??null,appellation:r.appellation??null,recognizedRegion:r.recognizedRegion??null,recognizedAppellation:r.recognizedAppellation??null,grapes:r.grapes,grapeBlend:r.grapeBlend,wineStyle:r.style??null,alcoholPercentage:r.alcoholPercentage??null,tastingDate:m?.capturedAt?.slice(0,10)??null,locationName:r.locationName??null,latitude:m?.latitude??null,longitude:m?.longitude??null,tags:derivedTags({country:r.country,region:r.region,appellation:r.appellation,grapes:r.grapes,style:r.style}),recognitionConfidence:r.confidence,recognitionStatus:'review'};
   },[active,photo]);
 
   return <section className="group-scan-page">

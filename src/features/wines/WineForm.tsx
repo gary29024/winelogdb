@@ -1,7 +1,9 @@
-import { useEffect,useRef,useState, type FormEvent } from 'react';
+import { useEffect,useMemo,useRef,useState, type FormEvent } from 'react';
 import { resolvePlace } from '../../lib/places/resolve';
 import { Link,useNavigate } from 'react-router-dom';
 import { addWineImages,saveWine,saveWineTastingStructure, type WinePhoto } from './api';
+import { derivedTags,reconcileTags } from './wineTags';
+import { grapeSuggestions } from '../../lib/wine/grapes';
 import { resolveProducer,type ProducerResolution } from '../producers/api';
 import { resolveCuvee,type CuveeResolution } from '../cuvees/api';
 import type { GrapeBlendEntry, WineInput } from '../../lib/db/schema';
@@ -44,6 +46,22 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,holdin
   const [adoptedProducer,setAdoptedProducer]=useState('');
   const [wineName,setWineName]=useState(String(initial?.wineName??'')),[appellation,setAppellation]=useState(String(initial?.appellation??'')),[wineStyle,setWineStyle]=useState(String(initial?.wineStyle??''));
   const [cruOverride,setCruOverride]=useState(String(initial?.classificationOverride??''));
+  const [blend,setBlend]=useState(()=>blendText(initial));
+  /** The half-typed grape after the last comma, without any percentage on it. */
+  const typedGrape=blend.split(',').at(-1)?.replace(/\d+(\.\d+)?\s*%?\s*$/,'').trim()??'';
+  const grapeHints=useMemo(()=>{
+    const found=grapeSuggestions(typedGrape);
+    // Nothing to offer once the name is already the one it would be filed under.
+    return found.length===1&&found[0].toLowerCase()===typedGrape.toLowerCase()?[]:found;
+  },[typedGrape]);
+  function completeGrape(name:string){
+    setBlend(current=>{
+      const parts=current.split(',');
+      const percentage=parts.at(-1)?.match(/(\d+(?:\.\d+)?\s*%)\s*$/)?.[1]??'';
+      parts[parts.length-1]=` ${name}${percentage?` ${percentage}`:''}`;
+      return parts.join(',').replace(/^\s+/,'');
+    });
+  }
   // Controlled so the duplicate probe can key on it: 2019 and 2020 of one cuvée
   // are two wines, and an evening pours both.
   const [vintageInput,setVintageInput]=useState(initial?.vintage==null?'':String(initial.vintage));
@@ -185,6 +203,22 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,holdin
     const placeChanged=placeValue(initial?.country)!==country||placeValue(initial?.region)!==region||placeValue(initial?.appellation)!==appellation;
     const orphanedReading=Boolean((initial?.recognizedRegion&&!placeValue(initial?.region))||(initial?.recognizedAppellation&&!placeValue(initial?.appellation)));
     const replaceRecordedPlace=placeChanged||orphanedReading;
+    /**
+     * The tags the wine puts there, corrected along with the wine.
+     *
+     * Three-way against what it said before, so a Champagne corrected into a
+     * Burgundy loses the Champagne tag and gains the Burgundy one, while a tag
+     * typed by hand - and a suggested one deliberately deleted - is left where
+     * it is. Read here rather than watched as you type, because the country and
+     * region fields are uncontrolled and this is the moment every value is in
+     * one place.
+     */
+    const wineStyleValue=(String(fd.get('wineStyle')||'')||null);
+    const typedTags=[...new Set(String(fd.get('tags')||'').split(',').map(x=>x.trim()).filter(Boolean))];
+    const nextTags=reconcileTags(typedTags,
+      derivedTags({country:initial?.country,region:initial?.region,appellation:initial?.appellation,
+        grapes:initial?.grapes,style:initial?.wineStyle}),
+      derivedTags({country,region,appellation,grapes:grapeBlend.map(x=>x.grape),style:wineStyleValue}));
     const input:WineFormInput={
       producer,wineName,vintage:fd.get('vintage')?Number(fd.get('vintage')):null,
       country,region,appellation,
@@ -205,7 +239,7 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,holdin
       venue:String(fd.get('venue')||'').trim()||null,locationName:String(fd.get('locationName')||'').trim()||null,
       latitude:initial?.latitude??null,longitude:initial?.longitude??null,
       price:fd.get('price')?Number(fd.get('price')):null,currency:currency||null,
-      tags:[...new Set(String(fd.get('tags')||'').split(',').map(x=>x.trim()).filter(Boolean))],recognitionStatus:'complete',recognitionConfidence:initial?.recognitionConfidence??null,
+      tags:nextTags,recognitionStatus:'complete',recognitionConfidence:initial?.recognitionConfidence??null,
       tastingStructure
     };
     try{
@@ -269,7 +303,17 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,holdin
         <option value="village">Village</option>
         <option value="none">Not classified</option>
       </select><small>{cruOverride?'Set by hand; WineLog will not change it.':'Read from the appellation and the label.'}</small></label></div>
-    <label className="full-field">Grapes / blend<input name="grapeBlend" defaultValue={blendText(initial)} placeholder="Merlot 95%, Cabernet Franc 5%"/><small>Percentages are optional. Separate grapes with commas.</small></label>
+    {/* Suggestions appear under the field only while a grape is half-typed, so
+        the form is no taller than it was until the moment it can help. The list
+        is a local table - no request, no debounce - and it offers only the name
+        a grape is filed under, because that is what pressing it will store. */}
+    <label className="full-field">Grapes / blend
+      <input name="grapeBlend" value={blend} onChange={e=>setBlend(e.target.value)} placeholder="Merlot 95%, Cabernet Franc 5%"/>
+      {grapeHints.length>0&&<span className="grape-hints" role="group" aria-label="Grape suggestions">
+        {grapeHints.map(name=><button type="button" key={name} className="grape-hint" onClick={()=>completeGrape(name)}>{name}</button>)}
+      </span>}
+      <small>Percentages are optional. Separate grapes with commas. A grape sold under another name — Pinot Nero, Garnacha — is filed under the one name when you save.</small>
+    </label>
 
     <details className="structure-fields structure-disclosure" open={structureOpen} onToggle={e=>setStructureOpen(e.currentTarget.open)}><summary><span>Structure</span><small>Optional</small></summary><div className="structure-disclosure-body"><small className="structure-helper">Tap the value itself. Tap the selected value again to clear it.</small>{structureFields.map(item=><div className="structure-row" key={item.key}><span>{item.label}</span><div className="structure-options" role="group" aria-label={item.label}>{item.options.map(([value,label])=><button key={value} type="button" className={`structure-option${structure[item.key]===value?' selected':''}`} aria-pressed={structure[item.key]===value} onClick={()=>chooseStructure(item.key,value)}>{label}</button>)}</div></div>)}</div></details>
 
@@ -284,7 +328,8 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,holdin
       <small>Use “Tasting / event group” to group wines from the same dinner, trip, class or formal tasting. Exact GPS remains attached even if you edit or clear the approximate place name.</small>
     </fieldset>
 
-    <label className="full-field">Tags (comma separated)<input name="tags" defaultValue={initial?.tags?.join(', ')??''}/></label>
+    <label className="full-field">Tags (comma separated)<input name="tags" defaultValue={initial?.tags?.join(', ')??''}/>
+      <small>Tags for the place, the grapes and the style follow the wine: correct a field above and the tag it put there is corrected with it. Anything you typed is left alone.</small></label>
     {photos.length>0&&<p className="form-note">{photos.length} photo{photos.length===1?'':'s'} will be saved permanently only after this wine is successfully logged.</p>}
     {error&&<p role="alert">{error}</p>}
     {/* Saving before the open-tasting probe answers used to post a null

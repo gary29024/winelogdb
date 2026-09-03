@@ -1,11 +1,42 @@
 import { currentOwnerRevision,missingTable } from '../src/lib/db/ownerRevision';
+import { canonicalGrapeName } from '../src/lib/wine/grapes';
 
 // Bump when the shape of the payload below changes, so caches written by an older
 // deployment are recomputed rather than served.
-export const JOURNEY_PAYLOAD_VERSION=4;
+export const JOURNEY_PAYLOAD_VERSION=6;
 
 const numberOrNull=(value:unknown)=>value==null?null:Number(value);
 const parseJson=<T>(value:unknown,fallback:T):T=>{try{return JSON.parse(String(value)) as T}catch{return fallback}};
+
+/**
+ * One vine, one row.
+ *
+ * The label keeps its own name on the bottle - a Pinot Nero stays a Pinot Nero
+ * everywhere it is shown - but a journal that counts it apart from its Pinot
+ * Noir is counting one grape twice, and every share, favourite rate and top
+ * fourteen was built on that. So the spellings are added together here, under
+ * the name the group is known by, and the count that comes out is of vines
+ * rather than of words.
+ *
+ * The wine counts are counts of distinct wines per spelling, so a wine listing
+ * two names for the same grape would be counted twice by a plain sum. It is a
+ * bottle that says "Pinot Noir, Spätburgunder", which no bottle does; the
+ * alternative is folding in SQL, which cannot see this table at all.
+ */
+const GRAPE_ROWS=14;
+function foldGrapes(rows:readonly Record<string,unknown>[]){
+  const folded=new Map<string,{grape:string;wines:number;favorites:number}>();
+  for(const row of rows){
+    const spelled=String(row.grape??'').trim();
+    if(!spelled)continue;
+    const name=canonicalGrapeName(spelled);
+    const entry=folded.get(name)??{grape:name,wines:0,favorites:0};
+    entry.wines+=Number(row.wines)||0;
+    entry.favorites+=Number(row.favorites)||0;
+    folded.set(name,entry);
+  }
+  return [...folded.values()].sort((a,b)=>b.wines-a.wines||a.grape.localeCompare(b.grape)).slice(0,GRAPE_ROWS);
+}
 
 export async function buildJourneyPayload(db:D1Database,owner:string){
   const statements=[
@@ -30,12 +61,19 @@ export async function buildJourneyPayload(db:D1Database,owner:string){
       COUNT(DISTINCT NULLIF(trim(appellation),'')) appellations,AVG(rating) average_rating
       FROM wines WHERE owner_id=? AND country IS NOT NULL AND trim(country)<>''
       GROUP BY trim(country) ORDER BY wines DESC,country ASC`).bind(owner),
+    // Regions stamp the map too now, so a top-20 slice is the same bug the
+    // countries query had: a Margaret River with four bottles never reaches the
+    // top twenty of a journal that is mostly French, so the map was never told
+    // about it and could not draw it. The cap that remains is a safety valve
+    // against a journal full of typo'd region strings rather than a display
+    // limit - the place tree carries 211 regions in total, and every screen
+    // that shows this list slices it to five or fewer itself.
     db.prepare(`SELECT NULLIF(trim(country),'') country,trim(region) region,COUNT(*) wines,
       COUNT(DISTINCT COALESCE(producer_id,lower(trim(producer)))) producers,
       COUNT(DISTINCT NULLIF(trim(appellation),'')) appellations,AVG(rating) average_rating,
       SUM(CASE WHEN favorite=1 THEN 1 ELSE 0 END) favorites
       FROM wines WHERE owner_id=? AND region IS NOT NULL AND trim(region)<>''
-      GROUP BY NULLIF(trim(country),''),trim(region) ORDER BY wines DESC,region ASC LIMIT 20`).bind(owner),
+      GROUP BY NULLIF(trim(country),''),trim(region) ORDER BY wines DESC,region ASC LIMIT 400`).bind(owner),
     db.prepare(`SELECT NULLIF(trim(country),'') country,NULLIF(trim(region),'') region,trim(appellation) appellation,
       COUNT(*) wines,AVG(rating) average_rating FROM wines
       WHERE owner_id=? AND appellation IS NOT NULL AND trim(appellation)<>''
@@ -63,11 +101,15 @@ export async function buildJourneyPayload(db:D1Database,owner:string){
     db.prepare(`SELECT s.structure_json,w.rating FROM wine_tasting_structures s
       JOIN wines w ON w.owner_id=s.owner_id AND w.id=s.wine_id
       WHERE s.owner_id=? AND s.structure_json<>'{}'`).bind(owner),
+    // Every distinct spelling, because the folding happens above this: Pinot
+    // Nero and Pinot Noir are two rows here and one grape afterwards, and a top
+    // slice taken before they were added together would be a slice of the wrong
+    // numbers. Bounded by how many grape names a person can type.
     db.prepare(`SELECT MIN(trim(CAST(g.value AS TEXT))) grape,COUNT(DISTINCT w.id) wines,
       COUNT(DISTINCT CASE WHEN w.favorite=1 THEN w.id END) favorites
       FROM wines w,json_each(CASE WHEN json_valid(w.grapes_json) THEN w.grapes_json ELSE '[]' END) g
       WHERE w.owner_id=? AND trim(CAST(g.value AS TEXT))<>''
-      GROUP BY lower(trim(CAST(g.value AS TEXT))) ORDER BY wines DESC,grape ASC LIMIT 14`).bind(owner),
+      GROUP BY lower(trim(CAST(g.value AS TEXT))) ORDER BY wines DESC,grape ASC LIMIT 400`).bind(owner),
     db.prepare(`SELECT w.id,w.producer,w.wine_name,w.vintage,NULLIF(trim(w.country),'') country,
       NULLIF(trim(w.region),'') region,NULLIF(trim(w.appellation),'') appellation,w.rating,
       NULLIF(w.tasting_date,'') tasting_date,w.created_at,
@@ -136,7 +178,7 @@ export async function buildJourneyPayload(db:D1Database,owner:string){
     currencies:rows<Record<string,unknown>>(7).map(row=>({currency:String(row.currency),wines:Number(row.wines),averagePrice:numberOrNull(row.average_price),averageRating:numberOrNull(row.average_rating)})),
     years:rows<Record<string,unknown>>(8).map(row=>({year:String(row.year),wines:Number(row.wines),ratedWines:Number(row.rated_wines),averageRating:numberOrNull(row.average_rating)})),
     structures,
-    grapes:rows<Record<string,unknown>>(10).map(row=>({grape:String(row.grape),wines:Number(row.wines),favorites:Number(row.favorites??0)})),
+    grapes:foldGrapes(rows<Record<string,unknown>>(10)),
     discovery:(()=>{
       const row=first<Record<string,unknown>>(12);
       return {tastings:Number(row.tastings??0),newProducers:Number(row.new_producers??0),newRegions:Number(row.new_regions??0),newCountries:Number(row.new_countries??0)};

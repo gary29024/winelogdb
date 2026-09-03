@@ -110,7 +110,7 @@ export function InsightsPage(){
     <section className="journey-card"><div className="journey-section-heading"><div><p className="section-label">What earns a heart</p><h2>Your favorites, by the numbers</h2></div><span>{summary.favorites}</span></div>
       {summary.favorites?<>
         <div className="favorite-columns">
-          <FavoriteColumn title="Grapes" rows={favoriteGrapes} label={grape=>grape.grape} href={grape=>journalHref({query:grape.grape})}/>
+          <FavoriteColumn title="Grapes" rows={favoriteGrapes} label={grape=>grape.grape} href={grape=>journalHref({grape:grape.grape})}/>
           <FavoriteColumn title="Regions" rows={favoriteRegions} label={region=>region.region} href={region=>journalHref({query:region.region})}/>
           <FavoriteColumn title="Styles" rows={favoriteStyles} label={style=>style.style} href={style=>journalHref({style:style.style})}/>
         </div>

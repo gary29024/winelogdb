@@ -1,3 +1,4 @@
+import { grapeGroup } from '../wine/grapes';
 import { favoriteOnlyQuery } from './favorite';
 
 export type JournalListQuery=Record<string,string|undefined>;
@@ -41,7 +42,14 @@ export async function listJournalPage(db:D1Database,owner:string,q:JournalListQu
   if(favoriteOnlyQuery(q.favorite))where+=' AND w.favorite=1';
   if(q.month){where+=" AND substr(coalesce(nullif(w.tasting_date,''),w.created_at),1,7)=?";args.push(q.month)}
   if(q.rating){where+=' AND w.rating>=?';args.push(Number(q.rating))}
-  if(q.grape){where+=' AND EXISTS (SELECT 1 FROM json_each(w.grapes_json) WHERE value=?)';args.push(q.grape)}
+  // Every name the grape answers to, because that is what is stored: the label
+  // keeps its own spelling, so asking for Pinot Noir has to find the bottle
+  // filed as Pinot Nero or the insight and the list behind it disagree.
+  if(q.grape){
+    const names=grapeGroup(q.grape);
+    where+=` AND EXISTS (SELECT 1 FROM json_each(w.grapes_json) WHERE lower(trim(CAST(value AS TEXT))) IN (${names.map(()=>'?').join(',')}))`;
+    args.push(...names.map(name=>name.toLowerCase()));
+  }
   if(q.tasting){where+=' AND EXISTS (SELECT 1 FROM wine_experiences we JOIN tastings t ON t.id=we.tasting_id WHERE we.wine_id=w.id AND we.owner_id=? AND lower(t.name) LIKE lower(?))';args.push(owner,`%${q.tasting}%`)}
   if(rawQuery&&!vintageSearch){
     const clean=rawQuery.replace(/[^\p{L}\p{N}\s]/gu,' ').trim();
