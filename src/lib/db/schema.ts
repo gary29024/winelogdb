@@ -123,7 +123,12 @@ export const wineRecordSchema = z.object({
   // A tier chosen by hand. Null derives as before; 'none' clears a derived one.
   classificationOverride: z.enum(['grand_cru','premier_cru','village','none']).nullable().optional().default(null), grapes: z.array(z.string().trim().min(1).max(100)).max(30).default([]),
   grapeBlend: z.array(grapeBlendEntrySchema).max(30).default([]),
-  wineStyle: wineStyleSchema, alcoholPercentage: optionalNumber(z.number().min(0).max(30)),
+  // Thirty was a wine ceiling, and this journal holds what gets poured after
+  // the wine: a Calvados at 46% was refused outright, with "Invalid wine" and
+  // nothing about which field. Seventy takes a cognac, an armagnac and a
+  // cask-strength bottling and still catches what the ceiling is really for -
+  // a misread decimal point, where 13.5 arrives as 135.
+  wineStyle: wineStyleSchema, alcoholPercentage: optionalNumber(z.number().min(0).max(70)),
   tastingNotes: z.string().trim().max(10000).default(''), rating: optionalNumber(z.number().min(0).max(100)),
   tastingDate: optionalDate, event: optionalText, venue: optionalText, price: optionalNumber(z.number().nonnegative()),
   currency: currencySchema, tags: z.array(z.string().trim().min(1).max(50)).max(50).default([]),
