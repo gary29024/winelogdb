@@ -148,6 +148,52 @@ describe('countries too wide for one dot',()=>{
     expect(markers.every(m=>m.country==='United States')).toBe(true);
   });
 
+  it('draws one dot where the map cannot draw two',()=>{
+    // Reported as: too packed, and not as intended. Barossa and Eden Valley are
+    // a fifth of a degree apart and a marker is two to four degrees across, so
+    // drawing them separately does not show a reader two places - the
+    // separation pass shoves them apart until they are a blob sitting where
+    // neither of them is.
+    const {markers}=buildMapMarkers([country('Australia',40)],[
+      region('Australia','Barossa Valley',14),region('Australia','Eden Valley',4),
+      region('Australia','Adelaide Hills',4),region('Australia','McLaren Vale',6),
+      region('Australia','Margaret River',10),region('Australia','Tamar Valley',2)
+    ]);
+    // South Australia is one dot on its biggest region; the west and Tasmania
+    // are the distinctions this map can actually draw.
+    expect(markers.map(m=>m.region).sort()).toEqual(['Barossa Valley','Margaret River','Tamar Valley']);
+    expect(markers.find(m=>m.region==='Barossa Valley')!.wines).toBe(28);
+  });
+
+  it('lands every dot near the place it stands for',()=>{
+    // The blob was markers driven to the seven-degree cap and stranded there.
+    // Nothing should need more than a nudge once the map only draws what it can.
+    const {markers}=buildMapMarkers([country('United States',60),country('Australia',40)],[
+      ...['Napa Valley','Sonoma County','Mendocino County','Lake County','Santa Barbara County',
+        'Monterey County','Sierra Foothills','Lodi','Willamette Valley','Columbia Valley',
+        'Finger Lakes','Long Island'].map((name,index)=>region('United States',name,12-index)),
+      ...['Barossa Valley','Eden Valley','McLaren Vale','Adelaide Hills','Coonawarra','Yarra Valley',
+        'Mornington Peninsula','Hunter Valley','Margaret River','Tamar Valley'].map((name,index)=>region('Australia',name,10-index))
+    ]);
+    for(const marker of markers)
+      expect(Math.hypot(marker.x-marker.anchorX,marker.y-marker.anchorY),`${marker.region} drifted`).toBeLessThan(4);
+  });
+
+  it('keeps two regions the map can tell apart as two',()=>{
+    const {markers}=buildMapMarkers([country('United States',30)],[
+      region('United States','Napa Valley',12),region('United States','Willamette Valley',10),
+      region('United States','Finger Lakes',8)
+    ]);
+    expect(markers).toHaveLength(3);
+  });
+
+  it('clusters the same way every time',()=>{
+    const pins=[region('Australia','Barossa Valley',5),region('Australia','Eden Valley',5),
+      region('Australia','McLaren Vale',5)];
+    const once=buildMapMarkers([country('Australia',15)],pins).markers;
+    expect(once).toEqual(buildMapMarkers([country('Australia',15)],[...pins].reverse()).markers);
+  });
+
   it('leaves a country whose regions sit together as the single dot it is',()=>{
     const {markers}=buildMapMarkers([country('South Africa',9)],[
       region('South Africa','Stellenbosch',5),region('South Africa','Swartland',4)

@@ -75,6 +75,41 @@ export function regionAnchor(country:string,region:string):readonly [number,numb
   return regionAnchorsByCountry.get(countryKey(country))?.get(normalizeCountryName(region))??null;
 }
 
+/**
+ * How close two regions have to be before this map cannot tell them apart.
+ *
+ * The grid is four degrees to a cell and a marker is two to four degrees
+ * across, so two dots need five or more degrees between them to read as two.
+ * Barossa and Eden Valley are a fifth of a degree apart; the Napa Valley and
+ * Sonoma County are one. Drawing them separately does not show a reader two
+ * places - the separation pass shoves them apart until they are a blob sitting
+ * where neither of them is, which is exactly what happened.
+ *
+ * So regions closer than this are one dot. What survives is the distinction the
+ * map can actually draw: Margaret River from Barossa, the Willamette from Napa,
+ * the Finger Lakes from either.
+ */
+const MERGE_DEGREES=5;
+
+type RegionPin={region:string;wines:number;anchor:readonly [number,number]};
+
+/**
+ * Biggest first, so a cluster sits on the region most of the wine came from and
+ * carries its name. Deterministic, because the map must not shuffle between
+ * loads.
+ */
+function clusterRegions(pins:readonly RegionPin[]){
+  const ordered=[...pins].sort((a,b)=>b.wines-a.wines||a.region.localeCompare(b.region));
+  const clusters:RegionPin[]=[];
+  for(const pin of ordered){
+    const near=clusters.find(cluster=>
+      Math.hypot(cluster.anchor[0]-pin.anchor[0],cluster.anchor[1]-pin.anchor[1])<=MERGE_DEGREES);
+    if(near)near.wines+=pin.wines;
+    else clusters.push({...pin});
+  }
+  return clusters;
+}
+
 export function projectPoint(latitude:number,longitude:number){
   return {x:longitude+180,y:MAP_LAT_TOP-latitude};
 }
@@ -137,10 +172,16 @@ export function buildMapMarkers(countries:readonly CountryStat[],regions:readonl
     // wines filed under the country alone - it falls back to the one dot, so a
     // journal never loses a stamp it has earned.
     const own=byCountry.get(countryKey(entry.country))??[];
-    const drawn=own.filter(region=>regionAnchor(entry.country,region.region));
+    const drawn=own.flatMap(region=>{
+      const found=regionAnchor(entry.country,region.region);
+      return found?[{region:region.region,wines:region.wines,anchor:found}]:[];
+    });
     if(drawn.length){
-      for(const region of drawn)put(`${countryKey(entry.country)}/${normalizeCountryName(region.region)}`,
-        entry.country,region.region,region.wines,regionAnchor(entry.country,region.region)!);
+      // Clustered first: a dot per region is only worth drawing where the map
+      // can draw them apart, and half of these are closer together than one
+      // marker is wide.
+      for(const pin of clusterRegions(drawn))put(`${countryKey(entry.country)}/${normalizeCountryName(pin.region)}`,
+        entry.country,pin.region,pin.wines,pin.anchor);
       continue;
     }
     put(`${anchor[0]},${anchor[1]}`,entry.country,null,entry.wines,anchor);
