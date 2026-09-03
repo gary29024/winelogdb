@@ -2,7 +2,7 @@ import { currentOwnerRevision,missingTable } from '../src/lib/db/ownerRevision';
 
 // Bump when the shape of the payload below changes, so caches written by an older
 // deployment are recomputed rather than served.
-export const JOURNEY_PAYLOAD_VERSION=4;
+export const JOURNEY_PAYLOAD_VERSION=5;
 
 const numberOrNull=(value:unknown)=>value==null?null:Number(value);
 const parseJson=<T>(value:unknown,fallback:T):T=>{try{return JSON.parse(String(value)) as T}catch{return fallback}};
@@ -30,12 +30,19 @@ export async function buildJourneyPayload(db:D1Database,owner:string){
       COUNT(DISTINCT NULLIF(trim(appellation),'')) appellations,AVG(rating) average_rating
       FROM wines WHERE owner_id=? AND country IS NOT NULL AND trim(country)<>''
       GROUP BY trim(country) ORDER BY wines DESC,country ASC`).bind(owner),
+    // Regions stamp the map too now, so a top-20 slice is the same bug the
+    // countries query had: a Margaret River with four bottles never reaches the
+    // top twenty of a journal that is mostly French, so the map was never told
+    // about it and could not draw it. The cap that remains is a safety valve
+    // against a journal full of typo'd region strings rather than a display
+    // limit - the place tree carries 211 regions in total, and every screen
+    // that shows this list slices it to five or fewer itself.
     db.prepare(`SELECT NULLIF(trim(country),'') country,trim(region) region,COUNT(*) wines,
       COUNT(DISTINCT COALESCE(producer_id,lower(trim(producer)))) producers,
       COUNT(DISTINCT NULLIF(trim(appellation),'')) appellations,AVG(rating) average_rating,
       SUM(CASE WHEN favorite=1 THEN 1 ELSE 0 END) favorites
       FROM wines WHERE owner_id=? AND region IS NOT NULL AND trim(region)<>''
-      GROUP BY NULLIF(trim(country),''),trim(region) ORDER BY wines DESC,region ASC LIMIT 20`).bind(owner),
+      GROUP BY NULLIF(trim(country),''),trim(region) ORDER BY wines DESC,region ASC LIMIT 400`).bind(owner),
     db.prepare(`SELECT NULLIF(trim(country),'') country,NULLIF(trim(region),'') region,trim(appellation) appellation,
       COUNT(*) wines,AVG(rating) average_rating FROM wines
       WHERE owner_id=? AND appellation IS NOT NULL AND trim(appellation)<>''
