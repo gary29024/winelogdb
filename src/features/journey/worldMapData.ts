@@ -420,3 +420,76 @@ export const COUNTRY_ALIASES:Readonly<Record<string,string>>={
   'west bank and gaza':'palestine',
   'western sahara':'w sahara'
 };
+
+/**
+ * Wine regions, by the country they sit in.
+ *
+ * A country anchor puts one dot on the country's main wine region, which is
+ * honest for France and misleading for the countries whose regions are a
+ * thousand miles apart: a Willamette Valley and a Finger Lakes both reported as
+ * California, and a Margaret River as Barossa, 2,700km away.
+ *
+ * Only the regions of countries that are actually spread out need to be here -
+ * worldMap works that out from these coordinates rather than from a list
+ * somebody has to keep - so South Africa is included precisely because its
+ * regions are all within an hour of Cape Town and it should stay one dot. The
+ * names are the place tree's own, because the region column is canonicalised
+ * through the tree before it is stored.
+ *
+ * Every one of these has to sit on a land cell or its dot floats in open water,
+ * and the grid is four degrees to a cell - so a coastal region is nudged inland
+ * until it lands, which is what the western American anchors and Margaret River
+ * are doing a degree east of where the vines actually are.
+ */
+export const REGION_ANCHORS:Readonly<Record<string,Readonly<Record<string,readonly [number,number]>>>>={
+  'united states of america':{
+    'California':[37.8,-121.6],'North Coast':[38.7,-122.7],'Central Coast':[36.1,-120.7],
+    'Napa Valley':[38.5,-122.35],'Napa-Sonoma':[38.4,-122.5],'Sonoma County':[38.5,-122.8],
+    'Mendocino County':[39.3,-123.3],'Lake County':[39.0,-122.7],
+    'Santa Barbara County':[34.7,-119.85],'Monterey County':[36.3,-121.2],
+    'San Luis Obispo County':[35.5,-119.85],'Santa Cruz Mountains':[37.1,-122.0],
+    'Ballard Canyon':[34.65,-119.95],'Sierra Foothills':[38.6,-120.8],
+    'Lodi':[38.1,-121.3],'Livermore Valley':[37.65,-121.75],
+    'Oregon':[45.0,-123.0],'Willamette Valley':[45.2,-123.1],'Southern Oregon':[42.5,-123.1],
+    'Washington':[46.5,-119.8],'Columbia Valley':[46.3,-119.5],'Puget Sound':[47.8,-122.3],
+    'New York':[42.6,-76.9],'Finger Lakes':[42.6,-76.9],'Long Island':[40.9,-72.7],
+    'Virginia':[38.0,-78.5],'Monticello':[38.0,-78.5],
+    'Texas':[30.4,-98.9],'Texas Hill Country':[30.4,-98.9]
+  },
+  'australia':{
+    'Barossa Valley':[-34.55,138.95],'Eden Valley':[-34.65,139.1],'McLaren Vale':[-35.22,138.55],
+    'Clare Valley':[-33.83,138.6],'Coonawarra':[-37.29,140.83],'Adelaide Hills':[-34.9,138.75],
+    'Padthaway':[-36.6,140.5],'Wrattonbully':[-36.9,140.85],'Langhorne Creek':[-35.3,138.95],
+    'Yarra Valley':[-37.75,145.5],'Mornington Peninsula':[-38.35,145.05],'Heathcote':[-36.92,144.7],
+    'Rutherglen':[-36.05,146.46],'Geelong':[-38.15,144.36],'Grampians':[-37.17,142.5],
+    'Beechworth':[-36.36,146.69],'Hunter Valley':[-32.78,151.2],'Orange':[-33.28,149.1],
+    'Mudgee':[-32.6,149.58],'Canberra District':[-35.2,149.2],
+    'Margaret River':[-33.95,116.2],'Great Southern':[-34.5,117.6],'Frankland River':[-34.35,116.9],
+    'Tamar Valley':[-41.3,147.0],'Coal River Valley':[-42.7,147.3]
+  },
+  'argentina':{
+    'Mendoza':[-33.0,-68.8],'Uco Valley':[-33.6,-69.1],'Lujan de Cuyo':[-33.05,-68.93],
+    'Maipu':[-32.98,-68.78],'Salta':[-26.0,-65.98],'Patagonia':[-39.0,-67.6],'San Juan':[-31.53,-68.53]
+  },
+  'chile':{
+    'Colchagua Valley':[-34.6,-71.2],'Maipo Valley':[-33.7,-70.75],'Casablanca Valley':[-33.32,-71.3],
+    'San Antonio Valley':[-33.6,-71.4],'Cachapoal Valley':[-34.25,-70.8],'Maule Valley':[-35.5,-71.6],
+    'Limari Valley':[-30.6,-71.1],'Itata Valley':[-36.6,-72.3],'Aconcagua Valley':[-32.85,-70.8],
+    'Bio Bio Valley':[-37.5,-72.3],'Elqui Valley':[-30.0,-70.7],'Curico Valley':[-34.98,-71.24]
+  },
+  'new zealand':{
+    'Marlborough':[-41.55,173.85],'Central Otago':[-45.0,169.2],'Hawke\u2019s Bay':[-39.6,176.7],
+    'Martinborough':[-41.22,175.46],'Nelson':[-41.3,173.1],'Waipara Valley':[-43.05,172.75],
+    'Gisborne':[-38.65,177.9],'Waiheke Island':[-36.8,175.05],'Auckland':[-36.85,174.76]
+  },
+  'canada':{
+    'Okanagan Valley':[49.6,-119.6],'Niagara Peninsula':[43.15,-79.3],'Prince Edward County':[44.0,-77.2]
+  },
+  // Here to be excluded rather than included: every one of these is within an
+  // hour of Cape Town, so the span rule keeps South Africa as a single dot.
+  'south africa':{
+    'Stellenbosch':[-33.94,18.86],'Swartland':[-33.35,18.7],'Franschhoek':[-33.9,19.12],
+    'Walker Bay':[-34.4,19.25],'Paarl':[-33.73,18.97],'Constantia':[-34.03,18.42],
+    'Elgin':[-34.15,19.03],'Robertson':[-33.8,19.9],'Breedekloof':[-33.6,19.35],'Darling':[-33.38,18.38]
+  }
+};

@@ -83,7 +83,7 @@ export function PassportPage(){
           <strong>{item.value}</strong><span>{item.label}</span><small>{item.detail}</small>
         </article>)}</div>
       </div>
-      <div className="passport-map-wrap"><PassportMap countries={data.countries}/></div>
+      <div className="passport-map-wrap"><PassportMap countries={data.countries} regions={data.regions}/></div>
     </section>
 
     <section className="passport-progress-card">
