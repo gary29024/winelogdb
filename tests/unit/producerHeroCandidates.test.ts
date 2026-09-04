@@ -26,19 +26,17 @@ describe('finding a producer hero photograph',()=>{
 
   it('will not offer the furniture',()=>{
     const html=page(`<meta property="og:image" content="https://estate.test/site-logo.png">
-      <img src="https://estate.test/favicon-192.png"><img src="https://estate.test/vineyard.jpg">`);
-    expect(heroImageCandidates(html)).toEqual(['https://estate.test/vineyard.jpg']);
+      <link rel="image_src" href="https://estate.test/chateau.jpg">`);
+    expect(heroImageCandidates(html)).toEqual(['https://estate.test/chateau.jpg']);
   });
 
-  it('skips an image the page itself calls small',()=>{
-    const html=page('<img src="https://estate.test/thumb.jpg" width="80" height="80"><img src="https://estate.test/hero.jpg" width="1600">');
-    expect(heroImageCandidates(html)).toEqual(['https://estate.test/hero.jpg']);
-  });
-
-  it('takes the lazy-loaded file rather than its placeholder',()=>{
-    // The norm on estate sites: src holds a grey placeholder until it scrolls.
-    const html=page('<img src="data:image/gif;base64,R0lGOD" data-src="https://estate.test/real.jpg">');
-    expect(heroImageCandidates(html)).toEqual(['https://estate.test/real.jpg']);
+  it('reads only what the site declares as the page\u2019s own picture',()=>{
+    // Reported back as meaningless photographs. The page's own <img> tags were
+    // read for a while and it was a mistake: the largest picture on a homepage
+    // is as often a stock close-up of grapes as it is the estate. A site that
+    // declares nothing has said nothing, and no picture beats that one.
+    const html=page('<img src="https://estate.test/stock-grapes.jpg" width="2000" height="1200">');
+    expect(heroImageCandidates(html)).toEqual([]);
   });
 
   it('unescapes a URL as the page wrote it, and never repeats one',()=>{
@@ -48,7 +46,7 @@ describe('finding a producer hero photograph',()=>{
   });
 
   it('stops at four, because a fifth candidate is guesswork',()=>{
-    const html=page([1,2,3,4,5,6].map(n=>`<img src="https://estate.test/${n}.jpg">`).join(''));
+    const html=page(`<script type="application/ld+json">{"image":${JSON.stringify([1,2,3,4,5,6].map(n=>`https://estate.test/${n}.jpg`))}}</script>`);
     expect(heroImageCandidates(html)).toHaveLength(4);
     expect(heroImageCandidates(html,2)).toHaveLength(2);
   });

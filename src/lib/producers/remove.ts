@@ -65,3 +65,24 @@ export async function deleteProducerEntity(env:ProducerDeleteEnv,owner:string,pr
   if(producer.hero_image_object_key)await env.WINE_IMAGES.delete(producer.hero_image_object_key).catch(()=>undefined);
   return {id:producerId,canonicalName:producer.canonical_name,deleted:true as const};
 }
+
+/**
+ * Throwing away a producer photograph that says nothing.
+ *
+ * Reported as: research often comes back with a meaningless picture - a stock
+ * close-up of grapes rather than the estate. No rule can judge "meaningful", so
+ * the person looking at it decides, and the URL is remembered as refused: a
+ * later run would otherwise fetch the same picture straight back. The URL and
+ * not a flag, so a site that changes its own picture may still offer the new
+ * one.
+ */
+export async function rejectProducerHeroImage(env:ProducerDeleteEnv,owner:string,producerId:string){
+  const producer=await env.DB.prepare('SELECT hero_image_object_key,hero_image_source_url FROM producers WHERE owner_id=? AND id=?')
+    .bind(owner,producerId).first<{hero_image_object_key:string|null;hero_image_source_url:string|null}>();
+  if(!producer)throw new Error('Producer not found');
+  if(!producer.hero_image_object_key)return {id:producerId,removed:false as const};
+  await env.DB.prepare('UPDATE producers SET hero_image_object_key=NULL,hero_image_source_url=NULL,hero_image_rejected_url=?,updated_at=? WHERE owner_id=? AND id=?')
+    .bind(producer.hero_image_source_url,new Date().toISOString(),owner,producerId).run();
+  await env.WINE_IMAGES.delete(producer.hero_image_object_key).catch(()=>undefined);
+  return {id:producerId,removed:true as const};
+}

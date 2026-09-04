@@ -167,7 +167,7 @@ async function fetchHero(image:URL){
  * plain HTTP - no model is asked anything - so a second attempt costs a request,
  * not a token.
  */
-async function heroImage(env:Env,owner:string,official:string){
+async function heroImage(env:Env,owner:string,official:string,rejected:string|null){
   const site=safeHttpsUrl(official);if(!site)return null;
   const page=await safeFetch(site,PAGE_TIMEOUT_MS,'text/html,application/xhtml+xml');
   // Lowercased: a server answering TEXT/HTML is serving HTML.
@@ -176,7 +176,10 @@ async function heroImage(env:Env,owner:string,official:string){
   const html=new TextDecoder().decode(pageBytes),base=page.url||site.toString();
   for(const candidate of heroImageCandidates(html)){
     const image=safeHttpsUrl(candidate,base)??safeHttpsUrl(candidate.replace(/^http:\/\//,'https://'),base);
-    if(!image)continue;
+    // A picture the owner threw away is not offered again by a later run. The
+    // URL rather than a flag, so a site that changes its own picture may still
+    // offer the new one.
+    if(!image||image.toString()===rejected)continue;
     const hero=await fetchHero(image).catch(()=>null);
     if(!hero)continue;
     const objectKey=createObjectKey(owner,hero.contentType);
@@ -240,7 +243,7 @@ async function saveProfile(env:Env,owner:string,producerId:string,requestId:stri
   await stageProducerCatalogParts<CatalogWine>(env.DB,[{owner,requestId,producerId,sliceKey:PROFILE_SOURCE_KEY,range:[],sources:profileSources,model}]);
   await env.DB.prepare('UPDATE producers SET home_country=?,home_region=?,home_locality=?,official_website_url=?,instagram_url=?,contact_email=?,contact_phone=?,contact_sources_json=?,profile=?,winemaking_practices=?,sources_json=?,research_model=?,researched_at=?,updated_at=? WHERE owner_id=? AND id=?')
     .bind(profile.homeCountry?.trim()||null,profile.homeRegion?.trim()||null,profile.homeLocality?.trim()||null,official,instagram,email,phone,JSON.stringify(contactSources),profile.profile.trim(),profile.winemakingPractices.trim(),JSON.stringify(sources),`${model} (batch profile)`,stamp,stamp,owner,producerId).run();
-  if(official){try{const hero=await heroImage(env,owner,official);if(hero){const old=row.hero_image_object_key?String(row.hero_image_object_key):null;await env.DB.prepare('UPDATE producers SET hero_image_object_key=?,hero_image_source_url=?,updated_at=? WHERE owner_id=? AND id=?').bind(hero.objectKey,hero.sourceUrl,now(),owner,producerId).run();if(old&&old!==hero.objectKey)await env.WINE_IMAGES.delete(old).catch(()=>undefined)}}catch(e){log('warn',{requestId,producerId,stage:'hero_skipped',error:(e as Error).message})}}
+  if(official){try{const hero=await heroImage(env,owner,official,row.hero_image_rejected_url?String(row.hero_image_rejected_url):null);if(hero){const old=row.hero_image_object_key?String(row.hero_image_object_key):null;await env.DB.prepare('UPDATE producers SET hero_image_object_key=?,hero_image_source_url=?,updated_at=? WHERE owner_id=? AND id=?').bind(hero.objectKey,hero.sourceUrl,now(),owner,producerId).run();if(old&&old!==hero.objectKey)await env.WINE_IMAGES.delete(old).catch(()=>undefined)}}catch(e){log('warn',{requestId,producerId,stage:'hero_skipped',error:(e as Error).message})}}
 }
 function normalizeCatalogRange(catalog:CatalogResult,slice:CatalogSlice,names:string[]){
   if(!catalog||!Array.isArray(catalog.range))throw new Error('Producer catalogue slice returned invalid fields');

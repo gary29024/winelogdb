@@ -10,6 +10,12 @@
  * caller tries the candidates in order until one downloads as an image. Pure,
  * because the ordering is the whole rule and it is far easier to argue with in
  * a test than through a live estate website.
+ *
+ * Every source here is one the site *declares* as the page's own picture. The
+ * page's <img> tags were read too for a while and it was a mistake: reported
+ * back as meaningless photographs, because the largest picture on a homepage is
+ * as often a stock close-up of grapes as it is the estate. A site that declares
+ * nothing has said nothing, and no picture is better than that one.
  */
 export const htmlAttribute=(tag:string,name:string)=>tag.match(new RegExp(`\\b${name}\\s*=\\s*(?:"([^"]*)"|'([^']*)'|([^\\s>]+))`,'i'))?.slice(1).find(Boolean)??null;
 
@@ -21,15 +27,6 @@ const META_KEYS=['og:image','og:image:secure_url','twitter:image','twitter:image
 const MAX_CANDIDATES=4;
 
 const decode=(value:string)=>value.replace(/&amp;/g,'&').replace(/&#(\d+);/g,(_,code:string)=>String.fromCharCode(Number(code))).trim();
-
-/** An image the page itself declares as small is furniture whatever it is named. */
-function tooSmall(tag:string){
-  for(const name of ['width','height']){
-    const declared=Number(htmlAttribute(tag,name));
-    if(Number.isFinite(declared)&&declared>0&&declared<400)return true;
-  }
-  return false;
-}
 
 /**
  * Every JSON-LD `image`, which is where Shopify, Squarespace and most winery
@@ -82,13 +79,5 @@ export function heroImageCandidates(html:string,limit=MAX_CANDIDATES){
     if(String(htmlAttribute(tag,'rel')||'').toLowerCase()==='image_src')add(htmlAttribute(tag,'href'));
 
   for(const image of jsonLdImages(html))add(image);
-
-  for(const tag of html.match(/<img\b[^>]*>/gi)??[]){
-    if(tooSmall(tag))continue;
-    // Lazy-loaded heroes are the norm on estate sites: the real file is in
-    // data-src and src holds a grey placeholder.
-    add(htmlAttribute(tag,'data-src')??htmlAttribute(tag,'src'));
-    if(found.length>=limit)break;
-  }
   return found.slice(0,limit);
 }

@@ -28,6 +28,11 @@
      --wine-fill stays dark enough for --on-accent to sit on it in both modes,
      which --paper cannot do once it stops being white. */
   --wine:#c51f45;--wine-fill:#c51f45;--wine-ink:#9b1c31;--wine-line:#e7b7c3;--on-accent:#fff;
+  /* Text laid over a photograph. Defined once and never redefined by scheme,
+     because a photograph is a photograph in both: the producer hero read its
+     colour from --paper, which a dark theme turns near-black, and laid the
+     estate's name in it over a bright picture. */
+  --on-photo:#f7f9fd;
 
   /* Status: one green, one amber, one red, shared by Deep Search quality, scan
      state and cru tiers, so "verified" reads the same on every screen. Each has
