@@ -14,6 +14,7 @@ describe('Gemini 3.8 Flash rollout',()=>{
     expect(read('worker/vintageWindowHandler.ts')).toContain("ESCALATION_MODEL='gemini-3.8-flash'");
   });
 
+  // 3.7 remains deliberately: it is the availability fallback, not a stale primary.
   it('keeps 3.7 as the Deep Search availability fallback',()=>{
     expect(read('src/lib/research/batchWineResearch.ts')).toContain("FALLBACK_MODEL='gemini-3.7-flash'");
     expect(read('src/lib/producers/batchResearch.ts')).toContain("FALLBACK_MODEL='gemini-3.7-flash'");
