@@ -1,6 +1,6 @@
 import { describe,expect,it,vi } from 'vitest';
 import { createD1Stub } from './support/d1Stub';
-import { deleteProducerEntity } from '../../src/lib/producers/remove';
+import { deleteProducerEntity,rejectProducerHeroImage } from '../../src/lib/producers/remove';
 
 const bucket=()=>({delete:vi.fn(async()=>undefined)});
 const stubFor=(overrides:{producer?:unknown;wines?:number}={})=>createD1Stub(sql=>{
@@ -64,6 +64,41 @@ describe('deleting a producer',()=>{
   it('says so when the producer is not there',async()=>{
     const stub=stubFor({producer:null});
     await expect(deleteProducerEntity({DB:stub.db,WINE_IMAGES:bucket() as unknown as R2Bucket},'owner','gone'))
+      .rejects.toThrow('Producer not found');
+  });
+});
+
+describe('throwing away a producer photograph',()=>{
+  // Reported as: research often comes back with a meaningless picture - a stock
+  // close-up of grapes rather than the estate. No rule can judge "meaningful",
+  // so the person looking at it decides.
+  const withHero=(hero:{hero_image_object_key:string|null;hero_image_source_url:string|null}|null)=>createD1Stub(sql=>
+    /SELECT hero_image_object_key/.test(sql)?{first:hero}:undefined);
+
+  it('clears the picture and remembers the address as refused',async()=>{
+    // The URL and not a flag: a site that later publishes a different picture
+    // may still offer the new one.
+    const stub=withHero({hero_image_object_key:'owner/hero.jpg',hero_image_source_url:'https://estate.test/grapes.jpg'});
+    const images=bucket();
+    expect(await rejectProducerHeroImage({DB:stub.db,WINE_IMAGES:images as unknown as R2Bucket},'owner','p1'))
+      .toEqual({id:'p1',removed:true});
+    const [update]=stub.writes();
+    expect(update.sql).toMatch(/hero_image_object_key=NULL,hero_image_source_url=NULL,hero_image_rejected_url=\?/);
+    expect(update.args[0]).toBe('https://estate.test/grapes.jpg');
+    expect(images.delete).toHaveBeenCalledWith('owner/hero.jpg');
+  });
+
+  it('does nothing at all when there is no picture to throw away',async()=>{
+    const stub=withHero({hero_image_object_key:null,hero_image_source_url:null}),images=bucket();
+    expect(await rejectProducerHeroImage({DB:stub.db,WINE_IMAGES:images as unknown as R2Bucket},'owner','p1'))
+      .toEqual({id:'p1',removed:false});
+    expect(stub.writes()).toHaveLength(0);
+    expect(images.delete).not.toHaveBeenCalled();
+  });
+
+  it('says so when the producer is not there',async()=>{
+    const stub=withHero(null);
+    await expect(rejectProducerHeroImage({DB:stub.db,WINE_IMAGES:bucket() as unknown as R2Bucket},'owner','gone'))
       .rejects.toThrow('Producer not found');
   });
 });

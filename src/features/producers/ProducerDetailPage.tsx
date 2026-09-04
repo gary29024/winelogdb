@@ -2,7 +2,7 @@ import { useEffect,useMemo,useRef,useState } from 'react';
 import { Link,useLocation,useNavigate,useParams } from 'react-router-dom';
 import { WineImage } from '../wines/WineImage';
 import { producerLinkChoices } from '../../lib/producers/linkChoices';
-import { cancelProducerResearch,deleteProducer,getProducer,getProducerResearchStatus,listProducers,mergeProducer,researchProducer,saveProducerCatalogDecision,setPrimaryProducerName,undoProducerCatalogDecision,unlinkProducer,type CatalogDecision,type LinkedProducer,type ProducerDetail,type ProducerResearchRun,type ProducerSummary } from './api';
+import { cancelProducerResearch,deleteProducer,getProducer,removeProducerHeroImage,getProducerResearchStatus,listProducers,mergeProducer,researchProducer,saveProducerCatalogDecision,setPrimaryProducerName,undoProducerCatalogDecision,unlinkProducer,type CatalogDecision,type LinkedProducer,type ProducerDetail,type ProducerResearchRun,type ProducerSummary } from './api';
 import { ProducerHeroImage } from './ProducerHeroImage';
 import { ProducerContacts } from './ProducerContacts';
 import { CuveeCatalogLinks,type TastedCuveeGroup } from './CuveeCatalogLinks';
@@ -62,7 +62,7 @@ function catalogMeta(wine:ProducerDetail['catalog'][number],category:CatalogCate
 function sourceHost(value:string){try{return new URL(value).hostname.toLowerCase().replace(/^www\./,'')}catch{return ''}}
 
 export function ProducerDetailPage(){
- const {id=''}=useParams(),{state:navState}=useLocation(),[producer,setProducer]=useState<ProducerDetail>(),[available,setAvailable]=useState<ProducerSummary[]>([]),[availableLoaded,setAvailableLoaded]=useState(false),[availableLoading,setAvailableLoading]=useState(false),[availableError,setAvailableError]=useState(''),[selectedAlias,setSelectedAlias]=useState(''),[primaryName,setPrimaryName]=useState(''),[loading,setLoading]=useState(true),[error,setError]=useState(''),[notice,setNotice]=useState(''),[researching,setResearching]=useState(false),[researchRun,setResearchRun]=useState<ProducerResearchRun|null>(null),[researchCancelling,setResearchCancelling]=useState(false),[merging,setMerging]=useState(false),[unlinking,setUnlinking]=useState(''),[savingPrimary,setSavingPrimary]=useState(false),[collapsedCategories,setCollapsedCategories]=useState<Set<CatalogCategory>>(readCollapsedCategories),[fixingKey,setFixingKey]=useState(''),[mergeTargetKey,setMergeTargetKey]=useState(''),[catalogBusy,setCatalogBusy]=useState(false),[deleting,setDeleting]=useState(false);
+ const {id=''}=useParams(),{state:navState}=useLocation(),[producer,setProducer]=useState<ProducerDetail>(),[available,setAvailable]=useState<ProducerSummary[]>([]),[availableLoaded,setAvailableLoaded]=useState(false),[availableLoading,setAvailableLoading]=useState(false),[availableError,setAvailableError]=useState(''),[selectedAlias,setSelectedAlias]=useState(''),[primaryName,setPrimaryName]=useState(''),[loading,setLoading]=useState(true),[error,setError]=useState(''),[notice,setNotice]=useState(''),[researching,setResearching]=useState(false),[researchRun,setResearchRun]=useState<ProducerResearchRun|null>(null),[researchCancelling,setResearchCancelling]=useState(false),[merging,setMerging]=useState(false),[unlinking,setUnlinking]=useState(''),[savingPrimary,setSavingPrimary]=useState(false),[collapsedCategories,setCollapsedCategories]=useState<Set<CatalogCategory>>(readCollapsedCategories),[fixingKey,setFixingKey]=useState(''),[mergeTargetKey,setMergeTargetKey]=useState(''),[catalogBusy,setCatalogBusy]=useState(false),[deleting,setDeleting]=useState(false),[removingPhoto,setRemovingPhoto]=useState(false);
  const nav=useNavigate();
  const researchPoll=useRef<Poller|undefined>(undefined);
  function stopResearchTimers(){researchPoll.current?.stop();researchPoll.current=undefined}
@@ -187,6 +187,22 @@ export function ProducerDetailPage(){
   * from then on. Offered only when the record is empty - a producer with wines
   * is the identity those wines hang from, and merging is what moves them.
   */
+ /**
+  * Throwing away a photograph that says nothing about the producer.
+  *
+  * Reported as: research often comes back with a meaningless picture - a stock
+  * close-up of grapes rather than the estate. No rule can judge "meaningful",
+  * so the person looking at it decides, and the picture's own address is
+  * remembered as refused: the next research run would otherwise fetch the same
+  * one straight back.
+  */
+ async function removePhoto(){
+  if(!producer||removingPhoto)return;
+  if(!confirm('Remove this photo?\n\nIt will not come back on the next research run. If the site later publishes a different picture, that one can still arrive.'))return;
+  setRemovingPhoto(true);setError('');setNotice('');
+  try{await removeProducerHeroImage(id);await reload();setNotice('Photo removed. Research will not offer that picture again.')}
+  catch(e){setError((e as Error).message)}finally{setRemovingPhoto(false)}
+ }
  async function removeProducer(){
   if(!producer||deleting)return;
   if(!confirm(`Delete “${producer.canonicalName}”?\n\nNothing is logged under this producer. Its profile, researched range, contacts and catalogue corrections go with it, along with the record of any producers merged into it. This cannot be undone.`))return;
@@ -214,7 +230,7 @@ export function ProducerDetailPage(){
  return <article className="producer-detail"><Link className="back-pill" to={back.to}>← {back.label}</Link>
   <header className={`producer-header${producer.heroImageAvailable?' has-hero':''}`}>
    {producer.heroImageAvailable&&<ProducerHeroImage producerId={producer.id} alt={`${producer.canonicalName} domaine`}/>}<div className="producer-header-shade"/>
-   <div className="producer-header-content"><p className="eyebrow">PRODUCER</p><h1>{producer.canonicalName}</h1><p>{location||'Home location not researched yet'}</p>{producer.aliases.length>1&&<small>Known aliases: {producer.aliases.join(' · ')}</small>}</div>
+   <div className="producer-header-content"><p className="eyebrow">PRODUCER</p><h1>{producer.canonicalName}</h1><p>{location||'Home location not researched yet'}</p>{producer.aliases.length>1&&<small>Known aliases: {producer.aliases.join(' · ')}</small>}{producer.heroImageAvailable&&<button type="button" className="producer-photo-remove" disabled={removingPhoto} onClick={()=>void removePhoto()}>{removingPhoto?'Removing…':'Remove this photo'}</button>}</div>
   </header>
   {error&&<p className="producer-error" role="alert">{error}</p>}{notice&&<p className="producer-notice" role="status">{notice}</p>}
   <section className="detail-section"><div className="producer-section-title"><div><p className="section-label">Producer research</p><h2>Profile & range</h2></div><button type="button" className="primary" disabled={researching} onClick={runResearch}>{researching?'Research running…':producer.researchedAt?'Refresh producer research':'Research producer'}</button></div>

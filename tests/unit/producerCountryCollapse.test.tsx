@@ -40,6 +40,11 @@ const libraryCounts=()=>[...(host?.querySelectorAll('*')??[])]
 const toggles=()=>[...(host?.querySelectorAll('.country-group-toggle')??[])] as HTMLButtonElement[];
 const bodies=()=>[...(host?.querySelectorAll('.producer-country-body')??[])] as HTMLElement[];
 const named=(country:string)=>toggles().find(button=>button.querySelector('.country-group-name')?.textContent===country)!;
+const regionToggles=()=>[...(host?.querySelectorAll('.region-group-toggle')??[])] as HTMLButtonElement[];
+const regionNamed=(region:string)=>regionToggles().find(button=>button.querySelector('.region-group-name')?.textContent===region)!;
+const regionBodies=()=>[...(host?.querySelectorAll('.producer-region-body')??[])] as HTMLElement[];
+/** Only the regions that have a toggle: one alone in its country never closes. */
+const openableRegionBodies=()=>regionToggles().map(button=>host!.querySelector(`#${button.getAttribute('aria-controls')}`) as HTMLElement);
 const click=async(el:HTMLElement)=>{await act(async()=>{el.click()})};
 const type=async(value:string)=>{
   const input=host!.querySelector('.producer-search-field input') as HTMLInputElement;
@@ -153,5 +158,99 @@ describe('the producer library by country',()=>{
     expect(toggles()).toHaveLength(0);
     expect(host?.querySelector('.range-toggle-all')).toBeNull();
     expect(host?.querySelectorAll('.producer-row')).toHaveLength(1);
+  });
+});
+
+describe('the regions inside a country',()=>{
+  // Reported as: opening France is the same problem one level down - Alsace,
+  // Bordeaux and every commune under them arrive at once, and at a thousand
+  // producers there is no navigating it.
+  const france=[
+    producer('p1','Domaine Dujac','France','Burgundy','Morey-Saint-Denis'),
+    producer('p2','Château Margaux','France','Bordeaux','Margaux'),
+    producer('p3','Château Broustet','France','Bordeaux','Barsac'),
+    producer('p4','Domaine Zind-Humbrecht','France','Alsace','Turckheim'),
+    producer('p5','Gaja','Italy','Piedmont','Barbaresco')
+  ];
+
+  it('opens a country as a list of its regions',async()=>{
+    await render(france);
+    await click(named('France'));
+    expect(regionToggles().map(button=>button.querySelector('.region-group-name')?.textContent))
+      .toEqual(['Alsace','Bordeaux','Burgundy']);
+    expect(openableRegionBodies().every(body=>body.hidden),'and not as its producers').toBe(true);
+  });
+
+  it('counts the producers inside a region before you open it',async()=>{
+    await render(france);
+    await click(named('France'));
+    expect(regionNamed('Bordeaux').querySelector('.catalog-group-count')?.textContent).toBe('2');
+    expect(regionNamed('Alsace').querySelector('.catalog-group-count')?.textContent).toBe('1');
+  });
+
+  it('opens one region without disturbing the others',async()=>{
+    await render(france);
+    await click(named('France'));
+    await click(regionNamed('Bordeaux'));
+    expect(regionNamed('Bordeaux').getAttribute('aria-expanded')).toBe('true');
+    expect(regionNamed('Alsace').getAttribute('aria-expanded')).toBe('false');
+    const body=host!.querySelector(`#${regionNamed('Bordeaux').getAttribute('aria-controls')}`) as HTMLElement;
+    expect(body.hidden).toBe(false);
+    expect(body.textContent).toContain('Château Margaux');
+  });
+
+  it('remembers an open region across visits',async()=>{
+    await render(france);
+    await click(named('France'));
+    await click(regionNamed('Alsace'));
+    act(()=>root?.unmount());host?.remove();
+    await render(france);
+    await click(named('France'));
+    expect(regionNamed('Alsace').getAttribute('aria-expanded')).toBe('true');
+    expect(regionNamed('Bordeaux').getAttribute('aria-expanded')).toBe('false');
+  });
+
+  it('leaves a region alone in its country open',async()=>{
+    // It is the country. Collapsing it would only add a tap between you and the
+    // producers.
+    await render(france);
+    await click(named('Italy'));
+    expect(regionToggles().some(button=>button.querySelector('.region-group-name')?.textContent==='Piedmont')).toBe(false);
+    expect(host!.textContent).toContain('Gaja');
+  });
+
+  it('expands and collapses both levels at once',async()=>{
+    // The words say all: an Expand all that opened the countries onto shut
+    // regions would not have expanded much.
+    await render(france);
+    const toggleAll=()=>host!.querySelector('.range-toggle-all') as HTMLButtonElement;
+    await click(toggleAll());
+    expect(bodies().every(body=>!body.hidden)).toBe(true);
+    expect(regionBodies().every(body=>!body.hidden)).toBe(true);
+    expect(toggleAll().textContent).toBe('Collapse all');
+    await click(toggleAll());
+    expect(bodies().every(body=>body.hidden)).toBe(true);
+    expect(openableRegionBodies().every(body=>body.hidden)).toBe(true);
+  });
+
+  it('opens the regions too while a search is running',async()=>{
+    // Same trap as the countries: a match hidden inside a collapsed region is a
+    // search that appears to have found nothing.
+    await render(france);
+    await type('broustet');
+    expect(regionToggles(),'nothing to collapse while searching').toHaveLength(0);
+    expect(regionBodies().every(body=>!body.hidden)).toBe(true);
+    expect(host!.querySelectorAll('.producer-row')).toHaveLength(1);
+    expect(host!.textContent).toContain('Château Broustet');
+  });
+
+  it('puts the regions back as they were when the search is cleared',async()=>{
+    await render(france);
+    await click(named('France'));
+    await click(regionNamed('Bordeaux'));
+    await type('broustet');
+    await type('');
+    expect(regionNamed('Bordeaux').getAttribute('aria-expanded')).toBe('true');
+    expect(regionNamed('Alsace').getAttribute('aria-expanded')).toBe('false');
   });
 });

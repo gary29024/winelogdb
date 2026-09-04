@@ -4,7 +4,7 @@ import { requireSession } from '../src/lib/auth/session';
 import { canonicalCountryName } from '../src/lib/wine/canonicalize';
 import { linkWineProducer,mapProducerRow,normalizeProducerAlias,resolveExistingProducer,setProducerPrimaryName,suggestExistingProducer } from '../src/lib/producers/entities';
 import { mergeProducerEntities,unlinkProducerMerge } from '../src/lib/producers/merge';
-import { deleteProducerEntity } from '../src/lib/producers/remove';
+import { deleteProducerEntity,rejectProducerHeroImage } from '../src/lib/producers/remove';
 import { getProducerResearchRun } from '../src/lib/producers/research';
 import { createManualProducerContact,deleteManualProducerContact,listManualProducerContacts,updateManualProducerContact } from '../src/lib/producers/manualContacts';
 import { applyCatalogDecisions,deleteCatalogDecision,listCatalogDecisions,saveCatalogDecision } from '../src/lib/producers/catalogDecisions';
@@ -168,6 +168,14 @@ app.post('/api/producers/:id/unlink',async c=>{
     if(sourceNames.has(primary))return c.json({error:'Choose a primary name that belongs to the canonical producer before unlinking this producer'},400);
   }
   try{return c.json(await unlinkProducerMerge(c.env.DB,owner,c.req.param('id'),body.mergeId))}catch(e){const message=(e as Error).message||'Could not unlink producer';return c.json({error:message},message.includes('not found')?404:400)}
+});
+
+app.delete('/api/producers/:id/hero-image',async c=>{
+  cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
+  const body=await c.req.json().catch(()=>({})) as {confirmation?:string};
+  if(body.confirmation!=='REMOVE_PRODUCER_PHOTO')return c.json({error:'Removing a producer photo requires explicit confirmation'},400);
+  try{return c.json(await rejectProducerHeroImage(c.env,owner,c.req.param('id')))}
+  catch(e){const message=(e as Error).message||'Could not remove this photo';return c.json({error:message},message==='Producer not found'?404:400)}
 });
 
 app.delete('/api/producers/:id',async c=>{

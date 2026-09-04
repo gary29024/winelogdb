@@ -1,6 +1,6 @@
 import { describe,expect,it } from 'vitest';
 import { countSearchQueries } from '../../src/lib/research/geminiBatch';
-import { catalogDefaultChunkKeys,researchPromptFor } from '../../src/lib/producers/batchResearch';
+import { MAX_INCOMPLETE_SPLITS,catalogDefaultChunkKeys,requestForKey,researchPromptFor } from '../../src/lib/producers/batchResearch';
 import { GEMINI_REQUESTS_PER_PRODUCER } from '../../src/lib/producers/researchCampaign';
 
 const response=(queries?:string[])=>({
@@ -70,5 +70,41 @@ describe('what the prompts ask for',()=>{
   it('still bounds a lettered slice',()=>{
     expect(slice).toContain('SLICE: return ONLY');
     expect(slice).not.toContain('COVERAGE: return every current cuvee');
+  });
+});
+
+describe('the room an answer is given, which decides whether the ladder is climbed',()=>{
+  // Reported after the move to 3.8: producer research runs far longer and burns
+  // far more grounded searches. Nothing in the request changed but the model
+  // name. Thinking tokens are output tokens and count against this cap, so a
+  // model that thinks harder inside a fixed 8192 runs out mid-range, reports
+  // itself unfinished, and the whole range is re-asked in halves - each half a
+  // fresh grounded request with its own search budget.
+  const roomFor=(key:string)=>(requestForKey('Domaine William Fevre',key).request.generationConfig as {maxOutputTokens?:number}).maxOutputTokens;
+
+  it('gives the whole range the most, because its overflow is what starts the ladder',()=>{
+    expect(roomFor('catalog_slice_a_z_other')).toBe(32768);
+    expect(roomFor('catalog_slice_a_z_other')).toBeGreaterThan(roomFor('catalog_slice_a_e')!);
+  });
+
+  it('gives every grounded request more room than the 8192 that ran out',()=>{
+    for(const key of ['profile','catalog_slice_a_z_other','catalog_slice_a_e','catalog_slice_other'])
+      expect(roomFor(key),`${key} needs room for its thinking as well as its answer`).toBeGreaterThan(8192);
+  });
+
+  it('keeps grounding switched on for every one of them',()=>{
+    // A ceiling is not a spend - only tokens produced are billed - so the room
+    // costs nothing. What it must not do is change the request otherwise.
+    for(const key of ['profile','catalog_slice_a_z_other','catalog_slice_a_e'])
+      expect(requestForKey('Domaine William Fevre',key).request.tools).toEqual([{google_search:{}}]);
+  });
+});
+
+describe('how far an unfinished range may be re-asked',()=>{
+  it('stops after three rounds rather than doubling all evening',()=>{
+    // Each round doubles the grounded requests: six of them is twenty-six
+    // slices and an evening's wait. Three is A-Z, halves, quarters.
+    expect(MAX_INCOMPLETE_SPLITS).toBe(3);
+    expect(2**MAX_INCOMPLETE_SPLITS,'the worst case stays in single figures').toBeLessThanOrEqual(8);
   });
 });

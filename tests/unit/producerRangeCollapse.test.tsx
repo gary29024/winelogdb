@@ -177,6 +177,15 @@ describe('Producer wine range',()=>{
     expect(byLabel('Delete this producer'),'merging is what moves the wines').toBeUndefined();
   });
 
+  it('offers to throw away a photograph, and only when there is one',async()=>{
+    // Reported as: research often comes back with a meaningless picture - a
+    // stock close-up of grapes rather than the estate.
+    await render();
+    expect(byLabel('Remove this photo'),'no picture, nothing to remove').toBeUndefined();
+    await render({heroImageAvailable:true});
+    expect(byLabel('Remove this photo')).toBeTruthy();
+  });
+
   it('survives local storage that refuses the range preference',async()=>{
     const blocked=(key:string)=>{if(key==='winelog.producerRange.collapsed')throw new Error('blocked')};
     vi.spyOn(Storage.prototype,'getItem').mockImplementation(function(this:Storage,key:string){blocked(key);return null});
