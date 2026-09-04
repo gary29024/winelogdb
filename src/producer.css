@@ -25,3 +25,5 @@
    button:hover:not(:disabled) is (0,2,1) and a class alone is (0,1,0), so
    without this the pointer arriving turns a ghost control opaque. */
 .alias-chip button:hover:not(:disabled){background:0 0}
+
+.producer-remove{display:grid;gap:5px;justify-items:start;margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}.producer-remove small{color:var(--ink-6);font-size:.76rem;line-height:1.5}

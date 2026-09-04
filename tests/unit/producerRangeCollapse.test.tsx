@@ -48,6 +48,7 @@ const toggles=()=>[...(host?.querySelectorAll('.catalog-group-toggle')??[])] as 
 const panels=()=>[...(host?.querySelectorAll('.producer-catalog')??[])] as HTMLElement[];
 const click=async(button:HTMLButtonElement)=>{await act(async()=>{button.click()})};
 
+const byLabel=(text:string)=>[...(host?.querySelectorAll('button')??[])].find(node=>node.textContent?.trim()===text);
 const fixButtons=()=>[...(host?.querySelectorAll('.catalog-fix')??[])] as HTMLButtonElement[];
 
 beforeEach(()=>{window.localStorage.clear();vi.spyOn(window,'confirm').mockReturnValue(true)});
@@ -162,6 +163,18 @@ describe('Producer wine range',()=>{
       'Colli Tortonesi Timorasso Derthona',
       'Piemonte Chardonnay Lidia'
     ]);
+  });
+
+  it('offers to delete a producer nothing is logged under, and not one that is',async()=>{
+    // Reported as: correcting a bottle's producer leaves the one it used to be
+    // behind, empty, with no way to remove it.
+    await render();
+    expect(byLabel('Delete this producer'),'nothing logged under it').toBeTruthy();
+    await render({tastedWines:[{id:'w1',wineName:'Clos de la Roche',vintage:2019,wineStyle:'red',grapes:[],
+      appellation:null,region:'Burgundy',rating:null,tastingDate:'2026-01-01',imageId:null,
+      cuveeId:'c1',catalogCuveeId:null,releaseParentCuveeId:null,releaseParentName:null,
+      releaseDesignation:null,releaseSequence:null}]});
+    expect(byLabel('Delete this producer'),'merging is what moves the wines').toBeUndefined();
   });
 
   it('survives local storage that refuses the range preference',async()=>{
