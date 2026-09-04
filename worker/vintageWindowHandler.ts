@@ -30,7 +30,7 @@ export type VintageWindowBindings=GeminiTransportBindings&{DB:D1Database;AI_USAG
  * escalation can go.
  */
 const MODEL='gemini-3.1-flash-lite';
-const ESCALATION_MODEL='gemini-3.7-flash';
+const ESCALATION_MODEL='gemini-3.8-flash';
 /**
  * Grounded calls carry a search round trip before the model writes anything,
  * so the budget is the research paths' rather than a plain call's - but split

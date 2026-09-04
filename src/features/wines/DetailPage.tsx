@@ -23,7 +23,7 @@ import { ElapsedSeconds } from '../../components/ElapsedSeconds';
 
 type DeepState='idle'|'confirm-usage'|'running'|'error';
 type DeepField='summary'|'vintageQuality'|'producerDetails'|'producerWinemakingPractices'|'winemakingTechniques'|'terroir'|'drinkingWindow';
-const deepStage:Record<WineResearchRun['stage'],string>={queued:'Queued for background research',researching:'Researching with Gemini 3.7 Flash',saving:'Saving Deep Search result',complete:'Research complete',failed:'Research failed'};
+const deepStage:Record<WineResearchRun['stage'],string>={queued:'Queued for background research',researching:'Researching with Gemini 3.8 Flash',saving:'Saving Deep Search result',complete:'Research complete',failed:'Research failed'};
 const claimStatusLabel={supported:'Direct support',partial:'Partial support',unsupported:'No direct citation',uncertainty:'Explicit uncertainty',conflicting:'Conflicting sources'} as const;
 const DEEP_FIELDS:DeepField[]=['summary','vintageQuality','producerDetails','producerWinemakingPractices','winemakingTechniques','terroir','drinkingWindow'];
 const DEEP_OPEN_FIELDS_KEY='winelog.deepSearch.openFields';

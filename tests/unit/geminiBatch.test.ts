@@ -52,7 +52,7 @@ describe('Gemini Batch helpers',()=>{
   it('can bypass one primary Batch create without making a network call',async()=>{
     const requestId='123e4567-e89b-12d3-a456-426614174000';
     bypassPrimaryGeminiBatchOnce(requestId);
-    await expect(createGeminiBatch('unused','gemini-3.7-flash',`winelog-producer-${requestId}-1`,[{key:'profile',request:{}}])).rejects.toThrow('temporarily in cooldown');
+    await expect(createGeminiBatch('unused','gemini-3.8-flash',`winelog-producer-${requestId}-1`,[{key:'profile',request:{}}])).rejects.toThrow('temporarily in cooldown');
     clearPrimaryGeminiBatchBypass(requestId);
   });
 });

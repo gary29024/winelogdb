@@ -61,13 +61,13 @@
     // only to CORRECT a number that was always wrong - that should reprice the
     // history, because the old figure was never true.
     // A window can be dated into the future: the entry below for 2027-01-01 is
-    // the end of Gemini 3.7 Flash's introductory pricing, already loaded.
+    // the end of Gemini 3.7/3.8 Flash introductory pricing, already loaded.
     // --------------------------------------------------------------------
     //
     // USD per million tokens, per model, oldest window first. The flat form
     // {"model":{"input":n,"output":n}} is still accepted and means "always".
     // Standard-tier list prices; the tier multipliers below do the rest.
-    "AI_COST_MODEL_RATES": "{\"gemini-3.1-flash-lite\":[{\"from\":\"2026-01-01\",\"input\":0.25,\"output\":1.50}],\"gemini-3.7-flash\":[{\"from\":\"2026-01-01\",\"input\":0.75,\"output\":3.75},{\"from\":\"2027-01-01\",\"input\":1.50,\"output\":7.50}]}",
+    "AI_COST_MODEL_RATES": "{\"gemini-3.1-flash-lite\":[{\"from\":\"2026-01-01\",\"input\":0.25,\"output\":1.50}],\"gemini-3.7-flash\":[{\"from\":\"2026-01-01\",\"input\":0.75,\"output\":3.75},{\"from\":\"2027-01-01\",\"input\":1.50,\"output\":7.50}],\"gemini-3.8-flash\":[{\"from\":\"2026-09-02\",\"input\":0.75,\"output\":3.75},{\"from\":\"2027-01-01\",\"input\":1.50,\"output\":7.50}]}",
     // What each service tier bills relative to standard. Batch recognition
     // queues on flex on purpose; priority is here for completeness, nothing
     // asks for it today.

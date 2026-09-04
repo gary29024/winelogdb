@@ -16,8 +16,8 @@ import { recordAiUsage,type AnalyticsSink } from '../usage/aiUsage';
 type Env={DB:D1Database;GEMINI_API_KEY?:string;RESEARCH_QUEUE:Queue<unknown>;AI_USAGE?:AnalyticsSink};
 type WineRow={producer:string;producer_id:string|null;cuvee_id:string|null;wine_name:string;vintage:number|null;country:string|null;region:string|null;appellation:string|null;grapes_json:string;grape_blend_json:string};
 type ResearchRow={deep_search_json:string};
-const PRIMARY_MODEL='gemini-3.7-flash';
-const FALLBACK_MODEL='gemini-3.6-flash';
+const PRIMARY_MODEL='gemini-3.8-flash';
+const FALLBACK_MODEL='gemini-3.7-flash';
 const RESEARCH_MODELS=[PRIMARY_MODEL,FALLBACK_MODEL] as const;
 const MAX_ATTEMPTS=3;
 
@@ -144,9 +144,9 @@ export async function startWineBatchResearch(env:Env,owner:string,wineId:string,
   if(!prepared.missing.length){try{await finalize(env,owner,wineId,prepared.wine,prepared.targets);await updateWineResearchRun(env.DB,owner,requestId,'complete','Deep Search already complete from reusable cached research','complete',0);return {ok:true as const,cached:true}}catch(e){const error=(e as Error).message||'Could not finalize cached wine research';await updateWineResearchRun(env.DB,owner,requestId,'failed',error,'failed').catch(()=>undefined);return {ok:false as const,error}}}
   try{await submitAttempt(env,owner,wineId,requestId,1,prepared.missing);return {ok:true as const,cached:false}}
   catch(e){
-    const primaryError=(e as Error).message||'Gemini 3.7 Batch submission failed';log('warn',{requestId,wineId,stage:'primary_submit_failed',attempt:1,error:primaryError});
+    const primaryError=(e as Error).message||'Gemini 3.8 Batch submission failed';log('warn',{requestId,wineId,stage:'primary_submit_failed',attempt:1,error:primaryError});
     try{await submitAttempt(env,owner,wineId,requestId,2,prepared.missing);return {ok:true as const,cached:false}}
-    catch(fallback){const error=`Gemini 3.7 submission failed (${primaryError}); Gemini 3.6 fallback also failed: ${(fallback as Error).message||'unknown error'}`;await updateWineResearchRun(env.DB,owner,requestId,'failed',error,'failed',2).catch(()=>undefined);return {ok:false as const,error}}
+    catch(fallback){const error=`Gemini 3.8 submission failed (${primaryError}); Gemini 3.7 fallback also failed: ${(fallback as Error).message||'unknown error'}`;await updateWineResearchRun(env.DB,owner,requestId,'failed',error,'failed',2).catch(()=>undefined);return {ok:false as const,error}}
   }
 }
 

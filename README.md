@@ -237,7 +237,7 @@ at all, which remains the fastest path by a wide margin.
 
 ## Which model researches, and enforcing grounding
 
-Deep Search runs on `gemini-3.7-flash` with `gemini-3.6-flash` as the
+Deep Search runs on `gemini-3.8-flash` with `gemini-3.7-flash` as the
 availability fallback. The two are not interchangeable for research: an answer
 that comes back without Google Search grounding cannot satisfy the quality gate
 however well written it is, so a call to a model that did not search cannot

@@ -111,7 +111,7 @@ describe('the group recognition handler, as it behaves today',()=>{
     const {response,stub}=await run();
     expect(response.status).toBe(200);
     expect(calls).toHaveLength(2);
-    expect(calls[1].url).toContain('gemini-3.7-flash');
+    expect(calls[1].url).toContain('gemini-3.8-flash');
     const writes=usageWrites(stub);
     expect(writes).toHaveLength(2);
     expect(writes.map(write=>write.args.at(-2))).toEqual([2,0]);

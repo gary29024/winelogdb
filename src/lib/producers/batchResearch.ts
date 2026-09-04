@@ -23,8 +23,8 @@ type CatalogSaveSummary={catalogCount:number;researchedCount:number;retainedCoun
 type CatalogSlice={key:string;start:string|null;end:string|null;includeOther:boolean;label:string};
 type ParsedCatalogPart={range:CatalogWine[];slice:CatalogSlice;metadata?:GroundingMetadata};
 
-const PRIMARY_MODEL='gemini-3.7-flash';
-const FALLBACK_MODEL='gemini-3.6-flash';
+const PRIMARY_MODEL='gemini-3.8-flash';
+const FALLBACK_MODEL='gemini-3.7-flash';
 const MAX_CATALOG_ATTEMPT=6;
 const PROFILE_SOURCE_KEY='__profile_sources__';
 const CATEGORIES=new Set<CatalogCategory>(['red','white','rose','sparkling','dessert','fortified','orange','other']);
@@ -289,7 +289,7 @@ async function submitBatch(env:Env,owner:string,producerId:string,requestId:stri
   try{
     googleName=await createGeminiBatch(env.GEMINI_API_KEY,model,`winelog-producer-${requestId}-${attempt}`,entries);
     jobId=await createResearchBatchJob(env.DB,{owner,requestId,targetKind:'producer',targetId:producerId,googleBatchName:googleName,model,attempt,keys});
-    const baseCount=keys.filter(key=>parseSliceKey(key)).length,message=attempt===1?`Producer profile plus ${baseCount} bounded catalogue slices submitted to Gemini 3.7 Batch`:`Retrying only ${keys.length} failed producer research part${keys.length===1?'':'s'} with ${model}`;
+    const baseCount=keys.filter(key=>parseSliceKey(key)).length,message=attempt===1?`Producer profile plus ${baseCount} bounded catalogue slices submitted to Gemini 3.8 Batch`:`Retrying only ${keys.length} failed producer research part${keys.length===1?'':'s'} with ${model}`;
     await setRunState(env.DB,owner,requestId,'running',attempt===1?'searching':'retrying',attempt,message);
     await env.RESEARCH_QUEUE.send({kind:'producer_batch_poll',owner,producerId,requestId,jobId,pollCount:0},{delaySeconds:researchBatchFirstPollDelay(isEmulatedGeminiBatchName(googleName))});log('log',{requestId,producerId,stage:'batch_submitted',attempt,model,keys,googleName});return jobId;
   }catch(e){const error=(e as Error).message||'Producer Batch submission failed';if(jobId)await finishResearchBatchJob(env.DB,owner,jobId,'failed',`Batch setup failed: ${error}`).catch(()=>undefined);if(googleName)await cancelGeminiBatch(env.GEMINI_API_KEY,googleName).catch(()=>undefined);throw e}
@@ -297,7 +297,7 @@ async function submitBatch(env:Env,owner:string,producerId:string,requestId:stri
 export async function startProducerBatchResearch(env:Env,owner:string,producerId:string,requestId:string){
   const keys=['profile',...catalogDefaultChunkKeys];
   try{await prepareProducerCatalogStage(env.DB,owner,producerId,requestId);await submitBatch(env,owner,producerId,requestId,1,PRIMARY_MODEL,keys);return {ok:true as const}}
-  catch(e){const primaryError=(e as Error).message||'Gemini 3.7 Batch submission failed';log('warn',{requestId,producerId,stage:'primary_submit_failed',error:primaryError});try{await submitBatch(env,owner,producerId,requestId,2,FALLBACK_MODEL,keys);return {ok:true as const}}catch(fallback){const error=`Gemini 3.7 submission failed (${primaryError}); Gemini 3.6 fallback also failed: ${(fallback as Error).message||'unknown error'}`;await discardProducerCatalogStage(env.DB,owner,requestId).catch(()=>undefined);await setRunState(env.DB,owner,requestId,'failed','failed',2,error).catch(()=>undefined);return {ok:false as const,error}}}
+  catch(e){const primaryError=(e as Error).message||'Gemini 3.8 Batch submission failed';log('warn',{requestId,producerId,stage:'primary_submit_failed',error:primaryError});try{await submitBatch(env,owner,producerId,requestId,2,FALLBACK_MODEL,keys);return {ok:true as const}}catch(fallback){const error=`Gemini 3.8 submission failed (${primaryError}); Gemini 3.7 fallback also failed: ${(fallback as Error).message||'unknown error'}`;await discardProducerCatalogStage(env.DB,owner,requestId).catch(()=>undefined);await setRunState(env.DB,owner,requestId,'failed','failed',2,error).catch(()=>undefined);return {ok:false as const,error}}}
 }
 
 async function completionMessage(db:D1Database,owner:string,producerId:string){
