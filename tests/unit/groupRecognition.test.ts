@@ -6,10 +6,40 @@ const wine=(overrides:Record<string,unknown>={})=>({
   producer:'Krug',wineName:'Grande Cuvée 170ème Édition',vintage:null,country:'France',region:'Champagne',appellation:'Champagne',grapes:['Pinot Noir','Chardonnay'],grapeBlend:[],style:'sparkling',alcoholPercentage:null,locationName:null,confidence:.8,boundingBox:{xMin:100,yMin:100,xMax:300,yMax:900},...overrides
 });
 
+const without=(source:Record<string,unknown>,key:string)=>{const copy={...source};delete copy[key];return copy};
+
 describe('group photo recognition',()=>{
   it('rejects inverted or empty bounding boxes',()=>{
     expect(groupRecognitionSchema.safeParse({wines:[wine({boundingBox:{xMin:400,yMin:100,xMax:300,yMax:900}})],unresolvedCount:0}).success).toBe(false);
     expect(groupRecognitionSchema.safeParse({wines:[wine({boundingBox:{xMin:100,yMin:100,xMax:100,yMax:900}})],unresolvedCount:0}).success).toBe(false);
+  });
+
+  it('keeps a scan whose boxes are missing a coordinate, filling it from the frame',()=>{
+    // Reported as: six bottles in a row, every one of them
+    // {path:['wines',N,'boundingBox','yMax'],message:'expected number, received
+    // undefined'}, and the whole scan refused. Six wines read correctly, thrown
+    // away because one number out of twenty-four was not there. The box crops a
+    // thumbnail; it is not identity.
+    const result=groupRecognitionSchema.safeParse({wines:[
+      wine({boundingBox:without({xMin:100,yMin:100,xMax:300,yMax:900},'yMax')}),
+      wine({wineName:'Vintage',vintage:2013,boundingBox:without({xMin:400,yMin:100,xMax:600,yMax:900},'yMax')})
+    ],unresolvedCount:0});
+    expect(result.success).toBe(true);
+    // The width the model did give is kept, so a row of bottles still crops as
+    // its own slice rather than as six copies of the photograph.
+    expect(result.success&&result.data.wines.map(item=>[item.boundingBox.xMin,item.boundingBox.xMax,item.boundingBox.yMax]))
+      .toEqual([[100,300,1000],[400,600,1000]]);
+  });
+
+  it('reads a coordinate wherever the model put it',()=>{
+    const spelled=groupRecognitionSchema.safeParse({wines:[wine({boundingBox:{x_min:100,y_min:80,x_max:300,y_max:900}})],unresolvedCount:0});
+    expect(spelled.success&&spelled.data.wines[0].boundingBox).toEqual({xMin:100,yMin:80,xMax:300,yMax:900});
+    // Gemini's own shape, and its own order: ymin, xmin, ymax, xmax.
+    const native=groupRecognitionSchema.safeParse({wines:[wine({boundingBox:{box_2d:[80,100,900,300]}})],unresolvedCount:0});
+    expect(native.success&&native.data.wines[0].boundingBox).toEqual({xMin:100,yMin:80,xMax:300,yMax:900});
+    // No box at all is a full-frame crop, not a lost wine.
+    const missing=groupRecognitionSchema.safeParse({wines:[without(wine(),'boundingBox')],unresolvedCount:0});
+    expect(missing.success&&missing.data.wines[0].boundingBox).toEqual({xMin:0,yMin:0,xMax:1000,yMax:1000});
   });
 
   it('deduplicates repeated bottles of the same wine and keeps the strongest detection',()=>{
