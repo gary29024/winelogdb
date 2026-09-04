@@ -12,7 +12,7 @@ export type VintageWindowBindings=GeminiTransportBindings&{DB:D1Database;AI_USAG
  *
  * The question is narrow and the work is retrieval, not reasoning: the search
  * tool fetches the pages and the model reads three of them and returns two
- * integers and three sentences. Flash-lite is priced at a third of 3.7 Flash
+ * integers and three sentences. Flash-lite is priced at a third of 3.8 Flash
  * per token and does not spend thinking tokens on top, which on a call this
  * shape is five to eight times cheaper.
  *
@@ -22,7 +22,7 @@ export type VintageWindowBindings=GeminiTransportBindings&{DB:D1Database;AI_USAG
  * and returns nothing. That is a question with an answer rather than a reason
  * to pay: ask the cheap one, and where what comes back is not a grounded,
  * well-shaped answer, ask the expensive one once. The common case pays
- * flash-lite; 3.7 Flash is paid for only on the calls that would otherwise
+ * flash-lite; 3.8 Flash is paid for only on the calls that would otherwise
  * have failed and returned nothing at all.
  *
  * Both attempts are metered under the one run, so the spend panel shows what
