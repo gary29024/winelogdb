@@ -26,6 +26,33 @@ type ParsedCatalogPart={range:CatalogWine[];slice:CatalogSlice;metadata?:Groundi
 const PRIMARY_MODEL='gemini-3.8-flash';
 const FALLBACK_MODEL='gemini-3.7-flash';
 const MAX_CATALOG_ATTEMPT=6;
+/**
+ * Output room, which is what decides whether the slice ladder is climbed at all.
+ *
+ * Reported after the move to 3.8: producer research runs far longer and burns
+ * far more grounded searches. Nothing in the request changed but the model
+ * name - so the cause is on the model's side of the wire, and the mechanism is
+ * this number. Thinking tokens are output tokens and count against this cap, so
+ * a model that thinks harder inside a fixed 8192 runs out mid-range, reports
+ * itself unfinished, and the whole range is re-asked in halves - each half a
+ * fresh grounded request with its own search budget. One request became two,
+ * then four, and the run took as long as it took.
+ *
+ * A ceiling is not a spend: only tokens actually produced are billed. So the
+ * room costs nothing and saves the ladder, which costs a great deal.
+ */
+const PROFILE_OUTPUT_TOKENS=16384;
+const FULL_RANGE_OUTPUT_TOKENS=32768;
+const SLICE_OUTPUT_TOKENS=16384;
+/**
+ * How many times an unfinished range may be halved.
+ *
+ * Each round doubles the grounded requests, so six of them is twenty-six slices
+ * and an evening's wait. Three is A-Z, halves, quarters - past that the range is
+ * reported unfinished and the visible catalogue is left as it was, which is the
+ * same promise every other failure here keeps.
+ */
+export const MAX_INCOMPLETE_SPLITS=3;
 const PROFILE_SOURCE_KEY='__profile_sources__';
 const CATEGORIES=new Set<CatalogCategory>(['red','white','rose','sparkling','dessert','fortified','orange','other']);
 const PAGE_TIMEOUT_MS=8_000,IMAGE_TIMEOUT_MS=10_000,MAX_PAGE_BYTES=384*1024,MAX_HERO_BYTES=5*1024*1024;
@@ -215,10 +242,14 @@ export function researchPromptFor(name:string,key:string){
   const slice=parseSliceKey(key);if(!slice)throw new Error(`Unknown producer research key ${key}`);
   return slicePrompt(name,slice);
 }
-function requestForKey(name:string,key:string):GeminiBatchRequest{
-  if(key==='profile')return {key,request:{contents:[{role:'user',parts:[{text:`${profilePrompt(name)}\n\n${describeResponseSchema(profileSchema)}`}]}],tools:[{google_search:{}}],generationConfig:groundedGenerationConfig(8192)}};
+/** Exposed so the output room each key is given can be asserted. */
+export function requestForKey(name:string,key:string):GeminiBatchRequest{
+  if(key==='profile')return {key,request:{contents:[{role:'user',parts:[{text:`${profilePrompt(name)}\n\n${describeResponseSchema(profileSchema)}`}]}],tools:[{google_search:{}}],generationConfig:groundedGenerationConfig(PROFILE_OUTPUT_TOKENS)}};
   const slice=parseSliceKey(key);if(!slice)throw new Error(`Unknown producer research key ${key}`);
-  return {key,request:{contents:[{role:'user',parts:[{text:`${slicePrompt(name,slice)}\n\n${describeResponseSchema(catalogSchema)}`}]}],tools:[{google_search:{}}],generationConfig:groundedGenerationConfig(8192)}};
+  // The whole range gets the most room, because it is the one answer that has
+  // to hold every wine and the only one whose overflow starts the ladder.
+  const room=key===FULL_CATALOG_SLICE.key?FULL_RANGE_OUTPUT_TOKENS:SLICE_OUTPUT_TOKENS;
+  return {key,request:{contents:[{role:'user',parts:[{text:`${slicePrompt(name,slice)}\n\n${describeResponseSchema(catalogSchema)}`}]}],tools:[{google_search:{}}],generationConfig:groundedGenerationConfig(room)}};
 }
 
 async function producerNames(db:D1Database,owner:string,producerId:string){
@@ -358,7 +389,19 @@ export async function pollProducerBatchResearch(env:Env,owner:string,producerId:
 
   // A slice that reported itself unfinished is asked again in halves, before
   // the coverage check sees a complete-looking range that is not one.
-  if(incomplete.length&&job.attempt<MAX_CATALOG_ATTEMPT){
+  if(incomplete.length&&job.attempt>=MAX_INCOMPLETE_SPLITS){
+    // The ladder has been climbed as far as it goes. Another round would double
+    // the grounded requests again, and committing a range the model itself
+    // called unfinished is the one thing this whole staging dance exists to
+    // prevent - so the run stops and says so, and the visible catalogue stays
+    // exactly as it was.
+    log('warn',{requestId,producerId,stage:'incomplete_split_exhausted',attempt:job.attempt,incomplete});
+    await finishResearchBatchJob(env.DB,owner,job.id,'failed','range still unfinished after the last narrower slices').catch(()=>undefined);
+    await discardProducerCatalogStage(env.DB,owner,requestId).catch(()=>undefined);
+    await setRunState(env.DB,owner,requestId,'failed','failed',job.attempt,`The range was still unfinished after ${job.attempt} rounds of narrower slices, so the previous visible catalogue was kept unchanged. Research this producer again to try afresh.`);
+    return;
+  }
+  if(incomplete.length){
     const halves=[...new Set(incomplete.flatMap(key=>catalogSubsliceKeysFor(key)))];
     if(halves.length){
       try{
