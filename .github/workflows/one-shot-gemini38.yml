@@ -1,0 +1,97 @@
+name: One-shot Gemini 3.8 migration
+
+on:
+  push:
+    branches: [feat/gemini-3-8-flash]
+
+permissions:
+  contents: write
+
+jobs:
+  migrate:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feat/gemini-3-8-flash
+          fetch-depth: 0
+      - name: Apply model migration
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          def replace(path, old, new, minimum=1):
+              p=Path(path)
+              text=p.read_text()
+              count=text.count(old)
+              if count < minimum:
+                  raise SystemExit(f'{path}: expected at least {minimum} occurrence(s) of {old!r}, found {count}')
+              p.write_text(text.replace(old,new))
+              print(f'{path}: {count} replacement(s)')
+
+          # Runtime model selection and current UI/docs.
+          replace('src/lib/recognition/escalation.ts','gemini-3.7-flash','gemini-3.8-flash')
+          replace('src/lib/research/modelHealth.ts','gemini-3.7-flash','gemini-3.8-flash')
+          replace('src/lib/research/cache.ts',"latestEntry?.model??'gemini-3.7-flash'","latestEntry?.model??'gemini-3.8-flash'")
+          replace('src/lib/research/geminiBatch.ts',"const PRIMARY_MODEL='gemini-3.7-flash'","const PRIMARY_MODEL='gemini-3.8-flash'")
+          replace('src/lib/research/geminiBatch.ts','Gemini 3.7 Batch bypassed','Gemini 3.8 Batch bypassed')
+
+          for path in ['src/lib/research/batchWineResearch.ts','src/lib/producers/batchResearch.ts']:
+              replace(path,"const PRIMARY_MODEL='gemini-3.7-flash';\nconst FALLBACK_MODEL='gemini-3.6-flash';","const PRIMARY_MODEL='gemini-3.8-flash';\nconst FALLBACK_MODEL='gemini-3.7-flash';")
+              replace(path,'Gemini 3.7','Gemini 3.8',0)
+              replace(path,'Gemini 3.6','Gemini 3.7',0)
+
+          replace('worker/vintageWindowHandler.ts',"const ESCALATION_MODEL='gemini-3.7-flash'","const ESCALATION_MODEL='gemini-3.8-flash'")
+          replace('worker/researchQueueEntry.ts','gemini-3.6-flash','gemini-3.7-flash')
+          replace('worker/researchQueueEntry.ts','Gemini 3.7 to Gemini 3.6','Gemini 3.8 to Gemini 3.7')
+          replace('src/features/wines/DetailPage.tsx','Researching with Gemini 3.7 Flash','Researching with Gemini 3.8 Flash')
+          replace('README.md','gemini-3.7-flash','gemini-3.8-flash')
+          replace('README.md','gemini-3.6-flash','gemini-3.7-flash')
+
+          # Keep Gemini 3.7 priced for historical records and as the new research
+          # fallback; add Gemini 3.8 as a separate dated model so old usage is
+          # never repriced under the new model name.
+          wrangler=Path('wrangler.jsonc')
+          text=wrangler.read_text()
+          old='"AI_COST_MODEL_RATES": "{\\"gemini-3.1-flash-lite\\":[{\\"from\\":\\"2026-01-01\\",\\"input\\":0.25,\\"output\\":1.50}],\\"gemini-3.7-flash\\":[{\\"from\\":\\"2026-01-01\\",\\"input\\":0.75,\\"output\\":3.75},{\\"from\\":\\"2027-01-01\\",\\"input\\":1.50,\\"output\\":7.50}]}"'
+          new='"AI_COST_MODEL_RATES": "{\\"gemini-3.1-flash-lite\\":[{\\"from\\":\\"2026-01-01\\",\\"input\\":0.25,\\"output\\":1.50}],\\"gemini-3.7-flash\\":[{\\"from\\":\\"2026-01-01\\",\\"input\\":0.75,\\"output\\":3.75},{\\"from\\":\\"2027-01-01\\",\\"input\\":1.50,\\"output\\":7.50}],\\"gemini-3.8-flash\\":[{\\"from\\":\\"2026-09-02\\",\\"input\\":0.75,\\"output\\":3.75},{\\"from\\":\\"2027-01-01\\",\\"input\\":1.50,\\"output\\":7.50}]}"'
+          if old not in text:
+              raise SystemExit('wrangler.jsonc: model-rate configuration did not match expected v1.1 shape')
+          text=text.replace(old,new)
+          text=text.replace("the end of Gemini 3.7 Flash's introductory pricing, already loaded.","the end of Gemini 3.7/3.8 Flash introductory pricing, already loaded.")
+          wrangler.write_text(text)
+
+          # Tests that assert the *current* model. Historical/cached-data fixtures
+          # deliberately remain on 3.7 so backward compatibility stays covered.
+          current_model_tests=[
+              'tests/unit/recognitionEscalation.test.ts',
+              'tests/unit/groupRecognitionHandler.test.ts',
+              'tests/unit/vintageModelEscalation.test.ts',
+              'tests/unit/geminiBatch.test.ts',
+          ]
+          for path in current_model_tests:
+              p=Path(path)
+              if not p.exists():
+                  raise SystemExit(f'missing expected test: {path}')
+              text=p.read_text().replace('gemini-3.7-flash','gemini-3.8-flash').replace('Gemini 3.7','Gemini 3.8')
+              p.write_text(text)
+
+          # A compact regression guard for the migration itself.
+          Path('tests/unit/gemini38Upgrade.test.ts').write_text("""import { readFileSync } from 'node:fs';\nimport { describe,expect,it } from 'vitest';\nimport { RECOGNITION_ESCALATION_MODEL } from '../../src/lib/recognition/escalation';\n\nconst read=(path:string)=>readFileSync(path,'utf8');\n\ndescribe('Gemini 3.8 Flash rollout',()=>{\n  it('uses 3.8 for current primary and escalation paths',()=>{\n    expect(RECOGNITION_ESCALATION_MODEL).toBe('gemini-3.8-flash');\n    expect(read('src/lib/research/modelHealth.ts')).toContain(\"PRIMARY_MODEL='gemini-3.8-flash'\");\n    expect(read('src/lib/research/geminiBatch.ts')).toContain(\"PRIMARY_MODEL='gemini-3.8-flash'\");\n    expect(read('src/lib/research/batchWineResearch.ts')).toContain(\"PRIMARY_MODEL='gemini-3.8-flash'\");\n    expect(read('src/lib/producers/batchResearch.ts')).toContain(\"PRIMARY_MODEL='gemini-3.8-flash'\");\n    expect(read('worker/vintageWindowHandler.ts')).toContain(\"ESCALATION_MODEL='gemini-3.8-flash'\");\n  });\n\n  it('keeps 3.7 as the Deep Search availability fallback',()=>{\n    expect(read('src/lib/research/batchWineResearch.ts')).toContain(\"FALLBACK_MODEL='gemini-3.7-flash'\");\n    expect(read('src/lib/producers/batchResearch.ts')).toContain(\"FALLBACK_MODEL='gemini-3.7-flash'\");\n    expect(read('worker/researchQueueEntry.ts')).toContain(\"route:'gemini-3.7-flash'\");\n  });\n\n  it('prices 3.8 independently without deleting 3.7 history',()=>{\n    const config=read('wrangler.jsonc');\n    expect(config).toContain('\\\\\"gemini-3.7-flash\\\\\"');\n    expect(config).toContain('\\\\\"gemini-3.8-flash\\\\\"');\n    expect(config).toContain('\\\\\"from\\\\\":\\\\\"2026-09-02\\\\\"');\n  });\n});\n""")
+
+          print('\nRemaining 3.7 references (expected: fallback, pricing, history/fixtures):')
+          import subprocess
+          subprocess.run(['git','grep','-n','gemini-3.7-flash'],check=False)
+          PY
+      - name: Remove one-shot workflow and commit migration
+        shell: bash
+        run: |
+          rm .github/workflows/one-shot-gemini38.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --check
+          git commit -m "Upgrade Gemini Flash primary paths to 3.8"
+          git push origin HEAD:feat/gemini-3-8-flash
