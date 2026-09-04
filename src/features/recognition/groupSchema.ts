@@ -110,13 +110,47 @@ const identityKey=(wine:GroupRecognitionWine)=>[
   wine.vintage??'nv'
 ].join('::');
 
+/** Below this a trim would leave a sliver instead of a bottle, so nothing is trimmed. */
+const MIN_BOX_WIDTH=40;
+
+/**
+ * Every box stops where the next one starts.
+ *
+ * Reported as: the crops went wild. Six bottles in a row came back with their
+ * left edges spaced exactly as the bottles were - 0, 180, 330, 480, 630, 790 -
+ * and every right edge bunched up near the far end of the frame, so the first
+ * box held all six bottles, the second held five, and the thumbnail for the
+ * Bollinger was a photograph of the Bollinger and everything beside it. That is
+ * the one thing a group photo exists to prevent, and groupCropRegion's 8%
+ * margin only widened it.
+ *
+ * The left edges are the half a vision model gets right - they are what it read
+ * each label at - so a box that runs past its neighbour's left edge is cut back
+ * to it. On a scan whose boxes are already separate this changes nothing at
+ * all; on a scan whose right edges are guesswork it recovers exactly the strips
+ * the left edges describe. Nothing is invented: every number here was read off
+ * the photograph, only from the bottle next door.
+ *
+ * Only sideways. Bottles in a back row sit above the ones in front and are
+ * meant to overlap vertically; two bottles sharing a column are not.
+ */
+function separateBoxes(wines:readonly GroupRecognitionWine[]){
+  return wines.map((wine,index)=>{
+    const next=wines[index+1];
+    if(!next)return wine;
+    const edge=next.boundingBox.xMin;
+    if(wine.boundingBox.xMax<=edge||edge-wine.boundingBox.xMin<MIN_BOX_WIDTH)return wine;
+    return {...wine,boundingBox:{...wine.boundingBox,xMax:edge}};
+  });
+}
+
 export function dedupeGroupRecognitionWines(wines:GroupRecognitionWine[]){
   const byIdentity=new Map<string,GroupRecognitionWine>();
   for(const raw of wines){
     const wine=canonicalizeWineFields(raw),key=identityKey(wine),existing=byIdentity.get(key);
     if(!existing||wine.confidence>existing.confidence)byIdentity.set(key,wine);
   }
-  return [...byIdentity.values()].sort((a,b)=>a.boundingBox.xMin-b.boundingBox.xMin||a.boundingBox.yMin-b.boundingBox.yMin);
+  return separateBoxes([...byIdentity.values()].sort((a,b)=>a.boundingBox.xMin-b.boundingBox.xMin||a.boundingBox.yMin-b.boundingBox.yMin));
 }
 
 function normalizeGroupEnvelope(value:unknown){

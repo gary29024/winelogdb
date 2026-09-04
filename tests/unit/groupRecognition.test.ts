@@ -61,6 +61,47 @@ describe('group photo recognition',()=>{
     expect(result.map(item=>item.vintage)).toEqual([2008,2013]);
   });
 
+  it('stops each box where the next one starts, when the right edges are guesswork',()=>{
+    // Reported as: the crops went wild. Six bottles in a row, left edges spaced
+    // exactly as the bottles were and every right edge bunched near the far end
+    // of the frame, so box one held all six bottles and the Bollinger's
+    // thumbnail was a photograph of the whole table.
+    const box=(xMin:number,xMax:number)=>({xMin,yMin:130,xMax,yMax:1000});
+    const result=dedupeGroupRecognitionWines([
+      wine({wineName:'R.D.',boundingBox:box(0,795)}),
+      wine({wineName:'La Grande Annee',boundingBox:box(180,815)}),
+      wine({wineName:'Dom Perignon',boundingBox:box(330,835)}),
+      wine({wineName:'P2',boundingBox:box(480,855)}),
+      wine({wineName:'Grande Cuvee',boundingBox:box(630,875)}),
+      wine({wineName:'Krug 2004',boundingBox:box(790,895)})
+    ] as never);
+    expect(result.map(item=>[item.boundingBox.xMin,item.boundingBox.xMax]))
+      .toEqual([[0,180],[180,330],[330,480],[480,630],[630,790],[790,895]]);
+    // Sideways only: bottles in a back row are meant to overlap the front one.
+    expect(result.map(item=>[item.boundingBox.yMin,item.boundingBox.yMax]))
+      .toEqual(Array.from({length:6},()=>[130,1000]));
+  });
+
+  it('leaves boxes that are already separate exactly as they are',()=>{
+    const boxes=[{xMin:80,yMin:100,xMax:240,yMax:900},{xMin:500,yMin:120,xMax:680,yMax:880}];
+    const result=dedupeGroupRecognitionWines([
+      wine({wineName:'First',boundingBox:boxes[0]}),
+      wine({wineName:'Second',boundingBox:boxes[1]})
+    ] as never);
+    expect(result.map(item=>item.boundingBox)).toEqual(boxes);
+  });
+
+  it('will not trim a box down to a sliver',()=>{
+    // Two detections all but on top of each other are a disagreement about one
+    // bottle, not two bottles; cutting the first back to 20 units wide would
+    // crop a stripe of glass.
+    const result=dedupeGroupRecognitionWines([
+      wine({wineName:'First',boundingBox:{xMin:100,yMin:100,xMax:300,yMax:900}}),
+      wine({wineName:'Second',boundingBox:{xMin:120,yMin:100,xMax:320,yMax:900}})
+    ] as never);
+    expect(result[0].boundingBox.xMax).toBe(300);
+  });
+
   it('canonicalizes producer-prefixed wine names during dedupe',()=>{
     const result=dedupeGroupRecognitionWines([wine({wineName:'Krug Grande Cuvée 170ème Édition'})] as never);
     expect(result[0].wineName).toBe('Grande Cuvée 170ème Édition');
