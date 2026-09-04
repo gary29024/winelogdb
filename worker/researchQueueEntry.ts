@@ -34,12 +34,12 @@ async function scheduleCancelSweep(env:Bindings,owner:string,targetKind:Research
   await env.RESEARCH_QUEUE.send({kind:'research_cancel_sweep',owner,targetKind,targetId,requestId,pass:0},{delaySeconds:5}).catch(e=>console.error(JSON.stringify({event:'research_cancel_sweep_schedule_failed',targetKind,targetId,requestId,error:(e as Error).message})))
 }
 async function preparePrimaryRouting(env:Bindings,owner:string,requestId:string){
-  const bypass=await shouldBypassPrimaryResearch(env.DB,owner);if(bypass){bypassPrimaryGeminiBatchOnce(requestId);console.warn(JSON.stringify({event:'research_model_route',requestId,stage:'primary_cooldown',route:'gemini-3.6-flash'}))}return bypass;
+  const bypass=await shouldBypassPrimaryResearch(env.DB,owner);if(bypass){bypassPrimaryGeminiBatchOnce(requestId);console.warn(JSON.stringify({event:'research_model_route',requestId,stage:'primary_cooldown',route:'gemini-3.7-flash'}))}return bypass;
 }
 async function noteFallbackUse(env:Bindings,owner:string,jobId:string,requestId:string,kind:'producer'|'wine',pollCount:number){
   if(pollCount!==0)return;const tracked=await getResearchBatchJob(env.DB,owner,jobId).catch(()=>null);if(!tracked||tracked.attempt!==2)return;
-  if(!(await shouldBypassPrimaryResearch(env.DB,owner)))await markPrimaryResearchUnavailable(env.DB,owner,`${kind} research fell back from Gemini 3.7 to Gemini 3.6`);
-  console.warn(JSON.stringify({event:'research_model_route',requestId,stage:'fallback_active',kind,route:'gemini-3.6-flash'}));
+  if(!(await shouldBypassPrimaryResearch(env.DB,owner)))await markPrimaryResearchUnavailable(env.DB,owner,`${kind} research fell back from Gemini 3.8 to Gemini 3.7`);
+  console.warn(JSON.stringify({event:'research_model_route',requestId,stage:'fallback_active',kind,route:'gemini-3.7-flash'}));
 }
 async function harvestProducerJobs(env:Bindings,owner:string,producerId:string,requestId:string,jobIds:string[]){
   for(const jobId of jobIds)await pollProducerBatchResearch(env,owner,producerId,requestId,jobId,0).catch(e=>console.error(JSON.stringify({event:'research_cancel_harvest_failed',kind:'producer',requestId,jobId,error:(e as Error).message})));

@@ -112,8 +112,8 @@ describe('asking the cheap model first',()=>{
     // for - and the only time it is asked.
     const {db,seen,env}=world(fromMemory,grounded);
     await expect(researchVintageWindow(env,'owner',subject,'r1')).resolves.toBeTruthy();
-    expect(seen).toEqual(['gemini-3.1-flash-lite','gemini-3.7-flash']);
-    expect(stored(db)[0].args[12]).toBe('gemini-3.7-flash');
+    expect(seen).toEqual(['gemini-3.1-flash-lite','gemini-3.8-flash']);
+    expect(stored(db)[0].args[12]).toBe('gemini-3.8-flash');
   });
 
   it('meters the attempt that failed, because it still billed',async()=>{
@@ -124,7 +124,7 @@ describe('asking the cheap model first',()=>{
     // One run, two calls: the wine is counted once, on the answer that was kept.
     expect(metered(db)).toEqual([
       {model:'gemini-3.1-flash-lite',units:0},
-      {model:'gemini-3.7-flash',units:1}
+      {model:'gemini-3.8-flash',units:1}
     ]);
   });
 
@@ -132,7 +132,7 @@ describe('asking the cheap model first',()=>{
     const {db,seen,env}=world(fromMemory);
     await expect(researchVintageWindow(env,'owner',subject,'r1'))
       .rejects.toThrow(/Nothing was retrieved for this vintage/);
-    expect(seen).toEqual(['gemini-3.1-flash-lite','gemini-3.7-flash']);
+    expect(seen).toEqual(['gemini-3.1-flash-lite','gemini-3.8-flash']);
     expect(stored(db),'and nothing is stored when neither model retrieved anything').toHaveLength(0);
   });
 
@@ -141,7 +141,7 @@ describe('asking the cheap model first',()=>{
     // caller is waiting on a button either way.
     const {seen,env}=world(503,grounded);
     await expect(researchVintageWindow(env,'owner',subject,'r1')).resolves.toBeTruthy();
-    expect(seen).toEqual(['gemini-3.1-flash-lite','gemini-3.7-flash']);
+    expect(seen).toEqual(['gemini-3.1-flash-lite','gemini-3.8-flash']);
   });
 
   it('reports what the second model said when both refuse',async()=>{

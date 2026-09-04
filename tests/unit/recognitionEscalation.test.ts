@@ -7,8 +7,8 @@ const primary=(overrides:Record<string,unknown>={})=>({
 });
 
 describe('selective wine-label escalation',()=>{
-  it('uses Gemini 3.7 only for uncertain identity results',()=>{
-    expect(RECOGNITION_ESCALATION_MODEL).toBe('gemini-3.7-flash');
+  it('uses Gemini 3.8 only for uncertain identity results',()=>{
+    expect(RECOGNITION_ESCALATION_MODEL).toBe('gemini-3.8-flash');
     expect(RECOGNITION_ESCALATION_CONFIDENCE).toBe(0.85);
     expect(recognitionEscalationReasons(primary())).toEqual([]);
     expect(recognitionEscalationReasons(primary({confidence:0.84}))).toContain('low-confidence');

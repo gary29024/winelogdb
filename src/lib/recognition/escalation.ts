@@ -1,7 +1,7 @@
 import type { GroupRecognitionResult } from '../../features/recognition/groupSchema';
 import type { RecognitionResult } from '../../features/recognition/schema';
 
-export const RECOGNITION_ESCALATION_MODEL='gemini-3.7-flash';
+export const RECOGNITION_ESCALATION_MODEL='gemini-3.8-flash';
 export const RECOGNITION_ESCALATION_CONFIDENCE=0.85;
 
 function hasIdentity(result:Pick<RecognitionResult,'producer'|'wineName'>){

@@ -93,7 +93,7 @@ describe('how the request reaches Gemini',()=>{
     // on the calls where it did not, rather than by paying for it every time.
     // vintageModelEscalation covers the behaviour; this holds the pair in place.
     expect(handler).toMatch(/const MODEL='gemini-3\.1-flash-lite'/);
-    expect(handler).toMatch(/const ESCALATION_MODEL='gemini-3\.7-flash'/);
+    expect(handler).toMatch(/const ESCALATION_MODEL='gemini-3\.8-flash'/);
   });
 
   it('bounds the pair, and gives the thinking model the longer half',()=>{

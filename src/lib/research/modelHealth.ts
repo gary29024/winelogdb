@@ -1,4 +1,4 @@
-const PRIMARY_MODEL='gemini-3.7-flash';
+const PRIMARY_MODEL='gemini-3.8-flash';
 const PRIMARY_COOLDOWN_MS=15*60*1000;
 
 const nowIso=()=>new Date().toISOString();
