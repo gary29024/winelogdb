@@ -35,7 +35,16 @@ const structureFields=[
 
 type WineFormInput=WineInput&{tastingStructure?:TastingStructure|null};
 type WineFormInitial=Partial<WineInput>&{tastingStructure?:TastingStructure|null};
-type WineFormProps={initial?:WineFormInitial;id?:string;photos?:WinePhoto[];onSave?:(input:WineFormInput)=>Promise<{id:string}>;onSaved?:(id:string)=>void;submitLabel?:string;
+/**
+ * Who the saved wine turned out to be.
+ *
+ * A caller that keeps its own list - Group Photo's review cards - showed what
+ * recognition read and had no way to learn what you corrected it to. Optional,
+ * so a caller that only needs the id ignores it.
+ */
+export type SavedWineIdentity={producer:string;wineName:string;vintage:number|null};
+
+type WineFormProps={initial?:WineFormInitial;id?:string;photos?:WinePhoto[];onSave?:(input:WineFormInput)=>Promise<{id:string}>;onSaved?:(id:string,saved?:SavedWineIdentity)=>void;submitLabel?:string;
   /** The cellar line this bottle came from, so saving takes it off the count. */
   holdingId?:string};
 
@@ -117,7 +126,7 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,holdin
     setAttaching(true);setError('');
     try{
       await addWineImages(duplicate.wineId,photos);
-      if(onSaved)onSaved(duplicate.wineId);else nav(`/wines/${duplicate.wineId}`);
+      if(onSaved)onSaved(duplicate.wineId,{producer:duplicate.producer,wineName:duplicate.wineName,vintage:duplicate.vintage});else nav(`/wines/${duplicate.wineId}`);
     }catch(e){setError((e as Error).message||'Could not add the photos to that wine')}
     finally{setAttaching(false)}
   }
@@ -262,7 +271,7 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,holdin
        */
       const joined=!id&&activeTasting&&input.tastingName===activeTasting.name
         &&(input.tastingDate??null)===(activeTasting.tastingDate??null);
-      if(onSaved)onSaved(savedId);
+      if(onSaved)onSaved(savedId,{producer:input.producer,wineName:input.wineName,vintage:input.vintage??null});
       else nav(joined&&activeTasting?`/tastings/${activeTasting.id}`:`/wines/${savedId}`);
     }catch(e){setError((e as Error).message);setBusy(false)}
   }

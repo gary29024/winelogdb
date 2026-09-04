@@ -1,5 +1,5 @@
 import { describe,expect,it } from 'vitest';
-import { nextPendingKey } from '../../src/features/uploads/groupReviewQueue';
+import { nextPendingKey,savedRecognition } from '../../src/features/uploads/groupReviewQueue';
 
 const bottle=(key:string,overrides:Partial<{savedId:string|null;removed:boolean;recognition:unknown}>={})=>
   ({key,savedId:null,removed:false,recognition:{},...overrides});
@@ -40,5 +40,36 @@ describe('the bottle to review next',()=>{
   it('still answers when the saved bottle is no longer in the list',()=>{
     const lineup=[bottle('a'),bottle('b')];
     expect(nextPendingKey(lineup,'gone')).toBe('a');
+  });
+});
+
+describe('what a card says once its wine is saved',()=>{
+  // Reported as: a correction typed into the form showed on the wine's own page
+  // and nowhere else, so the review list went on showing the model's reading of
+  // a wine you had already fixed.
+  const read={producer:'Dom Perignon',wineName:'Vintage 2004',vintage:2004,confidence:.92,
+    boundingBox:{xMin:330,yMin:130,xMax:480,yMax:1000},grapes:['Chardonnay']};
+
+  it('takes the producer, name and vintage that were actually saved',()=>{
+    expect(savedRecognition(read,{producer:'Moët & Chandon',wineName:'Dom Pérignon Vintage',vintage:2004}))
+      .toEqual({...read,producer:'Moët & Chandon',wineName:'Dom Pérignon Vintage',vintage:2004});
+  });
+
+  it('leaves the detection itself alone',()=>{
+    // The box and the confidence describe what was found in the photograph, and
+    // the crop they produced is still the crop on the card.
+    const saved=savedRecognition(read,{producer:'Krug',wineName:'Grande Cuvée',vintage:null})!;
+    expect(saved.boundingBox).toEqual(read.boundingBox);
+    expect(saved.confidence).toBe(.92);
+    expect(saved.grapes).toEqual(['Chardonnay']);
+    expect(saved.vintage,'a wine saved as non-vintage says so').toBeNull();
+  });
+
+  it('has nothing to write into for a wine added by hand',()=>{
+    expect(savedRecognition(null,{producer:'A',wineName:'B',vintage:null})).toBeNull();
+  });
+
+  it('changes nothing when the form did not say who was saved',()=>{
+    expect(savedRecognition(read,undefined)).toBe(read);
   });
 });
