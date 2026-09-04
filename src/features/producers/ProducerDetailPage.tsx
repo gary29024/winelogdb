@@ -153,7 +153,13 @@ export function ProducerDetailPage(){
    const first=wines[0],releaseFamily=Boolean(first?.releaseParentCuveeId),grapes=[...new Set(wines.flatMap(wine=>wine.grapes??[]).map(grape=>grape.trim()).filter(Boolean))];
    const ordered=[...wines].sort((a,b)=>releaseFamily?(b.releaseSequence??-1)-(a.releaseSequence??-1):(b.vintage??-1)-(a.vintage??-1));
    return {cuveeId:first?.cuveeId??null,catalogCuveeId:first?.releaseParentCuveeId??first?.catalogCuveeId??null,name:releaseFamily?(first?.releaseParentName??first?.wineName??''):(first?.wineName??''),appellation:first?.appellation??null,wineStyle:first?.wineStyle??null,grapes,releaseFamily,wines:ordered};
-  });
+  })
+  // Alphabetical, because a cuvee is looked up by name here. The order fell out
+  // of when each wine was last drunk, which is the Journal's question, not this
+  // page's: on a producer you have tasted for years the same cuvee moves every
+  // time you open another bottle. Base sensitivity so Ca di Pian and Campe sit
+  // where an eye expects them rather than after every unaccented name.
+   .sort((a,b)=>a.name.localeCompare(b.name,undefined,{sensitivity:'base'})||(a.wineStyle??'').localeCompare(b.wineStyle??''));
  },[producer]);
  async function runResearch(){
   if(!confirm('Research this producer’s home location, public contacts, producer-wide winemaking practices and current/recent wine range with Gemini + Google Search? The job runs in the background and continues even if you close WineLog.'))return;

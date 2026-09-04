@@ -138,6 +138,32 @@ describe('Producer wine range',()=>{
     expect(posted.some(item=>/\/catalog-decisions\/d1\/undo$/.test(item.url))).toBe(true);
   });
 
+  it('lists the cuvees you have tasted alphabetically, not by when you drank them',async()=>{
+    // Reported as: the tasted list came out in last-drunk order, which is the
+    // Journal's question. On this page a cuvee is looked for by name, and one
+    // that moves every time another bottle is opened cannot be found twice.
+    const tasted=(wineName:string,tastingDate:string,vintage:number)=>({
+      id:`w-${wineName}`,wineName,vintage,wineStyle:'red',grapes:['Nebbiolo'],
+      appellation:null,region:'Piedmont',rating:null,tastingDate,imageId:null,
+      cuveeId:`c-${wineName}`,catalogCuveeId:null,releaseParentCuveeId:null,
+      releaseParentName:null,releaseDesignation:null,releaseSequence:null
+    });
+    await render({tastedWines:[
+      tasted('Colli Tortonesi Timorasso Derthona','2026-08-27',2024),
+      tasted('Barbaresco Valeirano','2026-08-27',2014),
+      tasted('Barolo Campè','2026-08-18',2009),
+      tasted('Barbera d’Asti Superiore Cà di Pian','2026-06-17',2023),
+      tasted('Piemonte Chardonnay Lidia','2026-03-25',2020)
+    ]});
+    expect([...host!.querySelectorAll('.tasted-cuvee-title strong')].map(node=>node.textContent)).toEqual([
+      'Barbaresco Valeirano',
+      'Barbera d’Asti Superiore Cà di Pian',
+      'Barolo Campè',
+      'Colli Tortonesi Timorasso Derthona',
+      'Piemonte Chardonnay Lidia'
+    ]);
+  });
+
   it('survives local storage that refuses the range preference',async()=>{
     const blocked=(key:string)=>{if(key==='winelog.producerRange.collapsed')throw new Error('blocked')};
     vi.spyOn(Storage.prototype,'getItem').mockImplementation(function(this:Storage,key:string){blocked(key);return null});
