@@ -23,7 +23,9 @@ afterEach(()=>{act(()=>root?.unmount());host?.remove();root=null;host=null;vi.un
 const json=(body:unknown)=>new Response(JSON.stringify(body),{status:200,headers:{'content-type':'application/json'}});
 
 async function mount(parseBodies:unknown[]){
-  let parseIndex=0,uploadIndex=0;
+  let parseIndex=0,uploadIndex=0,blobs=0;
+  // jsdom has no object URLs, and the staged pages are shown from one.
+  vi.stubGlobal('URL',Object.assign(globalThis.URL,{createObjectURL:()=>`blob:page-${++blobs}`,revokeObjectURL:()=>{}}));
   vi.stubGlobal('fetch',vi.fn(async(url:string)=>{
     const path=String(url);
     if(path.includes('/sheet/parse'))return json(parseBodies[Math.min(parseIndex++,parseBodies.length-1)]);
@@ -167,6 +169,20 @@ describe('choosing the photographs',()=>{
     expect(button('Read 2 pages')).toBeTruthy();
   });
 
+  it('shows the pages it just photographed, before anything is read',async()=>{
+    // Reported as: the uploaded list did not show up until after the read. The
+    // screen said "2 pages saved" in words, and a wine list is paper - a page
+    // shot at an angle, a flash across the middle column, someone else's
+    // handout - none of which "2 pages saved" can tell you.
+    const host=await mount([parsed([{status:'new',wine:wine()}])]);
+    await pick([page('one.jpg'),page('two.jpg')]);
+    const shots=[...host.querySelectorAll('.tasting-sheet-staged-page img')] as HTMLImageElement[];
+    expect(shots,'one thumbnail per page in hand').toHaveLength(2);
+    expect(shots.every(image=>image.src.startsWith('blob:')),'straight off the phone, not back out of R2').toBe(true);
+    expect((globalThis.fetch as ReturnType<typeof vi.fn>).mock.calls
+      .filter(call=>String(call[0]).includes('/sheet/parse')),'and still nothing read').toHaveLength(0);
+  });
+
   it('reads them only once the button is pressed',async()=>{
     const host=await mount([parsed([{status:'new',wine:wine({wineName:'Bonnes-Mares'})}])]);
     await pick([page('one.jpg')]);
@@ -289,6 +305,20 @@ describe('a printed line the reading could not match',()=>{
     await act(async()=>{setter.call(selects[0],'w1');selects[0].dispatchEvent(new Event('change',{bubbles:true}))});
     const remaining=[...pickers()[1].options].map(option=>option.value);
     expect(remaining,'the claimed wine is gone from the other line').toEqual(['','w2']);
+  });
+
+  it('does not offer a wine the reading matched by itself',async()=>{
+    // Reported as: the wines the sheet had already matched on its own were
+    // still in every other line's picker. Only hand-pointed wines counted as
+    // taken, so pointing a second line at an automatic match would have written
+    // two prices to one wine.
+    await mount([parsed([
+      {status:'matched',wine:wine({wineName:'Synergie'}),wineId:'w1',hasPrice:false,currentPrice:null,currentCurrency:null},
+      {status:'new',wine:wine({wineName:'"Frenesie" Blanc de Meunier'})}
+    ],{lineup:[logged(),logged({wineId:'w2',wineName:'Esprit Nature'})]})]);
+    await choose([page('list.jpg')]);
+    const options=[...pickers()[0].options].map(option=>option.value);
+    expect(options,'w1 is spoken for by the matched line').toEqual(['','w2']);
   });
 
   it('offers nothing to point at when the evening has no wines yet',async()=>{

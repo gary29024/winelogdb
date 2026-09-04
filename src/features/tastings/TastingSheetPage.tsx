@@ -69,6 +69,34 @@ function StoredPage({documentId,index,checked,disabled,onToggle}:{documentId:str
   </li>;
 }
 
+/**
+ * What was just photographed, before a penny is spent reading it.
+ *
+ * Reported as: the pages did not show up until after the read. They were
+ * uploaded and the screen said so in words, but a wine list is paper - a
+ * page shot at an angle, a flash across the middle column, the second page of
+ * someone else's handout - and none of that is visible in "2 pages saved".
+ * Straight off the phone rather than back out of R2, so it appears at once and
+ * appears even when storing the page failed.
+ */
+function StagedPages({files}:{files:readonly File[]}){
+  // Made in the effect rather than in a memo, the way every other preview on
+  // this screen is: a memo's URLs outlive their own revoke on a remount.
+  const [urls,setUrls]=useState<string[]>([]);
+  useEffect(()=>{
+    const created=files.map(file=>URL.createObjectURL(file));
+    setUrls(created);
+    return()=>{for(const url of created)URL.revokeObjectURL(url)};
+  },[files]);
+  return <ul className="tasting-sheet-stored-pages">
+    {urls.map((url,index)=>
+      <li className="tasting-sheet-staged-page" key={url}>
+        <img src={url} alt={`Wine list page ${index+1}, just photographed`}/>
+        <small>Page {index+1}</small>
+      </li>)}
+  </ul>;
+}
+
 export function TastingSheetPage(){
   const {id=''}=useParams();
   const input=useRef<HTMLInputElement>(null);
@@ -125,8 +153,16 @@ export function TastingSheetPage(){
   const selectedPrices=priceable.filter(row=>row.selected);
   const selectedNew=creatable.filter(row=>row.selected);
   const alreadyPriced=matched.filter(rowHasPrice).length;
-  /** A wine one row claims is not offered to the others, or two rows fight over it. */
-  const claimed=new Set(rows.map(row=>row.manualWineId).filter((id):id is string=>Boolean(id)));
+  /**
+   * A wine one row writes to is not offered to the others.
+   *
+   * Reported as: a wine the reading had already matched by itself was still in
+   * every other row's picker. Only wines pointed at by hand were being counted
+   * as taken, so the eight bottles the sheet matched on its own stayed on offer
+   * - and pointing a second row at one of them would have written two prices to
+   * one wine. Matched by the reading or matched by hand, it is spoken for.
+   */
+  const claimed=new Set(rows.map(targetWineId).filter((id):id is string=>Boolean(id)));
 
   // Written on every edit rather than on leaving: there is no reliable "leaving"
   // on a phone, where the screen is closed by switching apps.
@@ -342,6 +378,12 @@ export function TastingSheetPage(){
       </>}
       <input ref={input} className="visually-hidden" type="file" accept="image/*" multiple onChange={event=>void choosePages(Array.from(event.target.files??[]))}/>
     </div>
+
+    {staged.length>0&&<section className="tasting-sheet-staged">
+      <h2>Just photographed</h2>
+      <p className="tasting-sheet-stored-note">Check the pages read the way you meant before spending a call on them. Reshoot any that do not, and photograph the list again.</p>
+      <StagedPages files={staged}/>
+    </section>}
 
     {documents.length>0&&staged.length===0&&<section className="tasting-sheet-stored">
       <div className="tasting-sheet-stored-head">
