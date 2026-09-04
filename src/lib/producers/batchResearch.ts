@@ -7,6 +7,7 @@ import { countSearchQueries,countUsageTokens,createGeminiBatch,describeResponseS
 import { researchBatchErrorPollDelay,researchBatchFirstPollDelay,researchBatchPollDelay,researchBatchStallAction,researchBatchTransientAction } from '../research/batchRetryPolicy';
 import { clearProducerCatalogSliceStage,discardProducerCatalogStage,listProducerCatalogStage,prepareProducerCatalogStage,stageProducerCatalogParts } from './catalogResearchStage';
 import { extractContactGrounding,normalizeProducerEmail,normalizeProducerPhone,safeInstagramUrl } from './research';
+import { heroImageCandidates } from './heroCandidates';
 import { assertCatalogTextQuality,extractOfficialContactCandidates,mergeCatalogRanges,suspiciousCatalogShrink } from './researchQuality';
 import { applyCatalogDecisions,listCatalogDecisions } from './catalogDecisions';
 import { catalogNameInitial,stripProducerCatalogPrefix } from './catalogName';
@@ -102,12 +103,32 @@ function cleanContactSources(value:unknown){
   for(const raw of value){if(!raw||typeof raw!=='object')continue;const item=raw as {title?:unknown;url?:unknown},url=safeHttpsUrl(item.url)?.toString();if(!url||seen.has(url))continue;seen.add(url);out.push({title:typeof item.title==='string'&&item.title.trim()?item.title.trim():new URL(url).hostname,url})}
   return out.slice(0,10);
 }
-export const htmlAttribute=(tag:string,name:string)=>tag.match(new RegExp(`\\b${name}\\s*=\\s*(?:"([^"]*)"|'([^']*)'|([^\\s>]+))`,'i'))?.slice(1).find(Boolean)??null;
-async function limited(response:Response,max:number){if(!response.body)return null;const reader=response.body.getReader(),chunks:Uint8Array[]=[];let total=0;try{while(true){const {done,value}=await reader.read();if(done)break;if(!value)continue;total+=value.byteLength;if(total>max){await reader.cancel();return null}chunks.push(value)}}finally{reader.releaseLock()}const out=new Uint8Array(total);let offset=0;for(const chunk of chunks){out.set(chunk,offset);offset+=chunk.byteLength}return out}
-async function safeFetch(url:URL,timeout:number,accept:string){const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),timeout);try{return await fetch(url,{headers:{Accept:accept},signal:controller.signal})}finally{clearTimeout(timer)}}
+export { htmlAttribute } from './heroCandidates';
+/**
+ * `prefix` keeps what has been read instead of throwing the response away.
+ *
+ * A homepage over the cap used to return null, and the picture and the contact
+ * links it was read for sit in the first two kilobytes of the head - so a site
+ * that ships four hundred kilobytes of inlined markup lost everything over a
+ * limit meant only to bound the read. An image is still all or nothing: half a
+ * JPEG is not a photograph.
+ */
+export async function limited(response:Response,max:number,prefix=false){if(!response.body)return null;const reader=response.body.getReader(),chunks:Uint8Array[]=[];let total=0;try{while(true){const {done,value}=await reader.read();if(done)break;if(!value)continue;total+=value.byteLength;chunks.push(value);if(total>max){await reader.cancel();if(!prefix)return null;break}}}finally{reader.releaseLock()}const out=new Uint8Array(total);let offset=0;for(const chunk of chunks){out.set(chunk,offset);offset+=chunk.byteLength}return out}
+/**
+ * A browser's own headers, because a wine estate's site is usually behind one
+ * of the WAFs that answers a request without a User-Agent with a 403 - and a
+ * research run that cannot read the homepage finds neither a photograph nor a
+ * contact address. One page per producer, on behalf of the person who asked for
+ * it, which is exactly the request a browser would have made.
+ */
+const BROWSER_HEADERS={
+  'User-Agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36',
+  'Accept-Language':'en;q=0.9'
+};
+async function safeFetch(url:URL,timeout:number,accept:string){const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),timeout);try{return await fetch(url,{headers:{...BROWSER_HEADERS,Accept:accept},signal:controller.signal})}finally{clearTimeout(timer)}}
 async function htmlPage(url:URL){
   const response=await safeFetch(url,PAGE_TIMEOUT_MS,'text/html,application/xhtml+xml');if(!response.ok||!(response.headers.get('Content-Type')||'').toLowerCase().includes('text/html'))return null;
-  const bytes=await limited(response,MAX_PAGE_BYTES);if(!bytes)return null;const finalUrl=safeHttpsUrl(response.url||url.toString())?.toString()??url.toString();return {html:new TextDecoder().decode(bytes),url:finalUrl};
+  const bytes=await limited(response,MAX_PAGE_BYTES,true);if(!bytes)return null;const finalUrl=safeHttpsUrl(response.url||url.toString())?.toString()??url.toString();return {html:new TextDecoder().decode(bytes),url:finalUrl};
 }
 async function officialWebsiteContacts(official:string){
   const start=safeHttpsUrl(official);if(!start)return {email:null as string|null,phone:null as string|null,instagram:null as string|null,sources:[] as ResearchSource[]};
@@ -123,12 +144,46 @@ async function officialWebsiteContacts(official:string){
   }
   return {email:emails[0]??null,phone:phones[0]??null,instagram:instagrams[0]??null,sources};
 }
+const HERO_TYPES=['image/jpeg','image/png','image/webp','image/avif'];
+
+/** One candidate, fetched and checked. Null for anything that is not a picture. */
+async function fetchHero(image:URL){
+  const response=await safeFetch(image,IMAGE_TIMEOUT_MS,'image/avif,image/webp,image/png,image/jpeg');
+  if(!response.ok)return null;
+  const contentType=(response.headers.get('Content-Type')||'').split(';')[0].trim().toLowerCase();
+  if(!HERO_TYPES.includes(contentType))return null;
+  const bytes=await limited(response,MAX_HERO_BYTES);
+  // Under a kilobyte is a tracking pixel or an error page served as an image.
+  if(!bytes||bytes.byteLength<1024)return null;
+  return {bytes,contentType};
+}
+
+/**
+ * The estate's own photograph, off its own homepage.
+ *
+ * Every candidate the page offers is tried in turn rather than only the first:
+ * an og:image pointing at a missing file, or at a logo the furniture filter did
+ * not catch, used to end the search rather than move it on. The whole thing is
+ * plain HTTP - no model is asked anything - so a second attempt costs a request,
+ * not a token.
+ */
 async function heroImage(env:Env,owner:string,official:string){
-  const site=safeHttpsUrl(official);if(!site)return null;const page=await safeFetch(site,PAGE_TIMEOUT_MS,'text/html,application/xhtml+xml');if(!page.ok||!(page.headers.get('Content-Type')||'').includes('text/html'))return null;
-  const pageBytes=await limited(page,MAX_PAGE_BYTES);if(!pageBytes)return null;const html=new TextDecoder().decode(pageBytes);let image:URL|null=null;
-  for(const tag of html.match(/<meta\b[^>]*>/gi)??[]){const key=String(htmlAttribute(tag,'property')||htmlAttribute(tag,'name')||'').toLowerCase();if(!['og:image','og:image:secure_url','twitter:image','twitter:image:src'].includes(key))continue;image=safeHttpsUrl(String(htmlAttribute(tag,'content')||'').replace(/&amp;/g,'&'),site.toString());if(image)break}
-  if(!image)return null;const response=await safeFetch(image,IMAGE_TIMEOUT_MS,'image/avif,image/webp,image/png,image/jpeg');if(!response.ok)return null;const contentType=(response.headers.get('Content-Type')||'').split(';')[0].trim().toLowerCase();if(!['image/jpeg','image/png','image/webp','image/avif'].includes(contentType))return null;
-  const bytes=await limited(response,MAX_HERO_BYTES);if(!bytes||bytes.byteLength<1024)return null;const objectKey=createObjectKey(owner,contentType);await env.WINE_IMAGES.put(objectKey,bytes,{httpMetadata:{contentType},customMetadata:{kind:'producer-hero',source:image.toString()}});return {objectKey,sourceUrl:image.toString()};
+  const site=safeHttpsUrl(official);if(!site)return null;
+  const page=await safeFetch(site,PAGE_TIMEOUT_MS,'text/html,application/xhtml+xml');
+  // Lowercased: a server answering TEXT/HTML is serving HTML.
+  if(!page.ok||!(page.headers.get('Content-Type')||'').toLowerCase().includes('text/html'))return null;
+  const pageBytes=await limited(page,MAX_PAGE_BYTES,true);if(!pageBytes)return null;
+  const html=new TextDecoder().decode(pageBytes),base=page.url||site.toString();
+  for(const candidate of heroImageCandidates(html)){
+    const image=safeHttpsUrl(candidate,base)??safeHttpsUrl(candidate.replace(/^http:\/\//,'https://'),base);
+    if(!image)continue;
+    const hero=await fetchHero(image).catch(()=>null);
+    if(!hero)continue;
+    const objectKey=createObjectKey(owner,hero.contentType);
+    await env.WINE_IMAGES.put(objectKey,hero.bytes,{httpMetadata:{contentType:hero.contentType},customMetadata:{kind:'producer-hero',source:image.toString()}});
+    return {objectKey,sourceUrl:image.toString()};
+  }
+  return null;
 }
 
 const profileSchema={type:'OBJECT',properties:{homeCountry:{type:'STRING'},homeRegion:{type:'STRING'},homeLocality:{type:'STRING'},officialWebsiteUrl:{type:'STRING',nullable:true},instagramUrl:{type:'STRING',nullable:true},contactEmail:{type:'STRING',nullable:true},contactPhone:{type:'STRING',nullable:true},profile:{type:'STRING'},winemakingPractices:{type:'STRING'}},required:['homeCountry','homeRegion','homeLocality','officialWebsiteUrl','instagramUrl','contactEmail','contactPhone','profile','winemakingPractices']};
