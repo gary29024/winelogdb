@@ -1,6 +1,7 @@
 import { useEffect,useMemo,useRef,useState } from 'react';
 import { addToCellar,updateHolding,type CellarHolding } from './api';
 import { VintageCheck } from '../maturity/VintageCheck';
+import { VINTAGE_WINDOW_SURFACES } from '../maturity/surfaces';
 import { getProducer,resolveProducer,type ProducerResolution } from '../producers/api';
 import { resolvePlace } from '../../lib/places/resolve';
 // The suggestion banner is the scan form's, down to the class names, so it is
@@ -230,7 +231,7 @@ export function AddToCellarSheet({onClose,onAdded,holding,onRemove,onVintageRese
           already has - which costs nothing - and one being edited follows the
           appellation as it is changed. It renders nothing until there is a
           vintage and a place, because until then there is nothing to say. */}
-      <VintageCheck wine={asking} onResearched={onVintageResearched}/>
+      {VINTAGE_WINDOW_SURFACES.cellarSheet&&<VintageCheck wine={asking} onResearched={onVintageResearched}/>}
 
       <label className="cellar-field">Producer *
         <input value={producer} onChange={event=>setProducer(event.target.value)} placeholder="Domaine, château or estate" autoFocus/>

@@ -38,7 +38,24 @@ export function mergeSessionIntoHistory(history:BatchSessionSummary[],session:Ba
 type StagePhoto={original:File;recognition:File;metadata:PhotoMetadata;width:number;height:number};
 type ApiErrorBody={error?:unknown};
 export class BatchApiError extends Error{constructor(message:string,readonly status:number){super(message);this.name='BatchApiError'}}
-async function read<T>(r:Response,message:string):Promise<T>{const body=await r.json().catch(()=>({})) as ApiErrorBody&Record<string,unknown>;if(!r.ok)throw new BatchApiError(typeof body.error==='string'?body.error:`${message} (${r.status})`,r.status);return body as T}
+/**
+ * The refusal, with the field that caused it.
+ *
+ * The server sends the failing fields in `issues` and this read only the title,
+ * so a batch review that would not save said "Invalid wine" and stopped -
+ * which is true, useless, and the same refusal the ordinary wine form spells
+ * out. Same shape as requireOk in the wine client, so both say the same thing.
+ */
+async function read<T>(r:Response,message:string):Promise<T>{
+  const body=await r.json().catch(()=>({})) as ApiErrorBody&Record<string,unknown>;
+  if(!r.ok){
+    const issues=Array.isArray(body.issues)?body.issues as Array<{path?:Array<string|number>;message?:string}>:[];
+    const details=issues.map(issue=>`${issue.path?.join('.')||'field'}: ${issue.message||'Invalid input'}`).join('; ');
+    const title=typeof body.error==='string'?body.error:`${message} (${r.status})`;
+    throw new BatchApiError([title,details].filter(Boolean).join(' — '),r.status);
+  }
+  return body as T;
+}
 export async function listBatchSessions(){const result=await read<{items:BatchSessionSummary[]}>(await fetch('/api/batch-recognition/sessions',{headers:authHeaders()}),'Could not load Batch Scan sessions');result.items.sort((a,b)=>{const aIncomplete=a.status==='uploading'?0:1,bIncomplete=b.status==='uploading'?0:1;return aIncomplete-bIncomplete||Date.parse(b.updatedAt)-Date.parse(a.updatedAt)});return result}
 export async function createBatchSession(expectedItems:number){return read<{id:string;status:string;createdAt:string;expiresAt:string;expectedItems:number}>(await fetch('/api/batch-recognition/sessions',{method:'POST',headers:authHeaders(true),body:JSON.stringify({expectedItems})}),'Could not create Batch Scan')}
 export async function getBatchSession(id:string){return read<BatchRecognitionSession>(await fetch(`/api/batch-recognition/sessions/${id}`,{headers:authHeaders()}),'Could not load Batch Scan')}
