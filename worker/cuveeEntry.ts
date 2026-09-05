@@ -3,6 +3,7 @@ import entryApp from './entry';
 import { requireSession } from '../src/lib/auth/session';
 import { ensureAllProducerLinks,refreshProducerHomeCountry } from '../src/lib/producers/entities';
 import { repairIdentityKeys } from '../src/lib/producers/identityRepair';
+import { runOneShotMaintenance } from '../src/lib/db/oneShotMaintenance';
 import { cleanupOrphanCuvee,cuveeStyleFamily,ensureAllCuveeLinksForProducer,ensureMissingCuveeLinks,normalizeCuveeAlias,reconcileProducerCuvees,resolveExistingCuvee } from '../src/lib/cuvees/entities';
 import { ensureWineIdentity } from '../src/lib/wine/identity';
 import { setCuveePrimaryName } from '../src/lib/cuvees/primaryName';
@@ -66,22 +67,24 @@ async function maybeScheduleIdentityMaintenance(c:Context<AppEnv>,owner:string){
 }
 
 async function maybeRepairIdentityKeys(c:Context<AppEnv>,owner:string){
-  const nowIso=new Date().toISOString();
-  const claim=await c.env.DB.prepare(`INSERT INTO maintenance_state(owner_id,maintenance_key,last_run_at) VALUES(?,?,?)
-    ON CONFLICT(owner_id,maintenance_key) DO NOTHING`).bind(owner,IDENTITY_REPAIR_KEY,nowIso).run();
-  if(!claim.meta.changes)return;
-  c.executionCtx.waitUntil((async()=>{
-    try{
-      const report=await repairIdentityKeys(c.env.DB,owner);
-      console.log(JSON.stringify({event:'identity-key-repair-complete',owner,...report}));
-      // A capped pass left work behind, so the claim is released and the next
-      // request picks the rest up.
-      if(report.capped)await c.env.DB.prepare('DELETE FROM maintenance_state WHERE owner_id=? AND maintenance_key=?').bind(owner,IDENTITY_REPAIR_KEY).run().catch(()=>{});
-    }catch(e){
-      console.error(JSON.stringify({event:'identity-key-repair-failed',owner,error:(e as Error).message}));
-      await c.env.DB.prepare('DELETE FROM maintenance_state WHERE owner_id=? AND maintenance_key=?').bind(owner,IDENTITY_REPAIR_KEY).run().catch(()=>{});
-    }
-  })());
+  await runOneShotMaintenance(c.env.DB,owner,IDENTITY_REPAIR_KEY,async()=>{
+    const report=await repairIdentityKeys(c.env.DB,owner);
+    console.log(JSON.stringify({event:'identity-key-repair-complete',owner,...report}));
+    return report;
+  });
+}
+
+function scheduleJournalMaintenance(c:Context<AppEnv>,owner:string){
+  if(Number(c.req.query('offset')||0)!==0)return;
+  // Claim checks and repairs must not delay the page query. Separate tasks let
+  // routine maintenance proceed even when an old identity repair needs a retry.
+  c.executionCtx.waitUntil(maybeRepairIdentityKeys(c,owner).catch(e=>{
+    console.error(JSON.stringify({event:'identity-key-repair-failed',error:(e as Error).message}));
+  }));
+  c.executionCtx.waitUntil(maybeScheduleIdentityMaintenance(c,owner).catch(e=>{
+    maintenanceMemo.delete(owner);
+    console.error(JSON.stringify({event:'identity-maintenance-schedule-failed',error:(e as Error).message}));
+  }));
 }
 
 app.get('/api/cuvees/resolve',async c=>{
@@ -107,7 +110,7 @@ app.get('/api/images/:id',async c=>{
 
 app.get('/api/journal',async c=>{
   cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
-  if(Number(c.req.query('offset')||0)===0){try{await maybeRepairIdentityKeys(c,owner);await maybeScheduleIdentityMaintenance(c,owner)}catch(e){console.error(JSON.stringify({event:'identity-maintenance-schedule-failed',error:(e as Error).message}))}}
+  scheduleJournalMaintenance(c,owner);
   try{return c.json(await listJournalPage(c.env.DB,owner,c.req.query()))}catch(e){console.error(JSON.stringify({event:'journal-list-failed',error:(e as Error).message}));return c.json({error:'Could not load Journal'},500)}
 });
 
@@ -121,7 +124,7 @@ app.post('/api/journal/batch-experience',async c=>{
 
 app.get('/api/wines',async c=>{
   let owner:string;try{owner=await user(c)}catch{return entryApp.fetch(c.req.raw,c.env,c.executionCtx)}
-  if(Number(c.req.query('offset')||0)===0){try{await maybeRepairIdentityKeys(c,owner);await maybeScheduleIdentityMaintenance(c,owner)}catch(e){console.error(JSON.stringify({event:'identity-maintenance-schedule-failed',error:(e as Error).message}))}}
+  scheduleJournalMaintenance(c,owner);
   return entryApp.fetch(c.req.raw,c.env,c.executionCtx);
 });
 

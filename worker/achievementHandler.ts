@@ -115,12 +115,14 @@ async function computeAchievementProgress(db:D1Database,owner:string){
 
 // The revision travels with the result so the route can turn it into an ETag and
 // answer an unchanged client with 304 rather than re-serializing the whole payload.
-export async function loadAchievementProgress(db:D1Database,owner:string,attempt=0):Promise<{revision:number|null;progress:AchievementProgress[]}>{
-  const revision=await currentOwnerRevision(db,owner);
+export async function loadAchievementProgress(db:D1Database,owner:string,attempt=0,initialRevision?:number|null):Promise<{revision:number|null;progress:AchievementProgress[]}>{
+  const revision=initialRevision===undefined?await currentOwnerRevision(db,owner):initialRevision;
   if(revision!==null){const cached=await cachedAchievementProgress(db,owner,revision);if(cached)return {revision,progress:cached}}
   const result=await computeAchievementProgress(db,owner),after=await currentOwnerRevision(db,owner);
   if(revision!==null&&after!==null&&after!==revision&&attempt===0)return loadAchievementProgress(db,owner,1);
-  if(after!==null)await storeAchievementProgress(db,owner,after,result);
+  // Even the retry can race a write. Never tag its old result with a new revision.
+  if(revision===null||after===null||after!==revision)return {revision:null,progress:result};
+  await storeAchievementProgress(db,owner,after,result);
   return {revision:after,progress:result};
 }
 

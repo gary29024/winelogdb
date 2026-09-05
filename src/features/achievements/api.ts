@@ -1,9 +1,7 @@
 import { authHeaders,clearSession } from '../../lib/auth/client';
 import { registerSummaryCache } from '../../lib/cache/summaryCaches';
+import { createSessionCache } from '../../lib/cache/sessionCache';
 import type { AchievementCatalogueOptions,AchievementMatchMode,AchievementProgress,CustomAchievementInput } from './types';
-
-let cached:{expires:number;data:AchievementProgress[]}|null=null;
-let pending:Promise<AchievementProgress[]>|null=null;
 
 async function requireJson<T>(response:Response,message:string):Promise<T>{
   if(response.status===401){clearSession();throw new Error('Session expired. Please sign in again.')}
@@ -11,19 +9,13 @@ async function requireJson<T>(response:Response,message:string):Promise<T>{
   if(!response.ok){const details=body.issues?.map(issue=>`${issue.path?.join('.')||'field'}: ${issue.message||'Invalid input'}`).join('; ');throw new Error([body.error||message,details].filter(Boolean).join(' — '))}
   return body;
 }
-export function invalidateAchievementProgress(){cached=null;pending=null}
+const achievementCache=createSessionCache(async()=>{
+  const response=await fetch('/api/achievements',{headers:authHeaders()});
+  return requireJson<AchievementProgress[]>(response,'Could not load wine collections');
+});
+export const invalidateAchievementProgress=achievementCache.invalidate;
 registerSummaryCache(invalidateAchievementProgress);
-export function getAchievementProgress():Promise<AchievementProgress[]>{
-  if(cached&&cached.expires>Date.now())return Promise.resolve(cached.data);
-  if(pending)return pending;
-  pending=(async()=>{
-    const response=await fetch('/api/achievements',{headers:authHeaders()});
-    const data=await requireJson<AchievementProgress[]>(response,'Could not load wine collections');
-    cached={data,expires:Date.now()+30_000};
-    return data;
-  })().finally(()=>{pending=null});
-  return pending;
-}
+export const getAchievementProgress=achievementCache.get;
 export async function getAchievementCatalogueOptions(){
   const response=await fetch('/api/achievements/catalogue-options',{headers:authHeaders()});
   return requireJson<AchievementCatalogueOptions>(response,'Could not load catalogue targets');

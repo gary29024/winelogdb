@@ -50,7 +50,14 @@ export async function listWines(params:URLSearchParams,options:{limit?:number;of
 export async function batchUpdateJournalExperience(ids:string[],patch:JournalBatchPatch){const r=await fetch('/api/journal/batch-experience',{method:'POST',headers:authHeaders(true),body:JSON.stringify({ids,...patch})});await requireOk(r,'Could not update selected wines');summariesChanged();return r.json() as Promise<{updated:number;tastingName?:string|null;venue?:string|null}>}
 export async function getWine(id:string):Promise<WineDetail>{const r=await fetch(`/api/wines/${id}`,{headers:authHeaders()});await requireOk(r,'Wine not found');const wine=await r.json() as WineDetail;return {...wine,groupSourcePhotos:wine.groupSourcePhotos??[]}}
 export async function saveWineTastingStructure(id:string,structure:TastingStructure|null){const r=await fetch(`/api/wines/${id}/tasting-structure`,{method:'PUT',headers:authHeaders(true),body:JSON.stringify({structure})});await requireOk(r,'Could not save tasting structure');summariesChanged();return r.json() as Promise<{ok:true}>}
-export async function setWineFavorite(id:string,favorite:boolean){const r=await fetch(`/api/wines/${id}/favorite`,{method:'PUT',headers:authHeaders(true),body:JSON.stringify({favorite})});await requireOk(r,'Could not update favorite');summariesChanged();return r.json() as Promise<{id:string;favorite:boolean}>}
+export async function setWineFavorite(id:string,favorite:boolean){
+  const r=await fetch(`/api/wines/${id}/favorite`,{method:'PUT',headers:authHeaders(true),body:JSON.stringify({favorite})});
+  await requireOk(r,'Could not update favorite');
+  const result=await r.json() as {id:string;favorite:boolean;changed?:boolean};
+  // Older Workers omit changed; continue invalidating for those responses.
+  if(result.changed!==false)summariesChanged();
+  return result;
+}
 /**
  * Photographs for a wine that already exists.
  *

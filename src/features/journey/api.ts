@@ -1,5 +1,6 @@
 import { authHeaders,clearSession } from '../../lib/auth/client';
 import { registerSummaryCache } from '../../lib/cache/summaryCaches';
+import { createSessionCache } from '../../lib/cache/sessionCache';
 import type { JourneySummary,StructureSample } from './model';
 
 export type CountryStat={country:string;wines:number;producers:number;appellations:number;averageRating:number|null};
@@ -48,24 +49,15 @@ export type JourneyData={
   recentTastings:RecentTasting[];
 };
 
-let cached:{expires:number;data:JourneyData}|null=null;
-let pending:Promise<JourneyData>|null=null;
-export function invalidateJourneyData(){cached=null;pending=null}
+const journeyCache=createSessionCache(async()=>{
+  const response=await fetch('/api/journey',{headers:authHeaders()});
+  if(response.status===401){clearSession();throw new Error('Session expired. Please sign in again.')}
+  if(!response.ok){const body=await response.json().catch(()=>({})) as {error?:string};throw new Error(body.error||'Could not load Wine Journey')}
+  return response.json() as Promise<JourneyData>;
+});
+export const invalidateJourneyData=journeyCache.invalidate;
 registerSummaryCache(invalidateJourneyData);
-
-export function getJourneyData():Promise<JourneyData>{
-  if(cached&&cached.expires>Date.now())return Promise.resolve(cached.data);
-  if(pending)return pending;
-  pending=(async()=>{
-    const response=await fetch('/api/journey',{headers:authHeaders()});
-    if(response.status===401){clearSession();throw new Error('Session expired. Please sign in again.')}
-    if(!response.ok){const body=await response.json().catch(()=>({})) as {error?:string};throw new Error(body.error||'Could not load Wine Journey')}
-    const data=await response.json() as JourneyData;
-    cached={data,expires:Date.now()+30_000};
-    return data;
-  })().finally(()=>{pending=null});
-  return pending;
-}
+export const getJourneyData=journeyCache.get;
 
 export type KindSpend={kind:string;label:string;runs:number;requests:number;searchQueries:number;promptTokens:number;outputTokens:number;units:number;unit:'run'|'wine';unitCount:number;costPerUnit:number;cost:number;costPerRun:number;searchesPerRun:number};
 export type UsageSummary={
