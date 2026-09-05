@@ -6,7 +6,7 @@ import { requireSession } from '../src/lib/auth/session';
 import { handleRecognitionRequest } from './recognitionHandler';
 import { ACHIEVEMENT_DEFINITION_VERSION,createCustomAchievementCollection,deleteCustomAchievementCollection,loadAchievementCatalogueOptions,loadAchievementProgress,setAchievementMatchMode,updateCustomAchievementCollection } from './achievementHandler';
 import { JOURNEY_PAYLOAD_VERSION,loadJourneySummary } from './journeyHandler';
-import { etagMatches,revisionETag } from '../src/lib/db/ownerRevision';
+import { currentOwnerRevision,etagMatches,revisionETag } from '../src/lib/db/ownerRevision';
 
 type Bindings={DB:D1Database;WINE_IMAGES:R2Bucket;ASSETS:Fetcher;GEMINI_API_KEY?:string;AUTH_SECRET:string;APP_PASSWORD:string;APP_URL:string;MAX_FILE_BYTES?:string;MAX_BATCH_FILES?:string};
 type AppEnv={Bindings:Bindings};
@@ -69,7 +69,10 @@ app.put('/api/achievements/:id/match-mode',async c=>{
 app.get('/api/achievements',async c=>{
   let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
   try{
-    const {revision,progress}=await loadAchievementProgress(c.env.DB,owner);
+    const initialRevision=await currentOwnerRevision(c.env.DB,owner);
+    const initialETag=initialRevision===null?null:revisionETag('achievements',ACHIEVEMENT_DEFINITION_VERSION,initialRevision);
+    if(initialETag&&etagMatches(c.req.header('If-None-Match'),initialETag)){privateRevalidated(c,initialETag);return c.body(null,304)}
+    const {revision,progress}=await loadAchievementProgress(c.env.DB,owner,0,initialRevision);
     const etag=revision===null?null:revisionETag('achievements',ACHIEVEMENT_DEFINITION_VERSION,revision);
     if(etag&&etagMatches(c.req.header('If-None-Match'),etag)){privateRevalidated(c,etag);return c.body(null,304)}
     privateRevalidated(c,etag);
@@ -80,7 +83,10 @@ app.get('/api/achievements',async c=>{
 app.get('/api/journey',async c=>{
   let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
   try{
-    const {revision,payload}=await loadJourneySummary(c.env.DB,owner);
+    const initialRevision=await currentOwnerRevision(c.env.DB,owner);
+    const initialETag=initialRevision===null?null:revisionETag('journey',JOURNEY_PAYLOAD_VERSION,initialRevision);
+    if(initialETag&&etagMatches(c.req.header('If-None-Match'),initialETag)){privateRevalidated(c,initialETag);return c.body(null,304)}
+    const {revision,payload}=await loadJourneySummary(c.env.DB,owner,initialRevision);
     const etag=revision===null?null:revisionETag('journey',JOURNEY_PAYLOAD_VERSION,revision);
     if(etag&&etagMatches(c.req.header('If-None-Match'),etag)){privateRevalidated(c,etag);return c.body(null,304)}
     privateRevalidated(c,etag);
@@ -92,11 +98,15 @@ app.put('/api/wines/:id/favorite',async c=>{
   let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
   const parsed=favoriteUpdateSchema.safeParse(await c.req.json().catch(()=>null));
   if(!parsed.success)return c.json({error:'Favorite must be true or false',issues:parsed.error.issues},400);
-  const id=c.req.param('id'),exists=await c.env.DB.prepare('SELECT id FROM wines WHERE owner_id=? AND id=?').bind(owner,id).first<{id:string}>();
-  if(!exists)return c.json({error:'Wine not found'},404);
-  const stamp=new Date().toISOString();
-  await c.env.DB.prepare('UPDATE wines SET favorite=?,updated_at=? WHERE owner_id=? AND id=?').bind(parsed.data.favorite?1:0,stamp,owner,id).run();
-  return c.json({id,favorite:parsed.data.favorite});
+  const id=c.req.param('id'),favorite=parsed.data.favorite?1:0;
+  // One statement for a changed favorite; retries do not write or bump revisions.
+  const result=await c.env.DB.prepare('UPDATE wines SET favorite=?,updated_at=? WHERE owner_id=? AND id=? AND coalesce(favorite,0)<>?')
+    .bind(favorite,new Date().toISOString(),owner,id,favorite).run();
+  if(!result.meta.changes){
+    const exists=await c.env.DB.prepare('SELECT id FROM wines WHERE owner_id=? AND id=?').bind(owner,id).first<{id:string}>();
+    if(!exists)return c.json({error:'Wine not found'},404);
+  }
+  return c.json({id,favorite:parsed.data.favorite,changed:Boolean(result.meta.changes)});
 });
 
 // The wine row already carries producer_id and favorite, and the base handler now

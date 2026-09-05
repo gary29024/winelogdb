@@ -216,8 +216,8 @@ async function storeJourneyPayload(db:D1Database,owner:string,revision:number,pa
 // application landing page. Serve them from the revision-keyed cache whenever the
 // journal has not changed, and report the revision so the route can answer a
 // conditional request with 304 instead of a body.
-export async function loadJourneySummary(db:D1Database,owner:string):Promise<{revision:number|null;payload:Record<string,unknown>}>{
-  const revision=await currentOwnerRevision(db,owner);
+export async function loadJourneySummary(db:D1Database,owner:string,initialRevision?:number|null):Promise<{revision:number|null;payload:Record<string,unknown>}>{
+  const revision=initialRevision===undefined?await currentOwnerRevision(db,owner):initialRevision;
   if(revision!==null){
     const cached=await cachedJourneyPayload(db,owner,revision);
     if(cached)return {revision,payload:cached};

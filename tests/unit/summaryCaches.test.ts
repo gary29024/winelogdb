@@ -52,6 +52,19 @@ describe('a summary stops being true the moment a wine changes',()=>{
     await journey.getJourneyData();
     expect(fetcher).toHaveBeenCalledTimes(2);
   });
+
+  it.each([false,true,undefined])('invalidates after favorite changes, including older Workers (changed: %s)',async changed=>{
+    const fetcher=vi.fn(async(input:RequestInfo|URL)=>new Response(JSON.stringify(
+      String(input).includes('/favorite')?{id:'w1',favorite:true,changed}:{summary:{totalWines:2}}
+    ),{status:200}));
+    vi.stubGlobal('fetch',fetcher);
+    const journey=await import('../../src/features/journey/api');
+    const {setWineFavorite}=await import('../../src/features/wines/api');
+    await journey.getJourneyData();
+    await setWineFavorite('w1',true);
+    await journey.getJourneyData();
+    expect(fetcher).toHaveBeenCalledTimes(changed===false?2:3);
+  });
 });
 
 describe('every write says so',()=>{
