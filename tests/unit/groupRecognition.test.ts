@@ -1,6 +1,6 @@
 import { describe,expect,it } from 'vitest';
 import { dedupeGroupRecognitionWines,groupRecognitionSchema,groupRecognitionWineSchema,parseGroupRecognition } from '../../src/features/recognition/groupSchema';
-import { groupCropRegion } from '../../src/features/uploads/cropGroupPhoto';
+import { cropOutputSize,groupCropRegion } from '../../src/features/uploads/cropGroupPhoto';
 
 const wine=(overrides:Record<string,unknown>={})=>({
   producer:'Krug',wineName:'Grande Cuvée 170ème Édition',vintage:null,country:'France',region:'Champagne',appellation:'Champagne',grapes:['Pinot Noir','Chardonnay'],grapeBlend:[],style:'sparkling',alcoholPercentage:null,locationName:null,confidence:.8,boundingBox:{xMin:100,yMin:100,xMax:300,yMax:900},...overrides
@@ -170,6 +170,32 @@ describe('group photo recognition',()=>{
     const region=groupCropRegion(1000,1000,box);
     expect(region.sx).toBeLessThan(400);
     expect(region.sx+region.sourceWidth).toBeGreaterThan(500);
+  });
+
+  it('lifts a narrow strip to the size an upload will take',()=>{
+    // Reported as: ten bottles in one photograph, and saving any of them came
+    // back as "width: Too small: expected number to be >=300". A tenth of a
+    // frame is a strip narrower than the upload floor, and the framing is the
+    // one thing all this box work was for - so the pixels stretch to meet the
+    // floor rather than the frame widening to borrow the neighbour back.
+    const region=groupCropRegion(1290,1295,{xMin:459,yMin:224,xMax:544,yMax:577});
+    expect(region.sourceWidth,'the frame itself stays as tight as it was').toBeLessThan(300);
+    const size=cropOutputSize(region.sourceWidth,region.sourceHeight,1600);
+    expect(size.targetWidth).toBeGreaterThanOrEqual(300);
+    expect(size.targetHeight).toBeGreaterThanOrEqual(300);
+    // Stretched, not squashed: the bottle keeps its shape.
+    expect(size.targetWidth/size.targetHeight).toBeCloseTo(region.sourceWidth/region.sourceHeight,2);
+  });
+
+  it('leaves a crop that is already big enough exactly as it is',()=>{
+    expect(cropOutputSize(900,1400,1600)).toEqual({targetWidth:900,targetHeight:1400});
+    // And still comes down to the long edge when a crop is larger than that.
+    expect(cropOutputSize(1600,3200,1600)).toEqual({targetWidth:800,targetHeight:1600});
+  });
+
+  it('will not stretch past the far end of what an upload takes',()=>{
+    const size=cropOutputSize(4,12000,1600);
+    expect(size.targetHeight).toBeLessThanOrEqual(12000);
   });
 
   it('never reaches outside the photo for a bottle at the edge',()=>{

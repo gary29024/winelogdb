@@ -1,3 +1,4 @@
+import { uploadLimits } from './validation';
 import type { GroupBoundingBox } from '../recognition/groupSchema';
 import type { PhotoMetadata } from './photoMetadata';
 import type { WinePhoto } from '../wines/api';
@@ -27,14 +28,36 @@ export function groupCropRegion(width:number,height:number,box:GroupBoundingBox)
   return {sx,sy,sourceWidth,sourceHeight};
 }
 
+/**
+ * How big the crop is written out.
+ *
+ * Reported as: ten bottles in one photograph, and saving any of them came back
+ * as "width: Too small: expected number to be >=300". A crop is uploaded as a
+ * wine photograph and the upload floor is 300px on both edges, but a tenth of a
+ * frame is narrower than that - which only became true once the boxes were
+ * tight enough to be worth having.
+ *
+ * The framing is the one thing all that box work was for, so the pixels stretch
+ * to meet the floor rather than the frame widening to borrow the neighbouring
+ * bottle back into shot. A soft thumbnail of the right bottle beats a sharp one
+ * with somebody else's label in it, and beats a save that will not go through.
+ */
+export function cropOutputSize(sourceWidth:number,sourceHeight:number,maxEdge:number){
+  const fit=Math.min(1,maxEdge/Math.max(sourceWidth,sourceHeight));
+  const floor=uploadLimits.minDimension/Math.min(sourceWidth,sourceHeight);
+  // Never past the far end of what an upload takes, however thin the strip.
+  const ceiling=uploadLimits.maxDimension/Math.max(sourceWidth,sourceHeight);
+  const scale=Math.min(Math.max(fit,floor),ceiling);
+  return {targetWidth:Math.max(1,Math.ceil(sourceWidth*scale)),targetHeight:Math.max(1,Math.ceil(sourceHeight*scale))};
+}
+
 export async function cropGroupPhoto(file:File,box:GroupBoundingBox,metadata?:PhotoMetadata,maxEdge=1600):Promise<WinePhoto>{
   const {image,url}=await loadImage(file);
   try{
     const width=image.naturalWidth,height=image.naturalHeight;
     if(!width||!height)throw new Error(`${file.name}: invalid image dimensions`);
     const {sx,sy,sourceWidth,sourceHeight}=groupCropRegion(width,height,box);
-    const scale=Math.min(1,maxEdge/Math.max(sourceWidth,sourceHeight));
-    const targetWidth=Math.max(1,Math.round(sourceWidth*scale)),targetHeight=Math.max(1,Math.round(sourceHeight*scale));
+    const {targetWidth,targetHeight}=cropOutputSize(sourceWidth,sourceHeight,maxEdge);
     const canvas=document.createElement('canvas');canvas.width=targetWidth;canvas.height=targetHeight;
     const context=canvas.getContext('2d');if(!context)throw new Error('Image cropping is not available in this browser');
     context.drawImage(image,sx,sy,Math.min(sourceWidth,width-sx),Math.min(sourceHeight,height-sy),0,0,targetWidth,targetHeight);

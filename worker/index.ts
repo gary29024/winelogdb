@@ -148,6 +148,11 @@ app.post('/api/wines',async c=>{
  try{validateBatch(files,{maxFiles:Number(c.env.MAX_BATCH_FILES)||12,maxBytes:Number(c.env.MAX_FILE_BYTES)||10485760,minDimension:300,maxDimension:12000})}catch(e){return c.json({error:(e as Error).message},400)}
  const dimensions=parseJson<unknown[]>(form.get('dimensions'),[]),metadata=parseJson<PhotoMetadata[]>(form.get('metadata'),[]);
  if(dimensions.length!==files.length||metadata.length!==files.length)return c.json({error:'Dimensions and metadata are required for every saved photo'},400);
+ // Checked here rather than inside the upload loop: parsing there threw a raw
+ // ZodError into the 500 handler, so a crop one pixel under the floor reached
+ // the screen as [{"origin":"number","code":"too_small",...}] with nothing to
+ // say which photo or what to do. Same shape as the wine body above.
+ for(const entry of dimensions){const size=dimensionsSchema.safeParse(entry);if(!size.success)return c.json({error:'Invalid photo dimensions',issues:size.error.issues},400)}
  const uploaded:Array<{key:string;imageId:string;file:File;dim:{width:number;height:number};meta:ReturnType<typeof normalizeMeta>}>=[];
  try{
   for(let i=0;i<files.length;i++){
@@ -207,6 +212,11 @@ app.post('/api/wines/:id/images',async c=>{
  try{validateBatch(files,{maxFiles,maxBytes:Number(c.env.MAX_FILE_BYTES)||10485760,minDimension:300,maxDimension:12000})}catch(e){return c.json({error:(e as Error).message},400)}
  const dimensions=parseJson<unknown[]>(form.get('dimensions'),[]),metadata=parseJson<PhotoMetadata[]>(form.get('metadata'),[]);
  if(dimensions.length!==files.length||metadata.length!==files.length)return c.json({error:'Dimensions and metadata are required for every saved photo'},400);
+ // Checked here rather than inside the upload loop: parsing there threw a raw
+ // ZodError into the 500 handler, so a crop one pixel under the floor reached
+ // the screen as [{"origin":"number","code":"too_small",...}] with nothing to
+ // say which photo or what to do. Same shape as the wine body above.
+ for(const entry of dimensions){const size=dimensionsSchema.safeParse(entry);if(!size.success)return c.json({error:'Invalid photo dimensions',issues:size.error.issues},400)}
  const uploaded:Array<{key:string;imageId:string;file:File;dim:{width:number;height:number};meta:ReturnType<typeof normalizeMeta>}>=[];
  try{
   for(let i=0;i<files.length;i++){

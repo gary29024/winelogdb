@@ -144,3 +144,24 @@ describe('removing one photo',()=>{
     expect(response.status).toBe(200);
   });
 });
+
+describe('a photo that is too small to store',()=>{
+  it('says which field and what the floor is, rather than dumping a parser error',async()=>{
+    // Reported as: saving a bottle out of a ten-bottle group photo answered
+    // with [{"origin":"number","code":"too_small","minimum":300,...}] and a 500.
+    // The dimensions were parsed inside the upload loop, so the ZodError went
+    // to the crash handler with nothing to say which photo or what to do.
+    const {response,put}=await post([photo()],{dimensions:[{width:141,height:1200}]});
+    expect(response.status,'a rejected photo is the caller’s fault, not a crash').toBe(400);
+    const body=await response.json() as {error:string;issues:Array<{path:string[];message:string}>};
+    expect(body.error).toBe('Invalid photo dimensions');
+    expect(body.issues[0].path).toEqual(['width']);
+    expect(body.issues[0].message).toContain('300');
+    expect(put,'and nothing was written to R2 first').toEqual([]);
+  });
+
+  it('takes a photo that meets the floor exactly',async()=>{
+    const {response}=await post([photo()],{dimensions:[{width:300,height:300}]});
+    expect(response.status).toBe(201);
+  });
+});
