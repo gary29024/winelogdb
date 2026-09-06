@@ -36,6 +36,21 @@ async function openJournal(at:string){
 const search=()=>host?.querySelector('[data-testid="search"]')?.textContent??'';
 const journalCalls=()=>requested.filter(url=>url.startsWith('/api/journal'));
 
+/**
+ * Waits for the search debounce to land, rather than sleeping past it.
+ *
+ * A fixed sleep against a 300ms debounce left forty milliseconds for a timer to
+ * fire, a state flush and a render - which is a race, and the kind that fails
+ * once on a loaded machine and never again when you go looking for it. Polling
+ * for the condition the case is about to assert costs nothing when the machine
+ * is quiet and does not lie when it is not.
+ */
+const settled=async(until:()=>boolean,budget=3000)=>{
+  const deadline=Date.now()+budget;
+  do{await act(async()=>{await new Promise(resolve=>setTimeout(resolve,20))})}
+  while(!until()&&Date.now()<deadline);
+};
+
 beforeEach(()=>{window.sessionStorage.clear()});
 afterEach(()=>{
   act(()=>root?.unmount());
@@ -70,7 +85,7 @@ describe('Journal filter memory',()=>{
     // must not emit a second commit that clears the restored offset.
     window.sessionStorage.setItem(KEY,'query=Dujac&offset=36');
     await openJournal('/journal');
-    await act(async()=>{await new Promise(resolve=>setTimeout(resolve,400))});
+    await settled(()=>search().includes('offset=36'));
     expect(search()).toContain('offset=36');
     expect(search()).toContain('query=Dujac');
   });
@@ -109,7 +124,7 @@ describe('Journal search responsiveness',()=>{
     expect(search()).toBe('');
     expect(journalCalls()).toHaveLength(before);
 
-    await act(async()=>{await new Promise(resolve=>setTimeout(resolve,340))});
+    await settled(()=>search()==='?query=rosado');
     expect(search()).toBe('?query=rosado');
     expect(journalCalls()).toHaveLength(before+1);
     expect(journalCalls().at(-1)).toContain('query=rosado');
@@ -164,7 +179,7 @@ describe('clearing the journal filters',()=>{
 
     const before=journalCalls().length;
     await act(async()=>{reset()!.click()});
-    await act(async()=>{await new Promise(resolve=>setTimeout(resolve,450))});
+    await settled(()=>search()===''&&reset()===undefined);
 
     expect(search()).toBe('');
     expect((host!.querySelector('input[type=search]') as HTMLInputElement).value).toBe('');
@@ -192,13 +207,16 @@ describe('resetting the filters',()=>{
       await act(async()=>{setter.call(el,value);el.dispatchEvent(new Event('input',{bubbles:true}))});
     };
     await setValue(host.querySelector('input[type=search]') as HTMLInputElement,'chambertin');
-    await act(async()=>{await new Promise(resolve=>setTimeout(resolve,420))});
+    // Reset only appears once a filter is actually committed, so it is the
+    // signal that the debounce has landed.
+    await settled(()=>[...host!.querySelectorAll('button')].some(button=>button.textContent==='Reset filters'));
     await setValue(host.querySelector('.filter-month input') as HTMLInputElement,'2026-08');
     expect((host.querySelector('.filter-month input') as HTMLInputElement).value).toBe('2026-08');
 
     const reset=[...host.querySelectorAll('button')].find(button=>button.textContent==='Reset filters')!;
     await act(async()=>{reset.dispatchEvent(new MouseEvent('click',{bubbles:true}))});
-    await act(async()=>{await new Promise(resolve=>setTimeout(resolve,450))});
+    await settled(()=>(host!.querySelector('input[type=search]') as HTMLInputElement).value===''
+      &&(host!.querySelector('.filter-month input') as HTMLInputElement).value==='');
 
     expect((host.querySelector('input[type=search]') as HTMLInputElement).value).toBe('');
     expect((host.querySelector('.filter-month input') as HTMLInputElement).value).toBe('');
@@ -220,7 +238,7 @@ describe('returning to a remembered search',()=>{
     const {LibraryPage}=await import('../../src/features/wines/LibraryPage');
     host=document.createElement('div');document.body.appendChild(host);root=createRoot(host);
     await act(async()=>{root!.render(<MemoryRouter initialEntries={['/journal']}><LibraryPage/></MemoryRouter>)});
-    await act(async()=>{await new Promise(resolve=>setTimeout(resolve,450))});
+    await settled(()=>(host!.querySelector('input[type=search]') as HTMLInputElement)?.value==='chambertin');
 
     expect((host.querySelector('input[type=search]') as HTMLInputElement).value).toBe('chambertin');
     expect(urls.filter(url=>url.includes('/api/journal')||url.includes('/api/wines'))).toHaveLength(1);
