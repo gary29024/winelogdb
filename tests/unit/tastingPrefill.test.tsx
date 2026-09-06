@@ -177,12 +177,25 @@ describe('a bottle the evening already holds',()=>{
   const photo={file:new File([new Uint8Array([1,2,3])],'bottle.jpg',{type:'image/jpeg'}),width:1200,height:1600};
   const already={wineId:'w1',producer:'Domaine Dujac',wineName:'Morey-Saint-Denis',vintage:2019};
   const scanned={producer:'Domaine Dujac',wineName:'Morey-Saint-Denis',vintage:2019};
-  const settle=async()=>{await act(async()=>{await new Promise(resolve=>setTimeout(resolve,450))})};
+  /**
+   * Waits for what the case is about to assert.
+   *
+   * A fixed sleep against a debounced probe is a race - it fails once on a
+   * loaded machine and never again when you go looking for it. A case expecting
+   * something polls for it; a case expecting nothing has to wait out the window
+   * in which it could have happened, so that one still sleeps, and for twice as
+   * long as it used to.
+   */
+  const settle=async(until?:()=>boolean)=>{
+    const deadline=Date.now()+(until?3000:900);
+    do{await act(async()=>{await new Promise(resolve=>setTimeout(resolve,20))})}
+    while(until?!until()&&Date.now()<deadline:Date.now()<deadline);
+  };
   const named=(text:string)=>[...host!.querySelectorAll('button')].find(node=>node.textContent?.includes(text));
 
   it('offers to add the photo to it rather than making a second copy',async()=>{
     await mount({photos:[photo],initial:scanned},tasting,undefined,already);
-    await settle();
+    await settle(()=>host!.textContent!.includes('is already in this tasting'));
     expect(host!.textContent).toContain('is already in this tasting');
     await act(async()=>{named('Add this photo to it')!.click()});
     expect(calls.some(([url])=>url.includes('/api/wines/w1/images')),'the photo went to the wine that existed').toBe(true);
@@ -191,7 +204,7 @@ describe('a bottle the evening already holds',()=>{
 
   it('still lets a second bottle of the same cuvée be logged',async()=>{
     await mount({photos:[photo],initial:scanned},tasting,undefined,already);
-    await settle();
+    await settle(()=>Boolean(named('Save a separate wine')));
     await act(async()=>{named('Save a separate wine')!.click()});
     expect(host!.textContent).not.toContain('is already in this tasting');
   });
@@ -222,7 +235,20 @@ describe('the house the library already knows',()=>{
   // field as the label read it, so the same producer entered under two spellings
   // that both resolved to it and consistency depended on noticing.
   const field=(name:string)=>host!.querySelector(`[name="${name}"]`) as HTMLInputElement;
-  const settle=async()=>{await act(async()=>{await new Promise(resolve=>setTimeout(resolve,400))})};
+  /**
+   * Waits for what the case is about to assert.
+   *
+   * A fixed sleep against a debounced probe is a race - it fails once on a
+   * loaded machine and never again when you go looking for it. A case expecting
+   * something polls for it; a case expecting nothing has to wait out the window
+   * in which it could have happened, so that one still sleeps, and for twice as
+   * long as it used to.
+   */
+  const settle=async(until?:()=>boolean)=>{
+    const deadline=Date.now()+(until?3000:900);
+    do{await act(async()=>{await new Promise(resolve=>setTimeout(resolve,20))})}
+    while(until?!until()&&Date.now()<deadline:Date.now()<deadline);
+  };
 
   afterEach(()=>{producerResolution=null});
 
@@ -230,7 +256,7 @@ describe('the house the library already knows',()=>{
     producerResolution={matched:true,inputName:'Antinori',
       producer:{id:'p1',canonicalName:'Marchesi Antinori',matchedName:'Antinori',matchType:'alias',researchedAt:null,catalogCount:0,tastedCount:9}};
     await mount({initial:{producer:'Antinori',wineName:'Tignanello'}});
-    await settle();
+    await settle(()=>field('producer').value==='Marchesi Antinori');
     expect(field('producer').value).toBe('Marchesi Antinori');
     expect(host!.textContent,'and says it did, and that it is reversible').toContain('Saved under the name your library uses');
   });
@@ -240,7 +266,7 @@ describe('the house the library already knows',()=>{
     // "Château Margaux" and also inside a village nobody meant.
     producerResolution={matched:false,inputName:'Antinori',suggestion:{id:'p1',canonicalName:'Marchesi Antinori',tastedCount:9}};
     await mount({initial:{producer:'Antinori',wineName:'Tignanello'}});
-    await settle();
+    await settle(()=>host!.textContent!.includes('Did you mean'));
     expect(field('producer').value,'untouched until asked').toBe('Antinori');
     expect(host!.textContent).toContain('Did you mean');
     await act(async()=>{[...host!.querySelectorAll('button')].find(node=>node.textContent==='Use it')!.click()});
