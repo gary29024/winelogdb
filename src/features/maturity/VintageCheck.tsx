@@ -2,6 +2,7 @@ import { useEffect,useState } from 'react';
 import { maturityPair,vintageCell,windowShift,type VintageSubject,type VintageWindow } from '../../lib/maturity/vintageWindow';
 import { getVintageWindow,lookUpVintageWindow } from './api';
 import { DrinkingWindow } from './DrinkingWindow';
+import { FriendResearchStatus } from '../auth/FriendResearchStatus';
 import '../../maturity.css';
 
 type Wine=VintageSubject&{classification?:string|null};
@@ -31,6 +32,7 @@ export function VintageCheck({wine,onResearched}:{wine:Wine;
   onResearched?:()=>void}){
   const [researched,setResearched]=useState<VintageWindow|null>(null);
   const [busy,setBusy]=useState(false),[error,setError]=useState('');
+  const [friendOperationId,setFriendOperationId]=useState<string>();
   const subject:VintageSubject={country:wine.country,region:wine.region,appellation:wine.appellation,
     vintage:wine.vintage,wineStyle:wine.wineStyle,classification:wine.classification,
     // For the baseline the model is quoted, never for the cell: a Dom Perignon
@@ -80,7 +82,7 @@ export function VintageCheck({wine,onResearched}:{wine:Wine;
    */
   async function look(again=false){
     setBusy(true);setError('');
-    try{const {window}=await lookUpVintageWindow(subject,again);setResearched(window);if(window)onResearched?.()}
+    try{const {window,friendOperationId}=await lookUpVintageWindow(subject,again);setFriendOperationId(friendOperationId);setResearched(window);if(window)onResearched?.()}
     catch(e){setError((e as Error).message||'Could not look up that vintage')}
     finally{setBusy(false)}
   }
@@ -90,6 +92,7 @@ export function VintageCheck({wine,onResearched}:{wine:Wine;
   if(!pair.calculated&&!pair.researched&&!askable)return null;
 
   return <div className="vintage-check">
+    {friendOperationId&&<FriendResearchStatus operationId={friendOperationId} onComplete={()=>{setFriendOperationId(undefined);void getVintageWindow(subject).then(window=>{setResearched(window);if(window)onResearched?.()})}}/>}
     <DrinkingWindow wine={wine}/>
 
     {pair.researched

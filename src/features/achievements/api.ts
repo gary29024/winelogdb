@@ -1,3 +1,4 @@
+import { apiFetch } from '../../lib/auth/client';
 import { authHeaders,clearSession } from '../../lib/auth/client';
 import { registerSummaryCache } from '../../lib/cache/summaryCaches';
 import { createSessionCache } from '../../lib/cache/sessionCache';
@@ -10,25 +11,25 @@ async function requireJson<T>(response:Response,message:string):Promise<T>{
   return body;
 }
 const achievementCache=createSessionCache(async()=>{
-  const response=await fetch('/api/achievements',{headers:authHeaders()});
+  const response=await apiFetch('/api/achievements',{headers:authHeaders()});
   return requireJson<AchievementProgress[]>(response,'Could not load wine collections');
 });
 export const invalidateAchievementProgress=achievementCache.invalidate;
 registerSummaryCache(invalidateAchievementProgress);
 export const getAchievementProgress=achievementCache.get;
 export async function getAchievementCatalogueOptions(){
-  const response=await fetch('/api/achievements/catalogue-options',{headers:authHeaders()});
+  const response=await apiFetch('/api/achievements/catalogue-options',{headers:authHeaders()});
   return requireJson<AchievementCatalogueOptions>(response,'Could not load catalogue targets');
 }
 export async function saveCustomAchievement(input:CustomAchievementInput,id?:string){
-  const response=await fetch(id?`/api/achievements/custom/${id}`:'/api/achievements/custom',{method:id?'PUT':'POST',headers:authHeaders(true),body:JSON.stringify(input)});
+  const response=await apiFetch(id?`/api/achievements/custom/${id}`:'/api/achievements/custom',{method:id?'PUT':'POST',headers:authHeaders(true),body:JSON.stringify(input)});
   const result=await requireJson<{id:string}>(response,id?'Could not update collection':'Could not create collection');invalidateAchievementProgress();return result;
 }
 export async function deleteCustomAchievement(id:string){
-  const response=await fetch(`/api/achievements/custom/${id}`,{method:'DELETE',headers:authHeaders(true),body:JSON.stringify({confirmation:'DELETE_COLLECTION'})});
+  const response=await apiFetch(`/api/achievements/custom/${id}`,{method:'DELETE',headers:authHeaders(true),body:JSON.stringify({confirmation:'DELETE_COLLECTION'})});
   const result=await requireJson<{deleted:true}>(response,'Could not delete collection');invalidateAchievementProgress();return result;
 }
 export async function setAchievementMatchMode(id:string,matchMode:AchievementMatchMode){
-  const response=await fetch(`/api/achievements/${id}/match-mode`,{method:'PUT',headers:authHeaders(true),body:JSON.stringify({matchMode})});
+  const response=await apiFetch(`/api/achievements/${id}/match-mode`,{method:'PUT',headers:authHeaders(true),body:JSON.stringify({matchMode})});
   const result=await requireJson<{matchMode:AchievementMatchMode}>(response,'Could not update collection matching');invalidateAchievementProgress();return result;
 }

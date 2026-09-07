@@ -1,3 +1,4 @@
+import { assertResearchInput,type CreditContext } from '../../../worker/multiUser/provider';
 import { deepSearchSchema,type DeepSearchResult } from '../db/schema';
 import { ensureProducerEntity } from '../producers/entities';
 import { parseStructuredJsonText } from '../producers/structuredJson';
@@ -13,8 +14,8 @@ import { auditTechnicalContradictions,technicalContradictionFailureMessage } fro
 import { updateWineResearchRun } from './backgroundJobs';
 import { recordAiUsage,type AnalyticsSink } from '../usage/aiUsage';
 
-type Env={DB:D1Database;GEMINI_API_KEY?:string;RESEARCH_QUEUE:Queue<unknown>;AI_USAGE?:AnalyticsSink};
-type WineRow={producer:string;producer_id:string|null;cuvee_id:string|null;wine_name:string;vintage:number|null;country:string|null;region:string|null;appellation:string|null;grapes_json:string;grape_blend_json:string};
+type Env={CREDIT_CONTEXT?:CreditContext;DB:D1Database;GEMINI_API_KEY?:string;RESEARCH_QUEUE:Queue<unknown>;AI_USAGE?:AnalyticsSink;CREDIT_RESEARCH_SCOPES?:string[]};
+type WineRow={producer:string;producer_id:string|null;cuvee_id:string|null;wine_name:string;vintage:number|null;country:string|null;region:string|null;appellation:string|null;wine_style?:string|null;grapes_json:string;grape_blend_json:string};
 type ResearchRow={deep_search_json:string};
 const PRIMARY_MODEL='gemini-3.8-flash';
 const FALLBACK_MODEL='gemini-3.7-flash';
@@ -50,7 +51,7 @@ const scopeNames:Record<ResearchScope,string>={producer:'producer profile and ge
 const scopeFields:Record<ResearchScope,string>={producer:'producerDetails, producerWinemakingPractices',terroir:'terroir',vintage_context:'vintageQuality',wine_vintage:'summary, winemakingTechniques, drinkingWindow'};
 
 function log(level:'log'|'warn'|'error',data:Record<string,unknown>){console[level](JSON.stringify({event:'wine_batch_research',...data}))}
-function researchTargets(wine:WineRow){return buildResearchTargets({producer:wine.producer,producerId:wine.producer_id,cuveeId:wine.cuvee_id,wineName:wine.wine_name,vintage:wine.vintage,country:wine.country,region:wine.region,appellation:wine.appellation})}
+function researchTargets(wine:WineRow){return buildResearchTargets({producer:wine.producer,producerId:wine.producer_id,cuveeId:wine.cuvee_id,wineName:wine.wine_name,vintage:wine.vintage,country:wine.country,region:wine.region,appellation:wine.appellation,wineStyle:wine.wine_style})}
 async function saveSnapshot(db:D1Database,owner:string,id:string,result:DeepSearchResult){const stamp=now();await db.prepare('UPDATE wines SET deep_search_json=?,deep_search_model=?,deep_search_updated_at=?,updated_at=? WHERE id=? AND owner_id=?').bind(JSON.stringify(result),result.model,stamp,stamp,id,owner).run()}
 
 async function seedProducerProfileResearch(db:D1Database,owner:string,wine:WineRow,targets:ResearchTarget[]){
@@ -79,18 +80,23 @@ function cachedContext(cache:Map<ResearchScope,CachedResearch>){
   return [get('producer','producerDetails')&&`Cached producer profile: ${get('producer','producerDetails')}`,get('producer','producerWinemakingPractices')&&`Cached producer-wide winemaking practices: ${get('producer','producerWinemakingPractices')}`,get('terroir','terroir')&&`Cached stable terroir: ${get('terroir','terroir')}`,get('vintage_context','vintageQuality')&&`Cached vintage context: ${get('vintage_context','vintageQuality')}`,get('wine_vintage','summary')&&`Cached exact-wine summary: ${get('wine_vintage','summary')}`].filter(Boolean).join('\n');
 }
 
-async function loadWine(db:D1Database,owner:string,wineId:string){
-  const wine=await db.prepare('SELECT producer,producer_id,cuvee_id,wine_name,vintage,country,region,appellation,grapes_json,grape_blend_json FROM wines WHERE id=? AND owner_id=?').bind(wineId,owner).first<WineRow>();if(!wine)return null;
+async function loadWine(db:D1Database,owner:string,wineId:string,credit?:CreditContext){
+  const wine=await db.prepare('SELECT producer,producer_id,cuvee_id,wine_name,vintage,country,region,appellation,wine_style,grapes_json,grape_blend_json FROM wines WHERE id=? AND owner_id=?').bind(wineId,owner).first<WineRow>();if(!wine)return null;
+  await assertResearchInput(credit,owner,wineId,'wine',wine);
+  if(credit)return wine; // Keep the cache identity used by the accepted quote.
   if(!wine.producer_id){const entity=await ensureProducerEntity(db,owner,wine.producer);wine.producer_id=entity.id;await db.prepare('UPDATE wines SET producer_id=? WHERE id=? AND owner_id=?').bind(entity.id,wineId,owner).run()}else await ensureProducerEntity(db,owner,wine.producer);
   return wine;
 }
 
 async function prepare(env:Env,owner:string,wineId:string,refresh:'none'|'vintage'|'all'){
-  const wine=await loadWine(env.DB,owner,wineId);if(!wine)throw new Error('Wine not found');const targets=researchTargets(wine);await seedProducerProfileResearch(env.DB,owner,wine,targets);
+  const wine=await loadWine(env.DB,owner,wineId,env.CREDIT_CONTEXT);if(!wine)throw new Error('Wine not found');const targets=researchTargets(wine);await seedProducerProfileResearch(env.DB,owner,wine,targets);
   let cache=await loadResearchCache(env.DB,owner,targets);cache=await bridgePriorCaches(env.DB,owner,wine,targets,cache);cache=await seedFromLegacy(env.DB,owner,wine,targets,cache);
   const force=new Set<ResearchScope>(refresh==='all'?targets.map(x=>x.scope):refresh==='vintage'?(['vintage_context','wine_vintage'] as ResearchScope[]):[]);
   if(force.size){for(const target of targets.filter(x=>force.has(x.scope))){await env.DB.prepare('DELETE FROM research_cache WHERE owner_id=? AND scope=? AND cache_key=?').bind(owner,target.scope,target.cacheKey).run();cache.delete(target.scope)}}
-  const missing=targets.filter(target=>!cache.has(target.scope)).map(target=>target.scope);return {wine,targets,cache,missing};
+  if(env.CREDIT_RESEARCH_SCOPES){const reusable=await loadResearchCache(env.DB,owner,targets,true);for(const target of targets)if(!force.has(target.scope)&&!cache.has(target.scope)&&reusable.has(target.scope))cache.set(target.scope,reusable.get(target.scope)!)}
+  const missing=targets.filter(target=>!cache.has(target.scope)).map(target=>target.scope);
+  if(env.CREDIT_RESEARCH_SCOPES&&missing.some(scope=>!env.CREDIT_RESEARCH_SCOPES!.includes(scope)))throw new Error('Research access changed; request a new credit quote');
+  return {wine,targets,cache,missing};
 }
 
 function sourcesFrom(metadata?:GroundingMetadata){
@@ -116,8 +122,10 @@ async function syncProducerScope(db:D1Database,owner:string,wine:WineRow,entry:C
 }
 
 async function finalize(env:Env,owner:string,wineId:string,wine:WineRow,targets:ResearchTarget[]){
-  const cache=await loadResearchCache(env.DB,owner,targets),missing=targets.filter(target=>!cache.has(target.scope));if(missing.length)throw new Error(`Deep Search cache is incomplete: ${missing.map(x=>scopeNames[x.scope]).join(', ')}`);
-  const result=assembleDeepSearch(cache,targets);await saveSnapshot(env.DB,owner,wineId,result);return result;
+  const cache=await loadResearchCache(env.DB,owner,targets,Boolean(env.CREDIT_RESEARCH_SCOPES)),missing=targets.filter(target=>!cache.has(target.scope));if(missing.length)throw new Error(`Deep Search cache is incomplete: ${missing.map(x=>scopeNames[x.scope]).join(', ')}`);
+  const result=assembleDeepSearch(cache,targets);
+  const own=new Map([...cache].filter(([,entry])=>!entry.contributorId||entry.contributorId===owner));
+  await saveSnapshot(env.DB,owner,wineId,assembleDeepSearch(own,targets));return result;
 }
 
 async function cancelAttemptBatch(env:Env,requestId:string,wineId:string,attempt:number,googleName:string,reason:string){
@@ -126,9 +134,9 @@ async function cancelAttemptBatch(env:Env,requestId:string,wineId:string,attempt
 }
 
 async function submitAttempt(env:Env,owner:string,wineId:string,requestId:string,attempt:number,scopes:ResearchScope[],feedback:ScopeFeedback={},attempted:readonly string[]=[]){
-  const wine=await loadWine(env.DB,owner,wineId);if(!wine)throw new Error('Wine not found');const targets=researchTargets(wine),cache=await loadResearchCache(env.DB,owner,targets),entry=buildRequest(wine,scopes,cache,feedback),model=await chooseResearchModel(env.DB,owner,attempted);let googleName:string|undefined,jobId:string|undefined;
+  const wine=await loadWine(env.DB,owner,wineId,env.CREDIT_CONTEXT);if(!wine)throw new Error('Wine not found');const targets=researchTargets(wine),cache=await loadResearchCache(env.DB,owner,targets),entry=buildRequest(wine,scopes,cache,feedback),model=await chooseResearchModel(env.DB,owner,attempted);let googleName:string|undefined,jobId:string|undefined;
   try{
-    googleName=await createGeminiBatch(env.GEMINI_API_KEY,model,`winelog-wine-${requestId}-${attempt}`,[entry]);
+    googleName=await createGeminiBatch(env.GEMINI_API_KEY,model,`winelog-wine-${requestId}-${attempt}`,[entry],env.CREDIT_CONTEXT);
     jobId=await createResearchBatchJob(env.DB,{owner,requestId,targetKind:'wine',targetId:wineId,googleBatchName:googleName,model,attempt,keys:scopes});
     const scopeCount=`${scopes.length} Deep Search scope${scopes.length===1?'':'s'}`;
     await updateWineResearchRun(env.DB,owner,requestId,'researching',
@@ -186,7 +194,7 @@ async function retryOrFail(env:Env,owner:string,wineId:string,requestId:string,a
 }
 
 export async function pollWineBatchResearch(env:Env,owner:string,wineId:string,requestId:string,jobId:string,pollCount:number){
-  const job=await getResearchBatchJob(env.DB,owner,jobId);if(!job||job.status!=='running')return;const scopes=job.keys as ResearchScope[],fetched=await fetchGeminiBatch(env.GEMINI_API_KEY,job.googleBatchName);
+  const job=await getResearchBatchJob(env.DB,owner,jobId);if(!job||job.status!=='running')return;const scopes=job.keys as ResearchScope[],fetched=await fetchGeminiBatch(env.GEMINI_API_KEY,job.googleBatchName,{},env.CREDIT_CONTEXT);
   if(!fetched.ok){
     if(fetched.status===429||fetched.status>=500){
       const action=researchBatchTransientAction(job.attempt,pollCount);
@@ -225,7 +233,7 @@ export async function pollWineBatchResearch(env:Env,owner:string,wineId:string,r
   try{
     const metadata=groundingMetadata,raw=parseStructuredJsonText(text) as Record<string,unknown>,parsed=deepSearchSchema.safeParse({...raw,sources:sourcesFrom(metadata),model:`${job.model} (batch)`,researchedAt:now()});if(!parsed.success)throw new Error(`Deep Search returned invalid fields: ${parsed.error.issues.map(x=>x.path.join('.')||x.message).join(', ')}`);
     const rawProvenance=buildDeepSearchProvenance(parsed.data,metadata),conflictAudit=auditTechnicalContradictions(parsed.data,rawProvenance),provenance=conflictAudit.provenance,researched:DeepSearchResult={...parsed.data,provenance};
-    const wine=await loadWine(env.DB,owner,wineId);if(!wine)throw new Error('Wine not found');const targets=researchTargets(wine),entries=splitDeepSearchResult(researched,targets).filter(entry=>scopes.includes(entry.target.scope));failed=scopes.filter(scope=>!entries.some(entry=>entry.target.scope===scope&&scopeIsComplete(scope,entry.payload)));
+    const wine=await loadWine(env.DB,owner,wineId,env.CREDIT_CONTEXT);if(!wine)throw new Error('Wine not found');const targets=researchTargets(wine),entries=splitDeepSearchResult(researched,targets).filter(entry=>scopes.includes(entry.target.scope));failed=scopes.filter(scope=>!entries.some(entry=>entry.target.scope===scope&&scopeIsComplete(scope,entry.payload)));
     const completeEntries=entries.filter(entry=>scopeIsComplete(entry.target.scope,entry.payload));for(const entry of completeEntries){await upsertResearchCache(env.DB,owner,entry);if(entry.target.scope==='producer')await syncProducerScope(env.DB,owner,wine,entry)}
     if(failed.length){
       // Carry the gate's reasons into the retry: the fallback model is asked to

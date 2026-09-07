@@ -8,7 +8,7 @@ A private, Cloudflare-native wine notebook. React provides an accessible respons
 - `src/features/uploads`: multi-image selection, client previews/progress, validation, independent result state, and retries.
 - `src/features/recognition`: strict schema for model output and editable review.
 - `src/lib/db`: D1 schema/migrations; `src/lib/r2`: opaque collision-resistant keys.
-- `worker/index.ts`: the authenticated API. Gemini secrets and R2 bindings never enter browser code. Images are fetched only after ownership checks at `/api/images/:id` and cached privately for five minutes.
+- `worker/multiUserEntry.ts`: the public authentication, authorization, and credit boundary around the existing API. Images require current authorization; API and shared image responses use `no-store`.
 
 Uploads accept JPEG, PNG, WebP, or HEIC, up to 10 MiB and 12 files per batch. Dimensions must be 300–12,000 px. Each image receives its own row and state, so a failed upload or recognition can be retried without duplicating successful items. Wine deletion first removes the record; R2 objects are deleted only if no remaining image row references them.
 
@@ -16,7 +16,7 @@ Recognition is server-only and schema constrained. Returned JSON is parsed with 
 
 ## Local development
 
-Requires Node 20+ and a Cloudflare account.
+Requires Node 22.13+ (Node 24 recommended for SQLite tests) and a Cloudflare account.
 
 ```bash
 npm install
@@ -26,7 +26,7 @@ npm run db:migrate:local
 npm run dev
 ```
 
-WineLog is single-tenant: one deployment belongs to one person. `POST /api/auth/login` compares a submitted password against `APP_PASSWORD` in constant time and, on success, issues an HS256 bearer token that expires after seven days; every API query additionally scopes records by owner. Set `AUTH_SECRET` to at least 32 random bytes, and rotate it to invalidate every issued token at once. Put Cloudflare Access in front of the origin if you want a second factor ahead of the password.
+WineLog supports an invite-only pilot of up to 25 accounts. Google identities map to internal IDs, with explicitly configured `OWNER_GOOGLE_SUB` retaining the legacy `owner` data. Opaque, revocable HttpOnly cookie sessions replace password tokens. Owner invitations, selected-friend wine sharing, factual research reuse, and quoted AI credits are described in [MULTI_USER_ROLLOUT.md](MULTI_USER_ROLLOUT.md). Complete that cutover checklist before admitting members.
 
 ## Cloudflare setup and deployment
 
@@ -36,7 +36,7 @@ login, verification and troubleshooting. In outline:
 
 1. Create the resources: `wrangler d1 create winelogdb`, `wrangler r2 bucket create winelog-private`, and `wrangler queues create` for both `winelog-research` and `winelog-research-dlq`.
 2. Put the returned D1 ID in `wrangler.jsonc`, replacing the one committed there. Keep the R2 bucket private.
-3. Add secrets: `APP_PASSWORD`, `AUTH_SECRET`, and then whichever Gemini transport you are using — `GEMINI_API_KEY` for the direct API, or `CF_AI_GATEWAY_TOKEN` for Vertex through AI Gateway. The gateway does not use the key, so on that path leave it unset.
+3. Add `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `OWNER_GOOGLE_SUB`, `AUTH_SECRET`, and the Gemini transport credential (`GEMINI_API_KEY` or `CF_AI_GATEWAY_TOKEN`). Password login is disabled.
 4. Set `APP_URL` in `wrangler.jsonc` to the exact deployed origin, then redeploy.
 5. Apply schema with `npm run db:migrate`, then run `npm run deploy`.
 

@@ -1,3 +1,4 @@
+import { accountStorageKey } from '../../lib/auth/client';
 import { useEffect,useMemo,useRef,useState } from 'react';
 import { pourFamily } from '../../lib/wine/pourFamily';
 import { JOURNAL_BACK,linkFrom,type BackTarget } from './backTarget';
@@ -32,9 +33,9 @@ const monthLabel=(key:string)=>{
 const JOURNAL_FILTER_KEY='winelog-journal-filters';
 const savedJournalFilters=()=>{
   if(typeof window==='undefined')return '';
-  try{return window.sessionStorage.getItem(JOURNAL_FILTER_KEY)??''}catch{return ''}
+  try{return window.sessionStorage.getItem(accountStorageKey(JOURNAL_FILTER_KEY))??''}catch{return ''}
 };
-const forgetJournalFilters=()=>{try{window.sessionStorage.removeItem(JOURNAL_FILTER_KEY)}catch{}};
+const forgetJournalFilters=()=>{try{window.sessionStorage.removeItem(accountStorageKey(JOURNAL_FILTER_KEY))}catch{}};
 /**
  * Which query parameters count as filters for the reset control. The view mode
  * is a display preference rather than a filter, and offset only exists because
@@ -44,7 +45,7 @@ const FILTER_KEYS=['query','month','tasting','country','style','rating','sort','
 
 const initialView=():ViewMode=>{
   if(typeof window==='undefined')return 'grid';
-  const saved=window.localStorage.getItem('winelog-journal-view');
+  const saved=window.localStorage.getItem(accountStorageKey('winelog-journal-view'));
   return saved==='list'||saved==='grid'?saved:'grid';
 };
 const sharedText=(values:Array<string|null>)=>{
@@ -137,7 +138,7 @@ export function LibraryPage(){
     const requested=Number.parseInt(pageDraft,10),page=Number.isFinite(requested)?Math.min(Math.max(requested,1),totalPages):currentPage;
     setPageDraft(String(page));if(page!==currentPage)goToOffset((page-1)*PAGE_SIZE);
   }
-  function setView(next:ViewMode){setViewState(next);try{window.localStorage.setItem('winelog-journal-view',next)}catch{}}
+  function setView(next:ViewMode){setViewState(next);try{window.localStorage.setItem(accountStorageKey('winelog-journal-view'),next)}catch{}}
   function stopSelecting(){setSelecting(false);setSelectedIds(new Set());setBatchOpen(false);setBatchError('')}
   function toggleSelection(id:string){
     if(!selectedIds.has(id)&&selectedIds.size>=MAX_BATCH_SELECTION){setBatchError(`A single batch can update up to ${MAX_BATCH_SELECTION} wines.`);return}
@@ -188,7 +189,7 @@ export function LibraryPage(){
 
   useEffect(()=>{
     if(restoring)return;
-    try{window.sessionStorage.setItem(JOURNAL_FILTER_KEY,queryKey)}catch{}
+    try{window.sessionStorage.setItem(accountStorageKey(JOURNAL_FILTER_KEY),queryKey)}catch{}
   },[queryKey,restoring]);
 
   useEffect(()=>{

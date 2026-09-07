@@ -36,7 +36,7 @@ describe('a cellar holding is not a wine you drank',()=>{
   it('is read only through the cellar library and the routes that serve it',()=>{
     const readers=walk(join(root,'src')).concat(walk(join(root,'worker')))
       .filter(path=>/\.tsx?$/.test(path)&&/cellar_holdings/.test(readFileSync(path,'utf8')))
-      .map(path=>path.slice(root.length+1));
+      .map(path=>path.slice(root.length+1).replaceAll('\\','/'));
     expect(readers.sort()).toEqual(['src/lib/cellar/holdings.ts','src/lib/cellar/list.ts']);
   });
 

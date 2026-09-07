@@ -21,7 +21,7 @@ type WineBatchPollJob={kind:'wine_batch_poll';owner:string;wineId:string;request
 type ProducerCampaignTickJob={kind:'producer_campaign_tick';owner:string;campaignId:string};
 type CancelResearchSweepJob={kind:'research_cancel_sweep';owner:string;targetKind:ResearchTargetKind;targetId:string;requestId:string;pass:number};
 type ResearchJob=ProducerJob|ProducerBatchPollJob|ProducerCampaignTickJob|WineJob|WineBatchPollJob|CancelResearchSweepJob|BatchRecognitionJob;
-type Bindings={DB:D1Database;WINE_IMAGES:R2Bucket;ASSETS:Fetcher;GEMINI_API_KEY?:string;AUTH_SECRET:string;APP_PASSWORD:string;APP_URL:string;MAX_FILE_BYTES?:string;MAX_BATCH_FILES?:string;RESEARCH_QUEUE:Queue<ResearchJob>};
+type Bindings={CREDIT_PRODUCER_IDS?:string[];DB:D1Database;WINE_IMAGES:R2Bucket;ASSETS:Fetcher;GEMINI_API_KEY?:string;AUTH_SECRET:string;APP_PASSWORD:string;APP_URL:string;MAX_FILE_BYTES?:string;MAX_BATCH_FILES?:string;RESEARCH_QUEUE:Queue<ResearchJob>};
 type AppEnv={Bindings:Bindings};
 const router=new Hono<AppEnv>();
 
@@ -89,7 +89,7 @@ router.post('/api/producers/research-batch',async c=>{
   const body=await c.req.json().catch(()=>({})) as {confirmation?:string;limit?:number};
   if(body.confirmation!=='RUN_PRODUCER_RESEARCH_BATCH')return c.json({error:'Batch producer research requires explicit confirmation'},400);
   if(await activeCampaignId(c.env.DB,owner))return c.json({error:'A batch producer research run is already in progress'},409);
-  const producers=await unresearchedProducers(c.env.DB,owner,Number(body.limit)||CAMPAIGN_MAX_PRODUCERS);
+  const producers=(await unresearchedProducers(c.env.DB,owner,Number(body.limit)||CAMPAIGN_MAX_PRODUCERS)).filter(producer=>!c.env.CREDIT_PRODUCER_IDS||c.env.CREDIT_PRODUCER_IDS.includes(producer.id));
   if(!producers.length)return c.json({error:'Every producer has been researched already'},400);
   const campaignId=await createCampaign(c.env,owner,producers);
   if(!campaignId)return c.json({error:'Could not start the batch'},500);

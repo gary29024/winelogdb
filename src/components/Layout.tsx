@@ -6,6 +6,8 @@ import { StartTastingSheet } from '../features/tastings/StartTastingSheet';
 import { useActiveTasting } from '../features/tastings/useActiveTasting';
 import '../scanSheet.css';
 import '../mobileViewport.css';
+import { CreditConfirmation } from '../features/auth/CreditConfirmation';
+import '../multiUser.css';
 
 const MOBILE_BROWSER_BOTTOM_VAR='--mobile-browser-bottom';
 const preloadUpload=()=>void import('../features/uploads/UploadPage');
@@ -98,9 +100,10 @@ export function Layout(){
   return <>
     <header className="topbar">
       <NavLink className="brand" to="/">WineLog</NavLink>
+      <NavLink className="account-link" to="/account">Account & friends</NavLink>
       <nav className="desktop-nav" aria-label="Main navigation"><NavLink to="/" end onPointerEnter={preloadPassport} onFocus={preloadPassport}>Passport</NavLink><NavLink to="/journal" onPointerEnter={preloadJournal} onFocus={preloadJournal}>Journal</NavLink><NavLink to="/tastings" onPointerEnter={preloadTastingList} onFocus={preloadTastingList}>Tastings</NavLink><NavLink to="/producers" onPointerEnter={preloadProducers} onFocus={preloadProducers}>Producers</NavLink><NavLink to="/insights" onPointerEnter={preloadInsights} onFocus={preloadInsights}>Insights</NavLink><button type="button" className="top-scan-trigger" onClick={openScanSheet}>Scan Wine</button></nav>
     </header>
-    <main><LiveTastingStrip/><Outlet/></main>
+    <main><LiveTastingStrip/><Outlet/></main><CreditConfirmation/>
     <footer>Your private tasting notebook</footer>
 
     <nav className="mobile-nav" aria-label="Mobile navigation">

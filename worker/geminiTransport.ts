@@ -1,4 +1,6 @@
+import { durableProvider,type CreditContext } from './multiUser/provider';
 export type GeminiTransportBindings={
+  CREDIT_CONTEXT?:CreditContext;
   GEMINI_API_KEY?:string;
   CF_AI_GATEWAY_TOKEN?:string;
   AI_GATEWAY_ACCOUNT_ID?:string;
@@ -58,7 +60,12 @@ function metadataHeader(metadata?:Record<string,MetadataValue>){
   return entries.length?JSON.stringify(Object.fromEntries(entries)):null;
 }
 
-export async function postGeminiGenerateContent(
+export async function postGeminiGenerateContent(env:GeminiTransportBindings,model:string,body:string,signal:AbortSignal,metadata?:Record<string,MetadataValue>,options:RequestOptions={}){
+ const provider=resolveGeminiTransport(env);
+ const response=await durableProvider(env.CREDIT_CONTEXT,JSON.stringify({model,body,metadata,options}),async()=>(await sendGeminiGenerateContent(env,model,body,signal,metadata,options)).response);
+ return {response,provider};
+}
+async function sendGeminiGenerateContent(
   env:GeminiTransportBindings,
   model:string,
   body:string,

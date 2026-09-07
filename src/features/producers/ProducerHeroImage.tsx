@@ -1,3 +1,4 @@
+import { apiFetch } from '../../lib/auth/client';
 import { useEffect,useState } from 'react';
 import { authHeaders } from '../../lib/auth/client';
 
@@ -7,7 +8,7 @@ export function ProducerHeroImage({producerId,alt}:{producerId:string;alt:string
   useEffect(()=>{
     let active=true,objectUrl:string|undefined;
     setSrc(undefined);setFailed(false);
-    fetch(`/api/producers/${producerId}/hero-image`,{headers:authHeaders()})
+    apiFetch(`/api/producers/${producerId}/hero-image`,{headers:authHeaders()})
       .then(async response=>{if(!response.ok)throw new Error(`Producer image failed (${response.status})`);return response.blob()})
       .then(blob=>{if(!active)return;objectUrl=URL.createObjectURL(blob);setSrc(objectUrl)})
       .catch(()=>{if(active)setFailed(true)});

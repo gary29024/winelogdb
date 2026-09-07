@@ -1,3 +1,4 @@
+import { apiFetch } from '../../lib/auth/client';
 import { authHeaders } from '../../lib/auth/client';
 
 const MAX_GROUP_IMAGE_CACHE_BYTES=32*1024*1024;
@@ -34,7 +35,7 @@ export function rememberGroupImageBlob(url:string,blob:Blob){
 export function loadGroupImageBlob(url:string):Promise<Blob>{
   const cached=cachedImage(url);if(cached)return Promise.resolve(cached);
   const pending=imageRequests.get(url);if(pending)return pending;
-  const request=fetch(url,{headers:authHeaders(),cache:'no-store'})
+  const request=apiFetch(url,{headers:authHeaders(),cache:'no-store'})
     .then(async response=>{if(!response.ok)throw new Error(`Could not restore Group Photo image (${response.status})`);return response.blob()})
     .then(blob=>{rememberGroupImageBlob(url,blob);return blob})
     .finally(()=>imageRequests.delete(url));

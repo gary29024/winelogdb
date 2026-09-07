@@ -1,3 +1,4 @@
+import { apiFetch } from '../../lib/auth/client';
 import { authHeaders,clearSession } from '../../lib/auth/client';
 import type { VintageWindow,VintageSubject } from '../../lib/maturity/vintageWindow';
 
@@ -16,7 +17,7 @@ const params=(subject:VintageSubject)=>{
 
 /** What has already been found. Never calls anything, so a wine page is free. */
 export async function getVintageWindow(subject:VintageSubject):Promise<VintageWindow|null>{
-  const response=await fetch(`/api/maturity/vintage?${params(subject)}`,{headers:authHeaders()}).catch(()=>null);
+  const response=await apiFetch(`/api/maturity/vintage?${params(subject)}`,{headers:authHeaders()}).catch(()=>null);
   if(!response?.ok)return null;
   const body=await response.json().catch(()=>null) as {window?:VintageWindow|null}|null;
   return body?.window??null;
@@ -24,10 +25,10 @@ export async function getVintageWindow(subject:VintageSubject):Promise<VintageWi
 
 /** The button. The only thing in the app that spends a search on a window. */
 export async function lookUpVintageWindow(subject:VintageSubject,refresh=false){
-  const response=await fetch('/api/maturity/vintage',{method:'POST',headers:authHeaders(true),
+  const response=await apiFetch('/api/maturity/vintage',{method:'POST',headers:authHeaders(true),
     body:JSON.stringify({...subject,refresh})});
   if(response.status===401){clearSession();throw new Error('Session expired. Please sign in again.')}
-  const body=await response.json().catch(()=>({})) as {window?:VintageWindow|null;cached?:boolean;error?:string};
+  const body=await response.json().catch(()=>({})) as {window?:VintageWindow|null;cached?:boolean;error?:string;waitingForFriend?:boolean;creditOperationId?:string};
   if(!response.ok)throw new Error(body.error||'Could not look up that vintage');
-  return {window:body.window??null,cached:Boolean(body.cached)};
+  return {window:body.window??null,cached:Boolean(body.cached),friendOperationId:body.waitingForFriend?body.creditOperationId:undefined};
 }

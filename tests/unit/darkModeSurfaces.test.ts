@@ -10,7 +10,7 @@ const walk=(dir:string):string[]=>readdirSync(dir,{withFileTypes:true}).flatMap(
 // Comments are stripped first: a comment sitting between a block's brace and
 // its first selector would otherwise be read as part of that selector.
 const sheets=walk(src).filter(path=>path.endsWith('.css'))
-  .map(path=>({name:path.split('/').pop()!,css:readFileSync(path,'utf8').replace(/\/\*[\s\S]*?\*\//g,'')}));
+  .map(path=>({name:path.replaceAll('\\','/').split('/').pop()!,css:readFileSync(path,'utf8').replace(/\/\*[\s\S]*?\*\//g,'')}));
 
 const channel=(decimal:number)=>decimal<=0.04045?decimal/12.92:((decimal+0.055)/1.055)**2.4;
 const relative=([red,green,blue]:number[])=>0.2126*channel(red/255)+0.7152*channel(green/255)+0.0722*channel(blue/255);

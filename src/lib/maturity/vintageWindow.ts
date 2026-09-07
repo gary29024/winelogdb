@@ -30,7 +30,7 @@ export type VintageSubject={country?:string|null;region?:string|null;appellation
   producer?:string|null;wineName?:string|null};
 
 const normalized=(value:unknown)=>String(value??'').normalize('NFD').replace(/[̀-ͯ]/g,'')
-  .toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
+  .toLowerCase().replace(/[^\p{L}\p{N}]+/gu,' ').trim();
 
 /** Where an answer is filed, and what to call that place on screen. */
 export type VintageCell={key:string;scope:'appellation'|'region';label:string};
@@ -118,11 +118,13 @@ export const mapVintageWindow=(row:Row):VintageWindow=>({
 
 const columns='country,region,appellation,vintage,wine_style,shift_from,shift_to,vintage_note,sources_json,model,researched_at';
 
-export async function readVintageWindow(db:D1Database,owner:string,subject:VintageSubject){
+export async function readVintageWindow(db:D1Database,owner:string,subject:VintageSubject,includeFriends=false){
   if(!askableVintage(subject))return null;
   const row=await db.prepare(`SELECT ${columns} FROM vintage_windows WHERE owner_id=? AND cache_key=?`)
     .bind(owner,vintageCacheKey(subject)).first<Row>();
-  return row?mapVintageWindow(row):null;
+  if(row)return mapVintageWindow(row);
+  if(includeFriends){const shared=await db.prepare(`SELECT v.* FROM vintage_windows v JOIN friendships f ON f.friend_id=v.owner_id AND f.user_id=? JOIN app_users u ON u.id=v.owner_id AND u.status='active' WHERE v.cache_key=? ORDER BY v.researched_at DESC LIMIT 1`).bind(owner,vintageCacheKey(subject)).first<Row>();return shared?mapVintageWindow(shared):null}
+  return null;
 }
 
 /**

@@ -1,3 +1,4 @@
+import { apiFetch } from '../../lib/auth/client';
 import { useEffect,useRef,useState } from 'react';
 import { authHeaders } from '../../lib/auth/client';
 import { labelFocusPosition } from '../../lib/wine/labelFocus';
@@ -24,7 +25,7 @@ function rememberImageUrl(imageId:string,src:string){
 function loadImageUrl(imageId:string){
   const cached=cachedImageUrl(imageId);if(cached)return Promise.resolve(cached);
   const pending=imageRequests.get(imageId);if(pending)return pending;
-  const request=fetch(`/api/images/${imageId}`,{headers:authHeaders(),cache:'default'})
+  const request=apiFetch(`/api/images/${imageId}`,{headers:authHeaders(),cache:'default'})
     .then(async response=>{if(!response.ok)throw new Error(`Image failed (${response.status})`);return response.blob()})
     .then(blob=>{const src=URL.createObjectURL(blob);rememberImageUrl(imageId,src);return src})
     .finally(()=>imageRequests.delete(imageId));

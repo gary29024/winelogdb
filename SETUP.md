@@ -3,10 +3,11 @@
 A step-by-step guide to running this repository as your own private wine
 notebook on Cloudflare.
 
-WineLog is **single-tenant by design**: one deployment belongs to one person,
-protected by one password. Every database row is owned by a fixed owner ID, so
-there is no sign-up flow, no user table and no tenant separation to configure.
-If two people want their own notebooks, they each deploy their own copy.
+WineLog supports an **invite-only pilot of up to 25 accounts**. Each journal is
+private; accepted friends can receive selected wines and reuse factual research.
+Read [the multi-user cutover guide](MULTI_USER_ROLLOUT.md) before migrating an
+existing deployment. Google configuration, credit prices, grants, and budgets
+must be set before launch.
 
 Budget about 30 minutes. Nothing here is irreversible, and every resource can be
 deleted afterwards.
@@ -32,7 +33,7 @@ bindings stay server-side; the browser never sees them.
 
 ## Prerequisites
 
-- **Node 20 or newer** — `node --version`
+- **Node 22.13 or newer** (24 recommended) — `node --version`
 - **A Cloudflare account.** D1, R2 and Queues all have free allowances. Check
   the current numbers on Cloudflare's pricing pages before committing to a
   workload; R2 in particular may ask for a payment method even within the free
@@ -158,10 +159,12 @@ prompts and answers.
 Secrets are encrypted and never appear in `wrangler.jsonc`.
 
 ```bash
-# The password you will log in with
-npx wrangler secret put APP_PASSWORD
+# Google web OAuth client and the explicitly verified legacy owner's subject
+npx wrangler secret put GOOGLE_CLIENT_ID
+npx wrangler secret put GOOGLE_CLIENT_SECRET
+npx wrangler secret put OWNER_GOOGLE_SUB
 
-# Signing key for session tokens — at least 32 random characters
+# Internal Worker signing key — rotate at cutover; at least 32 random characters
 npx wrangler secret put AUTH_SECRET
 
 # Only for Option A — the gateway path does not use it
@@ -181,9 +184,9 @@ You also need `APP_URL`, which is the exact origin the browser will load and is
 compared against for CORS. You will not know it until the first deploy, so set
 it in Step 7.
 
-> Changing `AUTH_SECRET` later invalidates every issued session token, which
-> only means logging in again. Changing `APP_PASSWORD` takes effect at the next
-> login; tokens already issued stay valid until they expire after seven days.
+> Register the exact `APP_URL/api/auth/google/callback` redirect with Google.
+> `OWNER_GOOGLE_SUB` is the verified OIDC subject, not an email. Password tokens
+> are rejected at the public Worker boundary. New sessions are revocable in D1.
 
 ---
 
@@ -253,12 +256,11 @@ builds and deploys on its own. Two things are worth knowing:
 
 ## Step 8 — Log in
 
-Open the deployed URL. You should land on the login page. Enter the
-`APP_PASSWORD` from Step 5.
-
-A successful login stores a seven-day session token in the browser's
-`localStorage`. There is no "log out on all devices" — rotating `AUTH_SECRET`
-does that.
+Open the deployed URL and choose **Continue with Google** using the configured
+owner account. Authentication uses a seven-day Secure, HttpOnly cookie. Configure
+the pilot budgets, prices and an owner credit grant in **Owner controls**, then
+complete storage inventory and research indexing before creating invitations.
+`POST /api/auth/logout-all` revokes the current user's sessions on all devices.
 
 ---
 
@@ -266,7 +268,7 @@ does that.
 
 Work through these in order; each exercises a different piece.
 
-1. **Auth** — the login page accepts your password and rejects a wrong one.
+1. **Auth** — the configured Google owner can log in; an uninvited account cannot.
 2. **D1** — add a wine by hand (`Add wine`) and find it in the Journal.
 3. **R2** — upload a label photo and confirm it renders on the wine.
 4. **Gemini recognition** — scan a bottle and check the fields come back filled.

@@ -1,3 +1,7 @@
+import { FriendResearchStatus } from '../auth/FriendResearchStatus';
+import { prepareSharingPhotos } from './sharingPhotos';
+import { apiJson } from '../../lib/auth/api';
+import { accountStorageKey } from '../../lib/auth/client';
 import { useEffect,useMemo,useRef,useState,type ReactNode } from 'react';
 import { Link,useLocation,useNavigate,useParams } from 'react-router-dom';
 import type { DeepSearchResult } from '../../lib/db/schema';
@@ -29,12 +33,12 @@ const DEEP_FIELDS:DeepField[]=['summary','vintageQuality','producerDetails','pro
 const DEEP_OPEN_FIELDS_KEY='winelog.deepSearch.openFields';
 function readOpenDeepFields():Set<DeepField>{
  try{
-  const raw=window.localStorage.getItem(DEEP_OPEN_FIELDS_KEY);if(!raw)return new Set();
+  const raw=window.localStorage.getItem(accountStorageKey(DEEP_OPEN_FIELDS_KEY));if(!raw)return new Set();
   const parsed=JSON.parse(raw) as unknown;
   return new Set(Array.isArray(parsed)?parsed.filter((x):x is DeepField=>DEEP_FIELDS.includes(x as DeepField)):[]);
  }catch{return new Set()}
 }
-function writeOpenDeepFields(next:Set<DeepField>){try{window.localStorage.setItem(DEEP_OPEN_FIELDS_KEY,JSON.stringify([...next]))}catch{/* storage unavailable */}}
+function writeOpenDeepFields(next:Set<DeepField>){try{window.localStorage.setItem(accountStorageKey(DEEP_OPEN_FIELDS_KEY),JSON.stringify([...next]))}catch{/* storage unavailable */}}
 
 function sourceHost(url:string){try{return new URL(url).hostname.toLowerCase().replace(/^www\./,'')}catch{return ''}}
 /** Gemini grounding often gives no page title, so several links on one host all
@@ -96,8 +100,10 @@ function ClaimEvidence({deep,field}:{deep:DeepSearchResult;field:DeepField}){
 
 const classificationLabel:Record<string,string>={grand_cru:'Grand Cru',premier_cru:'Premier Cru',village:'Village'};
 
+import { WineSharing } from './WineSharing';
 export function DetailPage(){
  const {id=''}=useParams(),nav=useNavigate(),{state}=useLocation(),[wine,setWine]=useState<WineDetail>(),[favoriteBusy,setFavoriteBusy]=useState(false),[deepState,setDeepState]=useState<DeepState>('idle'),[deepError,setDeepError]=useState(''),[deepRun,setDeepRun]=useState<WineResearchRun|null>(null),[deepNotice,setDeepNotice]=useState(''),[deepCancelling,setDeepCancelling]=useState(false),[selectedImage,setSelectedImage]=useState<string>(),[selectedGroupSource,setSelectedGroupSource]=useState<string>(),[openDeepFields,setOpenDeepFields]=useState<Set<DeepField>>(readOpenDeepFields),[photoBusy,setPhotoBusy]=useState(false),[photoError,setPhotoError]=useState('');
+ const [friendOperation,setFriendOperation]=useState('');
  const photoInput=useRef<HTMLInputElement|null>(null);
  const pollRef=useRef<Poller|undefined>(undefined);
  function stopDeepTimers(){pollRef.current?.stop();pollRef.current=undefined}
@@ -109,7 +115,7 @@ export function DetailPage(){
  }
  useEffect(()=>{let active=true;Promise.all([getWine(id),getWineDeepSearchStatus(id).catch(()=>null)]).then(([next,run])=>{if(!active)return;setWine(next);if(run?.status==='running')watchDeepSearch(run)}).catch(()=>undefined);return()=>{active=false;stopDeepTimers()}// eslint-disable-next-line react-hooks/exhaustive-deps
  },[id]);
- async function runDeepSearch(){setDeepState('running');setDeepError('');setDeepNotice('');try{const accepted=await startWineDeepSearch(id,wine?.deepSearch?'vintage':'none'),run=await getWineDeepSearchStatus(id,accepted.researchRequestId);if(run)watchDeepSearch(run);else setDeepNotice('Deep Search has been queued in the background. You can leave this page safely.')}catch(e){setDeepError((e as Error).message);setDeepState('error')}}
+ async function runDeepSearch(){setDeepState('running');setDeepError('');setDeepNotice('');try{const accepted=await startWineDeepSearch(id,wine?.deepSearch?'vintage':'none');if(accepted.cached){await reloadWine();setDeepState('idle');return}if(accepted.waitingForFriend){setFriendOperation(accepted.creditOperationId);setDeepState('idle');return}const run=await getWineDeepSearchStatus(id,accepted.researchRequestId);if(run)watchDeepSearch(run);else setDeepNotice('Deep Search has been queued in the background. You can leave this page safely.')}catch(e){setDeepError((e as Error).message);setDeepState('error')}}
  async function cancelDeepSearch(){if(!deepRun||deepRun.status!=='running'||deepCancelling)return;if(!confirm('Cancel this Deep Search? Any producer, terroir, vintage or wine research already saved will be kept.'))return;setDeepCancelling(true);setDeepError('');try{const result=await cancelWineDeepSearch(id,deepRun.requestId);stopDeepTimers();await reloadWine().catch(()=>undefined);setDeepRun(null);setDeepState('idle');setDeepNotice(result.alreadyTerminal?'Deep Search had already reached a terminal state.':'Deep Search cancelled. Any research already saved was kept.')}catch(e){setDeepError((e as Error).message);setDeepState('running')}finally{setDeepCancelling(false)}}
  /**
   * Photographs added to a wine that already exists.
@@ -131,7 +137,8 @@ export function DetailPage(){
     return {file,metadata,width:size.width,height:size.height};
    }));
    await addWineImages(id,photos);
-   await reloadWine();
+   const updated=await reloadWine(),shares=await apiJson<{recipientIds?:string[]}>(`/api/wines/${id}/shares`);
+   if(shares.recipientIds?.length)await prepareSharingPhotos(updated.imageIds.filter(imageId=>!wine?.imageIds.includes(imageId)));
   }catch(e){setPhotoError((e as Error).message||'Could not add the photos')}
   finally{setPhotoBusy(false);if(photoInput.current)photoInput.current.value=''}
  }
@@ -175,7 +182,7 @@ export function DetailPage(){
  const researchSections=deep?([
   ['Vintage quality','vintageQuality',deep.vintageQuality],['Producer','producerDetails',deep.producerDetails],['Producer-wide practices','producerWinemakingPractices',deep.producerWinemakingPractices],['This wine / vintage winemaking','winemakingTechniques',deep.winemakingTechniques],['Terroir','terroir',deep.terroir],['Drinking window','drinkingWindow',deep.drinkingWindow]
  ] as Array<[string,DeepField,string]>).filter(([, ,value])=>Boolean(value)):[];
- return <article className="detail wine-detail"><Link className="back-pill" to={back.to}>← {back.label}</Link>
+ return <article className="detail wine-detail"><Link className="back-pill" to={back.to}>← {back.label}</Link><WineSharing wineId={id} imageIds={wine.imageIds}/>
   <section className="wine-identity">
    {wine.imageIds.length?<div className="detail-gallery" aria-label={`${wine.wineName} photos`}>{wine.imageIds.map((imageId,index)=><span className="detail-photo-slot" key={imageId}><button type="button" className="detail-photo-button" onClick={()=>setSelectedImage(imageId)} aria-label={`Open photo ${index+1} of ${wine.imageIds.length}`}><WineImage imageId={imageId} alt={`${wine.producer} ${wine.wineName} photo ${index+1}`} className="detail-photo"/></button><button type="button" className="detail-photo-remove" disabled={photoBusy} onClick={()=>void removePhoto(imageId)} aria-label={`Remove photo ${index+1}`}>×</button></span>)}</div>:<div className="detail-bottle">{wine.wineStyle?.slice(0,1).toUpperCase()||'W'}</div>}
    <div className="detail-photo-add">
@@ -218,7 +225,7 @@ export function DetailPage(){
     <DeepSources sources={deep.sources}/>
     <small>Latest research model: {deep.model} · {new Date(deep.researchedAt).toLocaleDateString()} · reusable research is stored permanently</small>
    </>:<p>Enrich this wine with grounded research. WineLog reuses stored producer practices, terroir and vintage research whenever the scope matches.</p>}
-   {deepNotice&&<p className="producer-notice" role="status">{deepNotice}</p>}{deepState==='idle'&&<button type="button" className="primary" onClick={()=>setDeepState('confirm-usage')}>{deep?'Refresh vintage research':'Deep Search'}</button>}{deepState==='confirm-usage'&&<div className="deep-confirm"><p>{deep?'This refresh keeps cached producer-wide practices and stable terroir research, and re-runs only vintage-sensitive research for this wine.':'WineLog checks permanent caches first and queues Gemini 3.7 Flash with Google Search only for missing research scopes.'} The background job continues even if you close WineLog. API usage may be incurred. Continue?</p><button type="button" className="primary" onClick={runDeepSearch}>{deep?'Queue vintage refresh':'Queue Deep Search'}</button><button type="button" className="secondary-danger" onClick={()=>setDeepState('idle')}>Cancel</button></div>}{deepState==='running'&&<div className="deep-running" role="status"><span className="deep-spinner" aria-hidden="true"/><div><strong>{deepRun?deepStage[deepRun.stage]:'Queueing Deep Search…'}</strong><p>{deepRun?.message||'Preparing the background job.'}</p><small>{deepRun?<><ElapsedSeconds startedAt={deepRun.startedAt}/> · Request {deepRun.requestId}</>:'0s'}</small><p>You can leave this page or close WineLog. The Queue continues independently and the saved result will appear when you return.</p><button type="button" className="secondary-danger" disabled={!deepRun||deepCancelling} onClick={cancelDeepSearch}>{deepCancelling?'Cancelling…':'Cancel Deep Search'}</button></div></div>}{deepState==='error'&&<div className="deep-error" role="alert"><strong>Deep Search did not complete.</strong><p>{deepError||deepRun?.message||'The background research job failed before a result was saved.'}</p><button type="button" onClick={runDeepSearch}>Retry Deep Search</button><button type="button" className="secondary-danger" onClick={()=>setDeepState('idle')}>Close</button></div>}
+   {friendOperation&&<FriendResearchStatus operationId={friendOperation} onComplete={()=>void reloadWine()}/>} {deepNotice&&<p className="producer-notice" role="status">{deepNotice}</p>}{deepState==='idle'&&<button type="button" className="primary" onClick={()=>setDeepState('confirm-usage')}>{deep?'Refresh vintage research':'Deep Search'}</button>}{deepState==='confirm-usage'&&<div className="deep-confirm"><p>{deep?'This refresh keeps cached producer-wide practices and stable terroir research, and re-runs only vintage-sensitive research for this wine.':'WineLog checks permanent caches first and queues Gemini 3.7 Flash with Google Search only for missing research scopes.'} The background job continues even if you close WineLog. API usage may be incurred. Continue?</p><button type="button" className="primary" onClick={runDeepSearch}>{deep?'Queue vintage refresh':'Queue Deep Search'}</button><button type="button" className="secondary-danger" onClick={()=>setDeepState('idle')}>Cancel</button></div>}{deepState==='running'&&<div className="deep-running" role="status"><span className="deep-spinner" aria-hidden="true"/><div><strong>{deepRun?deepStage[deepRun.stage]:'Queueing Deep Search…'}</strong><p>{deepRun?.message||'Preparing the background job.'}</p><small>{deepRun?<><ElapsedSeconds startedAt={deepRun.startedAt}/> · Request {deepRun.requestId}</>:'0s'}</small><p>You can leave this page or close WineLog. The Queue continues independently and the saved result will appear when you return.</p><button type="button" className="secondary-danger" disabled={!deepRun||deepCancelling} onClick={cancelDeepSearch}>{deepCancelling?'Cancelling…':'Cancel Deep Search'}</button></div></div>}{deepState==='error'&&<div className="deep-error" role="alert"><strong>Deep Search did not complete.</strong><p>{deepError||deepRun?.message||'The background research job failed before a result was saved.'}</p><button type="button" onClick={runDeepSearch}>Retry Deep Search</button><button type="button" className="secondary-danger" onClick={()=>setDeepState('idle')}>Close</button></div>}
   </section>
   <section className="detail-section experience-panel"><p className="section-label">Your experience</p><dl>{[['Drinking date',wine.tastingDate],['Tasting / event',wine.tastingName],['Venue',wine.venue],['Location',wine.locationName],['Price',price]].filter(x=>x[1]).map(([k,v])=><div key={String(k)}><dt>{k}</dt><dd>{v}</dd></div>)}</dl></section><p className="detail-tags">{wine.tags.map(t=><span className="tag" key={t}>#{t}</span>)}</p><div className="actions"><Link className="button" to={`/wines/${id}/edit`}>Edit tasting</Link><button className="danger secondary-danger" onClick={async()=>{if(confirm('Delete this wine?')){await deleteWine(id);nav('/')}}}>Delete</button></div>
   {selectedImage&&<div className="image-lightbox" role="dialog" aria-modal="true" aria-label="Wine photo viewer" onClick={()=>setSelectedImage(undefined)}><button type="button" className="lightbox-close" aria-label="Close photo" onClick={()=>setSelectedImage(undefined)}>×</button><div className="lightbox-image-wrap" onClick={e=>e.stopPropagation()}><WineImage imageId={selectedImage} alt={`${wine.producer} ${wine.wineName} full-resolution photo`} className="lightbox-image"/></div></div>}

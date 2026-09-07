@@ -1,3 +1,5 @@
+import { assertResearchInput,type CreditContext } from '../../../worker/multiUser/provider';
+import { publishProducerResearch } from '../research/sharedProducer';
 import { createObjectKey } from '../r2/keys';
 import { ensureCuveeEntity,reconcileProducerCuvees } from '../cuvees/entities';
 import { createResearchBatchJob,finishResearchBatchJob,getResearchBatchJob,recordResearchSearchQueries,touchResearchBatchJob,type ResearchBatchJob } from '../research/batchJobStore';
@@ -13,7 +15,7 @@ import { applyCatalogDecisions,listCatalogDecisions } from './catalogDecisions';
 import { catalogNameInitial,stripProducerCatalogPrefix } from './catalogName';
 import { parseStructuredJsonText } from './structuredJson';
 
-type Env={DB:D1Database;WINE_IMAGES:R2Bucket;GEMINI_API_KEY?:string;RESEARCH_QUEUE:Queue<unknown>;AI_USAGE?:AnalyticsSink};
+type Env={CREDIT_CONTEXT?:CreditContext;DB:D1Database;WINE_IMAGES:R2Bucket;GEMINI_API_KEY?:string;RESEARCH_QUEUE:Queue<unknown>;AI_USAGE?:AnalyticsSink};
 type CatalogCategory='red'|'white'|'rose'|'sparkling'|'dessert'|'fortified'|'orange'|'other';
 type ProfileResult={homeCountry:string;homeRegion:string;homeLocality:string;officialWebsiteUrl:string|null;instagramUrl:string|null;contactEmail:string|null;contactPhone:string|null;profile:string;winemakingPractices:string};
 type CatalogWine={name:string;category:CatalogCategory;appellation?:string|null;classification?:string|null;style?:string|null;notes?:string|null};
@@ -284,6 +286,7 @@ async function producerNames(db:D1Database,owner:string,producerId:string){
 async function saveProfile(env:Env,owner:string,producerId:string,requestId:string,profile:ProfileResult,text:string,metadata:GroundingMetadata|undefined,model:string){
   if(!profile||typeof profile.profile!=='string'||typeof profile.winemakingPractices!=='string')throw new Error('Producer profile research returned invalid fields');
   const row=await env.DB.prepare('SELECT * FROM producers WHERE owner_id=? AND id=?').bind(owner,producerId).first<Record<string,unknown>>();if(!row)throw new Error('Producer not found');
+  await assertResearchInput(env.CREDIT_CONTEXT,owner,producerId,'producer',row);
   const contactGrounding=extractContactGrounding(text,metadata),grounded=new Set(contactGrounding.fields),parsedOfficial=safeHttpsUrl(profile.officialWebsiteUrl)?.toString()??null,parsedInstagram=safeInstagramUrl(profile.instagramUrl),parsedEmail=normalizeProducerEmail(profile.contactEmail),parsedPhone=normalizeProducerPhone(profile.contactPhone);
   const priorOfficial=row.official_website_url?String(row.official_website_url):null;
   const official=(parsedOfficial&&(grounded.has('officialWebsiteUrl')||metadataGroundsUrl(parsedOfficial,metadata))?parsedOfficial:null)||priorOfficial;
@@ -320,6 +323,7 @@ async function finalizeCatalogStage(env:Env,owner:string,producerId:string,reque
   const staged=await listProducerCatalogStage<CatalogWine>(env.DB,owner,producerId,requestId),catalogRows=staged.filter(row=>parseSliceKey(row.sliceKey));
   if(!catalogStageCoverageComplete(catalogRows.map(row=>row.sliceKey)))return null;
   const names=await producerNames(env.DB,owner,producerId),researched=catalogRows.flatMap(row=>row.range);
+  await assertResearchInput(env.CREDIT_CONTEXT,owner,producerId,'producer',{canonical_name:names[0]});
   const row=await env.DB.prepare('SELECT catalog_json,sources_json FROM producers WHERE owner_id=? AND id=?').bind(owner,producerId).first<{catalog_json:string;sources_json:string}>();
   const parsedPrevious=parseJson<unknown>(row?.catalog_json,[]),previous=(Array.isArray(parsedPrevious)?parsedPrevious:[]).filter(item=>item&&typeof item==='object'&&typeof (item as {name?:unknown}).name==='string') as CatalogWine[];
   // Manual corrections are re-applied to the freshly researched range, so a
@@ -342,9 +346,10 @@ async function finalizeCatalogStage(env:Env,owner:string,producerId:string,reque
 
 async function submitBatch(env:Env,owner:string,producerId:string,requestId:string,attempt:number,model:string,keys:string[]){
   const producer=await env.DB.prepare('SELECT canonical_name FROM producers WHERE owner_id=? AND id=?').bind(owner,producerId).first<{canonical_name:string}>();if(!producer)throw new Error('Producer not found');
+  await assertResearchInput(env.CREDIT_CONTEXT,owner,producerId,'producer',producer);
   const entries=keys.map(key=>requestForKey(producer.canonical_name,key));let googleName:string|undefined,jobId:string|undefined;
   try{
-    googleName=await createGeminiBatch(env.GEMINI_API_KEY,model,`winelog-producer-${requestId}-${attempt}`,entries);
+    googleName=await createGeminiBatch(env.GEMINI_API_KEY,model,`winelog-producer-${requestId}-${attempt}`,entries,env.CREDIT_CONTEXT);
     jobId=await createResearchBatchJob(env.DB,{owner,requestId,targetKind:'producer',targetId:producerId,googleBatchName:googleName,model,attempt,keys});
     const baseCount=keys.filter(key=>parseSliceKey(key)).length,asked=keys.includes('profile')?'Producer profile plus':'Range only, profile still current -';
     const message=attempt===1?`${asked} ${baseCount} bounded catalogue slice${baseCount===1?'':'s'} submitted to Batch`:`Retrying only ${keys.length} failed producer research part${keys.length===1?'':'s'} with ${model}`;
@@ -376,7 +381,7 @@ async function retryTransportFailure(env:Env,owner:string,producerId:string,requ
 
 export async function pollProducerBatchResearch(env:Env,owner:string,producerId:string,requestId:string,jobId:string,pollCount:number){
   const job=await getResearchBatchJob(env.DB,owner,jobId);if(!job||job.status!=='running')return;
-  const fetched=await fetchGeminiBatch(env.GEMINI_API_KEY,job.googleBatchName);
+  const fetched=await fetchGeminiBatch(env.GEMINI_API_KEY,job.googleBatchName,{},env.CREDIT_CONTEXT);
   if(!fetched.ok){
     if(fetched.status===429||fetched.status>=500){const action=researchBatchTransientAction(job.attempt,pollCount);if(action==='retry'){await touchResearchBatchJob(env.DB,owner,job.id);await env.RESEARCH_QUEUE.send({kind:'producer_batch_poll',owner,producerId,requestId,jobId:job.id,pollCount:pollCount+1},{delaySeconds:researchBatchErrorPollDelay(pollCount)});return}}
     await retryTransportFailure(env,owner,producerId,requestId,job,fetched.error);return;
@@ -453,7 +458,7 @@ export async function pollProducerBatchResearch(env:Env,owner:string,producerId:
   const uniqueFailed=[...new Set(failed)];await finishResearchBatchJob(env.DB,owner,job.id,uniqueFailed.length?'failed':'complete',uniqueFailed.length?uniqueFailed.map(key=>errors.get(key)).filter(Boolean).join('; '):null);
   if(!uniqueFailed.length){
     if(!catalogSummary){await discardProducerCatalogStage(env.DB,owner,requestId).catch(()=>undefined);await setRunState(env.DB,owner,requestId,'failed','failed',job.attempt,'Producer research ended without complete A–Z catalogue coverage; the previous visible catalogue was kept unchanged.');return}
-    const message=await completionMessage(env.DB,owner,producerId,job.keys.includes('profile'));await discardProducerCatalogStage(env.DB,owner,requestId).catch(()=>undefined);await setRunState(env.DB,owner,requestId,'complete','complete',job.attempt,message);log('log',{requestId,producerId,stage:'complete',attempt:job.attempt,catalogSummary});return;
+    const message=await completionMessage(env.DB,owner,producerId,job.keys.includes('profile'));await discardProducerCatalogStage(env.DB,owner,requestId).catch(()=>undefined);await setRunState(env.DB,owner,requestId,'complete','complete',job.attempt,message);await publishProducerResearch(env.DB,owner,producerId);log('log',{requestId,producerId,stage:'complete',attempt:job.attempt,catalogSummary});return;
   }
 
   if(job.attempt===1){try{await submitBatch(env,owner,producerId,requestId,2,FALLBACK_MODEL,uniqueFailed);return}catch(e){await failRun(env,owner,producerId,requestId,job,`Could not submit focused fallback for ${uniqueFailed.join(', ')}: ${(e as Error).message}`);return}}
