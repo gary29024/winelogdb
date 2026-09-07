@@ -146,3 +146,23 @@ describe('how small a cost can be and still be read',()=>{
     expect(page.textContent,'no thousandths on a figure that does not need them').not.toContain('1.610');
   });
 });
+
+describe('reading the two numbers together',()=>{
+  /**
+   * Reported as: twenty producer runs at HK$2.54 is fifty dollars, and the
+   * month underneath says five. Both were right and neither said so. The per-run
+   * figures are marginal - what one more run would cost - so they price their
+   * searches as if billable, while the allowance means they are not.
+   */
+  it('says the per-run figures price searches the month is not paying for',async()=>{
+    const page=await render(summary());
+    expect(page.querySelector('.ai-spend-marginal')?.textContent).toContain('what one more would cost');
+    expect(page.querySelector('.ai-spend-marginal')?.textContent).toContain('the tokens alone');
+  });
+
+  it('drops the note once the allowance is gone and the searches are the bill',async()=>{
+    const page=await render(summary({month:{month:'2026-08',searchQueries:6200,freeRemaining:0,billableSearches:1200,
+      cost:18.4,resetsAt:'2026-09-01T07:00:00.000Z',timeZone:'America/Los_Angeles'}}));
+    expect(page.querySelector('.ai-spend-marginal')).toBeNull();
+  });
+});

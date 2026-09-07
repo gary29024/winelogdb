@@ -99,6 +99,7 @@
 .ai-spend-grid>article>div:nth-child(2) b{font:700 1.02rem 'DM Sans',sans-serif;color:var(--ink);white-space:nowrap}
 .ai-spend-grid>article>div:nth-child(2) small{color:var(--ink-6);font-size:.68rem}
 .ai-spend-grid>article footer{grid-column:1/-1;padding-top:7px;margin-top:4px;border-top:1px solid var(--sunken);line-height:1.4}
+.ai-spend-marginal{margin:10px 0 0;color:var(--ink-6);font-size:.76rem;line-height:1.5}
 .ai-spend-month{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:baseline;gap:2px 12px;margin-top:10px;padding:12px 14px;border:1px solid var(--line-mid);border-radius:var(--r-md);background:var(--ground)}
 .ai-spend-month strong{grid-column:1;min-width:0;font:600 .86rem 'DM Sans',sans-serif}
 .ai-spend-month b{grid-column:2;grid-row:1;font:700 1.02rem 'DM Sans',sans-serif;white-space:nowrap}

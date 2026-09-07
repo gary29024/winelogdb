@@ -72,6 +72,11 @@ export function AiSpendCard(){
         </footer>
       </article>;
     })}</div>
+    {/* Reported as: twenty producer runs at HK$2.54 is fifty dollars, and the
+        month says five. Both are right and neither said so. These figures are
+        marginal - what one more run would cost - so they price their searches
+        as if billable, while the allowance below means they are not. */}
+    {month.freeRemaining>0&&<p className="ai-spend-marginal">Each figure is what one more would cost, searches priced in. While the allowance below lasts, the searches are free and the month's bill is the tokens alone.</p>}
     {/* The free allowance resets monthly and is the reason the bill is a step
         function rather than a slope, so it is worth seeing before it runs out.
 
