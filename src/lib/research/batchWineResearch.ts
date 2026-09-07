@@ -35,7 +35,13 @@ const MAX_ATTEMPTS=3;
  */
 export async function chooseResearchModel(db:D1Database,owner:string,attempted:readonly string[]){
   const ordered=await orderModelsByGrounding(db,owner,RESEARCH_MODELS);
-  return ordered.find(model=>!attempted.includes(model))??ordered[0]??PRIMARY_MODEL;
+  const chosen=ordered.find(model=>!attempted.includes(model))??ordered[0]??PRIMARY_MODEL;
+  // Logged because the last time this did something surprising - a model
+  // upgrade that never took effect for wine research - the only way to see it
+  // was to read this function. The configured order and the chosen model
+  // together say whether an observation moved anything.
+  if(chosen!==RESEARCH_MODELS[0])log('warn',{stage:'model_routed_away_from_primary',configured:RESEARCH_MODELS[0],chosen,order:ordered,attempted:[...attempted]});
+  return chosen;
 }
 const BATCH_KEY='wine-research';
 const now=()=>new Date().toISOString();
