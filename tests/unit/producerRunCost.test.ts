@@ -34,7 +34,11 @@ describe('what a producer run asks for',()=>{
 describe('the request a run actually submits',()=>{
   const run=async(row:Record<string,unknown>|null)=>{
     const stub=createD1Stub(sql=>{
-      if(/SELECT profile,home_country,profile_researched_at FROM producers/.test(sql))return {first:row};
+      // Deliberately loose: a stub that only answers the current column list
+      // would hand back nothing if the freshness read regressed to the shared
+      // timestamp, the row would look unknown, and the profile would be asked
+      // for - so the test below would pass on the very bug it exists to catch.
+      if(/SELECT profile,home_country,\w+ FROM producers/.test(sql))return {first:row};
       if(/SELECT canonical_name FROM producers/.test(sql))return {first:{canonical_name:'Chateau Cheval Blanc'}};
       return undefined;
     });
@@ -47,7 +51,7 @@ describe('the request a run actually submits',()=>{
     });
     const result=await startProducerBatchResearch(env,'owner','p1','r1');
     spy.mockRestore();vi.unstubAllGlobals();
-    return {result,keys:batches[0]?.entries.map(entry=>entry.key)??[]};
+    return {result,keys:batches[0]?.entries.map(entry=>entry.key)??[],sql:stub.sql()};
   };
 
   it('sends the range alone when the profile is still current',async()=>{
@@ -57,10 +61,15 @@ describe('the request a run actually submits',()=>{
   });
 
   it('refreshes an expired profile even when the catalog was refreshed today',async()=>{
-    const {keys}=await run(known({
+    const {keys,sql}=await run(known({
       profile_researched_at:new Date(Date.now()-(PROFILE_FRESH_DAYS+1)*day).toISOString(),
       researched_at:new Date().toISOString()
     }));
+    // Both halves of the fix: the read asks for the profile's own timestamp,
+    // and the answer is judged on that rather than on the shared one a catalog
+    // refresh keeps bumping.
+    expect(sql.some(text=>/SELECT profile,home_country,profile_researched_at FROM producers/.test(text)),
+      'the freshness read must name the profile timestamp').toBe(true);
     expect(keys).toEqual(['profile','catalog_slice_a_z_other']);
   });
 
