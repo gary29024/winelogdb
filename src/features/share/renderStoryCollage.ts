@@ -1,4 +1,6 @@
 import { labelFocusPosition } from '../../lib/wine/labelFocus';
+import { alignedRect } from './bottleAlign';
+import type { BottleFrame } from '../../lib/images/bottleFrame';
 import { MAX_STORY_WINES,STORY_HEIGHT,STORY_WIDTH,collageLayout,starMark,type Cell } from './storyCollage';
 
 /**
@@ -11,6 +13,8 @@ import { MAX_STORY_WINES,STORY_HEIGHT,STORY_WIDTH,collageLayout,starMark,type Ce
  */
 export type StoryWine={id:string;producer:string;wineName:string;vintage:number|null;favorite:boolean;imageId:string|null};
 export type StoryCard={title:string;subtitle:string;wines:StoryWine[]};
+/** Measured bottles, by image id. Absent ids simply draw as they were framed. */
+export type StoryFrames=Map<string,BottleFrame>;
 
 const PAPER='#f7f3ec',INK='#141c2b',MUTED='#6d7789',WINE='#c51f45',FRAME='#ffffff';
 const SERIF='"Playfair Display",Georgia,serif',SANS='"DM Sans",system-ui,sans-serif';
@@ -26,19 +30,17 @@ function roundedPath(ctx:CanvasRenderingContext2D,x:number,y:number,width:number
 }
 
 /**
- * Cover-fit, with the same downward nudge the journal thumbnails use.
+ * Cover-fit, with the same downward nudge the journal thumbnails use - or, for
+ * a photograph whose bottle has been measured, aligned on that bottle.
  *
  * A group-photo crop is one part wide to four tall; centred in a portrait cell
  * only its shoulder shows, which is the part of a bottle with nothing written
  * on it.
  */
-function drawCover(ctx:CanvasRenderingContext2D,image:CanvasImageSource,width:number,height:number,cell:Cell){
-  const scale=Math.max(cell.width/width,cell.height/height);
-  const drawn={width:width*scale,height:height*scale};
+function drawCover(ctx:CanvasRenderingContext2D,image:CanvasImageSource,width:number,height:number,cell:Cell,frame?:BottleFrame|null){
   const focus=labelFocusPosition(width,height)?0.72:0.5;
-  const x=cell.x+(cell.width-drawn.width)/2;
-  const y=cell.y+(cell.height-drawn.height)*focus;
-  ctx.drawImage(image,x,y,drawn.width,drawn.height);
+  const rect=alignedRect(width,height,cell,focus,frame);
+  ctx.drawImage(image,rect.x,rect.y,rect.width,rect.height);
 }
 
 function fitText(ctx:CanvasRenderingContext2D,text:string,max:number){
@@ -67,7 +69,7 @@ export type LoadedPhoto={image:CanvasImageSource;width:number;height:number}|nul
  * have none, a fetch may fail, and neither is a reason to have no card - the
  * cell falls back to the producer's initial on a tinted ground.
  */
-export function drawStoryCard(canvas:HTMLCanvasElement,card:StoryCard,photos:Map<string,LoadedPhoto>){
+export function drawStoryCard(canvas:HTMLCanvasElement,card:StoryCard,photos:Map<string,LoadedPhoto>,frames?:StoryFrames){
   const wines=card.wines.slice(0,MAX_STORY_WINES);
   canvas.width=STORY_WIDTH;canvas.height=STORY_HEIGHT;
   const ctx=canvas.getContext('2d');
@@ -88,7 +90,7 @@ export function drawStoryCard(canvas:HTMLCanvasElement,card:StoryCard,photos:Map
     roundedPath(ctx,cell.x,cell.y,cell.width,cell.height,18);
     ctx.fillStyle=FRAME;ctx.fill();
     ctx.clip();
-    if(photo)drawCover(ctx,photo.image,photo.width,photo.height,cell);
+    if(photo)drawCover(ctx,photo.image,photo.width,photo.height,cell,wine.imageId?frames?.get(wine.imageId):null);
     else{
       ctx.fillStyle='#e7e2d8';ctx.fillRect(cell.x,cell.y,cell.width,cell.height);
       ctx.fillStyle=MUTED;ctx.font=`700 ${Math.round(cell.width*0.3)}px ${SERIF}`;

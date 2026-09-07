@@ -1,0 +1,21 @@
+-- Where the bottle is in a photograph, so a story card can draw sixteen of them
+-- at the same size.
+--
+-- Sixteen photographs taken across an evening are taken from sixteen distances,
+-- and on a collage that reads as a grid of bottles at random scales. Nothing
+-- about the wine changed - only where the photographer was standing - so the
+-- card should not show it. What it takes to undo is one measurement per
+-- photograph: the bottle, and the label on it.
+--
+-- Read off the picture by the vision model rather than guessed at from the
+-- pixels: a tilted bottle over a white tablecloth and the same bottle over a
+-- tan floor defeated every threshold, edge and colour heuristic tried before
+-- this column existed.
+--
+-- One column of JSON rather than eight of numbers. Nothing queries a corner -
+-- the row is fetched whole by image id and handed to the canvas - and the
+-- shape has already grown once, from a bottle box to a bottle and a label.
+-- NULL means never measured; a stored row with null boxes means measured and
+-- nothing found, which is what stops a photograph of a cellar shelf being sent
+-- to the model again on every card.
+ALTER TABLE wine_images ADD COLUMN bottle_box TEXT;

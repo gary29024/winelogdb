@@ -271,8 +271,8 @@ describe('the usage ledger',()=>{
 });
 
 describe('every path that spends money is metered',()=>{
-  // A meter is only worth having if it covers everything. These are the six
-  // places WineLog calls Gemini; a new one added without a ledger write would
+  // A meter is only worth having if it covers everything. These are the places
+  // WineLog calls Gemini; a new one added without a ledger write would
   // be invisible in both the panel and the Cloudflare time series.
   //
   // Group Photo and Tasting Sheet declare their kind in a mode spec and hand it
@@ -287,6 +287,7 @@ describe('every path that spends money is metered',()=>{
     ['worker/vertexBatchRecognition.ts',"kind:'scan_batch'"],
     ['worker/groupRecognitionHandler.ts',"kind:'scan_group'"],
     ['worker/sheetRecognitionHandler.ts',"kind:'scan_sheet'"],
+    ['worker/bottleFrameHandler.ts',"kind:'bottle_frame'"],
     ['worker/vintageWindowHandler.ts',"kind:'vintage_window'"]
   ];
   it.each(sources)('%s records usage',async(path,kind)=>{
