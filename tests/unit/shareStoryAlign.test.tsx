@@ -39,7 +39,7 @@ async function open(count:number,frames:Record<string,unknown>={}){
   return calls;
 }
 
-describe('matching the bottle sizes on a card',()=>{
+describe('lining the bottles up on a card',()=>{
   it('never spends anything just by opening the sheet',async()=>{
     const calls=await open(3);
     // The lookup is free; measuring is the vision call, and it is a POST.
@@ -63,7 +63,7 @@ describe('matching the bottle sizes on a card',()=>{
   it('can be turned off, for a card the measurement framed badly',async()=>{
     await open(2);
     const toggle=[...host!.querySelectorAll('input[type=checkbox]')]
-      .find(input=>input.closest('label')?.textContent?.includes('Match bottle sizes')) as HTMLInputElement;
+      .find(input=>input.closest('label')?.textContent?.includes('Line the bottles up')) as HTMLInputElement;
     expect(toggle.checked,'on by default - it is what the card is for').toBe(true);
     await act(async()=>{toggle.click()});
     expect(toggle.checked).toBe(false);

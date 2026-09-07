@@ -1,5 +1,5 @@
 import { describe,expect,it } from 'vitest';
-import { alignedRect,bottleWidth,coverRect } from '../../src/features/share/bottleAlign';
+import { alignedPlacement,alignedRect,bottleTilt,bottleWidth,commonTilt,coverRect } from '../../src/features/share/bottleAlign';
 import type { BottleFrame } from '../../src/lib/images/bottleFrame';
 
 const cell={x:100,y:200,width:300,height:450};
@@ -16,7 +16,9 @@ const frame=(width:number,center=0.5,label=true):BottleFrame=>{
  */
 const leaning=(w:number,h:number,tilt:number,center=0.5):BottleFrame=>{
   const t=tilt*Math.PI/180,cos=Math.cos(t),sin=Math.sin(t);
-  const boxWidth=w*cos+h*sin,boxHeight=w*sin+h*cos;
+  // The box has to hold the slant whichever way it leans, so its sides are
+  // built from magnitudes; the axis keeps the sign.
+  const boxWidth=w*Math.abs(cos)+h*Math.abs(sin),boxHeight=w*Math.abs(sin)+h*Math.abs(cos);
   const midY=500;
   return {
     bottle:{xMin:(center*1000-boxWidth/2),yMin:midY-boxHeight/2,xMax:(center*1000+boxWidth/2),yMax:midY+boxHeight/2},
@@ -130,5 +132,80 @@ describe('a bottle held on a lean',()=>{
     expect(bottleWidth(shot.bottle!,{topX:100,topY:500,bottomX:900,bottomY:520})).toBeCloseTo(box,5);
     // And a lean past what anybody holds a bottle at is not inverted either.
     expect(bottleWidth(shot.bottle!,{topX:200,topY:200,bottomX:800,bottomY:700})).toBeCloseTo(box,5);
+  });
+});
+
+const degrees=(radians:number)=>radians*180/Math.PI;
+
+describe('settling a card on one lean',()=>{
+  const at=(tilt:number)=>leaning(60,246,tilt);
+
+  it('reads which way each bottle leans, and which way is which',()=>{
+    expect(degrees(bottleTilt(at(0).axis)!)).toBeCloseTo(0,4);
+    expect(degrees(bottleTilt(at(18).axis)!)).toBeCloseTo(18,4);
+    expect(degrees(bottleTilt(at(-18).axis)!)).toBeCloseTo(-18,4);
+    expect(bottleTilt(null),'a photograph never measured has no lean to report').toBeNull();
+    expect(bottleTilt({topX:0,topY:500,bottomX:1000,bottomY:520}),'and one on its side is a misread').toBeNull();
+  });
+
+  it('takes the middle lean of the card, not vertical',()=>{
+    // The whole point of the median: an evening shot at fifteen degrees
+    // throughout is already consistent, and turning it upright would be
+    // sixteen photographs of a tipped room for no gain.
+    expect(degrees(commonTilt([at(15),at(15),at(15)])!)).toBeCloseTo(15,4);
+    expect(degrees(commonTilt([at(-4),at(6),at(20)])!)).toBeCloseTo(6,4);
+    expect(commonTilt([{bottle:null,label:null,axis:null},null]),'nothing measured, nothing to agree on').toBeNull();
+  });
+
+  it('brings the odd bottle out towards the rest, and leaves the rest alone',()=>{
+    const lean=commonTilt([at(12),at(12),at(-6)])!;
+    expect(alignedPlacement(1200,1600,cell,.5,at(12),lean).turn,'already at the card angle').toBe(0);
+    const odd=alignedPlacement(1200,1600,cell,.5,at(-6),lean).turn;
+    expect(degrees(odd),'turned towards twelve, not to vertical').toBeGreaterThan(0);
+    expect(degrees(-6+degrees(odd)*0)).toBeLessThan(12);
+  });
+
+  it('never turns a photograph far enough to put the room on its side',()=>{
+    const lean=commonTilt([at(20),at(20),at(-25)])!;
+    const turn=degrees(alignedPlacement(1200,1600,cell,.5,at(-25),lean).turn);
+    expect(turn,'forty-five degrees of correction is capped').toBeCloseTo(12,4);
+    // What is left of the difference stays as lean, which is the point.
+    expect(-25+turn).toBeLessThan(20);
+  });
+
+  it('leaves a lean that already agrees within a couple of degrees untouched',()=>{
+    const lean=commonTilt([at(10),at(11),at(12)])!;
+    for(const tilt of [10,11,12])
+      expect(alignedPlacement(1200,1600,cell,.5,at(tilt),lean).turn,`${tilt} degrees`).toBe(0);
+  });
+
+  it('turns nothing at all when a photograph was never measured, or the card has no angle',()=>{
+    expect(alignedPlacement(1200,1600,cell,.5,frame(.3),commonTilt([at(20)])).turn,'no axis, no lean known').toBe(0);
+    expect(alignedPlacement(1200,1600,cell,.5,at(20),null).turn,'and nothing to agree with').toBe(0);
+  });
+
+  it('keeps the photograph over every corner of the cell once it is turned',()=>{
+    // The turned frame sees the cell as a bigger rectangle, and the drawing has
+    // to cover that or a triangle of blank canvas shows in the corner.
+    const lean=commonTilt([at(0),at(0),at(-30)])!;
+    for(const tilt of [-30,-20,0,14,26]){
+      const shot=at(tilt);
+      const {turn,x,y,width,height}=alignedPlacement(1200,1600,cell,.5,shot,lean);
+      const cos=Math.abs(Math.cos(turn)),sin=Math.abs(Math.sin(turn));
+      const needWidth=cell.width*cos+cell.height*sin,needHeight=cell.width*sin+cell.height*cos;
+      expect(x,`${tilt} degrees, left edge`).toBeLessThanOrEqual(-needWidth/2+1e-9);
+      expect(x+width,`${tilt} degrees, right edge`).toBeGreaterThanOrEqual(needWidth/2-1e-9);
+      expect(y,`${tilt} degrees, top edge`).toBeLessThanOrEqual(-needHeight/2+1e-9);
+      expect(y+height,`${tilt} degrees, bottom edge`).toBeGreaterThanOrEqual(needHeight/2-1e-9);
+    }
+  });
+
+  it('still draws every bottle the same width once they have been turned',()=>{
+    const lean=commonTilt([at(4),at(16),at(-10),at(24)])!;
+    const widths=[4,16,-10,24].map(tilt=>{
+      const shot=at(tilt);
+      return bottleWidth(shot.bottle!,shot.axis)*alignedPlacement(1200,1600,cell,.5,shot,lean).width/cell.width;
+    });
+    for(const width of widths)expect(width).toBeCloseTo(widths[0],2);
   });
 });

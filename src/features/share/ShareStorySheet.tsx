@@ -129,12 +129,12 @@ export function ShareStorySheet({card,onClose}:{card:StoryCard;onClose:()=>void}
       <div className="story-share-align">
         <label>
           <input type="checkbox" checked={align} onChange={event=>setAlign(event.target.checked)}/>
-          <span>Match bottle sizes</span>
+          <span>Line the bottles up</span>
         </label>
         {measuring>0
           ?<p className="story-share-note" role="status">Measuring {measuring} photograph{measuring===1?'':'s'}…</p>
           :unmeasured.length
-            ?<><p className="story-share-note">{measured?`${measured} of ${imageIds.length} photographs have been measured. `:''}Measuring reads where the bottle sits in each photograph. It is one small scan per photograph, kept for good, so a card made from these wines again is free.</p>
+            ?<><p className="story-share-note">{measured?`${measured} of ${imageIds.length} photographs have been measured. `:''}Measuring reads where the bottle sits in each photograph, and which way it leans. It is one small scan per photograph, kept for good, so a card made from these wines again is free.</p>
               <button type="button" onClick={()=>void measure()} disabled={!align}>Measure {unmeasured.length} photograph{unmeasured.length===1?'':'s'}</button></>
             :imageIds.length?<p className="story-share-note">Every bottle on this card has been measured.</p>:null}
       </div>

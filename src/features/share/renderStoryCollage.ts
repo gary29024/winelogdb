@@ -1,5 +1,5 @@
 import { labelFocusPosition } from '../../lib/wine/labelFocus';
-import { alignedRect } from './bottleAlign';
+import { alignedPlacement,commonTilt } from './bottleAlign';
 import type { BottleFrame } from '../../lib/images/bottleFrame';
 import { MAX_STORY_WINES,STORY_HEIGHT,STORY_WIDTH,collageLayout,starMark,type Cell } from './storyCollage';
 
@@ -37,10 +37,14 @@ function roundedPath(ctx:CanvasRenderingContext2D,x:number,y:number,width:number
  * only its shoulder shows, which is the part of a bottle with nothing written
  * on it.
  */
-function drawCover(ctx:CanvasRenderingContext2D,image:CanvasImageSource,width:number,height:number,cell:Cell,frame?:BottleFrame|null){
+function drawCover(ctx:CanvasRenderingContext2D,image:CanvasImageSource,width:number,height:number,cell:Cell,frame?:BottleFrame|null,lean?:number|null){
   const focus=labelFocusPosition(width,height)?0.72:0.5;
-  const rect=alignedRect(width,height,cell,focus,frame);
-  ctx.drawImage(image,rect.x,rect.y,rect.width,rect.height);
+  const {turn,x,y,width:drawn,height:tall}=alignedPlacement(width,height,cell,focus,frame,lean);
+  ctx.save();
+  ctx.translate(cell.x+cell.width/2,cell.y+cell.height/2);
+  if(turn)ctx.rotate(turn);
+  ctx.drawImage(image,x,y,drawn,tall);
+  ctx.restore();
 }
 
 function fitText(ctx:CanvasRenderingContext2D,text:string,max:number){
@@ -83,6 +87,9 @@ export function drawStoryCard(canvas:HTMLCanvasElement,card:StoryCard,photos:Map
   ctx.fillText(fitText(ctx,card.title,STORY_WIDTH-140),STORY_WIDTH/2,166);
 
   const {cells}=collageLayout(wines.length);
+  // The angle this card settles on, decided once for all of it: a lean means
+  // nothing on its own, only next to the bottle beside it.
+  const lean=frames?commonTilt(wines.map(wine=>wine.imageId?frames.get(wine.imageId):null)):null;
   wines.forEach((wine,index)=>{
     const cell=cells[index];if(!cell)return;
     const photo=wine.imageId?photos.get(wine.imageId)??null:null;
@@ -90,7 +97,7 @@ export function drawStoryCard(canvas:HTMLCanvasElement,card:StoryCard,photos:Map
     roundedPath(ctx,cell.x,cell.y,cell.width,cell.height,18);
     ctx.fillStyle=FRAME;ctx.fill();
     ctx.clip();
-    if(photo)drawCover(ctx,photo.image,photo.width,photo.height,cell,wine.imageId?frames?.get(wine.imageId):null);
+    if(photo)drawCover(ctx,photo.image,photo.width,photo.height,cell,wine.imageId?frames?.get(wine.imageId):null,lean);
     else{
       ctx.fillStyle='#e7e2d8';ctx.fillRect(cell.x,cell.y,cell.width,cell.height);
       ctx.fillStyle=MUTED;ctx.font=`700 ${Math.round(cell.width*0.3)}px ${SERIF}`;

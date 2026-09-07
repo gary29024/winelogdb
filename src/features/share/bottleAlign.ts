@@ -3,10 +3,13 @@ import type { BottleAxis,BottleBox,BottleFrame } from '../../lib/images/bottleFr
 /**
  * Drawing sixteen photographs as though they were taken from the same place.
  *
- * From the same place, not at the same angle: a bottle held on a lean stays on
- * its lean. Turning the photograph would level the bottle and tip the room it
- * was standing in, and a slanted table edge looks worse than a tilted bottle.
- * Only the size is made to agree.
+ * And at the same angle - but the card's own angle, not vertical. Bottles are
+ * held on a lean and photographed that way, and a grid where every one has been
+ * stood bolt upright looks retouched; what reads as untidy is not the lean but
+ * sixteen different leans. So the card picks the angle the evening was actually
+ * shot at - the middle one of its own bottles - and brings the others towards
+ * it, by a bounded amount, leaving the lean intact and only closing the spread.
+ * A card whose bottles already agree is turned not at all.
  *
  * The photographs are not: one bottle was held at arm's length, the next closer
  * in, and on a collage that reads as a grid of unrelated snapshots. Given where
@@ -20,6 +23,14 @@ import type { BottleAxis,BottleBox,BottleFrame } from '../../lib/images/bottleFr
  */
 export type FitCell={x:number;y:number;width:number;height:number};
 export type DrawRect={x:number;y:number;width:number;height:number};
+/**
+ * Where to draw the photograph, and how far to turn it.
+ *
+ * x and y are measured from the middle of the cell, in the frame the turn has
+ * already been applied to - which is exactly what a canvas does after a
+ * translate and a rotate, and saves the caller composing the transform twice.
+ */
+export type DrawPlacement={turn:number;x:number;y:number;width:number;height:number};
 
 /**
  * How much of a cell's width the bottle should span.
@@ -42,6 +53,18 @@ const LABEL_HEIGHT=0.52;
 const LABEL_DEPTH=0.62;
 /** Past this a phone photograph starts showing its pixels on a 1080-wide card. */
 const MAX_ZOOM=4;
+/**
+ * How far a photograph may be turned to join the rest.
+ *
+ * Turning the bottle turns the room behind it, so a table edge that was level
+ * comes out sloping - which reads worse than the tilt did. Twelve degrees is
+ * about as far as that goes unnoticed, and a bottle further out than that from
+ * the card's angle keeps the remainder of its lean rather than the room being
+ * put on its side for it.
+ */
+const MAX_TURN=12*Math.PI/180;
+/** Under this the lean already agrees, and resampling the photo buys nothing. */
+const TURN_DEADBAND=2.5*Math.PI/180;
 
 const spanX=(box:BottleBox)=>(box.xMax-box.xMin)/1000;
 const spanY=(box:BottleBox)=>(box.yMax-box.yMin)/1000;
@@ -77,6 +100,37 @@ export function bottleWidth(box:BottleBox,axis?:BottleAxis|null){
   const recovered=(boxWidth*cos-spanY(box)*sin)/determinant;
   return recovered>boxWidth*MIN_RECOVERED&&recovered<=boxWidth?recovered:boxWidth;
 }
+/**
+ * How far this bottle leans, signed, or null when it was never measured.
+ *
+ * Positive leans the way a right hand holds one - the base further right than
+ * the neck - which is the same sense a canvas rotation turns in.
+ */
+export function bottleTilt(axis?:BottleAxis|null){
+  if(!axis)return null;
+  const run=axis.bottomX-axis.topX,rise=axis.bottomY-axis.topY;
+  if(!rise)return null;
+  // An axis handed back upside down is still the same line.
+  const tilt=rise>0?Math.atan2(run,rise):Math.atan2(-run,-rise);
+  return Math.abs(tilt)<=MAX_TILT?tilt:null;
+}
+
+/**
+ * The angle a card should settle on: the middle lean of its own bottles.
+ *
+ * The median rather than the average, and rather than vertical, because it is
+ * the angle that turns the fewest photographs and the least - an evening whose
+ * bottles were all held at fifteen degrees is already consistent and should be
+ * left alone. Photographs that were never measured have no say and are never
+ * turned; they cannot be, their lean is not known.
+ */
+export function commonTilt(frames:Array<BottleFrame|null|undefined>){
+  const tilts=frames.map(frame=>bottleTilt(frame?.axis)).filter((tilt):tilt is number=>tilt!=null).sort((a,b)=>a-b);
+  if(!tilts.length)return null;
+  const middle=tilts.length>>1;
+  return tilts.length%2?tilts[middle]:(tilts[middle-1]+tilts[middle])/2;
+}
+
 const midX=(box:BottleBox)=>(box.xMin+box.xMax)/2000;
 const midY=(box:BottleBox)=>(box.yMin+box.yMax)/2000;
 
@@ -90,25 +144,54 @@ export function coverRect(imageWidth:number,imageHeight:number,cell:FitCell,focu
 /**
  * The same, aligned on a measured bottle.
  *
- * Both offsets are clamped to the cell: however far the arithmetic would like
- * to slide the photograph to centre a bottle standing at the edge of its frame,
- * an edge of the photograph must never come inside the cell. A bottle that far
- * off-centre ends up as close to the middle as its own photograph allows.
+ * Every offset is clamped to the cell: however far the arithmetic would like to
+ * slide or turn the photograph to bring a bottle standing at the edge of its
+ * frame into the middle, an edge of the photograph must never come inside the
+ * cell. A bottle that far off-centre ends up as close to the middle as its own
+ * photograph allows.
+ *
+ * Coverage outranks the zoom cap. A turned photograph has to be a little larger
+ * to keep its corners out of shot, and a soft bottle beats a triangle of blank
+ * canvas in the corner of a card.
  */
-export function alignedRect(imageWidth:number,imageHeight:number,cell:FitCell,focus:number,frame?:BottleFrame|null):DrawRect{
+export function alignedPlacement(imageWidth:number,imageHeight:number,cell:FitCell,focus:number,frame?:BottleFrame|null,lean?:number|null):DrawPlacement{
+  const centred=(rect:DrawRect,turn=0):DrawPlacement=>
+    ({turn,x:rect.x-(cell.x+cell.width/2),y:rect.y-(cell.y+cell.height/2),width:rect.width,height:rect.height});
   const bottle=frame?.bottle;
-  if(!imageWidth||!imageHeight)return {x:cell.x,y:cell.y,width:cell.width,height:cell.height};
-  if(!bottle||spanX(bottle)<=0)return coverRect(imageWidth,imageHeight,cell,focus);
+  if(!imageWidth||!imageHeight)return centred({x:cell.x,y:cell.y,width:cell.width,height:cell.height});
+  if(!bottle||spanX(bottle)<=0)return centred(coverRect(imageWidth,imageHeight,cell,focus));
+
+  const tilt=bottleTilt(frame?.axis);
+  const wanted=lean==null||tilt==null?0:lean-tilt;
+  const turn=Math.abs(wanted)<TURN_DEADBAND?0:Math.min(MAX_TURN,Math.max(-MAX_TURN,wanted));
+
+  // The cell, seen from the turned photograph: what it has to cover.
+  const cos=Math.cos(turn),sin=Math.sin(turn);
+  const needWidth=cell.width*Math.abs(cos)+cell.height*Math.abs(sin);
+  const needHeight=cell.width*Math.abs(sin)+cell.height*Math.abs(cos);
+
   const cover=Math.max(cell.width/imageWidth,cell.height/imageHeight);
-  const wanted=TARGET_BOTTLE*cell.width/(bottleWidth(bottle,frame?.axis)*imageWidth);
-  const scale=Math.min(Math.max(cover,wanted),cover*MAX_ZOOM);
+  const sized=TARGET_BOTTLE*cell.width/(bottleWidth(bottle,frame?.axis)*imageWidth);
+  const scale=Math.max(Math.min(Math.max(cover,sized),cover*MAX_ZOOM),needWidth/imageWidth,needHeight/imageHeight);
   const width=imageWidth*scale,height=imageHeight*scale;
+
+  // Where the bottle should land, carried into the turned frame.
   const anchorY=frame?.label?midY(frame.label):bottle.yMin/1000+(bottle.yMax-bottle.yMin)/1000*LABEL_DEPTH;
-  const x=cell.x+cell.width/2-midX(bottle)*width;
-  const y=cell.y+cell.height*LABEL_HEIGHT-anchorY*height;
+  const targetY=cell.height*(LABEL_HEIGHT-0.5);
+  const x=targetY*sin-midX(bottle)*width;
+  const y=targetY*cos-anchorY*height;
   return {
-    x:Math.min(cell.x,Math.max(cell.x+cell.width-width,x)),
-    y:Math.min(cell.y,Math.max(cell.y+cell.height-height,y)),
+    turn,
+    x:Math.min(-needWidth/2,Math.max(needWidth/2-width,x)),
+    y:Math.min(-needHeight/2,Math.max(needHeight/2-height,y)),
     width,height
   };
 }
+
+/** The placement as a plain rectangle. Only meaningful while nothing is turned. */
+export const placementRect=(cell:FitCell,placement:DrawPlacement):DrawRect=>
+  ({x:cell.x+cell.width/2+placement.x,y:cell.y+cell.height/2+placement.y,width:placement.width,height:placement.height});
+
+/** The unturned case, kept for callers that have no card to agree with. */
+export const alignedRect=(imageWidth:number,imageHeight:number,cell:FitCell,focus:number,frame?:BottleFrame|null):DrawRect=>
+  placementRect(cell,alignedPlacement(imageWidth,imageHeight,cell,focus,frame,null));
