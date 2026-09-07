@@ -6,7 +6,12 @@ type ProducerRow={
   id:string;canonical_name:string;match_key:string;home_country:string|null;home_region:string|null;home_locality:string|null;
   official_website_url?:string|null;instagram_url?:string|null;contact_email?:string|null;contact_phone?:string|null;contact_sources_json?:string|null;
   hero_image_object_key?:string|null;hero_image_source_url?:string|null;
-  profile:string;winemaking_practices?:string|null;catalog_json:string;sources_json:string;research_model:string|null;researched_at:string|null;created_at:string;updated_at:string
+  profile:string;winemaking_practices?:string|null;catalog_json:string;sources_json:string;research_model:string|null;researched_at:string|null;
+  /**
+   * Optional because a merge recorded before this column existed snapshots a
+   * row without it, and those snapshots are what an undo restores from.
+   */
+  profile_researched_at?:string|null;created_at:string;updated_at:string
 };
 type CacheRow={scope:ResearchScope;cache_key:string;subject_json:string;result_json:string;sources_json:string;model:string;researched_at:string;created_at:string;updated_at:string};
 type AliasRow={normalized_alias:string;display_alias:string};
@@ -17,7 +22,15 @@ type ArchiveInput={mergeId:string;originId:string;originName:string;type:string;
 
 const parseJson=<T>(raw:unknown,fallback:T):T=>{try{return JSON.parse(String(raw)) as T}catch{return fallback}};
 const time=(value:string|null|undefined)=>{const parsed=value?Date.parse(value):NaN;return Number.isFinite(parsed)?parsed:0};
-const producerColumns='id,canonical_name,match_key,home_country,home_region,home_locality,official_website_url,instagram_url,contact_email,contact_phone,contact_sources_json,hero_image_object_key,hero_image_source_url,profile,winemaking_practices,catalog_json,sources_json,research_model,researched_at,created_at,updated_at';
+/**
+ * profile_researched_at travels with the profile it dates.
+ *
+ * A merge moves one producer's profile onto another's row. Leaving the date
+ * behind would pair the winner's text with the loser's date - and a recent date
+ * on a stale profile is exactly what stops it ever being researched again,
+ * which is the fault this column was added to fix.
+ */
+const producerColumns='id,canonical_name,match_key,home_country,home_region,home_locality,official_website_url,instagram_url,contact_email,contact_phone,contact_sources_json,hero_image_object_key,hero_image_source_url,profile,winemaking_practices,catalog_json,sources_json,research_model,researched_at,profile_researched_at,created_at,updated_at';
 
 export function mergeSources(...lists:Source[][]){
   const seen=new Set<string>();
@@ -92,7 +105,7 @@ export async function mergeProducerEntities(db:D1Database,owner:string,destinati
     const instagram=activeProducer.instagram_url??destination.instagram_url??source.instagram_url??null;
     const contactEmail=activeProducer.contact_email??destination.contact_email??source.contact_email??null;
     const contactPhone=activeProducer.contact_phone??destination.contact_phone??source.contact_phone??null;
-    statements.push(db.prepare(`UPDATE producers SET home_country=?,home_region=?,home_locality=?,official_website_url=?,instagram_url=?,contact_email=?,contact_phone=?,contact_sources_json=?,hero_image_object_key=?,hero_image_source_url=?,profile=?,winemaking_practices=?,catalog_json=?,sources_json=?,research_model=?,researched_at=?,updated_at=? WHERE owner_id=? AND id=?`).bind(activeProducer.home_country,activeProducer.home_region,activeProducer.home_locality,officialWebsite,instagram,contactEmail,contactPhone,JSON.stringify(combinedContactSources),mediaProducer.hero_image_object_key??null,mediaProducer.hero_image_source_url??null,activeProducer.profile,activeProducer.winemaking_practices??'',activeProducer.catalog_json,JSON.stringify(combined),activeProducer.research_model,activeProducer.researched_at,now,owner,destinationId));
+    statements.push(db.prepare(`UPDATE producers SET home_country=?,home_region=?,home_locality=?,official_website_url=?,instagram_url=?,contact_email=?,contact_phone=?,contact_sources_json=?,hero_image_object_key=?,hero_image_source_url=?,profile=?,winemaking_practices=?,catalog_json=?,sources_json=?,research_model=?,researched_at=?,profile_researched_at=?,updated_at=? WHERE owner_id=? AND id=?`).bind(activeProducer.home_country,activeProducer.home_region,activeProducer.home_locality,officialWebsite,instagram,contactEmail,contactPhone,JSON.stringify(combinedContactSources),mediaProducer.hero_image_object_key??null,mediaProducer.hero_image_source_url??null,activeProducer.profile,activeProducer.winemaking_practices??'',activeProducer.catalog_json,JSON.stringify(combined),activeProducer.research_model,activeProducer.researched_at,activeProducer.profile_researched_at??null,now,owner,destinationId));
   }
 
   const groups=new Map<string,{target:ReturnType<typeof buildResearchTargets>[number];rows:Array<CacheRow&{originId:string;originName:string}>}>();
@@ -162,8 +175,8 @@ export async function unlinkProducerMerge(db:D1Database,owner:string,destination
   }
 
   const now=new Date().toISOString(),statements:D1PreparedStatement[]=[];
-  statements.push(db.prepare(`INSERT INTO producers(id,owner_id,canonical_name,match_key,home_country,home_region,home_locality,official_website_url,instagram_url,contact_email,contact_phone,contact_sources_json,hero_image_object_key,hero_image_source_url,profile,winemaking_practices,catalog_json,sources_json,research_model,researched_at,created_at,updated_at)
-    VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`).bind(source.id,owner,source.canonical_name,source.match_key,source.home_country,source.home_region,source.home_locality,source.official_website_url??null,source.instagram_url??null,source.contact_email??null,source.contact_phone??null,source.contact_sources_json??'[]',source.hero_image_object_key??null,source.hero_image_source_url??null,source.profile,source.winemaking_practices??'',source.catalog_json,source.sources_json,source.research_model,source.researched_at,source.created_at||now,now));
+  statements.push(db.prepare(`INSERT INTO producers(id,owner_id,canonical_name,match_key,home_country,home_region,home_locality,official_website_url,instagram_url,contact_email,contact_phone,contact_sources_json,hero_image_object_key,hero_image_source_url,profile,winemaking_practices,catalog_json,sources_json,research_model,researched_at,profile_researched_at,created_at,updated_at)
+    VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`).bind(source.id,owner,source.canonical_name,source.match_key,source.home_country,source.home_region,source.home_locality,source.official_website_url??null,source.instagram_url??null,source.contact_email??null,source.contact_phone??null,source.contact_sources_json??'[]',source.hero_image_object_key??null,source.hero_image_source_url??null,source.profile,source.winemaking_practices??'',source.catalog_json,source.sources_json,source.research_model,source.researched_at,source.profile_researched_at??null,source.created_at||now,now));
 
   for(const alias of aliases){
     statements.push(db.prepare(`INSERT INTO producer_aliases(owner_id,normalized_alias,producer_id,display_alias,created_at) VALUES(?,?,?,?,?)
@@ -206,7 +219,7 @@ export async function unlinkProducerMerge(db:D1Database,owner:string,destination
   }
 
   if(shouldRestorePreMerge(destination.updated_at,merge.merged_at)){
-    statements.push(db.prepare(`UPDATE producers SET canonical_name=?,match_key=?,home_country=?,home_region=?,home_locality=?,official_website_url=?,instagram_url=?,contact_email=?,contact_phone=?,contact_sources_json=?,hero_image_object_key=?,hero_image_source_url=?,profile=?,winemaking_practices=?,catalog_json=?,sources_json=?,research_model=?,researched_at=?,updated_at=? WHERE owner_id=? AND id=?`).bind(destinationBefore.canonical_name,destinationBefore.match_key,destinationBefore.home_country,destinationBefore.home_region,destinationBefore.home_locality,destinationBefore.official_website_url??null,destinationBefore.instagram_url??null,destinationBefore.contact_email??null,destinationBefore.contact_phone??null,destinationBefore.contact_sources_json??'[]',destinationBefore.hero_image_object_key??null,destinationBefore.hero_image_source_url??null,destinationBefore.profile,destinationBefore.winemaking_practices??'',destinationBefore.catalog_json,destinationBefore.sources_json,destinationBefore.research_model,destinationBefore.researched_at,now,owner,destinationId));
+    statements.push(db.prepare(`UPDATE producers SET canonical_name=?,match_key=?,home_country=?,home_region=?,home_locality=?,official_website_url=?,instagram_url=?,contact_email=?,contact_phone=?,contact_sources_json=?,hero_image_object_key=?,hero_image_source_url=?,profile=?,winemaking_practices=?,catalog_json=?,sources_json=?,research_model=?,researched_at=?,profile_researched_at=?,updated_at=? WHERE owner_id=? AND id=?`).bind(destinationBefore.canonical_name,destinationBefore.match_key,destinationBefore.home_country,destinationBefore.home_region,destinationBefore.home_locality,destinationBefore.official_website_url??null,destinationBefore.instagram_url??null,destinationBefore.contact_email??null,destinationBefore.contact_phone??null,destinationBefore.contact_sources_json??'[]',destinationBefore.hero_image_object_key??null,destinationBefore.hero_image_source_url??null,destinationBefore.profile,destinationBefore.winemaking_practices??'',destinationBefore.catalog_json,destinationBefore.sources_json,destinationBefore.research_model,destinationBefore.researched_at,destinationBefore.profile_researched_at??null,now,owner,destinationId));
   }
 
   statements.push(db.prepare('UPDATE producer_merges SET undone_at=? WHERE owner_id=? AND id=? AND undone_at IS NULL').bind(now,owner,mergeId));
