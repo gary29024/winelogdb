@@ -66,11 +66,20 @@ const nullableBoundingBox={
   ]
 } as const;
 
+const nullableAxis={
+  anyOf:[
+    {type:'object',additionalProperties:false,
+      properties:{topX:{type:'number',minimum:0,maximum:1000},topY:{type:'number',minimum:0,maximum:1000},bottomX:{type:'number',minimum:0,maximum:1000},bottomY:{type:'number',minimum:0,maximum:1000}},
+      required:['topX','topY','bottomX','bottomY']},
+    {type:'null'}
+  ]
+} as const;
+
 export const bottleFrameResponseJsonSchema={
   type:'object',
   additionalProperties:false,
-  properties:{bottle:nullableBoundingBox,label:nullableBoundingBox,confidence:{type:'number',minimum:0,maximum:1}},
-  required:['bottle','label','confidence']
+  properties:{bottle:nullableBoundingBox,label:nullableBoundingBox,axis:nullableAxis,confidence:{type:'number',minimum:0,maximum:1}},
+  required:['bottle','label','axis','confidence']
 } as const;
 
 export const groupRecognitionResponseJsonSchema={

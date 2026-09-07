@@ -1,13 +1,30 @@
 import { describe,expect,it } from 'vitest';
-import { alignedRect,coverRect } from '../../src/features/share/bottleAlign';
+import { alignedRect,bottleWidth,coverRect } from '../../src/features/share/bottleAlign';
 import type { BottleFrame } from '../../src/lib/images/bottleFrame';
 
 const cell={x:100,y:200,width:300,height:450};
 /** A bottle taking `width` of the frame's width, centred at `center`. */
 const frame=(width:number,center=0.5,label=true):BottleFrame=>{
   const bottle={xMin:(center-width/2)*1000,yMin:120,xMax:(center+width/2)*1000,yMax:880};
-  return {bottle,label:label?{xMin:bottle.xMin+10,yMin:520,xMax:bottle.xMax-10,yMax:700}:null};
+  return {bottle,label:label?{xMin:bottle.xMin+10,yMin:520,xMax:bottle.xMax-10,yMax:700}:null,axis:null};
 };
+
+/**
+ * The same bottle - width w, height h - leaning at `tilt` degrees, as the model
+ * would report it: an upright box big enough to hold the slant, and the axis
+ * down the middle of the glass.
+ */
+const leaning=(w:number,h:number,tilt:number,center=0.5):BottleFrame=>{
+  const t=tilt*Math.PI/180,cos=Math.cos(t),sin=Math.sin(t);
+  const boxWidth=w*cos+h*sin,boxHeight=w*sin+h*cos;
+  const midY=500;
+  return {
+    bottle:{xMin:(center*1000-boxWidth/2),yMin:midY-boxHeight/2,xMax:(center*1000+boxWidth/2),yMax:midY+boxHeight/2},
+    label:null,
+    axis:{topX:center*1000-sin*h/2,topY:midY-cos*h/2,bottomX:center*1000+sin*h/2,bottomY:midY+cos*h/2}
+  };
+};
+const spanOf=(box:{xMin:number;xMax:number})=>(box.xMax-box.xMin)/1000;
 const covers=(rect:{x:number;y:number;width:number;height:number})=>
   rect.x<=cell.x&&rect.y<=cell.y&&rect.x+rect.width>=cell.x+cell.width&&rect.y+rect.height>=cell.y+cell.height;
 
@@ -64,7 +81,7 @@ describe('drawing sixteen photographs as though they were taken from one place',
   });
 
   it('draws a photograph that was never measured exactly as it always did',()=>{
-    for(const frames of [null,undefined,{bottle:null,label:null}]){
+    for(const frames of [null,undefined,{bottle:null,label:null,axis:null}]){
       const rect=alignedRect(1200,1600,cell,.72,frames);
       expect(rect).toEqual(coverRect(1200,1600,cell,.72));
     }
@@ -73,5 +90,45 @@ describe('drawing sixteen photographs as though they were taken from one place',
   it('does not divide by a photograph of no size',()=>{
     const rect=alignedRect(0,0,cell,.5,frame(.3));
     expect(Number.isFinite(rect.width)&&Number.isFinite(rect.height)).toBe(true);
+  });
+});
+
+describe('a bottle held on a lean',()=>{
+  it('is measured as the glass, not as the box the slant needs',()=>{
+    // The defect this exists for: an axis-aligned box around a bottle at
+    // twenty degrees is more than twice the width of the bottle, so scaling
+    // boxes to a common width draws the tilted one less than half the size of
+    // its upright neighbour.
+    const upright=bottleWidth(leaning(60,246,0).bottle!,leaning(60,246,0).axis);
+    for(const tilt of [8,15,20,25,30]){
+      const shot=leaning(60,246,tilt);
+      expect(bottleWidth(shot.bottle!,shot.axis),`${tilt} degrees`).toBeCloseTo(upright,2);
+      expect(spanOf(shot.bottle!),`${tilt} degrees boxes wider than the glass`).toBeGreaterThan(upright);
+    }
+  });
+
+  it('draws the leaning bottle the same size as the upright one',()=>{
+    const widths=[0,10,20,28].map(tilt=>{
+      const shot=leaning(60,246,tilt);
+      return bottleWidth(shot.bottle!,shot.axis)*alignedRect(1200,1600,cell,.5,shot).width/cell.width;
+    });
+    for(const width of widths)expect(width).toBeCloseTo(widths[0],2);
+  });
+
+  it('leaves the photograph on its lean - only the size is made to agree',()=>{
+    // Nothing here rotates: turning the bottle level would tip the room it was
+    // photographed in, and a slanted table edge reads worse than a tilt.
+    const rect=alignedRect(1200,1600,cell,.5,leaning(60,246,22));
+    expect(Object.keys(rect).sort()).toEqual(['height','width','x','y']);
+  });
+
+  it('keeps the box when the axis is missing, absurd, or lying down',()=>{
+    const shot=leaning(60,246,20);
+    const box=spanOf(shot.bottle!);
+    expect(bottleWidth(shot.bottle!,null)).toBeCloseTo(box,5);
+    // A bottle on its side is a misread of some other object in the frame.
+    expect(bottleWidth(shot.bottle!,{topX:100,topY:500,bottomX:900,bottomY:520})).toBeCloseTo(box,5);
+    // And a lean past what anybody holds a bottle at is not inverted either.
+    expect(bottleWidth(shot.bottle!,{topX:200,topY:200,bottomX:800,bottomY:700})).toBeCloseTo(box,5);
   });
 });

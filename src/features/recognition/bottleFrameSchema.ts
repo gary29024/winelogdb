@@ -25,9 +25,18 @@ import type { BottleFrame } from '../../lib/images/bottleFrame';
 // back as "the bottle fills the photograph" rather than "there is no bottle".
 const nullableBox=z.union([z.null(),groupBoundingBoxSchema]).optional().default(null);
 
+const axisPoint=z.number().min(0).max(1000);
+const nullableAxis=z.union([z.null(),z.object({
+  topX:axisPoint,topY:axisPoint,bottomX:axisPoint,bottomY:axisPoint
+})]).optional().default(null);
+
 export const bottleFrameSchema=z.object({
   bottle:nullableBox,
   label:nullableBox,
+  // Two points down the middle of the glass. Cheaper to ask for than a rotated
+  // box and it answers the only question the card has about the lean: how much
+  // of the bottle's box is the bottle, and how much of it is the tilt.
+  axis:nullableAxis,
   confidence:z.number().min(0).max(1).default(0)
 }).strict();
 
@@ -41,4 +50,4 @@ export function parseBottleFrameResult(raw:string):BottleFrameResult{
 }
 
 /** What gets stored, and what the card draws with. */
-export const frameOf=(result:BottleFrameResult):BottleFrame=>({bottle:result.bottle??null,label:result.label??null});
+export const frameOf=(result:BottleFrameResult):BottleFrame=>({bottle:result.bottle??null,label:result.label??null,axis:result.axis??null});

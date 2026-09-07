@@ -18,7 +18,7 @@ describe('what the model is asked for when a card wants its bottles the same siz
     // The distinction the stored column exists for: a null box is a measured
     // photograph with nothing in it, not a bottle that fills the frame.
     const result=parseBottleFrameResult('{"bottle":null,"label":null,"confidence":0}');
-    expect(frameOf(result)).toEqual({bottle:null,label:null});
+    expect(frameOf(result)).toEqual({bottle:null,label:null,axis:null});
   });
 
   it('accepts the shapes Gemini actually answers with',()=>{
@@ -40,7 +40,7 @@ describe('what the model is asked for when a card wants its bottles the same siz
 
 describe('storing a measured frame',()=>{
   it('round-trips through the column',()=>{
-    const frame={bottle:box,label:null};
+    const frame={bottle:box,label:null,axis:{topX:380,topY:80,bottomX:380,bottomY:960}};
     expect(parseBottleFrame(serializeBottleFrame(frame))).toEqual(frame);
   });
 
@@ -49,11 +49,11 @@ describe('storing a measured frame',()=>{
   });
 
   it('drops a half a box rather than drawing with three corners',()=>{
-    expect(parseBottleFrame('{"bottle":{"xMin":10,"yMin":10,"xMax":900}}')).toEqual({bottle:null,label:null});
+    expect(parseBottleFrame('{"bottle":{"xMin":10,"yMin":10,"xMax":900}}')).toEqual({bottle:null,label:null,axis:null});
   });
 
   it('reads frames for the photographs on a card in one query, scoped to the owner',async()=>{
-    const stub=createD1Stub(()=>({all:[{id:'a',bottle_box:serializeBottleFrame({bottle:box,label:null})},{id:'b',bottle_box:null}]}));
+    const stub=createD1Stub(()=>({all:[{id:'a',bottle_box:serializeBottleFrame({bottle:box,label:null,axis:null})},{id:'b',bottle_box:null}]}));
     const frames=await readBottleFrames(stub.db,'owner-1',['a','b','a']);
     expect(frames.get('a')?.bottle).toEqual(box);
     expect(frames.has('b'),'a row that was never measured is not an answer').toBe(false);
@@ -77,7 +77,7 @@ describe('storing a measured frame',()=>{
 
   it('writes the frame against the owner, so one account cannot measure another',async()=>{
     const stub=createD1Stub(()=>({changes:1}));
-    await writeBottleFrame(stub.db,'owner-1','image-9',{bottle:box,label:null});
+    await writeBottleFrame(stub.db,'owner-1','image-9',{bottle:box,label:null,axis:null});
     expect(stub.writes()).toHaveLength(1);
     expect(stub.writes()[0].sql).toMatch(/UPDATE wine_images SET bottle_box=\? WHERE owner_id=\? AND id=\?/);
     expect(stub.writes()[0].args.slice(1)).toEqual(['owner-1','image-9']);

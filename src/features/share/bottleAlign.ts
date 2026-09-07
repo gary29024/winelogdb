@@ -1,7 +1,12 @@
-import type { BottleBox,BottleFrame } from '../../lib/images/bottleFrame';
+import type { BottleAxis,BottleBox,BottleFrame } from '../../lib/images/bottleFrame';
 
 /**
  * Drawing sixteen photographs as though they were taken from the same place.
+ *
+ * From the same place, not at the same angle: a bottle held on a lean stays on
+ * its lean. Turning the photograph would level the bottle and tip the room it
+ * was standing in, and a slanted table edge looks worse than a tilted bottle.
+ * Only the size is made to agree.
  *
  * The photographs are not: one bottle was held at arm's length, the next closer
  * in, and on a collage that reads as a grid of unrelated snapshots. Given where
@@ -39,6 +44,39 @@ const LABEL_DEPTH=0.62;
 const MAX_ZOOM=4;
 
 const spanX=(box:BottleBox)=>(box.xMax-box.xMin)/1000;
+const spanY=(box:BottleBox)=>(box.yMax-box.yMin)/1000;
+
+/**
+ * How much of the bottle's box is bottle, and how much of it is the lean.
+ *
+ * A box is axis-aligned and a bottle is usually held at an angle, so the box
+ * has to be wide enough to contain a slanted bottle: at twenty degrees it is
+ * more than twice the width of the glass. Scaling boxes to a common width
+ * would then draw the tilted bottle less than half the size of an upright one -
+ * which is the opposite of what this is for, and worse than never measuring.
+ *
+ * The photograph is not turned; only the arithmetic knows about the tilt. For a
+ * rectangle w by h leaning at t, the box is (w cos t + h sin t) by
+ * (w sin t + h cos t), and those two are solved back for w. Past forty degrees
+ * that inversion falls apart - and nobody holds a bottle at forty degrees to be
+ * photographed - so beyond it, and wherever the answer comes out absurd, the
+ * box width stands as it did.
+ */
+const MAX_TILT=40*Math.PI/180;
+/** However far it leans, the glass is never thinner than this share of its box. */
+const MIN_RECOVERED=0.22;
+
+export function bottleWidth(box:BottleBox,axis?:BottleAxis|null){
+  const boxWidth=spanX(box);
+  if(!axis)return boxWidth;
+  const run=Math.abs(axis.bottomX-axis.topX),rise=Math.abs(axis.bottomY-axis.topY);
+  if(!rise)return boxWidth;
+  const tilt=Math.atan2(run,rise);
+  if(tilt<0.03||tilt>MAX_TILT)return boxWidth;   // upright, or a misread
+  const cos=Math.cos(tilt),sin=Math.sin(tilt),determinant=cos*cos-sin*sin;
+  const recovered=(boxWidth*cos-spanY(box)*sin)/determinant;
+  return recovered>boxWidth*MIN_RECOVERED&&recovered<=boxWidth?recovered:boxWidth;
+}
 const midX=(box:BottleBox)=>(box.xMin+box.xMax)/2000;
 const midY=(box:BottleBox)=>(box.yMin+box.yMax)/2000;
 
@@ -62,7 +100,7 @@ export function alignedRect(imageWidth:number,imageHeight:number,cell:FitCell,fo
   if(!imageWidth||!imageHeight)return {x:cell.x,y:cell.y,width:cell.width,height:cell.height};
   if(!bottle||spanX(bottle)<=0)return coverRect(imageWidth,imageHeight,cell,focus);
   const cover=Math.max(cell.width/imageWidth,cell.height/imageHeight);
-  const wanted=TARGET_BOTTLE*cell.width/(spanX(bottle)*imageWidth);
+  const wanted=TARGET_BOTTLE*cell.width/(bottleWidth(bottle,frame?.axis)*imageWidth);
   const scale=Math.min(Math.max(cover,wanted),cover*MAX_ZOOM);
   const width=imageWidth*scale,height=imageHeight*scale;
   const anchorY=frame?.label?midY(frame.label):bottle.yMin/1000+(bottle.yMax-bottle.yMin)/1000*LABEL_DEPTH;
