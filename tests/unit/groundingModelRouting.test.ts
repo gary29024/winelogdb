@@ -6,23 +6,27 @@ const iso=(msAgo:number)=>new Date(Date.now()-msAgo).toISOString();
 const MINUTE=60_000,HOUR=60*MINUTE;
 
 describe('ranking a model by what it did with grounding',()=>{
-  it('prefers a model observed to ground over one never seen',()=>{
+  it('says nothing about a model it has never seen',()=>{
+    // Reported as: wine research still runs on 3.7. A model never observed used
+    // to rank below one seen to ground, so a newly configured primary lost to
+    // the record of what the old one used to do - and a model never chosen can
+    // never be observed, so it lost permanently. An observation may only demote.
+    expect(rankGroundingState(undefined)).toBe(0);
     expect(rankGroundingState({model:'a',grounding_ok_at:iso(MINUTE),grounding_failed_at:null})).toBe(0);
-    expect(rankGroundingState(undefined)).toBe(1);
   });
 
   it('routes around a model that recently answered ungrounded',()=>{
-    expect(rankGroundingState({model:'a',grounding_ok_at:null,grounding_failed_at:iso(MINUTE)})).toBe(2);
+    expect(rankGroundingState({model:'a',grounding_ok_at:null,grounding_failed_at:iso(MINUTE)})).toBe(1);
   });
 
   it('lets a model recover by grounding again',()=>{
     // The newer observation wins, so a provider fix needs no intervention.
     expect(rankGroundingState({model:'a',grounding_ok_at:iso(MINUTE),grounding_failed_at:iso(HOUR)})).toBe(0);
-    expect(rankGroundingState({model:'a',grounding_ok_at:iso(HOUR),grounding_failed_at:iso(MINUTE)})).toBe(2);
+    expect(rankGroundingState({model:'a',grounding_ok_at:iso(HOUR),grounding_failed_at:iso(MINUTE)})).toBe(1);
   });
 
   it('forgets an old failure once the cooldown has passed',()=>{
-    expect(rankGroundingState({model:'a',grounding_ok_at:null,grounding_failed_at:iso(GROUNDING_COOLDOWN_MS+MINUTE)})).toBe(1);
+    expect(rankGroundingState({model:'a',grounding_ok_at:null,grounding_failed_at:iso(GROUNDING_COOLDOWN_MS+MINUTE)})).toBe(0);
   });
 });
 
@@ -48,6 +52,19 @@ describe('choosing which model to research on',()=>{
       {model:'fallback',grounding_ok_at:null,grounding_failed_at:iso(MINUTE)}
     ]);
     expect(await orderModelsByGrounding(primaryGrounds,'o',['primary','fallback'])).toEqual(['primary','fallback']);
+  });
+
+  it('does not let a proven model outrank a newly configured one',async()=>{
+    // The upgrade that never happened: the outgoing primary carried months of
+    // observations, the incoming one carried none, and the order was decided by
+    // the record rather than by the configuration.
+    const onlyFallbackSeen=db([{model:'fallback',grounding_ok_at:iso(MINUTE),grounding_failed_at:null}]);
+    expect(await orderModelsByGrounding(onlyFallbackSeen,'o',['primary','fallback'])).toEqual(['primary','fallback']);
+  });
+
+  it('still demotes the configured primary once it actually fails to ground',async()=>{
+    const primaryFailed=db([{model:'primary',grounding_ok_at:null,grounding_failed_at:iso(MINUTE)}]);
+    expect(await orderModelsByGrounding(primaryFailed,'o',['primary','fallback'])).toEqual(['fallback','primary']);
   });
 
   it('falls back to the configured order when the health table cannot be read',async()=>{
