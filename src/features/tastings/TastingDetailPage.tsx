@@ -7,6 +7,9 @@ import { deleteTasting,detachWineFromTasting,endTasting,getTasting,reopenTasting
 import { setActiveTasting } from './useActiveTasting';
 import { TastingDocuments } from './TastingDocuments';
 import '../../tastings.css';
+import { ShareStorySheet } from '../share/ShareStorySheet';
+import { MAX_STORY_WINES } from '../share/storyCollage';
+import type { StoryCard } from '../share/renderStoryCollage';
 
 const dateLabel=(value:string|null)=>{
   if(!value)return 'No date';
@@ -47,6 +50,7 @@ export function TastingDetailPage(){
   const {id=''}=useParams(),navigate=useNavigate();
   const [tasting,setTasting]=useState<Tasting|null>(null),[wines,setWines]=useState<TastingWine[]>([]),[documents,setDocuments]=useState<TastingDocument[]>([]);
   const [loading,setLoading]=useState(true),[error,setError]=useState(''),[busy,setBusy]=useState(false);
+  const [storyCard,setStoryCard]=useState<StoryCard|null>(null);
   const [editing,setEditing]=useState(false),[nameDraft,setNameDraft]=useState(''),[venueDraft,setVenueDraft]=useState('');
 
   useEffect(()=>{
@@ -112,6 +116,7 @@ export function TastingDetailPage(){
 
     {error&&<p className="tasting-error" role="alert">{error}</p>}
 
+    {storyCard&&<ShareStorySheet card={storyCard} onClose={()=>setStoryCard(null)}/>}
     {!editing&&<div className="tasting-actions">
       {open
         ?<button type="button" onClick={()=>void run(()=>endTasting(id))} disabled={busy}>End tasting</button>
@@ -120,6 +125,18 @@ export function TastingDetailPage(){
           bottle from the page you are sitting on was the nav's Scan Wine, which
           is two taps away from the tasting you are already looking at. */}
       {open&&<Link className="button primary" to="/upload">Log a wine</Link>}
+      {/* An evening is the set of wines somebody would actually post, already
+          gathered and in pour order, so the card is one tap from it. */}
+      {wines.length>0&&<button type="button" onClick={()=>setStoryCard({
+        title:tasting.name,
+        subtitle:tasting.tastingDate
+          ?new Date(`${tasting.tastingDate}T00:00:00`).toLocaleDateString(undefined,{day:'numeric',month:'long',year:'numeric'})
+          :[tasting.venue,'WineLog'].filter(Boolean)[0] as string,
+        wines:wines.slice(0,MAX_STORY_WINES).map(wine=>({
+          id:wine.wineId,producer:wine.producer,wineName:wine.wineName,vintage:wine.vintage,
+          favorite:wine.favorite,imageId:wine.imageId
+        }))
+      })}>Share to a story</button>}
       <Link className="button" to={`/journal?attachTo=${id}`}>Add from journal</Link>
       <button type="button" onClick={()=>setEditing(true)} disabled={busy}>Rename / venue</button>
       <button type="button" className="quiet" onClick={()=>void removeTasting()} disabled={busy}>Delete</button>

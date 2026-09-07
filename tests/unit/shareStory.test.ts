@@ -1,0 +1,92 @@
+// @vitest-environment jsdom
+import { afterEach,describe,expect,it,vi } from 'vitest';
+
+const card=()=>new File(['card'],'winelog-story.jpg',{type:'image/jpeg'});
+
+async function loadModule(){
+  vi.resetModules();
+  return import('../../src/features/share/shareStory');
+}
+
+/** A navigator with only the share bits the sheet actually asks about. */
+const navigatorWith=(parts:Partial<{share:unknown;canShare:unknown}>)=>parts as unknown as Navigator;
+
+afterEach(()=>{vi.unstubAllGlobals();vi.restoreAllMocks()});
+
+describe('deciding whether the share sheet can take the card',()=>{
+  it('says yes only when the browser has both halves of the API and accepts the file',async()=>{
+    const {canShareFiles}=await loadModule();
+    const file=card();
+    expect(canShareFiles(file,navigatorWith({share:()=>Promise.resolve(),canShare:()=>true}))).toBe(true);
+    expect(canShareFiles(file,navigatorWith({canShare:()=>true})),'no share()').toBe(false);
+    expect(canShareFiles(file,navigatorWith({share:()=>Promise.resolve()})),'no canShare()').toBe(false);
+    expect(canShareFiles(file,navigatorWith({})),'neither').toBe(false);
+  });
+
+  it('believes a browser that says it cannot take a file, rather than trying anyway',async()=>{
+    const {canShareFiles}=await loadModule();
+    // Desktop Safari has share() and canShare(), and refuses files.
+    expect(canShareFiles(card(),navigatorWith({share:()=>Promise.resolve(),canShare:()=>false}))).toBe(false);
+  });
+
+  it('asks about the very file it is about to hand over',async()=>{
+    const {canShareFiles}=await loadModule();
+    const file=card();
+    const canShare=vi.fn(()=>true);
+    canShareFiles(file,navigatorWith({share:()=>Promise.resolve(),canShare}));
+    expect(canShare).toHaveBeenCalledWith({files:[file]});
+  });
+});
+
+describe('handing the card over',()=>{
+  /** Downloads go through an <a>; watching the click is how we tell them apart. */
+  function watchDownload(){
+    const clicks:HTMLAnchorElement[]=[];
+    const create=document.createElement.bind(document);
+    vi.spyOn(document,'createElement').mockImplementation((tag:string,options?:ElementCreationOptions)=>{
+      const element=create(tag as 'a',options);
+      // preventDefault keeps jsdom from trying to navigate to the blob URL.
+      if(tag==='a')element.addEventListener('click',event=>{event.preventDefault();clicks.push(element as HTMLAnchorElement)});
+      return element;
+    });
+    vi.stubGlobal('URL',Object.assign(Object.create(URL),{createObjectURL:()=>'blob:story',revokeObjectURL:()=>undefined}));
+    return clicks;
+  }
+
+  it('reports a completed share, and does not also save the file',async()=>{
+    const share=vi.fn(async()=>undefined);
+    vi.stubGlobal('navigator',navigatorWith({share,canShare:()=>true}));
+    const clicks=watchDownload();
+    const {shareStoryFile}=await loadModule();
+    const file=card();
+    await expect(shareStoryFile(file)).resolves.toBe('shared');
+    expect(share).toHaveBeenCalledWith({files:[file]});
+    expect(clicks,'a shared card is not downloaded as well').toHaveLength(0);
+  });
+
+  it('treats a dismissed share sheet as a change of mind, not a failure',async()=>{
+    const abort=Object.assign(new Error('share cancelled'),{name:'AbortError'});
+    vi.stubGlobal('navigator',navigatorWith({share:async()=>{throw abort},canShare:()=>true}));
+    const clicks=watchDownload();
+    const {shareStoryFile}=await loadModule();
+    await expect(shareStoryFile(card())).resolves.toBe('cancelled');
+    expect(clicks,'nothing is forced on somebody who backed out').toHaveLength(0);
+  });
+
+  it('saves the card when there is no share sheet to hand it to',async()=>{
+    vi.stubGlobal('navigator',navigatorWith({}));
+    const clicks=watchDownload();
+    const {shareStoryFile}=await loadModule();
+    await expect(shareStoryFile(card())).resolves.toBe('downloaded');
+    expect(clicks).toHaveLength(1);
+    expect(clicks[0].download).toBe('winelog-story.jpg');
+  });
+
+  it('still leaves the person with the card when a share that promised to work throws',async()=>{
+    vi.stubGlobal('navigator',navigatorWith({share:async()=>{throw new Error('NotAllowedError')},canShare:()=>true}));
+    const clicks=watchDownload();
+    const {shareStoryFile}=await loadModule();
+    await expect(shareStoryFile(card())).resolves.toBe('downloaded');
+    expect(clicks,'the fallback is the point of this branch').toHaveLength(1);
+  });
+});

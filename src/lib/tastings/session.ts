@@ -163,6 +163,8 @@ export type TastingWine={
   wineId:string;producer:string;wineName:string;vintage:number|null;wineStyle:string|null;
   appellation:string|null;region:string|null;country:string|null;
   rating:number|null;consumedAt:string|null;notes:string;imageId:string|null;
+  /** Only for the story card, which marks a favourite in its own corner. */
+  favorite:boolean;
 };
 
 /**
@@ -172,7 +174,7 @@ export type TastingWine={
  */
 export async function readTastingWines(db:D1Database,owner:string,id:string):Promise<TastingWine[]>{
   const {results}=await db.prepare(`SELECT we.id AS experience_id,w.id AS wine_id,w.producer,w.wine_name,w.vintage,w.wine_style,
-      w.appellation,w.region,w.country,
+      w.appellation,w.region,w.country,w.favorite,
       coalesce(we.rating,w.rating) AS rating,
       coalesce(we.consumed_at,w.tasting_date) AS consumed_at,
       coalesce(we.tasting_notes,'') AS notes,
@@ -188,6 +190,7 @@ export async function readTastingWines(db:D1Database,owner:string,id:string):Pro
     region:row.region?String(row.region):null,
     country:row.country?String(row.country):null,
     rating:row.rating==null?null:Number(row.rating),
+    favorite:Boolean(Number(row.favorite)||0),
     consumedAt:row.consumed_at?String(row.consumed_at):null,
     notes:String(row.notes??''),
     imageId:row.image_id?String(row.image_id):null
