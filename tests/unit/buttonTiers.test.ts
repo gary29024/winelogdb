@@ -198,3 +198,47 @@ describe('a button that paints no background of its own',()=>{
     expect(ghosts.length).toBeGreaterThan(3);
   });
 });
+
+describe('a selected state that has to survive the pointer',()=>{
+  /**
+   * Reported as: tapping Tasted or Favorites in the Journal made that tab's
+   * label disappear until you tapped another one. The selected pill paints
+   * `background:var(--ink)` and lays `color:var(--paper)` on it, but the ghost
+   * rule that keeps an unselected tab transparent is
+   * `.journal-scope-tabs button:hover:not(:disabled)` at (0,3,1) - and a class
+   * on its own is (0,2,1). The pointer arriving stripped the fill and left
+   * white lettering on a white row; on a phone, a tap leaves :hover behind
+   * until you touch something else, so it stayed gone.
+   *
+   * The escape is to name the selected state in the hover rule too. This finds
+   * the next one of these rather than the one already fixed.
+   */
+  const transparent=/(?:^|;)\s*background\s*:\s*(?:0 0|transparent|none)\s*(?:;|$)/;
+  const painted=/(?:^|;)\s*background\s*:\s*var\(|(?:^|;)\s*background\s*:\s*#/;
+  /** The part of a selector before its state, so a rule can be matched to its base. */
+  const baseOf=(selector:string)=>selector.split(':')[0].replace(/\.active\b/,'').trim();
+
+  const ghosts=rules.filter(rule=>/:hover/.test(rule.selector)&&transparent.test(rule.body));
+
+  it('is not stripped by the hover rule that keeps its siblings transparent',()=>{
+    const blanked=ghosts.flatMap(ghost=>ghost.selector.split(',').map(part=>part.trim()).flatMap(part=>{
+      const base=baseOf(part);
+      if(!base||/\.active\b/.test(part))return [];
+      // Somewhere the same base is painted while selected...
+      const selected=rules.filter(rule=>rule.selector.split(',').some(other=>
+        /\.active\b/.test(other)&&baseOf(other.trim())===base)&&painted.test(rule.body));
+      if(!selected.length)return [];
+      // ...so the hover rule has to say the selected one is not its business.
+      const excused=rules.some(rule=>rule.selector.split(',').some(other=>
+        /\.active\b/.test(other)&&/:hover/.test(other)&&baseOf(other.trim())===base)&&painted.test(rule.body));
+      return excused?[]:[`${ghost.sheet}: ${part}`];
+    }));
+    expect(blanked,'selected states a transparent hover rule would blank').toEqual([]);
+  });
+
+  it('has a case to check, so the guard is not passing on an empty set',()=>{
+    expect(ghosts.length).toBeGreaterThan(0);
+    expect(rules.some(rule=>/\.active\b/.test(rule.selector)&&/:hover/.test(rule.selector)),
+      'and at least one selected state names the pointer').toBe(true);
+  });
+});
