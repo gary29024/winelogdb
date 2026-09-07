@@ -124,3 +124,41 @@ describe('the group recognition handler, as it behaves today',()=>{
     expect((await run(undefined,{anonymous:true})).response.status).toBe(401);
   });
 });
+
+describe('what the log keeps when a scan will not parse',()=>{
+  /**
+   * Asked as: is it worth logging payloads through AI Gateway? Not as a
+   * standing setting - recognition sends photographs as inline base64, so
+   * payload logging keeps a copy of every bottle, table and priced wine list
+   * outside D1. What was actually wanted, twice, is what the model said. A
+   * schema error names the field that was wrong and says nothing about what was
+   * put there, which is the half that took a screenshot and a guess to recover.
+   */
+  const logged=(spy:ReturnType<typeof vi.spyOn>)=>spy.mock.calls
+    .map(call=>{try{return JSON.parse(String(call[0])) as Record<string,unknown>}catch{return {}}});
+
+  it('keeps the reply itself, bounded, and never the request',async()=>{
+    const error=vi.spyOn(console,'error').mockImplementation(()=>undefined);
+    const wrong='{"wines":[{"producer":"Krug","boundingBox":{"xMin":0,"ymax":900}}],"unresolvedCount":0}';
+    stubGemini([()=>new Response(JSON.stringify({candidates:[{content:{parts:[{text:wrong}]},finishReason:'STOP'}]}),
+      {status:200,headers:{'content-type':'application/json'}})]);
+    const {response}=await run();
+    expect(response.status).toBe(502);
+    const failure=logged(error).find(entry=>entry.event==='group-recognition-error');
+    expect(failure,'the failure is logged at all').toBeTruthy();
+    expect(String(failure!.reply),'and carries what the model actually said').toContain('ymax');
+    expect(Number(failure!.replyChars)).toBe(wrong.length);
+    expect(JSON.stringify(failure)).not.toContain('inlineData');
+    expect(String(failure!.reply).length,'bounded, so a long reply cannot flood the log').toBeLessThanOrEqual(800);
+    error.mockRestore();
+  });
+
+  it('says nothing about a reply that parsed',async()=>{
+    const error=vi.spyOn(console,'error').mockImplementation(()=>undefined);
+    stubGemini([()=>geminiReply({wines:[wine()],unresolvedCount:0})]);
+    const {response}=await run();
+    expect(response.status).toBe(200);
+    expect(logged(error).some(entry=>entry.event==='group-recognition-error')).toBe(false);
+    error.mockRestore();
+  });
+});

@@ -30,6 +30,10 @@ export const CAMPAIGN_STALE_RUN_MS=STALLED_RUN_MS;
  * A profile request plus one whole-range catalogue request. A range that does
  * not fit one answer is split and re-asked, so this is the floor rather than a
  * promise.
+ *
+ * A campaign researches producers that have never been researched, and those
+ * always need both halves. A producer whose profile is still current sends the
+ * range alone, so one is the floor everywhere else.
  */
 export const GEMINI_REQUESTS_PER_PRODUCER=2;
 /**

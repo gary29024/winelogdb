@@ -53,6 +53,29 @@ const SLICE_OUTPUT_TOKENS=16384;
  * same promise every other failure here keeps.
  */
 export const MAX_INCOMPLETE_SPLITS=3;
+/**
+ * How long a producer's profile is taken as still true.
+ *
+ * Measured on a real month: a producer Deep Search costs about twice a wine's,
+ * and it is the most frequent of the two. Half of that is a second grounded
+ * request asking again where the estate is, who owns it and how it farms -
+ * facts that do not move. The range does move, and is the reason anyone presses
+ * refresh.
+ *
+ * So a profile that exists, knows its country and was researched inside this
+ * window is kept, and the run asks only for the range. Anything thinner than
+ * that - no profile, no country, or old enough that an estate may have changed
+ * hands - is researched again. The window is also the escape: nothing needs a
+ * new control, it just costs a wait.
+ */
+export const PROFILE_FRESH_DAYS=90;
+type ProfileFreshness={profile?:unknown;home_country?:unknown;researched_at?:unknown};
+export function profileIsFresh(row:ProfileFreshness|null|undefined,now=Date.now()){
+  if(!row)return false;
+  if(!String(row.profile??'').trim()||!String(row.home_country??'').trim())return false;
+  const researched=Date.parse(String(row.researched_at??''));
+  return Number.isFinite(researched)&&researched<=now&&now-researched<PROFILE_FRESH_DAYS*24*60*60*1000;
+}
 const PROFILE_SOURCE_KEY='__profile_sources__';
 const CATEGORIES=new Set<CatalogCategory>(['red','white','rose','sparkling','dessert','fortified','orange','other']);
 const PAGE_TIMEOUT_MS=8_000,IMAGE_TIMEOUT_MS=10_000,MAX_PAGE_BYTES=384*1024,MAX_HERO_BYTES=5*1024*1024;
@@ -323,21 +346,24 @@ async function submitBatch(env:Env,owner:string,producerId:string,requestId:stri
   try{
     googleName=await createGeminiBatch(env.GEMINI_API_KEY,model,`winelog-producer-${requestId}-${attempt}`,entries);
     jobId=await createResearchBatchJob(env.DB,{owner,requestId,targetKind:'producer',targetId:producerId,googleBatchName:googleName,model,attempt,keys});
-    const baseCount=keys.filter(key=>parseSliceKey(key)).length,message=attempt===1?`Producer profile plus ${baseCount} bounded catalogue slices submitted to Gemini 3.8 Batch`:`Retrying only ${keys.length} failed producer research part${keys.length===1?'':'s'} with ${model}`;
+    const baseCount=keys.filter(key=>parseSliceKey(key)).length,asked=keys.includes('profile')?'Producer profile plus':'Range only, profile still current -';
+    const message=attempt===1?`${asked} ${baseCount} bounded catalogue slice${baseCount===1?'':'s'} submitted to Batch`:`Retrying only ${keys.length} failed producer research part${keys.length===1?'':'s'} with ${model}`;
     await setRunState(env.DB,owner,requestId,'running',attempt===1?'searching':'retrying',attempt,message);
     await env.RESEARCH_QUEUE.send({kind:'producer_batch_poll',owner,producerId,requestId,jobId,pollCount:0},{delaySeconds:researchBatchFirstPollDelay(isEmulatedGeminiBatchName(googleName))});log('log',{requestId,producerId,stage:'batch_submitted',attempt,model,keys,googleName});return jobId;
   }catch(e){const error=(e as Error).message||'Producer Batch submission failed';if(jobId)await finishResearchBatchJob(env.DB,owner,jobId,'failed',`Batch setup failed: ${error}`).catch(()=>undefined);if(googleName)await cancelGeminiBatch(env.GEMINI_API_KEY,googleName).catch(()=>undefined);throw e}
 }
 export async function startProducerBatchResearch(env:Env,owner:string,producerId:string,requestId:string){
-  const keys=['profile',...catalogDefaultChunkKeys];
+  const known=await env.DB.prepare('SELECT profile,home_country,researched_at FROM producers WHERE owner_id=? AND id=?')
+    .bind(owner,producerId).first<ProfileFreshness>();
+  const keys=[...(profileIsFresh(known)?[]:['profile']),...catalogDefaultChunkKeys];
   try{await prepareProducerCatalogStage(env.DB,owner,producerId,requestId);await submitBatch(env,owner,producerId,requestId,1,PRIMARY_MODEL,keys);return {ok:true as const}}
   catch(e){const primaryError=(e as Error).message||'Gemini 3.8 Batch submission failed';log('warn',{requestId,producerId,stage:'primary_submit_failed',error:primaryError});try{await submitBatch(env,owner,producerId,requestId,2,FALLBACK_MODEL,keys);return {ok:true as const}}catch(fallback){const error=`Gemini 3.8 submission failed (${primaryError}); Gemini 3.7 fallback also failed: ${(fallback as Error).message||'unknown error'}`;await discardProducerCatalogStage(env.DB,owner,requestId).catch(()=>undefined);await setRunState(env.DB,owner,requestId,'failed','failed',2,error).catch(()=>undefined);return {ok:false as const,error}}}
 }
 
-async function completionMessage(db:D1Database,owner:string,producerId:string){
+async function completionMessage(db:D1Database,owner:string,producerId:string,researchedProfile=true){
   const row=await db.prepare('SELECT catalog_json,profile,official_website_url,instagram_url,contact_email,contact_phone FROM producers WHERE owner_id=? AND id=?').bind(owner,producerId).first<Record<string,unknown>>();
   const catalog=parseJson<unknown>(row?.catalog_json,[]),count=Array.isArray(catalog)?catalog.length:0,profileSaved=Boolean(String(row?.profile??'').trim()),hasContact=Boolean(row?.official_website_url||row?.instagram_url||row?.contact_email||row?.contact_phone);
-  return `Producer research complete · Profile ${profileSaved?'saved':'not available'} · Contacts ${hasContact?'verified':'no verified public contact found'} · Catalogue ${count} wine${count===1?'':'s'} committed atomically from bounded slices`;
+  return `Producer research complete · Profile ${!profileSaved?'not available':researchedProfile?'saved':'kept, still current'} · Contacts ${hasContact?'verified':'no verified public contact found'} · Catalogue ${count} wine${count===1?'':'s'} committed atomically from bounded slices`;
 }
 async function failRun(env:Env,owner:string,producerId:string,requestId:string,job:ResearchBatchJob,error:string){
   await finishResearchBatchJob(env.DB,owner,job.id,'failed',error).catch(()=>undefined);await discardProducerCatalogStage(env.DB,owner,requestId).catch(()=>undefined);await setRunState(env.DB,owner,requestId,'failed','failed',job.attempt,error).catch(()=>undefined);log('error',{requestId,producerId,stage:'research_failed',attempt:job.attempt,error});
@@ -427,7 +453,7 @@ export async function pollProducerBatchResearch(env:Env,owner:string,producerId:
   const uniqueFailed=[...new Set(failed)];await finishResearchBatchJob(env.DB,owner,job.id,uniqueFailed.length?'failed':'complete',uniqueFailed.length?uniqueFailed.map(key=>errors.get(key)).filter(Boolean).join('; '):null);
   if(!uniqueFailed.length){
     if(!catalogSummary){await discardProducerCatalogStage(env.DB,owner,requestId).catch(()=>undefined);await setRunState(env.DB,owner,requestId,'failed','failed',job.attempt,'Producer research ended without complete A–Z catalogue coverage; the previous visible catalogue was kept unchanged.');return}
-    const message=await completionMessage(env.DB,owner,producerId);await discardProducerCatalogStage(env.DB,owner,requestId).catch(()=>undefined);await setRunState(env.DB,owner,requestId,'complete','complete',job.attempt,message);log('log',{requestId,producerId,stage:'complete',attempt:job.attempt,catalogSummary});return;
+    const message=await completionMessage(env.DB,owner,producerId,job.keys.includes('profile'));await discardProducerCatalogStage(env.DB,owner,requestId).catch(()=>undefined);await setRunState(env.DB,owner,requestId,'complete','complete',job.attempt,message);log('log',{requestId,producerId,stage:'complete',attempt:job.attempt,catalogSummary});return;
   }
 
   if(job.attempt===1){try{await submitBatch(env,owner,producerId,requestId,2,FALLBACK_MODEL,uniqueFailed);return}catch(e){await failRun(env,owner,producerId,requestId,job,`Could not submit focused fallback for ${uniqueFailed.join(', ')}: ${(e as Error).message}`);return}}
