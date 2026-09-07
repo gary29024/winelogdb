@@ -69,11 +69,11 @@ export const MAX_INCOMPLETE_SPLITS=3;
  * new control, it just costs a wait.
  */
 export const PROFILE_FRESH_DAYS=90;
-type ProfileFreshness={profile?:unknown;home_country?:unknown;researched_at?:unknown};
+type ProfileFreshness={profile?:unknown;home_country?:unknown;profile_researched_at?:unknown};
 export function profileIsFresh(row:ProfileFreshness|null|undefined,now=Date.now()){
   if(!row)return false;
   if(!String(row.profile??'').trim()||!String(row.home_country??'').trim())return false;
-  const researched=Date.parse(String(row.researched_at??''));
+  const researched=Date.parse(String(row.profile_researched_at??''));
   return Number.isFinite(researched)&&researched<=now&&now-researched<PROFILE_FRESH_DAYS*24*60*60*1000;
 }
 const PROFILE_SOURCE_KEY='__profile_sources__';
@@ -295,8 +295,8 @@ async function saveProfile(env:Env,owner:string,producerId:string,requestId:stri
   const contactSources=mergeSources(cleanContactSources(parseJson(row.contact_sources_json,[])),contactGrounding.sources,siteContacts.sources).slice(0,10);
   const profileSources=sourcesFrom(metadata),sources=mergeSources(parseJson<ResearchSource[]>(row.sources_json,[]),profileSources),stamp=now();
   await stageProducerCatalogParts<CatalogWine>(env.DB,[{owner,requestId,producerId,sliceKey:PROFILE_SOURCE_KEY,range:[],sources:profileSources,model}]);
-  await env.DB.prepare('UPDATE producers SET home_country=?,home_region=?,home_locality=?,official_website_url=?,instagram_url=?,contact_email=?,contact_phone=?,contact_sources_json=?,profile=?,winemaking_practices=?,sources_json=?,research_model=?,researched_at=?,updated_at=? WHERE owner_id=? AND id=?')
-    .bind(profile.homeCountry?.trim()||null,profile.homeRegion?.trim()||null,profile.homeLocality?.trim()||null,official,instagram,email,phone,JSON.stringify(contactSources),profile.profile.trim(),profile.winemakingPractices.trim(),JSON.stringify(sources),`${model} (batch profile)`,stamp,stamp,owner,producerId).run();
+  await env.DB.prepare('UPDATE producers SET home_country=?,home_region=?,home_locality=?,official_website_url=?,instagram_url=?,contact_email=?,contact_phone=?,contact_sources_json=?,profile=?,winemaking_practices=?,sources_json=?,research_model=?,researched_at=?,profile_researched_at=?,updated_at=? WHERE owner_id=? AND id=?')
+    .bind(profile.homeCountry?.trim()||null,profile.homeRegion?.trim()||null,profile.homeLocality?.trim()||null,official,instagram,email,phone,JSON.stringify(contactSources),profile.profile.trim(),profile.winemakingPractices.trim(),JSON.stringify(sources),`${model} (batch profile)`,stamp,stamp,stamp,owner,producerId).run();
   if(official){try{const hero=await heroImage(env,owner,official,row.hero_image_rejected_url?String(row.hero_image_rejected_url):null);if(hero){const old=row.hero_image_object_key?String(row.hero_image_object_key):null;await env.DB.prepare('UPDATE producers SET hero_image_object_key=?,hero_image_source_url=?,updated_at=? WHERE owner_id=? AND id=?').bind(hero.objectKey,hero.sourceUrl,now(),owner,producerId).run();if(old&&old!==hero.objectKey)await env.WINE_IMAGES.delete(old).catch(()=>undefined)}}catch(e){log('warn',{requestId,producerId,stage:'hero_skipped',error:(e as Error).message})}}
 }
 function normalizeCatalogRange(catalog:CatalogResult,slice:CatalogSlice,names:string[]){
@@ -353,7 +353,7 @@ async function submitBatch(env:Env,owner:string,producerId:string,requestId:stri
   }catch(e){const error=(e as Error).message||'Producer Batch submission failed';if(jobId)await finishResearchBatchJob(env.DB,owner,jobId,'failed',`Batch setup failed: ${error}`).catch(()=>undefined);if(googleName)await cancelGeminiBatch(env.GEMINI_API_KEY,googleName).catch(()=>undefined);throw e}
 }
 export async function startProducerBatchResearch(env:Env,owner:string,producerId:string,requestId:string){
-  const known=await env.DB.prepare('SELECT profile,home_country,researched_at FROM producers WHERE owner_id=? AND id=?')
+  const known=await env.DB.prepare('SELECT profile,home_country,profile_researched_at FROM producers WHERE owner_id=? AND id=?')
     .bind(owner,producerId).first<ProfileFreshness>();
   const keys=[...(profileIsFresh(known)?[]:['profile']),...catalogDefaultChunkKeys];
   try{await prepareProducerCatalogStage(env.DB,owner,producerId,requestId);await submitBatch(env,owner,producerId,requestId,1,PRIMARY_MODEL,keys);return {ok:true as const}}

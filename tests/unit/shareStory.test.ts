@@ -1,5 +1,6 @@
 // @vitest-environment jsdom
 import { afterEach,describe,expect,it,vi } from 'vitest';
+import type { LoadedPhoto,StoryCard } from '../../src/features/share/renderStoryCollage';
 
 const card=()=>new File(['card'],'winelog-story.jpg',{type:'image/jpeg'});
 
@@ -12,6 +13,42 @@ async function loadModule(){
 const navigatorWith=(parts:Partial<{share:unknown;canShare:unknown}>)=>parts as unknown as Navigator;
 
 afterEach(()=>{vi.unstubAllGlobals();vi.restoreAllMocks()});
+
+describe('loading story photos',()=>{
+  const story:StoryCard={title:'Evening',subtitle:'Today',wines:[
+    {id:'w1',producer:'P',wineName:'W',vintage:2020,favorite:false,imageId:'img-1'}
+  ]};
+
+  it('shares pending fetches and decodes across overlapping redraws',async()=>{
+    let resolve!:(response:Response)=>void;
+    const fetch=vi.fn(()=>new Promise<Response>(done=>{resolve=done}));
+    const decode=vi.fn(async()=>({width:400,height:600}));
+    vi.stubGlobal('fetch',fetch);vi.stubGlobal('createImageBitmap',decode);
+    const {loadStoryPhotos}=await loadModule();
+    const cache=new Map<string,LoadedPhoto>();
+    const first=loadStoryPhotos(story,cache),second=loadStoryPhotos(story,cache);
+    expect(fetch).toHaveBeenCalledTimes(1);
+    resolve(new Response(new Blob(['photo'])));
+    await Promise.all([first,second]);
+    await loadStoryPhotos(story,cache);
+    expect(fetch).toHaveBeenCalledTimes(1);
+    expect(decode).toHaveBeenCalledTimes(1);
+    expect(cache.get('img-1')?.width).toBe(400);
+  });
+
+  it('retries a failed load on the next redraw',async()=>{
+    const fetch=vi.fn().mockResolvedValueOnce(new Response(null,{status:503}))
+      .mockResolvedValueOnce(new Response(new Blob(['photo'])));
+    vi.stubGlobal('fetch',fetch);vi.stubGlobal('createImageBitmap',vi.fn(async()=>({width:400,height:600})));
+    const {loadStoryPhotos}=await loadModule();
+    const cache=new Map<string,LoadedPhoto>();
+    await loadStoryPhotos(story,cache);
+    expect(cache.has('img-1')).toBe(false);
+    await loadStoryPhotos(story,cache);
+    expect(fetch).toHaveBeenCalledTimes(2);
+    expect(cache.get('img-1')?.width).toBe(400);
+  });
+});
 
 describe('deciding whether the share sheet can take the card',()=>{
   it('says yes only when the browser has both halves of the API and accepts the file',async()=>{

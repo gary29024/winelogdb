@@ -5,7 +5,7 @@ import { PROFILE_FRESH_DAYS,profileIsFresh,startProducerBatchResearch } from '..
 const day=24*60*60*1000;
 const now=Date.parse('2026-09-07T00:00:00.000Z');
 const known=(overrides:Record<string,unknown>={})=>
-  ({profile:'A Saint-Emilion estate.',home_country:'France',researched_at:'2026-08-01T00:00:00.000Z',...overrides});
+  ({profile:'A Saint-Emilion estate.',home_country:'France',profile_researched_at:'2026-08-01T00:00:00.000Z',...overrides});
 
 describe('what a producer run asks for',()=>{
   /**
@@ -16,25 +16,25 @@ describe('what a producer run asks for',()=>{
    */
   it('keeps a profile that exists, knows its country and is recent',()=>{
     expect(profileIsFresh(known(),now)).toBe(true);
-    expect(profileIsFresh(known({researched_at:new Date(now-(PROFILE_FRESH_DAYS-1)*day).toISOString()}),now)).toBe(true);
+    expect(profileIsFresh(known({profile_researched_at:new Date(now-(PROFILE_FRESH_DAYS-1)*day).toISOString()}),now)).toBe(true);
   });
 
   it('researches one that is thin, unplaced, undated or old',()=>{
     expect(profileIsFresh(null,now),'a producer with no row at all').toBe(false);
     expect(profileIsFresh(known({profile:'   '}),now),'nothing written').toBe(false);
     expect(profileIsFresh(known({home_country:null}),now),'never placed').toBe(false);
-    expect(profileIsFresh(known({researched_at:null}),now),'never researched').toBe(false);
-    expect(profileIsFresh(known({researched_at:'not a date'}),now)).toBe(false);
-    expect(profileIsFresh(known({researched_at:new Date(now-(PROFILE_FRESH_DAYS+1)*day).toISOString()}),now),
+    expect(profileIsFresh(known({profile_researched_at:null}),now),'never researched').toBe(false);
+    expect(profileIsFresh(known({profile_researched_at:'not a date'}),now)).toBe(false);
+    expect(profileIsFresh(known({profile_researched_at:new Date(now-(PROFILE_FRESH_DAYS+1)*day).toISOString()}),now),
       'old enough that an estate may have changed hands').toBe(false);
-    expect(profileIsFresh(known({researched_at:new Date(now+day).toISOString()}),now),'a clock in the future proves nothing').toBe(false);
+    expect(profileIsFresh(known({profile_researched_at:new Date(now+day).toISOString()}),now),'a clock in the future proves nothing').toBe(false);
   });
 });
 
 describe('the request a run actually submits',()=>{
   const run=async(row:Record<string,unknown>|null)=>{
     const stub=createD1Stub(sql=>{
-      if(/SELECT profile,home_country,researched_at FROM producers/.test(sql))return {first:row};
+      if(/SELECT profile,home_country,profile_researched_at FROM producers/.test(sql))return {first:row};
       if(/SELECT canonical_name FROM producers/.test(sql))return {first:{canonical_name:'Chateau Cheval Blanc'}};
       return undefined;
     });
@@ -51,9 +51,22 @@ describe('the request a run actually submits',()=>{
   };
 
   it('sends the range alone when the profile is still current',async()=>{
-    const {result,keys}=await run(known({researched_at:new Date(Date.now()-day).toISOString()}));
+    const {result,keys}=await run(known({profile_researched_at:new Date(Date.now()-day).toISOString()}));
     expect(result.ok).toBe(true);
     expect(keys,'one grounded request, not two').toEqual(['catalog_slice_a_z_other']);
+  });
+
+  it('refreshes an expired profile even when the catalog was refreshed today',async()=>{
+    const {keys}=await run(known({
+      profile_researched_at:new Date(Date.now()-(PROFILE_FRESH_DAYS+1)*day).toISOString(),
+      researched_at:new Date().toISOString()
+    }));
+    expect(keys).toEqual(['profile','catalog_slice_a_z_other']);
+  });
+
+  it('refreshes legacy profiles whose only timestamp may belong to the catalog',async()=>{
+    const {keys}=await run(known({profile_researched_at:null,researched_at:new Date().toISOString()}));
+    expect(keys).toEqual(['profile','catalog_slice_a_z_other']);
   });
 
   it('sends both halves for a producer it has never placed',async()=>{

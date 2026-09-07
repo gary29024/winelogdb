@@ -8,8 +8,8 @@ const walk=(dir:string):string[]=>readdirSync(dir,{withFileTypes:true}).flatMap(
   return entry.isDirectory()?walk(path):[path];
 });
 const files=walk(src);
-const sheets=files.filter(path=>path.endsWith('.css')).map(path=>({name:path.split('/').pop()!,css:readFileSync(path,'utf8')}));
-const markup=files.filter(path=>path.endsWith('.tsx')).map(path=>({name:path.split('/').pop()!,jsx:readFileSync(path,'utf8')}));
+const sheets=files.filter(path=>path.endsWith('.css')).map(path=>({name:path.replaceAll('\\','/').split('/').pop()!,css:readFileSync(path,'utf8')}));
+const markup=files.filter(path=>path.endsWith('.tsx')).map(path=>({name:path.replaceAll('\\','/').split('/').pop()!,jsx:readFileSync(path,'utf8')}));
 
 /** Every class that appears on a <button> anywhere in the app. */
 const buttonClasses=new Set(markup.flatMap(file=>

@@ -43,15 +43,20 @@ export function ShareStorySheet({card,onClose}:{card:StoryCard;onClose:()=>void}
   // that a photograph which has never been measured is not asked after on
   // every redraw - the answer would be the same nothing.
   const asked=useRef(new Set<string>());
+  const mounted=useRef(false);
+  useEffect(()=>{
+    mounted.current=true;
+    return()=>{mounted.current=false};
+  },[]);
   useEffect(()=>{
     const missing=imageIds.filter(id=>!asked.current.has(id));
     if(!missing.length)return;
     for(const id of missing)asked.current.add(id);
-    let active=true;
     fetchBottleFrames(missing)
-      .then(found=>{if(active&&found.size)setFrames(current=>new Map([...current,...found]))})
+      // Results belong to image IDs, not to the selection that started the
+      // lookup. Keep them through selection changes and Strict Mode replay.
+      .then(found=>{if(mounted.current&&found.size)setFrames(current=>new Map([...found,...current]))})
       .catch(()=>{for(const id of missing)asked.current.delete(id)});
-    return()=>{active=false};
   },[imageIds]);
 
   useEffect(()=>{
