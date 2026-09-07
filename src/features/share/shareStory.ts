@@ -1,5 +1,5 @@
 import { authHeaders } from '../../lib/auth/client';
-import { drawStoryCard,type LoadedPhoto,type StoryCard } from './renderStoryCollage';
+import { drawStoryCard,type LoadedPhoto,type StoryCard,type StoryFrames } from './renderStoryCollage';
 
 /**
  * Getting a card out of the browser and into a story.
@@ -55,9 +55,9 @@ export async function loadStoryPhotos(card:StoryCard,cache=new Map<string,Loaded
   return cache;
 }
 
-export async function renderStoryFile(card:StoryCard,name='winelog-story.jpg',cache?:Map<string,LoadedPhoto>){
+export async function renderStoryFile(card:StoryCard,name='winelog-story.jpg',cache?:Map<string,LoadedPhoto>,frames?:StoryFrames){
   const canvas=document.createElement('canvas');
-  drawStoryCard(canvas,card,await loadStoryPhotos(card,cache));
+  drawStoryCard(canvas,card,await loadStoryPhotos(card,cache),frames);
   const blob=await new Promise<Blob|null>(resolve=>canvas.toBlob(resolve,'image/jpeg',.92));
   if(!blob)throw new Error('The story card could not be saved as an image');
   return new File([blob],name,{type:'image/jpeg'});

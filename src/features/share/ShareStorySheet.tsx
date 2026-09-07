@@ -1,8 +1,9 @@
-import { useEffect,useMemo,useRef,useState } from 'react';
+import { useCallback,useEffect,useMemo,useRef,useState } from 'react';
 import { MAX_STORY_WINES,pickStoryWines } from './storyCollage';
 import { drawStoryCard } from './renderStoryCollage';
 import { loadStoryPhotos,renderStoryFile,shareStoryFile } from './shareStory';
-import type { LoadedPhoto,StoryCard } from './renderStoryCollage';
+import { fetchBottleFrames,measureBottleFrame,thumbnailOf } from './bottleFrameApi';
+import type { LoadedPhoto,StoryCard,StoryFrames } from './renderStoryCollage';
 import '../../shareStory.css';
 
 /**
@@ -20,15 +21,38 @@ import '../../shareStory.css';
  */
 export function ShareStorySheet({card,onClose}:{card:StoryCard;onClose:()=>void}){
   const canvasRef=useRef<HTMLCanvasElement|null>(null);
-  // Kept across redraws: the preview is redrawn on every tick and untick, and
-  // refetching a bottle each time would make choosing feel like loading.
+  // Kept across redraws: the preview is redrawn on every tick, untick and
+  // measurement, and refetching a bottle each time would make it feel like
+  // loading rather than choosing.
   const photoCache=useRef(new Map<string,LoadedPhoto>());
   const [state,setState]=useState<'drawing'|'ready'|'failed'>('drawing');
   const [busy,setBusy]=useState(false),[notice,setNotice]=useState(''),[error,setError]=useState('');
   const [chosen,setChosen]=useState(()=>new Set(pickStoryWines(card.wines)));
+  const [frames,setFrames]=useState<StoryFrames>(()=>new Map());
+  const [align,setAlign]=useState(true);
+  const [measuring,setMeasuring]=useState(0);
   const full=chosen.size>=MAX_STORY_WINES;
   // Indexes rather than ids: one wine poured twice in an evening is two rows.
   const shown=useMemo(()=>({...card,wines:card.wines.filter((_,index)=>chosen.has(index))}),[card,chosen]);
+  const imageIds=useMemo(()=>[...new Set(shown.wines.map(wine=>wine.imageId).filter((id):id is string=>Boolean(id)))],[shown]);
+  const unmeasured=useMemo(()=>imageIds.filter(id=>!frames.has(id)),[imageIds,frames]);
+  const drawnFrames=align?frames:undefined;
+
+  // What is already known, which is free. Measuring the rest is a vision call
+  // and never happens without being asked for. Asked ids are remembered so
+  // that a photograph which has never been measured is not asked after on
+  // every redraw - the answer would be the same nothing.
+  const asked=useRef(new Set<string>());
+  useEffect(()=>{
+    const missing=imageIds.filter(id=>!asked.current.has(id));
+    if(!missing.length)return;
+    for(const id of missing)asked.current.add(id);
+    let active=true;
+    fetchBottleFrames(missing)
+      .then(found=>{if(active&&found.size)setFrames(current=>new Map([...current,...found]))})
+      .catch(()=>{for(const id of missing)asked.current.delete(id)});
+    return()=>{active=false};
+  },[imageIds]);
 
   useEffect(()=>{
     let active=true;
@@ -36,11 +60,11 @@ export function ShareStorySheet({card,onClose}:{card:StoryCard;onClose:()=>void}
     loadStoryPhotos(shown,photoCache.current)
       .then(photos=>{
         if(!active||!canvasRef.current)return;
-        drawStoryCard(canvasRef.current,shown,photos);setState('ready');
+        drawStoryCard(canvasRef.current,shown,photos,drawnFrames);setState('ready');
       })
       .catch(()=>{if(active)setState('failed')});
     return()=>{active=false};
-  },[shown]);
+  },[shown,drawnFrames]);
 
   function toggle(index:number){
     setChosen(current=>{
@@ -51,17 +75,46 @@ export function ShareStorySheet({card,onClose}:{card:StoryCard;onClose:()=>void}
     });
   }
 
+  /**
+   * Measures the photographs on the card that have never been measured.
+   *
+   * One small call each, three at a time so a card of sixteen does not open
+   * sixteen connections on venue wifi, and each answer is stored server-side -
+   * so this is the only time these photographs ever cost anything.
+   */
+  const measure=useCallback(async()=>{
+    if(measuring||!unmeasured.length)return;
+    setError('');setMeasuring(unmeasured.length);
+    const queue=[...unmeasured];
+    let failed=0;
+    const worker=async()=>{
+      for(let id=queue.shift();id;id=queue.shift()){
+        const photo=photoCache.current.get(id);
+        if(!photo){failed++;setMeasuring(count=>Math.max(0,count-1));continue}
+        try{
+          const frame=await measureBottleFrame(id,await thumbnailOf(photo,`${id}.jpg`));
+          setFrames(current=>new Map(current).set(id,frame));
+        }catch{failed++}
+        setMeasuring(count=>Math.max(0,count-1));
+      }
+    };
+    await Promise.all([worker(),worker(),worker()]);
+    setMeasuring(0);
+    if(failed)setError(failed===1?'One photograph could not be measured. It is on the card as it was framed.':`${failed} photographs could not be measured. They are on the card as they were framed.`);
+  },[measuring,unmeasured]);
+
   async function share(){
     if(busy)return;
     setBusy(true);setError('');setNotice('');
     try{
-      const outcome=await shareStoryFile(await renderStoryFile(shown,'winelog-story.jpg',photoCache.current));
+      const outcome=await shareStoryFile(await renderStoryFile(shown,'winelog-story.jpg',photoCache.current,drawnFrames));
       if(outcome==='shared')setNotice('Shared. Instagram puts it straight into a story.');
       if(outcome==='downloaded')setNotice('Saved to your photos. Open Instagram and pick it as a story background.');
     }catch(e){setError((e as Error).message||'The card could not be shared')}
     finally{setBusy(false)}
   }
 
+  const measured=imageIds.length-unmeasured.length;
   return <div className="story-share-backdrop" role="presentation" onClick={onClose}>
     <div className="story-share-sheet" role="dialog" aria-modal="true" aria-label="Share to a story" onClick={event=>event.stopPropagation()}>
       <div className="story-share-head">
@@ -72,6 +125,18 @@ export function ShareStorySheet({card,onClose}:{card:StoryCard;onClose:()=>void}
         <canvas ref={canvasRef} aria-label={`${card.title}, ${chosen.size} wines`}/>
         {state==='drawing'&&<p className="story-share-state">Laying out the card…</p>}
         {state==='failed'&&<p className="story-share-state" role="alert">The card could not be drawn on this device.</p>}
+      </div>
+      <div className="story-share-align">
+        <label>
+          <input type="checkbox" checked={align} onChange={event=>setAlign(event.target.checked)}/>
+          <span>Line the bottles up</span>
+        </label>
+        {measuring>0
+          ?<p className="story-share-note" role="status">Measuring {measuring} photograph{measuring===1?'':'s'}…</p>
+          :unmeasured.length
+            ?<><p className="story-share-note">{measured?`${measured} of ${imageIds.length} photographs have been measured. `:''}Measuring reads where the bottle sits in each photograph, and which way it leans. It is one small scan per photograph, kept for good, so a card made from these wines again is free.</p>
+              <button type="button" onClick={()=>void measure()} disabled={!align}>Measure {unmeasured.length} photograph{unmeasured.length===1?'':'s'}</button></>
+            :imageIds.length?<p className="story-share-note">Every bottle on this card has been measured.</p>:null}
       </div>
       {card.wines.length>MAX_STORY_WINES
         ?<p className="story-share-note">Sixteen is what fits before a bottle stops being recognisable, so favourites were kept first. Change the card below.</p>

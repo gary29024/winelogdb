@@ -8,6 +8,11 @@
 .story-share-stage{position:relative;display:grid;place-items:center;margin:14px 0;padding:10px;border:1px solid var(--line);border-radius:var(--r-md);background:var(--sunken)}
 .story-share-stage canvas{display:block;width:100%;max-width:270px;height:auto;border-radius:var(--r-sm)}
 .story-share-state{position:absolute;margin:0;color:var(--ink-6);font-size:.82rem}
+.story-share-align{display:grid;gap:7px;margin:0 0 12px;padding:11px 12px;border:1px solid var(--line);border-radius:var(--r-md);background:var(--sunken)}
+.story-share-align>label{display:flex;align-items:center;gap:9px;font-weight:700;cursor:pointer}
+.story-share-align input{width:17px;height:17px;flex:0 0 auto;accent-color:var(--wine)}
+.story-share-align>button{justify-self:start;padding:7px 12px;font:700 .76rem"DM Sans",sans-serif}
+.story-share-align .story-share-note{margin:0}
 .story-share-picks{list-style:none;max-height:172px;overflow:auto;margin:0 0 10px;padding:0;border:1px solid var(--line);border-radius:var(--r-md)}
 .story-share-picks li+li{border-top:1px solid var(--line)}
 .story-share-picks label{display:flex;align-items:center;gap:10px;padding:8px 11px;cursor:pointer}

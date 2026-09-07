@@ -9,7 +9,7 @@ import { billingMonth,nextBillingReset,BILLING_TIME_ZONE } from './billingPeriod
  * product; this is the meter beside it, and a meter that can break the thing it
  * measures is worse than no meter.
  */
-export const AI_USAGE_KINDS=['producer_research','wine_research','scan_single','scan_batch','scan_group','scan_sheet','vintage_window'] as const;
+export const AI_USAGE_KINDS=['producer_research','wine_research','scan_single','scan_batch','scan_group','scan_sheet','bottle_frame','vintage_window'] as const;
 export type AiUsageKind=typeof AI_USAGE_KINDS[number];
 
 export const kindLabels:Record<AiUsageKind,string>={
@@ -19,6 +19,7 @@ export const kindLabels:Record<AiUsageKind,string>={
   scan_batch:'Batch scan',
   scan_group:'Group photo',
   scan_sheet:'Tasting sheet',
+  bottle_frame:'Bottle framing',
   vintage_window:'Vintage window'
 };
 
@@ -53,6 +54,9 @@ export type AiUsageTier=typeof AI_USAGE_TIERS[number];
  */
 export const unitOf:Record<AiUsageKind,'run'|'wine'>={
   producer_research:'run',wine_research:'run',scan_single:'wine',scan_batch:'wine',scan_group:'wine',scan_sheet:'wine',
+  // One small photograph measured, once, and never again for that photograph -
+  // so the honest unit is the bottle it was measured for.
+  bottle_frame:'wine',
   // Priced per run, because one call answers for a whole region and vintage -
   // every wine you own from that cell, not the one that asked.
   vintage_window:'run'

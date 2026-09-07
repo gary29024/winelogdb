@@ -24,6 +24,8 @@ import { applySheetPrices,createSheetWines,sheetPricesSchema,sheetWinesSchema } 
 import { sheetPageWasCutShort,sheetResumeLine } from '../src/features/recognition/sheetSchema';
 import { sheetRecognitionSpec } from './sheetRecognitionHandler';
 import { runVisionRecognition } from './visionRecognition';
+import { measureBottleFrame } from './bottleFrameHandler';
+import { MAX_FRAME_LOOKUP,readBottleFrames } from '../src/lib/images/bottleFrame';
 
 type Bindings={DB:D1Database;WINE_IMAGES:R2Bucket;ASSETS:Fetcher;GEMINI_API_KEY?:string;AUTH_SECRET:string;APP_PASSWORD:string;APP_URL:string;MAX_FILE_BYTES?:string;MAX_BATCH_FILES?:string};
 type AppEnv={Bindings:Bindings};
@@ -106,6 +108,40 @@ app.get('/api/images/:id',async c=>{
   const headers=new Headers(response.headers);
   headers.set('Cache-Control','private, max-age=86400, immutable');
   return new Response(response.body,{status:response.status,statusText:response.statusText,headers});
+});
+
+/**
+ * The bottle framing a story card draws with.
+ *
+ * Two routes, because measuring costs a vision call and reading does not: the
+ * card asks what is already known for free, and only what comes back missing is
+ * ever offered to be measured. Nothing here identifies a wine - these are
+ * rectangles on photographs the journal already has.
+ */
+app.get('/api/bottle-frames',async c=>{
+  cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
+  const ids=(c.req.query('ids')??'').split(',').map(id=>id.trim()).filter(Boolean);
+  if(!ids.length)return c.json({frames:{}});
+  if(ids.length>MAX_FRAME_LOOKUP)return c.json({error:`Ask for at most ${MAX_FRAME_LOOKUP} photographs at once`},400);
+  try{
+    const frames=await readBottleFrames(c.env.DB,owner,ids);
+    return c.json({frames:Object.fromEntries(frames)});
+  }catch(e){
+    console.error(JSON.stringify({event:'bottle-frames-read-failed',error:(e as Error).message}));
+    return c.json({error:'Could not load the bottle framing'},500);
+  }
+});
+
+app.post('/api/bottle-frames/:imageId',async c=>{
+  cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
+  const imageId=c.req.param('imageId');
+  // Ownership is settled here rather than by the write: a measurement that
+  // silently updated nothing would still have been paid for.
+  const image=await c.env.DB.prepare('SELECT id FROM wine_images WHERE owner_id=? AND id=?').bind(owner,imageId).first<{id:string}>();
+  if(!image)return c.json({error:'That photograph no longer exists'},404);
+  const outcome=await measureBottleFrame(c.req.raw,c.env,imageId);
+  if(!outcome.ok)return outcome.response;
+  return c.json({imageId,frame:outcome.frame,requestId:outcome.requestId});
 });
 
 app.get('/api/journal',async c=>{

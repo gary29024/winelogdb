@@ -52,6 +52,36 @@ export const recognitionResponseJsonSchema={
   required:['grapes','grapeBlend','confidence']
 } as const;
 
+/**
+ * Two boxes and nothing else, which is why this call is cheap: one small
+ * photograph in, forty tokens out. Both are nullable so the model can say a
+ * photograph has no bottle in it rather than inventing one.
+ */
+const nullableBoundingBox={
+  anyOf:[
+    {type:'object',additionalProperties:false,
+      properties:{xMin:{type:'number',minimum:0,maximum:1000},yMin:{type:'number',minimum:0,maximum:1000},xMax:{type:'number',minimum:0,maximum:1000},yMax:{type:'number',minimum:0,maximum:1000}},
+      required:['xMin','yMin','xMax','yMax']},
+    {type:'null'}
+  ]
+} as const;
+
+const nullableAxis={
+  anyOf:[
+    {type:'object',additionalProperties:false,
+      properties:{topX:{type:'number',minimum:0,maximum:1000},topY:{type:'number',minimum:0,maximum:1000},bottomX:{type:'number',minimum:0,maximum:1000},bottomY:{type:'number',minimum:0,maximum:1000}},
+      required:['topX','topY','bottomX','bottomY']},
+    {type:'null'}
+  ]
+} as const;
+
+export const bottleFrameResponseJsonSchema={
+  type:'object',
+  additionalProperties:false,
+  properties:{bottle:nullableBoundingBox,label:nullableBoundingBox,axis:nullableAxis,confidence:{type:'number',minimum:0,maximum:1}},
+  required:['bottle','label','axis','confidence']
+} as const;
+
 export const groupRecognitionResponseJsonSchema={
   type:'object',
   additionalProperties:false,
