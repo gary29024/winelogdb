@@ -119,9 +119,21 @@ export async function loadAchievementProgress(db:D1Database,owner:string,attempt
   const revision=initialRevision===undefined?await currentOwnerRevision(db,owner):initialRevision;
   if(revision!==null){const cached=await cachedAchievementProgress(db,owner,revision);if(cached)return {revision,progress:cached}}
   const result=await computeAchievementProgress(db,owner),after=await currentOwnerRevision(db,owner);
-  if(revision!==null&&after!==null&&after!==revision&&attempt===0)return loadAchievementProgress(db,owner,1);
-  // Even the retry can race a write. Never tag its old result with a new revision.
-  if(revision===null||after===null||after!==revision)return {revision:null,progress:result};
+  // The retry carries the revision just read rather than reading it again, which
+  // also means it looks in the cache at the new revision before rebuilding: under
+  // a stream of writes some other request usually settles one first, and taking
+  // that costs a single indexed lookup instead of a second scan of the library.
+  if(revision!==null&&after!==null&&after!==revision&&attempt===0)return loadAchievementProgress(db,owner,1,after);
+  // Even the retry can race a write. Never tag its old result with a new revision
+  // - but before giving up the cache entirely, look once more at where the
+  // revision actually landed. Reported as a spike in D1 row reads: while writes
+  // keep coming this path returned uncached and untagged every time, so every
+  // visit scanned every wine, producer and cuvee again and the browser could not
+  // even revalidate.
+  if(revision===null||after===null||after!==revision){
+    const settled=after===null?null:await cachedAchievementProgress(db,owner,after);
+    return settled?{revision:after,progress:settled}:{revision:null,progress:result};
+  }
   await storeAchievementProgress(db,owner,after,result);
   return {revision:after,progress:result};
 }
