@@ -56,10 +56,17 @@ export async function listJournalPage(db:D1Database,owner:string,q:JournalListQu
     if(clean){where+=' AND (w.id IN (SELECT wine_id FROM wine_search WHERE wine_search MATCH ? AND owner_id=?) OR EXISTS (SELECT 1 FROM wine_experiences we JOIN tastings t ON t.id=we.tasting_id WHERE we.wine_id=w.id AND we.owner_id=? AND lower(t.name) LIKE lower(?)))';args.push(clean+'*',owner,owner,`%${rawQuery}%`)}
   }
 
+  /**
+   * Written as the expressions rather than the aliases, because this is what the
+   * planner matches against idx_wines_owner_journal_order. An alias resolves to
+   * the same thing and orders the same rows; it just does not look like the
+   * index while it is deciding.
+   */
+  const journalDate='coalesce(w.tasting_date,w.created_at)',photoSort='coalesce(w.photo_sort_at,w.created_at)';
   const orders:Record<string,string>={
-    newest:'journal_date DESC, photo_sort_at DESC, w.created_at DESC, w.id DESC',
-    oldest:'journal_date ASC, photo_sort_at ASC, w.created_at ASC, w.id ASC',
-    rating:'w.rating DESC, journal_date DESC, photo_sort_at DESC, w.created_at DESC, w.id DESC',
+    newest:`${journalDate} DESC, ${photoSort} DESC, w.created_at DESC, w.id DESC`,
+    oldest:`${journalDate} ASC, ${photoSort} ASC, w.created_at ASC, w.id ASC`,
+    rating:`w.rating DESC, ${journalDate} DESC, ${photoSort} DESC, w.created_at DESC, w.id DESC`,
     producer:'w.producer COLLATE NOCASE ASC, w.wine_name COLLATE NOCASE ASC, w.vintage DESC, w.id ASC',
     vintage:'w.vintage DESC, w.producer COLLATE NOCASE ASC, w.wine_name COLLATE NOCASE ASC, w.id ASC'
   };
@@ -70,9 +77,7 @@ export async function listJournalPage(db:D1Database,owner:string,q:JournalListQu
   const countStatement=db.prepare(`SELECT count(*) AS total FROM wines w WHERE ${where}`).bind(...args);
   const pageStatement=db.prepare(`SELECT w.id,w.producer,w.wine_name,w.vintage,w.country,w.region,w.appellation,w.grapes_json,w.wine_style,w.rating,w.venue,w.favorite,
     coalesce(w.tasting_date,w.created_at) AS journal_date,
-    coalesce((SELECT wi.captured_at FROM wine_images wi
-      WHERE wi.owner_id=w.owner_id AND wi.wine_id=w.id AND wi.captured_at IS NOT NULL
-      ORDER BY CASE WHEN wi.metadata_source='exif' THEN 0 ELSE 1 END,wi.captured_at ASC,wi.rowid ASC LIMIT 1),w.created_at) AS photo_sort_at,
+    coalesce(w.photo_sort_at,w.created_at) AS photo_sort_at,
     w.created_at,
     (SELECT t.name FROM wine_experiences we LEFT JOIN tastings t ON t.id=we.tasting_id WHERE we.wine_id=w.id AND we.owner_id=w.owner_id ORDER BY we.created_at DESC LIMIT 1) AS tasting_name,
     (SELECT wi.id FROM wine_images wi WHERE wi.owner_id=w.owner_id AND wi.wine_id=w.id ORDER BY wi.rowid ASC LIMIT 1) AS image_id
