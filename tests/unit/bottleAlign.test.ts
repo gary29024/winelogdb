@@ -1,5 +1,5 @@
 import { describe,expect,it } from 'vitest';
-import { alignedPlacement,alignedRect,bottleTilt,bottleWidth,commonTilt,coverRect } from '../../src/features/share/bottleAlign';
+import { alignedPlacement,alignedRect,bottleTilt,bottleWidth,commonTilt,coverRect,measurementIsUsable,placementRect } from '../../src/features/share/bottleAlign';
 import type { BottleFrame } from '../../src/lib/images/bottleFrame';
 
 const cell={x:100,y:200,width:300,height:450};
@@ -207,5 +207,60 @@ describe('settling a card on one lean',()=>{
       return bottleWidth(shot.bottle!,shot.axis)*alignedPlacement(1200,1600,cell,.5,shot,lean).width/cell.width;
     });
     for(const width of widths)expect(width).toBeCloseTo(widths[0],2);
+  });
+});
+
+describe('when the measurement is wrong about the bottle',()=>{
+  /** The label, as a share of the frame, on a bottle boxed at `boxWidth`. */
+  const shot=(boxWidth:number,labelWidth:number,center=0.5):BottleFrame=>({
+    bottle:{xMin:(center-boxWidth/2)*1000,yMin:100,xMax:(center+boxWidth/2)*1000,yMax:900},
+    label:{xMin:(center-labelWidth/2)*1000,yMin:420,xMax:(center+labelWidth/2)*1000,yMax:640},
+    axis:null
+  });
+  /** Every corner of the label, in the cell. */
+  const labelCorners=(frame:BottleFrame,place=alignedPlacement(1200,1600,cell,.5,frame,null))=>{
+    const label=frame.label!;
+    return [label.xMin,label.xMax].flatMap(x=>[label.yMin,label.yMax]
+      .map(y=>({x:place.x+x/1000*place.width,y:place.y+y/1000*place.height})));
+  };
+
+  it('never cuts the label, whatever the box claimed',()=>{
+    // The reported case: a box covering only part of a bottle asks for far too
+    // much magnification, and the name is sliced through.
+    for(const [boxWidth,labelWidth,center] of [[.08,.30,.5],[.10,.34,.34],[.12,.40,.66],[.06,.5,.5]] as const){
+      for(const corner of labelCorners(shot(boxWidth,labelWidth,center))){
+        expect(Math.abs(corner.x),`box ${boxWidth} at ${center}: label off the side`).toBeLessThanOrEqual(cell.width/2+1);
+        expect(Math.abs(corner.y),`box ${boxWidth} at ${center}: label off the end`).toBeLessThanOrEqual(cell.height/2+1);
+      }
+    }
+  });
+
+  it('gives up as little magnification as it takes to do it',()=>{
+    // Coming down to cover-fit for every awkward box would undo the alignment;
+    // the label is kept whole at the largest scale that still holds it.
+    const frame=shot(.10,.34,.34);
+    const kept=alignedPlacement(1200,1600,cell,.5,frame,null);
+    const cover=coverRect(1200,1600,cell,.5);
+    expect(kept.width,'still enlarged past the photograph as framed').toBeGreaterThan(cover.width);
+    // A hair more magnification and the label would leave the cell.
+    const more={...kept,width:kept.width*1.06,height:kept.height*1.06};
+    const corners=labelCorners(frame,{turn:0,x:more.x,y:more.y,width:more.width,height:more.height});
+    expect(corners.some(corner=>Math.abs(corner.x)>cell.width/2+1),'not scaled down further than needed').toBe(true);
+  });
+
+  it('leaves a well measured bottle exactly where it was',()=>{
+    // The guard must be invisible on the fourteen cells that came out right.
+    const good=shot(.34,.26);
+    const place=alignedPlacement(1200,1600,cell,.5,good,null);
+    expect(.34*place.width/cell.width,'still brought up to the target width').toBeCloseTo(.62,2);
+  });
+
+  it('refuses a box that is the whole photograph, or a sliver of it',()=>{
+    expect(measurementIsUsable({xMin:0,yMin:0,xMax:1000,yMax:1000}),'"I could not find it"').toBe(false);
+    expect(measurementIsUsable({xMin:400,yMin:400,xMax:420,yMax:900}),'too thin to be a bottle held up').toBe(false);
+    expect(measurementIsUsable({xMin:300,yMin:100,xMax:700,yMax:900}),'and an ordinary bottle is fine').toBe(true);
+    // Refused means drawn as the photograph was framed, not magnified to fill.
+    const refused=alignedPlacement(1200,1600,cell,.5,{bottle:{xMin:0,yMin:0,xMax:1000,yMax:1000},label:null,axis:null},null);
+    expect(placementRect(cell,refused)).toEqual(coverRect(1200,1600,cell,.5));
   });
 });
