@@ -8,7 +8,6 @@ import { WineImage } from './WineImage';
 import { JournalSearchInput } from './JournalSearchInput';
 import { JournalScopeTabs } from './JournalScopeTabs';
 import { ShareStorySheet } from '../share/ShareStorySheet';
-import { MAX_STORY_WINES } from '../share/storyCollage';
 import type { StoryCard } from '../share/renderStoryCollage';
 import '../../journalMonths.css';
 import '../../journalBatch.css';
@@ -159,7 +158,8 @@ export function LibraryPage(){
    *
    * Built from what is already on screen - the selection carries the producer,
    * the vintage, the favourite and the first photograph - so nothing is fetched
-   * to make it beyond the photographs themselves.
+   * to make it beyond the photographs themselves. The whole selection is handed
+   * over however long it is: the sheet is where the sixteen that fit are chosen.
    */
   function openStoryCard(){
     if(!selectedWines.length)return;
@@ -168,7 +168,7 @@ export function LibraryPage(){
     setStoryCard({
       title:events.size===1?[...events][0] as string:'Wines worth remembering',
       subtitle:dates.length?new Date(`${dates[dates.length-1]}T00:00:00`).toLocaleDateString(undefined,{day:'numeric',month:'long',year:'numeric'}):'WineLog',
-      wines:selectedWines.slice(0,MAX_STORY_WINES).map(wine=>({
+      wines:selectedWines.map(wine=>({
         id:wine.id,producer:wine.producer,wineName:wine.wineName,vintage:wine.vintage,
         favorite:wine.favorite,imageId:wine.imageIds[0]??null
       }))

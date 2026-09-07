@@ -8,7 +8,6 @@ import { setActiveTasting } from './useActiveTasting';
 import { TastingDocuments } from './TastingDocuments';
 import '../../tastings.css';
 import { ShareStorySheet } from '../share/ShareStorySheet';
-import { MAX_STORY_WINES } from '../share/storyCollage';
 import type { StoryCard } from '../share/renderStoryCollage';
 
 const dateLabel=(value:string|null)=>{
@@ -126,13 +125,14 @@ export function TastingDetailPage(){
           is two taps away from the tasting you are already looking at. */}
       {open&&<Link className="button primary" to="/upload">Log a wine</Link>}
       {/* An evening is the set of wines somebody would actually post, already
-          gathered and in pour order, so the card is one tap from it. */}
+          gathered and in pour order, so the card is one tap from it. The whole
+          lineup goes over; which of it lands on the card is chosen in the sheet. */}
       {wines.length>0&&<button type="button" onClick={()=>setStoryCard({
         title:tasting.name,
         subtitle:tasting.tastingDate
           ?new Date(`${tasting.tastingDate}T00:00:00`).toLocaleDateString(undefined,{day:'numeric',month:'long',year:'numeric'})
           :[tasting.venue,'WineLog'].filter(Boolean)[0] as string,
-        wines:wines.slice(0,MAX_STORY_WINES).map(wine=>({
+        wines:wines.map(wine=>({
           id:wine.wineId,producer:wine.producer,wineName:wine.wineName,vintage:wine.vintage,
           favorite:wine.favorite,imageId:wine.imageId
         }))

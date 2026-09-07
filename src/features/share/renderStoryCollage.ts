@@ -1,5 +1,5 @@
 import { labelFocusPosition } from '../../lib/wine/labelFocus';
-import { MAX_STORY_WINES,STORY_HEIGHT,STORY_WIDTH,captionsFit,collageLayout,starMark,type Cell } from './storyCollage';
+import { MAX_STORY_WINES,STORY_HEIGHT,STORY_WIDTH,collageLayout,starMark,type Cell } from './storyCollage';
 
 /**
  * The card itself, drawn.
@@ -76,11 +76,11 @@ export function drawStoryCard(canvas:HTMLCanvasElement,card:StoryCard,photos:Map
 
   ctx.textAlign='center';ctx.textBaseline='alphabetic';
   ctx.fillStyle=WINE;ctx.font=`600 30px ${SANS}`;
-  ctx.fillText(fitText(ctx,card.subtitle.toUpperCase(),STORY_WIDTH-160),STORY_WIDTH/2,120);
+  ctx.fillText(fitText(ctx,card.subtitle.toUpperCase(),STORY_WIDTH-160),STORY_WIDTH/2,96);
   ctx.fillStyle=INK;ctx.font=`700 72px ${SERIF}`;
-  ctx.fillText(fitText(ctx,card.title,STORY_WIDTH-140),STORY_WIDTH/2,196);
+  ctx.fillText(fitText(ctx,card.title,STORY_WIDTH-140),STORY_WIDTH/2,166);
 
-  const {cells}=collageLayout(wines.length),captions=captionsFit(wines.length);
+  const {cells}=collageLayout(wines.length);
   wines.forEach((wine,index)=>{
     const cell=cells[index];if(!cell)return;
     const photo=wine.imageId?photos.get(wine.imageId)??null:null;
@@ -95,28 +95,12 @@ export function drawStoryCard(canvas:HTMLCanvasElement,card:StoryCard,photos:Map
       ctx.textAlign='center';ctx.textBaseline='middle';
       ctx.fillText((wine.producer.trim()[0]??'W').toUpperCase(),cell.x+cell.width/2,cell.y+cell.height/2);
     }
-    if(captions){
-      // A gradient rather than a bar: the name has to be readable over a dark
-      // bottle and a white tablecloth alike, without boxing in the photograph.
-      const band=Math.min(96,cell.height*0.3),top=cell.y+cell.height-band;
-      const wash=ctx.createLinearGradient(0,top,0,cell.y+cell.height);
-      wash.addColorStop(0,'#0d132000');wash.addColorStop(1,'#0d1320e6');
-      ctx.fillStyle=wash;ctx.fillRect(cell.x,top,cell.width,band);
-      ctx.textAlign='left';ctx.textBaseline='alphabetic';ctx.fillStyle='#ffffff';
-      ctx.font=`700 ${Math.round(Math.max(19,cell.width*0.062))}px ${SANS}`;
-      ctx.fillText(fitText(ctx,wine.wineName,cell.width-32),cell.x+16,cell.y+cell.height-42);
-      ctx.fillStyle='#ffffffc4';ctx.font=`500 ${Math.round(Math.max(16,cell.width*0.05))}px ${SANS}`;
-      const line=[wine.producer,wine.vintage?String(wine.vintage):'NV'].filter(Boolean).join(' · ');
-      ctx.fillText(fitText(ctx,line,cell.width-32),cell.x+16,cell.y+cell.height-16);
-    }
     ctx.restore();
     if(wine.favorite){const mark=starMark(cell);drawStar(ctx,mark.x,mark.y,mark.size)}
   });
 
   ctx.textAlign='center';ctx.textBaseline='alphabetic';
-  ctx.fillStyle=MUTED;ctx.font=`600 26px ${SANS}`;
-  ctx.fillText(`${wines.length} wine${wines.length===1?'':'s'}`,STORY_WIDTH/2,STORY_HEIGHT-96);
-  ctx.fillStyle=INK;ctx.font=`700 38px ${SERIF}`;
-  ctx.fillText('WineLog',STORY_WIDTH/2,STORY_HEIGHT-48);
+  ctx.fillStyle=INK;ctx.font=`700 36px ${SERIF}`;
+  ctx.fillText('WineLog',STORY_WIDTH/2,STORY_HEIGHT-40);
   return canvas;
 }

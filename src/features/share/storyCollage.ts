@@ -15,21 +15,31 @@ export const MAX_STORY_WINES=16;
 export type Cell={x:number;y:number;width:number;height:number};
 export type CollageLayout={columns:number;rows:number;cells:Cell[]};
 
-const MARGIN=64;
-const GAP=18;
-/** Room for the title above and the wordmark below, so neither crowds the grid. */
-const HEAD=250;
-const FOOT=132;
+const MARGIN=56;
+const GAP=16;
+/**
+ * Room for the title above and the wordmark below.
+ *
+ * Kept deliberately tight. Instagram shows the card in a nine-by-sixteen frame
+ * with nothing around it, so every band left empty here is empty on the phone,
+ * and generous margins that read as composure on a web page read as a photo
+ * that failed to load.
+ */
+const HEAD=196;
+const FOOT=96;
 
 /**
- * A cell is portrait, always, because a bottle photograph is.
+ * A cell is portrait, always, because a bottle photograph is - but how portrait
+ * is allowed to move, so the grid fills the card.
  *
- * The grid is not stretched to fill the card: cells keep this shape and the
- * block they make is centred in what is left between the title and the
- * wordmark. Stretching was the first attempt and it put two wines in a pair of
- * landscape boxes, which crops a bottle through the middle.
+ * A single fixed ratio was the first attempt and it left a band of paper above
+ * and below almost every count: four wines in two columns want cells slightly
+ * taller than four-by-three, and holding them to it wasted 270px of a 1920px
+ * card. So the ratio is a range: the cells take whatever height the card has
+ * left, up to the point where a bottle would start to look stretched.
  */
-const CELL_ASPECT=4/3;
+const MIN_ASPECT=1.2;
+const MAX_ASPECT=1.7;
 
 /** Past four columns a producer's name gives out at story size. */
 const MAX_COLUMNS=4;
@@ -38,11 +48,11 @@ const MAX_COLUMNS=4;
 function fittedCell(count:number,columns:number){
   const rows=Math.ceil(count/columns);
   const areaWidth=STORY_WIDTH-MARGIN*2,areaHeight=STORY_HEIGHT-HEAD-FOOT;
-  let width=(areaWidth-GAP*(columns-1))/columns,height=width*CELL_ASPECT;
-  const block=rows*height+GAP*(rows-1);
-  // Tall grids run out of card before they run out of width, so the whole block
-  // comes down together rather than the cells losing their shape.
-  if(block>areaHeight){const scale=areaHeight/block;width*=scale;height*=scale}
+  const widest=(areaWidth-GAP*(columns-1))/columns,tallest=(areaHeight-GAP*(rows-1))/rows;
+  let width=widest,height=Math.min(Math.max(tallest,widest*MIN_ASPECT),widest*MAX_ASPECT);
+  // Only when even the squarest allowed cell is too tall for the card does the
+  // block come down together, rather than the cells losing their shape.
+  if(height>tallest){width*=tallest/height;height=tallest}
   return {columns,rows,width,height};
 }
 
@@ -95,10 +105,16 @@ export function starMark(cell:Cell){
 }
 
 /**
- * What a card can say about each bottle without becoming unreadable.
+ * Which wines a card starts with when more were picked than fit.
  *
- * Sixteen captions at story size is a wall of five-point type, so past nine the
- * photographs speak for themselves and the names go with the wines they belong
- * to rather than being shrunk until nobody reads them.
+ * Favourites first, because a card that marks favourites and then drops one for
+ * a bottle nobody starred has its priorities backwards - and because the
+ * sixteen a long evening leaves you with are rarely the first sixteen poured.
+ * The order on the card is still the order they came in: this chooses, it does
+ * not sort.
  */
-export const captionsFit=(count:number)=>count<=9;
+export function pickStoryWines(wines:Array<{favorite:boolean}>,limit=MAX_STORY_WINES){
+  const indexes=wines.map((wine,index)=>({index,favorite:wine.favorite}));
+  const chosen=[...indexes.filter(item=>item.favorite),...indexes.filter(item=>!item.favorite)].slice(0,limit);
+  return chosen.map(item=>item.index).sort((a,b)=>a-b);
+}

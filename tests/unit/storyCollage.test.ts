@@ -1,5 +1,5 @@
 import { describe,expect,it } from 'vitest';
-import { MAX_STORY_WINES,STORY_HEIGHT,STORY_WIDTH,captionsFit,collageColumns,collageLayout,starMark } from '../../src/features/share/storyCollage';
+import { MAX_STORY_WINES,STORY_HEIGHT,STORY_WIDTH,collageColumns,collageLayout,pickStoryWines,starMark } from '../../src/features/share/storyCollage';
 
 const counts=Array.from({length:MAX_STORY_WINES},(_,index)=>index+1);
 const overlaps=(a:{x:number;y:number;width:number;height:number},b:typeof a)=>
@@ -15,9 +15,9 @@ describe('laying a lineup out on a story card',()=>{
   it('keeps every cell inside the card and clear of the title and the wordmark',()=>{
     for(const count of counts)for(const cell of collageLayout(count).cells){
       expect(cell.x).toBeGreaterThanOrEqual(0);
-      expect(cell.y,`${count} wines clear of the title`).toBeGreaterThan(200);
+      expect(cell.y,`${count} wines clear of the title`).toBeGreaterThan(185);
       expect(cell.x+cell.width).toBeLessThanOrEqual(STORY_WIDTH);
-      expect(cell.y+cell.height,`${count} wines clear of the wordmark`).toBeLessThan(STORY_HEIGHT-100);
+      expect(cell.y+cell.height,`${count} wines clear of the wordmark`).toBeLessThanOrEqual(STORY_HEIGHT-96);
       expect(cell.width).toBeGreaterThan(0);expect(cell.height).toBeGreaterThan(0);
     }
   });
@@ -95,8 +95,50 @@ describe('laying a lineup out on a story card',()=>{
     }
   });
 
-  it('drops the per-wine captions once they would be unreadable',()=>{
-    expect(captionsFit(9)).toBe(true);
-    expect(captionsFit(10),'sixteen captions at story size is a wall of tiny type').toBe(false);
+  /**
+   * The complaint that produced this test: on a phone, where the card fills a
+   * nine-by-sixteen frame with nothing around it, a band of paper top and
+   * bottom reads as a photograph that failed rather than as composure.
+   */
+  it('fills the height of the card rather than floating a block in the middle',()=>{
+    for(const count of counts){
+      const {cells}=collageLayout(count);
+      const top=Math.min(...cells.map(cell=>cell.y));
+      const bottom=Math.max(...cells.map(cell=>cell.y+cell.height));
+      expect(bottom-top,`${count} wines leave the card half empty`).toBeGreaterThan(STORY_HEIGHT*0.74);
+    }
+  });
+
+  it('keeps every cell portrait, whatever it had to do to fill the card',()=>{
+    for(const count of counts)for(const cell of collageLayout(count).cells){
+      const aspect=cell.height/cell.width;
+      expect(aspect,`${count} wines: a bottle is taller than it is wide`).toBeGreaterThan(1.1);
+      expect(aspect,`${count} wines: past this a bottle looks stretched`).toBeLessThan(1.75);
+    }
+  });
+});
+
+describe('choosing which wines go on a card',()=>{
+  const lineup=(count:number,favourites:number[])=>
+    Array.from({length:count},(_,index)=>({favorite:favourites.includes(index)}));
+
+  it('takes everything when everything fits',()=>{
+    expect(pickStoryWines(lineup(5,[1]))).toEqual([0,1,2,3,4]);
+  });
+
+  it('keeps the favourites when more were picked than fit',()=>{
+    const chosen=pickStoryWines(lineup(24,[20,21,22,23]));
+    expect(chosen).toHaveLength(MAX_STORY_WINES);
+    for(const favourite of [20,21,22,23])
+      expect(chosen,`the starred wine at ${favourite} is the point of the card`).toContain(favourite);
+  });
+
+  it('hands them back in the order they came in, so the card is not resorted',()=>{
+    const chosen=pickStoryWines(lineup(20,[19,0]));
+    expect(chosen).toEqual([...chosen].sort((a,b)=>a-b));
+  });
+
+  it('does not drop a wine to make room for a favourite that is already on',()=>{
+    expect(pickStoryWines(lineup(16,[15]))).toHaveLength(16);
   });
 });

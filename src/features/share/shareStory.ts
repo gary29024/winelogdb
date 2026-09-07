@@ -40,16 +40,24 @@ async function loadPhoto(imageId:string):Promise<LoadedPhoto>{
   }catch{return null}
 }
 
-/** Every photograph the card needs, fetched once each however often it appears. */
-export async function loadStoryPhotos(card:StoryCard){
-  const ids=[...new Set(card.wines.map(wine=>wine.imageId).filter((id):id is string=>Boolean(id)))];
+/**
+ * Every photograph the card needs, fetched once each however often it appears.
+ *
+ * The cache is passed in rather than kept here so that taking a wine off the
+ * card and putting it back does not fetch its bottle a second time: the preview
+ * redraws on every change of mind.
+ */
+export async function loadStoryPhotos(card:StoryCard,cache=new Map<string,LoadedPhoto>()){
+  const ids=[...new Set(card.wines.map(wine=>wine.imageId).filter((id):id is string=>Boolean(id)))]
+    .filter(id=>!cache.has(id));
   const loaded=await Promise.all(ids.map(async id=>[id,await loadPhoto(id)] as const));
-  return new Map(loaded);
+  for(const [id,photo] of loaded)cache.set(id,photo);
+  return cache;
 }
 
-export async function renderStoryFile(card:StoryCard,name='winelog-story.jpg'){
+export async function renderStoryFile(card:StoryCard,name='winelog-story.jpg',cache?:Map<string,LoadedPhoto>){
   const canvas=document.createElement('canvas');
-  drawStoryCard(canvas,card,await loadStoryPhotos(card));
+  drawStoryCard(canvas,card,await loadStoryPhotos(card,cache));
   const blob=await new Promise<Blob|null>(resolve=>canvas.toBlob(resolve,'image/jpeg',.92));
   if(!blob)throw new Error('The story card could not be saved as an image');
   return new File([blob],name,{type:'image/jpeg'});
