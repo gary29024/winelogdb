@@ -61,10 +61,16 @@ const MAX_ZOOM=4;
  * about as far as that goes unnoticed, and a bottle further out than that from
  * the card's angle keeps the remainder of its lean rather than the room being
  * put on its side for it.
+ *
+ * Raised from twelve after a real card: at twelve, an evening whose bottles
+ * were held anywhere between upright and twenty-five degrees still read as some
+ * bottles standing and some leaning, because the ones furthest out kept half
+ * their difference. Eighteen closes almost all of it, and these are close crops
+ * where little of the room shows anyway.
  */
-const MAX_TURN=12*Math.PI/180;
+const MAX_TURN=18*Math.PI/180;
 /** Under this the lean already agrees, and resampling the photo buys nothing. */
-const TURN_DEADBAND=2.5*Math.PI/180;
+const TURN_DEADBAND=2*Math.PI/180;
 
 const spanX=(box:BottleBox)=>(box.xMax-box.xMin)/1000;
 const spanY=(box:BottleBox)=>(box.yMax-box.yMin)/1000;
@@ -89,7 +95,7 @@ const MAX_TILT=40*Math.PI/180;
 /** However far it leans, the glass is never thinner than this share of its box. */
 const MIN_RECOVERED=0.22;
 
-export function bottleWidth(box:BottleBox,axis?:BottleAxis|null){
+function recoveredWidth(box:BottleBox,axis?:BottleAxis|null){
   const boxWidth=spanX(box);
   if(!axis)return boxWidth;
   const run=Math.abs(axis.bottomX-axis.topX),rise=Math.abs(axis.bottomY-axis.topY);
@@ -99,6 +105,40 @@ export function bottleWidth(box:BottleBox,axis?:BottleAxis|null){
   const cos=Math.cos(tilt),sin=Math.sin(tilt),determinant=cos*cos-sin*sin;
   const recovered=(boxWidth*cos-spanY(box)*sin)/determinant;
   return recovered>boxWidth*MIN_RECOVERED&&recovered<=boxWidth?recovered:boxWidth;
+}
+
+/**
+ * The label as a check on the glass.
+ *
+ * A front label is printed on the bottle, so however the two are boxed the
+ * bottle cannot be narrower than its own label, and a label narrower than about
+ * three-fifths of the glass is not a wine label. That bounds the one number the
+ * whole card is scaled by, and it bounds it with the easier measurement: a
+ * printed rectangle of high contrast is something a vision model boxes far more
+ * reliably than the silhouette of dark glass against a dark room.
+ *
+ * Both cells that came out wrong on a real card were the box disagreeing with
+ * the label. One box covered a third of its bottle - narrower than the label on
+ * it, which cannot happen - and the bottle was drawn half again too large. The
+ * other ran wide of the glass, taking in the hand and the floor behind it, and
+ * its bottle came out small among its neighbours. Either way the label knew
+ * better.
+ *
+ * Bounds, not a replacement. Labels really do run from about two-thirds of the
+ * glass to the whole of it, so this leaves a box that disagrees within a fifth
+ * of the truth rather than at three times it - the difference between a cell
+ * that reads as slightly off and one that reads as a mistake.
+ */
+const BODY_AT_LEAST=0.98,BODY_AT_MOST=1.5;
+
+export function bottleWidth(box:BottleBox,axis?:BottleAxis|null,label?:BottleBox|null){
+  const width=recoveredWidth(box,axis);
+  if(!label)return width;
+  // Measured the same way, so a leaning bottle compares like with like: both
+  // boxes are inflated by the same tilt, and both are brought back by it.
+  const labelWidth=recoveredWidth(label,axis);
+  if(labelWidth<=0)return width;
+  return Math.min(Math.max(width,labelWidth*BODY_AT_LEAST),labelWidth*BODY_AT_MOST);
 }
 /**
  * How far this bottle leans, signed, or null when it was never measured.
@@ -206,7 +246,7 @@ export function alignedPlacement(imageWidth:number,imageHeight:number,cell:FitCe
   const needHeight=cell.width*Math.abs(sin)+cell.height*Math.abs(cos);
 
   const cover=Math.max(cell.width/imageWidth,cell.height/imageHeight);
-  const sized=TARGET_BOTTLE*cell.width/(bottleWidth(bottle,frame?.axis)*imageWidth);
+  const sized=TARGET_BOTTLE*cell.width/(bottleWidth(bottle,frame?.axis,frame?.label)*imageWidth);
   const floor=Math.max(cover,needWidth/imageWidth,needHeight/imageHeight);
   const ceiling=Math.max(Math.min(Math.max(cover,sized),cover*MAX_ZOOM),floor);
 

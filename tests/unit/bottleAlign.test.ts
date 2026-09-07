@@ -168,9 +168,9 @@ describe('settling a card on one lean',()=>{
   it('never turns a photograph far enough to put the room on its side',()=>{
     const lean=commonTilt([at(20),at(20),at(-25)])!;
     const turn=degrees(alignedPlacement(1200,1600,cell,.5,at(-25),lean).turn);
-    expect(turn,'forty-five degrees of correction is capped').toBeCloseTo(12,4);
+    expect(turn,'forty-five degrees of correction is capped').toBeCloseTo(18,4);
     // What is left of the difference stays as lean, which is the point.
-    expect(-25+turn).toBeLessThan(20);
+    expect(-25+turn).toBeLessThanOrEqual(20);
   });
 
   it('leaves a lean that already agrees within a couple of degrees untouched',()=>{
@@ -236,16 +236,48 @@ describe('when the measurement is wrong about the bottle',()=>{
   });
 
   it('gives up as little magnification as it takes to do it',()=>{
-    // Coming down to cover-fit for every awkward box would undo the alignment;
-    // the label is kept whole at the largest scale that still holds it.
-    const frame=shot(.10,.34,.34);
+    // A box of a believable width whose centre is well off the bottle: the
+    // width needs no correcting, so only the drop that keeps the label whole
+    // is taken, and not a scrap more.
+    const frame:BottleFrame={
+      bottle:{xMin:180,yMin:100,xMax:520,yMax:900},
+      label:{xMin:380,yMin:420,xMax:660,yMax:640},
+      axis:null
+    };
     const kept=alignedPlacement(1200,1600,cell,.5,frame,null);
     const cover=coverRect(1200,1600,cell,.5);
     expect(kept.width,'still enlarged past the photograph as framed').toBeGreaterThan(cover.width);
-    // A hair more magnification and the label would leave the cell.
-    const more={...kept,width:kept.width*1.06,height:kept.height*1.06};
-    const corners=labelCorners(frame,{turn:0,x:more.x,y:more.y,width:more.width,height:more.height});
-    expect(corners.some(corner=>Math.abs(corner.x)>cell.width/2+1),'not scaled down further than needed').toBe(true);
+    const more={turn:0,x:kept.x,y:kept.y,width:kept.width*1.08,height:kept.height*1.08};
+    expect(labelCorners(frame,more).some(corner=>Math.abs(corner.x)>cell.width/2+1),
+      'not scaled down further than needed').toBe(true);
+  });
+
+  it('will not believe a bottle narrower than the label printed on it',()=>{
+    // The Piccolo Derthona cell: a box over a third of its bottle asks for half
+    // again too much magnification. A label cannot be wider than its bottle, so
+    // the label settles it.
+    const third={bottle:{xMin:420,yMin:300,xMax:530,yMax:760},label:{xMin:390,yMin:430,xMax:700,yMax:640},axis:null};
+    const whole={bottle:{xMin:360,yMin:100,xMax:720,yMax:900},label:{xMin:390,yMin:430,xMax:700,yMax:640},axis:null};
+    const narrow=alignedPlacement(1200,1600,cell,.5,third,null);
+    const right=alignedPlacement(1200,1600,cell,.5,whole,null);
+    // Not exact - the label bounds the box rather than replacing it - but a
+    // fifth out instead of three times out.
+    expect(narrow.width/right.width,'no longer half again too large').toBeLessThan(1.25);
+  });
+
+  it('will not believe a bottle half again wider than its label either',()=>{
+    // The Alessandria cell: a box that took in the hand and the floor behind
+    // it, so the bottle came out small among its neighbours.
+    const wide={bottle:{xMin:120,yMin:100,xMax:900,yMax:900},label:{xMin:430,yMin:430,xMax:690,yMax:640},axis:null};
+    const whole={bottle:{xMin:400,yMin:100,xMax:720,yMax:900},label:{xMin:430,yMin:430,xMax:690,yMax:640},axis:null};
+    const loose=alignedPlacement(1200,1600,cell,.5,wide,null);
+    const right=alignedPlacement(1200,1600,cell,.5,whole,null);
+    expect(loose.width/right.width,'brought back up towards its neighbours').toBeGreaterThan(.8);
+  });
+
+  it('leaves a box that agrees with its label exactly as it was',()=>{
+    const frame={bottle:{xMin:400,yMin:100,xMax:720,yMax:900},label:{xMin:430,yMin:430,xMax:690,yMax:640},axis:null};
+    expect(bottleWidth(frame.bottle,null,frame.label)).toBeCloseTo(.32,5);
   });
 
   it('leaves a well measured bottle exactly where it was',()=>{
