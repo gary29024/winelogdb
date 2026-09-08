@@ -30,23 +30,40 @@ describe('alignment in the pixels actually drawn',()=>{
     }
   });
 
-  it('matches a large close-up to the smaller bottles',()=>{
+  it('uses the greater of target size and minimum rotated cover for close-ups',()=>{
     for(const width of [220,400,800]){
       const frame=shot(0,width);
       const p=alignedPlacement(1200,1600,cell,.5,frame,14*Math.PI/180);
-      expect(bottleWidth(frame.bottle!,frame.axis,frame.label,.75)*p.width).toBeCloseTo(300*.62,4);
+      const target=300*.62/bottleWidth(frame.bottle!,frame.axis,frame.label,.75);
+      const coverWidth=Math.max(cell.width*Math.abs(Math.cos(p.turn))+cell.height*Math.abs(Math.sin(p.turn))+2,
+        (cell.width*Math.abs(Math.sin(p.turn))+cell.height*Math.abs(Math.cos(p.turn))+2)*.75);
+      expect(p.width).toBeCloseTo(Math.max(target,coverWidth),4);
     }
   });
 
-  it('keeps every rotated label corner inside the cell even below cover scale',()=>{
+  it('keeps coverage when the label cannot fit without revealing blank space',()=>{
     const frame: BottleFrame={bottle:{xMin:150,xMax:850,yMin:0,yMax:1000},label:{xMin:200,xMax:800,yMin:150,yMax:850},axis:{topX:500,topY:0,bottomX:500,bottomY:1000}};
     const small={x:0,y:0,width:300,height:400};
     const p=alignedPlacement(1000,1000,small,.5,frame,18*Math.PI/180);
-    for(const x of [200,800])for(const y of [150,850]){
-      const px=p.x+x/1000*p.width,py=p.y+y/1000*p.height;
-      expect(Math.abs(px*Math.cos(p.turn)-py*Math.sin(p.turn))).toBeLessThanOrEqual(150.5);
-      expect(Math.abs(px*Math.sin(p.turn)+py*Math.cos(p.turn))).toBeLessThanOrEqual(200.5);
+    for(const x of [-150,150])for(const y of [-200,200]){
+      const px=x*Math.cos(p.turn)+y*Math.sin(p.turn),py=-x*Math.sin(p.turn)+y*Math.cos(p.turn);
+      expect(px).toBeGreaterThanOrEqual(p.x);expect(px).toBeLessThanOrEqual(p.x+p.width);
+      expect(py).toBeGreaterThanOrEqual(p.y);expect(py).toBeLessThanOrEqual(p.y+p.height);
     }
+  });
+
+  it('covers every cell corner across photo shapes, rotations and edge positions',()=>{
+    for(const [w,h] of [[1200,1600],[1600,1200],[400,1600]])
+      for(const tilt of [-25,0,25])for(const offset of [-150,0,150]){
+        const frame=shot(tilt,220,w,h);
+        for(const box of [frame.bottle!,frame.label!]){box.xMin+=offset;box.xMax+=offset}
+        const p=alignedPlacement(w,h,cell,.5,frame,14*Math.PI/180);
+        for(const x of [-cell.width/2,cell.width/2])for(const y of [-cell.height/2,cell.height/2]){
+          const px=x*Math.cos(p.turn)+y*Math.sin(p.turn),py=-x*Math.sin(p.turn)+y*Math.cos(p.turn);
+          expect(px).toBeGreaterThanOrEqual(p.x-1e-8);expect(px).toBeLessThanOrEqual(p.x+p.width+1e-8);
+          expect(py).toBeGreaterThanOrEqual(p.y-1e-8);expect(py).toBeLessThanOrEqual(p.y+p.height+1e-8);
+        }
+      }
   });
 
   it('does not let rejected measurements vote on the card angle',()=>{

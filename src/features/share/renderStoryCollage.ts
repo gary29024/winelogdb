@@ -1,5 +1,5 @@
 import { labelFocusPosition } from '../../lib/wine/labelFocus';
-import { alignedPlacement,commonTilt,coverRect } from './bottleAlign';
+import { alignedPlacement,commonTilt } from './bottleAlign';
 import type { BottleFrame } from '../../lib/images/bottleFrame';
 import { MAX_STORY_WINES,STORY_HEIGHT,STORY_WIDTH,collageLayout,starMark,type Cell } from './storyCollage';
 
@@ -40,18 +40,6 @@ function roundedPath(ctx:CanvasRenderingContext2D,x:number,y:number,width:number
 function drawCover(ctx:CanvasRenderingContext2D,image:CanvasImageSource,width:number,height:number,cell:Cell,frame?:BottleFrame|null,lean?:number|null){
   const focus=labelFocusPosition(width,height)?0.72:0.5;
   const {turn,x,y,width:drawn,height:tall}=alignedPlacement(width,height,cell,focus,frame,lean);
-  const needWidth=cell.width*Math.abs(Math.cos(turn))+cell.height*Math.abs(Math.sin(turn));
-  const needHeight=cell.width*Math.abs(Math.sin(turn))+cell.height*Math.abs(Math.cos(turn));
-  if('filter' in ctx&&(x>-needWidth/2||x+drawn<needWidth/2||y>-needHeight/2||y+tall<needHeight/2)){
-    // A soft background fills only the gaps left when a close-up is scaled
-    // down. The sharp foreground bottle can then match its neighbours.
-    const background=coverRect(width,height,cell,focus);
-    ctx.save();ctx.filter='blur(16px)';ctx.globalAlpha=0.45;
-    // If blur is unsupported or rejected, keep the cell's neutral fill rather
-    // than drawing a sharp duplicate behind the foreground bottle.
-    if(ctx.filter==='blur(16px)')ctx.drawImage(image,background.x-24,background.y-24,background.width+48,background.height+48);
-    ctx.restore();
-  }
   ctx.save();
   ctx.translate(cell.x+cell.width/2,cell.y+cell.height/2);
   if(turn)ctx.rotate(turn);

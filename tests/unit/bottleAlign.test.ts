@@ -50,17 +50,18 @@ describe('drawing sixteen photographs as though they were taken from one place',
     expect(.06*rect.width/cell.width).toBeLessThan(.62);
   });
 
-  it('scales close-up bottles down to the same target width',()=>{
+  it('keeps close-ups at cover scale rather than exposing the cell',()=>{
     const wide=alignedRect(1200,1600,cell,.5,frame(.92));
     const plain=coverRect(1200,1600,cell,.5);
-    expect(wide.width).toBeLessThan(plain.width);
-    expect(.92*wide.width/cell.width).toBeCloseTo(.62,5);
+    expect(wide.width).toBeGreaterThanOrEqual(plain.width);
+    expect(wide.width-plain.width).toBeLessThanOrEqual(2);
+    expect(covers(wide)).toBe(true);
   });
 
-  it('centres the subject even when it stood near the photograph edge',()=>{
+  it('repositions edge subjects only as far as full coverage allows',()=>{
     for(const center of [0.08,0.25,0.5,0.75,0.94])
       for(const width of [0.12,0.3,0.6])
-        {const rect=alignedRect(1200,1600,cell,.5,frame(width,center));expect(rect.x+center*rect.width).toBeCloseTo(cell.x+cell.width/2,5)}
+        expect(covers(alignedRect(1200,1600,cell,.5,frame(width,center)))).toBe(true);
   });
 
   it('puts the labels of two differently shot bottles at the same height',()=>{
