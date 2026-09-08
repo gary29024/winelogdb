@@ -82,9 +82,9 @@ export function drawStoryCard(canvas:HTMLCanvasElement,card:StoryCard,photos:Map
 
   ctx.textAlign='center';ctx.textBaseline='alphabetic';
   ctx.fillStyle=WINE;ctx.font=`600 30px ${SANS}`;
-  ctx.fillText(fitText(ctx,card.subtitle.toUpperCase(),STORY_WIDTH-160),STORY_WIDTH/2,96);
+  if(card.subtitle)ctx.fillText(fitText(ctx,card.subtitle.toUpperCase(),STORY_WIDTH-160),STORY_WIDTH/2,96);
   ctx.fillStyle=INK;ctx.font=`700 72px ${SERIF}`;
-  ctx.fillText(fitText(ctx,card.title,STORY_WIDTH-140),STORY_WIDTH/2,166);
+  if(card.title)ctx.fillText(fitText(ctx,card.title,STORY_WIDTH-140),STORY_WIDTH/2,166);
 
   const {cells}=collageLayout(wines.length);
   // The angle this card settles on, decided once for all of it: a lean means
