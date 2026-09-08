@@ -1,3 +1,4 @@
+import { apiFetch } from '../../lib/auth/client';
 import type { WineInput, WineRecord } from '../../lib/db/schema';
 import type { TastingStructure } from '../../lib/wine/tastingStructure';
 import type { PhotoMetadata } from '../uploads/photoMetadata';
@@ -45,13 +46,13 @@ async function requireOk(r:Response,message:string){
   if(!r.ok){const body=await r.json().catch(()=>({})) as {error?:string;issues?:ApiIssue[];details?:string};const details=body.issues?.map(issue=>`${issue.path?.join('.')||'field'}: ${issue.message||'Invalid input'}`).join('; ');throw new Error([body.error||message,details||body.details].filter(Boolean).join(' — '))}
 }
 export async function listWines(params:URLSearchParams,options:{limit?:number;offset?:number;signal?:AbortSignal}={}):Promise<{items:JournalWine[];nextOffset:number|null;total:number}>{
-  const query=new URLSearchParams(params);query.set('limit',String(options.limit??36));query.set('offset',String(options.offset??0));const r=await fetch(`/api/journal?${query}`,{headers:authHeaders(),signal:options.signal});await requireOk(r,'Could not load wines');return r.json();
+  const query=new URLSearchParams(params);query.set('limit',String(options.limit??36));query.set('offset',String(options.offset??0));const r=await apiFetch(`/api/journal?${query}`,{headers:authHeaders(),signal:options.signal});await requireOk(r,'Could not load wines');return r.json();
 }
-export async function batchUpdateJournalExperience(ids:string[],patch:JournalBatchPatch){const r=await fetch('/api/journal/batch-experience',{method:'POST',headers:authHeaders(true),body:JSON.stringify({ids,...patch})});await requireOk(r,'Could not update selected wines');summariesChanged();return r.json() as Promise<{updated:number;tastingName?:string|null;venue?:string|null}>}
-export async function getWine(id:string):Promise<WineDetail>{const r=await fetch(`/api/wines/${id}`,{headers:authHeaders()});await requireOk(r,'Wine not found');const wine=await r.json() as WineDetail;return {...wine,groupSourcePhotos:wine.groupSourcePhotos??[]}}
-export async function saveWineTastingStructure(id:string,structure:TastingStructure|null){const r=await fetch(`/api/wines/${id}/tasting-structure`,{method:'PUT',headers:authHeaders(true),body:JSON.stringify({structure})});await requireOk(r,'Could not save tasting structure');summariesChanged();return r.json() as Promise<{ok:true}>}
+export async function batchUpdateJournalExperience(ids:string[],patch:JournalBatchPatch){const r=await apiFetch('/api/journal/batch-experience',{method:'POST',headers:authHeaders(true),body:JSON.stringify({ids,...patch})});await requireOk(r,'Could not update selected wines');summariesChanged();return r.json() as Promise<{updated:number;tastingName?:string|null;venue?:string|null}>}
+export async function getWine(id:string):Promise<WineDetail>{const r=await apiFetch(`/api/wines/${id}`,{headers:authHeaders()});await requireOk(r,'Wine not found');const wine=await r.json() as WineDetail;return {...wine,groupSourcePhotos:wine.groupSourcePhotos??[]}}
+export async function saveWineTastingStructure(id:string,structure:TastingStructure|null){const r=await apiFetch(`/api/wines/${id}/tasting-structure`,{method:'PUT',headers:authHeaders(true),body:JSON.stringify({structure})});await requireOk(r,'Could not save tasting structure');summariesChanged();return r.json() as Promise<{ok:true}>}
 export async function setWineFavorite(id:string,favorite:boolean){
-  const r=await fetch(`/api/wines/${id}/favorite`,{method:'PUT',headers:authHeaders(true),body:JSON.stringify({favorite})});
+  const r=await apiFetch(`/api/wines/${id}/favorite`,{method:'PUT',headers:authHeaders(true),body:JSON.stringify({favorite})});
   await requireOk(r,'Could not update favorite');
   const result=await r.json() as {id:string;favorite:boolean;changed?:boolean};
   // Older Workers omit changed; continue invalidating for those responses.
@@ -70,26 +71,26 @@ export async function addWineImages(id:string,photos:WinePhoto[]){
   photos.forEach(photo=>fd.append('images',photo.file));
   fd.append('dimensions',JSON.stringify(photos.map(photo=>({width:photo.width,height:photo.height}))));
   fd.append('metadata',JSON.stringify(photos.map(photo=>photo.metadata??{capturedAt:null,latitude:null,longitude:null,source:'none'})));
-  const r=await fetch(`/api/wines/${id}/images`,{method:'POST',headers:authHeaders(),body:fd});
+  const r=await apiFetch(`/api/wines/${id}/images`,{method:'POST',headers:authHeaders(),body:fd});
   await requireOk(r,'Could not add the photos');
   summariesChanged();
   return r.json() as Promise<{imageIds:string[]}>;
 }
 
 export async function deleteWineImage(wineId:string,imageId:string){
-  const r=await fetch(`/api/wines/${wineId}/images/${imageId}`,{method:'DELETE',headers:authHeaders()});
+  const r=await apiFetch(`/api/wines/${wineId}/images/${imageId}`,{method:'DELETE',headers:authHeaders()});
   await requireOk(r,'Could not remove that photo');
   summariesChanged();
   return r.json() as Promise<{ok:true}>;
 }
 
 export async function saveWine(input:WineInput,id?:string,photos:WinePhoto[]=[],options:SaveWineOptions={}):Promise<{id:string}|{ok:true}>{
-  if(id){const body=options.preferCuveePrimaryName?{...input,preferCuveePrimaryName:true}:input;const r=await fetch(`/api/wines/${id}`,{method:'PUT',headers:authHeaders(true),body:JSON.stringify(body)});await requireOk(r,'Could not save wine');summariesChanged();return r.json() as Promise<{ok:true}>}
+  if(id){const body=options.preferCuveePrimaryName?{...input,preferCuveePrimaryName:true}:input;const r=await apiFetch(`/api/wines/${id}`,{method:'PUT',headers:authHeaders(true),body:JSON.stringify(body)});await requireOk(r,'Could not save wine');summariesChanged();return r.json() as Promise<{ok:true}>}
   const create=options.holdingId?`/api/wines?holding=${encodeURIComponent(options.holdingId)}`:'/api/wines';
-  if(photos.length){const fd=new FormData();fd.append('wine',JSON.stringify(input));photos.forEach(x=>fd.append('images',x.file));fd.append('dimensions',JSON.stringify(photos.map(x=>({width:x.width,height:x.height}))));fd.append('metadata',JSON.stringify(photos.map(x=>x.metadata??{capturedAt:null,latitude:null,longitude:null,source:'none'})));const r=await fetch(create,{method:'POST',headers:authHeaders(),body:fd});await requireOk(r,'Could not save wine and photos');summariesChanged();return r.json() as Promise<{id:string}>}
-  const r=await fetch(create,{method:'POST',headers:authHeaders(true),body:JSON.stringify(input)});await requireOk(r,'Could not save wine');summariesChanged();return r.json() as Promise<{id:string}>;
+  if(photos.length){const fd=new FormData();fd.append('wine',JSON.stringify(input));photos.forEach(x=>fd.append('images',x.file));fd.append('dimensions',JSON.stringify(photos.map(x=>({width:x.width,height:x.height}))));fd.append('metadata',JSON.stringify(photos.map(x=>x.metadata??{capturedAt:null,latitude:null,longitude:null,source:'none'})));const r=await apiFetch(create,{method:'POST',headers:authHeaders(),body:fd});await requireOk(r,'Could not save wine and photos');summariesChanged();return r.json() as Promise<{id:string}>}
+  const r=await apiFetch(create,{method:'POST',headers:authHeaders(true),body:JSON.stringify(input)});await requireOk(r,'Could not save wine');summariesChanged();return r.json() as Promise<{id:string}>;
 }
-export async function deleteWine(id:string){const r=await fetch(`/api/wines/${id}`,{method:'DELETE',headers:authHeaders()});await requireOk(r,'Could not delete wine');summariesChanged()}
-export async function startWineDeepSearch(id:string,refresh:'none'|'vintage'|'all',requestId=crypto.randomUUID()){const r=await fetch(`/api/wines/${id}/deep-search`,{method:'POST',headers:authHeaders(true),body:JSON.stringify({confirmation:'RUN_DEEP_SEARCH',refresh,requestId})});await requireOk(r,'Could not queue Deep Search');return r.json() as Promise<{accepted:true;researchRequestId:string;existing:boolean}>}
-export async function getWineDeepSearchStatus(id:string,requestId?:string){const suffix=requestId?`?requestId=${encodeURIComponent(requestId)}`:'';const r=await fetch(`/api/wines/${id}/deep-search-status${suffix}`,{headers:authHeaders()});if(r.status===404)return null;await requireOk(r,'Could not load Deep Search status');return r.json() as Promise<WineResearchRun>}
-export async function cancelWineDeepSearch(id:string,requestId:string){const r=await fetch(`/api/wines/${id}/deep-search-cancel`,{method:'POST',headers:authHeaders(true),body:JSON.stringify({confirmation:'CANCEL_DEEP_SEARCH',requestId})});await requireOk(r,'Could not cancel Deep Search');return r.json() as Promise<WineResearchCancelResult>}
+export async function deleteWine(id:string){const r=await apiFetch(`/api/wines/${id}`,{method:'DELETE',headers:authHeaders()});await requireOk(r,'Could not delete wine');summariesChanged()}
+export async function startWineDeepSearch(id:string,refresh:'none'|'vintage'|'all',requestId=crypto.randomUUID()){const r=await apiFetch(`/api/wines/${id}/deep-search`,{method:'POST',headers:authHeaders(true),body:JSON.stringify({confirmation:'RUN_DEEP_SEARCH',refresh,requestId})});await requireOk(r,'Could not queue Deep Search');return r.json() as Promise<{accepted:true;researchRequestId:string;existing:boolean;cached?:boolean;waitingForFriend?:boolean;creditOperationId:string}>}
+export async function getWineDeepSearchStatus(id:string,requestId?:string){const suffix=requestId?`?requestId=${encodeURIComponent(requestId)}`:'';const r=await apiFetch(`/api/wines/${id}/deep-search-status${suffix}`,{headers:authHeaders()});if(r.status===404)return null;await requireOk(r,'Could not load Deep Search status');return r.json() as Promise<WineResearchRun>}
+export async function cancelWineDeepSearch(id:string,requestId:string){const r=await apiFetch(`/api/wines/${id}/deep-search-cancel`,{method:'POST',headers:authHeaders(true),body:JSON.stringify({confirmation:'CANCEL_DEEP_SEARCH',requestId})});await requireOk(r,'Could not cancel Deep Search');return r.json() as Promise<WineResearchCancelResult>}

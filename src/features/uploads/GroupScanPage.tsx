@@ -1,3 +1,4 @@
+import { apiFetch } from '../../lib/auth/client';
 import { useEffect,useMemo,useRef,useState } from 'react';
 import { useNavigate,useSearchParams } from 'react-router-dom';
 import { WineForm,type SavedWineIdentity } from '../wines/WineForm';
@@ -90,7 +91,7 @@ export function GroupScanPage(){
     try{
       if(photo.recognitionFile.size>GROUP_RECOGNITION_TARGET_BYTES)throw new Error(`Recognition copy is still too large (${(photo.recognitionFile.size/1048576).toFixed(1)} MB). Choose the photo again so WineLog can recompress it.`);
       const fd=new FormData();fd.append('images',photo.recognitionFile);fd.append('metadata',JSON.stringify([photo.metadata]));
-      const response=await fetch('/api/recognition',{method:'POST',headers:{...authHeaders(),'X-WineLog-Recognition-Mode':'group'},body:fd}),payload=await readResponse(response);
+      const response=await apiFetch('/api/recognition',{method:'POST',headers:{...authHeaders(),'X-WineLog-Recognition-Mode':'group'},body:fd}),payload=await readResponse(response);
       if(response.status===401){clearSession();navigate('/login',{replace:true});return}if(!response.ok)throw new Error(readError(payload));
       const result=groupRecognitionSchema.parse(payload),aligned=await Promise.all(result.wines.map(alignToExistingCuvee));
       const reviewed=await Promise.all(aligned.map(async wine=>{const crop=await cropGroupPhoto(photo.file,wine.boundingBox,photo.metadata),cropPreview=await asDataUrl(crop.file);return {key:crypto.randomUUID(),recognition:wine,crop,cropPreview,savedId:null,removed:false,manual:false,saved:null} satisfies ReviewItem}));

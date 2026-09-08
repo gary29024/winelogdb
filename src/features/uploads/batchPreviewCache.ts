@@ -1,3 +1,4 @@
+import { apiFetch } from '../../lib/auth/client';
 import { authHeaders } from '../../lib/auth/client';
 import { batchImageUrl } from './batchApi';
 
@@ -28,7 +29,7 @@ async function fetchPreview(id:string){
       // Keep the network request uncached: these are authenticated temporary
       // objects and a failed response must never be replayed by the browser.
       // Successful blobs are cached below only after the body has arrived.
-      const response=await fetch(batchImageUrl(id),{headers:authHeaders(),cache:'no-store'});
+      const response=await apiFetch(batchImageUrl(id),{headers:authHeaders(),cache:'no-store'});
       if(!response.ok)throw new Error(`Preview failed (${response.status})`);
       return await response.blob();
     }catch(error){lastError=error}

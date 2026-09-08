@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 import { afterEach,beforeEach,describe,expect,it,vi } from 'vitest';
 import { createSessionCache } from '../../src/lib/cache/sessionCache';
+import { bootstrapAccount,clearSession } from '../../src/lib/auth/client';
 
 const deferred=<T>()=>{
   let resolve!:(value:T)=>void;
@@ -11,7 +12,7 @@ const deferred=<T>()=>{
 
 describe('session-scoped summary requests',()=>{
   beforeEach(()=>localStorage.clear());
-  afterEach(()=>vi.restoreAllMocks());
+  afterEach(()=>{clearSession();vi.restoreAllMocks();vi.unstubAllGlobals()});
 
   it('shares concurrent requests and reuses the response until its TTL expires',async()=>{
     const clock=vi.spyOn(Date,'now').mockReturnValue(1000);
@@ -43,14 +44,15 @@ describe('session-scoped summary requests',()=>{
   });
 
   it('does not share cached or in-flight data between sessions',async()=>{
-    localStorage.setItem('session','a');
+    vi.stubGlobal('fetch',vi.fn().mockResolvedValueOnce(Response.json({user:{id:'a'}})).mockResolvedValueOnce(Response.json({user:{id:'b'}})));
+    await bootstrapAccount();
     const old=deferred<number>(),load=vi.fn().mockReturnValueOnce(old.promise).mockResolvedValue(2);
     const cache=createSessionCache<number>(load),first=cache.get();
-    localStorage.setItem('session','b');
+    await bootstrapAccount();
     expect(await cache.get()).toBe(2);
     old.resolve(1);await first;
     expect(await cache.get()).toBe(2);
-    localStorage.removeItem('session');await cache.get();
+    clearSession();await cache.get();
     expect(load).toHaveBeenCalledTimes(3);
   });
 

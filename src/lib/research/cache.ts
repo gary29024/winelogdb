@@ -2,19 +2,20 @@ import { deepSearchProvenanceSchema,type DeepSearchProvenance,type DeepSearchRes
 import { assessResearchScope,buildDeepResearchQuality } from './qualityGate';
 import { highRiskTechnicalScopePasses } from './technicalClaimGate';
 import { auditTechnicalContradictions,disputedTechnicalClaimCount,technicalContradictionScopePasses } from './technicalContradictions';
+import { friendResearch,publishResearch } from './shared';
 
 export const researchScopes=['producer','terroir','vintage_context','wine_vintage'] as const;
 export type ResearchScope=typeof researchScopes[number];
 export type ResearchSource={title:string;url:string};
 export type ResearchTarget={scope:ResearchScope;cacheKey:string;subject:Record<string,string|number|null>};
-export type CachedResearch={target:ResearchTarget;payload:Record<string,string>;sources:ResearchSource[];provenance?:DeepSearchProvenance;model:string;researchedAt:string};
-export type ResearchWine={producer?:unknown;producerId?:unknown;cuveeId?:unknown;wineName?:unknown;vintage?:unknown;country?:unknown;region?:unknown;appellation?:unknown};
+export type CachedResearch={target:ResearchTarget;payload:Record<string,string>;sources:ResearchSource[];provenance?:DeepSearchProvenance;model:string;researchedAt:string;contributorId?:string};
+export type ResearchWine={producer?:unknown;producerId?:unknown;cuveeId?:unknown;wineName?:unknown;vintage?:unknown;country?:unknown;region?:unknown;appellation?:unknown;wineStyle?:unknown};
 
 type CacheRow={scope:ResearchScope;cache_key:string;subject_json:string;result_json:string;sources_json:string;provenance_json:string;model:string;researched_at:string};
 
 const parseJson=<T>(raw:unknown,fallback:T):T=>{try{return JSON.parse(String(raw)) as T}catch{return fallback}};
 const text=(value:unknown)=>typeof value==='string'?value.trim():value==null?'':String(value).trim();
-const normalized=(value:unknown)=>text(value).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[’'`]/g,'').replace(/[^a-z0-9]+/g,' ').trim();
+const normalized=(value:unknown)=>text(value).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[’'`]/g,'').replace(/[^\p{L}\p{N}]+/gu,' ').trim();
 const makeKey=(...parts:unknown[])=>JSON.stringify(parts.map(normalized));
 const parseProvenance=(raw:unknown)=>{const parsed=deepSearchProvenanceSchema.safeParse(parseJson(raw,null));return parsed.success?parsed.data:undefined};
 
@@ -29,6 +30,7 @@ export function buildResearchTargets(wine:ResearchWine):ResearchTarget[]{
   ];
   if(vintage!=null)targets.push({scope:'vintage_context',cacheKey:makeKey(country,region,appellation,vintage),subject:{country:country||null,region:region||null,appellation:appellation||null,vintage}});
   targets.push({scope:'wine_vintage',cacheKey:makeKey(producerIdentity,wineIdentity,vintage??'NV',appellation,region,country),subject:{producer,producerId:producerId||null,cuveeId:cuveeId||null,wineName,vintage,appellation:appellation||null,region:region||null,country:country||null}});
+  for(const target of targets)Object.assign(target.subject,{country:country||null,region:region||null,wineStyle:text(wine.wineStyle)||null});
   return targets;
 }
 
@@ -79,20 +81,26 @@ function provenanceForScope(provenance:DeepSearchProvenance|undefined,scope:Rese
 }
 function auditedProvenance(scope:ResearchScope,payload:Record<string,string>,provenance?:DeepSearchProvenance){return scope==='wine_vintage'?auditTechnicalContradictions(payload,provenance).provenance:provenance}
 
-export async function loadResearchCache(db:D1Database,owner:string,targets:ResearchTarget[]){
+export async function loadResearchCache(db:D1Database,owner:string,targets:ResearchTarget[],includeFriends=false){
   const found=await Promise.all(targets.map(async target=>{
     const row=await db.prepare('SELECT scope,cache_key,subject_json,result_json,sources_json,provenance_json,model,researched_at FROM research_cache WHERE owner_id=? AND scope=? AND cache_key=?').bind(owner,target.scope,target.cacheKey).first<CacheRow>();
     if(!row)return null;
     const payload=parseJson<Record<string,string>>(row.result_json,{}),sources=parseJson<ResearchSource[]>(row.sources_json,[]),provenance=auditedProvenance(target.scope,payload,parseProvenance(row.provenance_json));if(!scopePassesQuality(target.scope,payload,target,sources,provenance))return null;
     return {scope:target.scope,entry:{target,payload,sources,provenance,model:row.model,researchedAt:row.researched_at} as CachedResearch};
   }));
-  const cache=new Map<ResearchScope,CachedResearch>();for(const item of found)if(item)cache.set(item.scope,item.entry);return cache;
+  const cache=new Map<ResearchScope,CachedResearch>();for(const item of found)if(item)cache.set(item.scope,item.entry);
+  if(includeFriends)for(const target of targets){if(cache.has(target.scope))continue;for(const entry of await friendResearch(db,owner,target)){
+    if(scopePassesQuality(target.scope,entry.payload,target,entry.sources,entry.provenance)){cache.set(target.scope,{...entry,target});break}
+  }}
+  return cache;
 }
 
 async function writeCache(db:D1Database,owner:string,entry:CachedResearch,replace:boolean){
+  if(entry.contributorId&&entry.contributorId!==owner)return;
   const now=new Date().toISOString();
   const sql=replace?`INSERT INTO research_cache(owner_id,scope,cache_key,subject_json,result_json,sources_json,provenance_json,model,researched_at,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,?) ON CONFLICT(owner_id,scope,cache_key) DO UPDATE SET subject_json=excluded.subject_json,result_json=excluded.result_json,sources_json=excluded.sources_json,provenance_json=excluded.provenance_json,model=excluded.model,researched_at=excluded.researched_at,updated_at=excluded.updated_at`:`INSERT INTO research_cache(owner_id,scope,cache_key,subject_json,result_json,sources_json,provenance_json,model,researched_at,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,?) ON CONFLICT(owner_id,scope,cache_key) DO NOTHING`;
   await db.prepare(sql).bind(owner,entry.target.scope,entry.target.cacheKey,JSON.stringify(entry.target.subject),JSON.stringify(entry.payload),JSON.stringify(entry.sources),JSON.stringify(entry.provenance??{}),entry.model,entry.researchedAt,now,now).run();
+  if(scopePassesQuality(entry.target.scope,entry.payload,entry.target,entry.sources,entry.provenance))await publishResearch(db,owner,entry);
 }
 export const seedResearchCache=(db:D1Database,owner:string,entry:CachedResearch)=>writeCache(db,owner,entry,false);
 export const upsertResearchCache=(db:D1Database,owner:string,entry:CachedResearch)=>writeCache(db,owner,entry,true);

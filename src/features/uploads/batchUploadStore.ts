@@ -1,3 +1,4 @@
+import { accountStorageKey } from '../../lib/auth/client';
 import type { PhotoMetadata } from './photoMetadata';
 
 export type PendingBatchPhoto={original:File;recognition:File;metadata:PhotoMetadata;width:number;height:number};
@@ -14,7 +15,7 @@ const key=(sessionId:string,position:number)=>`${sessionId}:${position}`;
 function openDb(){
   return new Promise<IDBDatabase>((resolve,reject)=>{
     if(typeof indexedDB==='undefined'){reject(new Error('Browser storage is unavailable'));return}
-    const request=indexedDB.open(DB_NAME,VERSION);
+    const request=indexedDB.open(accountStorageKey(DB_NAME),VERSION);
     request.onerror=()=>reject(request.error??new Error('Could not open browser storage'));
     request.onupgradeneeded=()=>{
       const db=request.result;

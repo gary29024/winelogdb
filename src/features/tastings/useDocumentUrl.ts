@@ -1,3 +1,4 @@
+import { apiFetch } from '../../lib/auth/client';
 import { useEffect,useState } from 'react';
 import { authHeaders } from '../../lib/auth/client';
 
@@ -12,7 +13,7 @@ export function useDocumentUrl(documentId:string){
   const [src,setSrc]=useState<string>();
   useEffect(()=>{
     let active=true,created='';
-    fetch(`/api/tastings/documents/${documentId}`,{headers:authHeaders()})
+    apiFetch(`/api/tastings/documents/${documentId}`,{headers:authHeaders()})
       .then(response=>{if(!response.ok)throw new Error('unavailable');return response.blob()})
       .then(blob=>{if(!active)return;created=URL.createObjectURL(blob);setSrc(created)})
       .catch(()=>undefined);

@@ -1,3 +1,4 @@
+import { apiFetch } from '../../lib/auth/client';
 import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ImageLightbox } from '../../components/ImageLightbox';
@@ -53,7 +54,7 @@ export function UploadPage(){
       const fd=new FormData();
       items.forEach(x=>fd.append('images',x.recognitionFile!));
       fd.append('metadata',JSON.stringify(items.map(x=>x.metadata??{capturedAt:null,latitude:null,longitude:null,source:'none'})));
-      const rr=await fetch('/api/recognition',{method:'POST',headers:authHeaders(),body:fd});
+      const rr=await apiFetch('/api/recognition',{method:'POST',headers:authHeaders(),body:fd});
       const response=await readResponse(rr);
       if(rr.status===401){clearSession();navigate('/login',{replace:true});return}
       if(!rr.ok){failAll(readError(response));return}

@@ -3,6 +3,9 @@ import { act } from 'react';
 import { createRoot,type Root } from 'react-dom/client';
 import { MemoryRouter } from 'react-router-dom';
 import { afterEach,describe,expect,it,vi } from 'vitest';
+import { waitFor } from '@testing-library/react';
+import { File as NodeFile } from 'node:buffer';
+import { FormData as NodeFormData } from 'undici';
 
 declare global{var IS_REACT_ACT_ENVIRONMENT:boolean}
 globalThis.IS_REACT_ACT_ENVIRONMENT=true;
@@ -26,9 +29,11 @@ let root:Root|null=null,host:HTMLDivElement|null=null;
 const calls:{url:string;body:FormData}[]=[];
 
 async function render(state?:unknown){
+  vi.stubGlobal('File',NodeFile);vi.stubGlobal('FormData',NodeFormData);
   calls.length=0;
   vi.stubGlobal('fetch',vi.fn(async(url:string,init?:RequestInit)=>{
-    calls.push({url:String(url),body:init?.body as FormData});
+    if(String(url).startsWith('/api/credits/quotes'))return Response.json({id:'quote',total:0,available:100,units:[]});
+    if(String(url)==='/api/recognition')calls.push({url:String(url),body:await new Request(new URL(url,location.origin),init).formData()});
     return new Response(JSON.stringify(recognized),{status:200,headers:{'content-type':'application/json'}});
   }));
   let previews=0;
@@ -43,7 +48,7 @@ async function render(state?:unknown){
 }
 
 const button=(text:string)=>[...host!.querySelectorAll('button')].find(b=>b.textContent?.trim()===text);
-const click=async(el:HTMLElement)=>{await act(async()=>{el.click()})};
+const click=async(el:HTMLElement)=>{await act(async()=>{el.click()});await waitFor(()=>expect(host!.textContent).not.toContain('Identifying…'))};
 const pick=async(...names:string[])=>{
   const input=host!.querySelector('input[type=file]') as HTMLInputElement;
   const files=names.map(name=>new File([new Uint8Array([1,2,3])],name,{type:'image/jpeg'}));

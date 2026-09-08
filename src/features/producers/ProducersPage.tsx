@@ -1,3 +1,4 @@
+import { accountStorageKey } from '../../lib/auth/client';
 import { useCallback,useEffect,useMemo,useState } from 'react';
 import { Link } from 'react-router-dom';
 import { listProducers,type ProducerSummary } from './api';
@@ -31,11 +32,11 @@ const REGION_OPEN_KEY='winelog.producers.expandedRegions';
  */
 function readExpanded(storageKey:string):Set<string>{
   try{
-    const raw=window.localStorage.getItem(storageKey);if(!raw)return new Set();
+    const raw=window.localStorage.getItem(accountStorageKey(storageKey));if(!raw)return new Set();
     const parsed=JSON.parse(raw);return new Set(Array.isArray(parsed)?parsed.filter((x):x is string=>typeof x==='string'):[]);
   }catch{return new Set()}
 }
-function writeExpanded(storageKey:string,next:Set<string>){try{window.localStorage.setItem(storageKey,JSON.stringify([...next]))}catch{/* storage unavailable */}}
+function writeExpanded(storageKey:string,next:Set<string>){try{window.localStorage.setItem(accountStorageKey(storageKey),JSON.stringify([...next]))}catch{/* storage unavailable */}}
 const slug=(value:string)=>value.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-');
 const countryPanelId=(country:string)=>`producer-country-${slug(country)}`;
 const regionPanelId=(country:string,region:string)=>`producer-region-${slug(country)}-${slug(region)}`;

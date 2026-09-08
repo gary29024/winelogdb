@@ -1,7 +1,8 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "winelogdb",
-  "main": "worker/structureEntry.ts",
+  "main": "worker/multiUserEntry.ts",
+  "triggers": { "crons": ["*/5 * * * *"] },
   "compatibility_date": "2026-08-01",
   "keep_vars": true,
   "upload_source_maps": true,
