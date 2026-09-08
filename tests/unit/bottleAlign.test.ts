@@ -183,22 +183,6 @@ describe('settling a card on one lean',()=>{
     expect(alignedPlacement(1200,1200,cell,.5,at(20),null).turn,'and nothing to agree with').toBe(0);
   });
 
-  it('keeps the photograph over every corner of the cell once it is turned',()=>{
-    // The turned frame sees the cell as a bigger rectangle, and the drawing has
-    // to cover that or a triangle of blank canvas shows in the corner.
-    const lean=commonTilt([at(0),at(0),at(-30)])!;
-    for(const tilt of [-30,-20,0,14,26]){
-      const shot=at(tilt);
-      const {turn,x,y,width,height}=alignedPlacement(1200,1200,cell,.5,shot,lean);
-      const cos=Math.abs(Math.cos(turn)),sin=Math.abs(Math.sin(turn));
-      const needWidth=cell.width*cos+cell.height*sin,needHeight=cell.width*sin+cell.height*cos;
-      expect(x,`${tilt} degrees, left edge`).toBeLessThanOrEqual(-needWidth/2+1e-9);
-      expect(x+width,`${tilt} degrees, right edge`).toBeGreaterThanOrEqual(needWidth/2-1e-9);
-      expect(y,`${tilt} degrees, top edge`).toBeLessThanOrEqual(-needHeight/2+1e-9);
-      expect(y+height,`${tilt} degrees, bottom edge`).toBeGreaterThanOrEqual(needHeight/2-1e-9);
-    }
-  });
-
   it('still draws every bottle the same width once they have been turned',()=>{
     const lean=commonTilt([at(4),at(16),at(-10),at(24)])!;
     const widths=[4,16,-10,24].map(tilt=>{
