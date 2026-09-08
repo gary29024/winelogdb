@@ -37,7 +37,7 @@ type AchievementContext={
  * producer alias added to a checklist item would tick nothing.
  * curatedCollectionFingerprint in the tests fails until this moves.
  */
-export const ACHIEVEMENT_DEFINITION_VERSION=10;
+export const ACHIEVEMENT_DEFINITION_VERSION=11;
 const parseJson=<T>(value:unknown,fallback:T):T=>{try{return JSON.parse(String(value)) as T}catch{return fallback}};
 
 function groupedAliases<T extends {display_alias:string}>(rows:T[],id:(row:T)=>string){
@@ -58,7 +58,7 @@ async function loadAchievementContext(db:D1Database,owner:string):Promise<Achiev
     db.prepare(`SELECT id,producer_id,canonical_name,NULLIF(trim(appellation),'') appellation,NULLIF(trim(wine_style),'') wine_style,catalog_backed FROM cuvees WHERE owner_id=?`).bind(owner).all<CuveeRow>(),
     db.prepare(`SELECT cuvee_id,display_alias FROM cuvee_aliases WHERE owner_id=?`).bind(owner).all<CuveeAliasRow>()
   ]);
-  const producerAliases=groupedAliases(producerAliasesResult.results,row=>row.producer_id),cuveeAliases=groupedAliases(cuveeAliasesResult.results,row=>row.cuvee_id);
+  const producerAliases=groupedAliases(producerAliasesResult.results,row=>row.producer_id),cuveeAliases=groupedAliases(cuveeAliasesResult.results,row=>row.cu​vee_id);
   const producers:AchievementProducerIdentity[]=producersResult.results.map(row=>({id:row.id,canonicalName:row.canonical_name,aliases:producerAliases.get(row.id)??[],country:row.home_country,region:row.home_region}));
   const cuvees:AchievementCuveeIdentity[]=cuveesResult.results.map(row=>({id:row.id,producerId:row.producer_id,canonicalName:row.canonical_name,aliases:cuveeAliases.get(row.id)??[],appellation:row.appellation,wineStyle:row.wine_style,catalogBacked:Boolean(row.catalog_backed)}));
   const wines:AchievementWine[]=winesResult.results.map(row=>({id:row.id,producerId:row.producer_id,cuveeId:row.cuvee_id,producer:row.producer,wineName:row.wine_name,vintage:row.vintage,appellation:row.appellation,tastingDate:row.tasting_date}));
