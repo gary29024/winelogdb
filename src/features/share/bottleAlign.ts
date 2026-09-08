@@ -17,9 +17,8 @@ import type { BottleAxis,BottleBox,BottleFrame } from '../../lib/images/bottleFr
  * scaled to the same width and every label put at the same height, so the eye
  * reads a lineup instead of sixteen different distances.
  *
- * Close-ups can scale down as well as distant bottles scaling up. The renderer
- * fills exposed space separately instead of forcing oversized bottles to stay
- * oversized just to cover their cells.
+ * Every photograph fills its cell. Repositioning and the minimum necessary
+ * zoom take priority over equal bottle widths when those goals conflict.
  */
 export type FitCell={x:number;y:number;width:number;height:number};
 export type DrawRect={x:number;y:number;width:number;height:number};
@@ -211,7 +210,7 @@ export function coverRect(imageWidth:number,imageHeight:number,cell:FitCell,focu
  * The same, aligned on a measured bottle.
  *
  * Position the label, or the bottle when no label is known, at a common anchor.
- * Background coverage is separate so it cannot override size or label safety.
+ * Clamp that anchor to the positions that cover every rotated cell corner.
  */
 export function alignedPlacement(imageWidth:number,imageHeight:number,cell:FitCell,focus:number,frame?:BottleFrame|null,lean?:number|null):DrawPlacement{
   const centred=(rect:DrawRect,turn=0):DrawPlacement=>
@@ -229,11 +228,13 @@ export function alignedPlacement(imageWidth:number,imageHeight:number,cell:FitCe
 
   // The cell, seen from the turned photograph: what it has to cover.
   const cos=Math.cos(turn),sin=Math.sin(turn);
+  // A small bleed prevents subpixel image-edge seams after canvas resampling.
+  const needWidth=cell.width*Math.abs(cos)+cell.height*Math.abs(sin)+2;
+  const needHeight=cell.width*Math.abs(sin)+cell.height*Math.abs(cos)+2;
   const cover=Math.max(cell.width/imageWidth,cell.height/imageHeight);
   const sized=TARGET_BOTTLE*cell.width/(bottleWidth(bottle,frame?.axis,frame?.label,aspect)*imageWidth);
-  // Background coverage is handled by the renderer. Forcing cover scale here
-  // made close-up bottles permanently larger than the rest of the lineup.
-  const ceiling=Math.min(sized,cover*MAX_ZOOM);
+  const floor=Math.max(needWidth/imageWidth,needHeight/imageHeight);
+  const ceiling=Math.max(floor,Math.min(sized,cover*MAX_ZOOM));
 
   // Where the bottle should land, carried into the turned frame.
   const anchorY=frame?.label?midY(frame.label):bottle.yMin/1000+(bottle.yMax-bottle.yMin)/1000*LABEL_DEPTH;
@@ -241,8 +242,8 @@ export function alignedPlacement(imageWidth:number,imageHeight:number,cell:FitCe
   const at=(scale:number):DrawRect=>{
     const width=imageWidth*scale,height=imageHeight*scale;
     return {
-      x:targetY*sin-midX(frame?.label??bottle)*width,
-      y:targetY*cos-anchorY*height,
+      x:Math.min(-needWidth/2,Math.max(needWidth/2-width,targetY*sin-midX(frame?.label??bottle)*width)),
+      y:Math.min(-needHeight/2,Math.max(needHeight/2-height,targetY*cos-anchorY*height)),
       width,height
     };
   };
@@ -257,12 +258,12 @@ export function alignedPlacement(imageWidth:number,imageHeight:number,cell:FitCe
    * bottle drawn a little small next to its neighbours is a blemish, a bottle
    * whose name is sliced through is a ruined card.
    *
-   * Twelve halvings settle the safe scale to well under a pixel. Zero is a
-   * known fitting lower bound because all corners converge on the cell anchor.
+   * Never go below rotated cover-fit. If the label cannot fit at that scale,
+   * retain coverage and orientation rather than exposing white space.
    */
   let scale=ceiling;
   if(frame?.label&&!labelIsWhole(at(ceiling),turn,cell,frame.label)){
-    let low=0,high=ceiling;
+    let low=floor,high=ceiling;
     if(labelIsWhole(at(low),turn,cell,frame.label)){
       for(let step=0;step<12;step++){
         const middle=(low+high)/2;

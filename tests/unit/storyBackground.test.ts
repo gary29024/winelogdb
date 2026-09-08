@@ -28,18 +28,17 @@ function render(width:number,blur:'supported'|'missing'|'ignored'='supported'){
   return {draws,fills,cell:collageLayout(1).cells[0]};
 }
 
-describe('story cell background coverage belongs to the renderer',()=>{
-  it('draws one blurred cover behind a close-up that scales below cell width',()=>{
+describe('story cells are filled by the original photograph',()=>{
+  it('draws a single sharp photo covering the cell even for a close-up',()=>{
     const {draws,cell}=render(.8);
-    expect(draws).toHaveLength(2);
-    const [background,foreground]=draws;
-    expect(background).toMatchObject({alpha:.45,filter:'blur(16px)',clipped:true});
-    const [,x,y,width,height]=background.args as [unknown,number,number,number,number];
-    expect(x).toBeLessThanOrEqual(cell.x);expect(y).toBeLessThanOrEqual(cell.y);
-    expect(x+width).toBeGreaterThanOrEqual(cell.x+cell.width);
-    expect(y+height).toBeGreaterThanOrEqual(cell.y+cell.height);
+    expect(draws).toHaveLength(1);
+    const [foreground]=draws;
+    const [,x,y,width,height]=foreground.args as [unknown,number,number,number,number];
+    expect(x).toBeLessThanOrEqual(-cell.width/2);expect(y).toBeLessThanOrEqual(-cell.height/2);
+    expect(x+width).toBeGreaterThanOrEqual(cell.width/2);
+    expect(y+height).toBeGreaterThanOrEqual(cell.height/2);
     expect(foreground).toMatchObject({alpha:1,filter:'none',clipped:true});
-    expect(Number(foreground.args[3])).toBeLessThan(cell.width);
+    expect(Number(foreground.args[3])).toBeGreaterThanOrEqual(cell.width);
   });
 
   it('does not draw a redundant background when the foreground covers the cell',()=>{
@@ -48,10 +47,11 @@ describe('story cell background coverage belongs to the renderer',()=>{
     expect(draws[0]).toMatchObject({alpha:1,filter:'none',clipped:true});
   });
 
-  it.each(['missing','ignored'] as const)('uses neutral fill instead of a sharp duplicate when blur is %s',mode=>{
-    const {draws,fills}=render(.8,mode);
+  it.each(['missing','ignored'] as const)('fills the cell without requiring blur when it is %s',mode=>{
+    const {draws,cell}=render(.8,mode);
     expect(draws).toHaveLength(1);
     expect(draws[0]).toMatchObject({alpha:1,filter:'none',clipped:true});
-    expect(fills.some(fill=>fill.color==='#ffffff')).toBe(true);
+    expect(Number(draws[0].args[3])).toBeGreaterThanOrEqual(cell.width);
+    expect(Number(draws[0].args[4])).toBeGreaterThanOrEqual(cell.height);
   });
 });
