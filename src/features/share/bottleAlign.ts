@@ -17,9 +17,9 @@ import type { BottleAxis,BottleBox,BottleFrame } from '../../lib/images/bottleFr
  * scaled to the same width and every label put at the same height, so the eye
  * reads a lineup instead of sixteen different distances.
  *
- * The scale can only go up. Pulling back past cover-fit would show paper down
- * the side of a cell, so a bottle already larger than the target stays as it
- * is; in practice the photographs that need help are the distant ones.
+ * Close-ups can scale down as well as distant bottles scaling up. The renderer
+ * fills exposed space separately instead of forcing oversized bottles to stay
+ * oversized just to cover their cells.
  */
 export type FitCell={x:number;y:number;width:number;height:number};
 export type DrawRect={x:number;y:number;width:number;height:number};
@@ -56,15 +56,12 @@ const MAX_ZOOM=4;
 /**
  * How far a photograph may be turned to join the rest.
  *
- * Turning the bottle turns the room behind it, so a table edge that was level
- * comes out sloping - which reads worse than the tilt did. Twelve degrees is
- * about as far as that goes unnoticed, and a bottle further out than that from
- * the card's angle keeps the remainder of its lean rather than the room being
- * put on its side for it.
+ * Allow an upright bottle to join neighbours leaning up to forty degrees.
+ * Wider disagreements remain bounded rather than turning the room on its side.
  */
-const MAX_TURN=12*Math.PI/180;
+const MAX_TURN=40*Math.PI/180;
 /** Under this the lean already agrees, and resampling the photo buys nothing. */
-const TURN_DEADBAND=2.5*Math.PI/180;
+const TURN_DEADBAND=0.5*Math.PI/180;
 
 const spanX=(box:BottleBox)=>(box.xMax-box.xMin)/1000;
 const spanY=(box:BottleBox)=>(box.yMax-box.yMin)/1000;
@@ -78,7 +75,7 @@ const spanY=(box:BottleBox)=>(box.yMax-box.yMin)/1000;
  * would then draw the tilted bottle less than half the size of an upright one -
  * which is the opposite of what this is for, and worse than never measuring.
  *
- * The photograph is not turned; only the arithmetic knows about the tilt. For a
+ * For a
  * rectangle w by h leaning at t, the box is (w cos t + h sin t) by
  * (w sin t + h cos t), and those two are solved back for w. Past forty degrees
  * that inversion falls apart - and nobody holds a bottle at forty degrees to be
@@ -89,26 +86,60 @@ const MAX_TILT=40*Math.PI/180;
 /** However far it leans, the glass is never thinner than this share of its box. */
 const MIN_RECOVERED=0.22;
 
-export function bottleWidth(box:BottleBox,axis?:BottleAxis|null){
+function recoveredWidth(box:BottleBox,axis?:BottleAxis|null,aspect=1){
   const boxWidth=spanX(box);
   if(!axis)return boxWidth;
-  const run=Math.abs(axis.bottomX-axis.topX),rise=Math.abs(axis.bottomY-axis.topY);
+  const run=Math.abs(axis.bottomX-axis.topX)*aspect,rise=Math.abs(axis.bottomY-axis.topY);
   if(!rise)return boxWidth;
   const tilt=Math.atan2(run,rise);
   if(tilt<0.03||tilt>MAX_TILT)return boxWidth;   // upright, or a misread
   const cos=Math.cos(tilt),sin=Math.sin(tilt),determinant=cos*cos-sin*sin;
-  const recovered=(boxWidth*cos-spanY(box)*sin)/determinant;
+  const recovered=(boxWidth*cos-spanY(box)/aspect*sin)/determinant;
   return recovered>boxWidth*MIN_RECOVERED&&recovered<=boxWidth?recovered:boxWidth;
+}
+
+/**
+ * The label as a check on the glass.
+ *
+ * A front label is printed on the bottle, so however the two are boxed the
+ * bottle cannot be narrower than its own label, and a label narrower than about
+ * three-fifths of the glass is not a wine label. That bounds the one number the
+ * whole card is scaled by, and it bounds it with the easier measurement: a
+ * printed rectangle of high contrast is something a vision model boxes far more
+ * reliably than the silhouette of dark glass against a dark room.
+ *
+ * Both cells that came out wrong on a real card were the box disagreeing with
+ * the label. One box covered a third of its bottle - narrower than the label on
+ * it, which cannot happen - and the bottle was drawn half again too large. The
+ * other ran wide of the glass, taking in the hand and the floor behind it, and
+ * its bottle came out small among its neighbours. Either way the label knew
+ * better.
+ *
+ * Bounds, not a replacement. Labels really do run from about two-thirds of the
+ * glass to the whole of it, so this leaves a box that disagrees within a fifth
+ * of the truth rather than at three times it - the difference between a cell
+ * that reads as slightly off and one that reads as a mistake.
+ */
+const BODY_AT_LEAST=0.98,BODY_AT_MOST=1.5;
+
+export function bottleWidth(box:BottleBox,axis?:BottleAxis|null,label?:BottleBox|null,aspect=1){
+  const width=recoveredWidth(box,axis,aspect);
+  if(!label)return width;
+  // Measured the same way, so a leaning bottle compares like with like: both
+  // boxes are inflated by the same tilt, and both are brought back by it.
+  const labelWidth=recoveredWidth(label,axis,aspect);
+  if(labelWidth<=0)return width;
+  return Math.min(Math.max(width,labelWidth*BODY_AT_LEAST),labelWidth*BODY_AT_MOST);
 }
 /**
  * How far this bottle leans, signed, or null when it was never measured.
  *
- * Positive leans the way a right hand holds one - the base further right than
- * the neck - which is the same sense a canvas rotation turns in.
+ * Positive means the base is further right than the neck. Positive canvas
+ * rotation moves a downward axis left, so the rotation correction is opposite.
  */
-export function bottleTilt(axis?:BottleAxis|null){
+export function bottleTilt(axis?:BottleAxis|null,aspect=1){
   if(!axis)return null;
-  const run=axis.bottomX-axis.topX,rise=axis.bottomY-axis.topY;
+  const run=(axis.bottomX-axis.topX)*aspect,rise=axis.bottomY-axis.topY;
   if(!rise)return null;
   // An axis handed back upside down is still the same line.
   const tilt=rise>0?Math.atan2(run,rise):Math.atan2(-run,-rise);
@@ -124,8 +155,8 @@ export function bottleTilt(axis?:BottleAxis|null){
  * left alone. Photographs that were never measured have no say and are never
  * turned; they cannot be, their lean is not known.
  */
-export function commonTilt(frames:Array<BottleFrame|null|undefined>){
-  const tilts=frames.map(frame=>bottleTilt(frame?.axis)).filter((tilt):tilt is number=>tilt!=null).sort((a,b)=>a-b);
+export function commonTilt(frames:Array<BottleFrame|null|undefined>,aspects:number[]=[]){
+  const tilts=frames.map((frame,index)=>frame?.bottle&&measurementIsUsable(frame.bottle)?bottleTilt(frame.axis,aspects[index]??1):null).filter((tilt):tilt is number=>tilt!=null).sort((a,b)=>a-b);
   if(!tilts.length)return null;
   const middle=tilts.length>>1;
   return tilts.length%2?tilts[middle]:(tilts[middle-1]+tilts[middle])/2;
@@ -133,6 +164,41 @@ export function commonTilt(frames:Array<BottleFrame|null|undefined>){
 
 const midX=(box:BottleBox)=>(box.xMin+box.xMax)/2000;
 const midY=(box:BottleBox)=>(box.yMin+box.yMax)/2000;
+
+/**
+ * Whether a measurement is worth drawing with at all.
+ *
+ * The card trusts the boxes completely, so the boxes have to be refusable. A
+ * box the size of the whole photograph is what "I could not find it" looks like
+ * coming back, and a sliver is a misread of something else in the frame -
+ * neither is a bottle somebody held up, and either would be magnified until it
+ * filled a cell. Both fall back to the photograph as it was framed.
+ */
+const FULL_FRAME=0.97;
+const MIN_BOTTLE_WIDTH=0.04,MIN_BOTTLE_HEIGHT=0.12;
+export function measurementIsUsable(box:BottleBox){
+  const width=spanX(box),height=spanY(box);
+  if(width>=FULL_FRAME&&height>=FULL_FRAME)return false;
+  return width>=MIN_BOTTLE_WIDTH&&height>=MIN_BOTTLE_HEIGHT;
+}
+
+/**
+ * Is the whole label inside the cell?
+ *
+ * Exact rather than approximate: the label's corners are carried back out of
+ * the turned frame and tested against the cell itself, because a card that
+ * leans has its corners in different places than an upright one.
+ */
+function labelIsWhole(rect:DrawRect,turn:number,cell:FitCell,label:BottleBox){
+  const cos=Math.cos(turn),sin=Math.sin(turn);
+  const xs=[label.xMin,label.xMax].map(value=>rect.x+value/1000*rect.width);
+  const ys=[label.yMin,label.yMax].map(value=>rect.y+value/1000*rect.height);
+  for(const x of xs)for(const y of ys){
+    if(Math.abs(x*cos-y*sin)>cell.width/2+0.5)return false;
+    if(Math.abs(x*sin+y*cos)>cell.height/2+0.5)return false;
+  }
+  return true;
+}
 
 /** Cover-fit: the photograph as it is framed, filling the cell. */
 export function coverRect(imageWidth:number,imageHeight:number,cell:FitCell,focus:number):DrawRect{
@@ -144,48 +210,68 @@ export function coverRect(imageWidth:number,imageHeight:number,cell:FitCell,focu
 /**
  * The same, aligned on a measured bottle.
  *
- * Every offset is clamped to the cell: however far the arithmetic would like to
- * slide or turn the photograph to bring a bottle standing at the edge of its
- * frame into the middle, an edge of the photograph must never come inside the
- * cell. A bottle that far off-centre ends up as close to the middle as its own
- * photograph allows.
- *
- * Coverage outranks the zoom cap. A turned photograph has to be a little larger
- * to keep its corners out of shot, and a soft bottle beats a triangle of blank
- * canvas in the corner of a card.
+ * Position the label, or the bottle when no label is known, at a common anchor.
+ * Background coverage is separate so it cannot override size or label safety.
  */
 export function alignedPlacement(imageWidth:number,imageHeight:number,cell:FitCell,focus:number,frame?:BottleFrame|null,lean?:number|null):DrawPlacement{
   const centred=(rect:DrawRect,turn=0):DrawPlacement=>
     ({turn,x:rect.x-(cell.x+cell.width/2),y:rect.y-(cell.y+cell.height/2),width:rect.width,height:rect.height});
   const bottle=frame?.bottle;
   if(!imageWidth||!imageHeight)return centred({x:cell.x,y:cell.y,width:cell.width,height:cell.height});
-  if(!bottle||spanX(bottle)<=0)return centred(coverRect(imageWidth,imageHeight,cell,focus));
+  if(!bottle||!measurementIsUsable(bottle))return centred(coverRect(imageWidth,imageHeight,cell,focus));
 
-  const tilt=bottleTilt(frame?.axis);
-  const wanted=lean==null||tilt==null?0:lean-tilt;
+  const aspect=imageWidth/imageHeight;
+  const tilt=bottleTilt(frame?.axis,aspect);
+  // Positive canvas rotation turns a downward axis left, opposite to the
+  // positive measured lean (base to the right of the neck).
+  const wanted=lean==null||tilt==null?0:tilt-lean;
   const turn=Math.abs(wanted)<TURN_DEADBAND?0:Math.min(MAX_TURN,Math.max(-MAX_TURN,wanted));
 
   // The cell, seen from the turned photograph: what it has to cover.
   const cos=Math.cos(turn),sin=Math.sin(turn);
-  const needWidth=cell.width*Math.abs(cos)+cell.height*Math.abs(sin);
-  const needHeight=cell.width*Math.abs(sin)+cell.height*Math.abs(cos);
-
   const cover=Math.max(cell.width/imageWidth,cell.height/imageHeight);
-  const sized=TARGET_BOTTLE*cell.width/(bottleWidth(bottle,frame?.axis)*imageWidth);
-  const scale=Math.max(Math.min(Math.max(cover,sized),cover*MAX_ZOOM),needWidth/imageWidth,needHeight/imageHeight);
-  const width=imageWidth*scale,height=imageHeight*scale;
+  const sized=TARGET_BOTTLE*cell.width/(bottleWidth(bottle,frame?.axis,frame?.label,aspect)*imageWidth);
+  // Background coverage is handled by the renderer. Forcing cover scale here
+  // made close-up bottles permanently larger than the rest of the lineup.
+  const ceiling=Math.min(sized,cover*MAX_ZOOM);
 
   // Where the bottle should land, carried into the turned frame.
   const anchorY=frame?.label?midY(frame.label):bottle.yMin/1000+(bottle.yMax-bottle.yMin)/1000*LABEL_DEPTH;
   const targetY=cell.height*(LABEL_HEIGHT-0.5);
-  const x=targetY*sin-midX(bottle)*width;
-  const y=targetY*cos-anchorY*height;
-  return {
-    turn,
-    x:Math.min(-needWidth/2,Math.max(needWidth/2-width,x)),
-    y:Math.min(-needHeight/2,Math.max(needHeight/2-height,y)),
-    width,height
+  const at=(scale:number):DrawRect=>{
+    const width=imageWidth*scale,height=imageHeight*scale;
+    return {
+      x:targetY*sin-midX(frame?.label??bottle)*width,
+      y:targetY*cos-anchorY*height,
+      width,height
+    };
   };
+
+  /**
+   * The largest scale that still shows all of the label.
+   *
+   * A box that covered only part of a bottle asks for too much magnification
+   * and puts its centre in the wrong place, and the card then cuts the label in
+   * half - which is the one thing a wine photograph must not do. Rather than
+   * trusting the box, the zoom comes down until the label is whole again: a
+   * bottle drawn a little small next to its neighbours is a blemish, a bottle
+   * whose name is sliced through is a ruined card.
+   *
+   * Twelve halvings settle the safe scale to well under a pixel. Zero is a
+   * known fitting lower bound because all corners converge on the cell anchor.
+   */
+  let scale=ceiling;
+  if(frame?.label&&!labelIsWhole(at(ceiling),turn,cell,frame.label)){
+    let low=0,high=ceiling;
+    if(labelIsWhole(at(low),turn,cell,frame.label)){
+      for(let step=0;step<12;step++){
+        const middle=(low+high)/2;
+        if(labelIsWhole(at(middle),turn,cell,frame.label))low=middle;else high=middle;
+      }
+    }
+    scale=low;
+  }
+  return {turn,...at(scale)};
 }
 
 /** The placement as a plain rectangle. Only meaningful while nothing is turned. */

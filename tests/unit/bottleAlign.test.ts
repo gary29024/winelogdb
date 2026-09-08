@@ -1,5 +1,5 @@
 import { describe,expect,it } from 'vitest';
-import { alignedPlacement,alignedRect,bottleTilt,bottleWidth,commonTilt,coverRect } from '../../src/features/share/bottleAlign';
+import { alignedPlacement,alignedRect,bottleTilt,bottleWidth,commonTilt,coverRect,measurementIsUsable,placementRect } from '../../src/features/share/bottleAlign';
 import type { BottleFrame } from '../../src/lib/images/bottleFrame';
 
 const cell={x:100,y:200,width:300,height:450};
@@ -50,18 +50,17 @@ describe('drawing sixteen photographs as though they were taken from one place',
     expect(.06*rect.width/cell.width).toBeLessThan(.62);
   });
 
-  it('never pulls back past the photograph, however big the bottle already is',()=>{
-    // A bottle that fills its frame cannot be made smaller without showing
-    // paper down the side of the cell, so it stays as it was shot.
+  it('scales close-up bottles down to the same target width',()=>{
     const wide=alignedRect(1200,1600,cell,.5,frame(.92));
     const plain=coverRect(1200,1600,cell,.5);
-    expect(wide.width).toBeCloseTo(plain.width,5);
+    expect(wide.width).toBeLessThan(plain.width);
+    expect(.92*wide.width/cell.width).toBeCloseTo(.62,5);
   });
 
-  it('keeps the photograph over the whole cell, wherever the bottle stood in it',()=>{
+  it('centres the subject even when it stood near the photograph edge',()=>{
     for(const center of [0.08,0.25,0.5,0.75,0.94])
       for(const width of [0.12,0.3,0.6])
-        expect(covers(alignedRect(1200,1600,cell,.5,frame(width,center))),`${width} at ${center}`).toBe(true);
+        {const rect=alignedRect(1200,1600,cell,.5,frame(width,center));expect(rect.x+center*rect.width).toBeCloseTo(cell.x+cell.width/2,5)}
   });
 
   it('puts the labels of two differently shot bottles at the same height',()=>{
@@ -112,7 +111,7 @@ describe('a bottle held on a lean',()=>{
   it('draws the leaning bottle the same size as the upright one',()=>{
     const widths=[0,10,20,28].map(tilt=>{
       const shot=leaning(60,246,tilt);
-      return bottleWidth(shot.bottle!,shot.axis)*alignedRect(1200,1600,cell,.5,shot).width/cell.width;
+      return bottleWidth(shot.bottle!,shot.axis)*alignedRect(1200,1200,cell,.5,shot).width/cell.width;
     });
     for(const width of widths)expect(width).toBeCloseTo(widths[0],2);
   });
@@ -120,7 +119,7 @@ describe('a bottle held on a lean',()=>{
   it('leaves the photograph on its lean - only the size is made to agree',()=>{
     // Nothing here rotates: turning the bottle level would tip the room it was
     // photographed in, and a slanted table edge reads worse than a tilt.
-    const rect=alignedRect(1200,1600,cell,.5,leaning(60,246,22));
+    const rect=alignedRect(1200,1200,cell,.5,leaning(60,246,22));
     expect(Object.keys(rect).sort()).toEqual(['height','width','x','y']);
   });
 
@@ -159,53 +158,124 @@ describe('settling a card on one lean',()=>{
 
   it('brings the odd bottle out towards the rest, and leaves the rest alone',()=>{
     const lean=commonTilt([at(12),at(12),at(-6)])!;
-    expect(alignedPlacement(1200,1600,cell,.5,at(12),lean).turn,'already at the card angle').toBe(0);
-    const odd=alignedPlacement(1200,1600,cell,.5,at(-6),lean).turn;
-    expect(degrees(odd),'turned towards twelve, not to vertical').toBeGreaterThan(0);
-    expect(degrees(-6+degrees(odd)*0)).toBeLessThan(12);
+    expect(alignedPlacement(1200,1200,cell,.5,at(12),lean).turn,'already at the card angle').toBe(0);
+    const odd=alignedPlacement(1200,1200,cell,.5,at(-6),lean).turn;
+    expect(degrees(odd),'canvas rotation is opposite to measured lean').toBeLessThan(0);
+    expect(-6-degrees(odd)).toBeCloseTo(12,5);
   });
 
   it('never turns a photograph far enough to put the room on its side',()=>{
     const lean=commonTilt([at(20),at(20),at(-25)])!;
-    const turn=degrees(alignedPlacement(1200,1600,cell,.5,at(-25),lean).turn);
-    expect(turn,'forty-five degrees of correction is capped').toBeCloseTo(12,4);
+    const turn=degrees(alignedPlacement(1200,1200,cell,.5,at(-25),lean).turn);
+    expect(turn,'forty-five degrees of correction is capped').toBeCloseTo(-40,4);
     // What is left of the difference stays as lean, which is the point.
-    expect(-25+turn).toBeLessThan(20);
+    expect(-25-turn).toBeLessThanOrEqual(20);
   });
 
-  it('leaves a lean that already agrees within a couple of degrees untouched',()=>{
-    const lean=commonTilt([at(10),at(11),at(12)])!;
-    for(const tilt of [10,11,12])
-      expect(alignedPlacement(1200,1600,cell,.5,at(tilt),lean).turn,`${tilt} degrees`).toBe(0);
+  it('leaves a lean that already agrees within half a degree untouched',()=>{
+    const lean=commonTilt([at(10.8),at(11),at(11.2)])!;
+    for(const tilt of [10.8,11,11.2])
+      expect(alignedPlacement(1200,1200,cell,.5,at(tilt),lean).turn,`${tilt} degrees`).toBe(0);
   });
 
   it('turns nothing at all when a photograph was never measured, or the card has no angle',()=>{
-    expect(alignedPlacement(1200,1600,cell,.5,frame(.3),commonTilt([at(20)])).turn,'no axis, no lean known').toBe(0);
-    expect(alignedPlacement(1200,1600,cell,.5,at(20),null).turn,'and nothing to agree with').toBe(0);
-  });
-
-  it('keeps the photograph over every corner of the cell once it is turned',()=>{
-    // The turned frame sees the cell as a bigger rectangle, and the drawing has
-    // to cover that or a triangle of blank canvas shows in the corner.
-    const lean=commonTilt([at(0),at(0),at(-30)])!;
-    for(const tilt of [-30,-20,0,14,26]){
-      const shot=at(tilt);
-      const {turn,x,y,width,height}=alignedPlacement(1200,1600,cell,.5,shot,lean);
-      const cos=Math.abs(Math.cos(turn)),sin=Math.abs(Math.sin(turn));
-      const needWidth=cell.width*cos+cell.height*sin,needHeight=cell.width*sin+cell.height*cos;
-      expect(x,`${tilt} degrees, left edge`).toBeLessThanOrEqual(-needWidth/2+1e-9);
-      expect(x+width,`${tilt} degrees, right edge`).toBeGreaterThanOrEqual(needWidth/2-1e-9);
-      expect(y,`${tilt} degrees, top edge`).toBeLessThanOrEqual(-needHeight/2+1e-9);
-      expect(y+height,`${tilt} degrees, bottom edge`).toBeGreaterThanOrEqual(needHeight/2-1e-9);
-    }
+    expect(alignedPlacement(1200,1200,cell,.5,frame(.3),commonTilt([at(20)])).turn,'no axis, no lean known').toBe(0);
+    expect(alignedPlacement(1200,1200,cell,.5,at(20),null).turn,'and nothing to agree with').toBe(0);
   });
 
   it('still draws every bottle the same width once they have been turned',()=>{
     const lean=commonTilt([at(4),at(16),at(-10),at(24)])!;
     const widths=[4,16,-10,24].map(tilt=>{
       const shot=at(tilt);
-      return bottleWidth(shot.bottle!,shot.axis)*alignedPlacement(1200,1600,cell,.5,shot,lean).width/cell.width;
+      return bottleWidth(shot.bottle!,shot.axis)*alignedPlacement(1200,1200,cell,.5,shot,lean).width/cell.width;
     });
     for(const width of widths)expect(width).toBeCloseTo(widths[0],2);
+  });
+});
+
+describe('when the measurement is wrong about the bottle',()=>{
+  /** The label, as a share of the frame, on a bottle boxed at `boxWidth`. */
+  const shot=(boxWidth:number,labelWidth:number,center=0.5):BottleFrame=>({
+    bottle:{xMin:(center-boxWidth/2)*1000,yMin:100,xMax:(center+boxWidth/2)*1000,yMax:900},
+    label:{xMin:(center-labelWidth/2)*1000,yMin:420,xMax:(center+labelWidth/2)*1000,yMax:640},
+    axis:null
+  });
+  /** Every corner of the label, in the cell. */
+  const labelCorners=(frame:BottleFrame,place=alignedPlacement(1200,1600,cell,.5,frame,null))=>{
+    const label=frame.label!;
+    return [label.xMin,label.xMax].flatMap(x=>[label.yMin,label.yMax]
+      .map(y=>({x:place.x+x/1000*place.width,y:place.y+y/1000*place.height})));
+  };
+
+  it('never cuts the label, whatever the box claimed',()=>{
+    // The reported case: a box covering only part of a bottle asks for far too
+    // much magnification, and the name is sliced through.
+    for(const [boxWidth,labelWidth,center] of [[.08,.30,.5],[.10,.34,.34],[.12,.40,.66],[.06,.5,.5]] as const){
+      for(const corner of labelCorners(shot(boxWidth,labelWidth,center))){
+        expect(Math.abs(corner.x),`box ${boxWidth} at ${center}: label off the side`).toBeLessThanOrEqual(cell.width/2+1);
+        expect(Math.abs(corner.y),`box ${boxWidth} at ${center}: label off the end`).toBeLessThanOrEqual(cell.height/2+1);
+      }
+    }
+  });
+
+  it('uses the label centre when the bottle box is off-centre',()=>{
+    // A box of a believable width whose centre is well off the bottle: the
+    // width needs no correcting, so only the drop that keeps the label whole
+    // is taken, and not a scrap more.
+    const frame:BottleFrame={
+      bottle:{xMin:180,yMin:100,xMax:520,yMax:900},
+      label:{xMin:380,yMin:420,xMax:660,yMax:640},
+      axis:null
+    };
+    const kept=alignedPlacement(1200,1600,cell,.5,frame,null);
+    const cover=coverRect(1200,1600,cell,.5);
+    expect(kept.width,'still enlarged past the photograph as framed').toBeGreaterThan(cover.width);
+    const corners=labelCorners(frame,kept);
+    expect((Math.min(...corners.map(p=>p.x))+Math.max(...corners.map(p=>p.x)))/2).toBeCloseTo(0,5);
+    expect(corners.every(p=>Math.abs(p.x)<=cell.width/2&&Math.abs(p.y)<=cell.height/2)).toBe(true);
+  });
+
+  it('will not believe a bottle narrower than the label printed on it',()=>{
+    // The Piccolo Derthona cell: a box over a third of its bottle asks for half
+    // again too much magnification. A label cannot be wider than its bottle, so
+    // the label settles it.
+    const third={bottle:{xMin:420,yMin:300,xMax:530,yMax:760},label:{xMin:390,yMin:430,xMax:700,yMax:640},axis:null};
+    const whole={bottle:{xMin:360,yMin:100,xMax:720,yMax:900},label:{xMin:390,yMin:430,xMax:700,yMax:640},axis:null};
+    const narrow=alignedPlacement(1200,1600,cell,.5,third,null);
+    const right=alignedPlacement(1200,1600,cell,.5,whole,null);
+    // Not exact - the label bounds the box rather than replacing it - but a
+    // fifth out instead of three times out.
+    expect(narrow.width/right.width,'no longer half again too large').toBeLessThan(1.25);
+  });
+
+  it('will not believe a bottle half again wider than its label either',()=>{
+    // The Alessandria cell: a box that took in the hand and the floor behind
+    // it, so the bottle came out small among its neighbours.
+    const wide={bottle:{xMin:120,yMin:100,xMax:900,yMax:900},label:{xMin:430,yMin:430,xMax:690,yMax:640},axis:null};
+    const whole={bottle:{xMin:400,yMin:100,xMax:720,yMax:900},label:{xMin:430,yMin:430,xMax:690,yMax:640},axis:null};
+    const loose=alignedPlacement(1200,1600,cell,.5,wide,null);
+    const right=alignedPlacement(1200,1600,cell,.5,whole,null);
+    expect(loose.width/right.width,'brought back up towards its neighbours').toBeGreaterThan(.8);
+  });
+
+  it('leaves a box that agrees with its label exactly as it was',()=>{
+    const frame={bottle:{xMin:400,yMin:100,xMax:720,yMax:900},label:{xMin:430,yMin:430,xMax:690,yMax:640},axis:null};
+    expect(bottleWidth(frame.bottle,null,frame.label)).toBeCloseTo(.32,5);
+  });
+
+  it('leaves a well measured bottle exactly where it was',()=>{
+    // The guard must be invisible on the fourteen cells that came out right.
+    const good=shot(.34,.26);
+    const place=alignedPlacement(1200,1600,cell,.5,good,null);
+    expect(.34*place.width/cell.width,'still brought up to the target width').toBeCloseTo(.62,2);
+  });
+
+  it('refuses a box that is the whole photograph, or a sliver of it',()=>{
+    expect(measurementIsUsable({xMin:0,yMin:0,xMax:1000,yMax:1000}),'"I could not find it"').toBe(false);
+    expect(measurementIsUsable({xMin:400,yMin:400,xMax:420,yMax:900}),'too thin to be a bottle held up').toBe(false);
+    expect(measurementIsUsable({xMin:300,yMin:100,xMax:700,yMax:900}),'and an ordinary bottle is fine').toBe(true);
+    // Refused means drawn as the photograph was framed, not magnified to fill.
+    const refused=alignedPlacement(1200,1600,cell,.5,{bottle:{xMin:0,yMin:0,xMax:1000,yMax:1000},label:null,axis:null},null);
+    expect(placementRect(cell,refused)).toEqual(coverRect(1200,1600,cell,.5));
   });
 });
