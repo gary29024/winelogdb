@@ -28,3 +28,6 @@
 .story-share-notice{margin:0 0 8px;padding:10px 12px;border:1px solid var(--good-line);border-radius:var(--r-md);background:var(--good-wash);color:var(--good-ink);font-size:.82rem}
 .story-share-error{margin:0 0 8px;padding:10px 12px;border:1px solid var(--bad-line);border-radius:var(--r-md);background:var(--bad-wash);color:var(--bad);font-size:.82rem}
 @media(max-width:700px){.story-share-backdrop{padding:0}.story-share-sheet{width:100%;border-radius:var(--r-lg) var(--r-lg) 0 0;padding:16px 14px calc(16px + env(safe-area-inset-bottom))}}
+
+.story-share-align>.story-share-name{display:grid;gap:6px}
+.story-share-align .story-share-name input{box-sizing:border-box;width:100%;height:auto;min-width:0;font-size:16px}
