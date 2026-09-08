@@ -1,5 +1,5 @@
 import { describe,expect,it } from 'vitest';
-import { MAX_STORY_WINES,STORY_HEIGHT,STORY_WIDTH,collageColumns,collageLayout,pickStoryWines,starMark,storyHeaderHeight } from '../../src/features/share/storyCollage';
+import { MAX_STORY_WINES,STORY_HEIGHT,STORY_WIDTH,collageColumns,collageLayout,pickStoryWines,starMark,storyHeaderHeight,storyTitleLayout } from '../../src/features/share/storyCollage';
 
 const counts=Array.from({length:MAX_STORY_WINES},(_,index)=>index+1);
 const overlaps=(a:{x:number;y:number;width:number;height:number},b:typeof a)=>
@@ -176,5 +176,26 @@ describe('story grids with optional headers',()=>{
     expect(none.y).toBeLessThan(one.y);
     expect(one.height).toBeGreaterThan(full.height);
     expect(none.height).toBeGreaterThan(one.height);
+  });
+});
+
+describe('complete story titles',()=>{
+  const measure=(text:string,size:number)=>Array.from(text).length*size*.6;
+  it.each(['Vinosophy Walkaround Tasting September 2026','勃艮第葡萄酒品酒會與朋友分享美好時光','A'.repeat(180)])('wraps without dropping text: %s',name=>{
+    const title=storyTitleLayout(name,measure);
+    expect(title.lines.join('').replace(/ /g,'')).toBe(name.replace(/ /g,''));
+    expect(title.lines.length).toBeLessThanOrEqual(3);
+    for(const line of title.lines)expect(measure(line,title.fontSize)).toBeLessThanOrEqual(STORY_WIDTH-140);
+    for(const count of counts){
+      const header={title:true,subtitle:true,titleHeight:title.height};
+      for(const cell of collageLayout(count,header).cells){
+        expect(cell.y).toBeGreaterThanOrEqual(storyHeaderHeight(header)-.001);
+        expect(cell.y+cell.height).toBeLessThanOrEqual(STORY_HEIGHT-96+.001);
+      }
+    }
+  });
+  it('preserves the original height for a short title and removes blank titles',()=>{
+    expect(storyTitleLayout('Evening',measure)).toMatchObject({lines:['Evening'],fontSize:72,height:70});
+    expect(storyTitleLayout('   ',measure)).toMatchObject({lines:[],height:0});
   });
 });

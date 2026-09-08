@@ -1,7 +1,7 @@
 import { labelFocusPosition } from '../../lib/wine/labelFocus';
 import { alignedPlacement,commonTilt } from './bottleAlign';
 import type { BottleFrame } from '../../lib/images/bottleFrame';
-import { MAX_STORY_WINES,STORY_HEIGHT,STORY_WIDTH,collageLayout,starMark,type Cell } from './storyCollage';
+import { MAX_STORY_WINES,STORY_HEIGHT,STORY_WIDTH,collageLayout,starMark,storyTitleLayout,type Cell } from './storyCollage';
 
 /**
  * The card itself, drawn.
@@ -83,10 +83,13 @@ export function drawStoryCard(canvas:HTMLCanvasElement,card:StoryCard,photos:Map
   ctx.textAlign='center';ctx.textBaseline='alphabetic';
   ctx.fillStyle=WINE;ctx.font=`600 30px ${SANS}`;
   if(card.subtitle)ctx.fillText(fitText(ctx,card.subtitle.toUpperCase(),STORY_WIDTH-160),STORY_WIDTH/2,96);
-  ctx.fillStyle=INK;ctx.font=`700 72px ${SERIF}`;
-  if(card.title)ctx.fillText(fitText(ctx,card.title,STORY_WIDTH-140),STORY_WIDTH/2,card.subtitle?166:96);
+  const title=storyTitleLayout(card.title,(text,size)=>{
+    ctx.font=`700 ${size}px ${SERIF}`;return ctx.measureText(text).width;
+  });
+  ctx.fillStyle=INK;ctx.font=`700 ${title.fontSize}px ${SERIF}`;
+  title.lines.forEach((line,index)=>ctx.fillText(line,STORY_WIDTH/2,(card.subtitle?96:26)+title.lineHeight*(index+1)));
 
-  const {cells}=collageLayout(wines.length,{title:Boolean(card.title),subtitle:Boolean(card.subtitle)});
+  const {cells}=collageLayout(wines.length,{title:Boolean(card.title),subtitle:Boolean(card.subtitle),titleHeight:title.height});
   // The angle this card settles on, decided once for all of it: a lean means
   // nothing on its own, only next to the bottle beside it.
   const lean=frames?commonTilt(wines.map(wine=>wine.imageId&&photos.get(wine.imageId)?frames.get(wine.imageId):null),wines.map(wine=>{

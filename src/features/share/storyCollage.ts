@@ -25,11 +25,11 @@ const GAP=16;
  * and generous margins that read as composure on a web page read as a photo
  * that failed to load.
  */
-export type StoryHeader={title:boolean;subtitle:boolean};
+export type StoryHeader={title:boolean;subtitle:boolean;titleHeight?:number};
 const FULL_HEADER:StoryHeader={title:true,subtitle:true};
 /** Reserve only the header lines actually drawn, plus the outer margin. */
 export function storyHeaderHeight(header:StoryHeader){
-  return MARGIN+(header.title?70:0)+(header.subtitle?70:0);
+  return MARGIN+(header.title?(header.titleHeight??70):0)+(header.subtitle?70:0);
 }
 const FOOT=96;
 
@@ -124,4 +124,30 @@ export function pickStoryWines(wines:Array<{favorite:boolean}>,limit=MAX_STORY_W
   const indexes=wines.map((wine,index)=>({index,favorite:wine.favorite}));
   const chosen=[...indexes.filter(item=>item.favorite),...indexes.filter(item=>!item.favorite)].slice(0,limit);
   return chosen.map(item=>item.index).sort((a,b)=>a-b);
+}
+
+/** Wrap whole words where possible, splitting long words and CJK text as needed. */
+export function storyTitleLayout(title:string,measure:(text:string,size:number)=>number){
+  const text=title.trim().replace(/\s+/g,' ');
+  if(!text)return {lines:[] as string[],fontSize:72,lineHeight:70,height:0};
+  const wrap=(size:number)=>{
+    const lines:string[]=[];
+    let line='';
+    for(const word of text.split(' ')){
+      if(measure(line?line+' '+word:word,size)<=STORY_WIDTH-140){
+        line=line?line+' '+word:word;continue;
+      }
+      if(line){lines.push(line);line=''}
+      for(const char of Array.from(word)){
+        if(line&&measure(line+char,size)>STORY_WIDTH-140){lines.push(line);line=''}
+        line+=char;
+      }
+    }
+    if(line)lines.push(line);
+    return lines;
+  };
+  let fontSize=72,lines=wrap(fontSize);
+  while(lines.length>3&&fontSize>2){fontSize-=2;lines=wrap(fontSize)}
+  const lineHeight=fontSize===72?70:fontSize+8;
+  return {lines,fontSize,lineHeight,height:lines.length*lineHeight};
 }
