@@ -30,10 +30,11 @@ export function ShareStorySheet({card,onClose}:{card:StoryCard;onClose:()=>void}
   const [chosen,setChosen]=useState(()=>new Set(pickStoryWines(card.wines)));
   const [frames,setFrames]=useState<StoryFrames>(()=>new Map());
   const [align,setAlign]=useState(true);
+  const [showDate,setShowDate]=useState(true),[showTastingName,setShowTastingName]=useState(true);
   const [measuring,setMeasuring]=useState(0);
   const full=chosen.size>=MAX_STORY_WINES;
   // Indexes rather than ids: one wine poured twice in an evening is two rows.
-  const shown=useMemo(()=>({...card,wines:card.wines.filter((_,index)=>chosen.has(index))}),[card,chosen]);
+  const shown=useMemo(()=>({...card,title:showTastingName?card.title:'',subtitle:showDate?card.subtitle:'',wines:card.wines.filter((_,index)=>chosen.has(index))}),[card,chosen,showDate,showTastingName]);
   const imageIds=useMemo(()=>[...new Set(shown.wines.map(wine=>wine.imageId).filter((id):id is string=>Boolean(id)))],[shown]);
   const unmeasured=useMemo(()=>imageIds.filter(id=>!frames.has(id)),[imageIds,frames]);
   const drawnFrames=align?frames:undefined;
@@ -127,9 +128,19 @@ export function ShareStorySheet({card,onClose}:{card:StoryCard;onClose:()=>void}
         <button type="button" onClick={onClose} aria-label="Close">×</button>
       </div>
       <div className="story-share-stage">
-        <canvas ref={canvasRef} aria-label={`${card.title}, ${chosen.size} wines`}/>
+        <canvas ref={canvasRef} aria-label={[shown.title,shown.subtitle,`${chosen.size} wines`].filter(Boolean).join(', ')}/>
         {state==='drawing'&&<p className="story-share-state">Laying out the card…</p>}
         {state==='failed'&&<p className="story-share-state" role="alert">The card could not be drawn on this device.</p>}
+      </div>
+      <div className="story-share-align" role="group" aria-label="Story details">
+        <label>
+          <input type="checkbox" checked={showDate} onChange={event=>setShowDate(event.target.checked)}/>
+          <span>Show date</span>
+        </label>
+        <label>
+          <input type="checkbox" checked={showTastingName} onChange={event=>setShowTastingName(event.target.checked)}/>
+          <span>Show tasting name</span>
+        </label>
       </div>
       <div className="story-share-align">
         <label>

@@ -1,5 +1,5 @@
 import { describe,expect,it } from 'vitest';
-import { MAX_STORY_WINES,STORY_HEIGHT,STORY_WIDTH,collageColumns,collageLayout,pickStoryWines,starMark } from '../../src/features/share/storyCollage';
+import { MAX_STORY_WINES,STORY_HEIGHT,STORY_WIDTH,collageColumns,collageLayout,pickStoryWines,starMark,storyHeaderHeight } from '../../src/features/share/storyCollage';
 
 const counts=Array.from({length:MAX_STORY_WINES},(_,index)=>index+1);
 const overlaps=(a:{x:number;y:number;width:number;height:number},b:typeof a)=>
@@ -140,5 +140,41 @@ describe('choosing which wines go on a card',()=>{
 
   it('does not drop a wine to make room for a favourite that is already on',()=>{
     expect(pickStoryWines(lineup(16,[15]))).toHaveLength(16);
+  });
+});
+
+describe('story grids with optional headers',()=>{
+  it.each([
+    {title:true,subtitle:true},
+    {title:true,subtitle:false},
+    {title:false,subtitle:true},
+    {title:false,subtitle:false}
+  ])('fits all wine counts with header %j',header=>{
+    for(const count of counts){
+      const {cells}=collageLayout(count,header);
+      const original=collageLayout(count).cells[0];
+      expect(cells).toHaveLength(count);
+      expect(cells[0].width*cells[0].height).toBeGreaterThanOrEqual(original.width*original.height-0.001);
+      for(const cell of cells){
+        expect(cell.y).toBeGreaterThanOrEqual(storyHeaderHeight(header)-0.001);
+        expect(cell.y+cell.height).toBeLessThanOrEqual(STORY_HEIGHT-96+0.001);
+        expect(cell.x).toBeGreaterThanOrEqual(56-0.001);
+        expect(cell.x+cell.width).toBeLessThanOrEqual(STORY_WIDTH-56+0.001);
+        expect(cell.height/cell.width).toBeGreaterThanOrEqual(1.2-0.001);
+        expect(cell.height/cell.width).toBeLessThanOrEqual(1.7+0.001);
+      }
+      for(let a=0;a<cells.length;a++)for(let b=a+1;b<cells.length;b++)
+        expect(overlaps(cells[a],cells[b])).toBe(false);
+    }
+  });
+
+  it('expands the grid into the room freed by each hidden header line',()=>{
+    const full=collageLayout(6).cells[0];
+    const one=collageLayout(6,{title:true,subtitle:false}).cells[0];
+    const none=collageLayout(6,{title:false,subtitle:false}).cells[0];
+    expect(one.y).toBeLessThan(full.y);
+    expect(none.y).toBeLessThan(one.y);
+    expect(one.height).toBeGreaterThan(full.height);
+    expect(none.height).toBeGreaterThan(one.height);
   });
 });

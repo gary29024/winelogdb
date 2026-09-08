@@ -25,7 +25,12 @@ const GAP=16;
  * and generous margins that read as composure on a web page read as a photo
  * that failed to load.
  */
-const HEAD=196;
+export type StoryHeader={title:boolean;subtitle:boolean};
+const FULL_HEADER:StoryHeader={title:true,subtitle:true};
+/** Reserve only the header lines actually drawn, plus the outer margin. */
+export function storyHeaderHeight(header:StoryHeader){
+  return MARGIN+(header.title?70:0)+(header.subtitle?70:0);
+}
 const FOOT=96;
 
 /**
@@ -45,9 +50,9 @@ const MAX_ASPECT=1.7;
 const MAX_COLUMNS=4;
 
 /** The cell a given number of columns would produce, once it is made to fit. */
-function fittedCell(count:number,columns:number){
+function fittedCell(count:number,columns:number,head:number){
   const rows=Math.ceil(count/columns);
-  const areaWidth=STORY_WIDTH-MARGIN*2,areaHeight=STORY_HEIGHT-HEAD-FOOT;
+  const areaWidth=STORY_WIDTH-MARGIN*2,areaHeight=STORY_HEIGHT-head-FOOT;
   const widest=(areaWidth-GAP*(columns-1))/columns,tallest=(areaHeight-GAP*(rows-1))/rows;
   let width=widest,height=Math.min(Math.max(tallest,widest*MIN_ASPECT),widest*MAX_ASPECT);
   // Only when even the squarest allowed cell is too tall for the card does the
@@ -67,11 +72,12 @@ function fittedCell(count:number,columns:number){
  * rather than decided: every column count up to four is laid out, and the one
  * with the largest cell wins.
  */
-export function collageColumns(count:number){
+export function collageColumns(count:number,header:StoryHeader=FULL_HEADER){
+  const head=storyHeaderHeight(header);
   const total=Math.max(1,Math.min(Math.floor(count)||1,MAX_STORY_WINES));
-  let best=fittedCell(total,1);
+  let best=fittedCell(total,1,head);
   for(let columns=2;columns<=Math.min(MAX_COLUMNS,total);columns++){
-    const candidate=fittedCell(total,columns);
+    const candidate=fittedCell(total,columns,head);
     if(candidate.width*candidate.height>best.width*best.height)best=candidate;
   }
   return best.columns;
@@ -83,11 +89,12 @@ export function collageColumns(count:number){
  * Five wines in a three-by-two leaves two cells over, and hanging them under
  * the left columns reads as a mistake. Centred, it reads as the end of a list.
  */
-export function collageLayout(count:number):CollageLayout{
+export function collageLayout(count:number,header:StoryHeader=FULL_HEADER):CollageLayout{
+  const head=storyHeaderHeight(header);
   const total=Math.max(1,Math.min(Math.floor(count)||1,MAX_STORY_WINES));
-  const {columns,rows,width,height}=fittedCell(total,collageColumns(total));
-  const areaWidth=STORY_WIDTH-MARGIN*2,areaHeight=STORY_HEIGHT-HEAD-FOOT;
-  const top=HEAD+(areaHeight-(rows*height+GAP*(rows-1)))/2;
+  const {columns,rows,width,height}=fittedCell(total,collageColumns(total,header),head);
+  const areaWidth=STORY_WIDTH-MARGIN*2,areaHeight=STORY_HEIGHT-head-FOOT;
+  const top=head+(areaHeight-(rows*height+GAP*(rows-1)))/2;
   const cells:Cell[]=[];
   for(let index=0;index<total;index++){
     const row=Math.floor(index/columns),column=index%columns;
