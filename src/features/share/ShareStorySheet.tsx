@@ -31,10 +31,11 @@ export function ShareStorySheet({card,onClose}:{card:StoryCard;onClose:()=>void}
   const [frames,setFrames]=useState<StoryFrames>(()=>new Map());
   const [align,setAlign]=useState(true);
   const [showDate,setShowDate]=useState(true),[showTastingName,setShowTastingName]=useState(true);
+  const [storyName,setStoryName]=useState(card.title);
   const [measuring,setMeasuring]=useState(0);
   const full=chosen.size>=MAX_STORY_WINES;
   // Indexes rather than ids: one wine poured twice in an evening is two rows.
-  const shown=useMemo(()=>({...card,title:showTastingName?card.title:'',subtitle:showDate?card.subtitle:'',wines:card.wines.filter((_,index)=>chosen.has(index))}),[card,chosen,showDate,showTastingName]);
+  const shown=useMemo(()=>({...card,title:showTastingName?storyName.trim():'',subtitle:showDate?card.subtitle:'',wines:card.wines.filter((_,index)=>chosen.has(index))}),[card,chosen,showDate,showTastingName,storyName]);
   const imageIds=useMemo(()=>[...new Set(shown.wines.map(wine=>wine.imageId).filter((id):id is string=>Boolean(id)))],[shown]);
   const unmeasured=useMemo(()=>imageIds.filter(id=>!frames.has(id)),[imageIds,frames]);
   const drawnFrames=align?frames:undefined;
@@ -141,6 +142,10 @@ export function ShareStorySheet({card,onClose}:{card:StoryCard;onClose:()=>void}
           <input type="checkbox" checked={showTastingName} onChange={event=>setShowTastingName(event.target.checked)}/>
           <span>Show tasting name</span>
         </label>
+        {showTastingName&&<label className="story-share-name">
+          <span>Story name</span>
+          <input type="text" value={storyName} onChange={event=>setStoryName(event.target.value)} placeholder="Enter a name for this story"/>
+        </label>}
       </div>
       <div className="story-share-align">
         <label>
