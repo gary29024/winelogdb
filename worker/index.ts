@@ -1,15 +1,16 @@
 import { Hono } from 'hono';
+import { serveWineImage } from './wineImageHandler';
 import { grapeGroup } from '../src/lib/wine/grapes';
 import { cors } from 'hono/cors';
 import { GoogleGenerativeAI, SchemaType } from '@google/generative-ai';
 import { createSession, requireSession } from '../src/lib/auth/session';
 import { createObjectKey } from '../src/lib/r2/keys';
-import { wineInputSchema,type WineInput } from '../src/lib/db/schema';
+import { wineInputSchema } from '../src/lib/db/schema';
 import { dimensionsSchema, validateBatch } from '../src/features/uploads/validation';
 import { parseRecognition } from '../src/features/recognition/schema';
-import { closeOpenTastingIfDayChanged, touchTastingActivity } from '../src/lib/tastings/session';
+import { wineSaveStatements } from '../src/lib/db/wineSave';
 
-type Bindings={DB:D1Database;WINE_IMAGES:R2Bucket;ASSETS:Fetcher;GEMINI_API_KEY?:string;AUTH_SECRET:string;APP_PASSWORD:string;APP_URL:string;MAX_FILE_BYTES?:string;MAX_BATCH_FILES?:string};
+type Bindings={IMAGES?:ImagesBinding;DB:D1Database;WINE_IMAGES:R2Bucket;ASSETS:Fetcher;GEMINI_API_KEY?:string;AUTH_SECRET:string;APP_PASSWORD:string;APP_URL:string;MAX_FILE_BYTES?:string;MAX_BATCH_FILES?:string};
 type Variables={userId:string};
 type AppContext={Bindings:Bindings;Variables:Variables};
 type PhotoMetadata={capturedAt?:string|null;latitude?:number|null;longitude?:number|null;source?:'exif'|'file_fallback'|'none'};
@@ -75,39 +76,6 @@ async function mapWinesWithImages(db:D1Database,owner:string,rows:Record<string,
  return rows.map(row=>mapWine(row,byWine.get(String(row.id))??[]));
 }
 
-async function resolveTasting(db:D1Database,owner:string,w:WineInput){
- if(!w.tastingName?.trim())return null;
- const name=w.tastingName.trim(),date=w.tastingDate??null;
- const existing=await db.prepare("SELECT id FROM tastings WHERE owner_id=? AND name=? AND coalesce(tasting_date,'')=coalesce(?,'')").bind(owner,name,date).first<{id:string}>();
- if(existing?.id)return existing.id;
- const id=crypto.randomUUID(),now=new Date().toISOString();
- await db.prepare('INSERT INTO tastings(id,owner_id,name,tasting_date,venue,created_at,updated_at) VALUES(?,?,?,?,?,?,?)').bind(id,owner,name,date,w.venue??null,now,now).run();
- return id;
-}
-
-function hasExperience(w:WineInput){return Boolean(w.tastingName||w.tastingDate||w.venue||w.locationName||w.latitude!=null||w.longitude!=null||w.rating!=null||w.tastingNotes)}
-
-async function saveExperience(db:D1Database,owner:string,wineId:string,w:WineInput,updateExisting=false){
- if(!hasExperience(w))return;
- const tastingId=await resolveTasting(db,owner,w),now=new Date().toISOString();
- if(updateExisting){
-  const existing=await db.prepare('SELECT id FROM wine_experiences WHERE owner_id=? AND wine_id=? ORDER BY created_at DESC LIMIT 1').bind(owner,wineId).first<{id:string}>();
-  if(existing?.id){
-   await db.prepare('UPDATE wine_experiences SET tasting_id=?,consumed_at=?,latitude=?,longitude=?,location_name=?,rating=?,tasting_notes=?,updated_at=? WHERE id=? AND owner_id=?').bind(tastingId,w.tastingDate??null,w.latitude??null,w.longitude??null,w.locationName??w.venue??null,w.rating??null,w.tastingNotes??'',now,existing.id,owner).run();
-   return;
-  }
- }
- await db.prepare('INSERT INTO wine_experiences(id,owner_id,wine_id,tasting_id,consumed_at,latitude,longitude,location_name,rating,tasting_notes,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)').bind(crypto.randomUUID(),owner,wineId,tastingId,w.tastingDate??null,w.latitude??null,w.longitude??null,w.locationName??w.venue??null,w.rating??null,w.tastingNotes??'',now,now).run();
- // Only a newly logged bottle says anything about the evening. This must not
- // run on the update path: editing a wine from March while tonight's tasting is
- // open would close it on the March date, and re-editing an old bottle would
- // keep a finished tasting alive.
- if(!updateExisting){
-  await closeOpenTastingIfDayChanged(db,owner,w.tastingDate);
-  await touchTastingActivity(db,owner,tastingId);
- }
-}
-
 app.get('/api/wines',async c=>{
  const q=c.req.query(),owner=c.get('userId'),args:unknown[]=[owner];let where='w.owner_id=?';
  const filters:[string,string][]=[['vintage','w.vintage'],['country','w.country'],['region','w.region'],['style','w.wine_style'],['tastingDate','w.tasting_date']];
@@ -139,8 +107,9 @@ app.post('/api/wines',async c=>{
  if(!multipart){
   const parsed=wineInputSchema.safeParse(await c.req.json());if(!parsed.success)return c.json({error:'Invalid wine',issues:parsed.error.issues},400);
   const w=parsed.data;
-  await c.env.DB.prepare(`INSERT INTO wines(id,owner_id,producer,wine_name,vintage,country,region,appellation,recognized_region,recognized_appellation,classification,classification_override,grapes_json,grape_blend_json,wine_style,alcohol_percentage,tasting_notes,rating,tasting_date,event,venue,price,currency,tags_json,recognition_status,recognition_confidence,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`).bind(id,owner,w.producer,w.wineName,w.vintage,w.country,w.region,w.appellation,w.recognizedRegion,w.recognizedAppellation,w.classification,w.classificationOverride,JSON.stringify(w.grapes),JSON.stringify(w.grapeBlend),w.wineStyle,w.alcoholPercentage,w.tastingNotes,w.rating,w.tastingDate,w.event,w.venue,w.price,w.currency,JSON.stringify(w.tags),w.recognitionStatus,w.recognitionConfidence,now,now).run();
-  await saveExperience(c.env.DB,owner,id,w);return c.json({id},201);
+  const wineStatement=c.env.DB.prepare(`INSERT INTO wines(id,owner_id,producer,wine_name,vintage,country,region,appellation,recognized_region,recognized_appellation,classification,classification_override,grapes_json,grape_blend_json,wine_style,alcohol_percentage,tasting_notes,rating,tasting_date,event,venue,price,currency,tags_json,recognition_status,recognition_confidence,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`).bind(id,owner,w.producer,w.wineName,w.vintage,w.country,w.region,w.appellation,w.recognizedRegion,w.recognizedAppellation,w.classification,w.classificationOverride,JSON.stringify(w.grapes),JSON.stringify(w.grapeBlend),w.wineStyle,w.alcoholPercentage,w.tastingNotes,w.rating,w.tastingDate,w.event,w.venue,w.price,w.currency,JSON.stringify(w.tags),w.recognitionStatus,w.recognitionConfidence,now,now);
+  try{await c.env.DB.batch([wineStatement,...wineSaveStatements(c.env.DB,owner,id,w)]);return c.json({id},201)}
+  catch(error){console.error('wine-save-failed',error);return c.json({error:'Could not save wine. Please retry.'},500)}
  }
  const form=await c.req.formData();
  const parsed=wineInputSchema.safeParse(parseJson(form.get('wine'),null));if(!parsed.success)return c.json({error:'Invalid wine',issues:parsed.error.issues},400);
@@ -161,11 +130,9 @@ app.post('/api/wines',async c=>{
    uploaded.push({key,imageId,file,dim,meta});
   }
   const statements=[c.env.DB.prepare(`INSERT INTO wines(id,owner_id,producer,wine_name,vintage,country,region,appellation,recognized_region,recognized_appellation,classification,classification_override,grapes_json,grape_blend_json,wine_style,alcohol_percentage,tasting_notes,rating,tasting_date,event,venue,price,currency,tags_json,recognition_status,recognition_confidence,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`).bind(id,owner,w.producer,w.wineName,w.vintage,w.country,w.region,w.appellation,w.recognizedRegion,w.recognizedAppellation,w.classification,w.classificationOverride,JSON.stringify(w.grapes),JSON.stringify(w.grapeBlend),w.wineStyle,w.alcoholPercentage,w.tastingNotes,w.rating,w.tastingDate,w.event,w.venue,w.price,w.currency,JSON.stringify(w.tags),w.recognitionStatus,w.recognitionConfidence,now,now),...uploaded.map(x=>c.env.DB.prepare(`INSERT INTO wine_images(id,owner_id,wine_id,object_key,content_type,byte_size,width,height,upload_status,recognition_status,captured_at,latitude,longitude,location_name,metadata_source,created_at) VALUES(?,?,?,?,?,?,?,?,'uploaded','complete',?,?,?,?,?,?)`).bind(x.imageId,owner,id,x.key,x.file.type,x.file.size,x.dim.width,x.dim.height,x.meta.capturedAt,x.meta.latitude,x.meta.longitude,w.locationName??null,x.meta.source,now))];
-  await c.env.DB.batch(statements);
-  await saveExperience(c.env.DB,owner,id,w);
+  await c.env.DB.batch([...statements,...wineSaveStatements(c.env.DB,owner,id,w)]);
   return c.json({id},201);
  }catch(e){
-  try{await c.env.DB.batch([c.env.DB.prepare('DELETE FROM wine_images WHERE wine_id=? AND owner_id=?').bind(id,owner),c.env.DB.prepare('DELETE FROM wines WHERE id=? AND owner_id=?').bind(id,owner)])}catch{}
   await Promise.allSettled(uploaded.map(x=>c.env.WINE_IMAGES.delete(x.key)));
   return c.json({error:(e as Error).message||'Could not save wine and photos'},500);
  }
@@ -262,10 +229,12 @@ app.delete('/api/wines/:id/images/:imageId',async c=>{
 app.put('/api/wines/:id',async c=>{
  const parsed=wineInputSchema.safeParse(await c.req.json());if(!parsed.success)return c.json({error:'Invalid wine',issues:parsed.error.issues},400);
  const x=parsed.data,id=c.req.param('id'),owner=c.get('userId');
- const res=await c.env.DB.prepare(`UPDATE wines SET producer=?,wine_name=?,vintage=?,country=?,region=?,appellation=?,recognized_region=?,recognized_appellation=?,classification=?,classification_override=?,grapes_json=?,grape_blend_json=?,wine_style=?,alcohol_percentage=?,tasting_notes=?,rating=?,tasting_date=?,event=?,venue=?,price=?,currency=?,tags_json=?,recognition_status=?,recognition_confidence=?,updated_at=? WHERE id=? AND owner_id=?`).bind(x.producer,x.wineName,x.vintage,x.country,x.region,x.appellation,x.recognizedRegion,x.recognizedAppellation,x.classification,x.classificationOverride,JSON.stringify(x.grapes),JSON.stringify(x.grapeBlend),x.wineStyle,x.alcoholPercentage,x.tastingNotes,x.rating,x.tastingDate,x.event,x.venue,x.price,x.currency,JSON.stringify(x.tags),x.recognitionStatus,x.recognitionConfidence,new Date().toISOString(),id,owner).run();
- if(!res.meta.changes)return c.json({error:'Not found'},404);
- await saveExperience(c.env.DB,owner,id,x,true);
- return c.json({ok:true});
+ const wineStatement=c.env.DB.prepare(`UPDATE wines SET producer=?,wine_name=?,vintage=?,country=?,region=?,appellation=?,recognized_region=?,recognized_appellation=?,classification=?,classification_override=?,grapes_json=?,grape_blend_json=?,wine_style=?,alcohol_percentage=?,tasting_notes=?,rating=?,tasting_date=?,event=?,venue=?,price=?,currency=?,tags_json=?,recognition_status=?,recognition_confidence=?,updated_at=? WHERE id=? AND owner_id=?`).bind(x.producer,x.wineName,x.vintage,x.country,x.region,x.appellation,x.recognizedRegion,x.recognizedAppellation,x.classification,x.classificationOverride,JSON.stringify(x.grapes),JSON.stringify(x.grapeBlend),x.wineStyle,x.alcoholPercentage,x.tastingNotes,x.rating,x.tastingDate,x.event,x.venue,x.price,x.currency,JSON.stringify(x.tags),x.recognitionStatus,x.recognitionConfidence,new Date().toISOString(),id,owner);
+ try{
+  const [res]=await c.env.DB.batch([wineStatement,...wineSaveStatements(c.env.DB,owner,id,x,true)]);
+  if(!res.meta.changes)return c.json({error:'Not found'},404);
+  return c.json({ok:true});
+ }catch(error){console.error('wine-save-failed',error);return c.json({error:'Could not save wine. Please retry.'},500)}
 });
 
 app.delete('/api/wines/:id',async c=>{
@@ -282,7 +251,7 @@ app.delete('/api/wines/:id',async c=>{
  return c.body(null,204);
 });
 
-app.get('/api/images/:id',async c=>{const row=await c.env.DB.prepare('SELECT object_key FROM wine_images WHERE id=? AND owner_id=?').bind(c.req.param('id'),c.get('userId')).first<{object_key:string}>();if(!row)return c.json({error:'Not found'},404);const obj=await c.env.WINE_IMAGES.get(row.object_key);if(!obj)return c.json({error:'Not found'},404);return new Response(obj.body,{headers:{'Content-Type':obj.httpMetadata?.contentType||'application/octet-stream','Cache-Control':'private, max-age=300','Content-Security-Policy':"default-src 'none'"}})});
+app.get('/api/images/:id',c=>serveWineImage(c.req.raw,c.env,c.get('userId'),c.req.param('id')));
 
 app.post('/api/recognition',async c=>{
  const form=await c.req.formData(),files=form.getAll('images').filter((x):x is File=>x instanceof File);

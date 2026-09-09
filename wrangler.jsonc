@@ -12,6 +12,9 @@
   },
   "assets": { "binding": "ASSETS", "directory": "./dist", "not_found_handling": "single-page-application" },
   "d1_databases": [{ "binding": "DB", "database_name": "winelogdb", "database_id": "c0f85b35-4210-4541-a807-162e258e083d", "migrations_dir": "src/lib/db/migrations" }],
+  // Keep this account on Images Free: 5,000 unique transformations/month,
+  // then originals are served as fallback. No Images hosted storage is used.
+  "images": { "binding": "IMAGES" },
   "r2_buckets": [{ "binding": "WINE_IMAGES", "bucket_name": "winelog-private" }],
   "queues": {
     "producers": [{ "binding": "RESEARCH_QUEUE", "queue": "winelog-research" }],

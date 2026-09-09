@@ -21,28 +21,30 @@ function rememberImageUrl(imageId:string,src:string){
   }
 }
 
-function loadImageUrl(imageId:string){
-  const cached=cachedImageUrl(imageId);if(cached)return Promise.resolve(cached);
-  const pending=imageRequests.get(imageId);if(pending)return pending;
-  const request=fetch(`/api/images/${imageId}`,{headers:authHeaders(),cache:'default'})
+function loadImageUrl(imageId:string,variant:'thumbnail'|'original'){
+  const cacheKey=`${variant}:${imageId}`;
+  const cached=cachedImageUrl(cacheKey);if(cached)return Promise.resolve(cached);
+  const pending=imageRequests.get(cacheKey);if(pending)return pending;
+  const request=fetch(`/api/images/${imageId}${variant==='thumbnail'?'?variant=thumbnail':''}`,{headers:authHeaders(),cache:'default'})
     .then(async response=>{if(!response.ok)throw new Error(`Image failed (${response.status})`);return response.blob()})
-    .then(blob=>{const src=URL.createObjectURL(blob);rememberImageUrl(imageId,src);return src})
-    .finally(()=>imageRequests.delete(imageId));
-  imageRequests.set(imageId,request);return request;
+    .then(blob=>{const src=URL.createObjectURL(blob);rememberImageUrl(cacheKey,src);return src})
+    .finally(()=>imageRequests.delete(cacheKey));
+  imageRequests.set(cacheKey,request);return request;
 }
 
-export function WineImage({imageId,alt,className}:{imageId:string;alt:string;className?:string}){
+export function WineImage({imageId,alt,className,variant='thumbnail'}:{imageId:string;alt:string;className?:string;variant?:'thumbnail'|'original'}){
+  const cacheKey=`${variant}:${imageId}`;
   const placeholderRef=useRef<HTMLSpanElement|null>(null);
-  const [shouldLoad,setShouldLoad]=useState(()=>Boolean(cachedImageUrl(imageId)));
-  const [src,setSrc]=useState<string|undefined>(()=>cachedImageUrl(imageId));
+  const [shouldLoad,setShouldLoad]=useState(()=>Boolean(cachedImageUrl(cacheKey)));
+  const [src,setSrc]=useState<string|undefined>(()=>cachedImageUrl(cacheKey));
   const [failed,setFailed]=useState(false);
   // Measured off the loaded image rather than plumbed through the API, so it
   // works the same in the journal list, on the detail page and in the passport.
   const [objectPosition,setObjectPosition]=useState<string>();
 
   useEffect(()=>{
-    const cached=cachedImageUrl(imageId);setShouldLoad(Boolean(cached));setSrc(cached);setFailed(false);setObjectPosition(undefined);
-  },[imageId]);
+    const cached=cachedImageUrl(cacheKey);setShouldLoad(Boolean(cached));setSrc(cached);setFailed(false);setObjectPosition(undefined);
+  },[cacheKey]);
 
   useEffect(()=>{
     if(src||shouldLoad)return;
@@ -53,16 +55,16 @@ export function WineImage({imageId,alt,className}:{imageId:string;alt:string;cla
     },{rootMargin:'320px 0px'});
     observer.observe(node);
     return()=>observer.disconnect();
-  },[imageId,shouldLoad,src]);
+  },[imageId,variant,shouldLoad,src]);
 
   useEffect(()=>{
     if(!shouldLoad||src)return;
     let active=true;
-    loadImageUrl(imageId)
+    loadImageUrl(imageId,variant)
       .then(url=>{if(active)setSrc(url)})
       .catch(()=>{if(active)setFailed(true)});
     return()=>{active=false};
-  },[imageId,shouldLoad,src]);
+  },[imageId,variant,shouldLoad,src]);
 
   if(failed)return <span className={`wine-image-fallback ${className??''}`} aria-label={`${alt} unavailable`}>W</span>;
   if(!src)return <span ref={placeholderRef} className={`wine-image-loading ${className??''}`} aria-label={`${alt} loading`}/>;

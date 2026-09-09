@@ -102,13 +102,6 @@ app.get('/api/cuvees/resolve',async c=>{
   }catch(e){return c.json({error:(e as Error).message||'Could not resolve cuvee'},500)}
 });
 
-app.get('/api/images/:id',async c=>{
-  const response=await entryApp.fetch(c.req.raw,c.env,c.executionCtx);
-  if(!response.ok)return response;
-  const headers=new Headers(response.headers);
-  headers.set('Cache-Control','private, max-age=86400, immutable');
-  return new Response(response.body,{status:response.status,statusText:response.statusText,headers});
-});
 
 /**
  * The bottle framing a story card draws with.
