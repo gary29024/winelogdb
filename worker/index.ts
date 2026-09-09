@@ -1,5 +1,6 @@
 import { Hono } from 'hono';
 import { serveWineImage } from './wineImageHandler';
+import { photoObjectKeys } from '../src/lib/r2/thumbnails';
 import { grapeGroup } from '../src/lib/wine/grapes';
 import { cors } from 'hono/cors';
 import { GoogleGenerativeAI, SchemaType } from '@google/generative-ai';
@@ -221,7 +222,7 @@ app.delete('/api/wines/:id/images/:imageId',async c=>{
  // After the row, and forgiving: a bucket delete that fails leaves an orphan
  // worth pennies, while failing the request would leave a photo the owner has
  // already been told is gone.
- await c.env.WINE_IMAGES.delete(image.object_key).catch(()=>undefined);
+ await c.env.WINE_IMAGES.delete(photoObjectKeys(image.object_key)).catch(()=>undefined);
  await c.env.DB.prepare('UPDATE wines SET updated_at=? WHERE id=? AND owner_id=?').bind(new Date().toISOString(),id,owner).run();
  return c.json({ok:true});
 });
@@ -246,7 +247,7 @@ app.delete('/api/wines/:id',async c=>{
  // used to cost twelve serial D1 round trips.
  if(images.results.length){
   await c.env.DB.batch(images.results.map(image=>c.env.DB.prepare('DELETE FROM wine_images WHERE object_key=?').bind(image.object_key)));
-  await Promise.allSettled(images.results.map(image=>c.env.WINE_IMAGES.delete(image.object_key)));
+  await Promise.allSettled(images.results.map(image=>c.env.WINE_IMAGES.delete(photoObjectKeys(image.object_key))));
  }
  return c.body(null,204);
 });

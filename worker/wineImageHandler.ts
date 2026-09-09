@@ -1,5 +1,6 @@
+import { THUMBNAIL_VERSION,thumbnailObjectKey } from '../src/lib/r2/thumbnails';
+
 type ImageBindings={DB:D1Database;WINE_IMAGES:R2Bucket;IMAGES?:ImagesBinding};
-const THUMBNAIL_VERSION='v1';
 const PRIVATE_CACHE='private, max-age=86400, immutable';
 const FALLBACK_CACHE='private, max-age=300';
 
@@ -20,15 +21,37 @@ export async function serveWineImage(request:Request,env:ImageBindings,owner:str
   const thumbnail=variant==='thumbnail';
   // This is an internal Cache API key, never a publicly routable image URL.
   // Ownership is rechecked above even on cache hits, including after deletion.
-  const cacheKey=new Request(new URL(`/__wine_thumbnails/${THUMBNAIL_VERSION}/${encodeURIComponent(owner)}/${encodeURIComponent(row.object_key)}`,request.url));
+  const cacheKey=new Request(new URL(`/__wine_thumbnails/r2/${THUMBNAIL_VERSION}/${encodeURIComponent(owner)}/${encodeURIComponent(row.object_key)}`,request.url));
   const cache=thumbnail&&typeof caches!=='undefined'?(caches as CacheStorage&{default?:Cache}).default:undefined;
   if(cache){
     const cached=await cache.match(cacheKey).catch(()=>undefined);
     if(cached)return privateImage(cached);
   }
+  const derivativeKey=thumbnailObjectKey(row.object_key);
+  const cacheWrite=(response:Response)=>{
+    if(!cache)return Promise.resolve();
+    const cached=new Response(response.clone().body,{headers:{'Content-Type':'image/webp','Cache-Control':'public, max-age=2592000'}});
+    return cache.put(cacheKey,cached).catch(()=>undefined);
+  };
+  let canGenerate=thumbnail&&Boolean(env.IMAGES);
+  if(thumbnail){
+    try{
+      const stored=await env.WINE_IMAGES.get(derivativeKey);
+      if(stored){
+        const response=new Response(stored.body,{headers:{'Content-Type':'image/webp'}});
+        ctx.waitUntil(cacheWrite(response));
+        return privateImage(response);
+      }
+    }catch(error){
+      // A failed read is not proof the derivative is missing. Avoid paying for
+      // another transform during a storage outage; the original is the fallback.
+      canGenerate=false;
+      console.warn(JSON.stringify({event:'thumbnail-read-failed',imageId:id,error:(error as Error).message}));
+    }
+  }
   let original=await env.WINE_IMAGES.get(row.object_key);
   if(!original)return Response.json({error:'Not found'},{status:404});
-  if(thumbnail&&env.IMAGES){
+  if(canGenerate&&env.IMAGES){
     try{
       // Preserve the full aspect ratio and let the existing card CSS frame it.
       // One fixed variant; monthly unique usage is distinct from cache misses.
@@ -37,12 +60,22 @@ export async function serveWineImage(request:Request,env:ImageBindings,owner:str
         .output({format:'image/webp',quality:75,anim:false});
       const response=output.response();
       if(!response.ok)throw new Error(`Image transform returned ${response.status}`);
-      if(cache){
-        const cached=new Response(response.clone().body,{headers:{'Content-Type':'image/webp','Cache-Control':'public, max-age=2592000'}});
-        // Keep the write alive without delaying delivery of the thumbnail.
-        // A late cache failure must not hide the successfully transformed image.
-        ctx.waitUntil(cache.put(cacheKey,cached).catch(()=>undefined));
-      }
+      const persist=async()=>{
+        try{
+          // R2 receives a known-length body, independent of the Images stream.
+          const bytes=await response.clone().arrayBuffer();
+          await env.WINE_IMAGES.put(derivativeKey,bytes,{httpMetadata:{contentType:'image/webp'},storageClass:'Standard'});
+          // Deletion can race a background transform/write. If deletion won,
+          // remove the newly written derivative rather than orphaning it.
+          const live=await env.DB.prepare('SELECT object_key FROM wine_images WHERE id=? AND owner_id=?').bind(id,owner).first<{object_key:string}>();
+          if(live?.object_key!==row.object_key)await env.WINE_IMAGES.delete(derivativeKey);
+        }catch(error){
+          console.warn(JSON.stringify({event:'thumbnail-persist-failed',imageId:id,error:(error as Error).message}));
+        }
+      };
+      // Both writes outlive delivery, and neither can turn a good image into
+      // an error response. Future cache misses read the retained R2 WebP.
+      ctx.waitUntil(Promise.all([persist(),cacheWrite(response)]).then(()=>undefined));
       return privateImage(response);
     }catch(error){
       // Images Free rejects new transformations at its allowance, without
