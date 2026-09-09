@@ -4,6 +4,8 @@
 
 The normal JSON and multipart wine create/edit endpoints now validate tasting structure as part of the wine input. A single D1 `batch()` commits the wine row, photo rows (when supplied), tasting, latest experience, live-tasting activity and optional structure together. A database failure rolls the batch back and returns an error instead of reporting that the wine was fully saved. Failed multipart creation removes the R2 objects uploaded for that attempt.
 
+This intentionally changes live-tasting activity failure handling: closing or touching the active tasting previously ignored database errors. Those writes now participate in the same transaction, so failure rolls back the wine save and the user can retry. Historical wine edits still do not close or touch the active tasting.
+
 Clearing every experience field updates the latest experience to empty values. The row is retained so an older experience cannot reappear as the latest. Editing a wine without any experience does not create an empty one. Omitting `tastingStructure` preserves it for older clients; sending `null` clears it.
 
 Producer/cuvée linking remains a separate existing post-save operation. Group/batch promotion retains its existing workflow and separate structure endpoint; this change does not make all application operations one global transaction. Network interruption after a successful commit also remains distinct from a database rollback.
@@ -13,7 +15,7 @@ Producer/cuvée linking remains a separate existing post-save operation. Group/b
 - Small wine photos use `/api/images/:id?variant=thumbnail`.
 - The Worker authenticates the request and checks image ownership in D1 before accessing either R2 or its internal edge cache. Cached thumbnails cannot bypass this check.
 - Cloudflare's `IMAGES` binding reads private R2 bytes and produces one WebP variant, fitting inside 640 × 640 pixels without cropping or enlargement, at quality 75.
-- The internal Cache API retains the transformed image for up to 30 days, subject to eviction and data-centre locality. Responses sent to the browser are always private and cacheable for one day.
+- The internal Cache API retains the transformed image for up to 30 days, subject to eviction and data-centre locality. Cache writes run in `waitUntil` so first-view delivery does not wait for them. Responses sent to the browser are always private and cacheable for one day.
 - The default `/api/images/:id` continues to serve the original. The full-size viewer and story exports use that route. Thumbnail and original blob caches in the UI are separate.
 - Missing bindings, transformation failures and exhausted free transformation allowance fall back to the original with a short five-minute browser cache. An original fallback is never put in the thumbnail edge cache.
 - Existing photos benefit on first view. No migration, bulk backfill, new R2 bucket, permanent derivative storage or extra D1 writes are required.
@@ -29,7 +31,7 @@ Checked against Cloudflare documentation on 9 September 2026:
 | Hosted Cloudflare Images storage | Not selected: hosted storage/delivery requires Images Paid. |
 | Browser-generated persistent thumbnails | Possible, but adds upload/promotion/deletion handling and requires a separate path for existing photos. |
 
-Cloudflare Images Free includes **5,000 unique transformations per calendar month**. Once exhausted, new transformations fail with error `9422`, without overage charges on the Free plan. Repeated transformations of identical source bytes and parameters in the same month count once. This implementation uses one fixed variant and catches failure to keep photos viewable.
+Cloudflare Images Free includes **5,000 unique transformations per calendar month**. Once exhausted, new transformations fail with error `9422`, without overage charges on the Free plan. Repeated transformations of identical source bytes and parameters in the same month count once. This implementation uses one fixed variant and catches failure to keep photos viewable. This is a monthly usage bound, not a promise of one processing operation per photo forever. Eviction, another data centre or simultaneous misses can cause repeat processing; a later calendar month starts a new usage period. Cloudflare documents monthly deduplication of the same source and parameters, not a separate billable unique transformation for each data centre. Permanent R2 derivatives could reduce repeated processing later, but are not needed for the current single-user scope.
 
 **Keep the account on Images Free.** The code cannot inspect or change your billing plan. An account already on Images Paid can incur usage charges beyond its included allowance. This PR does not subscribe to a paid plan, provision hosted Images storage, change account billing or deploy the Worker.
 

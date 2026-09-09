@@ -61,6 +61,18 @@ describe('wine saves through the deployed entrypoint and migrated SQLite',()=>{
     expect((await request('POST','/api/wines',body(),multipart)).status).toBe(201);
     expect(sqlite.prepare('SELECT count(*) AS n FROM wines').get()).toMatchObject({n:1});
   });
+  it.each(['ended_at','last_wine_at'])('rolls creation back if live-tasting activity fails (%s)',async column=>{
+    const {sqlite,request}=setup();
+    const date=column==='ended_at'?'2026-08-31':'2026-09-01';
+    sqlite.prepare("INSERT INTO tastings(id,owner_id,name,tasting_date,started_at,created_at,updated_at) VALUES('active','owner','Original tasting',?,'2026-08-31','2026-08-31','2026-08-31')").run(date);
+    sqlite.exec(`CREATE TRIGGER reject_activity BEFORE UPDATE OF ${column} ON tastings WHEN OLD.id='active' BEGIN SELECT RAISE(ABORT,'Simulated activity failure'); END`);
+    expect((await request('POST','/api/wines',rich)).status).toBe(500);
+    for(const table of ['wines','wine_experiences','wine_tasting_structures'])expect(sqlite.prepare(`SELECT count(*) AS n FROM ${table}`).get()).toMatchObject({n:0});
+    expect(sqlite.prepare("SELECT ended_at,last_wine_at FROM tastings WHERE id='active'").get()).toMatchObject({ended_at:null,last_wine_at:null});
+    expect(sqlite.prepare('SELECT count(*) AS n FROM tastings').get()).toMatchObject({n:1});
+    sqlite.exec('DROP TRIGGER reject_activity');
+    expect((await request('POST','/api/wines',rich)).status).toBe(201);
+  });
   it('rejects invalid structure before writing anything',async()=>{
     const {sqlite,request}=setup();
     expect((await request('POST','/api/wines',{...rich,tastingStructure:{acidity:'invalid'}})).status).toBe(400);

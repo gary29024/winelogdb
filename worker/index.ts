@@ -251,7 +251,7 @@ app.delete('/api/wines/:id',async c=>{
  return c.body(null,204);
 });
 
-app.get('/api/images/:id',c=>serveWineImage(c.req.raw,c.env,c.get('userId'),c.req.param('id')));
+app.get('/api/images/:id',c=>serveWineImage(c.req.raw,c.env,c.get('userId'),c.req.param('id'),c.executionCtx));
 
 app.post('/api/recognition',async c=>{
  const form=await c.req.formData(),files=form.getAll('images').filter((x):x is File=>x instanceof File);

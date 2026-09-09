@@ -14,10 +14,12 @@ function setup(){
   const transform=vi.fn(()=>({output}));
   const input=vi.fn(()=>({transform}));
   const env={DB:stub.db,WINE_IMAGES:{get},IMAGES:{input},AUTH_SECRET:SECRET,APP_PASSWORD:'p',APP_URL:'https://x',ASSETS:{fetch:async()=>new Response('spa')}};
+  const background:Promise<unknown>[]=[];
+  const waitUntil=vi.fn((task:Promise<unknown>)=>{background.push(task)});
   async function request(variant='?variant=thumbnail',owner:string|null='owner'){
-    return app.fetch(new Request(`https://x/api/images/i1${variant}`,{headers:owner?{authorization:`Bearer ${await createSession(owner,SECRET)}`}:{}}),env as never,{waitUntil:()=>{},passThroughOnException:()=>{}} as never);
+    return app.fetch(new Request(`https://x/api/images/i1${variant}`,{headers:owner?{authorization:`Bearer ${await createSession(owner,SECRET)}`}:{}}),env as never,{waitUntil,passThroughOnException:()=>{}} as never);
   }
-  return {stub,cache,get,input,transform,output,env,request,remove:()=>{exists=false}};
+  return {stub,cache,get,input,transform,output,env,request,background,waitUntil,remove:()=>{exists=false}};
 }
 afterEach(()=>{vi.unstubAllGlobals();vi.restoreAllMocks()});
 describe('private wine thumbnails through the deployed entrypoint',()=>{
@@ -58,6 +60,26 @@ describe('private wine thumbnails through the deployed entrypoint',()=>{
     const {request,cache}=setup();cache.match.mockRejectedValueOnce(new Error('cache unavailable'));cache.put.mockRejectedValueOnce(new Error('cache full'));
     expect(await (await request()).text()).toBe('small-webp');
   });
+  it('returns the thumbnail while its cache write is still pending',async()=>{
+    const {request,cache,background,waitUntil}=setup();
+    let finish!:()=>void;
+    cache.put.mockImplementationOnce(()=>new Promise<void>(resolve=>{finish=resolve}));
+    const response=await request();
+    try{
+      expect(await response.text()).toBe('small-webp');
+      expect(waitUntil).toHaveBeenCalledTimes(1);
+      expect(background).toHaveLength(1);
+    }finally{finish();await Promise.all(background)}
+  },1000);
+  it('handles a cache rejection after the thumbnail has been delivered',async()=>{
+    const {request,cache,background}=setup();
+    let fail!:(error:Error)=>void;
+    cache.put.mockImplementationOnce(()=>new Promise<void>((_resolve,reject)=>{fail=reject}));
+    const response=await request();
+    expect(await response.text()).toBe('small-webp');
+    fail(new Error('late cache failure'));
+    await expect(Promise.all(background)).resolves.toEqual([undefined]);
+  },1000);
   it('refuses arbitrary transformation variants',async()=>{
     const {request,input,get}=setup();expect((await request('?variant=huge')).status).toBe(400);expect(input).not.toHaveBeenCalled();expect(get).not.toHaveBeenCalled();
   });

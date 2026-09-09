@@ -1,4 +1,5 @@
 import type { WineInput } from './schema';
+import { OPEN } from '../tastings/session';
 import { hasTastingStructure,type TastingStructure } from '../wine/tastingStructure';
 
 export function tastingStructureStatement(db:D1Database,owner:string,wineId:string,structure:TastingStructure|null,stamp=new Date().toISOString()){
@@ -32,8 +33,8 @@ export function wineSaveStatements(db:D1Database,owner:string,wineId:string,w:Wi
       .bind(crypto.randomUUID(),owner,wineId,owner,name,date,date,w.latitude??null,w.longitude??null,w.locationName??w.venue??null,w.rating??null,w.tastingNotes??'',stamp,stamp,owner,wineId,...(updateExisting?[owner,wineId]:[])));
     // Only creation updates the live tasting; historical edits must not close it.
     if(!updateExisting){
-      if(date)statements.push(db.prepare(`UPDATE tastings SET ended_at=?,updated_at=? WHERE owner_id=? AND started_at IS NOT NULL AND ended_at IS NULL AND coalesce(tasting_date,'')<>?`).bind(stamp,stamp,owner,date));
-      if(name)statements.push(db.prepare(`UPDATE tastings SET last_wine_at=?,updated_at=? WHERE owner_id=? AND id=${tastingId} AND started_at IS NOT NULL AND ended_at IS NULL`).bind(stamp,stamp,owner,owner,name,date));
+      if(date)statements.push(db.prepare(`UPDATE tastings SET ended_at=?,updated_at=? WHERE owner_id=? AND ${OPEN} AND coalesce(tasting_date,'')<>?`).bind(stamp,stamp,owner,date));
+      if(name)statements.push(db.prepare(`UPDATE tastings SET last_wine_at=?,updated_at=? WHERE owner_id=? AND id=${tastingId} AND ${OPEN}`).bind(stamp,stamp,owner,owner,name,date));
     }
   }
   // Omitted means preserve, null means clear. Older clients need not send it.

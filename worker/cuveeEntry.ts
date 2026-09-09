@@ -102,7 +102,6 @@ app.get('/api/cuvees/resolve',async c=>{
   }catch(e){return c.json({error:(e as Error).message||'Could not resolve cuvee'},500)}
 });
 
-
 /**
  * The bottle framing a story card draws with.
  *

@@ -12,7 +12,7 @@ function privateImage(response:Response,cacheControl=PRIVATE_CACHE){
 }
 
 /** One fixed variant, authenticated before even checking the internal edge cache. */
-export async function serveWineImage(request:Request,env:ImageBindings,owner:string,id:string){
+export async function serveWineImage(request:Request,env:ImageBindings,owner:string,id:string,ctx:Pick<ExecutionContext,'waitUntil'>){
   const variant=new URL(request.url).searchParams.get('variant');
   if(variant&&variant!=='thumbnail')return Response.json({error:'Unknown image variant'}, {status:400});
   const row=await env.DB.prepare('SELECT object_key FROM wine_images WHERE id=? AND owner_id=?').bind(id,owner).first<{object_key:string}>();
@@ -31,7 +31,7 @@ export async function serveWineImage(request:Request,env:ImageBindings,owner:str
   if(thumbnail&&env.IMAGES){
     try{
       // Preserve the full aspect ratio and let the existing card CSS frame it.
-      // No caller-controlled sizes: every photo consumes only one variant.
+      // One fixed variant; monthly unique usage is distinct from cache misses.
       const output=await env.IMAGES.input(original.body)
         .transform({width:640,height:640,fit:'scale-down'})
         .output({format:'image/webp',quality:75,anim:false});
@@ -39,8 +39,9 @@ export async function serveWineImage(request:Request,env:ImageBindings,owner:str
       if(!response.ok)throw new Error(`Image transform returned ${response.status}`);
       if(cache){
         const cached=new Response(response.clone().body,{headers:{'Content-Type':'image/webp','Cache-Control':'public, max-age=2592000'}});
-        // Cache failures must not hide a successfully transformed image.
-        await cache.put(cacheKey,cached).catch(()=>undefined);
+        // Keep the write alive without delaying delivery of the thumbnail.
+        // A late cache failure must not hide the successfully transformed image.
+        ctx.waitUntil(cache.put(cacheKey,cached).catch(()=>undefined));
       }
       return privateImage(response);
     }catch(error){
