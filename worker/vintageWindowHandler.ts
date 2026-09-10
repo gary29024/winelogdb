@@ -30,8 +30,8 @@ function prompt(subject:VintageSubject,baseline:{from:number;to:number}|null,cel
   const usual=baseline?`Wines like this are usually worth drinking between ${baseline.from} and ${baseline.to}.`
     :'No typical window is known for this combination.';
   const kept=cell.scope==='appellation'
-    ?`The answer is kept for every ${style} of ${subject.vintage} from ${cell.label} itself. Write about that vineyard and year, but never about one producer.`
-    :`The answer is kept for every ${style} of ${subject.vintage} from ${cell.label}. Write about the regional growing season and resulting wines, not one producer, estate or vineyard.`;
+    ?`The note is kept for every ${style} of ${subject.vintage} from ${cell.label}; write it about that vineyard in that year, but do not name a producer or estate.`
+    :`The note is kept for every ${style} of ${subject.vintage} from ${cell.label}; write about the regional growing season and resulting wines, and do not name a producer, an estate or a single vineyard in it.`;
   return `You must use Google Search before answering. Every factual claim must come from a page retrieved in this request. Do not answer from prior knowledge. If search returns nothing usable about this vintage and place, return null for both drinking years and quality.score, use low confidence, and explain the evidence gap.
 
 For ${style} from ${where}, vintage ${subject.vintage}, research both the drinking window and the quality of the vintage.
