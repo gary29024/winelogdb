@@ -6,9 +6,10 @@ export type VintageResearchMessage={kind:'vintage_window';owner:string;requestId
 type Bindings=VintageWindowBindings&{RESEARCH_QUEUE?:Queue<VintageResearchMessage>};
 type Row={id:string;status:VintageResearchStatus['status'];subject_json:string;result_json:string|null;error:string|null;updated_at:string};
 const now=()=>new Date().toISOString();
-// Much longer than the two model budgets combined. An abandoned job is failed
-// on an explicit retry, never silently replayed as another paid model request.
-const STALE_MS=10*60*1000;
+// More than twice the combined 75-second model budget, with time for D1.
+// An abandoned job is failed on an explicit retry, never silently replayed
+// as another paid model request.
+const STALE_MS=3*60*1000;
 const fields='id,status,subject_json,result_json,error,updated_at';
 const status=(row:Row):VintageResearchStatus=>({id:row.id,status:row.status,
   window:row.result_json?JSON.parse(row.result_json) as VintageWindow:null,error:row.error});
@@ -26,7 +27,7 @@ export async function failVintageResearch(db:D1Database,owner:string,id:string,e
 export async function queueVintageResearch(env:Bindings,owner:string,subject:VintageSubject){
   if(!env.RESEARCH_QUEUE)throw new Error('Vintage research is temporarily unavailable');
   const key=vintageCacheKey(subject),stamp=now(),id=crypto.randomUUID();
-  await env.DB.prepare("UPDATE vintage_research_jobs SET status='failed',error='Previous lookup stopped. A new lookup was requested.',updated_at=? WHERE owner_id=? AND cache_key=? AND status IN ('queued','running') AND updated_at<?")
+  await env.DB.prepare("UPDATE vintage_research_jobs SET status='failed',error='Previous lookup stopped. A new lookup was requested.',updated_at=? WHERE owner_id=? AND cache_key=? AND status IN ('queued','running') AND updated_at<=?")
     .bind(stamp,owner,key,new Date(Date.now()-STALE_MS).toISOString()).run();
   // The partial unique index makes two tabs requesting the same cell share a job.
   const inserted=await env.DB.prepare("INSERT INTO vintage_research_jobs(id,owner_id,cache_key,subject_json,status,created_at,updated_at) VALUES(?,?,?,?,'queued',?,?) ON CONFLICT DO NOTHING")

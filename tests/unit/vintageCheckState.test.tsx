@@ -115,13 +115,14 @@ describe('vintage research belongs to the displayed cell',()=>{
     expect(read).not.toHaveBeenCalled();
   });
 
-  it('keeps the previous result when observation times out but research continues',async()=>{
-    lookup.mockResolvedValue({window:null,cached:false,pending:true});
+  it.each(['queued','running'] as const)('keeps previous research and describes the last observed %s state honestly',async pendingStatus=>{
+    lookup.mockResolvedValue({window:null,cached:false,pending:true,pendingStatus});
     render(<VintageCheck wine={wine} initialWindow={found}/>);
     fireEvent.click(screen.getByText(/Evidence & sources/));
     fireEvent.click(screen.getByRole('button',{name:'Refresh research'}));
     await act(async()=>{});
-    expect(screen.getByRole('status').textContent).toMatch(/continues in the background/);
+    expect(screen.getByRole('status').textContent).toMatch(pendingStatus==='queued'?/waiting in the research queue/:/may have been interrupted/);
+    expect(screen.getByRole('status').textContent).not.toMatch(/continues in the background/);
     expect(screen.getByText('93')).toBeTruthy();
     expect(screen.queryByRole('alert')).toBeNull();
   });

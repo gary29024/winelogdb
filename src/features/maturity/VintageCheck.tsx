@@ -72,9 +72,14 @@ function VintageCellCheck({wine,onResearched,initialWindow,debounceMs=0}:Props){
     setStartedAt(new Date().toISOString());setError('');setNotice('');
     try{
       lookupController.current=new AbortController();
-      const {window,cached,pending}=await lookUpVintageWindow(subject,again,lookupController.current.signal);
+      const {window,cached,pending,pendingStatus}=await lookUpVintageWindow(subject,again,lookupController.current.signal);
       if(version!==requests.version)return;
-      if(pending){setNotice('Research continues in the background. Reopen this panel later to load the result.');return}
+      if(pending){
+        setNotice(pendingStatus==='queued'
+          ?'The lookup is still waiting in the research queue. Check again shortly.'
+          :'No result yet. The lookup may still be running or may have been interrupted. Check again shortly.');
+        return;
+      }
       if(!window)throw new Error('No research was returned. Please try again.');
       setResearched(window);setNotice(cached?'Saved research loaded.':'Research updated.');onResearched?.();
     }catch(e){

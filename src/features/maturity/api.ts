@@ -25,7 +25,7 @@ export async function getVintageWindow(subject:VintageSubject):Promise<VintageWi
   return body.window??null;
 }
 
-type VintageLookupResult={window:VintageWindow|null;cached:boolean;pending?:boolean};
+type VintageLookupResult={window:VintageWindow|null;cached:boolean;pending?:boolean;pendingStatus?:'queued'|'running'};
 
 /** Enqueue one lookup and observe it; status reads never start another model call. */
 export async function lookUpVintageWindow(subject:VintageSubject,refresh=false,signal?:AbortSignal):Promise<VintageLookupResult>{
@@ -37,16 +37,23 @@ export async function lookUpVintageWindow(subject:VintageSubject,refresh=false,s
   if(response.status!==202)return {window:body.window??null,cached:Boolean(body.cached)};
   if(!body.job?.id)throw new Error('Could not read vintage research progress');
   // Polling only reads status. Closing the page stops the observer, not the job.
-  // Bound the wait so a busy queue cannot leave the button spinning forever.
-  for(let poll=0;poll<36;poll++){
-    await new Promise(resolve=>setTimeout(resolve,5000));
+  // Read immediately, then at 1s/3s before backing off to five-second intervals.
+  // Count status-request time when deciding whether another poll fits the budget.
+  const deadline=Date.now()+180_000;
+  let pendingStatus:'queued'|'running'='queued';
+  for(let poll=0;Date.now()<deadline;poll++){
+    const delay=poll===0?0:poll===1?1000:poll===2?2000:5000;
+    if(delay)await new Promise(resolve=>setTimeout(resolve,Math.min(delay,deadline-Date.now())));
     signal?.throwIfAborted();
+    if(poll>0&&Date.now()>=deadline)break;
     const progress=await fetch(`/api/maturity/vintage/jobs/${encodeURIComponent(body.job.id)}`,{headers:authHeaders(),signal});
     if(progress.status===401){clearSession();throw new Error('Session expired. Please sign in again.')}
     const current=await progress.json().catch(()=>({})) as {job?:VintageResearchStatus;error?:string};
     if(!progress.ok||!current.job)throw new Error(current.error||'Could not read vintage research progress');
     if(current.job.status==='failed')throw new Error(current.job.error||'Could not look up that vintage');
     if(current.job.status==='complete')return {window:current.job.window,cached:false};
+    if(current.job.status!=='queued'&&current.job.status!=='running')throw new Error('Could not read vintage research progress');
+    pendingStatus=current.job.status;
   }
-  return {window:null,cached:false,pending:true};
+  return {window:null,cached:false,pending:true,pendingStatus};
 }

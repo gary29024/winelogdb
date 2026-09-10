@@ -110,10 +110,22 @@ describe('queued vintage research is independent of the requesting browser',()=>
     await consume();expect(fetch).toHaveBeenCalledOnce();
   });
 
+  it('preserves a still-live claim until the three-minute recovery threshold',async()=>{
+    vi.useFakeTimers({toFake:['Date']});
+    const {look,jobs,sqlite}=setup();await look();const first=jobs[0];
+    sqlite.prepare("UPDATE vintage_research_jobs SET status='running',updated_at=? WHERE id=?")
+      .run(new Date(Date.now()-179_000).toISOString(),first.requestId);
+    expect(await (await look({refresh:true})).json()).toMatchObject({job:{id:first.requestId,status:'running'}});
+    expect(jobs).toHaveLength(1);
+    vi.setSystemTime(Date.now()+1000);
+    expect((await look({refresh:true})).status).toBe(202);
+    expect(jobs).toHaveLength(2);
+  });
+
   it('recovers an abandoned job only on an explicit new request',async()=>{
     const {look,jobs,sqlite,consume,fetch}=setup();await look();const old=jobs[0];
     sqlite.prepare("UPDATE vintage_research_jobs SET status='running',updated_at=? WHERE id=?")
-      .run(new Date(Date.now()-11*60*1000).toISOString(),old.requestId);
+      .run(new Date(Date.now()-3*60*1000-1000).toISOString(),old.requestId);
     expect((await look()).status).toBe(202);expect(jobs).toHaveLength(2);
     await consume(old);expect(fetch).not.toHaveBeenCalled();
     await consume(jobs[1]);expect(fetch).toHaveBeenCalledOnce();
