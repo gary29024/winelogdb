@@ -3,12 +3,23 @@ import { placeClassification,resolvePlace } from '../places/resolve';
 import { maturityFor,type MaturityVerdict,type MaturityWindow,type Readiness } from './ageing';
 
 export type ResearchSource={title:string;url:string};
+export type VintageConfidence='low'|'medium'|'high';
+export type VintageQuality={
+  /** WineLog's own consensus score, never a copied critic score. */
+  score:number|null;
+  confidence:VintageConfidence;
+  consensus:string;
+  strengths:string[];
+  cautions:string[];
+};
 export type VintageWindow={
   country:string|null;region:string|null;appellation:string|null;
   vintage:number;wineStyle:string|null;
   /** Years the vintage moves the usual window at each end; +2 opens two later. */
   shiftFrom:number|null;shiftTo:number|null;
   note:string;sources:ResearchSource[];model:string|null;researchedAt:string;
+  /** Optional for rows researched before Vintage Intelligence existed. */
+  quality:VintageQuality|null;
 };
 
 /** What a wine needs to name before a vintage can be looked up for it. */
@@ -86,6 +97,25 @@ export function askableVintage(subject:VintageSubject){
     &&(subject.appellation?.trim()||subject.region?.trim()||subject.country?.trim()));
 }
 
+export const vintageQualitySchema=z.object({
+  score:z.number().int().min(70).max(100).nullable(),
+  confidence:z.enum(['low','medium','high']),
+  consensus:z.string().trim().max(600).default(''),
+  strengths:z.array(z.string().trim().min(1).max(120)).max(5).default([]),
+  cautions:z.array(z.string().trim().min(1).max(120)).max(5).default([])
+});
+
+/** Display bands are ours, so the model cannot call 89 "exceptional". */
+export function vintageScoreLabel(score:number|null|undefined){
+  if(score==null)return null;
+  if(score>=95)return 'Exceptional';
+  if(score>=90)return 'Outstanding';
+  if(score>=85)return 'Excellent';
+  if(score>=80)return 'Very good';
+  if(score>=75)return 'Good';
+  return 'Variable';
+}
+
 /**
  * What a source is allowed to say.
  *
@@ -97,6 +127,7 @@ export const vintageWindowSchema=z.object({
   drinkFrom:z.number().int().min(1900).max(2200).nullable(),
   drinkTo:z.number().int().min(1900).max(2200).nullable(),
   note:z.string().trim().max(1200).default(''),
+  quality:vintageQualitySchema.nullable().default(null),
   sources:z.array(z.object({title:z.string().trim().max(300),url:z.string().url()})).max(12).default([])
 }).superRefine((value,ctx)=>{
   if(value.drinkFrom!=null&&value.drinkTo!=null&&value.drinkTo<value.drinkFrom)
@@ -106,6 +137,11 @@ export const vintageWindowSchema=z.object({
 type Row=Record<string,unknown>;
 const parseJson=<T>(value:unknown,fallback:T):T=>{try{return JSON.parse(String(value)) as T}catch{return fallback}};
 const text=(value:unknown)=>{const trimmed=String(value??'').trim();return trimmed||null};
+const qualityFromRow=(value:unknown):VintageQuality|null=>{
+  if(value==null||String(value).trim()==='')return null;
+  const parsed=vintageQualitySchema.safeParse(parseJson(value,null));
+  return parsed.success?parsed.data:null;
+};
 
 export const mapVintageWindow=(row:Row):VintageWindow=>({
   country:text(row.country),region:text(row.region),appellation:text(row.appellation),
@@ -113,10 +149,10 @@ export const mapVintageWindow=(row:Row):VintageWindow=>({
   shiftFrom:row.shift_from==null?null:Number(row.shift_from),
   shiftTo:row.shift_to==null?null:Number(row.shift_to),
   note:String(row.vintage_note??''),sources:parseJson<ResearchSource[]>(row.sources_json,[]),
-  model:text(row.model),researchedAt:String(row.researched_at)
+  model:text(row.model),researchedAt:String(row.researched_at),quality:qualityFromRow(row.quality_json)
 });
 
-const columns='country,region,appellation,vintage,wine_style,shift_from,shift_to,vintage_note,sources_json,model,researched_at';
+const columns='country,region,appellation,vintage,wine_style,shift_from,shift_to,vintage_note,sources_json,model,researched_at,quality_json';
 
 export async function readVintageWindow(db:D1Database,owner:string,subject:VintageSubject){
   if(!askableVintage(subject))return null;
@@ -166,14 +202,14 @@ export async function writeVintageWindow(db:D1Database,owner:string,subject:Vint
   const stamp=new Date().toISOString();
   const shiftFrom=answer.drinkFrom!=null&&baseline?answer.drinkFrom-baseline.from:null;
   const shiftTo=answer.drinkTo!=null&&baseline?answer.drinkTo-baseline.to:null;
-  await db.prepare(`INSERT INTO vintage_windows(id,owner_id,cache_key,country,region,appellation,vintage,wine_style,shift_from,shift_to,vintage_note,sources_json,model,researched_at,created_at,updated_at)
-    VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+  await db.prepare(`INSERT INTO vintage_windows(id,owner_id,cache_key,country,region,appellation,vintage,wine_style,shift_from,shift_to,vintage_note,sources_json,model,researched_at,created_at,updated_at,quality_json)
+    VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
     ON CONFLICT(owner_id,cache_key) DO UPDATE SET shift_from=excluded.shift_from,shift_to=excluded.shift_to,
       vintage_note=excluded.vintage_note,sources_json=excluded.sources_json,model=excluded.model,
-      researched_at=excluded.researched_at,updated_at=excluded.updated_at`)
+      researched_at=excluded.researched_at,quality_json=excluded.quality_json,updated_at=excluded.updated_at`)
     .bind(crypto.randomUUID(),owner,vintageCacheKey(subject),place.country,place.region,place.appellation,
       subject.vintage,subject.wineStyle??null,shiftFrom,shiftTo,answer.note,
-      JSON.stringify(answer.sources),model,stamp,stamp,stamp).run();
+      JSON.stringify(answer.sources),model,stamp,stamp,stamp,answer.quality?JSON.stringify(answer.quality):null).run();
   return readVintageWindow(db,owner,subject);
 }
 
