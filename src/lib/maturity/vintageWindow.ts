@@ -241,7 +241,9 @@ export function maturityPair(wine:VintageSubject&{classification?:string|null},
     ?{from:calculated.from+researched.shiftFrom,to:calculated.to+researched.shiftTo,
       note:researched.note,sources:researched.sources,researchedAt:researched.researchedAt}
     :null;
-  return {calculated,researched:shifted};
+  // Match the cellar badge's fallback if a shared shift inverts this wine's
+  // shorter window; the panel must not offer a contradictory comparison.
+  return {calculated,researched:shifted&&shifted.to>=shifted.from?shifted:null};
 }
 
 /**

@@ -46,16 +46,16 @@ describe('the vintage block above the form',()=>{
     answer(stored);
     render(<VintageCheck wine={clos}/>);
     await screen.findByText('Drink 2021–2036');
-    expect(screen.getByText(/on the usual/)).toBeTruthy();
+    expect(screen.getByText('Typical window: 2019–2036')).toBeTruthy();
+    expect(screen.getByText('Estimated window starts 2 years later and ends at the usual time.')).toBeTruthy();
     const note=screen.getByText(/unusually warm spring/);
     const folded=note.closest('details')!;
     expect(folded,'the note lives inside the disclosure').not.toBeNull();
     expect(folded.open,'and it starts closed').toBe(false);
-    // The sources went in with it, so one summary line carries both
-    // and which model answered, which two requests in the gateway log will not
-    // say without payload logging turned on
-    expect(folded.querySelector('summary')!.textContent).toBe('Why this vintage · 2 sources · 2026-09-02 · gemini-3.7-flash');
+    // Source count stays in the summary; the model and date move inside.
+    expect(folded.querySelector('summary')!.textContent).toBe('Evidence & sources · 2 sources');
     expect(folded.querySelectorAll('a')).toHaveLength(2);
+    expect(screen.getByText('Model: gemini-3.7-flash').closest('details')).toBe(folded);
   });
 
   it('offers a fresh search on a cell that already has an answer',async()=>{
@@ -69,7 +69,7 @@ describe('the vintage block above the form',()=>{
       return new Response(JSON.stringify({window:stored}),{status:200,headers:{'content-type':'application/json'}});
     }));
     render(<VintageCheck wine={clos}/>);
-    const again=await screen.findByRole('button',{name:'Look it up again'});
+    const again=await screen.findByRole('button',{name:'Refresh research'});
     // and it says what pressing it costs, and who else it changes the answer for
     expect(screen.getByText(/Uses AI search/)).toBeTruthy();
     fireEvent.click(again);

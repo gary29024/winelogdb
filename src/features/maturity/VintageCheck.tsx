@@ -1,31 +1,33 @@
 import { useEffect,useRef,useState } from 'react';
 import { askableVintage,maturityPair,vintageCell,vintageScoreLabel,windowShift,type VintageSubject,type VintageWindow } from '../../lib/maturity/vintageWindow';
+import { ElapsedSeconds } from '../../components/ElapsedSeconds';
 import { getVintageWindow,lookUpVintageWindow } from './api';
 import { DrinkingWindow } from './DrinkingWindow';
 import '../../maturity.css';
 
 type Wine=VintageSubject&{classification?:string|null};
-type Props={wine:Wine;onResearched?:()=>void};
+type Props={wine:Wine;onResearched?:()=>void;initialWindow?:VintageWindow|null};
 
-const sameYears=(shift:{from:number;to:number}|null)=>shift!=null&&shift.from===0&&shift.to===0;
-const years=(value:number)=>`${value>0?'+':''}${value}`;
+const shiftDescription=(shift:{from:number;to:number})=>{
+  if(shift.from===0&&shift.to===0)return 'Same as the typical window.';
+  const timing=(years:number)=>years===0?'at the usual time':`${Math.abs(years)} year${Math.abs(years)===1?'':'s'} ${years>0?'later':'earlier'}`;
+  return `Estimated window starts ${timing(shift.from)} and ends ${timing(shift.to)}.`;
+};
 
-/**
- * The usual model and the researched vintage stay separate. Vintage Intelligence
- * belongs to the researched answer: it is source-aware context about the year,
- * not another input into the deterministic ageing table.
- */
+/** A changed cell gets fresh UI state; wines within one cell share the answer. */
 export function VintageCheck(props:Props){
-  // A changed year/place/style must never inherit another cell's result or
-  // pending request. Wines within the same cell still share the loaded answer.
   const key=askableVintage(props.wine)?vintageCell(props.wine).key:'';
   return <VintageCellCheck key={key} {...props}/>;
 }
 
-function VintageCellCheck({wine,onResearched}:Props){
-  const [researched,setResearched]=useState<VintageWindow|null>(null);
-  const [busy,setBusy]=useState(false),[error,setError]=useState('');
+function VintageCellCheck({wine,onResearched,initialWindow}:Props){
+  const [researched,setResearched]=useState<VintageWindow|null>(initialWindow??null);
+  const [readState,setReadState]=useState<'loading'|'ready'|'error'>(askableVintage(wine)&&initialWindow===undefined?'loading':'ready');
+  const [readSeq,setReadSeq]=useState(0);
+  const [startedAt,setStartedAt]=useState<string|null>(null);
+  const [error,setError]=useState(''),[notice,setNotice]=useState('');
   const requests=useRef({version:0}).current;
+  const busy=startedAt!==null;
   const subject:VintageSubject={country:wine.country,region:wine.region,appellation:wine.appellation,
     vintage:wine.vintage,wineStyle:wine.wineStyle,classification:wine.classification,
     producer:wine.producer,wineName:wine.wineName};
@@ -33,30 +35,47 @@ function VintageCellCheck({wine,onResearched}:Props){
   const cell=askable?vintageCell(subject):null;
   const asked=cell?.label||wine.region||wine.country;
   const cellKey=cell?.key??'';
+  const style=wine.wineStyle==='rose'?'Rosé':wine.wineStyle?wine.wineStyle[0].toUpperCase()+wine.wineStyle.slice(1):null;
+  const scope=[asked,style,wine.vintage].filter(Boolean).join(' · ');
 
   useEffect(()=>{
-    if(!cellKey)return;
-    const version=requests.version;
-    const timer=setTimeout(()=>{
-      if(version!==requests.version)return;
-      getVintageWindow(subject).then(found=>{
-        if(version===requests.version)setResearched(found);
-      }).catch(()=>{});
-    },300);
+    const version=++requests.version;
+    let timer:ReturnType<typeof setTimeout>|undefined;
+    // The cellar list already fetched this cell. Opening its details uses that
+    // result, including a known cache miss, without another read or AI request.
+    if(cellKey&&(initialWindow===undefined||readSeq>0)){
+      setReadState('loading');setError('');setNotice('');
+      timer=setTimeout(()=>{
+        getVintageWindow(subject).then(found=>{
+          if(version!==requests.version)return;
+          setResearched(found);setReadState('ready');
+          setNotice(found?'Saved research loaded.':'');
+        }).catch(()=>{
+          if(version!==requests.version)return;
+          setReadState('error');setError('Could not load saved research. Please retry.');
+        });
+      },300);
+    }
     return()=>{requests.version++;clearTimeout(timer)};
+    // Subject changes within this cell do not need another read. initialWindow
+    // seeds this mounted cell only; new research is owned by the state above.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[cellKey,requests]);
+  },[cellKey,readSeq,requests]);
 
   async function look(again=false){
+    if(busy||readState!=='ready')return;
     const version=++requests.version;
-    setBusy(true);setError('');
+    setStartedAt(new Date().toISOString());setError('');setNotice('');
     try{
-      const {window}=await lookUpVintageWindow(subject,again);
+      const {window,cached}=await lookUpVintageWindow(subject,again);
       if(version!==requests.version)return;
-      setResearched(window);if(window)onResearched?.();
+      if(!window)throw new Error('No research was returned. Please try again.');
+      setResearched(window);setNotice(cached?'Saved research loaded.':'Research updated.');onResearched?.();
     }catch(e){
-      if(version===requests.version)setError((e as Error).message||'Could not look up that vintage');
-    }finally{if(version===requests.version)setBusy(false)}
+      if(version===requests.version)setError(researched
+        ?'Refresh failed. Your previous research is still shown. Please try again.'
+        :(e as Error).message||'Could not look up that vintage. Please try again.');
+    }finally{if(version===requests.version)setStartedAt(null)}
   }
 
   const pair=maturityPair(wine,researched);
@@ -66,22 +85,31 @@ function VintageCellCheck({wine,onResearched}:Props){
   if(!pair.calculated&&!researched&&!askable)return null;
 
   return <div className="vintage-check">
-    <DrinkingWindow wine={wine}/>
+    {askable&&<div className="vintage-overview">
+      <strong className="vintage-scope">{scope}</strong>
+      {quality?.score!=null&&<div className="vintage-quality"><strong>{scoreLabel}</strong><span>WineLog estimate <b>{quality.score}</b>/100</span></div>}
+      {quality&&quality.score==null&&<span className="vintage-quality-unavailable">Quality estimate unavailable</span>}
+    </div>}
+    <DrinkingWindow wine={wine} researched={researched}/>
+    {pair.researched&&pair.calculated&&<p className="vintage-comparison">Typical window: {pair.calculated.from}–{pair.calculated.to}</p>}
+
+    <div className="vintage-progress">
+      <p className="vintage-status" role="status" aria-live="polite" aria-atomic="true">{busy?'Researching vintage…':readState==='loading'?'Checking saved research…':notice}</p>
+      {startedAt&&<span className="vintage-elapsed" aria-hidden="true"><ElapsedSeconds startedAt={startedAt}/></span>}
+    </div>
 
     {researched
       ?<div className="vintage-researched">
-        <div className="vintage-researched-head">
-          <strong>{wine.vintage} in {asked}</strong>
-          {quality?.score!=null&&<span className="vintage-quality">WineLog estimate <b>{quality.score}</b>/100 · {scoreLabel}</span>}
-          {quality&&<span className={`vintage-confidence vintage-confidence-${quality.confidence}`}>{quality.confidence} AI-assessed confidence</span>}
-          {pair.researched&&<span className="maturity-window">Drink {pair.researched.from}–{pair.researched.to}</span>}
-          {shift&&!sameYears(shift)&&<span className="vintage-shift">{years(shift.from)} / {years(shift.to)} on the usual</span>}
-          {sameYears(shift)&&<span className="vintage-shift">Same as the usual window</span>}
-        </div>
         <details className="vintage-sources">
-          <summary>Why this vintage · {researched.sources.length} source{researched.sources.length===1?'':'s'} · {researched.researchedAt.slice(0,10)}{researched.model?` · ${researched.model}`:''}</summary>
-          {quality&&<p>An AI synthesis of vintage commentary for {asked} {wine.vintage}. The score describes the vintage, not this individual bottle.</p>}
+          <summary>Evidence &amp; sources · {researched.sources.length} source{researched.sources.length===1?'':'s'}</summary>
+          <div className="vintage-research-meta">
+            {quality&&<span className={`vintage-confidence vintage-confidence-${quality.confidence}`}>{quality.confidence} AI-assessed confidence</span>}
+            <span>Researched <time dateTime={researched.researchedAt}>{researched.researchedAt.slice(0,10)}</time></span>
+            {researched.model&&<span>Model: {researched.model}</span>}
+          </div>
+          {quality&&<p>An AI synthesis of vintage commentary for {scope}. The score describes the vintage, not this individual bottle.</p>}
           {quality&&quality.score==null&&<p>No score: the available evidence did not support a quality estimate.</p>}
+          {shift&&<p className="vintage-shift">{shiftDescription(shift)}</p>}
           {quality?.consensus&&<p className="vintage-consensus">{quality.consensus}</p>}
           {quality&&(quality.strengths.length>0||quality.cautions.length>0)&&<div className="vintage-evidence-grid">
             {quality.strengths.length>0&&<div><strong>Strengths</strong><ul>{quality.strengths.map(item=><li key={`strength-${item}`}>{item}</li>)}</ul></div>}
@@ -91,16 +119,17 @@ function VintageCellCheck({wine,onResearched}:Props){
           <ul>{researched.sources.map(source=><li key={source.url}><a href={source.url} target="_blank" rel="noopener noreferrer">{source.title}</a></li>)}</ul>
           {!quality&&<p className="vintage-legacy-note"><small>No vintage quality assessment is stored with this lookup. Refresh it to request one.</small></p>}
           <p className="vintage-again">
-            <button type="button" className="quiet" onClick={()=>void look(true)} disabled={busy}>{busy?'Searching…':'Look it up again'}</button>
-            <small>Uses AI search and replaces this for every wine you own from {asked} {wine.vintage}.</small>
+            <button type="button" className="quiet" onClick={()=>void look(true)} disabled={busy||readState!=='ready'}>{busy?'Researching…':'Refresh research'}</button>
+            <small>Uses AI search. Updates saved research for your wines in {scope}.</small>
           </p>
         </details>
       </div>
-      :askable&&<div className="vintage-ask">
-        <button type="button" onClick={()=>void look()} disabled={busy}>{busy?'Searching…':`Look up ${wine.vintage}`}</button>
-        <small>One lookup requests the vintage window and WineLog Vintage Intelligence, then keeps it for every wine you own from {asked} {wine.vintage}.</small>
+      :askable&&readState==='ready'&&<div className="vintage-ask">
+        <button type="button" onClick={()=>void look()} disabled={busy}>{busy?'Researching…':`Look up ${wine.vintage}`}</button>
+        <small>Research the vintage once, then reuse it for your wines in {scope}.</small>
       </div>}
 
     {error&&<p className="cellar-error" role="alert">{error}</p>}
+    {readState==='error'&&<div className="vintage-ask"><button type="button" onClick={()=>setReadSeq(seq=>seq+1)}>Retry saved research</button></div>}
   </div>;
 }

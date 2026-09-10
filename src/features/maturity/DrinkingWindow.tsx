@@ -43,7 +43,7 @@ export function DrinkingWindow({wine,compact=false,researched=null}:{wine:Wine;c
     <strong>{readinessLabel[readiness]}</strong>
     <span className="maturity-window">Drink {windowLabel(verdict)}</span>
     <small>{shifted.researched
-      ?`${verdict.basis.label}'s usual window, moved by what ${wine.vintage} did`
+      ?`Based on vintage research for ${wine.vintage}, applied to ${verdict.basis.label}'s typical window`
       :`Typical for ${verdict.basis.label} — a rule of thumb, not research`}{opensNote(readiness,verdict.opensIn)}</small>
   </div>;
 }
