@@ -166,12 +166,14 @@ describe('a photo that is too small to store',()=>{
   });
 });
 
- it('deleting a wine removes both original photos and their permanent thumbnails',async()=>{
-  const stub=createD1Stub(sql=>/SELECT object_key FROM wine_images/.test(sql)?{all:[{object_key:'owner/a.jpg'},{object_key:'owner/b.jpg'}]}:undefined);
-  const deleted:string[]=[];
-  const response=await app.fetch(new Request('https://x/api/wines/w1',{method:'DELETE',headers:{authorization:`Bearer ${await createSession('owner',AUTH_SECRET)}`}}),{
-    DB:stub.db,WINE_IMAGES:{delete:async(keys:string[])=>{deleted.push(...keys)}},AUTH_SECRET,APP_URL:'https://x',APP_PASSWORD:'p'
-  } as never);
-  expect(response.status).toBe(204);
-  expect(deleted).toEqual(['owner/a.jpg','thumb/v1/owner/a.jpg.webp','owner/b.jpg','thumb/v1/owner/b.jpg.webp']);
- });
+describe('removing a wine and its photos',()=>{
+  it('deleting a wine removes both original photos and their permanent thumbnails',async()=>{
+   const stub=createD1Stub(sql=>/SELECT object_key FROM wine_images/.test(sql)?{all:[{object_key:'owner/a.jpg'},{object_key:'owner/b.jpg'}]}:undefined);
+   const deleted:string[]=[];
+   const response=await app.fetch(new Request('https://x/api/wines/w1',{method:'DELETE',headers:{authorization:`Bearer ${await createSession('owner',AUTH_SECRET)}`}}),{
+     DB:stub.db,WINE_IMAGES:{delete:async(keys:string[])=>{deleted.push(...keys)}},AUTH_SECRET,APP_URL:'https://x',APP_PASSWORD:'p'
+   } as never);
+   expect(response.status).toBe(204);
+   expect(deleted).toEqual(['owner/a.jpg','thumb/v1/owner/a.jpg.webp','owner/b.jpg','thumb/v1/owner/b.jpg.webp']);
+  });
+});

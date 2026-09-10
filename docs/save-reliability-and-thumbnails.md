@@ -41,10 +41,11 @@ The feature also uses the existing Workers, D1 and R2 request allowances; it doe
 
 The Wrangler configuration declares the `IMAGES` binding. No public R2 access is needed. After deploying, verify a signed-in thumbnail request returns `image/webp`, then open the same photo full size and verify the original still loads. Check the account's Images plan and usage in the dashboard before deployment. If the binding is unavailable, retained R2 thumbnails still work; photos without one fall back to originals.
 
-R2 Standard free allowances are shared account-wide: **10 GB-month of storage, 1 million Class A operations and 10 million Class B operations per month**, with free egress. Derivatives add storage and one write per successful generation; edge misses add reads. R2 bills usage beyond its free allowances, unlike the Images Free transformation limit. This code does not inspect account-wide usage or impose a spending cap.
+R2 Standard free allowances are shared account-wide: **10 GB-month of storage, 1 million Class A operations and 10 million Class B operations per month**, with free egress. The explicit `storageClass: Standard` prevents new derivatives from inheriting a bucket default of Infrequent Access, which is outside the R2 free tier. Derivatives add storage and one write per successful generation; edge misses add reads. R2 bills usage beyond its free allowances, unlike the Images Free transformation limit. This code does not inspect account-wide usage or impose a spending cap.
 
 Sources:
 - [R2 pricing](https://developers.cloudflare.com/r2/pricing/)
+- [R2PutOptions: omitted storage class inherits the bucket default](https://developers.cloudflare.com/r2/api/workers/workers-api-reference/#r2putoptions)
 - [Images pricing](https://developers.cloudflare.com/images/pricing/)
 - [Optimize with Workers: private bytes, binding configuration and caching](https://developers.cloudflare.com/images/optimization/binding/)
 - [Workers pricing and Free limits](https://developers.cloudflare.com/workers/platform/pricing/)

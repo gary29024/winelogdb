@@ -64,6 +64,8 @@ export async function serveWineImage(request:Request,env:ImageBindings,owner:str
         try{
           // R2 receives a known-length body, independent of the Images stream.
           const bytes=await response.clone().arrayBuffer();
+          // Pin Standard: an omitted class inherits the configurable bucket
+          // default, which may be Infrequent Access (outside R2's free tier).
           await env.WINE_IMAGES.put(derivativeKey,bytes,{httpMetadata:{contentType:'image/webp'},storageClass:'Standard'});
           // Deletion can race a background transform/write. If deletion won,
           // remove the newly written derivative rather than orphaning it.

@@ -89,6 +89,7 @@ describe('private wine thumbnails through the deployed entrypoint',()=>{
     const {request,entries,objects,background,input,get,put}=setup();
     expect(await (await request()).text()).toBe('small-webp');await Promise.all(background);
     expect(objects.get(thumbnailObjectKey('owner/original.jpg'))).toBe('small-webp');
+    expect(put).toHaveBeenCalledWith(thumbnailObjectKey('owner/original.jpg'),expect.any(ArrayBuffer),expect.objectContaining({storageClass:'Standard'}));
     expect(put).toHaveBeenCalledTimes(1);
     entries.clear();get.mockClear();
     expect(await (await request()).text()).toBe('small-webp');
