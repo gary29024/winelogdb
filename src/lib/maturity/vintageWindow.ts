@@ -18,8 +18,8 @@ export type VintageWindow={
   /** Years the vintage moves the usual window at each end; +2 opens two later. */
   shiftFrom:number|null;shiftTo:number|null;
   note:string;sources:ResearchSource[];model:string|null;researchedAt:string;
-  /** Optional for rows researched before Vintage Intelligence existed. */
-  quality:VintageQuality|null;
+  /** Optional for rows and callers that predate Vintage Intelligence. */
+  quality?:VintageQuality|null;
 };
 
 /** What a wine needs to name before a vintage can be looked up for it. */
