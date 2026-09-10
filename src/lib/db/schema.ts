@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { tastingStructureSchema } from '../wine/tastingStructure';
 import { canonicalizeWineFields } from '../wine/canonicalize';
 
 export const wineStyles = ['red', 'white', 'rose', 'sparkling', 'dessert', 'fortified', 'orange', 'other'] as const;
@@ -143,7 +144,7 @@ export type GrapeBlendEntry = z.infer<typeof grapeBlendEntrySchema>;
 export type DeepSearchResult = z.infer<typeof deepSearchSchema>;
 export type DeepSearchProvenance = z.infer<typeof deepSearchProvenanceSchema>;
 export type WineRecord = z.infer<typeof wineRecordSchema>;
-const wineInputBaseSchema = wineRecordSchema.omit({ id:true, ownerId:true, createdAt:true, updatedAt:true, deepSearch:true, imageIds:true, imageObjectKeys:true }).superRefine((value,ctx)=>{
+const wineInputBaseSchema = wineRecordSchema.omit({ id:true, ownerId:true, createdAt:true, updatedAt:true, deepSearch:true, imageIds:true, imageObjectKeys:true }).extend({tastingStructure:tastingStructureSchema.nullable().optional()}).superRefine((value,ctx)=>{
   const knownTotal=value.grapeBlend.reduce((sum,x)=>sum+(x.percentage??0),0);
   if(knownTotal>100.0001)ctx.addIssue({code:'custom',path:['grapeBlend'],message:'Known grape percentages cannot total more than 100%'});
 });
