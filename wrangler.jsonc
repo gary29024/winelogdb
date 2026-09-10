@@ -74,7 +74,7 @@
     // What each service tier bills relative to standard. Batch recognition
     // queues on flex on purpose; priority is here for completeness, nothing
     // asks for it today.
-    "AI_COST_TIER_MULTIPLIERS": "{\"flex\":0.5,\"priority\":1.8}",
+    "AI_COST_TIER_MULTIPLIERS": "{\"flex\":0.5,\"batch\":0.5,\"priority\":1.8}",
     // USD per 1,000 grounded Google Search queries, same dated shape. This is
     // the largest line on the bill, so it gets its own history.
     "AI_COST_GROUNDING_RATES": "[{\"from\":\"2026-01-01\",\"usdPer1k\":14}]",

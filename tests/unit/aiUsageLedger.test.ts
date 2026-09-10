@@ -88,7 +88,7 @@ describe('the rates',()=>{
     });
     // an unreadable amount falls back to the generic default, not to nothing
     expect(tokenCostUsd({searchQueries:0,promptTokens:1e6,outputTokens:0},rates,'m')).toBeCloseTo(DEFAULT_RATES.inputUsdPerM,6);
-    expect(rates.tierMultipliers.flex,'a zero multiplier would make the tier free').toBe(1);
+    expect(rates.tierMultipliers.flex,'an invalid override keeps the built-in discount').toBe(0.5);
     expect(rates.groundingWindows).toEqual([]);
     expect(marginalCostUsd({searchQueries:1000,promptTokens:0,outputTokens:0},rates)).toBeCloseTo(DEFAULT_RATES.groundingUsdPer1k,6);
   });
@@ -285,6 +285,7 @@ describe('every path that spends money is metered',()=>{
     ['src/lib/research/batchWineResearch.ts',"kind:'wine_research'"],
     ['worker/recognitionHandler.ts',"kind:'scan_single'"],
     ['worker/vertexBatchRecognition.ts',"kind:'scan_batch'"],
+    ['worker/batchRecognition.ts',"kind:'scan_batch'"],
     ['worker/groupRecognitionHandler.ts',"kind:'scan_group'"],
     ['worker/sheetRecognitionHandler.ts',"kind:'scan_sheet'"],
     ['worker/bottleFrameHandler.ts',"kind:'bottle_frame'"],
@@ -295,7 +296,12 @@ describe('every path that spends money is metered',()=>{
     const source=readFileSync(path,'utf8');
     const delegated=/from '\.\/visionRecognition'/.test(source);
     expect(source).toContain(kind);
-    expect(delegated?readFileSync('worker/visionRecognition.ts','utf8'):source).toContain('recordAiUsage');
+    const implementation=delegated?readFileSync('worker/visionRecognition.ts','utf8'):source;
+    if(implementation.includes('recognitionUsage')){
+      expect(implementation).toContain('meter.capture(');
+      expect(implementation).toContain('finally{await meter.flush()}');
+      expect(readFileSync('src/lib/recognition/usage.ts','utf8')).toContain('recordAiUsage');
+    }else expect(implementation).toContain('recordAiUsage');
   });
 
   it('covers every kind the ledger knows about',()=>{
@@ -483,5 +489,17 @@ describe('what a price change does to the history',()=>{
     const batch=summary.kinds.find(kind=>kind.kind==='scan_batch')!;
     expect(single.costPerUnit).toBeCloseTo(1,6);
     expect(batch.costPerUnit,'the same call queued on flex').toBeCloseTo(0.5,6);
+  });
+});
+
+
+describe('tier defaults survive missing or stale deployment variables',()=>{
+  it.each([undefined,'{}','not JSON','{"flex":0.7}','{"batch":0,"flex":-1}'])('keeps batch pricing when configuration is %s',config=>{
+    const rates=readAiRates({AI_COST_TIER_MULTIPLIERS:config});
+    const call={searchQueries:0,promptTokens:1e6,outputTokens:1e6};
+    expect(tokenCostUsd(call,rates,undefined,{tier:'batch'})).toBeCloseTo(tokenCostUsd(call,rates)/2);
+  });
+  it('honours explicit valid tier overrides without losing other defaults',()=>{
+    expect(readAiRates({AI_COST_TIER_MULTIPLIERS:'{"batch":0.6}'}).tierMultipliers).toMatchObject({standard:1,batch:0.6,flex:0.5,priority:1.8});
   });
 });

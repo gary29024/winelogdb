@@ -1,10 +1,11 @@
+import { recognitionUsage,type RecognitionUsage } from '../src/lib/recognition/usage';
 import { validateBatch } from '../src/features/uploads/validation';
 import { selectRecognitionMetadata,type RecognitionPhotoMetadata } from '../src/lib/uploads/metadataSelection';
 import { shouldRetryRecognitionFailure } from '../src/lib/recognition/retryPolicy';
 import { RECOGNITION_ESCALATION_MODEL } from '../src/lib/recognition/escalation';
 import { requireSession } from '../src/lib/auth/session';
 import { postGeminiGenerateContent,type GeminiTransportBindings } from './geminiTransport';
-import { geminiCallTokens,recordAiUsage,type AiUsageKind,type AnalyticsSink } from '../src/lib/usage/aiUsage';
+import type { AiUsageKind,AnalyticsSink } from '../src/lib/usage/aiUsage';
 
 /**
  * One photograph in, several wines out.
@@ -38,8 +39,10 @@ export type RecognitionModeSpec<T>={
   jsonSchema:unknown;
   parse(text:string):T;
   escalationReasons(result:T):string[];
-  /** Wines covered, which is both the metered unit and how an escalation is judged. */
+  /** Wines covered by a successful result, counted once across all model calls. */
   wineCount(result:T):number;
+  /** Modes that escalate must explicitly decide whether the new result improves the original. */
+  preferEscalated(primary:T,escalated:T):T;
   /**
    * Anything else worth having in the log line for this mode - the group photo's
    * count of bottles it gave up on, the sheet's truncation flag. Diagnostics
@@ -59,8 +62,6 @@ type GeminiResponse={
   error?:{message?:string};
 };
 
-/** What this call billed, so the primary and any escalation are metered apart. */
-const usageOf=(payload:GeminiResponse)=>geminiCallTokens(payload.usageMetadata);
 const HARD_TIMEOUT_MS=60_000;
 /**
  * How much of a reply is kept in the log when it will not parse.
@@ -94,7 +95,7 @@ function geminiErrorMessage(raw:string,status:number){
   return cleaned.slice(0,700)||`HTTP ${status}`;
 }
 
-async function tryEscalated<T>(env:VisionBindings,spec:RecognitionModeSpec<T>,requestId:string,requestBody:string,schemaFreeBody:string,primary:T,reasons:string[]){
+async function tryEscalated<T>(env:VisionBindings,spec:RecognitionModeSpec<T>,requestId:string,requestBody:string,schemaFreeBody:string,primary:T,reasons:string[],meter:RecognitionUsage){
   const startedAt=Date.now(),controller=new AbortController();let timedOut=false,schemaFallback=false,reply='';const timer=setTimeout(()=>{timedOut=true;controller.abort()},HARD_TIMEOUT_MS);
   console.log(JSON.stringify({event:`${spec.mode}-recognition-escalation-start`,requestId,fromModel:spec.model,toModel:RECOGNITION_ESCALATION_MODEL,reasons,primaryWines:spec.wineCount(primary),...prefixed('primary',spec.logFields?.(primary)??{})}));
   try{
@@ -106,14 +107,16 @@ async function tryEscalated<T>(env:VisionBindings,spec:RecognitionModeSpec<T>,re
       transport=await postGeminiGenerateContent(env,RECOGNITION_ESCALATION_MODEL,schemaFreeBody,controller.signal,{feature:'recognition',mode:`${spec.mode}-escalation-fallback`,requestId});response=transport.response;provider=transport.provider;
     }
     clearTimeout(timer);
-    if(!response.ok){const raw=(await response.text()).slice(0,2000);console.warn(JSON.stringify({event:`${spec.mode}-recognition-escalation-skipped`,requestId,model:RECOGNITION_ESCALATION_MODEL,provider,status:response.status,reasons,error:geminiErrorMessage(raw,response.status)}));return {result:primary,used:false,usage:null,finishReason:null}}
-    const payload=await response.json() as GeminiResponse,candidate=payload.candidates?.[0],text=candidate?.content?.parts?.map(part=>part.text??'').join('')??'';
+    if(!response.ok){const raw=(await response.text()).slice(0,2000);console.warn(JSON.stringify({event:`${spec.mode}-recognition-escalation-skipped`,requestId,model:RECOGNITION_ESCALATION_MODEL,provider,status:response.status,reasons,error:geminiErrorMessage(raw,response.status)}));return {result:primary,used:false,finishReason:null}}
+    const payload=await response.json() as GeminiResponse;
+    meter.capture(RECOGNITION_ESCALATION_MODEL,payload.usageMetadata);
+    const candidate=payload.candidates?.[0],text=candidate?.content?.parts?.map(part=>part.text??'').join('')??'';
     if(!text)throw new Error(`The escalation returned no ${spec.mode} recognition result`);
     reply=text;
-    const escalated=spec.parse(text),used=spec.wineCount(escalated)>0||spec.wineCount(primary)===0,result=used?escalated:primary;
+    const escalated=spec.parse(text),result=spec.preferEscalated(primary,escalated),used=result===escalated;
     console.log(JSON.stringify({event:`${spec.mode}-recognition-escalation-complete`,requestId,model:RECOGNITION_ESCALATION_MODEL,provider,reasons,used,schemaFallback,primaryWines:spec.wineCount(primary),escalatedWines:spec.wineCount(escalated),...prefixed('primary',spec.logFields?.(primary)??{}),...prefixed('escalated',spec.logFields?.(escalated)??{}),latencyMs:Date.now()-startedAt,finishReason:candidate?.finishReason??null,promptTokens:payload.usageMetadata?.promptTokenCount??null,outputTokens:payload.usageMetadata?.candidatesTokenCount??null,thinkingTokens:payload.usageMetadata?.thoughtsTokenCount??null,totalTokens:payload.usageMetadata?.totalTokenCount??null}));
-    return {result,used,usage:usageOf(payload),finishReason:used?candidate?.finishReason??null:null};
-  }catch(e){clearTimeout(timer);console.warn(JSON.stringify({event:`${spec.mode}-recognition-escalation-skipped`,requestId,model:RECOGNITION_ESCALATION_MODEL,reasons,timedOut,schemaFallback,latencyMs:Date.now()-startedAt,error:(e as Error).message||'Escalation failed',replyChars:reply.length,reply:reply.slice(0,REPLY_EXCERPT)}));return {result:primary,used:false,usage:null,finishReason:null}}
+    return {result,used,finishReason:used?candidate?.finishReason??null:null};
+  }catch(e){clearTimeout(timer);console.warn(JSON.stringify({event:`${spec.mode}-recognition-escalation-skipped`,requestId,model:RECOGNITION_ESCALATION_MODEL,reasons,timedOut,schemaFallback,latencyMs:Date.now()-startedAt,error:(e as Error).message||'Escalation failed',replyChars:reply.length,reply:reply.slice(0,REPLY_EXCERPT)}));return {result:primary,used:false,finishReason:null}}
 }
 
 export type VisionOutcome<T>=
@@ -154,6 +157,7 @@ export async function runVisionRecognition<T>(request:Request,env:VisionBindings
   console.log(JSON.stringify({event:`${spec.mode}-recognition-start`,requestId,model:spec.model,inputBytes:file.size,inputType:file.type,inputName:file.name,outputMode:'json-schema',afterLine}));
   for(let attempt=1;attempt<=2;attempt++){
     const attemptStarted=Date.now(),controller=new AbortController();let timedOut=false,replyText='';const timer=setTimeout(()=>{timedOut=true;controller.abort()},HARD_TIMEOUT_MS);
+    const meter=recognitionUsage(env,owner,{kind:spec.kind,runId:requestId});
     try{
       let transport=await postGeminiGenerateContent(env,spec.model,requestBody,controller.signal,{feature:'recognition',mode:spec.mode,requestId}),response=transport.response,provider=transport.provider,schemaFallback=false,primaryError='';
       if(response.status===400){
@@ -169,19 +173,17 @@ export async function runVisionRecognition<T>(request:Request,env:VisionBindings
         if(attempt===1&&shouldRetryRecognitionFailure({status:response.status,timedOut:false,networkError:false})){await new Promise(r=>setTimeout(r,700+Math.floor(Math.random()*500)));continue}
         return fail({error:`Gemini ${spec.mode} recognition failed (${response.status}): ${message}`,requestId},502);
       }
-      const payload=await response.json() as GeminiResponse,candidate=payload.candidates?.[0],text=candidate?.content?.parts?.map(part=>part.text??'').join('')??'';
+      const payload=await response.json() as GeminiResponse;
+      const primaryCall=meter.capture(spec.model,payload.usageMetadata);
+      const candidate=payload.candidates?.[0],text=candidate?.content?.parts?.map(part=>part.text??'').join('')??'';
       replyText=text;
       if(!text)throw new Error(`Gemini returned no ${spec.mode} recognition result`);
       const primary=spec.parse(text),escalationReasons=spec.escalationReasons(primary);
-      const escalation=escalationReasons.length?await tryEscalated(env,spec,requestId,requestBody,schemaFreeBody,primary,escalationReasons):{result:primary,used:false,usage:null,finishReason:null};
+      const escalation=escalationReasons.length?await tryEscalated(env,spec,requestId,requestBody,schemaFreeBody,primary,escalationReasons,meter):{result:primary,used:false,finishReason:null};
       const result=escalation.result,durationMs=Date.now()-startedAt,finalModel=escalation.used?RECOGNITION_ESCALATION_MODEL:spec.model;
       const wineCount=spec.wineCount(result);
       console.log(JSON.stringify({event:`${spec.mode}-recognition-complete`,requestId,model:finalModel,primaryModel:spec.model,escalated:escalation.used,escalationReasons,provider,attempt,geminiLatencyMs,durationMs,schemaFallback,wines:wineCount,...(spec.logFields?.(result)??{}),finishReason:candidate?.finishReason??null,promptTokens:payload.usageMetadata?.promptTokenCount??null,outputTokens:payload.usageMetadata?.candidatesTokenCount??null,thinkingTokens:payload.usageMetadata?.thoughtsTokenCount??null,totalTokens:payload.usageMetadata?.totalTokenCount??null}));
-      // One photograph, however many wines were on it - which is exactly why
-      // this cannot be quoted per run. The escalation is a second billed call
-      // covering the same wines, so it carries zero units or they count twice.
-      for(const [index,call] of [{model:spec.model,...usageOf(payload)},...(escalation.usage?[{model:RECOGNITION_ESCALATION_MODEL,...escalation.usage}]:[])].entries())
-        await recordAiUsage(env,owner,{kind:spec.kind,runId:requestId,model:call.model,requests:1,units:index===0?wineCount:0,promptTokens:call.promptTokens,outputTokens:call.outputTokens});
+      primaryCall.units=wineCount;
       return {ok:true,result,requestId,durationMs,finishReason:escalation.used?escalation.finishReason:candidate?.finishReason??null,wineCount,owner};
     }catch(e){
       clearTimeout(timer);const geminiLatencyMs=Date.now()-attemptStarted;
@@ -193,7 +195,7 @@ export async function runVisionRecognition<T>(request:Request,env:VisionBindings
       console.error(JSON.stringify({event:`${spec.mode}-recognition-error`,requestId,attempt,geminiLatencyMs,error:message,replyChars:replyText.length,reply:replyText.slice(0,REPLY_EXCERPT)}));
       if(attempt===1){await new Promise(r=>setTimeout(r,700+Math.floor(Math.random()*500)));continue}
       return fail({error:`${spec.label} returned invalid JSON: ${message}`,requestId},502);
-    }
+    }finally{await meter.flush()}
   }
   return fail({error:`${spec.label} failed`,requestId},502);
 }

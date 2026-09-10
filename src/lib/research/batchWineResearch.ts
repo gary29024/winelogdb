@@ -209,7 +209,7 @@ export async function pollWineBatchResearch(env:Env,owner:string,wineId:string,r
   if(fetched.state!=='JOB_STATE_SUCCEEDED'){const error=String((fetched.payload.error as {message?:unknown}|undefined)?.message||`Gemini batch ended with ${fetched.state}`);await finishResearchBatchJob(env.DB,owner,jobId,'failed',error);await retryOrFail(env,owner,wineId,requestId,job.attempt,scopes,[error],{},false,[job.model]);return}
   await updateWineResearchRun(env.DB,owner,requestId,'saving','Saving completed Gemini Batch Deep Search scopes','running',job.attempt);
   await recordResearchSearchQueries(env.DB,owner,job.id,countSearchQueries(fetched.responses)).catch(()=>undefined);
-  await recordAiUsage(env,owner,{kind:'wine_research',runId:requestId,targetId:wineId,model:job.model,
+  await recordAiUsage(env,owner,{kind:'wine_research',runId:requestId,targetId:wineId,model:job.model,tier:isEmulatedGeminiBatchName(job.googleBatchName)?'flex':'batch',eventId:`research:${owner}:${job.id}`,
     requests:fetched.responses.length,searchQueries:countSearchQueries(fetched.responses),...countUsageTokens(fetched.responses)});
   const inline=responsesByKey(fetched.responses).get(BATCH_KEY)??fetched.responses[0];if(!inline?.response){const error=inline?.error?.message||'Gemini returned no wine research result';await finishResearchBatchJob(env.DB,owner,jobId,'failed',error);await retryOrFail(env,owner,wineId,requestId,job.attempt,scopes,[error],{},false,[job.model]);return}
   const text=inlineResponseText(inline),finishReason=inlineFinishReason(inline);let failed=[...scopes],errors:string[]=[],feedback:ScopeFeedback={},ungrounded=false;
