@@ -1,4 +1,4 @@
-import { queueVintageResearch,readVintageResearch,type VintageResearchMessage } from './vintageResearchJobs';
+import { queueVintageResearch,readActiveVintageResearch,readVintageResearch,type VintageResearchMessage } from './vintageResearchJobs';
 import { Hono,type Context } from 'hono';
 import entryApp from './entry';
 import { requireSession } from '../src/lib/auth/session';
@@ -380,7 +380,12 @@ app.get('/api/maturity/vintage',async c=>{
   cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
   const subject=vintageSubject(c.req.query());
   if(!askableVintage(subject))return c.json({window:null});
-  try{return c.json({window:await cachedVintageWindow(c.env,owner,subject)})}
+  // The job travels with the window so a reopened panel can pick its own
+  // lookup back up instead of offering to pay for a second one.
+  try{
+    const [window,job]=await Promise.all([cachedVintageWindow(c.env,owner,subject),readActiveVintageResearch(c.env.DB,owner,subject)]);
+    return c.json({window,job});
+  }
   catch(e){console.error(JSON.stringify({event:'vintage-window-read-failed',error:(e as Error).message}));return c.json({error:'Could not load saved vintage research'},503)}
 });
 

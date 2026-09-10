@@ -31,6 +31,12 @@ function setup(){
       headers:{'content-type':'application/json',authorization:`Bearer ${await createSession(owner,SECRET)}`},
       body:JSON.stringify({...subject,...body})}),env,context);
   }
+  async function cell(owner='owner'){
+    const query=new URLSearchParams({country:subject.country,region:subject.region,
+      appellation:subject.appellation,vintage:String(subject.vintage),wineStyle:subject.wineStyle});
+    return app.fetch(new Request(`https://x/api/maturity/vintage?${query}`,{
+      headers:{authorization:`Bearer ${await createSession(owner,SECRET)}`}}),env,context);
+  }
   async function progress(id:string,owner='owner'){
     return app.fetch(new Request(`https://x/api/maturity/vintage/jobs/${id}`,{
       headers:{authorization:`Bearer ${await createSession(owner,SECRET)}`}}),env,context);
@@ -41,7 +47,7 @@ function setup(){
     expect(ack).toHaveBeenCalledOnce();expect(retry).not.toHaveBeenCalled();
   }
   const fetch=vi.fn(async()=>Response.json(payload()));vi.stubGlobal('fetch',fetch);
-  return {...state,look,progress,consume,jobs,send,waitUntil,fetch,env};
+  return {...state,look,progress,cell,consume,jobs,send,waitUntil,fetch,env};
 }
 
 describe('queued vintage research is independent of the requesting browser',()=>{
@@ -90,6 +96,21 @@ describe('queued vintage research is independent of the requesting browser',()=>
     const {look,send,fetch,jobs}=setup();send.mockRejectedValueOnce(new Error('queue unavailable'));
     expect((await look()).status).toBe(503);expect(fetch).not.toHaveBeenCalled();
     expect((await look()).status).toBe(202);expect(jobs).toHaveLength(1);
+  });
+  // Without this the panel cannot tell "nobody asked" from "asked and running",
+  // so reopening it offered the button for a lookup already paid for.
+  it('tells a reopened cell which lookup is still running for it',async()=>{
+    const {look,cell,consume,jobs}=setup();
+    expect(await (await cell()).json()).toMatchObject({window:null,job:null});
+    await look();
+    expect(await (await cell()).json()).toMatchObject({window:null,job:{id:jobs[0].requestId,status:'queued'}});
+    await consume();
+    // Finished work is the window again, and no job left to watch.
+    expect(await (await cell()).json()).toMatchObject({window:{quality:{score:93}},job:null});
+  });
+  it('never shows one owner the lookup another owner is running',async()=>{
+    const {look,cell}=setup();await look();
+    expect(await (await cell('another-owner')).json()).toMatchObject({job:null});
   });
   it('isolates job results and active-cell deduplication by owner',async()=>{
     const {look,jobs,progress}=setup();await look();
