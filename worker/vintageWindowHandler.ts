@@ -38,11 +38,11 @@ For ${style} from ${where}, vintage ${subject.vintage}, research both the drinki
 
 ${usual} For the drinking window, say where ${subject.vintage} moves that usual window and why. drinkFrom and drinkTo are calendar years, not ages, and apply to a wine of the kind described above rather than the region's longest-lived bottling.
 
-For quality, synthesize public evidence rather than copying any critic score. Prioritize, where available: official regional or grower bodies; established wine publications/critics' publicly accessible vintage commentary; reputable merchants' vintage reports; producer/harvest reports. Do not quote or reproduce paywalled reviews, and do not present a third party's numeric rating as WineLog's score.
+For quality, assess ${cell.label} ${subject.vintage} for ${style}, the shared cache scope, rather than this individual bottle or a narrower place within it. This applies to the score, consensus, strengths and cautions as well as the note. Synthesize public evidence rather than copying any critic score. Prioritize, where available: official regional or grower bodies; established wine publications/critics' publicly accessible vintage commentary; reputable merchants' vintage reports; producer/harvest reports. Do not quote or reproduce paywalled reviews, and do not present a third party's numeric rating as WineLog's score.
 
 Return a WineLog quality score only when the retrieved evidence supports one. Use this calibration consistently: 95-100 exceptional/historic; 90-94 outstanding; 85-89 excellent; 80-84 very good; 75-79 good; 70-74 variable/challenging. confidence is high only when several independent sources materially agree, medium for narrower but credible agreement, and low for thin or conflicting evidence. consensus is a concise synthesis, strengths and cautions are short evidence-backed phrases.
 
-${kept} Keep note and consensus concise.`;
+${kept} Keep note within 1200 characters and consensus within 600 characters. Return at most 5 strengths and 5 cautions, each 1-120 characters, and at most 12 sources with titles no longer than 300 characters.`;
 }
 
 /** Search grounding and responseSchema cannot be sent together, so this schema
@@ -73,26 +73,46 @@ function parseJson(raw:string){
   throw new Error('No JSON object in the reply');
 }
 
+const webUrl=(value:unknown)=>{
+  if(typeof value!=='string')return null;
+  try{
+    const url=new URL(value.trim());
+    return (url.protocol==='https:'||url.protocol==='http:')&&!url.username&&!url.password?url:null;
+  }catch{return null}
+};
+
+// Some captured replies carry citations only in their JSON. Keep that fallback,
+// but a host mentioned in a query string or lookalike domain is not a receipt.
+const groundingRedirect=(value:string)=>{
+  const url=webUrl(value);
+  return url?.protocol==='https:'&&url.hostname===GROUNDING_HOST&&!url.port
+    &&/^\/grounding-api-redirect\/[^/]+/.test(url.pathname);
+};
+
 const dedupe=(sources:Array<{title?:unknown;url?:unknown}>)=>{
   const seen=new Set<string>(),kept:Array<{title:string;url:string}>=[];
   for(const source of sources){
     const url=typeof source?.url==='string'?source.url.trim():'';
-    if(!url||seen.has(url))continue;
+    if(!webUrl(url)||seen.has(url))continue;
     seen.add(url);kept.push({title:String(source?.title||url).slice(0,300),url});
   }
   return kept.slice(0,12);
 };
 
-function groundedSources(payload:GeminiResponse,fromReply:unknown){
+function metadataSources(payload:GeminiResponse){
   const chunks=payload.candidates?.[0]?.groundingMetadata?.groundingChunks??[];
-  const metadata=dedupe(chunks.map(chunk=>({title:chunk.web?.title,url:chunk.web?.uri})));
+  return dedupe(chunks.map(chunk=>({title:chunk.web?.title,url:chunk.web?.uri})));
+}
+
+function groundedSources(payload:GeminiResponse,fromReply:unknown){
+  const metadata=metadataSources(payload);
   if(metadata.length)return metadata;
-  return dedupe(Array.isArray(fromReply)?fromReply as Array<{title?:unknown;url?:unknown}>:[]);
+  return dedupe(Array.isArray(fromReply)?fromReply as Array<{title?:unknown;url?:unknown}>:[])
+    .filter(source=>groundingRedirect(source.url));
 }
 
 const wasGrounded=(payload:GeminiResponse,sources:Array<{url:string}>)=>
-  Boolean(payload.candidates?.[0]?.groundingMetadata?.groundingChunks?.length)
-  ||sources.some(source=>source.url.includes(GROUNDING_HOST));
+  metadataSources(payload).length>0||sources.some(source=>groundingRedirect(source.url));
 
 type Answer=ReturnType<typeof vintageWindowSchema.parse>;
 type Billed={searchQueries:number;promptTokens:number;outputTokens:number};
@@ -135,7 +155,7 @@ async function ask(env:VintageWindowBindings,subject:VintageSubject,baseline:{fr
     if(!parsed.success)return {model,billed,detail,ok:false,reason:'invalid-shape',
       error:new Error(`The vintage lookup came back in the wrong shape: ${parsed.error.issues.map(issue=>issue.message).join('; ')}`)};
     const sources=parsed.data.sources;
-    detail.sources=sources.length;detail.redirects=sources.filter(source=>source.url.includes(GROUNDING_HOST)).length;
+    detail.sources=sources.length;detail.redirects=sources.filter(source=>groundingRedirect(source.url)).length;
     detail.vintageScore=parsed.data.quality?.score??null;detail.confidence=parsed.data.quality?.confidence??null;
     if(!sources.length||!wasGrounded(payload,sources))return {model,billed,detail,ok:false,reason:'ungrounded',
       error:new Error('Nothing was retrieved for this vintage, so there is nothing to show')};

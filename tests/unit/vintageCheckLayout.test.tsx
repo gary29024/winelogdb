@@ -71,7 +71,7 @@ describe('the vintage block above the form',()=>{
     render(<VintageCheck wine={clos}/>);
     const again=await screen.findByRole('button',{name:'Look it up again'});
     // and it says what pressing it costs, and who else it changes the answer for
-    expect(screen.getByText(/Spends one search/)).toBeTruthy();
+    expect(screen.getByText(/Uses AI search/)).toBeTruthy();
     fireEvent.click(again);
     await waitFor(()=>expect(posts).toHaveLength(1));
     expect(posts[0].refresh,'a refresh, not another read of the cache').toBe(true);
