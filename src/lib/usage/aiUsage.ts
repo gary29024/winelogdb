@@ -26,6 +26,8 @@ export const kindLabels:Record<AiUsageKind,string>={
 const whole=(value:unknown)=>{const parsed=Math.round(Number(value)||0);return parsed>0?parsed:0};
 
 export type AiUsageEvent={
+  /** Stable only for a persisted provider response, never for a fresh API attempt. */
+  eventId?:string;
   kind:AiUsageKind;runId:string;targetId?:string|null;model:string;
   requests?:number;searchQueries?:number;promptTokens?:number;outputTokens?:number;
   /**
@@ -43,7 +45,7 @@ export type AiUsageEvent={
 };
 
 /** Vertex bills the same model differently by tier; the ledger has to know which. */
-export const AI_USAGE_TIERS=['standard','flex','priority'] as const;
+export const AI_USAGE_TIERS=['standard','flex','priority','batch'] as const;
 export type AiUsageTier=typeof AI_USAGE_TIERS[number];
 
 /**
@@ -92,14 +94,16 @@ export async function recordAiUsage(env:AiUsageEnv,owner:string,event:AiUsageEve
   // allowance is counted in, which resets at midnight Pacific.
   const stamp=new Date().toISOString(),month=billingMonth(),tier=event.tier??'standard';
   try{
-    await env.DB.batch([
+    const writes=await env.DB.batch([
       env.DB.prepare(`INSERT INTO ai_usage_events(id,owner_id,kind,run_id,target_id,model,tier,requests,search_queries,prompt_tokens,output_tokens,units,created_at)
-        VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)`)
-        .bind(crypto.randomUUID(),owner,event.kind,event.runId,event.targetId??null,event.model,tier,requests,searchQueries,promptTokens,outputTokens,units,stamp),
+        VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?) ON CONFLICT(id) DO NOTHING`)
+        .bind(event.eventId??crypto.randomUUID(),owner,event.kind,event.runId,event.targetId??null,event.model,tier,requests,searchQueries,promptTokens,outputTokens,units,stamp),
       // Rolled up by model and tier as well as kind, because those two decide
       // the price and the rollup outlives the events it is made from.
+      // D1 runs this batch transactionally in order: changes() is the event
+      // insert above, so replaying a persisted answer cannot inflate the rollup.
       env.DB.prepare(`INSERT INTO ai_usage_monthly(owner_id,month,kind,model,tier,requests,search_queries,prompt_tokens,output_tokens,units,updated_at)
-        VALUES(?,?,?,?,?,?,?,?,?,?,?)
+        SELECT ?,?,?,?,?,?,?,?,?,?,? WHERE changes()>0
         ON CONFLICT(owner_id,month,kind,model,tier) DO UPDATE SET
           requests=ai_usage_monthly.requests+excluded.requests,
           search_queries=ai_usage_monthly.search_queries+excluded.search_queries,
@@ -110,6 +114,7 @@ export async function recordAiUsage(env:AiUsageEnv,owner:string,event:AiUsageEve
         .bind(owner,month,event.kind,event.model,tier,requests,searchQueries,promptTokens,outputTokens,units,stamp),
       env.DB.prepare(`DELETE FROM ai_usage_events WHERE owner_id=? AND created_at<datetime('now','-${RAW_EVENT_RETENTION_DAYS} days')`).bind(owner)
     ]);
+    if(writes[0]?.meta?.changes===0)return;
   }catch(e){console.error(JSON.stringify({event:'ai_usage_write_failed',kind:event.kind,error:(e as Error).message}))}
   // The same numbers into Analytics Engine, where they become a time series
   // the Cloudflare dashboard can chart and alert on without touching D1.

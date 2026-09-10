@@ -1,3 +1,4 @@
+import { geminiCallTokens,recordAiUsage,type AnalyticsSink } from '../src/lib/usage/aiUsage';
 import { parseRecognition } from '../src/features/recognition/schema';
 import { buildRecognitionPrompt,recognitionResponseSchema,RECOGNITION_MODEL } from '../src/lib/recognition/geminiRequest';
 import type { RecognitionPhotoMetadata } from '../src/lib/uploads/metadataSelection';
@@ -7,10 +8,10 @@ export type BatchRecognitionJob=
   |{kind:'recognition_batch_poll';owner:string;sessionId:string;jobId:string;pollCount:number}
   |{kind:'recognition_batch_cleanup';owner:string;sessionId:string};
 
-type Env={DB:D1Database;WINE_IMAGES:R2Bucket;GEMINI_API_KEY?:string;MAX_FILE_BYTES?:string;RESEARCH_QUEUE:Queue<unknown>};
+type Env={DB:D1Database;AI_USAGE?:AnalyticsSink;WINE_IMAGES:R2Bucket;GEMINI_API_KEY?:string;MAX_FILE_BYTES?:string;RESEARCH_QUEUE:Queue<unknown>};
 type ItemRow={id:string;position:number;status:string;metadata_json:string;recognition_json:string|null;error:string|null;confirmed_wine_id:string|null;saved_producer:string|null;saved_wine_name:string|null;saved_vintage:number|null};
 type ImageRow={id:string;item_id:string;original_object_key:string;recognition_object_key:string;content_type:string;byte_size:number;recognition_byte_size:number;width:number;height:number};
-type GoogleInlineResponse={metadata?:{key?:string};response?:{candidates?:Array<{content?:{parts?:Array<{text?:string}>};finishReason?:string}>};error?:{message?:string}};
+type GoogleInlineResponse={metadata?:{key?:string};response?:{usageMetadata?:Parameters<typeof geminiCallTokens>[0];candidates?:Array<{content?:{parts?:Array<{text?:string}>};finishReason?:string}>};error?:{message?:string}};
 
 const INLINE_PREPARED_TARGET=12*1024*1024;
 const INLINE_JSON_HARD_LIMIT=19_000_000;
@@ -256,12 +257,16 @@ export async function processBatchPollJob(env:Env,owner:string,sessionId:string,
     for(let i=0;i<ids.length;i++){
       const itemId=ids[i],inline=byMetadata.get(itemId)??responses[i];
       if(!inline?.response){await env.DB.prepare("UPDATE batch_recognition_items SET status='failed',error=?,updated_at=? WHERE id=? AND owner_id=?").bind(inline?.error?.message||'Gemini returned no batch result',stamp,itemId,owner).run();continue}
+      let units=0;
       try{
         const text=inline.response.candidates?.[0]?.content?.parts?.map(x=>x.text??'').join('')??'';if(!text)throw new Error('Gemini returned an empty recognition');
         const base=parseRecognition(text),item=await env.DB.prepare('SELECT metadata_json FROM batch_recognition_items WHERE id=? AND owner_id=?').bind(itemId,owner).first<{metadata_json:string}>(),metadata=parseJson<RecognitionPhotoMetadata[]>(item?.metadata_json,[]),{selected}=buildRecognitionPrompt(metadata);
         const result={...base,locationName:selected.gpsSource==='exif'&&base.locationName?.trim()?base.locationName.trim():null,tastingDate:selected.capturedAt?.slice(0,10)??null,latitude:selected.latitude,longitude:selected.longitude,metadataSource:selected.gpsSource==='exif'?'exif':selected.timestampSource,requestId:itemId};
         await env.DB.prepare("UPDATE batch_recognition_items SET status='ready',recognition_json=?,error=NULL,updated_at=? WHERE id=? AND owner_id=?").bind(JSON.stringify(result),stamp,itemId,owner).run();
-      }catch(e){await env.DB.prepare("UPDATE batch_recognition_items SET status='failed',error=?,updated_at=? WHERE id=? AND owner_id=?").bind((e as Error).message,stamp,itemId,owner).run()}
+        units=1;
+      }catch(e){await env.DB.prepare("UPDATE batch_recognition_items SET status='failed',error=?,updated_at=? WHERE id=? AND owner_id=?").bind((e as Error).message,stamp,itemId,owner).run()}finally{
+        await recordAiUsage(env,owner,{kind:'scan_batch',runId:sessionId,targetId:itemId,model:RECOGNITION_MODEL,tier:'batch',eventId:`recognition:${owner}:${jobId}:${itemId}`,requests:1,units,...geminiCallTokens(inline.response.usageMetadata)});
+      }
     }
     await env.DB.prepare("UPDATE batch_recognition_jobs SET status='complete',updated_at=? WHERE id=? AND owner_id=?").bind(stamp,jobId,owner).run();
   }else{

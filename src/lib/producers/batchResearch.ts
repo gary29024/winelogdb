@@ -390,7 +390,7 @@ export async function pollProducerBatchResearch(env:Env,owner:string,producerId:
   // Recorded before anything else can fail: the searches were billed whatever
   // happens to the parsing.
   await recordResearchSearchQueries(env.DB,owner,job.id,countSearchQueries(fetched.responses)).catch(()=>undefined);
-  await recordAiUsage(env,owner,{kind:'producer_research',runId:requestId,targetId:producerId,model:job.model,
+  await recordAiUsage(env,owner,{kind:'producer_research',runId:requestId,targetId:producerId,model:job.model,tier:isEmulatedGeminiBatchName(job.googleBatchName)?'flex':'batch',eventId:`research:${owner}:${job.id}`,
     requests:fetched.responses.length,searchQueries:countSearchQueries(fetched.responses),...countUsageTokens(fetched.responses)});
   await setRunState(env.DB,owner,requestId,'running','parsing',job.attempt,'Validating producer profile and staging independent catalogue slices');
   const byKey=responsesByKey(fetched.responses),failed:string[]=[],incomplete:string[]=[],errors=new Map<string,string>(),parts:ParsedCatalogPart[]=[],names=await producerNames(env.DB,owner,producerId);

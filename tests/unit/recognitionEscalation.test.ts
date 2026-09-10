@@ -21,7 +21,8 @@ describe('selective wine-label escalation',()=>{
     const first=primary(),weaker=primary({producer:null,wineName:null,confidence:0.4});
     expect(preferEscalatedRecognition(first,weaker)).toBe(first);
     const verified=primary({producer:'Verified Domaine',wineName:'Verified Cuvee',confidence:0.9});
-    expect(preferEscalatedRecognition(first,verified)).toBe(verified);
+    expect(preferEscalatedRecognition(first,verified)).toBe(first);
+    expect(preferEscalatedRecognition(primary({confidence:0.5}),verified)).toBe(verified);
   });
 
   it('escalates group photos when bottles remain unresolved or low-confidence',()=>{
@@ -36,5 +37,18 @@ describe('selective wine-label escalation',()=>{
     expect(prompt).toContain('Producer, wineName and vintage are identity-critical');
     expect(prompt).toContain('Do not invent, complete, or substitute producer, cuvee/wine name, or vintage');
     expect(prompt).toContain('country, region, appellation, grape varieties, and broad wine style');
+  });
+});
+
+describe('escalation protects established evidence',()=>{
+  it('does not lose or change a known vintage even at a higher reported confidence',()=>{
+    const first=primary({confidence:0.6});
+    expect(preferEscalatedRecognition(first,primary({vintage:null}))).toBe(first);
+    expect(preferEscalatedRecognition(first,primary({vintage:2021}))).toBe(first);
+  });
+  it('can fill missing identity without downgrading confidence',()=>{
+    const first=primary({producer:null,confidence:0.6}),candidate=primary();
+    expect(preferEscalatedRecognition(first,candidate)).toBe(candidate);
+    expect(preferEscalatedRecognition(first,primary({confidence:0.5}))).toBe(first);
   });
 });

@@ -285,6 +285,7 @@ describe('every path that spends money is metered',()=>{
     ['src/lib/research/batchWineResearch.ts',"kind:'wine_research'"],
     ['worker/recognitionHandler.ts',"kind:'scan_single'"],
     ['worker/vertexBatchRecognition.ts',"kind:'scan_batch'"],
+    ['worker/batchRecognition.ts',"kind:'scan_batch'"],
     ['worker/groupRecognitionHandler.ts',"kind:'scan_group'"],
     ['worker/sheetRecognitionHandler.ts',"kind:'scan_sheet'"],
     ['worker/bottleFrameHandler.ts',"kind:'bottle_frame'"],
@@ -295,7 +296,12 @@ describe('every path that spends money is metered',()=>{
     const source=readFileSync(path,'utf8');
     const delegated=/from '\.\/visionRecognition'/.test(source);
     expect(source).toContain(kind);
-    expect(delegated?readFileSync('worker/visionRecognition.ts','utf8'):source).toContain('recordAiUsage');
+    const implementation=delegated?readFileSync('worker/visionRecognition.ts','utf8'):source;
+    if(implementation.includes('recognitionUsage')){
+      expect(implementation).toContain('meter.capture(');
+      expect(implementation).toContain('finally{await meter.flush()}');
+      expect(readFileSync('src/lib/recognition/usage.ts','utf8')).toContain('recordAiUsage');
+    }else expect(implementation).toContain('recordAiUsage');
   });
 
   it('covers every kind the ledger knows about',()=>{
