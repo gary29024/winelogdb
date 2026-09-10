@@ -91,7 +91,7 @@ function VintageCellCheck({wine,onResearched,initialWindow,debounceMs=0}:Props){
     {askable&&<div className="vintage-overview">
       <strong className="vintage-scope">{scope}</strong>
       {quality?.score!=null&&<div className="vintage-quality"><strong>{scoreLabel}</strong><span>WineLog estimate <b>{quality.score}</b>/100</span></div>}
-      {quality&&quality.score==null&&<span className="vintage-quality-unavailable">Quality estimate unavailable</span>}
+      {quality&&quality.score==null&&<span className="vintage-quality-unavailable">No numeric quality score</span>}
     </div>}
     <DrinkingWindow wine={wine} researched={researched}/>
     {pair.researched&&pair.calculated&&<p className="vintage-comparison">Typical window: {pair.calculated.from}–{pair.calculated.to}</p>}

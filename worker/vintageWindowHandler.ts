@@ -35,8 +35,14 @@ function prompt(subject:VintageSubject,baseline:{from:number;to:number}|null,cel
   const where=place(subject),style=subject.wineStyle?`${subject.wineStyle} wine`:'wine';
   const usual=baseline?`Wines like this are usually worth drinking between ${baseline.from} and ${baseline.to}.`
     :'No typical window is known for this combination.';
+  /**
+   * Write for the cell that shares this answer, not just the bottle asking.
+   * A region cell serves every wine of that style from the region, so naming
+   * one vineyard would make the note wrong for the others. A named grand cru
+   * has its own cell: there, naming the vineyard and the year is the point.
+   */
   const kept=cell.scope==='appellation'
-    ?`The note is kept for every ${style} of ${subject.vintage} from ${cell.label}; write it about that vineyard in that year, but do not name a producer or estate.`
+    ?`The note is kept for every ${style} of ${subject.vintage} from ${cell.label}; write it about that vineyard in that year. Name the vineyard and the year; do not name a producer or estate.`
     :`The note is kept for every ${style} of ${subject.vintage} from ${cell.label}; write about the regional growing season and resulting wines, and do not name a producer, an estate or a single vineyard in it.`;
   return `You must use Google Search before answering. Every factual claim must come from a page retrieved in this request. Do not answer from prior knowledge. If search returns nothing usable about this vintage and place, return null for both drinking years and quality.score, use low confidence, and explain the evidence gap.
 
