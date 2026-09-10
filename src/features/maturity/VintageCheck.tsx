@@ -27,6 +27,7 @@ function VintageCellCheck({wine,onResearched,initialWindow,debounceMs=0}:Props){
   const [startedAt,setStartedAt]=useState<string|null>(null);
   const [error,setError]=useState(''),[notice,setNotice]=useState('');
   const requests=useRef({version:0}).current;
+  const lookupController=useRef<AbortController|null>(null);
   const busy=startedAt!==null;
   const subject:VintageSubject={country:wine.country,region:wine.region,appellation:wine.appellation,
     vintage:wine.vintage,wineStyle:wine.wineStyle,classification:wine.classification,
@@ -59,7 +60,7 @@ function VintageCellCheck({wine,onResearched,initialWindow,debounceMs=0}:Props){
       if(debounceMs>0&&readSeq===0)timer=setTimeout(read,debounceMs);
       else read();
     }
-    return()=>{requests.version++;clearTimeout(timer)};
+    return()=>{requests.version++;clearTimeout(timer);lookupController.current?.abort()};
     // Subject changes within this cell do not need another read. initialWindow
     // seeds this mounted cell only; new research is owned by the state above.
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -70,8 +71,10 @@ function VintageCellCheck({wine,onResearched,initialWindow,debounceMs=0}:Props){
     const version=++requests.version;
     setStartedAt(new Date().toISOString());setError('');setNotice('');
     try{
-      const {window,cached}=await lookUpVintageWindow(subject,again);
+      lookupController.current=new AbortController();
+      const {window,cached,pending}=await lookUpVintageWindow(subject,again,lookupController.current.signal);
       if(version!==requests.version)return;
+      if(pending){setNotice('Research continues in the background. Reopen this panel later to load the result.');return}
       if(!window)throw new Error('No research was returned. Please try again.');
       setResearched(window);setNotice(cached?'Saved research loaded.':'Research updated.');onResearched?.();
     }catch(e){

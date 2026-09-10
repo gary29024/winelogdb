@@ -51,7 +51,10 @@ describe('vintage research belongs to the displayed cell',()=>{
     const {rerender}=render(<VintageCheck wine={wine} onResearched={onResearched}/>);
     await flush();
     fireEvent.click(screen.getByRole('button',{name:'Look up 2019'}));
+    const signal=lookup.mock.calls[0][2];
+    expect(signal?.aborted).toBe(false);
     rerender(<VintageCheck wine={{...wine,vintage:2020}} onResearched={onResearched}/>);
+    expect(signal?.aborted).toBe(true);
     await flush();
     await act(async()=>pending.resolve({window:found,cached:false}));
     expect(screen.queryByText('93')).toBeNull();
@@ -110,6 +113,17 @@ describe('vintage research belongs to the displayed cell',()=>{
     expect(screen.getByRole('alert').textContent).toMatch(/previous research is still shown/);
     expect(screen.getByText('93')).toBeTruthy();
     expect(read).not.toHaveBeenCalled();
+  });
+
+  it('keeps the previous result when observation times out but research continues',async()=>{
+    lookup.mockResolvedValue({window:null,cached:false,pending:true});
+    render(<VintageCheck wine={wine} initialWindow={found}/>);
+    fireEvent.click(screen.getByText(/Evidence & sources/));
+    fireEvent.click(screen.getByRole('button',{name:'Refresh research'}));
+    await act(async()=>{});
+    expect(screen.getByRole('status').textContent).toMatch(/continues in the background/);
+    expect(screen.getByText('93')).toBeTruthy();
+    expect(screen.queryByRole('alert')).toBeNull();
   });
 
   it('uses a known cellar cache miss without a redundant read or automatic lookup',async()=>{

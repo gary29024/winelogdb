@@ -1,3 +1,4 @@
+import { failVintageResearch,processVintageResearch,type VintageResearchMessage } from './vintageResearchJobs';
 import { Hono } from 'hono';
 import app from './cuveeEntry';
 import { requireSession } from '../src/lib/auth/session';
@@ -20,7 +21,7 @@ type WineJob={kind:'wine';owner:string;wineId:string;requestId:string;refresh:'n
 type WineBatchPollJob={kind:'wine_batch_poll';owner:string;wineId:string;requestId:string;jobId:string;pollCount:number};
 type ProducerCampaignTickJob={kind:'producer_campaign_tick';owner:string;campaignId:string};
 type CancelResearchSweepJob={kind:'research_cancel_sweep';owner:string;targetKind:ResearchTargetKind;targetId:string;requestId:string;pass:number};
-type ResearchJob=ProducerJob|ProducerBatchPollJob|ProducerCampaignTickJob|WineJob|WineBatchPollJob|CancelResearchSweepJob|BatchRecognitionJob;
+type ResearchJob=ProducerJob|ProducerBatchPollJob|ProducerCampaignTickJob|WineJob|WineBatchPollJob|CancelResearchSweepJob|BatchRecognitionJob|VintageResearchMessage;
 type Bindings={DB:D1Database;WINE_IMAGES:R2Bucket;ASSETS:Fetcher;GEMINI_API_KEY?:string;AUTH_SECRET:string;APP_PASSWORD:string;APP_URL:string;MAX_FILE_BYTES?:string;MAX_BATCH_FILES?:string;RESEARCH_QUEUE:Queue<ResearchJob>};
 type AppEnv={Bindings:Bindings};
 const router=new Hono<AppEnv>();
@@ -208,6 +209,7 @@ async function abandonResearchJob(env:Bindings,job:ResearchJob,error:string){
   const message=`Research stopped after repeated failures: ${error}`;
   if(job.kind==='producer'||job.kind==='producer_batch_poll')await failProducerQueue(env.DB,job.owner,job.requestId,message);
   else if(job.kind==='wine'||job.kind==='wine_batch_poll')await updateWineResearchRun(env.DB,job.owner,job.requestId,'failed',message,'failed').catch(()=>undefined);
+  else if(job.kind==='vintage_window')await failVintageResearch(env.DB,job.owner,job.requestId,message);
   else return;
   console.error(JSON.stringify({event:'research_queue',stage:'abandoned',kind:job.kind,requestId:job.requestId}));
 }
@@ -235,6 +237,7 @@ async function consume(batch:MessageBatch<ResearchJob>,env:Bindings){
       if(swept.harvestJobIds.length){if(job.targetKind==='producer')await harvestProducerJobs(env,job.owner,job.targetId,job.requestId,swept.harvestJobIds);else await harvestWineJobs(env,job.owner,job.targetId,job.requestId,swept.harvestJobIds)}
       const delay=nextCancelSweepDelay(job.pass);if(delay!=null)await env.RESEARCH_QUEUE.send({...job,pass:job.pass+1},{delaySeconds:delay});
     }
+    else if(job.kind==='vintage_window')await processVintageResearch(env,job);
     else if(job.kind==='recognition_batch_submit')await processBatchSubmitJob(env,job.owner,job.sessionId);
     else if(job.kind==='recognition_batch_poll')await processBatchPollJob(env,job.owner,job.sessionId,job.jobId,job.pollCount);
     else if(job.kind==='recognition_batch_cleanup')await processBatchCleanupJob(env,job.owner,job.sessionId);

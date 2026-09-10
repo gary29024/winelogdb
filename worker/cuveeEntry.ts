@@ -1,3 +1,4 @@
+import { queueVintageResearch,readVintageResearch,type VintageResearchMessage } from './vintageResearchJobs';
 import { Hono,type Context } from 'hono';
 import entryApp from './entry';
 import { requireSession } from '../src/lib/auth/session';
@@ -11,7 +12,7 @@ import { ensureProducerCatalogCuveesSeeded } from '../src/lib/cuvees/catalogSeed
 import { changeCuveeCatalogLink,changeCuveeCatalogLinkSchema,createCuveeCatalogLink,createCuveeCatalogLinkSchema,getProducerCuveeCatalogState,unlinkCuveeCatalogLink,unlinkCuveeCatalogLinkSchema } from '../src/lib/cuvees/catalogLinks';
 import { listJournalPage } from '../src/lib/journal/list';
 import { listCellarPage } from '../src/lib/cellar/list';
-import { cachedVintageWindow,researchVintageWindow } from './vintageWindowHandler';
+import { cachedVintageWindow } from './vintageWindowHandler';
 import { askableVintage,type VintageSubject } from '../src/lib/maturity/vintageWindow';
 import { addHolding,deleteHolding,holdingsForWine,readHolding,takeBottleFromHolding,updateHolding } from '../src/lib/cellar/holdings';
 import { cellarInputSchema,cellarPatchSchema } from '../src/lib/cellar/schema';
@@ -27,7 +28,7 @@ import { runVisionRecognition } from './visionRecognition';
 import { measureBottleFrame } from './bottleFrameHandler';
 import { MAX_FRAME_LOOKUP,readBottleFrames } from '../src/lib/images/bottleFrame';
 
-type Bindings={DB:D1Database;WINE_IMAGES:R2Bucket;ASSETS:Fetcher;GEMINI_API_KEY?:string;AUTH_SECRET:string;APP_PASSWORD:string;APP_URL:string;MAX_FILE_BYTES?:string;MAX_BATCH_FILES?:string};
+type Bindings={DB:D1Database;RESEARCH_QUEUE?:Queue<VintageResearchMessage>;WINE_IMAGES:R2Bucket;ASSETS:Fetcher;GEMINI_API_KEY?:string;AUTH_SECRET:string;APP_PASSWORD:string;APP_URL:string;MAX_FILE_BYTES?:string;MAX_BATCH_FILES?:string};
 type AppEnv={Bindings:Bindings};
 const app=new Hono<AppEnv>();
 const IDENTITY_MAINTENANCE_KEY='identity-reconcile-v2';
@@ -383,6 +384,14 @@ app.get('/api/maturity/vintage',async c=>{
   catch(e){console.error(JSON.stringify({event:'vintage-window-read-failed',error:(e as Error).message}));return c.json({error:'Could not load saved vintage research'},503)}
 });
 
+app.get('/api/maturity/vintage/jobs/:id',async c=>{
+  cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
+  try{
+    const job=await readVintageResearch(c.env.DB,owner,c.req.param('id'));
+    return job?c.json({job}):c.json({error:'Vintage research was not found'},404);
+  }catch{return c.json({error:'Could not read vintage research progress'},503)}
+});
+
 app.post('/api/maturity/vintage',async c=>{
   cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
   const body=await c.req.json().catch(()=>({})) as Record<string,unknown>;
@@ -393,19 +402,11 @@ app.post('/api/maturity/vintage',async c=>{
     // second press on the same region and vintage spends nothing.
     const existing=await cachedVintageWindow(c.env,owner,subject);
     if(existing&&body.refresh!==true)return c.json({window:existing,cached:true});
-    // Registered before it is awaited, because the answer is written to D1 as
-    // the last thing this does. A grounded call runs for up to the escalation's
-    // budget, and a phone that locks or a tab that closes in the middle of it
-    // cancels the request - which threw away a search that had already been
-    // paid for, and left nothing cached, so the next press paid for it again.
-    // The reply still goes back to whoever is still listening; nobody left to
-    // listen no longer costs the answer.
-    const research=researchVintageWindow(c.env,owner,subject,crypto.randomUUID());
-    c.executionCtx.waitUntil(research.catch(()=>undefined));
-    return c.json({window:await research,cached:false});
+    const job=await queueVintageResearch(c.env,owner,subject);
+    return c.json({job,cached:false},202);
   }catch(e){
     console.error(JSON.stringify({event:'vintage-window-failed',error:(e as Error).message}));
-    return c.json({error:(e as Error).message||'Could not look up that vintage'},502);
+    return c.json({error:(e as Error).message||'Could not queue vintage research'},503);
   }
 });
 

@@ -1,3 +1,4 @@
+import type { VintageResearchStatus } from '../../lib/maturity/vintageResearch';
 import { authHeaders,clearSession } from '../../lib/auth/client';
 import type { VintageWindow,VintageSubject } from '../../lib/maturity/vintageWindow';
 
@@ -24,12 +25,28 @@ export async function getVintageWindow(subject:VintageSubject):Promise<VintageWi
   return body.window??null;
 }
 
-/** The button. The only thing in the app that spends a search on a window. */
-export async function lookUpVintageWindow(subject:VintageSubject,refresh=false){
-  const response=await fetch('/api/maturity/vintage',{method:'POST',headers:authHeaders(true),
+type VintageLookupResult={window:VintageWindow|null;cached:boolean;pending?:boolean};
+
+/** Enqueue one lookup and observe it; status reads never start another model call. */
+export async function lookUpVintageWindow(subject:VintageSubject,refresh=false,signal?:AbortSignal):Promise<VintageLookupResult>{
+  const response=await fetch('/api/maturity/vintage',{method:'POST',headers:authHeaders(true),signal,
     body:JSON.stringify({...subject,refresh})});
   if(response.status===401){clearSession();throw new Error('Session expired. Please sign in again.')}
-  const body=await response.json().catch(()=>({})) as {window?:VintageWindow|null;cached?:boolean;error?:string};
+  const body=await response.json().catch(()=>({})) as {window?:VintageWindow|null;cached?:boolean;error?:string;job?:VintageResearchStatus};
   if(!response.ok)throw new Error(body.error||'Could not look up that vintage');
-  return {window:body.window??null,cached:Boolean(body.cached)};
+  if(response.status!==202)return {window:body.window??null,cached:Boolean(body.cached)};
+  if(!body.job?.id)throw new Error('Could not read vintage research progress');
+  // Polling only reads status. Closing the page stops the observer, not the job.
+  // Bound the wait so a busy queue cannot leave the button spinning forever.
+  for(let poll=0;poll<36;poll++){
+    await new Promise(resolve=>setTimeout(resolve,5000));
+    signal?.throwIfAborted();
+    const progress=await fetch(`/api/maturity/vintage/jobs/${encodeURIComponent(body.job.id)}`,{headers:authHeaders(),signal});
+    if(progress.status===401){clearSession();throw new Error('Session expired. Please sign in again.')}
+    const current=await progress.json().catch(()=>({})) as {job?:VintageResearchStatus;error?:string};
+    if(!progress.ok||!current.job)throw new Error(current.error||'Could not read vintage research progress');
+    if(current.job.status==='failed')throw new Error(current.job.error||'Could not look up that vintage');
+    if(current.job.status==='complete')return {window:current.job.window,cached:false};
+  }
+  return {window:null,cached:false,pending:true};
 }
