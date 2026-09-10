@@ -393,8 +393,16 @@ app.post('/api/maturity/vintage',async c=>{
     // second press on the same region and vintage spends nothing.
     const existing=await cachedVintageWindow(c.env,owner,subject);
     if(existing&&body.refresh!==true)return c.json({window:existing,cached:true});
-    const found=await researchVintageWindow(c.env,owner,subject,crypto.randomUUID());
-    return c.json({window:found,cached:false});
+    // Registered before it is awaited, because the answer is written to D1 as
+    // the last thing this does. A grounded call runs for up to the escalation's
+    // budget, and a phone that locks or a tab that closes in the middle of it
+    // cancels the request - which threw away a search that had already been
+    // paid for, and left nothing cached, so the next press paid for it again.
+    // The reply still goes back to whoever is still listening; nobody left to
+    // listen no longer costs the answer.
+    const research=researchVintageWindow(c.env,owner,subject,crypto.randomUUID());
+    c.executionCtx.waitUntil(research.catch(()=>undefined));
+    return c.json({window:await research,cached:false});
   }catch(e){
     console.error(JSON.stringify({event:'vintage-window-failed',error:(e as Error).message}));
     return c.json({error:(e as Error).message||'Could not look up that vintage'},502);
