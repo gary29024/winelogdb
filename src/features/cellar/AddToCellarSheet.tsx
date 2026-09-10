@@ -231,7 +231,7 @@ export function AddToCellarSheet({onClose,onAdded,holding,onRemove,onVintageRese
           already has - which costs nothing - and one being edited follows the
           appellation as it is changed. It renders nothing until there is a
           vintage and a place, because until then there is nothing to say. */}
-      {VINTAGE_WINDOW_SURFACES.cellarSheet&&<VintageCheck wine={asking} onResearched={onVintageResearched}/>}
+      {VINTAGE_WINDOW_SURFACES.cellarSheet&&<VintageCheck debounceMs={300} wine={asking} onResearched={onVintageResearched}/>}
 
       <label className="cellar-field">Producer *
         <input value={producer} onChange={event=>setProducer(event.target.value)} placeholder="Domaine, château or estate" autoFocus/>

@@ -380,7 +380,7 @@ app.get('/api/maturity/vintage',async c=>{
   const subject=vintageSubject(c.req.query());
   if(!askableVintage(subject))return c.json({window:null});
   try{return c.json({window:await cachedVintageWindow(c.env,owner,subject)})}
-  catch(e){console.error(JSON.stringify({event:'vintage-window-read-failed',error:(e as Error).message}));return c.json({window:null})}
+  catch(e){console.error(JSON.stringify({event:'vintage-window-read-failed',error:(e as Error).message}));return c.json({error:'Could not load saved vintage research'},503)}
 });
 
 app.post('/api/maturity/vintage',async c=>{

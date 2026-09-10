@@ -14,12 +14,14 @@ const params=(subject:VintageSubject)=>{
   return query;
 };
 
-/** What has already been found. Never calls anything, so a wine page is free. */
+/** Read saved research only. A failed read must not look like a cache miss. */
 export async function getVintageWindow(subject:VintageSubject):Promise<VintageWindow|null>{
-  const response=await fetch(`/api/maturity/vintage?${params(subject)}`,{headers:authHeaders()}).catch(()=>null);
-  if(!response?.ok)return null;
-  const body=await response.json().catch(()=>null) as {window?:VintageWindow|null}|null;
-  return body?.window??null;
+  const response=await fetch(`/api/maturity/vintage?${params(subject)}`,{headers:authHeaders()});
+  if(response.status===401){clearSession();throw new Error('Session expired. Please sign in again.')}
+  if(!response.ok)throw new Error('Could not load saved vintage research');
+  const body=await response.json() as {window?:VintageWindow|null}|null;
+  if(!body||!Object.hasOwn(body,'window'))throw new Error('Could not read saved vintage research');
+  return body.window??null;
 }
 
 /** The button. The only thing in the app that spends a search on a window. */
