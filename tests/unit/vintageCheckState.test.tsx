@@ -143,6 +143,28 @@ describe('vintage research belongs to the displayed cell',()=>{
     expect(lookup).not.toHaveBeenCalled();
   });
 
+  it.each([null,{...found,researchedAt:'2026-09-09'}])('refreshes the parent when research completed before reopening (seed: %j)',async initialWindow=>{
+    read.mockResolvedValue(saved(found));
+    const onResearched=vi.fn();
+    const {rerender}=render(<VintageCheck wine={wine} initialWindow={initialWindow} onResearched={onResearched}/>);
+    await flush();
+    expect(screen.getByText('93')).toBeTruthy();
+    expect(onResearched).toHaveBeenCalledOnce();
+    expect(lookup).not.toHaveBeenCalled();
+    rerender(<VintageCheck wine={wine} initialWindow={found} onResearched={onResearched}/>);
+    await flush();
+    expect(onResearched).toHaveBeenCalledOnce();
+    expect(read).toHaveBeenCalledOnce();
+  });
+
+  it('does not reload the parent when its seeded research is already current',async()=>{
+    read.mockResolvedValue(saved({...found}));
+    const onResearched=vi.fn();
+    render(<VintageCheck wine={wine} initialWindow={found} onResearched={onResearched}/>);
+    await flush();
+    expect(onResearched).not.toHaveBeenCalled();
+  });
+
   it('picks a running lookup back up instead of offering to pay for it again',async()=>{
     read.mockResolvedValue(saved(null,{id:'job',status:'running'}));
     const observe=vi.mocked(observeVintageResearch);

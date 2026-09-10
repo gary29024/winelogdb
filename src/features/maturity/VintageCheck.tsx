@@ -80,6 +80,9 @@ function VintageCellCheck({wine,onResearched,initialWindow,debounceMs=0}:Props){
           if(version!==requests.version)return;
           setResearched(window);setReadState('ready');
           setNotice(window?'Saved research loaded.':'');
+          // A job may have finished while this panel was closed. Its saved
+          // result must refresh the cellar too, even with no job left to watch.
+          if(window&&window.researchedAt!==researched?.researchedAt)onResearched?.();
           // Pick the running lookup back up rather than showing its cell as
           // untouched. The observer is new; the job it watches is not.
           if(job)void watch(++requests.version,signal=>observeVintageResearch(job.id,signal));
