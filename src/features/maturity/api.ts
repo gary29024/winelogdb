@@ -1,3 +1,4 @@
+import type { VintageResearchStatus } from '../../lib/maturity/vintageResearch';
 import { authHeaders,clearSession } from '../../lib/auth/client';
 import type { VintageWindow,VintageSubject } from '../../lib/maturity/vintageWindow';
 
@@ -24,12 +25,35 @@ export async function getVintageWindow(subject:VintageSubject):Promise<VintageWi
   return body.window??null;
 }
 
-/** The button. The only thing in the app that spends a search on a window. */
-export async function lookUpVintageWindow(subject:VintageSubject,refresh=false){
-  const response=await fetch('/api/maturity/vintage',{method:'POST',headers:authHeaders(true),
+type VintageLookupResult={window:VintageWindow|null;cached:boolean;pending?:boolean;pendingStatus?:'queued'|'running'};
+
+/** Enqueue one lookup and observe it; status reads never start another model call. */
+export async function lookUpVintageWindow(subject:VintageSubject,refresh=false,signal?:AbortSignal):Promise<VintageLookupResult>{
+  const response=await fetch('/api/maturity/vintage',{method:'POST',headers:authHeaders(true),signal,
     body:JSON.stringify({...subject,refresh})});
   if(response.status===401){clearSession();throw new Error('Session expired. Please sign in again.')}
-  const body=await response.json().catch(()=>({})) as {window?:VintageWindow|null;cached?:boolean;error?:string};
+  const body=await response.json().catch(()=>({})) as {window?:VintageWindow|null;cached?:boolean;error?:string;job?:VintageResearchStatus};
   if(!response.ok)throw new Error(body.error||'Could not look up that vintage');
-  return {window:body.window??null,cached:Boolean(body.cached)};
+  if(response.status!==202)return {window:body.window??null,cached:Boolean(body.cached)};
+  if(!body.job?.id)throw new Error('Could not read vintage research progress');
+  // Polling only reads status. Closing the page stops the observer, not the job.
+  // Read immediately, then at 1s/3s before backing off to five-second intervals.
+  // Count status-request time when deciding whether another poll fits the budget.
+  const deadline=Date.now()+180_000;
+  let pendingStatus:'queued'|'running'='queued';
+  for(let poll=0;Date.now()<deadline;poll++){
+    const delay=poll===0?0:poll===1?1000:poll===2?2000:5000;
+    if(delay)await new Promise(resolve=>setTimeout(resolve,Math.min(delay,deadline-Date.now())));
+    signal?.throwIfAborted();
+    if(poll>0&&Date.now()>=deadline)break;
+    const progress=await fetch(`/api/maturity/vintage/jobs/${encodeURIComponent(body.job.id)}`,{headers:authHeaders(),signal});
+    if(progress.status===401){clearSession();throw new Error('Session expired. Please sign in again.')}
+    const current=await progress.json().catch(()=>({})) as {job?:VintageResearchStatus;error?:string};
+    if(!progress.ok||!current.job)throw new Error(current.error||'Could not read vintage research progress');
+    if(current.job.status==='failed')throw new Error(current.job.error||'Could not look up that vintage');
+    if(current.job.status==='complete')return {window:current.job.window,cached:false};
+    if(current.job.status!=='queued'&&current.job.status!=='running')throw new Error('Could not read vintage research progress');
+    pendingStatus=current.job.status;
+  }
+  return {window:null,cached:false,pending:true,pendingStatus};
 }
