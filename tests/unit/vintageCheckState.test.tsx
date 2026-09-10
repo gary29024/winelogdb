@@ -2,10 +2,10 @@
 import { act,cleanup,fireEvent,render,screen,within } from '@testing-library/react';
 import { afterEach,beforeEach,describe,expect,it,vi } from 'vitest';
 import { VintageCheck } from '../../src/features/maturity/VintageCheck';
-import { getVintageWindow,lookUpVintageWindow } from '../../src/features/maturity/api';
+import { getVintageWindow,lookUpVintageWindow,observeVintageResearch,type SavedVintageResearch } from '../../src/features/maturity/api';
 import { maturityPair,type VintageWindow } from '../../src/lib/maturity/vintageWindow';
 
-vi.mock('../../src/features/maturity/api',()=>({getVintageWindow:vi.fn(),lookUpVintageWindow:vi.fn()}));
+vi.mock('../../src/features/maturity/api',()=>({getVintageWindow:vi.fn(),lookUpVintageWindow:vi.fn(),observeVintageResearch:vi.fn()}));
 const wine={country:'France',region:'Burgundy',appellation:'Gevrey-Chambertin',wineStyle:'red',vintage:2019};
 const found:VintageWindow={...wine,shiftFrom:null,shiftTo:null,note:'No precise window supported.',
   sources:[{title:'Vintage report',url:'https://example.com/report'}],model:'model',researchedAt:'2026-09-10',
@@ -17,14 +17,17 @@ function deferred<T>(){
   return {promise,resolve,reject};
 }
 const read=vi.mocked(getVintageWindow),lookup=vi.mocked(lookUpVintageWindow);
+/** A cached read carries the saved window and any lookup still running. */
+const saved=(window:VintageWindow|null,job:{id:string;status:'queued'|'running'}|null=null)=>
+  ({window,job:job&&{...job,window:null,error:null}});
 const flush=()=>act(async()=>{await vi.advanceTimersByTimeAsync(300)});
 
 describe('vintage research belongs to the displayed cell',()=>{
-  beforeEach(()=>{vi.useFakeTimers();read.mockReset().mockResolvedValue(null);lookup.mockReset()});
+  beforeEach(()=>{vi.useFakeTimers();read.mockReset().mockResolvedValue(saved(null));lookup.mockReset()});
   afterEach(()=>{cleanup();vi.useRealTimers()});
 
   it('shows quality without inventing a drinking window, and labels its origin',async()=>{
-    read.mockResolvedValue(found);
+    read.mockResolvedValue(saved(found));
     const {container}=render(<VintageCheck wine={wine}/>);
     await flush();
     expect(screen.getByText('93')).toBeTruthy();
@@ -34,7 +37,7 @@ describe('vintage research belongs to the displayed cell',()=>{
   });
 
   it('removes old research immediately when the vintage changes',async()=>{
-    read.mockResolvedValueOnce(found);
+    read.mockResolvedValueOnce(saved(found));
     const {rerender}=render(<VintageCheck wine={wine}/>);
     await flush();
     expect(screen.getByText('93')).toBeTruthy();
@@ -63,7 +66,7 @@ describe('vintage research belongs to the displayed cell',()=>{
   });
 
   it('waits for a saved read before offering a new lookup',async()=>{
-    const pending=deferred<VintageWindow|null>();
+    const pending=deferred<SavedVintageResearch>();
     read.mockReturnValue(pending.promise);
     lookup.mockResolvedValue({window:found,cached:false});
     render(<VintageCheck wine={wine}/>);
@@ -71,14 +74,14 @@ describe('vintage research belongs to the displayed cell',()=>{
     expect(screen.getByRole('status').textContent).toBe('Checking saved research…');
     expect(screen.queryByRole('button',{name:'Look up 2019'})).toBeNull();
     expect(lookup).not.toHaveBeenCalled();
-    await act(async()=>pending.resolve(null));
+    await act(async()=>pending.resolve(saved(null)));
     fireEvent.click(screen.getByRole('button',{name:'Look up 2019'}));
     await act(async()=>{});
     expect(screen.getByText('93')).toBeTruthy();
   });
 
   it('retains research when the wine changes within the same regional cell',async()=>{
-    read.mockResolvedValue(found);
+    read.mockResolvedValue(saved(found));
     const {rerender}=render(<VintageCheck wine={wine}/>);
     await flush();
     rerender(<VintageCheck wine={{...wine,appellation:'Morey-Saint-Denis'}}/>);
@@ -88,7 +91,7 @@ describe('vintage research belongs to the displayed cell',()=>{
   });
 
   it('offers a saved-read retry rather than a paid lookup after a read failure',async()=>{
-    read.mockRejectedValueOnce(new Error('offline')).mockResolvedValueOnce(found);
+    read.mockRejectedValueOnce(new Error('offline')).mockResolvedValueOnce(saved(found));
     render(<VintageCheck wine={wine}/>);
     await flush();
     expect(screen.getByRole('alert').textContent).toMatch(/Could not load saved research/);
@@ -101,8 +104,9 @@ describe('vintage research belongs to the displayed cell',()=>{
 
   it('keeps the previous result on refresh failure and exposes elapsed time while waiting',async()=>{
     const pending=deferred<Awaited<ReturnType<typeof lookUpVintageWindow>>>();
-    lookup.mockReturnValue(pending.promise);
+    lookup.mockReturnValue(pending.promise);read.mockResolvedValue(saved(found));
     const {container}=render(<VintageCheck wine={wine} initialWindow={found}/>);
+    await flush();
     fireEvent.click(screen.getByText(/Evidence & sources/));
     fireEvent.click(screen.getByRole('button',{name:'Refresh research'}));
     await act(async()=>{await vi.advanceTimersByTimeAsync(2000)});
@@ -112,12 +116,13 @@ describe('vintage research belongs to the displayed cell',()=>{
     await act(async()=>pending.reject(new Error('upstream unavailable')));
     expect(screen.getByRole('alert').textContent).toMatch(/previous research is still shown/);
     expect(screen.getByText('93')).toBeTruthy();
-    expect(read).not.toHaveBeenCalled();
   });
 
   it.each(['queued','running'] as const)('keeps previous research and describes the last observed %s state honestly',async pendingStatus=>{
     lookup.mockResolvedValue({window:null,cached:false,pending:true,pendingStatus});
+    read.mockResolvedValue(saved(found));
     render(<VintageCheck wine={wine} initialWindow={found}/>);
+    await flush();
     fireEvent.click(screen.getByText(/Evidence & sources/));
     fireEvent.click(screen.getByRole('button',{name:'Refresh research'}));
     await act(async()=>{});
@@ -127,11 +132,68 @@ describe('vintage research belongs to the displayed cell',()=>{
     expect(screen.queryByRole('alert')).toBeNull();
   });
 
-  it('uses a known cellar cache miss without a redundant read or automatic lookup',async()=>{
+  // A seeded cell still reads once, because the seed cannot say whether a
+  // lookup is already running. It must never start one by itself.
+  it('reads a seeded cell once to find any running lookup, and starts none',async()=>{
+    read.mockResolvedValue(saved(null));
     render(<VintageCheck wine={wine} initialWindow={null}/>);
     await flush();
     expect(screen.getByRole('button',{name:'Look up 2019'})).toBeTruthy();
-    expect(read).not.toHaveBeenCalled();
+    expect(read).toHaveBeenCalledOnce();
+    expect(lookup).not.toHaveBeenCalled();
+  });
+
+  it.each([null,{...found,researchedAt:'2026-09-09'}])('refreshes the parent when research completed before reopening (seed: %j)',async initialWindow=>{
+    read.mockResolvedValue(saved(found));
+    const onResearched=vi.fn();
+    const {rerender}=render(<VintageCheck wine={wine} initialWindow={initialWindow} onResearched={onResearched}/>);
+    await flush();
+    expect(screen.getByText('93')).toBeTruthy();
+    expect(onResearched).toHaveBeenCalledOnce();
+    expect(lookup).not.toHaveBeenCalled();
+    rerender(<VintageCheck wine={wine} initialWindow={found} onResearched={onResearched}/>);
+    await flush();
+    expect(onResearched).toHaveBeenCalledOnce();
+    expect(read).toHaveBeenCalledOnce();
+  });
+
+  it('does not reload the parent when its seeded research is already current',async()=>{
+    read.mockResolvedValue(saved({...found}));
+    const onResearched=vi.fn();
+    render(<VintageCheck wine={wine} initialWindow={found} onResearched={onResearched}/>);
+    await flush();
+    expect(onResearched).not.toHaveBeenCalled();
+  });
+
+  it('picks a running lookup back up instead of offering to pay for it again',async()=>{
+    read.mockResolvedValue(saved(null,{id:'job',status:'running'}));
+    const observe=vi.mocked(observeVintageResearch);
+    const pending=deferred<Awaited<ReturnType<typeof observeVintageResearch>>>();
+    observe.mockReturnValue(pending.promise);
+    const onResearched=vi.fn();
+    render(<VintageCheck wine={wine} onResearched={onResearched}/>);
+    await flush();
+    // The button is the bug: it used to be offered for work already paid for.
+    expect(screen.queryByRole('button',{name:'Look up 2019'})).toBeNull();
+    expect(screen.getByRole('status').textContent).toBe('Researching vintage…');
+    expect(observe).toHaveBeenCalledWith('job',expect.anything());
+    expect(lookup).not.toHaveBeenCalled();
+    await act(async()=>pending.resolve({window:found,cached:false}));
+    expect(screen.getByText('93')).toBeTruthy();
+    // The cellar list is told, so its card stops showing the stale verdict.
+    expect(onResearched).toHaveBeenCalledOnce();
+  });
+
+  it('stops observing a resumed lookup when the panel closes, without cancelling it',async()=>{
+    read.mockResolvedValue(saved(null,{id:'job',status:'queued'}));
+    const observe=vi.mocked(observeVintageResearch);
+    let signal:AbortSignal|undefined;
+    observe.mockImplementation((_id,given)=>{signal=given;return new Promise(()=>{})});
+    const {unmount}=render(<VintageCheck wine={wine}/>);
+    await flush();
+    expect(signal?.aborted).toBe(false);
+    unmount();
+    expect(signal?.aborted).toBe(true);
     expect(lookup).not.toHaveBeenCalled();
   });
 
@@ -155,19 +217,19 @@ describe('vintage research belongs to the displayed cell',()=>{
   });
 
   it('ignores a slow saved read after the user changes vintage',async()=>{
-    const old=deferred<VintageWindow|null>();
-    read.mockReturnValueOnce(old.promise).mockResolvedValueOnce(null);
+    const old=deferred<SavedVintageResearch>();
+    read.mockReturnValueOnce(old.promise).mockResolvedValueOnce(saved(null));
     const {rerender}=render(<VintageCheck wine={wine}/>);
     await flush();
     rerender(<VintageCheck wine={{...wine,vintage:2020}}/>);
     await flush();
-    await act(async()=>old.resolve(found));
+    await act(async()=>old.resolve(saved(found)));
     expect(screen.queryByText('93')).toBeNull();
     expect(screen.getByRole('button',{name:'Look up 2020'})).toBeTruthy();
   });
 
   it('does not claim an undated missing quality payload must be a legacy lookup',async()=>{
-    read.mockResolvedValue({...found,quality:null});
+    read.mockResolvedValue(saved({...found,quality:null}));
     render(<VintageCheck wine={wine}/>);
     await flush();
     expect(screen.queryByText(/predates Vintage Intelligence/)).toBeNull();
@@ -177,7 +239,7 @@ describe('vintage research belongs to the displayed cell',()=>{
 
 
 describe('cache timing and quality presentation',()=>{
-  beforeEach(()=>{vi.useFakeTimers();read.mockReset().mockResolvedValue(null)});
+  beforeEach(()=>{vi.useFakeTimers();read.mockReset().mockResolvedValue(saved(null))});
   afterEach(()=>{cleanup();vi.useRealTimers()});
   it('reads immediately when opening an unseeded detail',async()=>{
     render(<VintageCheck wine={wine}/>);

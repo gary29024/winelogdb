@@ -1,7 +1,7 @@
 import { useEffect,useRef,useState } from 'react';
 import { askableVintage,maturityPair,vintageCell,vintageScoreLabel,windowShift,type VintageSubject,type VintageWindow } from '../../lib/maturity/vintageWindow';
 import { ElapsedSeconds } from '../../components/ElapsedSeconds';
-import { getVintageWindow,lookUpVintageWindow } from './api';
+import { getVintageWindow,lookUpVintageWindow,observeVintageResearch,type VintageLookupResult } from './api';
 import { DrinkingWindow } from './DrinkingWindow';
 import '../../maturity.css';
 
@@ -39,40 +39,18 @@ function VintageCellCheck({wine,onResearched,initialWindow,debounceMs=0}:Props){
   const style=wine.wineStyle==='rose'?'Rosé':wine.wineStyle?wine.wineStyle[0].toUpperCase()+wine.wineStyle.slice(1):null;
   const scope=[asked,style,wine.vintage].filter(Boolean).join(' · ');
 
-  useEffect(()=>{
-    const version=++requests.version;
-    let timer:ReturnType<typeof setTimeout>|undefined;
-    // The cellar list already fetched this cell. Opening its details uses that
-    // result, including a known cache miss, without another read or AI request.
-    if(cellKey&&(initialWindow===undefined||readSeq>0)){
-      setReadState('loading');setError('');setNotice('');
-      const read=()=>{
-        getVintageWindow(subject).then(found=>{
-          if(version!==requests.version)return;
-          setResearched(found);setReadState('ready');
-          setNotice(found?'Saved research loaded.':'');
-        }).catch(()=>{
-          if(version!==requests.version)return;
-          setReadState('error');setError('Could not load saved research. Please retry.');
-        });
-      };
-      // Only editable forms debounce changing cells; opening details and retries read immediately.
-      if(debounceMs>0&&readSeq===0)timer=setTimeout(read,debounceMs);
-      else read();
-    }
-    return()=>{requests.version++;clearTimeout(timer);lookupController.current?.abort()};
-    // Subject changes within this cell do not need another read. initialWindow
-    // seeds this mounted cell only; new research is owned by the state above.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[cellKey,readSeq,requests,debounceMs]);
-
-  async function look(again=false){
-    if(busy||readState!=='ready')return;
-    const version=++requests.version;
+  /**
+   * Waiting on a lookup, however this panel came to be waiting on it.
+   *
+   * The button and a panel reopened onto work already running share this, so
+   * both show the same spinner, both refuse to start a second lookup, and both
+   * tell the cellar list to reload the moment an answer lands.
+   */
+  async function watch(version:number,run:(signal:AbortSignal)=>Promise<VintageLookupResult>){
     setStartedAt(new Date().toISOString());setError('');setNotice('');
+    lookupController.current=new AbortController();
     try{
-      lookupController.current=new AbortController();
-      const {window,cached,pending,pendingStatus}=await lookUpVintageWindow(subject,again,lookupController.current.signal);
+      const {window,cached,pending,pendingStatus}=await run(lookupController.current.signal);
       if(version!==requests.version)return;
       if(pending){
         setNotice(pendingStatus==='queued'
@@ -87,6 +65,45 @@ function VintageCellCheck({wine,onResearched,initialWindow,debounceMs=0}:Props){
         ?'Refresh failed. Your previous research is still shown. Please try again.'
         :(e as Error).message||'Could not look up that vintage. Please try again.');
     }finally{if(version===requests.version)setStartedAt(null)}
+  }
+
+  useEffect(()=>{
+    const version=++requests.version;
+    let timer:ReturnType<typeof setTimeout>|undefined;
+    // Read even when the cellar list seeded a window, because the seed cannot
+    // say whether a lookup is running: that is the whole reason a reopened
+    // panel used to offer the button for research already under way.
+    if(cellKey){
+      setReadState('loading');setError('');setNotice('');
+      const read=()=>{
+        getVintageWindow(subject).then(({window,job})=>{
+          if(version!==requests.version)return;
+          setResearched(window);setReadState('ready');
+          setNotice(window?'Saved research loaded.':'');
+          // A job may have finished while this panel was closed. Its saved
+          // result must refresh the cellar too, even with no job left to watch.
+          if(window&&window.researchedAt!==researched?.researchedAt)onResearched?.();
+          // Pick the running lookup back up rather than showing its cell as
+          // untouched. The observer is new; the job it watches is not.
+          if(job)void watch(++requests.version,signal=>observeVintageResearch(job.id,signal));
+        }).catch(()=>{
+          if(version!==requests.version)return;
+          setReadState('error');setError('Could not load saved research. Please retry.');
+        });
+      };
+      // Only editable forms debounce changing cells; opening details and retries read immediately.
+      if(debounceMs>0&&readSeq===0)timer=setTimeout(read,debounceMs);
+      else read();
+    }
+    return()=>{requests.version++;clearTimeout(timer);lookupController.current?.abort()};
+    // Subject changes within this cell do not need another read. initialWindow
+    // seeds the first paint only; what is saved and running is owned by the read.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[cellKey,readSeq,requests,debounceMs]);
+
+  async function look(again=false){
+    if(busy||readState!=='ready')return;
+    await watch(++requests.version,signal=>lookUpVintageWindow(subject,again,signal));
   }
 
   const pair=maturityPair(wine,researched);

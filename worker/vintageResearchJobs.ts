@@ -14,6 +14,21 @@ const fields='id,status,subject_json,result_json,error,updated_at';
 const status=(row:Row):VintageResearchStatus=>({id:row.id,status:row.status,
   window:row.result_json?JSON.parse(row.result_json) as VintageWindow:null,error:row.error});
 
+/**
+ * The lookup already running for a cell, if there is one.
+ *
+ * A job is only addressable by its id, which lives in the memory of whichever
+ * panel asked for it. Close that panel and the work carries on with nobody able
+ * to see it: reopening offered the button again as though nothing had been
+ * asked for. This is how a cell finds its own job back, and it reads through
+ * the same partial unique index that keeps two tabs on one job.
+ */
+export async function readActiveVintageResearch(db:D1Database,owner:string,subject:VintageSubject){
+  const row=await db.prepare(`SELECT ${fields} FROM vintage_research_jobs WHERE owner_id=? AND cache_key=? AND status IN ('queued','running')`)
+    .bind(owner,vintageCacheKey(subject)).first<Row>();
+  return row?status(row):null;
+}
+
 export async function readVintageResearch(db:D1Database,owner:string,id:string){
   const row=await db.prepare(`SELECT ${fields} FROM vintage_research_jobs WHERE owner_id=? AND id=?`).bind(owner,id).first<Row>();
   return row?status(row):null;
