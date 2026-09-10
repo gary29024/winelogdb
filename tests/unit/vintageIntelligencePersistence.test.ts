@@ -12,10 +12,10 @@ const answer={drinkFrom:null,drinkTo:null,note:'No precise window supported.',qu
   sources:[{title:'Report',url:redirect}]};
 const databases:Array<ReturnType<typeof migratedSqliteD1>>=[];
 const database=()=>{const db=migratedSqliteD1();databases.push(db);return db};
-afterEach(()=>{vi.unstubAllGlobals();for(const {sqlite} of databases.splice(0))sqlite.close()});
+afterEach(()=>{vi.restoreAllMocks();vi.unstubAllGlobals();for(const {sqlite} of databases.splice(0))sqlite.close()});
 
-function reply(sources=answer.sources,chunks?:unknown[]){
-  const fetch=vi.fn(async()=>Response.json({candidates:[{content:{parts:[{text:JSON.stringify({...answer,sources})}]},
+function reply(sources=answer.sources,chunks?:unknown[],overrides:Record<string,unknown>={}){
+  const fetch=vi.fn(async()=>Response.json({candidates:[{content:{parts:[{text:JSON.stringify({...answer,sources,...overrides})}]},
     ...(chunks?{groundingMetadata:{groundingChunks:chunks,webSearchQueries:['Burgundy 2019']}}:{})}],
     usageMetadata:{promptTokenCount:100,candidatesTokenCount:200}}));
   vi.stubGlobal('fetch',fetch);
@@ -84,5 +84,42 @@ describe('vintage quality storage and evidence',()=>{
     reply([{title:'Invented',url:'https://example.test/invented'}],[{}]);
     const {db}=database();
     await expect(researchVintageWindow({DB:db,GEMINI_API_KEY:'test'},'owner',subject,'run')).rejects.toThrow(/Nothing was retrieved/);
+  });
+});
+
+
+describe('optional quality never invalidates a grounded window',()=>{
+  it.each([
+    {...quality,confidence:undefined}, {...quality,score:65},
+    {...quality,confidence:'very high'}, {...quality,strengths:Array(6).fill('Freshness')},
+    {...quality,consensus:'x'.repeat(700)}
+  ])('stores the window without escalating malformed quality %j',async invalid=>{
+    const fetch=reply(answer.sources,undefined,{drinkFrom:2025,drinkTo:2035,quality:invalid});
+    const log=vi.spyOn(console,'log').mockImplementation(()=>{});
+    const {db}=database();
+    const stored=await researchVintageWindow({DB:db,GEMINI_API_KEY:'test'},'owner',subject,'run');
+    expect(stored?.quality).toBeNull();
+    expect((await readVintageWindow(db,'owner',subject))?.note).toBe(answer.note);
+    expect(stored?.shiftFrom).not.toBeNull();
+    expect(fetch).toHaveBeenCalledTimes(1);
+    expect(log.mock.calls.map(([line])=>JSON.parse(line)).find(x=>x.event==='vintage-window-answered'))
+      .toMatchObject({qualityDiscarded:true,replySources:1,sources:1});
+  });
+
+  it('still refuses inverted windows after both attempts',async()=>{
+    const fetch=reply(answer.sources,undefined,{drinkFrom:2040,drinkTo:2020,quality:{score:65}});
+    const {db,sqlite}=database();
+    await expect(researchVintageWindow({DB:db,GEMINI_API_KEY:'test'},'owner',subject,'run')).rejects.toThrow(/wrong shape/);
+    expect(fetch).toHaveBeenCalledTimes(2);
+    expect(sqlite.prepare('SELECT COUNT(*) AS count FROM vintage_windows').get()?.count).toBe(0);
+  });
+
+  it.each([0,5])('logs %i model citations separately from accepted grounding',async count=>{
+    reply(Array.from({length:count},(_,i)=>({title:'Unverified',url:`https://example.test/${i}`})));
+    const warn=vi.spyOn(console,'warn').mockImplementation(()=>{});
+    const {db}=database();
+    await expect(researchVintageWindow({DB:db,GEMINI_API_KEY:'test'},'owner',subject,'run')).rejects.toThrow(/Nothing was retrieved/);
+    expect(warn.mock.calls.map(([line])=>JSON.parse(line)).find(x=>x.event==='vintage-window-escalation'))
+      .toMatchObject({replySources:count,metadataSources:0,sources:0,redirects:0});
   });
 });

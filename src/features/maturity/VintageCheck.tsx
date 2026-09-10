@@ -6,7 +6,7 @@ import { DrinkingWindow } from './DrinkingWindow';
 import '../../maturity.css';
 
 type Wine=VintageSubject&{classification?:string|null};
-type Props={wine:Wine;onResearched?:()=>void;initialWindow?:VintageWindow|null};
+type Props={wine:Wine;onResearched?:()=>void;initialWindow?:VintageWindow|null;debounceMs?:number};
 
 const shiftDescription=(shift:{from:number;to:number})=>{
   if(shift.from===0&&shift.to===0)return 'Same as the typical window.';
@@ -20,7 +20,7 @@ export function VintageCheck(props:Props){
   return <VintageCellCheck key={key} {...props}/>;
 }
 
-function VintageCellCheck({wine,onResearched,initialWindow}:Props){
+function VintageCellCheck({wine,onResearched,initialWindow,debounceMs=0}:Props){
   const [researched,setResearched]=useState<VintageWindow|null>(initialWindow??null);
   const [readState,setReadState]=useState<'loading'|'ready'|'error'>(askableVintage(wine)&&initialWindow===undefined?'loading':'ready');
   const [readSeq,setReadSeq]=useState(0);
@@ -45,7 +45,7 @@ function VintageCellCheck({wine,onResearched,initialWindow}:Props){
     // result, including a known cache miss, without another read or AI request.
     if(cellKey&&(initialWindow===undefined||readSeq>0)){
       setReadState('loading');setError('');setNotice('');
-      timer=setTimeout(()=>{
+      const read=()=>{
         getVintageWindow(subject).then(found=>{
           if(version!==requests.version)return;
           setResearched(found);setReadState('ready');
@@ -54,13 +54,16 @@ function VintageCellCheck({wine,onResearched,initialWindow}:Props){
           if(version!==requests.version)return;
           setReadState('error');setError('Could not load saved research. Please retry.');
         });
-      },300);
+      };
+      // Only editable forms debounce changing cells; opening details and retries read immediately.
+      if(debounceMs>0&&readSeq===0)timer=setTimeout(read,debounceMs);
+      else read();
     }
     return()=>{requests.version++;clearTimeout(timer)};
     // Subject changes within this cell do not need another read. initialWindow
     // seeds this mounted cell only; new research is owned by the state above.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[cellKey,readSeq,requests]);
+  },[cellKey,readSeq,requests,debounceMs]);
 
   async function look(again=false){
     if(busy||readState!=='ready')return;
@@ -108,16 +111,16 @@ function VintageCellCheck({wine,onResearched,initialWindow}:Props){
             {researched.model&&<span>Model: {researched.model}</span>}
           </div>
           {quality&&<p>An AI synthesis of vintage commentary for {scope}. The score describes the vintage, not this individual bottle.</p>}
-          {quality&&quality.score==null&&<p>No score: the available evidence did not support a quality estimate.</p>}
+          {quality&&quality.score==null&&<p>No numeric estimate was returned for this vintage.</p>}
           {shift&&<p className="vintage-shift">{shiftDescription(shift)}</p>}
           {quality?.consensus&&<p className="vintage-consensus">{quality.consensus}</p>}
           {quality&&(quality.strengths.length>0||quality.cautions.length>0)&&<div className="vintage-evidence-grid">
-            {quality.strengths.length>0&&<div><strong>Strengths</strong><ul>{quality.strengths.map(item=><li key={`strength-${item}`}>{item}</li>)}</ul></div>}
-            {quality.cautions.length>0&&<div><strong>Watch</strong><ul>{quality.cautions.map(item=><li key={`caution-${item}`}>{item}</li>)}</ul></div>}
+            {quality.strengths.length>0&&<div><strong>Strengths</strong><ul>{[...new Set(quality.strengths)].map(item=><li key={`strength-${item}`}>{item}</li>)}</ul></div>}
+            {quality.cautions.length>0&&<div><strong>Watch</strong><ul>{[...new Set(quality.cautions)].map(item=><li key={`caution-${item}`}>{item}</li>)}</ul></div>}
           </div>}
           {researched.note&&<p className="vintage-note">{researched.note}</p>}
           <ul>{researched.sources.map(source=><li key={source.url}><a href={source.url} target="_blank" rel="noopener noreferrer">{source.title}</a></li>)}</ul>
-          {!quality&&<p className="vintage-legacy-note"><small>No vintage quality assessment is stored with this lookup. Refresh it to request one.</small></p>}
+          {!quality&&<p className="vintage-legacy-note"><small>No vintage quality assessment is stored with this lookup.</small></p>}
           <p className="vintage-again">
             <button type="button" className="quiet" onClick={()=>void look(true)} disabled={busy||readState!=='ready'}>{busy?'Researching…':'Refresh research'}</button>
             <small>Uses AI search. Updates saved research for your wines in {scope}.</small>

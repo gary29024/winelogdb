@@ -159,3 +159,37 @@ describe('vintage research belongs to the displayed cell',()=>{
     expect(screen.getByText(/No vintage quality assessment/)).toBeTruthy();
   });
 });
+
+
+describe('cache timing and quality presentation',()=>{
+  beforeEach(()=>{vi.useFakeTimers();read.mockReset().mockResolvedValue(null)});
+  afterEach(()=>{cleanup();vi.useRealTimers()});
+  it('reads immediately when opening an unseeded detail',async()=>{
+    render(<VintageCheck wine={wine}/>);
+    expect(read).toHaveBeenCalledTimes(1);
+    await act(async()=>{});
+  });
+  it('debounces changing cells only when the editable form requests it',async()=>{
+    const {rerender}=render(<VintageCheck wine={wine} debounceMs={300}/>);
+    await act(async()=>{await vi.advanceTimersByTimeAsync(200)});
+    rerender(<VintageCheck wine={{...wine,vintage:2020}} debounceMs={300}/>);
+    await act(async()=>{await vi.advanceTimersByTimeAsync(200)});
+    expect(read).not.toHaveBeenCalled();
+    await flush();
+    expect(read).toHaveBeenCalledTimes(1);
+    expect(read.mock.calls[0][0].vintage).toBe(2020);
+  });
+  it('deduplicates evidence and does not equate a below-scale score with missing evidence',()=>{
+    render(<VintageCheck wine={wine} initialWindow={{...found,quality:{...found.quality!,score:null,
+      consensus:'Worse than the supported numeric scale.',strengths:['Freshness','Freshness'],cautions:['Rot','Rot']}}}/>);
+    expect(screen.getAllByText('Freshness')).toHaveLength(1);
+    expect(screen.getAllByText('Rot')).toHaveLength(1);
+    expect(screen.getByText('Worse than the supported numeric scale.')).toBeTruthy();
+    expect(screen.queryByText(/available evidence did not support/)).toBeNull();
+  });
+  it('does not encourage another paid search when quality is absent',()=>{
+    render(<VintageCheck wine={wine} initialWindow={{...found,quality:null}}/>);
+    expect(screen.getByText('No vintage quality assessment is stored with this lookup.')).toBeTruthy();
+    expect(screen.queryByText(/Refresh it to request one/)).toBeNull();
+  });
+});

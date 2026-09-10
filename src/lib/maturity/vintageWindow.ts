@@ -127,7 +127,8 @@ export const vintageWindowSchema=z.object({
   drinkFrom:z.number().int().min(1900).max(2200).nullable(),
   drinkTo:z.number().int().min(1900).max(2200).nullable(),
   note:z.string().trim().max(1200).default(''),
-  quality:vintageQualitySchema.nullable().default(null),
+  // Optional enrichment must not discard a valid window or trigger paid escalation.
+  quality:vintageQualitySchema.nullable().catch(null).default(null),
   sources:z.array(z.object({title:z.string().trim().max(300),url:z.string().url()})).max(12).default([])
 }).superRefine((value,ctx)=>{
   if(value.drinkFrom!=null&&value.drinkTo!=null&&value.drinkTo<value.drinkFrom)
