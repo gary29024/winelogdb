@@ -42,7 +42,7 @@ export type RecognitionModeSpec<T>={
   /** Wines covered by a successful result, counted once across all model calls. */
   wineCount(result:T):number;
   /** Modes that escalate must explicitly decide whether the new result improves the original. */
-  preferEscalated?(primary:T,escalated:T):T;
+  preferEscalated(primary:T,escalated:T):T;
   /**
    * Anything else worth having in the log line for this mode - the group photo's
    * count of bottles it gave up on, the sheet's truncation flag. Diagnostics
@@ -113,7 +113,7 @@ async function tryEscalated<T>(env:VisionBindings,spec:RecognitionModeSpec<T>,re
     const candidate=payload.candidates?.[0],text=candidate?.content?.parts?.map(part=>part.text??'').join('')??'';
     if(!text)throw new Error(`The escalation returned no ${spec.mode} recognition result`);
     reply=text;
-    const escalated=spec.parse(text),result=spec.preferEscalated?.(primary,escalated)??primary,used=result===escalated;
+    const escalated=spec.parse(text),result=spec.preferEscalated(primary,escalated),used=result===escalated;
     console.log(JSON.stringify({event:`${spec.mode}-recognition-escalation-complete`,requestId,model:RECOGNITION_ESCALATION_MODEL,provider,reasons,used,schemaFallback,primaryWines:spec.wineCount(primary),escalatedWines:spec.wineCount(escalated),...prefixed('primary',spec.logFields?.(primary)??{}),...prefixed('escalated',spec.logFields?.(escalated)??{}),latencyMs:Date.now()-startedAt,finishReason:candidate?.finishReason??null,promptTokens:payload.usageMetadata?.promptTokenCount??null,outputTokens:payload.usageMetadata?.candidatesTokenCount??null,thinkingTokens:payload.usageMetadata?.thoughtsTokenCount??null,totalTokens:payload.usageMetadata?.totalTokenCount??null}));
     return {result,used,finishReason:used?candidate?.finishReason??null:null};
   }catch(e){clearTimeout(timer);console.warn(JSON.stringify({event:`${spec.mode}-recognition-escalation-skipped`,requestId,model:RECOGNITION_ESCALATION_MODEL,reasons,timedOut,schemaFallback,latencyMs:Date.now()-startedAt,error:(e as Error).message||'Escalation failed',replyChars:reply.length,reply:reply.slice(0,REPLY_EXCERPT)}));return {result:primary,used:false,finishReason:null}}

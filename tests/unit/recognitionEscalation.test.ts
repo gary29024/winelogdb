@@ -14,7 +14,8 @@ describe('selective wine-label escalation',()=>{
     expect(recognitionEscalationReasons(primary({confidence:0.84}))).toContain('low-confidence');
     expect(recognitionEscalationReasons(primary({producer:null}))).toContain('missing-producer');
     expect(recognitionEscalationReasons(primary({wineName:null}))).toContain('missing-wine-name');
-    expect(recognitionEscalationReasons(primary(),{schemaFallback:true})).toContain('schema-fallback');
+    expect(recognitionEscalationReasons(primary(),{schemaFallback:true})).toEqual([]);
+    expect(recognitionEscalationReasons(primary({confidence:0.5}),{schemaFallback:true})).toContain('schema-fallback');
   });
 
   it('keeps the primary result when an escalation loses the bottle identity',()=>{
@@ -41,14 +42,28 @@ describe('selective wine-label escalation',()=>{
 });
 
 describe('escalation protects established evidence',()=>{
-  it('does not lose or change a known vintage even at a higher reported confidence',()=>{
-    const first=primary({confidence:0.6});
+  it('does not lose or change a confident vintage',()=>{
+    const first=primary();
     expect(preferEscalatedRecognition(first,primary({vintage:null}))).toBe(first);
     expect(preferEscalatedRecognition(first,primary({vintage:2021}))).toBe(first);
   });
-  it('can fill missing identity without downgrading confidence',()=>{
+  it('prefers a complete identity over an incomplete result',()=>{
     const first=primary({producer:null,confidence:0.6}),candidate=primary();
     expect(preferEscalatedRecognition(first,candidate)).toBe(candidate);
-    expect(preferEscalatedRecognition(first,primary({confidence:0.5}))).toBe(first);
+    const complete=primary({confidence:0.5});
+    expect(preferEscalatedRecognition(first,complete)).toBe(complete);
   });
+});
+
+
+it('can correct an uncertain vintage while preserving a confident one',()=>{
+  const first=primary({vintage:2018,confidence:0.5}),corrected=primary({vintage:2019,confidence:0.99});
+  expect(preferEscalatedRecognition(first,corrected)).toBe(corrected);
+  expect(preferEscalatedRecognition(first,primary({vintage:null,confidence:0.99}))).toBe(first);
+  const confident=primary({vintage:2018,confidence:0.9});
+  expect(preferEscalatedRecognition(confident,corrected)).toBe(confident);
+});
+it('accepts a lower-confidence identified wine when the primary identified nothing',()=>{
+  const first=primary({producer:null,wineName:null,vintage:null,confidence:0.4}),candidate=primary({confidence:0.35});
+  expect(preferEscalatedRecognition(first,candidate)).toBe(candidate);
 });

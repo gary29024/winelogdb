@@ -203,3 +203,16 @@ it('single scans retain primary and malformed escalation token costs',async()=>{
   expect(response.status).toBe(200);
   expect(usageWrites(stub).map(write=>write.args.slice(9,12))).toEqual([[1200,400,1],[1200,400,0]]);
 });
+
+
+it('does not escalate a confident single result just because the schema was rejected',async()=>{
+  const calls=stubGemini([
+    ()=>new Response('{"error":{"message":"response schema rejected"}}',{status:400}),
+    ()=>geminiReply({producer:'Krug',wineName:'Vintage',vintage:2013,confidence:0.9})
+  ]);
+  const {response,stub}=await run(undefined,{single:true});
+  expect(response.status).toBe(200);
+  expect(calls).toHaveLength(2);
+  expect(calls.every(call=>!call.url.includes('gemini-3.8-flash'))).toBe(true);
+  expect(usageWrites(stub)).toHaveLength(1);
+});

@@ -1,3 +1,4 @@
+import type { SheetPage } from '../../features/recognition/sheetSchema';
 import type { GroupRecognitionResult } from '../../features/recognition/groupSchema';
 import type { RecognitionResult } from '../../features/recognition/schema';
 
@@ -13,7 +14,8 @@ export function recognitionEscalationReasons(result:RecognitionResult,options:{s
   if(!result.producer?.trim())reasons.push('missing-producer');
   if(!result.wineName?.trim())reasons.push('missing-wine-name');
   if(result.confidence<RECOGNITION_ESCALATION_CONFIDENCE)reasons.push('low-confidence');
-  if(options.schemaFallback)reasons.push('schema-fallback');
+  // A successfully parsed schema-free answer is not itself a reason to pay again.
+  if(options.schemaFallback&&reasons.length)reasons.push('schema-fallback');
   return reasons;
 }
 
@@ -34,10 +36,12 @@ const normalized=(value:string|null|undefined)=>(value??'').normalize('NFD').rep
 const sameNames=(a:Identity,b:Identity)=>normalized(a.producer)===normalized(b.producer)&&normalized(a.wineName)===normalized(b.wineName);
 
 function preservesIdentity(primary:Identity,candidate:Identity){
-  if(!hasIdentity(candidate)||candidate.confidence<primary.confidence)return false;
+  if(!hasIdentity(candidate))return false;
+  if(hasIdentity(primary)&&candidate.confidence<primary.confidence)return false;
   // Confidence is a selection heuristic, not proof that a conflicting label is correct.
-  if(primary.vintage!=null&&candidate.vintage!==primary.vintage)return false;
+  if(primary.vintage!=null&&candidate.vintage==null)return false;
   if(primary.confidence>=RECOGNITION_ESCALATION_CONFIDENCE){
+    if(primary.vintage!=null&&candidate.vintage!==primary.vintage)return false;
     if(primary.producer?.trim()&&normalized(primary.producer)!==normalized(candidate.producer))return false;
     if(primary.wineName?.trim()&&normalized(primary.wineName)!==normalized(candidate.wineName))return false;
   }
@@ -59,7 +63,7 @@ export function preferEscalatedGroup(primary:GroupRecognitionResult,candidate:Gr
   return preservesWines(primary.wines,candidate.wines)?candidate:primary;
 }
 
-export function preferEscalatedSheet(primary:import('../../features/recognition/sheetSchema').SheetPage,candidate:import('../../features/recognition/sheetSchema').SheetPage){
+export function preferEscalatedSheet(primary:SheetPage,candidate:SheetPage){
   if(candidate.wines.length<primary.wines.length||candidate.unresolvedCount>primary.unresolvedCount||(!primary.truncated&&candidate.truncated))return primary;
   if(primary.currency&&normalized(primary.currency)!==normalized(candidate.currency))return primary;
   if((candidate.lastLineNumber??0)<(primary.lastLineNumber??0))return primary;
