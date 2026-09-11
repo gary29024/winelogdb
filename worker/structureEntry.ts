@@ -34,25 +34,28 @@ export default {
     const groupSessionResponse=await handleGroupRecognitionSessionRequest(request,env);if(groupSessionResponse)return groupSessionResponse;
 
     // Semantic retrieval is an input to the real Journal route, never a second
-    // implementation of that route. The forwarded request still passes through
-    // cuveeEntry, so CORS, authentication and identity maintenance stay owned in
-    // one place. Document backfill is always waitUntil work; only the query
-    // vector can delay a descriptive search.
+    // implementation of that route. Candidate IDs are internal-only: strip any
+    // caller-supplied value first, then set it only on the forwarded request we
+    // create after ranking. The canonical route still owns CORS, auth,
+    // maintenance, filtering and pagination.
     if(request.method==='GET'&&url.pathname==='/api/journal'){
+      url.searchParams.delete('__semanticIds');
+      const journalRequest=new Request(url,request);
       const rawQuery=(url.searchParams.get('query')??'').trim(),semanticFlag=url.searchParams.get('semantic');
       const useSemantic=rawQuery&&semanticFlag!=='0'&&(semanticFlag==='1'||shouldUseSemanticQuery(rawQuery));
       if(useSemantic){
-        let ownerId:string;try{ownerId=await owner(request,env)}catch{return jsonResponse({error:'Unauthorized'},401)}
+        let ownerId:string;try{ownerId=await owner(journalRequest,env)}catch{return jsonResponse({error:'Unauthorized'},401)}
         ctx.waitUntil(warmSemanticWineIndex(env,ownerId).catch(error=>console.error(JSON.stringify({event:'semantic-index-warm-failed',error:(error as Error).message}))));
         try{
           const semantic=await semanticWineIds(env,ownerId,rawQuery,72);
           if(semantic?.ids.length){
-            const forwardedUrl=new URL(request.url);
+            const forwardedUrl=new URL(journalRequest.url);
             forwardedUrl.searchParams.set('__semanticIds',semantic.ids.join(','));
-            return app.fetch(new Request(forwardedUrl,request),env,ctx);
+            return app.fetch(new Request(forwardedUrl,journalRequest),env,ctx);
           }
         }catch(error){console.error(JSON.stringify({event:'semantic-journal-search-failed',error:(error as Error).message}))}
       }
+      return app.fetch(journalRequest,env,ctx);
     }
 
     if(request.method==='PUT'&&url.pathname.match(/^\/api\/wines\/[^/]+\/tasting-structure$/)){
