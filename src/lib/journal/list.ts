@@ -30,7 +30,12 @@ export function sliceJournalPage<T>(rows:T[],limit:number,offset:number){
   return {items,nextOffset:rows.length>limit?offset+limit:null};
 }
 
-export async function listJournalPage(db:D1Database,owner:string,q:JournalListQuery){
+export async function listJournalPage(db:D1Database,owner:string,q:JournalListQuery,semanticIds:string[]=[]){
+  // structureEntry forwards semantic candidates through the canonical Journal
+  // route using an internal query parameter. The owner predicate below still
+  // scopes every candidate, and the cap prevents an oversized URL/SQL IN list.
+  const forwarded=(q.__semanticIds??'').split(',').map(id=>id.trim()).filter(Boolean).slice(0,72);
+  const semanticMatches=[...new Set((semanticIds.length?semanticIds:forwarded).slice(0,72))];
   const args:unknown[]=[owner];let where='w.owner_id=?';
   const filters:[string,string][]=[['vintage','w.vintage'],['country','w.country'],['region','w.region'],['style','w.wine_style'],['tastingDate','w.tasting_date']];
   const rawQuery=(q.query??'').trim();
@@ -52,8 +57,17 @@ export async function listJournalPage(db:D1Database,owner:string,q:JournalListQu
   }
   if(q.tasting){where+=' AND EXISTS (SELECT 1 FROM wine_experiences we JOIN tastings t ON t.id=we.tasting_id WHERE we.wine_id=w.id AND we.owner_id=? AND lower(t.name) LIKE lower(?))';args.push(owner,`%${q.tasting}%`)}
   if(rawQuery&&!vintageSearch){
+    const searchPredicates:string[]=[];
     const clean=rawQuery.replace(/[^\p{L}\p{N}\s]/gu,' ').trim();
-    if(clean){where+=' AND (w.id IN (SELECT wine_id FROM wine_search WHERE wine_search MATCH ? AND owner_id=?) OR EXISTS (SELECT 1 FROM wine_experiences we JOIN tastings t ON t.id=we.tasting_id WHERE we.wine_id=w.id AND we.owner_id=? AND lower(t.name) LIKE lower(?)))';args.push(clean+'*',owner,owner,`%${rawQuery}%`)}
+    if(clean){
+      searchPredicates.push('(w.id IN (SELECT wine_id FROM wine_search WHERE wine_search MATCH ? AND owner_id=?) OR EXISTS (SELECT 1 FROM wine_experiences we JOIN tastings t ON t.id=we.tasting_id WHERE we.wine_id=w.id AND we.owner_id=? AND lower(t.name) LIKE lower(?)))');
+      args.push(clean+'*',owner,owner,`%${rawQuery}%`);
+    }
+    if(semanticMatches.length){
+      searchPredicates.push(`w.id IN (${semanticMatches.map(()=>'?').join(',')})`);
+      args.push(...semanticMatches);
+    }
+    if(searchPredicates.length)where+=` AND (${searchPredicates.join(' OR ')})`;
   }
 
   /**
@@ -70,6 +84,15 @@ export async function listJournalPage(db:D1Database,owner:string,q:JournalListQu
     producer:'w.producer COLLATE NOCASE ASC, w.wine_name COLLATE NOCASE ASC, w.vintage DESC, w.id ASC',
     vintage:'w.vintage DESC, w.producer COLLATE NOCASE ASC, w.wine_name COLLATE NOCASE ASC, w.id ASC'
   };
+  const orderArgs:unknown[]=[];
+  let order=orders[q.sort??'']||orders.newest;
+  // A natural-language search is useful only if its nearest matches appear first.
+  // An explicit user-selected sort still wins, so semantic search never silently
+  // overrides "rating", "producer", etc.
+  if(!q.sort&&semanticMatches.length&&rawQuery&&!vintageSearch){
+    order=`CASE w.id ${semanticMatches.map((_,index)=>`WHEN ? THEN ${index}`).join(' ')} ELSE ${semanticMatches.length} END, ${orders.newest}`;
+    orderArgs.push(...semanticMatches);
+  }
   const limit=Math.min(Math.max(Number(q.limit)||36,1),72),offset=Math.max(Number(q.offset)||0,0);
   // Count and page share the exact same predicate and travel in one D1 batch.
   // The old limit+1 query could answer only "is there another page?", which
@@ -81,7 +104,7 @@ export async function listJournalPage(db:D1Database,owner:string,q:JournalListQu
     w.created_at,
     (SELECT t.name FROM wine_experiences we LEFT JOIN tastings t ON t.id=we.tasting_id WHERE we.wine_id=w.id AND we.owner_id=w.owner_id ORDER BY we.created_at DESC LIMIT 1) AS tasting_name,
     (SELECT wi.id FROM wine_images wi WHERE wi.owner_id=w.owner_id AND wi.wine_id=w.id ORDER BY wi.rowid ASC LIMIT 1) AS image_id
-    FROM wines w WHERE ${where} ORDER BY ${orders[q.sort??'']||orders.newest} LIMIT ? OFFSET ?`).bind(...args,limit,offset);
+    FROM wines w WHERE ${where} ORDER BY ${order} LIMIT ? OFFSET ?`).bind(...args,...orderArgs,limit,offset);
   const [countResult,rowsResult]=await db.batch([countStatement,pageStatement]);
   const total=Number((countResult.results[0] as {total?:unknown}|undefined)?.total??0);
   const rows=rowsResult.results as JournalRow[];

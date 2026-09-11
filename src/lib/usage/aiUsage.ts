@@ -3,14 +3,14 @@ import { marginalCostUsd,monthGroundingUsd,tokenCostUsd,toLocal,type AiRates,typ
 import { billingMonth,nextBillingReset,BILLING_TIME_ZONE } from './billingPeriod';
 
 /**
- * The AI usage ledger: one row per Gemini call, tagged with the run it belongs
+ * The AI usage ledger: one row per model call, tagged with the run it belongs
  * to, so a per-run cost is a division rather than a guess.
  *
- * Writes are never allowed to fail a request. Recognition and research are the
- * product; this is the meter beside it, and a meter that can break the thing it
- * measures is worse than no meter.
+ * Writes are never allowed to fail a request. Recognition, research and search
+ * are the product; this is the meter beside them, and a meter that can break
+ * the thing it measures is worse than no meter.
  */
-export const AI_USAGE_KINDS=['producer_research','wine_research','scan_single','scan_batch','scan_group','scan_sheet','bottle_frame','vintage_window'] as const;
+export const AI_USAGE_KINDS=['producer_research','wine_research','scan_single','scan_batch','scan_group','scan_sheet','bottle_frame','vintage_window','search_embedding'] as const;
 export type AiUsageKind=typeof AI_USAGE_KINDS[number];
 
 export const kindLabels:Record<AiUsageKind,string>={
@@ -21,7 +21,8 @@ export const kindLabels:Record<AiUsageKind,string>={
   scan_group:'Group photo',
   scan_sheet:'Tasting sheet',
   bottle_frame:'Bottle framing',
-  vintage_window:'Vintage window'
+  vintage_window:'Vintage window',
+  search_embedding:'Smart search'
 };
 
 const whole=(value:unknown)=>{const parsed=Math.round(Number(value)||0);return parsed>0?parsed:0};
@@ -34,7 +35,9 @@ export type AiUsageEvent={
   /**
    * How many wines this call covered. Recognition is quoted per wine, so a
    * group photo of nine bottles is nine; a batch item is one; a second call on
-   * the same wine (an escalation) is zero, or it would count twice.
+   * the same wine (an escalation) is zero, or it would count twice. Smart-search
+   * document indexing likewise counts the wines embedded; its query embedding
+   * adds a request but deliberately adds zero wine units.
    */
   units?:number;
   /**
@@ -61,7 +64,10 @@ export const unitOf:Record<AiUsageKind,'run'|'wine'>={
   bottle_frame:'wine',
   // Priced per run, because one call answers for a whole region and vintage -
   // every wine you own from that cell, not the one that asked.
-  vintage_window:'run'
+  vintage_window:'run',
+  // A document embedding covers one stored wine. The query embedding covers no
+  // wine, so that request records zero units and cannot inflate the per-wine figure.
+  search_embedding:'wine'
 };
 
 /**

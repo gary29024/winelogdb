@@ -11,6 +11,10 @@ AUTH_SECRET=use-at-least-32-random-characters
 # https://aistudio.google.com/apikey
 GEMINI_API_KEY=replace-me
 
+# Optional: only needed when SEMANTIC_SEARCH_PROVIDER=gemini and you want a
+# separate AI Studio key. If omitted, semantic search reuses GEMINI_API_KEY.
+# SEMANTIC_GEMINI_API_KEY=replace-me
+
 # The exact origin the browser loads, checked against for CORS.
 APP_URL=http://localhost:5173
 

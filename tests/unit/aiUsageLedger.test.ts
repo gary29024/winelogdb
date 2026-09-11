@@ -289,7 +289,8 @@ describe('every path that spends money is metered',()=>{
     ['worker/groupRecognitionHandler.ts',"kind:'scan_group'"],
     ['worker/sheetRecognitionHandler.ts',"kind:'scan_sheet'"],
     ['worker/bottleFrameHandler.ts',"kind:'bottle_frame'"],
-    ['worker/vintageWindowHandler.ts',"kind:'vintage_window'"]
+    ['worker/vintageWindowHandler.ts',"kind:'vintage_window'"],
+    ['src/lib/journal/semanticSearch.ts',"kind:'search_embedding'"]
   ];
   it.each(sources)('%s records usage',async(path,kind)=>{
     const { readFileSync }=await import('node:fs');

@@ -1,4 +1,4 @@
-import { useEffect,useMemo,useRef,useState } from 'react';
+import { useEffect,useMemo,useState } from 'react';
 import { pourFamily } from '../../lib/wine/pourFamily';
 import { JOURNAL_BACK,linkFrom,type BackTarget } from './backTarget';
 import { Link,Navigate,useNavigate,useSearchParams } from 'react-router-dom';
@@ -111,22 +111,13 @@ export function LibraryPage(){
   const [attachName,setAttachName]=useState('');
   const selectedWines=useMemo(()=>data.filter(wine=>selectedIds.has(wine.id)),[data,selectedIds]);
 
-  /**
-   * The query string as it stands right now.
-   *
-   * react-router hands setSearchParams(fn) the params from the render that
-   * created the setter, not the URL as it is when the setter runs. Deferred
-   * search commits therefore rebuild from this latest-value ref rather than a
-   * render-time snapshot, so another filter changed while typing is preserved.
-   */
-  const liveParams=useRef(params);
-  liveParams.current=params;
-
   function update(k:string,v:string,replace=true){
-    const next=new URLSearchParams(liveParams.current);
-    v?next.set(k,v):next.delete(k);
-    next.delete('offset');
-    setParams(next,{replace});
+    setParams(previous=>{
+      const next=new URLSearchParams(previous);
+      v?next.set(k,v):next.delete(k);
+      next.delete('offset');
+      return next;
+    },{replace});
   }
   function goToOffset(offset:number){
     const next=Math.max(0,Math.floor(offset/PAGE_SIZE)*PAGE_SIZE);
@@ -278,7 +269,7 @@ export function LibraryPage(){
       <JournalScopeTabs scope={favoriteOnly?'favorites':'tasted'}/>
       <Link className="journal-tastings-link" to="/tastings">Browse your tastings <span aria-hidden="true">›</span></Link>
     </div>
-    <form className="filters journal-filters" onSubmit={e=>e.preventDefault()}><JournalSearchInput value={params.get('query')??''} resetSeq={searchResetSeq} onCommit={value=>update('query',value)}/><div className="filter-pills"><label className="filter-month">Month<input type="month" aria-label="Drinking month" value={params.get('month')??''} onChange={e=>update('month',e.target.value)}/></label><label>Tasting<input value={params.get('tasting')??''} onChange={e=>update('tasting',e.target.value)} placeholder="Tasting / event"/></label><label>Country<input value={params.get('country')??''} onChange={e=>update('country',e.target.value)} placeholder="Country"/></label><label>Style<select value={params.get('style')??''} onChange={e=>update('style',e.target.value)}><option value="">Style</option>{['red','white','rose','sparkling','dessert','fortified','orange'].map(x=><option key={x}>{x}</option>)}</select></label><label>Score<input type="number" min="0" max="100" value={params.get('rating')??''} onChange={e=>update('rating',e.target.value)} placeholder="Score"/></label><label>Sort<select value={sort} onChange={e=>update('sort',e.target.value)}><option value="newest">Newest drinking date</option><option value="oldest">Oldest drinking date</option><option value="rating">Rating</option><option value="producer">Producer</option><option value="vintage">Vintage</option></select></label></div></form>
+    <form className="filters journal-filters" onSubmit={e=>e.preventDefault()}><JournalSearchInput value={params.get('query')??''} resetSeq={searchResetSeq}/><div className="filter-pills"><label className="filter-month">Month<input type="month" aria-label="Drinking month" value={params.get('month')??''} onChange={e=>update('month',e.target.value)}/></label><label>Tasting<input value={params.get('tasting')??''} onChange={e=>update('tasting',e.target.value)} placeholder="Tasting / event"/></label><label>Country<input value={params.get('country')??''} onChange={e=>update('country',e.target.value)} placeholder="Country"/></label><label>Style<select value={params.get('style')??''} onChange={e=>update('style',e.target.value)}><option value="">Style</option>{['red','white','rose','sparkling','dessert','fortified','orange'].map(x=><option key={x}>{x}</option>)}</select></label><label>Score<input type="number" min="0" max="100" value={params.get('rating')??''} onChange={e=>update('rating',e.target.value)} placeholder="Score"/></label><label>Sort<select value={sort} onChange={e=>update('sort',e.target.value)}><option value="newest">Newest drinking date</option><option value="oldest">Oldest drinking date</option><option value="rating">Rating</option><option value="producer">Producer</option><option value="vintage">Vintage</option></select></label></div></form>
     {attachTo&&<p className="journal-attach-banner" role="status">Pick the wines that were poured at <strong>{attachName||'this tasting'}</strong>, then tap Add. Filters and search still work, and the wines themselves are not changed — only which evening they belong to.</p>}
     {batchNotice&&<p className="journal-batch-notice" role="status">{batchNotice}</p>}
     {batchError&&!batchOpen&&<p className="journal-page-error" role="alert">{batchError}</p>}
