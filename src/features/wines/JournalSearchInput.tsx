@@ -28,5 +28,5 @@ export function JournalSearchInput({value,resetSeq,onCommit}:Props){
     timerRef.current=window.setTimeout(()=>{timerRef.current=null;latestCommit.current(next)},SEARCH_DEBOUNCE_MS);
   }
 
-  return <label className="search">Search<input aria-label="Search wines" type="search" value={draft} onChange={event=>change(event.target.value)} placeholder="Search wines, makers, regions…"/></label>;
+  return <label className="search">Search<input aria-label="Search wines" type="search" value={draft} onChange={event=>change(event.target.value)} placeholder="Search names, regions, or describe a wine…" title="Try a name such as Lamarche, or a description such as floral elegant Burgundy with fine tannins"/></label>;
 }
