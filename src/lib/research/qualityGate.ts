@@ -55,7 +55,8 @@ const GOOGLE_GROUNDING_REDIRECT_HOST='vertexaisearch.cloud.google.com';
 // carried in the chunk title. Scoring the redirect made every such source look
 // like one generic Google host, suppressing both source tier and corroboration.
 function titleHost(value:string){
-  const match=value.trim().toLowerCase().match(/\b(?:www\.)?([a-z0-9](?:[a-z0-9-]{0,62}\.)+[a-z]{2,24})\b/i);
+  // Only a bare domain identifies the publisher; prose may mention another site.
+  const match=value.trim().toLowerCase().match(/^((?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,24})$/i);
   return match?.[1]?.replace(/^www\./,'')??'';
 }
 function attributionHost(source:ResearchSourceLike){
@@ -64,7 +65,9 @@ function attributionHost(source:ResearchSourceLike){
   return uriHost;
 }
 export function distinctSourceHosts(sources:ResearchSourceLike[]){
-  return new Set(sources.map(attributionHost).filter(Boolean)).size;
+  // An unresolved redirect is still grounding, but its unknown publisher
+  // cannot establish independence from any of the identified publishers.
+  return new Set(sources.map(attributionHost).filter(h=>h&&h!==GOOGLE_GROUNDING_REDIRECT_HOST)).size;
 }
 
 const matchesHost=(candidate:string,known:string)=>candidate===known||candidate.endsWith(`.${known}`);

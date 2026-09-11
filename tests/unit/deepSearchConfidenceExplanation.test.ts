@@ -39,6 +39,35 @@ describe('Deep Search confidence explanation',()=>{
     expect(quality.score).toBe(90);
   });
 
+  it.each(['Our response to decanter.com ratings','decanter.com review','Read inao.gouv.fr for details'])('does not infer publisher authority from prose: %s',title=>{
+    const sources=[redirect(title,'a')];
+    expect(bestResearchSourceTier(sources)).toBe('grounded');
+    expect(distinctSourceHosts(sources)).toBe(0);
+    expect(buildDeepResearchQuality([entry(sources)]).score).toBe(82);
+  });
+
+  it.each(['Our vineyard soils','','vertexaisearch.cloud.google.com'])('does not count an unknown publisher as independent: %s',title=>{
+    const sources=[redirect('example-winery.com','a'),redirect(title,'b')];
+    expect(distinctSourceHosts(sources)).toBe(1);
+    const quality=buildDeepResearchQuality([entry(sources)]);
+    expect(quality.score).toBe(82);
+    expect(quality.status).toBe('mixed');
+  });
+
+  it('keeps unidentified redirects grounded without inventing corroboration',()=>{
+    const sources=[redirect('Vineyard soils','a'),redirect('Estate history','b')];
+    expect(bestResearchSourceTier(sources)).toBe('grounded');
+    expect(distinctSourceHosts(sources)).toBe(0);
+    expect(buildDeepResearchQuality([entry(sources)]).score).toBe(82);
+  });
+
+  it('normalizes publisher domains and deduplicates direct and redirect sources',()=>{
+    const sources=[redirect(' WWW.DECANTER.COM ','a'),source('https://decanter.com/wine')];
+    expect(bestResearchSourceTier(sources)).toBe('specialist');
+    expect(distinctSourceHosts(sources)).toBe(1);
+    expect(buildDeepResearchQuality([entry(sources)]).score).toBe(90);
+  });
+
   it('does not add the explanation after ordinary corroboration reaches verified',()=>{
     const quality=buildDeepResearchQuality([entry([
       source('https://one.example/terroir'),
