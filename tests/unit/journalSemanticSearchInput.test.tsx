@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { act } from 'react';
 import { createRoot,type Root } from 'react-dom/client';
-import { MemoryRouter,useLocation } from 'react-router-dom';
+import { MemoryRouter,useLocation,useSearchParams } from 'react-router-dom';
 import { afterEach,beforeEach,describe,expect,it,vi } from 'vitest';
 import { JournalSearchInput } from '../../src/features/wines/JournalSearchInput';
 
@@ -17,10 +17,14 @@ afterEach(()=>{
 });
 
 function LocationProbe(){const location=useLocation();return <output data-testid="location-search">{location.search}</output>}
+function Harness(){
+  const [params]=useSearchParams();
+  return <><JournalSearchInput value={params.get('query')??''} resetSeq={0} onCommit={vi.fn()}/><LocationProbe/></>;
+}
 
-function renderInput(value='',initial='/journal'){
+function renderInput(initial='/journal'){
   host=document.createElement('div');document.body.appendChild(host);root=createRoot(host);
-  act(()=>root!.render(<MemoryRouter initialEntries={[initial]}><JournalSearchInput value={value} resetSeq={0} onCommit={vi.fn()}/><LocationProbe/></MemoryRouter>));
+  act(()=>root!.render(<MemoryRouter initialEntries={[initial]}><Harness/></MemoryRouter>));
   return host.querySelector('[aria-label="Search wines"]') as HTMLInputElement;
 }
 
