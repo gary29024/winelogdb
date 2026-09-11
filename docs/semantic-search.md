@@ -52,7 +52,7 @@ All settled text continues to update Journal results after the existing 300 ms d
 
 This means a user typing `floral elegant Burgundy` still sees normal literal/metadata results automatically. No query embedding is spent merely because the user paused while composing the description. The URL records this distinction as `semantic=0` for the live lexical version and a positive semantic attempt number after Smart search. The first attempt is `semantic=1`; choosing **Smart search again** increments that number so the same text produces a real Journal refetch while the background index catches up.
 
-The UI deliberately does **not** claim that a Smart search is complete after the first press. On a cold or partially warmed index it shows that the journal index is being built in the background and keeps **Smart search again** available. This avoids presenting lexical or partial results as a completed semantic answer.
+The UI does not disable Smart search or label the first semantic attempt as definitively complete. It keeps **Smart search again** available so a cold or partially warmed index can be retried. It intentionally avoids a permanent “indexing” disclaimer because once the index is warm that message would be false; if richer index-state feedback is needed later, it should be driven by explicit server state rather than inferred from `semantic>0`.
 
 The Worker keeps its existing safety gate. `?semantic=1` forces semantic retrieval for direct/API testing and `?semantic=0` disables it. Other positive attempt values from the Journal UI also use semantic retrieval for descriptive queries.
 
@@ -78,8 +78,9 @@ Open Journal and try both forms:
 
 1. Type `Lamarche` and pause — it should behave like the existing live name search.
 2. Type `floral elegant Burgundy with fine tannins` and pause — ordinary lexical/metadata results should still update automatically and a **Smart search** button should be visible.
-3. Tap **Smart search** or press Enter — semantic retrieval is attempted and background indexing starts if needed. On a cold index the UI should say that indexing is happening rather than claiming success.
+3. Tap **Smart search** or press Enter — semantic retrieval is attempted and background indexing starts if needed. The action remains available as **Smart search again** rather than claiming the first attempt is final.
 4. If the first set looks incomplete, tap **Smart search again** — the same query should refetch against the warmer index.
 5. Edit the text again — after the next 300 ms pause it should return to the cheap lexical mode until Smart search is explicitly chosen again.
+6. While a search debounce is pending, change another filter such as Style — when the search settles, both the text and the newer filter should remain in the URL/results.
 
 For an A/B check, compare the same query with `semantic=0` and `semantic=1` in the Journal URL.

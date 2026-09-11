@@ -18,8 +18,9 @@ afterEach(()=>{
 
 function LocationProbe(){const location=useLocation();return <output data-testid="location-search">{location.search}</output>}
 function Harness(){
-  const [params]=useSearchParams();
-  return <><JournalSearchInput value={params.get('query')??''} resetSeq={0}/><LocationProbe/></>;
+  const [params,setParams]=useSearchParams();
+  const setRedStyle=()=>setParams(previous=>{const next=new URLSearchParams(previous);next.set('style','red');return next},{replace:true});
+  return <><JournalSearchInput value={params.get('query')??''} resetSeq={0}/><button type="button" aria-label="Set red style" onClick={setRedStyle}>Red</button><LocationProbe/></>;
 }
 
 function renderInput(initial='/journal'){
@@ -45,6 +46,18 @@ describe('Journal semantic search input',()=>{
     act(()=>vi.advanceTimersByTime(1));expect(query().get('query')).toBe('Nicole Lamarche');expect(query().get('semantic')).toBeNull();
   });
 
+  it('keeps a filter changed while the search debounce is pending',()=>{
+    const input=renderInput();
+    type(input,'floral elegant Burgundy');
+    act(()=>vi.advanceTimersByTime(100));
+    act(()=>host!.querySelector<HTMLButtonElement>('[aria-label="Set red style"]')!.click());
+    expect(query().get('style')).toBe('red');
+    act(()=>vi.advanceTimersByTime(200));
+    expect(query().get('query')).toBe('floral elegant Burgundy');
+    expect(query().get('semantic')).toBe('0');
+    expect(query().get('style')).toBe('red');
+  });
+
   it('keeps descriptive typing live but lexical until Smart search is chosen',()=>{
     const input=renderInput();
     type(input,'floral elegant Burgundy');
@@ -52,25 +65,23 @@ describe('Journal semantic search input',()=>{
     expect(query().get('query')).toBe('floral elegant Burgundy');
     expect(query().get('semantic')).toBe('0');
     expect(host!.querySelector('[aria-label="Run smart search"]')?.textContent).toContain('Smart search');
-    expect(host!.querySelector('.journal-semantic-hint')).toBeNull();
   });
 
-  it('makes a cold Smart search honest and retryable, then returns to lexical mode after editing',()=>{
+  it('keeps Smart search retryable, then returns to lexical mode after editing',()=>{
     const input=renderInput();
     type(input,'floral elegant Burgundy');act(()=>vi.advanceTimersByTime(300));
     act(()=>host!.querySelector<HTMLButtonElement>('[aria-label="Run smart search"]')!.click());
     expect(query().get('query')).toBe('floral elegant Burgundy');expect(query().get('semantic')).toBe('1');
     expect(host!.querySelector('[aria-label="Run smart search"]')?.textContent).toContain('Smart search again');
-    expect(host!.querySelector('.journal-semantic-hint')?.textContent).toContain('builds its journal index in the background');
+    expect(host!.querySelector('.journal-semantic-hint')).toBeNull();
 
     // Same text, new positive attempt: this is a real navigation/refetch rather
-    // than a disabled success state while the background index is still warm.
+    // than a disabled success state while the background index catches up.
     act(()=>host!.querySelector<HTMLButtonElement>('[aria-label="Run smart search"]')!.click());
     expect(query().get('semantic')).toBe('2');
 
     type(input,'silky perfumed pinot');act(()=>vi.advanceTimersByTime(300));
     expect(query().get('query')).toBe('silky perfumed pinot');expect(query().get('semantic')).toBe('0');
-    expect(host!.querySelector('.journal-semantic-hint')).toBeNull();
     act(()=>input.dispatchEvent(new KeyboardEvent('keydown',{key:'Enter',bubbles:true,cancelable:true})));
     expect(query().get('query')).toBe('silky perfumed pinot');expect(query().get('semantic')).toBe('1');
   });
