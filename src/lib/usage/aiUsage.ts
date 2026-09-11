@@ -153,8 +153,6 @@ export type AiUsageRunSpend={
 export type UsageSummary={
   currency:string;days:number;
   kinds:KindSpend[];
-  /** Individual research runs are kept compactly for drill-down in Insights. */
-  recentRuns:Partial<Record<AiUsageKind,AiUsageRunSpend[]>>;
   month:{month:string;searchQueries:number;freeRemaining:number;cost:number;billableSearches:number;
     /** When the allowance next resets, so the page can say it in the reader's own time. */
     resetsAt:string;timeZone:string};
@@ -162,39 +160,48 @@ export type UsageSummary={
   empty:boolean;
 };
 
+export const AI_USAGE_RUN_HISTORY_KINDS=['producer_research','wine_research','vintage_window'] as const;
+export type AiUsageRunHistoryKind=typeof AI_USAGE_RUN_HISTORY_KINDS[number];
+export const isAiUsageRunHistoryKind=(value:string):value is AiUsageRunHistoryKind=>(AI_USAGE_RUN_HISTORY_KINDS as readonly string[]).includes(value);
+export type UsageRunHistory={currency:string;days:number;kind:AiUsageRunHistoryKind;runs:AiUsageRunSpend[]};
+
 type EventRow={kind:string;model:string;tier:string;day:string;requests:number;search_queries:number;prompt_tokens:number;output_tokens:number;units:number};
 type RunPartRow={kind:string;run_id:string;target_id:string|null;target_label:string|null;model:string;tier:string;created_at:string;day:string;requests:number;search_queries:number;prompt_tokens:number;output_tokens:number};
 type RunRow={kind:string;runs:number};
 type MonthRow={kind:string;model:string;tier:string;search_queries:number;prompt_tokens:number;output_tokens:number};
 
-const RUN_HISTORY_KINDS=new Set<AiUsageKind>(['producer_research','wine_research','vintage_window']);
 const RUN_HISTORY_LIMIT=100;
+const clampWindow=(days:number)=>Math.max(1,Math.min(RAW_EVENT_RETENTION_DAYS,Math.floor(days)||30));
+const titleCase=(value:string)=>value.replace(/[_-]+/g,' ').replace(/\b[a-z]/g,letter=>letter.toUpperCase());
+function vintageTargetLabel(targetId:string|null){
+  if(!targetId)return null;
+  try{
+    const parsed=JSON.parse(targetId) as unknown;
+    if(!Array.isArray(parsed)||parsed.length<2)return null;
+    const anchor=String(parsed[0]??''),parts=anchor.split('|').filter(Boolean);
+    const place=parts.at(-1)??anchor,vintage=String(parsed[1]??'').trim(),style=String(parsed[2]??'').trim();
+    if(!place&&!vintage&&!style)return null;
+    return [place?titleCase(place):null,vintage||null,style?titleCase(style):null].filter(Boolean).join(' · ');
+  }catch{return null}
+}
 
+/**
+ * Aggregate spend for the Insights card. Keep this deliberately cheap: the
+ * per-run ledger is read only after the user asks to drill into a research
+ * category, not on every Insights load.
+ */
 export async function usageSummary(db:D1Database,owner:string,rates:AiRates,days=30):Promise<UsageSummary>{
-  const window=Math.max(1,Math.min(RAW_EVENT_RETENTION_DAYS,Math.floor(days)||30));
-  const month=billingMonth();
+  const window=clampWindow(days),month=billingMonth();
   // Grouped by model, tier and day as well as kind, because all three change
   // what a call cost: a run can escalate to a second model, batch recognition
   // bills on flex at about half of standard, and a price that changed part-way
   // through the window has to price each side of the change at its own rate.
-  //
-  // The second query replaces the old count-distinct query. It groups the same
-  // events by run/model/tier/day, which still gives exact run counts but also
-  // gives Insights the individual research history without another D1 read.
-  const [events,runParts,monthTotals]=await Promise.all([
+  const [events,runs,monthTotals]=await Promise.all([
     db.prepare(`SELECT kind,model,tier,date(created_at) AS day,sum(requests) AS requests,sum(search_queries) AS search_queries,
         sum(prompt_tokens) AS prompt_tokens,sum(output_tokens) AS output_tokens,sum(units) AS units
       FROM ai_usage_events WHERE owner_id=? AND created_at>datetime('now','-${window} days') GROUP BY kind,model,tier,day`).bind(owner).all<EventRow>(),
-    db.prepare(`SELECT e.kind,e.run_id,e.target_id,e.model,e.tier,date(e.created_at) AS day,max(e.created_at) AS created_at,
-        sum(e.requests) AS requests,sum(e.search_queries) AS search_queries,sum(e.prompt_tokens) AS prompt_tokens,sum(e.output_tokens) AS output_tokens,
-        CASE
-          WHEN e.kind='producer_research' THEN (SELECT p.canonical_name FROM producers p WHERE p.owner_id=e.owner_id AND p.id=e.target_id LIMIT 1)
-          WHEN e.kind='wine_research' THEN (SELECT trim(w.producer || ' · ' || CASE WHEN w.vintage IS NOT NULL THEN cast(w.vintage AS TEXT) || ' · ' ELSE '' END || w.wine_name) FROM wines w WHERE w.owner_id=e.owner_id AND w.id=e.target_id LIMIT 1)
-          ELSE NULL
-        END AS target_label
-      FROM ai_usage_events e WHERE e.owner_id=? AND e.created_at>datetime('now','-${window} days')
-      GROUP BY e.owner_id,e.kind,e.run_id,e.target_id,e.model,e.tier,date(e.created_at)
-      ORDER BY created_at DESC`).bind(owner).all<RunPartRow>(),
+    db.prepare(`SELECT kind,count(DISTINCT run_id) AS runs FROM ai_usage_events
+      WHERE owner_id=? AND created_at>datetime('now','-${window} days') GROUP BY kind`).bind(owner).all<RunRow>(),
     // Per model and tier, not one summed row: the fallback rate is not what a
     // 3.7 run or a flex batch was billed at, and pricing the month with it put
     // a different number under the same runs the cards above priced properly.
@@ -202,40 +209,7 @@ export async function usageSummary(db:D1Database,owner:string,rates:AiRates,days
       FROM ai_usage_monthly WHERE owner_id=? AND month=?`).bind(owner,month).all<MonthRow>()
   ]);
 
-  const runIdsByKind=new Map<string,Set<string>>();
-  const recentRunMaps=new Map<AiUsageKind,Map<string,AiUsageRunSpend>>();
-  for(const row of runParts.results??[]){
-    const kind=row.kind as AiUsageKind,runId=String(row.run_id||'');
-    if(!runId)continue;
-    const ids=runIdsByKind.get(kind)??new Set<string>();ids.add(runId);runIdsByKind.set(kind,ids);
-    if(!RUN_HISTORY_KINDS.has(kind))continue;
-    const totals:UsageTotals={searchQueries:Number(row.search_queries)||0,promptTokens:Number(row.prompt_tokens)||0,outputTokens:Number(row.output_tokens)||0};
-    const createdAt=String(row.created_at||''),cost=toLocal(marginalCostUsd(totals,rates,row.model,{on:row.day,tier:row.tier}),rates);
-    const part:RunSpendPart={model:row.model,tier:row.tier,createdAt,requests:Number(row.requests)||0,
-      searchQueries:totals.searchQueries,promptTokens:totals.promptTokens,outputTokens:totals.outputTokens,cost};
-    const map=recentRunMaps.get(kind)??new Map<string,AiUsageRunSpend>(),existing=map.get(runId);
-    if(existing){
-      existing.requests+=part.requests;existing.searchQueries+=part.searchQueries;existing.promptTokens+=part.promptTokens;
-      existing.outputTokens+=part.outputTokens;existing.cost+=part.cost;existing.parts.push(part);
-      if(createdAt>existing.createdAt)existing.createdAt=createdAt;
-      if(!existing.targetLabel&&row.target_label)existing.targetLabel=row.target_label;
-      if(!existing.targetId&&row.target_id)existing.targetId=row.target_id;
-    }else map.set(runId,{kind,runId,targetId:row.target_id??null,targetLabel:row.target_label??null,createdAt,
-      requests:part.requests,searchQueries:part.searchQueries,promptTokens:part.promptTokens,outputTokens:part.outputTokens,cost,parts:[part]});
-    recentRunMaps.set(kind,map);
-  }
-
-  let runsByKind=new Map([...runIdsByKind.entries()].map(([kind,ids])=>[kind,ids.size]));
-  // Real D1 returns one grouped row for every stored run. Keep a defensive
-  // fallback for lightweight test/compatibility adapters that can answer the
-  // historical count query but not the richer grouped projection. It is never
-  // an extra read in the normal path.
-  if((events.results?.length??0)>0&&(runParts.results?.length??0)===0){
-    const legacyRuns=await db.prepare(`SELECT kind,count(DISTINCT run_id) AS runs FROM ai_usage_events
-      WHERE owner_id=? AND created_at>datetime('now','-${window} days') GROUP BY kind`).bind(owner).all<RunRow>();
-    runsByKind=new Map((legacyRuns.results??[]).map(row=>[row.kind,Number(row.runs)||0]));
-  }
-
+  const runsByKind=new Map((runs.results??[]).map(row=>[row.kind,Number(row.runs)||0]));
   const byKind=new Map<string,KindSpend>();
   for(const row of events.results??[]){
     const totals:UsageTotals={searchQueries:Number(row.search_queries)||0,promptTokens:Number(row.prompt_tokens)||0,outputTokens:Number(row.output_tokens)||0};
@@ -259,11 +233,6 @@ export async function usageSummary(db:D1Database,owner:string,rates:AiRates,days
       costPerRun:entry.runs?entry.cost/entry.runs:0,
       searchesPerRun:entry.runs?entry.searchQueries/entry.runs:0};
   }).sort((a,b)=>b.cost-a.cost);
-  const recentRuns:Partial<Record<AiUsageKind,AiUsageRunSpend[]>>={};
-  for(const [kind,map] of recentRunMaps){
-    recentRuns[kind]=[...map.values()].map(run=>({...run,parts:run.parts.sort((a,b)=>a.createdAt.localeCompare(b.createdAt))}))
-      .sort((a,b)=>b.createdAt.localeCompare(a.createdAt)).slice(0,RUN_HISTORY_LIMIT);
-  }
   const monthRows=monthTotals.results??[];
   const monthUsage=monthRows.reduce<UsageTotals>((totals,row)=>({
     searchQueries:totals.searchQueries+(Number(row.search_queries)||0),
@@ -278,7 +247,7 @@ export async function usageSummary(db:D1Database,owner:string,rates:AiRates,days
     {searchQueries:0,promptTokens:Number(row.prompt_tokens)||0,outputTokens:Number(row.output_tokens)||0},
     rates,row.model,{tier:row.tier}),0);
   return {
-    currency:rates.currency,days:window,kinds,recentRuns,
+    currency:rates.currency,days:window,kinds,
     month:{
       month,searchQueries:monthUsage.searchQueries,
       resetsAt:nextBillingReset().toISOString(),timeZone:BILLING_TIME_ZONE,
@@ -288,4 +257,51 @@ export async function usageSummary(db:D1Database,owner:string,rates:AiRates,days
     },
     empty:kinds.length===0&&monthUsage.searchQueries===0&&monthUsage.promptTokens===0
   };
+}
+
+/**
+ * Individual run history is intentionally lazy. First select the latest logical
+ * run IDs in SQL, then expand only those runs into their model/tier/day parts,
+ * so an ordinary Insights visit pays none of this read cost and the drill-down
+ * cannot return an unbounded ledger.
+ */
+export async function usageRunHistory(db:D1Database,owner:string,rates:AiRates,kind:AiUsageRunHistoryKind,days=30):Promise<UsageRunHistory>{
+  const window=clampWindow(days);
+  const rows=await db.prepare(`WITH recent_runs AS (
+      SELECT run_id,max(created_at) AS latest FROM ai_usage_events
+      WHERE owner_id=? AND kind=? AND created_at>datetime('now','-${window} days')
+      GROUP BY run_id ORDER BY latest DESC LIMIT ?
+    )
+    SELECT e.kind,e.run_id,e.target_id,e.model,e.tier,date(e.created_at) AS day,max(e.created_at) AS created_at,
+      sum(e.requests) AS requests,sum(e.search_queries) AS search_queries,sum(e.prompt_tokens) AS prompt_tokens,sum(e.output_tokens) AS output_tokens,
+      CASE
+        WHEN e.kind='producer_research' THEN (SELECT p.canonical_name FROM producers p WHERE p.owner_id=e.owner_id AND p.id=e.target_id LIMIT 1)
+        WHEN e.kind='wine_research' THEN (SELECT trim(w.producer || ' · ' || CASE WHEN w.vintage IS NOT NULL THEN cast(w.vintage AS TEXT) || ' · ' ELSE '' END || w.wine_name) FROM wines w WHERE w.owner_id=e.owner_id AND w.id=e.target_id LIMIT 1)
+        ELSE NULL
+      END AS target_label
+    FROM ai_usage_events e JOIN recent_runs r ON r.run_id=e.run_id
+    WHERE e.owner_id=? AND e.kind=? AND e.created_at>datetime('now','-${window} days')
+    GROUP BY e.owner_id,e.kind,e.run_id,e.target_id,e.model,e.tier,date(e.created_at)
+    ORDER BY r.latest DESC,created_at ASC`).bind(owner,kind,RUN_HISTORY_LIMIT,owner,kind).all<RunPartRow>();
+
+  const runMap=new Map<string,AiUsageRunSpend>();
+  for(const row of rows.results??[]){
+    const runId=String(row.run_id||'');if(!runId)continue;
+    const totals:UsageTotals={searchQueries:Number(row.search_queries)||0,promptTokens:Number(row.prompt_tokens)||0,outputTokens:Number(row.output_tokens)||0};
+    const createdAt=String(row.created_at||''),cost=toLocal(marginalCostUsd(totals,rates,row.model,{on:row.day,tier:row.tier}),rates);
+    const part:RunSpendPart={model:row.model,tier:row.tier,createdAt,requests:Number(row.requests)||0,
+      searchQueries:totals.searchQueries,promptTokens:totals.promptTokens,outputTokens:totals.outputTokens,cost};
+    const targetLabel=row.target_label??(kind==='vintage_window'?vintageTargetLabel(row.target_id):null),existing=runMap.get(runId);
+    if(existing){
+      existing.requests+=part.requests;existing.searchQueries+=part.searchQueries;existing.promptTokens+=part.promptTokens;
+      existing.outputTokens+=part.outputTokens;existing.cost+=part.cost;existing.parts.push(part);
+      if(createdAt>existing.createdAt)existing.createdAt=createdAt;
+      if(!existing.targetLabel&&targetLabel)existing.targetLabel=targetLabel;
+      if(!existing.targetId&&row.target_id)existing.targetId=row.target_id;
+    }else runMap.set(runId,{kind,runId,targetId:row.target_id??null,targetLabel,createdAt,
+      requests:part.requests,searchQueries:part.searchQueries,promptTokens:part.promptTokens,outputTokens:part.outputTokens,cost,parts:[part]});
+  }
+  const runs=[...runMap.values()].map(run=>({...run,parts:run.parts.sort((a,b)=>a.createdAt.localeCompare(b.createdAt))}))
+    .sort((a,b)=>b.createdAt.localeCompare(a.createdAt));
+  return {currency:rates.currency,days:window,kind,runs};
 }
