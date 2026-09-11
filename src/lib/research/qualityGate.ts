@@ -47,14 +47,29 @@ const VERIFIED_SCORE:Record<ResearchSourceTier,number>={none:0,grounded:82,speci
 // lists was capped at 'mixed' however well sourced it was.
 const CORROBORATION_BONUS=[0,0,3,6] as const;
 export const SOURCE_CONFIDENCE_EXPLANATION='No quality-gate warning was raised; this score is limited by source authority or independent corroboration, not by a detected grounding failure.';
-export function distinctSourceHosts(sources:ResearchSourceLike[]){
-  return new Set(sources.map(source=>host(source.url)).filter(Boolean)).size;
-}
 
 const host=(value:string)=>{try{return new URL(value).hostname.toLowerCase().replace(/^www\./,'')}catch{return ''}};
+const GOOGLE_GROUNDING_REDIRECT_HOST='vertexaisearch.cloud.google.com';
+// Gemini's legacy Google Search grounding returns an attribution redirect URI
+// on vertexaisearch.cloud.google.com while the real publisher domain is commonly
+// carried in the chunk title. Scoring the redirect made every such source look
+// like one generic Google host, suppressing both source tier and corroboration.
+function titleHost(value:string){
+  const match=value.trim().toLowerCase().match(/\b(?:www\.)?([a-z0-9](?:[a-z0-9-]{0,62}\.)+[a-z]{2,24})\b/i);
+  return match?.[1]?.replace(/^www\./,'')??'';
+}
+function attributionHost(source:ResearchSourceLike){
+  const uriHost=host(source.url);
+  if(uriHost===GOOGLE_GROUNDING_REDIRECT_HOST)return titleHost(source.title)||uriHost;
+  return uriHost;
+}
+export function distinctSourceHosts(sources:ResearchSourceLike[]){
+  return new Set(sources.map(attributionHost).filter(Boolean)).size;
+}
+
 const matchesHost=(candidate:string,known:string)=>candidate===known||candidate.endsWith(`.${known}`);
 function sourceTier(source:ResearchSourceLike):ResearchSourceTier{
-  const h=host(source.url);if(!h)return 'none';
+  const h=attributionHost(source);if(!h)return 'none';
   if(OFFICIAL_TLD.test(h)||AUTHORITATIVE_HOSTS.some(item=>matchesHost(h,item)))return 'authoritative';
   if(SPECIALIST_HOSTS.some(item=>matchesHost(h,item)))return 'specialist';
   return /^https:/i.test(source.url)?'grounded':'none';
