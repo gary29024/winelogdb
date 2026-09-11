@@ -1,4 +1,4 @@
-import { recordAiUsage,type AiUsageEnv,type AiUsageKind } from '../usage/aiUsage';
+import { recordAiUsage,type AiUsageEnv } from '../usage/aiUsage';
 export { shouldUseSemanticQuery } from './semanticQuery';
 
 export type SemanticEmbeddingBindings={
@@ -29,7 +29,6 @@ const GEMINI_DIMENSIONS=768;
 const WARM_SLICE=64;
 const BACKGROUND_BACKFILL=192;
 const EMBED_BATCH=24;
-const SEARCH_EMBEDDING_KIND='search_embedding' as AiUsageKind;
 
 const jsonList=(value:unknown)=>{try{const parsed=JSON.parse(String(value));return Array.isArray(parsed)?parsed.map(String).filter(Boolean):[]}catch{return [] as string[]}};
 const clamp=(value:number,min:number,max:number)=>Math.min(Math.max(value,min),max);
@@ -61,14 +60,8 @@ function normalized(values:ArrayLike<number>){
   return Array.from({length:values.length},(_,i)=>Number(values[i])*scale);
 }
 
-export function cosineSimilarity(a:ArrayLike<number>,b:ArrayLike<number>){
-  if(!a.length||a.length!==b.length)return -1;
-  let dot=0,na=0,nb=0;
-  for(let i=0;i<a.length;i++){const av=Number(a[i]),bv=Number(b[i]);dot+=av*bv;na+=av*av;nb+=bv*bv}
-  return na>0&&nb>0?dot/Math.sqrt(na*nb):-1;
-}
-
-function normalizedDot(a:ArrayLike<number>,b:ArrayLike<number>){
+/** Both inputs must already be unit-normalized; provider vectors are normalized before storage/use. */
+export function normalizedDot(a:ArrayLike<number>,b:ArrayLike<number>){
   if(!a.length||a.length!==b.length)return -1;
   let dot=0;for(let i=0;i<a.length;i++)dot+=Number(a[i])*Number(b[i]);
   return dot;
@@ -134,15 +127,17 @@ async function embedTexts(env:SemanticEnv,config:EmbeddingConfig,texts:string[],
     });
   }finally{
     // Rejected or malformed AI answers can still consume quota. Meter every
-    // provider attempt, not only responses that pass our validation. Neither
-    // embedding response exposes exact billed tokens/neurons here, so the app
-    // records calls + embeddings covered and the provider dashboard remains
-    // authoritative for exact compute spend.
-    if(attempted)await recordAiUsage(env,meter.owner,{kind:SEARCH_EMBEDDING_KIND,runId:meter.runId,targetId:meter.targetId,model:config.model,requests:1,units:texts.length});
+    // provider attempt, not only responses that pass our validation. The ledger
+    // unit for Smart search is an indexed wine, so query embeddings count as a
+    // request but deliberately add zero wine units.
+    if(attempted)await recordAiUsage(env,meter.owner,{kind:'search_embedding',runId:meter.runId,targetId:meter.targetId,model:config.model,requests:1,units:kind==='document'?texts.length:0});
   }
 }
 
-function vectorBlob(vector:number[]){return Float32Array.from(vector).buffer}
+// Uint8Array is accepted by both D1 and the repo's node:sqlite harness as a BLOB
+// bind. A naked ArrayBuffer works in D1 but node:sqlite rejects it, which hid the
+// persistence path from realistic integration tests.
+function vectorBlob(vector:number[]){return new Uint8Array(Float32Array.from(vector).buffer)}
 function vectorFromBlob(value:ArrayBuffer|ArrayBufferView){
   if(value instanceof ArrayBuffer)return new Float32Array(value);
   const copy=value.buffer.slice(value.byteOffset,value.byteOffset+value.byteLength);
