@@ -10,7 +10,7 @@ import { createManualProducerContact,deleteManualProducerContact,listManualProdu
 import { applyCatalogDecisions,deleteCatalogDecision,listCatalogDecisions,saveCatalogDecision } from '../src/lib/producers/catalogDecisions';
 import { selectRecognitionMetadata,type RecognitionPhotoMetadata } from '../src/lib/uploads/metadataSelection';
 import { canonicalCatalogEntries,type CatalogPresentationLike } from '../src/lib/cuvees/catalogPresentation';
-import { usageSummary } from '../src/lib/usage/aiUsage';
+import { isAiUsageRunHistoryKind,usageRunHistory,usageSummary } from '../src/lib/usage/aiUsage';
 import { seedAiUsageOnce } from '../src/lib/usage/seedFromResearchJobs';
 import { readAiRates,type AiRateEnv } from '../src/lib/usage/rates';
 
@@ -44,6 +44,17 @@ app.get('/api/usage/spend',async c=>{
     return c.json(await usageSummary(c.env.DB,owner,readAiRates(c.env),Number.isFinite(days)?days:30));
   }
   catch(e){return c.json({error:(e as Error).message||'Could not load AI spend'},500)}
+});
+
+// Individual research runs are the expensive part of the ledger to read. Keep
+// them off the normal Insights path and fetch only one requested category after
+// the user opens its drill-down; usageRunHistory applies the SQL run limit.
+app.get('/api/usage/spend/runs',async c=>{
+  cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
+  const days=Number(c.req.query('days')??30),kind=(c.req.query('kind')??'').trim();
+  if(!isAiUsageRunHistoryKind(kind))return c.json({error:'Unsupported AI spend category'},400);
+  try{return c.json(await usageRunHistory(c.env.DB,owner,readAiRates(c.env),kind,Number.isFinite(days)?days:30))}
+  catch(e){return c.json({error:(e as Error).message||'Could not load AI run history'},500)}
 });
 
 app.get('/api/producers',async c=>{

@@ -60,14 +60,28 @@ registerSummaryCache(invalidateJourneyData);
 export const getJourneyData=journeyCache.get;
 
 export type KindSpend={kind:string;label:string;runs:number;requests:number;searchQueries:number;promptTokens:number;outputTokens:number;units:number;unit:'run'|'wine';unitCount:number;costPerUnit:number;cost:number;costPerRun:number;searchesPerRun:number};
+export type UsageRunPart={model:string;tier:string;createdAt:string;requests:number;searchQueries:number;promptTokens:number;outputTokens:number;cost:number};
+export type UsageRun={kind:string;runId:string;targetId:string|null;targetLabel:string|null;createdAt:string;requests:number;searchQueries:number;promptTokens:number;outputTokens:number;cost:number;parts:UsageRunPart[]};
+export type RunHistoryKind='producer_research'|'wine_research'|'vintage_window';
+export type UsageRunHistory={currency:string;days:number;kind:RunHistoryKind;runs:UsageRun[]};
 export type UsageSummary={
   currency:string;days:number;kinds:KindSpend[];empty:boolean;
   month:{month:string;searchQueries:number;freeRemaining:number;billableSearches:number;cost:number;resetsAt:string;timeZone:string};
 };
 
+const readUsageResponse=async<T>(response:Response,fallback:string):Promise<T>=>{
+  if(response.status===401){clearSession();throw new Error('Session expired. Please sign in again.')}
+  if(!response.ok){const body=await response.json().catch(()=>({})) as {error?:string};throw new Error(body.error||fallback)}
+  return response.json() as Promise<T>;
+};
+
 export async function getAiSpend(days=30):Promise<UsageSummary>{
   const response=await fetch(`/api/usage/spend?days=${days}`,{headers:authHeaders()});
-  if(response.status===401){clearSession();throw new Error('Session expired. Please sign in again.')}
-  if(!response.ok){const body=await response.json().catch(()=>({})) as {error?:string};throw new Error(body.error||'Could not load AI spend')}
-  return response.json() as Promise<UsageSummary>;
+  return readUsageResponse<UsageSummary>(response,'Could not load AI spend');
+}
+
+export async function getAiSpendRuns(kind:RunHistoryKind,days=30):Promise<UsageRunHistory>{
+  const params=new URLSearchParams({kind,days:String(days)});
+  const response=await fetch(`/api/usage/spend/runs?${params}`,{headers:authHeaders()});
+  return readUsageResponse<UsageRunHistory>(response,'Could not load AI run history');
 }

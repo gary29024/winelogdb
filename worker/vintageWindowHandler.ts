@@ -226,9 +226,13 @@ async function ask(env:VintageWindowBindings,subject:VintageSubject,baseline:{fr
  * A rejected answer is not a free one: the tokens were spent and the search
  * was run. Leaving those out is what would make the cheap-first pairing look
  * cheaper than it is, which is the one thing this panel must not do.
+ *
+ * The vintage cache key is also the stable target ID in the ledger. That lets
+ * Insights resolve a successful run back to its region/vintage/style without
+ * storing another copy of the label in every usage row.
  */
-const meter=(env:VintageWindowBindings,owner:string,requestId:string,attempt:Attempt,units:number)=>
-  attempt.billed?recordAiUsage(env,owner,{kind:'vintage_window',runId:requestId,model:attempt.model,requests:1,units,
+const meter=(env:VintageWindowBindings,owner:string,requestId:string,targetId:string,attempt:Attempt,units:number)=>
+  attempt.billed?recordAiUsage(env,owner,{kind:'vintage_window',runId:requestId,targetId,model:attempt.model,requests:1,units,
     searchQueries:attempt.billed.searchQueries,promptTokens:attempt.billed.promptTokens,outputTokens:attempt.billed.outputTokens}):Promise.resolve();
 
 export async function researchVintageWindow(env:VintageWindowBindings,owner:string,subject:VintageSubject,requestId:string){
@@ -239,12 +243,12 @@ export async function researchVintageWindow(env:VintageWindowBindings,owner:stri
 
   let attempt=await ask(env,subject,baseline,cell,MODEL,requestId,TIMEOUT_MS,OUTPUT_TOKENS);
   if(!attempt.ok){
-    await meter(env,owner,requestId,attempt,0);
+    await meter(env,owner,requestId,cell.key,attempt,0);
     console.warn(JSON.stringify({event:'vintage-window-escalation',requestId,vintage,cell:cell.label,
       fromModel:MODEL,toModel:ESCALATION_MODEL,reason:attempt.reason,error:attempt.error.message,...attempt.detail}));
     const escalated=await ask(env,subject,baseline,cell,ESCALATION_MODEL,requestId,ESCALATION_TIMEOUT_MS,ESCALATION_OUTPUT_TOKENS);
     if(!escalated.ok){
-      await meter(env,owner,requestId,escalated,0);
+      await meter(env,owner,requestId,cell.key,escalated,0);
       console.error(JSON.stringify({event:'vintage-window-refused',requestId,vintage,cell:cell.label,
         model:escalated.model,reason:escalated.reason,error:escalated.error.message,...escalated.detail}));
       throw escalated.error;
@@ -256,7 +260,7 @@ export async function researchVintageWindow(env:VintageWindowBindings,owner:stri
     redirects:attempt.detail?.redirects??null,vintageScore:attempt.detail?.vintageScore??null,
     confidence:attempt.detail?.confidence??null,replySources:attempt.detail?.replySources??null,
     metadataSources:attempt.detail?.metadataSources??null,qualityDiscarded:attempt.detail?.qualityDiscarded??false}));
-  await meter(env,owner,requestId,attempt,1);
+  await meter(env,owner,requestId,cell.key,attempt,1);
   return writeVintageWindow(env.DB,owner,subject,attempt.answer,baseline,attempt.model);
 }
 

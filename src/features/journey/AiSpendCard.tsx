@@ -1,5 +1,6 @@
-import { useEffect,useState } from 'react';
-import { getAiSpend,type UsageSummary } from './api';
+import { useEffect,useId,useRef,useState } from 'react';
+import { getAiSpend,getAiSpendRuns,type RunHistoryKind,type UsageRun,type UsageSummary } from './api';
+import '../../aiSpend.css';
 
 /**
  * What the AI has cost, per run.
@@ -22,6 +23,11 @@ const money=(currency:string,value:number)=>{
 };
 const count=(value:number)=>new Intl.NumberFormat().format(Math.round(value));
 const oneDecimal=(value:number)=>value.toFixed(1);
+const when=(iso:string)=>{
+  const at=new Date(iso);
+  if(Number.isNaN(at.getTime()))return 'Unknown time';
+  return new Intl.DateTimeFormat(undefined,{day:'numeric',month:'short',year:'numeric',hour:'numeric',minute:'2-digit'}).format(at);
+};
 /**
  * The allowance resets at midnight Pacific on the 1st, which from most of the
  * world is some other date and time entirely - so it is shown in the reader's
@@ -33,15 +39,114 @@ const resetLabel=(iso:string)=>{
   return new Intl.DateTimeFormat(undefined,{day:'numeric',month:'short',hour:'numeric',minute:'2-digit'}).format(at);
 };
 
+const DRILLDOWN_KINDS=new Set<RunHistoryKind>(['producer_research','wine_research','vintage_window']);
+const isDrilldownKind=(value:string):value is RunHistoryKind=>DRILLDOWN_KINDS.has(value as RunHistoryKind);
+const runTitle=(run:UsageRun,label:string)=>run.targetLabel||(
+  run.kind==='vintage_window'?'Vintage window research':label.replace('Deep Search','research')
+);
+
+function AiSpendRunDialog({label,runs,totalRuns,currency,days,loading,error,onClose}:{
+  label:string;runs:UsageRun[];totalRuns:number;currency:string;days:number;loading:boolean;error:string;onClose:()=>void;
+}){
+  const ref=useRef<HTMLDialogElement>(null),titleId=useId();
+  const [selectedId,setSelectedId]=useState<string|null>(null);
+  const selected=runs.find(run=>run.runId===selectedId)??null;
+
+  useEffect(()=>{
+    const dialog=ref.current!;
+    const previousFocus=document.activeElement instanceof HTMLElement?document.activeElement:null;
+    const previousOverflow=document.body.style.overflow;
+    dialog.showModal();document.body.style.overflow='hidden';
+    return()=>{
+      dialog.close();document.body.style.overflow=previousOverflow;
+      if(previousFocus?.isConnected)previousFocus.focus();
+    };
+  },[]);
+
+  return <dialog ref={ref} className="ai-spend-dialog" aria-labelledby={titleId}
+    onCancel={event=>{event.preventDefault();onClose()}}
+    onClick={event=>{if(event.target===event.currentTarget)onClose()}}>
+    <div className="ai-spend-dialog-body">
+      <div className="ai-spend-dialog-head">
+        <div>
+          {selected&&<button type="button" className="ai-spend-back" onClick={()=>setSelectedId(null)}>← All runs</button>}
+          <p className="section-label">AI spend</p>
+          <h2 id={titleId}>{selected?runTitle(selected,label):label}</h2>
+          <p>{selected?when(selected.createdAt):`Individual runs · last ${days} days`}</p>
+        </div>
+        <button type="button" className="quiet" onClick={onClose} aria-label="Close AI spend details">Close</button>
+      </div>
+
+      {!selected?<>
+        <p className="ai-spend-dialog-note">
+          Marginal cost prices grounded searches at list price so runs are comparable. Your actual billing-month cost can be lower while the free search allowance remains.
+        </p>
+        {loading?<p className="journey-muted">Loading run history…</p>
+          :error?<p className="journey-muted">{error}</p>
+          :runs.length?<div className="ai-spend-run-list">
+          {runs.map(run=><button type="button" key={run.runId} className="ai-spend-run-row" onClick={()=>setSelectedId(run.runId)}>
+            <span className="ai-spend-run-main"><strong>{runTitle(run,label)}</strong><small>{when(run.createdAt)}</small></span>
+            <span className="ai-spend-run-cost"><b>{money(currency,run.cost)}</b><small>marginal</small></span>
+            <span className="ai-spend-run-meta">
+              {count(run.searchQueries)} search{run.searchQueries===1?'':'es'} · {count(run.requests)} request{run.requests===1?'':'s'} · {count(run.promptTokens+run.outputTokens)} tokens
+            </span>
+            <span className="ai-spend-run-chevron" aria-hidden="true">›</span>
+          </button>)}
+        </div>:<p className="journey-muted">No individual run records are available in this window.</p>}
+        {!loading&&!error&&totalRuns>runs.length&&<p className="journey-muted small">Showing the latest {count(runs.length)} of {count(totalRuns)} runs.</p>}
+      </>:<>
+        <div className="ai-spend-run-summary">
+          <article><small>Marginal cost</small><strong>{money(currency,selected.cost)}</strong></article>
+          <article><small>Grounded searches</small><strong>{count(selected.searchQueries)}</strong></article>
+          <article><small>Requests</small><strong>{count(selected.requests)}</strong></article>
+          <article><small>Total tokens</small><strong>{count(selected.promptTokens+selected.outputTokens)}</strong></article>
+        </div>
+        <div className="ai-spend-run-token-split">
+          <span>Input {count(selected.promptTokens)}</span><span>Output + thinking {count(selected.outputTokens)}</span>
+        </div>
+        <div className="ai-spend-run-parts">
+          <h3>Request breakdown</h3>
+          {selected.parts.map((part,index)=><article key={`${part.model}-${part.tier}-${part.createdAt}-${index}`}>
+            <div><strong>{part.model}</strong><small>{part.tier} tier · {when(part.createdAt)}</small></div>
+            <b>{money(currency,part.cost)}</b>
+            <p>{count(part.requests)} request{part.requests===1?'':'s'} · {count(part.searchQueries)} search{part.searchQueries===1?'':'es'} · {count(part.promptTokens)} input · {count(part.outputTokens)} output/thinking</p>
+          </article>)}
+        </div>
+        <details className="ai-spend-run-id"><summary>Technical run ID</summary><code>{selected.runId}</code></details>
+        <p className="ai-spend-dialog-note">This is the marginal run cost used for comparing research efficiency. The billing-month tile applies the shared grounding allowance separately.</p>
+      </>}
+    </div>
+  </dialog>;
+}
+
 export function AiSpendCard(){
   const [spend,setSpend]=useState<UsageSummary|null>(null);
   const [error,setError]=useState('');
+  const [selectedKind,setSelectedKind]=useState<RunHistoryKind|null>(null);
+  const [selectedRuns,setSelectedRuns]=useState<UsageRun[]>([]);
+  const [runsLoading,setRunsLoading]=useState(false);
+  const [runsError,setRunsError]=useState('');
+  const runCache=useRef(new Map<string,UsageRun[]>());
 
   useEffect(()=>{
     let live=true;
     void getAiSpend().then(next=>{if(live)setSpend(next)}).catch(e=>{if(live)setError((e as Error).message)});
     return()=>{live=false};
   },[]);
+
+  useEffect(()=>{
+    if(!selectedKind||!spend)return;
+    const cacheKey=`${selectedKind}:${spend.days}`,cached=runCache.current.get(cacheKey);
+    if(cached){setSelectedRuns(cached);setRunsError('');setRunsLoading(false);return}
+    let live=true;
+    setSelectedRuns([]);setRunsError('');setRunsLoading(true);
+    void getAiSpendRuns(selectedKind,spend.days).then(history=>{
+      if(!live)return;
+      runCache.current.set(cacheKey,history.runs);setSelectedRuns(history.runs);
+    }).catch(e=>{if(live)setRunsError((e as Error).message||'Could not load run history')})
+      .finally(()=>{if(live)setRunsLoading(false)});
+    return()=>{live=false};
+  },[selectedKind,spend]);
 
   // Insights is about the wine, not the bill: anything wrong here - a failed
   // request, a payload that is not a summary - leaves the page as it was.
@@ -52,6 +157,7 @@ export function AiSpendCard(){
   </section>;
 
   const {month}=spend;
+  const selectedKindSpend=selectedKind?spend.kinds.find(kind=>kind.kind===selectedKind):null;
   return <section className="journey-card ai-spend-card">
     <div className="journey-section-heading">
       <div><p className="section-label">AI spend</p><h2>What each run costs</h2></div>
@@ -62,13 +168,18 @@ export function AiSpendCard(){
         other, let alone to a producer Deep Search, until they are. */}
     <div className="ai-spend-grid">{spend.kinds.map(kind=>{
       const unit=kind.unit==='wine'?'wine':'run',count_=kind.unitCount??kind.runs;
-      return <article key={kind.kind}>
+      const drillable=isDrilldownKind(kind.kind);
+      const open=()=>{if(isDrilldownKind(kind.kind))setSelectedKind(kind.kind)};
+      return <article key={kind.kind} className={drillable?'is-clickable':undefined}
+        role={drillable?'button':undefined} tabIndex={drillable?0:undefined} aria-haspopup={drillable?'dialog':undefined}
+        onClick={open} onKeyDown={event=>{if(!drillable)return;if(event.key==='Enter'||event.key===' '){event.preventDefault();open()}}}>
         <div><strong>{kind.label}</strong><span>{count(count_)} {unit}{count_===1?'':'s'}</span></div>
         <div><b>{money(spend.currency,kind.costPerUnit??kind.costPerRun)}</b><small>per {unit}</small></div>
         <footer>
           {money(spend.currency,kind.cost)} total · {count(kind.requests)} request{kind.requests===1?'':'s'}
           {unit==='wine'&&kind.runs>0&&<> · {count(kind.runs)} run{kind.runs===1?'':'s'}</>}
           {kind.searchQueries>0&&<> · {oneDecimal(kind.searchesPerRun)} searches/run</>}
+          {drillable&&<span className="ai-spend-view-runs">View runs ›</span>}
         </footer>
       </article>;
     })}</div>
@@ -109,5 +220,8 @@ export function AiSpendCard(){
       changes from a date leaves earlier runs at what they cost; correcting a rate that was always wrong reprices the history,
       as it should.
     </p>
+    {selectedKind&&selectedKindSpend&&<AiSpendRunDialog key={selectedKind} label={selectedKindSpend.label}
+      runs={selectedRuns} totalRuns={selectedKindSpend.runs} currency={spend.currency} days={spend.days}
+      loading={runsLoading} error={runsError} onClose={()=>setSelectedKind(null)}/>} 
   </section>;
 }
