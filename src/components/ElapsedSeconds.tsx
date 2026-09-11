@@ -1,9 +1,6 @@
 import { useEffect,useState } from 'react';
 
-export function elapsedSeconds(startedAt:string,now=Date.now()){
- const started=Date.parse(startedAt);
- return Number.isFinite(started)?Math.max(0,Math.floor((now-started)/1000)):0;
-}
+import { elapsedSeconds } from '../lib/polling/elapsedSeconds';
 
 /**
  * Keep a live background-job clock local to this tiny component. A timer in a
