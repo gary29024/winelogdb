@@ -19,7 +19,7 @@ afterEach(()=>{
 function LocationProbe(){const location=useLocation();return <output data-testid="location-search">{location.search}</output>}
 function Harness(){
   const [params]=useSearchParams();
-  return <><JournalSearchInput value={params.get('query')??''} resetSeq={0} onCommit={vi.fn()}/><LocationProbe/></>;
+  return <><JournalSearchInput value={params.get('query')??''} resetSeq={0}/><LocationProbe/></>;
 }
 
 function renderInput(initial='/journal'){
@@ -52,17 +52,25 @@ describe('Journal semantic search input',()=>{
     expect(query().get('query')).toBe('floral elegant Burgundy');
     expect(query().get('semantic')).toBe('0');
     expect(host!.querySelector('[aria-label="Run smart search"]')?.textContent).toContain('Smart search');
+    expect(host!.querySelector('.journal-semantic-hint')).toBeNull();
   });
 
-  it('runs one explicit Smart search by button or Enter and returns to lexical mode after editing',()=>{
+  it('makes a cold Smart search honest and retryable, then returns to lexical mode after editing',()=>{
     const input=renderInput();
     type(input,'floral elegant Burgundy');act(()=>vi.advanceTimersByTime(300));
     act(()=>host!.querySelector<HTMLButtonElement>('[aria-label="Run smart search"]')!.click());
     expect(query().get('query')).toBe('floral elegant Burgundy');expect(query().get('semantic')).toBe('1');
-    expect(host!.querySelector('[aria-label="Run smart search"]')?.textContent).toContain('Smart searched');
+    expect(host!.querySelector('[aria-label="Run smart search"]')?.textContent).toContain('Smart search again');
+    expect(host!.querySelector('.journal-semantic-hint')?.textContent).toContain('builds its journal index in the background');
+
+    // Same text, new positive attempt: this is a real navigation/refetch rather
+    // than a disabled success state while the background index is still warm.
+    act(()=>host!.querySelector<HTMLButtonElement>('[aria-label="Run smart search"]')!.click());
+    expect(query().get('semantic')).toBe('2');
 
     type(input,'silky perfumed pinot');act(()=>vi.advanceTimersByTime(300));
     expect(query().get('query')).toBe('silky perfumed pinot');expect(query().get('semantic')).toBe('0');
+    expect(host!.querySelector('.journal-semantic-hint')).toBeNull();
     act(()=>input.dispatchEvent(new KeyboardEvent('keydown',{key:'Enter',bubbles:true,cancelable:true})));
     expect(query().get('query')).toBe('silky perfumed pinot');expect(query().get('semantic')).toBe('1');
   });
