@@ -169,7 +169,7 @@ app.post('/api/producers/:id/merge',async c=>{
 app.post('/api/producers/:id/unlink',async c=>{
   cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
   const body=await c.req.json().catch(()=>({})) as {confirmation?:string;mergeId?:string};
-  if(body.confirmation!=='UNLINK_PRODUCER'||!body.mergeId)return c.json({error:'Producer unlink requires an existing producer selection and explicit confirmation'},400);
+  if(body.confirmation!=='UNLINK_PRODUCER'||!body.mergeId)return c.json({error:'Producer unlink requires an existing linked producer and explicit confirmation'},400);
   const guard=await c.env.DB.prepare(`SELECT p.canonical_name,m.source_canonical_name,m.source_aliases_json FROM producer_merges m
     JOIN producers p ON p.owner_id=m.owner_id AND p.id=m.destination_producer_id
     WHERE m.owner_id=? AND m.id=? AND m.destination_producer_id=? AND m.undone_at IS NULL`).bind(owner,body.mergeId,c.req.param('id')).first<{canonical_name:string;source_canonical_name:string;source_aliases_json:string}>();
