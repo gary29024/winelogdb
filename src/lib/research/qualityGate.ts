@@ -46,6 +46,7 @@ const VERIFIED_SCORE:Record<ResearchSourceTier,number>={none:0,grounded:82,speci
 // permanently below the 85 needed for 'verified', so any wine outside the host
 // lists was capped at 'mixed' however well sourced it was.
 const CORROBORATION_BONUS=[0,0,3,6] as const;
+export const SOURCE_CONFIDENCE_EXPLANATION='No quality-gate warning was raised; this score is limited by source authority or independent corroboration, not by a detected grounding failure.';
 export function distinctSourceHosts(sources:ResearchSourceLike[]){
   return new Set(sources.map(source=>host(source.url)).filter(Boolean)).size;
 }
@@ -145,5 +146,11 @@ export function buildDeepResearchQuality(entries:Array<{scope:ResearchScopeQuali
   const values=Object.values(fields),score=values.length?Math.round(values.reduce((sum,item)=>sum+item.score,0)/values.length):0;
   const uniqueWarnings=[...new Set(warnings)];
   const status:DeepResearchQuality['status']=score>=85&&!uniqueWarnings.length?'verified':score>=65?'mixed':'limited';
-  return {status,score,sourceTier:tier,warnings:uniqueWarnings.slice(0,20),fields};
+  // A clean, fully verified field set can still be mixed because generic HTTPS
+  // sources start at 82/100. Surface that distinction so 82 does not look like
+  // a hidden ungrounded claim: the content gate passed, but source authority or
+  // independent corroboration was not strong enough to clear the 85 threshold.
+  const sourceConfidenceLimited=status==='mixed'&&!uniqueWarnings.length&&values.length>0&&values.every(item=>item.status==='verified');
+  const displayWarnings=sourceConfidenceLimited?[SOURCE_CONFIDENCE_EXPLANATION]:uniqueWarnings;
+  return {status,score,sourceTier:tier,warnings:displayWarnings.slice(0,20),fields};
 }
