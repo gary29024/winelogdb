@@ -13,6 +13,13 @@ const SCOPE_FIELDS:Record<ResearchScopeQualityName,DeepResearchField[]>={
   vintage_context:['vintageQuality'],
   wine_vintage:['summary','expectedProfile','winemakingTechniques','drinkingWindow']
 };
+// Fields introduced after layered research shipped may be absent from a legacy
+// cache row. New research always writes the property, so present-but-empty still
+// means failure while a truly absent legacy property remains reusable.
+export const LEGACY_OPTIONAL_FIELDS:ReadonlySet<DeepResearchField>=new Set(['expectedProfile']);
+export function legacyOptionalFieldMissing(field:string,payload:Record<string,string>){
+  return LEGACY_OPTIONAL_FIELDS.has(field as DeepResearchField)&&!Object.prototype.hasOwnProperty.call(payload,field);
+}
 // Appellation bodies, consorzi, regulatory councils and national trade bodies.
 // The list is deliberately multi-region: when it only named French and Napa
 // hosts, a wine researched from excellent Italian, German or Australian sources
@@ -117,6 +124,11 @@ function vintageMismatch(field:DeepResearchField,value:string,subject:ResearchSu
   const vintage=typeof subject.vintage==='number'?subject.vintage:null;if(vintage==null)return false;
   if(yearsIn(value).includes(vintage))return false;
   const asserted=nonContextualYears(value);
+  // Sensory prose commonly carries a forward-looking drinking horizon (for
+  // example "best from 2026 to 2032"). A year after the wine's vintage cannot
+  // identify a competing vintage, so keep the mismatch guard only for earlier
+  // years that could actually be a pasted note from another vintage.
+  if(field==='expectedProfile')return asserted.some(year=>year<vintage);
   return asserted.length>0;
 }
 function generalPracticeLeak(field:DeepResearchField,value:string,subject:ResearchSubjectLike){
@@ -154,10 +166,7 @@ export function assessResearchField(field:DeepResearchField,value:string,subject
 export function assessResearchScope(scope:ResearchScopeQualityName,payload:Record<string,string>,subject:ResearchSubjectLike,sources:ResearchSourceLike[]){
   const fields:Array<readonly [DeepResearchField,ResearchFieldQuality&{pass:boolean}]>=[];
   for(const field of SCOPE_FIELDS[scope]){
-    // expectedProfile was added after the layered cache shipped. Absence means
-    // a legacy cache entry; an explicitly present empty value is still a real
-    // missing-field failure for newly generated research.
-    if(field==='expectedProfile'&&!Object.prototype.hasOwnProperty.call(payload,field))continue;
+    if(legacyOptionalFieldMissing(field,payload))continue;
     fields.push([field,assessResearchField(field,payload[field]??'',subject,sources)] as const);
   }
   const warnings=[...new Set(fields.flatMap(([,quality])=>quality.warnings))];

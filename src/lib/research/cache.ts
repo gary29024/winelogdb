@@ -1,5 +1,5 @@
 import { deepSearchProvenanceSchema,type DeepSearchProvenance,type DeepSearchResult } from '../db/schema';
-import { assessResearchScope,buildDeepResearchQuality } from './qualityGate';
+import { assessResearchScope,buildDeepResearchQuality,legacyOptionalFieldMissing } from './qualityGate';
 import { highRiskTechnicalScopePasses } from './technicalClaimGate';
 import { auditTechnicalContradictions,disputedTechnicalClaimCount,technicalContradictionScopePasses } from './technicalContradictions';
 
@@ -39,11 +39,7 @@ export function fieldsForScope(scope:ResearchScope){
   return ['summary','expectedProfile','winemakingTechniques','drinkingWindow'] as const;
 }
 function fieldIsMissing(field:string,payload:Record<string,string>){
-  // A missing property (rather than an empty property) identifies a cache entry
-  // written before expectedProfile existed. Keep that cache reusable; new model
-  // responses always carry the field and an empty value still fails the gate.
-  if(field==='expectedProfile'&&!Object.prototype.hasOwnProperty.call(payload,field))return false;
-  return !payload[field]?.trim();
+  return !legacyOptionalFieldMissing(field,payload)&&!payload[field]?.trim();
 }
 export function scopeIsComplete(scope:ResearchScope,payload:Record<string,string>){return fieldsForScope(scope).every(field=>!fieldIsMissing(field,payload));}
 export function scopePassesQuality(scope:ResearchScope,payload:Record<string,string>,target:ResearchTarget,sources:ResearchSource[],provenance?:DeepSearchProvenance){
