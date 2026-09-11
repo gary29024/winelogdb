@@ -1,4 +1,5 @@
 import { recordAiUsage,type AiUsageEnv,type AiUsageKind } from '../usage/aiUsage';
+export { shouldUseSemanticQuery } from './semanticQuery';
 
 export type SemanticEmbeddingBindings={
   AI?:Ai;
@@ -32,15 +33,6 @@ const SEARCH_EMBEDDING_KIND='search_embedding' as AiUsageKind;
 
 const jsonList=(value:unknown)=>{try{const parsed=JSON.parse(String(value));return Array.isArray(parsed)?parsed.map(String).filter(Boolean):[]}catch{return [] as string[]}};
 const clamp=(value:number,min:number,max:number)=>Math.min(Math.max(value,min),max);
-
-export function shouldUseSemanticQuery(query:string){
-  const clean=query.trim();
-  if(!clean||/^\d{4}$/.test(clean))return false;
-  const cjk=(clean.match(/[\u3400-\u9fff\uf900-\ufaff]/gu)??[]).length;
-  if(cjk>=4)return true;
-  const words=clean.split(/\s+/u).filter(Boolean);
-  return words.length>=3;
-}
 
 export function buildWineSemanticDocument(row:Partial<SemanticWineRow>){
   const grapes=jsonList(row.grapes_json??'[]'),tags=jsonList(row.tags_json??'[]');
