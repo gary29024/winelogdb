@@ -5,7 +5,7 @@ export type ResearchSourceTier='authoritative'|'specialist'|'grounded'|'none';
 export type ResearchSourceLike={title:string;url:string};
 export type ResearchSubjectLike=Record<string,string|number|null>;
 export type ResearchFieldQuality={status:ResearchFieldStatus;sourceTier:ResearchSourceTier;score:number;warnings:string[]};
-export type DeepResearchQuality={status:'verified'|'mixed'|'limited';score:number;sourceTier:ResearchSourceTier;warnings:string[];fields:Partial<Record<DeepResearchField,ResearchFieldQuality>>};
+export type DeepResearchQuality={status:'verified'|'mixed'|'limited';score:number;sourceTier:ResearchSourceTier;warnings:string[];scoreNote?:string;fields:Partial<Record<DeepResearchField,ResearchFieldQuality>>};
 
 const SCOPE_FIELDS:Record<ResearchScopeQualityName,DeepResearchField[]>={
   producer:['producerDetails','producerWinemakingPractices'],
@@ -59,6 +59,8 @@ function titleHost(value:string){
   const match=value.trim().toLowerCase().match(/^((?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,24})$/i);
   return match?.[1]?.replace(/^www\./,'')??'';
 }
+// Deep Search supplies these titles from groundingChunks[].web metadata, not model JSON.
+// Callers must preserve that provenance before trusting a title as publisher identity.
 function attributionHost(source:ResearchSourceLike){
   const uriHost=host(source.url);
   if(uriHost===GOOGLE_GROUNDING_REDIRECT_HOST)return titleHost(source.title)||uriHost;
@@ -169,6 +171,6 @@ export function buildDeepResearchQuality(entries:Array<{scope:ResearchScopeQuali
   // a hidden ungrounded claim: the content gate passed, but source authority or
   // independent corroboration was not strong enough to clear the 85 threshold.
   const sourceConfidenceLimited=status==='mixed'&&!uniqueWarnings.length&&values.length>0&&values.every(item=>item.status==='verified');
-  const displayWarnings=sourceConfidenceLimited?[SOURCE_CONFIDENCE_EXPLANATION]:uniqueWarnings;
-  return {status,score,sourceTier:tier,warnings:displayWarnings.slice(0,20),fields};
+
+  return {status,score,sourceTier:tier,warnings:uniqueWarnings.slice(0,20),scoreNote:sourceConfidenceLimited?SOURCE_CONFIDENCE_EXPLANATION:undefined,fields};
 }

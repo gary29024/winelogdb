@@ -1,5 +1,6 @@
 import { describe,expect,it } from 'vitest';
 import { assembleDeepSearch,buildResearchTargets,scopeIsComplete,type CachedResearch,type ResearchScope } from '../../src/lib/research/cache';
+import { deepSearchQualitySchema } from '../../src/lib/db/schema';
 
 const byScope=(targets:ReturnType<typeof buildResearchTargets>)=>new Map(targets.map(target=>[target.scope,target]));
 
@@ -53,5 +54,18 @@ describe('layered research assembly',()=>{
     expect(result.winemakingTechniques).toBe('2021 verified vinification');
     expect(result.drinkingWindow).toBe('2028–2045');
     expect(result.sources).toHaveLength(4);
+    expect(result.quality?.warnings).toEqual([]);
+    expect(result.quality?.scoreNote).toBeTruthy();
+    expect(deepSearchQualitySchema.parse(result.quality).scoreNote).toBe(result.quality?.scoreNote);
+
+    // Provenance can report a dispute independently of the field-level gate.
+    cache.get('wine_vintage')!.provenance={version:1,fields:{winemakingTechniques:{
+      claimCount:1,supportedCount:0,partialCount:0,unsupportedCount:0,uncertaintyCount:0,
+      conflictingCount:1,directSupportRatio:1,claims:[{claim:'Sources disagree on the oak percentage.',
+        supportStatus:'conflicting',sourceTier:'grounded',sources:[]}]
+    }}};
+    const disputed=assembleDeepSearch(cache,targets);
+    expect(disputed.quality?.warnings).toEqual(['cross-source-technical-conflict']);
+    expect(disputed.quality?.scoreNote).toBeUndefined();
   });
 });

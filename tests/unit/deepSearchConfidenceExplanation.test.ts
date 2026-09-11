@@ -17,7 +17,8 @@ describe('Deep Search confidence explanation',()=>{
     expect(quality.status).toBe('mixed');
     expect(quality.score).toBe(82);
     expect(quality.fields.terroir?.warnings).toEqual([]);
-    expect(quality.warnings).toEqual([SOURCE_CONFIDENCE_EXPLANATION]);
+    expect(quality.warnings).toEqual([]);
+    expect(quality.scoreNote).toBe(SOURCE_CONFIDENCE_EXPLANATION);
   });
 
   it('uses Gemini redirect titles as the publisher hosts for corroboration',()=>{
@@ -84,6 +85,6 @@ describe('Deep Search confidence explanation',()=>{
     const quality=buildDeepResearchQuality([entry([])]);
 
     expect(quality.warnings).toContain('no-grounding-source');
-    expect(quality.warnings).not.toContain(SOURCE_CONFIDENCE_EXPLANATION);
+    expect(quality.scoreNote).toBeUndefined();
   });
 });
