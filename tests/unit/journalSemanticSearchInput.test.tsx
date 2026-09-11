@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 import { act } from 'react';
 import { createRoot,type Root } from 'react-dom/client';
+import { MemoryRouter,useLocation } from 'react-router-dom';
 import { afterEach,beforeEach,describe,expect,it,vi } from 'vitest';
 import { JournalSearchInput } from '../../src/features/wines/JournalSearchInput';
 
@@ -15,9 +16,11 @@ afterEach(()=>{
   vi.useRealTimers();vi.restoreAllMocks();
 });
 
-function renderInput(onCommit:ReturnType<typeof vi.fn>,value=''){
+function LocationProbe(){const location=useLocation();return <output data-testid="location-search">{location.search}</output>}
+
+function renderInput(value='',initial='/journal'){
   host=document.createElement('div');document.body.appendChild(host);root=createRoot(host);
-  act(()=>root!.render(<JournalSearchInput value={value} resetSeq={0} onCommit={onCommit}/>));
+  act(()=>root!.render(<MemoryRouter initialEntries={[initial]}><JournalSearchInput value={value} resetSeq={0} onCommit={vi.fn()}/><LocationProbe/></MemoryRouter>));
   return host.querySelector('[aria-label="Search wines"]') as HTMLInputElement;
 }
 
@@ -28,30 +31,35 @@ function type(input:HTMLInputElement,value:string){
   });
 }
 
+const query=()=>new URLSearchParams(host!.querySelector('[data-testid="location-search"]')!.textContent??'');
+
 describe('Journal semantic search input',()=>{
-  it('keeps ordinary identity searches on the 300ms debounce',()=>{
-    const onCommit=vi.fn(),input=renderInput(onCommit);
+  it('keeps ordinary identity searches on the 300ms live debounce',()=>{
+    const input=renderInput();
     type(input,'Nicole Lamarche');
-    act(()=>vi.advanceTimersByTime(299));expect(onCommit).not.toHaveBeenCalled();
-    act(()=>vi.advanceTimersByTime(1));expect(onCommit).toHaveBeenCalledWith('Nicole Lamarche');
+    act(()=>vi.advanceTimersByTime(299));expect(query().get('query')).toBeNull();
+    act(()=>vi.advanceTimersByTime(1));expect(query().get('query')).toBe('Nicole Lamarche');expect(query().get('semantic')).toBeNull();
   });
 
-  it('does not auto-submit a descriptive query after typing pauses',()=>{
-    const onCommit=vi.fn(),input=renderInput(onCommit);
+  it('keeps descriptive typing live but lexical until Smart search is chosen',()=>{
+    const input=renderInput();
     type(input,'floral elegant Burgundy');
-    act(()=>vi.advanceTimersByTime(2000));
-    expect(onCommit).not.toHaveBeenCalled();
-    expect(host!.querySelector('[aria-label="Run semantic search"]')).not.toBeNull();
+    act(()=>vi.advanceTimersByTime(300));
+    expect(query().get('query')).toBe('floral elegant Burgundy');
+    expect(query().get('semantic')).toBe('0');
+    expect(host!.querySelector('[aria-label="Run smart search"]')?.textContent).toContain('Smart search');
   });
 
-  it('submits a descriptive query only on Search or Enter',()=>{
-    const onCommit=vi.fn(),input=renderInput(onCommit);
-    type(input,'floral elegant Burgundy');
-    act(()=>host!.querySelector<HTMLButtonElement>('[aria-label="Run semantic search"]')!.click());
-    expect(onCommit).toHaveBeenCalledTimes(1);expect(onCommit).toHaveBeenLastCalledWith('floral elegant Burgundy');
+  it('runs one explicit Smart search by button or Enter and returns to lexical mode after editing',()=>{
+    const input=renderInput();
+    type(input,'floral elegant Burgundy');act(()=>vi.advanceTimersByTime(300));
+    act(()=>host!.querySelector<HTMLButtonElement>('[aria-label="Run smart search"]')!.click());
+    expect(query().get('query')).toBe('floral elegant Burgundy');expect(query().get('semantic')).toBe('1');
+    expect(host!.querySelector('[aria-label="Run smart search"]')?.textContent).toContain('Smart searched');
 
-    onCommit.mockClear();type(input,'silky perfumed pinot');
+    type(input,'silky perfumed pinot');act(()=>vi.advanceTimersByTime(300));
+    expect(query().get('query')).toBe('silky perfumed pinot');expect(query().get('semantic')).toBe('0');
     act(()=>input.dispatchEvent(new KeyboardEvent('keydown',{key:'Enter',bubbles:true,cancelable:true})));
-    expect(onCommit).toHaveBeenCalledTimes(1);expect(onCommit).toHaveBeenLastCalledWith('silky perfumed pinot');
+    expect(query().get('query')).toBe('silky perfumed pinot');expect(query().get('semantic')).toBe('1');
   });
 });
