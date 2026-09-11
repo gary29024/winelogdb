@@ -1,6 +1,6 @@
 # Journal semantic search
 
-WineLogDB keeps its existing D1 FTS5 search and adds semantic retrieval only for descriptive queries. The same Journal search box therefore supports both exact searches such as `Lamarche` and natural-language searches such as `floral elegant Burgundy with fine tannins`.
+WineLogDB keeps its existing D1 FTS5 search and adds semantic retrieval only when the user explicitly asks for Smart search. The same Journal search box therefore supports both exact searches such as `Lamarche` and natural-language searches such as `floral elegant Burgundy with fine tannins` without making normal typing feel different.
 
 ## Default: Cloudflare Workers AI
 
@@ -48,9 +48,11 @@ The shared semantic-query gate classifies these as descriptive:
 - an English/space-separated query containing at least three terms; or
 - a CJK query containing at least four Han characters.
 
-Short identity-oriented searches continue to use the existing 300 ms live debounce and FTS5 path. Once the draft becomes descriptive, the UI stops auto-submitting it: the user must press **Enter** or tap **Search**. This prevents pauses while composing a sentence from generating repeated query-embedding calls.
+All settled text continues to update Journal results after the existing 300 ms debounce. Short identity-oriented searches use the ordinary FTS5 path. Descriptive text also uses that same cheap lexical path while showing an additional **✨ Smart search** action. Pressing **Enter** while a descriptive query is present, or tapping **Smart search**, explicitly opts that query into semantic retrieval once.
 
-The Worker uses the same gate. `?semantic=1` can still force semantic retrieval for direct/API testing and `?semantic=0` disables it for a request.
+This means a user typing `floral elegant Burgundy` still sees normal literal/metadata results automatically. No query embedding is spent merely because the user paused while composing the description. The URL records this distinction as `semantic=0` for the live lexical version and `semantic=1` after Smart search.
+
+The Worker keeps its existing safety gate. `?semantic=1` forces semantic retrieval and `?semantic=0` disables it for a request.
 
 Semantic candidates are unioned with FTS/tasting-name matches. Existing country, region, style, rating, month, tasting and favourite filters remain SQL predicates. With the default sort, semantic candidates are ordered by similarity; an explicit Journal sort such as rating, producer or vintage always wins.
 
@@ -60,7 +62,7 @@ The semantic layer does not replace the canonical `/api/journal` route. It forwa
 
 A semantic document contains wine identity and meaning-bearing fields only: producer, wine, vintage, geography, classification, style, grapes, tasting notes, rating, event/venue and tags. Operational IDs, photo URLs and timestamps are not embedded.
 
-Document indexing never blocks the Journal response. A submitted descriptive query schedules bounded cache warm-up through `waitUntil`; on a completely cold cache the current request simply uses the existing lexical result while vectors are built in the background. Once cached candidates exist, a semantic request waits only for the one query embedding.
+Document indexing never blocks the Journal response. An explicit Smart search schedules bounded cache warm-up through `waitUntil`; on a completely cold cache the current request simply uses the existing lexical result while vectors are built in the background. Once cached candidates exist, a semantic request waits only for the one query embedding.
 
 The cache records the wine's `updated_at`. An unchanged wine is never re-embedded. If a wine changes, its previous vector remains searchable until the background refresh replaces it, so an edit does not make that wine temporarily disappear from semantic results. Deleted wines are excluded by the join to the live `wines` table.
 
@@ -73,7 +75,8 @@ If the embedding service is unavailable, misconfigured or over quota, the Worker
 Open Journal and try both forms:
 
 1. Type `Lamarche` and pause — it should behave like the existing live name search.
-2. Type `floral elegant Burgundy with fine tannins` and pause — it should **not** submit yet; a Search button should be visible.
-3. Press Enter or tap Search — after the background cache has begun warming, it should return semantically similar wines even when those exact words do not all appear in the record.
+2. Type `floral elegant Burgundy with fine tannins` and pause — ordinary lexical/metadata results should still update automatically and a **Smart search** button should be visible.
+3. Tap **Smart search** or press Enter — after the background cache has begun warming, the same query should return semantically similar wines even when those exact words do not all appear in the record.
+4. Edit the text again — after the next 300 ms pause it should return to the cheap lexical mode until Smart search is explicitly chosen again.
 
-For an A/B check, append `semantic=0` to the same Journal URL and compare it with the normal result.
+For an A/B check, compare the same query with `semantic=0` and `semantic=1` in the Journal URL.
