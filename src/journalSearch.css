@@ -1,5 +1,6 @@
-.journal-search-control{display:flex;align-items:flex-end;gap:var(--s2)}
+.journal-search-control{display:flex;align-items:flex-end;gap:var(--s2);flex-wrap:wrap}
 .journal-search-control .search{flex:1;min-width:0}
 .journal-semantic-search-button{flex:0 0 auto;min-height:44px;white-space:nowrap}
-.journal-semantic-search-button.active{opacity:.72}
-@media(max-width:560px){.journal-search-control{align-items:stretch}.journal-semantic-search-button{align-self:flex-end}}
+.journal-semantic-search-button.active{opacity:.82}
+.journal-semantic-hint{flex-basis:100%;margin-top:calc(var(--s2)*-0.5);color:var(--text-muted);line-height:1.35}
+@media(max-width:560px){.journal-search-control{align-items:stretch}.journal-semantic-search-button{align-self:flex-end}.journal-semantic-hint{margin-top:0}}
