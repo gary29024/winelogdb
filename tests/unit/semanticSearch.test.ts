@@ -1,5 +1,6 @@
 import { describe,expect,it } from 'vitest';
-import { buildWineSemanticDocument,cosineSimilarity,rankSemanticCandidates,shouldUseSemanticQuery } from '../../src/lib/journal/semanticSearch';
+import { buildWineSemanticDocument,cosineSimilarity,rankSemanticCandidates } from '../../src/lib/journal/semanticSearch';
+import { shouldUseSemanticQuery } from '../../src/lib/journal/semanticQuery';
 
 describe('Journal semantic search helpers',()=>{
   it('keeps short identity searches on FTS and enables descriptive searches',()=>{
