@@ -4,6 +4,7 @@ import { createResearchBatchJob,finishResearchBatchJob,getResearchBatchJob,recor
 import { recordAiUsage,type AnalyticsSink } from '../usage/aiUsage';
 import { cancelGeminiBatch } from '../research/cancelResearch';
 import { countSearchQueries,countUsageTokens,createGeminiBatch,describeResponseSchema,fetchGeminiBatch,groundedGenerationConfig,inlineFinishReason,inlineGroundingMetadata,inlineResponseText,isEmulatedGeminiBatchName,isTerminalBatchState,responsesByKey,type GeminiBatchRequest,type GroundingMetadata } from '../research/geminiBatch';
+import { RESEARCH_STALE_DAYS } from '../research/freshness';
 import { researchBatchErrorPollDelay,researchBatchFirstPollDelay,researchBatchPollDelay,researchBatchStallAction,researchBatchTransientAction } from '../research/batchRetryPolicy';
 import { clearProducerCatalogSliceStage,discardProducerCatalogStage,listProducerCatalogStage,prepareProducerCatalogStage,stageProducerCatalogParts } from './catalogResearchStage';
 import { extractContactGrounding,normalizeProducerEmail,normalizeProducerPhone,safeInstagramUrl } from './research';
@@ -54,21 +55,11 @@ const SLICE_OUTPUT_TOKENS=16384;
  */
 export const MAX_INCOMPLETE_SPLITS=3;
 /**
- * How long a producer's profile is taken as still true.
- *
- * Measured on a real month: a producer Deep Search costs about twice a wine's,
- * and it is the most frequent of the two. Half of that is a second grounded
- * request asking again where the estate is, who owns it and how it farms -
- * facts that do not move. The range does move, and is the reason anyone presses
- * refresh.
- *
- * So a profile that exists, knows its country and was researched inside this
- * window is kept, and the run asks only for the range. Anything thinner than
- * that - no profile, no country, or old enough that an estate may have changed
- * hands - is researched again. The window is also the escape: nothing needs a
- * new control, it just costs a wait.
+ * Research is durable and stays visible indefinitely. This window only decides
+ * when another producer run should buy a fresh grounded profile. The UI marks
+ * an older saved answer as potentially stale rather than expiring or deleting it.
  */
-export const PROFILE_FRESH_DAYS=90;
+export const PROFILE_FRESH_DAYS=RESEARCH_STALE_DAYS;
 type ProfileFreshness={profile?:unknown;home_country?:unknown;profile_researched_at?:unknown};
 export function profileIsFresh(row:ProfileFreshness|null|undefined,now=Date.now()){
   if(!row)return false;
@@ -253,7 +244,7 @@ const catalogSchema={type:'OBJECT',properties:{rangeComplete:{type:'BOOLEAN',nul
  */
 const SEARCH_BUDGET=(maxSearches:number)=>`Search efficiently: use at most ${maxSearches} Google searches in this request. Start with the producer's own website, which usually carries everything you need on one or two pages, then a reputable reference or importer page if something is still missing. Do not run a separate search for each wine or each field - read the pages you already retrieved. If your budget runs out, answer from the pages you did retrieve rather than guessing.`;
 
-function profilePrompt(name:string){return `You must use the Google Search tool before answering, and every factual claim must come from a page you actually retrieved in this request. Do not answer from prior knowledge, and do not reconstruct a plausible answer for something you did not find. If the search tool is unavailable or returns nothing usable, say exactly that in the affected fields rather than writing an ungrounded answer: WineLog rejects an ungrounded response outright, so an honest "could not be verified" is worth more than confident prose.\n\nResearch the wine producer ${JSON.stringify(name)} using reliable public web sources. Prioritize the official producer website for identity, physical location, business contacts and producer-wide winemaking information. Return concise factual research only.\n\nLOCATION: homeCountry is the physical country; homeRegion is a broad wine region such as Burgundy, Champagne, Bordeaux, Tuscany, Piedmont, Mosel or Napa Valley; homeLocality is the commune/town where the producer is based. Do not use the regions where its wines happen to be produced.\n\nWINEMAKING PRACTICES: winemakingPractices is for stable producer-wide philosophy and practices only. State variability where practices differ by cuvee or vintage.\n\nCONTACTS: return only verified public business contacts. officialWebsiteUrl must be the official HTTPS site. instagramUrl must clearly be the official producer account. Prefer official first-party sources; return null when uncertain. WineLog will independently inspect the official site, including plain-text public email/phone information.\n\nReturn JSON only with homeCountry, homeRegion, homeLocality, officialWebsiteUrl, instagramUrl, contactEmail, contactPhone, profile, winemakingPractices.\n\n${SEARCH_BUDGET(5)}`}
+function profilePrompt(name:string){return `You must use the Google Search tool before answering, and every factual claim must come from a page you actually retrieved in this request. Do not answer from prior knowledge, and do not reconstruct a plausible answer for something you did not find. If the search tool is unavailable or returns nothing usable, say exactly that in the affected fields rather than writing an ungrounded answer: WineLog rejects an ungrounded response outright, so an honest "could not be verified" is worth more than confident prose.\n\nResearch the wine producer ${JSON.stringify(name)} using reliable public web sources. Prioritize the official producer website for identity, physical location and producer-wide winemaking information. Return concise factual research only.\n\nLOCATION: homeCountry is the physical country; homeRegion is a broad wine region such as Burgundy, Champagne, Bordeaux, Tuscany, Piedmont, Mosel or Napa Valley; homeLocality is the commune/town where the producer is based. Do not use the regions where its wines happen to be produced.\n\nWINEMAKING PRACTICES: winemakingPractices is for stable producer-wide philosophy and practices only. State variability where practices differ by cuvee or vintage.\n\nCONTACTS: return only verified public business contacts. officialWebsiteUrl must be the official HTTPS site. instagramUrl must clearly be the official producer account. If an official site exists, do not spend a separate search just to find email or phone: WineLog independently crawls its public contact pages after this answer. If no usable official site exists, or the pages already retrieved do not expose contacts, use at most one targeted secondary-source contact search within the total search budget. Prefer an official importer/distributor or regional/professional wine body. Only return an email or phone when the source explicitly identifies it as the producer's own business contact; never substitute an importer's, merchant's or directory's own contact details. Return null when uncertain.\n\nReturn JSON only with homeCountry, homeRegion, homeLocality, officialWebsiteUrl, instagramUrl, contactEmail, contactPhone, profile, winemakingPractices.\n\n${SEARCH_BUDGET(3)}`}
 function slicePrompt(name:string,slice:CatalogSlice){
   const whole=slice.start==='A'&&slice.end==='Z'&&slice.includeOther;
   const rule=slice.start&&slice.end?`${slice.start} through ${slice.end}${slice.includeOther?', plus non-letter/digit/symbol initials':''}`:'non-letter/digit/symbol initials only';
@@ -267,7 +258,7 @@ export function researchPromptFor(name:string,key:string){
 }
 /** Exposed so the output room each key is given can be asserted. */
 export function requestForKey(name:string,key:string):GeminiBatchRequest{
-  if(key==='profile')return {key,request:{contents:[{role:'user',parts:[{text:`${profilePrompt(name)}\n\n${describeResponseSchema(profileSchema)}`}]}],tools:[{google_search:{}}],generationConfig:groundedGenerationConfig(PROFILE_OUTPUT_TOKENS)}};
+  if(key==='profile')return {key,request:{contents:[{role:'user',parts:[{text:`${profilePrompt(name)}\n\n${describeResponseSchema(profileSchema)}`}]}],tools:[{google_search:{}}],generationConfig:groundedGenerationConfig(PROFILE_OUTPUT_TOKENS,'low')}};
   const slice=parseSliceKey(key);if(!slice)throw new Error(`Unknown producer research key ${key}`);
   // The whole range gets the most room, because it is the one answer that has
   // to hold every wine and the only one whose overflow starts the ladder.
