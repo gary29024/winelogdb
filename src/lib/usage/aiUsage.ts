@@ -164,6 +164,7 @@ export type UsageSummary={
 
 type EventRow={kind:string;model:string;tier:string;day:string;requests:number;search_queries:number;prompt_tokens:number;output_tokens:number;units:number};
 type RunPartRow={kind:string;run_id:string;target_id:string|null;target_label:string|null;model:string;tier:string;created_at:string;day:string;requests:number;search_queries:number;prompt_tokens:number;output_tokens:number};
+type RunRow={kind:string;runs:number};
 type MonthRow={kind:string;model:string;tier:string;search_queries:number;prompt_tokens:number;output_tokens:number};
 
 const RUN_HISTORY_KINDS=new Set<AiUsageKind>(['producer_research','wine_research','vintage_window']);
@@ -224,7 +225,17 @@ export async function usageSummary(db:D1Database,owner:string,rates:AiRates,days
     recentRunMaps.set(kind,map);
   }
 
-  const runsByKind=new Map([...runIdsByKind.entries()].map(([kind,ids])=>[kind,ids.size]));
+  let runsByKind=new Map([...runIdsByKind.entries()].map(([kind,ids])=>[kind,ids.size]));
+  // Real D1 returns one grouped row for every stored run. Keep a defensive
+  // fallback for lightweight test/compatibility adapters that can answer the
+  // historical count query but not the richer grouped projection. It is never
+  // an extra read in the normal path.
+  if((events.results?.length??0)>0&&(runParts.results?.length??0)===0){
+    const legacyRuns=await db.prepare(`SELECT kind,count(DISTINCT run_id) AS runs FROM ai_usage_events
+      WHERE owner_id=? AND created_at>datetime('now','-${window} days') GROUP BY kind`).bind(owner).all<RunRow>();
+    runsByKind=new Map((legacyRuns.results??[]).map(row=>[row.kind,Number(row.runs)||0]));
+  }
+
   const byKind=new Map<string,KindSpend>();
   for(const row of events.results??[]){
     const totals:UsageTotals={searchQueries:Number(row.search_queries)||0,promptTokens:Number(row.prompt_tokens)||0,outputTokens:Number(row.output_tokens)||0};
