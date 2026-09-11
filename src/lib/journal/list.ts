@@ -31,6 +31,11 @@ export function sliceJournalPage<T>(rows:T[],limit:number,offset:number){
 }
 
 export async function listJournalPage(db:D1Database,owner:string,q:JournalListQuery,semanticIds:string[]=[]){
+  // structureEntry forwards semantic candidates through the canonical Journal
+  // route using an internal query parameter. The owner predicate below still
+  // scopes every candidate, and the cap prevents an oversized URL/SQL IN list.
+  const forwarded=(q.__semanticIds??'').split(',').map(id=>id.trim()).filter(Boolean).slice(0,72);
+  const semanticMatches=[...new Set((semanticIds.length?semanticIds:forwarded).slice(0,72))];
   const args:unknown[]=[owner];let where='w.owner_id=?';
   const filters:[string,string][]=[['vintage','w.vintage'],['country','w.country'],['region','w.region'],['style','w.wine_style'],['tastingDate','w.tasting_date']];
   const rawQuery=(q.query??'').trim();
@@ -58,9 +63,9 @@ export async function listJournalPage(db:D1Database,owner:string,q:JournalListQu
       searchPredicates.push('(w.id IN (SELECT wine_id FROM wine_search WHERE wine_search MATCH ? AND owner_id=?) OR EXISTS (SELECT 1 FROM wine_experiences we JOIN tastings t ON t.id=we.tasting_id WHERE we.wine_id=w.id AND we.owner_id=? AND lower(t.name) LIKE lower(?)))');
       args.push(clean+'*',owner,owner,`%${rawQuery}%`);
     }
-    if(semanticIds.length){
-      searchPredicates.push(`w.id IN (${semanticIds.map(()=>'?').join(',')})`);
-      args.push(...semanticIds);
+    if(semanticMatches.length){
+      searchPredicates.push(`w.id IN (${semanticMatches.map(()=>'?').join(',')})`);
+      args.push(...semanticMatches);
     }
     if(searchPredicates.length)where+=` AND (${searchPredicates.join(' OR ')})`;
   }
@@ -84,9 +89,9 @@ export async function listJournalPage(db:D1Database,owner:string,q:JournalListQu
   // A natural-language search is useful only if its nearest matches appear first.
   // An explicit user-selected sort still wins, so semantic search never silently
   // overrides "rating", "producer", etc.
-  if(!q.sort&&semanticIds.length&&rawQuery&&!vintageSearch){
-    order=`CASE w.id ${semanticIds.map((_,index)=>`WHEN ? THEN ${index}`).join(' ')} ELSE ${semanticIds.length} END, ${orders.newest}`;
-    orderArgs.push(...semanticIds);
+  if(!q.sort&&semanticMatches.length&&rawQuery&&!vintageSearch){
+    order=`CASE w.id ${semanticMatches.map((_,index)=>`WHEN ? THEN ${index}`).join(' ')} ELSE ${semanticMatches.length} END, ${orders.newest}`;
+    orderArgs.push(...semanticMatches);
   }
   const limit=Math.min(Math.max(Number(q.limit)||36,1),72),offset=Math.max(Number(q.offset)||0,0);
   // Count and page share the exact same predicate and travel in one D1 batch.
