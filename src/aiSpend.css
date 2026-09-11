@@ -10,7 +10,7 @@
 .ai-spend-dialog-head h2{margin:1px 0 2px;font-size:1.35rem;overflow-wrap:anywhere}
 .ai-spend-dialog-head p:not(.section-label){margin:0;color:var(--ink-6);font-size:.72rem}
 .ai-spend-back{margin:0 0 8px;padding:0;border:0;background:none;color:var(--ink-5);font:700 .72rem 'DM Sans',sans-serif;cursor:pointer}
-.ai-spend-back:hover{background:none;text-decoration:underline}
+.ai-spend-back:hover:not(:disabled){background:none;text-decoration:underline}
 .ai-spend-dialog-note{margin:0 0 var(--s3);color:var(--ink-6);font-size:.74rem;line-height:1.5}
 
 .ai-spend-run-list{display:grid;gap:8px}
