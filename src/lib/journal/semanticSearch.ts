@@ -1,3 +1,5 @@
+import { recordAiUsage,type AiUsageEnv,type AiUsageKind } from '../usage/aiUsage';
+
 export type SemanticEmbeddingBindings={
   AI?:Ai;
   GEMINI_API_KEY?:string;
@@ -8,7 +10,7 @@ export type SemanticEmbeddingBindings={
   SEMANTIC_GEMINI_DIMENSIONS?:string;
 };
 
-type SemanticEnv=SemanticEmbeddingBindings&{DB:D1Database};
+type SemanticEnv=SemanticEmbeddingBindings&AiUsageEnv;
 type Provider='workers-ai'|'gemini';
 type EmbeddingConfig={provider:Provider;model:string;dimensions:number;modelKey:string;geminiKey?:string};
 type SemanticWineRow={
@@ -17,14 +19,16 @@ type SemanticWineRow={
 };
 type StoredEmbeddingRow={wine_id:string;embedding:ArrayBuffer|ArrayBufferView;dimensions:number};
 export type SemanticVectorCandidate={id:string;vector:ArrayLike<number>};
+type MeterContext={owner:string;runId:string;targetId:'journal-query'|'journal-index'};
 
 const WORKERS_MODEL='@cf/qwen/qwen3-embedding-0.6b';
 const GEMINI_MODEL='gemini-embedding-001';
 const WORKERS_DIMENSIONS=1024;
 const GEMINI_DIMENSIONS=768;
-const SYNC_BACKFILL=64;
+const WARM_SLICE=64;
 const BACKGROUND_BACKFILL=192;
 const EMBED_BATCH=24;
+const SEARCH_EMBEDDING_KIND='search_embedding' as AiUsageKind;
 
 const jsonList=(value:unknown)=>{try{const parsed=JSON.parse(String(value));return Array.isArray(parsed)?parsed.map(String).filter(Boolean):[]}catch{return [] as string[]}};
 const clamp=(value:number,min:number,max:number)=>Math.min(Math.max(value,min),max);
@@ -72,8 +76,15 @@ export function cosineSimilarity(a:ArrayLike<number>,b:ArrayLike<number>){
   return na>0&&nb>0?dot/Math.sqrt(na*nb):-1;
 }
 
+function normalizedDot(a:ArrayLike<number>,b:ArrayLike<number>){
+  if(!a.length||a.length!==b.length)return -1;
+  let dot=0;for(let i=0;i<a.length;i++)dot+=Number(a[i])*Number(b[i]);
+  return dot;
+}
+
+/** Query and persisted document vectors are normalized at the provider boundary. */
 export function rankSemanticCandidates(query:ArrayLike<number>,candidates:SemanticVectorCandidate[],limit=72){
-  return candidates.map(candidate=>({id:candidate.id,score:cosineSimilarity(query,candidate.vector)}))
+  return candidates.map(candidate=>({id:candidate.id,score:normalizedDot(query,candidate.vector)}))
     .filter(item=>Number.isFinite(item.score)&&item.score>-1)
     .sort((a,b)=>b.score-a.score)
     .slice(0,Math.max(1,limit));
@@ -91,8 +102,6 @@ function configFor(env:SemanticEmbeddingBindings):EmbeddingConfig|null{
   }
   if(!env.AI)return null;
   const model=env.SEMANTIC_WORKERS_MODEL?.trim()||WORKERS_MODEL;
-  // Qwen3-Embedding-0.6B and BGE-M3 both emit 1,024 dimensions. Keep the
-  // persisted model key explicit so a future model change lazily rebuilds rows.
   return {provider:'workers-ai',model,dimensions:WORKERS_DIMENSIONS,modelKey:`workers-ai:${model}:${WORKERS_DIMENSIONS}:v1`};
 }
 
@@ -102,7 +111,7 @@ function extractWorkersVectors(result:unknown){
   return data.map(item=>{if(!Array.isArray(item))throw new Error('Workers AI embedding response contained an invalid vector');return item.map(Number)});
 }
 
-async function embedTexts(env:SemanticEmbeddingBindings,config:EmbeddingConfig,texts:string[],kind:'query'|'document'){
+async function embedTexts(env:SemanticEnv,config:EmbeddingConfig,texts:string[],kind:'query'|'document',meter:MeterContext){
   if(!texts.length)return [] as number[][];
   let vectors:number[][];
   if(config.provider==='workers-ai'){
@@ -123,10 +132,15 @@ async function embedTexts(env:SemanticEmbeddingBindings,config:EmbeddingConfig,t
     vectors=(body.embeddings??[]).map(item=>item.values??[]);
   }
   if(vectors.length!==texts.length)throw new Error(`Embedding response returned ${vectors.length} vectors for ${texts.length} inputs`);
-  return vectors.map(vector=>{
+  const output=vectors.map(vector=>{
     if(vector.length!==config.dimensions)throw new Error(`Embedding dimension mismatch: expected ${config.dimensions}, got ${vector.length}`);
     return normalized(vector);
   });
+  // Neither embedding endpoint exposes exact billed token usage in this response
+  // shape. Still ledger every paid/model call and how many embeddings it covered;
+  // provider dashboards remain authoritative for neuron/token spend.
+  await recordAiUsage(env,meter.owner,{kind:SEARCH_EMBEDDING_KIND,runId:meter.runId,targetId:meter.targetId,model:config.model,requests:1,units:texts.length});
+  return output;
 }
 
 function vectorBlob(vector:number[]){return Float32Array.from(vector).buffer}
@@ -145,10 +159,10 @@ async function staleWineRows(db:D1Database,owner:string,config:EmbeddingConfig,l
   return result.results;
 }
 
-async function refreshSemanticIndex(env:SemanticEnv,owner:string,config:EmbeddingConfig,limit:number){
+async function refreshSemanticIndex(env:SemanticEnv,owner:string,config:EmbeddingConfig,limit:number,runId:string){
   const pending=await staleWineRows(env.DB,owner,config,limit),rows=pending.slice(0,limit);
   for(let start=0;start<rows.length;start+=EMBED_BATCH){
-    const chunk=rows.slice(start,start+EMBED_BATCH),vectors=await embedTexts(env,config,chunk.map(buildWineSemanticDocument),'document'),stamp=new Date().toISOString();
+    const chunk=rows.slice(start,start+EMBED_BATCH),vectors=await embedTexts(env,config,chunk.map(buildWineSemanticDocument),'document',{owner,runId,targetId:'journal-index'}),stamp=new Date().toISOString();
     await env.DB.batch(chunk.map((row,index)=>env.DB.prepare(`INSERT INTO wine_semantic_embeddings(owner_id,wine_id,model_key,dimensions,source_updated_at,embedding,updated_at)
       VALUES(?,?,?,?,?,?,?)
       ON CONFLICT(owner_id,wine_id,model_key) DO UPDATE SET dimensions=excluded.dimensions,source_updated_at=excluded.source_updated_at,embedding=excluded.embedding,updated_at=excluded.updated_at`)
@@ -160,24 +174,30 @@ async function refreshSemanticIndex(env:SemanticEnv,owner:string,config:Embeddin
 async function currentCandidates(db:D1Database,owner:string,config:EmbeddingConfig){
   const result=await db.prepare(`SELECT e.wine_id,e.embedding,e.dimensions
     FROM wine_semantic_embeddings e
-    JOIN wines w ON w.owner_id=e.owner_id AND w.id=e.wine_id AND w.updated_at=e.source_updated_at
+    JOIN wines w ON w.owner_id=e.owner_id AND w.id=e.wine_id
     WHERE e.owner_id=? AND e.model_key=? AND e.dimensions=?`).bind(owner,config.modelKey,config.dimensions).all<StoredEmbeddingRow>();
   return result.results.map(row=>({id:row.wine_id,vector:vectorFromBlob(row.embedding)}));
 }
 
 export async function semanticWineIds(env:SemanticEnv,owner:string,query:string,limit=72){
   const config=configFor(env);if(!config)return null;
-  const warmed=await refreshSemanticIndex(env,owner,config,SYNC_BACKFILL);
-  const [queryVector]=await embedTexts(env,config,[query],'query');
+  // Never hold the request open to build document vectors. On a cold index the
+  // lexical route answers immediately while warmSemanticWineIndex runs through
+  // waitUntil; once at least one candidate exists, only the query embedding is
+  // awaited here.
   const candidates=await currentCandidates(env.DB,owner,config);
-  return {ids:rankSemanticCandidates(queryVector,candidates,limit).map(item=>item.id),hasMore:warmed.hasMore,modelKey:config.modelKey};
+  if(!candidates.length)return {ids:[] as string[],modelKey:config.modelKey};
+  const runId=crypto.randomUUID();
+  const [queryVector]=await embedTexts(env,config,[query],'query',{owner,runId,targetId:'journal-query'});
+  return {ids:rankSemanticCandidates(queryVector,candidates,limit).map(item=>item.id),modelKey:config.modelKey};
 }
 
 export async function warmSemanticWineIndex(env:SemanticEnv,owner:string){
   const config=configFor(env);if(!config)return;
+  const runId=crypto.randomUUID();
   let remaining=BACKGROUND_BACKFILL;
   while(remaining>0){
-    const step=Math.min(SYNC_BACKFILL,remaining),result=await refreshSemanticIndex(env,owner,config,step);
+    const step=Math.min(WARM_SLICE,remaining),result=await refreshSemanticIndex(env,owner,config,step,runId);
     remaining-=result.indexed;
     if(!result.hasMore||result.indexed===0)break;
   }
