@@ -6,22 +6,61 @@ export function normalizeAchievementIdentity(value:string){
   return value.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/&/g,' and ').replace(/[’'`]/g,'').replace(/[^a-z0-9]+/g,' ').trim();
 }
 
-type IdentityIndexes={producerNames:Map<string,Set<string>>;cuveeNames:Map<string,Map<string,Set<string>>>};
+type WineKeys={producer:string;wine:string;appellation:string};
+type IdentityIndexes={
+  producerNames:Map<string,Set<string>>;
+  cuveeNames:Map<string,Map<string,Set<string>>>;
+  producerById:Map<string,AchievementProducerIdentity>;
+  cuveeById:Map<string,AchievementCuveeIdentity>;
+  cuveeIdsByName:Map<string,Set<string>>;
+  winesByProducerId:Map<string,AchievementWine[]>;
+  winesByCuveeId:Map<string,AchievementWine[]>;
+  winesByProducerName:Map<string,AchievementWine[]>;
+  winesByWineName:Map<string,AchievementWine[]>;
+  winesByAppellation:Map<string,AchievementWine[]>;
+  wineKeys:Map<string,WineKeys>;
+};
 
 function addIndex(index:Map<string,Set<string>>,name:string,id:string){
   const key=normalizeAchievementIdentity(name);if(!key)return;
   const ids=index.get(key)??new Set<string>();ids.add(id);index.set(key,ids);
 }
+function addRows(index:Map<string,AchievementWine[]>,key:string,row:AchievementWine){
+  if(!key)return;const rows=index.get(key)??[];rows.push(row);index.set(key,rows);
+}
+function normalizedSet(values:string[]|undefined){return new Set((values??[]).map(normalizeAchievementIdentity).filter(Boolean))}
+function matchesKey(value:string,names:Set<string>){return Boolean(value&&names.has(value))}
+function uniqueRows(rows:AchievementWine[]){
+  const seen=new Set<string>();return rows.filter(row=>!seen.has(row.id)&&Boolean(seen.add(row.id)));
+}
+function indexedRows(index:Map<string,AchievementWine[]>,keys:Set<string>){
+  const rows:AchievementWine[]=[];for(const key of keys)rows.push(...(index.get(key)??[]));return uniqueRows(rows);
+}
 
-function buildIndexes(registry:AchievementIdentityRegistry):IdentityIndexes{
+function buildIndexes(registry:AchievementIdentityRegistry,wines:AchievementWine[]):IdentityIndexes{
   const producerNames=new Map<string,Set<string>>(),cuveeNames=new Map<string,Map<string,Set<string>>>();
-  for(const producer of registry.producers){for(const name of [producer.canonicalName,...(producer.aliases??[])])addIndex(producerNames,name,producer.id)}
+  const producerById=new Map<string,AchievementProducerIdentity>(),cuveeById=new Map<string,AchievementCuveeIdentity>(),cuveeIdsByName=new Map<string,Set<string>>();
+  const winesByProducerId=new Map<string,AchievementWine[]>(),winesByCuveeId=new Map<string,AchievementWine[]>(),winesByProducerName=new Map<string,AchievementWine[]>(),winesByWineName=new Map<string,AchievementWine[]>(),winesByAppellation=new Map<string,AchievementWine[]>(),wineKeys=new Map<string,WineKeys>();
+  for(const producer of registry.producers){
+    producerById.set(producer.id,producer);
+    for(const name of [producer.canonicalName,...(producer.aliases??[])])addIndex(producerNames,name,producer.id);
+  }
   for(const cuvee of registry.cuvees){
+    cuveeById.set(cuvee.id,cuvee);
     const producerIndex=cuveeNames.get(cuvee.producerId)??new Map<string,Set<string>>();
-    for(const name of [cuvee.canonicalName,...(cuvee.aliases??[])])addIndex(producerIndex,name,cuvee.id);
+    for(const name of [cuvee.canonicalName,...(cuvee.aliases??[])]){
+      addIndex(producerIndex,name,cuvee.id);addIndex(cuveeIdsByName,name,cuvee.id);
+    }
     cuveeNames.set(cuvee.producerId,producerIndex);
   }
-  return {producerNames,cuveeNames};
+  for(const wine of wines){
+    const keys={producer:normalizeAchievementIdentity(wine.producer),wine:normalizeAchievementIdentity(wine.wineName),appellation:normalizeAchievementIdentity(wine.appellation??'')};
+    wineKeys.set(wine.id,keys);
+    if(wine.producerId)addRows(winesByProducerId,wine.producerId,wine);
+    if(wine.cuveeId)addRows(winesByCuveeId,wine.cuveeId,wine);
+    addRows(winesByProducerName,keys.producer,wine);addRows(winesByWineName,keys.wine,wine);addRows(winesByAppellation,keys.appellation,wine);
+  }
+  return {producerNames,cuveeNames,producerById,cuveeById,cuveeIdsByName,winesByProducerId,winesByCuveeId,winesByProducerName,winesByWineName,winesByAppellation,wineKeys};
 }
 
 function uniqueIndexedId(names:string[],index:Map<string,Set<string>>){
@@ -32,65 +71,66 @@ function uniqueIndexedId(names:string[],index:Map<string,Set<string>>){
 
 function selectorProducerNames(selector:AchievementSelector){return selector.type==='appellation'||selector.type==='site'?[]:selector.producerNames}
 function selectorCuveeNames(selector:AchievementSelector){return selector.type==='cuvee'||selector.type==='wine_vintage'||selector.type==='site'?selector.cuveeNames:[]}
-function normalizedSet(values:string[]){return new Set(values.map(normalizeAchievementIdentity).filter(Boolean))}
-function matchesName(value:string|undefined|null,names:Set<string>){return Boolean(value&&names.has(normalizeAchievementIdentity(value)))}
-function matchesAppellation(value:string|undefined|null,names:string[]|undefined){return !names?.length||matchesName(value,normalizedSet(names))}
+function matchesAppellationKey(value:string,names:string[]|undefined){return !names?.length||normalizedSet(names).has(value)}
 
-function resolveProducer(selector:AchievementSelector,registry:AchievementIdentityRegistry,indexes:IdentityIndexes){
-  if(selector.type!=='appellation'&&selector.type!=='site'&&selector.producerId&&registry.producers.some(item=>item.id===selector.producerId))return selector.producerId;
+function resolveProducer(selector:AchievementSelector,indexes:IdentityIndexes){
+  if(selector.type!=='appellation'&&selector.type!=='site'&&selector.producerId&&indexes.producerById.has(selector.producerId))return selector.producerId;
   const names=selectorProducerNames(selector);return names.length?uniqueIndexedId(names,indexes.producerNames):undefined;
 }
 
-function resolveCuvee(selector:AchievementSelector,producerId:string|undefined,registry:AchievementIdentityRegistry,indexes:IdentityIndexes){
+function resolveCuvee(selector:AchievementSelector,producerId:string|undefined,indexes:IdentityIndexes){
   if(!producerId||(selector.type!=='cuvee'&&selector.type!=='wine_vintage'))return undefined;
   if(selector.cuveeId){
-    const direct=registry.cuvees.find(item=>item.id===selector.cuveeId&&item.producerId===producerId);
-    if(direct&&matchesAppellation(direct.appellation,selector.appellationNames))return direct.id;
+    const direct=indexes.cuveeById.get(selector.cuveeId);
+    if(direct?.producerId===producerId&&matchesAppellationKey(normalizeAchievementIdentity(direct.appellation??''),selector.appellationNames))return direct.id;
   }
   const producerIndex=indexes.cuveeNames.get(producerId);if(!producerIndex)return undefined;
   const ids=new Set<string>();
   for(const name of selector.cuveeNames){for(const id of producerIndex.get(normalizeAchievementIdentity(name))??[])ids.add(id)}
   const compatible=[...ids].filter(id=>{
-    const cuvee=registry.cuvees.find(item=>item.id===id);return cuvee&&matchesAppellation(cuvee.appellation,selector.appellationNames);
+    const cuvee=indexes.cuveeById.get(id);return Boolean(cuvee&&matchesAppellationKey(normalizeAchievementIdentity(cuvee.appellation??''),selector.appellationNames));
   });
   return compatible.length===1?compatible[0]:undefined;
 }
 
-function siteCuveeIds(selector:SiteSelector,registry:AchievementIdentityRegistry){
+function siteCuveeIds(selector:SiteSelector,indexes:IdentityIndexes){
   const names=normalizedSet(selector.cuveeNames),ids=new Set<string>();
-  for(const cuvee of registry.cuvees){
-    if(!matchesAppellation(cuvee.appellation,selector.appellationNames))continue;
-    if([cuvee.canonicalName,...(cuvee.aliases??[])].some(name=>matchesName(name,names)))ids.add(cuvee.id);
+  for(const name of names){
+    for(const id of indexes.cuveeIdsByName.get(name)??[]){
+      const cuvee=indexes.cuveeById.get(id);
+      if(cuvee&&matchesAppellationKey(normalizeAchievementIdentity(cuvee.appellation??''),selector.appellationNames))ids.add(id);
+    }
   }
   return ids;
 }
 
-function rawPossibleMatches(selector:AchievementSelector,wines:AchievementWine[],matchMode:AchievementMatchMode){
+function rawPossibleMatches(selector:AchievementSelector,indexes:IdentityIndexes,matchMode:AchievementMatchMode){
   if(selector.type==='appellation')return [];
   if(selector.type==='site'){
-    const cuveeNames=normalizedSet(selector.cuveeNames);
-    return wines.filter(wine=>!wine.cuveeId&&matchesName(wine.wineName,cuveeNames)&&matchesAppellation(wine.appellation,selector.appellationNames));
+    const names=normalizedSet(selector.cuveeNames),rows=indexedRows(indexes.winesByWineName,names);
+    return rows.filter(wine=>{
+      const keys=indexes.wineKeys.get(wine.id);return Boolean(keys&&!wine.cuveeId&&matchesAppellationKey(keys.appellation,selector.appellationNames));
+    });
   }
-  const producerNames=normalizedSet(selector.producerNames),cuveeNames=normalizedSet(selectorCuveeNames(selector));
-  return wines.filter(wine=>{
-    if(!matchesName(wine.producer,producerNames))return false;
-    if(selector.type==='producer'||(selector.type==='wine_vintage'&&matchMode==='producer'))return !wine.producerId;
-    if(!matchesName(wine.wineName,cuveeNames)||!matchesAppellation(wine.appellation,selector.appellationNames))return false;
+  const producerNames=normalizedSet(selector.producerNames),rows=indexedRows(indexes.winesByProducerName,producerNames);
+  if(selector.type==='producer'||(selector.type==='wine_vintage'&&matchMode==='producer'))return rows.filter(wine=>!wine.producerId);
+  const cuveeNames=normalizedSet(selectorCuveeNames(selector));
+  return rows.filter(wine=>{
+    const keys=indexes.wineKeys.get(wine.id);if(!keys||!matchesKey(keys.wine,cuveeNames)||!matchesAppellationKey(keys.appellation,selector.appellationNames))return false;
     if(selector.type==='wine_vintage'&&matchMode==='exact'&&wine.vintage!==selector.vintage)return false;
     return !wine.cuveeId;
   });
 }
 
-function directMatches(selector:AchievementSelector,producerId:string|undefined,cuveeId:string|undefined,registry:AchievementIdentityRegistry,wines:AchievementWine[],matchMode:AchievementMatchMode){
-  if(selector.type==='appellation'){
-    const names=normalizedSet(selector.appellationNames);return wines.filter(wine=>matchesName(wine.appellation,names));
-  }
+function directMatches(selector:AchievementSelector,producerId:string|undefined,cuveeId:string|undefined,indexes:IdentityIndexes,matchMode:AchievementMatchMode){
+  if(selector.type==='appellation')return indexedRows(indexes.winesByAppellation,normalizedSet(selector.appellationNames));
   if(selector.type==='site'){
-    const ids=siteCuveeIds(selector,registry);return ids.size?wines.filter(wine=>Boolean(wine.cuveeId&&ids.has(wine.cuveeId))):[];
+    const ids=siteCuveeIds(selector,indexes),rows:AchievementWine[]=[];for(const id of ids)rows.push(...(indexes.winesByCuveeId.get(id)??[]));return uniqueRows(rows);
   }
-  if(selector.type==='producer'||(selector.type==='wine_vintage'&&matchMode==='producer'))return producerId?wines.filter(wine=>wine.producerId===producerId):[];
+  if(selector.type==='producer'||(selector.type==='wine_vintage'&&matchMode==='producer'))return producerId?[...(indexes.winesByProducerId.get(producerId)??[])]:[];
   if(!cuveeId)return [];
-  return wines.filter(wine=>wine.cuveeId===cuveeId&&(selector.type!=='wine_vintage'||matchMode!=='exact'||wine.vintage===selector.vintage));
+  const rows=[...(indexes.winesByCuveeId.get(cuveeId)??[])];
+  return selector.type==='wine_vintage'&&matchMode==='exact'?rows.filter(wine=>wine.vintage===selector.vintage):rows;
 }
 
 /**
@@ -121,9 +161,9 @@ function vintageLinks(ordered:AchievementWine[]):AchievementVintageLink[]{
   return [...best.entries()].sort((a,b)=>a[0]-b[0]).map(([vintage,wineId])=>({vintage,wineId}));
 }
 
-function progressItem(definitionItem:AchievementDefinition['items'][number],registry:AchievementIdentityRegistry,indexes:IdentityIndexes,wines:AchievementWine[],matchMode:AchievementMatchMode):AchievementItemProgress{
-  const resolvedProducerId=resolveProducer(definitionItem.selector,registry,indexes),resolvedCuveeId=resolveCuvee(definitionItem.selector,resolvedProducerId,registry,indexes);
-  const direct=directMatches(definitionItem.selector,resolvedProducerId,resolvedCuveeId,registry,wines,matchMode),possible=direct.length?[]:rawPossibleMatches(definitionItem.selector,wines,matchMode),matched=direct.length?direct:possible;
+function progressItem(definitionItem:AchievementDefinition['items'][number],indexes:IdentityIndexes,matchMode:AchievementMatchMode):AchievementItemProgress{
+  const resolvedProducerId=resolveProducer(definitionItem.selector,indexes),resolvedCuveeId=resolveCuvee(definitionItem.selector,resolvedProducerId,indexes);
+  const direct=directMatches(definitionItem.selector,resolvedProducerId,resolvedCuveeId,indexes,matchMode),possible=direct.length?[]:rawPossibleMatches(definitionItem.selector,indexes,matchMode),matched=direct.length?direct:possible;
   const ordered=orderMatches(matched,definitionItem.selector);
   const links=vintageLinks(ordered),vintages=links.map(link=>link.vintage);
   return {
@@ -134,20 +174,20 @@ function progressItem(definitionItem:AchievementDefinition['items'][number],regi
 }
 
 function supportsRelaxedMatching(definition:AchievementDefinition){return definition.items.some(item=>item.selector.type==='wine_vintage')}
-function progressWithIndexes(definition:AchievementDefinition,registry:AchievementIdentityRegistry,indexes:IdentityIndexes,wines:AchievementWine[],requestedMode:AchievementMatchMode):AchievementProgress{
+function progressWithIndexes(definition:AchievementDefinition,indexes:IdentityIndexes,requestedMode:AchievementMatchMode):AchievementProgress{
   const relaxed=supportsRelaxedMatching(definition),matchMode=relaxed?requestedMode:'exact';
-  const items=definition.items.map(item=>progressItem(item,registry,indexes,wines,matchMode));
+  const items=definition.items.map(item=>progressItem(item,indexes,matchMode));
   const completed=items.filter(item=>item.status==='tasted').length,possible=items.filter(item=>item.status==='possible').length,total=items.length,pending=total-completed-possible;
   return {definition,completed,possible,pending,total,percent:total?Math.round(completed/total*100):0,complete:total>0&&completed===total,items,matchMode,supportsRelaxedMatching:relaxed};
 }
 
 export function buildAchievementProgress(definition:AchievementDefinition,registry:AchievementIdentityRegistry,wines:AchievementWine[],matchMode:AchievementMatchMode='exact'):AchievementProgress{
-  return progressWithIndexes(definition,registry,buildIndexes(registry),wines,matchMode);
+  return progressWithIndexes(definition,buildIndexes(registry,wines),matchMode);
 }
 
 export function buildAllAchievementProgress(definitions:AchievementDefinition[],registry:AchievementIdentityRegistry,wines:AchievementWine[],matchModes:Record<string,AchievementMatchMode>={}){
-  const indexes=buildIndexes(registry);
-  return definitions.map(definition=>progressWithIndexes(definition,registry,indexes,wines,matchModes[definition.id]??'exact'));
+  const indexes=buildIndexes(registry,wines);
+  return definitions.map(definition=>progressWithIndexes(definition,indexes,matchModes[definition.id]??'exact'));
 }
 
 export function achievementRegistryFromEntities(producers:AchievementProducerIdentity[],cuvees:AchievementCuveeIdentity[]):AchievementIdentityRegistry{return {producers,cuvees}}

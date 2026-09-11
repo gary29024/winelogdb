@@ -9,7 +9,6 @@ import { getProducerResearchRun } from '../src/lib/producers/research';
 import { createManualProducerContact,deleteManualProducerContact,listManualProducerContacts,updateManualProducerContact } from '../src/lib/producers/manualContacts';
 import { applyCatalogDecisions,deleteCatalogDecision,listCatalogDecisions,saveCatalogDecision } from '../src/lib/producers/catalogDecisions';
 import { selectRecognitionMetadata,type RecognitionPhotoMetadata } from '../src/lib/uploads/metadataSelection';
-import { canonicalCatalogEntries,type CatalogPresentationLike } from '../src/lib/cuvees/catalogPresentation';
 import { isAiUsageRunHistoryKind,usageRunHistory,usageSummary } from '../src/lib/usage/aiUsage';
 import { seedAiUsageOnce } from '../src/lib/usage/seedFromResearchJobs';
 import { readAiRates,type AiRateEnv } from '../src/lib/usage/rates';
@@ -20,11 +19,6 @@ const app=new Hono<AppEnv>();
 
 async function user(c:{req:{header:(name:string)=>string|undefined};env:Bindings}){return (await requireSession(c.req.header('Authorization'),c.env.AUTH_SECRET)).userId}
 const parseJson=<T>(value:unknown,fallback:T):T=>{try{return JSON.parse(String(value)) as T}catch{return fallback}};
-function catalogEntries(value:unknown){
-  const parsed=parseJson<unknown>(value,[]);
-  if(!Array.isArray(parsed))return [] as CatalogPresentationLike[];
-  return parsed.filter((item):item is CatalogPresentationLike=>Boolean(item&&typeof item==='object'&&typeof (item as {name?:unknown}).name==='string'));
-}
 async function linkSavedWine(db:D1Database,owner:string,wineId:string){
   const row=await db.prepare('SELECT producer FROM wines WHERE owner_id=? AND id=?').bind(owner,wineId).first<{producer:string}>();
   if(row?.producer?.trim())await linkWineProducer(db,owner,wineId,row.producer);
@@ -60,21 +54,23 @@ app.get('/api/usage/spend/runs',async c=>{
 app.get('/api/producers',async c=>{
   cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
   try{
-    const [rows,aliases]=await Promise.all([
-      c.env.DB.prepare(`SELECT p.id,p.canonical_name,p.home_country,p.home_region,p.home_locality,p.researched_at,p.catalog_json,
-        (SELECT count(*) FROM wines w WHERE w.owner_id=p.owner_id AND w.producer_id=p.id) AS tasted_count
-        FROM producers p WHERE p.owner_id=? ORDER BY coalesce(p.home_country,'~'),coalesce(p.home_region,'~'),p.canonical_name COLLATE NOCASE`).bind(owner).all<Record<string,unknown>>(),
-      c.env.DB.prepare('SELECT producer_id,display_alias FROM producer_aliases WHERE owner_id=? ORDER BY display_alias COLLATE NOCASE').bind(owner).all<{producer_id:string;display_alias:string}>()
-    ]);
-    const aliasesByProducer=new Map<string,string[]>();
-    for(const alias of aliases.results){const list=aliasesByProducer.get(alias.producer_id)??[];list.push(alias.display_alias);aliasesByProducer.set(alias.producer_id,list)}
-    return c.json({items:rows.results.map(r=>{
-      const id=String(r.id),canonicalName=String(r.canonical_name),producerNames=[canonicalName,...(aliasesByProducer.get(id)??[])];
-      const catalogCount=canonicalCatalogEntries(catalogEntries(r.catalog_json),producerNames).length;
-      // One name per country, so two spellings of one place cannot open two
-      // panels on the producers page.
-      return {id,canonicalName,homeCountry:r.home_country?canonicalCountryName(String(r.home_country))??null:null,homeRegion:r.home_region?String(r.home_region):null,homeLocality:r.home_locality?String(r.home_locality):null,tastedCount:Number(r.tasted_count)||0,catalogCount,researchedAt:r.researched_at?String(r.researched_at):null};
-    })});
+    // Producer research canonicalizes and deduplicates catalog_json at storage
+    // time using the same identity key the page previously applied on every
+    // read. Count that stored range in D1, independent of partial cuvee seeding,
+    // and aggregate tasting counts once instead of running per-producer work in
+    // Worker JS.
+    const rows=await c.env.DB.prepare(`SELECT p.id,p.canonical_name,p.home_country,p.home_region,p.home_locality,p.researched_at,
+      coalesce(w.tasted_count,0) AS tasted_count,
+      coalesce(json_array_length(p.catalog_json),0) AS catalog_count
+      FROM producers p
+      LEFT JOIN (SELECT producer_id,count(*) AS tasted_count FROM wines WHERE owner_id=? AND producer_id IS NOT NULL GROUP BY producer_id) w ON w.producer_id=p.id
+      WHERE p.owner_id=? ORDER BY coalesce(p.home_country,'~'),coalesce(p.home_region,'~'),p.canonical_name COLLATE NOCASE`)
+      .bind(owner,owner).all<Record<string,unknown>>();
+    return c.json({items:rows.results.map(r=>({
+      id:String(r.id),canonicalName:String(r.canonical_name),homeCountry:r.home_country?canonicalCountryName(String(r.home_country))??null:null,
+      homeRegion:r.home_region?String(r.home_region):null,homeLocality:r.home_locality?String(r.home_locality):null,
+      tastedCount:Number(r.tasted_count)||0,catalogCount:Number(r.catalog_count)||0,researchedAt:r.researched_at?String(r.researched_at):null
+    }))});
   }catch(e){return c.json({error:(e as Error).message||'Could not load producers'},500)}
 });
 

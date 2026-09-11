@@ -23,12 +23,14 @@ const revision=()=>db.prepare("SELECT revision FROM achievement_cache_state WHER
 const search=(term:string)=>db.prepare('SELECT wine_id,owner_id FROM wine_search WHERE wine_search MATCH ?').all(term);
 
 describe('search update trigger on real SQLite with all migrations',()=>{
-  it('does not touch FTS for favorites, ratings, timestamps or equivalent search values',()=>{
-    const before=changes();
+  it('does not touch FTS or achievement progress for favorites, ratings, timestamps or equivalent search values',()=>{
+    const before=changes(),oldRevision=revision();
     db.exec(`UPDATE wines SET favorite=1,rating=95,updated_at='2026-02-01',
       producer=producer,region='',event='' WHERE id='w1'`);
-    // Only the wine row and owner revision changed; no FTS shadow table writes.
-    expect(changes()-before).toBe(2);
+    // Only the wine row changed: these fields alter neither search identity nor
+    // achievement matching, so neither derived index/cache should be rewritten.
+    expect(changes()-before).toBe(1);
+    expect(revision()).toBe(oldRevision);
     expect(search('Dujac')).toHaveLength(1);
   });
 
@@ -79,11 +81,11 @@ async function favorite(value:boolean,id='w1',owner='owner'){
 }
 
 describe('favorite route database work',()=>{
-  it('changes a favorite with one D1 statement and no FTS churn',async()=>{
+  it('changes a favorite with one D1 statement and no FTS or achievement-cache churn',async()=>{
     const before=changes(),oldRevision=Number(revision());
     const {response,stub}=await favorite(true);
     expect(response.status).toBe(200);expect(stub.calls).toHaveLength(1);
-    expect(changes()-before).toBe(2);expect(revision()).toBe(oldRevision+1);
+    expect(changes()-before).toBe(1);expect(revision()).toBe(oldRevision);
   });
 
   it('acknowledges a repeated value without any row writes or revision change',async()=>{
