@@ -43,12 +43,14 @@ To disable semantic retrieval while retaining ordinary Journal search, set:
 
 ## Query behaviour
 
-Semantic retrieval turns on automatically for:
+The shared semantic-query gate classifies these as descriptive:
 
 - an English/space-separated query containing at least three terms; or
 - a CJK query containing at least four Han characters.
 
-Short identity-oriented searches continue directly to FTS5. `?semantic=1` forces semantic retrieval for testing and `?semantic=0` disables it for a request.
+Short identity-oriented searches continue to use the existing 300 ms live debounce and FTS5 path. Once the draft becomes descriptive, the UI stops auto-submitting it: the user must press **Enter** or tap **Search**. This prevents pauses while composing a sentence from generating repeated query-embedding calls.
+
+The Worker uses the same gate. `?semantic=1` can still force semantic retrieval for direct/API testing and `?semantic=0` disables it for a request.
 
 Semantic candidates are unioned with FTS/tasting-name matches. Existing country, region, style, rating, month, tasting and favourite filters remain SQL predicates. With the default sort, semantic candidates are ordered by similarity; an explicit Journal sort such as rating, producer or vintage always wins.
 
@@ -58,7 +60,7 @@ The semantic layer does not replace the canonical `/api/journal` route. It forwa
 
 A semantic document contains wine identity and meaning-bearing fields only: producer, wine, vintage, geography, classification, style, grapes, tasting notes, rating, event/venue and tags. Operational IDs, photo URLs and timestamps are not embedded.
 
-Document indexing never blocks the Journal response. A descriptive query schedules bounded cache warm-up through `waitUntil`; on a completely cold cache the current request simply uses the existing lexical result while vectors are built in the background. Once cached candidates exist, a semantic request waits only for the one query embedding.
+Document indexing never blocks the Journal response. A submitted descriptive query schedules bounded cache warm-up through `waitUntil`; on a completely cold cache the current request simply uses the existing lexical result while vectors are built in the background. Once cached candidates exist, a semantic request waits only for the one query embedding.
 
 The cache records the wine's `updated_at`. An unchanged wine is never re-embedded. If a wine changes, its previous vector remains searchable until the background refresh replaces it, so an edit does not make that wine temporarily disappear from semantic results. Deleted wines are excluded by the join to the live `wines` table.
 
@@ -70,7 +72,8 @@ If the embedding service is unavailable, misconfigured or over quota, the Worker
 
 Open Journal and try both forms:
 
-1. `Lamarche` — should behave like the existing name search.
-2. `floral elegant Burgundy with fine tannins` — after the background cache has begun warming, should return semantically similar wines even when those exact words do not all appear in the record.
+1. Type `Lamarche` and pause — it should behave like the existing live name search.
+2. Type `floral elegant Burgundy with fine tannins` and pause — it should **not** submit yet; a Search button should be visible.
+3. Press Enter or tap Search — after the background cache has begun warming, it should return semantically similar wines even when those exact words do not all appear in the record.
 
 For an A/B check, append `semantic=0` to the same Journal URL and compare it with the normal result.
