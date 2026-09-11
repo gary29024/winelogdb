@@ -5,4 +5,6 @@ export type VintageResearchStatus={
   status:'queued'|'running'|'complete'|'failed';
   window:VintageWindow|null;
   error:string|null;
+  /** Original queue time, so a reopened panel can resume the same elapsed clock. */
+  createdAt?:string;
 };
