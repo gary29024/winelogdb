@@ -60,8 +60,11 @@ registerSummaryCache(invalidateJourneyData);
 export const getJourneyData=journeyCache.get;
 
 export type KindSpend={kind:string;label:string;runs:number;requests:number;searchQueries:number;promptTokens:number;outputTokens:number;units:number;unit:'run'|'wine';unitCount:number;costPerUnit:number;cost:number;costPerRun:number;searchesPerRun:number};
+export type UsageRunPart={model:string;tier:string;createdAt:string;requests:number;searchQueries:number;promptTokens:number;outputTokens:number;cost:number};
+export type UsageRun={kind:string;runId:string;targetId:string|null;targetLabel:string|null;createdAt:string;requests:number;searchQueries:number;promptTokens:number;outputTokens:number;cost:number;parts:UsageRunPart[]};
 export type UsageSummary={
   currency:string;days:number;kinds:KindSpend[];empty:boolean;
+  recentRuns:Record<string,UsageRun[]|undefined>;
   month:{month:string;searchQueries:number;freeRemaining:number;billableSearches:number;cost:number;resetsAt:string;timeZone:string};
 };
 
