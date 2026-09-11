@@ -1,5 +1,6 @@
 import { useEffect,useId,useRef,useState } from 'react';
 import { getAiSpend,type UsageRun,type UsageSummary } from './api';
+import '../../aiSpend.css';
 
 /**
  * What the AI has cost, per run.
