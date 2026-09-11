@@ -46,7 +46,12 @@ export const getProducerResearchStatus=(id:string,requestId?:string)=>{
   const suffix=requestId?`?requestId=${encodeURIComponent(requestId)}`:'';
   return fetch(`/api/producers/${id}/research-status${suffix}`,{headers:authHeaders()}).then(async r=>r.status===404?null:json<ProducerResearchRun>(r,'Could not load producer research status'));
 };
-export const researchProducer=(id:string,requestId=crypto.randomUUID(),refreshProfile=false)=>fetch(`/api/producers/${id}/research`,{method:'POST',headers:authHeaders(true),body:JSON.stringify({confirmation:'RUN_PRODUCER_RESEARCH',requestId,refreshProfile})}).then(r=>json<{accepted:true;researchRequestId:string;existing:boolean}>(r,'Producer research could not be queued'));
+export const researchProducer=(id:string,requestId=crypto.randomUUID(),refreshProfile=false)=>fetch(`/api/producers/${id}/research`,{method:'POST',headers:authHeaders(true),body:JSON.stringify({confirmation:'RUN_PRODUCER_RESEARCH',requestId,refreshProfile})})
+  .then(r=>json<{accepted:true;researchRequestId:string;existing:boolean}>(r,'Producer research could not be queued'))
+  .then(result=>{
+    if(refreshProfile&&result.existing)throw new Error('A producer research run is already in progress. The requested profile refresh was not queued; try again after it finishes.');
+    return result;
+  });
 export const cancelProducerResearch=(id:string,requestId:string)=>fetch(`/api/producers/${id}/research-cancel`,{method:'POST',headers:authHeaders(true),body:JSON.stringify({confirmation:'CANCEL_PRODUCER_RESEARCH',requestId})}).then(r=>json<ResearchCancelResult>(r,'Could not cancel producer research'));
 export const mergeProducer=(destinationId:string,sourceProducerId:string)=>fetch(`/api/producers/${destinationId}/merge`,{method:'POST',headers:authHeaders(true),body:JSON.stringify({confirmation:'MERGE_PRODUCER',sourceProducerId})}).then(r=>json<{mergeId:string;destinationId:string;canonicalName:string;mergedName:string}>(r,'Could not link producer'));
 export const removeProducerHeroImage=(id:string)=>fetch(`/api/producers/${id}/hero-image`,{method:'DELETE',headers:authHeaders(true),body:JSON.stringify({confirmation:'REMOVE_PRODUCER_PHOTO'})}).then(r=>json<{id:string;removed:boolean}>(r,'Could not remove this photo'));
