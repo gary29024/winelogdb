@@ -6,7 +6,6 @@ import { hasTastingStructure,tastingStructureSchema,type TastingStructure } from
 import { groupSourcePhotosForWine,handleGroupRecognitionSessionRequest } from './groupRecognitionSessions';
 import { resolveGeminiTransport,type GeminiTransportBindings } from './geminiTransport';
 import { processVertexBatchPollJob,processVertexBatchSubmitJob } from './vertexBatchRecognition';
-import { listJournalPage,type JournalListQuery } from '../src/lib/journal/list';
 import { semanticWineIds,shouldUseSemanticQuery,warmSemanticWineIndex,type SemanticEmbeddingBindings } from '../src/lib/journal/semanticSearch';
 
 type Bindings=Parameters<typeof app.fetch>[1]&GeminiTransportBindings&SemanticEmbeddingBindings;
@@ -34,22 +33,23 @@ export default {
     const url=new URL(request.url),wineId=exactWineId(url.pathname);
     const groupSessionResponse=await handleGroupRecognitionSessionRequest(request,env);if(groupSessionResponse)return groupSessionResponse;
 
-    // Short/name-like searches keep the existing FTS path. Descriptive queries
-    // additionally retrieve semantically similar wines, then listJournalPage
-    // unions those candidates with the lexical matches and keeps all filters.
-    // Any embedding/provider failure falls through to the old search untouched.
+    // Semantic retrieval is an input to the real Journal route, never a second
+    // implementation of that route. The forwarded request still passes through
+    // cuveeEntry, so CORS, authentication and identity maintenance stay owned in
+    // one place. Document backfill is always waitUntil work; only the query
+    // vector can delay a descriptive search.
     if(request.method==='GET'&&url.pathname==='/api/journal'){
       const rawQuery=(url.searchParams.get('query')??'').trim(),semanticFlag=url.searchParams.get('semantic');
       const useSemantic=rawQuery&&semanticFlag!=='0'&&(semanticFlag==='1'||shouldUseSemanticQuery(rawQuery));
       if(useSemantic){
         let ownerId:string;try{ownerId=await owner(request,env)}catch{return jsonResponse({error:'Unauthorized'},401)}
+        ctx.waitUntil(warmSemanticWineIndex(env,ownerId).catch(error=>console.error(JSON.stringify({event:'semantic-index-warm-failed',error:(error as Error).message}))));
         try{
           const semantic=await semanticWineIds(env,ownerId,rawQuery,72);
           if(semantic?.ids.length){
-            if(semantic.hasMore)ctx.waitUntil(warmSemanticWineIndex(env,ownerId).catch(error=>console.error(JSON.stringify({event:'semantic-index-warm-failed',error:(error as Error).message}))));
-            const query=Object.fromEntries(url.searchParams.entries()) as JournalListQuery;
-            const result=await listJournalPage(env.DB,ownerId,query,semantic.ids);
-            return jsonResponse({...result,semantic:{active:true,indexing:semantic.hasMore}});
+            const forwardedUrl=new URL(request.url);
+            forwardedUrl.searchParams.set('__semanticIds',semantic.ids.join(','));
+            return app.fetch(new Request(forwardedUrl,request),env,ctx);
           }
         }catch(error){console.error(JSON.stringify({event:'semantic-journal-search-failed',error:(error as Error).message}))}
       }
