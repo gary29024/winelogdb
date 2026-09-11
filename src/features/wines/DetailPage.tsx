@@ -23,10 +23,10 @@ import { AppIcon } from '../../components/AppIcons';
 import { ElapsedSeconds } from '../../components/ElapsedSeconds';
 
 type DeepState='idle'|'confirm-usage'|'running'|'error';
-type DeepField='summary'|'vintageQuality'|'producerDetails'|'producerWinemakingPractices'|'winemakingTechniques'|'terroir'|'drinkingWindow';
+type DeepField='summary'|'expectedProfile'|'vintageQuality'|'producerDetails'|'producerWinemakingPractices'|'winemakingTechniques'|'terroir'|'drinkingWindow';
 const deepStage:Record<WineResearchRun['stage'],string>={queued:'Queued for background research',researching:'Researching with Gemini 3.8 Flash',saving:'Saving Deep Search result',complete:'Research complete',failed:'Research failed'};
 const claimStatusLabel={supported:'Direct support',partial:'Partial support',unsupported:'No direct citation',uncertainty:'Explicit uncertainty',conflicting:'Conflicting sources'} as const;
-const DEEP_FIELDS:DeepField[]=['summary','vintageQuality','producerDetails','producerWinemakingPractices','winemakingTechniques','terroir','drinkingWindow'];
+const DEEP_FIELDS:DeepField[]=['summary','expectedProfile','vintageQuality','producerDetails','producerWinemakingPractices','winemakingTechniques','terroir','drinkingWindow'];
 const DEEP_OPEN_FIELDS_KEY='winelog.deepSearch.openFields';
 function readOpenDeepFields():Set<DeepField>{
  try{
@@ -175,7 +175,7 @@ export function DetailPage(){
  const blend=wine.grapeBlend.length?wine.grapeBlend.map(x=>`${x.grape}${x.percentage!=null?` ${x.percentage}%`:''}`):wine.grapes,deep=wine.deepSearch,structure=wine.tastingStructure,price=formatPrice(wine.price,wine.currency);
  const structureItems=structure?[[ 'Flavour intensity',structure.flavourIntensity],['Acidity',structure.acidity],['Tannin',structure.tannin],['Body',structure.body],['Finish',structure.finish],['Perceived alcohol',structure.alcohol]].filter((item):item is [string,string]=>Boolean(item[1])):[];
  const researchSections=deep?([
-  ['Vintage quality','vintageQuality',deep.vintageQuality],['Producer','producerDetails',deep.producerDetails],['Producer-wide practices','producerWinemakingPractices',deep.producerWinemakingPractices],['This wine / vintage winemaking','winemakingTechniques',deep.winemakingTechniques],['Terroir','terroir',deep.terroir],['Drinking window','drinkingWindow',deep.drinkingWindow]
+  ['What to expect','expectedProfile',deep.expectedProfile??''],['Vintage quality','vintageQuality',deep.vintageQuality],['Producer','producerDetails',deep.producerDetails],['Producer-wide practices','producerWinemakingPractices',deep.producerWinemakingPractices],['This wine / vintage winemaking','winemakingTechniques',deep.winemakingTechniques],['Terroir','terroir',deep.terroir],['Drinking window','drinkingWindow',deep.drinkingWindow]
  ] as Array<[string,DeepField,string]>).filter(([, ,value])=>Boolean(value)):[];
  return <article className="detail wine-detail"><Link className="back-pill" to={back.to}>← {back.label}</Link>
   <section className="wine-identity">
