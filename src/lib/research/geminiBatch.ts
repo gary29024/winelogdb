@@ -14,6 +14,7 @@ export type GroundingMetadata={
 };
 
 export type VertexFlexUsage={trafficType:string|null;flexConfirmed:boolean;promptTokens:number|null;outputTokens:number|null;totalTokens:number|null};
+export type GeminiThinkingLevel='low'|'medium'|'high';
 
 type GatewayRuntimeEnv=GeminiTransportBindings&{DB:D1Database};
 type GatewayRuntime={kind:'ready';env:GatewayRuntimeEnv}|{kind:'incomplete';missing:string[]};
@@ -293,7 +294,9 @@ export async function cancelEmulatedGeminiBatch(apiKey:string|undefined,name:str
  * stays the single definition of the contract and is rendered into the prompt
  * from here, so the two cannot drift apart.
  */
-export function groundedGenerationConfig(maxOutputTokens:number){return {maxOutputTokens}}
+export function groundedGenerationConfig(maxOutputTokens:number,thinkingLevel?:GeminiThinkingLevel){
+  return thinkingLevel?{maxOutputTokens,thinkingConfig:{thinkingLevel}}:{maxOutputTokens};
+}
 
 type SchemaNode={type?:string;properties?:Record<string,SchemaNode>;items?:SchemaNode;required?:string[];enum?:string[];nullable?:boolean};
 

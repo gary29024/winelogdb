@@ -11,6 +11,7 @@ import { catalogNote,verboseCatalogStyle } from '../../lib/producers/catalogNote
 import { stripProducerCatalogPrefix } from '../../lib/producers/catalogName';
 import { catalogDecisionKey,catalogDecisionLabel } from '../../lib/producers/catalogDecisions';
 import { cuveeStyleFamily,normalizeCuveeAlias } from '../../lib/cuvees/entities';
+import { isResearchStale } from '../../lib/research/freshness';
 import '../../producer.css';
 import { startBackoffPoll,type Poller } from '../../lib/polling/backoff';
 import { backTargetFromState,linkFrom,readBackTarget,rememberBackTarget,PRODUCERS_BACK } from '../wines/backTarget';
@@ -162,11 +163,11 @@ export function ProducerDetailPage(){
   // where an eye expects them rather than after every unaccented name.
    .sort((a,b)=>a.name.localeCompare(b.name,undefined,{sensitivity:'base'})||(a.wineStyle??'').localeCompare(b.wineStyle??''));
  },[producer]);
- async function runResearch(){
-  if(!confirm('Research this producer’s home location, public contacts, producer-wide winemaking practices and current/recent wine range with Gemini + Google Search? The job runs in the background and continues even if you close WineLog.'))return;
+ async function runResearch(refreshProfile=false){
+  if(!confirm((refreshProfile?'Refresh the saved profile even if it is still current? This uses an additional research request. ':'')+'Research this producer’s home location, public contacts, producer-wide winemaking practices and current/recent wine range with Gemini + Google Search? The job runs in the background and continues even if you close WineLog.'))return;
   setError('');setNotice('');
   try{
-   const accepted=await researchProducer(id);const run=await getProducerResearchStatus(id,accepted.researchRequestId);
+   const accepted=await researchProducer(id,undefined,refreshProfile);const run=await getProducerResearchStatus(id,accepted.researchRequestId);
    if(run)watchResearch(run);else setNotice('Producer research has been queued in the background. You can leave this page safely.');
   }catch(e){setError((e as Error).message)}
  }
@@ -226,14 +227,15 @@ export function ProducerDetailPage(){
  // the message stayed until the app was restarted.
  if(!producer)return <div className="producer-load-error" role="alert"><p>{error||'Producer not found'}</p>
   <button type="button" onClick={()=>{setLoading(true);setError('');void reload().catch(e=>setError((e as Error).message)).finally(()=>setLoading(false))}}>Try again</button></div>;
- const location=[producer.homeLocality,producer.homeRegion,producer.homeCountry].filter(Boolean).join(', '),primaryKey=normalizeProducerAlias(producer.canonicalName),sourceWebsiteCount=new Set(producer.sources.map(source=>sourceHost(source.url)).filter(Boolean)).size;
+ const location=[producer.homeLocality,producer.homeRegion,producer.homeCountry].filter(Boolean).join(','+' '),primaryKey=normalizeProducerAlias(producer.canonicalName),sourceWebsiteCount=new Set(producer.sources.map(source=>sourceHost(source.url)).filter(Boolean)).size;
+ const profileStale=isResearchStale(producer.profileResearchedAt),rangeStale=isResearchStale(producer.researchedAt),staleLabel=profileStale&&rangeStale?'profile & range':profileStale?'profile':rangeStale?'range':'';
  return <article className="producer-detail"><Link className="back-pill" to={back.to}>← {back.label}</Link>
   <header className={`producer-header${producer.heroImageAvailable?' has-hero':''}`}>
    {producer.heroImageAvailable&&<ProducerHeroImage producerId={producer.id} alt={`${producer.canonicalName} domaine`}/>}<div className="producer-header-shade"/>
    <div className="producer-header-content"><p className="eyebrow">PRODUCER</p><h1>{producer.canonicalName}</h1><p>{location||'Home location not researched yet'}</p>{producer.aliases.length>1&&<small>Known aliases: {producer.aliases.join(' · ')}</small>}{producer.heroImageAvailable&&<button type="button" className="producer-photo-remove" disabled={removingPhoto} onClick={()=>void removePhoto()}>{removingPhoto?'Removing…':'Remove this photo'}</button>}</div>
   </header>
   {error&&<p className="producer-error" role="alert">{error}</p>}{notice&&<p className="producer-notice" role="status">{notice}</p>}
-  <section className="detail-section"><div className="producer-section-title"><div><p className="section-label">Producer research</p><h2>Profile & range</h2></div><button type="button" className="primary" disabled={researching} onClick={runResearch}>{researching?'Research running…':producer.researchedAt?'Refresh producer research':'Research producer'}</button></div>
+  <section className="detail-section"><div className="producer-section-title"><div><p className="section-label">Producer research</p><h2>Profile & range</h2></div><button type="button" className="primary" disabled={researching} onClick={()=>void runResearch()}>{researching?'Research running…':producer.researchedAt?'Refresh producer research':'Research producer'}</button>{producer.profile&&<button type="button" disabled={researching} onClick={()=>void runResearch(true)}>Refresh profile & range</button>}</div>
    {researchRun&&<div className={`producer-research-status ${researchRun.status}`} role="status" aria-live="polite"><div><strong>{stageLabel[researchRun.stage]}</strong><span>{researchRun.message}</span></div><div><strong>{researching?<ElapsedSeconds startedAt={researchRun.startedAt}/>:researchRun.durationMs!=null?`${(researchRun.durationMs/1000).toFixed(1)}s`:''}</strong><small>Request {researchRun.requestId}</small></div>{researching&&<><p>This is a background job. You can leave this page or close WineLog; the saved result will appear automatically when you return.</p><button type="button" className="secondary-danger" disabled={researchCancelling} onClick={cancelResearch}>{researchCancelling?'Cancelling…':'Cancel Deep Search'}</button></>}</div>}
    {producer.profile?<p className="producer-profile">{producer.profile}</p>:<p>Research this producer to establish its physical base, broad region and commune, public contact details, official website, general producer-wide practices, header image and a sourced current/recent wine range.</p>}
    {producer.winemakingPractices&&<div className="producer-practices"><p className="section-label">General winemaking practices</p><p className="producer-profile">{producer.winemakingPractices}</p><small>Producer-wide context only. Exact cuvée/vintage techniques are researched separately on the wine page.</small></div>}
@@ -282,7 +284,7 @@ export function ProducerDetailPage(){
      <small>Corrections are re-applied after every producer research run, so a resolved duplicate does not come back.</small>
     </details>}
    </div>}
-   {producer.sources.length>0&&<details className="producer-sources"><summary>{producer.sources.length} profile & range reference{producer.sources.length===1?'':'s'}{sourceWebsiteCount?` · ${sourceWebsiteCount} website${sourceWebsiteCount===1?'':'s'}`:''}</summary>{producer.sources.map(s=><a key={s.url} href={s.url} target="_blank" rel="noreferrer">{s.title}</a>)}</details>}{producer.researchedAt&&<small>Latest producer research: {producer.researchModel} · {new Date(producer.researchedAt).toLocaleDateString()}</small>}
+   {producer.sources.length>0&&<details className="producer-sources"><summary>{producer.sources.length} profile & range reference{producer.sources.length===1?'':'s'}{sourceWebsiteCount?` · ${sourceWebsiteCount} website${sourceWebsiteCount===1?'':'s'}`:''}</summary>{producer.sources.map(s=><a key={s.url} href={s.url} target="_blank" rel="noreferrer">{s.title}</a>)}</details>}{producer.researchedAt&&<small>Latest producer research: {producer.researchModel} · {new Date(producer.researchedAt).toLocaleDateString()}{staleLabel&&<> · ⚠ {staleLabel} may be outdated</>}</small>}
   </section>
   <section className="detail-section"><p className="section-label">Your tastings</p><h2>{tastedGroups.length} cuvée{tastedGroups.length===1?'':'s'} · {producer.tastedWines.length} tasting{producer.tastedWines.length===1?'':'s'}</h2>{tastedGroups.length?<div className="producer-tasted-groups">{tastedGroups.map(group=>{const releaseCount=group.releaseFamily?new Set(group.wines.map(w=>w.releaseDesignation).filter(Boolean)).size:0,identityMeta=[releaseCount?`${releaseCount} release${releaseCount===1?'':'s'}`:null,group.wineStyle,group.grapes.length?group.grapes.join(' / '):null].filter(Boolean).join(' · ');return <div className="tasted-cuvee-group" key={`${group.catalogCuveeId??group.cuveeId??normalizeProducerAlias(group.name)}-${cuveeStyleFamily(group.wineStyle)||'unknown'}`}><div className="tasted-cuvee-title"><div><strong>{group.name}</strong>{identityMeta&&<small>{identityMeta}</small>}</div></div><div className="producer-tasted">{group.wines.map((w,index)=>{const release=String(w.releaseDesignation??'').trim(),subline=[release?(w.vintage??'NV'):null,w.appellation,w.region].filter(Boolean).join(' · ');return <div className="tasted-row tasted-vintage-row" key={w.id}><Link to={`/wines/${w.id}`} state={linkFrom({to:`/producers/${producer.id}`,label:producer.canonicalName})} className="tasted-row-link"><div className="tasted-thumb">{w.imageId?<WineImage imageId={w.imageId} alt={`${w.wineName} ${w.vintage??'NV'} bottle`} className="tasted-thumb-image"/>:<span className="tasted-thumb-fallback">W</span>}</div><div className="tasted-copy"><strong>{release||w.vintage||'NV'}</strong><span>{subline}</span></div></Link><div className="tasted-meta">{w.rating!=null&&<strong>{w.rating}</strong>}{w.tastingDate&&<span>{w.tastingDate}</span>}{index===0&&<CuveeCatalogLinks producer={producer} group={group} onChanged={reload}/>}</div></div>})}</div></div>})}</div>:<p>No tasting records linked to this producer yet.</p>}
   </section>

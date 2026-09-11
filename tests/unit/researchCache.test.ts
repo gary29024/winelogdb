@@ -1,6 +1,7 @@
 import { describe,expect,it } from 'vitest';
 import { assembleDeepSearch,buildResearchTargets,scopeIsComplete,type CachedResearch,type ResearchScope } from '../../src/lib/research/cache';
-import { deepSearchQualitySchema } from '../../src/lib/db/schema';
+import { deepSearchQualitySchema,deepSearchSchema } from '../../src/lib/db/schema';
+import { isResearchStale } from '../../src/lib/research/freshness';
 
 const byScope=(targets:ReturnType<typeof buildResearchTargets>)=>new Map(targets.map(target=>[target.scope,target]));
 
@@ -36,6 +37,18 @@ describe('layered research identities',()=>{
 });
 
 describe('layered research assembly',()=>{
+  it('keeps older reusable research stale after a recent vintage refresh',()=>{
+    const targets=buildResearchTargets({producer:'Estate',wineName:'Wine',vintage:2021});
+    const cache=new Map<ResearchScope,CachedResearch>();
+    for(const target of targets)cache.set(target.scope,{target,payload:{},sources:[],model:'model',
+      researchedAt:target.scope==='producer'?'2024-01-01T00:00:00.000Z':'2026-09-11T00:00:00.000Z'});
+    const result=deepSearchSchema.parse(assembleDeepSearch(cache,targets));
+    expect(result.researchedAt).toBe('2026-09-11T00:00:00.000Z');
+    expect(result.oldestResearchedAt).toBe('2024-01-01T00:00:00.000Z');
+    expect(isResearchStale(result.oldestResearchedAt,Date.parse(result.researchedAt))).toBe(true);
+    cache.get('producer')!.researchedAt=result.researchedAt;
+    expect(isResearchStale(assembleDeepSearch(cache,targets).oldestResearchedAt,Date.parse(result.researchedAt))).toBe(false);
+  });
   it('assembles one wine report from reusable cache scopes',()=>{
     const targets=buildResearchTargets({producer:'Domaine Dujac',wineName:'Clos de la Roche',vintage:2021,country:'France',region:'Burgundy',appellation:'Clos de la Roche'});
     const payloads:Record<ResearchScope,Record<string,string>>={

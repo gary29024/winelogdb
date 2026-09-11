@@ -58,6 +58,12 @@ afterEach(()=>{
 });
 
 describe('Producer wine range',()=>{
+  it.each([['Research producer',false],['Refresh profile & range',true]] as const)('sends the explicit profile choice from %s',async(label,refreshProfile)=>{
+    await render();
+    await click(byLabel(label)!);
+    expect(posted[0]).toMatchObject({url:'/api/producers/p1/research',body:{refreshProfile,confirmation:'RUN_PRODUCER_RESEARCH'}});
+  });
+
   it('groups the range by style and starts expanded',async()=>{
     await render();
     expect(groups()).toHaveLength(2);

@@ -32,7 +32,7 @@ describe('what a producer run asks for',()=>{
 });
 
 describe('the request a run actually submits',()=>{
-  const run=async(row:Record<string,unknown>|null)=>{
+  const run=async(row:Record<string,unknown>|null,refreshProfile=false)=>{
     const stub=createD1Stub(sql=>{
       // Deliberately loose: a stub that only answers the current column list
       // would hand back nothing if the freshness read regressed to the shared
@@ -49,7 +49,7 @@ describe('the request a run actually submits',()=>{
     const spy=vi.spyOn(module,'createGeminiBatch').mockImplementation(async(_key,model,_name,entries)=>{
       batches.push({model,entries:entries as Array<{key:string}>});return 'batches/x';
     });
-    const result=await startProducerBatchResearch(env,'owner','p1','r1');
+    const result=await startProducerBatchResearch(env,'owner','p1','r1',refreshProfile);
     spy.mockRestore();vi.unstubAllGlobals();
     return {result,keys:batches[0]?.entries.map(entry=>entry.key)??[],sql:stub.sql()};
   };
@@ -58,6 +58,12 @@ describe('the request a run actually submits',()=>{
     const {result,keys}=await run(known({profile_researched_at:new Date(Date.now()-day).toISOString()}));
     expect(result.ok).toBe(true);
     expect(keys,'one grounded request, not two').toEqual(['catalog_slice_a_z_other']);
+  });
+
+  it('includes a current profile when the user explicitly requests a refresh',async()=>{
+    const {result,keys}=await run(known({profile_researched_at:new Date().toISOString()}),true);
+    expect(result.ok).toBe(true);
+    expect(keys).toEqual(['profile','catalog_slice_a_z_other']);
   });
 
   it('refreshes an expired profile even when the catalog was refreshed today',async()=>{

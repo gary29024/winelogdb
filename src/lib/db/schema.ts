@@ -108,6 +108,7 @@ export const deepSearchSchema = z.object({
   sources: z.array(z.object({ title: z.string().trim().max(300), url: z.string().url() })).max(20).default([]),
   model: z.string().trim().max(100),
   researchedAt: z.string().datetime(),
+  oldestResearchedAt: z.string().datetime().optional(),
   quality:deepSearchQualitySchema.optional(),
   provenance:deepSearchProvenanceSchema.optional()
 });
