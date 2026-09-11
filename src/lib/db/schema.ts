@@ -99,6 +99,7 @@ export const deepSearchProvenanceSchema=z.object({
 });
 export const deepSearchSchema = z.object({
   summary: z.string().trim().max(6000).default(''),
+  expectedProfile: z.string().trim().max(4000).optional(),
   vintageQuality: z.string().trim().max(4000).default(''),
   producerDetails: z.string().trim().max(5000).default(''),
   producerWinemakingPractices: z.string().trim().max(5000).default(''),

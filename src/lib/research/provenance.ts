@@ -8,7 +8,7 @@ export type ResearchClaimProvenance={claim:string;supportStatus:ClaimSupportStat
 export type ResearchFieldProvenance={claimCount:number;supportedCount:number;partialCount:number;unsupportedCount:number;uncertaintyCount:number;conflictingCount:number;directSupportRatio:number;claims:ResearchClaimProvenance[]};
 export type DeepSearchProvenance=StoredDeepSearchProvenance;
 
-export const deepResearchFields:DeepResearchField[]=['summary','vintageQuality','producerDetails','producerWinemakingPractices','winemakingTechniques','terroir','drinkingWindow'];
+export const deepResearchFields:DeepResearchField[]=['summary','expectedProfile','vintageQuality','producerDetails','producerWinemakingPractices','winemakingTechniques','terroir','drinkingWindow'];
 
 const STOP_WORDS=new Set(['the','and','that','this','with','from','into','for','was','were','are','its','their','his','her','has','have','had','but','not','wine','producer','domaine','estate','vintage','cuvee','cuvée']);
 const normalize=(value:string)=>value.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[’'`]/g,'').replace(/[^a-z0-9%]+/g,' ').trim();
