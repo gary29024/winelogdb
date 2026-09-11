@@ -4,15 +4,15 @@ import { researchVintageWindow,type VintageWindowBindings } from './vintageWindo
 
 export type VintageResearchMessage={kind:'vintage_window';owner:string;requestId:string};
 type Bindings=VintageWindowBindings&{RESEARCH_QUEUE?:Queue<VintageResearchMessage>};
-type Row={id:string;status:VintageResearchStatus['status'];subject_json:string;result_json:string|null;error:string|null;updated_at:string};
+type Row={id:string;status:VintageResearchStatus['status'];subject_json:string;result_json:string|null;error:string|null;created_at:string;updated_at:string};
 const now=()=>new Date().toISOString();
 // More than twice the combined 75-second model budget, with time for D1.
 // An abandoned job is failed on an explicit retry, never silently replayed
 // as another paid model request.
 const STALE_MS=3*60*1000;
-const fields='id,status,subject_json,result_json,error,updated_at';
+const fields='id,status,subject_json,result_json,error,created_at,updated_at';
 const status=(row:Row):VintageResearchStatus=>({id:row.id,status:row.status,
-  window:row.result_json?JSON.parse(row.result_json) as VintageWindow:null,error:row.error});
+  window:row.result_json?JSON.parse(row.result_json) as VintageWindow:null,error:row.error,createdAt:row.created_at});
 
 /**
  * The lookup already running for a cell, if there is one.
@@ -57,7 +57,7 @@ export async function queueVintageResearch(env:Bindings,owner:string,subject:Vin
   }
   try{await env.RESEARCH_QUEUE.send({kind:'vintage_window',owner,requestId:id})}
   catch(e){await failVintageResearch(env.DB,owner,id,'Could not queue vintage research. Please retry.');throw e}
-  return {id,status:'queued',window:null,error:null} satisfies VintageResearchStatus;
+  return {id,status:'queued',window:null,error:null,createdAt:stamp} satisfies VintageResearchStatus;
 }
 
 export async function processVintageResearch(env:VintageWindowBindings,message:VintageResearchMessage){
