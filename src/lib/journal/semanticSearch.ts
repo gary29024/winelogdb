@@ -113,34 +113,41 @@ function extractWorkersVectors(result:unknown){
 
 async function embedTexts(env:SemanticEnv,config:EmbeddingConfig,texts:string[],kind:'query'|'document',meter:MeterContext){
   if(!texts.length)return [] as number[][];
-  let vectors:number[][];
-  if(config.provider==='workers-ai'){
-    if(!env.AI)throw new Error('Workers AI binding is unavailable');
-    const result=await (env.AI.run as (model:string,input:unknown)=>Promise<unknown>)(config.model,{text:texts});
-    vectors=extractWorkersVectors(result);
-  }else{
-    const requests=texts.map(text=>({
-      model:`models/${config.model}`,
-      content:{parts:[{text}]},
-      embedContentConfig:{taskType:kind==='query'?'RETRIEVAL_QUERY':'RETRIEVAL_DOCUMENT',outputDimensionality:config.dimensions,autoTruncate:true}
-    }));
-    const response=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(config.model)}:batchEmbedContents`,{
-      method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':config.geminiKey??''},body:JSON.stringify({requests})
+  let attempted=false;
+  try{
+    let vectors:number[][];
+    if(config.provider==='workers-ai'){
+      if(!env.AI)throw new Error('Workers AI binding is unavailable');
+      attempted=true;
+      const result=await (env.AI.run as (model:string,input:unknown)=>Promise<unknown>)(config.model,{text:texts});
+      vectors=extractWorkersVectors(result);
+    }else{
+      const requests=texts.map(text=>({
+        model:`models/${config.model}`,
+        content:{parts:[{text}]},
+        embedContentConfig:{taskType:kind==='query'?'RETRIEVAL_QUERY':'RETRIEVAL_DOCUMENT',outputDimensionality:config.dimensions,autoTruncate:true}
+      }));
+      attempted=true;
+      const response=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(config.model)}:batchEmbedContents`,{
+        method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':config.geminiKey??''},body:JSON.stringify({requests})
+      });
+      if(!response.ok)throw new Error(`Gemini embeddings failed (${response.status})`);
+      const body=await response.json() as {embeddings?:Array<{values?:number[]}>};
+      vectors=(body.embeddings??[]).map(item=>item.values??[]);
+    }
+    if(vectors.length!==texts.length)throw new Error(`Embedding response returned ${vectors.length} vectors for ${texts.length} inputs`);
+    return vectors.map(vector=>{
+      if(vector.length!==config.dimensions)throw new Error(`Embedding dimension mismatch: expected ${config.dimensions}, got ${vector.length}`);
+      return normalized(vector);
     });
-    if(!response.ok)throw new Error(`Gemini embeddings failed (${response.status})`);
-    const body=await response.json() as {embeddings?:Array<{values?:number[]}>};
-    vectors=(body.embeddings??[]).map(item=>item.values??[]);
+  }finally{
+    // Rejected or malformed AI answers can still consume quota. Meter every
+    // provider attempt, not only responses that pass our validation. Neither
+    // embedding response exposes exact billed tokens/neurons here, so the app
+    // records calls + embeddings covered and the provider dashboard remains
+    // authoritative for exact compute spend.
+    if(attempted)await recordAiUsage(env,meter.owner,{kind:SEARCH_EMBEDDING_KIND,runId:meter.runId,targetId:meter.targetId,model:config.model,requests:1,units:texts.length});
   }
-  if(vectors.length!==texts.length)throw new Error(`Embedding response returned ${vectors.length} vectors for ${texts.length} inputs`);
-  const output=vectors.map(vector=>{
-    if(vector.length!==config.dimensions)throw new Error(`Embedding dimension mismatch: expected ${config.dimensions}, got ${vector.length}`);
-    return normalized(vector);
-  });
-  // Neither embedding endpoint exposes exact billed token usage in this response
-  // shape. Still ledger every paid/model call and how many embeddings it covered;
-  // provider dashboards remain authoritative for neuron/token spend.
-  await recordAiUsage(env,meter.owner,{kind:SEARCH_EMBEDDING_KIND,runId:meter.runId,targetId:meter.targetId,model:config.model,requests:1,units:texts.length});
-  return output;
 }
 
 function vectorBlob(vector:number[]){return Float32Array.from(vector).buffer}
