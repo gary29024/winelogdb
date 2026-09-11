@@ -6,8 +6,10 @@ import { hasTastingStructure,tastingStructureSchema,type TastingStructure } from
 import { groupSourcePhotosForWine,handleGroupRecognitionSessionRequest } from './groupRecognitionSessions';
 import { resolveGeminiTransport,type GeminiTransportBindings } from './geminiTransport';
 import { processVertexBatchPollJob,processVertexBatchSubmitJob } from './vertexBatchRecognition';
+import { listJournalPage,type JournalListQuery } from '../src/lib/journal/list';
+import { semanticWineIds,shouldUseSemanticQuery,warmSemanticWineIndex,type SemanticEmbeddingBindings } from '../src/lib/journal/semanticSearch';
 
-type Bindings=Parameters<typeof app.fetch>[1]&GeminiTransportBindings;
+type Bindings=Parameters<typeof app.fetch>[1]&GeminiTransportBindings&SemanticEmbeddingBindings;
 type QueueBatch=Parameters<typeof app.queue>[0];
 type QueueJob={kind?:string;owner?:string;sessionId?:string;jobId?:string;pollCount?:number};
 
@@ -31,6 +33,27 @@ export default {
     configureBatchGateway(env);
     const url=new URL(request.url),wineId=exactWineId(url.pathname);
     const groupSessionResponse=await handleGroupRecognitionSessionRequest(request,env);if(groupSessionResponse)return groupSessionResponse;
+
+    // Short/name-like searches keep the existing FTS path. Descriptive queries
+    // additionally retrieve semantically similar wines, then listJournalPage
+    // unions those candidates with the lexical matches and keeps all filters.
+    // Any embedding/provider failure falls through to the old search untouched.
+    if(request.method==='GET'&&url.pathname==='/api/journal'){
+      const rawQuery=(url.searchParams.get('query')??'').trim(),semanticFlag=url.searchParams.get('semantic');
+      const useSemantic=rawQuery&&semanticFlag!=='0'&&(semanticFlag==='1'||shouldUseSemanticQuery(rawQuery));
+      if(useSemantic){
+        let ownerId:string;try{ownerId=await owner(request,env)}catch{return jsonResponse({error:'Unauthorized'},401)}
+        try{
+          const semantic=await semanticWineIds(env,ownerId,rawQuery,72);
+          if(semantic?.ids.length){
+            if(semantic.hasMore)ctx.waitUntil(warmSemanticWineIndex(env,ownerId).catch(error=>console.error(JSON.stringify({event:'semantic-index-warm-failed',error:(error as Error).message}))));
+            const query=Object.fromEntries(url.searchParams.entries()) as JournalListQuery;
+            const result=await listJournalPage(env.DB,ownerId,query,semantic.ids);
+            return jsonResponse({...result,semantic:{active:true,indexing:semantic.hasMore}});
+          }
+        }catch(error){console.error(JSON.stringify({event:'semantic-journal-search-failed',error:(error as Error).message}))}
+      }
+    }
 
     if(request.method==='PUT'&&url.pathname.match(/^\/api\/wines\/[^/]+\/tasting-structure$/)){
       let ownerId:string;try{ownerId=await owner(request,env)}catch{return jsonResponse({error:'Unauthorized'},401)}
