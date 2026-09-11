@@ -73,6 +73,7 @@ function ResearchQuality({deep}:{deep:DeepSearchResult}){
  const quality=deep.quality;if(!quality)return null;
  return <div className={`deep-quality ${quality.status}`}>
   <div className="deep-quality-head"><strong>{qualityStatusLabel[quality.status]??quality.status}</strong><span>{quality.score}/100 · best source tier: {quality.sourceTier}</span></div>
+  {quality.scoreNote&&!quality.warnings.length&&<p>{quality.scoreNote}</p>}
   {quality.warnings.length>0&&<ul>{quality.warnings.map(warning=><li key={warning}>{qualityWarningLabel[warning]??warning}</li>)}</ul>}
  </div>;
 }
@@ -195,7 +196,7 @@ export function DetailPage(){
   <section className="detail-section deep-search-panel">
    <div className="deep-panel-head"><p className="section-label">Deep Search</p>{deep?.quality&&<span className={`deep-quality-pill ${deep.quality.status}`}>{qualityStatusLabel[deep.quality.status]??deep.quality.status} · {deep.quality.score}/100</span>}</div>
    {deep?<>
-    {deep.quality&&deep.quality.warnings.length>0&&<ResearchQuality deep={deep}/>}
+    {deep.quality&&(deep.quality.warnings.length>0||deep.quality.scoreNote)&&<ResearchQuality deep={deep}/>}
     <div className="deep-summary"><ResearchText text={deep.summary}/><ClaimEvidence deep={deep} field="summary"/></div>
     {researchSections.length>0&&<div className="deep-research-sections">
      <div className="deep-sections-head"><span>{researchSections.length} research section{researchSections.length===1?'':'s'}</span><button type="button" className="deep-toggle-all" onClick={()=>toggleAllDeepFields(researchSections.map(([,field])=>field))}>{researchSections.every(([,field])=>openDeepFields.has(field))?'Collapse all':'Expand all'}</button></div>

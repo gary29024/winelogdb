@@ -219,7 +219,7 @@ export function LibraryPage(){
       .catch(e=>{if(e?.name!=='AbortError')setError(e.message)})
       .finally(()=>{if(!controller.signal.aborted)setLoading(false)});
     return()=>controller.abort();
-  },[queryKey,refreshSeq,restoring,attachTo]);
+  },[queryKey,refreshSeq,restoring,attachTo,currentOffset,params]);
 
   function leaveAttachMode(){
     setSelectedIds(new Set());setSelecting(false);setBatchError('');

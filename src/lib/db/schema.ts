@@ -73,6 +73,7 @@ export const deepSearchQualitySchema=z.object({
   score:z.number().min(0).max(100),
   sourceTier:researchSourceTierSchema,
   warnings:z.array(z.string().trim().max(200)).max(20).default([]),
+  scoreNote:z.string().trim().max(300).optional(),
   fields:z.record(z.string(),researchFieldQualitySchema).default({})
 });
 const researchClaimSourceSchema=z.object({title:z.string().trim().max(300),url:z.string().url()});

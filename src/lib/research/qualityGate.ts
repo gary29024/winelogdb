@@ -5,7 +5,7 @@ export type ResearchSourceTier='authoritative'|'specialist'|'grounded'|'none';
 export type ResearchSourceLike={title:string;url:string};
 export type ResearchSubjectLike=Record<string,string|number|null>;
 export type ResearchFieldQuality={status:ResearchFieldStatus;sourceTier:ResearchSourceTier;score:number;warnings:string[]};
-export type DeepResearchQuality={status:'verified'|'mixed'|'limited';score:number;sourceTier:ResearchSourceTier;warnings:string[];fields:Partial<Record<DeepResearchField,ResearchFieldQuality>>};
+export type DeepResearchQuality={status:'verified'|'mixed'|'limited';score:number;sourceTier:ResearchSourceTier;warnings:string[];scoreNote?:string;fields:Partial<Record<DeepResearchField,ResearchFieldQuality>>};
 
 const SCOPE_FIELDS:Record<ResearchScopeQualityName,DeepResearchField[]>={
   producer:['producerDetails','producerWinemakingPractices'],
@@ -46,14 +46,35 @@ const VERIFIED_SCORE:Record<ResearchSourceTier,number>={none:0,grounded:82,speci
 // permanently below the 85 needed for 'verified', so any wine outside the host
 // lists was capped at 'mixed' however well sourced it was.
 const CORROBORATION_BONUS=[0,0,3,6] as const;
-export function distinctSourceHosts(sources:ResearchSourceLike[]){
-  return new Set(sources.map(source=>host(source.url)).filter(Boolean)).size;
-}
+export const SOURCE_CONFIDENCE_EXPLANATION='No quality-gate warning was raised; this score is limited by source authority or independent corroboration, not by a detected grounding failure.';
 
 const host=(value:string)=>{try{return new URL(value).hostname.toLowerCase().replace(/^www\./,'')}catch{return ''}};
+const GOOGLE_GROUNDING_REDIRECT_HOST='vertexaisearch.cloud.google.com';
+// Gemini's legacy Google Search grounding returns an attribution redirect URI
+// on vertexaisearch.cloud.google.com while the real publisher domain is commonly
+// carried in the chunk title. Scoring the redirect made every such source look
+// like one generic Google host, suppressing both source tier and corroboration.
+function titleHost(value:string){
+  // Only a bare domain identifies the publisher; prose may mention another site.
+  const match=value.trim().toLowerCase().match(/^((?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,24})$/i);
+  return match?.[1]?.replace(/^www\./,'')??'';
+}
+// Deep Search supplies these titles from groundingChunks[].web metadata, not model JSON.
+// Callers must preserve that provenance before trusting a title as publisher identity.
+function attributionHost(source:ResearchSourceLike){
+  const uriHost=host(source.url);
+  if(uriHost===GOOGLE_GROUNDING_REDIRECT_HOST)return titleHost(source.title)||uriHost;
+  return uriHost;
+}
+export function distinctSourceHosts(sources:ResearchSourceLike[]){
+  // An unresolved redirect is still grounding, but its unknown publisher
+  // cannot establish independence from any of the identified publishers.
+  return new Set(sources.map(attributionHost).filter(h=>h&&h!==GOOGLE_GROUNDING_REDIRECT_HOST)).size;
+}
+
 const matchesHost=(candidate:string,known:string)=>candidate===known||candidate.endsWith(`.${known}`);
 function sourceTier(source:ResearchSourceLike):ResearchSourceTier{
-  const h=host(source.url);if(!h)return 'none';
+  const h=attributionHost(source);if(!h)return 'none';
   if(OFFICIAL_TLD.test(h)||AUTHORITATIVE_HOSTS.some(item=>matchesHost(h,item)))return 'authoritative';
   if(SPECIALIST_HOSTS.some(item=>matchesHost(h,item)))return 'specialist';
   return /^https:/i.test(source.url)?'grounded':'none';
@@ -145,5 +166,11 @@ export function buildDeepResearchQuality(entries:Array<{scope:ResearchScopeQuali
   const values=Object.values(fields),score=values.length?Math.round(values.reduce((sum,item)=>sum+item.score,0)/values.length):0;
   const uniqueWarnings=[...new Set(warnings)];
   const status:DeepResearchQuality['status']=score>=85&&!uniqueWarnings.length?'verified':score>=65?'mixed':'limited';
-  return {status,score,sourceTier:tier,warnings:uniqueWarnings.slice(0,20),fields};
+  // A clean, fully verified field set can still be mixed because generic HTTPS
+  // sources start at 82/100. Surface that distinction so 82 does not look like
+  // a hidden ungrounded claim: the content gate passed, but source authority or
+  // independent corroboration was not strong enough to clear the 85 threshold.
+  const sourceConfidenceLimited=status==='mixed'&&!uniqueWarnings.length&&values.length>0&&values.every(item=>item.status==='verified');
+
+  return {status,score,sourceTier:tier,warnings:uniqueWarnings.slice(0,20),scoreNote:sourceConfidenceLimited?SOURCE_CONFIDENCE_EXPLANATION:undefined,fields};
 }

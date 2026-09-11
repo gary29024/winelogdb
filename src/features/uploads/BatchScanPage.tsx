@@ -1,4 +1,4 @@
-import { useEffect,useMemo,useRef,useState } from 'react';
+import { useCallback,useEffect,useMemo,useRef,useState } from 'react';
 import { ImageLightbox } from '../../components/ImageLightbox';
 import { derivedTags } from '../wines/wineTags';
 import { WineForm } from '../wines/WineForm';
@@ -54,9 +54,9 @@ export function BatchScanPage(){
   const reviewItem=session?.items.find(x=>x.id===reviewId)??null;
   const readyItems=useMemo(()=>session?.items.filter(x=>x.status==='ready')??[],[session]);
   const waitingItems=useMemo(()=>session?.items.filter(x=>x.status==='submitted')??[],[session]);
-  function stopPoll(){poll.current?.stop();poll.current=undefined}
-  async function refreshPendingState(id:string){setCheckingPending(true);try{setPendingLocal((await listPendingBatchWines(id)).length)}catch{setPendingLocal(0)}finally{setCheckingPending(false)}}
-  async function recoverWaitingRecognition(next:BatchRecognitionSession,force=false){
+  const stopPoll=useCallback(()=>{poll.current?.stop();poll.current=undefined},[]);
+  const refreshPendingState=useCallback(async(id:string)=>{setCheckingPending(true);try{setPendingLocal((await listPendingBatchWines(id)).length)}catch{setPendingLocal(0)}finally{setCheckingPending(false)}},[]);
+  const recoverWaitingRecognition=useCallback(async(next:BatchRecognitionSession,force=false)=>{
     const waiting=next.items.filter(item=>item.status==='submitted').length,recoverable=['queued','running','ready','partial','failed'].includes(next.status),age=Date.now()-Date.parse(next.updatedAt),stale=!Number.isFinite(age)||age>=RECOVERY_STALE_MS;
     if(!waiting||!recoverable||recoveringSessions.current.has(next.id))return next;
     if(!force&&['queued','running'].includes(next.status)&&!stale)return next;
@@ -71,14 +71,14 @@ export function BatchScanPage(){
       setError(`Could not restart ${waiting} waiting recognition${waiting===1?'':'s'}: ${(e as Error).message}`);
       return latest??next;
     }finally{recoveringSessions.current.delete(next.id);setRecovering(false)}
-  }
-  async function refreshSession(id:string){let next=await getBatchSession(id);next=await recoverWaitingRecognition(next);setSession(next);setHistory(current=>mergeSessionIntoHistory(current,next));if(next.status==='uploading')void refreshPendingState(id);else{setPendingLocal(0);setCheckingPending(false)}if(['queued','running'].includes(next.status)&&!poll.current)poll.current=startBackoffPoll(()=>refreshSession(id).then(()=>undefined).catch(()=>undefined),{initialMs:10000,maxMs:30000});if(!['queued','running'].includes(next.status))stopPoll();return next}
+  },[]);
+  const refreshSession=useCallback(async function refreshSession(id:string){let next=await getBatchSession(id);next=await recoverWaitingRecognition(next);setSession(next);setHistory(current=>mergeSessionIntoHistory(current,next));if(next.status==='uploading')void refreshPendingState(id);else{setPendingLocal(0);setCheckingPending(false)}if(['queued','running'].includes(next.status)&&!poll.current)poll.current=startBackoffPoll(()=>refreshSession(id).then(()=>undefined).catch(()=>undefined),{initialMs:10000,maxMs:30000});if(!['queued','running'].includes(next.status))stopPoll();return next},[recoverWaitingRecognition,refreshPendingState,stopPoll]);
   async function retryWaitingRecognition(){
     if(!session||recovering||retryLockedSessionId===session.id)return;
     const id=session.id;setRetryLockedSessionId(id);if(retryUnlockTimer.current)window.clearTimeout(retryUnlockTimer.current);retryUnlockTimer.current=window.setTimeout(()=>{setRetryLockedSessionId(current=>current===id?null:current);retryUnlockTimer.current=undefined},RETRY_LOCK_MS);
     setError('');const next=await recoverWaitingRecognition(session,true);setSession(next);if(['queued','running'].includes(next.status)&&!poll.current)poll.current=startBackoffPoll(()=>refreshSession(next.id).then(()=>undefined).catch(()=>undefined),{initialMs:10000,maxMs:30000});
   }
-  useEffect(()=>{let active=true;listBatchSessions().then(async result=>{if(!active)return;setHistory(result.items);const asked=requestedSession&&result.items.find(x=>x.id===requestedSession);const resumable=asked||result.items.find(x=>['uploading','queued','running','ready','partial'].includes(x.status));if(resumable)await refreshSession(resumable.id)}).catch(()=>undefined);return()=>{active=false;stopPoll();uploadAbort.current?.abort();if(retryUnlockTimer.current)window.clearTimeout(retryUnlockTimer.current)}},[]);
+  useEffect(()=>{let active=true;listBatchSessions().then(async result=>{if(!active)return;setHistory(result.items);const asked=requestedSession&&result.items.find(x=>x.id===requestedSession);const resumable=asked||result.items.find(x=>['uploading','queued','running','ready','partial'].includes(x.status));if(resumable)await refreshSession(resumable.id)}).catch(()=>undefined);return()=>{active=false;stopPoll();uploadAbort.current?.abort();if(retryUnlockTimer.current)window.clearTimeout(retryUnlockTimer.current)}},[requestedSession,refreshSession,stopPoll]);
 
   async function choose(index:number,files:File[]){if(!files.length)return;setError('');setDrafts(xs=>xs.map((x,i)=>i===index?{...x,preparing:true,error:''}:x));try{const prepared=await Promise.all(files.map(async file=>{const [metadata,image]=await Promise.all([extractPhotoMetadata(file),prepareRecognitionImage(file,1600,0.80)]);return {original:file,recognition:image.file,metadata,width:image.width,height:image.height,preview:URL.createObjectURL(file)}}));setDrafts(xs=>xs.map((x,i)=>i===index?{...x,photos:prepared,preparing:false,error:''}:x))}catch(e){setDrafts(xs=>xs.map((x,i)=>i===index?{...x,preparing:false,error:(e as Error).message}:x))}}
   function removeDraft(index:number){setDrafts(xs=>xs.length<=2?xs.map((x,i)=>i===index?emptyWine():x):xs.filter((_,i)=>i!==index))}

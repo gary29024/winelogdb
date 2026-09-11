@@ -46,8 +46,8 @@ function VintageCellCheck({wine,onResearched,initialWindow,debounceMs=0}:Props){
    * both show the same spinner, both refuse to start a second lookup, and both
    * tell the cellar list to reload the moment an answer lands.
    */
-  async function watch(version:number,run:(signal:AbortSignal)=>Promise<VintageLookupResult>){
-    setStartedAt(new Date().toISOString());setError('');setNotice('');
+  async function watch(version:number,run:(signal:AbortSignal)=>Promise<VintageLookupResult>,resumeStartedAt?:string){
+    setStartedAt(resumeStartedAt||new Date().toISOString());setError('');setNotice('');
     lookupController.current=new AbortController();
     try{
       const {window,cached,pending,pendingStatus}=await run(lookupController.current.signal);
@@ -84,8 +84,9 @@ function VintageCellCheck({wine,onResearched,initialWindow,debounceMs=0}:Props){
           // result must refresh the cellar too, even with no job left to watch.
           if(window&&window.researchedAt!==researched?.researchedAt)onResearched?.();
           // Pick the running lookup back up rather than showing its cell as
-          // untouched. The observer is new; the job it watches is not.
-          if(job)void watch(++requests.version,signal=>observeVintageResearch(job.id,signal));
+          // untouched. The observer is new; the job it watches is not, so keep
+          // the original queue timestamp instead of restarting the clock here.
+          if(job)void watch(++requests.version,signal=>observeVintageResearch(job.id,signal),job.createdAt);
         }).catch(()=>{
           if(version!==requests.version)return;
           setReadState('error');setError('Could not load saved research. Please retry.');
