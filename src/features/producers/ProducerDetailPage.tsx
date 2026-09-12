@@ -5,6 +5,7 @@ import { producerLinkChoices } from '../../lib/producers/linkChoices';
 import { cancelProducerResearch,deleteProducer,getProducer,removeProducerHeroImage,getProducerResearchStatus,listProducers,mergeProducer,researchProducer,saveProducerCatalogDecision,setPrimaryProducerName,undoProducerCatalogDecision,unlinkProducer,type CatalogDecision,type LinkedProducer,type ProducerDetail,type ProducerResearchRun,type ProducerSummary } from './api';
 import { ProducerHeroImage } from './ProducerHeroImage';
 import { ProducerContacts } from './ProducerContacts';
+import { ProducerRangeMissing } from './ProducerRangeMissing';
 import { CuveeCatalogLinks,type TastedCuveeGroup } from './CuveeCatalogLinks';
 import { normalizeProducerAlias } from '../../lib/producers/entities';
 import { catalogNote,verboseCatalogStyle } from '../../lib/producers/catalogNote';
@@ -164,7 +165,7 @@ export function ProducerDetailPage(){
    .sort((a,b)=>a.name.localeCompare(b.name,undefined,{sensitivity:'base'})||(a.wineStyle??'').localeCompare(b.wineStyle??''));
  },[producer]);
  async function runResearch(refreshProfile=false){
-  if(!confirm((refreshProfile?'Refresh the saved profile even if it is still current? This uses an additional research request. ':'')+'Research this producer’s home location, public contacts, producer-wide winemaking practices and current/recent wine range with Gemini + Google Search? The job runs in the background and continues even if you close WineLog.'))return;
+  if(!confirm((refreshProfile?'Refresh the saved profile even if it is still current? This uses an additional research request. ':'')+'Research this producer’s home location, public contacts, producer-wide winemaking practices and current/recent wine range? The job runs in the background and continues even if you close WineLog.'))return;
   setError('');setNotice('');
   try{
    const accepted=await researchProducer(id,undefined,refreshProfile);const run=await getProducerResearchStatus(id,accepted.researchRequestId);
@@ -284,6 +285,7 @@ export function ProducerDetailPage(){
      <small>Corrections are re-applied after every producer research run, so a resolved duplicate does not come back.</small>
     </details>}
    </div>}
+   <ProducerRangeMissing producerId={producer.id} onChanged={reload}/>
    {producer.sources.length>0&&<details className="producer-sources"><summary>{producer.sources.length} profile & range reference{producer.sources.length===1?'':'s'}{sourceWebsiteCount?` · ${sourceWebsiteCount} website${sourceWebsiteCount===1?'':'s'}`:''}</summary>{producer.sources.map(s=><a key={s.url} href={s.url} target="_blank" rel="noreferrer">{s.title}</a>)}</details>}{producer.researchedAt&&<small>Latest producer research: {producer.researchModel} · {new Date(producer.researchedAt).toLocaleDateString()}{staleLabel&&<> · ⚠ {staleLabel} may be outdated</>}</small>}
   </section>
   <section className="detail-section"><p className="section-label">Your tastings</p><h2>{tastedGroups.length} cuvée{tastedGroups.length===1?'':'s'} · {producer.tastedWines.length} tasting{producer.tastedWines.length===1?'':'s'}</h2>{tastedGroups.length?<div className="producer-tasted-groups">{tastedGroups.map(group=>{const releaseCount=group.releaseFamily?new Set(group.wines.map(w=>w.releaseDesignation).filter(Boolean)).size:0,identityMeta=[releaseCount?`${releaseCount} release${releaseCount===1?'':'s'}`:null,group.wineStyle,group.grapes.length?group.grapes.join(' / '):null].filter(Boolean).join(' · ');return <div className="tasted-cuvee-group" key={`${group.catalogCuveeId??group.cuveeId??normalizeProducerAlias(group.name)}-${cuveeStyleFamily(group.wineStyle)||'unknown'}`}><div className="tasted-cuvee-title"><div><strong>{group.name}</strong>{identityMeta&&<small>{identityMeta}</small>}</div></div><div className="producer-tasted">{group.wines.map((w,index)=>{const release=String(w.releaseDesignation??'').trim(),subline=[release?(w.vintage??'NV'):null,w.appellation,w.region].filter(Boolean).join(' · ');return <div className="tasted-row tasted-vintage-row" key={w.id}><Link to={`/wines/${w.id}`} state={linkFrom({to:`/producers/${producer.id}`,label:producer.canonicalName})} className="tasted-row-link"><div className="tasted-thumb">{w.imageId?<WineImage imageId={w.imageId} alt={`${w.wineName} ${w.vintage??'NV'} bottle`} className="tasted-thumb-image"/>:<span className="tasted-thumb-fallback">W</span>}</div><div className="tasted-copy"><strong>{release||w.vintage||'NV'}</strong><span>{subline}</span></div></Link><div className="tasted-meta">{w.rating!=null&&<strong>{w.rating}</strong>}{w.tastingDate&&<span>{w.tastingDate}</span>}{index===0&&<CuveeCatalogLinks producer={producer} group={group} onChanged={reload}/>}</div></div>})}</div></div>})}</div>:<p>No tasting records linked to this producer yet.</p>}
