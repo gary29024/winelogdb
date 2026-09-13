@@ -50,6 +50,16 @@ function safeHttps(value:unknown,base?:string){
   if(typeof value!=='string'||!value.trim())return null;try{const url=new URL(value.trim(),base),host=url.hostname.toLowerCase();const ipLiteral=/^\d{1,3}(?:\.\d{1,3}){3}$/.test(host)||/^(?:\d+|0x[0-9a-f]+)$/i.test(host)||host.includes(':');if(url.protocol!=='https:'||url.username||url.password||!host||host==='localhost'||host.endsWith('.localhost')||host.endsWith('.local')||host.endsWith('.internal')||ipLiteral)return null;url.hash='';return url}catch{return null}
 }
 const host=(value:string)=>{try{return new URL(value).hostname.toLowerCase().replace(/^www\./,'')}catch{return ''}};
+// Strip one www and one m prefix deliberately; arbitrary subdomains are not aliases.
+const officialBase=(value:string)=>host(value).replace(/^m\./,'');
+const sameOfficialSite=(value:string,officialHost:string)=>officialBase(value)===officialHost.replace(/^m\./,'');
+const indexScore=(url:URL)=>/\/(?:our-wines|nos-vins|les-vins|wines|vins|vini|champagne|collection|range|portfolio)\/?$/i.test(url.pathname)?20:10;
+function crawlKey(url:URL){
+  const key=new URL(url);
+  for(const name of [...key.searchParams.keys()])if(/^(?:utm_.*|fbclid|gclid|ref|mc_cid|mc_eid)$/i.test(name))key.searchParams.delete(name);
+  key.searchParams.sort();
+  return key.toString();
+}
 function decoder(contentType:string){const charset=contentType.match(/charset\s*=\s*["']?([^;"'\s]+)/i)?.[1]?.trim();try{return new TextDecoder(charset||'utf-8')}catch{return new TextDecoder()}}
 function decode(value:string){return value.replace(/&nbsp;|&#160;/gi,' ').replace(/&amp;|&#38;/gi,'&').replace(/&quot;|&#34;/gi,'"').replace(/&#39;|&apos;/gi,"'").replace(/\s+/g,' ').trim()}
 function visibleText(html:string){return decode(html.replace(/<script\b[\s\S]*?<\/script>/gi,' ').replace(/<style\b[\s\S]*?<\/style>/gi,' ').replace(/<svg\b[\s\S]*?<\/svg>/gi,' ').replace(/<[^>]+>/g,' '))}
@@ -57,28 +67,48 @@ function visibleText(html:string){return decode(html.replace(/<script\b[\s\S]*?<
 export function extractRangeLinks(html:string,baseUrl:string){
   const base=safeHttps(baseUrl);if(!base)return [] as string[];const baseHost=host(base.toString()),out:Array<{url:string;score:number}>=[],seen=new Set<string>();
   for(const match of html.matchAll(/<a\b[^>]*href\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))[^>]*>([\s\S]*?)<\/a>/gi)){
-    const href=match[1]||match[2]||match[3]||'',label=visibleText(match[4]||'');const url=safeHttps(href,base.toString());if(!url||host(url.toString())!==baseHost)continue;
-    url.search='';const key=url.toString();if(seen.has(key))continue;const signal=`${url.pathname} ${label}`,score=RANGE_TERMS.test(signal)?10:0;if(!score)continue;seen.add(key);out.push({url:key,score});
+    const href=match[1]||match[2]||match[3]||'',label=visibleText(match[4]||'');const url=safeHttps(href,base.toString());if(!url||!sameOfficialSite(url.toString(),baseHost))continue;
+    const key=crawlKey(url);if(seen.has(key))continue;const signal=`${url.pathname} ${label}`,score=RANGE_TERMS.test(signal)?indexScore(url):0;if(!score)continue;seen.add(key);out.push({url:url.toString(),score});
   }
   return out.sort((a,b)=>b.score-a.score||a.url.localeCompare(b.url)).slice(0,24).map(item=>item.url);
 }
 async function fetchHtml(url:URL,officialHost:string){
+  const drop=(reason:string)=>{console.warn(JSON.stringify({event:'producer_range_page',stage:'rejected',host:url.hostname,path:url.pathname,reason}));return null};
   const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),PAGE_TIMEOUT_MS);try{
-    const response=await fetch(url,{headers:{'User-Agent':'Mozilla/5.0 (compatible; WineLogDB/1.0; producer range research)','Accept':'text/html,application/xhtml+xml','Accept-Language':'en,fr;q=0.8'},signal:controller.signal});
-    const contentType=response.headers.get('Content-Type')||'',finalUrl=safeHttps(response.url);
-    // fetch follows redirects. The cheap path is trusted only because its evidence
-    // is first-party, so never accept content that ultimately lands on another host.
-    if(!response.ok||!contentType.toLowerCase().includes('text/html')||!response.body||!finalUrl||host(finalUrl.toString())!==officialHost)return null;
+    let current=url,response:Response|undefined;
+    for(let hop=0;hop<6;hop++){
+      response=await fetch(current,{redirect:'manual',headers:{'User-Agent':'Mozilla/5.0 (compatible; WineLogDB/1.0; producer range research)','Accept':'text/html,application/xhtml+xml','Accept-Language':'en,fr;q=0.8'},signal:controller.signal});
+      if(![301,302,303,307,308].includes(response.status))break;
+      const next=safeHttps(response.headers.get('Location'),current.toString());
+      await response.body?.cancel();
+      // Vincod hosts estate technical sheets and redirects back to the estate's
+      // branded mobile hostname. Permit only this relay endpoint, never its HTML
+      // as evidence: the final response must still be on the official site.
+      // Final-host checks alone cannot constrain outbound requests: DNS can map
+      // an ordinary-looking hostname to a private address. Keep relay hosts bounded.
+      const publishingRelay=next&&host(next.toString())==='vincod.com'&&(/^\/[a-z0-9-]+\/web$/i.test(next.pathname)||
+        (host(current.toString())==='vincod.com'&&/^\/[a-z0-9-]+\/web$/i.test(current.pathname)&&next.pathname===current.pathname.replace(/\/web$/i,'')));
+      if(!next||(!sameOfficialSite(next.toString(),officialHost)&&!publishingRelay))return drop('redirect target not allowed');
+      current=next;response=undefined;
+    }
+    if(!response)return drop('redirect limit');
+    // Manual redirect handling makes current the exact requested URL. Only use
+    // it when URL metadata is absent; present metadata must pass validation.
+    const contentType=response.headers.get('Content-Type')||'',finalUrl=safeHttps(response.url||current.toString());
+    const rejection=!response.ok?`HTTP ${response.status}`:!contentType.toLowerCase().includes('text/html')?'not HTML':!response.body?'empty body':!finalUrl?'invalid response URL':!sameOfficialSite(finalUrl.toString(),officialHost)?'response host not official':null;
+    if(rejection||!response.body||!finalUrl){await response.body?.cancel();return drop(rejection||'invalid response')}
     const reader=response.body.getReader(),chunks:Uint8Array[]=[];let total=0;try{while(true){const {done,value}=await reader.read();if(done)break;if(!value)continue;const room=MAX_PAGE_BYTES-total;if(room<=0){await reader.cancel();break}chunks.push(value.byteLength<=room?value:value.slice(0,room));total+=Math.min(value.byteLength,room);if(total>=MAX_PAGE_BYTES){await reader.cancel();break}}}finally{reader.releaseLock()}
     const bytes=new Uint8Array(total);let offset=0;for(const chunk of chunks){bytes.set(chunk,offset);offset+=chunk.byteLength}return {html:decoder(contentType).decode(bytes),url:finalUrl.toString()};
-  }finally{clearTimeout(timer)}
+  }catch{return drop('fetch or body read failed')}finally{clearTimeout(timer)}
 }
 function sourceArray(value:unknown){const parsed=parse<unknown>(value,[]);if(!Array.isArray(parsed))return [] as Source[];return parsed.flatMap(raw=>{if(!raw||typeof raw!=='object')return [];const item=raw as {title?:unknown;url?:unknown},url=safeHttps(item.url)?.toString();return url?[{title:String(item.title??new URL(url).hostname).trim()||new URL(url).hostname,url}]:[]})}
 async function crawl(official:string,seeds:Source[]){
-  const officialUrl=safeHttps(official);if(!officialUrl)return [] as Page[];const officialHost=host(officialUrl.toString()),queue:string[]=[],queued=new Set<string>(),visited=new Set<string>(),pages:Page[]=[];let chars=0;
-  const push=(value:string)=>{const url=safeHttps(value);if(!url||host(url.toString())!==officialHost)return;url.search='';const key=url.toString();if(!queued.has(key)&&!visited.has(key)){queued.add(key);queue.push(key)}};
-  for(const source of seeds)push(source.url);push(officialUrl.toString());
-  while(queue.length&&visited.size<MAX_PAGES&&chars<MAX_EVIDENCE_CHARS){const requested=queue.shift()!;queued.delete(requested);if(visited.has(requested))continue;visited.add(requested);const page=await fetchHtml(new URL(requested),officialHost).catch(()=>null);if(!page)continue;const pageText=visibleText(page.html).slice(0,14_000);if(pageText.length<80)continue;const rangeSignal=RANGE_TERMS.test(`${new URL(page.url).pathname} ${pageText.slice(0,1000)}`);pages.push({url:page.url,text:pageText,rangeSignal});chars+=pageText.length;for(const link of extractRangeLinks(page.html,page.url))push(link)}
+  const officialUrl=safeHttps(official);if(!officialUrl)return [] as Page[];const officialHost=host(officialUrl.toString()),queue:Array<{url:URL;key:string;score:number}>=[],queued=new Set<string>(),visited=new Set<string>(),pages:Page[]=[];let chars=0;
+  const push=(value:string)=>{const url=safeHttps(value);if(!url||!sameOfficialSite(url.toString(),officialHost))return;const key=crawlKey(url);if(!queued.has(key)&&!visited.has(key)){queued.add(key);queue.push({url,key,score:indexScore(url)})}};
+  push(officialUrl.toString());
+  for(const source of seeds)push(source.url);
+  queue.splice(1,queue.length-1,...queue.slice(1).sort((a,b)=>b.score-a.score));
+  while(queue.length&&visited.size<MAX_PAGES&&chars<MAX_EVIDENCE_CHARS){const entry=queue.shift()!,requested=entry.url.toString();queued.delete(entry.key);if(visited.has(entry.key))continue;visited.add(entry.key);const page=await fetchHtml(entry.url,officialHost).catch(()=>null);if(!page){if(requested===officialUrl.toString()&&officialUrl.hostname.startsWith('www.')){const apex=new URL(officialUrl);apex.hostname=apex.hostname.slice(4);push(apex.toString());const index=queue.findIndex(item=>item.key===crawlKey(apex));if(index>=0)queue.unshift(...queue.splice(index,1))}continue}const pageText=visibleText(page.html).slice(0,14_000);if(pageText.length<80)continue;const rangeSignal=RANGE_TERMS.test(`${new URL(page.url).pathname} ${pageText.slice(0,1000)}`);pages.push({url:page.url,text:pageText,rangeSignal});chars+=pageText.length;for(const link of extractRangeLinks(page.html,page.url))push(link);queue.sort((a,b)=>b.score-a.score)}
   return pages;
 }
 function normalizeResult(raw:DirectResult,names:string[],allowedSources:Set<string>){
@@ -113,11 +143,14 @@ function acceptableCoverage(previous:number,next:number){if(!next)return false;i
 async function completeRun(db:D1Database,owner:string,producerId:string,requestId:string,message:string){const done=now(),row=await db.prepare('SELECT started_at FROM producer_research_runs WHERE owner_id=? AND producer_id=? AND request_id=?').bind(owner,producerId,requestId).first<{started_at:string}>(),duration=row?.started_at?Math.max(0,Date.parse(done)-Date.parse(row.started_at)):null;await db.prepare("UPDATE producer_research_runs SET status='complete',stage='complete',attempt=1,message=?,updated_at=?,completed_at=?,duration_ms=? WHERE owner_id=? AND producer_id=? AND request_id=?").bind(message,done,done,duration,owner,producerId,requestId).run()}
 
 /** Try the zero-search official-source path. false means the existing grounded Gemini pipeline should run unchanged. */
-export async function tryDirectProducerRangeRefresh(env:Env,owner:string,producerId:string,requestId:string,refreshProfile=false){
+export async function tryDirectProducerRangeRefresh(env:Env,owner:string,producerId:string,requestId:string,refreshProfile=false,rangeOnly=false){
   if(refreshProfile)return {handled:false as const,reason:'profile refresh requested'};if(!directRangeProviders(env).length)return {handled:false as const,reason:'no cheap provider'};
-  const row=await env.DB.prepare('SELECT canonical_name,profile,home_country,profile_researched_at,official_website_url,catalog_json,catalog_researched_json,catalog_sources_json,sources_json FROM producers WHERE owner_id=? AND id=?').bind(owner,producerId).first<ProducerRow>();if(!row||!profileFreshForDirectRange(row)||!row.official_website_url)return {handled:false as const,reason:'profile or official site unavailable'};
-  const official=safeHttps(row.official_website_url)?.toString();if(!official)return {handled:false as const,reason:'official site invalid'};const officialHost=host(official),stored=[...sourceArray(row.catalog_sources_json),...sourceArray(row.sources_json)].filter(source=>host(source.url)===officialHost),pages=await crawl(official,stored);if(!pages.length||!pages.some(page=>page.rangeSignal))return {handled:false as const,reason:'no complete-looking official range pages'};
+  const row=await env.DB.prepare('SELECT canonical_name,profile,home_country,profile_researched_at,official_website_url,catalog_json,catalog_researched_json,catalog_sources_json,sources_json FROM producers WHERE owner_id=? AND id=?').bind(owner,producerId).first<ProducerRow>();if(!row)return {handled:false as const,reason:'producer not found'};
+  if(!rangeOnly&&!profileFreshForDirectRange(row))return {handled:false as const,reason:'profile requires research'};
+  if(!row.official_website_url)return {handled:false as const,reason:'official site missing'};
+  const official=safeHttps(row.official_website_url)?.toString();if(!official)return {handled:false as const,reason:'official site invalid'};const officialHost=host(official),stored=[...sourceArray(row.catalog_sources_json),...sourceArray(row.sources_json)].filter(source=>sameOfficialSite(source.url,officialHost)),pages=await crawl(official,stored);if(!pages.length||!pages.some(page=>page.rangeSignal))return {handled:false as const,reason:'no complete-looking official range pages'};
   const previousRaw=parse<unknown>(row.catalog_researched_json,[]),previous=(Array.isArray(previousRaw)?previousRaw:[]).filter(item=>item&&typeof item==='object'&&typeof (item as {name?:unknown}).name==='string') as CatalogRangeWine[];
+  console.log(JSON.stringify({event:'producer_range_phase2',stage:'zai_attempt',producerId,requestId,pages:pages.length}));
   const names=[row.canonical_name],input=prompt(row.canonical_name,pages,previous);let extracted:{provider:Provider;model:string;body:DirectResult};try{extracted=await cheapExtract(env,owner,producerId,requestId,input)}catch(e){console.warn(JSON.stringify({event:'producer_range_phase2',stage:'cheap_model_failed',producerId,error:(e as Error).message}));return {handled:false as const,reason:'cheap model failed'}}
   let normalized;try{normalized=normalizeResult(extracted.body,names,new Set(pages.map(page=>page.url)))}catch(e){console.warn(JSON.stringify({event:'producer_range_phase2',stage:'parse_failed',producerId,error:(e as Error).message}));return {handled:false as const,reason:'cheap result invalid'}}
   if(!normalized.rangeComplete||!acceptableCoverage(previous.length,normalized.range.length)){

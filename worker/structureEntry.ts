@@ -12,7 +12,7 @@ import { addManualCatalogEntry,addMissingCandidate,captureGroundedCatalogAndOver
 
 type Bindings=Parameters<typeof app.fetch>[1]&GeminiTransportBindings&SemanticEmbeddingBindings&ProducerRangeAiBindings;
 type QueueBatch=Parameters<typeof app.queue>[0];
-type QueueJob={kind?:string;owner?:string;sessionId?:string;jobId?:string;pollCount?:number;producerId?:string;requestId?:string;refreshProfile?:boolean};
+type QueueJob={kind?:string;owner?:string;sessionId?:string;jobId?:string;pollCount?:number;producerId?:string;requestId?:string;refreshProfile?:boolean;rangeOnly?:boolean};
 
 async function owner(request:Request,env:Bindings){return (await requireSession(request.headers.get('Authorization')??undefined,env.AUTH_SECRET)).userId}
 function jsonResponse(body:unknown,status=200,headers?:Headers){const out=new Headers(headers);out.delete('Content-Length');out.set('Content-Type','application/json; charset=utf-8');return new Response(JSON.stringify(body),{status,headers:out})}
@@ -110,7 +110,7 @@ export default {
     // Gemini path with exactly the same retry/slice behaviour as before.
     if(job.kind==='producer'){
       const ownerId=String(job.owner||''),producerId=String(job.producerId||''),requestId=String(job.requestId||'');
-      if(ownerId&&producerId&&requestId){try{const direct=await tryDirectProducerRangeRefresh(env,ownerId,producerId,requestId,job.refreshProfile===true);if(direct.handled){message.ack();return}}catch(e){console.warn(JSON.stringify({event:'producer_range_phase2',stage:'intercept_failed',producerId,requestId,error:(e as Error).message}))}}
+      if(ownerId&&producerId&&requestId){try{const direct=await tryDirectProducerRangeRefresh(env,ownerId,producerId,requestId,job.refreshProfile===true,job.rangeOnly===true);console.log(JSON.stringify({event:'producer_range_route',producerId,requestId,provider:direct.handled?'zai':'gemini',reason:direct.handled?'official range accepted':direct.reason}));if(direct.handled){message.ack();return}}catch(e){console.warn(JSON.stringify({event:'producer_range_phase2',stage:'intercept_failed',producerId,requestId,error:(e as Error).message}))}}
       return app.queue(batch,env);
     }
     if(job.kind==='producer_batch_poll'){
