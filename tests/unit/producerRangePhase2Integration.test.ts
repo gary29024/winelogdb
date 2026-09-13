@@ -41,6 +41,64 @@ beforeEach(()=>{({sqlite,db}=migratedSqliteD1())});
 afterEach(()=>{vi.unstubAllGlobals();sqlite.close()});
 
 describe('Phase 2 direct range integration',()=>{
+ it('attempts range-only extraction with an old profile, while adaptive research still skips it',async()=>{
+  seedProducer();sqlite.prepare("UPDATE producers SET profile_researched_at='2020-01-01',home_country=NULL").run();
+  let calls=0;stubDirectFetch({rangeComplete:false,range:[]},()=>calls++);
+  expect((await tryDirectProducerRangeRefresh({DB:db,...gateway},'owner','p1','run-1')).handled).toBe(false);
+  expect(calls).toBe(0);
+  await tryDirectProducerRangeRefresh({DB:db,...gateway},'owner','p1','run-1',false,true);
+  expect(calls).toBe(1);
+ });
+
+ it('follows an HTTPS mobile alias but never fetches an unrelated redirect target',async()=>{
+  seedProducer();const fetched:string[]=[];
+  vi.stubGlobal('fetch',vi.fn(async(input:RequestInfo|URL)=>{
+   const url=String(input);fetched.push(url);
+   if(url==='https://domaine.example/')return new Response(null,{status:302,headers:{Location:'https://m.domaine.example/?l=fr'}});
+   if(url==='https://m.domaine.example/?l=fr')return responseAt(url,rootHtml);
+   if(url==='https://m.domaine.example/our-wines')return new Response(null,{status:302,headers:{Location:'https://merchant.example/wines'}});
+   if(url.startsWith('https://gateway.ai.cloudflare.com/'))return modelResponse({rangeComplete:false,range:[]});
+   throw new Error(`Unexpected fetch ${url}`);
+  }));
+  await tryDirectProducerRangeRefresh({DB:db,...gateway},'owner','p1','run-1');
+  expect(fetched).toContain('https://m.domaine.example/?l=fr');
+  expect(fetched).toContain('https://m.domaine.example/our-wines');
+  expect(fetched).not.toContain('https://merchant.example/wines');
+ });
+
+ it('reaches the wine index before individual bottles consume the page budget',async()=>{
+  seedProducer();const fetched:string[]=[];
+  vi.stubGlobal('fetch',vi.fn(async(input:RequestInfo|URL)=>{
+   const url=String(input);fetched.push(url);
+   if(url.startsWith('https://gateway.ai.cloudflare.com/'))return modelResponse({rangeComplete:false,range:[]});
+   const links=Array.from({length:12},(_,i)=>`<a href="/vin/bottle-${i}">Wine ${i}</a>`).join('');
+   return responseAt(url,url==='https://domaine.example/'?rootHtml+links+'<a href="/vins/">Vins</a>':rangeHtml);
+  }));
+  await tryDirectProducerRangeRefresh({DB:db,...gateway},'owner','p1','run-1');
+  expect(fetched.indexOf('https://domaine.example/vins/')).toBeLessThan(fetched.indexOf('https://domaine.example/vin/bottle-0'));
+ });
+
+ it('recovers a failed www host through HTTPS apex and a branded publishing relay',async()=>{
+  seedProducer();sqlite.prepare("UPDATE producers SET official_website_url='https://www.domaine.example/'").run();
+  let calls=0;
+  vi.stubGlobal('fetch',vi.fn(async(input:RequestInfo|URL)=>{
+   const url=String(input);
+   if(url==='https://www.domaine.example/')throw new Error('certificate expired');
+   const redirects:Record<string,string>={
+    'https://domaine.example/':'https://m.domaine.example/',
+    'https://m.domaine.example/':'https://vincod.com/ABC123/web?l=fr',
+    'https://vincod.com/ABC123/web?l=fr':'https://vincod.com/ABC123?l=fr',
+    'https://vincod.com/ABC123?l=fr':'https://m.domaine.example/ABC123?l=fr'
+   };
+   if(redirects[url])return new Response(null,{status:301,headers:{Location:redirects[url]}});
+   if(url==='https://m.domaine.example/ABC123?l=fr')return responseAt(url,rangeHtml);
+   if(url.startsWith('https://gateway.ai.cloudflare.com/')){calls++;return modelResponse({rangeComplete:false,range:[]})}
+   throw new Error(`Unexpected fetch ${url}`);
+  }));
+  await tryDirectProducerRangeRefresh({DB:db,...gateway},'owner','p1','run-1');
+  expect(calls).toBe(1);
+ });
+
  it('commits a complete official-site range, records sources and completes the existing run',async()=>{
   seedProducer();stubDirectFetch({rangeComplete:true,coverageNote:'Complete official range',range:[
    {name:'Clos A',category:'red',sourceUrl:'https://domaine.example/our-wines'},
