@@ -86,7 +86,7 @@ describe('Phase 2 direct range integration',()=>{
  it('reports the Z.ai stage and preserves cancellation during extraction',async()=>{
   seedProducer();stubDirectFetch({rangeComplete:true,range:[{name:'New Wine',category:'red'}]},()=>{
    const run=sqlite.prepare("SELECT message FROM producer_research_runs WHERE request_id='run-1'").get()!;
-   expect(run.message).toContain('Z.ai is extracting');
+   expect(run.message).toContain('Z.ai is streaming');
    sqlite.prepare("UPDATE producer_research_runs SET status='failed',stage='failed',message='Cancelled'").run();
   });
   const result=await tryDirectProducerRangeRefresh({DB:db,...gateway},'owner','p1','run-1');
