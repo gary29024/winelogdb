@@ -1,6 +1,7 @@
 import type { DatabaseSync } from 'node:sqlite';
 import { afterEach,beforeEach,describe,expect,it,vi } from 'vitest';
 import { tryDirectProducerRangeRefresh } from '../../src/lib/producers/catalogDirectResearch';
+import { getActiveProducerResearchRun } from '../../src/lib/producers/research';
 import { syncMissingCandidates } from '../../src/lib/producers/catalogRangeOverlay';
 import { createSession } from '../../src/lib/auth/session';
 import structureEntry from '../../worker/structureEntry';
@@ -41,6 +42,59 @@ beforeEach(()=>{({sqlite,db}=migratedSqliteD1())});
 afterEach(()=>{vi.unstubAllGlobals();sqlite.close()});
 
 describe('Phase 2 direct range integration',()=>{
+ it('expires same-day ISO timestamps while retaining live runs across timestamp formats',async()=>{
+  seedProducer();vi.useFakeTimers();vi.setSystemTime(new Date('2026-09-13T13:00:00Z'));
+  try{
+   for(const stamp of ['2026-09-13T11:00:00.000Z','2026-09-13 11:00:00']){
+    sqlite.prepare('UPDATE producer_research_runs SET updated_at=?').run(stamp);
+    expect(await getActiveProducerResearchRun(db,'owner','p1')).toBeNull();
+   }
+   for(const stamp of ['2026-09-13T12:30:00.000Z','2026-09-13 12:30:00']){
+    sqlite.prepare('UPDATE producer_research_runs SET updated_at=?').run(stamp);
+    expect(await getActiveProducerResearchRun(db,'owner','p1')).toEqual({request_id:'run-1'});
+   }
+  }finally{vi.useRealTimers()}
+ });
+
+ it('aborts a stalled Z.ai request after 35 seconds and permits grounded fallback',async()=>{
+  seedProducer();vi.useFakeTimers();let reachedModel!:()=>void;
+  const ready=new Promise<void>(resolve=>{reachedModel=resolve});
+  vi.stubGlobal('fetch',vi.fn(async(input:RequestInfo|URL,init?:RequestInit)=>{
+   const url=String(input);
+   if(url.startsWith('https://gateway.ai.cloudflare.com/')){
+    reachedModel();return new Promise<Response>((_resolve,reject)=>{
+     init!.signal!.addEventListener('abort',()=>reject(new DOMException('Aborted','AbortError')),{once:true});
+    });
+   }
+   return responseAt(url,url.endsWith('/our-wines')?rangeHtml:rootHtml);
+  }));
+  try{
+   const pending=tryDirectProducerRangeRefresh({DB:db,...gateway},'owner','p1','run-1');
+   await ready;await vi.advanceTimersByTimeAsync(35_000);
+   expect(await pending).toEqual({handled:false,reason:'cheap model failed'});
+   expect(sqlite.prepare("SELECT status FROM producer_research_runs WHERE request_id='run-1'").get()!.status).toBe('running');
+  }finally{vi.useRealTimers()}
+ });
+
+ it('does not crawl or charge for a terminal run',async()=>{
+  seedProducer();sqlite.prepare("UPDATE producer_research_runs SET status='failed'").run();
+  const fetcher=vi.fn();vi.stubGlobal('fetch',fetcher);
+  const result=await tryDirectProducerRangeRefresh({DB:db,...gateway},'owner','p1','run-1');
+  expect(result.reason).toBe('research run is no longer active');expect(fetcher).not.toHaveBeenCalled();
+ });
+
+ it('reports the Z.ai stage and preserves cancellation during extraction',async()=>{
+  seedProducer();stubDirectFetch({rangeComplete:true,range:[{name:'New Wine',category:'red'}]},()=>{
+   const run=sqlite.prepare("SELECT message FROM producer_research_runs WHERE request_id='run-1'").get()!;
+   expect(run.message).toContain('Z.ai is extracting');
+   sqlite.prepare("UPDATE producer_research_runs SET status='failed',stage='failed',message='Cancelled'").run();
+  });
+  const result=await tryDirectProducerRangeRefresh({DB:db,...gateway},'owner','p1','run-1');
+  expect(result.reason).toBe('research run is no longer active');
+  expect(sqlite.prepare("SELECT status,message FROM producer_research_runs WHERE request_id='run-1'").get()).toEqual({status:'failed',message:'Cancelled'});
+  expect(String(sqlite.prepare("SELECT catalog_json FROM producers WHERE id='p1'").get()!.catalog_json)).not.toContain('New Wine');
+ });
+
  it('deduplicates tracking variants without losing language or pagination',async()=>{
   seedProducer();const fetched:string[]=[];
   vi.stubGlobal('fetch',vi.fn(async(input:RequestInfo|URL)=>{
