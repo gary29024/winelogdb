@@ -56,7 +56,7 @@ describe('Phase 2 direct range integration',()=>{
   }finally{vi.useRealTimers()}
  });
 
- it('aborts a stalled Z.ai request after 35 seconds and permits grounded fallback',async()=>{
+ it('aborts a stalled Z.ai request after 60 seconds and permits grounded fallback',async()=>{
   seedProducer();vi.useFakeTimers();let reachedModel!:()=>void;
   const ready=new Promise<void>(resolve=>{reachedModel=resolve});
   vi.stubGlobal('fetch',vi.fn(async(input:RequestInfo|URL,init?:RequestInit)=>{
@@ -70,7 +70,7 @@ describe('Phase 2 direct range integration',()=>{
   }));
   try{
    const pending=tryDirectProducerRangeRefresh({DB:db,...gateway},'owner','p1','run-1');
-   await ready;await vi.advanceTimersByTimeAsync(35_000);
+   await ready;await vi.advanceTimersByTimeAsync(60_000);
    expect(await pending).toEqual({handled:false,reason:'cheap model failed'});
    expect(sqlite.prepare("SELECT status FROM producer_research_runs WHERE request_id='run-1'").get()!.status).toBe('running');
   }finally{vi.useRealTimers()}
