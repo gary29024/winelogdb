@@ -18,7 +18,8 @@ export async function gatewayErrorDetails(response:Response){
     // (including a key accidentally returned as a code) must not reach logs.
     if(/^\d{1,8}$/.test(code)||/^(rate_limit_exceeded|insufficient_quota|invalid_api_key|authentication_error|permission_denied)$/.test(code))details.providerCode=code;
     const message=typeof error?.message==='string'?error.message.toLowerCase():'';
-    if(/concurren/.test(message))details.providerMessage='Concurrency limit reported';
+    if(/specified key does not exist|provider key.*(?:does not exist|not found)|byok.*key.*(?:does not exist|not found|missing)/.test(message))details.providerMessage='AI Gateway provider key not found';
+    else if(/concurren/.test(message))details.providerMessage='Concurrency limit reported';
     else if(/balance|credit|insufficient_quota|quota|spend limit/.test(message))details.providerMessage='Quota, balance, or spend limit reported';
     else if(/rate.?limit|too many requests|频率|限流/.test(message))details.providerMessage='Rate limit reported';
     else if(/api.?key|authenticat|unauthorized/.test(message))details.providerMessage='Authentication problem reported';
