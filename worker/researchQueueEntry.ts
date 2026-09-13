@@ -15,7 +15,7 @@ import { markPrimaryResearchUnavailable,shouldBypassPrimaryResearch } from '../s
 import { createBatchSession,getBatchImage,getBatchSession,listBatchSessions,markSessionSubmitted,processBatchCleanupJob,processBatchPollJob,processBatchSubmitJob,rejectBatchItem,removeBatchSession,stageBatchItem,type BatchRecognitionJob } from './batchRecognition';
 import { attachConfirmedItemWithMetadata } from './batchPromotion';
 
-type ProducerJob={kind:'producer';owner:string;producerId:string;requestId:string;refreshProfile?:boolean};
+type ProducerJob={kind:'producer';owner:string;producerId:string;requestId:string;refreshProfile?:boolean;rangeOnly?:boolean};
 type ProducerBatchPollJob={kind:'producer_batch_poll';owner:string;producerId:string;requestId:string;jobId:string;pollCount:number};
 type WineJob={kind:'wine';owner:string;wineId:string;requestId:string;refresh:'none'|'vintage'|'all'};
 type WineBatchPollJob={kind:'wine_batch_poll';owner:string;wineId:string;requestId:string;jobId:string;pollCount:number};
@@ -51,9 +51,10 @@ async function harvestWineJobs(env:Bindings,owner:string,wineId:string,requestId
 
 router.post('/api/producers/:id/research',async c=>{
   cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
-  const body=await c.req.json().catch(()=>({})) as {confirmation?:string;requestId?:string;refreshProfile?:boolean};if(body.confirmation!=='RUN_PRODUCER_RESEARCH')return c.json({error:'Producer research requires explicit confirmation'},400);
+  const body=await c.req.json().catch(()=>({})) as {confirmation?:string;requestId?:string;refreshProfile?:boolean;rangeOnly?:boolean};if(body.confirmation!=='RUN_PRODUCER_RESEARCH')return c.json({error:'Producer research requires explicit confirmation'},400);
+  if(body.refreshProfile===true&&body.rangeOnly===true)return c.json({error:'Choose either range-only or profile refresh'},400);
   const queued=await createQueuedProducerResearchRun(c.env.DB,owner,c.req.param('id'),body.requestId);if(!queued)return c.json({error:'Producer not found'},404);
-  if(queued.created){try{await c.env.RESEARCH_QUEUE.send({kind:'producer',owner,producerId:c.req.param('id'),requestId:queued.requestId,refreshProfile:body.refreshProfile===true})}catch(e){const error=(e as Error).message||'Could not queue producer research';await failProducerQueue(c.env.DB,owner,queued.requestId,error);return c.json({error,researchRequestId:queued.requestId},503)}}
+  if(queued.created){try{await c.env.RESEARCH_QUEUE.send({kind:'producer',owner,producerId:c.req.param('id'),requestId:queued.requestId,refreshProfile:body.refreshProfile===true,rangeOnly:body.rangeOnly===true})}catch(e){const error=(e as Error).message||'Could not queue producer research';await failProducerQueue(c.env.DB,owner,queued.requestId,error);return c.json({error,researchRequestId:queued.requestId},503)}}
   return c.json({accepted:true,researchRequestId:queued.requestId,existing:!queued.created},202);
 });
 
@@ -219,7 +220,7 @@ async function consume(batch:MessageBatch<ResearchJob>,env:Bindings){
     console.log(JSON.stringify({event:'research_queue',stage:'start',kind:job.kind,...('requestId' in job?{requestId:job.requestId}:'sessionId' in job?{sessionId:job.sessionId}:{campaignId:job.campaignId})}));
     if(job.kind==='producer'){
       if(!(await isResearchRunRunning(env.DB,job.owner,'producer',job.producerId,job.requestId)))console.log(JSON.stringify({event:'research_queue',stage:'cancelled_before_submit',kind:job.kind,requestId:job.requestId}));
-      else{await preparePrimaryRouting(env,job.owner,job.requestId);try{const result=await startProducerBatchResearch(env,job.owner,job.producerId,job.requestId,job.refreshProfile===true);console.log(JSON.stringify({event:'research_queue',stage:result.ok?'batch_submitted':'failed',kind:job.kind,requestId:job.requestId,...(!result.ok?{error:result.error}:{})}))}finally{clearPrimaryGeminiBatchBypass(job.requestId)}}
+      else{await preparePrimaryRouting(env,job.owner,job.requestId);try{const result=await startProducerBatchResearch(env,job.owner,job.producerId,job.requestId,job.refreshProfile===true,job.rangeOnly===true);console.log(JSON.stringify({event:'research_queue',stage:result.ok?'batch_submitted':'failed',kind:job.kind,requestId:job.requestId,...(!result.ok?{error:result.error}:{})}))}finally{clearPrimaryGeminiBatchBypass(job.requestId)}}
     }
     else if(job.kind==='producer_campaign_tick'){
       const progress=await advanceCampaign(env,job.owner,job.campaignId);

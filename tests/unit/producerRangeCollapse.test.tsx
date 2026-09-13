@@ -58,6 +58,13 @@ afterEach(()=>{
 });
 
 describe('Producer wine range',()=>{
+  it('confirms and sends only range refresh for an already researched producer',async()=>{
+    await render({researchedAt:'2020-01-01T00:00:00.000Z',profileResearchedAt:'2020-01-01T00:00:00.000Z'});
+    await click(byLabel('Refresh wine range')!);
+    expect(window.confirm).toHaveBeenCalledWith(expect.stringContaining('wine range only'));
+    expect(window.confirm).not.toHaveBeenCalledWith(expect.stringContaining('home location'));
+    expect(posted[0]).toMatchObject({body:{rangeOnly:true,refreshProfile:false}});
+  });
   it.each([['Research producer',false],['Refresh profile & range',true]] as const)('sends the explicit profile choice from %s',async(label,refreshProfile)=>{
     await render();
     await click(byLabel(label)!);
