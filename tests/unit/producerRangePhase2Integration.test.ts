@@ -41,6 +41,32 @@ beforeEach(()=>{({sqlite,db}=migratedSqliteD1())});
 afterEach(()=>{vi.unstubAllGlobals();sqlite.close()});
 
 describe('Phase 2 direct range integration',()=>{
+ it('deduplicates tracking variants without losing language or pagination',async()=>{
+  seedProducer();const fetched:string[]=[];
+  vi.stubGlobal('fetch',vi.fn(async(input:RequestInfo|URL)=>{
+   const url=String(input);fetched.push(url);
+   if(url.startsWith('https://gateway.ai.cloudflare.com/'))return modelResponse({rangeComplete:false,range:[]});
+   const variants=['ref=home','utm_source=instagram','utm_source=qr','fbclid=abc','gclid=abc'];
+   const links=variants.map(query=>`<a href="/vins/?${query}">Vins</a>`).join('')+'<a href="/vins/?l=fr">Vins français</a><a href="/vins/?page=2">Vins page 2</a><a href="/vin/bottle">Wine bottle</a>';
+   return responseAt(url,url==='https://domaine.example/'?rootHtml.replace('<a href="/our-wines">Our wines</a>','')+links:rangeHtml);
+  }));
+  await tryDirectProducerRangeRefresh({DB:db,...gateway},'owner','p1','run-1');
+  expect(fetched.filter(url=>/ref=|utm_|fbclid|gclid/.test(url))).toHaveLength(1);
+  expect(fetched).toContain('https://domaine.example/vins/?l=fr');
+  expect(fetched).toContain('https://domaine.example/vins/?page=2');
+  expect(fetched).toContain('https://domaine.example/vin/bottle');
+ });
+
+ it('uses the manually requested URL when response URL metadata is absent',async()=>{
+  seedProducer();let calls=0;
+  vi.stubGlobal('fetch',vi.fn(async(input:RequestInfo|URL)=>{
+   if(String(input).startsWith('https://gateway.ai.cloudflare.com/')){calls++;return modelResponse({rangeComplete:false,range:[]})}
+   return new Response(rangeHtml,{headers:{'Content-Type':'text/html'}});
+  }));
+  await tryDirectProducerRangeRefresh({DB:db,...gateway},'owner','p1','run-1');
+  expect(calls).toBe(1);
+ });
+
  it('attempts range-only extraction with an old profile, while adaptive research still skips it',async()=>{
   seedProducer();sqlite.prepare("UPDATE producers SET profile_researched_at='2020-01-01',home_country=NULL").run();
   let calls=0;stubDirectFetch({rangeComplete:false,range:[]},()=>calls++);
