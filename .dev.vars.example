@@ -18,6 +18,7 @@ GEMINI_API_KEY=replace-me
 # The exact origin the browser loads, checked against for CORS.
 APP_URL=http://localhost:5173
 
-# Only when calling Vertex AI through Cloudflare AI Gateway. Leave unset to use
-# the Gemini API directly; setting only some gateway values fails at runtime.
+# Authenticates WineLog to Cloudflare AI Gateway. Producer range research uses
+# the same gateway token for the primary Z.AI custom-provider path. The Z.AI
+# provider key itself belongs in AI Gateway BYOK, not in Worker/local secrets.
 # CF_AI_GATEWAY_TOKEN=replace-me
