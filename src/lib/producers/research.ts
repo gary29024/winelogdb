@@ -13,8 +13,11 @@ const CONTACT_FIELDS:ContactField[]=['officialWebsiteUrl','instagramUrl','contac
 const now=()=>new Date().toISOString();
 
 export async function getActiveProducerResearchRun(db:D1Database,owner:string,producerId:string){
+  // ISO timestamps contain 'T'; comparing them as text to SQLite datetime()
+  // (which contains a space) keeps even hours-old runs active on the same day.
+  // Use the same inactivity window as the status endpoint's stall settlement.
   return db.prepare(`SELECT request_id FROM producer_research_runs WHERE owner_id=? AND producer_id=? AND status='running'
-    AND updated_at>datetime('now','-20 minutes') ORDER BY updated_at DESC LIMIT 1`).bind(owner,producerId).first<{request_id:string}>();
+    AND julianday(updated_at)>=julianday(?) ORDER BY updated_at DESC LIMIT 1`).bind(owner,producerId,new Date(Date.now()-STALLED_RUN_MS).toISOString()).first<{request_id:string}>();
 }
 
 export async function createQueuedProducerResearchRun(db:D1Database,owner:string,producerId:string,requestedId?:string){

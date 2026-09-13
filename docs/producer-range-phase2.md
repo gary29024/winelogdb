@@ -75,3 +75,14 @@ Expected repeat-refresh targets:
 - 80%+ lower marginal inference/search cost on successful direct-source refreshes.
 
 Those are targets, not hard-coded assumptions. Actual requests, tokens, model parts and fallback frequency are measured by the existing usage ledger.
+
+
+## Debugging a run that appears stuck
+
+A missing `thumb/v1/...` R2 object is a thumbnail cache miss, not a producer research failure. The image route reads the original and generates a derivative when Images is available, or serves the original as a fallback. Check the enclosing image HTTP response before treating a missing-object storage span as a failed request.
+
+For research, correlate `producer_range_route` and `producer_range_phase2` logs by `requestId`. The latter includes the Z.ai attempt, model error, parsing failure, incomplete-evidence fallback, and successful completion. Adding a Gateway provider key does not guarantee a Z.ai call: the official-site evidence must first pass the crawl gate.
+
+The producer status reports website reading and Z.ai extraction separately. Website requests have a six-second timeout and the crawl visits at most six URLs; the Z.ai request has a 35-second timeout, after which failure falls through to grounded Gemini research. This is not a 35-second limit on the whole research run. Gemini has its own bounded polling and retry policy. Runs with no progress for 45 minutes are marked failed when their status is read; active-run lookup uses that same window.
+
+The provider key belongs to AI Gateway's `zai` custom provider with its default BYOK alias. A Worker secret named `ZAI_API_KEY` alone is not consumed by this path. Confirm actual attempts in Insights / AI spend / Producer Deep Search / View runs / Request breakdown (`zai/glm-4.7-flash`), or the correlated Gateway logs. A recorded attempt does not by itself prove that extraction succeeded.
