@@ -3,6 +3,7 @@ import { tastingStructureStatement } from '../src/lib/db/wineSave';
 import { requireSession } from '../src/lib/auth/session';
 import { configureGeminiBatchGateway } from '../src/lib/research/geminiBatch';
 import { hasTastingStructure,tastingStructureSchema,type TastingStructure } from '../src/lib/wine/tastingStructure';
+import { hasSparklingDetails,sparklingDetailsSchema,type SparklingDetails } from '../src/lib/wine/sparklingDetails';
 import { groupSourcePhotosForWine,handleGroupRecognitionSessionRequest } from './groupRecognitionSessions';
 import { resolveGeminiTransport,type GeminiTransportBindings } from './geminiTransport';
 import { processVertexBatchPollJob,processVertexBatchSubmitJob } from './vertexBatchRecognition';
@@ -18,6 +19,10 @@ type QueueJob={kind?:string;owner?:string;sessionId?:string;jobId?:string;pollCo
 async function owner(request:Request,env:Bindings){return (await requireSession(request.headers.get('Authorization')??undefined,env.AUTH_SECRET)).userId}
 function jsonResponse(body:unknown,status=200,headers?:Headers){const out=new Headers(headers);out.delete('Content-Length');out.set('Content-Type','application/json; charset=utf-8');return new Response(JSON.stringify(body),{status,headers:out})}
 function configureBatchGateway(env:Bindings){return configureGeminiBatchGateway(env.GEMINI_API_KEY,env)}
+function parseSparklingDetails(raw:string|null|undefined):SparklingDetails|null{
+  if(!raw)return null;
+  try{const parsed=sparklingDetailsSchema.safeParse(JSON.parse(raw));return parsed.success&&hasSparklingDetails(parsed.data)?parsed.data:null}catch{return null}
+}
 
 async function failBatchGatewayConfig(env:Bindings,job:QueueJob,error:string){
   const ownerId=String(job.owner||''),sessionId=String(job.sessionId||'');if(!ownerId||!sessionId)return;
@@ -29,14 +34,31 @@ async function failBatchGatewayConfig(env:Bindings,job:QueueJob,error:string){
 }
 
 function exactWineId(pathname:string){const match=pathname.match(/^\/api\/wines\/([^/]+)$/);return match?decodeURIComponent(match[1]):null}
+function sparklingDetailsWineId(pathname:string){const match=pathname.match(/^\/api\/wines\/([^/]+)\/sparkling-details$/);return match?decodeURIComponent(match[1]):null}
 const pathId=(match:RegExpMatchArray,index:number)=>decodeURIComponent(match[index]||'');
 const correctionStatus=(message:string)=>/not found/i.test(message)?404:400;
 
 export default {
   async fetch(request:Request,env:Bindings,ctx:ExecutionContext){
     configureBatchGateway(env);
-    const url=new URL(request.url),wineId=exactWineId(url.pathname);
+    const url=new URL(request.url),wineId=exactWineId(url.pathname),sparklingWineId=sparklingDetailsWineId(url.pathname);
     const groupSessionResponse=await handleGroupRecognitionSessionRequest(request,env);if(groupSessionResponse)return groupSessionResponse;
+
+    if(sparklingWineId&&(request.method==='GET'||request.method==='PUT')){
+      let ownerId:string;try{ownerId=await owner(request,env)}catch{return jsonResponse({error:'Unauthorized'},401)}
+      const exists=await env.DB.prepare('SELECT id FROM wines WHERE owner_id=? AND id=?').bind(ownerId,sparklingWineId).first<{id:string}>();if(!exists)return jsonResponse({error:'Wine not found'},404);
+      if(request.method==='GET'){
+        const row=await env.DB.prepare('SELECT details_json FROM wine_sparkling_details WHERE owner_id=? AND wine_id=?').bind(ownerId,sparklingWineId).first<{details_json:string}>();
+        return jsonResponse({details:parseSparklingDetails(row?.details_json)});
+      }
+      const body=await request.json().catch(()=>null) as {details?:unknown}|null,parsed=sparklingDetailsSchema.nullable().safeParse(body?.details??null);
+      if(!parsed.success)return jsonResponse({error:'Invalid sparkling details',issues:parsed.error.issues},400);
+      try{
+        if(!parsed.data||!hasSparklingDetails(parsed.data))await env.DB.prepare('DELETE FROM wine_sparkling_details WHERE owner_id=? AND wine_id=?').bind(ownerId,sparklingWineId).run();
+        else{const stamp=new Date().toISOString();await env.DB.prepare(`INSERT INTO wine_sparkling_details(owner_id,wine_id,details_json,updated_at) VALUES(?,?,?,?) ON CONFLICT(owner_id,wine_id) DO UPDATE SET details_json=excluded.details_json,updated_at=excluded.updated_at`).bind(ownerId,sparklingWineId,JSON.stringify(parsed.data),stamp).run()}
+        return jsonResponse({ok:true});
+      }catch(error){console.error('sparkling-details-save-failed',error);return jsonResponse({error:'Could not save sparkling details. Please retry.'},500)}
+    }
 
     // Range corrections live above the legacy producer route so they can evolve
     // independently without making the already-large layered router larger.
@@ -87,15 +109,15 @@ export default {
       const response=await app.fetch(request,env,ctx);if(!response.ok)return response;
       let ownerId:string;try{ownerId=await owner(request,env)}catch{return response}
       try{
-        const [body,row,groupSourcePhotos]=await Promise.all([response.clone().json() as Promise<Record<string,unknown>>,env.DB.prepare('SELECT structure_json FROM wine_tasting_structures WHERE owner_id=? AND wine_id=?').bind(ownerId,wineId).first<{structure_json:string}>(),groupSourcePhotosForWine(env.DB,ownerId,wineId)]);
+        const [body,row,groupSourcePhotos,sparklingRow]=await Promise.all([response.clone().json() as Promise<Record<string,unknown>>,env.DB.prepare('SELECT structure_json FROM wine_tasting_structures WHERE owner_id=? AND wine_id=?').bind(ownerId,wineId).first<{structure_json:string}>(),groupSourcePhotosForWine(env.DB,ownerId,wineId),env.DB.prepare('SELECT details_json FROM wine_sparkling_details WHERE owner_id=? AND wine_id=?').bind(ownerId,wineId).first<{details_json:string}>()]);
         let structure:TastingStructure|null=null;if(row?.structure_json){const parsed=tastingStructureSchema.safeParse(JSON.parse(row.structure_json));if(parsed.success&&hasTastingStructure(parsed.data))structure=parsed.data}
-        return jsonResponse({...body,tastingStructure:structure,groupSourcePhotos},response.status,new Headers(response.headers));
+        return jsonResponse({...body,tastingStructure:structure,sparklingDetails:parseSparklingDetails(sparklingRow?.details_json),groupSourcePhotos},response.status,new Headers(response.headers));
       }catch{return response}
     }
 
     if(request.method==='DELETE'&&wineId){
       let ownerId:string|null=null;try{ownerId=await owner(request,env)}catch{}
-      const response=await app.fetch(request,env,ctx);if(response.ok&&ownerId)await env.DB.prepare('DELETE FROM wine_tasting_structures WHERE owner_id=? AND wine_id=?').bind(ownerId,wineId).run().catch(()=>undefined);return response;
+      const response=await app.fetch(request,env,ctx);if(response.ok&&ownerId)await env.DB.batch([env.DB.prepare('DELETE FROM wine_tasting_structures WHERE owner_id=? AND wine_id=?').bind(ownerId,wineId),env.DB.prepare('DELETE FROM wine_sparkling_details WHERE owner_id=? AND wine_id=?').bind(ownerId,wineId)]).catch(()=>undefined);return response;
     }
 
     return app.fetch(request,env,ctx);
