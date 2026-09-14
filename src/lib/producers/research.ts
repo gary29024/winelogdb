@@ -60,6 +60,27 @@ function jsonFieldRange(text:string,field:ContactField){
   return {start,end};
 }
 
+function jsonFieldStringValue(text:string,field:ContactField){
+  const range=jsonFieldRange(text,field);if(!range)return null;
+  const fragment=text.slice(range.start,range.end),colon=fragment.indexOf(':');if(colon<0)return null;
+  const raw=fragment.slice(colon+1).trim();if(!raw.startsWith('"'))return null;
+  try{const value=JSON.parse(raw);return typeof value==='string'?value:null}catch{return null}
+}
+
+function officialWebsiteHost(text:string){
+  const value=jsonFieldStringValue(text,'officialWebsiteUrl'),url=safeHttpsUrl(value);if(!url)return '';
+  return url.hostname.toLowerCase().replace(/^www\./,'');
+}
+
+function segmentMentionsOfficialWebsite(segmentText:string,websiteHost:string){
+  if(!segmentText||!websiteHost)return false;
+  for(const match of segmentText.matchAll(/https:\/\/[^\s"'<>\\)\]}]+/g)){
+    const url=safeHttpsUrl(match[0]);
+    if(url?.hostname.toLowerCase().replace(/^www\./,'')===websiteHost)return true;
+  }
+  return false;
+}
+
 /**
  * How long a run may go without saying anything before it is treated as dead.
  *
@@ -118,13 +139,22 @@ export function mapRunRow(row:Record<string,unknown>):ProducerResearchRun{
 export function extractContactGrounding(text:string,metadata?:GroundingMetadata){
   const ranges=new Map<ContactField,{start:number;end:number}>();
   for(const field of CONTACT_FIELDS){const range=jsonFieldRange(text,field);if(range)ranges.set(field,range)}
-  const groundedFields=new Set<ContactField>(),sources=new Map<string,ContactSource>(),chunks=metadata?.groundingChunks??[];
+  const websiteHost=officialWebsiteHost(text),groundedFields=new Set<ContactField>(),sources=new Map<string,ContactSource>(),chunks=metadata?.groundingChunks??[];
   for(const support of metadata?.groundingSupports??[]){
-    const segment=support.segment,segmentStart=segment?.startIndex,segmentEnd=segment?.endIndex;
+    const segment=support.segment,segmentStart=segment?.startIndex,segmentEnd=segment?.endIndex,segmentText=segment?.text?.toLowerCase()??'';
     const touched=CONTACT_FIELDS.filter(field=>{
       const range=ranges.get(field);if(!range)return false;
-      if(Number.isFinite(segmentStart)&&Number.isFinite(segmentEnd))return Number(segmentStart)<range.end&&Number(segmentEnd)>range.start;
-      return Boolean(segment?.text&&segment.text.includes(field));
+      if(Number.isFinite(segmentStart)&&Number.isFinite(segmentEnd)){
+        const overlaps=Number(segmentStart)<range.end&&Number(segmentEnd)>range.start;
+        if(overlaps||field!=='officialWebsiteUrl')return overlaps;
+      }
+      if(segment?.text?.includes(field))return true;
+      // Gemini structured responses do not always attach reliable byte/character
+      // offsets to grounded JSON fields. For the official site only, recover the
+      // link when the grounded claim text itself contains the exact returned
+      // HTTPS hostname. Requiring URL syntax avoids treating an email on the same
+      // domain as evidence that the website field itself was verified.
+      return field==='officialWebsiteUrl'&&segmentMentionsOfficialWebsite(segmentText,websiteHost);
     });
     if(!touched.length)continue;
     let hasWebSource=false;

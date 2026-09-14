@@ -10,7 +10,7 @@ export type TastedWine={id:string;wineName:string;vintage:number|null;appellatio
 export type LinkedProducer={mergeId:string;producerId:string;name:string;mergedAt:string};
 export type ManualProducerContactType='email'|'phone'|'website'|'instagram'|'other';
 export type ManualProducerContact={id:string;type:ManualProducerContactType;label:string|null;value:string;note:string|null;createdAt:string;updatedAt:string};
-export type ManualProducerContactInput={type:ManualProducerContactType;label?:string;value:string;note?:string};
+export type ManualProducerContactInput={type:ManualProducerContactType;label?:string;value:string;note?:string;official?:boolean;confirmation?:'CONFIRM_OFFICIAL_CONTACT'};
 export type ProducerCatalogCuvee=CatalogCuveeSummary&{tastedReleases?:string[]};
 export type ProducerDetail=ProducerEntity&{aliases:string[];tastedWines:TastedWine[];researchHistoryCount:number;linkedProducers:LinkedProducer[];catalogCuvees:ProducerCatalogCuvee[];cuveeCatalogLinks:CuveeCatalogLink[];supplementaryContacts:ManualProducerContact[];catalogDecisions:CatalogDecision[]};
 /** A house whose name contains, or is contained by, the one read off the label. Proposed, never applied. */

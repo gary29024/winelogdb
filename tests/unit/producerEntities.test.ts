@@ -1,6 +1,7 @@
 import { describe,expect,it } from 'vitest';
 import { normalizeProducerAlias,producerMatchKey,shouldSeedProducerCountry } from '../../src/lib/producers/entities';
 import { mergeSources,pickNewestResearch,shouldRestorePreMerge } from '../../src/lib/producers/merge';
+import { prepareOfficialContactPromotion,USER_CONFIRMED_INSTAGRAM_SOURCE,USER_CONFIRMED_WEBSITE_SOURCE } from '../../src/lib/producers/manualContacts';
 import { extractContactGrounding,normalizeProducerEmail,normalizeProducerPhone,safeInstagramUrl } from '../../src/lib/producers/research';
 import { buildResearchTargets } from '../../src/lib/research/cache';
 
@@ -69,6 +70,45 @@ describe('producer contact validation',()=>{
       {title:'La RVF',url:'https://www.larvf.com/example'}
     ]);
   });
+
+  it('recovers official website grounding when structured-response offsets are missing',()=>{
+    const text='{"officialWebsiteUrl":"https://www.domaine.example/","instagramUrl":null,"contactEmail":null,"contactPhone":null,"profile":"Profile"}';
+    const result=extractContactGrounding(text,{
+      groundingChunks:[{web:{title:'Domaine Example',uri:'https://vertexaisearch.cloud.google.com/grounding-api-redirect/example'}}],
+      groundingSupports:[{segment:{text:'Official website: https://domaine.example/'},groundingChunkIndices:[0]}]
+    });
+    expect(result.fields).toContain('officialWebsiteUrl');
+    expect(result.sources).toEqual([{title:'Domaine Example',url:'https://vertexaisearch.cloud.google.com/grounding-api-redirect/example'}]);
+  });
+
+  it('does not accept an official website from unrelated grounded profile text',()=>{
+    const text='{"officialWebsiteUrl":"https://www.domaine.example/","instagramUrl":null,"contactEmail":null,"contactPhone":null,"profile":"Profile"}';
+    const result=extractContactGrounding(text,{
+      groundingChunks:[{web:{title:'Regional profile',uri:'https://example.org/profile'}}],
+      groundingSupports:[{segment:{text:'The producer is based in Burgundy.'},groundingChunkIndices:[0]}]
+    });
+    expect(result.fields).not.toContain('officialWebsiteUrl');
+    expect(result.sources).toEqual([]);
+  });
+
+  it('prepares a user-confirmed website as canonical official provenance',()=>{
+    expect(prepareOfficialContactPromotion({type:'website',value:'https://domaine.example/'},[{title:'Old source',url:'https://reference.example'}])).toEqual({
+      type:'website',value:'https://domaine.example/',sources:[
+        {title:USER_CONFIRMED_WEBSITE_SOURCE,url:'https://domaine.example/'},
+        {title:'Old source',url:'https://reference.example'}
+      ]
+    });
+  });
+
+  it('keeps website and Instagram user confirmations distinct and requires HTTPS',()=>{
+    const promoted=prepareOfficialContactPromotion({type:'instagram',value:'https://instagram.com/domaine/'},[{title:USER_CONFIRMED_WEBSITE_SOURCE,url:'https://domaine.example/'}]);
+    expect(promoted.sources).toEqual([
+      {title:USER_CONFIRMED_INSTAGRAM_SOURCE,url:'https://instagram.com/domaine/'},
+      {title:USER_CONFIRMED_WEBSITE_SOURCE,url:'https://domaine.example/'}
+    ]);
+    expect(()=>prepareOfficialContactPromotion({type:'website',value:'http://domaine.example/'})).toThrow('Official contacts must use HTTPS');
+    expect(()=>prepareOfficialContactPromotion({type:'email',value:'info@domaine.example'})).toThrow('Only a website or Instagram contact can be made official');
+  });
 });
 
 describe('producer research merge policy',()=>{
@@ -85,5 +125,16 @@ describe('producer research merge policy',()=>{
     const mergedAt='2026-08-18T02:00:00.000Z';
     expect(shouldRestorePreMerge('2026-08-18T02:00:00.000Z',mergedAt)).toBe(true);
     expect(shouldRestorePreMerge('2026-08-18T02:00:01.000Z',mergedAt)).toBe(false);
+  });
+});
+
+describe('official hostname grounding boundaries',()=>{
+  it.each(['https://domaine.example.attacker.test','https://domaine.example@attacker.test'])('rejects a misleading URL %s',url=>{
+    const result=extractContactGrounding('{"officialWebsiteUrl":"https://domaine.example/"}',{groundingChunks:[{web:{uri:'https://reference.example/'}}],groundingSupports:[{segment:{text:`Visit ${url}`},groundingChunkIndices:[0]}]});
+    expect(result.fields).not.toContain('officialWebsiteUrl');
+  });
+  it('does not widen other contact key matching to uppercase',()=>{
+    const result=extractContactGrounding('{"contactEmail":"mail@domaine.example"}',{groundingChunks:[{web:{uri:'https://reference.example/'}}],groundingSupports:[{segment:{text:'CONTACTEMAIL'},groundingChunkIndices:[0]}]});
+    expect(result.fields).not.toContain('contactEmail');
   });
 });
