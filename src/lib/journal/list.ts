@@ -33,9 +33,15 @@ export function sliceJournalPage<T>(rows:T[],limit:number,offset:number){
 export async function listJournalPage(db:D1Database,owner:string,q:JournalListQuery,semanticIds:string[]=[]){
   // structureEntry forwards semantic candidates through the canonical Journal
   // route using an internal query parameter. The owner predicate below still
-  // scopes every candidate, and the cap prevents an oversized URL/SQL IN list.
+  // scopes every candidate, and the cap prevents an oversized URL/result set.
   const forwarded=(q.__semanticIds??'').split(',').map(id=>id.trim()).filter(Boolean).slice(0,72);
   const semanticMatches=[...new Set((semanticIds.length?semanticIds:forwarded).slice(0,72))];
+  // D1 permits at most 100 bound parameters per statement. A full 72-result
+  // semantic set used to consume 144 variables because every ID was rebound for
+  // membership and ranking. Pack the ordered IDs into JSON instead: json_each()
+  // preserves the array key as the semantic rank while using one variable each
+  // for the WHERE predicate and (when applicable) the default ORDER BY.
+  const semanticJson=JSON.stringify(semanticMatches);
   const args:unknown[]=[owner];let where='w.owner_id=?';
   const filters:[string,string][]=[['vintage','w.vintage'],['country','w.country'],['region','w.region'],['style','w.wine_style'],['tastingDate','w.tasting_date']];
   const rawQuery=(q.query??'').trim();
@@ -64,8 +70,8 @@ export async function listJournalPage(db:D1Database,owner:string,q:JournalListQu
       args.push(clean+'*',owner,owner,`%${rawQuery}%`);
     }
     if(semanticMatches.length){
-      searchPredicates.push(`w.id IN (${semanticMatches.map(()=>'?').join(',')})`);
-      args.push(...semanticMatches);
+      searchPredicates.push('w.id IN (SELECT CAST(value AS TEXT) FROM json_each(?))');
+      args.push(semanticJson);
     }
     if(searchPredicates.length)where+=` AND (${searchPredicates.join(' OR ')})`;
   }
@@ -88,10 +94,11 @@ export async function listJournalPage(db:D1Database,owner:string,q:JournalListQu
   let order=orders[q.sort??'']||orders.newest;
   // A natural-language search is useful only if its nearest matches appear first.
   // An explicit user-selected sort still wins, so semantic search never silently
-  // overrides "rating", "producer", etc.
+  // overrides "rating", "producer", etc. json_each() exposes the original array
+  // key, preserving the embedding rank without rebinding every candidate ID.
   if(!q.sort&&semanticMatches.length&&rawQuery&&!vintageSearch){
-    order=`CASE w.id ${semanticMatches.map((_,index)=>`WHEN ? THEN ${index}`).join(' ')} ELSE ${semanticMatches.length} END, ${orders.newest}`;
-    orderArgs.push(...semanticMatches);
+    order=`COALESCE((SELECT CAST(key AS INTEGER) FROM json_each(?) WHERE CAST(value AS TEXT)=w.id), ${semanticMatches.length}), ${orders.newest}`;
+    orderArgs.push(semanticJson);
   }
   const limit=Math.min(Math.max(Number(q.limit)||36,1),72),offset=Math.max(Number(q.offset)||0,0);
   // Count and page share the exact same predicate and travel in one D1 batch.
