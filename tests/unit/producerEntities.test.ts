@@ -69,6 +69,26 @@ describe('producer contact validation',()=>{
       {title:'La RVF',url:'https://www.larvf.com/example'}
     ]);
   });
+
+  it('recovers official website grounding when structured-response offsets are missing',()=>{
+    const text='{"officialWebsiteUrl":"https://www.domaine.example/","instagramUrl":null,"contactEmail":null,"contactPhone":null,"profile":"Profile"}';
+    const result=extractContactGrounding(text,{
+      groundingChunks:[{web:{title:'Domaine Example',uri:'https://vertexaisearch.cloud.google.com/grounding-api-redirect/example'}}],
+      groundingSupports:[{segment:{text:'Official website: https://domaine.example/'},groundingChunkIndices:[0]}]
+    });
+    expect(result.fields).toContain('officialWebsiteUrl');
+    expect(result.sources).toEqual([{title:'Domaine Example',url:'https://vertexaisearch.cloud.google.com/grounding-api-redirect/example'}]);
+  });
+
+  it('does not accept an official website from unrelated grounded profile text',()=>{
+    const text='{"officialWebsiteUrl":"https://www.domaine.example/","instagramUrl":null,"contactEmail":null,"contactPhone":null,"profile":"Profile"}';
+    const result=extractContactGrounding(text,{
+      groundingChunks:[{web:{title:'Regional profile',uri:'https://example.org/profile'}}],
+      groundingSupports:[{segment:{text:'The producer is based in Burgundy.'},groundingChunkIndices:[0]}]
+    });
+    expect(result.fields).not.toContain('officialWebsiteUrl');
+    expect(result.sources).toEqual([]);
+  });
 });
 
 describe('producer research merge policy',()=>{
