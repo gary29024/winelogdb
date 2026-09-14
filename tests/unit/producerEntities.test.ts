@@ -1,6 +1,7 @@
 import { describe,expect,it } from 'vitest';
 import { normalizeProducerAlias,producerMatchKey,shouldSeedProducerCountry } from '../../src/lib/producers/entities';
 import { mergeSources,pickNewestResearch,shouldRestorePreMerge } from '../../src/lib/producers/merge';
+import { prepareOfficialContactPromotion,USER_CONFIRMED_INSTAGRAM_SOURCE,USER_CONFIRMED_WEBSITE_SOURCE } from '../../src/lib/producers/manualContacts';
 import { extractContactGrounding,normalizeProducerEmail,normalizeProducerPhone,safeInstagramUrl } from '../../src/lib/producers/research';
 import { buildResearchTargets } from '../../src/lib/research/cache';
 
@@ -88,6 +89,25 @@ describe('producer contact validation',()=>{
     });
     expect(result.fields).not.toContain('officialWebsiteUrl');
     expect(result.sources).toEqual([]);
+  });
+
+  it('prepares a user-confirmed website as canonical official provenance',()=>{
+    expect(prepareOfficialContactPromotion({type:'website',value:'https://domaine.example/'},[{title:'Old source',url:'https://reference.example'}])).toEqual({
+      type:'website',value:'https://domaine.example/',sources:[
+        {title:USER_CONFIRMED_WEBSITE_SOURCE,url:'https://domaine.example/'},
+        {title:'Old source',url:'https://reference.example'}
+      ]
+    });
+  });
+
+  it('keeps website and Instagram user confirmations distinct and requires HTTPS',()=>{
+    const promoted=prepareOfficialContactPromotion({type:'instagram',value:'https://instagram.com/domaine/'},[{title:USER_CONFIRMED_WEBSITE_SOURCE,url:'https://domaine.example/'}]);
+    expect(promoted.sources).toEqual([
+      {title:USER_CONFIRMED_INSTAGRAM_SOURCE,url:'https://instagram.com/domaine/'},
+      {title:USER_CONFIRMED_WEBSITE_SOURCE,url:'https://domaine.example/'}
+    ]);
+    expect(()=>prepareOfficialContactPromotion({type:'website',value:'http://domaine.example/'})).toThrow('Official contacts must use HTTPS');
+    expect(()=>prepareOfficialContactPromotion({type:'email',value:'info@domaine.example'})).toThrow('Only a website or Instagram contact can be made official');
   });
 });
 
