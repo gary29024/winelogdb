@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { canonicalizeWineFields } from '../../lib/wine/canonicalize';
+import { sparklingDetailsSchema } from '../../lib/wine/sparklingDetails';
 import { normalizeRecognitionVintage } from './vintage';
 const nullableText = z.string().trim().max(300).nullable().optional();
 const grapeBlendEntry = z.object({grape:z.string().trim().min(1).max(100),percentage:z.number().min(0).max(100).nullable().optional()});
@@ -36,6 +37,7 @@ export const recognitionSchema = z.object({
   grapeBlend: z.array(grapeBlendEntry).max(20).default([]),
   style: z.preprocess(normalizeStyle,z.enum(wineStyles).nullable().optional()),
   alcoholPercentage: z.number().min(0).max(100).nullable().optional(),
+  sparklingDetails: sparklingDetailsSchema.nullable().optional(),
   confidence: z.number().min(0).max(1),
   tastingDate: z.string().date().nullable().optional(),
   locationName: nullableText,

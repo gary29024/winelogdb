@@ -19,6 +19,36 @@ function setup(){
 afterEach(()=>{for(const state of databases.splice(0))state.sqlite.close();vi.restoreAllMocks()});
 
 describe('wine saves through the deployed entrypoint and migrated SQLite',()=>{
+  it('saves, preserves, replaces and clears release details with the wine',async()=>{
+    const {create,request}=setup(),id=await create({...blank,sparklingDetails:{dosageGPerL:0,disgorgement:'Spring 2024'}});
+    expect(await (await request('GET',`/api/wines/${id}`)).json()).toMatchObject({sparklingDetails:{dosageGPerL:0,disgorgement:'Spring 2024'}});
+    await request('PUT',`/api/wines/${id}`,blank);
+    expect(await (await request('GET',`/api/wines/${id}`)).json()).toMatchObject({sparklingDetails:{dosageGPerL:0}});
+    await request('PUT',`/api/wines/${id}`,{...blank,sparklingDetails:{dosageGPerL:3}});
+    expect(await (await request('GET',`/api/wines/${id}`)).json()).toMatchObject({sparklingDetails:{dosageGPerL:3}});
+    for(const details of [null,{}]){
+      await request('PUT',`/api/wines/${id}`,{...blank,sparklingDetails:details});
+      expect(await (await request('GET',`/api/wines/${id}`)).json()).toMatchObject({sparklingDetails:null});
+    }
+  });
+  it('rolls back creation and edits when release details fail',async()=>{
+    const {sqlite,create,request}=setup(),id=await create();
+    sqlite.exec("CREATE TRIGGER reject_sparkling BEFORE INSERT ON wine_sparkling_details BEGIN SELECT RAISE(ABORT,'Simulated release failure'); END");
+    const changed={...rich,wineName:'Changed',tastingName:'New tasting',sparklingDetails:{dosageGPerL:4}};
+    expect((await request('PUT',`/api/wines/${id}`,changed)).status).toBe(500);
+    expect((await request('POST','/api/wines',changed)).status).toBe(500);
+    expect(await (await request('GET',`/api/wines/${id}`)).json()).toMatchObject({wineName:'Test wine',tastingName:'Original tasting',sparklingDetails:null});
+    expect(sqlite.prepare('SELECT count(*) AS n FROM wines').get()).toMatchObject({n:1});
+    expect(sqlite.prepare("SELECT count(*) AS n FROM tastings WHERE name='New tasting'").get()).toMatchObject({n:0});
+  });
+  it('validates release details and prevents cross-owner changes',async()=>{
+    const {sqlite,create,request}=setup(),id=await create({...blank,sparklingDetails:{dosageGPerL:2}});
+    expect((await request('POST','/api/wines',{...blank,sparklingDetails:{dosageGPerL:-1}})).status).toBe(400);
+    expect((await request('PUT',`/api/wines/${id}`,{...blank,sparklingDetails:null},false,'someone-else')).status).toBe(404);
+    expect(await (await request('GET',`/api/wines/${id}`)).json()).toMatchObject({sparklingDetails:{dosageGPerL:2}});
+    expect((await request('DELETE',`/api/wines/${id}`)).status).toBe(204);
+    expect(sqlite.prepare('SELECT count(*) AS n FROM wine_sparkling_details').get()).toMatchObject({n:0});
+  });
   it('clears every experience field and does not reveal an older experience',async()=>{
     const {sqlite,create,request}=setup(),id=await create();
     sqlite.prepare("INSERT INTO wine_experiences(id,owner_id,wine_id,tasting_notes,created_at,updated_at) VALUES('older','owner',?,'Older note','2020-01-01','2020-01-01')").run(id);

@@ -3,6 +3,7 @@ import { tastingStructureStatement } from '../src/lib/db/wineSave';
 import { requireSession } from '../src/lib/auth/session';
 import { configureGeminiBatchGateway } from '../src/lib/research/geminiBatch';
 import { hasTastingStructure,tastingStructureSchema,type TastingStructure } from '../src/lib/wine/tastingStructure';
+import { hasSparklingDetails,sparklingDetailsSchema,type SparklingDetails } from '../src/lib/wine/sparklingDetails';
 import { groupSourcePhotosForWine,handleGroupRecognitionSessionRequest } from './groupRecognitionSessions';
 import { resolveGeminiTransport,type GeminiTransportBindings } from './geminiTransport';
 import { processVertexBatchPollJob,processVertexBatchSubmitJob } from './vertexBatchRecognition';
@@ -18,6 +19,10 @@ type QueueJob={kind?:string;owner?:string;sessionId?:string;jobId?:string;pollCo
 async function owner(request:Request,env:Bindings){return (await requireSession(request.headers.get('Authorization')??undefined,env.AUTH_SECRET)).userId}
 function jsonResponse(body:unknown,status=200,headers?:Headers){const out=new Headers(headers);out.delete('Content-Length');out.set('Content-Type','application/json; charset=utf-8');return new Response(JSON.stringify(body),{status,headers:out})}
 function configureBatchGateway(env:Bindings){return configureGeminiBatchGateway(env.GEMINI_API_KEY,env)}
+function parseSparklingDetails(raw:string|null|undefined):SparklingDetails|null{
+  if(!raw)return null;
+  try{const parsed=sparklingDetailsSchema.safeParse(JSON.parse(raw));return parsed.success&&hasSparklingDetails(parsed.data)?parsed.data:null}catch{return null}
+}
 
 async function failBatchGatewayConfig(env:Bindings,job:QueueJob,error:string){
   const ownerId=String(job.owner||''),sessionId=String(job.sessionId||'');if(!ownerId||!sessionId)return;
@@ -87,15 +92,15 @@ export default {
       const response=await app.fetch(request,env,ctx);if(!response.ok)return response;
       let ownerId:string;try{ownerId=await owner(request,env)}catch{return response}
       try{
-        const [body,row,groupSourcePhotos]=await Promise.all([response.clone().json() as Promise<Record<string,unknown>>,env.DB.prepare('SELECT structure_json FROM wine_tasting_structures WHERE owner_id=? AND wine_id=?').bind(ownerId,wineId).first<{structure_json:string}>(),groupSourcePhotosForWine(env.DB,ownerId,wineId)]);
+        const [body,row,groupSourcePhotos,sparklingRow]=await Promise.all([response.clone().json() as Promise<Record<string,unknown>>,env.DB.prepare('SELECT structure_json FROM wine_tasting_structures WHERE owner_id=? AND wine_id=?').bind(ownerId,wineId).first<{structure_json:string}>(),groupSourcePhotosForWine(env.DB,ownerId,wineId),env.DB.prepare('SELECT details_json FROM wine_sparkling_details WHERE owner_id=? AND wine_id=?').bind(ownerId,wineId).first<{details_json:string}>()]);
         let structure:TastingStructure|null=null;if(row?.structure_json){const parsed=tastingStructureSchema.safeParse(JSON.parse(row.structure_json));if(parsed.success&&hasTastingStructure(parsed.data))structure=parsed.data}
-        return jsonResponse({...body,tastingStructure:structure,groupSourcePhotos},response.status,new Headers(response.headers));
+        return jsonResponse({...body,tastingStructure:structure,sparklingDetails:parseSparklingDetails(sparklingRow?.details_json),groupSourcePhotos},response.status,new Headers(response.headers));
       }catch{return response}
     }
 
     if(request.method==='DELETE'&&wineId){
       let ownerId:string|null=null;try{ownerId=await owner(request,env)}catch{}
-      const response=await app.fetch(request,env,ctx);if(response.ok&&ownerId)await env.DB.prepare('DELETE FROM wine_tasting_structures WHERE owner_id=? AND wine_id=?').bind(ownerId,wineId).run().catch(()=>undefined);return response;
+      const response=await app.fetch(request,env,ctx);if(response.ok&&ownerId)await env.DB.batch([env.DB.prepare('DELETE FROM wine_tasting_structures WHERE owner_id=? AND wine_id=?').bind(ownerId,wineId),env.DB.prepare('DELETE FROM wine_sparkling_details WHERE owner_id=? AND wine_id=?').bind(ownerId,wineId)]).catch(()=>undefined);return response;
     }
 
     return app.fetch(request,env,ctx);

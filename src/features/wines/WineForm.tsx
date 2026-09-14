@@ -8,8 +8,10 @@ import { resolveProducer,type ProducerResolution } from '../producers/api';
 import { resolveCuvee,type CuveeResolution } from '../cuvees/api';
 import type { GrapeBlendEntry, WineInput } from '../../lib/db/schema';
 import { hasTastingStructure,type TastingStructure,type TastingStructureKey } from '../../lib/wine/tastingStructure';
+import { emptySparklingDetails,hasSparklingDetails,type SparklingDetails } from '../../lib/wine/sparklingDetails';
 import { refreshActiveTasting,useActiveTasting } from '../tastings/useActiveTasting';
 import { matchTastingWine,type TastingWineMatch } from '../tastings/api';
+import { SparklingDetailsFields } from './SparklingDetailsFields';
 import '../../producerResolution.css';
 import '../../wineFormCompact.css';
 
@@ -33,8 +35,8 @@ const structureFields=[
   {key:'alcohol',label:'Perceived alcohol',options:[['low','Low'],['medium','Medium'],['high','High']]}
 ] as const;
 
-type WineFormInput=WineInput&{tastingStructure?:TastingStructure|null};
-type WineFormInitial=Partial<WineInput>&{tastingStructure?:TastingStructure|null};
+type WineFormInput=WineInput&{tastingStructure?:TastingStructure|null;sparklingDetails?:SparklingDetails|null};
+type WineFormInitial=Partial<WineInput>&{tastingStructure?:TastingStructure|null;sparklingDetails?:SparklingDetails|null};
 /**
  * Who the saved wine turned out to be.
  *
@@ -76,6 +78,8 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,holdin
   const [vintageInput,setVintageInput]=useState(initial?.vintage==null?'':String(initial.vintage));
   const [cuveeResolution,setCuveeResolution]=useState<CuveeResolution|null>(null),[resolvingCuvee,setResolvingCuvee]=useState(false),[preferCuveePrimaryName,setPreferCuveePrimaryName]=useState(false);
   const [structure,setStructure]=useState<TastingStructure>(()=>({...initial?.tastingStructure})),[structureOpen,setStructureOpen]=useState(()=>hasTastingStructure(initial?.tastingStructure??null));
+  const [sparklingDetails,setSparklingDetails]=useState<SparklingDetails>(()=>({...emptySparklingDetails,...initial?.sparklingDetails}));
+  const sparklingVisible=(!wineStyle||wineStyle==='sparkling')||hasSparklingDetails(sparklingDetails);
   const matched=producerResolution?.matched?producerResolution.producer:undefined;
   const suggestion=producerResolution?.matched?undefined:producerResolution?.suggestion;
   // The three fields an open tasting fills in. They are state rather than
@@ -228,6 +232,7 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,holdin
       derivedTags({country:initial?.country,region:initial?.region,appellation:initial?.appellation,
         grapes:initial?.grapes,style:initial?.wineStyle}),
       derivedTags({country,region,appellation,grapes:grapeBlend.map(x=>x.grape),style:wineStyleValue}));
+    const savedSparklingDetails=hasSparklingDetails(sparklingDetails)?sparklingDetails:null;
     const input:WineFormInput={
       producer,wineName,vintage:fd.get('vintage')?Number(fd.get('vintage')):null,
       country,region,appellation,
@@ -249,7 +254,7 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,holdin
       latitude:initial?.latitude??null,longitude:initial?.longitude??null,
       price:fd.get('price')?Number(fd.get('price')):null,currency:currency||null,
       tags:nextTags,recognitionStatus:'complete',recognitionConfidence:initial?.recognitionConfidence??null,
-      tastingStructure
+      tastingStructure,sparklingDetails:savedSparklingDetails??(hasSparklingDetails(initial?.sparklingDetails)?null:undefined)
     };
     try{
       const result=onSave?await onSave(input):await saveWine(input,id,id?[]:photos,{preferCuveePrimaryName:canPreferPrimary&&preferCuveePrimaryName,holdingId});
@@ -323,6 +328,8 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,holdin
       </span>}
       <small>Percentages are optional. Separate grapes with commas. A grape sold under another name — Pinot Nero, Garnacha — is filed under the one name when you save.</small>
     </label>
+
+    {sparklingVisible&&<SparklingDetailsFields details={sparklingDetails} onChange={setSparklingDetails}/>} 
 
     <details className="structure-fields structure-disclosure" open={structureOpen} onToggle={e=>setStructureOpen(e.currentTarget.open)}><summary><span>Structure</span><small>Optional</small></summary><div className="structure-disclosure-body"><small className="structure-helper">Tap the value itself. Tap the selected value again to clear it.</small>{structureFields.map(item=><div className="structure-row" key={item.key}><span>{item.label}</span><div className="structure-options" role="group" aria-label={item.label}>{item.options.map(([value,label])=><button key={value} type="button" className={`structure-option${structure[item.key]===value?' selected':''}`} aria-pressed={structure[item.key]===value} onClick={()=>chooseStructure(item.key,value)}>{label}</button>)}</div></div>)}</div></details>
 

@@ -2,6 +2,15 @@ import { selectRecognitionMetadata,type RecognitionPhotoMetadata } from '../uplo
 
 export const RECOGNITION_MODEL='gemini-3.1-flash-lite';
 
+const legacySparklingDetailsSchema={
+  type:'OBJECT',nullable:true,
+  properties:{
+    dosageGPerL:{type:'NUMBER',nullable:true},dosageCategory:{type:'STRING',nullable:true},disgorgement:{type:'STRING',nullable:true},tirage:{type:'STRING',nullable:true},
+    baseVintage:{type:'NUMBER',nullable:true},reserveWinePercentage:{type:'NUMBER',nullable:true},leesAgeingMonths:{type:'NUMBER',nullable:true},lotCode:{type:'STRING',nullable:true},
+    assemblage:{type:'STRING',nullable:true},reserveWineDetail:{type:'STRING',nullable:true},malolactic:{type:'STRING',nullable:true},fermentationElevage:{type:'STRING',nullable:true},otherTechnicalDetails:{type:'STRING',nullable:true}
+  }
+} as const;
+
 // Legacy OpenAPI-style schema retained for Gemini Batch compatibility. New synchronous
 // recognition calls use recognitionResponseJsonSchema below because Google's current
 // generateContent API marks responseSchema as deprecated in favor of JSON Schema.
@@ -11,7 +20,7 @@ export const recognitionResponseSchema={
     producer:{type:'STRING',nullable:true},wineName:{type:'STRING',nullable:true},vintage:{type:'NUMBER',nullable:true},country:{type:'STRING',nullable:true},region:{type:'STRING',nullable:true},appellation:{type:'STRING',nullable:true},
     grapes:{type:'ARRAY',items:{type:'STRING'}},
     grapeBlend:{type:'ARRAY',items:{type:'OBJECT',properties:{grape:{type:'STRING'},percentage:{type:'NUMBER',nullable:true}},required:['grape']}},
-    style:{type:'STRING',nullable:true},alcoholPercentage:{type:'NUMBER',nullable:true},locationName:{type:'STRING',nullable:true},confidence:{type:'NUMBER'}
+    style:{type:'STRING',nullable:true},alcoholPercentage:{type:'NUMBER',nullable:true},sparklingDetails:legacySparklingDetailsSchema,locationName:{type:'STRING',nullable:true},confidence:{type:'NUMBER'}
   },
   required:['grapes','grapeBlend','confidence']
 } as const;
@@ -31,6 +40,17 @@ const nullableString={anyOf:[{type:'string'},{type:'null'}]} as const;
 const regionField={anyOf:[{type:'string'},{type:'null'}],description:'Principal growing region, e.g. Napa Valley, Burgundy, Barossa Valley. Not a broad multi-region designation such as California unless nothing narrower is known.'} as const;
 const appellationField={anyOf:[{type:'string'},{type:'null'}],description:'Narrowest legally defined origin, e.g. Oakville, Gevrey-Chambertin, Barolo. Null when only the region is known.'} as const;
 const recognitionVintageJsonSchema={anyOf:[{type:'integer',minimum:1000,maximum:2200},{type:'null'}]} as const;
+const sparklingDetailsJsonSchema={
+  anyOf:[
+    {type:'object',additionalProperties:false,properties:{
+      dosageGPerL:{anyOf:[{type:'number',minimum:0,maximum:100},{type:'null'}]},dosageCategory:nullableString,disgorgement:nullableString,tirage:nullableString,
+      baseVintage:recognitionVintageJsonSchema,reserveWinePercentage:{anyOf:[{type:'number',minimum:0,maximum:100},{type:'null'}]},leesAgeingMonths:{anyOf:[{type:'number',minimum:0,maximum:600},{type:'null'}]},lotCode:nullableString,
+      assemblage:nullableString,reserveWineDetail:nullableString,malolactic:nullableString,fermentationElevage:nullableString,otherTechnicalDetails:nullableString
+    },required:['dosageGPerL','dosageCategory','disgorgement','tirage','baseVintage','reserveWinePercentage','leesAgeingMonths','lotCode','assemblage','reserveWineDetail','malolactic','fermentationElevage','otherTechnicalDetails']},
+    {type:'null'}
+  ],
+  description:'Release-specific Champagne/sparkling technical facts only when explicitly readable on the supplied bottle/label images. Null when none are visible.'
+} as const;
 
 export const recognitionResponseJsonSchema={
   type:'object',
@@ -46,10 +66,11 @@ export const recognitionResponseJsonSchema={
     grapeBlend:{type:'array',maxItems:20,items:{type:'object',additionalProperties:false,properties:{grape:{type:'string'},percentage:{anyOf:[{type:'number',minimum:0,maximum:100},{type:'null'}]}},required:['grape']}},
     style:{anyOf:[{type:'string',enum:['red','white','rose','sparkling','dessert','fortified','orange','other']},{type:'null'}]},
     alcoholPercentage:{anyOf:[{type:'number',minimum:0,maximum:100},{type:'null'}]},
+    sparklingDetails:sparklingDetailsJsonSchema,
     locationName:nullableString,
     confidence:{type:'number',minimum:0,maximum:1}
   },
-  required:['grapes','grapeBlend','confidence']
+  required:['grapes','grapeBlend','sparklingDetails','confidence']
 } as const;
 
 /**
@@ -175,6 +196,6 @@ export function buildRecognitionPrompt(metadata:RecognitionPhotoMetadata[]){
     selected.capturedAt?`The strongest photo timestamp is ${selected.capturedAt}.`:'No reliable photo timestamp.',
     selected.latitude!=null&&selected.longitude!=null?`The exact EXIF GPS is ${selected.latitude}, ${selected.longitude}. Infer only an approximate concise human-readable place name when reasonably confident; never alter the coordinates.`:'No reliable GPS metadata.'
   ].join(' ');
-  const prompt=`All supplied images are labels or views of the SAME wine bottle. Analyze them jointly in one identification. Reconcile front, back, neck and supplementary labels rather than treating them as separate wines. Producer, wineName and vintage are identity-critical: return them only when supported by visible label or bottle evidence in the supplied images. Do not invent, complete, or substitute producer, cuvee/wine name, or vintage from general wine knowledge; use null when the identity text or vintage is not reasonably readable, including non-vintage wines. After the visible identity is established, you may fill high-confidence canonical facts from general wine knowledge even when not printed verbatim only for country, region, appellation, grape varieties, and broad wine style. Use null or an empty array when not reasonably confident. ${PLACE_LEVEL_RULE} For style, return only one of: red, white, rose, sparkling, dessert, fortified, orange, other. Capture grape blend percentages only when explicitly visible in the supplied images; never invent vintage-specific percentages. Keep plain grape names in grapes and percentages in grapeBlend. Do not add producer history, vintage quality, terroir commentary, winemaking techniques, drinking windows, tasting notes, scores, or detailed research here; those belong to Deep Search. Confidence is 0 to 1 and should reflect confidence in the specific bottle identity, especially the visible producer and wineName rather than confidence in broad regional knowledge. ${context} Do not invent a tasting date; the application derives it from photo metadata.`;
+  const prompt=`All supplied images are labels or views of the SAME wine bottle. Analyze them jointly in one identification. Reconcile front, back, neck and supplementary labels rather than treating them as separate wines. Producer, wineName and vintage are identity-critical: return them only when supported by visible label or bottle evidence in the supplied images. Do not invent, complete, or substitute producer, cuvee/wine name, or vintage from general wine knowledge; use null when the identity text or vintage is not reasonably readable, including non-vintage wines. After the visible identity is established, you may fill high-confidence canonical facts from general wine knowledge even when not printed verbatim only for country, region, appellation, grape varieties, and broad wine style. Use null or an empty array when not reasonably confident. ${PLACE_LEVEL_RULE} For style, return only one of: red, white, rose, sparkling, dessert, fortified, orange, other. Capture grape blend percentages only when explicitly visible in the supplied images; never invent vintage-specific percentages. Keep plain grape names in grapes and percentages in grapeBlend. For Champagne or another sparkling wine, sparklingDetails may capture dosage g/L, the printed dosage category, disgorgement, tirage/mise en bouteille, base vintage, reserve-wine percentage, lees-ageing months, lot/release code, assemblage, reserve-wine detail, malolactic information, fermentation/elevage and other concise technical details — but ONLY when that fact is explicitly readable somewhere in the supplied bottle images. Do not infer any sparklingDetails value from producer reputation, cuvee style, appellation conventions or general knowledge; return sparklingDetails null when none of these facts are visibly stated. Do not add producer history, vintage quality, terroir commentary, unprinted winemaking techniques, drinking windows, tasting notes, scores, or detailed research here; those belong to Deep Search. Confidence is 0 to 1 and should reflect confidence in the specific bottle identity, especially the visible producer and wineName rather than confidence in broad regional knowledge. ${context} Do not invent a tasting date; the application derives it from photo metadata.`;
   return {prompt,selected};
 }
