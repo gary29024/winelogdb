@@ -40,7 +40,7 @@ export async function listJournalPage(db:D1Database,owner:string,q:JournalListQu
   // semantic set used to consume 144 variables because every ID was rebound for
   // membership and ranking. Pack the ordered IDs into JSON instead: json_each()
   // preserves the array key as the semantic rank while using one variable each
-  // for the WHERE predicate and (when applicable) the default ORDER BY.
+  // for membership and (when applicable) default ranking.
   const semanticJson=JSON.stringify(semanticMatches);
   const args:unknown[]=[owner];let where='w.owner_id=?';
   const filters:[string,string][]=[['vintage','w.vintage'],['country','w.country'],['region','w.region'],['style','w.wine_style'],['tastingDate','w.tasting_date']];
@@ -90,15 +90,17 @@ export async function listJournalPage(db:D1Database,owner:string,q:JournalListQu
     producer:'w.producer COLLATE NOCASE ASC, w.wine_name COLLATE NOCASE ASC, w.vintage DESC, w.id ASC',
     vintage:'w.vintage DESC, w.producer COLLATE NOCASE ASC, w.wine_name COLLATE NOCASE ASC, w.id ASC'
   };
-  const orderArgs:unknown[]=[];
   let order=orders[q.sort??'']||orders.newest;
+  let pageFrom='wines w';
+  const pagePrefixArgs:unknown[]=[];
   // A natural-language search is useful only if its nearest matches appear first.
   // An explicit user-selected sort still wins, so semantic search never silently
-  // overrides "rating", "producer", etc. json_each() exposes the original array
-  // key, preserving the embedding rank without rebinding every candidate ID.
+  // overrides "rating", "producer", etc. Join the ordered JSON array once for
+  // ranking instead of running a correlated json_each() scan for every result row.
   if(!q.sort&&semanticMatches.length&&rawQuery&&!vintageSearch){
-    order=`COALESCE((SELECT CAST(key AS INTEGER) FROM json_each(?) WHERE CAST(value AS TEXT)=w.id), ${semanticMatches.length}), ${orders.newest}`;
-    orderArgs.push(semanticJson);
+    pageFrom='wines w LEFT JOIN json_each(?) semantic_rank ON CAST(semantic_rank.value AS TEXT)=w.id';
+    pagePrefixArgs.push(semanticJson);
+    order=`COALESCE(CAST(semantic_rank.key AS INTEGER), ${semanticMatches.length}), ${orders.newest}`;
   }
   const limit=Math.min(Math.max(Number(q.limit)||36,1),72),offset=Math.max(Number(q.offset)||0,0);
   // Count and page share the exact same predicate and travel in one D1 batch.
@@ -111,7 +113,7 @@ export async function listJournalPage(db:D1Database,owner:string,q:JournalListQu
     w.created_at,
     (SELECT t.name FROM wine_experiences we LEFT JOIN tastings t ON t.id=we.tasting_id WHERE we.wine_id=w.id AND we.owner_id=w.owner_id ORDER BY we.created_at DESC LIMIT 1) AS tasting_name,
     (SELECT wi.id FROM wine_images wi WHERE wi.owner_id=w.owner_id AND wi.wine_id=w.id ORDER BY wi.rowid ASC LIMIT 1) AS image_id
-    FROM wines w WHERE ${where} ORDER BY ${order} LIMIT ? OFFSET ?`).bind(...args,...orderArgs,limit,offset);
+    FROM ${pageFrom} WHERE ${where} ORDER BY ${order} LIMIT ? OFFSET ?`).bind(...pagePrefixArgs,...args,limit,offset);
   const [countResult,rowsResult]=await db.batch([countStatement,pageStatement]);
   const total=Number((countResult.results[0] as {total?:unknown}|undefined)?.total??0);
   const rows=rowsResult.results as JournalRow[];
