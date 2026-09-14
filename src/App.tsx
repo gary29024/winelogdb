@@ -7,7 +7,7 @@ import type { WineRecord } from './lib/db/schema';
 const LibraryPage=lazy(()=>import('./features/wines/LibraryPage').then(module=>({default:module.LibraryPage})));
 const CellarPage=lazy(()=>import('./features/cellar/CellarPage'));
 const OpenBottlePage=lazy(()=>import('./features/cellar/OpenBottlePage').then(module=>({default:module.OpenBottlePage})));
-const DetailPage=lazy(()=>import('./features/wines/DetailPage').then(module=>({default:module.DetailPage})));
+const DetailPage=lazy(()=>import('./features/wines/DetailPageWithSparkling').then(module=>({default:module.DetailPageWithSparkling})));
 const UploadPage=lazy(()=>import('./features/uploads/UploadPage').then(module=>({default:module.UploadPage})));
 const GroupScanPage=lazy(()=>import('./features/uploads/GroupScanPage').then(module=>({default:module.GroupScanPage})));
 const BatchScanPage=lazy(()=>import('./features/uploads/BatchScanPage').then(module=>({default:module.BatchScanPage})));
