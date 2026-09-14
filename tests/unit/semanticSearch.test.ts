@@ -1,5 +1,5 @@
 import { afterEach,describe,expect,it,vi } from 'vitest';
-import { buildWineSemanticDocument,normalizedDot,rankSemanticCandidates,semanticWineIds,warmSemanticWineIndex } from '../../src/lib/journal/semanticSearch';
+import { buildWineSemanticDocument,decodeStoredEmbedding,normalizedDot,rankSemanticCandidates,semanticWineIds,warmSemanticWineIndex } from '../../src/lib/journal/semanticSearch';
 import { shouldUseSemanticQuery } from '../../src/lib/journal/semanticQuery';
 import { listJournalPage } from '../../src/lib/journal/list';
 import { migratedSqliteD1 } from './support/sqliteD1';
@@ -42,6 +42,15 @@ describe('Journal semantic search helpers',()=>{
       {id:'close',vector:close},
       {id:'exact',vector:query}
     ]).map(item=>item.id)).toEqual(['exact','close','orthogonal']);
+  });
+
+  it('decodes the plain number[] BLOB shape D1 returns in production',()=>{
+    const source=Float32Array.from([0.6,0.8,0,-0.25]),bytes=new Uint8Array(source.buffer);
+    expect(Array.from(decodeStoredEmbedding(Array.from(bytes)))).toEqual(Array.from(source));
+    // Keep local/node SQLite's typed-array shape working too.
+    expect(Array.from(decodeStoredEmbedding(bytes))).toEqual(Array.from(source));
+    expect(()=>decodeStoredEmbedding([1,2,3])).toThrow('invalid byte length');
+    expect(()=>decodeStoredEmbedding([0,256,0,0])).toThrow('invalid byte');
   });
 
   it('persists normalized BLOBs, ranks them, executes hybrid SQL, and cascades deletes on real SQLite',async()=>{

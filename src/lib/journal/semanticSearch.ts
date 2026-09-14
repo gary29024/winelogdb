@@ -18,7 +18,7 @@ type SemanticWineRow={
   id:string;producer:string;wine_name:string;vintage:number|null;country:string|null;region:string|null;appellation:string|null;
   classification:string|null;grapes_json:string;wine_style:string|null;tasting_notes:string|null;rating:number|null;event:string|null;venue:string|null;tags_json:string;updated_at:string;
 };
-type StoredEmbeddingRow={wine_id:string;embedding:ArrayBuffer|ArrayBufferView;dimensions:number};
+type StoredEmbeddingRow={wine_id:string;embedding:unknown;dimensions:number};
 export type SemanticVectorCandidate={id:string;vector:ArrayLike<number>};
 type MeterContext={owner:string;runId:string;targetId:'journal-query'|'journal-index'};
 
@@ -138,10 +138,26 @@ async function embedTexts(env:SemanticEnv,config:EmbeddingConfig,texts:string[],
 // bind. A naked ArrayBuffer works in D1 but node:sqlite rejects it, which hid the
 // persistence path from realistic integration tests.
 function vectorBlob(vector:number[]){return new Uint8Array(Float32Array.from(vector).buffer)}
-function vectorFromBlob(value:ArrayBuffer|ArrayBufferView){
-  if(value instanceof ArrayBuffer)return new Float32Array(value);
-  const copy=value.buffer.slice(value.byteOffset,value.byteOffset+value.byteLength);
-  return new Float32Array(copy);
+
+/**
+ * D1 deliberately returns BLOB columns as plain number[] values, while the
+ * local node:sqlite harness returns Uint8Array. Decode both at this boundary so
+ * ranking does not depend on which database runtime produced the row.
+ */
+export function decodeStoredEmbedding(value:unknown){
+  let bytes:Uint8Array;
+  if(Array.isArray(value)){
+    if(value.some(byte=>!Number.isInteger(byte)||byte<0||byte>255))throw new Error('Stored semantic embedding BLOB contains an invalid byte');
+    bytes=Uint8Array.from(value);
+  }else if(value instanceof ArrayBuffer)bytes=new Uint8Array(value);
+  else if(ArrayBuffer.isView(value))bytes=new Uint8Array(value.buffer,value.byteOffset,value.byteLength);
+  else throw new Error('Stored semantic embedding BLOB has an unsupported runtime type');
+
+  if(!bytes.byteLength||bytes.byteLength%Float32Array.BYTES_PER_ELEMENT!==0)throw new Error('Stored semantic embedding BLOB has an invalid byte length');
+  // Copy to an aligned, standalone buffer before constructing Float32Array.
+  // Some views can begin at a non-4-byte offset even when their total length is valid.
+  const copy=new Uint8Array(bytes.byteLength);copy.set(bytes);
+  return new Float32Array(copy.buffer);
 }
 
 async function staleWineRows(db:D1Database,owner:string,config:EmbeddingConfig,limit:number){
@@ -170,7 +186,7 @@ async function currentCandidates(db:D1Database,owner:string,config:EmbeddingConf
     FROM wine_semantic_embeddings e
     JOIN wines w ON w.owner_id=e.owner_id AND w.id=e.wine_id
     WHERE e.owner_id=? AND e.model_key=? AND e.dimensions=?`).bind(owner,config.modelKey,config.dimensions).all<StoredEmbeddingRow>();
-  return result.results.map(row=>({id:row.wine_id,vector:vectorFromBlob(row.embedding)}));
+  return result.results.map(row=>({id:row.wine_id,vector:decodeStoredEmbedding(row.embedding)}));
 }
 
 export async function semanticWineIds(env:SemanticEnv,owner:string,query:string,limit=72){
