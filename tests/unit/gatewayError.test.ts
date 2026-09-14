@@ -5,7 +5,7 @@ const response=(body:unknown,headers:HeadersInit={})=>new Response(JSON.stringif
 describe('safe Gateway error diagnostics',()=>{
   it('retains Z.ai codes and retry timing without echoing credentials or evidence',async()=>{
     const result=await gatewayErrorDetails(response({error:{code:'1302',message:'Concurrency limit: Bearer secret-key; wine evidence and private prompt'}},{'Retry-After':'30'}));
-    expect(result).toEqual({httpStatus:429,providerCode:'1302',providerMessage:'Concurrency limit reported',retryAfter:'30'});
+    expect(result).toEqual({httpStatus:429,providerCode:'1302',providerMessage:'Z.AI concurrency limit reported',retryAfter:'30'});
     expect(JSON.stringify(result)).not.toMatch(/secret-key|wine evidence|private prompt/);
   });
   it('handles Cloudflare errors and HTTP-date retry headers',async()=>{
