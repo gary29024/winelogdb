@@ -1,12 +1,14 @@
+import { useState } from 'react';
 import { hasSparklingDetails,type SparklingDetails } from '../../lib/wine/sparklingDetails';
 import '../../sparklingDetails.css';
 
 type Props={details:SparklingDetails;onChange:(next:SparklingDetails)=>void};
 
 export function SparklingDetailsFields({details,onChange}:Props){
+  const [open,setOpen]=useState(()=>hasSparklingDetails(details));
   const set=<K extends keyof SparklingDetails>(key:K,value:SparklingDetails[K])=>onChange({...details,[key]:value});
   const numberValue=(value:string)=>value.trim()===''?null:Number(value);
-  return <details className="sparkling-details-editor" defaultOpen={hasSparklingDetails(details)}>
+  return <details className="sparkling-details-editor" open={open} onToggle={e=>setOpen(e.currentTarget.open)}>
     <summary><span>Champagne / sparkling details</span><small>Optional · release-specific</small></summary>
     <div className="sparkling-details-body">
       <p className="sparkling-details-helper">Use what is printed on this bottle or release. These details stay with this logged wine, not the whole cuvée.</p>
