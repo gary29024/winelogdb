@@ -8,9 +8,10 @@ import { resolveGeminiTransport,type GeminiTransportBindings } from './geminiTra
 import { processVertexBatchPollJob,processVertexBatchSubmitJob } from './vertexBatchRecognition';
 import { semanticWineIds,shouldUseSemanticQuery,warmSemanticWineIndex,type SemanticEmbeddingBindings } from '../src/lib/journal/semanticSearch';
 import { tryDirectProducerRangeRefresh,type ProducerRangeAiBindings } from '../src/lib/producers/catalogDirectResearch';
+import { tryWorkersAiProducerRangeRefresh,workersFallbackEligible,type ProducerRangeWorkersAiBindings } from '../src/lib/producers/catalogWorkersAiFallback';
 import { addManualCatalogEntry,addMissingCandidate,captureGroundedCatalogAndOverlay,deleteManualCatalogEntry,ignoreMissingCandidate,listCatalogRangeCorrections } from '../src/lib/producers/catalogRangeOverlay';
 
-type Bindings=Parameters<typeof app.fetch>[1]&GeminiTransportBindings&SemanticEmbeddingBindings&ProducerRangeAiBindings;
+type Bindings=Parameters<typeof app.fetch>[1]&GeminiTransportBindings&SemanticEmbeddingBindings&ProducerRangeAiBindings&ProducerRangeWorkersAiBindings;
 type QueueBatch=Parameters<typeof app.queue>[0];
 type QueueJob={kind?:string;owner?:string;sessionId?:string;jobId?:string;pollCount?:number;producerId?:string;requestId?:string;refreshProfile?:boolean;rangeOnly?:boolean};
 
@@ -104,13 +105,23 @@ export default {
     if(batch.messages.length!==1)return app.queue(batch,env);
     const message=batch.messages[0],job=message.body as QueueJob;
 
-    // Phase 2 is deliberately an intercept, not a replacement. Only range-only
-    // refreshes with a fresh profile can finish here. Any weak evidence, model
-    // error or missing official site falls through to the existing grounded
-    // Gemini path with exactly the same retry/slice behaviour as before.
+    // Phase 2 is deliberately an intercept, not a replacement. Official-site
+    // extraction prefers Z.AI BYOK, then independently hosted Workers AI GLM.
+    // Weak evidence or failure of both cheap paths falls through to the existing
+    // grounded Gemini path with exactly the same retry/slice behaviour as before.
     if(job.kind==='producer'){
       const ownerId=String(job.owner||''),producerId=String(job.producerId||''),requestId=String(job.requestId||'');
-      if(ownerId&&producerId&&requestId){try{const direct=await tryDirectProducerRangeRefresh(env,ownerId,producerId,requestId,job.refreshProfile===true,job.rangeOnly===true);console.log(JSON.stringify({event:'producer_range_route',producerId,requestId,provider:direct.handled?'zai':'gemini',reason:direct.handled?'official range accepted':direct.reason}));if(direct.handled){message.ack();return}}catch(e){console.warn(JSON.stringify({event:'producer_range_phase2',stage:'intercept_failed',producerId,requestId,error:(e as Error).message}))}}
+      if(ownerId&&producerId&&requestId){
+        try{
+          const direct=await tryDirectProducerRangeRefresh(env,ownerId,producerId,requestId,job.refreshProfile===true,job.rangeOnly===true);
+          if(direct.handled){console.log(JSON.stringify({event:'producer_range_route',producerId,requestId,provider:'zai',reason:'official range accepted'}));message.ack();return}
+          if(workersFallbackEligible(direct.reason)){
+            const workers=await tryWorkersAiProducerRangeRefresh(env,ownerId,producerId,requestId,job.refreshProfile===true,job.rangeOnly===true);
+            if(workers.handled){console.log(JSON.stringify({event:'producer_range_route',producerId,requestId,provider:'workers-ai',reason:`${direct.reason}; Workers AI accepted official range`}));message.ack();return}
+            console.log(JSON.stringify({event:'producer_range_route',producerId,requestId,provider:'gemini',reason:`${direct.reason}; Workers AI: ${workers.reason}`}));
+          }else console.log(JSON.stringify({event:'producer_range_route',producerId,requestId,provider:'gemini',reason:direct.reason}));
+        }catch(e){console.warn(JSON.stringify({event:'producer_range_phase2',stage:'intercept_failed',producerId,requestId,error:(e as Error).message}))}
+      }
       return app.queue(batch,env);
     }
     if(job.kind==='producer_batch_poll'){

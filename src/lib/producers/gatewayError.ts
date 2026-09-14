@@ -1,5 +1,15 @@
 // Never log arbitrary provider text: errors can echo credentials or prompts.
 // Retain a constrained code and classify the message into safe local wording.
+const ZAI_RETRYABLE_CODES=new Set(['1302','1303','1305','1312']);
+const ZAI_CODE_MESSAGES:Record<string,string>={
+  '1302':'Z.AI concurrency limit reported',
+  '1303':'Z.AI request frequency limit reported',
+  '1305':'Z.AI rate limit triggered',
+  '1312':'Z.AI model high traffic reported'
+};
+
+export function isRetryableZaiProviderCode(code?:string){return Boolean(code&&ZAI_RETRYABLE_CODES.has(code))}
+
 export async function gatewayErrorDetails(response:Response){
   const details:{httpStatus:number;providerCode?:string;providerMessage?:string;retryAfter?:string}={httpStatus:response.status};
   const retry=response.headers.get('Retry-After')?.trim();
@@ -18,7 +28,8 @@ export async function gatewayErrorDetails(response:Response){
     // (including a key accidentally returned as a code) must not reach logs.
     if(/^\d{1,8}$/.test(code)||/^(rate_limit_exceeded|insufficient_quota|invalid_api_key|authentication_error|permission_denied)$/.test(code))details.providerCode=code;
     const message=typeof error?.message==='string'?error.message.toLowerCase():'';
-    if(/specified key does not exist|provider key.*(?:does not exist|not found)|byok.*key.*(?:does not exist|not found|missing)/.test(message))details.providerMessage='AI Gateway provider key not found';
+    if(details.providerCode&&ZAI_CODE_MESSAGES[details.providerCode])details.providerMessage=ZAI_CODE_MESSAGES[details.providerCode];
+    else if(/specified key does not exist|provider key.*(?:does not exist|not found)|byok.*key.*(?:does not exist|not found|missing)/.test(message))details.providerMessage='AI Gateway provider key not found';
     else if(/concurren/.test(message))details.providerMessage='Concurrency limit reported';
     else if(/balance|credit|insufficient_quota|quota|spend limit/.test(message))details.providerMessage='Quota, balance, or spend limit reported';
     else if(/rate.?limit|too many requests|频率|限流/.test(message))details.providerMessage='Rate limit reported';
