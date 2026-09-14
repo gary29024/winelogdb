@@ -1,6 +1,15 @@
 import type { WineInput } from './schema';
 import { OPEN } from '../tastings/session';
 import { hasTastingStructure,type TastingStructure } from '../wine/tastingStructure';
+import { hasSparklingDetails,type SparklingDetails } from '../wine/sparklingDetails';
+
+export function sparklingDetailsStatement(db:D1Database,owner:string,wineId:string,details:SparklingDetails|null,stamp=new Date().toISOString()){
+  if(!hasSparklingDetails(details))return db.prepare('DELETE FROM wine_sparkling_details WHERE owner_id=? AND wine_id=?').bind(owner,wineId);
+  return db.prepare(`INSERT INTO wine_sparkling_details(owner_id,wine_id,details_json,updated_at)
+    SELECT ?,?,?,? WHERE EXISTS (SELECT 1 FROM wines WHERE owner_id=? AND id=?)
+    ON CONFLICT(owner_id,wine_id) DO UPDATE SET details_json=excluded.details_json,updated_at=excluded.updated_at`)
+    .bind(owner,wineId,JSON.stringify(details),stamp,owner,wineId);
+}
 
 export function tastingStructureStatement(db:D1Database,owner:string,wineId:string,structure:TastingStructure|null,stamp=new Date().toISOString()){
   if(!structure||!hasTastingStructure(structure))return db.prepare('DELETE FROM wine_tasting_structures WHERE owner_id=? AND wine_id=?').bind(owner,wineId);
@@ -39,5 +48,6 @@ export function wineSaveStatements(db:D1Database,owner:string,wineId:string,w:Wi
   }
   // Omitted means preserve, null means clear. Older clients need not send it.
   if(w.tastingStructure!==undefined)statements.push(tastingStructureStatement(db,owner,wineId,w.tastingStructure,stamp));
+  if(w.sparklingDetails!==undefined)statements.push(sparklingDetailsStatement(db,owner,wineId,w.sparklingDetails,stamp));
   return statements;
 }

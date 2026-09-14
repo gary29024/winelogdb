@@ -17,6 +17,7 @@ describe('sparkling release details',()=>{
 
   it('treats an empty release profile as absent',()=>{
     expect(hasSparklingDetails(emptySparklingDetails)).toBe(false);
+    expect(sparklingDetailsSchema.parse({dosageGPerL:'   ',reserveWinePercentage:'\t'})).toMatchObject({dosageGPerL:null,reserveWinePercentage:null});
     expect(sparklingDetailsSchema.parse({dosageGPerL:'',disgorgement:'  '})).toMatchObject({dosageGPerL:null,disgorgement:null});
   });
 

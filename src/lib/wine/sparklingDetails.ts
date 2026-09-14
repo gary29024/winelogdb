@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 const optionalText=(max:number)=>z.preprocess(value=>typeof value==='string'&&!value.trim()?null:value,z.string().trim().max(max).optional().nullable());
 const optionalNumber=(schema:z.ZodNumber)=>z.preprocess(value=>{
-  if(value==null||value==='')return null;
+  if(value==null||(typeof value==='string'&&!value.trim()))return null;
   if(typeof value==='string'){
     const numeric=Number(value.trim());
     return Number.isFinite(numeric)?numeric:value;

@@ -1,7 +1,7 @@
 import { useEffect,useMemo,useRef,useState, type FormEvent } from 'react';
 import { resolvePlace } from '../../lib/places/resolve';
 import { Link,useNavigate } from 'react-router-dom';
-import { addWineImages,saveWine,saveWineSparklingDetails,saveWineTastingStructure, type WinePhoto } from './api';
+import { addWineImages,saveWine,saveWineTastingStructure, type WinePhoto } from './api';
 import { derivedTags,reconcileTags } from './wineTags';
 import { grapeSuggestions } from '../../lib/wine/grapes';
 import { resolveProducer,type ProducerResolution } from '../producers/api';
@@ -79,7 +79,7 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,holdin
   const [cuveeResolution,setCuveeResolution]=useState<CuveeResolution|null>(null),[resolvingCuvee,setResolvingCuvee]=useState(false),[preferCuveePrimaryName,setPreferCuveePrimaryName]=useState(false);
   const [structure,setStructure]=useState<TastingStructure>(()=>({...initial?.tastingStructure})),[structureOpen,setStructureOpen]=useState(()=>hasTastingStructure(initial?.tastingStructure??null));
   const [sparklingDetails,setSparklingDetails]=useState<SparklingDetails>(()=>({...emptySparklingDetails,...initial?.sparklingDetails}));
-  const sparklingVisible=wineStyle==='sparkling'||hasSparklingDetails(sparklingDetails);
+  const sparklingVisible=(!wineStyle||wineStyle==='sparkling')||hasSparklingDetails(sparklingDetails);
   const matched=producerResolution?.matched?producerResolution.producer:undefined;
   const suggestion=producerResolution?.matched?undefined:producerResolution?.suggestion;
   // The three fields an open tasting fills in. They are state rather than
@@ -254,13 +254,12 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,holdin
       latitude:initial?.latitude??null,longitude:initial?.longitude??null,
       price:fd.get('price')?Number(fd.get('price')):null,currency:currency||null,
       tags:nextTags,recognitionStatus:'complete',recognitionConfidence:initial?.recognitionConfidence??null,
-      tastingStructure,sparklingDetails:savedSparklingDetails
+      tastingStructure,sparklingDetails:savedSparklingDetails??(hasSparklingDetails(initial?.sparklingDetails)?null:undefined)
     };
     try{
       const result=onSave?await onSave(input):await saveWine(input,id,id?[]:photos,{preferCuveePrimaryName:canPreferPrimary&&preferCuveePrimaryName,holdingId});
       const savedId=id??('id' in result?result.id:undefined);if(!savedId)throw new Error('Save response did not include a wine ID');
       if(onSave)await saveWineTastingStructure(savedId,tastingStructure);
-      if(id||savedSparklingDetails)await saveWineSparklingDetails(savedId,savedSparklingDetails);
       // A save can have closed the open tasting - a wine dated another day ends
       // it server-side - so the cached answer is no longer trustworthy.
       if(!id)void refreshActiveTasting();
