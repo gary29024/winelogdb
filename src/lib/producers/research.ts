@@ -72,6 +72,11 @@ function officialWebsiteHost(text:string){
   return url.hostname.toLowerCase().replace(/^www\./,'');
 }
 
+function segmentMentionsOfficialWebsite(segmentText:string,websiteHost:string){
+  if(!segmentText||!websiteHost)return false;
+  return segmentText.includes(`https://${websiteHost}`)||segmentText.includes(`https://www.${websiteHost}`);
+}
+
 /**
  * How long a run may go without saying anything before it is treated as dead.
  *
@@ -140,8 +145,9 @@ export function extractContactGrounding(text:string,metadata?:GroundingMetadata)
       // Gemini structured responses do not always attach reliable byte/character
       // offsets to grounded JSON fields. For the official site only, recover the
       // link when the grounded claim text itself contains the exact returned
-      // hostname. This keeps provenance mandatory without depending on offsets.
-      return field==='officialWebsiteUrl'&&Boolean(websiteHost)&&segmentText.includes(websiteHost);
+      // HTTPS hostname. Requiring URL syntax avoids treating an email on the same
+      // domain as evidence that the website field itself was verified.
+      return field==='officialWebsiteUrl'&&segmentMentionsOfficialWebsite(segmentText,websiteHost);
     });
     if(!touched.length)continue;
     let hasWebSource=false;
