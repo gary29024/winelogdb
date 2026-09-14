@@ -20,7 +20,7 @@ function stubPages(){vi.stubGlobal('fetch',vi.fn(async(input:RequestInfo|URL)=>{
 function aiWith(result:unknown){return {run:vi.fn(async()=>result)} as unknown as Ai}
 
 beforeEach(()=>{({sqlite,db}=migratedSqliteD1())});
-afterEach(()=>{vi.unstubAllGlobals();vi.restoreAllMocks();sqlite.close()});
+afterEach(()=>{vi.unstubAllGlobals();vi.restoreAllMocks();vi.useRealTimers();sqlite.close()});
 
 describe('Workers AI producer range fallback',()=>{
   it('only runs for provider/model failures, not weak official evidence',()=>{
@@ -29,6 +29,32 @@ describe('Workers AI producer range fallback',()=>{
     expect(workersFallbackEligible('no cheap provider')).toBe(true);
     expect(workersFallbackEligible('official evidence incomplete')).toBe(false);
     expect(workersFallbackEligible('profile requires research')).toBe(false);
+  });
+
+  it('aborts the binding request on timeout',async()=>{
+    vi.useFakeTimers();seedProducer();stubPages();let signal:AbortSignal|undefined;
+    const AI={run:vi.fn((_model:unknown,_input:unknown,options:{signal:AbortSignal})=>{signal=options.signal;return new Promise(()=>{})})} as unknown as Ai;
+    const pending=tryWorkersAiProducerRangeRefresh({DB:db,AI},'owner','p1','run-1');await vi.advanceTimersByTimeAsync(0);
+    expect(signal?.aborted).toBe(false);await vi.advanceTimersByTimeAsync(75_000);
+    expect(await pending).toEqual({handled:false,reason:'workers ai failed'});expect(signal?.aborted).toBe(true);
+  });
+
+  it('skips inference after cancellation during the crawl',async()=>{
+    seedProducer();const AI=aiWith({});
+    vi.stubGlobal('fetch',vi.fn(async(input:RequestInfo|URL)=>{
+      sqlite.prepare("UPDATE producer_research_runs SET status='failed'").run();return responseAt(String(input),rangeHtml);
+    }));
+    expect(await tryWorkersAiProducerRangeRefresh({DB:db,AI},'owner','p1','run-1')).toMatchObject({reason:'research run is no longer active'});
+    expect(AI.run).not.toHaveBeenCalled();
+  });
+
+  it('uses the shared apex fallback when the saved www site is unavailable',async()=>{
+    seedProducer();sqlite.prepare("UPDATE producers SET official_website_url='https://www.domaine.example/'").run();
+    vi.stubGlobal('fetch',vi.fn(async(input:RequestInfo|URL)=>{
+      if(String(input).includes('www.'))throw new Error('TLS failure');return responseAt(String(input),rangeHtml);
+    }));
+    const AI=aiWith({response:{rangeComplete:false,range:[]}});await tryWorkersAiProducerRangeRefresh({DB:db,AI},'owner','p1','run-1');
+    expect(AI.run).toHaveBeenCalledTimes(1);
   });
 
   it('accepts a complete official range from Cloudflare-hosted GLM and completes the existing run',async()=>{

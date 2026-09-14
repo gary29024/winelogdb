@@ -72,6 +72,27 @@ describe('Z.ai transient rate-limit retry',()=>{
     expect(gatewayCalls).toBe(1);
   });
 
+  it.each(['120','Mon, 14 Sep 2026 00:02:00 GMT'])('falls back instead of retrying before a long Retry-After %s',async retryAfter=>{
+    vi.useFakeTimers();vi.setSystemTime(new Date('2026-09-14T00:00:00Z'));seedProducer();let calls=0;
+    vi.stubGlobal('fetch',vi.fn(async(input:RequestInfo|URL)=>{
+      const url=String(input);if(!url.includes('gateway.ai.cloudflare.com'))return responseAt(url,rangeHtml);
+      calls++;return new Response(JSON.stringify({error:{code:1305}}),{status:429,headers:{'Retry-After':retryAfter}});
+    }));
+    const pending=tryDirectProducerRangeRefresh({DB:db,...gateway},'owner','p1','run-1');await vi.runAllTimersAsync();
+    expect(await pending).toMatchObject({handled:false,reason:'cheap model failed'});expect(calls).toBe(1);
+  });
+
+  it('does not make another request when cancelled during backoff',async()=>{
+    vi.useFakeTimers();seedProducer();let calls=0;
+    vi.stubGlobal('fetch',vi.fn(async(input:RequestInfo|URL)=>{
+      const url=String(input);if(!url.includes('gateway.ai.cloudflare.com'))return responseAt(url,rangeHtml);
+      calls++;return new Response(JSON.stringify({error:{code:1305}}),{status:429,headers:{'Retry-After':'1'}});
+    }));
+    const pending=tryDirectProducerRangeRefresh({DB:db,...gateway},'owner','p1','run-1');await vi.advanceTimersByTimeAsync(0);
+    sqlite.prepare("UPDATE producer_research_runs SET status='failed'").run();await vi.runAllTimersAsync();await pending;
+    expect(calls).toBe(1);
+  });
+
   it('stops after three total attempts when a retryable 429 persists',async()=>{
     vi.useFakeTimers();seedProducer();let gatewayCalls=0;
     vi.stubGlobal('fetch',vi.fn(async(input:RequestInfo|URL)=>{

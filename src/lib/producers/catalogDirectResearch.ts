@@ -145,7 +145,7 @@ function retryAfterMs(value?:string){
   if(!value)return null;let delay:number;
   if(/^\d+$/.test(value))delay=Number(value)*1000;
   else{const retryAt=Date.parse(value);if(!Number.isFinite(retryAt))return null;delay=Math.max(0,retryAt-Date.now())}
-  return Math.min(delay,ZAI_MAX_RETRY_DELAY_MS);
+  return delay;
 }
 function retryDelayMs(details:GatewayDetails,retryIndex:number){
   const instructed=retryAfterMs(details.retryAfter);if(instructed!==null)return instructed;
@@ -194,11 +194,12 @@ async function cheapExtract(env:Env,owner:string,producerId:string,runId:string,
   const provider:Provider='zai-gateway',model=ZAI_METER_MODEL;let result:unknown,output='',attempts=0;
   try{
     while(attempts<ZAI_MAX_ATTEMPTS){
+      if(attempts&&!await reportProgress(env.DB,owner,producerId,runId,'Retrying Z.ai after a temporary rate limit'))throw new Error('Research run is no longer active');
       attempts++;
       try{result=await callZaiGateway(env,input,producerId,runId,attempts);break}
       catch(e){
         if(!(e instanceof ZaiGatewayHttpError)||e.details.httpStatus!==429||!isRetryableZaiProviderCode(e.details.providerCode)||attempts>=ZAI_MAX_ATTEMPTS)throw e;
-        const delayMs=retryDelayMs(e.details,attempts-1);console.warn(JSON.stringify({event:'producer_range_phase2',stage:'zai_retry',producerId,requestId:runId,attempt:attempts,nextAttempt:attempts+1,delayMs,httpStatus:e.details.httpStatus,providerCode:e.details.providerCode,providerMessage:e.details.providerMessage,retryAfter:e.details.retryAfter}));await wait(delayMs);
+        const delayMs=retryDelayMs(e.details,attempts-1);if(delayMs>ZAI_MAX_RETRY_DELAY_MS)throw e;console.warn(JSON.stringify({event:'producer_range_phase2',stage:'zai_retry',producerId,requestId:runId,attempt:attempts,nextAttempt:attempts+1,delayMs,httpStatus:e.details.httpStatus,providerCode:e.details.providerCode,providerMessage:e.details.providerMessage,retryAfter:e.details.retryAfter}));await wait(delayMs);
       }
     }
     if(!result)throw new Error('Z.AI via AI Gateway returned no result');
@@ -233,3 +234,6 @@ export async function tryDirectProducerRangeRefresh(env:Env,owner:string,produce
   }
   const sources=pages.filter(page=>page.rangeSignal||normalized.range.some(item=>item.sourceUrl===page.url)).map(page=>({title:'Official wine range',url:page.url}));const saved=await saveResearchedCatalog(env.DB,owner,producerId,normalized.range,sources,`${extracted.model} (official-source range via AI Gateway)`);await completeRun(env.DB,owner,producerId,requestId,`Range refreshed from the producer's official website with ${extracted.model} · 0 Google searches · ${saved.catalogCount} wines`);console.log(JSON.stringify({event:'producer_range_phase2',stage:'complete',producerId,requestId,provider:extracted.provider,catalogCount:saved.catalogCount}));return {handled:true as const,provider:extracted.provider,catalogCount:saved.catalogCount};
 }
+
+// Shared by both hosting providers so crawling and evidence rules cannot drift.
+export { crawl as crawlOfficialRange,prompt as officialRangePrompt,safeHttps,host,sameOfficialSite,sourceArray };
