@@ -127,3 +127,14 @@ describe('producer research merge policy',()=>{
     expect(shouldRestorePreMerge('2026-08-18T02:00:01.000Z',mergedAt)).toBe(false);
   });
 });
+
+describe('official hostname grounding boundaries',()=>{
+  it.each(['https://domaine.example.attacker.test','https://domaine.example@attacker.test'])('rejects a misleading URL %s',url=>{
+    const result=extractContactGrounding('{"officialWebsiteUrl":"https://domaine.example/"}',{groundingChunks:[{web:{uri:'https://reference.example/'}}],groundingSupports:[{segment:{text:`Visit ${url}`},groundingChunkIndices:[0]}]});
+    expect(result.fields).not.toContain('officialWebsiteUrl');
+  });
+  it('does not widen other contact key matching to uppercase',()=>{
+    const result=extractContactGrounding('{"contactEmail":"mail@domaine.example"}',{groundingChunks:[{web:{uri:'https://reference.example/'}}],groundingSupports:[{segment:{text:'CONTACTEMAIL'},groundingChunkIndices:[0]}]});
+    expect(result.fields).not.toContain('contactEmail');
+  });
+});

@@ -280,7 +280,9 @@ async function saveProfile(env:Env,owner:string,producerId:string,requestId:stri
   const row=await env.DB.prepare('SELECT * FROM producers WHERE owner_id=? AND id=?').bind(owner,producerId).first<Record<string,unknown>>();if(!row)throw new Error('Producer not found');
   const contactGrounding=extractContactGrounding(text,metadata),grounded=new Set(contactGrounding.fields),parsedOfficial=safeHttpsUrl(profile.officialWebsiteUrl)?.toString()??null,parsedInstagram=safeInstagramUrl(profile.instagramUrl),parsedEmail=normalizeProducerEmail(profile.contactEmail),parsedPhone=normalizeProducerPhone(profile.contactPhone);
   const priorOfficial=row.official_website_url?String(row.official_website_url):null;
-  const official=(parsedOfficial&&(grounded.has('officialWebsiteUrl')||metadataGroundsUrl(parsedOfficial,metadata))?parsedOfficial:null)||priorOfficial;
+  const websiteVerified=Boolean(parsedOfficial&&(grounded.has('officialWebsiteUrl')||metadataGroundsUrl(parsedOfficial,metadata)));
+  log('log',{requestId,producerId,stage:'official_website_verification',outcome:parsedOfficial?(websiteVerified?'verified':'rejected'):'no_valid_candidate',...(parsedOfficial?{host:new URL(parsedOfficial).hostname}:{})});
+  const official=(websiteVerified?parsedOfficial:null)||priorOfficial;
   let siteContacts={email:null as string|null,phone:null as string|null,instagram:null as string|null,sources:[] as ResearchSource[]};
   if(official){try{siteContacts=await officialWebsiteContacts(official)}catch(e){log('warn',{requestId,producerId,stage:'official_contact_lookup_skipped',error:(e as Error).message})}}
   const instagram=siteContacts.instagram||(parsedInstagram&&grounded.has('instagramUrl')?parsedInstagram:null)||(row.instagram_url?String(row.instagram_url):null);

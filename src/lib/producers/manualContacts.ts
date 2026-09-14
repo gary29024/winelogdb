@@ -1,6 +1,6 @@
 export type ManualProducerContactType='email'|'phone'|'website'|'instagram'|'other';
 export type ManualProducerContact={id:string;type:ManualProducerContactType;label:string|null;value:string;note:string|null;createdAt:string;updatedAt:string};
-export type ManualProducerContactInput={type?:unknown;label?:unknown;value?:unknown;note?:unknown;official?:unknown};
+export type ManualProducerContactInput={type?:unknown;label?:unknown;value?:unknown;note?:unknown;official?:unknown;confirmation?:unknown};
 type ContactSource={title:string;url:string};
 
 type Row={id:string;producer_id:string;contact_type:ManualProducerContactType;label:string|null;value:string;note:string|null;created_at:string;updated_at:string};
@@ -44,8 +44,9 @@ export function prepareOfficialContactPromotion(contact:{type:ManualProducerCont
   const value=normalizeUrl(contact.value,contact.type==='instagram'),url=new URL(value);
   if(url.protocol!=='https:')throw new Error('Official contacts must use HTTPS');
   const title=contact.type==='website'?USER_CONFIRMED_WEBSITE_SOURCE:USER_CONFIRMED_INSTAGRAM_SOURCE;
-  const otherUserTitle=contact.type==='website'?USER_CONFIRMED_WEBSITE_SOURCE:USER_CONFIRMED_INSTAGRAM_SOURCE;
-  const sources=[{title,url:value},...existingSources.filter(source=>source.title!==otherUserTitle&&source.url!==value)].slice(0,10);
+  // This label records the assertion origin, even if research later verifies it.
+  // Reconfirmation replaces the previous marker of the same contact kind.
+  const sources=[{title,url:value},...existingSources.filter(source=>source.title!==title&&source.url!==value)].slice(0,10);
   return {type:contact.type,value,sources};
 }
 
@@ -76,6 +77,7 @@ export async function createManualProducerContact(db:D1Database,owner:string,pro
 export async function updateManualProducerContact(db:D1Database,owner:string,producerId:string,contactId:string,input:ManualProducerContactInput){
   const existing=await contactForProducer(db,owner,producerId,contactId);if(!existing)throw new Error('Supplementary contact not found');const contact=normalizeManualProducerContact(input),stamp=new Date().toISOString();
   if(input.official===true){
+    if(input.confirmation!=='CONFIRM_OFFICIAL_CONTACT')throw new Error('Official contact promotion requires explicit confirmation');
     const producer=await db.prepare('SELECT contact_sources_json FROM producers WHERE owner_id=? AND id=?').bind(owner,producerId).first<{contact_sources_json:string|null}>();if(!producer)throw new Error('Producer not found');
     const promoted=prepareOfficialContactPromotion(contact,parseSources(producer.contact_sources_json)),sources=JSON.stringify(promoted.sources);
     const update=promoted.type==='website'

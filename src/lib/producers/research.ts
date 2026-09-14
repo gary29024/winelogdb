@@ -74,7 +74,11 @@ function officialWebsiteHost(text:string){
 
 function segmentMentionsOfficialWebsite(segmentText:string,websiteHost:string){
   if(!segmentText||!websiteHost)return false;
-  return segmentText.includes(`https://${websiteHost}`)||segmentText.includes(`https://www.${websiteHost}`);
+  for(const match of segmentText.matchAll(/https:\/\/[^\s"'<>\\)\]}]+/g)){
+    const url=safeHttpsUrl(match[0]);
+    if(url?.hostname.toLowerCase().replace(/^www\./,'')===websiteHost)return true;
+  }
+  return false;
 }
 
 /**
@@ -140,8 +144,11 @@ export function extractContactGrounding(text:string,metadata?:GroundingMetadata)
     const segment=support.segment,segmentStart=segment?.startIndex,segmentEnd=segment?.endIndex,segmentText=segment?.text?.toLowerCase()??'';
     const touched=CONTACT_FIELDS.filter(field=>{
       const range=ranges.get(field);if(!range)return false;
-      if(Number.isFinite(segmentStart)&&Number.isFinite(segmentEnd)&&Number(segmentStart)<range.end&&Number(segmentEnd)>range.start)return true;
-      if(segmentText&&segmentText.includes(field.toLowerCase()))return true;
+      if(Number.isFinite(segmentStart)&&Number.isFinite(segmentEnd)){
+        const overlaps=Number(segmentStart)<range.end&&Number(segmentEnd)>range.start;
+        if(overlaps||field!=='officialWebsiteUrl')return overlaps;
+      }
+      if(segment?.text?.includes(field))return true;
       // Gemini structured responses do not always attach reliable byte/character
       // offsets to grounded JSON fields. For the official site only, recover the
       // link when the grounded claim text itself contains the exact returned

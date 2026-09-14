@@ -38,10 +38,11 @@ export function ProducerContacts({producer,onChanged}:Props){
  async function promote(contact:ManualProducerContact){
   if(saving||(contact.type!=='website'&&contact.type!=='instagram'))return;
   const label=contact.type==='website'?'official website':'official Instagram';
-  if(!confirm(`Use this as the producer's ${label}? It will move out of supplementary contacts.`))return;
+  const current=contact.type==='website'?producer.officialWebsiteUrl:producer.instagramUrl;
+  if(!confirm(`Use ${contact.value} as the producer's ${label}?${current?` This replaces ${current}.`:''} It will move out of supplementary contacts.`))return;
   setSaving(true);setLocalError('');
   try{
-   const input={type:contact.type,label:contact.label??'',value:contact.value,note:contact.note??'',official:true} as Parameters<typeof updateSupplementaryContact>[2]&{official:true};
+   const input:Parameters<typeof updateSupplementaryContact>[2]={type:contact.type,label:contact.label??'',value:contact.value,note:contact.note??'',official:true,confirmation:'CONFIRM_OFFICIAL_CONTACT'};
    await updateSupplementaryContact(producer.id,contact.id,input);await onChanged();if(editingId===contact.id)cancel();
   }catch(e){setLocalError((e as Error).message)}finally{setSaving(false)}
  }
@@ -58,6 +59,7 @@ export function ProducerContacts({producer,onChanged}:Props){
   <div className="producer-contact-group supplementary"><div className="producer-contact-group-title"><strong>Supplementary contacts</strong><small>Added by you · kept separate unless you mark Website/Instagram official</small></div>
    {producer.supplementaryContacts.length?<div className="producer-manual-contacts">{producer.supplementaryContacts.map(contact=><div className="producer-manual-contact" key={contact.id}><div className="producer-manual-contact-copy"><span>{contact.label||LABELS[contact.type]}</span><ContactValue type={contact.type} value={contact.value}/>{contact.note&&<small>{contact.note}</small>}</div><div className="producer-contact-actions">{(contact.type==='website'||contact.type==='instagram')&&<button type="button" disabled={saving} onClick={()=>void promote(contact)}>Use as official</button>}<button type="button" onClick={()=>startEdit(contact)}>Edit</button><button type="button" className="danger" onClick={()=>void remove(contact)}>Delete</button></div></div>)}</div>:<p className="producer-contact-empty">No supplementary contacts added.</p>}
   </div>
+  {localError&&!showForm&&<p className="producer-contact-form-error" role="alert">{localError}</p>}
   {showForm&&<div className="producer-contact-form"><div className="producer-contact-form-grid">
    <label><span>Type</span><select value={draft.type} onChange={e=>setDraft({...draft,type:e.target.value as ManualProducerContactType})}>{Object.entries(LABELS).map(([value,label])=><option key={value} value={value}>{label}</option>)}</select></label>
    <label><span>Label <em>optional</em></span><input value={draft.label} maxLength={80} placeholder="Appointments, importer, winemaker…" onChange={e=>setDraft({...draft,label:e.target.value})}/></label>
