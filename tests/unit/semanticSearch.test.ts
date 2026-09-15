@@ -53,7 +53,7 @@ describe('Journal semantic search helpers',()=>{
     expect(()=>decodeStoredEmbedding([0,256,0,0])).toThrow('invalid byte');
   });
 
-  it('persists normalized BLOBs, ranks them, executes hybrid SQL, and cascades deletes on real SQLite',async()=>{
+  it('persists normalized BLOBs, reuses query rankings, invalidates on index changes, and cascades deletes on real SQLite',async()=>{
     const state=migratedSqliteD1();databases.push(state);const {db,sqlite}=state;
     const insert=sqlite.prepare(`INSERT INTO wines(id,owner_id,producer,wine_name,vintage,country,region,appellation,grapes_json,wine_style,tasting_notes,rating,event,venue,tags_json,created_at,updated_at)
       VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`);
@@ -65,7 +65,7 @@ describe('Journal semantic search helpers',()=>{
     const run=vi.fn(async(_model:string,input:unknown)=>{
       const texts=(input as {text:string[]}).text;
       return {data:texts.map(text=>{
-        if(text==='floral elegant Burgundy')return basis(1,0);
+        if(text.trim().replace(/\s+/g,' ')==='floral elegant Burgundy')return basis(1,0);
         if(text.includes('Wine: Fleur'))return basis(3,0);
         if(text.includes('Wine: Silk'))return basis(4,3);
         return basis(0,2);
@@ -78,6 +78,7 @@ describe('Journal semantic search helpers',()=>{
     expect(run).not.toHaveBeenCalled();
 
     await warmSemanticWineIndex(env,'owner');
+    expect(run).toHaveBeenCalledTimes(1);
     const stored=sqlite.prepare('SELECT wine_id,dimensions,embedding FROM wine_semantic_embeddings ORDER BY wine_id').all() as Array<{wine_id:string;dimensions:number;embedding:Uint8Array}>;
     expect(stored).toHaveLength(3);
     expect(stored.every(row=>row.dimensions===1024&&row.embedding.byteLength===4096)).toBe(true);
@@ -89,10 +90,35 @@ describe('Journal semantic search helpers',()=>{
 
     const semantic=await semanticWineIds(env,'owner','floral elegant Burgundy');
     expect(semantic?.ids.slice(0,3)).toEqual(['w1','w2','w3']);
+    expect(run).toHaveBeenCalledTimes(2);
     const page=await listJournalPage(db,'owner',{query:'floral elegant Burgundy'},semantic?.ids??[]);
     expect(page.items.map(item=>item.id)).toEqual(['w1','w2','w3']);
 
+    // Back-navigation keeps the same semantic query in the Journal URL. A
+    // whitespace-equivalent query must reuse the ranked IDs rather than paying
+    // for another provider request or scanning every stored vector again.
+    const cached=await semanticWineIds(env,'owner','  floral   elegant Burgundy  ');
+    expect(cached?.ids.slice(0,3)).toEqual(['w1','w2','w3']);
+    expect(run).toHaveBeenCalledTimes(2);
+    expect(sqlite.prepare('SELECT count(*) AS n FROM wine_semantic_query_cache').get()).toMatchObject({n:1});
+
+    // A refreshed document vector advances the semantic-index revision. The old
+    // ranking stays in D1 but can no longer be read as current, so the next query
+    // is embedded once and then becomes the new reusable cache entry.
+    sqlite.prepare("UPDATE wines SET tasting_notes='earthy savoury structured floral',updated_at='2026-09-12' WHERE id='w3'").run();
+    await warmSemanticWineIndex(env,'owner');
+    expect(run).toHaveBeenCalledTimes(3);
+    const refreshed=await semanticWineIds(env,'owner','floral elegant Burgundy');
+    expect(refreshed?.ids.slice(0,3)).toEqual(['w1','w2','w3']);
+    expect(run).toHaveBeenCalledTimes(4);
+
+    // Deleting a wine cascades its vector and the migration trigger advances the
+    // same revision, preventing a cached candidate list from surviving deletion.
     sqlite.prepare("DELETE FROM wines WHERE id='w2'").run();
     expect(sqlite.prepare('SELECT count(*) AS n FROM wine_semantic_embeddings').get()).toMatchObject({n:2});
+    const afterDelete=await semanticWineIds(env,'owner','floral elegant Burgundy');
+    expect(afterDelete?.ids.slice(0,2)).toEqual(['w1','w3']);
+    expect(afterDelete?.ids).not.toContain('w2');
+    expect(run).toHaveBeenCalledTimes(5);
   });
 });
