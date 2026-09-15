@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { requireSession } from '../src/lib/auth/session';
 import { validateBatch } from '../src/features/uploads/validation';
-import { CHAMPAGNE_EXTRACTION_PROMPT,CHAMPAGNE_PHOTO_BYTES,CHAMPAGNE_PHOTO_LIMIT,isChampagne,type ChampagneExtractionStatus } from '../src/lib/wine/champagneExtraction';
+import { CHAMPAGNE_EXTRACTION_PROMPT,CHAMPAGNE_PHOTO_BYTES,CHAMPAGNE_PHOTO_LIMIT,isChampagne,normalizeChampagneDetails,type ChampagneExtractionStatus } from '../src/lib/wine/champagneExtraction';
 import { sparklingDetailsSchema } from '../src/lib/wine/sparklingDetails';
 import { RECOGNITION_MODEL,sparklingDetailsJsonSchema } from '../src/lib/recognition/geminiRequest';
 import { createGeminiBatch,fetchGeminiBatch,inlineResponseText,isTerminalBatchState,type GeminiInlineResponse } from '../src/lib/research/geminiBatch';
@@ -91,7 +91,8 @@ async function complete(env:Env,row:Row,inline:GeminiInlineResponse,tier:'batch'
   if(inline.error||!inline.response)throw new Error('Gemini could not extract these labels. Please retry with clearer photos.');
   if(inline.response.candidates?.[0]?.finishReason!=='STOP')throw new Error('The label extraction was incomplete. Please try again.');
   const parsed=resultSchema.parse(JSON.parse(inlineResponseText(inline)));
-  await env.DB.prepare("UPDATE wine_champagne_extractions SET status='complete',result_json=?,error=NULL,updated_at=? WHERE owner_id=? AND wine_id=? AND request_id=? AND status IN ('running','submitted')").bind(JSON.stringify(parsed),now(),row.owner_id,row.wine_id,row.request_id).run();
+  const normalized=resultSchema.parse({details:normalizeChampagneDetails(parsed.details)});
+  await env.DB.prepare("UPDATE wine_champagne_extractions SET status='complete',result_json=?,error=NULL,updated_at=? WHERE owner_id=? AND wine_id=? AND request_id=? AND status IN ('running','submitted')").bind(JSON.stringify(normalized),now(),row.owner_id,row.wine_id,row.request_id).run();
 }
 
 export async function processChampagneExtraction(env:Env,job:ChampagneExtractionJob){
