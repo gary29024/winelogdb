@@ -1,8 +1,8 @@
-import { useEffect,useRef,useState } from 'react';
+import { useEffect,useId,useRef,useState,type ReactNode } from 'react';
+import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
 import { CHAMPAGNE_PHOTO_LIMIT,missingChampagneDetails,type ChampagneExtractionStatus } from '../../lib/wine/champagneExtraction';
 import { hasSparklingDetails,type SparklingDetails } from '../../lib/wine/sparklingDetails';
-import { ImageLightbox } from '../../components/ImageLightbox';
 import { getChampagneExtraction,startChampagneExtraction } from './champagneExtractionApi';
 import { SparklingDetailsCard } from './SparklingDetailsCard';
 import { WineImage } from './WineImage';
@@ -12,11 +12,23 @@ import '../../sparklingDetails.css';
 type Props={wineId:string;imageIds:string[];details:SparklingDetails;onApply:(suggestions:SparklingDetails)=>void};
 const pending=(run:ChampagneExtractionStatus|null)=>Boolean(run&&['queued','running','submitted'].includes(run.status));
 
+function ExtractionDialog({children,onClose}:{children:ReactNode;onClose:()=>void}){
+  const ref=useRef<HTMLDialogElement>(null),titleId=useId();
+  useEffect(()=>{
+    const dialog=ref.current!,previousFocus=document.activeElement instanceof HTMLElement?document.activeElement:null,previousOverflow=document.body.style.overflow;
+    dialog.showModal();document.body.style.overflow='hidden';
+    return()=>{dialog.close();document.body.style.overflow=previousOverflow;if(previousFocus?.isConnected)previousFocus.focus()};
+  },[]);
+  return createPortal(<dialog ref={ref} className="champagne-extraction-dialog" aria-labelledby={titleId} onCancel={event=>{event.preventDefault();onClose()}} onClick={event=>{if(event.target===event.currentTarget)onClose()}}>
+    <div className="champagne-dialog-body"><div className="champagne-dialog-heading"><h2 id={titleId}>Champagne label details</h2><button type="button" className="quiet" onClick={onClose} aria-label="Close Champagne extraction">Close</button></div>{children}</div>
+  </dialog>,document.body);
+}
+
 export function ChampagnePhotoBackfill({wineId,imageIds,details,onApply}:Props){
+  const [open,setOpen]=useState(()=>window.location.hash==='#champagne-photos');
   const [selected,setSelected]=useState(()=>imageIds.slice(0,CHAMPAGNE_PHOTO_LIMIT)),[run,setRun]=useState<ChampagneExtractionStatus|null>(null),[busy,setBusy]=useState(false),[error,setError]=useState(''),[notice,setNotice]=useState(''),[lightbox,setLightbox]=useState<string>();
   const controller=useRef<AbortController|null>(null),previewController=useRef<AbortController|null>(null),previewUrl=useRef<string|undefined>(undefined);
   const waiting=pending(run),missing=missingChampagneDetails(details,run?.details),hasMissing=hasSparklingDetails(missing);
-  useEffect(()=>{if(window.location.hash==='#champagne-photos')document.getElementById('champagne-photos')?.scrollIntoView?.({block:'start'})},[]);
   useEffect(()=>{
     const abort=new AbortController();let timer:ReturnType<typeof setTimeout>|undefined;
     const refresh=async()=>{
@@ -43,21 +55,26 @@ export function ChampagnePhotoBackfill({wineId,imageIds,details,onApply}:Props){
       previewUrl.current=URL.createObjectURL(blob);setLightbox(previewUrl.current);
     }catch(e){if(!abort.signal.aborted)setError((e as Error).message)}
   }
-  return <section className="champagne-backfill" id="champagne-photos" aria-label="Backfill Champagne details">
-    <h3>Read details from saved photos</h3>
-    <p>Choose up to {CHAMPAGNE_PHOTO_LIMIT} labels from this same bottle, including the back and neck. Extraction runs in the background; you can leave and return to Edit to review the result.</p>
+  function close(){setOpen(false);setLightbox(undefined);previewController.current?.abort()}
+  return <div className="champagne-backfill" id="champagne-photos">
+    <button type="button" className="quiet champagne-backfill-trigger" aria-haspopup="dialog" onClick={()=>setOpen(true)}>{waiting?'Extraction status':run?.status==='complete'&&hasMissing?'Review extracted details':'Extract from photos'}</button>
+    {notice&&<small role="status">{notice}</small>}
+    {open&&<ExtractionDialog onClose={close}>
+    {lightbox?<div className="champagne-photo-preview"><button type="button" className="quiet" onClick={()=>setLightbox(undefined)}>Back to photo selection</button><img src={lightbox} alt="Saved Champagne label"/></div>:<>
+    <p>Choose up to {CHAMPAGNE_PHOTO_LIMIT} labels from this bottle. Include the back and neck where possible, then confirm the photos to scan.</p>
     {imageIds.length===0?<p><Link to={`/wines/${wineId}`}>Add bottle photos on the wine page</Link> to extract its release details.</p>:<div className="champagne-photo-picker">{imageIds.map((id,index)=><div key={id}>
       <button type="button" onClick={()=>void preview(id)} aria-label={`Enlarge saved photo ${index+1}`}><WineImage imageId={id} alt={`Saved label ${index+1}`}/></button>
       <label><input type="checkbox" checked={selected.includes(id)} disabled={busy||waiting||(!selected.includes(id)&&selected.length>=CHAMPAGNE_PHOTO_LIMIT)} onChange={e=>setSelected(ids=>e.target.checked?[...ids,id]:ids.filter(value=>value!==id))}/>Photo {index+1}</label>
     </div>)}</div>}
-    <button type="button" disabled={busy||waiting||!selected.length} onClick={()=>void start()}>{busy?'Preparing photos…':waiting?'Extraction queued…':run?'Extract again from selected photos':'Extract Champagne details'}</button>
+    <button type="button" className="primary" disabled={busy||waiting||!selected.length} onClick={()=>void start()}>{busy?'Preparing photos…':waiting?'Extraction queued…':`Confirm ${selected.length} photo${selected.length===1?'':'s'} & extract`}</button>
     {waiting&&<p role="status">Processing in the background. Batch processing can take up to 24 hours. Nothing is saved to the wine automatically.</p>}
     {run?.status==='failed'&&<p role="alert">{run.error||'Extraction failed. Please try again.'}</p>}
     {run?.status==='complete'&&<div className="champagne-suggestions">
       <p>Result source photos: {run.imageIds.map((id,index)=>imageIds.includes(id)?<button type="button" key={id} onClick={()=>void preview(id)}>Photo {imageIds.indexOf(id)+1}</button>:<span key={id}>Photo {index+1} (removed)</span>)}</p>
-      {hasMissing?<><p>Review these missing-field suggestions against the photos before adding them. Existing values are preserved.</p><SparklingDetailsCard details={missing}/><button type="button" onClick={()=>{onApply(missing);setNotice('Suggestions added to the form. Review the fields below, then Save to keep them.')}}>Add suggestions to form</button></>:<p role="status">{hasSparklingDetails(run.details)?'No additional missing fields were found.':'No release details were readable. Try clearer back or neck label photos.'}</p>}
+      {hasMissing?<><p>Review these missing-field suggestions against the photos before adding them. Existing values are preserved.</p><SparklingDetailsCard details={missing}/><button type="button" onClick={()=>{onApply(missing);setNotice('Details added — Save wine to keep them.');close()}}>Add suggestions to form</button></>:<p role="status">{hasSparklingDetails(run.details)?'No additional missing fields were found.':'No release details were readable. Try clearer back or neck label photos.'}</p>}
     </div>}
-    {notice&&<p role="status">{notice}</p>}{error&&<p role="alert">{error}</p>}
-    {lightbox&&<ImageLightbox src={lightbox} alt="Saved Champagne label" onClose={()=>setLightbox(undefined)}/>}
-  </section>;
+    {error&&<p role="alert">{error}</p>}
+    </>}
+    </ExtractionDialog>}
+  </div>;
 }
