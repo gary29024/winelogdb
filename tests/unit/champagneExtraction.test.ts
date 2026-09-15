@@ -2,7 +2,7 @@ import { afterEach,describe,expect,it,vi } from 'vitest';
 import app from '../../worker/structureEntry';
 import { createSession } from '../../src/lib/auth/session';
 import { migratedSqliteD1 } from './support/sqliteD1';
-import { isChampagne,missingChampagneDetails,type ChampagneExtractionStatus } from '../../src/lib/wine/champagneExtraction';
+import { isChampagne,missingChampagneDetails,normalizeChampagneDetails,type ChampagneExtractionStatus } from '../../src/lib/wine/champagneExtraction';
 import type { ChampagneExtractionJob } from '../../worker/champagneExtraction';
 import { postGeminiGenerateContent } from '../../worker/geminiTransport';
 import { createGeminiBatch,fetchGeminiBatch } from '../../src/lib/research/geminiBatch';
@@ -84,6 +84,17 @@ describe('Champagne eligibility and non-destructive suggestions',()=>{
   it('preserves zero and existing text while filling only missing values',()=>{
     expect(missingChampagneDetails({dosageGPerL:0,disgorgement:'Original'},{dosageGPerL:3,disgorgement:'Changed',tirage:'2020',lotCode:' '})).toEqual({tirage:'2020'});
   });
+  it('normalizes label typography and common French technical text for the English form',()=>{
+    expect(normalizeChampagneDetails({
+      dosageCategory:'EXTRA BRUT',disgorgement:'JANVIER 2022',tirage:'NOVEMBRE 2020',
+      assemblage:'pinot noir (60%) chardonnay (30%) pinot blanc (10%)',
+      reserveWineDetail:'réserve perpétuelle (2010–2018)',otherTechnicalDetails:'récolte 2019 (80%)',lotCode:'  L22A  '
+    })).toMatchObject({
+      dosageCategory:'Extra Brut',disgorgement:'January 2022',tirage:'November 2020',
+      assemblage:'Pinot Noir (60%) Chardonnay (30%) Pinot Blanc (10%)',
+      reserveWineDetail:'Perpetual reserve (2010–2018)',otherTechnicalDetails:'Harvest 2019 (80%)',lotCode:'L22A'
+    });
+  });
 });
 
 describe('Champagne extraction through the deployed entrypoint',()=>{
@@ -98,7 +109,7 @@ describe('Champagne extraction through the deployed entrypoint',()=>{
     expect((await s.request()).status).toBe(400);
     expect(s.jobs).toHaveLength(0);expect(s.objects.size).toBe(0);
   });
-  it('queues once, persists a Flex result, meters it once, and never edits the wine',async()=>{
+  it('queues once, persists a Flex result, meters it once as Champagne extraction, and never edits the wine',async()=>{
     const s=setup();
     vi.mocked(postGeminiGenerateContent).mockResolvedValue({provider:'vertex-ai-gateway',response:new Response(JSON.stringify(reply({dosageGPerL:3,tirage:'2020'})))});
     expect((await s.request()).status).toBe(202);
@@ -112,7 +123,9 @@ describe('Champagne extraction through the deployed entrypoint',()=>{
     expect(JSON.parse(call[2])).not.toHaveProperty('tools');
     expect(await s.status()).toMatchObject({status:'complete',details:{dosageGPerL:3,tirage:'2020'}});
     expect(s.sqlite.prepare('SELECT details_json FROM wine_sparkling_details').get()).toMatchObject({details_json:'{"dosageGPerL":0}'});
-    expect(s.sqlite.prepare('SELECT tier,requests FROM ai_usage_events').all()).toEqual([expect.objectContaining({tier:'flex',requests:1})]);
+    expect(s.sqlite.prepare('SELECT kind,target_id,tier,requests FROM ai_usage_events').all()).toEqual([
+      expect.objectContaining({kind:'champagne_extraction',target_id:'w',tier:'flex',requests:1})
+    ]);
     expect(s.objects.size).toBe(0);
   });
   it('submits native Batch once and resumes polling without resubmission',async()=>{
@@ -125,7 +138,7 @@ describe('Champagne extraction through the deployed entrypoint',()=>{
     await s.process();await s.process();
     expect(createGeminiBatch).toHaveBeenCalledTimes(1);
     expect(await s.status()).toMatchObject({status:'complete',details:{disgorgement:'03/2024'}});
-    expect(s.sqlite.prepare('SELECT tier FROM ai_usage_events').get()).toMatchObject({tier:'batch'});
+    expect(s.sqlite.prepare('SELECT kind,tier FROM ai_usage_events').get()).toMatchObject({kind:'champagne_extraction',tier:'batch'});
   });
   it('records malformed paid responses as failed and permits explicit retry',async()=>{
     const s=setup();vi.mocked(postGeminiGenerateContent).mockResolvedValue({provider:'vertex-ai-gateway',response:new Response(JSON.stringify(reply({dosageGPerL:-3})))});
