@@ -11,6 +11,7 @@ import '../../sparklingDetails.css';
 
 type Props={wineId:string;imageIds:string[];details:SparklingDetails;onApply:(suggestions:SparklingDetails)=>void};
 const pending=(run:ChampagneExtractionStatus|null)=>Boolean(run&&['queued','running','submitted'].includes(run.status));
+const sourceLabels={dosageCategory:'Dosage category',disgorgement:'Disgorgement',tirage:'Tirage',assemblage:'Assemblage',reserveWineDetail:'Reserve wines',malolactic:'Malolactic',fermentationElevage:'Fermentation / élevage',otherTechnicalDetails:'Other details'};
 
 function ExtractionDialog({children,onClose}:{children:ReactNode;onClose:()=>void}){
   const ref=useRef<HTMLDialogElement>(null),titleId=useId();
@@ -80,7 +81,10 @@ export function ChampagnePhotoBackfill({wineId,imageIds,details,onApply}:Props){
     {run?.status==='failed'&&<p role="alert">{run.error||'Extraction failed. Please try again.'}</p>}
     {run?.status==='complete'&&<div className="champagne-suggestions">
       <p>Result source photos: {run.imageIds.map((id,index)=>imageIds.includes(id)?<button type="button" key={id} onClick={()=>void preview(id)}>Photo {imageIds.indexOf(id)+1}</button>:<span key={id}>Photo {index+1} (removed)</span>)}</p>
-      {hasMissing?<><p>Review these missing-field suggestions against the photos before adding them. Existing values are preserved.</p><SparklingDetailsCard details={missing}/><button type="button" onClick={()=>{onApply(missing);setNotice('Details added — Save wine to keep them.');close()}}>Add suggestions to form</button></>:<p role="status">{hasSparklingDetails(run.details)?'No additional missing fields were found.':'No release details were readable. Try clearer back or neck label photos.'}</p>}
+      {Boolean(run.reviewFields?.length)&&<p role="status">Some wording needs translation review and is excluded from suggestions: {run.reviewFields!.map(field=>sourceLabels[field]).join(', ')}. Check the label and enter these fields manually.</p>}
+      {Object.keys(run.sourceText??{}).length>0&&<details><summary>Original label wording</summary><dl>{Object.entries(run.sourceText??{}).map(([field,text])=><div key={field}><dt>{sourceLabels[field as keyof typeof sourceLabels]}</dt><dd>{text}</dd></div>)}</dl></details>}
+      {Object.keys(run.reviewText??{}).length>0&&<details><summary>Unconfirmed extracted text</summary><dl>{Object.entries(run.reviewText??{}).map(([field,text])=><div key={field}><dt>{sourceLabels[field as keyof typeof sourceLabels]}</dt><dd>{text}</dd></div>)}</dl></details>}
+      {hasMissing?<><p>Review these missing-field suggestions against the photos before adding them. Existing values are preserved.</p><SparklingDetailsCard details={missing}/><button type="button" onClick={()=>{onApply(missing);setNotice('Details added — Save wine to keep them.');close()}}>Add suggestions to form</button></>:<p role="status">{run.reviewFields?.length?'Review the original wording above; no additional suggestions are ready to add.':hasSparklingDetails(run.details)?'No additional missing fields were found.':'No release details were readable. Try clearer back or neck label photos.'}</p>}
     </div>}
     {error&&<p role="alert">{error}</p>}
     </>}

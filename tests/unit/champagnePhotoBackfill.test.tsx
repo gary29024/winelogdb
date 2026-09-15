@@ -27,6 +27,20 @@ async function render(run:ChampagneExtractionStatus|null,details:SparklingDetail
 }
 const button=(text:string)=>[...document.querySelectorAll('button')].find(node=>node.textContent===text)!;
 const open=async()=>{await act(async()=>{const trigger=host.querySelector('button')!;trigger.focus();trigger.click()})};
+it('shows literal wording and review notices while applying only ready suggestions',async()=>{
+  const {onApply}=await render({...completed,details:{dosageGPerL:3,malolactic:null},sourceText:{malolactic:'MALOLACTIQUE NON SOUHAITÉE'},reviewFields:['malolactic']},{});
+  await open();
+  expect(document.body.textContent).toContain('MALOLACTIQUE NON SOUHAITÉE');
+  expect(document.body.textContent).toContain('excluded from suggestions: Malolactic');
+  await act(async()=>button('Add suggestions to form').click());
+  expect(onApply).toHaveBeenCalledWith({dosageGPerL:3});
+});
+it('does not call an uncertain-only result unreadable',async()=>{
+  await render({...completed,details:null,sourceText:{malolactic:'MALOLACTIQUE ...'},reviewFields:['malolactic']},{});
+  await open();
+  expect(document.body.textContent).toContain('no additional suggestions are ready');
+  expect(document.body.textContent).not.toContain('No release details were readable');
+});
 it('restores completed suggestions on return and applies only missing fields on explicit click',async()=>{
   const {onApply}=await render(completed);
   await open();
