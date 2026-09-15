@@ -1,8 +1,9 @@
+import { champagneResponseJsonSchema,champagneFailureDiagnostics,ChampagneResponseError } from './champagneResponse';
 import { z } from 'zod';
 import { requireSession } from '../src/lib/auth/session';
 import { validateBatch } from '../src/features/uploads/validation';
-import { CHAMPAGNE_EXTRACTION_PROMPT,CHAMPAGNE_PHOTO_BYTES,CHAMPAGNE_PHOTO_LIMIT,isChampagne,prepareChampagneResult,champagneTextFields,champagneResultSchema,type ChampagneExtractionStatus } from '../src/lib/wine/champagneExtraction';
-import { RECOGNITION_MODEL,sparklingDetailsJsonSchema } from '../src/lib/recognition/geminiRequest';
+import { CHAMPAGNE_EXTRACTION_PROMPT,CHAMPAGNE_PHOTO_BYTES,CHAMPAGNE_PHOTO_LIMIT,isChampagne,prepareChampagneResult,champagneFailureDiagnosticsSchema,champagneResultSchema,type ChampagneExtractionStatus } from '../src/lib/wine/champagneExtraction';
+import { RECOGNITION_MODEL } from '../src/lib/recognition/geminiRequest';
 import { createGeminiBatch,fetchGeminiBatch,inlineResponseText,isTerminalBatchState,type GeminiInlineResponse } from '../src/lib/research/geminiBatch';
 import { geminiCallTokens,recordAiUsage,type AnalyticsSink } from '../src/lib/usage/aiUsage';
 import { postGeminiGenerateContent,resolveGeminiTransport,type GeminiTransportBindings } from './geminiTransport';
@@ -10,15 +11,15 @@ import { postGeminiGenerateContent,resolveGeminiTransport,type GeminiTransportBi
 type Env=GeminiTransportBindings&{DB:D1Database;WINE_IMAGES:R2Bucket;AUTH_SECRET:string;RESEARCH_QUEUE:Queue<unknown>;AI_USAGE?:AnalyticsSink};
 export type ChampagneExtractionJob={kind:'champagne_extraction';owner:string;wineId:string;requestId:string;cleanup?:boolean};
 type Row={owner_id:string;wine_id:string;request_id:string;status:ChampagneExtractionStatus['status'];request_key:string;image_ids_json:string;batch_name:string|null;result_json:string|null;error:string|null;created_at:string;updated_at:string};
-const resultSchema=champagneResultSchema;
+const resultSchema=champagneResultSchema.extend({diagnostics:champagneFailureDiagnosticsSchema.optional()});
 const now=()=>new Date().toISOString();
 const keyFor=(id:string)=>`champagne-extraction/${id}.json`;
 const json=(body:unknown,status=200)=>new Response(JSON.stringify(body),{status,headers:{'Content-Type':'application/json','Cache-Control':'no-store'}});
 const readRow=(db:D1Database,owner:string,wineId:string)=>db.prepare('SELECT * FROM wine_champagne_extractions WHERE owner_id=? AND wine_id=?').bind(owner,wineId).first<Row>();
 const statusOf=(row:Row):ChampagneExtractionStatus=>({requestId:row.request_id,status:row.status,...(row.result_json?resultSchema.parse(JSON.parse(row.result_json)):{details:null}),error:row.error,imageIds:JSON.parse(row.image_ids_json) as string[]});
 const wineFor=(db:D1Database,owner:string,wineId:string)=>db.prepare('SELECT region,appellation,wine_style AS wineStyle FROM wines WHERE owner_id=? AND id=?').bind(owner,wineId).first<{region:string|null;appellation:string|null;wineStyle:string|null}>();
-async function fail(env:Env,row:Row,message:string){
-  await env.DB.prepare("UPDATE wine_champagne_extractions SET status='failed',error=?,updated_at=? WHERE owner_id=? AND wine_id=? AND request_id=? AND status NOT IN ('complete','failed')").bind(message,now(),row.owner_id,row.wine_id,row.request_id).run();
+async function fail(env:Env,row:Row,message:string,diagnostics?:ChampagneExtractionStatus['diagnostics']){
+  await env.DB.prepare("UPDATE wine_champagne_extractions SET status='failed',error=?,result_json=?,updated_at=? WHERE owner_id=? AND wine_id=? AND request_id=? AND status NOT IN ('complete','failed')").bind(message,diagnostics?JSON.stringify({details:null,diagnostics}):null,now(),row.owner_id,row.wine_id,row.request_id).run();
 }
 async function base64(file:File){
   const bytes=new Uint8Array(await file.arrayBuffer());let binary='';
@@ -65,7 +66,7 @@ export async function handleChampagneExtraction(request:Request,env:Env):Promise
     const parts=[{text:CHAMPAGNE_EXTRACTION_PROMPT},...await Promise.all(files.map(async file=>({inlineData:{data:await base64(file),mimeType:file.type}})))];
     // English details plus literal evidence need more room than the old details-only
     // response. Keep thinking minimal and leave headroom for both in one request.
-    const body={contents:[{role:'user',parts}],generationConfig:{responseMimeType:'application/json',responseJsonSchema:{type:'object',properties:{details:sparklingDetailsJsonSchema,sourceText:{type:'object',properties:Object.fromEntries(champagneTextFields.map(field=>[field,{type:'string',maxLength:4000}])),additionalProperties:false},reviewFields:{type:'array',items:{type:'string',enum:champagneTextFields},maxItems:champagneTextFields.length}},required:['details','sourceText','reviewFields'],additionalProperties:false},maxOutputTokens:8192,thinkingConfig:{thinkingLevel:'minimal'}}};
+    const body={contents:[{role:'user',parts}],generationConfig:{responseMimeType:'application/json',responseJsonSchema:champagneResponseJsonSchema,maxOutputTokens:8192,thinkingConfig:{thinkingLevel:'minimal'}}};
     await env.WINE_IMAGES.put(requestKey,JSON.stringify(body),{httpMetadata:{contentType:'application/json'}});
     const saved=await env.DB.prepare(`INSERT INTO wine_champagne_extractions(owner_id,wine_id,request_id,status,request_key,image_ids_json,created_at,updated_at)
       VALUES(?,?,?,'queued',?,?,?,?) ON CONFLICT(owner_id,wine_id) DO UPDATE SET request_id=excluded.request_id,status='queued',request_key=excluded.request_key,image_ids_json=excluded.image_ids_json,batch_name=NULL,result_json=NULL,error=NULL,created_at=excluded.created_at,updated_at=excluded.updated_at
@@ -94,10 +95,12 @@ async function complete(env:Env,row:Row,inline:GeminiInlineResponse,tier:'batch'
   if(finishReason!=='STOP'){
     const usage=inline.response.usageMetadata;
     console.warn(JSON.stringify({event:'champagne-extraction-incomplete',requestId:row.request_id,finishReason:finishReason??'missing',promptTokens:usage?.promptTokenCount,outputTokens:usage?.candidatesTokenCount,thoughtTokens:usage?.thoughtsTokenCount}));
-    if(finishReason==='MAX_TOKENS')throw new Error('The AI reached its response limit before finishing the label details. This attempt is included in AI spend, but no details were saved. Try again with only the clearest back and neck labels.');
-    throw new Error('The AI stopped before completing the label details. This attempt is included in AI spend, but no details were saved. Please try again.');
+    if(finishReason==='MAX_TOKENS')throw new ChampagneResponseError('The AI reached its response limit before finishing the label details. This attempt is included in AI spend, but no details were saved. Try again with only the clearest back and neck labels.',champagneFailureDiagnostics(inline));
+    throw new ChampagneResponseError('The AI stopped before completing the label details. This attempt is included in AI spend, but no details were saved. Please try again.',champagneFailureDiagnostics(inline));
   }
-  const normalized=prepareChampagneResult(JSON.parse(inlineResponseText(inline)));
+  let normalized;
+  try{normalized=prepareChampagneResult(JSON.parse(inlineResponseText(inline)))}
+  catch{throw new ChampagneResponseError('The AI returned invalid label details. No details were saved. Please try again.',champagneFailureDiagnostics(inline))}
   await env.DB.prepare("UPDATE wine_champagne_extractions SET status='complete',result_json=?,error=NULL,updated_at=? WHERE owner_id=? AND wine_id=? AND request_id=? AND status IN ('running','submitted')").bind(JSON.stringify(normalized),now(),row.owner_id,row.wine_id,row.request_id).run();
 }
 
@@ -149,7 +152,7 @@ export async function processChampagneExtraction(env:Env,job:ChampagneExtraction
     }
   }catch(error){
     console.error(JSON.stringify({event:'champagne-extraction-failed',requestId:row.request_id,error:String(error)}));
-    await fail(env,row,error instanceof z.ZodError?'The extracted details were invalid. Please try again with clearer photos.':error instanceof Error?error.message:'Extraction failed. Please try again.');
+    await fail(env,row,error instanceof z.ZodError?'The extracted details were invalid. Please try again with clearer photos.':error instanceof Error?error.message:'Extraction failed. Please try again.',error instanceof ChampagneResponseError?error.diagnostics:undefined);
   }finally{
     // Native Batch already holds its input; Flex has finished reading it.
     if(cleanInput)await env.WINE_IMAGES.delete(key).catch(()=>undefined);

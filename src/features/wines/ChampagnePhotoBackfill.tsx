@@ -79,6 +79,7 @@ export function ChampagnePhotoBackfill({wineId,imageIds,details,onApply}:Props){
     <button type="button" className="primary" disabled={busy||waiting||!selected.length} onClick={()=>void start()}>{busy?'Preparing photos…':waiting?'Extraction queued…':`Confirm ${selected.length} photo${selected.length===1?'':'s'} & extract`}</button>
     {waiting&&<p role="status">Processing in the background. Batch processing can take up to 24 hours. Nothing is saved to the wine automatically.</p>}
     {run?.status==='failed'&&<p role="alert">{run.error||'Extraction failed. Please try again.'}</p>}
+    {run?.status==='failed'&&run.diagnostics&&<details><summary>Failure diagnostics</summary><p>Partial AI output for troubleshooting only. It has not been added to the wine. These details are replaced when you start another extraction.</p><pre style={{whiteSpace:'pre-wrap',overflowWrap:'anywhere'}}>{JSON.stringify({requestId:run.requestId,...run.diagnostics},null,2)}</pre></details>}
     {run?.status==='complete'&&<div className="champagne-suggestions">
       <p>Result source photos: {run.imageIds.map((id,index)=>imageIds.includes(id)?<button type="button" key={id} onClick={()=>void preview(id)}>Photo {imageIds.indexOf(id)+1}</button>:<span key={id}>Photo {index+1} (removed)</span>)}</p>
       {Boolean(run.reviewFields?.length)&&<p role="status">Some wording needs translation review and is excluded from suggestions: {run.reviewFields!.map(field=>sourceLabels[field]).join(', ')}. Check the label and enter these fields manually.</p>}

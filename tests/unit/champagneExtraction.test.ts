@@ -190,9 +190,13 @@ describe('Champagne extraction through the deployed entrypoint',()=>{
     await s.process();await s.process();
     expect(await s.status()).toMatchObject({status:'failed',details:null,error:expect.stringContaining('response limit')});
     expect((await s.status())?.error).toContain('included in AI spend');
+    expect((await s.status())?.diagnostics).toMatchObject({finishReason:'MAX_TOKENS',outputTokens:4080,answerStart:response.candidates[0].content.parts[0].text,excerptTruncated:false});
+    expect((await s.request('GET','foreign')).status).toBe(404);
     expect(s.sqlite.prepare('SELECT count(*) AS n FROM ai_usage_events').get()).toMatchObject({n:1});
     expect(s.sqlite.prepare('SELECT details_json FROM wine_sparkling_details').get()).toMatchObject({details_json:'{"dosageGPerL":0}'});
     expect(flex?postGeminiGenerateContent:createGeminiBatch).toHaveBeenCalledTimes(1);
+    await s.request();
+    expect((await s.status())?.diagnostics).toBeUndefined();
   });
   it('keeps other stop reasons distinct from response-limit failures',async()=>{
     const s=setup(),response=reply({dosageGPerL:3});response.candidates[0].finishReason='SAFETY';

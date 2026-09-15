@@ -4,6 +4,13 @@ The model translates complete statements in the existing extraction request.
 Deterministic cleanup only formats whitespace, dosage categories and complete
 month/year values. Do not add producer phrases to a replacement dictionary.
 
+The provider response schema gives English strings and literal source phrases
+per-field length guidance and uses explicit null source fields. Gemini's
+responseJsonSchema does not support maxLength: these are descriptions, not hard
+generation bounds. Server validation still enforces saved field lengths. The
+prompt requests each fact once and excludes whole-label transcription. These are
+preventive measures, not evidence of why a previous response ran long.
+
 Results retain literal `sourceText`, translated `details`, and `reviewFields` in
 the existing extraction JSON. Uncertain or overlong text is withheld from bulk
 suggestions. Any withheld model output is retained separately as `reviewText`;
@@ -50,3 +57,10 @@ explicit minimal thinking to leave room for source evidence and English details.
 This raises the maximum possible response cost, not the number of requests.
 Responses that hit the limit remain failed rather than silently accepting partial
 details; their usage is still metered and the UI explains this distinction.
+
+Failed/incomplete or invalid model responses retain up to 4,000 characters of
+answer excerpts (first and last 2,000) with separate answer/thinking counts in the
+owner's existing extraction result JSON. Reported thought parts are excluded.
+These excerpts are not logged, added to the wine or treated as suggestions. They
+are visible under Failure diagnostics and replaced by the next extraction for
+that wine. Older failed runs without a saved response cannot be recovered.
