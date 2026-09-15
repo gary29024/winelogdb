@@ -154,6 +154,7 @@ describe('Champagne extraction through the deployed entrypoint',()=>{
     const call=vi.mocked(postGeminiGenerateContent).mock.calls[0];
     expect(call[1]).toBe('gemini-3.1-flash-lite');expect(call[5]).toMatchObject({serviceTier:'flex'});
     expect(JSON.parse(call[2])).not.toHaveProperty('tools');
+    expect(JSON.parse(call[2]).generationConfig).toMatchObject({maxOutputTokens:8192,thinkingConfig:{thinkingLevel:'minimal'}});
     expect(await s.status()).toMatchObject({status:'complete',details:{dosageGPerL:3,tirage:'Tirage during summer',malolactic:'Malolactic fermentation encouraged'}});
     expect(s.sqlite.prepare('SELECT details_json FROM wine_sparkling_details').get()).toMatchObject({details_json:'{"dosageGPerL":0}'});
     expect(s.sqlite.prepare('SELECT kind,target_id,tier,requests FROM ai_usage_events').all()).toEqual([
@@ -165,6 +166,7 @@ describe('Champagne extraction through the deployed entrypoint',()=>{
     const s=setup(false);vi.mocked(createGeminiBatch).mockResolvedValue('batches/test');
     vi.mocked(fetchGeminiBatch).mockResolvedValueOnce({ok:true,state:'JOB_STATE_PENDING',payload:{},responses:[]});
     await s.request();await s.process();expect(await s.status()).toMatchObject({status:'submitted'});
+    expect(vi.mocked(createGeminiBatch).mock.calls[0][3][0].request.generationConfig).toMatchObject({maxOutputTokens:8192,thinkingConfig:{thinkingLevel:'minimal'}});
     await s.process();
     const run=(await s.status())!;
     vi.mocked(fetchGeminiBatch).mockResolvedValue({ok:true,state:'JOB_STATE_SUCCEEDED',payload:{},responses:[{metadata:{key:run.requestId},response:reply({disgorgement:'03/2024'})}]});
@@ -172,6 +174,32 @@ describe('Champagne extraction through the deployed entrypoint',()=>{
     expect(createGeminiBatch).toHaveBeenCalledTimes(1);
     expect(await s.status()).toMatchObject({status:'complete',details:{disgorgement:'03/2024'}});
     expect(s.sqlite.prepare('SELECT kind,tier FROM ai_usage_events').get()).toMatchObject({kind:'champagne_extraction',tier:'batch'});
+  });
+  it.each([true,false])('explains a token-limited response without applying partial details (Flex=%s)',async flex=>{
+    const s=setup(flex),response=reply({dosageGPerL:3});
+    response.candidates[0].finishReason='MAX_TOKENS';
+    response.usageMetadata={promptTokenCount:2933,candidatesTokenCount:4080};
+    if(flex){
+      vi.mocked(postGeminiGenerateContent).mockResolvedValue({provider:'vertex-ai-gateway',response:new Response(JSON.stringify(response))});
+      await s.request();
+    }else{
+      vi.mocked(createGeminiBatch).mockResolvedValue('batches/limited');
+      await s.request();await s.process();
+      vi.mocked(fetchGeminiBatch).mockResolvedValue({ok:true,state:'JOB_STATE_SUCCEEDED',payload:{},responses:[{metadata:{key:(await s.status())!.requestId},response}]});
+    }
+    await s.process();await s.process();
+    expect(await s.status()).toMatchObject({status:'failed',details:null,error:expect.stringContaining('response limit')});
+    expect((await s.status())?.error).toContain('included in AI spend');
+    expect(s.sqlite.prepare('SELECT count(*) AS n FROM ai_usage_events').get()).toMatchObject({n:1});
+    expect(s.sqlite.prepare('SELECT details_json FROM wine_sparkling_details').get()).toMatchObject({details_json:'{"dosageGPerL":0}'});
+    expect(flex?postGeminiGenerateContent:createGeminiBatch).toHaveBeenCalledTimes(1);
+  });
+  it('keeps other stop reasons distinct from response-limit failures',async()=>{
+    const s=setup(),response=reply({dosageGPerL:3});response.candidates[0].finishReason='SAFETY';
+    vi.mocked(postGeminiGenerateContent).mockResolvedValue({provider:'vertex-ai-gateway',response:new Response(JSON.stringify(response))});
+    await s.request();await s.process();
+    expect(await s.status()).toMatchObject({status:'failed',details:null,error:expect.stringContaining('AI stopped')});
+    expect((await s.status())?.error).not.toContain('response limit');
   });
   it('records malformed paid responses as failed and permits explicit retry',async()=>{
     const s=setup();vi.mocked(postGeminiGenerateContent).mockResolvedValue({provider:'vertex-ai-gateway',response:new Response(JSON.stringify(reply({dosageGPerL:-3})))});
