@@ -288,6 +288,7 @@ describe('every path that spends money is metered',()=>{
     ['worker/batchRecognition.ts',"kind:'scan_batch'"],
     ['worker/groupRecognitionHandler.ts',"kind:'scan_group'"],
     ['worker/sheetRecognitionHandler.ts',"kind:'scan_sheet'"],
+    ['worker/champagneExtraction.ts',"kind:'champagne_extraction'"],
     ['worker/bottleFrameHandler.ts',"kind:'bottle_frame'"],
     ['worker/vintageWindowHandler.ts',"kind:'vintage_window'"],
     ['src/lib/journal/semanticSearch.ts',"kind:'search_embedding'"]
