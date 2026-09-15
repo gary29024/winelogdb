@@ -19,6 +19,7 @@ type SemanticWineRow={
   classification:string|null;grapes_json:string;wine_style:string|null;tasting_notes:string|null;rating:number|null;event:string|null;venue:string|null;tags_json:string;updated_at:string;
 };
 type StoredEmbeddingRow={wine_id:string;embedding:unknown;dimensions:number};
+type SemanticQueryCacheRow={result_ids_json:string;max_results:number};
 export type SemanticVectorCandidate={id:string;vector:ArrayLike<number>};
 type MeterContext={owner:string;runId:string;targetId:'journal-query'|'journal-index'};
 
@@ -29,9 +30,11 @@ const GEMINI_DIMENSIONS=768;
 const WARM_SLICE=64;
 const BACKGROUND_BACKFILL=192;
 const EMBED_BATCH=24;
+const QUERY_CACHE_TTL_MS=30*60*1000;
 
 const jsonList=(value:unknown)=>{try{const parsed=JSON.parse(String(value));return Array.isArray(parsed)?parsed.map(String).filter(Boolean):[]}catch{return [] as string[]}};
 const clamp=(value:number,min:number,max:number)=>Math.min(Math.max(value,min),max);
+const normalizeSemanticQuery=(query:string)=>query.normalize('NFKC').trim().replace(/\s+/g,' ');
 
 export function buildWineSemanticDocument(row:Partial<SemanticWineRow>){
   const grapes=jsonList(row.grapes_json??'[]'),tags=jsonList(row.tags_json??'[]');
@@ -169,14 +172,65 @@ async function staleWineRows(db:D1Database,owner:string,config:EmbeddingConfig,l
   return result.results;
 }
 
+async function semanticIndexRevision(db:D1Database,owner:string,config:EmbeddingConfig){
+  const row=await db.prepare(`SELECT revision FROM wine_semantic_index_state WHERE owner_id=? AND model_key=?`)
+    .bind(owner,config.modelKey).first<{revision:number}>();
+  return Math.max(0,Number(row?.revision)||0);
+}
+
+async function cachedSemanticIds(db:D1Database,owner:string,config:EmbeddingConfig,queryKey:string,indexRevision:number,limit:number){
+  if(!queryKey)return null;
+  const cutoff=new Date(Date.now()-QUERY_CACHE_TTL_MS).toISOString();
+  try{
+    const row=await db.prepare(`SELECT result_ids_json,max_results
+      FROM wine_semantic_query_cache
+      WHERE owner_id=? AND model_key=? AND query_key=? AND index_revision=? AND updated_at>=?`)
+      .bind(owner,config.modelKey,queryKey,indexRevision,cutoff).first<SemanticQueryCacheRow>();
+    if(!row||Number(row.max_results)<Math.max(1,limit))return null;
+    const ids=JSON.parse(row.result_ids_json);
+    return Array.isArray(ids)&&ids.every(id=>typeof id==='string')?ids.slice(0,Math.max(1,limit)):null;
+  }catch(error){
+    console.warn(JSON.stringify({event:'semantic-query-cache-read-failed',error:(error as Error).message}));
+    return null;
+  }
+}
+
+async function cacheSemanticIds(env:SemanticEnv,owner:string,config:EmbeddingConfig,queryKey:string,indexRevision:number,ids:string[],limit:number){
+  if(!queryKey)return;
+  const stamp=new Date().toISOString(),cutoff=new Date(Date.now()-QUERY_CACHE_TTL_MS).toISOString(),maxResults=Math.max(1,limit);
+  try{
+    await env.DB.batch([
+      env.DB.prepare(`DELETE FROM wine_semantic_query_cache WHERE owner_id=? AND model_key=? AND (updated_at<? OR index_revision<>?)`)
+        .bind(owner,config.modelKey,cutoff,indexRevision),
+      env.DB.prepare(`INSERT INTO wine_semantic_query_cache(owner_id,model_key,query_key,index_revision,max_results,result_ids_json,updated_at)
+        VALUES(?,?,?,?,?,?,?)
+        ON CONFLICT(owner_id,model_key,query_key) DO UPDATE SET
+          index_revision=excluded.index_revision,
+          max_results=excluded.max_results,
+          result_ids_json=excluded.result_ids_json,
+          updated_at=excluded.updated_at`)
+        .bind(owner,config.modelKey,queryKey,indexRevision,maxResults,JSON.stringify(ids),stamp)
+    ]);
+  }catch(error){
+    // Query caching is an optimization only. A cache write must never turn an
+    // otherwise successful semantic search into an error/fallback.
+    console.warn(JSON.stringify({event:'semantic-query-cache-write-failed',error:(error as Error).message}));
+  }
+}
+
 async function refreshSemanticIndex(env:SemanticEnv,owner:string,config:EmbeddingConfig,limit:number,runId:string){
   const pending=await staleWineRows(env.DB,owner,config,limit),rows=pending.slice(0,limit);
   for(let start=0;start<rows.length;start+=EMBED_BATCH){
     const chunk=rows.slice(start,start+EMBED_BATCH),vectors=await embedTexts(env,config,chunk.map(buildWineSemanticDocument),'document',{owner,runId,targetId:'journal-index'}),stamp=new Date().toISOString();
-    await env.DB.batch(chunk.map((row,index)=>env.DB.prepare(`INSERT INTO wine_semantic_embeddings(owner_id,wine_id,model_key,dimensions,source_updated_at,embedding,updated_at)
+    const vectorStatements=chunk.map((row,index)=>env.DB.prepare(`INSERT INTO wine_semantic_embeddings(owner_id,wine_id,model_key,dimensions,source_updated_at,embedding,updated_at)
       VALUES(?,?,?,?,?,?,?)
       ON CONFLICT(owner_id,wine_id,model_key) DO UPDATE SET dimensions=excluded.dimensions,source_updated_at=excluded.source_updated_at,embedding=excluded.embedding,updated_at=excluded.updated_at`)
-      .bind(owner,row.id,config.modelKey,config.dimensions,row.updated_at,vectorBlob(vectors[index]),stamp)));
+      .bind(owner,row.id,config.modelKey,config.dimensions,row.updated_at,vectorBlob(vectors[index]),stamp));
+    const revisionStatement=env.DB.prepare(`INSERT INTO wine_semantic_index_state(owner_id,model_key,revision,updated_at)
+      VALUES(?,?,1,?)
+      ON CONFLICT(owner_id,model_key) DO UPDATE SET revision=wine_semantic_index_state.revision+1,updated_at=excluded.updated_at`)
+      .bind(owner,config.modelKey,stamp);
+    await env.DB.batch([...vectorStatements,revisionStatement]);
   }
   return {indexed:rows.length,hasMore:pending.length>limit};
 }
@@ -191,15 +245,22 @@ async function currentCandidates(db:D1Database,owner:string,config:EmbeddingConf
 
 export async function semanticWineIds(env:SemanticEnv,owner:string,query:string,limit=72){
   const config=configFor(env);if(!config)return null;
+  const queryKey=normalizeSemanticQuery(query),indexRevision=await semanticIndexRevision(env.DB,owner,config);
+  const cached=await cachedSemanticIds(env.DB,owner,config,queryKey,indexRevision,limit);
+  if(cached!==null)return {ids:cached,modelKey:config.modelKey};
+
   // Never hold the request open to build document vectors. On a cold index the
   // lexical route answers immediately while warmSemanticWineIndex runs through
   // waitUntil; once at least one candidate exists, only the query embedding is
-  // awaited here.
+  // awaited here. Ranked IDs are then cached against this exact index revision,
+  // so returning from a wine detail page does not spend another embedding call.
   const candidates=await currentCandidates(env.DB,owner,config);
   if(!candidates.length)return {ids:[] as string[],modelKey:config.modelKey};
   const runId=crypto.randomUUID();
   const [queryVector]=await embedTexts(env,config,[query],'query',{owner,runId,targetId:'journal-query'});
-  return {ids:rankSemanticCandidates(queryVector,candidates,limit).map(item=>item.id),modelKey:config.modelKey};
+  const ids=rankSemanticCandidates(queryVector,candidates,limit).map(item=>item.id);
+  await cacheSemanticIds(env,owner,config,queryKey,indexRevision,ids,limit);
+  return {ids,modelKey:config.modelKey};
 }
 
 export async function warmSemanticWineIndex(env:SemanticEnv,owner:string){
