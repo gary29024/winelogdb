@@ -10,7 +10,7 @@ import { billingMonth,nextBillingReset,BILLING_TIME_ZONE } from './billingPeriod
  * are the product; this is the meter beside them, and a meter that can break
  * the thing it measures is worse than no meter.
  */
-export const AI_USAGE_KINDS=['producer_research','wine_research','scan_single','scan_batch','scan_group','scan_sheet','bottle_frame','vintage_window','search_embedding'] as const;
+export const AI_USAGE_KINDS=['producer_research','wine_research','scan_single','scan_batch','scan_group','scan_sheet','champagne_extraction','bottle_frame','vintage_window','search_embedding'] as const;
 export type AiUsageKind=typeof AI_USAGE_KINDS[number];
 
 export const kindLabels:Record<AiUsageKind,string>={
@@ -20,6 +20,7 @@ export const kindLabels:Record<AiUsageKind,string>={
   scan_batch:'Batch scan',
   scan_group:'Group photo',
   scan_sheet:'Tasting sheet',
+  champagne_extraction:'Champagne details extraction',
   bottle_frame:'Bottle framing',
   vintage_window:'Vintage window',
   search_embedding:'Smart search'
@@ -58,7 +59,7 @@ export { AI_USAGE_TIERS,type AiUsageTier } from './tiers';
  * difference between a cheap run and an expensive one.
  */
 export const unitOf:Record<AiUsageKind,'run'|'wine'>={
-  producer_research:'run',wine_research:'run',scan_single:'wine',scan_batch:'wine',scan_group:'wine',scan_sheet:'wine',
+  producer_research:'run',wine_research:'run',champagne_extraction:'run',scan_single:'wine',scan_batch:'wine',scan_group:'wine',scan_sheet:'wine',
   // One small photograph measured, once, and never again for that photograph -
   // so the honest unit is the bottle it was measured for.
   bottle_frame:'wine',
@@ -160,13 +161,13 @@ export type UsageSummary={
   currency:string;days:number;
   kinds:KindSpend[];
   month:{month:string;searchQueries:number;freeRemaining:number;cost:number;billableSearches:number;
-    /** When the allowance next resets, so the page can say it in the reader's own time. */
+    /** When the allowance next resets, so the page can say so in the reader's own time. */
     resetsAt:string;timeZone:string};
   /** True once nothing has been metered yet, so the page can say so rather than showing zeros. */
   empty:boolean;
 };
 
-export const AI_USAGE_RUN_HISTORY_KINDS=['producer_research','wine_research','vintage_window'] as const;
+export const AI_USAGE_RUN_HISTORY_KINDS=['producer_research','wine_research','champagne_extraction','vintage_window'] as const;
 export type AiUsageRunHistoryKind=typeof AI_USAGE_RUN_HISTORY_KINDS[number];
 export const isAiUsageRunHistoryKind=(value:string):value is AiUsageRunHistoryKind=>(AI_USAGE_RUN_HISTORY_KINDS as readonly string[]).includes(value);
 export type UsageRunHistory={currency:string;days:number;kind:AiUsageRunHistoryKind;runs:AiUsageRunSpend[]};
@@ -183,6 +184,13 @@ function vintageTargetLabel(targetId:string|null){
   if(!targetId)return null;
   try{
     const parsed=JSON.parse(targetId) as unknown;
+    if(parsed&&typeof parsed==='object'&&!Array.isArray(parsed)){
+      const target=parsed as {place?:unknown;vintage?:unknown;style?:unknown};
+      const clean=(value:unknown)=>value==null?'':String(value).trim();
+      const place=clean(target.place),vintage=clean(target.vintage),style=clean(target.style);
+      if(!place&&!vintage&&!style)return null;
+      return [place||null,vintage||null,style?titleCase(style):null].filter(Boolean).join(' · ');
+    }
     if(!Array.isArray(parsed)||parsed.length<2)return null;
     const anchor=String(parsed[0]??''),parts=anchor.split('|').filter(Boolean);
     const place=parts.at(-1)??anchor,vintage=String(parsed[1]??'').trim(),style=String(parsed[2]??'').trim();
@@ -282,7 +290,7 @@ export async function usageRunHistory(db:D1Database,owner:string,rates:AiRates,k
       sum(e.requests) AS requests,sum(e.search_queries) AS search_queries,sum(e.prompt_tokens) AS prompt_tokens,sum(e.output_tokens) AS output_tokens,
       CASE
         WHEN e.kind='producer_research' THEN (SELECT p.canonical_name FROM producers p WHERE p.owner_id=e.owner_id AND p.id=e.target_id LIMIT 1)
-        WHEN e.kind='wine_research' THEN (SELECT trim(w.producer || ' · ' || CASE WHEN w.vintage IS NOT NULL THEN cast(w.vintage AS TEXT) || ' · ' ELSE '' END || w.wine_name) FROM wines w WHERE w.owner_id=e.owner_id AND w.id=e.target_id LIMIT 1)
+        WHEN e.kind IN ('wine_research','champagne_extraction') THEN (SELECT trim(w.producer || ' · ' || CASE WHEN w.vintage IS NOT NULL THEN cast(w.vintage AS TEXT) || ' · ' ELSE '' END || w.wine_name) FROM wines w WHERE w.owner_id=e.owner_id AND w.id=e.target_id LIMIT 1)
         ELSE NULL
       END AS target_label
     FROM ai_usage_events e JOIN recent_runs r ON r.run_id=e.run_id
