@@ -27,17 +27,26 @@ function ExtractionDialog({children,onClose}:{children:ReactNode;onClose:()=>voi
 export function ChampagnePhotoBackfill({wineId,imageIds,details,onApply}:Props){
   const [open,setOpen]=useState(()=>window.location.hash==='#champagne-photos');
   const [selected,setSelected]=useState(()=>imageIds.slice(0,CHAMPAGNE_PHOTO_LIMIT)),[run,setRun]=useState<ChampagneExtractionStatus|null>(null),[busy,setBusy]=useState(false),[error,setError]=useState(''),[notice,setNotice]=useState(''),[lightbox,setLightbox]=useState<string>();
-  const controller=useRef<AbortController|null>(null),previewController=useRef<AbortController|null>(null),previewUrl=useRef<string|undefined>(undefined);
-  const waiting=pending(run),missing=missingChampagneDetails(details,run?.details),hasMissing=hasSparklingDetails(missing);
+  const controller=useRef<AbortController|null>(null),previewController=useRef<AbortController|null>(null),previewUrl=useRef<string|undefined>(undefined),imageIdsRef=useRef(imageIds);
+  useEffect(()=>{imageIdsRef.current=imageIds},[imageIds]);
+  const waiting=pending(run),missing=missingChampagneDetails(details,run?.details),hasMissing=hasSparklingDetails(missing),imageIdsKey=imageIds.join('\u0000');
   useEffect(()=>{
     const abort=new AbortController();let timer:ReturnType<typeof setTimeout>|undefined;
     const refresh=async()=>{
-      try{const result=await getChampagneExtraction(wineId,abort.signal);if(!abort.signal.aborted){setRun(result.run);setError('');if(pending(result.run))timer=setTimeout(()=>void refresh(),30_000)}}
+      try{const result=await getChampagneExtraction(wineId,abort.signal);if(!abort.signal.aborted){
+        setRun(result.run);setError('');
+        // A queued extraction owns its photo set. Rehydrate that exact set when
+        // the user leaves and comes back instead of falling back to "first six".
+        // Removed photos stay out of the selectable set but remain identified in
+        // Result source photos after completion.
+        if(pending(result.run)&&result.run?.imageIds.length)setSelected(result.run.imageIds.filter(id=>imageIdsRef.current.includes(id)).slice(0,CHAMPAGNE_PHOTO_LIMIT));
+        if(pending(result.run))timer=setTimeout(()=>void refresh(),30_000);
+      }}
       catch(e){if(!abort.signal.aborted){setError((e as Error).message);timer=setTimeout(()=>void refresh(),30_000)}}
     };
     void refresh();
     return()=>{abort.abort();clearTimeout(timer)};
-  },[wineId,waiting]);
+  },[wineId,waiting,imageIdsKey]);
   useEffect(()=>()=>{controller.current?.abort();previewController.current?.abort();if(previewUrl.current)URL.revokeObjectURL(previewUrl.current)},[]);
   async function start(){
     if(busy||waiting)return;

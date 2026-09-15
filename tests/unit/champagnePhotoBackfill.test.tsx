@@ -37,9 +37,13 @@ it('restores completed suggestions on return and applies only missing fields on 
   expect(host.textContent).toContain('Save wine');
   expect(document.querySelector('dialog')).toBeNull();
 });
-it('restores pending work without submitting it again',async()=>{
-  await render({...completed,status:'submitted',details:null});
+it('restores the exact pending source-photo selection without submitting it again',async()=>{
+  await render({...completed,status:'submitted',details:null,imageIds:['p1']},{},['p1','p2']);
   await open();
+  const inputs=[...document.querySelectorAll<HTMLInputElement>('dialog input[type=checkbox]')];
+  expect(inputs).toHaveLength(2);
+  expect(inputs[0].checked).toBe(true);
+  expect(inputs[1].checked).toBe(false);
   expect(button('Extraction queued…').disabled).toBe(true);
   expect(startChampagneExtraction).not.toHaveBeenCalled();
 });
@@ -52,6 +56,16 @@ it('queues the selected saved photos, disables repeats, and waits for review',as
   await act(async()=>button('Confirm 1 photo & extract').click());
   expect(startChampagneExtraction).toHaveBeenCalledWith('w',['p1'],expect.any(AbortSignal));
   expect(button('Extraction queued…').disabled).toBe(true);expect(onApply).not.toHaveBeenCalled();
+});
+it('keeps a new selection when completed source photos are refreshed',async()=>{
+  const {onApply}=await render(completed,{},['p1','p2']);
+  await open();
+  const inputs=()=>[...document.querySelectorAll<HTMLInputElement>('dialog input[type=checkbox]')];
+  expect(inputs().map(input=>input.checked)).toEqual([true,true]);
+  await act(async()=>inputs()[0].click());
+  await act(async()=>root!.render(<MemoryRouter><ChampagnePhotoBackfill wineId="w" imageIds={['p1','p2','p3']} details={{}} onApply={onApply}/></MemoryRouter>));
+  expect(inputs().map(input=>input.checked)).toEqual([false,true,false]);
+  expect(document.body.textContent).toContain('Result source photos: Photo 1');
 });
 it('handles no photos and empty results without inventing suggestions',async()=>{
   await render({...completed,details:null}, {}, []);

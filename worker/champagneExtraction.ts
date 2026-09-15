@@ -87,7 +87,7 @@ export async function handleChampagneExtraction(request:Request,env:Env):Promise
 
 async function complete(env:Env,row:Row,inline:GeminiInlineResponse,tier:'batch'|'flex'){
   // Meter even an unusable answer; persisted event IDs prevent double billing in the UI.
-  if(inline.response)await recordAiUsage(env,row.owner_id,{kind:'scan_batch',runId:row.request_id,targetId:row.wine_id,eventId:`champagne:${row.request_id}`,model:RECOGNITION_MODEL,tier,requests:1,units:1,...geminiCallTokens(inline.response.usageMetadata)});
+  if(inline.response)await recordAiUsage(env,row.owner_id,{kind:'champagne_extraction',runId:row.request_id,targetId:row.wine_id,eventId:`champagne:${row.request_id}`,model:RECOGNITION_MODEL,tier,requests:1,units:1,...geminiCallTokens(inline.response.usageMetadata)});
   if(inline.error||!inline.response)throw new Error('Gemini could not extract these labels. Please retry with clearer photos.');
   if(inline.response.candidates?.[0]?.finishReason!=='STOP')throw new Error('The label extraction was incomplete. Please try again.');
   const parsed=resultSchema.parse(JSON.parse(inlineResponseText(inline)));

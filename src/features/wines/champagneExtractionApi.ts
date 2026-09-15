@@ -1,14 +1,27 @@
 import { authHeaders,clearSession } from '../../lib/auth/client';
-import { CHAMPAGNE_PHOTO_BYTES,CHAMPAGNE_PHOTO_LIMIT,type ChampagneExtractionStatus } from '../../lib/wine/champagneExtraction';
+import { CHAMPAGNE_PHOTO_BYTES,CHAMPAGNE_PHOTO_LIMIT,normalizeChampagneDetails,type ChampagneExtractionStatus } from '../../lib/wine/champagneExtraction';
 import { prepareRecognitionImageWithinBytes } from '../uploads/prepareImage';
+import { sparklingDetailsSchema } from '../../lib/wine/sparklingDetails';
 
 async function checked(response:Response){
   if(response.status===401){clearSession();throw new Error('Session expired. Please sign in again.')}
   if(!response.ok){const body=await response.json().catch(()=>({})) as {error?:string};throw new Error(body.error||'Could not load Champagne extraction.')}
   return response;
 }
+const responseDetailsSchema=sparklingDetailsSchema.strip();
+const normalizeRun=(run:ChampagneExtractionStatus|null)=>{
+  if(!run||run.details==null)return run;
+  // Older clients can still show known fields from a newer server response.
+  // Never pass unknown/invalid fields on to the form's strict suggestion parser.
+  const parsed=responseDetailsSchema.safeParse(run.details);
+  return {...run,details:parsed.success?normalizeChampagneDetails(parsed.data):null};
+};
+async function extractionResponse(response:Response){
+  const body=await (await checked(response)).json() as {run:ChampagneExtractionStatus|null};
+  return {run:normalizeRun(body.run)};
+}
 export async function getChampagneExtraction(wineId:string,signal?:AbortSignal){
-  return (await checked(await fetch(`/api/wines/${encodeURIComponent(wineId)}/champagne-extraction`,{headers:authHeaders(),signal}))).json() as Promise<{run:ChampagneExtractionStatus|null}>;
+  return extractionResponse(await fetch(`/api/wines/${encodeURIComponent(wineId)}/champagne-extraction`,{headers:authHeaders(),signal}));
 }
 export async function startChampagneExtraction(wineId:string,imageIds:string[],signal?:AbortSignal){
   if(!imageIds.length||imageIds.length>CHAMPAGNE_PHOTO_LIMIT)throw new Error(`Choose 1–${CHAMPAGNE_PHOTO_LIMIT} saved photos of this bottle.`);
@@ -22,5 +35,5 @@ export async function startChampagneExtraction(wineId:string,imageIds:string[],s
     signal?.throwIfAborted();form.append('images',prepared.file);
   }
   form.set('imageIds',JSON.stringify(imageIds));
-  return (await checked(await fetch(`/api/wines/${encodeURIComponent(wineId)}/champagne-extraction`,{method:'POST',headers:authHeaders(),body:form,signal}))).json() as Promise<{run:ChampagneExtractionStatus}>;
+  return extractionResponse(await fetch(`/api/wines/${encodeURIComponent(wineId)}/champagne-extraction`,{method:'POST',headers:authHeaders(),body:form,signal})) as Promise<{run:ChampagneExtractionStatus}>;
 }
