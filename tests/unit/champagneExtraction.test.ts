@@ -41,6 +41,46 @@ describe('Champagne eligibility and non-destructive suggestions',()=>{
     for(const appellation of ['Cava','Prosecco','Fine Champagne','Coteaux Champenois'])expect(isChampagne({region:'Champagne',appellation,wineStyle:'sparkling'})).toBe(false);
     expect(isChampagne({appellation:'Champagne',wineStyle:'white'})).toBe(false);
   });
+  // A grower bottle rarely says just 'Champagne'. The cru and blanc-de-blancs
+  // appellations are still Champagne, and hiding photo backfill from them was
+  // the difference between the button appearing and the wine looking ineligible.
+  it('accepts cru and blanc-de-blancs Champagne appellations',()=>{
+    for(const appellation of ['Champagne Grand Cru','Champagne Premier Cru','Champagne 1er Cru','Champagne Blanc de Blancs','AOC Champagne Grand Cru'])
+      expect(isChampagne({region:'Champagne',appellation,wineStyle:'sparkling'})).toBe(true);
+  });
+  // The appellation on a Champagne is always 'Champagne', so the village is what
+  // ends up in the appellation column. A grower bottle from Ambonnay is the
+  // common case, not the edge one.
+  it('accepts a Champagne village in the appellation column',()=>{
+    for(const appellation of ['Ambonnay','Bouzy','Aÿ','Ay','Verzenay','Le Mesnil-sur-Oger','Mailly-Champagne'])
+      expect(isChampagne({region:'Champagne',appellation,wineStyle:'sparkling'})).toBe(true);
+    // The village alone resolves to Champagne, so a blank region still qualifies.
+    expect(isChampagne({appellation:'Aÿ',wineStyle:'sparkling'})).toBe(true);
+    expect(isChampagne({appellation:'Cramant',wineStyle:null})).toBe(true);
+  });
+  // Style is one choice and offers no "sparkling rosé", so a rosé Champagne is
+  // filed under rose at least as often as under sparkling. It carries the same
+  // dosage, disgorgement and tirage, so it has to reach the same form.
+  it('accepts a rosé Champagne filed under the rose style',()=>{
+    for(const wineStyle of ['rose','rosé','Rose'])
+      expect(isChampagne({region:'Champagne',wineStyle})).toBe(true);
+    expect(isChampagne({region:'Champagne',appellation:'Ambonnay',wineStyle:'rose'})).toBe(true);
+    // Rose alone is not a passport: the place still has to be Champagne.
+    expect(isChampagne({region:'Provence',appellation:'Bandol',wineStyle:'rose'})).toBe(false);
+    // And the region's own still rosé stays out, named as what it is.
+    expect(isChampagne({region:'Champagne',appellation:'Rosé des Riceys',wineStyle:'rose'})).toBe(false);
+  });
+  // Champagne also makes still and fortified wine. None of it has a dosage or a
+  // disgorgement date, so the release form must stay shut for them.
+  it('rejects the still and fortified wines of the Champagne region',()=>{
+    for(const appellation of ['Coteaux Champenois','Rosé des Riceys','Rose des Riceys','Ratafia de Champagne','Ratafia Champenois','Marc de Champagne','Fine de Champagne'])
+      expect(isChampagne({region:'Champagne',appellation,wineStyle:'sparkling'})).toBe(false);
+    expect(isChampagne({region:'Champagne',wineStyle:'fortified'})).toBe(false);
+    expect(isChampagne({region:'Champagne',wineStyle:'red'})).toBe(false);
+  });
+  it.each(['Coteaux Champenois AOC','AOC Coteaux Champenois','Rosé des Riceys AOP','Ratafia de Champagne IGP','Fine Champagne Cognac','Champagne / Coteaux Champenois'])('excludes decorated still or spirit appellation %s',appellation=>{
+    expect(isChampagne({region:'Champagne',appellation,wineStyle:'rose'})).toBe(false);
+  });
   it('preserves zero and existing text while filling only missing values',()=>{
     expect(missingChampagneDetails({dosageGPerL:0,disgorgement:'Original'},{dosageGPerL:3,disgorgement:'Changed',tirage:'2020',lotCode:' '})).toEqual({tirage:'2020'});
   });
@@ -53,6 +93,8 @@ describe('Champagne extraction through the deployed entrypoint',()=>{
     expect((await s.request('POST','foreign')).status).toBe(404);
     expect((await s.request('POST','owner',['other-photo'])).status).toBe(400);
     s.sqlite.exec("UPDATE wines SET appellation='Cava'");
+    expect((await s.request()).status).toBe(400);
+    s.sqlite.exec("UPDATE wines SET appellation='Rosé des Riceys AOC',wine_style='rose'");
     expect((await s.request()).status).toBe(400);
     expect(s.jobs).toHaveLength(0);expect(s.objects.size).toBe(0);
   });

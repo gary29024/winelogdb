@@ -1,12 +1,39 @@
 import { sparklingDetailsSchema,type SparklingDetails } from './sparklingDetails';
+import { resolvePlace } from '../places/resolve';
 
 type Origin={region?:string|null;appellation?:string|null;wineStyle?:string|null};
 const normalized=(value:string|null|undefined)=>(value??'').trim().toLowerCase().replace(/\s+/g,' ');
-/** Do not mistake Fine Champagne Cognac or still Coteaux Champenois for Champagne. */
+/**
+ * The still and fortified wines the Champagne region also makes. None of them is
+ * made by a second fermentation in bottle, so none carries a dosage, a
+ * disgorgement date, a tirage or time on lees: the release form has nothing to
+ * hold for them, and a photo read would be inventing every value.
+ */
+// Match complete names within label text too: denomination markers and mixed
+// place strings must not bypass this exclusion through the region fallback.
+const STILL_OR_FORTIFIED=/\b(?:coteaux champenois|ros(?:é|e) des riceys|ratafia(?: champenois| de champagne)?|(?:marc|fine) de champagne|fine champagne)\b/;
+/**
+ * Style is a single choice with no "sparkling rosé" in it, so a rosé Champagne
+ * gets filed under rose as readily as under sparkling - and it carries the same
+ * dosage, disgorgement and tirage as any other, with an assemblage that is more
+ * interesting rather than less. Both styles have to pass.
+ */
+const SPARKLING_STYLES=new Set(['sparkling','rose','rosé']);
+/**
+ * A Champagne label names its village, not its appellation: the appellation is
+ * always Champagne, so Ambonnay and Aÿ land in the appellation column instead.
+ * The region is therefore the signal, and the appellation only overrules it when
+ * it names somewhere else - Cava belongs to Catalonia however the region reads.
+ */
 export function isChampagne(wine:Origin){
-  if(wine.wineStyle&&wine.wineStyle!=='sparkling')return false;
+  if(wine.wineStyle&&!SPARKLING_STYLES.has(normalized(wine.wineStyle)))return false;
   const appellation=normalized(wine.appellation);
-  if(appellation)return /^(?:aoc |aop )?champagne(?: aoc| aop)?$/.test(appellation);
+  if(appellation){
+    if(STILL_OR_FORTIFIED.test(appellation))return false;
+    if(/^(?:aoc |aop )?champagne\b/.test(appellation))return true;
+    const named=normalized(resolvePlace({appellation:wine.appellation}).region);
+    if(named)return named==='champagne';
+  }
   return normalized(wine.region)==='champagne';
 }
 export const CHAMPAGNE_PHOTO_LIMIT=6;
