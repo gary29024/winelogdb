@@ -37,9 +37,13 @@ it('restores completed suggestions on return and applies only missing fields on 
   expect(host.textContent).toContain('Save wine');
   expect(document.querySelector('dialog')).toBeNull();
 });
-it('restores pending work without submitting it again',async()=>{
-  await render({...completed,status:'submitted',details:null});
+it('restores the exact pending source-photo selection without submitting it again',async()=>{
+  await render({...completed,status:'submitted',details:null,imageIds:['p1']},{},['p1','p2']);
   await open();
+  const inputs=[...document.querySelectorAll<HTMLInputElement>('dialog input[type=checkbox]')];
+  expect(inputs).toHaveLength(2);
+  expect(inputs[0].checked).toBe(true);
+  expect(inputs[1].checked).toBe(false);
   expect(button('Extraction queued…').disabled).toBe(true);
   expect(startChampagneExtraction).not.toHaveBeenCalled();
 });
