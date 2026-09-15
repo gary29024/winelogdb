@@ -39,7 +39,7 @@ const resetLabel=(iso:string)=>{
   return new Intl.DateTimeFormat(undefined,{day:'numeric',month:'short',hour:'numeric',minute:'2-digit'}).format(at);
 };
 
-const DRILLDOWN_KINDS=new Set<RunHistoryKind>(['producer_research','wine_research','vintage_window']);
+const DRILLDOWN_KINDS=new Set<RunHistoryKind>(['producer_research','wine_research','champagne_extraction','vintage_window']);
 const isDrilldownKind=(value:string):value is RunHistoryKind=>DRILLDOWN_KINDS.has(value as RunHistoryKind);
 const runTitle=(run:UsageRun,label:string)=>run.targetLabel||(
   run.kind==='vintage_window'?'Vintage window research':label.replace('Deep Search','research')
