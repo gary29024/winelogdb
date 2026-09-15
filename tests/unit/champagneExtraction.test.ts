@@ -95,6 +95,19 @@ describe('Champagne eligibility and non-destructive suggestions',()=>{
       reserveWineDetail:'Perpetual reserve (2010–2018)',otherTechnicalDetails:'Harvest 2019 (80%)',lotCode:'L22A'
     });
   });
+  it('translates complete French Champagne technical phrases instead of leaving mixed-language fragments',()=>{
+    expect(normalizeChampagneDetails({
+      tirage:"TIRAGE COURANT D'ÉTÉ",
+      malolactic:'MALOLACTIQUE RECHERCHÉE',
+      fermentationElevage:'FERMENTATION INDIGÈNE, ENTONNAGE PAR GRAVITÉ',
+      otherTechnicalDetails:'RÉCOLTE À MATURITÉ OPTIMALE, VIN NON COLLÉ / NON FILTRÉ'
+    })).toMatchObject({
+      tirage:'Tirage during summer',
+      malolactic:'Malolactic fermentation encouraged',
+      fermentationElevage:'Indigenous yeast fermentation, barrel filling by gravity',
+      otherTechnicalDetails:'Harvested at optimal ripeness, unfined / unfiltered'
+    });
+  });
   it('preserves professional identifiers and release codes in technical prose',()=>{
     expect(normalizeChampagneDetails({otherTechnicalDetails:'RM 12345-01',assemblage:'RELEASE L22A'})).toMatchObject({
       otherTechnicalDetails:'RM 12345-01',assemblage:'Release L22A'
@@ -114,9 +127,9 @@ describe('Champagne extraction through the deployed entrypoint',()=>{
     expect((await s.request()).status).toBe(400);
     expect(s.jobs).toHaveLength(0);expect(s.objects.size).toBe(0);
   });
-  it('queues once, persists a Flex result, meters it once as Champagne extraction, and never edits the wine',async()=>{
+  it('queues once, persists normalized English from a Flex result, meters it once, and never edits the wine',async()=>{
     const s=setup();
-    vi.mocked(postGeminiGenerateContent).mockResolvedValue({provider:'vertex-ai-gateway',response:new Response(JSON.stringify(reply({dosageGPerL:3,tirage:'2020'})))});
+    vi.mocked(postGeminiGenerateContent).mockResolvedValue({provider:'vertex-ai-gateway',response:new Response(JSON.stringify(reply({dosageGPerL:3,tirage:"TIRAGE COURANT D'ÉTÉ",malolactic:'MALOLACTIQUE RECHERCHÉE'})))});
     expect((await s.request()).status).toBe(202);
     expect((await s.request()).status).toBe(202);
     expect(s.jobs.filter(job=>!job.cleanup)).toHaveLength(1);
@@ -126,7 +139,7 @@ describe('Champagne extraction through the deployed entrypoint',()=>{
     const call=vi.mocked(postGeminiGenerateContent).mock.calls[0];
     expect(call[1]).toBe('gemini-3.1-flash-lite');expect(call[5]).toMatchObject({serviceTier:'flex'});
     expect(JSON.parse(call[2])).not.toHaveProperty('tools');
-    expect(await s.status()).toMatchObject({status:'complete',details:{dosageGPerL:3,tirage:'2020'}});
+    expect(await s.status()).toMatchObject({status:'complete',details:{dosageGPerL:3,tirage:'Tirage during summer',malolactic:'Malolactic fermentation encouraged'}});
     expect(s.sqlite.prepare('SELECT details_json FROM wine_sparkling_details').get()).toMatchObject({details_json:'{"dosageGPerL":0}'});
     expect(s.sqlite.prepare('SELECT kind,target_id,tier,requests FROM ai_usage_events').all()).toEqual([
       expect.objectContaining({kind:'champagne_extraction',target_id:'w',tier:'flex',requests:1})
