@@ -58,6 +58,18 @@ describe('Champagne eligibility and non-destructive suggestions',()=>{
     expect(isChampagne({appellation:'Aÿ',wineStyle:'sparkling'})).toBe(true);
     expect(isChampagne({appellation:'Cramant',wineStyle:null})).toBe(true);
   });
+  // Style is one choice and offers no "sparkling rosé", so a rosé Champagne is
+  // filed under rose at least as often as under sparkling. It carries the same
+  // dosage, disgorgement and tirage, so it has to reach the same form.
+  it('accepts a rosé Champagne filed under the rose style',()=>{
+    for(const wineStyle of ['rose','rosé','Rose'])
+      expect(isChampagne({region:'Champagne',wineStyle})).toBe(true);
+    expect(isChampagne({region:'Champagne',appellation:'Ambonnay',wineStyle:'rose'})).toBe(true);
+    // Rose alone is not a passport: the place still has to be Champagne.
+    expect(isChampagne({region:'Provence',appellation:'Bandol',wineStyle:'rose'})).toBe(false);
+    // And the region's own still rosé stays out, named as what it is.
+    expect(isChampagne({region:'Champagne',appellation:'Rosé des Riceys',wineStyle:'rose'})).toBe(false);
+  });
   // Champagne also makes still and fortified wine. None of it has a dosage or a
   // disgorgement date, so the release form must stay shut for them.
   it('rejects the still and fortified wines of the Champagne region',()=>{

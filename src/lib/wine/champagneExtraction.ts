@@ -11,13 +11,20 @@ const normalized=(value:string|null|undefined)=>(value??'').trim().toLowerCase()
  */
 const STILL_OR_FORTIFIED=/^(?:coteaux champenois|ros(?:é|e) des riceys|ratafia(?: champenois| de champagne)?|(?:marc|fine) de champagne|fine champagne)$/;
 /**
+ * Style is a single choice with no "sparkling rosé" in it, so a rosé Champagne
+ * gets filed under rose as readily as under sparkling - and it carries the same
+ * dosage, disgorgement and tirage as any other, with an assemblage that is more
+ * interesting rather than less. Both styles have to pass.
+ */
+const SPARKLING_STYLES=new Set(['sparkling','rose','rosé']);
+/**
  * A Champagne label names its village, not its appellation: the appellation is
  * always Champagne, so Ambonnay and Aÿ land in the appellation column instead.
  * The region is therefore the signal, and the appellation only overrules it when
  * it names somewhere else - Cava belongs to Catalonia however the region reads.
  */
 export function isChampagne(wine:Origin){
-  if(wine.wineStyle&&wine.wineStyle!=='sparkling')return false;
+  if(wine.wineStyle&&!SPARKLING_STYLES.has(normalized(wine.wineStyle)))return false;
   const appellation=normalized(wine.appellation);
   if(appellation){
     if(STILL_OR_FORTIFIED.test(appellation))return false;
