@@ -45,4 +45,8 @@ are mocked: passing these tests does not measure live translation or OCR quality
 No live photo evaluation was performed for this change.
 
 There is no additional AI request or database migration. Returning source text
-does increase response tokens within the existing output-token budget.
+increases response tokens. Extraction uses an 8,192-token output limit with
+explicit minimal thinking to leave room for source evidence and English details.
+This raises the maximum possible response cost, not the number of requests.
+Responses that hit the limit remain failed rather than silently accepting partial
+details; their usage is still metered and the UI explains this distinction.

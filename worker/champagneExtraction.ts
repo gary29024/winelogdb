@@ -63,7 +63,9 @@ export async function handleChampagneExtraction(request:Request,env:Env):Promise
   const requestId=crypto.randomUUID(),requestKey=keyFor(requestId),stamp=now();
   try{
     const parts=[{text:CHAMPAGNE_EXTRACTION_PROMPT},...await Promise.all(files.map(async file=>({inlineData:{data:await base64(file),mimeType:file.type}})))];
-    const body={contents:[{role:'user',parts}],generationConfig:{responseMimeType:'application/json',responseJsonSchema:{type:'object',properties:{details:sparklingDetailsJsonSchema,sourceText:{type:'object',properties:Object.fromEntries(champagneTextFields.map(field=>[field,{type:'string',maxLength:4000}])),additionalProperties:false},reviewFields:{type:'array',items:{type:'string',enum:champagneTextFields},maxItems:champagneTextFields.length}},required:['details','sourceText','reviewFields'],additionalProperties:false},maxOutputTokens:4096}};
+    // English details plus literal evidence need more room than the old details-only
+    // response. Keep thinking minimal and leave headroom for both in one request.
+    const body={contents:[{role:'user',parts}],generationConfig:{responseMimeType:'application/json',responseJsonSchema:{type:'object',properties:{details:sparklingDetailsJsonSchema,sourceText:{type:'object',properties:Object.fromEntries(champagneTextFields.map(field=>[field,{type:'string',maxLength:4000}])),additionalProperties:false},reviewFields:{type:'array',items:{type:'string',enum:champagneTextFields},maxItems:champagneTextFields.length}},required:['details','sourceText','reviewFields'],additionalProperties:false},maxOutputTokens:8192,thinkingConfig:{thinkingLevel:'minimal'}}};
     await env.WINE_IMAGES.put(requestKey,JSON.stringify(body),{httpMetadata:{contentType:'application/json'}});
     const saved=await env.DB.prepare(`INSERT INTO wine_champagne_extractions(owner_id,wine_id,request_id,status,request_key,image_ids_json,created_at,updated_at)
       VALUES(?,?,?,'queued',?,?,?,?) ON CONFLICT(owner_id,wine_id) DO UPDATE SET request_id=excluded.request_id,status='queued',request_key=excluded.request_key,image_ids_json=excluded.image_ids_json,batch_name=NULL,result_json=NULL,error=NULL,created_at=excluded.created_at,updated_at=excluded.updated_at
@@ -88,7 +90,13 @@ async function complete(env:Env,row:Row,inline:GeminiInlineResponse,tier:'batch'
   // Meter even an unusable answer; persisted event IDs prevent double billing in the UI.
   if(inline.response)await recordAiUsage(env,row.owner_id,{kind:'champagne_extraction',runId:row.request_id,targetId:row.wine_id,eventId:`champagne:${row.request_id}`,model:RECOGNITION_MODEL,tier,requests:1,units:1,...geminiCallTokens(inline.response.usageMetadata)});
   if(inline.error||!inline.response)throw new Error('Gemini could not extract these labels. Please retry with clearer photos.');
-  if(inline.response.candidates?.[0]?.finishReason!=='STOP')throw new Error('The label extraction was incomplete. Please try again.');
+  const finishReason=inline.response.candidates?.[0]?.finishReason;
+  if(finishReason!=='STOP'){
+    const usage=inline.response.usageMetadata;
+    console.warn(JSON.stringify({event:'champagne-extraction-incomplete',requestId:row.request_id,finishReason:finishReason??'missing',promptTokens:usage?.promptTokenCount,outputTokens:usage?.candidatesTokenCount,thoughtTokens:usage?.thoughtsTokenCount}));
+    if(finishReason==='MAX_TOKENS')throw new Error('The AI reached its response limit before finishing the label details. This attempt is included in AI spend, but no details were saved. Try again with only the clearest back and neck labels.');
+    throw new Error('The AI stopped before completing the label details. This attempt is included in AI spend, but no details were saved. Please try again.');
+  }
   const normalized=prepareChampagneResult(JSON.parse(inlineResponseText(inline)));
   await env.DB.prepare("UPDATE wine_champagne_extractions SET status='complete',result_json=?,error=NULL,updated_at=? WHERE owner_id=? AND wine_id=? AND request_id=? AND status IN ('running','submitted')").bind(JSON.stringify(normalized),now(),row.owner_id,row.wine_id,row.request_id).run();
 }
