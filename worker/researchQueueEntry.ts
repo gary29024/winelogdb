@@ -3,6 +3,7 @@ import { Hono } from 'hono';
 import app from './cuveeEntry';
 import { requireSession } from '../src/lib/auth/session';
 import { pollProducerBatchResearch,startProducerBatchResearch } from '../src/lib/producers/batchResearch';
+import type { ChampagneExtractionJob } from './champagneExtraction';
 import { createQueuedProducerResearchRun,getProducerResearchRun,mapRunRow,settleIfStalled } from '../src/lib/producers/research';
 import { activeCampaignId,advanceCampaign,cancelCampaign,countUnresearchedProducers,createCampaign,dismissCampaign,listCampaigns,measuredSearchesPerRequest,readCampaign,reviveCampaignIfStalled,typicalProducerRunMs,unresearchedProducers,
   ASSUMED_SEARCHES_PER_REQUEST,CAMPAIGN_CONCURRENCY,CAMPAIGN_MAX_PRODUCERS,CAMPAIGN_TICK_SECONDS,GEMINI_REQUESTS_PER_PRODUCER } from '../src/lib/producers/researchCampaign';
@@ -21,7 +22,7 @@ type WineJob={kind:'wine';owner:string;wineId:string;requestId:string;refresh:'n
 type WineBatchPollJob={kind:'wine_batch_poll';owner:string;wineId:string;requestId:string;jobId:string;pollCount:number};
 type ProducerCampaignTickJob={kind:'producer_campaign_tick';owner:string;campaignId:string};
 type CancelResearchSweepJob={kind:'research_cancel_sweep';owner:string;targetKind:ResearchTargetKind;targetId:string;requestId:string;pass:number};
-type ResearchJob=ProducerJob|ProducerBatchPollJob|ProducerCampaignTickJob|WineJob|WineBatchPollJob|CancelResearchSweepJob|BatchRecognitionJob|VintageResearchMessage;
+type ResearchJob=ProducerJob|ProducerBatchPollJob|ProducerCampaignTickJob|WineJob|WineBatchPollJob|CancelResearchSweepJob|BatchRecognitionJob|VintageResearchMessage|ChampagneExtractionJob;
 type Bindings={DB:D1Database;WINE_IMAGES:R2Bucket;ASSETS:Fetcher;GEMINI_API_KEY?:string;AUTH_SECRET:string;APP_PASSWORD:string;APP_URL:string;MAX_FILE_BYTES?:string;MAX_BATCH_FILES?:string;RESEARCH_QUEUE:Queue<ResearchJob>};
 type AppEnv={Bindings:Bindings};
 const router=new Hono<AppEnv>();

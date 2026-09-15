@@ -40,7 +40,7 @@ const nullableString={anyOf:[{type:'string'},{type:'null'}]} as const;
 const regionField={anyOf:[{type:'string'},{type:'null'}],description:'Principal growing region, e.g. Napa Valley, Burgundy, Barossa Valley. Not a broad multi-region designation such as California unless nothing narrower is known.'} as const;
 const appellationField={anyOf:[{type:'string'},{type:'null'}],description:'Narrowest legally defined origin, e.g. Oakville, Gevrey-Chambertin, Barolo. Null when only the region is known.'} as const;
 const recognitionVintageJsonSchema={anyOf:[{type:'integer',minimum:1000,maximum:2200},{type:'null'}]} as const;
-const sparklingDetailsJsonSchema={
+export const sparklingDetailsJsonSchema={
   anyOf:[
     {type:'object',additionalProperties:false,properties:{
       dosageGPerL:{anyOf:[{type:'number',minimum:0,maximum:100},{type:'null'}]},dosageCategory:nullableString,disgorgement:nullableString,tirage:nullableString,
