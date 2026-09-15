@@ -2,7 +2,7 @@ import { afterEach,describe,expect,it,vi } from 'vitest';
 import app from '../../worker/structureEntry';
 import { createSession } from '../../src/lib/auth/session';
 import { migratedSqliteD1 } from './support/sqliteD1';
-import { isChampagne,missingChampagneDetails,normalizeChampagneDetails,type ChampagneExtractionStatus } from '../../src/lib/wine/champagneExtraction';
+import { isChampagne,missingChampagneDetails,normalizeChampagneDetails,prepareChampagneResult,type ChampagneExtractionStatus } from '../../src/lib/wine/champagneExtraction';
 import type { ChampagneExtractionJob } from '../../worker/champagneExtraction';
 import { postGeminiGenerateContent } from '../../worker/geminiTransport';
 import { createGeminiBatch,fetchGeminiBatch } from '../../src/lib/research/geminiBatch';
@@ -84,20 +84,37 @@ describe('Champagne eligibility and non-destructive suggestions',()=>{
   it('preserves zero and existing text while filling only missing values',()=>{
     expect(missingChampagneDetails({dosageGPerL:0,disgorgement:'Original'},{dosageGPerL:3,disgorgement:'Changed',tirage:'2020',lotCode:' '})).toEqual({tirage:'2020'});
   });
-  it('normalizes label typography and common French technical text for the English form',()=>{
+  it('formats structured values while preserving prose and names',()=>{
     expect(normalizeChampagneDetails({
       dosageCategory:'EXTRA BRUT',disgorgement:'JANVIER 2022',tirage:'NOVEMBRE 2020',
       assemblage:'pinot noir (60%) chardonnay (30%) pinot blanc (10%)',
       reserveWineDetail:'réserve perpétuelle (2010–2018)',otherTechnicalDetails:'récolte 2019 (80%)',lotCode:'  L22A  '
     })).toMatchObject({
       dosageCategory:'Extra Brut',disgorgement:'January 2022',tirage:'November 2020',
-      assemblage:'Pinot Noir (60%) Chardonnay (30%) Pinot Blanc (10%)',
-      reserveWineDetail:'Perpetual reserve (2010–2018)',otherTechnicalDetails:'Harvest 2019 (80%)',lotCode:'L22A'
+      assemblage:'pinot noir (60%) chardonnay (30%) pinot blanc (10%)',
+      reserveWineDetail:'réserve perpétuelle (2010–2018)',otherTechnicalDetails:'récolte 2019 (80%)',lotCode:'L22A'
     });
+  });
+  it.each([
+    'FERMENTATION MALOLACTIQUE NON SOUHAITÉE',
+    'VIN NON COLLÉ NI FILTRÉ',
+    'ÉLEVAGE EN FÛTS DE CHÊNE PENDANT 12 MOIS',
+    'Malolactic fermentation only for 30% of the blend',
+    'Cuvee Sur Lies, lot L22A',
+    'MALOLACTIQUE RECHERCHÉE; '+ 'a'.repeat(270)
+  ])('preserves arbitrary wording without fragment translation or expansion: %s',text=>{
+    const result=prepareChampagneResult({details:{malolactic:text}});
+    expect(result.details?.malolactic).toBe(text);
+    expect(normalizeChampagneDetails(result.details)).toEqual(result.details);
+  });
+  it('withholds overlong and uncertain translations while preserving evidence and other fields',()=>{
+    const long='English translation '.repeat(17);
+    const result=prepareChampagneResult({details:{dosageGPerL:3,malolactic:long,fermentationElevage:'Possibly barrel aged'},sourceText:{malolactic:'MALOLACTIQUE RECHERCHÉE',fermentationElevage:'Élevage ...'},reviewFields:['fermentationElevage']});
+    expect(result).toMatchObject({details:{dosageGPerL:3,malolactic:null,fermentationElevage:null},sourceText:{malolactic:'MALOLACTIQUE RECHERCHÉE',fermentationElevage:'Élevage ...'},reviewFields:['fermentationElevage','malolactic']});
   });
   it('preserves professional identifiers and release codes in technical prose',()=>{
     expect(normalizeChampagneDetails({otherTechnicalDetails:'RM 12345-01',assemblage:'RELEASE L22A'})).toMatchObject({
-      otherTechnicalDetails:'RM 12345-01',assemblage:'Release L22A'
+      otherTechnicalDetails:'RM 12345-01',assemblage:'RELEASE L22A'
     });
   });
 });
@@ -114,9 +131,20 @@ describe('Champagne extraction through the deployed entrypoint',()=>{
     expect((await s.request()).status).toBe(400);
     expect(s.jobs).toHaveLength(0);expect(s.objects.size).toBe(0);
   });
-  it('queues once, persists a Flex result, meters it once as Champagne extraction, and never edits the wine',async()=>{
+  it('persists original wording and excludes uncertain text through the API',async()=>{
     const s=setup();
-    vi.mocked(postGeminiGenerateContent).mockResolvedValue({provider:'vertex-ai-gateway',response:new Response(JSON.stringify(reply({dosageGPerL:3,tirage:'2020'})))});
+    const response=reply({dosageGPerL:3,malolactic:'Uncertain interpretation'});
+    response.candidates[0].content.parts[0].text=JSON.stringify({details:{dosageGPerL:3,malolactic:'Uncertain interpretation'},sourceText:{malolactic:'MALOLACTIQUE ...'},reviewFields:['malolactic']});
+    vi.mocked(postGeminiGenerateContent).mockResolvedValue({provider:'vertex-ai-gateway',response:new Response(JSON.stringify(response))});
+    await s.request();await s.process();
+    expect(await s.status()).toMatchObject({status:'complete',details:{dosageGPerL:3,malolactic:null},sourceText:{malolactic:'MALOLACTIQUE ...'},reviewFields:['malolactic']});
+    const stored=s.sqlite.prepare('SELECT result_json FROM wine_champagne_extractions').get() as {result_json:string};
+    expect(JSON.parse(stored.result_json)).toMatchObject({sourceText:{malolactic:'MALOLACTIQUE ...'},reviewFields:['malolactic']});
+    expect(s.sqlite.prepare('SELECT details_json FROM wine_sparkling_details').get()).toMatchObject({details_json:'{"dosageGPerL":0}'});
+  });
+  it('queues once, persists normalized English from a Flex result, meters it once, and never edits the wine',async()=>{
+    const s=setup();
+    vi.mocked(postGeminiGenerateContent).mockResolvedValue({provider:'vertex-ai-gateway',response:new Response(JSON.stringify(reply({dosageGPerL:3,tirage:'Tirage during summer',malolactic:'Malolactic fermentation encouraged'})))});
     expect((await s.request()).status).toBe(202);
     expect((await s.request()).status).toBe(202);
     expect(s.jobs.filter(job=>!job.cleanup)).toHaveLength(1);
@@ -126,7 +154,7 @@ describe('Champagne extraction through the deployed entrypoint',()=>{
     const call=vi.mocked(postGeminiGenerateContent).mock.calls[0];
     expect(call[1]).toBe('gemini-3.1-flash-lite');expect(call[5]).toMatchObject({serviceTier:'flex'});
     expect(JSON.parse(call[2])).not.toHaveProperty('tools');
-    expect(await s.status()).toMatchObject({status:'complete',details:{dosageGPerL:3,tirage:'2020'}});
+    expect(await s.status()).toMatchObject({status:'complete',details:{dosageGPerL:3,tirage:'Tirage during summer',malolactic:'Malolactic fermentation encouraged'}});
     expect(s.sqlite.prepare('SELECT details_json FROM wine_sparkling_details').get()).toMatchObject({details_json:'{"dosageGPerL":0}'});
     expect(s.sqlite.prepare('SELECT kind,target_id,tier,requests FROM ai_usage_events').all()).toEqual([
       expect.objectContaining({kind:'champagne_extraction',target_id:'w',tier:'flex',requests:1})

@@ -1,8 +1,7 @@
 import { z } from 'zod';
 import { requireSession } from '../src/lib/auth/session';
 import { validateBatch } from '../src/features/uploads/validation';
-import { CHAMPAGNE_EXTRACTION_PROMPT,CHAMPAGNE_PHOTO_BYTES,CHAMPAGNE_PHOTO_LIMIT,isChampagne,type ChampagneExtractionStatus } from '../src/lib/wine/champagneExtraction';
-import { sparklingDetailsSchema } from '../src/lib/wine/sparklingDetails';
+import { CHAMPAGNE_EXTRACTION_PROMPT,CHAMPAGNE_PHOTO_BYTES,CHAMPAGNE_PHOTO_LIMIT,isChampagne,prepareChampagneResult,champagneTextFields,champagneResultSchema,type ChampagneExtractionStatus } from '../src/lib/wine/champagneExtraction';
 import { RECOGNITION_MODEL,sparklingDetailsJsonSchema } from '../src/lib/recognition/geminiRequest';
 import { createGeminiBatch,fetchGeminiBatch,inlineResponseText,isTerminalBatchState,type GeminiInlineResponse } from '../src/lib/research/geminiBatch';
 import { geminiCallTokens,recordAiUsage,type AnalyticsSink } from '../src/lib/usage/aiUsage';
@@ -11,12 +10,12 @@ import { postGeminiGenerateContent,resolveGeminiTransport,type GeminiTransportBi
 type Env=GeminiTransportBindings&{DB:D1Database;WINE_IMAGES:R2Bucket;AUTH_SECRET:string;RESEARCH_QUEUE:Queue<unknown>;AI_USAGE?:AnalyticsSink};
 export type ChampagneExtractionJob={kind:'champagne_extraction';owner:string;wineId:string;requestId:string;cleanup?:boolean};
 type Row={owner_id:string;wine_id:string;request_id:string;status:ChampagneExtractionStatus['status'];request_key:string;image_ids_json:string;batch_name:string|null;result_json:string|null;error:string|null;created_at:string;updated_at:string};
-const resultSchema=z.object({details:sparklingDetailsSchema.nullable()}).strict();
+const resultSchema=champagneResultSchema;
 const now=()=>new Date().toISOString();
 const keyFor=(id:string)=>`champagne-extraction/${id}.json`;
 const json=(body:unknown,status=200)=>new Response(JSON.stringify(body),{status,headers:{'Content-Type':'application/json','Cache-Control':'no-store'}});
 const readRow=(db:D1Database,owner:string,wineId:string)=>db.prepare('SELECT * FROM wine_champagne_extractions WHERE owner_id=? AND wine_id=?').bind(owner,wineId).first<Row>();
-const statusOf=(row:Row):ChampagneExtractionStatus=>({requestId:row.request_id,status:row.status,details:row.result_json?resultSchema.parse(JSON.parse(row.result_json)).details:null,error:row.error,imageIds:JSON.parse(row.image_ids_json) as string[]});
+const statusOf=(row:Row):ChampagneExtractionStatus=>({requestId:row.request_id,status:row.status,...(row.result_json?resultSchema.parse(JSON.parse(row.result_json)):{details:null}),error:row.error,imageIds:JSON.parse(row.image_ids_json) as string[]});
 const wineFor=(db:D1Database,owner:string,wineId:string)=>db.prepare('SELECT region,appellation,wine_style AS wineStyle FROM wines WHERE owner_id=? AND id=?').bind(owner,wineId).first<{region:string|null;appellation:string|null;wineStyle:string|null}>();
 async function fail(env:Env,row:Row,message:string){
   await env.DB.prepare("UPDATE wine_champagne_extractions SET status='failed',error=?,updated_at=? WHERE owner_id=? AND wine_id=? AND request_id=? AND status NOT IN ('complete','failed')").bind(message,now(),row.owner_id,row.wine_id,row.request_id).run();
@@ -64,7 +63,7 @@ export async function handleChampagneExtraction(request:Request,env:Env):Promise
   const requestId=crypto.randomUUID(),requestKey=keyFor(requestId),stamp=now();
   try{
     const parts=[{text:CHAMPAGNE_EXTRACTION_PROMPT},...await Promise.all(files.map(async file=>({inlineData:{data:await base64(file),mimeType:file.type}})))];
-    const body={contents:[{role:'user',parts}],generationConfig:{responseMimeType:'application/json',responseJsonSchema:{type:'object',properties:{details:sparklingDetailsJsonSchema},required:['details'],additionalProperties:false},maxOutputTokens:4096}};
+    const body={contents:[{role:'user',parts}],generationConfig:{responseMimeType:'application/json',responseJsonSchema:{type:'object',properties:{details:sparklingDetailsJsonSchema,sourceText:{type:'object',properties:Object.fromEntries(champagneTextFields.map(field=>[field,{type:'string',maxLength:4000}])),additionalProperties:false},reviewFields:{type:'array',items:{type:'string',enum:champagneTextFields},maxItems:champagneTextFields.length}},required:['details','sourceText','reviewFields'],additionalProperties:false},maxOutputTokens:4096}};
     await env.WINE_IMAGES.put(requestKey,JSON.stringify(body),{httpMetadata:{contentType:'application/json'}});
     const saved=await env.DB.prepare(`INSERT INTO wine_champagne_extractions(owner_id,wine_id,request_id,status,request_key,image_ids_json,created_at,updated_at)
       VALUES(?,?,?,'queued',?,?,?,?) ON CONFLICT(owner_id,wine_id) DO UPDATE SET request_id=excluded.request_id,status='queued',request_key=excluded.request_key,image_ids_json=excluded.image_ids_json,batch_name=NULL,result_json=NULL,error=NULL,created_at=excluded.created_at,updated_at=excluded.updated_at
@@ -90,8 +89,8 @@ async function complete(env:Env,row:Row,inline:GeminiInlineResponse,tier:'batch'
   if(inline.response)await recordAiUsage(env,row.owner_id,{kind:'champagne_extraction',runId:row.request_id,targetId:row.wine_id,eventId:`champagne:${row.request_id}`,model:RECOGNITION_MODEL,tier,requests:1,units:1,...geminiCallTokens(inline.response.usageMetadata)});
   if(inline.error||!inline.response)throw new Error('Gemini could not extract these labels. Please retry with clearer photos.');
   if(inline.response.candidates?.[0]?.finishReason!=='STOP')throw new Error('The label extraction was incomplete. Please try again.');
-  const parsed=resultSchema.parse(JSON.parse(inlineResponseText(inline)));
-  await env.DB.prepare("UPDATE wine_champagne_extractions SET status='complete',result_json=?,error=NULL,updated_at=? WHERE owner_id=? AND wine_id=? AND request_id=? AND status IN ('running','submitted')").bind(JSON.stringify(parsed),now(),row.owner_id,row.wine_id,row.request_id).run();
+  const normalized=prepareChampagneResult(JSON.parse(inlineResponseText(inline)));
+  await env.DB.prepare("UPDATE wine_champagne_extractions SET status='complete',result_json=?,error=NULL,updated_at=? WHERE owner_id=? AND wine_id=? AND request_id=? AND status IN ('running','submitted')").bind(JSON.stringify(normalized),now(),row.owner_id,row.wine_id,row.request_id).run();
 }
 
 export async function processChampagneExtraction(env:Env,job:ChampagneExtractionJob){
