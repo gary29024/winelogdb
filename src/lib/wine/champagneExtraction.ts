@@ -1,13 +1,30 @@
 import { sparklingDetailsSchema,type SparklingDetails } from './sparklingDetails';
+import { resolvePlace } from '../places/resolve';
 
 type Origin={region?:string|null;appellation?:string|null;wineStyle?:string|null};
 const normalized=(value:string|null|undefined)=>(value??'').trim().toLowerCase().replace(/\s+/g,' ');
-/** Anchored at the start so a cru or blanc-de-blancs appellation still reads as
- *  Champagne, while Fine Champagne Cognac and still Coteaux Champenois do not. */
+/**
+ * The still and fortified wines the Champagne region also makes. None of them is
+ * made by a second fermentation in bottle, so none carries a dosage, a
+ * disgorgement date, a tirage or time on lees: the release form has nothing to
+ * hold for them, and a photo read would be inventing every value.
+ */
+const STILL_OR_FORTIFIED=/^(?:coteaux champenois|ros(?:é|e) des riceys|ratafia(?: champenois| de champagne)?|(?:marc|fine) de champagne|fine champagne)$/;
+/**
+ * A Champagne label names its village, not its appellation: the appellation is
+ * always Champagne, so Ambonnay and Aÿ land in the appellation column instead.
+ * The region is therefore the signal, and the appellation only overrules it when
+ * it names somewhere else - Cava belongs to Catalonia however the region reads.
+ */
 export function isChampagne(wine:Origin){
   if(wine.wineStyle&&wine.wineStyle!=='sparkling')return false;
   const appellation=normalized(wine.appellation);
-  if(appellation)return /^(?:aoc |aop )?champagne\b/.test(appellation);
+  if(appellation){
+    if(STILL_OR_FORTIFIED.test(appellation))return false;
+    if(/^(?:aoc |aop )?champagne\b/.test(appellation))return true;
+    const named=normalized(resolvePlace({appellation:wine.appellation}).region);
+    if(named)return named==='champagne';
+  }
   return normalized(wine.region)==='champagne';
 }
 export const CHAMPAGNE_PHOTO_LIMIT=6;

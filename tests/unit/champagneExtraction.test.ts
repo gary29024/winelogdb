@@ -48,6 +48,24 @@ describe('Champagne eligibility and non-destructive suggestions',()=>{
     for(const appellation of ['Champagne Grand Cru','Champagne Premier Cru','Champagne 1er Cru','Champagne Blanc de Blancs','AOC Champagne Grand Cru'])
       expect(isChampagne({region:'Champagne',appellation,wineStyle:'sparkling'})).toBe(true);
   });
+  // The appellation on a Champagne is always 'Champagne', so the village is what
+  // ends up in the appellation column. A grower bottle from Ambonnay is the
+  // common case, not the edge one.
+  it('accepts a Champagne village in the appellation column',()=>{
+    for(const appellation of ['Ambonnay','Bouzy','Aÿ','Ay','Verzenay','Le Mesnil-sur-Oger','Mailly-Champagne'])
+      expect(isChampagne({region:'Champagne',appellation,wineStyle:'sparkling'})).toBe(true);
+    // The village alone resolves to Champagne, so a blank region still qualifies.
+    expect(isChampagne({appellation:'Aÿ',wineStyle:'sparkling'})).toBe(true);
+    expect(isChampagne({appellation:'Cramant',wineStyle:null})).toBe(true);
+  });
+  // Champagne also makes still and fortified wine. None of it has a dosage or a
+  // disgorgement date, so the release form must stay shut for them.
+  it('rejects the still and fortified wines of the Champagne region',()=>{
+    for(const appellation of ['Coteaux Champenois','Rosé des Riceys','Rose des Riceys','Ratafia de Champagne','Ratafia Champenois','Marc de Champagne','Fine de Champagne'])
+      expect(isChampagne({region:'Champagne',appellation,wineStyle:'sparkling'})).toBe(false);
+    expect(isChampagne({region:'Champagne',wineStyle:'fortified'})).toBe(false);
+    expect(isChampagne({region:'Champagne',wineStyle:'red'})).toBe(false);
+  });
   it('preserves zero and existing text while filling only missing values',()=>{
     expect(missingChampagneDetails({dosageGPerL:0,disgorgement:'Original'},{dosageGPerL:3,disgorgement:'Changed',tirage:'2020',lotCode:' '})).toEqual({tirage:'2020'});
   });

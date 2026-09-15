@@ -235,7 +235,13 @@ const tree:readonly Draft[]=[
     // marking them the country default stops above the region tier, so a wine
     // recorded as "Champagne" showed no denomination while the same wine
     // recorded under its village showed AOC.
-    aocRegion('Champagne',[],appellations('Montagne de Reims','Côte des Blancs','Vallée de la Marne','Côte des Bar','Aÿ','Cramant','Le Mesnil-sur-Oger')),
+    // The seventeen grand cru villages sit here because a Champagne label names
+    // its village, not its appellation — the appellation is always 'Champagne'.
+    // Ambonnay or Bouzy in the appellation column has to resolve to the region,
+    // or the wine reads as if it came from nowhere.
+    aocRegion('Champagne',[],appellations('Montagne de Reims','Côte des Blancs','Vallée de la Marne','Côte des Bar',
+      'Ambonnay','Avize','Aÿ','Beaumont-sur-Vesle','Bouzy','Chouilly','Cramant','Louvois','Mailly-Champagne',
+      'Le Mesnil-sur-Oger','Oger','Oiry','Puisieulx','Sillery','Tours-sur-Marne','Verzenay','Verzy')),
     region('Rhône',['Rhone','Rhône Valley','Rhone Valley'],[
       sub('Northern Rhône',['Northern Rhone'],appellations('Côte-Rôtie','Hermitage','Crozes-Hermitage','Cornas','Saint-Joseph','Condrieu','Château-Grillet','Saint-Péray')),
       sub('Southern Rhône',['Southern Rhone'],appellations('Châteauneuf-du-Pape','Gigondas','Vacqueyras','Rasteau','Lirac','Tavel','Vinsobres','Cairanne','Côtes du Rhône','Côtes du Rhône Villages'))
