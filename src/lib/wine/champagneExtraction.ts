@@ -9,7 +9,9 @@ const normalized=(value:string|null|undefined)=>(value??'').trim().toLowerCase()
  * disgorgement date, a tirage or time on lees: the release form has nothing to
  * hold for them, and a photo read would be inventing every value.
  */
-const STILL_OR_FORTIFIED=/^(?:coteaux champenois|ros(?:é|e) des riceys|ratafia(?: champenois| de champagne)?|(?:marc|fine) de champagne|fine champagne)$/;
+// Match complete names within label text too: denomination markers and mixed
+// place strings must not bypass this exclusion through the region fallback.
+const STILL_OR_FORTIFIED=/\b(?:coteaux champenois|ros(?:é|e) des riceys|ratafia(?: champenois| de champagne)?|(?:marc|fine) de champagne|fine champagne)\b/;
 /**
  * Style is a single choice with no "sparkling rosé" in it, so a rosé Champagne
  * gets filed under rose as readily as under sparkling - and it carries the same

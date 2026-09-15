@@ -78,6 +78,9 @@ describe('Champagne eligibility and non-destructive suggestions',()=>{
     expect(isChampagne({region:'Champagne',wineStyle:'fortified'})).toBe(false);
     expect(isChampagne({region:'Champagne',wineStyle:'red'})).toBe(false);
   });
+  it.each(['Coteaux Champenois AOC','AOC Coteaux Champenois','Rosé des Riceys AOP','Ratafia de Champagne IGP','Fine Champagne Cognac','Champagne / Coteaux Champenois'])('excludes decorated still or spirit appellation %s',appellation=>{
+    expect(isChampagne({region:'Champagne',appellation,wineStyle:'rose'})).toBe(false);
+  });
   it('preserves zero and existing text while filling only missing values',()=>{
     expect(missingChampagneDetails({dosageGPerL:0,disgorgement:'Original'},{dosageGPerL:3,disgorgement:'Changed',tirage:'2020',lotCode:' '})).toEqual({tirage:'2020'});
   });
@@ -90,6 +93,8 @@ describe('Champagne extraction through the deployed entrypoint',()=>{
     expect((await s.request('POST','foreign')).status).toBe(404);
     expect((await s.request('POST','owner',['other-photo'])).status).toBe(400);
     s.sqlite.exec("UPDATE wines SET appellation='Cava'");
+    expect((await s.request()).status).toBe(400);
+    s.sqlite.exec("UPDATE wines SET appellation='Rosé des Riceys AOC',wine_style='rose'");
     expect((await s.request()).status).toBe(400);
     expect(s.jobs).toHaveLength(0);expect(s.objects.size).toBe(0);
   });
