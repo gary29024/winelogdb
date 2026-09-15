@@ -70,8 +70,8 @@ export const mapWine=(r:Record<string,unknown>,imageIds:string[]=[])=>({
 
 async function mapWinesWithImages(db:D1Database,owner:string,rows:Record<string,unknown>[]){
  if(!rows.length)return [];
- const wineIds=rows.map(r=>String(r.id)),placeholders=wineIds.map(()=>'?').join(',');
- const images=await db.prepare(`SELECT id,wine_id FROM wine_images WHERE owner_id=? AND wine_id IN (${placeholders}) ORDER BY rowid ASC`).bind(owner,...wineIds).all<{id:string;wine_id:string}>();
+ const wineIds=rows.map(r=>String(r.id));
+ const images=await db.prepare('SELECT id,wine_id FROM wine_images WHERE owner_id=? AND wine_id IN (SELECT CAST(value AS TEXT) FROM json_each(?)) ORDER BY rowid ASC').bind(owner,JSON.stringify(wineIds)).all<{id:string;wine_id:string}>();
  const byWine=new Map<string,string[]>();
  for(const image of images.results){const list=byWine.get(image.wine_id)??[];list.push(image.id);byWine.set(image.wine_id,list)}
  return rows.map(row=>mapWine(row,byWine.get(String(row.id))??[]));

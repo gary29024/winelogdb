@@ -91,16 +91,14 @@ export async function listJournalPage(db:D1Database,owner:string,q:JournalListQu
     vintage:'w.vintage DESC, w.producer COLLATE NOCASE ASC, w.wine_name COLLATE NOCASE ASC, w.id ASC'
   };
   let order=orders[q.sort??'']||orders.newest;
-  let pageFrom='wines w';
-  const pagePrefixArgs:unknown[]=[];
+  const orderArgs:unknown[]=[];
   // A natural-language search is useful only if its nearest matches appear first.
   // An explicit user-selected sort still wins, so semantic search never silently
-  // overrides "rating", "producer", etc. Join the ordered JSON array once for
-  // ranking instead of running a correlated json_each() scan for every result row.
+  // overrides "rating", "producer", etc. A direct LEFT JOIN to json_each also
+  // scans the virtual table per wine; keep the simpler scalar rank expression.
   if(!q.sort&&semanticMatches.length&&rawQuery&&!vintageSearch){
-    pageFrom='wines w LEFT JOIN json_each(?) semantic_rank ON CAST(semantic_rank.value AS TEXT)=w.id';
-    pagePrefixArgs.push(semanticJson);
-    order=`COALESCE(CAST(semantic_rank.key AS INTEGER), ${semanticMatches.length}), ${orders.newest}`;
+    order=`COALESCE((SELECT CAST(key AS INTEGER) FROM json_each(?) WHERE CAST(value AS TEXT)=w.id), ${semanticMatches.length}), ${orders.newest}`;
+    orderArgs.push(semanticJson);
   }
   const limit=Math.min(Math.max(Number(q.limit)||36,1),72),offset=Math.max(Number(q.offset)||0,0);
   // Count and page share the exact same predicate and travel in one D1 batch.
@@ -113,7 +111,7 @@ export async function listJournalPage(db:D1Database,owner:string,q:JournalListQu
     w.created_at,
     (SELECT t.name FROM wine_experiences we LEFT JOIN tastings t ON t.id=we.tasting_id WHERE we.wine_id=w.id AND we.owner_id=w.owner_id ORDER BY we.created_at DESC LIMIT 1) AS tasting_name,
     (SELECT wi.id FROM wine_images wi WHERE wi.owner_id=w.owner_id AND wi.wine_id=w.id ORDER BY wi.rowid ASC LIMIT 1) AS image_id
-    FROM ${pageFrom} WHERE ${where} ORDER BY ${order} LIMIT ? OFFSET ?`).bind(...pagePrefixArgs,...args,limit,offset);
+    FROM wines w WHERE ${where} ORDER BY ${order} LIMIT ? OFFSET ?`).bind(...args,...orderArgs,limit,offset);
   const [countResult,rowsResult]=await db.batch([countStatement,pageStatement]);
   const total=Number((countResult.results[0] as {total?:unknown}|undefined)?.total??0);
   const rows=rowsResult.results as JournalRow[];
