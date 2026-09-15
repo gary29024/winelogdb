@@ -184,13 +184,6 @@ function vintageTargetLabel(targetId:string|null){
   if(!targetId)return null;
   try{
     const parsed=JSON.parse(targetId) as unknown;
-    if(parsed&&typeof parsed==='object'&&!Array.isArray(parsed)){
-      const target=parsed as {place?:unknown;vintage?:unknown;style?:unknown};
-      const clean=(value:unknown)=>value==null?'':String(value).trim();
-      const place=clean(target.place),vintage=clean(target.vintage),style=clean(target.style);
-      if(!place&&!vintage&&!style)return null;
-      return [place||null,vintage||null,style?titleCase(style):null].filter(Boolean).join(' · ');
-    }
     if(!Array.isArray(parsed)||parsed.length<2)return null;
     const anchor=String(parsed[0]??''),parts=anchor.split('|').filter(Boolean);
     const place=parts.at(-1)??anchor,vintage=String(parsed[1]??'').trim(),style=String(parsed[2]??'').trim();

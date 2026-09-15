@@ -200,7 +200,7 @@ async function cacheSemanticIds(env:SemanticEnv,owner:string,config:EmbeddingCon
   const stamp=new Date().toISOString(),cutoff=new Date(Date.now()-QUERY_CACHE_TTL_MS).toISOString(),maxResults=Math.max(1,limit);
   try{
     await env.DB.batch([
-      env.DB.prepare(`DELETE FROM wine_semantic_query_cache WHERE owner_id=? AND model_key=? AND (updated_at<? OR index_revision<>?)`)
+      env.DB.prepare(`DELETE FROM wine_semantic_query_cache WHERE owner_id=? AND model_key=? AND (updated_at<? OR index_revision<?)`)
         .bind(owner,config.modelKey,cutoff,indexRevision),
       env.DB.prepare(`INSERT INTO wine_semantic_query_cache(owner_id,model_key,query_key,index_revision,max_results,result_ids_json,updated_at)
         VALUES(?,?,?,?,?,?,?)
@@ -208,7 +208,8 @@ async function cacheSemanticIds(env:SemanticEnv,owner:string,config:EmbeddingCon
           index_revision=excluded.index_revision,
           max_results=excluded.max_results,
           result_ids_json=excluded.result_ids_json,
-          updated_at=excluded.updated_at`)
+          updated_at=excluded.updated_at
+        WHERE excluded.index_revision>=wine_semantic_query_cache.index_revision`)
         .bind(owner,config.modelKey,queryKey,indexRevision,maxResults,JSON.stringify(ids),stamp)
     ]);
   }catch(error){
@@ -257,7 +258,7 @@ export async function semanticWineIds(env:SemanticEnv,owner:string,query:string,
   const candidates=await currentCandidates(env.DB,owner,config);
   if(!candidates.length)return {ids:[] as string[],modelKey:config.modelKey};
   const runId=crypto.randomUUID();
-  const [queryVector]=await embedTexts(env,config,[query],'query',{owner,runId,targetId:'journal-query'});
+  const [queryVector]=await embedTexts(env,config,[queryKey],'query',{owner,runId,targetId:'journal-query'});
   const ids=rankSemanticCandidates(queryVector,candidates,limit).map(item=>item.id);
   await cacheSemanticIds(env,owner,config,queryKey,indexRevision,ids,limit);
   return {ids,modelKey:config.modelKey};

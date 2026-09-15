@@ -57,6 +57,16 @@ it('queues the selected saved photos, disables repeats, and waits for review',as
   expect(startChampagneExtraction).toHaveBeenCalledWith('w',['p1'],expect.any(AbortSignal));
   expect(button('Extraction queued…').disabled).toBe(true);expect(onApply).not.toHaveBeenCalled();
 });
+it('keeps a new selection when completed source photos are refreshed',async()=>{
+  const {onApply}=await render(completed,{},['p1','p2']);
+  await open();
+  const inputs=()=>[...document.querySelectorAll<HTMLInputElement>('dialog input[type=checkbox]')];
+  expect(inputs().map(input=>input.checked)).toEqual([true,true]);
+  await act(async()=>inputs()[0].click());
+  await act(async()=>root!.render(<MemoryRouter><ChampagnePhotoBackfill wineId="w" imageIds={['p1','p2','p3']} details={{}} onApply={onApply}/></MemoryRouter>));
+  expect(inputs().map(input=>input.checked)).toEqual([false,true,false]);
+  expect(document.body.textContent).toContain('Result source photos: Photo 1');
+});
 it('handles no photos and empty results without inventing suggestions',async()=>{
   await render({...completed,details:null}, {}, []);
   await open();

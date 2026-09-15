@@ -1,13 +1,21 @@
 import { authHeaders,clearSession } from '../../lib/auth/client';
 import { CHAMPAGNE_PHOTO_BYTES,CHAMPAGNE_PHOTO_LIMIT,normalizeChampagneDetails,type ChampagneExtractionStatus } from '../../lib/wine/champagneExtraction';
 import { prepareRecognitionImageWithinBytes } from '../uploads/prepareImage';
+import { sparklingDetailsSchema } from '../../lib/wine/sparklingDetails';
 
 async function checked(response:Response){
   if(response.status===401){clearSession();throw new Error('Session expired. Please sign in again.')}
   if(!response.ok){const body=await response.json().catch(()=>({})) as {error?:string};throw new Error(body.error||'Could not load Champagne extraction.')}
   return response;
 }
-const normalizeRun=(run:ChampagneExtractionStatus|null)=>run?{...run,details:normalizeChampagneDetails(run.details)}:null;
+const responseDetailsSchema=sparklingDetailsSchema.strip();
+const normalizeRun=(run:ChampagneExtractionStatus|null)=>{
+  if(!run||run.details==null)return run;
+  // Older clients can still show known fields from a newer server response.
+  // Never pass unknown/invalid fields on to the form's strict suggestion parser.
+  const parsed=responseDetailsSchema.safeParse(run.details);
+  return {...run,details:parsed.success?normalizeChampagneDetails(parsed.data):null};
+};
 async function extractionResponse(response:Response){
   const body=await (await checked(response)).json() as {run:ChampagneExtractionStatus|null};
   return {run:normalizeRun(body.run)};

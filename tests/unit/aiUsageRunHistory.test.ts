@@ -1,4 +1,5 @@
 import { describe,expect,it } from 'vitest';
+import { readFileSync } from 'node:fs';
 import { recordAiUsage,usageRunHistory,usageSummary } from '../../src/lib/usage/aiUsage';
 import { DEFAULT_RATES } from '../../src/lib/usage/rates';
 import { migratedSqliteD1 } from './support/sqliteD1';
@@ -53,13 +54,17 @@ describe('AI spend run history',()=>{
     }finally{sqlite.close()}
   });
 
-  it('renders a self-describing Vintage Window target when one is available',async()=>{
+  it('backfills retained Vintage Window targets from the persisted array cache key',async()=>{
     const {db,sqlite}=migratedSqliteD1();
     try{
-      const target=JSON.stringify({key:JSON.stringify(['france|champagne',2019,'sparkling']),place:'Champagne',vintage:2019,style:'sparkling'});
-      await recordAiUsage({DB:db},'owner',{kind:'vintage_window',runId:'vintage-object',targetId:target,eventId:'vintage-object-1',model:'gemini-3.1-flash-lite',requests:1,searchQueries:2,promptTokens:200,outputTokens:300});
+      const target=JSON.stringify(['france|champagne',2019,'sparkling']);
+      await recordAiUsage({DB:db},'owner',{kind:'vintage_window',runId:'vintage-job',eventId:'vintage-event',model:'gemini-3.1-flash-lite',requests:1,searchQueries:2,promptTokens:200,outputTokens:300});
+      const stamp=new Date().toISOString();
+      sqlite.prepare(`INSERT INTO vintage_research_jobs(id,owner_id,cache_key,subject_json,status,created_at,updated_at)
+        VALUES('vintage-job','owner',?,'{}','complete',?,?)`).run(target,stamp,stamp);
+      sqlite.exec(readFileSync('src/lib/db/migrations/0062_ai_usage_champagne_extraction.sql','utf8'));
       expect((await usageRunHistory(db,'owner',DEFAULT_RATES,'vintage_window',30)).runs[0]).toMatchObject({
-        targetLabel:'Champagne · 2019 · Sparkling'
+        targetId:target,targetLabel:'Champagne · 2019 · Sparkling'
       });
     }finally{sqlite.close()}
   });

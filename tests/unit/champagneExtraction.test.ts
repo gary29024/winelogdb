@@ -95,6 +95,11 @@ describe('Champagne eligibility and non-destructive suggestions',()=>{
       reserveWineDetail:'Perpetual reserve (2010–2018)',otherTechnicalDetails:'Harvest 2019 (80%)',lotCode:'L22A'
     });
   });
+  it('preserves professional identifiers and release codes in technical prose',()=>{
+    expect(normalizeChampagneDetails({otherTechnicalDetails:'RM 12345-01',assemblage:'RELEASE L22A'})).toMatchObject({
+      otherTechnicalDetails:'RM 12345-01',assemblage:'Release L22A'
+    });
+  });
 });
 
 describe('Champagne extraction through the deployed entrypoint',()=>{

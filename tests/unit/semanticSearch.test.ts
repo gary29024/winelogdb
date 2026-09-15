@@ -65,7 +65,7 @@ describe('Journal semantic search helpers',()=>{
     const run=vi.fn(async(_model:string,input:unknown)=>{
       const texts=(input as {text:string[]}).text;
       return {data:texts.map(text=>{
-        if(text.trim().replace(/\s+/g,' ')==='floral elegant Burgundy')return basis(1,0);
+        if(text==='floral elegant Burgundy')return basis(1,0);
         if(text.includes('Wine: Fleur'))return basis(3,0);
         if(text.includes('Wine: Silk'))return basis(4,3);
         return basis(0,2);
@@ -88,7 +88,8 @@ describe('Journal semantic search helpers',()=>{
       expect(norm).toBeCloseTo(1,5);
     }
 
-    const semantic=await semanticWineIds(env,'owner','floral elegant Burgundy');
+    const semantic=await semanticWineIds(env,'owner','  ｆｌｏｒａｌ   elegant Burgundy  ');
+    expect(run.mock.calls[1][1]).toMatchObject({text:['floral elegant Burgundy']});
     expect(semantic?.ids.slice(0,3)).toEqual(['w1','w2','w3']);
     expect(run).toHaveBeenCalledTimes(2);
     const page=await listJournalPage(db,'owner',{query:'floral elegant Burgundy'},semantic?.ids??[]);
@@ -120,5 +121,31 @@ describe('Journal semantic search helpers',()=>{
     expect(afterDelete?.ids.slice(0,2)).toEqual(['w1','w3']);
     expect(afterDelete?.ids).not.toContain('w2');
     expect(run).toHaveBeenCalledTimes(5);
+  });
+
+  it('does not purge or overwrite newer rankings when an older query finishes late',async()=>{
+    const state=migratedSqliteD1();databases.push(state);const {db,sqlite}=state;
+    sqlite.exec("INSERT INTO wines(id,owner_id,producer,wine_name,created_at,updated_at) VALUES('w','owner','Producer','Wine','2026-01-01','2026-01-01')");
+    const vector=[1,...Array.from({length:1023},()=>0)];
+    const run=vi.fn(async()=>({data:[vector]}));
+    const env={DB:db,AI:{run}} as never;
+    await warmSemanticWineIndex(env,'owner');
+    let release!:()=>void,started!:()=>void;
+    const blocked=new Promise<void>(resolve=>{release=resolve});
+    const entered=new Promise<void>(resolve=>{started=resolve});
+    run.mockImplementationOnce(async()=>{started();await blocked;return {data:[vector]}});
+    const oldSearch=semanticWineIds(env,'owner','floral elegant Burgundy');
+    await entered;
+    sqlite.exec('UPDATE wine_semantic_index_state SET revision=revision+1');
+    await semanticWineIds(env,'owner','floral elegant Burgundy');
+    await semanticWineIds(env,'owner','silky elegant Burgundy');
+    const fresh=sqlite.prepare('SELECT query_key,index_revision,result_ids_json FROM wine_semantic_query_cache ORDER BY query_key').all();
+    expect(fresh).toHaveLength(2);
+    release();await oldSearch;
+    expect(sqlite.prepare('SELECT query_key,index_revision,result_ids_json FROM wine_semantic_query_cache ORDER BY query_key').all()).toEqual(fresh);
+    const calls=run.mock.calls.length;
+    await semanticWineIds(env,'owner','floral elegant Burgundy');
+    await semanticWineIds(env,'owner','silky elegant Burgundy');
+    expect(run).toHaveBeenCalledTimes(calls);
   });
 });

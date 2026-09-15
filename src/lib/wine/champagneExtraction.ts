@@ -64,7 +64,11 @@ const uniformCase=(value:string)=>{
   const letters=[...value].filter(char=>/\p{L}/u.test(char)).join('');
   if(!letters)return value;
   if(letters===letters.toLocaleUpperCase()||letters===letters.toLocaleLowerCase()){
-    const lower=value.toLocaleLowerCase();
+    // Preserve professional identifiers and literal alphanumeric codes even in
+    // otherwise all-caps prose (for example RM 12345-01 or release L22A).
+    const lower=value.split(/(\s+)/).map(token=>
+      /^(?:RM|NM|CM|RC|SR|ND|MA)$/.test(token)||(/\d/.test(token)&&/[A-Z]/.test(token)&&/^[A-Z\d./-]+$/.test(token))
+        ?token:token.toLocaleLowerCase()).join('');
     const first=[...lower].findIndex(char=>/\p{L}/u.test(char));
     return first<0?lower:`${lower.slice(0,first)}${lower[first].toLocaleUpperCase()}${lower.slice(first+1)}`;
   }
