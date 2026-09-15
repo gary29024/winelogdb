@@ -49,7 +49,7 @@ button,a,label[role=button],summary{touch-action:manipulation}
 
   /* 16px is the threshold below which iOS zooms the viewport on focus. The :not() chain also
      buys enough specificity to beat the per-page input sizes. */
-  input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=file]),select,textarea{font-size:max(16px,1em)}
+  :is(input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=file]),select,textarea){font-size:max(16px,1em)}
   /* Horizontal chip rails scroll cleanly, stop mid-chip, and fade at the edge so the clipped last
      filter reads as "more this way" rather than as a layout break. */
   .filter-pills{scroll-snap-type:x proximity;scrollbar-width:none;overscroll-behavior-x:contain;padding-right:10px;-webkit-mask-image:linear-gradient(90deg,#000 0,#000 calc(100% - 26px),transparent 100%);mask-image:linear-gradient(90deg,#000 0,#000 calc(100% - 26px),transparent 100%)}

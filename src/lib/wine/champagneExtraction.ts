@@ -2,11 +2,12 @@ import { sparklingDetailsSchema,type SparklingDetails } from './sparklingDetails
 
 type Origin={region?:string|null;appellation?:string|null;wineStyle?:string|null};
 const normalized=(value:string|null|undefined)=>(value??'').trim().toLowerCase().replace(/\s+/g,' ');
-/** Do not mistake Fine Champagne Cognac or still Coteaux Champenois for Champagne. */
+/** Anchored at the start so a cru or blanc-de-blancs appellation still reads as
+ *  Champagne, while Fine Champagne Cognac and still Coteaux Champenois do not. */
 export function isChampagne(wine:Origin){
   if(wine.wineStyle&&wine.wineStyle!=='sparkling')return false;
   const appellation=normalized(wine.appellation);
-  if(appellation)return /^(?:aoc |aop )?champagne(?: aoc| aop)?$/.test(appellation);
+  if(appellation)return /^(?:aoc |aop )?champagne\b/.test(appellation);
   return normalized(wine.region)==='champagne';
 }
 export const CHAMPAGNE_PHOTO_LIMIT=6;

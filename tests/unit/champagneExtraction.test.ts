@@ -41,6 +41,13 @@ describe('Champagne eligibility and non-destructive suggestions',()=>{
     for(const appellation of ['Cava','Prosecco','Fine Champagne','Coteaux Champenois'])expect(isChampagne({region:'Champagne',appellation,wineStyle:'sparkling'})).toBe(false);
     expect(isChampagne({appellation:'Champagne',wineStyle:'white'})).toBe(false);
   });
+  // A grower bottle rarely says just 'Champagne'. The cru and blanc-de-blancs
+  // appellations are still Champagne, and hiding photo backfill from them was
+  // the difference between the button appearing and the wine looking ineligible.
+  it('accepts cru and blanc-de-blancs Champagne appellations',()=>{
+    for(const appellation of ['Champagne Grand Cru','Champagne Premier Cru','Champagne 1er Cru','Champagne Blanc de Blancs','AOC Champagne Grand Cru'])
+      expect(isChampagne({region:'Champagne',appellation,wineStyle:'sparkling'})).toBe(true);
+  });
   it('preserves zero and existing text while filling only missing values',()=>{
     expect(missingChampagneDetails({dosageGPerL:0,disgorgement:'Original'},{dosageGPerL:3,disgorgement:'Changed',tirage:'2020',lotCode:' '})).toEqual({tirage:'2020'});
   });
