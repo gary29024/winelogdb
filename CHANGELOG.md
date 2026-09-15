@@ -2,6 +2,54 @@
 
 All notable WineLogDB changes are summarized here by shipped impact. Each stable release consolidates merged pull requests rather than duplicating the full PR-by-PR history.
 
+## [1.2.0] - 2026-09-15
+
+### Smart Journal search
+
+- Added opt-in **Smart Search** for descriptive natural-language Journal queries while keeping normal debounced typing on the existing cheap lexical/structured path.
+- Added Cloudflare Workers AI `@cf/qwen/qwen3-embedding-0.6b` as the default embedding provider with optional Gemini `gemini-embedding-001` BYOK support, background document refresh and fail-open lexical fallback.
+- Stored normalized Float32 embedding vectors in D1 and combined semantic candidates with the canonical Journal filters, pagination and explicit sorting rather than creating a parallel search surface.
+- Fixed production D1 BLOB decoding for number-array results and removed SQL-variable-limit failures by packing semantic candidate IDs/ranks instead of binding large ID lists repeatedly.
+
+### Vintage Intelligence and durable research
+
+- Expanded grounded vintage lookup with a source-aware **WineLog 70–100 estimate**, quality band, AI-assessed confidence, consensus, strengths and cautions while keeping WineLog's estimate explicitly separate from third-party critic scores.
+- Added a dedicated cellar Vintage Intelligence dialog, clearer researched-vs-typical drinking readiness and evidence/source presentation without automatic repeat AI calls.
+- Moved accepted vintage lookups onto the existing research queue so browser closure/disconnection no longer cancels paid work; persisted owner/cell jobs, deduplicated active work and preserved the previous saved result when a refresh fails.
+- Removed the drinking-window panel/request from tasted-wine detail by default while retaining the feature behind the surface flag and keeping it active for cellar bottles.
+
+### Champagne and sparkling release details
+
+- Added per-bottle Champagne/traditional-method release details for dosage, dosage style, disgorgement, tirage/bottling, base vintage, reserve percentage, lees ageing, lot/release code, assemblage, reserve detail, malolactic information and fermentation/elevage.
+- Extended Single Wine multi-photo recognition to capture those details only when they are explicitly visible on supplied labels, without inferring precise release facts from general producer/cuvée knowledge.
+- Added background **Fill Champagne details from photos** for existing Journal entries. Suggestions are persisted separately, fill only empty form fields and are applied only through the normal wine Save.
+- Fixed Champagne eligibility for village-valued appellations, `Champagne Grand Cru` / `Champagne Blanc de Blancs` wording and rosé Champagne while excluding still/fortified Champagne-region wines and unrelated sparkling wines.
+
+### Sharing, producer research and imagery
+
+- Added 1080 × 1920 tasting/Journal story cards for up to 16 selected wines, with label-first adaptive layouts, favourite markers, native file sharing where supported and a save fallback elsewhere.
+- Made story-card date and tasting name independently optional and allowed the grid to reclaim freed header space automatically.
+- Added Producer Range Phase 2: reuse/crawl bounded official-site evidence, try low-cost GLM-4.7-Flash extraction through AI Gateway/Z.AI with a Workers AI resilience path, and fall back to grounded Gemini when the evidence is incomplete or providers fail.
+- Added durable manual producer-catalogue additions and reviewable possible-missing-wine suggestions so later machine refreshes cannot erase user-confirmed corrections.
+- Added authenticated persistent private WebP thumbnails in R2 with ownership checks, edge/R2 reuse and safe original-image fallback; existing photos generate derivatives lazily rather than requiring re-upload or bulk backfill.
+
+### Save, scan and UI reliability
+
+- Made normal JSON/multipart wine saves transactional across the wine row, supplied photos, tasting state, latest experience, live-tasting activity and optional tasting structure; failed multipart creation cleans up R2 objects uploaded for that attempt.
+- Made Group Scan tolerant of missing non-essential bounding-box coordinates while continuing to reject invalid/inverted boxes.
+- Prevented automatically matched tasting-sheet wines from being offered to another row, and showed photographed wine-list pages before AI reading.
+- Sorted producer tasted-cuvée lists alphabetically, accepted realistic spirit alcohol percentages such as Calvados at 46%, and surfaced field-level Batch Scan validation failures instead of a generic error.
+- Fixed Journal/image-list D1 binding limits, semantic-search production decoding and multiple image/search loading issues found under real usage.
+- Standardized mobile inputs, selects and textareas at the 16 px anti-zoom threshold, including compact sparkling-detail fields.
+
+### Release integrity and deployment
+
+- v1.2.0 consolidates all merged product work after v1.1.0 through PR #255; open draft PR #224 (multi-user accounts, friend sharing and AI credit controls) is intentionally excluded.
+- Product baseline before release metadata: `main` at `64f2bf45ce86bb98a93d4e60d7500d36caa8aba9` (merged PR #255), whose CI run #863 completed successfully.
+- New schema migrations since v1.1.0 are `0048_producer_hero_rejected.sql` through `0060_champagne_extraction.sql` (13 migrations).
+- Latest shipped migration for this release: `0060_champagne_extraction.sql`.
+- Production upgrades must use `npm run deploy` so remote D1 migrations run before the Worker is deployed.
+
 ## [1.1.0] - 2026-09-03
 
 ### Cellar and bottle maturity
