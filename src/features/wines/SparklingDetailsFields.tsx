@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect,useState } from 'react';
 import { hasSparklingDetails,type SparklingDetails } from '../../lib/wine/sparklingDetails';
 import '../../sparklingDetails.css';
 
@@ -6,6 +6,8 @@ type Props={details:SparklingDetails;onChange:(next:SparklingDetails)=>void};
 
 export function SparklingDetailsFields({details,onChange}:Props){
   const [open,setOpen]=useState(()=>hasSparklingDetails(details));
+  const populated=hasSparklingDetails(details);
+  useEffect(()=>{if(populated)setOpen(true)},[populated]);
   const set=<K extends keyof SparklingDetails>(key:K,value:SparklingDetails[K])=>onChange({...details,[key]:value});
   const numberValue=(value:string)=>value.trim()===''?null:Number(value);
   return <details className="sparkling-details-editor" open={open} onToggle={e=>setOpen(e.currentTarget.open)}>

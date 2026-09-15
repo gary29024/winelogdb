@@ -1,4 +1,5 @@
 import app from './researchQueueEntry';
+import { handleChampagneExtraction,processChampagneExtraction } from './champagneExtraction';
 import { tastingStructureStatement } from '../src/lib/db/wineSave';
 import { requireSession } from '../src/lib/auth/session';
 import { configureGeminiBatchGateway } from '../src/lib/research/geminiBatch';
@@ -41,6 +42,7 @@ export default {
   async fetch(request:Request,env:Bindings,ctx:ExecutionContext){
     configureBatchGateway(env);
     const url=new URL(request.url),wineId=exactWineId(url.pathname);
+    const champagneResponse=await handleChampagneExtraction(request,env);if(champagneResponse)return champagneResponse;
     const groupSessionResponse=await handleGroupRecognitionSessionRequest(request,env);if(groupSessionResponse)return groupSessionResponse;
 
     // Range corrections live above the legacy producer route so they can evolve
@@ -109,6 +111,10 @@ export default {
     configureBatchGateway(env);
     if(batch.messages.length!==1)return app.queue(batch,env);
     const message=batch.messages[0],job=message.body as QueueJob;
+    if(message.body.kind==='champagne_extraction'){
+      try{await processChampagneExtraction(env,message.body);message.ack()}catch(error){console.error('champagne-extraction-queue-error',error);message.retry()}
+      return;
+    }
 
     // Phase 2 is deliberately an intercept, not a replacement. Official-site
     // extraction prefers Z.AI BYOK, then independently hosted Workers AI GLM.

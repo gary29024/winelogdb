@@ -12,6 +12,8 @@ import { emptySparklingDetails,hasSparklingDetails,type SparklingDetails } from 
 import { refreshActiveTasting,useActiveTasting } from '../tastings/useActiveTasting';
 import { matchTastingWine,type TastingWineMatch } from '../tastings/api';
 import { SparklingDetailsFields } from './SparklingDetailsFields';
+import { ChampagnePhotoBackfill } from './ChampagnePhotoBackfill';
+import { isChampagne,missingChampagneDetails } from '../../lib/wine/champagneExtraction';
 import '../../producerResolution.css';
 import '../../wineFormCompact.css';
 
@@ -36,7 +38,7 @@ const structureFields=[
 ] as const;
 
 type WineFormInput=WineInput&{tastingStructure?:TastingStructure|null;sparklingDetails?:SparklingDetails|null};
-type WineFormInitial=Partial<WineInput>&{tastingStructure?:TastingStructure|null;sparklingDetails?:SparklingDetails|null};
+type WineFormInitial=Partial<WineInput>&{tastingStructure?:TastingStructure|null;sparklingDetails?:SparklingDetails|null;imageIds?:string[]};
 /**
  * Who the saved wine turned out to be.
  *
@@ -329,6 +331,7 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,holdin
       <small>Percentages are optional. Separate grapes with commas. A grape sold under another name — Pinot Nero, Garnacha — is filed under the one name when you save.</small>
     </label>
 
+    {id&&isChampagne(initial??{})&&<ChampagnePhotoBackfill key={id} wineId={id} imageIds={initial?.imageIds??[]} details={sparklingDetails} onApply={suggestions=>setSparklingDetails(current=>({...current,...missingChampagneDetails(current,suggestions)}))}/>}
     {sparklingVisible&&<SparklingDetailsFields details={sparklingDetails} onChange={setSparklingDetails}/>} 
 
     <details className="structure-fields structure-disclosure" open={structureOpen} onToggle={e=>setStructureOpen(e.currentTarget.open)}><summary><span>Structure</span><small>Optional</small></summary><div className="structure-disclosure-body"><small className="structure-helper">Tap the value itself. Tap the selected value again to clear it.</small>{structureFields.map(item=><div className="structure-row" key={item.key}><span>{item.label}</span><div className="structure-options" role="group" aria-label={item.label}>{item.options.map(([value,label])=><button key={value} type="button" className={`structure-option${structure[item.key]===value?' selected':''}`} aria-pressed={structure[item.key]===value} onClick={()=>chooseStructure(item.key,value)}>{label}</button>)}</div></div>)}</div></details>
