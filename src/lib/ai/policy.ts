@@ -1,7 +1,7 @@
 export const AI_MODELS={
   recognitionPrimary:'gemini-3.1-flash-lite',
-  recognitionEscalationPrimary:'gemini-3.8-flash',
-  recognitionEscalationFallback:'gemini-3.7-flash',
+  recognitionEscalationSync:'gemini-3.8-flash',
+  recognitionEscalationFlex:'gemini-3.8-flash',
   groundedResearchPrimary:'gemini-3.8-flash',
   groundedResearchFallback:'gemini-3.7-flash',
   vintagePrimary:'gemini-3.1-flash-lite',
@@ -11,11 +11,6 @@ export const AI_MODELS={
   producerRangeZai:'glm-4.7-flash',
   producerRangeZaiMeter:'zai/glm-4.7-flash',
   producerRangeWorkers:'@cf/qwen/qwen3-30b-a3b-fp8'
-} as const;
-
-export const AI_DYNAMIC_ROUTES={
-  recognitionEscalation:'dynamic/winelog-recognition-escalation',
-  producerRangeExtraction:'dynamic/winelog-producer-range-extraction'
 } as const;
 
 export type AiRouteTransport=
@@ -30,78 +25,62 @@ export type AiRouteTransport=
 export type AiRoutePolicy={
   transport:AiRouteTransport;
   models:readonly string[];
-  dynamicRoute?:string;
-  dynamicReady:boolean;
   note:string;
 };
 
 /**
- * Canonical inventory of every production AI use case.
+ * Canonical inventory of the production AI use cases that actually run today.
  *
- * `dynamicReady` means the workload can eventually move behind Cloudflare
- * Dynamic Routing without losing a capability WineLog currently relies on.
- * It does not mean traffic is already sent to /compat/chat/completions. Dynamic
- * routes must be deployed in AI Gateway before a caller is switched over.
- *
- * Grounding, Flex and Batch stay provider-native because those capabilities use
- * Vertex/Gemini-specific request semantics. WineLog continues to own the
- * domain-quality gate even when infrastructure routing later moves to Cloudflare.
+ * This is intentionally not a transport abstraction or future-routing plan.
+ * Capability-specific behavior stays with its native implementation: Gemini
+ * multimodal structured output, Google Search grounding, Vertex Flex/Batch,
+ * Workers AI and custom AI Gateway providers each keep their existing request
+ * semantics. WineLog owns domain-quality gates and application fallbacks.
  */
 export const AI_ROUTES={
   recognitionInteractive:{
     transport:'gemini-native-sync',
     models:[AI_MODELS.recognitionPrimary],
-    dynamicReady:false,
-    note:'Single/group/sheet/framing recognition. Keep Gemini 3.1 Flash Lite and native multimodal structured output.'
+    note:'Single/group/sheet/framing recognition. Gemini 3.1 Flash Lite with native multimodal structured output.'
   },
-  recognitionEscalation:{
+  recognitionEscalationSync:{
     transport:'gemini-native-sync',
-    models:[AI_MODELS.recognitionEscalationPrimary,AI_MODELS.recognitionEscalationFallback],
-    dynamicRoute:AI_DYNAMIC_ROUTES.recognitionEscalation,
-    dynamicReady:true,
-    note:'Availability fallback target for uncertain recognition; WineLog still decides whether an escalated answer is better.'
+    models:[AI_MODELS.recognitionEscalationSync],
+    note:'Synchronous uncertain-recognition escalation. There is no separate availability model fallback on this path today.'
   },
   recognitionBatch:{
     transport:'gemini-native-flex-batch',
-    models:[AI_MODELS.recognitionPrimary,AI_MODELS.recognitionEscalationPrimary],
-    dynamicReady:false,
-    note:'Vertex Flex when AI Gateway is configured, Developer API Batch otherwise. Keep provider-native semantics.'
+    models:[AI_MODELS.recognitionPrimary,AI_MODELS.recognitionEscalationFlex],
+    note:'Vertex Flex when AI Gateway is configured, Developer API Batch otherwise; Flex escalation has its own policy key.'
   },
   champagneExtraction:{
     transport:'gemini-native-flex-batch',
     models:[AI_MODELS.recognitionPrimary],
-    dynamicReady:false,
     note:'Saved-photo Champagne detail extraction intentionally remains on Gemini 3.1 Flash Lite and Flex/Batch.'
   },
   wineDeepSearch:{
     transport:'gemini-native-grounded',
     models:[AI_MODELS.groundedResearchPrimary,AI_MODELS.groundedResearchFallback],
-    dynamicReady:false,
-    note:'Google Search grounding plus durable Flex/Batch research and WineLog grounding/quality validation.'
+    note:'Google Search grounding plus durable research execution and WineLog grounding/quality validation.'
   },
   producerResearch:{
     transport:'gemini-native-grounded',
     models:[AI_MODELS.groundedResearchPrimary,AI_MODELS.groundedResearchFallback],
-    dynamicReady:false,
-    note:'Producer profile/catalogue grounded research, including split recovery and durable background execution.'
+    note:'Producer profile/catalogue grounded research, including recovery and durable background execution.'
   },
   vintageIntelligence:{
     transport:'gemini-native-grounded',
     models:[AI_MODELS.vintagePrimary,AI_MODELS.vintageEscalation],
-    dynamicReady:false,
     note:'Grounded vintage window/intelligence. Keep the cheaper Gemini 3.1 Flash Lite first pass.'
   },
   producerRangeDirect:{
     transport:'hybrid',
     models:[AI_MODELS.producerRangeZai,AI_MODELS.producerRangeWorkers,AI_MODELS.groundedResearchPrimary,AI_MODELS.groundedResearchFallback],
-    dynamicRoute:AI_DYNAMIC_ROUTES.producerRangeExtraction,
-    dynamicReady:true,
-    note:'Official-site evidence extraction can route Z.AI to Workers AI; WineLog must retain completeness/coverage gates and grounded research fallback.'
+    note:'Official-site extraction tries Z.AI, then Workers AI, then the existing grounded Gemini pipeline; WineLog enforces completeness/coverage.'
   },
   semanticEmbeddings:{
     transport:'workers-ai',
     models:[AI_MODELS.semanticWorkers,AI_MODELS.semanticGemini],
-    dynamicReady:false,
     note:'Journal query/index embeddings. Workers AI is default; Gemini embeddings remain an explicit optional provider.'
   }
 } as const satisfies Record<string,AiRoutePolicy>;
