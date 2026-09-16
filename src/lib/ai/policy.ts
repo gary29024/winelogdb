@@ -93,7 +93,7 @@ export const AI_ROUTES={
   },
   producerRangeDirect:{
     transport:'hybrid',
-    models:[AI_MODELS.producerRangeZaiMeter,AI_MODELS.producerRangeWorkers,AI_MODELS.groundedResearchPrimary,AI_MODELS.groundedResearchFallback],
+    models:[AI_MODELS.producerRangeZai,AI_MODELS.producerRangeWorkers,AI_MODELS.groundedResearchPrimary,AI_MODELS.groundedResearchFallback],
     dynamicRoute:AI_DYNAMIC_ROUTES.producerRangeExtraction,
     dynamicReady:true,
     note:'Official-site evidence extraction can route Z.AI to Workers AI; WineLog must retain completeness/coverage gates and grounded research fallback.'
