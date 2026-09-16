@@ -372,6 +372,7 @@ async function retryTransportFailure(env:Env,owner:string,producerId:string,requ
 
 export async function pollProducerBatchResearch(env:Env,owner:string,producerId:string,requestId:string,jobId:string,pollCount:number){
   const job=await getResearchBatchJob(env.DB,owner,jobId);if(!job||job.status!=='running')return;
+  if(isEmulatedGeminiBatchName(job.googleBatchName))await setRunState(env.DB,owner,requestId,'running',job.attempt===1?'searching':'retrying',job.attempt,`${job.model} is researching ${job.keys.length} producer part${job.keys.length===1?'':'s'} via Vertex Flex`);
   const fetched=await fetchGeminiBatch(env.GEMINI_API_KEY,job.googleBatchName);
   if(!fetched.ok){
     if(fetched.status===429||fetched.status>=500){const action=researchBatchTransientAction(job.attempt,pollCount);if(action==='retry'){await touchResearchBatchJob(env.DB,owner,job.id);await env.RESEARCH_QUEUE.send({kind:'producer_batch_poll',owner,producerId,requestId,jobId:job.id,pollCount:pollCount+1},{delaySeconds:researchBatchErrorPollDelay(pollCount)});return}}

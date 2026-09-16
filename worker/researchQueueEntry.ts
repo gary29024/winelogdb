@@ -218,7 +218,7 @@ async function abandonResearchJob(env:Bindings,job:ResearchJob,error:string){
 
 async function consume(batch:MessageBatch<ResearchJob>,env:Bindings){
   for(const message of batch.messages){const job=message.body;try{
-    console.log(JSON.stringify({event:'research_queue',stage:'start',kind:job.kind,...('requestId' in job?{requestId:job.requestId}:'sessionId' in job?{sessionId:job.sessionId}:{campaignId:job.campaignId})}));
+    console.log(JSON.stringify({event:'research_queue',stage:'start',kind:job.kind,deliveryAttempt:message.attempts,...('jobId' in job?{jobId:job.jobId}:{}),...('pollCount' in job?{pollCount:job.pollCount}:{}),...('requestId' in job?{requestId:job.requestId}:'sessionId' in job?{sessionId:job.sessionId}:{campaignId:job.campaignId})}));
     if(job.kind==='producer'){
       if(!(await isResearchRunRunning(env.DB,job.owner,'producer',job.producerId,job.requestId)))console.log(JSON.stringify({event:'research_queue',stage:'cancelled_before_submit',kind:job.kind,requestId:job.requestId}));
       else{await preparePrimaryRouting(env,job.owner,job.requestId);try{const result=await startProducerBatchResearch(env,job.owner,job.producerId,job.requestId,job.refreshProfile===true,job.rangeOnly===true);console.log(JSON.stringify({event:'research_queue',stage:result.ok?'batch_submitted':'failed',kind:job.kind,requestId:job.requestId,...(!result.ok?{error:result.error}:{})}))}finally{clearPrimaryGeminiBatchBypass(job.requestId)}}

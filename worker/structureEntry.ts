@@ -117,7 +117,7 @@ export default {
     }
 
     // Phase 2 is deliberately an intercept, not a replacement. Official-site
-    // extraction prefers Z.AI BYOK, then independently hosted Workers AI GLM.
+    // extraction prefers Z.AI BYOK, then independently hosted Workers AI Qwen3.
     // Weak evidence or failure of both cheap paths falls through to the existing
     // grounded Gemini path with exactly the same retry/slice behaviour as before.
     if(job.kind==='producer'){
