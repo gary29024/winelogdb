@@ -27,6 +27,9 @@ const EMULATED_PREFIX='vertex-batches/';
 const EMULATED_TTL_MS=48*60*60*1000;
 const RUNNING_STALE_MS=12*60*1000;
 const REQUEST_TIMEOUT_MS=600_000;
+// Shared by every entry and retry, including later concurrency waves. Leave
+// time to persist results before the 12-minute lease and 15-minute queue limit.
+const EXECUTION_BUDGET_MS=660_000;
 const primaryBypassRequests=new Set<string>();
 const gatewayRuntimeByApiKey=new Map<string,GatewayRuntime>();
 const gatewayKeys=['CF_AI_GATEWAY_TOKEN','AI_GATEWAY_ACCOUNT_ID','AI_GATEWAY_ID','VERTEX_PROJECT_ID','VERTEX_REGION'] as const;
@@ -173,27 +176,42 @@ export async function mapLimit<T,R>(items:T[],limit:number,fn:(item:T,index:numb
   await Promise.all(workers);return output;
 }
 
-async function executeVertexEntry(env:GatewayRuntimeEnv,model:string,displayName:string,entry:GeminiBatchRequest):Promise<GeminiInlineResponse>{
+async function executeVertexEntry(env:GatewayRuntimeEnv,model:string,displayName:string,entry:GeminiBatchRequest,deadline:number,jobId:string):Promise<GeminiInlineResponse>{
   const body=JSON.stringify(normalizeVertexGenerateContentRequest(entry.request));
+  const metadata=featureMetadata(displayName,entry.key),requestId=displayName.match(/^winelog-(?:producer|wine)-([0-9a-f-]{36})-/i)?.[1];
   let lastError='Vertex request failed',lastStatus=0;
   for(let attempt=1;attempt<=2;attempt++){
-    const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),REQUEST_TIMEOUT_MS);
+    const timeoutMs=Math.min(REQUEST_TIMEOUT_MS,deadline-Date.now());
+    if(timeoutMs<=0){
+      console.warn(JSON.stringify({event:'vertex-flex-attempt',stage:'budget_exhausted',jobId,requestId,model,...metadata,attempt}));
+      return {metadata:{key:entry.key},error:{message:'Vertex Flex batch execution budget exhausted',status:408}};
+    }
+    const controller=new AbortController(),startedAt=Date.now();let timer:ReturnType<typeof setTimeout>|undefined,retry=false;
+    console.log(JSON.stringify({event:'vertex-flex-attempt',stage:'start',jobId,requestId,model,...metadata,attempt,timeoutMs}));
     try{
-      const metadata=featureMetadata(displayName,entry.key);
-      const {response}=await postGeminiGenerateContent(env,model,body,controller.signal,{...metadata,attempt,tier:'flex'},{serviceTier:'flex',serverTimeoutSeconds:600});
-      clearTimeout(timer);
-      if(response.ok){
-        const payload=await response.json() as GeminiInlineResponse['response'],usage=vertexFlexUsage(payload);
-        console.log(JSON.stringify({event:'vertex-flex-usage',model,...metadata,attempt,...usage}));
-        return {metadata:{key:entry.key},response:payload};
-      }
-      lastStatus=response.status;lastError=(await response.text().catch(()=>'' )).replace(/\s+/g,' ').trim().slice(0,700)||`HTTP ${response.status}`;
-      if(attempt===1&&(response.status===429||response.status>=500)){await new Promise(resolve=>setTimeout(resolve,900));continue}
+      // Race the entire operation, not just response headers. Aborting alone
+      // cannot guarantee completion if a transport/body reader ignores signals.
+      const outcome=await Promise.race([
+        (async()=>{
+          const {response}=await postGeminiGenerateContent(env,model,body,controller.signal,{...metadata,attempt,tier:'flex'},{serviceTier:'flex',serverTimeoutSeconds:Math.max(1,Math.floor(timeoutMs/1000))});
+          if(response.ok)return {payload:await response.json() as GeminiInlineResponse['response'],status:response.status};
+          return {status:response.status,error:(await response.text()).replace(/\s+/g,' ').trim().slice(0,700)||`HTTP ${response.status}`};
+        })(),
+        new Promise<never>((_,reject)=>{timer=setTimeout(()=>{reject(new Error('Vertex deadline exceeded'));controller.abort()},timeoutMs)})
+      ]);
+      console.log(JSON.stringify({event:'vertex-flex-attempt',stage:'response',jobId,requestId,model,...metadata,attempt,httpStatus:outcome.status,elapsedMs:Date.now()-startedAt}));
+      if('payload' in outcome){const usage=vertexFlexUsage(outcome.payload);console.log(JSON.stringify({event:'vertex-flex-usage',jobId,requestId,model,...metadata,attempt,...usage}));return {metadata:{key:entry.key},response:outcome.payload}}
+      lastStatus=outcome.status;lastError=outcome.error;
+      if(attempt===1&&(lastStatus===429||lastStatus>=500)){retry=true;continue}
       return {metadata:{key:entry.key},error:{message:lastError,status:lastStatus}};
     }catch(e){
-      clearTimeout(timer);lastError=controller.signal.aborted?`Vertex Flex request timed out after ${REQUEST_TIMEOUT_MS/60000} minutes`:(e as Error).message||'Vertex Flex request failed';
-      if(attempt===1){await new Promise(resolve=>setTimeout(resolve,900));continue}
+      lastStatus=controller.signal.aborted?408:0;lastError=controller.signal.aborted?`Vertex Flex request timed out after ${timeoutMs/1000} seconds`:(e as Error).message||'Vertex Flex request failed';
+      console.warn(JSON.stringify({event:'vertex-flex-attempt',stage:'failed',jobId,requestId,model,...metadata,attempt,failureKind:controller.signal.aborted?'timeout':'transport_or_body_error',elapsedMs:Date.now()-startedAt,timeoutMs}));
+      if(attempt===1){retry=true;continue}
       return {metadata:{key:entry.key},error:{message:lastError,status:lastStatus||0}};
+    }finally{
+      if(timer!==undefined)clearTimeout(timer);
+      if(retry&&deadline>Date.now())await new Promise(resolve=>setTimeout(resolve,Math.min(900,deadline-Date.now())));
     }
   }
   return {metadata:{key:entry.key},error:{message:lastError,status:lastStatus}};
@@ -220,7 +238,8 @@ async function executeStoredVertexBatch(env:GatewayRuntimeEnv,name:string,row:St
   try{
     const entries=parseJson<GeminiBatchRequest[]>(row.requests_json,[]);
     if(!entries.length)throw new Error('Queued Vertex batch has no requests');
-    const responses=await mapLimit(entries,VERTEX_BATCH_CONCURRENCY,(entry)=>executeVertexEntry(env,row.model,row.display_name,entry));
+    const deadline=Date.now()+EXECUTION_BUDGET_MS;
+    const responses=await mapLimit(entries,VERTEX_BATCH_CONCURRENCY,(entry)=>executeVertexEntry(env,row.model,row.display_name,entry,deadline,id));
     const result={state:'JOB_STATE_SUCCEEDED',dest:{inlinedResponses:responses},completedAt:now()};
     await db.prepare("UPDATE vertex_batch_emulation_jobs SET state='JOB_STATE_SUCCEEDED',requests_json='[]',result_json=?,error=NULL,updated_at=? WHERE id=? AND state='JOB_STATE_RUNNING'").bind(JSON.stringify(result),now(),id).run();
   }catch(e){

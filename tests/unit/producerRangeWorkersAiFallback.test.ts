@@ -83,17 +83,22 @@ describe('Workers AI producer range fallback',()=>{
     expect(AI.run).toHaveBeenCalledTimes(1);
   });
 
-  it('accepts a complete official range from Cloudflare-hosted GLM and completes the existing run',async()=>{
+  it('accepts a complete official range from Cloudflare-hosted Qwen3 and completes the existing run',async()=>{
     seedProducer();stubPages();
     const AI=aiWith({choices:[{message:{content:JSON.stringify({rangeComplete:true,coverageNote:'Complete',range:[{name:'Clos A',category:'red',sourceUrl:'https://domaine.example/our-wines'}]})}}],usage:{prompt_tokens:80,completion_tokens:30}});
     const result=await tryWorkersAiProducerRangeRefresh({DB:db,AI},'owner','p1','run-1');
     expect(result).toMatchObject({handled:true,provider:'workers-ai',catalogCount:1});
     expect((AI.run as unknown as ReturnType<typeof vi.fn>)).toHaveBeenCalledTimes(1);
-    expect((AI.run as unknown as ReturnType<typeof vi.fn>).mock.calls[0][0]).toBe('@cf/zai-org/glm-4.7-flash');
+    expect((AI.run as unknown as ReturnType<typeof vi.fn>).mock.calls[0][0]).toBe('@cf/qwen/qwen3-30b-a3b-fp8');
+    const request=(AI.run as unknown as ReturnType<typeof vi.fn>).mock.calls[0][1];
+    expect(request).toMatchObject({max_tokens:8192,response_format:{type:'json_object'},stream:false});
+    expect(request).not.toHaveProperty('max_completion_tokens');
+    expect(request.messages[0].content).toContain('/no_think');
     const run=sqlite.prepare("SELECT status,message FROM producer_research_runs WHERE owner_id='owner' AND request_id='run-1'").get() as {status:string;message:string};
-    expect(run.status).toBe('complete');expect(run.message).toContain('Workers AI GLM-4.7-Flash');
+    expect(run.status).toBe('complete');expect(run.message).toContain('Workers AI Qwen3-30B-A3B');
     const producer=sqlite.prepare("SELECT research_model FROM producers WHERE owner_id='owner' AND id='p1'").get() as {research_model:string};
     expect(producer.research_model).toContain('official-source range via Workers AI');
+    expect(producer.research_model).toContain('@cf/qwen/qwen3-30b-a3b-fp8');
   });
 
   it('falls through to grounded Gemini when Workers AI itself fails',async()=>{
