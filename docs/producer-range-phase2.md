@@ -10,7 +10,7 @@ When a producer already has a fresh saved profile and an official website, WineL
 2. crawls a small same-domain set of likely wine/range pages;
 3. sends only that retrieved evidence to Z.AI GLM-4.7-Flash through Cloudflare AI Gateway BYOK for structured extraction;
 4. retries only known transient Z.AI 429 conditions, up to three total Z.AI attempts;
-5. if Z.AI remains unavailable or returns an invalid model result, tries the separately hosted Cloudflare Workers AI copy of GLM-4.7-Flash;
+5. if Z.AI remains unavailable or returns an invalid model result, tries Qwen3-30B-A3B on Cloudflare Workers AI;
 6. commits a cheap-path result only when the model says the evidence is complete and the range passes conservative coverage checks;
 7. otherwise falls through to the existing Gemini 3.8/3.7 + Google Search workflow unchanged.
 
@@ -27,10 +27,10 @@ The primary cheap extractor is Z.AI `glm-4.7-flash` routed through the existing 
 The range-research provider order is:
 
 1. Cloudflare AI Gateway custom provider `zai` -> Z.AI `glm-4.7-flash` using the Gateway-stored BYOK key;
-2. Cloudflare Workers AI -> `@cf/zai-org/glm-4.7-flash`, using the existing `AI` binding and no additional provider key;
+2. Cloudflare Workers AI -> `@cf/qwen/qwen3-30b-a3b-fp8`, using the existing `AI` binding and no additional provider key;
 3. the existing grounded Gemini + Google Search pipeline if both cheap providers fail or the official-source evidence cannot establish a safe complete range.
 
-Workers AI is independently hosted by Cloudflare, so a Z.AI provider-side rate limit does not automatically imply the Workers AI copy is unavailable. The same official evidence, validation rules and durable catalogue overlay are used before a Workers AI result can be committed.
+Workers AI is independently hosted by Cloudflare, so a Z.AI provider-side rate limit does not automatically imply the Workers AI model is unavailable. The same official evidence, validation rules and durable catalogue overlay are used before a Workers AI result can be committed.
 
 WineLog continues to authenticate to AI Gateway with `CF_AI_GATEWAY_TOKEN`, and follows the existing `AI_GATEWAY_LOG_PAYLOADS` setting. Provider credentials remain inside AI Gateway. The Workers AI path uses the existing Cloudflare binding and needs no secret.
 
@@ -55,6 +55,8 @@ AI Gateway appends `/api/paas/v4/chat/completions` to the Custom Provider base U
 
 As of September 2026 Z.AI lists GLM-4.7-Flash API tokens as free. WineLog keeps that as the first choice, but repeated transient rate limits now have a bounded retry and an independent Workers AI fallback before grounded Gemini is used.
 
+The Workers AI fallback uses Qwen3-30B-A3B with JSON mode, `max_tokens: 8192`, and a `/no_think` system instruction to request direct extraction. This is a model instruction rather than a guaranteed server-side reasoning switch. Its existing 75-second timeout and failure diagnostics remain active. See the [Cloudflare model contract](https://developers.cloudflare.com/workers-ai/models/qwen3-30b-a3b-fp8/) and [Qwen thinking-mode guidance](https://qwenlm.github.io/blog/qwen3/). The spend ledger uses $0.0509 per million input tokens and $0.335 per million output tokens, effective for WineLog from September 16, 2026; the old Workers AI GLM rate remains configured for historical runs. Live latency and extraction quality still need validation after deployment.
+
 ## Missing wines and durable corrections
 
 Duplicate/hide decisions continue to work as before. Phase 2 adds the opposite correction:
@@ -70,10 +72,10 @@ The **+ Add missing wine** control is a manual catalogue correction, not another
 
 ## Measuring the improvement
 
-Both GLM routes are recorded in the existing AI usage ledger as Producer Deep Search parts with **0 Google Search queries**:
+Both extraction routes are recorded in the existing AI usage ledger as Producer Deep Search parts with **0 Google Search queries**:
 
 - Z.AI BYOK: `zai/glm-4.7-flash`
-- Workers AI: `@cf/zai-org/glm-4.7-flash`
+- Workers AI: `@cf/qwen/qwen3-30b-a3b-fp8`
 
 That separation makes it possible to see how often Z.AI succeeds, how often Workers AI rescues a provider failure, and how often the run still reaches grounded Gemini. The Workers AI ledger uses list token pricing so comparisons remain conservative even while a daily free Neuron allowance absorbs actual spend.
 
@@ -96,7 +98,7 @@ After deploying the diagnostics, retry the producer range refresh and search the
 
 Website requests have a six-second timeout and each cheap-path crawl visits at most six URLs. Z.AI waits up to 60 seconds for its first streamed response, uses a 30-second idle-stream timeout, and has a 180-second absolute stream ceiling. Known transient Z.AI 429 codes (`1302`, `1303`, `1305`, `1312`) receive at most two retries, respecting a valid `Retry-After` header up to 30 seconds or otherwise using short jittered backoff. Workers AI gets one bounded 75-second fallback attempt. These are provider-stage limits, not limits on the whole research run. Gemini has its own bounded polling and retry policy. Runs with no progress for 45 minutes are marked failed when their status is read; active-run lookup uses that same window.
 
-The provider key belongs to AI Gateway's `zai` custom provider with its default BYOK alias. A Worker secret named `ZAI_API_KEY` alone is not consumed by this path. Confirm actual attempts in Insights / AI spend / Producer Deep Search / View runs / Request breakdown (`zai/glm-4.7-flash` or `@cf/zai-org/glm-4.7-flash`), or the correlated Gateway/Workers logs. A recorded attempt does not by itself prove that extraction succeeded.
+The provider key belongs to AI Gateway's `zai` custom provider with its default BYOK alias. A Worker secret named `ZAI_API_KEY` alone is not consumed by this path. Confirm actual attempts in Insights / AI spend / Producer Deep Search / View runs / Request breakdown (`zai/glm-4.7-flash` or `@cf/qwen/qwen3-30b-a3b-fp8`), or the correlated Gateway/Workers logs. A recorded attempt does not by itself prove that extraction succeeded.
 
 Failed Gateway calls also emit `producer_range_phase2` / `gateway_error` with `requestId`, `producerId`, `httpStatus`, and (when available) `providerCode`, a safe `providerMessage` category, and validated `retryAfter`. Only numeric or allowlisted symbolic codes are retained. Raw messages, payloads, headers, and credentials are never logged by this diagnostic; unrecognized messages are withheld. Error-body reads are capped at 16 KiB and remain inside the existing model timeout. Full Gateway payload logging is not required.
 PR review hardening: Retry-After longer than 30 seconds skips further Z.ai attempts and advances to the Workers AI fallback; it is never shortened into an early retry. Cancellation is checked after retry waits and after the Workers AI crawl. Both providers share URL discovery, prioritization, tracking deduplication, apex fallback, and evidence prompting. The Workers AI 75-second timeout aborts its binding request as well as ending the wait.
