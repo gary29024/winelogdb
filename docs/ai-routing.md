@@ -1,41 +1,41 @@
-# WineLog AI routing policy
+# WineLog AI model and transport policy
 
-WineLog separates **model policy** from **transport**. Model identifiers live in `src/lib/ai/policy.ts`; feature code should import them rather than hard-code current model names.
+WineLog separates **model policy** from **transport implementation**. Current model identifiers live in `src/lib/ai/policy.ts`; feature and worker code should import them instead of hard-coding active model names.
 
-The policy deliberately keeps Gemini 3.1 Flash Lite where WineLog already uses it for low-cost recognition, Champagne extraction and first-pass vintage intelligence.
+This policy deliberately keeps Gemini 3.1 Flash Lite on the low-cost paths where it is currently used: primary recognition, Champagne extraction, and first-pass Vintage Intelligence.
 
 ## Route inventory
 
-| WineLog use case | Current transport | Current model order | Cloudflare Dynamic Route | Policy |
-| --- | --- | --- | --- | --- |
-| Single wine recognition | Gemini native `generateContent` through AI Gateway / Vertex when configured | `gemini-3.1-flash-lite` | No | Keep native multimodal JSON-schema behavior. |
-| Group / sheet / framing recognition | Gemini native `generateContent` | `gemini-3.1-flash-lite` | No | Same low-cost recognition primary. |
-| Recognition escalation | Gemini native synchronous request today | `gemini-3.8-flash` then availability target `gemini-3.7-flash` | `dynamic/winelog-recognition-escalation` | Dynamic-routing candidate. WineLog still decides whether the escalated answer is actually better. |
-| Batch recognition | Vertex Flex through AI Gateway, or Developer API Batch when Gateway is absent | `gemini-3.1-flash-lite`, escalation `gemini-3.8-flash` | No | Keep provider-native Flex/Batch semantics. |
-| Champagne photo extraction | Vertex Flex through AI Gateway, or Developer API Batch | `gemini-3.1-flash-lite` | No | Intentionally remains on 3.1 Flash Lite. |
-| Wine Deep Search | Native Gemini/Vertex grounded research, durable Flex/Batch execution | `gemini-3.8-flash` -> `gemini-3.7-flash` | No | Google Search grounding and WineLog's grounding/quality gate are required. |
-| Producer profile + catalogue research | Native Gemini/Vertex grounded research | `gemini-3.8-flash` -> `gemini-3.7-flash` | No | Same grounding and durable background constraints as wine research. |
-| Vintage Window / Vintage Intelligence | Native grounded Gemini request | `gemini-3.1-flash-lite` -> `gemini-3.8-flash` | No | Keep cheap first pass; escalation only when evidence/result is unusable. |
-| Producer Range direct extraction | AI Gateway custom Z.AI, then Workers AI, then grounded Gemini fallback | Z.AI `glm-4.7-flash` -> `@cf/qwen/qwen3-30b-a3b-fp8` -> grounded Gemini | `dynamic/winelog-producer-range-extraction` | Text-only extraction is a Dynamic Routing candidate, but WineLog must still enforce completeness/coverage before accepting it. |
-| Journal semantic query/index embeddings | Workers AI by default; optional Gemini Embeddings | `@cf/qwen/qwen3-embedding-0.6b` or `gemini-embedding-001` | No | Embeddings are not chat-completion Dynamic Routes. |
+| WineLog use case | Current transport | Current model order | Runtime behavior |
+| --- | --- | --- | --- |
+| Single wine recognition | Native Gemini `generateContent` through AI Gateway / Vertex when configured | `gemini-3.1-flash-lite` | Multimodal structured output. |
+| Group / sheet / framing recognition | Native Gemini `generateContent` | `gemini-3.1-flash-lite` | Same low-cost recognition primary. |
+| Synchronous recognition escalation | Native Gemini `generateContent` | `gemini-3.8-flash` | Triggered by WineLog confidence/identity rules. No separate 3.7 availability fallback exists on this path today. |
+| Batch recognition | Vertex Flex through AI Gateway, or Developer API Batch when Gateway is absent | `gemini-3.1-flash-lite`, Flex escalation `gemini-3.8-flash` | Flex escalation has a separate policy key from synchronous escalation so the transports can diverge safely later. |
+| Champagne photo extraction | Vertex Flex through AI Gateway, or Developer API Batch | `gemini-3.1-flash-lite` | Intentionally remains on 3.1 Flash Lite. |
+| Wine Deep Search | Native Gemini/Vertex grounded research with durable background execution | `gemini-3.8-flash` -> `gemini-3.7-flash` | 3.7 is a real availability/grounding fallback. Google Search grounding and WineLog quality gates are required. |
+| Producer profile + catalogue research | Native Gemini/Vertex grounded research | `gemini-3.8-flash` -> `gemini-3.7-flash` | Same grounded primary/fallback policy as wine research. |
+| Vintage Window / Vintage Intelligence | Native grounded Gemini request | `gemini-3.1-flash-lite` -> `gemini-3.8-flash` | Keep cheap first pass; escalate only when the first answer/evidence is unusable. |
+| Producer Range direct extraction | AI Gateway custom Z.AI, then Workers AI, then existing grounded Gemini pipeline | `glm-4.7-flash` -> `@cf/qwen/qwen3-30b-a3b-fp8` -> grounded Gemini | WineLog enforces official-source, completeness and coverage gates before accepting a cheap extraction. |
+| Journal semantic query/index embeddings | Workers AI by default; optional Gemini Embeddings | `@cf/qwen/qwen3-embedding-0.6b` or `gemini-embedding-001` | Embedding-specific transport, not chat completion. |
 
-`zai/glm-4.7-flash` remains the AI-usage metering key for the Z.AI call; the provider model sent upstream is `glm-4.7-flash`.
+`zai/glm-4.7-flash` is the AI-usage **metering/pricing key** for the Z.AI call; the provider model sent upstream is `glm-4.7-flash`.
 
 ## Ownership boundary
 
-Cloudflare should eventually own **infrastructure failover** for compatible synchronous inference: provider errors, timeouts, retry count and model availability. WineLog continues to own domain correctness: schema validation, label evidence rules, confidence/identity selection, producer-range coverage, grounding validation and research-quality gates.
+WineLog keeps the capability-specific transports that already match each workload. AI Gateway remains useful for authentication, BYOK, logging and provider transport, but there is no additional generic Dynamic Routing layer in the application architecture.
 
-Grounded research, Vertex Flex and Gemini/Developer Batch remain on provider-native endpoints through AI Gateway because Dynamic Routes currently run through the OpenAI-compatible `/compat/chat/completions` surface rather than the native Gemini/Vertex request APIs.
+WineLog owns domain correctness and application-level fallback decisions: structured-result validation, label evidence rules, recognition result selection, producer-range completeness, grounding validation and Deep Search quality gates.
 
-## Dynamic route targets
+Google Search grounding, Vertex Flex, Gemini/Developer Batch, Workers AI and custom-provider requests therefore stay on their existing native/provider-specific paths.
 
-The two route names reserved by the policy are:
+## Changing a model safely
 
-- `dynamic/winelog-recognition-escalation`: Gemini 3.8 Flash primary -> Gemini 3.7 Flash fallback for compatible synchronous recognition escalation.
-- `dynamic/winelog-producer-range-extraction`: Z.AI GLM-4.7-Flash primary -> Workers AI Qwen3-30B-A3B fallback for the text-only official-site extraction stage.
+A model refresh is a two-part operational change when the model is billable:
 
-Do **not** switch application callers merely because the names exist in code. Deploy and validate the corresponding AI Gateway Dynamic Route first. The route should only replace transport availability logic; WineLog's existing quality gate remains authoritative.
+1. **Add pricing first.** Add a new `{ "from": "<go-live date>", "input": ..., "output": ... }` window for the new model under `AI_COST_MODEL_RATES` in `wrangler.jsonc`. Never rewrite an existing historical window, because that would re-price past usage.
+2. **Then change the active model.** Update the relevant identifier in `AI_MODELS` in `src/lib/ai/policy.ts` and run the policy/wiring tests.
 
-## Changing a model
+For Z.AI, `producerRangeZai` is the upstream routing value while `producerRangeZaiMeter` is the pricing key. If that provider/model changes, update the pricing row and the meter key together before switching the upstream model.
 
-For a normal model refresh, edit `AI_MODELS` in `src/lib/ai/policy.ts`. Tests assert the intended route/model relationships there. Pricing-history rows remain separate from current routing so historical AI spend continues to use the model that actually ran.
+Historical usage fixtures and persisted historical model strings should not be rewritten merely because the current model changes; they describe what actually ran at the time.
