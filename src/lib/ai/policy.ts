@@ -79,7 +79,7 @@ export const AI_ROUTES={
     note:'Official-site extraction tries Z.AI, then Workers AI, then the existing grounded Gemini pipeline; WineLog enforces completeness/coverage.'
   },
   semanticEmbeddings:{
-    transport:'workers-ai',
+    transport:'hybrid',
     models:[AI_MODELS.semanticWorkers,AI_MODELS.semanticGemini],
     note:'Journal query/index embeddings. Workers AI is default; Gemini embeddings remain an explicit optional provider.'
   }
