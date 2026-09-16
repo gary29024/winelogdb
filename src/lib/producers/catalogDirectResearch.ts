@@ -1,3 +1,4 @@
+import { AI_MODELS } from '../ai/policy';
 import { gatewayErrorDetails,isRetryableZaiProviderCode } from './gatewayError';
 import { recordAiUsage,type AiUsageEnv } from '../usage/aiUsage';
 import { RESEARCH_STALE_DAYS } from '../research/freshness';
@@ -21,7 +22,7 @@ type Provider='zai-gateway';
 type ZaiTimeoutKind='first_chunk'|'idle'|'absolute';
 type ZaiStreamChunk={choices?:Array<{delta?:{content?:unknown};finish_reason?:unknown}>;usage?:Record<string,unknown>};
 type GatewayDetails=Awaited<ReturnType<typeof gatewayErrorDetails>>;
-const ZAI_MODEL='glm-4.7-flash',ZAI_METER_MODEL='zai/glm-4.7-flash';
+const ZAI_MODEL=AI_MODELS.producerRangeZai,ZAI_METER_MODEL=AI_MODELS.producerRangeZaiMeter;
 const MAX_PAGES=6,MAX_PAGE_BYTES=384*1024,MAX_EVIDENCE_CHARS=72_000,PAGE_TIMEOUT_MS=6_000;
 const MODEL_FIRST_CHUNK_TIMEOUT_MS=60_000,MODEL_IDLE_TIMEOUT_MS=30_000,MODEL_HARD_TIMEOUT_MS=180_000;
 const ZAI_MAX_ATTEMPTS=3,ZAI_MAX_RETRY_DELAY_MS=30_000,ZAI_RETRY_BASE_MS=[2_000,5_000] as const;
@@ -92,19 +93,11 @@ async function fetchHtml(url:URL,officialHost:string){
       if(![301,302,303,307,308].includes(response.status))break;
       const next=safeHttps(response.headers.get('Location'),current.toString());
       await response.body?.cancel();
-      // Vincod hosts estate technical sheets and redirects back to the estate's
-      // branded mobile hostname. Permit only this relay endpoint, never its HTML
-      // as evidence: the final response must still be on the official site.
-      // Final-host checks alone cannot constrain outbound requests: DNS can map
-      // an ordinary-looking hostname to a private address. Keep relay hosts bounded.
-      const publishingRelay=next&&host(next.toString())==='vincod.com'&&(/^\/[a-z0-9-]+\/web$/i.test(next.pathname)||
-        (host(current.toString())==='vincod.com'&&/^\/[a-z0-9-]+\/web$/i.test(current.pathname)&&next.pathname===current.pathname.replace(/\/web$/i,'')));
+      const publishingRelay=next&&host(next.toString())==='vincod.com'&&(/^\/[a-z0-9-]+\/web$/i.test(next.pathname)||(host(current.toString())==='vincod.com'&&/^\/[a-z0-9-]+\/web$/i.test(current.pathname)&&next.pathname===current.pathname.replace(/\/web$/i,'')));
       if(!next||(!sameOfficialSite(next.toString(),officialHost)&&!publishingRelay))return drop('redirect target not allowed');
       current=next;response=undefined;
     }
     if(!response)return drop('redirect limit');
-    // Manual redirect handling makes current the exact requested URL. Only use
-    // it when URL metadata is absent; present metadata must pass validation.
     const contentType=response.headers.get('Content-Type')||'',finalUrl=safeHttps(response.url||current.toString());
     const rejection=!response.ok?`HTTP ${response.status}`:!contentType.toLowerCase().includes('text/html')?'not HTML':!response.body?'empty body':!finalUrl?'invalid response URL':!sameOfficialSite(finalUrl.toString(),officialHost)?'response host not official':null;
     if(rejection||!response.body||!finalUrl){await response.body?.cancel();return drop(rejection||'invalid response')}
@@ -235,5 +228,4 @@ export async function tryDirectProducerRangeRefresh(env:Env,owner:string,produce
   const sources=pages.filter(page=>page.rangeSignal||normalized.range.some(item=>item.sourceUrl===page.url)).map(page=>({title:'Official wine range',url:page.url}));const saved=await saveResearchedCatalog(env.DB,owner,producerId,normalized.range,sources,`${extracted.model} (official-source range via AI Gateway)`);await completeRun(env.DB,owner,producerId,requestId,`Range refreshed from the producer's official website with ${extracted.model} · 0 Google searches · ${saved.catalogCount} wines`);console.log(JSON.stringify({event:'producer_range_phase2',stage:'complete',producerId,requestId,provider:extracted.provider,catalogCount:saved.catalogCount}));return {handled:true as const,provider:extracted.provider,catalogCount:saved.catalogCount};
 }
 
-// Shared by both hosting providers so crawling and evidence rules cannot drift.
 export { crawl as crawlOfficialRange,prompt as officialRangePrompt,safeHttps,host,sameOfficialSite,sourceArray };
