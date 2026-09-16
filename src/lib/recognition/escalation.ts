@@ -3,7 +3,8 @@ import type { GroupRecognitionResult } from '../../features/recognition/groupSch
 import type { RecognitionResult } from '../../features/recognition/schema';
 import { AI_MODELS } from '../ai/policy';
 
-export const RECOGNITION_ESCALATION_MODEL=AI_MODELS.recognitionEscalationPrimary;
+export const RECOGNITION_ESCALATION_MODEL=AI_MODELS.recognitionEscalationSync;
+export const RECOGNITION_FLEX_ESCALATION_MODEL=AI_MODELS.recognitionEscalationFlex;
 export const RECOGNITION_ESCALATION_CONFIDENCE=0.85;
 
 function hasIdentity(result:Pick<RecognitionResult,'producer'|'wineName'>){
