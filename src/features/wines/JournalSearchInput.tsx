@@ -20,6 +20,7 @@ type Props={value:string;resetSeq:number};
 export function JournalSearchInput({value,resetSeq}:Props){
   const [draft,setDraft]=useState(value),[params,setParams]=useSearchParams();
   const timerRef=useRef<number|null>(null),paramsRef=useRef(params);
+  const composingRef=useRef(false);
   paramsRef.current=params;
   const semanticDraft=shouldUseSemanticQuery(draft);
   const attempt=Math.max(0,Number.parseInt(params.get('semantic')??'0',10)||0);
@@ -55,12 +56,20 @@ export function JournalSearchInput({value,resetSeq}:Props){
   function change(next:string){
     setDraft(next);
     clearTimer();
+    if(composingRef.current)return;
     if(next===value&&attempt===0)return;
     timerRef.current=window.setTimeout(()=>{timerRef.current=null;commit(next,false)},SEARCH_DEBOUNCE_MS);
   }
 
   return <div className="journal-search-control">
-    <label className="search">Search<input aria-label="Search wines" type="search" value={draft} onChange={event=>change(event.target.value)} onKeyDown={event=>{if(event.key==='Enter'){event.preventDefault();commit(draft,semanticDraft)}}} placeholder="Search names, regions, or describe a wine…" title="Search updates automatically. For a description such as floral elegant Burgundy with fine tannins, use Smart search for meaning-based matches."/></label>
+    <label className="search">Search<input aria-label="Search wines" type="search" value={draft}
+      // Keyboard suggestions can replace text without React detecting a change.
+      // Read the DOM value on every input event, including insertReplacementText.
+      onInput={event=>change(event.currentTarget.value)}
+      onCompositionStart={()=>{composingRef.current=true;clearTimer()}}
+      onCompositionEnd={event=>{composingRef.current=false;change(event.currentTarget.value)}}
+      onKeyDown={event=>{if(event.key==='Enter'&&!composingRef.current&&!event.nativeEvent.isComposing&&event.keyCode!==229){event.preventDefault();const next=event.currentTarget.value;commit(next,shouldUseSemanticQuery(next))}}}
+      placeholder="Search names, regions, or describe a wine…" title="Search updates automatically. For a description such as floral elegant Burgundy with fine tannins, use Smart search for meaning-based matches."/></label>
     {semanticDraft&&<button type="button" className={`journal-semantic-search-button${semanticActive?' active':''}`} onClick={()=>commit(draft,true)} aria-label="Run smart search">{semanticActive?'↻ Smart search again':'✨ Smart search'}</button>}
   </div>;
 }

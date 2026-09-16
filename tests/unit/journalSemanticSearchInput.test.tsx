@@ -39,6 +39,32 @@ function type(input:HTMLInputElement,value:string){
 const query=()=>new URLSearchParams(host!.querySelector('[data-testid="location-search"]')!.textContent??'');
 
 describe('Journal semantic search input',()=>{
+  it('accepts a keyboard replacement even when React already tracks the DOM value',()=>{
+    const input=renderInput();
+    type(input,'Cham');act(()=>vi.advanceTimersByTime(300));
+    act(()=>{
+      input.value='Champagne';
+      input.dispatchEvent(new InputEvent('input',{bubbles:true,inputType:'insertReplacementText',data:'Champagne'}));
+    });
+    act(()=>host!.querySelector<HTMLButtonElement>('[aria-label="Set red style"]')!.click());
+    expect(input.value).toBe('Champagne');
+    act(()=>vi.advanceTimersByTime(300));
+    expect(query().get('query')).toBe('Champagne');
+    expect(query().get('style')).toBe('red');
+  });
+
+  it('waits for composition to finish and does not intercept its confirmation Enter',()=>{
+    const input=renderInput();type(input,'Cham');
+    act(()=>input.dispatchEvent(new CompositionEvent('compositionstart',{bubbles:true})));
+    type(input,'Champ');act(()=>vi.advanceTimersByTime(500));
+    expect(query().get('query')).toBeNull();
+    const enter=new KeyboardEvent('keydown',{key:'Enter',isComposing:true,bubbles:true,cancelable:true});
+    act(()=>input.dispatchEvent(enter));expect(enter.defaultPrevented).toBe(false);
+    expect(query().get('query')).toBeNull();
+    act(()=>{input.value='Champagne';input.dispatchEvent(new CompositionEvent('compositionend',{bubbles:true,data:'Champagne'}))});
+    act(()=>vi.advanceTimersByTime(300));expect(query().get('query')).toBe('Champagne');
+  });
+
   it('keeps ordinary identity searches on the 300ms live debounce',()=>{
     const input=renderInput();
     type(input,'Nicole Lamarche');
