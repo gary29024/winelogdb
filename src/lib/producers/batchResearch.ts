@@ -158,7 +158,7 @@ export { htmlAttribute } from './heroCandidates';
  * limit meant only to bound the read. An image is still all or nothing: half a
  * JPEG is not a photograph.
  */
-export async function limited(response:Response,max:number,prefix=false){if(!response.body)return null;const reader=response.body.getReader(),chunks:Uint8Array[]=[];let total=0;try{while(true){const {done,value}=await reader.read();if(done)break;if(!value)continue;total+=value.byteLength;chunks.push(value);if(total>max){await reader.cancel();if(!prefix)return null;break}}finally{reader.releaseLock()}const out=new Uint8Array(total);let offset=0;for(const chunk of chunks){out.set(chunk,offset);offset+=chunk.byteLength}return out}
+export async function limited(response:Response,max:number,prefix=false){if(!response.body)return null;const reader=response.body.getReader(),chunks:Uint8Array[]=[];let total=0;try{while(true){const {done,value}=await reader.read();if(done)break;if(!value)continue;total+=value.byteLength;chunks.push(value);if(total>max){await reader.cancel();if(!prefix)return null;break}}}finally{reader.releaseLock()}const out=new Uint8Array(total);let offset=0;for(const chunk of chunks){out.set(chunk,offset);offset+=chunk.byteLength}return out}
 /**
  * A browser's own headers, because a wine estate's site is usually behind one
  * of the WAFs that answers a request without a User-Agent with a 403 - and a
