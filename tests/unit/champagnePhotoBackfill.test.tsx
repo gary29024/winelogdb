@@ -27,6 +27,14 @@ async function render(run:ChampagneExtractionStatus|null,details:SparklingDetail
 }
 const button=(text:string)=>[...document.querySelectorAll('button')].find(node=>node.textContent===text)!;
 const open=async()=>{await act(async()=>{const trigger=host.querySelector('button')!;trigger.focus();trigger.click()})};
+it('shows failed answer excerpts as diagnostics without offering to apply them',async()=>{
+  const {onApply}=await render({...completed,status:'failed',details:null,error:'Response limit',diagnostics:{finishReason:'MAX_TOKENS',outputTokens:8176,thoughtTokens:null,answerCharacters:20,answerStart:'partial model output',answerEnd:'',excerptTruncated:false}},{});
+  await open();
+  expect(document.body.textContent).toContain('Failure diagnostics');
+  expect(document.body.textContent).toContain('partial model output');
+  expect(button('Add suggestions to form')).toBeUndefined();
+  expect(onApply).not.toHaveBeenCalled();
+});
 it('shows literal wording and review notices while applying only ready suggestions',async()=>{
   const {onApply}=await render({...completed,details:{dosageGPerL:3,malolactic:null},sourceText:{malolactic:'MALOLACTIQUE NON SOUHAITÉE'},reviewFields:['malolactic']},{});
   await open();
