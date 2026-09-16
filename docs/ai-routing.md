@@ -16,8 +16,10 @@ The policy deliberately keeps Gemini 3.1 Flash Lite where WineLog already uses i
 | Wine Deep Search | Native Gemini/Vertex grounded research, durable Flex/Batch execution | `gemini-3.8-flash` -> `gemini-3.7-flash` | No | Google Search grounding and WineLog's grounding/quality gate are required. |
 | Producer profile + catalogue research | Native Gemini/Vertex grounded research | `gemini-3.8-flash` -> `gemini-3.7-flash` | No | Same grounding and durable background constraints as wine research. |
 | Vintage Window / Vintage Intelligence | Native grounded Gemini request | `gemini-3.1-flash-lite` -> `gemini-3.8-flash` | No | Keep cheap first pass; escalation only when evidence/result is unusable. |
-| Producer Range direct extraction | AI Gateway custom Z.AI, then Workers AI, then grounded Gemini fallback | `zai/glm-4.7-flash` -> `@cf/qwen/qwen3-30b-a3b-fp8` -> grounded Gemini | `dynamic/winelog-producer-range-extraction` | Text-only extraction is a Dynamic Routing candidate, but WineLog must still enforce completeness/coverage before accepting it. |
+| Producer Range direct extraction | AI Gateway custom Z.AI, then Workers AI, then grounded Gemini fallback | Z.AI `glm-4.7-flash` -> `@cf/qwen/qwen3-30b-a3b-fp8` -> grounded Gemini | `dynamic/winelog-producer-range-extraction` | Text-only extraction is a Dynamic Routing candidate, but WineLog must still enforce completeness/coverage before accepting it. |
 | Journal semantic query/index embeddings | Workers AI by default; optional Gemini Embeddings | `@cf/qwen/qwen3-embedding-0.6b` or `gemini-embedding-001` | No | Embeddings are not chat-completion Dynamic Routes. |
+
+`zai/glm-4.7-flash` remains the AI-usage metering key for the Z.AI call; the provider model sent upstream is `glm-4.7-flash`.
 
 ## Ownership boundary
 
