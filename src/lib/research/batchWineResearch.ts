@@ -1,3 +1,4 @@
+import { AI_MODELS } from '../ai/policy';
 import { deepSearchSchema,type DeepSearchResult } from '../db/schema';
 import { ensureProducerEntity } from '../producers/entities';
 import { parseStructuredJsonText } from '../producers/structuredJson';
@@ -16,8 +17,8 @@ import { recordAiUsage,type AnalyticsSink } from '../usage/aiUsage';
 type Env={DB:D1Database;GEMINI_API_KEY?:string;RESEARCH_QUEUE:Queue<unknown>;AI_USAGE?:AnalyticsSink};
 type WineRow={producer:string;producer_id:string|null;cuvee_id:string|null;wine_name:string;vintage:number|null;country:string|null;region:string|null;appellation:string|null;grapes_json:string;grape_blend_json:string};
 type ResearchRow={deep_search_json:string};
-const PRIMARY_MODEL='gemini-3.8-flash';
-const FALLBACK_MODEL='gemini-3.7-flash';
+const PRIMARY_MODEL=AI_MODELS.groundedResearchPrimary;
+const FALLBACK_MODEL=AI_MODELS.groundedResearchFallback;
 const RESEARCH_MODELS=[PRIMARY_MODEL,FALLBACK_MODEL] as const;
 const MAX_ATTEMPTS=3;
 // Eight grounded fields now share this answer. The cap is headroom, not a spend
