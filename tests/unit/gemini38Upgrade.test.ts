@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs';
+import { readdirSync,readFileSync } from 'node:fs';
 import { describe,expect,it } from 'vitest';
 import { AI_MODELS,AI_ROUTES } from '../../src/lib/ai/policy';
 import { RECOGNITION_ESCALATION_MODEL,RECOGNITION_FLEX_ESCALATION_MODEL } from '../../src/lib/recognition/escalation';
@@ -50,6 +50,33 @@ describe('WineLog AI model policy',()=>{
     expect(read('src/lib/producers/catalogDirectResearch.ts')).toContain('AI_MODELS.producerRangeZai');
     expect(read('src/lib/producers/catalogWorkersAiFallback.ts')).toContain('AI_MODELS.producerRangeWorkers');
     expect(read('src/lib/journal/semanticSearch.ts')).toContain('AI_MODELS.semanticWorkers');
+  });
+
+  /**
+   * The wiring test above proves a file imports the policy. It cannot prove the
+   * file stopped naming a model in prose, and both forms drift the same way: the
+   * research error text and the Deep Search stage label kept saying "Gemini 3.8"
+   * while reading the model from policy. Error strings are persisted to run
+   * history and the stage label is shown to the owner, so a stale name is not
+   * only a comment. Absence is the only assertion that catches the prose form.
+   */
+  it('keeps current model names out of live code, in identifier and prose form',()=>{
+    const displayName=(id:string)=>id.replace(/^gemini-([\d.]+)-flash.*$/,'Gemini $1');
+    const current=[AI_MODELS.recognitionPrimary,AI_MODELS.recognitionEscalationSync,AI_MODELS.recognitionEscalationFlex,
+      AI_MODELS.groundedResearchPrimary,AI_MODELS.groundedResearchFallback,AI_MODELS.vintagePrimary,AI_MODELS.vintageEscalation,
+      AI_MODELS.producerRangeZai,AI_MODELS.producerRangeWorkers,AI_MODELS.semanticWorkers,AI_MODELS.semanticGemini];
+    const forbidden=[...new Set(current.flatMap(id=>[id,displayName(id)]))];
+    // policy.ts is where the literals belong. worker/index.ts holds the dead
+    // /api/recognition route that entry.ts shadows - its own comment says so, and
+    // rewiring a path nothing calls would only make the exemption harder to see.
+    const exempt=new Set(['src/lib/ai/policy.ts','worker/index.ts']);
+    const sources=['src','worker'].flatMap(root=>readdirSync(root,{recursive:true,encoding:'utf8'})
+      .map(name=>`${root}/${name}`).filter(path=>/\.tsx?$/.test(path)&&!exempt.has(path)));
+    expect(sources.length).toBeGreaterThan(50);
+    for(const file of sources){
+      const text=read(file);
+      for(const name of forbidden)expect(text,`${file} hard-codes "${name}"; read it from AI_MODELS instead`).not.toContain(name);
+    }
   });
 
   it('prices 3.8 independently without deleting 3.7 history',()=>{
