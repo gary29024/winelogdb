@@ -15,6 +15,25 @@ const estimateTokens=(value:string)=>Math.max(1,Math.ceil(value.length/4));
 
 export function workersFallbackEligible(reason:string){return reason==='cheap model failed'||reason==='cheap result invalid'||reason==='no cheap provider'}
 
+// Provider messages may echo prompts or credentials. Keep codes and local categories only.
+function failureDetails(error:unknown){
+  const value=error&&typeof error==='object'?error as {message?:unknown;code?:unknown;status?:unknown;statusCode?:unknown}:{};
+  const message=typeof value.message==='string'?value.message:typeof error==='string'?error:'';
+  const rawCode=typeof value.code==='number'||typeof value.code==='string'?String(value.code):'';
+  const providerCode=/^\d{1,8}$/.test(rawCode)?rawCode:message.match(/^\s*(?:AiError:\s*)?(\d{4})\s*:/)?.[1];
+  const status=Number(value.status??value.statusCode);
+  const categories:Record<string,string>={'3036':'daily_neuron_limit','3040':'capacity','3007':'provider_timeout','3008':'aborted','5035':'paid_plan_required','5018':'model_access','3041':'model_access','3023':'account_blocked','5007':'invalid_model','3042':'invalid_model','3006':'request_too_large','3003':'invalid_request','5004':'invalid_request'};
+  const failureKind=providerCode&&categories[providerCode]||
+    (message==='Workers AI timed out'?'local_timeout':
+      /Workers AI (?:GLM returned no text|returned no result)/.test(message)?'empty_response':
+      /quota|neuron|balance|credit/i.test(message)?'quota_or_billing':
+      /rate.?limit|too many requests/i.test(message)?'rate_limit':
+      /capacity/i.test(message)?'capacity':
+      /timeout|timed out/i.test(message)?'provider_timeout':
+      /authenticat|unauthorized|forbidden/i.test(message)?'authentication_or_access':'unknown');
+  return {failureKind,...(providerCode?{providerCode}:{}),...(Number.isInteger(status)&&status>=400&&status<=599?{httpStatus:status}:{})};
+}
+
 function directBody(result:unknown){
   if(!result||typeof result!=='object')throw new Error('Workers AI returned no result');const value=result as {response?:unknown;choices?:Array<{message?:{content?:unknown}}>;usage?:Record<string,unknown>};
   if(value.response&&typeof value.response==='object'&&!Array.isArray(value.response))return {body:value.response as DirectResult,output:JSON.stringify(value.response)};
@@ -42,9 +61,13 @@ export async function tryWorkersAiProducerRangeRefresh(env:Env,owner:string,prod
   const previousRaw=parse<unknown>(row.catalog_researched_json,[]),previous=(Array.isArray(previousRaw)?previousRaw:[]).filter(item=>item&&typeof item==='object'&&typeof (item as {name?:unknown}).name==='string') as CatalogRangeWine[];
   if(!await reportProgress(env.DB,owner,producerId,requestId,'Cloudflare Workers AI is extracting the official wine range'))return {handled:false as const,reason:'research run is no longer active'};
   const input=prompt(row.canonical_name,pages,previous);console.log(JSON.stringify({event:'producer_range_phase2',stage:'workers_ai_attempt',producerId,requestId,pages:pages.length,promptChars:input.length,estimatedPromptTokens:estimateTokens(input)}));
+  const startedAt=Date.now();let failurePhase='inference';
   let result:unknown,body:DirectResult,output='';
-  try{result=await callWorkersAi(env,input);({body,output}=directBody(result));await meter(env,owner,requestId,producerId,input,output,result);console.log(JSON.stringify({event:'producer_range_phase2',stage:'workers_ai_response',producerId,requestId,outputChars:output.length}))}
-  catch{await meter(env,owner,requestId,producerId,input,output,result).catch(()=>undefined);console.warn(JSON.stringify({event:'producer_range_phase2',stage:'workers_ai_failed',producerId,requestId}));return {handled:false as const,reason:'workers ai failed'}}
+  try{result=await callWorkersAi(env,input);failurePhase='response';({body,output}=directBody(result));failurePhase='usage_recording';await meter(env,owner,requestId,producerId,input,output,result);console.log(JSON.stringify({event:'producer_range_phase2',stage:'workers_ai_response',producerId,requestId,outputChars:output.length}))}
+  catch(error){
+    console.warn(JSON.stringify({event:'producer_range_phase2',stage:'workers_ai_failed',producerId,requestId,model:MODEL,elapsedMs:Date.now()-startedAt,timeoutMs:MODEL_TIMEOUT_MS,failurePhase,...failureDetails(error)}));
+    await meter(env,owner,requestId,producerId,input,output,result).catch(()=>undefined);return {handled:false as const,reason:'workers ai failed'};
+  }
   if(!await reportProgress(env.DB,owner,producerId,requestId,'Validating the Workers AI official wine range'))return {handled:false as const,reason:'research run is no longer active'};
   let normalized;try{normalized=normalizeDirectRangeResult(body,[row.canonical_name],new Set(pages.map(page=>page.url)))}catch{console.warn(JSON.stringify({event:'producer_range_phase2',stage:'workers_ai_parse_failed',producerId,requestId}));return {handled:false as const,reason:'workers ai result invalid'}}
   if(!normalized.rangeComplete||!acceptableCoverage(previous.length,normalized.range.length)){const candidates=await syncMissingCandidates(env.DB,owner,producerId,normalized.range).catch(()=>0);console.log(JSON.stringify({event:'producer_range_phase2',stage:'grounded_fallback',producerId,requestId,provider:'workers-ai',previous:previous.length,found:normalized.range.length,candidates,complete:normalized.rangeComplete}));return {handled:false as const,reason:'official evidence incomplete',candidates}}

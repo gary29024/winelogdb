@@ -33,10 +33,36 @@ describe('Workers AI producer range fallback',()=>{
 
   it('aborts the binding request on timeout',async()=>{
     vi.useFakeTimers();seedProducer();stubPages();let signal:AbortSignal|undefined;
+    const warn=vi.spyOn(console,'warn').mockImplementation(()=>{});
     const AI={run:vi.fn((_model:unknown,_input:unknown,options:{signal:AbortSignal})=>{signal=options.signal;return new Promise(()=>{})})} as unknown as Ai;
     const pending=tryWorkersAiProducerRangeRefresh({DB:db,AI},'owner','p1','run-1');await vi.advanceTimersByTimeAsync(0);
     expect(signal?.aborted).toBe(false);await vi.advanceTimersByTimeAsync(75_000);
     expect(await pending).toEqual({handled:false,reason:'workers ai failed'});expect(signal?.aborted).toBe(true);
+    expect(warn.mock.calls.map(([line])=>JSON.parse(String(line)))).toContainEqual(expect.objectContaining({stage:'workers_ai_failed',failureKind:'local_timeout',failurePhase:'inference',elapsedMs:75_000,timeoutMs:75_000}));
+  });
+
+  it.each([['3036','daily_neuron_limit'],['3040','capacity'],['3007','provider_timeout']])('records provider code %s without exposing provider text',async(code,kind)=>{
+    seedProducer();stubPages();const warn=vi.spyOn(console,'warn').mockImplementation(()=>{});
+    const AI={run:vi.fn(async()=>{throw Object.assign(new Error(`${code}: secret prompt and Bearer private-key`),{status:429})})} as unknown as Ai;
+    expect(await tryWorkersAiProducerRangeRefresh({DB:db,AI},'owner','p1','run-1')).toMatchObject({handled:false});
+    const logs=warn.mock.calls.map(([line])=>JSON.parse(String(line)));
+    expect(logs).toContainEqual(expect.objectContaining({stage:'workers_ai_failed',requestId:'run-1',providerCode:code,failureKind:kind,httpStatus:429,failurePhase:'inference'}));
+    expect(JSON.stringify(logs)).not.toMatch(/secret prompt|private-key/);
+  });
+
+  it('distinguishes an empty model response from an inference rejection',async()=>{
+    seedProducer();stubPages();const warn=vi.spyOn(console,'warn').mockImplementation(()=>{});
+    await tryWorkersAiProducerRangeRefresh({DB:db,AI:aiWith({choices:[{message:{content:''}}]})},'owner','p1','run-1');
+    expect(warn.mock.calls.map(([line])=>JSON.parse(String(line)))).toContainEqual(expect.objectContaining({failureKind:'empty_response',failurePhase:'response'}));
+  });
+
+  it('withholds unknown messages and nonnumeric provider codes',async()=>{
+    seedProducer();stubPages();const warn=vi.spyOn(console,'warn').mockImplementation(()=>{});
+    const AI={run:vi.fn(async()=>{throw {message:'private prompt',code:'private-key',status:'private-header'}})} as unknown as Ai;
+    await tryWorkersAiProducerRangeRefresh({DB:db,AI},'owner','p1','run-1');
+    const log=JSON.parse(String(warn.mock.calls[0][0]));
+    expect(log.failureKind).toBe('unknown');expect(log).not.toHaveProperty('providerCode');expect(log).not.toHaveProperty('httpStatus');
+    expect(JSON.stringify(log)).not.toContain('private');
   });
 
   it('skips inference after cancellation during the crawl',async()=>{
