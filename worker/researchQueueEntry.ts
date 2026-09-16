@@ -1,6 +1,7 @@
 import { failVintageResearch,processVintageResearch,type VintageResearchMessage } from './vintageResearchJobs';
 import { Hono } from 'hono';
 import app from './cuveeEntry';
+import { AI_MODELS } from '../src/lib/ai/policy';
 import { requireSession } from '../src/lib/auth/session';
 import { pollProducerBatchResearch,startProducerBatchResearch } from '../src/lib/producers/batchResearch';
 import type { ChampagneExtractionJob } from './champagneExtraction';
@@ -36,12 +37,12 @@ async function scheduleCancelSweep(env:Bindings,owner:string,targetKind:Research
   await env.RESEARCH_QUEUE.send({kind:'research_cancel_sweep',owner,targetKind,targetId,requestId,pass:0},{delaySeconds:5}).catch(e=>console.error(JSON.stringify({event:'research_cancel_sweep_schedule_failed',targetKind,targetId,requestId,error:(e as Error).message})))
 }
 async function preparePrimaryRouting(env:Bindings,owner:string,requestId:string){
-  const bypass=await shouldBypassPrimaryResearch(env.DB,owner);if(bypass){bypassPrimaryGeminiBatchOnce(requestId);console.warn(JSON.stringify({event:'research_model_route',requestId,stage:'primary_cooldown',route:'gemini-3.7-flash'}))}return bypass;
+  const bypass=await shouldBypassPrimaryResearch(env.DB,owner);if(bypass){bypassPrimaryGeminiBatchOnce(requestId);console.warn(JSON.stringify({event:'research_model_route',requestId,stage:'primary_cooldown',route:AI_MODELS.groundedResearchFallback}))}return bypass;
 }
 async function noteFallbackUse(env:Bindings,owner:string,jobId:string,requestId:string,kind:'producer'|'wine',pollCount:number){
   if(pollCount!==0)return;const tracked=await getResearchBatchJob(env.DB,owner,jobId).catch(()=>null);if(!tracked||tracked.attempt!==2)return;
-  if(!(await shouldBypassPrimaryResearch(env.DB,owner)))await markPrimaryResearchUnavailable(env.DB,owner,`${kind} research fell back from Gemini 3.8 to Gemini 3.7`);
-  console.warn(JSON.stringify({event:'research_model_route',requestId,stage:'fallback_active',kind,route:'gemini-3.7-flash'}));
+  if(!(await shouldBypassPrimaryResearch(env.DB,owner)))await markPrimaryResearchUnavailable(env.DB,owner,`${kind} research fell back from ${AI_MODELS.groundedResearchPrimary} to ${AI_MODELS.groundedResearchFallback}`);
+  console.warn(JSON.stringify({event:'research_model_route',requestId,stage:'fallback_active',kind,route:AI_MODELS.groundedResearchFallback}));
 }
 async function harvestProducerJobs(env:Bindings,owner:string,producerId:string,requestId:string,jobIds:string[]){
   for(const jobId of jobIds)await pollProducerBatchResearch(env,owner,producerId,requestId,jobId,0).catch(e=>console.error(JSON.stringify({event:'research_cancel_harvest_failed',kind:'producer',requestId,jobId,error:(e as Error).message})));
@@ -109,8 +110,7 @@ router.get('/api/producers/research-batch/history',async c=>{
 router.get('/api/producers/research-batch/:id',async c=>{
   cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
   const campaign=await readCampaign(c.env.DB,owner,c.req.param('id'));
-  return campaign?c.json({campaign}):c.json({error:'Batch run not found'},404);
-});
+  return campaign?c.json({campaign}):c.json({error:'Batch run not found'},404)});
 
 router.post('/api/producers/research-batch/:id/cancel',async c=>{
   cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}

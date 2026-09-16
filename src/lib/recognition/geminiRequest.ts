@@ -1,6 +1,7 @@
+import { AI_MODELS } from '../ai/policy';
 import { selectRecognitionMetadata,type RecognitionPhotoMetadata } from '../uploads/metadataSelection';
 
-export const RECOGNITION_MODEL='gemini-3.1-flash-lite';
+export const RECOGNITION_MODEL=AI_MODELS.recognitionPrimary;
 
 const legacySparklingDetailsSchema={
   type:'OBJECT',nullable:true,

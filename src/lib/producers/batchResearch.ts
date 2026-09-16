@@ -1,3 +1,4 @@
+import { AI_MODELS } from '../ai/policy';
 import { createObjectKey } from '../r2/keys';
 import { ensureCuveeEntity,reconcileProducerCuvees } from '../cuvees/entities';
 import { createResearchBatchJob,finishResearchBatchJob,getResearchBatchJob,recordResearchSearchQueries,touchResearchBatchJob,type ResearchBatchJob } from '../research/batchJobStore';
@@ -24,8 +25,8 @@ type CatalogSaveSummary={catalogCount:number;researchedCount:number;retainedCoun
 type CatalogSlice={key:string;start:string|null;end:string|null;includeOther:boolean;label:string};
 type ParsedCatalogPart={range:CatalogWine[];slice:CatalogSlice;metadata?:GroundingMetadata};
 
-const PRIMARY_MODEL='gemini-3.8-flash';
-const FALLBACK_MODEL='gemini-3.7-flash';
+const PRIMARY_MODEL=AI_MODELS.groundedResearchPrimary;
+const FALLBACK_MODEL=AI_MODELS.groundedResearchFallback;
 const MAX_CATALOG_ATTEMPT=6;
 /**
  * Output room, which is what decides whether the slice ladder is climbed at all.
@@ -353,7 +354,7 @@ export async function startProducerBatchResearch(env:Env,owner:string,producerId
     .bind(owner,producerId).first<ProfileFreshness>();
   const keys=[...(rangeOnly||(!refreshProfile&&profileIsFresh(known))?[]:['profile']),...catalogDefaultChunkKeys];
   try{await prepareProducerCatalogStage(env.DB,owner,producerId,requestId);await submitBatch(env,owner,producerId,requestId,1,PRIMARY_MODEL,keys);return {ok:true as const}}
-  catch(e){const primaryError=(e as Error).message||'Gemini 3.8 Batch submission failed';log('warn',{requestId,producerId,stage:'primary_submit_failed',error:primaryError});try{await submitBatch(env,owner,producerId,requestId,2,FALLBACK_MODEL,keys);return {ok:true as const}}catch(fallback){const error=`Gemini 3.8 submission failed (${primaryError}); Gemini 3.7 fallback also failed: ${(fallback as Error).message||'unknown error'}`;await discardProducerCatalogStage(env.DB,owner,requestId).catch(()=>undefined);await setRunState(env.DB,owner,requestId,'failed','failed',2,error).catch(()=>undefined);return {ok:false as const,error}}}
+  catch(e){const primaryError=(e as Error).message||`${PRIMARY_MODEL} Batch submission failed`;log('warn',{requestId,producerId,stage:'primary_submit_failed',error:primaryError});try{await submitBatch(env,owner,producerId,requestId,2,FALLBACK_MODEL,keys);return {ok:true as const}}catch(fallback){const error=`${PRIMARY_MODEL} submission failed (${primaryError}); ${FALLBACK_MODEL} fallback also failed: ${(fallback as Error).message||'unknown error'}`;await discardProducerCatalogStage(env.DB,owner,requestId).catch(()=>undefined);await setRunState(env.DB,owner,requestId,'failed','failed',2,error).catch(()=>undefined);return {ok:false as const,error}}}
 }
 
 async function completionMessage(db:D1Database,owner:string,producerId:string,researchedProfile=true){

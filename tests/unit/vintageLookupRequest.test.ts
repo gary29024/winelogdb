@@ -1,5 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { describe,expect,it } from 'vitest';
+import { AI_MODELS } from '../../src/lib/ai/policy';
 
 const handler=readFileSync('worker/vintageWindowHandler.ts','utf8');
 
@@ -91,9 +92,13 @@ describe('how the request reaches Gemini',()=>{
     // argued against it was whether it would search at all - an ungrounded
     // answer is thrown away - and that is answered by asking the stronger model
     // on the calls where it did not, rather than by paying for it every time.
-    // vintageModelEscalation covers the behaviour; this holds the pair in place.
-    expect(handler).toMatch(/const MODEL='gemini-3\.1-flash-lite'/);
-    expect(handler).toMatch(/const ESCALATION_MODEL='gemini-3\.8-flash'/);
+    // vintageModelEscalation covers the behaviour; this holds the policy wiring
+    // and the actual current pair in place without duplicating model literals in
+    // the handler itself.
+    expect(handler).toContain('const MODEL=AI_MODELS.vintagePrimary;');
+    expect(handler).toContain('const ESCALATION_MODEL=AI_MODELS.vintageEscalation;');
+    expect(AI_MODELS.vintagePrimary).toBe('gemini-3.1-flash-lite');
+    expect(AI_MODELS.vintageEscalation).toBe('gemini-3.8-flash');
   });
 
   it('bounds the pair, and gives the thinking model the longer half',()=>{
