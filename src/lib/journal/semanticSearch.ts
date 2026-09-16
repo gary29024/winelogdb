@@ -1,3 +1,4 @@
+import { AI_MODELS } from '../ai/policy';
 import { recordAiUsage,type AiUsageEnv } from '../usage/aiUsage';
 export { shouldUseSemanticQuery } from './semanticQuery';
 
@@ -23,8 +24,8 @@ type SemanticQueryCacheRow={result_ids_json:string;max_results:number};
 export type SemanticVectorCandidate={id:string;vector:ArrayLike<number>};
 type MeterContext={owner:string;runId:string;targetId:'journal-query'|'journal-index'};
 
-const WORKERS_MODEL='@cf/qwen/qwen3-embedding-0.6b';
-const GEMINI_MODEL='gemini-embedding-001';
+const WORKERS_MODEL=AI_MODELS.semanticWorkers;
+const GEMINI_MODEL=AI_MODELS.semanticGemini;
 const WORKERS_DIMENSIONS=1024;
 const GEMINI_DIMENSIONS=768;
 const WARM_SLICE=64;
@@ -129,24 +130,12 @@ async function embedTexts(env:SemanticEnv,config:EmbeddingConfig,texts:string[],
       return normalized(vector);
     });
   }finally{
-    // Rejected or malformed AI answers can still consume quota. Meter every
-    // provider attempt, not only responses that pass our validation. The ledger
-    // unit for Smart search is an indexed wine, so query embeddings count as a
-    // request but deliberately add zero wine units.
     if(attempted)await recordAiUsage(env,meter.owner,{kind:'search_embedding',runId:meter.runId,targetId:meter.targetId,model:config.model,requests:1,units:kind==='document'?texts.length:0});
   }
 }
 
-// Uint8Array is accepted by both D1 and the repo's node:sqlite harness as a BLOB
-// bind. A naked ArrayBuffer works in D1 but node:sqlite rejects it, which hid the
-// persistence path from realistic integration tests.
 function vectorBlob(vector:number[]){return new Uint8Array(Float32Array.from(vector).buffer)}
 
-/**
- * D1 deliberately returns BLOB columns as plain number[] values, while the
- * local node:sqlite harness returns Uint8Array. Decode both at this boundary so
- * ranking does not depend on which database runtime produced the row.
- */
 export function decodeStoredEmbedding(value:unknown){
   let bytes:Uint8Array;
   if(Array.isArray(value)){
@@ -157,8 +146,6 @@ export function decodeStoredEmbedding(value:unknown){
   else throw new Error('Stored semantic embedding BLOB has an unsupported runtime type');
 
   if(!bytes.byteLength||bytes.byteLength%Float32Array.BYTES_PER_ELEMENT!==0)throw new Error('Stored semantic embedding BLOB has an invalid byte length');
-  // Copy to an aligned, standalone buffer before constructing Float32Array.
-  // Some views can begin at a non-4-byte offset even when their total length is valid.
   const copy=new Uint8Array(bytes.byteLength);copy.set(bytes);
   return new Float32Array(copy.buffer);
 }
@@ -213,8 +200,6 @@ async function cacheSemanticIds(env:SemanticEnv,owner:string,config:EmbeddingCon
         .bind(owner,config.modelKey,queryKey,indexRevision,maxResults,JSON.stringify(ids),stamp)
     ]);
   }catch(error){
-    // Query caching is an optimization only. A cache write must never turn an
-    // otherwise successful semantic search into an error/fallback.
     console.warn(JSON.stringify({event:'semantic-query-cache-write-failed',error:(error as Error).message}));
   }
 }
@@ -249,12 +234,6 @@ export async function semanticWineIds(env:SemanticEnv,owner:string,query:string,
   const queryKey=normalizeSemanticQuery(query),indexRevision=await semanticIndexRevision(env.DB,owner,config);
   const cached=await cachedSemanticIds(env.DB,owner,config,queryKey,indexRevision,limit);
   if(cached!==null)return {ids:cached,modelKey:config.modelKey};
-
-  // Never hold the request open to build document vectors. On a cold index the
-  // lexical route answers immediately while warmSemanticWineIndex runs through
-  // waitUntil; once at least one candidate exists, only the query embedding is
-  // awaited here. Ranked IDs are then cached against this exact index revision,
-  // so returning from a wine detail page does not spend another embedding call.
   const candidates=await currentCandidates(env.DB,owner,config);
   if(!candidates.length)return {ids:[] as string[],modelKey:config.modelKey};
   const runId=crypto.randomUUID();
