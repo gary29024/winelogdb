@@ -175,7 +175,11 @@ Cloudflare should then:
 3. run all pending D1 migrations through migration **0069**;
 4. deploy `worker/multiUserEntry.ts` and the built front end.
 
-Migration 0069 seeds the current budget month only when that value is blank, so the first owner AI action is not blocked by a setting that did not exist before the multi-user cutover. Future month changes still require the normal owner usage update.
+Migration 0069 seeds the current budget month only when that value is blank, so the first owner AI action is not blocked by a setting that did not exist before the multi-user cutover.
+
+**Important monthly maintenance:** WineLog deliberately fails closed if its saved Cloudflare measurement month is stale. At **00:00 UTC on the first day of each month**, credit-gated AI actions pause until the owner opens **Account & friends → Owner controls → Pilot budgets**, changes **Measurement month (YYYY-MM)** to the new month, enters the new month’s measured Cloudflare cost (normally `0` at the start of the month), and presses **Save budgets**. If this has not been done, WineLog reports: `Owner must update this month’s Cloudflare usage estimate`. The Owner controls page warns you during the final three UTC days of the month and shows a clear paused warning if the month is already stale.
+
+The seeded setting **Allow paid Cloudflare usage below the hard stop** is enabled. This means recording a real non-zero cost does **not** stop AI while the amount remains below the configured hard stop; the default hard stop is still enforced.
 
 Do not invite anybody until you have completed Part E.
 
@@ -260,6 +264,21 @@ Only after Part E succeeds:
 7. exchange friend codes if you want to test sharing/research reuse.
 
 Start with one member. Once that account works, add the remaining pilot users.
+
+---
+
+# Monthly one-minute maintenance
+
+At the start of each UTC month:
+
+1. open **Account & friends → Owner controls → Pilot budgets**;
+2. set **Measurement month (YYYY-MM)** to the new month shown by WineLog;
+3. enter the Cloudflare cost measured so far for that new month — normally `0` at the beginning;
+4. press **Save budgets**.
+
+During the month, update **Measured Cloudflare cost this month (US$)** when you review the Cloudflare bill/usage. WineLog will warn at the configured warning amount and stop credit-gated AI at the hard-stop amount. Leaving **Allow paid Cloudflare usage below the hard stop** enabled means normal non-zero usage can continue below that ceiling.
+
+If you forget the month change, your data and Owner controls remain available; the credit-gated AI paths pause until the month is updated. This is intentional so a stale cost observation cannot silently carry into a new billing month.
 
 ---
 
