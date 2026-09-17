@@ -87,7 +87,7 @@ For the connected Worker, open **Settings → Build** and use:
 - Build command: `npm run build`
 - Deploy command: `npm run db:migrate && npx wrangler deploy`
 
-This is intentional. Cloudflare Runs the build step first, then the deploy step. The deploy command applies D1 migrations **before** promoting the new Worker code.
+This is intentional. Cloudflare runs the build step first, then the deploy step. The deploy command applies D1 migrations **before** promoting the new Worker code.
 
 Do not use a bare `npx wrangler deploy` as the production deploy command for releases that contain migrations.
 
@@ -118,7 +118,7 @@ For local/CLI deployment:
 npm run db:migrate
 ```
 
-The current multi-user branch contains migrations through **0068**. Wrangler records which migrations are already applied and only applies pending ones.
+The current multi-user branch contains migrations through **0069**. Migration 0069 only fills a blank `cloudflareObservedMonth` with the current month so the existing owner is not blocked on the first AI action after cutover. Wrangler records which migrations are already applied and only applies pending ones.
 
 For an existing deployment, make a fresh D1 export before applying the multi-user migrations:
 
@@ -166,11 +166,13 @@ After deployment:
 
 1. Open `APP_URL/about`, `/privacy`, `/terms` and `/login` in a private browser window.
 2. Confirm the legal pages are public and display the configured `SUPPORT_EMAIL`.
-3. Choose **Continue with Google**.
+3. Choose **Sign in with Google**.
 4. Use exactly the account configured as `OWNER_EMAIL`.
 5. Confirm your existing owner wines, producers, tastings, cellar data and images remain present.
 
 The first successful login binds that Google identity to the existing `owner` account. A later uninvited Google account cannot claim the owner merely because it knows the email.
+
+The owner remains exempt from WineLog credit pricing because the owner pays the provider bill directly. Owner AI actions still create zero-credit operation records for audit/usage tracking, but the owner does not need a credit grant or member price table to continue scanning or researching after cutover.
 
 ## Owner controls before inviting members
 
@@ -182,7 +184,7 @@ Then:
 
 1. review member/storage/AI budgets;
 2. configure every AI credit price you intend members to use;
-3. grant test credits as needed;
+3. grant test/member credits as needed;
 4. run **Inventory R2 storage**;
 5. run **Index existing research**;
 6. confirm rollout/maintenance state is healthy;
