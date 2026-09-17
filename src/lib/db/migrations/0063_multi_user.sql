@@ -108,6 +108,7 @@ INSERT OR IGNORE INTO pilot_settings(id,value_json) VALUES(1,json('{
   "totalStorageBytes":8589934592,
   "aiConcurrency":2,
   "aiDailyOperations":50,
+  "aiDailyEmbeddingRequests":400,
   "aiMonthlyBudgetUsd":25,
   "aiUnitBudgetUsd":1,
   "cloudflareWarningUsd":5,

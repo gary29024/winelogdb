@@ -1,6 +1,7 @@
 import { AI_MODELS } from '../ai/policy';
 import { recordAiUsage,type AiUsageEnv } from '../usage/aiUsage';
 import { durableProvider,type ProviderAuthorization } from '../credits/provider';
+import { missingTable } from '../db/ownerRevision';
 export { shouldUseSemanticQuery } from './semanticQuery';
 
 export type SemanticEmbeddingBindings={
@@ -31,6 +32,49 @@ type MeterContext={owner:string;runId:string;targetId:'journal-query'|'journal-i
 // still recorded in ai_usage_events/monthly below, per account and model, so the
 // owner can see request and indexed-wine volume and change this policy later.
 const EMBEDDING_CREDIT_EXEMPTION={exempt:true,reason:'search_embedding'} as const;
+
+/**
+ * How many embedding requests one account may spend in a day.
+ *
+ * Embeddings are zero-credit, which means they also miss every ceiling the
+ * credit path enforces in `reserve` - the daily operation count, the monthly
+ * budget and the Cloudflare stop-loss. Bounded per request is not the same as
+ * bounded: the index converges, but distinct queries miss the 30-minute cache
+ * and each buys a fresh embedding indefinitely.
+ *
+ * Read from pilot_settings so the owner controls it with everything else, and
+ * counted off ai_usage_events, which already records every attempt on
+ * idx_ai_usage_events_owner_kind. The owner pays the provider directly and is
+ * not capped. A deployment with neither table configured is the pre-credits
+ * single tenant and is left alone.
+ */
+export const DEFAULT_DAILY_EMBEDDING_REQUESTS=400;
+
+async function embeddingBudgetSpent(db:D1Database,owner:string){
+  const since=new Date(Date.now()-86400000).toISOString();
+  const row=await db.prepare("SELECT coalesce(sum(requests),0) AS spent FROM ai_usage_events WHERE owner_id=? AND kind='search_embedding' AND created_at>=?")
+    .bind(owner,since).first<{spent:number}>();
+  return Number(row?.spent)||0;
+}
+
+/** True when this account may still spend an embedding request today. */
+export async function embeddingAllowed(env:SemanticEnv,owner:string){
+  try{
+    const account=await env.DB.prepare('SELECT role FROM app_users WHERE id=?').bind(owner).first<{role:string}>();
+    if(!account)return true;
+    if(account.role==='owner')return true;
+    const configured=await env.DB.prepare('SELECT value_json FROM pilot_settings WHERE id=1').first<{value_json:string}>();
+    const parsed=configured?JSON.parse(configured.value_json) as {aiDailyEmbeddingRequests?:unknown}:null;
+    const raw=Number(parsed?.aiDailyEmbeddingRequests);
+    const cap=Number.isFinite(raw)&&raw>=0?raw:DEFAULT_DAILY_EMBEDDING_REQUESTS;
+    if(cap===0)return false;
+    return await embeddingBudgetSpent(env.DB,owner)<cap;
+  }catch(error){
+    // A deployment without the multi-user tables has one account and no cap.
+    if(missingTable(error))return true;
+    throw error;
+  }
+}
 const WORKERS_MODEL=AI_MODELS.semanticWorkers;
 const GEMINI_MODEL=AI_MODELS.semanticGemini;
 const WORKERS_DIMENSIONS=1024;
@@ -236,6 +280,8 @@ async function cacheSemanticIds(env:SemanticEnv,owner:string,config:EmbeddingCon
 }
 
 async function refreshSemanticIndex(env:SemanticEnv,owner:string,config:EmbeddingConfig,limit:number,runId:string){
+  // Checked before the read, so a capped account costs nothing at all.
+  if(!await embeddingAllowed(env,owner))return {indexed:0,hasMore:false};
   const pending=await staleWineRows(env.DB,owner,config,limit),rows=pending.slice(0,limit);
   for(let start=0;start<rows.length;start+=EMBED_BATCH){
     const chunk=rows.slice(start,start+EMBED_BATCH),vectors=await embedTexts(env,config,chunk.map(buildWineSemanticDocument),'document',{owner,runId,targetId:'journal-index'}),stamp=new Date().toISOString();
@@ -273,6 +319,9 @@ export async function semanticWineIds(env:SemanticEnv,owner:string,query:string,
   // so returning from a wine detail page does not spend another embedding call.
   const candidates=await currentCandidates(env.DB,owner,config);
   if(!candidates.length)return {ids:[] as string[],modelKey:config.modelKey};
+  // After the cache lookup above: a cached answer stays free when capped, and
+  // returning null degrades this search to the lexical route rather than failing.
+  if(!await embeddingAllowed(env,owner))return null;
   const runId=crypto.randomUUID();
   const [queryVector]=await embedTexts(env,config,[queryKey],'query',{owner,runId,targetId:'journal-query'});
   const ids=rankSemanticCandidates(queryVector,candidates,limit).map(item=>item.id);
