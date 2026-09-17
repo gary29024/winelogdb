@@ -1,5 +1,5 @@
 import { FriendResearchStatus } from '../auth/FriendResearchStatus';
-import { accountStorageKey } from '../../lib/auth/client';
+import { accountStorageKey,getAccount } from '../../lib/auth/client';
 import { useEffect,useMemo,useRef,useState } from 'react';
 import { Link,useLocation,useNavigate,useParams } from 'react-router-dom';
 import { WineImage } from '../wines/WineImage';
@@ -166,9 +166,13 @@ export function ProducerDetailPage(){
   // where an eye expects them rather than after every unaccented name.
    .sort((a,b)=>a.name.localeCompare(b.name,undefined,{sensitivity:'base'})||(a.wineStyle??'').localeCompare(b.wineStyle??''));
  },[producer]);
+ // The wine range is the expensive half of producer research, so members get the
+ // profile, practices and contacts only. There is nothing to refresh range-only.
+ const rangeAllowed=getAccount()?.role!=='member';
  async function runResearch(refreshProfile=false){
-  const rangeOnly=Boolean(producer?.researchedAt)&&!refreshProfile;
-  if(!confirm((rangeOnly?'Refresh this producer’s wine range only? AI usage may be incurred. The job continues in the background if you close WineLog.':(refreshProfile?'Refresh the saved profile even if it is still current? This uses an additional research request. ':'')+'Research this producer’s home location, public contacts, producer-wide winemaking practices and current/recent wine range? The job runs in the background and continues even if you close WineLog.')))return;
+  const rangeOnly=rangeAllowed&&Boolean(producer?.researchedAt)&&!refreshProfile;
+  const scope=rangeAllowed?'current/recent wine range':'producer-wide winemaking practices';
+  if(!confirm((rangeOnly?'Refresh this producer’s wine range only? AI usage may be incurred. The job continues in the background if you close WineLog.':(refreshProfile?'Refresh the saved profile even if it is still current? This uses an additional research request. ':'')+`Research this producer’s home location, public contacts and ${scope}? The job runs in the background and continues even if you close WineLog.`)))return;
   setError('');setNotice('');
   try{
    const accepted=await researchProducer(id,undefined,refreshProfile,rangeOnly);if(accepted.cached){window.location.reload();return}if(accepted.waitingForFriend){setFriendOperation(accepted.creditOperationId??'');return}const run=await getProducerResearchStatus(id,accepted.researchRequestId);
@@ -239,12 +243,12 @@ export function ProducerDetailPage(){
    <div className="producer-header-content"><p className="eyebrow">PRODUCER</p><h1>{producer.canonicalName}</h1><p>{location||'Home location not researched yet'}</p>{producer.aliases.length>1&&<small>Known aliases: {producer.aliases.join(' · ')}</small>}{producer.heroImageAvailable&&<button type="button" className="producer-photo-remove" disabled={removingPhoto} onClick={()=>void removePhoto()}>{removingPhoto?'Removing…':'Remove this photo'}</button>}</div>
   </header>
   {error&&<p className="producer-error" role="alert">{error}</p>}{friendOperation&&<FriendResearchStatus operationId={friendOperation} onComplete={()=>window.location.reload()}/>}{notice&&<p className="producer-notice" role="status">{notice}</p>}
-  <section className="detail-section"><div className="producer-section-title"><div><p className="section-label">Producer research</p><h2>Profile & range</h2></div><button type="button" className="primary" disabled={researching} onClick={()=>void runResearch()}>{researching?'Research running…':producer.researchedAt?'Refresh wine range':'Research producer'}</button>{(producer.profile||producer.researchedAt)&&<button type="button" disabled={researching} onClick={()=>void runResearch(true)}>Refresh profile & range</button>}</div>
+  <section className="detail-section"><div className="producer-section-title"><div><p className="section-label">Producer research</p><h2>{rangeAllowed?'Profile & range':'Producer profile'}</h2></div><button type="button" className="primary" disabled={researching} onClick={()=>void runResearch()}>{researching?'Research running…':rangeAllowed&&producer.researchedAt?'Refresh wine range':'Research producer'}</button>{(producer.profile||producer.researchedAt)&&<button type="button" disabled={researching} onClick={()=>void runResearch(true)}>{rangeAllowed?'Refresh profile & range':'Refresh profile'}</button>}</div>
    {researchRun&&<div className={`producer-research-status ${researchRun.status}`} role="status" aria-live="polite"><div><strong>{stageLabel[researchRun.stage]}</strong><span>{researchRun.message}</span></div><div><strong>{researching?<ElapsedSeconds startedAt={researchRun.startedAt}/>:researchRun.durationMs!=null?`${(researchRun.durationMs/1000).toFixed(1)}s`:''}</strong><small>Request {researchRun.requestId}</small></div>{researching&&<><p>This is a background job. You can leave this page or close WineLog; the saved result will appear automatically when you return.</p><button type="button" className="secondary-danger" disabled={researchCancelling} onClick={cancelResearch}>{researchCancelling?'Cancelling…':'Cancel Deep Search'}</button></>}</div>}
    {producer.profile?<p className="producer-profile">{producer.profile}</p>:<p>Research this producer to establish its physical base, broad region and commune, public contact details, official website, general producer-wide practices, header image and a sourced current/recent wine range.</p>}
    {producer.winemakingPractices&&<div className="producer-practices"><p className="section-label">General winemaking practices</p><p className="producer-profile">{producer.winemakingPractices}</p><small>Producer-wide context only. Exact cuvée/vintage techniques are researched separately on the wine page.</small></div>}
    <ProducerContacts producer={producer} onChanged={reload}/>
-   {catalogGroups.length>0&&<div className="producer-range">
+   {rangeAllowed&&catalogGroups.length>0&&<div className="producer-range">
     <div className="producer-range-head">
      <div><p className="section-label">Wine range</p><strong>{catalogTotals.wines} wine{catalogTotals.wines===1?'':'s'} · {catalogGroups.length} style{catalogGroups.length===1?'':'s'}{catalogTotals.tasted?` · ${catalogTotals.tasted} tasted`:''}</strong></div>
      <button type="button" className="range-toggle-all" onClick={toggleAllCategories}>{allCategoriesCollapsed?'Expand all':'Collapse all'}</button>

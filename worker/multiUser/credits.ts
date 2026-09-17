@@ -2,12 +2,13 @@ import { buildResearchTargets,loadResearchCache,type ResearchScope } from '../..
 import { unresearchedProducers } from '../../src/lib/producers/researchCampaign';
 import { producerSubjectKey,reusableProducer } from '../../src/lib/research/sharedProducer';
 import { sharedSubjectKey } from '../../src/lib/research/shared';
+import { producerRangeAllowed } from '../../src/lib/producers/rangeAccess';
 import { readVintageWindow,type VintageSubject } from '../../src/lib/maturity/vintageWindow';
 import { workKey,activeFriendWork } from './researchWork';
 import { researchInputFingerprint } from './provider';
 import { ApiError,boundedBytes,hash,json,seconds,settings,stamp,type Member } from './common';
 
-export const CREDIT_ACTIONS=['scan_single','scan_batch','scan_group','scan_sheet','producer_research','wine_producer','wine_terroir','wine_vintage_context','wine_wine_vintage','vintage_window'] as const;
+export const CREDIT_ACTIONS=['scan_single','scan_batch','scan_group','scan_sheet','producer_research','producer_profile','wine_producer','wine_terroir','wine_vintage_context','wine_wine_vintage','vintage_window'] as const;
 export type CreditAction=typeof CREDIT_ACTIONS[number];
 export type CreditUnit={id:string;action:CreditAction;priceId:string;credits:number;targetId?:string;targetFingerprint?:string;researchKey?:string;resultId?:string;scope?:ResearchScope;cacheKey?:string;parentOperationId?:string;depth?:number};
 export type CreditOperation={id:string;user_id:string;path:string;fingerprint:string;units_json:string;reserved:number;captured:number;status:string;response_json:string|null;response_status:number|null;run_id:string|null;created_at:string;updated_at:string};
@@ -48,7 +49,8 @@ export async function plannedUnits(request:Request,db:D1Database,user:string):Pr
   return targets.filter(t=>data.refresh==='all'||(data.refresh==='vintage'&&['wine_vintage','vintage_context'].includes(t.scope))||!cache.has(t.scope)).map(t=>({...unit(`wine_${t.scope}`,t.scope,wine[1]),scope:t.scope,cacheKey:t.cacheKey,targetFingerprint,researchKey:sharedSubjectKey(t)?`${t.scope}:${sharedSubjectKey(t)}`:undefined}));
  }
  const producer=path.match(/^\/api\/producers\/([^/]+)\/research$/);
- async function producerUnit(id:string){const row=await db.prepare('SELECT id,canonical_name,home_country FROM producers WHERE id=? AND owner_id=?').bind(id,user).first<Record<string,unknown>>();if(!row)throw new ApiError(404,'Producer not found');const key=producerSubjectKey(row);return {...unit('producer_research',id,id),targetFingerprint:await researchInputFingerprint('producer',row),researchKey:key?`producer:${key}`:undefined}}
+ const rangeAllowed=await producerRangeAllowed(db,user);
+ async function producerUnit(id:string){const row=await db.prepare('SELECT id,canonical_name,home_country FROM producers WHERE id=? AND owner_id=?').bind(id,user).first<Record<string,unknown>>();if(!row)throw new ApiError(404,'Producer not found');const key=producerSubjectKey(row);return {...unit(rangeAllowed?'producer_research':'producer_profile',id,id),targetFingerprint:await researchInputFingerprint('producer',row),researchKey:key?`producer:${key}`:undefined}}
  if(producer){const planned=await producerUnit(producer[1]);if(data.refresh!==true&&await reusableProducer(db,user,producer[1]))return [];return [planned]}
  if(path==='/api/producers/research-batch'){const units=[];for(const p of await unresearchedProducers(db,user,Math.min(8,Number(data.limit)||8)))if(!await reusableProducer(db,user,p.id))units.push(await producerUnit(p.id));return units}
  const batch=path.match(/^\/api\/batch-recognition\/sessions\/([^/]+)\/submit$/);

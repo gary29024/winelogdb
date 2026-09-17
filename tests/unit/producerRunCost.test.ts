@@ -32,8 +32,10 @@ describe('what a producer run asks for',()=>{
 });
 
 describe('the request a run actually submits',()=>{
-  const run=async(row:Record<string,unknown>|null,refreshProfile=false,rangeOnly=false)=>{
+  const run=async(row:Record<string,unknown>|null,refreshProfile=false,rangeOnly=false,role:'owner'|'member'='owner')=>{
     const stub=createD1Stub(sql=>{
+      // The wine range is owner-only, so every run now asks who is paying.
+      if(/SELECT role FROM app_users/.test(sql))return {first:{role}};
       // Deliberately loose: a stub that only answers the current column list
       // would hand back nothing if the freshness read regressed to the shared
       // timestamp, the row would look unknown, and the profile would be asked
@@ -83,6 +85,18 @@ describe('the request a run actually submits',()=>{
     expect(sql.some(text=>/SELECT profile,home_country,profile_researched_at FROM producers/.test(text)),
       'the freshness read must name the profile timestamp').toBe(true);
     expect(keys).toEqual(['profile','catalog_slice_a_z_other']);
+  });
+
+  it('asks a member for the profile alone and never for the range',async()=>{
+    const {result,keys}=await run(null,false,false,'member');
+    expect(result.ok).toBe(true);
+    expect(keys,'the range is the expensive half and is owner-only').toEqual(['profile']);
+  });
+
+  it('refuses a range-only run from a member rather than silently widening it',async()=>{
+    const {result,keys}=await run(known({profile_researched_at:new Date().toISOString()}),false,true,'member');
+    expect(result.ok).toBe(false);
+    expect(keys,'nothing may reach the provider').toEqual([]);
   });
 
   it('refreshes legacy profiles whose only timestamp may belong to the catalog',async()=>{

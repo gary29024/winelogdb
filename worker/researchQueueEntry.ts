@@ -4,6 +4,7 @@ import app from './cuveeEntry';
 import { AI_MODELS } from '../src/lib/ai/policy';
 import { requireSession } from '../src/lib/auth/session';
 import { pollProducerBatchResearch,startProducerBatchResearch } from '../src/lib/producers/batchResearch';
+import { producerRangeAllowed } from '../src/lib/producers/rangeAccess';
 import type { ChampagneExtractionJob } from './champagneExtraction';
 import { createQueuedProducerResearchRun,getProducerResearchRun,mapRunRow,settleIfStalled } from '../src/lib/producers/research';
 import { activeCampaignId,advanceCampaign,cancelCampaign,countUnresearchedProducers,createCampaign,dismissCampaign,listCampaigns,measuredSearchesPerRequest,readCampaign,reviveCampaignIfStalled,typicalProducerRunMs,unresearchedProducers,
@@ -55,6 +56,8 @@ router.post('/api/producers/:id/research',async c=>{
   cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
   const body=await c.req.json().catch(()=>({})) as {confirmation?:string;requestId?:string;refreshProfile?:boolean;rangeOnly?:boolean};if(body.confirmation!=='RUN_PRODUCER_RESEARCH')return c.json({error:'Producer research requires explicit confirmation'},400);
   if(body.refreshProfile===true&&body.rangeOnly===true)return c.json({error:'Choose either range-only or profile refresh'},400);
+  // The wine range is the expensive half of producer research and is owner-only.
+  if(body.rangeOnly===true&&!await producerRangeAllowed(c.env.DB,owner))return c.json({error:'Wine range research is not available on this account'},403);
   const queued=await createQueuedProducerResearchRun(c.env.DB,owner,c.req.param('id'),body.requestId);if(!queued)return c.json({error:'Producer not found'},404);
   if(queued.created){try{await c.env.RESEARCH_QUEUE.send({kind:'producer',owner,producerId:c.req.param('id'),requestId:queued.requestId,refreshProfile:body.refreshProfile===true,rangeOnly:body.rangeOnly===true})}catch(e){const error=(e as Error).message||'Could not queue producer research';await failProducerQueue(c.env.DB,owner,queued.requestId,error);return c.json({error,researchRequestId:queued.requestId},503)}}
   return c.json({accepted:true,researchRequestId:queued.requestId,existing:!queued.created},202);
