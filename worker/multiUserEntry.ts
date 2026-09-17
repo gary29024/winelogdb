@@ -71,7 +71,9 @@ export default {
    }
    const wineMatch=path.match(/^\/api\/wines\/([^/]+)$/);
    if(response.ok&&request.method==='GET'&&wineMatch){
-    const row=await env.DB.prepare('SELECT * FROM wines WHERE owner_id=? AND id=?').bind(member.id,wineMatch[1]).first<Record<string,unknown>>();
+    // Only the columns that build a cache key. SELECT * pulled deep_search_json
+    // - a multi-kilobyte snapshot - on every wine view, to read nine fields.
+    const row=await env.DB.prepare('SELECT producer,producer_id,cuvee_id,wine_name,vintage,country,region,appellation,wine_style FROM wines WHERE owner_id=? AND id=?').bind(member.id,wineMatch[1]).first<Record<string,unknown>>();
     if(row){const targets=wineTargets(row),cache=await loadResearchCache(env.DB,member.id,targets,true);
      // Showing a friend's research is what makes it the reader's own, so the
      // next view is an indexed lookup and unfriending cannot take it back.

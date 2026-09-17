@@ -3,7 +3,7 @@ import { deepSearchProvenanceSchema,type DeepSearchProvenance,type DeepSearchRes
 import { assessResearchScope,buildDeepResearchQuality,legacyOptionalFieldMissing } from './qualityGate';
 import { highRiskTechnicalScopePasses } from './technicalClaimGate';
 import { auditTechnicalContradictions,disputedTechnicalClaimCount,technicalContradictionScopePasses } from './technicalContradictions';
-import { friendResearch,publishResearch } from './shared';
+import { friendResearchBatch,publishResearch } from './shared';
 
 export const researchScopes=['producer','terroir','vintage_context','wine_vintage'] as const;
 export type ResearchScope=typeof researchScopes[number];
@@ -113,9 +113,18 @@ export async function loadResearchCache(db:D1Database,owner:string,targets:Resea
     return {scope:target.scope,entry:{target,payload,sources,provenance,model:row.model,researchedAt:row.researched_at} as CachedResearch};
   }));
   const cache=new Map<ResearchScope,CachedResearch>();for(const item of found)if(item)cache.set(item.scope,item.entry);
-  if(includeFriends)for(const target of targets){if(cache.has(target.scope))continue;for(const entry of await friendResearch(db,owner,target)){
-    if(scopePassesQuality(target.scope,entry.payload,target,entry.sources,entry.provenance)){cache.set(target.scope,{...entry,target});break}
-  }}
+  if(includeFriends){
+    // One query for every missing scope, rather than one per scope and one per
+    // alias key inside it. A wine view used to pay for up to eight sequential
+    // round trips here.
+    const missing=targets.filter(target=>!cache.has(target.scope));
+    if(missing.length){
+      const byScope=await friendResearchBatch(db,owner,missing);
+      for(const target of missing)for(const entry of byScope.get(target.scope)??[]){
+        if(scopePassesQuality(target.scope,entry.payload,target,entry.sources,entry.provenance)){cache.set(target.scope,{...entry,target});break}
+      }
+    }
+  }
   return cache;
 }
 

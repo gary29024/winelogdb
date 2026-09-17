@@ -1,7 +1,7 @@
 import { normalizeProducerAlias } from '../producers/entities';
 import { normalizeCuveeAlias } from '../cuvees/entities';
 import { producerNameVariants } from './aliasBridge';
-import type { CachedResearch,ResearchTarget } from './cache';
+import type { CachedResearch,ResearchScope,ResearchTarget } from './cache';
 
 export type SharedKeySkip='no-producer'|'no-country'|'no-wine-name'|'no-style'|'no-place'|'no-vintage';
 export type SharedKeyOutcome={keys:string[];skipped?:undefined}|{keys:[];skipped:SharedKeySkip};
@@ -68,23 +68,55 @@ export async function publishResearch(db:D1Database,owner:string,entry:CachedRes
  ON CONFLICT(contributor_id,subject_key,scope) DO UPDATE SET entry_json=excluded.entry_json,quality_version=1,researched_at=excluded.researched_at`)
  .bind(owner,key,entry.target.scope,payload,entry.researchedAt).run();
 }
-export async function friendResearch(db:D1Database,owner:string,target:ResearchTarget){
- const base=sharedSubjectKeys(target);if(!base.keys.length)return [];
- const identity=(target.identity??target.subject) as Record<string,unknown>;
- // A private alias such as "Ch. Margaux" -> "Château Margaux" may expand this
- // owner's lookup, but another member's manual correction never does.
+/**
+ * Friends' research for a whole wine in one query.
+ *
+ * This used to run one lookup per missing scope, and - once alias variants
+ * arrived - one per key inside that, each awaited in turn. A wine with four
+ * missing scopes could therefore spend eight sequential round trips on a page
+ * view, plus one repeat read of the same producer's aliases per scope.
+ *
+ * Every scope of a wine shares its producer, so the alias read happens once and
+ * all scope/key pairs go up together. Results are ranked back into each scope's
+ * own key order, so the most specific key still wins - the country-qualified
+ * producer key is preferred over the bare-name one that exists to reach readers
+ * with no country recorded.
+ */
+export async function friendResearchBatch(db:D1Database,owner:string,targets:ResearchTarget[]):Promise<Map<ResearchScope,CachedResearch[]>>{
+ const found=new Map<ResearchScope,CachedResearch[]>();
+ if(!targets.length)return found;
+ const identity=(targets[0].identity??targets[0].subject) as Record<string,unknown>;
  const variants=await producerNameVariants(db,owner,String(identity.producer??''));
- const keys=[...new Set(variants.length>1
-   ?variants.flatMap(name=>sharedSubjectKeys({...target,identity:{...identity,producer:name} as ResearchTarget['identity']}).keys)
-   :base.keys)];
- const found:CachedResearch[]=[];
- // Most specific key first, so a country-qualified producer match is preferred
- // over the bare-name one that exists to reach readers with no country recorded.
- for(const key of keys){
-  const rows=await db.prepare(`SELECT r.entry_json FROM reusable_research r JOIN friendships f ON f.friend_id=r.contributor_id AND f.user_id=?
-  JOIN app_users u ON u.id=r.contributor_id AND u.status='active' WHERE r.subject_key=? AND r.scope=? AND r.quality_version=1
-  ORDER BY r.researched_at DESC,r.contributor_id LIMIT 25`).bind(owner,key,target.scope).all<{entry_json:string}>();
-  for(const row of rows.results??[]){try{found.push(JSON.parse(row.entry_json) as CachedResearch)}catch{/* a corrupt row must not hide the rest */}}
+ const keysByScope=new Map<ResearchScope,string[]>();
+ for(const target of targets){
+  const own=(target.identity??target.subject) as Record<string,unknown>;
+  const keys=variants.length>1
+   ?[...new Set(variants.flatMap(name=>sharedSubjectKeys({...target,identity:{...own,producer:name} as ResearchTarget['identity']}).keys))]
+   :sharedSubjectKeys(target).keys;
+  if(keys.length)keysByScope.set(target.scope,keys);
+ }
+ const scopes=[...keysByScope.keys()],allKeys=[...new Set([...keysByScope.values()].flat())];
+ if(!scopes.length||!allKeys.length)return found;
+ // Filtering on subject_key first uses idx_reusable_research_subject; the scope
+ // filter then costs nothing, and a key from one scope cannot collide with
+ // another's - they are tuples of different arity.
+ const rows=await db.prepare(`SELECT r.scope,r.subject_key,r.entry_json FROM reusable_research r
+  JOIN friendships f ON f.friend_id=r.contributor_id AND f.user_id=?
+  JOIN app_users u ON u.id=r.contributor_id AND u.status='active'
+  WHERE r.subject_key IN (${allKeys.map(()=>'?').join(',')}) AND r.scope IN (${scopes.map(()=>'?').join(',')}) AND r.quality_version=1
+  ORDER BY r.researched_at DESC,r.contributor_id LIMIT 100`).bind(owner,...allKeys,...scopes).all<{scope:ResearchScope;subject_key:string;entry_json:string}>();
+ for(const [scope,order] of keysByScope){
+  const entries=(rows.results??[])
+   .filter(row=>row.scope===scope&&order.includes(row.subject_key))
+   // Stable sort, so researched_at DESC still decides between two rows on the same key.
+   .sort((a,b)=>order.indexOf(a.subject_key)-order.indexOf(b.subject_key))
+   .flatMap(row=>{try{return [JSON.parse(row.entry_json) as CachedResearch]}catch{return []}});
+  if(entries.length)found.set(scope,entries);
  }
  return found;
+}
+
+/** One scope's worth of the above, for callers that only have a single target. */
+export async function friendResearch(db:D1Database,owner:string,target:ResearchTarget){
+ return (await friendResearchBatch(db,owner,[target])).get(target.scope)??[];
 }
