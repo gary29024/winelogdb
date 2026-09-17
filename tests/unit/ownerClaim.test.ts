@@ -8,12 +8,21 @@ const claims=(sub:string,email:string)=>({sub,email,name:'Owner'});
 describe('claiming the owner account',()=>{
   // The migration seeds the owner row because the existing journal already
   // belongs to it, so a claim fills in an identity rather than creating one.
-  it('is seeded by the migration with a usable settings row',()=>{
+  it('is seeded by the migration with a usable, bounded settings row',()=>{
     const {sql,close}=realD1();
     try{
       expect(sql.prepare("SELECT role FROM app_users WHERE id='owner'").get()!.role).toBe('owner');
-      const settings=JSON.parse(String(sql.prepare('SELECT value_json FROM pilot_settings WHERE id=1').get()!.value_json));
-      expect(settings.allowOverages,'an unconfigured deployment must not spend').toBe(false);
+      const settings=JSON.parse(String(sql.prepare('SELECT value_json FROM pilot_settings WHERE id=1').get()!.value_json)) as {
+        allowOverages:boolean;cloudflareObservedUsd:number;cloudflareWarningUsd:number;cloudflareStopUsd:number
+      };
+      // The owner must be able to continue the existing AI workflow after cutover,
+      // including once a small real Cloudflare cost has been recorded. Safety is
+      // provided by the explicit finite hard stop and by leaving all member AI
+      // actions unpriced until the owner configures them.
+      expect(settings.allowOverages,'small recorded cost must not lock out the owner').toBe(true);
+      expect(settings.cloudflareObservedUsd,'fresh deployment starts with no recorded Cloudflare spend').toBe(0);
+      expect(settings.cloudflareWarningUsd).toBeGreaterThan(0);
+      expect(settings.cloudflareStopUsd).toBeGreaterThan(settings.cloudflareWarningUsd);
       expect(sql.prepare('SELECT count(*) AS n FROM credit_prices').get()!.n,'nothing is priced until the owner prices it').toBe(0);
     }finally{close()}
   });
