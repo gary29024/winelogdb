@@ -1,7 +1,11 @@
 import { CREDIT_ACTIONS } from './credits';
 import { ApiError,body,hash,json,ownerOnly,positive,randomToken,seconds,settings,stamp,textField,type IdentityEnv,type Member,type PilotSettings } from './common';
-import { readAiRates,tokenCostUsd,monthGroundingUsd,type AiRateEnv } from '../../src/lib/usage/rates';
+import { marginalCostUsd,monthGroundingUsd,readAiRates,tokenCostUsd,type AiRateEnv } from '../../src/lib/usage/rates';
 import { billingMonth } from '../../src/lib/usage/billingPeriod';
+
+type MemberUsageRow={owner_id:string;kind:string;model:string;tier:string;requests:number;search_queries:number;prompt_tokens:number;output_tokens:number;units:number};
+type MemberUsageKind={kind:string;requests:number;searchQueries:number;units:number;estimatedMarginalUsd:number};
+type MemberUsage={userId:string;requests:number;searchQueries:number;promptTokens:number;outputTokens:number;smartSearchRequests:number;smartSearchUnits:number;estimatedMarginalUsd:number;kinds:MemberUsageKind[]};
 
 export async function deploymentAiCost(db:D1Database,env:AiRateEnv){
  const rates=readAiRates(env),month=billingMonth();
@@ -9,15 +13,46 @@ export async function deploymentAiCost(db:D1Database,env:AiRateEnv){
  const searches=rows.reduce((n,r)=>n+r.searchQueries,0),tokens=rows.reduce((n,r)=>n+tokenCostUsd(r,rates,r.model,{tier:r.tier}),0);
  return {month,usd:tokens+monthGroundingUsd(searches,rates),searches,freeRemaining:Math.max(0,rates.groundingFreePerMonth-searches)};
 }
+
+/**
+ * Attribute the current month's provider activity to the account that caused it.
+ * This deliberately uses marginal/list pricing rather than allocating the shared
+ * monthly grounding allowance between members. The deployment-wide figure above
+ * remains the billing estimate; this one is for fair usage attribution and abuse
+ * monitoring. Workers AI embeddings can have zero estimated dollars when the
+ * provider response exposes no billable-token metadata, but their request/wine
+ * counts are still retained here.
+ */
+export async function memberAiUsage(db:D1Database,env:AiRateEnv){
+ const rates=readAiRates(env),month=billingMonth();
+ const rows=(await db.prepare(`SELECT owner_id,kind,model,tier,requests,search_queries,prompt_tokens,output_tokens,units
+   FROM ai_usage_monthly WHERE month=? ORDER BY owner_id,kind`).bind(month).all<MemberUsageRow>()).results;
+ const byUser=new Map<string,MemberUsage>();
+ for(const row of rows){
+  const requests=Number(row.requests)||0,searchQueries=Number(row.search_queries)||0,promptTokens=Number(row.prompt_tokens)||0,
+   outputTokens=Number(row.output_tokens)||0,units=Number(row.units)||0,
+   estimatedMarginalUsd=marginalCostUsd({searchQueries,promptTokens,outputTokens},rates,row.model,{tier:row.tier});
+  const usage=byUser.get(row.owner_id)??{userId:row.owner_id,requests:0,searchQueries:0,promptTokens:0,outputTokens:0,smartSearchRequests:0,smartSearchUnits:0,estimatedMarginalUsd:0,kinds:[]};
+  usage.requests+=requests;usage.searchQueries+=searchQueries;usage.promptTokens+=promptTokens;usage.outputTokens+=outputTokens;usage.estimatedMarginalUsd+=estimatedMarginalUsd;
+  if(row.kind==='search_embedding'){usage.smartSearchRequests+=requests;usage.smartSearchUnits+=units}
+  let kind=usage.kinds.find(item=>item.kind===row.kind);
+  if(!kind){kind={kind:row.kind,requests:0,searchQueries:0,units:0,estimatedMarginalUsd:0};usage.kinds.push(kind)}
+  kind.requests+=requests;kind.searchQueries+=searchQueries;kind.units+=units;kind.estimatedMarginalUsd+=estimatedMarginalUsd;
+  byUser.set(row.owner_id,usage);
+ }
+ return {month,items:[...byUser.values()].map(item=>({...item,kinds:item.kinds.sort((a,b)=>b.estimatedMarginalUsd-a.estimatedMarginalUsd||b.requests-a.requests)}))};
+}
 export async function adminRoute(request:Request,env:IdentityEnv&AiRateEnv,member:Member):Promise<Response|null>{
  const path=new URL(request.url).pathname;if(!path.startsWith('/api/admin/'))return null;ownerOnly(member);
  if(path==='/api/admin/overview'&&request.method==='GET'){
-  return json({members:(await env.DB.prepare('SELECT u.*,w.balance,w.reserved FROM app_users u JOIN credit_wallets w ON w.user_id=u.id ORDER BY u.created_at').all()).results,
-   prices:(await env.DB.prepare('SELECT * FROM credit_prices ORDER BY created_at DESC LIMIT 100').all()).results,
-   settings:await settings(env.DB).catch(()=>null),aiCost:await deploymentAiCost(env.DB,env),storage:(await env.DB.prepare('SELECT * FROM storage_totals').all()).results,
-   rollout:(await env.DB.prepare('SELECT * FROM rollout_state').all()).results,
-   reviewOperations:(await env.DB.prepare("SELECT id,user_id,path,status,reserved,created_at FROM credit_operations WHERE status='review' LIMIT 50").all()).results,
-   actions:CREDIT_ACTIONS});
+  const [members,prices,settingsValue,aiCost,memberUsage,storage,rollout,reviewOperations]=await Promise.all([
+   env.DB.prepare('SELECT u.*,w.balance,w.reserved FROM app_users u JOIN credit_wallets w ON w.user_id=u.id ORDER BY u.created_at').all(),
+   env.DB.prepare('SELECT * FROM credit_prices ORDER BY created_at DESC LIMIT 100').all(),
+   settings(env.DB).catch(()=>null),deploymentAiCost(env.DB,env),memberAiUsage(env.DB,env),
+   env.DB.prepare('SELECT * FROM storage_totals').all(),env.DB.prepare('SELECT * FROM rollout_state').all(),
+   env.DB.prepare("SELECT id,user_id,path,status,reserved,created_at FROM credit_operations WHERE status='review' LIMIT 50").all()
+  ]);
+  return json({members:members.results,prices:prices.results,settings:settingsValue,aiCost,memberUsage,storage:storage.results,rollout:rollout.results,reviewOperations:reviewOperations.results,actions:CREDIT_ACTIONS});
  }
  if(path==='/api/admin/settings'&&request.method==='PUT'){
   const b=await body(request),amount=(key:string)=>{const v=Number(b[key]);if(!Number.isFinite(v)||v<0||v>1e9)throw new ApiError(400,`Invalid ${key}`);return v};
