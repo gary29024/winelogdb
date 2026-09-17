@@ -14,7 +14,7 @@ beforeEach(()=>{
     database.sql.prepare('INSERT INTO app_users(id,email,display_name,role) VALUES(?,?,?,?) ON CONFLICT(id) DO UPDATE SET email=excluded.email,display_name=excluded.display_name,role=excluded.role').run(id,`${id}@example.com`,id,role);
     database.sql.prepare('INSERT OR IGNORE INTO credit_wallets(user_id) VALUES(?)').run(id);
   }
-  database.sql.prepare('INSERT INTO pilot_settings(id,value_json) VALUES(1,?)').run(JSON.stringify(config));
+  database.sql.prepare('INSERT INTO pilot_settings(id,value_json) VALUES(1,?) ON CONFLICT(id) DO UPDATE SET value_json=excluded.value_json').run(JSON.stringify(config));
 });
 afterEach(()=>{database.close();vi.restoreAllMocks();vi.unstubAllGlobals()});
 

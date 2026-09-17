@@ -5,7 +5,16 @@
 GOOGLE_CLIENT_ID=replace-me.apps.googleusercontent.com
 GOOGLE_CLIENT_SECRET=replace-me
 # The verified Google OIDC sub of the legacy owner. Never use an email here.
-OWNER_GOOGLE_SUB=replace-with-your-verified-google-subject
+# Who owns this deployment. Set ONE of these.
+#
+# OWNER_EMAIL is the easy one: the address you sign in to Google with, checked
+# against a Google-verified claim, and only honoured until the owner account has
+# an identity bound - so it is a one-time claim, not a standing key.
+OWNER_EMAIL=you@example.com
+#
+# OWNER_GOOGLE_SUB is exact and takes precedence when set, but you cannot read
+# your own Google subject until you have signed in at least once.
+# OWNER_GOOGLE_SUB=replace-with-your-verified-google-subject
 
 # Internal Worker signing key. Web sessions use opaque HttpOnly cookies.
 # Rotate this at cutover to invalidate legacy tokens. At least 32 random characters:

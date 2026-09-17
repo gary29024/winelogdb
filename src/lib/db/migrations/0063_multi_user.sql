@@ -97,4 +97,24 @@ CREATE INDEX idx_reusable_research_subject ON reusable_research(subject_key,scop
 INSERT OR IGNORE INTO app_users(id,email,display_name,role) VALUES('owner','','Owner','owner');
 INSERT OR IGNORE INTO credit_wallets(user_id) VALUES('owner');
 
+-- Conservative defaults, so a fresh deployment is usable rather than answering
+-- 503 to every request until somebody writes this row by hand. Deliberately
+-- unwelcoming: one member, no overages, small budgets. Nothing here grants an
+-- invitation, a credit or a price - those still require the owner to act, so an
+-- unconfigured deployment cannot spend anything.
+INSERT OR IGNORE INTO pilot_settings(id,value_json) VALUES(1,json('{
+  "memberLimit":1,
+  "memberStorageBytes":1073741824,
+  "totalStorageBytes":8589934592,
+  "aiConcurrency":2,
+  "aiDailyOperations":50,
+  "aiMonthlyBudgetUsd":25,
+  "aiUnitBudgetUsd":1,
+  "cloudflareWarningUsd":5,
+  "cloudflareStopUsd":10,
+  "cloudflareObservedUsd":0,
+  "cloudflareObservedMonth":"",
+  "allowOverages":false
+}'));
+
 -- No automatic invitation, credit grant, or price: launch requires owner configuration.

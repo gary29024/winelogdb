@@ -13,10 +13,28 @@ export async function authenticate(request:Request,env:IdentityEnv):Promise<Memb
 export function verifyOrigin(request:Request,env:IdentityEnv){
  if(!['GET','HEAD','OPTIONS'].includes(request.method)&&request.headers.get('Origin')!==new URL(env.APP_URL).origin)throw new ApiError(403,'Invalid request origin');
 }
+/**
+ * Whether this sign-in is the owner claiming their own account.
+ *
+ * OWNER_GOOGLE_SUB is exact and is honoured whenever it is set, but it asks the
+ * operator to know their Google subject before they have ever signed in - which
+ * they cannot read anywhere until they do. OWNER_EMAIL is the way out of that
+ * circle: the address is checked against a Google-verified claim, and only while
+ * no identity is bound to the owner account yet, so it is a one-time claim and
+ * not a standing key.
+ */
+async function ownerClaim(env:IdentityEnv,claims:{sub:string;email:string}){
+ if(env.OWNER_GOOGLE_SUB)return claims.sub===env.OWNER_GOOGLE_SUB;
+ const expected=env.OWNER_EMAIL?.trim().toLowerCase();
+ if(!expected||claims.email.trim().toLowerCase()!==expected)return false;
+ const bound=await env.DB.prepare("SELECT 1 AS bound FROM auth_identities WHERE user_id='owner'").first<{bound:number}>();
+ return !bound;
+}
+
 export async function bindGoogleAccount(env:IdentityEnv,claims:{sub:string;email:string;name:string},invitationHash:string|null){
  const existing=await env.DB.prepare('SELECT u.* FROM auth_identities i JOIN app_users u ON u.id=i.user_id WHERE i.provider=? AND i.subject=?').bind('google',claims.sub).first<Member>();
  if(existing){if(existing.status!=='active')throw new ApiError(403,'Account suspended');return existing}
- const isOwner=Boolean(env.OWNER_GOOGLE_SUB)&&claims.sub===env.OWNER_GOOGLE_SUB;
+ const isOwner=await ownerClaim(env,claims);
  const id=isOwner?'owner':crypto.randomUUID();
  if(!isOwner){
   const config=await settings(env.DB);
@@ -40,7 +58,7 @@ export async function authRoute(request:Request,env:IdentityEnv):Promise<Respons
  const url=new URL(request.url);
  if(url.pathname==='/api/auth/login')return json({error:'Password login has been retired. Use Google.'},410);
  if(url.pathname==='/api/auth/google/start'&&request.method==='GET'){
-  if(!env.GOOGLE_CLIENT_ID||!env.GOOGLE_CLIENT_SECRET||!env.OWNER_GOOGLE_SUB)throw new ApiError(503,'Google sign-in has not been configured');
+  if(!env.GOOGLE_CLIENT_ID||!env.GOOGLE_CLIENT_SECRET||!(env.OWNER_GOOGLE_SUB||env.OWNER_EMAIL))throw new ApiError(503,'Google sign-in has not been configured');
   const state=randomToken(),nonce=randomToken(),verifier=randomToken(),invite=url.searchParams.get('invitation');
   await env.DB.prepare('INSERT INTO auth_flows(state_hash,nonce,verifier,invitation_hash,expires_at) VALUES(?,?,?,?,?)').bind(await hash(state),nonce,verifier,invite?await hash(invite):null,seconds()+600).run();
   const digest=new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(verifier)));

@@ -12,12 +12,17 @@ The existing `owner` keys remain unchanged in D1 and R2.
    Check the export is readable and test restoring it to a separate database.
 2. Create a Google **web** OAuth client and register the exact HTTPS
    `APP_URL/api/auth/google/callback`. Configure `GOOGLE_CLIENT_ID`,
-   `GOOGLE_CLIENT_SECRET`, `OWNER_GOOGLE_SUB`, `APP_URL`, and a rotated
-   `AUTH_SECRET`. Obtain the owner's subject from a verified Google ID token for
-   that account. An email address is not a subject. Do not infer ownership from
-   the first login. See [Google OIDC](https://developers.google.com/identity/openid-connect/openid-connect).
-3. Apply migrations 0050 (accounts and credits), 0051 (storage and dispatch), and
-   0052 (provider receipts and cleanup), and 0053 (friend codes and requests), then deploy the new public entrypoint
+   `GOOGLE_CLIENT_SECRET`, `OWNER_EMAIL` (or `OWNER_GOOGLE_SUB`), `APP_URL`, and a rotated
+   `AUTH_SECRET`. `OWNER_EMAIL` is the address you sign in to Google with: it is
+   checked against a Google-verified claim and only until the owner account has
+   an identity bound, so it is a one-time claim rather than a standing key.
+   `OWNER_GOOGLE_SUB` is exact and takes precedence when set, but you cannot read
+   your own subject until you have signed in at least once - set it afterwards if
+   you want the stricter check. Ownership is never inferred from the first login
+   alone. See [Google OIDC](https://developers.google.com/identity/openid-connect/openid-connect).
+3. Apply migrations 0063 (accounts and credits), 0064 (storage and dispatch),
+   0065 (provider receipts and cleanup), 0066 (friend codes and requests),
+   0067 (adopted research) and 0068 (the producer alias pool), then deploy the new public entrypoint
    `worker/multiUserEntry.ts`. Never deploy the old entrypoints as separate public
    Workers. Password login returns 410, and public bearer tokens are rejected.
    Drain/reconcile old queue jobs before cutover: new consumers require a member
@@ -25,7 +30,10 @@ The existing `owner` keys remain unchanged in D1 and R2.
 4. Sign in with the configured owner. Check legacy wines, producers, cuvées,
    cellar holdings, tasting documents and photos against the backup counts.
 5. In **Account & friends → Owner controls**, configure all budget fields and
-   every action price. Prices are positive integers, versioned, and disabled
+   every action price. Migration 0063 seeds deliberately unwelcoming defaults -
+   one member, no overages, small budgets - so a fresh deployment answers
+   requests instead of 503ing, but it prices nothing and issues no invitation,
+   so it cannot spend until you act. Prices are positive integers, versioned, and disabled
    until configured. Set an initial owner grant; all accounts start at zero.
    Credits have no expiry, transfer, or cash value.
 6. Run **Inventory R2 storage** and **Index existing research** to completion.
