@@ -31,7 +31,7 @@ const wallet=()=>database.sql.prepare("SELECT balance,reserved FROM credit_walle
 describe('account boundary',()=>{
  it('binds only the configured Google subject while preserving legacy owner data',async()=>{
   database.close();database=realD1();
-  database.sql.exec("DELETE FROM credit_wallets WHERE user_id='owner'; DELETE FROM app_users WHERE id='owner'; INSERT INTO wines(id,owner_id,producer,wine_name,created_at,updated_at) VALUES('legacy','owner','Legacy','Bottle','now','now')");
+  database.sql.exec("DELETE FROM credit_prices WHERE created_by='owner'; DELETE FROM credit_wallets WHERE user_id='owner'; DELETE FROM app_users WHERE id='owner'; INSERT INTO wines(id,owner_id,producer,wine_name,created_at,updated_at) VALUES('legacy','owner','Legacy','Bottle','now','now')");
   const account=await bindGoogleAccount(env(),{sub:'explicit-owner-sub',email:'me@example.com',name:'Owner'},null);expect(account.id).toBe('owner');expect(database.sql.prepare("SELECT owner_id FROM wines WHERE id='legacy'").get()!.owner_id).toBe('owner');
  });
  it('verifies signed Google callbacks, nonce, one-use state, and cookie flags',async()=>{
@@ -157,7 +157,10 @@ describe('credit transactions',()=>{
   const {operation}=await reserve(request('{}',{'X-WineLog-Quote':q.id,'Idempotency-Key':'price'}),env(),member('alice'));
   expect(operation.reserved).toBe(5);await settle(database.db,operation,0,{body:{error:'Provider failed'},status:502});expect(wallet()).toMatchObject({balance:10,reserved:0});
  });
- it('disables unpriced AI routes',async()=>{await expect(quote(request('{}',{'X-WineLog-Recognition-Mode':'group'}),env(),member('alice'))).rejects.toMatchObject({status:503})});
+ it('sponsors group scans for members',async()=>{
+  const q=await quote(request('{}',{'X-WineLog-Recognition-Mode':'group'}),env(),member('alice'));
+  expect(q.total).toBe(0);expect(q.units).toHaveLength(1);expect(q.units[0]).toMatchObject({action:'scan_group',credits:0,priceId:'pilot-free-scan-group'});
+ });
  it('includes outstanding work in the provider budget',async()=>{
   const q=await quote(request(),env(),member('alice'));await expect(reserve(request('{}',{'X-WineLog-Quote':q.id,'Idempotency-Key':'budget'}),env(),member('alice'),100)).rejects.toMatchObject({status:409});
  });
