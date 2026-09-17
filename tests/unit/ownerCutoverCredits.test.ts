@@ -35,6 +35,21 @@ describe('multi-user owner cutover',()=>{
     }finally{close()}
   });
 
+  it('allows a real Cloudflare cost below the seeded hard stop',async()=>{
+    const {sql,db,close}=realD1();
+    try{
+      const row=sql.prepare('SELECT value_json FROM pilot_settings WHERE id=1').get() as {value_json:string};
+      const settings=JSON.parse(row.value_json) as {allowOverages:boolean;cloudflareObservedUsd:number;cloudflareStopUsd:number};
+      expect(settings.allowOverages).toBe(true);
+      expect(settings.cloudflareStopUsd).toBeGreaterThan(0.42);
+      settings.cloudflareObservedUsd=0.42;
+      sql.prepare('UPDATE pilot_settings SET value_json=? WHERE id=1').run(JSON.stringify(settings));
+      const q=await quote(scan(),{DB:db},owner);
+      const result=await reserve(scan({'X-WineLog-Quote':q.id,'Idempotency-Key':'owner-observed-cost'}),{DB:db},owner);
+      expect(result.operation).toMatchObject({user_id:'owner',status:'reserved'});
+    }finally{close()}
+  });
+
   it('still refuses unpriced member AI',async()=>{
     const {sql,db,close}=realD1();
     try{
