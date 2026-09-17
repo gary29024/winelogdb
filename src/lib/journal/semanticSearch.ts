@@ -1,8 +1,12 @@
 import { AI_MODELS } from '../ai/policy';
 import { recordAiUsage,type AiUsageEnv } from '../usage/aiUsage';
+import { durableProvider,type ProviderAuthorization } from '../credits/provider';
+import { missingTable } from '../db/ownerRevision';
 export { shouldUseSemanticQuery } from './semanticQuery';
 
 export type SemanticEmbeddingBindings={
+  /** Multi-user requests carry this, but Smart Search embeddings are deliberately zero-credit. */
+  CREDIT_CONTEXT?:ProviderAuthorization;
   AI?:Ai;
   GEMINI_API_KEY?:string;
   SEMANTIC_GEMINI_API_KEY?:string;
@@ -24,6 +28,59 @@ type SemanticQueryCacheRow={result_ids_json:string;max_results:number};
 export type SemanticVectorCandidate={id:string;vector:ArrayLike<number>};
 type MeterContext={owner:string;runId:string;targetId:'journal-query'|'journal-index'};
 
+// Embeddings are cheap enough that they do not consume user credits. They are
+// still recorded in ai_usage_events/monthly below, per account and model, so the
+// owner can see request and indexed-wine volume and change this policy later.
+const EMBEDDING_CREDIT_EXEMPTION={exempt:true,reason:'search_embedding'} as const;
+
+/**
+ * How many embedding requests one account may spend in a rolling 24-hour window.
+ *
+ * Embeddings are zero-credit, which means they also miss every ceiling the
+ * credit path enforces in `reserve` - the daily operation count, the monthly
+ * budget and the Cloudflare stop-loss. Bounded per request is not the same as
+ * bounded: the index converges, but distinct queries miss the 30-minute cache
+ * and each buys a fresh embedding indefinitely.
+ *
+ * Read from pilot_settings so the owner controls it with everything else, and
+ * counted off ai_usage_events, which already records every attempt on
+ * idx_ai_usage_events_owner_kind. The owner pays the provider directly and is
+ * not capped. A deployment with neither table configured is the pre-credits
+ * single tenant and is left alone.
+ *
+ * This is a defensive ceiling, not an accounting reservation. Every sequential
+ * provider call re-checks it, so one background refresh cannot run several
+ * batches after crossing the limit. Two truly concurrent requests can still
+ * race before either usage event lands; exact billing remains reconciled from
+ * the usage ledger/provider dashboard rather than treating this as a credit hold.
+ */
+export const DEFAULT_DAILY_EMBEDDING_REQUESTS=400;
+
+async function embeddingBudgetSpent(db:D1Database,owner:string){
+  const since=new Date(Date.now()-86400000).toISOString();
+  const row=await db.prepare("SELECT coalesce(sum(requests),0) AS spent FROM ai_usage_events WHERE owner_id=? AND kind='search_embedding' AND created_at>=?")
+    .bind(owner,since).first<{spent:number}>();
+  return Number(row?.spent)||0;
+}
+
+/** True when this account may still spend an embedding request in the rolling 24-hour window. */
+export async function embeddingAllowed(env:SemanticEnv,owner:string){
+  try{
+    const account=await env.DB.prepare('SELECT role FROM app_users WHERE id=?').bind(owner).first<{role:string}>();
+    if(!account)return true;
+    if(account.role==='owner')return true;
+    const configured=await env.DB.prepare('SELECT value_json FROM pilot_settings WHERE id=1').first<{value_json:string}>();
+    const parsed=configured?JSON.parse(configured.value_json) as {aiDailyEmbeddingRequests?:unknown}:null;
+    const raw=Number(parsed?.aiDailyEmbeddingRequests);
+    const cap=Number.isFinite(raw)&&raw>=0?raw:DEFAULT_DAILY_EMBEDDING_REQUESTS;
+    if(cap===0)return false;
+    return await embeddingBudgetSpent(env.DB,owner)<cap;
+  }catch(error){
+    // A deployment without the multi-user tables has one account and no cap.
+    if(missingTable(error))return true;
+    throw error;
+  }
+}
 const WORKERS_MODEL=AI_MODELS.semanticWorkers;
 const GEMINI_MODEL=AI_MODELS.semanticGemini;
 const WORKERS_DIMENSIONS=1024;
@@ -108,6 +165,9 @@ async function embedTexts(env:SemanticEnv,config:EmbeddingConfig,texts:string[],
     if(config.provider==='workers-ai'){
       if(!env.AI)throw new Error('Workers AI binding is unavailable');
       attempted=true;
+      // Workers AI has no Response wrapper to pass through durableProvider. This
+      // is the one deliberate zero-credit AI.run path and is pinned by the
+      // structural test; usage is recorded in the finally block below.
       const result=await (env.AI.run as (model:string,input:unknown)=>Promise<unknown>)(config.model,{text:texts});
       vectors=extractWorkersVectors(result);
     }else{
@@ -117,9 +177,16 @@ async function embedTexts(env:SemanticEnv,config:EmbeddingConfig,texts:string[],
         embedContentConfig:{taskType:kind==='query'?'RETRIEVAL_QUERY':'RETRIEVAL_DOCUMENT',outputDimensionality:config.dimensions,autoTruncate:true}
       }));
       attempted=true;
-      const response=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(config.model)}:batchEmbedContents`,{
-        method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':config.geminiKey??''},body:JSON.stringify({requests})
-      });
+      const payload=JSON.stringify({requests});
+      // Gemini embeddings follow the same zero-credit policy as Workers AI.
+      // durableProvider is retained as the provider chokepoint, with an explicit
+      // exemption rather than inheriting a member's denied/unpriced context. An
+      // exempt call is not persisted in provider_operations; the usage ledger
+      // below remains the audit trail for these idempotent embedding requests.
+      const response=await durableProvider(EMBEDDING_CREDIT_EXEMPTION,`embeddings:${config.model}:${kind}:${payload}`,()=>
+        fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(config.model)}:batchEmbedContents`,{
+          method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':config.geminiKey??''},body:payload
+        }));
       if(!response.ok)throw new Error(`Gemini embeddings failed (${response.status})`);
       const body=await response.json() as {embeddings?:Array<{values?:number[]}>};
       vectors=(body.embeddings??[]).map(item=>item.values??[]);
@@ -130,10 +197,10 @@ async function embedTexts(env:SemanticEnv,config:EmbeddingConfig,texts:string[],
       return normalized(vector);
     });
   }finally{
-    // Rejected or malformed AI answers can still consume quota. Meter every
-    // provider attempt, not only responses that pass our validation. The ledger
-    // unit for Smart search is an indexed wine, so query embeddings count as a
-    // request but deliberately add zero wine units.
+    // Rejected or malformed AI answers can still consume provider quota. Track
+    // every attempt even though embeddings consume zero WineLog credits. The
+    // usage unit for Smart Search is an indexed wine, so query embeddings count
+    // as a request but deliberately add zero wine units.
     if(attempted)await recordAiUsage(env,meter.owner,{kind:'search_embedding',runId:meter.runId,targetId:meter.targetId,model:config.model,requests:1,units:kind==='document'?texts.length:0});
   }
 }
@@ -221,8 +288,15 @@ async function cacheSemanticIds(env:SemanticEnv,owner:string,config:EmbeddingCon
 }
 
 async function refreshSemanticIndex(env:SemanticEnv,owner:string,config:EmbeddingConfig,limit:number,runId:string){
+  // Checked before the read, so a capped account costs nothing at all.
+  if(!await embeddingAllowed(env,owner))return {indexed:0,hasMore:false};
   const pending=await staleWineRows(env.DB,owner,config,limit),rows=pending.slice(0,limit);
+  let indexed=0,capped=false;
   for(let start=0;start<rows.length;start+=EMBED_BATCH){
+    // Re-check before every provider request. Without this, a member sitting one
+    // request below the ceiling could pass the initial guard and spend every
+    // remaining batch in this refresh before the next request-level check.
+    if(!await embeddingAllowed(env,owner)){capped=true;break}
     const chunk=rows.slice(start,start+EMBED_BATCH),vectors=await embedTexts(env,config,chunk.map(buildWineSemanticDocument),'document',{owner,runId,targetId:'journal-index'}),stamp=new Date().toISOString();
     const vectorStatements=chunk.map((row,index)=>env.DB.prepare(`INSERT INTO wine_semantic_embeddings(owner_id,wine_id,model_key,dimensions,source_updated_at,embedding,updated_at)
       VALUES(?,?,?,?,?,?,?)
@@ -233,8 +307,9 @@ async function refreshSemanticIndex(env:SemanticEnv,owner:string,config:Embeddin
       ON CONFLICT(owner_id,model_key) DO UPDATE SET revision=wine_semantic_index_state.revision+1,updated_at=excluded.updated_at`)
       .bind(owner,config.modelKey,stamp);
     await env.DB.batch([...vectorStatements,revisionStatement]);
+    indexed+=chunk.length;
   }
-  return {indexed:rows.length,hasMore:pending.length>limit};
+  return {indexed,hasMore:capped||pending.length>limit};
 }
 
 async function currentCandidates(db:D1Database,owner:string,config:EmbeddingConfig){
@@ -258,6 +333,9 @@ export async function semanticWineIds(env:SemanticEnv,owner:string,query:string,
   // so returning from a wine detail page does not spend another embedding call.
   const candidates=await currentCandidates(env.DB,owner,config);
   if(!candidates.length)return {ids:[] as string[],modelKey:config.modelKey};
+  // After the cache lookup above: a cached answer stays free when capped, and
+  // returning null degrades this search to the lexical route rather than failing.
+  if(!await embeddingAllowed(env,owner))return null;
   const runId=crypto.randomUUID();
   const [queryVector]=await embedTexts(env,config,[queryKey],'query',{owner,runId,targetId:'journal-query'});
   const ids=rankSemanticCandidates(queryVector,candidates,limit).map(item=>item.id);

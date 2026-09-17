@@ -1,12 +1,25 @@
-# Local-only secrets. Copy to .dev.vars and fill in; never commit .dev.vars.
-# These mirror the secrets set with `wrangler secret put` for a deployment.
+# Local-only runtime values. Copy to .dev.vars and fill in; never commit .dev.vars.
+# Production values belong in Cloudflare Worker > Settings > Variables and Secrets.
 
-# The password you log in with.
-APP_PASSWORD=choose-a-local-password
+# Google Web OAuth client. Register APP_URL/api/auth/google/callback exactly.
+GOOGLE_CLIENT_ID=replace-me.apps.googleusercontent.com
+GOOGLE_CLIENT_SECRET=replace-me
 
-# Signing key for session tokens. At least 32 random characters:
-#   openssl rand -base64 48
+# First owner sign-in. This is checked against Google's verified email claim and
+# only while the legacy owner account has no bound identity.
+OWNER_EMAIL=you@example.com
+# Optional stricter binding after first login. If present, it takes precedence.
+# OWNER_GOOGLE_SUB=replace-with-your-verified-google-subject
+
+# Internal Worker signing key. Use at least 32 random characters; 48+ is better.
 AUTH_SECRET=use-at-least-32-random-characters
+
+# Public contact shown on About / Privacy / Terms. This is intentionally public.
+SUPPORT_EMAIL=support@example.com
+
+# Exact origin the browser loads. Production must be HTTPS. Ordinary localhost
+# is fine for UI/API development, but Secure OAuth session cookies need HTTPS.
+APP_URL=http://localhost:5173
 
 # https://aistudio.google.com/apikey
 GEMINI_API_KEY=replace-me
@@ -14,9 +27,6 @@ GEMINI_API_KEY=replace-me
 # Optional: only needed when SEMANTIC_SEARCH_PROVIDER=gemini and you want a
 # separate AI Studio key. If omitted, semantic search reuses GEMINI_API_KEY.
 # SEMANTIC_GEMINI_API_KEY=replace-me
-
-# The exact origin the browser loads, checked against for CORS.
-APP_URL=http://localhost:5173
 
 # Authenticates WineLog to Cloudflare AI Gateway. Producer range research uses
 # the same gateway token for the primary Z.AI custom-provider path. The Z.AI

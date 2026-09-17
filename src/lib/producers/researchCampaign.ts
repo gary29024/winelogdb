@@ -15,7 +15,7 @@ import { createQueuedProducerResearchRun,markRunStalled,STALLED_RUN_MS } from '.
  */
 export const CAMPAIGN_CONCURRENCY=2;
 export const CAMPAIGN_TICK_SECONDS=30;
-export const CAMPAIGN_MAX_PRODUCERS=200;
+export const CAMPAIGN_MAX_PRODUCERS=8;
 /**
  * How long a producer may hold a lane without its run saying anything.
  *

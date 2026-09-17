@@ -1,3 +1,4 @@
+import { apiFetch } from '../../lib/auth/client';
 import type { VintageResearchStatus } from '../../lib/maturity/vintageResearch';
 import { authHeaders,clearSession } from '../../lib/auth/client';
 import type { VintageWindow,VintageSubject } from '../../lib/maturity/vintageWindow';
@@ -25,7 +26,7 @@ export type SavedVintageResearch={window:VintageWindow|null;job:VintageResearchS
  * offered the button again for research that was already paid for.
  */
 export async function getVintageWindow(subject:VintageSubject):Promise<SavedVintageResearch>{
-  const response=await fetch(`/api/maturity/vintage?${params(subject)}`,{headers:authHeaders()});
+  const response=await apiFetch(`/api/maturity/vintage?${params(subject)}`,{headers:authHeaders()});
   if(response.status===401){clearSession();throw new Error('Session expired. Please sign in again.')}
   if(!response.ok)throw new Error('Could not load saved vintage research');
   const body=await response.json() as {window?:VintageWindow|null;job?:VintageResearchStatus|null}|null;
@@ -33,7 +34,7 @@ export async function getVintageWindow(subject:VintageSubject):Promise<SavedVint
   return {window:body.window??null,job:body.job??null};
 }
 
-export type VintageLookupResult={window:VintageWindow|null;cached:boolean;pending?:boolean;pendingStatus?:'queued'|'running'};
+export type VintageLookupResult={window:VintageWindow|null;cached:boolean;pending?:boolean;pendingStatus?:'queued'|'running';friendOperationId?:string};
 
 /**
  * Watches one job to its end, or until the caller stops caring.
@@ -52,7 +53,7 @@ export async function observeVintageResearch(jobId:string,signal?:AbortSignal):P
     if(delay)await new Promise(resolve=>setTimeout(resolve,Math.min(delay,deadline-Date.now())));
     signal?.throwIfAborted();
     if(poll>0&&Date.now()>=deadline)break;
-    const progress=await fetch(`/api/maturity/vintage/jobs/${encodeURIComponent(jobId)}`,{headers:authHeaders(),signal});
+    const progress=await apiFetch(`/api/maturity/vintage/jobs/${encodeURIComponent(jobId)}`,{headers:authHeaders(),signal});
     if(progress.status===401){clearSession();throw new Error('Session expired. Please sign in again.')}
     const current=await progress.json().catch(()=>({})) as {job?:VintageResearchStatus;error?:string};
     if(!progress.ok||!current.job)throw new Error(current.error||'Could not read vintage research progress');
@@ -66,7 +67,7 @@ export async function observeVintageResearch(jobId:string,signal?:AbortSignal):P
 
 /** Enqueue one lookup and observe it; status reads never start another model call. */
 export async function lookUpVintageWindow(subject:VintageSubject,refresh=false,signal?:AbortSignal):Promise<VintageLookupResult>{
-  const response=await fetch('/api/maturity/vintage',{method:'POST',headers:authHeaders(true),signal,
+  const response=await apiFetch('/api/maturity/vintage',{method:'POST',headers:authHeaders(true),signal,
     body:JSON.stringify({...subject,refresh})});
   if(response.status===401){clearSession();throw new Error('Session expired. Please sign in again.')}
   const body=await response.json().catch(()=>({})) as {window?:VintageWindow|null;cached?:boolean;error?:string;job?:VintageResearchStatus};

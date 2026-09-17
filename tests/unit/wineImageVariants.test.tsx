@@ -2,7 +2,7 @@
 import { afterEach,expect,it,vi } from 'vitest';
 import { cleanup,render,waitFor } from '@testing-library/react';
 import { WineImage } from '../../src/features/wines/WineImage';
-vi.mock('../../src/lib/auth/client',()=>({authHeaders:()=>({Authorization:'Bearer test'})}));
+vi.mock('../../src/lib/auth/client',()=>({authHeaders:()=>({Authorization:'Bearer test'}),apiFetch:(...args:Parameters<typeof fetch>)=>fetch(...args)}));
 afterEach(()=>{cleanup();vi.unstubAllGlobals();vi.restoreAllMocks()});
 it('keeps thumbnail and original requests and blob caches separate when a photo is enlarged',async()=>{
   vi.stubGlobal('IntersectionObserver',undefined);

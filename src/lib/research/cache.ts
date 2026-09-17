@@ -3,35 +3,57 @@ import { deepSearchProvenanceSchema,type DeepSearchProvenance,type DeepSearchRes
 import { assessResearchScope,buildDeepResearchQuality,legacyOptionalFieldMissing } from './qualityGate';
 import { highRiskTechnicalScopePasses } from './technicalClaimGate';
 import { auditTechnicalContradictions,disputedTechnicalClaimCount,technicalContradictionScopePasses } from './technicalContradictions';
+import { friendResearchBatch,publishResearch } from './shared';
 
 export const researchScopes=['producer','terroir','vintage_context','wine_vintage'] as const;
 export type ResearchScope=typeof researchScopes[number];
 export type ResearchSource={title:string;url:string};
-export type ResearchTarget={scope:ResearchScope;cacheKey:string;subject:Record<string,string|number|null>};
-export type CachedResearch={target:ResearchTarget;payload:Record<string,string>;sources:ResearchSource[];provenance?:DeepSearchProvenance;model:string;researchedAt:string};
-export type ResearchWine={producer?:unknown;producerId?:unknown;cuveeId?:unknown;wineName?:unknown;vintage?:unknown;country?:unknown;region?:unknown;appellation?:unknown};
+/** What the sharing key is built from. Kept apart from `subject`, which is the
+ * quality gate's input and is persisted as subject_json, so widening one cannot
+ * quietly change the other. */
+export type ResearchIdentity={producer:string;wineName:string;country:string|null;region:string|null;appellation:string|null;wineStyle:string|null;vintage:number|null};
+export type ResearchTarget={scope:ResearchScope;cacheKey:string;subject:Record<string,string|number|null>;identity?:ResearchIdentity};
+export type CachedResearch={target:ResearchTarget;payload:Record<string,string>;sources:ResearchSource[];provenance?:DeepSearchProvenance;model:string;researchedAt:string;contributorId?:string};
+export type ResearchWine={producer?:unknown;producerId?:unknown;cuveeId?:unknown;wineName?:unknown;vintage?:unknown;country?:unknown;region?:unknown;appellation?:unknown;wineStyle?:unknown};
 
 type CacheRow={scope:ResearchScope;cache_key:string;subject_json:string;result_json:string;sources_json:string;provenance_json:string;model:string;researched_at:string};
 
 const parseJson=<T>(raw:unknown,fallback:T):T=>{try{return JSON.parse(String(raw)) as T}catch{return fallback}};
 const text=(value:unknown)=>typeof value==='string'?value.trim():value==null?'':String(value).trim();
-const normalized=(value:unknown)=>text(value).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[’'`]/g,'').replace(/[^a-z0-9]+/g,' ').trim();
+const normalized=(value:unknown)=>text(value).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[’'`]/g,'').replace(/[^\p{L}\p{N}]+/gu,' ').trim();
+/**
+ * The normalizer cache keys were built with before Unicode letters were kept.
+ *
+ * `[^a-z0-9]` erased every non-Latin character, so a producer written in Chinese,
+ * Cyrillic or Greek normalized to the empty string. Widening it to `\p{L}\p{N}`
+ * was right, but it also changed the key of every row already written for such a
+ * wine. Those rows are still perfectly good research; without this they would be
+ * orphaned and re-bought at full price. Only ever read from - nothing new is
+ * written under a legacy key.
+ */
+const legacyNormalized=(value:unknown)=>text(value).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[’'`]/g,'').replace(/[^a-z0-9]+/g,' ').trim();
 const makeKey=(...parts:unknown[])=>JSON.stringify(parts.map(normalized));
+const makeLegacyKey=(...parts:unknown[])=>JSON.stringify(parts.map(legacyNormalized));
 const parseProvenance=(raw:unknown)=>{const parsed=deepSearchProvenanceSchema.safeParse(parseJson(raw,null));return parsed.success?parsed.data:undefined};
 
-export function buildResearchTargets(wine:ResearchWine):ResearchTarget[]{
-  const producer=text(wine.producer),producerId=text(wine.producerId),cuveeId=text(wine.cuveeId),wineName=text(wine.wineName),country=text(wine.country),region=text(wine.region),appellation=text(wine.appellation);
+function researchTargetsWith(wine:ResearchWine,key:(...parts:unknown[])=>string):ResearchTarget[]{
+  const producer=text(wine.producer),producerId=text(wine.producerId),cuveeId=text(wine.cuveeId),wineName=text(wine.wineName),country=text(wine.country),region=text(wine.region),appellation=text(wine.appellation),wineStyle=text(wine.wineStyle);
   const vintage=typeof wine.vintage==='number'&&Number.isFinite(wine.vintage)?wine.vintage:null;
   const producerIdentity=producerId?`producer:${producerId}`:producer;
   const wineIdentity=cuveeId?`cuvee:${cuveeId}`:wineName;
+  const identity:ResearchIdentity={producer,wineName,country:country||null,region:region||null,appellation:appellation||null,wineStyle:wineStyle||null,vintage};
   const targets:ResearchTarget[]=[
-    {scope:'producer',cacheKey:makeKey(producerIdentity),subject:{producer,producerId:producerId||null}},
-    {scope:'terroir',cacheKey:makeKey(producerIdentity,wineIdentity,appellation,region,country),subject:{producer,producerId:producerId||null,cuveeId:cuveeId||null,wineName,appellation:appellation||null,region:region||null,country:country||null}}
+    {scope:'producer',cacheKey:key(producerIdentity),subject:{producer,producerId:producerId||null},identity},
+    {scope:'terroir',cacheKey:key(producerIdentity,wineIdentity,appellation,region,country),subject:{producer,producerId:producerId||null,cuveeId:cuveeId||null,wineName,appellation:appellation||null,region:region||null,country:country||null},identity}
   ];
-  if(vintage!=null)targets.push({scope:'vintage_context',cacheKey:makeKey(country,region,appellation,vintage),subject:{country:country||null,region:region||null,appellation:appellation||null,vintage}});
-  targets.push({scope:'wine_vintage',cacheKey:makeKey(producerIdentity,wineIdentity,vintage??'NV',appellation,region,country),subject:{producer,producerId:producerId||null,cuveeId:cuveeId||null,wineName,vintage,appellation:appellation||null,region:region||null,country:country||null}});
+  if(vintage!=null)targets.push({scope:'vintage_context',cacheKey:key(country,region,appellation,vintage),subject:{country:country||null,region:region||null,appellation:appellation||null,vintage},identity});
+  targets.push({scope:'wine_vintage',cacheKey:key(producerIdentity,wineIdentity,vintage??'NV',appellation,region,country),subject:{producer,producerId:producerId||null,cuveeId:cuveeId||null,wineName,vintage,appellation:appellation||null,region:region||null,country:country||null},identity});
   return targets;
 }
+export const buildResearchTargets=(wine:ResearchWine)=>researchTargetsWith(wine,makeKey);
+/** The same targets keyed the way they were before non-Latin names stopped
+ * collapsing to the empty string. Read-only: used to recover rows written then. */
+export const buildLegacyResearchTargets=(wine:ResearchWine)=>researchTargetsWith(wine,makeLegacyKey);
 
 export function fieldsForScope(scope:ResearchScope){
   if(scope==='producer')return ['producerDetails','producerWinemakingPractices'] as const;
@@ -83,22 +105,61 @@ function provenanceForScope(provenance:DeepSearchProvenance|undefined,scope:Rese
 }
 function auditedProvenance(scope:ResearchScope,payload:Record<string,string>,provenance?:DeepSearchProvenance){return scope==='wine_vintage'?auditTechnicalContradictions(payload,provenance).provenance:provenance}
 
-export async function loadResearchCache(db:D1Database,owner:string,targets:ResearchTarget[]){
+export async function loadResearchCache(db:D1Database,owner:string,targets:ResearchTarget[],includeFriends=false){
   const found=await Promise.all(targets.map(async target=>{
     const row=await db.prepare('SELECT scope,cache_key,subject_json,result_json,sources_json,provenance_json,model,researched_at FROM research_cache WHERE owner_id=? AND scope=? AND cache_key=?').bind(owner,target.scope,target.cacheKey).first<CacheRow>();
     if(!row)return null;
     const payload=parseJson<Record<string,string>>(row.result_json,{}),sources=parseJson<ResearchSource[]>(row.sources_json,[]),provenance=auditedProvenance(target.scope,payload,parseProvenance(row.provenance_json));if(!scopePassesQuality(target.scope,payload,target,sources,provenance))return null;
     return {scope:target.scope,entry:{target,payload,sources,provenance,model:row.model,researchedAt:row.researched_at} as CachedResearch};
   }));
-  const cache=new Map<ResearchScope,CachedResearch>();for(const item of found)if(item)cache.set(item.scope,item.entry);return cache;
+  const cache=new Map<ResearchScope,CachedResearch>();for(const item of found)if(item)cache.set(item.scope,item.entry);
+  if(includeFriends){
+    // One query for every missing scope, rather than one per scope and one per
+    // alias key inside it. A wine view used to pay for up to eight sequential
+    // round trips here.
+    const missing=targets.filter(target=>!cache.has(target.scope));
+    if(missing.length){
+      const byScope=await friendResearchBatch(db,owner,missing);
+      for(const target of missing)for(const entry of byScope.get(target.scope)??[]){
+        if(scopePassesQuality(target.scope,entry.payload,target,entry.sources,entry.provenance)){cache.set(target.scope,{...entry,target});break}
+      }
+    }
+  }
+  return cache;
 }
 
 async function writeCache(db:D1Database,owner:string,entry:CachedResearch,replace:boolean){
+  if(entry.contributorId&&entry.contributorId!==owner)return;
   const now=new Date().toISOString();
   const sql=replace?`INSERT INTO research_cache(owner_id,scope,cache_key,subject_json,result_json,sources_json,provenance_json,model,researched_at,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,?) ON CONFLICT(owner_id,scope,cache_key) DO UPDATE SET subject_json=excluded.subject_json,result_json=excluded.result_json,sources_json=excluded.sources_json,provenance_json=excluded.provenance_json,model=excluded.model,researched_at=excluded.researched_at,updated_at=excluded.updated_at`:`INSERT INTO research_cache(owner_id,scope,cache_key,subject_json,result_json,sources_json,provenance_json,model,researched_at,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,?) ON CONFLICT(owner_id,scope,cache_key) DO NOTHING`;
   await db.prepare(sql).bind(owner,entry.target.scope,entry.target.cacheKey,JSON.stringify(entry.target.subject),JSON.stringify(entry.payload),JSON.stringify(entry.sources),JSON.stringify(entry.provenance??{}),entry.model,entry.researchedAt,now,now).run();
+  if(scopePassesQuality(entry.target.scope,entry.payload,entry.target,entry.sources,entry.provenance))await publishResearch(db,owner,entry);
 }
 export const seedResearchCache=(db:D1Database,owner:string,entry:CachedResearch)=>writeCache(db,owner,entry,false);
+
+/**
+ * Keep a friend's research as the reader's own.
+ *
+ * Assembling a contributor's scopes on every view made the text disappear the
+ * moment a friendship ended, and made each repeat view pay for a friendship
+ * join. Once a reader has actually been shown a scope it is written to their
+ * own cache, tagged with who paid for it.
+ *
+ * Deliberately not published back to reusable_research: only the account that
+ * paid for research offers it to its friends, so a copy cannot spread on the
+ * contributor's behalf and attribution cannot drift as it is passed along.
+ */
+export async function adoptFriendResearch(db:D1Database,owner:string,cache:Map<ResearchScope,CachedResearch>){
+  const now=new Date().toISOString();
+  for(const entry of cache.values()){
+    const contributor=entry.contributorId;
+    if(!contributor||contributor===owner)continue;
+    await db.prepare(`INSERT INTO research_cache(owner_id,scope,cache_key,subject_json,result_json,sources_json,provenance_json,model,researched_at,source_user_id,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?) ON CONFLICT(owner_id,scope,cache_key) DO NOTHING`)
+      .bind(owner,entry.target.scope,entry.target.cacheKey,JSON.stringify(entry.target.subject),JSON.stringify(entry.payload),JSON.stringify(entry.sources),JSON.stringify(entry.provenance??{}),entry.model,entry.researchedAt,contributor,now,now)
+      .run().catch(error=>{console.error(JSON.stringify({event:'research_adopt_failed',scope:entry.target.scope,error:(error as Error).message}))});
+  }
+  return cache;
+}
 export const upsertResearchCache=(db:D1Database,owner:string,entry:CachedResearch)=>writeCache(db,owner,entry,true);
 
 export function splitDeepSearchResult(result:DeepSearchResult,targets:ResearchTarget[]){

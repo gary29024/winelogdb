@@ -1,3 +1,4 @@
+import { apiFetch } from '../../lib/auth/client';
 import { authHeaders,clearSession } from '../../lib/auth/client';
 import { registerSummaryCache } from '../../lib/cache/summaryCaches';
 import { createSessionCache } from '../../lib/cache/sessionCache';
@@ -50,7 +51,7 @@ export type JourneyData={
 };
 
 const journeyCache=createSessionCache(async()=>{
-  const response=await fetch('/api/journey',{headers:authHeaders()});
+  const response=await apiFetch('/api/journey',{headers:authHeaders()});
   if(response.status===401){clearSession();throw new Error('Session expired. Please sign in again.')}
   if(!response.ok){const body=await response.json().catch(()=>({})) as {error?:string};throw new Error(body.error||'Could not load Wine Journey')}
   return response.json() as Promise<JourneyData>;
@@ -76,12 +77,12 @@ const readUsageResponse=async<T>(response:Response,fallback:string):Promise<T>=>
 };
 
 export async function getAiSpend(days=30):Promise<UsageSummary>{
-  const response=await fetch(`/api/usage/spend?days=${days}`,{headers:authHeaders()});
+  const response=await apiFetch(`/api/usage/spend?days=${days}`,{headers:authHeaders()});
   return readUsageResponse<UsageSummary>(response,'Could not load AI spend');
 }
 
 export async function getAiSpendRuns(kind:RunHistoryKind,days=30):Promise<UsageRunHistory>{
   const params=new URLSearchParams({kind,days:String(days)});
-  const response=await fetch(`/api/usage/spend/runs?${params}`,{headers:authHeaders()});
+  const response=await apiFetch(`/api/usage/spend/runs?${params}`,{headers:authHeaders()});
   return readUsageResponse<UsageRunHistory>(response,'Could not load AI run history');
 }

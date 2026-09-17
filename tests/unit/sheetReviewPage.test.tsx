@@ -3,6 +3,25 @@ import { act } from 'react';
 import { createRoot,type Root } from 'react-dom/client';
 import { MemoryRouter,Route,Routes } from 'react-router-dom';
 import { afterEach,describe,expect,it,vi } from 'vitest';
+import { waitFor } from '@testing-library/react';
+import { File as NodeFile } from 'node:buffer';
+import { FormData as NodeFormData,Request as NodeRequest,Response as NodeResponse } from 'undici';
+
+
+/**
+ * FormData, File, Request and Response from one realm, as a browser has them.
+ *
+ * apiFetch serializes a FormData body once - the quote and the run must send
+ * byte-identical bodies or the server refuses the quote - and it does that by
+ * constructing a Request. Node 24 brand-checks the body: a FormData from any
+ * other realm is not recognised as one and is stringified to "[object FormData]"
+ * instead of multipart. Mixing jsdom's FormData with Node's internal Request
+ * silently produced a 17-byte text/plain body. One realm keeps the test honest.
+ */
+function stubOneRealm(){
+  vi.stubGlobal('File',NodeFile);vi.stubGlobal('FormData',NodeFormData);
+  vi.stubGlobal('Request',NodeRequest);vi.stubGlobal('Response',NodeResponse);
+}
 
 declare global{var IS_REACT_ACT_ENVIRONMENT:boolean}
 globalThis.IS_REACT_ACT_ENVIRONMENT=true;
@@ -23,11 +42,13 @@ afterEach(()=>{act(()=>root?.unmount());host?.remove();root=null;host=null;vi.un
 const json=(body:unknown)=>new Response(JSON.stringify(body),{status:200,headers:{'content-type':'application/json'}});
 
 async function mount(parseBodies:unknown[]){
+  stubOneRealm();
   let parseIndex=0,uploadIndex=0,blobs=0;
   // jsdom has no object URLs, and the staged pages are shown from one.
   vi.stubGlobal('URL',Object.assign(globalThis.URL,{createObjectURL:()=>`blob:page-${++blobs}`,revokeObjectURL:()=>{}}));
   vi.stubGlobal('fetch',vi.fn(async(url:string)=>{
     const path=String(url);
+    if(path.startsWith('/api/credits/quotes'))return json({id:'quote',total:0,available:100,units:[]});
     if(path.includes('/sheet/parse'))return json(parseBodies[Math.min(parseIndex++,parseBodies.length-1)]);
     // Uploading returns the pages it just stored, not the whole tasting.
     if(path.includes('/documents'))return json({documents:[{id:`up${uploadIndex++}`,contentType:'image/jpeg',byteSize:1,createdAt:'x'}]});
@@ -60,8 +81,9 @@ const button=(text:string)=>[...host!.querySelectorAll('button')].find(node=>nod
  * case that wants a parse asks for one the way a person would.
  */
 const byText=(pattern:RegExp)=>[...host!.querySelectorAll('button')].find(node=>pattern.test(node.textContent??''));
-const read=async()=>{await act(async()=>{byText(/^Read \d+ page/)!.click()})};
-const readSaved=async()=>{await act(async()=>{byText(/^Read \d+ saved page/)!.click()})};
+const waitForReading=async()=>{await waitFor(()=>expect(host!.textContent).not.toContain('Reading…'))};
+const read=async()=>{await act(async()=>{byText(/^Read \d+ page/)!.click()});await waitForReading()};
+const readSaved=async()=>{await act(async()=>{byText(/^Read \d+ saved page/)!.click()});await waitForReading()};
 const choose=async(files:File[])=>{await pick(files);await read()};
 
 const pickersIn=(node:HTMLElement)=>[...node.querySelectorAll('.tasting-sheet-match')] as unknown as HTMLSelectElement[];

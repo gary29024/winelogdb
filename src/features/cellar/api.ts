@@ -1,3 +1,4 @@
+import { apiFetch } from '../../lib/auth/client';
 import { authHeaders,clearSession } from '../../lib/auth/client';
 import type { VintageWindow } from '../../lib/maturity/vintageWindow';
 
@@ -38,30 +39,30 @@ async function requireOk(response:Response,message:string){
 export async function listCellar(params:URLSearchParams,options:{limit?:number;offset?:number;signal?:AbortSignal}={}):Promise<CellarPage>{
   const query=new URLSearchParams(params);
   query.set('limit',String(options.limit??36));query.set('offset',String(options.offset??0));
-  const response=await fetch(`/api/cellar?${query}`,{headers:authHeaders(),signal:options.signal});
+  const response=await apiFetch(`/api/cellar?${query}`,{headers:authHeaders(),signal:options.signal});
   await requireOk(response,'Could not load your cellar');
   return response.json() as Promise<CellarPage>;
 }
 
 export async function addToCellar(input:CellarInput){
-  const response=await fetch('/api/cellar',{method:'POST',headers:authHeaders(true),body:JSON.stringify(input)});
+  const response=await apiFetch('/api/cellar',{method:'POST',headers:authHeaders(true),body:JSON.stringify(input)});
   await requireOk(response,'Could not add those bottles');
   return (await response.json() as {holding:CellarHolding}).holding;
 }
 
 export async function updateHolding(id:string,patch:Partial<CellarInput>){
-  const response=await fetch(`/api/cellar/${id}`,{method:'PUT',headers:authHeaders(true),body:JSON.stringify(patch)});
+  const response=await apiFetch(`/api/cellar/${id}`,{method:'PUT',headers:authHeaders(true),body:JSON.stringify(patch)});
   await requireOk(response,'Could not update those bottles');
   return (await response.json() as {holding:CellarHolding}).holding;
 }
 
 export async function removeHolding(id:string){
-  const response=await fetch(`/api/cellar/${id}`,{method:'DELETE',headers:authHeaders()});
+  const response=await apiFetch(`/api/cellar/${id}`,{method:'DELETE',headers:authHeaders()});
   await requireOk(response,'Could not remove those bottles');
 }
 
 export async function getHolding(id:string){
-  const response=await fetch(`/api/cellar/${id}`,{headers:authHeaders()});
+  const response=await apiFetch(`/api/cellar/${id}`,{headers:authHeaders()});
   if(response.status===404)return null;
   await requireOk(response,'Could not load that cellar entry');
   return (await response.json() as {holding:CellarHolding}).holding;
@@ -73,7 +74,7 @@ export async function getHolding(id:string){
  * cellar has anything to say about the bottle.
  */
 export async function holdingsForWine(wineId:string):Promise<CellarHolding[]>{
-  const response=await fetch(`/api/wines/${wineId}/cellar`,{headers:authHeaders()}).catch(()=>null);
+  const response=await apiFetch(`/api/wines/${wineId}/cellar`,{headers:authHeaders()}).catch(()=>null);
   if(!response?.ok)return [];
   const body=await response.json().catch(()=>null) as {holdings?:unknown}|null;
   return Array.isArray(body?.holdings)?body.holdings as CellarHolding[]:[];

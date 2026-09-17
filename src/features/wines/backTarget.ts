@@ -1,3 +1,4 @@
+import { accountStorageKey } from '../../lib/auth/client';
 /**
  * Where the back link on a wine goes.
  *
@@ -42,12 +43,12 @@ export function backTargetFromState(state:unknown):BackTarget|null{
 }
 
 export function rememberBackTarget(id:string,target:BackTarget,scope:BackScope='wine'){
-  try{window.sessionStorage.setItem(KEY[scope],JSON.stringify({wineId:id,...target}))}catch{/* storage unavailable */}
+  try{window.sessionStorage.setItem(accountStorageKey(KEY[scope]),JSON.stringify({wineId:id,...target}))}catch{/* storage unavailable */}
 }
 
 export function readBackTarget(id:string,scope:BackScope='wine'):BackTarget|null{
   try{
-    const raw=window.sessionStorage.getItem(KEY[scope]);if(!raw)return null;
+    const raw=window.sessionStorage.getItem(accountStorageKey(KEY[scope]));if(!raw)return null;
     const parsed=JSON.parse(raw) as{wineId?:unknown}&Partial<BackTarget>;
     if(parsed?.wineId!==id||!isTarget(parsed))return null;
     return {to:parsed.to,label:parsed.label};

@@ -1,8 +1,10 @@
+import { FriendResearchStatus } from '../auth/FriendResearchStatus';
+import { accountStorageKey,getAccount } from '../../lib/auth/client';
 import { useEffect,useMemo,useRef,useState } from 'react';
 import { Link,useLocation,useNavigate,useParams } from 'react-router-dom';
 import { WineImage } from '../wines/WineImage';
 import { producerLinkChoices } from '../../lib/producers/linkChoices';
-import { cancelProducerResearch,deleteProducer,getProducer,removeProducerHeroImage,getProducerResearchStatus,listProducers,mergeProducer,researchProducer,saveProducerCatalogDecision,setPrimaryProducerName,undoProducerCatalogDecision,unlinkProducer,type CatalogDecision,type LinkedProducer,type ProducerDetail,type ProducerResearchRun,type ProducerSummary } from './api';
+import { confirmProducerName,getProducerNameSuggestions,type ProducerNameSuggestion,cancelProducerResearch,deleteProducer,getProducer,removeProducerHeroImage,getProducerResearchStatus,listProducers,mergeProducer,researchProducer,saveProducerCatalogDecision,setPrimaryProducerName,undoProducerCatalogDecision,unlinkProducer,type CatalogDecision,type LinkedProducer,type ProducerDetail,type ProducerResearchRun,type ProducerSummary } from './api';
 import { ProducerHeroImage } from './ProducerHeroImage';
 import { ProducerContacts } from './ProducerContacts';
 import { ProducerRangeMissing } from './ProducerRangeMissing';
@@ -25,12 +27,12 @@ const categoryLabels:Record<CatalogCategory,string>={red:'Red',white:'White',ros
 const RANGE_COLLAPSE_KEY='winelog.producerRange.collapsed';
 function readCollapsedCategories():Set<CatalogCategory>{
  try{
-  const raw=window.localStorage.getItem(RANGE_COLLAPSE_KEY);if(!raw)return new Set();
+  const raw=window.localStorage.getItem(accountStorageKey(RANGE_COLLAPSE_KEY));if(!raw)return new Set();
   const parsed=JSON.parse(raw) as unknown;
   return new Set(Array.isArray(parsed)?parsed.filter((x):x is CatalogCategory=>categoryOrder.includes(x as CatalogCategory)):[]);
  }catch{return new Set()}
 }
-function writeCollapsedCategories(next:Set<CatalogCategory>){try{window.localStorage.setItem(RANGE_COLLAPSE_KEY,JSON.stringify([...next]))}catch{/* storage unavailable */}}
+function writeCollapsedCategories(next:Set<CatalogCategory>){try{window.localStorage.setItem(accountStorageKey(RANGE_COLLAPSE_KEY),JSON.stringify([...next]))}catch{/* storage unavailable */}}
 function catalogCategory(wine:ProducerDetail['catalog'][number]):CatalogCategory{
  const value=String(wine.category??wine.style??'other').toLowerCase();
  if(value.includes('sparkling')||value.includes('champagne'))return 'sparkling';
@@ -63,8 +65,13 @@ function catalogMeta(wine:ProducerDetail['catalog'][number],category:CatalogCate
 }
 function sourceHost(value:string){try{return new URL(value).hostname.toLowerCase().replace(/^www\./,'')}catch{return ''}}
 
+const suggestionReason:Record<ProducerNameSuggestion['reason'],string>={
+  abbreviation:'a longer form of this name',
+  prefix:'the same name with its estate word',
+  spelling:'a slightly different spelling'
+};
 export function ProducerDetailPage(){
- const {id=''}=useParams(),{state:navState}=useLocation(),[producer,setProducer]=useState<ProducerDetail>(),[available,setAvailable]=useState<ProducerSummary[]>([]),[availableLoaded,setAvailableLoaded]=useState(false),[availableLoading,setAvailableLoading]=useState(false),[availableError,setAvailableError]=useState(''),[selectedAlias,setSelectedAlias]=useState(''),[primaryName,setPrimaryName]=useState(''),[loading,setLoading]=useState(true),[error,setError]=useState(''),[notice,setNotice]=useState(''),[researching,setResearching]=useState(false),[researchRun,setResearchRun]=useState<ProducerResearchRun|null>(null),[researchCancelling,setResearchCancelling]=useState(false),[merging,setMerging]=useState(false),[unlinking,setUnlinking]=useState(''),[savingPrimary,setSavingPrimary]=useState(false),[collapsedCategories,setCollapsedCategories]=useState<Set<CatalogCategory>>(readCollapsedCategories),[fixingKey,setFixingKey]=useState(''),[mergeTargetKey,setMergeTargetKey]=useState(''),[catalogBusy,setCatalogBusy]=useState(false),[deleting,setDeleting]=useState(false),[removingPhoto,setRemovingPhoto]=useState(false);
+ const {id=''}=useParams(),{state:navState}=useLocation(),[producer,setProducer]=useState<ProducerDetail>(),[available,setAvailable]=useState<ProducerSummary[]>([]),[availableLoaded,setAvailableLoaded]=useState(false),[availableLoading,setAvailableLoading]=useState(false),[availableError,setAvailableError]=useState(''),[selectedAlias,setSelectedAlias]=useState(''),[primaryName,setPrimaryName]=useState(''),[loading,setLoading]=useState(true),[error,setError]=useState(''),[notice,setNotice]=useState(''),[researching,setResearching]=useState(false),[researchRun,setResearchRun]=useState<ProducerResearchRun|null>(null),[researchCancelling,setResearchCancelling]=useState(false),[merging,setMerging]=useState(false),[unlinking,setUnlinking]=useState(''),[savingPrimary,setSavingPrimary]=useState(false),[collapsedCategories,setCollapsedCategories]=useState<Set<CatalogCategory>>(readCollapsedCategories),[fixingKey,setFixingKey]=useState(''),[mergeTargetKey,setMergeTargetKey]=useState(''),[catalogBusy,setCatalogBusy]=useState(false),[deleting,setDeleting]=useState(false),[removingPhoto,setRemovingPhoto]=useState(false),[friendOperation,setFriendOperation]=useState(''),[nameSuggestions,setNameSuggestions]=useState<ProducerNameSuggestion[]>([]),[confirmingName,setConfirmingName]=useState('');
  const nav=useNavigate();
  const researchPoll=useRef<Poller|undefined>(undefined);
  function stopResearchTimers(){researchPoll.current?.stop();researchPoll.current=undefined}
@@ -164,12 +171,33 @@ export function ProducerDetailPage(){
   // where an eye expects them rather than after every unaccented name.
    .sort((a,b)=>a.name.localeCompare(b.name,undefined,{sensitivity:'base'})||(a.wineStyle??'').localeCompare(b.wineStyle??''));
  },[producer]);
+ // The wine range is the expensive half of producer research, so members get the
+ // profile, practices and contacts only. There is nothing to refresh range-only.
+ const rangeAllowed=getAccount()?.role!=='member';
+ useEffect(()=>{
+  if(!id)return;
+  let active=true;
+  // A suggestion is worth nothing if it costs the page: failures stay silent.
+  // Defensive on the body as well as the request: this is an optional prompt and
+  // must never be able to break the producer page.
+  getProducerNameSuggestions(id).then(result=>{if(active)setNameSuggestions(Array.isArray(result?.items)?result.items:[])}).catch(()=>{if(active)setNameSuggestions([])});
+  return()=>{active=false};
+ },[id,producer?.canonicalName]);
+
+ async function confirmSuggestedName(name:string){
+  setConfirmingName(name);setError('');setNotice('');
+  try{await confirmProducerName(id,name);setNameSuggestions([]);setNotice(`Saved. Research filed under “${name}” is now available to you at no cost. Your producer and wines are unchanged.`)}
+  catch(e){setError((e as Error).message)}
+  finally{setConfirmingName('')}
+ }
+
  async function runResearch(refreshProfile=false){
-  const rangeOnly=Boolean(producer?.researchedAt)&&!refreshProfile;
-  if(!confirm((rangeOnly?'Refresh this producer’s wine range only? AI usage may be incurred. The job continues in the background if you close WineLog.':(refreshProfile?'Refresh the saved profile even if it is still current? This uses an additional research request. ':'')+'Research this producer’s home location, public contacts, producer-wide winemaking practices and current/recent wine range? The job runs in the background and continues even if you close WineLog.')))return;
+  const rangeOnly=rangeAllowed&&Boolean(producer?.researchedAt)&&!refreshProfile;
+  const scope=rangeAllowed?'current/recent wine range':'producer-wide winemaking practices';
+  if(!confirm((rangeOnly?'Refresh this producer’s wine range only? AI usage may be incurred. The job continues in the background if you close WineLog.':(refreshProfile?'Refresh the saved profile even if it is still current? This uses an additional research request. ':'')+`Research this producer’s home location, public contacts and ${scope}? The job runs in the background and continues even if you close WineLog.`)))return;
   setError('');setNotice('');
   try{
-   const accepted=await researchProducer(id,undefined,refreshProfile,rangeOnly);const run=await getProducerResearchStatus(id,accepted.researchRequestId);
+   const accepted=await researchProducer(id,undefined,refreshProfile,rangeOnly);if(accepted.cached){window.location.reload();return}if(accepted.waitingForFriend){setFriendOperation(accepted.creditOperationId??'');return}const run=await getProducerResearchStatus(id,accepted.researchRequestId);
    if(run)watchResearch(run);else setNotice('Producer research has been queued in the background. You can leave this page safely.');
   }catch(e){setError((e as Error).message)}
  }
@@ -236,13 +264,21 @@ export function ProducerDetailPage(){
    {producer.heroImageAvailable&&<ProducerHeroImage producerId={producer.id} alt={`${producer.canonicalName} domaine`}/>}<div className="producer-header-shade"/>
    <div className="producer-header-content"><p className="eyebrow">PRODUCER</p><h1>{producer.canonicalName}</h1><p>{location||'Home location not researched yet'}</p>{producer.aliases.length>1&&<small>Known aliases: {producer.aliases.join(' · ')}</small>}{producer.heroImageAvailable&&<button type="button" className="producer-photo-remove" disabled={removingPhoto} onClick={()=>void removePhoto()}>{removingPhoto?'Removing…':'Remove this photo'}</button>}</div>
   </header>
-  {error&&<p className="producer-error" role="alert">{error}</p>}{notice&&<p className="producer-notice" role="status">{notice}</p>}
-  <section className="detail-section"><div className="producer-section-title"><div><p className="section-label">Producer research</p><h2>Profile & range</h2></div><button type="button" className="primary" disabled={researching} onClick={()=>void runResearch()}>{researching?'Research running…':producer.researchedAt?'Refresh wine range':'Research producer'}</button>{(producer.profile||producer.researchedAt)&&<button type="button" disabled={researching} onClick={()=>void runResearch(true)}>Refresh profile & range</button>}</div>
+  {nameSuggestions.length>0&&<section className="producer-name-suggestion" aria-labelledby="name-suggestion-title">
+   <h2 id="name-suggestion-title">A friend may have researched this producer</h2>
+   <p>Research is filed under the name each person writes. A friend has research under {nameSuggestions.length===1?'a name':'names'} close to yours. If it is the same producer, confirming lets you use their research at no cost. Nothing about your producer or your wines changes.</p>
+   <ul>{nameSuggestions.map(item=><li key={item.name}>
+    <strong>{item.name}</strong> <span className="suggestion-reason">({suggestionReason[item.reason]})</span>
+    <button type="button" disabled={Boolean(confirmingName)} onClick={()=>void confirmSuggestedName(item.name)}>{confirmingName===item.name?'Saving…':'Same producer'}</button>
+   </li>)}</ul>
+  </section>}
+  {error&&<p className="producer-error" role="alert">{error}</p>}{friendOperation&&<FriendResearchStatus operationId={friendOperation} onComplete={()=>window.location.reload()}/>}{notice&&<p className="producer-notice" role="status">{notice}</p>}
+  <section className="detail-section"><div className="producer-section-title"><div><p className="section-label">Producer research</p><h2>{rangeAllowed?'Profile & range':'Producer profile'}</h2></div><button type="button" className="primary" disabled={researching} onClick={()=>void runResearch()}>{researching?'Research running…':rangeAllowed&&producer.researchedAt?'Refresh wine range':'Research producer'}</button>{(producer.profile||producer.researchedAt)&&<button type="button" disabled={researching} onClick={()=>void runResearch(true)}>{rangeAllowed?'Refresh profile & range':'Refresh profile'}</button>}</div>
    {researchRun&&<div className={`producer-research-status ${researchRun.status}`} role="status" aria-live="polite"><div><strong>{stageLabel[researchRun.stage]}</strong><span>{researchRun.message}</span></div><div><strong>{researching?<ElapsedSeconds startedAt={researchRun.startedAt}/>:researchRun.durationMs!=null?`${(researchRun.durationMs/1000).toFixed(1)}s`:''}</strong><small>Request {researchRun.requestId}</small></div>{researching&&<><p>This is a background job. You can leave this page or close WineLog; the saved result will appear automatically when you return.</p><button type="button" className="secondary-danger" disabled={researchCancelling} onClick={cancelResearch}>{researchCancelling?'Cancelling…':'Cancel Deep Search'}</button></>}</div>}
    {producer.profile?<p className="producer-profile">{producer.profile}</p>:<p>Research this producer to establish its physical base, broad region and commune, public contact details, official website, general producer-wide practices, header image and a sourced current/recent wine range.</p>}
    {producer.winemakingPractices&&<div className="producer-practices"><p className="section-label">General winemaking practices</p><p className="producer-profile">{producer.winemakingPractices}</p><small>Producer-wide context only. Exact cuvée/vintage techniques are researched separately on the wine page.</small></div>}
    <ProducerContacts producer={producer} onChanged={reload}/>
-   {catalogGroups.length>0&&<div className="producer-range">
+   {rangeAllowed&&catalogGroups.length>0&&<div className="producer-range">
     <div className="producer-range-head">
      <div><p className="section-label">Wine range</p><strong>{catalogTotals.wines} wine{catalogTotals.wines===1?'':'s'} · {catalogGroups.length} style{catalogGroups.length===1?'':'s'}{catalogTotals.tasted?` · ${catalogTotals.tasted} tasted`:''}</strong></div>
      <button type="button" className="range-toggle-all" onClick={toggleAllCategories}>{allCategoriesCollapsed?'Expand all':'Collapse all'}</button>

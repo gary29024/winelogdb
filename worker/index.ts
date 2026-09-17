@@ -1,10 +1,11 @@
 import { Hono } from 'hono';
+import { apiErrorHandler } from '../src/lib/credits/primitives';
 import { serveWineImage } from './wineImageHandler';
 import { photoObjectKeys } from '../src/lib/r2/thumbnails';
 import { grapeGroup } from '../src/lib/wine/grapes';
 import { cors } from 'hono/cors';
 import { GoogleGenerativeAI, SchemaType } from '@google/generative-ai';
-import { createSession, requireSession } from '../src/lib/auth/session';
+import { requireSession } from '../src/lib/auth/session';
 import { createObjectKey } from '../src/lib/r2/keys';
 import { wineInputSchema } from '../src/lib/db/schema';
 import { dimensionsSchema, validateBatch } from '../src/features/uploads/validation';
@@ -17,24 +18,14 @@ type AppContext={Bindings:Bindings;Variables:Variables};
 type PhotoMetadata={capturedAt?:string|null;latitude?:number|null;longitude?:number|null;source?:'exif'|'file_fallback'|'none'};
 
 const app=new Hono<AppContext>();
+app.onError(apiErrorHandler);
 app.use('/api/*',cors({origin:(origin,c)=>origin===c.env.APP_URL?origin:null,credentials:true}));
 app.use('/api/*',async(c,next)=>{
  if(c.req.path==='/api/auth/login')return next();
  try{const s=await requireSession(c.req.header('Authorization'),c.env.AUTH_SECRET);c.set('userId',s.userId);await next()}catch{return c.json({error:'Unauthorized'},401)}
 });
 
-async function sameSecret(a:string,b:string){
- const enc=new TextEncoder(),[ah,bh]=await Promise.all([crypto.subtle.digest('SHA-256',enc.encode(a)),crypto.subtle.digest('SHA-256',enc.encode(b))]);
- const av=new Uint8Array(ah),bv=new Uint8Array(bh);let diff=0;for(let i=0;i<av.length;i++)diff|=av[i]^bv[i];return diff===0;
-}
-app.post('/api/auth/login',async c=>{
- c.header('Cache-Control','no-store');
- const body=await c.req.json().catch(()=>({})) as {password?:unknown};
- const password=typeof body.password==='string'?body.password:'';
- if(!password||!c.env.APP_PASSWORD||!(await sameSecret(password,c.env.APP_PASSWORD))){await new Promise(r=>setTimeout(r,400));return c.json({error:'Invalid password'},401)}
- const token=await createSession('owner',c.env.AUTH_SECRET);
- return c.json({token});
-});
+app.post('/api/auth/login',c=>c.json({error:'Password login has been retired. Use Google login.'},410));
 
 const parseJson=<T>(value:unknown,fallback:T):T=>{try{return JSON.parse(String(value)) as T}catch{return fallback}};
 const normalizeMeta=(meta:PhotoMetadata|undefined)=>{

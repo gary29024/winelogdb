@@ -1,7 +1,7 @@
 import { afterEach,beforeEach,describe,expect,it,vi } from 'vitest';
 import { lookUpVintageWindow } from '../../src/features/maturity/api';
 import { clearSession } from '../../src/lib/auth/client';
-vi.mock('../../src/lib/auth/client',()=>({authHeaders:()=>({}),clearSession:vi.fn()}));
+vi.mock('../../src/lib/auth/client',()=>({authHeaders:()=>({}),clearSession:vi.fn(),apiFetch:(...args:Parameters<typeof fetch>)=>fetch(...args)}));
 const subject={country:'France',region:'Burgundy',vintage:2019};
 const queued=()=>Response.json({job:{id:'job',status:'queued'}},{status:202});
 const state=(status:string)=>Response.json({job:{id:'job',status}});

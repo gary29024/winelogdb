@@ -160,13 +160,13 @@ describe('choosing what a batch run covers',()=>{
     await unresearchedProducers(stub.db,'owner',25);
     const query=stub.matching(/FROM producers/)[0];
     expect(query.sql.replace(/\s+/g,' ')).toContain('researched_at IS NULL');
-    expect(query.args).toEqual(['owner',25]);
+    expect(query.args).toEqual(['owner',8]);
   });
 
   it('caps a single run so one click cannot queue the whole library',async()=>{
     const {stub}=world([]);
     await unresearchedProducers(stub.db,'owner',5000);
-    expect(stub.matching(/FROM producers/)[0].args[1]).toBe(200);
+    expect(stub.matching(/FROM producers/)[0].args[1]).toBe(8);
     await unresearchedProducers(stub.db,'owner',0);
     expect(stub.matching(/FROM producers/)[1].args[1]).toBe(1);
   });

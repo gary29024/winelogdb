@@ -1,3 +1,4 @@
+import { accountStorageKey } from '../../lib/auth/client';
 import type { SheetLineupWine,SheetMatch } from './api';
 
 /**
@@ -31,14 +32,14 @@ type DraftFile=Record<string,SheetDraft>;
 /** Storage is unavailable in a private window and throws rather than returning null. */
 function readAll():DraftFile{
   try{
-    const raw=localStorage.getItem(KEY);if(!raw)return {};
+    const raw=localStorage.getItem(accountStorageKey(KEY));if(!raw)return {};
     const parsed=JSON.parse(raw) as DraftFile;
     return parsed&&typeof parsed==='object'?parsed:{};
   }catch{return {}}
 }
 
 function writeAll(file:DraftFile){
-  try{localStorage.setItem(KEY,JSON.stringify(file))}
+  try{localStorage.setItem(accountStorageKey(KEY),JSON.stringify(file))}
   catch{/* full, or a private window: the draft is a convenience, never a record */}
 }
 

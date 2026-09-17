@@ -1,3 +1,4 @@
+import { FriendResearchStatus } from '../auth/FriendResearchStatus';
 import { useEffect,useRef,useState } from 'react';
 import { askableVintage,maturityPair,vintageCell,vintageScoreLabel,windowShift,type VintageSubject,type VintageWindow } from '../../lib/maturity/vintageWindow';
 import { ElapsedSeconds } from '../../components/ElapsedSeconds';
@@ -26,6 +27,7 @@ function VintageCellCheck({wine,onResearched,initialWindow,debounceMs=0}:Props){
   const [readSeq,setReadSeq]=useState(0);
   const [startedAt,setStartedAt]=useState<string|null>(null);
   const [error,setError]=useState(''),[notice,setNotice]=useState('');
+  const [friendOperationId,setFriendOperationId]=useState<string>();
   const requests=useRef({version:0}).current;
   const lookupController=useRef<AbortController|null>(null);
   const busy=startedAt!==null;
@@ -50,8 +52,11 @@ function VintageCellCheck({wine,onResearched,initialWindow,debounceMs=0}:Props){
     setStartedAt(resumeStartedAt||new Date().toISOString());setError('');setNotice('');
     lookupController.current=new AbortController();
     try{
-      const {window,cached,pending,pendingStatus}=await run(lookupController.current.signal);
+      const {window,cached,pending,pendingStatus,friendOperationId:sponsored}=await run(lookupController.current.signal);
       if(version!==requests.version)return;
+      // A friend is already paying for this exact lookup: wait on their run
+      // rather than starting — and charging for — a second one.
+      if(sponsored){setFriendOperationId(sponsored);return}
       if(pending){
         setNotice(pendingStatus==='queued'
           ?'The lookup is still waiting in the research queue. Check again shortly.'
@@ -122,6 +127,7 @@ function VintageCellCheck({wine,onResearched,initialWindow,debounceMs=0}:Props){
     <DrinkingWindow wine={wine} researched={researched}/>
     {pair.researched&&pair.calculated&&<p className="vintage-comparison">Typical window: {pair.calculated.from}–{pair.calculated.to}</p>}
 
+    {friendOperationId&&<FriendResearchStatus operationId={friendOperationId} onComplete={()=>{setFriendOperationId(undefined);void getVintageWindow(subject).then(({window})=>{setResearched(window);if(window)onResearched?.()})}}/>}
     <div className="vintage-progress">
       <p className="vintage-status" role="status" aria-live="polite" aria-atomic="true">{busy?'Researching vintage…':readState==='loading'?'Checking saved research…':notice}</p>
       {startedAt&&<span className="vintage-elapsed" aria-hidden="true"><ElapsedSeconds startedAt={startedAt}/></span>}

@@ -1,3 +1,4 @@
+import { apiFetch } from '../../lib/auth/client';
 import { authHeaders } from '../../lib/auth/client';
 
 export type CuveeResolution={
@@ -23,5 +24,5 @@ export function resolveCuvee(producerId:string,name:string,appellation?:string|n
   const params=new URLSearchParams({producerId,name});
   if(appellation)params.set('appellation',appellation);
   if(style)params.set('style',style);
-  return fetch(`/api/cuvees/resolve?${params.toString()}`,{headers:authHeaders()}).then(r=>json<CuveeResolution>(r,'Could not resolve cuvée'));
+  return apiFetch(`/api/cuvees/resolve?${params.toString()}`,{headers:authHeaders()}).then(r=>json<CuveeResolution>(r,'Could not resolve cuvée'));
 }

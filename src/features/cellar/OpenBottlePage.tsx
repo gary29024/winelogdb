@@ -1,3 +1,4 @@
+import { apiFetch } from '../../lib/auth/client';
 import { useEffect,useRef,useState } from 'react';
 import { Link,useSearchParams } from 'react-router-dom';
 import { WineForm } from '../wines/WineForm';
@@ -81,7 +82,7 @@ export function OpenBottlePage(){
       const form=new FormData();
       photos.forEach(photo=>form.append('images',photo.recognitionFile));
       form.append('metadata',JSON.stringify(photos.map(photo=>photo.metadata??{capturedAt:null,latitude:null,longitude:null,source:'none'})));
-      const response=await fetch('/api/recognition',{method:'POST',headers:authHeaders(),body:form});
+      const response=await apiFetch('/api/recognition',{method:'POST',headers:authHeaders(),body:form});
       if(response.status===401){clearSession();throw new Error('Session expired. Please sign in again.')}
       const body=await response.json().catch(()=>null);
       if(!response.ok)throw new Error((body as {error?:string})?.error||'Could not read the label');

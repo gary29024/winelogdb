@@ -7,7 +7,7 @@ import { afterEach,beforeEach,describe,expect,it,vi } from 'vitest';
 declare global{var IS_REACT_ACT_ENVIRONMENT:boolean}
 globalThis.IS_REACT_ACT_ENVIRONMENT=true;
 
-const KEY='winelog-journal-filters';
+const KEY='winelog-journal-filters:signed-out';
 let root:Root|null=null,host:HTMLDivElement|null=null,requested:string[]=[];
 
 function Probe(){
@@ -233,7 +233,7 @@ describe('returning to a remembered search',()=>{
       return new Response(JSON.stringify({items:[],nextOffset:null,total:19}),
         {status:200,headers:{'content-type':'application/json'}});
     }));
-    sessionStorage.setItem('winelog-journal-filters','query=chambertin');
+    sessionStorage.setItem(KEY,'query=chambertin');
     vi.resetModules();
     const {LibraryPage}=await import('../../src/features/wines/LibraryPage');
     host=document.createElement('div');document.body.appendChild(host);root=createRoot(host);

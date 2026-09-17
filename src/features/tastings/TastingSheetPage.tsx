@@ -185,8 +185,9 @@ export function TastingSheetPage(){
     const prepared=await prepareRecognitionImageWithinBytes(file,SHEET_TARGET_BYTES);
     const collected:SheetMatch[]=[];
     let afterLine:number|null=null,sheetCurrency='',wasPartial=false,unresolvedHere=0;
+    let continuation:string|undefined;
     for(let pass=0;pass<=MAX_CONTINUATIONS;pass++){
-      const result=await parseTastingSheetPage(id,prepared.file,afterLine);
+      const result=await parseTastingSheetPage(id,prepared.file,afterLine,continuation);continuation=result.creditOperationId;
       if(result.lineup)setLineup(result.lineup);
       collected.push(...result.matches);
       unresolvedHere+=result.unresolvedCount;

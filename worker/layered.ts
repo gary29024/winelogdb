@@ -1,4 +1,5 @@
 import { Hono } from 'hono';
+import { apiErrorHandler } from '../src/lib/credits/primitives';
 import baseApp from './index';
 import { requireSession } from '../src/lib/auth/session';
 import { canonicalCountryName } from '../src/lib/wine/canonicalize';
@@ -16,6 +17,7 @@ import { readAiRates,type AiRateEnv } from '../src/lib/usage/rates';
 type Bindings={DB:D1Database;WINE_IMAGES:R2Bucket;ASSETS:Fetcher;GEMINI_API_KEY?:string;AUTH_SECRET:string;APP_PASSWORD:string;APP_URL:string;MAX_FILE_BYTES?:string;MAX_BATCH_FILES?:string}&AiRateEnv;
 type AppEnv={Bindings:Bindings};
 const app=new Hono<AppEnv>();
+app.onError(apiErrorHandler);
 
 async function user(c:{req:{header:(name:string)=>string|undefined};env:Bindings}){return (await requireSession(c.req.header('Authorization'),c.env.AUTH_SECRET)).userId}
 const parseJson=<T>(value:unknown,fallback:T):T=>{try{return JSON.parse(String(value)) as T}catch{return fallback}};

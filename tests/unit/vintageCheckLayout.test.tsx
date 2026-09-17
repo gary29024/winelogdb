@@ -65,6 +65,7 @@ describe('the vintage block above the form',()=>{
     // existed while there was nothing there.
     const posts:Array<Record<string,unknown>>=[];
     vi.stubGlobal('fetch',vi.fn(async(input:RequestInfo|URL,init?:RequestInit)=>{
+      if(String(input).startsWith('/api/credits/quotes'))return Response.json({id:'quote',total:0,available:100,units:[]});
       if(init?.method==='POST')posts.push(JSON.parse(String(init.body)) as Record<string,unknown>);
       return new Response(JSON.stringify({window:stored}),{status:200,headers:{'content-type':'application/json'}});
     }));
