@@ -1,6 +1,6 @@
 import { geminiCallTokens,recordAiUsage,type AnalyticsSink } from '../src/lib/usage/aiUsage';
 import { parseRecognition } from '../src/features/recognition/schema';
-import { durableProvider,type CreditContext } from './multiUser/provider';
+import { durableProvider,type ProviderAuthorization } from './multiUser/provider';
 import { buildRecognitionPrompt,recognitionResponseSchema,RECOGNITION_MODEL } from '../src/lib/recognition/geminiRequest';
 import type { RecognitionPhotoMetadata } from '../src/lib/uploads/metadataSelection';
 
@@ -9,7 +9,7 @@ export type BatchRecognitionJob=
   |{kind:'recognition_batch_poll';owner:string;sessionId:string;jobId:string;pollCount:number}
   |{kind:'recognition_batch_cleanup';owner:string;sessionId:string};
 
-type Env={CREDIT_CONTEXT?:CreditContext;DB:D1Database;AI_USAGE?:AnalyticsSink;WINE_IMAGES:R2Bucket;GEMINI_API_KEY?:string;MAX_FILE_BYTES?:string;RESEARCH_QUEUE:Queue<unknown>};
+type Env={CREDIT_CONTEXT?:ProviderAuthorization;DB:D1Database;AI_USAGE?:AnalyticsSink;WINE_IMAGES:R2Bucket;GEMINI_API_KEY?:string;MAX_FILE_BYTES?:string;RESEARCH_QUEUE:Queue<unknown>};
 type ItemRow={id:string;position:number;status:string;metadata_json:string;recognition_json:string|null;error:string|null;confirmed_wine_id:string|null;saved_producer:string|null;saved_wine_name:string|null;saved_vintage:number|null};
 type ImageRow={id:string;item_id:string;original_object_key:string;recognition_object_key:string;content_type:string;byte_size:number;recognition_byte_size:number;width:number;height:number};
 type GoogleInlineResponse={metadata?:{key?:string};response?:{usageMetadata?:Parameters<typeof geminiCallTokens>[0];candidates?:Array<{content?:{parts?:Array<{text?:string}>};finishReason?:string}>};error?:{message?:string}};

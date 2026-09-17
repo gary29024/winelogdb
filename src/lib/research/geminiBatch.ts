@@ -1,6 +1,6 @@
 import { postGeminiGenerateContent,type GeminiTransportBindings } from '../../../worker/geminiTransport';
 import { AI_MODELS } from '../ai/policy';
-import { durableProvider,type CreditContext } from '../credits/provider';
+import { durableProvider,type ProviderAuthorization } from '../credits/provider';
 
 export type GeminiBatchRequest={key:string;request:Record<string,unknown>};
 export type GeminiInlineResponse={
@@ -257,7 +257,7 @@ async function executeStoredVertexBatch(env:GatewayRuntimeEnv,name:string,row:St
  * - the same '' configureGeminiBatchGateway registered the gateway runtime
  * under, so the request still goes out through AI Gateway.
  */
-export async function createGeminiBatch(apiKey:string|undefined,model:string,displayName:string,entries:GeminiBatchRequest[],context?:CreditContext){
+export async function createGeminiBatch(apiKey:string|undefined,model:string,displayName:string,entries:GeminiBatchRequest[],context?:ProviderAuthorization){
   if(!entries.length)throw new Error('Gemini Batch requires at least one request');
   if(consumePrimaryBypass(model,displayName))throw new Error(`${PRIMARY_MODEL} Batch bypassed because the primary research model is temporarily in cooldown`);
   const runtime=gatewayRuntime(apiKey);
@@ -281,7 +281,7 @@ export async function createGeminiBatch(apiKey:string|undefined,model:string,dis
   return name;
 }
 
-export async function fetchGeminiBatch(apiKey:string|undefined,googleBatchName:string,options:FetchOptions={},context?:CreditContext){
+export async function fetchGeminiBatch(apiKey:string|undefined,googleBatchName:string,options:FetchOptions={},context?:ProviderAuthorization){
   if(isEmulatedGeminiBatchName(googleBatchName)){
     const runtime=gatewayRuntime(apiKey);if(!runtime)return {ok:false as const,status:503,error:'AI Gateway runtime is unavailable for this queued Vertex batch'};
     let row=await storedVertexBatch(runtime.DB,googleBatchName);if(!row)return {ok:false as const,status:404,error:'Queued Vertex batch not found'};

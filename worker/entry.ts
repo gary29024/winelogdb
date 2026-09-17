@@ -1,4 +1,5 @@
 import { Hono } from 'hono';
+import { apiErrorHandler } from '../src/lib/credits/primitives';
 import layeredApp from './layered';
 import { applyJournalVintageSearch } from '../src/lib/journal/searchQuery';
 import { favoriteUpdateSchema } from '../src/lib/journal/favorite';
@@ -11,6 +12,7 @@ import { currentOwnerRevision,etagMatches,revisionETag } from '../src/lib/db/own
 type Bindings={DB:D1Database;WINE_IMAGES:R2Bucket;ASSETS:Fetcher;GEMINI_API_KEY?:string;AUTH_SECRET:string;APP_PASSWORD:string;APP_URL:string;MAX_FILE_BYTES?:string;MAX_BATCH_FILES?:string};
 type AppEnv={Bindings:Bindings};
 const app=new Hono<AppEnv>();
+app.onError(apiErrorHandler);
 
 async function user(c:{req:{header:(name:string)=>string|undefined};env:Bindings}){return (await requireSession(c.req.header('Authorization'),c.env.AUTH_SECRET)).userId}
 

@@ -3,7 +3,7 @@ import { realD1 } from './support/realD1';
 import { producerRangeAllowed } from '../../src/lib/producers/rangeAccess';
 
 const seed=(sql:ReturnType<typeof realD1>['sql'],id:string,role:string)=>
-  sql.exec(`INSERT INTO app_users(id,email,display_name,role) VALUES('${id}','${id}@example.com','${id}','${role}')`);
+  sql.exec(`INSERT INTO app_users(id,email,display_name,role) VALUES('${id}','${id}@example.com','${id}','${role}') ON CONFLICT(id) DO UPDATE SET role=excluded.role`);
 
 describe('who may research a producer wine range',()=>{
   it('allows the owner and refuses a member',async()=>{

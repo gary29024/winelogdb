@@ -1,5 +1,5 @@
 import { AI_MODELS } from '../ai/policy';
-import { assertResearchInput,type CreditContext } from '../credits/provider';
+import { assertResearchInput,type ProviderAuthorization } from '../credits/provider';
 import { deepSearchSchema,type DeepSearchResult } from '../db/schema';
 import { ensureProducerEntity } from '../producers/entities';
 import { parseStructuredJsonText } from '../producers/structuredJson';
@@ -15,7 +15,7 @@ import { auditTechnicalContradictions,technicalContradictionFailureMessage } fro
 import { updateWineResearchRun } from './backgroundJobs';
 import { recordAiUsage,type AnalyticsSink } from '../usage/aiUsage';
 
-type Env={CREDIT_CONTEXT?:CreditContext;DB:D1Database;GEMINI_API_KEY?:string;RESEARCH_QUEUE:Queue<unknown>;AI_USAGE?:AnalyticsSink;CREDIT_RESEARCH_SCOPES?:string[]};
+type Env={CREDIT_CONTEXT?:ProviderAuthorization;DB:D1Database;GEMINI_API_KEY?:string;RESEARCH_QUEUE:Queue<unknown>;AI_USAGE?:AnalyticsSink;CREDIT_RESEARCH_SCOPES?:string[]};
 type WineRow={producer:string;producer_id:string|null;cuvee_id:string|null;wine_name:string;vintage:number|null;country:string|null;region:string|null;appellation:string|null;wine_style?:string|null;grapes_json:string;grape_blend_json:string};
 type ResearchRow={deep_search_json:string};
 const PRIMARY_MODEL=AI_MODELS.groundedResearchPrimary;
@@ -92,7 +92,7 @@ function cachedContext(cache:Map<ResearchScope,CachedResearch>){
   return [get('producer','producerDetails')&&`Cached producer profile: ${get('producer','producerDetails')}`,get('producer','producerWinemakingPractices')&&`Cached producer-wide winemaking practices: ${get('producer','producerWinemakingPractices')}`,get('terroir','terroir')&&`Cached stable terroir: ${get('terroir','terroir')}`,get('vintage_context','vintageQuality')&&`Cached vintage context: ${get('vintage_context','vintageQuality')}`,get('wine_vintage','summary')&&`Cached exact-wine summary: ${get('wine_vintage','summary')}`,get('wine_vintage','expectedProfile')&&`Cached expected sensory profile: ${get('wine_vintage','expectedProfile')}`].filter(Boolean).join('\n');
 }
 
-async function loadWine(db:D1Database,owner:string,wineId:string,credit?:CreditContext){
+async function loadWine(db:D1Database,owner:string,wineId:string,credit?:ProviderAuthorization){
   const wine=await db.prepare('SELECT producer,producer_id,cuvee_id,wine_name,vintage,country,region,appellation,wine_style,grapes_json,grape_blend_json FROM wines WHERE id=? AND owner_id=?').bind(wineId,owner).first<WineRow>();if(!wine)return null;
   await assertResearchInput(credit,owner,wineId,'wine',wine);
   if(credit)return wine; // Keep the cache identity used by the accepted quote.

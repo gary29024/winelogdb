@@ -1,5 +1,6 @@
 import { failVintageResearch,processVintageResearch,type VintageResearchMessage } from './vintageResearchJobs';
 import { Hono } from 'hono';
+import { apiErrorHandler } from '../src/lib/credits/primitives';
 import app from './cuveeEntry';
 import { AI_MODELS } from '../src/lib/ai/policy';
 import { requireSession } from '../src/lib/auth/session';
@@ -28,6 +29,7 @@ type ResearchJob=ProducerJob|ProducerBatchPollJob|ProducerCampaignTickJob|WineJo
 type Bindings={CREDIT_PRODUCER_IDS?:string[];DB:D1Database;WINE_IMAGES:R2Bucket;ASSETS:Fetcher;GEMINI_API_KEY?:string;AUTH_SECRET:string;APP_PASSWORD:string;APP_URL:string;MAX_FILE_BYTES?:string;MAX_BATCH_FILES?:string;RESEARCH_QUEUE:Queue<ResearchJob>};
 type AppEnv={Bindings:Bindings};
 const router=new Hono<AppEnv>();
+router.onError(apiErrorHandler);
 
 function cors(c:{req:{header:(name:string)=>string|undefined};env:Bindings;header:(name:string,value:string)=>void}){const origin=c.req.header('Origin');if(origin&&origin===c.env.APP_URL){c.header('Access-Control-Allow-Origin',origin);c.header('Vary','Origin')}}
 async function user(c:{req:{header:(name:string)=>string|undefined};env:Bindings}){return (await requireSession(c.req.header('Authorization'),c.env.AUTH_SECRET)).userId}

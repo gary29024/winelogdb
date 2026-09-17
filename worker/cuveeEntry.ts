@@ -1,3 +1,4 @@
+import { apiErrorHandler } from '../src/lib/credits/primitives';
 import { queueVintageResearch,readActiveVintageResearch,readVintageResearch,type VintageResearchMessage } from './vintageResearchJobs';
 import { Hono,type Context } from 'hono';
 import entryApp from './entry';
@@ -31,6 +32,7 @@ import { MAX_FRAME_LOOKUP,readBottleFrames } from '../src/lib/images/bottleFrame
 type Bindings={DB:D1Database;RESEARCH_QUEUE?:Queue<VintageResearchMessage>;WINE_IMAGES:R2Bucket;ASSETS:Fetcher;GEMINI_API_KEY?:string;AUTH_SECRET:string;APP_PASSWORD:string;APP_URL:string;MAX_FILE_BYTES?:string;MAX_BATCH_FILES?:string};
 type AppEnv={Bindings:Bindings};
 const app=new Hono<AppEnv>();
+app.onError(apiErrorHandler);
 const IDENTITY_MAINTENANCE_KEY='identity-reconcile-v2';
 /**
  * One-shot, not a schedule: it repairs keys written by the old ASCII-only

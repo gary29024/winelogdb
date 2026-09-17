@@ -28,10 +28,10 @@ export async function bindGoogleAccount(env:IdentityEnv,claims:{sub:string;email
  const invitation=isOwner?null:await env.DB.prepare('SELECT token_hash FROM member_invitations WHERE token_hash=? AND email=? AND used_by IS NULL AND expires_at>?').bind(invitationHash,claims.email.toLowerCase(),seconds()).first();
  if(!isOwner&&!invitation)throw new ApiError(403,'Invitation is invalid, expired, or for a different email');
  await env.DB.batch([
-  isOwner?env.DB.prepare("INSERT INTO app_users(id,email,display_name,role) VALUES(?,?,?,'owner')").bind(id,claims.email,claims.name):
+  isOwner?env.DB.prepare("INSERT INTO app_users(id,email,display_name,role) VALUES(?,?,?,'owner') ON CONFLICT(id) DO UPDATE SET email=excluded.email,display_name=excluded.display_name,role='owner',status='active'").bind(id,claims.email,claims.name):
    env.DB.prepare("INSERT INTO app_users(id,email,display_name,role) SELECT ?,?,?,'member' FROM member_invitations WHERE token_hash=? AND email=? AND used_by IS NULL AND expires_at>? AND (SELECT count(*) FROM app_users)<json_extract((SELECT value_json FROM pilot_settings WHERE id=1),'$.memberLimit')").bind(id,claims.email,claims.name,invitationHash,claims.email.toLowerCase(),seconds()),
   env.DB.prepare('INSERT INTO auth_identities(provider,subject,user_id) VALUES(?,?,?)').bind('google',claims.sub,id),
-  env.DB.prepare('INSERT INTO credit_wallets(user_id) VALUES(?)').bind(id),
+  env.DB.prepare('INSERT OR IGNORE INTO credit_wallets(user_id) VALUES(?)').bind(id),
   ...(isOwner?[]:[env.DB.prepare('UPDATE member_invitations SET used_by=? WHERE token_hash=? AND used_by IS NULL').bind(id,invitationHash)])
  ]);
  return {id,email:claims.email,display_name:claims.name,role:isOwner?'owner':'member',status:'active'} as Member;

@@ -87,4 +87,14 @@ CREATE TABLE reusable_research (
  PRIMARY KEY(contributor_id,subject_key,scope)
 );
 CREATE INDEX idx_reusable_research_subject ON reusable_research(subject_key,scope,researched_at DESC);
+-- The existing single-tenant journal is already owned by 'owner', so that account
+-- exists from the moment this migration runs rather than being created lazily at
+-- first sign-in. Anything that reads a role - who may research a producer's wine
+-- range, who is exempt from credit metering - needs the row to be there, and a
+-- deployment whose owner row appears only after a successful Google callback has
+-- one more way to lock itself out. The real email and name arrive at that
+-- callback and overwrite the placeholder.
+INSERT OR IGNORE INTO app_users(id,email,display_name,role) VALUES('owner','','Owner','owner');
+INSERT OR IGNORE INTO credit_wallets(user_id) VALUES('owner');
+
 -- No automatic invitation, credit grant, or price: launch requires owner configuration.

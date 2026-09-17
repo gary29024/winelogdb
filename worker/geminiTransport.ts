@@ -1,6 +1,6 @@
-import { durableProvider,type CreditContext } from './multiUser/provider';
+import { durableProvider,type ProviderAuthorization } from './multiUser/provider';
 export type GeminiTransportBindings={
-  CREDIT_CONTEXT?:CreditContext;
+  CREDIT_CONTEXT?:ProviderAuthorization;
   GEMINI_API_KEY?:string;
   CF_AI_GATEWAY_TOKEN?:string;
   AI_GATEWAY_ACCOUNT_ID?:string;

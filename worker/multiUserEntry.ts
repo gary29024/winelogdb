@@ -5,6 +5,7 @@ import { authenticate,authRoute,verifyOrigin } from './multiUser/auth';
 import { socialRoute } from './multiUser/social';
 import { adminRoute,deploymentAiCost } from './multiUser/admin';
 import { aiRoute,creditRead,creditSummary,quote,reserve,saveOperationResponse,reconcileOperation,wineTargets,settle,type CreditOperation } from './multiUser/credits';
+import { providerAuthorization } from './multiUser/provider';
 import { claimDelivery,durableQueue,finishDelivery,flushOutbox,maintainJobs,markUncertain,type JobEnvelope } from './multiUser/jobs';
 import { meteredBucket } from './multiUser/storage';
 import { adoptFriendResearch,assembleDeepSearch,loadResearchCache } from '../src/lib/research/cache';
@@ -27,7 +28,12 @@ export default {
    const auth=await authRoute(request,env);if(auth)return auth;
    const member=await authenticate(request,env);verifyOrigin(request,env);
    if(request.headers.has('X-WineLog-Account')&&request.headers.get('X-WineLog-Account')!==member.id)throw new ApiError(409,'Account changed; reload this page');
-   const scoped={...env,WINE_IMAGES:meteredBucket(env.WINE_IMAGES,env.DB,member.id),RESEARCH_QUEUE:durableQueue(env.RESEARCH_QUEUE,env.DB)};
+   // Every request carries its metering decision, so a path that reaches the
+   // provider without having been priced fails loudly the first time a member
+   // tries it instead of quietly billing the deployment. The owner pays the
+   // provider directly and is exempt.
+   const unpriced=providerAuthorization(member.role,`${path} has no credit price yet, so it cannot be run on a member account.`);
+   const scoped={...env,CREDIT_CONTEXT:unpriced,WINE_IMAGES:meteredBucket(env.WINE_IMAGES,env.DB,member.id),RESEARCH_QUEUE:durableQueue(env.RESEARCH_QUEUE,env.DB)};
    const direct=await creditRead(request,env,member)??await rolloutRoute(request,env,member)??await adminRoute(request,env,member)??await socialRoute(request,scoped,member);if(direct)return direct;
    if(path==='/api/credits/quotes'&&request.method==='POST'){
     const url=new URL(request.url),target=url.searchParams.get('path')||'';if(!target.startsWith('/api/')||target.includes('?')||!aiRoute(target,'POST'))throw new ApiError(400,'Invalid quote target');
@@ -85,11 +91,11 @@ export default {
    if(!await claimDelivery(env.DB,id)){const done=await env.DB.prepare('SELECT done FROM queue_deliveries WHERE id=?').bind(id).first<{done:number}>();if(done?.done)message.ack();else message.retry({delaySeconds:60});continue}
    let retried=false;
    try{
-    const member=await env.DB.prepare("SELECT id FROM app_users WHERE id=? AND status='active'").bind(job.owner||'').first();
+    const member=await env.DB.prepare("SELECT id,role FROM app_users WHERE id=? AND status='active'").bind(job.owner||'').first<{id:string;role:string}>();
     if(!member){message.retry({delaySeconds:300});retried=true;continue}
     const op=job._creditOperationId?await env.DB.prepare('SELECT * FROM credit_operations WHERE id=? AND user_id=?').bind(job._creditOperationId,job.owner!).first<CreditOperation>():null;
     if(job.kind!=='recognition_batch_cleanup'&&(!op||!['reserved','running','review'].includes(op.status))){message.ack();continue}
-    const scoped={...env,CREDIT_CONTEXT:op?{db:env.DB,operationId:op.id,namespace:'queue'}:undefined,CREDIT_RESEARCH_SCOPES:op?JSON.parse(op.units_json).flatMap((u:{scope?:string})=>u.scope?[u.scope]:[]):[],WINE_IMAGES:meteredBucket(env.WINE_IMAGES,env.DB,job.owner!),RESEARCH_QUEUE:durableQueue(env.RESEARCH_QUEUE,env.DB,op?.id)};
+    const scoped={...env,CREDIT_CONTEXT:op?{db:env.DB,operationId:op.id,namespace:'queue'}:providerAuthorization(member.role,`${job.kind??'This job'} reached the provider without a credit operation.`),CREDIT_RESEARCH_SCOPES:op?JSON.parse(op.units_json).flatMap((u:{scope?:string})=>u.scope?[u.scope]:[]):[],WINE_IMAGES:meteredBucket(env.WINE_IMAGES,env.DB,job.owner!),RESEARCH_QUEUE:durableQueue(env.RESEARCH_QUEUE,env.DB,op?.id)};
     const wrapped={id:message.id,timestamp:message.timestamp,body:message.body,attempts:message.attempts,ack:()=>message.ack(),retry:(options?:QueueRetryOptions)=>{retried=true;message.retry(options)}};
     await legacy.queue({queue:batch.queue,metadata:batch.metadata,messages:[wrapped],ackAll:()=>message.ack(),retryAll:(options?:QueueRetryOptions)=>{retried=true;message.retry(options)}},scoped);
     if(op)await reconcileOperation(env.DB,op);

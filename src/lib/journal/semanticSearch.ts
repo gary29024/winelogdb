@@ -1,8 +1,11 @@
 import { AI_MODELS } from '../ai/policy';
 import { recordAiUsage,type AiUsageEnv } from '../usage/aiUsage';
+import { durableProvider,type ProviderAuthorization } from '../credits/provider';
 export { shouldUseSemanticQuery } from './semanticQuery';
 
 export type SemanticEmbeddingBindings={
+  /** Who is paying, so an embedding run cannot be an unmetered provider call. */
+  CREDIT_CONTEXT?:ProviderAuthorization;
   AI?:Ai;
   GEMINI_API_KEY?:string;
   SEMANTIC_GEMINI_API_KEY?:string;
@@ -117,9 +120,11 @@ async function embedTexts(env:SemanticEnv,config:EmbeddingConfig,texts:string[],
         embedContentConfig:{taskType:kind==='query'?'RETRIEVAL_QUERY':'RETRIEVAL_DOCUMENT',outputDimensionality:config.dimensions,autoTruncate:true}
       }));
       attempted=true;
-      const response=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(config.model)}:batchEmbedContents`,{
-        method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':config.geminiKey??''},body:JSON.stringify({requests})
-      });
+      const payload=JSON.stringify({requests});
+      const response=await durableProvider(env.CREDIT_CONTEXT,`embeddings:${config.model}:${kind}:${payload}`,()=>
+        fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(config.model)}:batchEmbedContents`,{
+          method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':config.geminiKey??''},body:payload
+        }));
       if(!response.ok)throw new Error(`Gemini embeddings failed (${response.status})`);
       const body=await response.json() as {embeddings?:Array<{values?:number[]}>};
       vectors=(body.embeddings??[]).map(item=>item.values??[]);

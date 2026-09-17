@@ -1,4 +1,5 @@
 import { AI_MODELS } from '../ai/policy';
+import { producerRangeAllowed } from './rangeAccess';
 import { gatewayErrorDetails,isRetryableZaiProviderCode } from './gatewayError';
 import { recordAiUsage,type AiUsageEnv } from '../usage/aiUsage';
 import { RESEARCH_STALE_DAYS } from '../research/freshness';
@@ -216,6 +217,10 @@ async function completeRun(db:D1Database,owner:string,producerId:string,requestI
 
 /** Try the zero-search official-source path. false means the existing grounded Gemini pipeline should run unchanged. */
 export async function tryDirectProducerRangeRefresh(env:Env,owner:string,producerId:string,requestId:string,refreshProfile=false,rangeOnly=false){
+  // The wine range is owner-only. This path runs from the queue before the
+  // batch researcher, so it has to ask the same question rather than inherit
+  // an answer it never sees.
+  if(!await producerRangeAllowed(env.DB,owner))return {handled:false as const,reason:'wine range research is not available on this account'};
   if(refreshProfile)return {handled:false as const,reason:'profile refresh requested'};if(!directRangeProviders(env).length)return {handled:false as const,reason:'no cheap provider'};
   const row=await env.DB.prepare('SELECT canonical_name,profile,home_country,profile_researched_at,official_website_url,catalog_json,catalog_researched_json,catalog_sources_json,sources_json FROM producers WHERE owner_id=? AND id=?').bind(owner,producerId).first<ProducerRow>();if(!row)return {handled:false as const,reason:'producer not found'};
   if(!rangeOnly&&!profileFreshForDirectRange(row))return {handled:false as const,reason:'profile requires research'};

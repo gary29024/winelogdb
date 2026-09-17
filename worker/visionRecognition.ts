@@ -5,6 +5,7 @@ import { shouldRetryRecognitionFailure } from '../src/lib/recognition/retryPolic
 import { RECOGNITION_ESCALATION_MODEL } from '../src/lib/recognition/escalation';
 import { requireSession } from '../src/lib/auth/session';
 import { postGeminiGenerateContent,type GeminiTransportBindings } from './geminiTransport';
+import { ApiError } from '../src/lib/credits/primitives';
 import type { AiUsageKind,AnalyticsSink } from '../src/lib/usage/aiUsage';
 
 /**
@@ -187,6 +188,9 @@ export async function runVisionRecognition<T>(request:Request,env:VisionBindings
       return {ok:true,result,requestId,durationMs,finishReason:escalation.used?escalation.finishReason:candidate?.finishReason??null,wineCount,owner};
     }catch(e){
       clearTimeout(timer);const geminiLatencyMs=Date.now()-attemptStarted;
+      // A refusal to spend is not a recognition failure and must not be retried
+      // or reported as one: it is the answer, and the caller has to see it.
+      if(e instanceof ApiError)throw e;
       if(timedOut){console.error(JSON.stringify({event:`${spec.mode}-recognition-timeout`,requestId,attempt,geminiLatencyMs}));return fail({error:`${spec.label} timed out after 60 seconds. Please try again.`,requestId},504)}
       const message=(e as Error).message||`${spec.label} failed`;
       // The reply itself, capped: a schema error names the field that was wrong

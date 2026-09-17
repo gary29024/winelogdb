@@ -16,3 +16,17 @@ export async function boundedBytes(stream:ReadableStream<Uint8Array>|null,limit:
  try{for(;;){const next=await reader.read();if(next.done)break;length+=next.value.byteLength;if(length>limit){await reader.cancel();throw new ApiError(413,'Request exceeds the upload limit')}chunks.push(next.value)}}finally{reader.releaseLock()}
  const bytes=new Uint8Array(length);let offset=0;for(const chunk of chunks){bytes.set(chunk,offset);offset+=chunk.length}return bytes;
 }
+
+/**
+ * Hono's default handler turns any thrown error into a bare 500.
+ *
+ * A refusal to spend is not an internal failure: it is the answer, and the
+ * status and reason have to reach the caller rather than being flattened into
+ * "Internal Server Error". Registered on every Hono app in the legacy chain,
+ * because each one handles its own routes and a parent's handler does not see
+ * a child's throw.
+ */
+export const apiErrorHandler=(error:unknown)=>{
+  if(error instanceof ApiError)return Response.json({error:error.message},{status:error.status,headers:{'Cache-Control':'no-store'}});
+  throw error;
+};

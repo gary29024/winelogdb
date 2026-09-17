@@ -1,4 +1,5 @@
 import { Hono } from 'hono';
+import { apiErrorHandler } from '../src/lib/credits/primitives';
 import { serveWineImage } from './wineImageHandler';
 import { photoObjectKeys } from '../src/lib/r2/thumbnails';
 import { grapeGroup } from '../src/lib/wine/grapes';
@@ -17,6 +18,7 @@ type AppContext={Bindings:Bindings;Variables:Variables};
 type PhotoMetadata={capturedAt?:string|null;latitude?:number|null;longitude?:number|null;source?:'exif'|'file_fallback'|'none'};
 
 const app=new Hono<AppContext>();
+app.onError(apiErrorHandler);
 app.use('/api/*',cors({origin:(origin,c)=>origin===c.env.APP_URL?origin:null,credentials:true}));
 app.use('/api/*',async(c,next)=>{
  if(c.req.path==='/api/auth/login')return next();

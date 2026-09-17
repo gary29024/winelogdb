@@ -1,4 +1,5 @@
 import { AI_MODELS } from '../ai/policy';
+import { producerRangeAllowed } from './rangeAccess';
 import { crawlOfficialRange as crawl,officialRangePrompt as prompt,safeHttps,host,sameOfficialSite,sourceArray,normalizeDirectRangeResult,profileFreshForDirectRange } from './catalogDirectResearch';
 import { saveResearchedCatalog,syncMissingCandidates,type CatalogRangeWine } from './catalogRangeOverlay';
 import { recordAiUsage,type AiUsageEnv } from '../usage/aiUsage';
@@ -54,6 +55,10 @@ async function reportProgress(db:D1Database,owner:string,producerId:string,reque
 async function completeRun(db:D1Database,owner:string,producerId:string,requestId:string,message:string){const done=now(),row=await db.prepare('SELECT started_at FROM producer_research_runs WHERE owner_id=? AND producer_id=? AND request_id=?').bind(owner,producerId,requestId).first<{started_at:string}>(),duration=row?.started_at?Math.max(0,Date.parse(done)-Date.parse(row.started_at)):null;await db.prepare("UPDATE producer_research_runs SET status='complete',stage='complete',attempt=1,message=?,updated_at=?,completed_at=?,duration_ms=? WHERE owner_id=? AND producer_id=? AND request_id=? AND status='running'").bind(message,done,done,duration,owner,producerId,requestId).run()}
 
 export async function tryWorkersAiProducerRangeRefresh(env:Env,owner:string,producerId:string,requestId:string,refreshProfile=false,rangeOnly=false){
+  // The wine range is owner-only. This path runs from the queue before the
+  // batch researcher, so it has to ask the same question rather than inherit
+  // an answer it never sees.
+  if(!await producerRangeAllowed(env.DB,owner))return {handled:false as const,reason:'wine range research is not available on this account'};
   if(!env.AI)return {handled:false as const,reason:'workers ai unavailable'};if(refreshProfile)return {handled:false as const,reason:'profile refresh requested'};
   const row=await env.DB.prepare('SELECT canonical_name,profile,home_country,profile_researched_at,official_website_url,catalog_researched_json,catalog_sources_json,sources_json FROM producers WHERE owner_id=? AND id=?').bind(owner,producerId).first<ProducerRow>();if(!row)return {handled:false as const,reason:'producer not found'};
   if(!rangeOnly&&!profileFreshForDirectRange(row))return {handled:false as const,reason:'profile requires research'};if(!row.official_website_url)return {handled:false as const,reason:'official site missing'};

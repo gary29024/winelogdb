@@ -20,7 +20,7 @@ const config:PilotSettings={memberLimit:25,memberStorageBytes:100_000_000,totalS
 const request=(body='{}',extra:Record<string,string>={})=>new Request('https://wine.example/api/recognition',{method:'POST',headers:{'Content-Type':'multipart/form-data; boundary=scan',Origin:'https://wine.example',...extra},body:`--scan\r\nContent-Disposition: form-data; name="images"; filename="label.jpg"\r\nContent-Type: image/jpeg\r\n\r\n${body}\r\n--scan--\r\n`});
 beforeEach(()=>{
  database=realD1();
- for(const id of ['owner','alice','bob','carol']){const u=member(id);database.sql.prepare('INSERT INTO app_users(id,email,display_name,role) VALUES(?,?,?,?)').run(u.id,u.email,u.display_name,u.role);database.sql.prepare('INSERT INTO credit_wallets(user_id) VALUES(?)').run(id)}
+ for(const id of ['owner','alice','bob','carol']){const u=member(id);database.sql.prepare('INSERT INTO app_users(id,email,display_name,role) VALUES(?,?,?,?) ON CONFLICT(id) DO UPDATE SET email=excluded.email,display_name=excluded.display_name,role=excluded.role').run(u.id,u.email,u.display_name,u.role);database.sql.prepare('INSERT OR IGNORE INTO credit_wallets(user_id) VALUES(?)').run(id)}
  database.sql.prepare('INSERT INTO pilot_settings(id,value_json) VALUES(1,?)').run(JSON.stringify(config));
  database.sql.prepare('INSERT INTO credit_prices(id,action,credits,created_at,created_by) VALUES(?,?,?,?,?)').run('price1','scan_single',5,stamp(),'owner');
  database.sql.exec("INSERT INTO credit_ledger(id,user_id,kind,amount,actor_id,reason) VALUES('g1','alice','grant',10,'owner','trial')");

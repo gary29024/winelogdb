@@ -17,7 +17,11 @@ const validLatitude=(value:unknown):value is number=>typeof value==='number'&&Nu
 const validLongitude=(value:unknown):value is number=>typeof value==='number'&&Number.isFinite(value)&&value>=-180&&value<=180;
 const validTimestamp=(value:unknown)=>typeof value==='string'&&!Number.isNaN(Date.parse(value));
 
-export function selectRecognitionMetadata(items:RecognitionPhotoMetadata[]):SelectedRecognitionMetadata{
+export function selectRecognitionMetadata(input:RecognitionPhotoMetadata[]|null|undefined):SelectedRecognitionMetadata{
+  // A request that omits the metadata field parses as JSON null rather than as
+  // the intended empty list, so this has to accept "no metadata" as a shape and
+  // not only as an empty array - otherwise every such scan is a 500.
+  const items=Array.isArray(input)?input:[];
   const exifTimestamp=items.find(item=>item.source==='exif'&&validTimestamp(item.capturedAt));
   const fallbackTimestamp=items.find(item=>validTimestamp(item.capturedAt));
   const timestamp=exifTimestamp??fallbackTimestamp;

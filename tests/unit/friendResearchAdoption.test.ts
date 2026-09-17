@@ -4,7 +4,7 @@ import { adoptFriendResearch,buildResearchTargets,loadResearchCache,upsertResear
 
 const wine={producer:'Domaine Dujac',wineName:'Clos de la Roche',vintage:2019,country:'France',region:'Burgundy',appellation:'Clos de la Roche',wineStyle:'red'};
 const seedUser=(sql:ReturnType<typeof realD1>['sql'],id:string,role='member')=>
-  sql.exec(`INSERT INTO app_users(id,email,display_name,role) VALUES('${id}','${id}@example.com','${id}','${role}')`);
+  sql.exec(`INSERT INTO app_users(id,email,display_name,role) VALUES('${id}','${id}@example.com','${id}','${role}') ON CONFLICT(id) DO UPDATE SET role=excluded.role`);
 const befriend=(sql:ReturnType<typeof realD1>['sql'],a:string,b:string)=>
   sql.exec(`INSERT INTO friendships(user_id,friend_id) VALUES('${a}','${b}'),('${b}','${a}')`);
 
