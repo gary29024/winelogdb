@@ -1,4 +1,6 @@
 import { spawn } from 'node:child_process';
+import process from 'node:process';
+import { setTimeout as sleep } from 'node:timers/promises';
 
 const host='127.0.0.1';
 const port=8788;
@@ -23,10 +25,9 @@ for(const stream of [child.stdout,child.stderr])stream.on('data',chunk=>{
   process.stdout.write(text);
 });
 
-const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 const fail=message=>{throw new Error(`${message}\n\nRecent Wrangler output:\n${output}`)};
 async function request(path,init={}){
-  return fetch(`${origin}${path}`,{redirect:'manual',...init});
+  return globalThis.fetch(`${origin}${path}`,{redirect:'manual',...init});
 }
 async function waitUntilReady(){
   const deadline=Date.now()+30000;
@@ -59,7 +60,7 @@ try{
   expect(start.status===302,`Google OAuth start: expected 302, got ${start.status}`);
   const location=start.headers.get('location');
   expect(Boolean(location),'Google OAuth start: missing Location header');
-  const google=new URL(location);
+  const google=new globalThis.URL(location);
   expect(google.origin==='https://accounts.google.com','Google OAuth start did not redirect to Google');
   expect(google.searchParams.get('redirect_uri')===`${origin}/api/auth/google/callback`,'Google OAuth callback URI was not generated from APP_URL');
 
@@ -76,7 +77,7 @@ try{
   expect(login.status===200,`SPA /login: expected 200, got ${login.status}`);
   expect((login.headers.get('content-type')||'').includes('text/html'),'SPA /login did not return HTML');
 
-  console.log('Platform boundary smoke passed.');
+  globalThis.console.log('Platform boundary smoke passed.');
 } finally {
   if(child.exitCode===null){
     child.kill('SIGTERM');
