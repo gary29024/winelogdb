@@ -34,7 +34,7 @@ type MeterContext={owner:string;runId:string;targetId:'journal-query'|'journal-i
 const EMBEDDING_CREDIT_EXEMPTION={exempt:true,reason:'search_embedding'} as const;
 
 /**
- * How many embedding requests one account may spend in a day.
+ * How many embedding requests one account may spend in a rolling 24-hour window.
  *
  * Embeddings are zero-credit, which means they also miss every ceiling the
  * credit path enforces in `reserve` - the daily operation count, the monthly
@@ -47,6 +47,12 @@ const EMBEDDING_CREDIT_EXEMPTION={exempt:true,reason:'search_embedding'} as cons
  * idx_ai_usage_events_owner_kind. The owner pays the provider directly and is
  * not capped. A deployment with neither table configured is the pre-credits
  * single tenant and is left alone.
+ *
+ * This is a defensive ceiling, not an accounting reservation. Every sequential
+ * provider call re-checks it, so one background refresh cannot run several
+ * batches after crossing the limit. Two truly concurrent requests can still
+ * race before either usage event lands; exact billing remains reconciled from
+ * the usage ledger/provider dashboard rather than treating this as a credit hold.
  */
 export const DEFAULT_DAILY_EMBEDDING_REQUESTS=400;
 
@@ -57,7 +63,7 @@ async function embeddingBudgetSpent(db:D1Database,owner:string){
   return Number(row?.spent)||0;
 }
 
-/** True when this account may still spend an embedding request today. */
+/** True when this account may still spend an embedding request in the rolling 24-hour window. */
 export async function embeddingAllowed(env:SemanticEnv,owner:string){
   try{
     const account=await env.DB.prepare('SELECT role FROM app_users WHERE id=?').bind(owner).first<{role:string}>();
@@ -174,7 +180,9 @@ async function embedTexts(env:SemanticEnv,config:EmbeddingConfig,texts:string[],
       const payload=JSON.stringify({requests});
       // Gemini embeddings follow the same zero-credit policy as Workers AI.
       // durableProvider is retained as the provider chokepoint, with an explicit
-      // exemption rather than inheriting a member's denied/unpriced context.
+      // exemption rather than inheriting a member's denied/unpriced context. An
+      // exempt call is not persisted in provider_operations; the usage ledger
+      // below remains the audit trail for these idempotent embedding requests.
       const response=await durableProvider(EMBEDDING_CREDIT_EXEMPTION,`embeddings:${config.model}:${kind}:${payload}`,()=>
         fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(config.model)}:batchEmbedContents`,{
           method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':config.geminiKey??''},body:payload
@@ -283,7 +291,12 @@ async function refreshSemanticIndex(env:SemanticEnv,owner:string,config:Embeddin
   // Checked before the read, so a capped account costs nothing at all.
   if(!await embeddingAllowed(env,owner))return {indexed:0,hasMore:false};
   const pending=await staleWineRows(env.DB,owner,config,limit),rows=pending.slice(0,limit);
+  let indexed=0,capped=false;
   for(let start=0;start<rows.length;start+=EMBED_BATCH){
+    // Re-check before every provider request. Without this, a member sitting one
+    // request below the ceiling could pass the initial guard and spend every
+    // remaining batch in this refresh before the next request-level check.
+    if(!await embeddingAllowed(env,owner)){capped=true;break}
     const chunk=rows.slice(start,start+EMBED_BATCH),vectors=await embedTexts(env,config,chunk.map(buildWineSemanticDocument),'document',{owner,runId,targetId:'journal-index'}),stamp=new Date().toISOString();
     const vectorStatements=chunk.map((row,index)=>env.DB.prepare(`INSERT INTO wine_semantic_embeddings(owner_id,wine_id,model_key,dimensions,source_updated_at,embedding,updated_at)
       VALUES(?,?,?,?,?,?,?)
@@ -294,8 +307,9 @@ async function refreshSemanticIndex(env:SemanticEnv,owner:string,config:Embeddin
       ON CONFLICT(owner_id,model_key) DO UPDATE SET revision=wine_semantic_index_state.revision+1,updated_at=excluded.updated_at`)
       .bind(owner,config.modelKey,stamp);
     await env.DB.batch([...vectorStatements,revisionStatement]);
+    indexed+=chunk.length;
   }
-  return {indexed:rows.length,hasMore:pending.length>limit};
+  return {indexed,hasMore:capped||pending.length>limit};
 }
 
 async function currentCandidates(db:D1Database,owner:string,config:EmbeddingConfig){
