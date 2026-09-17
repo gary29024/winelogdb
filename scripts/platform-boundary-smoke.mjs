@@ -1,5 +1,6 @@
 import { spawn } from 'node:child_process';
 import { once } from 'node:events';
+import { readFileSync } from 'node:fs';
 import process from 'node:process';
 import { setTimeout as sleep } from 'node:timers/promises';
 import { fileURLToPath } from 'node:url';
@@ -9,6 +10,12 @@ const port=8788;
 const origin=`http://${host}:${port}`;
 const wranglerCli=fileURLToPath(new globalThis.URL('../node_modules/wrangler/bin/wrangler.js',import.meta.url));
 const authSecret='platform-smoke-auth-secret-0123456789abcdef';
+const navigationHeaders={
+  accept:'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+  'sec-fetch-dest':'document',
+  'sec-fetch-mode':'navigate',
+  'sec-fetch-site':'same-origin',
+};
 const args=[
   'dev','--local','--ip',host,'--port',String(port),
   '--var',`APP_URL:${origin}`,
@@ -18,6 +25,22 @@ const args=[
   '--var','OWNER_EMAIL:owner@example.com',
   '--var',`AUTH_SECRET:${authSecret}`,
 ];
+
+function stripJsonc(source){
+  return source.replace(/\/\*[\s\S]*?\*\//g,'').replace(/^\s*\/\/.*$/gm,'');
+}
+function assertWorkerFirstConfig(){
+  const config=JSON.parse(stripJsonc(readFileSync('wrangler.jsonc','utf8')));
+  const runWorkerFirst=config.assets?.run_worker_first;
+  if(!Array.isArray(runWorkerFirst)||!runWorkerFirst.includes('/api/*')){
+    throw new Error('wrangler.jsonc must keep assets.run_worker_first containing /api/* so deployed SPA assets cannot intercept API navigation.');
+  }
+}
+
+// Wrangler local dev does not reproduce Cloudflare's deployed asset-router
+// precedence. Assert the production routing invariant explicitly, then use the
+// local server to exercise Worker/OAuth/JSON/SPA behavior behind that contract.
+assertWorkerFirstConfig();
 
 // Spawn Wrangler directly rather than through npx. The npx wrapper can exit
 // separately from Wrangler and leave the actual dev server alive in CI.
@@ -45,7 +68,7 @@ async function waitUntilReady(){
   while(Date.now()<deadline){
     if(child.exitCode!==null)fail(`wrangler dev exited early with code ${child.exitCode}`);
     try{
-      const response=await request('/api/public/config',{headers:{accept:'text/html'}});
+      const response=await request('/api/public/config',{headers:navigationHeaders});
       if(response.status)return;
     }catch{}
     await sleep(250);
@@ -102,11 +125,11 @@ let exitCode=0;
 try{
   await waitUntilReady();
 
-  const config=await request('/api/public/config',{headers:{accept:'text/html'}});
+  const config=await request('/api/public/config',{headers:navigationHeaders});
   const configBody=await expectJson(config,'browser navigation to public config',200);
   expect(configBody.supportEmail==='support@example.com','public config did not come from the Worker');
 
-  const start=await request('/api/auth/google/start',{headers:{accept:'text/html'}});
+  const start=await request('/api/auth/google/start',{headers:navigationHeaders});
   expect(start.status===302,`Google OAuth start: expected 302, got ${start.status}`);
   const location=start.headers.get('location');
   expect(Boolean(location),'Google OAuth start: missing Location header');
@@ -114,16 +137,16 @@ try{
   expect(google.origin==='https://accounts.google.com','Google OAuth start did not redirect to Google');
   expect(google.searchParams.get('redirect_uri')===`${origin}/api/auth/google/callback`,'Google OAuth callback URI was not generated from APP_URL');
 
-  const callback=await request('/api/auth/google/callback',{headers:{accept:'text/html'}});
+  const callback=await request('/api/auth/google/callback',{headers:navigationHeaders});
   await expectJson(callback,'browser navigation to OAuth callback',400);
 
   const me=await request('/api/me',{headers:{accept:'*/*'}});
   await expectJson(me,'unauthenticated /api/me',401);
 
-  const unknownApi=await request('/api/auth/not-a-route',{headers:{accept:'text/html'}});
+  const unknownApi=await request('/api/auth/not-a-route',{headers:navigationHeaders});
   await expectJson(unknownApi,'unknown API navigation',404);
 
-  const login=await request('/login',{headers:{accept:'text/html'}});
+  const login=await request('/login',{headers:navigationHeaders});
   expect(login.status===200,`SPA /login: expected 200, got ${login.status}`);
   expect((login.headers.get('content-type')||'').includes('text/html'),'SPA /login did not return HTML');
 
