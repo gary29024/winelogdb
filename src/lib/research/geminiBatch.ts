@@ -1,4 +1,5 @@
 import { postGeminiGenerateContent,type GeminiTransportBindings } from '../../../worker/geminiTransport';
+import { AI_MODELS } from '../ai/policy';
 
 export type GeminiBatchRequest={key:string;request:Record<string,unknown>};
 export type GeminiInlineResponse={
@@ -22,7 +23,7 @@ type StoredVertexBatch={id:string;model:string;display_name:string;requests_json
 type FetchOptions={execute?:boolean};
 
 const BATCH_TERMINAL_STATES=new Set(['JOB_STATE_SUCCEEDED','JOB_STATE_FAILED','JOB_STATE_CANCELLED','JOB_STATE_EXPIRED']);
-const PRIMARY_MODEL='gemini-3.8-flash';
+const PRIMARY_MODEL=AI_MODELS.groundedResearchPrimary;
 const EMULATED_PREFIX='vertex-batches/';
 const EMULATED_TTL_MS=48*60*60*1000;
 const RUNNING_STALE_MS=12*60*1000;
@@ -257,7 +258,7 @@ async function executeStoredVertexBatch(env:GatewayRuntimeEnv,name:string,row:St
  */
 export async function createGeminiBatch(apiKey:string|undefined,model:string,displayName:string,entries:GeminiBatchRequest[]){
   if(!entries.length)throw new Error('Gemini Batch requires at least one request');
-  if(consumePrimaryBypass(model,displayName))throw new Error('Gemini 3.8 Batch bypassed because the primary research model is temporarily in cooldown');
+  if(consumePrimaryBypass(model,displayName))throw new Error(`${PRIMARY_MODEL} Batch bypassed because the primary research model is temporarily in cooldown`);
   const runtime=gatewayRuntime(apiKey);
   if(runtime){
     const id=crypto.randomUUID(),stamp=now(),expiresAt=new Date(Date.now()+EMULATED_TTL_MS).toISOString();

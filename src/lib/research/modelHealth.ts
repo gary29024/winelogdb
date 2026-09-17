@@ -1,4 +1,6 @@
-const PRIMARY_MODEL='gemini-3.8-flash';
+import { AI_MODELS } from '../ai/policy';
+
+const PRIMARY_MODEL=AI_MODELS.groundedResearchPrimary;
 const PRIMARY_COOLDOWN_MS=15*60*1000;
 
 const nowIso=()=>new Date().toISOString();

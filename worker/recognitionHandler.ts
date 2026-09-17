@@ -76,7 +76,7 @@ async function tryEscalatedRecognition(
     const payload=await response.json() as GeminiResponse;
     meter.capture(RECOGNITION_ESCALATION_MODEL,payload.usageMetadata);
     const candidate=payload.candidates?.[0],text=candidate?.content?.parts?.map(part=>part.text??'').join('')??'';
-    if(!text)throw new Error('Gemini 3.7 returned no recognition result');
+    if(!text)throw new Error(`${RECOGNITION_ESCALATION_MODEL} returned no recognition result`);
     const escalated=parseRecognition(text),result=preferEscalatedRecognition(primary,escalated),used=result===escalated;
     console.log(JSON.stringify({event:'recognition-escalation-complete',requestId,model:RECOGNITION_ESCALATION_MODEL,provider,reasons,used,schemaFallback,primaryConfidence:primary.confidence,escalatedConfidence:escalated.confidence,latencyMs:Date.now()-startedAt,finishReason:candidate?.finishReason??null,promptTokens:payload.usageMetadata?.promptTokenCount??null,outputTokens:payload.usageMetadata?.candidatesTokenCount??null,thinkingTokens:payload.usageMetadata?.thoughtsTokenCount??null,totalTokens:payload.usageMetadata?.totalTokenCount??null}));
     return {result,used};

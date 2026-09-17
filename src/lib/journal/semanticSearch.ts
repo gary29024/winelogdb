@@ -1,3 +1,4 @@
+import { AI_MODELS } from '../ai/policy';
 import { recordAiUsage,type AiUsageEnv } from '../usage/aiUsage';
 export { shouldUseSemanticQuery } from './semanticQuery';
 
@@ -23,8 +24,8 @@ type SemanticQueryCacheRow={result_ids_json:string;max_results:number};
 export type SemanticVectorCandidate={id:string;vector:ArrayLike<number>};
 type MeterContext={owner:string;runId:string;targetId:'journal-query'|'journal-index'};
 
-const WORKERS_MODEL='@cf/qwen/qwen3-embedding-0.6b';
-const GEMINI_MODEL='gemini-embedding-001';
+const WORKERS_MODEL=AI_MODELS.semanticWorkers;
+const GEMINI_MODEL=AI_MODELS.semanticGemini;
 const WORKERS_DIMENSIONS=1024;
 const GEMINI_DIMENSIONS=768;
 const WARM_SLICE=64;

@@ -1,3 +1,4 @@
+import { AI_MODELS } from '../ai/policy';
 import { crawlOfficialRange as crawl,officialRangePrompt as prompt,safeHttps,host,sameOfficialSite,sourceArray,normalizeDirectRangeResult,profileFreshForDirectRange } from './catalogDirectResearch';
 import { saveResearchedCatalog,syncMissingCandidates,type CatalogRangeWine } from './catalogRangeOverlay';
 import { recordAiUsage,type AiUsageEnv } from '../usage/aiUsage';
@@ -7,7 +8,7 @@ type Env=AiUsageEnv&ProducerRangeWorkersAiBindings;
 type DirectResult={rangeComplete?:unknown;coverageNote?:unknown;range?:unknown};
 type ProducerRow={canonical_name:string;profile:string;home_country:string;profile_researched_at:string|null;official_website_url:string|null;catalog_researched_json:string;catalog_sources_json:string;sources_json:string};
 
-const MODEL='@cf/qwen/qwen3-30b-a3b-fp8';
+const MODEL=AI_MODELS.producerRangeWorkers;
 const MODEL_TIMEOUT_MS=75_000;
 const parse=<T>(value:unknown,fallback:T):T=>{try{return JSON.parse(String(value)) as T}catch{return fallback}};
 const now=()=>new Date().toISOString();

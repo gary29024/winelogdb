@@ -1,3 +1,4 @@
+import { AI_MODELS } from '../src/lib/ai/policy';
 import { geminiCallTokens,recordAiUsage,type AnalyticsSink } from '../src/lib/usage/aiUsage';
 import { askableVintage,readVintageWindow,vintageCell,vintageQualitySchema,vintageWindowSchema,writeVintageWindow,type VintageCell,type VintageSubject } from '../src/lib/maturity/vintageWindow';
 import { maturityFor } from '../src/lib/maturity/ageing';
@@ -10,8 +11,8 @@ export type VintageWindowBindings=GeminiTransportBindings&{DB:D1Database;AI_USAG
 /** Start with the cheaper model and escalate only when its window or grounding
  * is unusable. Both attempts are metered under one run: rejected answers still
  * consume tokens and searches. Malformed optional quality alone must not escalate. */
-const MODEL='gemini-3.1-flash-lite';
-const ESCALATION_MODEL='gemini-3.8-flash';
+const MODEL=AI_MODELS.vintagePrimary;
+const ESCALATION_MODEL=AI_MODELS.vintageEscalation;
 const TIMEOUT_MS=30_000;
 const ESCALATION_TIMEOUT_MS=45_000;
 /** Thinking tokens share the output cap. Too little room can truncate otherwise
