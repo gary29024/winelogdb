@@ -47,9 +47,9 @@ export default {
     const original=new Request(new URL(target,env.APP_URL),request),quoted=await quote(original,env,member);
     if(member.role==='member'&&quoted.units.length){
      const action=memberActionForRequest(original);if(!action)throw new ApiError(503,'This AI action has no member access policy');
-     const access=await memberAiActionAccess(env.DB,member.id,action),continuation=action==='scan_sheet'&&quoted.units.every(unit=>Boolean(unit.parentOperationId));
-     if(!continuation&&access.accessMode==='allowance'&&!access.remaining)throw new ApiError(429,allowanceMessage(access.label,access.resetsAt));
-     return json({...quoted,access:continuation?'continuation':access.accessMode==='included'?'included':'action_allowance',actionAccess:access});
+     const access=await memberAiActionAccess(env.DB,member.id,action);
+     if(access.accessMode==='allowance'&&!access.remaining)throw new ApiError(429,allowanceMessage(access.label,access.resetsAt));
+     return json({...quoted,access:access.accessMode==='included'?'included':'action_allowance',actionAccess:access});
     }
     return json({...quoted,access:member.role==='owner'?'owner':'reused'});
    }
@@ -133,10 +133,10 @@ export default {
     const wrapped={id:message.id,timestamp:message.timestamp,body:message.body,attempts:message.attempts,ack:()=>message.ack(),retry:(options?:QueueRetryOptions)=>{retried=true;message.retry(options)}};
     await legacy.queue({queue:batch.queue,metadata:batch.metadata,messages:[wrapped],ackAll:()=>message.ack(),retryAll:(options?:QueueRetryOptions)=>{retried=true;message.retry(options)}},scoped);
     if(op)await reconcileOperation(env.DB,op);
-   }catch(error){retried=true;message.retry();console.error(JSON.stringify({event:'multi_user_queue_failed',id,error:String(error)))}
+   }catch(error){retried=true;message.retry();console.error(JSON.stringify({event:'multi_user_queue_failed',id,error:String(error)}))}
    finally{await finishDelivery(env.DB,id,retried)}
   }
   await flushOutbox(env.DB,env.RESEARCH_QUEUE);
  },
- async scheduled(_event:ScheduledController,env:MultiUserEnv){await maintainJobs(env.DB,env.RESEARCH_QUEUE,env.WINE_IMAGES);await recoverRollouts(env);await env.DB.prepare("INSERT INTO rollout_state(name,value) VALUES('last_maintenance',?) ON CONFLICT(name) DO UPDATE SET value=excluded.value').bind(stamp()).run()}
+ async scheduled(_event:ScheduledController,env:MultiUserEnv){await maintainJobs(env.DB,env.RESEARCH_QUEUE,env.WINE_IMAGES);await recoverRollouts(env);await env.DB.prepare("INSERT INTO rollout_state(name,value) VALUES('last_maintenance',?) ON CONFLICT(name) DO UPDATE SET value=excluded.value").bind(stamp()).run()}
 };
