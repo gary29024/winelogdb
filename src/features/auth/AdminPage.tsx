@@ -15,10 +15,11 @@ const utcBudgetWindow=()=>{const now=new Date(),current=now.toISOString().slice(
 export function AdminPage(){
  const [data,setData]=useState<Overview|null>(null),[config,setConfig]=useState<Record<string,unknown>>(defaults),[message,setMessage]=useState(''),[busy,setBusy]=useState(false),[rolloutStatus,setRolloutStatus]=useState<RolloutStatus|null>(null);
  const [userId,setUserId]=useState(''),[credits,setCredits]=useState(1),[action,setAction]=useState('scan_single'),[email,setEmail]=useState('');
+ const rolloutRunning=rolloutStatus?.storage.state==='running'||rolloutStatus?.research.state==='running';
  async function load(){const [next,rollout]=await Promise.all([apiJson<Overview>('/api/admin/overview'),apiJson<RolloutStatus>('/api/admin/rollout/status')]);setData(next);setRolloutStatus(rollout);if(next.settings)setConfig(next.settings)}
  useEffect(()=>{void load().catch(e=>setMessage(e.message))},[]);
  useEffect(()=>{if(!data||window.location.hash!=='#member-usage')return;const frame=window.requestAnimationFrame(()=>document.getElementById('member-usage')?.scrollIntoView({block:'start'}));return()=>window.cancelAnimationFrame(frame)},[data]);
- useEffect(()=>{if(!rolloutStatus||![rolloutStatus.storage.state,rolloutStatus.research.state].includes('running'))return;const timer=window.setInterval(()=>{void apiJson<RolloutStatus>('/api/admin/rollout/status').then(setRolloutStatus).catch(()=>undefined)},5000);return()=>window.clearInterval(timer)},[rolloutStatus?.storage.state,rolloutStatus?.research.state]);
+ useEffect(()=>{if(!rolloutRunning)return;const timer=window.setInterval(()=>{void apiJson<RolloutStatus>('/api/admin/rollout/status').then(setRolloutStatus).catch(()=>undefined)},5000);return()=>window.clearInterval(timer)},[rolloutRunning]);
  async function run(fn:()=>Promise<unknown>){setBusy(true);setMessage('');try{const result=await fn();setMessage(typeof result==='string'?result:'Saved');await load()}catch(e){setMessage((e as Error).message)}finally{setBusy(false)}}
  async function startRollout(kind:'storage'|'research'){
   const result=await apiJson<{accepted:boolean;alreadyComplete?:boolean;status:RolloutStatus}>(`/api/admin/rollout/${kind}`,'POST',{});setRolloutStatus(result.status);
