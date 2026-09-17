@@ -148,17 +148,19 @@ If the current WineLog deployment is working, these should already exist. Do not
 
 ---
 
-# Part C — Backup immediately before merging
+# Part C — Recovery point immediately before merging
 
-Before merging PR #224, create a fresh D1 backup. If you are comfortable with one copy-and-paste command, run this from the repository:
+Modern Cloudflare D1 uses **Time Travel**, and it is always on. You do not need to create a manual snapshot just to have a rollback point. Immediately before merging, write down the current date and time; if a migration goes wrong, D1 can be restored to a point before the merge. Cloudflare's current retention is 7 days on the Workers Free plan and 30 days on the Paid plan.
+
+For extra protection, an independent SQL export is still useful. If you are comfortable with one copy-and-paste command, run this from the repository:
 
 ```powershell
 npx wrangler d1 export DB --remote --output=winelog-before-multi-user.sql
 ```
 
-Also confirm your R2 images are still present. Do not delete or recreate the existing bucket.
+Also confirm your R2 images are still present. D1 Time Travel does **not** restore R2 objects, so do not delete or recreate the existing R2 bucket during this rollout.
 
-If you are not comfortable running the backup command, use the Cloudflare dashboard's D1 backup/export controls before merging. The important point is to have a recoverable copy of the pre-migration database.
+If you do not want to use a command line, recording the pre-merge time plus D1 Time Travel is enough for the database rollback path; the SQL export is an additional independent copy, not a prerequisite to understand or operate the new login.
 
 ---
 
@@ -284,6 +286,6 @@ Do not merge until all of these are true:
 - [ ] Cloudflare production branch is `main`.
 - [ ] Build command is `npm run build`.
 - [ ] Deploy command is `npm run db:migrate && npx wrangler deploy`.
-- [ ] I have a fresh D1 backup.
+- [ ] I have noted the pre-merge time for D1 Time Travel; an SQL export is optional extra protection.
 
 If every box is checked, PR #224 is designed to deploy into a sign-in-ready state rather than requiring a second code change after merge.
