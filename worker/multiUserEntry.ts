@@ -76,7 +76,7 @@ export default {
      if(path==='/api/maturity/vintage'){const window=await readVintageWindow(env.DB,member.id,await request.clone().json() as VintageSubject,true);if(window){await settle(env.DB,operation,0,{body:{cached:true},status:200});return json({cached:true,window,creditOperationId:operation.id})}}
      if(cachedProducer||path==='/api/maturity/vintage'){await settle(env.DB,operation,0);throw new ApiError(409,'Research access changed; request a new quote')}
     }
-    const executionEnv={...scoped,CREDIT_CONTEXT:{db:env.DB,operationId:operation.id,namespace:'http'},CREDIT_PRODUCER_IDS:operationUnits.flatMap(u=>u.action==='producer_research'?[u.targetId]:[]),CREDIT_RESEARCH_SCOPES:operationUnits.flatMap(u=>u.scope?[u.scope]:[]),RESEARCH_QUEUE:durableQueue(env.RESEARCH_QUEUE,env.DB,operation.id)};
+    const executionEnv={...scoped,CREDIT_CONTEXT:{db:env.DB,operationId:operation.id,namespace:'http'},CREDIT_PRODUCER_IDS:operationUnits.flatMap(u=>u.action==='producer_research'&&u.targetId?[u.targetId]:[]),CREDIT_RESEARCH_SCOPES:operationUnits.flatMap(u=>u.scope?[u.scope]:[]),RESEARCH_QUEUE:durableQueue(env.RESEARCH_QUEUE,env.DB,operation.id)};
     try{
      const started=await env.DB.prepare("UPDATE credit_operations SET status='running',updated_at=? WHERE id=? AND status='reserved'").bind(stamp(),operation.id).run();
      if(!started.meta.changes)throw new ApiError(409,'Reservation is no longer available');
