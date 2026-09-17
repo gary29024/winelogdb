@@ -5,19 +5,22 @@ import { apiJson } from '../../lib/auth/api';
 
 type Friend={id:string;display_name:string};
 type Requests={incoming:Friend[];outgoing:Friend[]};
+type UsageKind={kind:string;label:string;runs:number;requests:number;units:number;unit:'run'|'wine'};
+type UsageSummary={days:number;kinds:UsageKind[];empty:boolean};
 export function AccountPage(){
  const [friends,setFriends]=useState<Friend[]>([]),[wallet,setWallet]=useState({balance:0,reserved:0,available:0});
  const [requests,setRequests]=useState<Requests>({incoming:[],outgoing:[]});
+ const [usage,setUsage]=useState<UsageSummary>({days:30,kinds:[],empty:true});
  const [ownCode,setOwnCode]=useState(''),[code,setCode]=useState('');
  const [busy,setBusy]=useState(false),[error,setError]=useState(''),[notice,setNotice]=useState('');
  const [history,setHistory]=useState<Array<{id:string;kind:string;amount:number;reason:string}>>([]);
  const load=useCallback(async()=>{
-  const [f,w,h,c,r]=await Promise.all([
+  const [f,w,h,c,r,u]=await Promise.all([
    apiJson<{items:Friend[]}>('/api/friends'),apiJson<typeof wallet>('/api/credits'),
    apiJson<{items:typeof history}>('/api/credits/history'),apiJson<{code:string}>('/api/friends/code'),
-   apiJson<Requests>('/api/friends/requests')
+   apiJson<Requests>('/api/friends/requests'),apiJson<UsageSummary>('/api/usage/spend')
   ]);
-  setFriends(f.items);setWallet(w);setHistory(h.items);setOwnCode(c.code);setRequests(r);
+  setFriends(f.items);setWallet(w);setHistory(h.items);setOwnCode(c.code);setRequests(r);setUsage(u);
  },[]);
  useEffect(()=>{
   const refresh=()=>void load().catch(e=>setError(e.message));refresh();
@@ -27,11 +30,14 @@ export function AccountPage(){
   setBusy(true);setError('');setNotice('');
   try{await fn();await load();setNotice(message)}catch(e){setError((e as Error).message)}finally{setBusy(false)}
  }
+ const account=getAccount(),smart=usage.kinds.find(item=>item.kind==='search_embedding'),requests=usage.kinds.reduce((sum,item)=>sum+item.requests,0),runs=usage.kinds.reduce((sum,item)=>sum+item.runs,0);
  return <section className="account-page">
-  <h1>Account & friends</h1><p>{getAccount()?.display_name}</p>
+  <h1>Account & friends</h1><p>{account?.display_name}</p>
   <p><strong>{wallet.available} credits available</strong> · {wallet.reserved} reserved</p>
-  <Link to="/shared">Shared with me</Link>
-  {getAccount()?.role==='owner'&&<p><Link to="/admin">Owner controls</Link></p>}
+  <nav className="account-shortcuts" aria-label="Account shortcuts"><Link to="/shared">Shared with me</Link>{account?.role==='owner'&&<><Link to="/admin">Owner controls</Link><Link to="/admin#member-usage">Member usage</Link></>}</nav>
+  <section className="personal-usage" aria-labelledby="your-usage-title"><h2 id="your-usage-title">Your usage</h2><p>Last {usage.days} days. WineLog credits and provider activity are tracked separately.</p>
+   {usage.empty?<p>No AI usage recorded yet.</p>:<dl><div><dt>AI runs</dt><dd>{runs}</dd></div><div><dt>Provider requests</dt><dd>{requests}</dd></div><div><dt>Smart Search</dt><dd>{smart?.requests??0} requests</dd></div><div><dt>Wines embedded</dt><dd>{smart?.units??0}</dd></div></dl>}
+  </section>
   {error&&<p role="alert">{error}</p>}{notice&&<p role="status">{notice}</p>}
   <h2>Friends</h2>
   <p>Accepted friends can reuse each other’s factual research. Personal wines are shared separately.</p>
