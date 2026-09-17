@@ -4,7 +4,7 @@ import { durableProvider,type ProviderAuthorization } from '../credits/provider'
 export { shouldUseSemanticQuery } from './semanticQuery';
 
 export type SemanticEmbeddingBindings={
-  /** Who is paying, so an embedding run cannot be an unmetered provider call. */
+  /** Multi-user requests carry this, but Smart Search embeddings are deliberately zero-credit. */
   CREDIT_CONTEXT?:ProviderAuthorization;
   AI?:Ai;
   GEMINI_API_KEY?:string;
@@ -27,6 +27,10 @@ type SemanticQueryCacheRow={result_ids_json:string;max_results:number};
 export type SemanticVectorCandidate={id:string;vector:ArrayLike<number>};
 type MeterContext={owner:string;runId:string;targetId:'journal-query'|'journal-index'};
 
+// Embeddings are cheap enough that they do not consume user credits. They are
+// still recorded in ai_usage_events/monthly below, per account and model, so the
+// owner can see request and indexed-wine volume and change this policy later.
+const EMBEDDING_CREDIT_EXEMPTION={exempt:true,reason:'search_embedding'} as const;
 const WORKERS_MODEL=AI_MODELS.semanticWorkers;
 const GEMINI_MODEL=AI_MODELS.semanticGemini;
 const WORKERS_DIMENSIONS=1024;
@@ -111,6 +115,9 @@ async function embedTexts(env:SemanticEnv,config:EmbeddingConfig,texts:string[],
     if(config.provider==='workers-ai'){
       if(!env.AI)throw new Error('Workers AI binding is unavailable');
       attempted=true;
+      // Workers AI has no Response wrapper to pass through durableProvider. This
+      // is the one deliberate zero-credit AI.run path and is pinned by the
+      // structural test; usage is recorded in the finally block below.
       const result=await (env.AI.run as (model:string,input:unknown)=>Promise<unknown>)(config.model,{text:texts});
       vectors=extractWorkersVectors(result);
     }else{
@@ -121,7 +128,10 @@ async function embedTexts(env:SemanticEnv,config:EmbeddingConfig,texts:string[],
       }));
       attempted=true;
       const payload=JSON.stringify({requests});
-      const response=await durableProvider(env.CREDIT_CONTEXT,`embeddings:${config.model}:${kind}:${payload}`,()=>
+      // Gemini embeddings follow the same zero-credit policy as Workers AI.
+      // durableProvider is retained as the provider chokepoint, with an explicit
+      // exemption rather than inheriting a member's denied/unpriced context.
+      const response=await durableProvider(EMBEDDING_CREDIT_EXEMPTION,`embeddings:${config.model}:${kind}:${payload}`,()=>
         fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(config.model)}:batchEmbedContents`,{
           method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':config.geminiKey??''},body:payload
         }));
@@ -135,10 +145,10 @@ async function embedTexts(env:SemanticEnv,config:EmbeddingConfig,texts:string[],
       return normalized(vector);
     });
   }finally{
-    // Rejected or malformed AI answers can still consume quota. Meter every
-    // provider attempt, not only responses that pass our validation. The ledger
-    // unit for Smart search is an indexed wine, so query embeddings count as a
-    // request but deliberately add zero wine units.
+    // Rejected or malformed AI answers can still consume provider quota. Track
+    // every attempt even though embeddings consume zero WineLog credits. The
+    // usage unit for Smart Search is an indexed wine, so query embeddings count
+    // as a request but deliberately add zero wine units.
     if(attempted)await recordAiUsage(env,meter.owner,{kind:'search_embedding',runId:meter.runId,targetId:meter.targetId,model:config.model,requests:1,units:kind==='document'?texts.length:0});
   }
 }
