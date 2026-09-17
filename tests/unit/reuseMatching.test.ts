@@ -46,27 +46,31 @@ describe('what reuse refuses, and why',()=>{
 
 describe('matching the same producer under two names',()=>{
   const seed=(sql:ReturnType<typeof realD1>['sql'])=>{
-    sql.exec("INSERT INTO app_users(id,email,display_name,role) VALUES('alice','a@e.com','alice','member') ON CONFLICT(id) DO NOTHING");
+    for(const id of ['alice','bob'])
+      sql.exec(`INSERT INTO app_users(id,email,display_name,role) VALUES('${id}','${id}@e.com','${id}','member') ON CONFLICT(id) DO NOTHING`);
   };
 
   it('returns the name as given when nothing has been confirmed',async()=>{
     const {sql,db,close}=realD1();
-    try{seed(sql);expect(await producerNameVariants(db,'Château Margaux')).toEqual(['chateau margaux'])}finally{close()}
+    try{seed(sql);expect(await producerNameVariants(db,'alice','Château Margaux')).toEqual(['chateau margaux'])}finally{close()}
   });
 
-  it('links two spellings once somebody confirms them',async()=>{
+  it('links two spellings only for the owner who confirmed them',async()=>{
     const {sql,db,close}=realD1();
     try{
       seed(sql);
       await rememberProducerAlias(db,'alice','Ch. Margaux','Château Margaux');
-      expect(await producerNameVariants(db,'Ch. Margaux')).toEqual(['ch margaux','chateau margaux']);
-      // The bridge reads both ways: the canonical name finds the alias too.
-      expect(await producerNameVariants(db,'Château Margaux')).toEqual(['chateau margaux','ch margaux']);
+      expect(await producerNameVariants(db,'alice','Ch. Margaux')).toEqual(['ch margaux','chateau margaux']);
+      // The bridge reads both ways for Alice.
+      expect(await producerNameVariants(db,'alice','Château Margaux')).toEqual(['chateau margaux','ch margaux']);
+      // Bob must not inherit Alice's manual correction.
+      expect(await producerNameVariants(db,'bob','Ch. Margaux')).toEqual(['ch margaux']);
+      expect(await producerNameVariants(db,'bob','Château Margaux')).toEqual(['chateau margaux']);
     }finally{close()}
   });
 
-  // A merge is the strongest signal the app has: a person saying these are one.
-  it('records a merge so every account can reuse across the two names',async()=>{
+  // A merge is a strong signal, but it remains the judgement of one account.
+  it('records a merge for that owner without publishing it to other accounts',async()=>{
     const {sql,db,close}=realD1();
     try{
       seed(sql);
@@ -74,7 +78,8 @@ describe('matching the same producer under two names',()=>{
       for(const [id,name,key] of [['p1','Domaine Dujac','domaine dujac'],['p2','Dujac','dujac']])
         sql.prepare('INSERT INTO producers(id,owner_id,canonical_name,match_key,created_at,updated_at) VALUES(?,?,?,?,?,?)').run(id,'alice',name,key,now,now);
       await mergeProducerEntities(db,'alice','p1','p2');
-      expect(await producerNameVariants(db,'Dujac')).toContain('domaine dujac');
+      expect(await producerNameVariants(db,'alice','Dujac')).toContain('domaine dujac');
+      expect(await producerNameVariants(db,'bob','Dujac')).toEqual(['dujac']);
     }finally{close()}
   });
 });
