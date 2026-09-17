@@ -1,5 +1,5 @@
 import { describe,expect,it } from 'vitest';
-import { MAX_STORY_WINES,STORY_HEIGHT,STORY_WIDTH,collageColumns,collageLayout,pickStoryWines,starMark } from '../../src/features/share/storyCollage';
+import { MAX_STORY_WINES,STORY_HEIGHT,STORY_WIDTH,collageColumns,collageLayout,pickStoryWines,starMark,storyHeaderHeight,storyTitleLayout } from '../../src/features/share/storyCollage';
 
 const counts=Array.from({length:MAX_STORY_WINES},(_,index)=>index+1);
 const overlaps=(a:{x:number;y:number;width:number;height:number},b:typeof a)=>
@@ -140,5 +140,62 @@ describe('choosing which wines go on a card',()=>{
 
   it('does not drop a wine to make room for a favourite that is already on',()=>{
     expect(pickStoryWines(lineup(16,[15]))).toHaveLength(16);
+  });
+});
+
+describe('story grids with optional headers',()=>{
+  it.each([
+    {title:true,subtitle:true},
+    {title:true,subtitle:false},
+    {title:false,subtitle:true},
+    {title:false,subtitle:false}
+  ])('fits all wine counts with header %j',header=>{
+    for(const count of counts){
+      const {cells}=collageLayout(count,header);
+      const original=collageLayout(count).cells[0];
+      expect(cells).toHaveLength(count);
+      expect(cells[0].width*cells[0].height).toBeGreaterThanOrEqual(original.width*original.height-0.001);
+      for(const cell of cells){
+        expect(cell.y).toBeGreaterThanOrEqual(storyHeaderHeight(header)-0.001);
+        expect(cell.y+cell.height).toBeLessThanOrEqual(STORY_HEIGHT-96+0.001);
+        expect(cell.x).toBeGreaterThanOrEqual(56-0.001);
+        expect(cell.x+cell.width).toBeLessThanOrEqual(STORY_WIDTH-56+0.001);
+        expect(cell.height/cell.width).toBeGreaterThanOrEqual(1.2-0.001);
+        expect(cell.height/cell.width).toBeLessThanOrEqual(1.7+0.001);
+      }
+      for(let a=0;a<cells.length;a++)for(let b=a+1;b<cells.length;b++)
+        expect(overlaps(cells[a],cells[b])).toBe(false);
+    }
+  });
+
+  it('expands the grid into the room freed by each hidden header line',()=>{
+    const full=collageLayout(6).cells[0];
+    const one=collageLayout(6,{title:true,subtitle:false}).cells[0];
+    const none=collageLayout(6,{title:false,subtitle:false}).cells[0];
+    expect(one.y).toBeLessThan(full.y);
+    expect(none.y).toBeLessThan(one.y);
+    expect(one.height).toBeGreaterThan(full.height);
+    expect(none.height).toBeGreaterThan(one.height);
+  });
+});
+
+describe('complete story titles',()=>{
+  const measure=(text:string,size:number)=>Array.from(text).length*size*.6;
+  it.each(['Vinosophy Walkaround Tasting September 2026','勃艮第葡萄酒品酒會與朋友分享美好時光','A'.repeat(180)])('wraps without dropping text: %s',name=>{
+    const title=storyTitleLayout(name,measure);
+    expect(title.lines.join('').replace(/ /g,'')).toBe(name.replace(/ /g,''));
+    expect(title.lines.length).toBeLessThanOrEqual(3);
+    for(const line of title.lines)expect(measure(line,title.fontSize)).toBeLessThanOrEqual(STORY_WIDTH-140);
+    for(const count of counts){
+      const header={title:true,subtitle:true,titleHeight:title.height};
+      for(const cell of collageLayout(count,header).cells){
+        expect(cell.y).toBeGreaterThanOrEqual(storyHeaderHeight(header)-.001);
+        expect(cell.y+cell.height).toBeLessThanOrEqual(STORY_HEIGHT-96+.001);
+      }
+    }
+  });
+  it('preserves the original height for a short title and removes blank titles',()=>{
+    expect(storyTitleLayout('Evening',measure)).toMatchObject({lines:['Evening'],fontSize:72,height:70});
+    expect(storyTitleLayout('   ',measure)).toMatchObject({lines:[],height:0});
   });
 });

@@ -47,11 +47,23 @@ async function loadPhoto(imageId:string):Promise<LoadedPhoto>{
  * card and putting it back does not fetch its bottle a second time: the preview
  * redraws on every change of mind.
  */
+const pendingPhotos=new WeakMap<Map<string,LoadedPhoto>,Map<string,Promise<LoadedPhoto>>>();
 export async function loadStoryPhotos(card:StoryCard,cache=new Map<string,LoadedPhoto>()){
+  let pending=pendingPhotos.get(cache);
+  if(!pending){pending=new Map();pendingPhotos.set(cache,pending)}
   const ids=[...new Set(card.wines.map(wine=>wine.imageId).filter((id):id is string=>Boolean(id)))]
-    .filter(id=>!cache.has(id));
-  const loaded=await Promise.all(ids.map(async id=>[id,await loadPhoto(id)] as const));
-  for(const [id,photo] of loaded)cache.set(id,photo);
+    .filter(id=>!cache.get(id));
+  await Promise.all(ids.map(id=>{
+    let request=pending.get(id);
+    if(!request){
+      request=loadPhoto(id).then(photo=>{
+        if(photo)cache.set(id,photo);
+        return photo;
+      }).finally(()=>pending.delete(id));
+      pending.set(id,request);
+    }
+    return request;
+  }));
   return cache;
 }
 

@@ -1,3 +1,4 @@
+import { queueVintageResearch,readActiveVintageResearch,readVintageResearch,type VintageResearchMessage } from './vintageResearchJobs';
 import { Hono,type Context } from 'hono';
 import entryApp from './entry';
 import { requireSession } from '../src/lib/auth/session';
@@ -11,7 +12,7 @@ import { ensureProducerCatalogCuveesSeeded } from '../src/lib/cuvees/catalogSeed
 import { changeCuveeCatalogLink,changeCuveeCatalogLinkSchema,createCuveeCatalogLink,createCuveeCatalogLinkSchema,getProducerCuveeCatalogState,unlinkCuveeCatalogLink,unlinkCuveeCatalogLinkSchema } from '../src/lib/cuvees/catalogLinks';
 import { listJournalPage } from '../src/lib/journal/list';
 import { listCellarPage } from '../src/lib/cellar/list';
-import { cachedVintageWindow,researchVintageWindow } from './vintageWindowHandler';
+import { cachedVintageWindow } from './vintageWindowHandler';
 import { askableVintage,type VintageSubject } from '../src/lib/maturity/vintageWindow';
 import { addHolding,deleteHolding,holdingsForWine,readHolding,takeBottleFromHolding,updateHolding } from '../src/lib/cellar/holdings';
 import { cellarInputSchema,cellarPatchSchema } from '../src/lib/cellar/schema';
@@ -27,7 +28,7 @@ import { runVisionRecognition } from './visionRecognition';
 import { measureBottleFrame } from './bottleFrameHandler';
 import { MAX_FRAME_LOOKUP,readBottleFrames } from '../src/lib/images/bottleFrame';
 
-type Bindings={DB:D1Database;WINE_IMAGES:R2Bucket;ASSETS:Fetcher;GEMINI_API_KEY?:string;AUTH_SECRET:string;APP_PASSWORD:string;APP_URL:string;MAX_FILE_BYTES?:string;MAX_BATCH_FILES?:string};
+type Bindings={DB:D1Database;RESEARCH_QUEUE?:Queue<VintageResearchMessage>;WINE_IMAGES:R2Bucket;ASSETS:Fetcher;GEMINI_API_KEY?:string;AUTH_SECRET:string;APP_PASSWORD:string;APP_URL:string;MAX_FILE_BYTES?:string;MAX_BATCH_FILES?:string};
 type AppEnv={Bindings:Bindings};
 const app=new Hono<AppEnv>();
 const IDENTITY_MAINTENANCE_KEY='identity-reconcile-v2';
@@ -100,14 +101,6 @@ app.get('/api/cuvees/resolve',async c=>{
     const cuvee=await resolveExistingCuvee(c.env.DB,owner,producerId,name,appellation,style);
     return cuvee?c.json({matched:true,inputName:name,cuvee}):c.json({matched:false,inputName:name});
   }catch(e){return c.json({error:(e as Error).message||'Could not resolve cuvee'},500)}
-});
-
-app.get('/api/images/:id',async c=>{
-  const response=await entryApp.fetch(c.req.raw,c.env,c.executionCtx);
-  if(!response.ok)return response;
-  const headers=new Headers(response.headers);
-  headers.set('Cache-Control','private, max-age=86400, immutable');
-  return new Response(response.body,{status:response.status,statusText:response.statusText,headers});
 });
 
 /**
@@ -387,8 +380,21 @@ app.get('/api/maturity/vintage',async c=>{
   cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
   const subject=vintageSubject(c.req.query());
   if(!askableVintage(subject))return c.json({window:null});
-  try{return c.json({window:await cachedVintageWindow(c.env,owner,subject)})}
-  catch(e){console.error(JSON.stringify({event:'vintage-window-read-failed',error:(e as Error).message}));return c.json({window:null})}
+  // The job travels with the window so a reopened panel can pick its own
+  // lookup back up instead of offering to pay for a second one.
+  try{
+    const [window,job]=await Promise.all([cachedVintageWindow(c.env,owner,subject),readActiveVintageResearch(c.env.DB,owner,subject)]);
+    return c.json({window,job});
+  }
+  catch(e){console.error(JSON.stringify({event:'vintage-window-read-failed',error:(e as Error).message}));return c.json({error:'Could not load saved vintage research'},503)}
+});
+
+app.get('/api/maturity/vintage/jobs/:id',async c=>{
+  cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
+  try{
+    const job=await readVintageResearch(c.env.DB,owner,c.req.param('id'));
+    return job?c.json({job}):c.json({error:'Vintage research was not found'},404);
+  }catch{return c.json({error:'Could not read vintage research progress'},503)}
 });
 
 app.post('/api/maturity/vintage',async c=>{
@@ -401,11 +407,11 @@ app.post('/api/maturity/vintage',async c=>{
     // second press on the same region and vintage spends nothing.
     const existing=await cachedVintageWindow(c.env,owner,subject);
     if(existing&&body.refresh!==true)return c.json({window:existing,cached:true});
-    const found=await researchVintageWindow(c.env,owner,subject,crypto.randomUUID());
-    return c.json({window:found,cached:false});
+    const job=await queueVintageResearch(c.env,owner,subject);
+    return c.json({job,cached:false},202);
   }catch(e){
     console.error(JSON.stringify({event:'vintage-window-failed',error:(e as Error).message}));
-    return c.json({error:(e as Error).message||'Could not look up that vintage'},502);
+    return c.json({error:(e as Error).message||'Could not queue vintage research'},503);
   }
 });
 

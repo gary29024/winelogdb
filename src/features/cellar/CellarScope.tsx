@@ -4,6 +4,9 @@ import { pourFamily } from '../../lib/wine/pourFamily';
 import { bottleLabel,listCellar,priceLabel,removeHolding,updateHolding,type CellarHolding } from './api';
 import { AddToCellarSheet } from './AddToCellarSheet';
 import { DrinkingWindow } from '../maturity/DrinkingWindow';
+import { VintageResearchDialog } from '../maturity/VintageResearchDialog';
+import { askableVintage } from '../../lib/maturity/vintageWindow';
+import { maturityVerdict } from '../../lib/maturity/ageing';
 
 const PAGE_SIZE=36;
 const SORTS:Array<[string,string]>=[['vintage','Vintage, newest'],['oldestVintage','Vintage, oldest'],['producer','Producer'],['bottles','Most bottles'],['added','Recently added'],['purchased','Recently bought']];
@@ -29,6 +32,7 @@ export function CellarScope(){
   const [loading,setLoading]=useState(true),[error,setError]=useState('');
   const [adding,setAdding]=useState(false),[busyId,setBusyId]=useState('');
   const [editing,setEditing]=useState<CellarHolding|null>(null);
+  const [viewingVintage,setViewingVintage]=useState<CellarHolding|null>(null);
   const [reloadSeq,setReloadSeq]=useState(0);
 
   const offset=Math.max(Number(params.get('offset'))||0,0);
@@ -119,7 +123,14 @@ export function CellarScope(){
           <span className="cellar-state">
             <span className="cellar-bottles">{bottleLabel(holding)}</span>
             {priceLabel(holding)&&<span className="cellar-price">{priceLabel(holding)}</span>}
-            <DrinkingWindow wine={holding} compact researched={holding.vintageWindow??null}/>
+            {askableVintage(holding)
+              ?<button type="button" className="cellar-vintage-trigger" aria-haspopup="dialog"
+                aria-label={`View vintage research for ${holding.producer} ${holding.wineName} ${holding.vintage}`}
+                onClick={()=>setViewingVintage(holding)}>
+                {maturityVerdict(holding)?<DrinkingWindow wine={holding} compact researched={holding.vintageWindow??null}/>:<span>Vintage research</span>}
+                <span aria-hidden="true">›</span>
+              </button>
+              :<DrinkingWindow wine={holding} compact researched={holding.vintageWindow??null}/>}
             {holding.location&&<span className="cellar-location">{holding.location}</span>}
           </span>
         </div>
@@ -151,5 +162,7 @@ export function CellarScope(){
     {editing&&<AddToCellarSheet holding={editing} onClose={()=>setEditing(null)} onAdded={()=>{setEditing(null);setReloadSeq(seq=>seq+1)}}
       onVintageResearched={()=>setReloadSeq(seq=>seq+1)}
       onRemove={async holding=>{const removed=await drop(holding);if(removed)setEditing(null)}}/>}
+    {viewingVintage&&<VintageResearchDialog wine={viewingVintage} initialWindow={viewingVintage.vintageWindow}
+      onClose={()=>setViewingVintage(null)} onResearched={()=>setReloadSeq(seq=>seq+1)}/>}
   </>;
 }

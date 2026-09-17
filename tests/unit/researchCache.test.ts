@@ -1,5 +1,7 @@
 import { describe,expect,it } from 'vitest';
 import { assembleDeepSearch,buildResearchTargets,scopeIsComplete,type CachedResearch,type ResearchScope } from '../../src/lib/research/cache';
+import { deepSearchQualitySchema,deepSearchSchema } from '../../src/lib/db/schema';
+import { isResearchStale } from '../../src/lib/research/freshness';
 
 const byScope=(targets:ReturnType<typeof buildResearchTargets>)=>new Map(targets.map(target=>[target.scope,target]));
 
@@ -35,6 +37,18 @@ describe('layered research identities',()=>{
 });
 
 describe('layered research assembly',()=>{
+  it('keeps older reusable research stale after a recent vintage refresh',()=>{
+    const targets=buildResearchTargets({producer:'Estate',wineName:'Wine',vintage:2021});
+    const cache=new Map<ResearchScope,CachedResearch>();
+    for(const target of targets)cache.set(target.scope,{target,payload:{},sources:[],model:'model',
+      researchedAt:target.scope==='producer'?'2024-01-01T00:00:00.000Z':'2026-09-11T00:00:00.000Z'});
+    const result=deepSearchSchema.parse(assembleDeepSearch(cache,targets));
+    expect(result.researchedAt).toBe('2026-09-11T00:00:00.000Z');
+    expect(result.oldestResearchedAt).toBe('2024-01-01T00:00:00.000Z');
+    expect(isResearchStale(result.oldestResearchedAt,Date.parse(result.researchedAt))).toBe(true);
+    cache.get('producer')!.researchedAt=result.researchedAt;
+    expect(isResearchStale(assembleDeepSearch(cache,targets).oldestResearchedAt,Date.parse(result.researchedAt))).toBe(false);
+  });
   it('assembles one wine report from reusable cache scopes',()=>{
     const targets=buildResearchTargets({producer:'Domaine Dujac',wineName:'Clos de la Roche',vintage:2021,country:'France',region:'Burgundy',appellation:'Clos de la Roche'});
     const payloads:Record<ResearchScope,Record<string,string>>={
@@ -53,5 +67,18 @@ describe('layered research assembly',()=>{
     expect(result.winemakingTechniques).toBe('2021 verified vinification');
     expect(result.drinkingWindow).toBe('2028–2045');
     expect(result.sources).toHaveLength(4);
+    expect(result.quality?.warnings).toEqual([]);
+    expect(result.quality?.scoreNote).toBeTruthy();
+    expect(deepSearchQualitySchema.parse(result.quality).scoreNote).toBe(result.quality?.scoreNote);
+
+    // Provenance can report a dispute independently of the field-level gate.
+    cache.get('wine_vintage')!.provenance={version:1,fields:{winemakingTechniques:{
+      claimCount:1,supportedCount:0,partialCount:0,unsupportedCount:0,uncertaintyCount:0,
+      conflictingCount:1,directSupportRatio:1,claims:[{claim:'Sources disagree on the oak percentage.',
+        supportStatus:'conflicting',sourceTier:'grounded',sources:[]}]
+    }}};
+    const disputed=assembleDeepSearch(cache,targets);
+    expect(disputed.quality?.warnings).toEqual(['cross-source-technical-conflict']);
+    expect(disputed.quality?.scoreNote).toBeUndefined();
   });
 });

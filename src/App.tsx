@@ -37,7 +37,7 @@ function Edit(){
   return()=>{active=false};
  },[id]);
  if(failed)return <p role="alert">Could not load wine.</p>;
- return w?<section><h1>Edit {w.wineName}</h1><WineForm id={id} initial={w}/></section>:<p>Loading wine…</p>;
+ return w&&w.id===id?<section><h1>Edit {w.wineName}</h1><WineForm key={id} id={id} initial={w}/></section>:<p>Loading wine…</p>;
 }
 function RequireSession({children}:{children:ReactNode}){return hasSession()?children:<Navigate to="/login" replace/>}
 function RouteFallback(){return <p className="route-loading" aria-live="polite">Loading…</p>}

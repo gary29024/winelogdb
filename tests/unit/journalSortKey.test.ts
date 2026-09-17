@@ -95,10 +95,10 @@ describe('the Journal sort key, kept on the wine',()=>{
 
     expect(sortKey('quiet'),'a later photograph is not the earliest').toBe('2025-06-01T00:00:00.000Z');
     expect(sortKey('moved'),'an earlier one is').toBe('2025-01-01T00:00:00.000Z');
-    // Two more: the wine row, and the owner revision it bumps - which is right,
-    // because the Journal's order really did change. The quiet case pays
-    // neither, which is the whole point of the guard.
-    expect(moved-quiet).toBe(2);
+    // One more write is the wine row whose Journal order really changed. Photo
+    // chronology is not achievement evidence, so it no longer dirties that cache.
+    // The quiet case pays neither, which is the whole point of the guard.
+    expect(moved-quiet).toBe(1);
   });
 
   it('backfills the wines that were already there',()=>{
@@ -119,21 +119,32 @@ describe('the Journal sort key, kept on the wine',()=>{
   });
 });
 
+type CapturedQuery={sql:string;args:unknown[]};
+/** Enough of D1 to run the real Journal query against real SQLite. */
+const asD1=(real:DatabaseSync,captured:CapturedQuery[]=[] )=>{
+  const statement=(sql:string,args:unknown[]):Record<string,unknown>=>({
+    bind:(...next:unknown[])=>statement(sql,next),
+    all:async()=>{captured.push({sql,args:[...args]});return {results:real.prepare(sql).all(...args as never[]),success:true}},
+    first:async()=>real.prepare(sql).get(...args as never[])??null,
+    run:async()=>({success:true,meta:{changes:Number(real.prepare(sql).run(...args as never[]).changes)}})
+  });
+  return {prepare:(sql:string)=>statement(sql,[]),
+    batch:async(statements:Array<{all:()=>Promise<unknown>}>)=>Promise.all(statements.map(item=>item.all()))} as unknown as D1Database;
+};
+
 describe('what the Journal page actually costs',()=>{
   const plan=(sql:string)=>db.prepare(`EXPLAIN QUERY PLAN ${sql}`).all().map(row=>String(row.detail)).join(' | ');
-  const page=(order:string)=>`SELECT w.id,${STORED} AS photo_sort_at,
-    (SELECT wi.id FROM wine_images wi WHERE wi.owner_id=w.owner_id AND wi.wine_id=w.id ORDER BY wi.rowid ASC LIMIT 1) AS image_id
-    FROM wines w WHERE w.owner_id='owner' ORDER BY ${order} LIMIT 36 OFFSET 0`;
-  const NEWEST='coalesce(w.tasting_date,w.created_at) DESC, '+STORED+' DESC, w.created_at DESC, w.id DESC';
-  const OLDEST='coalesce(w.tasting_date,w.created_at) ASC, '+STORED+' ASC, w.created_at ASC, w.id ASC';
 
-  it('walks the index instead of sorting the whole library',()=>{
-    // The measurement that started this: with the subquery in the ORDER BY the
-    // plan said USE TEMP B-TREE FOR ORDER BY, so all three per-row subqueries
-    // ran for every wine an owner has before the LIMIT applied.
-    for(const order of [NEWEST,OLDEST]){
-      expect(plan(page(order))).toContain('idx_wines_owner_journal_order');
-      expect(plan(page(order)),'no sort of the candidate set').not.toContain('TEMP B-TREE FOR ORDER BY');
+  it('the real newest and oldest page queries walk the index instead of sorting the whole library',async()=>{
+    for(const sort of ['newest','oldest'] as const){
+      const captured:CapturedQuery[]=[];
+      await listJournalPage(asD1(db,captured),'owner',{sort,limit:'36'});
+      const page=captured.find(item=>item.sql.includes('SELECT w.id,w.producer,w.wine_name'));
+      expect(page,`${sort} page query was captured`).toBeDefined();
+      const rows=db.prepare(`EXPLAIN QUERY PLAN ${page!.sql}`).all(...page!.args as never[]);
+      const root=rows.filter(row=>Number(row.parent)===0).map(row=>String(row.detail)).join(' | ');
+      expect(root).toContain('idx_wines_owner_journal_order');
+      expect(root,'the main page must not sort the full candidate set').not.toContain('TEMP B-TREE FOR ORDER BY');
     }
   });
 
@@ -146,18 +157,6 @@ describe('what the Journal page actually costs',()=>{
     expect(sorted).not.toContain('TEMP B-TREE FOR ORDER BY');
   });
 });
-
-/** Enough of D1 to run the real Journal query against real SQLite. */
-const asD1=(real:DatabaseSync)=>{
-  const statement=(sql:string,args:unknown[]):Record<string,unknown>=>({
-    bind:(...next:unknown[])=>statement(sql,next),
-    all:async()=>({results:real.prepare(sql).all(...args as never[]),success:true}),
-    first:async()=>real.prepare(sql).get(...args as never[])??null,
-    run:async()=>({success:true,meta:{changes:Number(real.prepare(sql).run(...args as never[]).changes)}})
-  });
-  return {prepare:(sql:string)=>statement(sql,[]),
-    batch:async(statements:Array<{all:()=>Promise<unknown>}>)=>Promise.all(statements.map(item=>item.all()))} as unknown as D1Database;
-};
 
 describe('the order the Journal actually returns',()=>{
   /**

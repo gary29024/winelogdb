@@ -2,6 +2,7 @@ import { describe,expect,it } from 'vitest';
 import { canonicalCountryName } from '../../src/lib/wine/canonicalize';
 import { mapProducerRow,pickProducerHomeCountry,refreshProducerHomeCountry } from '../../src/lib/producers/entities';
 import { createD1Stub } from './support/d1Stub';
+import { migratedSqliteD1 } from './support/sqliteD1';
 import app from '../../worker/cuveeEntry';
 import { createSession } from '../../src/lib/auth/session';
 
@@ -92,11 +93,10 @@ describe('a corrected wine country reaches the producer',()=>{
 describe('the producers page groups by one name per country',()=>{
   it('lists a producer stored under a synonym in its canonical panel',async()=>{
     const stub=createD1Stub(sql=>{
-      if(/FROM producers p WHERE p.owner_id=\?/.test(sql))return {all:[
-        {id:'p1',canonical_name:'Wiston Estate',home_country:'United Kingdom',home_region:null,home_locality:null,researched_at:null,catalog_json:'[]',tasted_count:1},
-        {id:'p2',canonical_name:'Hambledon Vineyard',home_country:'England',home_region:null,home_locality:null,researched_at:null,catalog_json:'[]',tasted_count:1}
+      if(/FROM producers p/.test(sql))return {all:[
+        {id:'p1',canonical_name:'Wiston Estate',home_country:'United Kingdom',home_region:null,home_locality:null,researched_at:null,tasted_count:1,catalog_count:0},
+        {id:'p2',canonical_name:'Hambledon Vineyard',home_country:'England',home_region:null,home_locality:null,researched_at:null,tasted_count:1,catalog_count:0}
       ]};
-      if(/FROM producer_aliases/.test(sql))return {all:[]};
       return undefined;
     });
     const response=await app.fetch(new Request('https://x/api/producers',{
@@ -107,5 +107,28 @@ describe('the producers page groups by one name per country',()=>{
     expect(response.status).toBe(200);
     const {items}=await response.json() as {items:Array<{homeCountry:string|null}>};
     expect(items.map(item=>item.homeCountry)).toEqual(['United Kingdom','United Kingdom']);
+  });
+
+  it('keeps the researched range count stable during partial cuvee seeding',async()=>{
+    const {db,sqlite}=migratedSqliteD1();
+    try{
+      const stamp='2026-09-11T00:00:00.000Z';
+      const catalog=JSON.stringify([
+        {name:'Wine A',category:'red'},
+        {name:'Wine B',category:'red'},
+        {name:'Wine C',category:'white'}
+      ]);
+      sqlite.prepare(`INSERT INTO producers(id,owner_id,canonical_name,match_key,catalog_json,created_at,updated_at)
+        VALUES('p-catalog','owner','Domaine Catalog','domaine catalog',?,?,?)`).run(catalog,stamp,stamp);
+      sqlite.prepare(`INSERT INTO cuvees(id,owner_id,producer_id,canonical_name,signature_key,catalog_backed,created_at,updated_at)
+        VALUES('c-one','owner','p-catalog','Wine A','wine a::style:red',1,?,?)`).run(stamp,stamp);
+      const response=await app.fetch(new Request('https://x/api/producers',{
+        headers:{authorization:`Bearer ${await createSession('owner',AUTH_SECRET)}`}
+      }),{DB:db,AUTH_SECRET,APP_URL:'https://x',APP_PASSWORD:'p',GEMINI_API_KEY:'k',ASSETS:{fetch:async()=>new Response('spa')}} as never,
+      {waitUntil:()=>undefined,passThroughOnException:()=>undefined} as never);
+      expect(response.status).toBe(200);
+      const {items}=await response.json() as {items:Array<{id:string;catalogCount:number}>};
+      expect(items.find(item=>item.id==='p-catalog')?.catalogCount).toBe(3);
+    }finally{sqlite.close()}
   });
 });

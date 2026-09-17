@@ -1,4 +1,5 @@
-import { assertResearchInput,type CreditContext } from '../../../worker/multiUser/provider';
+import { AI_MODELS } from '../ai/policy';
+import { assertResearchInput,type CreditContext } from '../credits/provider';
 import { publishProducerResearch } from '../research/sharedProducer';
 import { createObjectKey } from '../r2/keys';
 import { ensureCuveeEntity,reconcileProducerCuvees } from '../cuvees/entities';
@@ -6,6 +7,7 @@ import { createResearchBatchJob,finishResearchBatchJob,getResearchBatchJob,recor
 import { recordAiUsage,type AnalyticsSink } from '../usage/aiUsage';
 import { cancelGeminiBatch } from '../research/cancelResearch';
 import { countSearchQueries,countUsageTokens,createGeminiBatch,describeResponseSchema,fetchGeminiBatch,groundedGenerationConfig,inlineFinishReason,inlineGroundingMetadata,inlineResponseText,isEmulatedGeminiBatchName,isTerminalBatchState,responsesByKey,type GeminiBatchRequest,type GroundingMetadata } from '../research/geminiBatch';
+import { RESEARCH_STALE_DAYS } from '../research/freshness';
 import { researchBatchErrorPollDelay,researchBatchFirstPollDelay,researchBatchPollDelay,researchBatchStallAction,researchBatchTransientAction } from '../research/batchRetryPolicy';
 import { clearProducerCatalogSliceStage,discardProducerCatalogStage,listProducerCatalogStage,prepareProducerCatalogStage,stageProducerCatalogParts } from './catalogResearchStage';
 import { extractContactGrounding,normalizeProducerEmail,normalizeProducerPhone,safeInstagramUrl } from './research';
@@ -25,8 +27,8 @@ type CatalogSaveSummary={catalogCount:number;researchedCount:number;retainedCoun
 type CatalogSlice={key:string;start:string|null;end:string|null;includeOther:boolean;label:string};
 type ParsedCatalogPart={range:CatalogWine[];slice:CatalogSlice;metadata?:GroundingMetadata};
 
-const PRIMARY_MODEL='gemini-3.8-flash';
-const FALLBACK_MODEL='gemini-3.7-flash';
+const PRIMARY_MODEL=AI_MODELS.groundedResearchPrimary;
+const FALLBACK_MODEL=AI_MODELS.groundedResearchFallback;
 const MAX_CATALOG_ATTEMPT=6;
 /**
  * Output room, which is what decides whether the slice ladder is climbed at all.
@@ -56,26 +58,19 @@ const SLICE_OUTPUT_TOKENS=16384;
  */
 export const MAX_INCOMPLETE_SPLITS=3;
 /**
- * How long a producer's profile is taken as still true.
- *
- * Measured on a real month: a producer Deep Search costs about twice a wine's,
- * and it is the most frequent of the two. Half of that is a second grounded
- * request asking again where the estate is, who owns it and how it farms -
- * facts that do not move. The range does move, and is the reason anyone presses
- * refresh.
- *
- * So a profile that exists, knows its country and was researched inside this
- * window is kept, and the run asks only for the range. Anything thinner than
- * that - no profile, no country, or old enough that an estate may have changed
- * hands - is researched again. The window is also the escape: nothing needs a
- * new control, it just costs a wait.
+ * Previous usage analysis found producer research cost about twice wine research,
+ * with a separate profile request repeating relatively stable facts. The annual
+ * reuse window saves that request; users can explicitly refresh sooner.
+ * Research is durable and stays visible indefinitely. This window only decides
+ * when another producer run should buy a fresh grounded profile. The UI marks
+ * an older saved answer as potentially stale rather than expiring or deleting it.
  */
-export const PROFILE_FRESH_DAYS=90;
-type ProfileFreshness={profile?:unknown;home_country?:unknown;researched_at?:unknown};
+export const PROFILE_FRESH_DAYS=RESEARCH_STALE_DAYS;
+type ProfileFreshness={profile?:unknown;home_country?:unknown;profile_researched_at?:unknown};
 export function profileIsFresh(row:ProfileFreshness|null|undefined,now=Date.now()){
   if(!row)return false;
   if(!String(row.profile??'').trim()||!String(row.home_country??'').trim())return false;
-  const researched=Date.parse(String(row.researched_at??''));
+  const researched=Date.parse(String(row.profile_researched_at??''));
   return Number.isFinite(researched)&&researched<=now&&now-researched<PROFILE_FRESH_DAYS*24*60*60*1000;
 }
 const PROFILE_SOURCE_KEY='__profile_sources__';
@@ -255,7 +250,7 @@ const catalogSchema={type:'OBJECT',properties:{rangeComplete:{type:'BOOLEAN',nul
  */
 const SEARCH_BUDGET=(maxSearches:number)=>`Search efficiently: use at most ${maxSearches} Google searches in this request. Start with the producer's own website, which usually carries everything you need on one or two pages, then a reputable reference or importer page if something is still missing. Do not run a separate search for each wine or each field - read the pages you already retrieved. If your budget runs out, answer from the pages you did retrieve rather than guessing.`;
 
-function profilePrompt(name:string){return `You must use the Google Search tool before answering, and every factual claim must come from a page you actually retrieved in this request. Do not answer from prior knowledge, and do not reconstruct a plausible answer for something you did not find. If the search tool is unavailable or returns nothing usable, say exactly that in the affected fields rather than writing an ungrounded answer: WineLog rejects an ungrounded response outright, so an honest "could not be verified" is worth more than confident prose.\n\nResearch the wine producer ${JSON.stringify(name)} using reliable public web sources. Prioritize the official producer website for identity, physical location, business contacts and producer-wide winemaking information. Return concise factual research only.\n\nLOCATION: homeCountry is the physical country; homeRegion is a broad wine region such as Burgundy, Champagne, Bordeaux, Tuscany, Piedmont, Mosel or Napa Valley; homeLocality is the commune/town where the producer is based. Do not use the regions where its wines happen to be produced.\n\nWINEMAKING PRACTICES: winemakingPractices is for stable producer-wide philosophy and practices only. State variability where practices differ by cuvee or vintage.\n\nCONTACTS: return only verified public business contacts. officialWebsiteUrl must be the official HTTPS site. instagramUrl must clearly be the official producer account. Prefer official first-party sources; return null when uncertain. WineLog will independently inspect the official site, including plain-text public email/phone information.\n\nReturn JSON only with homeCountry, homeRegion, homeLocality, officialWebsiteUrl, instagramUrl, contactEmail, contactPhone, profile, winemakingPractices.\n\n${SEARCH_BUDGET(5)}`}
+function profilePrompt(name:string){return `You must use the Google Search tool before answering, and every factual claim must come from a page you actually retrieved in this request. Do not answer from prior knowledge, and do not reconstruct a plausible answer for something you did not find. If the search tool is unavailable or returns nothing usable, say exactly that in the affected fields rather than writing an ungrounded answer: WineLog rejects an ungrounded response outright, so an honest "could not be verified" is worth more than confident prose.\n\nResearch the wine producer ${JSON.stringify(name)} using reliable public web sources. Prioritize the official producer website for identity, physical location and producer-wide winemaking information. Return concise factual research only.\n\nLOCATION: homeCountry is the physical country; homeRegion is a broad wine region such as Burgundy, Champagne, Bordeaux, Tuscany, Piedmont, Mosel or Napa Valley; homeLocality is the commune/town where the producer is based. Do not use the regions where its wines happen to be produced.\n\nWINEMAKING PRACTICES: winemakingPractices is for stable producer-wide philosophy and practices only. State variability where practices differ by cuvee or vintage.\n\nCONTACTS: return only verified public business contacts. officialWebsiteUrl must be the official HTTPS site. instagramUrl must clearly be the official producer account. If an official site exists, do not spend a separate search just to find email or phone: WineLog independently crawls its public contact pages after this answer. If no usable official site exists, or the pages already retrieved do not expose contacts, use at most one targeted secondary-source contact search within the total search budget. Prioritize identity, location and winemaking practices before optional contact discovery; skip the contact search if those facts still need the remaining budget. Prefer an official importer/distributor or regional/professional wine body. Only return an email or phone when the source explicitly identifies it as the producer's own business contact; never substitute an importer's, merchant's or directory's own contact details. Return null when uncertain.\n\nReturn JSON only with homeCountry, homeRegion, homeLocality, officialWebsiteUrl, instagramUrl, contactEmail, contactPhone, profile, winemakingPractices.\n\n${SEARCH_BUDGET(3)}`}
 function slicePrompt(name:string,slice:CatalogSlice){
   const whole=slice.start==='A'&&slice.end==='Z'&&slice.includeOther;
   const rule=slice.start&&slice.end?`${slice.start} through ${slice.end}${slice.includeOther?', plus non-letter/digit/symbol initials':''}`:'non-letter/digit/symbol initials only';
@@ -269,7 +264,7 @@ export function researchPromptFor(name:string,key:string){
 }
 /** Exposed so the output room each key is given can be asserted. */
 export function requestForKey(name:string,key:string):GeminiBatchRequest{
-  if(key==='profile')return {key,request:{contents:[{role:'user',parts:[{text:`${profilePrompt(name)}\n\n${describeResponseSchema(profileSchema)}`}]}],tools:[{google_search:{}}],generationConfig:groundedGenerationConfig(PROFILE_OUTPUT_TOKENS)}};
+  if(key==='profile')return {key,request:{contents:[{role:'user',parts:[{text:`${profilePrompt(name)}\n\n${describeResponseSchema(profileSchema)}`}]}],tools:[{google_search:{}}],generationConfig:groundedGenerationConfig(PROFILE_OUTPUT_TOKENS,'low')}};
   const slice=parseSliceKey(key);if(!slice)throw new Error(`Unknown producer research key ${key}`);
   // The whole range gets the most room, because it is the one answer that has
   // to hold every wine and the only one whose overflow starts the ladder.
@@ -289,7 +284,9 @@ async function saveProfile(env:Env,owner:string,producerId:string,requestId:stri
   await assertResearchInput(env.CREDIT_CONTEXT,owner,producerId,'producer',row);
   const contactGrounding=extractContactGrounding(text,metadata),grounded=new Set(contactGrounding.fields),parsedOfficial=safeHttpsUrl(profile.officialWebsiteUrl)?.toString()??null,parsedInstagram=safeInstagramUrl(profile.instagramUrl),parsedEmail=normalizeProducerEmail(profile.contactEmail),parsedPhone=normalizeProducerPhone(profile.contactPhone);
   const priorOfficial=row.official_website_url?String(row.official_website_url):null;
-  const official=(parsedOfficial&&(grounded.has('officialWebsiteUrl')||metadataGroundsUrl(parsedOfficial,metadata))?parsedOfficial:null)||priorOfficial;
+  const websiteVerified=Boolean(parsedOfficial&&(grounded.has('officialWebsiteUrl')||metadataGroundsUrl(parsedOfficial,metadata)));
+  log('log',{requestId,producerId,stage:'official_website_verification',outcome:parsedOfficial?(websiteVerified?'verified':'rejected'):'no_valid_candidate',...(parsedOfficial?{host:new URL(parsedOfficial).hostname}:{})});
+  const official=(websiteVerified?parsedOfficial:null)||priorOfficial;
   let siteContacts={email:null as string|null,phone:null as string|null,instagram:null as string|null,sources:[] as ResearchSource[]};
   if(official){try{siteContacts=await officialWebsiteContacts(official)}catch(e){log('warn',{requestId,producerId,stage:'official_contact_lookup_skipped',error:(e as Error).message})}}
   const instagram=siteContacts.instagram||(parsedInstagram&&grounded.has('instagramUrl')?parsedInstagram:null)||(row.instagram_url?String(row.instagram_url):null);
@@ -298,8 +295,8 @@ async function saveProfile(env:Env,owner:string,producerId:string,requestId:stri
   const contactSources=mergeSources(cleanContactSources(parseJson(row.contact_sources_json,[])),contactGrounding.sources,siteContacts.sources).slice(0,10);
   const profileSources=sourcesFrom(metadata),sources=mergeSources(parseJson<ResearchSource[]>(row.sources_json,[]),profileSources),stamp=now();
   await stageProducerCatalogParts<CatalogWine>(env.DB,[{owner,requestId,producerId,sliceKey:PROFILE_SOURCE_KEY,range:[],sources:profileSources,model}]);
-  await env.DB.prepare('UPDATE producers SET home_country=?,home_region=?,home_locality=?,official_website_url=?,instagram_url=?,contact_email=?,contact_phone=?,contact_sources_json=?,profile=?,winemaking_practices=?,sources_json=?,research_model=?,researched_at=?,updated_at=? WHERE owner_id=? AND id=?')
-    .bind(profile.homeCountry?.trim()||null,profile.homeRegion?.trim()||null,profile.homeLocality?.trim()||null,official,instagram,email,phone,JSON.stringify(contactSources),profile.profile.trim(),profile.winemakingPractices.trim(),JSON.stringify(sources),`${model} (batch profile)`,stamp,stamp,owner,producerId).run();
+  await env.DB.prepare('UPDATE producers SET home_country=?,home_region=?,home_locality=?,official_website_url=?,instagram_url=?,contact_email=?,contact_phone=?,contact_sources_json=?,profile=?,winemaking_practices=?,sources_json=?,research_model=?,researched_at=?,profile_researched_at=?,updated_at=? WHERE owner_id=? AND id=?')
+    .bind(profile.homeCountry?.trim()||null,profile.homeRegion?.trim()||null,profile.homeLocality?.trim()||null,official,instagram,email,phone,JSON.stringify(contactSources),profile.profile.trim(),profile.winemakingPractices.trim(),JSON.stringify(sources),`${model} (batch profile)`,stamp,stamp,stamp,owner,producerId).run();
   if(official){try{const hero=await heroImage(env,owner,official,row.hero_image_rejected_url?String(row.hero_image_rejected_url):null);if(hero){const old=row.hero_image_object_key?String(row.hero_image_object_key):null;await env.DB.prepare('UPDATE producers SET hero_image_object_key=?,hero_image_source_url=?,updated_at=? WHERE owner_id=? AND id=?').bind(hero.objectKey,hero.sourceUrl,now(),owner,producerId).run();if(old&&old!==hero.objectKey)await env.WINE_IMAGES.delete(old).catch(()=>undefined)}}catch(e){log('warn',{requestId,producerId,stage:'hero_skipped',error:(e as Error).message})}}
 }
 function normalizeCatalogRange(catalog:CatalogResult,slice:CatalogSlice,names:string[]){
@@ -351,24 +348,24 @@ async function submitBatch(env:Env,owner:string,producerId:string,requestId:stri
   try{
     googleName=await createGeminiBatch(env.GEMINI_API_KEY,model,`winelog-producer-${requestId}-${attempt}`,entries,env.CREDIT_CONTEXT);
     jobId=await createResearchBatchJob(env.DB,{owner,requestId,targetKind:'producer',targetId:producerId,googleBatchName:googleName,model,attempt,keys});
-    const baseCount=keys.filter(key=>parseSliceKey(key)).length,asked=keys.includes('profile')?'Producer profile plus':'Range only, profile still current -';
+    const baseCount=keys.filter(key=>parseSliceKey(key)).length,asked=keys.includes('profile')?'Producer profile plus':'Range only, profile unchanged -';
     const message=attempt===1?`${asked} ${baseCount} bounded catalogue slice${baseCount===1?'':'s'} submitted to Batch`:`Retrying only ${keys.length} failed producer research part${keys.length===1?'':'s'} with ${model}`;
     await setRunState(env.DB,owner,requestId,'running',attempt===1?'searching':'retrying',attempt,message);
     await env.RESEARCH_QUEUE.send({kind:'producer_batch_poll',owner,producerId,requestId,jobId,pollCount:0},{delaySeconds:researchBatchFirstPollDelay(isEmulatedGeminiBatchName(googleName))});log('log',{requestId,producerId,stage:'batch_submitted',attempt,model,keys,googleName});return jobId;
   }catch(e){const error=(e as Error).message||'Producer Batch submission failed';if(jobId)await finishResearchBatchJob(env.DB,owner,jobId,'failed',`Batch setup failed: ${error}`).catch(()=>undefined);if(googleName)await cancelGeminiBatch(env.GEMINI_API_KEY,googleName).catch(()=>undefined);throw e}
 }
-export async function startProducerBatchResearch(env:Env,owner:string,producerId:string,requestId:string){
-  const known=await env.DB.prepare('SELECT profile,home_country,researched_at FROM producers WHERE owner_id=? AND id=?')
+export async function startProducerBatchResearch(env:Env,owner:string,producerId:string,requestId:string,refreshProfile=false,rangeOnly=false){
+  const known=await env.DB.prepare('SELECT profile,home_country,profile_researched_at FROM producers WHERE owner_id=? AND id=?')
     .bind(owner,producerId).first<ProfileFreshness>();
-  const keys=[...(profileIsFresh(known)?[]:['profile']),...catalogDefaultChunkKeys];
+  const keys=[...(rangeOnly||(!refreshProfile&&profileIsFresh(known))?[]:['profile']),...catalogDefaultChunkKeys];
   try{await prepareProducerCatalogStage(env.DB,owner,producerId,requestId);await submitBatch(env,owner,producerId,requestId,1,PRIMARY_MODEL,keys);return {ok:true as const}}
-  catch(e){const primaryError=(e as Error).message||'Gemini 3.8 Batch submission failed';log('warn',{requestId,producerId,stage:'primary_submit_failed',error:primaryError});try{await submitBatch(env,owner,producerId,requestId,2,FALLBACK_MODEL,keys);return {ok:true as const}}catch(fallback){const error=`Gemini 3.8 submission failed (${primaryError}); Gemini 3.7 fallback also failed: ${(fallback as Error).message||'unknown error'}`;await discardProducerCatalogStage(env.DB,owner,requestId).catch(()=>undefined);await setRunState(env.DB,owner,requestId,'failed','failed',2,error).catch(()=>undefined);return {ok:false as const,error}}}
+  catch(e){const primaryError=(e as Error).message||`${PRIMARY_MODEL} Batch submission failed`;log('warn',{requestId,producerId,stage:'primary_submit_failed',error:primaryError});try{await submitBatch(env,owner,producerId,requestId,2,FALLBACK_MODEL,keys);return {ok:true as const}}catch(fallback){const error=`${PRIMARY_MODEL} submission failed (${primaryError}); ${FALLBACK_MODEL} fallback also failed: ${(fallback as Error).message||'unknown error'}`;await discardProducerCatalogStage(env.DB,owner,requestId).catch(()=>undefined);await setRunState(env.DB,owner,requestId,'failed','failed',2,error).catch(()=>undefined);return {ok:false as const,error}}}
 }
 
 async function completionMessage(db:D1Database,owner:string,producerId:string,researchedProfile=true){
   const row=await db.prepare('SELECT catalog_json,profile,official_website_url,instagram_url,contact_email,contact_phone FROM producers WHERE owner_id=? AND id=?').bind(owner,producerId).first<Record<string,unknown>>();
   const catalog=parseJson<unknown>(row?.catalog_json,[]),count=Array.isArray(catalog)?catalog.length:0,profileSaved=Boolean(String(row?.profile??'').trim()),hasContact=Boolean(row?.official_website_url||row?.instagram_url||row?.contact_email||row?.contact_phone);
-  return `Producer research complete · Profile ${!profileSaved?'not available':researchedProfile?'saved':'kept, still current'} · Contacts ${hasContact?'verified':'no verified public contact found'} · Catalogue ${count} wine${count===1?'':'s'} committed atomically from bounded slices`;
+  return `Producer research complete · Profile ${!profileSaved?'not available':researchedProfile?'saved':'kept unchanged'} · Contacts ${hasContact?'verified':'no verified public contact found'} · Catalogue ${count} wine${count===1?'':'s'} committed atomically from bounded slices`;
 }
 async function failRun(env:Env,owner:string,producerId:string,requestId:string,job:ResearchBatchJob,error:string){
   await finishResearchBatchJob(env.DB,owner,job.id,'failed',error).catch(()=>undefined);await discardProducerCatalogStage(env.DB,owner,requestId).catch(()=>undefined);await setRunState(env.DB,owner,requestId,'failed','failed',job.attempt,error).catch(()=>undefined);log('error',{requestId,producerId,stage:'research_failed',attempt:job.attempt,error});
@@ -381,6 +378,7 @@ async function retryTransportFailure(env:Env,owner:string,producerId:string,requ
 
 export async function pollProducerBatchResearch(env:Env,owner:string,producerId:string,requestId:string,jobId:string,pollCount:number){
   const job=await getResearchBatchJob(env.DB,owner,jobId);if(!job||job.status!=='running')return;
+  if(isEmulatedGeminiBatchName(job.googleBatchName))await setRunState(env.DB,owner,requestId,'running',job.attempt===1?'searching':'retrying',job.attempt,`${job.model} is researching ${job.keys.length} producer part${job.keys.length===1?'':'s'} via Vertex Flex`);
   const fetched=await fetchGeminiBatch(env.GEMINI_API_KEY,job.googleBatchName,{},env.CREDIT_CONTEXT);
   if(!fetched.ok){
     if(fetched.status===429||fetched.status>=500){const action=researchBatchTransientAction(job.attempt,pollCount);if(action==='retry'){await touchResearchBatchJob(env.DB,owner,job.id);await env.RESEARCH_QUEUE.send({kind:'producer_batch_poll',owner,producerId,requestId,jobId:job.id,pollCount:pollCount+1},{delaySeconds:researchBatchErrorPollDelay(pollCount)});return}}
@@ -395,7 +393,7 @@ export async function pollProducerBatchResearch(env:Env,owner:string,producerId:
   // Recorded before anything else can fail: the searches were billed whatever
   // happens to the parsing.
   await recordResearchSearchQueries(env.DB,owner,job.id,countSearchQueries(fetched.responses)).catch(()=>undefined);
-  await recordAiUsage(env,owner,{kind:'producer_research',runId:requestId,targetId:producerId,model:job.model,
+  await recordAiUsage(env,owner,{kind:'producer_research',runId:requestId,targetId:producerId,model:job.model,tier:isEmulatedGeminiBatchName(job.googleBatchName)?'flex':'batch',eventId:`research:${owner}:${job.id}`,
     requests:fetched.responses.length,searchQueries:countSearchQueries(fetched.responses),...countUsageTokens(fetched.responses)});
   await setRunState(env.DB,owner,requestId,'running','parsing',job.attempt,'Validating producer profile and staging independent catalogue slices');
   const byKey=responsesByKey(fetched.responses),failed:string[]=[],incomplete:string[]=[],errors=new Map<string,string>(),parts:ParsedCatalogPart[]=[],names=await producerNames(env.DB,owner,producerId);

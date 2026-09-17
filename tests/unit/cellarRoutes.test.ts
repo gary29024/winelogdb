@@ -30,6 +30,15 @@ const wineBody={producer:'Cusumano',wineName:'Feudo di Mezzo',vintage:2020,count
   tags:[],recognitionStatus:'complete',recognitionConfidence:null};
 
 describe('the cellar routes',()=>{
+  it('reports a failed saved-vintage read instead of pretending no research exists',async()=>{
+    const {response}=await call('/api/maturity/vintage?vintage=2019&region=Burgundy',{},sql=>{
+      if(/FROM vintage_windows/.test(sql))throw new Error('database unavailable');
+      return undefined;
+    });
+    expect(response.status).toBe(503);
+    expect(await response.json()).toEqual({error:'Could not load saved vintage research'});
+  });
+
   it('turns bottles away without touching a wines row',async()=>{
     const {response,stub}=await call('/api/cellar',{
       method:'POST',headers:{'content-type':'application/json'},

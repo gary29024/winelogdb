@@ -19,14 +19,14 @@ const initial={
 let root:Root|null=null,host:HTMLDivElement|null=null;
 afterEach(()=>{act(()=>root?.unmount());host?.remove();root=null;host=null;vi.unstubAllGlobals()});
 
-async function render_(){
+async function render_(overrides:Record<string,unknown>={}){
   vi.stubGlobal('fetch',vi.fn(async()=>new Response(JSON.stringify({}),{status:200,headers:{'content-type':'application/json'}})));
   vi.resetModules();
   const saved:Record<string,unknown>[]=[];
   const {WineForm}=await import('../../src/features/wines/WineForm');
   host=document.createElement('div');document.body.appendChild(host);root=createRoot(host);
   await act(async()=>{root!.render(<MemoryRouter>
-    <WineForm id="w1" initial={initial as never} onSave={async input=>{saved.push(input as never);return {id:'w1'}}}/>
+    <WineForm id="w1" initial={{...initial,...overrides} as never} onSave={async input=>{saved.push(input as never);return {id:'w1'}}}/>
   </MemoryRouter>)});
   return {saved,host:host!};
 }
@@ -37,6 +37,30 @@ const setValue=(input:HTMLInputElement,value:string)=>{
   setter.call(input,value);input.dispatchEvent(new Event('input',{bubbles:true}));
 };
 const submit=async(host:HTMLElement)=>{await act(async()=>{host.querySelector('form')!.requestSubmit()})};
+
+describe('sparkling details in the wine save',()=>{
+  it('offers a collapsed editor for unknown style and saves zero dosage in the wine payload',async()=>{
+    const {saved,host}=await render_({wineStyle:null});
+    const editor=host.querySelector('details.sparkling-details-editor') as HTMLDetailsElement;
+    expect(editor.open).toBe(false);
+    await act(async()=>setValue(editor.querySelector('input')!, '0'));
+    await submit(host);
+    expect(saved[0].sparklingDetails).toMatchObject({dosageGPerL:0});
+    expect(vi.mocked(fetch).mock.calls.some(([url])=>String(url).includes('/sparkling-details'))).toBe(false);
+  });
+  it('omits details for an ordinary still-wine edit',async()=>{
+    const {saved,host}=await render_({wineStyle:'red'});
+    expect(host.querySelector('.sparkling-details-editor')).toBeNull();
+    await submit(host);
+    expect(saved[0].sparklingDetails).toBeUndefined();
+  });
+  it('sends null when the last existing detail is cleared',async()=>{
+    const {saved,host}=await render_({sparklingDetails:{dosageGPerL:3}});
+    await act(async()=>setValue(host.querySelector('.sparkling-details-editor input')!,''));
+    await submit(host);
+    expect(saved[0].sparklingDetails).toBeNull();
+  });
+});
 
 describe('tags when a scanned wine is corrected',()=>{
   it('replaces the tag the correction made wrong',async()=>{

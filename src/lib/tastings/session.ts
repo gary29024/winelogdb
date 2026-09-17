@@ -42,7 +42,7 @@ export const mapTasting=(row:Row):Tasting=>({
   createdAt:String(row.created_at),updatedAt:String(row.updated_at)
 });
 
-const OPEN='started_at IS NOT NULL AND ended_at IS NULL';
+export const OPEN='started_at IS NOT NULL AND ended_at IS NULL';
 const closeOpen=(db:D1Database,owner:string,stamp:string)=>
   db.prepare(`UPDATE tastings SET ended_at=?,updated_at=? WHERE owner_id=? AND ${OPEN}`).bind(stamp,stamp,owner);
 
@@ -195,31 +195,4 @@ export async function readTastingWines(db:D1Database,owner:string,id:string):Pro
     notes:String(row.notes??''),
     imageId:row.image_id?String(row.image_id):null
   }));
-}
-
-/**
- * Ends the open tasting when a wine is saved for a different day.
- *
- * One conditional UPDATE, no read. Because the form is prefilled from the
- * tasting row rather than from today's date, this fires only when someone
- * changes the date field - on intent, never on the clock passing midnight.
- *
- * Call on wine creation only. saveExperience is shared with PUT /api/wines/:id,
- * and running this there would end tonight's tasting the moment an old wine was
- * edited.
- */
-export async function closeOpenTastingIfDayChanged(db:D1Database,owner:string,tastingDate:string|null|undefined){
-  const date=text(tastingDate);
-  if(!date)return;
-  const stamp=now();
-  await db.prepare(`UPDATE tastings SET ended_at=?,updated_at=? WHERE owner_id=? AND ${OPEN} AND coalesce(tasting_date,'')<>?`)
-    .bind(stamp,stamp,owner,date).run().catch(()=>undefined);
-}
-
-/** Keeps the open tasting alive. Creation only, for the same reason. */
-export async function touchTastingActivity(db:D1Database,owner:string,tastingId:string|null|undefined){
-  if(!tastingId)return;
-  const stamp=now();
-  await db.prepare(`UPDATE tastings SET last_wine_at=?,updated_at=? WHERE owner_id=? AND id=? AND ${OPEN}`)
-    .bind(stamp,stamp,owner,tastingId).run().catch(()=>undefined);
 }

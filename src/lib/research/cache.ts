@@ -1,5 +1,6 @@
+import { AI_MODELS } from '../ai/policy';
 import { deepSearchProvenanceSchema,type DeepSearchProvenance,type DeepSearchResult } from '../db/schema';
-import { assessResearchScope,buildDeepResearchQuality } from './qualityGate';
+import { assessResearchScope,buildDeepResearchQuality,legacyOptionalFieldMissing } from './qualityGate';
 import { highRiskTechnicalScopePasses } from './technicalClaimGate';
 import { auditTechnicalContradictions,disputedTechnicalClaimCount,technicalContradictionScopePasses } from './technicalContradictions';
 import { friendResearch,publishResearch } from './shared';
@@ -38,9 +39,12 @@ export function fieldsForScope(scope:ResearchScope){
   if(scope==='producer')return ['producerDetails','producerWinemakingPractices'] as const;
   if(scope==='terroir')return ['terroir'] as const;
   if(scope==='vintage_context')return ['vintageQuality'] as const;
-  return ['summary','winemakingTechniques','drinkingWindow'] as const;
+  return ['summary','expectedProfile','winemakingTechniques','drinkingWindow'] as const;
 }
-export function scopeIsComplete(scope:ResearchScope,payload:Record<string,string>){return fieldsForScope(scope).every(field=>Boolean(payload[field]?.trim()));}
+function fieldIsMissing(field:string,payload:Record<string,string>){
+  return !legacyOptionalFieldMissing(field,payload)&&!payload[field]?.trim();
+}
+export function scopeIsComplete(scope:ResearchScope,payload:Record<string,string>){return fieldsForScope(scope).every(field=>!fieldIsMissing(field,payload));}
 export function scopePassesQuality(scope:ResearchScope,payload:Record<string,string>,target:ResearchTarget,sources:ResearchSource[],provenance?:DeepSearchProvenance){
   return scopeIsComplete(scope,payload)&&assessResearchScope(scope,payload,target.subject,sources).pass&&highRiskTechnicalScopePasses(scope,payload,provenance)&&technicalContradictionScopePasses(scope,payload,provenance);
 }
@@ -54,7 +58,7 @@ const RETRY_INSTRUCTIONS:Record<string,string>={
 
 /** The gate warnings a scope's content raises, as codes rather than prose. */
 export function scopeQualityWarnings(scope:ResearchScope,payload:Record<string,string>,target:ResearchTarget,sources:ResearchSource[]){
-  const missing=fieldsForScope(scope).some(field=>!payload[field]?.trim())?['missing-field']:[];
+  const missing=fieldsForScope(scope).some(field=>fieldIsMissing(field,payload))?['missing-field']:[];
   return [...new Set([...missing,...assessResearchScope(scope,payload,target.subject,sources).warnings])];
 }
 
@@ -65,7 +69,7 @@ export function scopeQualityWarnings(scope:ResearchScope,payload:Record<string,s
  */
 export function scopeRetryFeedback(scope:ResearchScope,payload:Record<string,string>,target:ResearchTarget,sources:ResearchSource[],provenance?:DeepSearchProvenance){
   const notes:string[]=[];
-  for(const field of fieldsForScope(scope))if(!payload[field]?.trim())notes.push(RETRY_INSTRUCTIONS['missing-field']);
+  for(const field of fieldsForScope(scope))if(fieldIsMissing(field,payload))notes.push(RETRY_INSTRUCTIONS['missing-field']);
   for(const warning of assessResearchScope(scope,payload,target.subject,sources).warnings){
     const instruction=RETRY_INSTRUCTIONS[warning];if(instruction&&!notes.includes(instruction))notes.push(instruction);
   }
@@ -106,7 +110,7 @@ export const seedResearchCache=(db:D1Database,owner:string,entry:CachedResearch)
 export const upsertResearchCache=(db:D1Database,owner:string,entry:CachedResearch)=>writeCache(db,owner,entry,true);
 
 export function splitDeepSearchResult(result:DeepSearchResult,targets:ResearchTarget[]){
-  const byScope:Record<ResearchScope,Record<string,string>>={producer:{producerDetails:result.producerDetails,producerWinemakingPractices:result.producerWinemakingPractices},terroir:{terroir:result.terroir},vintage_context:{vintageQuality:result.vintageQuality},wine_vintage:{summary:result.summary,winemakingTechniques:result.winemakingTechniques,drinkingWindow:result.drinkingWindow}};
+  const byScope:Record<ResearchScope,Record<string,string>>={producer:{producerDetails:result.producerDetails,producerWinemakingPractices:result.producerWinemakingPractices},terroir:{terroir:result.terroir},vintage_context:{vintageQuality:result.vintageQuality},wine_vintage:{summary:result.summary,expectedProfile:result.expectedProfile??'',winemakingTechniques:result.winemakingTechniques,drinkingWindow:result.drinkingWindow}};
   return targets.map(target=>{const raw=provenanceForScope(result.provenance,target.scope),provenance=auditedProvenance(target.scope,byScope[target.scope],raw);return {target,payload:byScope[target.scope],sources:result.sources,provenance,model:result.model,researchedAt:result.researchedAt} satisfies CachedResearch}).filter(entry=>scopePassesQuality(entry.target.scope,entry.payload,entry.target,entry.sources,entry.provenance));
 }
 
@@ -115,8 +119,10 @@ export function assembleDeepSearch(cache:Map<ResearchScope,CachedResearch>,targe
   const entries=targets.map(target=>cache.get(target.scope)).filter((x):x is CachedResearch=>Boolean(x));
   const seen=new Set<string>();const sources=entries.flatMap(x=>x.sources).filter(source=>{if(!source.url||seen.has(source.url))return false;seen.add(source.url);return true}).slice(0,20);
   const timestamps=entries.map(x=>Date.parse(x.researchedAt)).filter(Number.isFinite);const researchedAt=timestamps.length?new Date(Math.max(...timestamps)).toISOString():new Date().toISOString();
+  // A vintage refresh must not make older reusable producer/terroir scopes look fresh.
+  const oldestResearchedAt=timestamps.length?new Date(Math.min(...timestamps)).toISOString():undefined;
   const latestEntry=[...entries].sort((a,b)=>Date.parse(b.researchedAt)-Date.parse(a.researchedAt))[0];
   const provenanceFields:DeepSearchProvenance['fields']={};for(const entry of entries)if(entry.provenance)Object.assign(provenanceFields,entry.provenance.fields);const provenance=Object.keys(provenanceFields).length?{version:1 as const,fields:provenanceFields}:undefined;
-  const baseQuality=buildDeepResearchQuality(entries.map(entry=>({scope:entry.target.scope,payload:entry.payload,subject:entry.target.subject,sources:entry.sources}))),disputedCount=disputedTechnicalClaimCount(provenance),quality=disputedCount?{...baseQuality,status:'mixed' as const,warnings:[...new Set([...baseQuality.warnings,'cross-source-technical-conflict'])].slice(0,20)}:baseQuality;
-  return {summary:payload('wine_vintage').summary??'',vintageQuality:payload('vintage_context').vintageQuality??'',producerDetails:payload('producer').producerDetails??'',producerWinemakingPractices:payload('producer').producerWinemakingPractices??'',winemakingTechniques:payload('wine_vintage').winemakingTechniques??'',terroir:payload('terroir').terroir??'',drinkingWindow:payload('wine_vintage').drinkingWindow??'',sources,model:latestEntry?.model??'gemini-3.8-flash',researchedAt,quality,provenance};
+  const baseQuality=buildDeepResearchQuality(entries.map(entry=>({scope:entry.target.scope,payload:entry.payload,subject:entry.target.subject,sources:entry.sources}))),disputedCount=disputedTechnicalClaimCount(provenance),quality=disputedCount?{...baseQuality,status:'mixed' as const,scoreNote:undefined,warnings:[...new Set([...baseQuality.warnings,'cross-source-technical-conflict'])].slice(0,20)}:baseQuality;
+  return {summary:payload('wine_vintage').summary??'',expectedProfile:payload('wine_vintage').expectedProfile??'',vintageQuality:payload('vintage_context').vintageQuality??'',producerDetails:payload('producer').producerDetails??'',producerWinemakingPractices:payload('producer').producerWinemakingPractices??'',winemakingTechniques:payload('wine_vintage').winemakingTechniques??'',terroir:payload('terroir').terroir??'',drinkingWindow:payload('wine_vintage').drinkingWindow??'',sources,model:latestEntry?.model??AI_MODELS.groundedResearchPrimary,researchedAt,oldestResearchedAt,quality,provenance};
 }

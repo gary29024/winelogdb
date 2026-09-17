@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { describe,expect,it } from 'vitest';
-import { elapsedSeconds } from '../../src/components/ElapsedSeconds';
+import { elapsedSeconds } from '../../src/lib/polling/elapsedSeconds';
 
 const source=(path:string)=>readFileSync(resolve(path),'utf8');
 

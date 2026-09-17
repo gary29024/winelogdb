@@ -53,6 +53,12 @@ describe('what the prompts ask for',()=>{
     }
   });
 
+  it('caps profile discovery at three searches and avoids redundant contact searches',()=>{
+    expect(profile).toContain('use at most 3 Google searches');
+    expect(profile).toContain('do not spend a separate search just to find email or phone');
+    expect(profile).toContain('never substitute an importer');
+  });
+
   it('keeps provenance non-negotiable',()=>{
     // Cheaper must not mean guessed: the answer still has to come from a page
     // retrieved in this request.
@@ -80,7 +86,8 @@ describe('the room an answer is given, which decides whether the ladder is climb
   // model that thinks harder inside a fixed 8192 runs out mid-range, reports
   // itself unfinished, and the whole range is re-asked in halves - each half a
   // fresh grounded request with its own search budget.
-  const roomFor=(key:string)=>(requestForKey('Domaine William Fevre',key).request.generationConfig as {maxOutputTokens?:number}).maxOutputTokens;
+  const configFor=(key:string)=>requestForKey('Domaine William Fevre',key).request.generationConfig as {maxOutputTokens?:number;thinkingConfig?:{thinkingLevel?:string}};
+  const roomFor=(key:string)=>configFor(key).maxOutputTokens;
 
   it('gives the whole range the most, because its overflow is what starts the ladder',()=>{
     expect(roomFor('catalog_slice_a_z_other')).toBe(32768);
@@ -90,6 +97,11 @@ describe('the room an answer is given, which decides whether the ladder is climb
   it('gives every grounded request more room than the 8192 that ran out',()=>{
     for(const key of ['profile','catalog_slice_a_z_other','catalog_slice_a_e','catalog_slice_other'])
       expect(roomFor(key),`${key} needs room for its thinking as well as its answer`).toBeGreaterThan(8192);
+  });
+
+  it('uses low thinking for the retrieval-heavy profile only',()=>{
+    expect(configFor('profile').thinkingConfig).toEqual({thinkingLevel:'low'});
+    expect(configFor('catalog_slice_a_z_other').thinkingConfig).toBeUndefined();
   });
 
   it('keeps grounding switched on for every one of them',()=>{

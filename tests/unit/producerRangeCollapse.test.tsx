@@ -4,6 +4,8 @@ import { createRoot,type Root } from 'react-dom/client';
 import { MemoryRouter,Route,Routes } from 'react-router-dom';
 import { afterEach,beforeEach,describe,expect,it,vi } from 'vitest';
 
+vi.mock('../../src/lib/auth/client',async importOriginal=>({...await importOriginal<object>(),apiFetch:(...args:Parameters<typeof fetch>)=>fetch(...args)}));
+
 declare global{var IS_REACT_ACT_ENVIRONMENT:boolean}
 globalThis.IS_REACT_ACT_ENVIRONMENT=true;
 
@@ -58,6 +60,19 @@ afterEach(()=>{
 });
 
 describe('Producer wine range',()=>{
+  it('confirms and sends only range refresh for an already researched producer',async()=>{
+    await render({researchedAt:'2020-01-01T00:00:00.000Z',profileResearchedAt:'2020-01-01T00:00:00.000Z'});
+    await click(byLabel('Refresh wine range')!);
+    expect(window.confirm).toHaveBeenCalledWith(expect.stringContaining('wine range only'));
+    expect(window.confirm).not.toHaveBeenCalledWith(expect.stringContaining('home location'));
+    expect(posted[0]).toMatchObject({body:{rangeOnly:true,refreshProfile:false}});
+  });
+  it.each([['Research producer',false],['Refresh profile & range',true]] as const)('sends the explicit profile choice from %s',async(label,refreshProfile)=>{
+    await render();
+    await click(byLabel(label)!);
+    expect(posted[0]).toMatchObject({url:'/api/producers/p1/research',body:{refreshProfile,confirmation:'RUN_PRODUCER_RESEARCH'}});
+  });
+
   it('groups the range by style and starts expanded',async()=>{
     await render();
     expect(groups()).toHaveLength(2);

@@ -1,7 +1,7 @@
 import { describe,expect,it } from 'vitest';
 import { createD1Stub } from './support/d1Stub';
-import { TASTING_STALE_MS,closeOpenTastingIfDayChanged,endTasting,readActiveTasting,reopenTasting,settleStaleTasting,
-  startTasting,tastingLooksStale,touchTastingActivity,type Tasting } from '../../src/lib/tastings/session';
+import { TASTING_STALE_MS,endTasting,readActiveTasting,reopenTasting,settleStaleTasting,
+  startTasting,tastingLooksStale,type Tasting } from '../../src/lib/tastings/session';
 
 const row=(over:Record<string,unknown>={})=>({
   id:'t1',name:'Burgundy portfolio',tasting_date:'2026-08-28',venue:'Clubhouse',
@@ -106,33 +106,5 @@ describe('ending and reopening',()=>{
     const stub=createD1Stub(sql=>/SELECT \* FROM tastings/.test(sql)?{first:row()}:undefined);
     await reopenTasting(stub.db,'owner','t1');
     expect(stub.sql().some(sql=>/^UPDATE tastings SET ended_at=\?.*started_at IS NOT NULL AND ended_at IS NULL/.test(sql))).toBe(true);
-  });
-});
-
-describe('the close-on-a-different-day rule',()=>{
-  it('closes the open tasting only for a date that is not its own',async()=>{
-    const stub=createD1Stub();
-    await closeOpenTastingIfDayChanged(stub.db,'owner','2026-08-29');
-    const statement=stub.writes()[0];
-    expect(statement).toBeTruthy();
-    // One conditional UPDATE and no read: the comparison is the WHERE clause.
-    expect(stub.calls.filter(call=>/^SELECT/.test(call.sql))).toHaveLength(0);
-    expect(String(statement.sql).replace(/\s+/g,' ')).toContain("coalesce(tasting_date,'')<>?");
-    expect(statement.args[statement.args.length-1]).toBe('2026-08-29');
-  });
-
-  it('does nothing at all for a wine with no date',async()=>{
-    const stub=createD1Stub();
-    await closeOpenTastingIfDayChanged(stub.db,'owner',null);
-    expect(stub.calls).toHaveLength(0);
-  });
-
-  it('keeps the tasting alive only while it is still open',async()=>{
-    const stub=createD1Stub();
-    await touchTastingActivity(stub.db,'owner','t1');
-    const statement=stub.writes()[0];
-    expect(String(statement.sql).replace(/\s+/g,' ')).toContain('started_at IS NOT NULL AND ended_at IS NULL');
-    await touchTastingActivity(stub.db,'owner',null);
-    expect(stub.writes()).toHaveLength(1);
   });
 });

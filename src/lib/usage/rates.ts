@@ -1,3 +1,4 @@
+import { DEFAULT_TIER_MULTIPLIERS } from './tiers';
 /**
  * What a Gemini call costs, as configuration rather than code.
  *
@@ -100,7 +101,7 @@ function readWindows(raw:unknown,fallback:{input:number;output:number}):RateWind
 
 export const DEFAULT_RATES:AiRates={
   currency:'HKD',fxPerUsd:7.843,groundingUsdPer1k:14,groundingWindows:[],groundingFreePerMonth:5000,
-  inputUsdPerM:0.3,outputUsdPerM:2.5,perModel:{},tierMultipliers:{}
+  inputUsdPerM:0.3,outputUsdPerM:2.5,perModel:{},tierMultipliers:{...DEFAULT_TIER_MULTIPLIERS}
 };
 
 export function readAiRates(env:AiRateEnv):AiRates{
@@ -115,11 +116,11 @@ export function readAiRates(env:AiRateEnv):AiRates{
       if(windows.length)perModel[model]=windows;
     }
   }catch{perModel={}}
-  let tierMultipliers:AiRates['tierMultipliers']={};
+  let tierMultipliers:AiRates['tierMultipliers']={...DEFAULT_TIER_MULTIPLIERS};
   try{
     const parsed=JSON.parse(String(env.AI_COST_TIER_MULTIPLIERS??'{}')) as Record<string,unknown>;
-    for(const [tier,factor] of Object.entries(parsed??{}))tierMultipliers[tier]=positive(factor,1);
-  }catch{tierMultipliers={}}
+    for(const [tier,factor] of Object.entries(parsed??{}))tierMultipliers[tier]=positive(factor,tierMultipliers[tier]??1);
+  }catch{tierMultipliers={...DEFAULT_TIER_MULTIPLIERS}}
   let groundingWindows:GroundingWindow[]=[];
   try{
     const parsed=JSON.parse(String(env.AI_COST_GROUNDING_RATES??'[]')) as unknown;

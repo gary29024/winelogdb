@@ -30,10 +30,12 @@ export function ShareStorySheet({card,onClose}:{card:StoryCard;onClose:()=>void}
   const [chosen,setChosen]=useState(()=>new Set(pickStoryWines(card.wines)));
   const [frames,setFrames]=useState<StoryFrames>(()=>new Map());
   const [align,setAlign]=useState(true);
+  const [showDate,setShowDate]=useState(true),[showTastingName,setShowTastingName]=useState(true);
+  const [storyName,setStoryName]=useState(card.title);
   const [measuring,setMeasuring]=useState(0);
   const full=chosen.size>=MAX_STORY_WINES;
   // Indexes rather than ids: one wine poured twice in an evening is two rows.
-  const shown=useMemo(()=>({...card,wines:card.wines.filter((_,index)=>chosen.has(index))}),[card,chosen]);
+  const shown=useMemo(()=>({...card,title:showTastingName?storyName.trim():'',subtitle:showDate?card.subtitle:'',wines:card.wines.filter((_,index)=>chosen.has(index))}),[card,chosen,showDate,showTastingName,storyName]);
   const imageIds=useMemo(()=>[...new Set(shown.wines.map(wine=>wine.imageId).filter((id):id is string=>Boolean(id)))],[shown]);
   const unmeasured=useMemo(()=>imageIds.filter(id=>!frames.has(id)),[imageIds,frames]);
   const drawnFrames=align?frames:undefined;
@@ -43,15 +45,20 @@ export function ShareStorySheet({card,onClose}:{card:StoryCard;onClose:()=>void}
   // that a photograph which has never been measured is not asked after on
   // every redraw - the answer would be the same nothing.
   const asked=useRef(new Set<string>());
+  const mounted=useRef(false);
+  useEffect(()=>{
+    mounted.current=true;
+    return()=>{mounted.current=false};
+  },[]);
   useEffect(()=>{
     const missing=imageIds.filter(id=>!asked.current.has(id));
     if(!missing.length)return;
     for(const id of missing)asked.current.add(id);
-    let active=true;
     fetchBottleFrames(missing)
-      .then(found=>{if(active&&found.size)setFrames(current=>new Map([...current,...found]))})
+      // Results belong to image IDs, not to the selection that started the
+      // lookup. Keep them through selection changes and Strict Mode replay.
+      .then(found=>{if(mounted.current&&found.size)setFrames(current=>new Map([...found,...current]))})
       .catch(()=>{for(const id of missing)asked.current.delete(id)});
-    return()=>{active=false};
   },[imageIds]);
 
   useEffect(()=>{
@@ -122,9 +129,23 @@ export function ShareStorySheet({card,onClose}:{card:StoryCard;onClose:()=>void}
         <button type="button" onClick={onClose} aria-label="Close">×</button>
       </div>
       <div className="story-share-stage">
-        <canvas ref={canvasRef} aria-label={`${card.title}, ${chosen.size} wines`}/>
+        <canvas ref={canvasRef} aria-label={[shown.title,shown.subtitle,`${chosen.size} wines`].filter(Boolean).join(', ')}/>
         {state==='drawing'&&<p className="story-share-state">Laying out the card…</p>}
         {state==='failed'&&<p className="story-share-state" role="alert">The card could not be drawn on this device.</p>}
+      </div>
+      <div className="story-share-align" role="group" aria-label="Story details">
+        <label>
+          <input type="checkbox" checked={showDate} onChange={event=>setShowDate(event.target.checked)}/>
+          <span>Show date</span>
+        </label>
+        <label>
+          <input type="checkbox" checked={showTastingName} onChange={event=>setShowTastingName(event.target.checked)}/>
+          <span>Show tasting name</span>
+        </label>
+        {showTastingName&&<label className="story-share-name">
+          <span>Story name</span>
+          <input type="text" value={storyName} onChange={event=>setStoryName(event.target.value)} placeholder="Enter a name for this story"/>
+        </label>}
       </div>
       <div className="story-share-align">
         <label>

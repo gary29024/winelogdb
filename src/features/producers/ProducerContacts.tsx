@@ -22,32 +22,44 @@ function ContactValue({type,value}:{type:ManualProducerContactType;value:string}
 
 export function ProducerContacts({producer,onChanged}:Props){
  const [draft,setDraft]=useState<Draft>(EMPTY),[editingId,setEditingId]=useState<string|null>(null),[showForm,setShowForm]=useState(false),[saving,setSaving]=useState(false),[localError,setLocalError]=useState('');
- const verifiedLinks=[
+ const officialLinks=[
   producer.officialWebsiteUrl?{label:'Website',value:producer.officialWebsiteUrl}:null,
   producer.instagramUrl?{label:'Instagram',value:producer.instagramUrl}:null
  ].filter((x):x is NonNullable<typeof x>=>Boolean(x));
- const verifiedDetails=[
+ const officialDetails=[
   producer.contactEmail?{label:'Email',type:'email' as const,value:producer.contactEmail}:null,
   producer.contactPhone?{label:'Phone',type:'phone' as const,value:producer.contactPhone}:null
  ].filter((x):x is NonNullable<typeof x>=>Boolean(x));
- const hasVerified=verifiedLinks.length>0||verifiedDetails.length>0;
+ const hasOfficial=officialLinks.length>0||officialDetails.length>0;
  function startAdd(){setEditingId(null);setDraft(EMPTY);setLocalError('');setShowForm(true)}
  function startEdit(contact:ManualProducerContact){setEditingId(contact.id);setDraft({type:contact.type,label:contact.label??'',value:contact.value,note:contact.note??''});setLocalError('');setShowForm(true)}
  function cancel(){setShowForm(false);setEditingId(null);setDraft(EMPTY);setLocalError('')}
  async function save(){if(saving)return;setSaving(true);setLocalError('');try{if(editingId)await updateSupplementaryContact(producer.id,editingId,draft);else await createSupplementaryContact(producer.id,draft);await onChanged();cancel()}catch(e){setLocalError((e as Error).message)}finally{setSaving(false)}}
+ async function promote(contact:ManualProducerContact){
+  if(saving||(contact.type!=='website'&&contact.type!=='instagram'))return;
+  const label=contact.type==='website'?'official website':'official Instagram';
+  const current=contact.type==='website'?producer.officialWebsiteUrl:producer.instagramUrl;
+  if(!confirm(`Use ${contact.value} as the producer's ${label}?${current?` This replaces ${current}.`:''} It will move out of supplementary contacts.`))return;
+  setSaving(true);setLocalError('');
+  try{
+   const input:Parameters<typeof updateSupplementaryContact>[2]={type:contact.type,label:contact.label??'',value:contact.value,note:contact.note??'',official:true,confirmation:'CONFIRM_OFFICIAL_CONTACT'};
+   await updateSupplementaryContact(producer.id,contact.id,input);await onChanged();if(editingId===contact.id)cancel();
+  }catch(e){setLocalError((e as Error).message)}finally{setSaving(false)}
+ }
  async function remove(contact:ManualProducerContact){if(!confirm(`Delete ${contact.label||LABELS[contact.type]}: ${contact.value}?`))return;setLocalError('');try{await deleteSupplementaryContact(producer.id,contact.id);await onChanged();if(editingId===contact.id)cancel()}catch(e){setLocalError((e as Error).message)}}
  return <div className="producer-contact">
   <div className="producer-contact-head"><p className="section-label">Contact</p><button type="button" className="producer-contact-add" onClick={startAdd}>+ Add contact</button></div>
-  <div className="producer-contact-group"><div className="producer-contact-group-title"><strong>Verified by research</strong></div>
-   {producer.researchedAt?(hasVerified?<>
-    {verifiedLinks.length>0&&<div className="producer-contact-direct-links">{verifiedLinks.map(item=><a className="producer-contact-direct-link" key={item.label} href={item.value} target="_blank" rel="noreferrer"><span>{item.label}</span><span aria-hidden="true">↗</span></a>)}</div>}
-    {verifiedDetails.length>0&&<div className="producer-contact-compact">{verifiedDetails.map(item=><div className="producer-contact-row" key={`${item.type}-${item.value}`}><span>{item.label}</span><ContactValue type={item.type} value={item.value}/></div>)}</div>}
-   </>:<p className="producer-contact-empty">No verified public contact found in this research run.</p>):<p className="producer-contact-empty">Producer contact research has not been run yet.</p>}
+  <div className="producer-contact-group"><div className="producer-contact-group-title"><strong>Official contacts</strong><small>Verified by research or confirmed by you</small></div>
+   {hasOfficial?<>
+    {officialLinks.length>0&&<div className="producer-contact-direct-links">{officialLinks.map(item=><a className="producer-contact-direct-link" key={item.label} href={item.value} target="_blank" rel="noreferrer"><span>{item.label}</span><span aria-hidden="true">↗</span></a>)}</div>}
+    {officialDetails.length>0&&<div className="producer-contact-compact">{officialDetails.map(item=><div className="producer-contact-row" key={`${item.type}-${item.value}`}><span>{item.label}</span><ContactValue type={item.type} value={item.value}/></div>)}</div>}
+   </>:producer.researchedAt?<p className="producer-contact-empty">No official public contact found in this research run. You can add a Website or Instagram below and mark it official.</p>:<p className="producer-contact-empty">No official contact yet. You can add a Website or Instagram below and mark it official.</p>}
    {producer.contactSources.length>0&&<details className="producer-contact-sources"><summary>{producer.contactSources.length} contact reference{producer.contactSources.length===1?'':'s'}</summary><div>{producer.contactSources.map(source=><a key={source.url} href={source.url} target="_blank" rel="noreferrer">{source.title}</a>)}</div></details>}
   </div>
-  <div className="producer-contact-group supplementary"><div className="producer-contact-group-title"><strong>Supplementary contacts</strong><small>Added by you · kept separate from Deep Search</small></div>
-   {producer.supplementaryContacts.length?<div className="producer-manual-contacts">{producer.supplementaryContacts.map(contact=><div className="producer-manual-contact" key={contact.id}><div className="producer-manual-contact-copy"><span>{contact.label||LABELS[contact.type]}</span><ContactValue type={contact.type} value={contact.value}/>{contact.note&&<small>{contact.note}</small>}</div><div className="producer-contact-actions"><button type="button" onClick={()=>startEdit(contact)}>Edit</button><button type="button" className="danger" onClick={()=>void remove(contact)}>Delete</button></div></div>)}</div>:<p className="producer-contact-empty">No supplementary contacts added.</p>}
+  <div className="producer-contact-group supplementary"><div className="producer-contact-group-title"><strong>Supplementary contacts</strong><small>Added by you · kept separate unless you mark Website/Instagram official</small></div>
+   {producer.supplementaryContacts.length?<div className="producer-manual-contacts">{producer.supplementaryContacts.map(contact=><div className="producer-manual-contact" key={contact.id}><div className="producer-manual-contact-copy"><span>{contact.label||LABELS[contact.type]}</span><ContactValue type={contact.type} value={contact.value}/>{contact.note&&<small>{contact.note}</small>}</div><div className="producer-contact-actions">{(contact.type==='website'||contact.type==='instagram')&&<button type="button" disabled={saving} onClick={()=>void promote(contact)}>Use as official</button>}<button type="button" onClick={()=>startEdit(contact)}>Edit</button><button type="button" className="danger" onClick={()=>void remove(contact)}>Delete</button></div></div>)}</div>:<p className="producer-contact-empty">No supplementary contacts added.</p>}
   </div>
+  {localError&&!showForm&&<p className="producer-contact-form-error" role="alert">{localError}</p>}
   {showForm&&<div className="producer-contact-form"><div className="producer-contact-form-grid">
    <label><span>Type</span><select value={draft.type} onChange={e=>setDraft({...draft,type:e.target.value as ManualProducerContactType})}>{Object.entries(LABELS).map(([value,label])=><option key={value} value={value}>{label}</option>)}</select></label>
    <label><span>Label <em>optional</em></span><input value={draft.label} maxLength={80} placeholder="Appointments, importer, winemaker…" onChange={e=>setDraft({...draft,label:e.target.value})}/></label>

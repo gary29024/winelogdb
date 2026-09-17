@@ -23,7 +23,7 @@ describe('permanent friend codes and requests',()=>{
   expect(new Set(['alice','bob','carol'].map(code)).size).toBe(3);
   const first=await (await call('alice','code'))!.json();expect(first).toEqual(await (await call('alice','code'))!.json());expect(first).toMatchObject({code:expect.stringMatching(/^[A-F0-9]{4}(-[A-F0-9]{4}){2}$/)});
   const legacy=new DatabaseSync(':memory:');
-  try{legacy.exec("CREATE TABLE app_users(id TEXT PRIMARY KEY); CREATE TABLE friend_links(token_hash TEXT); INSERT INTO app_users VALUES('owner'),('existing'); INSERT INTO friend_links VALUES('old-link')");legacy.exec(readFileSync('src/lib/db/migrations/0053_friend_codes.sql','utf8'));expect(legacy.prepare('SELECT count(*) AS n FROM friend_codes').get()!.n).toBe(2);expect(legacy.prepare('SELECT count(*) AS n FROM friend_links').get()!.n).toBe(0)}finally{legacy.close()}
+  try{legacy.exec("CREATE TABLE app_users(id TEXT PRIMARY KEY); CREATE TABLE friend_links(token_hash TEXT); INSERT INTO app_users VALUES('owner'),('existing'); INSERT INTO friend_links VALUES('old-link')");legacy.exec(readFileSync('src/lib/db/migrations/0066_friend_codes.sql','utf8'));expect(legacy.prepare('SELECT count(*) AS n FROM friend_codes').get()!.n).toBe(2);expect(legacy.prepare('SELECT count(*) AS n FROM friend_links').get()!.n).toBe(0)}finally{legacy.close()}
  });
  it('keeps pending requests private and grants mutual research access only after recipient acceptance',async()=>{
   const target=buildResearchTargets({producer:'Domaine Test',country:'France'}).find(t=>t.scope==='producer')!;

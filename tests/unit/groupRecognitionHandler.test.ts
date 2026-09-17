@@ -1,3 +1,4 @@
+import { handleRecognitionRequest } from '../../worker/recognitionHandler';
 import { afterEach,describe,expect,it,vi } from 'vitest';
 import { handleGroupRecognitionRequest } from '../../worker/groupRecognitionHandler';
 import { createSession } from '../../src/lib/auth/session';
@@ -37,14 +38,14 @@ function stubGemini(replies:Array<()=>Response>){
   return calls;
 }
 
-async function run(files:File[]=[new File([new Uint8Array([1,2,3])],'lineup.jpg',{type:'image/jpeg'})],options:{anonymous?:boolean}={}){
+async function run(files:File[]=[new File([new Uint8Array([1,2,3])],'lineup.jpg',{type:'image/jpeg'})],options:{anonymous?:boolean;single?:boolean}={}){
   const form=new FormData();
   for(const file of files)form.append('images',file);
   form.append('metadata',JSON.stringify(files.map(()=>({capturedAt:null,latitude:null,longitude:null,source:'none'}))));
   const headers=new Headers();
   if(!options.anonymous)headers.set('authorization',`Bearer ${await createSession('owner',AUTH_SECRET)}`);
   const stub=createD1Stub();
-  const response=await handleGroupRecognitionRequest(new Request('https://x/api/recognition',{method:'POST',headers,body:form}),
+  const response=await (options.single?handleRecognitionRequest:handleGroupRecognitionRequest)(new Request('https://x/api/recognition',{method:'POST',headers,body:form}),
     {DB:stub.db,AUTH_SECRET,GEMINI_API_KEY:'test-key'} as never);
   return {response,stub};
 }
@@ -161,4 +162,57 @@ describe('what the log keeps when a scan will not parse',()=>{
     expect(logged(error).some(entry=>entry.event==='group-recognition-error')).toBe(false);
     error.mockRestore();
   });
+});
+
+describe('accounting for unusable or rejected model answers',()=>{
+  it('counts tokens from both malformed attempts, without inventing wine units',async()=>{
+    stubGemini([()=>geminiReply('not valid recognition')]);
+    const {response,stub}=await run();
+    expect(response.status).toBe(502);
+    const writes=usageWrites(stub);
+    expect(writes).toHaveLength(2);
+    expect(writes.map(write=>write.args.slice(9,12))).toEqual([[1200,400,0],[1200,400,0]]);
+  });
+  it('meters a malformed escalation and keeps the usable primary',async()=>{
+    stubGemini([()=>geminiReply({wines:[wine()],unresolvedCount:1}),()=>geminiReply('invalid')]);
+    const {response,stub}=await run();
+    expect(((await response.json()) as {wines:unknown[]}).wines).toHaveLength(1);
+    expect(usageWrites(stub).map(write=>write.args.slice(9,12))).toEqual([[1200,400,1],[1200,400,0]]);
+  });
+  it('keeps the fuller lineup but still meters the rejected escalation',async()=>{
+    stubGemini([
+      ()=>geminiReply({wines:[wine(),wine({wineName:'Vintage',vintage:2013})],unresolvedCount:1}),
+      ()=>geminiReply({wines:[wine()],unresolvedCount:0})
+    ]);
+    const {response,stub}=await run();
+    expect(((await response.json()) as {wines:unknown[]}).wines).toHaveLength(2);
+    expect(usageWrites(stub).map(write=>write.args.at(-2))).toEqual([2,0]);
+  });
+  it('counts successful retry wines once and preserves failed attempt tokens',async()=>{
+    stubGemini([()=>geminiReply('invalid'),()=>geminiReply({wines:[wine()],unresolvedCount:0})]);
+    const {response,stub}=await run();
+    expect(response.status).toBe(200);
+    expect(usageWrites(stub).map(write=>write.args.slice(9,12))).toEqual([[1200,400,0],[1200,400,1]]);
+  });
+});
+
+
+it('single scans retain primary and malformed escalation token costs',async()=>{
+  stubGemini([()=>geminiReply({producer:'Krug',wineName:'Vintage',vintage:2013,confidence:0.6}),()=>geminiReply('invalid')]);
+  const {response,stub}=await run(undefined,{single:true});
+  expect(response.status).toBe(200);
+  expect(usageWrites(stub).map(write=>write.args.slice(9,12))).toEqual([[1200,400,1],[1200,400,0]]);
+});
+
+
+it('does not escalate a confident single result just because the schema was rejected',async()=>{
+  const calls=stubGemini([
+    ()=>new Response('{"error":{"message":"response schema rejected"}}',{status:400}),
+    ()=>geminiReply({producer:'Krug',wineName:'Vintage',vintage:2013,confidence:0.9})
+  ]);
+  const {response,stub}=await run(undefined,{single:true});
+  expect(response.status).toBe(200);
+  expect(calls).toHaveLength(2);
+  expect(calls.every(call=>!call.url.includes('gemini-3.8-flash'))).toBe(true);
+  expect(usageWrites(stub)).toHaveLength(1);
 });

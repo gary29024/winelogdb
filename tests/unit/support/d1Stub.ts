@@ -10,7 +10,7 @@ export function createD1Stub(reply:(sql:string,args:unknown[])=>StubReply|undefi
   const statement=(sql:string,args:unknown[]):Record<string,unknown>=>({
     bind:(...next:unknown[])=>statement(sql,next),
     first:async()=>{calls.push({sql,args});return reply(sql,args)?.first??null},
-    all:async()=>{calls.push({sql,args});return {results:reply(sql,args)?.all??[],success:true}},
+    all:async()=>{calls.push({sql,args});const result=reply(sql,args);return {results:result?.all??[],success:true,meta:{changes:result?.changes??1}}},
     run:async()=>{calls.push({sql,args});return {success:true,meta:{changes:reply(sql,args)?.changes??1}}}
   });
   const db={

@@ -48,6 +48,7 @@ describe('research evidence quality gate',()=>{
     const targets=buildResearchTargets({producer:'Domaine Test',producerId:'p1',cuveeId:'c1',wineName:'Clos Test',vintage:2021,country:'France',region:'Burgundy',appellation:'Clos de la Roche'});
     const result={
       summary:'The exact 2021 wine is documented by the cited source.',
+      expectedProfile:'For 2021, expect red fruit, floral lift, bright acidity and fine tannins.',
       vintageQuality:'The 2020 growing season was warm and dry.',
       producerDetails:'A documented Burgundy producer.',
       producerWinemakingPractices:'The domaine uses parcel-sensitive élevage and practices vary by cuvée.',

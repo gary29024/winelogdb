@@ -1,4 +1,6 @@
 import { z } from 'zod';
+import { tastingStructureSchema } from '../wine/tastingStructure';
+import { sparklingDetailsSchema } from '../wine/sparklingDetails';
 import { canonicalizeWineFields } from '../wine/canonicalize';
 
 export const wineStyles = ['red', 'white', 'rose', 'sparkling', 'dessert', 'fortified', 'orange', 'other'] as const;
@@ -72,6 +74,7 @@ export const deepSearchQualitySchema=z.object({
   score:z.number().min(0).max(100),
   sourceTier:researchSourceTierSchema,
   warnings:z.array(z.string().trim().max(200)).max(20).default([]),
+  scoreNote:z.string().trim().max(300).optional(),
   fields:z.record(z.string(),researchFieldQualitySchema).default({})
 });
 const researchClaimSourceSchema=z.object({title:z.string().trim().max(300),url:z.string().url()});
@@ -97,6 +100,7 @@ export const deepSearchProvenanceSchema=z.object({
 });
 export const deepSearchSchema = z.object({
   summary: z.string().trim().max(6000).default(''),
+  expectedProfile: z.string().trim().max(4000).optional(),
   vintageQuality: z.string().trim().max(4000).default(''),
   producerDetails: z.string().trim().max(5000).default(''),
   producerWinemakingPractices: z.string().trim().max(5000).default(''),
@@ -106,6 +110,7 @@ export const deepSearchSchema = z.object({
   sources: z.array(z.object({ title: z.string().trim().max(300), url: z.string().url() })).max(20).default([]),
   model: z.string().trim().max(100),
   researchedAt: z.string().datetime(),
+  oldestResearchedAt: z.string().datetime().optional(),
   quality:deepSearchQualitySchema.optional(),
   provenance:deepSearchProvenanceSchema.optional()
 });
@@ -143,7 +148,7 @@ export type GrapeBlendEntry = z.infer<typeof grapeBlendEntrySchema>;
 export type DeepSearchResult = z.infer<typeof deepSearchSchema>;
 export type DeepSearchProvenance = z.infer<typeof deepSearchProvenanceSchema>;
 export type WineRecord = z.infer<typeof wineRecordSchema>;
-const wineInputBaseSchema = wineRecordSchema.omit({ id:true, ownerId:true, createdAt:true, updatedAt:true, deepSearch:true, imageIds:true, imageObjectKeys:true }).superRefine((value,ctx)=>{
+const wineInputBaseSchema = wineRecordSchema.omit({ id:true, ownerId:true, createdAt:true, updatedAt:true, deepSearch:true, imageIds:true, imageObjectKeys:true }).extend({tastingStructure:tastingStructureSchema.nullable().optional(),sparklingDetails:sparklingDetailsSchema.nullable().optional()}).superRefine((value,ctx)=>{
   const knownTotal=value.grapeBlend.reduce((sum,x)=>sum+(x.percentage??0),0);
   if(knownTotal>100.0001)ctx.addIssue({code:'custom',path:['grapeBlend'],message:'Known grape percentages cannot total more than 100%'});
 });

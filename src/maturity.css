@@ -23,15 +23,47 @@
 .vintage-check>.maturity-line{margin:0;border:0;border-radius:0;background:none}
 .vintage-check>.vintage-ask{padding:var(--s2) var(--s3)}
 .vintage-check>.cellar-error{padding:0 var(--s3) var(--s2)}
+.vintage-overview{display:grid;gap:var(--s1);padding:var(--s3) var(--s3) var(--s1);min-width:0}
+.vintage-scope{color:var(--ink-4);font-size:.82rem;overflow-wrap:anywhere}
+.vintage-comparison{margin:0;padding:0 var(--s3) var(--s2);color:var(--muted);font-size:.76rem;font-variant-numeric:tabular-nums}
+.vintage-progress{display:flex;align-items:baseline;gap:var(--s2);padding-inline:var(--s3);color:var(--muted);font-size:.78rem}
+.vintage-status{margin:0 0 var(--s2)}
+.vintage-status:empty{margin:0}
+.vintage-elapsed{font-variant-numeric:tabular-nums;white-space:nowrap}
 .vintage-ask{display:flex;flex-wrap:wrap;align-items:center;gap:var(--s2)}
 .vintage-ask small{flex:1 1 18rem;color:var(--muted);font-size:.76rem;line-height:1.45}
 .vintage-researched{padding:var(--s2) var(--s3);border-top:1px solid var(--wine-line);background:var(--paper)}
-.vintage-researched-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:var(--s2)}
+.vintage-quality{display:flex;flex-wrap:wrap;align-items:baseline;gap:var(--s1) var(--s3);color:var(--wine-ink)}
+.vintage-quality strong{font-size:1rem}
+.vintage-quality span{font-size:.78rem;color:var(--ink-4)}
+.vintage-quality b{font-variant-numeric:tabular-nums}
+.vintage-quality-unavailable{color:var(--muted);font-size:.78rem}
+.vintage-confidence{padding:.1rem .4rem;border:1px solid var(--line-mid);border-radius:var(--r-pill);color:var(--muted);font-size:.68rem;text-transform:capitalize}
+.vintage-confidence-high{color:var(--good-ink);border-color:var(--good)}
+.vintage-confidence-low{color:var(--warn);border-color:var(--warn)}
 .vintage-shift{color:var(--wine-ink);font-size:.78rem;font-weight:600}
+.vintage-consensus{margin:var(--s2) 0 0;color:var(--ink-3);font-size:.84rem;line-height:1.5}
+.vintage-evidence-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(12rem,100%),1fr));gap:var(--s2);margin-top:var(--s2)}
+.vintage-evidence-grid strong{color:var(--ink-4);font-size:.76rem}
+.vintage-evidence-grid ul{margin:var(--s1) 0 0;padding-left:var(--s4)}
 .vintage-note{margin:var(--s2) 0 0;color:var(--ink-4);font-size:.82rem;line-height:1.5}
-.vintage-sources{margin-top:var(--s2);color:var(--muted);font-size:.76rem}
+.vintage-sources{color:var(--muted);font-size:.78rem;overflow-wrap:anywhere}
+.vintage-sources summary{padding-block:var(--s2);cursor:pointer;color:var(--ink-4);font-weight:600}
+.vintage-research-meta{display:flex;flex-wrap:wrap;align-items:center;gap:var(--s2);margin-top:var(--s2);font-size:.74rem}
 .vintage-sources ul{margin:var(--s1) 0 0;padding-left:var(--s4)}
 .vintage-sources a{color:var(--ink-4)}
+.vintage-legacy-note{margin:var(--s2) 0 0;color:var(--muted)}
 .vintage-again{display:flex;flex-wrap:wrap;align-items:center;gap:var(--s1) var(--s2);margin:var(--s2) 0 0}
-.vintage-again button{padding:var(--s1) var(--s2);font-size:.8rem}
+.vintage-again button{min-height:44px;padding:var(--s2) var(--s3);font-size:.82rem}
 .vintage-again small{flex:1 1 14rem;color:var(--muted);font-size:.74rem;line-height:1.4}
+
+.cellar-vintage-trigger{display:inline-flex;align-items:center;gap:var(--s2);max-width:100%;min-height:44px;padding:var(--s1) var(--s2);border:1px solid var(--line);border-radius:var(--r-sm);background:var(--ground);color:var(--ink-4);text-align:left}
+.cellar-vintage-trigger .maturity-dot{flex-wrap:wrap;text-align:left}
+.vintage-dialog{width:min(34rem,calc(100% - 2rem));max-height:calc(100dvh - 2rem);margin:auto;padding:0;border:1px solid var(--line);border-radius:var(--r-lg);background:var(--paper);color:var(--ink);overflow-y:auto;overscroll-behavior:contain}
+.vintage-dialog::backdrop{background:#10182d70}
+.vintage-dialog-body{padding:var(--s4)}
+.vintage-dialog-head{display:flex;align-items:flex-start;justify-content:space-between;gap:var(--s3)}
+.vintage-dialog-head>div{min-width:0}
+.vintage-dialog-head h2{margin:0;font-size:1.2rem;overflow-wrap:anywhere}
+.vintage-dialog-head button{min-height:44px;flex-shrink:0}
+.vintage-dialog-producer{margin:var(--s1) 0 0;color:var(--muted);font-size:.85rem;overflow-wrap:anywhere}

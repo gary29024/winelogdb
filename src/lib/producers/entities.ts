@@ -19,6 +19,7 @@ export type ProducerEntity={
   heroImageSourceUrl:string|null;
   researchModel:string|null;
   researchedAt:string|null;
+  profileResearchedAt:string|null;
 };
 
 export type ProducerResolution={
@@ -260,6 +261,6 @@ export function mapProducerRow(row:Record<string,unknown>):ProducerEntity{
     profile:String(row.profile??''),winemakingPractices:String(row.winemaking_practices??''),catalog:parseJson(row.catalog_json,[]),sources:parseJson(row.sources_json,[]),officialWebsiteUrl:row.official_website_url?String(row.official_website_url):null,
     instagramUrl:row.instagram_url?String(row.instagram_url):null,contactEmail:row.contact_email?String(row.contact_email):null,contactPhone:row.contact_phone?String(row.contact_phone):null,contactSources:parseJson(row.contact_sources_json,[]),
     heroImageAvailable:Boolean(row.hero_image_object_key),heroImageSourceUrl:row.hero_image_source_url?String(row.hero_image_source_url):null,
-    researchModel:row.research_model?String(row.research_model):null,researchedAt:row.researched_at?String(row.researched_at):null
+    researchModel:row.research_model?String(row.research_model):null,researchedAt:row.researched_at?String(row.researched_at):null,profileResearchedAt:row.profile_researched_at?String(row.profile_researched_at):null
   };
 }

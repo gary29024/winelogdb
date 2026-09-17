@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { act } from 'react';
+import { act,StrictMode } from 'react';
 import { createRoot,type Root } from 'react-dom/client';
 import { afterEach,describe,expect,it,vi } from 'vitest';
 
@@ -19,27 +19,52 @@ let root:Root|null=null,host:HTMLDivElement|null=null;
 afterEach(()=>{act(()=>root?.unmount());host?.remove();root=null;host=null;vi.unstubAllGlobals();vi.resetModules()});
 
 /** Answers the frame lookup and the photo fetches; records every call. */
-function stubFetch(frames:Record<string,unknown>={}){
+function stubFetch(frames:Record<string,unknown>|Promise<Record<string,unknown>>={}){
   const calls:Array<{url:string;method:string}>=[];
   vi.stubGlobal('fetch',vi.fn(async(input:RequestInfo,init?:RequestInit)=>{
     const url=String(input),method=init?.method??'GET';
     calls.push({url,method});
-    if(url.startsWith('/api/bottle-frames'))return new Response(JSON.stringify({frames}),{status:200,headers:{'content-type':'application/json'}});
+    if(url.startsWith('/api/bottle-frames'))return new Response(JSON.stringify({frames:await frames}),{status:200,headers:{'content-type':'application/json'}});
     return new Response(new Blob(['x']),{status:200});
   }));
   return calls;
 }
 
-async function open(count:number,frames:Record<string,unknown>={}){
+async function open(count:number,frames:Record<string,unknown>|Promise<Record<string,unknown>>={},strict=false){
   const calls=stubFetch(frames);
   const {ShareStorySheet}=await import('../../src/features/share/ShareStorySheet');
   host=document.createElement('div');document.body.appendChild(host);
   root=createRoot(host);
-  await act(async()=>{root!.render(<ShareStorySheet card={{title:'An evening',subtitle:'Today',wines:wines(count)}} onClose={()=>undefined}/>)});
+  await act(async()=>{
+    const sheet=<ShareStorySheet card={{title:'An evening',subtitle:'Today',wines:wines(count)}} onClose={()=>undefined}/>;
+    root!.render(strict?<StrictMode>{sheet}</StrictMode>:sheet);
+  });
   return calls;
 }
 
 describe('lining the bottles up on a card',()=>{
+  it.each([false,true])('retains a pending lookup across selection changes (Strict Mode: %s)',async strict=>{
+    let resolve!:(frames:Record<string,unknown>)=>void;
+    const frames=new Promise<Record<string,unknown>>(done=>{resolve=done});
+    const calls=await open(2,frames,strict);
+    const picks=host!.querySelectorAll<HTMLInputElement>('.story-share-picks input');
+    await act(async()=>{picks[0].click()});
+    await act(async()=>{resolve(Object.fromEntries(wines(2).map(wine=>[wine.imageId,{bottle:null,label:null}])))});
+    expect(host!.textContent).toContain('Every bottle on this card has been measured');
+    await act(async()=>{picks[0].click()});
+    expect(host!.textContent).toContain('Every bottle on this card has been measured');
+    expect(calls.filter(call=>call.url.startsWith('/api/bottle-frames?'))).toHaveLength(1);
+    expect(calls.filter(call=>call.method==='POST')).toHaveLength(0);
+  });
+
+  it('retains a delayed lookup through Strict Mode effect replay without a selection change',async()=>{
+    let resolve!:(frames:Record<string,unknown>)=>void;
+    const calls=await open(1,new Promise(done=>{resolve=done}),true);
+    await act(async()=>{resolve({'img-0':{bottle:null,label:null}})});
+    expect(host!.textContent).toContain('Every bottle on this card has been measured');
+    expect(calls.filter(call=>call.url.startsWith('/api/bottle-frames?'))).toHaveLength(1);
+  });
+
   it('never spends anything just by opening the sheet',async()=>{
     const calls=await open(3);
     // The lookup is free; measuring is the vision call, and it is a POST.

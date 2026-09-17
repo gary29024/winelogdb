@@ -1,20 +1,29 @@
 import app from './researchQueueEntry';
+import { handleChampagneExtraction,processChampagneExtraction } from './champagneExtraction';
+import { tastingStructureStatement } from '../src/lib/db/wineSave';
 import { requireSession } from '../src/lib/auth/session';
 import { configureGeminiBatchGateway } from '../src/lib/research/geminiBatch';
 import { hasTastingStructure,tastingStructureSchema,type TastingStructure } from '../src/lib/wine/tastingStructure';
+import { hasSparklingDetails,sparklingDetailsSchema,type SparklingDetails } from '../src/lib/wine/sparklingDetails';
 import { groupSourcePhotosForWine,handleGroupRecognitionSessionRequest } from './groupRecognitionSessions';
 import { resolveGeminiTransport,type GeminiTransportBindings } from './geminiTransport';
 import { processVertexBatchPollJob,processVertexBatchSubmitJob } from './vertexBatchRecognition';
+import { semanticWineIds,shouldUseSemanticQuery,warmSemanticWineIndex,type SemanticEmbeddingBindings } from '../src/lib/journal/semanticSearch';
+import { tryDirectProducerRangeRefresh,type ProducerRangeAiBindings } from '../src/lib/producers/catalogDirectResearch';
+import { tryWorkersAiProducerRangeRefresh,workersFallbackEligible,type ProducerRangeWorkersAiBindings } from '../src/lib/producers/catalogWorkersAiFallback';
+import { addManualCatalogEntry,addMissingCandidate,captureGroundedCatalogAndOverlay,deleteManualCatalogEntry,ignoreMissingCandidate,listCatalogRangeCorrections } from '../src/lib/producers/catalogRangeOverlay';
 
-type Bindings=Parameters<typeof app.fetch>[1]&GeminiTransportBindings;
+type Bindings=Parameters<typeof app.fetch>[1]&GeminiTransportBindings&SemanticEmbeddingBindings&ProducerRangeAiBindings&ProducerRangeWorkersAiBindings;
 type QueueBatch=Parameters<typeof app.queue>[0];
-type QueueJob={kind?:string;owner?:string;sessionId?:string;jobId?:string;pollCount?:number};
-
-type StructurePayload={present:boolean;structure:TastingStructure|null;error?:string};
+type QueueJob={kind?:string;owner?:string;sessionId?:string;jobId?:string;pollCount?:number;producerId?:string;requestId?:string;refreshProfile?:boolean;rangeOnly?:boolean};
 
 async function owner(request:Request,env:Bindings){return (await requireSession(request.headers.get('Authorization')??undefined,env.AUTH_SECRET)).userId}
 function jsonResponse(body:unknown,status=200,headers?:Headers){const out=new Headers(headers);out.delete('Content-Length');out.set('Content-Type','application/json; charset=utf-8');return new Response(JSON.stringify(body),{status,headers:out})}
 function configureBatchGateway(env:Bindings){return configureGeminiBatchGateway(env.GEMINI_API_KEY,env)}
+function parseSparklingDetails(raw:string|null|undefined):SparklingDetails|null{
+  if(!raw)return null;
+  try{const parsed=sparklingDetailsSchema.safeParse(JSON.parse(raw));return parsed.success&&hasSparklingDetails(parsed.data)?parsed.data:null}catch{return null}
+}
 
 async function failBatchGatewayConfig(env:Bindings,job:QueueJob,error:string){
   const ownerId=String(job.owner||''),sessionId=String(job.sessionId||'');if(!ownerId||!sessionId)return;
@@ -25,68 +34,75 @@ async function failBatchGatewayConfig(env:Bindings,job:QueueJob,error:string){
   ]).catch(e=>console.error(JSON.stringify({event:'vertex-batch-config-fail-save',sessionId,error:(e as Error).message})));
 }
 
-async function extractStructure(request:Request):Promise<StructurePayload>{
-  try{
-    const type=request.headers.get('Content-Type')||'';
-    let record:Record<string,unknown>|null=null;
-    if(type.includes('multipart/form-data')){
-      const form=await request.clone().formData();const wine=form.get('wine');
-      if(typeof wine!=='string')return {present:false,structure:null};
-      record=JSON.parse(wine) as Record<string,unknown>;
-    }else record=await request.clone().json() as Record<string,unknown>;
-    if(!record||typeof record!=='object'||!Object.prototype.hasOwnProperty.call(record,'tastingStructure'))return {present:false,structure:null};
-    const raw=record.tastingStructure;
-    if(raw==null)return {present:true,structure:null};
-    const parsed=tastingStructureSchema.safeParse(raw);if(!parsed.success)return {present:true,structure:null,error:parsed.error.issues.map(issue=>`${issue.path.join('.')||'structure'}: ${issue.message}`).join('; ')};
-    return {present:true,structure:hasTastingStructure(parsed.data)?parsed.data:null};
-  }catch{return {present:false,structure:null}}
-}
-
-async function persistStructure(db:D1Database,ownerId:string,wineId:string,structure:TastingStructure|null){
-  if(!structure||!hasTastingStructure(structure)){await db.prepare('DELETE FROM wine_tasting_structures WHERE owner_id=? AND wine_id=?').bind(ownerId,wineId).run();return}
-  const stamp=new Date().toISOString();
-  await db.prepare(`INSERT INTO wine_tasting_structures(owner_id,wine_id,structure_json,created_at,updated_at) VALUES(?,?,?,?,?)
-    ON CONFLICT(owner_id,wine_id) DO UPDATE SET structure_json=excluded.structure_json,updated_at=excluded.updated_at`)
-    .bind(ownerId,wineId,JSON.stringify(structure),stamp,stamp).run();
-}
-
 function exactWineId(pathname:string){const match=pathname.match(/^\/api\/wines\/([^/]+)$/);return match?decodeURIComponent(match[1]):null}
+const pathId=(match:RegExpMatchArray,index:number)=>decodeURIComponent(match[index]||'');
+const correctionStatus=(message:string)=>/not found/i.test(message)?404:400;
 
 export default {
   async fetch(request:Request,env:Bindings,ctx:ExecutionContext){
     configureBatchGateway(env);
     const url=new URL(request.url),wineId=exactWineId(url.pathname);
+    const champagneResponse=await handleChampagneExtraction(request,env);if(champagneResponse)return champagneResponse;
     const groupSessionResponse=await handleGroupRecognitionSessionRequest(request,env);if(groupSessionResponse)return groupSessionResponse;
+
+    // Range corrections live above the legacy producer route so they can evolve
+    // independently without making the already-large layered router larger.
+    const correctionList=url.pathname.match(/^\/api\/producers\/([^/]+)\/catalog-range-corrections$/);
+    if(request.method==='GET'&&correctionList){let ownerId:string;try{ownerId=await owner(request,env)}catch{return jsonResponse({error:'Unauthorized'},401)}try{return jsonResponse(await listCatalogRangeCorrections(env.DB,ownerId,pathId(correctionList,1)))}catch(e){const message=(e as Error).message||'Could not load range corrections';return jsonResponse({error:message},correctionStatus(message))}}
+    const manualCreate=url.pathname.match(/^\/api\/producers\/([^/]+)\/catalog-manual$/);
+    if(request.method==='POST'&&manualCreate){let ownerId:string;try{ownerId=await owner(request,env)}catch{return jsonResponse({error:'Unauthorized'},401)}const body=await request.json().catch(()=>({})) as Record<string,unknown>;if(body.confirmation!=='ADD_MISSING_CATALOG_WINE')return jsonResponse({error:'Adding a missing wine requires explicit confirmation'},400);try{return jsonResponse(await addManualCatalogEntry(env.DB,ownerId,pathId(manualCreate,1),body),201)}catch(e){const message=(e as Error).message||'Could not add the missing wine';return jsonResponse({error:message},correctionStatus(message))}}
+    const manualDelete=url.pathname.match(/^\/api\/producers\/([^/]+)\/catalog-manual\/([^/]+)$/);
+    if(request.method==='DELETE'&&manualDelete){let ownerId:string;try{ownerId=await owner(request,env)}catch{return jsonResponse({error:'Unauthorized'},401)}const body=await request.json().catch(()=>({})) as {confirmation?:string};if(body.confirmation!=='REMOVE_MANUAL_CATALOG_WINE')return jsonResponse({error:'Removing a manual wine requires explicit confirmation'},400);try{return jsonResponse(await deleteManualCatalogEntry(env.DB,ownerId,pathId(manualDelete,1),pathId(manualDelete,2)))}catch(e){const message=(e as Error).message||'Could not remove the manual wine';return jsonResponse({error:message},correctionStatus(message))}}
+    const missingAction=url.pathname.match(/^\/api\/producers\/([^/]+)\/catalog-missing\/([^/]+)\/(add|ignore)$/);
+    if(request.method==='POST'&&missingAction){let ownerId:string;try{ownerId=await owner(request,env)}catch{return jsonResponse({error:'Unauthorized'},401)}const body=await request.json().catch(()=>({})) as {confirmation?:string},action=missingAction[3];const expected=action==='add'?'ADD_MISSING_CATALOG_WINE':'IGNORE_CATALOG_CANDIDATE';if(body.confirmation!==expected)return jsonResponse({error:'This range correction requires explicit confirmation'},400);try{return jsonResponse(action==='add'?await addMissingCandidate(env.DB,ownerId,pathId(missingAction,1),pathId(missingAction,2)):await ignoreMissingCandidate(env.DB,ownerId,pathId(missingAction,1),pathId(missingAction,2)))}catch(e){const message=(e as Error).message||'Could not update the missing-wine suggestion';return jsonResponse({error:message},correctionStatus(message))}}
+
+    // Semantic retrieval is an input to the real Journal route, never a second
+    // implementation of that route. Candidate IDs are internal-only: strip any
+    // caller-supplied value first, then set it only on the forwarded request we
+    // create after ranking. The canonical route still owns CORS, auth,
+    // maintenance, filtering and pagination.
+    if(request.method==='GET'&&url.pathname==='/api/journal'){
+      url.searchParams.delete('__semanticIds');
+      const journalRequest=new Request(url,request);
+      const rawQuery=(url.searchParams.get('query')??'').trim(),semanticFlag=url.searchParams.get('semantic');
+      const useSemantic=rawQuery&&semanticFlag!=='0'&&(semanticFlag==='1'||shouldUseSemanticQuery(rawQuery));
+      if(useSemantic){
+        let ownerId:string;try{ownerId=await owner(journalRequest,env)}catch{return jsonResponse({error:'Unauthorized'},401)}
+        ctx.waitUntil(warmSemanticWineIndex(env,ownerId).catch(error=>console.error(JSON.stringify({event:'semantic-index-warm-failed',error:(error as Error).message}))));
+        try{
+          const semantic=await semanticWineIds(env,ownerId,rawQuery,72);
+          if(semantic?.ids.length){
+            const forwardedUrl=new URL(journalRequest.url);
+            forwardedUrl.searchParams.set('__semanticIds',semantic.ids.join(','));
+            return app.fetch(new Request(forwardedUrl,journalRequest),env,ctx);
+          }
+        }catch(error){console.error(JSON.stringify({event:'semantic-journal-search-failed',error:(error as Error).message}))}
+      }
+      return app.fetch(journalRequest,env,ctx);
+    }
 
     if(request.method==='PUT'&&url.pathname.match(/^\/api\/wines\/[^/]+\/tasting-structure$/)){
       let ownerId:string;try{ownerId=await owner(request,env)}catch{return jsonResponse({error:'Unauthorized'},401)}
       const id=decodeURIComponent(url.pathname.split('/')[3]||'');const body=await request.json().catch(()=>null) as {structure?:unknown}|null;
       const parsed=tastingStructureSchema.nullable().safeParse(body?.structure??null);if(!parsed.success)return jsonResponse({error:'Invalid tasting structure',issues:parsed.error.issues},400);
       const exists=await env.DB.prepare('SELECT id FROM wines WHERE owner_id=? AND id=?').bind(ownerId,id).first<{id:string}>();if(!exists)return jsonResponse({error:'Wine not found'},404);
-      await persistStructure(env.DB,ownerId,id,parsed.data&&hasTastingStructure(parsed.data)?parsed.data:null);return jsonResponse({ok:true});
+      try{await tastingStructureStatement(env.DB,ownerId,id,parsed.data).run();return jsonResponse({ok:true})}
+      catch(error){console.error('tasting-structure-save-failed',error);return jsonResponse({error:'Could not save tasting structure. Please retry.'},500)}
     }
 
     if(request.method==='GET'&&wineId){
       const response=await app.fetch(request,env,ctx);if(!response.ok)return response;
       let ownerId:string;try{ownerId=await owner(request,env)}catch{return response}
       try{
-        const [body,row,groupSourcePhotos]=await Promise.all([response.clone().json() as Promise<Record<string,unknown>>,env.DB.prepare('SELECT structure_json FROM wine_tasting_structures WHERE owner_id=? AND wine_id=?').bind(ownerId,wineId).first<{structure_json:string}>(),groupSourcePhotosForWine(env.DB,ownerId,wineId)]);
+        const [body,row,groupSourcePhotos,sparklingRow]=await Promise.all([response.clone().json() as Promise<Record<string,unknown>>,env.DB.prepare('SELECT structure_json FROM wine_tasting_structures WHERE owner_id=? AND wine_id=?').bind(ownerId,wineId).first<{structure_json:string}>(),groupSourcePhotosForWine(env.DB,ownerId,wineId),env.DB.prepare('SELECT details_json FROM wine_sparkling_details WHERE owner_id=? AND wine_id=?').bind(ownerId,wineId).first<{details_json:string}>()]);
         let structure:TastingStructure|null=null;if(row?.structure_json){const parsed=tastingStructureSchema.safeParse(JSON.parse(row.structure_json));if(parsed.success&&hasTastingStructure(parsed.data))structure=parsed.data}
-        return jsonResponse({...body,tastingStructure:structure,groupSourcePhotos},response.status,new Headers(response.headers));
+        return jsonResponse({...body,tastingStructure:structure,sparklingDetails:parseSparklingDetails(sparklingRow?.details_json),groupSourcePhotos},response.status,new Headers(response.headers));
       }catch{return response}
-    }
-
-    if((request.method==='POST'&&url.pathname==='/api/wines')||(request.method==='PUT'&&wineId)){
-      const structure=await extractStructure(request);if(structure.error)return jsonResponse({error:'Invalid tasting structure',details:structure.error},400);
-      const response=await app.fetch(request,env,ctx);if(!response.ok||!structure.present)return response;
-      let ownerId:string;try{ownerId=await owner(request,env)}catch{return response}
-      try{const id=wineId??String((await response.clone().json() as {id?:unknown}).id??'');if(id)await persistStructure(env.DB,ownerId,id,structure.structure)}catch(e){console.error(JSON.stringify({event:'tasting-structure-save-failed',wineId,error:(e as Error).message}))}
-      return response;
     }
 
     if(request.method==='DELETE'&&wineId){
       let ownerId:string|null=null;try{ownerId=await owner(request,env)}catch{}
-      const response=await app.fetch(request,env,ctx);if(response.ok&&ownerId)await env.DB.prepare('DELETE FROM wine_tasting_structures WHERE owner_id=? AND wine_id=?').bind(ownerId,wineId).run().catch(()=>undefined);return response;
+      const response=await app.fetch(request,env,ctx);if(response.ok&&ownerId)await env.DB.batch([env.DB.prepare('DELETE FROM wine_tasting_structures WHERE owner_id=? AND wine_id=?').bind(ownerId,wineId),env.DB.prepare('DELETE FROM wine_sparkling_details WHERE owner_id=? AND wine_id=?').bind(ownerId,wineId)]).catch(()=>undefined);return response;
     }
 
     return app.fetch(request,env,ctx);
@@ -95,6 +111,37 @@ export default {
     configureBatchGateway(env);
     if(batch.messages.length!==1)return app.queue(batch,env);
     const message=batch.messages[0],job=message.body as QueueJob;
+    if(message.body.kind==='champagne_extraction'){
+      try{await processChampagneExtraction(env,message.body);message.ack()}catch(error){console.error('champagne-extraction-queue-error',error);message.retry()}
+      return;
+    }
+
+    // Phase 2 is deliberately an intercept, not a replacement. Official-site
+    // extraction prefers Z.AI BYOK, then independently hosted Workers AI Qwen3.
+    // Weak evidence or failure of both cheap paths falls through to the existing
+    // grounded Gemini path with exactly the same retry/slice behaviour as before.
+    if(job.kind==='producer'){
+      const ownerId=String(job.owner||''),producerId=String(job.producerId||''),requestId=String(job.requestId||'');
+      if(ownerId&&producerId&&requestId){
+        try{
+          const direct=await tryDirectProducerRangeRefresh(env,ownerId,producerId,requestId,job.refreshProfile===true,job.rangeOnly===true);
+          if(direct.handled){console.log(JSON.stringify({event:'producer_range_route',producerId,requestId,provider:'zai',reason:'official range accepted'}));message.ack();return}
+          if(workersFallbackEligible(direct.reason)){
+            const workers=await tryWorkersAiProducerRangeRefresh(env,ownerId,producerId,requestId,job.refreshProfile===true,job.rangeOnly===true);
+            if(workers.handled){console.log(JSON.stringify({event:'producer_range_route',producerId,requestId,provider:'workers-ai',reason:`${direct.reason}; Workers AI accepted official range`}));message.ack();return}
+            console.log(JSON.stringify({event:'producer_range_route',producerId,requestId,provider:'gemini',reason:`${direct.reason}; Workers AI: ${workers.reason}`}));
+          }else console.log(JSON.stringify({event:'producer_range_route',producerId,requestId,provider:'gemini',reason:direct.reason}));
+        }catch(e){console.warn(JSON.stringify({event:'producer_range_phase2',stage:'intercept_failed',producerId,requestId,error:(e as Error).message}))}
+      }
+      return app.queue(batch,env);
+    }
+    if(job.kind==='producer_batch_poll'){
+      await app.queue(batch,env);
+      const ownerId=String(job.owner||''),producerId=String(job.producerId||''),requestId=String(job.requestId||'');
+      if(ownerId&&producerId&&requestId)await captureGroundedCatalogAndOverlay(env.DB,ownerId,producerId,requestId).catch(e=>console.error(JSON.stringify({event:'producer_catalog_overlay_failed',producerId,requestId,error:(e as Error).message})));
+      return;
+    }
+
     if(job.kind!=='recognition_batch_submit'&&job.kind!=='recognition_batch_poll')return app.queue(batch,env);
     let provider;
     try{provider=resolveGeminiTransport(env)}catch(e){const error=(e as Error).message||'AI Gateway configuration is invalid';await failBatchGatewayConfig(env,job,error);console.error(JSON.stringify({event:'vertex-batch-config-error',kind:job.kind,sessionId:job.sessionId,error}));message.ack();return}

@@ -1,3 +1,4 @@
+import { preferEscalatedSheet } from '../src/lib/recognition/escalation';
 import { parseSheetPage,type SheetPage } from '../src/features/recognition/sheetSchema';
 import { sheetRecognitionResponseJsonSchema,PLACE_LEVEL_RULE,RECOGNITION_MODEL } from '../src/lib/recognition/geminiRequest';
 import type { RecognitionModeSpec } from './visionRecognition';
@@ -46,6 +47,7 @@ export const sheetRecognitionSpec:RecognitionModeSpec<SheetPage>={
   jsonSchema:sheetRecognitionResponseJsonSchema,
   parse:parseSheetPage,
   escalationReasons:sheetEscalationReasons,
+  preferEscalated:preferEscalatedSheet,
   wineCount:page=>page.wines.length,
   logFields:page=>({unresolvedCount:page.unresolvedCount,truncated:page.truncated}),
   prompt:(context,afterLine)=>`This is ONE PAGE of a PRINTED WINE LIST handed out at a wine tasting. It is a document, not a photograph of bottles. Read the printed text and return every wine listed on this page, in the order it is printed, top to bottom.

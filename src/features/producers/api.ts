@@ -11,7 +11,7 @@ export type TastedWine={id:string;wineName:string;vintage:number|null;appellatio
 export type LinkedProducer={mergeId:string;producerId:string;name:string;mergedAt:string};
 export type ManualProducerContactType='email'|'phone'|'website'|'instagram'|'other';
 export type ManualProducerContact={id:string;type:ManualProducerContactType;label:string|null;value:string;note:string|null;createdAt:string;updatedAt:string};
-export type ManualProducerContactInput={type:ManualProducerContactType;label?:string;value:string;note?:string};
+export type ManualProducerContactInput={type:ManualProducerContactType;label?:string;value:string;note?:string;official?:boolean;confirmation?:'CONFIRM_OFFICIAL_CONTACT'};
 export type ProducerCatalogCuvee=CatalogCuveeSummary&{tastedReleases?:string[]};
 export type ProducerDetail=ProducerEntity&{aliases:string[];tastedWines:TastedWine[];researchHistoryCount:number;linkedProducers:LinkedProducer[];catalogCuvees:ProducerCatalogCuvee[];cuveeCatalogLinks:CuveeCatalogLink[];supplementaryContacts:ManualProducerContact[];catalogDecisions:CatalogDecision[]};
 /** A house whose name contains, or is contained by, the one read off the label. Proposed, never applied. */
@@ -47,7 +47,15 @@ export const getProducerResearchStatus=(id:string,requestId?:string)=>{
   const suffix=requestId?`?requestId=${encodeURIComponent(requestId)}`:'';
   return apiFetch(`/api/producers/${id}/research-status${suffix}`,{headers:authHeaders()}).then(async r=>r.status===404?null:json<ProducerResearchRun>(r,'Could not load producer research status'));
 };
-export const researchProducer=(id:string,requestId=crypto.randomUUID(),refresh=false)=>apiFetch(`/api/producers/${id}/research`,{method:'POST',headers:authHeaders(true),body:JSON.stringify({confirmation:'RUN_PRODUCER_RESEARCH',requestId,...refresh?{refresh:true}:{}})}).then(r=>json<{accepted:true;researchRequestId:string;existing:boolean;cached?:boolean;waitingForFriend?:boolean;creditOperationId:string}>(r,'Producer research could not be queued'));
+export const researchProducer=(id:string,requestId=crypto.randomUUID(),refreshProfile=false,rangeOnly=false)=>apiFetch(`/api/producers/${id}/research`,{method:'POST',headers:authHeaders(true),body:JSON.stringify({confirmation:'RUN_PRODUCER_RESEARCH',requestId,refreshProfile,rangeOnly})})
+  .then(r=>json<{accepted:true;researchRequestId:string;existing:boolean;cached?:boolean;waitingForFriend?:boolean;creditOperationId?:string}>(r,'Producer research could not be queued'))
+  .then(result=>{
+    // A cached or friend-sponsored answer is not a queued run, so the "already running"
+    // guard below must not fire on it: nothing was queued and nothing needs retrying.
+    if(result.cached||result.waitingForFriend)return result;
+    if((refreshProfile||rangeOnly)&&result.existing)throw new Error('A producer research run is already in progress. The requested refresh was not queued; try again after it finishes.');
+    return result;
+  });
 export const cancelProducerResearch=(id:string,requestId:string)=>apiFetch(`/api/producers/${id}/research-cancel`,{method:'POST',headers:authHeaders(true),body:JSON.stringify({confirmation:'CANCEL_PRODUCER_RESEARCH',requestId})}).then(r=>json<ResearchCancelResult>(r,'Could not cancel producer research'));
 export const mergeProducer=(destinationId:string,sourceProducerId:string)=>apiFetch(`/api/producers/${destinationId}/merge`,{method:'POST',headers:authHeaders(true),body:JSON.stringify({confirmation:'MERGE_PRODUCER',sourceProducerId})}).then(r=>json<{mergeId:string;destinationId:string;canonicalName:string;mergedName:string}>(r,'Could not link producer'));
 export const removeProducerHeroImage=(id:string)=>apiFetch(`/api/producers/${id}/hero-image`,{method:'DELETE',headers:authHeaders(true),body:JSON.stringify({confirmation:'REMOVE_PRODUCER_PHOTO'})}).then(r=>json<{id:string;removed:boolean}>(r,'Could not remove this photo'));

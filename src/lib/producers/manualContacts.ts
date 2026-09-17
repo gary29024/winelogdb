@@ -1,9 +1,12 @@
 export type ManualProducerContactType='email'|'phone'|'website'|'instagram'|'other';
 export type ManualProducerContact={id:string;type:ManualProducerContactType;label:string|null;value:string;note:string|null;createdAt:string;updatedAt:string};
-export type ManualProducerContactInput={type?:unknown;label?:unknown;value?:unknown;note?:unknown};
+export type ManualProducerContactInput={type?:unknown;label?:unknown;value?:unknown;note?:unknown;official?:unknown;confirmation?:unknown};
+type ContactSource={title:string;url:string};
 
 type Row={id:string;producer_id:string;contact_type:ManualProducerContactType;label:string|null;value:string;note:string|null;created_at:string;updated_at:string};
 const TYPES=new Set<ManualProducerContactType>(['email','phone','website','instagram','other']);
+export const USER_CONFIRMED_WEBSITE_SOURCE='Confirmed by you · official website';
+export const USER_CONFIRMED_INSTAGRAM_SOURCE='Confirmed by you · official Instagram';
 
 function cleanOptional(value:unknown,max:number){const text=typeof value==='string'?value.trim():'';return text?text.slice(0,max):null}
 function normalizeUrl(value:string,instagram=false){
@@ -32,6 +35,21 @@ export function dedupeManualProducerContacts(rows:ManualProducerContact[]){
   const seen=new Set<string>();return rows.filter(row=>{const key=manualProducerContactKey(row);if(seen.has(key))return false;seen.add(key);return true});
 }
 
+function parseSources(value:unknown){
+  try{const parsed=JSON.parse(String(value??'[]')) as unknown;if(!Array.isArray(parsed))return [] as ContactSource[];return parsed.filter((item):item is ContactSource=>Boolean(item&&typeof item==='object'&&typeof (item as ContactSource).url==='string'&&typeof (item as ContactSource).title==='string'))}catch{return [] as ContactSource[]}
+}
+
+export function prepareOfficialContactPromotion(contact:{type:ManualProducerContactType;value:string},existingSources:ContactSource[]=[]){
+  if(contact.type!=='website'&&contact.type!=='instagram')throw new Error('Only a website or Instagram contact can be made official');
+  const value=normalizeUrl(contact.value,contact.type==='instagram'),url=new URL(value);
+  if(url.protocol!=='https:')throw new Error('Official contacts must use HTTPS');
+  const title=contact.type==='website'?USER_CONFIRMED_WEBSITE_SOURCE:USER_CONFIRMED_INSTAGRAM_SOURCE;
+  // This label records the assertion origin, even if research later verifies it.
+  // Reconfirmation replaces the previous marker of the same contact kind.
+  const sources=[{title,url:value},...existingSources.filter(source=>source.title!==title&&source.url!==value)].slice(0,10);
+  return {type:contact.type,value,sources};
+}
+
 const mapRow=(row:Row):ManualProducerContact=>({id:row.id,type:row.contact_type,label:row.label??null,value:row.value,note:row.note??null,createdAt:row.created_at,updatedAt:row.updated_at});
 
 async function producerExists(db:D1Database,owner:string,producerId:string){return Boolean(await db.prepare('SELECT id FROM producers WHERE owner_id=? AND id=?').bind(owner,producerId).first<{id:string}>())}
@@ -58,6 +76,16 @@ export async function createManualProducerContact(db:D1Database,owner:string,pro
 
 export async function updateManualProducerContact(db:D1Database,owner:string,producerId:string,contactId:string,input:ManualProducerContactInput){
   const existing=await contactForProducer(db,owner,producerId,contactId);if(!existing)throw new Error('Supplementary contact not found');const contact=normalizeManualProducerContact(input),stamp=new Date().toISOString();
+  if(input.official===true){
+    if(input.confirmation!=='CONFIRM_OFFICIAL_CONTACT')throw new Error('Official contact promotion requires explicit confirmation');
+    const producer=await db.prepare('SELECT contact_sources_json FROM producers WHERE owner_id=? AND id=?').bind(owner,producerId).first<{contact_sources_json:string|null}>();if(!producer)throw new Error('Producer not found');
+    const promoted=prepareOfficialContactPromotion(contact,parseSources(producer.contact_sources_json)),sources=JSON.stringify(promoted.sources);
+    const update=promoted.type==='website'
+      ?db.prepare('UPDATE producers SET official_website_url=?,contact_sources_json=?,updated_at=? WHERE owner_id=? AND id=?').bind(promoted.value,sources,stamp,owner,producerId)
+      :db.prepare('UPDATE producers SET instagram_url=?,contact_sources_json=?,updated_at=? WHERE owner_id=? AND id=?').bind(promoted.value,sources,stamp,owner,producerId);
+    await db.batch([update,db.prepare('DELETE FROM producer_manual_contacts WHERE owner_id=? AND id=?').bind(owner,contactId)]);
+    return {id:contactId,...contact,value:promoted.value,createdAt:existing.created_at,updatedAt:stamp} satisfies ManualProducerContact;
+  }
   await db.prepare('UPDATE producer_manual_contacts SET contact_type=?,label=?,value=?,note=?,updated_at=? WHERE owner_id=? AND id=?').bind(contact.type,contact.label,contact.value,contact.note,stamp,owner,contactId).run();
   return {id:contactId,...contact,createdAt:existing.created_at,updatedAt:stamp} satisfies ManualProducerContact;
 }
