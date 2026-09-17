@@ -3,15 +3,16 @@
 > **Owner shortcut:** if you are preparing the existing WineLog deployment and do not want to work through implementation details, use [GO_LIVE.md](GO_LIVE.md). It gives the exact Google OAuth and Cloudflare settings to complete **before merging**, so the app can be sign-in-ready immediately after deployment.
 
 This change prepares an invite-only deployment with at most 25 accounts. It does
-not deploy resources, open admission, grant initial credits, or upgrade a plan.
-The existing `owner` keys remain unchanged in D1 and R2.
+not deploy resources, open admission, grant initial member credits, or upgrade a
+plan. The existing `owner` keys remain unchanged in D1 and R2.
 
 ## Configure before launch
 
-1. Back up the existing D1 database and record its row counts, migration state,
-   and R2 object inventory. Keep the backup outside the public assets directory.
-   Use `npx wrangler d1 export DB --remote --output=winelog-before-multi-user.sql`.
-   Check the export is readable and test restoring it to a separate database.
+1. Record the pre-merge time so D1 Time Travel can restore the database to a
+   point before cutover if required. For an independent copy, export D1 with
+   `npx wrangler d1 export DB --remote --output=winelog-before-multi-user.sql`.
+   Record row counts, migration state and the R2 object inventory as a separate
+   check. D1 Time Travel does not restore R2 objects.
 2. Create a Google **web** OAuth client and register the exact HTTPS
    `APP_URL/api/auth/google/callback`. Configure `GOOGLE_CLIENT_ID`,
    `GOOGLE_CLIENT_SECRET`, `OWNER_EMAIL` (or `OWNER_GOOGLE_SUB`), `APP_URL`, `SUPPORT_EMAIL`, and a rotated
@@ -26,7 +27,8 @@ The existing `owner` keys remain unchanged in D1 and R2.
    Follow the complete [Google OAuth setup guide](docs/google-oauth-setup.md).
 3. Apply migrations 0063 (accounts and credits), 0064 (storage and dispatch),
    0065 (provider receipts and cleanup), 0066 (friend codes and requests),
-   0067 (adopted research) and 0068 (the owner-scoped producer alias pool), then deploy the new public entrypoint
+   0067 (adopted research), 0068 (the owner-scoped producer alias pool) and
+   0069 (the initial current budget month), then deploy the new public entrypoint
    `worker/multiUserEntry.ts`. Never deploy the old entrypoints as separate public
    Workers. Password login returns 410, and public bearer tokens are rejected.
    For Cloudflare Git Builds, use `npm run build` as the Build command and
@@ -35,29 +37,32 @@ The existing `owner` keys remain unchanged in D1 and R2.
    old queue jobs before cutover: new consumers require a member identity and a
    credit operation for credit-priced AI work.
 4. Sign in with the configured owner. Check legacy wines, producers, cuvées,
-   cellar holdings, tasting documents and photos against the backup counts.
-5. In **Account & friends → Owner controls**, configure all budget fields and
-   every action price. Migration 0063 seeds deliberately unwelcoming defaults -
-   one member, no overages, small budgets - so a fresh deployment answers
-   requests instead of 503ing, but it prices nothing and issues no invitation,
-   so it cannot spend until you act. Prices are positive integers, versioned, and disabled
-   until configured. Set an initial owner grant; all accounts start at zero.
-   Credits have no expiry, transfer, or cash value.
+   cellar holdings, tasting documents and photos against the pre-cutover checks.
+   The owner continues to pay the provider directly: owner AI actions create
+   zero-credit operation records but do not require a member price or a self-grant.
+5. In **Account & friends → Owner controls**, configure the member-facing budget
+   fields and every action price you intend members to use. Migration 0063 seeds
+   deliberately conservative defaults - one member, no overages, small budgets -
+   while migration 0069 seeds the current observation month only when blank so
+   the existing owner's first AI action is not blocked. Member prices are positive
+   integers, versioned, and disabled until configured. Grant member/test credits
+   only when you are ready to admit them. Credits have no expiry, transfer, or
+   cash value.
 6. Run **Inventory R2 storage** and **Index existing research** to completion.
    Both jobs use resumable cursors. Unknown legacy object prefixes are charged
    conservatively to `owner`. Research indexing also visits producers with no
    journal wines. Existing research must pass the current quality gates before
    being made reusable. No friend admission is permitted before these tasks and
-   all prices are configured.
+   all member prices are configured.
 7. Verify live Cloudflare subscriptions, remaining allowances and provider
    budgets. Run the production workload checks below, then issue one test
    invitation tied to the member's verified email. Invitations expire in seven
    days and can be consumed once. Admission and friendship are separate steps.
 
-Do not run `npm run deploy` until the backup, configuration, and maintenance
-window are ready; that script applies remote migrations. Reverting only the
-Worker to password authentication after admitting members is unsafe. Keep the
-new boundary in place during any application rollback.
+Do not run `npm run deploy` until the recovery point, configuration, and
+maintenance window are ready; that script applies remote migrations. Reverting
+only the Worker to password authentication after admitting members is unsafe.
+Keep the new boundary in place during any application rollback.
 
 ## How access works
 
@@ -121,15 +126,18 @@ treated as the same release merely because its wine name matches.
 Producer facts, cuvée terroir, vintage context, producer catalogue and vintage
 windows retain their respective scopes.
 
-Each credit-priced AI action first receives an expiring server quote bound to
-account, path, input and price versions. Execution supplies `X-WineLog-Quote` and
-`Idempotency-Key`. Reservations, capture and release are atomic D1 batches backed
-by an append-only ledger and wallet constraints. Successful scan drafts are
-charged even if later discarded. Failed units are released; successful research
-sections are captured separately. Verified continuations of the same truncated
-sheet page are free and limited to four continuations. Internal retries add no
-credit fee. Producer campaigns are limited to eight producers per request to
-bound D1 queries; additional campaigns can follow.
+Each credit-priced **member** AI action first receives an expiring server quote
+bound to account, path, input and price versions. Execution supplies
+`X-WineLog-Quote` and `Idempotency-Key`. Reservations, capture and release are
+atomic D1 batches backed by an append-only ledger and wallet constraints.
+Successful scan drafts are charged even if later discarded. Failed units are
+released; successful research sections are captured separately. Verified
+continuations of the same truncated sheet page are free and limited to four
+continuations. Internal retries add no credit fee. Producer campaigns are limited
+to eight producers per request to bound D1 queries; additional campaigns can
+follow. The owner remains zero-credit because the owner pays provider costs
+directly; owner requests still pass through the operation and usage accounting
+paths so activity remains observable.
 
 Smart Search embeddings are a deliberate zero-credit exception because their
 cost is very low. Both query and document embedding provider attempts are still
@@ -212,9 +220,10 @@ New API families: `/api/auth/*`, `/api/me`, `/api/friends/*` (including
 `/api/wines/:id/shares`, `/api/images/:id/sharing-copy`, `/api/shared/wines`,
 `/api/credits`, `/api/credits/history`, `/api/credits/quotes?path=…`,
 `/api/credits/operations/:id`, and owner-only `/api/admin/*`.
-Existing private resource routes remain; credit-priced AI routes require the
-quote headers. Smart Search embeddings are zero-credit but usage-metered as
-described above. Operation reads are scoped to their initiating user.
+Existing private resource routes remain; credit-priced member AI routes require
+the quote headers. Owner actions and Smart Search embeddings are zero-credit but
+usage-metered as described above. Operation reads are scoped to their initiating
+user.
 
 The identity table supports provider-neutral subjects; Apple login and native
 token exchange are deliberately deferred. Linking must prove both identities
