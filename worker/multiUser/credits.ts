@@ -89,7 +89,7 @@ export async function quote(request:Request,env:CreditEnv,member:Member){
 async function rejectOverlappingWork(db:D1Database,user:string,units:Array<{researchKey?:string}>){
  const keys=units.flatMap(unit=>unit.researchKey?[unit.researchKey]:[]);if(!keys.length)return;
  if(await db.prepare(`SELECT w.operation_id FROM research_work w JOIN friendships f ON f.friend_id=w.owner_id AND f.user_id=?
- WHERE w.subject_key IN (SELECT value FROM json_each(?)) LIMIT 1`).bind(user,JSON.stringify(keys)).first())throw new ApiError(409,'A friend is researching part of this request. Their result will be reused when it finishes; request a new quote then.');
+ WHERE w.subject_key IN (${`SELECT value FROM json_each(?)`}) LIMIT 1`).bind(user,JSON.stringify(keys)).first())throw new ApiError(409,'A friend is researching part of this request. Their result will be reused when it finishes; request a new quote then.');
 }
 export async function reserve(request:Request,env:CreditEnv,member:Member,observedUsd=0):Promise<{operation:CreditOperation;existing:boolean}>{
  const quoteId=request.headers.get('X-WineLog-Quote'),key=request.headers.get('Idempotency-Key');
@@ -124,10 +124,10 @@ export async function reserve(request:Request,env:CreditEnv,member:Member,observ
     coalesce((SELECT sum(budget_hold_usd) FROM credit_operations WHERE status IN ('reserved','running','review')),0)+?+?<=?)) AND
     (?=1 OR NOT EXISTS(SELECT 1 FROM credit_operations WHERE user_id=? AND path=? AND status IN ('reserved','running','review'))) AND
     (?=0 OR NOT EXISTS(SELECT 1 FROM research_work w JOIN friendships f ON f.friend_id=w.owner_id AND f.user_id=? WHERE w.subject_key IN (SELECT value FROM json_each(?))))`)
-    .bind(id,member.id,key,quoteId,quoted.path,fingerprint,JSON.stringify(units),total,now,now,units.length*config.aiUnitBudgetUsd,units.length,config.aiConcurrency,now.slice(0,10),config.aiDailyOperations,units.length*config.aiUnitBudgetUsd,observedUsd,config.aiMonthlyBudgetUsd,path==='/api/recognition'||path==='/api/maturity/vintage'||path.endsWith('/sheet/parse')?1:0,member.id,path,total,member.id,JSON.stringify(lockKeys)),
+    .bind(id,member.id,key,quoteId,quoted.path,fingerprint,JSON.stringify(units),total,now,now,units.length*config.aiUnitBudgetUsd,units.length,config.aiConcurrency,now.slice(0,10),config.aiDailyOperations,units.length*config.aiUnitBudgetUsd,observedUsd,config.aiMonthlyBudgetUsd,path==='/api/recognition'||path==='/api/maturity/vintage'||path.endsWith('/sheet/parse')?1:0,member.id,path,units.length,member.id,JSON.stringify(lockKeys)),
    // Foreign key + wallet CHECK constraints roll the entire batch back on rejection.
    env.DB.prepare("INSERT INTO credit_ledger(id,user_id,operation_id,kind,amount,actor_id,reason) VALUES(?,?,?,'reserve',?,?,?)").bind(`${id}:reserve`,member.id,id,total,member.id,'AI quote accepted'),
-   ...(sponsor?[env.DB.prepare('INSERT INTO research_followers(operation_id,sponsor_operation_id,sponsor_id) VALUES(?,?,?)').bind(id,sponsor.id,sponsor.user_id)]:total>0?lockKeys.map(lockKey=>env.DB.prepare('INSERT INTO research_work(subject_key,operation_id,owner_id) VALUES(?,?,?)').bind(lockKey,id,member.id)):[]),
+   ...(sponsor?[env.DB.prepare('INSERT INTO research_followers(operation_id,sponsor_operation_id,sponsor_id) VALUES(?,?,?)').bind(id,sponsor.id,sponsor.user_id)]:units.length>0?lockKeys.map(lockKey=>env.DB.prepare('INSERT INTO research_work(subject_key,operation_id,owner_id) VALUES(?,?,?)').bind(lockKey,id,member.id)):[]),
    ...units.filter(u=>u.parentOperationId).map(u=>env.DB.prepare('INSERT INTO sheet_continuations(parent_operation_id,operation_id) VALUES(?,?)').bind(u.parentOperationId!,id))
   ]);
  }catch{
@@ -137,13 +137,14 @@ export async function reserve(request:Request,env:CreditEnv,member:Member,observ
  }
  const operation=await env.DB.prepare('SELECT * FROM credit_operations WHERE id=?').bind(id).first<CreditOperation>();if(!operation)throw new ApiError(503,'Could not reserve credits');return {operation,existing:false};
 }
-export async function settle(db:D1Database,op:CreditOperation,captured:number,response?:{body:unknown;status:number}){
+export async function settle(db:D1Database,op:CreditOperation,captured:number,response?:{body:unknown;status:number},successful?:boolean){
  const amount=Math.min(op.reserved,Math.max(0,captured)),release=op.reserved-amount,now=stamp();
+ const complete=successful??(amount>0||response?.status===200);
  await db.batch([
   db.prepare("INSERT OR IGNORE INTO credit_ledger(id,user_id,operation_id,kind,amount,actor_id,reason) VALUES(?,?,?,'capture',?,?,?)").bind(`${op.id}:capture`,op.user_id,op.id,amount,op.user_id,'Validated AI results saved'),
   db.prepare("INSERT OR IGNORE INTO credit_ledger(id,user_id,operation_id,kind,amount,actor_id,reason) VALUES(?,?,?,'release',?,?,?)").bind(`${op.id}:release`,op.user_id,op.id,release,op.user_id,'Unused AI reservation'),
   db.prepare("UPDATE credit_operations SET captured=(SELECT amount FROM credit_ledger WHERE id=?),status=?,response_json=coalesce(?,response_json),response_status=coalesce(?,response_status),updated_at=? WHERE id=? AND status IN ('reserved','running','review')")
-   .bind(`${op.id}:capture`,amount>0||response?.status===200?'complete':'failed',response?JSON.stringify(response.body):null,response?.status??null,now,op.id),
+   .bind(`${op.id}:capture`,complete?'complete':'failed',response?JSON.stringify(response.body):null,response?.status??null,now,op.id),
   db.prepare('DELETE FROM research_work WHERE operation_id=?').bind(op.id)
  ]);
 }
@@ -154,7 +155,10 @@ export async function saveOperationResponse(db:D1Database,op:CreditOperation,res
  }
  const runId=String(data.researchRequestId||data.sessionId||(data.campaign as {id?:string}|undefined)?.id||'')||null;
  if(response.status===202){await db.prepare("UPDATE credit_operations SET status='running',response_json=?,response_status=?,run_id=?,updated_at=? WHERE id=?").bind(JSON.stringify(data),202,runId,stamp(),op.id).run()}
- else await settle(db,op,response.ok&&!data.error&&data.cached!==true?op.reserved:0,{body:data,status:response.status});
+ else{
+  const successful=response.ok&&!data.error;
+  await settle(db,op,successful&&data.cached!==true?op.reserved:0,{body:data,status:response.status},successful);
+ }
  const current=await db.prepare('SELECT * FROM credit_operations WHERE id=?').bind(op.id).first<CreditOperation>();return {...data,creditSettlement:creditSummary(current??op)};
 }
 export async function reconcileOperation(db:D1Database,op:CreditOperation){
@@ -166,32 +170,34 @@ export async function reconcileOperation(db:D1Database,op:CreditOperation){
  if(dependency){
   const access=await db.prepare("SELECT 1 FROM friendships f JOIN app_users u ON u.id=f.friend_id AND u.status='active' WHERE f.user_id=? AND f.friend_id=?").bind(op.user_id,dependency.sponsor_id).first();
   const sponsor=await db.prepare('SELECT status FROM credit_operations WHERE id=?').bind(dependency.sponsor_operation_id).first<{status:string}>();
-  if(!access||!sponsor||['complete','failed'].includes(sponsor.status))await settle(db,op,0,{body:{cached:Boolean(access&&sponsor?.status==='complete'),friendResearch:true},status:access&&sponsor?.status==='complete'?200:409});
+  if(!access||!sponsor||['complete','failed'].includes(sponsor.status))await settle(db,op,0,{body:{cached:Boolean(access&&sponsor?.status==='complete'),friendResearch:true},status:access&&sponsor?.status==='complete'?200:409},Boolean(access&&sponsor?.status==='complete'));
   return;
  }
- const units=JSON.parse(op.units_json) as CreditUnit[];let terminal=false,captured=0;
+ const units=JSON.parse(op.units_json) as CreditUnit[];let terminal=false,captured=0,successfulUnits=0;
  const first=units[0];
  if(op.path.includes('/deep-search')&&op.run_id){
   const run=await db.prepare('SELECT status FROM wine_research_runs WHERE owner_id=? AND request_id=?').bind(op.user_id,op.run_id).first<{status:string}>();
   const active=await db.prepare("SELECT id FROM research_batch_jobs WHERE owner_id=? AND request_id=? AND status='running' LIMIT 1").bind(op.user_id,op.run_id).first();
   terminal=Boolean(run&&run.status!=='running'&&!active);
-  if(terminal)for(const unit of units){if(await db.prepare('SELECT 1 FROM research_cache WHERE owner_id=? AND scope=? AND cache_key=? AND researched_at>=?').bind(op.user_id,unit.scope!,unit.cacheKey!,op.created_at).first())captured+=unit.credits}
+  if(terminal)for(const unit of units){if(await db.prepare('SELECT 1 FROM research_cache WHERE owner_id=? AND scope=? AND cache_key=? AND researched_at>=?').bind(op.user_id,unit.scope!,unit.cacheKey!,op.created_at).first()){captured+=unit.credits;successfulUnits++}}
  }else if(first?.action==='scan_batch'){
   const rows=await db.prepare('SELECT id,status,recognition_json FROM batch_recognition_items WHERE owner_id=? AND session_id=?').bind(op.user_id,first.targetId!).all<{id:string;status:string;recognition_json:string|null}>();
   terminal=units.every(u=>rows.results.some(r=>r.id===(u.resultId??u.id)&&!['staged','submitted'].includes(r.status)));
-  captured=units.filter(u=>rows.results.some(r=>r.id===(u.resultId??u.id)&&r.recognition_json)).reduce((sum,u)=>sum+u.credits,0);
+  const successful=units.filter(u=>rows.results.some(r=>r.id===(u.resultId??u.id)&&r.recognition_json));
+  successfulUnits=successful.length;captured=successful.reduce((sum,u)=>sum+u.credits,0);
  }else if(first?.action==='producer_research'&&op.run_id){
   if(op.path==='/api/producers/research-batch'){
    const rows=await db.prepare('SELECT producer_id,status FROM producer_research_campaign_items WHERE campaign_id=?').bind(op.run_id).all<{producer_id:string;status:string}>();
    terminal=rows.results.length>0&&rows.results.every(r=>!['pending','running'].includes(r.status));
-   captured=units.filter(u=>rows.results.some(r=>r.producer_id===u.targetId&&r.status==='complete')).reduce((sum,u)=>sum+u.credits,0);
+   const successful=units.filter(u=>rows.results.some(r=>r.producer_id===u.targetId&&r.status==='complete'));
+   successfulUnits=successful.length;captured=successful.reduce((sum,u)=>sum+u.credits,0);
   }else{
    const run=await db.prepare('SELECT status FROM producer_research_runs WHERE owner_id=? AND request_id=?').bind(op.user_id,op.run_id).first<{status:string}>();
    const active=await db.prepare("SELECT id FROM research_batch_jobs WHERE owner_id=? AND request_id=? AND status='running' LIMIT 1").bind(op.user_id,op.run_id).first();
-   terminal=Boolean(run&&run.status!=='running'&&!active);captured=run?.status==='complete'?op.reserved:0;
+   terminal=Boolean(run&&run.status!=='running'&&!active);successfulUnits=run?.status==='complete'?1:0;captured=successfulUnits?op.reserved:0;
   }
  }
- if(terminal)await settle(db,op,captured);
+ if(terminal)await settle(db,op,captured,undefined,successfulUnits>0);
  else if(Date.parse(op.created_at)<Date.now()-48*3600_000)await db.prepare("UPDATE credit_operations SET status='review',updated_at=? WHERE id=? AND status<>'review'").bind(stamp(),op.id).run();
 }
 export async function creditRead(request:Request,env:CreditEnv,member:Member):Promise<Response|null>{
