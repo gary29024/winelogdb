@@ -13,6 +13,7 @@ export function AdminPage(){
  const [userId,setUserId]=useState(''),[credits,setCredits]=useState(1),[action,setAction]=useState('scan_single'),[email,setEmail]=useState('');
  async function load(){const next=await apiJson<Overview>('/api/admin/overview');setData(next);if(next.settings)setConfig(next.settings)}
  useEffect(()=>{void load().catch(e=>setMessage(e.message))},[]);
+ useEffect(()=>{if(!data||window.location.hash!=='#member-usage')return;const frame=window.requestAnimationFrame(()=>document.getElementById('member-usage')?.scrollIntoView({block:'start'}));return()=>window.cancelAnimationFrame(frame)},[data]);
  async function run(fn:()=>Promise<unknown>){setBusy(true);setMessage('');try{const result=await fn();setMessage(typeof result==='string'?result:'Saved');await load()}catch(e){setMessage((e as Error).message)}finally{setBusy(false)}}
  async function rollout(kind:string){let complete=false;while(!complete){const result=await apiJson<{complete:boolean;processed:number}>(`/api/admin/rollout/${kind}`,'POST',{});complete=result.complete;setMessage(`${kind}: processed ${result.processed}${complete?' — complete':''}`)}return `${kind} complete`}
  const usageByUser=new Map(data?.memberUsage.items.map(item=>[item.userId,item])??[]),storageByUser=new Map(data?.storage.map(item=>[item.owner_id,Number(item.byte_size)||0])??[]);
