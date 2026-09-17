@@ -1,5 +1,7 @@
 # Multi-user pilot cutover
 
+> **Owner shortcut:** if you are preparing the existing WineLog deployment and do not want to work through implementation details, use [GO_LIVE.md](GO_LIVE.md). It gives the exact Google OAuth and Cloudflare settings to complete **before merging**, so the app can be sign-in-ready immediately after deployment.
+
 This change prepares an invite-only deployment with at most 25 accounts. It does
 not deploy resources, open admission, grant initial credits, or upgrade a plan.
 The existing `owner` keys remain unchanged in D1 and R2.
@@ -12,23 +14,26 @@ The existing `owner` keys remain unchanged in D1 and R2.
    Check the export is readable and test restoring it to a separate database.
 2. Create a Google **web** OAuth client and register the exact HTTPS
    `APP_URL/api/auth/google/callback`. Configure `GOOGLE_CLIENT_ID`,
-   `GOOGLE_CLIENT_SECRET`, `OWNER_EMAIL` (or `OWNER_GOOGLE_SUB`), `APP_URL`, and a rotated
+   `GOOGLE_CLIENT_SECRET`, `OWNER_EMAIL` (or `OWNER_GOOGLE_SUB`), `APP_URL`, `SUPPORT_EMAIL`, and a rotated
    `AUTH_SECRET`. `OWNER_EMAIL` is the address you sign in to Google with: it is
    checked against a Google-verified claim and only until the owner account has
    an identity bound, so it is a one-time claim rather than a standing key.
    `OWNER_GOOGLE_SUB` is exact and takes precedence when set, but you cannot read
-   your own subject until you have signed in at least once - set it afterwards if
-   you want the stricter check. Ownership is never inferred from the first login
-   alone. Follow the complete [Google OAuth setup guide](docs/google-oauth-setup.md),
-   including its public privacy and terms pages, before moving the consent screen
-   to production. See [Google OIDC](https://developers.google.com/identity/openid-connect/openid-connect).
+   your own subject until you have signed in at least once, so it is optional
+   post-launch hardening rather than a launch prerequisite. Ownership is never
+   inferred from the first login alone. Configure production runtime values in
+   Cloudflare **Settings → Variables and Secrets**, not only in Build Variables.
+   Follow the complete [Google OAuth setup guide](docs/google-oauth-setup.md).
 3. Apply migrations 0063 (accounts and credits), 0064 (storage and dispatch),
    0065 (provider receipts and cleanup), 0066 (friend codes and requests),
    0067 (adopted research) and 0068 (the owner-scoped producer alias pool), then deploy the new public entrypoint
    `worker/multiUserEntry.ts`. Never deploy the old entrypoints as separate public
    Workers. Password login returns 410, and public bearer tokens are rejected.
-   Drain/reconcile old queue jobs before cutover: new consumers require a member
-   identity and a credit operation for credit-priced AI work.
+   For Cloudflare Git Builds, use `npm run build` as the Build command and
+   `npm run db:migrate && npx wrangler deploy` as the Deploy command so the
+   database schema advances before the new Worker is promoted. Drain/reconcile
+   old queue jobs before cutover: new consumers require a member identity and a
+   credit operation for credit-priced AI work.
 4. Sign in with the configured owner. Check legacy wines, producers, cuvées,
    cellar holdings, tasting documents and photos against the backup counts.
 5. In **Account & friends → Owner controls**, configure all budget fields and
