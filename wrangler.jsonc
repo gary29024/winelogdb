@@ -11,7 +11,12 @@
     "logs": { "enabled": true, "head_sampling_rate": 1 },
     "traces": { "enabled": true, "head_sampling_rate": 1 }
   },
-  "assets": { "binding": "ASSETS", "directory": "./dist", "not_found_handling": "single-page-application" },
+  "assets": {
+    "binding": "ASSETS",
+    "directory": "./dist",
+    "not_found_handling": "single-page-application",
+    "run_worker_first": ["/api/*"]
+  },
   // Journal semantic search and Producer Range fallback use Workers AI. Range
   // extraction prefers Z.AI GLM-4.7-Flash through AI Gateway BYOK, then the
   // Cloudflare-hosted Qwen3-30B-A3B, then grounded Gemini.
