@@ -1,14 +1,16 @@
 import { spawn } from 'node:child_process';
+import { once } from 'node:events';
 import process from 'node:process';
 import { setTimeout as sleep } from 'node:timers/promises';
+import { fileURLToPath } from 'node:url';
 
 const host='127.0.0.1';
 const port=8788;
 const origin=`http://${host}:${port}`;
-const npx=process.platform==='win32'?'npx.cmd':'npx';
+const wranglerCli=fileURLToPath(new globalThis.URL('../node_modules/wrangler/bin/wrangler.js',import.meta.url));
 const authSecret='platform-smoke-auth-secret-0123456789abcdef';
 const args=[
-  'wrangler','dev','--local','--ip',host,'--port',String(port),
+  'dev','--local','--ip',host,'--port',String(port),
   '--var',`APP_URL:${origin}`,
   '--var','SUPPORT_EMAIL:support@example.com',
   '--var','GOOGLE_CLIENT_ID:smoke.apps.googleusercontent.com',
@@ -17,7 +19,14 @@ const args=[
   '--var',`AUTH_SECRET:${authSecret}`,
 ];
 
-const child=spawn(npx,args,{stdio:['ignore','pipe','pipe'],env:{...process.env,CI:'1'}});
+// Spawn Wrangler directly rather than through npx. The npx wrapper can exit
+// separately from Wrangler and leave the actual dev server alive in CI.
+const detached=process.platform!=='win32';
+const child=spawn(process.execPath,[wranglerCli,...args],{
+  stdio:['ignore','pipe','pipe'],
+  env:{...process.env,CI:'1'},
+  detached,
+});
 let output='';
 for(const stream of [child.stdout,child.stderr])stream.on('data',chunk=>{
   const text=String(chunk);
@@ -27,7 +36,9 @@ for(const stream of [child.stdout,child.stderr])stream.on('data',chunk=>{
 
 const fail=message=>{throw new Error(`${message}\n\nRecent Wrangler output:\n${output}`)};
 async function request(path,init={}){
-  return globalThis.fetch(`${origin}${path}`,{redirect:'manual',...init});
+  const options={redirect:'manual',...init};
+  if(!options.signal)options.signal=globalThis.AbortSignal.timeout(5000);
+  return globalThis.fetch(`${origin}${path}`,options);
 }
 async function waitUntilReady(){
   const deadline=Date.now()+30000;
@@ -48,7 +59,46 @@ async function expectJson(response,label,status){
   expect(contentType.includes('application/json'),`${label}: expected JSON, got ${contentType||'no content-type'}`);
   return response.json();
 }
+function signalChild(signal){
+  if(child.exitCode!==null)return;
+  if(process.platform==='win32'){
+    child.kill(signal);
+    return;
+  }
+  try{
+    // detached:true creates a process group, so this stops Wrangler and all of
+    // its local runtime children rather than only the immediate Node process.
+    process.kill(-child.pid,signal);
+  }catch(error){
+    if(error?.code!=='ESRCH')throw error;
+  }
+}
+async function waitForExit(milliseconds){
+  if(child.exitCode!==null)return;
+  await Promise.race([once(child,'exit'),sleep(milliseconds)]);
+}
+async function stopChild(){
+  if(child.exitCode===null){
+    signalChild('SIGTERM');
+    await waitForExit(1500);
+  }
+  if(child.exitCode===null){
+    signalChild('SIGKILL');
+    await waitForExit(1000);
+  }
+  child.stdout.destroy();
+  child.stderr.destroy();
+}
 
+// This is a release gate, not a long-running service. Even a future Wrangler
+// regression must fail fast instead of consuming the whole CI job timeout.
+const watchdog=globalThis.setTimeout(()=>{
+  globalThis.console.error('Platform boundary smoke exceeded 60 seconds.');
+  try{signalChild('SIGKILL');}catch{}
+  process.exit(1);
+},60000);
+
+let exitCode=0;
 try{
   await waitUntilReady();
 
@@ -78,12 +128,19 @@ try{
   expect((login.headers.get('content-type')||'').includes('text/html'),'SPA /login did not return HTML');
 
   globalThis.console.log('Platform boundary smoke passed.');
-} finally {
-  if(child.exitCode===null){
-    child.kill('SIGTERM');
-    await Promise.race([
-      new Promise(resolve=>child.once('exit',resolve)),
-      sleep(3000).then(()=>{if(child.exitCode===null)child.kill('SIGKILL');}),
-    ]);
+}catch(error){
+  exitCode=1;
+  globalThis.console.error(error);
+}finally{
+  globalThis.clearTimeout(watchdog);
+  try{
+    await stopChild();
+  }catch(error){
+    exitCode=1;
+    globalThis.console.error('Failed to stop Wrangler cleanly:',error);
   }
 }
+
+// Force a deterministic end after cleanup so an inherited runtime handle can
+// never leave the CI step hanging after the assertions have finished.
+process.exit(exitCode);
