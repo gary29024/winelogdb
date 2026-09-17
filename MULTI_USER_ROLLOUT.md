@@ -24,11 +24,11 @@ The existing `owner` keys remain unchanged in D1 and R2.
    to production. See [Google OIDC](https://developers.google.com/identity/openid-connect/openid-connect).
 3. Apply migrations 0063 (accounts and credits), 0064 (storage and dispatch),
    0065 (provider receipts and cleanup), 0066 (friend codes and requests),
-   0067 (adopted research) and 0068 (the producer alias pool), then deploy the new public entrypoint
+   0067 (adopted research) and 0068 (the owner-scoped producer alias pool), then deploy the new public entrypoint
    `worker/multiUserEntry.ts`. Never deploy the old entrypoints as separate public
    Workers. Password login returns 410, and public bearer tokens are rejected.
    Drain/reconcile old queue jobs before cutover: new consumers require a member
-   identity and a credit operation for AI work.
+   identity and a credit operation for credit-priced AI work.
 4. Sign in with the configured owner. Check legacy wines, producers, cuvées,
    cellar holdings, tasting documents and photos against the backup counts.
 5. In **Account & friends → Owner controls**, configure all budget fields and
@@ -64,7 +64,7 @@ the outer Worker authenticates the session. Administration checks owner role
 separately. Session revocation and suspension take effect on subsequent requests.
 
 Each account receives a permanent friend code at creation, displayed as
-`A1B2-C3D4-E5F6` in **Account & friends**. Migration 0053 assigns codes to existing
+`A1B2-C3D4-E5F6` in **Account & friends**. Migration 0066 assigns codes to existing
 accounts too. Enter another member's code to send an in-app request. Only the
 recipient can accept it; sending requests in both directions does not bypass
 acceptance. Members can decline incoming requests or cancel sent requests.
@@ -96,23 +96,28 @@ account. Export any unsaved legacy drafts before cutover.
 Private producer/cuvée records remain owned by their author. Reusable factual
 records retain contributor, canonical subject, scope, source evidence, quality
 version and research time. Reads prefer valid own results, then the newest
-passing result from a currently accepted friend. Friend facts are assembled on
-read and never copied into another account's permanent research cache. Removing
-a friend therefore removes access without deleting independently researched data.
+passing result from a currently accepted friend. Once a friend-contributed scope
+has actually been shown to the reader, it is adopted into that reader's private
+`research_cache`, tagged with `source_user_id`. Adoption never republishes the
+scope as the reader's contribution and never overwrites research the reader paid
+for independently. Ending the friendship blocks new reuse from that former friend,
+but does not revoke research already shown and adopted.
 
 Cross-account matching requires normalized Unicode names and sufficient
 geography/style context. Vintage and release designations stay distinct; unknown
 or ambiguous identities are not automatically reused. Correct the private wine
 identity before asking for a new quote. Similar names alone do not merge records.
-For non-vintage wines, automatic reuse covers stable producer and terroir facts;
-exact-release findings stay private until an explicit release identity can be
-represented. An unknown bottling or disgorgement is never treated as the same
-release merely because its wine name matches.
+Manual producer aliases and producer merges are owner-scoped: they may expand
+that owner's lookup against friend research, but are never published as another
+member's correction. For non-vintage wines, automatic reuse covers stable
+producer and terroir facts; exact-release findings stay private until an explicit
+release identity can be represented. An unknown bottling or disgorgement is never
+treated as the same release merely because its wine name matches.
 Producer facts, cuvée terroir, vintage context, producer catalogue and vintage
 windows retain their respective scopes.
 
-Each AI action first receives an expiring server quote bound to account, path,
-input and price versions. Execution supplies `X-WineLog-Quote` and
+Each credit-priced AI action first receives an expiring server quote bound to
+account, path, input and price versions. Execution supplies `X-WineLog-Quote` and
 `Idempotency-Key`. Reservations, capture and release are atomic D1 batches backed
 by an append-only ledger and wallet constraints. Successful scan drafts are
 charged even if later discarded. Failed units are released; successful research
@@ -121,15 +126,23 @@ sheet page are free and limited to four continuations. Internal retries add no
 credit fee. Producer campaigns are limited to eight producers per request to
 bound D1 queries; additional campaigns can follow.
 
+Smart Search embeddings are a deliberate zero-credit exception because their
+cost is very low. Both query and document embedding provider attempts are still
+recorded in the per-account AI usage ledger under `search_embedding`, including
+the model and request count; document indexing also records the number of wines
+embedded while query embeddings add zero wine units. This keeps usage and cost
+visibility without deducting WineLog credits.
+
 Wine identity and producer names are also bound to the quote. Background
 submission and result saving reject a changed identity instead of researching
 or filing results under a different wine after an edit.
 
 Matching active friend research can be followed for zero credits. The initiating
 member funds it. A failed contribution or lost friendship does not start new AI
-work; a new explicit quote is required. Browsing never invokes AI.
-This includes matching vintage-window lookups. When only part of another wine
-or campaign overlaps active friend work, admission waits for that work to finish;
+work; a new explicit quote is required. Ordinary browsing never invokes AI;
+Smart Search invokes only the zero-credit, usage-metered embeddings described
+above. This includes matching vintage-window lookups. When only part of another
+wine or campaign overlaps active friend work, admission waits for that work to finish;
 the member then requests a new quote for the sections still missing. Scope locks
 also prevent concurrent requests from paying twice for that overlapping work.
 
@@ -194,8 +207,9 @@ New API families: `/api/auth/*`, `/api/me`, `/api/friends/*` (including
 `/api/wines/:id/shares`, `/api/images/:id/sharing-copy`, `/api/shared/wines`,
 `/api/credits`, `/api/credits/history`, `/api/credits/quotes?path=…`,
 `/api/credits/operations/:id`, and owner-only `/api/admin/*`.
-Existing private resource routes remain; AI routes now require the quote headers.
-Operation reads are scoped to their initiating user.
+Existing private resource routes remain; credit-priced AI routes require the
+quote headers. Smart Search embeddings are zero-credit but usage-metered as
+described above. Operation reads are scoped to their initiating user.
 
 The identity table supports provider-neutral subjects; Apple login and native
 token exchange are deliberately deferred. Linking must prove both identities
