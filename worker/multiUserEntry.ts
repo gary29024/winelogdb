@@ -1,10 +1,11 @@
 import legacy from './structureEntry';
 import { SignJWT } from 'jose';
-import { ApiError,json,stamp,type IdentityEnv } from './multiUser/common';
+import { ApiError,json,settings,stamp,type IdentityEnv } from './multiUser/common';
 import { authenticate,authRoute,verifyOrigin } from './multiUser/auth';
 import { socialRoute } from './multiUser/social';
 import { adminRoute,deploymentAiCost } from './multiUser/admin';
 import { aiRoute,creditRead,creditSummary,quote,reserve,saveOperationResponse,reconcileOperation,wineTargets,settle,type CreditOperation } from './multiUser/credits';
+import { claimResearchAllowance,ownerOnlyResearchPath,researchAllowance,usesWeeklyResearchAllowance } from './multiUser/allowance';
 import { providerAuthorization } from './multiUser/provider';
 import { claimDelivery,durableQueue,finishDelivery,flushOutbox,maintainJobs,markUncertain,type JobEnvelope } from './multiUser/jobs';
 import { meteredBucket } from './multiUser/storage';
@@ -21,6 +22,7 @@ async function internalRequest(request:Request,env:MultiUserEnv,user:string){
  const token=await new SignJWT({internal:true}).setProtectedHeader({alg:'HS256'}).setSubject(user).setIssuedAt().setExpirationTime('60s').sign(new TextEncoder().encode(env.AUTH_SECRET));
  const headers=new Headers(request.headers);headers.set('Authorization',`Bearer ${token}`);headers.delete('Cookie');return new Request(request,{headers});
 }
+function allowanceMessage(resetsAt:string){return `This week's research allowance has been used. Your allowance resets ${new Date(resetsAt).toISOString()}.`}
 export default {
  async fetch(request:Request,env:MultiUserEnv,ctx:ExecutionContext):Promise<Response>{
   const path=new URL(request.url).pathname;if(!path.startsWith('/api/'))return env.ASSETS.fetch(request);
@@ -28,32 +30,53 @@ export default {
    const auth=await authRoute(request,env);if(auth)return auth;
    const member=await authenticate(request,env);verifyOrigin(request,env);
    if(request.headers.has('X-WineLog-Account')&&request.headers.get('X-WineLog-Account')!==member.id)throw new ApiError(409,'Account changed; reload this page');
-   // Every request carries its metering decision, so a path that reaches the
-   // provider without having been priced fails loudly the first time a member
-   // tries it instead of quietly billing the deployment. The owner pays the
-   // provider directly and is exempt.
-   const unpriced=providerAuthorization(member.role,`${path} has no credit price yet, so it cannot be run on a member account.`);
+   // Every provider request still carries an operation context for idempotency,
+   // cost accounting and budget holds. During the pilot, members are not charged
+   // WineLog credits: scans are sponsored and research is governed by a weekly
+   // run allowance instead.
+   const unpriced=providerAuthorization(member.role,`${path} has no member AI policy, so it cannot reach a provider.`);
    const scoped={...env,CREDIT_CONTEXT:unpriced,WINE_IMAGES:meteredBucket(env.WINE_IMAGES,env.DB,member.id),RESEARCH_QUEUE:durableQueue(env.RESEARCH_QUEUE,env.DB)};
+   if(path==='/api/credits'&&request.method==='GET'){
+    const wallet=await env.DB.prepare('SELECT balance,reserved,balance-reserved AS available FROM credit_wallets WHERE user_id=?').bind(member.id).first()??{balance:0,reserved:0,available:0};
+    if(member.role==='owner')return json({...wallet,researchAllowance:null,sponsoredAi:true});
+    const config=await settings(env.DB),allowance=await researchAllowance(env.DB,member.id,config.researchRunsPerWeek??2);
+    return json({...wallet,researchAllowance:allowance,sponsoredAi:true});
+   }
    const direct=await creditRead(request,env,member)??await rolloutRoute(request,env,member)??await adminRoute(request,env,member)??await socialRoute(request,scoped,member);if(direct)return direct;
    if(path==='/api/credits/quotes'&&request.method==='POST'){
     const url=new URL(request.url),target=url.searchParams.get('path')||'';if(!target.startsWith('/api/')||target.includes('?')||!aiRoute(target,'POST'))throw new ApiError(400,'Invalid quote target');
-    const original=new Request(new URL(target,env.APP_URL),request);return json(await quote(original,env,member));
+    if(member.role!=='owner'&&ownerOnlyResearchPath(target))throw new ApiError(403,'Batch Deep Search is owner-only. Members can research individual wines or producers within their weekly allowance.');
+    const original=new Request(new URL(target,env.APP_URL),request),quoted=await quote(original,env,member);
+    if(member.role==='member'&&usesWeeklyResearchAllowance(target)&&quoted.units.length){
+     const config=await settings(env.DB),allowance=await researchAllowance(env.DB,member.id,config.researchRunsPerWeek??2);
+     if(!allowance.remaining)throw new ApiError(429,allowanceMessage(allowance.resetsAt));
+     return json({...quoted,access:'weekly_allowance',researchAllowance:allowance});
+    }
+    return json({...quoted,access:member.role==='owner'?'owner':quoted.units.length?'sponsored':'reused'});
    }
    const forwarded=await internalRequest(request,env,member.id);
    if(aiRoute(path,request.method)){
+    if(member.role!=='owner'&&ownerOnlyResearchPath(path))throw new ApiError(403,'Batch Deep Search is owner-only.');
     const cost=await deploymentAiCost(env.DB,env);
-    const {operation,existing}=await reserve(request,env,member,cost.usd);
+    const {operation,existing}=await reserve(request,env,member,cost.usd),operationUnits=JSON.parse(operation.units_json) as Array<{action:string;targetId?:string;scope?:string}>;
+    if(member.role==='member'&&usesWeeklyResearchAllowance(path)&&operationUnits.length){
+     const config=await settings(env.DB),claim=await claimResearchAllowance(env.DB,member.id,operation.id,config.researchRunsPerWeek??2);
+     if(!claim.claimed){if(!existing)await settle(env.DB,operation,0,{body:{error:allowanceMessage(claim.allowance.resetsAt)},status:429},false);throw new ApiError(429,allowanceMessage(claim.allowance.resetsAt))}
+    }
     if(existing)return operation.response_json?json({...JSON.parse(operation.response_json),creditOperationId:operation.id,creditSettlement:creditSummary(operation)},operation.response_status??202):json({accepted:true,creditOperationId:operation.id,status:operation.status},202);
     const following=await env.DB.prepare('SELECT operation_id FROM research_followers WHERE operation_id=?').bind(operation.id).first();
     if(following){await env.DB.prepare("UPDATE credit_operations SET status='running',response_json=?,response_status=202,updated_at=? WHERE id=?").bind(JSON.stringify({accepted:true,waitingForFriend:true}),stamp(),operation.id).run();return json({accepted:true,waitingForFriend:true,creditOperationId:operation.id},202)}
-    if(operation.reserved===0){
+    // Zero reserved credits no longer means "cached": sponsored scans and allowed
+    // research are deliberately zero-credit too. Only an operation with no units
+    // represents work that became reusable/cached between quote and execution.
+    if(operationUnits.length===0){
      if(path.endsWith('/deep-search')){await settle(env.DB,operation,0,{body:{cached:true},status:200});return json({cached:true,creditOperationId:operation.id})}
      const cachedProducer=path.match(/^\/api\/producers\/([^/]+)\/research$/);
      if(cachedProducer){const producer=await reusableProducer(env.DB,member.id,cachedProducer[1]);if(producer){const result={cached:true};await settle(env.DB,operation,0,{body:result,status:200});return json({...result,creditOperationId:operation.id})}}
      if(path==='/api/maturity/vintage'){const window=await readVintageWindow(env.DB,member.id,await request.clone().json() as VintageSubject,true);if(window){await settle(env.DB,operation,0,{body:{cached:true},status:200});return json({cached:true,window,creditOperationId:operation.id})}}
      if(cachedProducer||path==='/api/maturity/vintage'){await settle(env.DB,operation,0);throw new ApiError(409,'Research access changed; request a new quote')}
     }
-    const executionEnv={...scoped,CREDIT_CONTEXT:{db:env.DB,operationId:operation.id,namespace:'http'},CREDIT_PRODUCER_IDS:JSON.parse(operation.units_json).flatMap((u:{action:string;targetId?:string})=>u.action==='producer_research'?[u.targetId]:[]),CREDIT_RESEARCH_SCOPES:JSON.parse(operation.units_json).flatMap((u:{scope?:string})=>u.scope?[u.scope]:[]),RESEARCH_QUEUE:durableQueue(env.RESEARCH_QUEUE,env.DB,operation.id)};
+    const executionEnv={...scoped,CREDIT_CONTEXT:{db:env.DB,operationId:operation.id,namespace:'http'},CREDIT_PRODUCER_IDS:operationUnits.flatMap(u=>u.action==='producer_research'?[u.targetId]:[]),CREDIT_RESEARCH_SCOPES:operationUnits.flatMap(u=>u.scope?[u.scope]:[]),RESEARCH_QUEUE:durableQueue(env.RESEARCH_QUEUE,env.DB,operation.id)};
     try{
      const started=await env.DB.prepare("UPDATE credit_operations SET status='running',updated_at=? WHERE id=? AND status='reserved'").bind(stamp(),operation.id).run();
      if(!started.meta.changes)throw new ApiError(409,'Reservation is no longer available');
