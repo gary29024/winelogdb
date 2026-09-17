@@ -1,368 +1,272 @@
-# Setting up your own WineLog
+# Setting up WineLog
 
-A step-by-step guide to running this repository as your own private wine
-notebook on Cloudflare.
+If you already run WineLog and are preparing to merge the multi-user rollout, use **[GO_LIVE.md](GO_LIVE.md)**. It is the shortest, non-technical checklist and is designed so the app can be sign-in-ready immediately after the merge.
 
-WineLog supports an **invite-only pilot of up to 25 accounts**. Each journal is
-private; accepted friends can receive selected wines and reuse factual research.
-Read [the multi-user cutover guide](MULTI_USER_ROLLOUT.md) before migrating an
-existing deployment. Google configuration, credit prices, grants, and budgets
-must be set before launch.
+This document is the fuller reference for a new deployment or troubleshooting an existing one.
 
-Budget about 30 minutes. Nothing here is irreversible, and every resource can be
-deleted afterwards.
+## What WineLog uses
 
----
+One Cloudflare Worker serves the React app and the API. It uses:
 
-## What you are deploying
+| Resource | Binding | Purpose |
+| --- | --- | --- |
+| D1 | `DB` | Wines, tastings, accounts, research, credits and job state |
+| R2 | `WINE_IMAGES` | Private original and derivative images |
+| Queue | `RESEARCH_QUEUE` | Background recognition/research work |
+| Workers AI | `AI` | Smart Search embeddings and model fallbacks |
+| Images | `IMAGES` | Image transformations |
+| Analytics Engine | `AI_USAGE` | AI usage telemetry |
+| Static Assets | `ASSETS` | Built front end |
 
-One Cloudflare Worker serves both the API and the built React app, backed by
-four Cloudflare products:
+The production entrypoint is `worker/multiUserEntry.ts`.
 
-| Resource | Binding | What it holds |
-|---|---|---|
-| D1 database | `DB` | Wines, tastings, producers, research cache, job state |
-| R2 bucket | `WINE_IMAGES` | Original photos and recognition copies, private |
-| Queue + dead-letter queue | `RESEARCH_QUEUE` | Background recognition and Deep Search jobs |
-| Static assets | `ASSETS` | The built front end |
+## Requirements
 
-Gemini does label recognition and grounded research. Your API key and R2
-bindings stay server-side; the browser never sees them.
+- Node 24 is recommended. The repository includes `.node-version` with `24` so Cloudflare Builds uses the same major version as CI.
+- A Cloudflare account.
+- A Google Cloud project for Google sign-in.
+- Existing Gemini / AI Gateway credentials for WineLog's AI features.
 
----
+For the existing deployment, do **not** recreate D1, R2 or queues just because you are enabling multi-user support.
 
-## Prerequisites
+## Runtime Variables and Secrets
 
-- **Node 22.13 or newer** (24 recommended) — `node --version`
-- **A Cloudflare account.** D1, R2 and Queues all have free allowances. Check
-  the current numbers on Cloudflare's pricing pages before committing to a
-  workload; R2 in particular may ask for a payment method even within the free
-  allowance.
-- **A Google AI Studio (Gemini) API key** — <https://aistudio.google.com/apikey>
-- **Wrangler**, which comes with the repo's dependencies. Every `wrangler`
-  command below can be run as `npx wrangler …` without installing it globally.
+In Cloudflare open:
 
----
+**Workers & Pages → winelogdb → Settings → Variables and Secrets**
 
-## Step 1 — Get the code and sign in
+These are runtime values. They are different from Build Variables.
 
-```bash
-git clone https://github.com/<your-account>/winelogdb.git
-cd winelogdb
-npm install
-npx wrangler login
+### Required for multi-user sign-in
+
+| Name | Type | Value |
+| --- | --- | --- |
+| `APP_URL` | Text | Public HTTPS origin, e.g. `https://wine.example.com` |
+| `SUPPORT_EMAIL` | Text | Public monitored support address |
+| `GOOGLE_CLIENT_ID` | Secret | Google Web OAuth client ID |
+| `GOOGLE_CLIENT_SECRET` | Secret | Google Web OAuth client secret |
+| `OWNER_EMAIL` | Secret | Google email that owns the legacy WineLog data |
+| `AUTH_SECRET` | Secret | Fresh random value of at least 32 characters |
+
+`OWNER_GOOGLE_SUB` is optional hardening after the first owner login. It is not needed to launch.
+
+The Worker config has `keep_vars: true`, so runtime values added in the Cloudflare dashboard are preserved during Wrangler deployments.
+
+### AI credentials
+
+Keep the AI credentials that already work for your deployment.
+
+Depending on the transport, the Worker may use:
+
+- `GEMINI_API_KEY`
+- `CF_AI_GATEWAY_TOKEN`
+- optional `SEMANTIC_GEMINI_API_KEY`
+
+Do not put these in GitHub source code or `wrangler.jsonc`.
+
+## Google OAuth
+
+Use [docs/google-oauth-setup.md](docs/google-oauth-setup.md).
+
+The key production callback is:
+
+```text
+APP_URL/api/auth/google/callback
 ```
 
-`wrangler login` opens a browser to authorise your account. If you work across
-several Cloudflare accounts, run `npx wrangler whoami` afterwards and note the
-account ID you intend to use.
+WineLog requests only `openid email profile`.
 
----
+For the first rollout, Google Auth Platform **Testing** mode is the simplest option. Add the owner as a test user before merging. Add each pilot member as a test user while the project remains in Testing.
 
-## Step 2 — Create the Cloudflare resources
+## Cloudflare Builds from GitHub
 
-```bash
-# D1 database — copy the database_id it prints
+For the connected Worker, open **Settings → Build** and use:
+
+- Repository: `gary29024/winelogdb`
+- Production branch: `main`
+- Build command: `npm run build`
+- Deploy command: `npm run db:migrate && npx wrangler deploy`
+
+This is intentional. Cloudflare Runs the build step first, then the deploy step. The deploy command applies D1 migrations **before** promoting the new Worker code.
+
+Do not use a bare `npx wrangler deploy` as the production deploy command for releases that contain migrations.
+
+Build Variables are only available during the build process. OAuth runtime settings belong in **Settings → Variables and Secrets** instead.
+
+## New Cloudflare deployment only
+
+If you are creating a separate WineLog deployment from scratch, create:
+
+```powershell
 npx wrangler d1 create winelogdb
-
-# Private R2 bucket
 npx wrangler r2 bucket create winelog-private
-
-# Queue and its dead-letter queue
 npx wrangler queues create winelog-research
 npx wrangler queues create winelog-research-dlq
 ```
 
-Create the dead-letter queue even though nothing routine writes to it. The
-consumer names it in `wrangler.jsonc`, and a deploy fails if it does not exist.
+Then replace the committed D1 `database_id` in `wrangler.jsonc` with the new database ID. If you use different resource names, update the matching bindings in `wrangler.jsonc` as well.
 
-> **Keep the R2 bucket private.** Uploads and image reads pass through the
-> authenticated Worker, which checks ownership before returning a photo. A
-> public bucket would expose every image by URL.
+Keep the R2 bucket private.
 
----
+The committed `wrangler.jsonc` contains deployment-specific AI Gateway/project configuration for the existing WineLog deployment. A new operator must replace or remove those account-specific values rather than accidentally targeting somebody else's infrastructure.
 
-## Step 3 — Point the config at *your* resources
+## Database migrations
 
-`wrangler.jsonc` is committed with the original author's IDs. **Three values
-must be replaced or your deploy will write into someone else's account or fail
-outright.**
+For local/CLI deployment:
 
-```jsonc
-{
-  "name": "winelogdb",                    // rename if you like; this becomes the worker name
-  "d1_databases": [{
-    "database_id": "PASTE_YOUR_OWN_ID"    // ← from `wrangler d1 create`
-  }],
-  "vars": {
-    "AI_GATEWAY_ACCOUNT_ID": "…",         // ← yours, or delete (see Step 4)
-    "VERTEX_PROJECT_ID": "…"              // ← yours, or delete (see Step 4)
-  }
-}
+```powershell
+npm run db:migrate
 ```
 
-Leave `MAX_FILE_BYTES` (10 MiB) and `MAX_BATCH_FILES` (12) unless you have a
-reason to change them.
+The current multi-user branch contains migrations through **0068**. Wrangler records which migrations are already applied and only applies pending ones.
 
----
+For an existing deployment, make a fresh D1 export before applying the multi-user migrations:
 
-## Step 4 — Choose how Gemini is called
-
-Two transports are supported. **Pick one — a half-configured gateway fails
-loudly at runtime rather than falling back.**
-
-### Option A — Gemini API directly (recommended to start)
-
-Simplest path. Delete all four gateway variables from `wrangler.jsonc`:
-
-```jsonc
-"vars": {
-  "MAX_FILE_BYTES": "10485760",
-  "MAX_BATCH_FILES": "12"
-}
+```powershell
+npx wrangler d1 export DB --remote --output=winelog-before-multi-user.sql
 ```
 
-Then set `GEMINI_API_KEY` in Step 5 and you are done. The transport resolver
-picks the direct API when no gateway variables are present.
+Do not recreate the existing R2 bucket.
 
-### Option B — Vertex AI through Cloudflare AI Gateway
+## Local deployment from a computer
 
-Adds request logging, analytics and Vertex's Flex service tier. It needs a
-Google Cloud project with Vertex AI enabled, and **all five** of these set:
+Once runtime settings and secrets are configured:
 
-| Variable | Where it lives | Value |
-|---|---|---|
-| `AI_GATEWAY_ACCOUNT_ID` | `wrangler.jsonc` vars | Your Cloudflare account ID |
-| `AI_GATEWAY_ID` | `wrangler.jsonc` vars | The gateway's name |
-| `VERTEX_PROJECT_ID` | `wrangler.jsonc` vars | Your Google Cloud project ID |
-| `VERTEX_REGION` | `wrangler.jsonc` vars | `global` |
-| `CF_AI_GATEWAY_TOKEN` | **secret** | An AI Gateway authentication token |
-
-Setting *some* of them raises
-`AI Gateway configuration is incomplete: missing …` on the first research call.
-Setting *none* falls back to Option A. There is no partial mode.
-
-On this option `GEMINI_API_KEY` is not used and should be left unset: the
-resolver checks the five gateway variables before it looks at the key, so
-every call goes to Vertex through the gateway. The few direct-API fallbacks
-that remain refuse with a message naming the key rather than calling out
-without a credential.
-
-Leave `AI_GATEWAY_LOG_PAYLOADS` at `"false"`. Turn it on only to debug a
-specific failing response, then turn it back off — it stores entire research
-prompts and answers.
-
----
-
-## Step 5 — Set the secrets
-
-Secrets are encrypted and never appear in `wrangler.jsonc`.
-
-```bash
-# Google web OAuth client
-npx wrangler secret put GOOGLE_CLIENT_ID
-npx wrangler secret put GOOGLE_CLIENT_SECRET
-
-# First owner sign-in only: the verified Google email that owns the legacy data.
-# After that sign-in, replace this with OWNER_GOOGLE_SUB as described below.
-npx wrangler secret put OWNER_EMAIL
-
-# Internal Worker signing key — rotate at cutover; at least 32 random characters
-npx wrangler secret put AUTH_SECRET
-
-# Only for Option A — the gateway path does not use it
-npx wrangler secret put GEMINI_API_KEY
-
-# Only for Option B
-npx wrangler secret put CF_AI_GATEWAY_TOKEN
-```
-
-A good `AUTH_SECRET`:
-
-```bash
-openssl rand -base64 48
-```
-
-You also need `APP_URL`, which is the exact origin the browser will load and is
-compared against for CORS. You will not know it until the first deploy, so set
-it in Step 7.
-
-> Register the exact `APP_URL/api/auth/google/callback` redirect with Google.
-> After the initial owner sign-in, query `auth_identities` for the owner's Google
-> subject, save it as `OWNER_GOOGLE_SUB`, and remove `OWNER_EMAIL`. The subject
-> is the permanent provider identity, not an email. Password tokens are rejected
-> at the public Worker boundary. New sessions are revocable in D1. See the
-> [Google OAuth setup guide](docs/google-oauth-setup.md) for the Console steps.
-
----
-
-## Step 6 — Create the database schema
-
-```bash
-npx wrangler d1 migrations apply DB --remote
-```
-
-This applies all 36 migrations in order. Expect it to list every one. Run the
-same command with `--local` instead for a local development database.
-
-Verify it landed:
-
-```bash
-npx wrangler d1 execute DB --remote --command \
-  "SELECT count(*) AS tables FROM sqlite_master WHERE type='table'"
-```
-
----
-
-## Step 7 — Deploy
-
-```bash
+```powershell
+npm install
 npm run deploy
 ```
 
-That builds the front end, applies any pending migrations and deploys the
-Worker. Wrangler prints the deployed URL, something like
-`https://winelogdb.<your-subdomain>.workers.dev`.
+`npm run deploy` builds the app, applies pending remote D1 migrations, then deploys the Worker.
 
-**Now set `APP_URL` to exactly that origin** — scheme and host, no trailing
-slash — and deploy once more:
-
-```jsonc
-"vars": {
-  "APP_URL": "https://winelogdb.your-subdomain.workers.dev"
-}
-```
-
-```bash
-npm run deploy
-```
-
-Getting `APP_URL` wrong does not break the page, but API calls fail the CORS
-origin check. If you later put the app on a custom domain, update `APP_URL` to
-match and redeploy.
-
-### Deploying from GitHub instead
-
-If you connect the repository to Cloudflare Workers Builds, a push to `main`
-builds and deploys on its own. Two things are worth knowing:
-
-- **Set the build command to `npm run deploy`**, not `wrangler deploy`. Only
-  the npm script runs `db:migrate`, and a release that adds a migration will
-  otherwise deploy code against a schema that does not have its tables yet —
-  the feature 500s while everything else looks fine. If your build command is
-  the bare `wrangler deploy`, run `npm run db:migrate` yourself before merging.
-- **The build follows the push event, not the merge.** If GitHub does not emit
-  one — it happens, and the sign is that no CI run appears for the merge commit
-  either — nothing builds even though `main` moved. Deploy the current `main`
-  from the Cloudflare dashboard (Workers → your worker → Builds → retry the
-  latest commit), or run `npm run deploy` locally. Merging something else on
-  top works too, but only because it produces a fresh push event.
-
----
-
-## Step 8 — Log in
-
-Open the deployed URL and choose **Continue with Google** using the configured
-owner account. Authentication uses a seven-day Secure, HttpOnly cookie. Configure
-the pilot budgets, prices and an owner credit grant in **Owner controls**, then
-complete storage inventory and research indexing before creating invitations.
-`POST /api/auth/logout-all` revokes the current user's sessions on all devices.
-
----
-
-## Verify it works
-
-Work through these in order; each exercises a different piece.
-
-1. **Auth** — the configured Google owner can log in; an uninvited account cannot.
-2. **D1** — add a wine by hand (`Add wine`) and find it in the Journal.
-3. **R2** — upload a label photo and confirm it renders on the wine.
-4. **Gemini recognition** — scan a bottle and check the fields come back filled.
-5. **Queues + research** — run Deep Search on a wine. It should move through
-   *queued → researching → complete*. If it stays queued, the queue consumer is
-   not running; see below.
-
----
+For an existing production app connected to GitHub, prefer the normal GitHub/Cloudflare build path described above so the deployment remains reproducible.
 
 ## Local development
 
-```bash
-cp .dev.vars.example .dev.vars     # then fill it in — never commit this file
+Copy the example file:
+
+```powershell
+copy .dev.vars.example .dev.vars
+```
+
+Fill it with local credentials. `.dev.vars` is ignored by Git.
+
+Then:
+
+```powershell
 npm run db:migrate:local
 npm run dev
 ```
 
-`.dev.vars` holds the same secrets as Step 5 plus `APP_URL`, which locally is
-`http://localhost:5173`. It is gitignored. The multi-user session cookies are
-`Secure`, so exercise a complete Google login against an HTTPS development or
-staging hostname rather than ordinary local HTTP.
+The secure multi-user session cookies are intended for HTTPS. Ordinary `http://localhost` is useful for UI/API development, but a complete Google sign-in flow should be tested on an HTTPS development/staging hostname.
 
-```bash
-npm test         # unit tests
+## First owner login
+
+After deployment:
+
+1. Open `APP_URL/about`, `/privacy`, `/terms` and `/login` in a private browser window.
+2. Confirm the legal pages are public and display the configured `SUPPORT_EMAIL`.
+3. Choose **Continue with Google**.
+4. Use exactly the account configured as `OWNER_EMAIL`.
+5. Confirm your existing owner wines, producers, tastings, cellar data and images remain present.
+
+The first successful login binds that Google identity to the existing `owner` account. A later uninvited Google account cannot claim the owner merely because it knows the email.
+
+## Owner controls before inviting members
+
+Open:
+
+**Account & friends → Owner controls**
+
+Then:
+
+1. review member/storage/AI budgets;
+2. configure every AI credit price you intend members to use;
+3. grant test credits as needed;
+4. run **Inventory R2 storage**;
+5. run **Index existing research**;
+6. confirm rollout/maintenance state is healthy;
+7. test one scan, one Deep Search and one Smart Search as the owner.
+
+Only then create the first member invitation.
+
+## Invite a member
+
+1. Create an invitation in Owner controls for an exact Google email.
+2. If Google OAuth is still in Testing, add the same email under Google Auth Platform → Audience → Test users.
+3. Send the invitation link privately.
+4. The member must sign in with that exact Google account.
+5. Verify the member sees their own empty/private journal, not the owner's data.
+
+Friendship is separate from admission. Members can exchange friend codes after both accounts exist.
+
+## Verification commands
+
+For developers or troubleshooting:
+
+```powershell
+npm test
 npm run lint
 npm run build
-npm run test:e2e # Playwright
+npm run test:e2e
 ```
 
----
+CI runs the high-risk unit suite and build checks on pull requests.
 
-## Troubleshooting
+## Common problems
 
-**`No Gemini transport is configured`**
-Neither `GEMINI_API_KEY` nor a complete gateway configuration is present. Set
-the key (Step 5).
+### Google: `redirect_uri_mismatch`
 
-**`AI Gateway configuration is incomplete: missing …`**
-Option B is partially configured. Set every variable the message names, or
-remove all four gateway vars to fall back to Option A.
+The Google Web OAuth client must contain exactly:
 
-**Deep Search stays "queued" forever**
-The queue consumer is not consuming. Confirm both queues exist
-(`npx wrangler queues list`) and that the deploy included the consumer, then
-watch it live with `npx wrangler tail --format pretty`.
-
-**Deep Search fails with "answered without grounding … 0 web sources"**
-Gemini returned an answer without searching, so the quality gate rejected it —
-correctly, since ungrounded research is what the gate exists to catch. It
-retries on a different model automatically. If it happens on every run, check
-that your key or Vertex project actually has Google Search grounding available.
-
-**`D1_ERROR: no such column` after pulling new commits**
-New migrations have not been applied. Run Step 6 again.
-
-**Images 404 on the wine page**
-The R2 bucket name in `wrangler.jsonc` does not match the bucket you created,
-or the bucket is in a different account than the Worker.
-
-**API calls fail with CORS errors**
-`APP_URL` does not exactly match the origin in the browser's address bar.
-Compare scheme, host and the absence of a trailing slash.
-
----
-
-## Running costs
-
-The design deliberately keeps browsing cheap: reads never write, the landing
-page and achievement progress are cached against a revision counter, and
-background jobs poll with an increasing interval instead of a fixed timer. See
-*Staying inside the D1 free tier* in the README for the reasoning.
-
-The variable cost is Gemini. Recognition runs once per photo; Deep Search runs
-once per missing research scope and is then cached permanently and reused by
-every other wine that matches the same scope. Refreshing a wine's vintage
-research re-runs only the vintage-sensitive scopes, not the producer or terroir
-research.
-
----
-
-## Backups
-
-Nothing here is backed up by default. Schedule both:
-
-```bash
-npx wrangler d1 export DB --remote --output backups/winelog-$(date +%F).sql
+```text
+APP_URL/api/auth/google/callback
 ```
 
-and an R2 copy to a second private bucket (`rclone sync` or R2 replication).
-Encrypt the exports, and test a restore occasionally — an untested backup is a
-guess. The README's *Backup and recovery* section describes the restore order.
+### WineLog: `Google sign-in has not been configured`
+
+One of these is missing in the deployed Worker:
+
+- `GOOGLE_CLIENT_ID`
+- `GOOGLE_CLIENT_SECRET`
+- `OWNER_EMAIL` or optional `OWNER_GOOGLE_SUB`
+
+### WineLog: `APP_URL is not configured as a valid application origin`
+
+Set the Cloudflare runtime variable to an origin only, such as:
+
+```text
+https://wine.example.com
+```
+
+### WineLog: `AUTH_SECRET must be at least 32 characters`
+
+Replace `AUTH_SECRET` with a longer random secret.
+
+### API writes return `Invalid request origin`
+
+The browser origin and `APP_URL` differ. Check protocol and hostname.
+
+### `D1_ERROR: no such table` or `no such column`
+
+Pending migrations were not applied. Run:
+
+```powershell
+npm run db:migrate
+```
+
+and ensure the Cloudflare Deploy command is `npm run db:migrate && npx wrangler deploy`.
+
+### Deep Search remains queued
+
+Confirm `winelog-research` exists and the Worker has a queue consumer. Check Worker logs for queue delivery errors.
+
+### Images return 404
+
+Confirm the Worker is bound to the existing private `winelog-private` R2 bucket and that the bucket was not recreated under another account.
+
+## Backup and rollback
+
+Before major migrations, keep a D1 export outside the app's public assets. Preserve the existing R2 bucket and its objects.
+
+After admitting multi-user accounts, do not roll the public Worker back to the old password boundary while keeping the migrated multi-user data model. If application code must be rolled back, retain the multi-user authentication/authorization boundary and diagnose the failed feature separately.
