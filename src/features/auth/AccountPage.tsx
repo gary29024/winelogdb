@@ -1,6 +1,6 @@
 import { useCallback,useEffect,useState } from 'react';
 import { Link } from 'react-router-dom';
-import { getAccount,logout } from '../../lib/auth/client';
+import { bootstrapAccount,getAccount,logout } from '../../lib/auth/client';
 import { apiJson } from '../../lib/auth/api';
 
 type Friend={id:string;display_name:string};
@@ -14,6 +14,7 @@ export function AccountPage(){
  const [requests,setRequests]=useState<Requests>({incoming:[],outgoing:[]});
  const [usage,setUsage]=useState<UsageSummary>({days:30,kinds:[],empty:true});
  const [ownCode,setOwnCode]=useState(''),[code,setCode]=useState('');
+ const [name,setName]=useState(()=>getAccount()?.display_name??'');
  const [busy,setBusy]=useState(false),[error,setError]=useState(''),[notice,setNotice]=useState('');
  const load=useCallback(async()=>{
   const [f,a,c,r,u]=await Promise.all([
@@ -32,7 +33,14 @@ export function AccountPage(){
  }
  const account=getAccount(),smart=usage.kinds.find(item=>item.kind==='search_embedding'),providerRequests=usage.kinds.reduce((sum,item)=>sum+item.requests,0),runs=usage.kinds.reduce((sum,item)=>sum+item.runs,0),allowance=access.researchAllowance;
  return <section className="account-page">
-  <h1>Account & friends</h1><p>{account?.display_name}</p>
+  <h1>Account & friends</h1>
+  <form onSubmit={e=>{e.preventDefault();void run(async()=>{const saved=await apiJson<{user:{display_name:string}}>('/api/me','PATCH',{displayName:name});setName(saved.user.display_name);await bootstrapAccount()},'Name updated.')}}>
+   <fieldset><legend>Profile</legend>
+    <label htmlFor="display-name">Name <input id="display-name" value={name} onChange={e=>setName(e.target.value)} maxLength={60} autoComplete="name" required /></label>
+    <button type="submit" disabled={busy||!name.trim()}>Save name</button>
+    <small>This is the name your friends and other WineLog members will see.</small>
+   </fieldset>
+  </form>
   {account?.role==='owner'?<p><strong>Owner AI access</strong> · usage and provider cost are tracked, but the member research allowance does not apply.</p>:<section aria-label="AI access"><p><strong>Scanning and Smart Search are included.</strong> Their provider cost is sponsored by WineLog.</p>{allowance&&<p><strong>{allowance.remaining} of {allowance.limit} research runs remaining this week.</strong> Resets {new Date(allowance.resetsAt).toLocaleString()}.</p>}<small>Wine Deep Search, individual producer research and Vintage Window share this allowance. Cached or friend-reused research does not use a run. Batch Deep Search is owner-only.</small></section>}
   <nav className="account-shortcuts" aria-label="Account shortcuts"><Link to="/shared">Shared with me</Link>{account?.role==='owner'&&<><Link to="/admin">Owner controls</Link><Link to="/admin#member-usage">Member usage</Link></>}</nav>
   <section className="personal-usage" aria-labelledby="your-usage-title"><h2 id="your-usage-title">Your usage</h2><p>Last {usage.days} days. Provider activity is tracked even for sponsored features.</p>
