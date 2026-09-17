@@ -1,28 +1,36 @@
--- Names the app already knows are the same producer.
+-- Producer-name equivalences confirmed inside one account.
 --
--- Reuse matched on the exact normalized producer name, so a friend who logged
--- "Ch. Margaux" and a friend who logged "Château Margaux" never met, and the
--- second one paid again. The equivalences were already in the database and
--- unused: producer_aliases holds every spelling an account has confirmed, and
--- producer_merges holds a person saying two producers are one.
+-- Reuse matched on the exact normalized producer name, so a user who logged
+-- "Ch. Margaux" and later confirmed it was "Château Margaux" should be able to
+-- find a friend's research filed under the canonical spelling. That correction
+-- is personal account data, though: another member must not inherit it merely
+-- because the same deployment stores both journals.
 --
--- Both sides are normalized by the same function - producer_aliases.normalized_alias
--- and producers.match_key are both normalizeProducerAlias output - so the seed
--- below is a plain join and needs no re-normalization.
+-- producer_aliases.normalized_alias, producers.match_key and
+-- producer_merges.source_match_key are all produced by normalizeProducerAlias,
+-- so the seeds below need no further normalization.
 --
--- Deliberately NOT fuzzy: only equivalences a person confirmed get in. In a
--- shared pool a wrong match serves another producer's research to everyone who
--- ever logs that name, which is worse than a miss.
+-- Deliberately NOT fuzzy: only equivalences this owner confirmed get in. A wrong
+-- match should affect at most that owner's lookup, never unrelated accounts.
 CREATE TABLE IF NOT EXISTS producer_alias_pool (
+  owner_id TEXT NOT NULL REFERENCES app_users(id) ON DELETE CASCADE,
   normalized_alias TEXT NOT NULL,
   producer_key TEXT NOT NULL,
-  confirmed_by TEXT,
   created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (normalized_alias, producer_key)
+  PRIMARY KEY (owner_id, normalized_alias, producer_key)
 );
-CREATE INDEX IF NOT EXISTS idx_producer_alias_pool_key ON producer_alias_pool(producer_key);
+CREATE INDEX IF NOT EXISTS idx_producer_alias_pool_key ON producer_alias_pool(owner_id,producer_key);
 
-INSERT OR IGNORE INTO producer_alias_pool(normalized_alias,producer_key,confirmed_by)
-SELECT a.normalized_alias,p.match_key,a.owner_id
+-- Existing explicit aliases.
+INSERT OR IGNORE INTO producer_alias_pool(owner_id,normalized_alias,producer_key)
+SELECT a.owner_id,a.normalized_alias,p.match_key
 FROM producer_aliases a JOIN producers p ON p.owner_id=a.owner_id AND p.id=a.producer_id
 WHERE a.normalized_alias<>p.match_key AND trim(a.normalized_alias)<>'' AND trim(p.match_key)<>'';
+
+-- Existing confirmed merges. The source producer row may already be gone, but
+-- producer_merges preserves its normalized match key and the destination id.
+INSERT OR IGNORE INTO producer_alias_pool(owner_id,normalized_alias,producer_key)
+SELECT m.owner_id,m.source_match_key,p.match_key
+FROM producer_merges m JOIN producers p ON p.owner_id=m.owner_id AND p.id=m.destination_producer_id
+WHERE m.undone_at IS NULL AND m.source_match_key<>p.match_key
+  AND trim(m.source_match_key)<>'' AND trim(p.match_key)<>'';
