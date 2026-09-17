@@ -21,16 +21,23 @@ CREATE TABLE IF NOT EXISTS producer_alias_pool (
 );
 CREATE INDEX IF NOT EXISTS idx_producer_alias_pool_key ON producer_alias_pool(owner_id,producer_key);
 
--- Existing explicit aliases.
+-- Existing explicit aliases. Producer tables predate app_users and can contain a
+-- stale legacy owner id, so seed only owners that actually exist in app_users;
+-- INSERT OR IGNORE does not suppress foreign-key violations.
 INSERT OR IGNORE INTO producer_alias_pool(owner_id,normalized_alias,producer_key)
 SELECT a.owner_id,a.normalized_alias,p.match_key
-FROM producer_aliases a JOIN producers p ON p.owner_id=a.owner_id AND p.id=a.producer_id
+FROM producer_aliases a
+JOIN producers p ON p.owner_id=a.owner_id AND p.id=a.producer_id
+JOIN app_users u ON u.id=a.owner_id
 WHERE a.normalized_alias<>p.match_key AND trim(a.normalized_alias)<>'' AND trim(p.match_key)<>'';
 
 -- Existing confirmed merges. The source producer row may already be gone, but
 -- producer_merges preserves its normalized match key and the destination id.
+-- Apply the same app_users guard for legacy/stale owner ids.
 INSERT OR IGNORE INTO producer_alias_pool(owner_id,normalized_alias,producer_key)
 SELECT m.owner_id,m.source_match_key,p.match_key
-FROM producer_merges m JOIN producers p ON p.owner_id=m.owner_id AND p.id=m.destination_producer_id
+FROM producer_merges m
+JOIN producers p ON p.owner_id=m.owner_id AND p.id=m.destination_producer_id
+JOIN app_users u ON u.id=m.owner_id
 WHERE m.undone_at IS NULL AND m.source_match_key<>p.match_key
   AND trim(m.source_match_key)<>'' AND trim(p.match_key)<>'';
