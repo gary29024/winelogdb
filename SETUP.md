@@ -159,10 +159,13 @@ prompts and answers.
 Secrets are encrypted and never appear in `wrangler.jsonc`.
 
 ```bash
-# Google web OAuth client and the explicitly verified legacy owner's subject
+# Google web OAuth client
 npx wrangler secret put GOOGLE_CLIENT_ID
 npx wrangler secret put GOOGLE_CLIENT_SECRET
-npx wrangler secret put OWNER_GOOGLE_SUB
+
+# First owner sign-in only: the verified Google email that owns the legacy data.
+# After that sign-in, replace this with OWNER_GOOGLE_SUB as described below.
+npx wrangler secret put OWNER_EMAIL
 
 # Internal Worker signing key — rotate at cutover; at least 32 random characters
 npx wrangler secret put AUTH_SECRET
@@ -185,8 +188,11 @@ compared against for CORS. You will not know it until the first deploy, so set
 it in Step 7.
 
 > Register the exact `APP_URL/api/auth/google/callback` redirect with Google.
-> `OWNER_GOOGLE_SUB` is the verified OIDC subject, not an email. Password tokens
-> are rejected at the public Worker boundary. New sessions are revocable in D1.
+> After the initial owner sign-in, query `auth_identities` for the owner's Google
+> subject, save it as `OWNER_GOOGLE_SUB`, and remove `OWNER_EMAIL`. The subject
+> is the permanent provider identity, not an email. Password tokens are rejected
+> at the public Worker boundary. New sessions are revocable in D1. See the
+> [Google OAuth setup guide](docs/google-oauth-setup.md) for the Console steps.
 
 ---
 
@@ -287,7 +293,9 @@ npm run dev
 ```
 
 `.dev.vars` holds the same secrets as Step 5 plus `APP_URL`, which locally is
-`http://localhost:5173`. It is gitignored.
+`http://localhost:5173`. It is gitignored. The multi-user session cookies are
+`Secure`, so exercise a complete Google login against an HTTPS development or
+staging hostname rather than ordinary local HTTP.
 
 ```bash
 npm test         # unit tests

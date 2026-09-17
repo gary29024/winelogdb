@@ -19,7 +19,9 @@ The existing `owner` keys remain unchanged in D1 and R2.
    `OWNER_GOOGLE_SUB` is exact and takes precedence when set, but you cannot read
    your own subject until you have signed in at least once - set it afterwards if
    you want the stricter check. Ownership is never inferred from the first login
-   alone. See [Google OIDC](https://developers.google.com/identity/openid-connect/openid-connect).
+   alone. Follow the complete [Google OAuth setup guide](docs/google-oauth-setup.md),
+   including its public privacy and terms pages, before moving the consent screen
+   to production. See [Google OIDC](https://developers.google.com/identity/openid-connect/openid-connect).
 3. Apply migrations 0063 (accounts and credits), 0064 (storage and dispatch),
    0065 (provider receipts and cleanup), 0066 (friend codes and requests),
    0067 (adopted research) and 0068 (the producer alias pool), then deploy the new public entrypoint

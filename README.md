@@ -26,7 +26,7 @@ npm run db:migrate:local
 npm run dev
 ```
 
-WineLog supports an invite-only pilot of up to 25 accounts. Google identities map to internal IDs, with explicitly configured `OWNER_GOOGLE_SUB` retaining the legacy `owner` data. Opaque, revocable HttpOnly cookie sessions replace password tokens. Owner invitations, selected-friend wine sharing, factual research reuse, and quoted AI credits are described in [MULTI_USER_ROLLOUT.md](MULTI_USER_ROLLOUT.md). Complete that cutover checklist before admitting members.
+WineLog supports an invite-only pilot of up to 25 accounts. Google identities map to internal IDs, with explicitly configured `OWNER_GOOGLE_SUB` retaining the legacy `owner` data. Opaque, revocable HttpOnly cookie sessions replace password tokens. Owner invitations, selected-friend wine sharing, factual research reuse, and quoted AI credits are described in [MULTI_USER_ROLLOUT.md](MULTI_USER_ROLLOUT.md). Complete that cutover checklist before admitting members. Follow [Google OAuth setup](docs/google-oauth-setup.md) to configure the consent screen, owner bootstrap, and Worker environment.
 
 ## Cloudflare setup and deployment
 
@@ -36,7 +36,7 @@ login, verification and troubleshooting. In outline:
 
 1. Create the resources: `wrangler d1 create winelogdb`, `wrangler r2 bucket create winelog-private`, and `wrangler queues create` for both `winelog-research` and `winelog-research-dlq`.
 2. Put the returned D1 ID in `wrangler.jsonc`, replacing the one committed there. Keep the R2 bucket private.
-3. Add `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `OWNER_GOOGLE_SUB`, `AUTH_SECRET`, and the Gemini transport credential (`GEMINI_API_KEY` or `CF_AI_GATEWAY_TOKEN`). Password login is disabled.
+3. Add `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `OWNER_EMAIL` for the first owner sign-in (then `OWNER_GOOGLE_SUB`), `AUTH_SECRET`, and the Gemini transport credential (`GEMINI_API_KEY` or `CF_AI_GATEWAY_TOKEN`). Password login is disabled.
 4. Set `APP_URL` in `wrangler.jsonc` to the exact deployed origin, then redeploy.
 5. Apply schema with `npm run db:migrate`, then run `npm run deploy`.
 
