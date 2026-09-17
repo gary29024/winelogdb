@@ -4,7 +4,10 @@ import type { CachedResearch,ResearchTarget } from './cache';
 
 /** Exact, Unicode-preserving identity. Missing geography is deliberately not a wildcard. */
 export function sharedSubjectKey(target:ResearchTarget):string|null{
- const s=target.subject,n=(v:unknown)=>normalizeCuveeAlias(String(v??''));
+ // The sharing key reads target.identity, which is kept apart from target.subject
+ // precisely so the quality gate's input and the sharing key cannot drift into
+ // each other. Older callers that build a target by hand fall back to subject.
+ const s=(target.identity??target.subject) as Record<string,unknown>,n=(v:unknown)=>normalizeCuveeAlias(String(v??''));
  const producer=normalizeProducerAlias(String(s.producer??'')),country=n(s.country),region=n(s.region),appellation=n(s.appellation);
  if(!country)return null;
  if(target.scope==='vintage_context')return s.vintage!=null&&(region||appellation)&&n(s.wineStyle)?JSON.stringify([country,region,appellation,n(s.wineStyle),s.vintage]):null;

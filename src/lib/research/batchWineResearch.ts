@@ -3,7 +3,7 @@ import { assertResearchInput,type CreditContext } from '../credits/provider';
 import { deepSearchSchema,type DeepSearchResult } from '../db/schema';
 import { ensureProducerEntity } from '../producers/entities';
 import { parseStructuredJsonText } from '../producers/structuredJson';
-import { adoptFriendResearch,assembleDeepSearch,buildResearchTargets,fieldsForScope,loadResearchCache,scopeIsComplete,scopeQualityWarnings,scopeRetryFeedback,seedResearchCache,splitDeepSearchResult,upsertResearchCache,type CachedResearch,type ResearchScope,type ResearchSource,type ResearchTarget } from './cache';
+import { adoptFriendResearch,assembleDeepSearch,buildLegacyResearchTargets,buildResearchTargets,fieldsForScope,loadResearchCache,scopeIsComplete,scopeQualityWarnings,scopeRetryFeedback,seedResearchCache,splitDeepSearchResult,upsertResearchCache,type CachedResearch,type ResearchScope,type ResearchSource,type ResearchTarget } from './cache';
 import { orderModelsByGrounding,recordGroundingObservation } from './modelHealth';
 import { createResearchBatchJob,finishResearchBatchJob,recordResearchSearchQueries,getResearchBatchJob,touchResearchBatchJob } from './batchJobStore';
 import { cancelGeminiBatch } from './cancelResearch';
@@ -75,7 +75,14 @@ async function seedFromLegacy(db:D1Database,owner:string,wine:WineRow,targets:Re
 
 async function bridgePriorCaches(db:D1Database,owner:string,wine:WineRow,stableTargets:ResearchTarget[],cache:Map<ResearchScope,CachedResearch>){
   if(cache.size===stableTargets.length)return cache;
-  const priorTargetSets=[buildResearchTargets({producer:wine.producer,producerId:wine.producer_id,wineName:wine.wine_name,vintage:wine.vintage,country:wine.country,region:wine.region,appellation:wine.appellation}),buildResearchTargets({producer:wine.producer,wineName:wine.wine_name,vintage:wine.vintage,country:wine.country,region:wine.region,appellation:wine.appellation})];
+  const shapes=[{producer:wine.producer,producerId:wine.producer_id,cuveeId:wine.cuvee_id,wineName:wine.wine_name,vintage:wine.vintage,country:wine.country,region:wine.region,appellation:wine.appellation},
+    {producer:wine.producer,producerId:wine.producer_id,wineName:wine.wine_name,vintage:wine.vintage,country:wine.country,region:wine.region,appellation:wine.appellation},
+    {producer:wine.producer,wineName:wine.wine_name,vintage:wine.vintage,country:wine.country,region:wine.region,appellation:wine.appellation}];
+  // Two axes of drift, not one. The identity shape changed when producer and
+  // cuvee entities arrived, and the key's normalizer changed when non-Latin
+  // names stopped collapsing to the empty string. A wine can have been cached
+  // under either, so both are tried before anything is re-bought.
+  const priorTargetSets=[...shapes.slice(1).map(buildResearchTargets),...shapes.map(buildLegacyResearchTargets)];
   const additions:CachedResearch[]=[];for(const oldTargets of priorTargetSets){const oldCache=await loadResearchCache(db,owner,oldTargets);for(const target of stableTargets){if(cache.has(target.scope)||additions.some(x=>x.target.scope===target.scope))continue;const old=oldCache.get(target.scope);if(old)additions.push({...old,target})}}
   if(additions.length){await Promise.all(additions.map(entry=>seedResearchCache(db,owner,entry)));return loadResearchCache(db,owner,stableTargets)}return cache;
 }

@@ -199,10 +199,10 @@ describe('sharing boundaries',()=>{
   const target=(wineName:string,vintage:number|null=2020,wineStyle='red')=>buildResearchTargets({producer:'赤恋酒庄',wineName,country:'China',region:'Ningxia',vintage,wineStyle}).find(t=>t.scope==='wine_vintage')!;
   const key=sharedSubjectKey(target('山'));
   for(const t of [target('水'),target('山',2021),target('山',2020,'white'),target('山 Edition 1',null),target('山 Edition 2',null)])expect(sharedSubjectKey(t)).not.toBe(key);
-  expect(sharedSubjectKey({...target('山'),subject:{...target('山').subject,country:null}})).toBeNull();
+  expect(sharedSubjectKey({...target('山'),identity:{...target('山').identity!,country:null}})).toBeNull();
   expect(sharedSubjectKey(target('山',null))).toBeNull();
   const red=buildResearchTargets({country:'France',region:'Burgundy',vintage:2021,wineStyle:'red'}).find(t=>t.scope==='vintage_context')!;
-  expect(sharedSubjectKey(red)).not.toBe(sharedSubjectKey({...red,subject:{...red.subject,wineStyle:'white'}}));
+  expect(sharedSubjectKey(red)).not.toBe(sharedSubjectKey({...red,identity:{...red.identity!,wineStyle:'white'}}));
  });
 });
 describe('background durability and costs',()=>{

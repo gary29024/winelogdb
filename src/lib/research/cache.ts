@@ -8,7 +8,11 @@ import { friendResearch,publishResearch } from './shared';
 export const researchScopes=['producer','terroir','vintage_context','wine_vintage'] as const;
 export type ResearchScope=typeof researchScopes[number];
 export type ResearchSource={title:string;url:string};
-export type ResearchTarget={scope:ResearchScope;cacheKey:string;subject:Record<string,string|number|null>};
+/** What the sharing key is built from. Kept apart from `subject`, which is the
+ * quality gate's input and is persisted as subject_json, so widening one cannot
+ * quietly change the other. */
+export type ResearchIdentity={producer:string;wineName:string;country:string|null;region:string|null;appellation:string|null;wineStyle:string|null;vintage:number|null};
+export type ResearchTarget={scope:ResearchScope;cacheKey:string;subject:Record<string,string|number|null>;identity?:ResearchIdentity};
 export type CachedResearch={target:ResearchTarget;payload:Record<string,string>;sources:ResearchSource[];provenance?:DeepSearchProvenance;model:string;researchedAt:string;contributorId?:string};
 export type ResearchWine={producer?:unknown;producerId?:unknown;cuveeId?:unknown;wineName?:unknown;vintage?:unknown;country?:unknown;region?:unknown;appellation?:unknown;wineStyle?:unknown};
 
@@ -17,23 +21,39 @@ type CacheRow={scope:ResearchScope;cache_key:string;subject_json:string;result_j
 const parseJson=<T>(raw:unknown,fallback:T):T=>{try{return JSON.parse(String(raw)) as T}catch{return fallback}};
 const text=(value:unknown)=>typeof value==='string'?value.trim():value==null?'':String(value).trim();
 const normalized=(value:unknown)=>text(value).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[’'`]/g,'').replace(/[^\p{L}\p{N}]+/gu,' ').trim();
+/**
+ * The normalizer cache keys were built with before Unicode letters were kept.
+ *
+ * `[^a-z0-9]` erased every non-Latin character, so a producer written in Chinese,
+ * Cyrillic or Greek normalized to the empty string. Widening it to `\p{L}\p{N}`
+ * was right, but it also changed the key of every row already written for such a
+ * wine. Those rows are still perfectly good research; without this they would be
+ * orphaned and re-bought at full price. Only ever read from - nothing new is
+ * written under a legacy key.
+ */
+const legacyNormalized=(value:unknown)=>text(value).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[’'`]/g,'').replace(/[^a-z0-9]+/g,' ').trim();
 const makeKey=(...parts:unknown[])=>JSON.stringify(parts.map(normalized));
+const makeLegacyKey=(...parts:unknown[])=>JSON.stringify(parts.map(legacyNormalized));
 const parseProvenance=(raw:unknown)=>{const parsed=deepSearchProvenanceSchema.safeParse(parseJson(raw,null));return parsed.success?parsed.data:undefined};
 
-export function buildResearchTargets(wine:ResearchWine):ResearchTarget[]{
-  const producer=text(wine.producer),producerId=text(wine.producerId),cuveeId=text(wine.cuveeId),wineName=text(wine.wineName),country=text(wine.country),region=text(wine.region),appellation=text(wine.appellation);
+function researchTargetsWith(wine:ResearchWine,key:(...parts:unknown[])=>string):ResearchTarget[]{
+  const producer=text(wine.producer),producerId=text(wine.producerId),cuveeId=text(wine.cuveeId),wineName=text(wine.wineName),country=text(wine.country),region=text(wine.region),appellation=text(wine.appellation),wineStyle=text(wine.wineStyle);
   const vintage=typeof wine.vintage==='number'&&Number.isFinite(wine.vintage)?wine.vintage:null;
   const producerIdentity=producerId?`producer:${producerId}`:producer;
   const wineIdentity=cuveeId?`cuvee:${cuveeId}`:wineName;
+  const identity:ResearchIdentity={producer,wineName,country:country||null,region:region||null,appellation:appellation||null,wineStyle:wineStyle||null,vintage};
   const targets:ResearchTarget[]=[
-    {scope:'producer',cacheKey:makeKey(producerIdentity),subject:{producer,producerId:producerId||null}},
-    {scope:'terroir',cacheKey:makeKey(producerIdentity,wineIdentity,appellation,region,country),subject:{producer,producerId:producerId||null,cuveeId:cuveeId||null,wineName,appellation:appellation||null,region:region||null,country:country||null}}
+    {scope:'producer',cacheKey:key(producerIdentity),subject:{producer,producerId:producerId||null},identity},
+    {scope:'terroir',cacheKey:key(producerIdentity,wineIdentity,appellation,region,country),subject:{producer,producerId:producerId||null,cuveeId:cuveeId||null,wineName,appellation:appellation||null,region:region||null,country:country||null},identity}
   ];
-  if(vintage!=null)targets.push({scope:'vintage_context',cacheKey:makeKey(country,region,appellation,vintage),subject:{country:country||null,region:region||null,appellation:appellation||null,vintage}});
-  targets.push({scope:'wine_vintage',cacheKey:makeKey(producerIdentity,wineIdentity,vintage??'NV',appellation,region,country),subject:{producer,producerId:producerId||null,cuveeId:cuveeId||null,wineName,vintage,appellation:appellation||null,region:region||null,country:country||null}});
-  for(const target of targets)Object.assign(target.subject,{country:country||null,region:region||null,wineStyle:text(wine.wineStyle)||null});
+  if(vintage!=null)targets.push({scope:'vintage_context',cacheKey:key(country,region,appellation,vintage),subject:{country:country||null,region:region||null,appellation:appellation||null,vintage},identity});
+  targets.push({scope:'wine_vintage',cacheKey:key(producerIdentity,wineIdentity,vintage??'NV',appellation,region,country),subject:{producer,producerId:producerId||null,cuveeId:cuveeId||null,wineName,vintage,appellation:appellation||null,region:region||null,country:country||null},identity});
   return targets;
 }
+export const buildResearchTargets=(wine:ResearchWine)=>researchTargetsWith(wine,makeKey);
+/** The same targets keyed the way they were before non-Latin names stopped
+ * collapsing to the empty string. Read-only: used to recover rows written then. */
+export const buildLegacyResearchTargets=(wine:ResearchWine)=>researchTargetsWith(wine,makeLegacyKey);
 
 export function fieldsForScope(scope:ResearchScope){
   if(scope==='producer')return ['producerDetails','producerWinemakingPractices'] as const;
