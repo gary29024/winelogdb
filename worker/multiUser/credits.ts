@@ -89,7 +89,7 @@ export async function quote(request:Request,env:CreditEnv,member:Member){
 async function rejectOverlappingWork(db:D1Database,user:string,units:Array<{researchKey?:string}>){
  const keys=units.flatMap(unit=>unit.researchKey?[unit.researchKey]:[]);if(!keys.length)return;
  if(await db.prepare(`SELECT w.operation_id FROM research_work w JOIN friendships f ON f.friend_id=w.owner_id AND f.user_id=?
- WHERE w.subject_key IN (${`SELECT value FROM json_each(?)`}) LIMIT 1`).bind(user,JSON.stringify(keys)).first())throw new ApiError(409,'A friend is researching part of this request. Their result will be reused when it finishes; request a new quote then.');
+ WHERE w.subject_key IN (SELECT value FROM json_each(?)) LIMIT 1`).bind(user,JSON.stringify(keys)).first())throw new ApiError(409,'A friend is researching part of this request. Their result will be reused when it finishes; request a new quote then.');
 }
 export async function reserve(request:Request,env:CreditEnv,member:Member,observedUsd=0):Promise<{operation:CreditOperation;existing:boolean}>{
  const quoteId=request.headers.get('X-WineLog-Quote'),key=request.headers.get('Idempotency-Key');
@@ -111,7 +111,7 @@ export async function reserve(request:Request,env:CreditEnv,member:Member,observ
  const subjectKey=await workKey(env.DB,member.id,path,request),sponsor=await activeFriendWork(env.DB,member.id,subjectKey);
  const needed=sponsor?[]:await plannedUnits(request,env.DB,member.id),quotedUnits=JSON.parse(quoted.units_json) as CreditUnit[];
  if(needed.some(u=>!quotedUnits.some(q=>q.id===u.id&&q.action===u.action&&q.cacheKey===u.cacheKey&&q.targetFingerprint===u.targetFingerprint)))throw new ApiError(409,'Work changed; review a new quote');
- const units=quotedUnits.filter(q=>needed.some(u=>u.id===q.id&&u.action===u.action));
+ const units=quotedUnits.filter(q=>needed.some(u=>u.id===q.id&&u.action===q.action));
  if(!sponsor)await rejectOverlappingWork(env.DB,member.id,units);
  const lockKeys=[...new Set([...(subjectKey?[subjectKey]:[]),...units.flatMap(unit=>unit.researchKey?[unit.researchKey]:[])])];
  const total=units.reduce((n,u)=>n+u.credits,0),id=crypto.randomUUID(),now=stamp();
