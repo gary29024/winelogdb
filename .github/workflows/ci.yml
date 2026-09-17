@@ -44,7 +44,7 @@ jobs:
       - name: TypeScript and production build
         run: npm run build
 
-      - name: Decide platform-boundary smoke scope
+      - name: Decide Worker runtime smoke scope
         id: platform
         shell: bash
         env:
@@ -56,30 +56,30 @@ jobs:
             run_smoke=true
             reason="main/release run"
           else
-            changed_file="$RUNNER_TEMP/platform-boundary-changed-files.txt"
+            changed_file="$RUNNER_TEMP/worker-runtime-changed-files.txt"
             git diff --name-only "$BASE_SHA"...HEAD | sed '/^$/d' > "$changed_file"
             if [ ! -s "$changed_file" ]; then
               run_smoke=true
               reason="empty diff; fail safe"
-            elif grep -Eq '^(worker/|wrangler\.(toml|jsonc)$|src/lib/db/migrations/|src/features/auth/|scripts/platform-boundary-smoke\.mjs$|\.github/workflows/|package\.json$|vite\.config\.ts$|index\.html$|public/)' "$changed_file"; then
+            elif grep -Eq '^(worker/|wrangler\.(toml|jsonc)$|src/lib/db/migrations/|src/features/auth/|scripts/worker-runtime-smoke\.mjs$|\.github/workflows/|package\.json$|vite\.config\.ts$|index\.html$|public/)' "$changed_file"; then
               run_smoke=true
               reason="Worker/auth/runtime/migration/SPA boundary changed"
             else
               run_smoke=false
-              reason="no platform-boundary files changed"
+              reason="no Worker runtime boundary files changed"
             fi
           fi
           echo "run_smoke=$run_smoke" >> "$GITHUB_OUTPUT"
           echo "reason=$reason" >> "$GITHUB_OUTPUT"
-          printf '**Platform boundary smoke:** `%s` - %s\n' "$run_smoke" "$reason" >> "$GITHUB_STEP_SUMMARY"
+          printf '**Worker runtime smoke:** `%s` - %s\n' "$run_smoke" "$reason" >> "$GITHUB_STEP_SUMMARY"
 
-      - name: Apply local D1 migrations for platform smoke
+      - name: Apply local D1 migrations for Worker runtime smoke
         if: steps.platform.outputs.run_smoke == 'true'
         run: npx wrangler d1 migrations apply DB --local
 
-      - name: Run platform boundary smoke
+      - name: Run Worker runtime smoke
         if: steps.platform.outputs.run_smoke == 'true'
-        run: node scripts/platform-boundary-smoke.mjs
+        run: node scripts/worker-runtime-smoke.mjs
 
   pr-tests:
     name: Affected unit tests
