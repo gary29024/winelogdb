@@ -61,9 +61,9 @@ jobs:
             if [ ! -s "$changed_file" ]; then
               run_smoke=true
               reason="empty diff; fail safe"
-            elif grep -Eq '^(worker/|wrangler\.(toml|jsonc)$|src/lib/db/migrations/|src/lib/credits/|src/lib/usage/|src/features/auth/|scripts/platform-boundary-smoke\.mjs$|\.github/workflows/|package\.json$|vite\.config\.ts$)' "$changed_file"; then
+            elif grep -Eq '^(worker/|wrangler\.(toml|jsonc)$|src/lib/db/migrations/|src/features/auth/|scripts/platform-boundary-smoke\.mjs$|\.github/workflows/|package\.json$|vite\.config\.ts$|index\.html$|public/)' "$changed_file"; then
               run_smoke=true
-              reason="auth/runtime/ownership/billing/migration boundary changed"
+              reason="Worker/auth/runtime/migration/SPA boundary changed"
             else
               run_smoke=false
               reason="no platform-boundary files changed"
