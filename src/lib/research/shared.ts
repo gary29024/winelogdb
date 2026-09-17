@@ -71,9 +71,9 @@ export async function publishResearch(db:D1Database,owner:string,entry:CachedRes
 export async function friendResearch(db:D1Database,owner:string,target:ResearchTarget){
  const base=sharedSubjectKeys(target);if(!base.keys.length)return [];
  const identity=(target.identity??target.subject) as Record<string,unknown>;
- // "Ch. Margaux" and "Château Margaux" are one producer once somebody has said
- // so. Each confirmed spelling gets its own lookup, after the name as given.
- const variants=await producerNameVariants(db,String(identity.producer??''));
+ // A private alias such as "Ch. Margaux" -> "Château Margaux" may expand this
+ // owner's lookup, but another member's manual correction never does.
+ const variants=await producerNameVariants(db,owner,String(identity.producer??''));
  const keys=[...new Set(variants.length>1
    ?variants.flatMap(name=>sharedSubjectKeys({...target,identity:{...identity,producer:name} as ResearchTarget['identity']}).keys)
    :base.keys)];
