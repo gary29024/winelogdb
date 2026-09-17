@@ -59,6 +59,6 @@ export function AdminPage(){
   </div>}
   <label>Invite email<input type="email" value={email} onChange={e=>setEmail(e.target.value)}/></label><button onClick={()=>void run(async()=>(await apiJson<{url:string}>('/api/admin/invitations','POST',{email})).url)}>Create member invitation</button>
  </fieldset>
- {!!data?.reviewOperations.length&&<><h2>Operations needing reconciliation</h2><p>These AI operations remain held because completion is uncertain. Reconcile provider status before allowing a duplicate run.</p><ul>{data.reviewOperations.map(op=><li key={op.id}>{op.id} — {op.path}</li>)}</ul>}
+ {!!data?.reviewOperations.length&&<><h2>Operations needing reconciliation</h2><p>These AI operations remain held because completion is uncertain. Reconcile provider status before allowing a duplicate run.</p><ul>{data.reviewOperations.map(op=><li key={op.id}>{op.id} — {op.path}</li>)}</ul></>}
  </section>;
 }
