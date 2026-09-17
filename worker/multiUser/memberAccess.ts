@@ -82,12 +82,13 @@ export async function memberAiActionAccess(db:D1Database,userId:string,action:Me
 
 /**
  * Reserve one allowance slot while provider work is in flight. Pending slots are
- * counted for concurrency safety, but failed operations are later removed, so
- * only successful runs remain consumed. Included actions create no claim.
+ * counted for concurrency safety, but failed operations are later removed by the
+ * D1 settlement trigger, so only successful runs remain consumed. Included
+ * actions create no claim.
  */
 export async function reserveMemberAiAllowance(db:D1Database,userId:string,operationId:string,action:MemberAiAction,now=new Date()){
- const existing=await db.prepare('SELECT status FROM member_ai_action_usage WHERE operation_id=? AND user_id=?').bind(operationId,userId).first<{status:string}>();
- if(existing)return {allowed:true,claimed:true,access:await memberAiActionAccess(db,userId,action,now)};
+ const existing=await db.prepare('SELECT action,status FROM member_ai_action_usage WHERE operation_id=? AND user_id=?').bind(operationId,userId).first<{action:string;status:string}>();
+ if(existing){if(existing.action!==action)throw new ApiError(409,'AI allowance operation changed action');return {allowed:true,claimed:true,access:await memberAiActionAccess(db,userId,action,now)}}
  const access=await memberAiActionAccess(db,userId,action,now);
  if(access.accessMode==='included')return {allowed:true,claimed:false,access};
  const result=await db.prepare(`INSERT INTO member_ai_action_usage(operation_id,user_id,action,week_start,status,created_at)
@@ -100,16 +101,6 @@ export async function reserveMemberAiAllowance(db:D1Database,userId:string,opera
    coalesce((SELECT sum(runs) FROM member_ai_action_grants WHERE user_id=? AND action=? AND week_start=?),0)`)
   .bind(operationId,userId,action,access.weekStart,stamp(),userId,action,access.weekStart,action,userId,action,access.weekStart).run();
  if(result.meta.changes)return {allowed:true,claimed:true,access:await memberAiActionAccess(db,userId,action,now)};
- const latest=await memberAiActionActionOrIncluded(db,userId,action,now);
+ const latest=await memberAiActionAccess(db,userId,action,now);
  return {allowed:latest.accessMode==='included',claimed:false,access:latest};
-}
-
-async function memberAiActionActionOrIncluded(db:D1Database,userId:string,action:MemberAiAction,now:Date){
- return memberAiActionAccess(db,userId,action,now);
-}
-
-/** Settle a pending allowance reservation. Failed work frees the slot. */
-export async function finalizeMemberAiAllowance(db:D1Database,operationId:string,successful:boolean){
- if(successful)await db.prepare("UPDATE member_ai_action_usage SET status='success',completed_at=? WHERE operation_id=? AND status='pending'").bind(stamp(),operationId).run();
- else await db.prepare("DELETE FROM member_ai_action_usage WHERE operation_id=? AND status='pending'").bind(operationId).run();
 }
