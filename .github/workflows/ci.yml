@@ -81,13 +81,21 @@ jobs:
           echo "Changed files ($changed_count):"
           cat "$changed_file"
 
-          # Documentation-only changes cannot affect runtime behaviour.
-          if ! grep -Ev '^(README\.md|CHANGELOG\.md|SETUP\.md|docs/)' "$changed_file" | grep -q .; then
+          if [ "$changed_count" -eq 0 ]; then
+            # An empty diff means the base sha and HEAD did not line up the way
+            # this job assumes - a force-push, or a re-run against a base that
+            # has moved. Skipping every test is the one outcome that a diff we
+            # failed to read can never justify, so run everything.
+            mode=full
+            reason="no changed files resolved; refusing to infer an empty test scope"
+          # Prose cannot change runtime behaviour, and no unit test reads a
+          # markdown file, so a markdown-only change has nothing to regress.
+          elif ! grep -Ev '^docs/|\.md$' "$changed_file" | grep -q .; then
             mode=none
             reason="documentation-only change"
           # Large refactors and files outside the TypeScript dependency graph
           # get the full suite because Vitest cannot safely infer every consumer.
-          elif [ "$changed_count" -gt 40 ] || grep -Eq '^(package\.json|vite\.config\.ts|tsconfig.*\.json|eslint\.config\.(js|mjs|ts)|wrangler\.(toml|jsonc)|\.github/|migrations/|tests/unit/fixtures/)|\.(css|sql|json)$' "$changed_file"; then
+          elif [ "$changed_count" -gt 40 ] || grep -Eq '^(package\.json|vite\.config\.ts|tsconfig.*\.json|eslint\.config\.(js|mjs|ts)|wrangler\.(toml|jsonc)|\.github/|src/lib/db/migrations/|tests/unit/fixtures/)|\.(css|sql|json)$' "$changed_file"; then
             mode=full
             reason="broad or dependency-graph-opaque change"
           else
@@ -98,12 +106,61 @@ jobs:
           echo "mode=$mode" >> "$GITHUB_OUTPUT"
           echo "reason=$reason" >> "$GITHUB_OUTPUT"
           echo "Selected $mode test scope: $reason"
+          printf '**Unit test scope:** `%s` - %s\n' "$mode" "$reason" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Run affected unit tests
         if: steps.scope.outputs.mode == 'changed'
+        shell: bash
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
-        run: npx vitest run tests/unit --changed "$BASE_SHA" --passWithNoTests
+        run: |
+          set -euo pipefail
+          selection="$RUNNER_TEMP/selected-tests.txt"
+
+          # Vitest --changed walks the *import* graph. A fifth of this suite
+          # asserts on source files it reads as text instead
+          # (readFileSync('src/features/wines/DetailPage.tsx', ...)), so no edit
+          # to those files can ever select those tests, and the regression they
+          # were written to catch would pass unseen. They always run. Finding
+          # them by their use of the fs module keeps the set correct on its own
+          # as tests are added, rather than as a list that goes stale.
+          #
+          # Only test files: a filter matching no test file is silently ignored
+          # by Vitest, so a helper swept up here would inflate the count below
+          # while running nothing. The one helper that reads source text
+          # (tests/unit/support/sqliteD1.ts) reads migrations, and a migration
+          # change already takes the full suite - a helper reading anything else
+          # would leave its consumers unselected and belongs in this set.
+          # grep exits 1 on no match, which under pipefail would fail this step
+          # over an empty set rather than over a real problem. The total check
+          # below turns an empty selection into the full suite instead.
+          grep -rlE "['\"](node:)?fs(/promises)?['\"]" tests/unit \
+            --include='*.test.ts' --include='*.test.tsx' | sort > "$selection" || true
+          invariant_count=$(wc -l < "$selection" | tr -d ' ')
+
+          # The tests/unit filter matters: without it Vitest's default include
+          # also matches the Playwright spec under tests/e2e.
+          npx vitest list tests/unit --changed "$BASE_SHA" --filesOnly >> "$selection"
+
+          # A blank line here would become a filter that matches every test.
+          sort -u "$selection" -o "$selection"
+          sed -i '/^$/d' "$selection"
+          total=$(wc -l < "$selection" | tr -d ' ')
+
+          # An empty filter list makes Vitest run every test it can find, e2e
+          # specs included. Ask for the full unit suite by name instead.
+          if [ "$total" -eq 0 ]; then
+            echo "Selected no test files; running the full unit suite instead."
+            npm test
+            exit 0
+          fi
+
+          echo "Running $total test files ($invariant_count always-run source-invariant):"
+          cat "$selection"
+          printf '%s affected unit test files (%s always-run source-invariant).\n' "$total" "$invariant_count" >> "$GITHUB_STEP_SUMMARY"
+
+          mapfile -t files < "$selection"
+          npx vitest run --passWithNoTests "${files[@]}"
 
       - name: Run full unit suite for high-risk changes
         if: steps.scope.outputs.mode == 'full'
