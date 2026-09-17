@@ -101,9 +101,20 @@ describe('every route to the provider',()=>{
       const text=readFileSync(file,'utf8');
       return provider.test(text)&&!text.includes('durableProvider');
     });
-    // Semantic search is why this test exists: it landed on main outside the
-    // route allowlist and reached Google's embeddings endpoint unmetered.
     expect(offenders,'a file that reaches the provider must route through durableProvider').toEqual([]);
+  });
+
+  it('allows only explicitly usage-metered zero-credit Workers AI calls',()=>{
+    const directWorkers=sources().filter(file=>readFileSync(file,'utf8').includes('.AI.run'));
+    const allowed=new Map([
+      ['src/lib/journal/semanticSearch.ts',['EMBEDDING_CREDIT_EXEMPTION','recordAiUsage','search_embedding']],
+      ['src/lib/producers/catalogWorkersAiFallback.ts',['producerRangeAllowed']]
+    ]);
+    for(const [file,guards] of allowed){
+      const text=readFileSync(file,'utf8');
+      for(const guard of guards)expect(text,`${file} needs ${guard} to remain exempt`).toContain(guard);
+    }
+    expect(directWorkers.filter(file=>!allowed.has(file)),'new AI.run paths need an explicit credit policy').toEqual([]);
   });
 
   it('is handed a metering decision on every multi-user request',()=>{
