@@ -30,13 +30,13 @@ export function AccountPage(){
   setBusy(true);setError('');setNotice('');
   try{await fn();await load();setNotice(message)}catch(e){setError((e as Error).message)}finally{setBusy(false)}
  }
- const account=getAccount(),smart=usage.kinds.find(item=>item.kind==='search_embedding'),requests=usage.kinds.reduce((sum,item)=>sum+item.requests,0),runs=usage.kinds.reduce((sum,item)=>sum+item.runs,0);
+ const account=getAccount(),smart=usage.kinds.find(item=>item.kind==='search_embedding'),providerRequests=usage.kinds.reduce((sum,item)=>sum+item.requests,0),runs=usage.kinds.reduce((sum,item)=>sum+item.runs,0);
  return <section className="account-page">
   <h1>Account & friends</h1><p>{account?.display_name}</p>
   <p><strong>{wallet.available} credits available</strong> · {wallet.reserved} reserved</p>
   <nav className="account-shortcuts" aria-label="Account shortcuts"><Link to="/shared">Shared with me</Link>{account?.role==='owner'&&<><Link to="/admin">Owner controls</Link><Link to="/admin#member-usage">Member usage</Link></>}</nav>
   <section className="personal-usage" aria-labelledby="your-usage-title"><h2 id="your-usage-title">Your usage</h2><p>Last {usage.days} days. WineLog credits and provider activity are tracked separately.</p>
-   {usage.empty?<p>No AI usage recorded yet.</p>:<dl><div><dt>AI runs</dt><dd>{runs}</dd></div><div><dt>Provider requests</dt><dd>{requests}</dd></div><div><dt>Smart Search</dt><dd>{smart?.requests??0} requests</dd></div><div><dt>Wines embedded</dt><dd>{smart?.units??0}</dd></div></dl>}
+   {usage.empty?<p>No AI usage recorded yet.</p>:<dl><div><dt>AI runs</dt><dd>{runs}</dd></div><div><dt>Provider requests</dt><dd>{providerRequests}</dd></div><div><dt>Smart Search</dt><dd>{smart?.requests??0} requests</dd></div><div><dt>Wines embedded</dt><dd>{smart?.units??0}</dd></div></dl>}
   </section>
   {error&&<p role="alert">{error}</p>}{notice&&<p role="status">{notice}</p>}
   <h2>Friends</h2>
