@@ -13,6 +13,12 @@ export async function authenticate(request:Request,env:IdentityEnv):Promise<Memb
 export function verifyOrigin(request:Request,env:IdentityEnv){
  if(!['GET','HEAD','OPTIONS'].includes(request.method)&&request.headers.get('Origin')!==appOrigin(env))throw new ApiError(403,'Invalid request origin');
 }
+function profileName(value:unknown){
+ if(typeof value!=='string')throw new ApiError(400,'Name is required');
+ const name=value.trim().replace(/\s+/gu,' ');
+ if(!name||[...name].length>60)throw new ApiError(400,'Name must be between 1 and 60 characters');
+ return name;
+}
 /**
  * Whether this sign-in is the owner claiming their own account.
  *
@@ -84,6 +90,10 @@ export async function authRoute(request:Request,env:IdentityEnv):Promise<Respons
   verifyOrigin(request,env);await env.DB.prepare('DELETE FROM auth_sessions WHERE token_hash=?').bind(await hash(cookie(request,SESSION))).run();return json({ok:true},200,{'Set-Cookie':setCookie(SESSION,'',0)});
  }
  if(url.pathname==='/api/me'&&request.method==='GET'){const member=await authenticate(request,env);return json({user:member})}
+ if(url.pathname==='/api/me'&&request.method==='PATCH'){
+  verifyOrigin(request,env);const member=await authenticate(request,env),data=await body(request),display_name=profileName(data.displayName);
+  await env.DB.prepare('UPDATE app_users SET display_name=? WHERE id=?').bind(display_name,member.id).run();return json({user:{...member,display_name}});
+ }
  if(url.pathname==='/api/auth/logout-all'&&request.method==='POST'){verifyOrigin(request,env);const member=await authenticate(request,env);await body(request);await env.DB.prepare('DELETE FROM auth_sessions WHERE user_id=?').bind(member.id).run();return json({ok:true},200,{'Set-Cookie':setCookie(SESSION,'',0)})}
  if(url.pathname.startsWith('/api/auth/'))return json({error:'Unknown authentication endpoint'},404);
  return null;
