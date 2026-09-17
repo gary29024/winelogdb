@@ -18,7 +18,7 @@ const stateLabel=(state:RolloutState)=>state==='not_started'?'Not started':state
 const utcBudgetWindow=()=>{const now=new Date(),current=now.toISOString().slice(0,7),nextDate=new Date(Date.UTC(now.getUTCFullYear(),now.getUTCMonth()+1,1)),days=Math.ceil((nextDate.getTime()-now.getTime())/86_400_000);return {current,next:nextDate.toISOString().slice(0,7),days}};
 export function AdminPage(){
  const [data,setData]=useState<Overview|null>(null),[config,setConfig]=useState<Record<string,unknown>>(defaults),[policies,setPolicies]=useState<ActionPolicy[]>([]),[message,setMessage]=useState(''),[busy,setBusy]=useState(false),[rolloutStatus,setRolloutStatus]=useState<RolloutStatus|null>(null);
- const [email,setEmail]=useState(''),[grantMemberId,setGrantMemberId]=useState(''),[grantAction,setGrantAction]=useState(''),[grantRuns,setGrantRuns]=useState(1),[grantReason,setGrantReason]=useState('');
+ const [email,setEmail]=useState(''),[inviteUrl,setInviteUrl]=useState(''),[grantMemberId,setGrantMemberId]=useState(''),[grantAction,setGrantAction]=useState(''),[grantRuns,setGrantRuns]=useState(1),[grantReason,setGrantReason]=useState('');
  const rolloutRunning=rolloutStatus?.storage.state==='running'||rolloutStatus?.research.state==='running';
  async function load(){
   const [next,rollout]=await Promise.all([apiJson<Overview>('/api/admin/overview'),apiJson<RolloutStatus>('/api/admin/rollout/status')]);setData(next);setRolloutStatus(rollout);setPolicies(next.actionPolicies);
@@ -89,7 +89,8 @@ export function AdminPage(){
    {rolloutStatus.research.error&&<p role="alert">Last research indexing error: {rolloutStatus.research.error}</p>}
    <button disabled={rolloutStatus.research.state==='running'} onClick={()=>void run(()=>startRollout('research',rolloutStatus.research.state==='complete'))}>{rolloutStatus.research.state==='running'?'Research indexing…':rolloutStatus.research.state==='complete'?'Refresh research index':rolloutStatus.research.state==='paused'?'Resume research indexing':'Index existing research'}</button>
   </div>}
-  <label>Invite email<input type="email" value={email} onChange={e=>setEmail(e.target.value)}/></label><button onClick={()=>void run(async()=>(await apiJson<{url:string}>('/api/admin/invitations','POST',{email})).url)}>Create member invitation</button>
+  <label>Invite email<input type="email" value={email} onChange={e=>{setEmail(e.target.value);setInviteUrl('')}}/></label><button onClick={()=>void run(async()=>{const result=await apiJson<{url:string}>('/api/admin/invitations','POST',{email});setInviteUrl(result.url);return 'Invitation created.'})}>Create member invitation</button>
+  {inviteUrl&&<div className="invitation-result"><strong>Invitation link</strong><input aria-label="Invitation link" readOnly value={inviteUrl} onFocus={e=>e.currentTarget.select()}/><div className="friend-actions"><button type="button" onClick={()=>void navigator.clipboard.writeText(inviteUrl).then(()=>setMessage('Invitation link copied.')).catch(()=>setMessage('Could not copy automatically. Press and hold the link to copy it.'))}>Copy link</button><a className="button" href={inviteUrl} target="_blank" rel="noreferrer">Open link</a></div></div>}
  </fieldset>
  {!!data?.reviewOperations.length&&<><h2>Operations needing reconciliation</h2><p>These AI operations remain held because completion is uncertain. Reconcile provider status before allowing a duplicate run.</p><ul>{data.reviewOperations.map(op=><li key={op.id}>{op.id} — {op.path}</li>)}</ul></>}
  </section>;
