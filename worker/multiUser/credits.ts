@@ -73,6 +73,10 @@ export async function quote(request:Request,env:CreditEnv,member:Member){
  const units:CreditUnit[]=[],prices=new Map<string,{id:string;credits:number}>();
  const sponsor=await activeFriendWork(env.DB,member.id,await workKey(env.DB,member.id,new URL(request.url).pathname,request));
  for(const unit of sponsor?[]:await plannedUnits(request,env.DB,member.id)){
+  // The owner pays provider bills directly and must keep the pre-rollout workflow
+  // after cutover. Keep a zero-credit operation for idempotency/auditability, but
+  // do not require the owner to invent member prices or grant credits to themself.
+  if(member.role==='owner'){units.push({...unit,priceId:'owner-exempt',credits:0});continue}
   const price=prices.get(unit.action)??await env.DB.prepare('SELECT id,credits FROM credit_prices WHERE action=? ORDER BY created_at DESC,rowid DESC LIMIT 1').bind(unit.action).first<{id:string;credits:number}>();if(price)prices.set(unit.action,price);
   if(!price)throw new ApiError(503,`The owner has not priced ${unit.action.replaceAll('_',' ')}`);units.push({...unit,priceId:price.id,credits:unit.parentOperationId?0:price.credits});
  }
@@ -107,7 +111,7 @@ export async function reserve(request:Request,env:CreditEnv,member:Member,observ
  const subjectKey=await workKey(env.DB,member.id,path,request),sponsor=await activeFriendWork(env.DB,member.id,subjectKey);
  const needed=sponsor?[]:await plannedUnits(request,env.DB,member.id),quotedUnits=JSON.parse(quoted.units_json) as CreditUnit[];
  if(needed.some(u=>!quotedUnits.some(q=>q.id===u.id&&q.action===u.action&&q.cacheKey===u.cacheKey&&q.targetFingerprint===u.targetFingerprint)))throw new ApiError(409,'Work changed; review a new quote');
- const units=quotedUnits.filter(q=>needed.some(u=>u.id===q.id&&u.action===q.action));
+ const units=quotedUnits.filter(q=>needed.some(u=>u.id===q.id&&u.action===u.action));
  if(!sponsor)await rejectOverlappingWork(env.DB,member.id,units);
  const lockKeys=[...new Set([...(subjectKey?[subjectKey]:[]),...units.flatMap(unit=>unit.researchKey?[unit.researchKey]:[])])];
  const total=units.reduce((n,u)=>n+u.credits,0),id=crypto.randomUUID(),now=stamp();
