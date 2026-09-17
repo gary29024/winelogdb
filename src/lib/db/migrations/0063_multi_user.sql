@@ -99,9 +99,11 @@ INSERT OR IGNORE INTO credit_wallets(user_id) VALUES('owner');
 
 -- Conservative defaults, so a fresh deployment is usable rather than answering
 -- 503 to every request until somebody writes this row by hand. Deliberately
--- unwelcoming: one member, no overages, small budgets. Nothing here grants an
--- invitation, a credit or a price - those still require the owner to act, so an
--- unconfigured deployment cannot spend anything.
+-- conservative: one member and small budgets. Cloudflare overages are allowed
+-- only within the configured hard stop; otherwise recording any non-zero real
+-- cost would immediately lock the deployment. Nothing here grants an invitation,
+-- a credit or a price - those still require the owner to act, so an unconfigured
+-- member cannot spend anything.
 INSERT OR IGNORE INTO pilot_settings(id,value_json) VALUES(1,json('{
   "memberLimit":1,
   "memberStorageBytes":1073741824,
@@ -115,7 +117,7 @@ INSERT OR IGNORE INTO pilot_settings(id,value_json) VALUES(1,json('{
   "cloudflareStopUsd":10,
   "cloudflareObservedUsd":0,
   "cloudflareObservedMonth":"",
-  "allowOverages":false
+  "allowOverages":true
 }'));
 
 -- No automatic invitation, credit grant, or price: launch requires owner configuration.
