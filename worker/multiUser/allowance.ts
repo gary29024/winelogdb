@@ -12,9 +12,9 @@ export function ownerOnlyResearchPath(path:string){return path==='/api/producers
 
 /** ISO-style week boundary: Monday 00:00 UTC. */
 export function researchWeek(now=new Date()){
- const date=new Date(now),day=date.getUTCDay(),back=(day+6)%7;
+ const date=new Date(now.getTime()),day=date.getUTCDay(),back=(day+6)%7;
  date.setUTCDate(date.getUTCDate()-back);date.setUTCHours(0,0,0,0);
- const next=new Date(date);next.setUTCDate(next.getUTCDate()+7);
+ const next=new Date(date.getTime());next.setUTCDate(next.getUTCDate()+7);
  return {weekStart:date.toISOString(),resetsAt:next.toISOString()};
 }
 
