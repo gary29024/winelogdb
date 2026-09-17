@@ -42,6 +42,8 @@ Once PR #224 is deployed, use these final links:
 
 If you use your own custom domain, add the registrable domain under **Authorized domains** and verify ownership in Google Search Console when Google asks. Example: for `https://wine.example.com`, the authorized domain is normally `example.com`.
 
+WineLog's login page uses Google's approved **Sign in with Google** artwork while keeping WineLog's server-side PKCE/OIDC flow behind it.
+
 ## A3. Set the audience
 
 Open **Audience**:
@@ -126,7 +128,7 @@ For the production connection use:
 
 This order matters: the new D1 tables must be created before the new Worker code is promoted.
 
-The repository now includes `.node-version` with Node 24, so Cloudflare Builds will use the same major Node version as CI.
+The repository includes `.node-version` with Node 24, so Cloudflare Builds uses the same major Node version as CI.
 
 Build Variables are not needed for the OAuth runtime settings above.
 
@@ -168,8 +170,10 @@ Cloudflare should then:
 
 1. install dependencies;
 2. run `npm run build`;
-3. run all pending D1 migrations through migration 0068;
+3. run all pending D1 migrations through migration **0069**;
 4. deploy `worker/multiUserEntry.ts` and the built front end.
+
+Migration 0069 seeds the current budget month only when that value is blank, so the first owner AI action is not blocked by a setting that did not exist before the multi-user cutover. Future month changes still require the normal owner usage update.
 
 Do not invite anybody until you have completed Part E.
 
@@ -192,7 +196,7 @@ The About, Privacy and Terms pages must work without being signed in. The public
 
 ## E2. Sign in as the owner
 
-Open `APP_URL/login` and press **Continue with Google**.
+Open `APP_URL/login` and press **Sign in with Google**.
 
 Use exactly the Google account stored in `OWNER_EMAIL`.
 
@@ -212,16 +216,18 @@ Go to:
 
 **Account & friends → Owner controls**
 
+Your existing owner workflow is deliberately continuous across the cutover: the owner pays the provider directly, so owner AI requests use zero WineLog credits and do **not** require you to create member prices or grant credits to yourself first. The operation is still recorded for audit/usage purposes.
+
 Before inviting members:
 
 1. review the seeded member/storage/AI limits;
-2. configure every credit price you intend to make available;
-3. grant yourself initial credits if you want to test charged actions;
+2. configure every credit price you intend to make available **to members**;
+3. grant credits to test/member accounts as needed;
 4. run **Inventory R2 storage**;
 5. run **Index existing research**;
 6. confirm the maintenance/rollout status is healthy.
 
-The initial settings are intentionally conservative. A newly deployed member should not be able to spend unpriced AI by accident.
+The initial settings are intentionally conservative. A newly deployed member cannot spend unpriced AI by accident.
 
 ## E4. Test the important functions
 
@@ -243,12 +249,13 @@ If those work, the multi-user boundary, D1, R2, queues, Google sign-in and AI pa
 
 Only after Part E succeeds:
 
-1. create one invitation in **Owner controls** for a specific Google email address;
-2. if Google OAuth is still in Testing, add that same email to Google Auth Platform → Audience → Test users;
-3. send the invitation link privately;
-4. ask the member to sign in with that exact Google email;
-5. confirm they see an empty/private account rather than your owner journal;
-6. exchange friend codes if you want to test sharing/research reuse.
+1. configure the member AI prices you want to offer and decide how many credits to grant;
+2. create one invitation in **Owner controls** for a specific Google email address;
+3. if Google OAuth is still in Testing, add that same email to Google Auth Platform → Audience → Test users;
+4. send the invitation link privately;
+5. ask the member to sign in with that exact Google email;
+6. confirm they see an empty/private account rather than your owner journal;
+7. exchange friend codes if you want to test sharing/research reuse.
 
 Start with one member. Once that account works, add the remaining pilot users.
 
