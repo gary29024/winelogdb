@@ -48,6 +48,25 @@ CREATE TABLE member_ai_action_grants (
 CREATE INDEX idx_member_ai_action_grants_week
   ON member_ai_action_grants(user_id,action,week_start,created_at);
 
+-- Pending allowance slots protect against concurrent oversubscription. The
+-- credit operation is WineLog's durable source of truth for whether provider
+-- work succeeded: successful work consumes the slot; failed work releases it.
+CREATE TRIGGER member_ai_action_usage_complete
+AFTER UPDATE OF status ON credit_operations
+WHEN new.status='complete'
+BEGIN
+  UPDATE member_ai_action_usage
+  SET status='success',completed_at=strftime('%Y-%m-%dT%H:%M:%fZ','now')
+  WHERE operation_id=new.id AND status='pending';
+END;
+
+CREATE TRIGGER member_ai_action_usage_failed
+AFTER UPDATE OF status ON credit_operations
+WHEN new.status='failed'
+BEGIN
+  DELETE FROM member_ai_action_usage WHERE operation_id=new.id AND status='pending';
+END;
+
 -- Preserve any successful usage already recorded by the short-lived shared
 -- research allowance. Failed/in-flight claims are intentionally not migrated,
 -- because the new policy counts successful runs only.
