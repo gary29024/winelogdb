@@ -10,7 +10,7 @@ import { claimDelivery,durableQueue,finishDelivery,flushOutbox,maintainJobs,mark
 import { meteredBucket } from './multiUser/storage';
 import { adoptFriendResearch,assembleDeepSearch,loadResearchCache } from '../src/lib/research/cache';
 import type { AiRateEnv } from '../src/lib/usage/rates';
-import { rolloutRoute } from './multiUser/rollout';
+import { processRolloutJob,recoverRollouts,rolloutRoute,type RolloutQueueJob } from './multiUser/rollout';
 import { reusableProducer } from '../src/lib/research/sharedProducer';
 import { readVintageWindow,type VintageSubject } from '../src/lib/maturity/vintageWindow';
 
@@ -89,12 +89,17 @@ export default {
  },
  async queue(batch:Batch,env:MultiUserEnv){
   for(const message of batch.messages){
-   const job=message.body as typeof message.body&JobEnvelope,id=job._outboxId||message.id;
+   const raw=message.body as (typeof message.body&JobEnvelope)|RolloutQueueJob,id=('_outboxId' in raw&&raw._outboxId)||message.id;
    if(!await claimDelivery(env.DB,id)){const done=await env.DB.prepare('SELECT done FROM queue_deliveries WHERE id=?').bind(id).first<{done:number}>();if(done?.done)message.ack();else message.retry({delaySeconds:60});continue}
    let retried=false;
    try{
-    const member=await env.DB.prepare("SELECT id,role FROM app_users WHERE id=? AND status='active'").bind(job.owner||'').first<{id:string;role:string}>();
+    const member=await env.DB.prepare("SELECT id,role FROM app_users WHERE id=? AND status='active'").bind(raw.owner||'').first<{id:string;role:string}>();
     if(!member){message.retry({delaySeconds:300});retried=true;continue}
+    if(raw.kind==='admin_rollout'){
+     if(member.role!=='owner'){message.ack();continue}
+     await processRolloutJob(env,raw.rollout);message.ack();continue;
+    }
+    const job=raw as typeof message.body&JobEnvelope;
     const op=job._creditOperationId?await env.DB.prepare('SELECT * FROM credit_operations WHERE id=? AND user_id=?').bind(job._creditOperationId,job.owner!).first<CreditOperation>():null;
     if(job.kind!=='recognition_batch_cleanup'&&(!op||!['reserved','running','review'].includes(op.status))){message.ack();continue}
     const scoped={...env,CREDIT_CONTEXT:op?{db:env.DB,operationId:op.id,namespace:'queue'}:providerAuthorization(member.role,`${job.kind??'This job'} reached the provider without a credit operation.`),CREDIT_RESEARCH_SCOPES:op?JSON.parse(op.units_json).flatMap((u:{scope?:string})=>u.scope?[u.scope]:[]):[],WINE_IMAGES:meteredBucket(env.WINE_IMAGES,env.DB,job.owner!),RESEARCH_QUEUE:durableQueue(env.RESEARCH_QUEUE,env.DB,op?.id)};
@@ -106,5 +111,5 @@ export default {
   }
   await flushOutbox(env.DB,env.RESEARCH_QUEUE);
  },
- async scheduled(_event:ScheduledController,env:MultiUserEnv){await maintainJobs(env.DB,env.RESEARCH_QUEUE,env.WINE_IMAGES);await env.DB.prepare("INSERT INTO rollout_state(name,value) VALUES('last_maintenance',?) ON CONFLICT(name) DO UPDATE SET value=excluded.value").bind(stamp()).run()}
+ async scheduled(_event:ScheduledController,env:MultiUserEnv){await maintainJobs(env.DB,env.RESEARCH_QUEUE,env.WINE_IMAGES);await recoverRollouts(env);await env.DB.prepare("INSERT INTO rollout_state(name,value) VALUES('last_maintenance',?) ON CONFLICT(name) DO UPDATE SET value=excluded.value").bind(stamp()).run()}
 };
