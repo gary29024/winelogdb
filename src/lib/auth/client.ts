@@ -25,14 +25,24 @@ const isAi=(path:string,method:string)=>method==='POST'&&(path==='/api/recogniti
 export async function apiFetch(input:RequestInfo|URL,init?:RequestInit):Promise<Response>{
  const atStart=generation,identity=getSession();
  const url=typeof input==='string'?new URL(input,location.origin):input instanceof URL?input:new URL(input.url);
- const original=new Request(url,input instanceof Request?input:init);
- const headers=new Headers(original.headers);if(identity)headers.set('X-WineLog-Account',identity);headers.delete('Authorization');
- const request=new Request(original,{headers,credentials:'same-origin'});
+ // Read the method and headers off the inputs directly rather than by building a
+ // Request. An abortable caller passes its page's AbortSignal, and the Request
+ // constructor brand-checks it: under jsdom the signal comes from a different
+ // realm than the fetch implementation, so constructing a Request from that init
+ // throws "Expected signal to be an instance of AbortSignal" and every abortable
+ // list read fails. The signal only ever needs to reach fetch, which accepts it.
+ const method=(input instanceof Request?input.method:init?.method)??'GET';
+ const headers=new Headers(input instanceof Request?input.headers:init?.headers);
+ if(identity)headers.set('X-WineLog-Account',identity);
+ headers.delete('Authorization');
  let response:Response;
- if(isAi(url.pathname,request.method)){
+ if(isAi(url.pathname,method)){
   const quoteUrl=new URL('/api/credits/quotes',url);quoteUrl.searchParams.set('path',url.pathname);
-  const bytes=await request.clone().arrayBuffer();
-  const quoted=await fetch(quoteUrl.pathname+quoteUrl.search,{method:request.method,headers:request.headers,body:bytes,credentials:'same-origin'});
+  // The quote and the run must send byte-identical bodies, and a FormData body
+  // can only be read once, so it is serialized here - with the signal left out,
+  // for the reason above - and the boundary header it generates is carried over.
+  const bytes=await requestBytes(input,init,headers);
+  const quoted=await fetch(quoteUrl.pathname+quoteUrl.search,{method,headers,body:bytes,credentials:'same-origin'});
   if(atStart!==generation||identity!==getSession())throw new Error('Account changed; discard the previous quote');
   if(!quoted.ok){if(quoted.status===401){clearSession();location.assign('/login')}return quoted}
   const quote=await quoted.json() as Quote;
@@ -43,7 +53,7 @@ export async function apiFetch(input:RequestInfo|URL,init?:RequestInit):Promise<
   }
   if(atStart!==generation||identity!==getSession())throw new Error('Account changed');
   headers.set('X-WineLog-Quote',quote.id);headers.set('Idempotency-Key',crypto.randomUUID());
-  const execute=()=>fetch(url.pathname+url.search,{method:request.method,headers,body:typeof init?.body==='string'?init.body:bytes,credentials:'same-origin',signal:init?.signal});
+  const execute=()=>fetch(url.pathname+url.search,{method,headers,body:bytes,credentials:'same-origin',signal:init?.signal});
   try{response=await execute()}catch(error){if(init?.signal?.aborted||atStart!==generation)throw error;response=await execute()}
  }else{
   response=await fetch(input,{...init,headers,credentials:'same-origin'});
@@ -52,4 +62,27 @@ export async function apiFetch(input:RequestInfo|URL,init?:RequestInit):Promise<
  if(response.status===401){clearSession();location.assign('/login')}
  return response;
 }
+
+/**
+ * The request body as bytes, so the quote and the run send exactly the same one.
+ *
+ * A string body needs no serialization. Anything else - a FormData scan upload,
+ * most of all - does, and only the Request constructor knows how to write the
+ * multipart boundary, so its generated Content-Type is copied onto the headers
+ * both calls will use. `signal` is stripped before constructing it: see apiFetch.
+ */
+async function requestBytes(input:RequestInfo|URL,init:RequestInit|undefined,headers:Headers){
+ const body=input instanceof Request?undefined:init?.body;
+ if(typeof body==='string')return body;
+ if(body==null&&!(input instanceof Request))return undefined;
+ const rest={...init};
+ // The signal must not reach the Request constructor: it brand-checks it, and an
+ // abortable caller's signal comes from a different realm under jsdom.
+ delete rest.signal;
+ const source=input instanceof Request?input.clone():new Request(location.origin,{...rest,method:'POST',body});
+ const type=source.headers.get('Content-Type');
+ if(type&&!headers.has('Content-Type'))headers.set('Content-Type',type);
+ return source.arrayBuffer();
+}
+
 if(typeof window!=='undefined')window.addEventListener('storage',event=>{if(event.key==='winelog-account-event'||event.key==='winelog-account-id'&&(event.newValue||null)!==getSession()){clearSession();location.reload()}});

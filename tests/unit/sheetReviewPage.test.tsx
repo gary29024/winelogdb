@@ -5,7 +5,23 @@ import { MemoryRouter,Route,Routes } from 'react-router-dom';
 import { afterEach,describe,expect,it,vi } from 'vitest';
 import { waitFor } from '@testing-library/react';
 import { File as NodeFile } from 'node:buffer';
-import { FormData as NodeFormData } from 'undici';
+import { FormData as NodeFormData,Request as NodeRequest,Response as NodeResponse } from 'undici';
+
+
+/**
+ * FormData, File, Request and Response from one realm, as a browser has them.
+ *
+ * apiFetch serializes a FormData body once - the quote and the run must send
+ * byte-identical bodies or the server refuses the quote - and it does that by
+ * constructing a Request. Node 24 brand-checks the body: a FormData from any
+ * other realm is not recognised as one and is stringified to "[object FormData]"
+ * instead of multipart. Mixing jsdom's FormData with Node's internal Request
+ * silently produced a 17-byte text/plain body. One realm keeps the test honest.
+ */
+function stubOneRealm(){
+  vi.stubGlobal('File',NodeFile);vi.stubGlobal('FormData',NodeFormData);
+  vi.stubGlobal('Request',NodeRequest);vi.stubGlobal('Response',NodeResponse);
+}
 
 declare global{var IS_REACT_ACT_ENVIRONMENT:boolean}
 globalThis.IS_REACT_ACT_ENVIRONMENT=true;
@@ -26,7 +42,7 @@ afterEach(()=>{act(()=>root?.unmount());host?.remove();root=null;host=null;vi.un
 const json=(body:unknown)=>new Response(JSON.stringify(body),{status:200,headers:{'content-type':'application/json'}});
 
 async function mount(parseBodies:unknown[]){
-  vi.stubGlobal('File',NodeFile);vi.stubGlobal('FormData',NodeFormData);
+  stubOneRealm();
   let parseIndex=0,uploadIndex=0,blobs=0;
   // jsdom has no object URLs, and the staged pages are shown from one.
   vi.stubGlobal('URL',Object.assign(globalThis.URL,{createObjectURL:()=>`blob:page-${++blobs}`,revokeObjectURL:()=>{}}));
