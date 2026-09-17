@@ -109,3 +109,7 @@ export const dismissResearchCampaign=(id:string)=>
     .then(r=>json<{campaign:ResearchCampaign|null}>(r,'Could not clear the batch run')).then(r=>r.campaign);
 
 export type { CatalogDecision,CatalogDecisionKind };
+
+export type ProducerNameSuggestion={name:string;reason:'abbreviation'|'spelling'|'prefix'};
+export const getProducerNameSuggestions=(id:string)=>apiFetch(`/api/producers/${id}/name-suggestions`,{headers:authHeaders()}).then(r=>json<{items:ProducerNameSuggestion[]}>(r,'Could not load name suggestions'));
+export const confirmProducerName=(id:string,name:string)=>apiFetch(`/api/producers/${id}/name-suggestions`,{method:'POST',headers:authHeaders(true),body:JSON.stringify({name})}).then(r=>json<{ok:true;name:string}>(r,'Could not confirm that name'));

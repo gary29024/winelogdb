@@ -1,5 +1,7 @@
 import { friendRequestRoute } from './friendRequests';
 import { ApiError,body,boundedBytes,json,stamp,type IdentityEnv,type Member } from './common';
+import { similarFriendProducers } from '../../src/lib/research/similarProducers';
+import { rememberProducerAlias } from '../../src/lib/research/aliasBridge';
 import type { SharedWine } from '../../src/lib/wine/shared';
 
 // Explicit allowlist: never serialize the private WineRecord into a shared response.
@@ -38,6 +40,26 @@ export function stripJpegMetadata(bytes:Uint8Array):Uint8Array{
 export async function socialRoute(request:Request,env:IdentityEnv&{WINE_IMAGES:R2Bucket},member:Member):Promise<Response|null>{
  const url=new URL(request.url),path=url.pathname;
  const friendRequest=await friendRequestRoute(request,env,member);if(friendRequest)return friendRequest;
+
+ // A friend's research is filed under the producer name they wrote. When this
+ // account writes it differently the two never meet, so the name is offered as a
+ // suggestion. Confirming records the equivalence in this account's own alias
+ // pool only: it changes no producer row, no wine, and nobody else's lookups.
+ const suggestions=path.match(/^\/api\/producers\/([^/]+)\/name-suggestions$/);
+ if(suggestions){
+  const producer=await env.DB.prepare('SELECT canonical_name FROM producers WHERE id=? AND owner_id=?').bind(suggestions[1],member.id).first<{canonical_name:string}>();
+  if(!producer)throw new ApiError(404,'Producer not found');
+  if(request.method==='GET')return json({items:await similarFriendProducers(env.DB,member.id,producer.canonical_name)});
+  if(request.method==='POST'){
+   const data=await body(request),name=typeof data.name==='string'?data.name:'';
+   // Re-derived rather than trusted: a posted name that is not currently a
+   // suggestion must not be able to map this producer onto arbitrary research.
+   const offered=await similarFriendProducers(env.DB,member.id,producer.canonical_name);
+   if(!offered.some(item=>item.name===name))throw new ApiError(409,'That name is no longer a suggestion for this producer');
+   await rememberProducerAlias(env.DB,member.id,producer.canonical_name,name);
+   return json({ok:true,name});
+  }
+ }
  if(path==='/api/friends'&&request.method==='GET')return json({items:(await env.DB.prepare("SELECT u.id,u.display_name FROM friendships f JOIN app_users u ON u.id=f.friend_id AND u.status='active' WHERE f.user_id=? ORDER BY u.display_name").bind(member.id).all()).results});
  const friend=path.match(/^\/api\/friends\/([^/]+)$/);
  if(friend&&request.method==='DELETE'){

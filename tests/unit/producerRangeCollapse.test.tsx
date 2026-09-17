@@ -32,6 +32,7 @@ async function render(over:Record<string,unknown>={}){
   vi.stubGlobal('fetch',vi.fn(async(url:string,init?:RequestInit)=>{
     const target=String(url);
     if(init?.method==='POST'){posted.push({url:target,body:JSON.parse(String(init.body??'{}'))});return new Response(JSON.stringify({id:'d1',deleted:true}),{status:200,headers:{'content-type':'application/json'}})}
+    if(target.includes('/name-suggestions'))return new Response(JSON.stringify({items:[]}),{status:200,headers:{'content-type':'application/json'}});
     if(target.includes('/research-status'))return new Response(null,{status:404});
     if(target.endsWith('/api/producers'))return new Response(JSON.stringify({items:[]}),{status:200,headers:{'content-type':'application/json'}});
     return new Response(JSON.stringify({...detail,...over}),{status:200,headers:{'content-type':'application/json'}});
