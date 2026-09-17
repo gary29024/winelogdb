@@ -1,26 +1,27 @@
 import { useCallback,useEffect,useState } from 'react';
 import { Link } from 'react-router-dom';
-import { getAccount,logout } from '../../lib/auth/client';
+import { bootstrapAccount,getAccount,logout } from '../../lib/auth/client';
 import { apiJson } from '../../lib/auth/api';
 
 type Friend={id:string;display_name:string};
 type Requests={incoming:Friend[];outgoing:Friend[]};
 type UsageKind={kind:string;label:string;runs:number;requests:number;units:number;unit:'run'|'wine'};
 type UsageSummary={days:number;kinds:UsageKind[];empty:boolean};
+type ResearchAllowance={limit:number;used:number;remaining:number;weekStart:string;resetsAt:string};
+type AccessSummary={balance:number;reserved:number;available:number;sponsoredAi:boolean;researchAllowance:ResearchAllowance|null};
 export function AccountPage(){
- const [friends,setFriends]=useState<Friend[]>([]),[wallet,setWallet]=useState({balance:0,reserved:0,available:0});
+ const [friends,setFriends]=useState<Friend[]>([]),[access,setAccess]=useState<AccessSummary>({balance:0,reserved:0,available:0,sponsoredAi:true,researchAllowance:null});
  const [requests,setRequests]=useState<Requests>({incoming:[],outgoing:[]});
  const [usage,setUsage]=useState<UsageSummary>({days:30,kinds:[],empty:true});
  const [ownCode,setOwnCode]=useState(''),[code,setCode]=useState('');
+ const [name,setName]=useState(()=>getAccount()?.display_name??'');
  const [busy,setBusy]=useState(false),[error,setError]=useState(''),[notice,setNotice]=useState('');
- const [history,setHistory]=useState<Array<{id:string;kind:string;amount:number;reason:string}>>([]);
  const load=useCallback(async()=>{
-  const [f,w,h,c,r,u]=await Promise.all([
-   apiJson<{items:Friend[]}>('/api/friends'),apiJson<typeof wallet>('/api/credits'),
-   apiJson<{items:typeof history}>('/api/credits/history'),apiJson<{code:string}>('/api/friends/code'),
+  const [f,a,c,r,u]=await Promise.all([
+   apiJson<{items:Friend[]}>('/api/friends'),apiJson<AccessSummary>('/api/credits'),apiJson<{code:string}>('/api/friends/code'),
    apiJson<Requests>('/api/friends/requests'),apiJson<UsageSummary>('/api/usage/spend')
   ]);
-  setFriends(f.items);setWallet(w);setHistory(h.items);setOwnCode(c.code);setRequests(r);setUsage(u);
+  setFriends(f.items);setAccess(a);setOwnCode(c.code);setRequests(r);setUsage(u);
  },[]);
  useEffect(()=>{
   const refresh=()=>void load().catch(e=>setError(e.message));refresh();
@@ -30,12 +31,19 @@ export function AccountPage(){
   setBusy(true);setError('');setNotice('');
   try{await fn();await load();setNotice(message)}catch(e){setError((e as Error).message)}finally{setBusy(false)}
  }
- const account=getAccount(),smart=usage.kinds.find(item=>item.kind==='search_embedding'),providerRequests=usage.kinds.reduce((sum,item)=>sum+item.requests,0),runs=usage.kinds.reduce((sum,item)=>sum+item.runs,0);
+ const account=getAccount(),smart=usage.kinds.find(item=>item.kind==='search_embedding'),providerRequests=usage.kinds.reduce((sum,item)=>sum+item.requests,0),runs=usage.kinds.reduce((sum,item)=>sum+item.runs,0),allowance=access.researchAllowance;
  return <section className="account-page">
-  <h1>Account & friends</h1><p>{account?.display_name}</p>
-  <p><strong>{wallet.available} credits available</strong> · {wallet.reserved} reserved</p>
+  <h1>Account & friends</h1>
+  <form onSubmit={e=>{e.preventDefault();void run(async()=>{const saved=await apiJson<{user:{display_name:string}}>('/api/me','PATCH',{displayName:name});setName(saved.user.display_name);await bootstrapAccount()},'Name updated.')}}>
+   <fieldset><legend>Profile</legend>
+    <label htmlFor="display-name">Name <input id="display-name" value={name} onChange={e=>setName(e.target.value)} maxLength={60} autoComplete="name" required /></label>
+    <button type="submit" disabled={busy||!name.trim()}>Save name</button>
+    <small>This is the name your friends and other WineLog members will see.</small>
+   </fieldset>
+  </form>
+  {account?.role==='owner'?<p><strong>Owner AI access</strong> · usage and provider cost are tracked, but the member research allowance does not apply.</p>:<section aria-label="AI access"><p><strong>Scanning and Smart Search are included.</strong> Their provider cost is sponsored by WineLog.</p>{allowance&&<p><strong>{allowance.remaining} of {allowance.limit} research runs remaining this week.</strong> Resets {new Date(allowance.resetsAt).toLocaleString()}.</p>}<small>Wine Deep Search, individual producer research and Vintage Window share this allowance. Cached or friend-reused research does not use a run. Batch Deep Search is owner-only.</small></section>}
   <nav className="account-shortcuts" aria-label="Account shortcuts"><Link to="/shared">Shared with me</Link>{account?.role==='owner'&&<><Link to="/admin">Owner controls</Link><Link to="/admin#member-usage">Member usage</Link></>}</nav>
-  <section className="personal-usage" aria-labelledby="your-usage-title"><h2 id="your-usage-title">Your usage</h2><p>Last {usage.days} days. WineLog credits and provider activity are tracked separately.</p>
+  <section className="personal-usage" aria-labelledby="your-usage-title"><h2 id="your-usage-title">Your usage</h2><p>Last {usage.days} days. Provider activity is tracked even for sponsored features.</p>
    {usage.empty?<p>No AI usage recorded yet.</p>:<dl><div><dt>AI runs</dt><dd>{runs}</dd></div><div><dt>Provider requests</dt><dd>{providerRequests}</dd></div><div><dt>Smart Search</dt><dd>{smart?.requests??0} requests</dd></div><div><dt>Wines embedded</dt><dd>{smart?.units??0}</dd></div></dl>}
   </section>
   {error&&<p role="alert">{error}</p>}{notice&&<p role="status">{notice}</p>}
@@ -65,7 +73,6 @@ export function AccountPage(){
   <ul>{requests.outgoing.map(item=><li key={item.id}>{item.display_name} · Awaiting acceptance <button disabled={busy} onClick={()=>void run(()=>apiJson(`/api/friends/requests/${item.id}`,'DELETE'),'Friend request cancelled.')}>Cancel request to {item.display_name}</button></li>)}</ul>
   <h3>Your friends</h3>{!friends.length&&<p>No friends yet. Send a request using a friend code above.</p>}
   <ul>{friends.map(friend=><li key={friend.id}>{friend.display_name} <button disabled={busy} onClick={()=>void run(()=>apiJson(`/api/friends/${friend.id}`,'DELETE'),'Friend removed.')}>Remove friend</button></li>)}</ul>
-  <h2>Credit history</h2><ul>{history.map(item=><li key={item.id}>{item.kind}: {item.amount} — {item.reason}</li>)}</ul>
   <button onClick={()=>void logout()}>Sign out</button>
  </section>;
 }

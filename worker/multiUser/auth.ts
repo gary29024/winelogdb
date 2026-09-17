@@ -13,6 +13,12 @@ export async function authenticate(request:Request,env:IdentityEnv):Promise<Memb
 export function verifyOrigin(request:Request,env:IdentityEnv){
  if(!['GET','HEAD','OPTIONS'].includes(request.method)&&request.headers.get('Origin')!==appOrigin(env))throw new ApiError(403,'Invalid request origin');
 }
+function profileName(value:unknown){
+ if(typeof value!=='string')throw new ApiError(400,'Name is required');
+ const name=value.trim().replace(/\s+/gu,' ');
+ if(!name||[...name].length>60)throw new ApiError(400,'Name must be between 1 and 60 characters');
+ return name;
+}
 /**
  * Whether this sign-in is the owner claiming their own account.
  *
@@ -38,7 +44,7 @@ export async function bindGoogleAccount(env:IdentityEnv,claims:{sub:string;email
  const id=isOwner?'owner':crypto.randomUUID();
  if(!isOwner){
   const config=await settings(env.DB);
-  const count=await env.DB.prepare('SELECT count(*) AS n FROM app_users').first<{n:number}>();
+  const count=await env.DB.prepare("SELECT count(*) AS n FROM app_users WHERE role='member'").first<{n:number}>();
   if((count?.n??0)>=config.memberLimit)throw new ApiError(403,'Pilot membership is full');
   if(!invitationHash)throw new ApiError(403,'An owner invitation is required');
  }
@@ -47,7 +53,7 @@ export async function bindGoogleAccount(env:IdentityEnv,claims:{sub:string;email
  if(!isOwner&&!invitation)throw new ApiError(403,'Invitation is invalid, expired, or for a different email');
  await env.DB.batch([
   isOwner?env.DB.prepare("INSERT INTO app_users(id,email,display_name,role) VALUES(?,?,?,'owner') ON CONFLICT(id) DO UPDATE SET email=excluded.email,display_name=excluded.display_name,role='owner',status='active'").bind(id,claims.email,claims.name):
-   env.DB.prepare("INSERT INTO app_users(id,email,display_name,role) SELECT ?,?,?,'member' FROM member_invitations WHERE token_hash=? AND email=? AND used_by IS NULL AND expires_at>? AND (SELECT count(*) FROM app_users)<json_extract((SELECT value_json FROM pilot_settings WHERE id=1),'$.memberLimit')").bind(id,claims.email,claims.name,invitationHash,claims.email.toLowerCase(),seconds()),
+   env.DB.prepare("INSERT INTO app_users(id,email,display_name,role) SELECT ?,?,?,'member' FROM member_invitations WHERE token_hash=? AND email=? AND used_by IS NULL AND expires_at>? AND (SELECT count(*) FROM app_users WHERE role='member')<json_extract((SELECT value_json FROM pilot_settings WHERE id=1),'$.memberLimit')").bind(id,claims.email,claims.name,invitationHash,claims.email.toLowerCase(),seconds()),
   env.DB.prepare('INSERT INTO auth_identities(provider,subject,user_id) VALUES(?,?,?)').bind('google',claims.sub,id),
   env.DB.prepare('INSERT OR IGNORE INTO credit_wallets(user_id) VALUES(?)').bind(id),
   ...(isOwner?[]:[env.DB.prepare('UPDATE member_invitations SET used_by=? WHERE token_hash=? AND used_by IS NULL').bind(id,invitationHash)])
@@ -84,6 +90,10 @@ export async function authRoute(request:Request,env:IdentityEnv):Promise<Respons
   verifyOrigin(request,env);await env.DB.prepare('DELETE FROM auth_sessions WHERE token_hash=?').bind(await hash(cookie(request,SESSION))).run();return json({ok:true},200,{'Set-Cookie':setCookie(SESSION,'',0)});
  }
  if(url.pathname==='/api/me'&&request.method==='GET'){const member=await authenticate(request,env);return json({user:member})}
+ if(url.pathname==='/api/me'&&request.method==='PATCH'){
+  verifyOrigin(request,env);const member=await authenticate(request,env),data=await body(request),display_name=profileName(data.displayName);
+  await env.DB.prepare('UPDATE app_users SET display_name=? WHERE id=?').bind(display_name,member.id).run();return json({user:{...member,display_name}});
+ }
  if(url.pathname==='/api/auth/logout-all'&&request.method==='POST'){verifyOrigin(request,env);const member=await authenticate(request,env);await body(request);await env.DB.prepare('DELETE FROM auth_sessions WHERE user_id=?').bind(member.id).run();return json({ok:true},200,{'Set-Cookie':setCookie(SESSION,'',0)})}
  if(url.pathname.startsWith('/api/auth/'))return json({error:'Unknown authentication endpoint'},404);
  return null;

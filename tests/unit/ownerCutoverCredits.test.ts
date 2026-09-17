@@ -21,10 +21,11 @@ describe('multi-user owner cutover',()=>{
     }finally{close()}
   });
 
-  it('keeps owner AI usable with zero credits and no configured member prices',async()=>{
+  it('keeps owner AI usable with zero credits alongside zero member tariffs',async()=>{
     const {sql,db,close}=realD1();
     try{
-      expect(sql.prepare('SELECT count(*) AS n FROM credit_prices').get()).toMatchObject({n:0});
+      const tariffs=sql.prepare('SELECT count(*) AS n,max(credits) AS maxCredits FROM credit_prices').get() as {n:number;maxCredits:number};
+      expect(tariffs.n).toBeGreaterThan(0);expect(tariffs.maxCredits).toBe(0);
       expect(sql.prepare("SELECT balance FROM credit_wallets WHERE user_id='owner'").get()).toMatchObject({balance:0});
       const q=await quote(scan(),{DB:db},owner);
       expect(q.total).toBe(0);
@@ -62,11 +63,15 @@ describe('multi-user owner cutover',()=>{
     }finally{close()}
   });
 
-  it('still refuses unpriced member AI',async()=>{
+  it('sponsors member scans without requiring wallet credits',async()=>{
     const {sql,db,close}=realD1();
     try{
       sql.exec("INSERT INTO app_users(id,email,display_name,role) VALUES('member','member@example.com','Member','member'); INSERT INTO credit_wallets(user_id) VALUES('member')");
-      await expect(quote(scan(),{DB:db},member)).rejects.toMatchObject({status:503,message:expect.stringContaining('has not priced')});
+      const q=await quote(scan(),{DB:db},member);
+      expect(q.total).toBe(0);expect(q.available).toBe(0);
+      expect(q.units).toHaveLength(1);expect(q.units[0]).toMatchObject({action:'scan_single',credits:0,priceId:'pilot-free-scan-single'});
+      const result=await reserve(scan({'X-WineLog-Quote':q.id,'Idempotency-Key':'member-sponsored-scan'}),{DB:db},member);
+      expect(result.operation).toMatchObject({user_id:'member',reserved:0,status:'reserved'});
     }finally{close()}
   });
 });

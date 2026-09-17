@@ -1,5 +1,6 @@
 import { CREDIT_ACTIONS } from './credits';
 import { ApiError,body,hash,json,ownerOnly,positive,randomToken,seconds,settings,stamp,textField,type IdentityEnv,type Member,type PilotSettings } from './common';
+import { researchAllowance } from './allowance';
 import { marginalCostUsd,monthGroundingUsd,readAiRates,tokenCostUsd,type AiRateEnv } from '../../src/lib/usage/rates';
 import { billingMonth } from '../../src/lib/usage/billingPeriod';
 
@@ -52,14 +53,19 @@ export async function adminRoute(request:Request,env:IdentityEnv&AiRateEnv,membe
    env.DB.prepare('SELECT * FROM storage_totals').all(),env.DB.prepare('SELECT * FROM rollout_state').all(),
    env.DB.prepare("SELECT id,user_id,path,status,reserved,created_at FROM credit_operations WHERE status='review' LIMIT 50").all()
   ]);
-  return json({members:members.results,prices:prices.results,settings:settingsValue,aiCost,memberUsage,storage:storage.results,rollout:rollout.results,reviewOperations:reviewOperations.results,actions:CREDIT_ACTIONS});
+  const limit=settingsValue?.researchRunsPerWeek??2;
+  const allowances=await Promise.all((members.results as Array<{id:string;role:string}>).filter(item=>item.role==='member').map(async item=>({userId:item.id,...await researchAllowance(env.DB,item.id,limit)})));
+  return json({members:members.results,prices:prices.results,settings:settingsValue,aiCost,memberUsage,allowances,storage:storage.results,rollout:rollout.results,reviewOperations:reviewOperations.results,actions:CREDIT_ACTIONS});
  }
  if(path==='/api/admin/settings'&&request.method==='PUT'){
   const b=await body(request),amount=(key:string)=>{const v=Number(b[key]);if(!Number.isFinite(v)||v<0||v>1e9)throw new ApiError(400,`Invalid ${key}`);return v};
-  const value:PilotSettings={memberLimit:positive(b.memberLimit,25),memberStorageBytes:positive(b.memberStorageBytes,100_000_000_000),totalStorageBytes:positive(b.totalStorageBytes,1_000_000_000_000),aiConcurrency:positive(b.aiConcurrency,4),aiDailyOperations:positive(b.aiDailyOperations,1000),aiDailyEmbeddingRequests:positive(b.aiDailyEmbeddingRequests,100_000),aiMonthlyBudgetUsd:amount('aiMonthlyBudgetUsd'),aiUnitBudgetUsd:amount('aiUnitBudgetUsd'),cloudflareWarningUsd:amount('cloudflareWarningUsd'),cloudflareStopUsd:amount('cloudflareStopUsd'),cloudflareObservedUsd:amount('cloudflareObservedUsd'),cloudflareObservedMonth:textField(b.cloudflareObservedMonth),allowOverages:b.allowOverages===true};
+  const value:PilotSettings={memberLimit:positive(b.memberLimit,25),memberStorageBytes:positive(b.memberStorageBytes,100_000_000_000),totalStorageBytes:positive(b.totalStorageBytes,1_000_000_000_000),aiConcurrency:positive(b.aiConcurrency,4),aiDailyOperations:positive(b.aiDailyOperations,1000),aiDailyEmbeddingRequests:positive(b.aiDailyEmbeddingRequests,100_000),researchRunsPerWeek:positive(b.researchRunsPerWeek??2,52),aiMonthlyBudgetUsd:amount('aiMonthlyBudgetUsd'),aiUnitBudgetUsd:amount('aiUnitBudgetUsd'),cloudflareWarningUsd:amount('cloudflareWarningUsd'),cloudflareStopUsd:amount('cloudflareStopUsd'),cloudflareObservedUsd:amount('cloudflareObservedUsd'),cloudflareObservedMonth:textField(b.cloudflareObservedMonth),allowOverages:b.allowOverages===true};
   if(value.cloudflareWarningUsd>=value.cloudflareStopUsd||value.aiMonthlyBudgetUsd<=0||value.aiUnitBudgetUsd<=0||!/^\d{4}-\d{2}$/.test(value.cloudflareObservedMonth))throw new ApiError(400,'Set a positive AI budget and a Cloudflare stop threshold above the warning threshold');
   await env.DB.prepare('INSERT INTO pilot_settings(id,value_json) VALUES(1,?) ON CONFLICT(id) DO UPDATE SET value_json=excluded.value_json,updated_at=?').bind(JSON.stringify(value),stamp()).run();return json({settings:value});
  }
+ // Kept as an internal compatibility endpoint for the existing quote ledger.
+ // The pilot UI no longer exposes prices: migration 0070 seeds zero tariffs and
+ // member access is governed by sponsored actions + weekly research allowance.
  if(path==='/api/admin/prices'&&request.method==='POST'){
   const b=await body(request),action=String(b.action);if(!CREDIT_ACTIONS.includes(action as typeof CREDIT_ACTIONS[number]))throw new ApiError(400,'Unknown action');
   await env.DB.prepare('INSERT INTO credit_prices(id,action,credits,created_at,created_by) VALUES(?,?,?,?,?)').bind(crypto.randomUUID(),action,positive(b.credits),stamp(),member.id).run();return json({ok:true},201);
@@ -76,8 +82,6 @@ export async function adminRoute(request:Request,env:IdentityEnv&AiRateEnv,membe
  if(path==='/api/admin/invitations'&&request.method==='POST'){
   await settings(env.DB);const readiness=(await env.DB.prepare("SELECT name FROM rollout_state WHERE name IN ('storage_inventory','research_index') AND value='complete'").all()).results;
   if(readiness.length!==2)throw new ApiError(409,'Complete storage inventory and research indexing before inviting members');
-  const priced=(await env.DB.prepare('SELECT DISTINCT action FROM credit_prices').all<{action:string}>()).results;
-  if(CREDIT_ACTIONS.some(action=>!priced.some(p=>p.action===action)))throw new ApiError(409,'Configure every AI action price before inviting members');
   const b=await body(request),email=textField(b.email,254).toLowerCase();if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))throw new ApiError(400,'Invalid email');
   const token=randomToken();await env.DB.prepare('INSERT INTO member_invitations(token_hash,email,created_by,expires_at) VALUES(?,?,?,?)').bind(await hash(token),email,member.id,seconds()+7*86400).run();return json({url:`${env.APP_URL}/login?invitation=${token}`},201);
  }

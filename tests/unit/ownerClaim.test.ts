@@ -13,17 +13,20 @@ describe('claiming the owner account',()=>{
     try{
       expect(sql.prepare("SELECT role FROM app_users WHERE id='owner'").get()!.role).toBe('owner');
       const settings=JSON.parse(String(sql.prepare('SELECT value_json FROM pilot_settings WHERE id=1').get()!.value_json)) as {
-        allowOverages:boolean;cloudflareObservedUsd:number;cloudflareWarningUsd:number;cloudflareStopUsd:number
+        allowOverages:boolean;cloudflareObservedUsd:number;cloudflareWarningUsd:number;cloudflareStopUsd:number;researchRunsPerWeek:number
       };
       // The owner must be able to continue the existing AI workflow after cutover,
       // including once a small real Cloudflare cost has been recorded. Safety is
-      // provided by the explicit finite hard stop and by leaving all member AI
-      // actions unpriced until the owner configures them.
+      // provided by the explicit finite hard stop; pilot member AI is sponsored
+      // through zero internal tariffs and bounded research allowances.
       expect(settings.allowOverages,'small recorded cost must not lock out the owner').toBe(true);
       expect(settings.cloudflareObservedUsd,'fresh deployment starts with no recorded Cloudflare spend').toBe(0);
       expect(settings.cloudflareWarningUsd).toBeGreaterThan(0);
       expect(settings.cloudflareStopUsd).toBeGreaterThan(settings.cloudflareWarningUsd);
-      expect(sql.prepare('SELECT count(*) AS n FROM credit_prices').get()!.n,'nothing is priced until the owner prices it').toBe(0);
+      expect(settings.researchRunsPerWeek).toBe(2);
+      const tariffs=sql.prepare('SELECT count(*) AS n,max(credits) AS maxCredits FROM credit_prices').get() as {n:number;maxCredits:number};
+      expect(tariffs.n,'pilot actions have explicit internal tariffs for quote/audit machinery').toBeGreaterThan(0);
+      expect(tariffs.maxCredits,'pilot member tariffs never charge WineLog credits').toBe(0);
     }finally{close()}
   });
 

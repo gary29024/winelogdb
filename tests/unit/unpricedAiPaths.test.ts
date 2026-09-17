@@ -18,11 +18,11 @@ beforeEach(()=>{
 });
 afterEach(()=>{database.close();vi.restoreAllMocks();vi.unstubAllGlobals()});
 
-describe('an AI path nobody priced',()=>{
-  // The allowlist of AI routes loses a race it cannot win: each new endpoint
-  // that reaches the provider is unmetered until somebody remembers to add it,
-  // and the symptom is a bill rather than an error. bottle-frames is the
-  // endpoint that proved it - it shipped on main outside aiRoute().
+describe('an AI path with no member policy',()=>{
+  // The allowlist of sponsored/allowance AI routes loses a race it cannot win:
+  // each new endpoint that reaches the provider is unmetered until somebody
+  // gives it an explicit member policy. bottle-frames is the endpoint that
+  // proved it - it shipped on main outside aiRoute().
   it('refuses a member and never reaches the provider',async()=>{
     database.sql.exec("INSERT INTO wines(id,owner_id,producer,wine_name,created_at,updated_at) VALUES('w1','bob','P','W','now','now')");
     database.sql.exec("INSERT INTO wine_images(id,owner_id,wine_id,object_key,content_type,byte_size,width,height,upload_status,recognition_status,created_at) VALUES('img1','bob','w1','k','image/jpeg',10,800,600,'uploaded','complete','now')");
@@ -40,8 +40,8 @@ describe('an AI path nobody priced',()=>{
       headers:{Cookie:'__Host-winelog=bob-session',Origin:'https://wine.example','Content-Type':'multipart/form-data; boundary=scan'},body}),env,ctx);
     await Promise.all(pending);
     expect(response.status).toBeGreaterThanOrEqual(400);
-    expect(await response.text()).toContain('credit price');
-    expect(provider,'an unpriced path must fail before it can spend').not.toHaveBeenCalled();
+    expect(await response.text()).toContain('no member AI policy');
+    expect(provider,'an endpoint without a member AI policy must fail before it can spend').not.toHaveBeenCalled();
   });
 });
 
@@ -56,8 +56,8 @@ describe('the three metering states',()=>{
 
   it('refuses a member with the reason the caller gave',async()=>{
     const calls=vi.fn(send);
-    await expect(durableProvider(providerAuthorization('member','/api/whatever has no price'),'k',calls))
-      .rejects.toMatchObject({status:402,message:'/api/whatever has no price'});
+    await expect(durableProvider(providerAuthorization('member','/api/whatever has no policy'),'k',calls))
+      .rejects.toMatchObject({status:402,message:'/api/whatever has no policy'});
     expect(calls).not.toHaveBeenCalled();
   });
 
@@ -114,13 +114,13 @@ describe('every route to the provider',()=>{
       const text=readFileSync(file,'utf8');
       for(const guard of guards)expect(text,`${file} needs ${guard} to remain exempt`).toContain(guard);
     }
-    expect(directWorkers.filter(file=>!allowed.has(file)),'new AI.run paths need an explicit credit policy').toEqual([]);
+    expect(directWorkers.filter(file=>!allowed.has(file)),'new AI.run paths need an explicit member policy').toEqual([]);
   });
 
   it('is handed a metering decision on every multi-user request',()=>{
     const entry=readFileSync('worker/multiUserEntry.ts','utf8');
     // The non-AI path is the one that shipped unmetered: it forwards straight to
-    // the legacy worker, which is where an unpriced endpoint lives.
+    // the legacy worker, which is where an endpoint without a member policy lives.
     expect(entry).toContain('providerAuthorization(member.role');
     expect(entry.match(/CREDIT_CONTEXT:/g)?.length,'both the request and the queue path decide').toBeGreaterThanOrEqual(3);
   });
