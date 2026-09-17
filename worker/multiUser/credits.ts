@@ -1,7 +1,7 @@
 import { buildResearchTargets,loadResearchCache,type ResearchScope } from '../../src/lib/research/cache';
 import { unresearchedProducers } from '../../src/lib/producers/researchCampaign';
 import { producerSubjectKey,reusableProducer } from '../../src/lib/research/sharedProducer';
-import { sharedSubjectKey } from '../../src/lib/research/shared';
+import { sharedSubjectKeys } from '../../src/lib/research/shared';
 import { producerRangeAllowed } from '../../src/lib/producers/rangeAccess';
 import { readVintageWindow,type VintageSubject } from '../../src/lib/maturity/vintageWindow';
 import { workKey,activeFriendWork } from './researchWork';
@@ -10,7 +10,10 @@ import { ApiError,boundedBytes,hash,json,seconds,settings,stamp,type Member } fr
 
 export const CREDIT_ACTIONS=['scan_single','scan_batch','scan_group','scan_sheet','producer_research','producer_profile','wine_producer','wine_terroir','wine_vintage_context','wine_wine_vintage','vintage_window'] as const;
 export type CreditAction=typeof CREDIT_ACTIONS[number];
-export type CreditUnit={id:string;action:CreditAction;priceId:string;credits:number;targetId?:string;targetFingerprint?:string;researchKey?:string;resultId?:string;scope?:ResearchScope;cacheKey?:string;parentOperationId?:string;depth?:number};
+export type CreditUnit={id:string;action:CreditAction;priceId:string;credits:number;targetId?:string;targetFingerprint?:string;researchKey?:string;resultId?:string;scope?:ResearchScope;cacheKey?:string;parentOperationId?:string;depth?:number;
+ /** Why this scope could not be shared with friends, when it could not. Recorded
+  * so a run that quietly misses reuse is visible rather than invisible. */
+ notShareable?:string};
 export type CreditOperation={id:string;user_id:string;path:string;fingerprint:string;units_json:string;reserved:number;captured:number;status:string;response_json:string|null;response_status:number|null;run_id:string|null;created_at:string;updated_at:string};
 export type CreditEnv={DB:D1Database};
 export const creditSummary=(op:CreditOperation)=>({status:op.status,captured:op.captured,reserved:['reserved','running','review'].includes(op.status)?op.reserved-op.captured:0});
@@ -46,7 +49,10 @@ export async function plannedUnits(request:Request,db:D1Database,user:string):Pr
  if(wine){
   const row=await db.prepare('SELECT * FROM wines WHERE id=? AND owner_id=?').bind(wine[1],user).first<Record<string,unknown>>();if(!row)throw new ApiError(404,'Wine not found');
   const targets=wineTargets(row),cache=await loadResearchCache(db,user,targets,true),targetFingerprint=await researchInputFingerprint('wine',row);
-  return targets.filter(t=>data.refresh==='all'||(data.refresh==='vintage'&&['wine_vintage','vintage_context'].includes(t.scope))||!cache.has(t.scope)).map(t=>({...unit(`wine_${t.scope}`,t.scope,wine[1]),scope:t.scope,cacheKey:t.cacheKey,targetFingerprint,researchKey:sharedSubjectKey(t)?`${t.scope}:${sharedSubjectKey(t)}`:undefined}));
+  return targets.filter(t=>data.refresh==='all'||(data.refresh==='vintage'&&['wine_vintage','vintage_context'].includes(t.scope))||!cache.has(t.scope)).map(t=>{
+   const shared=sharedSubjectKeys(t),key=shared.keys[0];
+   return {...unit(`wine_${t.scope}`,t.scope,wine[1]),scope:t.scope,cacheKey:t.cacheKey,targetFingerprint,researchKey:key?`${t.scope}:${key}`:undefined,notShareable:shared.skipped};
+  });
  }
  const producer=path.match(/^\/api\/producers\/([^/]+)\/research$/);
  const rangeAllowed=await producerRangeAllowed(db,user);

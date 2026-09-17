@@ -1,4 +1,5 @@
 import { canonicalCountryName } from '../wine/canonicalize';
+import { rememberProducerAlias } from '../research/aliasBridge';
 
 export type ProducerEntity={
   id:string;
@@ -223,6 +224,9 @@ export async function ensureProducerEntity(db:D1Database,owner:string,name:strin
   // Guard the conflict branch: re-resolving a producer that is already correctly
   // aliased is a read-path operation and must not charge a D1 row write.
   await db.prepare('INSERT INTO producer_aliases(owner_id,normalized_alias,producer_id,display_alias,created_at) VALUES(?,?,?,?,?) ON CONFLICT(owner_id,normalized_alias) DO UPDATE SET producer_id=excluded.producer_id,display_alias=excluded.display_alias WHERE producer_aliases.producer_id<>excluded.producer_id OR producer_aliases.display_alias<>excluded.display_alias').bind(owner,alias,found.id,canonical,now).run();
+  // An alias saved against a producer is the same confirmation a merge gives,
+  // one wine at a time, so reuse gets to use it too.
+  if(alias!==producerMatchKey(found.canonical_name))await rememberProducerAlias(db,owner,alias,found.canonical_name);
   await seedProducerCountryFromWine(db,owner,found.id,provisionalCountry);
   // Do not rewrite match_key here when a known alias is encountered. match_key follows
   // the user-selected primary/canonical name and only changes via setProducerPrimaryName.

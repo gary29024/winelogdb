@@ -1,4 +1,5 @@
 import { buildResearchTargets,scopeIsComplete,type ResearchScope } from '../research/cache';
+import { rememberProducerAlias } from '../research/aliasBridge';
 import { normalizeProducerAlias } from './entities';
 
 type Source={title:string;url:string};
@@ -147,6 +148,12 @@ export async function mergeProducerEntities(db:D1Database,owner:string,destinati
   statements.push(db.prepare('UPDATE producers SET updated_at=? WHERE owner_id=? AND id=?').bind(now,owner,destinationId));
 
   await db.batch(statements);
+  // A merge is a person saying these two names are one producer. That judgement
+  // is the best name-matching signal the app has, so reuse gets to use it: a
+  // friend who logged the merged spelling now meets research filed under the
+  // canonical one. Never allowed to fail the merge itself.
+  await rememberProducerAlias(db,owner,source.canonical_name,destination.canonical_name)
+    .catch(error=>console.warn(JSON.stringify({event:'producer_alias_pool_skipped',mergeId,error:(error as Error).message})));
   return {mergeId,destinationId,canonicalName:destination.canonical_name,mergedName:source.canonical_name};
 }
 

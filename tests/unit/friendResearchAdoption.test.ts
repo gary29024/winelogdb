@@ -24,9 +24,11 @@ describe('friend research is kept, not borrowed',()=>{
       seedUser(sql,'alice');seedUser(sql,'bob');befriend(sql,'alice','bob');
       const targets=buildResearchTargets(wine),producer=targets.find(t=>t.scope==='producer')!;
 
-      // Alice pays for it, which publishes it to her friends.
+      // Alice pays for it, which publishes it to her friends. A producer scope is
+      // filed under both [producer,country] and [producer], so a friend who has
+      // no country recorded for the same producer still meets the research.
       await upsertResearchCache(db,'alice',producerEntry(producer));
-      expect(sql.prepare('SELECT count(*) AS n FROM reusable_research').get()!.n).toBe(1);
+      expect(sql.prepare('SELECT count(*) AS n FROM reusable_research').get()!.n).toBe(2);
 
       // Bob sees it only through the friendship, and owns nothing yet.
       const borrowed=await loadResearchCache(db,'bob',targets,true);
