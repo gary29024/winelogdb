@@ -6,7 +6,7 @@ const LAST_UPDATED='17 September 2026';
 
 function SupportContact(){
   const [email,setEmail]=useState('');
-  useEffect(()=>{let active=true;fetch('/api/public/config').then(response=>response.ok?response.json():null).then((value:{supportEmail?:unknown}|null)=>{if(active&&typeof value?.supportEmail==='string')setEmail(value.supportEmail)}).catch(()=>{});return()=>{active=false}},[]);
+  useEffect(()=>{let active=true;fetch('/api/public/config').then(async response=>response.ok?await response.json() as {supportEmail?:unknown}:null).then(value=>{if(active&&typeof value?.supportEmail==='string')setEmail(value.supportEmail)}).catch(()=>{});return()=>{active=false}},[]);
   return email?<a href={`mailto:${email}`}>{email}</a>:<>the WineLog operator who invited you</>;
 }
 
