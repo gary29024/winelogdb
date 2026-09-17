@@ -50,6 +50,18 @@ describe('multi-user owner cutover',()=>{
     }finally{close()}
   });
 
+  it('keeps only the accepted action when quote units contain a stale sibling',async()=>{
+    const {sql,db,close}=realD1();
+    try{
+      const q=await quote(scan(),{DB:db},owner);
+      const correct=q.units[0];
+      sql.prepare('UPDATE credit_quotes SET units_json=? WHERE id=?').run(JSON.stringify([correct,{...correct,action:'scan_group'}]),q.id);
+      const result=await reserve(scan({'X-WineLog-Quote':q.id,'Idempotency-Key':'owner-action-binding'}),{DB:db},owner);
+      const units=JSON.parse(result.operation.units_json) as Array<{action:string}>;
+      expect(units.map(unit=>unit.action)).toEqual(['scan_single']);
+    }finally{close()}
+  });
+
   it('still refuses unpriced member AI',async()=>{
     const {sql,db,close}=realD1();
     try{
