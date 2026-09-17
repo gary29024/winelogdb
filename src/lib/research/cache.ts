@@ -107,6 +107,30 @@ async function writeCache(db:D1Database,owner:string,entry:CachedResearch,replac
   if(scopePassesQuality(entry.target.scope,entry.payload,entry.target,entry.sources,entry.provenance))await publishResearch(db,owner,entry);
 }
 export const seedResearchCache=(db:D1Database,owner:string,entry:CachedResearch)=>writeCache(db,owner,entry,false);
+
+/**
+ * Keep a friend's research as the reader's own.
+ *
+ * Assembling a contributor's scopes on every view made the text disappear the
+ * moment a friendship ended, and made each repeat view pay for a friendship
+ * join. Once a reader has actually been shown a scope it is written to their
+ * own cache, tagged with who paid for it.
+ *
+ * Deliberately not published back to reusable_research: only the account that
+ * paid for research offers it to its friends, so a copy cannot spread on the
+ * contributor's behalf and attribution cannot drift as it is passed along.
+ */
+export async function adoptFriendResearch(db:D1Database,owner:string,cache:Map<ResearchScope,CachedResearch>){
+  const now=new Date().toISOString();
+  for(const entry of cache.values()){
+    const contributor=entry.contributorId;
+    if(!contributor||contributor===owner)continue;
+    await db.prepare(`INSERT INTO research_cache(owner_id,scope,cache_key,subject_json,result_json,sources_json,provenance_json,model,researched_at,source_user_id,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?) ON CONFLICT(owner_id,scope,cache_key) DO NOTHING`)
+      .bind(owner,entry.target.scope,entry.target.cacheKey,JSON.stringify(entry.target.subject),JSON.stringify(entry.payload),JSON.stringify(entry.sources),JSON.stringify(entry.provenance??{}),entry.model,entry.researchedAt,contributor,now,now)
+      .run().catch(error=>{console.error(JSON.stringify({event:'research_adopt_failed',scope:entry.target.scope,error:(error as Error).message}))});
+  }
+  return cache;
+}
 export const upsertResearchCache=(db:D1Database,owner:string,entry:CachedResearch)=>writeCache(db,owner,entry,true);
 
 export function splitDeepSearchResult(result:DeepSearchResult,targets:ResearchTarget[]){

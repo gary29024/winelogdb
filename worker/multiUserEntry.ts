@@ -7,7 +7,7 @@ import { adminRoute,deploymentAiCost } from './multiUser/admin';
 import { aiRoute,creditRead,creditSummary,quote,reserve,saveOperationResponse,reconcileOperation,wineTargets,settle,type CreditOperation } from './multiUser/credits';
 import { claimDelivery,durableQueue,finishDelivery,flushOutbox,maintainJobs,markUncertain,type JobEnvelope } from './multiUser/jobs';
 import { meteredBucket } from './multiUser/storage';
-import { assembleDeepSearch,loadResearchCache } from '../src/lib/research/cache';
+import { adoptFriendResearch,assembleDeepSearch,loadResearchCache } from '../src/lib/research/cache';
 import type { AiRateEnv } from '../src/lib/usage/rates';
 import { rolloutRoute } from './multiUser/rollout';
 import { reusableProducer } from '../src/lib/research/sharedProducer';
@@ -66,7 +66,11 @@ export default {
    const wineMatch=path.match(/^\/api\/wines\/([^/]+)$/);
    if(response.ok&&request.method==='GET'&&wineMatch){
     const row=await env.DB.prepare('SELECT * FROM wines WHERE owner_id=? AND id=?').bind(member.id,wineMatch[1]).first<Record<string,unknown>>();
-    if(row){const targets=wineTargets(row),cache=await loadResearchCache(env.DB,member.id,targets,true);const data=await response.json() as Record<string,unknown>;return json({...data,deepSearch:cache.size?assembleDeepSearch(cache,targets):null})}
+    if(row){const targets=wineTargets(row),cache=await loadResearchCache(env.DB,member.id,targets,true);
+     // Showing a friend's research is what makes it the reader's own, so the
+     // next view is an indexed lookup and unfriending cannot take it back.
+     ctx.waitUntil(adoptFriendResearch(env.DB,member.id,cache));
+     const data=await response.json() as Record<string,unknown>;return json({...data,deepSearch:cache.size?assembleDeepSearch(cache,targets):null})}
    }
    if(request.method!=='GET')ctx.waitUntil(flushOutbox(env.DB,env.RESEARCH_QUEUE));
    return revalidated(response);

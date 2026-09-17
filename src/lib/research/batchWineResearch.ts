@@ -3,7 +3,7 @@ import { assertResearchInput,type CreditContext } from '../credits/provider';
 import { deepSearchSchema,type DeepSearchResult } from '../db/schema';
 import { ensureProducerEntity } from '../producers/entities';
 import { parseStructuredJsonText } from '../producers/structuredJson';
-import { assembleDeepSearch,buildResearchTargets,fieldsForScope,loadResearchCache,scopeIsComplete,scopeQualityWarnings,scopeRetryFeedback,seedResearchCache,splitDeepSearchResult,upsertResearchCache,type CachedResearch,type ResearchScope,type ResearchSource,type ResearchTarget } from './cache';
+import { adoptFriendResearch,assembleDeepSearch,buildResearchTargets,fieldsForScope,loadResearchCache,scopeIsComplete,scopeQualityWarnings,scopeRetryFeedback,seedResearchCache,splitDeepSearchResult,upsertResearchCache,type CachedResearch,type ResearchScope,type ResearchSource,type ResearchTarget } from './cache';
 import { orderModelsByGrounding,recordGroundingObservation } from './modelHealth';
 import { createResearchBatchJob,finishResearchBatchJob,recordResearchSearchQueries,getResearchBatchJob,touchResearchBatchJob } from './batchJobStore';
 import { cancelGeminiBatch } from './cancelResearch';
@@ -128,9 +128,11 @@ async function syncProducerScope(db:D1Database,owner:string,wine:WineRow,entry:C
 
 async function finalize(env:Env,owner:string,wineId:string,wine:WineRow,targets:ResearchTarget[]){
   const cache=await loadResearchCache(env.DB,owner,targets,Boolean(env.CREDIT_RESEARCH_SCOPES)),missing=targets.filter(target=>!cache.has(target.scope));if(missing.length)throw new Error(`Deep Search cache is incomplete: ${missing.map(x=>scopeNames[x.scope]).join(', ')}`);
+  // A friend's scopes are kept rather than re-borrowed on every view: the reader
+  // now owns the text, so it survives the friendship ending.
+  await adoptFriendResearch(env.DB,owner,cache);
   const result=assembleDeepSearch(cache,targets);
-  const own=new Map([...cache].filter(([,entry])=>!entry.contributorId||entry.contributorId===owner));
-  await saveSnapshot(env.DB,owner,wineId,assembleDeepSearch(own,targets));return result;
+  await saveSnapshot(env.DB,owner,wineId,result);return result;
 }
 
 async function cancelAttemptBatch(env:Env,requestId:string,wineId:string,attempt:number,googleName:string,reason:string){
