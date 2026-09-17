@@ -1,5 +1,5 @@
 import { createRemoteJWKSet,jwtVerify } from 'jose';
-import { ApiError,body,cookie,hash,json,randomToken,seconds,setCookie,settings,type IdentityEnv,type Member } from './common';
+import { ApiError,appOrigin,body,cookie,hash,json,randomToken,seconds,setCookie,settings,type IdentityEnv,type Member } from './common';
 
 const keys=createRemoteJWKSet(new URL('https://www.googleapis.com/oauth2/v3/certs'));
 const SESSION='__Host-winelog';
@@ -11,7 +11,7 @@ export async function authenticate(request:Request,env:IdentityEnv):Promise<Memb
  if(!user)throw new ApiError(401,'Session expired');return user;
 }
 export function verifyOrigin(request:Request,env:IdentityEnv){
- if(!['GET','HEAD','OPTIONS'].includes(request.method)&&request.headers.get('Origin')!==new URL(env.APP_URL).origin)throw new ApiError(403,'Invalid request origin');
+ if(!['GET','HEAD','OPTIONS'].includes(request.method)&&request.headers.get('Origin')!==appOrigin(env))throw new ApiError(403,'Invalid request origin');
 }
 /**
  * Whether this sign-in is the owner claiming their own account.
@@ -56,27 +56,29 @@ export async function bindGoogleAccount(env:IdentityEnv,claims:{sub:string;email
 }
 export async function authRoute(request:Request,env:IdentityEnv):Promise<Response|null>{
  const url=new URL(request.url);
+ if(url.pathname==='/api/public/config'&&request.method==='GET')return json({supportEmail:env.SUPPORT_EMAIL?.trim()||null});
  if(url.pathname==='/api/auth/login')return json({error:'Password login has been retired. Use Google.'},410);
  if(url.pathname==='/api/auth/google/start'&&request.method==='GET'){
   if(!env.GOOGLE_CLIENT_ID||!env.GOOGLE_CLIENT_SECRET||!(env.OWNER_GOOGLE_SUB||env.OWNER_EMAIL))throw new ApiError(503,'Google sign-in has not been configured');
-  const state=randomToken(),nonce=randomToken(),verifier=randomToken(),invite=url.searchParams.get('invitation');
+  if(!env.AUTH_SECRET||env.AUTH_SECRET.length<32)throw new ApiError(503,'AUTH_SECRET must be at least 32 characters');
+  const origin=appOrigin(env),state=randomToken(),nonce=randomToken(),verifier=randomToken(),invite=url.searchParams.get('invitation');
   await env.DB.prepare('INSERT INTO auth_flows(state_hash,nonce,verifier,invitation_hash,expires_at) VALUES(?,?,?,?,?)').bind(await hash(state),nonce,verifier,invite?await hash(invite):null,seconds()+600).run();
   const digest=new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(verifier)));
   const challenge=btoa(String.fromCharCode(...digest)).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
-  const target=new URL('https://accounts.google.com/o/oauth2/v2/auth');target.search=new URLSearchParams({client_id:env.GOOGLE_CLIENT_ID,redirect_uri:`${env.APP_URL}/api/auth/google/callback`,response_type:'code',scope:'openid email profile',state,nonce,code_challenge:challenge,code_challenge_method:'S256'}).toString();
+  const target=new URL('https://accounts.google.com/o/oauth2/v2/auth');target.search=new URLSearchParams({client_id:env.GOOGLE_CLIENT_ID,redirect_uri:`${origin}/api/auth/google/callback`,response_type:'code',scope:'openid email profile',state,nonce,code_challenge:challenge,code_challenge_method:'S256'}).toString();
   return new Response(null,{status:302,headers:{Location:target.toString(),'Set-Cookie':setCookie(FLOW,state,600),'Cache-Control':'no-store'}});
  }
  if(url.pathname==='/api/auth/google/callback'&&request.method==='GET'){
-  const state=url.searchParams.get('state')||'';if(!state||state!==cookie(request,FLOW))throw new ApiError(400,'Invalid sign-in state');
+  const origin=appOrigin(env),state=url.searchParams.get('state')||'';if(!state||state!==cookie(request,FLOW))throw new ApiError(400,'Invalid sign-in state');
   const flow=await env.DB.prepare('DELETE FROM auth_flows WHERE state_hash=? AND expires_at>? RETURNING nonce,verifier,invitation_hash').bind(await hash(state),seconds()).first<{nonce:string;verifier:string;invitation_hash:string|null}>();
   if(!flow||!url.searchParams.get('code'))throw new ApiError(400,'Sign-in expired or cancelled');
-  const reply=await fetch('https://oauth2.googleapis.com/token',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams({code:url.searchParams.get('code')!,client_id:env.GOOGLE_CLIENT_ID!,client_secret:env.GOOGLE_CLIENT_SECRET!,redirect_uri:`${env.APP_URL}/api/auth/google/callback`,grant_type:'authorization_code',code_verifier:flow.verifier}),signal:AbortSignal.timeout(15000)});
+  const reply=await fetch('https://oauth2.googleapis.com/token',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams({code:url.searchParams.get('code')!,client_id:env.GOOGLE_CLIENT_ID!,client_secret:env.GOOGLE_CLIENT_SECRET!,redirect_uri:`${origin}/api/auth/google/callback`,grant_type:'authorization_code',code_verifier:flow.verifier}),signal:AbortSignal.timeout(15000)});
   const tokens=await reply.json() as {id_token?:string};if(!reply.ok||!tokens.id_token)throw new ApiError(401,'Google sign-in failed');
   const {payload}=await jwtVerify(tokens.id_token,keys,{issuer:['https://accounts.google.com','accounts.google.com'],audience:env.GOOGLE_CLIENT_ID,algorithms:['RS256'],requiredClaims:['sub','exp','iat','nonce','email']});
   if(payload.nonce!==flow.nonce||!payload.sub||payload.email_verified!==true||typeof payload.email!=='string')throw new ApiError(401,'Google identity could not be verified');
   const member=await bindGoogleAccount(env,{sub:payload.sub,email:payload.email,name:typeof payload.name==='string'?payload.name:payload.email},flow.invitation_hash);
   const token=randomToken();await env.DB.prepare('INSERT INTO auth_sessions(token_hash,user_id,expires_at) VALUES(?,?,?)').bind(await hash(token),member.id,seconds()+sessionAge).run();
-  const headers=new Headers({Location:`${env.APP_URL}/`,'Cache-Control':'no-store'});headers.append('Set-Cookie',setCookie(SESSION,token,sessionAge));headers.append('Set-Cookie',setCookie(FLOW,'',0));return new Response(null,{status:302,headers});
+  const headers=new Headers({Location:`${origin}/`,'Cache-Control':'no-store'});headers.append('Set-Cookie',setCookie(SESSION,token,sessionAge));headers.append('Set-Cookie',setCookie(FLOW,'',0));return new Response(null,{status:302,headers});
  }
  if(url.pathname==='/api/auth/logout'&&request.method==='POST'){
   verifyOrigin(request,env);await env.DB.prepare('DELETE FROM auth_sessions WHERE token_hash=?').bind(await hash(cookie(request,SESSION))).run();return json({ok:true},200,{'Set-Cookie':setCookie(SESSION,'',0)});
