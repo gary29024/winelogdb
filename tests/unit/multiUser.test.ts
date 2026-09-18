@@ -207,8 +207,13 @@ describe('sharing boundaries',()=>{
   expect(allowed).toMatchObject({wineName:'Clos de la Roche',tastingNotes:'Lovely'});expect(allowed).not.toHaveProperty('price');
   const feed=await (await socialRoute(new Request('https://wine.example/api/shared/wines'),e,member('bob')))!.json() as {items:Array<{id:string}>};
   expect(feed.items.map(item=>item.id)).toContain('w');
+  const filler=database.sql.prepare("INSERT INTO wines(id,owner_id,producer,wine_name,created_at,updated_at) VALUES(?,'alice','P',?,'now','now')");
+  for(let index=0;index<300;index++)filler.run(`unshared-${index}`,`Unshared ${index}`);
   const plan=database.sql.prepare(`EXPLAIN QUERY PLAN ${SHARED_WINES_LIST_SQL}`).all('bob','bob','bob',0);
-  const planText=JSON.stringify(plan);expect(planText).toContain('idx_wine_shares_recipient');expect(planText).toContain('idx_tasting_shares_recipient');
+  const planText=JSON.stringify(plan);
+  expect(planText).toContain('MATERIALIZE page');
+  expect(planText).not.toMatch(/SEARCH w USING (?:COVERING )?INDEX idx_wines_owner/);
+  expect(planText).toMatch(/SEARCH w USING .*sqlite_autoindex_wines_1/);
   database.sql.exec("DELETE FROM wine_experiences WHERE id='e-share'");
   await expect(socialRoute(new Request('https://wine.example/api/shared/wines/w'),e,member('bob'))).rejects.toMatchObject({status:404});
  });
@@ -280,7 +285,8 @@ describe('sharing boundaries',()=>{
  it('prepares a missing shared photo on demand for dynamically inherited access',async()=>{
   wines();
   database.sql.exec("INSERT INTO tastings(id,owner_id,name,created_at,updated_at) VALUES('t-photo','alice','Photo tasting','now','now'); INSERT INTO wine_experiences(id,owner_id,wine_id,tasting_id,created_at,updated_at) VALUES('e-photo','alice','w','t-photo','now','now'); INSERT INTO tasting_shares(tasting_id,owner_id,recipient_id) VALUES('t-photo','alice','bob'); INSERT INTO wine_images(id,owner_id,wine_id,object_key,content_type,byte_size,width,height,upload_status,recognition_status,created_at) VALUES('img-photo','alice','w','owners/alice/original.jpg','image/jpeg',8,10,10,'uploaded','complete','now')");
-  const jpeg=Uint8Array.from([255,216,255,218,0,2,255,217]);
+  // Include SOF2 (0xC2): Cloudflare Images may emit progressive JPEGs.
+  const jpeg=Uint8Array.from([255,216,255,194,0,2,255,218,0,2,255,217]);
   const bucket={get:vi.fn(async(key:string)=>key==='owners/alice/original.jpg'?{body:new Response('original').body!}:null),put:vi.fn(async()=>({})),delete:vi.fn(async()=>undefined)} as unknown as R2Bucket;
   const images={input:vi.fn(()=>({transform:()=>({output:()=>({response:()=>new Response(jpeg,{headers:{'Content-Type':'image/jpeg'}})})})}))} as unknown as ImagesBinding;
   const detail=await (await socialRoute(new Request('https://wine.example/api/shared/wines/w'),{...env(),WINE_IMAGES:bucket,IMAGES:images},member('bob')))!.json() as {photos:Array<{id:string}>};
@@ -289,8 +295,12 @@ describe('sharing boundaries',()=>{
   expect(database.sql.prepare("SELECT counts_toward_member_limit FROM stored_objects WHERE object_key='shared/alice/img-photo.jpg'").get()?.counts_toward_member_limit).toBe(0);
  });
  it('has an explicit personal-field allowlist',()=>{expect(sharedWine({id:'w',price:10,venue:'x',latitude:1,tags_json:'["secret"]'})).not.toHaveProperty('tags')});
- it('removes JPEG application metadata and rejects non-JPEG inputs',()=>{
-  const jpeg=Uint8Array.from([255,216,255,225,0,5,71,80,83,255,218,0,2,255,217]);expect([...stripJpegMetadata(jpeg)]).toEqual([255,216,255,218,0,2,255,217]);expect(()=>stripJpegMetadata(new Uint8Array([1,2,3]))).toThrow('JPEG');
+ it('removes JPEG metadata while preserving baseline or progressive frame markers',()=>{
+  const baseline=Uint8Array.from([255,216,255,225,0,5,71,80,83,255,218,0,2,255,217]);
+  expect([...stripJpegMetadata(baseline)]).toEqual([255,216,255,218,0,2,255,217]);
+  const progressive=Uint8Array.from([255,216,255,194,0,2,255,218,0,2,255,217]);
+  expect([...stripJpegMetadata(progressive)]).toEqual([...progressive]);
+  expect(()=>stripJpegMetadata(new Uint8Array([1,2,3]))).toThrow('JPEG');
  });
  it('distinguishes vintages, styles, editions and Unicode names',()=>{
   const target=(wineName:string,vintage:number|null=2020,wineStyle='red')=>buildResearchTargets({producer:'赤恋酒庄',wineName,country:'China',region:'Ningxia',vintage,wineStyle}).find(t=>t.scope==='wine_vintage')!;

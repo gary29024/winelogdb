@@ -34,7 +34,7 @@ async function acceptedFriendIds(db:D1Database,owner:string,ids:string[]){
  if(unique.some(id=>!friends.some(friend=>friend.friend_id===id)))throw new ApiError(400,'Only accepted friends can receive this wine');
  return unique;
 }
-/** Accept only baseline JPEG derivatives and remove all application/comment metadata. */
+/** Accept JPEG derivatives (baseline or progressive) and remove application/comment metadata. */
 export function stripJpegMetadata(bytes:Uint8Array):Uint8Array{
  if(bytes[0]!==0xff||bytes[1]!==0xd8)throw new ApiError(400,'A JPEG sharing copy is required');
  const parts:Uint8Array[]=[bytes.slice(0,2)];let p=2,scan=false,ended=false;
@@ -48,7 +48,6 @@ export function stripJpegMetadata(bytes:Uint8Array):Uint8Array{
    while(end<bytes.length){if(bytes[end]!==0xff){end++;continue}const next=bytes[end+1];if(next===0||next>=0xd0&&next<=0xd7){end+=2;continue}break}
    parts.push(bytes.slice(p,end));p=end;scan=true;continue;
   }
-  if(marker===0xc2)throw new ApiError(400,'Use a baseline JPEG sharing copy');
   const length=(bytes[p+2]<<8)|bytes[p+3];if(length<2||p+2+length>bytes.length)throw new ApiError(400,'Invalid JPEG segment');
   if(!(marker>=0xe0&&marker<=0xef)&&marker!==0xfe)parts.push(bytes.slice(p,p+2+length));p+=2+length;
  }
@@ -63,7 +62,6 @@ function sharingBucket(env:SocialEnv,owner:string){
 
 async function ensureSharingPhoto(env:SocialEnv,owner:string,image:{id:string;object_key:string}){
  if(!env.IMAGES)return false;
- if(await env.DB.prepare('SELECT 1 FROM shared_photos WHERE image_id=? AND owner_id=?').bind(image.id,owner).first())return true;
  try{
   const original=await env.WINE_IMAGES.get(image.object_key);if(!original)return false;
   const output=await env.IMAGES.input(original.body).transform({width:1600,height:1600,fit:'scale-down'}).output({format:'image/jpeg',quality:80,anim:false});
@@ -78,6 +76,17 @@ async function ensureSharingPhoto(env:SocialEnv,owner:string,image:{id:string;ob
  }
 }
 
+async function ensureSharingPhotos(env:SocialEnv,owner:string,images:Array<{id:string;object_key:string}>){
+ if(!images.length)return;
+ if(!env.IMAGES){
+  console.warn(JSON.stringify({event:'sharing-photo-images-binding-missing',imageCount:images.length}));
+  return;
+ }
+ // A wine can carry many photos. A small concurrency window avoids serial
+ // transforms without turning one shared-wine GET into a burst of 30 transforms.
+ for(let offset=0;offset<images.length;offset+=4)await Promise.all(images.slice(offset,offset+4).map(image=>ensureSharingPhoto(env,owner,image)));
+}
+
 export const SHARED_WINES_LIST_SQL=`WITH accessible(wine_id,owner_id,shared_at) AS (
  SELECT s.wine_id,s.owner_id,s.created_at FROM wine_shares s WHERE s.recipient_id=?
  UNION ALL
@@ -88,13 +97,17 @@ export const SHARED_WINES_LIST_SQL=`WITH accessible(wine_id,owner_id,shared_at) 
 ), latest AS (
  SELECT wine_id,owner_id,max(shared_at) AS shared_at
  FROM accessible GROUP BY wine_id,owner_id
+), page AS MATERIALIZED (
+ SELECT a.wine_id,a.owner_id,a.shared_at,u.display_name
+ FROM latest a
+ JOIN friendships f ON f.user_id=? AND f.friend_id=a.owner_id
+ JOIN app_users u ON u.id=a.owner_id AND u.status='active'
+ ORDER BY a.shared_at DESC,a.wine_id LIMIT 25 OFFSET ?
 )
-SELECT w.*,u.display_name,a.shared_at
-FROM latest a
-JOIN wines w ON w.id=a.wine_id AND w.owner_id=a.owner_id
-JOIN friendships f ON f.user_id=? AND f.friend_id=w.owner_id
-JOIN app_users u ON u.id=w.owner_id AND u.status='active'
-ORDER BY a.shared_at DESC,w.id LIMIT 25 OFFSET ?`;
+SELECT w.*,p.display_name,p.shared_at
+FROM page p
+JOIN wines w ON w.id=p.wine_id AND w.owner_id=p.owner_id
+ORDER BY p.shared_at DESC,w.id`;
 
 export async function socialRoute(request:Request,env:SocialEnv,member:Member):Promise<Response|null>{
  const url=new URL(request.url),path=url.pathname;
@@ -203,7 +216,7 @@ export async function socialRoute(request:Request,env:SocialEnv,member:Member):P
    const object=await env.WINE_IMAGES.get(row.object_key);if(!object)throw new ApiError(404,'Photo not found');return new Response(object.body,{headers:{'Content-Type':'image/jpeg','Cache-Control':'private, no-store','X-Content-Type-Options':'nosniff'}});
   }
   const images=(await env.DB.prepare('SELECT i.id,i.object_key FROM wine_images i LEFT JOIN shared_photos p ON p.image_id=i.id AND p.owner_id=i.owner_id WHERE i.wine_id=? AND i.owner_id=? AND p.image_id IS NULL ORDER BY i.rowid').bind(shared[1],wine.owner_id).all<{id:string;object_key:string}>()).results;
-  for(const image of images)await ensureSharingPhoto(env,String(wine.owner_id),image);
+  await ensureSharingPhotos(env,String(wine.owner_id),images);
   const photos=(await env.DB.prepare('SELECT p.image_id FROM shared_photos p JOIN wine_images i ON i.id=p.image_id AND i.owner_id=p.owner_id WHERE i.wine_id=? AND i.owner_id=? ORDER BY i.rowid').bind(shared[1],wine.owner_id).all<{image_id:string}>()).results;
   return json({...sharedWine(wine),photos:photos.map(p=>({id:p.image_id,url:`/api/shared/wines/${shared[1]}/photos/${p.image_id}`}))});
  }
