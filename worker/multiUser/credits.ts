@@ -20,7 +20,8 @@ export const creditSummary=(op:CreditOperation)=>({status:op.status,captured:op.
 /** Recognition clients validate a strict wine/group schema. Credit bookkeeping is transport metadata, not recognition data, so keep it off that public JSON contract while retaining it for async AI routes that consume the operation id. */
 export function publicAiResponse(path:string,data:Record<string,unknown>,op:CreditOperation){
  if(path==='/api/recognition'){
-  const {creditOperationId:_creditOperationId,creditSettlement:_creditSettlement,...recognition}=data;
+  const recognition={...data};
+  delete recognition.creditOperationId;delete recognition.creditSettlement;
   return recognition;
  }
  return {...data,creditOperationId:op.id,creditSettlement:data.creditSettlement??creditSummary(op)};
