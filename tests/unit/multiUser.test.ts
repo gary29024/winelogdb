@@ -599,6 +599,48 @@ describe('sharing boundaries',()=>{
   * transform ever. The cost that used to be unbounded was the photo that cannot:
   * it was re-transformed on every friend view, and a transform is billed.
   */
+ it('builds a shared photo on first fetch instead of 404ing, and thumbnails it',async()=>{
+  // What the reporter actually wanted: a friend's card fills in as fast as the
+  // owner's own, which has always generated its thumbnail on first view.
+  wines();
+  database.sql.exec(`
+   INSERT INTO wine_shares(wine_id,owner_id,recipient_id) VALUES('w','alice','bob');
+   INSERT INTO wine_images(id,owner_id,wine_id,object_key,content_type,byte_size,width,height,upload_status,recognition_status,created_at)
+   VALUES('img-1','alice','w','owners/alice/1.jpg','image/jpeg',8,10,10,'uploaded','complete','now');
+  `);
+  const jpeg=Uint8Array.from([255,216,255,218,0,2,255,217]);
+  const store=new Map<string,Uint8Array>([['owners/alice/1.jpg',jpeg]]);
+  const bucket={
+   get:vi.fn(async(key:string)=>store.has(key)?{body:new Blob([store.get(key)! as BlobPart]).stream(),arrayBuffer:async()=>store.get(key)!.buffer,size:store.get(key)!.length}:null),
+   put:vi.fn(async(key:string,body:ArrayBuffer|Uint8Array)=>{store.set(key,new Uint8Array(body as ArrayBuffer));return {}}),
+   delete:vi.fn(async()=>undefined)
+  } as unknown as R2Bucket;
+  const transform=vi.fn(()=>({transform:()=>({output:()=>({response:()=>new Response(jpeg)})})}));
+  const e={...env(),WINE_IMAGES:bucket,IMAGES:{input:transform} as unknown as ImagesBinding};
+
+  // Nothing has prepared this photo: the old route answered 404 here.
+  expect(database.sql.prepare("SELECT count(*) AS n FROM shared_photos").get()!.n).toBe(0);
+  const first=await socialRoute(new Request('https://wine.example/api/shared/wines/w/photos/img-1?variant=thumbnail'),e,member('bob'));
+  expect(first?.status).toBe(200);
+  expect(database.sql.prepare("SELECT count(*) AS n FROM shared_photos").get()!.n).toBe(1);
+  // Both the sharing copy and its thumbnail are persisted under shared/.
+  expect([...store.keys()].some(key=>key==='shared/alice/img-1.jpg')).toBe(true);
+  expect([...store.keys()].some(key=>key==='shared/alice/img-1-thumb.jpg')).toBe(true);
+
+  // A second viewer pays for neither transform again.
+  const transforms=transform.mock.calls.length;
+  expect((await socialRoute(new Request('https://wine.example/api/shared/wines/w/photos/img-1?variant=thumbnail'),e,member('bob')))?.status).toBe(200);
+  expect(transform.mock.calls.length).toBe(transforms);
+ });
+
+ it('refuses a shared photo to someone the wine was never shared with',async()=>{
+  wines();
+  database.sql.exec("INSERT INTO wine_images(id,owner_id,wine_id,object_key,content_type,byte_size,width,height,upload_status,recognition_status,created_at) VALUES('img-1','alice','w','owners/alice/1.jpg','image/jpeg',8,10,10,'uploaded','complete','now')");
+  const e={...env(),WINE_IMAGES:{get:vi.fn(async()=>null)} as unknown as R2Bucket};
+  // On-demand generation must not become a way in: carol was never shared this.
+  await expect(socialRoute(new Request('https://wine.example/api/shared/wines/w/photos/img-1?variant=thumbnail'),e,member('carol'))).rejects.toMatchObject({status:404});
+ });
+
  it('prepares sharing photos on the scheduled pass, not only on a shared-wine view',async()=>{
   // The reported bug: sharing many wines at once left a friend's journal full of
   // letter tiles, because the only server-side path ran on a single wine's GET.

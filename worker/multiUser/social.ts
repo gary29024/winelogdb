@@ -295,6 +295,39 @@ export async function drainSharingPhotos(env:SocialEnv,limit=40){
  return rows.length;
 }
 
+/**
+ * The bytes a friend is served for one shared photo.
+ *
+ * A journal card is a couple of hundred pixels, so serving it the 1600px
+ * sharing copy would spend megabytes on a grid of them. The thumbnail is
+ * derived from that copy rather than from the original, so it inherits its
+ * metadata stripping instead of raising the question again, and it is stripped
+ * once more on the way out to keep one invariant: nothing under shared/ has
+ * skipped the stripper. It persists like the owner's own thumbnail, so only the
+ * first viewer pays for the transform.
+ */
+async function sharedPhotoObject(env:SocialEnv,owner:string,imageId:string,objectKey:string,thumbnail:boolean){
+ if(!thumbnail||!env.IMAGES)return env.WINE_IMAGES.get(objectKey);
+ const thumbKey=`shared/${owner}/${imageId}-thumb.jpg`;
+ const stored=await env.WINE_IMAGES.get(thumbKey).catch(()=>null);
+ if(stored)return stored;
+ const source=await env.WINE_IMAGES.get(objectKey);
+ if(!source)return null;
+ try{
+  const output=await env.IMAGES.input(source.body).transform({width:640,height:640,fit:'scale-down'}).output({format:'image/jpeg',quality:75,anim:false});
+  const response=output.response();
+  if(!response.ok)throw new Error(`Shared thumbnail transform returned ${response.status}`);
+  const bytes=stripJpegMetadata(new Uint8Array(await response.arrayBuffer()));
+  await sharingBucket(env,owner).put(thumbKey,bytes,{httpMetadata:{contentType:'image/jpeg'},storageClass:'Standard'});
+  return {body:new Blob([bytes as BlobPart]).stream()} as unknown as R2ObjectBody;
+ }catch(error){
+  // A thumbnail that will not build is not worth a broken card: fall back to
+  // the full sharing copy, which is already prepared and already safe.
+  console.warn(JSON.stringify({event:'shared-thumbnail-failed',imageId,error:(error as Error).message}));
+  return env.WINE_IMAGES.get(objectKey);
+ }
+}
+
 export const SHARED_WINES_LIST_SQL=`WITH accessible(wine_id,owner_id,shared_at) AS (
  SELECT s.wine_id,s.owner_id,s.created_at FROM wine_shares s WHERE s.recipient_id=?
  UNION ALL
@@ -469,8 +502,27 @@ export async function socialRoute(request:Request,env:SocialEnv,member:Member):P
  if(shared&&request.method==='GET'){
   const wine=await canReadShared(env.DB,member.id,shared[1]);if(!wine)throw new ApiError(404,'Shared wine not found');
   if(shared[2]){
-   const row=await env.DB.prepare('SELECT p.object_key FROM shared_photos p JOIN wine_images i ON i.id=p.image_id AND i.owner_id=p.owner_id WHERE i.wine_id=? AND i.id=? AND i.owner_id=?').bind(shared[1],shared[2],wine.owner_id).first<{object_key:string}>();if(!row)throw new ApiError(404,'Photo not found');
-   const object=await env.WINE_IMAGES.get(row.object_key);if(!object)throw new ApiError(404,'Photo not found');return new Response(object.body,{headers:{'Content-Type':'image/jpeg','Cache-Control':'private, no-store','X-Content-Type-Options':'nosniff'}});
+   const owner=String(wine.owner_id);
+   const find=()=>env.DB.prepare('SELECT p.object_key FROM shared_photos p JOIN wine_images i ON i.id=p.image_id AND i.owner_id=p.owner_id WHERE i.wine_id=? AND i.id=? AND i.owner_id=?').bind(shared[1],shared[2],owner).first<{object_key:string}>();
+   let row=await find();
+   if(!row){
+    // Build it now rather than 404, the way an owner's own thumbnail is built
+    // on first view. Pre-building was what made a bulk share slow: the sharer's
+    // browser had to grind through every photo before a friend saw any of them.
+    const pending=await env.DB.prepare(`SELECT i.id,i.object_key,coalesce(a.attempts,0) AS attempts
+      FROM wine_images i LEFT JOIN shared_photo_attempts a ON a.image_id=i.id AND a.owner_id=i.owner_id
+      WHERE i.id=? AND i.owner_id=? AND (a.retry_after IS NULL OR a.retry_after<=?)`)
+      .bind(shared[2],owner,stamp()).first<{id:string;object_key:string;attempts:number}>();
+    if(pending){
+     const racing=await ensureSharingPhotos(env,owner,[pending]);
+     if(racing.length)await waitForSharingPhotoContention(env,owner,racing);
+     row=await find();
+    }
+   }
+   if(!row)throw new ApiError(404,'Photo not found');
+   const object=await sharedPhotoObject(env,owner,String(shared[2]),row.object_key,url.searchParams.get('variant')==='thumbnail');
+   if(!object)throw new ApiError(404,'Photo not found');
+   return new Response(object.body,{headers:{'Content-Type':'image/jpeg','Cache-Control':'private, no-store','X-Content-Type-Options':'nosniff'}});
   }
   // Keep active leases visible: a second viewer that arrives after the winner
   // has claimed the photo should wait briefly instead of returning an empty first
