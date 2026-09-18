@@ -1,5 +1,6 @@
 import type { DeepSearchResult } from '../db/schema';
 import type { TastingStructure } from './tastingStructure';
+import type { SparklingDetails } from './sparklingDetails';
 
 /**
  * The published shape of a Deep Search result: the research a friend reads, and
@@ -60,6 +61,16 @@ export type SharedWine = SharedWineExperience&{
   * cancelling a run stays with the owner.
   */
  deepSearch:SharedDeepSearch|null;
+ /**
+  * The source owner's release details for the bottle they shared: dosage,
+  * disgorgement, tirage, assemblage and the rest. Facts about that bottle
+  * rather than anyone's experience of it, and the schema they are parsed with
+  * is strict and wholly public, which a test pins - so the whole of it crosses
+  * rather than a hand-listed subset. They are per-owner because an NV cuvee is
+  * disgorged differently between releases, and what a friend is looking at is
+  * the bottle that was shared.
+  */
+ sparklingDetails:SparklingDetails|null;
  favorite:boolean;
  updatedAt:string;
  photos?:Array<{id:string;url:string}>;

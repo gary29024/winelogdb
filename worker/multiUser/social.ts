@@ -5,6 +5,7 @@ import { rememberProducerAlias } from '../../src/lib/research/aliasBridge';
 import type { SharedDeepSearch,SharedWine } from '../../src/lib/wine/shared';
 import { deepSearchSchema } from '../../src/lib/db/schema';
 import { tastingStructureSchema,type TastingStructure } from '../../src/lib/wine/tastingStructure';
+import { hasSparklingDetails,sparklingDetailsSchema,type SparklingDetails } from '../../src/lib/wine/sparklingDetails';
 import { meteredBucket } from './storage';
 
 // Explicit allowlist: never serialize the private WineRecord into a shared response.
@@ -39,6 +40,7 @@ export function sharedWine(row:Record<string,unknown>):SharedWine{
   venue:text(row.viewer_venue)||null,locationName:text(row.viewer_location_name)||null,
   price:number(row.viewer_price),currency:text(row.viewer_currency)||null,
   structure:viewerStructure(row.viewer_structure_json),
+  sparklingDetails:sharedSparkling(row.sparkling_details_json),
   updatedAt:text(row.updated_at)
  };
 }
@@ -72,6 +74,20 @@ export function publishedDeepSearch(raw:unknown):SharedDeepSearch|null{
  }catch{/* Unparseable research is simply not shared. */return null}
 }
 
+/**
+ * The bottle's release details. sparklingDetailsSchema is strict and every one
+ * of its fields is a release fact, so the parsed object crosses whole; the
+ * boundary is the schema, and a test asserts the shared payload's keys are
+ * exactly its keys, which fails the day a private field is added to it.
+ */
+export function sharedSparkling(raw:unknown):SparklingDetails|null{
+ if(typeof raw!=='string'||!raw)return null;
+ try{
+  const parsed=sparklingDetailsSchema.safeParse(JSON.parse(raw));
+  return parsed.success&&hasSparklingDetails(parsed.data)?parsed.data:null;
+ }catch{return null}
+}
+
 /** The viewer's own structure, validated: a stored blob is not a contract. */
 export function viewerStructure(raw:unknown):TastingStructure|null{
  if(typeof raw!=='string'||!raw)return null;
@@ -94,8 +110,10 @@ export async function canReadShared(db:D1Database,viewer:string,wineId:string){
    pref.rating AS viewer_rating,pref.tasting_date AS viewer_tasting_date,pref.tasting_name AS viewer_tasting_name,
    pref.venue AS viewer_venue,pref.location_name AS viewer_location_name,pref.price AS viewer_price,pref.currency AS viewer_currency,
    pref.structure_json AS viewer_structure_json,
+   sd.details_json AS sparkling_details_json,
    ${VIEWER_PRODUCER_SQL}
  FROM wines w
+ LEFT JOIN wine_sparkling_details sd ON sd.owner_id=w.owner_id AND sd.wine_id=w.id
  JOIN friendships f ON f.user_id=? AND f.friend_id=w.owner_id
  JOIN app_users u ON u.id=w.owner_id AND u.status='active'
  LEFT JOIN shared_wine_preferences pref ON pref.recipient_id=? AND pref.owner_id=w.owner_id AND pref.wine_id=w.id
@@ -258,9 +276,11 @@ SELECT w.*,p.display_name,p.shared_at,
   pref.rating AS viewer_rating,pref.tasting_date AS viewer_tasting_date,pref.tasting_name AS viewer_tasting_name,
   pref.venue AS viewer_venue,pref.location_name AS viewer_location_name,pref.price AS viewer_price,pref.currency AS viewer_currency,
   pref.structure_json AS viewer_structure_json,
+  sd.details_json AS sparkling_details_json,
   ${VIEWER_PRODUCER_SQL}
 FROM page p
 JOIN wines w ON w.id=p.wine_id AND w.owner_id=p.owner_id
+LEFT JOIN wine_sparkling_details sd ON sd.owner_id=w.owner_id AND sd.wine_id=w.id
 LEFT JOIN shared_wine_preferences pref ON pref.recipient_id=? AND pref.owner_id=p.owner_id AND pref.wine_id=p.wine_id
 ORDER BY p.shared_at DESC,w.id`;
 

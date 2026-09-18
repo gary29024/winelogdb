@@ -16,6 +16,7 @@ import { flushOutbox,durableQueue,maintainJobs } from '../../worker/multiUser/jo
 import { meteredBucket } from '../../worker/multiUser/storage';
 import { wineSaveStatements } from '../../src/lib/db/wineSave';
 import { buildJourneyPayload } from '../../worker/journeyHandler';
+import { sparklingDetailsSchema } from '../../src/lib/wine/sparklingDetails';
 import type { WineInput } from '../../src/lib/db/schema';
 
 let database:ReturnType<typeof realD1>;
@@ -381,6 +382,48 @@ describe('shared wines as recipient journal history',()=>{
   // Alice's page still reflects only alice's own perception.
   const alice=await buildJourneyPayload(database.db,'alice',true) as {structures:Array<{structure:{acidity?:string}}>};
   expect(alice.structures.map(row=>row.structure.acidity)).toEqual(['low']);
+ });
+
+ it('shares the bottle\'s release details, and nothing the schema does not cover',async()=>{
+  // Dosage, disgorgement, assemblage and the rest are facts about the bottle
+  // that was shared, not anyone's experience of it, so they travel with it.
+  const details={dosageGPerL:6,dosageCategory:'Extra Brut',disgorgement:'Spring 2024',
+   baseVintage:2018,reserveWinePercentage:35,leesAgeingMonths:48,assemblage:'60% Pinot Noir, 40% Chardonnay'};
+  database.sql.exec(`
+   INSERT INTO friendships(user_id,friend_id) VALUES('alice','bob'),('bob','alice');
+   INSERT INTO wines(id,owner_id,producer,wine_name,created_at,updated_at)
+   VALUES('shared-fizz','alice','Maison Shared','Grand Brut','now','now');
+   INSERT INTO wine_shares(wine_id,owner_id,recipient_id) VALUES('shared-fizz','alice','bob');
+  `);
+  database.sql.prepare("INSERT INTO wine_sparkling_details(owner_id,wine_id,details_json,updated_at) VALUES('alice','shared-fizz',?,'now')")
+   .run(JSON.stringify(details));
+  const e={...env(),WINE_IMAGES:{} as R2Bucket};
+  const detail=await (await socialRoute(new Request('https://wine.example/api/shared/wines/shared-fizz'),e,member('bob')))!.json() as Record<string,unknown>;
+  expect(detail.sparklingDetails).toMatchObject(details);
+
+  // The schema is the boundary, so pin it two ways. Absent optional fields stay
+  // absent rather than coming back null, so the payload is a subset of the
+  // schema's keys - and the schema's own key list is fixed here, so the day a
+  // private field is added to it this fails instead of quietly shipping it.
+  const allowed=Object.keys(sparklingDetailsSchema.shape).sort();
+  expect(allowed).toEqual([
+   'assemblage','baseVintage','disgorgement','dosageCategory','dosageGPerL','fermentationElevage',
+   'leesAgeingMonths','lotCode','malolactic','otherTechnicalDetails','reserveWineDetail','reserveWinePercentage','tirage'
+  ]);
+  expect(Object.keys(detail.sparklingDetails as object).filter(key=>!allowed.includes(key)),'nothing outside the schema crosses').toEqual([]);
+ });
+
+ it('sends no sparkling details for a wine that has none',async()=>{
+  database.sql.exec(`
+   INSERT INTO friendships(user_id,friend_id) VALUES('alice','bob'),('bob','alice');
+   INSERT INTO wines(id,owner_id,producer,wine_name,created_at,updated_at)
+   VALUES('shared-still','alice','Domaine Shared','Still Red','now','now');
+   INSERT INTO wine_shares(wine_id,owner_id,recipient_id) VALUES('shared-still','alice','bob');
+   INSERT INTO wine_sparkling_details(owner_id,wine_id,details_json,updated_at) VALUES('alice','shared-still','{}','now');
+  `);
+  const e={...env(),WINE_IMAGES:{} as R2Bucket};
+  const detail=await (await socialRoute(new Request('https://wine.example/api/shared/wines/shared-still'),e,member('bob')))!.json() as Record<string,unknown>;
+  expect(detail.sparklingDetails).toBeNull();
  });
 
  it('refuses an experience for a wine the member was never shared',async()=>{

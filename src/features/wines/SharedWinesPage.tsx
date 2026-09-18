@@ -8,6 +8,7 @@ import { backTargetFromState,JOURNAL_BACK } from './backTarget';
 import { formatDate } from '../../lib/wine/detailFormat';
 import { experienceRows as buildExperienceRows } from '../../lib/wine/detailFields';
 import { FactList,WineDetailsSection,WineFactPills } from './WineFacts';
+import { SparklingDetailsCard } from './SparklingDetailsCard';
 import { structureValueLabel,type TastingStructure,type TastingStructureKey } from '../../lib/wine/tastingStructure';
 import { DeepSources,ResearchText } from './ResearchPresentation';
 import { researchSections } from './researchSections';
@@ -99,6 +100,7 @@ export function SharedWinesPage(){
    <div className="detail-favorite-row"><button type="button" className={`detail-favorite-button${wine.favorite?' active':''}`} aria-pressed={wine.favorite} onClick={()=>void toggleFavorite()} disabled={favoriteBusy}><span className="heart" aria-hidden="true"><AppIcon kind={wine.favorite?'heart-filled':'heart'}/></span>{wine.favorite?'Favorite':'Add to favorites'}</button><a className="detail-wine-searcher-link" href={wineSearcherUrl(wine.producer,wine.wineName,wine.vintage)} target="_blank" rel="noopener noreferrer">Find on Wine-Searcher <span aria-hidden="true">↗</span></a>{favoriteError&&<span className="shared-favorite-error" role="alert">{favoriteError}</span>}</div>
    <WineFactPills wine={wine}/>
   </section>
+  <SparklingDetailsCard details={wine.sparklingDetails}/>
   <div className="shared-source-indicator" role="note"><span>Shared by</span><strong>{wine.ownerName}</strong></div>
   <WineDetailsSection wine={wine}/>
   <section className="detail-section experience-panel">
