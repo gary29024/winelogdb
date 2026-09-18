@@ -140,7 +140,7 @@ export async function buildJourneyPayload(db:D1Database,owner:string,includeShar
       NULLIF(w.tasting_date,'') tasting_date,w.created_at,
       ${includeShared?'w.is_shared':'0 AS is_shared'},${includeShared?'w.shared_by':'NULL AS shared_by'},
       ${includeShared
-        ?`CASE WHEN w.is_shared=1 THEN (SELECT p.image_id FROM shared_photos p JOIN wine_images wi ON wi.id=p.image_id AND wi.owner_id=p.owner_id WHERE wi.owner_id=w.source_owner_id AND wi.wine_id=w.id ORDER BY wi.rowid ASC LIMIT 1) ELSE (SELECT wi.id FROM wine_images wi WHERE wi.owner_id=w.owner_id AND wi.wine_id=w.id ORDER BY wi.rowid ASC LIMIT 1) END`
+        ?`CASE WHEN w.is_shared=1 THEN (SELECT wi.id FROM wine_images wi WHERE wi.owner_id=w.source_owner_id AND wi.wine_id=w.id ORDER BY wi.rowid ASC LIMIT 1) ELSE (SELECT wi.id FROM wine_images wi WHERE wi.owner_id=w.owner_id AND wi.wine_id=w.id ORDER BY wi.rowid ASC LIMIT 1) END`
         :`(SELECT wi.id FROM wine_images wi WHERE wi.owner_id=w.owner_id AND wi.wine_id=w.id ORDER BY wi.rowid ASC LIMIT 1)`} image_id
       FROM ${wineTable} w WHERE w.owner_id=?
       ORDER BY COALESCE(NULLIF(w.tasting_date,''),w.created_at) DESC,w.created_at DESC LIMIT 4`).bind(owner),
