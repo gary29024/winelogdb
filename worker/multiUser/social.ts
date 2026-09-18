@@ -10,12 +10,17 @@ export function sharedWine(row:Record<string,unknown>):SharedWine{
  const text=(value:unknown)=>typeof value==='string'?value:'';
  const number=(value:unknown)=>typeof value==='number'&&Number.isFinite(value)?value:null;
  let grapes:string[]=[];try{const data:unknown=JSON.parse(String(row.grapes_json||'[]'));if(Array.isArray(data))grapes=data.filter((value):value is string=>typeof value==='string')}catch{/* Invalid legacy grapes must not expose another field. */}
- return {id:text(row.id),ownerName:text(row.display_name),producer:text(row.producer),wineName:text(row.wine_name),vintage:number(row.vintage),country:text(row.country)||null,region:text(row.region)||null,appellation:text(row.appellation)||null,wineStyle:text(row.wine_style)||null,grapes,tastingNotes:text(row.tasting_notes),rating:number(row.rating),tastingDate:text(row.tasting_date)||null,updatedAt:text(row.updated_at)};
+ return {id:text(row.id),ownerName:text(row.display_name),producer:text(row.producer),wineName:text(row.wine_name),vintage:number(row.vintage),country:text(row.country)||null,region:text(row.region)||null,appellation:text(row.appellation)||null,wineStyle:text(row.wine_style)||null,grapes,tastingNotes:'',rating:null,tastingDate:null,updatedAt:text(row.updated_at)};
 }
 export async function canReadShared(db:D1Database,viewer:string,wineId:string){
- return db.prepare(`SELECT w.*,u.display_name FROM wines w
+ return db.prepare(`SELECT w.*,u.display_name,
+   x.tasting_notes AS viewer_tasting_notes,x.rating AS viewer_rating,x.tasting_date AS viewer_tasting_date,
+   x.tasting_name AS viewer_tasting_name,x.venue AS viewer_venue,x.location_name AS viewer_location_name,
+   x.price AS viewer_price,x.currency AS viewer_currency
+ FROM wines w
  JOIN friendships f ON f.user_id=? AND f.friend_id=w.owner_id
  JOIN app_users u ON u.id=w.owner_id AND u.status='active'
+ LEFT JOIN shared_wine_experiences x ON x.recipient_id=? AND x.owner_id=w.owner_id AND x.wine_id=w.id
  WHERE w.id=? AND (
    EXISTS(SELECT 1 FROM wine_shares s WHERE s.wine_id=w.id AND s.owner_id=w.owner_id AND s.recipient_id=?)
    OR EXISTS(
@@ -23,7 +28,7 @@ export async function canReadShared(db:D1Database,viewer:string,wineId:string){
      JOIN wine_experiences we ON we.owner_id=ts.owner_id AND we.tasting_id=ts.tasting_id AND we.wine_id=w.id
      WHERE ts.owner_id=w.owner_id AND ts.recipient_id=?
    )
- )`).bind(viewer,wineId,viewer,viewer).first<Record<string,unknown>>();
+ )`).bind(viewer,viewer,wineId,viewer,viewer).first<Record<string,unknown>>();
 }
 
 async function acceptedFriendIds(db:D1Database,owner:string,ids:string[]){
@@ -274,6 +279,21 @@ export async function socialRoute(request:Request,env:SocialEnv,member:Member):P
   const offset=Math.max(0,Math.min(100000,Number(url.searchParams.get('offset'))||0));
   const rows=await env.DB.prepare(SHARED_WINES_LIST_SQL).bind(member.id,member.id,member.id,offset).all<Record<string,unknown>>();return json({items:rows.results.map(sharedWine),nextOffset:rows.results.length===25?offset+25:null});
  }
+ const sharedExperience=path.match(/^\\/api\\/shared\\/wines\\/([^/]+)\\/experience$/);
+ if(sharedExperience&&request.method==='PUT'){
+  const wine=await canReadShared(env.DB,member.id,sharedExperience[1]);if(!wine)throw new ApiError(404,'Shared wine not found');
+  const data=await body(request);
+  const optionalText=(key:string,max:number)=>data[key]==null||data[key]===''?null:typeof data[key]==='string'?String(data[key]).trim().slice(0,max):(()=>{throw new ApiError(400,`Invalid ${key}`)})();
+  const notes=typeof data.tastingNotes==='string'?data.tastingNotes.trim().slice(0,5000):'';
+  const rating=data.rating==null||data.rating===''?null:Number(data.rating);if(rating!==null&&(!Number.isFinite(rating)||rating<0||rating>100))throw new ApiError(400,'Score must be between 0 and 100');
+  const price=data.price==null||data.price===''?null:Number(data.price);if(price!==null&&(!Number.isFinite(price)||price<0))throw new ApiError(400,'Price must be zero or higher');
+  const tastingDate=optionalText('tastingDate',10),tastingName=optionalText('tastingName',160),venue=optionalText('venue',240),locationName=optionalText('locationName',240),currency=optionalText('currency',8)?.toUpperCase()??null,now=stamp();
+  await env.DB.prepare(`INSERT INTO shared_wine_experiences(recipient_id,owner_id,wine_id,tasting_notes,rating,tasting_date,tasting_name,venue,location_name,price,currency,created_at,updated_at)
+    VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)
+    ON CONFLICT(recipient_id,owner_id,wine_id) DO UPDATE SET tasting_notes=excluded.tasting_notes,rating=excluded.rating,tasting_date=excluded.tasting_date,tasting_name=excluded.tasting_name,venue=excluded.venue,location_name=excluded.location_name,price=excluded.price,currency=excluded.currency,updated_at=excluded.updated_at`)
+   .bind(member.id,wine.owner_id,sharedExperience[1],notes,rating,tastingDate,tastingName,venue,locationName,price,currency,now,now).run();
+  return json({experience:{tastingNotes:notes,rating,tastingDate,tastingName,venue,locationName,price,currency}});
+ }
  const shared=path.match(/^\/api\/shared\/wines\/([^/]+)(?:\/photos\/([^/]+))?$/);
  if(shared&&request.method==='GET'){
   const wine=await canReadShared(env.DB,member.id,shared[1]);if(!wine)throw new ApiError(404,'Shared wine not found');
@@ -299,7 +319,16 @@ export async function socialRoute(request:Request,env:SocialEnv,member:Member):P
   const contended=[...new Set([...leased,...raced])].slice(0,SHARING_MAX_PER_REQUEST);
   if(contended.length)await waitForSharingPhotoContention(env,String(wine.owner_id),contended);
   const photos=(await env.DB.prepare('SELECT p.image_id FROM shared_photos p JOIN wine_images i ON i.id=p.image_id AND i.owner_id=p.owner_id WHERE i.wine_id=? AND i.owner_id=? ORDER BY i.rowid').bind(shared[1],wine.owner_id).all<{image_id:string}>()).results;
-  return json({...sharedWine(wine),photos:photos.map(p=>({id:p.image_id,url:`/api/shared/wines/${shared[1]}/photos/${p.image_id}`}))});
+  return json({...sharedWine(wine),experience:{
+   tastingNotes:typeof wine.viewer_tasting_notes==='string'?wine.viewer_tasting_notes:'',
+   rating:typeof wine.viewer_rating==='number'?wine.viewer_rating:null,
+   tastingDate:typeof wine.viewer_tasting_date==='string'?wine.viewer_tasting_date:null,
+   tastingName:typeof wine.viewer_tasting_name==='string'?wine.viewer_tasting_name:null,
+   venue:typeof wine.viewer_venue==='string'?wine.viewer_venue:null,
+   locationName:typeof wine.viewer_location_name==='string'?wine.viewer_location_name:null,
+   price:typeof wine.viewer_price==='number'?wine.viewer_price:null,
+   currency:typeof wine.viewer_currency==='string'?wine.viewer_currency:null
+  },photos:photos.map(p=>({id:p.image_id,url:`/api/shared/wines/${shared[1]}/photos/${p.image_id}`}))});
  }
  return null;
 }
