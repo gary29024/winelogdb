@@ -14,3 +14,10 @@ html,body,#root{width:100%;max-width:100%;overflow-x:hidden}body{overscroll-beha
 /* The chosen view has to outrank that, the same way the scope tabs do: a class
    alone loses to a hover rule, and on a phone the tap leaves the hover behind. */
 .journal-view-toggle button.active,.journal-view-toggle button.active:hover:not(:disabled){background:var(--ink);color:var(--paper)}
+
+/* Shared bottles are marked by surface rather than by a badge, so the card keeps
+   its title space and the image is untouched. The tint is the whole visible cue;
+   provenance for assistive technology rides the card's accessible label instead,
+   so nothing here is the only way to know a bottle is shared. */
+.wine-grid.journal-list.journal-gallery .journal-grid-card.shared{background:var(--shared-wash);border-color:var(--shared-line)}
+.journal-list-view .journal-card.shared{background:var(--shared-wash);box-shadow:inset 3px 0 0 var(--shared-line)}

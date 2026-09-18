@@ -23,6 +23,7 @@ type JournalRow={
   image_id:string|null;
   is_shared:number;
   shared_by:string|null;
+  shared_tasting_name:string|null;
 };
 
 const parseJson=<T>(value:unknown,fallback:T):T=>{try{return JSON.parse(String(value)) as T}catch{return fallback}};
@@ -65,10 +66,14 @@ export async function listJournalPage(db:D1Database,owner:string,q:JournalListQu
     args.push(...names.map(name=>name.toLowerCase()));
   }
   if(q.tasting){
-    where+=includeShared
-      ?' AND w.is_shared=0 AND EXISTS (SELECT 1 FROM wine_experiences we JOIN tastings t ON t.id=we.tasting_id WHERE we.wine_id=w.id AND we.owner_id=? AND lower(t.name) LIKE lower(?))'
-      :' AND EXISTS (SELECT 1 FROM wine_experiences we JOIN tastings t ON t.id=we.tasting_id WHERE we.wine_id=w.id AND we.owner_id=? AND lower(t.name) LIKE lower(?))';
-    args.push(owner,`%${q.tasting}%`);
+    const like=`%${q.tasting}%`;
+    if(includeShared){
+      where+=" AND ((w.is_shared=1 AND lower(coalesce(w.shared_tasting_name,'')) LIKE lower(?)) OR (w.is_shared=0 AND EXISTS (SELECT 1 FROM wine_experiences we JOIN tastings t ON t.id=we.tasting_id WHERE we.wine_id=w.id AND we.owner_id=? AND lower(t.name) LIKE lower(?))))";
+      args.push(like,owner,like);
+    }else{
+      where+=' AND EXISTS (SELECT 1 FROM wine_experiences we JOIN tastings t ON t.id=we.tasting_id WHERE we.wine_id=w.id AND we.owner_id=? AND lower(t.name) LIKE lower(?))';
+      args.push(owner,like);
+    }
   }
   if(rawQuery&&!vintageSearch){
     const searchPredicates:string[]=[];
@@ -78,8 +83,8 @@ export async function listJournalPage(db:D1Database,owner:string,q:JournalListQu
       args.push(clean+'*',owner,owner,`%${rawQuery}%`);
       if(includeShared){
         const like=`%${rawQuery}%`;
-        searchPredicates.push("(w.is_shared=1 AND (lower(w.producer) LIKE lower(?) OR lower(w.wine_name) LIKE lower(?) OR lower(coalesce(w.country,'')) LIKE lower(?) OR lower(coalesce(w.region,'')) LIKE lower(?) OR lower(coalesce(w.appellation,'')) LIKE lower(?) OR lower(w.grapes_json) LIKE lower(?)))");
-        args.push(like,like,like,like,like,like);
+        searchPredicates.push("(w.is_shared=1 AND (lower(w.producer) LIKE lower(?) OR lower(w.wine_name) LIKE lower(?) OR lower(coalesce(w.country,'')) LIKE lower(?) OR lower(coalesce(w.region,'')) LIKE lower(?) OR lower(coalesce(w.appellation,'')) LIKE lower(?) OR lower(w.grapes_json) LIKE lower(?) OR lower(coalesce(w.shared_tasting_name,'')) LIKE lower(?)))");
+        args.push(like,like,like,like,like,like,like);
       }
     }
     if(semanticMatches.length){
@@ -122,7 +127,7 @@ export async function listJournalPage(db:D1Database,owner:string,q:JournalListQu
     ?'w.is_shared,w.shared_by,w.source_owner_id'
     :'0 AS is_shared,NULL AS shared_by,w.owner_id AS source_owner_id';
   const tastingName=includeShared
-    ?'CASE WHEN w.is_shared=0 THEN (SELECT t.name FROM wine_experiences we LEFT JOIN tastings t ON t.id=we.tasting_id WHERE we.wine_id=w.id AND we.owner_id=w.owner_id ORDER BY we.created_at DESC LIMIT 1) END'
+    ?"CASE WHEN w.is_shared=1 THEN w.shared_tasting_name ELSE (SELECT t.name FROM wine_experiences we LEFT JOIN tastings t ON t.id=we.tasting_id WHERE we.wine_id=w.id AND we.owner_id=w.owner_id ORDER BY we.created_at DESC LIMIT 1) END"
     :' (SELECT t.name FROM wine_experiences we LEFT JOIN tastings t ON t.id=we.tasting_id WHERE we.wine_id=w.id AND we.owner_id=w.owner_id ORDER BY we.created_at DESC LIMIT 1)';
   const imageId=includeShared
     ?`CASE WHEN w.is_shared=1 THEN
