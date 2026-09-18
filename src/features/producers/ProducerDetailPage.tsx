@@ -73,6 +73,7 @@ const suggestionReason:Record<ProducerNameSuggestion['reason'],string>={
 export function ProducerDetailPage(){
  const {id=''}=useParams(),{state:navState}=useLocation(),[producer,setProducer]=useState<ProducerDetail>(),[available,setAvailable]=useState<ProducerSummary[]>([]),[availableLoaded,setAvailableLoaded]=useState(false),[availableLoading,setAvailableLoading]=useState(false),[availableError,setAvailableError]=useState(''),[selectedAlias,setSelectedAlias]=useState(''),[primaryName,setPrimaryName]=useState(''),[loading,setLoading]=useState(true),[error,setError]=useState(''),[notice,setNotice]=useState(''),[researching,setResearching]=useState(false),[researchRun,setResearchRun]=useState<ProducerResearchRun|null>(null),[researchCancelling,setResearchCancelling]=useState(false),[merging,setMerging]=useState(false),[unlinking,setUnlinking]=useState(''),[savingPrimary,setSavingPrimary]=useState(false),[collapsedCategories,setCollapsedCategories]=useState<Set<CatalogCategory>>(readCollapsedCategories),[fixingKey,setFixingKey]=useState(''),[mergeTargetKey,setMergeTargetKey]=useState(''),[catalogBusy,setCatalogBusy]=useState(false),[deleting,setDeleting]=useState(false),[removingPhoto,setRemovingPhoto]=useState(false),[friendOperation,setFriendOperation]=useState(''),[nameSuggestions,setNameSuggestions]=useState<ProducerNameSuggestion[]>([]),[confirmingName,setConfirmingName]=useState('');
  const nav=useNavigate();
+ const memberView=getAccount()?.role==='member';
  const technicalView=getAccount()?.role==='owner';
  const researchPoll=useRef<Poller|undefined>(undefined);
  function stopResearchTimers(){researchPoll.current?.stop();researchPoll.current=undefined}
@@ -92,7 +93,7 @@ export function ProducerDetailPage(){
    const next=await getProducerResearchStatus(id,run.requestId).catch(()=>null);if(!next)return;setResearchRun(next);
    if(next.status==='running')return;
    stopResearchTimers();setResearching(false);
-   if(next.status==='complete'){await reload().catch(()=>undefined);setNotice(`Producer research completed${next.durationMs!=null?` in ${(next.durationMs/1000).toFixed(1)}s`:''}.`);setError('')}
+   if(next.status==='complete'){await reload().catch(()=>undefined);if(technicalView)setNotice(`Producer research completed${next.durationMs!=null?` in ${(next.durationMs/1000).toFixed(1)}s`:''}.`);else setNotice('');setError('')}
    else setError(technicalView?`${next.message||'Producer research failed.'} · Research request ${next.requestId}`:`Producer research failed · Support ID ${next.requestId}`);
   };
   researchPoll.current=startBackoffPoll(poll);void poll();
@@ -174,7 +175,7 @@ export function ProducerDetailPage(){
  },[producer]);
  // The wine range is the expensive half of producer research, so members get the
  // profile, practices and contacts only. There is nothing to refresh range-only.
- const rangeAllowed=getAccount()?.role!=='member'&&!producer?.sharedOnly;
+ const rangeAllowed=!memberView&&!producer?.sharedOnly;
  useEffect(()=>{
   if(!id||producer?.sharedOnly){setNameSuggestions([]);return}
   let active=true;
@@ -265,7 +266,7 @@ export function ProducerDetailPage(){
  // concepts back through counts, stale warnings, correction tools or source copy.
  const visibleSources=rangeAllowed?producer.sources:producer.sources.filter(source=>!/\b(?:wine )?range\b|\bcatalog(?:ue)?\b/i.test(source.title));
  const sourceWebsiteCount=new Set(visibleSources.map(source=>sourceHost(source.url)).filter(Boolean)).size;
- const profileStale=isResearchStale(producer.profileResearchedAt),rangeStale=rangeAllowed&&isResearchStale(producer.researchedAt),staleLabel=profileStale&&rangeStale?'profile & range':profileStale?'profile':rangeStale?'range':'';
+ const profileStale=isResearchStale(producer.profileResearchedAt),rangeStale=rangeAllowed&&isResearchStale(producer.researchedAt),staleLabel=profileStale&&rangeStale?'profile & range':profileStale?'profile':rangeStale?'range':'',hasProducerResearch=Boolean(producer.profile||producer.researchedAt);
  return <article className="producer-detail"><Link className="back-pill" to={back.to}>← {back.label}</Link>
   <header className={`producer-header${producer.heroImageAvailable?' has-hero':''}`}>
    {producer.heroImageAvailable&&<ProducerHeroImage producerId={producer.id} alt={`${producer.canonicalName} domaine`}/>}<div className="producer-header-shade"/>
@@ -280,8 +281,8 @@ export function ProducerDetailPage(){
    </li>)}</ul>
   </section>}
   {error&&<p className="producer-error" role="alert">{error}</p>}{friendOperation&&<FriendResearchStatus operationId={friendOperation} onComplete={()=>window.location.reload()}/>}{notice&&<p className="producer-notice" role="status">{notice}</p>}
-  <section className="detail-section"><div className="producer-section-title"><div><p className="section-label">Producer research</p><h2>{rangeAllowed?'Profile & range':'Producer profile'}</h2></div>{!producer.sharedOnly&&<><button type="button" className="primary" disabled={researching} onClick={()=>void runResearch()}>{researching?'Research running…':rangeAllowed&&producer.researchedAt?'Refresh wine range':'Research producer'}</button>{(producer.profile||producer.researchedAt)&&<button type="button" disabled={researching} onClick={()=>void runResearch(true)}>{rangeAllowed?'Refresh profile & range':'Refresh profile'}</button>}</>}</div>
-   {researchRun&&<div className={`producer-research-status ${researchRun.status}`} role="status" aria-live="polite"><div><strong>{stageLabel[researchRun.stage]}</strong>{technicalView&&<span>{researchRun.message}</span>}</div><div><strong>{researching?<ElapsedSeconds startedAt={researchRun.startedAt}/>:researchRun.durationMs!=null?`${(researchRun.durationMs/1000).toFixed(1)}s`:''}</strong><small>{technicalView?'Request':'Support ID'} {researchRun.requestId}</small></div>{researching&&<><p>This is a background job. You can leave this page or close WineLog; the saved result will appear automatically when you return.</p><button type="button" className="secondary-danger" disabled={researchCancelling} onClick={cancelResearch}>{researchCancelling?'Cancelling…':'Cancel Deep Search'}</button></>}</div>}
+  <section className="detail-section"><div className="producer-section-title"><div><p className="section-label">Producer research</p><h2>{rangeAllowed?'Profile & range':'Producer profile'}</h2></div>{!producer.sharedOnly&&(memberView?<button type="button" className="primary" disabled={researching} onClick={()=>void runResearch(hasProducerResearch)}>{researching?'Research running…':hasProducerResearch?'Refresh profile':'Research producer'}</button>:<><button type="button" className="primary" disabled={researching} onClick={()=>void runResearch()}>{researching?'Research running…':rangeAllowed&&producer.researchedAt?'Refresh wine range':'Research producer'}</button>{hasProducerResearch&&<button type="button" disabled={researching} onClick={()=>void runResearch(true)}>{rangeAllowed?'Refresh profile & range':'Refresh profile'}</button>}</>)}</div>
+   {researchRun&&(!memberView||researchRun.status!=='complete')&&<div className={`producer-research-status ${researchRun.status}`} role="status" aria-live="polite"><div><strong>{stageLabel[researchRun.stage]}</strong>{technicalView&&<span>{researchRun.message}</span>}</div><div><strong>{researching?<ElapsedSeconds startedAt={researchRun.startedAt}/>:researchRun.durationMs!=null?`${(researchRun.durationMs/1000).toFixed(1)}s`:''}</strong><small>{technicalView?'Request':'Support ID'} {researchRun.requestId}</small></div>{researching&&<><p>This is a background job. You can leave this page or close WineLog; the saved result will appear automatically when you return.</p><button type="button" className="secondary-danger" disabled={researchCancelling} onClick={cancelResearch}>{researchCancelling?'Cancelling…':'Cancel Deep Search'}</button></>}</div>}
    {producer.profile?<p className="producer-profile">{producer.profile}</p>:<p>{producer.sharedOnly?'No shared producer profile is available yet.':rangeAllowed?'Research this producer to establish its physical base, broad region and commune, public contact details, official website, general producer-wide practices, header image and a sourced current/recent wine range.':'Research this producer to establish its physical base, broad region and commune, public contact details, official website, general producer-wide practices and header image.'}</p>}
    {producer.winemakingPractices&&<div className="producer-practices"><p className="section-label">General winemaking practices</p><p className="producer-profile">{producer.winemakingPractices}</p><small>Producer-wide context only. Exact cuvée/vintage techniques are researched separately on the wine page.</small></div>}
    <ProducerContacts producer={producer} onChanged={reload} readOnly={producer.sharedOnly}/>
