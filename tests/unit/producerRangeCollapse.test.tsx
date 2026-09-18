@@ -85,6 +85,15 @@ describe('Producer wine range',()=>{
     expect(host!.textContent).not.toContain('Research complete');
   });
 
+  it('keeps inherited friend research visible while offering the member their own research action',async()=>{
+    await render({profile:'Profile researched by a friend.',researchedAt:'2026-09-01T00:00:00.000Z',profileResearchedAt:null,researchContributorId:'alice'},{role:'member'});
+    expect(host!.textContent).toContain('Profile researched by a friend.');
+    expect(byLabel('Research producer')).toBeTruthy();
+    expect(byLabel('Refresh profile')).toBeUndefined();
+    await click(byLabel('Research producer')!);
+    expect(posted[0]).toMatchObject({url:'/api/producers/p1/research',body:{refreshProfile:true,confirmation:'RUN_PRODUCER_RESEARCH'}});
+  });
+
   it('groups the range by style and starts expanded',async()=>{
     await render();
     expect(groups()).toHaveLength(2);

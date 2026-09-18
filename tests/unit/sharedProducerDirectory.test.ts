@@ -2,6 +2,7 @@ import { describe,expect,it } from 'vitest';
 import { migratedSqliteD1 } from './support/sqliteD1';
 import app from '../../worker/cuveeEntry';
 import { createSession } from '../../src/lib/auth/session';
+import { reusableProducer } from '../../src/lib/research/sharedProducer';
 
 const AUTH_SECRET='shared-producer-test-secret-long-enough';
 
@@ -34,6 +35,10 @@ describe('shared producers in the recipient library',()=>{
       expect(payload.items[0]).toMatchObject({canonicalName:'Domaine Test',tastedCount:1,sharedOnly:true});
       expect(payload.items[0].id).toMatch(/^shared::alice::producer-alice$/);
       expect(Number(sqlite.prepare("SELECT count(*) AS n FROM producers WHERE owner_id='bob'").get()!.n)).toBe(0);
+
+      const resolved=await app.fetch(new Request('https://x/api/producers/resolve?name=Domaine%20Test',{headers:auth}),env,context);
+      expect(resolved.status).toBe(200);
+      expect(await resolved.json()).toMatchObject({matched:true,inputName:'Domaine Test',producer:{canonicalName:'Domaine Test',sharedOnly:true,id:'shared::alice::producer-alice'}});
 
       const detail=await app.fetch(new Request(`https://x/api/producers/${payload.items[0].id}`,{headers:auth}),env,context);
       expect(detail.status).toBe(200);
@@ -75,6 +80,10 @@ describe('shared producers in the recipient library',()=>{
       const producer=await detail.json() as {tastedWines:Array<{id:string;shared?:boolean}>};
       expect(new Set(producer.tastedWines.map(wine=>wine.id))).toEqual(new Set(['wine-owned','wine-shared']));
       expect(producer.tastedWines.find(wine=>wine.id==='wine-shared')?.shared).toBe(true);
+      sqlite.prepare("UPDATE producers SET profile='A profile researched by Alice',winemaking_practices='Whole-cluster varies by cuvée',sources_json='[{\"title\":\"Producer site\",\"url\":\"https://example.com\"}]',researched_at=?,profile_researched_at=? WHERE id='producer-alice'").run(stamp,stamp);
+      const inherited=await reusableProducer(db,'bob','producer-bob');
+      expect(inherited).toMatchObject({profile:'A profile researched by Alice',winemakingPractices:'Whole-cluster varies by cuvée',researchContributorId:'alice'});
+      expect((inherited as {catalog?:unknown[]}).catalog).toEqual([]);
     }finally{sqlite.close()}
   });
 });

@@ -10,6 +10,7 @@ import { getProducerResearchRun } from '../src/lib/producers/research';
 import { createManualProducerContact,deleteManualProducerContact,listManualProducerContacts,updateManualProducerContact } from '../src/lib/producers/manualContacts';
 import { applyCatalogDecisions,deleteCatalogDecision,listCatalogDecisions,saveCatalogDecision } from '../src/lib/producers/catalogDecisions';
 import { parseSharedProducerId,sharedProducerId } from '../src/lib/producers/sharedRef';
+import { resolveVisibleSharedProducer } from '../src/lib/research/sharedProducer';
 import { selectRecognitionMetadata,type RecognitionPhotoMetadata } from '../src/lib/uploads/metadataSelection';
 import { isAiUsageRunHistoryKind,usageRunHistory,usageSummary } from '../src/lib/usage/aiUsage';
 import { seedAiUsageOnce } from '../src/lib/usage/seedFromResearchJobs';
@@ -134,6 +135,8 @@ app.get('/api/producers/resolve',async c=>{
   try{
     const producer=await resolveExistingProducer(c.env.DB,owner,name);
     if(producer)return c.json({matched:true,inputName:name,producer});
+    const shared=await resolveVisibleSharedProducer(c.env.DB,owner,name);
+    if(shared)return c.json({matched:true,inputName:name,producer:shared});
     // Only when nothing matched: the scan of the producer list is cheap but it
     // is not free, and a name that already resolved has nothing to suggest.
     const suggestion=await suggestExistingProducer(c.env.DB,owner,name).catch(()=>null);
