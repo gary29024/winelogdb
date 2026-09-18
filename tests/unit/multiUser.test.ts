@@ -16,6 +16,8 @@ import { flushOutbox,durableQueue,maintainJobs } from '../../worker/multiUser/jo
 import { meteredBucket } from '../../worker/multiUser/storage';
 import { wineSaveStatements } from '../../src/lib/db/wineSave';
 import type { WineInput } from '../../src/lib/db/schema';
+import { listJournalPage } from '../../src/lib/journal/list';
+import { buildJourneyPayload } from '../../worker/journeyHandler';
 
 let database:ReturnType<typeof realD1>;
 const member=(id:string):Member=>({id,email:`${id}@example.com`,display_name:id,role:id==='owner'?'owner':'member',status:'active'});
@@ -166,6 +168,33 @@ describe('credit transactions',()=>{
  });
  it('includes outstanding work in the provider budget',async()=>{
   const q=await quote(request(),env(),member('alice'));await expect(reserve(request('{}',{'X-WineLog-Quote':q.id,'Idempotency-Key':'budget'}),env(),member('alice'),100)).rejects.toMatchObject({status:409});
+ });
+});
+describe('shared wines as recipient journal history',()=>{
+ it('merges a shared wine into Journal and Journey without copying private owner fields',async()=>{
+  database.sql.exec(`
+   INSERT INTO friendships(user_id,friend_id) VALUES('alice','bob'),('bob','alice');
+   INSERT INTO wines(id,owner_id,producer,wine_name,vintage,country,region,appellation,grapes_json,wine_style,tasting_notes,rating,tasting_date,venue,price,currency,created_at,updated_at)
+   VALUES('shared-history','alice','Domaine Shared','Clos Shared',2022,'France','Burgundy','Volnay','["Pinot Noir"]','red','Floral and fine',93,'2026-09-10','Private home',888,'HKD','2026-09-10T12:00:00Z','2026-09-10T12:00:00Z');
+   INSERT INTO wine_shares(wine_id,owner_id,recipient_id,created_at) VALUES('shared-history','alice','bob','2026-09-11T12:00:00Z');
+  `);
+  const journal=await listJournalPage(database.db,'bob',{});
+  expect(journal.total).toBe(1);
+  expect(journal.items[0]).toMatchObject({id:'shared-history',producer:'Domaine Shared',shared:true,sharedBy:'alice',venue:null,favorite:false});
+  expect(journal.items[0].imageIds).toEqual([]);
+
+  const journey=await buildJourneyPayload(database.db,'bob',true) as {
+   summary:{totalWines:number;pricedWines:number};
+   countries:Array<{country:string;wines:number}>;
+   currencies:unknown[];
+   recentTastings:Array<{id:string;shared:boolean;sharedBy:string|null}>;
+  };
+  expect(journey.summary.totalWines).toBe(1);
+  expect(journey.summary.pricedWines).toBe(0);
+  expect(journey.countries).toContainEqual(expect.objectContaining({country:'France',wines:1}));
+  expect(journey.currencies).toEqual([]);
+  expect(journey.recentTastings[0]).toMatchObject({id:'shared-history',shared:true,sharedBy:'alice'});
+  expect(database.sql.prepare("SELECT count(*) AS n FROM wines WHERE owner_id='bob'").get()!.n).toBe(0);
  });
 });
 describe('sharing boundaries',()=>{

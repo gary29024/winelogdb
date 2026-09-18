@@ -99,4 +99,14 @@ describe('starter achievement definitions',()=>{
       {id:'michelin-grapes',authority:'MICHELIN Guide',region:'Burgundy',edition:2026,tier:'selected'}
     ]);
   });
+
+  it('counts an explicitly shared matching wine as tasted and marks its link read-only',()=>{
+    const definition=oneItem({type:'producer',producerNames:['Shared Domaine']});
+    const result=buildAchievementProgress(definition,{producers:[],cuvees:[]},[
+      {id:'shared-wine',producer:'Shared Domaine',wineName:'Village Red',vintage:2022,shared:true}
+    ]);
+    expect(result.completed).toBe(1);
+    expect(result.items[0]).toMatchObject({status:'tasted',tastedWineIds:['shared-wine'],tastedSharedWineIds:['shared-wine']});
+    expect(result.items[0].tastedVintageLinks).toEqual([{vintage:2022,wineId:'shared-wine',shared:true}]);
+  });
 });

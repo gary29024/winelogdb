@@ -77,7 +77,7 @@ export async function buildJourneyPayload(db:D1Database,owner:string,includeShar
       FROM ${wineTable} WHERE owner_id=? AND region IS NOT NULL AND trim(region)<>''
       GROUP BY NULLIF(trim(country),''),trim(region) ORDER BY wines DESC,region ASC LIMIT 400`).bind(owner),
     db.prepare(`SELECT NULLIF(trim(country),'') country,NULLIF(trim(region),'') region,trim(appellation) appellation,
-      COUNT(*) wines,AVG(rating) average_rating FROM wines
+      COUNT(*) wines,AVG(rating) average_rating FROM ${wineTable}
       WHERE owner_id=? AND appellation IS NOT NULL AND trim(appellation)<>''
       GROUP BY NULLIF(trim(country),''),NULLIF(trim(region),''),trim(appellation)
       ORDER BY wines DESC,appellation ASC LIMIT 24`).bind(owner),
@@ -91,7 +91,7 @@ export async function buildJourneyPayload(db:D1Database,owner:string,includeShar
     // ever got attached to the bottle.
     db.prepare(`SELECT MAX(producer) producer,COUNT(*) wines,COUNT(rating) rated_wines,AVG(rating) average_rating,
       SUM(CASE WHEN favorite=1 THEN 1 ELSE 0 END) favorites,
-      MAX(COALESCE(NULLIF(tasting_date,''),created_at)) last_tasted FROM wines
+      MAX(COALESCE(NULLIF(tasting_date,''),created_at)) last_tasted FROM ${wineTable}
       WHERE owner_id=? GROUP BY ${producerKey}
       HAVING COUNT(*)>=2 ORDER BY wines DESC,last_tasted DESC,producer ASC LIMIT 10`).bind(owner),
     db.prepare(`SELECT upper(trim(currency)) currency,COUNT(*) wines,AVG(price) average_price,AVG(rating) average_rating
@@ -153,7 +153,7 @@ export async function buildJourneyPayload(db:D1Database,owner:string,includeShar
     // Where a wine sits in a classified hierarchy, for the countries that have
     // one. Null everywhere else, so the card only appears when there is a mix.
     db.prepare(`SELECT classification,COUNT(*) wines,
-      SUM(CASE WHEN favorite=1 THEN 1 ELSE 0 END) favorites FROM wines
+      SUM(CASE WHEN favorite=1 THEN 1 ELSE 0 END) favorites FROM ${wineTable}
       WHERE owner_id=? AND classification IS NOT NULL AND trim(classification)<>''
       GROUP BY classification`).bind(owner),
     // How old a bottle is when it gets opened. Ages are bucketed in SQL so the
