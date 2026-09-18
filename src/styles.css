@@ -94,7 +94,9 @@
     --warn:#dcaa5e;--warn-line:#574627;--warn-wash:#2a2317;
     --bad:#f0808f;--bad-ink:#f5a3af;--bad-line:#5e2a35;--bad-wash:#2a171c;
     --danger:#b3243c;
-    --shared-wash:#241d2e;--shared-line:#4b3a5d;--shared-ink:#d1b8e5;
+    /* Shared journal cards need a clearly distinct lilac surface in dark mode;
+       the previous wash sat almost on top of --paper and was easy to miss. */
+    --shared-wash:#30243f;--shared-line:#73588c;--shared-ink:#e1c8f3;
 
     --pour:#212a3b;--pour-ink:#8f9bb1;
     --pour-red:#2c171d;--pour-red-ink:#f0909f;
