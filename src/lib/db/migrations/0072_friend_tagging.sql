@@ -3,7 +3,57 @@
 -- allowance. Existing shared/ objects are reclassified on migration.
 ALTER TABLE stored_objects ADD COLUMN counts_toward_member_limit INTEGER NOT NULL DEFAULT 1 CHECK(counts_toward_member_limit IN (0,1));
 UPDATE stored_objects SET counts_toward_member_limit=0 WHERE object_key LIKE 'shared/%';
-CREATE INDEX idx_stored_objects_member_meter ON stored_objects(owner_id,counts_toward_member_limit);
+
+-- Keep both physical bytes and the bytes that consume a member allowance.
+-- The deployment '*' row remains physical usage, while member rows can exclude
+-- WineLog-generated privacy derivatives without a live SUM() on every upload.
+ALTER TABLE storage_totals ADD COLUMN metered_byte_size INTEGER NOT NULL DEFAULT 0 CHECK(metered_byte_size>=0);
+UPDATE storage_totals
+SET metered_byte_size=CASE
+  WHEN owner_id='*' THEN byte_size
+  ELSE coalesce((SELECT sum(s.byte_size) FROM stored_objects s WHERE s.owner_id=storage_totals.owner_id AND s.counts_toward_member_limit=1),0)
+END;
+
+DROP TRIGGER IF EXISTS storage_insert;
+DROP TRIGGER IF EXISTS storage_update;
+DROP TRIGGER IF EXISTS storage_delete;
+
+CREATE TRIGGER storage_insert AFTER INSERT ON stored_objects BEGIN
+ INSERT INTO storage_totals(owner_id,byte_size,metered_byte_size)
+ VALUES(new.owner_id,new.byte_size,CASE WHEN new.counts_toward_member_limit=1 THEN new.byte_size ELSE 0 END)
+ ON CONFLICT(owner_id) DO UPDATE SET
+   byte_size=byte_size+new.byte_size,
+   metered_byte_size=metered_byte_size+CASE WHEN new.counts_toward_member_limit=1 THEN new.byte_size ELSE 0 END;
+ UPDATE storage_totals
+ SET byte_size=byte_size+new.byte_size,metered_byte_size=metered_byte_size+new.byte_size
+ WHERE owner_id='*';
+END;
+
+CREATE TRIGGER storage_update AFTER UPDATE ON stored_objects BEGIN
+ UPDATE storage_totals SET
+   byte_size=byte_size+new.byte_size-old.byte_size,
+   metered_byte_size=metered_byte_size
+     +CASE WHEN new.counts_toward_member_limit=1 THEN new.byte_size ELSE 0 END
+     -CASE WHEN old.counts_toward_member_limit=1 THEN old.byte_size ELSE 0 END
+ WHERE owner_id=new.owner_id;
+ UPDATE storage_totals SET
+   byte_size=byte_size+new.byte_size-old.byte_size,
+   metered_byte_size=metered_byte_size+new.byte_size-old.byte_size
+ WHERE owner_id='*';
+END;
+
+CREATE TRIGGER storage_delete AFTER DELETE ON stored_objects BEGIN
+ UPDATE storage_totals SET
+   byte_size=byte_size-old.byte_size,
+   metered_byte_size=metered_byte_size-CASE WHEN old.counts_toward_member_limit=1 THEN old.byte_size ELSE 0 END
+ WHERE owner_id=old.owner_id;
+ UPDATE storage_totals SET
+   byte_size=byte_size-old.byte_size,
+   metered_byte_size=metered_byte_size-old.byte_size
+ WHERE owner_id='*';
+END;
+
+CREATE INDEX idx_stored_objects_member_meter ON stored_objects(owner_id,counts_toward_member_limit,byte_size);
 
 -- Friend tagging preferences and tasting-level sharing.
 -- Direct wine_shares remains the explicit per-wine override. A tasting share is

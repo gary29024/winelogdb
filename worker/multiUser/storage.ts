@@ -10,7 +10,7 @@ export function meteredBucket(bucket:R2Bucket,db:D1Database,owner:string,policy:
    if(previous&&previous.owner_id!==owner)throw new ApiError(403,'Object belongs to another account');
    const memberMetered=policy.countsTowardMemberLimit===false?0:1;
    const result=await db.prepare(`INSERT INTO stored_objects(object_key,owner_id,byte_size,counts_toward_member_limit,updated_at)
-    SELECT ?,?,?,?,? WHERE (?=1 OR ?=0 OR coalesce((SELECT sum(byte_size) FROM stored_objects WHERE owner_id=? AND counts_toward_member_limit=1),0)+?-coalesce((SELECT byte_size FROM stored_objects WHERE object_key=? AND counts_toward_member_limit=1),0)<=?)
+    SELECT ?,?,?,?,? WHERE (?=1 OR ?=0 OR coalesce((SELECT metered_byte_size FROM storage_totals WHERE owner_id=?),0)+?-coalesce((SELECT CASE WHEN counts_toward_member_limit=1 THEN byte_size ELSE 0 END FROM stored_objects WHERE object_key=?),0)<=?)
     AND (?=0 OR coalesce((SELECT byte_size FROM storage_totals WHERE owner_id='*'),0)+?-coalesce((SELECT byte_size FROM stored_objects WHERE object_key=?),0)<=?)
     ON CONFLICT(object_key) DO UPDATE SET byte_size=excluded.byte_size,counts_toward_member_limit=excluded.counts_toward_member_limit,updated_at=excluded.updated_at`).bind(
       objectKey,owner,length,memberMetered,stamp(),

@@ -3,6 +3,7 @@ import { ApiError,body,boundedBytes,json,stamp,type IdentityEnv,type Member } fr
 import { similarFriendProducers } from '../../src/lib/research/similarProducers';
 import { rememberProducerAlias } from '../../src/lib/research/aliasBridge';
 import type { SharedWine } from '../../src/lib/wine/shared';
+import { meteredBucket } from './storage';
 
 // Explicit allowlist: never serialize the private WineRecord into a shared response.
 export function sharedWine(row:Record<string,unknown>):SharedWine{
@@ -54,7 +55,48 @@ export function stripJpegMetadata(bytes:Uint8Array):Uint8Array{
  if(!scan||!ended)throw new ApiError(400,'Invalid JPEG scan');
  const result=new Uint8Array(parts.reduce((sum,x)=>sum+x.length,0));let pos=0;for(const part of parts){result.set(part,pos);pos+=part.length}return result;
 }
-export async function socialRoute(request:Request,env:IdentityEnv&{WINE_IMAGES:R2Bucket},member:Member):Promise<Response|null>{
+type SocialEnv=IdentityEnv&{WINE_IMAGES:R2Bucket;IMAGES?:ImagesBinding};
+
+function sharingBucket(env:SocialEnv,owner:string){
+ return meteredBucket(env.WINE_IMAGES,env.DB,owner,{skipMemberLimit:true,countsTowardMemberLimit:false});
+}
+
+async function ensureSharingPhoto(env:SocialEnv,owner:string,image:{id:string;object_key:string}){
+ if(!env.IMAGES)return false;
+ if(await env.DB.prepare('SELECT 1 FROM shared_photos WHERE image_id=? AND owner_id=?').bind(image.id,owner).first())return true;
+ try{
+  const original=await env.WINE_IMAGES.get(image.object_key);if(!original)return false;
+  const output=await env.IMAGES.input(original.body).transform({width:1600,height:1600,fit:'scale-down'}).output({format:'image/jpeg',quality:80,anim:false});
+  const response=output.response();if(!response.ok)throw new Error(`Sharing image transform returned ${response.status}`);
+  const bytes=stripJpegMetadata(new Uint8Array(await response.arrayBuffer())),key=`shared/${owner}/${image.id}.jpg`;
+  await sharingBucket(env,owner).put(key,bytes,{httpMetadata:{contentType:'image/jpeg'},storageClass:'Standard'});
+  await env.DB.prepare('INSERT INTO shared_photos(image_id,owner_id,object_key,byte_size) VALUES(?,?,?,?) ON CONFLICT(image_id) DO UPDATE SET object_key=excluded.object_key,byte_size=excluded.byte_size,created_at=?').bind(image.id,owner,key,bytes.length,stamp()).run();
+  return true;
+ }catch(error){
+  console.warn(JSON.stringify({event:'sharing-photo-prepare-failed',imageId:image.id,error:(error as Error).message}));
+  return false;
+ }
+}
+
+export const SHARED_WINES_LIST_SQL=`WITH accessible(wine_id,owner_id,shared_at) AS (
+ SELECT s.wine_id,s.owner_id,s.created_at FROM wine_shares s WHERE s.recipient_id=?
+ UNION ALL
+ SELECT we.wine_id,ts.owner_id,ts.created_at
+ FROM tasting_shares ts
+ JOIN wine_experiences we ON we.owner_id=ts.owner_id AND we.tasting_id=ts.tasting_id
+ WHERE ts.recipient_id=?
+), latest AS (
+ SELECT wine_id,owner_id,max(shared_at) AS shared_at
+ FROM accessible GROUP BY wine_id,owner_id
+)
+SELECT w.*,u.display_name,a.shared_at
+FROM latest a
+JOIN wines w ON w.id=a.wine_id AND w.owner_id=a.owner_id
+JOIN friendships f ON f.user_id=? AND f.friend_id=w.owner_id
+JOIN app_users u ON u.id=w.owner_id AND u.status='active'
+ORDER BY a.shared_at DESC,w.id LIMIT 25 OFFSET ?`;
+
+export async function socialRoute(request:Request,env:SocialEnv,member:Member):Promise<Response|null>{
  const url=new URL(request.url),path=url.pathname;
  const friendRequest=await friendRequestRoute(request,env,member);if(friendRequest)return friendRequest;
 
@@ -86,7 +128,7 @@ export async function socialRoute(request:Request,env:IdentityEnv&{WINE_IMAGES:R
  if(defaultShare&&request.method==='PUT'){
   const data=await body(request),friendId=defaultShare[1];
   if(!await env.DB.prepare('SELECT 1 FROM friendships WHERE user_id=? AND friend_id=?').bind(member.id,friendId).first())throw new ApiError(400,'Only accepted friends can be a default tag');
-  if(data.enabled===true)await env.DB.prepare('INSERT OR IGNORE INTO member_share_defaults(owner_id,recipient_id) VALUES(?,?)').bind(member.id,friendId).run();
+  if(data.enabled===true)await env.DB.prepare('INSERT OR IGNORE INTO member_share_defaults(owner_id,recipient_id) SELECT ?,? WHERE EXISTS(SELECT 1 FROM friendships WHERE user_id=? AND friend_id=?)').bind(member.id,friendId,member.id,friendId).run();
   else if(data.enabled===false)await env.DB.prepare('DELETE FROM member_share_defaults WHERE owner_id=? AND recipient_id=?').bind(member.id,friendId).run();
   else throw new ApiError(400,'Choose whether this friend is tagged by default');
   return json({ok:true});
@@ -105,10 +147,10 @@ export async function socialRoute(request:Request,env:IdentityEnv&{WINE_IMAGES:R
   const data=await body(request);
   if(!Array.isArray(data.wineIds)||!data.wineIds.length||data.wineIds.length>500||data.wineIds.some(id=>typeof id!=='string'))throw new ApiError(400,'Choose between 1 and 500 wines');
   if(!Array.isArray(data.recipientIds)||data.recipientIds.some(id=>typeof id!=='string'))throw new ApiError(400,'Choose valid friends');
+  if(data.mode!=='add'&&data.mode!=='set')throw new ApiError(400,'Unknown tagging mode');
   const wineIds=[...new Set(data.wineIds as string[])],ids=await acceptedFriendIds(env.DB,member.id,data.recipientIds as string[]);
   const owned=await env.DB.prepare('SELECT count(*) AS count FROM wines WHERE owner_id=? AND id IN (SELECT value FROM json_each(?))').bind(member.id,JSON.stringify(wineIds)).first<{count:number}>();
   if(Number(owned?.count)!==wineIds.length)throw new ApiError(404,'One or more wines were not found');
-  if(data.mode!=='add'&&data.mode!=='set')throw new ApiError(400,'Unknown tagging mode');
   const statements:D1PreparedStatement[]=[];
   if(data.mode==='set')statements.push(env.DB.prepare('DELETE FROM wine_shares WHERE owner_id=? AND wine_id IN (SELECT value FROM json_each(?))').bind(member.id,JSON.stringify(wineIds)));
   if(ids.length)statements.push(env.DB.prepare(`INSERT OR IGNORE INTO wine_shares(wine_id,owner_id,recipient_id)
@@ -126,7 +168,7 @@ export async function socialRoute(request:Request,env:IdentityEnv&{WINE_IMAGES:R
   if(request.method==='PUT'){
    const data=await body(request);if(!Array.isArray(data.recipientIds)||data.recipientIds.some(id=>typeof id!=='string'))throw new ApiError(400,'Choose valid friends');
    const ids=await acceptedFriendIds(env.DB,member.id,data.recipientIds as string[]);
-   await env.DB.batch([env.DB.prepare('DELETE FROM tasting_shares WHERE tasting_id=? AND owner_id=?').bind(tastingShares[1],member.id),...ids.map(id=>env.DB.prepare('INSERT INTO tasting_shares(tasting_id,owner_id,recipient_id) VALUES(?,?,?)').bind(tastingShares[1],member.id,id))]);
+   await env.DB.batch([env.DB.prepare('DELETE FROM tasting_shares WHERE tasting_id=? AND owner_id=?').bind(tastingShares[1],member.id),...ids.map(id=>env.DB.prepare('INSERT INTO tasting_shares(tasting_id,owner_id,recipient_id) SELECT ?,?,? WHERE EXISTS(SELECT 1 FROM friendships WHERE user_id=? AND friend_id=?)').bind(tastingShares[1],member.id,id,member.id,id))]);
    return json({ok:true});
   }
  }
@@ -137,7 +179,7 @@ export async function socialRoute(request:Request,env:IdentityEnv&{WINE_IMAGES:R
   if(request.method==='PUT'){
    const data=await body(request);if(!Array.isArray(data.recipientIds)||data.recipientIds.some(x=>typeof x!=='string'))throw new ApiError(400,'Choose valid friends');
    const ids=await acceptedFriendIds(env.DB,member.id,data.recipientIds as string[]);
-   await env.DB.batch([env.DB.prepare('DELETE FROM wine_shares WHERE wine_id=? AND owner_id=?').bind(shares[1],member.id),...ids.map(id=>env.DB.prepare('INSERT INTO wine_shares(wine_id,owner_id,recipient_id) VALUES(?,?,?)').bind(shares[1],member.id,id))]);return json({ok:true});
+   await env.DB.batch([env.DB.prepare('DELETE FROM wine_shares WHERE wine_id=? AND owner_id=?').bind(shares[1],member.id),...ids.map(id=>env.DB.prepare('INSERT INTO wine_shares(wine_id,owner_id,recipient_id) SELECT ?,?,? WHERE EXISTS(SELECT 1 FROM friendships WHERE user_id=? AND friend_id=?)').bind(shares[1],member.id,id,member.id,id))]);return json({ok:true});
   }
  }
  const derivative=path.match(/^\/api\/images\/([^/]+)\/sharing-copy$/);
@@ -146,23 +188,12 @@ export async function socialRoute(request:Request,env:IdentityEnv&{WINE_IMAGES:R
   if(Number(request.headers.get('Content-Length'))>2_000_000)throw new ApiError(413,'Sharing copy is too large');
   const raw=await boundedBytes(request.body,2_000_000);
   const bytes=stripJpegMetadata(raw),key=`shared/${member.id}/${derivative[1]}.jpg`;
-  await env.WINE_IMAGES.put(key,bytes,{httpMetadata:{contentType:'image/jpeg'}});
+  await sharingBucket(env,member.id).put(key,bytes,{httpMetadata:{contentType:'image/jpeg'},storageClass:'Standard'});
   await env.DB.prepare('INSERT INTO shared_photos(image_id,owner_id,object_key,byte_size) VALUES(?,?,?,?) ON CONFLICT(image_id) DO UPDATE SET byte_size=excluded.byte_size,created_at=?').bind(derivative[1],member.id,key,bytes.length,stamp()).run();return json({ok:true});
  }
  if(path==='/api/shared/wines'&&request.method==='GET'){
   const offset=Math.max(0,Math.min(100000,Number(url.searchParams.get('offset'))||0));
-  const rows=await env.DB.prepare(`SELECT w.*,u.display_name,
-   max(
-     coalesce((SELECT max(s.created_at) FROM wine_shares s WHERE s.wine_id=w.id AND s.owner_id=w.owner_id AND s.recipient_id=?),''),
-     coalesce((SELECT max(ts.created_at) FROM tasting_shares ts JOIN wine_experiences we ON we.owner_id=ts.owner_id AND we.tasting_id=ts.tasting_id AND we.wine_id=w.id WHERE ts.owner_id=w.owner_id AND ts.recipient_id=?),'')
-   ) AS shared_at
-  FROM wines w
-  JOIN friendships f ON f.user_id=? AND f.friend_id=w.owner_id
-  JOIN app_users u ON u.id=w.owner_id AND u.status='active'
-  WHERE EXISTS(SELECT 1 FROM wine_shares s WHERE s.wine_id=w.id AND s.owner_id=w.owner_id AND s.recipient_id=?)
-     OR EXISTS(SELECT 1 FROM tasting_shares ts JOIN wine_experiences we ON we.owner_id=ts.owner_id AND we.tasting_id=ts.tasting_id AND we.wine_id=w.id
-       WHERE ts.owner_id=w.owner_id AND ts.recipient_id=?)
-  ORDER BY shared_at DESC,w.id LIMIT 25 OFFSET ?`).bind(member.id,member.id,member.id,member.id,member.id,offset).all<Record<string,unknown>>();return json({items:rows.results.map(sharedWine),nextOffset:rows.results.length===25?offset+25:null});
+  const rows=await env.DB.prepare(SHARED_WINES_LIST_SQL).bind(member.id,member.id,member.id,offset).all<Record<string,unknown>>();return json({items:rows.results.map(sharedWine),nextOffset:rows.results.length===25?offset+25:null});
  }
  const shared=path.match(/^\/api\/shared\/wines\/([^/]+)(?:\/photos\/([^/]+))?$/);
  if(shared&&request.method==='GET'){
@@ -171,7 +202,9 @@ export async function socialRoute(request:Request,env:IdentityEnv&{WINE_IMAGES:R
    const row=await env.DB.prepare('SELECT p.object_key FROM shared_photos p JOIN wine_images i ON i.id=p.image_id AND i.owner_id=p.owner_id WHERE i.wine_id=? AND i.id=? AND i.owner_id=?').bind(shared[1],shared[2],wine.owner_id).first<{object_key:string}>();if(!row)throw new ApiError(404,'Photo not found');
    const object=await env.WINE_IMAGES.get(row.object_key);if(!object)throw new ApiError(404,'Photo not found');return new Response(object.body,{headers:{'Content-Type':'image/jpeg','Cache-Control':'private, no-store','X-Content-Type-Options':'nosniff'}});
   }
-  const photos=(await env.DB.prepare('SELECT p.image_id FROM shared_photos p JOIN wine_images i ON i.id=p.image_id AND i.owner_id=p.owner_id WHERE i.wine_id=? AND i.owner_id=?').bind(shared[1],wine.owner_id).all<{image_id:string}>()).results;
+  const images=(await env.DB.prepare('SELECT i.id,i.object_key FROM wine_images i LEFT JOIN shared_photos p ON p.image_id=i.id AND p.owner_id=i.owner_id WHERE i.wine_id=? AND i.owner_id=? AND p.image_id IS NULL ORDER BY i.rowid').bind(shared[1],wine.owner_id).all<{id:string;object_key:string}>()).results;
+  for(const image of images)await ensureSharingPhoto(env,String(wine.owner_id),image);
+  const photos=(await env.DB.prepare('SELECT p.image_id FROM shared_photos p JOIN wine_images i ON i.id=p.image_id AND i.owner_id=p.owner_id WHERE i.wine_id=? AND i.owner_id=? ORDER BY i.rowid').bind(shared[1],wine.owner_id).all<{image_id:string}>()).results;
   return json({...sharedWine(wine),photos:photos.map(p=>({id:p.image_id,url:`/api/shared/wines/${shared[1]}/photos/${p.image_id}`}))});
  }
  return null;

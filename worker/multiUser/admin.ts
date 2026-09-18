@@ -51,7 +51,7 @@ export async function adminRoute(request:Request,env:IdentityEnv&AiRateEnv,membe
    env.DB.prepare('SELECT u.*,w.balance,w.reserved FROM app_users u JOIN credit_wallets w ON w.user_id=u.id ORDER BY u.created_at').all(),
    env.DB.prepare('SELECT * FROM credit_prices ORDER BY created_at DESC LIMIT 100').all(),
    settings(env.DB).catch(()=>null),deploymentAiCost(env.DB,env),memberAiUsage(env.DB,env),
-   env.DB.prepare('SELECT * FROM storage_totals').all(),env.DB.prepare('SELECT * FROM rollout_state').all(),
+   env.DB.prepare('SELECT owner_id,byte_size,metered_byte_size FROM storage_totals').all(),env.DB.prepare('SELECT * FROM rollout_state').all(),
    env.DB.prepare("SELECT id,user_id,path,status,reserved,created_at FROM credit_operations WHERE status='review' LIMIT 50").all(),
    memberAiPolicies(env.DB)
   ]);
