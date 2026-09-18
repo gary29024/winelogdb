@@ -57,12 +57,18 @@ export function referenceIdentityStatements(
     .bind(w.recognizedProducer??w.producer,w.recognizedWineName??w.wineName,w.recognizedVintageText??(w.vintage!=null?String(w.vintage):null),vintageKind,w.releaseDesignation??null,owner,wineId)
   :db.prepare(`UPDATE wines SET recognized_producer=?,recognized_wine_name=?,recognized_vintage_text=?,vintage_kind=?,release_designation=? WHERE owner_id=? AND id=?`)
     .bind(w.recognizedProducer??w.producer,w.recognizedWineName??w.wineName,w.recognizedVintageText??(w.vintage!=null?String(w.vintage):null),vintageKind,w.releaseDesignation??null,owner,wineId);
- const matched=w.identityMatchStatus==='matched'&&Boolean(w.lwin7);
- const identity=db.prepare(`UPDATE wines SET reference_product_key=?,lwin7=?,lwin11=?,elid=?,colour=?,product_type=?,product_subtype=?,
-   identity_match_status=?,identity_match_confidence=?,identity_matched_at=? WHERE owner_id=? AND id=?`)
-   .bind(matched?w.referenceProductKey??null:null,matched?w.lwin7??null:null,matched?w.lwin11??null:null,matched?w.elid??null:null,
-    matched?w.colour??null:null,matched?w.productType??null:null,matched?w.productSubtype??null:null,
-    w.identityMatchStatus??'unmatched',matched?w.identityMatchConfidence??1:null,matched?stamp:null,owner,wineId);
+ const lookupCompleted=w.identityMatchStatus!=null,matched=w.identityMatchStatus==='matched'&&Boolean(w.lwin7);
+ // A missing match after a completed lookup clears an old external mapping
+ // because the user may have changed the identity. A lookup that did not
+ // complete at all preserves the previous mapping on edits: an R2 hiccup must
+ // never make an otherwise-valid wine edit destructive.
+ const identity=updateExisting&&!lookupCompleted
+  ?db.prepare('UPDATE wines SET identity_match_status=identity_match_status WHERE owner_id=? AND id=?').bind(owner,wineId)
+  :db.prepare(`UPDATE wines SET reference_product_key=?,lwin7=?,lwin11=?,elid=?,colour=?,product_type=?,product_subtype=?,
+    identity_match_status=?,identity_match_confidence=?,identity_matched_at=? WHERE owner_id=? AND id=?`)
+    .bind(matched?w.referenceProductKey??null:null,matched?w.lwin7??null:null,matched?w.lwin11??null:null,matched?w.elid??null:null,
+     matched?w.colour??null:null,matched?w.productType??null:null,matched?w.productSubtype??null:null,
+     w.identityMatchStatus??'unmatched',matched?w.identityMatchConfidence??1:null,matched?stamp:null,owner,wineId);
  return [evidence,identity];
 }
 
@@ -115,6 +121,11 @@ export async function resolveWineReference(bucket:R2Bucket,wine:ReferenceResolva
   referenceDesignation:product.designation,referenceClassification:product.classification,country:product.country,region:product.region};
 }
 export async function enrichRecognitionReference<T extends ReferenceResolvable>(bucket:R2Bucket,wine:T){
- const match=await resolveWineReference(bucket,wine);
- return {...wine,...match,country:wine.country??match.country,region:wine.region??match.region};
+ try{
+  const match=await resolveWineReference(bucket,wine);
+  return {...wine,...match,country:wine.country??match.country,region:wine.region??match.region};
+ }catch(error){
+  console.warn(JSON.stringify({event:'wine-reference-lookup-failed',error:error instanceof Error?error.message:String(error)}));
+  return wine;
+ }
 }
