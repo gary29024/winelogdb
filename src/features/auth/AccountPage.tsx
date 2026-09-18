@@ -8,10 +8,10 @@ type Friend={id:string;display_name:string;defaultShare?:boolean};
 type Requests={incoming:Friend[];outgoing:Friend[]};
 type UsageKind={kind:string;label:string;runs:number;requests:number;units:number;unit:'run'|'wine'};
 type UsageSummary={days:number;kinds:UsageKind[];empty:boolean};
-type ResearchAllowance={limit:number;used:number;remaining:number;weekStart:string;resetsAt:string};
-type AccessSummary={balance:number;reserved:number;available:number;sponsoredAi:boolean;researchAllowance:ResearchAllowance|null};
+type ActionAccess={action:string;label:string;accessMode:'included'|'allowance';baseLimit:number;granted:number;limit:number;used:number;pending:number;remaining:number|null;weekStart:string;resetsAt:string};
+type AccessSummary={balance:number;reserved:number;available:number;sponsoredAi:boolean;actionAccess:ActionAccess[]|null};
 export function AccountPage(){
- const [friends,setFriends]=useState<Friend[]>([]),[access,setAccess]=useState<AccessSummary>({balance:0,reserved:0,available:0,sponsoredAi:true,researchAllowance:null});
+ const [friends,setFriends]=useState<Friend[]>([]),[access,setAccess]=useState<AccessSummary>({balance:0,reserved:0,available:0,sponsoredAi:true,actionAccess:null});
  const [requests,setRequests]=useState<Requests>({incoming:[],outgoing:[]});
  const [usage,setUsage]=useState<UsageSummary>({days:30,kinds:[],empty:true});
  const [ownCode,setOwnCode]=useState(''),[code,setCode]=useState('');
@@ -32,7 +32,8 @@ export function AccountPage(){
   setBusy(true);setError('');setNotice('');
   try{await fn();await load();setNotice(message)}catch(e){setError((e as Error).message)}finally{setBusy(false)}
  }
- const account=getAccount(),smart=usage.kinds.find(item=>item.kind==='search_embedding'),providerRequests=usage.kinds.reduce((sum,item)=>sum+item.requests,0),runs=usage.kinds.reduce((sum,item)=>sum+item.runs,0),allowance=access.researchAllowance;
+ const account=getAccount(),smart=usage.kinds.find(item=>item.kind==='search_embedding'),providerRequests=usage.kinds.reduce((sum,item)=>sum+item.requests,0),runs=usage.kinds.reduce((sum,item)=>sum+item.runs,0),actions=access.actionAccess??[],allowanceActions=actions.filter(item=>item.accessMode==='allowance');
+ const resetsAt=allowanceActions[0]?.resetsAt;
  return <section className="account-page">
   <h1>Account & friends</h1>
   <form onSubmit={e=>{e.preventDefault();void run(async()=>{const saved=await apiJson<{user:{display_name:string}}>('/api/me','PATCH',{displayName:name});setName(saved.user.display_name);await bootstrapAccount()},'Name updated.')}}>
@@ -42,9 +43,13 @@ export function AccountPage(){
     <small>This is the name your friends and other WineLog members will see.</small>
    </fieldset>
   </form>
-  {account?.role==='owner'?<p><strong>Owner AI access</strong> · usage and provider cost are tracked, but the member research allowance does not apply.</p>:<section aria-label="AI access"><p><strong>Scanning and Smart Search are included.</strong> Their provider cost is sponsored by WineLog.</p>{allowance&&<p><strong>{allowance.remaining} of {allowance.limit} research runs remaining this week.</strong> Resets {new Date(allowance.resetsAt).toLocaleString()}.</p>}<small>Wine Deep Search, individual producer research and Vintage Window share this allowance. Cached or friend-reused research does not use a run. Batch Deep Search is owner-only.</small></section>}
+  {account?.role==='owner'?<p><strong>Owner AI access</strong> · usage and provider cost are tracked, but member action allowances do not apply.</p>:<section aria-label="AI access">
+   <p><strong>Pilot AI access</strong></p>
+   <ul>{actions.map(item=><li key={item.action}><strong>{item.label}:</strong> {item.accessMode==='included'?'Included':`${item.remaining??0} of ${item.limit} free successful runs available this week${item.granted?` (${item.granted} extra granted)`:''}${item.pending?` · ${item.pending} in progress`:''}`}</li>)}</ul>
+   <small>Only successful new provider work consumes an allowance run. Failed work and cached or friend-reused results do not. Smart Search is included separately and has its own daily usage limit.{resetsAt?` Weekly allowances reset ${new Date(resetsAt).toLocaleString()}.`:''}</small>
+  </section>}
   <nav className="account-shortcuts" aria-label="Account shortcuts"><Link to="/shared">Shared with me</Link>{account?.role==='owner'&&<><Link to="/admin">Owner controls</Link><Link to="/admin#member-usage">Member usage</Link></>}</nav>
-  <section className="personal-usage" aria-labelledby="your-usage-title"><h2 id="your-usage-title">Your usage</h2><p>Last {usage.days} days. Provider activity is tracked even for sponsored features.</p>
+  <section className="personal-usage" aria-labelledby="your-usage-title"><h2 id="your-usage-title">Your usage</h2><p>Last {usage.days} days. Provider activity is tracked even for included features.</p>
    {usage.empty?<p>No AI usage recorded yet.</p>:<dl><div><dt>AI runs</dt><dd>{runs}</dd></div><div><dt>Provider requests</dt><dd>{providerRequests}</dd></div><div><dt>Smart Search</dt><dd>{smart?.requests??0} requests</dd></div><div><dt>Wines embedded</dt><dd>{smart?.units??0}</dd></div></dl>}
   </section>
   {error&&<p role="alert">{error}</p>}{notice&&<p role="status">{notice}</p>}
