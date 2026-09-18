@@ -26,6 +26,9 @@ export type JournalWine={
   rating:number|null;
   tastingDate:string|null;
   imageIds:string[];
+  imageUrl?:string|null;
+  shared?:boolean;
+  sharedBy?:string|null;
   createdAt:string;
 };
 export type GroupSourcePhoto={sessionId:string;createdAt:string;capturedAt:string|null};

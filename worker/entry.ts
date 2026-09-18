@@ -8,6 +8,7 @@ import { handleRecognitionRequest } from './recognitionHandler';
 import { ACHIEVEMENT_DEFINITION_VERSION,createCustomAchievementCollection,deleteCustomAchievementCollection,loadAchievementCatalogueOptions,loadAchievementProgress,setAchievementMatchMode,updateCustomAchievementCollection } from './achievementHandler';
 import { JOURNEY_PAYLOAD_VERSION,loadJourneySummary } from './journeyHandler';
 import { currentOwnerRevision,etagMatches,revisionETag } from '../src/lib/db/ownerRevision';
+import { hasIncomingSharedWines } from '../src/lib/sharing/visibleWines';
 
 type Bindings={DB:D1Database;WINE_IMAGES:R2Bucket;ASSETS:Fetcher;GEMINI_API_KEY?:string;AUTH_SECRET:string;APP_PASSWORD:string;APP_URL:string;MAX_FILE_BYTES?:string;MAX_BATCH_FILES?:string};
 type AppEnv={Bindings:Bindings};
@@ -71,10 +72,11 @@ app.put('/api/achievements/:id/match-mode',async c=>{
 app.get('/api/achievements',async c=>{
   let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
   try{
-    const initialRevision=await currentOwnerRevision(c.env.DB,owner);
+    const includeShared=await hasIncomingSharedWines(c.env.DB,owner);
+    const initialRevision=includeShared?null:await currentOwnerRevision(c.env.DB,owner);
     const initialETag=initialRevision===null?null:revisionETag('achievements',ACHIEVEMENT_DEFINITION_VERSION,initialRevision);
     if(initialETag&&etagMatches(c.req.header('If-None-Match'),initialETag)){privateRevalidated(c,initialETag);return c.body(null,304)}
-    const {revision,progress}=await loadAchievementProgress(c.env.DB,owner,0,initialRevision);
+    const {revision,progress}=await loadAchievementProgress(c.env.DB,owner,0,initialRevision,includeShared);
     const etag=revision===null?null:revisionETag('achievements',ACHIEVEMENT_DEFINITION_VERSION,revision);
     if(etag&&etagMatches(c.req.header('If-None-Match'),etag)){privateRevalidated(c,etag);return c.body(null,304)}
     privateRevalidated(c,etag);
@@ -85,10 +87,11 @@ app.get('/api/achievements',async c=>{
 app.get('/api/journey',async c=>{
   let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
   try{
-    const initialRevision=await currentOwnerRevision(c.env.DB,owner);
+    const includeShared=await hasIncomingSharedWines(c.env.DB,owner);
+    const initialRevision=includeShared?null:await currentOwnerRevision(c.env.DB,owner);
     const initialETag=initialRevision===null?null:revisionETag('journey',JOURNEY_PAYLOAD_VERSION,initialRevision);
     if(initialETag&&etagMatches(c.req.header('If-None-Match'),initialETag)){privateRevalidated(c,initialETag);return c.body(null,304)}
-    const {revision,payload}=await loadJourneySummary(c.env.DB,owner,initialRevision);
+    const {revision,payload}=await loadJourneySummary(c.env.DB,owner,initialRevision,0,includeShared);
     const etag=revision===null?null:revisionETag('journey',JOURNEY_PAYLOAD_VERSION,revision);
     if(etag&&etagMatches(c.req.header('If-None-Match'),etag)){privateRevalidated(c,etag);return c.body(null,304)}
     privateRevalidated(c,etag);

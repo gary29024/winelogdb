@@ -45,7 +45,8 @@ export function AchievementDetailPage(){
       <div className="achievement-checklist-heading"><div><p className="achievements-eyebrow">CHECKLIST</p><h2>{collection.total} targets</h2></div><span>{collection.pending} remaining</span></div>
       {collection.items.length?<div className="achievement-checklist">{groups.map(group=><div className="achievement-check-group" key={group.key||'all'}>{(group.section||group.subsection)&&<div className="achievement-check-section">{group.section&&<strong>{group.section}</strong>}{group.subsection&&<span>{group.subsection}</span>}</div>}{group.items.map(({item})=>{
           const back=linkFrom({to:`/achievements/${id}`,label:definition.title});
-          const links=item.tastedVintageLinks??[],firstWine=item.tastedWineIds[0];
+          const links=item.tastedVintageLinks??[],firstWine=item.tastedWineIds[0],sharedIds=new Set(item.tastedSharedWineIds??[]);
+          const tastingHref=(wineId:string,shared=false)=>shared||sharedIds.has(wineId)?`/shared/${wineId}`:`/wines/${wineId}`;
           return <article className={`achievement-check-row achievement-check-${item.status}`} key={item.id}>
             <span className="achievement-check-mark" aria-hidden="true">{item.status==='tasted'?'✓':item.status==='possible'?'?':'○'}</span>
             <div className="achievement-check-copy">
@@ -53,13 +54,13 @@ export function AchievementDetailPage(){
               {/* A row that matched several vintages links to each of them, so
                   nothing has to pick one on the reader's behalf. */}
               {links.length>0&&<small className="achievement-check-vintages">Tasted vintages: {links.map((link,index)=><span key={link.vintage}>
-                {index>0&&', '}<Link to={`/wines/${link.wineId}`} state={back}>{link.vintage}</Link>
+                {index>0&&', '}<Link to={tastingHref(link.wineId,Boolean(link.shared))} state={back}>{link.vintage}</Link>
               </span>)}</small>}
             </div>
             <div className="achievement-check-status"><span>{statusCopy(item.status)}</span>
               {/* Only worth a link of its own when the vintages above are not
                   already offering one: an undated or non-vintage tasting. */}
-              {firstWine&&links.length!==1&&<Link to={`/wines/${firstWine}`} state={back}>{item.status==='possible'?'Review':links.length?'Latest tasting':'View tasting'}</Link>}
+              {firstWine&&links.length!==1&&<Link to={tastingHref(firstWine)} state={back}>{item.status==='possible'?'Review':links.length?'Latest tasting':'View tasting'}</Link>}
             </div>
           </article>})}</div>)}</div>:<p className="achievement-empty-checklist">No catalogue targets currently match this live rule. Edit the collection or refresh the relevant producer catalogue.</p>}
     </section>

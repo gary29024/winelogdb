@@ -5,6 +5,7 @@ import { buildStructureProfile,structureDisplay } from './model';
 import { buildCadence,buildCruMix,buildDrinkingAge,buildMix,favoriteRates,readDiscovery,showsRatingInsights,showsStructureInsights } from './insights';
 import { grapeColorFor,styleColorKeyFor } from './passportVisuals';
 import { AiSpendCard } from './AiSpendCard';
+import { getAccount } from '../../lib/auth/client';
 import '../../journey.css';
 import '../../insights.css';
 
@@ -188,7 +189,7 @@ export function InsightsPage(){
       {data.currencies.length?<div className="currency-grid">{data.currencies.map(item=><article key={item.currency}><div><strong>{item.currency}</strong><span>{item.wines} priced wines</span></div><div><b>{money(item.currency,item.averagePrice)}</b><small>{withRatings&&item.averageRating!=null?`${rating(item.averageRating)} avg rating`:`${item.wines} logged`}</small></div></article>)}</div>:<p className="journey-muted">Record purchase or tasting prices to see separate summaries for each currency. WineLog does not mix currencies into a misleading value score.</p>}
     </section>
 
-    <AiSpendCard/>
+    {getAccount()?.role==='owner'&&<AiSpendCard/>}
 
     {(!withRatings||!withStructure)&&<p className="insights-gate-note">
       {[!withRatings?'rating':'',!withStructure?'structure':''].filter(Boolean).join(' and ')} insights stay hidden until they cover more of your journal — everything above works without them.
