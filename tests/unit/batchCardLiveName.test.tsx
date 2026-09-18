@@ -65,6 +65,15 @@ describe('a confirmed card in a batch scan',()=>{
     expect(card().textContent).toContain('Landlbirn');
     expect(card().textContent).toContain('Haselberger');
   });
+
+  it('passes recognized Champagne release details into the review form',async()=>{
+    await render([item({status:'ready',confirmedWineId:null,saved:null,recognition:{...recognition,style:'sparkling',sparklingDetails:{dosageGPerL:3,disgorgement:'03/2024',tirage:'07/2019',lotCode:'L23 / DT0324'}}})]);
+    const review=[...host!.querySelectorAll('button')].find(button=>button.textContent==='Review & save') as HTMLButtonElement;
+    await act(async()=>{review.click()});
+    const fields=[...host!.querySelectorAll('.sparkling-details-editor input')] as HTMLInputElement[];
+    expect(fields.map(input=>input.value)).toEqual(expect.arrayContaining(['3','03/2024','07/2019','L23 / DT0324']));
+  });
+
 });
 
 describe('the session the card reads from',()=>{
