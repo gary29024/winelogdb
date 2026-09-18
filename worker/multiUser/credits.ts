@@ -185,7 +185,7 @@ export async function reconcileOperation(db:D1Database,op:CreditOperation){
   terminal=units.every(u=>rows.results.some(r=>r.id===(u.resultId??u.id)&&!['staged','submitted'].includes(r.status)));
   const successful=units.filter(u=>rows.results.some(r=>r.id===(u.resultId??u.id)&&r.recognition_json));
   successfulUnits=successful.length;captured=successful.reduce((sum,u)=>sum+u.credits,0);
- }else if(first?.action==='producer_research'&&op.run_id){
+ }else if((first?.action==='producer_research'||first?.action==='producer_profile')&&op.run_id){
   if(op.path==='/api/producers/research-batch'){
    const rows=await db.prepare('SELECT producer_id,status FROM producer_research_campaign_items WHERE campaign_id=?').bind(op.run_id).all<{producer_id:string;status:string}>();
    terminal=rows.results.length>0&&rows.results.every(r=>!['pending','running'].includes(r.status));
