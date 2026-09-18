@@ -11,7 +11,7 @@ import { postGeminiGenerateContent,type GeminiTransportBindings } from './gemini
 import type { AnalyticsSink } from '../src/lib/usage/aiUsage';
 import { enrichRecognitionReference } from '../src/lib/wine/referenceIdentity';
 
-type RecognitionBindings=GeminiTransportBindings&{AUTH_SECRET:string;MAX_BATCH_FILES?:string;DB:D1Database;AI_USAGE?:AnalyticsSink};
+type RecognitionBindings=GeminiTransportBindings&{AUTH_SECRET:string;MAX_BATCH_FILES?:string;DB:D1Database;REFERENCE_DATA:R2Bucket;AI_USAGE?:AnalyticsSink};
 type GeminiResponse={
   candidates?:Array<{content?:{parts?:Array<{text?:string}>};finishReason?:string}>;
   usageMetadata?:{promptTokenCount?:number;candidatesTokenCount?:number;thoughtsTokenCount?:number;totalTokenCount?:number};
@@ -141,7 +141,7 @@ export async function handleRecognitionRequest(request:Request,env:RecognitionBi
       if(!text)throw new Error('Gemini returned no recognition result');
       const primary=parseRecognition(text),escalationReasons=recognitionEscalationReasons(primary,{schemaFallback});
       const escalation=escalationReasons.length?await tryEscalatedRecognition(env,requestId,requestBody,schemaFreeBody,primary,escalationReasons,meter):{result:primary,used:false};
-      const result=await enrichRecognitionReference(env.DB,escalation.result),finalModel=escalation.used?RECOGNITION_ESCALATION_MODEL:MODEL;
+      const result=await enrichRecognitionReference(env.REFERENCE_DATA,escalation.result),finalModel=escalation.used?RECOGNITION_ESCALATION_MODEL:MODEL;
       const locationName=selected.gpsSource==='exif'&&result.locationName?.trim()?result.locationName.trim():null;
       const durationMs=Date.now()-startedAt;
       console.log(JSON.stringify({event:'recognition-complete',requestId,model:finalModel,primaryModel:MODEL,escalated:escalation.used,escalationReasons,provider,attempt,geminiLatencyMs,durationMs,schemaFallback,finishReason:candidate?.finishReason??null,promptTokens:payload.usageMetadata?.promptTokenCount??null,outputTokens:payload.usageMetadata?.candidatesTokenCount??null,thinkingTokens:payload.usageMetadata?.thoughtsTokenCount??null,totalTokens:payload.usageMetadata?.totalTokenCount??null}));

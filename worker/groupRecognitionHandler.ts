@@ -23,7 +23,7 @@ export const groupRecognitionSpec:RecognitionModeSpec<GroupRecognitionResult>={
   oneFileError:'Choose exactly one group photo',
   jsonSchema:groupRecognitionResponseJsonSchema,
   parse:parseGroupRecognition,
-  enrich:async(db,result)=>({...result,wines:await Promise.all(result.wines.map(wine=>enrichRecognitionReference(db,wine)))}),
+  enrich:async(bucket,result)=>({...result,wines:await Promise.all(result.wines.map(wine=>enrichRecognitionReference(bucket,wine)))}),
   escalationReasons:groupRecognitionEscalationReasons,
   preferEscalated:preferEscalatedGroup,
   wineCount:result=>result.wines.length,

@@ -29,7 +29,7 @@ import { runVisionRecognition } from './visionRecognition';
 import { measureBottleFrame } from './bottleFrameHandler';
 import { MAX_FRAME_LOOKUP,readBottleFrames } from '../src/lib/images/bottleFrame';
 
-type Bindings={DB:D1Database;RESEARCH_QUEUE?:Queue<VintageResearchMessage>;WINE_IMAGES:R2Bucket;ASSETS:Fetcher;GEMINI_API_KEY?:string;AUTH_SECRET:string;APP_PASSWORD:string;APP_URL:string;MAX_FILE_BYTES?:string;MAX_BATCH_FILES?:string};
+type Bindings={DB:D1Database;RESEARCH_QUEUE?:Queue<VintageResearchMessage>;WINE_IMAGES:R2Bucket;REFERENCE_DATA:R2Bucket;ASSETS:Fetcher;GEMINI_API_KEY?:string;AUTH_SECRET:string;APP_PASSWORD:string;APP_URL:string;MAX_FILE_BYTES?:string;MAX_BATCH_FILES?:string};
 type AppEnv={Bindings:Bindings};
 const app=new Hono<AppEnv>();
 app.onError(apiErrorHandler);
@@ -691,7 +691,7 @@ app.post('/api/tastings/:id/sheet/wines',async c=>{
   cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
   const parsed=sheetWinesSchema.safeParse(await c.req.json().catch(()=>null));
   if(!parsed.success)return c.json({error:'Invalid sheet wines',issues:parsed.error.issues},400);
-  try{return c.json(await createSheetWines(c.env.DB,owner,c.req.param('id'),parsed.data),201)}
+  try{return c.json(await createSheetWines(c.env.DB,owner,c.req.param('id'),parsed.data,c.env.REFERENCE_DATA),201)}
   catch(e){const {message,status}=tastingError(e,'Could not add those wines');return c.json({error:message},status)}
 });
 

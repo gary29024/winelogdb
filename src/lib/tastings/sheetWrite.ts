@@ -2,7 +2,7 @@ import { z } from 'zod';
 import { canonicalizeWineFields } from '../wine/canonicalize';
 import { ensureWineIdentity } from '../wine/identity';
 import { attachWinesToTasting } from './attach';
-import { referenceIdentityStatements } from '../wine/referenceIdentity';
+import { enrichRecognitionReference,referenceIdentityStatements } from '../wine/referenceIdentity';
 
 /**
  * Writing what a wine list said, once the reader has agreed to it.
@@ -82,15 +82,16 @@ export type SheetWinesInput=z.infer<typeof sheetWinesSchema>;
  * through the same canonicalisation and the same ensureWineIdentity, so a wine
  * created from paper is indistinguishable afterwards from one typed in.
  */
-export async function createSheetWines(db:D1Database,owner:string,tastingId:string,input:SheetWinesInput){
+export async function createSheetWines(db:D1Database,owner:string,tastingId:string,input:SheetWinesInput,referenceData?:R2Bucket){
   const tasting=await db.prepare('SELECT id FROM tastings WHERE owner_id=? AND id=?').bind(owner,tastingId).first<{id:string}>();
   if(!tasting)throw new Error('That tasting no longer exists');
 
   const stamp=new Date().toISOString();
-  const rows=input.wines.map(raw=>{
-    const wine=canonicalizeWineFields({...raw,grapeBlend:[],recognizedRegion:null,recognizedAppellation:null,classification:null});
+  const rows=await Promise.all(input.wines.map(async raw=>{
+    const canonical=canonicalizeWineFields({...raw,grapeBlend:[],recognizedRegion:null,recognizedAppellation:null,classification:null});
+    const wine=referenceData?await enrichRecognitionReference(referenceData,canonical):canonical;
     return {id:crypto.randomUUID(),wine};
-  });
+  }));
 
   for(const chunk of chunked(rows))
     await db.batch(chunk.map(({id,wine})=>db.prepare(

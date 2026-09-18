@@ -47,7 +47,7 @@ export const sheetRecognitionSpec:RecognitionModeSpec<SheetPage>={
   oneFileError:'Send one wine list page per request',
   jsonSchema:sheetRecognitionResponseJsonSchema,
   parse:parseSheetPage,
-  enrich:async(db,page)=>({...page,wines:await Promise.all(page.wines.map(wine=>enrichRecognitionReference(db,wine)))}),
+  enrich:async(bucket,page)=>({...page,wines:await Promise.all(page.wines.map(wine=>enrichRecognitionReference(bucket,wine)))}),
   escalationReasons:sheetEscalationReasons,
   preferEscalated:preferEscalatedSheet,
   wineCount:page=>page.wines.length,
