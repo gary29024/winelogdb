@@ -9,6 +9,9 @@ import { TastingDocuments } from './TastingDocuments';
 import '../../tastings.css';
 import { ShareStorySheet } from '../share/ShareStorySheet';
 import type { StoryCard } from '../share/renderStoryCollage';
+import { FriendTagDialog } from '../wines/FriendTagDialog';
+import { getTastingFriendTags,listFriendTags,setTastingFriendTags,type FriendTag } from '../wines/friendTags';
+import { prepareSharingPhotos } from '../wines/sharingPhotos';
 
 const dateLabel=(value:string|null)=>{
   if(!value)return 'No date';
@@ -50,6 +53,7 @@ export function TastingDetailPage(){
   const [tasting,setTasting]=useState<Tasting|null>(null),[wines,setWines]=useState<TastingWine[]>([]),[documents,setDocuments]=useState<TastingDocument[]>([]);
   const [loading,setLoading]=useState(true),[error,setError]=useState(''),[busy,setBusy]=useState(false);
   const [storyCard,setStoryCard]=useState<StoryCard|null>(null);
+  const [tagOpen,setTagOpen]=useState(false),[tagFriends,setTagFriends]=useState<FriendTag[]>([]),[tagSelected,setTagSelected]=useState<string[]>([]),[tagBusy,setTagBusy]=useState(false),[tagError,setTagError]=useState('');
   const [editing,setEditing]=useState(false),[nameDraft,setNameDraft]=useState(''),[venueDraft,setVenueDraft]=useState('');
 
   useEffect(()=>{
@@ -66,6 +70,24 @@ export function TastingDetailPage(){
   const open=Boolean(tasting?.startedAt&&!tasting.endedAt);
   const rated=wines.filter(wine=>wine.rating!=null).map(wine=>wine.rating as number);
   const average=rated.length?rated.reduce((total,value)=>total+value,0)/rated.length:null;
+
+  async function openFriendTags(){
+    setTagOpen(true);setTagError('');
+    try{
+      const [friends,shares]=await Promise.all([listFriendTags(),getTastingFriendTags(id)]);
+      setTagFriends(friends.items);setTagSelected(shares.recipientIds);
+    }catch(e){setTagError((e as Error).message)}
+  }
+  async function saveFriendTags(){
+    setTagBusy(true);setTagError('');
+    try{
+      await setTastingFriendTags(id,tagSelected);
+      setTagOpen(false);
+      const imageIds=[...new Set(wines.flatMap(wine=>wine.imageId?[wine.imageId]:[]))];
+      if(tagSelected.length&&imageIds.length)void prepareSharingPhotos(imageIds).catch(()=>undefined);
+    }catch(e){setTagError((e as Error).message)}
+    finally{setTagBusy(false)}
+  }
 
   async function run(action:()=>Promise<{tasting:Tasting}>){
     setBusy(true);setError('');
@@ -116,6 +138,7 @@ export function TastingDetailPage(){
     {error&&<p className="tasting-error" role="alert">{error}</p>}
 
     {storyCard&&<ShareStorySheet card={storyCard} onClose={()=>setStoryCard(null)}/>}
+    <FriendTagDialog open={tagOpen} title="Tag friends for this tasting" description="Every wine in this tasting — including wines you add later — is shared with the selected friends. Remove a wine from the tasting and the tasting tag no longer applies to it." friends={tagFriends} selected={tagSelected} busy={tagBusy} error={tagError} confirmLabel="Save tasting tags" onSelectedChange={setTagSelected} onConfirm={()=>void saveFriendTags()} onClose={()=>setTagOpen(false)}/>
     {!editing&&<div className="tasting-actions">
       {open
         ?<button type="button" onClick={()=>void run(()=>endTasting(id))} disabled={busy}>End tasting</button>
@@ -127,6 +150,7 @@ export function TastingDetailPage(){
       {/* An evening is the set of wines somebody would actually post, already
           gathered and in pour order, so the card is one tap from it. The whole
           lineup goes over; which of it lands on the card is chosen in the sheet. */}
+      <button type="button" onClick={()=>void openFriendTags()}>Tag friends</button>
       {wines.length>0&&<button type="button" onClick={()=>setStoryCard({
         title:tasting.name,
         subtitle:tasting.tastingDate

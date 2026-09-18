@@ -35,13 +35,13 @@ export default {
    // WineLog credits: each user-facing action is either included for everyone or
    // consumes a successful-run allowance configured by the owner.
    const unpriced=providerAuthorization(member.role,`${path} has no member AI policy, so it cannot reach a provider.`);
-   const scoped={...env,CREDIT_CONTEXT:unpriced,WINE_IMAGES:meteredBucket(env.WINE_IMAGES,env.DB,member.id),RESEARCH_QUEUE:durableQueue(env.RESEARCH_QUEUE,env.DB)};
+   const scoped={...env,CREDIT_CONTEXT:unpriced,WINE_IMAGES:meteredBucket(env.WINE_IMAGES,env.DB,member.id,{skipMemberLimit:member.role==='owner'}),RESEARCH_QUEUE:durableQueue(env.RESEARCH_QUEUE,env.DB)};
    if(path==='/api/credits'&&request.method==='GET'){
     const wallet=await env.DB.prepare('SELECT balance,reserved,balance-reserved AS available FROM credit_wallets WHERE user_id=?').bind(member.id).first()??{balance:0,reserved:0,available:0};
     if(member.role==='owner')return json({...wallet,actionAccess:null,sponsoredAi:true});
     return json({...wallet,actionAccess:await memberAiAccess(env.DB,member.id),sponsoredAi:true});
    }
-   const direct=await creditRead(request,env,member)??await rolloutRoute(request,env,member)??await adminRoute(request,env,member)??await socialRoute(request,scoped,member);if(direct)return direct;
+   const direct=await creditRead(request,env,member)??await rolloutRoute(request,env,member)??await adminRoute(request,env,member)??await socialRoute(request,env,member);if(direct)return direct;
    if(path==='/api/credits/quotes'&&request.method==='POST'){
     const url=new URL(request.url),target=url.searchParams.get('path')||'';if(!target.startsWith('/api/')||target.includes('?')||!aiRoute(target,'POST'))throw new ApiError(400,'Invalid quote target');
     const original=new Request(new URL(target,env.APP_URL),request),quoted=await quote(original,env,member);
@@ -129,7 +129,7 @@ export default {
     const job=raw as typeof message.body&JobEnvelope;
     const op=job._creditOperationId?await env.DB.prepare('SELECT * FROM credit_operations WHERE id=? AND user_id=?').bind(job._creditOperationId,job.owner!).first<CreditOperation>():null;
     if(job.kind!=='recognition_batch_cleanup'&&(!op||!['reserved','running','review'].includes(op.status))){message.ack();continue}
-    const scoped={...env,CREDIT_CONTEXT:op?{db:env.DB,operationId:op.id,namespace:'queue'}:providerAuthorization(member.role,`${job.kind??'This job'} reached the provider without a credit operation.`),CREDIT_RESEARCH_SCOPES:op?JSON.parse(op.units_json).flatMap((u:{scope?:string})=>u.scope?[u.scope]:[]):[],WINE_IMAGES:meteredBucket(env.WINE_IMAGES,env.DB,job.owner!),RESEARCH_QUEUE:durableQueue(env.RESEARCH_QUEUE,env.DB,op?.id)};
+    const scoped={...env,CREDIT_CONTEXT:op?{db:env.DB,operationId:op.id,namespace:'queue'}:providerAuthorization(member.role,`${job.kind??'This job'} reached the provider without a credit operation.`),CREDIT_RESEARCH_SCOPES:op?JSON.parse(op.units_json).flatMap((u:{scope?:string})=>u.scope?[u.scope]:[]):[],WINE_IMAGES:meteredBucket(env.WINE_IMAGES,env.DB,job.owner!,{skipMemberLimit:member.role==='owner'}),RESEARCH_QUEUE:durableQueue(env.RESEARCH_QUEUE,env.DB,op?.id)};
     const wrapped={id:message.id,timestamp:message.timestamp,body:message.body,attempts:message.attempts,ack:()=>message.ack(),retry:(options?:QueueRetryOptions)=>{retried=true;message.retry(options)}};
     await legacy.queue({queue:batch.queue,metadata:batch.metadata,messages:[wrapped],ackAll:()=>message.ack(),retryAll:(options?:QueueRetryOptions)=>{retried=true;message.retry(options)}},scoped);
     if(op)await reconcileOperation(env.DB,op);

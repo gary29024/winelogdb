@@ -123,7 +123,7 @@ app.post('/api/wines',async c=>{
   }
   const statements=[c.env.DB.prepare(`INSERT INTO wines(id,owner_id,producer,wine_name,vintage,country,region,appellation,recognized_region,recognized_appellation,classification,classification_override,grapes_json,grape_blend_json,wine_style,alcohol_percentage,tasting_notes,rating,tasting_date,event,venue,price,currency,tags_json,recognition_status,recognition_confidence,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`).bind(id,owner,w.producer,w.wineName,w.vintage,w.country,w.region,w.appellation,w.recognizedRegion,w.recognizedAppellation,w.classification,w.classificationOverride,JSON.stringify(w.grapes),JSON.stringify(w.grapeBlend),w.wineStyle,w.alcoholPercentage,w.tastingNotes,w.rating,w.tastingDate,w.event,w.venue,w.price,w.currency,JSON.stringify(w.tags),w.recognitionStatus,w.recognitionConfidence,now,now),...uploaded.map(x=>c.env.DB.prepare(`INSERT INTO wine_images(id,owner_id,wine_id,object_key,content_type,byte_size,width,height,upload_status,recognition_status,captured_at,latitude,longitude,location_name,metadata_source,created_at) VALUES(?,?,?,?,?,?,?,?,'uploaded','complete',?,?,?,?,?,?)`).bind(x.imageId,owner,id,x.key,x.file.type,x.file.size,x.dim.width,x.dim.height,x.meta.capturedAt,x.meta.latitude,x.meta.longitude,w.locationName??null,x.meta.source,now))];
   await c.env.DB.batch([...statements,...wineSaveStatements(c.env.DB,owner,id,w)]);
-  return c.json({id},201);
+  return c.json({id,imageIds:uploaded.map(item=>item.imageId)},201);
  }catch(e){
   await Promise.allSettled(uploaded.map(x=>c.env.WINE_IMAGES.delete(x.key)));
   return c.json({error:(e as Error).message||'Could not save wine and photos'},500);

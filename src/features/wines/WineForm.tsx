@@ -1,7 +1,7 @@
 import { useEffect,useMemo,useRef,useState, type FormEvent } from 'react';
 import { resolvePlace } from '../../lib/places/resolve';
 import { Link,useNavigate } from 'react-router-dom';
-import { addWineImages,saveWine,saveWineTastingStructure, type WinePhoto } from './api';
+import { addWineImages,saveWine, type WinePhoto } from './api';
 import { derivedTags,reconcileTags } from './wineTags';
 import { grapeSuggestions } from '../../lib/wine/grapes';
 import { resolveProducer,type ProducerResolution } from '../producers/api';
@@ -14,6 +14,9 @@ import { matchTastingWine,type TastingWineMatch } from '../tastings/api';
 import { SparklingDetailsFields } from './SparklingDetailsFields';
 import { ChampagnePhotoBackfill } from './ChampagnePhotoBackfill';
 import { isChampagne,missingChampagneDetails } from '../../lib/wine/champagneExtraction';
+import { FriendTagDialog } from './FriendTagDialog';
+import { listFriendTags,type FriendTag } from './friendTags';
+import { prepareSharingPhotos } from './sharingPhotos';
 import '../../producerResolution.css';
 import '../../wineFormCompact.css';
 
@@ -48,11 +51,11 @@ type WineFormInitial=Partial<WineInput>&{tastingStructure?:TastingStructure|null
  */
 export type SavedWineIdentity={producer:string;wineName:string;vintage:number|null};
 
-type WineFormProps={initial?:WineFormInitial;id?:string;photos?:WinePhoto[];onSave?:(input:WineFormInput)=>Promise<{id:string}>;onSaved?:(id:string,saved?:SavedWineIdentity)=>void;submitLabel?:string;
+type WineFormProps={initial?:WineFormInitial;id?:string;photos?:WinePhoto[];onSave?:(input:WineFormInput)=>Promise<{id:string;imageIds?:string[]}>;onSaved?:(id:string,saved?:SavedWineIdentity)=>void;submitLabel?:string;enableFriendTagging?:boolean;
   /** The cellar line this bottle came from, so saving takes it off the count. */
   holdingId?:string};
 
-export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,holdingId}:WineFormProps){
+export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,enableFriendTagging=false,holdingId}:WineFormProps){
   const nav=useNavigate(),[busy,setBusy]=useState(false),[error,setError]=useState('');
   const [producer,setProducer]=useState(String(initial?.producer??'')),[producerResolution,setProducerResolution]=useState<ProducerResolution|null>(null),[resolvingProducer,setResolvingProducer]=useState(false);
   /** The spelling the library uses, once it has been taken - so the screen can say it did. */
@@ -104,8 +107,22 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,holdin
   const [duplicate,setDuplicate]=useState<TastingWineMatch|null>(null);
   const [dismissedDuplicate,setDismissedDuplicate]=useState(false);
   const [attaching,setAttaching]=useState(false);
+  const allowFriendTagging=!id&&(!onSave||enableFriendTagging);
+  const [tagFriends,setTagFriends]=useState<FriendTag[]>([]),[tagSelected,setTagSelected]=useState<string[]>([]),[tagDraft,setTagDraft]=useState<string[]>([]),[tagOpen,setTagOpen]=useState(false),[tagTouched,setTagTouched]=useState(false),[tagError,setTagError]=useState('');
   // Editing an existing wine never joins a tasting, so it never waits on one.
   const waitingForTasting=!id&&tastingLoading;
+
+  useEffect(()=>{
+    if(!allowFriendTagging)return;
+    let active=true;
+    listFriendTags().then(result=>{
+      if(!active)return;
+      setTagFriends(result.items);
+      const defaults=result.items.filter(friend=>friend.defaultShare).map(friend=>friend.id);
+      setTagSelected(defaults);setTagDraft(defaults);
+    }).catch(()=>undefined);
+    return()=>{active=false};
+  },[allowFriendTagging]);
 
   /**
    * Asked only where a duplicate can actually be made: a new wine, carrying
@@ -256,12 +273,13 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,holdin
       latitude:initial?.latitude??null,longitude:initial?.longitude??null,
       price:fd.get('price')?Number(fd.get('price')):null,currency:currency||null,
       tags:nextTags,recognitionStatus:'complete',recognitionConfidence:initial?.recognitionConfidence??null,
-      tastingStructure,sparklingDetails:savedSparklingDetails??(hasSparklingDetails(initial?.sparklingDetails)?null:undefined)
+      tastingStructure,sparklingDetails:savedSparklingDetails??(hasSparklingDetails(initial?.sparklingDetails)?null:undefined),
+      shareRecipientIds:allowFriendTagging&&tagTouched?tagSelected:undefined
     };
     try{
       const result=onSave?await onSave(input):await saveWine(input,id,id?[]:photos,{preferCuveePrimaryName:canPreferPrimary&&preferCuveePrimaryName,holdingId});
       const savedId=id??('id' in result?result.id:undefined);if(!savedId)throw new Error('Save response did not include a wine ID');
-      if(onSave)await saveWineTastingStructure(savedId,tastingStructure);
+      if(allowFriendTagging&&tagSelected.length&&'imageIds' in result&&result.imageIds?.length)void prepareSharingPhotos(result.imageIds).catch(()=>undefined);
       // A save can have closed the open tasting - a wine dated another day ends
       // it server-side - so the cached answer is no longer trustworthy.
       if(!id)void refreshActiveTasting();
@@ -342,14 +360,16 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,holdin
       <div className="wine-compact-row three"><label>Drinking date<input name="tastingDate" type="date" value={tastingDate} onChange={e=>setTastingDate(e.target.value)}/></label>{field('rating','Rating / 100','number','0.5')}<label>Price<div className="price-currency-inputs"><input name="currency" type="text" inputMode="text" maxLength={3} defaultValue={String(initial?.currency??'')} placeholder="HKD" aria-label="Currency"/><input name="price" type="number" step="0.01" defaultValue={String(initial?.price??'')} placeholder="0" aria-label="Price"/></div></label></div>
       <label className="full-field">Tasting / event group<input name="tastingName" type="text" value={tastingName} onChange={e=>setTastingName(e.target.value)}/></label>
       {!id&&activeTasting&&<p className="tasting-prefill-note">Prefilled from your open tasting — <strong>{activeTasting.name}</strong>. Change any of these to log this bottle outside it.</p>}
-      <div className="wine-compact-row two"><label>Venue<input name="venue" type="text" value={venue} onChange={e=>setVenue(e.target.value)}/></label><label>{hasGps?'Approximate place':'Place name'}<input name="locationName" type="text" defaultValue={String(initial?.locationName??'')}/>{hasEstimatedPlace&&<small>Suggested by Gemini from the photo GPS. Verify or edit this approximation before saving.</small>}</label></div>
-      {hasGps&&<div className="gps-readout"><strong>Photo GPS</strong><span>{Number(initial?.latitude).toFixed(6)}, {Number(initial?.longitude).toFixed(6)}</span><small>These coordinates are read directly from EXIF and stored exactly. The place name above is only an approximate Gemini interpretation.</small></div>}
+      <div className="wine-compact-row two"><label>Venue<input name="venue" type="text" value={venue} onChange={e=>setVenue(e.target.value)}/></label><label>{hasGps?'Approximate place':'Place name'}<input name="locationName" type="text" defaultValue={String(initial?.locationName??'')}/>{hasEstimatedPlace&&<small>Suggested from the photo location data. Verify or edit this approximation before saving.</small>}</label></div>
+      {hasGps&&<div className="gps-readout"><strong>Photo GPS</strong><span>{Number(initial?.latitude).toFixed(6)}, {Number(initial?.longitude).toFixed(6)}</span><small>These coordinates are read directly from EXIF and stored exactly. The place name above is only an approximate interpretation.</small></div>}
       <small>Use “Tasting / event group” to group wines from the same dinner, trip, class or formal tasting. Exact GPS remains attached even if you edit or clear the approximate place name.</small>
     </fieldset>
 
     <label className="full-field">Tags (comma separated)<input name="tags" defaultValue={initial?.tags?.join(', ')??''}/>
       <small>Tags for the place, the grapes and the style follow the wine: correct a field above and the tag it put there is corrected with it. Anything you typed is left alone.</small></label>
     {photos.length>0&&<p className="form-note">{photos.length} photo{photos.length===1?'':'s'} will be saved permanently only after this wine is successfully logged.</p>}
+    {allowFriendTagging&&<div className="form-note"><button type="button" onClick={()=>{setTagDraft(tagSelected);setTagError('');setTagOpen(true)}}>Tag friends{tagSelected.length?` · ${tagSelected.length} selected`:''}</button><span> Optional — choose who should receive this wine when it is saved.</span></div>}
+    <FriendTagDialog open={tagOpen} title="Tag friends when saved" description="Choose friends for this wine. Your account defaults are preselected; changing this selection affects only this wine." friends={tagFriends} selected={tagDraft} error={tagError} onSelectedChange={setTagDraft} onConfirm={()=>{setTagSelected(tagDraft);setTagTouched(true);setTagOpen(false)}} onClose={()=>setTagOpen(false)}/>
     {error&&<p role="alert">{error}</p>}
     {/* Saving before the open-tasting probe answers used to post a null
         tastingName, so a bottle logged in the first moments after an app load

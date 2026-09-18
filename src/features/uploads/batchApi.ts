@@ -98,6 +98,6 @@ export async function stageBatchWine(sessionId:string,position:number,photos:Sta
 
 export async function submitBatchSession(id:string){return read<{accepted:true;sessionId:string}>(await apiFetch(`/api/batch-recognition/sessions/${id}/submit`,{method:'POST',headers:authHeaders(true),body:'{}'}),'Could not submit Batch Scan')}
 export async function removeBatchSession(id:string){return read<{ok:true;confirmedItems:number}>(await apiFetch(`/api/batch-recognition/sessions/${id}`,{method:'DELETE',headers:authHeaders()}),'Could not remove Batch Scan')}
-export async function confirmBatchWine(sessionId:string,itemId:string,wine:WineInput){return read<{id:string}>(await apiFetch(`/api/batch-recognition/sessions/${sessionId}/items/${itemId}/confirm`,{method:'POST',headers:authHeaders(true),body:JSON.stringify({wine})}),'Could not save this wine')}
+export async function confirmBatchWine(sessionId:string,itemId:string,wine:WineInput){return read<{id:string;imageIds:string[]}>(await apiFetch(`/api/batch-recognition/sessions/${sessionId}/items/${itemId}/confirm`,{method:'POST',headers:authHeaders(true),body:JSON.stringify({wine})}),'Could not save this wine')}
 export async function rejectBatchWine(sessionId:string,itemId:string){return read<{ok:true}>(await apiFetch(`/api/batch-recognition/sessions/${sessionId}/items/${itemId}/reject`,{method:'POST',headers:authHeaders(true),body:'{}'}),'Could not discard this wine')}
 export const batchImageUrl=(id:string)=>`/api/batch-recognition/images/${id}`;

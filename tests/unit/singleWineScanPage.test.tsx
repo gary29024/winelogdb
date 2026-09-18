@@ -127,7 +127,7 @@ describe('the single wine page',()=>{
     (globalThis.fetch as ReturnType<typeof vi.fn>).mockResolvedValueOnce(
       new Response(JSON.stringify({error:'Gemini is unavailable',requestId:'abc'}),{status:503}));
     await click(button('Identify this wine')!);
-    expect(host!.querySelector('.scan-error')?.textContent).toBe('Gemini is unavailable · Request abc');
+    expect(host!.querySelector('.scan-error')?.textContent).toBe('Gemini is unavailable · Support ID abc');
     expect(host!.querySelector('.review')).toBeNull();
   });
 });

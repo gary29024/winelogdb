@@ -2,8 +2,9 @@ import { useCallback,useEffect,useState } from 'react';
 import { Link } from 'react-router-dom';
 import { bootstrapAccount,getAccount,logout } from '../../lib/auth/client';
 import { apiJson } from '../../lib/auth/api';
+import { setDefaultFriendShare } from '../wines/friendTags';
 
-type Friend={id:string;display_name:string};
+type Friend={id:string;display_name:string;defaultShare?:boolean};
 type Requests={incoming:Friend[];outgoing:Friend[]};
 type UsageKind={kind:string;label:string;runs:number;requests:number;units:number;unit:'run'|'wine'};
 type UsageSummary={days:number;kinds:UsageKind[];empty:boolean};
@@ -77,7 +78,7 @@ export function AccountPage(){
   <h3>Sent requests</h3>{!requests.outgoing.length&&<p>No pending sent requests.</p>}
   <ul>{requests.outgoing.map(item=><li key={item.id}>{item.display_name} · Awaiting acceptance <button disabled={busy} onClick={()=>void run(()=>apiJson(`/api/friends/requests/${item.id}`,'DELETE'),'Friend request cancelled.')}>Cancel request to {item.display_name}</button></li>)}</ul>
   <h3>Your friends</h3>{!friends.length&&<p>No friends yet. Send a request using a friend code above.</p>}
-  <ul>{friends.map(friend=><li key={friend.id}>{friend.display_name} <button disabled={busy} onClick={()=>void run(()=>apiJson(`/api/friends/${friend.id}`,'DELETE'),'Friend removed.')}>Remove friend</button></li>)}</ul>
+  <ul>{friends.map(friend=><li key={friend.id}><strong>{friend.display_name}</strong> <label><input type="checkbox" checked={Boolean(friend.defaultShare)} disabled={busy} onChange={event=>void run(()=>setDefaultFriendShare(friend.id,event.target.checked),event.target.checked?`New wines will be tagged with ${friend.display_name} by default.`:`Default tagging for ${friend.display_name} is off.`)}/> Tag new wines by default</label> <button disabled={busy} onClick={()=>void run(()=>apiJson(`/api/friends/${friend.id}`,'DELETE'),'Friend removed.')}>Remove friend</button></li>)}</ul>
   <button onClick={()=>void logout()}>Sign out</button>
  </section>;
 }

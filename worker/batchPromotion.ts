@@ -38,15 +38,16 @@ export async function attachConfirmedItemWithMetadata(env:Env,owner:string,sessi
   const images=await env.DB.prepare('SELECT id,original_object_key,recognition_object_key,content_type,byte_size,width,height FROM batch_recognition_images WHERE owner_id=? AND item_id=? ORDER BY rowid ASC').bind(owner,itemId).all<ImageRow>();
   const metadata=parseJson<RecognitionPhotoMetadata[]>(item.metadata_json,[]),recognition=item.recognition_json?parseJson<RecognitionSummary>(item.recognition_json,{}):{};
   const confirmedRecognition=mergeConfirmedWineIdentity(recognition,wine);
-  const locationName=typeof recognition.locationName==='string'&&recognition.locationName.trim()?recognition.locationName.trim():null,stamp=now(),statements:D1PreparedStatement[]=[];
+  const locationName=typeof recognition.locationName==='string'&&recognition.locationName.trim()?recognition.locationName.trim():null,stamp=now(),statements:D1PreparedStatement[]=[],imageIds:string[]=[];
   for(let index=0;index<images.results.length;index++){
-    const image=images.results[index],photo=permanentBatchPhotoMetadata(metadata[index],locationName);
+    const image=images.results[index],photo=permanentBatchPhotoMetadata(metadata[index],locationName),imageId=crypto.randomUUID();imageIds.push(imageId);
     statements.push(env.DB.prepare(`INSERT INTO wine_images(id,owner_id,wine_id,object_key,content_type,byte_size,width,height,upload_status,recognition_status,error,captured_at,latitude,longitude,location_name,metadata_source,created_at)
-      VALUES(?,?,?,?,?,?,?,?, 'uploaded','complete',NULL,?,?,?,?,?,?)`).bind(crypto.randomUUID(),owner,wineId,image.original_object_key,image.content_type,image.byte_size,image.width,image.height,photo.capturedAt,photo.latitude,photo.longitude,photo.locationName,photo.metadataSource,stamp));
+      VALUES(?,?,?,?,?,?,?,?, 'uploaded','complete',NULL,?,?,?,?,?,?)`).bind(imageId,owner,wineId,image.original_object_key,image.content_type,image.byte_size,image.width,image.height,photo.capturedAt,photo.latitude,photo.longitude,photo.locationName,photo.metadataSource,stamp));
   }
   statements.push(env.DB.prepare("UPDATE batch_recognition_items SET status='confirmed',confirmed_wine_id=?,recognition_json=?,updated_at=? WHERE id=? AND owner_id=?").bind(wineId,JSON.stringify(confirmedRecognition),stamp,itemId,owner));
   await env.DB.batch(statements);
   await Promise.all(images.results.map(image=>env.WINE_IMAGES.delete(image.recognition_object_key).catch(()=>undefined)));
   await env.DB.prepare('DELETE FROM batch_recognition_images WHERE owner_id=? AND item_id=?').bind(owner,itemId).run();
   await finishSessionIfTerminal(env.DB,owner,sessionId);
+  return imageIds;
 }

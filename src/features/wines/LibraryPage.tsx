@@ -15,6 +15,9 @@ import '../../journalBatch.css';
 import '../../journalPagination.css';
 import '../../favorites.css';
 import { AppIcon } from '../../components/AppIcons';
+import { FriendTagDialog } from './FriendTagDialog';
+import { listFriendTags,setBulkWineFriendTags,type FriendTag } from './friendTags';
+import { prepareSharingPhotos } from './sharingPhotos';
 
 const PAGE_SIZE=36;
 const MAX_BATCH_SELECTION=500;
@@ -97,6 +100,7 @@ export function LibraryPage(){
   const [favoriteBusy,setFavoriteBusy]=useState<Set<string>>(()=>new Set());
   const [storyCard,setStoryCard]=useState<StoryCard|null>(null);
   const [batchOpen,setBatchOpen]=useState(false),[batchBusy,setBatchBusy]=useState(false),[batchError,setBatchError]=useState(''),[batchNotice,setBatchNotice]=useState('');
+  const [tagOpen,setTagOpen]=useState(false),[tagBusy,setTagBusy]=useState(false),[tagError,setTagError]=useState(''),[tagFriends,setTagFriends]=useState<FriendTag[]>([]),[tagSelected,setTagSelected]=useState<string[]>([]);
   const [changeEvent,setChangeEvent]=useState(false),[changeVenue,setChangeVenue]=useState(false),[eventValue,setEventValue]=useState(''),[venueValue,setVenueValue]=useState(''),[eventMixed,setEventMixed]=useState(false),[venueMixed,setVenueMixed]=useState(false);
   const rawOffset=Number(params.get('offset'))||0,currentOffset=Math.max(0,Math.floor(rawOffset/PAGE_SIZE)*PAGE_SIZE),currentPage=currentOffset/PAGE_SIZE+1;
   const totalPages=Math.max(1,Math.ceil(total/PAGE_SIZE));
@@ -130,7 +134,7 @@ export function LibraryPage(){
     setPageDraft(String(page));if(page!==currentPage)goToOffset((page-1)*PAGE_SIZE);
   }
   function setView(next:ViewMode){setViewState(next);try{window.localStorage.setItem(accountStorageKey('winelog-journal-view'),next)}catch{}}
-  function stopSelecting(){setSelecting(false);setSelectedIds(new Set());setBatchOpen(false);setBatchError('')}
+  function stopSelecting(){setSelecting(false);setSelectedIds(new Set());setBatchOpen(false);setTagOpen(false);setBatchError('');setTagError('')}
   function toggleSelection(id:string){
     if(!selectedIds.has(id)&&selectedIds.size>=MAX_BATCH_SELECTION){setBatchError(`A single batch can update up to ${MAX_BATCH_SELECTION} wines.`);return}
     setBatchError('');setSelectedIds(previous=>{const next=new Set(previous);next.has(id)?next.delete(id):next.add(id);return next});
@@ -153,6 +157,25 @@ export function LibraryPage(){
    * to make it beyond the photographs themselves. The whole selection is handed
    * over however long it is: the sheet is where the sixteen that fit are chosen.
    */
+  async function openFriendTagging(){
+    if(!selectedWines.length)return;
+    setTagOpen(true);setTagSelected([]);setTagError('');
+    try{setTagFriends((await listFriendTags()).items)}catch(e){setTagError((e as Error).message)}
+  }
+  async function saveFriendTags(){
+    if(!selectedWines.length||!tagSelected.length){setTagError('Choose at least one friend.');return}
+    setTagBusy(true);setTagError('');setBatchNotice('');
+    try{
+      await setBulkWineFriendTags(selectedWines.map(wine=>wine.id),tagSelected);
+      setTagOpen(false);
+      const wineCount=selectedWines.length,friendCount=tagSelected.length;
+      setBatchNotice(`Tagged ${wineCount} wine${wineCount===1?'':'s'} with ${friendCount} friend${friendCount===1?'':'s'}.`);
+      const imageIds=[...new Set(selectedWines.flatMap(wine=>wine.imageIds))];
+      if(imageIds.length)try{await prepareSharingPhotos(imageIds)}catch{setBatchNotice(`Tagged ${wineCount} wine${wineCount===1?'':'s'}. Some photos could not be prepared for sharing, but the wine details and notes are shared.`)}
+    }catch(e){setTagError((e as Error).message)}
+    finally{setTagBusy(false)}
+  }
+
   function openStoryCard(){
     if(!selectedWines.length)return;
     const dates=selectedWines.map(wine=>wine.tastingDate).filter((date):date is string=>Boolean(date)).sort();
@@ -276,10 +299,11 @@ export function LibraryPage(){
     {batchError&&!batchOpen&&<p className="journal-page-error" role="alert">{batchError}</p>}
     <div className={`journal-viewbar${selecting?' selecting':''}`}><span>{selecting?`${selectedIds.size} selected · ${resultLabel}`:loading&&data.length?'Updating results…':!loading&&(filtersApplied||total>0)?`${resultLabel} · Page ${currentPage} of ${totalPages}`:(favoriteOnly?'Favorites':'Journal')}</span>{selecting?<div className="journal-selection-actions"><button type="button" onClick={selectAllOnPage} disabled={!data.length}>Select all on page</button><button type="button" onClick={()=>setSelectedIds(new Set())} disabled={!selectedIds.size}>Clear</button>{attachTo
       ?<button type="button" className="primary" onClick={()=>void submitAttach()} disabled={!selectedIds.size||batchBusy}>{batchBusy?'Adding…':`Add ${selectedIds.size} to ${attachName||'tasting'}`}</button>
-      :<><button type="button" onClick={openStoryCard} disabled={!selectedIds.size}>Share</button><button type="button" className="primary" onClick={openBatchEditor} disabled={!selectedIds.size}>Edit event / venue</button></>}<button type="button" onClick={attachTo?leaveAttachMode:stopSelecting} className="quiet">Done</button></div>:<div className={`journal-view-actions${filtersApplied?' with-reset':''}`}>{filtersApplied&&<button type="button" className="journal-filter-reset" onClick={resetFilters}>Reset filters</button>}<button type="button" className="journal-select-toggle" onClick={()=>{setSelecting(true);setBatchNotice('')}} disabled={!data.length}>Select</button><div className="journal-view-toggle" role="group" aria-label="Journal layout"><button type="button" className={view==='list'?'active':''} aria-pressed={view==='list'} onClick={()=>setView('list')}>List</button><button type="button" className={view==='grid'?'active':''} aria-pressed={view==='grid'} onClick={()=>setView('grid')}>Grid</button></div></div>}</div>
+      :<><button type="button" onClick={()=>void openFriendTagging()} disabled={!selectedIds.size}>Tag friends</button><button type="button" onClick={openStoryCard} disabled={!selectedIds.size}>Share</button><button type="button" className="primary" onClick={openBatchEditor} disabled={!selectedIds.size}>Edit event / venue</button></>}<button type="button" onClick={attachTo?leaveAttachMode:stopSelecting} className="quiet">Done</button></div>:<div className={`journal-view-actions${filtersApplied?' with-reset':''}`}>{filtersApplied&&<button type="button" className="journal-filter-reset" onClick={resetFilters}>Reset filters</button>}<button type="button" className="journal-select-toggle" onClick={()=>{setSelecting(true);setBatchNotice('')}} disabled={!data.length}>Select</button><div className="journal-view-toggle" role="group" aria-label="Journal layout"><button type="button" className={view==='list'?'active':''} aria-pressed={view==='list'} onClick={()=>setView('list')}>List</button><button type="button" className={view==='grid'?'active':''} aria-pressed={view==='grid'} onClick={()=>setView('grid')}>Grid</button></div></div>}</div>
     {loading&&!data.length?<p aria-live="polite">Pouring your collection…</p>:error&&!data.length?<p role="alert">{error}</p>:data.length?(chronological?<div className="journal-months">{groups.map(group=><section className="journal-month" key={group.key}><h2 className="journal-month-heading">{monthLabel(group.key)}</h2>{renderItems(group.items)}</section>)}</div>:renderItems(data)):favoriteOnly?<div className="empty favorite-empty"><span><AppIcon kind="heart"/></span><h2>No favorite wines yet</h2><p>Tap the heart on a Journal card or wine page to keep special bottles here.</p><button type="button" onClick={()=>update('favorite','')}>Show all wines</button></div>:<div className="empty"><span><AppIcon kind="journal"/></span><h2>Your journal is empty</h2><p>Scan a bottle label to add your first wine.</p><Link className="button" to="/upload">Scan Wine</Link></div>}
     {error&&data.length>0&&<p className="journal-page-error" role="alert">{error}</p>}
     {total>0&&<nav className="journal-pagination" aria-label="Journal pages"><button type="button" disabled={!hasPrevious||loading} onClick={()=>goToOffset(currentOffset-PAGE_SIZE)}>← Previous</button><form className="journal-page-picker" onSubmit={event=>{event.preventDefault();goToPage()}}><label>Page <input type="number" min="1" max={totalPages} inputMode="numeric" aria-label="Journal page number" value={pageDraft} onChange={event=>setPageDraft(event.target.value)}/> of {totalPages}</label><button type="submit" disabled={loading||pageDraft===String(currentPage)}>Go</button><span>{resultLabel}</span></form><button type="button" disabled={!hasNext||loading} onClick={()=>goToOffset(nextOffset??currentOffset+PAGE_SIZE)}>Next →</button></nav>}
+    <FriendTagDialog open={tagOpen} title={`Tag ${selectedIds.size} wine${selectedIds.size===1?'':'s'}`} description="Choose friends to add to every selected wine. Existing friend tags are kept." friends={tagFriends} selected={tagSelected} busy={tagBusy} error={tagError} confirmLabel="Tag selected wines" onSelectedChange={setTagSelected} onConfirm={()=>void saveFriendTags()} onClose={()=>setTagOpen(false)}/>
     {storyCard&&<ShareStorySheet card={storyCard} onClose={()=>setStoryCard(null)}/>}
     {batchOpen&&<div className="journal-batch-backdrop" role="presentation" onClick={()=>{if(!batchBusy)setBatchOpen(false)}}><div className="journal-batch-sheet" role="dialog" aria-modal="true" aria-labelledby="journal-batch-title" onClick={e=>e.stopPropagation()}><div className="journal-batch-heading"><div><p className="eyebrow">BATCH UPDATE</p><h2 id="journal-batch-title">{selectedIds.size} wine{selectedIds.size===1?'':'s'} selected</h2></div><button type="button" className="journal-batch-close" onClick={()=>setBatchOpen(false)} disabled={batchBusy} aria-label="Close batch editor">×</button></div><p>Enable only the fields you want to change. An enabled blank field clears that value; unchecked fields stay untouched.</p><label className="journal-batch-toggle"><input type="checkbox" checked={changeEvent} onChange={e=>setChangeEvent(e.target.checked)}/><span>Change tasting / event group</span></label><input className="journal-batch-input" type="text" value={eventValue} onChange={e=>setEventValue(e.target.value)} disabled={!changeEvent} placeholder={eventMixed?'Mixed events — enter replacement':'Event name; blank clears'}/><label className="journal-batch-toggle"><input type="checkbox" checked={changeVenue} onChange={e=>setChangeVenue(e.target.checked)}/><span>Change venue</span></label><input className="journal-batch-input" type="text" value={venueValue} onChange={e=>setVenueValue(e.target.value)} disabled={!changeVenue} placeholder={venueMixed?'Mixed venues — enter replacement':'Venue; blank clears'}/>{batchError&&<p className="journal-page-error" role="alert">{batchError}</p>}<div className="journal-batch-actions"><button type="button" onClick={()=>setBatchOpen(false)} disabled={batchBusy}>Cancel</button><button type="button" className="primary" onClick={submitBatch} disabled={batchBusy||(!changeEvent&&!changeVenue)}>{batchBusy?'Updating…':`Update ${selectedIds.size} wine${selectedIds.size===1?'':'s'}`}</button></div></div></div>}
   </section>

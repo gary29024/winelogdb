@@ -61,7 +61,8 @@ async function inventoryStorageBatch(env:RolloutEnv){
  const listing=await env.WINE_IMAGES.list({limit:STORAGE_BATCH,...(cursor?{cursor}:{})});
  if(listing.objects.length)await env.DB.batch(listing.objects.map(object=>{
   const owner=object.key.match(/^owners\/([^/]+)\//)?.[1]??object.key.match(/^shared\/([^/]+)\//)?.[1]??'owner';
-  return env.DB.prepare('INSERT INTO stored_objects(object_key,owner_id,byte_size,updated_at) VALUES(?,?,?,?) ON CONFLICT(object_key) DO UPDATE SET byte_size=excluded.byte_size,updated_at=excluded.updated_at').bind(object.key,owner,object.size,stamp());
+  const memberMetered=object.key.startsWith('shared/')?0:1;
+  return env.DB.prepare('INSERT INTO stored_objects(object_key,owner_id,byte_size,counts_toward_member_limit,updated_at) VALUES(?,?,?,?,?) ON CONFLICT(object_key) DO UPDATE SET byte_size=excluded.byte_size,counts_toward_member_limit=excluded.counts_toward_member_limit,updated_at=excluded.updated_at').bind(object.key,owner,object.size,memberMetered,stamp());
  }));
  const complete=!listing.truncated;
  await writeStates(env.DB,[['storage_cursor',complete?'':listing.cursor],...(complete?[['storage_inventory','complete'],[jobKey('storage'),'complete']] as Array<[string,string]>:[])]);

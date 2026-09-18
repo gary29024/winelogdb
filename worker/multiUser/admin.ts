@@ -51,7 +51,7 @@ export async function adminRoute(request:Request,env:IdentityEnv&AiRateEnv,membe
    env.DB.prepare('SELECT u.*,w.balance,w.reserved FROM app_users u JOIN credit_wallets w ON w.user_id=u.id ORDER BY u.created_at').all(),
    env.DB.prepare('SELECT * FROM credit_prices ORDER BY created_at DESC LIMIT 100').all(),
    settings(env.DB).catch(()=>null),deploymentAiCost(env.DB,env),memberAiUsage(env.DB,env),
-   env.DB.prepare('SELECT * FROM storage_totals').all(),env.DB.prepare('SELECT * FROM rollout_state').all(),
+   env.DB.prepare('SELECT owner_id,byte_size,metered_byte_size FROM storage_totals').all(),env.DB.prepare('SELECT * FROM rollout_state').all(),
    env.DB.prepare("SELECT id,user_id,path,status,reserved,created_at FROM credit_operations WHERE status='review' LIMIT 50").all(),
    memberAiPolicies(env.DB)
   ]);
@@ -61,7 +61,8 @@ export async function adminRoute(request:Request,env:IdentityEnv&AiRateEnv,membe
  }
  if(path==='/api/admin/settings'&&request.method==='PUT'){
   const b=await body(request),amount=(key:string)=>{const v=Number(b[key]);if(!Number.isFinite(v)||v<0||v>1e9)throw new ApiError(400,`Invalid ${key}`);return v};
-  const value:PilotSettings={memberLimit:positive(b.memberLimit,25),memberStorageBytes:positive(b.memberStorageBytes,100_000_000_000),totalStorageBytes:positive(b.totalStorageBytes,1_000_000_000_000),aiConcurrency:positive(b.aiConcurrency,4),aiDailyOperations:positive(b.aiDailyOperations,1000),aiDailyEmbeddingRequests:positive(b.aiDailyEmbeddingRequests,100_000),aiMonthlyBudgetUsd:amount('aiMonthlyBudgetUsd'),aiUnitBudgetUsd:amount('aiUnitBudgetUsd'),cloudflareWarningUsd:amount('cloudflareWarningUsd'),cloudflareStopUsd:amount('cloudflareStopUsd'),cloudflareObservedUsd:amount('cloudflareObservedUsd'),cloudflareObservedMonth:textField(b.cloudflareObservedMonth),allowOverages:b.allowOverages===true};
+  const storage=(key:string,max:number)=>{const v=Number(b[key]);if(!Number.isSafeInteger(v)||v<0||v>max)throw new ApiError(400,`Invalid ${key}`);return v};
+  const value:PilotSettings={memberLimit:positive(b.memberLimit,25),memberStorageBytes:storage('memberStorageBytes',100_000_000_000),totalStorageBytes:storage('totalStorageBytes',1_000_000_000_000),aiConcurrency:positive(b.aiConcurrency,4),aiDailyOperations:positive(b.aiDailyOperations,1000),aiDailyEmbeddingRequests:positive(b.aiDailyEmbeddingRequests,100_000),aiMonthlyBudgetUsd:amount('aiMonthlyBudgetUsd'),aiUnitBudgetUsd:amount('aiUnitBudgetUsd'),cloudflareWarningUsd:amount('cloudflareWarningUsd'),cloudflareStopUsd:amount('cloudflareStopUsd'),cloudflareObservedUsd:amount('cloudflareObservedUsd'),cloudflareObservedMonth:textField(b.cloudflareObservedMonth),allowOverages:b.allowOverages===true};
   if(value.cloudflareWarningUsd>=value.cloudflareStopUsd||value.aiMonthlyBudgetUsd<=0||value.aiUnitBudgetUsd<=0||!/^\d{4}-\d{2}$/.test(value.cloudflareObservedMonth))throw new ApiError(400,'Set a positive AI budget and a Cloudflare stop threshold above the warning threshold');
   await env.DB.prepare('INSERT INTO pilot_settings(id,value_json) VALUES(1,?) ON CONFLICT(id) DO UPDATE SET value_json=excluded.value_json,updated_at=?').bind(JSON.stringify(value),stamp()).run();return json({settings:value});
  }

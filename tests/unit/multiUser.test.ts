@@ -6,13 +6,16 @@ import { hash,seconds,stamp,type Member,type PilotSettings } from '../../worker/
 import { quote,reserve,settle,reconcileOperation,creditRead } from '../../worker/multiUser/credits';
 import { durableProvider } from '../../worker/multiUser/provider';
 import publicWorker from '../../worker/multiUserEntry';
-import { socialRoute,stripJpegMetadata,sharedWine } from '../../worker/multiUser/social';
+import { SHARED_WINES_LIST_SQL,socialRoute,stripJpegMetadata,sharedWine } from '../../worker/multiUser/social';
 import { sharedSubjectKey,publishResearch } from '../../src/lib/research/shared';
 import { producerSubjectKey,reusableProducer } from '../../src/lib/research/sharedProducer';
 import { buildResearchTargets,loadResearchCache,upsertResearchCache } from '../../src/lib/research/cache';
 import { startWineBatchResearch } from '../../src/lib/research/batchWineResearch';
 import { deploymentAiCost } from '../../worker/multiUser/admin';
 import { flushOutbox,durableQueue,maintainJobs } from '../../worker/multiUser/jobs';
+import { meteredBucket } from '../../worker/multiUser/storage';
+import { wineSaveStatements } from '../../src/lib/db/wineSave';
+import type { WineInput } from '../../src/lib/db/schema';
 
 let database:ReturnType<typeof realD1>;
 const member=(id:string):Member=>({id,email:`${id}@example.com`,display_name:id,role:id==='owner'?'owner':'member',status:'active'});
@@ -194,9 +197,153 @@ describe('sharing boundaries',()=>{
   await expect(read('carol')).rejects.toMatchObject({status:404});
   await socialRoute(new Request('https://wine.example/api/friends/alice',{method:'DELETE'}),e,member('bob'));await expect(read('bob')).rejects.toMatchObject({status:404});
  });
+ it('lets a tasting tag cover existing and future tasting wines without copying direct grants',async()=>{
+  wines();
+  database.sql.exec("INSERT INTO tastings(id,owner_id,name,created_at,updated_at) VALUES('t-share','alice','Friends tasting','now','now'); INSERT INTO wine_experiences(id,owner_id,wine_id,tasting_id,created_at,updated_at) VALUES('e-share','alice','w','t-share','now','now')");
+  const e={...env(),WINE_IMAGES:{} as R2Bucket};
+  await socialRoute(new Request('https://wine.example/api/tastings/t-share/shares',{method:'PUT',body:JSON.stringify({recipientIds:['bob']})}),e,member('alice'));
+  expect(database.sql.prepare("SELECT count(*) AS n FROM wine_shares WHERE wine_id='w'").get()!.n).toBe(0);
+  const allowed=await (await socialRoute(new Request('https://wine.example/api/shared/wines/w'),e,member('bob')))!.json();
+  expect(allowed).toMatchObject({wineName:'Clos de la Roche',tastingNotes:'Lovely'});expect(allowed).not.toHaveProperty('price');
+  const feed=await (await socialRoute(new Request('https://wine.example/api/shared/wines'),e,member('bob')))!.json() as {items:Array<{id:string}>};
+  expect(feed.items.map(item=>item.id)).toContain('w');
+  const filler=database.sql.prepare("INSERT INTO wines(id,owner_id,producer,wine_name,created_at,updated_at) VALUES(?,'alice','P',?,'now','now')");
+  for(let index=0;index<300;index++)filler.run(`unshared-${index}`,`Unshared ${index}`);
+  const plan=database.sql.prepare(`EXPLAIN QUERY PLAN ${SHARED_WINES_LIST_SQL}`).all('bob','bob','bob',0);
+  const planText=JSON.stringify(plan);
+  expect(planText).toContain('MATERIALIZE page');
+  expect(planText).not.toMatch(/SEARCH w USING (?:COVERING )?INDEX idx_wines_owner/);
+  expect(planText).toMatch(/SEARCH w USING .*sqlite_autoindex_wines_1/);
+  database.sql.exec("DELETE FROM wine_experiences WHERE id='e-share'");
+  await expect(socialRoute(new Request('https://wine.example/api/shared/wines/w'),e,member('bob'))).rejects.toMatchObject({status:404});
+ });
+ it('stores a per-friend default and applies it to the next saved wine',async()=>{
+  database.sql.exec("INSERT INTO friendships(user_id,friend_id) VALUES('alice','bob'),('bob','alice')");
+  const e={...env(),WINE_IMAGES:{} as R2Bucket};
+  await socialRoute(new Request('https://wine.example/api/friends/bob/default-share',{method:'PUT',body:JSON.stringify({enabled:true})}),e,member('alice'));
+  const friends=await (await socialRoute(new Request('https://wine.example/api/friends'),e,member('alice')))!.json() as {items:Array<{id:string;defaultShare:boolean}>};
+  expect(friends.items.find(item=>item.id==='bob')?.defaultShare).toBe(true);
+  const id='default-shared-wine',input={producer:'Test',wineName:'Default share',grapes:[],grapeBlend:[],tags:[],tastingNotes:''} as unknown as WineInput;
+  await database.db.batch([
+   database.db.prepare("INSERT INTO wines(id,owner_id,producer,wine_name,created_at,updated_at) VALUES(?,?,?,?,?,?)").bind(id,'alice','Test','Default share','now','now'),
+   ...wineSaveStatements(database.db,'alice',id,input)
+  ]);
+  expect(database.sql.prepare('SELECT recipient_id FROM wine_shares WHERE wine_id=?').get(id)?.recipient_id).toBe('bob');
+ });
+ it('writes a touched friend selection in the same wine batch instead of reapplying defaults',async()=>{
+  database.sql.exec("INSERT INTO friendships(user_id,friend_id) VALUES('alice','bob'),('bob','alice'),('alice','carol'),('carol','alice'); INSERT INTO member_share_defaults(owner_id,recipient_id) VALUES('alice','bob')");
+  const id='manual-share',input={producer:'Test',wineName:'Manual share',grapes:[],grapeBlend:[],tags:[],tastingNotes:'',shareRecipientIds:['carol']} as unknown as WineInput;
+  await database.db.batch([
+   database.db.prepare("INSERT INTO wines(id,owner_id,producer,wine_name,created_at,updated_at) VALUES(?,?,?,?,?,?)").bind(id,'alice','Test','Manual share','now','now'),
+   ...wineSaveStatements(database.db,'alice',id,input)
+  ]);
+  const recipients=database.sql.prepare('SELECT recipient_id FROM wine_shares WHERE wine_id=? ORDER BY recipient_id').all(id).map(row=>row.recipient_id);
+  expect(recipients).toEqual(['carol']);
+ });
+ it('bulk-tags more than 100 wines so Journal selections up to 500 do not fail',async()=>{
+  database.sql.exec("INSERT INTO friendships(user_id,friend_id) VALUES('alice','bob'),('bob','alice')");
+  const insert=database.sql.prepare("INSERT INTO wines(id,owner_id,producer,wine_name,created_at,updated_at) VALUES(?,'alice','P',?,'now','now')");
+  const wineIds=Array.from({length:101},(_,index)=>`bulk-${index}`);for(const [index,id] of wineIds.entries())insert.run(id,`Wine ${index}`);
+  const response=await socialRoute(new Request('https://wine.example/api/wines/shares',{method:'PUT',body:JSON.stringify({wineIds,recipientIds:['bob'],mode:'add'})}),{...env(),WINE_IMAGES:{} as R2Bucket},member('alice'));
+  expect(response?.status).toBe(200);expect((await response!.json() as {count:number}).count).toBe(101);
+  expect(database.sql.prepare("SELECT count(*) AS n FROM wine_shares WHERE owner_id='alice' AND recipient_id='bob'").get()!.n).toBe(101);
+ });
+ it('supports replacing friend tags in bulk without retaining the old recipient',async()=>{
+  database.sql.exec("INSERT INTO friendships(user_id,friend_id) VALUES('alice','bob'),('bob','alice'),('alice','carol'),('carol','alice'); INSERT INTO wines(id,owner_id,producer,wine_name,created_at,updated_at) VALUES('set-wine','alice','P','Set wine','now','now'); INSERT INTO wine_shares(wine_id,owner_id,recipient_id) VALUES('set-wine','alice','bob')");
+  const e={...env(),WINE_IMAGES:{} as R2Bucket};
+  await socialRoute(new Request('https://wine.example/api/wines/shares',{method:'PUT',body:JSON.stringify({wineIds:['set-wine'],recipientIds:['carol'],mode:'set'})}),e,member('alice'));
+  const recipients=database.sql.prepare("SELECT recipient_id FROM wine_shares WHERE wine_id='set-wine' ORDER BY recipient_id").all().map(row=>row.recipient_id);
+  expect(recipients).toEqual(['carol']);
+ });
+ it('keeps sharing derivatives out of the next personal upload allowance check',async()=>{
+  database.sql.prepare('UPDATE pilot_settings SET value_json=? WHERE id=1').run(JSON.stringify({...config,memberStorageBytes:5,totalStorageBytes:1000}));
+  const bucket={put:vi.fn(async()=>({})),delete:vi.fn(async()=>undefined)} as unknown as R2Bucket;
+  const personal=meteredBucket(bucket,database.db,'alice'),sharing=meteredBucket(bucket,database.db,'alice',{skipMemberLimit:true,countsTowardMemberLimit:false});
+  await personal.put('owners/alice/original-a',new Uint8Array(4));await sharing.put('shared/alice/copy-a.jpg',new Uint8Array(4));
+  await expect(personal.put('owners/alice/original-b',new Uint8Array(1))).resolves.toBeDefined();
+  await expect(personal.put('owners/alice/original-c',new Uint8Array(1))).rejects.toMatchObject({status:413});
+  expect(database.sql.prepare("SELECT byte_size,metered_byte_size FROM storage_totals WHERE owner_id='alice'").get()).toMatchObject({byte_size:9,metered_byte_size:5});
+  expect(database.sql.prepare("SELECT counts_toward_member_limit FROM stored_objects WHERE object_key='shared/alice/copy-a.jpg'").get()!.counts_toward_member_limit).toBe(0);
+ });
+ it('treats zero storage caps as unlimited while continuing to account bytes',async()=>{
+  database.sql.prepare('UPDATE pilot_settings SET value_json=? WHERE id=1').run(JSON.stringify({...config,memberStorageBytes:0,totalStorageBytes:0}));
+  const bucket={put:vi.fn(async()=>({})),delete:vi.fn(async()=>undefined)} as unknown as R2Bucket;
+  const personal=meteredBucket(bucket,database.db,'alice');
+  await expect(personal.put('owners/alice/unlimited-a',new Uint8Array(12))).resolves.toBeDefined();
+  await expect(personal.put('owners/alice/unlimited-b',new Uint8Array(18))).resolves.toBeDefined();
+  expect(database.sql.prepare("SELECT byte_size,metered_byte_size FROM storage_totals WHERE owner_id='alice'").get()).toMatchObject({byte_size:30,metered_byte_size:30});
+  expect(database.sql.prepare("SELECT byte_size FROM storage_totals WHERE owner_id='*'").get()!.byte_size).toBe(30);
+ });
+ it('lets the owner bypass a per-member storage cap without bypassing accounting',async()=>{
+  database.sql.prepare('UPDATE pilot_settings SET value_json=? WHERE id=1').run(JSON.stringify({...config,memberStorageBytes:1,totalStorageBytes:100}));
+  const bucket={put:vi.fn(async()=>({})),delete:vi.fn(async()=>undefined)} as unknown as R2Bucket;
+  const ownerBucket=meteredBucket(bucket,database.db,'owner',{skipMemberLimit:true});
+  await expect(ownerBucket.put('owners/owner/large',new Uint8Array(8))).resolves.toBeDefined();
+  expect(database.sql.prepare("SELECT byte_size,metered_byte_size FROM storage_totals WHERE owner_id='owner'").get()).toMatchObject({byte_size:8,metered_byte_size:8});
+  expect(database.sql.prepare("SELECT byte_size FROM storage_totals WHERE owner_id='*'").get()!.byte_size).toBe(8);
+ });
+ it('prepares a missing shared photo on demand for dynamically inherited access',async()=>{
+  wines();
+  database.sql.exec("INSERT INTO tastings(id,owner_id,name,created_at,updated_at) VALUES('t-photo','alice','Photo tasting','now','now'); INSERT INTO wine_experiences(id,owner_id,wine_id,tasting_id,created_at,updated_at) VALUES('e-photo','alice','w','t-photo','now','now'); INSERT INTO tasting_shares(tasting_id,owner_id,recipient_id) VALUES('t-photo','alice','bob'); INSERT INTO wine_images(id,owner_id,wine_id,object_key,content_type,byte_size,width,height,upload_status,recognition_status,created_at) VALUES('img-photo','alice','w','owners/alice/original.jpg','image/jpeg',8,10,10,'uploaded','complete','now')");
+  // Include SOF2 (0xC2): Cloudflare Images may emit progressive JPEGs.
+  const jpeg=Uint8Array.from([255,216,255,194,0,2,255,218,0,2,255,217]);
+  const bucket={get:vi.fn(async(key:string)=>key==='owners/alice/original.jpg'?{body:new Response('original').body!}:null),put:vi.fn(async()=>({})),delete:vi.fn(async()=>undefined)} as unknown as R2Bucket;
+  const images={input:vi.fn(()=>({transform:()=>({output:()=>({response:()=>new Response(jpeg,{headers:{'Content-Type':'image/jpeg'}})})})}))} as unknown as ImagesBinding;
+  const detail=await (await socialRoute(new Request('https://wine.example/api/shared/wines/w'),{...env(),WINE_IMAGES:bucket,IMAGES:images},member('bob')))!.json() as {photos:Array<{id:string}>};
+  expect(detail.photos).toEqual([{id:'img-photo',url:'/api/shared/wines/w/photos/img-photo'}]);
+  expect(database.sql.prepare("SELECT owner_id FROM shared_photos WHERE image_id='img-photo'").get()?.owner_id).toBe('alice');
+  expect(database.sql.prepare("SELECT counts_toward_member_limit FROM stored_objects WHERE object_key='shared/alice/img-photo.jpg'").get()?.counts_toward_member_limit).toBe(0);
+  expect(database.sql.prepare("SELECT count(*) AS n FROM shared_photo_attempts WHERE image_id='img-photo'").get()!.n).toBe(0);
+ });
+ /**
+  * The derivative is cached per photo, so a photo that CAN be derived costs one
+  * transform ever. The cost that used to be unbounded was the photo that cannot:
+  * it was re-transformed on every friend view, and a transform is billed.
+  */
+ it('stops re-transforming a photo that cannot be derived instead of retrying on every view',async()=>{
+  wines();
+  database.sql.exec("INSERT INTO wine_shares(wine_id,owner_id,recipient_id) VALUES('w','alice','bob'); INSERT INTO wine_images(id,owner_id,wine_id,object_key,content_type,byte_size,width,height,upload_status,recognition_status,created_at) VALUES('img-gone','alice','w','owners/alice/missing.jpg','image/jpeg',8,10,10,'uploaded','complete','now')");
+  const bucket={get:vi.fn(async()=>null),put:vi.fn(async()=>({})),delete:vi.fn(async()=>undefined)} as unknown as R2Bucket;
+  const transform=vi.fn(()=>({transform:()=>({output:()=>({response:()=>new Response(Uint8Array.from([255,216,255,218,0,2,255,217]))})})}));
+  const e={...env(),WINE_IMAGES:bucket,IMAGES:{input:transform} as unknown as ImagesBinding};
+  const read=async()=>(await (await socialRoute(new Request('https://wine.example/api/shared/wines/w'),e,member('bob')))!.json()) as {photos:unknown[]};
+  expect((await read()).photos).toEqual([]);
+  const first=database.sql.prepare("SELECT attempts,error FROM shared_photo_attempts WHERE image_id='img-gone'").get()!;
+  expect(first.attempts).toBe(1);expect(String(first.error)).toContain('no longer stored');
+  const reads=(bucket.get as ReturnType<typeof vi.fn>).mock.calls.length;
+  // Two further views inside the backoff window must not touch R2 or Images again.
+  await read();await read();
+  expect((bucket.get as ReturnType<typeof vi.fn>).mock.calls.length).toBe(reads);
+  expect(database.sql.prepare("SELECT attempts FROM shared_photo_attempts WHERE image_id='img-gone'").get()!.attempts).toBe(1);
+ });
+ it('lets only one concurrent view pay for a derivative and both first views receive the photo',async()=>{
+  wines();
+  database.sql.exec("INSERT INTO wine_shares(wine_id,owner_id,recipient_id) VALUES('w','alice','bob'),('w','alice','carol'); INSERT OR IGNORE INTO friendships(user_id,friend_id) VALUES('carol','alice'),('alice','carol'); INSERT INTO wine_images(id,owner_id,wine_id,object_key,content_type,byte_size,width,height,upload_status,recognition_status,created_at) VALUES('img-race','alice','w','owners/alice/original.jpg','image/jpeg',8,10,10,'uploaded','complete','now')");
+  const jpeg=Uint8Array.from([255,216,255,218,0,2,255,217]);
+  let release!:()=>void,entered!:()=>void;
+  const gate=new Promise<void>(resolve=>{release=resolve}),started=new Promise<void>(resolve=>{entered=resolve});
+  const bucket={get:vi.fn(async()=>{entered();await gate;return {body:new Response('original').body!}}),put:vi.fn(async()=>({})),delete:vi.fn(async()=>undefined)} as unknown as R2Bucket;
+  const transform=vi.fn(()=>({transform:()=>({output:()=>({response:()=>new Response(jpeg)})})}));
+  const e={...env(),WINE_IMAGES:bucket,IMAGES:{input:transform} as unknown as ImagesBinding};
+  const first=socialRoute(new Request('https://wine.example/api/shared/wines/w'),e,member('bob'));
+  await started;
+  const second=socialRoute(new Request('https://wine.example/api/shared/wines/w'),e,member('carol'));
+  // Hold the winner long enough that, without the contention wait, the loser
+  // would complete its final photo SELECT and return an empty first render.
+  await new Promise(resolve=>setTimeout(resolve,50));release();
+  const details=await Promise.all((await Promise.all([first,second])).map(async response=>(await response!.json()) as {photos:Array<{id:string}>}));
+  expect(transform.mock.calls.length).toBe(1);
+  expect(database.sql.prepare("SELECT count(*) AS n FROM shared_photos WHERE image_id='img-race'").get()!.n).toBe(1);
+  expect(details[0].photos.map(photo=>photo.id)).toContain('img-race');
+  expect(details[1].photos.map(photo=>photo.id)).toContain('img-race');
+ });
  it('has an explicit personal-field allowlist',()=>{expect(sharedWine({id:'w',price:10,venue:'x',latitude:1,tags_json:'["secret"]'})).not.toHaveProperty('tags')});
- it('removes JPEG application metadata and rejects non-JPEG inputs',()=>{
-  const jpeg=Uint8Array.from([255,216,255,225,0,5,71,80,83,255,218,0,2,255,217]);expect([...stripJpegMetadata(jpeg)]).toEqual([255,216,255,218,0,2,255,217]);expect(()=>stripJpegMetadata(new Uint8Array([1,2,3]))).toThrow('JPEG');
+ it('removes JPEG metadata while preserving baseline or progressive frame markers',()=>{
+  const baseline=Uint8Array.from([255,216,255,225,0,5,71,80,83,255,218,0,2,255,217]);
+  expect([...stripJpegMetadata(baseline)]).toEqual([255,216,255,218,0,2,255,217]);
+  const progressive=Uint8Array.from([255,216,255,194,0,2,255,218,0,2,255,217]);
+  expect([...stripJpegMetadata(progressive)]).toEqual([...progressive]);
+  expect(()=>stripJpegMetadata(new Uint8Array([1,2,3]))).toThrow('JPEG');
  });
  it('distinguishes vintages, styles, editions and Unicode names',()=>{
   const target=(wineName:string,vintage:number|null=2020,wineStyle='red')=>buildResearchTargets({producer:'赤恋酒庄',wineName,country:'China',region:'Ningxia',vintage,wineStyle}).find(t=>t.scope==='wine_vintage')!;
