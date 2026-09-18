@@ -5,17 +5,16 @@ import type { SharedWine,SharedWineExperience } from '../../lib/wine/shared';
 import { setWineFavorite } from './api';
 import { AppIcon } from '../../components/AppIcons';
 import { backTargetFromState,JOURNAL_BACK } from './backTarget';
-import { formatDate,formatPrice,formatRating } from '../../lib/wine/detailFormat';
-import { resolvePlace } from '../../lib/places/resolve';
+import { formatDate } from '../../lib/wine/detailFormat';
+import { experienceRows as buildExperienceRows } from '../../lib/wine/detailFields';
+import { FactList,WineDetailsSection,WineFactPills } from './WineFacts';
 import { structureValueLabel,type TastingStructure,type TastingStructureKey } from '../../lib/wine/tastingStructure';
 import { DeepSources,ResearchText } from './ResearchPresentation';
 import { researchSections } from './researchSections';
 import '../../favorites.css';
-// The classification pill, the denomination inside the appellation pill, the
-// structure grid and the research panel are all wine-detail markup, and their
-// rules live in these three sheets. DetailPage imported them; this page did not,
-// so a shared Grand Cru or Village pill rendered with no styling at all.
-import '../../wineClassification.css';
+// The structure grid and the research panel are wine-detail markup whose rules
+// live in these two sheets. The classification pill's sheet is owned by the
+// component that renders it, so no page can forget it again.
 import '../../wineFormCompact.css';
 import '../../deepSearch.css';
 // The gallery and lightbox markup below is the wine-detail one, and its rules
@@ -25,7 +24,6 @@ import '../../deepSearch.css';
 import '../../wineImages.css';
 import '../../sharedWine.css';
 
-const classificationLabel:Record<string,string>={grand_cru:'Grand Cru',premier_cru:'Premier Cru',village:'Village'};
 const wineSearcherUrl=(producer:string,wineName:string,vintage:number|null)=>`https://www.wine-searcher.com/find/${encodeURIComponent([producer,wineName,vintage??''].filter(Boolean).join(' ')).replace(/%20/g,'+')}`;
 type Draft={tastingDate:string;rating:string;tastingName:string;venue:string;locationName:string;currency:string;price:string;tastingNotes:string;structure:TastingStructure};
 const draftFromWine=(wine:SharedWine):Draft=>({
@@ -85,24 +83,13 @@ export function SharedWinesPage(){
  if(error&&!wine)return <section className="detail wine-detail"><Link className="back-pill" to={back.to}>← {back.label}</Link><p role="alert">{error}</p></section>;
  if(!wine)return <p aria-live="polite">Loading wine…</p>;
 
- const price=formatPrice(wine.price,wine.currency);
- // resolvePlace runs off country/region/appellation, all of which a shared wine
- // already carries, so the denomination needs nothing from the server.
- const denomination=resolvePlace({country:wine.country,region:wine.region,appellation:wine.appellation}).denomination;
- const place=[wine.appellation?wine.region:[wine.region,denomination].filter(Boolean).join(' '),wine.country].filter(Boolean).join(', ');
- const denominatedAppellation=wine.appellation?[wine.appellation,denomination].filter(Boolean).join(' '):null;
- const blend=wine.grapeBlend.length?wine.grapeBlend.map(part=>`${part.grape}${part.percentage!=null?` ${part.percentage}%`:''}`):wine.grapes;
- // What recognition first read off the label, shown only where it differs from
- // the corrected place - otherwise it is the same line twice.
- const recorded=[wine.recognizedRegion,wine.recognizedAppellation].filter(Boolean).join(' / ');
- const asRecorded=recorded&&recorded!==[wine.region,wine.appellation].filter(Boolean).join(' / ')?recorded:null;
+ // Both pages build these rows from one definition, so a field added or removed
+ // there appears or disappears on both rather than only on the owner's page.
+ const experienceRows=buildExperienceRows(wine);
  const structureItems=wine.structure?[['Flavour intensity',wine.structure.flavourIntensity],['Acidity',wine.structure.acidity],['Tannin',wine.structure.tannin],['Body',wine.structure.body],['Finish',wine.structure.finish],['Perceived alcohol',wine.structure.alcohol]].filter((item):item is [string,string]=>Boolean(item[1])):[];
  const sections=researchSections(wine.deepSearch);
  // The score is the viewer's own, so it belongs with the rest of their experience
  // rather than in the pills, where it would read as a property of the wine.
- const experienceRows:[string,string][]=([
-  ['Your rating',formatRating(wine.rating)],['Drinking date',formatDate(wine.tastingDate)],['Tasting / event',wine.tastingName],['Venue',wine.venue],['Location',wine.locationName],['Price',price]
- ] as [string,string|null][]).filter((row):row is [string,string]=>Boolean(row[1]));
  const hasExperience=Boolean(wine.tastingDate||wine.tastingName||wine.venue||wine.locationName||wine.price!=null||wine.rating!=null||wine.tastingNotes||structureItems.length);
  return <article className="detail wine-detail shared-wine-detail">
   <Link className="back-pill" to={back.to}>← {back.label}</Link>
@@ -110,13 +97,13 @@ export function SharedWinesPage(){
    {wine.photos?.length?<div className="detail-gallery" aria-label={`${wine.wineName} photos`}>{wine.photos.map((photo,index)=><span className="detail-photo-slot" key={photo.id}><button type="button" className="detail-photo-button" onClick={()=>setSelectedPhoto(photo.url)} aria-label={`Open photo ${index+1} of ${wine.photos!.length}`}><img src={photo.url} alt={`${wine.producer} ${wine.wineName} photo ${index+1}`} className="detail-photo" loading="lazy" decoding="async"/></button></span>)}</div>:<div className="detail-bottle">{wine.wineStyle?.slice(0,1).toUpperCase()||'W'}</div>}
    <p className="eyebrow">{wine.vintage??'NON-VINTAGE'} · {wine.wineStyle??'WINE'}</p><h1>{wine.wineName}</h1><h2>{wine.producerId?<Link className="detail-producer-link" to={`/producers/${wine.producerId}`}>{wine.producer}</Link>:wine.producer}</h2>
    <div className="detail-favorite-row"><button type="button" className={`detail-favorite-button${wine.favorite?' active':''}`} aria-pressed={wine.favorite} onClick={()=>void toggleFavorite()} disabled={favoriteBusy}><span className="heart" aria-hidden="true"><AppIcon kind={wine.favorite?'heart-filled':'heart'}/></span>{wine.favorite?'Favorite':'Add to favorites'}</button><a className="detail-wine-searcher-link" href={wineSearcherUrl(wine.producer,wine.wineName,wine.vintage)} target="_blank" rel="noopener noreferrer">Find on Wine-Searcher <span aria-hidden="true">↗</span></a>{favoriteError&&<span className="shared-favorite-error" role="alert">{favoriteError}</span>}</div>
-   <div className="detail-pills">{wine.appellation&&<span>{wine.appellation}{denomination&&<small className="detail-denomination">{denomination}</small>}</span>}{!wine.appellation&&wine.region&&denomination&&<span>{wine.region}<small className="detail-denomination">{denomination}</small></span>}{wine.classification&&<span className={`detail-classification detail-classification-${wine.classification}`}>{classificationLabel[wine.classification]}</span>}{wine.grapes.map(grape=><span key={grape}>{grape}</span>)}</div>
+   <WineFactPills wine={wine}/>
   </section>
   <div className="shared-source-indicator" role="note"><span>Shared by</span><strong>{wine.ownerName}</strong></div>
-  <section className="detail-section"><p className="section-label">Wine details</p><dl className="detail-facts">{[['Region',place],['Appellation',denominatedAppellation],['As recorded',asRecorded],['Grapes / blend',blend.join(', ')],['Alcohol',wine.alcoholPercentage!=null?`${wine.alcoholPercentage}%`:'']].filter(([,value])=>Boolean(value)).map(([label,value])=><div key={label}><dt>{label}</dt><dd>{value}</dd></div>)}</dl></section>
+  <WineDetailsSection wine={wine}/>
   <section className="detail-section experience-panel">
    <p className="section-label">Your experience</p>
-   {!editing?<>{experienceRows.length>0&&<dl className="detail-facts shared-experience-summary">{experienceRows.map(([label,value])=><div key={label}><dt>{label}</dt><dd>{value}</dd></div>)}</dl>}{structureItems.length>0&&<><p className="shared-structure-label">Structure</p><dl className="tasting-structure-summary">{structureItems.map(([label,value])=><div key={label}><dt>{label}</dt><dd>{structureValueLabel[value]??value}</dd></div>)}</dl></>}{wine.tastingNotes?<blockquote className="detail-experience-notes">{wine.tastingNotes}</blockquote>:null}<button type="button" className="shared-experience-edit" onClick={edit}>{hasExperience?'Edit your experience':'Add your experience'}</button></>:<form className="shared-experience-form" onSubmit={saveExperience}>
+   {!editing?<><FactList rows={experienceRows} className="shared-experience-summary"/>{structureItems.length>0&&<><p className="shared-structure-label">Structure</p><dl className="tasting-structure-summary">{structureItems.map(([label,value])=><div key={label}><dt>{label}</dt><dd>{structureValueLabel[value]??value}</dd></div>)}</dl></>}{wine.tastingNotes?<blockquote className="detail-experience-notes">{wine.tastingNotes}</blockquote>:null}<button type="button" className="shared-experience-edit" onClick={edit}>{hasExperience?'Edit your experience':'Add your experience'}</button></>:<form className="shared-experience-form" onSubmit={saveExperience}>
     <label>Drinking date<input type="date" value={draft.tastingDate} onChange={e=>setDraft({...draft,tastingDate:e.target.value})}/></label>
     <label>Rating / 100<input type="number" min="0" max="100" step="0.5" value={draft.rating} onChange={e=>setDraft({...draft,rating:e.target.value})}/></label>
     <label>Tasting / event<input type="text" maxLength={500} value={draft.tastingName} onChange={e=>setDraft({...draft,tastingName:e.target.value})}/></label>
