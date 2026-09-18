@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { FriendTagDialog } from './FriendTagDialog';
 import { getWineFriendTags,listFriendTags,setWineFriendTags,type FriendTag } from './friendTags';
 
-export function WineSharing({wineId,imageIds}:{wineId:string;imageIds:string[]}){
+export function WineSharing({wineId}:{wineId:string}){
  const [open,setOpen]=useState(false),[friends,setFriends]=useState<FriendTag[]>([]),[selected,setSelected]=useState<string[]>([]),[busy,setBusy]=useState(false),[message,setMessage]=useState(''),[error,setError]=useState('');
  async function show(){
   setOpen(true);setMessage('');setError('');
