@@ -23,7 +23,7 @@ async function robotsAllowed(){
   if(!response.ok)return true;const text=await response.text(),blocks=text.split(/\n(?=User-agent:)/i);
   const star=blocks.find(block=>/^User-agent:\s*\*/im.test(block));if(!star)return true;
   const denied=[...star.matchAll(/^Disallow:\s*(\S+)/gim)].map(match=>match[1]);
-  return !denied.some(path=>path==='/'||'/producer'.startsWith(path)||'/wine'.startsWith(path));
+  return !denied.some(path=>path==='/'||'/producer/'.startsWith(path)||'/wine/'.startsWith(path));
  }catch{return true}
 }
 if(!await robotsAllowed())throw new Error('ELID robots.txt currently disallows the registry paths; sync aborted');
