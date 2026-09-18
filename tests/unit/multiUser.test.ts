@@ -3,7 +3,7 @@ import { realD1 } from './support/realD1';
 import { authenticate,authRoute,bindGoogleAccount,verifyOrigin } from '../../worker/multiUser/auth';
 import { exportJWK,generateKeyPair,SignJWT } from 'jose';
 import { hash,seconds,stamp,type Member,type PilotSettings } from '../../worker/multiUser/common';
-import { quote,reserve,settle,reconcileOperation,creditRead } from '../../worker/multiUser/credits';
+import { quote,reserve,settle,reconcileOperation,creditRead,publicAiResponse } from '../../worker/multiUser/credits';
 import { durableProvider } from '../../worker/multiUser/provider';
 import publicWorker from '../../worker/multiUserEntry';
 import { SHARED_WINES_LIST_SQL,socialRoute,sharedWine } from '../../worker/multiUser/social';
@@ -146,6 +146,13 @@ describe('credit transactions',()=>{
   await settle(database.db,operation,3,{body:{ok:true},status:200});await settle(database.db,operation,3);
   expect(wallet()).toMatchObject({balance:7,reserved:0});
   expect(()=>database.sql.exec("DELETE FROM credit_ledger WHERE kind='capture'")).toThrow('append-only');
+ });
+ it('keeps recognition response JSON on its strict route schema while retaining metadata for async AI routes',async()=>{
+  const q=await quote(request(),env(),member('alice')),{operation}=await reserve(request('{}',{'X-WineLog-Quote':q.id,'Idempotency-Key':'response-shape'}),env(),member('alice'));
+  const recognition=publicAiResponse('/api/recognition',{producer:'Krug',confidence:.9,creditSettlement:{status:'complete'}},operation);
+  expect(recognition).toEqual({producer:'Krug',confidence:.9});
+  const research=publicAiResponse('/api/wines/w/deep-search',{accepted:true},operation);
+  expect(research).toMatchObject({accepted:true,creditOperationId:operation.id,creditSettlement:{status:operation.status}});
  });
  it('rolls back an overdraft including its operation and reservation ledger entry',async()=>{
   database.sql.exec("UPDATE credit_wallets SET balance=2 WHERE user_id='alice'");

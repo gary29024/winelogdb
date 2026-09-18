@@ -10,6 +10,7 @@ import { applyLabelDifferences,compareToLabel,type CheckField,type CheckableWine
 import { bottleLabel,getHolding,type CellarHolding } from './api';
 import type { WinePhoto } from '../wines/api';
 import '../../cellar.css';
+import { stripAiTransportMetadata } from '../../lib/credits/response';
 
 type Chosen=WinePhoto&{preview:string;recognitionFile:File};
 
@@ -86,7 +87,7 @@ export function OpenBottlePage(){
       if(response.status===401){clearSession();throw new Error('Session expired. Please sign in again.')}
       const body=await response.json().catch(()=>null);
       if(!response.ok)throw new Error((body as {error?:string})?.error||'Could not read the label');
-      const reading=recognitionSchema.parse(body);
+      const reading=recognitionSchema.parse(stripAiTransportMetadata(body));
       setDifferences(compareToLabel(entry as CheckableWine,reading));
     }catch(e){setCheckError((e as Error).message||'Could not read the label')}
     finally{setChecking(false)}

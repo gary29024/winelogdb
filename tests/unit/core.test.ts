@@ -5,6 +5,7 @@ import { parseRecognition } from '../../src/features/recognition/schema';
 import { parseGroupRecognition } from '../../src/features/recognition/groupSchema';
 import { validateBatch } from '../../src/features/uploads/validation';
 import { shouldRetryRecognitionFailure } from '../../src/lib/recognition/retryPolicy';
+import { stripAiTransportMetadata } from '../../src/lib/credits/response';
 
 describe('metadata validation', () => {
   it('rejects impossible wine data', () => {
@@ -70,6 +71,13 @@ describe('Gemini parsing', () => {
     expect(() =>
       parseRecognition('{"grapes":[],"confidence":1,"admin":true}'),
     ).toThrow();
+  });
+
+  it('strips only WineLog credit transport metadata and leaves other unknown fields strict',()=>{
+    const cleaned=stripAiTransportMetadata({producer:'A',grapes:[],confidence:1,creditOperationId:'op',creditSettlement:{status:'complete'}}) as Record<string,unknown>;
+    expect(cleaned).not.toHaveProperty('creditOperationId');
+    expect(cleaned).not.toHaveProperty('creditSettlement');
+    expect(()=>parseRecognition(JSON.stringify({...cleaned,admin:true}))).toThrow();
   });
 
   it('normalizes a quoted four-digit vintage from recognition', () => {

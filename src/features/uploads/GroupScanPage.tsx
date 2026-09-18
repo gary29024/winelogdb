@@ -17,6 +17,7 @@ import { deleteGroupScanSession,getGroupScanSession,linkGroupScanWine,listGroupS
 import '../../groupScan.css';
 import { AppIcon } from '../../components/AppIcons';
 import { linkFrom } from '../wines/backTarget';
+import { stripAiTransportMetadata } from '../../lib/credits/response';
 
 const GROUP_RECOGNITION_TARGET_BYTES=Math.floor(2.5*1024*1024);
 type SourcePhoto={file:File;recognitionFile:File;metadata:PhotoMetadata;preview:string;width:number;height:number};
@@ -93,7 +94,7 @@ export function GroupScanPage(){
       const fd=new FormData();fd.append('images',photo.recognitionFile);fd.append('metadata',JSON.stringify([photo.metadata]));
       const response=await apiFetch('/api/recognition',{method:'POST',headers:{...authHeaders(),'X-WineLog-Recognition-Mode':'group'},body:fd}),payload=await readResponse(response);
       if(response.status===401){clearSession();navigate('/login',{replace:true});return}if(!response.ok)throw new Error(readError(payload));
-      const result=groupRecognitionSchema.parse(payload),aligned=await Promise.all(result.wines.map(alignToExistingCuvee));
+      const result=groupRecognitionSchema.parse(stripAiTransportMetadata(payload)),aligned=await Promise.all(result.wines.map(alignToExistingCuvee));
       const reviewed=await Promise.all(aligned.map(async wine=>{const crop=await cropGroupPhoto(photo.file,wine.boundingBox,photo.metadata),cropPreview=await asDataUrl(crop.file);return {key:crypto.randomUUID(),recognition:wine,crop,cropPreview,savedId:null,removed:false,manual:false,saved:null} satisfies ReviewItem}));
       const id=crypto.randomUUID(),createdAt=new Date().toISOString();setSessionId(id);setSessionCreatedAt(createdAt);setItems(reviewed);setUnresolvedCount(result.unresolvedCount);setActiveKey(reviewed[0]?.key??null);
       const duration=result.recognitionDurationMs!=null?` in ${(result.recognitionDurationMs/1000).toFixed(1)}s`:'';setNotice(`${reviewed.length} distinct wine${reviewed.length===1?'':'s'} identified${duration}.${result.requestId?` Support ID ${result.requestId}.`:''} The source group photo and review state are being saved so you can resume later.`);

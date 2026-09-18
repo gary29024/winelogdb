@@ -17,6 +17,15 @@ export type CreditUnit={id:string;action:CreditAction;priceId:string;credits:num
 export type CreditOperation={id:string;user_id:string;path:string;fingerprint:string;units_json:string;reserved:number;captured:number;status:string;response_json:string|null;response_status:number|null;run_id:string|null;created_at:string;updated_at:string};
 export type CreditEnv={DB:D1Database};
 export const creditSummary=(op:CreditOperation)=>({status:op.status,captured:op.captured,reserved:['reserved','running','review'].includes(op.status)?op.reserved-op.captured:0});
+/** Recognition clients validate a strict wine/group schema. Credit bookkeeping is transport metadata, not recognition data, so keep it off that public JSON contract while retaining it for async AI routes that consume the operation id. */
+export function publicAiResponse(path:string,data:Record<string,unknown>,op:CreditOperation){
+ if(path==='/api/recognition'){
+  const recognition={...data};
+  delete recognition.creditOperationId;delete recognition.creditSettlement;
+  return recognition;
+ }
+ return {...data,creditOperationId:op.id,creditSettlement:data.creditSettlement??creditSummary(op)};
+}
 export function aiRoute(path:string,method:string){return method==='POST'&&(path==='/api/recognition'||/^\/api\/tastings\/[^/]+\/sheet\/parse$/.test(path)||/^\/api\/wines\/[^/]+\/deep-search$/.test(path)||/^\/api\/producers\/[^/]+\/research$/.test(path)||path==='/api/producers/research-batch'||/^\/api\/batch-recognition\/sessions\/[^/]+\/submit$/.test(path)||path==='/api/maturity/vintage')}
 export async function requestFingerprint(request:Request){
  const bytes=await boundedBytes(request.clone().body,16*1024*1024);
