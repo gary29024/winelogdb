@@ -231,6 +231,46 @@ describe('shared wines as recipient journal history',()=>{
   const detail=await (await socialRoute(new Request('https://wine.example/api/shared/wines/shared-experience'),e,member('bob')))!.json();
   expect(detail).toMatchObject({tastingNotes:'My note',rating:91,tastingDate:'2026-09-18',tastingName:'Friday dinner',venue:'My venue',price:680,currency:'HKD',favorite:true});
  });
+
+ it('rejects an experience it cannot store faithfully instead of coercing it',async()=>{
+  database.sql.exec(`
+   INSERT INTO friendships(user_id,friend_id) VALUES('alice','bob'),('bob','alice');
+   INSERT INTO wines(id,owner_id,producer,wine_name,created_at,updated_at)
+   VALUES('shared-validated','alice','Domaine Shared','Checked Pour','now','now');
+   INSERT INTO wine_shares(wine_id,owner_id,recipient_id) VALUES('shared-validated','alice','bob');
+  `);
+  const e={...env(),WINE_IMAGES:{} as R2Bucket};
+  const put=(payload:Record<string,unknown>)=>socialRoute(new Request('https://wine.example/api/shared/wines/shared-validated/experience',
+   {method:'PUT',body:JSON.stringify(payload)}),e,member('bob'));
+  // A two-letter code and a country name both look like currencies to a human
+  // and neither round-trips as one, so both have to come back as a 400 rather
+  // than being stored and shown next to a number.
+  await expect(put({currency:'HK'})).rejects.toMatchObject({status:400});
+  await expect(put({currency:'dollars'})).rejects.toMatchObject({status:400});
+  // 2026-02-30 passes a /^\d{4}-\d{2}-\d{2}$/ shape check but is not a day.
+  await expect(put({tastingDate:'2026-02-30'})).rejects.toMatchObject({status:400});
+  await expect(put({tastingDate:'18-09-2026'})).rejects.toMatchObject({status:400});
+  await expect(put({rating:101})).rejects.toMatchObject({status:400});
+  await expect(put({rating:-1})).rejects.toMatchObject({status:400});
+  await expect(put({price:-5})).rejects.toMatchObject({status:400});
+  expect(database.sql.prepare("SELECT count(*) AS n FROM shared_wine_preferences WHERE recipient_id='bob' AND wine_id='shared-validated'").get()!.n).toBe(0);
+  const ok=await put({rating:88,tastingDate:'2026-02-28',currency:'eur',price:42});
+  expect(ok?.status).toBe(200);
+  expect(database.sql.prepare("SELECT rating,tasting_date,currency,price FROM shared_wine_preferences WHERE recipient_id='bob' AND wine_id='shared-validated'").get())
+   .toMatchObject({rating:88,tasting_date:'2026-02-28',currency:'EUR',price:42});
+ });
+
+ it('refuses an experience for a wine the member was never shared',async()=>{
+  database.sql.exec(`
+   INSERT INTO friendships(user_id,friend_id) VALUES('alice','bob'),('bob','alice');
+   INSERT INTO wines(id,owner_id,producer,wine_name,created_at,updated_at)
+   VALUES('never-shared','alice','Domaine Shared','Private Pour','now','now');
+  `);
+  const e={...env(),WINE_IMAGES:{} as R2Bucket};
+  await expect(socialRoute(new Request('https://wine.example/api/shared/wines/never-shared/experience',
+   {method:'PUT',body:JSON.stringify({rating:95})}),e,member('bob'))).rejects.toMatchObject({status:404});
+  expect(database.sql.prepare("SELECT count(*) AS n FROM shared_wine_preferences WHERE wine_id='never-shared'").get()!.n).toBe(0);
+ });
 });
 describe('sharing boundaries',()=>{
  it('skips malformed or failing newer producer research and preserves private corrections',async()=>{
