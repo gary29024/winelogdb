@@ -1,5 +1,4 @@
 import { FriendResearchStatus } from '../auth/FriendResearchStatus';
-import { prepareSharingPhotos } from './sharingPhotos';
 import { apiJson } from '../../lib/auth/api';
 import { accountStorageKey,getAccount } from '../../lib/auth/client';
 import { WineSharing } from './WineSharing';
@@ -107,8 +106,7 @@ export function DetailPage(){
     return {file,metadata,width:size.width,height:size.height};
    }));
    await addWineImages(id,photos);
-   const updated=await reloadWine(),shares=await apiJson<{recipientIds?:string[]}>(`/api/wines/${id}/shares`);
-   if(shares.recipientIds?.length)await prepareSharingPhotos(updated.imageIds.filter(imageId=>!wine?.imageIds.includes(imageId)));
+   await reloadWine();
   }catch(e){setPhotoError((e as Error).message||'Could not add the photos')}
   finally{setPhotoBusy(false);if(photoInput.current)photoInput.current.value=''}
  }
