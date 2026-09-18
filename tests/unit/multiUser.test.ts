@@ -13,6 +13,7 @@ import { buildResearchTargets,loadResearchCache,upsertResearchCache } from '../.
 import { startWineBatchResearch } from '../../src/lib/research/batchWineResearch';
 import { deploymentAiCost } from '../../worker/multiUser/admin';
 import { flushOutbox,durableQueue,maintainJobs } from '../../worker/multiUser/jobs';
+import { meteredBucket } from '../../worker/multiUser/storage';
 import { wineSaveStatements } from '../../src/lib/db/wineSave';
 import type { WineInput } from '../../src/lib/db/schema';
 
@@ -219,6 +220,24 @@ describe('sharing boundaries',()=>{
    ...wineSaveStatements(database.db,'alice',id,input)
   ]);
   expect(database.sql.prepare('SELECT recipient_id FROM wine_shares WHERE wine_id=?').get(id)?.recipient_id).toBe('bob');
+ });
+ it('bulk-tags more than 100 wines so Journal selections up to 500 do not fail',async()=>{
+  database.sql.exec("INSERT INTO friendships(user_id,friend_id) VALUES('alice','bob'),('bob','alice')");
+  const insert=database.sql.prepare("INSERT INTO wines(id,owner_id,producer,wine_name,created_at,updated_at) VALUES(?,'alice','P',?,'now','now')");
+  const wineIds=Array.from({length:101},(_,index)=>`bulk-${index}`);for(const [index,id] of wineIds.entries())insert.run(id,`Wine ${index}`);
+  const response=await socialRoute(new Request('https://wine.example/api/wines/shares',{method:'PUT',body:JSON.stringify({wineIds,recipientIds:['bob'],mode:'add'})}),{...env(),WINE_IMAGES:{} as R2Bucket},member('alice'));
+  expect(response?.status).toBe(200);expect((await response!.json() as {count:number}).count).toBe(101);
+  expect(database.sql.prepare("SELECT count(*) AS n FROM wine_shares WHERE owner_id='alice' AND recipient_id='bob'").get()!.n).toBe(101);
+ });
+ it('keeps sharing derivatives out of the next personal upload allowance check',async()=>{
+  database.sql.prepare('UPDATE pilot_settings SET value_json=? WHERE id=1').run(JSON.stringify({...config,memberStorageBytes:5,totalStorageBytes:1000}));
+  const bucket={put:vi.fn(async()=>({})),delete:vi.fn(async()=>undefined)} as unknown as R2Bucket;
+  const personal=meteredBucket(bucket,database.db,'alice'),sharing=meteredBucket(bucket,database.db,'alice',{skipMemberLimit:true,countsTowardMemberLimit:false});
+  await personal.put('owners/alice/original-a',new Uint8Array(4));await sharing.put('shared/alice/copy-a.jpg',new Uint8Array(4));
+  await expect(personal.put('owners/alice/original-b',new Uint8Array(1))).resolves.toBeDefined();
+  await expect(personal.put('owners/alice/original-c',new Uint8Array(1))).rejects.toMatchObject({status:413});
+  expect(database.sql.prepare("SELECT byte_size FROM storage_totals WHERE owner_id='alice'").get()!.byte_size).toBe(9);
+  expect(database.sql.prepare("SELECT counts_toward_member_limit FROM stored_objects WHERE object_key='shared/alice/copy-a.jpg'").get()!.counts_toward_member_limit).toBe(0);
  });
  it('has an explicit personal-field allowlist',()=>{expect(sharedWine({id:'w',price:10,venue:'x',latitude:1,tags_json:'["secret"]'})).not.toHaveProperty('tags')});
  it('removes JPEG application metadata and rejects non-JPEG inputs',()=>{

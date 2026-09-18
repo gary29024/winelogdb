@@ -103,7 +103,7 @@ export async function socialRoute(request:Request,env:IdentityEnv&{WINE_IMAGES:R
  const bulkShares=path==='/api/wines/shares'&&request.method==='PUT';
  if(bulkShares){
   const data=await body(request);
-  if(!Array.isArray(data.wineIds)||!data.wineIds.length||data.wineIds.length>100||data.wineIds.some(id=>typeof id!=='string'))throw new ApiError(400,'Choose between 1 and 100 wines');
+  if(!Array.isArray(data.wineIds)||!data.wineIds.length||data.wineIds.length>500||data.wineIds.some(id=>typeof id!=='string'))throw new ApiError(400,'Choose between 1 and 500 wines');
   if(!Array.isArray(data.recipientIds)||data.recipientIds.some(id=>typeof id!=='string'))throw new ApiError(400,'Choose valid friends');
   const wineIds=[...new Set(data.wineIds as string[])],ids=await acceptedFriendIds(env.DB,member.id,data.recipientIds as string[]);
   const owned=await env.DB.prepare('SELECT count(*) AS count FROM wines WHERE owner_id=? AND id IN (SELECT value FROM json_each(?))').bind(member.id,JSON.stringify(wineIds)).first<{count:number}>();

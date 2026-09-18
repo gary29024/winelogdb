@@ -45,7 +45,7 @@ export default {
    // the member, so they count toward the deployment total but not the member's
    // personal upload allowance. A full personal allowance must not make a tag
    // action fail merely because WineLog needs a privacy-stripped JPEG copy.
-   const socialScoped={...env,WINE_IMAGES:meteredBucket(env.WINE_IMAGES,env.DB,member.id,{skipMemberLimit:true})};
+   const socialScoped={...env,WINE_IMAGES:meteredBucket(env.WINE_IMAGES,env.DB,member.id,{skipMemberLimit:true,countsTowardMemberLimit:false})};
    const direct=await creditRead(request,env,member)??await rolloutRoute(request,env,member)??await adminRoute(request,env,member)??await socialRoute(request,socialScoped,member);if(direct)return direct;
    if(path==='/api/credits/quotes'&&request.method==='POST'){
     const url=new URL(request.url),target=url.searchParams.get('path')||'';if(!target.startsWith('/api/')||target.includes('?')||!aiRoute(target,'POST'))throw new ApiError(400,'Invalid quote target');
