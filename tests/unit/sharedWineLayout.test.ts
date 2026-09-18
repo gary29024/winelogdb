@@ -50,7 +50,21 @@ describe('the shared wine page carries the styles it borrows',()=>{
   });
 });
 
-describe('shared cards keep attribution out of the visible card',()=>{\n  it('uses the shared surface and puts provenance in the Journal accessible label',()=>{\n    expect(library.includes("w.shared?' shared':''")).toBe(true);\n    expect(library).not.toContain('journal-shared-mark');\n    expect(library).toContain("shared by ${w.sharedBy||'a friend'}");\n  });\n\n  it('keeps Passport provenance screen-reader-only',()=>{\n    expect(passport).not.toContain('passport-recent-shared');\n    expect(passport).toContain('visually-hidden');\n    expect(passport).toContain('Shared by ${item.sharedBy}');\n  });\n});\n\ndescribe('the viewer\'s own score sits with their own experience',()=>{
+describe('shared cards keep attribution out of the visible card',()=>{
+  it('uses the shared surface and puts provenance in the Journal accessible label',()=>{
+    expect(library.includes("w.shared?' shared':''")).toBe(true);
+    expect(library).not.toContain('journal-shared-mark');
+    expect(library).toContain("shared by ${w.sharedBy||'a friend'}");
+  });
+
+  it('keeps Passport provenance screen-reader-only',()=>{
+    expect(passport).not.toContain('passport-recent-shared');
+    expect(passport).toContain('visually-hidden');
+    expect(passport).toContain('Shared by ${item.sharedBy}');
+  });
+});
+
+describe('the viewer\'s own score sits with their own experience',()=>{
   // wine.rating is the recipient's, not the wine's. In .detail-pills it read as
   // a property of the bottle, next to appellation and grapes, while the summary
   // the user had just edited did not show the number they typed.
@@ -63,6 +77,6 @@ describe('shared cards keep attribution out of the visible card',()=>{\n  it('us
   it('shows the notes inside the panel that edits them',()=>{
     const panel=sharedPage.indexOf('experience-panel');
     expect(panel).toBeGreaterThan(-1);
-    expect(sharedPage.indexOf('shared-experience-notes')).toBeGreaterThan(panel);
+    expect(sharedPage.indexOf('detail-experience-notes')).toBeGreaterThan(panel);
   });
 });

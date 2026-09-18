@@ -97,8 +97,7 @@ const LIGHT=0.75;
 const overPhotograph=new Set([
   'favorites.css .journal-favorite-button #ffffffed',
   'journalBatch.css .journal-select-mark #ffffffde',
-  'journalMonths.css .journal-grid-vintage #ffffffe8',
-  'journalMonths.css .journal-grid-card .journal-shared-mark #ffffffe8'
+  'journalMonths.css .journal-grid-vintage #ffffffe8'
 ]);
 
 /** Every innermost rule in a sheet, with where it sits. */

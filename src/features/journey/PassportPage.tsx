@@ -12,7 +12,6 @@ import { PassportMap } from './PassportMap';
 import '../../journey.css';
 import '../../achievementPassport.css';
 import { linkFrom } from '../wines/backTarget';
-import { AppIcon } from '../../components/AppIcons';
 
 const journalHref=(params:Record<string,string>)=>`/journal?${new URLSearchParams(params).toString()}`;
 const flags:Record<string,string>={France:'🇫🇷',Italy:'🇮🇹',Spain:'🇪🇸',Portugal:'🇵🇹',Germany:'🇩🇪',Australia:'🇦🇺','United States':'🇺🇸','United Kingdom':'🇬🇧',Argentina:'🇦🇷',Chile:'🇨🇱','South Africa':'🇿🇦','New Zealand':'🇳🇿',Austria:'🇦🇹',Greece:'🇬🇷',Hungary:'🇭🇺'};

@@ -1,7 +1,7 @@
 export type AppIconKey=
   |'passport'|'journal'|'producers'|'insights'
   |'scan'|'single-wine'|'group-photo'|'batch-scan'
-  |'tasting'|'pen'|'close'|'search'|'heart'|'heart-filled'|'shared';
+  |'tasting'|'pen'|'close'|'search'|'heart'|'heart-filled';
 
 const frame={viewBox:'0 0 24 24',fill:'none',stroke:'currentColor',strokeWidth:1.6,strokeLinecap:'round' as const,strokeLinejoin:'round' as const,focusable:'false' as const,'aria-hidden':true};
 
@@ -23,9 +23,5 @@ export function AppIcon({kind}:{kind:AppIconKey}){
   // Tasting: two glasses tilted towards each other - an evening rather than a bottle.
   if(kind==='tasting')return <svg {...frame} className="app-icon"><path d="M4.1 3.4h6.2l-.9 4.65a2.35 2.35 0 0 1-4.6 0Z"/><path d="M7.2 11.15v6.9M5.35 18.05h3.7"/><path d="M13.7 6.15h6.2l-.9 4.65a2.35 2.35 0 0 1-4.6 0Z"/><path d="M16.8 13.9v6.7M14.95 20.6h3.7"/></svg>;
   if(kind==='pen')return <svg {...frame} className="app-icon"><path d="M4 20h4.2l9.6-9.6a2.4 2.4 0 0 0-3.4-3.4L4.8 16.6Z"/><path d="M13.8 8.2l3.4 3.4"/><path d="M4 20l1-4"/></svg>;
-  // Shared: a friend standing behind the bottle you are looking at. Drawn as two
-  // figures rather than a share arrow, because the meaning here is "someone else's
-  // bottle", not "send this somewhere".
-  if(kind==='shared')return <svg {...frame} className="app-icon"><circle cx="9.2" cy="8.1" r="3.1"/><path d="M3.4 19.4a5.8 5.8 0 0 1 11.6 0"/><path d="M16.1 5.4a3.1 3.1 0 0 1 0 5.9"/><path d="M17.6 14.3a5.8 5.8 0 0 1 3 5.1"/></svg>;
   return <svg {...frame} className="app-icon"><path d="M6.6 6.6l10.8 10.8M17.4 6.6 6.6 17.4"/></svg>;
 }

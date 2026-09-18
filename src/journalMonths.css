@@ -15,19 +15,9 @@ html,body,#root{width:100%;max-width:100%;overflow-x:hidden}body{overscroll-beha
    alone loses to a hover rule, and on a phone the tap leaves the hover behind. */
 .journal-view-toggle button.active,.journal-view-toggle button.active:hover:not(:disabled){background:var(--ink);color:var(--paper)}
 
-/* Shared bottles carry provenance on the card surface rather than in the title,
-   but a tint alone is colour-only: --shared-line against --paper is about 1.2:1,
-   and a screen reader gets nothing at all from it. The surface is the quiet part;
-   .journal-shared-mark is what actually says "shared", and by whom. */
+/* Shared bottles are marked by surface rather than by a badge, so the card keeps
+   its title space and the image is untouched. The tint is the whole visible cue;
+   provenance for assistive technology rides the card's accessible label instead,
+   so nothing here is the only way to know a bottle is shared. */
 .wine-grid.journal-list.journal-gallery .journal-grid-card.shared{background:var(--shared-wash);border-color:var(--shared-line)}
 .journal-list-view .journal-card.shared{background:var(--shared-wash);box-shadow:inset 3px 0 0 var(--shared-line)}
-.journal-shared-mark>span{overflow:hidden;text-overflow:ellipsis}
-.journal-shared-mark .app-icon{width:14px;height:14px;flex:none}
-/* On the grid card the photo is the card, so the mark rides it instead of
-   pushing the title down - the trade the text badge was removed to avoid.
-   .journal-grid-media is already position:relative for the vintage and score.
-   Its ground is a wine label rather than the theme, so the face stays white in
-   both themes like .journal-grid-vintage - and the ink has to stay put with it,
-   because --shared-ink inverts to a pale lilac that a white face would swallow. */
-.journal-grid-card .journal-shared-mark{position:absolute;z-index:2;left:7px;bottom:7px;margin:0;max-width:calc(100% - 14px);background:#ffffffe8;border-color:#ffffffe8;color:#654a7c!important;box-shadow:0 2px 8px #10182d18}
-@media(max-width:700px){.journal-grid-card .journal-shared-mark{left:5px;bottom:5px;padding:2px 7px;font-size:.61rem}.journal-shared-mark .app-icon{width:12px;height:12px}}
