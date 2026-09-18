@@ -82,21 +82,21 @@ export function GroupScanPage(){
     try{
       const [metadata,prepared]=await Promise.all([extractPhotoMetadata(file),prepareRecognitionImageWithinBytes(file,GROUP_RECOGNITION_TARGET_BYTES)]),preview=URL.createObjectURL(file);
       setPhoto(current=>{if(current?.preview)URL.revokeObjectURL(current.preview);return {file,recognitionFile:prepared.file,metadata,preview,width:prepared.width,height:prepared.height}});
-      setNotice(`Recognition copy prepared at ${(prepared.file.size/1048576).toFixed(1)} MB. After identification, WineLog stores one server-side Group Photo session so you can resume it on another device.`);
+      setNotice('Photo ready. After identification, WineLog keeps one Group Photo session so you can resume it on another device.');
     }catch(e){setError((e as Error).message||'Could not prepare this group photo')}
   }
 
   async function identify(){
     if(!photo||identifying)return;setIdentifying(true);setError('');setNotice('');setItems([]);setActiveKey(null);setUnresolvedCount(0);
     try{
-      if(photo.recognitionFile.size>GROUP_RECOGNITION_TARGET_BYTES)throw new Error(`Recognition copy is still too large (${(photo.recognitionFile.size/1048576).toFixed(1)} MB). Choose the photo again so WineLog can recompress it.`);
+      if(photo.recognitionFile.size>GROUP_RECOGNITION_TARGET_BYTES)throw new Error('This photo could not be prepared for recognition. Choose it again or use a smaller image.');
       const fd=new FormData();fd.append('images',photo.recognitionFile);fd.append('metadata',JSON.stringify([photo.metadata]));
       const response=await apiFetch('/api/recognition',{method:'POST',headers:{...authHeaders(),'X-WineLog-Recognition-Mode':'group'},body:fd}),payload=await readResponse(response);
       if(response.status===401){clearSession();navigate('/login',{replace:true});return}if(!response.ok)throw new Error(readError(payload));
       const result=groupRecognitionSchema.parse(payload),aligned=await Promise.all(result.wines.map(alignToExistingCuvee));
       const reviewed=await Promise.all(aligned.map(async wine=>{const crop=await cropGroupPhoto(photo.file,wine.boundingBox,photo.metadata),cropPreview=await asDataUrl(crop.file);return {key:crypto.randomUUID(),recognition:wine,crop,cropPreview,savedId:null,removed:false,manual:false,saved:null} satisfies ReviewItem}));
       const id=crypto.randomUUID(),createdAt=new Date().toISOString();setSessionId(id);setSessionCreatedAt(createdAt);setItems(reviewed);setUnresolvedCount(result.unresolvedCount);setActiveKey(reviewed[0]?.key??null);
-      const duration=result.recognitionDurationMs!=null?` in ${(result.recognitionDurationMs/1000).toFixed(1)}s`:'';setNotice(`${reviewed.length} distinct wine${reviewed.length===1?'':'s'} identified${duration}. The source group photo and review state are being saved to server history.`);
+      const duration=result.recognitionDurationMs!=null?` in ${(result.recognitionDurationMs/1000).toFixed(1)}s`:'';setNotice(`${reviewed.length} distinct wine${reviewed.length===1?'':'s'} identified${duration}.${result.requestId?` Support ID ${result.requestId}.`:''} The source group photo and review state are being saved so you can resume later.`);
       if(!reviewed.length)setError('No wine could be identified confidently from this group photo. You can add missed wines manually or choose a clearer photo.');
     }catch(e){setError((e as Error).message||'Group recognition failed unexpectedly')}finally{setIdentifying(false)}
   }
