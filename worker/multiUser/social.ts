@@ -108,13 +108,15 @@ export async function socialRoute(request:Request,env:IdentityEnv&{WINE_IMAGES:R
   const wineIds=[...new Set(data.wineIds as string[])],ids=await acceptedFriendIds(env.DB,member.id,data.recipientIds as string[]);
   const owned=await env.DB.prepare('SELECT count(*) AS count FROM wines WHERE owner_id=? AND id IN (SELECT value FROM json_each(?))').bind(member.id,JSON.stringify(wineIds)).first<{count:number}>();
   if(Number(owned?.count)!==wineIds.length)throw new ApiError(404,'One or more wines were not found');
-  const statements=[env.DB.prepare('DELETE FROM wine_shares WHERE owner_id=? AND wine_id IN (SELECT value FROM json_each(?))').bind(member.id,JSON.stringify(wineIds))];
+  if(data.mode!=='add'&&data.mode!=='set')throw new ApiError(400,'Unknown tagging mode');
+  const statements:D1PreparedStatement[]=[];
+  if(data.mode==='set')statements.push(env.DB.prepare('DELETE FROM wine_shares WHERE owner_id=? AND wine_id IN (SELECT value FROM json_each(?))').bind(member.id,JSON.stringify(wineIds)));
   if(ids.length)statements.push(env.DB.prepare(`INSERT OR IGNORE INTO wine_shares(wine_id,owner_id,recipient_id)
     SELECT w.id,?,f.friend_id FROM wines w
     JOIN json_each(?) selected ON selected.value=w.id
     JOIN friendships f ON f.user_id=? AND f.friend_id IN (SELECT value FROM json_each(?))
     WHERE w.owner_id=?`).bind(member.id,JSON.stringify(wineIds),member.id,JSON.stringify(ids),member.id));
-  await env.DB.batch(statements);return json({ok:true,count:wineIds.length});
+  if(statements.length)await env.DB.batch(statements);return json({ok:true,count:wineIds.length});
  }
  const tastingShares=path.match(/^\/api\/tastings\/([^/]+)\/shares$/);
  if(tastingShares){
