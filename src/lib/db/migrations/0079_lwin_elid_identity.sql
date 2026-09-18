@@ -1,56 +1,6 @@
--- Global wine-reference identity. Reference data has no owner_id: one LWIN/ELID
--- catalogue is shared by every account while journal rows remain tenant scoped.
-CREATE TABLE IF NOT EXISTS wine_reference_products (
-  product_key TEXT PRIMARY KEY,
-  lwin7 TEXT NOT NULL UNIQUE,
-  status TEXT NOT NULL CHECK(status IN ('Live','Combined','Deleted')),
-  reference_lwin7 TEXT,
-  display_name TEXT NOT NULL,
-  producer_title TEXT,
-  producer_name TEXT NOT NULL,
-  wine_name TEXT NOT NULL,
-  producer_key TEXT NOT NULL,
-  wine_key TEXT NOT NULL,
-  country TEXT,
-  country_key TEXT NOT NULL DEFAULT '',
-  region TEXT,
-  region_key TEXT NOT NULL DEFAULT '',
-  sub_region TEXT,
-  site TEXT,
-  parcel TEXT,
-  colour TEXT,
-  colour_key TEXT NOT NULL DEFAULT '',
-  product_type TEXT,
-  product_subtype TEXT,
-  designation TEXT,
-  classification TEXT,
-  vintage_config TEXT,
-  first_vintage INTEGER,
-  final_vintage INTEGER,
-  source_added_at TEXT,
-  source_updated_at TEXT,
-  imported_at TEXT NOT NULL
-);
-
-CREATE INDEX IF NOT EXISTS idx_wine_reference_identity
-  ON wine_reference_products(status,producer_key,wine_key,country_key,region_key,colour_key);
-CREATE INDEX IF NOT EXISTS idx_wine_reference_redirect
-  ON wine_reference_products(reference_lwin7);
-CREATE INDEX IF NOT EXISTS idx_wine_reference_updated
-  ON wine_reference_products(source_updated_at);
-
-CREATE TABLE IF NOT EXISTS wine_reference_external_ids (
-  provider TEXT NOT NULL CHECK(provider IN ('lwin7','lwin11','elid')),
-  external_id TEXT NOT NULL,
-  product_key TEXT NOT NULL REFERENCES wine_reference_products(product_key) ON DELETE CASCADE,
-  vintage_code TEXT NOT NULL DEFAULT '',
-  source TEXT NOT NULL,
-  updated_at TEXT NOT NULL,
-  PRIMARY KEY(provider,external_id)
-);
-CREATE INDEX IF NOT EXISTS idx_wine_reference_external_product
-  ON wine_reference_external_ids(provider,product_key,vintage_code);
-
+-- Bulk external catalogues live in versioned R2 shards so a 200k+ snapshot
+-- refresh does not consume the Workers Free D1 100k-row daily write allowance.
+-- D1 only records one small operational sync marker plus IDs matched to user wines.
 CREATE TABLE IF NOT EXISTS wine_reference_sync_state (
   source TEXT PRIMARY KEY,
   source_version TEXT,

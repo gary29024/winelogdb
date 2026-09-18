@@ -25,7 +25,10 @@
   // Keep this account on Images Free: 5,000 unique transformations/month,
   // then originals are served as fallback. No Images hosted storage is used.
   "images": { "binding": "IMAGES" },
-  "r2_buckets": [{ "binding": "WINE_IMAGES", "bucket_name": "winelog-private" }],
+  "r2_buckets": [
+    { "binding": "WINE_IMAGES", "bucket_name": "winelog-private" },
+    { "binding": "REFERENCE_DATA", "bucket_name": "winelog-private" }
+  ],
   "queues": {
     "producers": [{ "binding": "RESEARCH_QUEUE", "queue": "winelog-research" }],
     "consumers": [{
