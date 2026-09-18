@@ -18,7 +18,7 @@ import type { WineInput } from '../../src/lib/db/schema';
 
 let database:ReturnType<typeof realD1>;
 const member=(id:string):Member=>({id,email:`${id}@example.com`,display_name:id,role:id==='owner'?'owner':'member',status:'active'});
-const config:PilotSettings={memberLimit:25,memberStorageBytes:100_000_000,totalStorageBytes:8_000_000_000,aiConcurrency:4,aiDailyOperations:100,aiDailyEmbeddingRequests:400,aiMonthlyBudgetUsd:100,aiUnitBudgetUsd:1,cloudflareWarningUsd:5,cloudflareStopUsd:10,cloudflareObservedUsd:0,cloudflareObservedMonth:stamp().slice(0,7),allowOverages:true};
+const config:PilotSettings={memberLimit:25,memberStorageBytes:100_000_000,totalStorageBytes:8_000_000_000,aiConcurrency:4,aiDailyOperations:100,aiDailyEmbeddingRequests:400,researchRunsPerWeek:2,aiMonthlyBudgetUsd:100,aiUnitBudgetUsd:1,cloudflareWarningUsd:5,cloudflareStopUsd:10,cloudflareObservedUsd:0,cloudflareObservedMonth:stamp().slice(0,7),allowOverages:true};
 const request=(body='{}',extra:Record<string,string>={})=>new Request('https://wine.example/api/recognition',{method:'POST',headers:{'Content-Type':'multipart/form-data; boundary=scan',Origin:'https://wine.example',...extra},body:`--scan\r\nContent-Disposition: form-data; name="images"; filename="label.jpg"\r\nContent-Type: image/jpeg\r\n\r\n${body}\r\n--scan--\r\n`});
 beforeEach(()=>{
  database=realD1();
