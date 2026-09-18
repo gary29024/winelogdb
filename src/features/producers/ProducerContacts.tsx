@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { createSupplementaryContact,deleteSupplementaryContact,updateSupplementaryContact,type ManualProducerContact,type ManualProducerContactType,type ProducerDetail } from './api';
 import '../../producerContacts.css';
 
-type Props={producer:ProducerDetail;onChanged:()=>Promise<void>};
+type Props={producer:ProducerDetail;onChanged:()=>Promise<void>;readOnly?:boolean};
 type Draft={type:ManualProducerContactType;label:string;value:string;note:string};
 const EMPTY:Draft={type:'email',label:'',value:'',note:''};
 const LABELS:Record<ManualProducerContactType,string>={email:'Email',phone:'Phone',website:'Website',instagram:'Instagram',other:'Other'};
@@ -20,7 +20,7 @@ function ContactValue({type,value}:{type:ManualProducerContactType;value:string}
  return <a href={href} target={external?'_blank':undefined} rel={external?'noreferrer':undefined}>{external?'Open ↗':value}</a>;
 }
 
-export function ProducerContacts({producer,onChanged}:Props){
+export function ProducerContacts({producer,onChanged,readOnly=false}:Props){
  const [draft,setDraft]=useState<Draft>(EMPTY),[editingId,setEditingId]=useState<string|null>(null),[showForm,setShowForm]=useState(false),[saving,setSaving]=useState(false),[localError,setLocalError]=useState('');
  const officialLinks=[
   producer.officialWebsiteUrl?{label:'Website',value:producer.officialWebsiteUrl}:null,
@@ -48,19 +48,19 @@ export function ProducerContacts({producer,onChanged}:Props){
  }
  async function remove(contact:ManualProducerContact){if(!confirm(`Delete ${contact.label||LABELS[contact.type]}: ${contact.value}?`))return;setLocalError('');try{await deleteSupplementaryContact(producer.id,contact.id);await onChanged();if(editingId===contact.id)cancel()}catch(e){setLocalError((e as Error).message)}}
  return <div className="producer-contact">
-  <div className="producer-contact-head"><p className="section-label">Contact</p><button type="button" className="producer-contact-add" onClick={startAdd}>+ Add contact</button></div>
-  <div className="producer-contact-group"><div className="producer-contact-group-title"><strong>Official contacts</strong><small>Verified by research or confirmed by you</small></div>
+  <div className="producer-contact-head"><p className="section-label">Contact</p>{!readOnly&&<button type="button" className="producer-contact-add" onClick={startAdd}>+ Add contact</button>}</div>
+  <div className="producer-contact-group"><div className="producer-contact-group-title"><strong>Official contacts</strong><small>{readOnly?'From the shared producer profile':'Verified by research or confirmed by you'}</small></div>
    {hasOfficial?<>
     {officialLinks.length>0&&<div className="producer-contact-direct-links">{officialLinks.map(item=><a className="producer-contact-direct-link" key={item.label} href={item.value} target="_blank" rel="noreferrer"><span>{item.label}</span><span aria-hidden="true">↗</span></a>)}</div>}
     {officialDetails.length>0&&<div className="producer-contact-compact">{officialDetails.map(item=><div className="producer-contact-row" key={`${item.type}-${item.value}`}><span>{item.label}</span><ContactValue type={item.type} value={item.value}/></div>)}</div>}
-   </>:producer.researchedAt?<p className="producer-contact-empty">No official public contact found in this research run. You can add a Website or Instagram below and mark it official.</p>:<p className="producer-contact-empty">No official contact yet. You can add a Website or Instagram below and mark it official.</p>}
+   </>:readOnly?<p className="producer-contact-empty">No official public contact is available in this shared producer profile.</p>:producer.researchedAt?<p className="producer-contact-empty">No official public contact found in this research run. You can add a Website or Instagram below and mark it official.</p>:<p className="producer-contact-empty">No official contact yet. You can add a Website or Instagram below and mark it official.</p>}
    {producer.contactSources.length>0&&<details className="producer-contact-sources"><summary>{producer.contactSources.length} contact reference{producer.contactSources.length===1?'':'s'}</summary><div>{producer.contactSources.map(source=><a key={source.url} href={source.url} target="_blank" rel="noreferrer">{source.title}</a>)}</div></details>}
   </div>
-  <div className="producer-contact-group supplementary"><div className="producer-contact-group-title"><strong>Supplementary contacts</strong><small>Added by you · kept separate unless you mark Website/Instagram official</small></div>
+  {!readOnly&&<div className="producer-contact-group supplementary"><div className="producer-contact-group-title"><strong>Supplementary contacts</strong><small>Added by you · kept separate unless you mark Website/Instagram official</small></div>
    {producer.supplementaryContacts.length?<div className="producer-manual-contacts">{producer.supplementaryContacts.map(contact=><div className="producer-manual-contact" key={contact.id}><div className="producer-manual-contact-copy"><span>{contact.label||LABELS[contact.type]}</span><ContactValue type={contact.type} value={contact.value}/>{contact.note&&<small>{contact.note}</small>}</div><div className="producer-contact-actions">{(contact.type==='website'||contact.type==='instagram')&&<button type="button" disabled={saving} onClick={()=>void promote(contact)}>Use as official</button>}<button type="button" onClick={()=>startEdit(contact)}>Edit</button><button type="button" className="danger" onClick={()=>void remove(contact)}>Delete</button></div></div>)}</div>:<p className="producer-contact-empty">No supplementary contacts added.</p>}
-  </div>
-  {localError&&!showForm&&<p className="producer-contact-form-error" role="alert">{localError}</p>}
-  {showForm&&<div className="producer-contact-form"><div className="producer-contact-form-grid">
+  </div>}
+  {!readOnly&&localError&&!showForm&&<p className="producer-contact-form-error" role="alert">{localError}</p>}
+  {!readOnly&&showForm&&<div className="producer-contact-form"><div className="producer-contact-form-grid">
    <label><span>Type</span><select value={draft.type} onChange={e=>setDraft({...draft,type:e.target.value as ManualProducerContactType})}>{Object.entries(LABELS).map(([value,label])=><option key={value} value={value}>{label}</option>)}</select></label>
    <label><span>Label <em>optional</em></span><input value={draft.label} maxLength={80} placeholder="Appointments, importer, winemaker…" onChange={e=>setDraft({...draft,label:e.target.value})}/></label>
    <label className="wide"><span>Contact</span><input value={draft.value} maxLength={500} type={draft.type==='email'?'email':draft.type==='phone'?'tel':draft.type==='website'||draft.type==='instagram'?'url':'text'} placeholder={draft.type==='email'?'name@example.com':draft.type==='phone'?'+33 …':draft.type==='instagram'?'https://instagram.com/…':draft.type==='website'?'https://…':'Contact detail'} onChange={e=>setDraft({...draft,value:e.target.value})}/></label>

@@ -34,10 +34,9 @@ export type SharedWine = SharedWineExperience&{
  ownerName:string;
  producer:string;
  /**
-  * The VIEWER's own producer row for the same producer, matched on match_key,
-  * or null when they have not logged this producer themselves. Never the source
-  * owner's id: producers are keyed (owner_id, id), so that id does not resolve
-  * in the viewer's account and a link built from it would 404.
+  * The viewer's own producer row when one exists for the same match_key;
+  * otherwise an authorised shared-producer reference that opens a read-only
+  * source profile. It is never the raw source producer id by itself.
   */
  producerId:string|null;
  wineName:string;

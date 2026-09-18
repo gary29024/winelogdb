@@ -77,7 +77,7 @@ export function ProducerDetailPage(){
  const researchPoll=useRef<Poller|undefined>(undefined);
  function stopResearchTimers(){researchPoll.current?.stop();researchPoll.current=undefined}
  async function reload(){const detail=await getProducer(id);setProducer(detail);setPrimaryName(detail.canonicalName);setSelectedAlias('')}
- async function refreshAvailable(){const directory=await listProducers();setAvailable(producerLinkChoices(directory.items,id));setAvailableLoaded(true);setSelectedAlias('')}
+ async function refreshAvailable(){const directory=await listProducers();setAvailable(producerLinkChoices(directory.items.filter(item=>!item.sharedOnly),id));setAvailableLoaded(true);setSelectedAlias('')}
  // The whole producer directory is a big read, and linking an alias is rare, so
  // it is fetched when someone asks to link rather than on every producer visit.
  async function loadAvailable(){
@@ -100,7 +100,7 @@ export function ProducerDetailPage(){
  useEffect(()=>{
   let active=true;
   setLoading(true);setProducer(undefined);setAvailable([]);setAvailableLoaded(false);setAvailableError('');setError('');
-  Promise.all([reload(),getProducerResearchStatus(id).catch(()=>null)]).then(([,run])=>{
+  Promise.all([reload(),id.startsWith('shared::')?Promise.resolve(null):getProducerResearchStatus(id).catch(()=>null)]).then(([,run])=>{
    if(!active)return;if(run)watchResearch(run);
   }).catch(e=>{if(active)setError(e.message)}).finally(()=>{if(active)setLoading(false)});
   return()=>{active=false;stopResearchTimers()};
@@ -174,16 +174,16 @@ export function ProducerDetailPage(){
  },[producer]);
  // The wine range is the expensive half of producer research, so members get the
  // profile, practices and contacts only. There is nothing to refresh range-only.
- const rangeAllowed=getAccount()?.role!=='member';
+ const rangeAllowed=getAccount()?.role!=='member'&&!producer?.sharedOnly;
  useEffect(()=>{
-  if(!id)return;
+  if(!id||producer?.sharedOnly){setNameSuggestions([]);return}
   let active=true;
   // A suggestion is worth nothing if it costs the page: failures stay silent.
   // Defensive on the body as well as the request: this is an optional prompt and
   // must never be able to break the producer page.
   getProducerNameSuggestions(id).then(result=>{if(active)setNameSuggestions(Array.isArray(result?.items)?result.items:[])}).catch(()=>{if(active)setNameSuggestions([])});
   return()=>{active=false};
- },[id,producer?.canonicalName]);
+ },[id,producer?.canonicalName,producer?.sharedOnly]);
 
  async function confirmSuggestedName(name:string){
   setConfirmingName(name);setError('');setNotice('');
@@ -193,6 +193,7 @@ export function ProducerDetailPage(){
  }
 
  async function runResearch(refreshProfile=false){
+  if(producer?.sharedOnly)return;
   const rangeOnly=rangeAllowed&&Boolean(producer?.researchedAt)&&!refreshProfile;
   const scope=rangeAllowed?'current/recent wine range':'producer-wide winemaking practices';
   if(!confirm((rangeOnly?'Refresh this producer’s wine range only? AI usage may be incurred. The job continues in the background if you close WineLog.':(refreshProfile?'Refresh the saved profile even if it is still current? This uses an additional research request. ':'')+`Research this producer’s home location, public contacts and ${scope}? The job runs in the background and continues even if you close WineLog.`)))return;
@@ -263,9 +264,9 @@ export function ProducerDetailPage(){
  return <article className="producer-detail"><Link className="back-pill" to={back.to}>← {back.label}</Link>
   <header className={`producer-header${producer.heroImageAvailable?' has-hero':''}`}>
    {producer.heroImageAvailable&&<ProducerHeroImage producerId={producer.id} alt={`${producer.canonicalName} domaine`}/>}<div className="producer-header-shade"/>
-   <div className="producer-header-content"><p className="eyebrow">PRODUCER</p><h1>{producer.canonicalName}</h1><p>{location||'Home location not researched yet'}</p>{producer.aliases.length>1&&<small>Known aliases: {producer.aliases.join(' · ')}</small>}{producer.heroImageAvailable&&<button type="button" className="producer-photo-remove" disabled={removingPhoto} onClick={()=>void removePhoto()}>{removingPhoto?'Removing…':'Remove this photo'}</button>}</div>
+   <div className="producer-header-content"><p className="eyebrow">PRODUCER</p><h1>{producer.canonicalName}</h1><p>{location||'Home location not researched yet'}</p>{producer.aliases.length>1&&<small>Known aliases: {producer.aliases.join(' · ')}</small>}{producer.sharedOnly&&<small>Shown because a friend shared wine from this producer with you.</small>}{!producer.sharedOnly&&producer.heroImageAvailable&&<button type="button" className="producer-photo-remove" disabled={removingPhoto} onClick={()=>void removePhoto()}>{removingPhoto?'Removing…':'Remove this photo'}</button>}</div>
   </header>
-  {nameSuggestions.length>0&&<section className="producer-name-suggestion" aria-labelledby="name-suggestion-title">
+  {!producer.sharedOnly&&nameSuggestions.length>0&&<section className="producer-name-suggestion" aria-labelledby="name-suggestion-title">
    <h2 id="name-suggestion-title">A friend may have researched this producer</h2>
    <p>Research is filed under the name each person writes. A friend has research under {nameSuggestions.length===1?'a name':'names'} close to yours. If it is the same producer, confirming lets you use their research at no cost. Nothing about your producer or your wines changes.</p>
    <ul>{nameSuggestions.map(item=><li key={item.name}>
@@ -274,11 +275,11 @@ export function ProducerDetailPage(){
    </li>)}</ul>
   </section>}
   {error&&<p className="producer-error" role="alert">{error}</p>}{friendOperation&&<FriendResearchStatus operationId={friendOperation} onComplete={()=>window.location.reload()}/>}{notice&&<p className="producer-notice" role="status">{notice}</p>}
-  <section className="detail-section"><div className="producer-section-title"><div><p className="section-label">Producer research</p><h2>{rangeAllowed?'Profile & range':'Producer profile'}</h2></div><button type="button" className="primary" disabled={researching} onClick={()=>void runResearch()}>{researching?'Research running…':rangeAllowed&&producer.researchedAt?'Refresh wine range':'Research producer'}</button>{(producer.profile||producer.researchedAt)&&<button type="button" disabled={researching} onClick={()=>void runResearch(true)}>{rangeAllowed?'Refresh profile & range':'Refresh profile'}</button>}</div>
+  <section className="detail-section"><div className="producer-section-title"><div><p className="section-label">Producer research</p><h2>{rangeAllowed?'Profile & range':'Producer profile'}</h2></div>{!producer.sharedOnly&&<><button type="button" className="primary" disabled={researching} onClick={()=>void runResearch()}>{researching?'Research running…':rangeAllowed&&producer.researchedAt?'Refresh wine range':'Research producer'}</button>{(producer.profile||producer.researchedAt)&&<button type="button" disabled={researching} onClick={()=>void runResearch(true)}>{rangeAllowed?'Refresh profile & range':'Refresh profile'}</button>}</>}</div>
    {researchRun&&<div className={`producer-research-status ${researchRun.status}`} role="status" aria-live="polite"><div><strong>{stageLabel[researchRun.stage]}</strong>{technicalView&&<span>{researchRun.message}</span>}</div><div><strong>{researching?<ElapsedSeconds startedAt={researchRun.startedAt}/>:researchRun.durationMs!=null?`${(researchRun.durationMs/1000).toFixed(1)}s`:''}</strong><small>{technicalView?'Request':'Support ID'} {researchRun.requestId}</small></div>{researching&&<><p>This is a background job. You can leave this page or close WineLog; the saved result will appear automatically when you return.</p><button type="button" className="secondary-danger" disabled={researchCancelling} onClick={cancelResearch}>{researchCancelling?'Cancelling…':'Cancel Deep Search'}</button></>}</div>}
-   {producer.profile?<p className="producer-profile">{producer.profile}</p>:<p>Research this producer to establish its physical base, broad region and commune, public contact details, official website, general producer-wide practices, header image and a sourced current/recent wine range.</p>}
+   {producer.profile?<p className="producer-profile">{producer.profile}</p>:<p>{producer.sharedOnly?'No shared producer profile is available yet.':'Research this producer to establish its physical base, broad region and commune, public contact details, official website, general producer-wide practices, header image and a sourced current/recent wine range.'}</p>}
    {producer.winemakingPractices&&<div className="producer-practices"><p className="section-label">General winemaking practices</p><p className="producer-profile">{producer.winemakingPractices}</p><small>Producer-wide context only. Exact cuvée/vintage techniques are researched separately on the wine page.</small></div>}
-   <ProducerContacts producer={producer} onChanged={reload}/>
+   <ProducerContacts producer={producer} onChanged={reload} readOnly={producer.sharedOnly}/>
    {rangeAllowed&&catalogGroups.length>0&&<div className="producer-range">
     <div className="producer-range-head">
      <div><p className="section-label">Wine range</p><strong>{catalogTotals.wines} wine{catalogTotals.wines===1?'':'s'} · {catalogGroups.length} style{catalogGroups.length===1?'':'s'}{catalogTotals.tasted?` · ${catalogTotals.tasted} tasted`:''}</strong></div>
@@ -323,21 +324,21 @@ export function ProducerDetailPage(){
      <small>Corrections are re-applied after every producer research run, so a resolved duplicate does not come back.</small>
     </details>}
    </div>}
-   <ProducerRangeMissing producerId={producer.id} onChanged={reload}/>
+   {!producer.sharedOnly&&<ProducerRangeMissing producerId={producer.id} onChanged={reload}/>} 
    {producer.sources.length>0&&<details className="producer-sources"><summary>{producer.sources.length} profile & range reference{producer.sources.length===1?'':'s'}{sourceWebsiteCount?` · ${sourceWebsiteCount} website${sourceWebsiteCount===1?'':'s'}`:''}</summary>{producer.sources.map(s=><a key={s.url} href={s.url} target="_blank" rel="noreferrer">{s.title}</a>)}</details>}{producer.researchedAt&&<small>{technicalView?<>Latest producer research: {producer.researchModel} · </>:<>Research updated </>}{new Date(producer.researchedAt).toLocaleDateString()}{staleLabel&&<> · ⚠ {staleLabel} may be outdated</>}</small>}
   </section>
-  <section className="detail-section"><p className="section-label">Your tastings</p><h2>{tastedGroups.length} cuvée{tastedGroups.length===1?'':'s'} · {producer.tastedWines.length} tasting{producer.tastedWines.length===1?'':'s'}</h2>{tastedGroups.length?<div className="producer-tasted-groups">{tastedGroups.map(group=>{const releaseCount=group.releaseFamily?new Set(group.wines.map(w=>w.releaseDesignation).filter(Boolean)).size:0,identityMeta=[releaseCount?`${releaseCount} release${releaseCount===1?'':'s'}`:null,group.wineStyle,group.grapes.length?group.grapes.join(' / '):null].filter(Boolean).join(' · ');return <div className="tasted-cuvee-group" key={`${group.catalogCuveeId??group.cuveeId??normalizeProducerAlias(group.name)}-${cuveeStyleFamily(group.wineStyle)||'unknown'}`}><div className="tasted-cuvee-title"><div><strong>{group.name}</strong>{identityMeta&&<small>{identityMeta}</small>}</div></div><div className="producer-tasted">{group.wines.map((w,index)=>{const release=String(w.releaseDesignation??'').trim(),subline=[release?(w.vintage??'NV'):null,w.appellation,w.region].filter(Boolean).join(' · ');return <div className="tasted-row tasted-vintage-row" key={w.id}><Link to={`/wines/${w.id}`} state={linkFrom({to:`/producers/${producer.id}`,label:producer.canonicalName})} className="tasted-row-link"><div className="tasted-thumb">{w.imageId?<WineImage imageId={w.imageId} alt={`${w.wineName} ${w.vintage??'NV'} bottle`} className="tasted-thumb-image"/>:<span className="tasted-thumb-fallback">W</span>}</div><div className="tasted-copy"><strong>{release||w.vintage||'NV'}</strong><span>{subline}</span></div></Link><div className="tasted-meta">{w.rating!=null&&<strong>{w.rating}</strong>}{w.tastingDate&&<span>{w.tastingDate}</span>}{index===0&&<CuveeCatalogLinks producer={producer} group={group} onChanged={reload}/>}</div></div>})}</div></div>})}</div>:<p>No tasting records linked to this producer yet.</p>}
+  <section className="detail-section"><p className="section-label">{producer.sharedOnly?'Shared wines':'Your tastings'}</p><h2>{tastedGroups.length} cuvée{tastedGroups.length===1?'':'s'} · {producer.tastedWines.length} tasting{producer.tastedWines.length===1?'':'s'}</h2>{tastedGroups.length?<div className="producer-tasted-groups">{tastedGroups.map(group=>{const releaseCount=group.releaseFamily?new Set(group.wines.map(w=>w.releaseDesignation).filter(Boolean)).size:0,identityMeta=[releaseCount?`${releaseCount} release${releaseCount===1?'':'s'}`:null,group.wineStyle,group.grapes.length?group.grapes.join(' / '):null].filter(Boolean).join(' · '),firstOwned=group.wines.findIndex(item=>!item.shared);return <div className="tasted-cuvee-group" key={`${group.catalogCuveeId??group.cuveeId??normalizeProducerAlias(group.name)}-${cuveeStyleFamily(group.wineStyle)||'unknown'}`}><div className="tasted-cuvee-title"><div><strong>{group.name}</strong>{identityMeta&&<small>{identityMeta}</small>}</div></div><div className="producer-tasted">{group.wines.map((w,index)=>{const release=String(w.releaseDesignation??'').trim(),subline=[release?(w.vintage??'NV'):null,w.appellation,w.region].filter(Boolean).join(' · '),href=w.shared?`/shared/wines/${w.id}`:`/wines/${w.id}`;return <div className="tasted-row tasted-vintage-row" key={w.id}><Link to={href} state={linkFrom({to:`/producers/${producer.id}`,label:producer.canonicalName})} className="tasted-row-link"><div className="tasted-thumb">{w.imageUrl?<img src={w.imageUrl} alt={`${w.wineName} ${w.vintage??'NV'} bottle`} className="tasted-thumb-image" loading="lazy" decoding="async"/>:w.imageId?<WineImage imageId={w.imageId} alt={`${w.wineName} ${w.vintage??'NV'} bottle`} className="tasted-thumb-image"/>:<span className="tasted-thumb-fallback">W</span>}</div><div className="tasted-copy"><strong>{release||w.vintage||'NV'}</strong><span>{subline}</span></div></Link><div className="tasted-meta">{w.rating!=null&&<strong>{w.rating}</strong>}{w.tastingDate&&<span>{w.tastingDate}</span>}{!w.shared&&index===firstOwned&&<CuveeCatalogLinks producer={producer} group={group} onChanged={reload}/>}</div></div>})}</div></div>})}</div>:<p>No tasting records linked to this producer yet.</p>}
   </section>
-  <section className="detail-section producer-identity"><p className="section-label">Identity & aliases</p><h2>Known producer names</h2>
+  {!producer.sharedOnly&&<section className="detail-section producer-identity"><p className="section-label">Identity & aliases</p><h2>Known producer names</h2>
    <div className="primary-name-control"><label>Primary display name<select value={primaryName} onChange={e=>setPrimaryName(e.target.value)}>{producer.aliases.map(alias=><option key={alias} value={alias}>{alias}</option>)}</select></label><button type="button" disabled={savingPrimary||!primaryName||primaryName===producer.canonicalName} onClick={savePrimaryName}>{savingPrimary?'Saving…':'Set primary'}</button></div>
    <p className="producer-help">The primary name is used in the Producers directory and profile heading. Changing it does not rewrite the producer name recorded on individual bottles, change the stable producer ID, or regenerate research.</p>
    <div className="alias-chips">{producer.aliases.map(alias=>{const normalized=normalizeProducerAlias(alias),link=linkedByName.get(normalized),isPrimary=normalized===primaryKey;return <span className="alias-chip" key={alias}>{alias}{isPrimary&&<em>Primary</em>}{link&&!isPrimary&&<button type="button" disabled={unlinking===link.mergeId} onClick={()=>unlinkAlias(link)}>{unlinking===link.mergeId?'Unlinking…':'Unlink'}</button>}{link&&isPrimary&&<small>Choose another primary before unlinking</small>}</span>})}</div><p className="producer-help">Add alias only links another producer name that already exists in your WineLog database. It does not accept free-text names or create a new identity. Linked producer identities can be unlinked again from here.</p>
    {!availableLoaded?<div className="alias-link-load"><button type="button" disabled={availableLoading} onClick={()=>{void loadAvailable()}}>{availableLoading?'Loading producer names…':'Choose a producer to link'}</button>{availableError&&<small role="alert">{availableError}</small>}</div>:available.length>0?<div className="alias-link-control"><select aria-label="Existing producer name to link" value={selectedAlias} onChange={e=>setSelectedAlias(e.target.value)}><option value="">Select an existing producer…</option>{available.map(item=><option key={item.id} value={item.id}>{item.canonicalName}</option>)}</select><button type="button" disabled={!selectedAlias||merging} onClick={addAlias}>{merging?'Linking…':'Add alias'}</button></div>:<small>No other producer names are available to link.</small>}
    {producer.researchHistoryCount>0&&<small>{producer.researchHistoryCount} prior research version{producer.researchHistoryCount===1?' is':'s are'} preserved in merge history.</small>}
-   {producer.tastedWines.length===0&&<div className="producer-remove">
+   {producer.tastedWines.every(wine=>wine.shared)&&<div className="producer-remove">
     <button type="button" className="secondary-danger" disabled={deleting} onClick={()=>void removeProducer()}>{deleting?'Deleting…':'Delete this producer'}</button>
     <small>Nothing is logged under this producer. A producer with wines is merged into the right one instead, which moves the wines with it.</small>
    </div>}
-  </section>
+  </section>}
  </article>
 }

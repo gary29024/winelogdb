@@ -13,7 +13,7 @@ import { ResearchCampaignHistory } from './ResearchCampaignHistory';
 export function ResearchCampaignPage(){
   const [unresearched,setUnresearched]=useState(0),[loading,setLoading]=useState(true),[finished,setFinished]=useState(0);
   const load=()=>listProducers()
-    .then(result=>setUnresearched(result.items.filter(item=>!item.researchedAt).length))
+    .then(result=>setUnresearched(result.items.filter(item=>!item.sharedOnly&&!item.researchedAt).length))
     .catch(()=>undefined)
     .finally(()=>setLoading(false));
 
