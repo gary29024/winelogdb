@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { FriendTagDialog } from './FriendTagDialog';
 import { getWineFriendTags,listFriendTags,setWineFriendTags,type FriendTag } from './friendTags';
-import { prepareSharingPhotos } from './sharingPhotos';
 
 export function WineSharing({wineId,imageIds}:{wineId:string;imageIds:string[]}){
  const [open,setOpen]=useState(false),[friends,setFriends]=useState<FriendTag[]>([]),[selected,setSelected]=useState<string[]>([]),[busy,setBusy]=useState(false),[message,setMessage]=useState(''),[error,setError]=useState('');
@@ -22,8 +21,6 @@ export function WineSharing({wineId,imageIds}:{wineId:string;imageIds:string[]})
    setOpen(false);
    if(!selected.length){setMessage('Friend tags removed.');return}
    setMessage(`Tagged with ${selected.length} friend${selected.length===1?'':'s'}.`);
-   try{await prepareSharingPhotos(imageIds)}
-   catch{setMessage(`Tagged with ${selected.length} friend${selected.length===1?'':'s'}. Photos could not be prepared for sharing, but the wine details are shared.`)}
   }catch(e){setError((e as Error).message)}
   finally{setBusy(false)}
  }
