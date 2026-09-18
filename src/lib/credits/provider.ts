@@ -28,7 +28,10 @@ export async function assertResearchInput(context:ProviderAuthorization|undefine
  if(!context||!('operationId' in context))return;
  const operation=await context.db.prepare('SELECT units_json FROM credit_operations WHERE id=? AND user_id=?').bind(context.operationId,owner).first<{units_json:string}>();
  const units=operation?JSON.parse(operation.units_json) as Array<{targetId?:string;targetFingerprint?:string;action:string}>:[];
- const unit=units.find(unit=>unit.targetId===targetId&&(kind==='wine'?unit.action.startsWith('wine_'):unit.action==='producer_research'));
+ // Owner producer work is priced as producer_research; members deliberately
+ // receive the cheaper profile-only producer_profile unit. Both authorize the
+ // same producer identity check before their queued provider request runs.
+ const unit=units.find(unit=>unit.targetId===targetId&&(kind==='wine'?unit.action.startsWith('wine_'):unit.action==='producer_research'||unit.action==='producer_profile'));
  if(!unit?.targetFingerprint||unit.targetFingerprint!==await researchInputFingerprint(kind,row))throw new ApiError(409,'Research identity changed; request a new credit quote');
 }
 /** A saved provider response is replayable. A missing response is never permission to resubmit. */
