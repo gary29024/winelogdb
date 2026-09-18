@@ -14,3 +14,9 @@ html,body,#root{width:100%;max-width:100%;overflow-x:hidden}body{overscroll-beha
 /* The chosen view has to outrank that, the same way the scope tabs do: a class
    alone loses to a hover rule, and on a phone the tap leaves the hover behind. */
 .journal-view-toggle button.active,.journal-view-toggle button.active:hover:not(:disabled){background:var(--ink);color:var(--paper)}
+
+/* Shared bottles use provenance by surface rather than a text badge. The image
+   remains untouched; only the card chrome changes, so the distinction survives
+   both list and grid layouts without consuming title space. */
+.wine-grid.journal-list.journal-gallery .journal-grid-card.shared{background:var(--shared-wash);border-color:var(--shared-line)}
+.journal-list-view .journal-card.shared{background:var(--shared-wash);box-shadow:inset 3px 0 0 var(--shared-line)}

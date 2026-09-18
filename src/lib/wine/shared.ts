@@ -1,5 +1,17 @@
-/** The complete shared-wine contract. Private journal fields never belong here. */
-export type SharedWine = {
+export type SharedWineExperience={
+ tastingNotes:string;
+ rating:number|null;
+ tastingDate:string|null;
+ tastingName:string|null;
+ venue:string|null;
+ locationName:string|null;
+ price:number|null;
+ currency:string|null;
+};
+
+/** Shared identity/facts plus the current viewer's own experience. Source-owner
+ * journal fields are never copied into the recipient's experience. */
+export type SharedWine = SharedWineExperience&{
  id:string;
  ownerName:string;
  producer:string;
@@ -10,9 +22,9 @@ export type SharedWine = {
  appellation:string|null;
  wineStyle:string|null;
  grapes:string[];
- tastingNotes:string;
- rating:number|null;
- tastingDate:string|null;
+ classification:'grand_cru'|'premier_cru'|'village'|null;
+ alcoholPercentage:number|null;
+ favorite:boolean;
  updatedAt:string;
  photos?:Array<{id:string;url:string}>;
 };

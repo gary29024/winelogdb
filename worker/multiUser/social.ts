@@ -10,12 +10,19 @@ export function sharedWine(row:Record<string,unknown>):SharedWine{
  const text=(value:unknown)=>typeof value==='string'?value:'';
  const number=(value:unknown)=>typeof value==='number'&&Number.isFinite(value)?value:null;
  let grapes:string[]=[];try{const data:unknown=JSON.parse(String(row.grapes_json||'[]'));if(Array.isArray(data))grapes=data.filter((value):value is string=>typeof value==='string')}catch{/* Invalid legacy grapes must not expose another field. */}
- return {id:text(row.id),ownerName:text(row.display_name),producer:text(row.producer),wineName:text(row.wine_name),vintage:number(row.vintage),country:text(row.country)||null,region:text(row.region)||null,appellation:text(row.appellation)||null,wineStyle:text(row.wine_style)||null,grapes,tastingNotes:text(row.tasting_notes),rating:number(row.rating),tastingDate:text(row.tasting_date)||null,updatedAt:text(row.updated_at)};
+ const tier=text(row.classification),classification=tier==='grand_cru'||tier==='premier_cru'||tier==='village'?tier:null;
+ return {id:text(row.id),ownerName:text(row.display_name),producer:text(row.producer),wineName:text(row.wine_name),vintage:number(row.vintage),country:text(row.country)||null,region:text(row.region)||null,appellation:text(row.appellation)||null,wineStyle:text(row.wine_style)||null,grapes,classification,alcoholPercentage:number(row.alcohol_percentage),favorite:Boolean(Number(row.viewer_favorite)||0),tastingNotes:text(row.viewer_tasting_notes),rating:number(row.viewer_rating),tastingDate:text(row.viewer_tasting_date)||null,tastingName:text(row.viewer_tasting_name)||null,venue:text(row.viewer_venue)||null,locationName:text(row.viewer_location_name)||null,price:number(row.viewer_price),currency:text(row.viewer_currency)||null,updatedAt:text(row.updated_at)};
 }
 export async function canReadShared(db:D1Database,viewer:string,wineId:string){
- return db.prepare(`SELECT w.*,u.display_name FROM wines w
+ return db.prepare(`SELECT w.*,u.display_name,
+   coalesce(pref.favorite,0) AS viewer_favorite,
+   coalesce(pref.tasting_notes,'') AS viewer_tasting_notes,
+   pref.rating AS viewer_rating,pref.tasting_date AS viewer_tasting_date,pref.tasting_name AS viewer_tasting_name,
+   pref.venue AS viewer_venue,pref.location_name AS viewer_location_name,pref.price AS viewer_price,pref.currency AS viewer_currency
+ FROM wines w
  JOIN friendships f ON f.user_id=? AND f.friend_id=w.owner_id
  JOIN app_users u ON u.id=w.owner_id AND u.status='active'
+ LEFT JOIN shared_wine_preferences pref ON pref.recipient_id=? AND pref.owner_id=w.owner_id AND pref.wine_id=w.id
  WHERE w.id=? AND (
    EXISTS(SELECT 1 FROM wine_shares s WHERE s.wine_id=w.id AND s.owner_id=w.owner_id AND s.recipient_id=?)
    OR EXISTS(
@@ -23,7 +30,7 @@ export async function canReadShared(db:D1Database,viewer:string,wineId:string){
      JOIN wine_experiences we ON we.owner_id=ts.owner_id AND we.tasting_id=ts.tasting_id AND we.wine_id=w.id
      WHERE ts.owner_id=w.owner_id AND ts.recipient_id=?
    )
- )`).bind(viewer,wineId,viewer,viewer).first<Record<string,unknown>>();
+ )`).bind(viewer,viewer,wineId,viewer,viewer).first<Record<string,unknown>>();
 }
 
 async function acceptedFriendIds(db:D1Database,owner:string,ids:string[]){
@@ -169,9 +176,14 @@ export const SHARED_WINES_LIST_SQL=`WITH accessible(wine_id,owner_id,shared_at) 
  JOIN app_users u ON u.id=a.owner_id AND u.status='active'
  ORDER BY a.shared_at DESC,a.wine_id LIMIT 25 OFFSET ?
 )
-SELECT w.*,p.display_name,p.shared_at
+SELECT w.*,p.display_name,p.shared_at,
+  coalesce(pref.favorite,0) AS viewer_favorite,
+  coalesce(pref.tasting_notes,'') AS viewer_tasting_notes,
+  pref.rating AS viewer_rating,pref.tasting_date AS viewer_tasting_date,pref.tasting_name AS viewer_tasting_name,
+  pref.venue AS viewer_venue,pref.location_name AS viewer_location_name,pref.price AS viewer_price,pref.currency AS viewer_currency
 FROM page p
 JOIN wines w ON w.id=p.wine_id AND w.owner_id=p.owner_id
+LEFT JOIN shared_wine_preferences pref ON pref.recipient_id=? AND pref.owner_id=p.owner_id AND pref.wine_id=p.wine_id
 ORDER BY p.shared_at DESC,w.id`;
 
 export async function socialRoute(request:Request,env:SocialEnv,member:Member):Promise<Response|null>{
@@ -272,7 +284,35 @@ export async function socialRoute(request:Request,env:SocialEnv,member:Member):P
  }
  if(path==='/api/shared/wines'&&request.method==='GET'){
   const offset=Math.max(0,Math.min(100000,Number(url.searchParams.get('offset'))||0));
-  const rows=await env.DB.prepare(SHARED_WINES_LIST_SQL).bind(member.id,member.id,member.id,offset).all<Record<string,unknown>>();return json({items:rows.results.map(sharedWine),nextOffset:rows.results.length===25?offset+25:null});
+  const rows=await env.DB.prepare(SHARED_WINES_LIST_SQL).bind(member.id,member.id,member.id,offset,member.id).all<Record<string,unknown>>();return json({items:rows.results.map(sharedWine),nextOffset:rows.results.length===25?offset+25:null});
+ }
+ const sharedExperience=path.match(/^\/api\/shared\/wines\/([^/]+)\/experience$/);
+ if(sharedExperience&&request.method==='PUT'){
+  const wine=await canReadShared(env.DB,member.id,sharedExperience[1]);if(!wine)throw new ApiError(404,'Shared wine not found');
+  const data=await body(request);
+  const optionalText=(value:unknown,max:number,label:string)=>{
+   if(value==null||value==='')return null;if(typeof value!=='string')throw new ApiError(400,`${label} must be text`);
+   const trimmed=value.trim();if(!trimmed)return null;if(trimmed.length>max)throw new ApiError(400,`${label} is too long`);return trimmed;
+  };
+  const optionalNumber=(value:unknown,min:number,max:number,label:string)=>{
+   if(value==null||value==='')return null;if(typeof value!=='number'||!Number.isFinite(value)||value<min||value>max)throw new ApiError(400,`${label} is invalid`);return value;
+  };
+  const tastingNotes=optionalText(data.tastingNotes,10000,'Sensory notes')??'',rating=optionalNumber(data.rating,0,100,'Rating');
+  const tastingDate=optionalText(data.tastingDate,10,'Drinking date');
+  if(tastingDate){const parsed=new Date(`${tastingDate}T00:00:00Z`);if(!/^\d{4}-\d{2}-\d{2}$/.test(tastingDate)||Number.isNaN(parsed.getTime())||parsed.toISOString().slice(0,10)!==tastingDate)throw new ApiError(400,'Drinking date is invalid')}
+  const tastingName=optionalText(data.tastingName,500,'Tasting / event'),venue=optionalText(data.venue,500,'Venue'),locationName=optionalText(data.locationName,500,'Location');
+  const price=optionalNumber(data.price,0,Number.MAX_SAFE_INTEGER,'Price');
+  const rawCurrency=optionalText(data.currency,3,'Currency'),currency=rawCurrency?.toUpperCase()??null;
+  if(currency&&!/^[A-Z]{3}$/.test(currency))throw new ApiError(400,'Use a 3-letter currency code such as USD, EUR or HKD');
+  const now=stamp();
+  await env.DB.prepare(`INSERT INTO shared_wine_preferences(
+    recipient_id,owner_id,wine_id,favorite,tasting_notes,rating,tasting_date,tasting_name,venue,location_name,price,currency,created_at,updated_at
+   ) VALUES(?,?,?,0,?,?,?,?,?,?,?,?,?,?)
+   ON CONFLICT(recipient_id,owner_id,wine_id) DO UPDATE SET
+    tasting_notes=excluded.tasting_notes,rating=excluded.rating,tasting_date=excluded.tasting_date,tasting_name=excluded.tasting_name,
+    venue=excluded.venue,location_name=excluded.location_name,price=excluded.price,currency=excluded.currency,updated_at=excluded.updated_at`)
+   .bind(member.id,String(wine.owner_id),sharedExperience[1],tastingNotes,rating,tastingDate,tastingName,venue,locationName,price,currency,now,now).run();
+  return json({ok:true,experience:{tastingNotes,rating,tastingDate,tastingName,venue,locationName,price,currency}});
  }
  const shared=path.match(/^\/api\/shared\/wines\/([^/]+)(?:\/photos\/([^/]+))?$/);
  if(shared&&request.method==='GET'){

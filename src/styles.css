@@ -42,6 +42,9 @@
   --warn:#7a5a18;--warn-line:#ead8ad;--warn-wash:#fffaf0;
   --bad:#7b2031;--bad-ink:#8a3343;--bad-line:#ecc8d0;--bad-wash:#fff7f8;
   --danger:#a52b3e;
+  /* Shared bottles are part of your journal, but not copies you own. A quiet
+     lilac surface marks that provenance without spending card space on a label. */
+  --shared-wash:#f6f2fa;--shared-line:#ddd3e9;--shared-ink:#654a7c;
 
   /* What is in the glass, for the tile shown when a wine has no photo yet.
      Keyed to the pour rather than to status, so sparkling is not green. */
@@ -91,6 +94,7 @@
     --warn:#dcaa5e;--warn-line:#574627;--warn-wash:#2a2317;
     --bad:#f0808f;--bad-ink:#f5a3af;--bad-line:#5e2a35;--bad-wash:#2a171c;
     --danger:#b3243c;
+    --shared-wash:#241d2e;--shared-line:#4b3a5d;--shared-ink:#d1b8e5;
 
     --pour:#212a3b;--pour-ink:#8f9bb1;
     --pour-red:#2c171d;--pour-red-ink:#f0909f;

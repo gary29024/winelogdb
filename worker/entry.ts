@@ -124,8 +124,10 @@ app.put('/api/wines/:id/favorite',async c=>{
       WHERE shared_wine_preferences.favorite<>1`).bind(owner,shared.source_owner_id,id,now,now).run();
     return c.json({id,favorite:true,changed:Boolean(saved.meta.changes)});
   }
-  const cleared=await c.env.DB.prepare('DELETE FROM shared_wine_preferences WHERE recipient_id=? AND owner_id=? AND wine_id=? AND favorite=1')
-    .bind(owner,shared.source_owner_id,id).run();
+  // The preference row may also contain this recipient's notes/date/price.
+  // Unfavoriting must not erase that personal experience.
+  const cleared=await c.env.DB.prepare('UPDATE shared_wine_preferences SET favorite=0,updated_at=? WHERE recipient_id=? AND owner_id=? AND wine_id=? AND favorite<>0')
+    .bind(now,owner,shared.source_owner_id,id).run();
   return c.json({id,favorite:false,changed:Boolean(cleared.meta.changes)});
 });
 
