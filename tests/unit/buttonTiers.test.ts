@@ -242,3 +242,17 @@ describe('a selected state that has to survive the pointer',()=>{
       'and at least one selected state names the pointer').toBe(true);
   });
 });
+
+
+describe('structure choice selected state',()=>{
+  it('keeps a selected option dark under the sticky iOS hover state',()=>{
+    // Mobile Safari can leave :hover active after a tap. The global button hover
+    // tier paints var(--ground), so a selected structure option needs a hover
+    // rule at least as specific as that tier or the new choice looks grey until
+    // another control is touched.
+    const selected=rules.find(rule=>rule.selector.split(',').some(part=>part.trim()==='.structure-option.selected:hover:not(:disabled)'));
+    expect(selected,'selected structure buttons should own their sticky-hover paint').toBeTruthy();
+    expect(selected!.body).toContain('background:var(--ink)');
+    expect(selected!.body).toContain('color:var(--paper)');
+  });
+});

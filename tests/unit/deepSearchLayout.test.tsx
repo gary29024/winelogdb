@@ -49,6 +49,19 @@ const wine=(over:Record<string,unknown>={})=>({
   tastingStructure:null,groupSourcePhotos:[],...over
 });
 
+const sharedDeepSearch={
+  summary:deepSearch.summary,vintageQuality:deepSearch.vintageQuality,producerDetails:deepSearch.producerDetails,
+  producerWinemakingPractices:deepSearch.producerWinemakingPractices,winemakingTechniques:deepSearch.winemakingTechniques,
+  terroir:deepSearch.terroir,drinkingWindow:deepSearch.drinkingWindow,sources:deepSearch.sources,researchedAt:deepSearch.researchedAt
+};
+const sharedWine=()=>({
+  id:'w1',ownerName:'Alice',producer:'Château La Fleur-Pétrus',producerId:null,wineName:'Château La Fleur-Pétrus',vintage:2014,
+  country:'France',region:'Bordeaux',appellation:'Pomerol',recognizedRegion:null,recognizedAppellation:null,
+  wineStyle:'red',grapes:['Merlot','Cabernet Franc'],grapeBlend:[],classification:null,alcoholPercentage:14.5,
+  deepSearch:sharedDeepSearch,sparklingDetails:null,favorite:false,updatedAt:'2026-01-01T00:00:00.000Z',photos:[],
+  tastingNotes:'',rating:null,tastingDate:null,tastingName:null,venue:null,locationName:null,price:null,currency:null,structure:null
+});
+
 let root:Root|null=null,host:HTMLDivElement|null=null;
 
 async function render(over:Record<string,unknown>={}){
@@ -62,6 +75,19 @@ async function render(over:Record<string,unknown>={}){
   root=createRoot(host);
   await act(async()=>{root!.render(<MemoryRouter initialEntries={['/wines/w1']}>
     <Routes><Route path="/wines/:id" element={<DetailPage/>}/></Routes>
+  </MemoryRouter>)});
+  return host;
+}
+
+async function renderShared(){
+  vi.stubGlobal('fetch',vi.fn(async()=>new Response(JSON.stringify(sharedWine()),{status:200,headers:{'content-type':'application/json'}})));
+  vi.resetModules();
+  const {SharedWinesPage}=await import('../../src/features/wines/SharedWinesPage');
+  host=document.createElement('div');
+  document.body.appendChild(host);
+  root=createRoot(host);
+  await act(async()=>{root!.render(<MemoryRouter initialEntries={['/shared/wines/w1']}>
+    <Routes><Route path="/shared/wines/:id" element={<SharedWinesPage/>}/></Routes>
   </MemoryRouter>)});
   return host;
 }
@@ -185,5 +211,32 @@ describe('Deep Search sources',()=>{
   it('shows nothing when there are no sources at all',async()=>{
     await render({deepSearch:{...deepSearch,sources:[]}});
     expect(host?.querySelector('.deep-sources')).toBeNull();
+  });
+});
+
+
+describe('Shared Deep Search research sections',()=>{
+  it('uses the same collapsed section controls as the owner page',async()=>{
+    await renderShared();
+    expect(sectionToggles()).toHaveLength(6);
+    expect(sectionToggles().every(button=>button.getAttribute('aria-expanded')==='false')).toBe(true);
+    expect(sectionBodies().every(body=>body.hidden)).toBe(true);
+    expect(host?.querySelector('.deep-summary')?.textContent).toContain('A structured, age-worthy Pomerol');
+    const toggleAll=host!.querySelector('.deep-toggle-all') as HTMLButtonElement;
+    expect(toggleAll.textContent).toBe('Expand all');
+    await click(toggleAll);
+    expect(sectionBodies().every(body=>!body.hidden)).toBe(true);
+    expect((host!.querySelector('.deep-toggle-all') as HTMLButtonElement).textContent).toBe('Collapse all');
+  });
+
+  it('remembers the same open sections across shared-wine visits',async()=>{
+    await renderShared();
+    await click(sectionToggles()[1]);
+    act(()=>root?.unmount());host?.remove();
+    root=null;host=null;
+    await renderShared();
+    expect(sectionToggles()[1].getAttribute('aria-expanded')).toBe('true');
+    expect(sectionBodies()[1].hidden).toBe(false);
+    expect(sectionBodies()[0].hidden).toBe(true);
   });
 });

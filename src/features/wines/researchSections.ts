@@ -1,4 +1,5 @@
 import type { DeepSearchResult } from '../../lib/db/schema';
+import { accountStorageKey } from '../../lib/auth/client';
 
 /**
  * Shape and ordering shared by both wine detail pages, so a friend's copy of a
@@ -9,6 +10,20 @@ import type { DeepSearchResult } from '../../lib/db/schema';
 export type DeepField='summary'|'expectedProfile'|'vintageQuality'|'producerDetails'|'producerWinemakingPractices'|'winemakingTechniques'|'terroir'|'drinkingWindow';
 
 export const DEEP_FIELDS:DeepField[]=['summary','expectedProfile','vintageQuality','producerDetails','producerWinemakingPractices','winemakingTechniques','terroir','drinkingWindow'];
+
+const DEEP_OPEN_FIELDS_KEY='winelog.deepSearch.openFields';
+export function readOpenDeepFields():Set<DeepField>{
+ try{
+  const raw=window.localStorage.getItem(accountStorageKey(DEEP_OPEN_FIELDS_KEY));if(!raw)return new Set();
+  const parsed=JSON.parse(raw) as unknown;
+  return new Set(Array.isArray(parsed)?parsed.filter((x):x is DeepField=>DEEP_FIELDS.includes(x as DeepField)):[]);
+ }catch{return new Set()}
+}
+export function writeOpenDeepFields(next:Set<DeepField>){
+ try{window.localStorage.setItem(accountStorageKey(DEEP_OPEN_FIELDS_KEY),JSON.stringify([...next]))}
+ catch{/* storage unavailable */}
+}
+
 
 /**
  * Only the research prose, so both the owner's full DeepSearchResult and the

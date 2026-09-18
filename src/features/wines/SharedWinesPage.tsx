@@ -11,7 +11,7 @@ import { FactList,WineDetailsSection,WineFactPills } from './WineFacts';
 import { SparklingDetailsCard } from './SparklingDetailsCard';
 import { structureValueLabel,type TastingStructure,type TastingStructureKey } from '../../lib/wine/tastingStructure';
 import { DeepSources,ResearchText } from './ResearchPresentation';
-import { researchSections } from './researchSections';
+import { readOpenDeepFields,researchSections,type DeepField,writeOpenDeepFields } from './researchSections';
 import '../../favorites.css';
 // The structure grid and the research panel are wine-detail markup whose rules
 // live in these two sheets. The classification pill's sheet is owned by the
@@ -45,7 +45,7 @@ const structureFields=[
 ] as const;
 
 export function SharedWinesPage(){
- const {id=''}=useParams(),{state}=useLocation(),[wine,setWine]=useState<SharedWine>(),[error,setError]=useState(''),[favoriteError,setFavoriteError]=useState(''),[editing,setEditing]=useState(false),[saving,setSaving]=useState(false),[notice,setNotice]=useState(''),[favoriteBusy,setFavoriteBusy]=useState(false),[selectedPhoto,setSelectedPhoto]=useState<string>(),[draft,setDraft]=useState<Draft>(EMPTY_DRAFT);
+ const {id=''}=useParams(),{state}=useLocation(),[wine,setWine]=useState<SharedWine>(),[error,setError]=useState(''),[favoriteError,setFavoriteError]=useState(''),[editing,setEditing]=useState(false),[saving,setSaving]=useState(false),[notice,setNotice]=useState(''),[favoriteBusy,setFavoriteBusy]=useState(false),[selectedPhoto,setSelectedPhoto]=useState<string>(),[draft,setDraft]=useState<Draft>(EMPTY_DRAFT),[openDeepFields,setOpenDeepFields]=useState<Set<DeepField>>(readOpenDeepFields);
  const back=useMemo(()=>backTargetFromState(state)??JOURNAL_BACK,[state]);
 
  useEffect(()=>{let active=true;setError('');setFavoriteError('');setNotice('');apiJson<SharedWine>(`/api/shared/wines/${id}`).then(item=>{if(active){setWine(item);setDraft(draftFromWine(item))}}).catch(e=>{if(active)setError((e as Error).message)});return()=>{active=false}},[id]);
@@ -54,6 +54,8 @@ export function SharedWinesPage(){
  // detail page it is also the only thing still moving. Retire it on its own.
  useEffect(()=>{if(!notice)return;const timer=setTimeout(()=>setNotice(''),4000);return()=>clearTimeout(timer)},[notice]);
 
+ function toggleDeepField(field:DeepField){setOpenDeepFields(current=>{const next=new Set(current);if(next.has(field))next.delete(field);else next.add(field);writeOpenDeepFields(next);return next})}
+ function toggleAllDeepFields(fields:DeepField[]){setOpenDeepFields(current=>{const allOpen=fields.every(field=>current.has(field)),next=allOpen?new Set([...current].filter(field=>!fields.includes(field))):new Set([...current,...fields]);writeOpenDeepFields(next);return next})}
  async function toggleFavorite(){
   if(!wine||favoriteBusy)return;const next=!wine.favorite;setFavoriteBusy(true);setWine({...wine,favorite:next});setFavoriteError('');
   try{await setWineFavorite(wine.id,next)}
@@ -130,10 +132,13 @@ export function SharedWinesPage(){
   {wine.deepSearch&&<section className="detail-section deep-search-panel">
    <div className="deep-panel-head"><p className="section-label">Deep Search</p></div>
    <div className="deep-summary"><ResearchText text={wine.deepSearch.summary}/></div>
-   {sections.length>0&&<div className="deep-research-sections">{sections.map(([label,field,value])=><section className="deep-research-section" key={field}>
-    <h3>{label}</h3>
-    <div className="deep-section-body"><ResearchText text={value}/></div>
-   </section>)}</div>}
+   {sections.length>0&&<div className="deep-research-sections">
+    <div className="deep-sections-head"><span>{sections.length} research section{sections.length===1?'':'s'}</span><button type="button" className="deep-toggle-all" onClick={()=>toggleAllDeepFields(sections.map(([,field])=>field))}>{sections.every(([,field])=>openDeepFields.has(field))?'Collapse all':'Expand all'}</button></div>
+    {sections.map(([label,field,value])=>{const open=openDeepFields.has(field),panelId=`shared-deep-section-${field}`;return <section className={`deep-research-section${open?'':' is-collapsed'}`} key={field}>
+     <h3><button type="button" className="deep-section-toggle" aria-expanded={open} aria-controls={panelId} onClick={()=>toggleDeepField(field)}><span className="deep-section-name">{label}</span><span className="deep-chevron" aria-hidden="true"/></button></h3>
+     <div className="deep-section-body" id={panelId} hidden={!open}><ResearchText text={value}/>{field==='producerWinemakingPractices'&&<small>General domaine context; not automatically treated as verified for this exact vintage.</small>}</div>
+    </section>})}
+   </div>}
    <DeepSources sources={wine.deepSearch.sources}/>
    <small>Research shared by {wine.ownerName} · updated {formatDate(wine.deepSearch.researchedAt.slice(0,10))}</small>
   </section>}
