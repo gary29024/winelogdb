@@ -44,13 +44,13 @@ const recognized={
 let root:Root|null=null,host:HTMLDivElement|null=null;
 const calls:{url:string;body:FormData}[]=[];
 
-async function render(state?:unknown){
+async function render(state?:unknown,recognitionPayload:unknown=recognized){
   stubOneRealm();
   calls.length=0;
   vi.stubGlobal('fetch',vi.fn(async(url:string,init?:RequestInit)=>{
     if(String(url).startsWith('/api/credits/quotes'))return Response.json({id:'quote',total:0,available:100,units:[]});
     if(String(url)==='/api/recognition')calls.push({url:String(url),body:await new Request(new URL(url,location.origin),init).formData()});
-    return new Response(JSON.stringify(recognized),{status:200,headers:{'content-type':'application/json'}});
+    return new Response(JSON.stringify(recognitionPayload),{status:200,headers:{'content-type':'application/json'}});
   }));
   let previews=0;
   vi.stubGlobal('URL',Object.assign(globalThis.URL,{createObjectURL:()=>`blob:preview-${++previews}`,revokeObjectURL:()=>{}}));
@@ -119,6 +119,15 @@ describe('the single wine page',()=>{
     expect(host!.textContent).toContain('identified in 4.2s');
     const producer=host!.querySelector('.review input') as HTMLInputElement;
     expect(producer.value).toBe('Domaine Dujac');
+  });
+
+  it('ignores WineLog credit transport metadata on a member recognition response',async()=>{
+    await render(undefined,{...recognized,creditOperationId:'operation-1',creditSettlement:{status:'complete',captured:0,reserved:0}});
+    await pick('front.jpg','back.jpg');
+    await click(button('Identify this wine')!);
+    expect(host!.querySelector('.scan-error')).toBeNull();
+    expect(host!.querySelector('.review h2')?.textContent).toBe('Combined identification');
+    expect((host!.querySelector('.review input') as HTMLInputElement).value).toBe('Domaine Dujac');
   });
 
   it('says so when recognition fails instead of leaving the page still',async()=>{

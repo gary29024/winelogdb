@@ -4,7 +4,7 @@ import { ApiError,json,stamp,type IdentityEnv } from './multiUser/common';
 import { authenticate,authRoute,verifyOrigin } from './multiUser/auth';
 import { socialRoute } from './multiUser/social';
 import { adminRoute,deploymentAiCost } from './multiUser/admin';
-import { aiRoute,creditRead,creditSummary,quote,reserve,saveOperationResponse,reconcileOperation,wineTargets,settle,type CreditOperation } from './multiUser/credits';
+import { aiRoute,creditRead,publicAiResponse,quote,reserve,saveOperationResponse,reconcileOperation,wineTargets,settle,type CreditOperation } from './multiUser/credits';
 import { memberActionForRequest,memberAiAccess,memberAiActionAccess,reserveMemberAiAllowance } from './multiUser/memberAccess';
 import { providerAuthorization } from './multiUser/provider';
 import { claimDelivery,durableQueue,finishDelivery,flushOutbox,maintainJobs,markUncertain,type JobEnvelope } from './multiUser/jobs';
@@ -66,7 +66,7 @@ export default {
       if(!claim.allowed){const message=allowanceMessage(claim.access.label,claim.access.resetsAt);if(!existing)await settle(env.DB,operation,0,{body:{error:message},status:429},false);throw new ApiError(429,message)}
      }
     }
-    if(existing)return operation.response_json?json({...JSON.parse(operation.response_json),creditOperationId:operation.id,creditSettlement:creditSummary(operation)},operation.response_status??202):json({accepted:true,creditOperationId:operation.id,status:operation.status},202);
+    if(existing)return operation.response_json?json(publicAiResponse(path,JSON.parse(operation.response_json) as Record<string,unknown>,operation),operation.response_status??202):json({accepted:true,creditOperationId:operation.id,status:operation.status},202);
     const following=await env.DB.prepare('SELECT operation_id FROM research_followers WHERE operation_id=?').bind(operation.id).first();
     if(following){await env.DB.prepare("UPDATE credit_operations SET status='running',response_json=?,response_status=202,updated_at=? WHERE id=?").bind(JSON.stringify({accepted:true,waitingForFriend:true}),stamp(),operation.id).run();return json({accepted:true,waitingForFriend:true,creditOperationId:operation.id},202)}
     // Zero reserved credits no longer means "cached": included/allowed work is
@@ -91,7 +91,7 @@ export default {
      const forwarded=await internalRequest(request,env,member.id);
      const response=await legacy.fetch(forwarded,executionEnv,ctx),data=await saveOperationResponse(env.DB,operation,response);
      ctx.waitUntil(flushOutbox(env.DB,env.RESEARCH_QUEUE));
-     return json({...data,creditOperationId:operation.id},response.status);
+     return json(publicAiResponse(path,data,operation),response.status);
     }catch(error){await markUncertain(env.DB,operation.id);throw error}
    }
    const forwarded=await internalRequest(request,env,member.id);

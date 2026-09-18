@@ -9,6 +9,7 @@ import { derivedTags } from '../wines/wineTags';
 import { prepareRecognitionImage } from './prepareImage';
 import { authHeaders,clearSession } from '../../lib/auth/client';
 import { AppIcon } from '../../components/AppIcons';
+import { stripAiTransportMetadata } from '../../lib/credits/response';
 
 type Item={file:File;recognitionFile?:File;preview:string;status:string;progress:number;error?:string;metadata?:PhotoMetadata;width?:number;height?:number};
 type RecognitionErrorBody={error?:unknown;requestId?:unknown};
@@ -58,7 +59,7 @@ export function UploadPage(){
       const response=await readResponse(rr);
       if(rr.status===401){clearSession();navigate('/login',{replace:true});return}
       if(!rr.ok){failAll(readError(response));return}
-      const result=recognitionSchema.parse(response);
+      const result=recognitionSchema.parse(stripAiTransportMetadata(response));
       const duration=result.recognitionDurationMs!=null?` in ${(result.recognitionDurationMs/1000).toFixed(1)}s`:'';
       setItems(xs=>xs.map(x=>({...x,status:`identified${duration}`,progress:100,error:undefined})));
       setReview(result);
