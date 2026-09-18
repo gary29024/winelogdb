@@ -2,9 +2,9 @@ import { useEffect,useState } from 'react';
 import { hasSparklingDetails,type SparklingDetails } from '../../lib/wine/sparklingDetails';
 import '../../sparklingDetails.css';
 
-type Props={details:SparklingDetails;onChange:(next:SparklingDetails)=>void};
+type Props={details:SparklingDetails;onChange:(next:SparklingDetails)=>void;showHelper?:boolean};
 
-export function SparklingDetailsFields({details,onChange}:Props){
+export function SparklingDetailsFields({details,onChange,showHelper=true}:Props){
   const [open,setOpen]=useState(()=>hasSparklingDetails(details));
   const populated=hasSparklingDetails(details);
   useEffect(()=>{if(populated)setOpen(true)},[populated]);
@@ -13,7 +13,7 @@ export function SparklingDetailsFields({details,onChange}:Props){
   return <details className="sparkling-details-editor" open={open} onToggle={e=>setOpen(e.currentTarget.open)}>
     <summary><span>Champagne / sparkling details</span><small>Optional · release-specific</small></summary>
     <div className="sparkling-details-body">
-      <p className="sparkling-details-helper">WineLog already tries to auto-fill these during identification when they are readable in the scanned photos. Leave anything not printed blank; the separate photo extraction is for backfilling saved wines. These details stay with this logged wine, not the whole cuvée.</p>
+      {showHelper&&<p className="sparkling-details-helper">WineLog already tries to auto-fill these during identification when they are readable in the scanned photos. Leave anything not printed blank; the separate photo extraction is for backfilling saved wines. These details stay with this logged wine, not the whole cuvée.</p>}
       <div className="sparkling-spec-grid">
         <label>Dosage <span>g/L</span><input type="number" min="0" max="100" step="0.1" value={details.dosageGPerL??''} onChange={e=>set('dosageGPerL',numberValue(e.target.value))}/></label>
         <label>Dosage style<input value={details.dosageCategory??''} placeholder="e.g. Extra Brut" onChange={e=>set('dosageCategory',e.target.value||null)}/></label>

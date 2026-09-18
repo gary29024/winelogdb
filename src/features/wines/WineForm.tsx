@@ -16,6 +16,7 @@ import { ChampagnePhotoBackfill } from './ChampagnePhotoBackfill';
 import { isChampagne,missingChampagneDetails } from '../../lib/wine/champagneExtraction';
 import { FriendTagDialog } from './FriendTagDialog';
 import { listFriendTags,type FriendTag } from './friendTags';
+import { getAccount } from '../../lib/auth/client';
 import '../../producerResolution.css';
 import '../../wineFormCompact.css';
 
@@ -55,6 +56,7 @@ type WineFormProps={initial?:WineFormInitial;id?:string;photos?:WinePhoto[];onSa
   holdingId?:string};
 
 export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,enableFriendTagging=false,holdingId}:WineFormProps){
+  const memberView=getAccount()?.role==='member';
   const nav=useNavigate(),[busy,setBusy]=useState(false),[error,setError]=useState('');
   const [producer,setProducer]=useState(String(initial?.producer??'')),[producerResolution,setProducerResolution]=useState<ProducerResolution|null>(null),[resolvingProducer,setResolvingProducer]=useState(false);
   /** The spelling the library uses, once it has been taken - so the screen can say it did. */
@@ -344,11 +346,11 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,enable
       {grapeHints.length>0&&<span className="grape-hints" role="group" aria-label="Grape suggestions">
         {grapeHints.map(name=><button type="button" key={name} className="grape-hint" onClick={()=>completeGrape(name)}>{name}</button>)}
       </span>}
-      <small>Percentages are optional. Separate grapes with commas. A grape sold under another name — Pinot Nero, Garnacha — is filed under the one name when you save.</small>
+      <small>Percentages are optional. Separate grapes with commas.{!memberView&&<> A grape sold under another name — Pinot Nero, Garnacha — is filed under the one name when you save.</>}</small>
     </label>
 
     {id&&isChampagne(initial??{})&&<ChampagnePhotoBackfill key={id} wineId={id} imageIds={initial?.imageIds??[]} details={sparklingDetails} onApply={suggestions=>setSparklingDetails(current=>({...current,...missingChampagneDetails(current,suggestions)}))}/>}
-    {sparklingVisible&&<SparklingDetailsFields details={sparklingDetails} onChange={setSparklingDetails}/>} 
+    {sparklingVisible&&<SparklingDetailsFields details={sparklingDetails} onChange={setSparklingDetails} showHelper={!memberView}/>} 
 
     <details className="structure-fields structure-disclosure" open={structureOpen} onToggle={e=>setStructureOpen(e.currentTarget.open)}><summary><span>Structure</span><small>Optional</small></summary><div className="structure-disclosure-body"><small className="structure-helper">Tap the value itself. Tap the selected value again to clear it.</small>{structureFields.map(item=><div className="structure-row" key={item.key}><span>{item.label}</span><div className="structure-options" role="group" aria-label={item.label}>{item.options.map(([value,label])=><button key={value} type="button" className={`structure-option${structure[item.key]===value?' selected':''}`} aria-pressed={structure[item.key]===value} onClick={()=>chooseStructure(item.key,value)}>{label}</button>)}</div></div>)}</div></details>
 
@@ -358,15 +360,15 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,enable
       <div className="wine-compact-row three"><label>Drinking date<input name="tastingDate" type="date" value={tastingDate} onChange={e=>setTastingDate(e.target.value)}/></label>{field('rating','Rating / 100','number','0.5')}<label>Price<div className="price-currency-inputs"><input name="currency" type="text" inputMode="text" maxLength={3} defaultValue={String(initial?.currency??'')} placeholder="HKD" aria-label="Currency"/><input name="price" type="number" step="0.01" defaultValue={String(initial?.price??'')} placeholder="0" aria-label="Price"/></div></label></div>
       <label className="full-field">Tasting / event group<input name="tastingName" type="text" value={tastingName} onChange={e=>setTastingName(e.target.value)}/></label>
       {!id&&activeTasting&&<p className="tasting-prefill-note">Prefilled from your open tasting — <strong>{activeTasting.name}</strong>. Change any of these to log this bottle outside it.</p>}
-      <div className="wine-compact-row two"><label>Venue<input name="venue" type="text" value={venue} onChange={e=>setVenue(e.target.value)}/></label><label>{hasGps?'Approximate place':'Place name'}<input name="locationName" type="text" defaultValue={String(initial?.locationName??'')}/>{hasEstimatedPlace&&<small>Suggested from the photo location data. Verify or edit this approximation before saving.</small>}</label></div>
-      {hasGps&&<div className="gps-readout"><strong>Photo GPS</strong><span>{Number(initial?.latitude).toFixed(6)}, {Number(initial?.longitude).toFixed(6)}</span><small>These coordinates are read directly from EXIF and stored exactly. The place name above is only an approximate interpretation.</small></div>}
-      <small>Use “Tasting / event group” to group wines from the same dinner, trip, class or formal tasting. Exact GPS remains attached even if you edit or clear the approximate place name.</small>
+      <div className="wine-compact-row two"><label>Venue<input name="venue" type="text" value={venue} onChange={e=>setVenue(e.target.value)}/></label><label>{hasGps?'Approximate place':'Place name'}<input name="locationName" type="text" defaultValue={String(initial?.locationName??'')}/>{hasEstimatedPlace&&!memberView&&<small>Suggested from the photo location data. Verify or edit this approximation before saving.</small>}</label></div>
+      {hasGps&&!memberView&&<div className="gps-readout"><strong>Photo GPS</strong><span>{Number(initial?.latitude).toFixed(6)}, {Number(initial?.longitude).toFixed(6)}</span><small>These coordinates are read directly from EXIF and stored exactly. The place name above is only an approximate interpretation.</small></div>}
+      {!memberView&&<small>Use “Tasting / event group” to group wines from the same dinner, trip, class or formal tasting. Exact GPS remains attached even if you edit or clear the approximate place name.</small>}
     </fieldset>
 
     <label className="full-field">Tags (comma separated)<input name="tags" defaultValue={initial?.tags?.join(', ')??''}/>
-      <small>Tags for the place, the grapes and the style follow the wine: correct a field above and the tag it put there is corrected with it. Anything you typed is left alone.</small></label>
+      {!memberView&&<small>Tags for the place, the grapes and the style follow the wine: correct a field above and the tag it put there is corrected with it. Anything you typed is left alone.</small>}</label>
     {photos.length>0&&<p className="form-note">{photos.length} photo{photos.length===1?'':'s'} will be saved permanently only after this wine is successfully logged.</p>}
-    {allowFriendTagging&&<div className="form-note"><button type="button" onClick={()=>{setTagDraft(tagSelected);setTagError('');setTagOpen(true)}}>Tag friends{tagSelected.length?` · ${tagSelected.length} selected`:''}</button><span> Optional — choose who should receive this wine when it is saved.</span></div>}
+    {allowFriendTagging&&<div className="form-note"><button type="button" onClick={()=>{setTagDraft(tagSelected);setTagError('');setTagOpen(true)}}>Tag friends{tagSelected.length?` · ${tagSelected.length} selected`:''}</button>{!memberView&&<span> Optional — choose who should receive this wine when it is saved.</span>}</div>}
     <FriendTagDialog open={tagOpen} title="Tag friends when saved" description="Choose friends for this wine. Your account defaults are preselected; changing this selection affects only this wine." friends={tagFriends} selected={tagDraft} error={tagError} onSelectedChange={setTagDraft} onConfirm={()=>{setTagSelected(tagDraft);setTagTouched(true);setTagOpen(false)}} onClose={()=>setTagOpen(false)}/>
     {error&&<p role="alert">{error}</p>}
     {/* Saving before the open-tasting probe answers used to post a null

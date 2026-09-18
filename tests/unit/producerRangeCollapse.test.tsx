@@ -4,7 +4,8 @@ import { createRoot,type Root } from 'react-dom/client';
 import { MemoryRouter,Route,Routes } from 'react-router-dom';
 import { afterEach,beforeEach,describe,expect,it,vi } from 'vitest';
 
-vi.mock('../../src/lib/auth/client',async importOriginal=>({...await importOriginal<object>(),apiFetch:(...args:Parameters<typeof fetch>)=>fetch(...args)}));
+const authState=vi.hoisted(()=>({role:null as 'owner'|'member'|null}));
+vi.mock('../../src/lib/auth/client',async importOriginal=>({...await importOriginal<object>(),apiFetch:(...args:Parameters<typeof fetch>)=>fetch(...args),getAccount:()=>authState.role?{id:authState.role,email:`${authState.role}@example.com`,display_name:authState.role,role:authState.role,status:'active'}:null}));
 
 declare global{var IS_REACT_ACT_ENVIRONMENT:boolean}
 globalThis.IS_REACT_ACT_ENVIRONMENT=true;
@@ -27,13 +28,14 @@ let root:Root|null=null,host:HTMLDivElement|null=null;
 
 let posted:Array<{url:string;body:unknown}>=[];
 
-async function render(over:Record<string,unknown>={}){
+async function render(over:Record<string,unknown>={},options:{role?:'owner'|'member';researchRun?:Record<string,unknown>}={}){
   posted=[];
+  authState.role=options.role??null;
   vi.stubGlobal('fetch',vi.fn(async(url:string,init?:RequestInit)=>{
     const target=String(url);
     if(init?.method==='POST'){posted.push({url:target,body:JSON.parse(String(init.body??'{}'))});return new Response(JSON.stringify({id:'d1',deleted:true}),{status:200,headers:{'content-type':'application/json'}})}
     if(target.includes('/name-suggestions'))return new Response(JSON.stringify({items:[]}),{status:200,headers:{'content-type':'application/json'}});
-    if(target.includes('/research-status'))return new Response(null,{status:404});
+    if(target.includes('/research-status'))return options.researchRun?new Response(JSON.stringify(options.researchRun),{status:200,headers:{'content-type':'application/json'}}):new Response(null,{status:404});
     if(target.endsWith('/api/producers'))return new Response(JSON.stringify({items:[]}),{status:200,headers:{'content-type':'application/json'}});
     return new Response(JSON.stringify({...detail,...over}),{status:200,headers:{'content-type':'application/json'}});
   }));
@@ -57,7 +59,7 @@ const fixButtons=()=>[...(host?.querySelectorAll('.catalog-fix')??[])] as HTMLBu
 beforeEach(()=>{window.localStorage.clear();vi.spyOn(window,'confirm').mockReturnValue(true)});
 afterEach(()=>{
   if(root)act(()=>root!.unmount());
-  host?.remove();root=null;host=null;vi.unstubAllGlobals();vi.restoreAllMocks();window.localStorage.clear();
+  host?.remove();root=null;host=null;authState.role=null;vi.unstubAllGlobals();vi.restoreAllMocks();window.localStorage.clear();
 });
 
 describe('Producer wine range',()=>{
@@ -72,6 +74,15 @@ describe('Producer wine range',()=>{
     await render();
     await click(byLabel(label)!);
     expect(posted[0]).toMatchObject({url:'/api/producers/p1/research',body:{refreshProfile,confirmation:'RUN_PRODUCER_RESEARCH'}});
+  });
+
+  it('shows members one producer research action and omits the completed-run card',async()=>{
+    await render({researchedAt:'2026-09-18T10:00:00.000Z',profileResearchedAt:'2026-09-18T10:00:00.000Z'},
+      {role:'member',researchRun:{requestId:'member-run',producerId:'p1',status:'complete',stage:'complete',attempt:1,message:'done',startedAt:'2026-09-18T09:57:00.000Z',updatedAt:'2026-09-18T10:00:00.000Z',completedAt:'2026-09-18T10:00:00.000Z',durationMs:163700}});
+    expect(byLabel('Refresh profile')).toBeTruthy();
+    expect(byLabel('Research producer')).toBeUndefined();
+    expect(host!.querySelector('.producer-research-status.complete')).toBeNull();
+    expect(host!.textContent).not.toContain('Research complete');
   });
 
   it('groups the range by style and starts expanded',async()=>{
