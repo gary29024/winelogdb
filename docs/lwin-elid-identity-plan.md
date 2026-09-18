@@ -165,7 +165,8 @@ Deployment order:
 4. apply generated D1 import SQL;
 5. check sync-state row and sample identities;
 6. optionally run a bounded backfill of existing wines after sample verification;
-7. add automated LWIN Change Since sync later when Liv-ex credentials are available.
+7. continue using the documented full-snapshot refresh whenever a newer official LWIN workbook is downloaded;
+8. add automated LWIN Change Since sync later when Liv-ex credentials are available.
 
 ## Explicit non-goals for this PR
 
@@ -180,9 +181,12 @@ Deployment order:
 
 ## Follow-up work
 
+Manual full-snapshot import remains a supported maintenance path after bootstrap. See [Importing and refreshing the LWIN reference database](./lwin-import.md). This covers the period while API credentials are pending, API outages, and periodic reconciliation.
+
 After Liv-ex API access is confirmed:
 - add scheduled `LWIN Change Since` ingestion through the same upsert layer;
-- reconcile changed/combined LWIN mappings without rewriting user data silently.
+- reconcile changed/combined LWIN mappings without rewriting user data silently;
+- retain the official full-snapshot importer as a fallback and reconciliation path.
 
 If ELID publishes an official machine-readable feed/API with suitable reuse terms:
 - import it into `wine_reference_external_ids`;

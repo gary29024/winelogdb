@@ -46,6 +46,10 @@ build command to use and what to do when a push does not trigger a build.
 
 No bucket CORS policy is needed because uploads and image reads pass through the authenticated Worker. If direct signed uploads are introduced later, restrict CORS to the exact application origin, required `PUT`/`HEAD` methods and content headers; never use `*` with credentials. Store object keys—not URLs, API credentials, or signatures—in D1.
 
+## LWIN reference database
+
+WineLog can import the official LWIN catalogue into the global D1 reference layer and refresh it again from later snapshots while Liv-ex API access is pending. The import is idempotent and does not duplicate the catalogue per user. See **[Importing and refreshing the LWIN reference database](docs/lwin-import.md)** for the Windows/PowerShell workflow, backup steps, D1 commands and verification queries.
+
 ## Search
 
 The migration creates owner/filter/sort indexes and an FTS5 table for producer, name, region, grapes, notes, event, and tags. API filtering supports vintage, country, region, style, minimum rating, and event, plus stable `limit`/`offset` loading and sorts for newest, oldest, rating, producer, and vintage. The UI stores all selections in URL query parameters so views are bookmarkable. Production write paths should maintain `wine_search` using D1 triggers or application transactions when enabling FTS queries at scale.
