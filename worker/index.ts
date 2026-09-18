@@ -49,8 +49,11 @@ const wineSelect=`SELECT w.*,
  LEFT JOIN tastings t ON t.owner_id=we.owner_id AND t.id=we.tasting_id`;
 
 export const mapWine=(r:Record<string,unknown>,imageIds:string[]=[])=>({
- id:r.id,ownerId:r.owner_id,producer:r.producer,wineName:r.wine_name,vintage:r.vintage,country:r.country,region:r.region,appellation:r.appellation,recognizedRegion:r.recognized_region??null,recognizedAppellation:r.recognized_appellation??null,classification:r.classification??null,classificationOverride:r.classification_override??null,
+ id:r.id,ownerId:r.owner_id,producer:r.producer,wineName:r.wine_name,vintage:r.vintage,
+ recognizedProducer:r.recognized_producer??null,recognizedWineName:r.recognized_wine_name??null,recognizedVintageText:r.recognized_vintage_text??null,vintageKind:r.vintage_kind??(r.vintage==null?'unknown':'vintage'),releaseDesignation:r.release_designation??null,
+ country:r.country,region:r.region,appellation:r.appellation,recognizedRegion:r.recognized_region??null,recognizedAppellation:r.recognized_appellation??null,classification:r.classification??null,classificationOverride:r.classification_override??null,
  grapes:parseJson<string[]>(r.grapes_json,[]),grapeBlend:parseJson<Array<{grape:string;percentage?:number|null}>>(r.grape_blend_json,[]),wineStyle:r.wine_style,alcoholPercentage:r.alcohol_percentage,
+ colour:r.colour??null,productType:r.product_type??null,productSubtype:r.product_subtype??null,referenceProductKey:r.reference_product_key??null,lwin7:r.lwin7??null,lwin11:r.lwin11??null,elid:r.elid??null,identityMatchStatus:r.identity_match_status??null,identityMatchConfidence:r.identity_match_confidence??null,identityMatchedAt:r.identity_matched_at??null,
  tastingNotes:r.experience_notes??r.tasting_notes,rating:r.experience_rating??r.rating,tastingDate:r.experience_date??r.tasting_date,event:r.event,venue:r.venue,
  tastingName:r.tasting_name,locationName:r.location_name,latitude:r.latitude,longitude:r.longitude,
  producerId:r.producer_id??null,favorite:Boolean(r.favorite),

@@ -219,7 +219,7 @@ export function TastingSheetPage(){
       // Rows the sheet repeats across a page break are one wine, not two.
       const seen=new Set<string>();
       const deduped=collected.filter(match=>{
-        const key=`${match.wine.producer.toLowerCase()}::${match.wine.wineName.toLowerCase()}::${match.wine.vintage??'nv'}`;
+        const key=`${match.wine.producer.toLowerCase()}::${match.wine.wineName.toLowerCase()}::${match.wine.vintage??match.wine.vintageKind??'unknown'}::${match.wine.releaseDesignation??''}`;
         if(seen.has(key))return false;
         seen.add(key);return true;
       });
@@ -356,6 +356,7 @@ export function TastingSheetPage(){
         tastingDate:tasting?.tastingDate??null,venue:tasting?.venue??null,
         wines:selectedNew.map(row=>({
           producer:row.wine.producer,wineName:row.wine.wineName,vintage:row.wine.vintage,
+          recognizedProducer:row.wine.recognizedProducer,recognizedWineName:row.wine.recognizedWineName,recognizedVintageText:row.wine.recognizedVintageText,vintageKind:row.wine.vintageKind,releaseDesignation:row.wine.releaseDesignation,
           country:row.wine.country,region:row.wine.region,appellation:row.wine.appellation,
           wineStyle:row.wine.style,grapes:row.wine.grapes,price:row.chosenPrice
         }))

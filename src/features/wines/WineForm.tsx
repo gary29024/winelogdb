@@ -82,6 +82,8 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,enable
   // Controlled so the duplicate probe can key on it: 2019 and 2020 of one cuvée
   // are two wines, and an evening pours both.
   const [vintageInput,setVintageInput]=useState(initial?.vintage==null?'':String(initial.vintage));
+  const [vintageKind,setVintageKind]=useState(String(initial?.vintageKind??(initial?.vintage!=null?'vintage':'unknown')));
+  const [releaseDesignation,setReleaseDesignation]=useState(String(initial?.releaseDesignation??''));
   const [cuveeResolution,setCuveeResolution]=useState<CuveeResolution|null>(null),[resolvingCuvee,setResolvingCuvee]=useState(false),[preferCuveePrimaryName,setPreferCuveePrimaryName]=useState(false);
   const [structure,setStructure]=useState<TastingStructure>(()=>({...initial?.tastingStructure})),[structureOpen,setStructureOpen]=useState(()=>hasTastingStructure(initial?.tastingStructure??null));
   const [sparklingDetails,setSparklingDetails]=useState<SparklingDetails>(()=>({...emptySparklingDetails,...initial?.sparklingDetails}));
@@ -253,8 +255,14 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,enable
         grapes:initial?.grapes,style:initial?.wineStyle}),
       derivedTags({country,region,appellation,grapes:grapeBlend.map(x=>x.grape),style:wineStyleValue}));
     const savedSparklingDetails=hasSparklingDetails(sparklingDetails)?sparklingDetails:null;
+    const vintageValue=fd.get('vintage')?Number(fd.get('vintage')):null;
     const input:WineFormInput={
-      producer,wineName,vintage:fd.get('vintage')?Number(fd.get('vintage')):null,
+      producer,wineName,vintage:vintageValue,
+      recognizedProducer:initial?.recognizedProducer??initial?.producer??producer,
+      recognizedWineName:initial?.recognizedWineName??initial?.wineName??wineName,
+      recognizedVintageText:initial?.recognizedVintageText??(vintageValue!=null?String(vintageValue):null),
+      vintageKind:(vintageValue!=null?'vintage':vintageKind||'unknown') as WineInput['vintageKind'],
+      releaseDesignation:releaseDesignation.trim()||null,
       country,region,appellation,
       // The reading the wine arrived with, sent back untouched - recognition
       // hands the form values it has already normalised, so re-deriving from
@@ -327,7 +335,8 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,enable
       {matched&&!matched.sharedOnly&&wineName.trim()&&(resolvingCuvee?<div className="producer-resolution cuvee-resolution matched"><span>Checking this producer’s cuvées…</span></div>:matchedCuvee?<><details className="producer-resolution cuvee-resolution matched compact-resolution"><summary>✓ Existing cuvée · {matchedCuvee.canonicalName}</summary><div className="compact-resolution-body"><span>{wineName.trim()===matchedCuvee.canonicalName?matchedCuvee.canonicalName:`${wineName.trim()} → ${matchedCuvee.canonicalName}`}</span><small>{matchedCuvee.matchType==='structured'?'Matched by stable producer + appellation/cuvée identity':matchedCuvee.matchType==='alias'?'Matched via a known cuvée name':'Same canonical cuvée identity'}{matchedCuvee.catalogBacked?' · producer catalogue-backed':''}{matchedCuvee.vintages.length?` · tasted vintages ${matchedCuvee.vintages.join(', ')}`:''}</small></div></details>{canPreferPrimary&&<label className="cuvee-primary-choice"><input type="checkbox" checked={preferCuveePrimaryName} onChange={e=>setPreferCuveePrimaryName(e.target.checked)}/><span>Use “{wineName.trim()}” as the primary cuvée name when saving</span><small>The cuvée ID stays the same; the old wording remains a searchable alias for every vintage.</small></label>}</>:<div className="producer-resolution cuvee-resolution new"><strong>○ New cuvée</strong><span>No existing cuvée identity for this producer matches this wine. WineLog will create one when saved.</span></div>)}
     </div>
 
-    <div className="wine-compact-row three"><label>Vintage<input name="vintage" type="number" value={vintageInput} onChange={e=>setVintageInput(e.target.value)}/></label><label>Style<select name="wineStyle" value={wineStyle} onChange={e=>setWineStyle(e.target.value)}><option value="">Unknown</option>{['red','white','rose','sparkling','dessert','fortified','orange','other'].map(x=><option key={x}>{x}</option>)}</select></label>{field('alcoholPercentage','Alcohol %','number','0.1')}</div>
+    <div className="wine-compact-row three"><label>Vintage<input name="vintage" type="number" value={vintageInput} onChange={e=>{setVintageInput(e.target.value);if(e.target.value)setVintageKind('vintage');else if(vintageKind==='vintage')setVintageKind('unknown')}}/></label><label>Style<select name="wineStyle" value={wineStyle} onChange={e=>setWineStyle(e.target.value)}><option value="">Unknown</option>{['red','white','rose','sparkling','dessert','fortified','orange','other'].map(x=><option key={x}>{x}</option>)}</select></label>{field('alcoholPercentage','Alcohol %','number','0.1')}</div>
+    <div className="wine-compact-row two"><label>Vintage type<select value={vintageKind} onChange={e=>setVintageKind(e.target.value)} disabled={Boolean(vintageInput)}><option value="vintage">Vintage</option><option value="non_vintage">Non-vintage</option><option value="multi_vintage">Multi-vintage</option><option value="unknown">Unknown / unreadable</option></select><small>{vintageInput?'A year is entered, so this is a vintage wine.':'NV is different from a label whose vintage simply could not be read.'}</small></label><label>Edition / release<input type="text" value={releaseDesignation} onChange={e=>setReleaseDesignation(e.target.value)} placeholder="e.g. 171ème Édition, MV20"/><small>Use this for a numbered or named release, not as a substitute for a vintage year.</small></label></div>
     <div className="wine-compact-row two">{field('country','Country')}{field('region','Region')}</div>
     <div className="wine-compact-row appellation-row"><label>Appellation<input name="appellation" value={appellation} onChange={e=>setAppellation(e.target.value)}/><small>{denomination?`Recognized as a ${denomination}; no need to type it.`:'The denomination is read from the name, so leave DOC / DOCG / AVA off — but keep IGT or IGP, which tells a zone apart from the region it shares a name with.'}</small></label>
       <label>Cru level<select name="classificationOverride" value={cruOverride} onChange={e=>setCruOverride(e.target.value)}>

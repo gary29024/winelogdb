@@ -1,8 +1,11 @@
-import type { WineInput } from '../db/schema';
-
 export const vintageKinds=['vintage','non_vintage','multi_vintage','unknown'] as const;
 export type VintageKind=typeof vintageKinds[number];
 export type IdentityMatchStatus='matched'|'suggested'|'ambiguous'|'unmatched'|'manual'|'conflict';
+export type ReferenceIdentityInput={
+ producer:string;wineName:string;vintage?:number|null;vintageKind?:VintageKind|null;releaseDesignation?:string|null;
+ recognizedProducer?:string|null;recognizedWineName?:string|null;recognizedVintageText?:string|null;
+ country?:string|null;region?:string|null;wineStyle?:string|null;
+};
 
 export function normalizeReferenceText(value:string|null|undefined){
   return (value??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase()
@@ -51,7 +54,7 @@ function colourFromStyle(style:string|null|undefined){
  * identity is never overwritten by the reference catalogue.
  */
 export function referenceIdentityStatements(
-  db:D1Database,owner:string,wineId:string,w:WineInput,stamp=new Date().toISOString(),updateExisting=false
+  db:D1Database,owner:string,wineId:string,w:ReferenceIdentityInput,stamp=new Date().toISOString(),updateExisting=false
 ){
   const vintageKind=normalizedVintageKind(w.vintage,w.vintageKind as VintageKind|null|undefined);
   const evidence=updateExisting

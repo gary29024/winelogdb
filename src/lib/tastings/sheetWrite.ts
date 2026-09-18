@@ -2,6 +2,7 @@ import { z } from 'zod';
 import { canonicalizeWineFields } from '../wine/canonicalize';
 import { ensureWineIdentity } from '../wine/identity';
 import { attachWinesToTasting } from './attach';
+import { referenceIdentityStatements } from '../wine/referenceIdentity';
 
 /**
  * Writing what a wine list said, once the reader has agreed to it.
@@ -53,6 +54,8 @@ const sheetWineInput=z.object({
   producer:z.string().trim().min(1).max(300),
   wineName:z.string().trim().min(1).max(300),
   vintage:z.number().int().min(1000).max(2200).nullable().optional(),
+  recognizedProducer:z.string().trim().max(300).nullable().optional(),recognizedWineName:z.string().trim().max(300).nullable().optional(),recognizedVintageText:z.string().trim().max(300).nullable().optional(),
+  vintageKind:z.enum(['vintage','non_vintage','multi_vintage','unknown']).nullable().optional(),releaseDesignation:z.string().trim().max(300).nullable().optional(),
   country:z.string().trim().max(300).nullable().optional(),
   region:z.string().trim().max(300).nullable().optional(),
   appellation:z.string().trim().max(300).nullable().optional(),
@@ -98,6 +101,11 @@ export async function createSheetWines(db:D1Database,owner:string,tastingId:stri
         JSON.stringify(wine.grapes??[]),'[]',wine.wineStyle??null,
         input.tastingDate??null,input.venue??null,
         wine.price??null,wine.price==null?null:input.currency??null,stamp,stamp)));
+
+  // The bulk sheet path bypasses /api/wines, so run the same local reference
+  // identity statements explicitly. This is still local D1 work: no provider
+  // call and no per-row network request.
+  for(const {id,wine} of rows)await db.batch(referenceIdentityStatements(db,owner,id,wine,stamp,false));
 
   // Serial and after the inserts: producer and cuvée linking reads rows back
   // and writes alias tables, so it cannot be folded into the insert batch.
