@@ -12,9 +12,26 @@ export function sharedWine(row:Record<string,unknown>):SharedWine{
  return {id:text(row.id),ownerName:text(row.display_name),producer:text(row.producer),wineName:text(row.wine_name),vintage:number(row.vintage),country:text(row.country)||null,region:text(row.region)||null,appellation:text(row.appellation)||null,wineStyle:text(row.wine_style)||null,grapes,tastingNotes:text(row.tasting_notes),rating:number(row.rating),tastingDate:text(row.tasting_date)||null,updatedAt:text(row.updated_at)};
 }
 export async function canReadShared(db:D1Database,viewer:string,wineId:string){
- return db.prepare(`SELECT w.*,u.display_name FROM wine_shares s JOIN wines w ON w.id=s.wine_id AND w.owner_id=s.owner_id
- JOIN friendships f ON f.user_id=s.recipient_id AND f.friend_id=s.owner_id JOIN app_users u ON u.id=s.owner_id AND u.status='active'
- WHERE s.recipient_id=? AND s.wine_id=?`).bind(viewer,wineId).first<Record<string,unknown>>();
+ return db.prepare(`SELECT w.*,u.display_name FROM wines w
+ JOIN friendships f ON f.user_id=? AND f.friend_id=w.owner_id
+ JOIN app_users u ON u.id=w.owner_id AND u.status='active'
+ WHERE w.id=? AND (
+   EXISTS(SELECT 1 FROM wine_shares s WHERE s.wine_id=w.id AND s.owner_id=w.owner_id AND s.recipient_id=?)
+   OR EXISTS(
+     SELECT 1 FROM tasting_shares ts
+     JOIN wine_experiences we ON we.owner_id=ts.owner_id AND we.tasting_id=ts.tasting_id AND we.wine_id=w.id
+     WHERE ts.owner_id=w.owner_id AND ts.recipient_id=?
+   )
+ )`).bind(viewer,wineId,viewer,viewer).first<Record<string,unknown>>();
+}
+
+async function acceptedFriendIds(db:D1Database,owner:string,ids:string[]){
+ if(ids.length>24)throw new ApiError(400,'Choose up to 24 friends');
+ const unique=[...new Set(ids)];
+ if(!unique.length)return unique;
+ const friends=(await db.prepare('SELECT friend_id FROM friendships WHERE user_id=?').bind(owner).all<{friend_id:string}>()).results;
+ if(unique.some(id=>!friends.some(friend=>friend.friend_id===id)))throw new ApiError(400,'Only accepted friends can receive this wine');
+ return unique;
 }
 /** Accept only baseline JPEG derivatives and remove all application/comment metadata. */
 export function stripJpegMetadata(bytes:Uint8Array):Uint8Array{
@@ -60,24 +77,65 @@ export async function socialRoute(request:Request,env:IdentityEnv&{WINE_IMAGES:R
    return json({ok:true,name});
   }
  }
- if(path==='/api/friends'&&request.method==='GET')return json({items:(await env.DB.prepare("SELECT u.id,u.display_name FROM friendships f JOIN app_users u ON u.id=f.friend_id AND u.status='active' WHERE f.user_id=? ORDER BY u.display_name").bind(member.id).all()).results});
+ if(path==='/api/friends'&&request.method==='GET')return json({items:(await env.DB.prepare(`SELECT u.id,u.display_name,
+   CASE WHEN d.recipient_id IS NULL THEN 0 ELSE 1 END AS defaultShare
+   FROM friendships f JOIN app_users u ON u.id=f.friend_id AND u.status='active'
+   LEFT JOIN member_share_defaults d ON d.owner_id=f.user_id AND d.recipient_id=f.friend_id
+   WHERE f.user_id=? ORDER BY u.display_name`).bind(member.id).all()).results.map(row=>({...row,defaultShare:Boolean(Number((row as Record<string,unknown>).defaultShare)||0)}))});
+ const defaultShare=path.match(/^\/api\/friends\/([^/]+)\/default-share$/);
+ if(defaultShare&&request.method==='PUT'){
+  const data=await body(request),friendId=defaultShare[1];
+  if(!await env.DB.prepare('SELECT 1 FROM friendships WHERE user_id=? AND friend_id=?').bind(member.id,friendId).first())throw new ApiError(400,'Only accepted friends can be a default tag');
+  if(data.enabled===true)await env.DB.prepare('INSERT OR IGNORE INTO member_share_defaults(owner_id,recipient_id) VALUES(?,?)').bind(member.id,friendId).run();
+  else if(data.enabled===false)await env.DB.prepare('DELETE FROM member_share_defaults WHERE owner_id=? AND recipient_id=?').bind(member.id,friendId).run();
+  else throw new ApiError(400,'Choose whether this friend is tagged by default');
+  return json({ok:true});
+ }
  const friend=path.match(/^\/api\/friends\/([^/]+)$/);
  if(friend&&request.method==='DELETE'){
   await env.DB.batch([
    env.DB.prepare('DELETE FROM friendships WHERE (user_id=? AND friend_id=?) OR (user_id=? AND friend_id=?)').bind(member.id,friend[1],friend[1],member.id),
-   env.DB.prepare('DELETE FROM wine_shares WHERE (owner_id=? AND recipient_id=?) OR (owner_id=? AND recipient_id=?)').bind(member.id,friend[1],friend[1],member.id)
+   env.DB.prepare('DELETE FROM wine_shares WHERE (owner_id=? AND recipient_id=?) OR (owner_id=? AND recipient_id=?)').bind(member.id,friend[1],friend[1],member.id),
+   env.DB.prepare('DELETE FROM member_share_defaults WHERE (owner_id=? AND recipient_id=?) OR (owner_id=? AND recipient_id=?)').bind(member.id,friend[1],friend[1],member.id),
+   env.DB.prepare('DELETE FROM tasting_shares WHERE (owner_id=? AND recipient_id=?) OR (owner_id=? AND recipient_id=?)').bind(member.id,friend[1],friend[1],member.id)
   ]);return json({ok:true});
+ }
+ const bulkShares=path==='/api/wines/shares'&&request.method==='PUT';
+ if(bulkShares){
+  const data=await body(request);
+  if(!Array.isArray(data.wineIds)||!data.wineIds.length||data.wineIds.length>100||data.wineIds.some(id=>typeof id!=='string'))throw new ApiError(400,'Choose between 1 and 100 wines');
+  if(!Array.isArray(data.recipientIds)||data.recipientIds.some(id=>typeof id!=='string'))throw new ApiError(400,'Choose valid friends');
+  const wineIds=[...new Set(data.wineIds as string[])],ids=await acceptedFriendIds(env.DB,member.id,data.recipientIds as string[]);
+  const owned=await env.DB.prepare('SELECT count(*) AS count FROM wines WHERE owner_id=? AND id IN (SELECT value FROM json_each(?))').bind(member.id,JSON.stringify(wineIds)).first<{count:number}>();
+  if(Number(owned?.count)!==wineIds.length)throw new ApiError(404,'One or more wines were not found');
+  const statements=[env.DB.prepare('DELETE FROM wine_shares WHERE owner_id=? AND wine_id IN (SELECT value FROM json_each(?))').bind(member.id,JSON.stringify(wineIds))];
+  if(ids.length)statements.push(env.DB.prepare(`INSERT OR IGNORE INTO wine_shares(wine_id,owner_id,recipient_id)
+    SELECT w.id,?,f.friend_id FROM wines w
+    JOIN json_each(?) selected ON selected.value=w.id
+    JOIN friendships f ON f.user_id=? AND f.friend_id IN (SELECT value FROM json_each(?))
+    WHERE w.owner_id=?`).bind(member.id,JSON.stringify(wineIds),member.id,JSON.stringify(ids),member.id));
+  await env.DB.batch(statements);return json({ok:true,count:wineIds.length});
+ }
+ const tastingShares=path.match(/^\/api\/tastings\/([^/]+)\/shares$/);
+ if(tastingShares){
+  const tasting=await env.DB.prepare('SELECT id FROM tastings WHERE id=? AND owner_id=?').bind(tastingShares[1],member.id).first();
+  if(!tasting)throw new ApiError(404,'Tasting not found');
+  if(request.method==='GET')return json({recipientIds:(await env.DB.prepare('SELECT recipient_id FROM tasting_shares WHERE tasting_id=? AND owner_id=?').bind(tastingShares[1],member.id).all<{recipient_id:string}>()).results.map(item=>item.recipient_id)});
+  if(request.method==='PUT'){
+   const data=await body(request);if(!Array.isArray(data.recipientIds)||data.recipientIds.some(id=>typeof id!=='string'))throw new ApiError(400,'Choose valid friends');
+   const ids=await acceptedFriendIds(env.DB,member.id,data.recipientIds as string[]);
+   await env.DB.batch([env.DB.prepare('DELETE FROM tasting_shares WHERE tasting_id=? AND owner_id=?').bind(tastingShares[1],member.id),...ids.map(id=>env.DB.prepare('INSERT INTO tasting_shares(tasting_id,owner_id,recipient_id) VALUES(?,?,?)').bind(tastingShares[1],member.id,id))]);
+   return json({ok:true});
+  }
  }
  const shares=path.match(/^\/api\/wines\/([^/]+)\/shares$/);
  if(shares){
   const wine=await env.DB.prepare('SELECT id FROM wines WHERE id=? AND owner_id=?').bind(shares[1],member.id).first();if(!wine)throw new ApiError(404,'Wine not found');
   if(request.method==='GET')return json({recipientIds:(await env.DB.prepare('SELECT recipient_id FROM wine_shares WHERE wine_id=? AND owner_id=?').bind(shares[1],member.id).all<{recipient_id:string}>()).results.map(x=>x.recipient_id)});
   if(request.method==='PUT'){
-   const data=await body(request);if(!Array.isArray(data.recipientIds)||data.recipientIds.length>24||data.recipientIds.some(x=>typeof x!=='string'))throw new ApiError(400,'Choose up to 24 friends');
-   const ids=[...new Set(data.recipientIds as string[])];
-   const friends=(await env.DB.prepare('SELECT friend_id FROM friendships WHERE user_id=?').bind(member.id).all<{friend_id:string}>()).results;
-   if(ids.some(id=>!friends.some(f=>f.friend_id===id)))throw new ApiError(400,'Only accepted friends can receive this wine');
-   await env.DB.batch([env.DB.prepare('DELETE FROM wine_shares WHERE wine_id=? AND owner_id=?').bind(shares[1],member.id),...ids.map(id=>env.DB.prepare('INSERT INTO wine_shares(wine_id,owner_id,recipient_id) SELECT ?,?,? WHERE EXISTS(SELECT 1 FROM friendships WHERE user_id=? AND friend_id=?)').bind(shares[1],member.id,id,member.id,id))]);return json({ok:true});
+   const data=await body(request);if(!Array.isArray(data.recipientIds)||data.recipientIds.some(x=>typeof x!=='string'))throw new ApiError(400,'Choose valid friends');
+   const ids=await acceptedFriendIds(env.DB,member.id,data.recipientIds as string[]);
+   await env.DB.batch([env.DB.prepare('DELETE FROM wine_shares WHERE wine_id=? AND owner_id=?').bind(shares[1],member.id),...ids.map(id=>env.DB.prepare('INSERT INTO wine_shares(wine_id,owner_id,recipient_id) VALUES(?,?,?)').bind(shares[1],member.id,id))]);return json({ok:true});
   }
  }
  const derivative=path.match(/^\/api\/images\/([^/]+)\/sharing-copy$/);
@@ -91,9 +149,13 @@ export async function socialRoute(request:Request,env:IdentityEnv&{WINE_IMAGES:R
  }
  if(path==='/api/shared/wines'&&request.method==='GET'){
   const offset=Math.max(0,Math.min(100000,Number(url.searchParams.get('offset'))||0));
-  const rows=await env.DB.prepare(`SELECT w.*,u.display_name FROM wine_shares s JOIN wines w ON w.id=s.wine_id AND w.owner_id=s.owner_id
-  JOIN friendships f ON f.user_id=s.recipient_id AND f.friend_id=s.owner_id JOIN app_users u ON u.id=s.owner_id AND u.status='active'
-  WHERE s.recipient_id=? ORDER BY s.created_at DESC,s.wine_id LIMIT 25 OFFSET ?`).bind(member.id,offset).all<Record<string,unknown>>();return json({items:rows.results.map(sharedWine),nextOffset:rows.results.length===25?offset+25:null});
+  const rows=await env.DB.prepare(`SELECT w.*,u.display_name FROM wines w
+  JOIN friendships f ON f.user_id=? AND f.friend_id=w.owner_id
+  JOIN app_users u ON u.id=w.owner_id AND u.status='active'
+  WHERE EXISTS(SELECT 1 FROM wine_shares s WHERE s.wine_id=w.id AND s.owner_id=w.owner_id AND s.recipient_id=?)
+     OR EXISTS(SELECT 1 FROM tasting_shares ts JOIN wine_experiences we ON we.owner_id=ts.owner_id AND we.tasting_id=ts.tasting_id AND we.wine_id=w.id
+       WHERE ts.owner_id=w.owner_id AND ts.recipient_id=?)
+  ORDER BY w.updated_at DESC,w.id LIMIT 25 OFFSET ?`).bind(member.id,member.id,member.id,offset).all<Record<string,unknown>>();return json({items:rows.results.map(sharedWine),nextOffset:rows.results.length===25?offset+25:null});
  }
  const shared=path.match(/^\/api\/shared\/wines\/([^/]+)(?:\/photos\/([^/]+))?$/);
  if(shared&&request.method==='GET'){
