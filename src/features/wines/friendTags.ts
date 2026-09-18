@@ -11,7 +11,7 @@ export const setWineFriendTags=(wineId:string,recipientIds:string[])=>
   apiJson<{ok:true}>(`/api/wines/${wineId}/shares`,'PUT',{recipientIds});
 
 export const setBulkWineFriendTags=(wineIds:string[],recipientIds:string[])=>
-  apiJson<{ok:true;count:number}>('/api/wines/shares','PUT',{wineIds,recipientIds});
+  apiJson<{ok:true;count:number}>('/api/wines/shares','PUT',{wineIds,recipientIds,mode:'add'});
 
 export const getTastingFriendTags=(tastingId:string)=>
   apiJson<{recipientIds:string[]}>(`/api/tastings/${tastingId}/shares`);
