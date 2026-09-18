@@ -27,9 +27,9 @@ export function WineSharing({wineId,imageIds}:{wineId:string;imageIds:string[]})
   }catch(e){setError((e as Error).message)}
   finally{setBusy(false)}
  }
- return <section className="wine-sharing">
+ return <div className="wine-sharing">
   <button type="button" onClick={()=>open?setOpen(false):void show()}>Tag friends</button>
   <FriendTagDialog open={open} title="Tag friends" description="Choose friends who can see this wine. Notes, rating, tasting date and sharing-safe wine photos are included; price, venue, photo location and cellar stay private." friends={friends} selected={selected} busy={busy} error={error} onSelectedChange={setSelected} onConfirm={()=>void save()} onClose={()=>setOpen(false)}/>
   {message&&<p role="status">{message}</p>}
- </section>;
+ </div>;
 }
