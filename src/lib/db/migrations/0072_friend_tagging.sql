@@ -20,10 +20,10 @@ DROP TRIGGER IF EXISTS storage_delete;
 
 CREATE TRIGGER storage_insert AFTER INSERT ON stored_objects BEGIN
  INSERT INTO storage_totals(owner_id,byte_size,metered_byte_size)
- VALUES(new.owner_id,new.byte_size,CASE WHEN new.counts_toward_member_limit=1 THEN new.byte_size ELSE 0 END)
+ VALUES(new.owner_id,new.byte_size,new.byte_size*new.counts_toward_member_limit)
  ON CONFLICT(owner_id) DO UPDATE SET
    byte_size=byte_size+new.byte_size,
-   metered_byte_size=metered_byte_size+CASE WHEN new.counts_toward_member_limit=1 THEN new.byte_size ELSE 0 END;
+   metered_byte_size=metered_byte_size+new.byte_size*new.counts_toward_member_limit;
  UPDATE storage_totals
  SET byte_size=byte_size+new.byte_size,metered_byte_size=metered_byte_size+new.byte_size
  WHERE owner_id='*';
@@ -33,8 +33,8 @@ CREATE TRIGGER storage_update AFTER UPDATE ON stored_objects BEGIN
  UPDATE storage_totals SET
    byte_size=byte_size+new.byte_size-old.byte_size,
    metered_byte_size=metered_byte_size
-     +CASE WHEN new.counts_toward_member_limit=1 THEN new.byte_size ELSE 0 END
-     -CASE WHEN old.counts_toward_member_limit=1 THEN old.byte_size ELSE 0 END
+     +new.byte_size*new.counts_toward_member_limit
+     -old.byte_size*old.counts_toward_member_limit
  WHERE owner_id=new.owner_id;
  UPDATE storage_totals SET
    byte_size=byte_size+new.byte_size-old.byte_size,
@@ -45,7 +45,7 @@ END;
 CREATE TRIGGER storage_delete AFTER DELETE ON stored_objects BEGIN
  UPDATE storage_totals SET
    byte_size=byte_size-old.byte_size,
-   metered_byte_size=metered_byte_size-CASE WHEN old.counts_toward_member_limit=1 THEN old.byte_size ELSE 0 END
+   metered_byte_size=metered_byte_size-old.byte_size*old.counts_toward_member_limit
  WHERE owner_id=old.owner_id;
  UPDATE storage_totals SET
    byte_size=byte_size-old.byte_size,
