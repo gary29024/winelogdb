@@ -9,7 +9,7 @@ export type ReferenceIdentityInput={
 
 export function normalizeReferenceText(value:string|null|undefined){
   return (value??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase()
-    .replace(/[’'\`]/g,'').replace(/&/g,' and ').replace(/[^\p{L}\p{N}]+/gu,' ').trim();
+    .replace(/[’'`]/g,'').replace(/&/g,' and ').replace(/[^\p{L}\p{N}]+/gu,' ').trim();
 }
 
 export function referenceWineKey(wineName:string|null|undefined,releaseDesignation?:string|null){

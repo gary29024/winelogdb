@@ -19,7 +19,7 @@ export const recognitionSchema = z.object({
 }).strict();
 export type RecognitionResult = z.infer<typeof recognitionSchema>;
 export function parseRecognition(raw: string): RecognitionResult {
-  const cleaned=raw.replace(/^\`\`\`(?:json)?\s*|\s*\`\`\`$/g,'');
+  const cleaned=raw.replace(/^```(?:json)?\s*|\s*```$/g,'');
   const parsed=recognitionSchema.parse(JSON.parse(cleaned));
   return recognitionSchema.parse(canonicalizeRecognitionEvidence(parsed));
 }

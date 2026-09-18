@@ -1,7 +1,7 @@
 import { createHash } from 'node:crypto';
 import { mkdir,readFile,writeFile } from 'node:fs/promises';
 import { basename,join,resolve } from 'node:path';
-import { LWIN_HEADERS,lwinUpsertSql,parseLwinReference,sqlLiteral,validateLwinHeaders,type LwinInputRow } from '../src/lib/wine/lwinImport';
+import { lwinUpsertSql,parseLwinReference,sqlLiteral,validateLwinHeaders,type LwinInputRow } from '../src/lib/wine/lwinImport';
 
 function csvRows(input:string){
  const rows:string[][]=[];let row:string[]=[],cell='',quoted=false;

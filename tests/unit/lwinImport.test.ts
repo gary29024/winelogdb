@@ -1,6 +1,6 @@
 import { describe,expect,it } from 'vitest';
 import { lwinUpsertSql,parseLwinReference,sqlLiteral,validateLwinHeaders,LWIN_HEADERS } from '../../src/lib/wine/lwinImport';
-\nfunction sample(over:Record<string,unknown>={}){
+function sample(over:Record<string,unknown>={}){
  const base:Record<string,unknown>={LWIN:'1000131.0',STATUS:'Combined',DISPLAY_NAME:'Trimbach, Clos St Hune Grand Cru',PRODUCER_TITLE:'Domaine',PRODUCER_NAME:'Trimbach',WINE:'Clos St Hune Grand Cru',COUNTRY:'France',REGION:'Alsace',SUB_REGION:'NA',SITE:'NA',PARCEL:'NA',COLOUR:'White',TYPE:'Wine',SUB_TYPE:'Still',DESIGNATION:'AOP',CLASSIFICATION:'NA',VINTAGE_CONFIG:'sequential',FIRST_VINTAGE:'1980.0',FINAL_VINTAGE:'NA',DATE_ADDED:'2020-01-01',DATE_UPDATED:'2026-09-16 17:02:13',REFERENCE:'1316384.0'};
  return {...base,...over};
 }
