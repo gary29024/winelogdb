@@ -13,6 +13,8 @@ import { buildResearchTargets,loadResearchCache,upsertResearchCache } from '../.
 import { startWineBatchResearch } from '../../src/lib/research/batchWineResearch';
 import { deploymentAiCost } from '../../worker/multiUser/admin';
 import { flushOutbox,durableQueue,maintainJobs } from '../../worker/multiUser/jobs';
+import { wineSaveStatements } from '../../src/lib/db/wineSave';
+import type { WineInput } from '../../src/lib/db/schema';
 
 let database:ReturnType<typeof realD1>;
 const member=(id:string):Member=>({id,email:`${id}@example.com`,display_name:id,role:id==='owner'?'owner':'member',status:'active'});
@@ -193,6 +195,30 @@ describe('sharing boundaries',()=>{
   const allowed=await (await read('bob'))!.json();expect(allowed).toMatchObject({tastingNotes:'Lovely'});expect(allowed).not.toHaveProperty('price');expect(allowed).not.toHaveProperty('venue');
   await expect(read('carol')).rejects.toMatchObject({status:404});
   await socialRoute(new Request('https://wine.example/api/friends/alice',{method:'DELETE'}),e,member('bob'));await expect(read('bob')).rejects.toMatchObject({status:404});
+ });
+ it('lets a tasting tag cover existing and future tasting wines without copying direct grants',async()=>{
+  wines();
+  database.sql.exec("INSERT INTO tastings(id,owner_id,name,created_at,updated_at) VALUES('t-share','alice','Friends tasting','now','now'); INSERT INTO wine_experiences(id,owner_id,wine_id,tasting_id,created_at,updated_at) VALUES('e-share','alice','w','t-share','now','now')");
+  const e={...env(),WINE_IMAGES:{} as R2Bucket};
+  await socialRoute(new Request('https://wine.example/api/tastings/t-share/shares',{method:'PUT',body:JSON.stringify({recipientIds:['bob']})}),e,member('alice'));
+  expect(database.sql.prepare("SELECT count(*) AS n FROM wine_shares WHERE wine_id='w'").get()!.n).toBe(0);
+  const allowed=await (await socialRoute(new Request('https://wine.example/api/shared/wines/w'),e,member('bob')))!.json();
+  expect(allowed).toMatchObject({wineName:'Clos de la Roche',tastingNotes:'Lovely'});expect(allowed).not.toHaveProperty('price');
+  database.sql.exec("DELETE FROM wine_experiences WHERE id='e-share'");
+  await expect(socialRoute(new Request('https://wine.example/api/shared/wines/w'),e,member('bob'))).rejects.toMatchObject({status:404});
+ });
+ it('stores a per-friend default and applies it to the next saved wine',async()=>{
+  database.sql.exec("INSERT INTO friendships(user_id,friend_id) VALUES('alice','bob'),('bob','alice')");
+  const e={...env(),WINE_IMAGES:{} as R2Bucket};
+  await socialRoute(new Request('https://wine.example/api/friends/bob/default-share',{method:'PUT',body:JSON.stringify({enabled:true})}),e,member('alice'));
+  const friends=await (await socialRoute(new Request('https://wine.example/api/friends'),e,member('alice')))!.json() as {items:Array<{id:string;defaultShare:boolean}>};
+  expect(friends.items.find(item=>item.id==='bob')?.defaultShare).toBe(true);
+  const id='default-shared-wine',input={producer:'Test',wineName:'Default share',grapes:[],grapeBlend:[],tags:[],tastingNotes:''} as unknown as WineInput;
+  await database.db.batch([
+   database.db.prepare("INSERT INTO wines(id,owner_id,producer,wine_name,created_at,updated_at) VALUES(?,?,?,?,?,?)").bind(id,'alice','Test','Default share','now','now'),
+   ...wineSaveStatements(database.db,'alice',id,input)
+  ]);
+  expect(database.sql.prepare('SELECT recipient_id FROM wine_shares WHERE wine_id=?').get(id)?.recipient_id).toBe('bob');
  });
  it('has an explicit personal-field allowlist',()=>{expect(sharedWine({id:'w',price:10,venue:'x',latitude:1,tags_json:'["secret"]'})).not.toHaveProperty('tags')});
  it('removes JPEG application metadata and rejects non-JPEG inputs',()=>{
