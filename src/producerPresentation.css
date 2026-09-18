@@ -1,3 +1,6 @@
 /* The official website belongs in the structured Contact block. The header already
    identifies the producer and location, so repeating the same link there is noise. */
 .producer-detail .producer-header .producer-site-link{display:none!important}
+
+/* Identity/alias explanations are secondary guidance, not primary producer content. */
+.producer-detail .producer-help{font-size:.8rem;line-height:1.45;color:var(--ink-6)}
