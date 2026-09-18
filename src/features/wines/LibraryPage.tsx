@@ -65,13 +65,12 @@ function WineCard({wine:w,view,selecting,selected,onToggle,onFavorite,favoriteBu
   // owns the loaded object URL, so replacing this subtree makes a loaded photo
   // flash back through its loading state even when the URL itself is cached.
   const selectionMark=<span className="journal-select-mark" aria-hidden="true" style={{display:selectable?'grid':'none'}}>{selected?'✓':''}</span>;
-  // Provenance needs a cue that survives colour-blindness, glare and a screen
-  // reader, so the surface tint carries an icon and the sharer's name rather
-  // than standing alone. On the grid card it rides the photo, where it costs no
-  // title space; in the list it sits with the other chips.
-  const sharedMark=w.shared?<span className="journal-shared-mark"><AppIcon kind="shared"/><span>{w.sharedBy||'Shared'}</span></span>:null;
-  const content=view==='grid'?<>{selectionMark}<div className="journal-grid-media">{image}<strong className="journal-grid-vintage">{w.vintage??'NV'}</strong>{w.rating!=null&&<span className="journal-grid-score">{w.rating}</span>}{sharedMark}</div><div className="wine-card-body"><h2 title={w.wineName}>{w.wineName}</h2><p className="producer" title={w.producer}>{w.producer}</p></div></>:<>{selectionMark}{image}<div className="wine-card-body"><div className="wine-card-top"><h2>{w.wineName}</h2><strong>{w.vintage??'NV'}</strong></div><p className="producer">{w.producer}</p><span className="journal-meta">{[[w.appellation,w.region,w.country].filter(Boolean).join(' · '),w.grapes.join(' · ')].filter(Boolean).join(' · ')}</span>{w.tastingName&&<span className="tasting-chip">{w.tastingName}</span>}{w.venue&&<span className="journal-venue">{w.venue}</span>}{w.rating!=null&&<span className="score-chip">{w.rating}</span>}{sharedMark}</div></>;
-  const label=`${w.producer} ${w.wineName}`;
+  // The user asked for shared cards to be distinguished by their surface, not
+  // by another visible attribution badge. Keep provenance available to screen
+  // readers through the card's accessible label; the visible sharer stays on
+  // the detail page, immediately before Wine details.
+  const content=view==='grid'?<>{selectionMark}<div className="journal-grid-media">{image}<strong className="journal-grid-vintage">{w.vintage??'NV'}</strong>{w.rating!=null&&<span className="journal-grid-score">{w.rating}</span>}</div><div className="wine-card-body"><h2 title={w.wineName}>{w.wineName}</h2><p className="producer" title={w.producer}>{w.producer}</p></div></>:<>{selectionMark}{image}<div className="wine-card-body"><div className="wine-card-top"><h2>{w.wineName}</h2><strong>{w.vintage??'NV'}</strong></div><p className="producer">{w.producer}</p><span className="journal-meta">{[[w.appellation,w.region,w.country].filter(Boolean).join(' · '),w.grapes.join(' · ')].filter(Boolean).join(' · ')}</span>{w.tastingName&&<span className="tasting-chip">{w.tastingName}</span>}{w.venue&&<span className="journal-venue">{w.venue}</span>}{w.rating!=null&&<span className="score-chip">{w.rating}</span>}</div></>;
+  const label=`${w.producer} ${w.wineName}${w.shared?`, shared by ${w.sharedBy||'a friend'}`:''}`;
   return <div className={`journal-card-shell ${view==='grid'?'grid':'list'}${selecting?' selecting':''}`}>
     <div className={className}>{content}</div>
     {selectable

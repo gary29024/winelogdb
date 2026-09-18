@@ -21,7 +21,6 @@ html,body,#root{width:100%;max-width:100%;overflow-x:hidden}body{overscroll-beha
    .journal-shared-mark is what actually says "shared", and by whom. */
 .wine-grid.journal-list.journal-gallery .journal-grid-card.shared{background:var(--shared-wash);border-color:var(--shared-line)}
 .journal-list-view .journal-card.shared{background:var(--shared-wash);box-shadow:inset 3px 0 0 var(--shared-line)}
-.journal-shared-mark{display:inline-flex!important;align-items:center;gap:5px;width:max-content;max-width:100%;border:1px solid var(--shared-line);border-radius:var(--r-pill);background:var(--shared-wash);color:var(--shared-ink)!important;padding:4px 10px;font:700 .72rem/1.35 'DM Sans',sans-serif;white-space:nowrap;margin-top:10px}
 .journal-shared-mark>span{overflow:hidden;text-overflow:ellipsis}
 .journal-shared-mark .app-icon{width:14px;height:14px;flex:none}
 /* On the grid card the photo is the card, so the mark rides it instead of

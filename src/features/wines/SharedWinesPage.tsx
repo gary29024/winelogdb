@@ -5,7 +5,6 @@ import type { SharedWine,SharedWineExperience } from '../../lib/wine/shared';
 import { setWineFavorite } from './api';
 import { AppIcon } from '../../components/AppIcons';
 import { backTargetFromState,JOURNAL_BACK } from './backTarget';
-import { formatDate,formatPrice,formatRating } from '../../lib/wine/detailFormat';
 import '../../favorites.css';
 // The gallery and lightbox markup below is the wine-detail one, and its rules
 // live in wineImages.css. This page never renders <WineImage>, and it is in the
@@ -16,6 +15,12 @@ import '../../sharedWine.css';
 
 const classificationLabel:Record<string,string>={grand_cru:'Grand Cru',premier_cru:'Premier Cru',village:'Village'};
 const wineSearcherUrl=(producer:string,wineName:string,vintage:number|null)=>`https://www.wine-searcher.com/find/${encodeURIComponent([producer,wineName,vintage??''].filter(Boolean).join(' ')).replace(/%20/g,'+')}`;
+const formatDate=(value:string|null)=>{
+ if(!value)return '';
+ const date=new Date(`${value}T00:00:00`);
+ return Number.isNaN(date.getTime())?value:new Intl.DateTimeFormat(undefined,{year:'numeric',month:'short',day:'numeric'}).format(date);
+};
+const formatPrice=(price:number|null,currency:string|null)=>price==null?'':`${currency?`${currency} `:''}${new Intl.NumberFormat('en-US',{maximumFractionDigits:2}).format(price)}`;
 type Draft={tastingDate:string;rating:string;tastingName:string;venue:string;locationName:string;currency:string;price:string;tastingNotes:string};
 const draftFromWine=(wine:SharedWine):Draft=>({
  tastingDate:wine.tastingDate??'',rating:wine.rating==null?'':String(wine.rating),tastingName:wine.tastingName??'',
@@ -64,9 +69,9 @@ export function SharedWinesPage(){
  const place=[wine.region,wine.country].filter(Boolean).join(', '),price=formatPrice(wine.price,wine.currency);
  // The score is the viewer's own, so it belongs with the rest of their experience
  // rather than in the pills, where it would read as a property of the wine.
- const experienceRows:[string,string][]=([
-  ['Your rating',formatRating(wine.rating)],['Drinking date',formatDate(wine.tastingDate)],['Tasting / event',wine.tastingName],['Venue',wine.venue],['Location',wine.locationName],['Price',price]
- ] as [string,string|null][]).filter((row):row is [string,string]=>Boolean(row[1]));
+ const experienceRows:[string,string][]=[
+  ['Your rating',wine.rating!=null?`${wine.rating} / 100`:'—'],['Drinking date',formatDate(wine.tastingDate)||'—'],['Tasting / event',wine.tastingName||'—'],['Venue',wine.venue||'—'],['Location',wine.locationName||'—'],['Price',price||'—']
+ ];
  const hasExperience=Boolean(wine.tastingDate||wine.tastingName||wine.venue||wine.locationName||wine.price!=null||wine.rating!=null||wine.tastingNotes);
  return <article className="detail wine-detail shared-wine-detail">
   <Link className="back-pill" to={back.to}>← {back.label}</Link>
@@ -77,10 +82,10 @@ export function SharedWinesPage(){
    <div className="detail-pills">{wine.appellation&&<span>{wine.appellation}</span>}{wine.classification&&<span className={`detail-classification detail-classification-${wine.classification}`}>{classificationLabel[wine.classification]}</span>}{wine.grapes.map(grape=><span key={grape}>{grape}</span>)}</div>
   </section>
   <div className="shared-source-indicator" role="note"><span>Shared by</span><strong>{wine.ownerName}</strong></div>
-  <section className="detail-section"><p className="section-label">Wine details</p><dl className="detail-facts">{[['Region',place],['Appellation',wine.appellation],['Grapes / blend',wine.grapes.join(', ')],['Alcohol',wine.alcoholPercentage!=null?`${wine.alcoholPercentage}%`:'']].filter(([,value])=>Boolean(value)).map(([label,value])=><div key={label}><dt>{label}</dt><dd>{value}</dd></div>)}</dl></section>
+  <section className="detail-section"><p className="section-label">Wine details</p><dl>{[['Region',place],['Appellation',wine.appellation],['Grapes / blend',wine.grapes.join(', ')],['Alcohol',wine.alcoholPercentage!=null?`${wine.alcoholPercentage}%`:'']].filter(([,value])=>Boolean(value)).map(([label,value])=><div key={label}><dt>{label}</dt><dd>{value}</dd></div>)}</dl></section>
   <section className="detail-section experience-panel">
    <p className="section-label">Your experience</p>
-   {!editing?<>{experienceRows.length>0&&<dl className="detail-facts shared-experience-summary">{experienceRows.map(([label,value])=><div key={label}><dt>{label}</dt><dd>{value}</dd></div>)}</dl>}{wine.tastingNotes?<blockquote className="detail-experience-notes">{wine.tastingNotes}</blockquote>:null}<button type="button" className="shared-experience-edit" onClick={edit}>{hasExperience?'Edit your experience':'Add your experience'}</button></>:<form className="shared-experience-form" onSubmit={saveExperience}>
+   {!editing?<><dl className="shared-experience-summary">{experienceRows.map(([label,value])=><div key={label}><dt>{label}</dt><dd className={value==='—'?'empty-value':undefined}>{value}</dd></div>)}</dl>{wine.tastingNotes?<blockquote className="shared-experience-notes">{wine.tastingNotes}</blockquote>:null}<button type="button" className="shared-experience-edit" onClick={edit}>{hasExperience?'Edit your experience':'Add your experience'}</button></>:<form className="shared-experience-form" onSubmit={saveExperience}>
     <label>Drinking date<input type="date" value={draft.tastingDate} onChange={e=>setDraft({...draft,tastingDate:e.target.value})}/></label>
     <label>Rating / 100<input type="number" min="0" max="100" step="0.5" value={draft.rating} onChange={e=>setDraft({...draft,rating:e.target.value})}/></label>
     <label>Tasting / event<input type="text" maxLength={500} value={draft.tastingName} onChange={e=>setDraft({...draft,tastingName:e.target.value})}/></label>

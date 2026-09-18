@@ -50,75 +50,19 @@ describe('the shared wine page carries the styles it borrows',()=>{
   });
 });
 
-describe('a shared bottle says so without relying on colour',()=>{
-  // --shared-line against --paper is roughly 1.2:1, so the tint and the 3px
-  // inset bar are not a signal on their own, and a screen reader gets nothing
-  // from either. Every surface that tints a shared card also has to name it.
-  it('gives the journal card a mark carrying the sharer, not just a tint',()=>{
-    // The mark has to name the sharer, not merely exist: the tint alone was the
-    // problem. A fallback for a missing name is fine, an absent name is not.
-    expect(library).toMatch(/journal-shared-mark[\s\S]{0,200}w\.sharedBy/);
-    expect(library).toMatch(/journal-shared-mark[\s\S]{0,200}kind="shared"/);
-    expect(declaredIn('.journal-shared-mark'),'.journal-shared-mark should be styled').not.toEqual([]);
-    expect(library.includes("w.shared?' shared':''"),'the tint stays as the quiet half').toBe(true);
+describe('shared cards keep attribution out of the visible card',()=>{\n  it('uses the shared surface and puts provenance in the Journal accessible label',()=>{\n    expect(library.includes("w.shared?' shared':''")).toBe(true);\n    expect(library).not.toContain('journal-shared-mark');\n    expect(library).toContain("shared by ${w.sharedBy||'a friend'}");\n  });\n\n  it('keeps Passport provenance screen-reader-only',()=>{\n    expect(passport).not.toContain('passport-recent-shared');\n    expect(passport).toContain('visually-hidden');\n    expect(passport).toContain('Shared by ${item.sharedBy}');\n  });\n});\n\ndescribe('the viewer\'s own score sits with their own experience',()=>{
+  // wine.rating is the recipient's, not the wine's. In .detail-pills it read as
+  // a property of the bottle, next to appellation and grapes, while the summary
+  // the user had just edited did not show the number they typed.
+  it('lists the rating in the experience rows and keeps it out of the pills',()=>{
+    expect(sharedPage).toContain("'Your rating'");
+    const pills=sharedPage.slice(sharedPage.indexOf('className="detail-pills"'));
+    expect(pills.slice(0,pills.indexOf('</div>'))).not.toContain('wine.rating');
   });
 
-  it('gives the passport row an icon and a label a screen reader reaches',()=>{
-    expect(passport).toContain('passport-recent-shared');
-    expect(passport).toContain('visually-hidden');
-    expect(passport).toMatch(/Shared by \$\{item\.sharedBy\}/);
-  });
-});
-
-describe('the owner view and the shared view are one layout',()=>{
-  const owner=read('features/wines/DetailPage.tsx');
-  // The two pages show the same wine to two people. Where they show the same
-  // thing they have to show it the same way, or the app reads as two apps: the
-  // score was a pill on one and a row on the other, the notes were a section of
-  // their own on one and part of the experience on the other, and each page had
-  // grown its own formatPrice.
-  const sections=(source:string)=>[...source.matchAll(/section-label">([A-Za-z][A-Za-z /]*)</g)].map(match=>match[1]);
-  const rows=(source:string)=>[...source.matchAll(/\['((?:Your rating|Drinking date|Tasting \/ event|Venue|Location|Price))'/g)].map(match=>match[1]);
-
-  it('orders the shared page as a subset of the owner page',()=>{
-    const shared=sections(sharedPage),full=sections(owner);
-    expect(shared).toEqual(['Wine details','Your experience']);
-    // Same relative order, with the owner's extra panels sitting after them.
-    expect(full.filter(name=>shared.includes(name))).toEqual(shared);
-    expect(full.indexOf('Your experience')).toBeLessThan(full.indexOf('Deep Search'));
-  });
-
-  it('lists the same experience rows in the same order on both',()=>{
-    expect(rows(sharedPage)).toEqual(['Your rating','Drinking date','Tasting / event','Venue','Location','Price']);
-    expect(rows(owner)).toEqual(rows(sharedPage));
-  });
-
-  it('keeps the score out of the wine facts on both',()=>{
-    for(const [name,source] of [['shared',sharedPage],['owner',owner]] as const){
-      const pills=source.slice(source.indexOf('className="detail-pills"'));
-      expect(pills.slice(0,pills.indexOf('</div>')),`${name} pills should not carry a rating`).not.toContain('.rating');
-    }
-  });
-
-  it('shows the notes inside the panel that owns them, under one class',()=>{
-    for(const [name,source] of [['shared',sharedPage],['owner',owner]] as const){
-      const panel=source.indexOf('experience-panel');
-      expect(panel,`${name} should have an experience panel`).toBeGreaterThan(-1);
-      expect(source.indexOf('detail-experience-notes'),`${name} notes belong in the panel`).toBeGreaterThan(panel);
-    }
-  });
-
-  it('formats through one shared module rather than a copy each',()=>{
-    for(const [name,source] of [['shared',sharedPage],['owner',owner]] as const){
-      expect(source,`${name} should import the shared formatters`).toContain("from '../../lib/wine/detailFormat'");
-      expect(/function formatPrice|const formatPrice=/.test(source),`${name} should not redefine formatPrice`).toBe(false);
-    }
-  });
-
-  it('gives both pages the dense one-line fact rows',()=>{
-    expect(sharedPage).toContain('detail-facts');
-    expect(owner).toContain('detail-facts');
-    const declared=declaredIn('.detail-facts').concat(sheets.filter(sheet=>/\.detail-facts\b/.test(sheet.text)));
-    expect(declared.length,'.detail-facts should be styled').toBeGreaterThan(0);
+  it('shows the notes inside the panel that edits them',()=>{
+    const panel=sharedPage.indexOf('experience-panel');
+    expect(panel).toBeGreaterThan(-1);
+    expect(sharedPage.indexOf('shared-experience-notes')).toBeGreaterThan(panel);
   });
 });

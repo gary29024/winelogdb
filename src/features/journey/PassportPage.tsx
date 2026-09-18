@@ -142,7 +142,7 @@ export function PassportPage(){
         <div className="passport-card-heading"><div><h2>Recent tastings</h2></div><Link to="/journal">View all</Link></div>
         {recent.length?<div className="passport-recent-list">{recent.slice(0,2).map(item=><Link className={item.shared?'shared':undefined} to={item.shared?`/shared/${item.id}`:`/wines/${item.id}`} state={linkFrom({to:'/',label:'Passport'})} key={item.id}>
           <span className="passport-recent-image">{item.shared&&item.imageUrl?<img src={item.imageUrl} alt={`${item.producer} ${item.wineName}`} loading="lazy" decoding="async"/>:item.imageId?<WineImage imageId={item.imageId} alt={`${item.producer} ${item.wineName}`}/>:<span className="passport-recent-fallback">W</span>}</span>
-          <div className="passport-recent-copy"><strong>{item.wineName}{item.vintage?` ${item.vintage}`:''}</strong><small>{item.shared&&<span className="passport-recent-shared" aria-hidden="true"><AppIcon kind="shared"/></span>}{[item.producer,item.region||item.country].filter(Boolean).join(' · ')}</small>{item.shared&&<span className="visually-hidden">{item.sharedBy?`Shared by ${item.sharedBy}`:'Shared with you'}</span>}</div>
+          <div className="passport-recent-copy"><strong>{item.wineName}{item.vintage?` ${item.vintage}`:''}</strong><small>{[item.producer,item.region||item.country].filter(Boolean).join(' · ')}</small>{item.shared&&<span className="visually-hidden">{item.sharedBy?`Shared by ${item.sharedBy}`:'Shared with you'}</span>}</div>
           <span className="passport-recent-date">{tastingDate(item)}</span>
         </Link>)}</div>:<p className="passport-empty-mini">Your latest tastings will appear here.</p>}
       </section>
