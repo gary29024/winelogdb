@@ -74,6 +74,17 @@ JOIN wines w
 LEFT JOIN shared_wine_preferences pref
   ON pref.recipient_id=g.recipient_id AND pref.owner_id=g.owner_id AND pref.wine_id=g.wine_id;
 
+-- This migration can land after shares already exist. Bump those recipients once
+-- so a pre-existing Journey/Collection cache cannot survive the new visible-wine
+-- read model with an old owner-only payload.
+INSERT INTO achievement_cache_state(owner_id,revision,updated_at)
+SELECT recipient_id,1,CURRENT_TIMESTAMP FROM (
+  SELECT recipient_id FROM wine_shares
+  UNION
+  SELECT recipient_id FROM tasting_shares
+) WHERE true
+ON CONFLICT(owner_id) DO UPDATE SET revision=achievement_cache_state.revision+1,updated_at=CURRENT_TIMESTAMP;
+
 
 -- Journey and Wine Collection caches are keyed by the viewer's existing
 -- achievement_cache_state revision. A shared source lives under somebody else's
@@ -135,7 +146,10 @@ CREATE TRIGGER shared_visible_rev_experience_delete AFTER DELETE ON wine_experie
   WHERE owner_id=OLD.owner_id AND tasting_id=OLD.tasting_id
   ON CONFLICT(owner_id) DO UPDATE SET revision=achievement_cache_state.revision+1,updated_at=CURRENT_TIMESTAMP;
 END;
-CREATE TRIGGER shared_visible_rev_experience_update AFTER UPDATE ON wine_experiences BEGIN
+CREATE TRIGGER shared_visible_rev_experience_update
+AFTER UPDATE OF tasting_id ON wine_experiences
+WHEN OLD.tasting_id IS NOT NEW.tasting_id
+BEGIN
   INSERT INTO achievement_cache_state(owner_id,revision,updated_at)
   SELECT recipient_id,1,CURRENT_TIMESTAMP FROM (
     SELECT recipient_id FROM tasting_shares WHERE owner_id=OLD.owner_id AND tasting_id=OLD.tasting_id
@@ -214,8 +228,9 @@ CREATE TRIGGER shared_visible_rev_friendship_delete AFTER DELETE ON friendships 
   ON CONFLICT(owner_id) DO UPDATE SET revision=achievement_cache_state.revision+1,updated_at=CURRENT_TIMESTAMP;
 END;
 
-CREATE TRIGGER shared_visible_rev_source_status AFTER UPDATE OF status ON app_users
-WHEN OLD.status IS NOT NEW.status
+CREATE TRIGGER shared_visible_rev_source_identity
+AFTER UPDATE OF status,display_name ON app_users
+WHEN OLD.status IS NOT NEW.status OR OLD.display_name IS NOT NEW.display_name
 BEGIN
   INSERT INTO achievement_cache_state(owner_id,revision,updated_at)
   SELECT recipient_id,1,CURRENT_TIMESTAMP FROM (
