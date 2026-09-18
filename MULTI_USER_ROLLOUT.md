@@ -94,15 +94,16 @@ recipient's Journal, Passport and Insights through that recipient-facing read
 model without copying the source wine into their account. Unsharing, deleting or
 unfriending revokes subsequent access. Downloaded content cannot be recalled.
 
-Sharing photos use separate JPEG derivatives rather than exposing the original
-upload. They may be prepared by the browser, generated on demand by the Worker,
-or backfilled by the scheduled maintenance pass. Application/comment metadata
-and trailing data are stripped before a sharing copy is stored; journal
-thumbnails are derived from that already-sanitized sharing copy and stripped
-again. If thumbnail generation fails, the fallback is the sanitized full sharing
-copy, not the original upload. Original images and unrelated group-source photos
-are never exposed by shared endpoints. Reads are authorization-checked and use
-`no-store`.
+Shared wine photos do not create a second R2 object family. After the recipient's
+wine-level access is checked, the shared-photo route serves the source owner's
+canonical image object; journal cards use the same permanent
+`thumb/v1/<original-object-key>.webp` derivative used by the owner's own cards.
+Sharing therefore adds no per-photo R2 storage, regardless of recipient count.
+The route also verifies that the requested image belongs to the shared wine, so
+knowing another image id from the same owner is not sufficient. Full-size delivery
+is the same uploaded file, so embedded EXIF or other metadata may be present.
+Unrelated group-source photos are never included merely because a wine is shared.
+Reads remain authorization-checked.
 
 Browser caches and draft/upload stores use the account ID. Authentication
 changes invalidate in-flight responses and reload other tabs; old password
@@ -225,7 +226,7 @@ capacity and remaining allowances were not inspected.
 
 New API families: `/api/auth/*`, `/api/me`, `/api/friends/*` (including
 `/api/friends/code`, `/api/friends/requests`, and `/api/friends/requests/:id/accept`),
-`/api/wines/:id/shares`, `/api/images/:id/sharing-copy`, `/api/shared/wines`,
+`/api/wines/:id/shares`, `/api/shared/wines`,
 `/api/credits`, `/api/credits/history`, `/api/credits/quotes?path=…`,
 `/api/credits/operations/:id`, and owner-only `/api/admin/*`.
 Existing private resource routes remain; credit-priced member AI routes require
