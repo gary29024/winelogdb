@@ -6,7 +6,7 @@ import { hash,seconds,stamp,type Member,type PilotSettings } from '../../worker/
 import { quote,reserve,settle,reconcileOperation,creditRead } from '../../worker/multiUser/credits';
 import { durableProvider } from '../../worker/multiUser/provider';
 import publicWorker from '../../worker/multiUserEntry';
-import { SHARED_WINES_LIST_SQL,socialRoute,stripJpegMetadata,sharedWine } from '../../worker/multiUser/social';
+import { SHARED_WINES_LIST_SQL,socialRoute,stripJpegMetadata,sharedWine,drainSharingPhotos } from '../../worker/multiUser/social';
 import { sharedSubjectKey,publishResearch } from '../../src/lib/research/shared';
 import { producerSubjectKey,reusableProducer } from '../../src/lib/research/sharedProducer';
 import { buildResearchTargets,loadResearchCache,upsertResearchCache } from '../../src/lib/research/cache';
@@ -16,6 +16,7 @@ import { flushOutbox,durableQueue,maintainJobs } from '../../worker/multiUser/jo
 import { meteredBucket } from '../../worker/multiUser/storage';
 import { wineSaveStatements } from '../../src/lib/db/wineSave';
 import { buildJourneyPayload } from '../../worker/journeyHandler';
+import { listJournalPage } from '../../src/lib/journal/list';
 import { sparklingDetailsSchema } from '../../src/lib/wine/sparklingDetails';
 import type { WineInput } from '../../src/lib/db/schema';
 
@@ -179,7 +180,10 @@ describe('shared wines as recipient journal history',()=>{
    INSERT INTO wine_shares(wine_id,owner_id,recipient_id,created_at) VALUES('shared-history','alice','bob','2026-09-11T12:00:00Z');
   `);
   const visible=database.sql.prepare("SELECT id,producer,is_shared,shared_by,tasting_notes,rating,tasting_date,venue,price,currency,favorite,country FROM member_visible_wines WHERE owner_id='bob'").get()!;
-  expect(visible).toMatchObject({id:'shared-history',producer:'Domaine Shared',is_shared:1,shared_by:'alice',tasting_notes:'',rating:null,tasting_date:null,venue:null,price:null,currency:null,favorite:0,country:'France'});
+  // The drinking date crosses from 0077 on, so a shared bottle sorts and buckets
+  // by when it was drunk rather than by the instant it was received. Everything
+  // else the owner wrote about drinking it stays theirs.
+  expect(visible).toMatchObject({id:'shared-history',producer:'Domaine Shared',is_shared:1,shared_by:'alice',tasting_notes:'',rating:null,tasting_date:'2026-09-10',venue:null,price:null,currency:null,favorite:0,country:'France'});
   const summary=database.sql.prepare("SELECT count(*) AS total_wines,sum(CASE WHEN price IS NOT NULL THEN 1 ELSE 0 END) AS priced_wines,count(DISTINCT country) AS countries FROM member_visible_wines WHERE owner_id='bob'").get()!;
   expect(summary).toMatchObject({total_wines:1,priced_wines:0,countries:1});
   expect(database.sql.prepare("SELECT count(*) AS n FROM wines WHERE owner_id='bob'").get()!.n).toBe(0);
@@ -426,6 +430,31 @@ describe('shared wines as recipient journal history',()=>{
   expect(detail.sparklingDetails).toBeNull();
  });
 
+ it('orders a bulk share by when each bottle was drunk, not when it arrived',async()=>{
+  // Sharing many wines at once gives every one of them the same shared_at. When
+  // that was the only date a recipient had, all the date keys tied and the order
+  // fell through to wine id, so a friend's journal came out shuffled.
+  database.sql.exec("INSERT INTO friendships(user_id,friend_id) VALUES('alice','bob'),('bob','alice')");
+  const wine=database.sql.prepare(`INSERT INTO wines(id,owner_id,producer,wine_name,tasting_date,created_at,updated_at)
+   VALUES(?,'alice','Domaine Shared',?,?,?,?)`);
+  const share=database.sql.prepare("INSERT INTO wine_shares(wine_id,owner_id,recipient_id,created_at) VALUES(?,'alice','bob','2026-09-18T12:00:00Z')");
+  // Ids deliberately run opposite to the drinking dates: under the old order the
+  // id tiebreak decided, so this would come back exactly backwards.
+  const bottles=[['w-a','Oldest','2026-01-05'],['w-b','Middle','2026-05-20'],['w-c','Newest','2026-09-01']];
+  for(const [id,name,date] of bottles){wine.run(id,name,date,`${date}T12:00:00Z`,`${date}T12:00:00Z`);share.run(id)}
+
+  const page=await listJournalPage(database.db,'bob',{},[],true);
+  expect(page.items.map(item=>item.wineName)).toEqual(['Newest','Middle','Oldest']);
+  expect(page.items.map(item=>item.tastingDate)).toEqual(['2026-09-01','2026-05-20','2026-01-05']);
+
+  // A recipient's own date is still theirs and still wins.
+  const e={...env(),WINE_IMAGES:{} as R2Bucket};
+  await socialRoute(new Request('https://wine.example/api/shared/wines/w-a/experience',
+   {method:'PUT',body:JSON.stringify({tastingDate:'2026-12-25'})}),e,member('bob'));
+  const after=await listJournalPage(database.db,'bob',{},[],true);
+  expect(after.items.map(item=>item.wineName)).toEqual(['Oldest','Newest','Middle']);
+ });
+
  it('refuses an experience for a wine the member was never shared',async()=>{
   database.sql.exec(`
    INSERT INTO friendships(user_id,friend_id) VALUES('alice','bob'),('bob','alice');
@@ -570,6 +599,42 @@ describe('sharing boundaries',()=>{
   * transform ever. The cost that used to be unbounded was the photo that cannot:
   * it was re-transformed on every friend view, and a transform is billed.
   */
+ it('prepares sharing photos on the scheduled pass, not only on a shared-wine view',async()=>{
+  // The reported bug: sharing many wines at once left a friend's journal full of
+  // letter tiles, because the only server-side path ran on a single wine's GET.
+  wines();
+  database.sql.exec(`
+   INSERT INTO wines(id,owner_id,producer,wine_name,created_at,updated_at) VALUES('w2','alice','P','Second','now','now');
+   INSERT INTO wines(id,owner_id,producer,wine_name,created_at,updated_at) VALUES('w-private','alice','P','Never shared','now','now');
+   INSERT INTO wine_shares(wine_id,owner_id,recipient_id) VALUES('w','alice','bob'),('w2','alice','bob');
+   INSERT INTO wine_images(id,owner_id,wine_id,object_key,content_type,byte_size,width,height,upload_status,recognition_status,created_at)
+   VALUES('img-1','alice','w','owners/alice/1.jpg','image/jpeg',8,10,10,'uploaded','complete','now'),
+         ('img-2','alice','w2','owners/alice/2.jpg','image/jpeg',8,10,10,'uploaded','complete','now'),
+         ('img-private','alice','w-private','owners/alice/p.jpg','image/jpeg',8,10,10,'uploaded','complete','now');
+  `);
+  const jpeg=Uint8Array.from([255,216,255,218,0,2,255,217]);
+  const bucket={get:vi.fn(async()=>({arrayBuffer:async()=>jpeg.buffer,size:jpeg.length})),put:vi.fn(async()=>({})),delete:vi.fn(async()=>undefined)} as unknown as R2Bucket;
+  const transform=vi.fn(()=>({transform:()=>({output:()=>({response:()=>new Response(jpeg)})})}));
+  const e={...env(),WINE_IMAGES:bucket,IMAGES:{input:transform} as unknown as ImagesBinding};
+
+  expect(database.sql.prepare("SELECT count(*) AS n FROM shared_photos").get()!.n).toBe(0);
+  await drainSharingPhotos(e);
+  const prepared=database.sql.prepare('SELECT image_id FROM shared_photos ORDER BY image_id').all().map(row=>row.image_id);
+  // Both shared wines, and nothing from the wine alice never shared.
+  expect(prepared).toEqual(['img-1','img-2']);
+
+  // Nothing is due now, so a second pass does no further transforms.
+  const transforms=transform.mock.calls.length;
+  await drainSharingPhotos(e);
+  expect(transform.mock.calls.length).toBe(transforms);
+ });
+
+ it('does nothing when the Images binding is absent rather than failing the cron',async()=>{
+  wines();
+  database.sql.exec("INSERT INTO wine_shares(wine_id,owner_id,recipient_id) VALUES('w','alice','bob')");
+  await expect(drainSharingPhotos({...env(),WINE_IMAGES:{} as R2Bucket})).resolves.toBe(0);
+ });
+
  it('stops re-transforming a photo that cannot be derived instead of retrying on every view',async()=>{
   wines();
   database.sql.exec("INSERT INTO wine_shares(wine_id,owner_id,recipient_id) VALUES('w','alice','bob'); INSERT INTO wine_images(id,owner_id,wine_id,object_key,content_type,byte_size,width,height,upload_status,recognition_status,created_at) VALUES('img-gone','alice','w','owners/alice/missing.jpg','image/jpeg',8,10,10,'uploaded','complete','now')");

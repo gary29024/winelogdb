@@ -8,6 +8,7 @@ import { aiRoute,creditRead,creditSummary,quote,reserve,saveOperationResponse,re
 import { memberActionForRequest,memberAiAccess,memberAiActionAccess,reserveMemberAiAllowance } from './multiUser/memberAccess';
 import { providerAuthorization } from './multiUser/provider';
 import { claimDelivery,durableQueue,finishDelivery,flushOutbox,maintainJobs,markUncertain,type JobEnvelope } from './multiUser/jobs';
+import { drainSharingPhotos } from './multiUser/social';
 import { meteredBucket } from './multiUser/storage';
 import { adoptFriendResearch,assembleDeepSearch,loadResearchCache } from '../src/lib/research/cache';
 import type { AiRateEnv } from '../src/lib/usage/rates';
@@ -138,5 +139,5 @@ export default {
   }
   await flushOutbox(env.DB,env.RESEARCH_QUEUE);
  },
- async scheduled(_event:ScheduledController,env:MultiUserEnv){await maintainJobs(env.DB,env.RESEARCH_QUEUE,env.WINE_IMAGES);await recoverRollouts(env);await env.DB.prepare("INSERT INTO rollout_state(name,value) VALUES('last_maintenance',?) ON CONFLICT(name) DO UPDATE SET value=excluded.value").bind(stamp()).run()}
+ async scheduled(_event:ScheduledController,env:MultiUserEnv){await maintainJobs(env.DB,env.RESEARCH_QUEUE,env.WINE_IMAGES);await drainSharingPhotos(env).catch(error=>console.warn(JSON.stringify({event:'sharing-photo-drain-failed',error:String(error)})));await recoverRollouts(env);await env.DB.prepare("INSERT INTO rollout_state(name,value) VALUES('last_maintenance',?) ON CONFLICT(name) DO UPDATE SET value=excluded.value").bind(stamp()).run()}
 };

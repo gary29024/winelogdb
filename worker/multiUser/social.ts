@@ -155,7 +155,7 @@ export function stripJpegMetadata(bytes:Uint8Array):Uint8Array{
  if(!scan||!ended)throw new ApiError(400,'Invalid JPEG scan');
  const result=new Uint8Array(parts.reduce((sum,x)=>sum+x.length,0));let pos=0;for(const part of parts){result.set(part,pos);pos+=part.length}return result;
 }
-type SocialEnv=IdentityEnv&{WINE_IMAGES:R2Bucket;IMAGES?:ImagesBinding};
+export type SocialEnv=IdentityEnv&{WINE_IMAGES:R2Bucket;IMAGES?:ImagesBinding};
 
 function sharingBucket(env:SocialEnv,owner:string){
  return meteredBucket(env.WINE_IMAGES,env.DB,owner,{skipMemberLimit:true,countsTowardMemberLimit:false});
@@ -251,6 +251,48 @@ async function ensureSharingPhotos(env:SocialEnv,owner:string,images:Array<{id:s
  const candidates=images.slice(0,SHARING_MAX_PER_REQUEST);
  const states=await Promise.all(candidates.map(image=>ensureSharingPhoto(env,owner,image)));
  return candidates.flatMap((image,index)=>states[index]==='busy'?[image.id]:[]);
+}
+
+/**
+ * Backfill sharing derivatives for shared wines, on the scheduled pass.
+ *
+ * Until now a shared_photos row was written either by the sharer's browser, in
+ * a serial loop that abandons the rest of the batch on the first failure and
+ * dies with the tab, or by ensureSharingPhotos on a single shared-wine GET.
+ * Nothing prepared them for a list, so after sharing 36 wines at once a friend's
+ * journal showed 36 letter tiles and only filled in as they opened each bottle.
+ *
+ * Draining it here makes the server the guarantee rather than the browser: due
+ * work is picked up within a cron tick whether or not the sharer stayed on the
+ * page. Bounded per owner by ensureSharingPhotos, and resumable because each
+ * derivative commits on its own, so a pass that runs out of room leaves the
+ * next one more to do rather than losing it.
+ */
+export async function drainSharingPhotos(env:SocialEnv,limit=40){
+ if(!env.IMAGES)return 0;
+ const now=stamp();
+ const rows=(await env.DB.prepare(`SELECT i.id,i.owner_id,i.object_key,coalesce(a.attempts,0) AS attempts
+   FROM wine_images i
+   LEFT JOIN shared_photos p ON p.image_id=i.id AND p.owner_id=i.owner_id
+   LEFT JOIN shared_photo_attempts a ON a.image_id=i.id AND a.owner_id=i.owner_id
+   WHERE p.image_id IS NULL
+     AND (a.retry_after IS NULL OR a.retry_after<=?)
+     AND (EXISTS(SELECT 1 FROM wine_shares s WHERE s.wine_id=i.wine_id AND s.owner_id=i.owner_id)
+       OR EXISTS(SELECT 1 FROM tasting_shares ts JOIN wine_experiences we
+            ON we.owner_id=ts.owner_id AND we.tasting_id=ts.tasting_id
+            WHERE we.wine_id=i.wine_id AND ts.owner_id=i.owner_id))
+   ORDER BY i.rowid LIMIT ?`).bind(now,Math.max(1,limit)).all<{id:string;owner_id:string;object_key:string;attempts:number}>()).results;
+ if(!rows.length)return 0;
+ // ensureSharingPhotos leases and transforms for one owner at a time, and caps
+ // itself, so group rather than hand it a mixed list.
+ const byOwner=new Map<string,Array<{id:string;object_key:string;attempts:number}>>();
+ for(const row of rows){
+  const list=byOwner.get(row.owner_id)??[];
+  list.push({id:row.id,object_key:row.object_key,attempts:row.attempts});
+  byOwner.set(row.owner_id,list);
+ }
+ for(const [owner,images] of byOwner)await ensureSharingPhotos(env,owner,images);
+ return rows.length;
 }
 
 export const SHARED_WINES_LIST_SQL=`WITH accessible(wine_id,owner_id,shared_at) AS (
