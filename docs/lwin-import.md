@@ -1,393 +1,308 @@
-# Importing and refreshing the LWIN reference database
+# Importing and refreshing LWIN and ELID reference data
 
-WineLogDB stores the Liv-ex Wine Identification Number (LWIN) catalogue once as **global reference data** in D1. It is not duplicated per WineLog user, and refreshing it does not rewrite tasting notes, photos, user corrections, producer research or other personal data.
+WineLogDB keeps the large external reference catalogues in **R2**, not in D1.
 
-This runbook covers both the **first LWIN load** and **periodic manual refreshes** while Liv-ex API access is delayed, unavailable or unsuitable. Manual snapshot import is a supported maintenance path. Even after `LWIN Change Since` is automated, an occasional full snapshot remains useful for reconciliation and recovery.
+That is deliberate. The LWIN snapshot is already over 200,000 rows, while Cloudflare's Free-plan D1 write allowance is much smaller than a full catalogue refresh once indexes are counted. R2 lets WineLog keep the full reference dataset cheaply while D1 stores only the small sync marker and the external IDs actually attached to user wines.
 
-## What the importer does
+The normal workflows are now:
 
-`npm run lwin:build-import` reads the official LWIN CSV and generates idempotent, chunked D1 SQL. It:
+```powershell
+npm run lwin:import -- "C:\WineLogData\LWINdatabase.xlsx"
+npm run elid:sync
+```
 
-- imports Live, Combined and Deleted rows;
-- preserves Combined -> REFERENCE redirects;
-- normalises Excel-style identifiers such as `1000131.0` to `1000131`;
-- converts blank/`NA` values to NULL where appropriate;
-- upserts by stable product key instead of creating duplicates;
-- does **not** infer deletion merely because a row is absent from a later snapshot;
-- records the source filename, SHA-256 hash, latest source update timestamp and row counts in `wine_reference_sync_state`.
+Neither command is required on the recognition hot path. Recognition reads the already-imported local R2 reference shards.
 
-The LWIN workbook and generated SQL are operational data. Do **not** commit them to Git.
+## Storage layout
+
+Each import creates an immutable version and changes a small manifest **only after all shards have uploaded successfully**:
+
+```text
+reference/
+  lwin/
+    current.json
+    versions/<content-hash>/
+      shard-000.json
+      shard-001.json
+      ...
+      redirects.json
+
+  elid/
+    current.json
+    versions/<content-hash>/
+      shard-000.json
+      shard-001.json
+      ...
+```
+
+The shards are distributed by normalized producer identity. A normal bottle lookup therefore reads one small shard rather than the whole catalogue.
+
+Old versions are not overwritten when a new snapshot is published, which gives us a straightforward recovery path.
 
 ## Before importing
 
-The identity migration must already be deployed:
+Install the repository dependencies and deploy/apply the PR's schema first:
 
 ```powershell
 npm install
 npm run db:migrate
+npm run deploy
 ```
 
-The migration creates `wine_reference_products`, `wine_reference_external_ids` and `wine_reference_sync_state`.
+The deployment provides the `REFERENCE_DATA` R2 binding. It points at the existing private `winelog-private` bucket, but is intentionally separate from the metered `WINE_IMAGES` binding so global reference reads do not count as member photo storage.
 
-### Back up D1 first
+The external source files and generated shards are operational data. Do **not** commit them to Git.
 
-Run this before the initial import and before every later full refresh:
+---
 
-```powershell
-New-Item -ItemType Directory -Force backups | Out-Null
-$stamp = Get-Date -Format "yyyy-MM-dd-HHmm"
-npx wrangler d1 export DB --remote --output "backups/winelog-$stamp.sql"
-```
+# LWIN
 
-Keep the backup until the new reference snapshot has been verified.
+## First import
 
-## 1. Download the official LWIN workbook
-
-Download the latest official LWIN database from Liv-ex and keep the original workbook unchanged as the source snapshot.
-
-A useful naming convention is:
+Keep the original Liv-ex workbook unchanged, for example:
 
 ```text
-LWINdatabase-YYYY-MM-DD.xlsx
+C:\WineLogData\LWINdatabase-2026-09-18.xlsx
 ```
 
-## 2. Export the LWIN worksheet as CSV UTF-8
+WineLog reads the XLSX directly; **you no longer need to convert it to CSV**.
 
-The WineLog importer deliberately accepts CSV rather than XLSX so an Excel parser does not become part of the Worker/runtime dependency tree.
+Before changing production, run a dry build:
 
-In Excel:
+```powershell
+npm run lwin:build-import -- "C:\WineLogData\LWINdatabase-2026-09-18.xlsx"
+```
 
-1. Open the downloaded workbook.
-2. Select the worksheet containing the LWIN records.
-3. Choose **File -> Save As**.
-4. Choose **CSV UTF-8 (Comma delimited) (*.csv)**.
-5. Save it outside the repository or in an ignored local working folder.
-
-Example:
+This validates the workbook and writes the generated version under:
 
 ```text
-C:\WineLogData\LWINdatabase-2026-09-18.csv
+.tmp\lwin-reference\<version>\
 ```
 
-Do not rename, remove or reorder the source columns. The importer validates the expected header before producing SQL.
+It does not upload anything.
 
-## 3. Generate D1 import files
+Review the console summary. Pay particular attention to:
 
-From the WineLogDB repository root:
+- valid rows accepted;
+- rejected rows;
+- Combined records;
+- the generated content version.
+
+Unexpected rejected rows should be investigated before publishing.
+
+When the dry run looks right:
 
 ```powershell
-Remove-Item ".tmp\lwin-import" -Recurse -Force -ErrorAction SilentlyContinue
-npm run lwin:build-import -- "C:\WineLogData\LWINdatabase-2026-09-18.csv" ".tmp\lwin-import"
+npm run lwin:import -- "C:\WineLogData\LWINdatabase-2026-09-18.xlsx"
 ```
 
-The output looks like:
+The importer:
 
-```text
-.tmp\lwin-import\
-  lwin-0001.sql
-  lwin-0002.sql
-  ...
-  lwin-sync-state.sql
-  manifest.json
-```
+1. reads the official XLSX;
+2. validates the expected LWIN columns;
+3. normalizes Excel numeric IDs such as `1000131.0` to `1000131`;
+4. retains Live, Combined and Deleted rows;
+5. builds Combined -> REFERENCE redirect data;
+6. writes producer-keyed R2 shards under a new immutable version;
+7. uploads every shard;
+8. switches `reference/lwin/current.json` **last**;
+9. writes one small `wine_reference_sync_state` row to D1.
 
-Review the manifest before touching production:
+If an upload fails before step 8, the application continues using the previous `current.json`.
+
+## CSV is still accepted
+
+If you already have a UTF-8 CSV export, it can still be used:
 
 ```powershell
-Get-Content ".tmp\lwin-import\manifest.json"
+npm run lwin:import -- "C:\WineLogData\LWINdatabase-2026-09-18.csv"
 ```
 
-Check that:
+XLSX is simply the preferred path because it removes the manual conversion step.
 
-- `accepted` is close to the expected source row count;
-- `rejected` is zero, or every rejection is understood;
-- `redirected` is plausible for Combined records;
-- `latestSourceUpdate` is recent;
-- `sha256` is populated.
+## Verify LWIN after import
 
-If there are unexplained rejected rows, stop and inspect the source first.
-
-## 4. Apply the numbered chunks to remote D1
-
-Apply only the numbered data files first:
+Check the D1 operational marker:
 
 ```powershell
-Get-ChildItem ".tmp\lwin-import\*.sql" |
-  Where-Object { $_.Name -match '^lwin-\d{4}\.sql
-    Write-Host "Applying $($_.Name)..."
-    npx wrangler d1 execute DB --remote --file $_.FullName
-    if ($LASTEXITCODE -ne 0) { throw "LWIN import stopped at $($_.Name)" }
-  }
+npx wrangler d1 execute DB --remote --command "SELECT source,source_version,source_updated_at,rows_seen,rows_written,rows_redirected,rows_rejected,status,updated_at FROM wine_reference_sync_state WHERE source='lwin';"
 ```
 
-The generated statements are idempotent. If the process stops because of a network or Cloudflare error, fix the problem and rerun the same loop. Successfully applied chunks update the same records instead of duplicating them.
+Expected `status` is `complete`.
 
-Only after every numbered chunk succeeds, write the completed sync marker:
+Download the current R2 manifest:
 
 ```powershell
-npx wrangler d1 execute DB --remote --file ".tmp\lwin-import\lwin-sync-state.sql"
+New-Item -ItemType Directory -Force ".tmp\reference-check" | Out-Null
+npx wrangler r2 object get "winelog-private/reference/lwin/current.json" --remote --file ".tmp\reference-check\lwin-current.json"
+Get-Content ".tmp\reference-check\lwin-current.json"
 ```
 
-Keeping the state file last prevents an incomplete import from being recorded as complete.
+Confirm that the manifest contains:
 
-## 5. Verify the import
+- `provider: "lwin"`;
+- the expected source filename;
+- the expected row count;
+- a recent `sourceUpdatedAt`;
+- a `prefix` pointing to the new version.
 
-### Sync status
+Then spot-check several wines in WineLog:
+
+- one normal vintage wine;
+- one true NV wine;
+- one numbered release such as Champagne edition;
+- one wine whose label spelling differs slightly from canonical naming.
+
+An unmatched wine must continue to save normally.
+
+## Periodic LWIN refresh
+
+Manual full-snapshot refresh remains a supported operating mode even after Liv-ex API access eventually becomes available.
+
+When Liv-ex publishes a newer workbook:
 
 ```powershell
-npx wrangler d1 execute DB --remote --command "SELECT source, source_version, source_updated_at, rows_seen, rows_written, rows_redirected, rows_rejected, status, updated_at FROM wine_reference_sync_state WHERE source='lwin';"
+npm run lwin:build-import -- "C:\WineLogData\LWINdatabase-NEW-DATE.xlsx"
+npm run lwin:import -- "C:\WineLogData\LWINdatabase-NEW-DATE.xlsx"
 ```
 
-Expected `status`: `complete`.
+The new content hash creates a new R2 version. The old version remains available instead of being overwritten.
 
-### LWIN status counts
+This makes the snapshot path useful for:
+
+- delayed API approval;
+- API outages;
+- catching up after a long gap;
+- periodic reconciliation against Liv-ex's official full database;
+- rebuilding a fresh WineLog deployment.
+
+When `LWIN Change Since` is implemented, it should update the same reference catalogue format. The full-XLSX importer should remain as the reconciliation/recovery route.
+
+## LWIN rollback
+
+Before an important refresh, save the current manifest locally:
 
 ```powershell
-npx wrangler d1 execute DB --remote --command "SELECT status, COUNT(*) AS records FROM wine_reference_products GROUP BY status ORDER BY status;"
+npx wrangler r2 object get "winelog-private/reference/lwin/current.json" --remote --file ".tmp\reference-check\lwin-before-refresh.json"
 ```
 
-These counts should broadly agree with the downloaded snapshot.
-
-### Combined redirect integrity
+Because old versioned shards remain in R2, rollback is only a manifest switch:
 
 ```powershell
-npx wrangler d1 execute DB --remote --command "SELECT COUNT(*) AS broken_combined FROM wine_reference_products WHERE status='Combined' AND (reference_lwin7 IS NULL OR reference_lwin7='');"
+npx wrangler r2 object put "winelog-private/reference/lwin/current.json" --remote --file ".tmp\reference-check\lwin-before-refresh.json" --content-type "application/json" --force
 ```
 
-Expected result: `0`.
+Then verify a known wine again.
 
-### Recent source changes
+---
+
+# ELID
+
+There is currently no official machine-readable ELID database/feed available to WineLog, so #282 includes a **registry-only crawler**.
+
+It deliberately does **not** copy the rich editorial/technical content on ELID wine pages. It retains only identity facts needed to link an official registered ELID:
+
+- ELID;
+- base ELID;
+- producer code/name;
+- wine/cuvée name;
+- vintage/NV/release code;
+- source URL.
+
+WineLog never fabricates a missing ELID.
+
+## Small ELID smoke test
+
+Before a full crawl, test one producer:
 
 ```powershell
-npx wrangler d1 execute DB --remote --command "SELECT lwin7, display_name, status, source_updated_at FROM wine_reference_products ORDER BY source_updated_at DESC LIMIT 10;"
+npm run elid:sync -- --producer=FR-KRUG --dry-run
 ```
 
-After deployment, also spot-check several known wines in WineLog. A unique match should acquire an LWIN reference, while unmatched wines must continue to save normally. Check at least one vintage wine, one true NV wine and one numbered edition/release.
-
-## Periodic manual refresh
-
-Until Liv-ex API access is available, repeat the same full-snapshot process whenever you obtain a newer official workbook:
-
-```text
-Download fresh workbook
-        ↓
-Keep the original snapshot
-        ↓
-Export CSV UTF-8
-        ↓
-Back up D1
-        ↓
-Generate fresh import files
-        ↓
-Review manifest/rejections
-        ↓
-Apply numbered chunks
-        ↓
-Apply sync-state last
-        ↓
-Run verification queries
-```
-
-Always generate into a clean output directory so old and new chunks cannot be mixed.
-
-### Why repeated full imports are safe
-
-The reference tables use stable keys and upserts. Re-importing the same snapshot should converge on the same data. A newer snapshot updates changed records and adds newly issued LWINs.
-
-The importer is intentionally non-destructive: a missing row in a later file does **not** cause WineLog to delete the existing external identity. Liv-ex's explicit `Deleted` and `Combined` statuses are the signals WineLog trusts.
-
-## Coexisting with the future Liv-ex API
-
-When `LWIN Change Since` access is available, it should update the **same reference tables**:
-
-```text
-Routine updates
-Liv-ex Change Since API
-        ↓
-incremental upsert
-        ↓
-wine_reference_products
-
-Fallback / reconciliation
-Official LWIN snapshot
-        ↓
-manual importer
-        ↓
-same tables
-```
-
-Keep manual full-snapshot import available for:
-
-- initial bootstrap;
-- delayed API credentials;
-- API outages or long gaps;
-- periodic reconciliation against the official snapshot;
-- rebuilding a fresh D1 database.
-
-Do not run an API delta sync and a full snapshot import concurrently. Finish one update source before starting the other.
-
-## Troubleshooting
-
-**Required columns are missing**  
-Re-export the original worksheet as CSV UTF-8 without editing its headings.
-
-**LWIN/REFERENCE values end in `.0`**  
-That is expected from Excel. The importer normalises valid seven-digit values to strings.
-
-**A chunk fails halfway through**  
-Do not apply `lwin-sync-state.sql`. Rerun the numbered chunks after fixing the problem.
-
-**The manifest reports rejected rows**  
-Do not ignore a large or unexplained count. Malformed identifiers/statuses and Combined rows without a valid REFERENCE are rejected intentionally.
-
-**The new snapshot has fewer records**  
-Do not delete the difference manually. WineLog preserves historical identities and trusts explicit Liv-ex status/REFERENCE changes rather than absence.
-
-**A known wine still does not match LWIN**  
-The current resolver intentionally avoids guessing. Exact aliases, fuzzy suggestions and more advanced conflict handling are separate resolver work; the WineLog record remains valid when no LWIN match exists.
-
-## Data and attribution
-
-Use the official LWIN dataset under Liv-ex's applicable licence/terms and retain the required attribution. Do not publish the downloaded workbook or generated bulk reference data from the WineLogDB repository.
-
-The repository contains the schema, importer and integration logic only.
- } |
-  Sort-Object Name |
-  ForEach-Object {
-    Write-Host "Applying $($_.Name)..."
-    npx wrangler d1 execute DB --remote --file $_.FullName
-    if ($LASTEXITCODE -ne 0) { throw "LWIN import stopped at $($_.Name)" }
-  }
-```
-
-The generated statements are idempotent. If the process stops because of a network or Cloudflare error, fix the problem and rerun the same loop. Successfully applied chunks update the same records instead of duplicating them.
-
-Only after every numbered chunk succeeds, write the completed sync marker:
+Or one country:
 
 ```powershell
-npx wrangler d1 execute DB --remote --file ".tmp\lwin-import\lwin-sync-state.sql"
+npm run elid:sync -- --country=FR --dry-run
 ```
 
-Keeping the state file last prevents an incomplete import from being recorded as complete.
+The crawler:
 
-## 5. Verify the import
+- checks `robots.txt` before proceeding;
+- identifies itself with a WineLogDB user agent;
+- waits between network requests;
+- caches fetched pages locally for seven days;
+- applies page-size safety limits;
+- visits producer/wine registry pages only;
+- stores only the registry fields above.
 
-### Sync status
+If robots instructions disallow the relevant paths, it aborts rather than working around them.
+
+## Publish ELID registry data
+
+For a full registry refresh:
 
 ```powershell
-npx wrangler d1 execute DB --remote --command "SELECT source, source_version, source_updated_at, rows_seen, rows_written, rows_redirected, rows_rejected, status, updated_at FROM wine_reference_sync_state WHERE source='lwin';"
+npm run elid:sync
 ```
 
-Expected `status`: `complete`.
-
-### LWIN status counts
+For one country:
 
 ```powershell
-npx wrangler d1 execute DB --remote --command "SELECT status, COUNT(*) AS records FROM wine_reference_products GROUP BY status ORDER BY status;"
+npm run elid:sync -- --country=FR
 ```
 
-These counts should broadly agree with the downloaded snapshot.
-
-### Combined redirect integrity
+Force a fresh fetch instead of using the seven-day local cache:
 
 ```powershell
-npx wrangler d1 execute DB --remote --command "SELECT COUNT(*) AS broken_combined FROM wine_reference_products WHERE status='Combined' AND (reference_lwin7 IS NULL OR reference_lwin7='');"
+npm run elid:sync -- --fresh
 ```
 
-Expected result: `0`.
+A full registry crawl can involve many pages. If it is interrupted, simply rerun it; the local cache means already-fetched pages normally do not need another request.
 
-### Recent source changes
+After all R2 shards upload successfully, `reference/elid/current.json` is switched last and the D1 sync marker is updated.
+
+Verify it with:
 
 ```powershell
-npx wrangler d1 execute DB --remote --command "SELECT lwin7, display_name, status, source_updated_at FROM wine_reference_products ORDER BY source_updated_at DESC LIMIT 10;"
+npx wrangler d1 execute DB --remote --command "SELECT source,source_version,rows_seen,rows_written,status,updated_at FROM wine_reference_sync_state WHERE source='elid';"
+npx wrangler r2 object get "winelog-private/reference/elid/current.json" --remote --file ".tmp\reference-check\elid-current.json"
+Get-Content ".tmp\reference-check\elid-current.json"
 ```
 
-After deployment, also spot-check several known wines in WineLog. A unique match should acquire an LWIN reference, while unmatched wines must continue to save normally. Check at least one vintage wine, one true NV wine and one numbered edition/release.
+## ELID refresh frequency
 
-## Periodic manual refresh
+ELID identity data does not need to be crawled on every bottle scan. A periodic manual refresh—such as monthly, or after learning that the registry has materially changed—is enough initially.
 
-Until Liv-ex API access is available, repeat the same full-snapshot process whenever you obtain a newer official workbook:
+The application never contacts `elid.wine` during ordinary recognition. Recognition reads the imported R2 catalogue.
 
-```text
-Download fresh workbook
-        ↓
-Keep the original snapshot
-        ↓
-Export CSV UTF-8
-        ↓
-Back up D1
-        ↓
-Generate fresh import files
-        ↓
-Review manifest/rejections
-        ↓
-Apply numbered chunks
-        ↓
-Apply sync-state last
-        ↓
-Run verification queries
-```
+---
 
-Always generate into a clean output directory so old and new chunks cannot be mixed.
+# Troubleshooting
 
-### Why repeated full imports are safe
+### LWIN workbook says required columns are missing
 
-The reference tables use stable keys and upserts. Re-importing the same snapshot should converge on the same data. A newer snapshot updates changed records and adds newly issued LWINs.
+Use the original Liv-ex workbook without renaming/removing columns. If using CSV, export the original sheet as CSV UTF-8 without modifying the headers.
 
-The importer is intentionally non-destructive: a missing row in a later file does **not** cause WineLog to delete the existing external identity. Liv-ex's explicit `Deleted` and `Combined` statuses are the signals WineLog trusts.
+### Some LWIN values display with `.0`
 
-## Coexisting with the future Liv-ex API
+That is normal Excel behavior. The importer converts valid seven-digit identifiers to strings before building the catalogue.
 
-When `LWIN Change Since` access is available, it should update the **same reference tables**:
+### Import/crawl stops during upload
 
-```text
-Routine updates
-Liv-ex Change Since API
-        ↓
-incremental upsert
-        ↓
-wine_reference_products
+The existing `current.json` remains active until the new version uploads completely. Rerun the command after fixing the issue.
 
-Fallback / reconciliation
-Official LWIN snapshot
-        ↓
-manual importer
-        ↓
-same tables
-```
+### A known wine does not receive an LWIN/ELID
 
-Keep manual full-snapshot import available for:
+The resolver intentionally avoids guessing. A missing external ID does not invalidate the WineLog wine. Alias/fuzzy candidate scoring remains a later resolver enhancement.
 
-- initial bootstrap;
-- delayed API credentials;
-- API outages or long gaps;
-- periodic reconciliation against the official snapshot;
-- rebuilding a fresh D1 database.
+### ELID crawl suddenly refuses to run
 
-Do not run an API delta sync and a full snapshot import concurrently. Finish one update source before starting the other.
+Check ELID's current robots instructions/site structure rather than bypassing the block. The crawler is intentionally fail-closed for explicit crawl restrictions.
 
-## Troubleshooting
+## Source/licensing boundary
 
-**Required columns are missing**  
-Re-export the original worksheet as CSV UTF-8 without editing its headings.
+Use the official LWIN dataset under Liv-ex's applicable licence/attribution requirements.
 
-**LWIN/REFERENCE values end in `.0`**  
-That is expected from Excel. The importer normalises valid seven-digit values to strings.
+For ELID, the crawler is intentionally limited to public registry identity facts. It does not bulk-copy technical specifications, editorial descriptions, drinking windows, tasting notes, prices or other enriched content.
 
-**A chunk fails halfway through**  
-Do not apply `lwin-sync-state.sql`. Rerun the numbered chunks after fixing the problem.
-
-**The manifest reports rejected rows**  
-Do not ignore a large or unexplained count. Malformed identifiers/statuses and Combined rows without a valid REFERENCE are rejected intentionally.
-
-**The new snapshot has fewer records**  
-Do not delete the difference manually. WineLog preserves historical identities and trusts explicit Liv-ex status/REFERENCE changes rather than absence.
-
-**A known wine still does not match LWIN**  
-The current resolver intentionally avoids guessing. Exact aliases, fuzzy suggestions and more advanced conflict handling are separate resolver work; the WineLog record remains valid when no LWIN match exists.
-
-## Data and attribution
-
-Use the official LWIN dataset under Liv-ex's applicable licence/terms and retain the required attribution. Do not publish the downloaded workbook or generated bulk reference data from the WineLogDB repository.
-
-The repository contains the schema, importer and integration logic only.
+If ELID later publishes an official machine-readable feed/API, replace the crawler with that source while retaining the same R2 catalogue format.

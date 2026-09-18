@@ -48,7 +48,9 @@ No bucket CORS policy is needed because uploads and image reads pass through the
 
 ## LWIN reference database
 
-WineLog can import the official LWIN catalogue into the global D1 reference layer and refresh it again from later snapshots while Liv-ex API access is pending. The import is idempotent and does not duplicate the catalogue per user. See **[Importing and refreshing the LWIN reference database](docs/lwin-import.md)** for the Windows/PowerShell workflow, backup steps, D1 commands and verification queries.
+WineLog keeps the large LWIN and ELID reference catalogues as versioned producer-keyed R2 shards, with only small sync state and matched IDs in D1. This avoids a 200k+ catalogue refresh consuming the Free-plan D1 write allowance.
+
+Import an official Liv-ex workbook directly with `npm run lwin:import -- "C:\path\LWINdatabase.xlsx"`; no CSV conversion is required. ELID has no official machine-readable feed available to WineLog, so `npm run elid:sync` performs a conservative, rate-limited registry crawl that stores identifier facts only and never runs during bottle recognition. See **[Importing and refreshing LWIN and ELID reference data](docs/lwin-import.md)**.
 
 ## Search
 

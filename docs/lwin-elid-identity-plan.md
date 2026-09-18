@@ -8,46 +8,43 @@ LWIN is the primary external reference dataset and taxonomy. ELID is a complemen
 
 ## Design principles
 
-1. **Global reference data, tenant-owned journals.** LWIN/ELID reference rows are shared once in D1. User wines, experiences, photos, corrections and research remain scoped by `owner_id`.
+1. **Global reference data, tenant-owned journals.** Bulk LWIN/ELID catalogues are shared once as versioned R2 reference shards. D1 stores only sync state and identifiers attached to user wines; user experiences, photos, corrections and research remain scoped by `owner_id`.
 2. **Evidence before canon.** Recognition records what the label shows. A resolver then matches that evidence to WineLog/LWIN. Canonical metadata is enrichment, not hallucinated label text.
 3. **No invented external IDs.** LWIN and ELID are stored only when backed by imported/reference data. WineLog never fabricates an ELID producer/wine code.
 4. **Backward compatible rollout.** Existing wines continue to work when no external match exists. Existing `wine_style`, `classification` and `vintage` behavior remains readable while richer fields are introduced.
-5. **No bulk reference duplication.** Product metadata is not copied to every journal row. User wines link to a global product reference.
-6. **Cheap hot path.** Matching uses indexed local D1 data. No network/API request is required for ordinary recognition/save.
+5. **No bulk reference duplication.** Product metadata is not copied to every journal row. The large external catalogues live once in R2; matched identifiers are persisted on the user wine.
+6. **Cheap hot path.** Matching reads one producer-keyed R2 shard and uses a short in-isolate cache. No Liv-ex/ELID internet request is required for ordinary recognition/save.
 7. **Safe corrections.** User edits never rewrite the global LWIN/ELID reference tables.
 
-## Phase 1 — reference schema and bootstrap tooling
+## Phase 1 — reference catalogue and bootstrap tooling
 
-Add global D1 tables:
+Keep the large external catalogues in versioned R2 shards. A content-addressed import writes immutable version files first and switches the small `current.json` manifest last.
 
-- `wine_reference_products`
-  - canonical external product key
-  - LWIN7 and LWIN status/reference redirect
-  - display/producer/wine names
-  - country, region, sub-region, site, parcel
-  - colour, type, subtype, designation, classification
-  - vintage configuration, first/final vintage
-  - source update timestamps
-- `wine_reference_external_ids`
-  - provider (`lwin`, `elid`)
-  - identifier
-  - product key
-  - optional vintage/release discriminator
-  - source/provenance and update timestamp
-- `wine_reference_sync_state`
-  - source, source version/hash, last source timestamp, counters and status
+R2 contains:
+- LWIN producer-keyed shards with product identity, geography, colour/type, classification and vintage configuration;
+- a Combined -> current-LWIN redirect map;
+- ELID producer-keyed registry shards containing only registered identifier facts;
+- one current manifest per provider.
 
-Add a deterministic bootstrap script that accepts the official LWIN export as CSV. The downloaded XLSX can be exported to CSV without changing its columns; the importer validates the required header before generating chunked D1 SQL. This keeps an Excel parser out of the runtime and avoids committing the 212k-row dataset to Git.
+D1 contains:
+- `wine_reference_sync_state`, a small operational marker for completed imports;
+- the LWIN/ELID values actually matched to individual WineLog wines.
 
-The importer must:
-- treat LWIN and REFERENCE as strings;
-- upsert idempotently;
-- keep Live, Combined and Deleted rows;
+This avoids trying to write the full 200k+ LWIN catalogue through the Free-plan D1 write allowance and avoids duplicating reference data per member.
+
+The LWIN importer accepts the official XLSX directly (CSV remains supported). The ELID sync is a conservative registry crawler because no official machine-readable feed is currently available.
+
+The importers must:
+- keep Live, Combined and Deleted LWIN records;
 - preserve Combined -> REFERENCE redirects;
-- map blank cells to NULL;
-- reject malformed identifiers/statuses;
-- process in bounded chunks suitable for D1 import;
-- record source metadata/sync state.
+- treat external identifiers as strings;
+- reject malformed records rather than guess;
+- shard deterministically by normalized producer;
+- publish the current manifest only after every version file succeeds;
+- record source/version/counters in D1;
+- never commit bulk external data to Git.
+
+See [Importing and refreshing LWIN and ELID reference data](./lwin-import.md).
 
 ## Phase 2 — user-wine external identity
 
@@ -83,11 +80,12 @@ Create one server-side resolver that accepts recognition/save evidence:
 - optional release designation
 
 Resolution order:
-1. exact/known WineLog producer + cuvée identity;
-2. exact LWIN normalized producer/wine candidate;
-3. narrowed LWIN candidate by geography/colour;
-4. redirect Combined LWINs to their current reference;
-5. return matched/suggested/ambiguous/unmatched with score and candidates.
+1. preserve the existing WineLog producer/cuvée identity;
+2. read the producer's LWIN R2 shard and look for an exact normalized producer/wine candidate;
+3. narrow with geography/colour when supplied;
+4. redirect Combined LWINs to the imported current reference;
+5. attach an ELID only when an actually crawled registry entry matches the product/release;
+6. otherwise return ambiguous/unmatched rather than guess.
 
 Rules:
 - a high-confidence LWIN match may enrich canonical metadata;
@@ -160,10 +158,10 @@ Validation:
 
 Deployment order:
 1. merge/deploy schema and code;
-2. export the official LWIN workbook to CSV;
-3. run bootstrap generator locally;
-4. apply generated D1 import SQL;
-5. check sync-state row and sample identities;
+2. run `npm run lwin:build-import -- <official.xlsx>` as a local dry run;
+3. run `npm run lwin:import -- <official.xlsx>` to publish a versioned R2 catalogue;
+4. check the R2 current manifest, D1 sync-state row and sample identities;
+5. run an ELID producer/country dry-run, then `npm run elid:sync` when appropriate;
 6. optionally run a bounded backfill of existing wines after sample verification;
 7. continue using the documented full-snapshot refresh whenever a newer official LWIN workbook is downloaded;
 8. add automated LWIN Change Since sync later when Liv-ex credentials are available.
@@ -171,7 +169,7 @@ Deployment order:
 ## Explicit non-goals for this PR
 
 - no Liv-ex paid market/pricing data;
-- no ELID website scraping;
+- no ELID editorial/technical content ingestion; the registry crawler is limited to public identifier facts and obeys robots instructions;
 - no invented ELIDs;
 - no LWIN API dependency;
 - no automatic destructive rewrite of existing producer/cuvée identities;
@@ -188,7 +186,4 @@ After Liv-ex API access is confirmed:
 - reconcile changed/combined LWIN mappings without rewriting user data silently;
 - retain the official full-snapshot importer as a fallback and reconciliation path.
 
-If ELID publishes an official machine-readable feed/API with suitable reuse terms:
-- import it into `wine_reference_external_ids`;
-- add an incremental sync path;
-- use ELID technical metadata only as attributed enrichment, not as an automatic overwrite of producer/label facts.
+If ELID later publishes an official machine-readable feed/API, replace the registry crawler with that source while retaining the same R2 shard format. Technical/editorial ELID content remains outside the identifier sync.
