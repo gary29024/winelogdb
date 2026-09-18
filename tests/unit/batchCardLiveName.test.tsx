@@ -21,14 +21,17 @@ const session=(items:unknown[])=>({id:'s1',status:'complete',totalItems:items.le
 let root:Root|null=null,host:HTMLDivElement|null=null;
 afterEach(()=>{act(()=>root?.unmount());host?.remove();root=null;host=null;vi.unstubAllGlobals()});
 
-async function render(items:unknown[]){
+async function render(items:unknown[],role?:'owner'|'member'){
   // The page finds the asked session in the list first, then fetches it.
   const summary={id:'s1',status:'complete',totalItems:items.length,expectedItems:items.length,
     confirmedItems:items.length,createdAt:'x',updatedAt:'x',expiresAt:'x'};
-  vi.stubGlobal('fetch',vi.fn(async(url:string)=>new Response(
-    JSON.stringify(String(url).endsWith('/sessions/s1')?session(items):{items:[summary]}),
-    {status:200,headers:{'content-type':'application/json'}})));
+  vi.stubGlobal('fetch',vi.fn(async(url:string)=>{
+    const target=String(url);
+    if(target.endsWith('/api/me')&&role)return new Response(JSON.stringify({user:{id:role,email:`${role}@example.com`,display_name:role,role,status:'active'}}),{status:200,headers:{'content-type':'application/json'}});
+    return new Response(JSON.stringify(target.endsWith('/sessions/s1')?session(items):{items:[summary]}),{status:200,headers:{'content-type':'application/json'}});
+  }));
   vi.resetModules();
+  if(role){const {bootstrapAccount}=await import('../../src/lib/auth/client');await bootstrapAccount()}
   const {BatchScanPage}=await import('../../src/features/uploads/BatchScanPage');
   host=document.createElement('div');document.body.appendChild(host);root=createRoot(host);
   await act(async()=>{root!.render(<MemoryRouter initialEntries={['/batch-scan?session=s1']}><BatchScanPage/></MemoryRouter>)});
@@ -72,6 +75,21 @@ describe('a confirmed card in a batch scan',()=>{
     await act(async()=>{review.click()});
     const fields=[...host!.querySelectorAll('.sparkling-details-editor input')] as HTMLInputElement[];
     expect(fields.map(input=>input.value)).toEqual(expect.arrayContaining(['3','03/2024','07/2019','L23 / DT0324']));
+  });
+
+  it('keeps the member review form compact without owner-facing helper copy',async()=>{
+    await render([item({status:'ready',confirmedWineId:null,saved:null,recognition:{...recognition,style:'sparkling',grapes:['Pinot Noir'],grapeBlend:[{grape:'Pinot Noir',percentage:100}],sparklingDetails:{dosageGPerL:0,disgorgement:'December 2025'},locationName:'Hong Kong',latitude:22.28045,longitude:114.192275}})],'member');
+    const review=[...host!.querySelectorAll('button')].find(button=>button.textContent==='Review & save') as HTMLButtonElement;
+    await act(async()=>{review.click()});
+    const text=host!.textContent??'';
+    expect(text).not.toContain('Tap a label photo to enlarge it and verify the identification against the original.');
+    expect(text).not.toContain('A grape sold under another name');
+    expect(text).not.toContain('WineLog already tries to auto-fill these during identification');
+    expect(text).not.toContain('Suggested from the photo location data');
+    expect(host!.querySelector('.gps-readout')).toBeNull();
+    expect(text).not.toContain('Tags for the place, the grapes and the style follow the wine');
+    expect(text).not.toContain('Optional — choose who should receive this wine when it is saved.');
+    expect([...host!.querySelectorAll('button')].some(button=>button.textContent?.startsWith('Tag friends'))).toBe(true);
   });
 
 });
