@@ -3,6 +3,7 @@
  */
 export function stripAiTransportMetadata(value:unknown):unknown{
  if(!value||typeof value!=='object'||Array.isArray(value))return value;
- const {creditOperationId:_creditOperationId,creditSettlement:_creditSettlement,...payload}=value as Record<string,unknown>;
+ const payload={...(value as Record<string,unknown>)};
+ delete payload.creditOperationId;delete payload.creditSettlement;
  return payload;
 }
