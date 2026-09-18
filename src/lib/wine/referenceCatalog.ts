@@ -9,8 +9,9 @@ export type ElidReferenceRecord={
  wineName:string;wineKey:string;vintageCode:string;sourceUrl:string;
 };
 
-const cache=new Map<string,{until:number,value:unknown}>();
+const caches=new WeakMap<R2Bucket,Map<string,{until:number,value:unknown}>>();
 const CACHE_MS=5*60*1000;
+function bucketCache(bucket:R2Bucket){let cache=caches.get(bucket);if(!cache){cache=new Map();caches.set(bucket,cache)}return cache}
 
 export function referenceShardId(producerKey:string,shards=REFERENCE_SHARDS){
  let hash=2166136261;
@@ -20,7 +21,7 @@ export function referenceShardId(producerKey:string,shards=REFERENCE_SHARDS){
 export const referenceManifestKey=(provider:ReferenceProvider)=>`reference/${provider}/current.json`;
 
 async function jsonObject<T>(bucket:R2Bucket,key:string,ttl=CACHE_MS):Promise<T|null>{
- const hit=cache.get(key);if(hit&&hit.until>Date.now())return hit.value as T;
+ const cache=bucketCache(bucket),hit=cache.get(key);if(hit&&hit.until>Date.now())return hit.value as T;
  const object=await bucket.get(key);if(!object)return null;
  const value=JSON.parse(await object.text()) as T;cache.set(key,{until:Date.now()+ttl,value});return value;
 }
