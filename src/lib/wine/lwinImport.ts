@@ -20,7 +20,7 @@ const text=(value:unknown)=>missing(value)?null:String(value).trim();
 const year=(value:unknown)=>{const n=Number(String(value??'').replace(/\.0+$/,''));return Number.isInteger(n)&&n>=1000&&n<=2200?n:null};
 const date=(value:unknown)=>{
  const valueText=text(value);if(!valueText)return null;
- const parsed=new Date(valueText);return Number.isNaN(parsed.getTime())?valueText:parsed.toISOString();
+ const parsed=new Date(valueText);return Number.isNaN(parsed.getTime())?null:parsed.toISOString();
 };
 
 export function validateLwinHeaders(headers:string[]){

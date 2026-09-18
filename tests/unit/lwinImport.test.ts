@@ -11,6 +11,9 @@ describe('LWIN reference import',()=>{
   expect(parsed).toMatchObject({productKey:'lwin:1000131',lwin7:'1000131',status:'Combined',referenceLwin7:'1316384',producerKey:'trimbach',wineKey:'clos st hune grand cru',subRegion:null,firstVintage:1980,finalVintage:null});
  });
  it('rejects a combined row without a destination',()=>expect(()=>parseLwinReference(sample({REFERENCE:'NA'}))).toThrow(/no valid REFERENCE/));
+ it('drops malformed source dates instead of letting raw text win latest-date comparisons',()=>{
+  expect(parseLwinReference(sample({DATE_UPDATED:'not-a-date'})).sourceUpdatedAt).toBeNull();
+ });
  it('pins the official export header contract',()=>{
   expect(()=>validateLwinHeaders([...LWIN_HEADERS].filter(x=>x!=='REFERENCE'))).toThrow(/REFERENCE/);
  });

@@ -26,6 +26,10 @@
   // then originals are served as fallback. No Images hosted storage is used.
   "images": { "binding": "IMAGES" },
   "r2_buckets": [
+    // Same private physical bucket, separate logical bindings: WINE_IMAGES is
+    // wrapped by per-member photo metering, while REFERENCE_DATA only accesses
+    // the reserved reference/ prefix. Reference code must never enumerate or
+    // delete outside reference/, and photo cleanup must remain wine-key scoped.
     { "binding": "WINE_IMAGES", "bucket_name": "winelog-private" },
     { "binding": "REFERENCE_DATA", "bucket_name": "winelog-private" }
   ],

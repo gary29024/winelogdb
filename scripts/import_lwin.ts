@@ -3,7 +3,7 @@ import { readFile } from 'node:fs/promises';
 import { extname,basename,resolve } from 'node:path';
 import ExcelJS from 'exceljs';
 import { parseLwinReference,validateLwinHeaders,type LwinInputRow,type LwinReferenceProduct } from '../src/lib/wine/lwinImport';
-import { REFERENCE_SHARDS,referenceShardId,type ReferenceManifest } from '../src/lib/wine/referenceCatalog';
+import { REFERENCE_SHARDS,referenceShardId,type LwinRedirect,type ReferenceManifest } from '../src/lib/wine/referenceCatalog';
 import { DEFAULT_REFERENCE_BUCKET,flag,option,positional,recordSyncState,uploadReferenceFiles,writeShardFiles } from './referenceR2';
 
 function csvRows(input:string){
@@ -54,8 +54,12 @@ for(const [index,row] of inputRows.entries())try{
 if(!products.length)throw new Error('No valid LWIN rows were found');
 const shards=new Map<string,LwinReferenceProduct[]>(),byLwin=new Map(products.map(product=>[product.lwin7,product]));
 for(const product of products){const id=referenceShardId(product.producerKey,REFERENCE_SHARDS),rows=shards.get(id)??[];rows.push(product);shards.set(id,rows)}
-const redirects:Record<string,LwinReferenceProduct>={};
-for(const product of products)if(product.status==='Combined'&&product.referenceLwin7){const target=byLwin.get(product.referenceLwin7);if(target)redirects[product.lwin7]=target}
+const redirects:Record<string,LwinRedirect>={};
+for(const product of products)if(product.status==='Combined'&&product.referenceLwin7){
+ const target=byLwin.get(product.referenceLwin7);
+ if(!target)throw new Error(`Combined LWIN ${product.lwin7} points to missing REFERENCE ${product.referenceLwin7}`);
+ redirects[product.lwin7]={targetLwin7:target.lwin7,targetShard:referenceShardId(target.producerKey,REFERENCE_SHARDS)};
+}
 const prefix=`reference/lwin/versions/${version}`,manifest:ReferenceManifest={
  provider:'lwin',version,prefix,shardCount:REFERENCE_SHARDS,rows:products.length,source:basename(inputPath),sourceUpdatedAt:latest||null,generatedAt,
  redirectsKey:`${prefix}/redirects.json`

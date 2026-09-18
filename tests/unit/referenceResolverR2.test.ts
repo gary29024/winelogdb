@@ -26,14 +26,15 @@ const elid:ElidReferenceRecord={
 };
 function objects(){
  const lwinManifest:ReferenceManifest={provider:'lwin',version:'l1',prefix:'reference/lwin/versions/l1',shardCount:256,rows:1,source:'LWIN.xlsx',sourceUpdatedAt:null,generatedAt:'now',redirectsKey:'reference/lwin/versions/l1/redirects.json'};
- const elidManifest:ReferenceManifest={provider:'elid',version:'e1',prefix:'reference/elid/versions/e1',shardCount:256,rows:1,source:'elid.wine',sourceUpdatedAt:null,generatedAt:'now'};
- const shard=referenceShardId('krug');
+ const elidManifest:ReferenceManifest={provider:'elid',version:'e1',prefix:'reference/elid/versions/e1',shardCount:256,rows:1,source:'elid.wine',sourceUpdatedAt:null,generatedAt:'now',producerIndexKey:'reference/elid/versions/e1/producer-index.json'};
+ const lwinShard=referenceShardId('krug'),elidShard=referenceShardId('FR-KRUG');
  return {
   'reference/lwin/current.json':lwinManifest,
-  [`reference/lwin/versions/l1/shard-${shard}.json`]:[lwin],
+  [`reference/lwin/versions/l1/shard-${lwinShard}.json`]:[lwin],
   'reference/lwin/versions/l1/redirects.json':{},
   'reference/elid/current.json':elidManifest,
-  [`reference/elid/versions/e1/shard-${shard}.json`]:[elid]
+  'reference/elid/versions/e1/producer-index.json':{'krug':['FR-KRUG'],'champagne krug':['FR-KRUG']},
+  [`reference/elid/versions/e1/shard-${elidShard}.json`]:[elid]
  };
 }
 
@@ -47,9 +48,10 @@ describe('R2 wine reference resolver',()=>{
   const first={...lwin,productKey:'lwin:1111111',lwin7:'1111111',status:'Combined' as const,referenceLwin7:'2222222'};
   data[key]=[first];
   data['reference/lwin/versions/l1/redirects.json']={
-   '1111111':{...lwin,productKey:'lwin:2222222',lwin7:'2222222',status:'Combined',referenceLwin7:'1234567'},
-   '2222222':lwin
+   '1111111':{targetLwin7:'2222222',targetShard:shard},
+   '2222222':{targetLwin7:'1234567',targetShard:shard}
   };
+  data[key]=[first,{...lwin,productKey:'lwin:2222222',lwin7:'2222222',status:'Combined',referenceLwin7:'1234567'},lwin];
   const result=await resolveWineReference(bucket(data),{producer:'Krug',wineName:'Grande Cuvée',releaseDesignation:'171ème Édition'});
   expect(result).toMatchObject({identityMatchStatus:'matched',lwin7:'1234567'});
  });
@@ -58,6 +60,21 @@ describe('R2 wine reference resolver',()=>{
   data[key]=[lwin,{...lwin,productKey:'lwin:7654321',lwin7:'7654321'}];
   const result=await resolveWineReference(bucket(data),{producer:'Krug',wineName:'Grande Cuvée',releaseDesignation:'171ème Édition'});
   expect(result.identityMatchStatus).toBe('ambiguous');expect(result.lwin7).toBeNull();
+ });
+ it('does not attach a specific ELID when vintage/release identity is not safely derivable',async()=>{
+  const b=bucket(objects());
+  const unknown=await resolveWineReference(b,{producer:'Krug',wineName:'Grande Cuvée',releaseDesignation:'171ème Édition',vintage:null,vintageKind:'unknown'});
+  expect(unknown.elid).toBeNull();
+  const mv=await resolveWineReference(b,{producer:'Krug',wineName:'Grande Cuvée',releaseDesignation:'MV20',vintage:null,vintageKind:'multi_vintage'});
+  expect(mv.elid).toBeNull();
+ });
+ it('can reconcile a generic producer prefix through the explicit ELID producer index',async()=>{
+  const data=objects(),index=data['reference/elid/versions/e1/producer-index.json'] as Record<string,string[]>;
+  delete index.krug;index['champagne krug']=['FR-KRUG'];
+  const changed={...lwin,producerName:'Champagne Krug',producerKey:'krug'},shard=referenceShardId('krug');
+  data[`reference/lwin/versions/l1/shard-${shard}.json`]=[changed];
+  const result=await resolveWineReference(bucket(data),{producer:'Krug',wineName:'Grande Cuvée',releaseDesignation:'171ème Édition',vintageKind:'non_vintage'});
+  expect(result.elid).toBe('FR-CMP-KRUG01-N171');
  });
  it('fails open when R2 itself is temporarily unavailable',async()=>{
   const wine={producer:'Krug',wineName:'Grande Cuvée',vintage:null as number|null};

@@ -159,6 +159,10 @@ const wineInputBaseSchema = wineRecordSchema.omit({ id:true, ownerId:true, creat
   colour:true,productType:true,productSubtype:true }).extend({tastingStructure:tastingStructureSchema.nullable().optional(),sparklingDetails:sparklingDetailsSchema.nullable().optional(),shareRecipientIds:z.array(z.string().min(1).max(128)).max(24).optional()}).superRefine((value,ctx)=>{
   const knownTotal=value.grapeBlend.reduce((sum,x)=>sum+(x.percentage??0),0);
   if(knownTotal>100.0001)ctx.addIssue({code:'custom',path:['grapeBlend'],message:'Known grape percentages cannot total more than 100%'});
+  if(value.vintage!=null&&value.vintageKind&&value.vintageKind!=='vintage')
+    ctx.addIssue({code:'custom',path:['vintageKind'],message:'A wine with a four-digit vintage must use vintageKind "vintage"'});
+  if(value.vintage==null&&value.vintageKind==='vintage')
+    ctx.addIssue({code:'custom',path:['vintageKind'],message:'vintageKind "vintage" requires a four-digit vintage'});
 });
 export const wineInputSchema = wineInputBaseSchema.transform(value=>canonicalizeWineFields(value));
 export type WineInput = z.infer<typeof wineInputSchema>;

@@ -22,6 +22,12 @@ describe('wineInputSchema vintage',()=>{
     if(parsed.success)expect(parsed.data.vintage).toBeNull();
   });
 
+  it('rejects contradictory vintage kind combinations',()=>{
+    expect(wineInputSchema.safeParse({...base,vintage:2015,vintageKind:'non_vintage'}).success).toBe(false);
+    expect(wineInputSchema.safeParse({...base,vintage:null,vintageKind:'vintage'}).success).toBe(false);
+    expect(wineInputSchema.safeParse({...base,vintage:2015,vintageKind:'vintage'}).success).toBe(true);
+  });
+
   it('rejects a non-year vintage',()=>{
     const parsed=wineInputSchema.safeParse({...base,vintage:'twenty twenty-one'});
     expect(parsed.success).toBe(false);

@@ -106,7 +106,8 @@ export async function createSheetWines(db:D1Database,owner:string,tastingId:stri
   // The bulk sheet path bypasses /api/wines, so run the same local reference
   // identity statements explicitly. This is still local D1 work: no provider
   // call and no per-row network request.
-  for(const {id,wine} of rows)await db.batch(referenceIdentityStatements(db,owner,id,wine,stamp,false));
+  const identityStatements=rows.flatMap(({id,wine})=>referenceIdentityStatements(db,owner,id,wine,stamp,false));
+  for(const chunk of chunked(identityStatements))await db.batch(chunk);
 
   // Serial and after the inserts: producer and cuvée linking reads rows back
   // and writes alias tables, so it cannot be folded into the insert batch.

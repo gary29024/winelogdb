@@ -1,6 +1,7 @@
 import type { LwinReferenceProduct } from './lwinImport';
-import { lwinRedirects,referenceRows,type ElidReferenceRecord } from './referenceCatalog';
+import { elidProducerIndex,lwinRedirects,normalizeReferenceText,producerLookupKeys,referenceRows,referenceRowsByShard,type ElidReferenceRecord } from './referenceCatalog';
 
+export { normalizeReferenceText } from './referenceCatalog';
 export const vintageKinds=['vintage','non_vintage','multi_vintage','unknown'] as const;
 export type VintageKind=typeof vintageKinds[number];
 export type IdentityMatchStatus='matched'|'suggested'|'ambiguous'|'unmatched'|'manual'|'conflict';
@@ -13,10 +14,6 @@ export type ReferenceIdentityInput={
  colour?:string|null;productType?:string|null;productSubtype?:string|null;
 };
 
-export function normalizeReferenceText(value:string|null|undefined){
- return (value??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase()
-   .replace(/[’'`]/g,'').replace(/&/g,' and ').replace(/[^\p{L}\p{N}]+/gu,' ').trim();
-}
 export function referenceWineKey(wineName:string|null|undefined,releaseDesignation?:string|null){
  const base=normalizeReferenceText(wineName),release=normalizeReferenceText(releaseDesignation);
  if(!release||base.includes(release))return base;
@@ -31,7 +28,9 @@ export function isValidElid(value:string|null|undefined){
  return /^[A-Z]{2}-[A-Z]{3}-[A-Z0-9]{6}-(?:\d{4}|XXXX|NVXX|N[A-Z0-9]{3})(?:\+[A-Z0-9]{3,4})?$/.test(value.trim().toUpperCase());
 }
 export function normalizedVintageKind(vintage:number|null|undefined,kind:VintageKind|null|undefined):VintageKind{
- if(kind&&vintageKinds.includes(kind))return kind;return vintage==null?'unknown':'vintage';
+ if(vintage!=null)return 'vintage';
+ if(kind&&vintageKinds.includes(kind))return kind;
+ return 'unknown';
 }
 export function vintageReferenceCode(vintage:number|null|undefined,kind:VintageKind|null|undefined){
  const resolved=normalizedVintageKind(vintage,kind);return resolved==='vintage'&&vintage!=null?String(vintage):'';
@@ -39,12 +38,16 @@ export function vintageReferenceCode(vintage:number|null|undefined,kind:VintageK
 function colourFromStyle(style:string|null|undefined){
  const value=(style??'').trim().toLowerCase();return ['red','white','rose','orange'].includes(value)?value:'';
 }
-function elidVintageClue(wine:ReferenceResolvable){
- if(wine.vintageKind==='vintage'&&wine.vintage!=null)return String(wine.vintage);
- if(wine.vintageKind==='non_vintage'||wine.vintageKind==='multi_vintage'){
-  const digits=wine.releaseDesignation?.match(/\b(\d{3})\b/)?.[1];return digits?`N${digits}`:'NVXX';
- }
- return '';
+function elidVintageClue(wine:ReferenceResolvable):string|null{
+ const kind=normalizedVintageKind(wine.vintage,wine.vintageKind);
+ if(kind==='vintage'&&wine.vintage!=null)return String(wine.vintage);
+ if(kind==='unknown'||kind==='multi_vintage')return null;
+ const release=(wine.releaseDesignation??'').trim();
+ if(!release)return 'NVXX';
+ const explicit=release.toUpperCase().match(/\bN([A-Z0-9]{3})\b/)?.[1];
+ if(explicit)return `N${explicit}`;
+ const numbered=release.match(/\b(\d{3})\b/)?.[1];
+ return numbered?`N${numbered}`:null;
 }
 
 export function referenceIdentityStatements(
@@ -57,18 +60,16 @@ export function referenceIdentityStatements(
     .bind(w.recognizedProducer??w.producer,w.recognizedWineName??w.wineName,w.recognizedVintageText??(w.vintage!=null?String(w.vintage):null),vintageKind,w.releaseDesignation??null,owner,wineId)
   :db.prepare(`UPDATE wines SET recognized_producer=?,recognized_wine_name=?,recognized_vintage_text=?,vintage_kind=?,release_designation=? WHERE owner_id=? AND id=?`)
     .bind(w.recognizedProducer??w.producer,w.recognizedWineName??w.wineName,w.recognizedVintageText??(w.vintage!=null?String(w.vintage):null),vintageKind,w.releaseDesignation??null,owner,wineId);
- const lookupCompleted=w.identityMatchStatus!=null,matched=w.identityMatchStatus==='matched'&&Boolean(w.lwin7);
- // A missing match after a completed lookup clears an old external mapping
- // because the user may have changed the identity. A lookup that did not
- // complete at all preserves the previous mapping on edits: an R2 hiccup must
- // never make an otherwise-valid wine edit destructive.
- const identity=updateExisting&&!lookupCompleted
-  ?db.prepare('UPDATE wines SET identity_match_status=identity_match_status WHERE owner_id=? AND id=?').bind(owner,wineId)
-  :db.prepare(`UPDATE wines SET reference_product_key=?,lwin7=?,lwin11=?,elid=?,colour=?,product_type=?,product_subtype=?,
-    identity_match_status=?,identity_match_confidence=?,identity_matched_at=? WHERE owner_id=? AND id=?`)
-    .bind(matched?w.referenceProductKey??null:null,matched?w.lwin7??null:null,matched?w.lwin11??null:null,matched?w.elid??null:null,
-     matched?w.colour??null:null,matched?w.productType??null:null,matched?w.productSubtype??null:null,
-     w.identityMatchStatus??'unmatched',matched?w.identityMatchConfidence??1:null,matched?stamp:null,owner,wineId);
+
+ const lookupCompleted=w.identityMatchStatus!=null;
+ if(!lookupCompleted)return [evidence];
+
+ const persistIdentity=(w.identityMatchStatus==='matched'||w.identityMatchStatus==='manual')&&Boolean(w.lwin7);
+ const identity=db.prepare(`UPDATE wines SET reference_product_key=?,lwin7=?,lwin11=?,elid=?,colour=?,product_type=?,product_subtype=?,
+   identity_match_status=?,identity_match_confidence=?,identity_matched_at=? WHERE owner_id=? AND id=?`)
+   .bind(persistIdentity?w.referenceProductKey??null:null,persistIdentity?w.lwin7??null:null,persistIdentity?w.lwin11??null:null,persistIdentity?w.elid??null:null,
+    persistIdentity?w.colour??null:null,persistIdentity?w.productType??null:null,persistIdentity?w.productSubtype??null:null,
+    w.identityMatchStatus,persistIdentity?w.identityMatchConfidence??(w.identityMatchStatus==='manual'?null:1):null,persistIdentity?stamp:null,owner,wineId);
  return [evidence,identity];
 }
 
@@ -94,10 +95,19 @@ const compatible=(candidate:LwinReferenceProduct,countryKey:string,regionKey:str
  (!colourKey||!candidate.colourKey||candidate.colourKey===colourKey);
 
 async function registeredElid(bucket:R2Bucket,product:LwinReferenceProduct,wine:ReferenceResolvable){
- const rows=await referenceRows<ElidReferenceRecord>(bucket,'elid',product.producerKey);if(!rows.length)return null;
- const baseWine=normalizeReferenceText(wine.wineName),clue=elidVintageClue(wine);
- const candidates=rows.filter(row=>row.producerKey===product.producerKey&&row.wineKey===baseWine&&(!clue||row.vintageCode===clue));
- return candidates.length===1&&isValidElid(candidates[0].elid)?candidates[0].elid:null;
+ const clue=elidVintageClue(wine);if(!clue)return null;
+ const index=await elidProducerIndex(bucket),codes=[...new Set(producerLookupKeys(product.producerName).flatMap(key=>index[key]??[]))];
+ if(!codes.length){
+  console.warn(JSON.stringify({event:'elid-producer-unmapped',lwin7:product.lwin7,producer:product.producerName}));
+  return null;
+ }
+ const baseWine=normalizeReferenceText(wine.wineName),groups=await Promise.all(codes.map(code=>referenceRows<ElidReferenceRecord>(bucket,'elid',code)));
+ const candidates=groups.flat().filter(row=>codes.includes(row.producerCode)&&row.wineKey===baseWine&&row.vintageCode===clue);
+ if(candidates.length!==1){
+  if(candidates.length>1)console.warn(JSON.stringify({event:'elid-match-ambiguous',lwin7:product.lwin7,producer:product.producerName,candidates:candidates.length}));
+  return null;
+ }
+ return isValidElid(candidates[0].elid)?candidates[0].elid:null;
 }
 
 export async function resolveWineReference(bucket:R2Bucket,wine:ReferenceResolvable):Promise<ReferenceMatch>{
@@ -110,11 +120,13 @@ export async function resolveWineReference(bucket:R2Bucket,wine:ReferenceResolva
  let product=candidates[0];
  if(product.status==='Deleted')return unmatched();
  if(product.status==='Combined'){
-  const redirects=await lwinRedirects<LwinReferenceProduct>(bucket),seen=new Set<string>();
+  const redirects=await lwinRedirects(bucket),seen=new Set<string>();
   while(product.status==='Combined'){
    if(seen.has(product.lwin7)||seen.size>=16)return unmatched('conflict');
    seen.add(product.lwin7);
-   const target=redirects[product.lwin7];if(!target)return unmatched('conflict');
+   const redirect=redirects[product.lwin7];if(!redirect)return unmatched('conflict');
+   const targetRows=await referenceRowsByShard<LwinReferenceProduct>(bucket,'lwin',redirect.targetShard);
+   const target=targetRows.find(row=>row.lwin7===redirect.targetLwin7);if(!target)return unmatched('conflict');
    product=target;
   }
  }
