@@ -1,6 +1,5 @@
 import { grapeGroup } from '../wine/grapes';
 import { favoriteOnlyQuery } from './favorite';
-import { hasIncomingSharedWines } from '../sharing/visibleWines';
 
 export type JournalListQuery=Record<string,string|undefined>;
 
@@ -33,8 +32,7 @@ export function sliceJournalPage<T>(rows:T[],limit:number,offset:number){
   return {items,nextOffset:rows.length>limit?offset+limit:null};
 }
 
-export async function listJournalPage(db:D1Database,owner:string,q:JournalListQuery,semanticIds:string[]=[]){
-  const includeShared=await hasIncomingSharedWines(db,owner);
+export async function listJournalPage(db:D1Database,owner:string,q:JournalListQuery,semanticIds:string[]=[],includeShared=false){
   const wineSource=includeShared?'member_visible_wines':'wines';
   // structureEntry forwards semantic candidates through the canonical Journal
   // route using an internal query parameter. The owner predicate below still

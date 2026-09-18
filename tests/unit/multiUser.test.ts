@@ -178,7 +178,7 @@ describe('shared wines as recipient journal history',()=>{
    VALUES('shared-history','alice','Domaine Shared','Clos Shared',2022,'France','Burgundy','Volnay','["Pinot Noir"]','red','Floral and fine',93,'2026-09-10','Private home',888,'HKD','2026-09-10T12:00:00Z','2026-09-10T12:00:00Z');
    INSERT INTO wine_shares(wine_id,owner_id,recipient_id,created_at) VALUES('shared-history','alice','bob','2026-09-11T12:00:00Z');
   `);
-  const journal=await listJournalPage(database.db,'bob',{});
+  const journal=await listJournalPage(database.db,'bob',{},[],true);
   expect(journal.total).toBe(1);
   expect(journal.items[0]).toMatchObject({id:'shared-history',producer:'Domaine Shared',shared:true,sharedBy:'alice',venue:null,favorite:false});
   expect(journal.items[0].imageIds).toEqual([]);

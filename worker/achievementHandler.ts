@@ -37,7 +37,7 @@ type AchievementContext={
  * producer alias added to a checklist item would tick nothing.
  * curatedCollectionFingerprint in the tests fails until this moves.
  */
-export const ACHIEVEMENT_DEFINITION_VERSION=11;
+export const ACHIEVEMENT_DEFINITION_VERSION=12;
 const parseJson=<T>(value:unknown,fallback:T):T=>{try{return JSON.parse(String(value)) as T}catch{return fallback}};
 
 function groupedAliases<T extends {display_alias:string}>(rows:T[],id:(row:T)=>string){
@@ -116,12 +116,11 @@ async function computeAchievementProgress(db:D1Database,owner:string,includeShar
 
 // The revision travels with the result so the route can turn it into an ETag and
 // answer an unchanged client with 304 rather than re-serializing the whole payload.
-export async function loadAchievementProgress(db:D1Database,owner:string,attempt=0,initialRevision?:number|null,includeShared=false):Promise<{revision:number|null;progress:AchievementProgress[]}>
+export async function loadAchievementProgress(db:D1Database,owner:string,attempt=0,initialRevision?:number|null):Promise<{revision:number|null;progress:AchievementProgress[]>}
 {
-  if(includeShared)return {revision:null,progress:await computeAchievementProgress(db,owner,true)};
   const revision=initialRevision===undefined?await currentOwnerRevision(db,owner):initialRevision;
   if(revision!==null){const cached=await cachedAchievementProgress(db,owner,revision);if(cached)return {revision,progress:cached}}
-  const result=await computeAchievementProgress(db,owner),after=await currentOwnerRevision(db,owner);
+  const result=await computeAchievementProgress(db,owner,true),after=await currentOwnerRevision(db,owner);
   // The retry carries the revision just read rather than reading it again, which
   // also means it looks in the cache at the new revision before rebuilding: under
   // a stream of writes some other request usually settles one first, and taking

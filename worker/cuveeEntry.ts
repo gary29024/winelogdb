@@ -142,7 +142,7 @@ app.post('/api/bottle-frames/:imageId',async c=>{
 app.get('/api/journal',async c=>{
   cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
   scheduleJournalMaintenance(c,owner);
-  try{return c.json(await listJournalPage(c.env.DB,owner,c.req.query()))}catch(e){console.error(JSON.stringify({event:'journal-list-failed',error:(e as Error).message}));return c.json({error:'Could not load Journal'},500)}
+  try{return c.json(await listJournalPage(c.env.DB,owner,c.req.query(),[],true))}catch(e){console.error(JSON.stringify({event:'journal-list-failed',error:(e as Error).message}));return c.json({error:'Could not load Journal'},500)}
 });
 
 app.post('/api/journal/batch-experience',async c=>{
