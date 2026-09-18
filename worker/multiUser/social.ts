@@ -1,12 +1,12 @@
 import { friendRequestRoute } from './friendRequests';
-import { ApiError,body,boundedBytes,json,stamp,type IdentityEnv,type Member } from './common';
+import { ApiError,body,json,stamp,type IdentityEnv,type Member } from './common';
 import { similarFriendProducers } from '../../src/lib/research/similarProducers';
 import { rememberProducerAlias } from '../../src/lib/research/aliasBridge';
 import type { SharedDeepSearch,SharedWine } from '../../src/lib/wine/shared';
 import { deepSearchSchema } from '../../src/lib/db/schema';
 import { tastingStructureSchema,type TastingStructure } from '../../src/lib/wine/tastingStructure';
 import { hasSparklingDetails,sparklingDetailsSchema,type SparklingDetails } from '../../src/lib/wine/sparklingDetails';
-import { meteredBucket } from './storage';
+import { serveWineImageObject } from '../wineImageHandler';
 
 // Explicit allowlist: never serialize the private WineRecord into a shared response.
 export function sharedWine(row:Record<string,unknown>):SharedWine{
@@ -135,199 +135,18 @@ async function acceptedFriendIds(db:D1Database,owner:string,ids:string[]){
  if(unique.some(id=>!friends.some(friend=>friend.friend_id===id)))throw new ApiError(400,'Only accepted friends can receive this wine');
  return unique;
 }
-/** Accept JPEG derivatives (baseline or progressive) and remove application/comment metadata. */
-export function stripJpegMetadata(bytes:Uint8Array):Uint8Array{
- if(bytes[0]!==0xff||bytes[1]!==0xd8)throw new ApiError(400,'A JPEG sharing copy is required');
- const parts:Uint8Array[]=[bytes.slice(0,2)];let p=2,scan=false,ended=false;
- while(p<bytes.length){
-  if(bytes[p]!==0xff)throw new ApiError(400,'Invalid JPEG');
-  const marker=bytes[p+1];
-  if(marker===0xd9){parts.push(bytes.slice(p,p+2));ended=true;break}
-  if(marker===0xda){
-   const size=(bytes[p+2]<<8)|bytes[p+3];if(size<2||p+size+2>bytes.length)throw new ApiError(400,'Invalid JPEG scan');
-   let end=p+size+2;
-   while(end<bytes.length){if(bytes[end]!==0xff){end++;continue}const next=bytes[end+1];if(next===0||next>=0xd0&&next<=0xd7){end+=2;continue}break}
-   parts.push(bytes.slice(p,end));p=end;scan=true;continue;
-  }
-  const length=(bytes[p+2]<<8)|bytes[p+3];if(length<2||p+2+length>bytes.length)throw new ApiError(400,'Invalid JPEG segment');
-  if(!(marker>=0xe0&&marker<=0xef)&&marker!==0xfe)parts.push(bytes.slice(p,p+2+length));p+=2+length;
- }
- if(!scan||!ended)throw new ApiError(400,'Invalid JPEG scan');
- const result=new Uint8Array(parts.reduce((sum,x)=>sum+x.length,0));let pos=0;for(const part of parts){result.set(part,pos);pos+=part.length}return result;
-}
 export type SocialEnv=IdentityEnv&{WINE_IMAGES:R2Bucket;IMAGES?:ImagesBinding};
 
-function sharingBucket(env:SocialEnv,owner:string){
- return meteredBucket(env.WINE_IMAGES,env.DB,owner,{skipMemberLimit:true,countsTowardMemberLimit:false});
-}
+const detachedImageContext:Pick<ExecutionContext,'waitUntil'>={
+ waitUntil(promise){void promise.catch(error=>console.warn(JSON.stringify({event:'shared-image-background-failed',error:String(error)})))}
+};
 
 /**
- * A derivative is generated once per photo and reused by every friend and every
- * view, so the steady-state cost is zero. These bounds exist only for the moments
- * that are not steady state: a photo that cannot be derived at all, and the first
- * two viewers arriving together.
+ * Shared photos deliberately reuse the owner's canonical R2 objects. Access is
+ * checked against the shared wine first, then this route verifies that the
+ * requested image belongs to that wine. The normal image helper then serves the
+ * same original or permanent thumb/v1 derivative used by the owner.
  */
-const SHARING_LEASE_MS=60_000;
-/** Backoff by attempt number: ~15m, 1h, 6h, then daily. */
-const SHARING_BACKOFF_MS=[15*60_000,60*60_000,6*60*60_000,24*60*60_000];
-/**
- * Derivatives generated per request. A wine may carry up to 30 photos, but a real
- * set is front/back/neck/additional, so this completes an ordinary wine on its
- * first view while keeping one GET's transform work bounded. Anything beyond it
- * arrives on the next view.
- */
-const SHARING_MAX_PER_REQUEST=8;
-
-/** `priorAttempts` is the number of failures before this one, so 0 gives the first rung. */
-const sharingRetryAfter=(priorAttempts:number)=>
- new Date(Date.now()+SHARING_BACKOFF_MS[Math.min(priorAttempts,SHARING_BACKOFF_MS.length-1)]).toISOString();
-
-/**
- * Takes the one attempt slot for this photo, or reports that another request
- * already holds it. Concurrent first views would otherwise both pay for a
- * transform of the same photo before either wrote its shared_photos row.
- */
-async function claimSharingPhoto(env:SocialEnv,owner:string,imageId:string){
- const now=stamp(),lease=new Date(Date.now()+SHARING_LEASE_MS).toISOString();
- const claimed=await env.DB.prepare(`INSERT INTO shared_photo_attempts(image_id,owner_id,attempts,retry_after,updated_at)
-   VALUES(?,?,0,?,?)
-   ON CONFLICT(image_id) DO UPDATE SET retry_after=excluded.retry_after,updated_at=excluded.updated_at,error=NULL
-   WHERE shared_photo_attempts.retry_after<=?`).bind(imageId,owner,lease,now,now).run();
- return Boolean(claimed.meta.changes);
-}
-
-type SharingPhotoAttempt='ready'|'busy'|'failed';
-
-async function ensureSharingPhoto(env:SocialEnv,owner:string,image:{id:string;object_key:string;attempts:number}):Promise<SharingPhotoAttempt>{
- if(!env.IMAGES)return 'failed';
- if(!await claimSharingPhoto(env,owner,image.id))return 'busy';
- try{
-  const original=await env.WINE_IMAGES.get(image.object_key);if(!original)throw new Error('Original photo is no longer stored');
-  const output=await env.IMAGES.input(original.body).transform({width:1600,height:1600,fit:'scale-down'}).output({format:'image/jpeg',quality:80,anim:false});
-  const response=output.response();if(!response.ok)throw new Error(`Sharing image transform returned ${response.status}`);
-  const bytes=stripJpegMetadata(new Uint8Array(await response.arrayBuffer())),key=`shared/${owner}/${image.id}.jpg`;
-  await sharingBucket(env,owner).put(key,bytes,{httpMetadata:{contentType:'image/jpeg'},storageClass:'Standard'});
-  await env.DB.batch([
-   env.DB.prepare('INSERT INTO shared_photos(image_id,owner_id,object_key,byte_size) VALUES(?,?,?,?) ON CONFLICT(image_id) DO UPDATE SET object_key=excluded.object_key,byte_size=excluded.byte_size,created_at=?').bind(image.id,owner,key,bytes.length,stamp()),
-   env.DB.prepare('DELETE FROM shared_photo_attempts WHERE image_id=? AND owner_id=?').bind(image.id,owner)
-  ]);
-  return 'ready';
- }catch(error){
-  const message=(error as Error).message;
-  await env.DB.prepare('UPDATE shared_photo_attempts SET attempts=attempts+1,error=?,retry_after=?,updated_at=? WHERE image_id=? AND owner_id=?')
-   .bind(message.slice(0,300),sharingRetryAfter(image.attempts),stamp(),image.id,owner).run().catch(()=>undefined);
-  console.warn(JSON.stringify({event:'sharing-photo-prepare-failed',imageId:image.id,attempts:image.attempts+1,error:message}));
-  return 'failed';
- }
-}
-
-const SHARING_CONTENTION_DELAYS_MS=[100,200,400,800];
-
-/**
- * A concurrent viewer that loses the lease should not get a misleading
- * photo-less first render while the winner is still finishing the derivative.
- * Poll only the contended image ids, and only for a short bounded window.
- */
-async function waitForSharingPhotoContention(env:SocialEnv,owner:string,imageIds:string[]){
- let pending=[...new Set(imageIds)];
- for(const delay of SHARING_CONTENTION_DELAYS_MS){
-  if(!pending.length)return;
-  await new Promise(resolve=>setTimeout(resolve,delay));
-  const placeholders=pending.map(()=>'?').join(',');
-  const rows=(await env.DB.prepare(`SELECT image_id FROM shared_photos WHERE owner_id=? AND image_id IN (${placeholders})`).bind(owner,...pending).all<{image_id:string}>()).results;
-  const ready=new Set(rows.map(row=>row.image_id));
-  pending=pending.filter(id=>!ready.has(id));
- }
-}
-
-async function ensureSharingPhotos(env:SocialEnv,owner:string,images:Array<{id:string;object_key:string;attempts:number}>){
- if(!images.length)return [] as string[];
- if(!env.IMAGES){
-  console.warn(JSON.stringify({event:'sharing-photo-images-binding-missing',imageCount:images.length}));
-  return [] as string[];
- }
- // Capped so one shared-wine GET cannot fan a 30-photo wine into 30 transforms.
- // Each derivative commits on its own, so the next view resumes where this left off.
- const candidates=images.slice(0,SHARING_MAX_PER_REQUEST);
- const states=await Promise.all(candidates.map(image=>ensureSharingPhoto(env,owner,image)));
- return candidates.flatMap((image,index)=>states[index]==='busy'?[image.id]:[]);
-}
-
-/**
- * Backfill sharing derivatives for shared wines, on the scheduled pass.
- *
- * Until now a shared_photos row was written either by the sharer's browser, in
- * a serial loop that abandons the rest of the batch on the first failure and
- * dies with the tab, or by ensureSharingPhotos on a single shared-wine GET.
- * Nothing prepared them for a list, so after sharing 36 wines at once a friend's
- * journal showed 36 letter tiles and only filled in as they opened each bottle.
- *
- * Draining it here makes the server the guarantee rather than the browser: due
- * work is picked up within a cron tick whether or not the sharer stayed on the
- * page. Bounded per owner by ensureSharingPhotos, and resumable because each
- * derivative commits on its own, so a pass that runs out of room leaves the
- * next one more to do rather than losing it.
- */
-export async function drainSharingPhotos(env:SocialEnv,limit=40){
- if(!env.IMAGES)return 0;
- const now=stamp();
- const rows=(await env.DB.prepare(`SELECT i.id,i.owner_id,i.object_key,coalesce(a.attempts,0) AS attempts
-   FROM wine_images i
-   LEFT JOIN shared_photos p ON p.image_id=i.id AND p.owner_id=i.owner_id
-   LEFT JOIN shared_photo_attempts a ON a.image_id=i.id AND a.owner_id=i.owner_id
-   WHERE p.image_id IS NULL
-     AND (a.retry_after IS NULL OR a.retry_after<=?)
-     AND (EXISTS(SELECT 1 FROM wine_shares s WHERE s.wine_id=i.wine_id AND s.owner_id=i.owner_id)
-       OR EXISTS(SELECT 1 FROM tasting_shares ts JOIN wine_experiences we
-            ON we.owner_id=ts.owner_id AND we.tasting_id=ts.tasting_id
-            WHERE we.wine_id=i.wine_id AND ts.owner_id=i.owner_id))
-   ORDER BY i.rowid LIMIT ?`).bind(now,Math.max(1,limit)).all<{id:string;owner_id:string;object_key:string;attempts:number}>()).results;
- if(!rows.length)return 0;
- // ensureSharingPhotos leases and transforms for one owner at a time, and caps
- // itself, so group rather than hand it a mixed list.
- const byOwner=new Map<string,Array<{id:string;object_key:string;attempts:number}>>();
- for(const row of rows){
-  const list=byOwner.get(row.owner_id)??[];
-  list.push({id:row.id,object_key:row.object_key,attempts:row.attempts});
-  byOwner.set(row.owner_id,list);
- }
- for(const [owner,images] of byOwner)await ensureSharingPhotos(env,owner,images);
- return rows.length;
-}
-
-/**
- * The bytes a friend is served for one shared photo.
- *
- * A journal card is a couple of hundred pixels, so serving it the 1600px
- * sharing copy would spend megabytes on a grid of them. The thumbnail is
- * derived from that copy rather than from the original, so it inherits its
- * metadata stripping instead of raising the question again, and it is stripped
- * once more on the way out to keep one invariant: nothing under shared/ has
- * skipped the stripper. It persists like the owner's own thumbnail, so only the
- * first viewer pays for the transform.
- */
-async function sharedPhotoObject(env:SocialEnv,owner:string,imageId:string,objectKey:string,thumbnail:boolean){
- if(!thumbnail||!env.IMAGES)return env.WINE_IMAGES.get(objectKey);
- const thumbKey=`shared/${owner}/${imageId}-thumb.jpg`;
- const stored=await env.WINE_IMAGES.get(thumbKey).catch(()=>null);
- if(stored)return stored;
- const source=await env.WINE_IMAGES.get(objectKey);
- if(!source)return null;
- try{
-  const output=await env.IMAGES.input(source.body).transform({width:640,height:640,fit:'scale-down'}).output({format:'image/jpeg',quality:75,anim:false});
-  const response=output.response();
-  if(!response.ok)throw new Error(`Shared thumbnail transform returned ${response.status}`);
-  const bytes=stripJpegMetadata(new Uint8Array(await response.arrayBuffer()));
-  await sharingBucket(env,owner).put(thumbKey,bytes,{httpMetadata:{contentType:'image/jpeg'},storageClass:'Standard'});
-  return {body:new Blob([bytes as BlobPart]).stream()} as unknown as R2ObjectBody;
- }catch(error){
-  // A thumbnail that will not build is not worth a broken card: fall back to
-  // the full sharing copy, which is already prepared and already safe.
-  console.warn(JSON.stringify({event:'shared-thumbnail-failed',imageId,error:(error as Error).message}));
-  return env.WINE_IMAGES.get(objectKey);
- }
-}
-
 export const SHARED_WINES_LIST_SQL=`WITH accessible(wine_id,owner_id,shared_at) AS (
  SELECT s.wine_id,s.owner_id,s.created_at FROM wine_shares s WHERE s.recipient_id=?
  UNION ALL
@@ -359,7 +178,7 @@ LEFT JOIN wine_sparkling_details sd ON sd.owner_id=w.owner_id AND sd.wine_id=w.i
 LEFT JOIN shared_wine_preferences pref ON pref.recipient_id=? AND pref.owner_id=p.owner_id AND pref.wine_id=p.wine_id
 ORDER BY p.shared_at DESC,w.id`;
 
-export async function socialRoute(request:Request,env:SocialEnv,member:Member):Promise<Response|null>{
+export async function socialRoute(request:Request,env:SocialEnv,member:Member,ctx?:Pick<ExecutionContext,'waitUntil'>):Promise<Response|null>{
  const url=new URL(request.url),path=url.pathname;
  const friendRequest=await friendRequestRoute(request,env,member);if(friendRequest)return friendRequest;
 
@@ -446,15 +265,6 @@ export async function socialRoute(request:Request,env:SocialEnv,member:Member):P
    await env.DB.batch([env.DB.prepare('DELETE FROM wine_shares WHERE wine_id=? AND owner_id=?').bind(shares[1],member.id),...ids.map(id=>env.DB.prepare('INSERT INTO wine_shares(wine_id,owner_id,recipient_id) SELECT ?,?,? WHERE EXISTS(SELECT 1 FROM friendships WHERE user_id=? AND friend_id=?)').bind(shares[1],member.id,id,member.id,id))]);return json({ok:true});
   }
  }
- const derivative=path.match(/^\/api\/images\/([^/]+)\/sharing-copy$/);
- if(derivative&&request.method==='PUT'){
-  const row=await env.DB.prepare('SELECT id FROM wine_images WHERE id=? AND owner_id=? AND wine_id IS NOT NULL').bind(derivative[1],member.id).first();if(!row)throw new ApiError(404,'Photo not found');
-  if(Number(request.headers.get('Content-Length'))>2_000_000)throw new ApiError(413,'Sharing copy is too large');
-  const raw=await boundedBytes(request.body,2_000_000);
-  const bytes=stripJpegMetadata(raw),key=`shared/${member.id}/${derivative[1]}.jpg`;
-  await sharingBucket(env,member.id).put(key,bytes,{httpMetadata:{contentType:'image/jpeg'},storageClass:'Standard'});
-  await env.DB.prepare('INSERT INTO shared_photos(image_id,owner_id,object_key,byte_size) VALUES(?,?,?,?) ON CONFLICT(image_id) DO UPDATE SET byte_size=excluded.byte_size,created_at=?').bind(derivative[1],member.id,key,bytes.length,stamp()).run();return json({ok:true});
- }
  if(path==='/api/shared/wines'&&request.method==='GET'){
   const offset=Math.max(0,Math.min(100000,Number(url.searchParams.get('offset'))||0));
   const rows=await env.DB.prepare(SHARED_WINES_LIST_SQL).bind(member.id,member.id,member.id,offset,member.id,member.id).all<Record<string,unknown>>();return json({items:rows.results.map(sharedWine),nextOffset:rows.results.length===25?offset+25:null});
@@ -501,48 +311,18 @@ export async function socialRoute(request:Request,env:SocialEnv,member:Member):P
  const shared=path.match(/^\/api\/shared\/wines\/([^/]+)(?:\/photos\/([^/]+))?$/);
  if(shared&&request.method==='GET'){
   const wine=await canReadShared(env.DB,member.id,shared[1]);if(!wine)throw new ApiError(404,'Shared wine not found');
+  const owner=String(wine.owner_id);
   if(shared[2]){
-   const owner=String(wine.owner_id);
-   const find=()=>env.DB.prepare('SELECT p.object_key FROM shared_photos p JOIN wine_images i ON i.id=p.image_id AND i.owner_id=p.owner_id WHERE i.wine_id=? AND i.id=? AND i.owner_id=?').bind(shared[1],shared[2],owner).first<{object_key:string}>();
-   let row=await find();
-   if(!row){
-    // Build it now rather than 404, the way an owner's own thumbnail is built
-    // on first view. Pre-building was what made a bulk share slow: the sharer's
-    // browser had to grind through every photo before a friend saw any of them.
-    const pending=await env.DB.prepare(`SELECT i.id,i.object_key,coalesce(a.attempts,0) AS attempts
-      FROM wine_images i LEFT JOIN shared_photo_attempts a ON a.image_id=i.id AND a.owner_id=i.owner_id
-      WHERE i.id=? AND i.owner_id=? AND (a.retry_after IS NULL OR a.retry_after<=?)`)
-      .bind(shared[2],owner,stamp()).first<{id:string;object_key:string;attempts:number}>();
-    if(pending){
-     const racing=await ensureSharingPhotos(env,owner,[pending]);
-     if(racing.length)await waitForSharingPhotoContention(env,owner,racing);
-     row=await find();
-    }
-   }
-   if(!row)throw new ApiError(404,'Photo not found');
-   const object=await sharedPhotoObject(env,owner,String(shared[2]),row.object_key,url.searchParams.get('variant')==='thumbnail');
-   if(!object)throw new ApiError(404,'Photo not found');
-   return new Response(object.body,{headers:{'Content-Type':'image/jpeg','Cache-Control':'private, no-store','X-Content-Type-Options':'nosniff'}});
+   // canReadShared authorizes the wine; this second predicate prevents an image
+   // id from another wine owned by the same friend being substituted into the URL.
+   const image=await env.DB.prepare('SELECT object_key FROM wine_images WHERE id=? AND wine_id=? AND owner_id=?')
+    .bind(shared[2],shared[1],owner).first<{object_key:string}>();
+   if(!image)throw new ApiError(404,'Photo not found');
+   return serveWineImageObject(request,env,owner,String(shared[2]),image.object_key,ctx??detachedImageContext);
   }
-  // Keep active leases visible: a second viewer that arrives after the winner
-  // has claimed the photo should wait briefly instead of returning an empty first
-  // render. Failure backoffs remain visible too, but are not retried until due.
-  const images=(await env.DB.prepare(`SELECT i.id,i.object_key,coalesce(a.attempts,0) AS attempts,
-    a.error AS attempt_error,a.retry_after
-   FROM wine_images i
-   LEFT JOIN shared_photos p ON p.image_id=i.id AND p.owner_id=i.owner_id
-   LEFT JOIN shared_photo_attempts a ON a.image_id=i.id AND a.owner_id=i.owner_id
-   WHERE i.wine_id=? AND i.owner_id=? AND p.image_id IS NULL
-   ORDER BY i.rowid`).bind(shared[1],wine.owner_id).all<{id:string;object_key:string;attempts:number;attempt_error:string|null;retry_after:string|null}>()).results;
-  const now=stamp();
-  const due=images.filter(image=>image.retry_after===null||image.retry_after<=now);
-  const leased=images.filter(image=>image.retry_after!==null&&image.retry_after>now&&image.attempt_error===null)
-   .slice(0,SHARING_MAX_PER_REQUEST).map(image=>image.id);
-  const raced=await ensureSharingPhotos(env,String(wine.owner_id),due);
-  const contended=[...new Set([...leased,...raced])].slice(0,SHARING_MAX_PER_REQUEST);
-  if(contended.length)await waitForSharingPhotoContention(env,String(wine.owner_id),contended);
-  const photos=(await env.DB.prepare('SELECT p.image_id FROM shared_photos p JOIN wine_images i ON i.id=p.image_id AND i.owner_id=p.owner_id WHERE i.wine_id=? AND i.owner_id=? ORDER BY i.rowid').bind(shared[1],wine.owner_id).all<{image_id:string}>()).results;
-  return json({...sharedWine(wine),photos:photos.map(p=>({id:p.image_id,url:`/api/shared/wines/${shared[1]}/photos/${p.image_id}`}))});
+  const photos=(await env.DB.prepare('SELECT id FROM wine_images WHERE wine_id=? AND owner_id=? ORDER BY rowid')
+   .bind(shared[1],owner).all<{id:string}>()).results;
+  return json({...sharedWine(wine),photos:photos.map(photo=>({id:photo.id,url:`/api/shared/wines/${shared[1]}/photos/${photo.id}`}))});
  }
  return null;
 }
