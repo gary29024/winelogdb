@@ -37,6 +37,7 @@ function asDataUrl(file:File){return new Promise<string>((resolve,reject)=>{cons
 async function alignToExistingCuvee(result:GroupRecognitionWine){
   try{
     const producer=await resolveProducer(result.producer);if(!producer.matched||!producer.producer)return result;
+    if(producer.producer.sharedOnly)return {...result,producer:producer.producer.canonicalName};
     const cuvee=await resolveCuvee(producer.producer.id,result.wineName,null,result.style??null);
     if(!cuvee.matched||!cuvee.cuvee)return {...result,producer:producer.producer.canonicalName};
     return {...result,producer:producer.producer.canonicalName,wineName:cuvee.cuvee.canonicalName,appellation:cuvee.cuvee.appellation??result.appellation};
