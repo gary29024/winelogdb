@@ -4,6 +4,7 @@ import { buildRecognitionPrompt,recognitionResponseJsonSchema,RECOGNITION_MODEL 
 import { preferEscalatedRecognition,recognitionEscalationReasons,RECOGNITION_FLEX_ESCALATION_MODEL } from '../src/lib/recognition/escalation';
 import type { RecognitionPhotoMetadata } from '../src/lib/uploads/metadataSelection';
 import { shouldRetryRecognitionFailure } from '../src/lib/recognition/retryPolicy';
+import { enrichRecognitionReference } from '../src/lib/wine/referenceIdentity';
 import { postGeminiGenerateContent,type GeminiTransportBindings } from './geminiTransport';
 import type { AnalyticsSink } from '../src/lib/usage/aiUsage';
 
@@ -177,7 +178,7 @@ export async function processVertexBatchPollJob(env:Env,owner:string,sessionId:s
     const primaryCall=meter.capture(RECOGNITION_MODEL,payload.usageMetadata);
     const candidate=payload.candidates?.[0],text=candidate?.content?.parts?.map(part=>part.text??'').join('')??'';
     if(!text)throw new Error('Vertex returned an empty recognition');
-    const primary=parseRecognition(text),escalationReasons=recognitionEscalationReasons(primary),escalation=escalationReasons.length?await tryEscalatedBatchRecognition(env,sessionId,itemId,body,primary,escalationReasons,meter):{result:primary,used:false,trafficType:null},base=escalation.result,result={...base,locationName:selected.gpsSource==='exif'&&base.locationName?.trim()?base.locationName.trim():null,tastingDate:selected.capturedAt?.slice(0,10)??null,latitude:selected.latitude,longitude:selected.longitude,metadataSource:selected.gpsSource==='exif'?'exif':selected.timestampSource,requestId:itemId},stamp=now();
+    const primary=parseRecognition(text),escalationReasons=recognitionEscalationReasons(primary),escalation=escalationReasons.length?await tryEscalatedBatchRecognition(env,sessionId,itemId,body,primary,escalationReasons,meter):{result:primary,used:false,trafficType:null},base=escalation.result,enriched=await enrichRecognitionReference(env.DB,base),result={...enriched,locationName:selected.gpsSource==='exif'&&enriched.locationName?.trim()?enriched.locationName.trim():null,tastingDate:selected.capturedAt?.slice(0,10)??null,latitude:selected.latitude,longitude:selected.longitude,metadataSource:selected.gpsSource==='exif'?'exif':selected.timestampSource,requestId:itemId},stamp=now();
     await env.DB.batch([
       env.DB.prepare("UPDATE batch_recognition_items SET status='ready',recognition_json=?,error=NULL,updated_at=? WHERE id=? AND owner_id=? AND status='submitted'").bind(JSON.stringify(result),stamp,itemId,owner),
       env.DB.prepare("UPDATE batch_recognition_jobs SET status='complete',error=NULL,updated_at=? WHERE id=? AND owner_id=?").bind(stamp,jobId,owner)

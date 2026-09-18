@@ -2,6 +2,7 @@ import { preferEscalatedSheet } from '../src/lib/recognition/escalation';
 import { parseSheetPage,type SheetPage } from '../src/features/recognition/sheetSchema';
 import { sheetRecognitionResponseJsonSchema,PLACE_LEVEL_RULE,RECOGNITION_MODEL } from '../src/lib/recognition/geminiRequest';
 import type { RecognitionModeSpec } from './visionRecognition';
+import { enrichRecognitionReference } from '../src/lib/wine/referenceIdentity';
 
 const MAX_SHEET_IMAGE_BYTES=3*1024*1024;
 
@@ -46,6 +47,7 @@ export const sheetRecognitionSpec:RecognitionModeSpec<SheetPage>={
   oneFileError:'Send one wine list page per request',
   jsonSchema:sheetRecognitionResponseJsonSchema,
   parse:parseSheetPage,
+  enrich:async(db,page)=>({...page,wines:await Promise.all(page.wines.map(wine=>enrichRecognitionReference(db,wine)))}),
   escalationReasons:sheetEscalationReasons,
   preferEscalated:preferEscalatedSheet,
   wineCount:page=>page.wines.length,
@@ -62,7 +64,7 @@ PRICES. Return every price printed against a wine in priceOptions, in the order 
 
 CURRENCY. Report ONE currency for the whole page in the currency field, as a three-letter ISO 4217 code read from the symbols or codes printed on it (HK$ or $ beside a Hong Kong venue is HKD, £ is GBP, € is EUR, ¥ may be JPY or CNY - use the surrounding text to decide). Use null if no currency can be determined. Do not put a currency on individual wines.
 
-Vintage must be a JSON integer such as 2019, never a quoted string. Use null for non-vintage, multi-vintage, an edition or release code, or unreadable; MV20, 173eme Edition and 90-21 are release identifiers, not vintages. After the printed identity is established, high-confidence canonical country, region, appellation, grapes and broad style may be filled from general wine knowledge. ${PLACE_LEVEL_RULE} Style must be one of red, white, rose, sparkling, dessert, fortified, orange, other. Blend percentages only when explicitly printed. Do not return tasting notes, scores or producer history.
+vintage is ONLY an actual four-digit vintage year as a JSON integer such as 2019; otherwise use null. recognizedVintageText is the exact printed vintage/NV/MV/edition text when present. vintageKind must be vintage, non_vintage, multi_vintage or unknown; unreadable/missing is unknown, not non_vintage. Put edition/release markers such as MV20, 173eme Edition or 90-21 in releaseDesignation, not vintage. After the printed identity is established, high-confidence canonical country, region, appellation, grapes and broad style may be filled from general wine knowledge. ${PLACE_LEVEL_RULE} Style must be one of red, white, rose, sparkling, dessert, fortified, orange, other. Blend percentages only when explicitly printed. Do not return tasting notes, scores or producer history.
 
 Confidence is 0 to 1 for how clearly this wine's identity is printed on the page.
 

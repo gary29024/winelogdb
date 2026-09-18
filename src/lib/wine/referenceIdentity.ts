@@ -105,3 +105,68 @@ export function referenceIdentityStatements(
       vintageCode,vintageCode,vintageCode,stamp,owner,wineId);
   return [evidence,resolution];
 }
+
+
+type ReferenceResolvable={
+ producer?:string|null;wineName?:string|null;vintage?:number|null;vintageKind?:VintageKind|null;
+ country?:string|null;region?:string|null;style?:string|null;wineStyle?:string|null;
+};
+type ReferenceRow={
+ product_key:string;lwin7:string;country:string|null;region:string|null;sub_region:string|null;site:string|null;parcel:string|null;
+ colour:string|null;product_type:string|null;product_subtype:string|null;designation:string|null;classification:string|null;
+};
+export type ReferenceMatch={
+ referenceProductKey:string|null;lwin7:string|null;lwin11:string|null;elid:string|null;
+ identityMatchStatus:IdentityMatchStatus;identityMatchConfidence:number|null;
+ colour:string|null;productType:string|null;productSubtype:string|null;
+ referenceSubRegion:string|null;referenceSite:string|null;referenceParcel:string|null;
+ referenceDesignation:string|null;referenceClassification:string|null;
+ country:string|null;region:string|null;
+};
+
+const unmatched=():ReferenceMatch=>({
+ referenceProductKey:null,lwin7:null,lwin11:null,elid:null,identityMatchStatus:'unmatched',identityMatchConfidence:null,
+ colour:null,productType:null,productSubtype:null,referenceSubRegion:null,referenceSite:null,referenceParcel:null,
+ referenceDesignation:null,referenceClassification:null,country:null,region:null
+});
+
+export async function resolveWineReference(db:D1Database,wine:ReferenceResolvable):Promise<ReferenceMatch>{
+ const producerKey=normalizeReferenceText(wine.producer),wineKey=normalizeReferenceText(wine.wineName);
+ if(!producerKey||!wineKey)return unmatched();
+ const countryKey=normalizeReferenceText(wine.country),regionKey=normalizeReferenceText(wine.region);
+ const colourKey=colourFromStyle(wine.style??wine.wineStyle),vintageCode=vintageReferenceCode(wine.vintage,wine.vintageKind);
+ try{
+  const rows=await db.prepare(`SELECT product_key,lwin7,country,region,sub_region,site,parcel,colour,product_type,product_subtype,designation,classification
+    FROM wine_reference_products
+    WHERE status='Live' AND producer_key=? AND wine_key=?
+      AND (?='' OR country_key='' OR country_key=?)
+      AND (?='' OR region_key='' OR region_key=?)
+      AND (?='' OR colour_key='' OR colour_key=?)
+    LIMIT 3`).bind(producerKey,wineKey,countryKey,countryKey,regionKey,regionKey,colourKey,colourKey).all<ReferenceRow>();
+  if(rows.results.length!==1)return {...unmatched(),identityMatchStatus:rows.results.length>1?'ambiguous':'unmatched'};
+  const product=rows.results[0];
+  const ids=await db.prepare(`SELECT provider,external_id,vintage_code FROM wine_reference_external_ids
+    WHERE product_key=? AND provider IN ('lwin11','elid') AND (vintage_code=? OR vintage_code='')`)
+    .bind(product.product_key,vintageCode).all<{provider:string;external_id:string;vintage_code:string}>();
+  const exact=(provider:string)=>ids.results.find(id=>id.provider===provider&&id.vintage_code===vintageCode)
+    ??ids.results.find(id=>id.provider===provider&&!id.vintage_code);
+  const lwin11=exact('lwin11')?.external_id??null,rawElid=exact('elid')?.external_id??null;
+  return {
+   referenceProductKey:product.product_key,lwin7:product.lwin7,lwin11,elid:rawElid&&isValidElid(rawElid)?rawElid:null,
+   identityMatchStatus:'matched',identityMatchConfidence:1,
+   colour:product.colour,productType:product.product_type,productSubtype:product.product_subtype,
+   referenceSubRegion:product.sub_region,referenceSite:product.site,referenceParcel:product.parcel,
+   referenceDesignation:product.designation,referenceClassification:product.classification,
+   country:product.country,region:product.region
+  };
+ }catch(error){
+  const message=(error as Error).message??'';
+  if(/no such table|does not exist/i.test(message))return unmatched();
+  throw error;
+ }
+}
+
+export async function enrichRecognitionReference<T extends ReferenceResolvable>(db:D1Database,wine:T){
+ const match=await resolveWineReference(db,wine);
+ return {...wine,...match,country:wine.country??match.country,region:wine.region??match.region};
+}

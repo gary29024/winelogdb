@@ -39,6 +39,7 @@ export type RecognitionModeSpec<T>={
   prompt(context:string,afterLine:number|null):string;
   jsonSchema:unknown;
   parse(text:string):T;
+  enrich?(db:D1Database,result:T):Promise<T>;
   escalationReasons(result:T):string[];
   /** Wines covered by a successful result, counted once across all model calls. */
   wineCount(result:T):number;
@@ -181,7 +182,7 @@ export async function runVisionRecognition<T>(request:Request,env:VisionBindings
       if(!text)throw new Error(`Gemini returned no ${spec.mode} recognition result`);
       const primary=spec.parse(text),escalationReasons=spec.escalationReasons(primary);
       const escalation=escalationReasons.length?await tryEscalated(env,spec,requestId,requestBody,schemaFreeBody,primary,escalationReasons,meter):{result:primary,used:false,finishReason:null};
-      const result=escalation.result,durationMs=Date.now()-startedAt,finalModel=escalation.used?RECOGNITION_ESCALATION_MODEL:spec.model;
+      const selectedResult=escalation.result,result=spec.enrich?await spec.enrich(env.DB,selectedResult):selectedResult,durationMs=Date.now()-startedAt,finalModel=escalation.used?RECOGNITION_ESCALATION_MODEL:spec.model;
       const wineCount=spec.wineCount(result);
       console.log(JSON.stringify({event:`${spec.mode}-recognition-complete`,requestId,model:finalModel,primaryModel:spec.model,escalated:escalation.used,escalationReasons,provider,attempt,geminiLatencyMs,durationMs,schemaFallback,wines:wineCount,...(spec.logFields?.(result)??{}),finishReason:candidate?.finishReason??null,promptTokens:payload.usageMetadata?.promptTokenCount??null,outputTokens:payload.usageMetadata?.candidatesTokenCount??null,thinkingTokens:payload.usageMetadata?.thoughtsTokenCount??null,totalTokens:payload.usageMetadata?.totalTokenCount??null}));
       primaryCall.units=wineCount;
