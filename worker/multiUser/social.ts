@@ -90,7 +90,7 @@ async function claimSharingPhoto(env:SocialEnv,owner:string,imageId:string){
  const now=stamp(),lease=new Date(Date.now()+SHARING_LEASE_MS).toISOString();
  const claimed=await env.DB.prepare(`INSERT INTO shared_photo_attempts(image_id,owner_id,attempts,retry_after,updated_at)
    VALUES(?,?,0,?,?)
-   ON CONFLICT(image_id) DO UPDATE SET retry_after=excluded.retry_after,updated_at=excluded.updated_at
+   ON CONFLICT(image_id) DO UPDATE SET retry_after=excluded.retry_after,updated_at=excluded.updated_at,error=NULL
    WHERE shared_photo_attempts.retry_after<=?`).bind(imageId,owner,lease,now,now).run();
  return Boolean(claimed.meta.changes);
 }
@@ -140,17 +140,16 @@ async function waitForSharingPhotoContention(env:SocialEnv,owner:string,imageIds
 }
 
 async function ensureSharingPhotos(env:SocialEnv,owner:string,images:Array<{id:string;object_key:string;attempts:number}>){
- if(!images.length)return;
+ if(!images.length)return [] as string[];
  if(!env.IMAGES){
   console.warn(JSON.stringify({event:'sharing-photo-images-binding-missing',imageCount:images.length}));
-  return;
+  return [] as string[];
  }
  // Capped so one shared-wine GET cannot fan a 30-photo wine into 30 transforms.
  // Each derivative commits on its own, so the next view resumes where this left off.
  const candidates=images.slice(0,SHARING_MAX_PER_REQUEST);
  const states=await Promise.all(candidates.map(image=>ensureSharingPhoto(env,owner,image)));
- const busy=candidates.flatMap((image,index)=>states[index]==='busy'?[image.id]:[]);
- if(busy.length)await waitForSharingPhotoContention(env,owner,busy);
+ return candidates.flatMap((image,index)=>states[index]==='busy'?[image.id]:[]);
 }
 
 export const SHARED_WINES_LIST_SQL=`WITH accessible(wine_id,owner_id,shared_at) AS (
@@ -281,16 +280,23 @@ export async function socialRoute(request:Request,env:SocialEnv,member:Member):P
    const row=await env.DB.prepare('SELECT p.object_key FROM shared_photos p JOIN wine_images i ON i.id=p.image_id AND i.owner_id=p.owner_id WHERE i.wine_id=? AND i.id=? AND i.owner_id=?').bind(shared[1],shared[2],wine.owner_id).first<{object_key:string}>();if(!row)throw new ApiError(404,'Photo not found');
    const object=await env.WINE_IMAGES.get(row.object_key);if(!object)throw new ApiError(404,'Photo not found');return new Response(object.body,{headers:{'Content-Type':'image/jpeg','Cache-Control':'private, no-store','X-Content-Type-Options':'nosniff'}});
   }
-  // Photos still owed a derivative AND due to be tried: a photo that has failed
-  // repeatedly is skipped until its backoff expires rather than re-transformed on
-  // every view.
-  const images=(await env.DB.prepare(`SELECT i.id,i.object_key,coalesce(a.attempts,0) AS attempts
+  // Keep active leases visible: a second viewer that arrives after the winner
+  // has claimed the photo should wait briefly instead of returning an empty first
+  // render. Failure backoffs remain visible too, but are not retried until due.
+  const images=(await env.DB.prepare(`SELECT i.id,i.object_key,coalesce(a.attempts,0) AS attempts,
+    a.error AS attempt_error,a.retry_after
    FROM wine_images i
    LEFT JOIN shared_photos p ON p.image_id=i.id AND p.owner_id=i.owner_id
    LEFT JOIN shared_photo_attempts a ON a.image_id=i.id AND a.owner_id=i.owner_id
-   WHERE i.wine_id=? AND i.owner_id=? AND p.image_id IS NULL AND (a.image_id IS NULL OR a.retry_after<=?)
-   ORDER BY i.rowid`).bind(shared[1],wine.owner_id,stamp()).all<{id:string;object_key:string;attempts:number}>()).results;
-  await ensureSharingPhotos(env,String(wine.owner_id),images);
+   WHERE i.wine_id=? AND i.owner_id=? AND p.image_id IS NULL
+   ORDER BY i.rowid`).bind(shared[1],wine.owner_id).all<{id:string;object_key:string;attempts:number;attempt_error:string|null;retry_after:string|null}>()).results;
+  const now=stamp();
+  const due=images.filter(image=>image.retry_after===null||image.retry_after<=now);
+  const leased=images.filter(image=>image.retry_after!==null&&image.retry_after>now&&image.attempt_error===null)
+   .slice(0,SHARING_MAX_PER_REQUEST).map(image=>image.id);
+  const raced=await ensureSharingPhotos(env,String(wine.owner_id),due);
+  const contended=[...new Set([...leased,...raced])].slice(0,SHARING_MAX_PER_REQUEST);
+  if(contended.length)await waitForSharingPhotoContention(env,String(wine.owner_id),contended);
   const photos=(await env.DB.prepare('SELECT p.image_id FROM shared_photos p JOIN wine_images i ON i.id=p.image_id AND i.owner_id=p.owner_id WHERE i.wine_id=? AND i.owner_id=? ORDER BY i.rowid').bind(shared[1],wine.owner_id).all<{image_id:string}>()).results;
   return json({...sharedWine(wine),photos:photos.map(p=>({id:p.image_id,url:`/api/shared/wines/${shared[1]}/photos/${p.image_id}`}))});
  }
