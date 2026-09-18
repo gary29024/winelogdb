@@ -151,13 +151,18 @@ export async function socialRoute(request:Request,env:IdentityEnv&{WINE_IMAGES:R
  }
  if(path==='/api/shared/wines'&&request.method==='GET'){
   const offset=Math.max(0,Math.min(100000,Number(url.searchParams.get('offset'))||0));
-  const rows=await env.DB.prepare(`SELECT w.*,u.display_name FROM wines w
+  const rows=await env.DB.prepare(`SELECT w.*,u.display_name,
+   max(
+     coalesce((SELECT max(s.created_at) FROM wine_shares s WHERE s.wine_id=w.id AND s.owner_id=w.owner_id AND s.recipient_id=?),''),
+     coalesce((SELECT max(ts.created_at) FROM tasting_shares ts JOIN wine_experiences we ON we.owner_id=ts.owner_id AND we.tasting_id=ts.tasting_id AND we.wine_id=w.id WHERE ts.owner_id=w.owner_id AND ts.recipient_id=?),'')
+   ) AS shared_at
+  FROM wines w
   JOIN friendships f ON f.user_id=? AND f.friend_id=w.owner_id
   JOIN app_users u ON u.id=w.owner_id AND u.status='active'
   WHERE EXISTS(SELECT 1 FROM wine_shares s WHERE s.wine_id=w.id AND s.owner_id=w.owner_id AND s.recipient_id=?)
      OR EXISTS(SELECT 1 FROM tasting_shares ts JOIN wine_experiences we ON we.owner_id=ts.owner_id AND we.tasting_id=ts.tasting_id AND we.wine_id=w.id
        WHERE ts.owner_id=w.owner_id AND ts.recipient_id=?)
-  ORDER BY w.updated_at DESC,w.id LIMIT 25 OFFSET ?`).bind(member.id,member.id,member.id,offset).all<Record<string,unknown>>();return json({items:rows.results.map(sharedWine),nextOffset:rows.results.length===25?offset+25:null});
+  ORDER BY shared_at DESC,w.id LIMIT 25 OFFSET ?`).bind(member.id,member.id,member.id,member.id,member.id,offset).all<Record<string,unknown>>();return json({items:rows.results.map(sharedWine),nextOffset:rows.results.length===25?offset+25:null});
  }
  const shared=path.match(/^\/api\/shared\/wines\/([^/]+)(?:\/photos\/([^/]+))?$/);
  if(shared&&request.method==='GET'){
