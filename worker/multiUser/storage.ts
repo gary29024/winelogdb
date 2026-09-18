@@ -1,6 +1,6 @@
 import { ApiError,boundedBytes,settings,stamp } from './common';
 
-export function meteredBucket(bucket:R2Bucket,db:D1Database,owner:string,options:{skipMemberLimit?:boolean}={}):R2Bucket{
+export function meteredBucket(bucket:R2Bucket,db:D1Database,owner:string,policy:{skipMemberLimit?:boolean}={}):R2Bucket{
  return new Proxy(bucket,{get(target,key){
   if(key==='put')return async(objectKey:string,value:ReadableStream|ArrayBuffer|ArrayBufferView|string|Blob|null,options?:R2PutOptions)=>{
    const config=await settings(db);
@@ -13,7 +13,7 @@ export function meteredBucket(bucket:R2Bucket,db:D1Database,owner:string,options
     AND (?=0 OR coalesce((SELECT byte_size FROM storage_totals WHERE owner_id='*'),0)+?-coalesce((SELECT byte_size FROM stored_objects WHERE object_key=?),0)<=?)
     ON CONFLICT(object_key) DO UPDATE SET byte_size=excluded.byte_size,updated_at=excluded.updated_at`).bind(
       objectKey,owner,length,stamp(),
-      options.skipMemberLimit?1:0,config.memberStorageBytes,owner,length,objectKey,config.memberStorageBytes,
+      policy.skipMemberLimit?1:0,config.memberStorageBytes,owner,length,objectKey,config.memberStorageBytes,
       config.totalStorageBytes,length,objectKey,config.totalStorageBytes
     ).run();
    if(!result.meta.changes)throw new ApiError(413,'Storage limit reached');
