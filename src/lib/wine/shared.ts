@@ -15,4 +15,14 @@ export type SharedWine = {
  tastingDate:string|null;
  updatedAt:string;
  photos?:Array<{id:string;url:string}>;
+ experience?:{
+  tastingNotes:string;
+  rating:number|null;
+  tastingDate:string|null;
+  tastingName:string|null;
+  venue:string|null;
+  locationName:string|null;
+  price:number|null;
+  currency:string|null;
+ };
 };
