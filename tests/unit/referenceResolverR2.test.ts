@@ -42,6 +42,17 @@ describe('R2 wine reference resolver',()=>{
   const result=await resolveWineReference(bucket(objects()),{producer:'Krug',wineName:'Grande Cuvée',releaseDesignation:'171ème Édition',vintage:null,vintageKind:'non_vintage',country:'France',region:'Champagne',style:'sparkling'});
   expect(result).toMatchObject({identityMatchStatus:'matched',lwin7:'1234567',elid:'FR-CMP-KRUG01-N171',productSubtype:'Sparkling'});
  });
+ it('follows a Combined-to-Combined redirect chain to the current Live identity',async()=>{
+  const data=objects(),shard=referenceShardId('krug'),key=`reference/lwin/versions/l1/shard-${shard}.json`;
+  const first={...lwin,productKey:'lwin:1111111',lwin7:'1111111',status:'Combined' as const,referenceLwin7:'2222222'};
+  data[key]=[first];
+  data['reference/lwin/versions/l1/redirects.json']={
+   '1111111':{...lwin,productKey:'lwin:2222222',lwin7:'2222222',status:'Combined',referenceLwin7:'1234567'},
+   '2222222':lwin
+  };
+  const result=await resolveWineReference(bucket(data),{producer:'Krug',wineName:'Grande Cuvée',releaseDesignation:'171ème Édition'});
+  expect(result).toMatchObject({identityMatchStatus:'matched',lwin7:'1234567'});
+ });
  it('does not guess when two LWIN rows have the same narrowed identity',async()=>{
   const data=objects(),shard=referenceShardId('krug'),key=`reference/lwin/versions/l1/shard-${shard}.json`;
   data[key]=[lwin,{...lwin,productKey:'lwin:7654321',lwin7:'7654321'}];

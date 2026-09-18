@@ -109,9 +109,14 @@ export async function resolveWineReference(bucket:R2Bucket,wine:ReferenceResolva
  if(candidates.length!==1)return unmatched(candidates.length>1?'ambiguous':'unmatched');
  let product=candidates[0];
  if(product.status==='Deleted')return unmatched();
- if(product.status==='Combined'&&product.referenceLwin7){
-  const redirects=await lwinRedirects<LwinReferenceProduct>(bucket),target=redirects[product.lwin7];
-  if(!target)return unmatched('conflict');product=target;
+ if(product.status==='Combined'){
+  const redirects=await lwinRedirects<LwinReferenceProduct>(bucket),seen=new Set<string>();
+  while(product.status==='Combined'){
+   if(seen.has(product.lwin7)||seen.size>=16)return unmatched('conflict');
+   seen.add(product.lwin7);
+   const target=redirects[product.lwin7];if(!target)return unmatched('conflict');
+   product=target;
+  }
  }
  if(product.status!=='Live')return unmatched();
  const elid=await registeredElid(bucket,product,wine);
