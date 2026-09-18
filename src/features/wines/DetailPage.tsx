@@ -5,7 +5,7 @@ import { accountStorageKey,getAccount } from '../../lib/auth/client';
 import { WineSharing } from './WineSharing';
 import { SparklingDetailsCard } from './SparklingDetailsCard';
 import { isChampagne } from '../../lib/wine/champagneExtraction';
-import { useEffect,useMemo,useRef,useState,type ReactNode } from 'react';
+import { useEffect,useMemo,useRef,useState } from 'react';
 import { Link,useLocation,useNavigate,useParams } from 'react-router-dom';
 import type { DeepSearchResult } from '../../lib/db/schema';
 import { addWineImages,cancelWineDeepSearch,deleteWine,deleteWineImage,getWine,getWineDeepSearchStatus,setWineFavorite,startWineDeepSearch,type WineDetail,type WineResearchRun } from './api';
@@ -18,6 +18,8 @@ import { VINTAGE_WINDOW_SURFACES } from '../maturity/surfaces';
 import { backTargetFromState,JOURNAL_BACK,readBackTarget,rememberBackTarget } from './backTarget';
 import { GroupSourceImage } from '../uploads/GroupSourceImage';
 import { structureValueLabel } from '../../lib/wine/tastingStructure';
+import { DeepSources,ResearchText } from './ResearchPresentation';
+import { DEEP_FIELDS,researchSections,type DeepField } from './researchSections';
 import { formatDate,formatPrice,formatRating } from '../../lib/wine/detailFormat';
 import { resolvePlace } from '../../lib/places/resolve';
 import { isResearchStale } from '../../lib/research/freshness';
@@ -31,10 +33,8 @@ import { AppIcon } from '../../components/AppIcons';
 import { ElapsedSeconds } from '../../components/ElapsedSeconds';
 
 type DeepState='idle'|'confirm-usage'|'running'|'error';
-type DeepField='summary'|'expectedProfile'|'vintageQuality'|'producerDetails'|'producerWinemakingPractices'|'winemakingTechniques'|'terroir'|'drinkingWindow';
 const deepStage:Record<WineResearchRun['stage'],string>={queued:'Queued for background research',researching:'Researching in the background',saving:'Saving Deep Search result',complete:'Research complete',failed:'Research failed'};
 const claimStatusLabel={supported:'Direct support',partial:'Partial support',unsupported:'No direct citation',uncertainty:'Explicit uncertainty',conflicting:'Conflicting sources'} as const;
-const DEEP_FIELDS:DeepField[]=['summary','expectedProfile','vintageQuality','producerDetails','producerWinemakingPractices','winemakingTechniques','terroir','drinkingWindow'];
 const DEEP_OPEN_FIELDS_KEY='winelog.deepSearch.openFields';
 function readOpenDeepFields():Set<DeepField>{
  try{
@@ -45,28 +45,7 @@ function readOpenDeepFields():Set<DeepField>{
 }
 function writeOpenDeepFields(next:Set<DeepField>){try{window.localStorage.setItem(accountStorageKey(DEEP_OPEN_FIELDS_KEY),JSON.stringify([...next]))}catch{/* storage unavailable */}}
 
-function sourceHost(url:string){try{return new URL(url).hostname.toLowerCase().replace(/^www\./,'')}catch{return ''}}
-/** Gemini grounding often gives no page title, so several links on one host all
- * render as the bare hostname. Falling back to the last path segment turns
- * "wine.com / wine.com / wine.com" into three links a reader can tell apart. */
-function sourceLinkLabel(source:{title:string;url:string},host:string){
- const title=source.title?.trim();
- if(title&&title.toLowerCase().replace(/^www\./,'')!==host)return title;
- try{
-  const segments=new URL(source.url).pathname.split('/').filter(Boolean),last=segments[segments.length-1];
-  const decoded=last?decodeURIComponent(last).replace(/\.(?:html?|php|aspx?)$/i,'').replace(/[-_]+/g,' ').trim():'';
-  if(decoded)return decoded;
- }catch{/* fall through to host */}
- return host||title||source.url;
-}
-
-
 function wineSearcherUrl(producer:string,wineName:string,vintage:number|null|undefined){const query=[producer,wineName,vintage!=null?String(vintage):''].map(x=>String(x).trim()).filter(Boolean).join(' ');return `https://www.wine-searcher.com/find/${encodeURIComponent(query).replace(/%20/g,'+')}`}
-function ResearchText({text}:{text:string}){
- const nodes:ReactNode[]=[],lines=text.trim().split(/\r?\n/);let paragraph:string[]=[],bullets:string[]=[];
- const flushParagraph=()=>{if(paragraph.length){nodes.push(<p key={`p-${nodes.length}`}>{paragraph.join(' ')}</p>);paragraph=[]}},flushBullets=()=>{if(bullets.length){nodes.push(<ul key={`u-${nodes.length}`}>{bullets.map((item,index)=><li key={index}>{item}</li>)}</ul>);bullets=[]}};
- for(const raw of lines){const line=raw.trim();if(!line){flushParagraph();flushBullets();continue}const bullet=line.match(/^[-•]\s+(.*)$/);if(bullet){flushParagraph();bullets.push(bullet[1]);continue}flushBullets();paragraph.push(line)}flushParagraph();flushBullets();return <div className="research-text">{nodes}</div>;
-}
 const qualityWarningLabel:Record<string,string>={
  'missing-field':'a research field came back empty',
  'no-grounding-source':'no web source backed part of this research',
@@ -84,18 +63,6 @@ function ResearchQuality({deep}:{deep:DeepSearchResult}){
   {quality.scoreNote&&!quality.warnings.length&&<p>{quality.scoreNote}</p>}
   {quality.warnings.length>0&&<ul>{quality.warnings.map(warning=><li key={warning}>{qualityWarningLabel[warning]??warning}</li>)}</ul>}
  </div>;
-}
-
-function DeepSources({sources}:{sources:DeepSearchResult['sources']}){
- const groups=useMemo(()=>{
-  const map=new Map<string,typeof sources>();
-  for(const source of sources){const host=sourceHost(source.url)||'other sources',list=map.get(host)??[];list.push(source);map.set(host,list)}
-  return [...map.entries()].sort(([,a],[,b])=>b.length-a.length);
- },[sources]);
- if(!sources.length)return null;
- return <details className="deep-sources"><summary>{sources.length} source{sources.length===1?'':'s'} · {groups.length} site{groups.length===1?'':'s'}</summary>
-  <div className="deep-sources-list">{groups.map(([host,items])=><div className="deep-source-group" key={host}><strong>{host}</strong>{items.map(item=><a key={item.url} href={item.url} target="_blank" rel="noreferrer">{sourceLinkLabel(item,host)}</a>)}</div>)}</div>
- </details>;
 }
 
 function ClaimEvidence({deep,field}:{deep:DeepSearchResult;field:DeepField}){
@@ -185,9 +152,7 @@ export function DetailPage(){
  const structureItems=structure?[[ 'Flavour intensity',structure.flavourIntensity],['Acidity',structure.acidity],['Tannin',structure.tannin],['Body',structure.body],['Finish',structure.finish],['Perceived alcohol',structure.alcohol]].filter((item):item is [string,string]=>Boolean(item[1])):[];
  const experienceRows=([['Your rating',formatRating(wine.rating)],['Drinking date',formatDate(wine.tastingDate)],['Tasting / event',wine.tastingName],['Venue',wine.venue],['Location',wine.locationName],['Price',price]] as [string,string|null][])
   .filter((row):row is [string,string]=>Boolean(row[1]));
- const researchSections=deep?([
-  ['What to expect','expectedProfile',deep.expectedProfile??''],['Vintage quality','vintageQuality',deep.vintageQuality],['Producer','producerDetails',deep.producerDetails],['Producer-wide practices','producerWinemakingPractices',deep.producerWinemakingPractices],['This wine / vintage winemaking','winemakingTechniques',deep.winemakingTechniques],['Terroir','terroir',deep.terroir],['Drinking window','drinkingWindow',deep.drinkingWindow]
- ] as Array<[string,DeepField,string]>).filter(([, ,value])=>Boolean(value)):[];
+ const sections=researchSections(deep);
  return <article className="detail wine-detail"><Link className="back-pill" to={back.to}>← {back.label}</Link>
   <section className="wine-identity">
    {wine.imageIds.length?<div className="detail-gallery" aria-label={`${wine.wineName} photos`}>{wine.imageIds.map((imageId,index)=><span className="detail-photo-slot" key={imageId}><button type="button" className="detail-photo-button" onClick={()=>setSelectedImage(imageId)} aria-label={`Open photo ${index+1} of ${wine.imageIds.length}`}><WineImage imageId={imageId} alt={`${wine.producer} ${wine.wineName} photo ${index+1}`} className="detail-photo"/></button><button type="button" className="detail-photo-remove" disabled={photoBusy} onClick={()=>void removePhoto(imageId)} aria-label={`Remove photo ${index+1}`}>×</button></span>)}</div>:<div className="detail-bottle">{wine.wineStyle?.slice(0,1).toUpperCase()||'W'}</div>}
@@ -212,9 +177,9 @@ export function DetailPage(){
    {deep?<>
     {deep.quality&&(deep.quality.warnings.length>0||deep.quality.scoreNote)&&<ResearchQuality deep={deep}/>}
     <div className="deep-summary"><ResearchText text={deep.summary}/><ClaimEvidence deep={deep} field="summary"/></div>
-    {researchSections.length>0&&<div className="deep-research-sections">
-     <div className="deep-sections-head"><span>{researchSections.length} research section{researchSections.length===1?'':'s'}</span><button type="button" className="deep-toggle-all" onClick={()=>toggleAllDeepFields(researchSections.map(([,field])=>field))}>{researchSections.every(([,field])=>openDeepFields.has(field))?'Collapse all':'Expand all'}</button></div>
-     {researchSections.map(([label,field,value])=>{
+    {sections.length>0&&<div className="deep-research-sections">
+     <div className="deep-sections-head"><span>{sections.length} research section{sections.length===1?'':'s'}</span><button type="button" className="deep-toggle-all" onClick={()=>toggleAllDeepFields(sections.map(([,field])=>field))}>{sections.every(([,field])=>openDeepFields.has(field))?'Collapse all':'Expand all'}</button></div>
+     {sections.map(([label,field,value])=>{
       const open=openDeepFields.has(field),evidence=deep.provenance?.fields[field],panelId=`deep-section-${field}`;
       return <section className={`deep-research-section${open?'':' is-collapsed'}`} key={field}>
        <h3><button type="button" className="deep-section-toggle" aria-expanded={open} aria-controls={panelId} onClick={()=>toggleDeepField(field)}>

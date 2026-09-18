@@ -19,6 +19,33 @@ const declaredIn=(selector:string)=>sheets.filter(sheet=>
   [...sheet.text.matchAll(/([^{}]+)\{[^{}]*\}/g)]
     .some(match=>match[1].split(',').some(part=>part.trim().split(/\s+/).pop()===selector)));
 
+
+/**
+ * Every class a file can put on an element: static className="a b", and template
+ * literals, whose ${...} holes are resolved against the values they can actually
+ * take. A class only reachable through a template literal is still a class that
+ * needs rules, which is exactly how .detail-classification-village shipped
+ * unstyled on the shared page.
+ */
+const CLASS_SUFFIXES:Record<string,string[]>={'detail-classification-':['grand_cru','premier_cru','village']};
+function renderedClasses(source:string){
+  const names=new Set<string>();
+  for(const match of source.matchAll(/className="([^"{}]+)"/g))
+    for(const name of match[1].split(/\s+/)) if(name) names.add(name);
+  for(const match of source.matchAll(/className=\{`([^`]*)`\}/g)){
+    // A ${...} hole becomes a marker so "a${x}" stays one token, not two.
+    const HOLE='\uFFFDhole\uFFFD';
+    for(const token of match[1].replace(/\$\{[^}]*\}/g,HOLE).split(/\s+/)){
+      if(!token) continue;
+      const base=token.split(HOLE).join('');
+      if(base) names.add(base);
+      const prefix=token.endsWith(HOLE)?base:'';
+      for(const suffix of CLASS_SUFFIXES[prefix]??[]) names.add(`${prefix}${suffix}`);
+    }
+  }
+  return [...names];
+}
+
 const sharedPage=read('features/wines/SharedWinesPage.tsx');
 const library=read('features/wines/LibraryPage.tsx');
 const passport=read('features/journey/PassportPage.tsx');
@@ -36,10 +63,14 @@ describe('the shared wine page carries the styles it borrows',()=>{
   it('imports a stylesheet for every wine-detail class it renders',()=>{
     const own=imported(sharedPage);
     expect(own.length,'the page should import its own stylesheets').toBeGreaterThan(0);
-    const rendered=[...sharedPage.matchAll(/className="([^"{}]+)"/g)]
-      .flatMap(match=>match[1].split(/\s+/)).filter(Boolean);
+    const rendered=renderedClasses(sharedPage);
     expect(rendered).toContain('image-lightbox');
     expect(rendered).toContain('detail-gallery');
+    // The bug this guard first missed: the classification pill is built with a
+    // template literal, and an earlier version of this test only read static
+    // className="..." strings, so the pill shipped with no rules at all.
+    expect(rendered).toContain('detail-classification');
+    expect(rendered).toContain('detail-classification-village');
     const missing=[...new Set(rendered)].filter(name=>{
       const styled=declaredIn(`.${name}`);
       // A class nothing styles is not this test's business; one that is styled

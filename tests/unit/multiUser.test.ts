@@ -260,6 +260,71 @@ describe('shared wines as recipient journal history',()=>{
    .toMatchObject({rating:88,tasting_date:'2026-02-28',currency:'EUR',price:42});
  });
 
+ it('shares the wine facts the owner sees, and the research they already paid for',async()=>{
+  const deep={summary:'Forest floor and dried rose.',vintageQuality:'A cool year.',producerDetails:'Domaine notes.',
+   producerWinemakingPractices:'Whole cluster.',winemakingTechniques:'Long maceration.',terroir:'Limestone.',
+   drinkingWindow:'2026-2040',sources:[{title:'Vinous',url:'https://example.test/v'}],model:'gemini-3.7-flash',
+   researchedAt:'2026-09-01T00:00:00.000Z'};
+  database.sql.exec(`
+   INSERT INTO friendships(user_id,friend_id) VALUES('alice','bob'),('bob','alice');
+   -- Same producer, one row per account: that is what match_key bridges.
+   INSERT INTO producers(id,owner_id,canonical_name,match_key,home_country,created_at,updated_at)
+   VALUES('prod-alice','alice','Domaine Shared','domaine-shared','France','now','now'),
+         ('prod-bob','bob','Domaine Shared','domaine-shared','France','now','now');
+  `);
+  database.sql.prepare(`INSERT INTO wines(id,owner_id,producer_id,producer,wine_name,region,appellation,recognized_region,recognized_appellation,grapes_json,grape_blend_json,deep_search_json,created_at,updated_at)
+   VALUES('shared-facts','alice','prod-alice','Domaine Shared','Full Facts','Burgundy','Volnay','Bourgogne','Volnay 1er','["Pinot Noir"]',?,?,'now','now')`)
+   .run('[{"grape":"Pinot Noir","percentage":100}]',JSON.stringify(deep));
+  database.sql.exec("INSERT INTO wine_shares(wine_id,owner_id,recipient_id) VALUES('shared-facts','alice','bob')");
+  const e={...env(),WINE_IMAGES:{} as R2Bucket};
+  const detail=await (await socialRoute(new Request('https://wine.example/api/shared/wines/shared-facts'),e,member('bob')))!.json() as Record<string,unknown>;
+  expect(detail).toMatchObject({
+   recognizedRegion:'Bourgogne',recognizedAppellation:'Volnay 1er',
+   grapeBlend:[{grape:'Pinot Noir',percentage:100}]
+  });
+  expect((detail.deepSearch as {summary:string}).summary).toBe('Forest floor and dried rose.');
+  // The producer link resolves to BOB's own producer row, never alice's: ids are
+  // keyed (owner_id,id), so alice's id would 404 in bob's account.
+  expect(detail.producerId).toBe('prod-bob');
+ });
+
+ it('gives no producer link when the recipient has never logged that producer',async()=>{
+  database.sql.exec(`
+   INSERT INTO friendships(user_id,friend_id) VALUES('alice','bob'),('bob','alice');
+   INSERT INTO producers(id,owner_id,canonical_name,match_key,home_country,created_at,updated_at)
+   VALUES('prod-alice','alice','Domaine Solo','domaine-solo','France','now','now');
+   INSERT INTO wines(id,owner_id,producer_id,producer,wine_name,created_at,updated_at)
+   VALUES('shared-noprod','alice','prod-alice','Domaine Solo','Unmatched','now','now');
+   INSERT INTO wine_shares(wine_id,owner_id,recipient_id) VALUES('shared-noprod','alice','bob');
+  `);
+  const e={...env(),WINE_IMAGES:{} as R2Bucket};
+  const detail=await (await socialRoute(new Request('https://wine.example/api/shared/wines/shared-noprod'),e,member('bob')))!.json() as Record<string,unknown>;
+  expect(detail.producerId).toBeNull();
+ });
+
+ it('keeps perceived structure per viewer and validates it',async()=>{
+  database.sql.exec(`
+   INSERT INTO friendships(user_id,friend_id) VALUES('alice','bob'),('bob','alice');
+   INSERT INTO wines(id,owner_id,producer,wine_name,created_at,updated_at)
+   VALUES('shared-structure','alice','Domaine Shared','Structured','now','now');
+   INSERT INTO wine_shares(wine_id,owner_id,recipient_id) VALUES('shared-structure','alice','bob');
+   INSERT INTO wine_tasting_structures(owner_id,wine_id,structure_json,created_at,updated_at)
+   VALUES('alice','shared-structure','{"acidity":"low"}','now','now');
+  `);
+  const e={...env(),WINE_IMAGES:{} as R2Bucket};
+  const put=(payload:Record<string,unknown>)=>socialRoute(new Request('https://wine.example/api/shared/wines/shared-structure/experience',
+   {method:'PUT',body:JSON.stringify(payload)}),e,member('bob'));
+  // A scale value from the wrong axis and an unknown axis are both 400s, not a
+  // blob stored now and silently dropped when it is read back.
+  await expect(put({structure:{acidity:'pronounced'}})).rejects.toMatchObject({status:400});
+  await expect(put({structure:{sweetness:'high'}})).rejects.toMatchObject({status:400});
+  expect((await put({structure:{acidity:'high',tannin:'medium_plus'}}))?.status).toBe(200);
+  const detail=await (await socialRoute(new Request('https://wine.example/api/shared/wines/shared-structure'),e,member('bob')))!.json() as Record<string,unknown>;
+  expect(detail.structure).toMatchObject({acidity:'high',tannin:'medium_plus'});
+  // Alice's own structure is untouched and never reaches bob.
+  expect(database.sql.prepare("SELECT structure_json FROM wine_tasting_structures WHERE owner_id='alice' AND wine_id='shared-structure'").get()!.structure_json).toBe('{"acidity":"low"}');
+ });
+
  it('refuses an experience for a wine the member was never shared',async()=>{
   database.sql.exec(`
    INSERT INTO friendships(user_id,friend_id) VALUES('alice','bob'),('bob','alice');

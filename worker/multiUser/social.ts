@@ -3,6 +3,8 @@ import { ApiError,body,boundedBytes,json,stamp,type IdentityEnv,type Member } fr
 import { similarFriendProducers } from '../../src/lib/research/similarProducers';
 import { rememberProducerAlias } from '../../src/lib/research/aliasBridge';
 import type { SharedWine } from '../../src/lib/wine/shared';
+import { deepSearchSchema } from '../../src/lib/db/schema';
+import { tastingStructureSchema,type TastingStructure } from '../../src/lib/wine/tastingStructure';
 import { meteredBucket } from './storage';
 
 // Explicit allowlist: never serialize the private WineRecord into a shared response.
@@ -10,15 +12,64 @@ export function sharedWine(row:Record<string,unknown>):SharedWine{
  const text=(value:unknown)=>typeof value==='string'?value:'';
  const number=(value:unknown)=>typeof value==='number'&&Number.isFinite(value)?value:null;
  let grapes:string[]=[];try{const data:unknown=JSON.parse(String(row.grapes_json||'[]'));if(Array.isArray(data))grapes=data.filter((value):value is string=>typeof value==='string')}catch{/* Invalid legacy grapes must not expose another field. */}
+ let grapeBlend:SharedWine['grapeBlend']=[];
+ try{
+  const data:unknown=JSON.parse(String(row.grape_blend_json||'[]'));
+  // Read field by field rather than spreading: a legacy row is not a contract,
+  // and spreading it would put whatever else it holds into a shared response.
+  if(Array.isArray(data))grapeBlend=data.flatMap(part=>{
+   if(!part||typeof part!=='object')return [];
+   const entry=part as Record<string,unknown>,grape=text(entry.grape);
+   return grape?[{grape,percentage:number(entry.percentage)}]:[];
+  });
+ }catch{/* Invalid legacy blend falls back to the plain grape names. */}
  const tier=text(row.classification),classification=tier==='grand_cru'||tier==='premier_cru'||tier==='village'?tier:null;
- return {id:text(row.id),ownerName:text(row.display_name),producer:text(row.producer),wineName:text(row.wine_name),vintage:number(row.vintage),country:text(row.country)||null,region:text(row.region)||null,appellation:text(row.appellation)||null,wineStyle:text(row.wine_style)||null,grapes,classification,alcoholPercentage:number(row.alcohol_percentage),favorite:Boolean(Number(row.viewer_favorite)||0),tastingNotes:text(row.viewer_tasting_notes),rating:number(row.viewer_rating),tastingDate:text(row.viewer_tasting_date)||null,tastingName:text(row.viewer_tasting_name)||null,venue:text(row.viewer_venue)||null,locationName:text(row.viewer_location_name)||null,price:number(row.viewer_price),currency:text(row.viewer_currency)||null,updatedAt:text(row.updated_at)};
+ let deepSearch:SharedWine['deepSearch']=null;
+ try{
+  const raw=row.deep_search_json;
+  if(typeof raw==='string'&&raw){const parsed=deepSearchSchema.safeParse(JSON.parse(raw));if(parsed.success)deepSearch=parsed.data}
+ }catch{/* Unparseable research is simply not shared. */}
+ return {
+  id:text(row.id),ownerName:text(row.display_name),
+  producer:text(row.producer),producerId:text(row.viewer_producer_id)||null,
+  wineName:text(row.wine_name),vintage:number(row.vintage),
+  country:text(row.country)||null,region:text(row.region)||null,appellation:text(row.appellation)||null,
+  recognizedRegion:text(row.recognized_region)||null,recognizedAppellation:text(row.recognized_appellation)||null,
+  wineStyle:text(row.wine_style)||null,grapes,grapeBlend,classification,
+  alcoholPercentage:number(row.alcohol_percentage),deepSearch,
+  favorite:Boolean(Number(row.viewer_favorite)||0),
+  tastingNotes:text(row.viewer_tasting_notes),rating:number(row.viewer_rating),
+  tastingDate:text(row.viewer_tasting_date)||null,tastingName:text(row.viewer_tasting_name)||null,
+  venue:text(row.viewer_venue)||null,locationName:text(row.viewer_location_name)||null,
+  price:number(row.viewer_price),currency:text(row.viewer_currency)||null,
+  structure:viewerStructure(row.viewer_structure_json),
+  updatedAt:text(row.updated_at)
+ };
 }
+
+/** The viewer's own structure, validated: a stored blob is not a contract. */
+export function viewerStructure(raw:unknown):TastingStructure|null{
+ if(typeof raw!=='string'||!raw)return null;
+ try{const parsed=tastingStructureSchema.safeParse(JSON.parse(raw));return parsed.success?parsed.data:null}catch{return null}
+}
+
+/**
+ * Producers are keyed (owner_id, id), so the source owner's producer id means
+ * nothing in the viewer's account. Their shared match_key does: this resolves
+ * to the viewer's OWN producer row for the same producer, and hands back null
+ * when they have never logged it, rather than a link that would 404.
+ */
+const VIEWER_PRODUCER_SQL=`(SELECT vp.id FROM producers op JOIN producers vp ON vp.owner_id=? AND vp.match_key=op.match_key
+  WHERE op.owner_id=w.owner_id AND op.id=w.producer_id) AS viewer_producer_id`;
+
 export async function canReadShared(db:D1Database,viewer:string,wineId:string){
  return db.prepare(`SELECT w.*,u.display_name,
    coalesce(pref.favorite,0) AS viewer_favorite,
    coalesce(pref.tasting_notes,'') AS viewer_tasting_notes,
    pref.rating AS viewer_rating,pref.tasting_date AS viewer_tasting_date,pref.tasting_name AS viewer_tasting_name,
-   pref.venue AS viewer_venue,pref.location_name AS viewer_location_name,pref.price AS viewer_price,pref.currency AS viewer_currency
+   pref.venue AS viewer_venue,pref.location_name AS viewer_location_name,pref.price AS viewer_price,pref.currency AS viewer_currency,
+   pref.structure_json AS viewer_structure_json,
+   ${VIEWER_PRODUCER_SQL}
  FROM wines w
  JOIN friendships f ON f.user_id=? AND f.friend_id=w.owner_id
  JOIN app_users u ON u.id=w.owner_id AND u.status='active'
@@ -30,7 +81,7 @@ export async function canReadShared(db:D1Database,viewer:string,wineId:string){
      JOIN wine_experiences we ON we.owner_id=ts.owner_id AND we.tasting_id=ts.tasting_id AND we.wine_id=w.id
      WHERE ts.owner_id=w.owner_id AND ts.recipient_id=?
    )
- )`).bind(viewer,viewer,wineId,viewer,viewer).first<Record<string,unknown>>();
+ )`).bind(viewer,viewer,viewer,wineId,viewer,viewer).first<Record<string,unknown>>();
 }
 
 async function acceptedFriendIds(db:D1Database,owner:string,ids:string[]){
@@ -180,7 +231,9 @@ SELECT w.*,p.display_name,p.shared_at,
   coalesce(pref.favorite,0) AS viewer_favorite,
   coalesce(pref.tasting_notes,'') AS viewer_tasting_notes,
   pref.rating AS viewer_rating,pref.tasting_date AS viewer_tasting_date,pref.tasting_name AS viewer_tasting_name,
-  pref.venue AS viewer_venue,pref.location_name AS viewer_location_name,pref.price AS viewer_price,pref.currency AS viewer_currency
+  pref.venue AS viewer_venue,pref.location_name AS viewer_location_name,pref.price AS viewer_price,pref.currency AS viewer_currency,
+  pref.structure_json AS viewer_structure_json,
+  ${VIEWER_PRODUCER_SQL}
 FROM page p
 JOIN wines w ON w.id=p.wine_id AND w.owner_id=p.owner_id
 LEFT JOIN shared_wine_preferences pref ON pref.recipient_id=? AND pref.owner_id=p.owner_id AND pref.wine_id=p.wine_id
@@ -284,7 +337,7 @@ export async function socialRoute(request:Request,env:SocialEnv,member:Member):P
  }
  if(path==='/api/shared/wines'&&request.method==='GET'){
   const offset=Math.max(0,Math.min(100000,Number(url.searchParams.get('offset'))||0));
-  const rows=await env.DB.prepare(SHARED_WINES_LIST_SQL).bind(member.id,member.id,member.id,offset,member.id).all<Record<string,unknown>>();return json({items:rows.results.map(sharedWine),nextOffset:rows.results.length===25?offset+25:null});
+  const rows=await env.DB.prepare(SHARED_WINES_LIST_SQL).bind(member.id,member.id,member.id,offset,member.id,member.id).all<Record<string,unknown>>();return json({items:rows.results.map(sharedWine),nextOffset:rows.results.length===25?offset+25:null});
  }
  const sharedExperience=path.match(/^\/api\/shared\/wines\/([^/]+)\/experience$/);
  if(sharedExperience&&request.method==='PUT'){
@@ -304,15 +357,26 @@ export async function socialRoute(request:Request,env:SocialEnv,member:Member):P
   const price=optionalNumber(data.price,0,Number.MAX_SAFE_INTEGER,'Price');
   const rawCurrency=optionalText(data.currency,3,'Currency'),currency=rawCurrency?.toUpperCase()??null;
   if(currency&&!/^[A-Z]{3}$/.test(currency))throw new ApiError(400,'Use a 3-letter currency code such as USD, EUR or HKD');
+  // The viewer's own perceived structure. Parsed against the same schema the
+  // owner's form uses, so an unknown key or an out-of-scale value is a 400
+  // rather than a blob stored now and silently dropped when it is read back.
+  let structure:TastingStructure|null=null;
+  if(data.structure!=null){
+   const parsed=tastingStructureSchema.safeParse(data.structure);
+   if(!parsed.success)throw new ApiError(400,'Structure is invalid');
+   structure=Object.values(parsed.data).some(value=>value!=null)?parsed.data:null;
+  }
+  const structureJson=structure?JSON.stringify(structure):null;
   const now=stamp();
   await env.DB.prepare(`INSERT INTO shared_wine_preferences(
-    recipient_id,owner_id,wine_id,favorite,tasting_notes,rating,tasting_date,tasting_name,venue,location_name,price,currency,created_at,updated_at
-   ) VALUES(?,?,?,0,?,?,?,?,?,?,?,?,?,?)
+    recipient_id,owner_id,wine_id,favorite,tasting_notes,rating,tasting_date,tasting_name,venue,location_name,price,currency,structure_json,created_at,updated_at
+   ) VALUES(?,?,?,0,?,?,?,?,?,?,?,?,?,?,?)
    ON CONFLICT(recipient_id,owner_id,wine_id) DO UPDATE SET
     tasting_notes=excluded.tasting_notes,rating=excluded.rating,tasting_date=excluded.tasting_date,tasting_name=excluded.tasting_name,
-    venue=excluded.venue,location_name=excluded.location_name,price=excluded.price,currency=excluded.currency,updated_at=excluded.updated_at`)
-   .bind(member.id,String(wine.owner_id),sharedExperience[1],tastingNotes,rating,tastingDate,tastingName,venue,locationName,price,currency,now,now).run();
-  return json({ok:true,experience:{tastingNotes,rating,tastingDate,tastingName,venue,locationName,price,currency}});
+    venue=excluded.venue,location_name=excluded.location_name,price=excluded.price,currency=excluded.currency,
+    structure_json=excluded.structure_json,updated_at=excluded.updated_at`)
+   .bind(member.id,String(wine.owner_id),sharedExperience[1],tastingNotes,rating,tastingDate,tastingName,venue,locationName,price,currency,structureJson,now,now).run();
+  return json({ok:true,experience:{tastingNotes,rating,tastingDate,tastingName,venue,locationName,price,currency,structure}});
  }
  const shared=path.match(/^\/api\/shared\/wines\/([^/]+)(?:\/photos\/([^/]+))?$/);
  if(shared&&request.method==='GET'){
