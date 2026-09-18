@@ -73,7 +73,8 @@ describe('R2 wine reference resolver',()=>{
  });
  it('can reconcile an ELID generic producer prefix through the explicit producer index',async()=>{
   const data=objects(),elidShard=referenceShardId('FR-KRUG');
-  data['reference/elid/versions/e1/producer-index.json']={'krug':['FR-KRUG']};
+  const producerIndex=data['reference/elid/versions/e1/producer-index.json'] as Record<string,string[]>;
+  delete producerIndex['champagne krug'];
   data[`reference/elid/versions/e1/shard-${elidShard}.json`]=[{...elid,producerName:'Champagne Krug',producerKey:'champagne krug'}];
   const result=await resolveWineReference(bucket(data),{producer:'Krug',wineName:'Grande Cuvée',releaseDesignation:'171ème Édition',vintageKind:'non_vintage'});
   expect(result.elid).toBe('FR-CMP-KRUG01-N171');
