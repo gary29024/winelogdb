@@ -14,6 +14,9 @@ import { matchTastingWine,type TastingWineMatch } from '../tastings/api';
 import { SparklingDetailsFields } from './SparklingDetailsFields';
 import { ChampagnePhotoBackfill } from './ChampagnePhotoBackfill';
 import { isChampagne,missingChampagneDetails } from '../../lib/wine/champagneExtraction';
+import { FriendTagDialog } from './FriendTagDialog';
+import { listFriendTags,setWineFriendTags,type FriendTag } from './friendTags';
+import { prepareSharingPhotos } from './sharingPhotos';
 import '../../producerResolution.css';
 import '../../wineFormCompact.css';
 
@@ -104,8 +107,22 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,holdin
   const [duplicate,setDuplicate]=useState<TastingWineMatch|null>(null);
   const [dismissedDuplicate,setDismissedDuplicate]=useState(false);
   const [attaching,setAttaching]=useState(false);
+  const allowFriendTagging=!id&&!onSave;
+  const [tagFriends,setTagFriends]=useState<FriendTag[]>([]),[tagSelected,setTagSelected]=useState<string[]>([]),[tagDraft,setTagDraft]=useState<string[]>([]),[tagOpen,setTagOpen]=useState(false),[tagTouched,setTagTouched]=useState(false),[tagError,setTagError]=useState('');
   // Editing an existing wine never joins a tasting, so it never waits on one.
   const waitingForTasting=!id&&tastingLoading;
+
+  useEffect(()=>{
+    if(!allowFriendTagging)return;
+    let active=true;
+    listFriendTags().then(result=>{
+      if(!active)return;
+      setTagFriends(result.items);
+      const defaults=result.items.filter(friend=>friend.defaultShare).map(friend=>friend.id);
+      setTagSelected(defaults);setTagDraft(defaults);
+    }).catch(()=>undefined);
+    return()=>{active=false};
+  },[allowFriendTagging]);
 
   /**
    * Asked only where a duplicate can actually be made: a new wine, carrying
@@ -262,6 +279,8 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,holdin
       const result=onSave?await onSave(input):await saveWine(input,id,id?[]:photos,{preferCuveePrimaryName:canPreferPrimary&&preferCuveePrimaryName,holdingId});
       const savedId=id??('id' in result?result.id:undefined);if(!savedId)throw new Error('Save response did not include a wine ID');
       if(onSave)await saveWineTastingStructure(savedId,tastingStructure);
+      if(allowFriendTagging&&tagTouched)await setWineFriendTags(savedId,tagSelected);
+      if(allowFriendTagging&&tagSelected.length&&'imageIds' in result&&result.imageIds?.length)void prepareSharingPhotos(result.imageIds).catch(()=>undefined);
       // A save can have closed the open tasting - a wine dated another day ends
       // it server-side - so the cached answer is no longer trustworthy.
       if(!id)void refreshActiveTasting();
@@ -350,6 +369,8 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,holdin
     <label className="full-field">Tags (comma separated)<input name="tags" defaultValue={initial?.tags?.join(', ')??''}/>
       <small>Tags for the place, the grapes and the style follow the wine: correct a field above and the tag it put there is corrected with it. Anything you typed is left alone.</small></label>
     {photos.length>0&&<p className="form-note">{photos.length} photo{photos.length===1?'':'s'} will be saved permanently only after this wine is successfully logged.</p>}
+    {allowFriendTagging&&<div className="form-note"><button type="button" onClick={()=>{setTagDraft(tagSelected);setTagError('');setTagOpen(true)}}>Tag friends{tagSelected.length?` · ${tagSelected.length} selected`:''}</button><span> Optional — choose who should receive this wine when it is saved.</span></div>}
+    <FriendTagDialog open={tagOpen} title="Tag friends when saved" description="Choose friends for this wine. Your account defaults are preselected; changing this selection affects only this wine." friends={tagFriends} selected={tagDraft} error={tagError} onSelectedChange={setTagDraft} onConfirm={()=>{setTagSelected(tagDraft);setTagTouched(true);setTagOpen(false)}} onClose={()=>setTagOpen(false)}/>
     {error&&<p role="alert">{error}</p>}
     {/* Saving before the open-tasting probe answers used to post a null
         tastingName, so a bottle logged in the first moments after an app load
