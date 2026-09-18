@@ -51,7 +51,7 @@ type WineFormInitial=Partial<WineInput>&{tastingStructure?:TastingStructure|null
  */
 export type SavedWineIdentity={producer:string;wineName:string;vintage:number|null};
 
-type WineFormProps={initial?:WineFormInitial;id?:string;photos?:WinePhoto[];onSave?:(input:WineFormInput)=>Promise<{id:string}>;onSaved?:(id:string,saved?:SavedWineIdentity)=>void;submitLabel?:string;
+type WineFormProps={initial?:WineFormInitial;id?:string;photos?:WinePhoto[];onSave?:(input:WineFormInput)=>Promise<{id:string;imageIds?:string[]}>;onSaved?:(id:string,saved?:SavedWineIdentity)=>void;submitLabel?:string;
   /** The cellar line this bottle came from, so saving takes it off the count. */
   holdingId?:string};
 
