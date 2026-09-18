@@ -2,7 +2,7 @@ import { createHash } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import { extname,basename,resolve } from 'node:path';
 import ExcelJS from 'exceljs';
-import { LWIN_HEADERS,parseLwinReference,validateLwinHeaders,type LwinInputRow,type LwinReferenceProduct } from '../src/lib/wine/lwinImport';
+import { parseLwinReference,validateLwinHeaders,type LwinInputRow,type LwinReferenceProduct } from '../src/lib/wine/lwinImport';
 import { REFERENCE_SHARDS,referenceShardId,type ReferenceManifest } from '../src/lib/wine/referenceCatalog';
 import { DEFAULT_REFERENCE_BUCKET,flag,option,positional,recordSyncState,uploadReferenceFiles,writeShardFiles } from './referenceR2';
 
