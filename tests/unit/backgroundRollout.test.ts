@@ -53,4 +53,27 @@ describe('background launch preparation',()=>{
   status=await rolloutStatus(database.db);
   expect(status.research).toMatchObject({state:'complete',wines:{processed:12,total:12},producers:{processed:0,total:0},error:null});
  });
+
+ it('refreshes an already-complete research index without revoking launch readiness',async()=>{
+  const {database,env,sent}=setup();
+  database.sql.prepare("INSERT INTO wines(id,owner_id,producer,wine_name,created_at,updated_at) VALUES('w1','owner','Producer','Wine 1','now','now')").run();
+  await rolloutRoute(new Request('https://wine.example/api/admin/rollout/research',{method:'POST'}),env,owner);
+  await processRolloutJob(env,'research');
+  expect((await rolloutStatus(database.db)).research.state).toBe('complete');
+  expect(database.sql.prepare("SELECT value FROM rollout_state WHERE name='research_index'").get()!.value).toBe('complete');
+
+  database.sql.prepare("INSERT INTO wines(id,owner_id,producer,wine_name,created_at,updated_at) VALUES('w2','owner','Producer','Wine 2','now','now')").run();
+  const before=sent.length;
+  const response=await rolloutRoute(new Request('https://wine.example/api/admin/rollout/research',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({refresh:true})}),env,owner);
+  expect(response?.status).toBe(202);expect(sent).toHaveLength(before+1);expect(sent.at(-1)).toEqual({kind:'admin_rollout',owner:'owner',rollout:'research'});
+  // Initial readiness remains complete while the refresh walks current records,
+  // so inviting a member is not temporarily disabled by routine maintenance.
+  expect(database.sql.prepare("SELECT value FROM rollout_state WHERE name='research_index'").get()!.value).toBe('complete');
+  expect((await rolloutStatus(database.db)).research).toMatchObject({state:'running',wines:{processed:0,total:2}});
+
+  const refreshed=await processRolloutJob(env,'research');
+  expect(refreshed).toMatchObject({complete:true,processed:2,busy:false});
+  expect((await rolloutStatus(database.db)).research).toMatchObject({state:'complete',wines:{processed:2,total:2},error:null});
+  expect(database.sql.prepare("SELECT value FROM rollout_state WHERE name='rollout_research_refresh'").get()!.value).toBe('complete');
+ });
 });

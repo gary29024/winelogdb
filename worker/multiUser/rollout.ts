@@ -14,7 +14,7 @@ export type RolloutStatus={
  research:{state:TaskState;wines:{processed:number;total:number};producers:{processed:number;total:number};error:string|null};
 };
 
-const STORAGE_BATCH=100,RESEARCH_BATCH=10,LEASE_SECONDS=180;
+const STORAGE_BATCH=100,RESEARCH_BATCH=10,LEASE_SECONDS=180,RESEARCH_REFRESH='rollout_research_refresh';
 const jobKey=(kind:RolloutKind)=>`rollout_${kind}_job`;
 const errorKey=(kind:RolloutKind)=>`rollout_${kind}_error`;
 const leaseKey=(kind:RolloutKind)=>`rollout_${kind}_lease`;
@@ -23,26 +23,27 @@ const completionKey=(kind:RolloutKind)=>kind==='storage'?'storage_inventory':'re
 async function readState(db:D1Database,name:string){return (await db.prepare('SELECT value FROM rollout_state WHERE name=?').bind(name).first<{value:string}>())?.value??''}
 async function writeState(db:D1Database,name:string,value:string){await db.prepare('INSERT INTO rollout_state(name,value) VALUES(?,?) ON CONFLICT(name) DO UPDATE SET value=excluded.value').bind(name,value).run()}
 async function writeStates(db:D1Database,entries:Array<[string,string]>){if(entries.length)await db.batch(entries.map(([name,value])=>db.prepare('INSERT INTO rollout_state(name,value) VALUES(?,?) ON CONFLICT(name) DO UPDATE SET value=excluded.value').bind(name,value)))}
-function taskState(complete:boolean,running:boolean,hasCursor:boolean):TaskState{return complete?'complete':running?'running':hasCursor?'paused':'not_started'}
+function taskState(complete:boolean,running:boolean,hasCursor:boolean):TaskState{return running?'running':complete?'complete':hasCursor?'paused':'not_started'}
 
 /** Owner-visible status survives navigation and browser restarts. */
 export async function rolloutStatus(db:D1Database):Promise<RolloutStatus>{
- const [storageComplete,storageJob,storageError,researchComplete,researchJob,researchError,wineCursor,producerCursor,storageObjects,wineTotal,producerTotal]=await Promise.all([
+ const [storageComplete,storageJob,storageError,researchComplete,researchJob,researchRefresh,researchError,wineCursor,producerCursor,storageObjects,wineTotal,producerTotal]=await Promise.all([
   readState(db,'storage_inventory'),readState(db,jobKey('storage')),readState(db,errorKey('storage')),
-  readState(db,'research_index'),readState(db,jobKey('research')),readState(db,errorKey('research')),
+  readState(db,'research_index'),readState(db,jobKey('research')),readState(db,RESEARCH_REFRESH),readState(db,errorKey('research')),
   readState(db,'research_cursor'),readState(db,'producer_research_cursor'),
   db.prepare('SELECT count(*) AS n FROM stored_objects').first<{n:number}>(),
   db.prepare('SELECT count(*) AS n FROM wines').first<{n:number}>(),
   db.prepare('SELECT count(*) AS n FROM producers').first<{n:number}>()
  ]);
- const winesTotal=Number(wineTotal?.n)||0,producersTotal=Number(producerTotal?.n)||0;
+ const winesTotal=Number(wineTotal?.n)||0,producersTotal=Number(producerTotal?.n)||0,researchRefreshing=researchRefresh==='running'||researchRefresh==='paused';
  const [wineDone,producerDone]=await Promise.all([
-  researchComplete==='complete'?Promise.resolve(winesTotal):wineCursor?db.prepare('SELECT count(*) AS n FROM wines WHERE id<=?').bind(wineCursor).first<{n:number}>().then(row=>Number(row?.n)||0):Promise.resolve(0),
-  researchComplete==='complete'?Promise.resolve(producersTotal):producerCursor?db.prepare('SELECT count(*) AS n FROM producers WHERE id<=?').bind(producerCursor).first<{n:number}>().then(row=>Number(row?.n)||0):Promise.resolve(0)
+  researchComplete==='complete'&&!researchRefreshing?Promise.resolve(winesTotal):wineCursor?db.prepare('SELECT count(*) AS n FROM wines WHERE id<=?').bind(wineCursor).first<{n:number}>().then(row=>Number(row?.n)||0):Promise.resolve(0),
+  researchComplete==='complete'&&!researchRefreshing?Promise.resolve(producersTotal):producerCursor?db.prepare('SELECT count(*) AS n FROM producers WHERE id<=?').bind(producerCursor).first<{n:number}>().then(row=>Number(row?.n)||0):Promise.resolve(0)
  ]);
+ const researchState:TaskState=researchJob==='running'?'running':researchRefresh==='paused'?'paused':taskState(researchComplete==='complete',false,Boolean(wineCursor||producerCursor));
  return {
   storage:{state:taskState(storageComplete==='complete',storageJob==='running',Boolean(await readState(db,'storage_cursor'))),objects:Number(storageObjects?.n)||0,error:storageError||null},
-  research:{state:taskState(researchComplete==='complete',researchJob==='running',Boolean(wineCursor||producerCursor)),wines:{processed:wineDone,total:winesTotal},producers:{processed:producerDone,total:producersTotal},error:researchError||null}
+  research:{state:researchState,wines:{processed:wineDone,total:winesTotal},producers:{processed:producerDone,total:producersTotal},error:researchError||null}
  };
 }
 
@@ -68,7 +69,8 @@ async function inventoryStorageBatch(env:RolloutEnv){
 }
 
 async function indexResearchBatch(env:RolloutEnv){
- if(await readState(env.DB,'research_index')==='complete')return {complete:true,processed:0};
+ const refreshing=await readState(env.DB,RESEARCH_REFRESH)==='running';
+ if(await readState(env.DB,'research_index')==='complete'&&!refreshing)return {complete:true,processed:0};
  const cursor=await readState(env.DB,'research_cursor');
  const rows=await env.DB.prepare(`SELECT * FROM wines WHERE id>? ORDER BY id LIMIT ${RESEARCH_BATCH}`).bind(cursor).all<Record<string,unknown>>();
  for(const row of rows.results){
@@ -89,7 +91,7 @@ async function indexResearchBatch(env:RolloutEnv){
   for(const producer of producers.results)await publishProducerResearch(env.DB,producer.owner_id,producer.id);
   producerCount=producers.results.length;complete=producerCount<RESEARCH_BATCH;
   if(producerCount)await writeState(env.DB,'producer_research_cursor',producers.results.at(-1)!.id);
-  if(complete)await writeStates(env.DB,[['research_index','complete'],[jobKey('research'),'complete']]);
+  if(complete)await writeStates(env.DB,[['research_index','complete'],[jobKey('research'),'complete'],...(refreshing?[[RESEARCH_REFRESH,'complete']] as Array<[string,string]>:[])]);
  }
  return {complete,processed:rows.results.length+producerCount};
 }
@@ -111,26 +113,39 @@ export async function processRolloutJob(env:RolloutEnv,kind:RolloutKind){
 /** The five-minute maintenance trigger repairs a lost/dead-lettered rollout dispatch. */
 export async function recoverRollouts(env:RolloutEnv){
  for(const kind of ['storage','research'] as const){
-  if(await readState(env.DB,completionKey(kind))==='complete')continue;
+  const refreshRunning=kind==='research'&&await readState(env.DB,RESEARCH_REFRESH)==='running';
+  if(await readState(env.DB,completionKey(kind))==='complete'&&!refreshRunning)continue;
   if(await readState(env.DB,jobKey(kind))!=='running')continue;
   await env.RESEARCH_QUEUE.send({kind:'admin_rollout',owner:'owner',rollout:kind} satisfies RolloutQueueJob).catch(error=>console.error(JSON.stringify({event:'rollout_recovery_failed',kind,error:String(error)})));
  }
 }
 
-async function startRollout(env:RolloutEnv,member:Member,kind:RolloutKind){
- if(await readState(env.DB,completionKey(kind))==='complete')return {accepted:false,alreadyComplete:true,status:await rolloutStatus(env.DB)};
- await writeStates(env.DB,[[jobKey(kind),'running'],[errorKey(kind),'']]);
+async function startRollout(env:RolloutEnv,member:Member,kind:RolloutKind,refresh=false){
+ const [complete,job,refreshState]=await Promise.all([readState(env.DB,completionKey(kind)),readState(env.DB,jobKey(kind)),kind==='research'?readState(env.DB,RESEARCH_REFRESH):Promise.resolve('')]);
+ if(job==='running')return {accepted:false,alreadyRunning:true,status:await rolloutStatus(env.DB)};
+ const resumingRefresh=kind==='research'&&refreshState==='paused';
+ if(complete==='complete'&&!refresh&&!resumingRefresh)return {accepted:false,alreadyComplete:true,status:await rolloutStatus(env.DB)};
+ if(refresh&&kind!=='research')throw new ApiError(400,'Only the research index can be refreshed');
+ const entries:Array<[string,string]>=[[jobKey(kind),'running'],[errorKey(kind),'']];
+ if(kind==='research'&&(refresh||resumingRefresh)){
+  entries.push([RESEARCH_REFRESH,'running']);
+  if(refresh)entries.push(['research_cursor',''],['producer_research_cursor','']);
+ }
+ await writeStates(env.DB,entries);
  try{await env.RESEARCH_QUEUE.send({kind:'admin_rollout',owner:member.id,rollout:kind} satisfies RolloutQueueJob)}
- catch(error){await writeStates(env.DB,[[jobKey(kind),'paused'],[errorKey(kind),error instanceof Error?error.message:String(error)]]);throw new ApiError(503,'Could not start the background rollout job')}
- return {accepted:true,status:await rolloutStatus(env.DB)};
+ catch(error){const failed:Array<[string,string]>=[[jobKey(kind),'paused'],[errorKey(kind),error instanceof Error?error.message:String(error)]];if(kind==='research'&&(refresh||resumingRefresh))failed.push([RESEARCH_REFRESH,'paused']);await writeStates(env.DB,failed);throw new ApiError(503,'Could not start the background rollout job')}
+ return {accepted:true,refreshing:kind==='research'&&(refresh||resumingRefresh),status:await rolloutStatus(env.DB)};
 }
 
-/** Owner-only launch preparation: POST starts/resumes, GET reports durable progress. */
+/** Owner-only launch preparation: POST starts/resumes/refreshes, GET reports durable progress. */
 export async function rolloutRoute(request:Request,env:RolloutEnv,member:Member):Promise<Response|null>{
  const path=new URL(request.url).pathname;if(!path.startsWith('/api/admin/rollout/'))return null;ownerOnly(member);
  if(path==='/api/admin/rollout/status'&&request.method==='GET')return json(await rolloutStatus(env.DB));
  if(request.method!=='POST')throw new ApiError(405,'Use POST');
  if(path==='/api/admin/rollout/storage')return json(await startRollout(env,member,'storage'),202);
- if(path==='/api/admin/rollout/research')return json(await startRollout(env,member,'research'),202);
+ if(path==='/api/admin/rollout/research'){
+  const data=await request.json().catch(()=>({})) as {refresh?:unknown};
+  return json(await startRollout(env,member,'research',data.refresh===true),202);
+ }
  throw new ApiError(404,'Unknown rollout task');
 }

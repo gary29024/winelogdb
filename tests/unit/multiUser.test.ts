@@ -31,7 +31,7 @@ const wallet=()=>database.sql.prepare("SELECT balance,reserved FROM credit_walle
 describe('account boundary',()=>{
  it('binds only the configured Google subject while preserving legacy owner data',async()=>{
   database.close();database=realD1();
-  database.sql.exec("DELETE FROM credit_prices WHERE created_by='owner'; DELETE FROM credit_wallets WHERE user_id='owner'; DELETE FROM app_users WHERE id='owner'; INSERT INTO wines(id,owner_id,producer,wine_name,created_at,updated_at) VALUES('legacy','owner','Legacy','Bottle','now','now')");
+  database.sql.exec("DELETE FROM credit_prices WHERE created_by='owner'; DELETE FROM member_ai_action_policies WHERE updated_by='owner'; DELETE FROM credit_wallets WHERE user_id='owner'; DELETE FROM app_users WHERE id='owner'; INSERT INTO wines(id,owner_id,producer,wine_name,created_at,updated_at) VALUES('legacy','owner','Legacy','Bottle','now','now')");
   const account=await bindGoogleAccount(env(),{sub:'explicit-owner-sub',email:'me@example.com',name:'Owner'},null);expect(account.id).toBe('owner');expect(database.sql.prepare("SELECT owner_id FROM wines WHERE id='legacy'").get()!.owner_id).toBe('owner');
  });
  it('verifies signed Google callbacks, nonce, one-use state, and cookie flags',async()=>{
