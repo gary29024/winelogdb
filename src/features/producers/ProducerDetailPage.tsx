@@ -93,7 +93,7 @@ export function ProducerDetailPage(){
    if(next.status==='running')return;
    stopResearchTimers();setResearching(false);
    if(next.status==='complete'){await reload().catch(()=>undefined);setNotice(`Producer research completed${next.durationMs!=null?` in ${(next.durationMs/1000).toFixed(1)}s`:''}.`);setError('')}
-   else setError(technicalView?`${next.message||'Producer research failed.'} · Research request ${next.requestId}`:`Producer research failed. · Support ID ${next.requestId}`);
+   else setError(technicalView?`${next.message||'Producer research failed.'} · Research request ${next.requestId}`:`Producer research failed · Support ID ${next.requestId}`);
   };
   researchPoll.current=startBackoffPoll(poll);void poll();
  }
@@ -174,7 +174,7 @@ export function ProducerDetailPage(){
  },[producer]);
  // The wine range is the expensive half of producer research, so members get the
  // profile, practices and contacts only. There is nothing to refresh range-only.
- const rangeAllowed=!technicalView?getAccount()?.role!=='member':true;
+ const rangeAllowed=getAccount()?.role!=='member';
  useEffect(()=>{
   if(!id)return;
   let active=true;

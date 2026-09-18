@@ -46,13 +46,19 @@ export function wineSaveStatements(db:D1Database,owner:string,wineId:string,w:Wi
       if(name)statements.push(db.prepare(`UPDATE tastings SET last_wine_at=?,updated_at=? WHERE owner_id=? AND id=${tastingId} AND ${OPEN}`).bind(stamp,stamp,owner,owner,name,date));
     }
   }
-  // New wines inherit the account's explicit default friend tags. The row is a
-  // normal wine_shares grant after creation, so the owner can remove it on this
-  // wine without changing the account-level default for future wines.
-  if(!updateExisting)statements.push(db.prepare(`INSERT OR IGNORE INTO wine_shares(wine_id,owner_id,recipient_id)
-    SELECT ?,?,d.recipient_id FROM member_share_defaults d
-    JOIN friendships f ON f.user_id=d.owner_id AND f.friend_id=d.recipient_id
-    WHERE d.owner_id=?`).bind(wineId,owner,owner));
+  // New wines either use the explicit selection made on this save, or inherit
+  // the account default when the form was left untouched. Keeping this in the
+  // same D1 batch as wine creation prevents a sharing failure from making a
+  // successfully saved wine look unsaved and inviting a duplicate retry.
+  if(!updateExisting){
+    if(w.shareRecipientIds!==undefined)statements.push(db.prepare(`INSERT OR IGNORE INTO wine_shares(wine_id,owner_id,recipient_id)
+      SELECT ?,?,f.friend_id FROM friendships f
+      WHERE f.user_id=? AND f.friend_id IN (SELECT value FROM json_each(?))`).bind(wineId,owner,owner,JSON.stringify(w.shareRecipientIds)));
+    else statements.push(db.prepare(`INSERT OR IGNORE INTO wine_shares(wine_id,owner_id,recipient_id)
+      SELECT ?,?,d.recipient_id FROM member_share_defaults d
+      JOIN friendships f ON f.user_id=d.owner_id AND f.friend_id=d.recipient_id
+      WHERE d.owner_id=?`).bind(wineId,owner,owner));
+  }
   // Omitted means preserve, null means clear. Older clients need not send it.
   if(w.tastingStructure!==undefined)statements.push(tastingStructureStatement(db,owner,wineId,w.tastingStructure,stamp));
   if(w.sparklingDetails!==undefined)statements.push(sparklingDetailsStatement(db,owner,wineId,w.sparklingDetails,stamp));

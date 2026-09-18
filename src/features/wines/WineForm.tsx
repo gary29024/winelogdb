@@ -1,7 +1,7 @@
 import { useEffect,useMemo,useRef,useState, type FormEvent } from 'react';
 import { resolvePlace } from '../../lib/places/resolve';
 import { Link,useNavigate } from 'react-router-dom';
-import { addWineImages,saveWine,saveWineTastingStructure, type WinePhoto } from './api';
+import { addWineImages,saveWine, type WinePhoto } from './api';
 import { derivedTags,reconcileTags } from './wineTags';
 import { grapeSuggestions } from '../../lib/wine/grapes';
 import { resolveProducer,type ProducerResolution } from '../producers/api';
@@ -15,7 +15,7 @@ import { SparklingDetailsFields } from './SparklingDetailsFields';
 import { ChampagnePhotoBackfill } from './ChampagnePhotoBackfill';
 import { isChampagne,missingChampagneDetails } from '../../lib/wine/champagneExtraction';
 import { FriendTagDialog } from './FriendTagDialog';
-import { listFriendTags,setWineFriendTags,type FriendTag } from './friendTags';
+import { listFriendTags,type FriendTag } from './friendTags';
 import { prepareSharingPhotos } from './sharingPhotos';
 import '../../producerResolution.css';
 import '../../wineFormCompact.css';
@@ -273,13 +273,12 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,enable
       latitude:initial?.latitude??null,longitude:initial?.longitude??null,
       price:fd.get('price')?Number(fd.get('price')):null,currency:currency||null,
       tags:nextTags,recognitionStatus:'complete',recognitionConfidence:initial?.recognitionConfidence??null,
-      tastingStructure,sparklingDetails:savedSparklingDetails??(hasSparklingDetails(initial?.sparklingDetails)?null:undefined)
+      tastingStructure,sparklingDetails:savedSparklingDetails??(hasSparklingDetails(initial?.sparklingDetails)?null:undefined),
+      shareRecipientIds:allowFriendTagging&&tagTouched?tagSelected:undefined
     };
     try{
       const result=onSave?await onSave(input):await saveWine(input,id,id?[]:photos,{preferCuveePrimaryName:canPreferPrimary&&preferCuveePrimaryName,holdingId});
       const savedId=id??('id' in result?result.id:undefined);if(!savedId)throw new Error('Save response did not include a wine ID');
-      if(onSave)await saveWineTastingStructure(savedId,tastingStructure);
-      if(allowFriendTagging&&tagTouched)await setWineFriendTags(savedId,tagSelected);
       if(allowFriendTagging&&tagSelected.length&&'imageIds' in result&&result.imageIds?.length)void prepareSharingPhotos(result.imageIds).catch(()=>undefined);
       // A save can have closed the open tasting - a wine dated another day ends
       // it server-side - so the cached answer is no longer trustworthy.

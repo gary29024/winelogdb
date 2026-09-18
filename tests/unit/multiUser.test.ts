@@ -225,6 +225,16 @@ describe('sharing boundaries',()=>{
   ]);
   expect(database.sql.prepare('SELECT recipient_id FROM wine_shares WHERE wine_id=?').get(id)?.recipient_id).toBe('bob');
  });
+ it('writes a touched friend selection in the same wine batch instead of reapplying defaults',async()=>{
+  database.sql.exec("INSERT INTO friendships(user_id,friend_id) VALUES('alice','bob'),('bob','alice'),('alice','carol'),('carol','alice'); INSERT INTO member_share_defaults(owner_id,recipient_id) VALUES('alice','bob')");
+  const id='manual-share',input={producer:'Test',wineName:'Manual share',grapes:[],grapeBlend:[],tags:[],tastingNotes:'',shareRecipientIds:['carol']} as unknown as WineInput;
+  await database.db.batch([
+   database.db.prepare("INSERT INTO wines(id,owner_id,producer,wine_name,created_at,updated_at) VALUES(?,?,?,?,?,?)").bind(id,'alice','Test','Manual share','now','now'),
+   ...wineSaveStatements(database.db,'alice',id,input)
+  ]);
+  const recipients=database.sql.prepare('SELECT recipient_id FROM wine_shares WHERE wine_id=? ORDER BY recipient_id').all(id).map(row=>row.recipient_id);
+  expect(recipients).toEqual(['carol']);
+ });
  it('bulk-tags more than 100 wines so Journal selections up to 500 do not fail',async()=>{
   database.sql.exec("INSERT INTO friendships(user_id,friend_id) VALUES('alice','bob'),('bob','alice')");
   const insert=database.sql.prepare("INSERT INTO wines(id,owner_id,producer,wine_name,created_at,updated_at) VALUES(?,'alice','P',?,'now','now')");
@@ -266,6 +276,17 @@ describe('sharing boundaries',()=>{
   await expect(ownerBucket.put('owners/owner/large',new Uint8Array(8))).resolves.toBeDefined();
   expect(database.sql.prepare("SELECT byte_size,metered_byte_size FROM storage_totals WHERE owner_id='owner'").get()).toMatchObject({byte_size:8,metered_byte_size:8});
   expect(database.sql.prepare("SELECT byte_size FROM storage_totals WHERE owner_id='*'").get()!.byte_size).toBe(8);
+ });
+ it('prepares a missing shared photo on demand for dynamically inherited access',async()=>{
+  wines();
+  database.sql.exec("INSERT INTO tastings(id,owner_id,name,created_at,updated_at) VALUES('t-photo','alice','Photo tasting','now','now'); INSERT INTO wine_experiences(id,owner_id,wine_id,tasting_id,created_at,updated_at) VALUES('e-photo','alice','w','t-photo','now','now'); INSERT INTO tasting_shares(tasting_id,owner_id,recipient_id) VALUES('t-photo','alice','bob'); INSERT INTO wine_images(id,owner_id,wine_id,object_key,content_type,byte_size,width,height,upload_status,recognition_status,created_at) VALUES('img-photo','alice','w','owners/alice/original.jpg','image/jpeg',8,10,10,'uploaded','complete','now')");
+  const jpeg=Uint8Array.from([255,216,255,218,0,2,255,217]);
+  const bucket={get:vi.fn(async(key:string)=>key==='owners/alice/original.jpg'?{body:new Response('original').body!}:null),put:vi.fn(async()=>({})),delete:vi.fn(async()=>undefined)} as unknown as R2Bucket;
+  const images={input:vi.fn(()=>({transform:()=>({output:()=>({response:()=>new Response(jpeg,{headers:{'Content-Type':'image/jpeg'}})})})}))} as unknown as ImagesBinding;
+  const detail=await (await socialRoute(new Request('https://wine.example/api/shared/wines/w'),{...env(),WINE_IMAGES:bucket,IMAGES:images},member('bob')))!.json() as {photos:Array<{id:string}>};
+  expect(detail.photos).toEqual([{id:'img-photo',url:'/api/shared/wines/w/photos/img-photo'}]);
+  expect(database.sql.prepare("SELECT owner_id FROM shared_photos WHERE image_id='img-photo'").get()?.owner_id).toBe('alice');
+  expect(database.sql.prepare("SELECT counts_toward_member_limit FROM stored_objects WHERE object_key='shared/alice/img-photo.jpg'").get()?.counts_toward_member_limit).toBe(0);
  });
  it('has an explicit personal-field allowlist',()=>{expect(sharedWine({id:'w',price:10,venue:'x',latitude:1,tags_json:'["secret"]'})).not.toHaveProperty('tags')});
  it('removes JPEG application metadata and rejects non-JPEG inputs',()=>{
