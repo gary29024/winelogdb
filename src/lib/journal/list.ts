@@ -66,9 +66,9 @@ export async function listJournalPage(db:D1Database,owner:string,q:JournalListQu
   }
   if(q.tasting){
     where+=includeShared
-      ?' AND w.is_shared=0 AND EXISTS (SELECT 1 FROM wine_experiences we JOIN tastings t ON t.id=we.tasting_id WHERE we.wine_id=w.id AND we.owner_id=? AND lower(t.name) LIKE lower(?))'
+      ?` AND ((w.is_shared=0 AND EXISTS (SELECT 1 FROM wine_experiences we JOIN tastings t ON t.id=we.tasting_id WHERE we.wine_id=w.id AND we.owner_id=? AND lower(t.name) LIKE lower(?))) OR (w.is_shared=1 AND EXISTS (SELECT 1 FROM shared_wine_experiences sx WHERE sx.recipient_id=w.owner_id AND sx.owner_id=w.source_owner_id AND sx.wine_id=w.id AND lower(sx.tasting_name) LIKE lower(?))))`
       :' AND EXISTS (SELECT 1 FROM wine_experiences we JOIN tastings t ON t.id=we.tasting_id WHERE we.wine_id=w.id AND we.owner_id=? AND lower(t.name) LIKE lower(?))';
-    args.push(owner,`%${q.tasting}%`);
+    args.push(owner,`%${q.tasting}%`,...(includeShared?[`%${q.tasting}%`]:[]));
   }
   if(rawQuery&&!vintageSearch){
     const searchPredicates:string[]=[];
@@ -122,7 +122,7 @@ export async function listJournalPage(db:D1Database,owner:string,q:JournalListQu
     ?'w.is_shared,w.shared_by,w.source_owner_id'
     :'0 AS is_shared,NULL AS shared_by,w.owner_id AS source_owner_id';
   const tastingName=includeShared
-    ?'CASE WHEN w.is_shared=0 THEN (SELECT t.name FROM wine_experiences we LEFT JOIN tastings t ON t.id=we.tasting_id WHERE we.wine_id=w.id AND we.owner_id=w.owner_id ORDER BY we.created_at DESC LIMIT 1) END'
+    ?`CASE WHEN w.is_shared=0 THEN (SELECT t.name FROM wine_experiences we LEFT JOIN tastings t ON t.id=we.tasting_id WHERE we.wine_id=w.id AND we.owner_id=w.owner_id ORDER BY we.created_at DESC LIMIT 1) ELSE (SELECT sx.tasting_name FROM shared_wine_experiences sx WHERE sx.recipient_id=w.owner_id AND sx.owner_id=w.source_owner_id AND sx.wine_id=w.id) END`
     :' (SELECT t.name FROM wine_experiences we LEFT JOIN tastings t ON t.id=we.tasting_id WHERE we.wine_id=w.id AND we.owner_id=w.owner_id ORDER BY we.created_at DESC LIMIT 1)';
   const imageId=includeShared
     ?`CASE WHEN w.is_shared=1 THEN
