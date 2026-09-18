@@ -51,11 +51,11 @@ type WineFormInitial=Partial<WineInput>&{tastingStructure?:TastingStructure|null
  */
 export type SavedWineIdentity={producer:string;wineName:string;vintage:number|null};
 
-type WineFormProps={initial?:WineFormInitial;id?:string;photos?:WinePhoto[];onSave?:(input:WineFormInput)=>Promise<{id:string;imageIds?:string[]}>;onSaved?:(id:string,saved?:SavedWineIdentity)=>void;submitLabel?:string;
+type WineFormProps={initial?:WineFormInitial;id?:string;photos?:WinePhoto[];onSave?:(input:WineFormInput)=>Promise<{id:string;imageIds?:string[]}>;onSaved?:(id:string,saved?:SavedWineIdentity)=>void;submitLabel?:string;enableFriendTagging?:boolean;
   /** The cellar line this bottle came from, so saving takes it off the count. */
   holdingId?:string};
 
-export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,holdingId}:WineFormProps){
+export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,enableFriendTagging=false,holdingId}:WineFormProps){
   const nav=useNavigate(),[busy,setBusy]=useState(false),[error,setError]=useState('');
   const [producer,setProducer]=useState(String(initial?.producer??'')),[producerResolution,setProducerResolution]=useState<ProducerResolution|null>(null),[resolvingProducer,setResolvingProducer]=useState(false);
   /** The spelling the library uses, once it has been taken - so the screen can say it did. */
@@ -107,7 +107,7 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,holdin
   const [duplicate,setDuplicate]=useState<TastingWineMatch|null>(null);
   const [dismissedDuplicate,setDismissedDuplicate]=useState(false);
   const [attaching,setAttaching]=useState(false);
-  const allowFriendTagging=!id&&!onSave;
+  const allowFriendTagging=!id&&(!onSave||enableFriendTagging);
   const [tagFriends,setTagFriends]=useState<FriendTag[]>([]),[tagSelected,setTagSelected]=useState<string[]>([]),[tagDraft,setTagDraft]=useState<string[]>([]),[tagOpen,setTagOpen]=useState(false),[tagTouched,setTagTouched]=useState(false),[tagError,setTagError]=useState('');
   // Editing an existing wine never joins a tasting, so it never waits on one.
   const waitingForTasting=!id&&tastingLoading;
