@@ -32,8 +32,8 @@ export function FriendTagDialog({
       const focusable=[...sheet.current.querySelectorAll<HTMLElement>('button:not([disabled]),a[href],input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])')];
       if(!focusable.length){event.preventDefault();sheet.current.focus();return}
       const first=focusable[0],last=focusable[focusable.length-1],active=document.activeElement;
-      if(event.shiftKey&&(active===first||!sheet.current.contains(active))){event.preventDefault();last.focus()}
-      else if(!event.shiftKey&&(active===last||!sheet.current.contains(active))){event.preventDefault();first.focus()}
+      if(event.shiftKey&&(active===sheet.current||active===first||!sheet.current.contains(active))){event.preventDefault();last.focus()}
+      else if(!event.shiftKey&&(active===sheet.current||active===last||!sheet.current.contains(active))){event.preventDefault();first.focus()}
     };
     document.addEventListener('keydown',key);
     const overflow=document.body.style.overflow;document.body.style.overflow='hidden';
