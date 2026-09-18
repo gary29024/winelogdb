@@ -2,6 +2,7 @@ import type { WineInput } from './schema';
 import { OPEN } from '../tastings/session';
 import { hasTastingStructure,type TastingStructure } from '../wine/tastingStructure';
 import { hasSparklingDetails,type SparklingDetails } from '../wine/sparklingDetails';
+import { referenceIdentityStatements } from '../wine/referenceIdentity';
 
 export function sparklingDetailsStatement(db:D1Database,owner:string,wineId:string,details:SparklingDetails|null,stamp=new Date().toISOString()){
   if(!hasSparklingDetails(details))return db.prepare('DELETE FROM wine_sparkling_details WHERE owner_id=? AND wine_id=?').bind(owner,wineId);
@@ -62,5 +63,6 @@ export function wineSaveStatements(db:D1Database,owner:string,wineId:string,w:Wi
   // Omitted means preserve, null means clear. Older clients need not send it.
   if(w.tastingStructure!==undefined)statements.push(tastingStructureStatement(db,owner,wineId,w.tastingStructure,stamp));
   if(w.sparklingDetails!==undefined)statements.push(sparklingDetailsStatement(db,owner,wineId,w.sparklingDetails,stamp));
+  statements.push(...referenceIdentityStatements(db,owner,wineId,w,stamp,updateExisting));
   return statements;
 }

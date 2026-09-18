@@ -13,7 +13,8 @@
     "deploy": "npm run build && npm run db:migrate && wrangler deploy",
     "db:migrate:local": "wrangler d1 migrations apply DB --local",
     "db:migrate": "wrangler d1 migrations apply DB --remote",
-    "gi:sync": "vite-node scripts/sync_gi_register.ts"
+    "gi:sync": "vite-node scripts/sync_gi_register.ts",
+    "lwin:build-import": "vite-node scripts/import_lwin.ts"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",

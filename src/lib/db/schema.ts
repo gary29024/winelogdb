@@ -117,6 +117,8 @@ export const deepSearchSchema = z.object({
 export const wineRecordSchema = z.object({
   id: z.string().uuid(), ownerId: z.string().min(1).max(128), producer: z.string().trim().min(1).max(200),
   wineName: z.string().trim().min(1).max(200), vintage: vintageSchema,
+  recognizedProducer: optionalText, recognizedWineName: optionalText, recognizedVintageText: optionalText,
+  vintageKind: z.enum(['vintage','non_vintage','multi_vintage','unknown']).optional().nullable(), releaseDesignation: optionalText,
   country: optionalText, region: optionalText, appellation: optionalText,
   // The region and appellation as they first arrived, before the place tree
   // re-slotted them. Set on the way in from the supplied values, so callers
@@ -134,6 +136,10 @@ export const wineRecordSchema = z.object({
   // cask-strength bottling and still catches what the ceiling is really for -
   // a misread decimal point, where 13.5 arrives as 135.
   wineStyle: wineStyleSchema, alcoholPercentage: optionalNumber(z.number().min(0).max(70)),
+  colour: optionalText, productType: optionalText, productSubtype: optionalText,
+  referenceProductKey: optionalText, lwin7: optionalText, lwin11: optionalText, elid: optionalText,
+  identityMatchStatus: z.enum(['matched','suggested','ambiguous','unmatched','manual','conflict']).optional().nullable(),
+  identityMatchConfidence: optionalNumber(z.number().min(0).max(1)), identityMatchedAt: z.string().datetime().optional().nullable(),
   tastingNotes: z.string().trim().max(10000).default(''), rating: optionalNumber(z.number().min(0).max(100)),
   tastingDate: optionalDate, event: optionalText, venue: optionalText, price: optionalNumber(z.number().nonnegative()),
   currency: currencySchema, tags: z.array(z.string().trim().min(1).max(50)).max(50).default([]),
@@ -148,7 +154,9 @@ export type GrapeBlendEntry = z.infer<typeof grapeBlendEntrySchema>;
 export type DeepSearchResult = z.infer<typeof deepSearchSchema>;
 export type DeepSearchProvenance = z.infer<typeof deepSearchProvenanceSchema>;
 export type WineRecord = z.infer<typeof wineRecordSchema>;
-const wineInputBaseSchema = wineRecordSchema.omit({ id:true, ownerId:true, createdAt:true, updatedAt:true, deepSearch:true, imageIds:true, imageObjectKeys:true }).extend({tastingStructure:tastingStructureSchema.nullable().optional(),sparklingDetails:sparklingDetailsSchema.nullable().optional(),shareRecipientIds:z.array(z.string().min(1).max(128)).max(24).optional()}).superRefine((value,ctx)=>{
+const wineInputBaseSchema = wineRecordSchema.omit({ id:true, ownerId:true, createdAt:true, updatedAt:true, deepSearch:true, imageIds:true, imageObjectKeys:true,
+  referenceProductKey:true,lwin7:true,lwin11:true,elid:true,identityMatchStatus:true,identityMatchConfidence:true,identityMatchedAt:true,
+  colour:true,productType:true,productSubtype:true }).extend({tastingStructure:tastingStructureSchema.nullable().optional(),sparklingDetails:sparklingDetailsSchema.nullable().optional(),shareRecipientIds:z.array(z.string().min(1).max(128)).max(24).optional()}).superRefine((value,ctx)=>{
   const knownTotal=value.grapeBlend.reduce((sum,x)=>sum+(x.percentage??0),0);
   if(knownTotal>100.0001)ctx.addIssue({code:'custom',path:['grapeBlend'],message:'Known grape percentages cannot total more than 100%'});
 });
