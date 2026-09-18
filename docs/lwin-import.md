@@ -180,19 +180,20 @@ When `LWIN Change Since` is implemented, it should update the same reference cat
 
 ## LWIN rollback
 
-Before an important refresh, save the current manifest locally:
+Every completed version retains its own manifest at:
 
-```powershell
-npx wrangler r2 object get "winelog-private/reference/lwin/current.json" --remote --file ".tmp\reference-check\lwin-before-refresh.json"
+```text
+reference/lwin/versions/<version>/manifest.json
 ```
 
-Because old versioned shards remain in R2, rollback is only a manifest switch:
+so rollback does not depend on remembering to save `current.json` beforehand. Retrieve the manifest for the version you want and promote it back to `current.json`:
 
 ```powershell
-npx wrangler r2 object put "winelog-private/reference/lwin/current.json" --remote --file ".tmp\reference-check\lwin-before-refresh.json" --content-type "application/json" --force
+npx wrangler r2 object get "winelog-private/reference/lwin/versions/<version>/manifest.json" --remote --file ".tmp\reference-check\lwin-rollback.json"
+npx wrangler r2 object put "winelog-private/reference/lwin/current.json" --remote --file ".tmp\reference-check\lwin-rollback.json" --content-type "application/json" --force
 ```
 
-Then verify a known wine again.
+A version directory without `manifest.json` is incomplete and must not be promoted. Then verify a known wine again.
 
 ---
 

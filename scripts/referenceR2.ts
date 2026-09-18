@@ -36,6 +36,7 @@ export function uploadReferenceFiles(provider:ReferenceProvider,version:string,f
   const name=file.split(/[\\/]/).pop()!;
   wrangler(['r2','object','put',`${bucket}/${prefix}/${name}`,'--remote','--file',file,'--content-type','application/json','--force']);
  }
+ wrangler(['r2','object','put',`${bucket}/${prefix}/manifest.json`,'--remote','--file',manifestPath,'--content-type','application/json','--force']);
  wrangler(['r2','object','put',`${bucket}/reference/${provider}/current.json`,'--remote','--file',manifestPath,'--content-type','application/json','--force']);
 }
 export function recordSyncState(source:string,manifest:ReferenceManifest,counts:{seen:number;written:number;redirected?:number;rejected?:number}){
