@@ -170,3 +170,24 @@ button:disabled{opacity:.55;cursor:default}
 .detail-tags{display:flex;flex-wrap:wrap;gap:6px 10px}
 .detail-tags .tag{margin-right:0}.actions{display:flex;gap:10px;margin-top:24px}.mobile-nav{display:none}
 @media(max-width:700px){html{font-size:15px}body{background:var(--ground)}.topbar{height:60px;padding:0 16px}.desktop-nav{display:none}.brand{font-size:1.38rem}main{padding:16px 14px 104px}footer{display:none}.hero{padding:28px 0}.hero.compact{padding-top:6px}.journal-hero{padding:10px 0 16px}.journal-hero h1{font-size:2.2rem}.journal-hero p:last-child{font-size:.92rem}.journal-filters{padding:0;background:transparent;border:0}.journal-filters .search input{background:var(--sunken);border:0;padding:13px 14px}.filter-pills{padding-top:9px;padding-bottom:3px}.filter-pills label{min-width:112px}.filter-pills input,.filter-pills select{background:var(--paper)}.wine-grid.journal-list{display:grid;grid-template-columns:1fr;gap:0;background:var(--paper);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}.journal-card{display:grid;grid-template-columns:58px 1fr;gap:12px;border:0;border-bottom:1px solid var(--sunken);border-radius:0;min-height:0;padding:13px 7px}.journal-card:last-child{border-bottom:0}.journal-card:hover,.journal-card:focus{transform:none;box-shadow:none}.journal-card .bottle{width:54px;height:72px}.wine-card-top h2{font-family:'DM Sans',sans-serif;font-size:1.03rem}.wine-card span{font-size:.79rem}.score-chip{position:absolute;right:22px;margin-top:-27px}.form-grid,.detail dl{grid-template-columns:1fr;gap:12px}.wine-form>label{margin:14px 0}.filters input,.filters select,.wine-form input,.wine-form select,.wine-form textarea{padding:10px 11px}.experience-fields{margin:18px 0;padding:15px}.photo-source-card{padding:23px 16px}.scan-summary{display:grid;padding-top:14px}.upload-list li{align-items:flex-start;gap:12px;padding:10px}.upload-list img{width:66px;height:78px}.review{margin-top:26px;padding:16px}.wine-identity{padding:18px 14px;border-radius:var(--r-lg)}.wine-identity h1{font-size:2.15rem}.detail-section{margin-top:14px;padding:16px 14px;border-radius:var(--r-lg)}.detail-section blockquote{font-size:1.35rem}.back-pill{margin-bottom:14px;padding:8px 12px}.actions{display:grid;margin-top:18px}.actions>*{text-align:center}.mobile-nav{position:fixed;display:flex;left:0;right:0;bottom:0;height:78px;background:var(--paper);border-top:1px solid var(--line);z-index:40;align-items:center;justify-content:space-around;padding-bottom:max(8px,env(safe-area-inset-bottom))}.mobile-nav a{text-decoration:none;color:var(--ink-7);font-size:.7rem;font-weight:700;display:grid;place-items:center;gap:2px;min-width:0;flex:1}.mobile-nav a.active{color:var(--wine)}.nav-icon{font-size:1.35rem}.scan-nav{transform:translateY(-16px)}.scan-plus{width:50px;height:50px;border-radius:var(--r-md);background:var(--ink);color:var(--paper);display:grid;place-items:center;font-size:1.85rem;box-shadow:0 9px 24px #10182d2b}.scan-nav.active .scan-plus{background:var(--wine)}}
+
+
+/* Shared wines are first-class Journal entries, with a quiet visual cue instead
+   of repeating ownership text on every card. */
+.journal-shared-card{background:#f7f3fb;border-color:#d9cbe8}
+.journal-shared-card .wine-card-body{background:#f7f3fb}
+.shared-origin{display:flex;align-items:center;gap:.55rem;margin:.2rem 0 1rem;padding:.65rem .85rem;border:1px solid #ded6e7;border-radius:999px;background:#f7f3fb;color:#62556e;font-size:.86rem;width:max-content;max-width:100%}
+.detail-favorite-row .wine-sharing{display:inline-flex;align-items:center;margin:0}
+.detail-favorite-row .wine-sharing>button{min-height:2.55rem;padding:.55rem .85rem;border-radius:999px;white-space:nowrap}
+.detail-favorite-row .wine-sharing>p{display:none}
+.shared-experience-hint{margin-top:0;color:var(--muted)}
+.shared-experience label{display:grid;gap:.4rem;font-weight:600;color:var(--ink)}
+.shared-experience textarea,.shared-experience input{width:100%;box-sizing:border-box;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);font:inherit;padding:.7rem .8rem}
+.shared-experience textarea{min-height:7rem;resize:vertical}
+.shared-experience-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.8rem;margin:1rem 0}
+.shared-experience>.primary{margin-top:.25rem}
+@media(max-width:640px){
+ .shared-experience-grid{grid-template-columns:1fr}
+ .detail-favorite-row{flex-wrap:wrap}
+ .detail-favorite-row .wine-sharing>button{min-height:2.35rem;padding:.45rem .72rem}
+}
