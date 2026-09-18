@@ -17,10 +17,10 @@ export function heading(html:string,level=1){
 }
 export function elidParts(path:string){
  const match=path.match(ELID_WINE_PATH);if(!match)return null;
- return {baseElid:match[1],vintageCode:match[2]??'',elid:match[2]?`${match[1]}-${match[2]}`:match[1]};
+ return {baseElid:match[1],vintageCode:match[2]??'',elid:match[2]?`${match[1]}-${match[2]}`:null};
 }
 export function producerKeyFromName(name:string){return normalizeReferenceText(name)}
-export function validRegistryElid(value:string){return isValidElid(value)}
+export function validRegistryElid(value:string|null){return isValidElid(value)}
 
 type RobotsRule={allow:boolean;pattern:string};
 type RobotsGroup={agents:string[];rules:RobotsRule[]};

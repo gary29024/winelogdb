@@ -62,6 +62,11 @@ const sheetWineInput=z.object({
   wineStyle:z.enum(['red','white','rose','sparkling','dessert','fortified','orange','other']).nullable().optional(),
   grapes:z.array(z.string().trim().min(1).max(100)).max(20).default([]),
   price:z.number().nonnegative().max(1_000_000).nullable().optional()
+}).superRefine((value,ctx)=>{
+  if(value.vintage!=null&&value.vintageKind&&value.vintageKind!=='vintage')
+    ctx.addIssue({code:'custom',path:['vintageKind'],message:'A four-digit vintage requires vintageKind "vintage"'});
+  if(value.vintage==null&&value.vintageKind==='vintage')
+    ctx.addIssue({code:'custom',path:['vintageKind'],message:'vintageKind "vintage" requires a four-digit vintage'});
 });
 
 export const sheetWinesSchema=z.object({

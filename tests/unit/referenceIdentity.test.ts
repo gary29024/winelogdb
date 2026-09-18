@@ -1,5 +1,5 @@
 import { describe,expect,it } from 'vitest';
-import { isValidElid,normalizeLwinId,normalizeReferenceText,normalizedVintageKind,referenceWineKey,vintageReferenceCode } from '../../src/lib/wine/referenceIdentity';
+import { isValidElid,normalizeLwinId,normalizeReferenceText,normalizedVintageKind,referenceIdentityStatements,referenceWineKey,vintageReferenceCode } from '../../src/lib/wine/referenceIdentity';
 
 describe('external wine identity helpers',()=>{
  it('normalizes LWIN values read as Excel numbers',()=>{
@@ -19,6 +19,17 @@ describe('external wine identity helpers',()=>{
   expect(isValidElid('FR-CMP-KRUG01-N171')).toBe(true);
   expect(isValidElid('FR-BGN-DUJA01-2019')).toBe(true);
   expect(isValidElid('FR-BGN-made-up-2019')).toBe(false);
+ });
+ it('skips the identity D1 write when reference lookup did not complete',()=>{
+  const db={prepare:(sql:string)=>({bind:(...args:unknown[])=>({sql,args})})} as unknown as D1Database;
+  const statements=referenceIdentityStatements(db,'owner','wine',{producer:'Krug',wineName:'Grande Cuvée',vintage:null},'2026-09-18T00:00:00.000Z',false);
+  expect(statements).toHaveLength(1);
+ });
+ it('keeps a future manual external identity instead of discarding its ID',()=>{
+  const db={prepare:(sql:string)=>({bind:(...args:unknown[])=>({sql,args})})} as unknown as D1Database;
+  const statements=referenceIdentityStatements(db,'owner','wine',{producer:'Krug',wineName:'Grande Cuvée',vintage:null,identityMatchStatus:'manual',lwin7:'1234567',referenceProductKey:'lwin:1234567'},'2026-09-18T00:00:00.000Z',false) as unknown as Array<{args:unknown[]}>;
+  expect(statements).toHaveLength(2);
+  expect(statements[1].args).toContain('1234567');
  });
  it('does not confuse an unknown vintage with non-vintage',()=>{
   expect(normalizedVintageKind(null,null)).toBe('unknown');

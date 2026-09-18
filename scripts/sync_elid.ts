@@ -27,13 +27,13 @@ async function networkText(url:string,accept='text/html'){
    const body=await response.text();if(Buffer.byteLength(body)>MAX_PAGE_BYTES)throw new Error(`ELID page exceeded the crawler safety limit: ${url}`);
    return body;
   }finally{
-   if(response)await sleep(DELAY_MS);
+   await sleep(DELAY_MS);
   }
  }
  throw new Error(`ELID request failed for ${url}`);
 }
 async function robotsText(){
- if(!robotsTextPromise)robotsTextPromise=networkText(BASE+'/robots.txt','text/plain').catch(()=> '');
+ if(!robotsTextPromise)robotsTextPromise=networkText(BASE+'/robots.txt','text/plain');
  return robotsTextPromise;
 }
 async function assertRobotsAllowed(url:string){
