@@ -633,6 +633,30 @@ describe('sharing boundaries',()=>{
   expect(transform.mock.calls.length).toBe(transforms);
  });
 
+ it('queues and removes both persisted sharing objects when the source image is deleted',async()=>{
+  wines();
+  database.sql.exec(`
+   INSERT INTO wine_images(id,owner_id,wine_id,object_key,content_type,byte_size,width,height,upload_status,recognition_status,created_at)
+   VALUES('img-clean','alice','w','owners/alice/clean.jpg','image/jpeg',8,10,10,'uploaded','complete','now');
+   INSERT INTO shared_photos(image_id,owner_id,object_key,byte_size)
+   VALUES('img-clean','alice','shared/alice/img-clean.jpg',8);
+   INSERT INTO stored_objects(object_key,owner_id,byte_size,counts_toward_member_limit,updated_at)
+   VALUES('shared/alice/img-clean.jpg','alice',8,0,'now'),
+         ('shared/alice/img-clean-thumb.jpg','alice',4,0,'now');
+  `);
+  database.sql.prepare("DELETE FROM wine_images WHERE id='img-clean' AND owner_id='alice'").run();
+  expect(database.sql.prepare('SELECT object_key FROM storage_deletions ORDER BY object_key').all().map(row=>row.object_key))
+   .toEqual(['shared/alice/img-clean-thumb.jpg','shared/alice/img-clean.jpg']);
+
+  const removed:string[]=[];
+  const bucket={delete:vi.fn(async(key:string|string[])=>{for(const item of typeof key==='string'?[key]:key)removed.push(item)})} as unknown as R2Bucket;
+  const queue={send:vi.fn()} as unknown as Queue<unknown>;
+  await maintainJobs(database.db,queue,bucket);
+  expect(removed.sort()).toEqual(['shared/alice/img-clean-thumb.jpg','shared/alice/img-clean.jpg']);
+  expect(database.sql.prepare("SELECT count(*) AS n FROM stored_objects WHERE object_key LIKE 'shared/alice/img-clean%'").get()!.n).toBe(0);
+  expect(database.sql.prepare('SELECT count(*) AS n FROM storage_deletions').get()!.n).toBe(0);
+ });
+
  it('refuses a shared photo to someone the wine was never shared with',async()=>{
   wines();
   database.sql.exec("INSERT INTO wine_images(id,owner_id,wine_id,object_key,content_type,byte_size,width,height,upload_status,recognition_status,created_at) VALUES('img-1','alice','w','owners/alice/1.jpg','image/jpeg',8,10,10,'uploaded','complete','now')");
