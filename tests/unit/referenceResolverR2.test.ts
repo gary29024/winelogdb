@@ -43,15 +43,18 @@ describe('R2 wine reference resolver',()=>{
   const result=await resolveWineReference(bucket(objects()),{producer:'Krug',wineName:'Grande Cuvée',releaseDesignation:'171ème Édition',vintage:null,vintageKind:'non_vintage',country:'France',region:'Champagne',style:'sparkling'});
   expect(result).toMatchObject({identityMatchStatus:'matched',lwin7:'1234567',elid:'FR-CMP-KRUG01-N171',productSubtype:'Sparkling'});
  });
- it('follows a Combined-to-Combined redirect chain to the current Live identity',async()=>{
-  const data=objects(),shard=referenceShardId('krug'),key=`reference/lwin/versions/l1/shard-${shard}.json`;
+ it('follows Combined redirects across producer shards to the current Live identity',async()=>{
+  const data=objects(),sourceShard=referenceShardId('krug'),sourceKey=`reference/lwin/versions/l1/shard-${sourceShard}.json`;
+  const middleKey='renamed producer',middleShard=referenceShardId(middleKey),middlePath=`reference/lwin/versions/l1/shard-${middleShard}.json`;
+  const liveKey='current producer',liveShard=referenceShardId(liveKey),livePath=`reference/lwin/versions/l1/shard-${liveShard}.json`;
   const first={...lwin,productKey:'lwin:1111111',lwin7:'1111111',status:'Combined' as const,referenceLwin7:'2222222'};
-  data[key]=[first];
+  const middle={...lwin,productKey:'lwin:2222222',lwin7:'2222222',status:'Combined' as const,referenceLwin7:'1234567',producerName:'Renamed Producer',producerKey:middleKey};
+  const current={...lwin,producerName:'Current Producer',producerKey:liveKey};
+  data[sourceKey]=[first];data[middlePath]=[middle];data[livePath]=[current];
   data['reference/lwin/versions/l1/redirects.json']={
-   '1111111':{targetLwin7:'2222222',targetShard:shard},
-   '2222222':{targetLwin7:'1234567',targetShard:shard}
+   '1111111':{targetLwin7:'2222222',targetShard:middleShard},
+   '2222222':{targetLwin7:'1234567',targetShard:liveShard}
   };
-  data[key]=[first,{...lwin,productKey:'lwin:2222222',lwin7:'2222222',status:'Combined',referenceLwin7:'1234567'},lwin];
   const result=await resolveWineReference(bucket(data),{producer:'Krug',wineName:'Grande Cuvée',releaseDesignation:'171ème Édition'});
   expect(result).toMatchObject({identityMatchStatus:'matched',lwin7:'1234567'});
  });
