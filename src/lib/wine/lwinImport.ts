@@ -48,27 +48,3 @@ export function parseLwinReference(row:LwinInputRow,importedAt=new Date().toISOS
  };
 }
 
-export const sqlLiteral=(value:unknown)=>{
- if(value==null)return 'NULL';
- if(typeof value==='number')return Number.isFinite(value)?String(value):'NULL';
- return `'${String(value).replace(/'/g,"''")}'`;
-};
-
-export function lwinUpsertSql(rows:LwinReferenceProduct[]){
- if(!rows.length)return '';
- const cols=['product_key','lwin7','status','reference_lwin7','display_name','producer_title','producer_name','wine_name','producer_key','wine_key','country','country_key','region','region_key','sub_region','site','parcel','colour','colour_key','product_type','product_subtype','designation','classification','vintage_config','first_vintage','final_vintage','source_added_at','source_updated_at','imported_at'];
- const values=rows.map(r=>[
-  r.productKey,r.lwin7,r.status,r.referenceLwin7,r.displayName,r.producerTitle,r.producerName,r.wineName,r.producerKey,r.wineKey,
-  r.country,r.countryKey,r.region,r.regionKey,r.subRegion,r.site,r.parcel,r.colour,r.colourKey,r.productType,r.productSubtype,r.designation,
-  r.classification,r.vintageConfig,r.firstVintage,r.finalVintage,r.sourceAddedAt,r.sourceUpdatedAt,r.importedAt
- ].map(sqlLiteral).join(','));
- return `INSERT INTO wine_reference_products(${cols.join(',')}) VALUES\n(${values.join('),\n(')})\nON CONFLICT(product_key) DO UPDATE SET
-  lwin7=excluded.lwin7,status=excluded.status,reference_lwin7=excluded.reference_lwin7,display_name=excluded.display_name,
-  producer_title=excluded.producer_title,producer_name=excluded.producer_name,wine_name=excluded.wine_name,
-  producer_key=excluded.producer_key,wine_key=excluded.wine_key,country=excluded.country,country_key=excluded.country_key,
-  region=excluded.region,region_key=excluded.region_key,sub_region=excluded.sub_region,site=excluded.site,parcel=excluded.parcel,
-  colour=excluded.colour,colour_key=excluded.colour_key,product_type=excluded.product_type,product_subtype=excluded.product_subtype,
-  designation=excluded.designation,classification=excluded.classification,vintage_config=excluded.vintage_config,
-  first_vintage=excluded.first_vintage,final_vintage=excluded.final_vintage,source_added_at=excluded.source_added_at,
-  source_updated_at=excluded.source_updated_at,imported_at=excluded.imported_at;`;
-}
