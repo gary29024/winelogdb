@@ -15,6 +15,6 @@ CREATE TABLE IF NOT EXISTS shared_photo_attempts (
   updated_at TEXT NOT NULL
 );
 
--- Read path: "photos for this wine still owed a derivative, and due to be tried".
-CREATE INDEX IF NOT EXISTS idx_shared_photo_attempts_due
-  ON shared_photo_attempts(owner_id, retry_after);
+-- image_id is the primary key and is the lookup key on the shared-wine read
+-- path, so no secondary index is needed here. Avoid extra index maintenance on
+-- this short-lived lease table.

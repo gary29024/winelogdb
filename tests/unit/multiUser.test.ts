@@ -316,19 +316,26 @@ describe('sharing boundaries',()=>{
   expect((bucket.get as ReturnType<typeof vi.fn>).mock.calls.length).toBe(reads);
   expect(database.sql.prepare("SELECT attempts FROM shared_photo_attempts WHERE image_id='img-gone'").get()!.attempts).toBe(1);
  });
- it('lets only one concurrent view pay for a given photo derivative',async()=>{
+ it('lets only one concurrent view pay for a derivative and both first views receive the photo',async()=>{
   wines();
   database.sql.exec("INSERT INTO wine_shares(wine_id,owner_id,recipient_id) VALUES('w','alice','bob'),('w','alice','carol'); INSERT OR IGNORE INTO friendships(user_id,friend_id) VALUES('carol','alice'),('alice','carol'); INSERT INTO wine_images(id,owner_id,wine_id,object_key,content_type,byte_size,width,height,upload_status,recognition_status,created_at) VALUES('img-race','alice','w','owners/alice/original.jpg','image/jpeg',8,10,10,'uploaded','complete','now')");
   const jpeg=Uint8Array.from([255,216,255,218,0,2,255,217]);
-  const bucket={get:vi.fn(async()=>({body:new Response('original').body!})),put:vi.fn(async()=>({})),delete:vi.fn(async()=>undefined)} as unknown as R2Bucket;
+  let release!:()=>void,entered!:()=>void;
+  const gate=new Promise<void>(resolve=>{release=resolve}),started=new Promise<void>(resolve=>{entered=resolve});
+  const bucket={get:vi.fn(async()=>{entered();await gate;return {body:new Response('original').body!}}),put:vi.fn(async()=>({})),delete:vi.fn(async()=>undefined)} as unknown as R2Bucket;
   const transform=vi.fn(()=>({transform:()=>({output:()=>({response:()=>new Response(jpeg)})})}));
   const e={...env(),WINE_IMAGES:bucket,IMAGES:{input:transform} as unknown as ImagesBinding};
-  await Promise.all([
-   socialRoute(new Request('https://wine.example/api/shared/wines/w'),e,member('bob')),
-   socialRoute(new Request('https://wine.example/api/shared/wines/w'),e,member('carol'))
-  ]);
+  const first=socialRoute(new Request('https://wine.example/api/shared/wines/w'),e,member('bob'));
+  await started;
+  const second=socialRoute(new Request('https://wine.example/api/shared/wines/w'),e,member('carol'));
+  // Hold the winner long enough that, without the contention wait, the loser
+  // would complete its final photo SELECT and return an empty first render.
+  await new Promise(resolve=>setTimeout(resolve,50));release();
+  const details=await Promise.all((await Promise.all([first,second])).map(async response=>(await response!.json()) as {photos:Array<{id:string}>}));
   expect(transform.mock.calls.length).toBe(1);
   expect(database.sql.prepare("SELECT count(*) AS n FROM shared_photos WHERE image_id='img-race'").get()!.n).toBe(1);
+  expect(details[0].photos.map(photo=>photo.id)).toContain('img-race');
+  expect(details[1].photos.map(photo=>photo.id)).toContain('img-race');
  });
  it('has an explicit personal-field allowlist',()=>{expect(sharedWine({id:'w',price:10,venue:'x',latitude:1,tags_json:'["secret"]'})).not.toHaveProperty('tags')});
  it('removes JPEG metadata while preserving baseline or progressive frame markers',()=>{

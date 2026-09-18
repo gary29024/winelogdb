@@ -95,9 +95,11 @@ async function claimSharingPhoto(env:SocialEnv,owner:string,imageId:string){
  return Boolean(claimed.meta.changes);
 }
 
-async function ensureSharingPhoto(env:SocialEnv,owner:string,image:{id:string;object_key:string;attempts:number}){
- if(!env.IMAGES)return false;
- if(!await claimSharingPhoto(env,owner,image.id))return false;
+type SharingPhotoAttempt='ready'|'busy'|'failed';
+
+async function ensureSharingPhoto(env:SocialEnv,owner:string,image:{id:string;object_key:string;attempts:number}):Promise<SharingPhotoAttempt>{
+ if(!env.IMAGES)return 'failed';
+ if(!await claimSharingPhoto(env,owner,image.id))return 'busy';
  try{
   const original=await env.WINE_IMAGES.get(image.object_key);if(!original)throw new Error('Original photo is no longer stored');
   const output=await env.IMAGES.input(original.body).transform({width:1600,height:1600,fit:'scale-down'}).output({format:'image/jpeg',quality:80,anim:false});
@@ -108,13 +110,32 @@ async function ensureSharingPhoto(env:SocialEnv,owner:string,image:{id:string;ob
    env.DB.prepare('INSERT INTO shared_photos(image_id,owner_id,object_key,byte_size) VALUES(?,?,?,?) ON CONFLICT(image_id) DO UPDATE SET object_key=excluded.object_key,byte_size=excluded.byte_size,created_at=?').bind(image.id,owner,key,bytes.length,stamp()),
    env.DB.prepare('DELETE FROM shared_photo_attempts WHERE image_id=? AND owner_id=?').bind(image.id,owner)
   ]);
-  return true;
+  return 'ready';
  }catch(error){
   const message=(error as Error).message;
   await env.DB.prepare('UPDATE shared_photo_attempts SET attempts=attempts+1,error=?,retry_after=?,updated_at=? WHERE image_id=? AND owner_id=?')
    .bind(message.slice(0,300),sharingRetryAfter(image.attempts),stamp(),image.id,owner).run().catch(()=>undefined);
   console.warn(JSON.stringify({event:'sharing-photo-prepare-failed',imageId:image.id,attempts:image.attempts+1,error:message}));
-  return false;
+  return 'failed';
+ }
+}
+
+const SHARING_CONTENTION_DELAYS_MS=[100,200,400,800];
+
+/**
+ * A concurrent viewer that loses the lease should not get a misleading
+ * photo-less first render while the winner is still finishing the derivative.
+ * Poll only the contended image ids, and only for a short bounded window.
+ */
+async function waitForSharingPhotoContention(env:SocialEnv,owner:string,imageIds:string[]){
+ let pending=[...new Set(imageIds)];
+ for(const delay of SHARING_CONTENTION_DELAYS_MS){
+  if(!pending.length)return;
+  await new Promise(resolve=>setTimeout(resolve,delay));
+  const placeholders=pending.map(()=>'?').join(',');
+  const rows=(await env.DB.prepare(`SELECT image_id FROM shared_photos WHERE owner_id=? AND image_id IN (${placeholders})`).bind(owner,...pending).all<{image_id:string}>()).results;
+  const ready=new Set(rows.map(row=>row.image_id));
+  pending=pending.filter(id=>!ready.has(id));
  }
 }
 
@@ -126,7 +147,10 @@ async function ensureSharingPhotos(env:SocialEnv,owner:string,images:Array<{id:s
  }
  // Capped so one shared-wine GET cannot fan a 30-photo wine into 30 transforms.
  // Each derivative commits on its own, so the next view resumes where this left off.
- await Promise.all(images.slice(0,SHARING_MAX_PER_REQUEST).map(image=>ensureSharingPhoto(env,owner,image)));
+ const candidates=images.slice(0,SHARING_MAX_PER_REQUEST);
+ const states=await Promise.all(candidates.map(image=>ensureSharingPhoto(env,owner,image)));
+ const busy=candidates.flatMap((image,index)=>states[index]==='busy'?[image.id]:[]);
+ if(busy.length)await waitForSharingPhotoContention(env,owner,busy);
 }
 
 export const SHARED_WINES_LIST_SQL=`WITH accessible(wine_id,owner_id,shared_at) AS (
