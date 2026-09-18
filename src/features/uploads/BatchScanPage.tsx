@@ -64,7 +64,7 @@ export function BatchScanPage(){
     recoveryAttemptedSessions.current.add(next.id);recoveringSessions.current.add(next.id);setRecovering(true);
     try{
       await submitBatchSession(next.id);
-      setNotice(`Recovery queued for ${waiting} waiting wine${waiting===1?'':'s'}. WineLog is checking existing Gemini jobs now and will submit only items that are not already attached to an active job.`);
+      setNotice(`Recovery queued for ${waiting} waiting wine${waiting===1?'':'s'}. WineLog is checking existing recognition jobs now and will submit only items that are not already attached to an active job.`);
       return await getBatchSession(next.id);
     }catch(e){
       const latest=await getBatchSession(next.id).catch(()=>null);
@@ -97,7 +97,7 @@ export function BatchScanPage(){
     setUploadProgress({sessionId:created.id,uploaded:0,total:pending.length,phase:'uploading',resumable});
     const controller=new AbortController();uploadAbort.current=controller;await uploadPendingItems(created.id,pending,new Set(),pending.length,controller.signal);
     setUploadProgress(current=>current?{...current,uploaded:pending.length,phase:'queueing'}:current);await submitBatchSession(created.id);await clearPendingBatchSession(created.id).catch(()=>undefined);setUploadProgress(null);
-    setNotice(`${pending.length} wines uploaded and queued with Gemini Batch API. You can now close WineLog; recognition continues in the background.`);await refreshSession(created.id);setHistory((await listBatchSessions()).items);
+    setNotice(`${pending.length} wines uploaded and queued for background recognition. You can now close WineLog; recognition continues in the background.`);await refreshSession(created.id);setHistory((await listBatchSessions()).items);
   }catch(e){if((e as DOMException).name!=='AbortError'&&!cancelledSessions.current.has(createdId)){setError((e as Error).message);if(createdId){const staged=await getBatchSession(createdId).catch(()=>null);if(staged?.status==='uploading'){setSession(staged);await refreshPendingState(createdId)}}}}finally{uploadAbort.current=null;setSubmitting(false)}}
 
   async function resumeUpload(){if(!session||session.status!=='uploading')return;setSubmitting(true);setError('');setNotice('');try{
