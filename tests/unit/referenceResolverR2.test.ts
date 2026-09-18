@@ -68,11 +68,10 @@ describe('R2 wine reference resolver',()=>{
   const mv=await resolveWineReference(b,{producer:'Krug',wineName:'Grande Cuvée',releaseDesignation:'MV20',vintage:null,vintageKind:'multi_vintage'});
   expect(mv.elid).toBeNull();
  });
- it('can reconcile a generic producer prefix through the explicit ELID producer index',async()=>{
-  const data=objects(),index=data['reference/elid/versions/e1/producer-index.json'] as Record<string,string[]>;
-  delete index.krug;index['champagne krug']=['FR-KRUG'];
-  const changed={...lwin,producerName:'Champagne Krug',producerKey:'krug'},shard=referenceShardId('krug');
-  data[`reference/lwin/versions/l1/shard-${shard}.json`]=[changed];
+ it('can reconcile an ELID generic producer prefix through the explicit producer index',async()=>{
+  const data=objects(),elidShard=referenceShardId('FR-KRUG');
+  data['reference/elid/versions/e1/producer-index.json']={'krug':['FR-KRUG']};
+  data[`reference/elid/versions/e1/shard-${elidShard}.json`]=[{...elid,producerName:'Champagne Krug',producerKey:'champagne krug'}];
   const result=await resolveWineReference(bucket(data),{producer:'Krug',wineName:'Grande Cuvée',releaseDesignation:'171ème Édition',vintageKind:'non_vintage'});
   expect(result.elid).toBe('FR-CMP-KRUG01-N171');
  });
