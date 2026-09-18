@@ -156,19 +156,21 @@ function orderMatches(matched:AchievementWine[],selector:AchievementSelector){
  * its most recent tasting.
  */
 function vintageLinks(ordered:AchievementWine[]):AchievementVintageLink[]{
-  const best=new Map<number,string>();
-  for(const wine of ordered)if(typeof wine.vintage==='number'&&!best.has(wine.vintage))best.set(wine.vintage,wine.id);
-  return [...best.entries()].sort((a,b)=>a[0]-b[0]).map(([vintage,wineId])=>({vintage,wineId}));
+  const best=new Map<number,AchievementWine>();
+  for(const wine of ordered)if(typeof wine.vintage==='number'&&!best.has(wine.vintage))best.set(wine.vintage,wine);
+  return [...best.entries()].sort((a,b)=>a[0]-b[0]).map(([vintage,wine])=>({vintage,wineId:wine.id,...(wine.shared?{shared:true}:{})}));
 }
 
 function progressItem(definitionItem:AchievementDefinition['items'][number],indexes:IdentityIndexes,matchMode:AchievementMatchMode):AchievementItemProgress{
   const resolvedProducerId=resolveProducer(definitionItem.selector,indexes),resolvedCuveeId=resolveCuvee(definitionItem.selector,resolvedProducerId,indexes);
-  const direct=directMatches(definitionItem.selector,resolvedProducerId,resolvedCuveeId,indexes,matchMode),possible=direct.length?[]:rawPossibleMatches(definitionItem.selector,indexes,matchMode),matched=direct.length?direct:possible;
+  const direct=directMatches(definitionItem.selector,resolvedProducerId,resolvedCuveeId,indexes,matchMode);
+  const raw=direct.length?[]:rawPossibleMatches(definitionItem.selector,indexes,matchMode),sharedMatches=raw.filter(wine=>wine.shared),possible=sharedMatches.length?[]:raw;
+  const tasted=direct.length?direct:sharedMatches,matched=tasted.length?tasted:possible;
   const ordered=orderMatches(matched,definitionItem.selector);
-  const links=vintageLinks(ordered),vintages=links.map(link=>link.vintage);
+  const links=vintageLinks(ordered),vintages=links.map(link=>link.vintage),sharedIds=ordered.filter(wine=>wine.shared).map(wine=>wine.id);
   return {
-    id:definitionItem.id,label:definitionItem.label,note:definitionItem.note,status:direct.length?'tasted':possible.length?'possible':'pending',
-    tastedWineIds:ordered.map(wine=>wine.id),tastedVintages:vintages,tastedVintageLinks:links,
+    id:definitionItem.id,label:definitionItem.label,note:definitionItem.note,status:tasted.length?'tasted':possible.length?'possible':'pending',
+    tastedWineIds:ordered.map(wine=>wine.id),...(sharedIds.length?{tastedSharedWineIds:sharedIds}:{}),tastedVintages:vintages,tastedVintageLinks:links,
     ...(resolvedProducerId?{resolvedProducerId}:{}),...(resolvedCuveeId?{resolvedCuveeId}:{})
   };
 }

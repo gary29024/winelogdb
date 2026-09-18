@@ -168,6 +168,50 @@ describe('credit transactions',()=>{
   const q=await quote(request(),env(),member('alice'));await expect(reserve(request('{}',{'X-WineLog-Quote':q.id,'Idempotency-Key':'budget'}),env(),member('alice'),100)).rejects.toMatchObject({status:409});
  });
 });
+describe('shared wines as recipient journal history',()=>{
+ it('projects a shared wine into the recipient history without copying private owner fields',()=>{
+  database.sql.exec(`
+   INSERT INTO friendships(user_id,friend_id) VALUES('alice','bob'),('bob','alice');
+   INSERT INTO wines(id,owner_id,producer,wine_name,vintage,country,region,appellation,grapes_json,wine_style,tasting_notes,rating,tasting_date,venue,price,currency,created_at,updated_at)
+   VALUES('shared-history','alice','Domaine Shared','Clos Shared',2022,'France','Burgundy','Volnay','["Pinot Noir"]','red','Floral and fine',93,'2026-09-10','Private home',888,'HKD','2026-09-10T12:00:00Z','2026-09-10T12:00:00Z');
+   INSERT INTO wine_shares(wine_id,owner_id,recipient_id,created_at) VALUES('shared-history','alice','bob','2026-09-11T12:00:00Z');
+  `);
+  const visible=database.sql.prepare("SELECT id,producer,is_shared,shared_by,venue,price,currency,favorite,country FROM member_visible_wines WHERE owner_id='bob'").get()!;
+  expect(visible).toMatchObject({id:'shared-history',producer:'Domaine Shared',is_shared:1,shared_by:'alice',venue:null,price:null,currency:null,favorite:0,country:'France'});
+  const summary=database.sql.prepare("SELECT count(*) AS total_wines,sum(CASE WHEN price IS NOT NULL THEN 1 ELSE 0 END) AS priced_wines,count(DISTINCT country) AS countries FROM member_visible_wines WHERE owner_id='bob'").get()!;
+  expect(summary).toMatchObject({total_wines:1,priced_wines:0,countries:1});
+  expect(database.sql.prepare("SELECT count(*) AS n FROM wines WHERE owner_id='bob'").get()!.n).toBe(0);
+ });
+ it('lets the recipient favorite a shared journal wine without changing the source owner',async()=>{
+  database.sql.exec(`
+   INSERT INTO friendships(user_id,friend_id) VALUES('alice','bob'),('bob','alice');
+   INSERT INTO wines(id,owner_id,producer,wine_name,vintage,country,region,appellation,grapes_json,wine_style,tasting_notes,rating,tasting_date,favorite,created_at,updated_at)
+   VALUES('shared-favorite','alice','Domaine Shared','Favorite Me',2021,'France','Burgundy','Volnay','["Pinot Noir"]','red','Silky',94,'2026-09-09',0,'2026-09-09T12:00:00Z','2026-09-09T12:00:00Z');
+   INSERT INTO wine_shares(wine_id,owner_id,recipient_id,created_at) VALUES('shared-favorite','alice','bob','2026-09-10T12:00:00Z');
+  `);
+  database.sql.prepare('INSERT INTO auth_sessions VALUES(?,?,?)').run(await hash('bob-session'),'bob',seconds()+3600);
+  const e={...env(),WINE_IMAGES:{},RESEARCH_QUEUE:{send:vi.fn()},ASSETS:{fetch:vi.fn(async()=>Response.json({error:'Not found'},{status:404}))}} as unknown as Parameters<typeof publicWorker.fetch>[1];
+  const pending:Promise<unknown>[]=[],context={waitUntil:(p:Promise<unknown>)=>pending.push(p)} as unknown as ExecutionContext;
+  const call=async(favorite:boolean)=>publicWorker.fetch(new Request('https://wine.example/api/wines/shared-favorite/favorite',{
+   method:'PUT',headers:{Cookie:'__Host-winelog=bob-session',Origin:'https://wine.example','Content-Type':'application/json'},body:JSON.stringify({favorite})
+  }),e,context);
+
+  const added=await call(true);
+  expect(added.status).toBe(200);
+  expect(await added.json()).toMatchObject({id:'shared-favorite',favorite:true,changed:true});
+  expect(database.sql.prepare("SELECT favorite FROM wines WHERE owner_id='alice' AND id='shared-favorite'").get()!.favorite).toBe(0);
+  expect(database.sql.prepare("SELECT favorite FROM member_visible_wines WHERE owner_id='bob' AND id='shared-favorite'").get()!.favorite).toBe(1);
+  expect(database.sql.prepare("SELECT sum(favorite) AS favorites FROM member_visible_wines WHERE owner_id='bob'").get()!.favorites).toBe(1);
+
+  const removed=await call(false);
+  expect(removed.status).toBe(200);
+  expect(await removed.json()).toMatchObject({id:'shared-favorite',favorite:false,changed:true});
+  expect(database.sql.prepare("SELECT count(*) AS n FROM shared_wine_preferences WHERE recipient_id='bob' AND wine_id='shared-favorite'").get()!.n).toBe(0);
+  expect(database.sql.prepare("SELECT favorite FROM member_visible_wines WHERE owner_id='bob' AND id='shared-favorite'").get()!.favorite).toBe(0);
+  await Promise.all(pending);
+ });
+
+});
 describe('sharing boundaries',()=>{
  it('skips malformed or failing newer producer research and preserves private corrections',async()=>{
   database.sql.exec("INSERT INTO friendships(user_id,friend_id) VALUES('alice','bob'),('alice','carol'),('alice','owner'); INSERT INTO producers(id,owner_id,canonical_name,match_key,home_country,profile,created_at,updated_at) VALUES('p','alice','Domaine Test','domaine test','France','My corrected producer profile','now','now')");

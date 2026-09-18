@@ -74,7 +74,7 @@ app.get('/api/achievements',async c=>{
     const initialRevision=await currentOwnerRevision(c.env.DB,owner);
     const initialETag=initialRevision===null?null:revisionETag('achievements',ACHIEVEMENT_DEFINITION_VERSION,initialRevision);
     if(initialETag&&etagMatches(c.req.header('If-None-Match'),initialETag)){privateRevalidated(c,initialETag);return c.body(null,304)}
-    const {revision,progress}=await loadAchievementProgress(c.env.DB,owner,0,initialRevision);
+    const {revision,progress}=await loadAchievementProgress(c.env.DB,owner,0,initialRevision,true);
     const etag=revision===null?null:revisionETag('achievements',ACHIEVEMENT_DEFINITION_VERSION,revision);
     if(etag&&etagMatches(c.req.header('If-None-Match'),etag)){privateRevalidated(c,etag);return c.body(null,304)}
     privateRevalidated(c,etag);
@@ -88,7 +88,7 @@ app.get('/api/journey',async c=>{
     const initialRevision=await currentOwnerRevision(c.env.DB,owner);
     const initialETag=initialRevision===null?null:revisionETag('journey',JOURNEY_PAYLOAD_VERSION,initialRevision);
     if(initialETag&&etagMatches(c.req.header('If-None-Match'),initialETag)){privateRevalidated(c,initialETag);return c.body(null,304)}
-    const {revision,payload}=await loadJourneySummary(c.env.DB,owner,initialRevision);
+    const {revision,payload}=await loadJourneySummary(c.env.DB,owner,initialRevision,0,true);
     const etag=revision===null?null:revisionETag('journey',JOURNEY_PAYLOAD_VERSION,revision);
     if(etag&&etagMatches(c.req.header('If-None-Match'),etag)){privateRevalidated(c,etag);return c.body(null,304)}
     privateRevalidated(c,etag);
@@ -100,15 +100,33 @@ app.put('/api/wines/:id/favorite',async c=>{
   let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
   const parsed=favoriteUpdateSchema.safeParse(await c.req.json().catch(()=>null));
   if(!parsed.success)return c.json({error:'Favorite must be true or false',issues:parsed.error.issues},400);
-  const id=c.req.param('id'),favorite=parsed.data.favorite?1:0;
-  // One statement for a changed favorite; retries do not write or bump revisions.
+  const id=c.req.param('id'),favorite=parsed.data.favorite?1:0,now=new Date().toISOString();
+
+  // Own wines keep the existing fast path. A no-op favorite retry does not write
+  // or bump the revision used by Passport/Insights caches.
   const result=await c.env.DB.prepare('UPDATE wines SET favorite=?,updated_at=? WHERE owner_id=? AND id=? AND coalesce(favorite,0)<>?')
-    .bind(favorite,new Date().toISOString(),owner,id,favorite).run();
-  if(!result.meta.changes){
-    const exists=await c.env.DB.prepare('SELECT id FROM wines WHERE owner_id=? AND id=?').bind(owner,id).first<{id:string}>();
-    if(!exists)return c.json({error:'Wine not found'},404);
+    .bind(favorite,now,owner,id,favorite).run();
+  if(result.meta.changes)return c.json({id,favorite:parsed.data.favorite,changed:true});
+
+  const own=await c.env.DB.prepare('SELECT id FROM wines WHERE owner_id=? AND id=?').bind(owner,id).first<{id:string}>();
+  if(own)return c.json({id,favorite:parsed.data.favorite,changed:false});
+
+  // A shared favorite is the recipient's preference. It never changes the source
+  // owner's wine or exposes private source fields.
+  const shared=await c.env.DB.prepare('SELECT source_owner_id FROM member_visible_wines WHERE owner_id=? AND id=? AND is_shared=1 LIMIT 1')
+    .bind(owner,id).first<{source_owner_id:string}>();
+  if(!shared)return c.json({error:'Wine not found'},404);
+
+  if(favorite){
+    const saved=await c.env.DB.prepare(`INSERT INTO shared_wine_preferences(recipient_id,owner_id,wine_id,favorite,created_at,updated_at)
+      VALUES(?,?,?,1,?,?)
+      ON CONFLICT(recipient_id,owner_id,wine_id) DO UPDATE SET favorite=1,updated_at=excluded.updated_at
+      WHERE shared_wine_preferences.favorite<>1`).bind(owner,shared.source_owner_id,id,now,now).run();
+    return c.json({id,favorite:true,changed:Boolean(saved.meta.changes)});
   }
-  return c.json({id,favorite:parsed.data.favorite,changed:Boolean(result.meta.changes)});
+  const cleared=await c.env.DB.prepare('DELETE FROM shared_wine_preferences WHERE recipient_id=? AND owner_id=? AND wine_id=? AND favorite=1')
+    .bind(owner,shared.source_owner_id,id).run();
+  return c.json({id,favorite:false,changed:Boolean(cleared.meta.changes)});
 });
 
 // The wine row already carries producer_id and favorite, and the base handler now

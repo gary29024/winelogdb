@@ -128,3 +128,25 @@ describe('Insights for a journal that does score wines',()=>{
     expect(text(page.querySelector('.journey-stat-grid')!)).toContain('92.4');
   });
 });
+
+describe('Insights member privacy',()=>{
+  it('does not show or request AI spend for a member',async()=>{
+    vi.resetModules();
+    const fetchMock=vi.fn(async(input:RequestInfo|URL)=>{
+      const path=new URL(String(input),'https://wine.example').pathname;
+      if(path==='/api/me')return new Response(JSON.stringify({user:{id:'member',email:'member@example.com',display_name:'Member',role:'member',status:'active'}}),{status:200,headers:{'content-type':'application/json'}});
+      if(path==='/api/journey')return new Response(JSON.stringify(journal()),{status:200,headers:{'content-type':'application/json'}});
+      if(path.startsWith('/api/usage/'))throw new Error('member Insights must not request AI spend');
+      return new Response('{}',{status:404,headers:{'content-type':'application/json'}});
+    });
+    vi.stubGlobal('fetch',fetchMock);
+    const {bootstrapAccount}=await import('../../src/lib/auth/client');
+    await bootstrapAccount();
+    const {InsightsPage}=await import('../../src/features/journey/InsightsPage');
+    host=document.createElement('div');document.body.appendChild(host);root=createRoot(host);
+    await act(async()=>{root!.render(<MemoryRouter><InsightsPage/></MemoryRouter>)});
+    expect(fetchMock.mock.calls.some(call=>String(call[0]).includes('/api/usage/'))).toBe(false);
+    expect(text(host)).not.toContain('AI spend');
+  });
+});
+

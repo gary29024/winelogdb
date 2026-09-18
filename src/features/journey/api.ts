@@ -31,6 +31,9 @@ export type RecentTasting={
   tastingDate:string|null;
   createdAt:string;
   imageId:string|null;
+  imageUrl?:string|null;
+  shared?:boolean;
+  sharedBy?:string|null;
 };
 export type JourneyData={
   summary:JourneySummary;

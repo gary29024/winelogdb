@@ -3,7 +3,7 @@ import { canonicalGrapeName } from '../src/lib/wine/grapes';
 
 // Bump when the shape of the payload below changes, so caches written by an older
 // deployment are recomputed rather than served.
-export const JOURNEY_PAYLOAD_VERSION=6;
+export const JOURNEY_PAYLOAD_VERSION=7;
 
 const numberOrNull=(value:unknown)=>value==null?null:Number(value);
 const parseJson=<T>(value:unknown,fallback:T):T=>{try{return JSON.parse(String(value)) as T}catch{return fallback}};
@@ -38,10 +38,12 @@ function foldGrapes(rows:readonly Record<string,unknown>[]){
   return [...folded.values()].sort((a,b)=>b.wines-a.wines||a.grape.localeCompare(b.grape)).slice(0,GRAPE_ROWS);
 }
 
-export async function buildJourneyPayload(db:D1Database,owner:string){
+export async function buildJourneyPayload(db:D1Database,owner:string,includeShared=false){
+  const wineTable=includeShared?'member_visible_wines':'wines';
+  const producerKey=includeShared?'lower(trim(producer))':'COALESCE(producer_id,lower(trim(producer)))';
   const statements=[
     db.prepare(`SELECT COUNT(*) total_wines,
-      COUNT(DISTINCT COALESCE(producer_id,lower(trim(producer)))) producers,
+      COUNT(DISTINCT ${producerKey}) producers,
       COUNT(DISTINCT NULLIF(trim(country),'')) countries,
       COUNT(DISTINCT NULLIF(trim(region),'')) regions,
       COUNT(DISTINCT NULLIF(trim(appellation),'')) appellations,
@@ -49,7 +51,7 @@ export async function buildJourneyPayload(db:D1Database,owner:string){
       SUM(CASE WHEN favorite=1 THEN 1 ELSE 0 END) favorites,
       AVG(rating) average_rating,COUNT(rating) rated_wines,
       SUM(CASE WHEN price IS NOT NULL THEN 1 ELSE 0 END) priced_wines
-      FROM wines WHERE owner_id=?`).bind(owner),
+      FROM ${wineTable} WHERE owner_id=?`).bind(owner),
     db.prepare(`SELECT COUNT(*) structured_tastings FROM wine_tasting_structures
       WHERE owner_id=? AND structure_json<>'{}'`).bind(owner),
     // Every country, not a top slice: this list is what stamps the Passport map,
@@ -57,9 +59,9 @@ export async function buildJourneyPayload(db:D1Database,owner:string){
     // the countries past it off the map entirely. There are fewer than two
     // hundred of them in the world, so the row count is bounded by reality.
     db.prepare(`SELECT trim(country) country,COUNT(*) wines,
-      COUNT(DISTINCT COALESCE(producer_id,lower(trim(producer)))) producers,
+      COUNT(DISTINCT ${producerKey}) producers,
       COUNT(DISTINCT NULLIF(trim(appellation),'')) appellations,AVG(rating) average_rating
-      FROM wines WHERE owner_id=? AND country IS NOT NULL AND trim(country)<>''
+      FROM ${wineTable} WHERE owner_id=? AND country IS NOT NULL AND trim(country)<>''
       GROUP BY trim(country) ORDER BY wines DESC,country ASC`).bind(owner),
     // Regions stamp the map too now, so a top-20 slice is the same bug the
     // countries query had: a Margaret River with four bottles never reaches the
@@ -69,19 +71,19 @@ export async function buildJourneyPayload(db:D1Database,owner:string){
     // limit - the place tree carries 211 regions in total, and every screen
     // that shows this list slices it to five or fewer itself.
     db.prepare(`SELECT NULLIF(trim(country),'') country,trim(region) region,COUNT(*) wines,
-      COUNT(DISTINCT COALESCE(producer_id,lower(trim(producer)))) producers,
+      COUNT(DISTINCT ${producerKey}) producers,
       COUNT(DISTINCT NULLIF(trim(appellation),'')) appellations,AVG(rating) average_rating,
       SUM(CASE WHEN favorite=1 THEN 1 ELSE 0 END) favorites
-      FROM wines WHERE owner_id=? AND region IS NOT NULL AND trim(region)<>''
+      FROM ${wineTable} WHERE owner_id=? AND region IS NOT NULL AND trim(region)<>''
       GROUP BY NULLIF(trim(country),''),trim(region) ORDER BY wines DESC,region ASC LIMIT 400`).bind(owner),
     db.prepare(`SELECT NULLIF(trim(country),'') country,NULLIF(trim(region),'') region,trim(appellation) appellation,
-      COUNT(*) wines,AVG(rating) average_rating FROM wines
+      COUNT(*) wines,AVG(rating) average_rating FROM ${wineTable}
       WHERE owner_id=? AND appellation IS NOT NULL AND trim(appellation)<>''
       GROUP BY NULLIF(trim(country),''),NULLIF(trim(region),''),trim(appellation)
       ORDER BY wines DESC,appellation ASC LIMIT 24`).bind(owner),
     db.prepare(`SELECT wine_style style,COUNT(*) wines,COUNT(rating) rated_wines,AVG(rating) average_rating,
       SUM(CASE WHEN favorite=1 THEN 1 ELSE 0 END) favorites
-      FROM wines WHERE owner_id=? AND wine_style IS NOT NULL AND trim(wine_style)<>''
+      FROM ${wineTable} WHERE owner_id=? AND wine_style IS NOT NULL AND trim(wine_style)<>''
       GROUP BY wine_style ORDER BY wines DESC,style ASC`).bind(owner),
     // Producers you come back to. This used to require two *rated* wines from
     // the same producer, which returns nothing at all for a journal that rarely
@@ -89,14 +91,14 @@ export async function buildJourneyPayload(db:D1Database,owner:string){
     // ever got attached to the bottle.
     db.prepare(`SELECT MAX(producer) producer,COUNT(*) wines,COUNT(rating) rated_wines,AVG(rating) average_rating,
       SUM(CASE WHEN favorite=1 THEN 1 ELSE 0 END) favorites,
-      MAX(COALESCE(NULLIF(tasting_date,''),created_at)) last_tasted FROM wines
-      WHERE owner_id=? GROUP BY COALESCE(producer_id,lower(trim(producer)))
+      MAX(COALESCE(NULLIF(tasting_date,''),created_at)) last_tasted FROM ${wineTable}
+      WHERE owner_id=? GROUP BY ${producerKey}
       HAVING COUNT(*)>=2 ORDER BY wines DESC,last_tasted DESC,producer ASC LIMIT 10`).bind(owner),
     db.prepare(`SELECT upper(trim(currency)) currency,COUNT(*) wines,AVG(price) average_price,AVG(rating) average_rating
-      FROM wines WHERE owner_id=? AND price IS NOT NULL AND currency IS NOT NULL AND trim(currency)<>''
+      FROM ${wineTable} WHERE owner_id=? AND price IS NOT NULL AND currency IS NOT NULL AND trim(currency)<>''
       GROUP BY upper(trim(currency)) ORDER BY wines DESC,currency ASC LIMIT 8`).bind(owner),
     db.prepare(`SELECT substr(COALESCE(NULLIF(tasting_date,''),created_at),1,4) year,COUNT(*) wines,
-      COUNT(rating) rated_wines,AVG(rating) average_rating FROM wines WHERE owner_id=?
+      COUNT(rating) rated_wines,AVG(rating) average_rating FROM ${wineTable} WHERE owner_id=?
       GROUP BY substr(COALESCE(NULLIF(tasting_date,''),created_at),1,4) ORDER BY year DESC LIMIT 8`).bind(owner),
     db.prepare(`SELECT s.structure_json,w.rating FROM wine_tasting_structures s
       JOIN wines w ON w.owner_id=s.owner_id AND w.id=s.wine_id
@@ -107,14 +109,17 @@ export async function buildJourneyPayload(db:D1Database,owner:string){
     // numbers. Bounded by how many grape names a person can type.
     db.prepare(`SELECT MIN(trim(CAST(g.value AS TEXT))) grape,COUNT(DISTINCT w.id) wines,
       COUNT(DISTINCT CASE WHEN w.favorite=1 THEN w.id END) favorites
-      FROM wines w,json_each(CASE WHEN json_valid(w.grapes_json) THEN w.grapes_json ELSE '[]' END) g
+      FROM ${wineTable} w,json_each(CASE WHEN json_valid(w.grapes_json) THEN w.grapes_json ELSE '[]' END) g
       WHERE w.owner_id=? AND trim(CAST(g.value AS TEXT))<>''
       GROUP BY lower(trim(CAST(g.value AS TEXT))) ORDER BY wines DESC,grape ASC LIMIT 400`).bind(owner),
     db.prepare(`SELECT w.id,w.producer,w.wine_name,w.vintage,NULLIF(trim(w.country),'') country,
       NULLIF(trim(w.region),'') region,NULLIF(trim(w.appellation),'') appellation,w.rating,
       NULLIF(w.tasting_date,'') tasting_date,w.created_at,
-      (SELECT wi.id FROM wine_images wi WHERE wi.owner_id=w.owner_id AND wi.wine_id=w.id ORDER BY wi.created_at ASC LIMIT 1) image_id
-      FROM wines w WHERE w.owner_id=?
+      ${includeShared?'w.is_shared':'0 AS is_shared'},${includeShared?'w.shared_by':'NULL AS shared_by'},
+      ${includeShared
+        ?`CASE WHEN w.is_shared=1 THEN (SELECT p.image_id FROM shared_photos p JOIN wine_images wi ON wi.id=p.image_id AND wi.owner_id=p.owner_id WHERE wi.owner_id=w.source_owner_id AND wi.wine_id=w.id ORDER BY wi.rowid ASC LIMIT 1) ELSE (SELECT wi.id FROM wine_images wi WHERE wi.owner_id=w.owner_id AND wi.wine_id=w.id ORDER BY wi.rowid ASC LIMIT 1) END`
+        :`(SELECT wi.id FROM wine_images wi WHERE wi.owner_id=w.owner_id AND wi.wine_id=w.id ORDER BY wi.rowid ASC LIMIT 1)`} image_id
+      FROM ${wineTable} w WHERE w.owner_id=?
       ORDER BY COALESCE(NULLIF(w.tasting_date,''),w.created_at) DESC,w.created_at DESC LIMIT 4`).bind(owner),
     // Discovery: of the most recent tastings, how many were the first from that
     // producer, region or country. Ranking every wine within its own group and
@@ -122,10 +127,10 @@ export async function buildJourneyPayload(db:D1Database,owner:string){
     // journal rather than first in the window.
     db.prepare(`WITH ordered AS (
         SELECT id,COALESCE(NULLIF(tasting_date,''),created_at) sort_key,created_at,
-          COALESCE(producer_id,lower(trim(producer))) producer_key,
+          ${producerKey} producer_key,
           NULLIF(lower(trim(COALESCE(region,''))),'') region_key,
           NULLIF(lower(trim(COALESCE(country,''))),'') country_key
-        FROM wines WHERE owner_id=?
+        FROM ${wineTable} WHERE owner_id=?
       ),ranked AS (
         SELECT sort_key,created_at,id,
           ROW_NUMBER() OVER (PARTITION BY producer_key ORDER BY sort_key,created_at,id) producer_rank,
@@ -143,18 +148,18 @@ export async function buildJourneyPayload(db:D1Database,owner:string){
         SUM(CASE WHEN country_rank=1 THEN 1 ELSE 0 END) new_countries
       FROM recent`).bind(owner),
     db.prepare(`SELECT substr(COALESCE(NULLIF(tasting_date,''),created_at),1,7) month,COUNT(*) wines,
-      SUM(CASE WHEN favorite=1 THEN 1 ELSE 0 END) favorites FROM wines WHERE owner_id=?
+      SUM(CASE WHEN favorite=1 THEN 1 ELSE 0 END) favorites FROM ${wineTable} WHERE owner_id=?
       GROUP BY month ORDER BY month DESC LIMIT 18`).bind(owner),
     // Where a wine sits in a classified hierarchy, for the countries that have
     // one. Null everywhere else, so the card only appears when there is a mix.
     db.prepare(`SELECT classification,COUNT(*) wines,
-      SUM(CASE WHEN favorite=1 THEN 1 ELSE 0 END) favorites FROM wines
+      SUM(CASE WHEN favorite=1 THEN 1 ELSE 0 END) favorites FROM ${wineTable}
       WHERE owner_id=? AND classification IS NOT NULL AND trim(classification)<>''
       GROUP BY classification`).bind(owner),
     // How old a bottle is when it gets opened. Ages are bucketed in SQL so the
     // payload stays a histogram rather than one row per wine.
     db.prepare(`SELECT CAST(substr(COALESCE(NULLIF(tasting_date,''),created_at),1,4) AS INTEGER)-vintage age,
-      COUNT(*) wines FROM wines WHERE owner_id=? AND vintage IS NOT NULL AND vintage>1900
+      COUNT(*) wines FROM ${wineTable} WHERE owner_id=? AND vintage IS NOT NULL AND vintage>1900
       AND CAST(substr(COALESCE(NULLIF(tasting_date,''),created_at),1,4) AS INTEGER)>=vintage
       GROUP BY age ORDER BY age ASC`).bind(owner)
   ];
@@ -189,7 +194,9 @@ export async function buildJourneyPayload(db:D1Database,owner:string){
     recentTastings:rows<Record<string,unknown>>(11).map(row=>({
       id:String(row.id),producer:String(row.producer),wineName:String(row.wine_name),vintage:row.vintage==null?null:Number(row.vintage),
       country:row.country==null?null:String(row.country),region:row.region==null?null:String(row.region),appellation:row.appellation==null?null:String(row.appellation),
-      rating:numberOrNull(row.rating),tastingDate:row.tasting_date==null?null:String(row.tasting_date),createdAt:String(row.created_at),imageId:row.image_id==null?null:String(row.image_id)
+      rating:numberOrNull(row.rating),tastingDate:row.tasting_date==null?null:String(row.tasting_date),createdAt:String(row.created_at),imageId:row.image_id==null?null:String(row.image_id),
+      imageUrl:Number(row.is_shared)&&row.image_id!=null?`/api/shared/wines/${String(row.id)}/photos/${String(row.image_id)}`:null,
+      shared:Boolean(Number(row.is_shared)||0),sharedBy:row.shared_by==null?null:String(row.shared_by)
     }))
   };
 }
@@ -216,19 +223,19 @@ async function storeJourneyPayload(db:D1Database,owner:string,revision:number,pa
 // application landing page. Serve them from the revision-keyed cache whenever the
 // journal has not changed, and report the revision so the route can answer a
 // conditional request with 304 instead of a body.
-export async function loadJourneySummary(db:D1Database,owner:string,initialRevision?:number|null,attempt=0):Promise<{revision:number|null;payload:Record<string,unknown>}>{
+export async function loadJourneySummary(db:D1Database,owner:string,initialRevision?:number|null,attempt=0,includeShared=false):Promise<{revision:number|null;payload:Record<string,unknown>}>{
   const revision=initialRevision===undefined?await currentOwnerRevision(db,owner):initialRevision;
   if(revision!==null){
     const cached=await cachedJourneyPayload(db,owner,revision);
     if(cached)return {revision,payload:cached};
   }
-  const payload=await buildJourneyPayload(db,owner);
+  const payload=await buildJourneyPayload(db,owner,includeShared);
   // Re-read the revision: a concurrent write during the rebuild must not be cached
   // under the stale counter, or the next request would serve a payload missing it.
   const after=revision===null?null:await currentOwnerRevision(db,owner);
   // One bounded retry, carrying the revision just read - so it looks in the cache
   // at where the counter actually landed before rebuilding anything.
-  if(after!==null&&after!==revision&&attempt===0)return loadJourneySummary(db,owner,after,1);
+  if(after!==null&&after!==revision&&attempt===0)return loadJourneySummary(db,owner,after,1,includeShared);
   if(after===null||after!==revision){
     // Whoever settled that revision first has already paid for this payload.
     const settled=after===null?null:await cachedJourneyPayload(db,owner,after);
