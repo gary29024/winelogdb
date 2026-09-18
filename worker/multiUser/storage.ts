@@ -1,6 +1,6 @@
 import { ApiError,boundedBytes,settings,stamp } from './common';
 
-export function meteredBucket(bucket:R2Bucket,db:D1Database,owner:string):R2Bucket{
+export function meteredBucket(bucket:R2Bucket,db:D1Database,owner:string,options:{skipMemberLimit?:boolean}={}):R2Bucket{
  return new Proxy(bucket,{get(target,key){
   if(key==='put')return async(objectKey:string,value:ReadableStream|ArrayBuffer|ArrayBufferView|string|Blob|null,options?:R2PutOptions)=>{
    const config=await settings(db);
@@ -9,10 +9,14 @@ export function meteredBucket(bucket:R2Bucket,db:D1Database,owner:string):R2Buck
    const previous=await db.prepare('SELECT owner_id,byte_size FROM stored_objects WHERE object_key=?').bind(objectKey).first<{owner_id:string;byte_size:number}>();
    if(previous&&previous.owner_id!==owner)throw new ApiError(403,'Object belongs to another account');
    const result=await db.prepare(`INSERT INTO stored_objects(object_key,owner_id,byte_size,updated_at)
-    SELECT ?,?,?,? WHERE coalesce((SELECT byte_size FROM storage_totals WHERE owner_id=?),0)+?-coalesce((SELECT byte_size FROM stored_objects WHERE object_key=?),0)<=?
-    AND (SELECT byte_size FROM storage_totals WHERE owner_id='*')+?-coalesce((SELECT byte_size FROM stored_objects WHERE object_key=?),0)<=?
-    ON CONFLICT(object_key) DO UPDATE SET byte_size=excluded.byte_size,updated_at=excluded.updated_at`).bind(objectKey,owner,length,stamp(),owner,length,objectKey,config.memberStorageBytes,length,objectKey,config.totalStorageBytes).run();
-   if(!result.meta.changes)throw new ApiError(413,'Storage allowance reached');
+    SELECT ?,?,?,? WHERE (?=1 OR ?=0 OR coalesce((SELECT byte_size FROM storage_totals WHERE owner_id=?),0)+?-coalesce((SELECT byte_size FROM stored_objects WHERE object_key=?),0)<=?)
+    AND (?=0 OR coalesce((SELECT byte_size FROM storage_totals WHERE owner_id='*'),0)+?-coalesce((SELECT byte_size FROM stored_objects WHERE object_key=?),0)<=?)
+    ON CONFLICT(object_key) DO UPDATE SET byte_size=excluded.byte_size,updated_at=excluded.updated_at`).bind(
+      objectKey,owner,length,stamp(),
+      options.skipMemberLimit?1:0,config.memberStorageBytes,owner,length,objectKey,config.memberStorageBytes,
+      config.totalStorageBytes,length,objectKey,config.totalStorageBytes
+    ).run();
+   if(!result.meta.changes)throw new ApiError(413,'Storage limit reached');
    // On uncertain R2 failure the reservation remains conservative until inventory.
    return target.put(objectKey,bytes,options);
   };
