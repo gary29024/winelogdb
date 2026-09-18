@@ -293,6 +293,42 @@ describe('sharing boundaries',()=>{
   expect(detail.photos).toEqual([{id:'img-photo',url:'/api/shared/wines/w/photos/img-photo'}]);
   expect(database.sql.prepare("SELECT owner_id FROM shared_photos WHERE image_id='img-photo'").get()?.owner_id).toBe('alice');
   expect(database.sql.prepare("SELECT counts_toward_member_limit FROM stored_objects WHERE object_key='shared/alice/img-photo.jpg'").get()?.counts_toward_member_limit).toBe(0);
+  expect(database.sql.prepare("SELECT count(*) AS n FROM shared_photo_attempts WHERE image_id='img-photo'").get()!.n).toBe(0);
+ });
+ /**
+  * The derivative is cached per photo, so a photo that CAN be derived costs one
+  * transform ever. The cost that used to be unbounded was the photo that cannot:
+  * it was re-transformed on every friend view, and a transform is billed.
+  */
+ it('stops re-transforming a photo that cannot be derived instead of retrying on every view',async()=>{
+  wines();
+  database.sql.exec("INSERT INTO wine_shares(wine_id,owner_id,recipient_id) VALUES('w','alice','bob'); INSERT INTO wine_images(id,owner_id,wine_id,object_key,content_type,byte_size,width,height,upload_status,recognition_status,created_at) VALUES('img-gone','alice','w','owners/alice/missing.jpg','image/jpeg',8,10,10,'uploaded','complete','now')");
+  const bucket={get:vi.fn(async()=>null),put:vi.fn(async()=>({})),delete:vi.fn(async()=>undefined)} as unknown as R2Bucket;
+  const transform=vi.fn(()=>({transform:()=>({output:()=>({response:()=>new Response(Uint8Array.from([255,216,255,218,0,2,255,217]))})})}));
+  const e={...env(),WINE_IMAGES:bucket,IMAGES:{input:transform} as unknown as ImagesBinding};
+  const read=async()=>(await (await socialRoute(new Request('https://wine.example/api/shared/wines/w'),e,member('bob')))!.json()) as {photos:unknown[]};
+  expect((await read()).photos).toEqual([]);
+  const first=database.sql.prepare("SELECT attempts,error FROM shared_photo_attempts WHERE image_id='img-gone'").get()!;
+  expect(first.attempts).toBe(1);expect(String(first.error)).toContain('no longer stored');
+  const reads=(bucket.get as ReturnType<typeof vi.fn>).mock.calls.length;
+  // Two further views inside the backoff window must not touch R2 or Images again.
+  await read();await read();
+  expect((bucket.get as ReturnType<typeof vi.fn>).mock.calls.length).toBe(reads);
+  expect(database.sql.prepare("SELECT attempts FROM shared_photo_attempts WHERE image_id='img-gone'").get()!.attempts).toBe(1);
+ });
+ it('lets only one concurrent view pay for a given photo derivative',async()=>{
+  wines();
+  database.sql.exec("INSERT INTO wine_shares(wine_id,owner_id,recipient_id) VALUES('w','alice','bob'),('w','alice','carol'); INSERT OR IGNORE INTO friendships(user_id,friend_id) VALUES('carol','alice'),('alice','carol'); INSERT INTO wine_images(id,owner_id,wine_id,object_key,content_type,byte_size,width,height,upload_status,recognition_status,created_at) VALUES('img-race','alice','w','owners/alice/original.jpg','image/jpeg',8,10,10,'uploaded','complete','now')");
+  const jpeg=Uint8Array.from([255,216,255,218,0,2,255,217]);
+  const bucket={get:vi.fn(async()=>({body:new Response('original').body!})),put:vi.fn(async()=>({})),delete:vi.fn(async()=>undefined)} as unknown as R2Bucket;
+  const transform=vi.fn(()=>({transform:()=>({output:()=>({response:()=>new Response(jpeg)})})}));
+  const e={...env(),WINE_IMAGES:bucket,IMAGES:{input:transform} as unknown as ImagesBinding};
+  await Promise.all([
+   socialRoute(new Request('https://wine.example/api/shared/wines/w'),e,member('bob')),
+   socialRoute(new Request('https://wine.example/api/shared/wines/w'),e,member('carol'))
+  ]);
+  expect(transform.mock.calls.length).toBe(1);
+  expect(database.sql.prepare("SELECT count(*) AS n FROM shared_photos WHERE image_id='img-race'").get()!.n).toBe(1);
  });
  it('has an explicit personal-field allowlist',()=>{expect(sharedWine({id:'w',price:10,venue:'x',latitude:1,tags_json:'["secret"]'})).not.toHaveProperty('tags')});
  it('removes JPEG metadata while preserving baseline or progressive frame markers',()=>{
