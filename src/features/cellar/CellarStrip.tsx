@@ -1,4 +1,7 @@
 import { useEffect,useState } from 'react';
+// Rendered on the wine detail page, whose route never imported cellar.css: the
+// strip owns its rules so it cannot render unstyled wherever it is placed.
+import '../../cellar.css';
 import { Link } from 'react-router-dom';
 import { bottleLabel,holdingsForWine,type CellarHolding } from './api';
 

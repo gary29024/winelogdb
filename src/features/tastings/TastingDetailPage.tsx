@@ -11,7 +11,6 @@ import { ShareStorySheet } from '../share/ShareStorySheet';
 import type { StoryCard } from '../share/renderStoryCollage';
 import { FriendTagDialog } from '../wines/FriendTagDialog';
 import { getTastingFriendTags,listFriendTags,setTastingFriendTags,type FriendTag } from '../wines/friendTags';
-import { prepareSharingPhotos } from '../wines/sharingPhotos';
 
 const dateLabel=(value:string|null)=>{
   if(!value)return 'No date';
@@ -83,8 +82,6 @@ export function TastingDetailPage(){
     try{
       await setTastingFriendTags(id,tagSelected);
       setTagOpen(false);
-      const imageIds=[...new Set(wines.flatMap(wine=>wine.imageId?[wine.imageId]:[]))];
-      if(tagSelected.length&&imageIds.length)void prepareSharingPhotos(imageIds).catch(()=>undefined);
     }catch(e){setTagError((e as Error).message)}
     finally{setTagBusy(false)}
   }

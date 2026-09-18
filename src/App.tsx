@@ -1,6 +1,5 @@
 import { AccountPage } from './features/auth/AccountPage';
 import { AdminPage } from './features/auth/AdminPage';
-import { SharedWinesPage } from './features/wines/SharedWinesPage';
 import { lazy,Suspense,useEffect,useState,type ReactNode } from 'react';
 import { BrowserRouter,Navigate,Route,Routes,useParams,useSearchParams } from 'react-router-dom';
 import { Layout } from './components/Layout';
@@ -11,6 +10,7 @@ const LibraryPage=lazy(()=>import('./features/wines/LibraryPage').then(module=>(
 const CellarPage=lazy(()=>import('./features/cellar/CellarPage'));
 const OpenBottlePage=lazy(()=>import('./features/cellar/OpenBottlePage').then(module=>({default:module.OpenBottlePage})));
 const DetailPage=lazy(()=>import('./features/wines/DetailPage').then(module=>({default:module.DetailPage})));
+const SharedWinesPage=lazy(()=>import('./features/wines/SharedWinesPage').then(module=>({default:module.SharedWinesPage})));
 const UploadPage=lazy(()=>import('./features/uploads/UploadPage').then(module=>({default:module.UploadPage})));
 const GroupScanPage=lazy(()=>import('./features/uploads/GroupScanPage').then(module=>({default:module.GroupScanPage})));
 const BatchScanPage=lazy(()=>import('./features/uploads/BatchScanPage').then(module=>({default:module.BatchScanPage})));

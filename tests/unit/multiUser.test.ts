@@ -6,7 +6,7 @@ import { hash,seconds,stamp,type Member,type PilotSettings } from '../../worker/
 import { quote,reserve,settle,reconcileOperation,creditRead } from '../../worker/multiUser/credits';
 import { durableProvider } from '../../worker/multiUser/provider';
 import publicWorker from '../../worker/multiUserEntry';
-import { SHARED_WINES_LIST_SQL,socialRoute,stripJpegMetadata,sharedWine } from '../../worker/multiUser/social';
+import { SHARED_WINES_LIST_SQL,socialRoute,sharedWine } from '../../worker/multiUser/social';
 import { sharedSubjectKey,publishResearch } from '../../src/lib/research/shared';
 import { producerSubjectKey,reusableProducer } from '../../src/lib/research/sharedProducer';
 import { buildResearchTargets,loadResearchCache,upsertResearchCache } from '../../src/lib/research/cache';
@@ -15,7 +15,11 @@ import { deploymentAiCost } from '../../worker/multiUser/admin';
 import { flushOutbox,durableQueue,maintainJobs } from '../../worker/multiUser/jobs';
 import { meteredBucket } from '../../worker/multiUser/storage';
 import { wineSaveStatements } from '../../src/lib/db/wineSave';
+import { buildJourneyPayload } from '../../worker/journeyHandler';
+import { listJournalPage } from '../../src/lib/journal/list';
+import { sparklingDetailsSchema } from '../../src/lib/wine/sparklingDetails';
 import type { WineInput } from '../../src/lib/db/schema';
+import { thumbnailObjectKey } from '../../src/lib/r2/thumbnails';
 
 let database:ReturnType<typeof realD1>;
 const member=(id:string):Member=>({id,email:`${id}@example.com`,display_name:id,role:id==='owner'?'owner':'member',status:'active'});
@@ -177,7 +181,10 @@ describe('shared wines as recipient journal history',()=>{
    INSERT INTO wine_shares(wine_id,owner_id,recipient_id,created_at) VALUES('shared-history','alice','bob','2026-09-11T12:00:00Z');
   `);
   const visible=database.sql.prepare("SELECT id,producer,is_shared,shared_by,tasting_notes,rating,tasting_date,venue,price,currency,favorite,country FROM member_visible_wines WHERE owner_id='bob'").get()!;
-  expect(visible).toMatchObject({id:'shared-history',producer:'Domaine Shared',is_shared:1,shared_by:'alice',tasting_notes:'',rating:null,tasting_date:null,venue:null,price:null,currency:null,favorite:0,country:'France'});
+  // The drinking date crosses from 0077 on, so a shared bottle sorts and buckets
+  // by when it was drunk rather than by the instant it was received. Everything
+  // else the owner wrote about drinking it stays theirs.
+  expect(visible).toMatchObject({id:'shared-history',producer:'Domaine Shared',is_shared:1,shared_by:'alice',tasting_notes:'',rating:null,tasting_date:'2026-09-10',venue:null,price:null,currency:null,favorite:0,country:'France'});
   const summary=database.sql.prepare("SELECT count(*) AS total_wines,sum(CASE WHEN price IS NOT NULL THEN 1 ELSE 0 END) AS priced_wines,count(DISTINCT country) AS countries FROM member_visible_wines WHERE owner_id='bob'").get()!;
   expect(summary).toMatchObject({total_wines:1,priced_wines:0,countries:1});
   expect(database.sql.prepare("SELECT count(*) AS n FROM wines WHERE owner_id='bob'").get()!.n).toBe(0);
@@ -258,6 +265,195 @@ describe('shared wines as recipient journal history',()=>{
   expect(ok?.status).toBe(200);
   expect(database.sql.prepare("SELECT rating,tasting_date,currency,price FROM shared_wine_preferences WHERE recipient_id='bob' AND wine_id='shared-validated'").get())
    .toMatchObject({rating:88,tasting_date:'2026-02-28',currency:'EUR',price:42});
+ });
+
+ it('shares the wine facts the owner sees, and the research they already paid for',async()=>{
+  const deep={summary:'Forest floor and dried rose.',vintageQuality:'A cool year.',producerDetails:'Domaine notes.',
+   producerWinemakingPractices:'Whole cluster.',winemakingTechniques:'Long maceration.',terroir:'Limestone.',
+   drinkingWindow:'2026-2040',sources:[{title:'Vinous',url:'https://example.test/v'}],model:'gemini-3.7-flash',
+   researchedAt:'2026-09-01T00:00:00.000Z'};
+  database.sql.exec(`
+   INSERT INTO friendships(user_id,friend_id) VALUES('alice','bob'),('bob','alice');
+   -- Same producer, one row per account: that is what match_key bridges.
+   INSERT INTO producers(id,owner_id,canonical_name,match_key,home_country,created_at,updated_at)
+   VALUES('prod-alice','alice','Domaine Shared','domaine-shared','France','now','now'),
+         ('prod-bob','bob','Domaine Shared','domaine-shared','France','now','now');
+  `);
+  database.sql.prepare(`INSERT INTO wines(id,owner_id,producer_id,producer,wine_name,region,appellation,recognized_region,recognized_appellation,grapes_json,grape_blend_json,deep_search_json,created_at,updated_at)
+   VALUES('shared-facts','alice','prod-alice','Domaine Shared','Full Facts','Burgundy','Volnay','Bourgogne','Volnay 1er','["Pinot Noir"]',?,?,'now','now')`)
+   .run('[{"grape":"Pinot Noir","percentage":100}]',JSON.stringify(deep));
+  database.sql.exec("INSERT INTO wine_shares(wine_id,owner_id,recipient_id) VALUES('shared-facts','alice','bob')");
+  const e={...env(),WINE_IMAGES:{} as R2Bucket};
+  const detail=await (await socialRoute(new Request('https://wine.example/api/shared/wines/shared-facts'),e,member('bob')))!.json() as Record<string,unknown>;
+  expect(detail).toMatchObject({
+   recognizedRegion:'Bourgogne',recognizedAppellation:'Volnay 1er',
+   grapeBlend:[{grape:'Pinot Noir',percentage:100}]
+  });
+  expect((detail.deepSearch as {summary:string}).summary).toBe('Forest floor and dried rose.');
+  // The producer link resolves to BOB's own producer row, never alice's: ids are
+  // keyed (owner_id,id), so alice's id would 404 in bob's account.
+  expect(detail.producerId).toBe('prod-bob');
+ });
+
+ it('gives no producer link when the recipient has never logged that producer',async()=>{
+  database.sql.exec(`
+   INSERT INTO friendships(user_id,friend_id) VALUES('alice','bob'),('bob','alice');
+   INSERT INTO producers(id,owner_id,canonical_name,match_key,home_country,created_at,updated_at)
+   VALUES('prod-alice','alice','Domaine Solo','domaine-solo','France','now','now');
+   INSERT INTO wines(id,owner_id,producer_id,producer,wine_name,created_at,updated_at)
+   VALUES('shared-noprod','alice','prod-alice','Domaine Solo','Unmatched','now','now');
+   INSERT INTO wine_shares(wine_id,owner_id,recipient_id) VALUES('shared-noprod','alice','bob');
+  `);
+  const e={...env(),WINE_IMAGES:{} as R2Bucket};
+  const detail=await (await socialRoute(new Request('https://wine.example/api/shared/wines/shared-noprod'),e,member('bob')))!.json() as Record<string,unknown>;
+  expect(detail.producerId).toBeNull();
+ });
+
+ it('keeps perceived structure per viewer and validates it',async()=>{
+  database.sql.exec(`
+   INSERT INTO friendships(user_id,friend_id) VALUES('alice','bob'),('bob','alice');
+   INSERT INTO wines(id,owner_id,producer,wine_name,created_at,updated_at)
+   VALUES('shared-structure','alice','Domaine Shared','Structured','now','now');
+   INSERT INTO wine_shares(wine_id,owner_id,recipient_id) VALUES('shared-structure','alice','bob');
+   INSERT INTO wine_tasting_structures(owner_id,wine_id,structure_json,created_at,updated_at)
+   VALUES('alice','shared-structure','{"acidity":"low"}','now','now');
+  `);
+  const e={...env(),WINE_IMAGES:{} as R2Bucket};
+  const put=(payload:Record<string,unknown>)=>socialRoute(new Request('https://wine.example/api/shared/wines/shared-structure/experience',
+   {method:'PUT',body:JSON.stringify(payload)}),e,member('bob'));
+  // A scale value from the wrong axis and an unknown axis are both 400s, not a
+  // blob stored now and silently dropped when it is read back.
+  await expect(put({structure:{acidity:'pronounced'}})).rejects.toMatchObject({status:400});
+  await expect(put({structure:{sweetness:'high'}})).rejects.toMatchObject({status:400});
+  expect((await put({structure:{acidity:'high',tannin:'medium_plus'}}))?.status).toBe(200);
+  const detail=await (await socialRoute(new Request('https://wine.example/api/shared/wines/shared-structure'),e,member('bob')))!.json() as Record<string,unknown>;
+  expect(detail.structure).toMatchObject({acidity:'high',tannin:'medium_plus'});
+  // Alice's own structure is untouched and never reaches bob.
+  expect(database.sql.prepare("SELECT structure_json FROM wine_tasting_structures WHERE owner_id='alice' AND wine_id='shared-structure'").get()!.structure_json).toBe('{"acidity":"low"}');
+ });
+
+ it('publishes only the research text, never the run diagnostics',async()=>{
+  // deepSearchSchema also parses model, quality and provenance. Those answer
+  // "should I trust this run" and belong to whoever paid for it, so the shared
+  // JSON must not carry them - the page not drawing them is not a boundary.
+  const deep={summary:'Forest floor.',vintageQuality:'A cool year.',producerDetails:'Notes.',
+   producerWinemakingPractices:'Whole cluster.',winemakingTechniques:'Long maceration.',terroir:'Limestone.',
+   drinkingWindow:'2026-2040',sources:[{title:'Vinous',url:'https://example.test/v'}],
+   model:'gemini-3.7-flash',researchedAt:'2026-09-01T00:00:00.000Z',
+   quality:{status:'mixed',score:62,sourceTier:'specialist',warnings:['no-grounding-source'],scoreNote:'thin'},
+   provenance:{version:1}};
+  database.sql.exec("INSERT INTO friendships(user_id,friend_id) VALUES('alice','bob'),('bob','alice')");
+  database.sql.prepare(`INSERT INTO wines(id,owner_id,producer,wine_name,deep_search_json,created_at,updated_at)
+   VALUES('shared-deep','alice','Domaine Shared','Researched',?,'now','now')`).run(JSON.stringify(deep));
+  database.sql.exec("INSERT INTO wine_shares(wine_id,owner_id,recipient_id) VALUES('shared-deep','alice','bob')");
+  const e={...env(),WINE_IMAGES:{} as R2Bucket};
+  const detail=await (await socialRoute(new Request('https://wine.example/api/shared/wines/shared-deep'),e,member('bob')))!.json() as Record<string,unknown>;
+  const shared=detail.deepSearch as Record<string,unknown>;
+  expect(shared.summary).toBe('Forest floor.');
+  expect(shared.sources).toHaveLength(1);
+  for(const secret of ['model','quality','provenance'])
+   expect(shared,`${secret} must not cross accounts`).not.toHaveProperty(secret);
+  // Belt and braces: the serialized body must not mention them either.
+  const body=JSON.stringify(detail);
+  expect(body).not.toContain('gemini-3.7-flash');
+  expect(body).not.toContain('no-grounding-source');
+ });
+
+ it('counts the recipient\'s own structure in their journey analytics',async()=>{
+  database.sql.exec(`
+   INSERT INTO friendships(user_id,friend_id) VALUES('alice','bob'),('bob','alice');
+   INSERT INTO wines(id,owner_id,producer,wine_name,created_at,updated_at)
+   VALUES('shared-journey','alice','Domaine Shared','Analysed','now','now');
+   INSERT INTO wine_shares(wine_id,owner_id,recipient_id) VALUES('shared-journey','alice','bob');
+   -- Alice's own perception of her bottle, which must stay out of bob's numbers.
+   INSERT INTO wine_tasting_structures(owner_id,wine_id,structure_json,created_at,updated_at)
+   VALUES('alice','shared-journey','{"acidity":"low"}','now','now');
+  `);
+  const before=await buildJourneyPayload(database.db,'bob',true) as {summary:{structuredTastings:number};structures:unknown[]};
+  expect(before.summary.structuredTastings).toBe(0);
+  expect(before.structures).toHaveLength(0);
+
+  const e={...env(),WINE_IMAGES:{} as R2Bucket};
+  const saved=await socialRoute(new Request('https://wine.example/api/shared/wines/shared-journey/experience',
+   {method:'PUT',body:JSON.stringify({rating:91,structure:{acidity:'high',tannin:'medium_plus'}})}),e,member('bob'));
+  expect(saved?.status).toBe(200);
+
+  const after=await buildJourneyPayload(database.db,'bob',true) as {summary:{structuredTastings:number};structures:Array<{structure:{acidity?:string};rating:number|null}>};
+  expect(after.summary.structuredTastings).toBe(1);
+  expect(after.structures).toHaveLength(1);
+  // Bob's own axis and his own score, not alice's.
+  expect(after.structures[0].structure.acidity).toBe('high');
+  expect(after.structures[0].rating).toBe(91);
+  // Alice's page still reflects only alice's own perception.
+  const alice=await buildJourneyPayload(database.db,'alice',true) as {structures:Array<{structure:{acidity?:string}}>};
+  expect(alice.structures.map(row=>row.structure.acidity)).toEqual(['low']);
+ });
+
+ it('shares the bottle\'s release details, and nothing the schema does not cover',async()=>{
+  // Dosage, disgorgement, assemblage and the rest are facts about the bottle
+  // that was shared, not anyone's experience of it, so they travel with it.
+  const details={dosageGPerL:6,dosageCategory:'Extra Brut',disgorgement:'Spring 2024',
+   baseVintage:2018,reserveWinePercentage:35,leesAgeingMonths:48,assemblage:'60% Pinot Noir, 40% Chardonnay'};
+  database.sql.exec(`
+   INSERT INTO friendships(user_id,friend_id) VALUES('alice','bob'),('bob','alice');
+   INSERT INTO wines(id,owner_id,producer,wine_name,created_at,updated_at)
+   VALUES('shared-fizz','alice','Maison Shared','Grand Brut','now','now');
+   INSERT INTO wine_shares(wine_id,owner_id,recipient_id) VALUES('shared-fizz','alice','bob');
+  `);
+  database.sql.prepare("INSERT INTO wine_sparkling_details(owner_id,wine_id,details_json,updated_at) VALUES('alice','shared-fizz',?,'now')")
+   .run(JSON.stringify(details));
+  const e={...env(),WINE_IMAGES:{} as R2Bucket};
+  const detail=await (await socialRoute(new Request('https://wine.example/api/shared/wines/shared-fizz'),e,member('bob')))!.json() as Record<string,unknown>;
+  expect(detail.sparklingDetails).toMatchObject(details);
+
+  // The schema is the boundary, so pin it two ways. Absent optional fields stay
+  // absent rather than coming back null, so the payload is a subset of the
+  // schema's keys - and the schema's own key list is fixed here, so the day a
+  // private field is added to it this fails instead of quietly shipping it.
+  const allowed=Object.keys(sparklingDetailsSchema.shape).sort();
+  expect(allowed).toEqual([
+   'assemblage','baseVintage','disgorgement','dosageCategory','dosageGPerL','fermentationElevage',
+   'leesAgeingMonths','lotCode','malolactic','otherTechnicalDetails','reserveWineDetail','reserveWinePercentage','tirage'
+  ]);
+  expect(Object.keys(detail.sparklingDetails as object).filter(key=>!allowed.includes(key)),'nothing outside the schema crosses').toEqual([]);
+ });
+
+ it('sends no sparkling details for a wine that has none',async()=>{
+  database.sql.exec(`
+   INSERT INTO friendships(user_id,friend_id) VALUES('alice','bob'),('bob','alice');
+   INSERT INTO wines(id,owner_id,producer,wine_name,created_at,updated_at)
+   VALUES('shared-still','alice','Domaine Shared','Still Red','now','now');
+   INSERT INTO wine_shares(wine_id,owner_id,recipient_id) VALUES('shared-still','alice','bob');
+   INSERT INTO wine_sparkling_details(owner_id,wine_id,details_json,updated_at) VALUES('alice','shared-still','{}','now');
+  `);
+  const e={...env(),WINE_IMAGES:{} as R2Bucket};
+  const detail=await (await socialRoute(new Request('https://wine.example/api/shared/wines/shared-still'),e,member('bob')))!.json() as Record<string,unknown>;
+  expect(detail.sparklingDetails).toBeNull();
+ });
+
+ it('orders a bulk share by when each bottle was drunk, not when it arrived',async()=>{
+  // Sharing many wines at once gives every one of them the same shared_at. When
+  // that was the only date a recipient had, all the date keys tied and the order
+  // fell through to wine id, so a friend's journal came out shuffled.
+  database.sql.exec("INSERT INTO friendships(user_id,friend_id) VALUES('alice','bob'),('bob','alice')");
+  const wine=database.sql.prepare(`INSERT INTO wines(id,owner_id,producer,wine_name,tasting_date,created_at,updated_at)
+   VALUES(?,'alice','Domaine Shared',?,?,?,?)`);
+  const share=database.sql.prepare("INSERT INTO wine_shares(wine_id,owner_id,recipient_id,created_at) VALUES(?,'alice','bob','2026-09-18T12:00:00Z')");
+  // Ids deliberately run opposite to the drinking dates: under the old order the
+  // id tiebreak decided, so this would come back exactly backwards.
+  const bottles=[['w-a','Oldest','2026-01-05'],['w-b','Middle','2026-05-20'],['w-c','Newest','2026-09-01']];
+  for(const [id,name,date] of bottles){wine.run(id,name,date,`${date}T12:00:00Z`,`${date}T12:00:00Z`);share.run(id)}
+
+  const page=await listJournalPage(database.db,'bob',{},[],true);
+  expect(page.items.map(item=>item.wineName)).toEqual(['Newest','Middle','Oldest']);
+  expect(page.items.map(item=>item.tastingDate)).toEqual(['2026-09-01','2026-05-20','2026-01-05']);
+
+  // A recipient's own date is still theirs and still wins.
+  const e={...env(),WINE_IMAGES:{} as R2Bucket};
+  await socialRoute(new Request('https://wine.example/api/shared/wines/w-a/experience',
+   {method:'PUT',body:JSON.stringify({tastingDate:'2026-12-25'})}),e,member('bob'));
+  const after=await listJournalPage(database.db,'bob',{},[],true);
+  expect(after.items.map(item=>item.wineName)).toEqual(['Oldest','Newest','Middle']);
  });
 
  it('refuses an experience for a wine the member was never shared',async()=>{
@@ -386,69 +582,64 @@ describe('sharing boundaries',()=>{
   expect(database.sql.prepare("SELECT byte_size,metered_byte_size FROM storage_totals WHERE owner_id='owner'").get()).toMatchObject({byte_size:8,metered_byte_size:8});
   expect(database.sql.prepare("SELECT byte_size FROM storage_totals WHERE owner_id='*'").get()!.byte_size).toBe(8);
  });
- it('prepares a missing shared photo on demand for dynamically inherited access',async()=>{
+ it('lists canonical wine photos for inherited tasting shares without creating sharing copies',async()=>{
   wines();
   database.sql.exec("INSERT INTO tastings(id,owner_id,name,created_at,updated_at) VALUES('t-photo','alice','Photo tasting','now','now'); INSERT INTO wine_experiences(id,owner_id,wine_id,tasting_id,created_at,updated_at) VALUES('e-photo','alice','w','t-photo','now','now'); INSERT INTO tasting_shares(tasting_id,owner_id,recipient_id) VALUES('t-photo','alice','bob'); INSERT INTO wine_images(id,owner_id,wine_id,object_key,content_type,byte_size,width,height,upload_status,recognition_status,created_at) VALUES('img-photo','alice','w','owners/alice/original.jpg','image/jpeg',8,10,10,'uploaded','complete','now')");
-  // Include SOF2 (0xC2): Cloudflare Images may emit progressive JPEGs.
-  const jpeg=Uint8Array.from([255,216,255,194,0,2,255,218,0,2,255,217]);
-  const bucket={get:vi.fn(async(key:string)=>key==='owners/alice/original.jpg'?{body:new Response('original').body!}:null),put:vi.fn(async()=>({})),delete:vi.fn(async()=>undefined)} as unknown as R2Bucket;
-  const images={input:vi.fn(()=>({transform:()=>({output:()=>({response:()=>new Response(jpeg,{headers:{'Content-Type':'image/jpeg'}})})})}))} as unknown as ImagesBinding;
-  const detail=await (await socialRoute(new Request('https://wine.example/api/shared/wines/w'),{...env(),WINE_IMAGES:bucket,IMAGES:images},member('bob')))!.json() as {photos:Array<{id:string}>};
+  const detail=await (await socialRoute(new Request('https://wine.example/api/shared/wines/w'),{...env(),WINE_IMAGES:{} as R2Bucket},member('bob')))!.json() as {photos:Array<{id:string}>};
   expect(detail.photos).toEqual([{id:'img-photo',url:'/api/shared/wines/w/photos/img-photo'}]);
-  expect(database.sql.prepare("SELECT owner_id FROM shared_photos WHERE image_id='img-photo'").get()?.owner_id).toBe('alice');
-  expect(database.sql.prepare("SELECT counts_toward_member_limit FROM stored_objects WHERE object_key='shared/alice/img-photo.jpg'").get()?.counts_toward_member_limit).toBe(0);
-  expect(database.sql.prepare("SELECT count(*) AS n FROM shared_photo_attempts WHERE image_id='img-photo'").get()!.n).toBe(0);
+  expect(database.sql.prepare("SELECT count(*) AS n FROM shared_photos").get()!.n).toBe(0);
+  expect(database.sql.prepare("SELECT count(*) AS n FROM shared_photo_attempts").get()!.n).toBe(0);
  });
- /**
-  * The derivative is cached per photo, so a photo that CAN be derived costs one
-  * transform ever. The cost that used to be unbounded was the photo that cannot:
-  * it was re-transformed on every friend view, and a transform is billed.
-  */
- it('stops re-transforming a photo that cannot be derived instead of retrying on every view',async()=>{
+
+ it('serves the canonical permanent thumbnail to a friend without any shared R2 object',async()=>{
   wines();
-  database.sql.exec("INSERT INTO wine_shares(wine_id,owner_id,recipient_id) VALUES('w','alice','bob'); INSERT INTO wine_images(id,owner_id,wine_id,object_key,content_type,byte_size,width,height,upload_status,recognition_status,created_at) VALUES('img-gone','alice','w','owners/alice/missing.jpg','image/jpeg',8,10,10,'uploaded','complete','now')");
-  const bucket={get:vi.fn(async()=>null),put:vi.fn(async()=>({})),delete:vi.fn(async()=>undefined)} as unknown as R2Bucket;
-  const transform=vi.fn(()=>({transform:()=>({output:()=>({response:()=>new Response(Uint8Array.from([255,216,255,218,0,2,255,217]))})})}));
-  const e={...env(),WINE_IMAGES:bucket,IMAGES:{input:transform} as unknown as ImagesBinding};
-  const read=async()=>(await (await socialRoute(new Request('https://wine.example/api/shared/wines/w'),e,member('bob')))!.json()) as {photos:unknown[]};
-  expect((await read()).photos).toEqual([]);
-  const first=database.sql.prepare("SELECT attempts,error FROM shared_photo_attempts WHERE image_id='img-gone'").get()!;
-  expect(first.attempts).toBe(1);expect(String(first.error)).toContain('no longer stored');
-  const reads=(bucket.get as ReturnType<typeof vi.fn>).mock.calls.length;
-  // Two further views inside the backoff window must not touch R2 or Images again.
-  await read();await read();
-  expect((bucket.get as ReturnType<typeof vi.fn>).mock.calls.length).toBe(reads);
-  expect(database.sql.prepare("SELECT attempts FROM shared_photo_attempts WHERE image_id='img-gone'").get()!.attempts).toBe(1);
+  database.sql.exec("INSERT INTO wine_shares(wine_id,owner_id,recipient_id) VALUES('w','alice','bob'); INSERT INTO wine_images(id,owner_id,wine_id,object_key,content_type,byte_size,width,height,upload_status,recognition_status,created_at) VALUES('img-1','alice','w','owners/alice/1.jpg','image/jpeg',8,10,10,'uploaded','complete','now')");
+  const thumbKey=thumbnailObjectKey('owners/alice/1.jpg');
+  const get=vi.fn(async(key:string)=>key===thumbKey?{body:new Response('canonical-thumb').body!,httpMetadata:{contentType:'image/webp'}}:key==='owners/alice/1.jpg'?{body:new Response('original').body!,httpMetadata:{contentType:'image/jpeg'}}:null);
+  const put=vi.fn(async()=>({}));
+  const e={...env(),WINE_IMAGES:{get,put,delete:vi.fn()} as unknown as R2Bucket};
+  const response=await socialRoute(new Request('https://wine.example/api/shared/wines/w/photos/img-1?variant=thumbnail'),e,member('bob'),{waitUntil:vi.fn()});
+  expect(response?.status).toBe(200);
+  expect(get).toHaveBeenCalledWith(thumbKey);
+  expect(get.mock.calls.some(([key])=>String(key).startsWith('shared/'))).toBe(false);
+  expect(put).not.toHaveBeenCalled();
+  expect(database.sql.prepare("SELECT count(*) AS n FROM shared_photos").get()!.n).toBe(0);
  });
- it('lets only one concurrent view pay for a derivative and both first views receive the photo',async()=>{
+
+ it('serves the canonical original to a friend when full size is requested',async()=>{
   wines();
-  database.sql.exec("INSERT INTO wine_shares(wine_id,owner_id,recipient_id) VALUES('w','alice','bob'),('w','alice','carol'); INSERT OR IGNORE INTO friendships(user_id,friend_id) VALUES('carol','alice'),('alice','carol'); INSERT INTO wine_images(id,owner_id,wine_id,object_key,content_type,byte_size,width,height,upload_status,recognition_status,created_at) VALUES('img-race','alice','w','owners/alice/original.jpg','image/jpeg',8,10,10,'uploaded','complete','now')");
-  const jpeg=Uint8Array.from([255,216,255,218,0,2,255,217]);
-  let release!:()=>void,entered!:()=>void;
-  const gate=new Promise<void>(resolve=>{release=resolve}),started=new Promise<void>(resolve=>{entered=resolve});
-  const bucket={get:vi.fn(async()=>{entered();await gate;return {body:new Response('original').body!}}),put:vi.fn(async()=>({})),delete:vi.fn(async()=>undefined)} as unknown as R2Bucket;
-  const transform=vi.fn(()=>({transform:()=>({output:()=>({response:()=>new Response(jpeg)})})}));
-  const e={...env(),WINE_IMAGES:bucket,IMAGES:{input:transform} as unknown as ImagesBinding};
-  const first=socialRoute(new Request('https://wine.example/api/shared/wines/w'),e,member('bob'));
-  await started;
-  const second=socialRoute(new Request('https://wine.example/api/shared/wines/w'),e,member('carol'));
-  // Hold the winner long enough that, without the contention wait, the loser
-  // would complete its final photo SELECT and return an empty first render.
-  await new Promise(resolve=>setTimeout(resolve,50));release();
-  const details=await Promise.all((await Promise.all([first,second])).map(async response=>(await response!.json()) as {photos:Array<{id:string}>}));
-  expect(transform.mock.calls.length).toBe(1);
-  expect(database.sql.prepare("SELECT count(*) AS n FROM shared_photos WHERE image_id='img-race'").get()!.n).toBe(1);
-  expect(details[0].photos.map(photo=>photo.id)).toContain('img-race');
-  expect(details[1].photos.map(photo=>photo.id)).toContain('img-race');
+  database.sql.exec("INSERT INTO wine_shares(wine_id,owner_id,recipient_id) VALUES('w','alice','bob'); INSERT INTO wine_images(id,owner_id,wine_id,object_key,content_type,byte_size,width,height,upload_status,recognition_status,created_at) VALUES('img-original','alice','w','owners/alice/original.jpg','image/jpeg',8,10,10,'uploaded','complete','now')");
+  const get=vi.fn(async(key:string)=>key==='owners/alice/original.jpg'?{body:new Response('original').body!,httpMetadata:{contentType:'image/jpeg'}}:null);
+  const response=await socialRoute(new Request('https://wine.example/api/shared/wines/w/photos/img-original'),{...env(),WINE_IMAGES:{get,put:vi.fn(),delete:vi.fn()} as unknown as R2Bucket},member('bob'),{waitUntil:vi.fn()});
+  expect(response?.status).toBe(200);
+  expect(get).toHaveBeenCalledWith('owners/alice/original.jpg');
+  expect(get.mock.calls.some(([key])=>String(key).startsWith('shared/'))).toBe(false);
+ });
+
+ it('refuses an image from another wine owned by the same friend',async()=>{
+  wines();
+  database.sql.exec("INSERT INTO wine_shares(wine_id,owner_id,recipient_id) VALUES('w','alice','bob'); INSERT INTO wines(id,owner_id,producer,wine_name,created_at,updated_at) VALUES('other','alice','P','Other','now','now'); INSERT INTO wine_images(id,owner_id,wine_id,object_key,content_type,byte_size,width,height,upload_status,recognition_status,created_at) VALUES('other-image','alice','other','owners/alice/other.jpg','image/jpeg',8,10,10,'uploaded','complete','now')");
+  await expect(socialRoute(new Request('https://wine.example/api/shared/wines/w/photos/other-image'),{...env(),WINE_IMAGES:{} as R2Bucket},member('bob'))).rejects.toMatchObject({status:404});
+ });
+
+ it('refuses a shared photo to someone the wine was never shared with',async()=>{
+  wines();
+  database.sql.exec("INSERT INTO wine_images(id,owner_id,wine_id,object_key,content_type,byte_size,width,height,upload_status,recognition_status,created_at) VALUES('img-private','alice','w','owners/alice/private.jpg','image/jpeg',8,10,10,'uploaded','complete','now')");
+  await expect(socialRoute(new Request('https://wine.example/api/shared/wines/w/photos/img-private'),{...env(),WINE_IMAGES:{} as R2Bucket},member('carol'))).rejects.toMatchObject({status:404});
+ });
+
+ it('invalidates recipient summaries when the canonical photo set changes',()=>{
+  wines();
+  database.sql.exec("INSERT INTO wine_shares(wine_id,owner_id,recipient_id) VALUES('w','alice','bob')");
+  const before=Number(database.sql.prepare("SELECT revision FROM achievement_cache_state WHERE owner_id='bob'").get()?.revision??0);
+  database.sql.exec("INSERT INTO wine_images(id,owner_id,wine_id,object_key,content_type,byte_size,width,height,upload_status,recognition_status,created_at) VALUES('img-rev','alice','w','owners/alice/rev.jpg','image/jpeg',8,10,10,'uploaded','complete','now')");
+  const afterInsert=Number(database.sql.prepare("SELECT revision FROM achievement_cache_state WHERE owner_id='bob'").get()?.revision??0);
+  expect(afterInsert).toBeGreaterThan(before);
+  database.sql.exec("DELETE FROM wine_images WHERE id='img-rev'");
+  const afterDelete=Number(database.sql.prepare("SELECT revision FROM achievement_cache_state WHERE owner_id='bob'").get()?.revision??0);
+  expect(afterDelete).toBeGreaterThan(afterInsert);
  });
  it('has an explicit personal-field allowlist',()=>{expect(sharedWine({id:'w',price:10,venue:'x',latitude:1,tags_json:'["secret"]'})).not.toHaveProperty('tags')});
- it('removes JPEG metadata while preserving baseline or progressive frame markers',()=>{
-  const baseline=Uint8Array.from([255,216,255,225,0,5,71,80,83,255,218,0,2,255,217]);
-  expect([...stripJpegMetadata(baseline)]).toEqual([255,216,255,218,0,2,255,217]);
-  const progressive=Uint8Array.from([255,216,255,194,0,2,255,218,0,2,255,217]);
-  expect([...stripJpegMetadata(progressive)]).toEqual([...progressive]);
-  expect(()=>stripJpegMetadata(new Uint8Array([1,2,3]))).toThrow('JPEG');
- });
  it('distinguishes vintages, styles, editions and Unicode names',()=>{
   const target=(wineName:string,vintage:number|null=2020,wineStyle='red')=>buildResearchTargets({producer:'赤恋酒庄',wineName,country:'China',region:'Ningxia',vintage,wineStyle}).find(t=>t.scope==='wine_vintage')!;
   const key=sharedSubjectKey(target('山'));

@@ -52,7 +52,18 @@ export async function buildJourneyPayload(db:D1Database,owner:string,includeShar
       AVG(rating) average_rating,COUNT(rating) rated_wines,
       SUM(CASE WHEN price IS NOT NULL THEN 1 ELSE 0 END) priced_wines
       FROM ${wineTable} WHERE owner_id=?`).bind(owner),
-    db.prepare(`SELECT COUNT(*) structured_tastings FROM wine_tasting_structures
+    // A recipient's perceived structure lives in shared_wine_preferences, not in
+    // wine_tasting_structures, whose key describes a wine's owner. Counting only
+    // the latter meant a shared bottle they had structured never reached this
+    // total, while saving it still paid for a cache rebuild that could not
+    // change. The visibility join keeps a revoked share from counting.
+    includeShared
+      ? db.prepare(`SELECT
+          (SELECT COUNT(*) FROM wine_tasting_structures WHERE owner_id=? AND structure_json<>'{}')
+          +(SELECT COUNT(*) FROM shared_wine_preferences pref
+            JOIN member_visible_wines v ON v.owner_id=pref.recipient_id AND v.id=pref.wine_id AND v.is_shared=1
+            WHERE pref.recipient_id=? AND COALESCE(pref.structure_json,'{}')<>'{}') AS structured_tastings`).bind(owner,owner)
+      : db.prepare(`SELECT COUNT(*) structured_tastings FROM wine_tasting_structures
       WHERE owner_id=? AND structure_json<>'{}'`).bind(owner),
     // Every country, not a top slice: this list is what stamps the Passport map,
     // so a truncated one silently pins the country count at the limit and leaves
@@ -100,7 +111,19 @@ export async function buildJourneyPayload(db:D1Database,owner:string,includeShar
     db.prepare(`SELECT substr(COALESCE(NULLIF(tasting_date,''),created_at),1,4) year,COUNT(*) wines,
       COUNT(rating) rated_wines,AVG(rating) average_rating FROM ${wineTable} WHERE owner_id=?
       GROUP BY substr(COALESCE(NULLIF(tasting_date,''),created_at),1,4) ORDER BY year DESC LIMIT 8`).bind(owner),
-    db.prepare(`SELECT s.structure_json,w.rating FROM wine_tasting_structures s
+    // Each viewer's own structure paired with their own rating. The recipient's
+    // half reads their preference row, so the source owner's structure and score
+    // stay out of the recipient's typical-structure and rating-by-structure
+    // insights, exactly as their notes and price already do.
+    includeShared
+      ? db.prepare(`SELECT s.structure_json,w.rating FROM wine_tasting_structures s
+          JOIN wines w ON w.owner_id=s.owner_id AND w.id=s.wine_id
+          WHERE s.owner_id=? AND s.structure_json<>'{}'
+        UNION ALL
+          SELECT pref.structure_json,pref.rating FROM shared_wine_preferences pref
+          JOIN member_visible_wines v ON v.owner_id=pref.recipient_id AND v.id=pref.wine_id AND v.is_shared=1
+          WHERE pref.recipient_id=? AND COALESCE(pref.structure_json,'{}')<>'{}'`).bind(owner,owner)
+      : db.prepare(`SELECT s.structure_json,w.rating FROM wine_tasting_structures s
       JOIN wines w ON w.owner_id=s.owner_id AND w.id=s.wine_id
       WHERE s.owner_id=? AND s.structure_json<>'{}'`).bind(owner),
     // Every distinct spelling, because the folding happens above this: Pinot
@@ -117,7 +140,7 @@ export async function buildJourneyPayload(db:D1Database,owner:string,includeShar
       NULLIF(w.tasting_date,'') tasting_date,w.created_at,
       ${includeShared?'w.is_shared':'0 AS is_shared'},${includeShared?'w.shared_by':'NULL AS shared_by'},
       ${includeShared
-        ?`CASE WHEN w.is_shared=1 THEN (SELECT p.image_id FROM shared_photos p JOIN wine_images wi ON wi.id=p.image_id AND wi.owner_id=p.owner_id WHERE wi.owner_id=w.source_owner_id AND wi.wine_id=w.id ORDER BY wi.rowid ASC LIMIT 1) ELSE (SELECT wi.id FROM wine_images wi WHERE wi.owner_id=w.owner_id AND wi.wine_id=w.id ORDER BY wi.rowid ASC LIMIT 1) END`
+        ?`CASE WHEN w.is_shared=1 THEN (SELECT wi.id FROM wine_images wi WHERE wi.owner_id=w.source_owner_id AND wi.wine_id=w.id ORDER BY wi.rowid ASC LIMIT 1) ELSE (SELECT wi.id FROM wine_images wi WHERE wi.owner_id=w.owner_id AND wi.wine_id=w.id ORDER BY wi.rowid ASC LIMIT 1) END`
         :`(SELECT wi.id FROM wine_images wi WHERE wi.owner_id=w.owner_id AND wi.wine_id=w.id ORDER BY wi.rowid ASC LIMIT 1)`} image_id
       FROM ${wineTable} w WHERE w.owner_id=?
       ORDER BY COALESCE(NULLIF(w.tasting_date,''),w.created_at) DESC,w.created_at DESC LIMIT 4`).bind(owner),

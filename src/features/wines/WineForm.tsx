@@ -16,7 +16,6 @@ import { ChampagnePhotoBackfill } from './ChampagnePhotoBackfill';
 import { isChampagne,missingChampagneDetails } from '../../lib/wine/champagneExtraction';
 import { FriendTagDialog } from './FriendTagDialog';
 import { listFriendTags,type FriendTag } from './friendTags';
-import { prepareSharingPhotos } from './sharingPhotos';
 import '../../producerResolution.css';
 import '../../wineFormCompact.css';
 
@@ -279,7 +278,6 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,enable
     try{
       const result=onSave?await onSave(input):await saveWine(input,id,id?[]:photos,{preferCuveePrimaryName:canPreferPrimary&&preferCuveePrimaryName,holdingId});
       const savedId=id??('id' in result?result.id:undefined);if(!savedId)throw new Error('Save response did not include a wine ID');
-      if(allowFriendTagging&&tagSelected.length&&'imageIds' in result&&result.imageIds?.length)void prepareSharingPhotos(result.imageIds).catch(()=>undefined);
       // A save can have closed the open tasting - a wine dated another day ends
       // it server-side - so the cached answer is no longer trustworthy.
       if(!id)void refreshActiveTasting();

@@ -130,8 +130,13 @@ export async function listJournalPage(db:D1Database,owner:string,q:JournalListQu
     ?"CASE WHEN w.is_shared=1 THEN w.shared_tasting_name ELSE (SELECT t.name FROM wine_experiences we LEFT JOIN tastings t ON t.id=we.tasting_id WHERE we.wine_id=w.id AND we.owner_id=w.owner_id ORDER BY we.created_at DESC LIMIT 1) END"
     :' (SELECT t.name FROM wine_experiences we LEFT JOIN tastings t ON t.id=we.tasting_id WHERE we.wine_id=w.id AND we.owner_id=w.owner_id ORDER BY we.created_at DESC LIMIT 1)';
   const imageId=includeShared
+    // A shared card used to name its photo only once a sharing derivative
+    // existed, so a bulk share left a friend looking at letter tiles until each
+    // bottle was opened. The card now names the photo whenever the wine has one
+    // and the shared photo route builds the derivative on first fetch, which is
+    // how an owner's own thumbnails have always worked.
     ?`CASE WHEN w.is_shared=1 THEN
-        (SELECT p.image_id FROM shared_photos p JOIN wine_images wi ON wi.id=p.image_id AND wi.owner_id=p.owner_id WHERE wi.owner_id=w.source_owner_id AND wi.wine_id=w.id ORDER BY wi.rowid ASC LIMIT 1)
+        (SELECT wi.id FROM wine_images wi WHERE wi.owner_id=w.source_owner_id AND wi.wine_id=w.id ORDER BY wi.rowid ASC LIMIT 1)
        ELSE (SELECT wi.id FROM wine_images wi WHERE wi.owner_id=w.owner_id AND wi.wine_id=w.id ORDER BY wi.rowid ASC LIMIT 1) END`
     :' (SELECT wi.id FROM wine_images wi WHERE wi.owner_id=w.owner_id AND wi.wine_id=w.id ORDER BY wi.rowid ASC LIMIT 1)';
   const pageStatement=db.prepare(`SELECT w.id,w.producer,w.wine_name,w.vintage,w.country,w.region,w.appellation,w.grapes_json,w.wine_style,w.rating,w.venue,w.favorite,
@@ -160,7 +165,7 @@ export async function listJournalPage(db:D1Database,owner:string,q:JournalListQu
     rating:row.rating==null?null:Number(row.rating),
     tastingDate:row.journal_date??null,
     imageIds:row.image_id&&!row.is_shared?[row.image_id]:[],
-    imageUrl:row.image_id&&row.is_shared?`/api/shared/wines/${row.id}/photos/${row.image_id}`:null,
+    imageUrl:row.image_id&&row.is_shared?`/api/shared/wines/${row.id}/photos/${row.image_id}?variant=thumbnail`:null,
     shared:Boolean(row.is_shared),
     sharedBy:row.shared_by??null,
     createdAt:row.created_at

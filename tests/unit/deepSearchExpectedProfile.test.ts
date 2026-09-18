@@ -66,7 +66,9 @@ describe('Deep Search expected profile',()=>{
     expect(batch).toContain("finishReason==='MAX_TOKENS'");
     expect(batch).toContain('the previous answer hit the output limit');
 
-    const detail=readFileSync('src/features/wines/DetailPage.tsx','utf8');
+    // The section order moved out of DetailPage so the shared wine page renders
+    // research in the same order; it is still the order that matters here.
+    const detail=readFileSync('src/features/wines/researchSections.ts','utf8');
     const expected=detail.indexOf("['What to expect','expectedProfile'");
     const vintage=detail.indexOf("['Vintage quality','vintageQuality'");
     expect(expected).toBeGreaterThan(-1);

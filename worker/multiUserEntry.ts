@@ -41,7 +41,7 @@ export default {
     if(member.role==='owner')return json({...wallet,actionAccess:null,sponsoredAi:true});
     return json({...wallet,actionAccess:await memberAiAccess(env.DB,member.id),sponsoredAi:true});
    }
-   const direct=await creditRead(request,env,member)??await rolloutRoute(request,env,member)??await adminRoute(request,env,member)??await socialRoute(request,env,member);if(direct)return direct;
+   const direct=await creditRead(request,env,member)??await rolloutRoute(request,env,member)??await adminRoute(request,env,member)??await socialRoute(request,env,member,ctx);if(direct)return direct;
    if(path==='/api/credits/quotes'&&request.method==='POST'){
     const url=new URL(request.url),target=url.searchParams.get('path')||'';if(!target.startsWith('/api/')||target.includes('?')||!aiRoute(target,'POST'))throw new ApiError(400,'Invalid quote target');
     const original=new Request(new URL(target,env.APP_URL),request),quoted=await quote(original,env,member);

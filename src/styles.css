@@ -178,6 +178,10 @@ button:disabled{opacity:.55;cursor:default}
 .detail dl.detail-facts+.detail-experience-notes{margin-top:12px}
 .detail-experience-empty{margin:0;color:var(--ink-7);font-size:.82rem}
 .experience-panel{background:var(--ground)}.tag{margin-right:8px;color:var(--wine)}
+/* A success notice, rendered by the wine detail, producer and both scan pages.
+   It lived in producer.css, which three of those four never import, so it showed
+   up unstyled everywhere but the producer page. */
+.producer-notice{padding:12px 14px;border-radius:var(--r-md);border:1px solid var(--good-line);background:var(--good-wash);color:var(--good-ink)}
 /* The tags are adjacent spans with no whitespace between them, so the line has
    nowhere to break: six of them ran past the right edge and made the whole page
    scroll sideways. A wrapping row breaks between them and carries the gap the

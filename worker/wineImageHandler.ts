@@ -12,12 +12,15 @@ function privateImage(response:Response,cacheControl=PRIVATE_CACHE){
   return new Response(response.body,{status:response.status,headers});
 }
 
-/** One fixed variant, authenticated before even checking the internal edge cache. */
-export async function serveWineImage(request:Request,env:ImageBindings,owner:string,id:string,ctx:Pick<ExecutionContext,'waitUntil'>){
+/**
+ * Serve a wine image after the caller has already established that this exact
+ * image row is authorized. Both owner and shared-wine routes use this so they
+ * resolve to the same original and the same permanent thumbnail object in R2.
+ */
+export async function serveWineImageObject(request:Request,env:ImageBindings,owner:string,id:string,objectKey:string,ctx:Pick<ExecutionContext,'waitUntil'>){
   const variant=new URL(request.url).searchParams.get('variant');
   if(variant&&variant!=='thumbnail')return Response.json({error:'Unknown image variant'}, {status:400});
-  const row=await env.DB.prepare('SELECT object_key FROM wine_images WHERE id=? AND owner_id=?').bind(id,owner).first<{object_key:string}>();
-  if(!row)return Response.json({error:'Not found'},{status:404});
+  const row={object_key:objectKey};
   const thumbnail=variant==='thumbnail';
   // This is an internal Cache API key, never a publicly routable image URL.
   // Ownership is rechecked above even on cache hits, including after deletion.
@@ -89,4 +92,12 @@ export async function serveWineImage(request:Request,env:ImageBindings,owner:str
     }
   }
   return privateImage(new Response(original.body,{headers:{'Content-Type':original.httpMetadata?.contentType||'application/octet-stream'}}),thumbnail?FALLBACK_CACHE:PRIVATE_CACHE);
+}
+
+
+/** One fixed variant, authenticated before even checking the internal edge cache. */
+export async function serveWineImage(request:Request,env:ImageBindings,owner:string,id:string,ctx:Pick<ExecutionContext,'waitUntil'>){
+  const row=await env.DB.prepare('SELECT object_key FROM wine_images WHERE id=? AND owner_id=?').bind(id,owner).first<{object_key:string}>();
+  if(!row)return Response.json({error:'Not found'},{status:404});
+  return serveWineImageObject(request,env,owner,id,row.object_key,ctx);
 }
