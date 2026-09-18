@@ -12,6 +12,12 @@ export function normalizeReferenceText(value:string|null|undefined){
     .replace(/[’'\`]/g,'').replace(/&/g,' and ').replace(/[^\p{L}\p{N}]+/gu,' ').trim();
 }
 
+export function referenceWineKey(wineName:string|null|undefined,releaseDesignation?:string|null){
+  const base=normalizeReferenceText(wineName),release=normalizeReferenceText(releaseDesignation);
+  if(!release||base.includes(release))return base;
+  return normalizeReferenceText(`${wineName??''} ${releaseDesignation??''}`);
+}
+
 export function normalizeLwinId(value:unknown){
   if(value==null)return null;
   const text=String(value).trim();
@@ -73,7 +79,7 @@ export function referenceIdentityStatements(
         w.recognizedProducer??w.producer,w.recognizedWineName??w.wineName,w.recognizedVintageText??(w.vintage!=null?String(w.vintage):null),
         vintageKind,w.releaseDesignation??null,owner,wineId);
 
-  const producerKey=normalizeReferenceText(w.producer),wineKey=normalizeReferenceText(w.wineName);
+  const producerKey=normalizeReferenceText(w.producer),wineKey=referenceWineKey(w.wineName,w.releaseDesignation);
   const countryKey=normalizeReferenceText(w.country),regionKey=normalizeReferenceText(w.region);
   const colourKey=colourFromStyle(w.wineStyle),vintageCode=vintageReferenceCode(w.vintage,vintageKind);
   const resolution=db.prepare(`WITH candidates AS (
@@ -111,7 +117,7 @@ export function referenceIdentityStatements(
 
 
 type ReferenceResolvable={
- producer?:string|null;wineName?:string|null;vintage?:number|null;vintageKind?:VintageKind|null;
+ producer?:string|null;wineName?:string|null;vintage?:number|null;vintageKind?:VintageKind|null;releaseDesignation?:string|null;
  country?:string|null;region?:string|null;style?:string|null;wineStyle?:string|null;
 };
 type ReferenceRow={
@@ -134,7 +140,7 @@ const unmatched=():ReferenceMatch=>({
 });
 
 export async function resolveWineReference(db:D1Database,wine:ReferenceResolvable):Promise<ReferenceMatch>{
- const producerKey=normalizeReferenceText(wine.producer),wineKey=normalizeReferenceText(wine.wineName);
+ const producerKey=normalizeReferenceText(wine.producer),wineKey=referenceWineKey(wine.wineName,wine.releaseDesignation);
  if(!producerKey||!wineKey)return unmatched();
  const countryKey=normalizeReferenceText(wine.country),regionKey=normalizeReferenceText(wine.region);
  const colourKey=colourFromStyle(wine.style??wine.wineStyle),vintageCode=vintageReferenceCode(wine.vintage,wine.vintageKind);

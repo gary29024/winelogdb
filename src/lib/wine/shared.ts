@@ -41,10 +41,10 @@ export type SharedWine = SharedWineExperience&{
  producerId:string|null;
  wineName:string;
  vintage:number|null;
- vintageKind:'vintage'|'non_vintage'|'multi_vintage'|'unknown'|null;
- releaseDesignation:string|null;
- lwin7:string|null;lwin11:string|null;elid:string|null;
- colour:string|null;productType:string|null;productSubtype:string|null;
+ vintageKind?:'vintage'|'non_vintage'|'multi_vintage'|'unknown'|null;
+ releaseDesignation?:string|null;
+ lwin7?:string|null;lwin11?:string|null;elid?:string|null;
+ colour?:string|null;productType?:string|null;productSubtype?:string|null;
  country:string|null;
  region:string|null;
  appellation:string|null;
