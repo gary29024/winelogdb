@@ -17,7 +17,6 @@ import '../../favorites.css';
 import { AppIcon } from '../../components/AppIcons';
 import { FriendTagDialog } from './FriendTagDialog';
 import { listFriendTags,setBulkWineFriendTags,type FriendTag } from './friendTags';
-import { prepareSharingPhotos } from './sharingPhotos';
 
 const PAGE_SIZE=36;
 const MAX_BATCH_SELECTION=500;
@@ -176,8 +175,6 @@ export function LibraryPage(){
       setTagOpen(false);
       const wineCount=selectedWines.length,friendCount=tagSelected.length;
       setBatchNotice(`Tagged ${wineCount} wine${wineCount===1?'':'s'} with ${friendCount} friend${friendCount===1?'':'s'}.`);
-      const imageIds=[...new Set(selectedWines.flatMap(wine=>wine.imageIds))];
-      if(imageIds.length)try{await prepareSharingPhotos(imageIds)}catch{setBatchNotice(`Tagged ${wineCount} wine${wineCount===1?'':'s'}. Some photos could not be prepared for sharing, but the wine details and notes are shared.`)}
     }catch(e){setTagError((e as Error).message)}
     finally{setTagBusy(false)}
   }
