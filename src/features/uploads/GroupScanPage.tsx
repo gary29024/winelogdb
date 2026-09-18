@@ -30,7 +30,7 @@ type SourcePhoto={file:File;recognitionFile:File;metadata:PhotoMetadata;preview:
 type ReviewItem={key:string;recognition:GroupRecognitionWine|null;crop:WinePhoto|null;cropPreview:string|null;savedId:string|null;removed:boolean;manual:boolean;saved:SavedWineIdentity|null};
 type ErrorBody={error?:unknown;requestId?:unknown};
 
-function readError(value:unknown){const body=typeof value==='object'&&value!==null?value as ErrorBody:{};const message=typeof body.error==='string'?body.error:'Request failed';return typeof body.requestId==='string'?`${message} · Request ${body.requestId}`:message}
+function readError(value:unknown){const body=typeof value==='object'&&value!==null?value as ErrorBody:{};const message=typeof body.error==='string'?body.error:'Request failed';return typeof body.requestId==='string'?`${message} · Support ID ${body.requestId}`:message}
 async function readResponse(response:Response){const requestId=response.headers.get('X-WineLog-Request-Id')??undefined,text=await response.text();if(!text)return {error:`Group recognition failed (${response.status})`,requestId};try{return JSON.parse(text) as unknown}catch{return {error:text.slice(0,700),requestId}}}
 function asDataUrl(file:File){return new Promise<string>((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(String(reader.result??''));reader.onerror=()=>reject(new Error('Could not preview detected crop'));reader.readAsDataURL(file)})}
 async function alignToExistingCuvee(result:GroupRecognitionWine){
