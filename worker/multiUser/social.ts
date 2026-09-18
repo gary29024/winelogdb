@@ -2,7 +2,7 @@ import { friendRequestRoute } from './friendRequests';
 import { ApiError,body,boundedBytes,json,stamp,type IdentityEnv,type Member } from './common';
 import { similarFriendProducers } from '../../src/lib/research/similarProducers';
 import { rememberProducerAlias } from '../../src/lib/research/aliasBridge';
-import type { SharedWine } from '../../src/lib/wine/shared';
+import type { SharedDeepSearch,SharedWine } from '../../src/lib/wine/shared';
 import { deepSearchSchema } from '../../src/lib/db/schema';
 import { tastingStructureSchema,type TastingStructure } from '../../src/lib/wine/tastingStructure';
 import { meteredBucket } from './storage';
@@ -24,11 +24,7 @@ export function sharedWine(row:Record<string,unknown>):SharedWine{
   });
  }catch{/* Invalid legacy blend falls back to the plain grape names. */}
  const tier=text(row.classification),classification=tier==='grand_cru'||tier==='premier_cru'||tier==='village'?tier:null;
- let deepSearch:SharedWine['deepSearch']=null;
- try{
-  const raw=row.deep_search_json;
-  if(typeof raw==='string'&&raw){const parsed=deepSearchSchema.safeParse(JSON.parse(raw));if(parsed.success)deepSearch=parsed.data}
- }catch{/* Unparseable research is simply not shared. */}
+ const deepSearch=publishedDeepSearch(row.deep_search_json);
  return {
   id:text(row.id),ownerName:text(row.display_name),
   producer:text(row.producer),producerId:text(row.viewer_producer_id)||null,
@@ -45,6 +41,35 @@ export function sharedWine(row:Record<string,unknown>):SharedWine{
   structure:viewerStructure(row.viewer_structure_json),
   updatedAt:text(row.updated_at)
  };
+}
+
+/**
+ * The research a friend receives. Copied field by field from the validated
+ * result, never handed over whole: deepSearchSchema also parses model, quality
+ * and provenance, and this PR's rule is that those stay with the owner. Listing
+ * the fields here makes the JSON the boundary rather than the page's markup, so
+ * a new diagnostic added to the schema does not quietly cross accounts.
+ */
+export function publishedDeepSearch(raw:unknown):SharedDeepSearch|null{
+ if(typeof raw!=='string'||!raw)return null;
+ try{
+  const parsed=deepSearchSchema.safeParse(JSON.parse(raw));
+  if(!parsed.success)return null;
+  const deep=parsed.data;
+  return {
+   summary:deep.summary,
+   ...deep.expectedProfile?{expectedProfile:deep.expectedProfile}:{},
+   vintageQuality:deep.vintageQuality,
+   producerDetails:deep.producerDetails,
+   producerWinemakingPractices:deep.producerWinemakingPractices,
+   winemakingTechniques:deep.winemakingTechniques,
+   terroir:deep.terroir,
+   drinkingWindow:deep.drinkingWindow,
+   sources:deep.sources,
+   researchedAt:deep.researchedAt,
+   ...deep.oldestResearchedAt?{oldestResearchedAt:deep.oldestResearchedAt}:{}
+  };
+ }catch{/* Unparseable research is simply not shared. */return null}
 }
 
 /** The viewer's own structure, validated: a stored blob is not a contract. */

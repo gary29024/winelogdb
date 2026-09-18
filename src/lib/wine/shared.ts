@@ -1,6 +1,18 @@
 import type { DeepSearchResult } from '../db/schema';
 import type { TastingStructure } from './tastingStructure';
 
+/**
+ * The published shape of a Deep Search result: the research a friend reads, and
+ * nothing else. model, quality and provenance answer "should I trust this run"
+ * and belong to whoever paid for it and can re-run it, so they are absent from
+ * the type rather than merely unrendered - the page not drawing them is not a
+ * boundary, and the JSON is what actually crosses between accounts.
+ */
+export type SharedDeepSearch=Pick<DeepSearchResult,
+ 'summary'|'vintageQuality'|'producerDetails'|'producerWinemakingPractices'
+ |'winemakingTechniques'|'terroir'|'drinkingWindow'|'sources'|'researchedAt'>
+ &{expectedProfile?:string;oldestResearchedAt?:string};
+
 export type SharedWineExperience={
  tastingNotes:string;
  rating:number|null;
@@ -47,7 +59,7 @@ export type SharedWine = SharedWineExperience&{
   * research back rather than charging for it twice. Read-only: starting or
   * cancelling a run stays with the owner.
   */
- deepSearch:DeepSearchResult|null;
+ deepSearch:SharedDeepSearch|null;
  favorite:boolean;
  updatedAt:string;
  photos?:Array<{id:string;url:string}>;

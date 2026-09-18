@@ -10,8 +10,17 @@ export type DeepField='summary'|'expectedProfile'|'vintageQuality'|'producerDeta
 
 export const DEEP_FIELDS:DeepField[]=['summary','expectedProfile','vintageQuality','producerDetails','producerWinemakingPractices','winemakingTechniques','terroir','drinkingWindow'];
 
+/**
+ * Only the research prose, so both the owner's full DeepSearchResult and the
+ * narrower SharedDeepSearch a friend receives satisfy it. Asking for the whole
+ * result here would force the shared payload to carry diagnostics it must not.
+ */
+export type ResearchProse=Pick<DeepSearchResult,
+ 'vintageQuality'|'producerDetails'|'producerWinemakingPractices'|'winemakingTechniques'|'terroir'|'drinkingWindow'>
+ &{expectedProfile?:string};
+
 /** Section order is the reading order on both pages; summary renders above these. */
-export function researchSections(deep:DeepSearchResult|null|undefined):Array<[string,DeepField,string]>{
+export function researchSections(deep:ResearchProse|null|undefined):Array<[string,DeepField,string]>{
  if(!deep)return [];
  return ([
   ['What to expect','expectedProfile',deep.expectedProfile??''],

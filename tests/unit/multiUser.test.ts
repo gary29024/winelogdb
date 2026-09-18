@@ -15,6 +15,7 @@ import { deploymentAiCost } from '../../worker/multiUser/admin';
 import { flushOutbox,durableQueue,maintainJobs } from '../../worker/multiUser/jobs';
 import { meteredBucket } from '../../worker/multiUser/storage';
 import { wineSaveStatements } from '../../src/lib/db/wineSave';
+import { buildJourneyPayload } from '../../worker/journeyHandler';
 import type { WineInput } from '../../src/lib/db/schema';
 
 let database:ReturnType<typeof realD1>;
@@ -323,6 +324,63 @@ describe('shared wines as recipient journal history',()=>{
   expect(detail.structure).toMatchObject({acidity:'high',tannin:'medium_plus'});
   // Alice's own structure is untouched and never reaches bob.
   expect(database.sql.prepare("SELECT structure_json FROM wine_tasting_structures WHERE owner_id='alice' AND wine_id='shared-structure'").get()!.structure_json).toBe('{"acidity":"low"}');
+ });
+
+ it('publishes only the research text, never the run diagnostics',async()=>{
+  // deepSearchSchema also parses model, quality and provenance. Those answer
+  // "should I trust this run" and belong to whoever paid for it, so the shared
+  // JSON must not carry them - the page not drawing them is not a boundary.
+  const deep={summary:'Forest floor.',vintageQuality:'A cool year.',producerDetails:'Notes.',
+   producerWinemakingPractices:'Whole cluster.',winemakingTechniques:'Long maceration.',terroir:'Limestone.',
+   drinkingWindow:'2026-2040',sources:[{title:'Vinous',url:'https://example.test/v'}],
+   model:'gemini-3.7-flash',researchedAt:'2026-09-01T00:00:00.000Z',
+   quality:{status:'mixed',score:62,sourceTier:'specialist',warnings:['no-grounding-source'],scoreNote:'thin'},
+   provenance:{version:1}};
+  database.sql.exec("INSERT INTO friendships(user_id,friend_id) VALUES('alice','bob'),('bob','alice')");
+  database.sql.prepare(`INSERT INTO wines(id,owner_id,producer,wine_name,deep_search_json,created_at,updated_at)
+   VALUES('shared-deep','alice','Domaine Shared','Researched',?,'now','now')`).run(JSON.stringify(deep));
+  database.sql.exec("INSERT INTO wine_shares(wine_id,owner_id,recipient_id) VALUES('shared-deep','alice','bob')");
+  const e={...env(),WINE_IMAGES:{} as R2Bucket};
+  const detail=await (await socialRoute(new Request('https://wine.example/api/shared/wines/shared-deep'),e,member('bob')))!.json() as Record<string,unknown>;
+  const shared=detail.deepSearch as Record<string,unknown>;
+  expect(shared.summary).toBe('Forest floor.');
+  expect(shared.sources).toHaveLength(1);
+  for(const secret of ['model','quality','provenance'])
+   expect(shared,`${secret} must not cross accounts`).not.toHaveProperty(secret);
+  // Belt and braces: the serialized body must not mention them either.
+  const body=JSON.stringify(detail);
+  expect(body).not.toContain('gemini-3.7-flash');
+  expect(body).not.toContain('no-grounding-source');
+ });
+
+ it('counts the recipient\'s own structure in their journey analytics',async()=>{
+  database.sql.exec(`
+   INSERT INTO friendships(user_id,friend_id) VALUES('alice','bob'),('bob','alice');
+   INSERT INTO wines(id,owner_id,producer,wine_name,created_at,updated_at)
+   VALUES('shared-journey','alice','Domaine Shared','Analysed','now','now');
+   INSERT INTO wine_shares(wine_id,owner_id,recipient_id) VALUES('shared-journey','alice','bob');
+   -- Alice's own perception of her bottle, which must stay out of bob's numbers.
+   INSERT INTO wine_tasting_structures(owner_id,wine_id,structure_json,created_at,updated_at)
+   VALUES('alice','shared-journey','{"acidity":"low"}','now','now');
+  `);
+  const before=await buildJourneyPayload(database.db,'bob',true) as {summary:{structuredTastings:number};structures:unknown[]};
+  expect(before.summary.structuredTastings).toBe(0);
+  expect(before.structures).toHaveLength(0);
+
+  const e={...env(),WINE_IMAGES:{} as R2Bucket};
+  const saved=await socialRoute(new Request('https://wine.example/api/shared/wines/shared-journey/experience',
+   {method:'PUT',body:JSON.stringify({rating:91,structure:{acidity:'high',tannin:'medium_plus'}})}),e,member('bob'));
+  expect(saved?.status).toBe(200);
+
+  const after=await buildJourneyPayload(database.db,'bob',true) as {summary:{structuredTastings:number};structures:Array<{structure:{acidity?:string};rating:number|null}>};
+  expect(after.summary.structuredTastings).toBe(1);
+  expect(after.structures).toHaveLength(1);
+  // Bob's own axis and his own score, not alice's.
+  expect(after.structures[0].structure.acidity).toBe('high');
+  expect(after.structures[0].rating).toBe(91);
+  // Alice's page still reflects only alice's own perception.
+  const alice=await buildJourneyPayload(database.db,'alice',true) as {structures:Array<{structure:{acidity?:string}}>};
+  expect(alice.structures.map(row=>row.structure.acidity)).toEqual(['low']);
  });
 
  it('refuses an experience for a wine the member was never shared',async()=>{
