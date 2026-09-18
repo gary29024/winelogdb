@@ -6,14 +6,14 @@ import type { CatalogCuveeSummary,CuveeCatalogLink } from '../../lib/cuvees/cata
 import type { CatalogDecision,CatalogDecisionKind } from '../../lib/producers/catalogDecisions';
 import { matchCuveeReleaseVariantToCatalog } from '../../lib/cuvees/releaseVariants';
 
-export type ProducerSummary={id:string;canonicalName:string;homeCountry:string|null;homeRegion:string|null;homeLocality:string|null;tastedCount:number;catalogCount:number;researchedAt:string|null};
-export type TastedWine={id:string;wineName:string;vintage:number|null;appellation:string|null;region:string|null;country:string|null;wineStyle:string|null;grapes:string[];imageId:string|null;tastingDate:string|null;rating:number|null;cuveeId:string|null;catalogCuveeId:string|null;releaseParentCuveeId?:string|null;releaseParentName?:string|null;releaseDesignation?:string|null;releaseSequence?:number|null};
+export type ProducerSummary={id:string;canonicalName:string;homeCountry:string|null;homeRegion:string|null;homeLocality:string|null;tastedCount:number;catalogCount:number;researchedAt:string|null;sharedOnly?:boolean};
+export type TastedWine={id:string;wineName:string;vintage:number|null;appellation:string|null;region:string|null;country:string|null;wineStyle:string|null;grapes:string[];imageId:string|null;imageUrl?:string|null;tastingDate:string|null;rating:number|null;cuveeId:string|null;catalogCuveeId:string|null;shared?:boolean;releaseParentCuveeId?:string|null;releaseParentName?:string|null;releaseDesignation?:string|null;releaseSequence?:number|null};
 export type LinkedProducer={mergeId:string;producerId:string;name:string;mergedAt:string};
 export type ManualProducerContactType='email'|'phone'|'website'|'instagram'|'other';
 export type ManualProducerContact={id:string;type:ManualProducerContactType;label:string|null;value:string;note:string|null;createdAt:string;updatedAt:string};
 export type ManualProducerContactInput={type:ManualProducerContactType;label?:string;value:string;note?:string;official?:boolean;confirmation?:'CONFIRM_OFFICIAL_CONTACT'};
 export type ProducerCatalogCuvee=CatalogCuveeSummary&{tastedReleases?:string[]};
-export type ProducerDetail=ProducerEntity&{aliases:string[];tastedWines:TastedWine[];researchHistoryCount:number;linkedProducers:LinkedProducer[];catalogCuvees:ProducerCatalogCuvee[];cuveeCatalogLinks:CuveeCatalogLink[];supplementaryContacts:ManualProducerContact[];catalogDecisions:CatalogDecision[]};
+export type ProducerDetail=ProducerEntity&{sharedOnly?:boolean;aliases:string[];tastedWines:TastedWine[];researchHistoryCount:number;linkedProducers:LinkedProducer[];catalogCuvees:ProducerCatalogCuvee[];cuveeCatalogLinks:CuveeCatalogLink[];supplementaryContacts:ManualProducerContact[];catalogDecisions:CatalogDecision[]};
 /** A house whose name contains, or is contained by, the one read off the label. Proposed, never applied. */
 export type ProducerSuggestion={id:string;canonicalName:string;tastedCount:number};
 export type ProducerResolution={matched:boolean;inputName:string;suggestion?:ProducerSuggestion;producer?:{id:string;canonicalName:string;matchedName:string;matchType:'canonical'|'alias'|'normalized';researchedAt:string|null;catalogCount:number;tastedCount:number}};

@@ -1,5 +1,5 @@
 import { FriendResearchStatus } from '../auth/FriendResearchStatus';
-import { accountStorageKey,getAccount } from '../../lib/auth/client';
+import { getAccount } from '../../lib/auth/client';
 import { WineSharing } from './WineSharing';
 import { SparklingDetailsCard } from './SparklingDetailsCard';
 import { isChampagne } from '../../lib/wine/champagneExtraction';
@@ -17,7 +17,7 @@ import { backTargetFromState,JOURNAL_BACK,readBackTarget,rememberBackTarget } fr
 import { GroupSourceImage } from '../uploads/GroupSourceImage';
 import { structureValueLabel } from '../../lib/wine/tastingStructure';
 import { DeepSources,ResearchText } from './ResearchPresentation';
-import { DEEP_FIELDS,researchSections,type DeepField } from './researchSections';
+import { readOpenDeepFields,researchSections,type DeepField,writeOpenDeepFields } from './researchSections';
 import { experienceRows as buildExperienceRows } from '../../lib/wine/detailFields';
 import { FactList,WineDetailsSection,WineFactPills } from './WineFacts';
 import { isResearchStale } from '../../lib/research/freshness';
@@ -33,16 +33,6 @@ import { ElapsedSeconds } from '../../components/ElapsedSeconds';
 type DeepState='idle'|'confirm-usage'|'running'|'error';
 const deepStage:Record<WineResearchRun['stage'],string>={queued:'Queued for background research',researching:'Researching in the background',saving:'Saving Deep Search result',complete:'Research complete',failed:'Research failed'};
 const claimStatusLabel={supported:'Direct support',partial:'Partial support',unsupported:'No direct citation',uncertainty:'Explicit uncertainty',conflicting:'Conflicting sources'} as const;
-const DEEP_OPEN_FIELDS_KEY='winelog.deepSearch.openFields';
-function readOpenDeepFields():Set<DeepField>{
- try{
-  const raw=window.localStorage.getItem(accountStorageKey(DEEP_OPEN_FIELDS_KEY));if(!raw)return new Set();
-  const parsed=JSON.parse(raw) as unknown;
-  return new Set(Array.isArray(parsed)?parsed.filter((x):x is DeepField=>DEEP_FIELDS.includes(x as DeepField)):[]);
- }catch{return new Set()}
-}
-function writeOpenDeepFields(next:Set<DeepField>){try{window.localStorage.setItem(accountStorageKey(DEEP_OPEN_FIELDS_KEY),JSON.stringify([...next]))}catch{/* storage unavailable */}}
-
 function wineSearcherUrl(producer:string,wineName:string,vintage:number|null|undefined){const query=[producer,wineName,vintage!=null?String(vintage):''].map(x=>String(x).trim()).filter(Boolean).join(' ');return `https://www.wine-searcher.com/find/${encodeURIComponent(query).replace(/%20/g,'+')}`}
 const qualityWarningLabel:Record<string,string>={
  'missing-field':'a research field came back empty',

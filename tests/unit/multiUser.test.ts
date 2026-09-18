@@ -295,7 +295,7 @@ describe('shared wines as recipient journal history',()=>{
   expect(detail.producerId).toBe('prod-bob');
  });
 
- it('gives no producer link when the recipient has never logged that producer',async()=>{
+ it('links to the read-only shared producer when the recipient has never logged that producer',async()=>{
   database.sql.exec(`
    INSERT INTO friendships(user_id,friend_id) VALUES('alice','bob'),('bob','alice');
    INSERT INTO producers(id,owner_id,canonical_name,match_key,home_country,created_at,updated_at)
@@ -306,7 +306,7 @@ describe('shared wines as recipient journal history',()=>{
   `);
   const e={...env(),WINE_IMAGES:{} as R2Bucket};
   const detail=await (await socialRoute(new Request('https://wine.example/api/shared/wines/shared-noprod'),e,member('bob')))!.json() as Record<string,unknown>;
-  expect(detail.producerId).toBeNull();
+  expect(detail.producerId).toBe('shared::alice::prod-alice');
  });
 
  it('keeps perceived structure per viewer and validates it',async()=>{
@@ -640,6 +640,10 @@ describe('sharing boundaries',()=>{
   expect(afterDelete).toBeGreaterThan(afterInsert);
  });
  it('has an explicit personal-field allowlist',()=>{expect(sharedWine({id:'w',price:10,venue:'x',latitude:1,tags_json:'["secret"]'})).not.toHaveProperty('tags')});
+ it('links a shared wine to the viewer producer when present and otherwise to a read-only shared producer',()=>{
+  expect(sharedWine({id:'w',producer:'Domaine',owner_id:'alice',producer_id:'source-p',viewer_producer_id:'viewer-p'}).producerId).toBe('viewer-p');
+  expect(sharedWine({id:'w',producer:'Domaine',owner_id:'alice',producer_id:'source-p'}).producerId).toBe('shared::alice::source-p');
+ });
  it('distinguishes vintages, styles, editions and Unicode names',()=>{
   const target=(wineName:string,vintage:number|null=2020,wineStyle='red')=>buildResearchTargets({producer:'赤恋酒庄',wineName,country:'China',region:'Ningxia',vintage,wineStyle}).find(t=>t.scope==='wine_vintage')!;
   const key=sharedSubjectKey(target('山'));

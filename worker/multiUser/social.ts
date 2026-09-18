@@ -7,6 +7,7 @@ import { deepSearchSchema } from '../../src/lib/db/schema';
 import { tastingStructureSchema,type TastingStructure } from '../../src/lib/wine/tastingStructure';
 import { hasSparklingDetails,sparklingDetailsSchema,type SparklingDetails } from '../../src/lib/wine/sparklingDetails';
 import { serveWineImageObject } from '../wineImageHandler';
+import { sharedProducerId } from '../../src/lib/producers/sharedRef';
 
 // Explicit allowlist: never serialize the private WineRecord into a shared response.
 export function sharedWine(row:Record<string,unknown>):SharedWine{
@@ -28,7 +29,7 @@ export function sharedWine(row:Record<string,unknown>):SharedWine{
  const deepSearch=publishedDeepSearch(row.deep_search_json);
  return {
   id:text(row.id),ownerName:text(row.display_name),
-  producer:text(row.producer),producerId:text(row.viewer_producer_id)||null,
+  producer:text(row.producer),producerId:text(row.viewer_producer_id)||(text(row.producer_id)&&text(row.owner_id)?sharedProducerId(text(row.owner_id),text(row.producer_id)):null),
   wineName:text(row.wine_name),vintage:number(row.vintage),
   country:text(row.country)||null,region:text(row.region)||null,appellation:text(row.appellation)||null,
   recognizedRegion:text(row.recognized_region)||null,recognizedAppellation:text(row.recognized_appellation)||null,
@@ -95,10 +96,9 @@ export function viewerStructure(raw:unknown):TastingStructure|null{
 }
 
 /**
- * Producers are keyed (owner_id, id), so the source owner's producer id means
- * nothing in the viewer's account. Their shared match_key does: this resolves
- * to the viewer's OWN producer row for the same producer, and hands back null
- * when they have never logged it, rather than a link that would 404.
+ * Prefer the viewer's own producer row when one exists for the same match_key.
+ * Otherwise sharedWine() falls back to an authorised synthetic producer ref,
+ * which opens the read-only source profile without copying it into this account.
  */
 const VIEWER_PRODUCER_SQL=`(SELECT vp.id FROM producers op JOIN producers vp ON vp.owner_id=? AND vp.match_key=op.match_key
   WHERE op.owner_id=w.owner_id AND op.id=w.producer_id) AS viewer_producer_id`;

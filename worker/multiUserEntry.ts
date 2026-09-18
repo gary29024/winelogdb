@@ -53,7 +53,6 @@ export default {
     }
     return json({...quoted,access:member.role==='owner'?'owner':'reused'});
    }
-   const forwarded=await internalRequest(request,env,member.id);
    if(aiRoute(path,request.method)){
     const cost=await deploymentAiCost(env.DB,env);
     const {operation,existing}=await reserve(request,env,member,cost.usd),operationUnits=JSON.parse(operation.units_json) as Array<{action:string;targetId?:string;scope?:string;parentOperationId?:string}>;
@@ -84,11 +83,18 @@ export default {
     try{
      const started=await env.DB.prepare("UPDATE credit_operations SET status='running',updated_at=? WHERE id=? AND status='reserved'").bind(stamp(),operation.id).run();
      if(!started.meta.changes)throw new ApiError(409,'Reservation is no longer available');
+     // Build the internal request only after quote validation, fingerprinting,
+     // unit planning and allowance reservation have finished reading clones of
+     // the public request body. In Cloudflare Workers, constructing Request from
+     // the original first can lock its ReadableStream and make those later
+     // request.clone() calls throw.
+     const forwarded=await internalRequest(request,env,member.id);
      const response=await legacy.fetch(forwarded,executionEnv,ctx),data=await saveOperationResponse(env.DB,operation,response);
      ctx.waitUntil(flushOutbox(env.DB,env.RESEARCH_QUEUE));
      return json({...data,creditOperationId:operation.id},response.status);
     }catch(error){await markUncertain(env.DB,operation.id);throw error}
    }
+   const forwarded=await internalRequest(request,env,member.id);
    const response=await legacy.fetch(forwarded,scoped,ctx);
    const producerMatch=path.match(/^\/api\/producers\/([^/]+)$/);
    if(response.ok&&request.method==='GET'&&producerMatch){const shared=await reusableProducer(env.DB,member.id,producerMatch[1]);if(shared)return json({...await response.json() as object,...shared})}

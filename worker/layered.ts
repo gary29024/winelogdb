@@ -9,6 +9,7 @@ import { deleteProducerEntity,rejectProducerHeroImage } from '../src/lib/produce
 import { getProducerResearchRun } from '../src/lib/producers/research';
 import { createManualProducerContact,deleteManualProducerContact,listManualProducerContacts,updateManualProducerContact } from '../src/lib/producers/manualContacts';
 import { applyCatalogDecisions,deleteCatalogDecision,listCatalogDecisions,saveCatalogDecision } from '../src/lib/producers/catalogDecisions';
+import { parseSharedProducerId,sharedProducerId } from '../src/lib/producers/sharedRef';
 import { selectRecognitionMetadata,type RecognitionPhotoMetadata } from '../src/lib/uploads/metadataSelection';
 import { isAiUsageRunHistoryKind,usageRunHistory,usageSummary } from '../src/lib/usage/aiUsage';
 import { seedAiUsageOnce } from '../src/lib/usage/seedFromResearchJobs';
@@ -56,22 +57,69 @@ app.get('/api/usage/spend/runs',async c=>{
 app.get('/api/producers',async c=>{
   cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
   try{
-    // Producer research canonicalizes and deduplicates catalog_json at storage
-    // time using the same identity key the page previously applied on every
-    // read. Count that stored range in D1, independent of partial cuvee seeding,
-    // and aggregate tasting counts once instead of running per-producer work in
-    // Worker JS.
-    const rows=await c.env.DB.prepare(`SELECT p.id,p.canonical_name,p.home_country,p.home_region,p.home_locality,p.researched_at,
-      coalesce(w.tasted_count,0) AS tasted_count,
-      coalesce(json_array_length(p.catalog_json),0) AS catalog_count
-      FROM producers p
-      LEFT JOIN (SELECT producer_id,count(*) AS tasted_count FROM wines WHERE owner_id=? AND producer_id IS NOT NULL GROUP BY producer_id) w ON w.producer_id=p.id
-      WHERE p.owner_id=? ORDER BY coalesce(p.home_country,'~'),coalesce(p.home_region,'~'),p.canonical_name COLLATE NOCASE`)
-      .bind(owner,owner).all<Record<string,unknown>>();
-    return c.json({items:rows.results.map(r=>({
-      id:String(r.id),canonicalName:String(r.canonical_name),homeCountry:r.home_country?canonicalCountryName(String(r.home_country))??null:null,
+    // The producer directory is a read model. Shared wines contribute their
+    // source producer without copying that producer row into the recipient's
+    // account, so a new member's Producers page is not empty.
+    const [owned,shared]=await Promise.all([
+      c.env.DB.prepare(`SELECT p.id,p.match_key,p.canonical_name,p.home_country,p.home_region,p.home_locality,p.researched_at,
+        coalesce(w.tasted_count,0) AS tasted_count,
+        coalesce(json_array_length(p.catalog_json),0) AS catalog_count
+        FROM producers p
+        LEFT JOIN (SELECT producer_id,count(*) AS tasted_count FROM wines WHERE owner_id=? AND producer_id IS NOT NULL GROUP BY producer_id) w ON w.producer_id=p.id
+        WHERE p.owner_id=?`).bind(owner,owner).all<Record<string,unknown>>(),
+      c.env.DB.prepare(`SELECT p.owner_id AS source_owner_id,p.id,p.match_key,p.canonical_name,p.home_country,p.home_region,p.home_locality,p.researched_at,
+        count(*) AS tasted_count,
+        coalesce(json_array_length(p.catalog_json),0) AS catalog_count
+        FROM member_visible_wines v
+        JOIN wines source_wine ON source_wine.owner_id=v.source_owner_id AND source_wine.id=v.id
+        JOIN producers p ON p.owner_id=source_wine.owner_id AND p.id=source_wine.producer_id
+        WHERE v.owner_id=? AND v.is_shared=1
+        GROUP BY p.owner_id,p.id
+        ORDER BY p.researched_at DESC,p.canonical_name COLLATE NOCASE`).bind(owner).all<Record<string,unknown>>()
+    ]);
+
+    type DirectoryItem={
+      id:string;matchKey:string;canonicalName:string;homeCountry:string|null;homeRegion:string|null;homeLocality:string|null;
+      tastedCount:number;catalogCount:number;researchedAt:string|null;sharedOnly:boolean
+    };
+    const ownedItems:DirectoryItem[]=owned.results.map(r=>({
+      id:String(r.id),matchKey:String(r.match_key??''),canonicalName:String(r.canonical_name),
+      homeCountry:r.home_country?canonicalCountryName(String(r.home_country))??null:null,
       homeRegion:r.home_region?String(r.home_region):null,homeLocality:r.home_locality?String(r.home_locality):null,
-      tastedCount:Number(r.tasted_count)||0,catalogCount:Number(r.catalog_count)||0,researchedAt:r.researched_at?String(r.researched_at):null
+      tastedCount:Number(r.tasted_count)||0,catalogCount:Number(r.catalog_count)||0,
+      researchedAt:r.researched_at?String(r.researched_at):null,sharedOnly:false
+    }));
+    const byMatch=new Map(ownedItems.map(item=>[item.matchKey,item]));
+    const sharedOnly=new Map<string,DirectoryItem>();
+
+    for(const r of shared.results){
+      const matchKey=String(r.match_key??''),count=Number(r.tasted_count)||0,ownedMatch=byMatch.get(matchKey);
+      if(ownedMatch){
+        ownedMatch.tastedCount+=count;
+        // A shared producer can fill a blank filing location for display without
+        // mutating the recipient's producer row.
+        ownedMatch.homeCountry??=r.home_country?canonicalCountryName(String(r.home_country))??null:null;
+        ownedMatch.homeRegion??=r.home_region?String(r.home_region):null;
+        ownedMatch.homeLocality??=r.home_locality?String(r.home_locality):null;
+        continue;
+      }
+      const current=sharedOnly.get(matchKey);
+      if(current){current.tastedCount+=count;continue}
+      sharedOnly.set(matchKey,{
+        id:sharedProducerId(String(r.source_owner_id),String(r.id)),matchKey,canonicalName:String(r.canonical_name),
+        homeCountry:r.home_country?canonicalCountryName(String(r.home_country))??null:null,
+        homeRegion:r.home_region?String(r.home_region):null,homeLocality:r.home_locality?String(r.home_locality):null,
+        tastedCount:count,catalogCount:Number(r.catalog_count)||0,researchedAt:r.researched_at?String(r.researched_at):null,sharedOnly:true
+      });
+    }
+
+    const items=[...ownedItems,...sharedOnly.values()].sort((a,b)=>
+      (a.homeCountry??'~').localeCompare(b.homeCountry??'~')||
+      (a.homeRegion??'~').localeCompare(b.homeRegion??'~')||
+      a.canonicalName.localeCompare(b.canonicalName,undefined,{sensitivity:'base'}));
+    return c.json({items:items.map(item=>({
+      id:item.id,canonicalName:item.canonicalName,homeCountry:item.homeCountry,homeRegion:item.homeRegion,homeLocality:item.homeLocality,
+      tastedCount:item.tastedCount,catalogCount:item.catalogCount,researchedAt:item.researchedAt,sharedOnly:item.sharedOnly
     }))});
   }catch(e){return c.json({error:(e as Error).message||'Could not load producers'},500)}
 });
@@ -102,7 +150,18 @@ app.get('/api/producers/:id/research-status',async c=>{
 
 app.get('/api/producers/:id/hero-image',async c=>{
   cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
-  const row=await c.env.DB.prepare('SELECT hero_image_object_key FROM producers WHERE owner_id=? AND id=?').bind(owner,c.req.param('id')).first<{hero_image_object_key:string|null}>();
+  const requested=c.req.param('id'),shared=parseSharedProducerId(requested);
+  let row:{hero_image_object_key:string|null}|null=null;
+  if(shared){
+    row=await c.env.DB.prepare(`SELECT p.hero_image_object_key FROM producers p
+      WHERE p.owner_id=? AND p.id=? AND EXISTS(
+        SELECT 1 FROM member_visible_wines v
+        JOIN wines source_wine ON source_wine.owner_id=v.source_owner_id AND source_wine.id=v.id
+        WHERE v.owner_id=? AND v.is_shared=1 AND source_wine.owner_id=p.owner_id AND source_wine.producer_id=p.id
+      )`).bind(shared.sourceOwner,shared.producerId,owner).first<{hero_image_object_key:string|null}>();
+  }else{
+    row=await c.env.DB.prepare('SELECT hero_image_object_key FROM producers WHERE owner_id=? AND id=?').bind(owner,requested).first<{hero_image_object_key:string|null}>();
+  }
   if(!row?.hero_image_object_key)return c.json({error:'Producer image not found'},404);
   const obj=await c.env.WINE_IMAGES.get(row.hero_image_object_key);if(!obj)return c.json({error:'Producer image not found'},404);
   return new Response(obj.body,{headers:{'Content-Type':obj.httpMetadata?.contentType||'application/octet-stream','Cache-Control':'private, max-age=3600','Content-Security-Policy':"default-src 'none'"}});
@@ -111,24 +170,65 @@ app.get('/api/producers/:id/hero-image',async c=>{
 app.get('/api/producers/:id',async c=>{
   cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
   try{
-    const row=await c.env.DB.prepare('SELECT * FROM producers WHERE owner_id=? AND id=?').bind(owner,c.req.param('id')).first<Record<string,unknown>>();
+    const requested=c.req.param('id'),sharedRef=parseSharedProducerId(requested);
+    let row:Record<string,unknown>|null=null,sharedOnly=false,matchKey='';
+    if(sharedRef){
+      row=await c.env.DB.prepare(`SELECT p.* FROM producers p
+        WHERE p.owner_id=? AND p.id=? AND EXISTS(
+          SELECT 1 FROM member_visible_wines v
+          JOIN wines source_wine ON source_wine.owner_id=v.source_owner_id AND source_wine.id=v.id
+          WHERE v.owner_id=? AND v.is_shared=1 AND source_wine.owner_id=p.owner_id AND source_wine.producer_id=p.id
+        )`).bind(sharedRef.sourceOwner,sharedRef.producerId,owner).first<Record<string,unknown>>();
+      sharedOnly=Boolean(row);
+    }else{
+      row=await c.env.DB.prepare('SELECT * FROM producers WHERE owner_id=? AND id=?').bind(owner,requested).first<Record<string,unknown>>();
+    }
     if(!row)return c.json({error:'Producer not found'},404);
+    matchKey=String(row.match_key??'');
+
+    const sharedWines=await c.env.DB.prepare(`SELECT v.id,v.wine_name,v.vintage,v.appellation,v.region,v.country,v.wine_style,v.grapes_json,
+      v.tasting_date,v.rating,v.source_owner_id,
+      (SELECT wi.id FROM wine_images wi WHERE wi.owner_id=v.source_owner_id AND wi.wine_id=v.id ORDER BY wi.rowid ASC LIMIT 1) AS image_id
+      FROM member_visible_wines v
+      JOIN wines source_wine ON source_wine.owner_id=v.source_owner_id AND source_wine.id=v.id
+      JOIN producers source_producer ON source_producer.owner_id=source_wine.owner_id AND source_producer.id=source_wine.producer_id
+      WHERE v.owner_id=? AND v.is_shared=1 AND source_producer.match_key=?
+      ORDER BY coalesce(v.tasting_date,v.created_at) DESC,v.vintage DESC`).bind(owner,matchKey).all<Record<string,unknown>>();
+
+    const mapSharedWine=(w:Record<string,unknown>)=>({
+      id:String(w.id),cuveeId:null,wineName:String(w.wine_name),vintage:w.vintage==null?null:Number(w.vintage),
+      appellation:w.appellation?String(w.appellation):null,region:w.region?String(w.region):null,country:w.country?String(w.country):null,
+      wineStyle:w.wine_style?String(w.wine_style):null,grapes:parseJson<unknown[]>(w.grapes_json,[]).map(String).filter(Boolean),
+      imageId:null,
+      imageUrl:w.image_id?`/api/shared/wines/${String(w.id)}/photos/${String(w.image_id)}?variant=thumbnail`:null,
+      tastingDate:w.tasting_date?String(w.tasting_date):null,rating:w.rating==null?null:Number(w.rating),shared:true
+    });
+
+    if(sharedOnly){
+      const entity=mapProducerRow(row);
+      return c.json({...entity,sharedOnly:true,aliases:[entity.canonicalName],researchHistoryCount:0,linkedProducers:[],
+        supplementaryContacts:[],catalogDecisions:[],catalogCuvees:[],cuveeCatalogLinks:[],tastedWines:sharedWines.results.map(mapSharedWine)});
+    }
+
     const [aliases,wines,history,links,supplementaryContacts,catalogDecisions]=await Promise.all([
-      c.env.DB.prepare('SELECT display_alias FROM producer_aliases WHERE owner_id=? AND producer_id=? ORDER BY display_alias COLLATE NOCASE').bind(owner,c.req.param('id')).all<{display_alias:string}>(),
+      c.env.DB.prepare('SELECT display_alias FROM producer_aliases WHERE owner_id=? AND producer_id=? ORDER BY display_alias COLLATE NOCASE').bind(owner,requested).all<{display_alias:string}>(),
       c.env.DB.prepare(`SELECT w.id,w.cuvee_id,w.wine_name,w.vintage,w.appellation,w.region,w.country,w.wine_style,w.grapes_json,
         (SELECT wi.id FROM wine_images wi WHERE wi.owner_id=w.owner_id AND wi.wine_id=w.id ORDER BY wi.rowid ASC LIMIT 1) AS image_id,
         coalesce((SELECT we.consumed_at FROM wine_experiences we WHERE we.owner_id=w.owner_id AND we.wine_id=w.id ORDER BY we.created_at DESC LIMIT 1),w.tasting_date) AS tasting_date,
         coalesce((SELECT we.rating FROM wine_experiences we WHERE we.owner_id=w.owner_id AND we.wine_id=w.id ORDER BY we.created_at DESC LIMIT 1),w.rating) AS rating
-        FROM wines w WHERE w.owner_id=? AND w.producer_id=? ORDER BY coalesce(tasting_date,w.created_at) DESC,w.vintage DESC`).bind(owner,c.req.param('id')).all<Record<string,unknown>>(),
-      c.env.DB.prepare('SELECT count(*) AS count FROM producer_research_history WHERE owner_id=? AND producer_id=?').bind(owner,c.req.param('id')).first<{count:number}>(),
+        FROM wines w WHERE w.owner_id=? AND w.producer_id=? ORDER BY coalesce(tasting_date,w.created_at) DESC,w.vintage DESC`).bind(owner,requested).all<Record<string,unknown>>(),
+      c.env.DB.prepare('SELECT count(*) AS count FROM producer_research_history WHERE owner_id=? AND producer_id=?').bind(owner,requested).first<{count:number}>(),
       c.env.DB.prepare(`SELECT id,source_producer_id,source_canonical_name,merged_at FROM producer_merges
-        WHERE owner_id=? AND destination_producer_id=? AND undone_at IS NULL ORDER BY merged_at DESC`).bind(owner,c.req.param('id')).all<{id:string;source_producer_id:string;source_canonical_name:string;merged_at:string}>(),
-      listManualProducerContacts(c.env.DB,owner,c.req.param('id')),
-      listCatalogDecisions(c.env.DB,owner,c.req.param('id'))
+        WHERE owner_id=? AND destination_producer_id=? AND undone_at IS NULL ORDER BY merged_at DESC`).bind(owner,requested).all<{id:string;source_producer_id:string;source_canonical_name:string;merged_at:string}>(),
+      listManualProducerContacts(c.env.DB,owner,requested),
+      listCatalogDecisions(c.env.DB,owner,requested)
     ]);
     const entity=mapProducerRow(row),producerNames=[entity.canonicalName,...aliases.results.map(x=>x.display_alias)];
     const correctedCatalog=applyCatalogDecisions(entity.catalog,catalogDecisions,producerNames).range;
-    return c.json({...entity,catalog:correctedCatalog,catalogDecisions,aliases:aliases.results.map(x=>x.display_alias),researchHistoryCount:Number(history?.count)||0,linkedProducers:links.results.map(x=>({mergeId:x.id,producerId:x.source_producer_id,name:x.source_canonical_name,mergedAt:x.merged_at})),supplementaryContacts,tastedWines:wines.results.map(w=>({id:String(w.id),cuveeId:w.cuvee_id?String(w.cuvee_id):null,wineName:String(w.wine_name),vintage:w.vintage==null?null:Number(w.vintage),appellation:w.appellation?String(w.appellation):null,region:w.region?String(w.region):null,country:w.country?String(w.country):null,wineStyle:w.wine_style?String(w.wine_style):null,grapes:parseJson<unknown[]>(w.grapes_json,[]).map(String).filter(Boolean),imageId:w.image_id?String(w.image_id):null,tastingDate:w.tasting_date?String(w.tasting_date):null,rating:w.rating==null?null:Number(w.rating)}))});
+    const ownWines=wines.results.map(w=>({id:String(w.id),cuveeId:w.cuvee_id?String(w.cuvee_id):null,wineName:String(w.wine_name),vintage:w.vintage==null?null:Number(w.vintage),appellation:w.appellation?String(w.appellation):null,region:w.region?String(w.region):null,country:w.country?String(w.country):null,wineStyle:w.wine_style?String(w.wine_style):null,grapes:parseJson<unknown[]>(w.grapes_json,[]).map(String).filter(Boolean),imageId:w.image_id?String(w.image_id):null,imageUrl:null,tastingDate:w.tasting_date?String(w.tasting_date):null,rating:w.rating==null?null:Number(w.rating),shared:false}));
+    return c.json({...entity,sharedOnly:false,catalog:correctedCatalog,catalogDecisions,aliases:aliases.results.map(x=>x.display_alias),
+      researchHistoryCount:Number(history?.count)||0,linkedProducers:links.results.map(x=>({mergeId:x.id,producerId:x.source_producer_id,name:x.source_canonical_name,mergedAt:x.merged_at})),
+      supplementaryContacts,tastedWines:[...ownWines,...sharedWines.results.map(mapSharedWine)]});
   }catch(e){return c.json({error:(e as Error).message||'Could not load producer'},500)}
 });
 
