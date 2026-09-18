@@ -82,19 +82,27 @@ The page refreshes requests when focused and offers a manual refresh button.
 Friend codes do not admit new members. Old friend links are retired and cannot
 create friendships. Existing accepted friendships remain unchanged.
 Friendship is mutual and non-transitive.
-The owner selects recipients on each wine. **Shared with me** is read-only and
-does not insert journal rows or affect statistics. Its explicit serializer
-includes wine identity, notes, rating, tasting date and authorized wine photos;
-it excludes price, venue, coordinates, private tags, cellar and tasting documents.
-Unsharing, deleting or unfriending revokes subsequent access. Downloaded content
-cannot be recalled.
+The owner selects recipients on each wine. The source wine remains read-only to
+the recipient, while the recipient's favorite, tasting notes, rating, date,
+event, venue, location, price and perceived structure are stored separately as
+their own experience. The explicit shared serializer publishes bottle identity
+and other bottle facts, the source tasting date used for journal chronology,
+published factual research and authorized wine-photo copies; it does not publish
+the source owner's tasting notes, rating, venue, location, price, private tags,
+cellar inventory or tasting documents. Shared wines can participate in the
+recipient's Journal, Passport and Insights through that recipient-facing read
+model without copying the source wine into their account. Unsharing, deleting or
+unfriending revokes subsequent access. Downloaded content cannot be recalled.
 
-Sharing photos are browser-rendered JPEG derivatives, with application/comment
-metadata and trailing data removed again on the server. Original images and
-unrelated group-source photos are never exposed by shared endpoints. New photos
-added through the web journal get derivatives when the wine is already shared.
-API clients that attach photos must also upload the sharing copy before it can
-appear to recipients. Reads are authorization-checked and use `no-store`.
+Sharing photos use separate JPEG derivatives rather than exposing the original
+upload. They may be prepared by the browser, generated on demand by the Worker,
+or backfilled by the scheduled maintenance pass. Application/comment metadata
+and trailing data are stripped before a sharing copy is stored; journal
+thumbnails are derived from that already-sanitized sharing copy and stripped
+again. If thumbnail generation fails, the fallback is the sanitized full sharing
+copy, not the original upload. Original images and unrelated group-source photos
+are never exposed by shared endpoints. Reads are authorization-checked and use
+`no-store`.
 
 Browser caches and draft/upload stores use the account ID. Authentication
 changes invalidate in-flight responses and reload other tabs; old password
