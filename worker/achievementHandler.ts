@@ -116,16 +116,15 @@ async function computeAchievementProgress(db:D1Database,owner:string,includeShar
 
 // The revision travels with the result so the route can turn it into an ETag and
 // answer an unchanged client with 304 rather than re-serializing the whole payload.
-export async function loadAchievementProgress(db:D1Database,owner:string,attempt=0,initialRevision?:number|null):Promise<{revision:number|null;progress:AchievementProgress[]>}
-{
+export async function loadAchievementProgress(db:D1Database,owner:string,attempt=0,initialRevision?:number|null,includeShared=false):Promise<{revision:number|null;progress:AchievementProgress[]}>{
   const revision=initialRevision===undefined?await currentOwnerRevision(db,owner):initialRevision;
   if(revision!==null){const cached=await cachedAchievementProgress(db,owner,revision);if(cached)return {revision,progress:cached}}
-  const result=await computeAchievementProgress(db,owner,true),after=await currentOwnerRevision(db,owner);
+  const result=await computeAchievementProgress(db,owner,includeShared),after=await currentOwnerRevision(db,owner);
   // The retry carries the revision just read rather than reading it again, which
   // also means it looks in the cache at the new revision before rebuilding: under
   // a stream of writes some other request usually settles one first, and taking
   // that costs a single indexed lookup instead of a second scan of the library.
-  if(revision!==null&&after!==null&&after!==revision&&attempt===0)return loadAchievementProgress(db,owner,1,after);
+  if(revision!==null&&after!==null&&after!==revision&&attempt===0)return loadAchievementProgress(db,owner,1,after,includeShared);
   // Even the retry can race a write. Never tag its old result with a new revision
   // - but before giving up the cache entirely, look once more at where the
   // revision actually landed. Reported as a spike in D1 row reads: while writes

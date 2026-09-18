@@ -223,19 +223,19 @@ async function storeJourneyPayload(db:D1Database,owner:string,revision:number,pa
 // application landing page. Serve them from the revision-keyed cache whenever the
 // journal has not changed, and report the revision so the route can answer a
 // conditional request with 304 instead of a body.
-export async function loadJourneySummary(db:D1Database,owner:string,initialRevision?:number|null,attempt=0):Promise<{revision:number|null;payload:Record<string,unknown>}>{
+export async function loadJourneySummary(db:D1Database,owner:string,initialRevision?:number|null,attempt=0,includeShared=false):Promise<{revision:number|null;payload:Record<string,unknown>}>{
   const revision=initialRevision===undefined?await currentOwnerRevision(db,owner):initialRevision;
   if(revision!==null){
     const cached=await cachedJourneyPayload(db,owner,revision);
     if(cached)return {revision,payload:cached};
   }
-  const payload=await buildJourneyPayload(db,owner);
+  const payload=await buildJourneyPayload(db,owner,includeShared);
   // Re-read the revision: a concurrent write during the rebuild must not be cached
   // under the stale counter, or the next request would serve a payload missing it.
   const after=revision===null?null:await currentOwnerRevision(db,owner);
   // One bounded retry, carrying the revision just read - so it looks in the cache
   // at where the counter actually landed before rebuilding anything.
-  if(after!==null&&after!==revision&&attempt===0)return loadJourneySummary(db,owner,after,1);
+  if(after!==null&&after!==revision&&attempt===0)return loadJourneySummary(db,owner,after,1,includeShared);
   if(after===null||after!==revision){
     // Whoever settled that revision first has already paid for this payload.
     const settled=after===null?null:await cachedJourneyPayload(db,owner,after);

@@ -2,6 +2,21 @@
 -- copying the source wine into the recipient's account. The recipient-facing
 -- branch intentionally projects only fields already allowed by the sharing
 -- contract; personal price, venue and owner entity IDs stay private.
+--
+-- A favorite on a shared wine belongs to the recipient. It must not mutate the
+-- source owner's favorite flag, so it lives in a small recipient preference row.
+CREATE TABLE IF NOT EXISTS shared_wine_preferences (
+  recipient_id TEXT NOT NULL REFERENCES app_users(id),
+  owner_id TEXT NOT NULL REFERENCES app_users(id),
+  wine_id TEXT NOT NULL REFERENCES wines(id) ON DELETE CASCADE,
+  favorite INTEGER NOT NULL DEFAULT 0 CHECK(favorite IN (0,1)),
+  created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY(recipient_id,owner_id,wine_id),
+  CHECK(owner_id<>recipient_id)
+);
+CREATE INDEX IF NOT EXISTS idx_shared_wine_preferences_favorite
+  ON shared_wine_preferences(recipient_id,favorite,wine_id);
 DROP VIEW IF EXISTS member_visible_wines;
 CREATE VIEW member_visible_wines AS
 WITH accessible AS (
@@ -42,7 +57,7 @@ SELECT
   w.country,w.region,w.appellation,w.grapes_json,w.wine_style,
   w.tasting_notes,w.rating,w.tasting_date,
   NULL AS venue,
-  0 AS favorite,
+  coalesce(pref.favorite,0) AS favorite,
   NULL AS price,
   NULL AS currency,
   w.classification,
@@ -55,7 +70,9 @@ JOIN friendships f
 JOIN app_users u
   ON u.id=g.owner_id AND u.status='active'
 JOIN wines w
-  ON w.id=g.wine_id AND w.owner_id=g.owner_id;
+  ON w.id=g.wine_id AND w.owner_id=g.owner_id
+LEFT JOIN shared_wine_preferences pref
+  ON pref.recipient_id=g.recipient_id AND pref.owner_id=g.owner_id AND pref.wine_id=g.wine_id;
 
 
 -- Journey and Wine Collection caches are keyed by the viewer's existing
@@ -83,6 +100,20 @@ CREATE TRIGGER shared_visible_rev_tasting_share_insert AFTER INSERT ON tasting_s
   ON CONFLICT(owner_id) DO UPDATE SET revision=achievement_cache_state.revision+1,updated_at=CURRENT_TIMESTAMP;
 END;
 CREATE TRIGGER shared_visible_rev_tasting_share_delete AFTER DELETE ON tasting_shares BEGIN
+  INSERT INTO achievement_cache_state(owner_id,revision,updated_at) VALUES(OLD.recipient_id,1,CURRENT_TIMESTAMP)
+  ON CONFLICT(owner_id) DO UPDATE SET revision=achievement_cache_state.revision+1,updated_at=CURRENT_TIMESTAMP;
+END;
+CREATE TRIGGER shared_visible_rev_preference_insert AFTER INSERT ON shared_wine_preferences BEGIN
+  INSERT INTO achievement_cache_state(owner_id,revision,updated_at) VALUES(NEW.recipient_id,1,CURRENT_TIMESTAMP)
+  ON CONFLICT(owner_id) DO UPDATE SET revision=achievement_cache_state.revision+1,updated_at=CURRENT_TIMESTAMP;
+END;
+CREATE TRIGGER shared_visible_rev_preference_update AFTER UPDATE OF favorite ON shared_wine_preferences
+WHEN OLD.favorite IS NOT NEW.favorite
+BEGIN
+  INSERT INTO achievement_cache_state(owner_id,revision,updated_at) VALUES(NEW.recipient_id,1,CURRENT_TIMESTAMP)
+  ON CONFLICT(owner_id) DO UPDATE SET revision=achievement_cache_state.revision+1,updated_at=CURRENT_TIMESTAMP;
+END;
+CREATE TRIGGER shared_visible_rev_preference_delete AFTER DELETE ON shared_wine_preferences BEGIN
   INSERT INTO achievement_cache_state(owner_id,revision,updated_at) VALUES(OLD.recipient_id,1,CURRENT_TIMESTAMP)
   ON CONFLICT(owner_id) DO UPDATE SET revision=achievement_cache_state.revision+1,updated_at=CURRENT_TIMESTAMP;
 END;
@@ -114,7 +145,8 @@ CREATE TRIGGER shared_visible_rev_experience_update AFTER UPDATE ON wine_experie
   ON CONFLICT(owner_id) DO UPDATE SET revision=achievement_cache_state.revision+1,updated_at=CURRENT_TIMESTAMP;
 END;
 
-CREATE TRIGGER shared_visible_rev_source_wine_update AFTER UPDATE ON wines BEGIN
+CREATE TRIGGER shared_visible_rev_source_wine_update
+AFTER UPDATE OF producer,wine_name,vintage,country,region,appellation,grapes_json,wine_style,tasting_notes,rating,tasting_date,classification ON wines BEGIN
   INSERT INTO achievement_cache_state(owner_id,revision,updated_at)
   SELECT recipient_id,1,CURRENT_TIMESTAMP FROM (
     SELECT recipient_id FROM wine_shares

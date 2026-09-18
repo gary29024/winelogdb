@@ -196,6 +196,39 @@ describe('shared wines as recipient journal history',()=>{
   expect(journey.recentTastings[0]).toMatchObject({id:'shared-history',shared:true,sharedBy:'alice'});
   expect(database.sql.prepare("SELECT count(*) AS n FROM wines WHERE owner_id='bob'").get()!.n).toBe(0);
  });
+ it('lets the recipient favorite a shared journal wine without changing the source owner',async()=>{
+  database.sql.exec(`
+   INSERT INTO friendships(user_id,friend_id) VALUES('alice','bob'),('bob','alice');
+   INSERT INTO wines(id,owner_id,producer,wine_name,vintage,country,region,appellation,grapes_json,wine_style,tasting_notes,rating,tasting_date,favorite,created_at,updated_at)
+   VALUES('shared-favorite','alice','Domaine Shared','Favorite Me',2021,'France','Burgundy','Volnay','["Pinot Noir"]','red','Silky',94,'2026-09-09',0,'2026-09-09T12:00:00Z','2026-09-09T12:00:00Z');
+   INSERT INTO wine_shares(wine_id,owner_id,recipient_id,created_at) VALUES('shared-favorite','alice','bob','2026-09-10T12:00:00Z');
+  `);
+  database.sql.prepare('INSERT INTO auth_sessions VALUES(?,?,?)').run(await hash('bob-session'),'bob',seconds()+3600);
+  const e={...env(),WINE_IMAGES:{},RESEARCH_QUEUE:{send:vi.fn()},ASSETS:{fetch:vi.fn(async()=>Response.json({error:'Not found'},{status:404}))}} as unknown as Parameters<typeof publicWorker.fetch>[1];
+  const pending:Promise<unknown>[]=[],context={waitUntil:(p:Promise<unknown>)=>pending.push(p)} as unknown as ExecutionContext;
+  const call=async(favorite:boolean)=>publicWorker.fetch(new Request('https://wine.example/api/wines/shared-favorite/favorite',{
+   method:'PUT',headers:{Cookie:'__Host-winelog=bob-session',Origin:'https://wine.example','Content-Type':'application/json'},body:JSON.stringify({favorite})
+  }),e,context);
+
+  const added=await call(true);
+  expect(added.status).toBe(200);
+  expect(await added.json()).toMatchObject({id:'shared-favorite',favorite:true,changed:true});
+  expect(database.sql.prepare("SELECT favorite FROM wines WHERE owner_id='alice' AND id='shared-favorite'").get()!.favorite).toBe(0);
+  expect(database.sql.prepare("SELECT favorite FROM shared_wine_preferences WHERE recipient_id='bob' AND owner_id='alice' AND wine_id='shared-favorite'").get()!.favorite).toBe(1);
+
+  const journal=await listJournalPage(database.db,'bob',{favorite:'1'},[],true);
+  expect(journal.items).toHaveLength(1);
+  expect(journal.items[0]).toMatchObject({id:'shared-favorite',shared:true,favorite:true});
+  const journey=await buildJourneyPayload(database.db,'bob',true) as {summary:{favorites:number}};
+  expect(journey.summary.favorites).toBe(1);
+
+  const removed=await call(false);
+  expect(removed.status).toBe(200);
+  expect(await removed.json()).toMatchObject({id:'shared-favorite',favorite:false,changed:true});
+  expect(database.sql.prepare("SELECT count(*) AS n FROM shared_wine_preferences WHERE recipient_id='bob' AND wine_id='shared-favorite'").get()!.n).toBe(0);
+  await Promise.all(pending);
+ });
+
 });
 describe('sharing boundaries',()=>{
  it('skips malformed or failing newer producer research and preserves private corrections',async()=>{
