@@ -6,7 +6,7 @@ import { hash,seconds,stamp,type Member,type PilotSettings } from '../../worker/
 import { quote,reserve,settle,reconcileOperation,creditRead } from '../../worker/multiUser/credits';
 import { durableProvider } from '../../worker/multiUser/provider';
 import publicWorker from '../../worker/multiUserEntry';
-import { SHARED_WINES_LIST_SQL,socialRoute,stripJpegMetadata,sharedWine,drainSharingPhotos } from '../../worker/multiUser/social';
+import { SHARED_WINES_LIST_SQL,socialRoute,sharedWine } from '../../worker/multiUser/social';
 import { sharedSubjectKey,publishResearch } from '../../src/lib/research/shared';
 import { producerSubjectKey,reusableProducer } from '../../src/lib/research/sharedProducer';
 import { buildResearchTargets,loadResearchCache,upsertResearchCache } from '../../src/lib/research/cache';
@@ -19,6 +19,7 @@ import { buildJourneyPayload } from '../../worker/journeyHandler';
 import { listJournalPage } from '../../src/lib/journal/list';
 import { sparklingDetailsSchema } from '../../src/lib/wine/sparklingDetails';
 import type { WineInput } from '../../src/lib/db/schema';
+import { thumbnailObjectKey } from '../../src/lib/r2/thumbnails';
 
 let database:ReturnType<typeof realD1>;
 const member=(id:string):Member=>({id,email:`${id}@example.com`,display_name:id,role:id==='owner'?'owner':'member',status:'active'});
@@ -581,171 +582,64 @@ describe('sharing boundaries',()=>{
   expect(database.sql.prepare("SELECT byte_size,metered_byte_size FROM storage_totals WHERE owner_id='owner'").get()).toMatchObject({byte_size:8,metered_byte_size:8});
   expect(database.sql.prepare("SELECT byte_size FROM storage_totals WHERE owner_id='*'").get()!.byte_size).toBe(8);
  });
- it('prepares a missing shared photo on demand for dynamically inherited access',async()=>{
+ it('lists canonical wine photos for inherited tasting shares without creating sharing copies',async()=>{
   wines();
   database.sql.exec("INSERT INTO tastings(id,owner_id,name,created_at,updated_at) VALUES('t-photo','alice','Photo tasting','now','now'); INSERT INTO wine_experiences(id,owner_id,wine_id,tasting_id,created_at,updated_at) VALUES('e-photo','alice','w','t-photo','now','now'); INSERT INTO tasting_shares(tasting_id,owner_id,recipient_id) VALUES('t-photo','alice','bob'); INSERT INTO wine_images(id,owner_id,wine_id,object_key,content_type,byte_size,width,height,upload_status,recognition_status,created_at) VALUES('img-photo','alice','w','owners/alice/original.jpg','image/jpeg',8,10,10,'uploaded','complete','now')");
-  // Include SOF2 (0xC2): Cloudflare Images may emit progressive JPEGs.
-  const jpeg=Uint8Array.from([255,216,255,194,0,2,255,218,0,2,255,217]);
-  const bucket={get:vi.fn(async(key:string)=>key==='owners/alice/original.jpg'?{body:new Response('original').body!}:null),put:vi.fn(async()=>({})),delete:vi.fn(async()=>undefined)} as unknown as R2Bucket;
-  const images={input:vi.fn(()=>({transform:()=>({output:()=>({response:()=>new Response(jpeg,{headers:{'Content-Type':'image/jpeg'}})})})}))} as unknown as ImagesBinding;
-  const detail=await (await socialRoute(new Request('https://wine.example/api/shared/wines/w'),{...env(),WINE_IMAGES:bucket,IMAGES:images},member('bob')))!.json() as {photos:Array<{id:string}>};
+  const detail=await (await socialRoute(new Request('https://wine.example/api/shared/wines/w'),{...env(),WINE_IMAGES:{} as R2Bucket},member('bob')))!.json() as {photos:Array<{id:string}>};
   expect(detail.photos).toEqual([{id:'img-photo',url:'/api/shared/wines/w/photos/img-photo'}]);
-  expect(database.sql.prepare("SELECT owner_id FROM shared_photos WHERE image_id='img-photo'").get()?.owner_id).toBe('alice');
-  expect(database.sql.prepare("SELECT counts_toward_member_limit FROM stored_objects WHERE object_key='shared/alice/img-photo.jpg'").get()?.counts_toward_member_limit).toBe(0);
-  expect(database.sql.prepare("SELECT count(*) AS n FROM shared_photo_attempts WHERE image_id='img-photo'").get()!.n).toBe(0);
- });
- /**
-  * The derivative is cached per photo, so a photo that CAN be derived costs one
-  * transform ever. The cost that used to be unbounded was the photo that cannot:
-  * it was re-transformed on every friend view, and a transform is billed.
-  */
- it('builds a shared photo on first fetch instead of 404ing, and thumbnails it',async()=>{
-  // What the reporter actually wanted: a friend's card fills in as fast as the
-  // owner's own, which has always generated its thumbnail on first view.
-  wines();
-  database.sql.exec(`
-   INSERT INTO wine_shares(wine_id,owner_id,recipient_id) VALUES('w','alice','bob');
-   INSERT INTO wine_images(id,owner_id,wine_id,object_key,content_type,byte_size,width,height,upload_status,recognition_status,created_at)
-   VALUES('img-1','alice','w','owners/alice/1.jpg','image/jpeg',8,10,10,'uploaded','complete','now');
-  `);
-  const jpeg=Uint8Array.from([255,216,255,218,0,2,255,217]);
-  const store=new Map<string,Uint8Array>([['owners/alice/1.jpg',jpeg]]);
-  const bucket={
-   get:vi.fn(async(key:string)=>store.has(key)?{body:new Blob([store.get(key)! as BlobPart]).stream(),arrayBuffer:async()=>store.get(key)!.buffer,size:store.get(key)!.length}:null),
-   put:vi.fn(async(key:string,body:ArrayBuffer|Uint8Array)=>{store.set(key,new Uint8Array(body as ArrayBuffer));return {}}),
-   delete:vi.fn(async()=>undefined)
-  } as unknown as R2Bucket;
-  const transform=vi.fn(()=>({transform:()=>({output:()=>({response:()=>new Response(jpeg)})})}));
-  const e={...env(),WINE_IMAGES:bucket,IMAGES:{input:transform} as unknown as ImagesBinding};
-
-  // Nothing has prepared this photo: the old route answered 404 here.
   expect(database.sql.prepare("SELECT count(*) AS n FROM shared_photos").get()!.n).toBe(0);
-  const first=await socialRoute(new Request('https://wine.example/api/shared/wines/w/photos/img-1?variant=thumbnail'),e,member('bob'));
-  expect(first?.status).toBe(200);
-  expect(database.sql.prepare("SELECT count(*) AS n FROM shared_photos").get()!.n).toBe(1);
-  // Both the sharing copy and its thumbnail are persisted under shared/.
-  expect([...store.keys()].some(key=>key==='shared/alice/img-1.jpg')).toBe(true);
-  expect([...store.keys()].some(key=>key==='shared/alice/img-1-thumb.jpg')).toBe(true);
-
-  // A second viewer pays for neither transform again.
-  const transforms=transform.mock.calls.length;
-  expect((await socialRoute(new Request('https://wine.example/api/shared/wines/w/photos/img-1?variant=thumbnail'),e,member('bob')))?.status).toBe(200);
-  expect(transform.mock.calls.length).toBe(transforms);
+  expect(database.sql.prepare("SELECT count(*) AS n FROM shared_photo_attempts").get()!.n).toBe(0);
  });
 
- it('queues and removes both persisted sharing objects when the source image is deleted',async()=>{
+ it('serves the canonical permanent thumbnail to a friend without any shared R2 object',async()=>{
   wines();
-  database.sql.exec(`
-   INSERT INTO wine_images(id,owner_id,wine_id,object_key,content_type,byte_size,width,height,upload_status,recognition_status,created_at)
-   VALUES('img-clean','alice','w','owners/alice/clean.jpg','image/jpeg',8,10,10,'uploaded','complete','now');
-   INSERT INTO shared_photos(image_id,owner_id,object_key,byte_size)
-   VALUES('img-clean','alice','shared/alice/img-clean.jpg',8);
-   INSERT INTO stored_objects(object_key,owner_id,byte_size,counts_toward_member_limit,updated_at)
-   VALUES('shared/alice/img-clean.jpg','alice',8,0,'now'),
-         ('shared/alice/img-clean-thumb.jpg','alice',4,0,'now');
-  `);
-  database.sql.prepare("DELETE FROM wine_images WHERE id='img-clean' AND owner_id='alice'").run();
-  expect(database.sql.prepare('SELECT object_key FROM storage_deletions ORDER BY object_key').all().map(row=>row.object_key))
-   .toEqual(['shared/alice/img-clean-thumb.jpg','shared/alice/img-clean.jpg']);
+  database.sql.exec("INSERT INTO wine_shares(wine_id,owner_id,recipient_id) VALUES('w','alice','bob'); INSERT INTO wine_images(id,owner_id,wine_id,object_key,content_type,byte_size,width,height,upload_status,recognition_status,created_at) VALUES('img-1','alice','w','owners/alice/1.jpg','image/jpeg',8,10,10,'uploaded','complete','now')");
+  const thumbKey=thumbnailObjectKey('owners/alice/1.jpg');
+  const get=vi.fn(async(key:string)=>key===thumbKey?{body:new Response('canonical-thumb').body!,httpMetadata:{contentType:'image/webp'}}:key==='owners/alice/1.jpg'?{body:new Response('original').body!,httpMetadata:{contentType:'image/jpeg'}}:null);
+  const put=vi.fn(async()=>({}));
+  const e={...env(),WINE_IMAGES:{get,put,delete:vi.fn()} as unknown as R2Bucket};
+  const response=await socialRoute(new Request('https://wine.example/api/shared/wines/w/photos/img-1?variant=thumbnail'),e,member('bob'),{waitUntil:vi.fn()});
+  expect(response?.status).toBe(200);
+  expect(get).toHaveBeenCalledWith(thumbKey);
+  expect(get.mock.calls.some(([key])=>String(key).startsWith('shared/'))).toBe(false);
+  expect(put).not.toHaveBeenCalled();
+  expect(database.sql.prepare("SELECT count(*) AS n FROM shared_photos").get()!.n).toBe(0);
+ });
 
-  const removed:string[]=[];
-  const bucket={delete:vi.fn(async(key:string|string[])=>{for(const item of typeof key==='string'?[key]:key)removed.push(item)})} as unknown as R2Bucket;
-  const queue={send:vi.fn()} as unknown as Queue<unknown>;
-  await maintainJobs(database.db,queue,bucket);
-  expect(removed.sort()).toEqual(['shared/alice/img-clean-thumb.jpg','shared/alice/img-clean.jpg']);
-  expect(database.sql.prepare("SELECT count(*) AS n FROM stored_objects WHERE object_key LIKE 'shared/alice/img-clean%'").get()!.n).toBe(0);
-  expect(database.sql.prepare('SELECT count(*) AS n FROM storage_deletions').get()!.n).toBe(0);
+ it('serves the canonical original to a friend when full size is requested',async()=>{
+  wines();
+  database.sql.exec("INSERT INTO wine_shares(wine_id,owner_id,recipient_id) VALUES('w','alice','bob'); INSERT INTO wine_images(id,owner_id,wine_id,object_key,content_type,byte_size,width,height,upload_status,recognition_status,created_at) VALUES('img-original','alice','w','owners/alice/original.jpg','image/jpeg',8,10,10,'uploaded','complete','now')");
+  const get=vi.fn(async(key:string)=>key==='owners/alice/original.jpg'?{body:new Response('original').body!,httpMetadata:{contentType:'image/jpeg'}}:null);
+  const response=await socialRoute(new Request('https://wine.example/api/shared/wines/w/photos/img-original'),{...env(),WINE_IMAGES:{get,put:vi.fn(),delete:vi.fn()} as unknown as R2Bucket},member('bob'),{waitUntil:vi.fn()});
+  expect(response?.status).toBe(200);
+  expect(get).toHaveBeenCalledWith('owners/alice/original.jpg');
+  expect(get.mock.calls.some(([key])=>String(key).startsWith('shared/'))).toBe(false);
+ });
+
+ it('refuses an image from another wine owned by the same friend',async()=>{
+  wines();
+  database.sql.exec("INSERT INTO wine_shares(wine_id,owner_id,recipient_id) VALUES('w','alice','bob'); INSERT INTO wines(id,owner_id,producer,wine_name,created_at,updated_at) VALUES('other','alice','P','Other','now','now'); INSERT INTO wine_images(id,owner_id,wine_id,object_key,content_type,byte_size,width,height,upload_status,recognition_status,created_at) VALUES('other-image','alice','other','owners/alice/other.jpg','image/jpeg',8,10,10,'uploaded','complete','now')");
+  await expect(socialRoute(new Request('https://wine.example/api/shared/wines/w/photos/other-image'),{...env(),WINE_IMAGES:{} as R2Bucket},member('bob'))).rejects.toMatchObject({status:404});
  });
 
  it('refuses a shared photo to someone the wine was never shared with',async()=>{
   wines();
-  database.sql.exec("INSERT INTO wine_images(id,owner_id,wine_id,object_key,content_type,byte_size,width,height,upload_status,recognition_status,created_at) VALUES('img-1','alice','w','owners/alice/1.jpg','image/jpeg',8,10,10,'uploaded','complete','now')");
-  const e={...env(),WINE_IMAGES:{get:vi.fn(async()=>null)} as unknown as R2Bucket};
-  // On-demand generation must not become a way in: carol was never shared this.
-  await expect(socialRoute(new Request('https://wine.example/api/shared/wines/w/photos/img-1?variant=thumbnail'),e,member('carol'))).rejects.toMatchObject({status:404});
+  database.sql.exec("INSERT INTO wine_images(id,owner_id,wine_id,object_key,content_type,byte_size,width,height,upload_status,recognition_status,created_at) VALUES('img-private','alice','w','owners/alice/private.jpg','image/jpeg',8,10,10,'uploaded','complete','now')");
+  await expect(socialRoute(new Request('https://wine.example/api/shared/wines/w/photos/img-private'),{...env(),WINE_IMAGES:{} as R2Bucket},member('carol'))).rejects.toMatchObject({status:404});
  });
 
- it('prepares sharing photos on the scheduled pass, not only on a shared-wine view',async()=>{
-  // The reported bug: sharing many wines at once left a friend's journal full of
-  // letter tiles, because the only server-side path ran on a single wine's GET.
-  wines();
-  database.sql.exec(`
-   INSERT INTO wines(id,owner_id,producer,wine_name,created_at,updated_at) VALUES('w2','alice','P','Second','now','now');
-   INSERT INTO wines(id,owner_id,producer,wine_name,created_at,updated_at) VALUES('w-private','alice','P','Never shared','now','now');
-   INSERT INTO wine_shares(wine_id,owner_id,recipient_id) VALUES('w','alice','bob'),('w2','alice','bob');
-   INSERT INTO wine_images(id,owner_id,wine_id,object_key,content_type,byte_size,width,height,upload_status,recognition_status,created_at)
-   VALUES('img-1','alice','w','owners/alice/1.jpg','image/jpeg',8,10,10,'uploaded','complete','now'),
-         ('img-2','alice','w2','owners/alice/2.jpg','image/jpeg',8,10,10,'uploaded','complete','now'),
-         ('img-private','alice','w-private','owners/alice/p.jpg','image/jpeg',8,10,10,'uploaded','complete','now');
-  `);
-  const jpeg=Uint8Array.from([255,216,255,218,0,2,255,217]);
-  const bucket={get:vi.fn(async()=>({arrayBuffer:async()=>jpeg.buffer,size:jpeg.length})),put:vi.fn(async()=>({})),delete:vi.fn(async()=>undefined)} as unknown as R2Bucket;
-  const transform=vi.fn(()=>({transform:()=>({output:()=>({response:()=>new Response(jpeg)})})}));
-  const e={...env(),WINE_IMAGES:bucket,IMAGES:{input:transform} as unknown as ImagesBinding};
-
-  expect(database.sql.prepare("SELECT count(*) AS n FROM shared_photos").get()!.n).toBe(0);
-  await drainSharingPhotos(e);
-  const prepared=database.sql.prepare('SELECT image_id FROM shared_photos ORDER BY image_id').all().map(row=>row.image_id);
-  // Both shared wines, and nothing from the wine alice never shared.
-  expect(prepared).toEqual(['img-1','img-2']);
-
-  // Nothing is due now, so a second pass does no further transforms.
-  const transforms=transform.mock.calls.length;
-  await drainSharingPhotos(e);
-  expect(transform.mock.calls.length).toBe(transforms);
- });
-
- it('does nothing when the Images binding is absent rather than failing the cron',async()=>{
+ it('invalidates recipient summaries when the canonical photo set changes',()=>{
   wines();
   database.sql.exec("INSERT INTO wine_shares(wine_id,owner_id,recipient_id) VALUES('w','alice','bob')");
-  await expect(drainSharingPhotos({...env(),WINE_IMAGES:{} as R2Bucket})).resolves.toBe(0);
- });
-
- it('stops re-transforming a photo that cannot be derived instead of retrying on every view',async()=>{
-  wines();
-  database.sql.exec("INSERT INTO wine_shares(wine_id,owner_id,recipient_id) VALUES('w','alice','bob'); INSERT INTO wine_images(id,owner_id,wine_id,object_key,content_type,byte_size,width,height,upload_status,recognition_status,created_at) VALUES('img-gone','alice','w','owners/alice/missing.jpg','image/jpeg',8,10,10,'uploaded','complete','now')");
-  const bucket={get:vi.fn(async()=>null),put:vi.fn(async()=>({})),delete:vi.fn(async()=>undefined)} as unknown as R2Bucket;
-  const transform=vi.fn(()=>({transform:()=>({output:()=>({response:()=>new Response(Uint8Array.from([255,216,255,218,0,2,255,217]))})})}));
-  const e={...env(),WINE_IMAGES:bucket,IMAGES:{input:transform} as unknown as ImagesBinding};
-  const read=async()=>(await (await socialRoute(new Request('https://wine.example/api/shared/wines/w'),e,member('bob')))!.json()) as {photos:unknown[]};
-  expect((await read()).photos).toEqual([]);
-  const first=database.sql.prepare("SELECT attempts,error FROM shared_photo_attempts WHERE image_id='img-gone'").get()!;
-  expect(first.attempts).toBe(1);expect(String(first.error)).toContain('no longer stored');
-  const reads=(bucket.get as ReturnType<typeof vi.fn>).mock.calls.length;
-  // Two further views inside the backoff window must not touch R2 or Images again.
-  await read();await read();
-  expect((bucket.get as ReturnType<typeof vi.fn>).mock.calls.length).toBe(reads);
-  expect(database.sql.prepare("SELECT attempts FROM shared_photo_attempts WHERE image_id='img-gone'").get()!.attempts).toBe(1);
- });
- it('lets only one concurrent view pay for a derivative and both first views receive the photo',async()=>{
-  wines();
-  database.sql.exec("INSERT INTO wine_shares(wine_id,owner_id,recipient_id) VALUES('w','alice','bob'),('w','alice','carol'); INSERT OR IGNORE INTO friendships(user_id,friend_id) VALUES('carol','alice'),('alice','carol'); INSERT INTO wine_images(id,owner_id,wine_id,object_key,content_type,byte_size,width,height,upload_status,recognition_status,created_at) VALUES('img-race','alice','w','owners/alice/original.jpg','image/jpeg',8,10,10,'uploaded','complete','now')");
-  const jpeg=Uint8Array.from([255,216,255,218,0,2,255,217]);
-  let release!:()=>void,entered!:()=>void;
-  const gate=new Promise<void>(resolve=>{release=resolve}),started=new Promise<void>(resolve=>{entered=resolve});
-  const bucket={get:vi.fn(async()=>{entered();await gate;return {body:new Response('original').body!}}),put:vi.fn(async()=>({})),delete:vi.fn(async()=>undefined)} as unknown as R2Bucket;
-  const transform=vi.fn(()=>({transform:()=>({output:()=>({response:()=>new Response(jpeg)})})}));
-  const e={...env(),WINE_IMAGES:bucket,IMAGES:{input:transform} as unknown as ImagesBinding};
-  const first=socialRoute(new Request('https://wine.example/api/shared/wines/w'),e,member('bob'));
-  await started;
-  const second=socialRoute(new Request('https://wine.example/api/shared/wines/w'),e,member('carol'));
-  // Hold the winner long enough that, without the contention wait, the loser
-  // would complete its final photo SELECT and return an empty first render.
-  await new Promise(resolve=>setTimeout(resolve,50));release();
-  const details=await Promise.all((await Promise.all([first,second])).map(async response=>(await response!.json()) as {photos:Array<{id:string}>}));
-  expect(transform.mock.calls.length).toBe(1);
-  expect(database.sql.prepare("SELECT count(*) AS n FROM shared_photos WHERE image_id='img-race'").get()!.n).toBe(1);
-  expect(details[0].photos.map(photo=>photo.id)).toContain('img-race');
-  expect(details[1].photos.map(photo=>photo.id)).toContain('img-race');
+  const before=Number(database.sql.prepare("SELECT revision FROM achievement_cache_state WHERE owner_id='bob'").get()?.revision??0);
+  database.sql.exec("INSERT INTO wine_images(id,owner_id,wine_id,object_key,content_type,byte_size,width,height,upload_status,recognition_status,created_at) VALUES('img-rev','alice','w','owners/alice/rev.jpg','image/jpeg',8,10,10,'uploaded','complete','now')");
+  const afterInsert=Number(database.sql.prepare("SELECT revision FROM achievement_cache_state WHERE owner_id='bob'").get()?.revision??0);
+  expect(afterInsert).toBeGreaterThan(before);
+  database.sql.exec("DELETE FROM wine_images WHERE id='img-rev'");
+  const afterDelete=Number(database.sql.prepare("SELECT revision FROM achievement_cache_state WHERE owner_id='bob'").get()?.revision??0);
+  expect(afterDelete).toBeGreaterThan(afterInsert);
  });
  it('has an explicit personal-field allowlist',()=>{expect(sharedWine({id:'w',price:10,venue:'x',latitude:1,tags_json:'["secret"]'})).not.toHaveProperty('tags')});
- it('removes JPEG metadata while preserving baseline or progressive frame markers',()=>{
-  const baseline=Uint8Array.from([255,216,255,225,0,5,71,80,83,255,218,0,2,255,217]);
-  expect([...stripJpegMetadata(baseline)]).toEqual([255,216,255,218,0,2,255,217]);
-  const progressive=Uint8Array.from([255,216,255,194,0,2,255,218,0,2,255,217]);
-  expect([...stripJpegMetadata(progressive)]).toEqual([...progressive]);
-  expect(()=>stripJpegMetadata(new Uint8Array([1,2,3]))).toThrow('JPEG');
- });
  it('distinguishes vintages, styles, editions and Unicode names',()=>{
   const target=(wineName:string,vintage:number|null=2020,wineStyle='red')=>buildResearchTargets({producer:'赤恋酒庄',wineName,country:'China',region:'Ningxia',vintage,wineStyle}).find(t=>t.scope==='wine_vintage')!;
   const key=sharedSubjectKey(target('山'));
