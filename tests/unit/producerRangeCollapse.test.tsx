@@ -94,6 +94,12 @@ describe('Producer wine range',()=>{
     expect(posted[0]).toMatchObject({url:'/api/producers/p1/research',body:{refreshProfile:true,confirmation:'RUN_PRODUCER_RESEARCH'}});
   });
 
+  it('hides the producer-wide research footnote from members',async()=>{
+    await render({winemakingPractices:'Traditional élevage.'},{role:'member'});
+    expect(host!.textContent).toContain('Traditional élevage.');
+    expect(host!.textContent).not.toContain('Producer-wide context only. Exact cuvée/vintage techniques are researched separately on the wine page.');
+  });
+
   it('groups the range by style and starts expanded',async()=>{
     await render();
     expect(groups()).toHaveLength(2);
