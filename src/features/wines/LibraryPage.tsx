@@ -71,7 +71,7 @@ function WineCard({wine:w,view,selecting,selected,onToggle,onFavorite,favoriteBu
     <div className={className}>{content}</div>
     {selectable
       ?<button type="button" className="journal-card-action journal-select-action" aria-pressed={selected} aria-label={`${selected?'Deselect':'Select'} ${label}`} onClick={onToggle}/>
-      :<><Link className="journal-card-action journal-open-action" to={w.shared?`/shared/${w.id}`:`/wines/${w.id}`} state={linkFrom(backTo)} aria-label={`Open ${label}`}/><button type="button" className={`journal-favorite-button${w.favorite?' active':''}`} aria-pressed={w.favorite} aria-label={`${w.favorite?'Remove':'Add'} ${label} ${w.favorite?'from':'to'} favorites`} disabled={favoriteBusy} onClick={()=>onFavorite(!w.favorite)}><AppIcon kind={w.favorite?'heart-filled':'heart'}/></>}
+      :<><Link className="journal-card-action journal-open-action" to={w.shared?`/shared/${w.id}`:`/wines/${w.id}`} state={linkFrom(backTo)} aria-label={`Open ${label}`}/><button type="button" className={`journal-favorite-button${w.favorite?' active':''}`} aria-pressed={w.favorite} aria-label={`${w.favorite?'Remove':'Add'} ${label} ${w.favorite?'from':'to'} favorites`} disabled={favoriteBusy} onClick={()=>onFavorite(!w.favorite)}><AppIcon kind={w.favorite?'heart-filled':'heart'}/></button></>}
   </div>;
 }
 
