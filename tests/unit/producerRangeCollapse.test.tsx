@@ -4,7 +4,8 @@ import { createRoot,type Root } from 'react-dom/client';
 import { MemoryRouter,Route,Routes } from 'react-router-dom';
 import { afterEach,beforeEach,describe,expect,it,vi } from 'vitest';
 
-vi.mock('../../src/lib/auth/client',async importOriginal=>({...await importOriginal<object>(),apiFetch:(...args:Parameters<typeof fetch>)=>fetch(...args)}));
+const authState=vi.hoisted(()=>({role:null as 'owner'|'member'|null}));
+vi.mock('../../src/lib/auth/client',async importOriginal=>({...await importOriginal<object>(),apiFetch:(...args:Parameters<typeof fetch>)=>fetch(...args),getAccount:()=>authState.role?{id:authState.role,email:`${authState.role}@example.com`,display_name:authState.role,role:authState.role,status:'active'}:null}));
 
 declare global{var IS_REACT_ACT_ENVIRONMENT:boolean}
 globalThis.IS_REACT_ACT_ENVIRONMENT=true;
@@ -29,9 +30,9 @@ let posted:Array<{url:string;body:unknown}>=[];
 
 async function render(over:Record<string,unknown>={},options:{role?:'owner'|'member';researchRun?:Record<string,unknown>}={}){
   posted=[];
+  authState.role=options.role??null;
   vi.stubGlobal('fetch',vi.fn(async(url:string,init?:RequestInit)=>{
     const target=String(url);
-    if(target.endsWith('/api/me')&&options.role)return new Response(JSON.stringify({user:{id:options.role,email:`${options.role}@example.com`,display_name:options.role,role:options.role,status:'active'}}),{status:200,headers:{'content-type':'application/json'}});
     if(init?.method==='POST'){posted.push({url:target,body:JSON.parse(String(init.body??'{}'))});return new Response(JSON.stringify({id:'d1',deleted:true}),{status:200,headers:{'content-type':'application/json'}})}
     if(target.includes('/name-suggestions'))return new Response(JSON.stringify({items:[]}),{status:200,headers:{'content-type':'application/json'}});
     if(target.includes('/research-status'))return options.researchRun?new Response(JSON.stringify(options.researchRun),{status:200,headers:{'content-type':'application/json'}}):new Response(null,{status:404});
@@ -39,7 +40,6 @@ async function render(over:Record<string,unknown>={},options:{role?:'owner'|'mem
     return new Response(JSON.stringify({...detail,...over}),{status:200,headers:{'content-type':'application/json'}});
   }));
   vi.resetModules();
-  if(options.role){const {bootstrapAccount}=await import('../../src/lib/auth/client');await bootstrapAccount()}
   const {ProducerDetailPage}=await import('../../src/features/producers/ProducerDetailPage');
   host=document.createElement('div');document.body.appendChild(host);root=createRoot(host);
   await act(async()=>{root!.render(<MemoryRouter initialEntries={['/producers/p1']}>
@@ -59,7 +59,7 @@ const fixButtons=()=>[...(host?.querySelectorAll('.catalog-fix')??[])] as HTMLBu
 beforeEach(()=>{window.localStorage.clear();vi.spyOn(window,'confirm').mockReturnValue(true)});
 afterEach(()=>{
   if(root)act(()=>root!.unmount());
-  host?.remove();root=null;host=null;vi.unstubAllGlobals();vi.restoreAllMocks();window.localStorage.clear();
+  host?.remove();root=null;host=null;authState.role=null;vi.unstubAllGlobals();vi.restoreAllMocks();window.localStorage.clear();
 });
 
 describe('Producer wine range',()=>{
