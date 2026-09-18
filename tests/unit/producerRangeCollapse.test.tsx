@@ -27,17 +27,19 @@ let root:Root|null=null,host:HTMLDivElement|null=null;
 
 let posted:Array<{url:string;body:unknown}>=[];
 
-async function render(over:Record<string,unknown>={}){
+async function render(over:Record<string,unknown>={},options:{role?:'owner'|'member';researchRun?:Record<string,unknown>}={}){
   posted=[];
   vi.stubGlobal('fetch',vi.fn(async(url:string,init?:RequestInit)=>{
     const target=String(url);
+    if(target.endsWith('/api/me')&&options.role)return new Response(JSON.stringify({user:{id:options.role,email:`${options.role}@example.com`,display_name:options.role,role:options.role,status:'active'}}),{status:200,headers:{'content-type':'application/json'}});
     if(init?.method==='POST'){posted.push({url:target,body:JSON.parse(String(init.body??'{}'))});return new Response(JSON.stringify({id:'d1',deleted:true}),{status:200,headers:{'content-type':'application/json'}})}
     if(target.includes('/name-suggestions'))return new Response(JSON.stringify({items:[]}),{status:200,headers:{'content-type':'application/json'}});
-    if(target.includes('/research-status'))return new Response(null,{status:404});
+    if(target.includes('/research-status'))return options.researchRun?new Response(JSON.stringify(options.researchRun),{status:200,headers:{'content-type':'application/json'}}):new Response(null,{status:404});
     if(target.endsWith('/api/producers'))return new Response(JSON.stringify({items:[]}),{status:200,headers:{'content-type':'application/json'}});
     return new Response(JSON.stringify({...detail,...over}),{status:200,headers:{'content-type':'application/json'}});
   }));
   vi.resetModules();
+  if(options.role){const {bootstrapAccount}=await import('../../src/lib/auth/client');await bootstrapAccount()}
   const {ProducerDetailPage}=await import('../../src/features/producers/ProducerDetailPage');
   host=document.createElement('div');document.body.appendChild(host);root=createRoot(host);
   await act(async()=>{root!.render(<MemoryRouter initialEntries={['/producers/p1']}>
@@ -72,6 +74,15 @@ describe('Producer wine range',()=>{
     await render();
     await click(byLabel(label)!);
     expect(posted[0]).toMatchObject({url:'/api/producers/p1/research',body:{refreshProfile,confirmation:'RUN_PRODUCER_RESEARCH'}});
+  });
+
+  it('shows members one producer research action and omits the completed-run card',async()=>{
+    await render({researchedAt:'2026-09-18T10:00:00.000Z',profileResearchedAt:'2026-09-18T10:00:00.000Z'},
+      {role:'member',researchRun:{requestId:'member-run',producerId:'p1',status:'complete',stage:'complete',attempt:1,message:'done',startedAt:'2026-09-18T09:57:00.000Z',updatedAt:'2026-09-18T10:00:00.000Z',completedAt:'2026-09-18T10:00:00.000Z',durationMs:163700}});
+    expect(byLabel('Refresh profile')).toBeTruthy();
+    expect(byLabel('Research producer')).toBeUndefined();
+    expect(host!.querySelector('.producer-research-status.complete')).toBeNull();
+    expect(host!.textContent).not.toContain('Research complete');
   });
 
   it('groups the range by style and starts expanded',async()=>{
