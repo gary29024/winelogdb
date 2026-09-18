@@ -36,9 +36,9 @@ describe('shared producers in the recipient library',()=>{
       expect(payload.items[0].id).toMatch(/^shared::alice::producer-alice$/);
       expect(Number(sqlite.prepare("SELECT count(*) AS n FROM producers WHERE owner_id='bob'").get()!.n)).toBe(0);
 
-      const resolved=await app.fetch(new Request('https://x/api/producers/resolve?name=Domaine%20Test',{headers:auth}),env,context);
+      const resolved=await app.fetch(new Request('https://x/api/producers/resolve?name=Domaine-Test',{headers:auth}),env,context);
       expect(resolved.status).toBe(200);
-      expect(await resolved.json()).toMatchObject({matched:true,inputName:'Domaine Test',producer:{canonicalName:'Domaine Test',sharedOnly:true,id:'shared::alice::producer-alice'}});
+      expect(await resolved.json()).toMatchObject({matched:true,inputName:'Domaine-Test',producer:{canonicalName:'Domaine Test',sharedOnly:true,id:'shared::alice::producer-alice'}});
 
       const detail=await app.fetch(new Request(`https://x/api/producers/${payload.items[0].id}`,{headers:auth}),env,context);
       expect(detail.status).toBe(200);
