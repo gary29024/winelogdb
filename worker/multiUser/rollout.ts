@@ -255,5 +255,9 @@ export async function rolloutRoute(request:Request,env:RolloutEnv,member:Member)
   const data=await request.json().catch(()=>({})) as {refresh?:unknown};
   return json(await startRollout(env,member,'lwin',data.refresh===true),202);
  }
+ if(path==='/api/admin/rollout/lwin-ai'){
+  const data=await request.json().catch(()=>({})) as {refresh?:unknown};
+  return json(await startRollout(env,member,'lwin_ai',data.refresh===true),202);
+ }
  throw new ApiError(404,'Unknown rollout task');
 }
