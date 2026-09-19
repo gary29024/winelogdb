@@ -60,7 +60,7 @@ for(const [index,row] of inputRows.entries())try{
 }
 if(!products.length)throw new Error('No valid LWIN rows were found');
 const shards=new Map<string,LwinReferenceProduct[]>(),byLwin=new Map(products.map(product=>[product.lwin7,product]));
-for(const product of products){const id=referenceShardId(product.producerKey,REFERENCE_SHARDS),rows=shards.get(id)??[];rows.push(product);shards.set(id,rows)}
+for(const product of products){const id=referenceShardId(product.producerKey||product.lwin7,REFERENCE_SHARDS),rows=shards.get(id)??[];rows.push(product);shards.set(id,rows)}
 const redirects:Record<string,LwinRedirect>={};
 for(const product of products)if(product.status==='Combined'&&product.referenceLwin7){
  const seen=new Set([product.lwin7]);let targetId=product.referenceLwin7,target:LwinReferenceProduct|undefined,unresolvedReason:string|null=null;
@@ -88,7 +88,7 @@ for(const product of products)if(product.status==='Combined'&&product.referenceL
   console.warn(`LWIN ${product.lwin7}: unresolved redirect — ${unresolvedReason??'no terminal target'}`);
   continue;
  }
- redirects[product.lwin7]={targetLwin7:target.lwin7,targetShard:referenceShardId(target.producerKey,REFERENCE_SHARDS)};
+ redirects[product.lwin7]={targetLwin7:target.lwin7,targetShard:referenceShardId(target.producerKey||target.lwin7,REFERENCE_SHARDS)};
 }
 const prefix=`reference/lwin/versions/${version}`,manifest:ReferenceManifest={
  provider:'lwin',version,prefix,shardCount:REFERENCE_SHARDS,rows:products.length,source:basename(inputPath),sourceUpdatedAt:latest||null,generatedAt,

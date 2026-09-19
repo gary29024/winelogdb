@@ -89,7 +89,9 @@ Review the console summary. Pay particular attention to:
 - unresolved Combined redirects;
 - the generated content version.
 
-Unexpected rejected rows or unresolved redirects should be investigated before publishing. A small number of unresolved redirects does not block the refresh: those Combined identities remain in the catalogue but resolve as `conflict` rather than being guessed. Circular redirect chains still stop the import because they indicate a structurally corrupt source graph.
+The official LWIN workbook legitimately contains sparse historical/reference rows where `WINE`, `PRODUCER_NAME` or `DISPLAY_NAME` is blank/NA. WineLog retains those rows instead of rejecting them. They remain useful for LWIN identity history and Combined redirects, but rows without enough producer/wine identity are not candidates for automatic name matching.
+
+Unexpected rejected rows or unresolved redirects should therefore be investigated before publishing. A small number of unresolved redirects does not block the refresh: those Combined identities remain in the catalogue but resolve as `conflict` rather than being guessed. Circular redirect chains still stop the import because they indicate a structurally corrupt source graph.
 
 When the dry run looks right:
 
@@ -102,7 +104,7 @@ The importer:
 1. reads the official XLSX;
 2. validates the expected LWIN columns;
 3. normalizes Excel numeric IDs such as `1000131.0` to `1000131`;
-4. retains Live, Combined and Deleted rows;
+4. retains Live, Combined and Deleted rows, including legitimate sparse rows with blank optional identity fields;
 5. builds Combined -> REFERENCE redirect data;
 6. writes producer-keyed R2 shards under a new immutable version;
 7. uploads every shard;
@@ -288,6 +290,10 @@ Use the original Liv-ex workbook without renaming/removing columns. If using CSV
 ### Some LWIN values display with `.0`
 
 That is normal Excel behavior. The importer converts valid seven-digit identifiers to strings before building the catalogue.
+
+### Many rows are reported as rejected because WINE/producer/display name is blank
+
+Do not proceed with an older importer that reports this pattern. Liv-ex legitimately leaves some optional identity fields blank on historical/reference records. Current WineLog retains those sparse rows and simply excludes rows without enough producer/wine identity from automatic name matching.
 
 ### An LWIN redirect is reported as unresolved
 
