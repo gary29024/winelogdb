@@ -2,7 +2,7 @@ import { normalizeReferenceText } from './referenceCatalog';
 
 export const referenceSuggestionFields=['producer','wineName','country','region','classification'] as const;
 export type ReferenceSuggestionField=typeof referenceSuggestionFields[number];
-export type ReferenceSuggestion={field:ReferenceSuggestionField;label:string;current:string|null;suggested:string};
+export type ReferenceSuggestion={field:ReferenceSuggestionField;label:string;current:string|null;suggested:string;suggestedValue?:string};
 
 export function appClassification(value:string|null|undefined){
  const normalized=normalizeReferenceText(value);
@@ -36,7 +36,7 @@ export function buildReferenceSuggestions(input:SuggestionInput):ReferenceSugges
  }
  if(!input.classificationOverride){
   const suggested=appClassification(input.referenceClassification),current=input.classification?.trim()||null;
-  if(current&&suggested&&current!==suggested)suggestions.push({field:'classification',label:'Classification',current:classificationLabel(current),suggested:classificationLabel(suggested)!});
+  if(current&&suggested&&current!==suggested)suggestions.push({field:'classification',label:'Classification',current:classificationLabel(current),suggested:classificationLabel(suggested)!,suggestedValue:suggested});
  }
  return suggestions;
 }

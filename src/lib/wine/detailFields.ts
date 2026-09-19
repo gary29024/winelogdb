@@ -1,5 +1,6 @@
 import { resolvePlace } from '../places/resolve';
 import { formatDate,formatPrice,formatRating } from './detailFormat';
+import { normalizeReferenceText } from './referenceCatalog';
 
 /**
  * The single definition of what a wine detail page shows, for both the owner's
@@ -20,6 +21,7 @@ import { formatDate,formatPrice,formatRating } from './detailFormat';
 // normalise before it can ask for its own rows.
 type Absent=null|undefined;
 export type WineFacts={
+ wineName?:string|Absent;
  country?:string|Absent;
  region?:string|Absent;
  appellation?:string|Absent;
@@ -31,7 +33,7 @@ export type WineFacts={
  releaseDesignation?:string|Absent;
  vintageKind?:'vintage'|'non_vintage'|'multi_vintage'|'unknown'|Absent;
  colour?:string|Absent;productType?:string|Absent;productSubtype?:string|Absent;
- lwin7?:string|Absent;lwin11?:string|Absent;elid?:string|Absent;
+ lwin7?:string|Absent;lwin11?:string|Absent;elid?:string|Absent;referenceSite?:string|Absent;referenceParcel?:string|Absent;
 };
 
 export type WineExperience={
@@ -77,9 +79,20 @@ export function asRecordedLabel(wine:WineFacts){
  return recorded&&recorded!==[wine.region,wine.appellation].filter(Boolean).join(' / ')?recorded:null;
 }
 
+/** A reference site/parcel is useful only when the same words are not already
+ * visible in the wine name or the legal place fields. */
+function additionalReferencePlace(value:string|Absent,wine:WineFacts,extra:Array<string|Absent>=[]){
+ const candidate=value?.trim();if(!candidate)return null;
+ const candidateKey=normalizeReferenceText(candidate);
+ const covered=[wine.wineName,wine.region,wine.appellation,...extra].some(item=>{
+  const itemKey=normalizeReferenceText(item);return Boolean(itemKey&&itemKey.includes(candidateKey));
+ });
+ return covered?null:candidate;
+}
+
 /** The Wine details rows, in reading order. Empty fields are dropped. */
 export function wineFactRows(wine:WineFacts):FactRow[]{
- const {denominatedAppellation,denominatedRegion}=placeLabels(wine);
+ const {denominatedAppellation,denominatedRegion}=placeLabels(wine),site=additionalReferencePlace(wine.referenceSite,wine),parcel=additionalReferencePlace(wine.referenceParcel,wine,[site]);
  return present([
   ['Region',denominatedRegion],
   ['Appellation',denominatedAppellation],
@@ -88,6 +101,7 @@ export function wineFactRows(wine:WineFacts):FactRow[]{
   ['Type',[wine.colour,wine.productSubtype??wine.productType].filter(Boolean).join(' · ')],
   ['Grapes / blend',blendLabels(wine).join(', ')],
   ['Alcohol',wine.alcoholPercentage!=null?`${wine.alcoholPercentage}%`:null],
+  ['LWIN site',site],['LWIN parcel',parcel],
   ['LWIN7',wine.lwin7],['LWIN11',wine.lwin11],['ELID',wine.elid]
  ]);
 }

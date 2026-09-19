@@ -129,18 +129,22 @@ async function backfillLwinBatch(env:RolloutEnv){
     producer:row.producer,wineName:row.wine_name,country:safeCountry,region:safeRegion,classification:safeClassification,classificationOverride:row.classification_override,
     referenceProducer:result.referenceProducer,referenceWineName:result.referenceWineName,referenceCountry:result.country,referenceRegion:result.region,referenceClassification:result.referenceClassification
    }),now=stamp();
-   const saved=await env.DB.prepare(`UPDATE wines SET reference_product_key=?,lwin7=?,lwin11=?,elid=?,
+   const saved=await env.DB.prepare(`UPDATE wines SET reference_product_key=?,lwin7=?,lwin11=?,elid=?,reference_site=?,reference_parcel=?,
       country=coalesce(nullif(trim(country),''),?),region=coalesce(nullif(trim(region),''),?),
       classification=CASE WHEN classification IS NULL AND classification_override IS NULL THEN coalesce(?,classification) ELSE classification END,
       colour=coalesce(colour,?),product_type=coalesce(product_type,?),product_subtype=coalesce(product_subtype,?),
-      identity_match_status='matched',identity_match_confidence=?,identity_matched_at=?,reference_suggestions_json=?,reference_suggestions_updated_at=?
+      identity_match_status='matched',identity_match_confidence=?,identity_match_candidates_json=NULL,identity_matched_at=?,identity_checked_at=?,reference_suggestions_json=?,reference_suggestions_updated_at=?
       WHERE id=? AND owner_id=? AND lwin7 IS NULL AND coalesce(identity_match_status,'')<>'manual'`)
-     .bind(result.referenceProductKey,result.lwin7,result.lwin11,result.elid,result.country,result.region,safeClassification,result.colour,result.productType,result.productSubtype,
-      result.identityMatchConfidence,now,suggestions.length?JSON.stringify(suggestions):null,suggestions.length?now:null,row.id,row.owner_id).run();
+     .bind(result.referenceProductKey,result.lwin7,result.lwin11,result.elid,result.referenceSite,result.referenceParcel,result.country,result.region,safeClassification,result.colour,result.productType,result.productSubtype,
+      result.identityMatchConfidence,now,now,suggestions.length?JSON.stringify(suggestions):null,suggestions.length?now:null,row.id,row.owner_id).run();
    if(saved.meta.changes)matched++;
-  }else if(result.identityMatchStatus==='ambiguous')ambiguous++;
-  else if(result.identityMatchStatus==='conflict')conflict++;
-  else unmatched++;
+  }else{
+   const status=result.identityMatchStatus==='ambiguous'?'ambiguous':result.identityMatchStatus==='conflict'?'conflict':'unmatched',now=stamp();
+   const saved=await env.DB.prepare(`UPDATE wines SET identity_match_status=?,identity_match_confidence=NULL,identity_match_candidates_json=?,identity_matched_at=NULL,identity_checked_at=?
+      WHERE id=? AND owner_id=? AND lwin7 IS NULL AND coalesce(identity_match_status,'')<>'manual'`)
+    .bind(status,result.identityMatchCandidates.length?JSON.stringify(result.identityMatchCandidates):null,now,row.id,row.owner_id).run();
+   if(saved.meta.changes){if(status==='ambiguous')ambiguous++;else if(status==='conflict')conflict++;else unmatched++}
+  }
  }
  const processed=rows.results.length,last=rows.results.at(-1)?.id??cursor,complete=processed<LWIN_BATCH;
  const [priorProcessed,priorMatched,priorAmbiguous,priorUnmatched,priorConflict]=await Promise.all([

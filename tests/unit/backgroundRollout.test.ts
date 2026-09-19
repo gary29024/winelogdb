@@ -88,15 +88,15 @@ describe('background launch preparation',()=>{
    [`reference/lwin/versions/l1/shard-${shard}.json`]:[{
     productKey:'lwin:1234567',lwin7:'1234567',status:'Live',referenceLwin7:null,displayName:'Krug, Grande Cuvee',producerTitle:null,producerName:'Krug',wineName:'Grande Cuvee',
     producerKey,wineKey:'grande cuvee',country:'France',countryKey:'france',region:'Champagne',regionKey:'champagne',subRegion:null,site:null,parcel:null,
-    colour:'White',colourKey:'white',productType:'Wine',productSubtype:'Sparkling',designation:null,classification:'Grand Cru',vintageConfig:null,firstVintage:null,finalVintage:null,
+    colour:'White',colourKey:'white',productType:'Wine',productSubtype:'Sparkling',designation:null,classification:'Grand Cru',vintageConfig:'sequential',firstVintage:2000,finalVintage:2026,
     sourceAddedAt:null,sourceUpdatedAt:null,importedAt:'now'
    }],
    'reference/lwin/versions/l1/redirects.json':{}
   };
   const {database,env,sent}=setup([],referenceObjects);
   database.sql.exec(`
-   INSERT INTO wines(id,owner_id,producer,wine_name,country,region,tasting_notes,created_at,updated_at) VALUES
-    ('w1','owner','Krug','Grande Cuvee',NULL,NULL,'keep this note','now','now'),
+   INSERT INTO wines(id,owner_id,producer,wine_name,vintage,country,region,tasting_notes,created_at,updated_at) VALUES
+    ('w1','owner','Krug','Grande Cuvee',2019,NULL,NULL,'keep this note','now','now'),
     ('w2','member','Unknown','Mystery Wine','France','Champagne','member note','now','now');
    INSERT INTO wines(id,owner_id,producer,wine_name,identity_match_status,elid,created_at,updated_at)
     VALUES('w3','owner','Krug','Grande Cuvee','manual','FR-CMP-KRUG01-N171','now','now');
@@ -110,10 +110,10 @@ describe('background launch preparation',()=>{
   const status=await rolloutStatus(database.db);
   expect(status.lwin).toMatchObject({state:'complete',processed:2,total:2,matched:1,ambiguous:0,unmatched:1,conflict:0,error:null});
 
-  const matched=database.sql.prepare('SELECT lwin7,identity_match_status,tasting_notes,colour,product_type,country,region,classification,reference_suggestions_json FROM wines WHERE id=?').get('w1') as Record<string,unknown>;
-  expect(matched).toMatchObject({lwin7:'1234567',identity_match_status:'matched',tasting_notes:'keep this note',colour:'White',product_type:'Wine',country:'France',region:'Champagne',classification:'grand_cru',reference_suggestions_json:null});
-  const unmatched=database.sql.prepare('SELECT lwin7,identity_match_status,tasting_notes FROM wines WHERE id=?').get('w2') as Record<string,unknown>;
-  expect(unmatched).toMatchObject({lwin7:null,identity_match_status:null,tasting_notes:'member note'});
+  const matched=database.sql.prepare('SELECT lwin7,lwin11,identity_match_status,identity_checked_at,tasting_notes,colour,product_type,country,region,classification,reference_suggestions_json FROM wines WHERE id=?').get('w1') as Record<string,unknown>;
+  expect(matched).toMatchObject({lwin7:'1234567',lwin11:'12345672019',identity_match_status:'matched',tasting_notes:'keep this note',colour:'White',product_type:'Wine',country:'France',region:'Champagne',classification:'grand_cru',reference_suggestions_json:null});expect(matched.identity_checked_at).toBeTruthy();
+  const unmatched=database.sql.prepare('SELECT lwin7,identity_match_status,identity_checked_at,tasting_notes FROM wines WHERE id=?').get('w2') as Record<string,unknown>;
+  expect(unmatched).toMatchObject({lwin7:null,identity_match_status:'unmatched',tasting_notes:'member note'});expect(unmatched.identity_checked_at).toBeTruthy();
   const manual=database.sql.prepare('SELECT lwin7,identity_match_status,elid FROM wines WHERE id=?').get('w3') as Record<string,unknown>;
   expect(manual).toMatchObject({lwin7:null,identity_match_status:'manual',elid:'FR-CMP-KRUG01-N171'});
  });

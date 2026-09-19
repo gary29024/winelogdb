@@ -15,6 +15,7 @@ describe('LWIN reference suggestions',()=>{
    classification:'premier_cru',referenceClassification:'Grand Cru'
   });
   expect(suggestions.map(item=>item.field)).toEqual(['wineName','region','classification']);
+  expect(suggestions.find(item=>item.field==='classification')?.suggestedValue).toBe('grand_cru');
  });
  it('does not suggest a classification over an explicit user override',()=>{
   expect(buildReferenceSuggestions({classification:'premier_cru',classificationOverride:'none',referenceClassification:'Grand Cru'})).toEqual([]);
