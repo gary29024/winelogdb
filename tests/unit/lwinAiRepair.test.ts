@@ -11,6 +11,7 @@ function bucket(rows:LwinReferenceProduct[],reads?:string[]){
   const shard=referenceShardId(row.producerKey),key=`reference/lwin/versions/v1/shard-${shard}.json`,list=(objects[key] as LwinReferenceProduct[]|undefined)??[];list.push(row);objects[key]=list;
   for(const lookup of producerLookupKeys(row.producerName)){for(const value of [lookup,...lookup.split(' ').filter(token=>token.length>=4).map(token=>`t:${token}`)]){const shards=index[value]??[];if(!shards.includes(shard))shards.push(shard);index[value]=shards}}
  }
+ for(const key of Object.keys(index))if(key.startsWith('t:')&&index[key].length>8)delete index[key];
  return {get:async(key:string)=>{reads?.push(key);return key in objects?{text:async()=>JSON.stringify(objects[key])}:null}} as unknown as R2Bucket;
 }
 const product=(lwin7:string,producerName:string,wineName:string):LwinReferenceProduct=>({productKey:`lwin:${lwin7}`,lwin7,status:'Live',referenceLwin7:null,displayName:`${producerName}, ${wineName}`,producerTitle:null,producerName,wineName,producerKey:producerName.toLowerCase(),wineKey:wineName.toLowerCase(),country:'France',countryKey:'france',region:'Bordeaux',regionKey:'bordeaux',subRegion:null,site:null,parcel:null,colour:'Red',colourKey:'red',productType:'Wine',productSubtype:'Still',designation:null,classification:null,vintageConfig:'sequential',firstVintage:2000,finalVintage:2026,sourceAddedAt:null,sourceUpdatedAt:null,importedAt:'now'});
