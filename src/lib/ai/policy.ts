@@ -53,6 +53,11 @@ export const AI_ROUTES={
     models:[AI_MODELS.recognitionPrimary,AI_MODELS.recognitionEscalationFlex],
     note:'Vertex Flex when AI Gateway is configured, Developer API Batch otherwise; Flex escalation has its own policy key.'
   },
+  lwinBackfill:{
+    transport:'gemini-native-flex-batch',
+    models:[AI_MODELS.recognitionPrimary],
+    note:'Owner-triggered one-off unresolved LWIN repair. Local candidates first; Gemini 3.1 Flash Lite ranks only supplied candidates over AI Gateway Vertex Flex.'
+  },
   champagneExtraction:{
     transport:'gemini-native-flex-batch',
     models:[AI_MODELS.recognitionPrimary],
