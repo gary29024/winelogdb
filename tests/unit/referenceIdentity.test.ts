@@ -25,15 +25,17 @@ describe('external wine identity helpers',()=>{
   const statements=referenceIdentityStatements(db,'owner','wine',{producer:'Krug',wineName:'Grande Cuvée',vintage:null},'2026-09-18T00:00:00.000Z',false);
   expect(statements).toHaveLength(1);
  });
- it('keeps a future manual external identity instead of discarding its ID',()=>{
+ it('keeps future manual LWIN-only or ELID-only identities instead of discarding them',()=>{
   const db={prepare:(sql:string)=>({bind:(...args:unknown[])=>({sql,args})})} as unknown as D1Database;
-  const statements=referenceIdentityStatements(db,'owner','wine',{producer:'Krug',wineName:'Grande Cuvée',vintage:null,identityMatchStatus:'manual',lwin7:'1234567',referenceProductKey:'lwin:1234567'},'2026-09-18T00:00:00.000Z',false) as unknown as Array<{args:unknown[]}>;
-  expect(statements).toHaveLength(2);
-  expect(statements[1].args).toContain('1234567');
+  const lwin=referenceIdentityStatements(db,'owner','wine',{producer:'Krug',wineName:'Grande Cuvée',vintage:null,identityMatchStatus:'manual',lwin7:'1234567',referenceProductKey:'lwin:1234567'},'2026-09-18T00:00:00.000Z',false) as unknown as Array<{args:unknown[]}>;
+  expect(lwin).toHaveLength(2);expect(lwin[1].args).toContain('1234567');
+  const elid=referenceIdentityStatements(db,'owner','wine',{producer:'Krug',wineName:'Grande Cuvée',vintage:null,identityMatchStatus:'manual',elid:'FR-CMP-KRUG01-N171'},'2026-09-18T00:00:00.000Z',false) as unknown as Array<{args:unknown[]}>;
+  expect(elid).toHaveLength(2);expect(elid[1].args).toContain('FR-CMP-KRUG01-N171');
  });
  it('does not confuse an unknown vintage with non-vintage',()=>{
   expect(normalizedVintageKind(null,null)).toBe('unknown');
   expect(normalizedVintageKind(null,'non_vintage')).toBe('non_vintage');
+  expect(normalizedVintageKind(null,'vintage')).toBe('unknown');
   expect(vintageReferenceCode(2019,'vintage')).toBe('2019');
   expect(vintageReferenceCode(null,'non_vintage')).toBe('');
  });

@@ -29,7 +29,7 @@ export function isValidElid(value:string|null|undefined){
 }
 export function normalizedVintageKind(vintage:number|null|undefined,kind:VintageKind|null|undefined):VintageKind{
  if(vintage!=null)return 'vintage';
- if(kind&&vintageKinds.includes(kind))return kind;
+ if(kind&&kind!=='vintage'&&vintageKinds.includes(kind))return kind;
  return 'unknown';
 }
 export function vintageReferenceCode(vintage:number|null|undefined,kind:VintageKind|null|undefined){
@@ -64,7 +64,9 @@ export function referenceIdentityStatements(
  const lookupCompleted=w.identityMatchStatus!=null;
  if(!lookupCompleted)return [evidence];
 
- const persistIdentity=(w.identityMatchStatus==='matched'||w.identityMatchStatus==='manual')&&Boolean(w.lwin7);
+ const persistIdentity=w.identityMatchStatus==='matched'
+  ?Boolean(w.lwin7)
+  :w.identityMatchStatus==='manual'&&Boolean(w.lwin7||w.elid);
  const identity=db.prepare(`UPDATE wines SET reference_product_key=?,lwin7=?,lwin11=?,elid=?,colour=?,product_type=?,product_subtype=?,
    identity_match_status=?,identity_match_confidence=?,identity_matched_at=? WHERE owner_id=? AND id=?`)
    .bind(persistIdentity?w.referenceProductKey??null:null,persistIdentity?w.lwin7??null:null,persistIdentity?w.lwin11??null:null,persistIdentity?w.elid??null:null,
@@ -94,6 +96,14 @@ const compatible=(candidate:LwinReferenceProduct,countryKey:string,regionKey:str
  (!regionKey||!candidate.regionKey||candidate.regionKey===regionKey)&&
  (!colourKey||!candidate.colourKey||candidate.colourKey===colourKey);
 
+function elidWineNameKeys(product:LwinReferenceProduct,wine:ReferenceResolvable){
+ const keys=new Set([normalizeReferenceText(wine.wineName),normalizeReferenceText(product.wineName)].filter(Boolean));
+ const release=normalizeReferenceText(wine.releaseDesignation);
+ if(release)for(const key of [...keys])if(key.endsWith(release)){
+  const base=key.slice(0,-release.length).trim();if(base)keys.add(base);
+ }
+ return [...keys];
+}
 async function registeredElid(bucket:R2Bucket,product:LwinReferenceProduct,wine:ReferenceResolvable){
  const clue=elidVintageClue(wine);if(!clue)return null;
  const index=await elidProducerIndex(bucket),codes=[...new Set(producerLookupKeys(product.producerName).flatMap(key=>index[key]??[]))];
@@ -101,10 +111,10 @@ async function registeredElid(bucket:R2Bucket,product:LwinReferenceProduct,wine:
   console.warn(JSON.stringify({event:'elid-producer-unmapped',lwin7:product.lwin7,producer:product.producerName}));
   return null;
  }
- const baseWine=normalizeReferenceText(wine.wineName),groups=await Promise.all(codes.map(code=>referenceRows<ElidReferenceRecord>(bucket,'elid',code)));
- const candidates=groups.flat().filter(row=>codes.includes(row.producerCode)&&row.wineKey===baseWine&&row.vintageCode===clue);
+ const wineKeys=elidWineNameKeys(product,wine),groups=await Promise.all(codes.map(code=>referenceRows<ElidReferenceRecord>(bucket,'elid',code)));
+ const candidates=groups.flat().filter(row=>codes.includes(row.producerCode)&&wineKeys.includes(row.wineKey)&&row.vintageCode===clue);
  if(candidates.length!==1){
-  if(candidates.length>1)console.warn(JSON.stringify({event:'elid-match-ambiguous',lwin7:product.lwin7,producer:product.producerName,candidates:candidates.length}));
+  console.warn(JSON.stringify({event:candidates.length?'elid-match-ambiguous':'elid-match-missing',lwin7:product.lwin7,producer:product.producerName,wineKeys,vintageCode:clue,candidates:candidates.length}));
   return null;
  }
  return isValidElid(candidates[0].elid)?candidates[0].elid:null;

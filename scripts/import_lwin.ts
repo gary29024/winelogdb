@@ -56,8 +56,17 @@ const shards=new Map<string,LwinReferenceProduct[]>(),byLwin=new Map(products.ma
 for(const product of products){const id=referenceShardId(product.producerKey,REFERENCE_SHARDS),rows=shards.get(id)??[];rows.push(product);shards.set(id,rows)}
 const redirects:Record<string,LwinRedirect>={};
 for(const product of products)if(product.status==='Combined'&&product.referenceLwin7){
- const target=byLwin.get(product.referenceLwin7);
- if(!target)throw new Error(`Combined LWIN ${product.lwin7} points to missing REFERENCE ${product.referenceLwin7}`);
+ const seen=new Set([product.lwin7]);let targetId=product.referenceLwin7,target:LwinReferenceProduct|undefined;
+ while(targetId){
+  target=byLwin.get(targetId);
+  if(!target)throw new Error(`Combined LWIN ${product.lwin7} points to missing REFERENCE ${targetId}`);
+  if(seen.has(target.lwin7))throw new Error(`Combined LWIN ${product.lwin7} has a circular REFERENCE chain at ${target.lwin7}`);
+  seen.add(target.lwin7);
+  if(target.status!=='Combined')break;
+  if(!target.referenceLwin7)throw new Error(`Combined LWIN ${target.lwin7} has no valid REFERENCE`);
+  targetId=target.referenceLwin7;
+ }
+ if(!target)throw new Error(`Combined LWIN ${product.lwin7} has no resolvable REFERENCE`);
  redirects[product.lwin7]={targetLwin7:target.lwin7,targetShard:referenceShardId(target.producerKey,REFERENCE_SHARDS)};
 }
 const prefix=`reference/lwin/versions/${version}`,manifest:ReferenceManifest={

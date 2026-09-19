@@ -33,7 +33,17 @@ async function networkText(url:string,accept='text/html'){
  throw new Error(`ELID request failed for ${url}`);
 }
 async function robotsText(){
- if(!robotsTextPromise)robotsTextPromise=networkText(BASE+'/robots.txt','text/plain');
+ if(!robotsTextPromise)robotsTextPromise=(async()=>{
+  let response:Response|undefined;
+  try{
+   response=await fetch(BASE+'/robots.txt',{headers:{'User-Agent':USER_AGENT,'Accept':'text/plain'}});
+   if(response.status>=400&&response.status<500)return '';
+   if(!response.ok)throw new Error(`ELID robots.txt unavailable (${response.status}); sync aborted`);
+   return await response.text();
+  }finally{
+   await sleep(DELAY_MS);
+  }
+ })();
  return robotsTextPromise;
 }
 async function assertRobotsAllowed(url:string){
@@ -44,8 +54,8 @@ async function assertRobotsAllowed(url:string){
 }
 async function cached(url:string){
  await mkdir(CACHE,{recursive:true});const file=cacheFile(url),fresh=flag('fresh');
- if(!fresh)try{const info=await stat(file);if(Date.now()-info.mtimeMs<7*24*60*60*1000)return await readFile(file,'utf8')}catch{}
  await assertRobotsAllowed(url);
+ if(!fresh)try{const info=await stat(file);if(Date.now()-info.mtimeMs<7*24*60*60*1000)return await readFile(file,'utf8')}catch{}
  const html=await networkText(url);await writeFile(file,html,'utf8');return html;
 }
 

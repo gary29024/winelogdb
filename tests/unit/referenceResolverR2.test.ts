@@ -64,6 +64,12 @@ describe('R2 wine reference resolver',()=>{
   const result=await resolveWineReference(bucket(data),{producer:'Krug',wineName:'Grande Cuvée',releaseDesignation:'171ème Édition'});
   expect(result.identityMatchStatus).toBe('ambiguous');expect(result.lwin7).toBeNull();
  });
+ it('can match an ELID base wine name after removing the known release designation',async()=>{
+  const data=objects(),lwinShard=referenceShardId('krug');
+  data[`reference/lwin/versions/l1/shard-${lwinShard}.json`]=[{...lwin,wineName:'Grande Cuvée 171ème Édition',wineKey:'grande cuvee 171eme edition'}];
+  const result=await resolveWineReference(bucket(data),{producer:'Krug',wineName:'Grande Cuvée 171ème Édition',releaseDesignation:'171ème Édition',vintageKind:'non_vintage'});
+  expect(result.elid).toBe('FR-CMP-KRUG01-N171');
+ });
  it('does not attach a specific ELID when vintage/release identity is not safely derivable',async()=>{
   const b=bucket(objects());
   const unknown=await resolveWineReference(b,{producer:'Krug',wineName:'Grande Cuvée',releaseDesignation:'171ème Édition',vintage:null,vintageKind:'unknown'});
