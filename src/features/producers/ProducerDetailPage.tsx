@@ -112,6 +112,9 @@ export function ProducerDetailPage(){
  const nav=useNavigate(),account=getAccount();
  const memberView=account?.role==='member';
  const technicalView=account?.role==='owner';
+ // The wine range is the expensive half of producer research, so members get the
+ // profile, practices and contacts only. There is nothing to refresh range-only.
+ const rangeAllowed=!memberView&&!producer?.sharedOnly;
  const researchPoll=useRef<Poller|undefined>(undefined);
  function stopResearchTimers(){researchPoll.current?.stop();researchPoll.current=undefined}
  async function reload(){const detail=await getProducer(id);setProducer(detail);setPrimaryName(detail.canonicalName);setSelectedAlias('')}
@@ -212,8 +215,16 @@ export function ProducerDetailPage(){
  /**
   * How big the estate is, before any of it is read. It counts appellations
   * rather than groups so the line means the same thing on every axis.
+  *
+  * Only where the range itself is shown. The catalogue reaches every viewer's
+  * browser whatever their role, so counting it unconditionally would have put
+  * "18 wines · 12 appellations" above a page that, for a member, then shows no
+  * range at all - the header promising something the page does not deliver.
+  * A member's own tastings are theirs to count, and are on the page.
   */
  const rangeStats=useMemo(()=>{
+  const tastedCuvees=new Set((producer?.tastedWines??[]).map(wine=>wine.cuveeId??wine.id)).size;
+  if(!rangeAllowed)return tastedCuvees?`${tastedCuvees} tasted`:'';
   if(!catalogRows.length)return '';
   const appellations=new Set(catalogRows.map(row=>row.village).filter(name=>name&&name!=='Appellation not stated')).size;
   const tasted=catalogRows.filter(row=>Boolean(row.identity?.tastedCount)).length;
@@ -222,7 +233,7 @@ export function ProducerDetailPage(){
    appellations?`${appellations} appellation${appellations===1?'':'s'}`:'',
    tasted?`${tasted} tasted`:''
   ].filter(Boolean).join(' · ');
- },[catalogRows]);
+ },[catalogRows,rangeAllowed,producer]);
  const catalogTotals=useMemo(()=>catalogGroups.reduce((totals,group)=>({wines:totals.wines+group.rows.length,tasted:totals.tasted+group.tasted}),{wines:0,tasted:0}),[catalogGroups]);
  // Named by style rather than by the current grouping: which wine survives a
  // merge is a question about the wines, and the answer would otherwise be
@@ -294,9 +305,6 @@ export function ProducerDetailPage(){
   // where an eye expects them rather than after every unaccented name.
    .sort((a,b)=>a.name.localeCompare(b.name,undefined,{sensitivity:'base'})||(a.wineStyle??'').localeCompare(b.wineStyle??''));
  },[producer]);
- // The wine range is the expensive half of producer research, so members get the
- // profile, practices and contacts only. There is nothing to refresh range-only.
- const rangeAllowed=!memberView&&!producer?.sharedOnly;
  useEffect(()=>{
   if(!id||producer?.sharedOnly){setNameSuggestions([]);return}
   let active=true;

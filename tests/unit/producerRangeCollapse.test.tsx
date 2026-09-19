@@ -175,6 +175,29 @@ describe('Producer wine range',()=>{
     expect(host?.querySelector('.producer-header-stats')?.textContent).toBe('3 wines · 3 appellations');
   });
 
+  it('never promises a member a range the page will not show them',async()=>{
+    // The catalogue reaches every viewer's browser whatever their role, but the
+    // range is owner-only. Counting it unconditionally put "3 wines · 3
+    // appellations" above a page that then showed a member no range at all.
+    await render({},{role:'member'});
+    expect(host?.querySelector('.producer-range'),'members get profile and contacts only').toBeNull();
+    expect(host?.querySelector('.producer-header-stats')?.textContent??'').not.toContain('wines');
+    expect(host?.querySelector('.producer-header-stats')?.textContent??'').not.toContain('appellation');
+  });
+
+  it('still counts a member’s own tastings, which are theirs and are on the page',async()=>{
+    await render({tastedWines:[
+      {id:'w1',wineName:'Clos de la Roche',vintage:2019,wineStyle:'red',grapes:[],appellation:null,region:'Burgundy',
+       rating:null,tastingDate:'2026-01-01',imageId:null,cuveeId:'c1',catalogCuveeId:null,releaseParentCuveeId:null,
+       releaseParentName:null,releaseDesignation:null,releaseSequence:null},
+      {id:'w2',wineName:'Clos de la Roche',vintage:2018,wineStyle:'red',grapes:[],appellation:null,region:'Burgundy',
+       rating:null,tastingDate:'2026-02-01',imageId:null,cuveeId:'c1',catalogCuveeId:null,releaseParentCuveeId:null,
+       releaseParentName:null,releaseDesignation:null,releaseSequence:null}
+    ]},{role:'member'});
+    // Two bottles of one cuvée is one wine tasted, not two.
+    expect(host?.querySelector('.producer-header-stats')?.textContent).toBe('1 tasted');
+  });
+
   it('collapses and re-expands a single style without touching the others',async()=>{
     await render();
     await click(toggles()[0]);

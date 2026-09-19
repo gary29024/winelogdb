@@ -227,6 +227,36 @@ estate's name over a photograph, which is a genuinely different shape from
 media-beside-text, and forcing the shared component onto it would have cost the
 hero image for the sake of uniformity. It gains the count line and nothing else.
 
+## Owner and member
+
+Both roles get the same wine page, the same provenance badges and the same
+reference panel. The differences are wording, not layout: an owner sees the
+research model, the job's own stage message and a request id, where a member
+sees "Research updated", a plain progress line and a support id.
+
+The producer page is the real fork. `rangeAllowed = !memberView && !sharedOnly`,
+because the wine range is the expensive half of producer research, so a member
+gets the profile, the producer-wide practices and the contacts only. Everything
+this pass added to the range — the composition bar, the pivot and the filter
+chips — is therefore owner-only, and a member's producer page is about a third
+shorter. Their heading reads "Producer profile" rather than "Profile & range",
+they get one research action instead of two, the producer-wide footnote is
+hidden, and range and catalogue hosts are filtered out of the sources list.
+
+**A bug this pass introduced, found by drawing the member's page.** The
+catalogue reaches every viewer's browser whatever their role — only the
+rendering is gated — so the new hero count line counted it unconditionally and
+would have read "18 wines · 12 appellations" above a page that then showed a
+member no range at all: a header promising something the page does not deliver.
+The count line now respects `rangeAllowed` and falls back to the member's own
+tasted-cuvée count, which is theirs and is on the page. Pinned by two tests in
+`producerRangeCollapse`.
+
+Worth deciding separately: a member's producer page is now mostly profile,
+contacts and their own tastings. If that reads as thin, the cheap half of the
+range — a composition bar over the wines they have actually tasted — could be
+shown without granting range research.
+
 ## Phases
 
 | Phase | Work |
