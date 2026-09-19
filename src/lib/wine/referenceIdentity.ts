@@ -1,5 +1,6 @@
 import type { LwinReferenceProduct } from './lwinImport';
 import { elidProducerIndex,lwinRedirects,normalizeReferenceText,producerLookupKeys,referenceRows,referenceRowsByShard,type ElidReferenceRecord } from './referenceCatalog';
+import { appClassification,buildReferenceSuggestions } from './referenceSuggestions';
 
 export { normalizeReferenceText } from './referenceCatalog';
 export const vintageKinds=['vintage','non_vintage','multi_vintage','unknown'] as const;
@@ -8,10 +9,11 @@ export type IdentityMatchStatus='matched'|'suggested'|'ambiguous'|'unmatched'|'m
 export type ReferenceIdentityInput={
  producer:string;wineName:string;vintage?:number|null;vintageKind?:VintageKind|null;releaseDesignation?:string|null;
  recognizedProducer?:string|null;recognizedWineName?:string|null;recognizedVintageText?:string|null;
- country?:string|null;region?:string|null;wineStyle?:string|null;
+ country?:string|null;region?:string|null;wineStyle?:string|null;classification?:string|null;classificationOverride?:string|null;
  referenceProductKey?:string|null;lwin7?:string|null;lwin11?:string|null;elid?:string|null;
  identityMatchStatus?:IdentityMatchStatus|null;identityMatchConfidence?:number|null;
  colour?:string|null;productType?:string|null;productSubtype?:string|null;
+ referenceProducer?:string|null;referenceWineName?:string|null;referenceCountry?:string|null;referenceRegion?:string|null;referenceClassification?:string|null;
 };
 
 export function referenceWineKey(wineName:string|null|undefined,releaseDesignation?:string|null){
@@ -67,29 +69,34 @@ export function referenceIdentityStatements(
  const persistIdentity=w.identityMatchStatus==='matched'
   ?Boolean(w.lwin7)
   :w.identityMatchStatus==='manual'&&Boolean(w.lwin7||w.elid);
+ const suggestions=persistIdentity&&w.identityMatchStatus==='matched'?buildReferenceSuggestions({
+   producer:w.producer,wineName:w.wineName,country:w.country,region:w.region,classification:w.classification,classificationOverride:w.classificationOverride,
+   referenceProducer:w.referenceProducer,referenceWineName:w.referenceWineName,referenceCountry:w.referenceCountry,referenceRegion:w.referenceRegion,referenceClassification:w.referenceClassification
+  }):[];
  const identity=db.prepare(`UPDATE wines SET reference_product_key=?,lwin7=?,lwin11=?,elid=?,colour=?,product_type=?,product_subtype=?,
-   identity_match_status=?,identity_match_confidence=?,identity_matched_at=? WHERE owner_id=? AND id=?`)
+   identity_match_status=?,identity_match_confidence=?,identity_matched_at=?,reference_suggestions_json=?,reference_suggestions_updated_at=? WHERE owner_id=? AND id=?`)
    .bind(persistIdentity?w.referenceProductKey??null:null,persistIdentity?w.lwin7??null:null,persistIdentity?w.lwin11??null:null,persistIdentity?w.elid??null:null,
     persistIdentity?w.colour??null:null,persistIdentity?w.productType??null:null,persistIdentity?w.productSubtype??null:null,
-    w.identityMatchStatus,persistIdentity?w.identityMatchConfidence??(w.identityMatchStatus==='manual'?null:1):null,persistIdentity?stamp:null,owner,wineId);
+    w.identityMatchStatus,persistIdentity?w.identityMatchConfidence??(w.identityMatchStatus==='manual'?null:1):null,persistIdentity?stamp:null,
+    suggestions.length?JSON.stringify(suggestions):null,suggestions.length?stamp:null,owner,wineId);
  return [evidence,identity];
 }
 
 type ReferenceResolvable={
  producer?:string|null;wineName?:string|null;vintage?:number|null;vintageKind?:VintageKind|null;releaseDesignation?:string|null;
- country?:string|null;region?:string|null;style?:string|null;wineStyle?:string|null;
+ country?:string|null;region?:string|null;style?:string|null;wineStyle?:string|null;classification?:string|null;classificationOverride?:string|null;
 };
 export type ReferenceMatch={
  referenceProductKey:string|null;lwin7:string|null;lwin11:string|null;elid:string|null;
  identityMatchStatus:IdentityMatchStatus;identityMatchConfidence:number|null;
  colour:string|null;productType:string|null;productSubtype:string|null;
  referenceSubRegion:string|null;referenceSite:string|null;referenceParcel:string|null;
- referenceDesignation:string|null;referenceClassification:string|null;country:string|null;region:string|null;
+ referenceDesignation:string|null;referenceClassification:string|null;referenceProducer:string|null;referenceWineName:string|null;country:string|null;region:string|null;
 };
 const unmatched=(status:IdentityMatchStatus='unmatched'):ReferenceMatch=>({
  referenceProductKey:null,lwin7:null,lwin11:null,elid:null,identityMatchStatus:status,identityMatchConfidence:null,
  colour:null,productType:null,productSubtype:null,referenceSubRegion:null,referenceSite:null,referenceParcel:null,
- referenceDesignation:null,referenceClassification:null,country:null,region:null
+ referenceDesignation:null,referenceClassification:null,referenceProducer:null,referenceWineName:null,country:null,region:null
 });
 const compatible=(candidate:LwinReferenceProduct,countryKey:string,regionKey:string,colourKey:string)=>
  (!countryKey||!candidate.countryKey||candidate.countryKey===countryKey)&&
@@ -145,12 +152,13 @@ export async function resolveWineReference(bucket:R2Bucket,wine:ReferenceResolva
  return {referenceProductKey:product.productKey,lwin7:product.lwin7,lwin11:null,elid,identityMatchStatus:'matched',identityMatchConfidence:1,
   colour:product.colour,productType:product.productType,productSubtype:product.productSubtype,
   referenceSubRegion:product.subRegion,referenceSite:product.site,referenceParcel:product.parcel,
-  referenceDesignation:product.designation,referenceClassification:product.classification,country:product.country,region:product.region};
+  referenceDesignation:product.designation,referenceClassification:product.classification,referenceProducer:product.producerName,referenceWineName:product.wineName,country:product.country,region:product.region};
 }
 export async function enrichRecognitionReference<T extends ReferenceResolvable>(bucket:R2Bucket,wine:T){
  try{
   const match=await resolveWineReference(bucket,wine);
-  return {...wine,...match,country:wine.country??match.country,region:wine.region??match.region};
+  const classification=wine.classification??(!wine.classificationOverride?appClassification(match.referenceClassification):null);
+  return {...wine,...match,country:wine.country??match.country,region:wine.region??match.region,classification,referenceCountry:match.country,referenceRegion:match.region};
  }catch(error){
   console.warn(JSON.stringify({event:'wine-reference-lookup-failed',error:error instanceof Error?error.message:String(error)}));
   return wine;

@@ -5,6 +5,7 @@ import { publishResearch } from '../../src/lib/research/shared';
 import { wineTargets } from './credits';
 import { publishProducerResearch } from '../../src/lib/research/sharedProducer';
 import { resolveWineReference,type VintageKind } from '../../src/lib/wine/referenceIdentity';
+import { appClassification,buildReferenceSuggestions } from '../../src/lib/wine/referenceSuggestions';
 
 export type RolloutKind='storage'|'research'|'lwin';
 export type RolloutQueueJob={kind:'admin_rollout';owner:string;rollout:RolloutKind};
@@ -106,27 +107,36 @@ async function indexResearchBatch(env:RolloutEnv){
 
 type LwinBackfillRow={
  id:string;owner_id:string;producer:string|null;wine_name:string|null;vintage:number|null;vintage_kind:VintageKind|null;release_designation:string|null;
- country:string|null;region:string|null;wine_style:string|null;
+ country:string|null;region:string|null;wine_style:string|null;classification:string|null;classification_override:string|null;
 };
 
 async function backfillLwinBatch(env:RolloutEnv){
  if(await readState(env.DB,'lwin_backfill')==='complete')return {complete:true,processed:0};
  const cursor=await readState(env.DB,'lwin_cursor');
- const rows=await env.DB.prepare(`SELECT id,owner_id,producer,wine_name,vintage,vintage_kind,release_designation,country,region,wine_style
+ const rows=await env.DB.prepare(`SELECT id,owner_id,producer,wine_name,vintage,vintage_kind,release_designation,country,region,wine_style,classification,classification_override
    FROM wines WHERE id>? AND lwin7 IS NULL AND coalesce(identity_match_status,'')<>'manual'
    ORDER BY id LIMIT ${LWIN_BATCH}`).bind(cursor).all<LwinBackfillRow>();
  let matched=0,ambiguous=0,unmatched=0,conflict=0;
  for(const row of rows.results){
   const result=await resolveWineReference(env.REFERENCE_DATA,{
    producer:row.producer,wineName:row.wine_name,vintage:row.vintage,vintageKind:row.vintage_kind,releaseDesignation:row.release_designation,
-   country:row.country,region:row.region,wineStyle:row.wine_style
+   country:row.country,region:row.region,wineStyle:row.wine_style,classification:row.classification,classificationOverride:row.classification_override
   });
   if(result.identityMatchStatus==='matched'&&result.lwin7){
+   const safeCountry=row.country?.trim()?row.country:result.country,safeRegion=row.region?.trim()?row.region:result.region;
+   const safeClassification=row.classification??(!row.classification_override?appClassification(result.referenceClassification):null);
+   const suggestions=buildReferenceSuggestions({
+    producer:row.producer,wineName:row.wine_name,country:safeCountry,region:safeRegion,classification:safeClassification,classificationOverride:row.classification_override,
+    referenceProducer:result.referenceProducer,referenceWineName:result.referenceWineName,referenceCountry:result.country,referenceRegion:result.region,referenceClassification:result.referenceClassification
+   }),now=stamp();
    const saved=await env.DB.prepare(`UPDATE wines SET reference_product_key=?,lwin7=?,lwin11=?,elid=?,
+      country=coalesce(nullif(trim(country),''),?),region=coalesce(nullif(trim(region),''),?),
+      classification=CASE WHEN classification IS NULL AND classification_override IS NULL THEN coalesce(?,classification) ELSE classification END,
       colour=coalesce(colour,?),product_type=coalesce(product_type,?),product_subtype=coalesce(product_subtype,?),
-      identity_match_status='matched',identity_match_confidence=?,identity_matched_at=?
+      identity_match_status='matched',identity_match_confidence=?,identity_matched_at=?,reference_suggestions_json=?,reference_suggestions_updated_at=?
       WHERE id=? AND owner_id=? AND lwin7 IS NULL AND coalesce(identity_match_status,'')<>'manual'`)
-     .bind(result.referenceProductKey,result.lwin7,result.lwin11,result.elid,result.colour,result.productType,result.productSubtype,result.identityMatchConfidence,stamp(),row.id,row.owner_id).run();
+     .bind(result.referenceProductKey,result.lwin7,result.lwin11,result.elid,result.country,result.region,safeClassification,result.colour,result.productType,result.productSubtype,
+      result.identityMatchConfidence,now,suggestions.length?JSON.stringify(suggestions):null,suggestions.length?now:null,row.id,row.owner_id).run();
    if(saved.meta.changes)matched++;
   }else if(result.identityMatchStatus==='ambiguous')ambiguous++;
   else if(result.identityMatchStatus==='conflict')conflict++;

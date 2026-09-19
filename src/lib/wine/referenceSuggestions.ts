@@ -1,0 +1,42 @@
+import { normalizeReferenceText } from './referenceCatalog';
+
+export const referenceSuggestionFields=['producer','wineName','country','region','classification'] as const;
+export type ReferenceSuggestionField=typeof referenceSuggestionFields[number];
+export type ReferenceSuggestion={field:ReferenceSuggestionField;label:string;current:string|null;suggested:string};
+
+export function appClassification(value:string|null|undefined){
+ const normalized=normalizeReferenceText(value);
+ if(normalized==='grand cru')return 'grand_cru';
+ if(normalized==='premier cru'||normalized==='1er cru')return 'premier_cru';
+ if(normalized==='village')return 'village';
+ return null;
+}
+export function classificationLabel(value:string|null|undefined){
+ if(value==='grand_cru')return 'Grand Cru';
+ if(value==='premier_cru')return 'Premier Cru';
+ if(value==='village')return 'Village';
+ return value?.trim()||null;
+}
+type SuggestionInput={
+ producer?:string|null;wineName?:string|null;country?:string|null;region?:string|null;classification?:string|null;classificationOverride?:string|null;
+ referenceProducer?:string|null;referenceWineName?:string|null;referenceCountry?:string|null;referenceRegion?:string|null;referenceClassification?:string|null;
+};
+export function buildReferenceSuggestions(input:SuggestionInput):ReferenceSuggestion[]{
+ const suggestions:ReferenceSuggestion[]=[];
+ const pairs:Array<[ReferenceSuggestionField,string,string|null|undefined,string|null|undefined]>=[
+  ['producer','Producer',input.producer,input.referenceProducer],
+  ['wineName','Wine name',input.wineName,input.referenceWineName],
+  ['country','Country',input.country,input.referenceCountry],
+  ['region','Region',input.region,input.referenceRegion]
+ ];
+ for(const [field,label,current,suggested] of pairs){
+  const a=current?.trim()||null,b=suggested?.trim()||null;
+  if(!a||!b||normalizeReferenceText(a)===normalizeReferenceText(b))continue;
+  suggestions.push({field,label,current:a,suggested:b});
+ }
+ if(!input.classificationOverride){
+  const suggested=appClassification(input.referenceClassification),current=input.classification?.trim()||null;
+  if(current&&suggested&&current!==suggested)suggestions.push({field:'classification',label:'Classification',current:classificationLabel(current),suggested:classificationLabel(suggested)!});
+ }
+ return suggestions;
+}
