@@ -168,6 +168,27 @@ async function backfillLwinBatch(env:RolloutEnv){
  return {complete,processed,matched,ambiguous,unmatched,conflict};
 }
 
+async function aiBackfillLwinBatch(env:RolloutEnv){
+ if(await readState(env.DB,'lwin_ai_backfill')==='complete')return {complete:true,processed:0};
+ const cursor=await readState(env.DB,'lwin_ai_cursor');
+ const rows=await env.DB.prepare(`SELECT id,owner_id,producer,wine_name,vintage,vintage_kind,release_designation,country,region,wine_style,classification,classification_override FROM wines WHERE id>? AND lwin7 IS NULL AND identity_match_status IN ('unmatched','ambiguous','suggested') ORDER BY id LIMIT ${LWIN_AI_BATCH}`).bind(cursor).all<LwinBackfillRow>();
+ let matched=0,deterministic=0,ai=0,review=0;
+ for(const row of rows.results){
+  const candidates=await repairCandidates(env.REFERENCE_DATA,row),choice=await aiRepair(env,row,candidates);
+  if(!choice){review++;continue}
+  const selected=candidates.find(item=>item.row.lwin7===choice.lwin7)?.row as LwinReferenceProduct|undefined;if(!selected){review++;continue}
+  const result=await resolveWineReference(env.REFERENCE_DATA,{producer:selected.producerName,wineName:selected.wineName,vintage:row.vintage,vintageKind:row.vintage_kind,releaseDesignation:row.release_designation,country:row.country,region:row.region,wineStyle:row.wine_style,classification:row.classification,classificationOverride:row.classification_override});
+  if(result.identityMatchStatus!=='matched'||result.lwin7!==choice.lwin7){review++;continue}
+  const now=stamp(),suggestions=buildReferenceSuggestions({producer:row.producer,wineName:row.wine_name,country:row.country,region:row.region,classification:row.classification,classificationOverride:row.classification_override,referenceProducer:result.referenceProducer,referenceWineName:result.referenceWineName,referenceCountry:result.country,referenceRegion:result.region,referenceClassification:result.referenceClassification});
+  const saved=await env.DB.prepare(`UPDATE wines SET reference_product_key=?,lwin7=?,lwin11=?,elid=?,reference_site=?,reference_parcel=?,colour=coalesce(colour,?),product_type=coalesce(product_type,?),product_subtype=coalesce(product_subtype,?),identity_match_status='matched',identity_match_confidence=?,identity_match_candidates_json=NULL,identity_matched_at=?,identity_checked_at=?,reference_suggestions_json=?,reference_suggestions_updated_at=? WHERE id=? AND owner_id=? AND lwin7 IS NULL AND coalesce(identity_match_status,'')<>'manual'`).bind(result.referenceProductKey,result.lwin7,result.lwin11,result.elid,result.referenceSite,result.referenceParcel,result.colour,result.productType,result.productSubtype,choice.confidence,now,now,suggestions.length?JSON.stringify(suggestions):null,suggestions.length?now:null,row.id,row.owner_id).run();
+  if(saved.meta.changes){matched++;if(choice.method==='ai')ai++;else deterministic++}
+ }
+ const processed=rows.results.length,last=rows.results.at(-1)?.id??cursor,complete=processed<LWIN_AI_BATCH;
+ const [p,m,d,a,r]=await Promise.all([readCount(env.DB,'lwin_ai_processed'),readCount(env.DB,'lwin_ai_matched'),readCount(env.DB,'lwin_ai_deterministic'),readCount(env.DB,'lwin_ai_model'),readCount(env.DB,'lwin_ai_review')]);
+ await writeStates(env.DB,[['lwin_ai_cursor',last],['lwin_ai_processed',String(p+processed)],['lwin_ai_matched',String(m+matched)],['lwin_ai_deterministic',String(d+deterministic)],['lwin_ai_model',String(a+ai)],['lwin_ai_review',String(r+review)],...(complete?[['lwin_ai_backfill','complete'],[jobKey('lwin_ai'),'complete']] as Array<[string,string]>:[])]);
+ return {complete,processed,matched,deterministic,ai,review};
+}
+
 /** Process one bounded chunk. Queue chaining makes the overall job independent of the page lifetime. */
 export async function processRolloutJob(env:RolloutEnv,kind:RolloutKind){
  const lease=await acquireLease(env.DB,kind);if(!lease)return {complete:false,processed:0,busy:true};
