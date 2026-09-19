@@ -10,7 +10,7 @@ declare global{var IS_REACT_ACT_ENVIRONMENT:boolean}
 globalThis.IS_REACT_ACT_ENVIRONMENT=true;
 
 const recognition={producer:'Haselberger',wineName:'Landlbirn',vintage:2021,confidence:1,
-  country:'Austria',region:null,appellation:null,grapes:[],wineStyle:'red'};
+  country:'Austria',region:null,appellation:null,grapes:[],style:'red'};
 
 const item=(overrides:Record<string,unknown>={})=>({
   id:'i1',position:0,status:'confirmed',recognition,error:null,confirmedWineId:'w1',
