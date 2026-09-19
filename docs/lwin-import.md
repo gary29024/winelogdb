@@ -161,6 +161,10 @@ Then spot-check several wines in WineLog:
 
 An unmatched wine must continue to save normally.
 
+For existing automatic matches, Owner controls also provides **Stored LWIN validation**. This is a local D1 + R2 pass: it re-runs the current deterministic resolver against wines that already carry an automatic LWIN. A confirmed match is marked verified. If the current resolver disagrees, WineLog keeps the stored LWIN intact, marks the identity as a conflict and lists it for owner review; it never silently deletes or swaps an existing identifier.
+
+All launch-preparation rollouts can be paused from Owner controls. Pausing stops queue chaining after the current bounded batch, preserves the cursor/counters and allows the same task to resume later without starting over.
+
 ## Periodic LWIN refresh
 
 Manual full-snapshot refresh remains a supported operating mode even after Liv-ex API access eventually becomes available.
