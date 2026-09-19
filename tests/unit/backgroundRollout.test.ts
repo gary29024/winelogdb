@@ -97,7 +97,7 @@ describe('background launch preparation',()=>{
   database.sql.exec(`
    INSERT INTO wines(id,owner_id,producer,wine_name,vintage,country,region,tasting_notes,created_at,updated_at) VALUES
     ('w1','owner','Krug','Grande Cuvee',2019,NULL,NULL,'keep this note','now','now'),
-    ('w2','member','Unknown','Mystery Wine','France','Champagne','member note','now','now');
+    ('w2','member','Unknown','Mystery Wine',NULL,'France','Champagne','member note','now','now');
    INSERT INTO wines(id,owner_id,producer,wine_name,identity_match_status,elid,created_at,updated_at)
     VALUES('w3','owner','Krug','Grande Cuvee','manual','FR-CMP-KRUG01-N171','now','now');
   `);
