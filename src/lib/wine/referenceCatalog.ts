@@ -71,3 +71,18 @@ export async function elidProducerIndex(bucket:R2Bucket):Promise<ElidProducerInd
  const manifest=await referenceManifest(bucket,'elid');if(!manifest?.producerIndexKey)return {};
  return await jsonObject<ElidProducerIndex>(bucket,manifest.producerIndexKey)??{};
 }
+
+/**
+ * Bounded candidate retrieval for one-off repair/backfill work. It deliberately
+ * scans only the immutable local LWIN shards and never calls Liv-ex. Callers
+ * should narrow the returned rows before sending any candidates to AI.
+ */
+export async function lwinCandidateRows<T>(bucket:R2Bucket,predicate:(row:T)=>boolean,limit=12):Promise<T[]>{
+ const manifest=await referenceManifest(bucket,'lwin');if(!manifest)return [];
+ const found:T[]=[];
+ for(let i=0;i<manifest.shardCount&&found.length<limit;i++){
+  const shard=String(i).padStart(3,'0'),rows=await referenceRowsByShard<T>(bucket,'lwin',shard);
+  for(const row of rows)if(predicate(row)){found.push(row);if(found.length>=limit)break}
+ }
+ return found;
+}
