@@ -25,12 +25,13 @@ const elid:ElidReferenceRecord={
  wineName:'Grande Cuvée',wineKey:'grande cuvee',vintageCode:'N171',sourceUrl:'https://elid.wine/wine/FR-CMP-KRUG01-N171'
 };
 function objects(){
- const lwinManifest:ReferenceManifest={provider:'lwin',version:'l1',prefix:'reference/lwin/versions/l1',shardCount:256,rows:1,source:'LWIN.xlsx',sourceUpdatedAt:null,generatedAt:'now',redirectsKey:'reference/lwin/versions/l1/redirects.json'};
+ const lwinManifest:ReferenceManifest={provider:'lwin',version:'l1',prefix:'reference/lwin/versions/l1',shardCount:256,rows:1,source:'LWIN.xlsx',sourceUpdatedAt:null,generatedAt:'now',redirectsKey:'reference/lwin/versions/l1/redirects.json',producerIndexKey:'reference/lwin/versions/l1/producer-index.json'};
  const elidManifest:ReferenceManifest={provider:'elid',version:'e1',prefix:'reference/elid/versions/e1',shardCount:256,rows:1,source:'elid.wine',sourceUpdatedAt:null,generatedAt:'now',producerIndexKey:'reference/elid/versions/e1/producer-index.json'};
  const lwinShard=referenceShardId('krug'),elidShard=referenceShardId('FR-KRUG');
  return {
   'reference/lwin/current.json':lwinManifest,
   [`reference/lwin/versions/l1/shard-${lwinShard}.json`]:[lwin],
+  'reference/lwin/versions/l1/producer-index.json':{'krug':[lwinShard]},
   'reference/lwin/versions/l1/redirects.json':{},
   'reference/elid/current.json':elidManifest,
   'reference/elid/versions/e1/producer-index.json':{'krug':['FR-KRUG'],'champagne krug':['FR-KRUG']},
@@ -42,6 +43,14 @@ describe('R2 wine reference resolver',()=>{
  it('matches an edition-specific LWIN and only attaches a registry-backed ELID',async()=>{
   const result=await resolveWineReference(bucket(objects()),{producer:'Krug',wineName:'Grande Cuvée',releaseDesignation:'171ème Édition',vintage:null,vintageKind:'non_vintage',country:'France',region:'Champagne',style:'sparkling'});
   expect(result).toMatchObject({identityMatchStatus:'matched',lwin7:'1234567',elid:'FR-CMP-KRUG01-N171',productSubtype:'Sparkling'});
+ });
+ it('matches a safe generic producer-prefix alias without AI',async()=>{
+  const data=objects(),castagnierShard=referenceShardId('castagnier'),path=`reference/lwin/versions/l1/shard-${castagnierShard}.json`;
+  const castagnier={...lwin,productKey:'lwin:1724273',lwin7:'1724273',displayName:'Domaine Castagnier, Chambolle-Musigny',producerName:'Castagnier',producerKey:'castagnier',wineName:'Chambolle-Musigny',wineKey:'chambolle musigny',region:'Burgundy',regionKey:'burgundy',colour:'Red',colourKey:'red',productSubtype:null};
+  data[path]=[...((data[path] as LwinReferenceProduct[]|undefined)??[]),castagnier];
+  (data['reference/lwin/versions/l1/producer-index.json'] as Record<string,string[]>)['castagnier']=[castagnierShard];
+  const result=await resolveWineReference(bucket(data),{producer:'Domaine Castagnier',wineName:'Chambolle-Musigny',vintage:2022,vintageKind:'vintage',country:'France',region:'Burgundy',style:'red'});
+  expect(result).toMatchObject({identityMatchStatus:'matched',lwin7:'1724273',referenceProducer:'Castagnier',referenceWineName:'Chambolle-Musigny'});
  });
  it('falls back to a base LWIN wine row when the export does not carry edition-specific rows',async()=>{
   const data=objects(),shard=referenceShardId('krug'),key=`reference/lwin/versions/l1/shard-${shard}.json`;

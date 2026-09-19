@@ -82,6 +82,18 @@ export async function lwinProducerIndex(bucket:R2Bucket):Promise<LwinProducerInd
  const manifest=await referenceManifest(bucket,'lwin');if(!manifest?.producerIndexKey)return {};
  return await jsonObject<LwinProducerIndex>(bucket,manifest.producerIndexKey)??{};
 }
+export async function lwinStrictRowsForProducer<T>(bucket:R2Bucket,producer:string|null|undefined):Promise<T[]>{
+ const manifest=await referenceManifest(bucket,'lwin');if(!manifest)return [];
+ const keys=producerLookupKeys(producer);if(!keys.length)return [];
+ // Interactive matching only needs exact generic-prefix aliases. The broader
+ // token lookup below is reserved for repair/backfill work because it can fan
+ // out to several shards. This keeps normal recognition fast and R2-cheap.
+ if(!manifest.producerIndexKey)return referenceRows<T>(bucket,'lwin',keys[0]);
+ const index=await lwinProducerIndex(bucket),shardIds=new Set<string>();
+ for(const key of keys)for(const shard of index[key]??[])shardIds.add(shard);
+ if(!shardIds.size)return referenceRows<T>(bucket,'lwin',keys[0]);
+ const found:T[]=[];for(const shard of shardIds)found.push(...await referenceRowsByShard<T>(bucket,'lwin',shard));return found;
+}
 export async function lwinCandidateRowsForProducer<T>(bucket:R2Bucket,producer:string|null|undefined):Promise<T[]>{
  const manifest=await referenceManifest(bucket,'lwin');if(!manifest)return [];
  if(!manifest.producerIndexKey)throw new Error('LWIN producer index is missing; rerun the LWIN reference import before AI backfill');

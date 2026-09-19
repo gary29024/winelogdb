@@ -1,5 +1,5 @@
 import type { LwinReferenceProduct } from './lwinImport';
-import { elidProducerIndex,lwinRedirects,normalizeReferenceText,producerLookupKeys,referenceRows,referenceRowsByShard,type ElidReferenceRecord } from './referenceCatalog';
+import { elidProducerIndex,lwinRedirects,lwinStrictRowsForProducer,normalizeReferenceText,producerLookupKeys,referenceRows,referenceRowsByShard,type ElidReferenceRecord } from './referenceCatalog';
 import { appClassification,buildReferenceSuggestions } from './referenceSuggestions';
 import { canonicalizeWineFields } from './canonicalize';
 
@@ -149,11 +149,12 @@ async function registeredElid(bucket:R2Bucket,product:LwinReferenceProduct,wine:
 }
 
 export async function resolveWineReference(bucket:R2Bucket,wine:ReferenceResolvable):Promise<ReferenceMatch>{
- const producerKey=normalizeReferenceText(wine.producer),wineKey=referenceWineKey(wine.wineName,wine.releaseDesignation),baseWineKey=normalizeReferenceText(wine.wineName);
- if(!producerKey||!wineKey)return unmatched();
+ const producerKeys=producerLookupKeys(wine.producer),wineKey=referenceWineKey(wine.wineName,wine.releaseDesignation),baseWineKey=normalizeReferenceText(wine.wineName);
+ if(!producerKeys.length||!wineKey)return unmatched();
  const inputPlace=canonicalReferencePlace(wine.country,wine.region),countryKey=normalizeReferenceText(inputPlace.country),regionKey=normalizeReferenceText(inputPlace.region),colourKey=colourFromStyle(wine.style??wine.wineStyle);
- const rows=await referenceRows<LwinReferenceProduct>(bucket,'lwin',producerKey);if(!rows.length)return unmatched();
- const eligible=(key:string)=>rows.filter(row=>row.status!=='Deleted'&&row.producerKey===producerKey&&row.wineKey===key&&compatible(row,countryKey,regionKey,colourKey));
+ const rows=await lwinStrictRowsForProducer<LwinReferenceProduct>(bucket,wine.producer);if(!rows.length)return unmatched();
+ const inputProducerKeys=new Set(producerKeys),sameProducer=(row:LwinReferenceProduct)=>producerLookupKeys(row.producerName??row.producerKey).some(key=>inputProducerKeys.has(key));
+ const eligible=(key:string)=>rows.filter(row=>row.status!=='Deleted'&&sameProducer(row)&&row.wineKey===key&&compatible(row,countryKey,regionKey,colourKey));
  // Prefer an edition/release-specific LWIN row when one exists. The real LWIN
  // export also files some release families (for example Krug Grande Cuvee) only
  // under the base wine name, so a recognized release designation must not turn
