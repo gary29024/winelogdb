@@ -11,6 +11,15 @@ describe('standard recognition identity fields',()=>{
   expect(unknown.vintageKind).toBe('unknown');
   expect(nv.recognizedProducer).toBe('Krug');expect(nv.recognizedWineName).toBe('Grande Cuvée');
  });
+ it('accepts server-side reference enrichment on strict recognition responses',()=>{
+  const parsed=parseRecognition(JSON.stringify({
+   producer:'Château Margaux',wineName:'Margaux',vintage:2019,country:'France',region:'Bordeaux',grapes:[],grapeBlend:[],sparklingDetails:null,confidence:.98,
+   referenceProductKey:'lwin:1011847',lwin7:'1011847',lwin11:'10118472019',elid:null,identityMatchStatus:'matched',identityMatchConfidence:1,identityMatchCandidates:[],
+   referenceProducer:'Château Margaux',referenceWineName:'Margaux',referenceCountry:'France',referenceRegion:'Bordeaux',referenceSubRegion:'Margaux',referenceSite:null,referenceParcel:null,referenceDesignation:null,referenceClassification:'Premier Cru Classé',
+   colour:'Red',productType:'Wine',productSubtype:'Still'
+  }));
+  expect(parsed).toMatchObject({lwin7:'1011847',identityMatchCandidates:[],referenceProducer:'Château Margaux',referenceWineName:'Margaux',referenceCountry:'France',referenceRegion:'Bordeaux'});
+ });
  it('keeps different NV editions distinct in group dedupe',()=>{
   const wine=(releaseDesignation:string)=>({producer:'Krug',wineName:'Grande Cuvée',vintage:null,recognizedVintageText:releaseDesignation,vintageKind:'non_vintage',releaseDesignation,country:'France',region:'Champagne',appellation:'Champagne',grapes:[],grapeBlend:[],style:'sparkling',alcoholPercentage:12,locationName:null,confidence:.95,boundingBox:{xMin:0,yMin:0,xMax:200,yMax:900}});
   const parsed=parseGroupRecognition(JSON.stringify({wines:[wine('170ème Édition'),{...wine('171ème Édition'),boundingBox:{xMin:300,yMin:0,xMax:500,yMax:900}}],unresolvedCount:0}));

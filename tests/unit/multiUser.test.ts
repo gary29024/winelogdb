@@ -547,12 +547,16 @@ describe('sharing boundaries',()=>{
    INSERT INTO wine_shares(wine_id,owner_id,recipient_id) VALUES('owner-one','owner','bob');
   `);
   const e={...env(),WINE_IMAGES:{} as R2Bucket};
-  const response=await socialRoute(new Request('https://wine.example/api/friends/bob/share-existing-wines',{method:'POST',body:'{}'}),e,member('owner'));
+  const call=(friendId:string,user='owner')=>socialRoute(new Request(`https://wine.example/api/friends/${friendId}/share-existing-wines`,{method:'POST',body:'{}'}),e,member(user));
+  const response=await call('bob');
   expect(response?.status).toBe(200);
+  expect(await response!.json()).toMatchObject({ok:true,count:1});
   expect(database.sql.prepare("SELECT count(*) AS n FROM wine_shares WHERE owner_id='owner' AND recipient_id='bob'").get()!.n).toBe(2);
   expect(database.sql.prepare("SELECT count(*) AS n FROM wine_shares WHERE wine_id='member-one' AND recipient_id='bob'").get()!.n).toBe(0);
-  await expect(socialRoute(new Request('https://wine.example/api/friends/bob/share-existing-wines',{method:'POST',body:'{}'}),e,member('alice')))
-   .rejects.toMatchObject({status:403,message:'Owner access required'});
+  expect(await (await call('bob'))!.json()).toMatchObject({ok:true,count:0});
+  await expect(call('carol')).rejects.toMatchObject({status:400,message:'Only accepted friends can receive shared wines'});
+  expect(database.sql.prepare("SELECT count(*) AS n FROM wine_shares WHERE owner_id='owner' AND recipient_id='carol'").get()!.n).toBe(0);
+  await expect(call('bob','alice')).rejects.toMatchObject({status:403,message:'Owner access required'});
  });
  it('writes a touched friend selection in the same wine batch instead of reapplying defaults',async()=>{
   database.sql.exec("INSERT INTO friendships(user_id,friend_id) VALUES('alice','bob'),('bob','alice'),('alice','carol'),('carol','alice'); INSERT INTO member_share_defaults(owner_id,recipient_id) VALUES('alice','bob')");

@@ -4,12 +4,13 @@ import { createRoot,type Root } from 'react-dom/client';
 import { MemoryRouter } from 'react-router-dom';
 import { afterEach,describe,expect,it,vi } from 'vitest';
 import { createD1Stub } from './support/d1Stub';
+import { recognitionSchema } from '../../src/features/recognition/schema';
 
 declare global{var IS_REACT_ACT_ENVIRONMENT:boolean}
 globalThis.IS_REACT_ACT_ENVIRONMENT=true;
 
 const recognition={producer:'Haselberger',wineName:'Landlbirn',vintage:2021,confidence:1,
-  country:'Austria',region:null,appellation:null,grapes:[],wineStyle:'red'};
+  country:'Austria',region:null,appellation:null,grapes:[],style:'red'};
 
 const item=(overrides:Record<string,unknown>={})=>({
   id:'i1',position:0,status:'confirmed',recognition,error:null,confirmedWineId:'w1',
@@ -107,5 +108,23 @@ describe('the session the card reads from',()=>{
     expect(result?.items[0].saved).toEqual({producer:'Weingut Haselberger',wineName:'Landlbirne',vintage:2020});
     // The reading is kept beside it rather than replaced.
     expect(result?.items[0].recognition).toMatchObject({wineName:'Landlbirn'});
+  });
+
+  it('round-trips LWIN-enriched recognition data that still satisfies the shared recognition contract',async()=>{
+    const enriched={...recognition,style:'red',identityMatchStatus:'matched',identityMatchConfidence:1,identityMatchCandidates:[],
+      referenceProductKey:'lwin:1011847',lwin7:'1011847',lwin11:'10118472021',elid:null,
+      referenceProducer:'Weingut Haselberger',referenceWineName:'Landlbirne',referenceCountry:'Austria',referenceRegion:'Niederösterreich',
+      referenceSubRegion:null,referenceSite:null,referenceParcel:null,referenceDesignation:null,referenceClassification:null,
+      colour:'Red',productType:'Wine',productSubtype:'Still'};
+    const stub=createD1Stub(sql=>/FROM batch_recognition_sessions/.test(sql)
+      ?{first:{id:'s1',status:'ready',total_items:1,expected_items:1,confirmed_items:0,created_at:'x',updated_at:'x',expires_at:'x'}}
+      :/batch_recognition_items i LEFT JOIN wines/.test(sql)
+        ?{all:[{id:'i1',position:0,status:'ready',metadata_json:'{}',recognition_json:JSON.stringify(enriched),error:null,confirmed_wine_id:null,saved_producer:null,saved_wine_name:null,saved_vintage:null}]}
+        :{all:[]});
+    const { getBatchSession }=await import('../../worker/batchRecognition');
+    const result=await getBatchSession(stub.db,'owner','s1');
+    expect(result?.items[0].status).toBe('ready');
+    expect(result?.items[0].recognition).toMatchObject({lwin7:'1011847',identityMatchCandidates:[],referenceProducer:'Weingut Haselberger',referenceCountry:'Austria'});
+    expect(()=>recognitionSchema.parse(result?.items[0].recognition)).not.toThrow();
   });
 });

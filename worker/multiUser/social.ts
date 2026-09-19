@@ -218,12 +218,14 @@ export async function socialRoute(request:Request,env:SocialEnv,member:Member,ct
  }
  const shareExisting=path.match(/^\/api\/friends\/([^/]+)\/share-existing-wines$/);
  if(shareExisting&&request.method==='POST'){
+  // Deliberate pilot guardrail: members can tag selected Journal wines, but only
+  // the owner can fan out an unbounded whole-journal share from Account & friends.
   ownerOnly(member);
   const friendId=shareExisting[1];
   if(!await env.DB.prepare('SELECT 1 FROM friendships WHERE user_id=? AND friend_id=?').bind(member.id,friendId).first())throw new ApiError(400,'Only accepted friends can receive shared wines');
-  await env.DB.prepare(`INSERT OR IGNORE INTO wine_shares(wine_id,owner_id,recipient_id)
+  const result=await env.DB.prepare(`INSERT OR IGNORE INTO wine_shares(wine_id,owner_id,recipient_id)
     SELECT id,?,? FROM wines WHERE owner_id=?`).bind(member.id,friendId,member.id).run();
-  return json({ok:true});
+  return json({ok:true,count:Number(result.meta.changes??0)});
  }
  const friend=path.match(/^\/api\/friends\/([^/]+)$/);
  if(friend&&request.method==='DELETE'){

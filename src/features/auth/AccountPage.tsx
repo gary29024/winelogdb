@@ -28,9 +28,9 @@ export function AccountPage(){
   const refresh=()=>void load().catch(e=>setError(e.message));refresh();
   window.addEventListener('focus',refresh);return()=>window.removeEventListener('focus',refresh);
  },[load]);
- async function run(fn:()=>Promise<unknown>,message=''){
+ async function run(fn:()=>Promise<unknown>,message:string|((result:unknown)=>string)=''){
   setBusy(true);setError('');setNotice('');
-  try{await fn();await load();setNotice(message)}catch(e){setError((e as Error).message)}finally{setBusy(false)}
+  try{const result=await fn();await load();setNotice(typeof message==='function'?message(result):message)}catch(e){setError((e as Error).message)}finally{setBusy(false)}
  }
  const account=getAccount(),smart=usage.kinds.find(item=>item.kind==='search_embedding'),providerRequests=usage.kinds.reduce((sum,item)=>sum+item.requests,0),runs=usage.kinds.reduce((sum,item)=>sum+item.runs,0),actions=access.actionAccess??[],allowanceActions=actions.filter(item=>item.accessMode==='allowance');
  const resetsAt=allowanceActions[0]?.resetsAt;
@@ -78,7 +78,7 @@ export function AccountPage(){
   <h3>Sent requests</h3>{!requests.outgoing.length&&<p>No pending sent requests.</p>}
   <ul>{requests.outgoing.map(item=><li key={item.id}>{item.display_name} · Awaiting acceptance <button disabled={busy} onClick={()=>void run(()=>apiJson(`/api/friends/requests/${item.id}`,'DELETE'),'Friend request cancelled.')}>Cancel request to {item.display_name}</button></li>)}</ul>
   <h3>Your friends</h3>{!friends.length&&<p>No friends yet. Send a request using a friend code above.</p>}
-  <ul>{friends.map(friend=><li key={friend.id}><strong>{friend.display_name}</strong> <label><input type="checkbox" checked={Boolean(friend.defaultShare)} disabled={busy} onChange={event=>void run(()=>setDefaultFriendShare(friend.id,event.target.checked),event.target.checked?`New wines will be tagged with ${friend.display_name} by default.`:`Default tagging for ${friend.display_name} is off.`)}/> Tag new wines by default</label> {account?.role==='owner'&&<button disabled={busy} onClick={()=>{if(confirm(`Share every wine already in your Journal with ${friend.display_name}?\n\nThis does not change default tagging for future wines.`))void run(()=>shareAllExistingWines(friend.id),`All existing wines are now shared with ${friend.display_name}.`)}}>Share all existing wines</button>} <button disabled={busy} onClick={()=>void run(()=>apiJson(`/api/friends/${friend.id}`,'DELETE'),'Friend removed.')}>Remove friend</button></li>)}</ul>
+  <ul>{friends.map(friend=><li key={friend.id}><strong>{friend.display_name}</strong> <label><input type="checkbox" checked={Boolean(friend.defaultShare)} disabled={busy} onChange={event=>void run(()=>setDefaultFriendShare(friend.id,event.target.checked),event.target.checked?`New wines will be tagged with ${friend.display_name} by default.`:`Default tagging for ${friend.display_name} is off.`)}/> Tag new wines by default</label> {account?.role==='owner'&&<button disabled={busy} aria-label={`Share all existing wines with ${friend.display_name}`} onClick={()=>{if(confirm(`Share every wine already in your Journal with ${friend.display_name}?\n\nThis does not change default tagging for future wines. There is currently no bulk undo; reversing this requires untagging this friend from wines individually.`))void run(()=>shareAllExistingWines(friend.id),result=>{const count=(result as {count:number}).count;return count?`Shared ${count} wine${count===1?'':'s'} with ${friend.display_name}.`:`No new wine shares were added for ${friend.display_name}.`})}}>Share all existing wines</button>} <button disabled={busy} onClick={()=>void run(()=>apiJson(`/api/friends/${friend.id}`,'DELETE'),'Friend removed.')}>Remove friend</button></li>)}</ul>
   <button onClick={()=>void logout()}>Sign out</button>
  </section>;
 }
