@@ -1,6 +1,6 @@
 import { AI_MODELS } from '../../src/lib/ai/policy';
 import { geminiCallTokens,recordAiUsage,type AiUsageEnv } from '../../src/lib/usage/aiUsage';
-import { lwinCandidateRows,normalizeReferenceText,producerLookupKeys } from '../../src/lib/wine/referenceCatalog';
+import { lwinCandidateRowsForProducer,normalizeReferenceText,producerLookupKeys } from '../../src/lib/wine/referenceCatalog';
 import type { LwinReferenceProduct } from '../../src/lib/wine/lwinImport';
 import { postGeminiGenerateContent,type GeminiTransportBindings } from '../geminiTransport';
 
@@ -25,7 +25,7 @@ function candidateScore(wine:LwinRepairWine,row:LwinReferenceProduct){
  return producer*.48+name*.42+country*.04+region*.06;
 }
 export async function repairCandidates(bucket:R2Bucket,wine:LwinRepairWine){
- const scored=await lwinCandidateRows<LwinReferenceProduct>(bucket,row=>row.status==='Live'&&candidateScore(wine,row)>=0.48,Number.MAX_SAFE_INTEGER);
+ const scored=await lwinCandidateRowsForProducer<LwinReferenceProduct>(bucket,wine.producer,row=>row.status==='Live'&&candidateScore(wine,row)>=0.48,40);
  return scored.map(row=>({row,score:candidateScore(wine,row)})).sort((a,b)=>b.score-a.score).slice(0,8);
 }
 export function deterministicRepair(candidates:Awaited<ReturnType<typeof repairCandidates>>):RepairChoice{
