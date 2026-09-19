@@ -43,6 +43,18 @@ describe('R2 wine reference resolver',()=>{
   const result=await resolveWineReference(bucket(objects()),{producer:'Krug',wineName:'Grande Cuvée',releaseDesignation:'171ème Édition',vintage:null,vintageKind:'non_vintage',country:'France',region:'Champagne',style:'sparkling'});
   expect(result).toMatchObject({identityMatchStatus:'matched',lwin7:'1234567',elid:'FR-CMP-KRUG01-N171',productSubtype:'Sparkling'});
  });
+ it('falls back to a base LWIN wine row when the export does not carry edition-specific rows',async()=>{
+  const data=objects(),shard=referenceShardId('krug'),key=`reference/lwin/versions/l1/shard-${shard}.json`;
+  data[key]=[{...lwin,displayName:'Krug, Grande Cuvee',wineName:'Grande Cuvee',wineKey:'grande cuvee'}];
+  const result=await resolveWineReference(bucket(data),{producer:'Krug',wineName:'Grande Cuvée',releaseDesignation:'171ème Édition',vintage:null,vintageKind:'non_vintage',country:'France',region:'Champagne',style:'sparkling'});
+  expect(result).toMatchObject({identityMatchStatus:'matched',lwin7:'1234567',elid:'FR-CMP-KRUG01-N171'});
+ });
+ it('prefers an edition-specific LWIN row over the base-family fallback',async()=>{
+  const data=objects(),shard=referenceShardId('krug'),key=`reference/lwin/versions/l1/shard-${shard}.json`;
+  data[key]=[lwin,{...lwin,productKey:'lwin:7654321',lwin7:'7654321',displayName:'Krug, Grande Cuvee',wineName:'Grande Cuvee',wineKey:'grande cuvee'}];
+  const result=await resolveWineReference(bucket(data),{producer:'Krug',wineName:'Grande Cuvée',releaseDesignation:'171ème Édition',vintageKind:'non_vintage'});
+  expect(result).toMatchObject({identityMatchStatus:'matched',lwin7:'1234567'});
+ });
  it('follows Combined redirects across producer shards to the current Live identity',async()=>{
   const data=objects(),sourceShard=referenceShardId('krug'),sourceKey=`reference/lwin/versions/l1/shard-${sourceShard}.json`;
   const middleKey='renamed producer',middleShard=referenceShardId(middleKey),middlePath=`reference/lwin/versions/l1/shard-${middleShard}.json`;
