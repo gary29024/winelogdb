@@ -80,7 +80,7 @@ export function AdminPage(){
   </form>}
  </fieldset>
  <fieldset disabled={busy}><legend>Launch preparation</legend>
-  <p>R2 inventory, research indexing and LWIN backfill run in the background. It is safe to leave this page. The first LWIN pass uses only local D1 + R2 data. The optional second pass uses Gemini 3.1 Flash Lite through the normal AI Gateway Vertex path on Flex, only for unresolved wines after local candidate narrowing. Neither pass calls Liv-ex or changes tasting notes, photos or research.</p>
+  <p>R2 inventory, research indexing and LWIN backfill run in the background. It is safe to leave this page. The first LWIN pass uses only local D1 + R2 data. The optional second pass uses the low-cost recognition model through the normal AI Gateway Vertex path on Flex, only for unresolved wines after local candidate narrowing. Neither pass calls Liv-ex or changes tasting notes, photos or research.</p>
   {rolloutStatus&&<div>
    <p><strong>R2 storage:</strong> {stateLabel(rolloutStatus.storage.state)} · {rolloutStatus.storage.objects} objects tracked.</p>
    {rolloutStatus.storage.error&&<p role="alert">Last storage inventory error: {rolloutStatus.storage.error}</p>}
