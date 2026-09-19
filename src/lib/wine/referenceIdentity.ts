@@ -106,6 +106,7 @@ function elidWineNameKeys(product:LwinReferenceProduct,wine:ReferenceResolvable)
 }
 async function registeredElid(bucket:R2Bucket,product:LwinReferenceProduct,wine:ReferenceResolvable){
  const clue=elidVintageClue(wine);if(!clue)return null;
+ if(!product.producerName)return null;
  const index=await elidProducerIndex(bucket),codes=[...new Set(producerLookupKeys(product.producerName).flatMap(key=>index[key]??[]))];
  if(!codes.length){
   console.warn(JSON.stringify({event:'elid-producer-unmapped',lwin7:product.lwin7,producer:product.producerName}));
@@ -125,10 +126,9 @@ export async function resolveWineReference(bucket:R2Bucket,wine:ReferenceResolva
  if(!producerKey||!wineKey)return unmatched();
  const countryKey=normalizeReferenceText(wine.country),regionKey=normalizeReferenceText(wine.region),colourKey=colourFromStyle(wine.style??wine.wineStyle);
  const rows=await referenceRows<LwinReferenceProduct>(bucket,'lwin',producerKey);if(!rows.length)return unmatched();
- const candidates=rows.filter(row=>row.producerKey===producerKey&&row.wineKey===wineKey&&compatible(row,countryKey,regionKey,colourKey));
+ const candidates=rows.filter(row=>row.status!=='Deleted'&&row.producerKey===producerKey&&row.wineKey===wineKey&&compatible(row,countryKey,regionKey,colourKey));
  if(candidates.length!==1)return unmatched(candidates.length>1?'ambiguous':'unmatched');
  let product=candidates[0];
- if(product.status==='Deleted')return unmatched();
  if(product.status==='Combined'){
   const redirects=await lwinRedirects(bucket),seen=new Set<string>();
   while(product.status==='Combined'){

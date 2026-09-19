@@ -1,7 +1,7 @@
 export const REFERENCE_SHARDS=256;
 export type ReferenceProvider='lwin'|'elid';
 export type ReferenceManifest={
- provider:ReferenceProvider;version:string;prefix:string;shardCount:number;rows:number;
+ provider:ReferenceProvider;version:string;prefix:string;shardCount:number;rows:number;matchableRows?:number;sparseRows?:number;
  source:string;sourceUpdatedAt:string|null;generatedAt:string;redirectsKey?:string|null;producerIndexKey?:string|null;
 };
 export type ElidReferenceRecord={

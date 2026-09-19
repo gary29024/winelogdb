@@ -8,7 +8,7 @@ export const LWIN_HEADERS=[
 export type LwinInputRow=Record<string,string|number|null|undefined>;
 export type LwinReferenceProduct={
  productKey:string;lwin7:string;status:'Live'|'Combined'|'Deleted';referenceLwin7:string|null;
- displayName:string;producerTitle:string|null;producerName:string;wineName:string;
+ displayName:string|null;producerTitle:string|null;producerName:string|null;wineName:string|null;
  producerKey:string;wineKey:string;country:string|null;countryKey:string;region:string|null;regionKey:string;
  subRegion:string|null;site:string|null;parcel:string|null;colour:string|null;colourKey:string;
  productType:string|null;productSubtype:string|null;designation:string|null;classification:string|null;
@@ -33,7 +33,6 @@ export function parseLwinReference(row:LwinInputRow,importedAt=new Date().toISOS
  const status=String(row.STATUS??'').trim();
  if(status!=='Live'&&status!=='Combined'&&status!=='Deleted')throw new Error(`Invalid LWIN status for ${lwin7}: ${status}`);
  const displayName=text(row.DISPLAY_NAME),producerName=text(row.PRODUCER_NAME),wineName=text(row.WINE);
- if(!displayName||!producerName||!wineName)throw new Error(`LWIN ${lwin7} is missing display/producer/wine identity`);
  const referenceLwin7=normalizeLwinId(row.REFERENCE);
  if(status==='Combined'&&!referenceLwin7)throw new Error(`Combined LWIN ${lwin7} has no valid REFERENCE`);
  const country=text(row.COUNTRY),region=text(row.REGION),colour=text(row.COLOUR);
