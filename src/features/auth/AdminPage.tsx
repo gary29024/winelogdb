@@ -8,7 +8,7 @@ type ActionAllowance={action:string;label:string;accessMode:'included'|'allowanc
 type MemberActionAccess={userId:string;actions:ActionAllowance[]};
 type Overview={members:Member[];actions:string[];settings:Record<string,unknown>|null;prices:Array<{id:string;action:string;credits:number}>;aiCost:{month:string;usd:number;searches:number};memberUsage:{month:string;items:MemberUsage[]};actionPolicies:ActionPolicy[];actionAccess:MemberActionAccess[];storage:Array<{owner_id:string;byte_size:number;metered_byte_size:number}>;reviewOperations:Array<{id:string;user_id:string;path:string}>};
 type RolloutState='not_started'|'paused'|'running'|'complete';
-type RolloutStatus={storage:{state:RolloutState;objects:number;error:string|null};research:{state:RolloutState;wines:{processed:number;total:number};producers:{processed:number;total:number};error:string|null};lwin:{state:RolloutState;processed:number;total:number;matched:number;ambiguous:number;unmatched:number;conflict:number;error:string|null}};
+type RolloutStatus={storage:{state:RolloutState;objects:number;error:string|null};research:{state:RolloutState;wines:{processed:number;total:number};producers:{processed:number;total:number};error:string|null};lwin:{state:RolloutState;processed:number;total:number;matched:number;ambiguous:number;unmatched:number;conflict:number;error:string|null};lwinAi:{state:RolloutState;processed:number;total:number;matched:number;deterministic:number;ai:number;review:number;error:string|null}};
 const defaults={memberLimit:25,memberStorageBytes:100*1024*1024,totalStorageBytes:8*1024*1024*1024,aiConcurrency:2,aiDailyOperations:100,aiDailyEmbeddingRequests:400,aiMonthlyBudgetUsd:0,aiUnitBudgetUsd:1,cloudflareWarningUsd:0,cloudflareStopUsd:0,cloudflareObservedUsd:0,cloudflareObservedMonth:new Date().toISOString().slice(0,7),allowOverages:true};
 const budgetKeys=Object.keys(defaults);
 const budgetLabels:Record<string,string>={memberLimit:'Member limit (owner excluded)',memberStorageBytes:'Storage per member (bytes; 0 = unlimited)',totalStorageBytes:'Total storage (bytes; 0 = unlimited)',aiConcurrency:'Simultaneous AI actions',aiDailyOperations:'Global AI units per day',aiDailyEmbeddingRequests:'Smart Search embeddings per account per day',aiMonthlyBudgetUsd:'Monthly AI budget (US$)',aiUnitBudgetUsd:'Estimated hold per unit, including retries (US$)',cloudflareWarningUsd:'Cloudflare warning amount (US$)',cloudflareStopUsd:'Cloudflare stop amount (US$)',cloudflareObservedUsd:'Measured Cloudflare cost this month (US$)',cloudflareObservedMonth:'Measurement month (YYYY-MM)',allowOverages:'Allow paid Cloudflare usage below the hard stop'};
@@ -19,7 +19,7 @@ const utcBudgetWindow=()=>{const now=new Date(),current=now.toISOString().slice(
 export function AdminPage(){
  const [data,setData]=useState<Overview|null>(null),[config,setConfig]=useState<Record<string,unknown>>(defaults),[policies,setPolicies]=useState<ActionPolicy[]>([]),[message,setMessage]=useState(''),[busy,setBusy]=useState(false),[rolloutStatus,setRolloutStatus]=useState<RolloutStatus|null>(null);
  const [email,setEmail]=useState(''),[inviteUrl,setInviteUrl]=useState(''),[grantMemberId,setGrantMemberId]=useState(''),[grantAction,setGrantAction]=useState(''),[grantRuns,setGrantRuns]=useState(1),[grantReason,setGrantReason]=useState('');
- const rolloutRunning=rolloutStatus?.storage.state==='running'||rolloutStatus?.research.state==='running'||rolloutStatus?.lwin.state==='running';
+ const rolloutRunning=rolloutStatus?.storage.state==='running'||rolloutStatus?.research.state==='running'||rolloutStatus?.lwin.state==='running'||rolloutStatus?.lwinAi.state==='running';
  async function load(){
   const [next,rollout]=await Promise.all([apiJson<Overview>('/api/admin/overview'),apiJson<RolloutStatus>('/api/admin/rollout/status')]);setData(next);setRolloutStatus(rollout);setPolicies(next.actionPolicies);
   if(next.settings){const clean:Record<string,unknown>={...defaults};for(const key of budgetKeys)if(next.settings[key]!==undefined)clean[key]=next.settings[key];setConfig(clean)}
@@ -29,9 +29,9 @@ export function AdminPage(){
  useEffect(()=>{if(!rolloutRunning)return;const timer=window.setInterval(()=>{void apiJson<RolloutStatus>('/api/admin/rollout/status').then(setRolloutStatus).catch(()=>undefined)},5000);return()=>window.clearInterval(timer)},[rolloutRunning]);
  useEffect(()=>{const members=data?.members.filter(item=>item.role==='member')??[];if(!grantMemberId&&members[0])setGrantMemberId(members[0].id);const allowed=policies.filter(item=>item.accessMode==='allowance');if(!allowed.some(item=>item.action===grantAction))setGrantAction(allowed[0]?.action??'')},[data,policies,grantMemberId,grantAction]);
  async function run(fn:()=>Promise<unknown>){setBusy(true);setMessage('');try{const result=await fn();setMessage(typeof result==='string'?result:'Saved');await load()}catch(e){setMessage((e as Error).message)}finally{setBusy(false)}}
- async function startRollout(kind:'storage'|'research'|'lwin',refresh=false){
+ async function startRollout(kind:'storage'|'research'|'lwin'|'lwin-ai',refresh=false){
   const result=await apiJson<{accepted:boolean;alreadyComplete?:boolean;alreadyRunning?:boolean;refreshing?:boolean;status:RolloutStatus}>(`/api/admin/rollout/${kind}`,'POST',kind==='storage'?{}:{refresh});setRolloutStatus(result.status);
-  const label=kind==='storage'?'R2 storage inventory':kind==='research'?'Research indexing':'LWIN backfill';
+  const label=kind==='storage'?'R2 storage inventory':kind==='research'?'Research indexing':kind==='lwin-ai'?'AI-assisted LWIN resolution':'LWIN backfill';
   if(result.alreadyRunning)return `${label} is already running.`;
   if(result.alreadyComplete)return `${label} is already complete.`;
   return `${refresh?`${label} refresh`:label} is running in the background. You can leave this page.`;
@@ -80,7 +80,7 @@ export function AdminPage(){
   </form>}
  </fieldset>
  <fieldset disabled={busy}><legend>Launch preparation</legend>
-  <p>R2 inventory, research indexing and LWIN backfill run in the background. It is safe to leave this page. LWIN backfill uses only WineLog's local D1 + R2 data: it makes no AI or Liv-ex API calls and never changes tasting notes, photos or research.</p>
+  <p>R2 inventory, research indexing and LWIN backfill run in the background. It is safe to leave this page. The first LWIN pass uses only local D1 + R2 data. The optional second pass uses the low-cost recognition model through the normal AI Gateway Vertex path on Flex, only for unresolved wines after local candidate narrowing. Neither pass calls Liv-ex or changes tasting notes, photos or research.</p>
   {rolloutStatus&&<div>
    <p><strong>R2 storage:</strong> {stateLabel(rolloutStatus.storage.state)} · {rolloutStatus.storage.objects} objects tracked.</p>
    {rolloutStatus.storage.error&&<p role="alert">Last storage inventory error: {rolloutStatus.storage.error}</p>}
@@ -93,6 +93,10 @@ export function AdminPage(){
    {rolloutStatus.lwin.total>0&&<progress max={rolloutStatus.lwin.total} value={Math.min(rolloutStatus.lwin.processed,rolloutStatus.lwin.total)} aria-label="LWIN backfill progress"/>}
    {rolloutStatus.lwin.error&&<p role="alert">Last LWIN backfill error: {rolloutStatus.lwin.error}</p>}
    <button disabled={rolloutStatus.lwin.state==='running'} onClick={()=>void run(()=>startRollout('lwin',rolloutStatus.lwin.state==='complete'))}>{rolloutStatus.lwin.state==='running'?'Matching existing wines…':rolloutStatus.lwin.state==='complete'?'Recheck unmatched wines':rolloutStatus.lwin.state==='paused'?'Resume LWIN backfill':'Match existing wines to LWIN'}</button>
+   <p><strong>AI-assisted LWIN resolution:</strong> {stateLabel(rolloutStatus.lwinAi.state)} · {rolloutStatus.lwinAi.processed}/{rolloutStatus.lwinAi.total} unresolved wines checked · {rolloutStatus.lwinAi.matched} matched ({rolloutStatus.lwinAi.deterministic} local · {rolloutStatus.lwinAi.ai} AI) · {rolloutStatus.lwinAi.review} left for review.</p>
+   {rolloutStatus.lwinAi.total>0&&<progress max={rolloutStatus.lwinAi.total} value={Math.min(rolloutStatus.lwinAi.processed,rolloutStatus.lwinAi.total)} aria-label="AI LWIN resolution progress"/>}
+   {rolloutStatus.lwinAi.error&&<p role="alert">Last AI LWIN resolution error: {rolloutStatus.lwinAi.error}</p>}
+   <button disabled={rolloutStatus.lwinAi.state==='running'||rolloutStatus.lwin.state!=='complete'} onClick={()=>void run(()=>startRollout('lwin-ai',rolloutStatus.lwinAi.state==='complete'))}>{rolloutStatus.lwinAi.state==='running'?'Resolving unmatched wines…':rolloutStatus.lwinAi.state==='complete'?'Recheck unresolved with AI':'Resolve unmatched LWIN wines'}</button>
   </div>}
   <label>Invite email<input type="email" value={email} onChange={e=>{setEmail(e.target.value);setInviteUrl('')}}/></label><button onClick={()=>void run(async()=>{const result=await apiJson<{url:string}>('/api/admin/invitations','POST',{email});setInviteUrl(result.url);return 'Invitation created.'})}>Create member invitation</button>
   {inviteUrl&&<div className="invitation-result"><strong>Invitation link</strong><input aria-label="Invitation link" readOnly value={inviteUrl} onFocus={e=>e.currentTarget.select()}/><div className="friend-actions"><button type="button" onClick={()=>void navigator.clipboard.writeText(inviteUrl).then(()=>setMessage('Invitation link copied.')).catch(()=>setMessage('Could not copy automatically. Press and hold the link to copy it.'))}>Copy link</button><a className="button" href={inviteUrl} target="_blank" rel="noreferrer">Open link</a></div></div>}

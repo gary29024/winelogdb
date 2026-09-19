@@ -130,7 +130,8 @@ export default {
     if(!member){message.retry({delaySeconds:300});retried=true;continue}
     if(raw.kind==='admin_rollout'){
      if(member.role!=='owner'){message.ack();continue}
-     await processRolloutJob(env,raw.rollout);message.ack();continue;
+     const rolloutEnv={...env,CREDIT_CONTEXT:providerAuthorization('owner',`Admin ${raw.rollout} rollout`)};
+     await processRolloutJob(rolloutEnv,raw.rollout);message.ack();continue;
     }
     const job=raw as typeof message.body&JobEnvelope;
     const op=job._creditOperationId?await env.DB.prepare('SELECT * FROM credit_operations WHERE id=? AND user_id=?').bind(job._creditOperationId,job.owner!).first<CreditOperation>():null;
