@@ -67,6 +67,9 @@ for(const product of products){
  const id=referenceShardId(product.producerKey||product.lwin7,REFERENCE_SHARDS),rows=shards.get(id)??[];rows.push(product);shards.set(id,rows);
  for(const key of producerLookupKeys(product.producerName)){addIndex(key,id);for(const token of key.split(' ').filter(token=>token.length>=4))addIndex(`t:${token}`,id)}
 }
+// Token aliases are only useful while selective. Generic producer words such as
+// chateau/domaine otherwise fan out to nearly every shard and defeat the index.
+for(const key of Object.keys(producerIndex))if(key.startsWith('t:')&&producerIndex[key].length>8)delete producerIndex[key];
 const redirects:Record<string,LwinRedirect>={};
 for(const product of products)if(product.status==='Combined'&&product.referenceLwin7){
  const seen=new Set([product.lwin7]);let targetId=product.referenceLwin7,target:LwinReferenceProduct|undefined,unresolvedReason:string|null=null;
