@@ -7,7 +7,9 @@ import { AppIcon } from '../../components/AppIcons';
 import { backTargetFromState,JOURNAL_BACK } from './backTarget';
 import { formatDate } from '../../lib/wine/detailFormat';
 import { experienceRows as buildExperienceRows } from '../../lib/wine/detailFields';
-import { FactList,WineDetailsSection,WineFactPills } from './WineFacts';
+import { FactList,WineDetailsSection,WineFactPills,WineReferenceSection } from './WineFacts';
+import { PageHeader } from '../../components/PageHeader';
+import { SectionLabel } from '../../components/SectionLabel';
 import { SparklingDetailsCard } from './SparklingDetailsCard';
 import { structureValueLabel,type TastingStructure,type TastingStructureKey } from '../../lib/wine/tastingStructure';
 import { DeepSources,ResearchText } from './ResearchPresentation';
@@ -93,20 +95,36 @@ export function SharedWinesPage(){
  const sections=researchSections(wine.deepSearch);
  // The score is the viewer's own, so it belongs with the rest of their experience
  // rather than in the pills, where it would read as a property of the wine.
+ const heroPhoto=wine.photos?.[0];
  const hasExperience=Boolean(wine.tastingDate||wine.tastingName||wine.venue||wine.locationName||wine.price!=null||wine.rating!=null||wine.tastingNotes||structureItems.length);
  return <article className="detail wine-detail shared-wine-detail">
   <Link className="back-pill" to={back.to}>← {back.label}</Link>
+  {/* The same header the owner's page uses: photograph beside the name rather
+      than stacked above it, so a recipient reaches the wine without scrolling. */}
   <section className="wine-identity">
-   {wine.photos?.length?<div className="detail-gallery" aria-label={`${wine.wineName} photos`}>{wine.photos.map((photo,index)=><span className="detail-photo-slot" key={photo.id}><button type="button" className="detail-photo-button" onClick={()=>setSelectedPhoto(photo.url)} aria-label={`Open photo ${index+1} of ${wine.photos!.length}`}><img src={photo.url} alt={`${wine.producer} ${wine.wineName} photo ${index+1}`} className="detail-photo" loading="lazy" decoding="async"/></button></span>)}</div>:<div className="detail-bottle">{wine.wineStyle?.slice(0,1).toUpperCase()||'W'}</div>}
-   <p className="eyebrow">{wine.vintage??'NON-VINTAGE'} · {wine.wineStyle??'WINE'}</p><h1>{wine.wineName}</h1><h2>{wine.producerId?<Link className="detail-producer-link" to={`/producers/${wine.producerId}`}>{wine.producer}</Link>:wine.producer}</h2>
-   <div className="detail-favorite-row"><button type="button" className={`detail-favorite-button${wine.favorite?' active':''}`} aria-pressed={wine.favorite} onClick={()=>void toggleFavorite()} disabled={favoriteBusy}><span className="heart" aria-hidden="true"><AppIcon kind={wine.favorite?'heart-filled':'heart'}/></span>{wine.favorite?'Favorite':'Add to favorites'}</button><a className="detail-wine-searcher-link" href={wineSearcherUrl(wine.producer,wine.wineName,wine.vintage)} target="_blank" rel="noopener noreferrer">Find on Wine-Searcher <span aria-hidden="true">↗</span></a>{favoriteError&&<span className="shared-favorite-error" role="alert">{favoriteError}</span>}</div>
-   <WineFactPills wine={wine}/>
+   <PageHeader
+    eyebrow={`${wine.vintage??'NON-VINTAGE'} · ${wine.wineStyle??'WINE'}`}
+    title={wine.wineName}
+    media={<div className="detail-media">
+     {heroPhoto
+      ?<button type="button" className="detail-photo-button" onClick={()=>setSelectedPhoto(heroPhoto.url)} aria-label={`Open photo 1 of ${wine.photos!.length}`}><img src={heroPhoto.url} alt={`${wine.producer} ${wine.wineName}`} className="detail-photo" loading="lazy" decoding="async"/></button>
+      :<div className="detail-bottle">{wine.wineStyle?.slice(0,1).toUpperCase()||'W'}</div>}
+     {(wine.photos?.length??0)>1&&<span className="detail-photo-count">{wine.photos!.length} photos</span>}
+    </div>}
+   >
+    <h2 className="detail-producer">{wine.producerId?<Link className="detail-producer-link" to={`/producers/${wine.producerId}`}>{wine.producer}</Link>:wine.producer}</h2>
+    <WineFactPills wine={wine}/>
+   </PageHeader>
   </section>
+  <div className="wine-actions">
+   <button type="button" className={`detail-favorite-button${wine.favorite?' active':''}`} aria-pressed={wine.favorite} onClick={()=>void toggleFavorite()} disabled={favoriteBusy}><span className="heart" aria-hidden="true"><AppIcon kind={wine.favorite?'heart-filled':'heart'}/></span>{wine.favorite?'Favorite':'Add to favorites'}</button>
+   <a className="detail-wine-searcher-link" href={wineSearcherUrl(wine.producer,wine.wineName,wine.vintage)} target="_blank" rel="noopener noreferrer">Find on Wine-Searcher <span aria-hidden="true">↗</span></a>
+   {favoriteError&&<span className="shared-favorite-error" role="alert">{favoriteError}</span>}
+  </div>
   <SparklingDetailsCard details={wine.sparklingDetails}/>
   <div className="shared-source-indicator" role="note"><span>Shared by</span><strong>{wine.ownerName}</strong></div>
-  <WineDetailsSection wine={wine}/>
   <section className="detail-section experience-panel">
-   <p className="section-label">Your experience</p>
+   <SectionLabel origin="yours">Your experience</SectionLabel>
    {!editing?<><FactList rows={experienceRows} className="shared-experience-summary"/>{structureItems.length>0&&<><p className="shared-structure-label">Structure</p><dl className="tasting-structure-summary">{structureItems.map(([label,value])=><div key={label}><dt>{label}</dt><dd>{structureValueLabel[value]??value}</dd></div>)}</dl></>}{wine.tastingNotes?<blockquote className="detail-experience-notes">{wine.tastingNotes}</blockquote>:null}<button type="button" className="shared-experience-edit" onClick={edit}>{hasExperience?'Edit your experience':'Add your experience'}</button></>:<form className="shared-experience-form" onSubmit={saveExperience}>
     <label>Drinking date<input type="date" value={draft.tastingDate} onChange={e=>setDraft({...draft,tastingDate:e.target.value})}/></label>
     <label>Rating / 100<input type="number" min="0" max="100" step="0.5" value={draft.rating} onChange={e=>setDraft({...draft,rating:e.target.value})}/></label>
@@ -129,8 +147,16 @@ export function SharedWinesPage(){
    </form>}
    {notice&&<p className="shared-experience-notice" role="status">{notice}</p>}{error&&<p className="shared-experience-error" role="alert">{error}</p>}
   </section>
+  <WineDetailsSection wine={wine}/>
+  <WineReferenceSection wine={wine}/>
+  {/* The gallery leaves the header so the photograph is not competing with the
+      name; a recipient cannot change these, so there is nothing to manage. */}
+  {(wine.photos?.length??0)>1&&<section className="detail-section detail-photos-panel">
+   <SectionLabel>Photos</SectionLabel>
+   <div className="detail-gallery" aria-label={`${wine.wineName} photos`}>{wine.photos!.map((photo,index)=><span className="detail-photo-slot" key={photo.id}><button type="button" className="detail-photo-button" onClick={()=>setSelectedPhoto(photo.url)} aria-label={`Open photo ${index+1} of ${wine.photos!.length}`}><img src={photo.url} alt={`${wine.producer} ${wine.wineName} photo ${index+1}`} className="detail-photo" loading="lazy" decoding="async"/></button></span>)}</div>
+  </section>}
   {wine.deepSearch&&<section className="detail-section deep-search-panel">
-   <div className="deep-panel-head"><p className="section-label">Deep Search</p></div>
+   <div className="deep-panel-head"><SectionLabel origin="researched">Deep Search</SectionLabel></div>
    <div className="deep-summary"><ResearchText text={wine.deepSearch.summary}/></div>
    {sections.length>0&&<div className="deep-research-sections">
     <div className="deep-sections-head"><span>{sections.length} research section{sections.length===1?'':'s'}</span><button type="button" className="deep-toggle-all" onClick={()=>toggleAllDeepFields(sections.map(([,field])=>field))}>{sections.every(([,field])=>openDeepFields.has(field))?'Collapse all':'Expand all'}</button></div>

@@ -1,0 +1,25 @@
+/* The shared page header. Media beside the words rather than above them: the
+   centred, stacked identity card spent most of a phone screen before a single
+   fact, and a centred block gives the eye no fixed left edge to return to on
+   each new line. */
+.page-header{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;align-items:start}
+.page-header.has-media{grid-template-columns:auto minmax(0,1fr)}
+.page-header-media{grid-row:1;align-self:start}
+.page-header-body{min-width:0}
+.page-header-body>.eyebrow{margin:0 0 6px}
+.page-header-body>h1{margin:0;font-size:clamp(1.7rem,4.4vw,2.5rem);line-height:1.06}
+.page-header-subtitle{margin:8px 0 0;color:var(--ink-5);font-size:1rem}
+/* The count line is the producer page's answer to "how big is this estate" and
+   the journal's to "how much is in this filter", so it reads as data rather
+   than as prose. */
+.page-header-stats{margin:8px 0 0;color:var(--ink-6);font:600 .84rem 'DM Sans',sans-serif;font-variant-numeric:tabular-nums}
+.page-header-actions{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+
+@media(max-width:700px){
+  .page-header{gap:13px}
+  .page-header.has-media{gap:14px}
+  .page-header-body>h1{font-size:1.72rem}
+  .page-header-subtitle{font-size:.92rem}
+  .page-header-stats{font-size:.8rem}
+  .page-header-actions>*{flex:1 1 auto;text-align:center}
+}

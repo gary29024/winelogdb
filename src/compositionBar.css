@@ -1,0 +1,58 @@
+/* The stacked proportion track and its legend.
+   Segment widths sum to exactly 100, so the 2px gap between fills is carved out
+   of each segment rather than added between them - a flex gap would push the
+   last segment past the end of the track. The gap is painted in the surface
+   colour because a separator is the mechanism for telling two fills apart; an
+   outline around each one would add ink that is not data. */
+.composition{display:grid;gap:10px;margin:0 0 4px}
+.composition-track{display:flex;width:100%;height:10px;border-radius:var(--r-pill);background:var(--sunken);overflow:hidden}
+.composition-segment{box-sizing:border-box;min-width:0;height:100%;border-right:2px solid var(--paper)}
+.composition-segment:last-child{border-right:0}
+
+.composition-legend{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px 18px;margin:0;padding:0;list-style:none}
+.composition-legend li{display:flex;align-items:baseline;gap:7px;min-width:0}
+.composition-swatch{flex:0 0 auto;align-self:center;width:9px;height:9px;border-radius:50%}
+/* Text never wears the series colour: the swatch beside it carries identity,
+   and several of the light-mode slots are unreadable as lettering. */
+.composition-legend-label{color:var(--ink-3);font:600 .8rem 'DM Sans',sans-serif;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.composition-legend-value{flex:0 0 auto;margin-left:auto;color:var(--ink-6);font:600 .76rem 'DM Sans',sans-serif;font-variant-numeric:tabular-nums}
+
+/* One definition of what a tone looks like, as a custom property rather than a
+   background. Anything that marks a category - a stacked segment, a legend dot,
+   the swatch on a range group header - opts in by carrying data-tone, and the
+   legend beside a bar is then guaranteed to match the bar. Adding a consumer
+   costs one selector here, not one per tone. */
+[data-tone]{--tone:var(--ink-8)}
+
+/* Cru tier: one hue stepped dark to light, so the rank is visible in the colour
+   and not only in the label. The steps flip end for end in dark mode - grand cru
+   is the strongest mark against either surface, never the faintest. */
+[data-tone="cru-grand"]{--tone:var(--cru-grand)}
+[data-tone="cru-premier"]{--tone:var(--cru-premier)}
+[data-tone="cru-village"]{--tone:var(--cru-village)}
+[data-tone="cru-regional"]{--tone:var(--cru-regional)}
+
+/* Villages and anything else nominal: the fixed categorical order. */
+[data-tone="series-1"]{--tone:var(--series-1)}
+[data-tone="series-2"]{--tone:var(--series-2)}
+[data-tone="series-3"]{--tone:var(--series-3)}
+[data-tone="series-4"]{--tone:var(--series-4)}
+[data-tone="series-5"]{--tone:var(--series-5)}
+
+/* Wine style keeps the semantic tokens the charts already use: a red wine being
+   red means something to the reader that an arbitrary slot would throw away. */
+[data-tone="style-red"]{--tone:var(--style-red)}
+[data-tone="style-white"]{--tone:var(--style-white)}
+[data-tone="style-rose"]{--tone:var(--style-rose)}
+[data-tone="style-sparkling"]{--tone:var(--style-sparkling)}
+[data-tone="style-dessert"]{--tone:var(--style-dessert)}
+[data-tone="style-fortified"]{--tone:var(--style-fortified)}
+[data-tone="style-orange"]{--tone:var(--style-orange)}
+[data-tone="style-other"]{--tone:var(--style-other)}
+
+/* The consumers. */
+.composition-segment,.composition-swatch,.catalog-swatch,.range-filter-dot{background:var(--tone,var(--ink-8))}
+
+@media(max-width:700px){
+  .composition-legend{grid-template-columns:minmax(0,1fr)}
+}

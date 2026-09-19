@@ -14,6 +14,10 @@ import { catalogNote,verboseCatalogStyle } from '../../lib/producers/catalogNote
 import { stripProducerCatalogPrefix } from '../../lib/producers/catalogName';
 import { catalogDecisionKey,catalogDecisionLabel } from '../../lib/producers/catalogDecisions';
 import { cuveeStyleFamily,normalizeCuveeAlias } from '../../lib/cuvees/entities';
+import { CATALOG_HIERARCHY_LABELS,catalogHierarchyLabel,catalogVillageLabel,type CatalogHierarchyLabel } from '../../lib/cuvees/catalogPresentation';
+import { CompositionBar } from '../../components/CompositionBar';
+import { SectionLabel } from '../../components/SectionLabel';
+import { foldToOther,OTHER_TONE,SERIES_TONES } from '../../lib/ui/composition';
 import { isResearchStale } from '../../lib/research/freshness';
 import '../../producer.css';
 import { startBackoffPoll,type Poller } from '../../lib/polling/backoff';
@@ -24,15 +28,48 @@ const stageLabel:Record<ProducerResearchRun['stage'],string>={preparing:'Queued 
 type CatalogCategory='red'|'white'|'rose'|'sparkling'|'dessert'|'fortified'|'orange'|'other';
 const categoryOrder:CatalogCategory[]=['red','white','rose','sparkling','dessert','fortified','orange','other'];
 const categoryLabels:Record<CatalogCategory,string>={red:'Red',white:'White',rose:'Rosé',sparkling:'Sparkling',dessert:'Dessert / sweet',fortified:'Fortified',orange:'Orange',other:'Other'};
+/**
+ * The three questions a range can answer.
+ *
+ * It only ever grouped by style, which is the least interesting of the three
+ * for a Burgundy domaine: how good the holdings are, and where they are, were
+ * both already computed and thrown away. The rows are the same rows - this
+ * regroups them in the browser and fetches nothing.
+ */
+type RangeAxis='classification'|'village'|'style';
+const RANGE_AXES:RangeAxis[]=['classification','village','style'];
+const RANGE_AXIS_LABELS:Record<RangeAxis,string>={classification:'Classification',village:'Village',style:'Style'};
+const isRangeAxis=(value:unknown):value is RangeAxis=>RANGE_AXES.includes(value as RangeAxis);
+/** A group name is free text once the axis is a village, so it cannot go straight into an id. */
+const slug=(value:string)=>value.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')||'group';
+
+/** The cru ramp, in rank order; anything unclassified is not a rank and stays neutral. */
+const HIERARCHY_TONES:Record<CatalogHierarchyLabel,string>={
+ 'Grand Cru':'cru-grand','Premier Cru / 1er Cru':'cru-premier',
+ 'Village / appellation':'cru-village','Regional':'cru-regional','Other / unclassified':OTHER_TONE
+};
+
 const RANGE_COLLAPSE_KEY='winelog.producerRange.collapsed';
-function readCollapsedCategories():Set<CatalogCategory>{
+const RANGE_AXIS_KEY='winelog.producerRange.axis';
+/**
+ * Collapse state is keyed by axis as well as by group, because "Red" collapsed
+ * says nothing about whether "Grand Cru" should be. The stored value was a bare
+ * list of style categories, so anything that does not parse as the new shape is
+ * simply dropped rather than migrated: it costs one expanded group, once.
+ */
+function readCollapsedGroups():Set<string>{
  try{
   const raw=window.localStorage.getItem(accountStorageKey(RANGE_COLLAPSE_KEY));if(!raw)return new Set();
   const parsed=JSON.parse(raw) as unknown;
-  return new Set(Array.isArray(parsed)?parsed.filter((x):x is CatalogCategory=>categoryOrder.includes(x as CatalogCategory)):[]);
+  if(!Array.isArray(parsed))return new Set();
+  return new Set(parsed.filter((x):x is string=>typeof x==='string').map(x=>x.includes(':')?x:`style:${x}`));
  }catch{return new Set()}
 }
-function writeCollapsedCategories(next:Set<CatalogCategory>){try{window.localStorage.setItem(accountStorageKey(RANGE_COLLAPSE_KEY),JSON.stringify([...next]))}catch{/* storage unavailable */}}
+function writeCollapsedGroups(next:Set<string>){try{window.localStorage.setItem(accountStorageKey(RANGE_COLLAPSE_KEY),JSON.stringify([...next]))}catch{/* storage unavailable */}}
+function readStoredAxis():RangeAxis|null{
+ try{const raw=window.localStorage.getItem(accountStorageKey(RANGE_AXIS_KEY));return isRangeAxis(raw)?raw:null}catch{return null}
+}
+function writeStoredAxis(axis:RangeAxis){try{window.localStorage.setItem(accountStorageKey(RANGE_AXIS_KEY),axis)}catch{/* storage unavailable */}}
 function catalogCategory(wine:ProducerDetail['catalog'][number]):CatalogCategory{
  const value=String(wine.category??wine.style??'other').toLowerCase();
  if(value.includes('sparkling')||value.includes('champagne'))return 'sparkling';
@@ -71,7 +108,7 @@ const suggestionReason:Record<ProducerNameSuggestion['reason'],string>={
   spelling:'a slightly different spelling'
 };
 export function ProducerDetailPage(){
- const {id=''}=useParams(),{state:navState}=useLocation(),[producer,setProducer]=useState<ProducerDetail>(),[available,setAvailable]=useState<ProducerSummary[]>([]),[availableLoaded,setAvailableLoaded]=useState(false),[availableLoading,setAvailableLoading]=useState(false),[availableError,setAvailableError]=useState(''),[selectedAlias,setSelectedAlias]=useState(''),[primaryName,setPrimaryName]=useState(''),[loading,setLoading]=useState(true),[error,setError]=useState(''),[notice,setNotice]=useState(''),[researching,setResearching]=useState(false),[researchRun,setResearchRun]=useState<ProducerResearchRun|null>(null),[researchCancelling,setResearchCancelling]=useState(false),[merging,setMerging]=useState(false),[unlinking,setUnlinking]=useState(''),[savingPrimary,setSavingPrimary]=useState(false),[collapsedCategories,setCollapsedCategories]=useState<Set<CatalogCategory>>(readCollapsedCategories),[fixingKey,setFixingKey]=useState(''),[mergeTargetKey,setMergeTargetKey]=useState(''),[catalogBusy,setCatalogBusy]=useState(false),[deleting,setDeleting]=useState(false),[removingPhoto,setRemovingPhoto]=useState(false),[friendOperation,setFriendOperation]=useState(''),[nameSuggestions,setNameSuggestions]=useState<ProducerNameSuggestion[]>([]),[confirmingName,setConfirmingName]=useState('');
+ const {id=''}=useParams(),{state:navState}=useLocation(),[producer,setProducer]=useState<ProducerDetail>(),[available,setAvailable]=useState<ProducerSummary[]>([]),[availableLoaded,setAvailableLoaded]=useState(false),[availableLoading,setAvailableLoading]=useState(false),[availableError,setAvailableError]=useState(''),[selectedAlias,setSelectedAlias]=useState(''),[primaryName,setPrimaryName]=useState(''),[loading,setLoading]=useState(true),[error,setError]=useState(''),[notice,setNotice]=useState(''),[researching,setResearching]=useState(false),[researchRun,setResearchRun]=useState<ProducerResearchRun|null>(null),[researchCancelling,setResearchCancelling]=useState(false),[merging,setMerging]=useState(false),[unlinking,setUnlinking]=useState(''),[savingPrimary,setSavingPrimary]=useState(false),[collapsedGroups,setCollapsedGroups]=useState<Set<string>>(readCollapsedGroups),[storedAxis,setStoredAxis]=useState<RangeAxis|null>(readStoredAxis),[rangeFilter,setRangeFilter]=useState(''),[fixingKey,setFixingKey]=useState(''),[mergeTargetKey,setMergeTargetKey]=useState(''),[catalogBusy,setCatalogBusy]=useState(false),[deleting,setDeleting]=useState(false),[removingPhoto,setRemovingPhoto]=useState(false),[friendOperation,setFriendOperation]=useState(''),[nameSuggestions,setNameSuggestions]=useState<ProducerNameSuggestion[]>([]),[confirmingName,setConfirmingName]=useState('');
  const nav=useNavigate(),account=getAccount();
  const memberView=account?.role==='member';
  const technicalView=account?.role==='owner';
@@ -108,23 +145,101 @@ export function ProducerDetailPage(){
  // eslint-disable-next-line react-hooks/exhaustive-deps
  },[id]);
  const linkedByName=useMemo(()=>new Map((producer?.linkedProducers??[]).map(link=>[normalizeProducerAlias(link.name),link])),[producer]);
- const catalogGroups=useMemo(()=>{
+ // Every catalogue row, with all three axes resolved once. Regrouping is then a
+ // pure rearrangement, so switching axis costs nothing and fetches nothing.
+ const catalogRows=useMemo(()=>{
   if(!producer)return [];
-  const map=new Map<CatalogCategory,ProducerDetail['catalog']>();
-  for(const wine of producer.catalog){const category=catalogCategory(wine),list=map.get(category)??[];list.push(wine);map.set(category,list)}
-  return categoryOrder.flatMap(category=>{
-   const wines=map.get(category);if(!wines?.length)return [];
-   const rows=wines.map((wine,index)=>{
-    const identity=catalogCuveeFor(wine,producer),producerNames=[producer.canonicalName,...producer.aliases];
-    return {key:`${wine.name}-${index}`,displayName:displayCatalogName(wine.name,producer),identity,meta:catalogMeta(wine,category),note:catalogNote(wine.notes,wine.style),releaseCount:identity?.tastedReleases?.length??0,
-     decisionKey:catalogDecisionKey(wine,producerNames),label:catalogDecisionLabel(wine,producerNames),category};
-   });
-   return [{category,label:categoryLabels[category],rows,tasted:rows.filter(row=>Boolean(row.identity?.tastedCount)).length}];
+  const producerNames=[producer.canonicalName,...producer.aliases];
+  return producer.catalog.map((wine,index)=>{
+   const category=catalogCategory(wine),identity=catalogCuveeFor(wine,producer);
+   return {key:`${wine.name}-${index}`,displayName:displayCatalogName(wine.name,producer),identity,
+    meta:catalogMeta(wine,category),note:catalogNote(wine.notes,wine.style),releaseCount:identity?.tastedReleases?.length??0,
+    decisionKey:catalogDecisionKey(wine,producerNames),label:catalogDecisionLabel(wine,producerNames),
+    category,hierarchy:catalogHierarchyLabel(wine),village:catalogVillageLabel(wine)};
   });
  },[producer]);
+
+ /**
+  * How many distinct answers an axis gives. An axis that puts every wine in one
+  * group has told the reader nothing, which is what decides the opening view.
+  */
+ const axisSpread=useMemo(()=>({
+  classification:new Set(catalogRows.map(row=>row.hierarchy)).size,
+  village:new Set(catalogRows.map(row=>row.village)).size,
+  style:new Set(catalogRows.map(row=>row.category)).size
+ }),[catalogRows]);
+
+ /**
+  * Classification first where it separates anything, then village, then style.
+  * A Burgundy domaine opens on its cru mix; a Napa producer, where every wine
+  * is unclassified, opens on something that actually varies instead of on one
+  * group called "Other". A choice the reader makes is remembered and wins.
+  */
+ const defaultAxis:RangeAxis=axisSpread.classification>1?'classification':axisSpread.village>1?'village':'style';
+ const axis:RangeAxis=storedAxis??defaultAxis;
+
+ const catalogGroups=useMemo(()=>{
+  if(!catalogRows.length)return [];
+  const groupOf=(row:typeof catalogRows[number])=>
+   axis==='classification'?row.hierarchy:axis==='village'?row.village:row.category;
+  const map=new Map<string,typeof catalogRows>();
+  for(const row of catalogRows){const key=String(groupOf(row));const list=map.get(key)??[];list.push(row);map.set(key,list)}
+
+  const built=[...map.entries()].map(([key,rows])=>({
+   key,
+   label:axis==='style'?categoryLabels[key as CatalogCategory]??key:key,
+   rows,
+   tasted:rows.filter(row=>Boolean(row.identity?.tastedCount)).length,
+   tone:axis==='classification'?HIERARCHY_TONES[key as CatalogHierarchyLabel]??OTHER_TONE
+    :axis==='style'?`style-${key}`
+    :OTHER_TONE
+  }));
+
+  // Ranked axes keep their rank order; a nominal one is ordered by size, which
+  // is also the order its colours are handed out in.
+  if(axis==='classification')
+   built.sort((a,b)=>CATALOG_HIERARCHY_LABELS.indexOf(a.key as CatalogHierarchyLabel)-CATALOG_HIERARCHY_LABELS.indexOf(b.key as CatalogHierarchyLabel));
+  else if(axis==='style')
+   built.sort((a,b)=>categoryOrder.indexOf(a.key as CatalogCategory)-categoryOrder.indexOf(b.key as CatalogCategory));
+  else{
+   built.sort((a,b)=>b.rows.length-a.rows.length||a.label.localeCompare(b.label));
+   // Colour follows the entity: slots are assigned to villages by size once,
+   // here, so filtering the list below cannot repaint the ones that remain.
+   built.forEach((group,index)=>{group.tone=SERIES_TONES[index]??OTHER_TONE});
+  }
+  return built;
+ },[catalogRows,axis]);
+ /**
+  * How big the estate is, before any of it is read. It counts appellations
+  * rather than groups so the line means the same thing on every axis.
+  */
+ const rangeStats=useMemo(()=>{
+  if(!catalogRows.length)return '';
+  const appellations=new Set(catalogRows.map(row=>row.village).filter(name=>name&&name!=='Appellation not stated')).size;
+  const tasted=catalogRows.filter(row=>Boolean(row.identity?.tastedCount)).length;
+  return [
+   `${catalogRows.length} wine${catalogRows.length===1?'':'s'}`,
+   appellations?`${appellations} appellation${appellations===1?'':'s'}`:'',
+   tasted?`${tasted} tasted`:''
+  ].filter(Boolean).join(' · ');
+ },[catalogRows]);
  const catalogTotals=useMemo(()=>catalogGroups.reduce((totals,group)=>({wines:totals.wines+group.rows.length,tasted:totals.tasted+group.tasted}),{wines:0,tasted:0}),[catalogGroups]);
- const catalogRowIndex=useMemo(()=>catalogGroups.flatMap(group=>group.rows.map(row=>({decisionKey:row.decisionKey,label:row.label,groupLabel:group.label}))).filter(row=>row.decisionKey),[catalogGroups]);
- const allCategoriesCollapsed=catalogGroups.length>0&&catalogGroups.every(group=>collapsedCategories.has(group.category));
+ // Named by style rather than by the current grouping: which wine survives a
+ // merge is a question about the wines, and the answer would otherwise be
+ // worded differently depending on which pivot happened to be showing.
+ const catalogRowIndex=useMemo(()=>catalogRows.map(row=>({decisionKey:row.decisionKey,label:row.label,groupLabel:categoryLabels[row.category]})).filter(row=>row.decisionKey),[catalogRows]);
+ // The bar always shows the whole range. A chip narrows the list underneath it,
+ // never the shape above it: the point of the bar is the proportions, and a
+ // filtered bar would redraw them as 100% of whatever survived.
+ const compositionEntries=useMemo(()=>{
+  const entries=catalogGroups.map(group=>({key:group.key,label:group.label,count:group.rows.length,tone:group.tone}));
+  // Past the documented slots a village joins Other rather than being handed a
+  // repeated hue, which would say two villages were the same place.
+  return axis==='village'?foldToOther(entries,SERIES_TONES.length,OTHER_TONE):entries;
+ },[catalogGroups,axis]);
+ const visibleGroups=useMemo(()=>rangeFilter?catalogGroups.filter(group=>group.key===rangeFilter):catalogGroups,[catalogGroups,rangeFilter]);
+ const collapseKey=(groupKey:string)=>`${axis}:${groupKey}`;
+ const allCategoriesCollapsed=visibleGroups.length>0&&visibleGroups.every(group=>collapsedGroups.has(collapseKey(group.key)));
  function startFixing(decisionKey:string){setFixingKey(current=>current===decisionKey?'':decisionKey);setMergeTargetKey('');setError('')}
  async function applyCatalogDecision(row:{decisionKey:string;label:string},decision:'merge'|'hide'){
   if(!producer||catalogBusy)return;
@@ -148,15 +263,21 @@ export function ProducerDetailPage(){
   try{await undoProducerCatalogDecision(id,decision.id);await reload();setNotice(`The correction for “${decision.sourceName}” has been undone.`)}
   catch(e){setError((e as Error).message)}finally{setCatalogBusy(false)}
  }
- function toggleCategory(category:CatalogCategory){
-  setCollapsedCategories(current=>{const next=new Set(current);if(next.has(category))next.delete(category);else next.add(category);writeCollapsedCategories(next);return next});
+ function toggleCategory(groupKey:string){
+  const stored=collapseKey(groupKey);
+  setCollapsedGroups(current=>{const next=new Set(current);if(next.has(stored))next.delete(stored);else next.add(stored);writeCollapsedGroups(next);return next});
  }
  function toggleAllCategories(){
-  setCollapsedCategories(current=>{
+  setCollapsedGroups(current=>{
    const next=new Set(current);
-   for(const group of catalogGroups){if(allCategoriesCollapsed)next.delete(group.category);else next.add(group.category)}
-   writeCollapsedCategories(next);return next;
+   for(const group of visibleGroups){if(allCategoriesCollapsed)next.delete(collapseKey(group.key));else next.add(collapseKey(group.key))}
+   writeCollapsedGroups(next);return next;
   });
+ }
+ function chooseAxis(next:RangeAxis){
+  // A filter names a group on the axis it was picked on, so it cannot survive a
+  // switch: "Grand Cru" means nothing once the range is grouped by village.
+  setStoredAxis(next);writeStoredAxis(next);setRangeFilter('');setFixingKey('');
  }
  const tastedGroups=useMemo<TastedCuveeGroup[]>(()=>{
   const map=new Map<string,ProducerDetail['tastedWines']>();
@@ -271,7 +392,7 @@ export function ProducerDetailPage(){
  return <article className="producer-detail"><Link className="back-pill" to={back.to}>← {back.label}</Link>
   <header className={`producer-header${producer.heroImageAvailable?' has-hero':''}`}>
    {producer.heroImageAvailable&&<ProducerHeroImage producerId={producer.id} alt={`${producer.canonicalName} domaine`}/>}<div className="producer-header-shade"/>
-   <div className="producer-header-content"><p className="eyebrow">PRODUCER</p><h1>{producer.canonicalName}</h1><p>{location||'Home location not researched yet'}</p>{producer.aliases.length>1&&<small>Known aliases: {producer.aliases.join(' · ')}</small>}{producer.sharedOnly&&<small>Shown because a friend shared wine from this producer with you.</small>}{!producer.sharedOnly&&producer.heroImageAvailable&&<button type="button" className="producer-photo-remove" disabled={removingPhoto} onClick={()=>void removePhoto()}>{removingPhoto?'Removing…':'Remove this photo'}</button>}</div>
+   <div className="producer-header-content"><p className="eyebrow">PRODUCER</p><h1>{producer.canonicalName}</h1><p>{location||'Home location not researched yet'}</p>{rangeStats&&<p className="producer-header-stats">{rangeStats}</p>}{producer.aliases.length>1&&<small>Known aliases: {producer.aliases.join(' · ')}</small>}{producer.sharedOnly&&<small>Shown because a friend shared wine from this producer with you.</small>}{!producer.sharedOnly&&producer.heroImageAvailable&&<button type="button" className="producer-photo-remove" disabled={removingPhoto} onClick={()=>void removePhoto()}>{removingPhoto?'Removing…':'Remove this photo'}</button>}</div>
   </header>
   {!producer.sharedOnly&&nameSuggestions.length>0&&<section className="producer-name-suggestion" aria-labelledby="name-suggestion-title">
    <h2 id="name-suggestion-title">A friend may have researched this producer</h2>
@@ -289,14 +410,28 @@ export function ProducerDetailPage(){
    <ProducerContacts producer={producer} onChanged={reload} readOnly={producer.sharedOnly}/>
    {rangeAllowed&&catalogGroups.length>0&&<div className="producer-range">
     <div className="producer-range-head">
-     <div><p className="section-label">Wine range</p><strong>{catalogTotals.wines} wine{catalogTotals.wines===1?'':'s'} · {catalogGroups.length} style{catalogGroups.length===1?'':'s'}{catalogTotals.tasted?` · ${catalogTotals.tasted} tasted`:''}</strong></div>
+     <div><SectionLabel>Wine range</SectionLabel><strong>{catalogTotals.wines} wine{catalogTotals.wines===1?'':'s'} · {catalogGroups.length} {axis==='style'?`style${catalogGroups.length===1?'':'s'}`:axis==='village'?`village${catalogGroups.length===1?'':'s'}`:`tier${catalogGroups.length===1?'':'s'}`}{catalogTotals.tasted?` · ${catalogTotals.tasted} tasted`:''}</strong></div>
      <button type="button" className="range-toggle-all" onClick={toggleAllCategories}>{allCategoriesCollapsed?'Expand all':'Collapse all'}</button>
     </div>
-    {catalogGroups.map(group=>{
-     const collapsed=collapsedCategories.has(group.category),panelId=`producer-range-${group.category}`;
-     return <section className={`producer-catalog-group${collapsed?' is-collapsed':''}`} key={group.category}>
-      <h3><button type="button" className="catalog-group-toggle" aria-expanded={!collapsed} aria-controls={panelId} onClick={()=>toggleCategory(group.category)}>
-       <span className={`catalog-swatch ${group.category}`} aria-hidden="true"/>
+    {/* One set of wines, three questions. Whichever axis separates them opens
+        first, and a choice made here is remembered. */}
+    <div className="range-axis-tabs" role="group" aria-label="Group the range by">
+     {RANGE_AXES.map(option=><button type="button" key={option} className={option===axis?'active':''} aria-pressed={option===axis} onClick={()=>chooseAxis(option)}>{RANGE_AXIS_LABELS[option]}</button>)}
+    </div>
+    <CompositionBar entries={compositionEntries} unit="wines" label={`Range by ${RANGE_AXIS_LABELS[axis].toLowerCase()}`}/>
+    {/* Collapse hides what you have decided against; a chip narrows to the one
+        thing you want. On a forty-wine domaine the chip is much the faster. */}
+    {catalogGroups.length>1&&<div className="range-filters" role="group" aria-label="Show one group only">
+     <button type="button" className={rangeFilter?'':'active'} aria-pressed={!rangeFilter} onClick={()=>setRangeFilter('')}>All <b>{catalogTotals.wines}</b></button>
+     {catalogGroups.map(group=><button type="button" key={group.key} className={rangeFilter===group.key?'active':''} aria-pressed={rangeFilter===group.key} onClick={()=>setRangeFilter(current=>current===group.key?'':group.key)}>
+      <span className="range-filter-dot" data-tone={group.tone} aria-hidden="true"/>{group.label} <b>{group.rows.length}</b>
+     </button>)}
+    </div>}
+    {visibleGroups.map(group=>{
+     const collapsed=collapsedGroups.has(collapseKey(group.key)),panelId=`producer-range-${slug(group.key)}`;
+     return <section className={`producer-catalog-group${collapsed?' is-collapsed':''}`} key={group.key}>
+      <h3><button type="button" className="catalog-group-toggle" aria-expanded={!collapsed} aria-controls={panelId} onClick={()=>toggleCategory(group.key)}>
+       <span className="catalog-swatch" data-tone={group.tone} aria-hidden="true"/>
        <span className="catalog-group-name">{group.label}</span>
        <span className="catalog-group-count">{group.rows.length}</span>
        {group.tasted>0&&<span className="catalog-group-tasted">{group.tasted} tasted</span>}

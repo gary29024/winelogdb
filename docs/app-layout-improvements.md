@@ -1,0 +1,274 @@
+# App layout improvements
+
+A layout pass across the wine detail page, the producer page, the Journal and
+the app shell. No new colours, no new type scale, no new dependencies: the work
+is to rearrange what is already there and to name one idea the app was already
+living by without saying so.
+
+## The idea
+
+> **Give a fact a rank before you give it a name.**
+
+WineLog knows a great deal about where each of its facts came from. The research
+pipeline tiers its sources, scores its claims, records whether a statement was
+directly cited, disputed or merely plausible, and keeps LWIN and ELID identifiers
+against a wine. None of that reaches the reader. Every section on a wine page is
+the same white card with the same border, the same radius and the same weight, so
+a Liv-ex registry number, an AI-researched paragraph and a score the owner typed
+themselves all read as equally authoritative.
+
+Two reference designs prompted this pass, and both solve the same problem:
+
+- A wine-detail mock-up that splits one page into **Overview** (derived),
+  **Official reference (LWIN) — Read only**, and **Your Experience — Editable**.
+  You learn who is responsible for a number before you read it.
+- The `burgundy.atlas` producer view, which shows the **shape** of a domaine — a
+  stacked bar reading "67% Premier Cru" — before it shows a list of vineyard
+  names, and which lets the same holdings be re-sorted by village or by
+  classification without changing pages.
+
+Everything below follows from that one idea.
+
+## Provenance ranks
+
+Four ranks, rendered as a small chip at the right-hand end of a section label.
+
+| Rank | Badge | Means | Where |
+| --- | --- | --- | --- |
+| Yours | `✎ Yours` | typed by the account holder; editable | Your experience, Structure, Tags |
+| Derived | *(none)* | computed from what the account holder typed | Wine details |
+| Reference | `🔒 Reference` | from LWIN/ELID; cannot be edited here | Official reference |
+| Researched | `✨ Researched` | AI research, carrying its quality score | Deep Search |
+
+Derived is the default and therefore silent: a badge on every section would mark
+nothing, in the same way that a second tier of tracked-uppercase labels marked
+nothing before `.section-label` became sentence case.
+
+The badge is a variant of the existing `.chip` primitive in `styles.css`, not a
+tenth invention. `src/components/SectionLabel.tsx` owns both the markup and the
+stylesheet import, the way `WineFacts.tsx` already owns `wineClassification.css`.
+
+## Wine detail page
+
+### What was wrong
+
+`.wine-identity` carried the photo gallery, add-photo, remove-photo, the group
+photo context, the eyebrow, the title, the producer link, the favourite toggle,
+a Wine-Searcher link, sharing, the fact pills, the drink-window check and cellar
+stock — read content, edit controls and navigation in one box. It was centre
+aligned, which costs the eye a fixed left edge to return to on every line, and it
+was tall enough to fill most of a phone screen before a single fact. Edit and
+Delete sat at the very bottom, below the longest section on the page.
+
+### What it becomes
+
+```
+← Journal
+
+┌─ IDENTITY ─────────────────────────────────────┐
+│ ┌──────┐ NON-VINTAGE · SPARKLING               │
+│ │ img  │ Grande Cuvée                          │
+│ │      │ Krug                                › │
+│ └──────┘ [Champagne AOC] [Grand Cru] [Chard.]  │
+│  3 photos ›                                    │
+└────────────────────────────────────────────────┘
+  [ ♡ Favourite ]   [ Edit tasting ]
+
+┌─ YOUR EXPERIENCE ──────────── ✎ Yours ─────────┐
+┌─ STRUCTURE ────────────────── ✎ Yours ─────────┐
+┌─ WINE DETAILS ─────────────────────────────────┐
+┌─ OFFICIAL REFERENCE (LWIN) ── 🔒 Reference ────┐
+┌─ IN YOUR CELLAR ───────────────────────────────┐
+┌─ RESEARCH ────────── ✨ Researched · 82/100 ───┐
+#tags
+Delete this wine
+```
+
+Your experience moves above Wine details because it is the reason the record
+exists. Deep Search moves last because it is the longest section and the least
+often the thing someone opened the page for. The drink window joins Wine details,
+where the rest of the derived facts live, and the cellar strip gets a row of its
+own instead of riding in the identity card.
+
+### Two deliberate departures from the mock-up
+
+**No sticky bottom action bar.** `.mobile-nav` is already `position:fixed;
+bottom:0` at 78px plus `env(safe-area-inset-bottom)`. A second fixed bar would
+have to stack on it, fight the same inset, and would do nothing on desktop. An
+action row directly beneath the identity card is visible without scrolling for
+the same cost as a static row.
+
+**Keep the em-dash row for an unknown reference field.** Showing `Site / parcel —`
+is more honest than hiding the row. LWIN can say a wine is Corton; it cannot yet
+say a wine is from the Pernand side of Corton. A blank row states the limit of
+the reference data instead of leaving the reader to assume the question was never
+asked.
+
+## Producer page
+
+The range already had collapsible groups, colour swatches, counts and tasted
+badges. Four things were missing.
+
+### The pivot
+
+The range grouped by wine style only — red, white, sparkling — which is the least
+interesting of the three axes available for a Burgundy domaine. Both other axes
+were already computed and unused:
+
+- `catalogHierarchyLabel()` in `src/lib/cuvees/catalogPresentation.ts` returns
+  Grand Cru / Premier Cru / Village / Regional / Other for any catalogue entry.
+- the appellation on each entry gives the village.
+
+A three-way segmented control regroups the same rows without a fetch:
+
+```
+[ Classification | Village | Style ]
+```
+
+All three axes are resolved once per catalogue row, so switching is a pure
+rearrangement in the browser.
+
+**Which axis opens first is chosen, not fixed.** Classification wins where it
+separates anything, then village, then style. A Burgundy domaine therefore opens
+on its cru mix, while a Napa producer — every wine unclassified, one appellation
+— opens on style rather than on a single group called "Other / unclassified". A
+choice the reader makes is remembered and beats the automatic one.
+
+A grand cru is left standing as its own group on the village axis.
+Clos de la Roche is an appellation in its own right, and the reference data does
+not say which commune a grand cru sits in — the same gap that stops anyone saying
+a wine is from the Pernand side of Corton. Inventing the parent would be a guess,
+and wrong exactly at the boundaries people care about.
+
+Collapse state is keyed by axis as well as by group, because "Red is collapsed"
+says nothing about whether "Grand Cru" should be.
+
+### Composition bar
+
+A stacked proportion bar with a legend above the list, giving the shape of the
+estate before the names.
+
+**Cru tier is ordinal, not categorical.** Grand above Premier above Village above
+Regional is a rank, so it takes one hue stepped dark to light and the reader sees
+the order in the colour itself — rather than the four unrelated hues the
+reference design uses. Unclassified is the absence of a rank rather than the
+bottom of one, so it stays neutral and is not in the ramp. Villages are names,
+not ranks, so they take categorical slots in a fixed order instead, folding into
+one neutral "Other" past the fifth rather than repeating a hue.
+
+Every palette here was validated rather than eyeballed: the cru ramp for monotone
+lightness, step separation and light-end contrast against its own surface in each
+mode; the categorical slots for lightness band, chroma floor, colour-vision
+separation and normal-vision separation. Three of the light-mode slots sit under
+3:1 on paper, which is why the legend prints every count and percentage — the
+numbers are the required relief, not decoration.
+
+**The bar always shows the whole range.** A filter chip narrows the list beneath
+it and never the shape above it: redrawing the bar as 100% of whatever survived
+the filter would answer a different and much less useful question. Slots are
+assigned to villages by size once, so filtering cannot repaint the survivors
+either.
+
+A tone is defined once, as a custom property keyed on `data-tone`, so the dot on
+a group header is guaranteed to be the same colour as that group's segment in the
+bar above it. Six hard-coded hexes in `producer.css`
+(`.catalog-swatch.white{background:#e0c76c}` and its siblings) are gone with it —
+they broke the rule at the top of `styles.css` and, being fixed values, could not
+follow dark mode.
+
+### Count line and filter chips
+
+`21 wines · 18 appellations · 6 tasted` under the location in the hero, so the
+page says how big the estate is before it is scrolled.
+
+Filter chips — `(All 18) (Grand Cru 1) (Premier Cru 12) (Village 4)` — are a
+different gesture from collapse. Collapse hides what you have decided against;
+a chip narrows to the one thing you want. On a forty-wine domaine the chips are
+much the faster of the two, and both are kept.
+
+## Journal
+
+`.journal-viewbar` carried the result count, the page number, a filter reset, a
+Select toggle and a List/Grid switch, growing five more buttons in selection
+mode, and sat under six filter inputs in a scrolling pill row. That is two dense
+rows of furniture before any wine on a phone.
+
+The six filters fold behind a `Filters (2)` disclosure. Search stays out,
+because it is the control used every visit. Reset moves off the view bar and in
+beside the filters, where it is about what is being shown rather than about
+layout. The fields stay mounted and are hidden rather than unmounted, so a
+half-typed filter survives being folded away, and the disclosure opens on arrival
+when something is already narrowing the list — a filtered journal whose filters
+are hidden looks like a journal that has lost wines.
+
+A disclosure rather than the modal sheet first sketched: the sheet buys focus
+management and a backdrop for a row of six inputs that do not need either.
+
+**The composition bar was deliberately not added here.** The journal loads one
+page at a time, so the only mix available on the client is the mix of the current
+page. A bar drawn from 36 wines under a heading reading "73 matching wines" would
+be a misleading chart, and an honest one needs the aggregate from the server.
+That is a data change, not a layout change, and it is left for its own piece of
+work.
+
+## App shell
+
+`Layout.tsx` rendered brand → account link → nav under `justify-content:
+space-between`, which put the account link between the brand and the navigation.
+Brand left, nav centre, account and Scan right.
+
+The scan action rode inside `.desktop-nav`, and so disappeared with it on a
+phone, where the tab bar carries it. Out on its own it has to be told, or it
+appears twice.
+
+`<PageHeader>` — eyebrow, title, subtitle, count line, media, actions — now backs
+both wine pages. **The producer hero keeps its own treatment**: it lays the
+estate's name over a photograph, which is a genuinely different shape from
+media-beside-text, and forcing the shared component onto it would have cost the
+hero image for the sake of uniformity. It gains the count line and nothing else.
+
+## Phases
+
+| Phase | Work |
+| --- | --- |
+| 1a | `SectionLabel` with provenance badge, `PageHeader`, `CompositionBar` |
+| 1b | Wine detail: hero, section order, badges, action row, LWIN block |
+| 2a | Producer: count line, composition bar, filter chips, swatch tokens |
+| 2b | Producer: Classification / Village / Style pivot |
+| 3 | Journal filter sheet; shell header order; `PageHeader` adoption |
+
+Phase 1a is pure addition and breaks nothing. Each later phase depends only on
+1a, so they can land in any order after it.
+
+## Guards
+
+The CSS guard tests in `tests/unit` constrain this work, and the new code is
+written to them rather than around them:
+
+- `designTokens.test.ts` — every `var()` resolves, every token in `:root` is
+  referenced, the dark block holds only declarations, and no rule pins a light
+  background without also pinning its text colour.
+- `buttonTiers.test.ts` — a button that paints a background declares its colour
+  and its border; a transparent button declares
+  `:hover:not(:disabled)`; a selected `.active` state names the pointer so iOS
+  cannot leave it blanked; a section label is sentence case.
+- `cssSelectorIntegrity.test.ts` — no `.a.b` pair that no element ever carries.
+
+New tests added with this work:
+
+- `compositionShares.test.ts` — the proportion maths: sums to exactly 100 across
+  a spread of awkward splits, never inflates an empty entry to fill the row, and
+  keeps the caller's order so a filter cannot repaint the survivors.
+- `sectionProvenance.test.ts` — the four ranks, including that derived stays
+  silent and that the badge joins the shared chip primitive.
+- `catalogVillageLabel.test.ts` — a village and its premier cru land together,
+  and a grand cru is left standing as its own place.
+- `wineDetailOrder.test.ts` — the reading order of both wine pages, that photo
+  management is out of the identity card, and that nothing pins a second bar to
+  the edge the navigation already owns.
+
+Two existing tests changed deliberately rather than incidentally.
+`externalWineIdentityPresentation` pinned the LWIN rows to the Wine details
+table; it now pins them to the reference panel and to their absence from the
+facts table. `producerRangeCollapse` pinned style as the opening grouping; it now
+pins the chosen-axis behaviour, with a case for the style fallback.

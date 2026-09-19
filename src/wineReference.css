@@ -1,0 +1,10 @@
+/* The Official reference panel.
+   It is sunk rather than raised: the facts in it are not this account's, and a
+   panel that sits slightly into the page reads as quoted material where another
+   white card would read as one more thing the owner wrote. */
+.reference-panel{background:var(--ground);border-color:var(--line-mid)}
+.reference-panel .detail-facts dd{font-variant-numeric:tabular-nums}
+/* The reference identifiers are codes, so they break anywhere rather than
+   pushing the row wide. */
+.reference-panel .detail-facts dd{overflow-wrap:anywhere}
+.reference-note{margin:12px 0 0;padding-top:11px;border-top:1px solid var(--line);color:var(--ink-6);font-size:.78rem;line-height:1.5}

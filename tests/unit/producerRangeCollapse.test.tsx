@@ -55,6 +55,8 @@ const click=async(button:HTMLButtonElement)=>{await act(async()=>{button.click()
 
 const byLabel=(text:string)=>[...(host?.querySelectorAll('button')??[])].find(node=>node.textContent?.trim()===text);
 const fixButtons=()=>[...(host?.querySelectorAll('.catalog-fix')??[])] as HTMLButtonElement[];
+const axisTabs=()=>[...(host?.querySelectorAll('.range-axis-tabs button')??[])] as HTMLButtonElement[];
+const rangeFilters=()=>[...(host?.querySelectorAll('.range-filters button')??[])] as HTMLButtonElement[];
 
 beforeEach(()=>{window.localStorage.clear();vi.spyOn(window,'confirm').mockReturnValue(true)});
 afterEach(()=>{
@@ -100,14 +102,77 @@ describe('Producer wine range',()=>{
     expect(host!.textContent).not.toContain('Producer-wide context only. Exact cuvée/vintage techniques are researched separately on the wine page.');
   });
 
-  it('groups the range by style and starts expanded',async()=>{
+  it('opens on the cru mix, because that is what a Burgundy range is about',async()=>{
+    // It grouped by style only, which is the least interesting of the three
+    // axes here: two grand crus and a village wine is the fact about Dujac,
+    // and "Red 2, White 1" is not.
     await render();
     expect(groups()).toHaveLength(2);
-    expect(toggles().map(button=>button.querySelector('.catalog-group-name')?.textContent)).toEqual(['Red','White']);
+    expect(axisTabs().find(button=>button.classList.contains('active'))?.textContent).toBe('Classification');
+    expect(toggles().map(button=>button.querySelector('.catalog-group-name')?.textContent)).toEqual(['Grand Cru','Village / appellation']);
     expect(toggles().map(button=>button.querySelector('.catalog-group-count')?.textContent)).toEqual(['2','1']);
     expect(toggles().every(button=>button.getAttribute('aria-expanded')==='true')).toBe(true);
     expect(panels().every(panel=>!panel.hidden)).toBe(true);
-    expect(host?.querySelector('.producer-range-head strong')?.textContent).toContain('3 wines · 2 styles');
+    expect(host?.querySelector('.producer-range-head strong')?.textContent).toContain('3 wines · 2 tiers');
+  });
+
+  it('falls back to style where nothing is classified, rather than one group called Other',async()=>{
+    // A Napa producer has no cru tier and one appellation, so opening on either
+    // would put every wine in a single group and say nothing at all.
+    await render({catalog:[
+      {name:'Cabernet Sauvignon',category:'red',appellation:'Napa Valley',classification:null,style:null,notes:null},
+      {name:'Sauvignon Blanc',category:'white',appellation:'Napa Valley',classification:null,style:null,notes:null}
+    ]});
+    expect(axisTabs().find(button=>button.classList.contains('active'))?.textContent).toBe('Style');
+    expect(toggles().map(button=>button.querySelector('.catalog-group-name')?.textContent)).toEqual(['Red','White']);
+  });
+
+  it('regroups the same wines when another axis is chosen',async()=>{
+    await render();
+    await click(axisTabs().find(button=>button.textContent==='Village')!);
+    // A grand cru is its own appellation and is left standing as one: the
+    // reference data does not say which commune it sits in.
+    expect(toggles().map(button=>button.querySelector('.catalog-group-name')?.textContent))
+      .toEqual(['Charmes-Chambertin','Clos de la Roche','Morey-Saint-Denis']);
+    expect(host?.querySelector('.producer-range-head strong')?.textContent).toContain('3 villages');
+    await click(axisTabs().find(button=>button.textContent==='Style')!);
+    expect(toggles().map(button=>button.querySelector('.catalog-group-name')?.textContent)).toEqual(['Red','White']);
+  });
+
+  it('remembers the axis you chose, over the one it would have picked',async()=>{
+    await render();
+    await click(axisTabs().find(button=>button.textContent==='Style')!);
+    if(root)act(()=>root!.unmount());
+    host?.remove();
+    await render();
+    expect(axisTabs().find(button=>button.classList.contains('active'))?.textContent).toBe('Style');
+  });
+
+  it('narrows the list to one group without redrawing the shape of the range',async()=>{
+    // The bar answers "what is this estate", which is not a question about the
+    // filter. Showing 100% Grand Cru because Grand Cru is selected would be a
+    // different and much less useful claim.
+    await render();
+    const before=[...host!.querySelectorAll('.composition-segment')].map(node=>(node as HTMLElement).style.width);
+    await click(rangeFilters().find(button=>button.textContent?.startsWith('Grand Cru'))!);
+    expect(groups()).toHaveLength(1);
+    expect(toggles()[0].querySelector('.catalog-group-name')?.textContent).toBe('Grand Cru');
+    expect([...host!.querySelectorAll('.composition-segment')].map(node=>(node as HTMLElement).style.width)).toEqual(before);
+    await click(rangeFilters().find(button=>button.textContent?.startsWith('All'))!);
+    expect(groups()).toHaveLength(2);
+  });
+
+  it('drops a filter that means nothing on the axis being switched to',async()=>{
+    await render();
+    await click(rangeFilters().find(button=>button.textContent?.startsWith('Grand Cru'))!);
+    expect(groups()).toHaveLength(1);
+    await click(axisTabs().find(button=>button.textContent==='Style')!);
+    expect(groups()).toHaveLength(2);
+  });
+
+  it('shows the size of the estate before any of it is read',async()=>{
+    await render();
+    expect(host?.querySelector('.producer-header-stats')?.textContent).toBe('3 wines · 3 appellations');
   });
 
   it('collapses and re-expands a single style without touching the others',async()=>{
@@ -147,6 +212,8 @@ describe('Producer wine range',()=>{
     await click(fixButtons()[0]);
     const select=host!.querySelector('.catalog-fix-merge select') as unknown as HTMLSelectElement;
     // Every other wine in the range is offered as the survivor, across styles.
+    // Named by style, not by the pivot that happens to be showing: which wine
+    // survives a merge is a question about the wines.
     expect([...select.options].slice(1).map(option=>option.textContent)).toEqual([
       'Clos de la Roche · Red','Morey-Saint-Denis Blanc · Morey-Saint-Denis · White'
     ]);

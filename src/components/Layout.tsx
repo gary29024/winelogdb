@@ -98,10 +98,13 @@ export function Layout(){
   }
 
   return <>
+    {/* Brand, then navigation, then the account and the one action. The account
+        link used to sit between the brand and the nav, which put a destination
+        nobody visits daily in the middle of the ones they do. */}
     <header className="topbar">
       <NavLink className="brand" to="/">WineLog</NavLink>
-      <NavLink className="account-link" to="/account">Account & friends</NavLink>
-      <nav className="desktop-nav" aria-label="Main navigation"><NavLink to="/" end onPointerEnter={preloadPassport} onFocus={preloadPassport}>Passport</NavLink><NavLink to="/journal" onPointerEnter={preloadJournal} onFocus={preloadJournal}>Journal</NavLink><NavLink to="/tastings" onPointerEnter={preloadTastingList} onFocus={preloadTastingList}>Tastings</NavLink><NavLink to="/producers" onPointerEnter={preloadProducers} onFocus={preloadProducers}>Producers</NavLink><NavLink to="/insights" onPointerEnter={preloadInsights} onFocus={preloadInsights}>Insights</NavLink><button type="button" className="top-scan-trigger" onClick={openScanSheet}>Scan Wine</button></nav>
+      <nav className="desktop-nav" aria-label="Main navigation"><NavLink to="/" end onPointerEnter={preloadPassport} onFocus={preloadPassport}>Passport</NavLink><NavLink to="/journal" onPointerEnter={preloadJournal} onFocus={preloadJournal}>Journal</NavLink><NavLink to="/tastings" onPointerEnter={preloadTastingList} onFocus={preloadTastingList}>Tastings</NavLink><NavLink to="/producers" onPointerEnter={preloadProducers} onFocus={preloadProducers}>Producers</NavLink><NavLink to="/insights" onPointerEnter={preloadInsights} onFocus={preloadInsights}>Insights</NavLink></nav>
+      <div className="topbar-end"><NavLink className="account-link" to="/account">Account &amp; friends</NavLink><button type="button" className="top-scan-trigger" onClick={openScanSheet}>Scan Wine</button></div>
     </header>
     <main><LiveTastingStrip/><Outlet/></main><CreditConfirmation/>
     <footer>Your private tasting notebook</footer>

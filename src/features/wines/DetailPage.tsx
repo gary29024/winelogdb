@@ -19,7 +19,9 @@ import { structureValueLabel } from '../../lib/wine/tastingStructure';
 import { DeepSources,ResearchText } from './ResearchPresentation';
 import { readOpenDeepFields,researchSections,type DeepField,writeOpenDeepFields } from './researchSections';
 import { experienceRows as buildExperienceRows } from '../../lib/wine/detailFields';
-import { FactList,WineDetailsSection,WineFactPills } from './WineFacts';
+import { FactList,WineDetailsSection,WineFactPills,WineReferenceSection } from './WineFacts';
+import { PageHeader } from '../../components/PageHeader';
+import { SectionLabel } from '../../components/SectionLabel';
 import { isResearchStale } from '../../lib/research/freshness';
 import '../../deepSearch.css';
 import '../../favorites.css';
@@ -129,9 +131,55 @@ export function DetailPage(){
  const structureItems=structure?[[ 'Flavour intensity',structure.flavourIntensity],['Acidity',structure.acidity],['Tannin',structure.tannin],['Body',structure.body],['Finish',structure.finish],['Perceived alcohol',structure.alcohol]].filter((item):item is [string,string]=>Boolean(item[1])):[];
  const experienceRows=buildExperienceRows(wine);
  const sections=researchSections(deep);
+ // The first photograph stands for the bottle in the header; the rest, and the
+ // controls that change them, live in the Photos panel further down.
+ const heroImageId=wine.imageIds[0];
  return <article className="detail wine-detail"><Link className="back-pill" to={back.to}>← {back.label}</Link>
+  {/* Photograph beside the name rather than above it. Stacked and centred, the
+      identity card spent most of a phone screen before a single fact, and a
+      centred block gives the eye no left edge to come back to on each line. */}
   <section className="wine-identity">
-   {wine.imageIds.length?<div className="detail-gallery" aria-label={`${wine.wineName} photos`}>{wine.imageIds.map((imageId,index)=><span className="detail-photo-slot" key={imageId}><button type="button" className="detail-photo-button" onClick={()=>setSelectedImage(imageId)} aria-label={`Open photo ${index+1} of ${wine.imageIds.length}`}><WineImage imageId={imageId} alt={`${wine.producer} ${wine.wineName} photo ${index+1}`} className="detail-photo"/></button><button type="button" className="detail-photo-remove" disabled={photoBusy} onClick={()=>void removePhoto(imageId)} aria-label={`Remove photo ${index+1}`}>×</button></span>)}</div>:<div className="detail-bottle">{wine.wineStyle?.slice(0,1).toUpperCase()||'W'}</div>}
+   <PageHeader
+    eyebrow={`${wine.vintage??'NON-VINTAGE'} · ${wine.wineStyle??'WINE'}`}
+    title={wine.wineName}
+    media={<div className="detail-media">
+     {heroImageId
+      ?<button type="button" className="detail-photo-button" onClick={()=>setSelectedImage(heroImageId)} aria-label={`Open photo 1 of ${wine.imageIds.length}`}><WineImage imageId={heroImageId} alt={`${wine.producer} ${wine.wineName}`} className="detail-photo"/></button>
+      :<div className="detail-bottle">{wine.wineStyle?.slice(0,1).toUpperCase()||'W'}</div>}
+     {wine.imageIds.length>1&&<span className="detail-photo-count">{wine.imageIds.length} photos</span>}
+    </div>}
+   >
+    <h2 className="detail-producer">{wine.producerId?<Link className="detail-producer-link" to={`/producers/${wine.producerId}`}>{wine.producer}</Link>:wine.producer}</h2>
+    <WineFactPills wine={wine}/>
+   </PageHeader>
+  </section>
+  {/* The two things most often pressed, directly under the name instead of
+      below the longest panel on the page. Not a fixed bar: the mobile nav is
+      already pinned to the bottom with the home-indicator inset under it, and a
+      second fixed bar would stack on it for no gain on a desktop. */}
+  <div className="wine-actions">
+   <button type="button" className={`detail-favorite-button${wine.favorite?' active':''}`} aria-pressed={wine.favorite} onClick={()=>void toggleFavorite()} disabled={favoriteBusy}><span className="heart" aria-hidden="true"><AppIcon kind={wine.favorite?'heart-filled':'heart'}/></span>{wine.favorite?'Favorite':'Add to favorites'}</button>
+   <Link className="button primary" to={`/wines/${id}/edit`}>Edit tasting</Link>
+   <WineSharing wineId={id}/>
+   <a className="detail-wine-searcher-link" href={wineSearcherUrl(wine.producer,wine.wineName,wine.vintage)} target="_blank" rel="noopener noreferrer">Find on Wine-Searcher <span aria-hidden="true">↗</span></a>
+  </div>
+  <SparklingDetailsCard details={wine.sparklingDetails}/>
+  {isChampagne(wine)&&<Link className="champagne-backfill-link" to={`/wines/${wine.id}/edit#champagne-photos`}>Fill Champagne details from photos</Link>}
+  {/* Your experience leads: it is the reason the record exists at all. */}
+  <section className="detail-section experience-panel"><SectionLabel origin="yours">Your experience</SectionLabel><FactList rows={experienceRows}/>{wine.tastingNotes&&<blockquote className="detail-experience-notes">{wine.tastingNotes}</blockquote>}{!experienceRows.length&&!wine.tastingNotes&&<p className="detail-experience-empty">No tasting logged for this bottle yet.</p>}</section>
+  {structureItems.length>0&&<section className="detail-section structure-detail-section"><SectionLabel origin="yours">Structure</SectionLabel><dl className="tasting-structure-summary">{structureItems.map(([label,value])=><div key={label}><dt>{label}</dt><dd>{structureValueLabel[value]??value}</dd></div>)}</dl><p className="structure-section-note">Perceived structure; label ABV appears in Wine details.</p></section>}
+  <WineDetailsSection wine={wine}/>
+  {/* The drink window is derived from the vintage and the place, so it belongs
+      with the rest of the derived facts rather than in the identity card. */}
+  {VINTAGE_WINDOW_SURFACES.wineDetail&&<VintageCheck wine={wine}/>}
+  <WineReferenceSection wine={wine}/>
+  {/* Photographs are the owner's, and adding or removing one is an edit: it has
+      no business in a block whose job is to be read. */}
+  <section className="detail-section detail-photos-panel">
+   <SectionLabel origin="yours">Photos</SectionLabel>
+   {wine.imageIds.length>0
+    ?<div className="detail-gallery" aria-label={`${wine.wineName} photos`}>{wine.imageIds.map((imageId,index)=><span className="detail-photo-slot" key={imageId}><button type="button" className="detail-photo-button" onClick={()=>setSelectedImage(imageId)} aria-label={`Open photo ${index+1} of ${wine.imageIds.length}`}><WineImage imageId={imageId} alt={`${wine.producer} ${wine.wineName} photo ${index+1}`} className="detail-photo"/></button><button type="button" className="detail-photo-remove" disabled={photoBusy} onClick={()=>void removePhoto(imageId)} aria-label={`Remove photo ${index+1}`}>×</button></span>)}</div>
+    :<p className="detail-photos-empty">No photograph of this bottle yet.</p>}
    <div className="detail-photo-add">
     <button type="button" className="quiet" disabled={photoBusy} onClick={()=>photoInput.current?.click()}>
      {photoBusy?'Adding…':wine.imageIds.length?'Add another photo':'Add a photo'}
@@ -141,15 +189,10 @@ export function DetailPage(){
    </div>
    {photoError&&<p className="detail-photo-error" role="alert">{photoError}</p>}
    {wine.groupSourcePhotos.length>0&&<div className="group-source-context"><div className="group-source-heading"><span>GROUP PHOTO</span><small>Source context · bottle crop shown above</small></div><div className="group-source-gallery">{wine.groupSourcePhotos.map(source=><button type="button" key={source.sessionId} className="group-source-button" onClick={()=>setSelectedGroupSource(source.sessionId)} aria-label="Open source Group Photo"><GroupSourceImage sessionId={source.sessionId} alt={`${wine.producer} ${wine.wineName} source group photo`} className="group-source-photo"/><span>{new Date(source.capturedAt??source.createdAt).toLocaleDateString()}</span></button>)}</div></div>}
-   <p className="eyebrow">{wine.vintage??'NON-VINTAGE'} · {wine.wineStyle??'WINE'}</p><h1>{wine.wineName}</h1><h2>{wine.producerId?<Link className="detail-producer-link" to={`/producers/${wine.producerId}`}>{wine.producer}</Link>:wine.producer}</h2><div className="detail-favorite-row"><button type="button" className={`detail-favorite-button${wine.favorite?' active':''}`} aria-pressed={wine.favorite} onClick={()=>void toggleFavorite()} disabled={favoriteBusy}><span className="heart" aria-hidden="true"><AppIcon kind={wine.favorite?'heart-filled':'heart'}/></span>{wine.favorite?'Favorite':'Add to favorites'}</button><a className="detail-wine-searcher-link" href={wineSearcherUrl(wine.producer,wine.wineName,wine.vintage)} target="_blank" rel="noopener noreferrer">Find on Wine-Searcher <span aria-hidden="true">↗</span></a><WineSharing wineId={id}/></div><WineFactPills wine={wine}/>{VINTAGE_WINDOW_SURFACES.wineDetail&&<VintageCheck wine={wine}/>}<CellarStrip wineId={wine.id}/>
   </section>
-  <SparklingDetailsCard details={wine.sparklingDetails}/>
-  {isChampagne(wine)&&<Link className="champagne-backfill-link" to={`/wines/${wine.id}/edit#champagne-photos`}>Fill Champagne details from photos</Link>}
-  <WineDetailsSection wine={wine}/>
-  <section className="detail-section experience-panel"><p className="section-label">Your experience</p><FactList rows={experienceRows}/>{wine.tastingNotes&&<blockquote className="detail-experience-notes">{wine.tastingNotes}</blockquote>}{!experienceRows.length&&!wine.tastingNotes&&<p className="detail-experience-empty">No tasting logged for this bottle yet.</p>}</section>
-  {structureItems.length>0&&<section className="detail-section structure-detail-section"><p className="section-label">Structure</p><dl className="tasting-structure-summary">{structureItems.map(([label,value])=><div key={label}><dt>{label}</dt><dd>{structureValueLabel[value]??value}</dd></div>)}</dl><p className="structure-section-note">Perceived structure; label ABV appears in Wine details.</p></section>}
+  <CellarStrip wineId={wine.id}/>
   <section className="detail-section deep-search-panel">
-   <div className="deep-panel-head"><p className="section-label">Deep Search</p>{deep?.quality&&<span className={`deep-quality-pill ${deep.quality.status}`}>{qualityStatusLabel[deep.quality.status]??deep.quality.status} · {deep.quality.score}/100</span>}</div>
+   <div className="deep-panel-head"><SectionLabel origin="researched" trailing={deep?.quality?<span className={`deep-quality-pill ${deep.quality.status}`}>{qualityStatusLabel[deep.quality.status]??deep.quality.status} · {deep.quality.score}/100</span>:undefined}>Deep Search</SectionLabel></div>
    {deep?<>
     {deep.quality&&(deep.quality.warnings.length>0||deep.quality.scoreNote)&&<ResearchQuality deep={deep}/>}
     <div className="deep-summary"><ResearchText text={deep.summary}/><ClaimEvidence deep={deep} field="summary"/></div>
@@ -176,7 +219,7 @@ export function DetailPage(){
    </>:<p>Enrich this wine with grounded research. WineLog reuses stored producer practices, terroir and vintage research whenever the scope matches.</p>}
    {friendOperation&&<FriendResearchStatus operationId={friendOperation} onComplete={()=>void reloadWine()}/>}{deepNotice&&<p className="producer-notice" role="status">{deepNotice}</p>}{deepState==='idle'&&<button type="button" className="primary" onClick={()=>setDeepState('confirm-usage')}>{deep?'Refresh vintage research':'Deep Search'}</button>}{deepState==='confirm-usage'&&<div className="deep-confirm"><p>{deep?'This refresh keeps reusable producer and terroir research, and refreshes only the vintage-sensitive parts for this wine.':technicalView?'WineLog checks permanent caches first and queues grounded research only for missing research scopes.':'WineLog reuses saved research first and researches only what is missing.'} The background job continues even if you close WineLog. Continue?</p><button type="button" className="primary" onClick={runDeepSearch}>{deep?'Queue vintage refresh':'Queue Deep Search'}</button><button type="button" className="secondary-danger" onClick={()=>setDeepState('idle')}>Cancel</button></div>}{deepState==='running'&&<div className="deep-running" role="status"><span className="deep-spinner" aria-hidden="true"/><div><strong>{deepRun?deepStage[deepRun.stage]:'Queueing Deep Search…'}</strong><p>{technicalView?(deepRun?.message||'Preparing the background job.'):'WineLog is researching this wine in the background.'}</p><small>{deepRun?<><ElapsedSeconds startedAt={deepRun.startedAt}/> · {technicalView?'Request':'Support ID'} {deepRun.requestId}</>:'0s'}</small><p>You can leave this page or close WineLog. The background research continues and the saved result will appear when you return.</p><button type="button" className="secondary-danger" disabled={!deepRun||deepCancelling} onClick={cancelDeepSearch}>{deepCancelling?'Cancelling…':'Cancel Deep Search'}</button></div></div>}{deepState==='error'&&<div className="deep-error" role="alert"><strong>Deep Search did not complete.</strong><p>{deepError||(technicalView?deepRun?.message:null)||`The background research job failed before a result was saved.${deepRun?.requestId?` · Support ID ${deepRun.requestId}`:''}`}</p><button type="button" onClick={runDeepSearch}>Retry Deep Search</button><button type="button" className="secondary-danger" onClick={()=>setDeepState('idle')}>Close</button></div>}
   </section>
-<p className="detail-tags">{wine.tags.map(t=><span className="tag" key={t}>#{t}</span>)}</p><div className="actions"><Link className="button" to={`/wines/${id}/edit`}>Edit tasting</Link><button className="danger secondary-danger" onClick={async()=>{if(confirm('Delete this wine?')){await deleteWine(id);nav('/')}}}>Delete</button></div>
+<p className="detail-tags">{wine.tags.map(t=><span className="tag" key={t}>#{t}</span>)}</p><div className="actions"><button className="danger secondary-danger" onClick={async()=>{if(confirm('Delete this wine?')){await deleteWine(id);nav('/')}}}>Delete this wine</button></div>
   {selectedImage&&<div className="image-lightbox" role="dialog" aria-modal="true" aria-label="Wine photo viewer" onClick={()=>setSelectedImage(undefined)}><button type="button" className="lightbox-close" aria-label="Close photo" onClick={()=>setSelectedImage(undefined)}>×</button><div className="lightbox-image-wrap" onClick={e=>e.stopPropagation()}><WineImage variant="original" imageId={selectedImage} alt={`${wine.producer} ${wine.wineName} full-resolution photo`} className="lightbox-image"/></div></div>}
   {selectedGroupSource&&<div className="image-lightbox" role="dialog" aria-modal="true" aria-label="Source Group Photo viewer" onClick={()=>setSelectedGroupSource(undefined)}><button type="button" className="lightbox-close" aria-label="Close Group Photo" onClick={()=>setSelectedGroupSource(undefined)}>×</button><div className="lightbox-image-wrap" onClick={e=>e.stopPropagation()}><GroupSourceImage sessionId={selectedGroupSource} alt={`${wine.producer} ${wine.wineName} source Group Photo`} className="lightbox-image"/></div></div>}
  </article>
