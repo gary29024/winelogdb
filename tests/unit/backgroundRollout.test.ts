@@ -127,4 +127,9 @@ describe('background launch preparation',()=>{
   expect((await rolloutStatus(database.db)).lwinAi).toMatchObject({state:'running',processed:0,total:1,matched:0,deterministic:0,ai:0,review:0});
  });
 
+ it('keeps AI LWIN queue chunks to one wine so progress is checkpointed within the Worker CPU budget',async()=>{
+  const source=await import('node:fs/promises').then(fs=>fs.readFile(new URL('../../worker/multiUser/rollout.ts',import.meta.url),'utf8'));
+  expect(source).toContain('LWIN_AI_BATCH=1');
+ });
+
 });

@@ -22,7 +22,7 @@ export type RolloutStatus={
  lwinAi:{state:TaskState;processed:number;total:number;matched:number;deterministic:number;ai:number;review:number;error:string|null};
 };
 
-const STORAGE_BATCH=100,RESEARCH_BATCH=10,LWIN_BATCH=25,LWIN_AI_BATCH=4,LEASE_SECONDS=180,RESEARCH_REFRESH='rollout_research_refresh';
+const STORAGE_BATCH=100,RESEARCH_BATCH=10,LWIN_BATCH=25,LWIN_AI_BATCH=1,LEASE_SECONDS=180,RESEARCH_REFRESH='rollout_research_refresh';
 const jobKey=(kind:RolloutKind)=>`rollout_${kind}_job`;
 const errorKey=(kind:RolloutKind)=>`rollout_${kind}_error`;
 const leaseKey=(kind:RolloutKind)=>`rollout_${kind}_lease`;
