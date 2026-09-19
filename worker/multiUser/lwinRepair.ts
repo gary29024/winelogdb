@@ -11,22 +11,20 @@ type Env=GeminiTransportBindings&AiUsageEnv&{REFERENCE_DATA:R2Bucket};
 export type RepairChoice={lwin7:string;confidence:number;method:'deterministic'|'ai'}|null;
 
 const words=(value:string|null|undefined)=>new Set(normalizeReferenceText(value).split(' ').filter(Boolean));
-function similarity(a:string|null|undefined,b:string|null|undefined){
- const left=words(a),right=words(b);if(!left.size||!right.size)return 0;
- let common=0;for(const word of left)if(right.has(word))common++;
- return common/Math.max(left.size,right.size);
-}
-function candidateScore(wine:LwinRepairWine,row:LwinReferenceProduct){
- const producer=Math.max(...producerLookupKeys(wine.producer).map(key=>similarity(key,row.producerKey)),0);
- const name=similarity([wine.wine_name,wine.release_designation].filter(Boolean).join(' '),row.wineName);
- const country=wine.country&&row.country?similarity(wine.country,row.country):1;
- const region=wine.region&&row.region?similarity(wine.region,row.region):1;
- if(producer<0.45||name<0.34||country<0.5||region<0.34)return 0;
- return producer*.48+name*.42+country*.04+region*.06;
+function setSimilarity(left:Set<string>,right:Set<string>){if(!left.size||!right.size)return 0;let common=0;for(const word of left)if(right.has(word))common++;return common/Math.max(left.size,right.size)}
+function scorer(wine:LwinRepairWine){
+ const producerKeys=producerLookupKeys(wine.producer).map(words),wineName=words([wine.wine_name,wine.release_designation].filter(Boolean).join(' ')),country=words(wine.country),region=words(wine.region);
+ return (row:LwinReferenceProduct)=>{
+  const producer=Math.max(...producerKeys.map(key=>setSimilarity(key,words(row.producerKey))),0),name=setSimilarity(wineName,words(row.wineName));
+  const countryScore=wine.country&&row.country?setSimilarity(country,words(row.country)):1,regionScore=wine.region&&row.region?setSimilarity(region,words(row.region)):1;
+  if(producer<0.45||name<0.34||countryScore<0.5||regionScore<0.34)return 0;
+  return producer*.48+name*.42+countryScore*.04+regionScore*.06;
+ };
 }
 export async function repairCandidates(bucket:R2Bucket,wine:LwinRepairWine){
- const scored=await lwinCandidateRowsForProducer<LwinReferenceProduct>(bucket,wine.producer,row=>row.status==='Live'&&candidateScore(wine,row)>=0.48,40);
- return scored.map(row=>({row,score:candidateScore(wine,row)})).sort((a,b)=>b.score-a.score).slice(0,8);
+ const score=scorer(wine),rows=await lwinCandidateRowsForProducer<LwinReferenceProduct>(bucket,wine.producer),best:Array<{row:LwinReferenceProduct;score:number}>=[];
+ for(const row of rows){if(row.status!=='Live')continue;const value=score(row);if(value<0.48)continue;best.push({row,score:value});best.sort((a,b)=>b.score-a.score);if(best.length>8)best.pop()}
+ return best;
 }
 export function deterministicRepair(candidates:Awaited<ReturnType<typeof repairCandidates>>):RepairChoice{
  const first=candidates[0],second=candidates[1];if(!first)return null;
