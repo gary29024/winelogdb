@@ -1,6 +1,8 @@
 import { spawnSync } from 'node:child_process';
+import { existsSync } from 'node:fs';
 import { mkdir,writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import type { ReferenceManifest,ReferenceProvider } from '../src/lib/wine/referenceCatalog';
 
 export const DEFAULT_REFERENCE_BUCKET='winelog-private';
@@ -14,9 +16,14 @@ export function option(name:string){
 export function positional(){
  return process.argv.slice(2).filter(value=>!value.startsWith('--'));
 }
-function npx(){return process.platform==='win32'?'npx.cmd':'npx'}
+export function wranglerInvocation(args:string[]){
+ const cli=fileURLToPath(new URL('../node_modules/wrangler/bin/wrangler.js',import.meta.url));
+ return {command:process.execPath,args:[cli,...args],cli};
+}
 export function wrangler(args:string[]){
- const result=spawnSync(npx(),['wrangler',...args],{stdio:'inherit',shell:false});
+ const invocation=wranglerInvocation(args);
+ if(!existsSync(invocation.cli))throw new Error('Wrangler CLI was not found in node_modules. Run npm install before importing reference data.');
+ const result=spawnSync(invocation.command,invocation.args,{stdio:'inherit',shell:false});
  if(result.error)throw result.error;
  if(result.status!==0)throw new Error(`wrangler ${args.join(' ')} failed with exit code ${result.status}`);
 }
