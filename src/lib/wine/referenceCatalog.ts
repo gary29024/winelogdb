@@ -84,6 +84,7 @@ export async function lwinProducerIndex(bucket:R2Bucket):Promise<LwinProducerInd
 }
 export async function lwinCandidateRowsForProducer<T>(bucket:R2Bucket,producer:string|null|undefined,predicate:(row:T)=>boolean,limit=20):Promise<T[]>{
  const manifest=await referenceManifest(bucket,'lwin');if(!manifest)return [];
+ if(!manifest.producerIndexKey)throw new Error('LWIN producer index is missing; rerun the LWIN reference import before AI backfill');
  const index=await lwinProducerIndex(bucket),keys=producerLookupKeys(producer);
  const shardIds=new Set<string>();
  for(const key of keys){for(const shard of index[key]??[])shardIds.add(shard);for(const token of key.split(' ').filter(token=>token.length>=4))for(const shard of index[`t:${token}`]??[])shardIds.add(shard)}
