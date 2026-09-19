@@ -39,10 +39,10 @@ export function uploadReferenceFiles(provider:ReferenceProvider,version:string,f
  wrangler(['r2','object','put',`${bucket}/${prefix}/manifest.json`,'--remote','--file',manifestPath,'--content-type','application/json','--force']);
  wrangler(['r2','object','put',`${bucket}/reference/${provider}/current.json`,'--remote','--file',manifestPath,'--content-type','application/json','--force']);
 }
-export function recordSyncState(source:string,manifest:ReferenceManifest,counts:{seen:number;written:number;redirected?:number;rejected?:number}){
+export function recordSyncState(source:string,manifest:ReferenceManifest,counts:{seen:number;written:number;redirected?:number;rejected?:number;unresolved?:number}){
  const q=(value:string|null)=>value==null?'NULL':`'${value.replace(/'/g,"''")}'`;
- const sql=`INSERT INTO wine_reference_sync_state(source,source_version,source_hash,source_updated_at,rows_seen,rows_written,rows_redirected,rows_rejected,status,updated_at)
- VALUES(${q(source)},${q(manifest.source)},${q(manifest.version)},${q(manifest.sourceUpdatedAt)},${counts.seen},${counts.written},${counts.redirected??0},${counts.rejected??0},'complete',${q(manifest.generatedAt)})
- ON CONFLICT(source) DO UPDATE SET source_version=excluded.source_version,source_hash=excluded.source_hash,source_updated_at=excluded.source_updated_at,rows_seen=excluded.rows_seen,rows_written=excluded.rows_written,rows_redirected=excluded.rows_redirected,rows_rejected=excluded.rows_rejected,status=excluded.status,updated_at=excluded.updated_at;`;
+ const sql=`INSERT INTO wine_reference_sync_state(source,source_version,source_hash,source_updated_at,rows_seen,rows_written,rows_redirected,rows_rejected,rows_unresolved,status,updated_at)
+ VALUES(${q(source)},${q(manifest.source)},${q(manifest.version)},${q(manifest.sourceUpdatedAt)},${counts.seen},${counts.written},${counts.redirected??0},${counts.rejected??0},${counts.unresolved??0},'complete',${q(manifest.generatedAt)})
+ ON CONFLICT(source) DO UPDATE SET source_version=excluded.source_version,source_hash=excluded.source_hash,source_updated_at=excluded.source_updated_at,rows_seen=excluded.rows_seen,rows_written=excluded.rows_written,rows_redirected=excluded.rows_redirected,rows_rejected=excluded.rows_rejected,rows_unresolved=excluded.rows_unresolved,status=excluded.status,updated_at=excluded.updated_at;`;
  wrangler(['d1','execute','DB','--remote','--command',sql,'--yes']);
 }

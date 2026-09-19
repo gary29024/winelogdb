@@ -86,9 +86,10 @@ Review the console summary. Pay particular attention to:
 - valid rows accepted;
 - rejected rows;
 - Combined records;
+- unresolved Combined redirects;
 - the generated content version.
 
-Unexpected rejected rows should be investigated before publishing.
+Unexpected rejected rows or unresolved redirects should be investigated before publishing. A small number of unresolved redirects does not block the refresh: those Combined identities remain in the catalogue but resolve as `conflict` rather than being guessed. Circular redirect chains still stop the import because they indicate a structurally corrupt source graph.
 
 When the dry run looks right:
 
@@ -125,10 +126,10 @@ XLSX is simply the preferred path because it removes the manual conversion step.
 Check the D1 operational marker:
 
 ```powershell
-npx wrangler d1 execute DB --remote --command "SELECT source,source_version,source_updated_at,rows_seen,rows_written,rows_redirected,rows_rejected,status,updated_at FROM wine_reference_sync_state WHERE source='lwin';"
+npx wrangler d1 execute DB --remote --command "SELECT source,source_version,source_updated_at,rows_seen,rows_written,rows_redirected,rows_rejected,rows_unresolved,status,updated_at FROM wine_reference_sync_state WHERE source='lwin';"
 ```
 
-Expected `status` is `complete`.
+Expected `status` is `complete`. `rows_unresolved` should normally be zero; if non-zero, review the importer warnings to see whether each target was rejected by WineLog validation or was genuinely absent from the Liv-ex workbook.
 
 Download the current R2 manifest:
 
@@ -287,6 +288,12 @@ Use the original Liv-ex workbook without renaming/removing columns. If using CSV
 ### Some LWIN values display with `.0`
 
 That is normal Excel behavior. The importer converts valid seven-digit identifiers to strings before building the catalogue.
+
+### An LWIN redirect is reported as unresolved
+
+The importer distinguishes between a redirect target that exists in the source workbook but was rejected by WineLog validation and a target that is genuinely absent from the workbook. The affected Combined identity is retained but has no redirect entry, so runtime resolution reports a conflict instead of guessing. Investigate the warning, but an isolated unresolved redirect does not prevent the rest of the official snapshot from refreshing.
+
+A circular redirect chain is different: it stops the import because there is no safe terminal identity.
 
 ### Import/crawl stops during upload
 

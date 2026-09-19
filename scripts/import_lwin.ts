@@ -3,6 +3,7 @@ import { readFile } from 'node:fs/promises';
 import { extname,basename,resolve } from 'node:path';
 import ExcelJS from 'exceljs';
 import { parseLwinReference,validateLwinHeaders,type LwinInputRow,type LwinReferenceProduct } from '../src/lib/wine/lwinImport';
+import { normalizeLwinId } from '../src/lib/wine/referenceIdentity';
 import { REFERENCE_SHARDS,referenceShardId,type LwinRedirect,type ReferenceManifest } from '../src/lib/wine/referenceCatalog';
 import { DEFAULT_REFERENCE_BUCKET,flag,option,positional,recordSyncState,uploadReferenceFiles,writeShardFiles } from './referenceR2';
 
@@ -46,27 +47,47 @@ const inputPath=resolve(inputArg),extension=extname(inputPath).toLowerCase();
 if(!['.xlsx','.csv'].includes(extension))throw new Error('LWIN import accepts the official .xlsx workbook or a UTF-8 .csv export');
 const raw=await readFile(inputPath),hash=createHash('sha256').update(raw).digest('hex'),version=hash.slice(0,16),generatedAt=new Date().toISOString();
 const inputRows=extension==='.xlsx'?await rowsFromXlsx(inputPath):await rowsFromCsv(inputPath);
-const products:LwinReferenceProduct[]=[];let rejected=0,redirected=0,latest='';
+const products:LwinReferenceProduct[]=[],sourceLwins=new Set<string>(),rejectedByLwin=new Map<string,string>();
+let rejected=0,redirected=0,unresolvedRedirects=0,latest='';
+for(const row of inputRows){const id=normalizeLwinId(row.LWIN);if(id)sourceLwins.add(id)}
 for(const [index,row] of inputRows.entries())try{
  const product=parseLwinReference(row,generatedAt);products.push(product);if(product.status==='Combined')redirected++;
  if((product.sourceUpdatedAt??'')>latest)latest=product.sourceUpdatedAt??latest;
-}catch(error){rejected++;console.warn(`row ${index+2}: ${(error as Error).message}`)}
+}catch(error){
+ rejected++;const message=(error as Error).message,lwin=normalizeLwinId(row.LWIN);
+ if(lwin)rejectedByLwin.set(lwin,message);
+ console.warn(`row ${index+2}: ${message}`);
+}
 if(!products.length)throw new Error('No valid LWIN rows were found');
 const shards=new Map<string,LwinReferenceProduct[]>(),byLwin=new Map(products.map(product=>[product.lwin7,product]));
 for(const product of products){const id=referenceShardId(product.producerKey,REFERENCE_SHARDS),rows=shards.get(id)??[];rows.push(product);shards.set(id,rows)}
 const redirects:Record<string,LwinRedirect>={};
 for(const product of products)if(product.status==='Combined'&&product.referenceLwin7){
- const seen=new Set([product.lwin7]);let targetId=product.referenceLwin7,target:LwinReferenceProduct|undefined;
+ const seen=new Set([product.lwin7]);let targetId=product.referenceLwin7,target:LwinReferenceProduct|undefined,unresolvedReason:string|null=null;
  while(targetId){
   target=byLwin.get(targetId);
-  if(!target)throw new Error(`Combined LWIN ${product.lwin7} points to missing REFERENCE ${targetId}`);
+  if(!target){
+   const rejectedReason=rejectedByLwin.get(targetId);
+   unresolvedReason=rejectedReason
+    ?`target ${targetId} was rejected during parse: ${rejectedReason}`
+    :sourceLwins.has(targetId)
+      ?`target ${targetId} is present in the workbook but unavailable after validation`
+      :`target ${targetId} is absent from the workbook`;
+   break;
+  }
   if(seen.has(target.lwin7))throw new Error(`Combined LWIN ${product.lwin7} has a circular REFERENCE chain at ${target.lwin7}`);
   seen.add(target.lwin7);
   if(target.status!=='Combined')break;
-  if(!target.referenceLwin7)throw new Error(`Combined LWIN ${target.lwin7} has no valid REFERENCE`);
+  if(!target.referenceLwin7){
+   unresolvedReason=`target ${target.lwin7} is Combined but has no valid REFERENCE after validation`;break;
+  }
   targetId=target.referenceLwin7;
  }
- if(!target)throw new Error(`Combined LWIN ${product.lwin7} has no resolvable REFERENCE`);
+ if(unresolvedReason||!target){
+  unresolvedRedirects++;
+  console.warn(`LWIN ${product.lwin7}: unresolved redirect — ${unresolvedReason??'no terminal target'}`);
+  continue;
+ }
  redirects[product.lwin7]={targetLwin7:target.lwin7,targetShard:referenceShardId(target.producerKey,REFERENCE_SHARDS)};
 }
 const prefix=`reference/lwin/versions/${version}`,manifest:ReferenceManifest={
@@ -74,9 +95,9 @@ const prefix=`reference/lwin/versions/${version}`,manifest:ReferenceManifest={
  redirectsKey:`${prefix}/redirects.json`
 };
 const built=await writeShardFiles('lwin',version,shards,manifest,{'redirects.json':redirects});
-console.log(`Prepared ${products.length} LWIN rows in ${shards.size} R2 shards; ${redirected} combined, ${rejected} rejected. Version ${version}.`);
+console.log(`Prepared ${products.length} LWIN rows in ${shards.size} R2 shards; ${redirected} combined, ${unresolvedRedirects} unresolved redirects, ${rejected} rejected rows. Version ${version}.`);
 if(flag('dry-run')){console.log(`Dry run only. Files: ${built.dir}`);process.exit(0)}
 const bucket=option('bucket')??DEFAULT_REFERENCE_BUCKET;
 uploadReferenceFiles('lwin',version,built.files,built.manifestPath,bucket);
-recordSyncState('lwin',manifest,{seen:inputRows.length,written:products.length,redirected,rejected});
+recordSyncState('lwin',manifest,{seen:inputRows.length,written:products.length,redirected,rejected,unresolved:unresolvedRedirects});
 console.log(`LWIN ${version} is now current in R2 bucket ${bucket}.`);

@@ -10,6 +10,7 @@ CREATE TABLE IF NOT EXISTS wine_reference_sync_state (
   rows_written INTEGER NOT NULL DEFAULT 0,
   rows_redirected INTEGER NOT NULL DEFAULT 0,
   rows_rejected INTEGER NOT NULL DEFAULT 0,
+  rows_unresolved INTEGER NOT NULL DEFAULT 0,
   status TEXT NOT NULL,
   updated_at TEXT NOT NULL
 );
