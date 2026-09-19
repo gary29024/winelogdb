@@ -24,6 +24,15 @@ export function producerLookupKeys(value:string|null|undefined){
  if(stripped&&stripped!==base)keys.push(stripped);
  return [...new Set(keys)];
 }
+export function producerHouseQualifier(value:string|null|undefined){
+ const base=normalizeReferenceText(value);if(!base)return null;
+ const first=base.split(' ')[0];
+ if(first==='domaine'||first==='domaines')return 'domaine';
+ if(first==='chateau'||first==='ch')return 'chateau';
+ if(first==='bodega'||first==='bodegas')return 'bodega';
+ if(first==='azienda')return 'azienda agricola';
+ return ['champagne','maison','weingut','tenuta','cantina'].includes(first)?first:null;
+}
 
 export type LwinReferenceIdentitySource={
  displayName?:string|null;producerName?:string|null;producerKey?:string|null;wineName?:string|null;wineKey?:string|null;

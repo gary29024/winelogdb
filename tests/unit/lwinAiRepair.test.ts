@@ -30,6 +30,16 @@ describe('AI-assisted LWIN repair candidate gate',()=>{
   expect(candidates.map(item=>item.row.lwin7)).toEqual(['1724273']);
   expect(deterministicRepair(candidates)).toMatchObject({lwin7:'1724273',method:'deterministic'});
  });
+ it('does not let an unqualified producer name choose between qualified houses',async()=>{
+  const base=product('1724273','Castagnier','Placeholder'),domaine={...base,displayName:'Domaine Castagnier, Chambolle-Musigny',producerTitle:'Domaine',wineName:null,wineKey:'',region:'Burgundy',regionKey:'burgundy'},maison={...domaine,productKey:'lwin:1724274',lwin7:'1724274',displayName:'Maison Castagnier, Chambolle-Musigny',producerTitle:'Maison'};
+  const candidates=await repairCandidates(bucket([domaine,maison]),{id:'w1',owner_id:'owner',producer:'Castagnier',wine_name:'Chambolle-Musigny',country:'France',region:'Burgundy',wine_style:'red',release_designation:null});
+  expect(candidates).toEqual([]);
+ });
+ it('treats Ch. and Chateau as the same house qualifier without AI',async()=>{
+  const rows=[product('1000001','Chateau Margaux','Margaux')];
+  const candidates=await repairCandidates(bucket(rows),{id:'w1',owner_id:'owner',producer:'Ch. Margaux',wine_name:'Margaux',country:'France',region:'Bordeaux',wine_style:'red',release_designation:null});
+  expect(deterministicRepair(candidates)).toMatchObject({lwin7:'1000001',method:'deterministic'});
+ });
  it('does not auto-accept a weak or close candidate',async()=>{
   const rows=[product('1000001','Chateau Margaux','Pavillon Rouge'),product('1000002','Chateau Margaux','Pavillon Blanc')];
   const candidates=await repairCandidates(bucket(rows),{id:'w1',owner_id:'owner',producer:'Ch Margaux',wine_name:'Pavillon',country:'France',region:'Bordeaux',wine_style:'red',release_designation:null});

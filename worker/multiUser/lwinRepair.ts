@@ -1,6 +1,6 @@
 import { AI_MODELS } from '../../src/lib/ai/policy';
 import { geminiCallTokens,recordAiUsage,type AiUsageEnv } from '../../src/lib/usage/aiUsage';
-import { lwinCandidateRowsForProducer,lwinReferenceIdentity,normalizeReferenceText,producerLookupKeys } from '../../src/lib/wine/referenceCatalog';
+import { lwinCandidateRowsForProducer,lwinReferenceIdentity,normalizeReferenceText,producerHouseQualifier,producerLookupKeys } from '../../src/lib/wine/referenceCatalog';
 import type { LwinReferenceProduct } from '../../src/lib/wine/lwinImport';
 import { postGeminiGenerateContent,type GeminiTransportBindings } from '../geminiTransport';
 
@@ -13,13 +13,14 @@ export type RepairChoice={lwin7:string;confidence:number;method:'deterministic'|
 const words=(value:string|null|undefined)=>new Set(normalizeReferenceText(value).split(' ').filter(Boolean));
 function setSimilarity(left:Set<string>,right:Set<string>){if(!left.size||!right.size)return 0;let common=0;for(const word of left)if(right.has(word))common++;return common/Math.max(left.size,right.size)}
 function scorer(wine:LwinRepairWine){
- const producerAliases=producerLookupKeys(wine.producer),producerKeys=producerAliases.map(words),inputProducerKey=normalizeReferenceText(wine.producer),wineName=words([wine.wine_name,wine.release_designation].filter(Boolean).join(' ')),country=words(wine.country),region=words(wine.region);
+ const producerKeys=producerLookupKeys(wine.producer).map(words),inputQualifier=producerHouseQualifier(wine.producer),wineName=words([wine.wine_name,wine.release_designation].filter(Boolean).join(' ')),country=words(wine.country),region=words(wine.region);
  return (row:LwinReferenceProduct)=>{
-  const identity=lwinReferenceIdentity(row),candidateAliases=producerLookupKeys(identity.producerName);
-  // If both sides explicitly carry a generic house qualifier, it is identity,
-  // not noise: Domaine X must not be auto-treated as Maison X / negociant X.
-  if(producerAliases.length>1&&candidateAliases.length>1&&inputProducerKey&&identity.producerKey&&inputProducerKey!==identity.producerKey)return 0;
-  const producer=Math.max(...producerKeys.map(key=>setSimilarity(key,words(identity.producerKey))),0),name=setSimilarity(wineName,words(identity.wineName));
+  const identity=lwinReferenceIdentity(row),candidateQualifier=producerHouseQualifier(identity.producerName);
+  // House qualifiers are identity-bearing. Missing or different qualifiers stay
+  // unresolved; equivalent forms such as Ch. and Chateau share one qualifier.
+  if(inputQualifier!==candidateQualifier&&(inputQualifier||candidateQualifier))return 0;
+  const candidateProducerKeys=producerLookupKeys(identity.producerName).map(words);
+  const producer=Math.max(...producerKeys.flatMap(left=>candidateProducerKeys.map(right=>setSimilarity(left,right))),0),name=setSimilarity(wineName,words(identity.wineName));
   const countryScore=wine.country&&row.country?setSimilarity(country,words(row.country)):1,regionScore=wine.region&&row.region?setSimilarity(region,words(row.region)):1;
   if(producer<0.45||name<0.34||countryScore<0.5||regionScore<0.34)return 0;
   return producer*.48+name*.42+countryScore*.04+regionScore*.06;
