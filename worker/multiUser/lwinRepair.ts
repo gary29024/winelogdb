@@ -25,7 +25,7 @@ function candidateScore(wine:LwinRepairWine,row:LwinReferenceProduct){
  return producer*.48+name*.42+country*.04+region*.06;
 }
 export async function repairCandidates(bucket:R2Bucket,wine:LwinRepairWine){
- const scored=await lwinCandidateRows<LwinReferenceProduct>(bucket,row=>row.status==='Live'&&candidateScore(wine,row)>=0.48,20);
+ const scored=await lwinCandidateRows<LwinReferenceProduct>(bucket,row=>row.status==='Live'&&candidateScore(wine,row)>=0.48,Number.MAX_SAFE_INTEGER);
  return scored.map(row=>({row,score:candidateScore(wine,row)})).sort((a,b)=>b.score-a.score).slice(0,8);
 }
 export function deterministicRepair(candidates:Awaited<ReturnType<typeof repairCandidates>>):RepairChoice{
