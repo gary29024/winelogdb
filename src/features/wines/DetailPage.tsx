@@ -148,10 +148,10 @@ export function DetailPage(){
   <SparklingDetailsCard details={wine.sparklingDetails}/>
   {isChampagne(wine)&&<Link className="champagne-backfill-link" to={`/wines/${wine.id}/edit#champagne-photos`}>Fill Champagne details from photos</Link>}
   <WineDetailsSection wine={wine}/>
-  {wine.referenceSuggestions.length>0&&<section className="detail-section lwin-suggestion-panel">
+  {(wine.referenceSuggestions??[]).length>0&&<section className="detail-section lwin-suggestion-panel">
    <p className="section-label">LWIN suggested updates</p>
    <p className="lwin-suggestion-intro">WineLog found a canonical LWIN match but kept your existing populated fields unchanged. Review each difference before using the LWIN value.</p>
-   <div className="lwin-suggestion-list">{wine.referenceSuggestions.map(item=><article className="lwin-suggestion-row" key={item.field}>
+   <div className="lwin-suggestion-list">{(wine.referenceSuggestions??[]).map(item=><article className="lwin-suggestion-row" key={item.field}>
     <div><strong>{item.label}</strong><span><small>Current</small>{item.current||'—'}</span><span><small>LWIN</small>{item.suggested}</span></div>
     <button type="button" className="quiet" disabled={Boolean(referenceBusy)} onClick={()=>void applyReferenceSuggestion(item.field)}>{referenceBusy===item.field?'Applying…':'Use LWIN value'}</button>
    </article>)}</div>
