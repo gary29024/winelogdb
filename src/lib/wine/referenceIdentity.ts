@@ -106,6 +106,7 @@ function elidWineNameKeys(product:LwinReferenceProduct,wine:ReferenceResolvable)
 }
 async function registeredElid(bucket:R2Bucket,product:LwinReferenceProduct,wine:ReferenceResolvable){
  const clue=elidVintageClue(wine);if(!clue)return null;
+ if(!product.producerName)return null;
  const index=await elidProducerIndex(bucket),codes=[...new Set(producerLookupKeys(product.producerName).flatMap(key=>index[key]??[]))];
  if(!codes.length){
   console.warn(JSON.stringify({event:'elid-producer-unmapped',lwin7:product.lwin7,producer:product.producerName}));

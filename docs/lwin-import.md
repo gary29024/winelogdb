@@ -85,11 +85,13 @@ Review the console summary. Pay particular attention to:
 
 - valid rows accepted;
 - rejected rows;
+- matchable rows;
+- sparse rows (valid LWIN records missing producer or wine identity);
 - Combined records;
 - unresolved Combined redirects;
 - the generated content version.
 
-The official LWIN workbook legitimately contains sparse historical/reference rows where `WINE`, `PRODUCER_NAME` or `DISPLAY_NAME` is blank/NA. WineLog retains those rows instead of rejecting them. They remain useful for LWIN identity history and Combined redirects, but rows without enough producer/wine identity are not candidates for automatic name matching.
+The official LWIN workbook legitimately contains sparse historical/reference rows where `WINE`, `PRODUCER_NAME` or `DISPLAY_NAME` is blank/NA. WineLog retains those rows instead of rejecting them. They remain useful for LWIN identity history and as redirect targets/intermediate hops, but rows without enough producer/wine identity are not candidates for automatic name matching. A sparse Combined row that is itself a redirect source is not reachable through normal producer + wine-name matching.
 
 Unexpected rejected rows or unresolved redirects should therefore be investigated before publishing. A small number of unresolved redirects does not block the refresh: those Combined identities remain in the catalogue but resolve as `conflict` rather than being guessed. Circular redirect chains still stop the import because they indicate a structurally corrupt source graph.
 
@@ -128,10 +130,10 @@ XLSX is simply the preferred path because it removes the manual conversion step.
 Check the D1 operational marker:
 
 ```powershell
-npx wrangler d1 execute DB --remote --command "SELECT source,source_version,source_updated_at,rows_seen,rows_written,rows_redirected,rows_rejected,rows_unresolved,status,updated_at FROM wine_reference_sync_state WHERE source='lwin';"
+npx wrangler d1 execute DB --remote --command "SELECT source,source_version,source_updated_at,rows_seen,rows_written,rows_redirected,rows_rejected,rows_unresolved,rows_sparse,status,updated_at FROM wine_reference_sync_state WHERE source='lwin';"
 ```
 
-Expected `status` is `complete`. `rows_unresolved` should normally be zero; if non-zero, review the importer warnings to see whether each target was rejected by WineLog validation or was genuinely absent from the Liv-ex workbook.
+Expected `status` is `complete`. On the September 2026 workbook used to validate this importer, the baseline is 212,414 retained rows, 184,024 matchable rows and 28,390 sparse rows. Treat a material change in the sparse/matchable mix as a reason to inspect the new source file before publishing. `rows_unresolved` should normally be zero; if non-zero, review the importer warnings to see whether each target was rejected by WineLog validation or was genuinely absent from the Liv-ex workbook.
 
 Download the current R2 manifest:
 
@@ -145,7 +147,8 @@ Confirm that the manifest contains:
 
 - `provider: "lwin"`;
 - the expected source filename;
-- the expected row count;
+- the expected total row count;
+- `matchableRows` and `sparseRows` consistent with the dry-run summary;
 - a recent `sourceUpdatedAt`;
 - a `prefix` pointing to the new version.
 

@@ -60,7 +60,8 @@ for(const [index,row] of inputRows.entries())try{
 }
 if(!products.length)throw new Error('No valid LWIN rows were found');
 const shards=new Map<string,LwinReferenceProduct[]>(),byLwin=new Map(products.map(product=>[product.lwin7,product]));
-for(const product of products){const id=referenceShardId(product.producerKey||product.lwin7,REFERENCE_SHARDS),rows=shards.get(id)??[];rows.push(product);shards.set(id,rows)}
+let sparse=0;
+for(const product of products){if(!product.producerKey||!product.wineKey)sparse++;const id=referenceShardId(product.producerKey||product.lwin7,REFERENCE_SHARDS),rows=shards.get(id)??[];rows.push(product);shards.set(id,rows)}
 const redirects:Record<string,LwinRedirect>={};
 for(const product of products)if(product.status==='Combined'&&product.referenceLwin7){
  const seen=new Set([product.lwin7]);let targetId=product.referenceLwin7,target:LwinReferenceProduct|undefined,unresolvedReason:string|null=null;
@@ -91,13 +92,13 @@ for(const product of products)if(product.status==='Combined'&&product.referenceL
  redirects[product.lwin7]={targetLwin7:target.lwin7,targetShard:referenceShardId(target.producerKey||target.lwin7,REFERENCE_SHARDS)};
 }
 const prefix=`reference/lwin/versions/${version}`,manifest:ReferenceManifest={
- provider:'lwin',version,prefix,shardCount:REFERENCE_SHARDS,rows:products.length,source:basename(inputPath),sourceUpdatedAt:latest||null,generatedAt,
+ provider:'lwin',version,prefix,shardCount:REFERENCE_SHARDS,rows:products.length,matchableRows:products.length-sparse,sparseRows:sparse,source:basename(inputPath),sourceUpdatedAt:latest||null,generatedAt,
  redirectsKey:`${prefix}/redirects.json`
 };
 const built=await writeShardFiles('lwin',version,shards,manifest,{'redirects.json':redirects});
-console.log(`Prepared ${products.length} LWIN rows in ${shards.size} R2 shards; ${redirected} combined, ${unresolvedRedirects} unresolved redirects, ${rejected} rejected rows. Version ${version}.`);
+console.log(`Prepared ${products.length} LWIN rows in ${shards.size} R2 shards; ${products.length-sparse} matchable, ${sparse} sparse, ${redirected} combined, ${unresolvedRedirects} unresolved redirects, ${rejected} rejected rows. Version ${version}.`);
 if(flag('dry-run')){console.log(`Dry run only. Files: ${built.dir}`);process.exit(0)}
 const bucket=option('bucket')??DEFAULT_REFERENCE_BUCKET;
 uploadReferenceFiles('lwin',version,built.files,built.manifestPath,bucket);
-recordSyncState('lwin',manifest,{seen:inputRows.length,written:products.length,redirected,rejected,unresolved:unresolvedRedirects});
+recordSyncState('lwin',manifest,{seen:inputRows.length,written:products.length,redirected,rejected,unresolved:unresolvedRedirects,sparse});
 console.log(`LWIN ${version} is now current in R2 bucket ${bucket}.`);
