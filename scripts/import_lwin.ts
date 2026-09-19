@@ -4,7 +4,7 @@ import { extname,basename,resolve } from 'node:path';
 import ExcelJS from 'exceljs';
 import { parseLwinReference,validateLwinHeaders,type LwinInputRow,type LwinReferenceProduct } from '../src/lib/wine/lwinImport';
 import { normalizeLwinId } from '../src/lib/wine/referenceIdentity';
-import { REFERENCE_SHARDS,referenceShardId,type LwinRedirect,type ReferenceManifest } from '../src/lib/wine/referenceCatalog';
+import { REFERENCE_SHARDS,producerLookupKeys,referenceShardId,type LwinProducerIndex,type LwinRedirect,type ReferenceManifest } from '../src/lib/wine/referenceCatalog';
 import { DEFAULT_REFERENCE_BUCKET,flag,option,positional,recordSyncState,uploadReferenceFiles,writeShardFiles } from './referenceR2';
 
 function csvRows(input:string){
@@ -59,9 +59,17 @@ for(const [index,row] of inputRows.entries())try{
  console.warn(`row ${index+2}: ${message}`);
 }
 if(!products.length)throw new Error('No valid LWIN rows were found');
-const shards=new Map<string,LwinReferenceProduct[]>(),byLwin=new Map(products.map(product=>[product.lwin7,product]));
+const shards=new Map<string,LwinReferenceProduct[]>(),byLwin=new Map(products.map(product=>[product.lwin7,product])),producerIndex:LwinProducerIndex={};
 let sparse=0;
-for(const product of products){if(!product.producerKey||!product.wineKey)sparse++;const id=referenceShardId(product.producerKey||product.lwin7,REFERENCE_SHARDS),rows=shards.get(id)??[];rows.push(product);shards.set(id,rows)}
+const addIndex=(key:string,shard:string)=>{const values=producerIndex[key]??[];if(!values.includes(shard))values.push(shard);producerIndex[key]=values};
+for(const product of products){
+ if(!product.producerKey||!product.wineKey)sparse++;
+ const id=referenceShardId(product.producerKey||product.lwin7,REFERENCE_SHARDS),rows=shards.get(id)??[];rows.push(product);shards.set(id,rows);
+ for(const key of producerLookupKeys(product.producerName)){addIndex(key,id);for(const token of key.split(' ').filter(token=>token.length>=4))addIndex(`t:${token}`,id)}
+}
+// Token aliases are only useful while selective. Generic producer words such as
+// chateau/domaine otherwise fan out to nearly every shard and defeat the index.
+for(const key of Object.keys(producerIndex))if(key.startsWith('t:')&&producerIndex[key].length>8)delete producerIndex[key];
 const redirects:Record<string,LwinRedirect>={};
 for(const product of products)if(product.status==='Combined'&&product.referenceLwin7){
  const seen=new Set([product.lwin7]);let targetId=product.referenceLwin7,target:LwinReferenceProduct|undefined,unresolvedReason:string|null=null;
@@ -93,9 +101,9 @@ for(const product of products)if(product.status==='Combined'&&product.referenceL
 }
 const prefix=`reference/lwin/versions/${version}`,manifest:ReferenceManifest={
  provider:'lwin',version,prefix,shardCount:REFERENCE_SHARDS,rows:products.length,matchableRows:products.length-sparse,sparseRows:sparse,source:basename(inputPath),sourceUpdatedAt:latest||null,generatedAt,
- redirectsKey:`${prefix}/redirects.json`
+ redirectsKey:`${prefix}/redirects.json`,producerIndexKey:`${prefix}/producer-index.json`
 };
-const built=await writeShardFiles('lwin',version,shards,manifest,{'redirects.json':redirects});
+const built=await writeShardFiles('lwin',version,shards,manifest,{'redirects.json':redirects,'producer-index.json':producerIndex});
 console.log(`Prepared ${products.length} LWIN rows in ${shards.size} R2 shards; ${products.length-sparse} matchable, ${sparse} sparse, ${redirected} combined, ${unresolvedRedirects} unresolved redirects, ${rejected} rejected rows. Version ${version}.`);
 if(flag('dry-run')){console.log(`Dry run only. Files: ${built.dir}`);process.exit(0)}
 const bucket=option('bucket')??DEFAULT_REFERENCE_BUCKET;

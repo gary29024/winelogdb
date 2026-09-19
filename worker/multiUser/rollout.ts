@@ -198,7 +198,9 @@ export async function processRolloutJob(env:RolloutEnv,kind:RolloutKind){
   if(!result.complete)await env.RESEARCH_QUEUE.send({kind:'admin_rollout',owner:'owner',rollout:kind} satisfies RolloutQueueJob);
   return {...result,busy:false};
  }catch(error){
-  await writeState(env.DB,errorKey(kind),error instanceof Error?error.message:String(error));
+  const message=error instanceof Error?error.message:String(error);
+  await writeStates(env.DB,[[errorKey(kind),message],[jobKey(kind),'paused']]);
+  if(kind==='lwin_ai'&&message.includes('LWIN producer index is missing'))return {complete:false,processed:0,busy:false,paused:true};
   throw error;
  }finally{await releaseLease(env.DB,kind,lease)}
 }
