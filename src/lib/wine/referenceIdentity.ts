@@ -126,10 +126,9 @@ export async function resolveWineReference(bucket:R2Bucket,wine:ReferenceResolva
  if(!producerKey||!wineKey)return unmatched();
  const countryKey=normalizeReferenceText(wine.country),regionKey=normalizeReferenceText(wine.region),colourKey=colourFromStyle(wine.style??wine.wineStyle);
  const rows=await referenceRows<LwinReferenceProduct>(bucket,'lwin',producerKey);if(!rows.length)return unmatched();
- const candidates=rows.filter(row=>row.producerKey===producerKey&&row.wineKey===wineKey&&compatible(row,countryKey,regionKey,colourKey));
+ const candidates=rows.filter(row=>row.status!=='Deleted'&&row.producerKey===producerKey&&row.wineKey===wineKey&&compatible(row,countryKey,regionKey,colourKey));
  if(candidates.length!==1)return unmatched(candidates.length>1?'ambiguous':'unmatched');
  let product=candidates[0];
- if(product.status==='Deleted')return unmatched();
  if(product.status==='Combined'){
   const redirects=await lwinRedirects(bucket),seen=new Set<string>();
   while(product.status==='Combined'){

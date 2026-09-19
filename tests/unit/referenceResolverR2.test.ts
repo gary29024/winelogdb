@@ -58,7 +58,19 @@ describe('R2 wine reference resolver',()=>{
   const result=await resolveWineReference(bucket(data),{producer:'Krug',wineName:'Grande Cuvée',releaseDesignation:'171ème Édition'});
   expect(result).toMatchObject({identityMatchStatus:'matched',lwin7:'1234567'});
  });
- it('does not guess when two LWIN rows have the same narrowed identity',async()=>{
+ it('ignores Deleted duplicates when a current Live identity exists',async()=>{
+  const data=objects(),shard=referenceShardId('krug'),key=`reference/lwin/versions/l1/shard-${shard}.json`;
+  data[key]=[lwin,{...lwin,productKey:'lwin:7654321',lwin7:'7654321',status:'Deleted' as const}];
+  const result=await resolveWineReference(bucket(data),{producer:'Krug',wineName:'Grande Cuvée',releaseDesignation:'171ème Édition'});
+  expect(result).toMatchObject({identityMatchStatus:'matched',lwin7:'1234567'});
+ });
+ it('does not match a Deleted identity when no current candidate exists',async()=>{
+  const data=objects(),shard=referenceShardId('krug'),key=`reference/lwin/versions/l1/shard-${shard}.json`;
+  data[key]=[{...lwin,status:'Deleted' as const}];
+  const result=await resolveWineReference(bucket(data),{producer:'Krug',wineName:'Grande Cuvée',releaseDesignation:'171ème Édition'});
+  expect(result.identityMatchStatus).toBe('unmatched');expect(result.lwin7).toBeNull();
+ });
+ it('does not guess when two non-deleted LWIN rows have the same narrowed identity',async()=>{
   const data=objects(),shard=referenceShardId('krug'),key=`reference/lwin/versions/l1/shard-${shard}.json`;
   data[key]=[lwin,{...lwin,productKey:'lwin:7654321',lwin7:'7654321'}];
   const result=await resolveWineReference(bucket(data),{producer:'Krug',wineName:'Grande Cuvée',releaseDesignation:'171ème Édition'});
