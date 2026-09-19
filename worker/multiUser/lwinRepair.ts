@@ -34,7 +34,8 @@ export function deterministicRepair(candidates:Awaited<ReturnType<typeof repairC
  // margin are cheaper and safer than asking the model to confirm an obvious row.
  return first.score>=.93&&(!second||first.score-second.score>=.12)?{lwin7:first.row.lwin7,confidence:first.score,method:'deterministic'}:null;
 }
-function responseText(payload:any){return String(payload?.candidates?.[0]?.content?.parts?.map((part:any)=>part?.text??'').join('')??'')}
+type GeminiPayload={usageMetadata?:{promptTokenCount?:unknown;candidatesTokenCount?:unknown;thoughtsTokenCount?:unknown};candidates?:Array<{content?:{parts?:Array<{text?:string}>}}>;error?:unknown};
+function responseText(payload:GeminiPayload){return String(payload.candidates?.[0]?.content?.parts?.map(part=>part.text??'').join('')??'')}
 export async function aiRepair(env:Env,wine:LwinRepairWine,candidates:Awaited<ReturnType<typeof repairCandidates>>):Promise<RepairChoice>{
  if(!candidates.length)return null;
  const deterministic=deterministicRepair(candidates);if(deterministic)return deterministic;
@@ -44,7 +45,7 @@ export async function aiRepair(env:Env,wine:LwinRepairWine,candidates:Awaited<Re
  const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),45_000);
  try{
   const {response}=await postGeminiGenerateContent(env,AI_MODELS.recognitionPrimary,body,controller.signal,{feature:'lwin-backfill',wine:wine.id},{serviceTier:'flex',serverTimeoutSeconds:40});
-  const payload=await response.json() as any;
+  const payload=await response.json() as GeminiPayload;
   await recordAiUsage(env,wine.owner_id,{kind:'lwin_backfill',runId:'lwin-ai-backfill',targetId:wine.id,eventId:`lwin-backfill:${wine.owner_id}:${wine.id}`,model:AI_MODELS.recognitionPrimary,tier:'flex',requests:1,units:1,...geminiCallTokens(payload?.usageMetadata)});
   if(!response.ok)return null;
   let parsed:{lwin7?:string|null;confidence?:number};try{parsed=JSON.parse(responseText(payload))}catch{return null}
