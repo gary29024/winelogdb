@@ -82,15 +82,12 @@ export async function lwinProducerIndex(bucket:R2Bucket):Promise<LwinProducerInd
  const manifest=await referenceManifest(bucket,'lwin');if(!manifest?.producerIndexKey)return {};
  return await jsonObject<LwinProducerIndex>(bucket,manifest.producerIndexKey)??{};
 }
-export async function lwinCandidateRowsForProducer<T>(bucket:R2Bucket,producer:string|null|undefined,predicate:(row:T)=>boolean,limit=20):Promise<T[]>{
+export async function lwinCandidateRowsForProducer<T>(bucket:R2Bucket,producer:string|null|undefined):Promise<T[]>{
  const manifest=await referenceManifest(bucket,'lwin');if(!manifest)return [];
  if(!manifest.producerIndexKey)throw new Error('LWIN producer index is missing; rerun the LWIN reference import before AI backfill');
- const index=await lwinProducerIndex(bucket),keys=producerLookupKeys(producer);
- const shardIds=new Set<string>();
+ const index=await lwinProducerIndex(bucket),keys=producerLookupKeys(producer),shardIds=new Set<string>();
  for(const key of keys){for(const shard of index[key]??[])shardIds.add(shard);for(const token of key.split(' ').filter(token=>token.length>=4))for(const shard of index[`t:${token}`]??[])shardIds.add(shard)}
- const found:T[]=[];
- for(const shard of shardIds){const rows=await referenceRowsByShard<T>(bucket,'lwin',shard);for(const row of rows)if(predicate(row)){found.push(row);if(found.length>=limit)return found}}
- return found;
+ const found:T[]=[];for(const shard of shardIds)found.push(...await referenceRowsByShard<T>(bucket,'lwin',shard));return found;
 }
 
 /** Legacy bounded scan retained for maintenance tools; interactive/queue matching
