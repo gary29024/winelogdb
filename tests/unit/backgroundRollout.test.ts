@@ -118,4 +118,13 @@ describe('background launch preparation',()=>{
   expect(manual).toMatchObject({lwin7:null,identity_match_status:'manual',elid:'FR-CMP-KRUG01-N171'});
  });
 
+ it('accepts the owner AI-assisted LWIN rollout endpoint and queues the AI job',async()=>{
+  const {database,env,sent}=setup([]);
+  database.sql.exec("INSERT INTO wines(id,owner_id,producer,wine_name,identity_match_status,created_at,updated_at) VALUES('w-ai','owner','Unknown Producer','Unknown Wine','unmatched','now','now')");
+  const response=await rolloutRoute(new Request('https://wine.example/api/admin/rollout/lwin-ai',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({refresh:false})}),env,owner);
+  expect(response?.status).toBe(202);
+  expect(sent.at(-1)).toEqual({kind:'admin_rollout',owner:'owner',rollout:'lwin_ai'});
+  expect((await rolloutStatus(database.db)).lwinAi).toMatchObject({state:'running',processed:0,total:1,matched:0,deterministic:0,ai:0,review:0});
+ });
+
 });
