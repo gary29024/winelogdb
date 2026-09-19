@@ -4,6 +4,7 @@ import { createRoot,type Root } from 'react-dom/client';
 import { MemoryRouter } from 'react-router-dom';
 import { afterEach,describe,expect,it,vi } from 'vitest';
 import { createD1Stub } from './support/d1Stub';
+import { recognitionSchema } from '../../src/features/recognition/schema';
 
 declare global{var IS_REACT_ACT_ENVIRONMENT:boolean}
 globalThis.IS_REACT_ACT_ENVIRONMENT=true;
@@ -109,7 +110,7 @@ describe('the session the card reads from',()=>{
     expect(result?.items[0].recognition).toMatchObject({wineName:'Landlbirn'});
   });
 
-  it('round-trips LWIN-enriched recognition data without turning a batch item into a schema failure',async()=>{
+  it('round-trips LWIN-enriched recognition data that still satisfies the shared recognition contract',async()=>{
     const enriched={...recognition,style:'red',identityMatchStatus:'matched',identityMatchConfidence:1,identityMatchCandidates:[],
       referenceProductKey:'lwin:1011847',lwin7:'1011847',lwin11:'10118472021',elid:null,
       referenceProducer:'Weingut Haselberger',referenceWineName:'Landlbirne',referenceCountry:'Austria',referenceRegion:'Niederösterreich',
@@ -124,5 +125,6 @@ describe('the session the card reads from',()=>{
     const result=await getBatchSession(stub.db,'owner','s1');
     expect(result?.items[0].status).toBe('ready');
     expect(result?.items[0].recognition).toMatchObject({lwin7:'1011847',identityMatchCandidates:[],referenceProducer:'Weingut Haselberger',referenceCountry:'Austria'});
+    expect(()=>recognitionSchema.parse(result?.items[0].recognition)).not.toThrow();
   });
 });

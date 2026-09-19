@@ -41,7 +41,7 @@ export const recognitionCommonFields={
 export const referenceRecognitionFields={
  referenceProductKey:nullableRecognitionText,lwin7:nullableRecognitionText,lwin11:nullableRecognitionText,elid:nullableRecognitionText,
  identityMatchStatus:z.enum(['matched','suggested','ambiguous','unmatched','manual','conflict']).nullable().optional(),
- identityMatchConfidence:z.number().min(0).max(1).nullable().optional(),identityMatchCandidates:z.array(z.string()).optional(),
+ identityMatchConfidence:z.number().min(0).max(1).nullable().optional(),identityMatchCandidates:z.array(z.string().max(32)).nullable().optional(),
  colour:nullableRecognitionText,productType:nullableRecognitionText,productSubtype:nullableRecognitionText,
  referenceProducer:nullableRecognitionText,referenceWineName:nullableRecognitionText,referenceCountry:nullableRecognitionText,referenceRegion:nullableRecognitionText,
  referenceSubRegion:nullableRecognitionText,referenceSite:nullableRecognitionText,referenceParcel:nullableRecognitionText,
