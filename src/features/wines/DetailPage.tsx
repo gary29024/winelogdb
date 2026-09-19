@@ -6,7 +6,7 @@ import { isChampagne } from '../../lib/wine/champagneExtraction';
 import { useEffect,useMemo,useRef,useState } from 'react';
 import { Link,useLocation,useNavigate,useParams } from 'react-router-dom';
 import type { DeepSearchResult } from '../../lib/db/schema';
-import { addWineImages,cancelWineDeepSearch,deleteWine,deleteWineImage,getWine,getWineDeepSearchStatus,setWineFavorite,startWineDeepSearch,type WineDetail,type WineResearchRun } from './api';
+import { addWineImages,applyWineReferenceSuggestion,cancelWineDeepSearch,deleteWine,deleteWineImage,getWine,getWineDeepSearchStatus,setWineFavorite,startWineDeepSearch,type WineDetail,type WineResearchRun } from './api';
 import { extractPhotoMetadata } from '../uploads/photoMetadata';
 import { imageSize } from '../uploads/prepareImage';
 import { WineImage } from './WineImage';
@@ -26,6 +26,7 @@ import '../../favorites.css';
 import '../../wineFormCompact.css';
 import '../../groupSource.css';
 import '../../wineClassification.css';
+import '../../referenceSuggestions.css';
 import { startBackoffPoll,type Poller } from '../../lib/polling/backoff';
 import { AppIcon } from '../../components/AppIcons';
 import { ElapsedSeconds } from '../../components/ElapsedSeconds';
@@ -60,7 +61,7 @@ function ClaimEvidence({deep,field}:{deep:DeepSearchResult;field:DeepField}){
 
 
 export function DetailPage(){
- const {id=''}=useParams(),nav=useNavigate(),{state}=useLocation(),[wine,setWine]=useState<WineDetail>(),[favoriteBusy,setFavoriteBusy]=useState(false),[deepState,setDeepState]=useState<DeepState>('idle'),[deepError,setDeepError]=useState(''),[deepRun,setDeepRun]=useState<WineResearchRun|null>(null),[deepNotice,setDeepNotice]=useState(''),[deepCancelling,setDeepCancelling]=useState(false),[selectedImage,setSelectedImage]=useState<string>(),[selectedGroupSource,setSelectedGroupSource]=useState<string>(),[openDeepFields,setOpenDeepFields]=useState<Set<DeepField>>(readOpenDeepFields),[photoBusy,setPhotoBusy]=useState(false),[photoError,setPhotoError]=useState(''),[friendOperation,setFriendOperation]=useState('');
+ const {id=''}=useParams(),nav=useNavigate(),{state}=useLocation(),[wine,setWine]=useState<WineDetail>(),[favoriteBusy,setFavoriteBusy]=useState(false),[referenceBusy,setReferenceBusy]=useState<string>(''),[referenceError,setReferenceError]=useState(''),[deepState,setDeepState]=useState<DeepState>('idle'),[deepError,setDeepError]=useState(''),[deepRun,setDeepRun]=useState<WineResearchRun|null>(null),[deepNotice,setDeepNotice]=useState(''),[deepCancelling,setDeepCancelling]=useState(false),[selectedImage,setSelectedImage]=useState<string>(),[selectedGroupSource,setSelectedGroupSource]=useState<string>(),[openDeepFields,setOpenDeepFields]=useState<Set<DeepField>>(readOpenDeepFields),[photoBusy,setPhotoBusy]=useState(false),[photoError,setPhotoError]=useState(''),[friendOperation,setFriendOperation]=useState('');
  const technicalView=getAccount()?.role==='owner';
  const photoInput=useRef<HTMLInputElement|null>(null);
  const pollRef=useRef<Poller|undefined>(undefined);
@@ -109,6 +110,7 @@ export function DetailPage(){
   finally{setPhotoBusy(false)}
  }
 
+ async function applyReferenceSuggestion(field:WineDetail['referenceSuggestions'][number]['field']){if(!wine||referenceBusy)return;setReferenceBusy(field);setReferenceError('');try{await applyWineReferenceSuggestion(id,field);await reloadWine()}catch(e){setReferenceError((e as Error).message)}finally{setReferenceBusy('')}}
  async function toggleFavorite(){if(!wine||favoriteBusy)return;const next=!wine.favorite;setFavoriteBusy(true);setWine({...wine,favorite:next});try{await setWineFavorite(id,next)}catch(e){setWine(current=>current?{...current,favorite:!next}:current);setDeepNotice((e as Error).message)}finally{setFavoriteBusy(false)}}
  function toggleDeepField(field:DeepField){setOpenDeepFields(current=>{const next=new Set(current);if(next.has(field))next.delete(field);else next.add(field);writeOpenDeepFields(next);return next})}
  function toggleAllDeepFields(fields:DeepField[]){setOpenDeepFields(current=>{const allOpen=fields.every(field=>current.has(field)),next=new Set(current);for(const field of fields){if(allOpen)next.delete(field);else next.add(field)}writeOpenDeepFields(next);return next})}
@@ -146,6 +148,15 @@ export function DetailPage(){
   <SparklingDetailsCard details={wine.sparklingDetails}/>
   {isChampagne(wine)&&<Link className="champagne-backfill-link" to={`/wines/${wine.id}/edit#champagne-photos`}>Fill Champagne details from photos</Link>}
   <WineDetailsSection wine={wine}/>
+  {(wine.referenceSuggestions??[]).length>0&&<section className="detail-section lwin-suggestion-panel">
+   <p className="section-label">LWIN suggested updates</p>
+   <p className="lwin-suggestion-intro">WineLog found a canonical LWIN match but kept your existing populated fields unchanged. Review each difference before using the LWIN value.</p>
+   <div className="lwin-suggestion-list">{(wine.referenceSuggestions??[]).map(item=><article className="lwin-suggestion-row" key={item.field}>
+    <div><strong>{item.label}</strong><span><small>Current</small>{item.current||'—'}</span><span><small>LWIN</small>{item.suggested}</span></div>
+    <button type="button" className="quiet" disabled={Boolean(referenceBusy)} onClick={()=>void applyReferenceSuggestion(item.field)}>{referenceBusy===item.field?'Applying…':'Use LWIN value'}</button>
+   </article>)}</div>
+   {referenceError&&<p role="alert" className="detail-photo-error">{referenceError}</p>}
+  </section>}
   <section className="detail-section experience-panel"><p className="section-label">Your experience</p><FactList rows={experienceRows}/>{wine.tastingNotes&&<blockquote className="detail-experience-notes">{wine.tastingNotes}</blockquote>}{!experienceRows.length&&!wine.tastingNotes&&<p className="detail-experience-empty">No tasting logged for this bottle yet.</p>}</section>
   {structureItems.length>0&&<section className="detail-section structure-detail-section"><p className="section-label">Structure</p><dl className="tasting-structure-summary">{structureItems.map(([label,value])=><div key={label}><dt>{label}</dt><dd>{structureValueLabel[value]??value}</dd></div>)}</dl><p className="structure-section-note">Perceived structure; label ABV appears in Wine details.</p></section>}
   <section className="detail-section deep-search-panel">
