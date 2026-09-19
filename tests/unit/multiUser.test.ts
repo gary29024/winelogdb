@@ -537,6 +537,23 @@ describe('sharing boundaries',()=>{
   ]);
   expect(database.sql.prepare('SELECT recipient_id FROM wine_shares WHERE wine_id=?').get(id)?.recipient_id).toBe('bob');
  });
+ it('lets only the owner share every existing wine with one accepted friend',async()=>{
+  database.sql.exec(`
+   INSERT INTO friendships(user_id,friend_id) VALUES('owner','bob'),('bob','owner'),('alice','bob'),('bob','alice');
+   INSERT INTO wines(id,owner_id,producer,wine_name,created_at,updated_at) VALUES
+    ('owner-one','owner','P','Owner one','now','now'),
+    ('owner-two','owner','P','Owner two','now','now'),
+    ('member-one','alice','P','Member one','now','now');
+   INSERT INTO wine_shares(wine_id,owner_id,recipient_id) VALUES('owner-one','owner','bob');
+  `);
+  const e={...env(),WINE_IMAGES:{} as R2Bucket};
+  const response=await socialRoute(new Request('https://wine.example/api/friends/bob/share-existing-wines',{method:'POST',body:'{}'}),e,member('owner'));
+  expect(response?.status).toBe(200);
+  expect(database.sql.prepare("SELECT count(*) AS n FROM wine_shares WHERE owner_id='owner' AND recipient_id='bob'").get()!.n).toBe(2);
+  expect(database.sql.prepare("SELECT count(*) AS n FROM wine_shares WHERE wine_id='member-one' AND recipient_id='bob'").get()!.n).toBe(0);
+  await expect(socialRoute(new Request('https://wine.example/api/friends/bob/share-existing-wines',{method:'POST',body:'{}'}),e,member('alice')))
+   .rejects.toMatchObject({status:403,message:'Owner access required'});
+ });
  it('writes a touched friend selection in the same wine batch instead of reapplying defaults',async()=>{
   database.sql.exec("INSERT INTO friendships(user_id,friend_id) VALUES('alice','bob'),('bob','alice'),('alice','carol'),('carol','alice'); INSERT INTO member_share_defaults(owner_id,recipient_id) VALUES('alice','bob')");
   const id='manual-share',input={producer:'Test',wineName:'Manual share',grapes:[],grapeBlend:[],tags:[],tastingNotes:'',shareRecipientIds:['carol']} as unknown as WineInput;

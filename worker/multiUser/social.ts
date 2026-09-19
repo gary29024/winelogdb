@@ -221,9 +221,9 @@ export async function socialRoute(request:Request,env:SocialEnv,member:Member,ct
   ownerOnly(member);
   const friendId=shareExisting[1];
   if(!await env.DB.prepare('SELECT 1 FROM friendships WHERE user_id=? AND friend_id=?').bind(member.id,friendId).first())throw new ApiError(400,'Only accepted friends can receive shared wines');
-  const result=await env.DB.prepare(`INSERT OR IGNORE INTO wine_shares(wine_id,owner_id,recipient_id)
-    SELECT id,?,?, FROM wines WHERE owner_id=?`.replace('?,?, FROM','?,? FROM')).bind(member.id,friendId,member.id).run();
-  return json({ok:true,count:Number(result.meta.changes??0)});
+  await env.DB.prepare(`INSERT OR IGNORE INTO wine_shares(wine_id,owner_id,recipient_id)
+    SELECT id,?,? FROM wines WHERE owner_id=?`).bind(member.id,friendId,member.id).run();
+  return json({ok:true});
  }
  const friend=path.match(/^\/api\/friends\/([^/]+)$/);
  if(friend&&request.method==='DELETE'){
