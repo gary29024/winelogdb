@@ -10,6 +10,7 @@ export type ElidReferenceRecord={
 };
 export type LwinRedirect={targetLwin7:string;targetShard:string};
 export type ElidProducerIndex=Record<string,string[]>;
+export type LwinProducerIndex=Record<string,string[]>;
 
 export function normalizeReferenceText(value:string|null|undefined){
  return (value??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase()
@@ -77,6 +78,22 @@ export async function elidProducerIndex(bucket:R2Bucket):Promise<ElidProducerInd
  * scans only the immutable local LWIN shards and never calls Liv-ex. Callers
  * should narrow the returned rows before sending any candidates to AI.
  */
+export async function lwinProducerIndex(bucket:R2Bucket):Promise<LwinProducerIndex>{
+ const manifest=await referenceManifest(bucket,'lwin');if(!manifest?.producerIndexKey)return {};
+ return await jsonObject<LwinProducerIndex>(bucket,manifest.producerIndexKey)??{};
+}
+export async function lwinCandidateRowsForProducer<T>(bucket:R2Bucket,producer:string|null|undefined,predicate:(row:T)=>boolean,limit=20):Promise<T[]>{
+ const manifest=await referenceManifest(bucket,'lwin');if(!manifest)return [];
+ const index=await lwinProducerIndex(bucket),keys=producerLookupKeys(producer);
+ const shardIds=new Set<string>();
+ for(const key of keys){for(const shard of index[key]??[])shardIds.add(shard);for(const token of key.split(' ').filter(token=>token.length>=4))for(const shard of index[`t:${token}`]??[])shardIds.add(shard)}
+ const found:T[]=[];
+ for(const shard of shardIds){const rows=await referenceRowsByShard<T>(bucket,'lwin',shard);for(const row of rows)if(predicate(row)){found.push(row);if(found.length>=limit)return found}}
+ return found;
+}
+
+/** Legacy bounded scan retained for maintenance tools; interactive/queue matching
+ * must use the producer index above so one wine never reads all 256 shards. */
 export async function lwinCandidateRows<T>(bucket:R2Bucket,predicate:(row:T)=>boolean,limit=12):Promise<T[]>{
  const manifest=await referenceManifest(bucket,'lwin');if(!manifest)return [];
  const found:T[]=[];
