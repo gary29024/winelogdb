@@ -1,6 +1,6 @@
 import { AI_MODELS } from '../../src/lib/ai/policy';
 import { geminiCallTokens,recordAiUsage,type AiUsageEnv } from '../../src/lib/usage/aiUsage';
-import { lwinCandidateRowsForProducer,normalizeReferenceText,producerLookupKeys } from '../../src/lib/wine/referenceCatalog';
+import { lwinCandidateRowsForProducer,lwinReferenceIdentity,normalizeReferenceText,producerLookupKeys } from '../../src/lib/wine/referenceCatalog';
 import type { LwinReferenceProduct } from '../../src/lib/wine/lwinImport';
 import { postGeminiGenerateContent,type GeminiTransportBindings } from '../geminiTransport';
 
@@ -13,9 +13,13 @@ export type RepairChoice={lwin7:string;confidence:number;method:'deterministic'|
 const words=(value:string|null|undefined)=>new Set(normalizeReferenceText(value).split(' ').filter(Boolean));
 function setSimilarity(left:Set<string>,right:Set<string>){if(!left.size||!right.size)return 0;let common=0;for(const word of left)if(right.has(word))common++;return common/Math.max(left.size,right.size)}
 function scorer(wine:LwinRepairWine){
- const producerKeys=producerLookupKeys(wine.producer).map(words),wineName=words([wine.wine_name,wine.release_designation].filter(Boolean).join(' ')),country=words(wine.country),region=words(wine.region);
+ const producerAliases=producerLookupKeys(wine.producer),producerKeys=producerAliases.map(words),inputProducerKey=normalizeReferenceText(wine.producer),wineName=words([wine.wine_name,wine.release_designation].filter(Boolean).join(' ')),country=words(wine.country),region=words(wine.region);
  return (row:LwinReferenceProduct)=>{
-  const producer=Math.max(...producerKeys.map(key=>setSimilarity(key,words(row.producerKey))),0),name=setSimilarity(wineName,words(row.wineName));
+  const identity=lwinReferenceIdentity(row),candidateAliases=producerLookupKeys(identity.producerName);
+  // If both sides explicitly carry a generic house qualifier, it is identity,
+  // not noise: Domaine X must not be auto-treated as Maison X / negociant X.
+  if(producerAliases.length>1&&candidateAliases.length>1&&inputProducerKey&&identity.producerKey&&inputProducerKey!==identity.producerKey)return 0;
+  const producer=Math.max(...producerKeys.map(key=>setSimilarity(key,words(identity.producerKey))),0),name=setSimilarity(wineName,words(identity.wineName));
   const countryScore=wine.country&&row.country?setSimilarity(country,words(row.country)):1,regionScore=wine.region&&row.region?setSimilarity(region,words(row.region)):1;
   if(producer<0.45||name<0.34||countryScore<0.5||regionScore<0.34)return 0;
   return producer*.48+name*.42+countryScore*.04+regionScore*.06;
@@ -37,7 +41,7 @@ function responseText(payload:GeminiPayload){return String(payload.candidates?.[
 export async function aiRepair(env:Env,wine:LwinRepairWine,candidates:Awaited<ReturnType<typeof repairCandidates>>):Promise<RepairChoice>{
  if(!candidates.length)return null;
  const deterministic=deterministicRepair(candidates);if(deterministic)return deterministic;
- const candidateData=candidates.map(({row,score})=>({lwin7:row.lwin7,producer:row.producerName,wine:row.wineName,country:row.country,region:row.region,subRegion:row.subRegion,site:row.site,parcel:row.parcel,colour:row.colour,type:row.productType,score:Number(score.toFixed(3))}));
+ const candidateData=candidates.map(({row,score})=>{const identity=lwinReferenceIdentity(row);return {lwin7:row.lwin7,producer:identity.producerName,wine:identity.wineName,country:row.country,region:row.region,subRegion:row.subRegion,site:row.site,parcel:row.parcel,colour:row.colour,type:row.productType,score:Number(score.toFixed(3))}});
  const prompt=`You are resolving a WineLog record to an official LWIN candidate. Choose ONLY from the supplied candidates. Never invent an LWIN. Treat abbreviations, accents, translated wording and producer prefixes as possible aliases, but reject conflicts in producer, cuvee, geography or wine type. If evidence is insufficient return NONE. Input: ${JSON.stringify({producer:wine.producer,wine:wine.wine_name,release:wine.release_designation,country:wine.country,region:wine.region,style:wine.wine_style})}. Candidates: ${JSON.stringify(candidateData)}`;
  const body=JSON.stringify({contents:[{role:'user',parts:[{text:prompt}]}],generationConfig:{temperature:0,responseMimeType:'application/json',responseJsonSchema:{type:'object',properties:{lwin7:{type:['string','null']},confidence:{type:'number'},reason:{type:'string'}},required:['lwin7','confidence','reason'],additionalProperties:false}}});
  const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),45_000);

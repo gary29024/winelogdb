@@ -25,6 +25,19 @@ export function producerLookupKeys(value:string|null|undefined){
  return [...new Set(keys)];
 }
 
+export type LwinReferenceIdentitySource={
+ displayName?:string|null;producerName?:string|null;producerKey?:string|null;wineName?:string|null;wineKey?:string|null;
+};
+export function lwinReferenceIdentity(row:LwinReferenceIdentitySource){
+ const display=(row.displayName??'').trim(),comma=display.indexOf(',');
+ const displayProducer=comma>0?display.slice(0,comma).trim():null,displayWine=comma>0?display.slice(comma+1).trim():null;
+ const producerName=displayProducer||row.producerName?.trim()||null,wineName=row.wineName?.trim()||displayWine||null;
+ return {
+  producerName,producerKey:normalizeReferenceText(producerName)||normalizeReferenceText(row.producerKey),
+  wineName,wineKey:normalizeReferenceText(row.wineKey)||normalizeReferenceText(wineName)
+ };
+}
+
 type CacheEntry={until:number;value:unknown|null};
 const caches=new WeakMap<R2Bucket,Map<string,CacheEntry>>();
 const CACHE_MS=5*60*1000,NEGATIVE_CACHE_MS=60*1000,MAX_CACHE_ENTRIES=16;
@@ -85,9 +98,10 @@ export async function lwinProducerIndex(bucket:R2Bucket):Promise<LwinProducerInd
 export async function lwinStrictRowsForProducer<T>(bucket:R2Bucket,producer:string|null|undefined):Promise<T[]>{
  const manifest=await referenceManifest(bucket,'lwin');if(!manifest)return [];
  const keys=producerLookupKeys(producer);if(!keys.length)return [];
- // Interactive matching only needs exact generic-prefix aliases. The broader
- // token lookup below is reserved for repair/backfill work because it can fan
- // out to several shards. This keeps normal recognition fast and R2-cheap.
+ // Prefix stripping is retrieval-only: it may locate the Castagnier shard for
+ // "Domaine Castagnier", but the resolver still requires the official display
+ // producer identity to match exactly. That keeps Domaine/Maison identities
+ // distinct while avoiding a full-catalogue scan.
  if(!manifest.producerIndexKey)return referenceRows<T>(bucket,'lwin',keys[0]);
  const index=await lwinProducerIndex(bucket),shardIds=new Set<string>();
  for(const key of keys)for(const shard of index[key]??[])shardIds.add(shard);

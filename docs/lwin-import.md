@@ -91,7 +91,7 @@ Review the console summary. Pay particular attention to:
 - unresolved Combined redirects;
 - the generated content version.
 
-The official LWIN workbook legitimately contains sparse historical/reference rows where `WINE`, `PRODUCER_NAME` or `DISPLAY_NAME` is blank/NA. WineLog retains those rows instead of rejecting them. They remain useful for LWIN identity history and as redirect targets/intermediate hops, but rows without enough producer/wine identity are not candidates for automatic name matching. A sparse Combined row that is itself a redirect source is not reachable through normal producer + wine-name matching.
+The official LWIN workbook legitimately contains sparse historical/reference rows where `WINE`, `PRODUCER_NAME` or `DISPLAY_NAME` is blank/NA. WineLog retains those rows instead of rejecting them. When `WINE` is blank but `DISPLAY_NAME` still contains an unambiguous `Producer, Wine` identity, WineLog may use that official display identity for matching. The display producer qualifier is preserved — for example, `Domaine X` and `Maison X` are not collapsed merely because `PRODUCER_NAME` is `X` for both. Rows that still lack enough producer/wine identity remain useful for history/redirects but are not automatic match candidates.
 
 Unexpected rejected rows or unresolved redirects should therefore be investigated before publishing. A small number of unresolved redirects does not block the refresh: those Combined identities remain in the catalogue but resolve as `conflict` rather than being guessed. Circular redirect chains still stop the import because they indicate a structurally corrupt source graph.
 

@@ -1,5 +1,5 @@
 import type { LwinReferenceProduct } from './lwinImport';
-import { elidProducerIndex,lwinRedirects,lwinStrictRowsForProducer,normalizeReferenceText,producerLookupKeys,referenceRows,referenceRowsByShard,type ElidReferenceRecord } from './referenceCatalog';
+import { elidProducerIndex,lwinRedirects,lwinStrictRowsForProducer,lwinReferenceIdentity,normalizeReferenceText,producerLookupKeys,referenceRows,referenceRowsByShard,type ElidReferenceRecord } from './referenceCatalog';
 import { appClassification,buildReferenceSuggestions } from './referenceSuggestions';
 import { canonicalizeWineFields } from './canonicalize';
 
@@ -149,12 +149,14 @@ async function registeredElid(bucket:R2Bucket,product:LwinReferenceProduct,wine:
 }
 
 export async function resolveWineReference(bucket:R2Bucket,wine:ReferenceResolvable):Promise<ReferenceMatch>{
- const producerKeys=producerLookupKeys(wine.producer),wineKey=referenceWineKey(wine.wineName,wine.releaseDesignation),baseWineKey=normalizeReferenceText(wine.wineName);
- if(!producerKeys.length||!wineKey)return unmatched();
+ const producerKey=normalizeReferenceText(wine.producer),wineKey=referenceWineKey(wine.wineName,wine.releaseDesignation),baseWineKey=normalizeReferenceText(wine.wineName);
+ if(!producerKey||!wineKey)return unmatched();
  const inputPlace=canonicalReferencePlace(wine.country,wine.region),countryKey=normalizeReferenceText(inputPlace.country),regionKey=normalizeReferenceText(inputPlace.region),colourKey=colourFromStyle(wine.style??wine.wineStyle);
  const rows=await lwinStrictRowsForProducer<LwinReferenceProduct>(bucket,wine.producer);if(!rows.length)return unmatched();
- const inputProducerKeys=new Set(producerKeys),sameProducer=(row:LwinReferenceProduct)=>producerLookupKeys(row.producerName??row.producerKey).some(key=>inputProducerKeys.has(key));
- const eligible=(key:string)=>rows.filter(row=>row.status!=='Deleted'&&sameProducer(row)&&row.wineKey===key&&compatible(row,countryKey,regionKey,colourKey));
+ const eligible=(key:string)=>rows.filter(row=>{
+  const identity=lwinReferenceIdentity(row);
+  return row.status!=='Deleted'&&identity.producerKey===producerKey&&identity.wineKey===key&&compatible(row,countryKey,regionKey,colourKey);
+ });
  // Prefer an edition/release-specific LWIN row when one exists. The real LWIN
  // export also files some release families (for example Krug Grande Cuvee) only
  // under the base wine name, so a recognized release designation must not turn
@@ -175,11 +177,11 @@ export async function resolveWineReference(bucket:R2Bucket,wine:ReferenceResolva
   }
  }
  if(product.status!=='Live')return unmatched();
- const elid=await registeredElid(bucket,product,wine),place=canonicalReferencePlace(product.country,product.region);
+ const elid=await registeredElid(bucket,product,wine),place=canonicalReferencePlace(product.country,product.region),identity=lwinReferenceIdentity(product);
  return {referenceProductKey:product.productKey,lwin7:product.lwin7,lwin11:lwin11For(product,wine),elid,identityMatchStatus:'matched',identityMatchConfidence:1,identityMatchCandidates:[],
   colour:product.colour,productType:product.productType,productSubtype:product.productSubtype,
   referenceSubRegion:product.subRegion,referenceSite:product.site,referenceParcel:product.parcel,
-  referenceDesignation:product.designation,referenceClassification:product.classification,referenceProducer:product.producerName,referenceWineName:product.wineName,country:place.country,region:place.region};
+  referenceDesignation:product.designation,referenceClassification:product.classification,referenceProducer:identity.producerName,referenceWineName:identity.wineName,country:place.country,region:place.region};
 }
 export async function enrichRecognitionReference<T extends ReferenceResolvable>(bucket:R2Bucket,wine:T){
  try{

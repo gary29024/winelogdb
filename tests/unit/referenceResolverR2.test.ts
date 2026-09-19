@@ -44,13 +44,18 @@ describe('R2 wine reference resolver',()=>{
   const result=await resolveWineReference(bucket(objects()),{producer:'Krug',wineName:'Grande Cuvée',releaseDesignation:'171ème Édition',vintage:null,vintageKind:'non_vintage',country:'France',region:'Champagne',style:'sparkling'});
   expect(result).toMatchObject({identityMatchStatus:'matched',lwin7:'1234567',elid:'FR-CMP-KRUG01-N171',productSubtype:'Sparkling'});
  });
- it('matches a safe generic producer-prefix alias without AI',async()=>{
+ it('uses the official display identity for sparse LWIN rows and keeps domaine/maison distinct',async()=>{
   const data=objects(),castagnierShard=referenceShardId('castagnier'),path=`reference/lwin/versions/l1/shard-${castagnierShard}.json`;
-  const castagnier={...lwin,productKey:'lwin:1724273',lwin7:'1724273',displayName:'Domaine Castagnier, Chambolle-Musigny',producerName:'Castagnier',producerKey:'castagnier',wineName:'Chambolle-Musigny',wineKey:'chambolle musigny',region:'Burgundy',regionKey:'burgundy',colour:'Red',colourKey:'red',productSubtype:null};
-  data[path]=[...((data[path] as LwinReferenceProduct[]|undefined)??[]),castagnier];
+  const domaine={...lwin,productKey:'lwin:1724273',lwin7:'1724273',displayName:'Domaine Castagnier, Chambolle-Musigny',producerTitle:'Domaine',producerName:'Castagnier',producerKey:'castagnier',wineName:null,wineKey:'',region:'Burgundy',regionKey:'burgundy',subRegion:'Chambolle-Musigny',colour:'Red',colourKey:'red',productSubtype:'Still'};
+  const maison={...domaine,productKey:'lwin:1724274',lwin7:'1724274',displayName:'Maison Castagnier, Chambolle-Musigny',producerTitle:'Maison'};
+  data[path]=[...((data[path] as LwinReferenceProduct[]|undefined)??[]),domaine,maison];
   (data['reference/lwin/versions/l1/producer-index.json'] as Record<string,string[]>)['castagnier']=[castagnierShard];
-  const result=await resolveWineReference(bucket(data),{producer:'Domaine Castagnier',wineName:'Chambolle-Musigny',vintage:2022,vintageKind:'vintage',country:'France',region:'Burgundy',style:'red'});
-  expect(result).toMatchObject({identityMatchStatus:'matched',lwin7:'1724273',referenceProducer:'Castagnier',referenceWineName:'Chambolle-Musigny'});
+  const estate=await resolveWineReference(bucket(data),{producer:'Domaine Castagnier',wineName:'Chambolle-Musigny',vintage:2022,vintageKind:'vintage',country:'France',region:'Burgundy',style:'red'});
+  expect(estate).toMatchObject({identityMatchStatus:'matched',lwin7:'1724273',referenceProducer:'Domaine Castagnier',referenceWineName:'Chambolle-Musigny'});
+  const negociant=await resolveWineReference(bucket(data),{producer:'Maison Castagnier',wineName:'Chambolle-Musigny',vintage:2022,vintageKind:'vintage',country:'France',region:'Burgundy',style:'red'});
+  expect(negociant).toMatchObject({identityMatchStatus:'matched',lwin7:'1724274',referenceProducer:'Maison Castagnier'});
+  const bare=await resolveWineReference(bucket(data),{producer:'Castagnier',wineName:'Chambolle-Musigny',vintage:2022,vintageKind:'vintage',country:'France',region:'Burgundy',style:'red'});
+  expect(bare.identityMatchStatus).toBe('unmatched');expect(bare.lwin7).toBeNull();
  });
  it('falls back to a base LWIN wine row when the export does not carry edition-specific rows',async()=>{
   const data=objects(),shard=referenceShardId('krug'),key=`reference/lwin/versions/l1/shard-${shard}.json`;

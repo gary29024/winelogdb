@@ -1,6 +1,6 @@
 import { describe,expect,it } from 'vitest';
 import { deterministicRepair,repairCandidates } from '../../worker/multiUser/lwinRepair';
-import { producerLookupKeys,referenceShardId,type LwinProducerIndex,type ReferenceManifest } from '../../src/lib/wine/referenceCatalog';
+import { lwinReferenceIdentity,producerLookupKeys,referenceShardId,type LwinProducerIndex,type ReferenceManifest } from '../../src/lib/wine/referenceCatalog';
 import type { LwinReferenceProduct } from '../../src/lib/wine/lwinImport';
 
 function bucket(rows:LwinReferenceProduct[],reads?:string[]){
@@ -8,8 +8,9 @@ function bucket(rows:LwinReferenceProduct[],reads?:string[]){
  const manifest:ReferenceManifest={provider:'lwin',version:'v1',prefix:'reference/lwin/versions/v1',shardCount:256,rows:rows.length,source:'test',sourceUpdatedAt:null,generatedAt:'now',producerIndexKey:indexKey};
  const objects:Record<string,unknown>={'reference/lwin/current.json':manifest,[indexKey]:index};
  for(const row of rows){
-  const shard=referenceShardId(row.producerKey),key=`reference/lwin/versions/v1/shard-${shard}.json`,list=(objects[key] as LwinReferenceProduct[]|undefined)??[];list.push(row);objects[key]=list;
-  for(const lookup of producerLookupKeys(row.producerName)){for(const value of [lookup,...lookup.split(' ').filter(token=>token.length>=4).map(token=>`t:${token}`)]){const shards=index[value]??[];if(!shards.includes(shard))shards.push(shard);index[value]=shards}}
+  const identity=lwinReferenceIdentity(row),shard=referenceShardId(row.producerKey||identity.producerKey),key=`reference/lwin/versions/v1/shard-${shard}.json`,list=(objects[key] as LwinReferenceProduct[]|undefined)??[];list.push(row);objects[key]=list;
+  const lookupKeys=new Set([...producerLookupKeys(row.producerName),...producerLookupKeys(identity.producerName)]);
+  for(const lookup of lookupKeys){for(const value of [lookup,...lookup.split(' ').filter(token=>token.length>=4).map(token=>`t:${token}`)]){const shards=index[value]??[];if(!shards.includes(shard))shards.push(shard);index[value]=shards}}
  }
  for(const key of Object.keys(index))if(key.startsWith('t:')&&index[key].length>8)delete index[key];
  return {get:async(key:string)=>{reads?.push(key);return key in objects?{text:async()=>JSON.stringify(objects[key])}:null}} as unknown as R2Bucket;
@@ -22,6 +23,12 @@ describe('AI-assisted LWIN repair candidate gate',()=>{
   const candidates=await repairCandidates(bucket(rows),{id:'w1',owner_id:'owner',producer:'Chateau Margaux',wine_name:'Margaux',country:'France',region:'Bordeaux',wine_style:'red',release_designation:null});
   expect(candidates[0]?.row.lwin7).toBe('1000001');
   expect(deterministicRepair(candidates)).toMatchObject({lwin7:'1000001',method:'deterministic'});
+ });
+ it('keeps estate and negociant display identities separate even when PRODUCER_NAME is shared',async()=>{
+  const base=product('1724273','Castagnier','Placeholder'),domaine={...base,displayName:'Domaine Castagnier, Chambolle-Musigny',producerTitle:'Domaine',wineName:null,wineKey:'',region:'Burgundy',regionKey:'burgundy',subRegion:'Chambolle-Musigny'},maison={...domaine,productKey:'lwin:1724274',lwin7:'1724274',displayName:'Maison Castagnier, Chambolle-Musigny',producerTitle:'Maison'};
+  const candidates=await repairCandidates(bucket([domaine,maison]),{id:'w1',owner_id:'owner',producer:'Domaine Castagnier',wine_name:'Chambolle-Musigny',country:'France',region:'Burgundy',wine_style:'red',release_designation:null});
+  expect(candidates.map(item=>item.row.lwin7)).toEqual(['1724273']);
+  expect(deterministicRepair(candidates)).toMatchObject({lwin7:'1724273',method:'deterministic'});
  });
  it('does not auto-accept a weak or close candidate',async()=>{
   const rows=[product('1000001','Chateau Margaux','Pavillon Rouge'),product('1000002','Chateau Margaux','Pavillon Blanc')];

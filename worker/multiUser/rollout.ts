@@ -5,6 +5,7 @@ import { publishResearch } from '../../src/lib/research/shared';
 import { wineTargets } from './credits';
 import { publishProducerResearch } from '../../src/lib/research/sharedProducer';
 import { resolveWineReference,type VintageKind } from '../../src/lib/wine/referenceIdentity';
+import { lwinReferenceIdentity } from '../../src/lib/wine/referenceCatalog';
 import { appClassification,buildReferenceSuggestions } from '../../src/lib/wine/referenceSuggestions';
 import { aiRepair,repairCandidates } from './lwinRepair';
 import type { GeminiTransportBindings } from '../geminiTransport';
@@ -177,7 +178,8 @@ async function aiBackfillLwinBatch(env:RolloutEnv){
   const candidates=await repairCandidates(env.REFERENCE_DATA,row),choice=await aiRepair(env,row,candidates);
   if(!choice){review++;continue}
   const selected=candidates.find(item=>item.row.lwin7===choice.lwin7)?.row as LwinReferenceProduct|undefined;if(!selected){review++;continue}
-  const result=await resolveWineReference(env.REFERENCE_DATA,{producer:selected.producerName,wineName:selected.wineName,vintage:row.vintage,vintageKind:row.vintage_kind,releaseDesignation:row.release_designation,country:row.country,region:row.region,wineStyle:row.wine_style,classification:row.classification,classificationOverride:row.classification_override});
+  const selectedIdentity=lwinReferenceIdentity(selected);
+  const result=await resolveWineReference(env.REFERENCE_DATA,{producer:selectedIdentity.producerName,wineName:selectedIdentity.wineName,vintage:row.vintage,vintageKind:row.vintage_kind,releaseDesignation:row.release_designation,country:row.country,region:row.region,wineStyle:row.wine_style,classification:row.classification,classificationOverride:row.classification_override});
   if(result.identityMatchStatus!=='matched'||result.lwin7!==choice.lwin7){review++;continue}
   const now=stamp(),suggestions=buildReferenceSuggestions({producer:row.producer,wineName:row.wine_name,country:row.country,region:row.region,classification:row.classification,classificationOverride:row.classification_override,referenceProducer:result.referenceProducer,referenceWineName:result.referenceWineName,referenceCountry:result.country,referenceRegion:result.region,referenceClassification:result.referenceClassification});
   const saved=await env.DB.prepare(`UPDATE wines SET reference_product_key=?,lwin7=?,lwin11=?,elid=?,reference_site=?,reference_parcel=?,colour=coalesce(colour,?),product_type=coalesce(product_type,?),product_subtype=coalesce(product_subtype,?),identity_match_status='matched',identity_match_confidence=?,identity_match_candidates_json=NULL,identity_matched_at=?,identity_checked_at=?,reference_suggestions_json=?,reference_suggestions_updated_at=? WHERE id=? AND owner_id=? AND lwin7 IS NULL AND coalesce(identity_match_status,'')<>'manual'`).bind(result.referenceProductKey,result.lwin7,result.lwin11,result.elid,result.referenceSite,result.referenceParcel,result.colour,result.productType,result.productSubtype,choice.confidence,now,now,suggestions.length?JSON.stringify(suggestions):null,suggestions.length?now:null,row.id,row.owner_id).run();
