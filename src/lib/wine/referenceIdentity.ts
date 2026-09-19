@@ -149,11 +149,17 @@ async function registeredElid(bucket:R2Bucket,product:LwinReferenceProduct,wine:
 }
 
 export async function resolveWineReference(bucket:R2Bucket,wine:ReferenceResolvable):Promise<ReferenceMatch>{
- const producerKey=normalizeReferenceText(wine.producer),wineKey=referenceWineKey(wine.wineName,wine.releaseDesignation);
+ const producerKey=normalizeReferenceText(wine.producer),wineKey=referenceWineKey(wine.wineName,wine.releaseDesignation),baseWineKey=normalizeReferenceText(wine.wineName);
  if(!producerKey||!wineKey)return unmatched();
  const inputPlace=canonicalReferencePlace(wine.country,wine.region),countryKey=normalizeReferenceText(inputPlace.country),regionKey=normalizeReferenceText(inputPlace.region),colourKey=colourFromStyle(wine.style??wine.wineStyle);
  const rows=await referenceRows<LwinReferenceProduct>(bucket,'lwin',producerKey);if(!rows.length)return unmatched();
- const candidates=rows.filter(row=>row.status!=='Deleted'&&row.producerKey===producerKey&&row.wineKey===wineKey&&compatible(row,countryKey,regionKey,colourKey));
+ const eligible=(key:string)=>rows.filter(row=>row.status!=='Deleted'&&row.producerKey===producerKey&&row.wineKey===key&&compatible(row,countryKey,regionKey,colourKey));
+ // Prefer an edition/release-specific LWIN row when one exists. The real LWIN
+ // export also files some release families (for example Krug Grande Cuvee) only
+ // under the base wine name, so a recognized release designation must not turn
+ // an otherwise valid reference match into a miss.
+ let candidates=eligible(wineKey);
+ if(!candidates.length&&baseWineKey&&baseWineKey!==wineKey)candidates=eligible(baseWineKey);
  if(candidates.length!==1)return unmatched(candidates.length>1?'ambiguous':'unmatched',candidates.map(row=>row.lwin7));
  let product=candidates[0];
  if(product.status==='Combined'){
