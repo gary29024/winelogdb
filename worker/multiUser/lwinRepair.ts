@@ -21,7 +21,7 @@ function scorer(wine:LwinRepairWine){
   // plausible alias, but receives a small confidence penalty.
   if(inputQualifier&&candidateQualifier&&inputQualifier!==candidateQualifier)return 0;
   if(!inputQualifier&&candidateQualifier)return 0;
-  const qualifierPenalty=inputQualifier&&!candidateQualifier?.95:1;
+  const qualifierPenalty=inputQualifier&&!candidateQualifier?0.95:1;
   const candidateProducerKeys=[identity.producerKey,identity.structuredProducerKey].filter(Boolean).map(words);
   const producer=Math.max(...producerKeys.flatMap(left=>candidateProducerKeys.map(right=>setSimilarity(left,right))),0),name=setSimilarity(wineName,words(identity.wineName));
   const countryScore=wine.country&&row.country?setSimilarity(country,words(row.country)):1,regionScore=wine.region&&row.region?setSimilarity(region,words(row.region)):1;
