@@ -1,12 +1,16 @@
 import { describe,expect,it } from 'vitest';
 import { deterministicRepair,repairCandidates } from '../../worker/multiUser/lwinRepair';
-import { referenceShardId,type ReferenceManifest } from '../../src/lib/wine/referenceCatalog';
+import { producerLookupKeys,referenceShardId,type LwinProducerIndex,type ReferenceManifest } from '../../src/lib/wine/referenceCatalog';
 import type { LwinReferenceProduct } from '../../src/lib/wine/lwinImport';
 
 function bucket(rows:LwinReferenceProduct[]){
- const manifest:ReferenceManifest={provider:'lwin',version:'v1',prefix:'reference/lwin/versions/v1',shardCount:256,rows:rows.length,source:'test',sourceUpdatedAt:null,generatedAt:'now'};
- const objects:Record<string,unknown>={'reference/lwin/current.json':manifest};
- for(const row of rows){const key=`reference/lwin/versions/v1/shard-${referenceShardId(row.producerKey)}.json`,list=(objects[key] as LwinReferenceProduct[]|undefined)??[];list.push(row);objects[key]=list}
+ const index:LwinProducerIndex={},indexKey='reference/lwin/versions/v1/producer-index.json';
+ const manifest:ReferenceManifest={provider:'lwin',version:'v1',prefix:'reference/lwin/versions/v1',shardCount:256,rows:rows.length,source:'test',sourceUpdatedAt:null,generatedAt:'now',producerIndexKey:indexKey};
+ const objects:Record<string,unknown>={'reference/lwin/current.json':manifest,[indexKey]:index};
+ for(const row of rows){
+  const shard=referenceShardId(row.producerKey),key=`reference/lwin/versions/v1/shard-${shard}.json`,list=(objects[key] as LwinReferenceProduct[]|undefined)??[];list.push(row);objects[key]=list;
+  for(const lookup of producerLookupKeys(row.producerName)){for(const value of [lookup,...lookup.split(' ').filter(token=>token.length>=4).map(token=>`t:${token}`)]){const shards=index[value]??[];if(!shards.includes(shard))shards.push(shard);index[value]=shards}}
+ }
  return {get:async(key:string)=>key in objects?{text:async()=>JSON.stringify(objects[key])}:null} as unknown as R2Bucket;
 }
 const product=(lwin7:string,producerName:string,wineName:string):LwinReferenceProduct=>({productKey:`lwin:${lwin7}`,lwin7,status:'Live',referenceLwin7:null,displayName:`${producerName}, ${wineName}`,producerTitle:null,producerName,wineName,producerKey:producerName.toLowerCase(),wineKey:wineName.toLowerCase(),country:'France',countryKey:'france',region:'Bordeaux',regionKey:'bordeaux',subRegion:null,site:null,parcel:null,colour:'Red',colourKey:'red',productType:'Wine',productSubtype:'Still',designation:null,classification:null,vintageConfig:'sequential',firstVintage:2000,finalVintage:2026,sourceAddedAt:null,sourceUpdatedAt:null,importedAt:'now'});
