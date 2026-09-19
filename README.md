@@ -46,6 +46,12 @@ build command to use and what to do when a push does not trigger a build.
 
 No bucket CORS policy is needed because uploads and image reads pass through the authenticated Worker. If direct signed uploads are introduced later, restrict CORS to the exact application origin, required `PUT`/`HEAD` methods and content headers; never use `*` with credentials. Store object keys—not URLs, API credentials, or signatures—in D1.
 
+## LWIN reference database
+
+WineLog keeps the large LWIN and ELID reference catalogues as versioned producer-keyed R2 shards, with only small sync state and matched IDs in D1. This avoids a 200k+ catalogue refresh consuming the Free-plan D1 write allowance.
+
+Import an official Liv-ex workbook directly with `npm run lwin:import -- "C:\path\LWINdatabase.xlsx"`; no CSV conversion is required. ELID has no official machine-readable feed available to WineLog, so `npm run elid:sync` performs a conservative, rate-limited registry crawl that stores identifier facts only and never runs during bottle recognition. See **[Importing and refreshing LWIN and ELID reference data](docs/lwin-import.md)**.
+
 ## Search
 
 The migration creates owner/filter/sort indexes and an FTS5 table for producer, name, region, grapes, notes, event, and tags. API filtering supports vintage, country, region, style, minimum rating, and event, plus stable `limit`/`offset` loading and sorts for newest, oldest, rating, producer, and vintage. The UI stores all selections in URL query parameters so views are bookmarkable. Production write paths should maintain `wine_search` using D1 triggers or application transactions when enabling FTS queries at scale.

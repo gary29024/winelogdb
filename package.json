@@ -13,7 +13,10 @@
     "deploy": "npm run build && npm run db:migrate && wrangler deploy",
     "db:migrate:local": "wrangler d1 migrations apply DB --local",
     "db:migrate": "wrangler d1 migrations apply DB --remote",
-    "gi:sync": "vite-node scripts/sync_gi_register.ts"
+    "gi:sync": "vite-node scripts/sync_gi_register.ts",
+    "lwin:build-import": "vite-node scripts/import_lwin.ts --dry-run",
+    "lwin:import": "vite-node scripts/import_lwin.ts",
+    "elid:sync": "vite-node scripts/sync_elid.ts"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
@@ -48,6 +51,7 @@
     "undici": "^7.29.0",
     "vite": "^7.1.3",
     "vitest": "^3.2.4",
-    "wrangler": "^4.33.1"
+    "wrangler": "^4.33.1",
+    "exceljs": "^4.4.0"
   }
 }

@@ -28,6 +28,10 @@ export type WineFacts={
  grapes?:readonly string[];
  grapeBlend?:readonly {grape:string;percentage?:number|Absent}[];
  alcoholPercentage?:number|Absent;
+ releaseDesignation?:string|Absent;
+ vintageKind?:'vintage'|'non_vintage'|'multi_vintage'|'unknown'|Absent;
+ colour?:string|Absent;productType?:string|Absent;productSubtype?:string|Absent;
+ lwin7?:string|Absent;lwin11?:string|Absent;elid?:string|Absent;
 };
 
 export type WineExperience={
@@ -80,8 +84,11 @@ export function wineFactRows(wine:WineFacts):FactRow[]{
   ['Region',denominatedRegion],
   ['Appellation',denominatedAppellation],
   ['As recorded',asRecordedLabel(wine)],
+  ['Release',wine.releaseDesignation],
+  ['Type',[wine.colour,wine.productSubtype??wine.productType].filter(Boolean).join(' · ')],
   ['Grapes / blend',blendLabels(wine).join(', ')],
-  ['Alcohol',wine.alcoholPercentage!=null?`${wine.alcoholPercentage}%`:null]
+  ['Alcohol',wine.alcoholPercentage!=null?`${wine.alcoholPercentage}%`:null],
+  ['LWIN7',wine.lwin7],['LWIN11',wine.lwin11],['ELID',wine.elid]
  ]);
 }
 

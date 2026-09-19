@@ -3,6 +3,7 @@ import { authHeaders,clearSession } from '../../lib/auth/client';
 import { summariesChanged } from '../../lib/cache/summaryCaches';
 import type { Tasting,TastingSummary,TastingWine } from '../../lib/tastings/session';
 import type { TastingDocument } from '../../lib/tastings/documents';
+import type { SheetWine as RecognitionSheetWine } from '../recognition/sheetSchema';
 
 export type { Tasting,TastingSummary,TastingWine,TastingDocument };
 export type TastingDetail={tasting:Tasting;wines:TastingWine[];documents:TastingDocument[]};
@@ -71,12 +72,7 @@ export const uploadTastingDocuments=(id:string,files:File[])=>{
 };
 
 export type SheetPriceOption={amount:number;label:string|null};
-export type SheetWine={
-  producer:string;wineName:string;vintage:number|null;
-  country:string|null;region:string|null;appellation:string|null;
-  style:string|null;grapes:string[];priceOptions:SheetPriceOption[];
-  section:string|null;lineNumber:number|null;confidence:number;
-};
+export type SheetWine=RecognitionSheetWine;
 export type SheetMatch=
   |{status:'matched';wine:SheetWine;wineId:string;hasPrice:boolean;currentPrice:number|null;currentCurrency:string|null}
   |{status:'new';wine:SheetWine};

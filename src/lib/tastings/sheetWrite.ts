@@ -2,6 +2,7 @@ import { z } from 'zod';
 import { canonicalizeWineFields } from '../wine/canonicalize';
 import { ensureWineIdentity } from '../wine/identity';
 import { attachWinesToTasting } from './attach';
+import { enrichRecognitionReference,referenceIdentityStatements } from '../wine/referenceIdentity';
 
 /**
  * Writing what a wine list said, once the reader has agreed to it.
@@ -53,12 +54,19 @@ const sheetWineInput=z.object({
   producer:z.string().trim().min(1).max(300),
   wineName:z.string().trim().min(1).max(300),
   vintage:z.number().int().min(1000).max(2200).nullable().optional(),
+  recognizedProducer:z.string().trim().max(300).nullable().optional(),recognizedWineName:z.string().trim().max(300).nullable().optional(),recognizedVintageText:z.string().trim().max(300).nullable().optional(),
+  vintageKind:z.enum(['vintage','non_vintage','multi_vintage','unknown']).nullable().optional(),releaseDesignation:z.string().trim().max(300).nullable().optional(),
   country:z.string().trim().max(300).nullable().optional(),
   region:z.string().trim().max(300).nullable().optional(),
   appellation:z.string().trim().max(300).nullable().optional(),
   wineStyle:z.enum(['red','white','rose','sparkling','dessert','fortified','orange','other']).nullable().optional(),
   grapes:z.array(z.string().trim().min(1).max(100)).max(20).default([]),
   price:z.number().nonnegative().max(1_000_000).nullable().optional()
+}).superRefine((value,ctx)=>{
+  if(value.vintage!=null&&value.vintageKind&&value.vintageKind!=='vintage')
+    ctx.addIssue({code:'custom',path:['vintageKind'],message:'A four-digit vintage requires vintageKind "vintage"'});
+  if(value.vintage==null&&value.vintageKind==='vintage')
+    ctx.addIssue({code:'custom',path:['vintageKind'],message:'vintageKind "vintage" requires a four-digit vintage'});
 });
 
 export const sheetWinesSchema=z.object({
@@ -79,15 +87,16 @@ export type SheetWinesInput=z.infer<typeof sheetWinesSchema>;
  * through the same canonicalisation and the same ensureWineIdentity, so a wine
  * created from paper is indistinguishable afterwards from one typed in.
  */
-export async function createSheetWines(db:D1Database,owner:string,tastingId:string,input:SheetWinesInput){
+export async function createSheetWines(db:D1Database,owner:string,tastingId:string,input:SheetWinesInput,referenceData?:R2Bucket){
   const tasting=await db.prepare('SELECT id FROM tastings WHERE owner_id=? AND id=?').bind(owner,tastingId).first<{id:string}>();
   if(!tasting)throw new Error('That tasting no longer exists');
 
   const stamp=new Date().toISOString();
-  const rows=input.wines.map(raw=>{
-    const wine=canonicalizeWineFields({...raw,grapeBlend:[],recognizedRegion:null,recognizedAppellation:null,classification:null});
+  const rows=await Promise.all(input.wines.map(async raw=>{
+    const canonical=canonicalizeWineFields({...raw,grapeBlend:[],recognizedRegion:null,recognizedAppellation:null,classification:null});
+    const wine=referenceData?await enrichRecognitionReference(referenceData,canonical):canonical;
     return {id:crypto.randomUUID(),wine};
-  });
+  }));
 
   for(const chunk of chunked(rows))
     await db.batch(chunk.map(({id,wine})=>db.prepare(
@@ -98,6 +107,12 @@ export async function createSheetWines(db:D1Database,owner:string,tastingId:stri
         JSON.stringify(wine.grapes??[]),'[]',wine.wineStyle??null,
         input.tastingDate??null,input.venue??null,
         wine.price??null,wine.price==null?null:input.currency??null,stamp,stamp)));
+
+  // The bulk sheet path bypasses /api/wines, so run the same local reference
+  // identity statements explicitly. This is still local D1 work: no provider
+  // call and no per-row network request.
+  const identityStatements=rows.flatMap(({id,wine})=>referenceIdentityStatements(db,owner,id,wine,stamp,false));
+  for(const chunk of chunked(identityStatements))await db.batch(chunk);
 
   // Serial and after the inserts: producer and cuvée linking reads rows back
   // and writes alias tables, so it cannot be folded into the insert batch.

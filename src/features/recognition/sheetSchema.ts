@@ -1,6 +1,5 @@
 import { z } from 'zod';
-import { canonicalizeWineFields } from '../../lib/wine/canonicalize';
-import { normalizeRecognitionVintage } from './vintage';
+import { canonicalizeRecognitionEvidence,nullableRecognitionText,recognitionCommonFields,referenceRecognitionFields } from './identityFields';
 
 /**
  * The printed wine list handed out at a tasting, read as text.
@@ -14,10 +13,7 @@ import { normalizeRecognitionVintage } from './vintage';
  *
  * What this adds that no bottle photograph can ever give you is the price.
  */
-const nullableText=z.string().trim().max(300).nullable().optional();
-const wineStyles=['red','white','rose','sparkling','dessert','fortified','orange','other'] as const;
-const grapeBlendEntry=z.object({grape:z.string().trim().min(1).max(100),percentage:z.number().min(0).max(100).nullable().optional()});
-const recognitionVintageSchema=z.preprocess(normalizeRecognitionVintage,z.number().int().min(1000).max(2200).nullable().optional());
+const nullableText=nullableRecognitionText;
 
 /**
  * Every number printed against one wine, rather than one chosen for you.
@@ -35,20 +31,8 @@ export const sheetPriceOptionSchema=z.object({
 export const sheetWineSchema=z.object({
   producer:z.string().trim().min(1).max(300),
   wineName:z.string().trim().min(1).max(300),
-  vintage:recognitionVintageSchema,
-  country:nullableText,
-  region:nullableText,
-  appellation:nullableText,
-  // Filled by canonicalizeWineFields during merge, not by the model - same
-  // reason as the group schema: the object is parsed again downstream, so every
-  // field canonicalisation adds needs a home here.
-  recognizedRegion:nullableText,
-  recognizedAppellation:nullableText,
-  classification:z.enum(['grand_cru','premier_cru','village']).nullable().optional(),
-  grapes:z.array(z.string().trim().max(100)).max(20).default([]),
-  grapeBlend:z.array(grapeBlendEntry).max(20).default([]),
-  style:z.enum(wineStyles).nullable().optional(),
-  alcoholPercentage:z.number().min(0).max(100).nullable().optional(),
+  ...recognitionCommonFields,
+  ...referenceRecognitionFields,
   priceOptions:z.array(sheetPriceOptionSchema).max(4).default([]),
   /** The flight or heading this wine is printed under. Not a wine itself. */
   section:nullableText,
@@ -106,10 +90,11 @@ export type SheetPage=z.infer<typeof sheetPageSchema>;
  * continuation overlaps the page it continues by a row or two, and a wine can
  * be reprinted at a page break.
  */
-export const sheetIdentityKey=(wine:Pick<SheetWine,'producer'|'wineName'|'vintage'>)=>[
+export const sheetIdentityKey=(wine:Pick<SheetWine,'producer'|'wineName'|'vintage'|'vintageKind'|'releaseDesignation'>)=>[
   wine.producer.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[^\p{L}\p{N}]+/gu,' ').trim(),
   wine.wineName.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[^\p{L}\p{N}]+/gu,' ').trim(),
-  wine.vintage??'nv'
+  wine.vintage??wine.vintageKind??'unknown',
+  wine.releaseDesignation??''
 ].join('::');
 
 /**
@@ -122,7 +107,7 @@ export const sheetIdentityKey=(wine:Pick<SheetWine,'producer'|'wineName'|'vintag
 export function mergeSheetWines(pages:SheetWine[][]){
   const byIdentity=new Map<string,SheetWine>();
   for(const page of pages)for(const raw of page){
-    const wine=canonicalizeWineFields(raw) as SheetWine,key=sheetIdentityKey(wine),existing=byIdentity.get(key);
+    const wine=canonicalizeRecognitionEvidence(raw) as SheetWine,key=sheetIdentityKey(wine),existing=byIdentity.get(key);
     if(!existing){byIdentity.set(key,wine);continue}
     const better=wine.priceOptions.length>existing.priceOptions.length
       ||(wine.priceOptions.length===existing.priceOptions.length&&wine.confidence>existing.confidence);
