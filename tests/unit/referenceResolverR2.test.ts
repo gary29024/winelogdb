@@ -66,7 +66,7 @@ describe('R2 wine reference resolver',()=>{
   expect(bare).toMatchObject({identityMatchStatus:'matched',lwin7:'1000001'});expect(display).toMatchObject({identityMatchStatus:'matched',lwin7:'1000001'});
  });
  it('tries both qualified and stripped producer shards when an older manifest has no producer index',async()=>{
-  const data=objects(),manifest=data['reference/lwin/current.json'] as ReferenceManifest;delete manifest.producerIndexKey;delete data['reference/lwin/versions/l1/producer-index.json'];
+  const data=objects(),manifest=data['reference/lwin/current.json'] as ReferenceManifest,records=data as Record<string,unknown>;delete manifest.producerIndexKey;delete records['reference/lwin/versions/l1/producer-index.json'];
   const shard=referenceShardId('castagnier'),path=`reference/lwin/versions/l1/shard-${shard}.json`;
   data[path]=[{...lwin,productKey:'lwin:1724273',lwin7:'1724273',displayName:'Domaine Castagnier, Chambolle-Musigny',producerName:'Castagnier',producerKey:'castagnier',wineName:null,wineKey:'',region:'Burgundy',regionKey:'burgundy',colour:'Red',colourKey:'red'}];
   const result=await resolveWineReference(bucket(data),{producer:'Domaine Castagnier',wineName:'Chambolle-Musigny',country:'France',region:'Burgundy',style:'red'});
