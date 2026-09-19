@@ -16,14 +16,17 @@ function scorer(wine:LwinRepairWine){
  const producerKeys=producerLookupKeys(wine.producer).map(words),inputQualifier=producerHouseQualifier(wine.producer),wineName=words([wine.wine_name,wine.release_designation].filter(Boolean).join(' ')),country=words(wine.country),region=words(wine.region);
  return (row:LwinReferenceProduct)=>{
   const identity=lwinReferenceIdentity(row),candidateQualifier=producerHouseQualifier(identity.producerName);
-  // House qualifiers are identity-bearing. Missing or different qualifiers stay
-  // unresolved; equivalent forms such as Ch. and Chateau share one qualifier.
-  if(inputQualifier!==candidateQualifier&&(inputQualifier||candidateQualifier))return 0;
-  const candidateProducerKeys=producerLookupKeys(identity.producerName).map(words);
+  // A qualifier the official display actually carries is identity-bearing.
+  // A qualified user input against an unqualified official row remains a
+  // plausible alias, but receives a small confidence penalty.
+  if(inputQualifier&&candidateQualifier&&inputQualifier!==candidateQualifier)return 0;
+  if(!inputQualifier&&candidateQualifier)return 0;
+  const qualifierPenalty=inputQualifier&&!candidateQualifier?.95:1;
+  const candidateProducerKeys=[identity.producerKey,identity.structuredProducerKey].filter(Boolean).map(words);
   const producer=Math.max(...producerKeys.flatMap(left=>candidateProducerKeys.map(right=>setSimilarity(left,right))),0),name=setSimilarity(wineName,words(identity.wineName));
   const countryScore=wine.country&&row.country?setSimilarity(country,words(row.country)):1,regionScore=wine.region&&row.region?setSimilarity(region,words(row.region)):1;
   if(producer<0.45||name<0.34||countryScore<0.5||regionScore<0.34)return 0;
-  return producer*.48+name*.42+countryScore*.04+regionScore*.06;
+  return (producer*.48+name*.42+countryScore*.04+regionScore*.06)*qualifierPenalty;
  };
 }
 export async function repairCandidates(bucket:R2Bucket,wine:LwinRepairWine){

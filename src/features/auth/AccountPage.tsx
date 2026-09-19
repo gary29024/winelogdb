@@ -29,7 +29,7 @@ export function AccountPage(){
   window.addEventListener('focus',refresh);return()=>window.removeEventListener('focus',refresh);
  },[load]);
  async function run(fn:()=>Promise<unknown>,message:string|((result:unknown)=>string)=''){
-  setBusy(true);setError('');setNotice('');
+  setBusy(true);setError('');setNotice('');setShareNotice(null);
   try{const result=await fn();await load();setNotice(typeof message==='function'?message(result):message)}catch(e){setError((e as Error).message)}finally{setBusy(false)}
  }
  async function shareExisting(friend:Friend){

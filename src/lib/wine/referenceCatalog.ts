@@ -40,9 +40,10 @@ export type LwinReferenceIdentitySource={
 export function lwinReferenceIdentity(row:LwinReferenceIdentitySource){
  const display=(row.displayName??'').trim(),comma=display.indexOf(',');
  const displayProducer=comma>0?display.slice(0,comma).trim():null,displayWine=comma>0?display.slice(comma+1).trim():null;
- const producerName=displayProducer||row.producerName?.trim()||null,wineName=row.wineName?.trim()||displayWine||null;
+ const structuredProducerName=row.producerName?.trim()||null,producerName=displayProducer||structuredProducerName,wineName=row.wineName?.trim()||displayWine||null;
  return {
   producerName,producerKey:normalizeReferenceText(producerName)||normalizeReferenceText(row.producerKey),
+  structuredProducerKey:normalizeReferenceText(row.producerKey)||normalizeReferenceText(structuredProducerName),
   wineName,wineKey:normalizeReferenceText(row.wineKey)||normalizeReferenceText(wineName)
  };
 }
@@ -107,14 +108,18 @@ export async function lwinProducerIndex(bucket:R2Bucket):Promise<LwinProducerInd
 export async function lwinStrictRowsForProducer<T>(bucket:R2Bucket,producer:string|null|undefined):Promise<T[]>{
  const manifest=await referenceManifest(bucket,'lwin');if(!manifest)return [];
  const keys=producerLookupKeys(producer);if(!keys.length)return [];
- // Prefix stripping is retrieval-only: it may locate the Castagnier shard for
- // "Domaine Castagnier", but the resolver still requires the official display
- // producer identity to match exactly. That keeps Domaine/Maison identities
- // distinct while avoiding a full-catalogue scan.
- if(!manifest.producerIndexKey)return referenceRows<T>(bucket,'lwin',keys[0]);
+ // Prefix stripping is retrieval-only. When an older manifest has no producer
+ // index, try the tiny set of exact lookup-key shards instead of hashing only
+ // the qualified form and missing rows stored under PRODUCER_NAME.
+ const fallback=async()=>{
+  const found:T[]=[],seen=new Set<string>();
+  for(const key of keys){const shard=referenceShardId(key,manifest.shardCount);if(seen.has(shard))continue;seen.add(shard);found.push(...await referenceRowsByShard<T>(bucket,'lwin',shard))}
+  return found;
+ };
+ if(!manifest.producerIndexKey)return fallback();
  const index=await lwinProducerIndex(bucket),shardIds=new Set<string>();
  for(const key of keys)for(const shard of index[key]??[])shardIds.add(shard);
- if(!shardIds.size)return referenceRows<T>(bucket,'lwin',keys[0]);
+ if(!shardIds.size)return fallback();
  const found:T[]=[];for(const shard of shardIds)found.push(...await referenceRowsByShard<T>(bucket,'lwin',shard));return found;
 }
 export async function lwinCandidateRowsForProducer<T>(bucket:R2Bucket,producer:string|null|undefined):Promise<T[]>{

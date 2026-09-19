@@ -35,6 +35,11 @@ describe('AI-assisted LWIN repair candidate gate',()=>{
   const candidates=await repairCandidates(bucket([domaine,maison]),{id:'w1',owner_id:'owner',producer:'Castagnier',wine_name:'Chambolle-Musigny',country:'France',region:'Burgundy',wine_style:'red',release_designation:null});
   expect(candidates).toEqual([]);
  });
+ it('keeps a qualified user alias when the official display omits the house word',async()=>{
+  const rows=[product('1000003','Bollinger','Special Cuvee')];
+  const candidates=await repairCandidates(bucket(rows),{id:'w1',owner_id:'owner',producer:'Champagne Bollinger',wine_name:'Special Cuvee',country:'France',region:'Bordeaux',wine_style:'red',release_designation:null});
+  expect(candidates[0]?.row.lwin7).toBe('1000003');expect(candidates[0]?.score).toBeGreaterThanOrEqual(.93);
+ });
  it('treats Ch. and Chateau as the same house qualifier without AI',async()=>{
   const rows=[product('1000001','Chateau Margaux','Margaux')];
   const candidates=await repairCandidates(bucket(rows),{id:'w1',owner_id:'owner',producer:'Ch. Margaux',wine_name:'Margaux',country:'France',region:'Bordeaux',wine_style:'red',release_designation:null});

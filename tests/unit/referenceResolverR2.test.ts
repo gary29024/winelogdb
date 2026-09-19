@@ -55,7 +55,22 @@ describe('R2 wine reference resolver',()=>{
   const negociant=await resolveWineReference(bucket(data),{producer:'Maison Castagnier',wineName:'Chambolle-Musigny',vintage:2022,vintageKind:'vintage',country:'France',region:'Burgundy',style:'red'});
   expect(negociant).toMatchObject({identityMatchStatus:'matched',lwin7:'1724274',referenceProducer:'Maison Castagnier'});
   const bare=await resolveWineReference(bucket(data),{producer:'Castagnier',wineName:'Chambolle-Musigny',vintage:2022,vintageKind:'vintage',country:'France',region:'Burgundy',style:'red'});
-  expect(bare.identityMatchStatus).toBe('unmatched');expect(bare.lwin7).toBeNull();
+  expect(bare.identityMatchStatus).toBe('ambiguous');expect(bare.lwin7).toBeNull();expect(bare.identityMatchCandidates).toEqual(['1724273','1724274']);
+ });
+ it('keeps the structured producer name as an accepted alias on ordinary populated rows',async()=>{
+  const data=objects(),shard=referenceShardId('margaux'),path=`reference/lwin/versions/l1/shard-${shard}.json`;
+  const row={...lwin,productKey:'lwin:1000001',lwin7:'1000001',displayName:'Chateau Margaux, Chateau Margaux',producerTitle:'Chateau',producerName:'Margaux',producerKey:'margaux',wineName:'Chateau Margaux',wineKey:'chateau margaux',region:'Bordeaux',regionKey:'bordeaux',colour:'Red',colourKey:'red'};
+  data[path]=[row];const index=data['reference/lwin/versions/l1/producer-index.json'] as Record<string,string[]>;index.margaux=[shard];index['chateau margaux']=[shard];
+  const bare=await resolveWineReference(bucket(data),{producer:'Margaux',wineName:'Chateau Margaux',country:'France',region:'Bordeaux',style:'red'});
+  const display=await resolveWineReference(bucket(data),{producer:'Chateau Margaux',wineName:'Chateau Margaux',country:'France',region:'Bordeaux',style:'red'});
+  expect(bare).toMatchObject({identityMatchStatus:'matched',lwin7:'1000001'});expect(display).toMatchObject({identityMatchStatus:'matched',lwin7:'1000001'});
+ });
+ it('tries both qualified and stripped producer shards when an older manifest has no producer index',async()=>{
+  const data=objects(),manifest=data['reference/lwin/current.json'] as ReferenceManifest;delete manifest.producerIndexKey;delete data['reference/lwin/versions/l1/producer-index.json'];
+  const shard=referenceShardId('castagnier'),path=`reference/lwin/versions/l1/shard-${shard}.json`;
+  data[path]=[{...lwin,productKey:'lwin:1724273',lwin7:'1724273',displayName:'Domaine Castagnier, Chambolle-Musigny',producerName:'Castagnier',producerKey:'castagnier',wineName:null,wineKey:'',region:'Burgundy',regionKey:'burgundy',colour:'Red',colourKey:'red'}];
+  const result=await resolveWineReference(bucket(data),{producer:'Domaine Castagnier',wineName:'Chambolle-Musigny',country:'France',region:'Burgundy',style:'red'});
+  expect(result).toMatchObject({identityMatchStatus:'matched',lwin7:'1724273'});
  });
  it('falls back to a base LWIN wine row when the export does not carry edition-specific rows',async()=>{
   const data=objects(),shard=referenceShardId('krug'),key=`reference/lwin/versions/l1/shard-${shard}.json`;

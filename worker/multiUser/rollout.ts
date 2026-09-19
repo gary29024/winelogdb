@@ -49,8 +49,8 @@ export async function rolloutStatus(db:D1Database):Promise<RolloutStatus>{
   readState(db,'lwin_backfill'),readState(db,jobKey('lwin')),readState(db,errorKey('lwin')),readState(db,'lwin_cursor'),
   readCount(db,'lwin_processed'),readCount(db,'lwin_total'),readCount(db,'lwin_matched'),readCount(db,'lwin_ambiguous'),readCount(db,'lwin_unmatched'),readCount(db,'lwin_conflict')
  ]);
- const [lwinValidateComplete,lwinValidateJob,lwinValidateError,lwinValidateCursor,lwinValidateProcessed,lwinValidateTotal,lwinValidateVerified,lwinValidateReview]=await Promise.all([
-  readState(db,'lwin_validation'),readState(db,jobKey('lwin_validate')),readState(db,errorKey('lwin_validate')),readState(db,'lwin_validate_cursor'),
+ const [lwinValidateComplete,lwinValidateJob,lwinValidateError,lwinValidateCursor,lwinValidateStartedAt,lwinValidateProcessed,lwinValidateTotal,lwinValidateVerified,lwinValidateReview]=await Promise.all([
+  readState(db,'lwin_validation'),readState(db,jobKey('lwin_validate')),readState(db,errorKey('lwin_validate')),readState(db,'lwin_validate_cursor'),readState(db,'lwin_validate_started_at'),
   readCount(db,'lwin_validate_processed'),readCount(db,'lwin_validate_total'),readCount(db,'lwin_validate_verified'),readCount(db,'lwin_validate_review')
  ]);
  const [lwinAiComplete,lwinAiJob,lwinAiError,lwinAiCursor,lwinAiProcessed,lwinAiTotal,lwinAiMatched,lwinAiDeterministic,lwinAiModel,lwinAiReview]=await Promise.all([
@@ -64,8 +64,8 @@ export async function rolloutStatus(db:D1Database):Promise<RolloutStatus>{
  ]);
  const researchState:TaskState=researchJob==='running'?'running':researchRefresh==='paused'||researchJob==='paused'?'paused':taskState(researchComplete==='complete',researchJob,Boolean(wineCursor||producerCursor));
  let validationReviewItems:Array<{id:string;producer:string;wineName:string;lwin7:string;candidates:string[]}>=[]; 
- if(lwinValidateJob!=='running'&&lwinValidateReview>0){
-  const flagged=await db.prepare("SELECT id,producer,wine_name,lwin7,identity_match_candidates_json FROM wines WHERE lwin7 IS NOT NULL AND identity_match_status='conflict' ORDER BY identity_checked_at DESC LIMIT 20").all<Record<string,unknown>>();
+ if(lwinValidateJob!=='running'&&lwinValidateReview>0&&lwinValidateStartedAt){
+  const flagged=await db.prepare("SELECT id,producer,wine_name,lwin7,identity_match_candidates_json FROM wines WHERE lwin7 IS NOT NULL AND identity_match_status='conflict' AND identity_checked_at>=? ORDER BY identity_checked_at DESC LIMIT 20").bind(lwinValidateStartedAt).all<Record<string,unknown>>();
   validationReviewItems=flagged.results.map(row=>{
    let candidates:string[]=[];try{const parsed=JSON.parse(String(row.identity_match_candidates_json??'[]'));if(Array.isArray(parsed))candidates=parsed.filter((value):value is string=>typeof value==='string')}catch{/* keep malformed legacy candidate metadata out of owner UI */}
    return {id:String(row.id),producer:String(row.producer??''),wineName:String(row.wine_name??''),lwin7:String(row.lwin7??''),candidates};
@@ -280,7 +280,7 @@ async function startRollout(env:RolloutEnv,member:Member,kind:RolloutKind,refres
  }
  if(kind==='lwin_validate'&&(refresh||(!cursor&&complete!=='complete'))){
   const total=await env.DB.prepare("SELECT count(*) AS n FROM wines WHERE lwin7 IS NOT NULL AND identity_match_status IN ('matched','conflict')").first<{n:number}>();
-  entries.push(['lwin_validation',''],['lwin_validate_cursor',''],['lwin_validate_total',String(Number(total?.n)||0)],['lwin_validate_processed','0'],['lwin_validate_verified','0'],['lwin_validate_review','0']);
+  entries.push(['lwin_validation',''],['lwin_validate_cursor',''],['lwin_validate_started_at',stamp()],['lwin_validate_total',String(Number(total?.n)||0)],['lwin_validate_processed','0'],['lwin_validate_verified','0'],['lwin_validate_review','0']);
  }
  if(kind==='lwin_ai'&&(refresh||(!cursor&&complete!=='complete'))){
   const total=await env.DB.prepare("SELECT count(*) AS n FROM wines WHERE lwin7 IS NULL AND identity_match_status IN ('unmatched','ambiguous','suggested')").first<{n:number}>();
