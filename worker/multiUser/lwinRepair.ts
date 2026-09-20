@@ -51,12 +51,27 @@ export async function aiRepair(env:Env,wine:LwinRepairWine,candidates:Awaited<Re
  const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),45_000);
  try{
   const {response}=await postGeminiGenerateContent(env,AI_MODELS.recognitionPrimary,body,controller.signal,{feature:'lwin-backfill',wine:wine.id},{serviceTier:'flex',serverTimeoutSeconds:40});
-  const payload=await response.json() as GeminiPayload;
+  // Gate on HTTP status before decoding: gateways can return plain text or HTML.
+  // Throw so the rollout keeps its checkpoint instead of counting a failed call as review.
+  if(!response.ok){
+   await response.body?.cancel().catch(()=>{});
+   const reason=response.status===504?'timed out (HTTP 504 Gateway Timeout)':`failed (HTTP ${response.status})`;
+   throw new Error(`LWIN AI request ${reason}. Resume AI LWIN resolution to retry this wine.`);
+  }
+  let payload:GeminiPayload;
+  try{payload=await response.json() as GeminiPayload}catch(error){
+   if(!(error instanceof SyntaxError))throw error;
+   throw new Error('LWIN AI returned an invalid JSON response. Resume AI LWIN resolution to retry this wine.');
+  }
+  if(!payload||typeof payload!=='object'||Array.isArray(payload)||payload.error)throw new Error('LWIN AI returned an invalid response. Resume AI LWIN resolution to retry this wine.');
   await recordAiUsage(env,wine.owner_id,{kind:'lwin_backfill',runId:'lwin-ai-backfill',targetId:wine.id,eventId:`lwin-backfill:${wine.owner_id}:${wine.id}`,model:AI_MODELS.recognitionPrimary,tier:'flex',requests:1,units:1,...geminiCallTokens(payload?.usageMetadata)});
-  if(!response.ok)return null;
   let parsed:{lwin7?:string|null;confidence?:number};try{parsed=JSON.parse(responseText(payload))}catch{return null}
+  if(!parsed||typeof parsed!=='object')return null;
   const confidence=Number(parsed.confidence)||0,lwin7=String(parsed.lwin7??'');
   if(confidence<.90||!candidates.some(item=>item.row.lwin7===lwin7))return null;
   return {lwin7,confidence,method:'ai'};
+ }catch(error){
+  if(controller.signal.aborted)throw new Error('LWIN AI request timed out after 45 seconds. Resume AI LWIN resolution to retry this wine.');
+  throw error;
  }finally{clearTimeout(timer)}
 }

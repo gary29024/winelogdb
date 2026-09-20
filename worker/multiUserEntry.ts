@@ -29,6 +29,7 @@ export default {
   try{
    const auth=await authRoute(request,env);if(auth)return auth;
    const member=await authenticate(request,env);verifyOrigin(request,env);
+   if(member.role!=='owner'&&/^\/api\/wines\/[^/]+\/(reference-preview|reference-review|reference-suggestion|producer-name-review)$/.test(path))throw new ApiError(403,'Owner access required');
    if(request.headers.has('X-WineLog-Account')&&request.headers.get('X-WineLog-Account')!==member.id)throw new ApiError(409,'Account changed; reload this page');
    // Every provider request still carries an operation context for idempotency,
    // cost accounting and budget holds. During the pilot members are not charged

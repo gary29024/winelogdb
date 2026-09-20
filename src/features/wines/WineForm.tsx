@@ -17,6 +17,7 @@ import { isChampagne,missingChampagneDetails } from '../../lib/wine/champagneExt
 import { FriendTagDialog } from './FriendTagDialog';
 import { listFriendTags,type FriendTag } from './friendTags';
 import { getAccount } from '../../lib/auth/client';
+import { apiJson } from '../../lib/auth/api';
 import '../../producerResolution.css';
 import '../../wineFormCompact.css';
 
@@ -41,6 +42,7 @@ const structureFields=[
 ] as const;
 
 type WineFormInput=WineInput&{tastingStructure?:TastingStructure|null;sparklingDetails?:SparklingDetails|null};
+type LoggingReferencePreview={matched:boolean;needsReview:boolean;producer?:string|null;wineName?:string|null;country?:string|null;region?:string|null;colour?:string|null;productType?:string|null;productSubtype?:string|null;token:string|null};
 type WineFormInitial=Partial<WineInput>&{tastingStructure?:TastingStructure|null;sparklingDetails?:SparklingDetails|null;imageIds?:string[]};
 /**
  * Who the saved wine turned out to be.
@@ -58,6 +60,9 @@ type WineFormProps={initial?:WineFormInitial;id?:string;photos?:WinePhoto[];onSa
 export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,enableFriendTagging=false,holdingId}:WineFormProps){
   const memberView=getAccount()?.role==='member';
   const nav=useNavigate(),[busy,setBusy]=useState(false),[error,setError]=useState('');
+  const [referenceReview,setReferenceReview]=useState<{key:string;preview:LoggingReferencePreview}|null>(null);
+  const referencePanel=useRef<HTMLFieldSetElement>(null);
+  useEffect(()=>{if(referenceReview)referencePanel.current?.scrollIntoView({block:'center',behavior:'smooth'})},[referenceReview]);
   const [producer,setProducer]=useState(String(initial?.producer??'')),[producerResolution,setProducerResolution]=useState<ProducerResolution|null>(null),[resolvingProducer,setResolvingProducer]=useState(false);
   /** The spelling the library uses, once it has been taken - so the screen can say it did. */
   const [adoptedProducer,setAdoptedProducer]=useState('');
@@ -226,6 +231,8 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,enable
 
   async function submit(e:FormEvent<HTMLFormElement>){
     e.preventDefault();setBusy(true);setError('');const fd=new FormData(e.currentTarget);
+    const submitter=(e.nativeEvent as SubmitEvent).submitter;
+    const referenceChoice=submitter instanceof HTMLButtonElement&&submitter.name==='referenceDecision'?submitter.value:'';
     const producer=String(fd.get('producer')||'').trim(),wineName=String(fd.get('wineName')||'').trim();
     if(!producer||!wineName){setError('Producer and wine name are required.');setBusy(false);return}
     const grapeBlend=parseBlend(String(fd.get('grapeBlend')||'')),currency=String(fd.get('currency')||'').trim().toUpperCase(),tastingStructure=hasTastingStructure(structure)?structure:null;
@@ -286,6 +293,18 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,enable
       shareRecipientIds:allowFriendTagging&&tagTouched?tagSelected:undefined
     };
     try{
+      if(!id){
+        const key=JSON.stringify(input);
+        if(referenceReview?.key!==key){
+          // Reference availability must never prevent someone from logging a wine.
+          const preview=await apiJson<LoggingReferencePreview>('/api/wines/reference-check','POST',input).catch(()=>null);
+          if(preview?.matched&&preview.needsReview){setReferenceReview({key,preview});setBusy(false);return}
+          input.referenceDecision=preview?.matched&&preview.token?{action:'confirm',token:preview.token}:{action:'unmatched'};
+        }else{
+          if(referenceChoice!=='none'&&referenceChoice!=='confirm'){setError('Choose one of the options below to save your wine.');setBusy(false);return}
+          input.referenceDecision=referenceChoice==='none'?{action:'none'}:{action:'confirm',token:referenceReview.preview.token??undefined};
+        }
+      }
       const result=onSave?await onSave(input):await saveWine(input,id,id?[]:photos,{preferCuveePrimaryName:canPreferPrimary&&preferCuveePrimaryName,holdingId});
       const savedId=id??('id' in result?result.id:undefined);if(!savedId)throw new Error('Save response did not include a wine ID');
       // A save can have closed the open tasting - a wine dated another day ends
@@ -306,14 +325,14 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,enable
         &&(input.tastingDate??null)===(activeTasting.tastingDate??null);
       if(onSaved)onSaved(savedId,{producer:input.producer,wineName:input.wineName,vintage:input.vintage??null});
       else nav(joined&&activeTasting?`/tastings/${activeTasting.id}`:`/wines/${savedId}`);
-    }catch(e){setError((e as Error).message);setBusy(false)}
+    }catch(e){setError((e as Error).message);setReferenceReview(null);setBusy(false)}
   }
   // The tree, not the typist, holds the denomination: showing what it reads back
   // is what tells you a "Chianti Classico" you typed was understood as a DOCG.
   const denomination=resolvePlace({country:String(initial?.country??'')||null,region:String(initial?.region??'')||null,appellation}).denomination;
   const field=(name:string,label:string,type='text',step?:string,required=false)=><label>{label}<input name={name} type={type} step={step} required={required} defaultValue={String(initial?.[name as keyof WineInput]??'')}/></label>;
   const hasGps=initial?.latitude!=null&&initial?.longitude!=null,hasEstimatedPlace=hasGps&&Boolean(initial?.locationName?.trim());
-  return <form className="wine-form wine-form-compact" onSubmit={submit} onInvalid={event=>{let parent=(event.target as HTMLElement).parentElement;while(parent){if(parent instanceof HTMLDetailsElement)parent.open=true;parent=parent.parentElement}}}>
+  return <form className="wine-form wine-form-compact" onSubmit={submit} onChange={()=>setReferenceReview(null)} onInvalid={event=>{let parent=(event.target as HTMLElement).parentElement;while(parent){if(parent instanceof HTMLDetailsElement)parent.open=true;parent=parent.parentElement}}}>
     {duplicate&&<div className="wine-duplicate-note" role="status">
       <p><strong>{duplicate.wineName}</strong>{duplicate.vintage?` ${duplicate.vintage}`:''} is already in this tasting{duplicate.producer?`, under ${duplicate.producer}`:''}. Saving this would make a second copy of it.</p>
       <div className="wine-duplicate-actions">
@@ -385,12 +404,20 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,enable
     {allowFriendTagging&&<div className="form-note"><button type="button" onClick={()=>{setTagDraft(tagSelected);setTagError('');setTagOpen(true)}}>Tag friends{tagSelected.length?` · ${tagSelected.length} selected`:''}</button>{!memberView&&<span> Optional — choose who should receive this wine when it is saved.</span>}</div>}
     <FriendTagDialog open={tagOpen} title="Tag friends when saved" description="Choose friends for this wine. Your account defaults are preselected; changing this selection affects only this wine." friends={tagFriends} selected={tagDraft} error={tagError} onSelectedChange={setTagDraft} onConfirm={()=>{setTagSelected(tagDraft);setTagTouched(true);setTagOpen(false)}} onClose={()=>setTagOpen(false)}/>
     {error&&<p role="alert">{error}</p>}
+    {referenceReview&&<fieldset ref={referencePanel} className="wine-reference-review">
+      <legend>Is this the same wine?</legend>
+      <p><strong>{referenceReview.preview.producer} · {referenceReview.preview.wineName}</strong></p>
+      <p>{[referenceReview.preview.country,referenceReview.preview.region,referenceReview.preview.colour,referenceReview.preview.productSubtype||referenceReview.preview.productType].filter(Boolean).join(' · ')}</p>
+      <p>If this isn’t your wine, Keep my details saves it without this match.</p>
+      <div className="wine-reference-actions"><button type="submit" name="referenceDecision" value="confirm" className="primary" disabled={busy}>Yes, save wine</button><button type="submit" name="referenceDecision" value="none" disabled={busy}>Keep my details</button></div>
+      {busy&&<p role="status">Saving…</p>}
+    </fieldset>}
     {/* Saving before the open-tasting probe answers used to post a null
         tastingName, so a bottle logged in the first moments after an app load
         was silently created outside the evening. The probe is one indexed query
         and its answer is cached for the rest of the session, so this is a
         flicker on the first save and nothing afterwards - and it fails open: if
         the probe errors, loading clears and the save proceeds untasted. */}
-    <div className="wine-form-actions">{id&&<button type="button" className="wine-edit-cancel quiet" disabled={busy} onClick={()=>nav(`/wines/${id}`)}>Cancel</button>}<button type="submit" className="primary" disabled={busy||waitingForTasting}>{busy?'Saving…':waitingForTasting?'Checking tasting…':submitLabel??'Save wine'}</button></div>
+    {!referenceReview&&<div className="wine-form-actions">{id&&<button type="button" className="wine-edit-cancel quiet" disabled={busy} onClick={()=>nav(`/wines/${id}`)}>Cancel</button>}<button type="submit" className="primary" disabled={busy||waitingForTasting}>{busy?'Saving…':waitingForTasting?'Checking tasting…':submitLabel??'Save wine'}</button></div>}
   </form>
 }
