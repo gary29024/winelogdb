@@ -198,11 +198,12 @@ app.get('/api/producers/:id',async c=>{
   const response=await entryApp.fetch(c.req.raw,c.env,c.executionCtx);
   if(!response.ok)return response;
   try{
-    const body=await response.clone().json() as Record<string,unknown>&{sharedOnly?:boolean;tastedWines?:Array<Record<string,unknown>&{id?:unknown;cuveeId?:unknown}>};
+    const body=await response.clone().json() as Record<string,unknown>&{sharedOnly?:boolean;aliases?:string[];tastedWines?:Array<Record<string,unknown>&{id:string;cuveeId:string|null;vintage:number|null;shared?:boolean}>};
     // A shared-only producer is a read-through view of a friend's producer.
     // It has no recipient-owned cuvee identities to seed or repair.
     if(body.sharedOnly)return response;
-    const state=await getProducerCuveeCatalogState(c.env.DB,owner,producerId);
+    const known=body.aliases&&body.tastedWines?{aliases:body.aliases,wines:body.tastedWines.filter(wine=>!wine.shared).map(wine=>({id:wine.id,cuvee_id:wine.cuveeId,vintage:wine.vintage}))}:undefined;
+    const state=await getProducerCuveeCatalogState(c.env.DB,owner,producerId,known);
     const tastedWines=(body.tastedWines??[]).map(wine=>{const wineId=String(wine.id??'');return {...wine,cuveeId:typeof wine.cuveeId==='string'?wine.cuveeId:null,catalogCuveeId:state.wineCatalogTargets[wineId]??null}});
     const headers=new Headers(response.headers);headers.delete('Content-Length');headers.set('Content-Type','application/json; charset=utf-8');
     return new Response(JSON.stringify({...body,tastedWines,catalogCuvees:state.catalogCuvees,cuveeCatalogLinks:state.cuveeCatalogLinks}),{status:response.status,statusText:response.statusText,headers});

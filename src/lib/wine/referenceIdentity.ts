@@ -1,5 +1,5 @@
 import type { LwinReferenceProduct } from './lwinImport';
-import { elidProducerIndex,lwinRedirects,lwinStrictRowsForProducer,lwinReferenceIdentity,normalizeReferenceText,producerLookupKeys,referenceRows,referenceRowsByShard,type ElidReferenceRecord } from './referenceCatalog';
+import { elidProducerIndex,lwinRedirects,lwinStrictRowsForProducer,lwinReferenceIdentity,normalizeReferenceText,producerLookupKeys,referenceRows,referenceRowsByShard,type ReferenceSource,type ElidReferenceRecord } from './referenceCatalog';
 import { appClassification,buildReferenceSuggestions } from './referenceSuggestions';
 import { canonicalizeWineFields } from './canonicalize';
 
@@ -156,7 +156,7 @@ function elidWineNameKeys(product:LwinReferenceProduct,wine:ReferenceResolvable)
  }
  return [...keys];
 }
-async function registeredElid(bucket:R2Bucket,product:LwinReferenceProduct,wine:ReferenceResolvable){
+async function registeredElid(bucket:ReferenceSource,product:LwinReferenceProduct,wine:ReferenceResolvable){
  const clue=elidVintageClue(wine);if(!clue)return null;
  if(!product.producerName)return null;
  const index=await elidProducerIndex(bucket),codes=[...new Set(producerLookupKeys(product.producerName).flatMap(key=>index[key]??[]))];
@@ -173,7 +173,7 @@ async function registeredElid(bucket:R2Bucket,product:LwinReferenceProduct,wine:
  return isValidElid(candidates[0].elid)?candidates[0].elid:null;
 }
 
-export async function resolveWineReference(bucket:R2Bucket,wine:ReferenceResolvable):Promise<ReferenceMatch>{
+export async function resolveWineReference(bucket:ReferenceSource,wine:ReferenceResolvable):Promise<ReferenceMatch>{
  const producerKey=normalizeReferenceText(wine.producer),wineKey=referenceWineKey(wine.wineName,wine.releaseDesignation),baseWineKey=normalizeReferenceText(wine.wineName);
  if(!producerKey||!wineKey)return unmatched();
  const inputPlace=canonicalReferencePlace(wine.country,wine.region),countryKey=normalizeReferenceText(inputPlace.country),regionKey=normalizeReferenceText(inputPlace.region),colourKey=colourFromStyle(wine.style??wine.wineStyle);
@@ -206,14 +206,14 @@ export async function resolveWineReference(bucket:R2Bucket,wine:ReferenceResolva
 }
 
 /** Share vintage and metadata rules between automatic matching and an explicit code selection. */
-export async function referenceMatchForProduct(bucket:R2Bucket,product:LwinReferenceProduct,wine:ReferenceResolvable,options:{includeElid?:boolean}={}):Promise<ReferenceMatch>{
+export async function referenceMatchForProduct(bucket:ReferenceSource,product:LwinReferenceProduct,wine:ReferenceResolvable,options:{includeElid?:boolean}={}):Promise<ReferenceMatch>{
  const elid=options.includeElid===false?null:await registeredElid(bucket,product,wine),place=canonicalReferencePlace(product.country,product.region),identity=lwinReferenceIdentity(product);
  return {referenceProductKey:product.productKey,lwin7:product.lwin7,lwin11:lwin11For(product,wine),elid,identityMatchStatus:'matched',identityMatchConfidence:1,identityMatchCandidates:[],
   colour:product.colour,productType:product.productType,productSubtype:product.productSubtype,
   referenceSubRegion:product.subRegion,referenceSite:product.site,referenceParcel:product.parcel,
   referenceDesignation:product.designation,referenceClassification:product.classification,referenceProducer:identity.producerName,referenceWineName:identity.wineName,country:place.country,region:place.region};
 }
-export async function enrichRecognitionReference<T extends ReferenceResolvable>(bucket:R2Bucket,wine:T){
+export async function enrichRecognitionReference<T extends ReferenceResolvable>(bucket:ReferenceSource,wine:T){
  try{
   const match=await resolveWineReference(bucket,wine);
   const classification=wine.classification??(!wine.classificationOverride?appClassification(match.referenceClassification):null);

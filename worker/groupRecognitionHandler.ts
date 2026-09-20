@@ -3,6 +3,7 @@ import { groupRecognitionResponseJsonSchema,PLACE_LEVEL_RULE,PRODUCER_NAME_RULE,
 import { groupRecognitionEscalationReasons,preferEscalatedGroup } from '../src/lib/recognition/escalation';
 import { handleVisionRecognitionRequest,type RecognitionModeSpec,type VisionBindings } from './visionRecognition';
 import { enrichRecognitionReference } from '../src/lib/wine/referenceIdentity';
+import { ReferenceReadScope } from '../src/lib/wine/referenceCatalog';
 
 const MAX_GROUP_IMAGE_BYTES=3*1024*1024;
 
@@ -23,7 +24,7 @@ export const groupRecognitionSpec:RecognitionModeSpec<GroupRecognitionResult>={
   oneFileError:'Choose exactly one group photo',
   jsonSchema:groupRecognitionResponseJsonSchema,
   parse:parseGroupRecognition,
-  enrich:async(bucket,result)=>({...result,wines:await Promise.all(result.wines.map(wine=>enrichRecognitionReference(bucket,wine)))}),
+  enrich:async(bucket,result)=>{const scope=new ReferenceReadScope(bucket);return {...result,wines:await Promise.all(result.wines.map(wine=>enrichRecognitionReference(scope,wine))) }},
   escalationReasons:groupRecognitionEscalationReasons,
   preferEscalated:preferEscalatedGroup,
   wineCount:result=>result.wines.length,

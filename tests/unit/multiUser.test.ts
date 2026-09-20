@@ -649,6 +649,31 @@ describe('sharing boundaries',()=>{
   expect(get.mock.calls.some(([key])=>String(key).startsWith('shared/'))).toBe(false);
  });
 
+ it.each(['friendship','share','owner','photo'])('rechecks %s access before a cached shared thumbnail',async revoke=>{
+  wines();
+  database.sql.exec("INSERT INTO wine_shares(wine_id,owner_id,recipient_id) VALUES('w','alice','bob'); INSERT INTO wine_images(id,owner_id,wine_id,object_key,content_type,byte_size,width,height,upload_status,created_at) VALUES('cached','alice','w','owners/alice/cached.jpg','image/jpeg',8,10,10,'uploaded','now')");
+  const match=vi.fn(async()=>new Response('cached-thumb')),get=vi.fn();
+  vi.stubGlobal('caches',{default:{match}});
+  try{
+   const e={...env(),WINE_IMAGES:{get} as unknown as R2Bucket},request=()=>socialRoute(new Request('https://wine.example/api/shared/wines/w/photos/cached?variant=thumbnail'),e,member('bob'));
+   const before=database.counts().reads;
+   expect(await (await request())!.text()).toBe('cached-thumb');
+   expect(database.counts().reads-before).toBe(1);expect(get).not.toHaveBeenCalled();
+   database.sql.exec(revoke==='friendship'?"DELETE FROM friendships WHERE user_id='bob' AND friend_id='alice'":revoke==='share'?"DELETE FROM wine_shares WHERE wine_id='w'":revoke==='owner'?"UPDATE app_users SET status='suspended' WHERE id='alice'":"DELETE FROM wine_images WHERE id='cached'");
+   await expect(request()).rejects.toMatchObject({status:404});expect(match).toHaveBeenCalledTimes(1);expect(get).not.toHaveBeenCalled();
+  }finally{vi.unstubAllGlobals()}
+ });
+
+ it('authorizes inherited tasting photos in one query and revokes the grant immediately',async()=>{
+  wines();
+  database.sql.exec("INSERT INTO tastings(id,owner_id,name,created_at,updated_at) VALUES('t-inherited','alice','Tasting','now','now'); INSERT INTO wine_experiences(id,owner_id,wine_id,tasting_id,created_at,updated_at) VALUES('e-inherited','alice','w','t-inherited','now','now'); INSERT INTO tasting_shares(tasting_id,owner_id,recipient_id) VALUES('t-inherited','alice','bob'); INSERT INTO wine_images(id,owner_id,wine_id,object_key,content_type,byte_size,width,height,upload_status,created_at) VALUES('inherited','alice','w','owners/alice/inherited.jpg','image/jpeg',8,10,10,'uploaded','now')");
+  const get=vi.fn(async()=>({body:new Response('photo').body!,httpMetadata:{contentType:'image/jpeg'}})),e={...env(),WINE_IMAGES:{get} as unknown as R2Bucket};
+  const request=()=>socialRoute(new Request('https://wine.example/api/shared/wines/w/photos/inherited'),e,member('bob'));
+  const before=database.counts().reads;expect(await (await request())!.text()).toBe('photo');expect(database.counts().reads-before).toBe(1);
+  database.sql.exec("DELETE FROM tasting_shares WHERE tasting_id='t-inherited'");
+  await expect(request()).rejects.toMatchObject({status:404});expect(get).toHaveBeenCalledTimes(1);
+ });
+
  it('refuses an image from another wine owned by the same friend',async()=>{
   wines();
   database.sql.exec("INSERT INTO wine_shares(wine_id,owner_id,recipient_id) VALUES('w','alice','bob'); INSERT INTO wines(id,owner_id,producer,wine_name,created_at,updated_at) VALUES('other','alice','P','Other','now','now'); INSERT INTO wine_images(id,owner_id,wine_id,object_key,content_type,byte_size,width,height,upload_status,recognition_status,created_at) VALUES('other-image','alice','other','owners/alice/other.jpg','image/jpeg',8,10,10,'uploaded','complete','now')");
