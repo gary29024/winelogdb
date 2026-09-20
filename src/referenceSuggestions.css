@@ -30,3 +30,5 @@
 .lwin-link-form input{width:100%;min-width:0;border:1px solid var(--line);border-radius:8px;padding:.7rem;background:var(--paper);color:var(--ink);font:inherit}
 .lwin-link-preview{margin-top:1rem;background:var(--ground);border-radius:8px;padding:.8rem;overflow-wrap:anywhere}
 .lwin-link-preview p{margin:.6rem 0}
+.producer-name-review{min-width:0;overflow-wrap:anywhere}
+.producer-name-review button{white-space:normal;max-width:100%}

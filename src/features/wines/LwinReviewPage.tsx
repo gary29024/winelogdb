@@ -7,6 +7,7 @@ import { applyWineReferenceSuggestion,getWine,type WineDetail } from './api';
 import { linkFrom,rememberBackTarget } from './backTarget';
 import { WineImage } from './WineImage';
 import { LwinLinkEditor } from './LwinLinkEditor';
+import { ProducerNameReview } from './ProducerNameReview';
 import '../../referenceSuggestions.css';
 
 type ReviewItem={id:string;producer:string;wineName:string;vintage:number|null;lwin7:string|null;conflict:boolean};
@@ -50,6 +51,7 @@ export function LwinReviewPage(){
      <div><strong>{suggestion.label}</strong><span><small>Current</small>{suggestion.current||'—'}</span><span><small>LWIN</small>{suggestion.suggested}</span></div>
      <div className="lwin-review-choices"><button disabled={busy} onClick={()=>void act(()=>applyWineReferenceSuggestion(item.id,suggestion.field))}>Use LWIN value</button><button className="quiet" disabled={busy} onClick={()=>void act(()=>applyWineReferenceSuggestion(item.id,suggestion.field,'keep'))}>Keep current</button></div>
     </div>)}</div>
+    {wine.referenceSuggestions?.some(suggestion=>suggestion.field==='producer')&&<ProducerNameReview key={`${wine.id}:${wine.updatedAt}`} wineId={wine.id} disabled={busy} onApply={act}/>}
     {!pending(wine)&&<p>This wine has been resolved. Refresh the list to continue.</p>}
     {busy&&<p role="status">Saving review…</p>}
    </div>)}

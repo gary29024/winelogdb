@@ -17,6 +17,7 @@ import { appClassification,classificationLabel,referenceSuggestionFields,type Re
 import { ensureWineIdentity } from '../src/lib/wine/identity';
 import { recheckWineReference } from './wineReferenceReview';
 import { linkWineReference,previewWineReference } from './manualWineReference';
+import { applyProducerNameReview,previewProducerNameReview } from './producerNameReview';
 
 type Bindings={IMAGES?:ImagesBinding;DB:D1Database;WINE_IMAGES:R2Bucket;REFERENCE_DATA:R2Bucket;ASSETS:Fetcher;GEMINI_API_KEY?:string;AUTH_SECRET:string;APP_PASSWORD:string;APP_URL:string;MAX_FILE_BYTES?:string;MAX_BATCH_FILES?:string};
 type Variables={userId:string};
@@ -225,6 +226,12 @@ app.delete('/api/wines/:id/images/:imageId',async c=>{
  await c.env.WINE_IMAGES.delete(photoObjectKeys(image.object_key)).catch(()=>undefined);
  await c.env.DB.prepare('UPDATE wines SET updated_at=? WHERE id=? AND owner_id=?').bind(new Date().toISOString(),id,owner).run();
  return c.json({ok:true});
+});
+
+app.get('/api/wines/:id/producer-name-review',async c=>c.json((await previewProducerNameReview(c.env.DB,c.get('userId'),c.req.param('id'))).preview));
+app.post('/api/wines/:id/producer-name-review',async c=>{
+ const payload=await c.req.json().catch(()=>null) as {previewToken?:unknown}|null;
+ return c.json(await applyProducerNameReview(c.env.DB,c.get('userId'),c.req.param('id'),payload?.previewToken));
 });
 
 app.put('/api/wines/:id/reference-suggestion',async c=>{
