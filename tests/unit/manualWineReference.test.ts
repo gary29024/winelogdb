@@ -35,6 +35,26 @@ function setup({indexed=false,status='Live',vintageConfig='sequential'}:{indexed
 }
 
 describe('manual LWIN selection',()=>{
+ it.each([false,true])('previews Cave de Tain by exact code in a legacy catalogue (producer index: %s)',async indexed=>{
+  const {database,env,objects,reads,row,request}=setup();
+  const product=parseLwinReference({LWIN:'2259354',STATUS:'Live',DISPLAY_NAME:'Cave de Tain, Nobles Rives',PRODUCER_TITLE:'Cave',PRODUCER_NAME:'de Tain',WINE:'Nobles Rives',COUNTRY:'France',REGION:'Rhone',SUB_REGION:'Crozes-Hermitage',COLOUR:'Red',TYPE:'Wine',SUB_TYPE:'Still',VINTAGE_CONFIG:'sequential'});
+  const shard=referenceShardId(product.producerKey);
+  objects[`test/shard-${shard}.json`]=[product];
+  if(indexed){
+   (objects['reference/lwin/current.json'] as Record<string,unknown>).producerIndexKey='test/producer-index.json';
+   objects['test/producer-index.json']={'de tain':[shard]};
+  }
+  database.sql.exec("UPDATE wines SET producer='Cave de Tain',wine_name='Nobles Rives',vintage=2025,region='Rhone',wine_style='white',colour='White'");
+  const before=row();
+  const {preview}=await previewWineReference(env,'owner','w1','2259354');
+  expect(preview).toMatchObject({lwin7:'2259354',producer:'Cave de Tain',wineName:'Nobles Rives',colour:'Red'});
+  expect(row()).toEqual(before);
+  expect(reads.filter(key=>key.includes('/shard-')).length).toBeLessThanOrEqual(2);
+  // The entered ID remains authoritative even when the current colour differs.
+  expect((await request('reference-review',{action:'link',lwin7:'2259354',previewToken:preview.previewToken})).status).toBe(200);
+  expect(row()).toMatchObject({lwin7:'2259354',colour:'Red',wine_style:'white',tasting_notes:'Keep my notes',identity_match_status:'manual'});
+  expect((await request('reference-preview?lwin7=9999999')).status).toBe(404);
+ });
  it.each(['confirm','none'] as const)('reviews the named catalogue identity before creation and saves the %s decision',async(action)=>{
   const {env,database,product}=setup(),identity=lwinReferenceIdentity(product);
   const input={producer:product.producerName,wineName:identity.wineName,vintage:2018,country:'France',region:'Bordeaux',wineStyle:'dessert',tastingNotes:'My label and notes',alcoholPercentage:null,rating:null,tastingDate:null,event:null,venue:null,price:null,currency:null,recognitionConfidence:null};

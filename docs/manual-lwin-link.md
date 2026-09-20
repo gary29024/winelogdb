@@ -16,6 +16,8 @@ Choose **Reject match — keep without LWIN** from Needs review or the wine deta
 
 New LWIN imports write sharded ID indexes before publishing the manifest. Exact-code lookup then reads a small index and the relevant product shard, including when the saved producer is incorrect. Existing manifests remain supported through a bounded lookup under the current producer. To enable arbitrary cross-producer lookup for an older catalogue, re-import its source with the updated importer. No production catalogue or wine data is changed by this PR.
 
+Legacy producer lookup recognises `Cave` and `Caves` prefixes, so `Cave de Tain` can find records stored under structured producer name `de Tain`. An exact-code preview shows the catalogue colour even when it differs from the saved wine's style; previewing never changes the wine. Check the colour before explicitly confirming a replacement.
+
 ## Validation
 
 SQLite/D1 tests cover read-only previews, explicit replacement, preservation of personal fields, stale previews, account isolation, invalid/missing/deleted codes, combined-code redirects, vintage restrictions, and indexed lookup across producers. Mobile browser tests cover preview invalidation after typing, explicit confirmation, queue removal, and light/dark layouts. An importer dry run verifies the generated ID index and manifest pointer.
