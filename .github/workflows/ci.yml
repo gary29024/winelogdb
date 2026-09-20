@@ -76,7 +76,7 @@ jobs:
         run: npm run test:e2e
       - name: Both iPhone layouts
         if: matrix.browser == 'webkit'
-        run: npm run test:e2e:iphone
+        run: npm run test:e2e:full -- --project="iPhone*"
       - name: Upload browser reports
         if: always()
         uses: actions/upload-artifact@v4
