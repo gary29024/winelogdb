@@ -38,7 +38,9 @@ describe('Journal result navigation',()=>{
     });
     const page=await render('/journal?query=Austria',fetcher);
     expect(page.querySelector('.journal-viewbar')?.textContent).toContain('73 matching wines · Page 1 of 3');
-    expect(page.querySelector('.journal-view-actions')?.classList.contains('with-reset')).toBe(true);
+    // Reset sits with the filters now, not among the list-and-grid controls,
+    // which were about layout rather than about what is being shown.
+    expect(page.querySelector('.journal-filter-bar .journal-filter-reset')).not.toBeNull();
     const input=page.querySelector('[aria-label="Journal page number"]') as HTMLInputElement;
     await act(async()=>{const setter=Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype,'value')!.set!;setter.call(input,'3');input.dispatchEvent(new Event('input',{bubbles:true}))});
     await act(async()=>{page.querySelector('.journal-page-picker')!.dispatchEvent(new Event('submit',{bubbles:true,cancelable:true}))});

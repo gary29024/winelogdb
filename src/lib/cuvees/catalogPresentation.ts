@@ -44,6 +44,33 @@ export function catalogHierarchyLabel(wine:CatalogPresentationLike):CatalogHiera
   return CATALOG_HIERARCHY_LABELS[catalogHierarchyRank(wine)];
 }
 
+/** Cru wording that qualifies a village rather than naming a different one. */
+const CRU_SUFFIX=/[\s,]+(grand\s+cru|premier\s+cru|1\s*er\s+cru|1°\s+cru|village|communal)\s*$/i;
+
+/**
+ * The village an entry sits in, for grouping a range by place.
+ *
+ * "Gevrey-Chambertin Premier Cru" and plain "Gevrey-Chambertin" are the same
+ * village seen at two tiers, so the cru wording comes off and both land in one
+ * group. It comes off repeatedly because catalogue wording doubles up -
+ * "Chablis Premier Cru Village" is a real string.
+ *
+ * A grand cru is deliberately left standing as its own group. Clos de la Roche
+ * IS an appellation in its own right, and the reference data does not say which
+ * commune a grand cru sits in - the same gap that stops anyone saying a wine
+ * comes from the Pernand side of Corton. Inventing the parent here would be
+ * guessing, and it would be wrong at exactly the boundaries people care about.
+ */
+export function catalogVillageLabel(wine:CatalogPresentationLike):string{
+  let text=String(wine.appellation??'').trim();
+  for(let guard=0;guard<4;guard+=1){
+    const next=text.replace(CRU_SUFFIX,'').trim();
+    if(next===text||!next)break;
+    text=next;
+  }
+  return text||'Appellation not stated';
+}
+
 export function catalogPresentationKey(wine:CatalogPresentationLike,producerNames:string[]=[]){
   const cleanName=stripProducerCatalogPrefix(wine.name,producerNames);
   const key=cuveeIdentitySignature(cleanName,wine.appellation,wine.category??wine.style);

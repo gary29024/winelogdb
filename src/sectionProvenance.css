@@ -1,0 +1,29 @@
+/* The provenance badge on a section label.
+   The badge is a .chip and takes the primitive's shape from styles.css; only
+   the things that make it a provenance badge live here. */
+
+/* A plain section label carries its hairline on ::after. With a badge on the
+   row that rule would sit between the words and the badge instead of pushing
+   the badge to the margin, so the text takes the hairline and the badge takes
+   the end. */
+.section-label-text{min-width:0}
+.section-label:has(.provenance-chip)::after{display:none}
+.section-label:has(.provenance-chip) .section-label-text{flex:1;display:flex;align-items:center;gap:12px}
+.section-label:has(.provenance-chip) .section-label-text::after{content:"";flex:1;height:1px;background:var(--line)}
+
+.provenance-chip{flex:0 0 auto;gap:5px;padding:3px 9px;font-size:.68rem;letter-spacing:.04em}
+.provenance-icon{display:grid;place-items:center;width:12px;height:12px}
+.provenance-icon .app-icon{width:12px;height:12px;stroke-width:1.9}
+
+/* Yours is the quiet one: it is the common case on a wine page, and a loud
+   badge on the section somebody wrote themselves would be the least useful
+   mark on the screen. */
+.provenance-chip[data-origin="yours"]{border-color:var(--line);background:var(--ground);color:var(--ink-5)}
+.provenance-chip[data-origin="researched"]{border-color:var(--wine-line);background:var(--paper);color:var(--wine-ink)}
+
+@media(max-width:700px){
+  .provenance-chip{padding:3px 8px;font-size:.66rem}
+  /* On a narrow row the hairline is the first thing worth dropping: the badge
+     and the words both have to fit before anything decorative does. */
+  .section-label:has(.provenance-chip) .section-label-text::after{display:none}
+}

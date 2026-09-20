@@ -7,7 +7,7 @@ const walk=(dir:string):string[]=>readdirSync(dir,{withFileTypes:true}).flatMap(
   const path=join(dir,entry.name);
   return entry.isDirectory()?walk(path):[path];
 });
-const files=walk(src).map(path=>path.slice(src.length+1));
+const files=walk(src).map(path=>path.slice(src.length+1).replace(/\\/g,'/'));
 const read=(path:string)=>readFileSync(join(src,path),'utf8');
 const strip=(text:string)=>text.replace(/\/\*[\s\S]*?\*\//g,'');
 const sheets=files.filter(path=>path.endsWith('.css'))

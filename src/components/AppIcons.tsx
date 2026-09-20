@@ -1,7 +1,8 @@
 export type AppIconKey=
   |'passport'|'journal'|'producers'|'insights'
   |'scan'|'single-wine'|'group-photo'|'batch-scan'
-  |'tasting'|'pen'|'close'|'search'|'heart'|'heart-filled';
+  |'tasting'|'pen'|'close'|'search'|'heart'|'heart-filled'
+  |'sparkle'|'chevron-right';
 
 const frame={viewBox:'0 0 24 24',fill:'none',stroke:'currentColor',strokeWidth:1.6,strokeLinecap:'round' as const,strokeLinejoin:'round' as const,focusable:'false' as const,'aria-hidden':true};
 
@@ -23,5 +24,8 @@ export function AppIcon({kind}:{kind:AppIconKey}){
   // Tasting: two glasses tilted towards each other - an evening rather than a bottle.
   if(kind==='tasting')return <svg {...frame} className="app-icon"><path d="M4.1 3.4h6.2l-.9 4.65a2.35 2.35 0 0 1-4.6 0Z"/><path d="M7.2 11.15v6.9M5.35 18.05h3.7"/><path d="M13.7 6.15h6.2l-.9 4.65a2.35 2.35 0 0 1-4.6 0Z"/><path d="M16.8 13.9v6.7M14.95 20.6h3.7"/></svg>;
   if(kind==='pen')return <svg {...frame} className="app-icon"><path d="M4 20h4.2l9.6-9.6a2.4 2.4 0 0 0-3.4-3.4L4.8 16.6Z"/><path d="M13.8 8.2l3.4 3.4"/><path d="M4 20l1-4"/></svg>;
+  // Researched rather than recorded: a four-point star with two smaller sparks.
+  if(kind==='sparkle')return <svg {...frame} className="app-icon"><path d="M11.1 3.4 12.7 8l4.6 1.6-4.6 1.6-1.6 4.6-1.6-4.6L4.9 9.6 9.5 8Z"/><path d="M17.7 14.2l.7 2 2 .7-2 .7-.7 2-.7-2-2-.7 2-.7Z"/></svg>;
+  if(kind==='chevron-right')return <svg {...frame} className="app-icon"><path d="m9.6 5.4 6.6 6.6-6.6 6.6"/></svg>;
   return <svg {...frame} className="app-icon"><path d="M6.6 6.6l10.8 10.8M17.4 6.6 6.6 17.4"/></svg>;
 }
