@@ -20,7 +20,7 @@ export type RolloutStatus={
  storage:{state:TaskState;objects:number;error:string|null};
  research:{state:TaskState;wines:{processed:number;total:number};producers:{processed:number;total:number};error:string|null};
  lwin:{state:TaskState;processed:number;total:number;matched:number;ambiguous:number;unmatched:number;conflict:number;error:string|null};
- lwinValidation:{state:TaskState;processed:number;total:number;verified:number;review:number;error:string|null;reviewItems:Array<{id:string;producer:string;wineName:string;lwin7:string;candidates:string[]}>};
+ lwinValidation:{state:TaskState;processed:number;total:number;verified:number;review:number;error:string|null;reviewListUnavailable?:boolean;reviewItems:Array<{id:string;producer:string;wineName:string;lwin7:string;candidates:string[]}>};
  lwinAi:{state:TaskState;processed:number;total:number;matched:number;deterministic:number;ai:number;review:number;error:string|null};
 };
 
@@ -75,7 +75,7 @@ export async function rolloutStatus(db:D1Database):Promise<RolloutStatus>{
   storage:{state:taskState(storageComplete==='complete',storageJob,Boolean(await readState(db,'storage_cursor'))),objects:Number(storageObjects?.n)||0,error:storageError||null},
   research:{state:researchState,wines:{processed:wineDone,total:winesTotal},producers:{processed:producerDone,total:producersTotal},error:researchError||null},
   lwin:{state:taskState(lwinComplete==='complete',lwinJob,Boolean(lwinCursor)),processed:lwinProcessed,total:lwinTotal,matched:lwinMatched,ambiguous:lwinAmbiguous,unmatched:lwinUnmatched,conflict:lwinConflict,error:lwinError||null},
-  lwinValidation:{state:taskState(lwinValidateComplete==='complete',lwinValidateJob,Boolean(lwinValidateCursor)),processed:lwinValidateProcessed,total:lwinValidateTotal,verified:lwinValidateVerified,review:lwinValidateReview,error:lwinValidateError||null,reviewItems:validationReviewItems},
+  lwinValidation:{state:taskState(lwinValidateComplete==='complete',lwinValidateJob,Boolean(lwinValidateCursor)),processed:lwinValidateProcessed,total:lwinValidateTotal,verified:lwinValidateVerified,review:lwinValidateReview,error:lwinValidateError||null,reviewListUnavailable:lwinValidateReview>0&&!lwinValidateStartedAt,reviewItems:validationReviewItems},
   lwinAi:{state:taskState(lwinAiComplete==='complete',lwinAiJob,Boolean(lwinAiCursor)),processed:lwinAiProcessed,total:lwinAiTotal,matched:lwinAiMatched,deterministic:lwinAiDeterministic,ai:lwinAiModel,review:lwinAiReview,error:lwinAiError||null}
  };
 }

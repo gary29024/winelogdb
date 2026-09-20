@@ -26,6 +26,18 @@ function setup(objects:Array<{key:string;size:number}>=[],referenceObjects:Recor
 }
 
 describe('background launch preparation',()=>{
+ it('explains missing legacy validation stamps and scopes stamped review lists',async()=>{
+  const {database}=setup();
+  database.sql.exec(`INSERT INTO rollout_state(name,value) VALUES ('lwin_validate_review','2'),('lwin_validation','complete');
+   INSERT INTO wines(id,owner_id,producer,wine_name,lwin7,identity_match_status,identity_checked_at,created_at,updated_at) VALUES
+   ('old','owner','Producer','Wine','1000001','conflict','2026-09-18','now','now'),
+   ('new','owner','Producer','Wine','1000002','conflict','2026-09-20','now','now')`);
+  expect((await rolloutStatus(database.db)).lwinValidation).toMatchObject({review:2,reviewListUnavailable:true,reviewItems:[]});
+  database.sql.exec("INSERT INTO rollout_state(name,value) VALUES ('lwin_validate_started_at','2026-09-19')");
+  const status=(await rolloutStatus(database.db)).lwinValidation;
+  expect(status.reviewListUnavailable).toBe(false);
+  expect(status.reviewItems.map(item=>item.id)).toEqual(['new']);
+ });
  it('returns immediately, then inventories R2 from the queue without the page staying open',async()=>{
   const {database,env,sent,list}=setup([{key:'legacy/a.jpg',size:123},{key:'owners/owner/b.jpg',size:456}]);
   const response=await rolloutRoute(new Request('https://wine.example/api/admin/rollout/storage',{method:'POST'}),env,owner);

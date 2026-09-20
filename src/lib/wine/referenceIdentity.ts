@@ -54,8 +54,9 @@ function elidVintageClue(wine:ReferenceResolvable):string|null{
  return numbered?`N${numbered}`:null;
 }
 
+export type StoredReferenceIdentity={producer:string;wine_name:string;lwin7:string|null};
 export function referenceIdentityStatements(
- db:D1Database,owner:string,wineId:string,w:ReferenceIdentityInput,stamp=new Date().toISOString(),updateExisting=false
+ db:D1Database,owner:string,wineId:string,w:ReferenceIdentityInput,stamp=new Date().toISOString(),updateExisting=false,previous?:StoredReferenceIdentity
 ){
  const vintageKind=normalizedVintageKind(w.vintage,w.vintageKind);
  const evidence=updateExisting
@@ -81,30 +82,31 @@ export function referenceIdentityStatements(
   persistIdentity?w.colour??null:null,persistIdentity?w.productType??null:null,persistIdentity?w.productSubtype??null:null
  ] as const;
  const candidatesJson=w.identityMatchCandidates?.length?JSON.stringify(w.identityMatchCandidates):null;
- const identity=db.prepare(`UPDATE wines SET reference_product_key=?,lwin7=?,lwin11=?,elid=?,reference_site=?,reference_parcel=?,colour=?,product_type=?,product_subtype=?,
-   identity_match_status=?,identity_match_confidence=?,identity_match_candidates_json=?,identity_matched_at=?,identity_checked_at=?,reference_suggestions_json=?,reference_suggestions_updated_at=? WHERE owner_id=? AND id=?`)
+ const identityStatement=(guard='',guardValues:unknown[]=[])=>db.prepare(`UPDATE wines SET reference_product_key=?,lwin7=?,lwin11=?,elid=?,reference_site=?,reference_parcel=?,colour=?,product_type=?,product_subtype=?,
+   identity_match_status=?,identity_match_confidence=?,identity_match_candidates_json=?,identity_matched_at=?,identity_checked_at=?,reference_suggestions_json=?,reference_suggestions_updated_at=? WHERE owner_id=? AND id=? ${guard}`)
    .bind(...referenceValues,w.identityMatchStatus,persistIdentity?w.identityMatchConfidence??(w.identityMatchStatus==='manual'?null:1):null,
-    candidatesJson,persistIdentity?stamp:null,stamp,suggestions.length?JSON.stringify(suggestions):null,suggestions.length?stamp:null,owner,wineId);
- if(!updateExisting||w.identityMatchStatus==='manual')return [evidence,identity];
+    candidatesJson,persistIdentity?stamp:null,stamp,suggestions.length?JSON.stringify(suggestions):null,suggestions.length?stamp:null,owner,wineId,...guardValues);
+ if(!updateExisting||w.identityMatchStatus==='manual')return [evidence,identityStatement()];
+
+ // A deliberate name correction may accept a new deterministic match. Mere
+ // formatting changes, failed lookups, and manual identities retain protection.
+ const corrected=previous&&(normalizeReferenceText(previous.producer)!==normalizeReferenceText(w.producer)||normalizeReferenceText(previous.wine_name)!==normalizeReferenceText(w.wineName));
+ if(corrected&&persistIdentity&&w.identityMatchStatus==='matched')return [evidence,identityStatement("AND coalesce(identity_match_status,'')<>'manual'")];
 
  // An edit may re-run matching after the catalogue or naming rules changed.
  // Never silently destroy or replace a stored automatic identity in that case:
  // keep the current reference, mark the disagreement, and let owner validation
  // decide it explicitly. Manual identities remain authoritative as well.
  const incomingLwin=persistIdentity?w.lwin7??null:null,incomingElid=persistIdentity?w.elid??null:null;
- const conflictCandidates=[...new Set([...(w.identityMatchCandidates??[]),...(incomingLwin?[incomingLwin]:[])])];
+ const conflictCandidates=[...new Set([...(previous?.lwin7?[previous.lwin7]:[]),...(w.identityMatchCandidates??[]),...(incomingLwin?[incomingLwin]:[])])];
  const conflict=db.prepare(`UPDATE wines SET identity_match_status='conflict',identity_match_confidence=NULL,
    identity_match_candidates_json=coalesce(?,identity_match_candidates_json),identity_checked_at=?
    WHERE owner_id=? AND id=? AND coalesce(identity_match_status,'')<>'manual'
    AND (lwin7 IS NOT NULL OR elid IS NOT NULL)
    AND NOT ((? IS NOT NULL AND lwin7=?) OR (lwin7 IS NULL AND ? IS NOT NULL AND elid=?))`)
   .bind(conflictCandidates.length?JSON.stringify(conflictCandidates):null,stamp,owner,wineId,incomingLwin,incomingLwin,incomingElid,incomingElid);
- const safeIdentity=db.prepare(`UPDATE wines SET reference_product_key=?,lwin7=?,lwin11=?,elid=?,reference_site=?,reference_parcel=?,colour=?,product_type=?,product_subtype=?,
-   identity_match_status=?,identity_match_confidence=?,identity_match_candidates_json=?,identity_matched_at=?,identity_checked_at=?,reference_suggestions_json=?,reference_suggestions_updated_at=?
-   WHERE owner_id=? AND id=? AND coalesce(identity_match_status,'')<>'manual'
-   AND ((lwin7 IS NULL AND elid IS NULL) OR (? IS NOT NULL AND lwin7=?) OR (lwin7 IS NULL AND ? IS NOT NULL AND elid=?))`)
-  .bind(...referenceValues,w.identityMatchStatus,persistIdentity?w.identityMatchConfidence??1:null,candidatesJson,persistIdentity?stamp:null,stamp,
-   suggestions.length?JSON.stringify(suggestions):null,suggestions.length?stamp:null,owner,wineId,incomingLwin,incomingLwin,incomingElid,incomingElid);
+ const safeIdentity=identityStatement(`AND coalesce(identity_match_status,'')<>'manual'
+   AND ((lwin7 IS NULL AND elid IS NULL) OR (? IS NOT NULL AND lwin7=?) OR (lwin7 IS NULL AND ? IS NOT NULL AND elid=?))`,[incomingLwin,incomingLwin,incomingElid,incomingElid]);
  return [evidence,conflict,safeIdentity];
 }
 

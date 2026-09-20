@@ -250,7 +250,8 @@ app.put('/api/wines/:id',async c=>{
  const x=await enrichRecognitionReference(c.env.REFERENCE_DATA,parsed.data),id=c.req.param('id'),owner=c.get('userId');
  const wineStatement=c.env.DB.prepare(`UPDATE wines SET producer=?,wine_name=?,vintage=?,country=?,region=?,appellation=?,recognized_region=?,recognized_appellation=?,classification=?,classification_override=?,grapes_json=?,grape_blend_json=?,wine_style=?,alcohol_percentage=?,tasting_notes=?,rating=?,tasting_date=?,event=?,venue=?,price=?,currency=?,tags_json=?,recognition_status=?,recognition_confidence=?,updated_at=? WHERE id=? AND owner_id=?`).bind(x.producer,x.wineName,x.vintage,x.country,x.region,x.appellation,x.recognizedRegion,x.recognizedAppellation,x.classification,x.classificationOverride,JSON.stringify(x.grapes),JSON.stringify(x.grapeBlend),x.wineStyle,x.alcoholPercentage,x.tastingNotes,x.rating,x.tastingDate,x.event,x.venue,x.price,x.currency,JSON.stringify(x.tags),x.recognitionStatus,x.recognitionConfidence,new Date().toISOString(),id,owner);
  try{
-  const [res]=await c.env.DB.batch([wineStatement,...wineSaveStatements(c.env.DB,owner,id,x,true)]);
+  const previous=await c.env.DB.prepare('SELECT producer,wine_name,lwin7 FROM wines WHERE owner_id=? AND id=?').bind(owner,id).first<{producer:string;wine_name:string;lwin7:string|null}>();
+  const [res]=await c.env.DB.batch([wineStatement,...wineSaveStatements(c.env.DB,owner,id,x,true,previous??undefined)]);
   if(!res.meta.changes)return c.json({error:'Not found'},404);
   return c.json({ok:true});
  }catch(error){console.error('wine-save-failed',error);return c.json({error:'Could not save wine. Please retry.'},500)}
