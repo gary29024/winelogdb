@@ -15,3 +15,9 @@ New LWIN imports write sharded ID indexes before publishing the manifest. Exact-
 ## Validation
 
 SQLite/D1 tests cover read-only previews, explicit replacement, preservation of personal fields, stale previews, account isolation, invalid/missing/deleted codes, combined-code redirects, vintage restrictions, and indexed lookup across producers. Mobile browser tests cover preview invalidation after typing, explicit confirmation, queue removal, and light/dark layouts. An importer dry run verifies the generated ID index and manifest pointer.
+
+## Accepted names reverting
+
+Applying a wine-name suggestion previously updated `wine_name` and cleared the cuvée link, then called `ensureWineIdentity`. The cuvée linker preferred `recognized_wine_name`, which still contained the older name, and immediately wrote that old identity's name back. The suggestion was already removed, so the operation appeared successful despite the unchanged title.
+
+Accepting a name now updates the cuvée-linking input in the same guarded SQL write, matching the ordinary edit path. A SQLite regression reproduces `Grand Cru Grand Vintage` reverting after accepting `Grand Vintage Brut Grand Cru`, then verifies the corrected name survives relinking and a producer maintenance sweep. Keeping the current value still leaves the name unchanged. Previously dismissed suggestions are not reconstructed because the database does not distinguish these failed applications from deliberate Keep decisions; an affected wine can be corrected through **Edit wine**.

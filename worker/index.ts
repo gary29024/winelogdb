@@ -245,9 +245,13 @@ app.put('/api/wines/:id/reference-suggestion',async c=>{
  let value:string|null=keep?(rawCurrent==null?null:String(rawCurrent)):suggestion.suggested;
  if(!keep&&field==='classification')value=suggestion.suggestedValue??appClassification(suggestion.suggested);
  if(!keep&&!value)return c.json({error:'Unsupported LWIN value'},400);
- const remaining=suggestions.filter(item=>item.field!==field),now=new Date().toISOString(),identityReset=keep?'':field==='producer'?',producer_id=NULL,cuvee_id=NULL':field==='wineName'?',cuvee_id=NULL':'';
+ // Cuvee relinking uses recognized_wine_name as its input. Like an explicit
+ // edit, accepting a name must update that input in the same guarded write;
+ // otherwise ensureWineIdentity immediately restores the previous name.
+ const rename=!keep&&field==='wineName';
+ const remaining=suggestions.filter(item=>item.field!==field),now=new Date().toISOString(),identityReset=keep?'':field==='producer'?',producer_id=NULL,cuvee_id=NULL':rename?',recognized_wine_name=?,cuvee_id=NULL':'';
  const result=await c.env.DB.prepare(`UPDATE wines SET ${column}=?${identityReset},reference_suggestions_json=?,reference_suggestions_updated_at=?,updated_at=? WHERE owner_id=? AND id=? AND reference_suggestions_json IS ? AND ${column} IS ?`)
-  .bind(value,remaining.length?JSON.stringify(remaining):null,remaining.length?now:null,now,owner,id,row.reference_suggestions_json??null,rawCurrent??null).run();
+  .bind(value,...(rename?[value]:[]),remaining.length?JSON.stringify(remaining):null,remaining.length?now:null,now,owner,id,row.reference_suggestions_json??null,rawCurrent??null).run();
  if(!result.meta.changes)return c.json({error:'This wine changed. Refresh and review it again.'},409);
  if(!keep&&(field==='producer'||field==='wineName'))await ensureWineIdentity(c.env.DB,owner,id);
  await recheckWineReference(c.env.DB,c.env.REFERENCE_DATA,owner,id,false);

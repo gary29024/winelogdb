@@ -6,6 +6,8 @@ import { parseLwinReference } from '../../src/lib/wine/lwinImport';
 import { lwinReferenceIdentity,referenceShardId } from '../../src/lib/wine/referenceCatalog';
 import { createSession } from '../../src/lib/auth/session';
 import app from '../../worker/index';
+import { ensureWineIdentity } from '../../src/lib/wine/identity';
+import { ensureAllCuveeLinksForProducer } from '../../src/lib/cuvees/entities';
 
 const databases:Array<ReturnType<typeof realD1>>=[];
 afterEach(()=>{databases.splice(0).forEach(db=>db.close())});
@@ -80,6 +82,27 @@ describe('LWIN review repair and queue',()=>{
   const response=await request('w1/reference-suggestion',{field:'wineName',action},'PUT');
   expect(response.status).toBe(409);
   expect(database.sql.prepare('SELECT wine_name,reference_suggestions_json FROM wines').get()).toMatchObject({wine_name:'Special Club Rosé',reference_suggestions_json:suggestions});
+ });
+ it.each(['apply','keep'] as const)('%s uses the intended name when the wine already has an older recognition and cuvee link',async action=>{
+  const {database,insert,request,queue}=setup();insert();
+  const original='Grand Cru Grand Vintage',suggested='Grand Vintage Brut Grand Cru';
+  database.sql.prepare("UPDATE wines SET producer='Varnier-Fannière',wine_name=?,recognized_wine_name=?,vintage=2015,region='Champagne',appellation='Avize AOC',wine_style='sparkling',lwin7='1560279',lwin11='15602792015',identity_match_status='manual',reference_suggestions_json=?")
+   .run(original,original,JSON.stringify([{field:'wineName',label:'Wine name',current:original,suggested}]));
+  await ensureWineIdentity(database.db,'owner','w1');
+  const before=database.sql.prepare('SELECT * FROM wines WHERE id=\'w1\'').get()!;
+  expect(before.cuvee_id).toBeTruthy();
+  const response=await request('w1/reference-suggestion',{field:'wineName',action},'PUT');
+  expect(response.status).toBe(200);
+  const expected=action==='apply'?suggested:original;
+  const check=()=>{
+   const wine=database.sql.prepare('SELECT * FROM wines WHERE id=\'w1\'').get()!;
+   expect(wine).toMatchObject({wine_name:expected,recognized_wine_name:expected,lwin7:'1560279',lwin11:'15602792015',vintage:2015,producer:before.producer,reference_suggestions_json:null});
+   expect(database.sql.prepare('SELECT canonical_name FROM cuvees WHERE id=?').get(wine.cuvee_id)!.canonical_name).toBe(expected);
+  };
+  check();
+  await ensureWineIdentity(database.db,'owner','w1');
+  await ensureAllCuveeLinksForProducer(database.db,'owner',String(before.producer_id));
+  check();expect((await queue()).total).toBe(0);
  });
  it('paginates beyond 20, includes suggestion-only wines, and excludes other accounts',async()=>{
   const {database,insert,queue}=setup();for(let i=0;i<45;i++)insert(`w${String(i).padStart(2,'0')}`);insert('private','1059328','another-owner');
