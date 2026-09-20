@@ -1,29 +1,5 @@
 # App layout improvements
 
-## iPhone and account-role validation
-
-The phone layout is checked in WebKit using both iPhone 15 Pro and iPhone 15 Pro
-Max profiles. The profiles include the smaller viewport left by Safari controls;
-additional checks cover the full 393 × 852 and 430 × 932 CSS-pixel screens,
-simulated safe-area insets, and landscape rotation. These are browser-emulation
-checks, not a claim of testing on physical iPhones.
-
-Wine headers scale their photo with the available width and place identity pills
-below the photo/title row. Mobile wine actions use two columns with 44px tap
-targets. Research quality occupies a separate row, expanded Journal filters use
-two columns, and the compact touch navigation remains available in landscape.
-Structure labels use the recorded axis name; a partial tasting is no longer
-visually relabelled as Intensity just because its value appears first.
-
-Owner and member accounts are tested independently: owners keep producer range
-grouping, composition and refresh controls plus research model details; members
-keep the simpler producer profile and research wording. Shared wines expose the
-viewer's own experience editor without personal-wine edit or research controls.
-
-Run `npx playwright install webkit`, then `npm run test:e2e:iphone`. The suite
-checks wine detail, shared experience, Journal, producer, scan sheet, rotation
-and safe-area clearance for both roles on both devices.
-
 A layout pass across the wine detail page, the producer page, the Journal and
 the app shell. No new colours, no new type scale, no new dependencies: the work
 is to rearrange what is already there and to name one idea the app was already
@@ -328,3 +304,27 @@ additional catalogue fields and warnings for disputed matches.
 Browser checks cover owner and shared pages, populated and empty Structure,
 integrated identifiers, and Deep Search drinking guidance at phone and desktop
 widths. Source-scanning test helpers normalize Windows path separators.
+
+## iPhone and account-role validation
+
+The phone layout is checked in WebKit using both iPhone 15 Pro and iPhone 15 Pro
+Max profiles. The profiles include the smaller viewport left by Safari controls;
+additional checks cover the full 393 × 852 and 430 × 932 CSS-pixel screens,
+simulated safe-area insets, and landscape rotation. These are browser-emulation
+checks, not a claim of testing on physical iPhones.
+
+Wine headers scale their photo with the available width and place identity pills
+below the photo/title row. Mobile wine actions use two columns with 44px tap
+targets. Research quality occupies a separate row, expanded Journal filters use
+two columns, and the compact touch navigation remains available in landscape.
+Structure labels use the recorded axis name; a partial tasting is no longer
+visually relabelled as Intensity just because its value appears first.
+
+Owner and member accounts are tested independently: owners keep producer range
+grouping, composition and refresh controls plus research model details; members
+keep the simpler producer profile and research wording. Shared wines expose the
+viewer's own experience editor without personal-wine edit or research controls.
+
+Run `npx playwright install webkit`, then `npm run test:e2e:iphone`. The suite
+checks wine detail, shared experience, Journal, producer, scan sheet, rotation
+and safe-area clearance for both roles on both devices.
