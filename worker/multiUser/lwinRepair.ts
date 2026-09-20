@@ -13,6 +13,11 @@ export type LwinRepairWine={
 type Env=GeminiTransportBindings&AiUsageEnv&{REFERENCE_DATA:R2Bucket};
 export type RepairChoice={lwin7:string;confidence:number;method:'deterministic'|'ai'}|null;
 
+// One Flex call per queue delivery, within the queue's 15-minute wall limit.
+export const LWIN_AI_TIMEOUT_MS=660_000;
+export const LWIN_AI_LEASE_SECONDS=780;
+export class LwinAiTransientError extends Error {}
+
 const words=(value:string|null|undefined)=>new Set(normalizeReferenceText(value).split(' ').filter(Boolean));
 function setSimilarity(left:Set<string>,right:Set<string>){if(!left.size||!right.size)return 0;let common=0;for(const word of left)if(right.has(word))common++;return common/Math.max(left.size,right.size)}
 function scorer(wine:LwinRepairWine){
@@ -55,15 +60,19 @@ export async function aiRepair(env:Env,wine:LwinRepairWine,candidates:Awaited<Re
  const candidateData=candidates.map(({row,score})=>{const identity=lwinReferenceIdentity(row);return {lwin7:row.lwin7,producer:identity.producerName,wine:identity.wineName,country:row.country,region:row.region,subRegion:row.subRegion,site:row.site,parcel:row.parcel,colour:row.colour,type:row.productType,subtype:row.productSubtype,classification:row.classification,designation:row.designation,vintageConfig:row.vintageConfig,firstVintage:row.firstVintage,finalVintage:row.finalVintage,score:Number(score.toFixed(3))}});
  const prompt=`You are resolving a WineLog record to an official LWIN candidate. Choose ONLY from the supplied candidates. Never invent an LWIN. Treat abbreviations, accents, translated wording and producer prefixes as possible aliases, but reject conflicts in producer, cuvee, geography or wine type. If evidence is insufficient return NONE. Input: ${JSON.stringify({producer:wine.producer,wine:wine.wine_name,release:wine.release_designation,country:wine.country,region:wine.region,appellation:wine.appellation,style:wine.wine_style,vintage:wine.vintage,colour:wine.colour,type:wine.product_type,subtype:wine.product_subtype,classification:wine.classification,subRegion:wine.sub_region,site:wine.reference_site,parcel:wine.reference_parcel})}. Candidates: ${JSON.stringify(candidateData)}`;
  const body=JSON.stringify({contents:[{role:'user',parts:[{text:prompt}]}],generationConfig:{temperature:0,responseMimeType:'application/json',responseJsonSchema:{type:'object',properties:{lwin7:{type:['string','null']},confidence:{type:'number'},reason:{type:'string'}},required:['lwin7','confidence','reason'],additionalProperties:false}}});
- const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),45_000);
+ const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),LWIN_AI_TIMEOUT_MS);
  try{
-  const {response}=await postGeminiGenerateContent(env,AI_MODELS.recognitionPrimary,body,controller.signal,{feature:'lwin-backfill',wine:wine.id},{serviceTier:'flex',serverTimeoutSeconds:40});
+  const {response}=await postGeminiGenerateContent(env,AI_MODELS.recognitionPrimary,body,controller.signal,{feature:'lwin-backfill',wine:wine.id},{serviceTier:'flex',serverTimeoutSeconds:600}).catch(error=>{
+   if(error instanceof TypeError)throw new LwinAiTransientError('LWIN AI network request failed. Resume AI LWIN resolution to retry this wine.');
+   throw error;
+  });
   // Gate on HTTP status before decoding: gateways can return plain text or HTML.
   // Throw so the rollout keeps its checkpoint instead of counting a failed call as review.
   if(!response.ok){
    await response.body?.cancel().catch(()=>{});
    const reason=response.status===504?'timed out (HTTP 504 Gateway Timeout)':`failed (HTTP ${response.status})`;
-   throw new Error(`LWIN AI request ${reason}. Resume AI LWIN resolution to retry this wine.`);
+   const ErrorType=[408,429,500,502,503,504].includes(response.status)?LwinAiTransientError:Error;
+   throw new ErrorType(`LWIN AI request ${reason}. Resume AI LWIN resolution to retry this wine.`);
   }
   let payload:GeminiPayload;
   try{payload=await response.json() as GeminiPayload}catch(error){
@@ -78,7 +87,7 @@ export async function aiRepair(env:Env,wine:LwinRepairWine,candidates:Awaited<Re
   if(!Number.isFinite(confidence)||confidence<.90||confidence>1||!candidates.some(item=>item.row.lwin7===lwin7&&compatibleLwinProduct(item.row,{...wine,wineStyle:wine.wine_style,productType:wine.product_type,productSubtype:wine.product_subtype})))return null;
   return {lwin7,confidence,method:'ai'};
  }catch(error){
-  if(controller.signal.aborted)throw new Error('LWIN AI request timed out after 45 seconds. Resume AI LWIN resolution to retry this wine.');
+  if(controller.signal.aborted)throw new LwinAiTransientError('LWIN AI request timed out after 11 minutes. Resume AI LWIN resolution to retry this wine.');
   throw error;
  }finally{clearTimeout(timer)}
 }
