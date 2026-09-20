@@ -55,7 +55,7 @@ export function AccountPage(){
    <ul>{actions.map(item=><li key={item.action}><strong>{item.label}:</strong> {item.accessMode==='included'?'Included':`${item.remaining??0} of ${item.limit} free successful runs available this week${item.granted?` (${item.granted} extra granted)`:''}${item.pending?` · ${item.pending} in progress`:''}`}</li>)}</ul>
    <small>Only successful new provider work consumes an allowance run. Failed work and cached or friend-reused results do not. Smart Search is included separately and has its own daily usage limit.{resetsAt?` Weekly allowances reset ${new Date(resetsAt).toLocaleString()}.`:''}</small>
   </section>}
-  {account?.role==='owner'&&<nav className="account-shortcuts" aria-label="Account shortcuts"><Link to="/admin">Owner controls</Link><Link to="/admin#member-usage">Member usage</Link></nav>}
+  {account?.role==='owner'&&<nav className="account-shortcuts" aria-label="Account shortcuts"><Link to="/admin">Owner controls</Link><Link to="/admin/lwin-review">Needs review</Link><Link to="/admin#member-usage">Member usage</Link></nav>}
   <section className="personal-usage" aria-labelledby="your-usage-title"><h2 id="your-usage-title">Your usage</h2><p>Last {usage.days} days. Provider activity is tracked even for included features.</p>
    {usage.empty?<p>No AI usage recorded yet.</p>:<dl><div><dt>AI runs</dt><dd>{runs}</dd></div><div><dt>Provider requests</dt><dd>{providerRequests}</dd></div><div><dt>Smart Search</dt><dd>{smart?.requests??0} requests</dd></div><div><dt>Wines embedded</dt><dd>{smart?.units??0}</dd></div></dl>}
   </section>
