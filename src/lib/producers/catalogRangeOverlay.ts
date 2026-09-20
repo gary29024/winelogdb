@@ -1,3 +1,4 @@
+import { attachLwinRange,producerLwinReferences } from './lwinRange';
 import { ensureCuveeEntity,reconcileProducerCuvees } from '../cuvees/entities';
 import { catalogPresentationKey } from '../cuvees/catalogPresentation';
 import { applyCatalogDecisions,listCatalogDecisions } from './catalogDecisions';
@@ -48,7 +49,7 @@ export async function rebuildVisibleCatalog(db:D1Database,owner:string,producerI
   // Manual rows are the researched side of this merge, so a deliberate user
   // correction wins any same-identity machine row without creating a duplicate.
   const overlaid=mergeCatalogRanges(base,manuals,150,names).range;
-  const decisions=await listCatalogDecisions(db,owner,producerId),visible=applyCatalogDecisions(overlaid,decisions,names).range;
+  const decisions=await listCatalogDecisions(db,owner,producerId),visible=attachLwinRange(applyCatalogDecisions(overlaid,decisions,names).range,await producerLwinReferences(db,owner,producerId),names);
   await db.prepare('UPDATE producers SET catalog_json=?,updated_at=? WHERE owner_id=? AND id=?').bind(JSON.stringify(visible),stamp(),owner,producerId).run();
   // Full research is already a background operation and still synchronizes the
   // whole range. Interactive one-row corrections opt out and synchronize only

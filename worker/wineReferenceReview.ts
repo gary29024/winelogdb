@@ -1,3 +1,4 @@
+import { lwinEnrichmentStatement,resolveStoredLwin,type StoredLwinWine } from './lwinEnrichment';
 import { resolveWineReference,type VintageKind } from '../src/lib/wine/referenceIdentity';
 import { lwinReferenceIdentity,lwinRowById } from '../src/lib/wine/referenceCatalog';
 import type { LwinReferenceProduct } from '../src/lib/wine/lwinImport';
@@ -10,10 +11,16 @@ export const pendingReferenceReviewSql="(identity_match_status='conflict' OR coa
 export async function recheckWineReference(db:D1Database,bucket:R2Bucket,owner:string,id:string,refreshSuggestions=true){
  const row=await db.prepare('SELECT * FROM wines WHERE owner_id=? AND id=?').bind(owner,id).first<Record<string,unknown>>();
  if(!row)return false;
+ if(!row.lwin7&&row.identity_match_status!=='manual'){
+  const stored=row as StoredLwinWine,match=await resolveStoredLwin(bucket,stored),statement=match?lwinEnrichmentStatement(db,stored,match):null;
+  if(statement)return Boolean((await statement.run()).meta.changes);
+  return true;
+ }
  const value=(key:string)=>row[key]==null?null:String(row[key]);
  const input={producer:value('producer'),wineName:value('wine_name'),country:value('country'),region:value('region'),classification:value('classification'),classificationOverride:value('classification_override')};
  const result=await resolveWineReference(bucket,{...input,vintage:row.vintage==null?null:Number(row.vintage),vintageKind:value('vintage_kind') as VintageKind|null,releaseDesignation:value('release_designation'),wineStyle:value('wine_style')});
  const verified=Boolean(row.lwin7)&&result.identityMatchStatus==='matched'&&result.lwin7===row.lwin7;
+ if(verified){const statement=lwinEnrichmentStatement(db,row as StoredLwinWine,result,row.identity_match_status==='manual'?'manual':'deterministic');return statement?Boolean((await statement.run()).meta.changes):true}
  let suggestions:ReferenceSuggestion[]|null=null;
  if(refreshSuggestions){
   const product=row.lwin7?await lwinRowById<LwinReferenceProduct>(bucket,String(row.lwin7),input.producer):null;

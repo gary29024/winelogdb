@@ -39,8 +39,8 @@ describe('wine saves through the deployed entrypoint and migrated SQLite',()=>{
     const row=sqlite.prepare('SELECT * FROM wines WHERE id=?').get(id) as Record<string,unknown>;
     expect(row.identity_match_status).toBe(expected);
     expect(row).toMatchObject(expected==='matched'
-      ?{lwin7:'1000009',lwin11:'10000092020',elid:null,reference_product_key:'lwin:1000009',colour:'White',identity_match_candidates_json:null}
-      :expected==='unmatched'?{lwin7:null,lwin11:null,elid:null,reference_product_key:null,colour:null,product_type:null,product_subtype:null,reference_site:null,reference_parcel:null,identity_match_candidates_json:null,identity_matched_at:null,reference_suggestions_json:null}
+      ?{lwin7:'1000009',lwin11:'10000092020',elid:null,reference_product_key:'lwin:1000009',colour:'Red',identity_match_candidates_json:null}
+      :expected==='unmatched'?{lwin7:null,lwin11:null,elid:null,reference_product_key:null,colour:'Red',product_type:'Wine',product_subtype:'Still',reference_site:null,reference_parcel:null,identity_match_candidates_json:null,identity_matched_at:null,reference_suggestions_json:null}
       :{lwin7:'1000001',lwin11:'10000012020',elid:'FR-BDX-MARG01-2020',reference_product_key:'lwin:1000001',colour:'Red'});
     if(expected==='conflict'){
       const candidates=JSON.parse(String(row.identity_match_candidates_json));
