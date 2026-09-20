@@ -55,7 +55,7 @@ test('editing a tasting persists the note and deletion requires confirmation',as
  await page.goto('/wines/w');
  await page.getByRole('link',{name:'Edit tasting',exact:true}).click();
  await page.getByRole('textbox',{name:'Tasting notes',exact:true}).fill('Updated tasting note');
- await page.getByRole('button',{name:'Save wine',exact:true}).click();
+ await page.getByRole('button',{name:'Save changes',exact:true}).click();
  await expect(page).toHaveURL(/\/wines\/w$/);
  await expect(page.getByText('Updated tasting note',{exact:true})).toBeVisible();
  expect(edits).toBe(1);
