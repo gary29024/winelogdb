@@ -1,3 +1,4 @@
+import { PageHeader } from '../../components/PageHeader';
 import { useCallback,useEffect,useState } from 'react';
 import { Link,useSearchParams } from 'react-router-dom';
 import { getAccount } from '../../lib/auth/client';
@@ -34,7 +35,8 @@ export function LwinReviewPage(){
  const back={to:`/admin/lwin-review${params.size?`?${params}`:''}`,label:'Needs review'};
  if(!owner)return <p>Owner access required.</p>;
  return <section className="lwin-review-page">
-  <header className="lwin-review-header"><p className="eyebrow">Owner controls</p><h1>Needs review</h1><p>Review LWIN differences one wine at a time. Resolved wines leave this queue.</p>{page&&<p>{page.total} wines remaining</p>}<Link to="/admin">Owner controls</Link></header>
+  <PageHeader eyebrow="Owner controls" title="Needs review" subtitle="Review LWIN differences one wine at a time." stats={page?[`${page.total} wines remaining`]:[]} actions={<Link to="/admin?section=maintenance">Owner controls</Link>}/>
+
   <div className="lwin-review-toolbar"><button disabled={loading||busy} onClick={()=>void load().catch(e=>setError(e.message))}>Refresh list</button>{cursor&&<Link to="/admin/lwin-review">Back to first wines</Link>}</div>
   {notice&&<p role="status">{notice}</p>}{error&&<p role="alert">{error}</p>}
   {loading&&<p role="status">Loading wines…</p>}

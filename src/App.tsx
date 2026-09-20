@@ -1,3 +1,4 @@
+import './remainingLayout.css';
 import { AccountPage } from './features/auth/AccountPage';
 import { AdminPage } from './features/auth/AdminPage';
 import { lazy,Suspense,useEffect,useState,type ReactNode } from 'react';

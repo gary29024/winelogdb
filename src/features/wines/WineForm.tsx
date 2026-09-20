@@ -313,7 +313,7 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,enable
   const denomination=resolvePlace({country:String(initial?.country??'')||null,region:String(initial?.region??'')||null,appellation}).denomination;
   const field=(name:string,label:string,type='text',step?:string,required=false)=><label>{label}<input name={name} type={type} step={step} required={required} defaultValue={String(initial?.[name as keyof WineInput]??'')}/></label>;
   const hasGps=initial?.latitude!=null&&initial?.longitude!=null,hasEstimatedPlace=hasGps&&Boolean(initial?.locationName?.trim());
-  return <form className="wine-form wine-form-compact" onSubmit={submit}>
+  return <form className="wine-form wine-form-compact" onSubmit={submit} onInvalid={event=>{let parent=(event.target as HTMLElement).parentElement;while(parent){if(parent instanceof HTMLDetailsElement)parent.open=true;parent=parent.parentElement}}}>
     {duplicate&&<div className="wine-duplicate-note" role="status">
       <p><strong>{duplicate.wineName}</strong>{duplicate.vintage?` ${duplicate.vintage}`:''} is already in this tasting{duplicate.producer?`, under ${duplicate.producer}`:''}. Saving this would make a second copy of it.</p>
       <div className="wine-duplicate-actions">
@@ -323,6 +323,7 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,enable
         <button type="button" className="quiet" disabled={attaching||busy} onClick={()=>{setDismissedDuplicate(true);setDuplicate(null)}}>Save a separate wine</button>
       </div>
     </div>}
+    <h2 className="form-section-heading">Wine identity</h2>
     <div className="producer-field"><label>Producer *<input name="producer" type="text" required value={producer} onChange={e=>setProducer(e.target.value)}/></label>
       {adoptedProducer&&producer===adoptedProducer&&<p className="producer-adopted">Saved under the name your library uses. Type over it to keep what the label said.</p>}
       {suggestion&&<div className="producer-resolution producer-suggestion">
@@ -337,6 +338,7 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,enable
 
     <div className="wine-compact-row three"><label>Vintage<input name="vintage" type="number" value={vintageInput} onChange={e=>{setVintageInput(e.target.value);if(e.target.value)setVintageKind('vintage');else if(vintageKind==='vintage')setVintageKind('unknown')}}/></label><label>Style<select name="wineStyle" value={wineStyle} onChange={e=>setWineStyle(e.target.value)}><option value="">Unknown</option>{['red','white','rose','sparkling','dessert','fortified','orange','other'].map(x=><option key={x}>{x}</option>)}</select></label>{field('alcoholPercentage','Alcohol %','number','0.1')}</div>
     <div className="wine-compact-row two"><label>Year status<select value={vintageKind} onChange={e=>setVintageKind(e.target.value)} disabled={Boolean(vintageInput)}><option value="vintage">Vintage</option><option value="non_vintage">Non-vintage</option><option value="multi_vintage">Multi-vintage</option><option value="unknown">Unknown / unreadable</option></select><small>{vintageInput?'A year is entered, so this is a vintage wine.':'NV is different from a label whose vintage simply could not be read.'}</small></label><label>Edition / release<input type="text" value={releaseDesignation} onChange={e=>setReleaseDesignation(e.target.value)} placeholder="e.g. 171ème Édition, MV20"/><small>Use this for a numbered or named release, not as a substitute for a vintage year.</small></label></div>
+    <h2 className="form-section-heading">Bottle facts</h2>
     <div className="wine-compact-row two">{field('country','Country')}{field('region','Region')}</div>
     <div className="wine-compact-row appellation-row"><label>Appellation<input name="appellation" value={appellation} onChange={e=>setAppellation(e.target.value)}/><small>{denomination?`Recognized as a ${denomination}; no need to type it.`:'The denomination is read from the name, so leave DOC / DOCG / AVA off — but keep IGT or IGP, which tells a zone apart from the region it shares a name with.'}</small></label>
       <label>Cru level<select name="classificationOverride" value={cruOverride} onChange={e=>setCruOverride(e.target.value)}>
@@ -361,8 +363,9 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,enable
     {id&&isChampagne(initial??{})&&<ChampagnePhotoBackfill key={id} wineId={id} imageIds={initial?.imageIds??[]} details={sparklingDetails} onApply={suggestions=>setSparklingDetails(current=>({...current,...missingChampagneDetails(current,suggestions)}))}/>}
     {sparklingVisible&&<SparklingDetailsFields details={sparklingDetails} onChange={setSparklingDetails} showHelper={!memberView}/>} 
 
-    <details className="structure-fields structure-disclosure" open={structureOpen} onToggle={e=>setStructureOpen(e.currentTarget.open)}><summary><span>Structure</span><small>Optional</small></summary><div className="structure-disclosure-body"><small className="structure-helper">Tap the value itself. Tap the selected value again to clear it.</small>{structureFields.map(item=><div className="structure-row" key={item.key}><span>{item.label}</span><div className="structure-options" role="group" aria-label={item.label}>{item.options.map(([value,label])=><button key={value} type="button" className={`structure-option${structure[item.key]===value?' selected':''}`} aria-pressed={structure[item.key]===value} onClick={()=>chooseStructure(item.key,value)}>{label}</button>)}</div></div>)}</div></details>
 
+
+    <h2 className="form-section-heading">Your experience</h2>
     <label className="full-field">Tasting notes<textarea name="tastingNotes" rows={4} defaultValue={initial?.tastingNotes}/></label>
 
     <fieldset className="experience-fields"><legend>This drinking / tasting</legend>
@@ -373,6 +376,8 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,enable
       {hasGps&&!memberView&&<div className="gps-readout"><strong>Photo GPS</strong><span>{Number(initial?.latitude).toFixed(6)}, {Number(initial?.longitude).toFixed(6)}</span><small>These coordinates are read directly from EXIF and stored exactly. The place name above is only an approximate interpretation.</small></div>}
       {!memberView&&<small>Use “Tasting / event group” to group wines from the same dinner, trip, class or formal tasting. Exact GPS remains attached even if you edit or clear the approximate place name.</small>}
     </fieldset>
+
+    <details className="structure-fields structure-disclosure" open={structureOpen} onToggle={e=>setStructureOpen(e.currentTarget.open)}><summary><span>Structure</span><small>Optional</small></summary><div className="structure-disclosure-body"><small className="structure-helper">Tap the value itself. Tap the selected value again to clear it.</small>{structureFields.map(item=><div className="structure-row" key={item.key}><span>{item.label}</span><div className="structure-options" role="group" aria-label={item.label}>{item.options.map(([value,label])=><button key={value} type="button" className={`structure-option${structure[item.key]===value?' selected':''}`} aria-pressed={structure[item.key]===value} onClick={()=>chooseStructure(item.key,value)}>{label}</button>)}</div></div>)}</div></details>
 
     <label className="full-field">Tags (comma separated)<input name="tags" defaultValue={initial?.tags?.join(', ')??''}/>
       {!memberView&&<small>Tags for the place, the grapes and the style follow the wine: correct a field above and the tag it put there is corrected with it. Anything you typed is left alone.</small>}</label>
