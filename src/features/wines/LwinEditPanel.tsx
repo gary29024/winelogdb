@@ -7,10 +7,11 @@ import { LwinLinkEditor,type LwinLinkPreview } from './LwinLinkEditor';
 import './lwinEdit.css';
 
 export type LwinEditValues={producer:string;wineName:string;country:string;region:string;classification:string;classificationOverride:string};
-type Props={wine:WineDetail;values:LwinEditValues;dirty:boolean;disabled:boolean;canMatch:boolean;onApply:(values:Partial<LwinEditValues>)=>void;onBusy:(busy:boolean)=>void;onUpdated:(wine:WineDetail)=>void};
+type Props={wine:WineDetail;values:LwinEditValues;dirty:boolean;disabled:boolean;canMatch:boolean;initiallyOpen?:boolean;onApply:(values:Partial<LwinEditValues>)=>void;onBusy:(busy:boolean)=>void;onUpdated:(wine:WineDetail)=>void};
 
-export function LwinEditPanel({wine,values,dirty,disabled,canMatch,onApply,onBusy,onUpdated}:Props){
+export function LwinEditPanel({wine,values,dirty,disabled,canMatch,initiallyOpen=false,onApply,onBusy,onUpdated}:Props){
  const [busy,setBusy]=useState(false),[error,setError]=useState(''),[notice,setNotice]=useState('');
+ const [open,setOpen]=useState(initiallyOpen);
  const status=wine.identityMatchStatus;
  const linked=Boolean(wine.lwin7),accepted=linked&&(status==='matched'||status==='manual');
  const reference=wine.lwinReference?.lwin7===wine.lwin7?wine.lwinReference:null;
@@ -43,8 +44,9 @@ export function LwinEditPanel({wine,values,dirty,disabled,canMatch,onApply,onBus
   ['Country',reference.country],['Region',reference.region],['Sub-region',reference.subRegion],['Site / vineyard',reference.site],['Parcel',reference.parcel],
   ['Designation',reference.designation],['Classification',reference.classification],['Colour',reference.colour],['Product type',reference.productType],['Product subtype',reference.productSubtype]
  ]:[];
- return <section id="lwin-match" className="lwin-edit-panel" aria-labelledby="lwin-edit-title">
-  <div className="lwin-edit-heading"><h2 id="lwin-edit-title">LWIN match</h2><strong className={`lwin-edit-status${accepted?' accepted':''}`} role="status">{label}</strong></div>
+ return <details id="lwin-match" className="lwin-edit-panel" open={open} onToggle={event=>setOpen(event.currentTarget.open)}>
+  <summary className="lwin-edit-summary"><span>LWIN reference</span><span className="lwin-edit-summary-status"><strong className={`lwin-edit-status${accepted?' accepted':''}`} role="status">{label}</strong>{linked&&<span className="lwin-edit-code">{wine.lwin7}</span>}</span></summary>
+  <div className="lwin-edit-body">
   {linked&&<p><strong>LWIN {wine.lwin7}</strong>{wine.lwin11&&<> · Vintage LWIN {wine.lwin11}</>}</p>}
   {dirty&&<p>The match above is for your saved wine. Pending edits have not been checked yet.</p>}
   {reference&&<p className="lwin-edit-canonical">{reference.displayName||[reference.producer,reference.wineName].filter(Boolean).join(' · ')}</p>}
@@ -52,9 +54,8 @@ export function LwinEditPanel({wine,values,dirty,disabled,canMatch,onApply,onBus
   {status==='ambiguous'&&!linked&&<p>More than one wine may fit. Preview the possible matches below and choose the bottle you have.</p>}
   {linked&&!reference&&<p>Catalogue details have not been loaded for this link yet.</p>}
   {!linked&&!optedOut&&status!=='ambiguous'&&<p>Find a match using your saved wine details, or enter a 7-digit LWIN to preview it.</p>}
-  {reference&&<details className="lwin-edit-facts"><summary>Catalogue details · region, vineyard & classification</summary>
-   <p>These fields come from LWIN and are stored with the match. “Not provided” means the catalogue has no value.</p>
-   <div className="lwin-edit-fact-grid">{facts.map(([name,value])=><label key={name}>{name}<input aria-label={`LWIN ${name}`} readOnly value={value||''} placeholder="Not provided"/></label>)}</div>
+  {reference&&<details className="lwin-edit-facts"><summary>Original catalogue details</summary>
+   <dl className="lwin-edit-fact-grid">{facts.filter(([,value])=>value).map(([name,value])=><div key={name}><dt>{name}</dt><dd>{value}</dd></div>)}</dl>
    {reference.sourceUpdatedAt&&<small>Catalogue updated: {reference.sourceUpdatedAt}</small>}
   </details>}
   {accepted&&reference&&canMatch&&differences.length>0&&<details className="lwin-edit-comparison" open><summary>Use catalogue details in your form</summary>
@@ -70,5 +71,6 @@ export function LwinEditPanel({wine,values,dirty,disabled,canMatch,onApply,onBus
    <LwinLinkEditor wine={wine} disabled={locked} candidates={wine.identityMatchCandidates??[]} onLink={(preview:LwinLinkPreview)=>update({action:'link',lwin7:preview.requestedLwin7,previewToken:preview.previewToken})} onReject={()=>update({action:'reject',lwin7:wine.lwin7??null,updatedAt:wine.updatedAt})}/>
   </>}
   {error&&<p role="alert">{error}</p>}
- </section>;
+  </div>
+ </details>;
 }

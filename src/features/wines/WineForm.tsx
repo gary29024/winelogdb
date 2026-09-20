@@ -3,6 +3,8 @@ import { resolvePlace } from '../../lib/places/resolve';
 import { Link,useNavigate } from 'react-router-dom';
 import { addWineImages,getWine,saveWine, type WinePhoto,type WineDetail } from './api';
 import { LwinEditPanel,type LwinEditValues } from './LwinEditPanel';
+import { WineEnrichedDetails } from './WineEnrichedDetails';
+import { classificationLabel } from '../../lib/wine/referenceSuggestions';
 import { derivedTags,reconcileTags } from './wineTags';
 import { grapeSuggestions } from '../../lib/wine/grapes';
 import { resolveProducer,type ProducerResolution } from '../producers/api';
@@ -54,11 +56,11 @@ type WineFormInitial=Partial<WineInput>&{tastingStructure?:TastingStructure|null
  */
 export type SavedWineIdentity={producer:string;wineName:string;vintage:number|null};
 
-type WineFormProps={initial?:WineFormInitial;id?:string;photos?:WinePhoto[];onSave?:(input:WineFormInput)=>Promise<{id:string;imageIds?:string[]}>;onSaved?:(id:string,saved?:SavedWineIdentity)=>void;submitLabel?:string;enableFriendTagging?:boolean;referenceWine?:WineDetail;onReferenceUpdated?:(wine:WineDetail)=>void;
+type WineFormProps={initial?:WineFormInitial;id?:string;photos?:WinePhoto[];onSave?:(input:WineFormInput)=>Promise<{id:string;imageIds?:string[]}>;onSaved?:(id:string,saved?:SavedWineIdentity)=>void;submitLabel?:string;enableFriendTagging?:boolean;referenceWine?:WineDetail;referenceInitiallyOpen?:boolean;onReferenceUpdated?:(wine:WineDetail)=>void;
   /** The cellar line this bottle came from, so saving takes it off the count. */
   holdingId?:string};
 
-export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,enableFriendTagging=false,holdingId,referenceWine,onReferenceUpdated}:WineFormProps){
+export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,enableFriendTagging=false,holdingId,referenceWine,referenceInitiallyOpen=false,onReferenceUpdated}:WineFormProps){
   const memberView=getAccount()?.role==='member';
   const nav=useNavigate(),[busy,setBusy]=useState(false),[error,setError]=useState('');
   const [dirty,setDirty]=useState(false),[referenceBusy,setReferenceBusy]=useState(false);
@@ -353,8 +355,7 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,enable
   const hasGps=initial?.latitude!=null&&initial?.longitude!=null,hasEstimatedPlace=hasGps&&Boolean(initial?.locationName?.trim());
   return <>
     {referenceWine&&onReferenceUpdated&&<>
-      <nav className="wine-edit-nav" aria-label="Edit wine sections"><a href="#lwin-match">LWIN match</a><a href="#wine-fields">Wine details</a><a href="#tasting-fields">Tasting & notes</a></nav>
-      <LwinEditPanel wine={referenceWine} values={{producer,wineName,country,region,classification:classification??'',classificationOverride:cruOverride}} dirty={dirty} disabled={busy} canMatch={getAccount()?.role==='owner'} onApply={applyLwin} onBusy={setReferenceBusy} onUpdated={onReferenceUpdated}/>
+      <LwinEditPanel wine={referenceWine} values={{producer,wineName,country,region,classification:classification??'',classificationOverride:cruOverride}} dirty={dirty} disabled={busy} initiallyOpen={referenceInitiallyOpen} canMatch={getAccount()?.role==='owner'} onApply={applyLwin} onBusy={setReferenceBusy} onUpdated={onReferenceUpdated}/>
     </>}
     <form id={id?`wine-edit-form-${id}`:undefined} className="wine-form wine-form-compact" onSubmit={submit} onChange={()=>{setReferenceReview(null);setDirty(true)}}>
     <fieldset className="wine-form-body" disabled={referenceBusy}>
@@ -385,12 +386,13 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,enable
     <div className="wine-compact-row two"><label>Country<input name="country" value={country} onChange={e=>setCountry(e.target.value)}/></label><label>Region<input name="region" value={region} onChange={e=>setRegion(e.target.value)}/></label></div>
     <div className="wine-compact-row appellation-row"><label>Appellation<input name="appellation" value={appellation} onChange={e=>setAppellation(e.target.value)}/><small>{denomination?`Recognized as a ${denomination}; no need to type it.`:'The denomination is read from the name, so leave DOC / DOCG / AVA off — but keep IGT or IGP, which tells a zone apart from the region it shares a name with.'}</small></label>
       <label>Cru level<select name="classificationOverride" value={cruOverride} onChange={e=>setCruOverride(e.target.value)}>
-        <option value="">Auto</option>
+        <option value="">{classification?`${classificationLabel(classification)} (automatic)`:'Auto'}</option>
         <option value="grand_cru">Grand Cru</option>
         <option value="premier_cru">Premier Cru</option>
         <option value="village">Village</option>
         <option value="none">Not classified</option>
       </select><small>{cruOverride?'Set by hand; WineLog will not change it.':classification?`Current: ${classification.replaceAll('_',' ')}. Read from the appellation, label or reference.`:'Read from the appellation and the label.'}</small></label></div>
+    {referenceWine&&<WineEnrichedDetails wine={referenceWine}/>}
     {/* Suggestions appear under the field only while a grape is half-typed, so
         the form is no taller than it was until the moment it can help. The list
         is a local table - no request, no debounce - and it offers only the name
