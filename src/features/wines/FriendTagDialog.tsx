@@ -25,7 +25,12 @@ export function FriendTagDialog({
   const maxSelected=24;
   useEffect(()=>{
     if(!open)return;
+    const opener=document.activeElement instanceof HTMLElement?document.activeElement:null;
     sheet.current?.focus();
+    return()=>{if(opener?.isConnected)opener.focus()};
+  },[open]);
+  useEffect(()=>{
+    if(!open)return;
     const key=(event:KeyboardEvent)=>{
       if(event.key==='Escape'&&!busy){event.preventDefault();onClose();return}
       if(event.key!=='Tab'||!sheet.current)return;

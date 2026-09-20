@@ -37,7 +37,7 @@ describe('Journal result navigation',()=>{
       return new Response(JSON.stringify({items:[journalWine()],nextOffset:offset+36<73?offset+36:null,total:73}),{status:200,headers:{'content-type':'application/json'}});
     });
     const page=await render('/journal?query=Austria',fetcher);
-    expect(page.querySelector('.journal-viewbar')?.textContent).toContain('73 matching wines · Page 1 of 3');
+    expect(page.querySelector('.journal-viewbar')?.textContent).toContain('73 matching wines');
     // Reset sits with the filters now, not among the list-and-grid controls,
     // which were about layout rather than about what is being shown.
     expect(page.querySelector('.journal-filter-bar .journal-filter-reset')).not.toBeNull();
@@ -46,13 +46,14 @@ describe('Journal result navigation',()=>{
     await act(async()=>{page.querySelector('.journal-page-picker')!.dispatchEvent(new Event('submit',{bubbles:true,cancelable:true}))});
     await flush();
     expect(fetcher.mock.calls.some(([url])=>new URL(String(url),'https://x').searchParams.get('offset')==='72')).toBe(true);
-    expect(page.querySelector('.journal-viewbar')?.textContent).toContain('Page 3 of 3');
+    expect((page.querySelector('[aria-label="Journal page number"]') as HTMLInputElement).value).toBe('3');
+    expect(page.querySelector('.journal-page-picker')?.textContent).toContain('of 3');
   });
 
   it('shows a zero result count after a filter finds nothing',async()=>{
     const fetcher=vi.fn(async()=>new Response(JSON.stringify({items:[],nextOffset:null,total:0}),{status:200,headers:{'content-type':'application/json'}}));
     const page=await render('/journal?country=Austria',fetcher);
-    expect(page.querySelector('.journal-viewbar')?.textContent).toContain('0 matching wines · Page 1 of 1');
+    expect(page.querySelector('.journal-viewbar')?.textContent).toContain('0 matching wines');
   });
 
   it('keeps an already-loaded photo mounted when selection mode opens',async()=>{

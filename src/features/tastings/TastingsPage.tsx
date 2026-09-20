@@ -1,3 +1,4 @@
+import { PageHeader } from '../../components/PageHeader';
 import { useEffect,useMemo,useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AppIcon } from '../../components/AppIcons';
@@ -60,7 +61,7 @@ export function TastingsPage(){
     </Link></li>;
 
   return <section className="tastings-page">
-    <div className="hero compact"><p className="eyebrow">TASTINGS</p><h1>Every evening, kept together.</h1><p>Start a tasting from Scan Wine and each wine you log joins it, with the name, date and venue already filled in.</p></div>
+    <PageHeader title="Tastings" subtitle="Start a tasting from Scan Wine and each wine you log joins it, with the name, date and venue already filled in."/>
     {loading?<p aria-live="polite">Loading tastings…</p>
       :error?<p role="alert">{error}</p>
       :months.length?<div className="tasting-months">{months.map(group=>

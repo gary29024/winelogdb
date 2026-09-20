@@ -136,14 +136,15 @@ export function TastingDetailPage(){
 
     {storyCard&&<ShareStorySheet card={storyCard} onClose={()=>setStoryCard(null)}/>}
     <FriendTagDialog open={tagOpen} title="Tag friends for this tasting" description="Every wine in this tasting — including wines you add later — is shared with the selected friends. Remove a wine from the tasting and the tasting tag no longer applies to it." friends={tagFriends} selected={tagSelected} busy={tagBusy} error={tagError} confirmLabel="Save tasting tags" onSelectedChange={setTagSelected} onConfirm={()=>void saveFriendTags()} onClose={()=>setTagOpen(false)}/>
-    {!editing&&<div className="tasting-actions">
+    {!editing&&open&&<div className="tasting-actions"><Link className="button primary" to="/upload">Log a wine</Link></div>}
+    {!editing&&<details className="tasting-secondary-actions"><summary>Tasting options</summary><div className="tasting-actions">
       {open
         ?<button type="button" onClick={()=>void run(()=>endTasting(id))} disabled={busy}>End tasting</button>
         :<button type="button" onClick={()=>void run(()=>reopenTasting(id))} disabled={busy}>Reopen tasting</button>}
       {/* The thing you actually do all evening. Without it the only way to log a
           bottle from the page you are sitting on was the nav's Scan Wine, which
           is two taps away from the tasting you are already looking at. */}
-      {open&&<Link className="button primary" to="/upload">Log a wine</Link>}
+
       {/* An evening is the set of wines somebody would actually post, already
           gathered and in pour order, so the card is one tap from it. The whole
           lineup goes over; which of it lands on the card is chosen in the sheet. */}
@@ -160,13 +161,14 @@ export function TastingDetailPage(){
       })}>Share to a story</button>}
       <Link className="button" to={`/journal?attachTo=${id}`}>Add from journal</Link>
       <button type="button" onClick={()=>setEditing(true)} disabled={busy}>Rename / venue</button>
-      <button type="button" className="quiet" onClick={()=>void removeTasting()} disabled={busy}>Delete</button>
-    </div>}
+
+    </div></details>}
 
     {wines.length
       ?<Lineup tastingId={id} name={tasting.name} wines={wines} onRemoved={wineId=>setWines(previous=>previous.filter(wine=>wine.wineId!==wineId))}/>
       :<p className="tasting-empty">{open?'No wines yet. Every wine you log while this is open joins it.':'No wines in this tasting. Add them from the journal.'}</p>}
 
     <TastingDocuments tastingId={id} documents={documents} onChange={setDocuments}/>
+    {!editing&&<div className="settings-session"><button type="button" className="danger" onClick={()=>void removeTasting()} disabled={busy}>Delete tasting</button></div>}
   </article>;
 }
