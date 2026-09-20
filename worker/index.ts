@@ -14,6 +14,7 @@ import { wineSaveStatements } from '../src/lib/db/wineSave';
 import { enrichRecognitionReference } from '../src/lib/wine/referenceIdentity';
 import { appClassification,classificationLabel,referenceSuggestionFields,type ReferenceSuggestion,type ReferenceSuggestionField } from '../src/lib/wine/referenceSuggestions';
 import { ensureWineIdentity } from '../src/lib/wine/identity';
+import { recheckWineReference } from './wineReferenceReview';
 
 type Bindings={IMAGES?:ImagesBinding;DB:D1Database;WINE_IMAGES:R2Bucket;REFERENCE_DATA:R2Bucket;ASSETS:Fetcher;GEMINI_API_KEY?:string;AUTH_SECRET:string;APP_PASSWORD:string;APP_URL:string;MAX_FILE_BYTES?:string;MAX_BATCH_FILES?:string};
 type Variables={userId:string};
@@ -225,7 +226,9 @@ app.delete('/api/wines/:id/images/:imageId',async c=>{
 });
 
 app.put('/api/wines/:id/reference-suggestion',async c=>{
- const owner=c.get('userId'),id=c.req.param('id'),payload=await c.req.json().catch(()=>null) as {field?:unknown}|null,field=String(payload?.field??'') as ReferenceSuggestionField;
+ const owner=c.get('userId'),id=c.req.param('id'),payload=await c.req.json().catch(()=>null) as {field?:unknown;action?:unknown}|null,field=String(payload?.field??'') as ReferenceSuggestionField;
+ if(payload?.action!==undefined&&payload.action!=='keep'&&payload.action!=='apply')return c.json({error:'Unknown review action'},400);
+ const keep=payload?.action==='keep';
  if(!referenceSuggestionFields.includes(field))return c.json({error:'Unknown LWIN suggestion field'},400);
  const row=await c.env.DB.prepare('SELECT producer,wine_name,country,region,classification,reference_suggestions_json FROM wines WHERE owner_id=? AND id=?').bind(owner,id).first<Record<string,unknown>>();
  if(!row)return c.json({error:'Not found'},404);
@@ -234,15 +237,32 @@ app.put('/api/wines/:id/reference-suggestion',async c=>{
  const columns:Record<ReferenceSuggestionField,string>={producer:'producer',wineName:'wine_name',country:'country',region:'region',classification:'classification'},column=columns[field];
  const rawCurrent=field==='wineName'?row.wine_name:row[field],current=field==='classification'?classificationLabel(rawCurrent==null?null:String(rawCurrent)):(rawCurrent==null?null:String(rawCurrent));
  if((suggestion.current??null)!==(current??null))return c.json({error:'This wine changed since the LWIN suggestion was created. Re-run matching before applying it.'},409);
- let value:string|null=suggestion.suggested;
- if(field==='classification')value=suggestion.suggestedValue??appClassification(suggestion.suggested);
- if(!value)return c.json({error:'Unsupported LWIN value'},400);
- const remaining=suggestions.filter(item=>item.field!==field),now=new Date().toISOString(),identityReset=field==='producer'?',producer_id=NULL,cuvee_id=NULL':field==='wineName'?',cuvee_id=NULL':'';
- const result=await c.env.DB.prepare(`UPDATE wines SET ${column}=?${identityReset},reference_suggestions_json=?,reference_suggestions_updated_at=?,updated_at=? WHERE owner_id=? AND id=?`)
-  .bind(value,remaining.length?JSON.stringify(remaining):null,remaining.length?now:null,now,owner,id).run();
- if(!result.meta.changes)return c.json({error:'Not found'},404);
- if(field==='producer'||field==='wineName')await ensureWineIdentity(c.env.DB,owner,id);
+ let value:string|null=keep?(rawCurrent==null?null:String(rawCurrent)):suggestion.suggested;
+ if(!keep&&field==='classification')value=suggestion.suggestedValue??appClassification(suggestion.suggested);
+ if(!keep&&!value)return c.json({error:'Unsupported LWIN value'},400);
+ const remaining=suggestions.filter(item=>item.field!==field),now=new Date().toISOString(),identityReset=keep?'':field==='producer'?',producer_id=NULL,cuvee_id=NULL':field==='wineName'?',cuvee_id=NULL':'';
+ const result=await c.env.DB.prepare(`UPDATE wines SET ${column}=?${identityReset},reference_suggestions_json=?,reference_suggestions_updated_at=?,updated_at=? WHERE owner_id=? AND id=? AND reference_suggestions_json IS ? AND ${column} IS ?`)
+  .bind(value,remaining.length?JSON.stringify(remaining):null,remaining.length?now:null,now,owner,id,row.reference_suggestions_json??null,rawCurrent??null).run();
+ if(!result.meta.changes)return c.json({error:'This wine changed. Refresh and review it again.'},409);
+ if(!keep&&(field==='producer'||field==='wineName'))await ensureWineIdentity(c.env.DB,owner,id);
+ await recheckWineReference(c.env.DB,c.env.REFERENCE_DATA,owner,id,false);
  return c.json({ok:true,referenceSuggestions:remaining});
+});
+
+app.post('/api/wines/:id/reference-review',async c=>{
+ const owner=c.get('userId'),id=c.req.param('id'),payload=await c.req.json().catch(()=>null) as {action?:unknown;lwin7?:unknown;updatedAt?:unknown}|null;
+ if(payload?.action==='recheck'){
+  if(!await recheckWineReference(c.env.DB,c.env.REFERENCE_DATA,owner,id))return c.json({error:'Wine changed or is unavailable. Refresh and try again.'},409);
+  return c.json({ok:true});
+ }
+ if(payload?.action==='confirm'&&typeof payload.lwin7==='string'&&/^\d{7}$/.test(payload.lwin7)&&typeof payload.updatedAt==='string'){
+  const now=new Date().toISOString();
+  const saved=await c.env.DB.prepare("UPDATE wines SET identity_match_status='manual',identity_match_candidates_json=NULL,identity_match_confidence=NULL,identity_checked_at=?,updated_at=? WHERE owner_id=? AND id=? AND lwin7=? AND updated_at=? AND identity_match_status='conflict'")
+   .bind(now,now,owner,id,payload.lwin7,payload.updatedAt).run();
+  if(!saved.meta.changes)return c.json({error:'Wine changed. Refresh before confirming its LWIN.'},409);
+  return c.json({ok:true});
+ }
+ return c.json({error:'Unknown review action'},400);
 });
 
 app.put('/api/wines/:id',async c=>{

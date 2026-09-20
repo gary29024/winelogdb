@@ -40,3 +40,11 @@ export function buildReferenceSuggestions(input:SuggestionInput):ReferenceSugges
  }
  return suggestions;
 }
+
+/** Refresh pending comparisons without reopening fields the user already kept. */
+export function refreshPendingReferenceSuggestions(input:SuggestionInput,stored:unknown):ReferenceSuggestion[]{
+ let previous:unknown;try{previous=JSON.parse(String(stored??'[]'))}catch{return []}
+ if(!Array.isArray(previous))return [];
+ const fields=new Set(previous.filter(item=>item&&typeof item==='object').map(item=>item.field));
+ return buildReferenceSuggestions(input).filter(item=>fields.has(item.field));
+}

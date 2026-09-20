@@ -6,11 +6,12 @@ import { wineTargets } from './credits';
 import { publishProducerResearch } from '../../src/lib/research/sharedProducer';
 import { resolveWineReference,type VintageKind } from '../../src/lib/wine/referenceIdentity';
 import { lwinReferenceIdentity } from '../../src/lib/wine/referenceCatalog';
-import { appClassification,buildReferenceSuggestions } from '../../src/lib/wine/referenceSuggestions';
+import { appClassification,buildReferenceSuggestions,refreshPendingReferenceSuggestions } from '../../src/lib/wine/referenceSuggestions';
 import { aiRepair,repairCandidates } from './lwinRepair';
 import type { GeminiTransportBindings } from '../geminiTransport';
 import type { AiUsageEnv } from '../../src/lib/usage/aiUsage';
 import type { LwinReferenceProduct } from '../../src/lib/wine/lwinImport';
+import { pendingReferenceReviewSql } from '../wineReferenceReview';
 
 export type RolloutKind='storage'|'research'|'lwin'|'lwin_validate'|'lwin_ai';
 export type RolloutQueueJob={kind:'admin_rollout';owner:string;rollout:RolloutKind};
@@ -183,12 +184,12 @@ async function backfillLwinBatch(env:RolloutEnv){
  return {complete,processed,matched,ambiguous,unmatched,conflict};
 }
 
-type LwinValidationRow=LwinBackfillRow&{lwin7:string};
+type LwinValidationRow=LwinBackfillRow&{lwin7:string;reference_suggestions_json:string|null};
 
 async function validateStoredLwinBatch(env:RolloutEnv){
  if(await readState(env.DB,'lwin_validation')==='complete')return {complete:true,processed:0,verified:0,review:0};
  const cursor=await readState(env.DB,'lwin_validate_cursor');
- const rows=await env.DB.prepare(`SELECT id,owner_id,producer,wine_name,vintage,vintage_kind,release_designation,country,region,wine_style,classification,classification_override,lwin7
+ const rows=await env.DB.prepare(`SELECT id,owner_id,producer,wine_name,vintage,vintage_kind,release_designation,country,region,wine_style,classification,classification_override,lwin7,reference_suggestions_json
    FROM wines WHERE id>? AND lwin7 IS NOT NULL AND identity_match_status IN ('matched','conflict')
    ORDER BY id LIMIT ${LWIN_VALIDATE_BATCH}`).bind(cursor).all<LwinValidationRow>();
  let verified=0,review=0;
@@ -198,8 +199,9 @@ async function validateStoredLwinBatch(env:RolloutEnv){
    country:row.country,region:row.region,wineStyle:row.wine_style,classification:row.classification,classificationOverride:row.classification_override
   }),now=stamp();
   if(result.identityMatchStatus==='matched'&&result.lwin7===row.lwin7){
-   const saved=await env.DB.prepare(`UPDATE wines SET identity_match_status='matched',identity_match_confidence=1,identity_match_candidates_json=NULL,identity_checked_at=?
-     WHERE id=? AND owner_id=? AND lwin7=? AND coalesce(identity_match_status,'')<>'manual'`).bind(now,row.id,row.owner_id,row.lwin7).run();
+   const suggestions=refreshPendingReferenceSuggestions({producer:row.producer,wineName:row.wine_name,country:row.country,region:row.region,classification:row.classification,classificationOverride:row.classification_override,referenceProducer:result.referenceProducer,referenceWineName:result.referenceWineName,referenceCountry:result.country,referenceRegion:result.region,referenceClassification:result.referenceClassification},row.reference_suggestions_json);
+   const saved=await env.DB.prepare(`UPDATE wines SET identity_match_status='matched',identity_match_confidence=1,identity_match_candidates_json=NULL,identity_checked_at=?,reference_suggestions_json=?,reference_suggestions_updated_at=?
+     WHERE id=? AND owner_id=? AND lwin7=? AND coalesce(identity_match_status,'')<>'manual'`).bind(now,suggestions.length?JSON.stringify(suggestions):null,suggestions.length?now:null,row.id,row.owner_id,row.lwin7).run();
    if(saved.meta.changes)verified++;
   }else{
    const candidates=[...new Set([row.lwin7,result.lwin7,...result.identityMatchCandidates].filter((value):value is string=>typeof value==='string'&&value.length>0))];
@@ -308,6 +310,15 @@ async function pauseRollout(env:RolloutEnv,kind:RolloutKind){
 /** Owner-only launch preparation: POST starts/resumes/refreshes, GET reports durable progress. */
 export async function rolloutRoute(request:Request,env:RolloutEnv,member:Member):Promise<Response|null>{
  const path=new URL(request.url).pathname;if(!path.startsWith('/api/admin/rollout/'))return null;ownerOnly(member);
+ if(path==='/api/admin/rollout/lwin-review'&&request.method==='GET'){
+  const cursor=new URL(request.url).searchParams.get('after')??'';
+  const [rows,count]=await Promise.all([
+   env.DB.prepare(`SELECT id,producer,wine_name,vintage,lwin7,identity_match_status,reference_suggestions_json FROM wines WHERE owner_id=? AND ${pendingReferenceReviewSql} AND id>? ORDER BY id LIMIT 41`).bind(member.id,cursor).all<Record<string,unknown>>(),
+   env.DB.prepare(`SELECT count(*) AS n FROM wines WHERE owner_id=? AND ${pendingReferenceReviewSql}`).bind(member.id).first<{n:number}>()
+  ]);
+  const items=rows.results.slice(0,40).map(row=>({id:String(row.id),producer:String(row.producer??''),wineName:String(row.wine_name??''),vintage:row.vintage,lwin7:row.lwin7,conflict:row.identity_match_status==='conflict'}));
+  return json({items,total:Number(count?.n)||0,nextCursor:rows.results.length>40?items.at(-1)!.id:null});
+ }
  if(path==='/api/admin/rollout/status'&&request.method==='GET')return json(await rolloutStatus(env.DB));
  if(request.method!=='POST')throw new ApiError(405,'Use POST');
  const pause=path.match(/^\/api\/admin\/rollout\/(storage|research|lwin|lwin-validate|lwin-ai)\/pause$/);

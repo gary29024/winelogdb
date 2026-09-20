@@ -35,12 +35,14 @@ export function producerHouseQualifier(value:string|null|undefined){
 }
 
 export type LwinReferenceIdentitySource={
- displayName?:string|null;producerName?:string|null;producerKey?:string|null;wineName?:string|null;wineKey?:string|null;
+ displayName?:string|null;producerTitle?:string|null;producerName?:string|null;producerKey?:string|null;wineName?:string|null;wineKey?:string|null;
 };
 export function lwinReferenceIdentity(row:LwinReferenceIdentitySource){
  const display=(row.displayName??'').trim(),comma=display.indexOf(',');
  const displayProducer=comma>0?display.slice(0,comma).trim():null,displayWine=comma>0?display.slice(comma+1).trim():null;
- const structuredProducerName=row.producerName?.trim()||null,producerName=displayProducer||structuredProducerName,wineName=row.wineName?.trim()||displayWine||null;
+ const structuredProducerName=row.producerName?.trim()||null,title=row.producerTitle?.trim();
+ const titledProducer=structuredProducerName&&title&&!normalizeReferenceText(structuredProducerName).startsWith(`${normalizeReferenceText(title)} `)?`${title} ${structuredProducerName}`:structuredProducerName;
+ const producerName=displayProducer||titledProducer,wineName=row.wineName?.trim()||displayWine||null;
  return {
   producerName,producerKey:normalizeReferenceText(producerName)||normalizeReferenceText(row.producerKey),
   structuredProducerKey:normalizeReferenceText(row.producerKey)||normalizeReferenceText(structuredProducerName),
