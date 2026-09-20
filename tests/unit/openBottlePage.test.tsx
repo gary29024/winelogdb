@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
-import { beforeEach,describe,expect,it,vi } from 'vitest';
-import { cleanup,render,screen,waitFor } from '@testing-library/react';
+import { afterEach,beforeEach,describe,expect,it,vi } from 'vitest';
+import { act,cleanup,render,screen,waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 
 const holding={id:'h1',producerId:'p1',cuveeId:'c1',producer:'Cusumano',wineName:'Feudo di Mezzo',vintage:2020,
@@ -26,6 +26,12 @@ async function open(){
 
 describe('opening a bottle from the cellar',()=>{
   beforeEach(()=>{cleanup();vi.unstubAllGlobals()});
+  afterEach(async()=>{
+    // Unmount and flush React work before jsdom removes window, including
+    // after the last case (beforeEach alone cannot clean up that render).
+    await act(async()=>{cleanup()});
+    vi.unstubAllGlobals();
+  });
 
   it('carries what you paid onto the wine, so Insights prices it',async()=>{
     stubFetch();
