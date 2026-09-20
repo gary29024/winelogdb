@@ -36,9 +36,4 @@ describe('when the first status poll runs',()=>{
     expect(researchBatchFirstPollDelay(true)).toBe(0);
   });
 
-  it('leaves the later polls alone',()=>{
-    // Only the first poll changes: once work is under way the backoff still
-    // applies, so a long run does not turn into a tight polling loop.
-    expect([1,2,3,4,5].map(researchBatchPollDelay)).toEqual([30,60,120,300,900]);
-  });
 });

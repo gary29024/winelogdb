@@ -1,0 +1,19 @@
+name: Test dependencies
+description: Shared runtime and dependency download cache for WineLog CI
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 24
+    - uses: oven-sh/setup-bun@v2
+      with:
+        bun-version: 1.2.15
+    - uses: actions/cache@v4
+      with:
+        path: ~/.bun/install/cache
+        key: ${{ runner.os }}-bun-1.2.15-${{ hashFiles('package.json') }}
+        restore-keys: ${{ runner.os }}-bun-1.2.15-
+    - name: Install dependencies
+      shell: bash
+      run: bun install

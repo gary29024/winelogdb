@@ -1,0 +1,2304 @@
+{
+  "tests": 2328,
+  "passed": 2328,
+  "failed": 0,
+  "files": 275,
+  "seconds": 21.17287060546875,
+  "categories": {
+    "Authorization/multi-user": {
+      "files": 12,
+      "tests": 119
+    },
+    "Source/config contracts": {
+      "files": 12,
+      "tests": 74
+    },
+    "API/Worker integration/contracts": {
+      "files": 27,
+      "tests": 229
+    },
+    "UI/component": {
+      "files": 45,
+      "tests": 403
+    },
+    "Fast unit/domain rules": {
+      "files": 99,
+      "tests": 814
+    },
+    "D1 persistence/integration": {
+      "files": 35,
+      "tests": 306
+    },
+    "AI routing/research/recognition": {
+      "files": 36,
+      "tests": 361
+    },
+    "Migration/regression": {
+      "files": 9,
+      "tests": 22
+    }
+  },
+  "slowest": [
+    {
+      "file": "multiUser.test.ts",
+      "purpose": "Authorization/multi-user",
+      "tags": [
+        "real SQLite",
+        "R2 contract",
+        "Queue contract"
+      ],
+      "tests": 68,
+      "ms": 11330
+    },
+    {
+      "file": "tastingPrefill.test.tsx",
+      "purpose": "UI/component",
+      "tags": [],
+      "tests": 19,
+      "ms": 8363
+    },
+    {
+      "file": "producerRangeCollapse.test.tsx",
+      "purpose": "UI/component",
+      "tags": [],
+      "tests": 26,
+      "ms": 4489
+    },
+    {
+      "file": "groupRecognitionHandler.test.ts",
+      "purpose": "API/Worker integration/contracts",
+      "tags": [],
+      "tests": 14,
+      "ms": 4164
+    },
+    {
+      "file": "wineSaveAtomic.test.ts",
+      "purpose": "D1 persistence/integration",
+      "tags": [
+        "real SQLite"
+      ],
+      "tests": 24,
+      "ms": 4039
+    },
+    {
+      "file": "deepSearchLayout.test.tsx",
+      "purpose": "UI/component",
+      "tags": [
+        "Queue contract"
+      ],
+      "tests": 25,
+      "ms": 3716
+    },
+    {
+      "file": "manualWineReference.test.ts",
+      "purpose": "D1 persistence/integration",
+      "tags": [
+        "real SQLite",
+        "R2 contract"
+      ],
+      "tests": 21,
+      "ms": 3145
+    },
+    {
+      "file": "producerCountryCollapse.test.tsx",
+      "purpose": "UI/component",
+      "tags": [],
+      "tests": 19,
+      "ms": 2695
+    },
+    {
+      "file": "producerRangePhase2Integration.test.ts",
+      "purpose": "D1 persistence/integration",
+      "tags": [
+        "real SQLite"
+      ],
+      "tests": 17,
+      "ms": 2633
+    },
+    {
+      "file": "vintageIntelligencePersistence.test.ts",
+      "purpose": "D1 persistence/integration",
+      "tags": [
+        "real SQLite",
+        "file/source assertions"
+      ],
+      "tests": 19,
+      "ms": 2588
+    }
+  ],
+  "inventory": [
+    {
+      "file": "accountSwitch.test.ts",
+      "purpose": "Authorization/multi-user",
+      "tags": [],
+      "tests": 2,
+      "ms": 10
+    },
+    {
+      "file": "achievementCacheCpu.test.ts",
+      "purpose": "Source/config contracts",
+      "tags": [
+        "file/source assertions"
+      ],
+      "tests": 3,
+      "ms": 489
+    },
+    {
+      "file": "achievementCacheVersion.test.ts",
+      "purpose": "API/Worker integration/contracts",
+      "tags": [],
+      "tests": 2,
+      "ms": 37
+    },
+    {
+      "file": "achievementChecklistLinks.test.tsx",
+      "purpose": "UI/component",
+      "tags": [],
+      "tests": 5,
+      "ms": 376
+    },
+    {
+      "file": "achievementClassifiedWine.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 3,
+      "ms": 6
+    },
+    {
+      "file": "achievementCuration.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 18,
+      "ms": 19
+    },
+    {
+      "file": "achievementEngine.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 13,
+      "ms": 17
+    },
+    {
+      "file": "achievementPassportPreview.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 5,
+      "ms": 4
+    },
+    {
+      "file": "achievementUi.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 1,
+      "ms": 4
+    },
+    {
+      "file": "achievementVintageLinks.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 7,
+      "ms": 18
+    },
+    {
+      "file": "ageingTable.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 19,
+      "ms": 13
+    },
+    {
+      "file": "aiGatewayPayloadLogging.test.ts",
+      "purpose": "API/Worker integration/contracts",
+      "tags": [],
+      "tests": 2,
+      "ms": 2
+    },
+    {
+      "file": "aiSpendCard.test.tsx",
+      "purpose": "UI/component",
+      "tags": [
+        "file/source assertions"
+      ],
+      "tests": 11,
+      "ms": 376
+    },
+    {
+      "file": "aiSpendDrilldown.test.tsx",
+      "purpose": "UI/component",
+      "tags": [],
+      "tests": 1,
+      "ms": 202
+    },
+    {
+      "file": "aiUsageIdempotency.test.ts",
+      "purpose": "D1 persistence/integration",
+      "tags": [
+        "real SQLite"
+      ],
+      "tests": 2,
+      "ms": 368
+    },
+    {
+      "file": "aiUsageLedger.test.ts",
+      "purpose": "AI routing/research/recognition",
+      "tags": [
+        "file/source assertions"
+      ],
+      "tests": 53,
+      "ms": 87
+    },
+    {
+      "file": "aiUsageRunHistory.test.ts",
+      "purpose": "D1 persistence/integration",
+      "tags": [
+        "real SQLite",
+        "file/source assertions"
+      ],
+      "tests": 5,
+      "ms": 786
+    },
+    {
+      "file": "aiUsageSeed.test.ts",
+      "purpose": "AI routing/research/recognition",
+      "tags": [],
+      "tests": 6,
+      "ms": 33
+    },
+    {
+      "file": "aiUsageTierMigration.test.ts",
+      "purpose": "Migration/regression",
+      "tags": [
+        "file/source assertions"
+      ],
+      "tests": 2,
+      "ms": 5
+    },
+    {
+      "file": "apiReadWork.test.ts",
+      "purpose": "UI/component",
+      "tags": [],
+      "tests": 5,
+      "ms": 51
+    },
+    {
+      "file": "apiWorkerFirstConfig.test.ts",
+      "purpose": "Source/config contracts",
+      "tags": [
+        "file/source assertions"
+      ],
+      "tests": 1,
+      "ms": 3
+    },
+    {
+      "file": "appIcons.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 3,
+      "ms": 7
+    },
+    {
+      "file": "backendWorkProfile.test.ts",
+      "purpose": "D1 persistence/integration",
+      "tags": [
+        "real SQLite",
+        "R2 contract",
+        "Queue contract"
+      ],
+      "tests": 1,
+      "ms": 283
+    },
+    {
+      "file": "backendWorkSafety.test.ts",
+      "purpose": "D1 persistence/integration",
+      "tags": [
+        "real SQLite",
+        "R2 contract",
+        "Queue contract"
+      ],
+      "tests": 5,
+      "ms": 508
+    },
+    {
+      "file": "backgroundRollout.test.ts",
+      "purpose": "D1 persistence/integration",
+      "tags": [
+        "real SQLite",
+        "R2 contract",
+        "Queue contract"
+      ],
+      "tests": 9,
+      "ms": 1194
+    },
+    {
+      "file": "batchApiErrors.test.ts",
+      "purpose": "UI/component",
+      "tags": [],
+      "tests": 3,
+      "ms": 30
+    },
+    {
+      "file": "batchCardLiveName.test.tsx",
+      "purpose": "UI/component",
+      "tags": [],
+      "tests": 8,
+      "ms": 1508
+    },
+    {
+      "file": "batchHistorySync.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 8,
+      "ms": 6
+    },
+    {
+      "file": "batchPreviewCache.test.ts",
+      "purpose": "UI/component",
+      "tags": [],
+      "tests": 2,
+      "ms": 7
+    },
+    {
+      "file": "batchPromotionMetadata.test.ts",
+      "purpose": "API/Worker integration/contracts",
+      "tags": [],
+      "tests": 4,
+      "ms": 4
+    },
+    {
+      "file": "batchRecognition.test.ts",
+      "purpose": "API/Worker integration/contracts",
+      "tags": [],
+      "tests": 10,
+      "ms": 7
+    },
+    {
+      "file": "batchRecognitionAccounting.test.ts",
+      "purpose": "API/Worker integration/contracts",
+      "tags": [],
+      "tests": 2,
+      "ms": 44
+    },
+    {
+      "file": "batchRetryPolicy.test.ts",
+      "purpose": "AI routing/research/recognition",
+      "tags": [],
+      "tests": 7,
+      "ms": 5
+    },
+    {
+      "file": "batchUploadResume.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 3,
+      "ms": 3
+    },
+    {
+      "file": "benchmarkProducerDefinitions.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 5,
+      "ms": 10
+    },
+    {
+      "file": "bolgheriSassicaia.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 3,
+      "ms": 6
+    },
+    {
+      "file": "bottleAlign.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 26,
+      "ms": 13
+    },
+    {
+      "file": "bottleAlignPixels.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 7,
+      "ms": 15
+    },
+    {
+      "file": "bottleFrame.test.ts",
+      "purpose": "AI routing/research/recognition",
+      "tags": [
+        "file/source assertions"
+      ],
+      "tests": 14,
+      "ms": 16
+    },
+    {
+      "file": "bottleFrameRoute.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 5,
+      "ms": 273
+    },
+    {
+      "file": "buttonTiers.test.ts",
+      "purpose": "Source/config contracts",
+      "tags": [
+        "file/source assertions"
+      ],
+      "tests": 15,
+      "ms": 92
+    },
+    {
+      "file": "campaignCopy.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 5,
+      "ms": 4
+    },
+    {
+      "file": "campaignOutcomeLine.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 4,
+      "ms": 3
+    },
+    {
+      "file": "cancelResearch.test.ts",
+      "purpose": "AI routing/research/recognition",
+      "tags": [],
+      "tests": 2,
+      "ms": 3
+    },
+    {
+      "file": "catalogAtomicRefresh.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 4,
+      "ms": 6
+    },
+    {
+      "file": "catalogIntegrityMigration.test.ts",
+      "purpose": "Migration/regression",
+      "tags": [],
+      "tests": 3,
+      "ms": 4
+    },
+    {
+      "file": "catalogName.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 2,
+      "ms": 3
+    },
+    {
+      "file": "catalogNote.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 4,
+      "ms": 6
+    },
+    {
+      "file": "catalogPresentation.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 6,
+      "ms": 29
+    },
+    {
+      "file": "catalogStageMigration.test.ts",
+      "purpose": "Migration/regression",
+      "tags": [
+        "file/source assertions"
+      ],
+      "tests": 1,
+      "ms": 2
+    },
+    {
+      "file": "catalogVillageLabel.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 6,
+      "ms": 4
+    },
+    {
+      "file": "cellarBottleSheet.test.tsx",
+      "purpose": "UI/component",
+      "tags": [],
+      "tests": 10,
+      "ms": 2130
+    },
+    {
+      "file": "cellarEditTier.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 7,
+      "ms": 14
+    },
+    {
+      "file": "cellarHoldings.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 20,
+      "ms": 33
+    },
+    {
+      "file": "cellarIsolation.test.ts",
+      "purpose": "Authorization/multi-user",
+      "tags": [
+        "file/source assertions"
+      ],
+      "tests": 4,
+      "ms": 29
+    },
+    {
+      "file": "cellarPlaceGaps.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 12,
+      "ms": 27
+    },
+    {
+      "file": "cellarProducerMatch.test.tsx",
+      "purpose": "UI/component",
+      "tags": [],
+      "tests": 5,
+      "ms": 2560
+    },
+    {
+      "file": "cellarRoutes.test.ts",
+      "purpose": "API/Worker integration/contracts",
+      "tags": [],
+      "tests": 7,
+      "ms": 57
+    },
+    {
+      "file": "cellarScopePage.test.tsx",
+      "purpose": "UI/component",
+      "tags": [
+        "file/source assertions"
+      ],
+      "tests": 14,
+      "ms": 2383
+    },
+    {
+      "file": "chablisClimats.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 7,
+      "ms": 9
+    },
+    {
+      "file": "chablisVillage.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [
+        "file/source assertions"
+      ],
+      "tests": 16,
+      "ms": 12
+    },
+    {
+      "file": "champagneExtraction.test.ts",
+      "purpose": "D1 persistence/integration",
+      "tags": [
+        "real SQLite",
+        "Queue contract"
+      ],
+      "tests": 32,
+      "ms": 1792
+    },
+    {
+      "file": "champagneExtractionApi.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 2,
+      "ms": 13
+    },
+    {
+      "file": "champagnePhotoBackfill.test.tsx",
+      "purpose": "UI/component",
+      "tags": [],
+      "tests": 9,
+      "ms": 201
+    },
+    {
+      "file": "champagneResponse.test.ts",
+      "purpose": "API/Worker integration/contracts",
+      "tags": [],
+      "tests": 3,
+      "ms": 15
+    },
+    {
+      "file": "classificationOverrideField.test.tsx",
+      "purpose": "UI/component",
+      "tags": [],
+      "tests": 8,
+      "ms": 1907
+    },
+    {
+      "file": "classificationRoundTrip.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 9,
+      "ms": 10
+    },
+    {
+      "file": "clearRecordedAppellation.test.tsx",
+      "purpose": "UI/component",
+      "tags": [],
+      "tests": 4,
+      "ms": 1062
+    },
+    {
+      "file": "compositionShares.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 12,
+      "ms": 18
+    },
+    {
+      "file": "core.test.ts",
+      "purpose": "AI routing/research/recognition",
+      "tags": [
+        "R2 contract"
+      ],
+      "tests": 17,
+      "ms": 45
+    },
+    {
+      "file": "cssSelectorIntegrity.test.ts",
+      "purpose": "Source/config contracts",
+      "tags": [
+        "file/source assertions"
+      ],
+      "tests": 2,
+      "ms": 8
+    },
+    {
+      "file": "customAchievementCollections.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 5,
+      "ms": 24
+    },
+    {
+      "file": "cuveeCatalogLinks.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 4,
+      "ms": 7
+    },
+    {
+      "file": "cuveeIdentity.test.ts",
+      "purpose": "AI routing/research/recognition",
+      "tags": [],
+      "tests": 10,
+      "ms": 9
+    },
+    {
+      "file": "cuveePrimaryName.test.ts",
+      "purpose": "API/Worker integration/contracts",
+      "tags": [],
+      "tests": 8,
+      "ms": 88
+    },
+    {
+      "file": "cuveeReleaseVariants.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 15,
+      "ms": 15
+    },
+    {
+      "file": "d1PerformanceRoutes.test.ts",
+      "purpose": "API/Worker integration/contracts",
+      "tags": [],
+      "tests": 15,
+      "ms": 130
+    },
+    {
+      "file": "d1ReadPathCost.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 4,
+      "ms": 9
+    },
+    {
+      "file": "darkModeSurfaces.test.ts",
+      "purpose": "Source/config contracts",
+      "tags": [
+        "file/source assertions"
+      ],
+      "tests": 4,
+      "ms": 10
+    },
+    {
+      "file": "deepSearchConfidenceExplanation.test.ts",
+      "purpose": "AI routing/research/recognition",
+      "tags": [],
+      "tests": 13,
+      "ms": 11
+    },
+    {
+      "file": "deepSearchExpectedProfile.test.ts",
+      "purpose": "AI routing/research/recognition",
+      "tags": [
+        "file/source assertions"
+      ],
+      "tests": 5,
+      "ms": 21
+    },
+    {
+      "file": "deepSearchLayout.test.tsx",
+      "purpose": "UI/component",
+      "tags": [
+        "Queue contract"
+      ],
+      "tests": 25,
+      "ms": 3716
+    },
+    {
+      "file": "denominationDisplay.test.tsx",
+      "purpose": "UI/component",
+      "tags": [],
+      "tests": 6,
+      "ms": 1020
+    },
+    {
+      "file": "designTokens.test.ts",
+      "purpose": "Source/config contracts",
+      "tags": [
+        "file/source assertions"
+      ],
+      "tests": 7,
+      "ms": 10
+    },
+    {
+      "file": "detailBoundaryLayout.test.ts",
+      "purpose": "Source/config contracts",
+      "tags": [
+        "file/source assertions"
+      ],
+      "tests": 4,
+      "ms": 10
+    },
+    {
+      "file": "drinkingWindow.test.tsx",
+      "purpose": "UI/component",
+      "tags": [],
+      "tests": 9,
+      "ms": 71
+    },
+    {
+      "file": "elidRegistry.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 5,
+      "ms": 6
+    },
+    {
+      "file": "embeddingBudget.test.ts",
+      "purpose": "D1 persistence/integration",
+      "tags": [
+        "real SQLite"
+      ],
+      "tests": 5,
+      "ms": 598
+    },
+    {
+      "file": "embeddingRefreshCeiling.test.ts",
+      "purpose": "D1 persistence/integration",
+      "tags": [
+        "real SQLite"
+      ],
+      "tests": 1,
+      "ms": 181
+    },
+    {
+      "file": "escalationSelection.test.ts",
+      "purpose": "AI routing/research/recognition",
+      "tags": [],
+      "tests": 3,
+      "ms": 22
+    },
+    {
+      "file": "externalWineIdentityPresentation.test.ts",
+      "purpose": "API/Worker integration/contracts",
+      "tags": [],
+      "tests": 18,
+      "ms": 15
+    },
+    {
+      "file": "favorite.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 2,
+      "ms": 4
+    },
+    {
+      "file": "friendRequests.test.ts",
+      "purpose": "Authorization/multi-user",
+      "tags": [
+        "real SQLite",
+        "R2 contract",
+        "file/source assertions"
+      ],
+      "tests": 7,
+      "ms": 1069
+    },
+    {
+      "file": "friendResearchAdoption.test.ts",
+      "purpose": "D1 persistence/integration",
+      "tags": [
+        "real SQLite"
+      ],
+      "tests": 2,
+      "ms": 303
+    },
+    {
+      "file": "gatewayError.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 5,
+      "ms": 17
+    },
+    {
+      "file": "gatewayOnly.test.ts",
+      "purpose": "API/Worker integration/contracts",
+      "tags": [
+        "file/source assertions"
+      ],
+      "tests": 6,
+      "ms": 8
+    },
+    {
+      "file": "gemini38Upgrade.test.ts",
+      "purpose": "AI routing/research/recognition",
+      "tags": [
+        "file/source assertions"
+      ],
+      "tests": 7,
+      "ms": 114
+    },
+    {
+      "file": "geminiBatch.test.ts",
+      "purpose": "AI routing/research/recognition",
+      "tags": [],
+      "tests": 7,
+      "ms": 8
+    },
+    {
+      "file": "geminiTransport.test.ts",
+      "purpose": "API/Worker integration/contracts",
+      "tags": [],
+      "tests": 6,
+      "ms": 10
+    },
+    {
+      "file": "geographicIndication.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 19,
+      "ms": 39
+    },
+    {
+      "file": "giRegisterDrift.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 5,
+      "ms": 3
+    },
+    {
+      "file": "grapeNames.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 16,
+      "ms": 55
+    },
+    {
+      "file": "groundingBudget.test.ts",
+      "purpose": "AI routing/research/recognition",
+      "tags": [],
+      "tests": 13,
+      "ms": 9
+    },
+    {
+      "file": "groundingModelRouting.test.ts",
+      "purpose": "AI routing/research/recognition",
+      "tags": [
+        "file/source assertions"
+      ],
+      "tests": 16,
+      "ms": 9
+    },
+    {
+      "file": "groupImageCache.test.ts",
+      "purpose": "UI/component",
+      "tags": [],
+      "tests": 3,
+      "ms": 14
+    },
+    {
+      "file": "groupRecognition.test.ts",
+      "purpose": "AI routing/research/recognition",
+      "tags": [],
+      "tests": 19,
+      "ms": 35
+    },
+    {
+      "file": "groupRecognitionHandler.test.ts",
+      "purpose": "API/Worker integration/contracts",
+      "tags": [],
+      "tests": 14,
+      "ms": 4164
+    },
+    {
+      "file": "groupRecognitionSessionMigration.test.ts",
+      "purpose": "Migration/regression",
+      "tags": [
+        "file/source assertions"
+      ],
+      "tests": 1,
+      "ms": 2
+    },
+    {
+      "file": "groupReviewQueue.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 10,
+      "ms": 5
+    },
+    {
+      "file": "hybridJournalSearch.test.ts",
+      "purpose": "D1 persistence/integration",
+      "tags": [
+        "real SQLite"
+      ],
+      "tests": 4,
+      "ms": 180
+    },
+    {
+      "file": "identityKeyRepair.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 9,
+      "ms": 19
+    },
+    {
+      "file": "insightsPage.test.tsx",
+      "purpose": "UI/component",
+      "tags": [],
+      "tests": 9,
+      "ms": 854
+    },
+    {
+      "file": "insightsWithoutRatings.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 26,
+      "ms": 38
+    },
+    {
+      "file": "journalBatchExperience.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 6,
+      "ms": 10
+    },
+    {
+      "file": "journalFilterDisclosure.test.ts",
+      "purpose": "Source/config contracts",
+      "tags": [
+        "file/source assertions"
+      ],
+      "tests": 7,
+      "ms": 4
+    },
+    {
+      "file": "journalFilterMemory.test.tsx",
+      "purpose": "UI/component",
+      "tags": [],
+      "tests": 14,
+      "ms": 2447
+    },
+    {
+      "file": "journalMonthFilter.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 4,
+      "ms": 5
+    },
+    {
+      "file": "journalPageExperience.test.tsx",
+      "purpose": "UI/component",
+      "tags": [],
+      "tests": 3,
+      "ms": 399
+    },
+    {
+      "file": "journalPagination.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 3,
+      "ms": 5
+    },
+    {
+      "file": "journalSearch.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 6,
+      "ms": 121
+    },
+    {
+      "file": "journalSemanticSearchInput.test.tsx",
+      "purpose": "UI/component",
+      "tags": [],
+      "tests": 6,
+      "ms": 158
+    },
+    {
+      "file": "journalSortKey.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [
+        "file/source assertions"
+      ],
+      "tests": 9,
+      "ms": 1472
+    },
+    {
+      "file": "journey.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 2,
+      "ms": 4
+    },
+    {
+      "file": "journeyCache.test.ts",
+      "purpose": "API/Worker integration/contracts",
+      "tags": [
+        "file/source assertions"
+      ],
+      "tests": 12,
+      "ms": 17
+    },
+    {
+      "file": "journeyCacheMigration.test.ts",
+      "purpose": "Migration/regression",
+      "tags": [
+        "file/source assertions"
+      ],
+      "tests": 4,
+      "ms": 3
+    },
+    {
+      "file": "journeyLadder.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 9,
+      "ms": 6
+    },
+    {
+      "file": "labelCheck.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 9,
+      "ms": 9
+    },
+    {
+      "file": "labelFocus.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 5,
+      "ms": 2
+    },
+    {
+      "file": "launchConfig.test.ts",
+      "purpose": "API/Worker integration/contracts",
+      "tags": [],
+      "tests": 4,
+      "ms": 9
+    },
+    {
+      "file": "lwinAiRepair.test.ts",
+      "purpose": "D1 persistence/integration",
+      "tags": [
+        "real SQLite",
+        "R2 contract",
+        "Queue contract"
+      ],
+      "tests": 19,
+      "ms": 1747
+    },
+    {
+      "file": "lwinCanonicalEnrichment.test.ts",
+      "purpose": "D1 persistence/integration",
+      "tags": [
+        "real SQLite",
+        "R2 contract",
+        "Queue contract"
+      ],
+      "tests": 21,
+      "ms": 2332
+    },
+    {
+      "file": "lwinImport.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 5,
+      "ms": 8
+    },
+    {
+      "file": "manualWineReference.test.ts",
+      "purpose": "D1 persistence/integration",
+      "tags": [
+        "real SQLite",
+        "R2 contract"
+      ],
+      "tests": 21,
+      "ms": 3145
+    },
+    {
+      "file": "memberAiAllowance.test.ts",
+      "purpose": "Authorization/multi-user",
+      "tags": [
+        "real SQLite"
+      ],
+      "tests": 9,
+      "ms": 1074
+    },
+    {
+      "file": "memberAiRequestBody.test.ts",
+      "purpose": "Authorization/multi-user",
+      "tags": [
+        "real SQLite",
+        "file/source assertions"
+      ],
+      "tests": 2,
+      "ms": 412
+    },
+    {
+      "file": "memberProducerProfileResearch.test.ts",
+      "purpose": "Authorization/multi-user",
+      "tags": [
+        "real SQLite"
+      ],
+      "tests": 2,
+      "ms": 330
+    },
+    {
+      "file": "metadataSelection.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 4,
+      "ms": 5
+    },
+    {
+      "file": "michelinBordeaux.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 3,
+      "ms": 5
+    },
+    {
+      "file": "migrationSequence.test.ts",
+      "purpose": "Migration/regression",
+      "tags": [
+        "file/source assertions"
+      ],
+      "tests": 1,
+      "ms": 2
+    },
+    {
+      "file": "mobileShell.test.tsx",
+      "purpose": "UI/component",
+      "tags": [
+        "file/source assertions"
+      ],
+      "tests": 9,
+      "ms": 219
+    },
+    {
+      "file": "modelHealth.test.ts",
+      "purpose": "AI routing/research/recognition",
+      "tags": [],
+      "tests": 1,
+      "ms": 3
+    },
+    {
+      "file": "multiUser.test.ts",
+      "purpose": "Authorization/multi-user",
+      "tags": [
+        "real SQLite",
+        "R2 contract",
+        "Queue contract"
+      ],
+      "tests": 68,
+      "ms": 11330
+    },
+    {
+      "file": "newCollections.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 14,
+      "ms": 14
+    },
+    {
+      "file": "oneShotMaintenance.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 5,
+      "ms": 9
+    },
+    {
+      "file": "openBottlePage.test.tsx",
+      "purpose": "UI/component",
+      "tags": [],
+      "tests": 6,
+      "ms": 1625
+    },
+    {
+      "file": "ownerClaim.test.ts",
+      "purpose": "Authorization/multi-user",
+      "tags": [
+        "real SQLite"
+      ],
+      "tests": 5,
+      "ms": 743
+    },
+    {
+      "file": "ownerCutoverCredits.test.ts",
+      "purpose": "Authorization/multi-user",
+      "tags": [
+        "real SQLite"
+      ],
+      "tests": 5,
+      "ms": 842
+    },
+    {
+      "file": "passportMapLegibility.test.ts",
+      "purpose": "Source/config contracts",
+      "tags": [
+        "file/source assertions"
+      ],
+      "tests": 6,
+      "ms": 4
+    },
+    {
+      "file": "passportStampCount.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [
+        "file/source assertions"
+      ],
+      "tests": 4,
+      "ms": 17
+    },
+    {
+      "file": "passportVisuals.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 3,
+      "ms": 3
+    },
+    {
+      "file": "passportWorldMap.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 30,
+      "ms": 36
+    },
+    {
+      "file": "pfvAndAmericanAvas.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 3,
+      "ms": 5
+    },
+    {
+      "file": "pilotWorkload.test.ts",
+      "purpose": "D1 persistence/integration",
+      "tags": [
+        "real SQLite",
+        "R2 contract"
+      ],
+      "tests": 1,
+      "ms": 811
+    },
+    {
+      "file": "placeDenomination.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 7,
+      "ms": 5
+    },
+    {
+      "file": "placeHierarchy.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [
+        "file/source assertions"
+      ],
+      "tests": 49,
+      "ms": 68
+    },
+    {
+      "file": "pollBackoff.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 3,
+      "ms": 3
+    },
+    {
+      "file": "pourFamily.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [
+        "file/source assertions"
+      ],
+      "tests": 5,
+      "ms": 5
+    },
+    {
+      "file": "producerAliasPoolMigration.test.ts",
+      "purpose": "Migration/regression",
+      "tags": [
+        "file/source assertions"
+      ],
+      "tests": 2,
+      "ms": 5
+    },
+    {
+      "file": "producerBackNavigation.test.tsx",
+      "purpose": "UI/component",
+      "tags": [],
+      "tests": 3,
+      "ms": 37
+    },
+    {
+      "file": "producerBatchRecovery.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 7,
+      "ms": 5
+    },
+    {
+      "file": "producerCatalogDecisions.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [
+        "file/source assertions"
+      ],
+      "tests": 11,
+      "ms": 16
+    },
+    {
+      "file": "producerCatalogRangeOverlay.test.ts",
+      "purpose": "D1 persistence/integration",
+      "tags": [
+        "real SQLite"
+      ],
+      "tests": 6,
+      "ms": 898
+    },
+    {
+      "file": "producerCountryCollapse.test.tsx",
+      "purpose": "UI/component",
+      "tags": [],
+      "tests": 19,
+      "ms": 2695
+    },
+    {
+      "file": "producerDelete.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [
+        "R2 contract"
+      ],
+      "tests": 9,
+      "ms": 14
+    },
+    {
+      "file": "producerEntities.test.ts",
+      "purpose": "AI routing/research/recognition",
+      "tags": [],
+      "tests": 17,
+      "ms": 15
+    },
+    {
+      "file": "producerGatewayError.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 3,
+      "ms": 13
+    },
+    {
+      "file": "producerHeroCandidates.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 8,
+      "ms": 8
+    },
+    {
+      "file": "producerHeroContrast.test.ts",
+      "purpose": "Source/config contracts",
+      "tags": [
+        "file/source assertions"
+      ],
+      "tests": 3,
+      "ms": 6
+    },
+    {
+      "file": "producerHeroMeta.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 7,
+      "ms": 17
+    },
+    {
+      "file": "producerHomeCountry.test.ts",
+      "purpose": "D1 persistence/integration",
+      "tags": [
+        "real SQLite"
+      ],
+      "tests": 13,
+      "ms": 196
+    },
+    {
+      "file": "producerLinkChoices.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 1,
+      "ms": 13
+    },
+    {
+      "file": "producerLoadRetry.test.tsx",
+      "purpose": "UI/component",
+      "tags": [],
+      "tests": 1,
+      "ms": 271
+    },
+    {
+      "file": "producerManualContacts.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 6,
+      "ms": 10
+    },
+    {
+      "file": "producerMergeProfileDate.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 2,
+      "ms": 9
+    },
+    {
+      "file": "producerMergeUndoProfileDate.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [
+        "file/source assertions"
+      ],
+      "tests": 3,
+      "ms": 473
+    },
+    {
+      "file": "producerNameReview.test.ts",
+      "purpose": "D1 persistence/integration",
+      "tags": [
+        "real SQLite"
+      ],
+      "tests": 7,
+      "ms": 1054
+    },
+    {
+      "file": "producerNameSuggestions.test.ts",
+      "purpose": "D1 persistence/integration",
+      "tags": [
+        "real SQLite"
+      ],
+      "tests": 7,
+      "ms": 529
+    },
+    {
+      "file": "producerRangeAccess.test.ts",
+      "purpose": "Authorization/multi-user",
+      "tags": [
+        "real SQLite"
+      ],
+      "tests": 3,
+      "ms": 314
+    },
+    {
+      "file": "producerRangeCollapse.test.tsx",
+      "purpose": "UI/component",
+      "tags": [],
+      "tests": 26,
+      "ms": 4489
+    },
+    {
+      "file": "producerRangePhase2.test.ts",
+      "purpose": "AI routing/research/recognition",
+      "tags": [],
+      "tests": 6,
+      "ms": 13
+    },
+    {
+      "file": "producerRangePhase2Integration.test.ts",
+      "purpose": "D1 persistence/integration",
+      "tags": [
+        "real SQLite"
+      ],
+      "tests": 17,
+      "ms": 2633
+    },
+    {
+      "file": "producerRangeWorkersAiFallback.test.ts",
+      "purpose": "D1 persistence/integration",
+      "tags": [
+        "real SQLite"
+      ],
+      "tests": 12,
+      "ms": 1741
+    },
+    {
+      "file": "producerRangeZaiRateLimit.test.ts",
+      "purpose": "D1 persistence/integration",
+      "tags": [
+        "real SQLite"
+      ],
+      "tests": 6,
+      "ms": 955
+    },
+    {
+      "file": "producerRangeZaiTransport.test.ts",
+      "purpose": "D1 persistence/integration",
+      "tags": [
+        "real SQLite"
+      ],
+      "tests": 7,
+      "ms": 1015
+    },
+    {
+      "file": "producerResearchApi.test.ts",
+      "purpose": "UI/component",
+      "tags": [],
+      "tests": 3,
+      "ms": 10
+    },
+    {
+      "file": "producerResearchCampaign.test.ts",
+      "purpose": "AI routing/research/recognition",
+      "tags": [
+        "Queue contract"
+      ],
+      "tests": 16,
+      "ms": 16
+    },
+    {
+      "file": "producerResearchQuality.test.ts",
+      "purpose": "AI routing/research/recognition",
+      "tags": [],
+      "tests": 5,
+      "ms": 10
+    },
+    {
+      "file": "producerRunCost.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 12,
+      "ms": 19
+    },
+    {
+      "file": "producerStructuredJson.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 8,
+      "ms": 9
+    },
+    {
+      "file": "producerSuggestion.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 9,
+      "ms": 9
+    },
+    {
+      "file": "profileDateBackfill.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [
+        "file/source assertions"
+      ],
+      "tests": 4,
+      "ms": 214
+    },
+    {
+      "file": "profileName.test.ts",
+      "purpose": "D1 persistence/integration",
+      "tags": [
+        "real SQLite"
+      ],
+      "tests": 3,
+      "ms": 465
+    },
+    {
+      "file": "recognitionEscalation.test.ts",
+      "purpose": "AI routing/research/recognition",
+      "tags": [],
+      "tests": 8,
+      "ms": 7
+    },
+    {
+      "file": "recognitionEvaluation.test.ts",
+      "purpose": "AI routing/research/recognition",
+      "tags": [],
+      "tests": 13,
+      "ms": 1746
+    },
+    {
+      "file": "recognitionIdentityFields.test.ts",
+      "purpose": "AI routing/research/recognition",
+      "tags": [],
+      "tests": 5,
+      "ms": 35
+    },
+    {
+      "file": "recognitionReferenceTrust.test.ts",
+      "purpose": "API/Worker integration/contracts",
+      "tags": [
+        "R2 contract"
+      ],
+      "tests": 14,
+      "ms": 134
+    },
+    {
+      "file": "recognizedPlace.test.ts",
+      "purpose": "API/Worker integration/contracts",
+      "tags": [],
+      "tests": 7,
+      "ms": 43
+    },
+    {
+      "file": "referenceCatalog.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [
+        "R2 contract"
+      ],
+      "tests": 12,
+      "ms": 9
+    },
+    {
+      "file": "referenceIdentity.test.ts",
+      "purpose": "D1 persistence/integration",
+      "tags": [
+        "real SQLite"
+      ],
+      "tests": 8,
+      "ms": 167
+    },
+    {
+      "file": "referenceR2.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [
+        "R2 contract"
+      ],
+      "tests": 1,
+      "ms": 3
+    },
+    {
+      "file": "referenceResolverR2.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [
+        "R2 contract"
+      ],
+      "tests": 16,
+      "ms": 25
+    },
+    {
+      "file": "referenceSuggestions.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 3,
+      "ms": 4
+    },
+    {
+      "file": "researchCache.test.ts",
+      "purpose": "AI routing/research/recognition",
+      "tags": [],
+      "tests": 6,
+      "ms": 23
+    },
+    {
+      "file": "researchElapsedClock.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [
+        "file/source assertions"
+      ],
+      "tests": 2,
+      "ms": 3
+    },
+    {
+      "file": "researchFreshness.test.ts",
+      "purpose": "AI routing/research/recognition",
+      "tags": [],
+      "tests": 3,
+      "ms": 4
+    },
+    {
+      "file": "researchGateHardening.test.ts",
+      "purpose": "AI routing/research/recognition",
+      "tags": [
+        "file/source assertions"
+      ],
+      "tests": 14,
+      "ms": 25
+    },
+    {
+      "file": "researchKeyCompatibility.test.ts",
+      "purpose": "AI routing/research/recognition",
+      "tags": [],
+      "tests": 5,
+      "ms": 8
+    },
+    {
+      "file": "researchProvenance.test.ts",
+      "purpose": "AI routing/research/recognition",
+      "tags": [],
+      "tests": 5,
+      "ms": 7
+    },
+    {
+      "file": "researchQualityGate.test.ts",
+      "purpose": "AI routing/research/recognition",
+      "tags": [],
+      "tests": 7,
+      "ms": 15
+    },
+    {
+      "file": "reuseMatching.test.ts",
+      "purpose": "D1 persistence/integration",
+      "tags": [
+        "real SQLite"
+      ],
+      "tests": 8,
+      "ms": 482
+    },
+    {
+      "file": "schemaColumns.test.ts",
+      "purpose": "Migration/regression",
+      "tags": [
+        "file/source assertions"
+      ],
+      "tests": 2,
+      "ms": 17
+    },
+    {
+      "file": "searchWriteCost.test.ts",
+      "purpose": "API/Worker integration/contracts",
+      "tags": [
+        "file/source assertions"
+      ],
+      "tests": 14,
+      "ms": 2046
+    },
+    {
+      "file": "sectionProvenance.test.tsx",
+      "purpose": "UI/component",
+      "tags": [
+        "file/source assertions"
+      ],
+      "tests": 7,
+      "ms": 61
+    },
+    {
+      "file": "semanticJournalRoute.test.ts",
+      "purpose": "D1 persistence/integration",
+      "tags": [
+        "real SQLite"
+      ],
+      "tests": 1,
+      "ms": 195
+    },
+    {
+      "file": "semanticSearch.test.ts",
+      "purpose": "D1 persistence/integration",
+      "tags": [
+        "real SQLite"
+      ],
+      "tests": 6,
+      "ms": 356
+    },
+    {
+      "file": "semanticUsageRegistration.test.ts",
+      "purpose": "AI routing/research/recognition",
+      "tags": [
+        "file/source assertions"
+      ],
+      "tests": 2,
+      "ms": 4
+    },
+    {
+      "file": "sessionCache.test.ts",
+      "purpose": "Authorization/multi-user",
+      "tags": [],
+      "tests": 5,
+      "ms": 6
+    },
+    {
+      "file": "sharedProducerDirectory.test.ts",
+      "purpose": "D1 persistence/integration",
+      "tags": [
+        "real SQLite"
+      ],
+      "tests": 2,
+      "ms": 360
+    },
+    {
+      "file": "sharedWineLayout.test.ts",
+      "purpose": "Source/config contracts",
+      "tags": [
+        "file/source assertions"
+      ],
+      "tests": 10,
+      "ms": 423
+    },
+    {
+      "file": "shareStory.test.ts",
+      "purpose": "UI/component",
+      "tags": [],
+      "tests": 9,
+      "ms": 86
+    },
+    {
+      "file": "shareStoryAlign.test.tsx",
+      "purpose": "UI/component",
+      "tags": [],
+      "tests": 7,
+      "ms": 367
+    },
+    {
+      "file": "sheetMatch.test.ts",
+      "purpose": "AI routing/research/recognition",
+      "tags": [],
+      "tests": 9,
+      "ms": 26
+    },
+    {
+      "file": "sheetReviewPage.test.tsx",
+      "purpose": "UI/component",
+      "tags": [],
+      "tests": 29,
+      "ms": 2143
+    },
+    {
+      "file": "sheetRoutes.test.ts",
+      "purpose": "API/Worker integration/contracts",
+      "tags": [],
+      "tests": 15,
+      "ms": 199
+    },
+    {
+      "file": "sheetSchema.test.ts",
+      "purpose": "AI routing/research/recognition",
+      "tags": [],
+      "tests": 18,
+      "ms": 45
+    },
+    {
+      "file": "sheetWrite.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 10,
+      "ms": 25
+    },
+    {
+      "file": "singleWineScanPage.test.tsx",
+      "purpose": "UI/component",
+      "tags": [],
+      "tests": 5,
+      "ms": 521
+    },
+    {
+      "file": "sparklingDetails.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 3,
+      "ms": 9
+    },
+    {
+      "file": "spiritStrength.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 3,
+      "ms": 14
+    },
+    {
+      "file": "stalledResearchRun.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [
+        "Queue contract"
+      ],
+      "tests": 7,
+      "ms": 8
+    },
+    {
+      "file": "storyBackground.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 4,
+      "ms": 8
+    },
+    {
+      "file": "storyCollage.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 23,
+      "ms": 156
+    },
+    {
+      "file": "summaryCaches.test.ts",
+      "purpose": "UI/component",
+      "tags": [
+        "file/source assertions"
+      ],
+      "tests": 9,
+      "ms": 64
+    },
+    {
+      "file": "tastingCloseRules.test.ts",
+      "purpose": "API/Worker integration/contracts",
+      "tags": [],
+      "tests": 4,
+      "ms": 50
+    },
+    {
+      "file": "tastingDocuments.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [
+        "R2 contract"
+      ],
+      "tests": 6,
+      "ms": 18
+    },
+    {
+      "file": "tastingPages.test.tsx",
+      "purpose": "UI/component",
+      "tags": [],
+      "tests": 20,
+      "ms": 1638
+    },
+    {
+      "file": "tastingPrefill.test.tsx",
+      "purpose": "UI/component",
+      "tags": [],
+      "tests": 19,
+      "ms": 8363
+    },
+    {
+      "file": "tastingRoutes.test.ts",
+      "purpose": "API/Worker integration/contracts",
+      "tags": [
+        "R2 contract"
+      ],
+      "tests": 9,
+      "ms": 56
+    },
+    {
+      "file": "tastingSession.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 11,
+      "ms": 11
+    },
+    {
+      "file": "tastingSessionMigration.test.ts",
+      "purpose": "Migration/regression",
+      "tags": [
+        "file/source assertions"
+      ],
+      "tests": 6,
+      "ms": 3
+    },
+    {
+      "file": "tastingStructure.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [
+        "file/source assertions"
+      ],
+      "tests": 4,
+      "ms": 17
+    },
+    {
+      "file": "technicalClaimGate.test.ts",
+      "purpose": "AI routing/research/recognition",
+      "tags": [],
+      "tests": 7,
+      "ms": 14
+    },
+    {
+      "file": "technicalContradictions.test.ts",
+      "purpose": "AI routing/research/recognition",
+      "tags": [],
+      "tests": 8,
+      "ms": 12
+    },
+    {
+      "file": "ungroundedResearchReport.test.ts",
+      "purpose": "AI routing/research/recognition",
+      "tags": [],
+      "tests": 8,
+      "ms": 17
+    },
+    {
+      "file": "unpricedAiPaths.test.ts",
+      "purpose": "Authorization/multi-user",
+      "tags": [
+        "real SQLite",
+        "file/source assertions"
+      ],
+      "tests": 7,
+      "ms": 1105
+    },
+    {
+      "file": "vertexBatchConcurrency.test.ts",
+      "purpose": "AI routing/research/recognition",
+      "tags": [],
+      "tests": 6,
+      "ms": 24
+    },
+    {
+      "file": "vertexBatchDeadline.test.ts",
+      "purpose": "D1 persistence/integration",
+      "tags": [
+        "real SQLite"
+      ],
+      "tests": 5,
+      "ms": 812
+    },
+    {
+      "file": "vintageCheckLayout.test.tsx",
+      "purpose": "UI/component",
+      "tags": [
+        "file/source assertions"
+      ],
+      "tests": 4,
+      "ms": 265
+    },
+    {
+      "file": "vintageCheckState.test.tsx",
+      "purpose": "UI/component",
+      "tags": [],
+      "tests": 23,
+      "ms": 484
+    },
+    {
+      "file": "vintageIntelligence.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [
+        "file/source assertions"
+      ],
+      "tests": 5,
+      "ms": 9
+    },
+    {
+      "file": "vintageIntelligencePersistence.test.ts",
+      "purpose": "D1 persistence/integration",
+      "tags": [
+        "real SQLite",
+        "file/source assertions"
+      ],
+      "tests": 19,
+      "ms": 2588
+    },
+    {
+      "file": "vintageLookupReply.test.ts",
+      "purpose": "API/Worker integration/contracts",
+      "tags": [
+        "file/source assertions"
+      ],
+      "tests": 3,
+      "ms": 49
+    },
+    {
+      "file": "vintageLookupRequest.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [
+        "file/source assertions"
+      ],
+      "tests": 10,
+      "ms": 6
+    },
+    {
+      "file": "vintageModelEscalation.test.ts",
+      "purpose": "API/Worker integration/contracts",
+      "tags": [
+        "file/source assertions"
+      ],
+      "tests": 9,
+      "ms": 73
+    },
+    {
+      "file": "vintageResearchAccess.test.tsx",
+      "purpose": "UI/component",
+      "tags": [],
+      "tests": 7,
+      "ms": 373
+    },
+    {
+      "file": "vintageResearchPolling.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 8,
+      "ms": 30
+    },
+    {
+      "file": "vintageResearchSurvivesClose.test.ts",
+      "purpose": "D1 persistence/integration",
+      "tags": [
+        "real SQLite"
+      ],
+      "tests": 11,
+      "ms": 1797
+    },
+    {
+      "file": "vintageResumeTimer.test.tsx",
+      "purpose": "UI/component",
+      "tags": [],
+      "tests": 1,
+      "ms": 41
+    },
+    {
+      "file": "vintageWindow.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 26,
+      "ms": 22
+    },
+    {
+      "file": "vintageWindowSurfaces.test.tsx",
+      "purpose": "UI/component",
+      "tags": [
+        "file/source assertions"
+      ],
+      "tests": 4,
+      "ms": 384
+    },
+    {
+      "file": "wineBackTarget.test.tsx",
+      "purpose": "UI/component",
+      "tags": [
+        "file/source assertions"
+      ],
+      "tests": 18,
+      "ms": 1502
+    },
+    {
+      "file": "wineClassificationDisplay.test.tsx",
+      "purpose": "UI/component",
+      "tags": [],
+      "tests": 4,
+      "ms": 738
+    },
+    {
+      "file": "wineDetailMapping.test.ts",
+      "purpose": "API/Worker integration/contracts",
+      "tags": [],
+      "tests": 3,
+      "ms": 6
+    },
+    {
+      "file": "wineDetailOrder.test.ts",
+      "purpose": "Source/config contracts",
+      "tags": [
+        "file/source assertions"
+      ],
+      "tests": 12,
+      "ms": 5
+    },
+    {
+      "file": "wineDetailReadCost.test.ts",
+      "purpose": "D1 persistence/integration",
+      "tags": [
+        "real SQLite"
+      ],
+      "tests": 2,
+      "ms": 307
+    },
+    {
+      "file": "wineEditRelink.test.ts",
+      "purpose": "API/Worker integration/contracts",
+      "tags": [],
+      "tests": 10,
+      "ms": 115
+    },
+    {
+      "file": "wineFormTagsAndGrapes.test.tsx",
+      "purpose": "UI/component",
+      "tags": [],
+      "tests": 9,
+      "ms": 2017
+    },
+    {
+      "file": "wineImageRoutes.test.ts",
+      "purpose": "API/Worker integration/contracts",
+      "tags": [],
+      "tests": 13,
+      "ms": 66
+    },
+    {
+      "file": "wineImageVariants.test.tsx",
+      "purpose": "UI/component",
+      "tags": [],
+      "tests": 1,
+      "ms": 84
+    },
+    {
+      "file": "wineListImageBindings.test.ts",
+      "purpose": "D1 persistence/integration",
+      "tags": [
+        "real SQLite"
+      ],
+      "tests": 1,
+      "ms": 191
+    },
+    {
+      "file": "wineReferenceReview.test.ts",
+      "purpose": "D1 persistence/integration",
+      "tags": [
+        "real SQLite",
+        "R2 contract"
+      ],
+      "tests": 13,
+      "ms": 1839
+    },
+    {
+      "file": "wineSaveAtomic.test.ts",
+      "purpose": "D1 persistence/integration",
+      "tags": [
+        "real SQLite"
+      ],
+      "tests": 24,
+      "ms": 4039
+    },
+    {
+      "file": "wineSchema.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 7,
+      "ms": 13
+    },
+    {
+      "file": "wineTags.test.ts",
+      "purpose": "Fast unit/domain rules",
+      "tags": [],
+      "tests": 8,
+      "ms": 6
+    },
+    {
+      "file": "wineThumbnails.test.ts",
+      "purpose": "API/Worker integration/contracts",
+      "tags": [
+        "R2 contract"
+      ],
+      "tests": 15,
+      "ms": 100
+    }
+  ],
+  "provenance": {
+    "commit": "f2ba8454e43e1e5a79a0c940b61e9af8588bc3ec",
+    "date": "2026-09-20",
+    "node": "22.22.0",
+    "vitest": "3.2.7",
+    "os": "Windows",
+    "note": "Includes pre-existing uncommitted recognition evaluation test; timings are local observations, not hosted CI."
+  }
+}
