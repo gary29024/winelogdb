@@ -24,6 +24,29 @@ export function producerLookupKeys(value:string|null|undefined){
  if(stripped&&stripped!==base)keys.push(stripped);
  return [...new Set(keys)];
 }
+export function producerHouseQualifier(value:string|null|undefined){
+ const base=normalizeReferenceText(value);if(!base)return null;
+ const first=base.split(' ')[0];
+ if(first==='domaine'||first==='domaines')return 'domaine';
+ if(first==='chateau'||first==='ch')return 'chateau';
+ if(first==='bodega'||first==='bodegas')return 'bodega';
+ if(first==='azienda')return 'azienda agricola';
+ return ['champagne','maison','weingut','tenuta','cantina'].includes(first)?first:null;
+}
+
+export type LwinReferenceIdentitySource={
+ displayName?:string|null;producerName?:string|null;producerKey?:string|null;wineName?:string|null;wineKey?:string|null;
+};
+export function lwinReferenceIdentity(row:LwinReferenceIdentitySource){
+ const display=(row.displayName??'').trim(),comma=display.indexOf(',');
+ const displayProducer=comma>0?display.slice(0,comma).trim():null,displayWine=comma>0?display.slice(comma+1).trim():null;
+ const structuredProducerName=row.producerName?.trim()||null,producerName=displayProducer||structuredProducerName,wineName=row.wineName?.trim()||displayWine||null;
+ return {
+  producerName,producerKey:normalizeReferenceText(producerName)||normalizeReferenceText(row.producerKey),
+  structuredProducerKey:normalizeReferenceText(row.producerKey)||normalizeReferenceText(structuredProducerName),
+  wineName,wineKey:normalizeReferenceText(row.wineKey)||normalizeReferenceText(wineName)
+ };
+}
 
 type CacheEntry={until:number;value:unknown|null};
 const caches=new WeakMap<R2Bucket,Map<string,CacheEntry>>();
@@ -81,6 +104,23 @@ export async function elidProducerIndex(bucket:R2Bucket):Promise<ElidProducerInd
 export async function lwinProducerIndex(bucket:R2Bucket):Promise<LwinProducerIndex>{
  const manifest=await referenceManifest(bucket,'lwin');if(!manifest?.producerIndexKey)return {};
  return await jsonObject<LwinProducerIndex>(bucket,manifest.producerIndexKey)??{};
+}
+export async function lwinStrictRowsForProducer<T>(bucket:R2Bucket,producer:string|null|undefined):Promise<T[]>{
+ const manifest=await referenceManifest(bucket,'lwin');if(!manifest)return [];
+ const keys=producerLookupKeys(producer);if(!keys.length)return [];
+ // Prefix stripping is retrieval-only. When an older manifest has no producer
+ // index, try the tiny set of exact lookup-key shards instead of hashing only
+ // the qualified form and missing rows stored under PRODUCER_NAME.
+ const fallback=async()=>{
+  const found:T[]=[],seen=new Set<string>();
+  for(const key of keys){const shard=referenceShardId(key,manifest.shardCount);if(seen.has(shard))continue;seen.add(shard);found.push(...await referenceRowsByShard<T>(bucket,'lwin',shard))}
+  return found;
+ };
+ if(!manifest.producerIndexKey)return fallback();
+ const index=await lwinProducerIndex(bucket),shardIds=new Set<string>();
+ for(const key of keys)for(const shard of index[key]??[])shardIds.add(shard);
+ if(!shardIds.size)return fallback();
+ const found:T[]=[];for(const shard of shardIds)found.push(...await referenceRowsByShard<T>(bucket,'lwin',shard));return found;
 }
 export async function lwinCandidateRowsForProducer<T>(bucket:R2Bucket,producer:string|null|undefined):Promise<T[]>{
  const manifest=await referenceManifest(bucket,'lwin');if(!manifest)return [];

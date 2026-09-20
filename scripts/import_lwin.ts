@@ -4,7 +4,7 @@ import { extname,basename,resolve } from 'node:path';
 import ExcelJS from 'exceljs';
 import { parseLwinReference,validateLwinHeaders,type LwinInputRow,type LwinReferenceProduct } from '../src/lib/wine/lwinImport';
 import { normalizeLwinId } from '../src/lib/wine/referenceIdentity';
-import { REFERENCE_SHARDS,producerLookupKeys,referenceShardId,type LwinProducerIndex,type LwinRedirect,type ReferenceManifest } from '../src/lib/wine/referenceCatalog';
+import { REFERENCE_SHARDS,lwinReferenceIdentity,producerLookupKeys,referenceShardId,type LwinProducerIndex,type LwinRedirect,type ReferenceManifest } from '../src/lib/wine/referenceCatalog';
 import { DEFAULT_REFERENCE_BUCKET,flag,option,positional,recordSyncState,uploadReferenceFiles,writeShardFiles } from './referenceR2';
 
 function csvRows(input:string){
@@ -63,9 +63,10 @@ const shards=new Map<string,LwinReferenceProduct[]>(),byLwin=new Map(products.ma
 let sparse=0;
 const addIndex=(key:string,shard:string)=>{const values=producerIndex[key]??[];if(!values.includes(shard))values.push(shard);producerIndex[key]=values};
 for(const product of products){
- if(!product.producerKey||!product.wineKey)sparse++;
- const id=referenceShardId(product.producerKey||product.lwin7,REFERENCE_SHARDS),rows=shards.get(id)??[];rows.push(product);shards.set(id,rows);
- for(const key of producerLookupKeys(product.producerName)){addIndex(key,id);for(const token of key.split(' ').filter(token=>token.length>=4))addIndex(`t:${token}`,id)}
+ const identity=lwinReferenceIdentity(product);if(!identity.producerKey||!identity.wineKey)sparse++;
+ const id=referenceShardId(product.producerKey||identity.producerKey||product.lwin7,REFERENCE_SHARDS),rows=shards.get(id)??[];rows.push(product);shards.set(id,rows);
+ const lookupKeys=new Set([...producerLookupKeys(product.producerName),...producerLookupKeys(identity.producerName)]);
+ for(const key of lookupKeys){addIndex(key,id);for(const token of key.split(' ').filter(token=>token.length>=4))addIndex(`t:${token}`,id)}
 }
 // Token aliases are only useful while selective. Generic producer words such as
 // chateau/domaine otherwise fan out to nearly every shard and defeat the index.

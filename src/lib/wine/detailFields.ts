@@ -1,6 +1,7 @@
 import { resolvePlace } from '../places/resolve';
 import { formatDate,formatPrice,formatRating } from './detailFormat';
 import { normalizeReferenceText } from './referenceCatalog';
+import type { IdentityMatchStatus } from './referenceIdentity';
 
 /**
  * The single definition of what a wine detail page shows, for both the owner's
@@ -34,6 +35,7 @@ export type WineFacts={
  vintageKind?:'vintage'|'non_vintage'|'multi_vintage'|'unknown'|Absent;
  colour?:string|Absent;productType?:string|Absent;productSubtype?:string|Absent;
  lwin7?:string|Absent;lwin11?:string|Absent;elid?:string|Absent;referenceSite?:string|Absent;referenceParcel?:string|Absent;
+ identityMatchStatus?:IdentityMatchStatus|Absent;
 };
 
 export type WineExperience={
@@ -93,16 +95,18 @@ function additionalReferencePlace(value:string|Absent,wine:WineFacts,extra:Array
 /** The Wine details rows, in reading order. Empty fields are dropped. */
 export function wineFactRows(wine:WineFacts):FactRow[]{
  const {denominatedAppellation,denominatedRegion}=placeLabels(wine),site=additionalReferencePlace(wine.referenceSite,wine),parcel=additionalReferencePlace(wine.referenceParcel,wine,[site]);
+ const conflict=wine.identityMatchStatus==='conflict',referenceLabel=(label:string)=>conflict?`${label} (needs review)`:label;
  return present([
   ['Region',denominatedRegion],
   ['Appellation',denominatedAppellation],
   ['As recorded',asRecordedLabel(wine)],
   ['Release',wine.releaseDesignation],
-  ['Type',[wine.colour,wine.productSubtype??wine.productType].filter(Boolean).join(' · ')],
+  ['Reference identity',conflict?'Conflict — stored reference details may not match this wine.':null],
+  [referenceLabel('Type'),[wine.colour,wine.productSubtype??wine.productType].filter(Boolean).join(' · ')],
   ['Grapes / blend',blendLabels(wine).join(', ')],
   ['Alcohol',wine.alcoholPercentage!=null?`${wine.alcoholPercentage}%`:null],
-  ['LWIN site',site],['LWIN parcel',parcel],
-  ['LWIN7',wine.lwin7],['LWIN11',wine.lwin11],['ELID',wine.elid]
+  [referenceLabel('LWIN site'),site],[referenceLabel('LWIN parcel'),parcel],
+  [referenceLabel('LWIN7'),wine.lwin7],[referenceLabel('LWIN11'),wine.lwin11],[referenceLabel('ELID'),wine.elid]
  ]);
 }
 
