@@ -88,10 +88,11 @@ export function referenceIdentityStatements(
     candidatesJson,persistIdentity?stamp:null,stamp,suggestions.length?JSON.stringify(suggestions):null,suggestions.length?stamp:null,owner,wineId,...guardValues);
  if(!updateExisting||w.identityMatchStatus==='manual')return [evidence,identityStatement()];
 
- // A deliberate name correction may accept a new deterministic match. Mere
- // formatting changes, failed lookups, and manual identities retain protection.
+ // A deliberate name correction accepts a new deterministic match or clears
+ // an obsolete automatic identity when the new name is absent from the catalogue.
+ // Formatting changes, incomplete lookups, ambiguity and manual IDs stay protected.
  const corrected=previous&&(normalizeReferenceText(previous.producer)!==normalizeReferenceText(w.producer)||normalizeReferenceText(previous.wine_name)!==normalizeReferenceText(w.wineName));
- if(corrected&&persistIdentity&&w.identityMatchStatus==='matched')return [evidence,identityStatement("AND coalesce(identity_match_status,'')<>'manual'")];
+ if(corrected&&((persistIdentity&&w.identityMatchStatus==='matched')||w.identityMatchStatus==='unmatched'))return [evidence,identityStatement("AND coalesce(identity_match_status,'')<>'manual'")];
 
  // An edit may re-run matching after the catalogue or naming rules changed.
  // Never silently destroy or replace a stored automatic identity in that case:

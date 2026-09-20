@@ -25,24 +25,35 @@ describe('wine saves through the deployed entrypoint and migrated SQLite',()=>{
     {change:{wineName:'Correct wine'},lookup:'matched',stored:'conflict',expected:'matched'},
     {change:{tastingNotes:'New note'},lookup:'matched',stored:'matched',expected:'conflict'},
     {change:{producer:' TEST ESTATE '},lookup:'matched',stored:'matched',expected:'conflict'},
-    {change:{producer:'Correct estate'},lookup:'unmatched',stored:'matched',expected:'conflict'},
+    {change:{producer:'Correct estate'},lookup:'unmatched',stored:'matched',expected:'unmatched'},
+    {change:{wineName:'Unknown wine'},lookup:'unmatched',stored:'conflict',expected:'unmatched'},
+    {change:{tastingNotes:'New note'},lookup:'unmatched',stored:'matched',expected:'conflict'},
+    {change:{producer:'Correct estate'},lookup:'unmatched',stored:'manual',expected:'manual'},
     {change:{producer:'Correct estate'},lookup:'ambiguous',stored:'matched',expected:'conflict'},
     {change:{producer:'Correct estate'},lookup:'matched',stored:'manual',expected:'manual'},
   ] as const)('handles a name correction without bypassing reference safeguards: %j',async({change,lookup,stored,expected})=>{
     const {sqlite,create,request}=setup(),id=await create(blank);
-    sqlite.prepare("UPDATE wines SET lwin7='1000001',lwin11='10000012020',elid='FR-BDX-MARG01-2020',identity_match_status=?,reference_product_key='lwin:1000001',colour='Red' WHERE id=?").run(stored,id);
+    sqlite.prepare("UPDATE wines SET lwin7='1000001',lwin11='10000012020',elid='FR-BDX-MARG01-2020',identity_match_status=?,reference_product_key='lwin:1000001',colour='Red',product_type='Wine',product_subtype='Still',reference_site='Old site',reference_parcel='Old parcel',identity_matched_at='old',reference_suggestions_json='[]' WHERE id=?").run(stored,id);
     vi.spyOn(referenceIdentity,'enrichRecognitionReference').mockImplementation(async (_bucket,wine)=>({...wine,identityMatchStatus:lookup,lwin7:lookup==='matched'?'1000009':null,lwin11:lookup==='matched'?'10000092020':null,elid:null,referenceProductKey:lookup==='matched'?'lwin:1000009':null,colour:'White',identityMatchCandidates:lookup==='ambiguous'?['1000009','1000010']:[]}));
     expect((await request('PUT',`/api/wines/${id}`,{...blank,...change})).status).toBe(200);
     const row=sqlite.prepare('SELECT * FROM wines WHERE id=?').get(id) as Record<string,unknown>;
     expect(row.identity_match_status).toBe(expected);
     expect(row).toMatchObject(expected==='matched'
       ?{lwin7:'1000009',lwin11:'10000092020',elid:null,reference_product_key:'lwin:1000009',colour:'White',identity_match_candidates_json:null}
+      :expected==='unmatched'?{lwin7:null,lwin11:null,elid:null,reference_product_key:null,colour:null,product_type:null,product_subtype:null,reference_site:null,reference_parcel:null,identity_match_candidates_json:null,identity_matched_at:null,reference_suggestions_json:null}
       :{lwin7:'1000001',lwin11:'10000012020',elid:'FR-BDX-MARG01-2020',reference_product_key:'lwin:1000001',colour:'Red'});
     if(expected==='conflict'){
       const candidates=JSON.parse(String(row.identity_match_candidates_json));
       expect(candidates).toContain('1000001');
       if(lookup!=='unmatched')expect(candidates).toContain('1000009');
     }
+  });
+  it('preserves stored identity when a rename lookup fails to complete',async()=>{
+    const {sqlite,create,request}=setup(),id=await create(blank);
+    sqlite.prepare("UPDATE wines SET lwin7='1000001',elid='FR-BDX-MARG01-2020',identity_match_status='matched' WHERE id=?").run(id);
+    // The unavailable reference bucket makes enrichment return without a status.
+    expect((await request('PUT',`/api/wines/${id}`,{...blank,producer:'Unknown estate'})).status).toBe(200);
+    expect(sqlite.prepare('SELECT lwin7,elid,identity_match_status FROM wines WHERE id=?').get(id)).toMatchObject({lwin7:'1000001',elid:'FR-BDX-MARG01-2020',identity_match_status:'matched'});
   });
   it('saves, preserves, replaces and clears release details with the wine',async()=>{
     const {create,request}=setup(),id=await create({...blank,sparklingDetails:{dosageGPerL:0,disgorgement:'Spring 2024'}});

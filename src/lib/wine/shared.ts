@@ -44,6 +44,8 @@ export type SharedWine = SharedWineExperience&{
  vintageKind?:'vintage'|'non_vintage'|'multi_vintage'|'unknown'|null;
  releaseDesignation?:string|null;
  lwin7?:string|null;lwin11?:string|null;elid?:string|null;referenceSite?:string|null;referenceParcel?:string|null;
+ /** A public warning about the displayed facts, without private match diagnostics. */
+ identityMatchStatus?:'conflict'|null;
  colour?:string|null;productType?:string|null;productSubtype?:string|null;
  country:string|null;
  region:string|null;
