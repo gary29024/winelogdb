@@ -6,7 +6,7 @@ import { wineTargets } from './credits';
 import { publishProducerResearch } from '../../src/lib/research/sharedProducer';
 import { referenceMatchForProduct } from '../../src/lib/wine/referenceIdentity';
 import { ReferenceReadScope,referenceManifest } from '../../src/lib/wine/referenceCatalog';
-import { aiRepair,repairCandidates } from './lwinRepair';
+import { aiRepair,repairCandidates,LwinAiTransientError,LWIN_AI_LEASE_SECONDS } from './lwinRepair';
 import type { GeminiTransportBindings } from '../geminiTransport';
 import type { AiUsageEnv } from '../../src/lib/usage/aiUsage';
 import { lwinEnrichmentStatement,lwinInput,resolveStoredLwin,type StoredLwinWine } from '../lwinEnrichment';
@@ -30,6 +30,7 @@ const STORAGE_BATCH=100,RESEARCH_BATCH=10,LWIN_BATCH=25,LWIN_VALIDATE_BATCH=25,L
 const jobKey=(kind:RolloutKind)=>`rollout_${kind}_job`;
 const errorKey=(kind:RolloutKind)=>`rollout_${kind}_error`;
 const leaseKey=(kind:RolloutKind)=>`rollout_${kind}_lease`;
+const leaseSeconds=(kind:RolloutKind)=>kind==='lwin_ai'?LWIN_AI_LEASE_SECONDS:LEASE_SECONDS;
 const completionKey=(kind:RolloutKind)=>kind==='storage'?'storage_inventory':kind==='research'?'research_index':kind==='lwin'?'lwin_backfill':kind==='lwin_validate'?'lwin_validation':'lwin_ai_backfill';
 
 async function readState(db:D1Database,name:string){return (await db.prepare('SELECT value FROM rollout_state WHERE name=?').bind(name).first<{value:string}>())?.value??''}
@@ -95,7 +96,7 @@ export async function rolloutStatus(db:D1Database):Promise<RolloutStatus>{
 }
 
 async function acquireLease(db:D1Database,kind:RolloutKind){
- const now=Math.floor(Date.now()/1000),until=now+LEASE_SECONDS,name=leaseKey(kind),value=String(until)+':'+crypto.randomUUID();
+ const now=Math.floor(Date.now()/1000),until=now+leaseSeconds(kind),name=leaseKey(kind),value=String(until)+':'+crypto.randomUUID();
  const result=await db.prepare(`INSERT INTO rollout_state(name,value) VALUES(?,?)
   ON CONFLICT(name) DO UPDATE SET value=excluded.value WHERE CAST(rollout_state.value AS INTEGER)<=?`).bind(name,value,now).run();
  return result.meta.changes?value:null;
@@ -156,7 +157,7 @@ async function lwinBatch(env:RolloutEnv,kind:'lwin'|'lwin_validate'|'lwin_ai',le
  const counts:Record<string,number>={processed:0,matched:0,ambiguous:0,unmatched:0,conflict:0,verified:0,review:0,deterministic:0,ai:0};
  for(const row of rows.results){
   if(await readState(env.DB,jobKey(kind))!=='running')return {complete:false,...counts};
-  const renewed=String(Math.floor(Date.now()/1000)+LEASE_SECONDS)+':'+crypto.randomUUID();
+  const renewed=String(Math.floor(Date.now()/1000)+leaseSeconds(kind))+':'+crypto.randomUUID();
   const renewal=await env.DB.prepare('UPDATE rollout_state SET value=? WHERE name=? AND value=?').bind(renewed,leaseKey(kind),lease.value).run();
   if(!renewal.meta.changes)throw new Error('LWIN lease expired; resume to retry.');lease.value=renewed;
   let result=await resolveStoredLwin(scope,row);
@@ -177,6 +178,7 @@ async function lwinBatch(env:RolloutEnv,kind:'lwin'|'lwin_validate'|'lwin_ai',le
   // all statements are local SQL and no network work happens inside the batch.
   const checkpoint=env.DB.prepare('INSERT INTO rollout_state(name,value) VALUES(?,?) ON CONFLICT(name) DO UPDATE SET value=excluded.value').bind(prefix+'_cursor',row.id);
   const counterStatements=Object.entries(delta).map(([key,value])=>env.DB.prepare('INSERT INTO rollout_state(name,value) VALUES(?,?) ON CONFLICT(name) DO UPDATE SET value=CAST(rollout_state.value AS INTEGER)+CAST(excluded.value AS INTEGER)').bind(prefix+'_'+(key==='ai'?'model':key),String(value)));
+  if(kind==='lwin_ai')counterStatements.push(env.DB.prepare("UPDATE rollout_state SET value='0' WHERE name IN ('lwin_ai_retry_count','lwin_ai_retry_at')"));
   // The update's compare-and-swap is checked before advancing. D1 batches are
   // transactional; a failed guard raises a constraint violation and rolls back.
   const assertion=statement?env.DB.prepare(`INSERT INTO rollout_state(name,value) SELECT 'lwin_assertion',NULL WHERE changes()=0`):null;
@@ -202,6 +204,10 @@ export async function processRolloutJob(env:RolloutEnv,kind:RolloutKind,job?:Rol
  try{
   // A refresh may have acquired the lease between the initial check and ours.
   if(job?.generation!==undefined&&(job.generation!==await readState(env.DB,`rollout_${kind}_generation`)||job.cursor!==await readState(env.DB,`${kind}_cursor`)))return {complete:false,processed:0,busy:false,stale:true};
+  if(kind==='lwin_ai'){
+   const retryAfterSeconds=await readCount(env.DB,'lwin_ai_retry_at')-Math.floor(Date.now()/1000);
+   if(retryAfterSeconds>0)return {complete:false,processed:0,busy:false,retryAfterSeconds};
+  }
   await writeState(env.DB,errorKey(kind),'');
   const result=kind==='storage'?await inventoryStorageBatch(env):kind==='research'?await indexResearchBatch(env):await lwinBatch(env,kind,lease);
   const stillRunning=await readState(env.DB,jobKey(kind))==='running';
@@ -209,7 +215,17 @@ export async function processRolloutJob(env:RolloutEnv,kind:RolloutKind,job?:Rol
   return {...result,busy:false,...(!result.complete&&!stillRunning?{paused:true}: {})};
  }catch(error){
   const message=error instanceof Error?error.message:String(error);
-  if(await readState(env.DB,leaseKey(kind))===lease.value)await writeStates(env.DB,[[errorKey(kind),message],[jobKey(kind),'paused']]);
+  if(await readState(env.DB,leaseKey(kind))===lease.value){
+   if(kind==='lwin_ai'&&error instanceof LwinAiTransientError&&await readState(env.DB,jobKey(kind))==='running'){
+    const retries=await readCount(env.DB,'lwin_ai_retry_count');
+    if(retries<2){
+     const retryAfterSeconds=60*2**retries+Math.floor(Math.random()*15);
+     await writeStates(env.DB,[['lwin_ai_retry_count',String(retries+1)],['lwin_ai_retry_at',String(Math.floor(Date.now()/1000)+retryAfterSeconds)],[errorKey(kind),`${message.replace(/ Resume AI LWIN resolution to retry this wine\.$/,'')} Retrying automatically (${retries+1}/2) in ${retryAfterSeconds} seconds.`]]);
+     return {complete:false,processed:0,busy:false,retryAfterSeconds};
+    }
+   }
+   await writeStates(env.DB,[[errorKey(kind),message],[jobKey(kind),'paused']]);
+  }
   if(kind==='lwin_ai'&&message.includes('LWIN producer index is missing'))return {complete:false,processed:0,busy:false,paused:true};
   throw error;
  }finally{await releaseLease(env.DB,kind,lease.value)}
@@ -221,6 +237,7 @@ export async function recoverRollouts(env:RolloutEnv){
   const refreshRunning=kind==='research'&&await readState(env.DB,RESEARCH_REFRESH)==='running';
   if(await readState(env.DB,completionKey(kind))==='complete'&&!refreshRunning)continue;
   if(await readState(env.DB,jobKey(kind))!=='running')continue;
+  if(kind==='lwin_ai'&&await readCount(env.DB,'lwin_ai_retry_at')>Math.floor(Date.now()/1000))continue;
   if(Number.parseInt(await readState(env.DB,leaseKey(kind)))>Math.floor(Date.now()/1000))continue;
   await dispatchRollout(env,kind).catch(error=>console.error(JSON.stringify({event:'rollout_recovery_failed',kind,error:String(error)})));
  }
@@ -241,6 +258,7 @@ async function startRolloutLocked(env:RolloutEnv,member:Member,kind:RolloutKind,
  if(complete==='complete'&&!refresh&&!resumingRefresh)return {accepted:false,alreadyComplete:true,status:await rolloutStatus(env.DB)};
  if(refresh&&kind==='storage')throw new ApiError(400,'Storage inventory cannot be refreshed from this endpoint');
  const entries:Array<[string,string]>=[[jobKey(kind),'running'],[errorKey(kind),'']];
+ if(kind==='lwin_ai')entries.push(['lwin_ai_retry_count','0'],['lwin_ai_retry_at','0']);
  if(kind.startsWith('lwin')){
   // A new generation also permits explicit retry of a completed ambiguous run.
   if(refresh||!await readState(env.DB,`rollout_${kind}_generation`))entries.push([`rollout_${kind}_generation`,crypto.randomUUID()]);
