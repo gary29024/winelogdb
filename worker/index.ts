@@ -12,6 +12,7 @@ import { dimensionsSchema, validateBatch } from '../src/features/uploads/validat
 import { parseRecognition } from '../src/features/recognition/schema';
 import { wineSaveStatements } from '../src/lib/db/wineSave';
 import { enrichRecognitionReference } from '../src/lib/wine/referenceIdentity';
+import { normalizeReferenceText } from '../src/lib/wine/referenceCatalog';
 import { appClassification,classificationLabel,referenceSuggestionFields,type ReferenceSuggestion,type ReferenceSuggestionField } from '../src/lib/wine/referenceSuggestions';
 import { ensureWineIdentity } from '../src/lib/wine/identity';
 import { recheckWineReference } from './wineReferenceReview';
@@ -236,7 +237,10 @@ app.put('/api/wines/:id/reference-suggestion',async c=>{
  if(!suggestion)return c.json({error:'That LWIN suggestion is no longer available'},409);
  const columns:Record<ReferenceSuggestionField,string>={producer:'producer',wineName:'wine_name',country:'country',region:'region',classification:'classification'},column=columns[field];
  const rawCurrent=field==='wineName'?row.wine_name:row[field],current=field==='classification'?classificationLabel(rawCurrent==null?null:String(rawCurrent)):(rawCurrent==null?null:String(rawCurrent));
- if((suggestion.current??null)!==(current??null))return c.json({error:'This wine changed since the LWIN suggestion was created. Re-run matching before applying it.'},409);
+ // Suggestions and entity aliases already ignore accents and formatting. Use
+ // the same comparison here; the write below still guards the exact raw value
+ // read from D1 so an edit during this request cannot be overwritten.
+ if(normalizeReferenceText(suggestion.current)!==normalizeReferenceText(current))return c.json({error:'This wine changed since the LWIN suggestion was created. Re-run matching before applying it.'},409);
  let value:string|null=keep?(rawCurrent==null?null:String(rawCurrent)):suggestion.suggested;
  if(!keep&&field==='classification')value=suggestion.suggestedValue??appClassification(suggestion.suggested);
  if(!keep&&!value)return c.json({error:'Unsupported LWIN value'},400);
