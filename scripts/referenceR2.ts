@@ -1,6 +1,8 @@
 import { spawnSync } from 'node:child_process';
+import { existsSync } from 'node:fs';
 import { mkdir,writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import type { ReferenceManifest,ReferenceProvider } from '../src/lib/wine/referenceCatalog';
 
 export const DEFAULT_REFERENCE_BUCKET='winelog-private';
@@ -14,9 +16,14 @@ export function option(name:string){
 export function positional(){
  return process.argv.slice(2).filter(value=>!value.startsWith('--'));
 }
-function npx(){return process.platform==='win32'?'npx.cmd':'npx'}
+export function wranglerInvocation(args:string[]){
+ const cli=fileURLToPath(new URL('../node_modules/wrangler/bin/wrangler.js',import.meta.url));
+ return {command:process.execPath,args:[cli,...args],cli};
+}
 export function wrangler(args:string[]){
- const result=spawnSync(npx(),['wrangler',...args],{stdio:'inherit',shell:false});
+ const invocation=wranglerInvocation(args);
+ if(!existsSync(invocation.cli))throw new Error('Wrangler CLI was not found in node_modules. Run npm install before importing reference data.');
+ const result=spawnSync(invocation.command,invocation.args,{stdio:'inherit',shell:false});
  if(result.error)throw result.error;
  if(result.status!==0)throw new Error(`wrangler ${args.join(' ')} failed with exit code ${result.status}`);
 }
@@ -39,10 +46,10 @@ export function uploadReferenceFiles(provider:ReferenceProvider,version:string,f
  wrangler(['r2','object','put',`${bucket}/${prefix}/manifest.json`,'--remote','--file',manifestPath,'--content-type','application/json','--force']);
  wrangler(['r2','object','put',`${bucket}/reference/${provider}/current.json`,'--remote','--file',manifestPath,'--content-type','application/json','--force']);
 }
-export function recordSyncState(source:string,manifest:ReferenceManifest,counts:{seen:number;written:number;redirected?:number;rejected?:number;unresolved?:number}){
+export function recordSyncState(source:string,manifest:ReferenceManifest,counts:{seen:number;written:number;redirected?:number;rejected?:number;unresolved?:number;sparse?:number}){
  const q=(value:string|null)=>value==null?'NULL':`'${value.replace(/'/g,"''")}'`;
- const sql=`INSERT INTO wine_reference_sync_state(source,source_version,source_hash,source_updated_at,rows_seen,rows_written,rows_redirected,rows_rejected,rows_unresolved,status,updated_at)
- VALUES(${q(source)},${q(manifest.source)},${q(manifest.version)},${q(manifest.sourceUpdatedAt)},${counts.seen},${counts.written},${counts.redirected??0},${counts.rejected??0},${counts.unresolved??0},'complete',${q(manifest.generatedAt)})
- ON CONFLICT(source) DO UPDATE SET source_version=excluded.source_version,source_hash=excluded.source_hash,source_updated_at=excluded.source_updated_at,rows_seen=excluded.rows_seen,rows_written=excluded.rows_written,rows_redirected=excluded.rows_redirected,rows_rejected=excluded.rows_rejected,rows_unresolved=excluded.rows_unresolved,status=excluded.status,updated_at=excluded.updated_at;`;
+ const sql=`INSERT INTO wine_reference_sync_state(source,source_version,source_hash,source_updated_at,rows_seen,rows_written,rows_redirected,rows_rejected,rows_unresolved,rows_sparse,status,updated_at)
+ VALUES(${q(source)},${q(manifest.source)},${q(manifest.version)},${q(manifest.sourceUpdatedAt)},${counts.seen},${counts.written},${counts.redirected??0},${counts.rejected??0},${counts.unresolved??0},${counts.sparse??0},'complete',${q(manifest.generatedAt)})
+ ON CONFLICT(source) DO UPDATE SET source_version=excluded.source_version,source_hash=excluded.source_hash,source_updated_at=excluded.source_updated_at,rows_seen=excluded.rows_seen,rows_written=excluded.rows_written,rows_redirected=excluded.rows_redirected,rows_rejected=excluded.rows_rejected,rows_unresolved=excluded.rows_unresolved,rows_sparse=excluded.rows_sparse,status=excluded.status,updated_at=excluded.updated_at;`;
  wrangler(['d1','execute','DB','--remote','--command',sql,'--yes']);
 }

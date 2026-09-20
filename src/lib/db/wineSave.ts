@@ -2,7 +2,7 @@ import type { WineInput } from './schema';
 import { OPEN } from '../tastings/session';
 import { hasTastingStructure,type TastingStructure } from '../wine/tastingStructure';
 import { hasSparklingDetails,type SparklingDetails } from '../wine/sparklingDetails';
-import { referenceIdentityStatements } from '../wine/referenceIdentity';
+import { referenceIdentityStatements,type StoredReferenceIdentity } from '../wine/referenceIdentity';
 
 export function sparklingDetailsStatement(db:D1Database,owner:string,wineId:string,details:SparklingDetails|null,stamp=new Date().toISOString()){
   if(!hasSparklingDetails(details))return db.prepare('DELETE FROM wine_sparkling_details WHERE owner_id=? AND wine_id=?').bind(owner,wineId);
@@ -21,7 +21,7 @@ export function tastingStructureStatement(db:D1Database,owner:string,wineId:stri
 }
 
 /** Append to the wine write's D1 batch. Nothing is committed while preparing it. */
-export function wineSaveStatements(db:D1Database,owner:string,wineId:string,w:WineInput,updateExisting=false){
+export function wineSaveStatements(db:D1Database,owner:string,wineId:string,w:WineInput,updateExisting=false,previous?:StoredReferenceIdentity){
   const statements:D1PreparedStatement[]=[],stamp=new Date().toISOString();
   const hasExperience=Boolean(w.tastingName||w.tastingDate||w.venue||w.locationName||w.latitude!=null||w.longitude!=null||w.rating!=null||w.tastingNotes);
   const name=w.tastingName?.trim()||null,date=w.tastingDate??null;
@@ -63,6 +63,6 @@ export function wineSaveStatements(db:D1Database,owner:string,wineId:string,w:Wi
   // Omitted means preserve, null means clear. Older clients need not send it.
   if(w.tastingStructure!==undefined)statements.push(tastingStructureStatement(db,owner,wineId,w.tastingStructure,stamp));
   if(w.sparklingDetails!==undefined)statements.push(sparklingDetailsStatement(db,owner,wineId,w.sparklingDetails,stamp));
-  statements.push(...referenceIdentityStatements(db,owner,wineId,w,stamp,updateExisting));
+  statements.push(...referenceIdentityStatements(db,owner,wineId,w,stamp,updateExisting,previous));
   return statements;
 }

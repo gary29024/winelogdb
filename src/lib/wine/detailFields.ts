@@ -1,5 +1,7 @@
 import { resolvePlace } from '../places/resolve';
 import { formatDate,formatPrice,formatRating } from './detailFormat';
+import { normalizeReferenceText } from './referenceCatalog';
+import type { IdentityMatchStatus } from './referenceIdentity';
 
 /**
  * The single definition of what a wine detail page shows, for both the owner's
@@ -20,6 +22,7 @@ import { formatDate,formatPrice,formatRating } from './detailFormat';
 // normalise before it can ask for its own rows.
 type Absent=null|undefined;
 export type WineFacts={
+ wineName?:string|Absent;
  country?:string|Absent;
  region?:string|Absent;
  appellation?:string|Absent;
@@ -31,25 +34,8 @@ export type WineFacts={
  releaseDesignation?:string|Absent;
  vintageKind?:'vintage'|'non_vintage'|'multi_vintage'|'unknown'|Absent;
  colour?:string|Absent;productType?:string|Absent;productSubtype?:string|Absent;
- lwin7?:string|Absent;lwin11?:string|Absent;elid?:string|Absent;
-};
-
-/**
- * The reference facts, which are a different kind of thing from the rest.
- *
- * Everything in WineFacts is either what the owner typed or something derived
- * from it. These came from the LWIN and ELID catalogues instead: nobody here
- * wrote them, and nobody here can edit them. They used to sit in the Wine
- * details table among the derived rows, which said the opposite.
- *
- * The two owner-only fields are declared optional rather than kept out. A
- * recipient is handed SharedWine, which has no field for either, so the rows
- * are dropped by `present` without anyone having to remember to drop them -
- * the same protection the private journal fields get from the type.
- */
-export type WineReference=WineFacts&{
- identityMatchStatus?:'matched'|'suggested'|'ambiguous'|'unmatched'|'manual'|'conflict'|Absent;
- referenceProductKey?:string|Absent;
+ lwin7?:string|Absent;lwin11?:string|Absent;elid?:string|Absent;referenceSite?:string|Absent;referenceParcel?:string|Absent;
+ identityMatchStatus?:IdentityMatchStatus|Absent;
 };
 
 export type WineExperience={
@@ -95,59 +81,33 @@ export function asRecordedLabel(wine:WineFacts){
  return recorded&&recorded!==[wine.region,wine.appellation].filter(Boolean).join(' / ')?recorded:null;
 }
 
-/**
- * The Wine details rows, in reading order. Empty fields are dropped.
- *
- * Derived only: the identifiers and the catalogue's own product wording moved
- * to `referenceRows`, because a reader cannot tell a Liv-ex fact from a typed
- * one when the two sit in the same ruled table.
- */
+/** A reference site/parcel is useful only when the same words are not already
+ * visible in the wine name or the legal place fields. */
+function additionalReferencePlace(value:string|Absent,wine:WineFacts,extra:Array<string|Absent>=[]){
+ const candidate=value?.trim();if(!candidate)return null;
+ const candidateKey=normalizeReferenceText(candidate);
+ const covered=[wine.wineName,wine.region,wine.appellation,...extra].some(item=>{
+  const itemKey=normalizeReferenceText(item);return Boolean(itemKey&&itemKey.includes(candidateKey));
+ });
+ return covered?null:candidate;
+}
+
+/** The Wine details rows, in reading order. Empty fields are dropped. */
 export function wineFactRows(wine:WineFacts):FactRow[]{
- const {denominatedAppellation,denominatedRegion}=placeLabels(wine);
+ const {denominatedAppellation,denominatedRegion}=placeLabels(wine),site=additionalReferencePlace(wine.referenceSite,wine),parcel=additionalReferencePlace(wine.referenceParcel,wine,[site]);
+ const conflict=wine.identityMatchStatus==='conflict',referenceLabel=(label:string)=>conflict?`${label} (needs review)`:label;
  return present([
   ['Region',denominatedRegion],
   ['Appellation',denominatedAppellation],
   ['As recorded',asRecordedLabel(wine)],
   ['Release',wine.releaseDesignation],
+  ['Reference identity',conflict?'Conflict — stored reference details may not match this wine.':null],
+  [referenceLabel('Type'),[wine.colour,wine.productSubtype??wine.productType].filter(Boolean).join(' · ')],
   ['Grapes / blend',blendLabels(wine).join(', ')],
-  ['Alcohol',wine.alcoholPercentage!=null?`${wine.alcoholPercentage}%`:null]
+  ['Alcohol',wine.alcoholPercentage!=null?`${wine.alcoholPercentage}%`:null],
+  [referenceLabel('LWIN site'),site],[referenceLabel('LWIN parcel'),parcel],
+  [referenceLabel('LWIN7'),wine.lwin7],[referenceLabel('LWIN11'),wine.lwin11],[referenceLabel('ELID'),wine.elid]
  ]);
-}
-
-const matchStatusLabel:Record<string,string>={
- matched:'Verified',suggested:'Suggested',ambiguous:'Ambiguous',
- unmatched:'No match',manual:'Set by hand',conflict:'Conflicting'
-};
-
-/** Whether anything in the reference catalogues actually attached to this wine. */
-export function hasReference(wine:WineReference):boolean{
- return Boolean(wine.lwin7||wine.lwin11||wine.elid||wine.referenceProductKey);
-}
-
-/**
- * The Official reference rows. Empty when nothing matched, so the panel is
- * absent rather than empty on a wine the catalogues have never heard of.
- *
- * `Site / parcel` is the exception to dropping empty fields, and it is
- * deliberate. LWIN can say a wine is Corton; it cannot yet say a wine is from
- * the Pernand side of Corton. Leaving the row out would let a reader assume the
- * question was never asked, when the truth is that it was asked and the
- * catalogue has no answer. A dash states the limit of the reference data.
- */
-export function referenceRows(wine:WineReference):FactRow[]{
- if(!hasReference(wine))return [];
- return [
-  ...present([
-   ['Match status',wine.identityMatchStatus?matchStatusLabel[wine.identityMatchStatus]??wine.identityMatchStatus:null],
-   ['LWIN7',wine.lwin7],
-   ['LWIN11',wine.lwin11],
-   ['ELID',wine.elid],
-   ['Reference product',wine.referenceProductKey],
-   ['Product type',wine.productSubtype??wine.productType],
-   ['Colour',wine.colour]
-  ]),
-  ['Site / parcel','—']
- ];
 }
 
 /**

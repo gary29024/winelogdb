@@ -85,11 +85,15 @@ Review the console summary. Pay particular attention to:
 
 - valid rows accepted;
 - rejected rows;
+- matchable rows;
+- sparse rows (valid LWIN records missing producer or wine identity);
 - Combined records;
 - unresolved Combined redirects;
 - the generated content version.
 
-Unexpected rejected rows or unresolved redirects should be investigated before publishing. A small number of unresolved redirects does not block the refresh: those Combined identities remain in the catalogue but resolve as `conflict` rather than being guessed. Circular redirect chains still stop the import because they indicate a structurally corrupt source graph.
+The official LWIN workbook legitimately contains sparse historical/reference rows where `WINE`, `PRODUCER_NAME` or `DISPLAY_NAME` is blank/NA. WineLog retains those rows instead of rejecting them. When `WINE` is blank but `DISPLAY_NAME` still contains an unambiguous `Producer, Wine` identity, WineLog may use that official display identity for matching. The display producer qualifier is preserved — for example, `Domaine X` and `Maison X` are not collapsed merely because `PRODUCER_NAME` is `X` for both. Rows that still lack enough producer/wine identity remain useful for history/redirects but are not automatic match candidates.
+
+Unexpected rejected rows or unresolved redirects should therefore be investigated before publishing. A small number of unresolved redirects does not block the refresh: those Combined identities remain in the catalogue but resolve as `conflict` rather than being guessed. Circular redirect chains still stop the import because they indicate a structurally corrupt source graph.
 
 When the dry run looks right:
 
@@ -102,7 +106,7 @@ The importer:
 1. reads the official XLSX;
 2. validates the expected LWIN columns;
 3. normalizes Excel numeric IDs such as `1000131.0` to `1000131`;
-4. retains Live, Combined and Deleted rows;
+4. retains Live, Combined and Deleted rows, including legitimate sparse rows with blank optional identity fields;
 5. builds Combined -> REFERENCE redirect data;
 6. writes producer-keyed R2 shards under a new immutable version;
 7. uploads every shard;
@@ -126,10 +130,10 @@ XLSX is simply the preferred path because it removes the manual conversion step.
 Check the D1 operational marker:
 
 ```powershell
-npx wrangler d1 execute DB --remote --command "SELECT source,source_version,source_updated_at,rows_seen,rows_written,rows_redirected,rows_rejected,rows_unresolved,status,updated_at FROM wine_reference_sync_state WHERE source='lwin';"
+npx wrangler d1 execute DB --remote --command "SELECT source,source_version,source_updated_at,rows_seen,rows_written,rows_redirected,rows_rejected,rows_unresolved,rows_sparse,status,updated_at FROM wine_reference_sync_state WHERE source='lwin';"
 ```
 
-Expected `status` is `complete`. `rows_unresolved` should normally be zero; if non-zero, review the importer warnings to see whether each target was rejected by WineLog validation or was genuinely absent from the Liv-ex workbook.
+Expected `status` is `complete`. On the September 2026 workbook used to validate this importer, the baseline is 212,414 retained rows, 184,024 matchable rows and 28,390 sparse rows. Treat a material change in the sparse/matchable mix as a reason to inspect the new source file before publishing. `rows_unresolved` should normally be zero; if non-zero, review the importer warnings to see whether each target was rejected by WineLog validation or was genuinely absent from the Liv-ex workbook.
 
 Download the current R2 manifest:
 
@@ -143,7 +147,8 @@ Confirm that the manifest contains:
 
 - `provider: "lwin"`;
 - the expected source filename;
-- the expected row count;
+- the expected total row count;
+- `matchableRows` and `sparseRows` consistent with the dry-run summary;
 - a recent `sourceUpdatedAt`;
 - a `prefix` pointing to the new version.
 
@@ -155,6 +160,10 @@ Then spot-check several wines in WineLog:
 - one wine whose label spelling differs slightly from canonical naming.
 
 An unmatched wine must continue to save normally.
+
+For existing automatic matches, Owner controls also provides **Stored LWIN validation**. This is a local D1 + R2 pass: it re-runs the current deterministic resolver against wines that already carry an automatic LWIN. A confirmed match is marked verified. If the current resolver disagrees, WineLog keeps the stored LWIN intact, marks the identity as a conflict and lists it for owner review; it never silently deletes or swaps an existing identifier.
+
+All launch-preparation rollouts can be paused from Owner controls. Pausing stops queue chaining after the current bounded batch, preserves the cursor/counters and allows the same task to resume later without starting over.
 
 ## Periodic LWIN refresh
 
@@ -288,6 +297,10 @@ Use the original Liv-ex workbook without renaming/removing columns. If using CSV
 ### Some LWIN values display with `.0`
 
 That is normal Excel behavior. The importer converts valid seven-digit identifiers to strings before building the catalogue.
+
+### Many rows are reported as rejected because WINE/producer/display name is blank
+
+Do not proceed with an older importer that reports this pattern. Liv-ex legitimately leaves some optional identity fields blank on historical/reference records. Current WineLog retains those sparse rows and simply excludes rows without enough producer/wine identity from automatic name matching.
 
 ### An LWIN redirect is reported as unresolved
 

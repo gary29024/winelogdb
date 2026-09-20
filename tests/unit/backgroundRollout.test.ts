@@ -2,28 +2,42 @@ import { afterEach,describe,expect,it,vi } from 'vitest';
 import { realD1 } from './support/realD1';
 import { processRolloutJob,rolloutRoute,rolloutStatus,type RolloutQueueJob } from '../../worker/multiUser/rollout';
 import type { Member } from '../../worker/multiUser/common';
+import { referenceShardId,type ReferenceManifest } from '../../src/lib/wine/referenceCatalog';
 
 const owner:Member={id:'owner',email:'owner@example.com',display_name:'Owner',role:'owner',status:'active'};
 const databases:Array<ReturnType<typeof realD1>>=[];
 
 afterEach(()=>{for(const database of databases.splice(0))database.close();vi.restoreAllMocks()});
 
-function setup(objects:Array<{key:string;size:number}>=[]){
+function setup(objects:Array<{key:string;size:number}>=[],referenceObjects:Record<string,unknown>={}){
  const database=realD1();databases.push(database);
  const sent:RolloutQueueJob[]=[];
  const list=vi.fn(async({cursor}:{cursor?:string}={})=>{
   if(cursor)return {objects:[],truncated:false,cursor:undefined};
   return {objects:objects.map(object=>({...object,uploaded:new Date(),etag:'etag',httpEtag:'etag',checksums:{toJSON:()=>({})},storageClass:'Standard'})),truncated:false,cursor:undefined};
  });
+ const referenceGet=vi.fn(async(key:string)=>key in referenceObjects?{text:async()=>JSON.stringify(referenceObjects[key])}:null);
  const env={
   DB:database.db,AUTH_SECRET:'a'.repeat(48),APP_URL:'https://wine.example',
-  WINE_IMAGES:{list} as unknown as R2Bucket,
+  WINE_IMAGES:{list} as unknown as R2Bucket,REFERENCE_DATA:{get:referenceGet} as unknown as R2Bucket,
   RESEARCH_QUEUE:{send:vi.fn(async(job:RolloutQueueJob)=>{sent.push(job)})} as unknown as Queue<unknown>
  };
- return {database,env,sent,list};
+ return {database,env,sent,list,referenceGet};
 }
 
 describe('background launch preparation',()=>{
+ it('explains missing legacy validation stamps and scopes stamped review lists',async()=>{
+  const {database}=setup();
+  database.sql.exec(`INSERT INTO rollout_state(name,value) VALUES ('lwin_validate_review','2'),('lwin_validation','complete');
+   INSERT INTO wines(id,owner_id,producer,wine_name,lwin7,identity_match_status,identity_checked_at,created_at,updated_at) VALUES
+   ('old','owner','Producer','Wine','1000001','conflict','2026-09-18','now','now'),
+   ('new','owner','Producer','Wine','1000002','conflict','2026-09-20','now','now')`);
+  expect((await rolloutStatus(database.db)).lwinValidation).toMatchObject({review:2,reviewListUnavailable:true,reviewItems:[]});
+  database.sql.exec("INSERT INTO rollout_state(name,value) VALUES ('lwin_validate_started_at','2026-09-19')");
+  const status=(await rolloutStatus(database.db)).lwinValidation;
+  expect(status.reviewListUnavailable).toBe(false);
+  expect(status.reviewItems.map(item=>item.id)).toEqual(['new']);
+ });
  it('returns immediately, then inventories R2 from the queue without the page staying open',async()=>{
   const {database,env,sent,list}=setup([{key:'legacy/a.jpg',size:123},{key:'owners/owner/b.jpg',size:456}]);
   const response=await rolloutRoute(new Request('https://wine.example/api/admin/rollout/storage',{method:'POST'}),env,owner);
@@ -76,4 +90,91 @@ describe('background launch preparation',()=>{
   expect((await rolloutStatus(database.db)).research).toMatchObject({state:'complete',wines:{processed:2,total:2},error:null});
   expect(database.sql.prepare("SELECT value FROM rollout_state WHERE name='rollout_research_refresh'").get()!.value).toBe('complete');
  });
+ it('backfills only clear LWIN matches across existing accounts without touching manual identities',async()=>{
+  const producerKey='krug',shard=referenceShardId(producerKey),manifest:ReferenceManifest={
+   provider:'lwin',version:'l1',prefix:'reference/lwin/versions/l1',shardCount:256,rows:1,source:'LWIN.xlsx',sourceUpdatedAt:null,generatedAt:'now',
+   redirectsKey:'reference/lwin/versions/l1/redirects.json'
+  };
+  const referenceObjects={
+   'reference/lwin/current.json':manifest,
+   [`reference/lwin/versions/l1/shard-${shard}.json`]:[{
+    productKey:'lwin:1234567',lwin7:'1234567',status:'Live',referenceLwin7:null,displayName:'Krug, Grande Cuvee',producerTitle:null,producerName:'Krug',wineName:'Grande Cuvee',
+    producerKey,wineKey:'grande cuvee',country:'France',countryKey:'france',region:'Champagne',regionKey:'champagne',subRegion:null,site:null,parcel:null,
+    colour:'White',colourKey:'white',productType:'Wine',productSubtype:'Sparkling',designation:null,classification:'Grand Cru',vintageConfig:'sequential',firstVintage:2000,finalVintage:2026,
+    sourceAddedAt:null,sourceUpdatedAt:null,importedAt:'now'
+   }],
+   'reference/lwin/versions/l1/redirects.json':{}
+  };
+  const {database,env,sent}=setup([],referenceObjects);
+  database.sql.exec(`
+   INSERT INTO wines(id,owner_id,producer,wine_name,vintage,country,region,tasting_notes,created_at,updated_at) VALUES
+    ('w1','owner','Krug','Grande Cuvee',2019,NULL,NULL,'keep this note','now','now'),
+    ('w2','member','Unknown','Mystery Wine',NULL,'France','Champagne','member note','now','now');
+   INSERT INTO wines(id,owner_id,producer,wine_name,identity_match_status,elid,created_at,updated_at)
+    VALUES('w3','owner','Krug','Grande Cuvee','manual','FR-CMP-KRUG01-N171','now','now');
+  `);
+  const response=await rolloutRoute(new Request('https://wine.example/api/admin/rollout/lwin',{method:'POST'}),env,owner);
+  expect(response?.status).toBe(202);expect(sent.at(-1)).toEqual({kind:'admin_rollout',owner:'owner',rollout:'lwin'});
+  expect((await rolloutStatus(database.db)).lwin).toMatchObject({state:'running',processed:0,total:2,matched:0});
+
+  const result=await processRolloutJob(env,'lwin');
+  expect(result).toMatchObject({complete:true,processed:2,matched:1,unmatched:1,busy:false});
+  const status=await rolloutStatus(database.db);
+  expect(status.lwin).toMatchObject({state:'complete',processed:2,total:2,matched:1,ambiguous:0,unmatched:1,conflict:0,error:null});
+
+  const matched=database.sql.prepare('SELECT lwin7,lwin11,identity_match_status,identity_checked_at,tasting_notes,colour,product_type,country,region,classification,reference_suggestions_json FROM wines WHERE id=?').get('w1') as Record<string,unknown>;
+  expect(matched).toMatchObject({lwin7:'1234567',lwin11:'12345672019',identity_match_status:'matched',tasting_notes:'keep this note',colour:'White',product_type:'Wine',country:'France',region:'Champagne',classification:'grand_cru',reference_suggestions_json:null});expect(matched.identity_checked_at).toBeTruthy();
+  const unmatched=database.sql.prepare('SELECT lwin7,identity_match_status,identity_checked_at,tasting_notes FROM wines WHERE id=?').get('w2') as Record<string,unknown>;
+  expect(unmatched).toMatchObject({lwin7:null,identity_match_status:'unmatched',tasting_notes:'member note'});expect(unmatched.identity_checked_at).toBeTruthy();
+  const manual=database.sql.prepare('SELECT lwin7,identity_match_status,elid FROM wines WHERE id=?').get('w3') as Record<string,unknown>;
+  expect(manual).toMatchObject({lwin7:null,identity_match_status:'manual',elid:'FR-CMP-KRUG01-N171'});
+ });
+
+ it('revalidates stored automatic LWINs without deleting a disputed identifier',async()=>{
+  const producerKey='krug',shard=referenceShardId(producerKey),manifest:ReferenceManifest={provider:'lwin',version:'l1',prefix:'reference/lwin/versions/l1',shardCount:256,rows:1,source:'test',sourceUpdatedAt:null,generatedAt:'now'};
+  const referenceObjects={'reference/lwin/current.json':manifest,[`reference/lwin/versions/l1/shard-${shard}.json`]:[{productKey:'lwin:1234567',lwin7:'1234567',status:'Live',referenceLwin7:null,displayName:'Krug, Grande Cuvee',producerTitle:null,producerName:'Krug',wineName:'Grande Cuvee',producerKey,wineKey:'grande cuvee',country:'France',countryKey:'france',region:'Champagne',regionKey:'champagne',subRegion:null,site:null,parcel:null,colour:'White',colourKey:'white',productType:'Wine',productSubtype:'Sparkling',designation:null,classification:null,vintageConfig:'sequential',firstVintage:2000,finalVintage:2026,sourceAddedAt:null,sourceUpdatedAt:null,importedAt:'now'}]};
+  const {database,env,sent}=setup([],referenceObjects);
+  database.sql.exec(`INSERT INTO wines(id,owner_id,producer,wine_name,lwin7,identity_match_status,created_at,updated_at) VALUES
+   ('valid','owner','Krug','Grande Cuvee','1234567','matched','now','now'),
+   ('suspect','owner','Maison Krug','Grande Cuvee','1234567','matched','now','now'),
+   ('manual','owner','Maison Krug','Grande Cuvee','1234567','manual','now','now')`);
+  const response=await rolloutRoute(new Request('https://wine.example/api/admin/rollout/lwin-validate',{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'}),env,owner);
+  expect(response?.status).toBe(202);expect(sent.at(-1)).toEqual({kind:'admin_rollout',owner:'owner',rollout:'lwin_validate'});
+  const result=await processRolloutJob(env,'lwin_validate');expect(result).toMatchObject({complete:true,processed:2,verified:1,review:1,busy:false});
+  const valid=database.sql.prepare("SELECT lwin7,identity_match_status FROM wines WHERE id='valid'").get() as Record<string,unknown>;
+  const suspect=database.sql.prepare("SELECT lwin7,identity_match_status,identity_match_candidates_json FROM wines WHERE id='suspect'").get() as Record<string,unknown>;
+  const manual=database.sql.prepare("SELECT lwin7,identity_match_status FROM wines WHERE id='manual'").get() as Record<string,unknown>;
+  expect(valid).toMatchObject({lwin7:'1234567',identity_match_status:'matched'});
+  expect(suspect).toMatchObject({lwin7:'1234567',identity_match_status:'conflict'});expect(String(suspect.identity_match_candidates_json)).toContain('1234567');
+  expect(manual).toMatchObject({lwin7:'1234567',identity_match_status:'manual'});
+  expect((await rolloutStatus(database.db)).lwinValidation).toMatchObject({state:'complete',processed:2,total:2,verified:1,review:1});
+ });
+
+ it('pauses a rollout without clearing its checkpoint and ignores stale queued work',async()=>{
+  const {database,env,sent}=setup([]);
+  database.sql.exec("INSERT INTO wines(id,owner_id,producer,wine_name,identity_match_status,created_at,updated_at) VALUES('w-ai','owner','Unknown Producer','Unknown Wine','unmatched','now','now')");
+  await rolloutRoute(new Request('https://wine.example/api/admin/rollout/lwin-ai',{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'}),env,owner);
+  const queued=sent.length;
+  const paused=await rolloutRoute(new Request('https://wine.example/api/admin/rollout/lwin-ai/pause',{method:'POST'}),env,owner);
+  expect(paused?.status).toBe(202);expect((await rolloutStatus(database.db)).lwinAi.state).toBe('paused');
+  const stale=await processRolloutJob(env,'lwin_ai');expect(stale).toMatchObject({processed:0,busy:false,paused:true});
+  expect(sent).toHaveLength(queued);
+  const resumed=await rolloutRoute(new Request('https://wine.example/api/admin/rollout/lwin-ai',{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'}),env,owner);
+  expect(resumed?.status).toBe(202);expect((await rolloutStatus(database.db)).lwinAi.state).toBe('running');
+ });
+
+ it('accepts the owner AI-assisted LWIN rollout endpoint and queues the AI job',async()=>{
+  const {database,env,sent}=setup([]);
+  database.sql.exec("INSERT INTO wines(id,owner_id,producer,wine_name,identity_match_status,created_at,updated_at) VALUES('w-ai','owner','Unknown Producer','Unknown Wine','unmatched','now','now')");
+  const response=await rolloutRoute(new Request('https://wine.example/api/admin/rollout/lwin-ai',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({refresh:false})}),env,owner);
+  expect(response?.status).toBe(202);
+  expect(sent.at(-1)).toEqual({kind:'admin_rollout',owner:'owner',rollout:'lwin_ai'});
+  expect((await rolloutStatus(database.db)).lwinAi).toMatchObject({state:'running',processed:0,total:1,matched:0,deterministic:0,ai:0,review:0});
+ });
+
+ it('keeps AI LWIN queue chunks to one wine so progress is checkpointed within the Worker CPU budget',async()=>{
+  const source=await import('node:fs/promises').then(fs=>fs.readFile(new URL('../../worker/multiUser/rollout.ts',import.meta.url),'utf8'));
+  expect(source).toContain('LWIN_AI_BATCH=1');
+ });
+
 });

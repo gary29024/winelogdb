@@ -37,7 +37,7 @@ Four ranks, rendered as a small chip at the right-hand end of a section label.
 | --- | --- | --- | --- |
 | Yours | `✎ Yours` | typed by the account holder; editable | Your experience, Structure, Tags |
 | Derived | *(none)* | computed from what the account holder typed | Wine details |
-| Reference | `🔒 Reference` | from LWIN/ELID; cannot be edited here | Official reference |
+| Reference | `🔒 Reference` | available for catalogue-only sections | Wine identifiers stay in Wine details without a separate badge |
 | Researched | `✨ Researched` | AI research, carrying its quality score | Deep Search |
 
 Derived is the default and therefore silent: a badge on every section would mark
@@ -77,7 +77,7 @@ Delete sat at the very bottom, below the longest section on the page.
 ┌─ YOUR EXPERIENCE ──────────── ✎ Yours ─────────┐
 ┌─ STRUCTURE ────────────────── ✎ Yours ─────────┐
 ┌─ WINE DETAILS ─────────────────────────────────┐
-┌─ OFFICIAL REFERENCE (LWIN) ── 🔒 Reference ────┐
+│  Known LWIN / ELID and additional site facts  │
 ┌─ IN YOUR CELLAR ───────────────────────────────┐
 ┌─ RESEARCH ────────── ✨ Researched · 82/100 ───┐
 #tags
@@ -86,8 +86,9 @@ Delete this wine
 
 Your experience moves above Wine details because it is the reason the record
 exists. Deep Search moves last because it is the longest section and the least
-often the thing someone opened the page for. The drink window joins Wine details,
-where the rest of the derived facts live, and the cellar strip gets a row of its
+often the thing someone opened the page for. Structure appears only when the
+viewer has entered at least one value. Drinking guidance stays in Deep Search;
+the separate drink-window widget is removed. The cellar strip gets a row of its
 own instead of riding in the identity card.
 
 ### Two deliberate departures from the mock-up
@@ -98,11 +99,11 @@ have to stack on it, fight the same inset, and would do nothing on desktop. An
 action row directly beneath the identity card is visible without scrolling for
 the same cost as a static row.
 
-**Keep the em-dash row for an unknown reference field.** Showing `Site / parcel —`
-is more honest than hiding the row. LWIN can say a wine is Corton; it cannot yet
-say a wine is from the Pernand side of Corton. A blank row states the limit of
-the reference data instead of leaving the reader to assume the question was never
-asked.
+**Integrate reference facts into Wine details.** Known LWIN7, LWIN11 and ELID
+identifiers belong beside the wine's other facts. Available type, site and parcel
+details appear there too, with repeated place names and missing fields omitted.
+Identity conflicts retain their review warning, and proposed LWIN corrections
+remain explicit choices. There is no separate Official reference panel.
 
 ## Producer page
 
@@ -230,7 +231,7 @@ hero image for the sake of uniformity. It gains the count line and nothing else.
 ## Owner and member
 
 Both roles get the same wine page, the same provenance badges and the same
-reference panel. The differences are wording, not layout: an owner sees the
+integrated wine facts. The differences are wording, not layout: an owner sees the
 research model, the job's own stage message and a request id, where a member
 sees "Research updated", a plain progress line and a support id.
 
@@ -297,8 +298,9 @@ New tests added with this work:
   management is out of the identity card, and that nothing pins a second bar to
   the edge the navigation already owns.
 
-Two existing tests changed deliberately rather than incidentally.
-`externalWineIdentityPresentation` pinned the LWIN rows to the Wine details
-table; it now pins them to the reference panel and to their absence from the
-facts table. `producerRangeCollapse` pinned style as the opening grouping; it now
-pins the chosen-axis behaviour, with a case for the style fallback.
+`externalWineIdentityPresentation` keeps LWIN and ELID in Wine details, including
+additional catalogue fields and warnings for disputed matches.
+`producerRangeCollapse` pins the chosen-axis behaviour, with a style fallback.
+Browser checks cover owner and shared pages, populated and empty Structure,
+integrated identifiers, and Deep Search drinking guidance at phone and desktop
+widths. Source-scanning test helpers normalize Windows path separators.

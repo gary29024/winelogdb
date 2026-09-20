@@ -20,13 +20,13 @@ describe('the order a wine reads in',()=>{
     expect(at(source,'experience-panel')).toBeLessThan(at(source,'<WineDetailsSection'));
   });
 
-  it.each(pages)('puts the reference panel after the facts it qualifies on the %s page',(_name,source)=>{
-    expect(at(source,'<WineDetailsSection')).toBeLessThan(at(source,'<WineReferenceSection'));
+  it.each(pages)('keeps identifiers in Wine details without a separate reference panel on the %s page',(_name,source)=>{
+    expect(source).not.toContain('WineReferenceSection');
   });
 
   it.each(pages)('leaves Deep Search last, being the longest and the least asked for, on the %s page',(_name,source)=>{
     const deep=at(source,'deep-search-panel');
-    for(const earlier of ['experience-panel','<WineDetailsSection','<WineReferenceSection'])
+    for(const earlier of ['experience-panel','<WineDetailsSection'])
       expect(at(source,earlier),`${earlier} should come before Deep Search`).toBeLessThan(deep);
   });
 
@@ -53,7 +53,7 @@ describe('the order a wine reads in',()=>{
     // Derived stays unmarked: a badge on every section marks nothing.
     const facts=readFileSync('src/features/wines/WineFacts.tsx','utf8');
     expect(facts).toContain('<SectionLabel>Wine details</SectionLabel>');
-    expect(facts).toContain('<SectionLabel origin="reference">Official reference</SectionLabel>');
+    expect(facts).not.toContain('Official reference');
   });
 
   it('lays the identity card out along a left edge rather than down a centre line',()=>{

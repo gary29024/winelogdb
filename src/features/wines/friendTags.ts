@@ -21,3 +21,6 @@ export const setTastingFriendTags=(tastingId:string,recipientIds:string[])=>
 
 export const setDefaultFriendShare=(friendId:string,enabled:boolean)=>
   apiJson<{ok:true}>(`/api/friends/${friendId}/default-share`,'PUT',{enabled});
+
+export const shareAllExistingWines=(friendId:string)=>
+  apiJson<{ok:true;count:number}>(`/api/friends/${friendId}/share-existing-wines`,'POST',{});

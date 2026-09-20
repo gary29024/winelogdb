@@ -10,6 +10,12 @@ describe('LWIN reference import',()=>{
   const parsed=parseLwinReference(sample(),'2026-09-18T00:00:00.000Z');
   expect(parsed).toMatchObject({productKey:'lwin:1000131',lwin7:'1000131',status:'Combined',referenceLwin7:'1316384',producerKey:'trimbach',wineKey:'clos st hune grand cru',subRegion:null,firstVintage:1980,finalVintage:null});
  });
+ it('retains legitimate sparse reference rows instead of rejecting missing optional identity fields',()=>{
+  const live=parseLwinReference(sample({STATUS:'Live',DISPLAY_NAME:'Val de Flores, Mendoza',PRODUCER_NAME:'Val de Flores',WINE:'NA',REFERENCE:''}));
+  expect(live).toMatchObject({lwin7:'1000131',status:'Live',displayName:'Val de Flores, Mendoza',producerName:'Val de Flores',wineName:null,producerKey:'val de flores',wineKey:''});
+  const historical=parseLwinReference(sample({DISPLAY_NAME:'NA',PRODUCER_NAME:'NA',WINE:'NA'}));
+  expect(historical).toMatchObject({status:'Combined',displayName:null,producerName:null,wineName:null,producerKey:'',wineKey:'',referenceLwin7:'1316384'});
+ });
  it('rejects a combined row without a destination',()=>expect(()=>parseLwinReference(sample({REFERENCE:'NA'}))).toThrow(/no valid REFERENCE/));
  it('drops malformed source dates instead of letting raw text win latest-date comparisons',()=>{
   expect(parseLwinReference(sample({DATE_UPDATED:'not-a-date'})).sourceUpdatedAt).toBeNull();

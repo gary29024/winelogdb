@@ -10,7 +10,7 @@ import { billingMonth,nextBillingReset,BILLING_TIME_ZONE } from './billingPeriod
  * are the product; this is the meter beside them, and a meter that can break
  * the thing it measures is worse than no meter.
  */
-export const AI_USAGE_KINDS=['producer_research','wine_research','scan_single','scan_batch','scan_group','scan_sheet','champagne_extraction','bottle_frame','vintage_window','search_embedding'] as const;
+export const AI_USAGE_KINDS=['producer_research','wine_research','scan_single','scan_batch','scan_group','scan_sheet','champagne_extraction','bottle_frame','vintage_window','search_embedding','lwin_backfill'] as const;
 export type AiUsageKind=typeof AI_USAGE_KINDS[number];
 
 export const kindLabels:Record<AiUsageKind,string>={
@@ -23,7 +23,8 @@ export const kindLabels:Record<AiUsageKind,string>={
   champagne_extraction:'Champagne details extraction',
   bottle_frame:'Bottle framing',
   vintage_window:'Vintage window',
-  search_embedding:'Smart search'
+  search_embedding:'Smart search',
+  lwin_backfill:'LWIN identity backfill'
 };
 
 const whole=(value:unknown)=>{const parsed=Math.round(Number(value)||0);return parsed>0?parsed:0};
@@ -68,7 +69,8 @@ export const unitOf:Record<AiUsageKind,'run'|'wine'>={
   vintage_window:'run',
   // A document embedding covers one stored wine. The query embedding covers no
   // wine, so that request records zero units and cannot inflate the per-wine figure.
-  search_embedding:'wine'
+  search_embedding:'wine',
+  lwin_backfill:'wine'
 };
 
 /**

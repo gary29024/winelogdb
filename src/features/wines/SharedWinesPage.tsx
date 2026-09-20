@@ -7,7 +7,7 @@ import { AppIcon } from '../../components/AppIcons';
 import { backTargetFromState,JOURNAL_BACK } from './backTarget';
 import { formatDate } from '../../lib/wine/detailFormat';
 import { experienceRows as buildExperienceRows } from '../../lib/wine/detailFields';
-import { FactList,WineDetailsSection,WineFactPills,WineReferenceSection } from './WineFacts';
+import { FactList,WineDetailsSection,WineFactPills } from './WineFacts';
 import { PageHeader } from '../../components/PageHeader';
 import { SectionLabel } from '../../components/SectionLabel';
 import { SparklingDetailsCard } from './SparklingDetailsCard';
@@ -148,7 +148,6 @@ export function SharedWinesPage(){
    {notice&&<p className="shared-experience-notice" role="status">{notice}</p>}{error&&<p className="shared-experience-error" role="alert">{error}</p>}
   </section>
   <WineDetailsSection wine={wine}/>
-  <WineReferenceSection wine={wine}/>
   {/* The gallery leaves the header so the photograph is not competing with the
       name; a recipient cannot change these, so there is nothing to manage. */}
   {(wine.photos?.length??0)>1&&<section className="detail-section detail-photos-panel">

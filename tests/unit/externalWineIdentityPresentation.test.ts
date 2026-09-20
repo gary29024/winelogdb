@@ -1,61 +1,40 @@
 import { describe,expect,it } from 'vitest';
-import { hasReference,referenceRows,wineFactRows } from '../../src/lib/wine/detailFields';
+import { wineFactRows } from '../../src/lib/wine/detailFields';
 import { sharedWine } from '../../worker/multiUser/social';
 
-const krug={releaseDesignation:'171ème Édition',colour:'White',productSubtype:'Sparkling',lwin7:'1234567',elid:'FR-CMP-KRUG01-N171'};
-
 describe('external wine identity presentation',()=>{
- it('keeps the catalogue’s facts out of the table of the owner’s own',()=>{
-  // The identifiers and the catalogue's product wording used to sit in Wine
-  // details among Region, Grapes and Alcohol, which said a Liv-ex registry
-  // number and a hand-typed appellation were the same kind of claim. They are
-  // still shown - they moved to a panel that says whose they are.
-  const facts=wineFactRows(krug);
-  expect(facts).toContainEqual(['Release','171ème Édition']);
-  expect(facts.map(([label])=>label)).not.toContain('LWIN7');
-  expect(facts.map(([label])=>label)).not.toContain('ELID');
-  expect(facts.map(([label])=>label)).not.toContain('Product type');
+ it('marks disputed identifiers and reference-derived details for owners and friends',()=>{
+  const row={id:'w',producer:'Estate',wine_name:'Wine',lwin7:'1000001',lwin11:'10000012020',elid:'FR-BDX-MARG01-2020',colour:'Red',reference_site:'Site',identity_match_status:'conflict',identity_match_candidates_json:'["1000001","1000009"]'};
+  const friend=sharedWine(row);
+  expect(friend).toMatchObject({identityMatchStatus:'conflict'});
+  expect(friend).not.toHaveProperty('identityMatchCandidates');
+  for(const wine of [friend,{lwin7:row.lwin7,lwin11:row.lwin11,elid:row.elid,colour:row.colour,referenceSite:row.reference_site,identityMatchStatus:'conflict' as const}]){
+   const rows=wineFactRows(wine);
+   expect(rows).toContainEqual(['Reference identity','Conflict — stored reference details may not match this wine.']);
+   expect(rows).toContainEqual(['LWIN7 (needs review)','1000001']);
+   expect(rows).toContainEqual(['LWIN11 (needs review)','10000012020']);
+   expect(rows).toContainEqual(['ELID (needs review)','FR-BDX-MARG01-2020']);
+   expect(rows).toContainEqual(['Type (needs review)','Red']);
+   expect(rows).toContainEqual(['LWIN site (needs review)','Site']);
+  }
  });
-
- it('still shows every registered identifier, under the reference panel',()=>{
-  const rows=referenceRows(krug);
+ it('shows release, product type and registered external identifiers as bottle facts',()=>{
+  const rows=wineFactRows({wineName:'Grande Cuvée',releaseDesignation:'171ème Édition',colour:'White',productSubtype:'Sparkling',referenceSite:'Montagne de Reims',referenceParcel:'Clos du Mesnil',lwin7:'1234567',lwin11:'12345672008',elid:'FR-CMP-KRUG01-N171'});
+  expect(rows).toContainEqual(['Release','171ème Édition']);
+  expect(rows).toContainEqual(['Type','White · Sparkling']);
+  expect(rows).toContainEqual(['LWIN site','Montagne de Reims']);
+  expect(rows).toContainEqual(['LWIN parcel','Clos du Mesnil']);
   expect(rows).toContainEqual(['LWIN7','1234567']);
+  expect(rows).toContainEqual(['LWIN11','12345672008']);
   expect(rows).toContainEqual(['ELID','FR-CMP-KRUG01-N171']);
-  expect(rows).toContainEqual(['Product type','Sparkling']);
-  expect(rows).toContainEqual(['Colour','White']);
  });
-
- it('names the match status in words rather than in the database’s enum',()=>{
-  expect(referenceRows({...krug,identityMatchStatus:'matched'})).toContainEqual(['Match status','Verified']);
-  expect(referenceRows({...krug,identityMatchStatus:'manual'})).toContainEqual(['Match status','Set by hand']);
+ it('does not repeat LWIN site or parcel already visible in the wine name',()=>{
+  const rows=wineFactRows({wineName:'Vosne-Romanée 1er Cru Les Suchots',region:'Burgundy',appellation:'Vosne-Romanée',referenceSite:'Vosne-Romanée',referenceParcel:'Les Suchots'});
+  expect(rows.some(([label])=>label==='LWIN site'||label==='LWIN parcel')).toBe(false);
  });
-
- it('says the parcel is unknown rather than leaving the row out',()=>{
-  // LWIN can say a wine is Corton; it cannot yet say it is from the Pernand
-  // side of Corton. Dropping the row would let a reader assume the question was
-  // never asked, when it was asked and the catalogue has no answer.
-  expect(referenceRows(krug)).toContainEqual(['Site / parcel','—']);
- });
-
- it('shows no reference panel at all for a wine no catalogue has heard of',()=>{
-  // An empty panel would claim the catalogues were consulted and came back
-  // blank, which is a different statement from never having matched.
-  const unmatched={releaseDesignation:'171ème Édition',colour:'White'};
-  expect(hasReference(unmatched)).toBe(false);
-  expect(referenceRows(unmatched)).toEqual([]);
- });
-
  it('allow-lists external IDs to a friend without leaking match diagnostics',()=>{
-  const wine=sharedWine({id:'w',producer:'Krug',wine_name:'Grande Cuvée',vintage_kind:'non_vintage',release_designation:'171ème Édition',lwin7:'1234567',elid:'FR-CMP-KRUG01-N171',identity_match_confidence:.99});
-  expect(wine).toMatchObject({lwin7:'1234567',elid:'FR-CMP-KRUG01-N171',releaseDesignation:'171ème Édition'});
+  const wine=sharedWine({id:'w',producer:'Krug',wine_name:'Grande Cuvée',vintage_kind:'non_vintage',release_designation:'171ème Édition',lwin7:'1234567',reference_site:'Montagne de Reims',reference_parcel:'Clos du Mesnil',elid:'FR-CMP-KRUG01-N171',identity_match_confidence:.99});
+  expect(wine).toMatchObject({lwin7:'1234567',referenceSite:'Montagne de Reims',referenceParcel:'Clos du Mesnil',elid:'FR-CMP-KRUG01-N171',releaseDesignation:'171ème Édition'});
   expect(wine).not.toHaveProperty('identityMatchConfidence');
- });
-
- it('drops a match status a recipient was never given, without being asked to',()=>{
-  // referenceRows declares the owner-only fields optional rather than keeping
-  // them out, so the protection is the type: SharedWine has no field for a
-  // match status, so the row cannot be built from one.
-  const shared=sharedWine({id:'w',producer:'Krug',wine_name:'Grande Cuvée',lwin7:'1234567',identity_match_status:'matched'});
-  expect(referenceRows(shared).map(([label])=>label)).not.toContain('Match status');
  });
 });

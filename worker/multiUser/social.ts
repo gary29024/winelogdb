@@ -1,5 +1,5 @@
 import { friendRequestRoute } from './friendRequests';
-import { ApiError,body,json,stamp,type IdentityEnv,type Member } from './common';
+import { ApiError,body,json,ownerOnly,stamp,type IdentityEnv,type Member } from './common';
 import { similarFriendProducers } from '../../src/lib/research/similarProducers';
 import { rememberProducerAlias } from '../../src/lib/research/aliasBridge';
 import type { SharedDeepSearch,SharedWine } from '../../src/lib/wine/shared';
@@ -31,7 +31,8 @@ export function sharedWine(row:Record<string,unknown>):SharedWine{
   id:text(row.id),ownerName:text(row.display_name),
   producer:text(row.producer),producerId:text(row.viewer_producer_id)||(text(row.producer_id)&&text(row.owner_id)?sharedProducerId(text(row.owner_id),text(row.producer_id)):null),
   wineName:text(row.wine_name),vintage:number(row.vintage),vintageKind:(['vintage','non_vintage','multi_vintage','unknown'].includes(text(row.vintage_kind))?text(row.vintage_kind):null) as SharedWine['vintageKind'],releaseDesignation:text(row.release_designation)||null,
-  lwin7:text(row.lwin7)||null,lwin11:text(row.lwin11)||null,elid:text(row.elid)||null,colour:text(row.colour)||null,productType:text(row.product_type)||null,productSubtype:text(row.product_subtype)||null,
+  lwin7:text(row.lwin7)||null,lwin11:text(row.lwin11)||null,elid:text(row.elid)||null,referenceSite:text(row.reference_site)||null,referenceParcel:text(row.reference_parcel)||null,colour:text(row.colour)||null,productType:text(row.product_type)||null,productSubtype:text(row.product_subtype)||null,
+  identityMatchStatus:row.identity_match_status==='conflict'?'conflict':null,
   country:text(row.country)||null,region:text(row.region)||null,appellation:text(row.appellation)||null,
   recognizedRegion:text(row.recognized_region)||null,recognizedAppellation:text(row.recognized_appellation)||null,
   wineStyle:text(row.wine_style)||null,grapes,grapeBlend,classification,
@@ -215,6 +216,17 @@ export async function socialRoute(request:Request,env:SocialEnv,member:Member,ct
   else if(data.enabled===false)await env.DB.prepare('DELETE FROM member_share_defaults WHERE owner_id=? AND recipient_id=?').bind(member.id,friendId).run();
   else throw new ApiError(400,'Choose whether this friend is tagged by default');
   return json({ok:true});
+ }
+ const shareExisting=path.match(/^\/api\/friends\/([^/]+)\/share-existing-wines$/);
+ if(shareExisting&&request.method==='POST'){
+  // Deliberate pilot guardrail: members can tag selected Journal wines, but only
+  // the owner can fan out an unbounded whole-journal share from Account & friends.
+  ownerOnly(member);
+  const friendId=shareExisting[1];
+  if(!await env.DB.prepare('SELECT 1 FROM friendships WHERE user_id=? AND friend_id=?').bind(member.id,friendId).first())throw new ApiError(400,'Only accepted friends can receive shared wines');
+  const result=await env.DB.prepare(`INSERT OR IGNORE INTO wine_shares(wine_id,owner_id,recipient_id)
+    SELECT id,?,? FROM wines WHERE owner_id=?`).bind(member.id,friendId,member.id).run();
+  return json({ok:true,count:Number(result.meta.changes??0)});
  }
  const friend=path.match(/^\/api\/friends\/([^/]+)$/);
  if(friend&&request.method==='DELETE'){

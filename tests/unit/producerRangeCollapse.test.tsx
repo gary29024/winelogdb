@@ -65,6 +65,11 @@ afterEach(()=>{
 });
 
 describe('Producer wine range',()=>{
+  it('opens a shared tasting using the shared wine route',async()=>{
+    await render({tastedWines:[{id:'shared-wine',wineName:'Clos de la Roche',vintage:2020,wineStyle:'red',shared:true}]});
+    expect(host?.querySelector('.tasted-row-link')?.getAttribute('href')).toBe('/shared/shared-wine');
+  });
+
   it('confirms and sends only range refresh for an already researched producer',async()=>{
     await render({researchedAt:'2020-01-01T00:00:00.000Z',profileResearchedAt:'2020-01-01T00:00:00.000Z'});
     await click(byLabel('Refresh wine range')!);

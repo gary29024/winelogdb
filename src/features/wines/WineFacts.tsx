@@ -1,14 +1,11 @@
 import type { ReactNode } from 'react';
-import { hasReference,placeLabels,referenceRows,wineFactRows,type FactRow,type WineFacts as Facts,type WineReference } from '../../lib/wine/detailFields';
+import { placeLabels,wineFactRows,type FactRow,type WineFacts as Facts } from '../../lib/wine/detailFields';
 import { SectionLabel } from '../../components/SectionLabel';
 // The markup below and the rules it needs travel together. A page used to be
 // able to render .detail-classification while forgetting this import, which is
 // how a shared Village pill shipped with no styling at all; owning the import
 // here makes that impossible for any page that renders the pill.
 import '../../wineClassification.css';
-// Same rule, for the reference panel: the component that renders the class owns
-// the stylesheet, so a page cannot show the panel without its rules.
-import '../../wineReference.css';
 
 const classificationLabel:Record<string,string>={grand_cru:'Grand Cru',premier_cru:'Premier Cru',village:'Village'};
 
@@ -41,25 +38,10 @@ export function FactList({rows,className}:{rows:FactRow[];className?:string}){
 
 /** The Wine details panel. `extra` appends rows only one viewer is entitled to. */
 export function WineDetailsSection({wine,extra=[]}:{wine:Facts;extra?:FactRow[]}){
+ const rows=[...wineFactRows(wine),...extra];
+ if(!rows.length)return null;
  return <section className="detail-section">
   <SectionLabel>Wine details</SectionLabel>
-  <FactList rows={[...wineFactRows(wine),...extra]}/>
- </section>;
-}
-
-/**
- * The Official reference panel: what LWIN and ELID say, marked as theirs.
- *
- * Both wine pages render it, so a recipient sees the same identifiers under the
- * same heading. It disappears entirely when nothing matched - an empty
- * reference panel would imply the catalogues had been consulted and come back
- * blank, which is a different claim from never having matched at all.
- */
-export function WineReferenceSection({wine}:{wine:WineReference}){
- if(!hasReference(wine))return null;
- return <section className="detail-section reference-panel">
-  <SectionLabel origin="reference">Official reference</SectionLabel>
-  <FactList rows={referenceRows(wine)}/>
-  <p className="reference-note">LWIN identifies the appellation a wine is registered under, not the parcel inside it.</p>
+  <FactList rows={rows}/>
  </section>;
 }

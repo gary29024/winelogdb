@@ -6,20 +6,18 @@ import { isChampagne } from '../../lib/wine/champagneExtraction';
 import { useEffect,useMemo,useRef,useState } from 'react';
 import { Link,useLocation,useNavigate,useParams } from 'react-router-dom';
 import type { DeepSearchResult } from '../../lib/db/schema';
-import { addWineImages,cancelWineDeepSearch,deleteWine,deleteWineImage,getWine,getWineDeepSearchStatus,setWineFavorite,startWineDeepSearch,type WineDetail,type WineResearchRun } from './api';
+import { addWineImages,applyWineReferenceSuggestion,cancelWineDeepSearch,deleteWine,deleteWineImage,getWine,getWineDeepSearchStatus,setWineFavorite,startWineDeepSearch,type WineDetail,type WineResearchRun } from './api';
 import { extractPhotoMetadata } from '../uploads/photoMetadata';
 import { imageSize } from '../uploads/prepareImage';
 import { WineImage } from './WineImage';
 import { CellarStrip } from '../cellar/CellarStrip';
-import { VintageCheck } from '../maturity/VintageCheck';
-import { VINTAGE_WINDOW_SURFACES } from '../maturity/surfaces';
 import { backTargetFromState,JOURNAL_BACK,readBackTarget,rememberBackTarget } from './backTarget';
 import { GroupSourceImage } from '../uploads/GroupSourceImage';
 import { structureValueLabel } from '../../lib/wine/tastingStructure';
 import { DeepSources,ResearchText } from './ResearchPresentation';
 import { readOpenDeepFields,researchSections,type DeepField,writeOpenDeepFields } from './researchSections';
 import { experienceRows as buildExperienceRows } from '../../lib/wine/detailFields';
-import { FactList,WineDetailsSection,WineFactPills,WineReferenceSection } from './WineFacts';
+import { FactList,WineDetailsSection,WineFactPills } from './WineFacts';
 import { PageHeader } from '../../components/PageHeader';
 import { SectionLabel } from '../../components/SectionLabel';
 import { isResearchStale } from '../../lib/research/freshness';
@@ -28,6 +26,7 @@ import '../../favorites.css';
 import '../../wineFormCompact.css';
 import '../../groupSource.css';
 import '../../wineClassification.css';
+import '../../referenceSuggestions.css';
 import { startBackoffPoll,type Poller } from '../../lib/polling/backoff';
 import { AppIcon } from '../../components/AppIcons';
 import { ElapsedSeconds } from '../../components/ElapsedSeconds';
@@ -62,7 +61,7 @@ function ClaimEvidence({deep,field}:{deep:DeepSearchResult;field:DeepField}){
 
 
 export function DetailPage(){
- const {id=''}=useParams(),nav=useNavigate(),{state}=useLocation(),[wine,setWine]=useState<WineDetail>(),[favoriteBusy,setFavoriteBusy]=useState(false),[deepState,setDeepState]=useState<DeepState>('idle'),[deepError,setDeepError]=useState(''),[deepRun,setDeepRun]=useState<WineResearchRun|null>(null),[deepNotice,setDeepNotice]=useState(''),[deepCancelling,setDeepCancelling]=useState(false),[selectedImage,setSelectedImage]=useState<string>(),[selectedGroupSource,setSelectedGroupSource]=useState<string>(),[openDeepFields,setOpenDeepFields]=useState<Set<DeepField>>(readOpenDeepFields),[photoBusy,setPhotoBusy]=useState(false),[photoError,setPhotoError]=useState(''),[friendOperation,setFriendOperation]=useState('');
+ const {id=''}=useParams(),nav=useNavigate(),{state}=useLocation(),[wine,setWine]=useState<WineDetail>(),[favoriteBusy,setFavoriteBusy]=useState(false),[referenceBusy,setReferenceBusy]=useState<string>(''),[referenceError,setReferenceError]=useState(''),[deepState,setDeepState]=useState<DeepState>('idle'),[deepError,setDeepError]=useState(''),[deepRun,setDeepRun]=useState<WineResearchRun|null>(null),[deepNotice,setDeepNotice]=useState(''),[deepCancelling,setDeepCancelling]=useState(false),[selectedImage,setSelectedImage]=useState<string>(),[selectedGroupSource,setSelectedGroupSource]=useState<string>(),[openDeepFields,setOpenDeepFields]=useState<Set<DeepField>>(readOpenDeepFields),[photoBusy,setPhotoBusy]=useState(false),[photoError,setPhotoError]=useState(''),[friendOperation,setFriendOperation]=useState('');
  const technicalView=getAccount()?.role==='owner';
  const photoInput=useRef<HTMLInputElement|null>(null);
  const pollRef=useRef<Poller|undefined>(undefined);
@@ -111,6 +110,7 @@ export function DetailPage(){
   finally{setPhotoBusy(false)}
  }
 
+ async function applyReferenceSuggestion(field:WineDetail['referenceSuggestions'][number]['field']){if(!wine||referenceBusy)return;setReferenceBusy(field);setReferenceError('');try{await applyWineReferenceSuggestion(id,field);await reloadWine()}catch(e){setReferenceError((e as Error).message)}finally{setReferenceBusy('')}}
  async function toggleFavorite(){if(!wine||favoriteBusy)return;const next=!wine.favorite;setFavoriteBusy(true);setWine({...wine,favorite:next});try{await setWineFavorite(id,next)}catch(e){setWine(current=>current?{...current,favorite:!next}:current);setDeepNotice((e as Error).message)}finally{setFavoriteBusy(false)}}
  function toggleDeepField(field:DeepField){setOpenDeepFields(current=>{const next=new Set(current);if(next.has(field))next.delete(field);else next.add(field);writeOpenDeepFields(next);return next})}
  function toggleAllDeepFields(fields:DeepField[]){setOpenDeepFields(current=>{const allOpen=fields.every(field=>current.has(field)),next=new Set(current);for(const field of fields){if(allOpen)next.delete(field);else next.add(field)}writeOpenDeepFields(next);return next})}
@@ -169,10 +169,15 @@ export function DetailPage(){
   <section className="detail-section experience-panel"><SectionLabel origin="yours">Your experience</SectionLabel><FactList rows={experienceRows}/>{wine.tastingNotes&&<blockquote className="detail-experience-notes">{wine.tastingNotes}</blockquote>}{!experienceRows.length&&!wine.tastingNotes&&<p className="detail-experience-empty">No tasting logged for this bottle yet.</p>}</section>
   {structureItems.length>0&&<section className="detail-section structure-detail-section"><SectionLabel origin="yours">Structure</SectionLabel><dl className="tasting-structure-summary">{structureItems.map(([label,value])=><div key={label}><dt>{label}</dt><dd>{structureValueLabel[value]??value}</dd></div>)}</dl><p className="structure-section-note">Perceived structure; label ABV appears in Wine details.</p></section>}
   <WineDetailsSection wine={wine}/>
-  {/* The drink window is derived from the vintage and the place, so it belongs
-      with the rest of the derived facts rather than in the identity card. */}
-  {VINTAGE_WINDOW_SURFACES.wineDetail&&<VintageCheck wine={wine}/>}
-  <WineReferenceSection wine={wine}/>
+  {(wine.referenceSuggestions??[]).length>0&&<section className="detail-section lwin-suggestion-panel">
+   <p className="section-label">LWIN suggested updates</p>
+   <p className="lwin-suggestion-intro">WineLog found a canonical LWIN match but kept your existing populated fields unchanged. Review each difference before using the LWIN value.</p>
+   <div className="lwin-suggestion-list">{(wine.referenceSuggestions??[]).map(item=><article className="lwin-suggestion-row" key={item.field}>
+    <div><strong>{item.label}</strong><span><small>Current</small>{item.current||'—'}</span><span><small>LWIN</small>{item.suggested}</span></div>
+    <button type="button" className="quiet" disabled={Boolean(referenceBusy)} onClick={()=>void applyReferenceSuggestion(item.field)}>{referenceBusy===item.field?'Applying…':'Use LWIN value'}</button>
+   </article>)}</div>
+   {referenceError&&<p role="alert" className="detail-photo-error">{referenceError}</p>}
+  </section>}
   {/* Photographs are the owner's, and adding or removing one is an edit: it has
       no business in a block whose job is to be read. */}
   <section className="detail-section detail-photos-panel">

@@ -12,6 +12,8 @@ import { dimensionsSchema, validateBatch } from '../src/features/uploads/validat
 import { parseRecognition } from '../src/features/recognition/schema';
 import { wineSaveStatements } from '../src/lib/db/wineSave';
 import { enrichRecognitionReference } from '../src/lib/wine/referenceIdentity';
+import { appClassification,classificationLabel,referenceSuggestionFields,type ReferenceSuggestion,type ReferenceSuggestionField } from '../src/lib/wine/referenceSuggestions';
+import { ensureWineIdentity } from '../src/lib/wine/identity';
 
 type Bindings={IMAGES?:ImagesBinding;DB:D1Database;WINE_IMAGES:R2Bucket;REFERENCE_DATA:R2Bucket;ASSETS:Fetcher;GEMINI_API_KEY?:string;AUTH_SECRET:string;APP_PASSWORD:string;APP_URL:string;MAX_FILE_BYTES?:string;MAX_BATCH_FILES?:string};
 type Variables={userId:string};
@@ -54,7 +56,7 @@ export const mapWine=(r:Record<string,unknown>,imageIds:string[]=[])=>({
  recognizedProducer:r.recognized_producer??null,recognizedWineName:r.recognized_wine_name??null,recognizedVintageText:r.recognized_vintage_text??null,vintageKind:r.vintage_kind??(r.vintage==null?'unknown':'vintage'),releaseDesignation:r.release_designation??null,
  country:r.country,region:r.region,appellation:r.appellation,recognizedRegion:r.recognized_region??null,recognizedAppellation:r.recognized_appellation??null,classification:r.classification??null,classificationOverride:r.classification_override??null,
  grapes:parseJson<string[]>(r.grapes_json,[]),grapeBlend:parseJson<Array<{grape:string;percentage?:number|null}>>(r.grape_blend_json,[]),wineStyle:r.wine_style,alcoholPercentage:r.alcohol_percentage,
- colour:r.colour??null,productType:r.product_type??null,productSubtype:r.product_subtype??null,referenceProductKey:r.reference_product_key??null,lwin7:r.lwin7??null,lwin11:r.lwin11??null,elid:r.elid??null,identityMatchStatus:r.identity_match_status??null,identityMatchConfidence:r.identity_match_confidence??null,identityMatchedAt:r.identity_matched_at??null,
+ colour:r.colour??null,productType:r.product_type??null,productSubtype:r.product_subtype??null,referenceProductKey:r.reference_product_key??null,lwin7:r.lwin7??null,lwin11:r.lwin11??null,elid:r.elid??null,referenceSite:r.reference_site??null,referenceParcel:r.reference_parcel??null,referenceSuggestions:parseJson<ReferenceSuggestion[]>(r.reference_suggestions_json,[]),identityMatchStatus:r.identity_match_status??null,identityMatchConfidence:r.identity_match_confidence??null,identityMatchCandidates:parseJson<string[]>(r.identity_match_candidates_json,[]),identityMatchedAt:r.identity_matched_at??null,identityCheckedAt:r.identity_checked_at??null,
  tastingNotes:r.experience_notes??r.tasting_notes,rating:r.experience_rating??r.rating,tastingDate:r.experience_date??r.tasting_date,event:r.event,venue:r.venue,
  tastingName:r.tasting_name,locationName:r.location_name,latitude:r.latitude,longitude:r.longitude,
  producerId:r.producer_id??null,favorite:Boolean(r.favorite),
@@ -222,12 +224,34 @@ app.delete('/api/wines/:id/images/:imageId',async c=>{
  return c.json({ok:true});
 });
 
+app.put('/api/wines/:id/reference-suggestion',async c=>{
+ const owner=c.get('userId'),id=c.req.param('id'),payload=await c.req.json().catch(()=>null) as {field?:unknown}|null,field=String(payload?.field??'') as ReferenceSuggestionField;
+ if(!referenceSuggestionFields.includes(field))return c.json({error:'Unknown LWIN suggestion field'},400);
+ const row=await c.env.DB.prepare('SELECT producer,wine_name,country,region,classification,reference_suggestions_json FROM wines WHERE owner_id=? AND id=?').bind(owner,id).first<Record<string,unknown>>();
+ if(!row)return c.json({error:'Not found'},404);
+ const suggestions=parseJson<ReferenceSuggestion[]>(row.reference_suggestions_json,[]),suggestion=suggestions.find(item=>item.field===field);
+ if(!suggestion)return c.json({error:'That LWIN suggestion is no longer available'},409);
+ const columns:Record<ReferenceSuggestionField,string>={producer:'producer',wineName:'wine_name',country:'country',region:'region',classification:'classification'},column=columns[field];
+ const rawCurrent=field==='wineName'?row.wine_name:row[field],current=field==='classification'?classificationLabel(rawCurrent==null?null:String(rawCurrent)):(rawCurrent==null?null:String(rawCurrent));
+ if((suggestion.current??null)!==(current??null))return c.json({error:'This wine changed since the LWIN suggestion was created. Re-run matching before applying it.'},409);
+ let value:string|null=suggestion.suggested;
+ if(field==='classification')value=suggestion.suggestedValue??appClassification(suggestion.suggested);
+ if(!value)return c.json({error:'Unsupported LWIN value'},400);
+ const remaining=suggestions.filter(item=>item.field!==field),now=new Date().toISOString(),identityReset=field==='producer'?',producer_id=NULL,cuvee_id=NULL':field==='wineName'?',cuvee_id=NULL':'';
+ const result=await c.env.DB.prepare(`UPDATE wines SET ${column}=?${identityReset},reference_suggestions_json=?,reference_suggestions_updated_at=?,updated_at=? WHERE owner_id=? AND id=?`)
+  .bind(value,remaining.length?JSON.stringify(remaining):null,remaining.length?now:null,now,owner,id).run();
+ if(!result.meta.changes)return c.json({error:'Not found'},404);
+ if(field==='producer'||field==='wineName')await ensureWineIdentity(c.env.DB,owner,id);
+ return c.json({ok:true,referenceSuggestions:remaining});
+});
+
 app.put('/api/wines/:id',async c=>{
  const parsed=wineInputSchema.safeParse(await c.req.json());if(!parsed.success)return c.json({error:'Invalid wine',issues:parsed.error.issues},400);
  const x=await enrichRecognitionReference(c.env.REFERENCE_DATA,parsed.data),id=c.req.param('id'),owner=c.get('userId');
  const wineStatement=c.env.DB.prepare(`UPDATE wines SET producer=?,wine_name=?,vintage=?,country=?,region=?,appellation=?,recognized_region=?,recognized_appellation=?,classification=?,classification_override=?,grapes_json=?,grape_blend_json=?,wine_style=?,alcohol_percentage=?,tasting_notes=?,rating=?,tasting_date=?,event=?,venue=?,price=?,currency=?,tags_json=?,recognition_status=?,recognition_confidence=?,updated_at=? WHERE id=? AND owner_id=?`).bind(x.producer,x.wineName,x.vintage,x.country,x.region,x.appellation,x.recognizedRegion,x.recognizedAppellation,x.classification,x.classificationOverride,JSON.stringify(x.grapes),JSON.stringify(x.grapeBlend),x.wineStyle,x.alcoholPercentage,x.tastingNotes,x.rating,x.tastingDate,x.event,x.venue,x.price,x.currency,JSON.stringify(x.tags),x.recognitionStatus,x.recognitionConfidence,new Date().toISOString(),id,owner);
  try{
-  const [res]=await c.env.DB.batch([wineStatement,...wineSaveStatements(c.env.DB,owner,id,x,true)]);
+  const previous=await c.env.DB.prepare('SELECT producer,wine_name,lwin7 FROM wines WHERE owner_id=? AND id=?').bind(owner,id).first<{producer:string;wine_name:string;lwin7:string|null}>();
+  const [res]=await c.env.DB.batch([wineStatement,...wineSaveStatements(c.env.DB,owner,id,x,true,previous??undefined)]);
   if(!res.meta.changes)return c.json({error:'Not found'},404);
   return c.json({ok:true});
  }catch(error){console.error('wine-save-failed',error);return c.json({error:'Could not save wine. Please retry.'},500)}

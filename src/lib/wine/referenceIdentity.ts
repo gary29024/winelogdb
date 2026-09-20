@@ -1,5 +1,7 @@
 import type { LwinReferenceProduct } from './lwinImport';
-import { elidProducerIndex,lwinRedirects,normalizeReferenceText,producerLookupKeys,referenceRows,referenceRowsByShard,type ElidReferenceRecord } from './referenceCatalog';
+import { elidProducerIndex,lwinRedirects,lwinStrictRowsForProducer,lwinReferenceIdentity,normalizeReferenceText,producerLookupKeys,referenceRows,referenceRowsByShard,type ElidReferenceRecord } from './referenceCatalog';
+import { appClassification,buildReferenceSuggestions } from './referenceSuggestions';
+import { canonicalizeWineFields } from './canonicalize';
 
 export { normalizeReferenceText } from './referenceCatalog';
 export const vintageKinds=['vintage','non_vintage','multi_vintage','unknown'] as const;
@@ -8,10 +10,12 @@ export type IdentityMatchStatus='matched'|'suggested'|'ambiguous'|'unmatched'|'m
 export type ReferenceIdentityInput={
  producer:string;wineName:string;vintage?:number|null;vintageKind?:VintageKind|null;releaseDesignation?:string|null;
  recognizedProducer?:string|null;recognizedWineName?:string|null;recognizedVintageText?:string|null;
- country?:string|null;region?:string|null;wineStyle?:string|null;
+ country?:string|null;region?:string|null;wineStyle?:string|null;classification?:string|null;classificationOverride?:string|null;
  referenceProductKey?:string|null;lwin7?:string|null;lwin11?:string|null;elid?:string|null;
- identityMatchStatus?:IdentityMatchStatus|null;identityMatchConfidence?:number|null;
+ identityMatchStatus?:IdentityMatchStatus|null;identityMatchConfidence?:number|null;identityMatchCandidates?:string[]|null;
  colour?:string|null;productType?:string|null;productSubtype?:string|null;
+ referenceProducer?:string|null;referenceWineName?:string|null;referenceCountry?:string|null;referenceRegion?:string|null;referenceClassification?:string|null;
+ referenceSite?:string|null;referenceParcel?:string|null;
 };
 
 export function referenceWineKey(wineName:string|null|undefined,releaseDesignation?:string|null){
@@ -50,8 +54,9 @@ function elidVintageClue(wine:ReferenceResolvable):string|null{
  return numbered?`N${numbered}`:null;
 }
 
+export type StoredReferenceIdentity={producer:string;wine_name:string;lwin7:string|null};
 export function referenceIdentityStatements(
- db:D1Database,owner:string,wineId:string,w:ReferenceIdentityInput,stamp=new Date().toISOString(),updateExisting=false
+ db:D1Database,owner:string,wineId:string,w:ReferenceIdentityInput,stamp=new Date().toISOString(),updateExisting=false,previous?:StoredReferenceIdentity
 ){
  const vintageKind=normalizedVintageKind(w.vintage,w.vintageKind);
  const evidence=updateExisting
@@ -67,34 +72,81 @@ export function referenceIdentityStatements(
  const persistIdentity=w.identityMatchStatus==='matched'
   ?Boolean(w.lwin7)
   :w.identityMatchStatus==='manual'&&Boolean(w.lwin7||w.elid);
- const identity=db.prepare(`UPDATE wines SET reference_product_key=?,lwin7=?,lwin11=?,elid=?,colour=?,product_type=?,product_subtype=?,
-   identity_match_status=?,identity_match_confidence=?,identity_matched_at=? WHERE owner_id=? AND id=?`)
-   .bind(persistIdentity?w.referenceProductKey??null:null,persistIdentity?w.lwin7??null:null,persistIdentity?w.lwin11??null:null,persistIdentity?w.elid??null:null,
-    persistIdentity?w.colour??null:null,persistIdentity?w.productType??null:null,persistIdentity?w.productSubtype??null:null,
-    w.identityMatchStatus,persistIdentity?w.identityMatchConfidence??(w.identityMatchStatus==='manual'?null:1):null,persistIdentity?stamp:null,owner,wineId);
- return [evidence,identity];
+ const suggestions=persistIdentity&&w.identityMatchStatus==='matched'?buildReferenceSuggestions({
+   producer:w.producer,wineName:w.wineName,country:w.country,region:w.region,classification:w.classification,classificationOverride:w.classificationOverride,
+   referenceProducer:w.referenceProducer,referenceWineName:w.referenceWineName,referenceCountry:w.referenceCountry,referenceRegion:w.referenceRegion,referenceClassification:w.referenceClassification
+  }):[];
+ const referenceValues=[
+  persistIdentity?w.referenceProductKey??null:null,persistIdentity?w.lwin7??null:null,persistIdentity?w.lwin11??null:null,persistIdentity?w.elid??null:null,
+  persistIdentity?w.referenceSite??null:null,persistIdentity?w.referenceParcel??null:null,
+  persistIdentity?w.colour??null:null,persistIdentity?w.productType??null:null,persistIdentity?w.productSubtype??null:null
+ ] as const;
+ const candidatesJson=w.identityMatchCandidates?.length?JSON.stringify(w.identityMatchCandidates):null;
+ const identityStatement=(guard='',guardValues:unknown[]=[])=>db.prepare(`UPDATE wines SET reference_product_key=?,lwin7=?,lwin11=?,elid=?,reference_site=?,reference_parcel=?,colour=?,product_type=?,product_subtype=?,
+   identity_match_status=?,identity_match_confidence=?,identity_match_candidates_json=?,identity_matched_at=?,identity_checked_at=?,reference_suggestions_json=?,reference_suggestions_updated_at=? WHERE owner_id=? AND id=? ${guard}`)
+   .bind(...referenceValues,w.identityMatchStatus,persistIdentity?w.identityMatchConfidence??(w.identityMatchStatus==='manual'?null:1):null,
+    candidatesJson,persistIdentity?stamp:null,stamp,suggestions.length?JSON.stringify(suggestions):null,suggestions.length?stamp:null,owner,wineId,...guardValues);
+ if(!updateExisting||w.identityMatchStatus==='manual')return [evidence,identityStatement()];
+
+ // A deliberate name correction accepts a new deterministic match or clears
+ // an obsolete automatic identity when the new name is absent from the catalogue.
+ // Formatting changes, incomplete lookups, ambiguity and manual IDs stay protected.
+ const corrected=previous&&(normalizeReferenceText(previous.producer)!==normalizeReferenceText(w.producer)||normalizeReferenceText(previous.wine_name)!==normalizeReferenceText(w.wineName));
+ if(corrected&&((persistIdentity&&w.identityMatchStatus==='matched')||w.identityMatchStatus==='unmatched'))return [evidence,identityStatement("AND coalesce(identity_match_status,'')<>'manual'")];
+
+ // An edit may re-run matching after the catalogue or naming rules changed.
+ // Never silently destroy or replace a stored automatic identity in that case:
+ // keep the current reference, mark the disagreement, and let owner validation
+ // decide it explicitly. Manual identities remain authoritative as well.
+ const incomingLwin=persistIdentity?w.lwin7??null:null,incomingElid=persistIdentity?w.elid??null:null;
+ const conflictCandidates=[...new Set([...(previous?.lwin7?[previous.lwin7]:[]),...(w.identityMatchCandidates??[]),...(incomingLwin?[incomingLwin]:[])])];
+ const conflict=db.prepare(`UPDATE wines SET identity_match_status='conflict',identity_match_confidence=NULL,
+   identity_match_candidates_json=coalesce(?,identity_match_candidates_json),identity_checked_at=?
+   WHERE owner_id=? AND id=? AND coalesce(identity_match_status,'')<>'manual'
+   AND (lwin7 IS NOT NULL OR elid IS NOT NULL)
+   AND NOT ((? IS NOT NULL AND lwin7=?) OR (lwin7 IS NULL AND ? IS NOT NULL AND elid=?))`)
+  .bind(conflictCandidates.length?JSON.stringify(conflictCandidates):null,stamp,owner,wineId,incomingLwin,incomingLwin,incomingElid,incomingElid);
+ const safeIdentity=identityStatement(`AND coalesce(identity_match_status,'')<>'manual'
+   AND ((lwin7 IS NULL AND elid IS NULL) OR (? IS NOT NULL AND lwin7=?) OR (lwin7 IS NULL AND ? IS NOT NULL AND elid=?))`,[incomingLwin,incomingLwin,incomingElid,incomingElid]);
+ return [evidence,conflict,safeIdentity];
 }
 
 type ReferenceResolvable={
  producer?:string|null;wineName?:string|null;vintage?:number|null;vintageKind?:VintageKind|null;releaseDesignation?:string|null;
- country?:string|null;region?:string|null;style?:string|null;wineStyle?:string|null;
+ country?:string|null;region?:string|null;style?:string|null;wineStyle?:string|null;classification?:string|null;classificationOverride?:string|null;
 };
 export type ReferenceMatch={
  referenceProductKey:string|null;lwin7:string|null;lwin11:string|null;elid:string|null;
- identityMatchStatus:IdentityMatchStatus;identityMatchConfidence:number|null;
+ identityMatchStatus:IdentityMatchStatus;identityMatchConfidence:number|null;identityMatchCandidates:string[];
  colour:string|null;productType:string|null;productSubtype:string|null;
  referenceSubRegion:string|null;referenceSite:string|null;referenceParcel:string|null;
- referenceDesignation:string|null;referenceClassification:string|null;country:string|null;region:string|null;
+ referenceDesignation:string|null;referenceClassification:string|null;referenceProducer:string|null;referenceWineName:string|null;country:string|null;region:string|null;
 };
-const unmatched=(status:IdentityMatchStatus='unmatched'):ReferenceMatch=>({
- referenceProductKey:null,lwin7:null,lwin11:null,elid:null,identityMatchStatus:status,identityMatchConfidence:null,
+const unmatched=(status:IdentityMatchStatus='unmatched',identityMatchCandidates:string[]=[]):ReferenceMatch=>({
+ referenceProductKey:null,lwin7:null,lwin11:null,elid:null,identityMatchStatus:status,identityMatchConfidence:null,identityMatchCandidates,
  colour:null,productType:null,productSubtype:null,referenceSubRegion:null,referenceSite:null,referenceParcel:null,
- referenceDesignation:null,referenceClassification:null,country:null,region:null
+ referenceDesignation:null,referenceClassification:null,referenceProducer:null,referenceWineName:null,country:null,region:null
 });
-const compatible=(candidate:LwinReferenceProduct,countryKey:string,regionKey:string,colourKey:string)=>
- (!countryKey||!candidate.countryKey||candidate.countryKey===countryKey)&&
- (!regionKey||!candidate.regionKey||candidate.regionKey===regionKey)&&
- (!colourKey||!candidate.colourKey||candidate.colourKey===colourKey);
+function canonicalReferencePlace(country:string|null|undefined,region:string|null|undefined){
+ const place=canonicalizeWineFields({country:country??null,region:region??null});
+ return {country:place.country??null,region:place.region??null};
+}
+const compatible=(candidate:LwinReferenceProduct,countryKey:string,regionKey:string,colourKey:string)=>{
+ const place=canonicalReferencePlace(candidate.country,candidate.region);
+ return (!countryKey||!place.country||normalizeReferenceText(place.country)===countryKey)&&
+  (!regionKey||!place.region||normalizeReferenceText(place.region)===regionKey)&&
+  (!colourKey||!candidate.colourKey||candidate.colourKey===colourKey);
+};
+function lwin11For(product:LwinReferenceProduct,wine:ReferenceResolvable){
+ const vintage=wine.vintage,kind=normalizedVintageKind(vintage,wine.vintageKind);
+ if(kind!=='vintage'||vintage==null)return null;
+ if(product.firstVintage!=null&&vintage<product.firstVintage)return null;
+ if(product.finalVintage!=null&&vintage>product.finalVintage)return null;
+ if(product.vintageConfig==='singleVintageOnly')return product.firstVintage===vintage?`${product.lwin7}${vintage}`:null;
+ // nonSequential means selected vintages. This import does not carry the
+ // provider's exact vintageValues list, so a range alone is not enough proof.
+ return product.vintageConfig==='sequential'?`${product.lwin7}${vintage}`:null;
+}
 
 function elidWineNameKeys(product:LwinReferenceProduct,wine:ReferenceResolvable){
  const keys=new Set([normalizeReferenceText(wine.wineName),normalizeReferenceText(product.wineName)].filter(Boolean));
@@ -106,6 +158,7 @@ function elidWineNameKeys(product:LwinReferenceProduct,wine:ReferenceResolvable)
 }
 async function registeredElid(bucket:R2Bucket,product:LwinReferenceProduct,wine:ReferenceResolvable){
  const clue=elidVintageClue(wine);if(!clue)return null;
+ if(!product.producerName)return null;
  const index=await elidProducerIndex(bucket),codes=[...new Set(producerLookupKeys(product.producerName).flatMap(key=>index[key]??[]))];
  if(!codes.length){
   console.warn(JSON.stringify({event:'elid-producer-unmapped',lwin7:product.lwin7,producer:product.producerName}));
@@ -121,14 +174,22 @@ async function registeredElid(bucket:R2Bucket,product:LwinReferenceProduct,wine:
 }
 
 export async function resolveWineReference(bucket:R2Bucket,wine:ReferenceResolvable):Promise<ReferenceMatch>{
- const producerKey=normalizeReferenceText(wine.producer),wineKey=referenceWineKey(wine.wineName,wine.releaseDesignation);
+ const producerKey=normalizeReferenceText(wine.producer),wineKey=referenceWineKey(wine.wineName,wine.releaseDesignation),baseWineKey=normalizeReferenceText(wine.wineName);
  if(!producerKey||!wineKey)return unmatched();
- const countryKey=normalizeReferenceText(wine.country),regionKey=normalizeReferenceText(wine.region),colourKey=colourFromStyle(wine.style??wine.wineStyle);
- const rows=await referenceRows<LwinReferenceProduct>(bucket,'lwin',producerKey);if(!rows.length)return unmatched();
- const candidates=rows.filter(row=>row.producerKey===producerKey&&row.wineKey===wineKey&&compatible(row,countryKey,regionKey,colourKey));
- if(candidates.length!==1)return unmatched(candidates.length>1?'ambiguous':'unmatched');
+ const inputPlace=canonicalReferencePlace(wine.country,wine.region),countryKey=normalizeReferenceText(inputPlace.country),regionKey=normalizeReferenceText(inputPlace.region),colourKey=colourFromStyle(wine.style??wine.wineStyle);
+ const rows=await lwinStrictRowsForProducer<LwinReferenceProduct>(bucket,wine.producer);if(!rows.length)return unmatched();
+ const eligible=(key:string)=>rows.filter(row=>{
+  const identity=lwinReferenceIdentity(row),producerMatches=identity.producerKey===producerKey||identity.structuredProducerKey===producerKey;
+  return row.status!=='Deleted'&&producerMatches&&identity.wineKey===key&&compatible(row,countryKey,regionKey,colourKey);
+ });
+ // Prefer an edition/release-specific LWIN row when one exists. The real LWIN
+ // export also files some release families (for example Krug Grande Cuvee) only
+ // under the base wine name, so a recognized release designation must not turn
+ // an otherwise valid reference match into a miss.
+ let candidates=eligible(wineKey);
+ if(!candidates.length&&baseWineKey&&baseWineKey!==wineKey)candidates=eligible(baseWineKey);
+ if(candidates.length!==1)return unmatched(candidates.length>1?'ambiguous':'unmatched',candidates.map(row=>row.lwin7));
  let product=candidates[0];
- if(product.status==='Deleted')return unmatched();
  if(product.status==='Combined'){
   const redirects=await lwinRedirects(bucket),seen=new Set<string>();
   while(product.status==='Combined'){
@@ -141,16 +202,17 @@ export async function resolveWineReference(bucket:R2Bucket,wine:ReferenceResolva
   }
  }
  if(product.status!=='Live')return unmatched();
- const elid=await registeredElid(bucket,product,wine);
- return {referenceProductKey:product.productKey,lwin7:product.lwin7,lwin11:null,elid,identityMatchStatus:'matched',identityMatchConfidence:1,
+ const elid=await registeredElid(bucket,product,wine),place=canonicalReferencePlace(product.country,product.region),identity=lwinReferenceIdentity(product);
+ return {referenceProductKey:product.productKey,lwin7:product.lwin7,lwin11:lwin11For(product,wine),elid,identityMatchStatus:'matched',identityMatchConfidence:1,identityMatchCandidates:[],
   colour:product.colour,productType:product.productType,productSubtype:product.productSubtype,
   referenceSubRegion:product.subRegion,referenceSite:product.site,referenceParcel:product.parcel,
-  referenceDesignation:product.designation,referenceClassification:product.classification,country:product.country,region:product.region};
+  referenceDesignation:product.designation,referenceClassification:product.classification,referenceProducer:identity.producerName,referenceWineName:identity.wineName,country:place.country,region:place.region};
 }
 export async function enrichRecognitionReference<T extends ReferenceResolvable>(bucket:R2Bucket,wine:T){
  try{
   const match=await resolveWineReference(bucket,wine);
-  return {...wine,...match,country:wine.country??match.country,region:wine.region??match.region};
+  const classification=wine.classification??(!wine.classificationOverride?appClassification(match.referenceClassification):null);
+  return {...wine,...match,country:wine.country??match.country,region:wine.region??match.region,classification,referenceCountry:match.country,referenceRegion:match.region};
  }catch(error){
   console.warn(JSON.stringify({event:'wine-reference-lookup-failed',error:error instanceof Error?error.message:String(error)}));
   return wine;

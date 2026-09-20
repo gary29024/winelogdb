@@ -213,6 +213,8 @@ button:disabled{opacity:.55;cursor:default}
 .detail-photo-count{color:var(--ink-6);font:600 .72rem 'DM Sans',sans-serif}
 .wine-identity .detail-producer{font-family:'DM Sans',sans-serif;font-size:1.05rem;color:var(--wine);margin:.45rem 0 .7rem}
 .detail-pills{display:flex;gap:8px;flex-wrap:wrap}
+.detail-pills>span{max-width:100%;white-space:normal;overflow-wrap:anywhere}
+.detail-pills .detail-denomination{flex:none;white-space:nowrap}
 /* The actions sit directly under the name instead of below the longest panel on
    the page. Deliberately not a fixed bar - the mobile nav already owns the
    bottom edge and the home-indicator inset beneath it. */
