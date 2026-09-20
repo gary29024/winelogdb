@@ -1,7 +1,7 @@
 import { describe,expect,it } from 'vitest';
 import { AppIcon,type AppIconKey } from '../../src/components/AppIcons';
 
-const iconKeys:AppIconKey[]=['passport','journal','producers','insights','scan','single-wine','group-photo','batch-scan','pen','close','search','heart','heart-filled'];
+const iconKeys:AppIconKey[]=['passport','journal','producers','insights','scan','single-wine','group-photo','batch-scan','pen','close','search','heart','heart-filled','sparkle','chevron-right'];
 
 describe('app shell icon set',()=>{
   it('draws an svg for every icon key',()=>{

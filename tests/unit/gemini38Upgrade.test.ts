@@ -71,7 +71,7 @@ describe('WineLog AI model policy',()=>{
     // rewiring a path nothing calls would only make the exemption harder to see.
     const exempt=new Set(['src/lib/ai/policy.ts','worker/index.ts']);
     const sources=['src','worker'].flatMap(root=>readdirSync(root,{recursive:true,encoding:'utf8'})
-      .map(name=>`${root}/${name}`).filter(path=>/\.tsx?$/.test(path)&&!exempt.has(path)));
+      .map(name=>`${root}/${name.replace(/\\/g,'/')}`).filter(path=>/\.tsx?$/.test(path)&&!exempt.has(path)));
     expect(sources.length).toBeGreaterThan(50);
     for(const file of sources){
       const text=read(file);

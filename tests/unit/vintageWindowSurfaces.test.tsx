@@ -15,12 +15,10 @@ describe('where the drinking window is offered',()=>{
     expect(VINTAGE_WINDOW_SURFACES.cellarSheet).toBe(true);
   });
 
-  it('is a switch, not a deletion',()=>{
-    // Turning it back on has to be this one boolean and nothing else, so both
-    // surfaces read the flag rather than one of them having been cut out.
+  it('keeps the window in the cellar and removes the duplicate from wine details',()=>{
     const detail=readFileSync('src/features/wines/DetailPage.tsx','utf8');
     const sheet=readFileSync('src/features/cellar/AddToCellarSheet.tsx','utf8');
-    expect(detail).toMatch(/VINTAGE_WINDOW_SURFACES\.wineDetail&&<VintageCheck/);
+    expect(detail).not.toContain('VintageCheck');
     expect(sheet).toMatch(/VINTAGE_WINDOW_SURFACES\.cellarSheet&&<VintageCheck/);
     // and everything behind it is still here, running for the cellar
     expect(readFileSync('src/features/maturity/VintageCheck.tsx','utf8')).toMatch(/lookUpVintageWindow/);

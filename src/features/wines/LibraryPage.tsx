@@ -44,6 +44,13 @@ const forgetJournalFilters=()=>{try{window.sessionStorage.removeItem(accountStor
  * a filter put you on a later page, so it goes with them.
  */
 const FILTER_KEYS=['query','month','tasting','country','style','rating','sort','favorite','offset'] as const;
+/**
+ * The controls that actually narrow the list, which is not the same set as the
+ * things a reset clears: sort, favourite and offset change what you are looking
+ * at without cutting anything out, so counting them would put a badge on a
+ * journal nobody has filtered.
+ */
+const NARROWING_KEYS=['month','tasting','country','style','rating'] as const;
 
 const initialView=():ViewMode=>{
   if(typeof window==='undefined')return 'grid';
@@ -100,6 +107,10 @@ export function LibraryPage(){
   // not reached the URL yet.
   const [searchResetSeq,setSearchResetSeq]=useState(0);
   const [pageDraft,setPageDraft]=useState('1');
+  // Folded away by default, but open on arrival when something is already
+  // narrowing the list: a filtered journal whose filters are hidden looks like
+  // a journal that has lost wines.
+  const [filtersOpen,setFiltersOpen]=useState(()=>NARROWING_KEYS.some(key=>(params.get(key)??'')!==''));
   const [selecting,setSelecting]=useState(false),[selectedIds,setSelectedIds]=useState<Set<string>>(()=>new Set());
   const [favoriteBusy,setFavoriteBusy]=useState<Set<string>>(()=>new Set());
   const [storyCard,setStoryCard]=useState<StoryCard|null>(null);
@@ -273,6 +284,7 @@ export function LibraryPage(){
   // wine, so there was no way to get to a plain journal short of editing the
   // URL. This clears the lot, including what was remembered.
   const filtersApplied=FILTER_KEYS.some(key=>(params.get(key)??'')!=='');
+  const narrowingCount=NARROWING_KEYS.filter(key=>(params.get(key)??'')!=='').length;
   // Clearing filters must not also cancel an attach: that is what Done is for.
   const resetFilters=()=>{setRestoreFilters('');setSearchResetSeq(value=>value+1);forgetJournalFilters();setParams(attachTo?new URLSearchParams({attachTo}):new URLSearchParams(),{replace:false})};
   const chronological=sort==='newest'||sort==='oldest';
@@ -296,13 +308,24 @@ export function LibraryPage(){
       <JournalScopeTabs scope={favoriteOnly?'favorites':'tasted'}/>
       <Link className="journal-tastings-link" to="/tastings">Browse your tastings <span aria-hidden="true">›</span></Link>
     </div>
-    <form className="filters journal-filters" onSubmit={e=>e.preventDefault()}><JournalSearchInput value={params.get('query')??''} resetSeq={searchResetSeq}/><div className="filter-pills"><label className="filter-month">Month<input type="month" aria-label="Drinking month" value={params.get('month')??''} onChange={e=>update('month',e.target.value)}/></label><label>Tasting<input value={params.get('tasting')??''} onChange={e=>update('tasting',e.target.value)} placeholder="Tasting / event"/></label><label>Country<input value={params.get('country')??''} onChange={e=>update('country',e.target.value)} placeholder="Country"/></label><label>Style<select value={params.get('style')??''} onChange={e=>update('style',e.target.value)}><option value="">Style</option>{['red','white','rose','sparkling','dessert','fortified','orange'].map(x=><option key={x}>{x}</option>)}</select></label><label>Score<input type="number" min="0" max="100" value={params.get('rating')??''} onChange={e=>update('rating',e.target.value)} placeholder="Score"/></label><label>Sort<select value={sort} onChange={e=>update('sort',e.target.value)}><option value="newest">Newest drinking date</option><option value="oldest">Oldest drinking date</option><option value="rating">Rating</option><option value="producer">Producer</option><option value="vintage">Vintage</option></select></label></div></form>
+    {/* Search is the control used every visit, so it stays out; the other six
+        were two dense rows of furniture above the first wine on a phone. They
+        stay mounted rather than unmounted so a half-typed filter survives being
+        folded away. */}
+    <form className="filters journal-filters" onSubmit={e=>e.preventDefault()}><JournalSearchInput value={params.get('query')??''} resetSeq={searchResetSeq}/>
+     <div className="journal-filter-bar">
+      <button type="button" className="journal-filter-toggle" aria-expanded={filtersOpen} aria-controls="journal-filter-fields" onClick={()=>setFiltersOpen(open=>!open)}>
+       Filters{narrowingCount>0&&<b>{narrowingCount}</b>}<span className="journal-filter-chevron" aria-hidden="true"/>
+      </button>
+      {filtersApplied&&<button type="button" className="journal-filter-reset" onClick={resetFilters}>Reset filters</button>}
+     </div>
+     <div className="filter-pills" id="journal-filter-fields" hidden={!filtersOpen}><label className="filter-month">Month<input type="month" aria-label="Drinking month" value={params.get('month')??''} onChange={e=>update('month',e.target.value)}/></label><label>Tasting<input value={params.get('tasting')??''} onChange={e=>update('tasting',e.target.value)} placeholder="Tasting / event"/></label><label>Country<input value={params.get('country')??''} onChange={e=>update('country',e.target.value)} placeholder="Country"/></label><label>Style<select value={params.get('style')??''} onChange={e=>update('style',e.target.value)}><option value="">Style</option>{['red','white','rose','sparkling','dessert','fortified','orange'].map(x=><option key={x}>{x}</option>)}</select></label><label>Score<input type="number" min="0" max="100" value={params.get('rating')??''} onChange={e=>update('rating',e.target.value)} placeholder="Score"/></label><label>Sort<select value={sort} onChange={e=>update('sort',e.target.value)}><option value="newest">Newest drinking date</option><option value="oldest">Oldest drinking date</option><option value="rating">Rating</option><option value="producer">Producer</option><option value="vintage">Vintage</option></select></label></div></form>
     {attachTo&&<p className="journal-attach-banner" role="status">Pick the wines that were poured at <strong>{attachName||'this tasting'}</strong>, then tap Add. Filters and search still work, and the wines themselves are not changed — only which evening they belong to.</p>}
     {batchNotice&&<p className="journal-batch-notice" role="status">{batchNotice}</p>}
     {batchError&&!batchOpen&&<p className="journal-page-error" role="alert">{batchError}</p>}
     <div className={`journal-viewbar${selecting?' selecting':''}`}><span>{selecting?`${selectedIds.size} selected · ${resultLabel}`:loading&&data.length?'Updating results…':!loading&&(filtersApplied||total>0)?`${resultLabel} · Page ${currentPage} of ${totalPages}`:(favoriteOnly?'Favorites':'Journal')}</span>{selecting?<div className="journal-selection-actions"><button type="button" onClick={selectAllOnPage} disabled={!data.length}>Select all on page</button><button type="button" onClick={()=>setSelectedIds(new Set())} disabled={!selectedIds.size}>Clear</button>{attachTo
       ?<button type="button" className="primary" onClick={()=>void submitAttach()} disabled={!selectedIds.size||batchBusy}>{batchBusy?'Adding…':`Add ${selectedIds.size} to ${attachName||'tasting'}`}</button>
-      :<><button type="button" onClick={()=>void openFriendTagging()} disabled={!selectedIds.size}>Tag friends</button><button type="button" onClick={openStoryCard} disabled={!selectedIds.size}>Share</button><button type="button" className="primary" onClick={openBatchEditor} disabled={!selectedIds.size}>Edit event / venue</button></>}<button type="button" onClick={attachTo?leaveAttachMode:stopSelecting} className="quiet">Done</button></div>:<div className={`journal-view-actions${filtersApplied?' with-reset':''}`}>{filtersApplied&&<button type="button" className="journal-filter-reset" onClick={resetFilters}>Reset filters</button>}<button type="button" className="journal-select-toggle" onClick={()=>{setSelecting(true);setBatchNotice('')}} disabled={!data.some(wine=>!wine.shared)}>Select</button><div className="journal-view-toggle" role="group" aria-label="Journal layout"><button type="button" className={view==='list'?'active':''} aria-pressed={view==='list'} onClick={()=>setView('list')}>List</button><button type="button" className={view==='grid'?'active':''} aria-pressed={view==='grid'} onClick={()=>setView('grid')}>Grid</button></div></div>}</div>
+      :<><button type="button" onClick={()=>void openFriendTagging()} disabled={!selectedIds.size}>Tag friends</button><button type="button" onClick={openStoryCard} disabled={!selectedIds.size}>Share</button><button type="button" className="primary" onClick={openBatchEditor} disabled={!selectedIds.size}>Edit event / venue</button></>}<button type="button" onClick={attachTo?leaveAttachMode:stopSelecting} className="quiet">Done</button></div>:<div className="journal-view-actions"><button type="button" className="journal-select-toggle" onClick={()=>{setSelecting(true);setBatchNotice('')}} disabled={!data.some(wine=>!wine.shared)}>Select</button><div className="journal-view-toggle" role="group" aria-label="Journal layout"><button type="button" className={view==='list'?'active':''} aria-pressed={view==='list'} onClick={()=>setView('list')}>List</button><button type="button" className={view==='grid'?'active':''} aria-pressed={view==='grid'} onClick={()=>setView('grid')}>Grid</button></div></div>}</div>
     {loading&&!data.length?<p aria-live="polite">Pouring your collection…</p>:error&&!data.length?<p role="alert">{error}</p>:data.length?(chronological?<div className="journal-months">{groups.map(group=><section className="journal-month" key={group.key}><h2 className="journal-month-heading">{monthLabel(group.key)}</h2>{renderItems(group.items)}</section>)}</div>:renderItems(data)):favoriteOnly?<div className="empty favorite-empty"><span><AppIcon kind="heart"/></span><h2>No favorite wines yet</h2><p>Tap the heart on a Journal card or wine page to keep special bottles here.</p><button type="button" onClick={()=>update('favorite','')}>Show all wines</button></div>:<div className="empty"><span><AppIcon kind="journal"/></span><h2>Your journal is empty</h2><p>Scan a bottle label to add your first wine.</p><Link className="button" to="/upload">Scan Wine</Link></div>}
     {error&&data.length>0&&<p className="journal-page-error" role="alert">{error}</p>}
     {total>0&&<nav className="journal-pagination" aria-label="Journal pages"><button type="button" disabled={!hasPrevious||loading} onClick={()=>goToOffset(currentOffset-PAGE_SIZE)}>← Previous</button><form className="journal-page-picker" onSubmit={event=>{event.preventDefault();goToPage()}}><label>Page <input type="number" min="1" max={totalPages} inputMode="numeric" aria-label="Journal page number" value={pageDraft} onChange={event=>setPageDraft(event.target.value)}/> of {totalPages}</label><button type="submit" disabled={loading||pageDraft===String(currentPage)}>Go</button><span>{resultLabel}</span></form><button type="button" disabled={!hasNext||loading} onClick={()=>goToOffset(nextOffset??currentOffset+PAGE_SIZE)}>Next →</button></nav>}

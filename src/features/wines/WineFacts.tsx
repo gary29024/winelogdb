@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { placeLabels,wineFactRows,type FactRow,type WineFacts as Facts } from '../../lib/wine/detailFields';
+import { SectionLabel } from '../../components/SectionLabel';
 // The markup below and the rules it needs travel together. A page used to be
 // able to render .detail-classification while forgetting this import, which is
 // how a shared Village pill shipped with no styling at all; owning the import
@@ -37,8 +38,10 @@ export function FactList({rows,className}:{rows:FactRow[];className?:string}){
 
 /** The Wine details panel. `extra` appends rows only one viewer is entitled to. */
 export function WineDetailsSection({wine,extra=[]}:{wine:Facts;extra?:FactRow[]}){
+ const rows=[...wineFactRows(wine),...extra];
+ if(!rows.length)return null;
  return <section className="detail-section">
-  <p className="section-label">Wine details</p>
-  <FactList rows={[...wineFactRows(wine),...extra]}/>
+  <SectionLabel>Wine details</SectionLabel>
+  <FactList rows={rows}/>
  </section>;
 }
