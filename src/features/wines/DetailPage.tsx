@@ -150,8 +150,8 @@ export function DetailPage(){
     </div>}
    >
     <h2 className="detail-producer">{wine.producerId?<Link className="detail-producer-link" to={`/producers/${wine.producerId}`}>{wine.producer}</Link>:wine.producer}</h2>
-    <WineFactPills wine={wine}/>
    </PageHeader>
+   <WineFactPills wine={wine}/>
   </section>
   {/* The two things most often pressed, directly under the name instead of
       below the longest panel on the page. Not a fixed bar: the mobile nav is

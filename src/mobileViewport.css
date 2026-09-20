@@ -1,2 +1,5 @@
 :root{--mobile-browser-bottom:0px}
-@media(max-width:700px){main{padding-bottom:calc(104px + var(--mobile-browser-bottom))}.mobile-nav{bottom:var(--mobile-browser-bottom);transform:translateZ(0);will-change:bottom}}
+@media(max-width:700px), (max-width:932px) and (orientation:landscape) and (pointer:coarse){
+ main{padding-bottom:calc(104px + var(--mobile-browser-bottom))}
+ .mobile-nav{bottom:var(--mobile-browser-bottom);transform:translateZ(0);will-change:bottom}
+}

@@ -23,3 +23,11 @@
   .page-header-stats{font-size:.8rem}
   .page-header-actions>*{flex:1 1 auto;text-align:center}
 }
+
+/* The Pro has less room beside the photograph than the Pro Max. Scale the
+   media continuously between the two rather than shrinking the reading text. */
+@media(max-width:430px){
+  .wine-identity .detail-media{width:clamp(72px,20vw,88px)}
+  .wine-identity .detail-bottle,.wine-identity .detail-media .detail-photo-button{width:100%}
+  .wine-identity .detail-bottle,.wine-identity .detail-media .detail-photo{height:clamp(96px,27vw,118px)}
+}

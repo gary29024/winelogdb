@@ -113,8 +113,8 @@ export function SharedWinesPage(){
     </div>}
    >
     <h2 className="detail-producer">{wine.producerId?<Link className="detail-producer-link" to={`/producers/${wine.producerId}`}>{wine.producer}</Link>:wine.producer}</h2>
-    <WineFactPills wine={wine}/>
    </PageHeader>
+   <WineFactPills wine={wine}/>
   </section>
   <div className="wine-actions">
    <button type="button" className={`detail-favorite-button${wine.favorite?' active':''}`} aria-pressed={wine.favorite} onClick={()=>void toggleFavorite()} disabled={favoriteBusy}><span className="heart" aria-hidden="true"><AppIcon kind={wine.favorite?'heart-filled':'heart'}/></span>{wine.favorite?'Favorite':'Add to favorites'}</button>
