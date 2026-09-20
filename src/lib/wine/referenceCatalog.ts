@@ -42,8 +42,11 @@ export function lwinReferenceIdentity(row:LwinReferenceIdentitySource){
  const display=(row.displayName??'').trim(),comma=display.indexOf(',');
  const displayProducer=comma>0?display.slice(0,comma).trim():null,displayWine=comma>0?display.slice(comma+1).trim():null;
  const structuredProducerName=row.producerName?.trim()||null,title=row.producerTitle?.trim();
- const titledProducer=structuredProducerName&&title&&!normalizeReferenceText(structuredProducerName).startsWith(`${normalizeReferenceText(title)} `)?`${title} ${structuredProducerName}`:structuredProducerName;
- const producerName=displayProducer||titledProducer,wineName=row.wineName?.trim()||displayWine||null;
+ // DISPLAY_NAME may omit PRODUCER_TITLE even when the structured export has it.
+ // Preserve an already-qualified display identity, and never duplicate its title.
+ const baseProducer=displayProducer||structuredProducerName,baseKey=normalizeReferenceText(baseProducer),titleKey=normalizeReferenceText(title);
+ const producerName=baseProducer&&titleKey&&baseKey!==titleKey&&!baseKey.startsWith(`${titleKey} `)&&!producerHouseQualifier(baseProducer)?`${title} ${baseProducer}`:baseProducer;
+ const wineName=row.wineName?.trim()||displayWine||null;
  return {
   producerName,producerKey:normalizeReferenceText(producerName)||normalizeReferenceText(row.producerKey),
   structuredProducerKey:normalizeReferenceText(row.producerKey)||normalizeReferenceText(structuredProducerName),

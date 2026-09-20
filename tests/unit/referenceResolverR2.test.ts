@@ -40,6 +40,16 @@ function objects(){
 }
 
 describe('R2 wine reference resolver',()=>{
+ it('uses structured titles to distinguish Maison and Domaine when both display names omit them',async()=>{
+  const data=objects(),shard=referenceShardId('fang');
+  const maison={...lwin,productKey:'lwin:3061244',lwin7:'3061244',displayName:'Fang, Cuvee Zephyr',producerTitle:'Maison',producerName:'Fang',producerKey:'fang',wineName:'Cuvee Zephyr',wineKey:'cuvee zephyr'};
+  data[`reference/lwin/versions/l1/shard-${shard}.json`]=[maison,{...maison,productKey:'lwin:3061245',lwin7:'3061245',producerTitle:'Domaine'}];
+  (data['reference/lwin/versions/l1/producer-index.json'] as Record<string,string[]>).fang=[shard];
+  const b=bucket(data);
+  expect(await resolveWineReference(b,{producer:'Maison FANG',wineName:'Cuvée Zéphyr'})).toMatchObject({identityMatchStatus:'matched',lwin7:'3061244',referenceProducer:'Maison Fang'});
+  expect(await resolveWineReference(b,{producer:'Domaine FANG',wineName:'Cuvée Zéphyr'})).toMatchObject({identityMatchStatus:'matched',lwin7:'3061245',referenceProducer:'Domaine Fang'});
+  expect(await resolveWineReference(b,{producer:'FANG',wineName:'Cuvée Zéphyr'})).toMatchObject({identityMatchStatus:'ambiguous',lwin7:null});
+ });
  it('matches an edition-specific LWIN and only attaches a registry-backed ELID',async()=>{
   const result=await resolveWineReference(bucket(objects()),{producer:'Krug',wineName:'Grande Cuvée',releaseDesignation:'171ème Édition',vintage:null,vintageKind:'non_vintage',country:'France',region:'Champagne',style:'sparkling'});
   expect(result).toMatchObject({identityMatchStatus:'matched',lwin7:'1234567',elid:'FR-CMP-KRUG01-N171',productSubtype:'Sparkling'});

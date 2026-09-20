@@ -1,10 +1,24 @@
 import { describe,expect,it } from 'vitest';
-import { producerHouseQualifier,producerLookupKeys,referenceRowsByShard,referenceShardId,type ReferenceManifest } from '../../src/lib/wine/referenceCatalog';
+import { lwinReferenceIdentity,producerHouseQualifier,producerLookupKeys,referenceRowsByShard,referenceShardId,type ReferenceManifest } from '../../src/lib/wine/referenceCatalog';
 
 function bucket(objects:Record<string,unknown>,reads:Record<string,number>={}){
  return {get:async(key:string)=>{reads[key]=(reads[key]??0)+1;if(!(key in objects))return null;return {text:async()=>JSON.stringify(objects[key])}}} as unknown as R2Bucket;
 }
 describe('reference catalogue sharding and cache',()=>{
+ it.each(['Maison','Domaine'])('preserves %s from the structured title when the display name omits it',title=>{
+  expect(lwinReferenceIdentity({displayName:'Fang, Cuvee Zephyr',producerTitle:title,producerName:'Fang',wineName:'Cuvee Zephyr'}))
+   .toMatchObject({producerName:`${title} Fang`,producerKey:`${title.toLowerCase()} fang`,structuredProducerKey:'fang',wineName:'Cuvee Zephyr'});
+ });
+ it.each([
+  ['Domaine Fang, Cuvee Zephyr','Domaine','Fang','Domaine Fang'],
+  ['Maison Fang, Cuvee Zephyr','Domaine','Fang','Maison Fang'],
+  [null,'Domaine','Domaine Fang','Domaine Fang'],
+  ['Château Test, Wine','Chateau','Test','Château Test'],
+  ['Fang, Cuvee Zephyr',null,'Fang','Fang'],
+  ['Fang, Cuvee Zephyr','Maison',null,'Maison Fang']
+ ])('preserves qualified and sparse producer identities: %s',(displayName,producerTitle,producerName,expected)=>{
+  expect(lwinReferenceIdentity({displayName,producerTitle,producerName}).producerName).toBe(expected);
+ });
  it('is deterministic and bounded',()=>{
   expect(referenceShardId('krug')).toBe(referenceShardId('krug'));
   expect(Number(referenceShardId('krug'))).toBeGreaterThanOrEqual(0);

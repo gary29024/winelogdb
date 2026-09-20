@@ -85,9 +85,9 @@ export function asRecordedLabel(wine:WineFacts){
  * visible in the wine name or the legal place fields. */
 function additionalReferencePlace(value:string|Absent,wine:WineFacts,extra:Array<string|Absent>=[]){
  const candidate=value?.trim();if(!candidate)return null;
- const candidateKey=normalizeReferenceText(candidate);
+ const candidateKey=normalizeReferenceText(candidate);if(!candidateKey)return null;
  const covered=[wine.wineName,wine.region,wine.appellation,...extra].some(item=>{
-  const itemKey=normalizeReferenceText(item);return Boolean(itemKey&&itemKey.includes(candidateKey));
+  const itemKey=normalizeReferenceText(item);return Boolean(itemKey&&` ${itemKey} `.includes(` ${candidateKey} `));
  });
  return covered?null:candidate;
 }

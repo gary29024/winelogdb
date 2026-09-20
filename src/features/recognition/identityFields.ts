@@ -48,6 +48,15 @@ export const referenceRecognitionFields={
  referenceDesignation:nullableRecognitionText,referenceClassification:nullableRecognitionText
 } as const;
 
+/** Raw model JSON has no authority to supply catalogue identity. Keep this list
+ * tied to the response schema so newly added reference fields are stripped too.
+ * Apply before validation: even malformed invented IDs must not discard a read.
+ * Browser/session response schemas still accept verified server enrichment. */
+export function stripModelReferenceFields(value:unknown):unknown{
+ if(!value||typeof value!=='object'||Array.isArray(value))return value;
+ return Object.fromEntries(Object.entries(value).filter(([key])=>!Object.hasOwn(referenceRecognitionFields,key)));
+}
+
 type Evidence={
  producer?:string|null;wineName?:string|null;vintage?:number|null;vintageKind?:VintageKind|null;
  recognizedProducer?:string|null;recognizedWineName?:string|null;recognizedVintageText?:string|null;
