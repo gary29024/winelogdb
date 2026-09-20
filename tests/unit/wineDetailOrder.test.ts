@@ -48,8 +48,11 @@ describe('the order a wine reads in',()=>{
   it('marks who is answerable for each section rather than drawing them all alike',()=>{
     for(const [name,source] of pages){
       expect(source,`${name} should mark the tasting as the owner's`).toContain('<SectionLabel origin="yours">Your experience</SectionLabel>');
-      expect(source,`${name} should mark research as researched`).toContain('origin="researched"');
     }
+    // The owner's page also shows partial reused scopes. Only a complete report
+    // earns the badge; deepSearchLayout tests the rendered complete/partial states.
+    expect(owner).toContain("origin={deepComplete?'researched':undefined}");
+    expect(shared).toContain('origin="researched"');
     // Derived stays unmarked: a badge on every section marks nothing.
     const facts=readFileSync('src/features/wines/WineFacts.tsx','utf8');
     expect(facts).toContain('<SectionLabel>Wine details</SectionLabel>');
