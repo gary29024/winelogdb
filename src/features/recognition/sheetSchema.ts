@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { canonicalizeRecognitionEvidence,nullableRecognitionText,recognitionCommonFields,referenceRecognitionFields } from './identityFields';
+import { canonicalizeRecognitionEvidence,nullableRecognitionText,recognitionCommonFields,referenceRecognitionFields,stripModelReferenceFields } from './identityFields';
 
 /**
  * The printed wine list handed out at a tasting, read as text.
@@ -150,7 +150,7 @@ export function parseSheetPage(raw:string):SheetPage{
   // screen already tells you to add those by hand rather than guessing.
   const wines:SheetWine[]=[];let unreadable=0;
   for(const row of envelope.wines){
-    const parsed=sheetWineSchema.safeParse(row);
+    const parsed=sheetWineSchema.safeParse(stripModelReferenceFields(row));
     if(parsed.success)wines.push(parsed.data);else unreadable++;
   }
   return {...envelope,wines:mergeSheetWines([wines]),unresolvedCount:Math.min(200,envelope.unresolvedCount+unreadable)};

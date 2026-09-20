@@ -3,6 +3,24 @@ import { wineFactRows } from '../../src/lib/wine/detailFields';
 import { sharedWine } from '../../worker/multiUser/social';
 
 describe('external wine identity presentation',()=>{
+ it.each(['wineName','region','appellation','referenceSite'] as const)('keeps distinct parcel words when %s has only a substring',field=>{
+  for(const [visible,parcel] of [['Champeaux','Champ'],['Crassons','Cras']]){
+   expect(wineFactRows({[field]:visible,referenceParcel:parcel})).toContainEqual(['LWIN parcel',parcel]);
+  }
+ });
+ it.each(['wineName','region','appellation'] as const)('keeps distinct site words when %s has only a substring',field=>{
+  for(const [visible,site] of [['Champeaux','Champ'],['Crassons','Cras']]){
+   expect(wineFactRows({[field]:visible,referenceSite:site})).toContainEqual(['LWIN site',site]);
+  }
+ });
+ it.each(['wineName','region','appellation','referenceSite'] as const)('suppresses normalized whole-phrase parcel duplicates in %s',field=>{
+  for(const visible of ['LES SUCHÔTS','Vosne-Romanée / Les Suchots / Premier Cru']){
+   expect(wineFactRows({[field]:visible,referenceParcel:'Les Suchots'}).some(([label])=>label==='LWIN parcel')).toBe(false);
+  }
+ });
+ it.each(['wineName','region','appellation'] as const)('suppresses normalized whole-phrase site duplicates in %s',field=>{
+  expect(wineFactRows({[field]:'Vosne-Romanée / Les Suchots / Premier Cru',referenceSite:'LES SUCHÔTS'}).some(([label])=>label==='LWIN site')).toBe(false);
+ });
  it('marks disputed identifiers and reference-derived details for owners and friends',()=>{
   const row={id:'w',producer:'Estate',wine_name:'Wine',lwin7:'1000001',lwin11:'10000012020',elid:'FR-BDX-MARG01-2020',colour:'Red',reference_site:'Site',identity_match_status:'conflict',identity_match_candidates_json:'["1000001","1000009"]'};
   const friend=sharedWine(row);

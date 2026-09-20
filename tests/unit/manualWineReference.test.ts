@@ -70,8 +70,20 @@ describe('manual LWIN selection',()=>{
  });
  it('saves a clear match without review, including accent and case differences',async()=>{
   const {env,product}=setup();product.displayName='Rieussec, Château Rieussec';
-  const preview=await previewLoggingReference(env.REFERENCE_DATA,wineInputSchema.parse({producer:'RIEUSSEC',wineName:'Chateau Rieussec',country:'France',region:'Bordeaux'}));
+  const preview=await previewLoggingReference(env.REFERENCE_DATA,wineInputSchema.parse({producer:'CHÂTEAU RIEUSSEC',wineName:'Chateau Rieussec',country:'France',region:'Bordeaux'}));
   expect(preview).toMatchObject({matched:true,needsReview:false});expect(preview.token).toBeTruthy();
+ });
+ it('rechecks the Maison Fang screenshot without suggesting removal of the producer title',async()=>{
+  const {database,env,objects,row}=setup();
+  // Identity fields from the imported 03383c3400811b6c snapshot, LWIN 3061244.
+  const fang=parseLwinReference({LWIN:'3061244',STATUS:'Live',DISPLAY_NAME:'Maison Fang, Savigny-les-Beaune, Cuvee Zephyr',PRODUCER_TITLE:'Maison',PRODUCER_NAME:'Fang',WINE:'Cuvee Zephyr',COUNTRY:'France',REGION:'Burgundy',SUB_REGION:'Savigny-les-Beaune',COLOUR:'White',TYPE:'Wine',SUB_TYPE:'Still',VINTAGE_CONFIG:'sequential'});
+  objects[`test/shard-${referenceShardId('fang')}.json`]=[fang];
+  database.sql.prepare("UPDATE wines SET producer='Maison FANG',wine_name='Savigny-lès-Beaune Cuvée Zéphyr',lwin7='3061244',region='Burgundy',wine_style='white',reference_suggestions_json=?")
+   .run(JSON.stringify([{field:'producer',label:'Producer',current:'Maison FANG',suggested:'Fang'},{field:'wineName',label:'Wine name',current:'Savigny-lès-Beaune Cuvée Zéphyr',suggested:'Cuvee Zephyr'}]));
+  expect(await recheckWineReference(env.DB,env.REFERENCE_DATA,'owner','w1')).toBe(true);
+  expect(row()).toMatchObject({producer:'Maison FANG',wine_name:'Savigny-lès-Beaune Cuvée Zéphyr',lwin7:'3061244',identity_match_status:'conflict'});
+  const suggestions=JSON.parse(String(row().reference_suggestions_json)) as Array<{field:string}>;
+  expect(suggestions.map(item=>item.field)).toEqual(['wineName']);
  });
  it('refuses a stale logging match',async()=>{
   const {env,database,product}=setup(),identity=lwinReferenceIdentity(product);
