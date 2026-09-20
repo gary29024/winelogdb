@@ -12,16 +12,16 @@ import '../sectionProvenance.css';
  * Liv-ex registry number, a researched paragraph and a score somebody invented
  * over dinner all read as equally authoritative.
  *
- * Four ranks, of which only three are marked. Derived is the default and stays
+ * Personal records and research are marked. Bottle facts stay unmarked, with
+ * catalogue identifiers integrated into Wine details. The default stays
  * silent: a badge on every section marks nothing, which is exactly what
  * happened to the tracked-uppercase treatment before section labels became
  * sentence case.
  */
-export type Provenance='yours'|'reference'|'researched';
+export type Provenance='yours'|'researched';
 
 const badges:Record<Provenance,{label:string;icon:AppIconKey;title:string}>={
   yours:{label:'Yours',icon:'pen',title:'You recorded this, and you can change it.'},
-  reference:{label:'Reference',icon:'lock',title:'From the LWIN reference catalogue. It cannot be edited here.'},
   researched:{label:'Researched',icon:'sparkle',title:'Researched by WineLog from cited sources.'}
 };
 

@@ -55,16 +55,16 @@ Everything below follows from that one idea.
 
 ## Provenance ranks
 
-Four ranks, rendered as a small chip at the right-hand end of a section label.
+Two badges distinguish personal records from research. Bottle facts remain
+unbadged, including the catalogue identifiers integrated into Wine details.
 
 | Rank | Badge | Means | Where |
 | --- | --- | --- | --- |
 | Yours | `✎ Yours` | typed by the account holder; editable | Your experience, Structure, Tags |
-| Derived | *(none)* | computed from what the account holder typed | Wine details |
-| Reference | `🔒 Reference` | available for catalogue-only sections | Wine identifiers stay in Wine details without a separate badge |
+| Wine facts | *(none)* | bottle details, including catalogue identifiers | Wine details |
 | Researched | `✨ Researched` | AI research, carrying its quality score | Deep Search |
 
-Derived is the default and therefore silent: a badge on every section would mark
+Unbadged is the default: a badge on every section would mark
 nothing, in the same way that a second tier of tracked-uppercase labels marked
 nothing before `.section-label` became sentence case.
 
@@ -314,7 +314,7 @@ New tests added with this work:
 - `compositionShares.test.ts` — the proportion maths: sums to exactly 100 across
   a spread of awkward splits, never inflates an empty entry to fill the row, and
   keeps the caller's order so a filter cannot repaint the survivors.
-- `sectionProvenance.test.ts` — the four ranks, including that derived stays
+- `sectionProvenance.test.ts` — the two badges, including that wine facts stay
   silent and that the badge joins the shared chip primitive.
 - `catalogVillageLabel.test.ts` — a village and its premier cru land together,
   and a grand cru is left standing as its own place.

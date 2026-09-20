@@ -19,9 +19,6 @@
    badge on the section somebody wrote themselves would be the least useful
    mark on the screen. */
 .provenance-chip[data-origin="yours"]{border-color:var(--line);background:var(--ground);color:var(--ink-5)}
-/* Reference is the one that means "this did not come from you and you cannot
-   change it here", so it is the one that gets the ink. */
-.provenance-chip[data-origin="reference"]{border-color:var(--line-strong);background:var(--sunken);color:var(--ink-3)}
 .provenance-chip[data-origin="researched"]{border-color:var(--wine-line);background:var(--paper);color:var(--wine-ink)}
 
 @media(max-width:700px){
