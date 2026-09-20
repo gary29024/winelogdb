@@ -1,3 +1,4 @@
+import { reliableLwinReference,publicLwinTaxonomy } from '../../src/lib/wine/lwinMetadata';
 import { friendRequestRoute } from './friendRequests';
 import { ApiError,body,json,ownerOnly,stamp,type IdentityEnv,type Member } from './common';
 import { similarFriendProducers } from '../../src/lib/research/similarProducers';
@@ -26,12 +27,13 @@ export function sharedWine(row:Record<string,unknown>):SharedWine{
   });
  }catch{/* Invalid legacy blend falls back to the plain grape names. */}
  const tier=text(row.classification),classification=tier==='grand_cru'||tier==='premier_cru'||tier==='village'?tier:null;
+ const lwinReference=reliableLwinReference(row);
  const deepSearch=publishedDeepSearch(row.deep_search_json);
  return {
   id:text(row.id),ownerName:text(row.display_name),
   producer:text(row.producer),producerId:text(row.viewer_producer_id)||(text(row.producer_id)&&text(row.owner_id)?sharedProducerId(text(row.owner_id),text(row.producer_id)):null),
   wineName:text(row.wine_name),vintage:number(row.vintage),vintageKind:(['vintage','non_vintage','multi_vintage','unknown'].includes(text(row.vintage_kind))?text(row.vintage_kind):null) as SharedWine['vintageKind'],releaseDesignation:text(row.release_designation)||null,
-  lwin7:text(row.lwin7)||null,lwin11:text(row.lwin11)||null,elid:text(row.elid)||null,referenceSite:text(row.reference_site)||null,referenceParcel:text(row.reference_parcel)||null,colour:text(row.colour)||null,productType:text(row.product_type)||null,productSubtype:text(row.product_subtype)||null,
+  lwinReference:lwinReference?publicLwinTaxonomy(lwinReference):null,lwin7:text(row.lwin7)||null,lwin11:text(row.lwin11)||null,elid:text(row.elid)||null,referenceSite:text(row.reference_site)||null,referenceParcel:text(row.reference_parcel)||null,colour:text(row.colour)||null,productType:text(row.product_type)||null,productSubtype:text(row.product_subtype)||null,
   identityMatchStatus:row.identity_match_status==='conflict'?'conflict':null,
   country:text(row.country)||null,region:text(row.region)||null,appellation:text(row.appellation)||null,
   recognizedRegion:text(row.recognized_region)||null,recognizedAppellation:text(row.recognized_appellation)||null,

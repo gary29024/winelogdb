@@ -50,7 +50,7 @@ export function lwinReferenceIdentity(row:LwinReferenceIdentitySource){
  return {
   producerName,producerKey:normalizeReferenceText(producerName)||normalizeReferenceText(row.producerKey),
   structuredProducerKey:normalizeReferenceText(row.producerKey)||normalizeReferenceText(structuredProducerName),
-  wineName,wineKey:normalizeReferenceText(row.wineKey)||normalizeReferenceText(wineName)
+  displayWineKey:normalizeReferenceText(displayWine),wineName,wineKey:normalizeReferenceText(row.wineKey)||normalizeReferenceText(wineName)
  };
 }
 
@@ -98,9 +98,11 @@ async function jsonObject<T>(bucket:ReferenceSource,key:string,ttl=CACHE_MS):Pro
 export async function referenceManifest(bucket:ReferenceSource,provider:ReferenceProvider){
  return jsonObject<ReferenceManifest>(bucket,referenceManifestKey(provider),60_000);
 }
-export async function referenceRowsByShard<T>(bucket:ReferenceSource,provider:ReferenceProvider,shard:string):Promise<T[]>{
+export async function referenceRowsByShard<T>(bucket:ReferenceSource,provider:ReferenceProvider,shard:string,required=false):Promise<T[]>{
  const manifest=await referenceManifest(bucket,provider);if(!manifest)return [];
- const key=`${manifest.prefix}/shard-${shard}.json`;return await jsonObject<T[]>(bucket,key)??[];
+ const key=`${manifest.prefix}/shard-${shard}.json`,rows=await jsonObject<T[]>(bucket,key);
+ if(required&&!rows)throw new Error(`LWIN catalogue shard unavailable: ${shard}; resume to retry.`);
+ return rows??[];
 }
 export async function referenceRows<T>(bucket:ReferenceSource,provider:ReferenceProvider,key:string):Promise<T[]>{
  const manifest=await referenceManifest(bucket,provider);if(!manifest)return [];
@@ -139,7 +141,8 @@ export async function lwinStrictRowsForProducer<T>(bucket:ReferenceSource,produc
  const index=await lwinProducerIndex(bucket),shardIds=new Set<string>();
  for(const key of keys)for(const shard of index[key]??[])shardIds.add(shard);
  if(!shardIds.size)return fallback();
- const found:T[]=[];for(const shard of shardIds)found.push(...await referenceRowsByShard<T>(bucket,'lwin',shard));return found;
+ if(shardIds.size>16)throw new Error('LWIN producer lookup is too broad; refine the producer name or link a code before retrying.');
+ const found:T[]=[];for(const shard of shardIds)found.push(...await referenceRowsByShard<T>(bucket,'lwin',shard,true));return found;
 }
 
 /** Exact-ID lookup. Older imports can still resolve codes for the current producer. */

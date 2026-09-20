@@ -1,7 +1,9 @@
+import type { LwinTaxonomy } from '../wine/lwinMetadata';
 import { cuveeIdentitySignature,cuveeStyleFamily,normalizeCuveeAlias } from './entities';
 import { stripProducerCatalogPrefix } from '../producers/catalogName';
 
 export type CatalogPresentationLike={
+  lwinReference?:LwinTaxonomy;
   name:string;
   category?:string|null;
   appellation?:string|null;
@@ -20,7 +22,7 @@ export type CatalogPresentationChoice={
   appellation:string|null;
   wineStyle:string|null;
   classification:string|null;
-  hierarchy:CatalogHierarchyLabel;
+  hierarchy:string;
   issue:string|null;
 };
 
@@ -29,6 +31,17 @@ function normalizedText(wine:CatalogPresentationLike){
 }
 
 export function catalogHierarchyRank(wine:CatalogPresentationLike){
+  const reference=wine.lwinReference;
+  if(reference){
+    if(normalizeCuveeAlias(reference.region??'')==='burgundy'){
+      const tier=normalizeCuveeAlias(reference.classification??'');
+      if(tier==='grand cru')return 0;if(tier==='premier cru')return 1;
+      if(normalizeCuveeAlias(reference.subRegion??'')==='bourgogne')return 3;
+      return reference.subRegion?2:4;
+    }
+    // DOCG, Erste Lage and Bordeaux classes are not Burgundy cru tiers.
+    return 4;
+  }
   const text=normalizedText(wine),words=new Set(text.split(/\s+/).filter(Boolean));
   if(words.has('grand')&&words.has('cru'))return 0;
   if(words.has('premier')&&words.has('cru'))return 1;
@@ -40,7 +53,8 @@ export function catalogHierarchyRank(wine:CatalogPresentationLike){
   return 4;
 }
 
-export function catalogHierarchyLabel(wine:CatalogPresentationLike):CatalogHierarchyLabel{
+export function catalogHierarchyLabel(wine:CatalogPresentationLike):string{
+  if(wine.lwinReference&&normalizeCuveeAlias(wine.lwinReference.region??'')!=='burgundy')return wine.lwinReference.classification||wine.lwinReference.designation||'Other / unclassified';
   return CATALOG_HIERARCHY_LABELS[catalogHierarchyRank(wine)];
 }
 
@@ -62,6 +76,7 @@ const CRU_SUFFIX=/[\s,]+(grand\s+cru|premier\s+cru|1\s*er\s+cru|1°\s+cru|villag
  * guessing, and it would be wrong at exactly the boundaries people care about.
  */
 export function catalogVillageLabel(wine:CatalogPresentationLike):string{
+  if(wine.lwinReference?.subRegion)return wine.lwinReference.subRegion;
   let text=String(wine.appellation??'').trim();
   for(let guard=0;guard<4;guard+=1){
     const next=text.replace(CRU_SUFFIX,'').trim();

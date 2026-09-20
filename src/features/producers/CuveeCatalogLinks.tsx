@@ -37,7 +37,7 @@ export function CuveeCatalogLinks({producer,group,onChanged}:{producer:ProducerD
     const ranked=[...linkable].sort((a,b)=>similarity(group,b)-similarity(group,a)),best=ranked[0];
     return best&&similarity(group,best)>=.45?best:null;
   },[linkable,group]);
-  const choiceGroups=useMemo(()=>CATALOG_HIERARCHY_LABELS.flatMap(hierarchy=>{const items=choices.filter(target=>target.hierarchy===hierarchy);return items.length?[{hierarchy,items}]:[]}),[choices]);
+  const choiceGroups=useMemo(()=>[...new Set<string>([...CATALOG_HIERARCHY_LABELS,...choices.map(choice=>choice.hierarchy)])].flatMap(hierarchy=>{const items=choices.filter(target=>target.hierarchy===hierarchy);return items.length?[{hierarchy,items}]:[]}),[choices]);
   const catalogTargetId=group.catalogCuveeId??group.wines.find(wine=>wine.catalogCuveeId)?.catalogCuveeId??null;
   const directMatch=Boolean(catalogTargetId&&!link);
 

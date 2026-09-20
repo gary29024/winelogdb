@@ -114,7 +114,7 @@ describe('background launch preparation',()=>{
     VALUES('w3','owner','Krug','Grande Cuvee','manual','FR-CMP-KRUG01-N171','now','now');
   `);
   const response=await rolloutRoute(new Request('https://wine.example/api/admin/rollout/lwin',{method:'POST'}),env,owner);
-  expect(response?.status).toBe(202);expect(sent.at(-1)).toEqual({kind:'admin_rollout',owner:'owner',rollout:'lwin'});
+  expect(response?.status).toBe(202);expect(sent.at(-1)).toMatchObject({kind:'admin_rollout',owner:'owner',rollout:'lwin'});
   expect((await rolloutStatus(database.db)).lwin).toMatchObject({state:'running',processed:0,total:2,matched:0});
 
   const result=await processRolloutJob(env,'lwin');
@@ -139,7 +139,7 @@ describe('background launch preparation',()=>{
    ('suspect','owner','Maison Krug','Grande Cuvee','1234567','matched','now','now'),
    ('manual','owner','Maison Krug','Grande Cuvee','1234567','manual','now','now')`);
   const response=await rolloutRoute(new Request('https://wine.example/api/admin/rollout/lwin-validate',{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'}),env,owner);
-  expect(response?.status).toBe(202);expect(sent.at(-1)).toEqual({kind:'admin_rollout',owner:'owner',rollout:'lwin_validate'});
+  expect(response?.status).toBe(202);expect(sent.at(-1)).toMatchObject({kind:'admin_rollout',owner:'owner',rollout:'lwin_validate'});
   const result=await processRolloutJob(env,'lwin_validate');expect(result).toMatchObject({complete:true,processed:2,verified:1,review:1,busy:false});
   const valid=database.sql.prepare("SELECT lwin7,identity_match_status FROM wines WHERE id='valid'").get() as Record<string,unknown>;
   const suspect=database.sql.prepare("SELECT lwin7,identity_match_status,identity_match_candidates_json FROM wines WHERE id='suspect'").get() as Record<string,unknown>;
@@ -168,7 +168,7 @@ describe('background launch preparation',()=>{
   database.sql.exec("INSERT INTO wines(id,owner_id,producer,wine_name,identity_match_status,created_at,updated_at) VALUES('w-ai','owner','Unknown Producer','Unknown Wine','unmatched','now','now')");
   const response=await rolloutRoute(new Request('https://wine.example/api/admin/rollout/lwin-ai',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({refresh:false})}),env,owner);
   expect(response?.status).toBe(202);
-  expect(sent.at(-1)).toEqual({kind:'admin_rollout',owner:'owner',rollout:'lwin_ai'});
+  expect(sent.at(-1)).toMatchObject({kind:'admin_rollout',owner:'owner',rollout:'lwin_ai'});
   expect((await rolloutStatus(database.db)).lwinAi).toMatchObject({state:'running',processed:0,total:1,matched:0,deterministic:0,ai:0,review:0});
  });
 

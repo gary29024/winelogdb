@@ -52,7 +52,7 @@ describe('manual LWIN selection',()=>{
   expect(reads.filter(key=>key.includes('/shard-')).length).toBeLessThanOrEqual(2);
   // The entered ID remains authoritative even when the current colour differs.
   expect((await request('reference-review',{action:'link',lwin7:'2259354',previewToken:preview.previewToken})).status).toBe(200);
-  expect(row()).toMatchObject({lwin7:'2259354',colour:'Red',wine_style:'white',tasting_notes:'Keep my notes',identity_match_status:'manual'});
+  expect(row()).toMatchObject({lwin7:'2259354',colour:'White',wine_style:'white',tasting_notes:'Keep my notes',identity_match_status:'manual'});
   expect((await request('reference-preview?lwin7=9999999')).status).toBe(404);
  });
  it.each(['confirm','none'] as const)('reviews the named catalogue identity before creation and saves the %s decision',async(action)=>{
@@ -81,7 +81,7 @@ describe('manual LWIN selection',()=>{
   database.sql.prepare("UPDATE wines SET producer='Maison FANG',wine_name='Savigny-lès-Beaune Cuvée Zéphyr',lwin7='3061244',region='Burgundy',wine_style='white',reference_suggestions_json=?")
    .run(JSON.stringify([{field:'producer',label:'Producer',current:'Maison FANG',suggested:'Fang'},{field:'wineName',label:'Wine name',current:'Savigny-lès-Beaune Cuvée Zéphyr',suggested:'Cuvee Zephyr'}]));
   expect(await recheckWineReference(env.DB,env.REFERENCE_DATA,'owner','w1')).toBe(true);
-  expect(row()).toMatchObject({producer:'Maison FANG',wine_name:'Savigny-lès-Beaune Cuvée Zéphyr',lwin7:'3061244',identity_match_status:'conflict'});
+  expect(row()).toMatchObject({producer:'Maison FANG',wine_name:'Savigny-lès-Beaune Cuvée Zéphyr',lwin7:'3061244',identity_match_status:'matched'});
   const suggestions=JSON.parse(String(row().reference_suggestions_json)) as Array<{field:string}>;
   expect(suggestions.map(item=>item.field)).toEqual(['wineName']);
  });
@@ -108,7 +108,7 @@ describe('manual LWIN selection',()=>{
   const response=await request('reference-review',{action:'reject',lwin7:before.lwin7,updatedAt:before.updated_at});
   expect(response.status).toBe(200);
   expect(row()).toMatchObject({producer:before.producer,wine_name:before.wine_name,vintage:2018,country:'France',region:'Bordeaux',wine_style:'sweet',tasting_notes:'Keep my notes',rating:94,
-   lwin7:null,lwin11:null,elid:null,reference_product_key:null,reference_site:null,reference_parcel:null,colour:null,product_type:null,product_subtype:null,
+   lwin7:null,lwin11:null,elid:null,reference_product_key:null,reference_site:null,reference_parcel:null,colour:before.colour,product_type:before.product_type,product_subtype:before.product_subtype,
    identity_match_status:'manual',identity_match_confidence:null,identity_match_candidates_json:null,identity_matched_at:null,reference_suggestions_json:null,reference_suggestions_updated_at:null});
   const review=await rolloutRoute(new Request('https://wine.example/api/admin/rollout/lwin-review'),env as never,{id:'owner',role:'owner',status:'active',email:'owner@example.com',display_name:'Owner'});
   expect(await review!.json()).toMatchObject({total:0,items:[]});
