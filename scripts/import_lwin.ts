@@ -59,12 +59,13 @@ for(const [index,row] of inputRows.entries())try{
  console.warn(`row ${index+2}: ${message}`);
 }
 if(!products.length)throw new Error('No valid LWIN rows were found');
-const shards=new Map<string,LwinReferenceProduct[]>(),byLwin=new Map(products.map(product=>[product.lwin7,product])),producerIndex:LwinProducerIndex={};
+const shards=new Map<string,LwinReferenceProduct[]>(),byLwin=new Map(products.map(product=>[product.lwin7,product])),producerIndex:LwinProducerIndex={},idIndexes:Record<string,Record<string,string>>={};
 let sparse=0;
 const addIndex=(key:string,shard:string)=>{const values=producerIndex[key]??[];if(!values.includes(shard))values.push(shard);producerIndex[key]=values};
 for(const product of products){
  const identity=lwinReferenceIdentity(product);if(!identity.producerKey||!identity.wineKey)sparse++;
  const id=referenceShardId(product.producerKey||identity.producerKey||product.lwin7,REFERENCE_SHARDS),rows=shards.get(id)??[];rows.push(product);shards.set(id,rows);
+ const idFile=`id-index-${referenceShardId(product.lwin7,REFERENCE_SHARDS)}.json`;(idIndexes[idFile]??={})[product.lwin7]=id;
  const lookupKeys=new Set([...producerLookupKeys(product.producerName),...producerLookupKeys(identity.producerName)]);
  for(const key of lookupKeys){addIndex(key,id);for(const token of key.split(' ').filter(token=>token.length>=4))addIndex(`t:${token}`,id)}
 }
@@ -102,9 +103,9 @@ for(const product of products)if(product.status==='Combined'&&product.referenceL
 }
 const prefix=`reference/lwin/versions/${version}`,manifest:ReferenceManifest={
  provider:'lwin',version,prefix,shardCount:REFERENCE_SHARDS,rows:products.length,matchableRows:products.length-sparse,sparseRows:sparse,source:basename(inputPath),sourceUpdatedAt:latest||null,generatedAt,
- redirectsKey:`${prefix}/redirects.json`,producerIndexKey:`${prefix}/producer-index.json`
+ redirectsKey:`${prefix}/redirects.json`,producerIndexKey:`${prefix}/producer-index.json`,lwinIdIndexPrefix:`${prefix}/id-index-`
 };
-const built=await writeShardFiles('lwin',version,shards,manifest,{'redirects.json':redirects,'producer-index.json':producerIndex});
+const built=await writeShardFiles('lwin',version,shards,manifest,{'redirects.json':redirects,'producer-index.json':producerIndex,...idIndexes});
 console.log(`Prepared ${products.length} LWIN rows in ${shards.size} R2 shards; ${products.length-sparse} matchable, ${sparse} sparse, ${redirected} combined, ${unresolvedRedirects} unresolved redirects, ${rejected} rejected rows. Version ${version}.`);
 if(flag('dry-run')){console.log(`Dry run only. Files: ${built.dir}`);process.exit(0)}
 const bucket=option('bucket')??DEFAULT_REFERENCE_BUCKET;

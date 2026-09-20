@@ -23,3 +23,12 @@
 .lwin-review-header{padding-block:1rem;display:grid;gap:.6rem}
 .lwin-review-header h1,.lwin-review-header p{margin:0}
 .lwin-review-header p{color:var(--muted)}
+.lwin-link-editor{border:1px solid var(--line);border-radius:12px;padding:.8rem;min-width:0}
+.lwin-link-editor summary{cursor:pointer;font-weight:700;min-height:32px}
+.lwin-link-form{display:flex;flex-wrap:wrap;gap:.7rem;align-items:end}
+.lwin-link-form label{display:grid;gap:.3rem;min-width:0;flex:1 1 10rem}
+.lwin-link-form input{width:100%;min-width:0;border:1px solid var(--line);border-radius:8px;padding:.7rem;background:var(--paper);color:var(--ink);font:inherit}
+.lwin-link-preview{margin-top:1rem;background:var(--ground);border-radius:8px;padding:.8rem;overflow-wrap:anywhere}
+.lwin-link-preview p{margin:.6rem 0}
+.producer-name-review{min-width:0;overflow-wrap:anywhere}
+.producer-name-review button{white-space:normal;max-width:100%}

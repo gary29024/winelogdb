@@ -53,3 +53,35 @@ test('review cards resolve in place and preserve the return route',async({page},
  await expect(page).toHaveURL(/admin\/lwin-review\?wine=w2/);
  await expect(page.getByRole('button',{name:'Confirm stored LWIN 1000002'})).toBeVisible();
 });
+
+for(const colorScheme of ['light','dark'] as const)test(`manual LWIN preview and confirmation on mobile (${colorScheme})`,async({page},info)=>{
+ await page.emulateMedia({colorScheme});
+ const wine={...fixture,id:'w1',producer:'Chateau Rieussec',wineName:'Château Rieussec',vintage:2018,lwin7:'1017425',identityMatchStatus:'conflict',referenceSuggestions:[],imageIds:[]};
+ let writes=0;
+ await page.route('**/api/**',async route=>{
+  const path=new URL(route.request().url()).pathname;
+  if(path==='/api/me')return route.fulfill({json:{user:{id:'owner',role:'owner',email:'owner@example.com',display_name:'Owner',status:'active'}}});
+  if(path==='/api/admin/rollout/lwin-review')return route.fulfill({json:{items:wine.identityMatchStatus==='conflict'?[{...wine,conflict:true}]:[],total:wine.identityMatchStatus==='conflict'?1:0,nextCursor:null}});
+  if(path==='/api/wines/w1/reference-preview')return route.fulfill({json:{requestedLwin7:'1017483',lwin7:'1017483',storedLwin7:'1017425',displayName:'Chateau Rieussec Premier Cru Classe, Sauternes',country:'France',region:'Bordeaux',colour:'White',productSubtype:'Still',vintage:2018,lwin11:'10174832018',suggestions:[],previewToken:'preview-token'}});
+  if(path==='/api/wines/w1/reference-review'){
+   expect(route.request().postDataJSON()).toEqual({action:'link',lwin7:'1017483',previewToken:'preview-token'});writes++;wine.lwin7='1017483';wine.identityMatchStatus='manual';return route.fulfill({json:{ok:true,lwin7:wine.lwin7}});
+  }
+  if(path==='/api/wines/w1')return route.fulfill({json:wine});
+  return route.fulfill({json:{items:[],total:0}});
+ });
+ await page.goto('/admin/lwin-review?wine=w1');
+ await page.getByText('Change LWIN',{exact:true}).click();
+ await page.getByLabel('LWIN code',{exact:true}).fill('1017483');
+ await page.getByRole('button',{name:'Preview LWIN',exact:true}).click();
+ await expect(page.getByText('Chateau Rieussec Premier Cru Classe, Sauternes',{exact:true})).toBeVisible();
+ expect(writes).toBe(0);
+ await page.getByLabel('LWIN code',{exact:true}).fill('1017484');
+ await expect(page.getByRole('button',{name:'Link LWIN 1017483',exact:true})).toHaveCount(0);
+ await page.getByLabel('LWIN code',{exact:true}).fill('1017483');
+ await page.getByRole('button',{name:'Preview LWIN',exact:true}).click();
+ await expect(page.getByRole('button',{name:'Link LWIN 1017483',exact:true})).toBeVisible();
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+ await page.screenshot({path:info.outputPath(`manual-lwin-${colorScheme}.png`),fullPage:true});
+ await page.getByRole('button',{name:'Link LWIN 1017483',exact:true}).click();
+ await expect(page.getByText('All caught up. No wines need review.')).toBeVisible();expect(writes).toBe(1);
+});

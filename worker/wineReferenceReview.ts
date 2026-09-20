@@ -1,5 +1,5 @@
 import { resolveWineReference,type VintageKind } from '../src/lib/wine/referenceIdentity';
-import { lwinReferenceIdentity,lwinStrictRowsForProducer } from '../src/lib/wine/referenceCatalog';
+import { lwinReferenceIdentity,lwinRowById } from '../src/lib/wine/referenceCatalog';
 import type { LwinReferenceProduct } from '../src/lib/wine/lwinImport';
 import { refreshPendingReferenceSuggestions,type ReferenceSuggestion } from '../src/lib/wine/referenceSuggestions';
 import { canonicalizeWineFields } from '../src/lib/wine/canonicalize';
@@ -16,9 +16,9 @@ export async function recheckWineReference(db:D1Database,bucket:R2Bucket,owner:s
  const verified=Boolean(row.lwin7)&&result.identityMatchStatus==='matched'&&result.lwin7===row.lwin7;
  let suggestions:ReferenceSuggestion[]|null=null;
  if(refreshSuggestions){
-  const product=(await lwinStrictRowsForProducer<LwinReferenceProduct>(bucket,input.producer)).find(item=>item.lwin7===row.lwin7&&item.status==='Live');
+  const product=row.lwin7?await lwinRowById<LwinReferenceProduct>(bucket,String(row.lwin7),input.producer):null;
   // If the local reference is unavailable, preserve the existing suggestions.
-  if(product){const identity=lwinReferenceIdentity(product),place=canonicalizeWineFields({country:product.country,region:product.region});suggestions=refreshPendingReferenceSuggestions({...input,referenceProducer:identity.producerName,referenceWineName:identity.wineName,referenceCountry:place.country,referenceRegion:place.region,referenceClassification:product.classification},row.reference_suggestions_json)}
+  if(product?.status==='Live'){const identity=lwinReferenceIdentity(product),place=canonicalizeWineFields({country:product.country,region:product.region});suggestions=refreshPendingReferenceSuggestions({...input,referenceProducer:identity.producerName,referenceWineName:identity.wineName,referenceCountry:place.country,referenceRegion:place.region,referenceClassification:product.classification},row.reference_suggestions_json)}
  }
  const now=new Date().toISOString();
  const saved=await db.prepare(`UPDATE wines SET

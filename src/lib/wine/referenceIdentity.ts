@@ -202,7 +202,12 @@ export async function resolveWineReference(bucket:R2Bucket,wine:ReferenceResolva
   }
  }
  if(product.status!=='Live')return unmatched();
- const elid=await registeredElid(bucket,product,wine),place=canonicalReferencePlace(product.country,product.region),identity=lwinReferenceIdentity(product);
+ return referenceMatchForProduct(bucket,product,wine);
+}
+
+/** Share vintage and metadata rules between automatic matching and an explicit code selection. */
+export async function referenceMatchForProduct(bucket:R2Bucket,product:LwinReferenceProduct,wine:ReferenceResolvable,options:{includeElid?:boolean}={}):Promise<ReferenceMatch>{
+ const elid=options.includeElid===false?null:await registeredElid(bucket,product,wine),place=canonicalReferencePlace(product.country,product.region),identity=lwinReferenceIdentity(product);
  return {referenceProductKey:product.productKey,lwin7:product.lwin7,lwin11:lwin11For(product,wine),elid,identityMatchStatus:'matched',identityMatchConfidence:1,identityMatchCandidates:[],
   colour:product.colour,productType:product.productType,productSubtype:product.productSubtype,
   referenceSubRegion:product.subRegion,referenceSite:product.site,referenceParcel:product.parcel,

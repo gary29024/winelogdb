@@ -6,6 +6,8 @@ import { summariesChanged } from '../../lib/cache/summaryCaches';
 import { applyWineReferenceSuggestion,getWine,type WineDetail } from './api';
 import { linkFrom,rememberBackTarget } from './backTarget';
 import { WineImage } from './WineImage';
+import { LwinLinkEditor } from './LwinLinkEditor';
+import { ProducerNameReview } from './ProducerNameReview';
 import '../../referenceSuggestions.css';
 
 type ReviewItem={id:string;producer:string;wineName:string;vintage:number|null;lwin7:string|null;conflict:boolean};
@@ -44,10 +46,12 @@ export function LwinReviewPage(){
     <div className="lwin-review-toolbar"><Link to={`/wines/${item.id}`} state={linkFrom(back)}>Open wine</Link><Link to={`/wines/${item.id}/edit`} onClick={()=>rememberBackTarget(item.id,back)} state={linkFrom(back)}>Edit wine</Link><button disabled={busy} onClick={()=>void act(()=>apiJson(`/api/wines/${item.id}/reference-review`,'POST',{action:'recheck'}))}>Recheck LWIN</button></div>
     <p className="lwin-suggestion-intro">Recheck LWIN refreshes older suggestions against the current catalogue. Your populated fields stay unchanged.</p>
     {wine.identityMatchStatus==='conflict'&&<div className="lwin-review-conflict"><strong>Stored LWIN: {wine.lwin7||'None'}</strong><p>The current match could not verify this identity. Check the wine before confirming.</p>{!!wine.identityMatchCandidates?.length&&<p>Candidate LWINs: {wine.identityMatchCandidates.join(', ')}</p>}{wine.lwin7&&<button disabled={busy} onClick={()=>void act(()=>apiJson(`/api/wines/${item.id}/reference-review`,'POST',{action:'confirm',lwin7:wine.lwin7,updatedAt:wine.updatedAt}))}>Confirm stored LWIN {wine.lwin7}</button>}</div>}
+    <LwinLinkEditor key={wine.id} wine={wine} disabled={busy} onLink={preview=>act(()=>apiJson(`/api/wines/${wine.id}/reference-review`,'POST',{action:'link',lwin7:preview.requestedLwin7,previewToken:preview.previewToken}))}/>
     <div className="lwin-suggestion-list">{wine.referenceSuggestions?.map(suggestion=><div className="lwin-suggestion-row" key={suggestion.field}>
      <div><strong>{suggestion.label}</strong><span><small>Current</small>{suggestion.current||'—'}</span><span><small>LWIN</small>{suggestion.suggested}</span></div>
      <div className="lwin-review-choices"><button disabled={busy} onClick={()=>void act(()=>applyWineReferenceSuggestion(item.id,suggestion.field))}>Use LWIN value</button><button className="quiet" disabled={busy} onClick={()=>void act(()=>applyWineReferenceSuggestion(item.id,suggestion.field,'keep'))}>Keep current</button></div>
     </div>)}</div>
+    {wine.referenceSuggestions?.some(suggestion=>suggestion.field==='producer')&&<ProducerNameReview key={`${wine.id}:${wine.updatedAt}`} wineId={wine.id} disabled={busy} onApply={act}/>}
     {!pending(wine)&&<p>This wine has been resolved. Refresh the list to continue.</p>}
     {busy&&<p role="status">Saving review…</p>}
    </div>)}
