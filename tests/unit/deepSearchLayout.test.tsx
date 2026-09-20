@@ -106,6 +106,54 @@ afterEach(()=>{
 });
 
 describe('Deep Search research sections',()=>{
+  it('reuses vintage-only research and queues missing sections without forcing a refresh',async()=>{
+    await render({deepSearch:{...deepSearch,summary:'',producerDetails:'',producerWinemakingPractices:'',
+      winemakingTechniques:'',terroir:'',drinkingWindow:''}});
+    const panel=host!.querySelector('.deep-search-panel')!;
+    expect(sectionToggles()).toHaveLength(1);
+    expect(panel.textContent).toContain('Partial research is available');
+    expect(panel.querySelector('.provenance-chip')).toBeNull();
+    expect(panel.textContent).not.toContain('Refresh vintage research');
+    const button=panel.querySelector<HTMLButtonElement>('button.primary')!;
+    expect(button.textContent).toBe('Deep Search');
+    await click(button);
+    expect(panel.querySelector('.deep-confirm')?.textContent).toContain('researches only what is missing');
+    const queue=panel.querySelector<HTMLButtonElement>('.deep-confirm button.primary')!;
+    expect(queue.textContent).toBe('Queue Deep Search');
+    vi.mocked(fetch).mockResolvedValueOnce(new Response(JSON.stringify({accepted:true,cached:true}),{status:200}));
+    await click(queue);
+    const request=vi.mocked(fetch).mock.calls.find(([url,init])=>String(url).endsWith('/deep-search')&&init?.method==='POST');
+    expect(JSON.parse(String(request?.[1]?.body))).toMatchObject({refresh:'none'});
+  });
+
+  it('keeps the vintage refresh action for complete research, including legacy results',async()=>{
+    await render();
+    const panel=host!.querySelector('.deep-search-panel')!;
+    expect(panel.textContent).not.toContain('Partial research is available');
+    expect(panel.querySelector('.provenance-chip')?.textContent).toBe('Researched');
+    const button=panel.querySelector<HTMLButtonElement>('button.primary')!;
+    expect(button.textContent).toBe('Refresh vintage research');
+    await click(button);
+    const queue=panel.querySelector<HTMLButtonElement>('.deep-confirm button.primary')!;
+    expect(queue.textContent).toBe('Queue vintage refresh');
+    vi.mocked(fetch).mockResolvedValueOnce(new Response(JSON.stringify({accepted:true,cached:true}),{status:200}));
+    await click(queue);
+    const request=vi.mocked(fetch).mock.calls.find(([url,init])=>String(url).endsWith('/deep-search')&&init?.method==='POST');
+    expect(JSON.parse(String(request?.[1]?.body))).toMatchObject({refresh:'vintage'});
+  });
+
+  it('does not require regional vintage research for a non-vintage wine',async()=>{
+    await render({vintage:null,deepSearch:{...deepSearch,vintageQuality:''}});
+    expect(host!.querySelector('.deep-search-panel button.primary')?.textContent).toBe('Refresh vintage research');
+    expect(host!.textContent).not.toContain('Partial research is available');
+  });
+
+  it.each(['summary','producerDetails','producerWinemakingPractices','terroir','winemakingTechniques','drinkingWindow','vintageQuality'])(
+    'offers Deep Search when %s is still missing',async field=>{
+      await render({deepSearch:{...deepSearch,[field]:'   '}});
+      expect(host!.querySelector('.deep-search-panel button.primary')?.textContent).toBe('Deep Search');
+    });
+
   it('lists every populated scope collapsed by default',async()=>{
     await render();
     expect(sectionToggles()).toHaveLength(6);
