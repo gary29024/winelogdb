@@ -17,3 +17,7 @@
 .grape-hints{display:flex;flex-wrap:wrap;gap:var(--s1);margin-top:var(--s1)}
 .grape-hint{padding:var(--s1) var(--s2);border:1px solid var(--line);border-radius:var(--r-pill);background:var(--ground);color:var(--ink-3);font-size:.8rem;font-weight:600}
 .grape-hint:hover:not(:disabled){border-color:var(--line-strong);background:var(--paper)}
+.wine-reference-review{min-width:0;border:1px solid var(--line);border-radius:12px;padding:1rem;display:grid;gap:.75rem;overflow-wrap:anywhere}
+.wine-reference-review p{margin:0}
+.wine-reference-actions{display:flex;flex-wrap:wrap;gap:.65rem}
+.wine-reference-actions button{flex:1 1 auto;min-height:44px}

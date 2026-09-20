@@ -4,7 +4,7 @@ import type { WineDetail } from './api';
 import '../../referenceSuggestions.css';
 
 export type LwinLinkPreview={requestedLwin7:string;lwin7:string;storedLwin7:string|null;displayName:string;producer:string|null;wineName:string|null;country:string|null;region:string|null;colour:string|null;productType:string|null;productSubtype:string|null;lwin11:string|null;vintage:number|null;suggestions:WineDetail['referenceSuggestions'];previewToken:string};
-export function LwinLinkEditor({wine,disabled=false,onLink}:{wine:WineDetail;disabled?:boolean;onLink:(preview:LwinLinkPreview)=>Promise<void>}){
+export function LwinLinkEditor({wine,disabled=false,onLink,onReject}:{wine:WineDetail;disabled?:boolean;onLink:(preview:LwinLinkPreview)=>Promise<void>;onReject:()=>Promise<void>}){
  const [code,setCode]=useState(''),[preview,setPreview]=useState<LwinLinkPreview>(),[loading,setLoading]=useState(false),[error,setError]=useState('');
  const request=useRef(0);
  useEffect(()=>{request.current++;setPreview(undefined);setError('');setLoading(false)},[wine.id,wine.updatedAt]);
@@ -12,7 +12,8 @@ export function LwinLinkEditor({wine,disabled=false,onLink}:{wine:WineDetail;dis
   const token=++request.current;setLoading(true);setPreview(undefined);setError('');
   try{const next=await apiJson<LwinLinkPreview>(`/api/wines/${wine.id}/reference-preview?lwin7=${encodeURIComponent(code.trim())}`);if(request.current===token)setPreview(next)}catch(e){if(request.current===token)setError((e as Error).message)}finally{if(request.current===token)setLoading(false)}
  }
- return <details className="lwin-link-editor"><summary>{wine.lwin7?'Change LWIN':'Link a LWIN'}</summary>
+ return <>{wine.identityMatchStatus==='manual'&&!wine.lwin7&&!wine.elid&&<p>Kept without LWIN. Automatic matching is off for this wine. You can link a LWIN below at any time.</p>}
+ <details className="lwin-link-editor"><summary>{wine.lwin7?'Change LWIN':'Link a LWIN'}</summary>
   <p>Enter a 7-digit LWIN and check the catalogue details before linking it.</p>
   <form className="lwin-link-form" onSubmit={e=>{e.preventDefault();void lookup()}}>
    <label htmlFor={`lwin-code-${wine.id}`}>LWIN code<input id={`lwin-code-${wine.id}`} inputMode="numeric" pattern="[0-9]{7}" maxLength={7} placeholder="e.g. 1017483" autoComplete="off" required value={code} disabled={disabled} onChange={e=>{request.current++;setLoading(false);setPreview(undefined);setError('');setCode(e.target.value)}}/></label>
@@ -28,5 +29,9 @@ export function LwinLinkEditor({wine,disabled=false,onLink}:{wine:WineDetail;dis
    {!!preview.suggestions.length&&<p>{preview.suggestions.length} field difference{preview.suggestions.length===1?'':'s'} will remain available to review separately.</p>}
    <button type="button" disabled={disabled||loading} onClick={()=>void onLink(preview)}>Link LWIN {preview.lwin7}</button>
   </section>}
- </details>;
+ </details>
+ {(wine.lwin7||wine.identityMatchStatus==='conflict'||Boolean(wine.referenceSuggestions?.length))&&<div className="lwin-review-choices">
+  <p>No applicable LWIN? Reject this match to keep the wine without a reference and prevent automatic rematching.</p>
+  <button type="button" disabled={disabled||loading} onClick={()=>void onReject()}>Reject match — keep without LWIN</button>
+ </div>}</>;
 }

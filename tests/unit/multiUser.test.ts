@@ -36,6 +36,11 @@ afterEach(()=>{database.close();vi.restoreAllMocks();vi.unstubAllGlobals()});
 const env=()=>({DB:database.db,AUTH_SECRET:'a'.repeat(48),APP_URL:'https://wine.example',OWNER_GOOGLE_SUB:'explicit-owner-sub'});
 const wallet=()=>database.sql.prepare("SELECT balance,reserved FROM credit_wallets WHERE user_id='alice'").get();
 describe('account boundary',()=>{
+ it.each(['reference-preview','reference-review','reference-suggestion','producer-name-review'])('keeps %s catalogue maintenance owner-only',async(path)=>{
+  database.sql.prepare('INSERT INTO auth_sessions VALUES(?,?,?)').run(await hash('session'),'alice',seconds()+3600);
+  const response=await publicWorker.fetch(new Request(`https://wine.example/api/wines/w1/${path}`,{method:path==='reference-preview'?'GET':'POST',headers:{Cookie:'__Host-winelog=session',Origin:'https://wine.example'}}),env() as never,{} as ExecutionContext);
+  expect(response.status).toBe(403);expect(await response.json()).toMatchObject({error:'Owner access required'});
+ });
  it('binds only the configured Google subject while preserving legacy owner data',async()=>{
   database.close();database=realD1();
   database.sql.exec("DELETE FROM credit_prices WHERE created_by='owner'; DELETE FROM member_ai_action_policies WHERE updated_by='owner'; DELETE FROM credit_wallets WHERE user_id='owner'; DELETE FROM app_users WHERE id='owner'; INSERT INTO wines(id,owner_id,producer,wine_name,created_at,updated_at) VALUES('legacy','owner','Legacy','Bottle','now','now')");

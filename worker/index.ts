@@ -12,11 +12,12 @@ import { dimensionsSchema, validateBatch } from '../src/features/uploads/validat
 import { parseRecognition } from '../src/features/recognition/schema';
 import { wineSaveStatements } from '../src/lib/db/wineSave';
 import { enrichRecognitionReference } from '../src/lib/wine/referenceIdentity';
+import { previewLoggingReference,resolveLoggingReference } from './wineLoggingReference';
 import { normalizeReferenceText } from '../src/lib/wine/referenceCatalog';
 import { appClassification,classificationLabel,referenceSuggestionFields,type ReferenceSuggestion,type ReferenceSuggestionField } from '../src/lib/wine/referenceSuggestions';
 import { ensureWineIdentity } from '../src/lib/wine/identity';
 import { recheckWineReference } from './wineReferenceReview';
-import { linkWineReference,previewWineReference } from './manualWineReference';
+import { linkWineReference,previewWineReference,rejectWineReference } from './manualWineReference';
 import { applyProducerNameReview,previewProducerNameReview } from './producerNameReview';
 
 type Bindings={IMAGES?:ImagesBinding;DB:D1Database;WINE_IMAGES:R2Bucket;REFERENCE_DATA:R2Bucket;ASSETS:Fetcher;GEMINI_API_KEY?:string;AUTH_SECRET:string;APP_PASSWORD:string;APP_URL:string;MAX_FILE_BYTES?:string;MAX_BATCH_FILES?:string};
@@ -103,19 +104,24 @@ app.get('/api/wines/:id',async c=>{
  return row?c.json(mapWine(row as Record<string,unknown>,images.results.map(x=>x.id))):c.json({error:'Not found'},404)
 });
 
+app.post('/api/wines/reference-check',async c=>{
+ const parsed=wineInputSchema.safeParse(await c.req.json());if(!parsed.success)return c.json({error:'Invalid wine',issues:parsed.error.issues},400);
+ return c.json(await previewLoggingReference(c.env.REFERENCE_DATA,parsed.data));
+});
+
 app.post('/api/wines',async c=>{
  const owner=c.get('userId'),id=crypto.randomUUID(),now=new Date().toISOString();
  const multipart=(c.req.header('Content-Type')||'').includes('multipart/form-data');
  if(!multipart){
   const parsed=wineInputSchema.safeParse(await c.req.json());if(!parsed.success)return c.json({error:'Invalid wine',issues:parsed.error.issues},400);
-  const w=await enrichRecognitionReference(c.env.REFERENCE_DATA,parsed.data);
+  const w=await resolveLoggingReference(c.env.REFERENCE_DATA,parsed.data);
   const wineStatement=c.env.DB.prepare(`INSERT INTO wines(id,owner_id,producer,wine_name,vintage,country,region,appellation,recognized_region,recognized_appellation,classification,classification_override,grapes_json,grape_blend_json,wine_style,alcohol_percentage,tasting_notes,rating,tasting_date,event,venue,price,currency,tags_json,recognition_status,recognition_confidence,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`).bind(id,owner,w.producer,w.wineName,w.vintage,w.country,w.region,w.appellation,w.recognizedRegion,w.recognizedAppellation,w.classification,w.classificationOverride,JSON.stringify(w.grapes),JSON.stringify(w.grapeBlend),w.wineStyle,w.alcoholPercentage,w.tastingNotes,w.rating,w.tastingDate,w.event,w.venue,w.price,w.currency,JSON.stringify(w.tags),w.recognitionStatus,w.recognitionConfidence,now,now);
   try{await c.env.DB.batch([wineStatement,...wineSaveStatements(c.env.DB,owner,id,w)]);return c.json({id},201)}
   catch(error){console.error('wine-save-failed',error);return c.json({error:'Could not save wine. Please retry.'},500)}
  }
  const form=await c.req.formData();
  const parsed=wineInputSchema.safeParse(parseJson(form.get('wine'),null));if(!parsed.success)return c.json({error:'Invalid wine',issues:parsed.error.issues},400);
- const w=await enrichRecognitionReference(c.env.REFERENCE_DATA,parsed.data),files=form.getAll('images').filter((x):x is File=>x instanceof File);
+ const w=await resolveLoggingReference(c.env.REFERENCE_DATA,parsed.data),files=form.getAll('images').filter((x):x is File=>x instanceof File);
  try{validateBatch(files,{maxFiles:Number(c.env.MAX_BATCH_FILES)||12,maxBytes:Number(c.env.MAX_FILE_BYTES)||10485760,minDimension:300,maxDimension:12000})}catch(e){return c.json({error:(e as Error).message},400)}
  const dimensions=parseJson<unknown[]>(form.get('dimensions'),[]),metadata=parseJson<PhotoMetadata[]>(form.get('metadata'),[]);
  if(dimensions.length!==files.length||metadata.length!==files.length)return c.json({error:'Dimensions and metadata are required for every saved photo'},400);
@@ -273,6 +279,7 @@ app.get('/api/wines/:id/reference-preview',async c=>{
 app.post('/api/wines/:id/reference-review',async c=>{
  const owner=c.get('userId'),id=c.req.param('id'),payload=await c.req.json().catch(()=>null) as {action?:unknown;lwin7?:unknown;updatedAt?:unknown;previewToken?:unknown}|null;
  if(payload?.action==='link')return c.json(await linkWineReference(c.env,owner,id,payload));
+ if(payload?.action==='reject')return c.json(await rejectWineReference(c.env,owner,id,payload));
  if(payload?.action==='recheck'){
   if(!await recheckWineReference(c.env.DB,c.env.REFERENCE_DATA,owner,id))return c.json({error:'Wine changed or is unavailable. Refresh and try again.'},409);
   return c.json({ok:true});

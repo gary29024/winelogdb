@@ -3,8 +3,13 @@ import { realD1 } from './support/realD1';
 import app from '../../worker/index';
 import { createSession } from '../../src/lib/auth/session';
 import { parseLwinReference,type LwinReferenceProduct } from '../../src/lib/wine/lwinImport';
-import { referenceShardId } from '../../src/lib/wine/referenceCatalog';
+import { lwinReferenceIdentity,referenceShardId } from '../../src/lib/wine/referenceCatalog';
 import { previewWineReference } from '../../worker/manualWineReference';
+import { processRolloutJob,rolloutRoute } from '../../worker/multiUser/rollout';
+import { recheckWineReference } from '../../worker/wineReferenceReview';
+import { referenceIdentityStatements } from '../../src/lib/wine/referenceIdentity';
+import { previewLoggingReference } from '../../worker/wineLoggingReference';
+import { wineInputSchema } from '../../src/lib/db/schema';
 
 const databases:Array<ReturnType<typeof realD1>>=[];
 afterEach(()=>databases.splice(0).forEach(db=>db.close()));
@@ -30,6 +35,80 @@ function setup({indexed=false,status='Live',vintageConfig='sequential'}:{indexed
 }
 
 describe('manual LWIN selection',()=>{
+ it.each(['confirm','none'] as const)('reviews the named catalogue identity before creation and saves the %s decision',async(action)=>{
+  const {env,database,product}=setup(),identity=lwinReferenceIdentity(product);
+  const input={producer:product.producerName,wineName:identity.wineName,vintage:2018,country:'France',region:'Bordeaux',wineStyle:'dessert',tastingNotes:'My label and notes',alcoholPercentage:null,rating:null,tastingDate:null,event:null,venue:null,price:null,currency:null,recognitionConfidence:null};
+  const post=async(path:string,body:unknown)=>app.fetch(new Request(`https://wine.example/api/wines${path}`,{method:'POST',headers:{authorization:`Bearer ${await createSession('owner',secret)}`,'content-type':'application/json'},body:JSON.stringify(body)}),env as never);
+  const before=database.sql.prepare('SELECT count(*) AS n FROM wines').get()!.n;
+  const preview=await post('/reference-check',input);expect(preview.status).toBe(200);
+  const result=await preview.json() as {matched:boolean;token:string};
+  expect(result).toMatchObject({matched:true,needsReview:true,producer:identity.producerName,wineName:identity.wineName});
+  expect(database.sql.prepare('SELECT count(*) AS n FROM wines').get()!.n).toBe(before);
+  const saved=await post('',{...input,referenceDecision:{action,token:result.token}});expect(saved.status).toBe(201);
+  const {id}=await saved.json() as {id:string};
+  expect(database.sql.prepare('SELECT producer,wine_name,tasting_notes,lwin7,identity_match_status FROM wines WHERE id=?').get(id)).toMatchObject({producer:input.producer,wine_name:input.wineName,tasting_notes:input.tastingNotes,lwin7:action==='confirm'?'1017483':null,identity_match_status:action==='confirm'?'matched':'manual'});
+ });
+ it('saves a clear match without review, including accent and case differences',async()=>{
+  const {env,product}=setup();product.displayName='Rieussec, Château Rieussec';
+  const preview=await previewLoggingReference(env.REFERENCE_DATA,wineInputSchema.parse({producer:'RIEUSSEC',wineName:'Chateau Rieussec',country:'France',region:'Bordeaux'}));
+  expect(preview).toMatchObject({matched:true,needsReview:false});expect(preview.token).toBeTruthy();
+ });
+ it('refuses a stale logging match',async()=>{
+  const {env,database,product}=setup(),identity=lwinReferenceIdentity(product);
+  const input={producer:product.producerName,wineName:identity.wineName,vintage:2018,country:'France',region:'Bordeaux',wineStyle:'dessert'};
+  const response=await app.fetch(new Request('https://wine.example/api/wines',{method:'POST',headers:{authorization:`Bearer ${await createSession('owner',secret)}`,'content-type':'application/json'},body:JSON.stringify({...input,referenceDecision:{action:'confirm',token:'stale'}})}),env as never);
+  expect(response.status).toBe(409);
+  expect(database.sql.prepare('SELECT count(*) AS n FROM wines').get()!.n).toBe(1);
+ });
+ it('saves an unchecked wine without a reference or another catalogue lookup',async()=>{
+  const {env,database,reads}=setup();
+  const input={producer:'Rieussec',wineName:'Château Rieussec',vintage:2018,country:'France',region:'Bordeaux',wineStyle:'dessert',alcoholPercentage:null,rating:null,tastingDate:null,event:null,venue:null,price:null,currency:null,recognitionConfidence:null,referenceDecision:{action:'unmatched'}};
+  const response=await app.fetch(new Request('https://wine.example/api/wines',{method:'POST',headers:{authorization:`Bearer ${await createSession('owner',secret)}`,'content-type':'application/json'},body:JSON.stringify(input)}),env as never);
+  expect(response.status).toBe(201);
+  const {id}=await response.json() as {id:string};
+  expect(database.sql.prepare('SELECT lwin7,identity_match_status FROM wines WHERE id=?').get(id)).toMatchObject({lwin7:null,identity_match_status:'unmatched'});
+  expect(reads).toEqual([]);
+ });
+ it('rejects a match, clears its reference metadata and removes it from review without changing personal fields',async()=>{
+  const {database,env,row,request}=setup();
+  database.sql.exec("UPDATE wines SET reference_product_key='lwin:1017425',colour='White',product_type='Wine',product_subtype='Still',identity_match_candidates_json='[\"1017483\"]',identity_match_confidence=0.9,identity_matched_at='now',reference_suggestions_updated_at='now'");
+  const before=row();
+  const response=await request('reference-review',{action:'reject',lwin7:before.lwin7,updatedAt:before.updated_at});
+  expect(response.status).toBe(200);
+  expect(row()).toMatchObject({producer:before.producer,wine_name:before.wine_name,vintage:2018,country:'France',region:'Bordeaux',wine_style:'sweet',tasting_notes:'Keep my notes',rating:94,
+   lwin7:null,lwin11:null,elid:null,reference_product_key:null,reference_site:null,reference_parcel:null,colour:null,product_type:null,product_subtype:null,
+   identity_match_status:'manual',identity_match_confidence:null,identity_match_candidates_json:null,identity_matched_at:null,reference_suggestions_json:null,reference_suggestions_updated_at:null});
+  const review=await rolloutRoute(new Request('https://wine.example/api/admin/rollout/lwin-review'),env as never,{id:'owner',role:'owner',status:'active',email:'owner@example.com',display_name:'Owner'});
+  expect(await review!.json()).toMatchObject({total:0,items:[]});
+ });
+ it('preserves the no-LWIN choice through rechecks, save matching and both backfills, while allowing a later manual link',async()=>{
+  const {database,env,row,request}=setup(),before=row();
+  expect((await request('reference-review',{action:'reject',lwin7:before.lwin7,updatedAt:before.updated_at})).status).toBe(200);
+  await recheckWineReference(env.DB,env.REFERENCE_DATA,'owner','w1');
+  for(const producer of ['Chateau Rieussec','Corrected producer'])await env.DB.batch(referenceIdentityStatements(env.DB,'owner','w1',{
+   producer,wineName:'Château Rieussec',identityMatchStatus:'matched',lwin7:'1017483',referenceProductKey:'lwin:1017483'
+  },'later',true,{producer:'Chateau Rieussec',wine_name:'Château Rieussec',lwin7:null}));
+  database.sql.exec("INSERT INTO rollout_state(name,value) VALUES('rollout_lwin_job','running'),('rollout_lwin_ai_job','running')");
+  for(const kind of ['lwin','lwin_ai'] as const)expect(await processRolloutJob(env as never,kind)).toMatchObject({complete:true,processed:0});
+  expect(row()).toMatchObject({lwin7:null,identity_match_status:'manual',reference_suggestions_json:null});
+  const {preview}=await previewWineReference(env,'owner','w1','1017483');
+  expect((await request('reference-review',{action:'link',lwin7:'1017483',previewToken:preview.previewToken})).status).toBe(200);
+  expect(row()).toMatchObject({lwin7:'1017483',identity_match_status:'manual'});
+ });
+ it('rejects stale or incomplete rejection requests and cross-account access',async()=>{
+  const {row,request}=setup(),before=row();
+  expect((await request('reference-review',{action:'reject',lwin7:before.lwin7,updatedAt:'stale'})).status).toBe(409);
+  expect((await request('reference-review',{action:'reject',lwin7:'9999999',updatedAt:before.updated_at})).status).toBe(409);
+  expect((await request('reference-review',{action:'reject',lwin7:before.lwin7})).status).toBe(400);
+  expect((await request('reference-review',{action:'reject',updatedAt:before.updated_at})).status).toBe(400);
+  expect((await request('reference-review',{action:'reject',lwin7:before.lwin7,updatedAt:before.updated_at},'member')).status).toBe(404);
+  expect(row()).toEqual(before);
+ });
+ it('can keep a conflicted wine without LWIN when only candidates remain',async()=>{
+  const {database,row,request}=setup();database.sql.exec('UPDATE wines SET lwin7=NULL');
+  expect((await request('reference-review',{action:'reject',lwin7:null,updatedAt:row().updated_at})).status).toBe(200);
+  expect(row()).toMatchObject({lwin7:null,elid:null,identity_match_status:'manual',reference_suggestions_json:null});
+ });
  it('previews without writes and replaces the wrong identity without changing personal wine fields',async()=>{
   const {env,row,request}=setup(),before=row();
   const {preview}=await previewWineReference(env,'owner','w1','1017483');

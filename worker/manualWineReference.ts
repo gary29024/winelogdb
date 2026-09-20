@@ -9,6 +9,23 @@ type Env={DB:D1Database;REFERENCE_DATA:R2Bucket};
 // personal fields are never assigned by the linking UPDATE.
 const snapshotColumns=['updated_at','producer','wine_name','vintage','vintage_kind','release_designation','country','region','wine_style','classification','classification_override','lwin7','reference_suggestions_json','identity_match_status'] as const;
 
+export async function rejectWineReference(env:Pick<Env,'DB'>,owner:string,id:string,payload:{lwin7?:unknown;updatedAt?:unknown}){
+ if((payload.lwin7!==null&&(typeof payload.lwin7!=='string'||!/^\d{7}$/.test(payload.lwin7)))||typeof payload.updatedAt!=='string'||!payload.updatedAt)throw new ApiError(400,'Refresh the wine before rejecting its LWIN match.');
+ const row=await env.DB.prepare('SELECT * FROM wines WHERE owner_id=? AND id=?').bind(owner,id).first<Record<string,unknown>>();
+ if(!row)throw new ApiError(404,'Wine not found.');
+ if((row.lwin7??null)!==payload.lwin7||row.updated_at!==payload.updatedAt)throw new ApiError(409,'The wine changed. Refresh before rejecting its LWIN match.');
+ const now=new Date().toISOString();
+ // A manual identity with no reference is an explicit opt-out. Existing save
+ // and rollout guards preserve it until the user deliberately links a new LWIN.
+ const saved=await env.DB.prepare(`UPDATE wines SET reference_product_key=NULL,lwin7=NULL,lwin11=NULL,elid=NULL,reference_site=NULL,reference_parcel=NULL,
+  colour=NULL,product_type=NULL,product_subtype=NULL,identity_match_status='manual',identity_match_confidence=NULL,identity_match_candidates_json=NULL,
+  identity_matched_at=NULL,identity_checked_at=?,reference_suggestions_json=NULL,reference_suggestions_updated_at=NULL,updated_at=?
+  WHERE owner_id=? AND id=? AND ${snapshotColumns.map(column=>`${column} IS ?`).join(' AND ')}`)
+  .bind(now,now,owner,id,...snapshotColumns.map(column=>row[column]??null)).run();
+ if(!saved.meta.changes)throw new ApiError(409,'The wine changed. Refresh before rejecting its LWIN match.');
+ return {ok:true,lwin7:null,referenceSuggestions:[]};
+}
+
 export async function previewWineReference(env:Env,owner:string,id:string,code:unknown){
  const lwin7=typeof code==='string'?code.trim():'';
  if(!/^\d{7}$/.test(lwin7))throw new ApiError(400,'Enter a 7-digit LWIN code.');
