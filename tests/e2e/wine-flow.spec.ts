@@ -1,6 +1,7 @@
 import { test,expect,type Page } from '@playwright/test';
+import { wine } from './fixtures/layoutWine';
 const user={id:'alice',email:'alice@example.com',display_name:'Alice',role:'member',status:'active'};
-async function signedIn(page:Page){await page.route('**/api/**',async route=>{const path=new URL(route.request().url()).pathname;const data=path==='/api/me'?{user}:path==='/api/credits'?{available:20,reserved:0,balance:20}:path==='/api/friends/code'?{code:'A1B2-C3D4-E5F6'}:path==='/api/friends/requests'?{incoming:[],outgoing:[]}:path==='/api/friends'?{items:[{id:'bob',display_name:'Bob'}]}:path==='/api/shared/wines'?{items:[{id:'w',ownerName:'Bob',producer:'Domaine Dujac',wineName:'Clos de la Roche',vintage:2020,tastingNotes:'Bright cherry',rating:4,tastingDate:'2026-09-01'}],nextOffset:null}:{items:[],total:0,nextOffset:null};await route.fulfill({json:data})})}
+async function signedIn(page:Page){await page.route('**/api/**',async route=>{const path=new URL(route.request().url()).pathname;const data=path==='/api/me'?{user}:path==='/api/credits'?{available:20,reserved:0,balance:20,sponsoredAi:true,actionAccess:[]}:path==='/api/usage/spend'?{days:30,kinds:[],empty:true}:path==='/api/shared/wines/w'?{...wine,id:'w',ownerName:'Bob',tastingNotes:'Bright cherry'}:path==='/api/journal'?{items:[{...wine,id:'w',shared:true,sharedBy:'Bob'}],total:1,nextOffset:null}:path==='/api/friends/code'?{code:'A1B2-C3D4-E5F6'}:path==='/api/friends/requests'?{incoming:[],outgoing:[]}:path==='/api/friends'?{items:[{id:'bob',display_name:'Bob'}]}:path==='/api/shared/wines'?{items:[{id:'w',ownerName:'Bob',producer:'Domaine Dujac',wineName:'Clos de la Roche',vintage:2020,tastingNotes:'Bright cherry',rating:4,tastingDate:'2026-09-01'}],nextOffset:null}:{items:[],total:0,nextOffset:null};await route.fulfill({json:data})})}
 test('Google invitation login has no legacy password form',async({page})=>{
  await page.route('**/api/me',route=>route.fulfill({status:401,json:{error:'Sign in required'}}));await page.goto('/login?invitation=single-use');
  await expect(page.getByRole('link',{name:/Google/})).toHaveAttribute('href','/api/auth/google/start?invitation=single-use');await expect(page.locator('input[type=password]')).toHaveCount(0);
@@ -25,9 +26,9 @@ test('friend codes send pending requests and only acceptance adds a friend',asyn
  await page.getByRole('button',{name:'Cancel request to Bob',exact:true}).click();await expect(page.getByText('No pending sent requests.')).toBeVisible();
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
 });
-test('account and shared wines remain separate from the journal on mobile',async({page})=>{
- await page.setViewportSize({width:390,height:844});await signedIn(page);await page.goto('/account');await expect(page.getByText('20 credits available')).toBeVisible();await expect(page.getByRole('heading',{name:'Friends',exact:true})).toBeVisible();
- await page.getByRole('link',{name:'Shared with me'}).click();await expect(page.getByRole('heading',{name:'Shared with me',exact:true})).toBeVisible();await expect(page.getByText('Bright cherry')).toBeVisible();await expect(page.getByRole('button',{name:/Edit|Add to journal/})).toHaveCount(0);
+test('account and shared wine experience remain accessible from the Journal on mobile',async({page})=>{
+ await page.setViewportSize({width:390,height:844});await signedIn(page);await page.goto('/account');await expect(page.getByText('Pilot AI access', {exact:true})).toBeVisible();await expect(page.getByRole('heading',{name:'Friends',exact:true})).toBeVisible();
+ await page.goto('/shared');await expect(page).toHaveURL(/\/journal$/);await page.getByRole('link',{name:/Open .*shared by Bob/}).click();await expect(page.getByText('Bright cherry')).toBeVisible();await expect(page.getByRole('button',{name:'Edit your experience'})).toBeVisible();
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
 });
 test('a scan requires the server quote and cancellation invokes no AI',async({page})=>{

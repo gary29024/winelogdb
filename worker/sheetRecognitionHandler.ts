@@ -3,6 +3,7 @@ import { parseSheetPage,type SheetPage } from '../src/features/recognition/sheet
 import { sheetRecognitionResponseJsonSchema,PLACE_LEVEL_RULE,PRODUCER_NAME_RULE,RECOGNITION_MODEL } from '../src/lib/recognition/geminiRequest';
 import type { RecognitionModeSpec } from './visionRecognition';
 import { enrichRecognitionReference } from '../src/lib/wine/referenceIdentity';
+import { ReferenceReadScope } from '../src/lib/wine/referenceCatalog';
 
 const MAX_SHEET_IMAGE_BYTES=3*1024*1024;
 
@@ -47,7 +48,7 @@ export const sheetRecognitionSpec:RecognitionModeSpec<SheetPage>={
   oneFileError:'Send one wine list page per request',
   jsonSchema:sheetRecognitionResponseJsonSchema,
   parse:parseSheetPage,
-  enrich:async(bucket,page)=>({...page,wines:await Promise.all(page.wines.map(wine=>enrichRecognitionReference(bucket,wine)))}),
+  enrich:async(bucket,page)=>{const scope=new ReferenceReadScope(bucket);return {...page,wines:await Promise.all(page.wines.map(wine=>enrichRecognitionReference(scope,wine))) }},
   escalationReasons:sheetEscalationReasons,
   preferEscalated:preferEscalatedSheet,
   wineCount:page=>page.wines.length,

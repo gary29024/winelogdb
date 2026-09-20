@@ -94,8 +94,10 @@ for(const role of ['owner','member'] as const){
     });
     await page.setViewportSize(device.viewport);
    }
-   await page.getByRole('button',{name:'Refresh vintage research',exact:true}).click();
-   await expect(page.getByRole('button',{name:'Queue vintage refresh',exact:true})).toBeVisible();
+   // This fixture has only a summary/window; incomplete research offers to
+   // fill the missing scopes rather than refresh an already complete report.
+   await page.getByRole('button',{name:'Deep Search',exact:true}).click();
+   await expect(page.getByRole('button',{name:'Queue Deep Search',exact:true})).toBeVisible();
    await fits(page);
    await page.goto('/shared/layout-wine');
    await expect(page.getByRole('heading',{name:wine.wineName,exact:true})).toBeVisible();

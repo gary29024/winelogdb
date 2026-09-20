@@ -1,0 +1,46 @@
+{
+  "journal": {
+    "reads": 2,
+    "writes": 0,
+    "ms": 2.02
+  },
+  "researchScopes": {
+    "reads": 1,
+    "writes": 0,
+    "ms": 0.93
+  },
+  "semanticCached": {
+    "reads": 2,
+    "writes": 0,
+    "ms": 0.11
+  },
+  "semanticWarmClean": {
+    "reads": 1,
+    "writes": 0,
+    "ms": 0.18
+  },
+  "cachedAiCalls": 0,
+  "sharedPhoto": {
+    "reads": 1,
+    "writes": 0,
+    "ms": 4.05
+  },
+  "sharedPhotoR2": 1,
+  "producer": {
+    "reads": 11,
+    "writes": 0,
+    "ms": 11.64
+  },
+  "groupReference": {
+    "reads": 0,
+    "writes": 0,
+    "ms": 1.83
+  },
+  "groupReferenceR2": 2,
+  "outboxConcurrent": {
+    "reads": 2,
+    "writes": 3,
+    "ms": 19.95
+  },
+  "queueSends": 1
+}

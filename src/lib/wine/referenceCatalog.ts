@@ -55,6 +55,13 @@ export function lwinReferenceIdentity(row:LwinReferenceIdentitySource){
 }
 
 type CacheEntry={until:number;value:unknown|null};
+// Create once per recognition request. Only resolved JSON is cached globally;
+// never let one Workers request await another request's R2 I/O.
+export class ReferenceReadScope{
+ readonly pending=new Map<string,Promise<unknown>>();
+ constructor(readonly bucket:R2Bucket){}
+}
+export type ReferenceSource=R2Bucket|ReferenceReadScope;
 const caches=new WeakMap<R2Bucket,Map<string,CacheEntry>>();
 const CACHE_MS=5*60*1000,NEGATIVE_CACHE_MS=60*1000,MAX_CACHE_ENTRIES=16;
 function bucketCache(bucket:R2Bucket){let cache=caches.get(bucket);if(!cache){cache=new Map();caches.set(bucket,cache)}return cache}
@@ -71,7 +78,13 @@ export function referenceShardId(key:string,shards=REFERENCE_SHARDS){
 }
 export const referenceManifestKey=(provider:ReferenceProvider)=>`reference/${provider}/current.json`;
 
-async function jsonObject<T>(bucket:R2Bucket,key:string,ttl=CACHE_MS):Promise<T|null>{
+async function jsonObject<T>(bucket:ReferenceSource,key:string,ttl=CACHE_MS):Promise<T|null>{
+ if(bucket instanceof ReferenceReadScope){
+  const hit=bucket.pending.get(key);if(hit)return hit as Promise<T|null>;
+  const read=jsonObject<T>(bucket.bucket,key,ttl);
+  bucket.pending.set(key,read);
+  try{return await read}finally{bucket.pending.delete(key)}
+ }
  const cache=bucketCache(bucket),now=Date.now(),hit=cache.get(key);
  if(hit){
   if(hit.until>now){cache.delete(key);cache.set(key,hit);return hit.value as T|null}
@@ -82,22 +95,22 @@ async function jsonObject<T>(bucket:R2Bucket,key:string,ttl=CACHE_MS):Promise<T|
  const value=JSON.parse(await object.text()) as T;cacheSet(cache,key,value,now+ttl);return value;
 }
 
-export async function referenceManifest(bucket:R2Bucket,provider:ReferenceProvider){
+export async function referenceManifest(bucket:ReferenceSource,provider:ReferenceProvider){
  return jsonObject<ReferenceManifest>(bucket,referenceManifestKey(provider),60_000);
 }
-export async function referenceRowsByShard<T>(bucket:R2Bucket,provider:ReferenceProvider,shard:string):Promise<T[]>{
+export async function referenceRowsByShard<T>(bucket:ReferenceSource,provider:ReferenceProvider,shard:string):Promise<T[]>{
  const manifest=await referenceManifest(bucket,provider);if(!manifest)return [];
  const key=`${manifest.prefix}/shard-${shard}.json`;return await jsonObject<T[]>(bucket,key)??[];
 }
-export async function referenceRows<T>(bucket:R2Bucket,provider:ReferenceProvider,key:string):Promise<T[]>{
+export async function referenceRows<T>(bucket:ReferenceSource,provider:ReferenceProvider,key:string):Promise<T[]>{
  const manifest=await referenceManifest(bucket,provider);if(!manifest)return [];
  return referenceRowsByShard<T>(bucket,provider,referenceShardId(key,manifest.shardCount));
 }
-export async function lwinRedirects(bucket:R2Bucket):Promise<Record<string,LwinRedirect>>{
+export async function lwinRedirects(bucket:ReferenceSource):Promise<Record<string,LwinRedirect>>{
  const manifest=await referenceManifest(bucket,'lwin');if(!manifest?.redirectsKey)return {};
  return await jsonObject<Record<string,LwinRedirect>>(bucket,manifest.redirectsKey)??{};
 }
-export async function elidProducerIndex(bucket:R2Bucket):Promise<ElidProducerIndex>{
+export async function elidProducerIndex(bucket:ReferenceSource):Promise<ElidProducerIndex>{
  const manifest=await referenceManifest(bucket,'elid');if(!manifest?.producerIndexKey)return {};
  return await jsonObject<ElidProducerIndex>(bucket,manifest.producerIndexKey)??{};
 }
@@ -107,11 +120,11 @@ export async function elidProducerIndex(bucket:R2Bucket):Promise<ElidProducerInd
  * scans only the immutable local LWIN shards and never calls Liv-ex. Callers
  * should narrow the returned rows before sending any candidates to AI.
  */
-export async function lwinProducerIndex(bucket:R2Bucket):Promise<LwinProducerIndex>{
+export async function lwinProducerIndex(bucket:ReferenceSource):Promise<LwinProducerIndex>{
  const manifest=await referenceManifest(bucket,'lwin');if(!manifest?.producerIndexKey)return {};
  return await jsonObject<LwinProducerIndex>(bucket,manifest.producerIndexKey)??{};
 }
-export async function lwinStrictRowsForProducer<T>(bucket:R2Bucket,producer:string|null|undefined):Promise<T[]>{
+export async function lwinStrictRowsForProducer<T>(bucket:ReferenceSource,producer:string|null|undefined):Promise<T[]>{
  const manifest=await referenceManifest(bucket,'lwin');if(!manifest)return [];
  const keys=producerLookupKeys(producer);if(!keys.length)return [];
  // Prefix stripping is retrieval-only. When an older manifest has no producer
@@ -130,7 +143,7 @@ export async function lwinStrictRowsForProducer<T>(bucket:R2Bucket,producer:stri
 }
 
 /** Exact-ID lookup. Older imports can still resolve codes for the current producer. */
-export async function lwinRowById<T extends {lwin7:string}>(bucket:R2Bucket,lwin7:string,producer?:string|null):Promise<T|null>{
+export async function lwinRowById<T extends {lwin7:string}>(bucket:ReferenceSource,lwin7:string,producer?:string|null):Promise<T|null>{
  const manifest=await referenceManifest(bucket,'lwin');if(!manifest)return null;
  if(manifest.lwinIdIndexPrefix){
   const index=await jsonObject<Record<string,string>>(bucket,`${manifest.lwinIdIndexPrefix}${referenceShardId(lwin7,manifest.shardCount)}.json`);
@@ -139,7 +152,7 @@ export async function lwinRowById<T extends {lwin7:string}>(bucket:R2Bucket,lwin
  }
  const rows=await lwinStrictRowsForProducer<T>(bucket,producer);return rows.find(row=>row.lwin7===lwin7)??null;
 }
-export async function lwinCandidateRowsForProducer<T>(bucket:R2Bucket,producer:string|null|undefined):Promise<T[]>{
+export async function lwinCandidateRowsForProducer<T>(bucket:ReferenceSource,producer:string|null|undefined):Promise<T[]>{
  const manifest=await referenceManifest(bucket,'lwin');if(!manifest)return [];
  if(!manifest.producerIndexKey)throw new Error('LWIN producer index is missing; rerun the LWIN reference import before AI backfill');
  const index=await lwinProducerIndex(bucket),keys=producerLookupKeys(producer),shardIds=new Set<string>();
@@ -149,7 +162,7 @@ export async function lwinCandidateRowsForProducer<T>(bucket:R2Bucket,producer:s
 
 /** Legacy bounded scan retained for maintenance tools; interactive/queue matching
  * must use the producer index above so one wine never reads all 256 shards. */
-export async function lwinCandidateRows<T>(bucket:R2Bucket,predicate:(row:T)=>boolean,limit=12):Promise<T[]>{
+export async function lwinCandidateRows<T>(bucket:ReferenceSource,predicate:(row:T)=>boolean,limit=12):Promise<T[]>{
  const manifest=await referenceManifest(bucket,'lwin');if(!manifest)return [];
  const found:T[]=[];
  for(let i=0;i<manifest.shardCount&&found.length<limit;i++){

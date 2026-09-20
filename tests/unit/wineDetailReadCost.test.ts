@@ -36,9 +36,8 @@ describe('what a wine view costs to read',()=>{
       const spent=counts().reads-before;
 
       expect(cache.get('producer')?.contributorId,'Bob still finds it').toBe('alice');
-      // 4 own-cache reads (issued together) + 1 alias read + 1 batched friend query.
-      // Measured: 13 before this was batched, 6 after.
-      expect(spent,'the friend path must not scale with scope or key count').toBeLessThanOrEqual(6);
+      // One own-cache lookup + one alias read + one friend lookup.
+      expect(spent,'the friend path must not scale with scope or key count').toBe(3);
     }finally{close()}
   });
 
@@ -51,7 +50,7 @@ describe('what a wine view costs to read',()=>{
       const before=counts().reads;
       await loadResearchCache(db,'bob',targets,true);
       // Three scopes are still missing, so one alias read and one batched query.
-      expect(counts().reads-before).toBeLessThanOrEqual(6);
+      expect(counts().reads-before).toBe(3);
     }finally{close()}
   });
 });

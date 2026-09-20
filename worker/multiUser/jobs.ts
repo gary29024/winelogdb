@@ -19,6 +19,11 @@ export function durableQueue(queue:Queue<unknown>,db:D1Database,operationId?:str
 export async function flushOutbox(db:D1Database,queue:Queue<unknown>){
  const rows=(await db.prepare('SELECT id,body_json FROM queue_outbox WHERE sent_at IS NULL AND due_at<=? ORDER BY due_at LIMIT 4').bind(seconds()).all<{id:string;body_json:string}>()).results;
  for(const row of rows){
+  // Competing HTTP/cron/queue flushes may have read the same rows. Atomically
+  // defer this row before sending; a crashed dispatcher becomes eligible again
+  // after the lease. Delivery remains at-least-once and consumer claims still apply.
+  const claimed=await db.prepare('UPDATE queue_outbox SET due_at=? WHERE id=? AND sent_at IS NULL AND due_at<=?').bind(seconds()+60,row.id,seconds()).run();
+  if(!claimed.meta.changes)continue;
   try{await queue.send(JSON.parse(row.body_json));await db.prepare('UPDATE queue_outbox SET sent_at=?,attempts=attempts+1 WHERE id=?').bind(seconds(),row.id).run()}
   catch{await db.prepare('UPDATE queue_outbox SET attempts=attempts+1,due_at=? WHERE id=? AND sent_at IS NULL').bind(seconds()+60,row.id).run()}
  }
