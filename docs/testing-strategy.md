@@ -7,9 +7,14 @@ The complete Vitest suite runs on every PR. It is cheap enough to keep authoriza
 | Gate | PR | Main push / manual / weekly | Dependencies |
 | --- | --- | --- | --- |
 | Lint and build | Lint, TypeScript, production build, all local D1 migrations, Worker smoke | Same | Build precedes runtime smoke; no other job dependency |
-| Regression and browser tests | All Vitest tests, then Chromium browser flows | All Vitest tests, then Chromium and both iPhone WebKit projects | Browser checks use the test-mode Vite server; no production build needed |
+| Unit and integration tests | All Vitest tests, two workers | Same | Independent of quality and browsers |
+| Browser (chromium) | All Chromium flows | Same | Independent test-mode Vite server; no production build needed |
+| Browser (webkit) | Not scheduled | Both iPhone projects | Independent of Chromium and Vitest |
+| Regression and browser tests | Requires unit and browser jobs to succeed | Same, including WebKit | Lightweight aggregate check; no checkout/install/build |
 
-The two jobs run independently. Main previously installed dependencies in three jobs and split Vitest across two shards; it now installs in two jobs and runs Vitest once. A shared composite action keeps Node 24, Bun 1.2.15 and the dependency download cache consistent. TypeScript is part of `npm run build`; CI does not repeat it. Browser projects share one server at checkpoints. Tests remain isolated and independent; no retries conceal failures, and focused `.only` tests fail CI.
+Quality, the complete Vitest suite and browser jobs run independently. Vitest explicitly uses two workers: its default of CPUs minus one leaves a two-core hosted runner with only one. Chromium and WebKit use separate jobs so browser installation and execution no longer extend the unit-test job. Both iPhone projects share the WebKit job's server. A shared composite action keeps Node 24, Bun 1.2.15 and the dependency download cache consistent. TypeScript is part of `npm run build`; CI does not repeat it. Tests remain isolated and independent; no retries conceal failures, and focused `.only` tests fail CI.
+
+Parallel jobs add dependency installations and may increase aggregate runner minutes, but remove the browser work from the unit-test critical path. Measure both elapsed workflow time and aggregate job time; fewer jobs alone does not mean a faster workflow. The aggregate required check fails if the unit job or any browser matrix job fails or is cancelled. Its name stays stable for branch protection.
 
 The weekly checkpoint runs Monday at 03:17 UTC. Both iPhone widths, owner/member views, safe areas, rotation, contrast and screenshots remain covered there and on main/manual runs. Those layout permutations are the only deferred tier. Chromium account, recognition, identity-review, edit and deletion flows run on every PR. There are no path-based skips, including for documentation changes.
 
@@ -57,7 +62,11 @@ Actual hosted baseline from [main run 35511834996](https://github.com/gary29024/
 
 [PR run 35511725123](https://github.com/gary29024/winelogdb/actions/runs/35511725123) ran the full suite because its change was high risk: affected-test job 115 s (104 s test step), quality 81 s. Other PRs could skip tests or use a separate Vitest listing followed by execution. Source-file consumers had to be selected separately because they do not appear in the import graph.
 
-The revised workflow has not been submitted to hosted CI, so no after-CI wall time is claimed. The measured suite reduction, removal of a shard's setup, and combined browser server reduce execution work. Browser installation/execution adds coverage that the old workflow omitted, so its cost must be included when measuring the next hosted run. CI uploads JSON inventory/timings, HTML browser reports and failure traces for seven days.
+### Hosted regression discovered after PR #306
+
+The local speedup did not establish a CI speedup. [The merged run 35515337561](https://github.com/gary29024/winelogdb/actions/runs/35515337561) took **4m45s**, compared with the old main run's **2m06s**. The combined regression job took 278 seconds: 127 seconds for Vitest, then 51 seconds installing browsers, then 81 seconds executing all browser projects, plus setup/reporting. [The next PR run 35520772893](https://github.com/gary29024/winelogdb/actions/runs/35520772893) took 3m09s; its combined job spent 99 seconds in Vitest, then 28 seconds installing Chromium and 40 seconds testing it. The old PR took 1m58s.
+
+The follow-up workflow separates those independent stages and explicitly enables two Vitest workers. All previous test cases and event tiers are preserved; there are no new path skips, retries or reduced assertions. The earlier claim that the CI optimization was complete based on local timings was premature. Hosted follow-up results must establish the improvement. CI uploads per-job JSON inventories, HTML browser reports and failure traces for seven days.
 
 Final validation after adding the browser gap check:
 
