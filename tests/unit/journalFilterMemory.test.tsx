@@ -36,26 +36,21 @@ async function openJournal(at:string){
 const search=()=>host?.querySelector('[data-testid="search"]')?.textContent??'';
 const journalCalls=()=>requested.filter(url=>url.startsWith('/api/journal'));
 
-/**
- * Waits for the search debounce to land, rather than sleeping past it.
- *
- * A fixed sleep against a 300ms debounce left forty milliseconds for a timer to
- * fire, a state flush and a render - which is a race, and the kind that fails
- * once on a loaded machine and never again when you go looking for it. Polling
- * for the condition the case is about to assert costs nothing when the machine
- * is quiet and does not lie when it is not.
- */
-const settled=async(until:()=>boolean,budget=3000)=>{
-  const deadline=Date.now()+budget;
-  do{await act(async()=>{await new Promise(resolve=>setTimeout(resolve,20))})}
-  while(!until()&&Date.now()<deadline);
+// Advance the whole debounce window even when the predicate is already true.
+// This also catches a late search commit restoring a cleared filter.
+const settled=async(until:()=>boolean)=>{
+  for(let elapsed=0;elapsed<1000;elapsed+=100){
+    await act(async()=>{await vi.advanceTimersByTimeAsync(100)});
+  }
+  expect(until()).toBe(true);
 };
 
-beforeEach(()=>{window.sessionStorage.clear()});
+beforeEach(()=>{window.sessionStorage.clear();vi.useFakeTimers({toFake:['setTimeout','clearTimeout']})});
 afterEach(()=>{
   act(()=>root?.unmount());
   host?.remove();
   root=null;host=null;
+  vi.useRealTimers();
   vi.unstubAllGlobals();
 });
 

@@ -40,3 +40,29 @@ test('a scan requires the server quote and cancellation invokes no AI',async({pa
  await expect(page.getByRole('dialog')).toBeVisible();await page.getByRole('button',{name:'Cancel',exact:true}).click();expect(submissions).toBe(0);
  await page.getByRole('button',{name:'Identify this wine',exact:true}).click();await page.getByRole('button',{name:'Use 5 credits',exact:true}).click();await expect(page.getByRole('heading',{name:'Combined identification'})).toBeVisible();expect(submissions).toBe(1);
 });
+
+test('editing a tasting persists the note and deletion requires confirmation',async({page})=>{
+ await signedIn(page);
+ let notes='Original note',edits=0,deletes=0;
+ await page.route('**/api/wines/w',async route=>{
+  if(route.request().method()==='DELETE'){deletes++;await route.fulfill({status:204});return}
+  if(route.request().method()==='PUT'){
+   expect(route.request().postDataJSON()).toMatchObject({producer:wine.producer,wineName:wine.wineName,tastingNotes:'Updated tasting note'});
+   notes=route.request().postDataJSON().tastingNotes;edits++;
+  }
+  await route.fulfill({json:{...wine,id:'w',tastingNotes:notes}});
+ });
+ await page.goto('/wines/w');
+ await page.getByRole('link',{name:'Edit tasting',exact:true}).click();
+ await page.getByRole('textbox',{name:'Tasting notes',exact:true}).fill('Updated tasting note');
+ await page.getByRole('button',{name:'Save wine',exact:true}).click();
+ await expect(page).toHaveURL(/\/wines\/w$/);
+ await expect(page.getByText('Updated tasting note',{exact:true})).toBeVisible();
+ expect(edits).toBe(1);
+ page.once('dialog',dialog=>dialog.dismiss());
+ await page.getByRole('button',{name:'Delete this wine',exact:true}).click();
+ await expect(page).toHaveURL(/\/wines\/w$/);expect(deletes).toBe(0);
+ page.once('dialog',dialog=>dialog.accept());
+ await page.getByRole('button',{name:'Delete this wine',exact:true}).click();
+ await expect(page).toHaveURL('http://127.0.0.1:5173/');expect(deletes).toBe(1);
+});

@@ -6,9 +6,11 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "typecheck": "tsc -b",
     "test": "vitest run tests/unit",
     "test:watch": "vitest tests/unit",
-    "test:e2e": "playwright test",
+    "test:e2e": "playwright test --project=chromium",
+    "test:e2e:full": "playwright test",
     "test:e2e:iphone": "playwright test --config=playwright.iphone.config.ts",
     "lint": "eslint .",
     "deploy": "npm run build && npm run db:migrate && wrangler deploy",

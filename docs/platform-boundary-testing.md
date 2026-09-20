@@ -2,7 +2,7 @@
 
 WineLog treats authentication, account ownership, database migrations, SPA/Worker routing, and Cloudflare runtime configuration as high-risk boundaries. Green unit tests are not sufficient for those changes because provider routing can fail before application code runs.
 
-The existing **Lint and build** CI job therefore runs `scripts/worker-runtime-smoke.mjs` whenever a pull request touches Worker/runtime code, Wrangler configuration, auth UI, D1 migrations, workflow/runtime configuration, package/build configuration, `index.html`, or `public/`. The smoke also runs on every push to `main`.
+The **Lint and build** CI job runs `scripts/worker-runtime-smoke.mjs` on every PR, push to `main`, manual dispatch and weekly checkpoint. There is no path-based skip: cross-cutting imports, environment and asset changes can affect this boundary. See [the test policy and measurements](testing-strategy.md) for all CI tiers.
 
 Before the smoke starts, CI builds the production app and applies all D1 migrations to a local Wrangler database. The gate then performs two complementary checks:
 

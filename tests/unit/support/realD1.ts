@@ -1,8 +1,7 @@
-import { DatabaseSync,type SQLInputValue } from 'node:sqlite';
-import { readFileSync,readdirSync } from 'node:fs';
+import type { SQLInputValue } from 'node:sqlite';
+import { migratedDatabase } from './migratedDatabase';
 export function realD1(){
- const sql=new DatabaseSync(':memory:');sql.exec('PRAGMA foreign_keys=ON');
- for(const file of readdirSync('src/lib/db/migrations').filter(f=>f.endsWith('.sql')).sort())sql.exec(readFileSync(`src/lib/db/migrations/${file}`,'utf8'));
+ const sql=migratedDatabase();
  let reads=0,writes=0;
  function statement(query:string,args:SQLInputValue[]=[]){
   const first=async(column?:string)=>{reads++;const row=sql.prepare(query).get(...args);return column?row?.[column]??null:row??null};

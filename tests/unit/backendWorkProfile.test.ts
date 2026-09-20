@@ -1,4 +1,3 @@
-import { mkdirSync,writeFileSync } from 'node:fs';
 import { expect,it,vi } from 'vitest';
 import { realD1 } from './support/realD1';
 import { listJournalPage } from '../../src/lib/journal/list';
@@ -51,21 +50,22 @@ it('profiles common reads, cached navigation, recognition and competing dispatch
   await measure('groupReference',()=>groupRecognitionSpec.enrich!({get:referenceGet} as unknown as R2Bucket,{wines:Array.from({length:20},()=>({producer:'Estate',wineName:'Wine',vintage:2020,confidence:.95})),unresolvedCount:0} as never));
   metrics.groupReferenceR2=referenceGet.mock.calls.length;
   d.sql.exec("INSERT INTO queue_outbox(id,body_json,due_at) VALUES('outbox','{}',0)");
-  const send=vi.fn(async()=>{await new Promise(resolve=>setTimeout(resolve,5))});
-  await measure('outboxConcurrent',()=>Promise.all([flushOutbox(d.db,{send} as unknown as Queue),flushOutbox(d.db,{send} as unknown as Queue)]));
+  let release!:()=>void,started!:()=>void;
+  const pending=new Promise<void>(resolve=>{release=resolve});
+  const sending=new Promise<void>(resolve=>{started=resolve});
+  const send=vi.fn(async()=>{started();await pending});
+  await measure('outboxConcurrent',async()=>{
+   const first=flushOutbox(d.db,{send} as unknown as Queue);
+   await sending;
+   // The competing dispatcher must finish while the first send is still pending.
+   try{await flushOutbox(d.db,{send} as unknown as Queue)}finally{release();await first}
+  });
   metrics.queueSends=send.mock.calls.length;
-  const baseline=process.env.PROFILE_EXPECT_BASELINE==='1';
-  expect(metrics).toMatchObject(baseline?{
-   journal:{reads:2,writes:0},researchScopes:{reads:4,writes:0},
-   semanticCached:{reads:2,writes:0},semanticWarmClean:{reads:4,writes:0},cachedAiCalls:0,
-   sharedPhoto:{reads:2,writes:0},sharedPhotoR2:1,producer:{reads:13,writes:0},groupReferenceR2:40,queueSends:2
-  }:{
+  expect(metrics).toMatchObject({
    journal:{reads:2,writes:0},researchScopes:{reads:1,writes:0},
    semanticCached:{reads:2,writes:0},semanticWarmClean:{reads:1,writes:0},cachedAiCalls:0,
    sharedPhoto:{reads:1,writes:0},sharedPhotoR2:1,producer:{reads:11,writes:0},
    groupReferenceR2:2,queueSends:1
   });
-  mkdirSync('.cache',{recursive:true});writeFileSync(`.cache/backend-profile-${process.env.PROFILE_LABEL??'current'}.json`,JSON.stringify(metrics,null,2));
-  console.log(JSON.stringify(metrics));
  }finally{d.close()}
 });

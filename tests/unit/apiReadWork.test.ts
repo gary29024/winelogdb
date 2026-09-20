@@ -1,18 +1,20 @@
 // @vitest-environment jsdom
 import { afterEach,expect,it,vi } from 'vitest';
-import { mkdirSync,writeFileSync } from 'node:fs';
 import { apiFetch,bootstrapAccount,clearSession } from '../../src/lib/auth/client';
 afterEach(()=>{clearSession();vi.unstubAllGlobals()});
-it('measures overlapping producer and shared-wine reads',async()=>{
- const fetcher=vi.fn(async()=>{await new Promise(resolve=>setTimeout(resolve,5));return Response.json({id:'wine'})});
+it('coalesces overlapping producer and shared-wine reads',async()=>{
+ let release!:()=>void;
+ let pending:Promise<void>;
+ const fetcher=vi.fn(async()=>{await pending;return Response.json({id:'wine'})});
  vi.stubGlobal('fetch',fetcher);
- const start=performance.now();
  for(const url of ['/api/producers/p','/api/shared/wines/w']){
-  const responses=await Promise.all([apiFetch(url),apiFetch(url),apiFetch(url)]);
+  pending=new Promise<void>(resolve=>{release=resolve});
+  const responsesPending=Promise.all([apiFetch(url),apiFetch(url),apiFetch(url)]);
+  release();
+  const responses=await responsesPending;
   expect(await Promise.all(responses.map(r=>r.json()))).toEqual([{id:'wine'},{id:'wine'},{id:'wine'}]);
  }
- mkdirSync('.cache',{recursive:true});writeFileSync(`.cache/api-read-profile-${process.env.PROFILE_LABEL??'current'}.json`,JSON.stringify({requests:fetcher.mock.calls.length,ms:performance.now()-start},null,2));
- expect(fetcher).toHaveBeenCalledTimes(process.env.PROFILE_EXPECT_BASELINE==='1'?6:2);
+ expect(fetcher).toHaveBeenCalledTimes(2);
 });
 
 it('revalidates settled reads and never reuses a read across a mutation',async()=>{
