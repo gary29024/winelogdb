@@ -16,7 +16,7 @@ export default defineConfig({
   projects:[
     {name:'chromium',testIgnore:'**/iphone-layout.spec.ts',use:{browserName:'chromium'}},
     ...['iPhone 15 Pro','iPhone 15 Pro Max'].map(name=>({
-      name,testMatch:'**/iphone-layout.spec.ts',use:{...devices[name],browserName:'webkit' as const},
+      name,testMatch:['**/iphone-layout.spec.ts','**/lwin-edit.spec.ts'],use:{...devices[name],browserName:'webkit' as const},
     })),
   ],
 });

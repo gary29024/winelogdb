@@ -1,0 +1,24 @@
+.wine-edit-nav{display:flex;flex-wrap:wrap;gap:8px 18px;margin:0 0 16px}
+.wine-edit-nav a{padding-block:8px}
+.lwin-edit-panel{border:1px solid var(--line);border-radius:var(--r-md);padding:16px;margin-bottom:20px;background:var(--paper);overflow-wrap:anywhere;scroll-margin-top:90px}
+.lwin-edit-heading{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px}
+.lwin-edit-heading h2{font-size:1.2rem;margin:0}
+.lwin-edit-status{border:1px solid var(--line);border-radius:var(--r-pill);padding:5px 10px;font-size:.8rem;background:var(--ground)}
+.lwin-edit-status.accepted{color:var(--ink);border-color:var(--ink-6)}
+.lwin-edit-panel p{font-size:.88rem;line-height:1.5;margin:10px 0}
+.lwin-edit-panel summary{cursor:pointer;font-weight:700;padding:12px 0;min-height:44px}
+.lwin-edit-facts,.lwin-edit-comparison{border-top:1px solid var(--line);margin-top:14px}
+.lwin-edit-fact-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.lwin-edit-fact-grid label{min-width:0;font-size:.8rem}
+.lwin-edit-fact-grid input{box-sizing:border-box;width:100%;min-width:0;min-height:44px;padding:10px;border:1px solid var(--line);border-radius:var(--r-sm);background:var(--ground);color:var(--ink);font:inherit;margin-top:4px}
+.lwin-edit-panel small{display:block;margin-top:8px;color:var(--ink-6)}
+.lwin-edit-difference{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;padding:12px 0;border-bottom:1px solid var(--line)}
+.lwin-edit-difference>div{min-width:0;flex:1 1 190px}
+.lwin-edit-difference span{display:block;font-size:.85rem;margin-top:5px}
+.lwin-edit-panel button{min-height:44px;white-space:normal}
+.lwin-edit-save-first{padding:10px;border-left:3px solid var(--ink-5);background:var(--ground)}
+.wine-form-body{display:contents;border:0;padding:0;margin:0;min-width:0}
+#wine-fields,#tasting-fields{scroll-margin-top:90px}
+.wine-form-compact h2{font-size:1.2rem;margin:4px 0}
+@media(max-width:400px){.lwin-edit-panel{padding:12px}.lwin-edit-difference button{width:100%}}
+@media(max-width:350px){.lwin-edit-fact-grid{grid-template-columns:minmax(0,1fr)}}

@@ -4,7 +4,7 @@ import { lazy,Suspense,useEffect,useState,type ReactNode } from 'react';
 import { BrowserRouter,Navigate,Route,Routes,useParams,useSearchParams } from 'react-router-dom';
 import { Layout } from './components/Layout';
 import { hasSession } from './lib/auth/client';
-import type { WineRecord } from './lib/db/schema';
+import type { WineDetail } from './features/wines/api';
 
 const LwinReviewPage=lazy(()=>import('./features/wines/LwinReviewPage').then(module=>({default:module.LwinReviewPage})));
 const LibraryPage=lazy(()=>import('./features/wines/LibraryPage').then(module=>({default:module.LibraryPage})));
@@ -33,7 +33,7 @@ const TastingDetailPage=lazy(()=>import('./features/tastings/TastingDetailPage')
 const TastingSheetPage=lazy(()=>import('./features/tastings/TastingSheetPage').then(module=>({default:module.TastingSheetPage})));
 
 function Edit(){
- const {id}=useParams(),[w,setW]=useState<WineRecord>(),[failed,setFailed]=useState(false);
+ const {id}=useParams(),[w,setW]=useState<WineDetail>(),[failed,setFailed]=useState(false),[revision,setRevision]=useState(0);
  useEffect(()=>{
   if(!id)return;
   let active=true;setFailed(false);
@@ -41,7 +41,7 @@ function Edit(){
   return()=>{active=false};
  },[id]);
  if(failed)return <p role="alert">Could not load wine.</p>;
- return w&&w.id===id?<section><h1>Edit {w.wineName}</h1><WineForm key={id} id={id} initial={w}/></section>:<p>Loading wine…</p>;
+ return w&&w.id===id?<section><h1>Edit {w.wineName}</h1><WineForm key={`${id}:${revision}`} id={id} initial={w} referenceWine={w} onReferenceUpdated={wine=>{setW(wine);setRevision(value=>value+1)}} submitLabel="Save changes"/></section>:<p>Loading wine…</p>;
 }
 function RequireSession({children}:{children:ReactNode}){return hasSession()?children:<Navigate to="/login" replace/>}
 function RouteFallback(){return <p className="route-loading" aria-live="polite">Loading…</p>}
