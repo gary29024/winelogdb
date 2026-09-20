@@ -1,4 +1,6 @@
 import { apiJson } from '../../lib/auth/api';
+import { LwinLinkEditor,type LwinLinkPreview } from './LwinLinkEditor';
+import { summariesChanged } from '../../lib/cache/summaryCaches';
 import { FriendResearchStatus } from '../auth/FriendResearchStatus';
 import { getAccount } from '../../lib/auth/client';
 import { WineSharing } from './WineSharing';
@@ -113,6 +115,7 @@ export function DetailPage(){
 
  async function applyReferenceSuggestion(field:WineDetail['referenceSuggestions'][number]['field'],action:'apply'|'keep'='apply'){if(!wine||referenceBusy)return;setReferenceBusy(field);setReferenceError('');try{await applyWineReferenceSuggestion(id,field,action);await reloadWine()}catch(e){setReferenceError((e as Error).message)}finally{setReferenceBusy('')}}
  async function recheckReference(){if(referenceBusy)return;setReferenceBusy('recheck');setReferenceError('');try{await apiJson(`/api/wines/${id}/reference-review`,'POST',{action:'recheck'});await reloadWine()}catch(e){setReferenceError((e as Error).message)}finally{setReferenceBusy('')}}
+ async function linkReference(preview:LwinLinkPreview){if(referenceBusy)return;setReferenceBusy('link');setReferenceError('');try{await apiJson(`/api/wines/${id}/reference-review`,'POST',{action:'link',lwin7:preview.requestedLwin7,previewToken:preview.previewToken});summariesChanged();await reloadWine()}catch(e){setReferenceError((e as Error).message)}finally{setReferenceBusy('')}}
  async function toggleFavorite(){if(!wine||favoriteBusy)return;const next=!wine.favorite;setFavoriteBusy(true);setWine({...wine,favorite:next});try{await setWineFavorite(id,next)}catch(e){setWine(current=>current?{...current,favorite:!next}:current);setDeepNotice((e as Error).message)}finally{setFavoriteBusy(false)}}
  function toggleDeepField(field:DeepField){setOpenDeepFields(current=>{const next=new Set(current);if(next.has(field))next.delete(field);else next.add(field);writeOpenDeepFields(next);return next})}
  function toggleAllDeepFields(fields:DeepField[]){setOpenDeepFields(current=>{const allOpen=fields.every(field=>current.has(field)),next=new Set(current);for(const field of fields){if(allOpen)next.delete(field);else next.add(field)}writeOpenDeepFields(next);return next})}
@@ -150,6 +153,7 @@ export function DetailPage(){
   <SparklingDetailsCard details={wine.sparklingDetails}/>
   {isChampagne(wine)&&<Link className="champagne-backfill-link" to={`/wines/${wine.id}/edit#champagne-photos`}>Fill Champagne details from photos</Link>}
   <WineDetailsSection wine={wine}/>
+  <section className="detail-section"><LwinLinkEditor key={wine.id} wine={wine} disabled={Boolean(referenceBusy)} onLink={linkReference}/>{referenceError&&<p role="alert" className="detail-photo-error">{referenceError}</p>}</section>
   {(wine.referenceSuggestions??[]).length>0&&<section className="detail-section lwin-suggestion-panel">
    <p className="section-label">LWIN suggested updates</p><div className="lwin-review-toolbar"><button disabled={Boolean(referenceBusy)} onClick={()=>void recheckReference()}>Recheck LWIN</button>{technicalView&&<Link to={`/admin/lwin-review?wine=${id}`}>Review all pending wines</Link>}</div>
    <p className="lwin-suggestion-intro">WineLog found a canonical LWIN match but kept your existing populated fields unchanged. Review each difference before using the LWIN value.</p>
@@ -157,7 +161,6 @@ export function DetailPage(){
     <div><strong>{item.label}</strong><span><small>Current</small>{item.current||'—'}</span><span><small>LWIN</small>{item.suggested}</span></div>
     <button type="button" className="quiet" disabled={Boolean(referenceBusy)} onClick={()=>void applyReferenceSuggestion(item.field)}>{referenceBusy===item.field?'Saving…':'Use LWIN value'}</button><button type="button" className="quiet" disabled={Boolean(referenceBusy)} onClick={()=>void applyReferenceSuggestion(item.field,'keep')}>Keep current</button>
    </article>)}</div>
-   {referenceError&&<p role="alert" className="detail-photo-error">{referenceError}</p>}
   </section>}
   <section className="detail-section experience-panel"><p className="section-label">Your experience</p><FactList rows={experienceRows}/>{wine.tastingNotes&&<blockquote className="detail-experience-notes">{wine.tastingNotes}</blockquote>}{!experienceRows.length&&!wine.tastingNotes&&<p className="detail-experience-empty">No tasting logged for this bottle yet.</p>}</section>
   {structureItems.length>0&&<section className="detail-section structure-detail-section"><p className="section-label">Structure</p><dl className="tasting-structure-summary">{structureItems.map(([label,value])=><div key={label}><dt>{label}</dt><dd>{structureValueLabel[value]??value}</dd></div>)}</dl><p className="structure-section-note">Perceived structure; label ABV appears in Wine details.</p></section>}

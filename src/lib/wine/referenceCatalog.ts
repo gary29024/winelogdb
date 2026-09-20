@@ -2,7 +2,7 @@ export const REFERENCE_SHARDS=256;
 export type ReferenceProvider='lwin'|'elid';
 export type ReferenceManifest={
  provider:ReferenceProvider;version:string;prefix:string;shardCount:number;rows:number;matchableRows?:number;sparseRows?:number;
- source:string;sourceUpdatedAt:string|null;generatedAt:string;redirectsKey?:string|null;producerIndexKey?:string|null;
+ source:string;sourceUpdatedAt:string|null;generatedAt:string;redirectsKey?:string|null;producerIndexKey?:string|null;lwinIdIndexPrefix?:string|null;
 };
 export type ElidReferenceRecord={
  elid:string;baseElid:string;producerCode:string;producerName:string;producerKey:string;
@@ -123,6 +123,17 @@ export async function lwinStrictRowsForProducer<T>(bucket:R2Bucket,producer:stri
  for(const key of keys)for(const shard of index[key]??[])shardIds.add(shard);
  if(!shardIds.size)return fallback();
  const found:T[]=[];for(const shard of shardIds)found.push(...await referenceRowsByShard<T>(bucket,'lwin',shard));return found;
+}
+
+/** Exact-ID lookup. Older imports can still resolve codes for the current producer. */
+export async function lwinRowById<T extends {lwin7:string}>(bucket:R2Bucket,lwin7:string,producer?:string|null):Promise<T|null>{
+ const manifest=await referenceManifest(bucket,'lwin');if(!manifest)return null;
+ if(manifest.lwinIdIndexPrefix){
+  const index=await jsonObject<Record<string,string>>(bucket,`${manifest.lwinIdIndexPrefix}${referenceShardId(lwin7,manifest.shardCount)}.json`);
+  const shard=index?.[lwin7];if(!shard)return null;
+  const rows=await referenceRowsByShard<T>(bucket,'lwin',shard);return rows.find(row=>row.lwin7===lwin7)??null;
+ }
+ const rows=await lwinStrictRowsForProducer<T>(bucket,producer);return rows.find(row=>row.lwin7===lwin7)??null;
 }
 export async function lwinCandidateRowsForProducer<T>(bucket:R2Bucket,producer:string|null|undefined):Promise<T[]>{
  const manifest=await referenceManifest(bucket,'lwin');if(!manifest)return [];

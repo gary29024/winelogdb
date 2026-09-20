@@ -16,6 +16,7 @@ import { normalizeReferenceText } from '../src/lib/wine/referenceCatalog';
 import { appClassification,classificationLabel,referenceSuggestionFields,type ReferenceSuggestion,type ReferenceSuggestionField } from '../src/lib/wine/referenceSuggestions';
 import { ensureWineIdentity } from '../src/lib/wine/identity';
 import { recheckWineReference } from './wineReferenceReview';
+import { linkWineReference,previewWineReference } from './manualWineReference';
 
 type Bindings={IMAGES?:ImagesBinding;DB:D1Database;WINE_IMAGES:R2Bucket;REFERENCE_DATA:R2Bucket;ASSETS:Fetcher;GEMINI_API_KEY?:string;AUTH_SECRET:string;APP_PASSWORD:string;APP_URL:string;MAX_FILE_BYTES?:string;MAX_BATCH_FILES?:string};
 type Variables={userId:string};
@@ -253,8 +254,14 @@ app.put('/api/wines/:id/reference-suggestion',async c=>{
  return c.json({ok:true,referenceSuggestions:remaining});
 });
 
+app.get('/api/wines/:id/reference-preview',async c=>{
+ const result=await previewWineReference(c.env,c.get('userId'),c.req.param('id'),c.req.query('lwin7'));
+ return c.json(result.preview);
+});
+
 app.post('/api/wines/:id/reference-review',async c=>{
- const owner=c.get('userId'),id=c.req.param('id'),payload=await c.req.json().catch(()=>null) as {action?:unknown;lwin7?:unknown;updatedAt?:unknown}|null;
+ const owner=c.get('userId'),id=c.req.param('id'),payload=await c.req.json().catch(()=>null) as {action?:unknown;lwin7?:unknown;updatedAt?:unknown;previewToken?:unknown}|null;
+ if(payload?.action==='link')return c.json(await linkWineReference(c.env,owner,id,payload));
  if(payload?.action==='recheck'){
   if(!await recheckWineReference(c.env.DB,c.env.REFERENCE_DATA,owner,id))return c.json({error:'Wine changed or is unavailable. Refresh and try again.'},409);
   return c.json({ok:true});
