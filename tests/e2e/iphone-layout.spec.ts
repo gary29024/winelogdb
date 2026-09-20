@@ -20,7 +20,7 @@ async function mockAccount(page:Page,role:'owner'|'member'){
   const data=path==='/api/me'?{user:{id:'reader',email:'reader@example.com',display_name:'Reader',role,status:'active'}}
    :path==='/api/producers/p1'?producer
    :path==='/api/wines/layout-wine'?{...wine,tastingStructure:{acidity:'high'},
-    deepSearch:{...wine.deepSearch,model:'layout-test-model',quality:{status:'mixed',score:82,sourceTier:'primary',warnings:[]}}}
+    deepSearch:{...wine.deepSearch,vintageQuality:'A balanced growing season.',producerDetails:'A family domaine in Burgundy.',producerWinemakingPractices:'Careful sorting and gentle pressing.',winemakingTechniques:'Fermented and matured in oak.',terroir:'Limestone soils above the village.',model:'layout-test-model',quality:{status:'mixed',score:82,sourceTier:'primary',warnings:[]}}}
    :path==='/api/shared/wines/layout-wine'?{...wine,structure:null}
    :path==='/api/journal'?{items:[wine],total:1,nextOffset:null}
    :path==='/api/credits'?{available:20,reserved:0,balance:20}
