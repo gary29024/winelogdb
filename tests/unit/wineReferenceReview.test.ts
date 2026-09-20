@@ -64,6 +64,23 @@ describe('LWIN review repair and queue',()=>{
   expect((await queue()).total).toBe(0);
   expect(database.sql.prepare('SELECT producer FROM wines').get()!.producer).toBe('de la Vougeraie');
  });
+ it.each(['apply','keep'] as const)('allows %s when the saved wine-name snapshot differs only by an accent',async action=>{
+  const {database,insert,request,queue}=setup();insert();
+  database.sql.prepare("UPDATE wines SET producer='Forget-Chemin',wine_name='Special Club',region='Champagne',lwin7='2428042',identity_match_status='manual',reference_suggestions_json=?")
+   .run(JSON.stringify([{field:'wineName',label:'Wine name',current:'Spécial Club',suggested:'Special Club Brut'}]));
+  const response=await request('w1/reference-suggestion',{field:'wineName',action},'PUT');
+  expect(response.status).toBe(200);
+  expect(database.sql.prepare('SELECT wine_name,lwin7,identity_match_status,reference_suggestions_json FROM wines').get()).toMatchObject({wine_name:action==='apply'?'Special Club Brut':'Special Club',lwin7:'2428042',identity_match_status:'manual',reference_suggestions_json:null});
+  expect((await queue()).total).toBe(0);
+ });
+ it.each(['apply','keep'] as const)('still rejects %s when the stored wine name meaningfully changed',async action=>{
+  const {database,insert,request}=setup();insert();
+  const suggestions=JSON.stringify([{field:'wineName',label:'Wine name',current:'Spécial Club',suggested:'Special Club Brut'}]);
+  database.sql.prepare("UPDATE wines SET wine_name='Special Club Rosé',reference_suggestions_json=?").run(suggestions);
+  const response=await request('w1/reference-suggestion',{field:'wineName',action},'PUT');
+  expect(response.status).toBe(409);
+  expect(database.sql.prepare('SELECT wine_name,reference_suggestions_json FROM wines').get()).toMatchObject({wine_name:'Special Club Rosé',reference_suggestions_json:suggestions});
+ });
  it('paginates beyond 20, includes suggestion-only wines, and excludes other accounts',async()=>{
   const {database,insert,queue}=setup();for(let i=0;i<45;i++)insert(`w${String(i).padStart(2,'0')}`);insert('private','1059328','another-owner');
   database.sql.exec("UPDATE wines SET identity_match_status='matched' WHERE id='w00'");
