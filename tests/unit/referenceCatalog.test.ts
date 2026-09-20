@@ -1,5 +1,5 @@
 import { describe,expect,it } from 'vitest';
-import { producerLookupKeys,referenceRowsByShard,referenceShardId,type ReferenceManifest } from '../../src/lib/wine/referenceCatalog';
+import { producerHouseQualifier,producerLookupKeys,referenceRowsByShard,referenceShardId,type ReferenceManifest } from '../../src/lib/wine/referenceCatalog';
 
 function bucket(objects:Record<string,unknown>,reads:Record<string,number>={}){
  return {get:async(key:string)=>{reads[key]=(reads[key]??0)+1;if(!(key in objects))return null;return {text:async()=>JSON.stringify(objects[key])}}} as unknown as R2Bucket;
@@ -13,6 +13,10 @@ describe('reference catalogue sharding and cache',()=>{
  it('creates conservative producer lookup aliases without guessing ownership',()=>{
   expect(producerLookupKeys('Champagne Krug')).toEqual(['champagne krug','krug']);
   expect(producerLookupKeys('Ch. Latour')).toEqual(['ch latour','latour']);
+  expect(producerLookupKeys('Cave de Tain')).toEqual(['cave de tain','de tain']);
+  expect(producerLookupKeys('Caves de Tain')).toEqual(['caves de tain','de tain']);
+  expect(producerHouseQualifier('Cave de Tain')).toBe('cave');
+  expect(producerHouseQualifier('Caves de Tain')).toBe('cave');
   expect(producerLookupKeys('Dom Pérignon')).toEqual(['dom perignon']);
  });
  it('caches missing shards so repeated misses do not re-read R2',async()=>{
