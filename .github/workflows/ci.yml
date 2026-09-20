@@ -29,46 +29,74 @@ jobs:
       # build already runs tsc -b; do not repeat typecheck in another job.
       - name: TypeScript and production build
         run: npm run build
-      # Always exercise the real local runtime. Import/path selection cannot
-      # describe the Worker, asset routing and migration boundary reliably.
       - name: Apply local D1 migrations
         run: npm run db:migrate:local
       - name: Worker runtime smoke
         run: node scripts/worker-runtime-smoke.mjs
 
-  regression:
-    name: Regression and browser tests
+  unit:
+    name: Unit and integration tests
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/test-setup
-      # One invocation avoids graph-selection startup and duplicate shard setup.
-      # Fresh SQLite copies keep the full integration suite cheap enough for PRs.
+      # Vitest otherwise uses CPUs minus one: only one worker on a two-core
+      # hosted runner. Keep isolation and use both cores, with bounded memory.
       - name: All unit, component and integration tests
-        run: npm test -- --reporter=default --reporter=json --outputFile=.cache/test-reports/vitest.json
+        run: npm test -- --maxWorkers=2 --reporter=default --reporter=json --outputFile=.cache/test-reports/vitest.json
       - name: Test inventory and timing report
         run: node scripts/test-suite-report.mjs .cache/test-reports/vitest.json > .cache/test-reports/inventory.json
-      - name: Install PR browser
-        if: github.event_name == 'pull_request'
-        run: npx playwright install --with-deps chromium
-      - name: Install checkpoint browsers
-        if: github.event_name != 'pull_request'
-        run: npx playwright install --with-deps chromium webkit
-      - name: Chromium flows on every PR
-        if: github.event_name == 'pull_request'
-        run: npm run test:e2e
-      - name: All browser flows and iPhone layouts at checkpoints
-        if: github.event_name != 'pull_request'
-        run: npm run test:e2e:full
-      - name: Upload test reports
+      - name: Upload unit test reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: test-reports
+          name: unit-test-reports
+          path: .cache/test-reports/
+          retention-days: 7
+          include-hidden-files: true
+
+  browser:
+    name: Browser (${{ matrix.browser }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        # PRs keep Chromium; main/manual/weekly runs also keep both iPhone
+        # projects. WebKit installation and execution cannot delay Chromium.
+        browser: ${{ fromJSON(github.event_name == 'pull_request' && '["chromium"]' || '["chromium","webkit"]') }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/test-setup
+      - name: Install browser and operating-system libraries
+        run: npx playwright install --with-deps ${{ matrix.browser }}
+      - name: Chromium flows
+        if: matrix.browser == 'chromium'
+        run: npm run test:e2e
+      - name: Both iPhone layouts
+        if: matrix.browser == 'webkit'
+        run: npm run test:e2e:full -- --project="iPhone*"
+      - name: Upload browser reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-reports-${{ matrix.browser }}
           path: |
-            .cache/test-reports/
             test-results/
             playwright-report/
           retention-days: 7
-          include-hidden-files: true
+
+  regression:
+    # Preserve the required check name while work runs independently above.
+    name: Regression and browser tests
+    if: always()
+    needs: [unit, browser]
+    runs-on: ubuntu-latest
+    timeout-minutes: 1
+    steps:
+      - name: Require every regression job to pass
+        env:
+          UNIT_RESULT: ${{ needs.unit.result }}
+          BROWSER_RESULT: ${{ needs.browser.result }}
+        run: test "$UNIT_RESULT" = success && test "$BROWSER_RESULT" = success
