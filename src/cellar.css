@@ -1,5 +1,5 @@
 /* Bottles you hold. Tokens only, one selector per line, per the house rules. */
-.cellar-page .journal-hero p:last-child{max-width:52ch}
+
 
 .cellar-filters .cellar-search{width:100%;padding:var(--s3) var(--s4);border:1px solid var(--line);border-radius:var(--r-md);background:var(--paper);color:var(--ink)}
 .cellar-viewbar{align-items:center}
