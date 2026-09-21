@@ -16,7 +16,7 @@ export function normalizeReferenceText(value:string|null|undefined){
  return (value??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase()
    .replace(/[’'`]/g,'').replace(/&/g,' and ').replace(/[^\p{L}\p{N}]+/gu,' ').trim();
 }
-const GENERIC_PRODUCER_PREFIX=/^(?:domaine|domaines|chateau|ch|champagne|maison|cave|caves|weingut|bodega|bodegas|tenuta|cantina|azienda agricola)\s+/;
+const GENERIC_PRODUCER_PREFIX=/^(?:domaine|domaines|chateau|ch|champagne|maison|cave|caves|weingut|bodega|bodegas|tenuta|cantina|azienda agricola|marques)\s+/;
 export function producerLookupKeys(value:string|null|undefined){
  const base=normalizeReferenceText(value);if(!base)return [];
  const keys=[base];let stripped=base;
