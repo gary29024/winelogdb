@@ -18,12 +18,31 @@ export function compatibleLwinProduct(row:LwinReferenceProduct,input:LwinClues){
  return true;
 }
 
-/** Prefix-stripped names retrieve candidates; they are not producer identity. */
+/** Only the catalogue's explicit parenthetical suffix can supply an estate alias. */
+export function parentheticalProducerAlias(producer:string|null|undefined,row:LwinReferenceProduct){
+ const identity=lwinReferenceIdentity(row),name=identity.producerName??'';
+ const base=name.match(/^(.+?)\s+\([^()]+\)$/)?.[1];if(!base)return false;
+ const qualifier=producerHouseQualifier(producer),other=producerHouseQualifier(name);
+ if(qualifier&&other&&qualifier!==other)return false;
+ const bases=producerLookupKeys(base).filter(value=>!producerHouseQualifier(value)&&value.split(' ').length>=2);
+ return producerLookupKeys(producer).some(value=>bases.includes(value));
+}
+
+/** Retrieval equivalence only: an unqualified name cannot choose a house. */
+export function unqualifiedLwinHouse(producer:string|null|undefined,row:LwinReferenceProduct){
+ if(producerHouseQualifier(producer))return false;
+ const keys=producerLookupKeys(producer);
+ return producerLookupKeys(lwinReferenceIdentity(row).producerName).some(value=>keys.includes(value));
+}
+
 export function sameLwinProducer(producer:string|null|undefined,row:LwinReferenceProduct){
  const identity=lwinReferenceIdentity(row),input=key(producer),candidate=key(identity.producerName);
  const qualifier=producerHouseQualifier(producer),other=producerHouseQualifier(identity.producerName);
  if(qualifier&&other&&qualifier!==other)return false;
  if(input===candidate)return true;
+ // A catalogue-authored parenthetical estate is a possible short-name alias.
+ // The caller must still require the wine identity and a unique compatible row.
+ if(parentheticalProducerAlias(producer,row))return true;
  // Ch./Chateau are spelling aliases of the same explicit house type.
  if(qualifier&&qualifier===other)return producerLookupKeys(producer).some(a=>producerLookupKeys(identity.producerName).includes(a));
  return !qualifier&&input===identity.structuredProducerKey;
