@@ -4,12 +4,12 @@ import { loadResearchCache,splitDeepSearchResult,upsertResearchCache } from '../
 import { publishResearch } from '../../src/lib/research/shared';
 import { wineTargets } from './credits';
 import { publishProducerResearch } from '../../src/lib/research/sharedProducer';
-import { referenceMatchForProduct } from '../../src/lib/wine/referenceIdentity';
-import { ReferenceReadScope,referenceManifest } from '../../src/lib/wine/referenceCatalog';
+import { referenceMatchForProduct,type ReferenceMatch } from '../../src/lib/wine/referenceIdentity';
+import { ReferenceReadScope,referenceManifest,LwinProducerLookupTooBroadError } from '../../src/lib/wine/referenceCatalog';
 import { aiRepair,repairCandidates,LwinAiTransientError,LWIN_AI_LEASE_SECONDS } from './lwinRepair';
 import type { GeminiTransportBindings } from '../geminiTransport';
 import type { AiUsageEnv } from '../../src/lib/usage/aiUsage';
-import { lwinEnrichmentStatement,lwinInput,resolveStoredLwin,type StoredLwinWine } from '../lwinEnrichment';
+import { lwinEnrichmentStatement,lwinInput,lwinUpdate,resolveStoredLwin,type StoredLwinWine } from '../lwinEnrichment';
 import { readLwinReference } from '../../src/lib/wine/lwinMetadata';
 import { pendingReferenceReviewSql } from '../wineReferenceReview';
 import { flushOutbox } from './jobs';
@@ -160,15 +160,26 @@ async function lwinBatch(env:RolloutEnv,kind:'lwin'|'lwin_validate'|'lwin_ai',le
   const renewed=String(Math.floor(Date.now()/1000)+leaseSeconds(kind))+':'+crypto.randomUUID();
   const renewal=await env.DB.prepare('UPDATE rollout_state SET value=? WHERE name=? AND value=?').bind(renewed,leaseKey(kind),lease.value).run();
   if(!renewal.meta.changes)throw new Error('LWIN lease expired; resume to retry.');lease.value=renewed;
-  let result=await resolveStoredLwin(scope,row);
+  let result:ReferenceMatch|null=null,lookupTooBroad=false;
   let method:'deterministic'|'ai'|'manual'=readLwinReference(row.lwin_reference_json)?.method??(row.identity_match_status==='manual'?'manual':'deterministic');
-  if(kind==='lwin_ai'&&result?.identityMatchStatus!=='matched'&&result?.identityMatchStatus!=='ambiguous'){
-   const input=lwinInput(row),repairWine={...row,id:row.id,owner_id:row.owner_id,producer:input.producer,wine_name:input.wineName,country:input.country,region:input.region,wine_style:input.wineStyle,release_designation:input.releaseDesignation,vintage:input.vintage,appellation:input.appellation,classification:input.classification,colour:input.colour,product_type:input.productType,product_subtype:input.productSubtype};
-   const candidates=await repairCandidates(env.REFERENCE_DATA,repairWine),choice=await aiRepair(env,repairWine,candidates);
-   if(choice){const selected=candidates.find(item=>item.row.lwin7===choice.lwin7)!.row;result=await referenceMatchForProduct(scope,selected,input);result.identityMatchConfidence=choice.confidence;method=choice.method}
+  try{
+   result=await resolveStoredLwin(scope,row);
+   if(kind==='lwin_ai'&&result?.identityMatchStatus!=='matched'&&result?.identityMatchStatus!=='ambiguous'){
+    const input=lwinInput(row),repairWine={...row,id:row.id,owner_id:row.owner_id,producer:input.producer,wine_name:input.wineName,country:input.country,region:input.region,wine_style:input.wineStyle,release_designation:input.releaseDesignation,vintage:input.vintage,appellation:input.appellation,classification:input.classification,colour:input.colour,product_type:input.productType,product_subtype:input.productSubtype};
+    const candidates=await repairCandidates(env.REFERENCE_DATA,repairWine),choice=await aiRepair(env,repairWine,candidates);
+    if(choice){const selected=candidates.find(item=>item.row.lwin7===choice.lwin7)!.row;result=await referenceMatchForProduct(scope,selected,input);result.identityMatchConfidence=choice.confidence;method=choice.method}
+   }
+   }catch(error){
+   // A bounded lookup is a per-wine review outcome, not a catalogue outage.
+   // Never retry AI with truncated candidates or swallow missing-shard errors.
+   if(!(error instanceof LwinProducerLookupTooBroadError))throw error;
+   lookupTooBroad=true;result=null;
+   console.warn(JSON.stringify({event:'lwin_lookup_needs_review',wineId:row.id,rollout:kind,reason:'producer_lookup_too_broad'}));
   }
-  const statement=result?lwinEnrichmentStatement(env.DB,row,result,method):null;
   const status=row.lwin7&&result?.lwin7!==row.lwin7?'conflict':result?.identityMatchStatus??'unmatched';
+  const statement=lookupTooBroad
+   ?row.identity_match_status==='manual'?null:lwinUpdate(env.DB,row,{identity_match_status:status,identity_match_confidence:null,identity_checked_at:stamp()})
+   :result?lwinEnrichmentStatement(env.DB,row,result,method):null;
   const delta:Record<string,number>={processed:1};
   if(kind==='lwin_validate')delta[status==='matched'?'verified':'review']=1;
   else if(kind==='lwin_ai'){if(status==='matched'){delta.matched=1;delta[method==='ai'?'ai':'deterministic']=1}else delta.review=1}

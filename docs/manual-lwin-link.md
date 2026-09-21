@@ -26,6 +26,8 @@ Region comparisons follow the app's existing geographic hierarchy. A saved `Coon
 
 ## Validation
 
+Background LWIN refresh, validation, and AI runs treat the 16-shard producer lookup limit as a per-wine review outcome. They preserve stored identifiers and personal fields, count an unresolved wine as unmatched (or review during AI/validation), flag unverified automatic stored identities as conflicts, and advance the checkpoint transactionally. Manual identities remain unchanged. A `lwin_lookup_needs_review` warning records the wine ID and `producer_lookup_too_broad` reason. Missing catalogue shards and other unexpected errors still pause the run. After deploying this recovery fix, resume a paused run from its existing checkpoint; restarting the entire refresh is unnecessary.
+
 SQLite/D1 tests cover read-only previews, explicit replacement, preservation of personal fields, stale previews, account isolation, invalid/missing/deleted codes, combined-code redirects, vintage restrictions, and indexed lookup across producers. Mobile browser tests cover preview invalidation after typing, explicit confirmation, queue removal, and light/dark layouts. An importer dry run verifies the generated ID index and manifest pointer.
 
 ## Accepted names reverting
