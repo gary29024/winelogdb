@@ -1,6 +1,15 @@
 import { PLACES,type PlaceNode,type PlaceTier } from './hierarchy';
 
-const key=(value:string)=>value.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[’'`]/g,'').replace(/[^a-z0-9]+/g,' ').trim();
+/**
+ * A place name reduced to the form the indexes are keyed by: accents folded,
+ * apostrophes dropped and every other separator flattened to a single space.
+ *
+ * Exported because it is the one definition of "the same name". A caller that
+ * keys its own table off a place name - the Burgundy Atlas mapping does - has
+ * to fold names exactly the way this file's index folded them, and a second
+ * copy of the expression is a copy that can drift.
+ */
+export const placeKey=(value:string)=>value.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[’'`]/g,'').replace(/[^a-z0-9]+/g,' ').trim();
 
 const byId=new Map(PLACES.map(place=>[place.id,place]));
 
@@ -24,7 +33,7 @@ export const placeClassification=(placeId:string|null|undefined)=>
 const byName=(()=>{
   const index=new Map<string,PlaceNode[]>();
   const add=(name:string,place:PlaceNode)=>{
-    const normalized=key(name);
+    const normalized=placeKey(name);
     if(!normalized)return;
     const bucket=index.get(normalized);
     if(bucket){if(!bucket.includes(place))bucket.push(place)}
@@ -73,7 +82,7 @@ const DENOMINATION=/ (?:docg|doca|doc|dop|do|igt|igp|aoc|aop|ava|dac|qba)$/;
  */
 const LABEL_DENOMINATION=/ (igt|igp)$/;
 export function labelDenomination(value:string|null|undefined):string|null{
-  const match=value?key(value).match(LABEL_DENOMINATION):null;
+  const match=value?placeKey(value).match(LABEL_DENOMINATION):null;
   return match?match[1].toUpperCase():null;
 }
 /** The same value with a marker we have already read stripped off. */
@@ -96,7 +105,7 @@ const AGEING=new RegExp(` (?:${AGEING_TERMS.join('|')})$`);
 /** The ageing tier a place value names, in the casing the label would use. */
 export function ageingTerm(value:string|null|undefined):string|null{
   if(!value)return null;
-  const match=AGEING.exec(key(value));
+  const match=AGEING.exec(placeKey(value));
   if(!match)return null;
   return match[0].trim().replace(/\b[a-z]/g,letter=>letter.toUpperCase());
 }
@@ -117,7 +126,7 @@ export function ageingTerm(value:string|null|undefined):string|null{
  */
 export function lookupPlace(value:string|null|undefined):PlaceNode[]{
   if(!value)return [];
-  const normalized=key(value);
+  const normalized=placeKey(value);
   const exact=byName.get(normalized);
   if(exact)return exact;
   for(let trimmedValue=normalized;DENOMINATION.test(trimmedValue)||AGEING.test(trimmedValue);){
@@ -165,7 +174,7 @@ const PREMIER_CRU=/\b(?:premier|1er|1ere)\s+cru\b/;
 export function classifyFromText(...values:readonly (string|null|undefined)[]):WineClassification|null{
   for(const value of values){
     if(!value)continue;
-    const normalized=key(value);
+    const normalized=placeKey(value);
     if(byName.has(normalized))continue;
     if(PREMIER_CRU.test(normalized))return 'premier_cru';
     if(GRAND_CRU.test(normalized))return 'grand_cru';
@@ -314,7 +323,7 @@ function villageIfCertain(classification:WineClassification|undefined,value:stri
 }
 
 function namesOnlyThePlace(value:string){
-  let normalized=key(value);
+  let normalized=placeKey(value);
   for(;;){
     if(byName.has(normalized))return true;
     if(!DENOMINATION.test(normalized)&&!AGEING.test(normalized))return false;
@@ -340,12 +349,12 @@ function pickAnchor(matches:readonly PlaceNode[]):PlaceNode|null{
  */
 export function placesCompatible(left:string|null|undefined,right:string|null|undefined){
   if(!left||!right)return true;
-  if(key(left)===key(right))return true;
+  if(placeKey(left)===placeKey(right))return true;
   // Exact nodes only. The premier-cru reading is right for deciding which field
   // a place belongs in, but too loose for identity: cuvee matching deliberately
   // keeps "Corton Grand Cru" and "Corton" apart on a weak signature match, and
   // stripping at the marker would quietly merge them.
-  const leftMatches=byName.get(key(left))??[],rightMatches=byName.get(key(right))??[];
+  const leftMatches=byName.get(placeKey(left))??[],rightMatches=byName.get(placeKey(right))??[];
   if(!leftMatches.length||!rightMatches.length)return false;
   return leftMatches.some(a=>rightMatches.some(b=>a.id===b.id||isAncestor(a,b)||isAncestor(b,a)));
 }
