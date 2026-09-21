@@ -7,12 +7,38 @@ describe('Burgundy Atlas destinations',()=>{
   // Curation, not the raw definition list: `definitions` still carries the
   // Burgundy checklists `curatedLaunch` removed, so asserting against it would
   // vouch for links on pages the app never serves.
-  it('links every row of every collection it claims, and claims only live ones',()=>{
+  //
+  // Named rather than counted, so a row that stops linking has to be admitted
+  // here rather than absorbed into a tally. A producer collection earns its
+  // place by the matcher withholding these, not by every row resolving.
+  const unlinkedRows:Record<string,string[]>={'domaine-romanee-conti':['Cuvée Duvault-Blochet']};
+
+  it('links every row of every collection it claims, apart from named exceptions',()=>{
     for(const id of atlasCollections){
       const collection=getAchievementDefinition(id);
       expect(collection,`${id} is not a curated collection`).not.toBeNull();
-      expect(collection!.items.filter(item=>!burgundyAtlasPlace(item.label)).map(item=>item.label)).toEqual([]);
+      expect(collection!.items.filter(item=>!burgundyAtlasPlace(item.label)).map(item=>item.label),id)
+        .toEqual(unlinkedRows[id]??[]);
     }
+  });
+
+  it('sends a producer row to the appellation, not to a parcel or the estate',()=>{
+    const drc=getAchievementDefinition('domaine-romanee-conti')!;
+    expect(drc.items.map(item=>burgundyAtlasPlace(item.label)?.placeId??null)).toEqual([
+      'france/burgundy/cote-de-nuits/romanee-conti','france/burgundy/cote-de-nuits/la-tache',
+      'france/burgundy/cote-de-nuits/richebourg','france/burgundy/cote-de-nuits/romanee-saint-vivant',
+      'france/burgundy/cote-de-nuits/grands-echezeaux','france/burgundy/cote-de-nuits/echezeaux',
+      'france/burgundy/cote-de-beaune/montrachet','france/burgundy/cote-de-beaune/corton',
+      'france/burgundy/cote-de-beaune/corton-charlemagne',null
+    ]);
+    // The Domaine owns Romanée-Conti outright and farms a slice of Échezeaux.
+    // Either way the row resolves to the appellation every grower shares, so
+    // the estate's own checklist and the 33-cru one agree on the destination.
+    const explorer=getAchievementDefinition('burgundy-33-grand-crus')!;
+    for(const label of ['Romanée-Conti','Échezeaux','Montrachet'])
+      expect(burgundyAtlasPlace(label)?.url,label)
+        .toBe(burgundyAtlasPlace(explorer.items.find(item=>item.label===label)!.label)?.url);
+    expect(drc.items.some(item=>/domaine|drc/i.test(item.label))).toBe(false);
   });
 
   it('covers every appellation in the existing 33 Grand Cru collection with a distinct canonical link',()=>{

@@ -1,10 +1,13 @@
 # Burgundy Atlas links
 
-Wine details now offer **Explore on Burgundy Atlas** below the identity pills when the recorded appellation matches a mapped Burgundy Grand Cru. The same link appears as **Burgundy Atlas** on every row of one curated collection, including untasted rows:
+Wine details now offer **Explore on Burgundy Atlas** below the identity pills when the recorded appellation matches a mapped Burgundy Grand Cru. The same link appears as **Burgundy Atlas** on the rows of two curated collections, including untasted rows:
 
-- Burgundy Grand Cru Explorer (33)
+- Burgundy Grand Cru Explorer - all 33 rows link
+- Domaine de la Romanée-Conti - 9 of 10 rows link
 
 The three narrower Burgundy checklists - Côte de Nuits Grand Crus, Côte de Beaune Grand Crus and The Nine Gevrey Grand Crus - are in `curatedLaunch.ts`'s `removed` set and are not served. The small membership list lives in `atlasCollections.ts`; `curatedLaunch.ts` validates it and refuses to boot on an id curation has dropped. The detail page imports only the membership list, avoiding a download of the complete collection catalogue.
+
+The Domaine checklist is a producer's range rather than a list of appellations, so it is the first collection where a row deliberately carries no link: `Cuvée Duvault-Blochet` is a cuvée name, not an appellation, and the matcher withholds rather than guess at the Vosne-Romanée Premier Cru behind it. That withholding is what lets a producer collection join at all. Rows that do link point at the appellation, never at the Domaine's parcel inside it - a DRC Échezeaux and anyone else's reach the same Échezeaux page - because a parcel is not what Atlas maps here.
 
 Owner and shared wine pages use the same component. Links open in a new tab, leaving the tasting and its navigation state available. Existing links to tasted vintages remain separate.
 
@@ -28,11 +31,11 @@ The mapping is shared static frontend data. There are no migrations, database re
 
 ## Extending coverage
 
-Premier Cru climats, village fallbacks, producer ranges and internal vineyard pages are follow-up work. Unmapped places show no link in this release. A new collection must be curated - that is, absent from `removed` - before `atlasCollections` may name it, and every one of its rows must resolve. A new destination must be selected from Atlas's published records, checked for name, classification and geographic scope, and keyed to WineLog's canonical place identity. Do not generate Atlas IDs or substitute a nearby vineyard. Update `verifiedAt` only after checking the complete mapping again.
+Premier Cru climats, village fallbacks, producer ranges and internal vineyard pages are follow-up work. Unmapped places show no link in this release. A new collection must be curated - that is, absent from `removed` - before `atlasCollections` may name it. Its rows need not all resolve, but every row that does not must be named in the `unlinkedRows` exception list in `tests/unit/burgundyAtlas.test.ts`, so a row that quietly stops linking fails rather than disappears into a count. A new destination must be selected from Atlas's published records, checked for name, classification and geographic scope, and keyed to WineLog's canonical place identity. Do not generate Atlas IDs or substitute a nearby vineyard. Update `verifiedAt` only after checking the complete mapping again.
 
 ## Validation
 
-- Focused Vitest checks: matching, complete 33-cru coverage, every claimed collection live and fully linked, name collisions, geography conflicts and wine-detail regressions.
+- Focused Vitest checks: matching, complete 33-cru coverage, every claimed collection live and linked bar named exceptions, per-row destinations for the Domaine checklist, name collisions, geography conflicts and wine-detail regressions.
 - Chromium: owner/shared details, all 33 checklist links, preserved tasting links, no background Atlas requests, new-tab behavior and unsupported Premier Cru suppression.
 - Layouts checked at 320, 390 and 1280 pixels; screenshots reviewed for overlap and clipping.
 - TypeScript, production build and lint.

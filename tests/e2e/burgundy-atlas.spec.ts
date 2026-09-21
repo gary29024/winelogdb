@@ -9,11 +9,18 @@ const collection={definition,completed:1,possible:0,pending:32,total:33,percent:
     tastedWineIds:item.label==='Chambertin'?['layout-wine']:[],tastedVintages:item.label==='Chambertin'?[2020]:[],
     tastedVintageLinks:item.label==='Chambertin'?[{vintage:2020,wineId:'layout-wine'}]:[]}))};
 
+// A producer's range, where one row is a cuvée name rather than an appellation
+// and so has no Atlas destination at all.
+const drcDefinition=getAchievementDefinition('domaine-romanee-conti')!;
+const drcCollection={definition:drcDefinition,completed:0,possible:0,pending:drcDefinition.items.length,
+  total:drcDefinition.items.length,percent:0,complete:false,matchMode:'exact',supportsRelaxedMatching:false,
+  items:drcDefinition.items.map(item=>({...item,status:'pending',tastedWineIds:[],tastedVintages:[],tastedVintageLinks:[]}))};
+
 async function mockApi(page:Page,overrides:Record<string,unknown>={}){
   await page.route('**/api/**',async route=>{
     const path=new URL(route.request().url()).pathname;
     const data=path==='/api/me'?{user:{id:'reader',email:'reader@example.com',display_name:'Reader',role:'member',status:'active'}}
-      :path==='/api/achievements'?[collection]
+      :path==='/api/achievements'?[collection,drcCollection]
       :path==='/api/wines/layout-wine'||path==='/api/shared/wines/layout-wine'?{...wine,
         wineName:'Chambertin Grand Cru',appellation:'Chambertin',classification:'grand_cru',
         wineStyle:'red',colour:'Red',grapes:['Pinot Noir'],grapeBlend:[],deepSearch:null,
@@ -61,6 +68,24 @@ test('Grand Cru checklist links both tasted and pending rows without replacing t
     await page.setViewportSize({width,height:900});
     expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
     await page.screenshot({path:testInfo.outputPath(`atlas-collection-${width}.png`)});
+  }
+});
+
+test('the Domaine checklist links its appellations and leaves the cuvée row alone',async({page})=>{
+  await mockApi(page);await page.goto('/achievements/domaine-romanee-conti');
+  await expect(page.getByRole('heading',{name:'Domaine de la Romanée-Conti',exact:true})).toBeVisible();
+  // Nine of ten: the tenth row is the one the matcher is right to refuse.
+  await expect(page.locator('.burgundy-atlas-link')).toHaveCount(9);
+  const cuvee=page.locator('.achievement-check-row').filter({has:page.getByText('Cuvée Duvault-Blochet',{exact:true})});
+  await expect(cuvee).toHaveCount(1);
+  await expect(cuvee.locator('.burgundy-atlas-link')).toHaveCount(0);
+  // The estate's own row points at the appellation every grower shares, not at
+  // a page about the Domaine.
+  const conti=page.locator('.achievement-check-row').filter({has:page.getByText('Romanée-Conti',{exact:true})});
+  await expect(conti.locator('.burgundy-atlas-link')).toHaveAttribute('href',/ba_designation_ps4pmljcohuy5bihimkoykpaou/);
+  for(const width of [320,390,1280]){
+    await page.setViewportSize({width,height:900});
+    expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
   }
 });
 
