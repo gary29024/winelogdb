@@ -126,6 +126,9 @@ export async function lwinProducerIndex(bucket:ReferenceSource):Promise<LwinProd
  const manifest=await referenceManifest(bucket,'lwin');if(!manifest?.producerIndexKey)return {};
  return await jsonObject<LwinProducerIndex>(bucket,manifest.producerIndexKey)??{};
 }
+export class LwinProducerLookupTooBroadError extends Error {
+ constructor(){super('LWIN producer lookup is too broad; refine the producer name or link a code before retrying.');this.name='LwinProducerLookupTooBroadError'}
+}
 function producerShards(index:LwinProducerIndex,producer:string|null|undefined,includeTokens=false){
  const keys=producerLookupKeys(producer),shards=new Set<string>();
  for(const key of keys){
@@ -138,7 +141,7 @@ function producerShards(index:LwinProducerIndex,producer:string|null|undefined,i
  const bases=keys.filter(key=>!producerHouseQualifier(key)&&key.split(' ').length>=2);
  for(const [key,ids] of Object.entries(index))if(!key.startsWith('t:')&&bases.some(base=>key.startsWith(`${base} `)))for(const shard of ids)shards.add(shard);
  // Never truncate candidates: that could turn an ambiguous wine into a match.
- if(shards.size>16)throw new Error('LWIN producer lookup is too broad; refine the producer name or link a code before retrying.');
+ if(shards.size>16)throw new LwinProducerLookupTooBroadError();
  return shards;
 }
 export async function lwinStrictRowsForProducer<T>(bucket:ReferenceSource,producer:string|null|undefined):Promise<T[]>{
