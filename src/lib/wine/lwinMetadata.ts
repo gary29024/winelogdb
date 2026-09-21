@@ -5,6 +5,7 @@ import { referenceAppRegion,regionWithin } from './referenceGeography';
 
 const text=z.string().nullable();
 export const lwinReferenceSchema=z.object({
+ identityVersion:z.literal(2).optional(),
  source:z.literal('lwin'),version:z.string(),lwin7:z.string().regex(/^\d{7}$/),
  displayName:text.optional(),producerTitle:text.optional(),
  producer:text,wineName:text,country:text,region:text,subRegion:text,site:text,parcel:text,

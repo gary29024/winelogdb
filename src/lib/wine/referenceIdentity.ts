@@ -227,7 +227,7 @@ export async function resolveWineReference(bucket:ReferenceSource,wine:Reference
 export async function referenceMatchForProduct(bucket:ReferenceSource,product:LwinReferenceProduct,wine:ReferenceResolvable,options:{includeElid?:boolean}={}):Promise<ReferenceMatch>{
  const elid=options.includeElid===false?null:await registeredElid(bucket,product,wine),place=canonicalReferencePlace(product.country,product.region),identity=lwinReferenceIdentity(product);
  const manifest=await referenceManifest(bucket,'lwin');
- const lwinReference:LwinReference={source:'lwin',version:manifest?.version??product.importedAt,lwin7:product.lwin7,displayName:product.displayName,producerTitle:product.producerTitle,producer:identity.producerName,wineName:identity.wineName,
+ const lwinReference:LwinReference={identityVersion:2,source:'lwin',version:manifest?.version??product.importedAt,lwin7:product.lwin7,displayName:product.displayName,producerTitle:product.producerTitle,producer:identity.producerName,wineName:identity.wineName,
   country:place.country,region:place.region,subRegion:product.subRegion,site:product.site,parcel:product.parcel,designation:product.designation,classification:product.classification,
   colour:product.colour,productType:product.productType,productSubtype:product.productSubtype,vintageConfig:product.vintageConfig,firstVintage:product.firstVintage,finalVintage:product.finalVintage,sourceUpdatedAt:product.sourceUpdatedAt,method:'deterministic',confidence:1,filled:{},conflicts:[],input:{producer:wine.producer??null,wineName:wine.wineName??null}};
  return {lwinReference,referenceProductKey:product.productKey,lwin7:product.lwin7,lwin11:lwin11For(product,wine),elid,identityMatchStatus:'matched',identityMatchConfidence:1,identityMatchCandidates:[],

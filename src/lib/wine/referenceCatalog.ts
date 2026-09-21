@@ -44,7 +44,10 @@ export function lwinReferenceIdentity(row:LwinReferenceIdentitySource){
  const structuredProducerName=row.producerName?.trim()||null,title=row.producerTitle?.trim();
  // DISPLAY_NAME may omit PRODUCER_TITLE even when the structured export has it.
  // Preserve an already-qualified display identity, and never duplicate its title.
- const baseProducer=displayProducer||structuredProducerName,baseKey=normalizeReferenceText(baseProducer),titleKey=normalizeReferenceText(title);
+ // A display prefix can be the wine/brand (Timeless), not its producer
+ // (Silver Oak). Only borrow a display spelling/title for the same producer.
+ const sameProducer=structuredProducerName&&producerLookupKeys(displayProducer).some(key=>producerLookupKeys(structuredProducerName).includes(key));
+ const baseProducer=(sameProducer?displayProducer:null)||structuredProducerName||displayProducer,baseKey=normalizeReferenceText(baseProducer),titleKey=normalizeReferenceText(title);
  const producerName=baseProducer&&titleKey&&baseKey!==titleKey&&!baseKey.startsWith(`${titleKey} `)&&!producerHouseQualifier(baseProducer)?`${title} ${baseProducer}`:baseProducer;
  const wineName=row.wineName?.trim()||displayWine||null;
  return {
@@ -161,13 +164,28 @@ export async function lwinStrictRowsForProducer<T>(bucket:ReferenceSource,produc
  const found:T[]=[];for(const shard of shardIds)found.push(...await referenceRowsByShard<T>(bucket,'lwin',shard,true));return found;
 }
 
-/** Exact-ID lookup. Older imports can still resolve codes for the current producer. */
-export async function lwinRowById<T extends {lwin7:string}>(bucket:ReferenceSource,lwin7:string,producer?:string|null):Promise<T|null>{
+/** Exact-ID lookup. Explicit manual previews can search legacy imports globally. */
+export async function lwinRowById<T extends {lwin7:string}>(bucket:ReferenceSource,lwin7:string,producer?:string|null,options:{manualPreview?:boolean}={}):Promise<T|null>{
  const manifest=await referenceManifest(bucket,'lwin');if(!manifest)return null;
  if(manifest.lwinIdIndexPrefix){
   const index=await jsonObject<Record<string,string>>(bucket,`${manifest.lwinIdIndexPrefix}${referenceShardId(lwin7,manifest.shardCount)}.json`);
   const shard=index?.[lwin7];if(!shard)return null;
   const rows=await referenceRowsByShard<T>(bucket,'lwin',shard);return rows.find(row=>row.lwin7===lwin7)??null;
+ }
+ if(options.manualPreview){
+  try{
+   const rows=await lwinStrictRowsForProducer<T>(bucket,producer),found=rows.find(row=>row.lwin7===lwin7);
+   if(found)return found;
+  }catch(error){if(!(error instanceof LwinProducerLookupTooBroadError))throw error}
+  // Explicit code previews must not depend on the saved producer. Legacy
+  // imports lack an ID index; read one shard at a time, bounded to 256, and
+  // stop on the exact ID. Automatic matching never takes this fallback.
+  if(!Number.isInteger(manifest.shardCount)||manifest.shardCount<1||manifest.shardCount>REFERENCE_SHARDS)throw new Error('Invalid LWIN catalogue shard count');
+  for(let i=0;i<manifest.shardCount;i++){
+   const rows=await referenceRowsByShard<T>(bucket,'lwin',String(i).padStart(3,'0'));
+   const found=rows.find(row=>row.lwin7===lwin7);if(found)return found;
+  }
+  return null;
  }
  const rows=await lwinStrictRowsForProducer<T>(bucket,producer);return rows.find(row=>row.lwin7===lwin7)??null;
 }

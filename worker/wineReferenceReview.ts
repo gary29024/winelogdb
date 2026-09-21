@@ -11,8 +11,8 @@ export const pendingReferenceReviewSql="(identity_match_status='conflict' OR coa
 export async function recheckWineReference(db:D1Database,bucket:R2Bucket,owner:string,id:string,refreshSuggestions=true){
  const row=await db.prepare('SELECT * FROM wines WHERE owner_id=? AND id=?').bind(owner,id).first<Record<string,unknown>>();
  if(!row)return false;
- if(!row.lwin7&&row.identity_match_status!=='manual'){
-  const stored=row as StoredLwinWine,match=await resolveStoredLwin(bucket,stored),statement=match?lwinEnrichmentStatement(db,stored,match):null;
+ if((!row.lwin7&&row.identity_match_status!=='manual')||(row.lwin7&&row.identity_match_status==='manual')){
+  const stored=row as StoredLwinWine,match=await resolveStoredLwin(bucket,stored,{manualPreview:row.identity_match_status==='manual'}),statement=match?lwinEnrichmentStatement(db,stored,match):null;
   if(statement)return Boolean((await statement.run()).meta.changes);
   return true;
  }
