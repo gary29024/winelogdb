@@ -36,8 +36,8 @@ export async function previewWineReference(env:Env,owner:string,id:string,code:u
  const manifest=await referenceManifest(env.REFERENCE_DATA,'lwin');
  if(!manifest)throw new ApiError(503,'The LWIN catalogue is temporarily unavailable. Try again later.');
  const value=(key:string)=>row[key]==null?null:String(row[key]);
- const initial=await lwinRowById<LwinReferenceProduct>(env.REFERENCE_DATA,lwin7,value('producer'));
- if(!initial)throw new ApiError(404,manifest.lwinIdIndexPrefix?'This LWIN was not found in the imported catalogue.':'This LWIN was not found for the current producer. Check the code and producer name.');
+ const initial=await lwinRowById<LwinReferenceProduct>(env.REFERENCE_DATA,lwin7,value('producer'),{manualPreview:true});
+ if(!initial)throw new ApiError(404,'This LWIN was not found in the imported catalogue. Check the code or refresh the catalogue.');
  let product:LwinReferenceProduct=initial;
  const seen=new Set<string>();
  while(product.status==='Combined'){
