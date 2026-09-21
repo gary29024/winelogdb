@@ -20,6 +20,16 @@ async function setup(count=3){
  return {db,sql,producer,oldName,newName,snapshot};
 }
 describe('producer-wide name review',()=>{
+ it('updates accepted match inputs for a reviewed producer while preserving disputed identities',async()=>{
+  const {db,sql,oldName,newName}=await setup();
+  const reference={lwin7:'1059328',input:{producer:oldName,wineName:'Pinot Noir'}};
+  sql.prepare('UPDATE wines SET lwin_reference_json=?').run(JSON.stringify(reference));
+  sql.exec("UPDATE wines SET identity_match_status='conflict' WHERE id='w1'");
+  const {preview}=await previewProducerNameReview(db,'owner','w0');
+  await applyProducerNameReview(db,'owner','w0',preview.previewToken);
+  const rows=sql.prepare('SELECT id,lwin_reference_json FROM wines').all();
+  for(const row of rows)expect(JSON.parse(String(row.lwin_reference_json)).input).toEqual({producer:row.id==='w1'?oldName:newName,wineName:'Pinot Noir'});
+ });
  it('previews all linked wines without writes, applies once, and maps both names to the same identity',async()=>{
   const {db,sql,producer,oldName,newName,snapshot}=await setup(45),before=snapshot();
   const {preview}=await previewProducerNameReview(db,'owner','w0');

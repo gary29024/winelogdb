@@ -247,7 +247,7 @@ app.put('/api/wines/:id/reference-suggestion',async c=>{
  if(payload?.action!==undefined&&payload.action!=='keep'&&payload.action!=='apply')return c.json({error:'Unknown review action'},400);
  const keep=payload?.action==='keep';
  if(!referenceSuggestionFields.includes(field))return c.json({error:'Unknown LWIN suggestion field'},400);
- const row=await c.env.DB.prepare('SELECT producer,wine_name,country,region,classification,lwin7,lwin_reference_json,reference_suggestions_json FROM wines WHERE owner_id=? AND id=?').bind(owner,id).first<Record<string,unknown>>();
+ const row=await c.env.DB.prepare('SELECT producer,wine_name,country,region,classification,lwin7,identity_match_status,lwin_reference_json,reference_suggestions_json FROM wines WHERE owner_id=? AND id=?').bind(owner,id).first<Record<string,unknown>>();
  if(!row)return c.json({error:'Not found'},404);
  const suggestions=parseJson<ReferenceSuggestion[]>(row.reference_suggestions_json,[]),suggestion=suggestions.find(item=>item.field===field);
  if(!suggestion)return c.json({error:'That LWIN suggestion is no longer available'},409);
@@ -265,10 +265,14 @@ app.put('/api/wines/:id/reference-suggestion',async c=>{
  // Cuvee relinking uses recognized_wine_name as its input. Like an explicit
  // edit, accepting a name must update that input in the same guarded write;
  // otherwise ensureWineIdentity immediately restores the previous name.
+ // Reviewed naming choices retain the accepted match and its current input.
+ // A disputed identity still requires explicit identity confirmation.
+ const reviewedReference=reference&&reference.lwin7===row.lwin7&&['matched','manual'].includes(String(row.identity_match_status))&&(field==='producer'||field==='wineName')
+  ?{...reference,input:{producer:field==='producer'?value:String(row.producer??''),wineName:field==='wineName'?value:String(row.wine_name??'')}}:null;
  const rename=!keep&&field==='wineName';
  const remaining=suggestions.filter(item=>item.field!==field),now=new Date().toISOString(),identityReset=keep?'':field==='producer'?',producer_id=NULL,cuvee_id=NULL':rename?',recognized_wine_name=?,cuvee_id=NULL':'';
- const result=await c.env.DB.prepare(`UPDATE wines SET ${column}=?${identityReset},reference_suggestions_json=?,reference_suggestions_updated_at=?,updated_at=? WHERE owner_id=? AND id=? AND reference_suggestions_json IS ? AND ${column} IS ?`)
-  .bind(value,...(rename?[value]:[]),remaining.length?JSON.stringify(remaining):null,remaining.length?now:null,now,owner,id,row.reference_suggestions_json??null,rawCurrent??null).run();
+ const result=await c.env.DB.prepare(`UPDATE wines SET ${column}=?${identityReset},lwin_reference_json=?,reference_suggestions_json=?,reference_suggestions_updated_at=?,updated_at=? WHERE owner_id=? AND id=? AND reference_suggestions_json IS ? AND ${column} IS ? AND lwin7 IS ? AND identity_match_status IS ? AND lwin_reference_json IS ?`)
+  .bind(value,...(rename?[value]:[]),reviewedReference?JSON.stringify(reviewedReference):row.lwin_reference_json??null,remaining.length?JSON.stringify(remaining):null,remaining.length?now:null,now,owner,id,row.reference_suggestions_json??null,rawCurrent??null,row.lwin7??null,row.identity_match_status??null,row.lwin_reference_json??null).run();
  if(!result.meta.changes)return c.json({error:'This wine changed. Refresh and review it again.'},409);
  if(!keep&&(field==='producer'||field==='wineName'))await ensureWineIdentity(c.env.DB,owner,id);
  await recheckWineReference(c.env.DB,c.env.REFERENCE_DATA,owner,id,false);
