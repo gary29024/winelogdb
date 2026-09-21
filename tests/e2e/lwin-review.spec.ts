@@ -17,6 +17,31 @@ const fixture={
 
 
 test.use({viewport:{width:393,height:852}});
+test('matched LWIN is visible and can be checked without entering its code',async({page})=>{
+ const displayName='Guy Amiot et Fils, Chassagne-Montrachet Premier Cru, Clos Saint-Jean Rouge';
+ const wine={...fixture,id:'w1',producer:'Guy Amiot et Fils',wineName:'Chassagne-Montrachet 1er Cru Clos Saint Jean',lwin7:'1018031',imageIds:[],lwinReference:{lwin7:'1018031',displayName},referenceSuggestions:[{field:'wineName',label:'Wine name',current:'Chassagne-Montrachet 1er Cru Clos Saint Jean',suggested:'Chassagne-Montrachet Premier Cru, Clos Saint-Jean Rouge'}]};
+ let previews=0,writes=0;
+ await page.route('**/api/**',async route=>{
+  const url=new URL(route.request().url()),path=url.pathname;
+  if(route.request().method()!=='GET')writes++;
+  if(path==='/api/me')return route.fulfill({json:{user:{id:'owner',role:'owner',email:'owner@example.com',display_name:'Owner',status:'active'}}});
+  if(path==='/api/admin/rollout/lwin-review')return route.fulfill({json:{items:[wine],total:1,nextCursor:null}});
+  if(path==='/api/wines/w1')return route.fulfill({json:wine});
+  if(path==='/api/wines/w1/reference-preview'){
+   expect(url.searchParams.get('lwin7')).toBe('1018031');previews++;
+   return route.fulfill({json:{requestedLwin7:'1018031',lwin7:'1018031',storedLwin7:'1018031',displayName,suggestions:wine.referenceSuggestions,previewToken:'preview'}});
+  }
+  return route.fulfill({json:{items:[],total:0}});
+ });
+ await page.goto('/admin/lwin-review?wine=w1');
+ const stored=page.getByRole('region',{name:'Stored LWIN reference'});
+ await expect(stored.getByText('Stored LWIN 1018031',{exact:true})).toBeVisible();
+ await expect(stored.getByText(displayName,{exact:true})).toBeVisible();
+ await stored.getByRole('button',{name:'Check LWIN 1018031'}).click();
+ await expect(page.getByRole('region',{name:'LWIN preview'}).getByText(displayName,{exact:true})).toBeVisible();
+ expect(previews).toBe(1);expect(writes).toBe(0);
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+});
 test('members have no catalogue maintenance on wine details',async({page})=>{
  await page.route('**/api/**',async route=>{
   const path=new URL(route.request().url()).pathname;

@@ -35,6 +35,19 @@ function setup({indexed=false,status='Live',vintageConfig='sequential'}:{indexed
 }
 
 describe('manual LWIN selection',()=>{
+ it('refreshes a shortened name and refuses applying the old suggestion',async()=>{
+  const {database,env,product,row,request}=setup();
+  product.displayName='Chateau Rieussec, Sauternes Rouge';product.wineName='Rouge';
+  const {preview}=await previewWineReference(env,'owner','w1','1017483');
+  expect((await request('reference-review',{action:'link',lwin7:'1017483',previewToken:preview.previewToken})).status).toBe(200);
+  database.sql.prepare('UPDATE wines SET reference_suggestions_json=?').run(JSON.stringify([{field:'wineName',label:'Wine name',current:row().wine_name,suggested:'Rouge'}]));
+  const before=row().wine_name;
+  const response=await app.fetch(new Request('https://wine.example/api/wines/w1/reference-suggestion',{method:'PUT',headers:{authorization:`Bearer ${await createSession('owner',secret)}`,'content-type':'application/json'},body:JSON.stringify({field:'wineName',action:'apply'})}),env as never);
+  expect(response.status).toBe(409);expect(row().wine_name).toBe(before);
+  expect((await request('reference-review',{action:'recheck'})).status).toBe(200);
+  expect(JSON.parse(String(row().reference_suggestions_json))).toEqual([{field:'wineName',label:'Wine name',current:before,suggested:'Sauternes Rouge'}]);
+  expect(row().wine_name).toBe(before);
+ });
  it.each([false,true])('previews Cave de Tain by exact code in a legacy catalogue (producer index: %s)',async indexed=>{
   const {database,env,objects,reads,row,request}=setup();
   const product=parseLwinReference({LWIN:'2259354',STATUS:'Live',DISPLAY_NAME:'Cave de Tain, Nobles Rives',PRODUCER_TITLE:'Cave',PRODUCER_NAME:'de Tain',WINE:'Nobles Rives',COUNTRY:'France',REGION:'Rhone',SUB_REGION:'Crozes-Hermitage',COLOUR:'Red',TYPE:'Wine',SUB_TYPE:'Still',VINTAGE_CONFIG:'sequential'});
@@ -82,8 +95,7 @@ describe('manual LWIN selection',()=>{
    .run(JSON.stringify([{field:'producer',label:'Producer',current:'Maison FANG',suggested:'Fang'},{field:'wineName',label:'Wine name',current:'Savigny-lès-Beaune Cuvée Zéphyr',suggested:'Cuvee Zephyr'}]));
   expect(await recheckWineReference(env.DB,env.REFERENCE_DATA,'owner','w1')).toBe(true);
   expect(row()).toMatchObject({producer:'Maison FANG',wine_name:'Savigny-lès-Beaune Cuvée Zéphyr',lwin7:'3061244',identity_match_status:'matched'});
-  const suggestions=JSON.parse(String(row().reference_suggestions_json)) as Array<{field:string}>;
-  expect(suggestions.map(item=>item.field)).toEqual(['wineName']);
+  expect(row().reference_suggestions_json).toBeNull();
  });
  it('refuses a stale logging match',async()=>{
   const {env,database,product}=setup(),identity=lwinReferenceIdentity(product);
@@ -145,7 +157,7 @@ describe('manual LWIN selection',()=>{
   const {env,row,request}=setup(),before=row();
   const {preview}=await previewWineReference(env,'owner','w1','1017483');
   expect(row()).toEqual(before);expect(preview).toMatchObject({lwin7:'1017483',storedLwin7:'1017425',lwin11:'10174832018'});
-  expect(preview.suggestions.map(item=>item.field)).toEqual(['producer']);
+  expect(preview.suggestions.map(item=>item.field)).toEqual(['producer','wineName']);
   const response=await request('reference-review',{action:'link',lwin7:'1017483',previewToken:preview.previewToken});
   expect(response.status).toBe(200);
   expect(row()).toMatchObject({producer:before.producer,wine_name:before.wine_name,vintage:2018,country:'France',region:'Bordeaux',wine_style:'sweet',tasting_notes:'Keep my notes',rating:94,lwin7:'1017483',lwin11:'10174832018',elid:null,reference_site:null,reference_parcel:null,reference_product_key:'lwin:1017483',identity_match_status:'manual',identity_match_candidates_json:null,reference_suggestions_json:JSON.stringify(preview.suggestions)});

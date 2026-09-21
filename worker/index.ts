@@ -1,3 +1,4 @@
+import { lwinDisplayWineName,sameWineDisplayName } from '../src/lib/wine/lwinDisplayName';
 import { readLwinReference } from '../src/lib/wine/lwinMetadata';
 import { Hono } from 'hono';
 import { apiErrorHandler } from '../src/lib/credits/primitives';
@@ -246,10 +247,12 @@ app.put('/api/wines/:id/reference-suggestion',async c=>{
  if(payload?.action!==undefined&&payload.action!=='keep'&&payload.action!=='apply')return c.json({error:'Unknown review action'},400);
  const keep=payload?.action==='keep';
  if(!referenceSuggestionFields.includes(field))return c.json({error:'Unknown LWIN suggestion field'},400);
- const row=await c.env.DB.prepare('SELECT producer,wine_name,country,region,classification,reference_suggestions_json FROM wines WHERE owner_id=? AND id=?').bind(owner,id).first<Record<string,unknown>>();
+ const row=await c.env.DB.prepare('SELECT producer,wine_name,country,region,classification,lwin7,lwin_reference_json,reference_suggestions_json FROM wines WHERE owner_id=? AND id=?').bind(owner,id).first<Record<string,unknown>>();
  if(!row)return c.json({error:'Not found'},404);
  const suggestions=parseJson<ReferenceSuggestion[]>(row.reference_suggestions_json,[]),suggestion=suggestions.find(item=>item.field===field);
  if(!suggestion)return c.json({error:'That LWIN suggestion is no longer available'},409);
+ const reference=readLwinReference(row.lwin_reference_json),displayWine=reference?.lwin7===row.lwin7&&reference?lwinDisplayWineName(reference):null;
+ if(!keep&&field==='wineName'&&displayWine&&!sameWineDisplayName(suggestion.suggested,displayWine))return c.json({error:'This wine-name suggestion is outdated. Recheck LWIN to review the full catalogue name before applying it.'},409);
  const columns:Record<ReferenceSuggestionField,string>={producer:'producer',wineName:'wine_name',country:'country',region:'region',classification:'classification'},column=columns[field];
  const rawCurrent=field==='wineName'?row.wine_name:row[field],current=field==='classification'?classificationLabel(rawCurrent==null?null:String(rawCurrent)):(rawCurrent==null?null:String(rawCurrent));
  // Suggestions and entity aliases already ignore accents and formatting. Use
