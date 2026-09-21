@@ -93,7 +93,7 @@ export function referenceIdentityStatements(
   :w.identityMatchStatus==='manual'&&Boolean(w.lwin7||w.elid);
  const suggestions=persistIdentity&&w.identityMatchStatus==='matched'?buildReferenceSuggestions({
    producer:w.producer,wineName:w.wineName,country:w.country,region:w.region,classification:w.classification,classificationOverride:w.classificationOverride,
-   referenceProducer:w.referenceProducer,referenceWineName:w.referenceWineName,referenceCountry:w.referenceCountry,referenceRegion:w.referenceRegion,referenceClassification:w.referenceClassification
+   referenceProducer:w.referenceProducer,referenceWineName:w.referenceWineName,referenceCountry:w.referenceCountry,referenceRegion:w.referenceRegion,referenceSubRegion:w.lwinReference?.subRegion,referenceClassification:w.referenceClassification
   }):[];
  const referenceValues=[
   persistIdentity?w.referenceProductKey??null:null,persistIdentity?w.lwin7??null:null,persistIdentity?w.lwin11??null:null,persistIdentity?w.elid??null:null,

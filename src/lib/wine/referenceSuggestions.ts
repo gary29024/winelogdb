@@ -1,4 +1,5 @@
 import { normalizeReferenceText } from './referenceCatalog';
+import { referenceAppRegion,regionWithin } from './referenceGeography';
 
 export const referenceSuggestionFields=['producer','wineName','country','region','classification'] as const;
 export type ReferenceSuggestionField=typeof referenceSuggestionFields[number];
@@ -19,7 +20,7 @@ export function classificationLabel(value:string|null|undefined){
 }
 type SuggestionInput={
  producer?:string|null;wineName?:string|null;country?:string|null;region?:string|null;classification?:string|null;classificationOverride?:string|null;
- referenceProducer?:string|null;referenceWineName?:string|null;referenceCountry?:string|null;referenceRegion?:string|null;referenceClassification?:string|null;
+ referenceProducer?:string|null;referenceWineName?:string|null;referenceCountry?:string|null;referenceRegion?:string|null;referenceSubRegion?:string|null;referenceClassification?:string|null;
 };
 export function buildReferenceSuggestions(input:SuggestionInput):ReferenceSuggestion[]{
  const suggestions:ReferenceSuggestion[]=[];
@@ -27,11 +28,12 @@ export function buildReferenceSuggestions(input:SuggestionInput):ReferenceSugges
   ['producer','Producer',input.producer,input.referenceProducer],
   ['wineName','Wine name',input.wineName,input.referenceWineName],
   ['country','Country',input.country,input.referenceCountry],
-  ['region','Region',input.region,input.referenceRegion]
+  ['region','Region',input.region,referenceAppRegion({country:input.referenceCountry,region:input.referenceRegion,subRegion:input.referenceSubRegion})]
  ];
  for(const [field,label,current,suggested] of pairs){
   const a=current?.trim()||null,b=suggested?.trim()||null;
   if(!a||!b||normalizeReferenceText(a)===normalizeReferenceText(b))continue;
+  if(field==='region'&&regionWithin(a,b,input.country,input.referenceCountry))continue;
   suggestions.push({field,label,current:a,suggested:b});
  }
  if(!input.classificationOverride){

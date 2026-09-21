@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { apiJson } from '../../lib/auth/api';
 import { summariesChanged } from '../../lib/cache/summaryCaches';
 import { appClassification,classificationLabel } from '../../lib/wine/referenceSuggestions';
+import { referenceAppRegion,regionWithin } from '../../lib/wine/referenceGeography';
 import { getWine,type WineDetail } from './api';
 import { LwinLinkEditor,type LwinLinkPreview } from './LwinLinkEditor';
 import './lwinEdit.css';
@@ -34,10 +35,10 @@ export function LwinEditPanel({wine,values,dirty,disabled,canMatch,initiallyOpen
   {key:'producer' as const,label:'Producer',value:reference.producer,current:values.producer},
   {key:'wineName' as const,label:'Wine name',value:reference.wineName,current:values.wineName},
   {key:'country' as const,label:'Country',value:reference.country,current:values.country},
-  {key:'region' as const,label:'Region',value:reference.region,current:values.region},
+  {key:'region' as const,label:'Region',value:referenceAppRegion(reference),current:values.region},
   {key:'classification' as const,label:'Cru level',value:appClassification(reference.classification),current:values.classificationOverride||values.classification}
  ]:[];
- const differences=comparisons.filter(item=>item.value&&item.value!==item.current);
+ const differences=comparisons.filter(item=>item.value&&item.value!==item.current&&!(item.key==='region'&&regionWithin(item.current,item.value,values.country,reference?.country)));
  const missing=differences.filter(item=>!item.current);
  function apply(patch:Partial<LwinEditValues>){onApply(patch);setNotice('Added to your form. Save changes below to keep these values.')}
  const facts=reference?[
