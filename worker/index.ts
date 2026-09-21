@@ -32,7 +32,10 @@ app.onError(apiErrorHandler);
 app.use('/api/*',cors({origin:(origin,c)=>origin===c.env.APP_URL?origin:null,credentials:true}));
 app.use('/api/*',async(c,next)=>{
  if(c.req.path==='/api/auth/login')return next();
- try{const s=await requireSession(c.req.header('Authorization'),c.env.AUTH_SECRET);c.set('userId',s.userId);await next()}catch{return c.json({error:'Unauthorized'},401)}
+ try{const s=await requireSession(c.req.header('Authorization'),c.env.AUTH_SECRET);c.set('userId',s.userId)}catch{return c.json({error:'Unauthorized'},401)}
+ // Only session verification can expire a login. Route/database failures must
+ // reach the API error handler instead of logging a valid user out.
+ await next();
 });
 
 app.post('/api/auth/login',c=>c.json({error:'Password login has been retired. Use Google login.'},410));
