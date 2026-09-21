@@ -66,10 +66,15 @@ export async function applyProducerNameReview(db:D1Database,owner:string,wineId:
     SELECT ?,json_extract(value,'$[0]'),? FROM json_each(?) WHERE json_extract(value,'$[0]')<>?`)
     .bind(owner,normalizeProducerAlias(name),JSON.stringify(aliases),normalizeProducerAlias(name)),
    db.prepare('UPDATE producers SET canonical_name=?,match_key=?,updated_at=? WHERE owner_id=? AND id=?').bind(name,producerMatchKey(name),now,owner,producer.id),
-   db.prepare(`UPDATE wines SET producer=?,reference_suggestions_json=json_extract(review.value,'$.suggestions'),
+   db.prepare(`UPDATE wines SET producer=?,
+    lwin_reference_json=CASE WHEN json_valid(lwin_reference_json) THEN CASE
+     WHEN identity_match_status IN ('matched','manual') AND json_extract(lwin_reference_json,'$.lwin7')=lwin7
+     THEN json_set(lwin_reference_json,'$.input.producer',?,'$.input.wineName',coalesce(json_extract(lwin_reference_json,'$.input.wineName'),wine_name))
+     ELSE lwin_reference_json END ELSE lwin_reference_json END,
+    reference_suggestions_json=json_extract(review.value,'$.suggestions'),
     reference_suggestions_updated_at=CASE WHEN json_extract(review.value,'$.changed') THEN CASE WHEN json_extract(review.value,'$.suggestions') IS NULL THEN NULL ELSE ? END ELSE reference_suggestions_updated_at END,
     updated_at=? FROM json_each(?) AS review WHERE owner_id=? AND producer_id=? AND wines.id=json_extract(review.value,'$.id')`)
-    .bind(name,now,now,JSON.stringify(changes),owner,producer.id)
+    .bind(name,name,now,now,JSON.stringify(changes),owner,producer.id)
   ]);
  }catch(error){
   if(/malformed JSON/i.test(String(error)))throw new ApiError(409,'The producer or its wines changed. Preview the change again.');

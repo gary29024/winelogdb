@@ -3,6 +3,7 @@ import { lwinRowById,referenceManifest,normalizeReferenceText,type ReferenceSour
 import type { LwinReferenceProduct } from '../src/lib/wine/lwinImport';
 import { enrichLwinTaxonomy,readLwinReference } from '../src/lib/wine/lwinMetadata';
 import { buildReferenceSuggestions,refreshPendingReferenceSuggestions } from '../src/lib/wine/referenceSuggestions';
+import { compatibleLwinProduct } from '../src/lib/wine/lwinMatching';
 
 export type StoredLwinWine=Record<string,unknown>&StoredReferenceIdentity&{id:string;owner_id:string};
 export function lwinInput(row:Record<string,unknown>){
@@ -51,7 +52,17 @@ export async function resolveStoredLwin(bucket:ReferenceSource,row:StoredLwinWin
  const manifest=await referenceManifest(bucket,'lwin');if(!manifest)throw new Error('LWIN catalogue unavailable; resume to retry.');
  if(row.identity_match_status==='manual'&&!row.lwin7)return null;
  const prior=readLwinReference(row.lwin_reference_json);
- if(row.lwin7&&(row.identity_match_status==='matched'||row.identity_match_status==='manual')){
+ // Older field-review writes left the AI input snapshot behind. Recover only
+ // completed reviews whose sole name changes exactly adopt recorded catalogue
+ // suggestions. Arbitrary edits and incompatible bottle clues still re-match.
+ const legacyReviewed=prior?.method==='ai'&&prior.lwin7===row.lwin7&&prior.input&&
+  (!row.reference_suggestions_json||row.reference_suggestions_json==='[]')&&
+  (['producer','wineName'] as const).some(field=>normalizeReferenceText(field==='producer'?row.producer:row.wine_name)!==normalizeReferenceText(prior.input![field]))&&
+  (['producer','wineName'] as const).every(field=>{
+   const current=field==='producer'?row.producer:row.wine_name,original=prior.input![field];
+   return normalizeReferenceText(current)===normalizeReferenceText(original)||prior.conflicts.some(conflict=>conflict.field===field&&normalizeReferenceText(conflict.current)===normalizeReferenceText(original)&&normalizeReferenceText(conflict.reference)===normalizeReferenceText(current));
+  });
+ if(row.lwin7&&(row.identity_match_status==='matched'||row.identity_match_status==='manual'||(row.identity_match_status==='conflict'&&legacyReviewed))){
   // A trusted versioned snapshot can be re-enriched without reading its R2 shard.
   if(prior?.identityVersion===2&&prior.lwin7===row.lwin7&&prior.version===manifest.version&&(row.identity_match_status==='manual'||(prior.input&&normalizeReferenceText(prior.input.producer)===normalizeReferenceText(row.producer)&&normalizeReferenceText(prior.input.wineName)===normalizeReferenceText(row.wine_name)))){
    const product:LwinReferenceProduct={...prior,productKey:`lwin:${prior.lwin7}`,status:'Live',referenceLwin7:null,displayName:null,producerTitle:null,producerName:prior.producer,producerKey:'',wineKey:'',countryKey:'',regionKey:'',colourKey:'',sourceAddedAt:null,importedAt:prior.version};
@@ -59,9 +70,9 @@ export async function resolveStoredLwin(bucket:ReferenceSource,row:StoredLwinWin
    return {...match,elid:typeof row.elid==='string'?row.elid:null,lwinReference:prior,identityMatchConfidence:prior.confidence};
   }
   // Legacy automatic matches must pass the current matcher before becoming trusted.
-  if(row.identity_match_status==='manual'||(prior?.lwin7===row.lwin7&&prior.input&&normalizeReferenceText(prior.input.producer)===normalizeReferenceText(row.producer)&&normalizeReferenceText(prior.input.wineName)===normalizeReferenceText(row.wine_name))){
+  if(legacyReviewed||row.identity_match_status==='manual'||(prior?.lwin7===row.lwin7&&prior.input&&normalizeReferenceText(prior.input.producer)===normalizeReferenceText(row.producer)&&normalizeReferenceText(prior.input.wineName)===normalizeReferenceText(row.wine_name))){
    const product=await lwinRowById<LwinReferenceProduct>(bucket,String(row.lwin7),row.producer,options);
-   if(product?.status==='Live'){const match=await referenceMatchForProduct(bucket,product,lwinInput(row),{includeElid:false});return {...match,identityMatchConfidence:prior?.confidence??match.identityMatchConfidence,lwinReference:match.lwinReference?{...match.lwinReference,method:prior?.method??'manual'}:null}}
+   if(product?.status==='Live'&&(!legacyReviewed||compatibleLwinProduct(product,lwinInput(row)))){const match=await referenceMatchForProduct(bucket,product,lwinInput(row),{includeElid:false});return {...match,identityMatchConfidence:prior?.confidence??match.identityMatchConfidence,lwinReference:match.lwinReference?{...match.lwinReference,method:prior?.method??'manual'}:null}}
    if(row.identity_match_status==='manual')return null;
   }
  }

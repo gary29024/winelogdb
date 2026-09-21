@@ -50,7 +50,7 @@ describe('background launch preparation',()=>{
   const status=await rolloutStatus(database.db);
   const progress=kind==='lwin'?status.lwin:kind==='lwin_validate'?status.lwinValidation:status.lwinAi;
   expect(progress).toMatchObject({state:'complete',processed:2,total:2,error:null});
-  expect(progress).toMatchObject(kind==='lwin'?{matched:1,unmatched:storedCode?0:1,conflict:storedCode?1:0}:kind==='lwin_validate'?{verified:1,review:1}:{matched:1,review:1,ai:0});
+  expect(progress).toMatchObject(kind==='lwin'?{matched:storedStatus==='manual'?2:1,unmatched:storedCode?0:1,conflict:storedCode&&storedStatus!=='manual'?1:0}:kind==='lwin_validate'?{verified:1,review:1}:{matched:1,review:1,ai:0});
   expect(database.sql.prepare("SELECT lwin7,identity_match_status,tasting_notes FROM wines WHERE id='a'").get()).toEqual({lwin7:storedCode,identity_match_status:storedStatus==='manual'?'manual':storedCode?'conflict':'unmatched',tasting_notes:'keep note'});
   expect(database.sql.prepare("SELECT lwin7,identity_match_status FROM wines WHERE id='b'").get()).toEqual({lwin7:'1234567',identity_match_status:'matched'});
   expect(database.sql.prepare('SELECT value FROM rollout_state WHERE name=?').get(`${kind}_cursor`)!.value).toBe('b');
