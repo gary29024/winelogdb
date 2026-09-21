@@ -4,7 +4,7 @@ import type { WineDetail } from './api';
 import '../../referenceSuggestions.css';
 
 export type LwinLinkPreview={requestedLwin7:string;lwin7:string;storedLwin7:string|null;displayName:string;producer:string|null;wineName:string|null;country:string|null;region:string|null;colour:string|null;productType:string|null;productSubtype:string|null;lwin11:string|null;vintage:number|null;suggestions:WineDetail['referenceSuggestions'];previewToken:string};
-export function LwinLinkEditor({wine,disabled=false,candidates=[],onLink,onReject}:{wine:WineDetail;disabled?:boolean;candidates?:string[];onLink:(preview:LwinLinkPreview)=>Promise<void>;onReject:()=>Promise<void>}){
+export function LwinLinkEditor({wine,disabled=false,candidates=[],showStoredSummary=true,onLink,onReject}:{wine:WineDetail;disabled?:boolean;candidates?:string[];showStoredSummary?:boolean;onLink:(preview:LwinLinkPreview)=>Promise<void>;onReject:()=>Promise<void>}){
  const [code,setCode]=useState(''),[preview,setPreview]=useState<LwinLinkPreview>(),[loading,setLoading]=useState(false),[error,setError]=useState('');
  const request=useRef(0);
  const editor=useRef<HTMLDetailsElement>(null);
@@ -15,6 +15,12 @@ export function LwinLinkEditor({wine,disabled=false,candidates=[],onLink,onRejec
   try{const next=await apiJson<LwinLinkPreview>(`/api/wines/${wine.id}/reference-preview?lwin7=${encodeURIComponent(candidate.trim())}`);if(request.current===token)setPreview(next)}catch(e){if(request.current===token)setError((e as Error).message)}finally{if(request.current===token)setLoading(false)}
  }
  return <>{wine.identityMatchStatus==='manual'&&!wine.lwin7&&!wine.elid&&<p>Kept without LWIN. Automatic matching is off for this wine. You can link a LWIN below at any time.</p>}
+ {wine.lwin7&&<section aria-label="Stored LWIN reference" className="lwin-link-preview">
+  {showStoredSummary&&<><strong>Stored LWIN {wine.lwin7}</strong>
+  <p>{wine.identityMatchStatus==='conflict'?'Needs identity review':wine.identityMatchStatus==='manual'?'Manually linked':wine.identityMatchStatus==='matched'?'Matched':'Not verified'}</p>
+  {wine.lwinReference?.lwin7===wine.lwin7&&wine.lwinReference.displayName?<p>{wine.lwinReference.displayName}</p>:<p>Preview this code to check the full catalogue name.</p>}</>}
+  <button type="button" disabled={disabled||loading} onClick={()=>{setCode(wine.lwin7!);if(editor.current)editor.current.open=true;void lookup(wine.lwin7!)}}>Check LWIN {wine.lwin7}</button>
+ </section>}
  {candidates.length>0&&<div className="lwin-edit-candidates"><p>Preview a possible match:</p>{[...new Set(candidates)].map(candidate=><button type="button" key={candidate} disabled={disabled||loading} onClick={()=>{setCode(candidate);if(editor.current)editor.current.open=true;void lookup(candidate)}}>Preview LWIN {candidate}</button>)}</div>}
  <details ref={editor} className="lwin-link-editor"><summary>{wine.lwin7?'Change LWIN':'Link a LWIN'}</summary>
   <p>Enter a 7-digit LWIN and check the catalogue details before linking it.</p>

@@ -25,7 +25,7 @@ export async function recheckWineReference(db:D1Database,bucket:R2Bucket,owner:s
  if(refreshSuggestions){
   const product=row.lwin7?await lwinRowById<LwinReferenceProduct>(bucket,String(row.lwin7),input.producer):null;
   // If the local reference is unavailable, preserve the existing suggestions.
-  if(product?.status==='Live'){const identity=lwinReferenceIdentity(product),place=canonicalizeWineFields({country:product.country,region:product.region});suggestions=refreshPendingReferenceSuggestions({...input,referenceProducer:identity.producerName,referenceWineName:identity.wineName,referenceCountry:place.country,referenceRegion:place.region,referenceSubRegion:product.subRegion,referenceClassification:product.classification},row.reference_suggestions_json)}
+  if(product?.status==='Live'){const identity=lwinReferenceIdentity(product),place=canonicalizeWineFields({country:product.country,region:product.region});suggestions=refreshPendingReferenceSuggestions({...input,referenceDisplayName:product.displayName,referenceProducer:identity.producerName,referenceWineName:identity.wineName,referenceCountry:place.country,referenceRegion:place.region,referenceSubRegion:product.subRegion,referenceClassification:product.classification},row.reference_suggestions_json)}
  }
  const now=new Date().toISOString();
  const saved=await db.prepare(`UPDATE wines SET
