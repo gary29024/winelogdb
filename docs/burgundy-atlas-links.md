@@ -1,11 +1,10 @@
 # Burgundy Atlas links
 
-Wine details now offer **Explore on Burgundy Atlas** below the identity pills when the recorded appellation matches a mapped Burgundy Grand Cru. The same link appears as **Burgundy Atlas** on every row of these curated collections, including untasted rows:
+Wine details now offer **Explore on Burgundy Atlas** below the identity pills when the recorded appellation matches a mapped Burgundy Grand Cru. The same link appears as **Burgundy Atlas** on every row of one curated collection, including untasted rows:
 
 - Burgundy Grand Cru Explorer (33)
-- Côte de Nuits Grand Crus (24)
-- Côte de Beaune Grand Crus (8)
-- The Nine Gevrey Grand Crus (9)
+
+The three narrower Burgundy checklists - Côte de Nuits Grand Crus, Côte de Beaune Grand Crus and The Nine Gevrey Grand Crus - are in `curatedLaunch.ts`'s `removed` set and are not served, so naming them here would describe a page nobody can open. `atlasCollections` lives in that same file and refuses to boot on an id curation has dropped.
 
 Owner and shared wine pages use the same component. Links open in a new tab, leaving the tasting and its navigation state available. Existing links to tasted vintages remain separate.
 
@@ -29,11 +28,11 @@ The mapping is shared static frontend data. There are no migrations, database re
 
 ## Extending coverage
 
-Premier Cru climats, village fallbacks, producer ranges and internal vineyard pages are follow-up work. Unmapped places show no link in this release. A new destination must be selected from Atlas's published records, checked for name, classification and geographic scope, and keyed to WineLog's canonical place identity. Do not generate Atlas IDs or substitute a nearby vineyard. Update `verifiedAt` only after checking the complete mapping again.
+Premier Cru climats, village fallbacks, producer ranges and internal vineyard pages are follow-up work. Unmapped places show no link in this release. A new collection must be curated - that is, absent from `removed` - before `atlasCollections` may name it, and every one of its rows must resolve. A new destination must be selected from Atlas's published records, checked for name, classification and geographic scope, and keyed to WineLog's canonical place identity. Do not generate Atlas IDs or substitute a nearby vineyard. Update `verifiedAt` only after checking the complete mapping again.
 
 ## Validation
 
-- Focused Vitest checks: matching, complete 33-cru coverage, name collisions, geography conflicts and wine-detail regressions.
+- Focused Vitest checks: matching, complete 33-cru coverage, every claimed collection live and fully linked, name collisions, geography conflicts and wine-detail regressions.
 - Chromium: owner/shared details, all 33 checklist links, preserved tasting links, no background Atlas requests, new-tab behavior and unsupported Premier Cru suppression.
 - Layouts checked at 320, 390 and 1280 pixels; screenshots reviewed for overlap and clipping.
 - TypeScript, production build and lint.

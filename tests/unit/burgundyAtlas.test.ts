@@ -1,9 +1,20 @@
 import { describe,expect,it } from 'vitest';
 import { burgundyAtlasPlace,burgundyAtlasWinePlace } from '../../src/lib/places/burgundyAtlas';
 import mapping from '../../src/lib/places/burgundyAtlasLinks.json';
-import { getAchievementDefinition } from '../../src/features/achievements/definitions';
+import { atlasCollections,getAchievementDefinition } from '../../src/features/achievements/curatedLaunch';
 
 describe('Burgundy Atlas destinations',()=>{
+  // Curation, not the raw definition list: `definitions` still carries the
+  // Burgundy checklists `curatedLaunch` removed, so asserting against it would
+  // vouch for links on pages the app never serves.
+  it('links every row of every collection it claims, and claims only live ones',()=>{
+    for(const id of atlasCollections){
+      const collection=getAchievementDefinition(id);
+      expect(collection,`${id} is not a curated collection`).not.toBeNull();
+      expect(collection!.items.filter(item=>!burgundyAtlasPlace(item.label)).map(item=>item.label)).toEqual([]);
+    }
+  });
+
   it('covers every appellation in the existing 33 Grand Cru collection with a distinct canonical link',()=>{
     const collection=getAchievementDefinition('burgundy-33-grand-crus')!;
     const places=collection.items.map(item=>burgundyAtlasPlace(item.label));

@@ -8,10 +8,9 @@ import '../../achievements.css';
 import { linkFrom } from '../wines/backTarget';
 import { BurgundyAtlasLink } from '../../components/BurgundyAtlasLink';
 import { burgundyAtlasPlace } from '../../lib/places/burgundyAtlas';
-
-// Only these curated collections guarantee that every row names a Burgundy
-// Grand Cru appellation. A custom title or a producer name is not that evidence.
-const atlasCollections=new Set(['burgundy-33-grand-crus','cote-de-nuits-24-grand-crus','cote-de-beaune-8-grand-crus','gevrey-nine-grand-crus']);
+// Which collections may carry an Atlas link is curation's answer, not this
+// page's, so it is kept beside the list that decides what ships at all.
+import { atlasCollections } from './curatedLaunch';
 
 function statusCopy(status:AchievementProgress['items'][number]['status']){if(status==='tasted')return 'Tasted';if(status==='possible')return 'Needs linking';return 'Not tasted'}
 function collectionEyebrow(collection:AchievementProgress){const definition=collection.definition;if(definition.series)return `${definition.series.authority} · ${definition.series.region} · ${definition.series.edition}`;if(definition.origin==='catalogue')return 'SMART CATALOGUE COLLECTION';if(definition.origin==='custom')return 'MY COLLECTION';return 'COLLECTION'}

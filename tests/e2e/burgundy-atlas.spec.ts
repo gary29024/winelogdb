@@ -1,6 +1,6 @@
 import { test,expect,type Page } from '@playwright/test';
 import { wine } from './fixtures/layoutWine';
-import { getAchievementDefinition } from '../../src/features/achievements/definitions';
+import { getAchievementDefinition } from '../../src/features/achievements/curatedLaunch';
 
 const chambertinUrl='https://burgundyatlas.com/place/ba_designation_ynrwzabbmfahxtxy3ervwn4vca/chambertin';
 const definition=getAchievementDefinition('burgundy-33-grand-crus')!;
@@ -29,7 +29,7 @@ for(const route of ['/wines/layout-wine','/shared/layout-wine']){
     const atlasRequests:string[]=[];
     page.on('request',request=>{if(new URL(request.url()).hostname==='burgundyatlas.com')atlasRequests.push(request.url())});
     await mockApi(page);await page.goto(route);
-    const link=page.getByRole('link',{name:'Explore Chambertin on Burgundy Atlas (opens in a new tab)',exact:true});
+    const link=page.getByRole('link',{name:'Explore on Burgundy Atlas: Chambertin (opens in a new tab)',exact:true});
     await expect(link).toHaveAttribute('href',chambertinUrl);
     await expect(link).toHaveAttribute('target','_blank');
     await expect(link).toHaveAttribute('rel','noopener noreferrer');
