@@ -54,7 +54,7 @@ export async function previewWineReference(env:Env,owner:string,id:string,code:u
  // A product code alone cannot verify the old ELID's edition/release. Clear it
  // rather than transferring a reference from the previous product.
  const match=await referenceMatchForProduct(env.REFERENCE_DATA,product,input,{includeElid:false});
- const suggestions=buildReferenceSuggestions({...input,referenceProducer:match.referenceProducer,referenceWineName:match.referenceWineName,referenceCountry:match.country,referenceRegion:match.region,referenceClassification:match.referenceClassification});
+ const suggestions=buildReferenceSuggestions({...input,referenceProducer:match.referenceProducer,referenceWineName:match.referenceWineName,referenceCountry:match.country,referenceRegion:match.region,referenceSubRegion:match.referenceSubRegion,referenceClassification:match.referenceClassification});
  const snapshot=snapshotColumns.map(column=>row[column]??null);
  const previewToken=await hash(JSON.stringify({owner,id,lwin7,snapshot,version:manifest.version,product,match,suggestions}));
  const preview={requestedLwin7:lwin7,lwin7:product.lwin7,displayName:product.displayName||[match.referenceProducer,match.referenceWineName].filter(Boolean).join(', '),producer:match.referenceProducer,wineName:match.referenceWineName,country:match.country,region:match.region,colour:match.colour,productType:match.productType,productSubtype:match.productSubtype,lwin11:match.lwin11,vintage:input.vintage,storedLwin7:value('lwin7'),suggestions,previewToken};

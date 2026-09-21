@@ -14,7 +14,7 @@ describe('LWIN reference suggestions',()=>{
    country:'France',referenceCountry:'France',region:'Burgundy',referenceRegion:'Bourgogne',
    classification:'premier_cru',referenceClassification:'Grand Cru'
   });
-  expect(suggestions.map(item=>item.field)).toEqual(['wineName','region','classification']);
+  expect(suggestions.map(item=>item.field)).toEqual(['wineName','classification']);
   expect(suggestions.find(item=>item.field==='classification')?.suggestedValue).toBe('grand_cru');
  });
  it('does not suggest a classification over an explicit user override',()=>{

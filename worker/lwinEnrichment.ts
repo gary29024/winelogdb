@@ -33,7 +33,7 @@ export function lwinEnrichmentStatement(db:D1Database,row:StoredLwinWine,match:R
  if(!match.lwin7||!match.lwinReference)return lwinUpdate(db,row,{identity_match_status:match.identityMatchStatus,identity_match_confidence:null,identity_match_candidates_json:match.identityMatchCandidates.length?JSON.stringify(match.identityMatchCandidates):null,...(!row.identity_checked_at?{identity_checked_at:now}:{})});
  const input=lwinInput(row),prior=readLwinReference(row.lwin_reference_json),reference={...match.lwinReference,method,confidence:match.identityMatchConfidence,filled:prior?.lwin7===match.lwin7?prior.filled:{}};
  const enriched=enrichLwinTaxonomy(input,reference);
- const comparison={...enriched,referenceProducer:reference.producer,referenceWineName:reference.wineName,referenceCountry:reference.country,referenceRegion:reference.region,referenceClassification:reference.classification};
+ const comparison={...enriched,referenceProducer:reference.producer,referenceWineName:reference.wineName,referenceCountry:reference.country,referenceRegion:reference.region,referenceSubRegion:reference.subRegion,referenceClassification:reference.classification};
  const suggestions=row.lwin7===match.lwin7?refreshPendingReferenceSuggestions(comparison,row.reference_suggestions_json):buildReferenceSuggestions(comparison);
  const suggestionsJson=suggestions.length?JSON.stringify(suggestions):null;
  return lwinUpdate(db,row,{
