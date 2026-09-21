@@ -4,7 +4,7 @@ Wine details now offer **Explore on Burgundy Atlas** below the identity pills wh
 
 - Burgundy Grand Cru Explorer (33)
 
-The three narrower Burgundy checklists - Côte de Nuits Grand Crus, Côte de Beaune Grand Crus and The Nine Gevrey Grand Crus - are in `curatedLaunch.ts`'s `removed` set and are not served, so naming them here would describe a page nobody can open. `atlasCollections` lives in that same file and refuses to boot on an id curation has dropped.
+The three narrower Burgundy checklists - Côte de Nuits Grand Crus, Côte de Beaune Grand Crus and The Nine Gevrey Grand Crus - are in `curatedLaunch.ts`'s `removed` set and are not served. The small membership list lives in `atlasCollections.ts`; `curatedLaunch.ts` validates it and refuses to boot on an id curation has dropped. The detail page imports only the membership list, avoiding a download of the complete collection catalogue.
 
 Owner and shared wine pages use the same component. Links open in a new tab, leaving the tasting and its navigation state available. Existing links to tasted vintages remain separate.
 

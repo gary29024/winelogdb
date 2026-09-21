@@ -8,9 +8,7 @@ import '../../achievements.css';
 import { linkFrom } from '../wines/backTarget';
 import { BurgundyAtlasLink } from '../../components/BurgundyAtlasLink';
 import { burgundyAtlasPlace } from '../../lib/places/burgundyAtlas';
-// Which collections may carry an Atlas link is curation's answer, not this
-// page's, so it is kept beside the list that decides what ships at all.
-import { atlasCollections } from './curatedLaunch';
+import { atlasCollections } from './atlasCollections';
 
 function statusCopy(status:AchievementProgress['items'][number]['status']){if(status==='tasted')return 'Tasted';if(status==='possible')return 'Needs linking';return 'Not tasted'}
 function collectionEyebrow(collection:AchievementProgress){const definition=collection.definition;if(definition.series)return `${definition.series.authority} · ${definition.series.region} · ${definition.series.edition}`;if(definition.origin==='catalogue')return 'SMART CATALOGUE COLLECTION';if(definition.origin==='custom')return 'MY COLLECTION';return 'COLLECTION'}

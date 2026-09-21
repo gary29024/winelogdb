@@ -4,6 +4,8 @@ import { benchmarkCourseDefinition } from './benchmarkCourseDefinition';
 import { michelinAchievementDefinitions } from './michelinDefinitions';
 import { pfvAndAmericanAvaDefinitions } from './pfvAndAmericanAvas';
 import type { AchievementDefinition,AchievementDefinitionItem } from './types';
+import { atlasCollections } from './atlasCollections';
+export { atlasCollections } from './atlasCollections';
 
 const removed=new Set([
   'bordeaux-second-growths',
@@ -114,17 +116,7 @@ if(duplicate)throw new Error(`Duplicate curated collection id: ${duplicate.id}`)
 
 export function getAchievementDefinition(id:string){return achievementDefinitions.find(item=>item.id===id)??null}
 
-/**
- * The collections whose every row is a Burgundy Grand Cru appellation, and so
- * can carry a Burgundy Atlas link. A custom title or a producer name is not
- * that evidence, which is why this is a list rather than a rule.
- *
- * It lives beside `removed` on purpose. Three of the Burgundy checklists here
- * were curated away long before the Atlas links were written, and naming them
- * anyway shipped a feature that could never render: the detail page only ever
- * sees a definition this file serves. Anyone editing `removed` now has to walk
- * past this list, and the check below refuses to boot if they don't.
- */
-export const atlasCollections=new Set(['burgundy-33-grand-crus']);
+// Validate the lightweight Atlas membership list against what curation serves.
+// The page imports only that list, not the complete collection catalogue.
 const unreachable=[...atlasCollections].find(id=>!getAchievementDefinition(id));
 if(unreachable)throw new Error(`Burgundy Atlas collection is not curated: ${unreachable}`);
