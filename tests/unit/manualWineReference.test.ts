@@ -35,6 +35,30 @@ function setup({indexed=false,status='Live',vintageConfig='sequential'}:{indexed
 }
 
 describe('manual LWIN selection',()=>{
+ it('reports an unavailable stored catalogue row without changing review choices',async()=>{
+  const {database,objects,row,request}=setup();
+  database.sql.exec("UPDATE wines SET identity_match_status='manual'");
+  for(const key of Object.keys(objects))if(key.includes('/shard-'))delete objects[key];
+  const before=row(),response=await request('reference-review',{action:'recheck'});
+  expect(response.status).toBe(503);expect(row()).toEqual(before);
+ });
+ it('rechecks Marques de Riscal once and clears the stale shortening suggestion with a bounded producer lookup',async()=>{
+  const {database,env,objects,product,row,request,reads}=setup();
+  Object.assign(product,parseLwinReference({LWIN:'1237421',STATUS:'Live',DISPLAY_NAME:'Marques de Riscal, Gran Reserva, Rioja',PRODUCER_TITLE:'Marques',PRODUCER_NAME:'de Riscal',WINE:'Gran Reserva',COUNTRY:'Spain',REGION:'Rioja',COLOUR:'Red',TYPE:'Wine',SUB_TYPE:'Still'}));
+  for(const key of Object.keys(objects))if(key.includes('/shard-'))delete objects[key];
+  const shard=referenceShardId('de riscal');objects[`test/shard-${shard}.json`]=[product];
+  Object.assign(objects['reference/lwin/current.json'] as object,{producerIndexKey:'test/producers.json'});objects['test/producers.json']={'de riscal':[shard]};
+  database.sql.exec("UPDATE wines SET producer='Marqués de Riscal',wine_name='Marqués de Riscal Gran Reserva',country='Spain',region='Rioja',wine_style='red',lwin7=NULL,identity_match_status='unmatched'");
+  const {preview}=await previewWineReference(env,'owner','w1','1237421');
+  expect(reads.filter(key=>key.includes('/shard-'))).toHaveLength(1);
+  expect((await request('reference-review',{action:'link',lwin7:'1237421',previewToken:preview.previewToken})).status).toBe(200);
+  database.sql.prepare("UPDATE wines SET identity_match_status='matched',reference_suggestions_json=?").run(JSON.stringify([{field:'wineName',label:'Wine name',current:row().wine_name,suggested:'Gran Reserva'}]));
+  expect((await request('reference-review',{action:'recheck'})).status).toBe(200);
+  expect(row()).toMatchObject({identity_match_status:'matched',wine_name:'Marqués de Riscal Gran Reserva',reference_suggestions_json:null});
+  expect((await request('reference-review',{action:'recheck'})).status).toBe(200);
+  expect(row().reference_suggestions_json).toBeNull();
+  expect(reads.filter(key=>key.includes('/shard-'))).toHaveLength(1);
+ });
  it.each([false,true])('links Timeless by code regardless of saved producer (ID index: %s)',async indexed=>{
   const {database,env,objects,product,row,request,reads}=setup({indexed});
   Object.assign(product,parseLwinReference({LWIN:'2035826',STATUS:'Live',DISPLAY_NAME:'Timeless, Napa Valley',PRODUCER_NAME:'Silver Oak',WINE:'Timeless',COUNTRY:'United States',REGION:'California',SUB_REGION:'Napa Valley',COLOUR:'Red',TYPE:'Wine',SUB_TYPE:'Still',VINTAGE_CONFIG:'sequential'}));
@@ -69,6 +93,8 @@ describe('manual LWIN selection',()=>{
   expect((await request('reference-review',{action:'recheck'})).status).toBe(200);
   expect(JSON.parse(String(row().reference_suggestions_json))).toEqual([{field:'wineName',label:'Wine name',current:before,suggested:'Sauternes Rouge'}]);
   expect(row().wine_name).toBe(before);
+  const applied=await app.fetch(new Request('https://wine.example/api/wines/w1/reference-suggestion',{method:'PUT',headers:{authorization:`Bearer ${await createSession('owner',secret)}`,'content-type':'application/json'},body:JSON.stringify({field:'wineName',action:'apply'})}),env as never);
+  expect(applied.status).toBe(200);expect(row().wine_name).toBe('Sauternes Rouge');
  });
  it.each([false,true])('previews Cave de Tain by exact code in a legacy catalogue (producer index: %s)',async indexed=>{
   const {database,env,objects,reads,row,request}=setup();
@@ -179,10 +205,10 @@ describe('manual LWIN selection',()=>{
   const {env,row,request}=setup(),before=row();
   const {preview}=await previewWineReference(env,'owner','w1','1017483');
   expect(row()).toEqual(before);expect(preview).toMatchObject({lwin7:'1017483',storedLwin7:'1017425',lwin11:'10174832018'});
-  expect(preview.suggestions.map(item=>item.field)).toEqual(['wineName']);
+  expect(preview.suggestions).toEqual([]);
   const response=await request('reference-review',{action:'link',lwin7:'1017483',previewToken:preview.previewToken});
   expect(response.status).toBe(200);
-  expect(row()).toMatchObject({producer:before.producer,wine_name:before.wine_name,vintage:2018,country:'France',region:'Bordeaux',wine_style:'sweet',tasting_notes:'Keep my notes',rating:94,lwin7:'1017483',lwin11:'10174832018',elid:null,reference_site:null,reference_parcel:null,reference_product_key:'lwin:1017483',identity_match_status:'manual',identity_match_candidates_json:null,reference_suggestions_json:JSON.stringify(preview.suggestions)});
+  expect(row()).toMatchObject({producer:before.producer,wine_name:before.wine_name,vintage:2018,country:'France',region:'Bordeaux',wine_style:'sweet',tasting_notes:'Keep my notes',rating:94,lwin7:'1017483',lwin11:'10174832018',elid:null,reference_site:null,reference_parcel:null,reference_product_key:'lwin:1017483',identity_match_status:'manual',identity_match_candidates_json:null,reference_suggestions_json:null});
  });
  it('uses the ID index to find a different producer without scanning all shards',async()=>{
   const {database,env,reads}=setup({indexed:true});database.sql.exec("UPDATE wines SET producer='Wrong producer'");

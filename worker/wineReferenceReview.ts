@@ -1,3 +1,4 @@
+import { ApiError } from '../src/lib/credits/primitives';
 import { lwinEnrichmentStatement,resolveStoredLwin,type StoredLwinWine } from './lwinEnrichment';
 import { resolveWineReference,type VintageKind } from '../src/lib/wine/referenceIdentity';
 import { lwinReferenceIdentity,lwinRowById } from '../src/lib/wine/referenceCatalog';
@@ -18,9 +19,10 @@ export async function recheckWineReference(db:D1Database,bucket:R2Bucket,owner:s
    return statement?Boolean((await statement.run()).meta.changes):true;
   }
  }
- if((!row.lwin7&&row.identity_match_status!=='manual')||(row.lwin7&&row.identity_match_status==='manual')){
-  const stored=row as StoredLwinWine,match=await resolveStoredLwin(bucket,stored,{manualPreview:row.identity_match_status==='manual'}),statement=match?lwinEnrichmentStatement(db,stored,match):null;
+ if((!row.lwin7&&row.identity_match_status!=='manual')||(row.lwin7&&(row.identity_match_status==='manual'||(refreshSuggestions&&row.identity_match_status==='matched')))){
+  const stored=row as StoredLwinWine,match=await resolveStoredLwin(bucket,stored,{manualPreview:refreshSuggestions}),statement=match?lwinEnrichmentStatement(db,stored,match):null;
   if(statement)return Boolean((await statement.run()).meta.changes);
+  if(!match&&row.lwin7&&refreshSuggestions)throw new ApiError(503,'The stored LWIN could not be refreshed from the catalogue. Your review choices were not changed.');
   return true;
  }
  const value=(key:string)=>row[key]==null?null:String(row[key]);
@@ -30,8 +32,9 @@ export async function recheckWineReference(db:D1Database,bucket:R2Bucket,owner:s
  if(verified){const statement=lwinEnrichmentStatement(db,row as StoredLwinWine,result,row.identity_match_status==='manual'?'manual':'deterministic');return statement?Boolean((await statement.run()).meta.changes):true}
  let suggestions:ReferenceSuggestion[]|null=null;
  if(refreshSuggestions){
-  const product=row.lwin7?await lwinRowById<LwinReferenceProduct>(bucket,String(row.lwin7),input.producer):null;
-  // If the local reference is unavailable, preserve the existing suggestions.
+  const product=row.lwin7?await lwinRowById<LwinReferenceProduct>(bucket,String(row.lwin7),input.producer,{manualPreview:true}):null;
+  // Do not report a successful refresh while retaining an unverified suggestion.
+  if(row.lwin7&&product?.status!=='Live')throw new ApiError(503,'The stored LWIN could not be refreshed from the catalogue. Your review choices were not changed.');
   if(product?.status==='Live'){const identity=lwinReferenceIdentity(product),place=canonicalizeWineFields({country:product.country,region:product.region});suggestions=refreshPendingReferenceSuggestions({...input,referenceDisplayName:product.displayName,referenceProducer:identity.producerName,referenceWineName:identity.wineName,referenceCountry:place.country,referenceRegion:place.region,referenceSubRegion:product.subRegion,referenceClassification:product.classification},row.reference_suggestions_json)}
  }
  const now=new Date().toISOString();

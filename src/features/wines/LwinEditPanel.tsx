@@ -6,7 +6,7 @@ import { referenceAppRegion,regionWithin } from '../../lib/wine/referenceGeograp
 import { getWine,type WineDetail } from './api';
 import { LwinLinkEditor,type LwinLinkPreview } from './LwinLinkEditor';
 import './lwinEdit.css';
-import { lwinDisplayWineName,sameWineDisplayName } from '../../lib/wine/lwinDisplayName';
+import { lwinDisplayWineName,wineNameNeedsReview } from '../../lib/wine/lwinDisplayName';
 
 export type LwinEditValues={producer:string;wineName:string;country:string;region:string;classification:string;classificationOverride:string};
 type Props={wine:WineDetail;values:LwinEditValues;dirty:boolean;disabled:boolean;canMatch:boolean;initiallyOpen?:boolean;onApply:(values:Partial<LwinEditValues>)=>void;onBusy:(busy:boolean)=>void;onUpdated:(wine:WineDetail)=>void};
@@ -39,7 +39,7 @@ export function LwinEditPanel({wine,values,dirty,disabled,canMatch,initiallyOpen
   {key:'region' as const,label:'Region',value:referenceAppRegion(reference),current:values.region},
   {key:'classification' as const,label:'Cru level',value:appClassification(reference.classification),current:values.classificationOverride||values.classification}
  ]:[];
- const differences=comparisons.filter(item=>item.value&&item.value!==item.current&&!(item.key==='wineName'&&sameWineDisplayName(item.current,item.value))&&!(item.key==='region'&&regionWithin(item.current,item.value,values.country,reference?.country)));
+ const differences=comparisons.filter(item=>item.value&&item.value!==item.current&&!(item.key==='wineName'&&!wineNameNeedsReview(item.current,item.value))&&!(item.key==='region'&&regionWithin(item.current,item.value,values.country,reference?.country)));
  const missing=differences.filter(item=>!item.current);
  function apply(patch:Partial<LwinEditValues>){onApply(patch);setNotice('Added to your form. Save changes below to keep these values.')}
  const facts=reference?[

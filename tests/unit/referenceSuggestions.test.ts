@@ -3,6 +3,18 @@ import { appClassification,buildReferenceSuggestions,refreshPendingReferenceSugg
 import { lwinDisplayWineName } from '../../src/lib/wine/lwinDisplayName';
 
 describe('LWIN reference suggestions',()=>{
+ it.each([
+  ['Karia Chardonnay',{displayName:"Stag's Leap Wine Cellars, Karia, Napa Valley",wineName:'Karia',subRegion:'Napa Valley'}],
+  ['Marqués de Riscal Gran Reserva',{displayName:'Marques de Riscal, Gran Reserva, Rioja',wineName:'Gran Reserva',region:'Rioja'}],
+  ['Heathcote Nebbiolo',{displayName:'The Hairy Arm, Nebbiolo, Heathcote',wineName:'Nebbiolo',subRegion:'Heathcote'}]
+ ])('keeps the fuller logged name %s without appending catalogue geography',(wineName,lwinReference)=>{
+  expect(buildReferenceSuggestions({wineName,lwinReference})).toEqual([]);
+  expect(refreshPendingReferenceSuggestions({wineName,lwinReference},JSON.stringify([{field:'wineName',suggested:lwinReference.wineName}]))).toEqual([]);
+ });
+ it('removes only a trailing location field, retaining site and cru identity',()=>{
+  expect(lwinDisplayWineName({displayName:'Example, Chassagne-Montrachet Premier Cru, Clos Saint-Jean Rouge',wineName:'Rouge',subRegion:'Chassagne-Montrachet'})).toBe('Chassagne-Montrachet Premier Cru, Clos Saint-Jean Rouge');
+  expect(lwinDisplayWineName({displayName:'Example, Karia, Napa Valley',wineName:'Karia',subRegion:'Napa Valley'})).toBe('Karia');
+ });
  const reference={displayName:'Guy Amiot et Fils, Chassagne-Montrachet Premier Cru, Clos Saint-Jean Rouge',wineName:'Rouge'};
  it('preserves appellation, vineyard, cru and colour in a suggested name',()=>{
   const input={wineName:'Chassagne-Montrachet 1er Cru Clos Saint Jean',referenceWineName:'Rouge',lwinReference:reference};
