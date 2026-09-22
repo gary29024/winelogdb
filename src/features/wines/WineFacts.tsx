@@ -45,7 +45,7 @@ export function WineDetailsSection({wine,extra=[]}:{wine:Facts;extra?:FactRow[]}
  const rows=[...wineFactRows(wine),...extra];
  if(!rows.length)return null;
  const pairedLabels=wine.identityMatchStatus==='conflict'?[]:[['Type','Alcohol'],['LWIN7','LWIN11']].flatMap(pair=>{
-  const labels=pair.map(name=>rows.find(([label])=>label===name||label===`${name} (needs review)`)?.[0]);
+  const labels=pair.map(name=>rows.find(([label])=>label===name)?.[0]);
   return labels.every((label):label is string=>Boolean(label))?labels:[];
  });
  return <section className="detail-section">

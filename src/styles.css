@@ -251,7 +251,8 @@ button:disabled{opacity:.55;cursor:default}
 @media(max-width:700px){
  .wine-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
  .wine-actions>button,.wine-actions>a{display:flex;align-items:center;justify-content:center;min-height:44px;width:100%;padding:9px 8px;text-align:center}
- .wine-actions>.wine-sharing-status,.wine-actions>.shared-favorite-error{grid-column:1/-1;order:1}
+ /* wineSharing.css places .wine-sharing-status, beside the button that emits it. */
+ .wine-actions>.shared-favorite-error{grid-column:1/-1;order:1}
  .journal-filters .filter-pills:not([hidden]){display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;overflow:visible;padding-right:0;scroll-snap-type:none;-webkit-mask-image:none;mask-image:none}
  .journal-filters .filter-pills label{min-width:0}
  .journal-filters .filter-pills input,.journal-filters .filter-pills select{min-width:0;width:100%;min-height:44px;font-size:16px}

@@ -32,8 +32,8 @@ for(const role of ['owner','member'])for(const width of [320,390,1280])test(`${r
  await page.setViewportSize({width,height:900});
  await setup(page,role);
  await page.goto('/wines/layout-wine');
- const tag=page.getByRole('button',{name:'Tag friends',exact:true});
- await expect(tag).toHaveAttribute('aria-pressed','false');
+ const tag=page.getByRole('button',{name:/^Tag friends/});
+ await expect(tag).toHaveAccessibleName('Tag friends, not shared');
  await tag.click();
  const sheet=page.getByRole('dialog',{name:'Tag friends',exact:true});
  await expect(sheet.locator('.friend-tag-relationship')).toHaveCount(0);
@@ -41,12 +41,12 @@ for(const role of ['owner','member'])for(const width of [320,390,1280])test(`${r
  await sheet.getByRole('button',{name:'Bob',exact:true}).click();
  await sheet.getByRole('button',{name:'Confirm tags',exact:true}).click();
  await expect(sheet).toHaveCount(0);
- await expect(tag).toHaveAttribute('aria-pressed','true');
+ await expect(tag).toHaveAccessibleName('Tag friends, shared with 2 friends');
  await expect(tag).toHaveClass(/active/);
- await expect(page.getByRole('status')).toHaveText('Tags updated.');
+ await expect(page.getByRole('status')).toHaveText('Tagged with 2 friends.');
  await actionsFit(page);
  await page.reload();
- await expect(tag).toHaveAttribute('aria-pressed','true');
+ await expect(tag).toHaveAccessibleName('Tag friends, shared with 2 friends');
  await expect(page.getByText('Shared with Alice, Bob',{exact:true})).toHaveCount(0);
  await tag.click();
  await expect(sheet.locator('.friend-tag-relationship')).toHaveCount(0);
@@ -54,14 +54,15 @@ for(const role of ['owner','member'])for(const width of [320,390,1280])test(`${r
  await sheet.getByRole('button',{name:'Alice',exact:true}).click();
  await expect(sheet.locator('.friend-tag-relationship')).toHaveCount(0);
  await sheet.getByRole('button',{name:'Cancel',exact:true}).click();
- await expect(tag).toHaveAttribute('aria-pressed','true');
+ await expect(tag).toHaveAccessibleName('Tag friends, shared with 2 friends');
  await tag.click();
  await expect(sheet.getByRole('button',{name:'Alice',exact:true})).toHaveAttribute('aria-pressed','true');
  await sheet.getByRole('button',{name:'Alice',exact:true}).click();
  await sheet.getByRole('button',{name:'Bob',exact:true}).click();
  await sheet.getByRole('button',{name:'Confirm tags',exact:true}).click();
- await expect(tag).toHaveAttribute('aria-pressed','false');
+ await expect(tag).toHaveAccessibleName('Tag friends, not shared');
  await expect(tag).not.toHaveClass(/active/);
+ await expect(page.getByRole('status')).toHaveText('Friend tags removed.');
  await actionsFit(page);
 });
 
@@ -72,6 +73,9 @@ for(const role of ['owner','member'])test(`${role}: recipient sharing sheet name
  await expect(page.getByRole('heading',{name:wine.wineName,exact:true})).toBeVisible();
  await expect(page.locator('.shared-source-indicator')).toHaveCount(0);
  await expect(page.getByText('Shared by Gary',{exact:true})).toHaveCount(0);
+ // The page never names the sharer, but it does say the research is inherited.
+ await expect(page.getByText(/^Shared, updated /)).toBeVisible();
+ await expect(page.getByText(/Research shared by/)).toHaveCount(0);
  const tag=page.getByRole('button',{name:'Sharing details',exact:true});
  await expect(tag).not.toHaveClass(/active/);
  await tag.click();
@@ -84,7 +88,7 @@ for(const role of ['owner','member'])test(`${role}: recipient sharing sheet name
  await expect(sheet.getByRole('group',{name:'Friends'})).toHaveCount(0);
  await expect(sheet.getByRole('button',{name:'Confirm tags'})).toHaveCount(0);
  await expect(sheet).not.toContainText(/Alice|Bob/);
- await sheet.getByRole('button',{name:'Close',exact:true}).click();
+ await sheet.locator('footer').getByRole('button',{name:'Close',exact:true}).click();
  await expect(tag).toBeFocused();
  await actionsFit(page);
  expect(requests.filter(request=>request.includes('/shares')||request.includes('/api/friends'))).toEqual([]);
@@ -93,13 +97,42 @@ for(const role of ['owner','member'])test(`${role}: recipient sharing sheet name
 test('failed share reads cannot overwrite existing tags',async({page})=>{
  await setup(page,'member',['alice']);
  await page.goto('/wines/layout-wine');
- const tag=page.getByRole('button',{name:'Tag friends',exact:true});
- await expect(tag).toHaveAttribute('aria-pressed','true');
+ const tag=page.getByRole('button',{name:/^Tag friends/});
+ await expect(tag).toHaveAccessibleName('Tag friends, shared with 1 friend');
  await page.route('**/api/wines/layout-wine/shares',route=>route.fulfill({status:503,json:{error:'Sharing unavailable'}}));
  await tag.click();
  const sheet=page.getByRole('dialog',{name:'Tag friends',exact:true});
  await expect(sheet.getByRole('alert')).toContainText('Sharing unavailable');
  await expect(sheet.getByRole('button',{name:'Confirm tags'})).toBeDisabled();
  await sheet.getByRole('button',{name:'Close',exact:true}).click();
- await expect(tag).toHaveAttribute('aria-pressed','true');
+ await expect(tag).toHaveAccessibleName('Tag friends, shared with 1 friend');
+});
+
+// An unread list and an empty one look identical once rendered, so the sheet
+// has to say which it is rather than leaving the space blank.
+test('the sheet says it is loading rather than showing an empty friend list',async({page})=>{
+ await setup(page,'member');
+ await page.goto('/wines/layout-wine');
+ let release=()=>{};
+ const held=new Promise<void>(resolve=>{release=resolve});
+ await page.route('**/api/friends',async route=>{await held;await route.fulfill({json:{items:[{id:'alice',display_name:'Alice'}]}})});
+ await page.getByRole('button',{name:/^Tag friends/}).click();
+ const sheet=page.getByRole('dialog',{name:'Tag friends',exact:true});
+ await expect(sheet.getByText('Loading friends…',{exact:true})).toBeVisible();
+ await expect(sheet.getByText('Add a friend from Account & friends first.',{exact:true})).toHaveCount(0);
+ await expect(sheet.getByRole('button',{name:'Confirm tags',exact:true})).toBeDisabled();
+ release();
+ await expect(sheet.getByRole('button',{name:'Alice',exact:true})).toBeVisible();
+ await expect(sheet.getByText('Loading friends…',{exact:true})).toHaveCount(0);
+});
+
+// A member with no friends yet must still be told what to do about it.
+test('the sheet keeps its empty state once the read lands',async({page})=>{
+ await setup(page,'member');
+ await page.goto('/wines/layout-wine');
+ await page.route('**/api/friends',route=>route.fulfill({json:{items:[]}}));
+ await page.getByRole('button',{name:/^Tag friends/}).click();
+ const sheet=page.getByRole('dialog',{name:'Tag friends',exact:true});
+ await expect(sheet.getByText('Add a friend from Account & friends first.',{exact:true})).toBeVisible();
+ await expect(sheet.getByText('Loading friends…',{exact:true})).toHaveCount(0);
 });

@@ -90,7 +90,10 @@ export function wineFactRows(wine:WineFacts):FactRow[]{
   ['Region',denominatedRegion],
   ['Appellation',denominatedAppellation],
   ['Release',wine.releaseDesignation],
-  ['Reference identity',conflict?'Conflict — stored reference details may not match this wine.':wine.identityMatchStatus==='manual'&&!wine.lwin7&&!wine.elid?'Kept without LWIN · automatic matching off':null],
+  // A manual decision retires the review panel, so this row is the only place
+  // left that says matching is off - and the only place that can say where to
+  // undo it, now that there is no longer a control below to point at.
+  ['Reference identity',conflict?'Conflict — stored reference details may not match this wine.':wine.identityMatchStatus==='manual'&&!wine.lwin7&&!wine.elid?'Kept without LWIN · automatic matching off · link one in Edit tasting':null],
   [referenceLabel('Type'),[wine.colour,wine.productSubtype??wine.productType].filter(Boolean).join(' · ')],
   ['Alcohol',wine.alcoholPercentage!=null?`${wine.alcoholPercentage}%`:null],
   ['Grapes / blend',blendLabels(wine).join(', ')],

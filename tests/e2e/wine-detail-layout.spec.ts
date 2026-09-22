@@ -86,7 +86,9 @@ for(const role of ['owner','member'])for(const route of ['/wines/layout-wine','/
   expect(fits).toBe(true);
   await mockWine(page,null,role,{identityMatchStatus:'manual',lwin7:null,lwin11:null,elid:null,referenceSuggestions:[{field:'producer',label:'Producer',current:'Old',suggested:'Stale'}]});
   await page.reload();
-  await expect(facts).toContainText('Kept without LWIN · automatic matching off');
+  // The panel is gone for good after a manual decision, so the row that replaces
+  // it has to name the one place the decision can still be undone.
+  await expect(facts).toContainText('Kept without LWIN · automatic matching off · link one in Edit tasting');
   await expect(page.locator('.lwin-link-editor,.lwin-suggestion-panel')).toHaveCount(0);
  });
 }
