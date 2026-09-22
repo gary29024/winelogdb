@@ -86,9 +86,10 @@ for(const role of ['owner','member'])for(const route of ['/wines/layout-wine','/
   expect(fits).toBe(true);
   await mockWine(page,null,role,{identityMatchStatus:'manual',lwin7:null,lwin11:null,elid:null,referenceSuggestions:[{field:'producer',label:'Producer',current:'Old',suggested:'Stale'}]});
   await page.reload();
-  // The panel is gone for good after a manual decision, so the row that replaces
-  // it has to name the one place the decision can still be undone.
-  await expect(facts).toContainText('Kept without LWIN · automatic matching off · link one in Edit tasting');
+  // Only an owner account viewing its own wine can reach the reference editor.
+  const canEditReference=role==='owner'&&route.startsWith('/wines/');
+  const identity=facts.locator('div').filter({has:page.getByText('Reference identity',{exact:true})}).locator('dd');
+  await expect(identity).toHaveText(`Kept without LWIN · automatic matching off${canEditReference?' · link one in Edit tasting':''}`);
   await expect(page.locator('.lwin-link-editor,.lwin-suggestion-panel')).toHaveCount(0);
  });
 }

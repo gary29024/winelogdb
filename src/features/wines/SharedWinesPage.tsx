@@ -169,7 +169,7 @@ export function SharedWinesPage(){
    <DeepSources sources={wine.deepSearch.sources}/>
    {/* Not this reader's research: it came with the bottle, so the line says so
        without naming the sharer, who is one press away on the tag button. */}
-   <small>Shared, updated {formatDate(wine.deepSearch.researchedAt.slice(0,10))}</small>
+   <small>Shared research · updated {formatDate(wine.deepSearch.researchedAt.slice(0,10))}</small>
   </section>}
   {selectedPhoto&&<div className="image-lightbox" role="dialog" aria-modal="true" aria-label="Wine photo viewer" onClick={()=>setSelectedPhoto(undefined)}><button type="button" className="lightbox-close" aria-label="Close photo" onClick={()=>setSelectedPhoto(undefined)}>×</button><div className="lightbox-image-wrap" onClick={e=>e.stopPropagation()}><img src={selectedPhoto} alt={`${wine.producer} ${wine.wineName} full-resolution shared photo`} className="lightbox-image"/></div></div>}
  </article>;

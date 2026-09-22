@@ -41,8 +41,8 @@ export function FactList({rows,className,pairedLabels=[]}:{rows:FactRow[];classN
 }
 
 /** The Wine details panel. `extra` appends rows only one viewer is entitled to. */
-export function WineDetailsSection({wine,extra=[]}:{wine:Facts;extra?:FactRow[]}){
- const rows=[...wineFactRows(wine),...extra];
+export function WineDetailsSection({wine,extra=[],canEditReference=false}:{wine:Facts;extra?:FactRow[];canEditReference?:boolean}){
+ const rows=[...wineFactRows(wine,{canEditReference}),...extra];
  if(!rows.length)return null;
  const pairedLabels=wine.identityMatchStatus==='conflict'?[]:[['Type','Alcohol'],['LWIN7','LWIN11']].flatMap(pair=>{
   const labels=pair.map(name=>rows.find(([label])=>label===name)?.[0]);
