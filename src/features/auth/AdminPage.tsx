@@ -1,3 +1,7 @@
+import { SectionNavigation } from '../../components/SectionNavigation';
+import { usePageSection } from '../../components/usePageSection';
+import { PageHeader } from '../../components/PageHeader';
+import '../../settingsLayout.css';
 import { Link } from 'react-router-dom';
 import { useEffect,useState } from 'react';
 import { apiJson } from '../../lib/auth/api';
@@ -18,17 +22,22 @@ const formatBytes=(bytes:number)=>{if(!Number.isFinite(bytes)||bytes<=0)return '
 const labelKind=(kind:string)=>kind.replaceAll('_',' ').replace(/\b\w/g,c=>c.toUpperCase());
 const stateLabel=(state:RolloutState)=>state==='not_started'?'Not started':state==='paused'?'Paused':state==='running'?'Running in background':'Complete';
 const utcBudgetWindow=()=>{const now=new Date(),current=now.toISOString().slice(0,7),nextDate=new Date(Date.UTC(now.getUTCFullYear(),now.getUTCMonth()+1,1)),days=Math.ceil((nextDate.getTime()-now.getTime())/86_400_000);return {current,next:nextDate.toISOString().slice(0,7),days}};
+const sections=[{id:'members',label:'Members'},{id:'usage',label:'Usage'},{id:'access',label:'Access & budgets'},{id:'maintenance',label:'Maintenance'}];
 export function AdminPage(){
+ const [section,selectSection]=usePageSection(sections,'members',{hash:'#member-usage',section:'usage'});
  const [data,setData]=useState<Overview|null>(null),[config,setConfig]=useState<Record<string,unknown>>(defaults),[policies,setPolicies]=useState<ActionPolicy[]>([]),[message,setMessage]=useState(''),[busy,setBusy]=useState(false),[rolloutStatus,setRolloutStatus]=useState<RolloutStatus|null>(null);
+ const [loadError,setLoadError]=useState('');
  const [email,setEmail]=useState(''),[inviteUrl,setInviteUrl]=useState(''),[grantMemberId,setGrantMemberId]=useState(''),[grantAction,setGrantAction]=useState(''),[grantRuns,setGrantRuns]=useState(1),[grantReason,setGrantReason]=useState('');
  const rolloutRunning=rolloutStatus?.storage.state==='running'||rolloutStatus?.research.state==='running'||rolloutStatus?.lwin.state==='running'||rolloutStatus?.lwinValidation.state==='running'||rolloutStatus?.lwinAi.state==='running';
- async function load(){
-  const [next,rollout]=await Promise.all([apiJson<Overview>('/api/admin/overview'),apiJson<RolloutStatus>('/api/admin/rollout/status')]);setData(next);setRolloutStatus(rollout);setPolicies(next.actionPolicies);
-  if(next.settings){const clean:Record<string,unknown>={...defaults};for(const key of budgetKeys)if(next.settings[key]!==undefined)clean[key]=next.settings[key];setConfig(clean)}
+ async function load(initial=false){
+  setLoadError('');
+  const [next,rollout]=await Promise.all([apiJson<Overview>('/api/admin/overview'),apiJson<RolloutStatus>('/api/admin/rollout/status').catch(()=>null)]);setData(next);setRolloutStatus(rollout);if(initial)setPolicies(next.actionPolicies);
+  if(initial&&next.settings){const clean:Record<string,unknown>={...defaults};for(const key of budgetKeys)if(next.settings[key]!==undefined)clean[key]=next.settings[key];setConfig(clean)}
  }
- useEffect(()=>{void load().catch(e=>setMessage(e.message))},[]);
- useEffect(()=>{if(!data||window.location.hash!=='#member-usage')return;const frame=window.requestAnimationFrame(()=>document.getElementById('member-usage')?.scrollIntoView({block:'start'}));return()=>window.cancelAnimationFrame(frame)},[data]);
+ useEffect(()=>{void load(true).catch(e=>setLoadError(e.message))},[]);
+ useEffect(()=>{if(!data||section!=='usage'||window.location.hash!=='#member-usage')return;const frame=window.requestAnimationFrame(()=>document.getElementById('member-usage')?.scrollIntoView({block:'start'}));return()=>window.cancelAnimationFrame(frame)},[data,section]);
  useEffect(()=>{const refresh=()=>{void apiJson<RolloutStatus>('/api/admin/rollout/status').then(setRolloutStatus).catch(()=>undefined)};window.addEventListener('focus',refresh);return()=>window.removeEventListener('focus',refresh)},[]);
+
  useEffect(()=>{if(!rolloutRunning)return;const timer=window.setInterval(()=>{void apiJson<RolloutStatus>('/api/admin/rollout/status').then(setRolloutStatus).catch(()=>undefined)},5000);return()=>window.clearInterval(timer)},[rolloutRunning]);
  useEffect(()=>{const members=data?.members.filter(item=>item.role==='member')??[];if(!grantMemberId&&members[0])setGrantMemberId(members[0].id);const allowed=policies.filter(item=>item.accessMode==='allowance');if(!allowed.some(item=>item.action===grantAction))setGrantAction(allowed[0]?.action??'')},[data,policies,grantMemberId,grantAction]);
  async function run(fn:()=>Promise<unknown>){setBusy(true);setMessage('');try{const result=await fn();setMessage(typeof result==='string'?result:'Saved');await load()}catch(e){setMessage((e as Error).message)}finally{setBusy(false)}}
@@ -48,10 +57,22 @@ export function AdminPage(){
  const budgetWindow=utcBudgetWindow(),observedMonth=String(config.cloudflareObservedMonth??'');
  const researchProcessed=(rolloutStatus?.research.wines.processed??0)+(rolloutStatus?.research.producers.processed??0),researchTotal=(rolloutStatus?.research.wines.total??0)+(rolloutStatus?.research.producers.total??0);
  function changePolicy(action:string,patch:Partial<ActionPolicy>){setPolicies(current=>current.map(item=>item.action===action?{...item,...patch}:item))}
- return <section className="account-page"><h1>Owner controls</h1><p><Link className="button" to="/admin/lwin-review">LWIN needs review{rolloutStatus?.lwinCurrent?` (${rolloutStatus.lwinCurrent.needsReview})`:''}</Link></p>{message&&<p role="status">{message}</p>}{data&&<p>Estimated provider AI cost: US${data.aiCost.usd.toFixed(2)} · {data.aiCost.searches} searches. Estimates can lag provider billing.</p>}
+ return <section className="account-page settings-page">
+ <PageHeader title="Owner controls" subtitle="Members, AI access and operations."/>
+ <div className="settings-layout">
+  <aside><SectionNavigation label="Owner sections" items={sections.map(item=>({...item,count:item.id==='maintenance'?rolloutStatus?.lwinCurrent?.needsReview:undefined}))} selected={section} onSelect={selectSection}/></aside>
+  <div className="settings-content">
+ {message&&<p role="status">{message}</p>}
+ {loadError&&<p role="alert">{loadError} <button type="button" onClick={()=>void load(true).catch(e=>setLoadError(e.message))}>Retry owner controls</button></p>}
+ {!data&&!loadError&&<p role="status">Loading owner controls…</p>}
+ {!!data?.reviewOperations.length&&<p role="alert">{data.reviewOperations.length} operations need reconciliation. <button type="button" onClick={()=>selectSection('maintenance')}>Review operations</button></p>}
+
  {observedMonth!==budgetWindow.current&&<p role="alert"><strong>AI is paused for the new month.</strong> In Pilot limits & budgets, set Measurement month to <strong>{budgetWindow.current}</strong>, enter this month’s measured Cloudflare cost (usually 0 at the start of a month), then press Save limits & budgets.</p>}
  {observedMonth===budgetWindow.current&&budgetWindow.days<=3&&<p role="status"><strong>Monthly AI budget check due soon.</strong> At 00:00 UTC on {budgetWindow.next}-01, WineLog will pause AI until Measurement month is changed to <strong>{budgetWindow.next}</strong> and the new month’s measured Cloudflare cost is saved.</p>}
  {Number(config.cloudflareObservedUsd)>=Number(config.cloudflareWarningUsd)&&Number(config.cloudflareWarningUsd)>0&&<p role='alert'>Cloudflare spending has reached your warning amount. Review current usage before more AI work.</p>}
+ <div hidden={!data}>
+ <section hidden={section!=='usage'} aria-label="Usage">
+ {data&&<p>Estimated provider AI cost: US${data.aiCost.usd.toFixed(2)} · {data.aiCost.searches} searches. Estimates can lag provider billing.</p>}
  {data&&<section id="member-usage" className="member-usage" aria-labelledby="member-usage-title">
   <h2 id="member-usage-title">Member usage · {data.memberUsage.month}</h2>
   <p>Included actions are free to members within the deployment safeguards. Allowance actions count only successful user-facing runs; failed work releases the slot. Smart Search remains separately controlled by its per-account daily embedding limit.</p>
@@ -63,6 +84,7 @@ export function AdminPage(){
   </article>})}</div>
   <p className="usage-note">Cached or friend-reused results do not consume a run. Retries remain attached to the same operation. Allowance weeks reset Monday 00:00 UTC and do not roll over.</p>
  </section>}
+ </section><section hidden={section!=='access'} aria-label="Access and budgets">
  <fieldset disabled={busy}><legend>Pilot limits & budgets</legend><p>These are deployment-wide cost and capacity safeguards. Member entitlements are configured separately below.</p>{budgetKeys.map(key=>{const value=config[key];return <label key={key}>{budgetLabels[key]??key}{typeof value==='boolean'?<input type="checkbox" checked={value} onChange={e=>setConfig({...config,[key]:e.target.checked})}/>:<input type={typeof value==='number'?'number':'text'} value={String(value??'')} onChange={e=>setConfig({...config,[key]:typeof value==='number'?Number(e.target.value):e.target.value})}/>}</label>})}<button onClick={()=>void run(()=>apiJson('/api/admin/settings','PUT',config))}>Save limits & budgets</button></fieldset>
  <fieldset disabled={busy}><legend>Member AI access</legend>
   <p>Choose which user-facing AI actions are included for every member. For actions that would normally require credits, keep them on allowance mode during the pilot and set the free successful runs available to each account per week.</p>
@@ -74,6 +96,7 @@ export function AdminPage(){
   <button disabled={!policies.length} onClick={()=>void run(()=>apiJson('/api/admin/action-policies','PUT',{policies:policies.map(({action,accessMode,weeklyLimit})=>({action,accessMode,weeklyLimit}))}))}>Save member AI access</button>
   <p><small>Smart Search remains free to members and is governed by “Smart Search embeddings per account per day” above rather than this successful-run allowance.</small></p>
  </fieldset>
+ </section><section hidden={section!=='members'} aria-label="Members">
  <fieldset disabled={busy}><legend>Members</legend>
   <ul>{members.map(m=><li key={m.id}>{m.display_name} · {m.email} — {m.status} <button onClick={()=>void run(()=>apiJson(`/api/admin/members/${m.id}`,'PATCH',{status:m.status==='active'?'suspended':'active'}))}>{m.status==='active'?'Suspend':'Restore'}</button></li>)}</ul>{!members.length&&<p>No invited members yet.</p>}
   {!!members.length&&!!allowancePolicies.length&&<form onSubmit={e=>{e.preventDefault();void run(async()=>{await apiJson('/api/admin/action-grants','POST',{userId:grantMemberId,action:grantAction,runs:grantRuns,reason:grantReason,idempotencyKey:crypto.randomUUID()});setGrantRuns(1);setGrantReason('');return 'Additional free allocation granted for this week.'})}}>
@@ -86,7 +109,11 @@ export function AdminPage(){
    </fieldset>
   </form>}
  </fieldset>
- <fieldset disabled={busy}><legend>Launch preparation</legend>
+ <fieldset disabled={busy}><legend>Create invitation</legend>  <label>Invite email<input type="email" value={email} onChange={e=>{setEmail(e.target.value);setInviteUrl('')}}/></label><button onClick={()=>void run(async()=>{const result=await apiJson<{url:string}>('/api/admin/invitations','POST',{email});setInviteUrl(result.url);return 'Invitation created.'})}>Create member invitation</button>
+  {inviteUrl&&<div className="invitation-result"><strong>Invitation link</strong><input aria-label="Invitation link" readOnly value={inviteUrl} onFocus={e=>e.currentTarget.select()}/><div className="friend-actions"><button type="button" onClick={()=>void navigator.clipboard.writeText(inviteUrl).then(()=>setMessage('Invitation link copied.')).catch(()=>setMessage('Could not copy automatically. Press and hold the link to copy it.'))}>Copy link</button><a className="button" href={inviteUrl} target="_blank" rel="noreferrer">Open link</a></div></div>}</fieldset>
+ </section><section hidden={section!=='maintenance'} aria-label="Maintenance">
+ <p><Link className="button" to="/admin/lwin-review">LWIN needs review{rolloutStatus?.lwinCurrent?` (${rolloutStatus.lwinCurrent.needsReview})`:''}</Link></p>
+ <fieldset disabled={busy}><legend>Background maintenance</legend>{!rolloutStatus&&<p role="alert">Maintenance status is unavailable. <button type="button" onClick={()=>void run(()=>load())}>Retry</button></p>}
   <p>R2 inventory, research indexing and LWIN backfill run in the background. It is safe to leave this page. The first LWIN pass uses only local D1 + R2 data. The optional second pass uses the low-cost recognition model through the normal AI Gateway Vertex path on Flex, only for unresolved wines after local candidate narrowing. Neither pass calls Liv-ex or changes tasting notes, photos or research.</p>
   {rolloutStatus&&<div>
    <p><strong>R2 storage:</strong> {stateLabel(rolloutStatus.storage.state)} · {rolloutStatus.storage.objects} objects tracked.</p>
@@ -118,9 +145,8 @@ export function AdminPage(){
    {rolloutStatus.lwinAi.error&&<p role="alert">Last AI LWIN resolution error: {rolloutStatus.lwinAi.error}</p>}
    <div className="friend-actions"><button disabled={rolloutStatus.lwinAi.state==='running'||rolloutStatus.lwin.state!=='complete'} onClick={()=>void run(()=>startRollout('lwin-ai',rolloutStatus.lwinAi.state==='complete'))}>{rolloutStatus.lwinAi.state==='running'?'Resolving unmatched wines…':rolloutStatus.lwinAi.state==='complete'?'Recheck unresolved with AI':rolloutStatus.lwinAi.state==='paused'?'Resume AI-assisted LWIN resolution':'Resolve unmatched LWIN wines'}</button>{rolloutStatus.lwinAi.state==='running'&&<button type="button" onClick={()=>void run(()=>pauseRollout('lwin-ai'))}>Pause</button>}</div>
   </div>}
-  <label>Invite email<input type="email" value={email} onChange={e=>{setEmail(e.target.value);setInviteUrl('')}}/></label><button onClick={()=>void run(async()=>{const result=await apiJson<{url:string}>('/api/admin/invitations','POST',{email});setInviteUrl(result.url);return 'Invitation created.'})}>Create member invitation</button>
-  {inviteUrl&&<div className="invitation-result"><strong>Invitation link</strong><input aria-label="Invitation link" readOnly value={inviteUrl} onFocus={e=>e.currentTarget.select()}/><div className="friend-actions"><button type="button" onClick={()=>void navigator.clipboard.writeText(inviteUrl).then(()=>setMessage('Invitation link copied.')).catch(()=>setMessage('Could not copy automatically. Press and hold the link to copy it.'))}>Copy link</button><a className="button" href={inviteUrl} target="_blank" rel="noreferrer">Open link</a></div></div>}
+
  </fieldset>
  {!!data?.reviewOperations.length&&<><h2>Operations needing reconciliation</h2><p>These AI operations remain held because completion is uncertain. Reconcile provider status before allowing a duplicate run.</p><ul>{data.reviewOperations.map(op=><li key={op.id}>{op.id} — {op.path}</li>)}</ul></>}
- </section>;
+ </section></div></div></div></section>;
 }

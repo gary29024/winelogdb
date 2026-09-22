@@ -1,4 +1,9 @@
 import { useSearchParams } from 'react-router-dom';
+// The tabs carry .journal-scope-tabs, so they own the sheet that styles it.
+// favorites.css reached them only through the Journal, which left the tabs
+// unstyled - no pill, no active scope - for anyone landing on the cellar
+// directly, since that page is its own lazily loaded chunk.
+import '../../favorites.css';
 
 export type JournalScope='tasted'|'cellar'|'favorites';
 

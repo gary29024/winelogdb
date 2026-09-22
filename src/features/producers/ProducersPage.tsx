@@ -1,3 +1,4 @@
+import { PageHeader } from '../../components/PageHeader';
 import { accountStorageKey,getAccount } from '../../lib/auth/client';
 import { useCallback,useEffect,useMemo,useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -95,7 +96,7 @@ export function ProducersPage(){
   setExpandedCountries(()=>{const next=open?new Set(groups.map(group=>group.country)):new Set<string>();writeExpanded(COUNTRY_OPEN_KEY,next);return next});
   setExpandedRegions(()=>{const next=open?new Set(everyRegionKey):new Set<string>();writeExpanded(REGION_OPEN_KEY,next);return next});
  }
- return <section className="producer-page"><div className="hero compact"><p className="eyebrow">PRODUCERS</p><h1>Your producer library.</h1><p>Browse domaines by where they are physically based: country, broad wine region, then commune — not by the appellations represented in their wines.</p></div>
+ return <section className="producer-page"><PageHeader title="Producers" subtitle="Browse domaines by where they are physically based: country, broad wine region, then commune — not by the appellations represented in their wines."/>
   <div className="producer-search"><div className="producer-search-field"><span aria-hidden="true"><AppIcon kind="search"/></span><input type="search" value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search producers…" aria-label="Search producers"/>{hasQuery&&<button type="button" onClick={()=>setQuery('')} aria-label="Clear producer search">Clear</button>}</div></div>
   {!loading&&!error&&<ResearchCampaignLink unresearched={items.filter(item=>!item.sharedOnly&&!item.researchedAt).length}/>}
   {loading?<p>Loading producers…</p>:error?<div className="producer-load-error" role="alert"><p>{error}</p><button type="button" onClick={()=>{void load()}}>Try again</button></div>:groups.length?<>

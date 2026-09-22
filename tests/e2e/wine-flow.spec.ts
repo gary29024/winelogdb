@@ -17,17 +17,25 @@ test('friend codes send pending requests and only acceptance adds a friend',asyn
  await page.route('**/api/friends/requests/incoming/accept',async route=>{expect(route.request().method()).toBe('POST');accepted=true;await route.fulfill({json:{ok:true}})});
  await page.route('**/api/friends/requests/decline',async route=>{expect(route.request().method()).toBe('DELETE');declined=true;await route.fulfill({json:{ok:true}})});
  await page.route('**/api/friends/requests/outgoing',async route=>{expect(route.request().method()).toBe('DELETE');sent=false;await route.fulfill({json:{ok:true}})});
- await page.goto('/account');await expect(page.getByRole('textbox',{name:'Your friend code',exact:true})).toHaveValue('A1B2-C3D4-E5F6');
+ await page.goto('/account?section=friends');await expect(page.getByRole('textbox',{name:'Your friend code',exact:true})).toHaveValue('A1B2-C3D4-E5F6');
  await expect(page.getByRole('button',{name:'Create friend link'})).toHaveCount(0);
+ // Sent requests sit behind a disclosure. Open it once: it is uncontrolled, so
+ // it stays open across the re-renders each action triggers.
+ await page.locator('summary').filter({hasText:'Sent requests'}).click();
  await page.getByRole('textbox',{name:'Friend code',exact:true}).fill('1234-5678-ABCD');await page.getByRole('button',{name:'Send friend request'}).click();
  await expect(page.getByText('Bob · Awaiting acceptance')).toBeVisible();await expect(page.getByRole('button',{name:'Remove friend'})).toHaveCount(0);
- await page.getByRole('button',{name:'Accept Carol',exact:true}).click();await expect(page.getByText('You and Carol are now friends.')).toBeVisible();await expect(page.getByRole('button',{name:'Remove friend'})).toHaveCount(1);
+ await page.getByRole('button',{name:'Accept Carol',exact:true}).click();await expect(page.getByText('You and Carol are now friends.')).toBeVisible();
+ // Removing a friend is behind that friend's own Sharing options disclosure.
+ await page.locator('summary').filter({hasText:'Sharing options'}).click();
+ await expect(page.getByRole('button',{name:'Remove friend'})).toHaveCount(1);
  await page.getByRole('button',{name:'Decline Dave',exact:true}).click();await expect(page.getByText('No incoming requests.')).toBeVisible();
  await page.getByRole('button',{name:'Cancel request to Bob',exact:true}).click();await expect(page.getByText('No pending sent requests.')).toBeVisible();
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
 });
 test('account and shared wine experience remain accessible from the Journal on mobile',async({page})=>{
- await page.setViewportSize({width:390,height:844});await signedIn(page);await page.goto('/account');await expect(page.getByText('Pilot AI access', {exact:true})).toBeVisible();await expect(page.getByRole('heading',{name:'Friends',exact:true})).toBeVisible();
+ await page.setViewportSize({width:390,height:844});await signedIn(page);
+ await page.goto('/account?section=usage');await expect(page.getByText('Pilot AI access', {exact:true})).toBeVisible();
+ await page.goto('/account?section=friends');await expect(page.getByRole('heading',{name:'Friends',exact:true})).toBeVisible();
  await page.goto('/shared');await expect(page).toHaveURL(/\/journal$/);await page.getByRole('link',{name:/Open .*shared by Bob/}).click();await expect(page.getByText('Bright cherry')).toBeVisible();await expect(page.getByRole('button',{name:'Edit your experience'})).toBeVisible();
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
 });
