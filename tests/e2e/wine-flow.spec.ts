@@ -38,7 +38,7 @@ test('a scan requires the server quote and cancellation invokes no AI',async({pa
  await page.goto('/upload');const png=await page.evaluate(()=>{const canvas=document.createElement('canvas');canvas.width=600;canvas.height=800;const c=canvas.getContext('2d')!;c.fillStyle='white';c.fillRect(0,0,600,800);c.fillStyle='black';c.fillText('Wine label',40,100);return canvas.toDataURL('image/png').split(',')[1]});
  await page.locator('input[type=file]').setInputFiles({name:'wine.png',mimeType:'image/png',buffer:Buffer.from(png,'base64')});await page.getByRole('button',{name:'Identify this wine',exact:true}).click();
  await expect(page.getByRole('dialog')).toBeVisible();await page.getByRole('button',{name:'Cancel',exact:true}).click();expect(submissions).toBe(0);
- await page.getByRole('button',{name:'Identify this wine',exact:true}).click();await page.getByRole('button',{name:'Use 5 credits',exact:true}).click();await expect(page.getByRole('heading',{name:'Combined identification'})).toBeVisible();expect(submissions).toBe(1);
+ await page.getByRole('button',{name:'Identify this wine',exact:true}).click();await page.getByRole('button',{name:'Use 5 credits',exact:true}).click();await expect(page.getByRole('heading',{name:'Identification Results'})).toBeVisible();expect(submissions).toBe(1);
 });
 
 test('editing a tasting persists the note and deletion requires confirmation',async({page})=>{

@@ -36,8 +36,8 @@ export async function previewWineReference(env:Env,owner:string,id:string,code:u
  const manifest=await referenceManifest(env.REFERENCE_DATA,'lwin');
  if(!manifest)throw new ApiError(503,'The LWIN catalogue is temporarily unavailable. Try again later.');
  const value=(key:string)=>row[key]==null?null:String(row[key]);
- const initial=await lwinRowById<LwinReferenceProduct>(env.REFERENCE_DATA,lwin7,value('producer'));
- if(!initial)throw new ApiError(404,manifest.lwinIdIndexPrefix?'This LWIN was not found in the imported catalogue.':'This LWIN was not found for the current producer. Check the code and producer name.');
+ const initial=await lwinRowById<LwinReferenceProduct>(env.REFERENCE_DATA,lwin7,value('producer'),{manualPreview:true});
+ if(!initial)throw new ApiError(404,'This LWIN was not found in the imported catalogue. Check the code or refresh the catalogue.');
  let product:LwinReferenceProduct=initial;
  const seen=new Set<string>();
  while(product.status==='Combined'){
@@ -54,7 +54,7 @@ export async function previewWineReference(env:Env,owner:string,id:string,code:u
  // A product code alone cannot verify the old ELID's edition/release. Clear it
  // rather than transferring a reference from the previous product.
  const match=await referenceMatchForProduct(env.REFERENCE_DATA,product,input,{includeElid:false});
- const suggestions=buildReferenceSuggestions({...input,referenceProducer:match.referenceProducer,referenceWineName:match.referenceWineName,referenceCountry:match.country,referenceRegion:match.region,referenceClassification:match.referenceClassification});
+ const suggestions=buildReferenceSuggestions({...input,lwinReference:match.lwinReference,referenceProducer:match.referenceProducer,referenceWineName:match.referenceWineName,referenceCountry:match.country,referenceRegion:match.region,referenceSubRegion:match.referenceSubRegion,referenceClassification:match.referenceClassification});
  const snapshot=snapshotColumns.map(column=>row[column]??null);
  const previewToken=await hash(JSON.stringify({owner,id,lwin7,snapshot,version:manifest.version,product,match,suggestions}));
  const preview={requestedLwin7:lwin7,lwin7:product.lwin7,displayName:product.displayName||[match.referenceProducer,match.referenceWineName].filter(Boolean).join(', '),producer:match.referenceProducer,wineName:match.referenceWineName,country:match.country,region:match.region,colour:match.colour,productType:match.productType,productSubtype:match.productSubtype,lwin11:match.lwin11,vintage:input.vintage,storedLwin7:value('lwin7'),suggestions,previewToken};

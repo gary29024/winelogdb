@@ -1,9 +1,11 @@
 import { z } from 'zod';
 import { normalizeReferenceText } from './referenceCatalog';
 import { appClassification } from './referenceSuggestions';
+import { referenceAppRegion,regionWithin } from './referenceGeography';
 
 const text=z.string().nullable();
 export const lwinReferenceSchema=z.object({
+ identityVersion:z.literal(2).optional(),
  source:z.literal('lwin'),version:z.string(),lwin7:z.string().regex(/^\d{7}$/),
  displayName:text.optional(),producerTitle:text.optional(),
  producer:text,wineName:text,country:text,region:text,subRegion:text,site:text,parcel:text,
@@ -29,7 +31,7 @@ export function publicLwinTaxonomy(reference:LwinReference):LwinTaxonomy{
 export type TaxonomyInput={producer?:string|null;wineName?:string|null;country?:string|null;region?:string|null;classification?:string|null;classificationOverride?:string|null;colour?:string|null;productType?:string|null;productSubtype?:string|null};
 export function enrichLwinTaxonomy<T extends TaxonomyInput>(wine:T,reference:LwinReference){
  const result={...wine},filled={...reference.filled},conflicts:LwinReference['conflicts']=[];
- const values={country:reference.country,region:reference.region,classification:appClassification(reference.classification),colour:reference.colour,productType:reference.productType,productSubtype:reference.productSubtype};
+ const values={country:reference.country,region:referenceAppRegion(reference),classification:appClassification(reference.classification),colour:reference.colour,productType:reference.productType,productSubtype:reference.productSubtype};
  for(const [field,value] of Object.entries(values) as Array<[keyof typeof values,string|null]>){
   if(!value)continue;
   const current=wine[field]?.trim();
@@ -38,7 +40,7 @@ export function enrichLwinTaxonomy<T extends TaxonomyInput>(wine:T,reference:Lwi
    continue;
   }
   if(!current){result[field]=value;filled[field]=value}
-  else if(normalizeReferenceText(current)!==normalizeReferenceText(value))conflicts.push({field,current,reference:value});
+  else if(normalizeReferenceText(current)!==normalizeReferenceText(value)&&!(field==='region'&&regionWithin(current,value,wine.country,reference.country)))conflicts.push({field,current,reference:value});
   // A later edit is no longer an LWIN-derived field, even if the reference stays.
   if(current&&filled[field]&&current!==filled[field])delete filled[field];
  }

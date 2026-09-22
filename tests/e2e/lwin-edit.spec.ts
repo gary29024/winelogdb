@@ -21,6 +21,13 @@ async function setup(page:Page,overrides:Record<string,unknown>={},role='owner',
   return route.fulfill({json:{items:[],holdings:[],total:0,matched:false,tasting:null}});
  });
  await page.goto('/wines/w1/edit');
+ if(role==='member'){
+  // Members get the catalogue read back through the wine fields and the facts
+  // list; the matching panel itself is owner work and is not rendered for them.
+  await expect(page.locator('.wine-enriched-details')).toBeVisible();
+  await expect(page.getByText('LWIN reference',{exact:true})).toHaveCount(0);
+  return {actions,saves};
+ }
  await expect(page.getByText('LWIN reference',{exact:true})).toBeVisible();
  if(expand)await page.getByText('LWIN reference',{exact:true}).click();
  return {actions,saves};
@@ -128,11 +135,15 @@ test('legacy backfilled values remain visible without a newer reference snapshot
  await expect(details).not.toContainText('Côte de Beaune');
 });
 
-test('members can see the match and facts without owner matching controls',async({page})=>{
+test('members see the catalogue facts without the matching panel or its controls',async({page})=>{
  await setup(page,{},'member');
- await expect(page.getByText('Matched',{exact:true})).toBeVisible();
  await expect(page.locator('.wine-enriched-details')).toContainText('Côte de Beaune');
+ await expect(page.locator('#lwin-match')).toHaveCount(0);
  await expect(page.getByRole('button',{name:/Refresh match|Reject match|Use LWIN/})).toHaveCount(0);
+ // The simplified view drops the owner diagnostics, but the tier a saved wine
+ // is filed under is not a diagnostic: a member editing it sees it too.
+ await expect(page.locator('select[name=classificationOverride] option:checked')).toHaveText('Premier Cru (automatic)');
+ await expect(page.locator('.wine-compact-row.appellation-row small')).toHaveCount(0);
 });
 
 test('manual opt-out is visible and offers only an explicit link',async({page})=>{

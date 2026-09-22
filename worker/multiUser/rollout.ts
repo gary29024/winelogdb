@@ -4,12 +4,12 @@ import { loadResearchCache,splitDeepSearchResult,upsertResearchCache } from '../
 import { publishResearch } from '../../src/lib/research/shared';
 import { wineTargets } from './credits';
 import { publishProducerResearch } from '../../src/lib/research/sharedProducer';
-import { referenceMatchForProduct } from '../../src/lib/wine/referenceIdentity';
-import { ReferenceReadScope,referenceManifest } from '../../src/lib/wine/referenceCatalog';
+import { referenceMatchForProduct,type ReferenceMatch } from '../../src/lib/wine/referenceIdentity';
+import { ReferenceReadScope,referenceManifest,LwinProducerLookupTooBroadError } from '../../src/lib/wine/referenceCatalog';
 import { aiRepair,repairCandidates,LwinAiTransientError,LWIN_AI_LEASE_SECONDS } from './lwinRepair';
 import type { GeminiTransportBindings } from '../geminiTransport';
 import type { AiUsageEnv } from '../../src/lib/usage/aiUsage';
-import { lwinEnrichmentStatement,lwinInput,resolveStoredLwin,type StoredLwinWine } from '../lwinEnrichment';
+import { lwinEnrichmentStatement,lwinInput,lwinUpdate,resolveStoredLwin,type StoredLwinWine } from '../lwinEnrichment';
 import { readLwinReference } from '../../src/lib/wine/lwinMetadata';
 import { pendingReferenceReviewSql } from '../wineReferenceReview';
 import { flushOutbox } from './jobs';
@@ -19,6 +19,7 @@ export type RolloutQueueJob={kind:'admin_rollout';owner:string;rollout:RolloutKi
 type RolloutEnv=IdentityEnv&GeminiTransportBindings&AiUsageEnv&{WINE_IMAGES:R2Bucket;REFERENCE_DATA:R2Bucket;RESEARCH_QUEUE:Queue<unknown>};
 type TaskState='not_started'|'paused'|'running'|'complete';
 export type RolloutStatus={
+ lwinCurrent?:{total:number;automatic:number;manual:number;identityConflicts:number;fieldUpdates:number;needsReview:number;withoutLwin:number;optedOut:number};
  storage:{state:TaskState;objects:number;error:string|null};
  research:{state:TaskState;wines:{processed:number;total:number};producers:{processed:number;total:number};error:string|null};
  lwin:{state:TaskState;processed:number;total:number;matched:number;ambiguous:number;unmatched:number;conflict:number;error:string|null};
@@ -52,7 +53,16 @@ async function dispatchRollout(env:RolloutEnv,kind:RolloutKind,owner='owner'){
 function taskState(complete:boolean,job:string,hasCursor:boolean):TaskState{return job==='running'?'running':complete?'complete':job==='paused'||hasCursor?'paused':'not_started'}
 
 /** Owner-visible status survives navigation and browser restarts. */
-export async function rolloutStatus(db:D1Database):Promise<RolloutStatus>{
+export async function rolloutStatus(db:D1Database,ownerId?:string):Promise<RolloutStatus>{
+ const lwinCurrent=ownerId?await db.prepare(`SELECT count(*) AS total,
+  count(CASE WHEN lwin7 IS NOT NULL AND identity_match_status='matched' THEN 1 END) AS automatic,
+  count(CASE WHEN lwin7 IS NOT NULL AND identity_match_status='manual' THEN 1 END) AS manual,
+  count(CASE WHEN identity_match_status='conflict' THEN 1 END) AS identityConflicts,
+  count(CASE WHEN coalesce(identity_match_status,'')<>'conflict' AND coalesce(reference_suggestions_json,'[]') NOT IN ('[]','null','') THEN 1 END) AS fieldUpdates,
+  count(CASE WHEN ${pendingReferenceReviewSql} THEN 1 END) AS needsReview,
+  count(CASE WHEN lwin7 IS NULL THEN 1 END) AS withoutLwin,
+  count(CASE WHEN lwin7 IS NULL AND identity_match_status='manual' THEN 1 END) AS optedOut
+  FROM wines WHERE owner_id=?`).bind(ownerId).first<NonNullable<RolloutStatus['lwinCurrent']>>():null;
  const [storageComplete,storageJob,storageError,researchComplete,researchJob,researchRefresh,researchError,wineCursor,producerCursor,storageObjects,wineTotal,producerTotal,
   lwinComplete,lwinJob,lwinError,lwinCursor,lwinProcessed,lwinTotal,lwinMatched,lwinAmbiguous,lwinUnmatched,lwinConflict]=await Promise.all([
   readState(db,'storage_inventory'),readState(db,jobKey('storage')),readState(db,errorKey('storage')),
@@ -87,6 +97,7 @@ export async function rolloutStatus(db:D1Database):Promise<RolloutStatus>{
   });
  }
  return {
+  ...(lwinCurrent?{lwinCurrent}:{}),
   storage:{state:taskState(storageComplete==='complete',storageJob,Boolean(await readState(db,'storage_cursor'))),objects:Number(storageObjects?.n)||0,error:storageError||null},
   research:{state:researchState,wines:{processed:wineDone,total:winesTotal},producers:{processed:producerDone,total:producersTotal},error:researchError||null},
   lwin:{state:taskState(lwinComplete==='complete',lwinJob,Boolean(lwinCursor)),processed:lwinProcessed,total:lwinTotal,matched:lwinMatched,ambiguous:lwinAmbiguous,unmatched:lwinUnmatched,conflict:lwinConflict,error:lwinError||null},
@@ -160,15 +171,26 @@ async function lwinBatch(env:RolloutEnv,kind:'lwin'|'lwin_validate'|'lwin_ai',le
   const renewed=String(Math.floor(Date.now()/1000)+leaseSeconds(kind))+':'+crypto.randomUUID();
   const renewal=await env.DB.prepare('UPDATE rollout_state SET value=? WHERE name=? AND value=?').bind(renewed,leaseKey(kind),lease.value).run();
   if(!renewal.meta.changes)throw new Error('LWIN lease expired; resume to retry.');lease.value=renewed;
-  let result=await resolveStoredLwin(scope,row);
+  let result:ReferenceMatch|null=null,lookupTooBroad=false;
   let method:'deterministic'|'ai'|'manual'=readLwinReference(row.lwin_reference_json)?.method??(row.identity_match_status==='manual'?'manual':'deterministic');
-  if(kind==='lwin_ai'&&result?.identityMatchStatus!=='matched'&&result?.identityMatchStatus!=='ambiguous'){
-   const input=lwinInput(row),repairWine={...row,id:row.id,owner_id:row.owner_id,producer:input.producer,wine_name:input.wineName,country:input.country,region:input.region,wine_style:input.wineStyle,release_designation:input.releaseDesignation,vintage:input.vintage,appellation:input.appellation,classification:input.classification,colour:input.colour,product_type:input.productType,product_subtype:input.productSubtype};
-   const candidates=await repairCandidates(env.REFERENCE_DATA,repairWine),choice=await aiRepair(env,repairWine,candidates);
-   if(choice){const selected=candidates.find(item=>item.row.lwin7===choice.lwin7)!.row;result=await referenceMatchForProduct(scope,selected,input);result.identityMatchConfidence=choice.confidence;method=choice.method}
+  try{
+   result=await resolveStoredLwin(scope,row);
+   if(kind==='lwin_ai'&&result?.identityMatchStatus!=='matched'&&result?.identityMatchStatus!=='ambiguous'){
+    const input=lwinInput(row),repairWine={...row,id:row.id,owner_id:row.owner_id,producer:input.producer,wine_name:input.wineName,country:input.country,region:input.region,wine_style:input.wineStyle,release_designation:input.releaseDesignation,vintage:input.vintage,appellation:input.appellation,classification:input.classification,colour:input.colour,product_type:input.productType,product_subtype:input.productSubtype};
+    const candidates=await repairCandidates(env.REFERENCE_DATA,repairWine),choice=await aiRepair(env,repairWine,candidates);
+    if(choice){const selected=candidates.find(item=>item.row.lwin7===choice.lwin7)!.row;result=await referenceMatchForProduct(scope,selected,input);result.identityMatchConfidence=choice.confidence;method=choice.method}
+   }
+   }catch(error){
+   // A bounded lookup is a per-wine review outcome, not a catalogue outage.
+   // Never retry AI with truncated candidates or swallow missing-shard errors.
+   if(!(error instanceof LwinProducerLookupTooBroadError))throw error;
+   lookupTooBroad=true;result=null;
+   console.warn(JSON.stringify({event:'lwin_lookup_needs_review',wineId:row.id,rollout:kind,reason:'producer_lookup_too_broad'}));
   }
-  const statement=result?lwinEnrichmentStatement(env.DB,row,result,method):null;
-  const status=row.lwin7&&result?.lwin7!==row.lwin7?'conflict':result?.identityMatchStatus??'unmatched';
+  const status=row.identity_match_status==='manual'&&row.lwin7?'matched':row.lwin7&&result?.lwin7!==row.lwin7?'conflict':result?.identityMatchStatus??'unmatched';
+  const statement=lookupTooBroad
+   ?row.identity_match_status==='manual'?null:lwinUpdate(env.DB,row,{identity_match_status:status,identity_match_confidence:null,identity_checked_at:stamp()})
+   :result?lwinEnrichmentStatement(env.DB,row,result,method):null;
   const delta:Record<string,number>={processed:1};
   if(kind==='lwin_validate')delta[status==='matched'?'verified':'review']=1;
   else if(kind==='lwin_ai'){if(status==='matched'){delta.matched=1;delta[method==='ai'?'ai':'deterministic']=1}else delta.review=1}
@@ -245,7 +267,7 @@ export async function recoverRollouts(env:RolloutEnv){
 
 async function startRollout(env:RolloutEnv,member:Member,kind:RolloutKind,refresh=false){
  const lease=await acquireLease(env.DB,kind);
- if(!lease)return {accepted:false,alreadyRunning:true,status:await rolloutStatus(env.DB)};
+ if(!lease)return {accepted:false,alreadyRunning:true,status:await rolloutStatus(env.DB,member.id)};
  try{return await startRolloutLocked(env,member,kind,refresh)}finally{await releaseLease(env.DB,kind,lease)}
 }
 async function startRolloutLocked(env:RolloutEnv,member:Member,kind:RolloutKind,refresh=false){
@@ -253,9 +275,9 @@ async function startRolloutLocked(env:RolloutEnv,member:Member,kind:RolloutKind,
   readState(env.DB,completionKey(kind)),readState(env.DB,jobKey(kind)),kind==='research'?readState(env.DB,RESEARCH_REFRESH):Promise.resolve(''),
   kind==='lwin'?readState(env.DB,'lwin_cursor'):kind==='lwin_validate'?readState(env.DB,'lwin_validate_cursor'):kind==='lwin_ai'?readState(env.DB,'lwin_ai_cursor'):Promise.resolve('')
  ]);
- if(job==='running')return {accepted:false,alreadyRunning:true,status:await rolloutStatus(env.DB)};
+ if(job==='running')return {accepted:false,alreadyRunning:true,status:await rolloutStatus(env.DB,member.id)};
  const resumingRefresh=kind==='research'&&refreshState==='paused';
- if(complete==='complete'&&!refresh&&!resumingRefresh)return {accepted:false,alreadyComplete:true,status:await rolloutStatus(env.DB)};
+ if(complete==='complete'&&!refresh&&!resumingRefresh)return {accepted:false,alreadyComplete:true,status:await rolloutStatus(env.DB,member.id)};
  if(refresh&&kind==='storage')throw new ApiError(400,'Storage inventory cannot be refreshed from this endpoint');
  const entries:Array<[string,string]>=[[jobKey(kind),'running'],[errorKey(kind),'']];
  if(kind==='lwin_ai')entries.push(['lwin_ai_retry_count','0'],['lwin_ai_retry_at','0']);
@@ -285,16 +307,16 @@ async function startRolloutLocked(env:RolloutEnv,member:Member,kind:RolloutKind,
  await writeStates(env.DB,entries);
  try{await dispatchRollout(env,kind,member.id)}
  catch(error){const failed:Array<[string,string]>=[[jobKey(kind),'paused'],[errorKey(kind),error instanceof Error?error.message:String(error)]];if(kind==='research'&&(refresh||resumingRefresh))failed.push([RESEARCH_REFRESH,'paused']);await writeStates(env.DB,failed);throw new ApiError(503,'Could not start the background rollout job')}
- return {accepted:true,refreshing:(kind==='research'&&Boolean(refresh||resumingRefresh))||((kind==='lwin'||kind==='lwin_validate'||kind==='lwin_ai')&&refresh),status:await rolloutStatus(env.DB)};
+ return {accepted:true,refreshing:(kind==='research'&&Boolean(refresh||resumingRefresh))||((kind==='lwin'||kind==='lwin_validate'||kind==='lwin_ai')&&refresh),status:await rolloutStatus(env.DB,member.id)};
 }
 
-async function pauseRollout(env:RolloutEnv,kind:RolloutKind){
+async function pauseRollout(env:RolloutEnv,kind:RolloutKind,member:Member){
  const job=await readState(env.DB,jobKey(kind));
- if(job!=='running')return {accepted:false,alreadyPaused:job==='paused',status:await rolloutStatus(env.DB)};
+ if(job!=='running')return {accepted:false,alreadyPaused:job==='paused',status:await rolloutStatus(env.DB,member.id)};
  const entries:Array<[string,string]>=[[jobKey(kind),'paused']];
  if(kind==='research'&&await readState(env.DB,RESEARCH_REFRESH)==='running')entries.push([RESEARCH_REFRESH,'paused']);
  await writeStates(env.DB,entries);
- return {accepted:true,status:await rolloutStatus(env.DB)};
+ return {accepted:true,status:await rolloutStatus(env.DB,member.id)};
 }
 
 /** Owner-only launch preparation: POST starts/resumes/refreshes, GET reports durable progress. */
@@ -309,12 +331,12 @@ export async function rolloutRoute(request:Request,env:RolloutEnv,member:Member)
   const items=rows.results.slice(0,40).map(row=>({id:String(row.id),producer:String(row.producer??''),wineName:String(row.wine_name??''),vintage:row.vintage,lwin7:row.lwin7,conflict:row.identity_match_status==='conflict'}));
   return json({items,total:Number(count?.n)||0,nextCursor:rows.results.length>40?items.at(-1)!.id:null});
  }
- if(path==='/api/admin/rollout/status'&&request.method==='GET')return json(await rolloutStatus(env.DB));
+ if(path==='/api/admin/rollout/status'&&request.method==='GET')return json(await rolloutStatus(env.DB,member.id));
  if(request.method!=='POST')throw new ApiError(405,'Use POST');
  const pause=path.match(/^\/api\/admin\/rollout\/(storage|research|lwin|lwin-validate|lwin-ai)\/pause$/);
  if(pause){
   const kind:RolloutKind=pause[1]==='lwin-ai'?'lwin_ai':pause[1]==='lwin-validate'?'lwin_validate':pause[1] as RolloutKind;
-  return json(await pauseRollout(env,kind),202);
+  return json(await pauseRollout(env,kind,member),202);
  }
  if(path==='/api/admin/rollout/storage')return json(await startRollout(env,member,'storage'),202);
  if(path==='/api/admin/rollout/research'){

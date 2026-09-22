@@ -8,6 +8,9 @@ import { createSession } from '../../src/lib/auth/session';
 import app from '../../worker/index';
 import { ensureWineIdentity } from '../../src/lib/wine/identity';
 import { ensureAllCuveeLinksForProducer } from '../../src/lib/cuvees/entities';
+import { referenceMatchForProduct } from '../../src/lib/wine/referenceIdentity';
+import { resolveStoredLwin,lwinEnrichmentStatement,type StoredLwinWine } from '../../worker/lwinEnrichment';
+import { rolloutStatus } from '../../worker/multiUser/rollout';
 
 const databases:Array<ReturnType<typeof realD1>>=[];
 afterEach(()=>{databases.splice(0).forEach(db=>db.close())});
@@ -27,10 +30,49 @@ function setup(){
   return app.fetch(new Request(`https://wine.example/api/wines/${path}`,{method,headers:{authorization:`Bearer ${await createSession(account,secret)}`,'content-type':'application/json'},body:JSON.stringify(body)}),env as never);
  }
  const queue=(after='')=>rolloutRoute(new Request(`https://wine.example/api/admin/rollout/lwin-review?after=${after}`),env as never,owner).then(r=>r!.json()) as Promise<{items:Array<{id:string}>;total:number;nextCursor:string|null}>;
- return {database,env,bucket,insert,request,queue};
+ return {database,env,bucket,insert,request,queue,objects};
 }
 
 describe('LWIN review repair and queue',()=>{
+ async function hairyArm(){
+  const context=setup(),{database,bucket,objects,insert}=context;insert();
+  const product=parseLwinReference({LWIN:'2409267',STATUS:'Live',DISPLAY_NAME:'The Hairy Arm, Nebbiolo, Heathcote',PRODUCER_NAME:'The Hairy Arm',WINE:'Nebbiolo',COUNTRY:'Australia',REGION:'Victoria',SUB_REGION:'Heathcote',COLOUR:'Red',TYPE:'Wine',SUB_TYPE:'Still'});
+  objects[`test/shard-${referenceShardId(product.producerKey)}.json`]=[product];
+  const input={producer:'The Hairy Arm Wine Company',wineName:'Heathcote Nebbiolo'};
+  const match=await referenceMatchForProduct(bucket,product,input,{includeElid:false});
+  const reference={...match.lwinReference!,method:'ai',confidence:0.95,input,conflicts:[{field:'producer',current:input.producer,reference:'The Hairy Arm'},{field:'wineName',current:input.wineName,reference:'Nebbiolo'}]};
+  const suggestions=[{field:'producer',label:'Producer',current:input.producer,suggested:'The Hairy Arm'},{field:'wineName',label:'Wine name',current:input.wineName,suggested:'Nebbiolo, Heathcote'}];
+  database.sql.prepare("UPDATE wines SET producer=?,wine_name=?,lwin7='2409267',identity_match_status='matched',country='Australia',region='Victoria',lwin_reference_json=?,reference_suggestions_json=?").run(input.producer,input.wineName,JSON.stringify(reference),JSON.stringify(suggestions));
+  const row=()=>database.sql.prepare('SELECT * FROM wines').get() as StoredLwinWine;
+  const refresh=async()=>{const next=await resolveStoredLwin(bucket,row());const statement=next&&lwinEnrichmentStatement(database.db,row(),next,next.lwinReference?.method);if(statement)await statement.run()};
+  return {...context,row,refresh};
+ }
+ it('keeps the reviewed Hairy Arm AI identity through repeated enrichment refreshes',async()=>{
+  const {request,row,refresh,queue}=await hairyArm();
+  expect((await request('w1/reference-suggestion',{field:'producer',action:'apply'},'PUT')).status).toBe(200);
+  expect((await request('w1/reference-suggestion',{field:'wineName',action:'keep'},'PUT')).status).toBe(200);
+  expect(JSON.parse(String(row().lwin_reference_json)).input).toEqual({producer:'The Hairy Arm',wineName:'Heathcote Nebbiolo'});
+  await refresh();await refresh();
+  expect(row()).toMatchObject({producer:'The Hairy Arm',wine_name:'Heathcote Nebbiolo',lwin7:'2409267',identity_match_status:'matched',reference_suggestions_json:null});
+  expect((await queue()).total).toBe(0);
+ });
+ it.each([false,true])('repairs legacy reviewed-name conflicts only with compatible clues (incompatible: %s)',async incompatible=>{
+  const {database,row,request}=await hairyArm();
+  database.sql.prepare("UPDATE wines SET producer='The Hairy Arm',identity_match_status='conflict',reference_suggestions_json=NULL,colour=?").run(incompatible?'White':'Red');
+  expect((await request('w1/reference-review',{action:'recheck'})).status).toBe(200);
+  expect(row().identity_match_status).toBe(incompatible?'conflict':'matched');
+  expect(row().wine_name).toBe('Heathcote Nebbiolo');
+ });
+ it('counts current owner review items separately from historical run totals',async()=>{
+  const {database,insert,request}=setup();insert();insert('w2');insert('private','1059328','other-owner');
+  database.sql.exec("UPDATE wines SET identity_match_status='manual' WHERE id='w2'; INSERT INTO rollout_state(name,value) VALUES('lwin_conflict','17')");
+  const before=await rolloutStatus(database.db,'owner');
+  expect(before.lwinCurrent).toMatchObject({total:2,manual:1,identityConflicts:1,fieldUpdates:1,needsReview:2});
+  expect((await request('w2/reference-suggestion',{field:'producer',action:'keep'},'PUT')).status).toBe(200);
+  const after=await rolloutStatus(database.db,'owner');
+  expect(after.lwinCurrent).toMatchObject({total:2,manual:1,identityConflicts:1,fieldUpdates:0,needsReview:1});
+  expect(after.lwin.conflict).toBe(17);
+ });
  it('preserves the full producer from the display name, with title fallback',()=>{
   expect(lwinReferenceIdentity({producerTitle:'Domaine',producerName:'de la Vougeraie'}).producerName).toBe('Domaine de la Vougeraie');
   expect(lwinReferenceIdentity({displayName:'Domaine de la Vougeraie, Bourgogne',producerName:'de la Vougeraie'}).producerName).toBe('Domaine de la Vougeraie');

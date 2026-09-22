@@ -1,4 +1,4 @@
-import { compatibleLwinProduct,sameLwinProducer } from '../../src/lib/wine/lwinMatching';
+import { compatibleLwinProduct,sameLwinProducer,parentheticalProducerAlias,unqualifiedLwinHouse } from '../../src/lib/wine/lwinMatching';
 import type { VintageKind } from '../../src/lib/wine/referenceIdentity';
 import { AI_MODELS } from '../../src/lib/ai/policy';
 import { geminiCallTokens,recordAiUsage,type AiUsageEnv } from '../../src/lib/usage/aiUsage';
@@ -29,7 +29,8 @@ function scorer(wine:LwinRepairWine){
   // A qualified user input against an unqualified official row remains a
   // plausible alias, but receives a small confidence penalty.
   if(inputQualifier&&candidateQualifier&&inputQualifier!==candidateQualifier)return 0;
-  if(!inputQualifier&&candidateQualifier)return 0;
+  const estateAlias=parentheticalProducerAlias(wine.producer,row);
+  if(!inputQualifier&&candidateQualifier&&!estateAlias)return 0;
   const qualifierPenalty=inputQualifier&&!candidateQualifier?0.95:1;
   const candidateProducerKeys=[...new Set([...producerLookupKeys(identity.producerName),...producerLookupKeys(identity.structuredProducerKey)])].map(words);
   const producer=Math.max(...producerKeys.flatMap(left=>candidateProducerKeys.map(right=>setSimilarity(left,right))),0),name=Math.max(setSimilarity(wineName,words(identity.wineName)),setSimilarity(wineName,words(identity.displayWineKey)));
@@ -40,6 +41,11 @@ function scorer(wine:LwinRepairWine){
 }
 export async function repairCandidates(bucket:R2Bucket,wine:LwinRepairWine){
  const score=scorer(wine),rows=await lwinCandidateRowsForProducer<LwinReferenceProduct>(bucket,wine.producer),best:Array<{row:LwinReferenceProduct;score:number;exact?:boolean}>=[];
+ const name=normalizeReferenceText([wine.wine_name,wine.release_designation].filter(Boolean).join(' '));
+ // Do not hide a competing house/estate merely because its qualifier would
+ // otherwise remove it from the AI shortlist for an unqualified input.
+ const exactRows=rows.filter(row=>{const identity=lwinReferenceIdentity(row);return row.status==='Live'&&(sameLwinProducer(wine.producer,row)||unqualifiedLwinHouse(wine.producer,row))&&[identity.wineKey,identity.displayWineKey].includes(name)&&compatibleLwinProduct(row,{...wine,wineStyle:wine.wine_style,productType:wine.product_type,productSubtype:wine.product_subtype,subRegion:wine.sub_region,site:wine.reference_site,parcel:wine.reference_parcel})});
+ if(exactRows.length>1&&exactRows.some(row=>parentheticalProducerAlias(wine.producer,row)))return [];
  for(const row of rows){if(row.status!=='Live')continue;const value=score(row);if(value<0.48)continue;const identity=lwinReferenceIdentity(row),name=normalizeReferenceText([wine.wine_name,wine.release_designation].filter(Boolean).join(' '));const exact=(sameLwinProducer(wine.producer,row)||(producerHouseQualifier(wine.producer)==='champagne'&&!producerHouseQualifier(identity.producerName)&&producerLookupKeys(wine.producer).includes(normalizeReferenceText(identity.producerName))))&&[identity.wineKey,identity.displayWineKey].includes(name);best.push({row,score:value,exact});best.sort((a,b)=>b.score-a.score);if(best.length>8)best.pop()}
  return best;
 }

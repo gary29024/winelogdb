@@ -6,6 +6,9 @@ import { getAchievementProgress,setAchievementMatchMode } from './api';
 import type { AchievementMatchMode,AchievementProgress } from './types';
 import '../../achievements.css';
 import { linkFrom } from '../wines/backTarget';
+import { BurgundyAtlasLink } from '../../components/BurgundyAtlasLink';
+import { burgundyAtlasPlace } from '../../lib/places/burgundyAtlas';
+import { atlasCollections } from './atlasCollections';
 
 function statusCopy(status:AchievementProgress['items'][number]['status']){if(status==='tasted')return 'Tasted';if(status==='possible')return 'Needs linking';return 'Not tasted'}
 function collectionEyebrow(collection:AchievementProgress){const definition=collection.definition;if(definition.series)return `${definition.series.authority} · ${definition.series.region} · ${definition.series.edition}`;if(definition.origin==='catalogue')return 'SMART CATALOGUE COLLECTION';if(definition.origin==='custom')return 'MY COLLECTION';return 'COLLECTION'}
@@ -51,6 +54,7 @@ export function AchievementDetailPage(){
             <span className="achievement-check-mark" aria-hidden="true">{item.status==='tasted'?'✓':item.status==='possible'?'?':'○'}</span>
             <div className="achievement-check-copy">
               <strong>{item.label}</strong>{item.note&&<small>{item.note}</small>}
+              {atlasCollections.has(definition.id)&&<BurgundyAtlasLink place={burgundyAtlasPlace(item.label)} compact/>}
               {/* A row that matched several vintages links to each of them, so
                   nothing has to pick one on the reader's behalf. */}
               {links.length>0&&<small className="achievement-check-vintages">Tasted vintages: {links.map((link,index)=><span key={link.vintage}>

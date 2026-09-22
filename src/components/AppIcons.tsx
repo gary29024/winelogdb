@@ -2,7 +2,7 @@ export type AppIconKey=
   |'passport'|'journal'|'producers'|'insights'
   |'scan'|'single-wine'|'group-photo'|'batch-scan'
   |'tasting'|'pen'|'close'|'search'|'heart'|'heart-filled'
-  |'sparkle'|'chevron-right';
+  |'sparkle'|'chevron-right'|'person-tag';
 
 const frame={viewBox:'0 0 24 24',fill:'none',stroke:'currentColor',strokeWidth:1.6,strokeLinecap:'round' as const,strokeLinejoin:'round' as const,focusable:'false' as const,'aria-hidden':true};
 
@@ -27,5 +27,6 @@ export function AppIcon({kind}:{kind:AppIconKey}){
   // Researched rather than recorded: a four-point star with two smaller sparks.
   if(kind==='sparkle')return <svg {...frame} className="app-icon"><path d="M11.1 3.4 12.7 8l4.6 1.6-4.6 1.6-1.6 4.6-1.6-4.6L4.9 9.6 9.5 8Z"/><path d="M17.7 14.2l.7 2 2 .7-2 .7-.7 2-.7-2-2-.7 2-.7Z"/></svg>;
   if(kind==='chevron-right')return <svg {...frame} className="app-icon"><path d="m9.6 5.4 6.6 6.6-6.6 6.6"/></svg>;
+  if(kind==='person-tag')return <svg {...frame} className="app-icon"><path d="M8.5 5 12 2l3.5 3H19a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z"/><circle cx="12" cy="10.5" r="2.5"/><path d="M7 19v-1a5 5 0 0 1 10 0v1"/></svg>;
   return <svg {...frame} className="app-icon"><path d="M6.6 6.6l10.8 10.8M17.4 6.6 6.6 17.4"/></svg>;
 }

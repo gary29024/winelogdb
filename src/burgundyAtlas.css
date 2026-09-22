@@ -1,0 +1,8 @@
+.burgundy-atlas-link{
+  display:inline-flex;align-items:center;gap:.4em;max-width:100%;min-height:44px;
+  color:var(--wine-ink);font-size:.84rem;font-weight:600;
+  text-decoration:underline;text-underline-offset:3px;overflow-wrap:anywhere;
+}
+.burgundy-atlas-link:hover{color:var(--ink)}
+.burgundy-atlas-link-compact{font-size:.78rem}
+.wine-atlas-context{margin-top:2px}

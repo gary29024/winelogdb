@@ -21,7 +21,9 @@ main>section>.page-header,main>article>.page-header{margin-bottom:var(--s5)}
 .group-history,.batch-history{margin-top:var(--s6);padding-top:var(--s5);border-top:1px solid var(--line)}
 .group-result-copy,.batch-item>div,.group-history-card>div{min-width:0;overflow-wrap:anywhere}
 .wine-form fieldset{min-width:0}.wine-form legend{max-width:100%;padding:0 var(--s2)}
-.form-section-heading{margin:var(--s5) 0 var(--s2);font-size:1.2rem}
+/* main's wineFormCompact pass tightened everything around these, so the
+   section dividers take the 16px step rather than the 24px one. */
+.form-section-heading{margin:var(--s4) 0 var(--s2);font-size:1.2rem}
 .collection-library-heading,.collection-editor-heading{gap:var(--s3)}
 .collection-library-heading>div,.collection-editor-heading>div{min-width:0;overflow-wrap:anywhere}
 .legal-page{max-width:780px;margin:auto}.legal-card{overflow-wrap:anywhere}.legal-card p{line-height:1.7}

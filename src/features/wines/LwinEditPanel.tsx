@@ -2,9 +2,11 @@ import { useState } from 'react';
 import { apiJson } from '../../lib/auth/api';
 import { summariesChanged } from '../../lib/cache/summaryCaches';
 import { appClassification,classificationLabel } from '../../lib/wine/referenceSuggestions';
+import { referenceAppRegion,regionWithin } from '../../lib/wine/referenceGeography';
 import { getWine,type WineDetail } from './api';
 import { LwinLinkEditor,type LwinLinkPreview } from './LwinLinkEditor';
 import './lwinEdit.css';
+import { lwinDisplayWineName,wineNameNeedsReview } from '../../lib/wine/lwinDisplayName';
 
 export type LwinEditValues={producer:string;wineName:string;country:string;region:string;classification:string;classificationOverride:string};
 type Props={wine:WineDetail;values:LwinEditValues;dirty:boolean;disabled:boolean;canMatch:boolean;initiallyOpen?:boolean;onApply:(values:Partial<LwinEditValues>)=>void;onBusy:(busy:boolean)=>void;onUpdated:(wine:WineDetail)=>void};
@@ -32,12 +34,12 @@ export function LwinEditPanel({wine,values,dirty,disabled,canMatch,initiallyOpen
  }
  const comparisons=reference?[
   {key:'producer' as const,label:'Producer',value:reference.producer,current:values.producer},
-  {key:'wineName' as const,label:'Wine name',value:reference.wineName,current:values.wineName},
+  {key:'wineName' as const,label:'Wine name',value:lwinDisplayWineName(reference),current:values.wineName},
   {key:'country' as const,label:'Country',value:reference.country,current:values.country},
-  {key:'region' as const,label:'Region',value:reference.region,current:values.region},
+  {key:'region' as const,label:'Region',value:referenceAppRegion(reference),current:values.region},
   {key:'classification' as const,label:'Cru level',value:appClassification(reference.classification),current:values.classificationOverride||values.classification}
  ]:[];
- const differences=comparisons.filter(item=>item.value&&item.value!==item.current);
+ const differences=comparisons.filter(item=>item.value&&item.value!==item.current&&!(item.key==='wineName'&&!wineNameNeedsReview(item.current,item.value))&&!(item.key==='region'&&regionWithin(item.current,item.value,values.country,reference?.country)));
  const missing=differences.filter(item=>!item.current);
  function apply(patch:Partial<LwinEditValues>){onApply(patch);setNotice('Added to your form. Save changes below to keep these values.')}
  const facts=reference?[
@@ -68,7 +70,7 @@ export function LwinEditPanel({wine,values,dirty,disabled,canMatch,initiallyOpen
    {dirty&&<div className="lwin-edit-save-first"><p>Save your changes before finding or changing a match. Your edits are still in the form.</p><button type="submit" form={`wine-edit-form-${wine.id}`} name="editIntent" value="continue" disabled={disabled||busy}>Save & continue matching</button></div>}
    <p className="lwin-edit-help">Matching actions save immediately and fill missing supported fields. Existing values remain for you to review.</p>
    <div className="lwin-edit-actions">{!optedOut&&<button type="button" disabled={locked} onClick={()=>void update({action:'recheck'})}>{busy?'Checking…':linked?'Refresh match and details':'Find LWIN match'}</button>}</div>
-   <LwinLinkEditor wine={wine} disabled={locked} candidates={wine.identityMatchCandidates??[]} onLink={(preview:LwinLinkPreview)=>update({action:'link',lwin7:preview.requestedLwin7,previewToken:preview.previewToken})} onReject={()=>update({action:'reject',lwin7:wine.lwin7??null,updatedAt:wine.updatedAt})}/>
+   <LwinLinkEditor wine={wine} showStoredSummary={false} disabled={locked} candidates={wine.identityMatchCandidates??[]} onLink={(preview:LwinLinkPreview)=>update({action:'link',lwin7:preview.requestedLwin7,previewToken:preview.previewToken})} onReject={()=>update({action:'reject',lwin7:wine.lwin7??null,updatedAt:wine.updatedAt})}/>
   </>}
   {error&&<p role="alert">{error}</p>}
   </div>
