@@ -1,0 +1,171 @@
+{
+  "source": "https://burgundyatlas.com/sitemap.xml",
+  "verifiedAt": "2026-09-21",
+  "entries": [
+    {
+      "placeId": "france/burgundy/cote-de-nuits/chambertin",
+      "kind": "designation",
+      "url": "https://burgundyatlas.com/place/ba_designation_ynrwzabbmfahxtxy3ervwn4vca/chambertin"
+    },
+    {
+      "placeId": "france/burgundy/cote-de-nuits/chambertin-clos-de-beze",
+      "kind": "designation",
+      "url": "https://burgundyatlas.com/place/ba_designation_nnn6fvl6h7e5mjd5c4jgzlmp3a/chambertin-clos-de-beze"
+    },
+    {
+      "placeId": "france/burgundy/cote-de-nuits/charmes-chambertin",
+      "kind": "designation",
+      "url": "https://burgundyatlas.com/place/ba_designation_pymtffnqqpaaz7g35eq2th7pve/charmes-chambertin"
+    },
+    {
+      "placeId": "france/burgundy/cote-de-nuits/mazoyeres-chambertin",
+      "kind": "designation",
+      "url": "https://burgundyatlas.com/place/ba_designation_tmqhwbavn3svuvca46lf7qqppa/mazoyeres-chambertin"
+    },
+    {
+      "placeId": "france/burgundy/cote-de-nuits/griotte-chambertin",
+      "kind": "designation",
+      "url": "https://burgundyatlas.com/place/ba_designation_s23i3gbvjeyk5jyuje4aezwdfq/griotte-chambertin"
+    },
+    {
+      "placeId": "france/burgundy/cote-de-nuits/chapelle-chambertin",
+      "kind": "designation",
+      "url": "https://burgundyatlas.com/place/ba_designation_pifrrhcqfk372zeoyfexkexbuy/chapelle-chambertin"
+    },
+    {
+      "placeId": "france/burgundy/cote-de-nuits/latricieres-chambertin",
+      "kind": "designation",
+      "url": "https://burgundyatlas.com/place/ba_designation_j24uvrziqaang62ja6tbbqndgi/latricieres-chambertin"
+    },
+    {
+      "placeId": "france/burgundy/cote-de-nuits/mazis-chambertin",
+      "kind": "designation",
+      "url": "https://burgundyatlas.com/place/ba_designation_de5doqosjkd2by5kazy5ewqhrm/mazis-chambertin"
+    },
+    {
+      "placeId": "france/burgundy/cote-de-nuits/ruchottes-chambertin",
+      "kind": "designation",
+      "url": "https://burgundyatlas.com/place/ba_designation_mbuvj2yyux737ggy6uhuc75kca/ruchottes-chambertin"
+    },
+    {
+      "placeId": "france/burgundy/cote-de-nuits/clos-de-la-roche",
+      "kind": "designation",
+      "url": "https://burgundyatlas.com/place/ba_designation_kmupj4aqy75j36dooulinztmwy/clos-de-la-roche"
+    },
+    {
+      "placeId": "france/burgundy/cote-de-nuits/clos-saint-denis",
+      "kind": "designation",
+      "url": "https://burgundyatlas.com/place/ba_designation_6ryqav6bdz5gbli5pfhr2ocwr4/clos-saint-denis"
+    },
+    {
+      "placeId": "france/burgundy/cote-de-nuits/clos-des-lambrays",
+      "kind": "designation",
+      "url": "https://burgundyatlas.com/place/ba_designation_7cpnisnlraixmgjylefkicuhkq/clos-des-lambrays"
+    },
+    {
+      "placeId": "france/burgundy/cote-de-nuits/clos-de-tart",
+      "kind": "designation",
+      "url": "https://burgundyatlas.com/place/ba_designation_nfkfkgev4ofifyglm2ygx6lrye/clos-de-tart"
+    },
+    {
+      "placeId": "france/burgundy/cote-de-nuits/bonnes-mares",
+      "kind": "designation",
+      "url": "https://burgundyatlas.com/place/ba_designation_ryckoqmksigzefbvw4mib27hna/bonnes-mares"
+    },
+    {
+      "placeId": "france/burgundy/cote-de-nuits/musigny",
+      "kind": "designation",
+      "url": "https://burgundyatlas.com/place/ba_designation_dl3bqc23lnv4cekrnlbxqncodu/musigny"
+    },
+    {
+      "placeId": "france/burgundy/cote-de-nuits/clos-de-vougeot",
+      "kind": "designation",
+      "url": "https://burgundyatlas.com/place/ba_designation_wwh6jamfifpcw4fpoxpnldystu/clos-de-vougeot-ou-clos-vougeot"
+    },
+    {
+      "placeId": "france/burgundy/cote-de-nuits/echezeaux",
+      "kind": "designation",
+      "url": "https://burgundyatlas.com/place/ba_designation_edgrupe77evaoro5jktsj6m3di/echezeaux"
+    },
+    {
+      "placeId": "france/burgundy/cote-de-nuits/grands-echezeaux",
+      "kind": "designation",
+      "url": "https://burgundyatlas.com/place/ba_designation_bwgqchgczwa6u2p5e5kuiowdvy/grands-echezeaux"
+    },
+    {
+      "placeId": "france/burgundy/cote-de-nuits/romanee-conti",
+      "kind": "designation",
+      "url": "https://burgundyatlas.com/place/ba_designation_ps4pmljcohuy5bihimkoykpaou/romanee-conti"
+    },
+    {
+      "placeId": "france/burgundy/cote-de-nuits/la-tache",
+      "kind": "designation",
+      "url": "https://burgundyatlas.com/place/ba_designation_lmb2l6h35mfv6za5q2u3yhhluq/la-tache"
+    },
+    {
+      "placeId": "france/burgundy/cote-de-nuits/richebourg",
+      "kind": "designation",
+      "url": "https://burgundyatlas.com/place/ba_designation_5a7235kipcb2ay4ji2yxvbqlcu/richebourg"
+    },
+    {
+      "placeId": "france/burgundy/cote-de-nuits/romanee-saint-vivant",
+      "kind": "designation",
+      "url": "https://burgundyatlas.com/place/ba_designation_76qfzljfgxwkrh6gmsfpf2fzra/romanee-saint-vivant"
+    },
+    {
+      "placeId": "france/burgundy/cote-de-nuits/la-romanee",
+      "kind": "designation",
+      "url": "https://burgundyatlas.com/place/ba_designation_z4rwjlfbbel4n3rsdrx5iazjca/la-romanee"
+    },
+    {
+      "placeId": "france/burgundy/cote-de-nuits/la-grande-rue",
+      "kind": "designation",
+      "url": "https://burgundyatlas.com/place/ba_designation_7sqe44rnxhviy3na33jlr3urr4/la-grande-rue"
+    },
+    {
+      "placeId": "france/burgundy/cote-de-beaune/corton",
+      "kind": "designation",
+      "url": "https://burgundyatlas.com/place/ba_designation_6r4q4giylpk2l7qq7qaex2mqqy/corton"
+    },
+    {
+      "placeId": "france/burgundy/cote-de-beaune/corton-charlemagne",
+      "kind": "designation",
+      "url": "https://burgundyatlas.com/place/ba_designation_qpkmnbiut2vjvbj5pjmlljsrqi/corton-charlemagne"
+    },
+    {
+      "placeId": "france/burgundy/cote-de-beaune/charlemagne",
+      "kind": "designation",
+      "url": "https://burgundyatlas.com/place/ba_designation_67mswu3u5eqcohbudshxp6cfjm/charlemagne"
+    },
+    {
+      "placeId": "france/burgundy/cote-de-beaune/montrachet",
+      "kind": "designation",
+      "url": "https://burgundyatlas.com/place/ba_designation_zhhadupen4sdhxv3k46igi5ppy/montrachet"
+    },
+    {
+      "placeId": "france/burgundy/cote-de-beaune/chevalier-montrachet",
+      "kind": "designation",
+      "url": "https://burgundyatlas.com/place/ba_designation_vf4273tdipcko2tm4a22awuhge/chevalier-montrachet"
+    },
+    {
+      "placeId": "france/burgundy/cote-de-beaune/batard-montrachet",
+      "kind": "designation",
+      "url": "https://burgundyatlas.com/place/ba_designation_dpdm6xw6swoajdjyis5vljhcki/batard-montrachet"
+    },
+    {
+      "placeId": "france/burgundy/cote-de-beaune/bienvenues-batard-montrachet",
+      "kind": "designation",
+      "url": "https://burgundyatlas.com/place/ba_designation_fnoekkpqwxjfrepgy5hysgq22a/bienvenues-batard-montrachet"
+    },
+    {
+      "placeId": "france/burgundy/cote-de-beaune/criots-batard-montrachet",
+      "kind": "designation",
+      "url": "https://burgundyatlas.com/place/ba_designation_6wcuojtk6rgtumd3ghanniqguu/criots-batard-montrachet"
+    },
+    {
+      "placeId": "france/burgundy/chablis/chablis-grand-cru",
+      "kind": "appellation",
+      "url": "https://burgundyatlas.com/place/ba_appellation_3nnjx5kyyvfo4w2nldfonpaqmq/chablis-grand-cru"
+    }
+  ]
+}

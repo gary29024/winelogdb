@@ -1,3 +1,5 @@
+import { lwinDisplayWineName,sameWineDisplayName,wineNameNeedsReview } from '../src/lib/wine/lwinDisplayName';
+import { readLwinReference } from '../src/lib/wine/lwinMetadata';
 import { Hono } from 'hono';
 import { apiErrorHandler } from '../src/lib/credits/primitives';
 import { serveWineImage } from './wineImageHandler';
@@ -11,7 +13,7 @@ import { wineInputSchema } from '../src/lib/db/schema';
 import { dimensionsSchema, validateBatch } from '../src/features/uploads/validation';
 import { parseRecognition } from '../src/features/recognition/schema';
 import { wineSaveStatements } from '../src/lib/db/wineSave';
-import { enrichRecognitionReference } from '../src/lib/wine/referenceIdentity';
+import { enrichRecognitionReference,type StoredReferenceIdentity } from '../src/lib/wine/referenceIdentity';
 import { previewLoggingReference,resolveLoggingReference } from './wineLoggingReference';
 import { normalizeReferenceText } from '../src/lib/wine/referenceCatalog';
 import { appClassification,classificationLabel,referenceSuggestionFields,type ReferenceSuggestion,type ReferenceSuggestionField } from '../src/lib/wine/referenceSuggestions';
@@ -30,7 +32,10 @@ app.onError(apiErrorHandler);
 app.use('/api/*',cors({origin:(origin,c)=>origin===c.env.APP_URL?origin:null,credentials:true}));
 app.use('/api/*',async(c,next)=>{
  if(c.req.path==='/api/auth/login')return next();
- try{const s=await requireSession(c.req.header('Authorization'),c.env.AUTH_SECRET);c.set('userId',s.userId);await next()}catch{return c.json({error:'Unauthorized'},401)}
+ try{const s=await requireSession(c.req.header('Authorization'),c.env.AUTH_SECRET);c.set('userId',s.userId)}catch{return c.json({error:'Unauthorized'},401)}
+ // Only session verification can expire a login. Route/database failures must
+ // reach the API error handler instead of logging a valid user out.
+ await next();
 });
 
 app.post('/api/auth/login',c=>c.json({error:'Password login has been retired. Use Google login.'},410));
@@ -61,7 +66,7 @@ export const mapWine=(r:Record<string,unknown>,imageIds:string[]=[])=>({
  recognizedProducer:r.recognized_producer??null,recognizedWineName:r.recognized_wine_name??null,recognizedVintageText:r.recognized_vintage_text??null,vintageKind:r.vintage_kind??(r.vintage==null?'unknown':'vintage'),releaseDesignation:r.release_designation??null,
  country:r.country,region:r.region,appellation:r.appellation,recognizedRegion:r.recognized_region??null,recognizedAppellation:r.recognized_appellation??null,classification:r.classification??null,classificationOverride:r.classification_override??null,
  grapes:parseJson<string[]>(r.grapes_json,[]),grapeBlend:parseJson<Array<{grape:string;percentage?:number|null}>>(r.grape_blend_json,[]),wineStyle:r.wine_style,alcoholPercentage:r.alcohol_percentage,
- colour:r.colour??null,productType:r.product_type??null,productSubtype:r.product_subtype??null,referenceProductKey:r.reference_product_key??null,lwin7:r.lwin7??null,lwin11:r.lwin11??null,elid:r.elid??null,referenceSite:r.reference_site??null,referenceParcel:r.reference_parcel??null,referenceSuggestions:parseJson<ReferenceSuggestion[]>(r.reference_suggestions_json,[]),identityMatchStatus:r.identity_match_status??null,identityMatchConfidence:r.identity_match_confidence??null,identityMatchCandidates:parseJson<string[]>(r.identity_match_candidates_json,[]),identityMatchedAt:r.identity_matched_at??null,identityCheckedAt:r.identity_checked_at??null,
+ lwinReference:readLwinReference(r.lwin_reference_json),colour:r.colour??null,productType:r.product_type??null,productSubtype:r.product_subtype??null,referenceProductKey:r.reference_product_key??null,lwin7:r.lwin7??null,lwin11:r.lwin11??null,elid:r.elid??null,referenceSite:r.reference_site??null,referenceParcel:r.reference_parcel??null,referenceSuggestions:parseJson<ReferenceSuggestion[]>(r.reference_suggestions_json,[]),identityMatchStatus:r.identity_match_status??null,identityMatchConfidence:r.identity_match_confidence??null,identityMatchCandidates:parseJson<string[]>(r.identity_match_candidates_json,[]),identityMatchedAt:r.identity_matched_at??null,identityCheckedAt:r.identity_checked_at??null,
  tastingNotes:r.experience_notes??r.tasting_notes,rating:r.experience_rating??r.rating,tastingDate:r.experience_date??r.tasting_date,event:r.event,venue:r.venue,
  tastingName:r.tasting_name,locationName:r.location_name,latitude:r.latitude,longitude:r.longitude,
  producerId:r.producer_id??null,favorite:Boolean(r.favorite),
@@ -245,10 +250,12 @@ app.put('/api/wines/:id/reference-suggestion',async c=>{
  if(payload?.action!==undefined&&payload.action!=='keep'&&payload.action!=='apply')return c.json({error:'Unknown review action'},400);
  const keep=payload?.action==='keep';
  if(!referenceSuggestionFields.includes(field))return c.json({error:'Unknown LWIN suggestion field'},400);
- const row=await c.env.DB.prepare('SELECT producer,wine_name,country,region,classification,reference_suggestions_json FROM wines WHERE owner_id=? AND id=?').bind(owner,id).first<Record<string,unknown>>();
+ const row=await c.env.DB.prepare('SELECT producer,wine_name,country,region,classification,lwin7,identity_match_status,lwin_reference_json,reference_suggestions_json FROM wines WHERE owner_id=? AND id=?').bind(owner,id).first<Record<string,unknown>>();
  if(!row)return c.json({error:'Not found'},404);
  const suggestions=parseJson<ReferenceSuggestion[]>(row.reference_suggestions_json,[]),suggestion=suggestions.find(item=>item.field===field);
  if(!suggestion)return c.json({error:'That LWIN suggestion is no longer available'},409);
+ const reference=readLwinReference(row.lwin_reference_json),displayWine=reference?.lwin7===row.lwin7&&reference?lwinDisplayWineName(reference):null;
+ if(!keep&&field==='wineName'&&displayWine&&(!sameWineDisplayName(suggestion.suggested,displayWine)||!wineNameNeedsReview(String(row.wine_name??''),displayWine)))return c.json({error:'This wine-name suggestion is outdated. Recheck LWIN to review the full catalogue name before applying it.'},409);
  const columns:Record<ReferenceSuggestionField,string>={producer:'producer',wineName:'wine_name',country:'country',region:'region',classification:'classification'},column=columns[field];
  const rawCurrent=field==='wineName'?row.wine_name:row[field],current=field==='classification'?classificationLabel(rawCurrent==null?null:String(rawCurrent)):(rawCurrent==null?null:String(rawCurrent));
  // Suggestions and entity aliases already ignore accents and formatting. Use
@@ -261,10 +268,14 @@ app.put('/api/wines/:id/reference-suggestion',async c=>{
  // Cuvee relinking uses recognized_wine_name as its input. Like an explicit
  // edit, accepting a name must update that input in the same guarded write;
  // otherwise ensureWineIdentity immediately restores the previous name.
+ // Reviewed naming choices retain the accepted match and its current input.
+ // A disputed identity still requires explicit identity confirmation.
+ const reviewedReference=reference&&reference.lwin7===row.lwin7&&['matched','manual'].includes(String(row.identity_match_status))&&(field==='producer'||field==='wineName')
+  ?{...reference,input:{producer:field==='producer'?value:String(row.producer??''),wineName:field==='wineName'?value:String(row.wine_name??'')}}:null;
  const rename=!keep&&field==='wineName';
  const remaining=suggestions.filter(item=>item.field!==field),now=new Date().toISOString(),identityReset=keep?'':field==='producer'?',producer_id=NULL,cuvee_id=NULL':rename?',recognized_wine_name=?,cuvee_id=NULL':'';
- const result=await c.env.DB.prepare(`UPDATE wines SET ${column}=?${identityReset},reference_suggestions_json=?,reference_suggestions_updated_at=?,updated_at=? WHERE owner_id=? AND id=? AND reference_suggestions_json IS ? AND ${column} IS ?`)
-  .bind(value,...(rename?[value]:[]),remaining.length?JSON.stringify(remaining):null,remaining.length?now:null,now,owner,id,row.reference_suggestions_json??null,rawCurrent??null).run();
+ const result=await c.env.DB.prepare(`UPDATE wines SET ${column}=?${identityReset},lwin_reference_json=?,reference_suggestions_json=?,reference_suggestions_updated_at=?,updated_at=? WHERE owner_id=? AND id=? AND reference_suggestions_json IS ? AND ${column} IS ? AND lwin7 IS ? AND identity_match_status IS ? AND lwin_reference_json IS ?`)
+  .bind(value,...(rename?[value]:[]),reviewedReference?JSON.stringify(reviewedReference):row.lwin_reference_json??null,remaining.length?JSON.stringify(remaining):null,remaining.length?now:null,now,owner,id,row.reference_suggestions_json??null,rawCurrent??null,row.lwin7??null,row.identity_match_status??null,row.lwin_reference_json??null).run();
  if(!result.meta.changes)return c.json({error:'This wine changed. Refresh and review it again.'},409);
  if(!keep&&(field==='producer'||field==='wineName'))await ensureWineIdentity(c.env.DB,owner,id);
  await recheckWineReference(c.env.DB,c.env.REFERENCE_DATA,owner,id,false);
@@ -299,7 +310,7 @@ app.put('/api/wines/:id',async c=>{
  const x=await enrichRecognitionReference(c.env.REFERENCE_DATA,parsed.data),id=c.req.param('id'),owner=c.get('userId');
  const wineStatement=c.env.DB.prepare(`UPDATE wines SET producer=?,wine_name=?,vintage=?,country=?,region=?,appellation=?,recognized_region=?,recognized_appellation=?,classification=?,classification_override=?,grapes_json=?,grape_blend_json=?,wine_style=?,alcohol_percentage=?,tasting_notes=?,rating=?,tasting_date=?,event=?,venue=?,price=?,currency=?,tags_json=?,recognition_status=?,recognition_confidence=?,updated_at=? WHERE id=? AND owner_id=?`).bind(x.producer,x.wineName,x.vintage,x.country,x.region,x.appellation,x.recognizedRegion,x.recognizedAppellation,x.classification,x.classificationOverride,JSON.stringify(x.grapes),JSON.stringify(x.grapeBlend),x.wineStyle,x.alcoholPercentage,x.tastingNotes,x.rating,x.tastingDate,x.event,x.venue,x.price,x.currency,JSON.stringify(x.tags),x.recognitionStatus,x.recognitionConfidence,new Date().toISOString(),id,owner);
  try{
-  const previous=await c.env.DB.prepare('SELECT producer,wine_name,lwin7 FROM wines WHERE owner_id=? AND id=?').bind(owner,id).first<{producer:string;wine_name:string;lwin7:string|null}>();
+  const previous=await c.env.DB.prepare('SELECT * FROM wines WHERE owner_id=? AND id=?').bind(owner,id).first<StoredReferenceIdentity>();
   const [res]=await c.env.DB.batch([wineStatement,...wineSaveStatements(c.env.DB,owner,id,x,true,previous??undefined)]);
   if(!res.meta.changes)return c.json({error:'Not found'},404);
   return c.json({ok:true});

@@ -4,6 +4,8 @@ import { benchmarkCourseDefinition } from './benchmarkCourseDefinition';
 import { michelinAchievementDefinitions } from './michelinDefinitions';
 import { pfvAndAmericanAvaDefinitions } from './pfvAndAmericanAvas';
 import type { AchievementDefinition,AchievementDefinitionItem } from './types';
+import { atlasCollections } from './atlasCollections';
+export { atlasCollections } from './atlasCollections';
 
 const removed=new Set([
   'bordeaux-second-growths',
@@ -113,3 +115,8 @@ const duplicate=achievementDefinitions.find((definition,index)=>achievementDefin
 if(duplicate)throw new Error(`Duplicate curated collection id: ${duplicate.id}`);
 
 export function getAchievementDefinition(id:string){return achievementDefinitions.find(item=>item.id===id)??null}
+
+// Validate the lightweight Atlas membership list against what curation serves.
+// The page imports only that list, not the complete collection catalogue.
+const unreachable=[...atlasCollections].find(id=>!getAchievementDefinition(id));
+if(unreachable)throw new Error(`Burgundy Atlas collection is not curated: ${unreachable}`);

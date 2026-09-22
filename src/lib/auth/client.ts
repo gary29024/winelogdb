@@ -1,13 +1,17 @@
 export type Account={id:string;email:string;display_name:string;role:'owner'|'member';status:string};
 let account:Account|null=null;
 let generation=0;
+// Browser-only in-flight JSON reads. No settled response survives navigation:
+// permissions and remote edits are rechecked on every later request.
+const pendingReads=new Map<string,Promise<Response>>();
+const shareableRead=(path:string)=>path==='/api/journal'||path==='/api/producers'||/^\/api\/(?:producers|shared\/wines)\/[^/]+$/.test(path);
 export const getAccount=()=>account;
 /** An account/cache identity only; authentication credentials never enter JavaScript. */
 export const getSession=()=>account?.id??null;
 export const hasSession=()=>account!==null;
 export const accountStorageKey=(key:string)=>`${key}:${getSession()??'signed-out'}`;
 export const authHeaders=(json=false):Record<string,string>=>({...account?{'X-WineLog-Account':account.id}:{},...json?{'Content-Type':'application/json'}:{}});
-export function clearSession(){account=null;generation++;localStorage.removeItem('session');sessionStorage.removeItem('winelog-account')}
+export function clearSession(){account=null;generation++;pendingReads.clear();localStorage.removeItem('session');sessionStorage.removeItem('winelog-account')}
 export async function bootstrapAccount(){
  const response=await fetch('/api/me',{credentials:'same-origin',cache:'no-store'});
  const next=response.ok?(await response.json() as {user:Account}).user:null;
@@ -32,6 +36,7 @@ export async function apiFetch(input:RequestInfo|URL,init?:RequestInit):Promise<
  // throws "Expected signal to be an instance of AbortSignal" and every abortable
  // list read fails. The signal only ever needs to reach fetch, which accepts it.
  const method=(input instanceof Request?input.method:init?.method)??'GET';
+ if(method!=='GET')pendingReads.clear();
  const headers=new Headers(input instanceof Request?input.headers:init?.headers);
  if(identity)headers.set('X-WineLog-Account',identity);
  headers.delete('Authorization');
@@ -56,7 +61,17 @@ export async function apiFetch(input:RequestInfo|URL,init?:RequestInit):Promise<
   const execute=()=>fetch(url.pathname+url.search,{method,headers,body:bytes,credentials:'same-origin',signal:init?.signal});
   try{response=await execute()}catch(error){if(init?.signal?.aborted||atStart!==generation)throw error;response=await execute()}
  }else{
-  response=await fetch(input,{...init,headers,credentials:'same-origin'});
+  // Abortable callers retain their independent cancellation semantics. Explicit
+  // Request objects and non-JSON endpoints also keep their original fetch path.
+  if(method==='GET'&&!(input instanceof Request)&&!init?.signal&&shareableRead(url.pathname)){
+   const key=JSON.stringify([atStart,identity,url.href,{...init,headers:[...headers.entries()]}]);
+   let pending=pendingReads.get(key);
+   if(!pending){
+    pending=fetch(input,{...init,headers,credentials:'same-origin'}).finally(()=>{if(pendingReads.get(key)===pending)pendingReads.delete(key)});
+    pendingReads.set(key,pending);
+   }
+   response=(await pending).clone();
+  }else response=await fetch(input,{...init,headers,credentials:'same-origin'});
  }
  if(atStart!==generation||identity!==getSession())throw new Error('Account changed; discard the previous response');
  if(response.status===401){clearSession();location.assign('/login')}

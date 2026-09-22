@@ -2,241 +2,101 @@ name: CI
 
 on:
   pull_request:
-    branches:
-      - main
+    branches: [main]
   push:
-    branches:
-      - main
+    branches: [main]
   workflow_dispatch:
+  schedule:
+    - cron: '17 3 * * 1'
 
 concurrency:
-  group: ci-${{ github.workflow }}-${{ github.ref }}
+  group: ci-${{ github.workflow }}-${{ github.ref }}-${{ github.event_name }}
   cancel-in-progress: true
+
+permissions:
+  contents: read
 
 jobs:
   quality:
     name: Lint and build
     runs-on: ubuntu-latest
     timeout-minutes: 10
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 24
-
-      - name: Set up Bun
-        uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: 1.2.15
-
-      - name: Install dependencies
-        run: bun install
-
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/test-setup
       - name: Lint
         run: npm run lint
-
+      # build already runs tsc -b; do not repeat typecheck in another job.
       - name: TypeScript and production build
         run: npm run build
-
-      - name: Decide Worker runtime smoke scope
-        id: platform
-        shell: bash
-        env:
-          EVENT_NAME: ${{ github.event_name }}
-          BASE_SHA: ${{ github.event.pull_request.base.sha }}
-        run: |
-          set -euo pipefail
-          if [ "$EVENT_NAME" != "pull_request" ]; then
-            run_smoke=true
-            reason="main/release run"
-          else
-            changed_file="$RUNNER_TEMP/worker-runtime-changed-files.txt"
-            git diff --name-only "$BASE_SHA"...HEAD | sed '/^$/d' > "$changed_file"
-            if [ ! -s "$changed_file" ]; then
-              run_smoke=true
-              reason="empty diff; fail safe"
-            elif grep -Eq '^(worker/|wrangler\.(toml|jsonc)$|src/lib/db/migrations/|src/features/auth/|scripts/worker-runtime-smoke\.mjs$|\.github/workflows/|package\.json$|vite\.config\.ts$|index\.html$|public/)' "$changed_file"; then
-              run_smoke=true
-              reason="Worker/auth/runtime/migration/SPA boundary changed"
-            else
-              run_smoke=false
-              reason="no Worker runtime boundary files changed"
-            fi
-          fi
-          echo "run_smoke=$run_smoke" >> "$GITHUB_OUTPUT"
-          echo "reason=$reason" >> "$GITHUB_OUTPUT"
-          printf '**Worker runtime smoke:** `%s` - %s\n' "$run_smoke" "$reason" >> "$GITHUB_STEP_SUMMARY"
-
-      - name: Apply local D1 migrations for Worker runtime smoke
-        if: steps.platform.outputs.run_smoke == 'true'
-        run: npx wrangler d1 migrations apply DB --local
-
-      - name: Run Worker runtime smoke
-        if: steps.platform.outputs.run_smoke == 'true'
+      - name: Apply local D1 migrations
+        run: npm run db:migrate:local
+      - name: Worker runtime smoke
         run: node scripts/worker-runtime-smoke.mjs
 
-  pr-tests:
-    name: Affected unit tests
-    if: github.event_name == 'pull_request'
+  unit:
+    name: Unit and integration tests
     runs-on: ubuntu-latest
     timeout-minutes: 10
-
     steps:
-      - name: Checkout repository with history
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/test-setup
+      # Vitest otherwise uses CPUs minus one: only one worker on a two-core
+      # hosted runner. Keep isolation and use both cores, with bounded memory.
+      - name: All unit, component and integration tests
+        run: npm test -- --maxWorkers=2 --reporter=default --reporter=json --outputFile=.cache/test-reports/vitest.json
+      - name: Test inventory and timing report
+        run: node scripts/test-suite-report.mjs .cache/test-reports/vitest.json > .cache/test-reports/inventory.json
+      - name: Upload unit test reports
+        if: always()
+        uses: actions/upload-artifact@v4
         with:
-          fetch-depth: 0
+          name: unit-test-reports
+          path: .cache/test-reports/
+          retention-days: 7
+          include-hidden-files: true
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 24
-
-      - name: Set up Bun
-        uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: 1.2.15
-
-      - name: Install dependencies
-        run: bun install
-
-      - name: Choose test scope
-        id: scope
-        shell: bash
-        env:
-          BASE_SHA: ${{ github.event.pull_request.base.sha }}
-        run: |
-          set -euo pipefail
-          changed_file="$RUNNER_TEMP/changed-files.txt"
-          git diff --name-only "$BASE_SHA"...HEAD | sed '/^$/d' > "$changed_file"
-          changed_count=$(wc -l < "$changed_file" | tr -d ' ')
-
-          echo "Changed files ($changed_count):"
-          cat "$changed_file"
-
-          if [ "$changed_count" -eq 0 ]; then
-            # An empty diff means the base sha and HEAD did not line up the way
-            # this job assumes - a force-push, or a re-run against a base that
-            # has moved. Skipping every test is the one outcome that a diff we
-            # failed to read can never justify, so run everything.
-            mode=full
-            reason="no changed files resolved; refusing to infer an empty test scope"
-          # Prose cannot change runtime behaviour, and no unit test reads a
-          # markdown file, so a markdown-only change has nothing to regress.
-          elif ! grep -Ev '^docs/|\.md$' "$changed_file" | grep -q .; then
-            mode=none
-            reason="documentation-only change"
-          # Large refactors and files outside the TypeScript dependency graph
-          # get the full suite because Vitest cannot safely infer every consumer.
-          elif [ "$changed_count" -gt 40 ] || grep -Eq '^(package\.json|vite\.config\.ts|tsconfig.*\.json|eslint\.config\.(js|mjs|ts)|wrangler\.(toml|jsonc)|\.github/|src/lib/db/migrations/|tests/unit/fixtures/)|\.(css|sql|json)$' "$changed_file"; then
-            mode=full
-            reason="broad or dependency-graph-opaque change"
-          else
-            mode=changed
-            reason="Vitest dependency graph can target affected tests"
-          fi
-
-          echo "mode=$mode" >> "$GITHUB_OUTPUT"
-          echo "reason=$reason" >> "$GITHUB_OUTPUT"
-          echo "Selected $mode test scope: $reason"
-          printf '**Unit test scope:** `%s` - %s\n' "$mode" "$reason" >> "$GITHUB_STEP_SUMMARY"
-
-      - name: Run affected unit tests
-        if: steps.scope.outputs.mode == 'changed'
-        shell: bash
-        env:
-          BASE_SHA: ${{ github.event.pull_request.base.sha }}
-        run: |
-          set -euo pipefail
-          selection="$RUNNER_TEMP/selected-tests.txt"
-
-          # Vitest --changed walks the *import* graph. A fifth of this suite
-          # asserts on source files it reads as text instead
-          # (readFileSync('src/features/wines/DetailPage.tsx', ...)), so no edit
-          # to those files can ever select those tests, and the regression they
-          # were written to catch would pass unseen. They always run. Finding
-          # them by their use of the fs module keeps the set correct on its own
-          # as tests are added, rather than as a list that goes stale.
-          #
-          # Only test files: a filter matching no test file is silently ignored
-          # by Vitest, so a helper swept up here would inflate the count below
-          # while running nothing. The one helper that reads source text
-          # (tests/unit/support/sqliteD1.ts) reads migrations, and a migration
-          # change already takes the full suite - a helper reading anything else
-          # would leave its consumers unselected and belongs in this set.
-          # grep exits 1 on no match, which under pipefail would fail this step
-          # over an empty set rather than over a real problem. The total check
-          # below turns an empty selection into the full suite instead.
-          grep -rlE "['\"](node:)?fs(/promises)?['\"]" tests/unit \
-            --include='*.test.ts' --include='*.test.tsx' | sort > "$selection" || true
-          invariant_count=$(wc -l < "$selection" | tr -d ' ')
-
-          # The tests/unit filter matters: without it Vitest's default include
-          # also matches the Playwright spec under tests/e2e.
-          npx vitest list tests/unit --changed "$BASE_SHA" --filesOnly >> "$selection"
-
-          # A blank line here would become a filter that matches every test.
-          sort -u "$selection" -o "$selection"
-          sed -i '/^$/d' "$selection"
-          total=$(wc -l < "$selection" | tr -d ' ')
-
-          # An empty filter list makes Vitest run every test it can find, e2e
-          # specs included. Ask for the full unit suite by name instead.
-          if [ "$total" -eq 0 ]; then
-            echo "Selected no test files; running the full unit suite instead."
-            npm test
-            exit 0
-          fi
-
-          echo "Running $total test files ($invariant_count always-run source-invariant):"
-          cat "$selection"
-          printf '%s affected unit test files (%s always-run source-invariant).\n' "$total" "$invariant_count" >> "$GITHUB_STEP_SUMMARY"
-
-          mapfile -t files < "$selection"
-          npx vitest run --passWithNoTests "${files[@]}"
-
-      - name: Run full unit suite for high-risk changes
-        if: steps.scope.outputs.mode == 'full'
-        run: npm test
-
-      - name: Skip unit tests for docs-only changes
-        if: steps.scope.outputs.mode == 'none'
-        run: echo "No runtime files changed; unit tests are not required."
-
-  regression:
-    name: Full regression (${{ matrix.shard }})
-    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+  browser:
+    name: Browser (${{ matrix.browser }})
     runs-on: ubuntu-latest
     timeout-minutes: 10
     strategy:
       fail-fast: false
       matrix:
-        shard:
-          - 1/2
-          - 2/2
-
+        # PRs keep Chromium; main/manual/weekly runs also keep both iPhone
+        # projects. WebKit installation and execution cannot delay Chromium.
+        browser: ${{ fromJSON(github.event_name == 'pull_request' && '["chromium"]' || '["chromium","webkit"]') }}
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/test-setup
+      - name: Install browser and operating-system libraries
+        run: npx playwright install --with-deps ${{ matrix.browser }}
+      - name: Chromium flows
+        if: matrix.browser == 'chromium'
+        run: npm run test:e2e
+      - name: Both iPhone layouts
+        if: matrix.browser == 'webkit'
+        run: npm run test:e2e:full -- --project="iPhone*"
+      - name: Upload browser reports
+        if: always()
+        uses: actions/upload-artifact@v4
         with:
-          node-version: 24
+          name: browser-reports-${{ matrix.browser }}
+          path: |
+            test-results/
+            playwright-report/
+          retention-days: 7
 
-      - name: Set up Bun
-        uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: 1.2.15
-
-      - name: Install dependencies
-        run: bun install
-
-      - name: Run regression shard
-        run: npm test -- --shard=${{ matrix.shard }}
+  regression:
+    # Preserve the required check name while work runs independently above.
+    name: Regression and browser tests
+    if: always()
+    needs: [unit, browser]
+    runs-on: ubuntu-latest
+    timeout-minutes: 1
+    steps:
+      - name: Require every regression job to pass
+        env:
+          UNIT_RESULT: ${{ needs.unit.result }}
+          BROWSER_RESULT: ${{ needs.browser.result }}
+        run: test "$UNIT_RESULT" = success && test "$BROWSER_RESULT" = success

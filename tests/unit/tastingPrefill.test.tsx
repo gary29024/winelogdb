@@ -2,7 +2,7 @@
 import { act } from 'react';
 import { createRoot,type Root } from 'react-dom/client';
 import { MemoryRouter,useLocation } from 'react-router-dom';
-import { afterEach,describe,expect,it,vi } from 'vitest';
+import { afterEach,beforeEach,describe,expect,it,vi } from 'vitest';
 
 declare global{var IS_REACT_ACT_ENVIRONMENT:boolean}
 globalThis.IS_REACT_ACT_ENVIRONMENT=true;
@@ -12,7 +12,17 @@ const tasting={id:'t1',name:'Burgundy portfolio',tastingDate:'2026-08-28',venue:
   createdAt:'2026-08-28T10:00:00.000Z',updatedAt:'2026-08-28T10:00:00.000Z'};
 
 let root:Root|null=null,host:HTMLDivElement|null=null;
-afterEach(()=>{act(()=>root?.unmount());host?.remove();root=null;host=null;vi.unstubAllGlobals()});
+beforeEach(()=>vi.useFakeTimers({toFake:['setTimeout','clearTimeout']}));
+afterEach(()=>{act(()=>root?.unmount());host?.remove();root=null;host=null;vi.useRealTimers();vi.unstubAllGlobals()});
+
+// Flush each debounce window inside act so React can schedule the next effect.
+// Negative assertions cover the entire window too, without waiting on wall time.
+async function settle(until?:()=>boolean){
+  for(let elapsed=0;elapsed<1000;elapsed+=100){
+    await act(async()=>{await vi.advanceTimersByTimeAsync(100)});
+  }
+  if(until)expect(until()).toBe(true);
+}
 
 const json=(body:unknown)=>new Response(JSON.stringify(body),{status:200,headers:{'content-type':'application/json'}});
 
@@ -177,20 +187,6 @@ describe('a bottle the evening already holds',()=>{
   const photo={file:new File([new Uint8Array([1,2,3])],'bottle.jpg',{type:'image/jpeg'}),width:1200,height:1600};
   const already={wineId:'w1',producer:'Domaine Dujac',wineName:'Morey-Saint-Denis',vintage:2019};
   const scanned={producer:'Domaine Dujac',wineName:'Morey-Saint-Denis',vintage:2019};
-  /**
-   * Waits for what the case is about to assert.
-   *
-   * A fixed sleep against a debounced probe is a race - it fails once on a
-   * loaded machine and never again when you go looking for it. A case expecting
-   * something polls for it; a case expecting nothing has to wait out the window
-   * in which it could have happened, so that one still sleeps, and for twice as
-   * long as it used to.
-   */
-  const settle=async(until?:()=>boolean)=>{
-    const deadline=Date.now()+(until?3000:900);
-    do{await act(async()=>{await new Promise(resolve=>setTimeout(resolve,20))})}
-    while(until?!until()&&Date.now()<deadline:Date.now()<deadline);
-  };
   const named=(text:string)=>[...host!.querySelectorAll('button')].find(node=>node.textContent?.includes(text));
 
   it('offers to add the photo to it rather than making a second copy',async()=>{
@@ -235,20 +231,6 @@ describe('the house the library already knows',()=>{
   // field as the label read it, so the same producer entered under two spellings
   // that both resolved to it and consistency depended on noticing.
   const field=(name:string)=>host!.querySelector(`[name="${name}"]`) as HTMLInputElement;
-  /**
-   * Waits for what the case is about to assert.
-   *
-   * A fixed sleep against a debounced probe is a race - it fails once on a
-   * loaded machine and never again when you go looking for it. A case expecting
-   * something polls for it; a case expecting nothing has to wait out the window
-   * in which it could have happened, so that one still sleeps, and for twice as
-   * long as it used to.
-   */
-  const settle=async(until?:()=>boolean)=>{
-    const deadline=Date.now()+(until?3000:900);
-    do{await act(async()=>{await new Promise(resolve=>setTimeout(resolve,20))})}
-    while(until?!until()&&Date.now()<deadline:Date.now()<deadline);
-  };
 
   afterEach(()=>{producerResolution=null});
 

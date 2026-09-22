@@ -32,3 +32,5 @@
 .lwin-link-preview p{margin:.6rem 0}
 .producer-name-review{min-width:0;overflow-wrap:anywhere}
 .producer-name-review button{white-space:normal;max-width:100%}
+.lwin-edit-candidates{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.lwin-edit-candidates p{flex-basis:100%;margin:0}

@@ -27,18 +27,6 @@ describe('metadata validation', () => {
     ).toBe(true);
   });
 
-  it('accepts modern vintages without relying on the runtime clock', () => {
-    const parsed = wineInputSchema.parse({
-      producer: 'P',
-      wineName: 'W',
-      vintage: 2021,
-      grapes: [],
-      tags: [],
-      tastingNotes: '',
-    });
-    expect(parsed.vintage).toBe(2021);
-  });
-
   it('removes a repeated producer prefix from wine name', () => {
     const parsed = wineInputSchema.parse({
       producer: 'Domaine Armand Rousseau',

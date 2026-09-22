@@ -1,6 +1,7 @@
 import { test,expect,type Page } from '@playwright/test';
+import { wine } from './fixtures/layoutWine';
 const user={id:'alice',email:'alice@example.com',display_name:'Alice',role:'member',status:'active'};
-async function signedIn(page:Page){await page.route('**/api/**',async route=>{const path=new URL(route.request().url()).pathname;const data=path==='/api/me'?{user}:path==='/api/credits'?{available:20,reserved:0,balance:20}:path==='/api/friends/code'?{code:'A1B2-C3D4-E5F6'}:path==='/api/friends/requests'?{incoming:[],outgoing:[]}:path==='/api/friends'?{items:[{id:'bob',display_name:'Bob'}]}:path==='/api/shared/wines'?{items:[{id:'w',ownerName:'Bob',producer:'Domaine Dujac',wineName:'Clos de la Roche',vintage:2020,tastingNotes:'Bright cherry',rating:4,tastingDate:'2026-09-01'}],nextOffset:null}:{items:[],total:0,nextOffset:null};await route.fulfill({json:data})})}
+async function signedIn(page:Page){await page.route('**/api/**',async route=>{const path=new URL(route.request().url()).pathname;const data=path==='/api/me'?{user}:path==='/api/credits'?{available:20,reserved:0,balance:20,sponsoredAi:true,actionAccess:[]}:path==='/api/usage/spend'?{days:30,kinds:[],empty:true}:path==='/api/shared/wines/w'?{...wine,id:'w',ownerName:'Bob',tastingNotes:'Bright cherry'}:path==='/api/journal'?{items:[{...wine,id:'w',shared:true,sharedBy:'Bob'}],total:1,nextOffset:null}:path==='/api/friends/code'?{code:'A1B2-C3D4-E5F6'}:path==='/api/friends/requests'?{incoming:[],outgoing:[]}:path==='/api/friends'?{items:[{id:'bob',display_name:'Bob'}]}:path==='/api/shared/wines'?{items:[{id:'w',ownerName:'Bob',producer:'Domaine Dujac',wineName:'Clos de la Roche',vintage:2020,tastingNotes:'Bright cherry',rating:4,tastingDate:'2026-09-01'}],nextOffset:null}:{items:[],total:0,nextOffset:null};await route.fulfill({json:data})})}
 test('Google invitation login has no legacy password form',async({page})=>{
  await page.route('**/api/me',route=>route.fulfill({status:401,json:{error:'Sign in required'}}));await page.goto('/login?invitation=single-use');
  await expect(page.getByRole('link',{name:/Google/})).toHaveAttribute('href','/api/auth/google/start?invitation=single-use');await expect(page.locator('input[type=password]')).toHaveCount(0);
@@ -25,9 +26,9 @@ test('friend codes send pending requests and only acceptance adds a friend',asyn
  await page.getByRole('button',{name:'Cancel request to Bob',exact:true}).click();await expect(page.getByText('No pending sent requests.')).toBeVisible();
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
 });
-test('account and shared wines remain separate from the journal on mobile',async({page})=>{
- await page.setViewportSize({width:390,height:844});await signedIn(page);await page.goto('/account');await expect(page.getByText('20 credits available')).toBeVisible();await expect(page.getByRole('heading',{name:'Friends',exact:true})).toBeVisible();
- await page.getByRole('link',{name:'Shared with me'}).click();await expect(page.getByRole('heading',{name:'Shared with me',exact:true})).toBeVisible();await expect(page.getByText('Bright cherry')).toBeVisible();await expect(page.getByRole('button',{name:/Edit|Add to journal/})).toHaveCount(0);
+test('account and shared wine experience remain accessible from the Journal on mobile',async({page})=>{
+ await page.setViewportSize({width:390,height:844});await signedIn(page);await page.goto('/account');await expect(page.getByText('Pilot AI access', {exact:true})).toBeVisible();await expect(page.getByRole('heading',{name:'Friends',exact:true})).toBeVisible();
+ await page.goto('/shared');await expect(page).toHaveURL(/\/journal$/);await page.getByRole('link',{name:/Open .*shared by Bob/}).click();await expect(page.getByText('Bright cherry')).toBeVisible();await expect(page.getByRole('button',{name:'Edit your experience'})).toBeVisible();
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
 });
 test('a scan requires the server quote and cancellation invokes no AI',async({page})=>{
@@ -37,5 +38,31 @@ test('a scan requires the server quote and cancellation invokes no AI',async({pa
  await page.goto('/upload');const png=await page.evaluate(()=>{const canvas=document.createElement('canvas');canvas.width=600;canvas.height=800;const c=canvas.getContext('2d')!;c.fillStyle='white';c.fillRect(0,0,600,800);c.fillStyle='black';c.fillText('Wine label',40,100);return canvas.toDataURL('image/png').split(',')[1]});
  await page.locator('input[type=file]').setInputFiles({name:'wine.png',mimeType:'image/png',buffer:Buffer.from(png,'base64')});await page.getByRole('button',{name:'Identify this wine',exact:true}).click();
  await expect(page.getByRole('dialog')).toBeVisible();await page.getByRole('button',{name:'Cancel',exact:true}).click();expect(submissions).toBe(0);
- await page.getByRole('button',{name:'Identify this wine',exact:true}).click();await page.getByRole('button',{name:'Use 5 credits',exact:true}).click();await expect(page.getByRole('heading',{name:'Combined identification'})).toBeVisible();expect(submissions).toBe(1);
+ await page.getByRole('button',{name:'Identify this wine',exact:true}).click();await page.getByRole('button',{name:'Use 5 credits',exact:true}).click();await expect(page.getByRole('heading',{name:'Identification Results'})).toBeVisible();expect(submissions).toBe(1);
+});
+
+test('editing a tasting persists the note and deletion requires confirmation',async({page})=>{
+ await signedIn(page);
+ let notes='Original note',edits=0,deletes=0;
+ await page.route('**/api/wines/w',async route=>{
+  if(route.request().method()==='DELETE'){deletes++;await route.fulfill({status:204});return}
+  if(route.request().method()==='PUT'){
+   expect(route.request().postDataJSON()).toMatchObject({producer:wine.producer,wineName:wine.wineName,tastingNotes:'Updated tasting note'});
+   notes=route.request().postDataJSON().tastingNotes;edits++;
+  }
+  await route.fulfill({json:{...wine,id:'w',tastingNotes:notes}});
+ });
+ await page.goto('/wines/w');
+ await page.getByRole('link',{name:'Edit tasting',exact:true}).click();
+ await page.getByRole('textbox',{name:'Tasting notes',exact:true}).fill('Updated tasting note');
+ await page.getByRole('button',{name:'Save changes',exact:true}).click();
+ await expect(page).toHaveURL(/\/wines\/w$/);
+ await expect(page.getByText('Updated tasting note',{exact:true})).toBeVisible();
+ expect(edits).toBe(1);
+ page.once('dialog',dialog=>dialog.dismiss());
+ await page.getByRole('button',{name:'Delete this wine',exact:true}).click();
+ await expect(page).toHaveURL(/\/wines\/w$/);expect(deletes).toBe(0);
+ page.once('dialog',dialog=>dialog.accept());
+ await page.getByRole('button',{name:'Delete this wine',exact:true}).click();
+ await expect(page).toHaveURL('http://127.0.0.1:5173/');expect(deletes).toBe(1);
 });

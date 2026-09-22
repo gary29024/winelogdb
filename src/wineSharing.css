@@ -1,0 +1,5 @@
+.detail-share-button{display:inline-flex;align-items:center;justify-content:center;width:44px;min-height:44px;padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink-6)}
+.detail-share-button .app-icon{width:20px;height:20px}
+.detail-share-button.active{color:var(--wine);border-color:var(--wine-line);background:var(--bad-wash)}
+.detail-share-button:hover:not(:disabled){color:var(--wine);border-color:var(--wine-line);background:var(--bad-wash)}
+.wine-sharing-status{flex:1 0 100%;grid-column:1/-1;order:1;color:var(--ink-6);font-size:.72rem;text-align:center}

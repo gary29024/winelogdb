@@ -1,5 +1,5 @@
 import { describe,expect,it } from 'vitest';
-import { parseRecognition } from '../../src/features/recognition/schema';
+import { parseRecognition,recognitionSchema } from '../../src/features/recognition/schema';
 import { parseGroupRecognition } from '../../src/features/recognition/groupSchema';
 import { parseSheetPage,sheetIdentityKey } from '../../src/features/recognition/sheetSchema';
 
@@ -12,12 +12,12 @@ describe('standard recognition identity fields',()=>{
   expect(nv.recognizedProducer).toBe('Krug');expect(nv.recognizedWineName).toBe('Grande Cuvée');
  });
  it('accepts server-side reference enrichment on strict recognition responses',()=>{
-  const parsed=parseRecognition(JSON.stringify({
+  const parsed=recognitionSchema.parse({
    producer:'Château Margaux',wineName:'Margaux',vintage:2019,country:'France',region:'Bordeaux',grapes:[],grapeBlend:[],sparklingDetails:null,confidence:.98,
    referenceProductKey:'lwin:1011847',lwin7:'1011847',lwin11:'10118472019',elid:null,identityMatchStatus:'matched',identityMatchConfidence:1,identityMatchCandidates:[],
    referenceProducer:'Château Margaux',referenceWineName:'Margaux',referenceCountry:'France',referenceRegion:'Bordeaux',referenceSubRegion:'Margaux',referenceSite:null,referenceParcel:null,referenceDesignation:null,referenceClassification:'Premier Cru Classé',
    colour:'Red',productType:'Wine',productSubtype:'Still'
-  }));
+  });
   expect(parsed).toMatchObject({lwin7:'1011847',identityMatchCandidates:[],referenceProducer:'Château Margaux',referenceWineName:'Margaux',referenceCountry:'France',referenceRegion:'Bordeaux'});
  });
  it('keeps different NV editions distinct in group dedupe',()=>{

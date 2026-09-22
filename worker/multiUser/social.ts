@@ -1,3 +1,4 @@
+import { reliableLwinReference,publicLwinTaxonomy } from '../../src/lib/wine/lwinMetadata';
 import { friendRequestRoute } from './friendRequests';
 import { ApiError,body,json,ownerOnly,stamp,type IdentityEnv,type Member } from './common';
 import { similarFriendProducers } from '../../src/lib/research/similarProducers';
@@ -26,12 +27,13 @@ export function sharedWine(row:Record<string,unknown>):SharedWine{
   });
  }catch{/* Invalid legacy blend falls back to the plain grape names. */}
  const tier=text(row.classification),classification=tier==='grand_cru'||tier==='premier_cru'||tier==='village'?tier:null;
+ const lwinReference=reliableLwinReference(row);
  const deepSearch=publishedDeepSearch(row.deep_search_json);
  return {
   id:text(row.id),ownerName:text(row.display_name),
   producer:text(row.producer),producerId:text(row.viewer_producer_id)||(text(row.producer_id)&&text(row.owner_id)?sharedProducerId(text(row.owner_id),text(row.producer_id)):null),
   wineName:text(row.wine_name),vintage:number(row.vintage),vintageKind:(['vintage','non_vintage','multi_vintage','unknown'].includes(text(row.vintage_kind))?text(row.vintage_kind):null) as SharedWine['vintageKind'],releaseDesignation:text(row.release_designation)||null,
-  lwin7:text(row.lwin7)||null,lwin11:text(row.lwin11)||null,elid:text(row.elid)||null,referenceSite:text(row.reference_site)||null,referenceParcel:text(row.reference_parcel)||null,colour:text(row.colour)||null,productType:text(row.product_type)||null,productSubtype:text(row.product_subtype)||null,
+  lwinReference:lwinReference?publicLwinTaxonomy(lwinReference):null,lwin7:text(row.lwin7)||null,lwin11:text(row.lwin11)||null,elid:text(row.elid)||null,referenceSite:text(row.reference_site)||null,referenceParcel:text(row.reference_parcel)||null,colour:text(row.colour)||null,productType:text(row.product_type)||null,productSubtype:text(row.product_subtype)||null,
   identityMatchStatus:row.identity_match_status==='conflict'?'conflict':null,
   country:text(row.country)||null,region:text(row.region)||null,appellation:text(row.appellation)||null,
   recognizedRegion:text(row.recognized_region)||null,recognizedAppellation:text(row.recognized_appellation)||null,
@@ -323,16 +325,26 @@ export async function socialRoute(request:Request,env:SocialEnv,member:Member,ct
  }
  const shared=path.match(/^\/api\/shared\/wines\/([^/]+)(?:\/photos\/([^/]+))?$/);
  if(shared&&request.method==='GET'){
+  if(shared[2]){
+   // Authorize the exact wine and photo together, without fetching research,
+   // preferences, or producer data for every thumbnail. LEFT JOIN preserves the
+   // existing distinction between an inaccessible wine and a missing photo.
+   const image=await env.DB.prepare(`SELECT w.owner_id,i.object_key FROM wines w
+    JOIN friendships f ON f.user_id=? AND f.friend_id=w.owner_id
+    JOIN app_users u ON u.id=w.owner_id AND u.status='active'
+    LEFT JOIN wine_images i ON i.id=? AND i.wine_id=w.id AND i.owner_id=w.owner_id
+    WHERE w.id=? AND (
+     EXISTS(SELECT 1 FROM wine_shares s WHERE s.wine_id=w.id AND s.owner_id=w.owner_id AND s.recipient_id=?)
+     OR EXISTS(SELECT 1 FROM tasting_shares ts JOIN wine_experiences we
+      ON we.owner_id=ts.owner_id AND we.tasting_id=ts.tasting_id AND we.wine_id=w.id
+      WHERE ts.owner_id=w.owner_id AND ts.recipient_id=?))`)
+    .bind(member.id,shared[2],shared[1],member.id,member.id).first<{owner_id:string;object_key:string|null}>();
+   if(!image)throw new ApiError(404,'Shared wine not found');
+   if(!image.object_key)throw new ApiError(404,'Photo not found');
+   return serveWineImageObject(request,env,image.owner_id,String(shared[2]),image.object_key,ctx??detachedImageContext);
+  }
   const wine=await canReadShared(env.DB,member.id,shared[1]);if(!wine)throw new ApiError(404,'Shared wine not found');
   const owner=String(wine.owner_id);
-  if(shared[2]){
-   // canReadShared authorizes the wine; this second predicate prevents an image
-   // id from another wine owned by the same friend being substituted into the URL.
-   const image=await env.DB.prepare('SELECT object_key FROM wine_images WHERE id=? AND wine_id=? AND owner_id=?')
-    .bind(shared[2],shared[1],owner).first<{object_key:string}>();
-   if(!image)throw new ApiError(404,'Photo not found');
-   return serveWineImageObject(request,env,owner,String(shared[2]),image.object_key,ctx??detachedImageContext);
-  }
   const photos=(await env.DB.prepare('SELECT id FROM wine_images WHERE wine_id=? AND owner_id=? ORDER BY rowid')
    .bind(shared[1],owner).all<{id:string}>()).results;
   return json({...sharedWine(wine),photos:photos.map(photo=>({id:photo.id,url:`/api/shared/wines/${shared[1]}/photos/${photo.id}`}))});

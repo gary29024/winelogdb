@@ -55,10 +55,22 @@ describe('how many research calls run at once',()=>{
   });
 
   it('keeps results in the order the entries were given',async()=>{
-    const out=await mapLimit([10,20,30,40,50,60,70],VERTEX_BATCH_CONCURRENCY,async(value,index)=>{
-      await new Promise(resolve=>setTimeout(resolve,(7-index)%3));
+    const releases:Array<()=>void>=[];
+    const completed:number[]=[];
+    let startedLast!:()=>void;
+    const lastStarted=new Promise<void>(resolve=>{startedLast=resolve});
+    const result=mapLimit([10,20,30,40,50,60,70],VERTEX_BATCH_CONCURRENCY,async(value,index)=>{
+      if(index===6)startedLast();
+      await new Promise<void>(resolve=>{releases.push(resolve)});
+      completed.push(value);
       return value;
     });
+    expect(releases).toHaveLength(6);
+    for(const release of [...releases].reverse()){release();await Promise.resolve()}
+    await lastStarted;
+    releases[6]();
+    const out=await result;
+    expect(completed).toEqual([60,50,40,30,20,10,70]);
     // Responses are matched back to their batch key by position downstream, so
     // finishing out of order must not reorder the array.
     expect(out).toEqual([10,20,30,40,50,60,70]);

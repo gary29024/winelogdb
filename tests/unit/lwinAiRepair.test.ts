@@ -1,8 +1,10 @@
 import { afterEach,describe,expect,it,vi } from 'vitest';
-import { aiRepair,deterministicRepair,repairCandidates } from '../../worker/multiUser/lwinRepair';
+import { aiRepair,deterministicRepair,repairCandidates,LWIN_AI_TIMEOUT_MS,LWIN_AI_LEASE_SECONDS } from '../../worker/multiUser/lwinRepair';
 import * as transport from '../../worker/geminiTransport';
 import { realD1 } from './support/realD1';
-import { processRolloutJob,rolloutRoute,rolloutStatus } from '../../worker/multiUser/rollout';
+import { processRolloutJob,recoverRollouts,rolloutRoute,rolloutStatus } from '../../worker/multiUser/rollout';
+import publicWorker from '../../worker/multiUserEntry';
+import { claimDelivery } from '../../worker/multiUser/jobs';
 import { lwinReferenceIdentity,producerLookupKeys,referenceShardId,type LwinProducerIndex,type ReferenceManifest } from '../../src/lib/wine/referenceCatalog';
 import type { LwinReferenceProduct } from '../../src/lib/wine/lwinImport';
 
@@ -29,6 +31,16 @@ describe('LWIN AI response handling',()=>{
   const candidates=[{row:product('1000001','Chateau Margaux','Pavillon Rouge'),score:.8}];
   return {database,run:()=>aiRepair({DB:database.db,REFERENCE_DATA:bucket([])},wine,candidates)};
  }
+ function setupRollout(){
+  const database=realD1();databases.push(database);
+  const env={DB:database.db,AUTH_SECRET:'a'.repeat(48),APP_URL:'https://wine.example',
+   REFERENCE_DATA:bucket([product('1000001','Chateau Margaux','Pavillon Rouge')]),
+   WINE_IMAGES:bucket([]),RESEARCH_QUEUE:{send:vi.fn()} as unknown as Queue<unknown>};
+  database.sql.exec(`INSERT INTO wines(id,owner_id,producer,wine_name,country,region,identity_match_status,created_at,updated_at)
+   VALUES('w2','owner','Chateau Margaux','Pavillon','France','Bordeaux','unmatched','now','now');
+   INSERT INTO rollout_state(name,value) VALUES ('rollout_lwin_ai_job','running'),('lwin_ai_cursor','w1'),('lwin_ai_processed','1'),('lwin_ai_total','2')`);
+  return {database,env};
+ }
  it.each([
   [504,'error code: 504 ','HTTP 504 Gateway Timeout'],
   [502,'<html>Bad Gateway</html>','HTTP 502'],
@@ -47,34 +59,88 @@ describe('LWIN AI response handling',()=>{
  });
  it('explains a local timeout and clears its timer',async()=>{
   vi.useFakeTimers();
-  vi.spyOn(transport,'postGeminiGenerateContent').mockImplementation(async(_env,_model,_body,signal)=>new Promise((_resolve,reject)=>{
+  const post=vi.spyOn(transport,'postGeminiGenerateContent').mockImplementation(async(_env,_model,_body,signal)=>new Promise((_resolve,reject)=>{
    signal.addEventListener('abort',()=>reject(new DOMException('Aborted','AbortError')),{once:true});
   }));
-  const assertion=expect(setup().run()).rejects.toThrow('timed out after 45 seconds');
-  await vi.advanceTimersByTimeAsync(45_000);await assertion;
+  const assertion=expect(setup().run()).rejects.toThrow('timed out after 11 minutes');
+  await vi.advanceTimersByTimeAsync(45_000);
+  expect(post.mock.calls[0][3].aborted).toBe(false);
+  expect(post.mock.calls[0][5]).toEqual({serviceTier:'flex',serverTimeoutSeconds:600});
+  await vi.advanceTimersByTimeAsync(LWIN_AI_TIMEOUT_MS-45_000);await assertion;
   expect(vi.getTimerCount()).toBe(0);
  });
- it('preserves the rollout checkpoint after a 504 and retries the same wine on resume',async()=>{
-  const database=realD1();databases.push(database);
-  const env={DB:database.db,AUTH_SECRET:'a'.repeat(48),APP_URL:'https://wine.example',
-   REFERENCE_DATA:bucket([product('1000001','Chateau Margaux','Pavillon Rouge')]),
-   WINE_IMAGES:bucket([]),RESEARCH_QUEUE:{send:vi.fn()} as unknown as Queue<unknown>};
-  database.sql.exec(`INSERT INTO wines(id,owner_id,producer,wine_name,country,region,identity_match_status,created_at,updated_at)
-   VALUES('w2','owner','Chateau Margaux','Pavillon','France','Bordeaux','unmatched','now','now');
-   INSERT INTO rollout_state(name,value) VALUES ('rollout_lwin_ai_job','running'),('lwin_ai_cursor','w1'),('lwin_ai_processed','1'),('lwin_ai_total','2')`);
+ it('retries a 504 through the queue after backoff without recounting or manually resuming',async()=>{
+  vi.useFakeTimers();const {database,env}=setupRollout();
   const post=vi.spyOn(transport,'postGeminiGenerateContent')
    .mockResolvedValueOnce({response:new Response('error code: 504 ',{status:504}),provider:'vertex-ai-gateway'})
    .mockResolvedValueOnce({response:Response.json({candidates:[{content:{parts:[{text:JSON.stringify({lwin7:null,confidence:0})}]}}]}),provider:'vertex-ai-gateway'});
-  await expect(processRolloutJob(env,'lwin_ai')).rejects.toThrow('HTTP 504 Gateway Timeout');
-  expect((await rolloutStatus(database.db)).lwinAi).toMatchObject({state:'paused',processed:1,total:2,review:0,error:expect.stringContaining('HTTP 504')});
+  const retry=vi.fn(),ack=vi.fn(),message={id:'delivery',body:{kind:'admin_rollout',owner:'owner',rollout:'lwin_ai'},attempts:1,ack,retry};
+  const deliver=()=>publicWorker.queue({messages:[message]} as never,env as never);
+  await deliver();
+  expect(retry).toHaveBeenCalledWith({delaySeconds:expect.any(Number)});expect(ack).not.toHaveBeenCalled();
+  expect(database.sql.prepare("SELECT done FROM queue_deliveries WHERE id='delivery'").get()?.done).toBe(0);
+  expect((await rolloutStatus(database.db)).lwinAi).toMatchObject({state:'running',processed:1,total:2,review:0,error:expect.stringContaining('Retrying automatically (1/2)')});
   expect(database.sql.prepare("SELECT value FROM rollout_state WHERE name='lwin_ai_cursor'").get()?.value).toBe('w1');
+  await processRolloutJob(env,'lwin_ai');await recoverRollouts(env);
+  expect(post).toHaveBeenCalledTimes(1);
   expect(env.RESEARCH_QUEUE.send).not.toHaveBeenCalled();
-  await rolloutRoute(new Request('https://wine.example/api/admin/rollout/lwin-ai',{method:'POST'}),env,{id:'owner',email:'owner@example.com',display_name:'Owner',role:'owner',status:'active'});
-  await processRolloutJob(env,'lwin_ai');
+  const delay=retry.mock.calls[0][0].delaySeconds;expect(delay).toBeGreaterThanOrEqual(60);expect(delay).toBeLessThan(75);
+  await vi.advanceTimersByTimeAsync(delay*1000);await deliver();
+  expect(ack).toHaveBeenCalledTimes(1);
+  expect(database.sql.prepare("SELECT done FROM queue_deliveries WHERE id='delivery'").get()?.done).toBe(1);
   expect(post).toHaveBeenCalledTimes(2);
   expect(post.mock.calls.map(call=>call[4]?.wine)).toEqual(['w2','w2']);
   expect((await rolloutStatus(database.db)).lwinAi).toMatchObject({state:'running',processed:2,review:1,error:null});
   expect(database.sql.prepare("SELECT value FROM rollout_state WHERE name='lwin_ai_cursor'").get()?.value).toBe('w2');
+  expect(database.sql.prepare("SELECT value FROM rollout_state WHERE name='lwin_ai_retry_count'").get()?.value).toBe('0');
+ });
+ it('bounds automatic retries and lets an explicit resume retry the same checkpoint',async()=>{
+  vi.useFakeTimers();const {database,env}=setupRollout();
+  const post=vi.spyOn(transport,'postGeminiGenerateContent').mockImplementation(async()=>({response:new Response('busy',{status:429}),provider:'vertex-ai-gateway'}));
+  for(const minimumDelay of [60,120]){
+   const result=await processRolloutJob(env,'lwin_ai');
+   expect(result).toMatchObject({retryAfterSeconds:expect.any(Number)});
+   if(!('retryAfterSeconds' in result))throw new Error('Expected retry');
+   expect(result.retryAfterSeconds).toBeGreaterThanOrEqual(minimumDelay);
+   await vi.advanceTimersByTimeAsync(result.retryAfterSeconds!*1000);
+  }
+  await expect(processRolloutJob(env,'lwin_ai')).rejects.toThrow('HTTP 429');
+  expect(post).toHaveBeenCalledTimes(3);
+  expect((await rolloutStatus(database.db)).lwinAi).toMatchObject({state:'paused',processed:1,review:0});
+  await recoverRollouts(env);expect(env.RESEARCH_QUEUE.send).not.toHaveBeenCalled();
+  await rolloutRoute(new Request('https://wine.example/api/admin/rollout/lwin-ai',{method:'POST'}),env,{id:'owner',email:'owner@example.com',display_name:'Owner',role:'owner',status:'active'});
+  expect(database.sql.prepare("SELECT value FROM rollout_state WHERE name='lwin_ai_retry_count'").get()?.value).toBe('0');
+  expect(database.sql.prepare("SELECT value FROM rollout_state WHERE name='lwin_ai_cursor'").get()?.value).toBe('w1');
+  expect(await processRolloutJob(env,'lwin_ai')).toMatchObject({retryAfterSeconds:expect.any(Number)});
+ });
+ it('keeps the delivery and rollout leased while a slow Flex result finishes',async()=>{
+  vi.useFakeTimers();const {database,env}=setupRollout();
+  await claimDelivery(database.db,'slow',LWIN_AI_LEASE_SECONDS);
+  const post=vi.spyOn(transport,'postGeminiGenerateContent').mockImplementation(async()=>{
+   vi.setSystemTime(Date.now()+620_000);
+   expect(await claimDelivery(database.db,'slow',LWIN_AI_LEASE_SECONDS)).toBe(false);
+   expect(await processRolloutJob(env,'lwin_ai')).toMatchObject({busy:true});
+   await recoverRollouts(env);expect(env.RESEARCH_QUEUE.send).not.toHaveBeenCalled();
+   return {response:Response.json({candidates:[{content:{parts:[{text:JSON.stringify({lwin7:'1000001',confidence:.95})}]}}]}),provider:'vertex-ai-gateway'};
+  });
+  await processRolloutJob(env,'lwin_ai');
+  expect(post).toHaveBeenCalledTimes(1);
+  expect((await rolloutStatus(database.db)).lwinAi).toMatchObject({processed:2,matched:1,ai:1});
+  expect(database.sql.prepare("SELECT lwin7 FROM wines WHERE id='w2'").get()?.lwin7).toBe('1000001');
+ });
+ it('pauses immediately on permanent errors and respects pause during a transient failure',async()=>{
+  const {database,env}=setupRollout();
+  const post=vi.spyOn(transport,'postGeminiGenerateContent').mockResolvedValue({response:new Response('forbidden',{status:403}),provider:'vertex-ai-gateway'});
+  await expect(processRolloutJob(env,'lwin_ai')).rejects.toThrow('HTTP 403');
+  expect((await rolloutStatus(database.db)).lwinAi.state).toBe('paused');
+  database.sql.exec("UPDATE rollout_state SET value='running' WHERE name='rollout_lwin_ai_job'");
+  post.mockImplementation(async()=>{
+   database.sql.exec("UPDATE rollout_state SET value='paused' WHERE name='rollout_lwin_ai_job'");
+   return {response:new Response('busy',{status:503}),provider:'vertex-ai-gateway'};
+  });
+  await expect(processRolloutJob(env,'lwin_ai')).rejects.toThrow('HTTP 503');
+  expect((await rolloutStatus(database.db)).lwinAi.state).toBe('paused');
+  expect(env.RESEARCH_QUEUE.send).not.toHaveBeenCalled();
  });
  it.each([
   ['1000001',.95,{lwin7:'1000001',confidence:.95,method:'ai'}],

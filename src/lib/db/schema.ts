@@ -1,3 +1,4 @@
+import { lwinReferenceSchema } from '../wine/lwinMetadata';
 import { z } from 'zod';
 import { tastingStructureSchema } from '../wine/tastingStructure';
 import { sparklingDetailsSchema } from '../wine/sparklingDetails';
@@ -139,6 +140,7 @@ export const wineRecordSchema = z.object({
   // a misread decimal point, where 13.5 arrives as 135.
   wineStyle: wineStyleSchema, alcoholPercentage: optionalNumber(z.number().min(0).max(70)),
   colour: optionalText, productType: optionalText, productSubtype: optionalText,
+  lwinReference:lwinReferenceSchema.nullable().optional(),
   referenceProductKey: optionalText, lwin7: optionalText, lwin11: optionalText, elid: optionalText, referenceSite: optionalText, referenceParcel: optionalText,
   referenceSuggestions:z.array(referenceSuggestionSchema).default([]),
   identityMatchStatus: z.enum(['matched','suggested','ambiguous','unmatched','manual','conflict']).optional().nullable(),
@@ -159,7 +161,7 @@ export type DeepSearchResult = z.infer<typeof deepSearchSchema>;
 export type DeepSearchProvenance = z.infer<typeof deepSearchProvenanceSchema>;
 export type WineRecord = z.infer<typeof wineRecordSchema>;
 const wineInputBaseSchema = wineRecordSchema.omit({ id:true, ownerId:true, createdAt:true, updatedAt:true, deepSearch:true, imageIds:true, imageObjectKeys:true,
-  referenceProductKey:true,lwin7:true,lwin11:true,elid:true,referenceSite:true,referenceParcel:true,referenceSuggestions:true,identityMatchStatus:true,identityMatchConfidence:true,identityMatchCandidates:true,identityMatchedAt:true,identityCheckedAt:true,
+  lwinReference:true,referenceProductKey:true,lwin7:true,lwin11:true,elid:true,referenceSite:true,referenceParcel:true,referenceSuggestions:true,identityMatchStatus:true,identityMatchConfidence:true,identityMatchCandidates:true,identityMatchedAt:true,identityCheckedAt:true,
   colour:true,productType:true,productSubtype:true }).extend({referenceDecision:z.object({action:z.enum(['confirm','none','unmatched']),token:z.string().max(128).optional()}).optional(),tastingStructure:tastingStructureSchema.nullable().optional(),sparklingDetails:sparklingDetailsSchema.nullable().optional(),shareRecipientIds:z.array(z.string().min(1).max(128)).max(24).optional()}).superRefine((value,ctx)=>{
   const knownTotal=value.grapeBlend.reduce((sum,x)=>sum+(x.percentage??0),0);
   if(knownTotal>100.0001)ctx.addIssue({code:'custom',path:['grapeBlend'],message:'Known grape percentages cannot total more than 100%'});

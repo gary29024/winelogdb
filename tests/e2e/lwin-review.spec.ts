@@ -17,6 +17,31 @@ const fixture={
 
 
 test.use({viewport:{width:393,height:852}});
+test('matched LWIN is visible and can be checked without entering its code',async({page})=>{
+ const displayName='Guy Amiot et Fils, Chassagne-Montrachet Premier Cru, Clos Saint-Jean Rouge';
+ const wine={...fixture,id:'w1',producer:'Guy Amiot et Fils',wineName:'Chassagne-Montrachet 1er Cru Clos Saint Jean',lwin7:'1018031',imageIds:[],lwinReference:{lwin7:'1018031',displayName},referenceSuggestions:[{field:'wineName',label:'Wine name',current:'Chassagne-Montrachet 1er Cru Clos Saint Jean',suggested:'Chassagne-Montrachet Premier Cru, Clos Saint-Jean Rouge'}]};
+ let previews=0,writes=0;
+ await page.route('**/api/**',async route=>{
+  const url=new URL(route.request().url()),path=url.pathname;
+  if(route.request().method()!=='GET')writes++;
+  if(path==='/api/me')return route.fulfill({json:{user:{id:'owner',role:'owner',email:'owner@example.com',display_name:'Owner',status:'active'}}});
+  if(path==='/api/admin/rollout/lwin-review')return route.fulfill({json:{items:[wine],total:1,nextCursor:null}});
+  if(path==='/api/wines/w1')return route.fulfill({json:wine});
+  if(path==='/api/wines/w1/reference-preview'){
+   expect(url.searchParams.get('lwin7')).toBe('1018031');previews++;
+   return route.fulfill({json:{requestedLwin7:'1018031',lwin7:'1018031',storedLwin7:'1018031',displayName,suggestions:wine.referenceSuggestions,previewToken:'preview'}});
+  }
+  return route.fulfill({json:{items:[],total:0}});
+ });
+ await page.goto('/admin/lwin-review?wine=w1');
+ const stored=page.getByRole('region',{name:'Stored LWIN reference'});
+ await expect(stored.getByText('Stored LWIN 1018031',{exact:true})).toBeVisible();
+ await expect(stored.getByText(displayName,{exact:true})).toBeVisible();
+ await stored.getByRole('button',{name:'Check LWIN 1018031'}).click();
+ await expect(page.getByRole('region',{name:'LWIN preview'}).getByText(displayName,{exact:true})).toBeVisible();
+ expect(previews).toBe(1);expect(writes).toBe(0);
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+});
 test('members have no catalogue maintenance on wine details',async({page})=>{
  await page.route('**/api/**',async route=>{
   const path=new URL(route.request().url()).pathname;
@@ -112,11 +137,14 @@ for(const entry of ['review','detail'] as const)test(`reject a LWIN match from $
   await expect(page.getByText('All caught up. No wines need review.')).toBeVisible();
   await page.goto('/wines/w1');
  }
- await expect(page.getByText(/Kept without LWIN\. Automatic matching is off/)).toBeVisible();
+ await expect(page.locator('.lwin-link-editor')).toHaveCount(0);
  await expect(reject).toHaveCount(0);
  await expect(page.getByText('LWIN site',{exact:true})).toHaveCount(0);
  await page.reload();
- await expect(page.getByText(/Kept without LWIN\. Automatic matching is off/)).toBeVisible();
+ await expect(page.getByRole('heading',{name:fixture.wineName,exact:true})).toBeVisible();
+ await expect(page.locator('.lwin-link-editor')).toHaveCount(0);
+ await page.getByRole('link',{name:'Edit tasting',exact:true}).click();
+ await page.getByText('LWIN reference',{exact:true}).click();
  await page.getByText('Link a LWIN',{exact:true}).click();
  await expect(page.getByLabel('LWIN code',{exact:true})).toBeVisible();
  expect(writes).toBe(1);
@@ -160,7 +188,7 @@ test('review cards resolve in place and preserve the return route',async({page},
  await expect(page.getByRole('button',{name:'Confirm stored LWIN 1000002'})).toBeVisible();
 });
 
-for(const colorScheme of ['light','dark'] as const)test(`manual LWIN preview and confirmation on mobile (${colorScheme})`,async({page},info)=>{
+for(const entry of ['review','detail'] as const)for(const colorScheme of ['light','dark'] as const)test(`manual LWIN preview and confirmation from ${entry} on mobile (${colorScheme})`,async({page},info)=>{
  await page.emulateMedia({colorScheme});
  const wine={...fixture,id:'w1',producer:'Chateau Rieussec',wineName:'Château Rieussec',vintage:2018,lwin7:'1017425',identityMatchStatus:'conflict',referenceSuggestions:[],imageIds:[]};
  let writes=0;
@@ -175,7 +203,7 @@ for(const colorScheme of ['light','dark'] as const)test(`manual LWIN preview and
   if(path==='/api/wines/w1')return route.fulfill({json:wine});
   return route.fulfill({json:{items:[],total:0}});
  });
- await page.goto('/admin/lwin-review?wine=w1');
+ await page.goto(entry==='review'?'/admin/lwin-review?wine=w1':'/wines/w1');
  await page.getByText('Change LWIN',{exact:true}).click();
  await page.getByLabel('LWIN code',{exact:true}).fill('1017483');
  await page.getByRole('button',{name:'Preview LWIN',exact:true}).click();
@@ -189,5 +217,16 @@ for(const colorScheme of ['light','dark'] as const)test(`manual LWIN preview and
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
  await page.screenshot({path:info.outputPath(`manual-lwin-${colorScheme}.png`),fullPage:true});
  await page.getByRole('button',{name:'Link LWIN 1017483',exact:true}).click();
- await expect(page.getByText('All caught up. No wines need review.')).toBeVisible();expect(writes).toBe(1);
+ if(entry==='review'){
+  await expect(page.getByText('All caught up. No wines need review.')).toBeVisible();
+  await page.goto('/wines/w1');
+ }
+ await expect(page.getByRole('heading',{name:wine.wineName,exact:true})).toBeVisible();
+ await expect(page.locator('.lwin-link-editor')).toHaveCount(0);
+ await expect(page.getByRole('region',{name:'Stored LWIN reference'})).toHaveCount(0);
+ await expect(page.locator('.detail-wine-facts')).toContainText('1017483');
+ await page.reload();
+ await expect(page.getByRole('heading',{name:wine.wineName,exact:true})).toBeVisible();
+ await expect(page.locator('.lwin-link-editor')).toHaveCount(0);
+ expect(writes).toBe(1);
 });

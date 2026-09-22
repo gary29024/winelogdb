@@ -7,8 +7,7 @@ import type { IdentityMatchStatus } from './referenceIdentity';
  * The single definition of what a wine detail page shows, for both the owner's
  * page and a recipient's. Adding or removing a field here changes both, which
  * is the point: the two pages drifted apart field by field until the shared one
- * was missing the denomination, the grape percentages and the As recorded line,
- * none of which had ever been withheld on purpose.
+ * was missing denomination and grape percentages unintentionally.
  *
  * Privacy is enforced by the types rather than by remembering. A recipient is
  * given SharedWine, which simply has no field for anything private, so a source
@@ -72,39 +71,31 @@ export function blendLabels(wine:WineFacts){
  return blend.length?blend.map(part=>`${part.grape}${part.percentage!=null?` ${part.percentage}%`:''}`):grapes;
 }
 
-/**
- * What recognition first read off the label, shown only where it differs from
- * the corrected place - otherwise it is the same line printed twice.
- */
-export function asRecordedLabel(wine:WineFacts){
- const recorded=[wine.recognizedRegion,wine.recognizedAppellation].filter(Boolean).join(' / ');
- return recorded&&recorded!==[wine.region,wine.appellation].filter(Boolean).join(' / ')?recorded:null;
-}
-
 /** A reference site/parcel is useful only when the same words are not already
  * visible in the wine name or the legal place fields. */
 function additionalReferencePlace(value:string|Absent,wine:WineFacts,extra:Array<string|Absent>=[]){
  const candidate=value?.trim();if(!candidate)return null;
- const candidateKey=normalizeReferenceText(candidate);
+ const candidateKey=normalizeReferenceText(candidate);if(!candidateKey)return null;
  const covered=[wine.wineName,wine.region,wine.appellation,...extra].some(item=>{
-  const itemKey=normalizeReferenceText(item);return Boolean(itemKey&&itemKey.includes(candidateKey));
+  const itemKey=normalizeReferenceText(item);return Boolean(itemKey&&` ${itemKey} `.includes(` ${candidateKey} `));
  });
  return covered?null:candidate;
 }
 
 /** The Wine details rows, in reading order. Empty fields are dropped. */
-export function wineFactRows(wine:WineFacts):FactRow[]{
+export function wineFactRows(wine:WineFacts,{canEditReference=false}:{canEditReference?:boolean}={}):FactRow[]{
  const {denominatedAppellation,denominatedRegion}=placeLabels(wine),site=additionalReferencePlace(wine.referenceSite,wine),parcel=additionalReferencePlace(wine.referenceParcel,wine,[site]);
  const conflict=wine.identityMatchStatus==='conflict',referenceLabel=(label:string)=>conflict?`${label} (needs review)`:label;
  return present([
   ['Region',denominatedRegion],
   ['Appellation',denominatedAppellation],
-  ['As recorded',asRecordedLabel(wine)],
   ['Release',wine.releaseDesignation],
-  ['Reference identity',conflict?'Conflict — stored reference details may not match this wine.':null],
+  // Everyone can read the decision; only viewers who can edit the reference
+  // should be directed to its controls in Edit tasting.
+  ['Reference identity',conflict?'Conflict — stored reference details may not match this wine.':wine.identityMatchStatus==='manual'&&!wine.lwin7&&!wine.elid?`Kept without LWIN · automatic matching off${canEditReference?' · link one in Edit tasting':''}`:null],
   [referenceLabel('Type'),[wine.colour,wine.productSubtype??wine.productType].filter(Boolean).join(' · ')],
-  ['Grapes / blend',blendLabels(wine).join(', ')],
   ['Alcohol',wine.alcoholPercentage!=null?`${wine.alcoholPercentage}%`:null],
+  ['Grapes / blend',blendLabels(wine).join(', ')],
   [referenceLabel('LWIN site'),site],[referenceLabel('LWIN parcel'),parcel],
   [referenceLabel('LWIN7'),wine.lwin7],[referenceLabel('LWIN11'),wine.lwin11],[referenceLabel('ELID'),wine.elid]
  ]);

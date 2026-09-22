@@ -19,6 +19,11 @@ export function durableQueue(queue:Queue<unknown>,db:D1Database,operationId?:str
 export async function flushOutbox(db:D1Database,queue:Queue<unknown>){
  const rows=(await db.prepare('SELECT id,body_json FROM queue_outbox WHERE sent_at IS NULL AND due_at<=? ORDER BY due_at LIMIT 4').bind(seconds()).all<{id:string;body_json:string}>()).results;
  for(const row of rows){
+  // Competing HTTP/cron/queue flushes may have read the same rows. Atomically
+  // defer this row before sending; a crashed dispatcher becomes eligible again
+  // after the lease. Delivery remains at-least-once and consumer claims still apply.
+  const claimed=await db.prepare('UPDATE queue_outbox SET due_at=? WHERE id=? AND sent_at IS NULL AND due_at<=?').bind(seconds()+60,row.id,seconds()).run();
+  if(!claimed.meta.changes)continue;
   try{await queue.send(JSON.parse(row.body_json));await db.prepare('UPDATE queue_outbox SET sent_at=?,attempts=attempts+1 WHERE id=?').bind(seconds(),row.id).run()}
   catch{await db.prepare('UPDATE queue_outbox SET attempts=attempts+1,due_at=? WHERE id=? AND sent_at IS NULL').bind(seconds()+60,row.id).run()}
  }
@@ -53,8 +58,8 @@ export async function maintainJobs(db:D1Database,queue:Queue<unknown>,bucket?:R2
   for(const row of pending.results){await meteredBucket(bucket,db,row.owner_id).delete(row.object_key);await db.prepare('DELETE FROM storage_deletions WHERE object_key=?').bind(row.object_key).run()}
  }
 }
-export async function claimDelivery(db:D1Database,id:string){
- return Boolean((await db.prepare('INSERT INTO queue_deliveries(id,lease_until) VALUES(?,?) ON CONFLICT(id) DO UPDATE SET lease_until=excluded.lease_until WHERE queue_deliveries.done=0 AND queue_deliveries.lease_until<?').bind(id,seconds()+600,seconds()).run()).meta.changes);
+export async function claimDelivery(db:D1Database,id:string,leaseSeconds=600){
+ return Boolean((await db.prepare('INSERT INTO queue_deliveries(id,lease_until) VALUES(?,?) ON CONFLICT(id) DO UPDATE SET lease_until=excluded.lease_until WHERE queue_deliveries.done=0 AND queue_deliveries.lease_until<?').bind(id,seconds()+leaseSeconds,seconds()).run()).meta.changes);
 }
 export async function finishDelivery(db:D1Database,id:string,retry:boolean){await db.prepare('UPDATE queue_deliveries SET done=?,lease_until=? WHERE id=?').bind(retry?0:1,retry?0:seconds(),id).run()}
 export async function markUncertain(db:D1Database,id:string){await db.prepare("UPDATE credit_operations SET status='review',updated_at=? WHERE id=? AND status IN ('reserved','running')").bind(stamp(),id).run()}

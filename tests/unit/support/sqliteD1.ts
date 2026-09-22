@@ -1,12 +1,9 @@
-import { DatabaseSync,type SQLInputValue } from 'node:sqlite';
-import { readFileSync,readdirSync } from 'node:fs';
+import type { SQLInputValue } from 'node:sqlite';
+import { migratedDatabase } from './migratedDatabase';
 
 /** Real SQLite statements and transaction rollback, with the D1 methods used here. */
 export function migratedSqliteD1(){
-  const sqlite=new DatabaseSync(':memory:');
-  sqlite.exec('PRAGMA foreign_keys=ON');
-  const directory='src/lib/db/migrations';
-  for(const file of readdirSync(directory).filter(file=>file.endsWith('.sql')).sort())sqlite.exec(readFileSync(`${directory}/${file}`,'utf8'));
+  const sqlite=migratedDatabase();
   function statement(sql:string,args:SQLInputValue[]=[]){
     return {
       bind:(...values:SQLInputValue[])=>statement(sql,values),

@@ -1,3 +1,4 @@
+import type { LwinTaxonomy } from './lwinMetadata';
 import type { DeepSearchResult } from '../db/schema';
 import type { TastingStructure } from './tastingStructure';
 import type { SparklingDetails } from './sparklingDetails';
@@ -43,6 +44,7 @@ export type SharedWine = SharedWineExperience&{
  vintage:number|null;
  vintageKind?:'vintage'|'non_vintage'|'multi_vintage'|'unknown'|null;
  releaseDesignation?:string|null;
+ lwinReference?:LwinTaxonomy|null;
  lwin7?:string|null;lwin11?:string|null;elid?:string|null;referenceSite?:string|null;referenceParcel?:string|null;
  /** A public warning about the displayed facts, without private match diagnostics. */
  identityMatchStatus?:'conflict'|null;

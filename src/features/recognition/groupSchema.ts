@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { canonicalizeRecognitionEvidence,nullableRecognitionText,recognitionCommonFields,referenceRecognitionFields } from './identityFields';
+import { canonicalizeRecognitionEvidence,nullableRecognitionText,recognitionCommonFields,referenceRecognitionFields,stripModelReferenceFields } from './identityFields';
 
 /**
  * The frame itself, which is what a coordinate the model did not give falls back
@@ -140,6 +140,9 @@ function normalizeGroupEnvelope(value:unknown){
 
 export function parseGroupRecognition(raw:string):GroupRecognitionResult{
   const cleaned=raw.replace(/^```(?:json)?\s*|\s*```$/g,'');
-  const parsed=groupRecognitionSchema.parse(normalizeGroupEnvelope(JSON.parse(cleaned)));
+  const envelope=normalizeGroupEnvelope(JSON.parse(cleaned));
+  const model=envelope&&typeof envelope==='object'&&'wines' in envelope&&Array.isArray(envelope.wines)
+    ?{...envelope,wines:envelope.wines.map(stripModelReferenceFields)}:envelope;
+  const parsed=groupRecognitionSchema.parse(model);
   return {...parsed,wines:dedupeGroupRecognitionWines(parsed.wines)};
 }

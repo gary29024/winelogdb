@@ -1,7 +1,10 @@
 import { useEffect,useMemo,useRef,useState, type FormEvent } from 'react';
 import { resolvePlace } from '../../lib/places/resolve';
 import { Link,useNavigate } from 'react-router-dom';
-import { addWineImages,saveWine, type WinePhoto } from './api';
+import { addWineImages,getWine,saveWine, type WinePhoto,type WineDetail } from './api';
+import { LwinEditPanel,type LwinEditValues } from './LwinEditPanel';
+import { WineEnrichedDetails } from './WineEnrichedDetails';
+import { classificationLabel } from '../../lib/wine/referenceSuggestions';
 import { derivedTags,reconcileTags } from './wineTags';
 import { grapeSuggestions } from '../../lib/wine/grapes';
 import { resolveProducer,type ProducerResolution } from '../producers/api';
@@ -53,13 +56,16 @@ type WineFormInitial=Partial<WineInput>&{tastingStructure?:TastingStructure|null
  */
 export type SavedWineIdentity={producer:string;wineName:string;vintage:number|null};
 
-type WineFormProps={initial?:WineFormInitial;id?:string;photos?:WinePhoto[];onSave?:(input:WineFormInput)=>Promise<{id:string;imageIds?:string[]}>;onSaved?:(id:string,saved?:SavedWineIdentity)=>void;submitLabel?:string;enableFriendTagging?:boolean;
+type WineFormProps={initial?:WineFormInitial;id?:string;photos?:WinePhoto[];onSave?:(input:WineFormInput)=>Promise<{id:string;imageIds?:string[]}>;onSaved?:(id:string,saved?:SavedWineIdentity)=>void;submitLabel?:string;enableFriendTagging?:boolean;referenceWine?:WineDetail;referenceInitiallyOpen?:boolean;onReferenceUpdated?:(wine:WineDetail)=>void;
   /** The cellar line this bottle came from, so saving takes it off the count. */
   holdingId?:string};
 
-export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,enableFriendTagging=false,holdingId}:WineFormProps){
+export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,enableFriendTagging=false,holdingId,referenceWine,referenceInitiallyOpen=false,onReferenceUpdated}:WineFormProps){
   const memberView=getAccount()?.role==='member';
   const nav=useNavigate(),[busy,setBusy]=useState(false),[error,setError]=useState('');
+  const [dirty,setDirty]=useState(false),[referenceBusy,setReferenceBusy]=useState(false);
+  const [country,setCountry]=useState(String(initial?.country??'')),[region,setRegion]=useState(String(initial?.region??''));
+  const [classification,setClassification]=useState<WineInput['classification']>(initial?.classification??null);
   const [referenceReview,setReferenceReview]=useState<{key:string;preview:LoggingReferencePreview}|null>(null);
   const referencePanel=useRef<HTMLFieldSetElement>(null);
   useEffect(()=>{if(referenceReview)referencePanel.current?.scrollIntoView({block:'center',behavior:'smooth'})},[referenceReview]);
@@ -77,6 +83,7 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,enable
     return found.length===1&&found[0].toLowerCase()===typedGrape.toLowerCase()?[]:found;
   },[typedGrape]);
   function completeGrape(name:string){
+    setDirty(true);
     setBlend(current=>{
       const parts=current.split(',');
       const percentage=parts.at(-1)?.match(/(\d+(?:\.\d+)?\s*%)\s*$/)?.[1]??'';
@@ -200,7 +207,8 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,enable
     if(!canonical||producer.trim()!==producerResolution?.inputName||producer===canonical)return;
     setProducer(canonical);
     setAdoptedProducer(canonical);
-  },[producerResolution,producer]);
+    if(id)setDirty(true);
+  },[producerResolution,producer,id]);
 
   useEffect(()=>{
     const name=producer.trim();
@@ -224,13 +232,14 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,enable
   useEffect(()=>{if(!canPreferPrimary)setPreferCuveePrimaryName(false)},[canPreferPrimary]);
 
   function chooseStructure(key:TastingStructureKey,value:string){
+    setDirty(true);
     setStructure(current=>({...current,[key]:current[key]===value?null:value}) as TastingStructure);
   }
 
   const placeValue=(value:string|null|undefined)=>value?.trim()||null;
 
   async function submit(e:FormEvent<HTMLFormElement>){
-    e.preventDefault();setBusy(true);setError('');const fd=new FormData(e.currentTarget);
+    e.preventDefault();if(busy||referenceBusy)return;setBusy(true);setError('');const fd=new FormData(e.currentTarget);
     const submitter=(e.nativeEvent as SubmitEvent).submitter;
     const referenceChoice=submitter instanceof HTMLButtonElement&&submitter.name==='referenceDecision'?submitter.value:'';
     const producer=String(fd.get('producer')||'').trim(),wineName=String(fd.get('wineName')||'').trim();
@@ -280,7 +289,7 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,enable
       recognizedAppellation:replaceRecordedPlace?null:initial?.recognizedAppellation??null,
       // Derived server-side, but sent back so an edit does not clear a tier the
       // label text no longer carries.
-      classification:initial?.classification??null,
+      classification,
       classificationOverride:(cruOverride||null) as WineInput['classificationOverride'],
       grapes:[...new Set(grapeBlend.map(x=>x.grape))],grapeBlend,wineStyle:(String(fd.get('wineStyle')||'')||null) as WineInput['wineStyle'],
       alcoholPercentage:fd.get('alcoholPercentage')?Number(fd.get('alcoholPercentage')):null,tastingNotes:String(fd.get('tastingNotes')||''),rating:fd.get('rating')?Number(fd.get('rating')):null,
@@ -307,6 +316,9 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,enable
       }
       const result=onSave?await onSave(input):await saveWine(input,id,id?[]:photos,{preferCuveePrimaryName:canPreferPrimary&&preferCuveePrimaryName,holdingId});
       const savedId=id??('id' in result?result.id:undefined);if(!savedId)throw new Error('Save response did not include a wine ID');
+      if(id&&onReferenceUpdated&&submitter instanceof HTMLButtonElement&&submitter.name==='editIntent'){
+        onReferenceUpdated(await getWine(id));return;
+      }
       // A save can have closed the open tasting - a wine dated another day ends
       // it server-side - so the cached answer is no longer trustworthy.
       if(!id)void refreshActiveTasting();
@@ -329,10 +341,32 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,enable
   }
   // The tree, not the typist, holds the denomination: showing what it reads back
   // is what tells you a "Chianti Classico" you typed was understood as a DOCG.
-  const denomination=resolvePlace({country:String(initial?.country??'')||null,region:String(initial?.region??'')||null,appellation}).denomination;
+  // Members are spared it — they are not the ones curating the catalogue.
+  const denomination=memberView?null:resolvePlace({country:country||null,region:region||null,appellation}).denomination;
+  // A wine still under review has been read off a label, not filed: any tier it
+  // carries is a reading, so the automatic option stays plain until the wine has
+  // been saved once. On a wine that exists — edited later, or opened from the
+  // cellar — naming the tier is the only way to see what it is filed as, and
+  // that is as true for a member as for an owner.
+  const identifiedNotYetSaved=initial?.recognitionStatus==='review';
+  function applyLwin(values:Partial<LwinEditValues>){
+    if(values.producer!==undefined)setProducer(values.producer);
+    if(values.wineName!==undefined)setWineName(values.wineName);
+    if(values.country!==undefined)setCountry(values.country);
+    if(values.region!==undefined)setRegion(values.region);
+    if(values.classification!==undefined)setClassification(values.classification as WineInput['classification']);
+    if(values.classificationOverride!==undefined)setCruOverride(values.classificationOverride);
+    setDirty(true);
+  }
   const field=(name:string,label:string,type='text',step?:string,required=false)=><label>{label}<input name={name} type={type} step={step} required={required} defaultValue={String(initial?.[name as keyof WineInput]??'')}/></label>;
   const hasGps=initial?.latitude!=null&&initial?.longitude!=null,hasEstimatedPlace=hasGps&&Boolean(initial?.locationName?.trim());
-  return <form className="wine-form wine-form-compact" onSubmit={submit} onChange={()=>setReferenceReview(null)} onInvalid={event=>{let parent=(event.target as HTMLElement).parentElement;while(parent){if(parent instanceof HTMLDetailsElement)parent.open=true;parent=parent.parentElement}}}>
+  return <>
+    {!memberView&&referenceWine&&onReferenceUpdated&&<>
+      <LwinEditPanel wine={referenceWine} values={{producer,wineName,country,region,classification:classification??'',classificationOverride:cruOverride}} dirty={dirty} disabled={busy} initiallyOpen={referenceInitiallyOpen} canMatch={getAccount()?.role==='owner'} onApply={applyLwin} onBusy={setReferenceBusy} onUpdated={onReferenceUpdated}/>
+    </>}
+    <form id={id?`wine-edit-form-${id}`:undefined} className="wine-form wine-form-compact" onSubmit={submit} onChange={()=>{setReferenceReview(null);setDirty(true)}} onInvalid={event=>{let parent=(event.target as HTMLElement).parentElement;while(parent){if(parent instanceof HTMLDetailsElement)parent.open=true;parent=parent.parentElement}}}>
+    <fieldset className="wine-form-body" disabled={referenceBusy}>
+
     {duplicate&&<div className="wine-duplicate-note" role="status">
       <p><strong>{duplicate.wineName}</strong>{duplicate.vintage?` ${duplicate.vintage}`:''} is already in this tasting{duplicate.producer?`, under ${duplicate.producer}`:''}. Saving this would make a second copy of it.</p>
       <div className="wine-duplicate-actions">
@@ -342,12 +376,12 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,enable
         <button type="button" className="quiet" disabled={attaching||busy} onClick={()=>{setDismissedDuplicate(true);setDuplicate(null)}}>Save a separate wine</button>
       </div>
     </div>}
-    <h2 className="form-section-heading">Wine identity</h2>
+    <h2 className="form-section-heading" id="wine-fields">Wine identity</h2>
     <div className="producer-field"><label>Producer *<input name="producer" type="text" required value={producer} onChange={e=>setProducer(e.target.value)}/></label>
       {adoptedProducer&&producer===adoptedProducer&&<p className="producer-adopted">Saved under the name your library uses. Type over it to keep what the label said.</p>}
       {suggestion&&<div className="producer-resolution producer-suggestion">
         <span>Did you mean <strong>{suggestion.canonicalName}</strong>? {suggestion.tastedCount} wine{suggestion.tastedCount===1?'':'s'} logged.</span>
-        <button type="button" onClick={()=>{setProducer(suggestion.canonicalName);setAdoptedProducer('')}}>Use it</button>
+        <button type="button" onClick={()=>{setProducer(suggestion.canonicalName);setAdoptedProducer('');setDirty(true)}}>Use it</button>
       </div>}
       {producer.trim()&&(resolvingProducer?<div className="producer-resolution matched"><span>Checking producer library…</span></div>:matched?<details className="producer-resolution matched compact-resolution"><summary>✓ Existing producer · {matched.canonicalName}</summary><div className="compact-resolution-body"><span>{matched.matchType==='alias'?`Matched via known alias “${matched.matchedName}” → `:''}{matched.canonicalName}</span><small>{matched.tastedCount} tasted{!memberView?` · ${matched.catalogCount} wines in researched range`:''}{matched.researchedAt?' · producer research available':''}{matched.sharedOnly?' · shared by a friend':''}</small><Link to={`/producers/${matched.id}`}>View producer profile</Link></div></details>:<div className="producer-resolution new"><strong>○ New producer</strong><span>No existing producer identity matches this name. A new profile will be created when the wine is saved.</span></div>)}
     </div>
@@ -356,17 +390,19 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,enable
     </div>
 
     <div className="wine-compact-row three"><label>Vintage<input name="vintage" type="number" value={vintageInput} onChange={e=>{setVintageInput(e.target.value);if(e.target.value)setVintageKind('vintage');else if(vintageKind==='vintage')setVintageKind('unknown')}}/></label><label>Style<select name="wineStyle" value={wineStyle} onChange={e=>setWineStyle(e.target.value)}><option value="">Unknown</option>{['red','white','rose','sparkling','dessert','fortified','orange','other'].map(x=><option key={x}>{x}</option>)}</select></label>{field('alcoholPercentage','Alcohol %','number','0.1')}</div>
-    <div className="wine-compact-row two"><label>Year status<select value={vintageKind} onChange={e=>setVintageKind(e.target.value)} disabled={Boolean(vintageInput)}><option value="vintage">Vintage</option><option value="non_vintage">Non-vintage</option><option value="multi_vintage">Multi-vintage</option><option value="unknown">Unknown / unreadable</option></select><small>{vintageInput?'A year is entered, so this is a vintage wine.':'NV is different from a label whose vintage simply could not be read.'}</small></label><label>Edition / release<input type="text" value={releaseDesignation} onChange={e=>setReleaseDesignation(e.target.value)} placeholder="e.g. 171ème Édition, MV20"/><small>Use this for a numbered or named release, not as a substitute for a vintage year.</small></label></div>
+    <div className="wine-compact-row two"><label>Year status<select value={vintageKind} onChange={e=>setVintageKind(e.target.value)} disabled={Boolean(vintageInput)}><option value="vintage">Vintage</option><option value="non_vintage">Non-vintage</option><option value="multi_vintage">Multi-vintage</option><option value="unknown">Unknown / unreadable</option></select>{!memberView&&<small className="wine-field-help">{vintageInput?'A year is entered, so this is a vintage wine.':'NV is different from a label whose vintage simply could not be read.'}</small>}</label><label>Edition / release<input type="text" value={releaseDesignation} onChange={e=>setReleaseDesignation(e.target.value)} placeholder="e.g. 171ème Édition, MV20"/><small className="wine-field-help">Use this for a numbered or named release, not as a substitute for a vintage year.</small></label></div>
     <h2 className="form-section-heading">Bottle facts</h2>
-    <div className="wine-compact-row two">{field('country','Country')}{field('region','Region')}</div>
-    <div className="wine-compact-row appellation-row"><label>Appellation<input name="appellation" value={appellation} onChange={e=>setAppellation(e.target.value)}/><small>{denomination?`Recognized as a ${denomination}; no need to type it.`:'The denomination is read from the name, so leave DOC / DOCG / AVA off — but keep IGT or IGP, which tells a zone apart from the region it shares a name with.'}</small></label>
+    <div className="wine-compact-row two"><label>Country<input name="country" value={country} onChange={e=>setCountry(e.target.value)}/></label><label>Region<input name="region" value={region} onChange={e=>setRegion(e.target.value)}/></label></div>
+    <div className="wine-compact-row appellation-row"><label>Appellation<input name="appellation" value={appellation} onChange={e=>setAppellation(e.target.value)}/>{!memberView&&<small className="wine-field-help">{denomination?`Recognized as a ${denomination}; no need to type it.`:'The denomination is read from the name, so leave DOC / DOCG / AVA off — but keep IGT or IGP, which tells a zone apart from the region it shares a name with.'}</small>}</label>
+
       <label>Cru level<select name="classificationOverride" value={cruOverride} onChange={e=>setCruOverride(e.target.value)}>
-        <option value="">Auto</option>
+        <option value="">{classification&&!identifiedNotYetSaved?`${classificationLabel(classification)} (automatic)`:'Auto - read from label'}</option>
         <option value="grand_cru">Grand Cru</option>
         <option value="premier_cru">Premier Cru</option>
         <option value="village">Village</option>
         <option value="none">Not classified</option>
-      </select><small>{cruOverride?'Set by hand; WineLog will not change it.':'Read from the appellation and the label.'}</small></label></div>
+      </select>{!memberView&&<small className="wine-field-help">{cruOverride?'Set by hand; WineLog will not change it.':classification?`Current: ${classification.replaceAll('_',' ')}. Read from the appellation, label or reference.`:'Read from the appellation and the label.'}</small>}</label></div>
+    {referenceWine&&<WineEnrichedDetails wine={referenceWine}/>}
     {/* Suggestions appear under the field only while a grape is half-typed, so
         the form is no taller than it was until the moment it can help. The list
         is a local table - no request, no debounce - and it offers only the name
@@ -376,15 +412,15 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,enable
       {grapeHints.length>0&&<span className="grape-hints" role="group" aria-label="Grape suggestions">
         {grapeHints.map(name=><button type="button" key={name} className="grape-hint" onClick={()=>completeGrape(name)}>{name}</button>)}
       </span>}
-      <small>Percentages are optional. Separate grapes with commas.{!memberView&&<> A grape sold under another name — Pinot Nero, Garnacha — is filed under the one name when you save.</>}</small>
+      <small className="wine-field-help">Percentages are optional. Separate grapes with commas.{!memberView&&<> A grape sold under another name — Pinot Nero, Garnacha — is filed under the one name when you save.</>}</small>
     </label>
 
-    {id&&isChampagne(initial??{})&&<ChampagnePhotoBackfill key={id} wineId={id} imageIds={initial?.imageIds??[]} details={sparklingDetails} onApply={suggestions=>setSparklingDetails(current=>({...current,...missingChampagneDetails(current,suggestions)}))}/>}
-    {sparklingVisible&&<SparklingDetailsFields details={sparklingDetails} onChange={setSparklingDetails} showHelper={!memberView}/>} 
+    {id&&isChampagne(initial??{})&&<ChampagnePhotoBackfill key={id} wineId={id} imageIds={initial?.imageIds??[]} details={sparklingDetails} onApply={suggestions=>{setSparklingDetails(current=>({...current,...missingChampagneDetails(current,suggestions)}));setDirty(true)}}/>}
+    {sparklingVisible&&<SparklingDetailsFields details={sparklingDetails} onChange={value=>{setSparklingDetails(value);setDirty(true)}} showHelper={!memberView}/>}
 
 
+    <h2 className="form-section-heading" id="tasting-fields">Your experience</h2>
 
-    <h2 className="form-section-heading">Your experience</h2>
     <label className="full-field">Tasting notes<textarea name="tastingNotes" rows={4} defaultValue={initial?.tastingNotes}/></label>
 
     <fieldset className="experience-fields"><legend>This drinking / tasting</legend>
@@ -419,5 +455,6 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,enable
         flicker on the first save and nothing afterwards - and it fails open: if
         the probe errors, loading clears and the save proceeds untasted. */}
     {!referenceReview&&<div className="wine-form-actions">{id&&<button type="button" className="wine-edit-cancel quiet" disabled={busy} onClick={()=>nav(`/wines/${id}`)}>Cancel</button>}<button type="submit" className="primary" disabled={busy||waitingForTasting}>{busy?'Saving…':waitingForTasting?'Checking tasting…':submitLabel??'Save wine'}</button></div>}
-  </form>
+    </fieldset>
+  </form></>
 }

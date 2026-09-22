@@ -1,4 +1,6 @@
 import { normalizeReferenceText } from './referenceCatalog';
+import { referenceAppRegion,regionWithin } from './referenceGeography';
+import { lwinDisplayWineName,wineNameNeedsReview,type LwinNameSource } from './lwinDisplayName';
 
 export const referenceSuggestionFields=['producer','wineName','country','region','classification'] as const;
 export type ReferenceSuggestionField=typeof referenceSuggestionFields[number];
@@ -18,20 +20,23 @@ export function classificationLabel(value:string|null|undefined){
  return value?.trim()||null;
 }
 type SuggestionInput={
+ lwinReference?:LwinNameSource|null;referenceDisplayName?:string|null;
  producer?:string|null;wineName?:string|null;country?:string|null;region?:string|null;classification?:string|null;classificationOverride?:string|null;
- referenceProducer?:string|null;referenceWineName?:string|null;referenceCountry?:string|null;referenceRegion?:string|null;referenceClassification?:string|null;
+ referenceProducer?:string|null;referenceWineName?:string|null;referenceCountry?:string|null;referenceRegion?:string|null;referenceSubRegion?:string|null;referenceClassification?:string|null;
 };
 export function buildReferenceSuggestions(input:SuggestionInput):ReferenceSuggestion[]{
  const suggestions:ReferenceSuggestion[]=[];
  const pairs:Array<[ReferenceSuggestionField,string,string|null|undefined,string|null|undefined]>=[
   ['producer','Producer',input.producer,input.referenceProducer],
-  ['wineName','Wine name',input.wineName,input.referenceWineName],
+  ['wineName','Wine name',input.wineName,lwinDisplayWineName({...input.lwinReference,displayName:input.referenceDisplayName??input.lwinReference?.displayName,wineName:input.referenceWineName??input.lwinReference?.wineName,country:input.referenceCountry??input.lwinReference?.country,region:input.referenceRegion??input.lwinReference?.region,subRegion:input.referenceSubRegion??input.lwinReference?.subRegion})],
   ['country','Country',input.country,input.referenceCountry],
-  ['region','Region',input.region,input.referenceRegion]
+  ['region','Region',input.region,referenceAppRegion({country:input.referenceCountry,region:input.referenceRegion,subRegion:input.referenceSubRegion})]
  ];
  for(const [field,label,current,suggested] of pairs){
   const a=current?.trim()||null,b=suggested?.trim()||null;
   if(!a||!b||normalizeReferenceText(a)===normalizeReferenceText(b))continue;
+  if(field==='wineName'&&!wineNameNeedsReview(a,b))continue;
+  if(field==='region'&&regionWithin(a,b,input.country,input.referenceCountry))continue;
   suggestions.push({field,label,current:a,suggested:b});
  }
  if(!input.classificationOverride){

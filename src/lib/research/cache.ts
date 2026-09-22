@@ -106,12 +106,17 @@ function provenanceForScope(provenance:DeepSearchProvenance|undefined,scope:Rese
 function auditedProvenance(scope:ResearchScope,payload:Record<string,string>,provenance?:DeepSearchProvenance){return scope==='wine_vintage'?auditTechnicalContradictions(payload,provenance).provenance:provenance}
 
 export async function loadResearchCache(db:D1Database,owner:string,targets:ResearchTarget[],includeFriends=false){
-  const found=await Promise.all(targets.map(async target=>{
-    const row=await db.prepare('SELECT scope,cache_key,subject_json,result_json,sources_json,provenance_json,model,researched_at FROM research_cache WHERE owner_id=? AND scope=? AND cache_key=?').bind(owner,target.scope,target.cacheKey).first<CacheRow>();
+  const rows=targets.length?(await db.prepare(`SELECT scope,cache_key,subject_json,result_json,sources_json,provenance_json,model,researched_at
+    FROM research_cache WHERE owner_id=? AND (scope,cache_key) IN
+      (SELECT json_extract(value,'$.scope'),json_extract(value,'$.cacheKey') FROM json_each(?))`)
+    .bind(owner,JSON.stringify(targets.map(({scope,cacheKey})=>({scope,cacheKey})))).all<CacheRow>()).results:[];
+  const byKey=new Map(rows.map(row=>[JSON.stringify([row.scope,row.cache_key]),row]));
+  const found=targets.map(target=>{
+    const row=byKey.get(JSON.stringify([target.scope,target.cacheKey]));
     if(!row)return null;
     const payload=parseJson<Record<string,string>>(row.result_json,{}),sources=parseJson<ResearchSource[]>(row.sources_json,[]),provenance=auditedProvenance(target.scope,payload,parseProvenance(row.provenance_json));if(!scopePassesQuality(target.scope,payload,target,sources,provenance))return null;
     return {scope:target.scope,entry:{target,payload,sources,provenance,model:row.model,researchedAt:row.researched_at} as CachedResearch};
-  }));
+  });
   const cache=new Map<ResearchScope,CachedResearch>();for(const item of found)if(item)cache.set(item.scope,item.entry);
   if(includeFriends){
     // One query for every missing scope, rather than one per scope and one per

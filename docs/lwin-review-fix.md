@@ -20,7 +20,7 @@ The old owner list selected at most 20 conflict rows from the last validation ru
 - A dedicated `/admin/lwin-review` page lists the signed-in owner's pending conflicts and field suggestions, with a live count and cursor pagination. Account and Owner controls link directly to it.
 - Expandable cards allow accepting or keeping individual values, rechecking stale comparisons, and explicitly confirming the stored identity. Resolved cards disappear and the next pending card opens.
 - Wine and edit links retain the review return target, including page cursor and selected wine.
-- Producer fallback combines the structured title and name when a display producer is unavailable. It does not strip identity-bearing house qualifiers.
+- Producer identity retains the structured title even when the display producer omits it. An already-qualified display producer stays intact; titles are not duplicated, and Domaine and Maison remain distinct.
 - Rechecking refreshes pending comparisons from the stored LWIN's current local reference, without replacing populated wine fields or reopening already-kept fields. Successful validation also refreshes pending comparisons.
 - Applying or keeping a field rechecks the identity. Only a unique match to the same stored LWIN clears an automatic conflict. A real disagreement remains pending until an explicit decision. Confirming a stored LWIN records a manual identity decision.
 - Writes check the relevant snapshot and are scoped to the signed-in account. Pagination and review counts are independent of historical rollout counters.
@@ -28,6 +28,10 @@ The old owner list selected at most 20 conflict rows from the last validation ru
 ## Existing records
 
 Open Needs review and use **Recheck LWIN** on a stale card. If its current name and stored identity agree with the catalogue, the obsolete suggestion and conflict disappear without changing the name. **Revalidate stored LWINs** also refreshes pending suggestions for identities it can verify. No production data was changed while implementing this fix.
+
+The imported snapshot also contains LWIN **3061244** with display name `Maison Fang, Savigny-les-Beaune, Cuvee Zephyr`, producer title `Maison`, producer name `Fang`, and wine name `Cuvee Zephyr`. A saved suggestion to replace `Maison FANG` with `Fang` is stale. Rechecking removes that producer suggestion. A recorded wine name of `Savigny-lès-Beaune Cuvée Zéphyr` still differs from the structured wine name, so the conflict remains for an explicit identity decision; rechecking does not shorten the owner's name automatically.
+
+Recognition prompts explicitly retain printed producer prefixes. Raw model JSON is stripped of all server-owned reference fields before validation ([#292](https://github.com/gary29024/winelogdb/issues/292)), covering single, group, sheet, escalation, Developer API batch and Vertex paths. Browser response schemas still accept verified enrichment. Reference site/parcel deduplication uses complete normalized phrases ([#296](https://github.com/gary29024/winelogdb/issues/296)); `Champ` and `Cras` remain visible beside `Champeaux` and `Crassons`.
 
 ## Verification
 

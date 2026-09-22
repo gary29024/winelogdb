@@ -20,7 +20,7 @@ async function mockAccount(page:Page,role:'owner'|'member'){
   const data=path==='/api/me'?{user:{id:'reader',email:'reader@example.com',display_name:'Reader',role,status:'active'}}
    :path==='/api/producers/p1'?producer
    :path==='/api/wines/layout-wine'?{...wine,tastingStructure:{acidity:'high'},
-    deepSearch:{...wine.deepSearch,vintageQuality:'A balanced growing season.',producerDetails:'A family domaine in Burgundy.',producerWinemakingPractices:'Careful sorting and gentle pressing.',winemakingTechniques:'Fermented and matured in oak.',terroir:'Limestone soils above the village.',model:'layout-test-model',quality:{status:'mixed',score:82,sourceTier:'primary',warnings:[]}}}
+    deepSearch:{...wine.deepSearch,model:'layout-test-model',quality:{status:'mixed',score:82,sourceTier:'primary',warnings:[]}}}
    :path==='/api/shared/wines/layout-wine'?{...wine,structure:null}
    :path==='/api/journal'?{items:[wine],total:1,nextOffset:null}
    :path==='/api/credits'?{available:20,reserved:0,balance:20}
@@ -94,8 +94,10 @@ for(const role of ['owner','member'] as const){
     });
     await page.setViewportSize(device.viewport);
    }
-   await page.getByRole('button',{name:'Refresh vintage research',exact:true}).click();
-   await expect(page.getByRole('button',{name:'Queue vintage refresh',exact:true})).toBeVisible();
+   // This fixture has only a summary/window; incomplete research offers to
+   // fill the missing scopes rather than refresh an already complete report.
+   await page.getByRole('button',{name:'Deep Search',exact:true}).click();
+   await expect(page.getByRole('button',{name:'Queue Deep Search',exact:true})).toBeVisible();
    await fits(page);
    await page.goto('/shared/layout-wine');
    await expect(page.getByRole('heading',{name:wine.wineName,exact:true})).toBeVisible();

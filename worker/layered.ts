@@ -1,3 +1,5 @@
+import { attachLwinRange } from '../src/lib/producers/lwinRange';
+import { reliableLwinReference,type LwinReference } from '../src/lib/wine/lwinMetadata';
 import { Hono } from 'hono';
 import { apiErrorHandler } from '../src/lib/credits/primitives';
 import baseApp from './index';
@@ -215,7 +217,7 @@ app.get('/api/producers/:id',async c=>{
 
     const [aliases,wines,history,links,supplementaryContacts,catalogDecisions]=await Promise.all([
       c.env.DB.prepare('SELECT display_alias FROM producer_aliases WHERE owner_id=? AND producer_id=? ORDER BY display_alias COLLATE NOCASE').bind(owner,requested).all<{display_alias:string}>(),
-      c.env.DB.prepare(`SELECT w.id,w.cuvee_id,w.wine_name,w.vintage,w.appellation,w.region,w.country,w.wine_style,w.grapes_json,
+      c.env.DB.prepare(`SELECT w.id,w.cuvee_id,w.wine_name,w.vintage,w.appellation,w.region,w.country,w.wine_style,w.grapes_json,w.lwin7,w.identity_match_status,w.lwin_reference_json,
         (SELECT wi.id FROM wine_images wi WHERE wi.owner_id=w.owner_id AND wi.wine_id=w.id ORDER BY wi.rowid ASC LIMIT 1) AS image_id,
         coalesce((SELECT we.consumed_at FROM wine_experiences we WHERE we.owner_id=w.owner_id AND we.wine_id=w.id ORDER BY we.created_at DESC LIMIT 1),w.tasting_date) AS tasting_date,
         coalesce((SELECT we.rating FROM wine_experiences we WHERE we.owner_id=w.owner_id AND we.wine_id=w.id ORDER BY we.created_at DESC LIMIT 1),w.rating) AS rating
@@ -227,7 +229,8 @@ app.get('/api/producers/:id',async c=>{
       listCatalogDecisions(c.env.DB,owner,requested)
     ]);
     const entity=mapProducerRow(row),producerNames=[entity.canonicalName,...aliases.results.map(x=>x.display_alias)];
-    const correctedCatalog=applyCatalogDecisions(entity.catalog,catalogDecisions,producerNames).range;
+    const references=wines.results.map(reliableLwinReference).filter((reference):reference is LwinReference=>Boolean(reference));
+    const correctedCatalog=attachLwinRange(applyCatalogDecisions(entity.catalog,catalogDecisions,producerNames).range,[...new Map(references.map(reference=>[reference.lwin7,reference])).values()],producerNames);
     const ownWines=wines.results.map(w=>({id:String(w.id),cuveeId:w.cuvee_id?String(w.cuvee_id):null,wineName:String(w.wine_name),vintage:w.vintage==null?null:Number(w.vintage),appellation:w.appellation?String(w.appellation):null,region:w.region?String(w.region):null,country:w.country?String(w.country):null,wineStyle:w.wine_style?String(w.wine_style):null,grapes:parseJson<unknown[]>(w.grapes_json,[]).map(String).filter(Boolean),imageId:w.image_id?String(w.image_id):null,imageUrl:null,tastingDate:w.tasting_date?String(w.tasting_date):null,rating:w.rating==null?null:Number(w.rating),shared:false}));
     return c.json({...entity,sharedOnly:false,catalog:correctedCatalog,catalogDecisions,aliases:aliases.results.map(x=>x.display_alias),
       researchHistoryCount:Number(history?.count)||0,linkedProducers:links.results.map(x=>({mergeId:x.id,producerId:x.source_producer_id,name:x.source_canonical_name,mergedAt:x.merged_at})),

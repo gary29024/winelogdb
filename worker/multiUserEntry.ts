@@ -12,6 +12,7 @@ import { meteredBucket } from './multiUser/storage';
 import { adoptFriendResearch,assembleDeepSearch,loadResearchCache } from '../src/lib/research/cache';
 import type { AiRateEnv } from '../src/lib/usage/rates';
 import { processRolloutJob,recoverRollouts,rolloutRoute,type RolloutQueueJob } from './multiUser/rollout';
+import { LWIN_AI_LEASE_SECONDS } from './multiUser/lwinRepair';
 import { reusableProducer } from '../src/lib/research/sharedProducer';
 import { readVintageWindow,type VintageSubject } from '../src/lib/maturity/vintageWindow';
 
@@ -124,7 +125,7 @@ export default {
  async queue(batch:Batch,env:MultiUserEnv){
   for(const message of batch.messages){
    const raw=message.body as (typeof message.body&JobEnvelope)|RolloutQueueJob,id=('_outboxId' in raw&&raw._outboxId)||message.id;
-   if(!await claimDelivery(env.DB,id)){const done=await env.DB.prepare('SELECT done FROM queue_deliveries WHERE id=?').bind(id).first<{done:number}>();if(done?.done)message.ack();else message.retry({delaySeconds:60});continue}
+   if(!await claimDelivery(env.DB,id,raw.kind==='admin_rollout'&&raw.rollout==='lwin_ai'?LWIN_AI_LEASE_SECONDS:undefined)){const done=await env.DB.prepare('SELECT done FROM queue_deliveries WHERE id=?').bind(id).first<{done:number}>();if(done?.done)message.ack();else message.retry({delaySeconds:60});continue}
    let retried=false;
    try{
     const member=await env.DB.prepare("SELECT id,role FROM app_users WHERE id=? AND status='active'").bind(raw.owner||'').first<{id:string;role:string}>();
@@ -132,7 +133,8 @@ export default {
     if(raw.kind==='admin_rollout'){
      if(member.role!=='owner'){message.ack();continue}
      const rolloutEnv={...env,CREDIT_CONTEXT:providerAuthorization('owner',`Admin ${raw.rollout} rollout`)};
-     await processRolloutJob(rolloutEnv,raw.rollout);message.ack();continue;
+     const result=await processRolloutJob(rolloutEnv,raw.rollout,raw);
+     if(result.busy||('retryAfterSeconds' in result&&result.retryAfterSeconds)){retried=true;message.retry({delaySeconds:'retryAfterSeconds' in result?result.retryAfterSeconds:60})}else message.ack();continue;
     }
     const job=raw as typeof message.body&JobEnvelope;
     const op=job._creditOperationId?await env.DB.prepare('SELECT * FROM credit_operations WHERE id=? AND user_id=?').bind(job._creditOperationId,job.owner!).first<CreditOperation>():null;

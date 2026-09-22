@@ -35,6 +35,67 @@ function setup({indexed=false,status='Live',vintageConfig='sequential'}:{indexed
 }
 
 describe('manual LWIN selection',()=>{
+ it('reports an unavailable stored catalogue row without changing review choices',async()=>{
+  const {database,objects,row,request}=setup();
+  database.sql.exec("UPDATE wines SET identity_match_status='manual'");
+  for(const key of Object.keys(objects))if(key.includes('/shard-'))delete objects[key];
+  const before=row(),response=await request('reference-review',{action:'recheck'});
+  expect(response.status).toBe(503);expect(row()).toEqual(before);
+ });
+ it('rechecks Marques de Riscal once and clears the stale shortening suggestion with a bounded producer lookup',async()=>{
+  const {database,env,objects,product,row,request,reads}=setup();
+  Object.assign(product,parseLwinReference({LWIN:'1237421',STATUS:'Live',DISPLAY_NAME:'Marques de Riscal, Gran Reserva, Rioja',PRODUCER_TITLE:'Marques',PRODUCER_NAME:'de Riscal',WINE:'Gran Reserva',COUNTRY:'Spain',REGION:'Rioja',COLOUR:'Red',TYPE:'Wine',SUB_TYPE:'Still'}));
+  for(const key of Object.keys(objects))if(key.includes('/shard-'))delete objects[key];
+  const shard=referenceShardId('de riscal');objects[`test/shard-${shard}.json`]=[product];
+  Object.assign(objects['reference/lwin/current.json'] as object,{producerIndexKey:'test/producers.json'});objects['test/producers.json']={'de riscal':[shard]};
+  database.sql.exec("UPDATE wines SET producer='Marqués de Riscal',wine_name='Marqués de Riscal Gran Reserva',country='Spain',region='Rioja',wine_style='red',lwin7=NULL,identity_match_status='unmatched'");
+  const {preview}=await previewWineReference(env,'owner','w1','1237421');
+  expect(reads.filter(key=>key.includes('/shard-'))).toHaveLength(1);
+  expect((await request('reference-review',{action:'link',lwin7:'1237421',previewToken:preview.previewToken})).status).toBe(200);
+  database.sql.prepare("UPDATE wines SET identity_match_status='matched',reference_suggestions_json=?").run(JSON.stringify([{field:'wineName',label:'Wine name',current:row().wine_name,suggested:'Gran Reserva'}]));
+  expect((await request('reference-review',{action:'recheck'})).status).toBe(200);
+  expect(row()).toMatchObject({identity_match_status:'matched',wine_name:'Marqués de Riscal Gran Reserva',reference_suggestions_json:null});
+  expect((await request('reference-review',{action:'recheck'})).status).toBe(200);
+  expect(row().reference_suggestions_json).toBeNull();
+  expect(reads.filter(key=>key.includes('/shard-'))).toHaveLength(1);
+ });
+ it.each([false,true])('links Timeless by code regardless of saved producer (ID index: %s)',async indexed=>{
+  const {database,env,objects,product,row,request,reads}=setup({indexed});
+  Object.assign(product,parseLwinReference({LWIN:'2035826',STATUS:'Live',DISPLAY_NAME:'Timeless, Napa Valley',PRODUCER_NAME:'Silver Oak',WINE:'Timeless',COUNTRY:'United States',REGION:'California',SUB_REGION:'Napa Valley',COLOUR:'Red',TYPE:'Wine',SUB_TYPE:'Still',VINTAGE_CONFIG:'sequential'}));
+  // Store only in the correct structured-producer shard, as in the real import.
+  for(const key of Object.keys(objects))if(key.includes('/shard-'))delete objects[key];
+  const shard=referenceShardId('silver oak');objects[`test/shard-${shard}.json`]=[product];
+  objects[`test/id-index-${referenceShardId('2035826')}.json`]={'2035826':shard};
+  database.sql.exec("UPDATE wines SET producer='Timeless',wine_name='Timeless',lwin7=NULL,identity_match_status='unmatched'");
+  const before=row(),{preview}=await previewWineReference(env,'owner','w1','2035826');
+  expect(preview).toMatchObject({producer:'Silver Oak',wineName:'Timeless',lwin7:'2035826'});expect(row()).toEqual(before);
+  if(indexed)expect(reads.filter(key=>key.includes('/shard-'))).toHaveLength(1);
+  expect((await request('reference-review',{action:'link',lwin7:'2035826',previewToken:preview.previewToken})).status).toBe(200);
+  expect(row()).toMatchObject({producer:'Timeless',lwin7:'2035826',identity_match_status:'manual'});
+  // Simulate the prior parser's cached reference; explicit recheck must repair
+  // it even with unchanged catalogue version and a mismatched saved producer.
+  const old=JSON.parse(String(row().lwin_reference_json));delete old.identityVersion;old.producer='Timeless';
+  database.sql.prepare('UPDATE wines SET lwin_reference_json=?,reference_suggestions_json=?').run(JSON.stringify(old),JSON.stringify([{field:'producer',label:'Producer',current:'Timeless',suggested:'Timeless'}]));
+  expect((await request('reference-review',{action:'recheck'})).status).toBe(200);
+  expect(JSON.parse(String(row().lwin_reference_json))).toMatchObject({identityVersion:2,producer:'Silver Oak'});
+  expect(JSON.parse(String(row().reference_suggestions_json))).toEqual([{field:'producer',label:'Producer',current:'Timeless',suggested:'Silver Oak'}]);
+  expect(row().producer).toBe('Timeless');
+ });
+ it('refreshes a shortened name and refuses applying the old suggestion',async()=>{
+  const {database,env,product,row,request}=setup();
+  product.displayName='Chateau Rieussec, Sauternes Rouge';product.wineName='Rouge';
+  const {preview}=await previewWineReference(env,'owner','w1','1017483');
+  expect((await request('reference-review',{action:'link',lwin7:'1017483',previewToken:preview.previewToken})).status).toBe(200);
+  database.sql.prepare('UPDATE wines SET reference_suggestions_json=?').run(JSON.stringify([{field:'wineName',label:'Wine name',current:row().wine_name,suggested:'Rouge'}]));
+  const before=row().wine_name;
+  const response=await app.fetch(new Request('https://wine.example/api/wines/w1/reference-suggestion',{method:'PUT',headers:{authorization:`Bearer ${await createSession('owner',secret)}`,'content-type':'application/json'},body:JSON.stringify({field:'wineName',action:'apply'})}),env as never);
+  expect(response.status).toBe(409);expect(row().wine_name).toBe(before);
+  expect((await request('reference-review',{action:'recheck'})).status).toBe(200);
+  expect(JSON.parse(String(row().reference_suggestions_json))).toEqual([{field:'wineName',label:'Wine name',current:before,suggested:'Sauternes Rouge'}]);
+  expect(row().wine_name).toBe(before);
+  const applied=await app.fetch(new Request('https://wine.example/api/wines/w1/reference-suggestion',{method:'PUT',headers:{authorization:`Bearer ${await createSession('owner',secret)}`,'content-type':'application/json'},body:JSON.stringify({field:'wineName',action:'apply'})}),env as never);
+  expect(applied.status).toBe(200);expect(row().wine_name).toBe('Sauternes Rouge');
+ });
  it.each([false,true])('previews Cave de Tain by exact code in a legacy catalogue (producer index: %s)',async indexed=>{
   const {database,env,objects,reads,row,request}=setup();
   const product=parseLwinReference({LWIN:'2259354',STATUS:'Live',DISPLAY_NAME:'Cave de Tain, Nobles Rives',PRODUCER_TITLE:'Cave',PRODUCER_NAME:'de Tain',WINE:'Nobles Rives',COUNTRY:'France',REGION:'Rhone',SUB_REGION:'Crozes-Hermitage',COLOUR:'Red',TYPE:'Wine',SUB_TYPE:'Still',VINTAGE_CONFIG:'sequential'});
@@ -52,7 +113,7 @@ describe('manual LWIN selection',()=>{
   expect(reads.filter(key=>key.includes('/shard-')).length).toBeLessThanOrEqual(2);
   // The entered ID remains authoritative even when the current colour differs.
   expect((await request('reference-review',{action:'link',lwin7:'2259354',previewToken:preview.previewToken})).status).toBe(200);
-  expect(row()).toMatchObject({lwin7:'2259354',colour:'Red',wine_style:'white',tasting_notes:'Keep my notes',identity_match_status:'manual'});
+  expect(row()).toMatchObject({lwin7:'2259354',colour:'White',wine_style:'white',tasting_notes:'Keep my notes',identity_match_status:'manual'});
   expect((await request('reference-preview?lwin7=9999999')).status).toBe(404);
  });
  it.each(['confirm','none'] as const)('reviews the named catalogue identity before creation and saves the %s decision',async(action)=>{
@@ -70,8 +131,19 @@ describe('manual LWIN selection',()=>{
  });
  it('saves a clear match without review, including accent and case differences',async()=>{
   const {env,product}=setup();product.displayName='Rieussec, Château Rieussec';
-  const preview=await previewLoggingReference(env.REFERENCE_DATA,wineInputSchema.parse({producer:'RIEUSSEC',wineName:'Chateau Rieussec',country:'France',region:'Bordeaux'}));
+  const preview=await previewLoggingReference(env.REFERENCE_DATA,wineInputSchema.parse({producer:'CHÂTEAU RIEUSSEC',wineName:'Chateau Rieussec',country:'France',region:'Bordeaux'}));
   expect(preview).toMatchObject({matched:true,needsReview:false});expect(preview.token).toBeTruthy();
+ });
+ it('rechecks the Maison Fang screenshot without suggesting removal of the producer title',async()=>{
+  const {database,env,objects,row}=setup();
+  // Identity fields from the imported 03383c3400811b6c snapshot, LWIN 3061244.
+  const fang=parseLwinReference({LWIN:'3061244',STATUS:'Live',DISPLAY_NAME:'Maison Fang, Savigny-les-Beaune, Cuvee Zephyr',PRODUCER_TITLE:'Maison',PRODUCER_NAME:'Fang',WINE:'Cuvee Zephyr',COUNTRY:'France',REGION:'Burgundy',SUB_REGION:'Savigny-les-Beaune',COLOUR:'White',TYPE:'Wine',SUB_TYPE:'Still',VINTAGE_CONFIG:'sequential'});
+  objects[`test/shard-${referenceShardId('fang')}.json`]=[fang];
+  database.sql.prepare("UPDATE wines SET producer='Maison FANG',wine_name='Savigny-lès-Beaune Cuvée Zéphyr',lwin7='3061244',region='Burgundy',wine_style='white',reference_suggestions_json=?")
+   .run(JSON.stringify([{field:'producer',label:'Producer',current:'Maison FANG',suggested:'Fang'},{field:'wineName',label:'Wine name',current:'Savigny-lès-Beaune Cuvée Zéphyr',suggested:'Cuvee Zephyr'}]));
+  expect(await recheckWineReference(env.DB,env.REFERENCE_DATA,'owner','w1')).toBe(true);
+  expect(row()).toMatchObject({producer:'Maison FANG',wine_name:'Savigny-lès-Beaune Cuvée Zéphyr',lwin7:'3061244',identity_match_status:'matched'});
+  expect(row().reference_suggestions_json).toBeNull();
  });
  it('refuses a stale logging match',async()=>{
   const {env,database,product}=setup(),identity=lwinReferenceIdentity(product);
@@ -96,7 +168,7 @@ describe('manual LWIN selection',()=>{
   const response=await request('reference-review',{action:'reject',lwin7:before.lwin7,updatedAt:before.updated_at});
   expect(response.status).toBe(200);
   expect(row()).toMatchObject({producer:before.producer,wine_name:before.wine_name,vintage:2018,country:'France',region:'Bordeaux',wine_style:'sweet',tasting_notes:'Keep my notes',rating:94,
-   lwin7:null,lwin11:null,elid:null,reference_product_key:null,reference_site:null,reference_parcel:null,colour:null,product_type:null,product_subtype:null,
+   lwin7:null,lwin11:null,elid:null,reference_product_key:null,reference_site:null,reference_parcel:null,colour:before.colour,product_type:before.product_type,product_subtype:before.product_subtype,
    identity_match_status:'manual',identity_match_confidence:null,identity_match_candidates_json:null,identity_matched_at:null,reference_suggestions_json:null,reference_suggestions_updated_at:null});
   const review=await rolloutRoute(new Request('https://wine.example/api/admin/rollout/lwin-review'),env as never,{id:'owner',role:'owner',status:'active',email:'owner@example.com',display_name:'Owner'});
   expect(await review!.json()).toMatchObject({total:0,items:[]});
@@ -133,10 +205,10 @@ describe('manual LWIN selection',()=>{
   const {env,row,request}=setup(),before=row();
   const {preview}=await previewWineReference(env,'owner','w1','1017483');
   expect(row()).toEqual(before);expect(preview).toMatchObject({lwin7:'1017483',storedLwin7:'1017425',lwin11:'10174832018'});
-  expect(preview.suggestions.map(item=>item.field)).toEqual(['producer']);
+  expect(preview.suggestions).toEqual([]);
   const response=await request('reference-review',{action:'link',lwin7:'1017483',previewToken:preview.previewToken});
   expect(response.status).toBe(200);
-  expect(row()).toMatchObject({producer:before.producer,wine_name:before.wine_name,vintage:2018,country:'France',region:'Bordeaux',wine_style:'sweet',tasting_notes:'Keep my notes',rating:94,lwin7:'1017483',lwin11:'10174832018',elid:null,reference_site:null,reference_parcel:null,reference_product_key:'lwin:1017483',identity_match_status:'manual',identity_match_candidates_json:null,reference_suggestions_json:JSON.stringify(preview.suggestions)});
+  expect(row()).toMatchObject({producer:before.producer,wine_name:before.wine_name,vintage:2018,country:'France',region:'Bordeaux',wine_style:'sweet',tasting_notes:'Keep my notes',rating:94,lwin7:'1017483',lwin11:'10174832018',elid:null,reference_site:null,reference_parcel:null,reference_product_key:'lwin:1017483',identity_match_status:'manual',identity_match_candidates_json:null,reference_suggestions_json:null});
  });
  it('uses the ID index to find a different producer without scanning all shards',async()=>{
   const {database,env,reads}=setup({indexed:true});database.sql.exec("UPDATE wines SET producer='Wrong producer'");

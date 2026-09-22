@@ -288,8 +288,8 @@ async function cacheSemanticIds(env:SemanticEnv,owner:string,config:EmbeddingCon
 }
 
 async function refreshSemanticIndex(env:SemanticEnv,owner:string,config:EmbeddingConfig,limit:number,runId:string){
-  // Checked before the read, so a capped account costs nothing at all.
-  if(!await embeddingAllowed(env,owner))return {indexed:0,hasMore:false};
+  // A current index needs no allowance/account reads. Check the live budget
+  // immediately before each provider call, including the first batch.
   const pending=await staleWineRows(env.DB,owner,config,limit),rows=pending.slice(0,limit);
   let indexed=0,capped=false;
   for(let start=0;start<rows.length;start+=EMBED_BATCH){

@@ -40,6 +40,16 @@ function objects(){
 }
 
 describe('R2 wine reference resolver',()=>{
+ it('uses structured titles to distinguish Maison and Domaine when both display names omit them',async()=>{
+  const data=objects(),shard=referenceShardId('fang');
+  const maison={...lwin,productKey:'lwin:3061244',lwin7:'3061244',displayName:'Fang, Cuvee Zephyr',producerTitle:'Maison',producerName:'Fang',producerKey:'fang',wineName:'Cuvee Zephyr',wineKey:'cuvee zephyr'};
+  data[`reference/lwin/versions/l1/shard-${shard}.json`]=[maison,{...maison,productKey:'lwin:3061245',lwin7:'3061245',producerTitle:'Domaine'}];
+  (data['reference/lwin/versions/l1/producer-index.json'] as Record<string,string[]>).fang=[shard];
+  const b=bucket(data);
+  expect(await resolveWineReference(b,{producer:'Maison FANG',wineName:'Cuvée Zéphyr'})).toMatchObject({identityMatchStatus:'matched',lwin7:'3061244',referenceProducer:'Maison Fang'});
+  expect(await resolveWineReference(b,{producer:'Domaine FANG',wineName:'Cuvée Zéphyr'})).toMatchObject({identityMatchStatus:'matched',lwin7:'3061245',referenceProducer:'Domaine Fang'});
+  expect(await resolveWineReference(b,{producer:'FANG',wineName:'Cuvée Zéphyr'})).toMatchObject({identityMatchStatus:'ambiguous',lwin7:null});
+ });
  it('matches an edition-specific LWIN and only attaches a registry-backed ELID',async()=>{
   const result=await resolveWineReference(bucket(objects()),{producer:'Krug',wineName:'Grande Cuvée',releaseDesignation:'171ème Édition',vintage:null,vintageKind:'non_vintage',country:'France',region:'Champagne',style:'sparkling'});
   expect(result).toMatchObject({identityMatchStatus:'matched',lwin7:'1234567',elid:'FR-CMP-KRUG01-N171',productSubtype:'Sparkling'});
@@ -59,7 +69,7 @@ describe('R2 wine reference resolver',()=>{
  });
  it('keeps the structured producer name as an accepted alias on ordinary populated rows',async()=>{
   const data=objects(),shard=referenceShardId('margaux'),path=`reference/lwin/versions/l1/shard-${shard}.json`;
-  const row={...lwin,productKey:'lwin:1000001',lwin7:'1000001',displayName:'Chateau Margaux, Chateau Margaux',producerTitle:'Chateau',producerName:'Margaux',producerKey:'margaux',wineName:'Chateau Margaux',wineKey:'chateau margaux',region:'Bordeaux',regionKey:'bordeaux',colour:'Red',colourKey:'red'};
+  const row={...lwin,productKey:'lwin:1000001',lwin7:'1000001',displayName:'Chateau Margaux, Chateau Margaux',producerTitle:'Chateau',producerName:'Margaux',producerKey:'margaux',wineName:'Chateau Margaux',wineKey:'chateau margaux',region:'Bordeaux',regionKey:'bordeaux',colour:'Red',colourKey:'red',productSubtype:'Still'};
   data[path]=[row];const index=data['reference/lwin/versions/l1/producer-index.json'] as Record<string,string[]>;index.margaux=[shard];index['chateau margaux']=[shard];
   const bare=await resolveWineReference(bucket(data),{producer:'Margaux',wineName:'Chateau Margaux',country:'France',region:'Bordeaux',style:'red'});
   const display=await resolveWineReference(bucket(data),{producer:'Chateau Margaux',wineName:'Chateau Margaux',country:'France',region:'Bordeaux',style:'red'});
@@ -68,7 +78,7 @@ describe('R2 wine reference resolver',()=>{
  it('tries both qualified and stripped producer shards when an older manifest has no producer index',async()=>{
   const data=objects(),manifest=data['reference/lwin/current.json'] as ReferenceManifest,records=data as Record<string,unknown>;delete manifest.producerIndexKey;delete records['reference/lwin/versions/l1/producer-index.json'];
   const shard=referenceShardId('castagnier'),path=`reference/lwin/versions/l1/shard-${shard}.json`;
-  data[path]=[{...lwin,productKey:'lwin:1724273',lwin7:'1724273',displayName:'Domaine Castagnier, Chambolle-Musigny',producerName:'Castagnier',producerKey:'castagnier',wineName:null,wineKey:'',region:'Burgundy',regionKey:'burgundy',colour:'Red',colourKey:'red'}];
+  data[path]=[{...lwin,productKey:'lwin:1724273',lwin7:'1724273',displayName:'Domaine Castagnier, Chambolle-Musigny',producerName:'Castagnier',producerKey:'castagnier',wineName:null,wineKey:'',region:'Burgundy',regionKey:'burgundy',colour:'Red',colourKey:'red',productSubtype:'Still'}];
   const result=await resolveWineReference(bucket(data),{producer:'Domaine Castagnier',wineName:'Chambolle-Musigny',country:'France',region:'Burgundy',style:'red'});
   expect(result).toMatchObject({identityMatchStatus:'matched',lwin7:'1724273'});
  });

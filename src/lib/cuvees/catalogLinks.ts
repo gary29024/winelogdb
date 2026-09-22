@@ -113,10 +113,10 @@ async function loadCatalogRows(db:D1Database,owner:string,producerId:string){
     WHERE owner_id=? AND producer_id=? AND catalog_backed=1 ORDER BY canonical_name COLLATE NOCASE`).bind(owner,producerId).all<CuveeRow>();
 }
 
-async function loadCatalogDefinition(db:D1Database,owner:string,producerId:string){
+async function loadCatalogDefinition(db:D1Database,owner:string,producerId:string,knownAliases?:string[]){
   const [producer,aliases]=await Promise.all([
     db.prepare('SELECT canonical_name,catalog_json FROM producers WHERE owner_id=? AND id=?').bind(owner,producerId).first<{canonical_name:string;catalog_json:string}>(),
-    db.prepare('SELECT display_alias FROM producer_aliases WHERE owner_id=? AND producer_id=?').bind(owner,producerId).all<{display_alias:string}>()
+    knownAliases?Promise.resolve({results:knownAliases.map(display_alias=>({display_alias}))}):db.prepare('SELECT display_alias FROM producer_aliases WHERE owner_id=? AND producer_id=?').bind(owner,producerId).all<{display_alias:string}>()
   ]);
   const producerNames=[producer?.canonical_name??'',...aliases.results.map(x=>x.display_alias)].filter(Boolean);
   const catalog=canonicalCatalogEntries(parseJson<CatalogWine[]>(producer?.catalog_json,[]),producerNames);
@@ -163,8 +163,10 @@ async function markRecoveredCatalogIndexingRun(db:D1Database,owner:string,produc
   return Boolean(result.meta.changes);
 }
 
-export async function getProducerCuveeCatalogState(db:D1Database,owner:string,producerId:string){
-  const definition=await loadCatalogDefinition(db,owner,producerId);
+export async function getProducerCuveeCatalogState(db:D1Database,owner:string,producerId:string,known?:{aliases:string[];wines:WineCuveeRow[]}){
+  // Only the authenticated producer route supplies this request-local snapshot.
+  // Read the raw catalog as before; its display overlay is not a repair input.
+  const definition=await loadCatalogDefinition(db,owner,producerId,known?.aliases);
   let catalogRows=await loadCatalogRows(db,owner,producerId),repairIssues=new Map<string,string>();
   if(missingCatalogEntries(definition.catalog,definition.producerNames,catalogRows.results).length){
     repairIssues=await repairCatalogEntries(db,owner,producerId,definition.catalog,definition.producerNames,catalogRows.results);
@@ -191,7 +193,7 @@ export async function getProducerCuveeCatalogState(db:D1Database,owner:string,pr
       JOIN cuvees s ON s.owner_id=l.owner_id AND s.id=l.source_cuvee_id
       JOIN cuvees d ON d.owner_id=l.owner_id AND d.id=l.catalog_cuvee_id
       WHERE l.owner_id=? AND l.producer_id=? AND l.unlinked_at IS NULL ORDER BY l.created_at DESC`).bind(owner,producerId).all<LinkRow>(),
-    db.prepare('SELECT id,cuvee_id,vintage FROM wines WHERE owner_id=? AND producer_id=?').bind(owner,producerId).all<WineCuveeRow>()
+    known?Promise.resolve({results:known.wines}):db.prepare('SELECT id,cuvee_id,vintage FROM wines WHERE owner_id=? AND producer_id=?').bind(owner,producerId).all<WineCuveeRow>()
   ]);
   const catalogIds=new Set(catalogRows.results.map(row=>row.id));
   const linkedTargets=new Map(linkRows.results.map(row=>[row.source_cuvee_id,row.catalog_cuvee_id] as const));

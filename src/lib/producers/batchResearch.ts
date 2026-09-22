@@ -1,3 +1,4 @@
+import { producerLwinContext,producerLwinReferences } from './lwinRange';
 import { AI_MODELS } from '../ai/policy';
 import { assertResearchInput,type ProviderAuthorization } from '../credits/provider';
 import { publishProducerResearch } from '../research/sharedProducer';
@@ -264,13 +265,13 @@ export function researchPromptFor(name:string,key:string){
   return slicePrompt(name,slice);
 }
 /** Exposed so the output room each key is given can be asserted. */
-export function requestForKey(name:string,key:string):GeminiBatchRequest{
+export function requestForKey(name:string,key:string,referenceContext=''):GeminiBatchRequest{
   if(key==='profile')return {key,request:{contents:[{role:'user',parts:[{text:`${profilePrompt(name)}\n\n${describeResponseSchema(profileSchema)}`}]}],tools:[{google_search:{}}],generationConfig:groundedGenerationConfig(PROFILE_OUTPUT_TOKENS,'low')}};
   const slice=parseSliceKey(key);if(!slice)throw new Error(`Unknown producer research key ${key}`);
   // The whole range gets the most room, because it is the one answer that has
   // to hold every wine and the only one whose overflow starts the ladder.
   const room=key===FULL_CATALOG_SLICE.key?FULL_RANGE_OUTPUT_TOKENS:SLICE_OUTPUT_TOKENS;
-  return {key,request:{contents:[{role:'user',parts:[{text:`${slicePrompt(name,slice)}\n\n${describeResponseSchema(catalogSchema)}`}]}],tools:[{google_search:{}}],generationConfig:groundedGenerationConfig(room)}};
+  return {key,request:{contents:[{role:'user',parts:[{text:`${slicePrompt(name,slice)}\n\n${referenceContext}\n\n${describeResponseSchema(catalogSchema)}`}]}],tools:[{google_search:{}}],generationConfig:groundedGenerationConfig(room)}};
 }
 
 async function producerNames(db:D1Database,owner:string,producerId:string){
@@ -345,7 +346,8 @@ async function finalizeCatalogStage(env:Env,owner:string,producerId:string,reque
 async function submitBatch(env:Env,owner:string,producerId:string,requestId:string,attempt:number,model:string,keys:string[]){
   const producer=await env.DB.prepare('SELECT canonical_name FROM producers WHERE owner_id=? AND id=?').bind(owner,producerId).first<{canonical_name:string}>();if(!producer)throw new Error('Producer not found');
   await assertResearchInput(env.CREDIT_CONTEXT,owner,producerId,'producer',producer);
-  const entries=keys.map(key=>requestForKey(producer.canonical_name,key));let googleName:string|undefined,jobId:string|undefined;
+  const context=producerLwinContext(await producerLwinReferences(env.DB,owner,producerId));
+  const entries=keys.map(key=>requestForKey(producer.canonical_name,key,context));let googleName:string|undefined,jobId:string|undefined;
   try{
     googleName=await createGeminiBatch(env.GEMINI_API_KEY,model,`winelog-producer-${requestId}-${attempt}`,entries,env.CREDIT_CONTEXT);
     jobId=await createResearchBatchJob(env.DB,{owner,requestId,targetKind:'producer',targetId:producerId,googleBatchName:googleName,model,attempt,keys});
