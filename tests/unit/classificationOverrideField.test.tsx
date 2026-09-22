@@ -50,13 +50,14 @@ describe('Setting the cru tier by hand',()=>{
     // The derived tier does not preselect the field: the select records intent,
     // not the current answer, or every wine would look hand-set.
     expect(select().value).toBe('');
-    expect(helper()).toContain('Read from the appellation');
+    expect(helper()).toBe('');
+    expect(node().querySelector('option')?.textContent).toBe('Auto - read from label');
   });
 
   it('preselects a tier that was set by hand',async()=>{
     await openForm({...base,classification:'premier_cru',classificationOverride:'premier_cru'});
     expect(select().value).toBe('premier_cru');
-    expect(helper()).toContain('will not change it');
+    expect(helper()).toBe('');
   });
 
   it('submits the chosen tier',async()=>{
@@ -85,28 +86,10 @@ describe('Setting the cru tier by hand',()=>{
   });
 });
 
-describe('Reading the denomination back in the form',()=>{
-  it('names the denomination the appellation resolves to',async()=>{
-    // The question the helper answers: was "Chianti Classico" understood as the
-    // DOCG, given the form will not let the term be typed into the field.
-    await openForm({producer:'Fontodi',wineName:'Filetta',country:'Italy',region:'Tuscany',appellation:'Chianti Classico'});
-    expect(appellationHelp()).toContain('DOCG');
-  });
-
-  it('says where the term goes when nothing has resolved yet',async()=>{
-    await openForm({producer:'x',wineName:'y',country:'',region:'',appellation:''});
-    expect(appellationHelp()).toContain('leave DOC / DOCG / AVA off');
-  });
-
-  it('follows what is being typed, not what was saved',async()=>{
+describe('Appellation presentation',()=>{
+  it('keeps the appellation without the confusing optional-field caption',async()=>{
     await openForm(base);
-    expect(appellationHelp()).toContain('AOC');
-    await act(async()=>{
-      const field=host!.querySelector('input[name="appellation"]') as HTMLInputElement;
-      const setter=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value')!.set!;
-      setter.call(field,'Barolo');
-      field.dispatchEvent(new Event('input',{bubbles:true}));
-    });
-    expect(appellationHelp()).toContain('DOCG');
+    expect((host!.querySelector('input[name="appellation"]') as HTMLInputElement).value).toBe(base.appellation);
+    expect(appellationHelp()).toBe('');
   });
 });

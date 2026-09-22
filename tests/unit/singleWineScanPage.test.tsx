@@ -38,7 +38,7 @@ vi.mock('../../src/features/uploads/photoMetadata',()=>({
 const recognized={
   producer:'Domaine Dujac',wineName:'Morey-Saint-Denis 1er Cru',vintage:2019,
   country:'France',region:'Burgundy',appellation:'Morey-Saint-Denis 1er Cru',
-  style:'red',confidence:0.91,recognitionDurationMs:4200
+  style:'red',confidence:0.91,recognitionDurationMs:4200,requestId:'8af82b07-318d-40fa-aaf2-ef0afd4eba1e'
 };
 
 let root:Root|null=null,host:HTMLDivElement|null=null;
@@ -98,7 +98,7 @@ describe('the single wine page',()=>{
     expect(rows).toHaveLength(2);
     expect(rows.map(row=>row.querySelector('strong')?.textContent)).toEqual(['Primary label','Additional label 2']);
     expect(rows.every(row=>row.textContent?.includes('ready to identify'))).toBe(true);
-    expect(rows[0].textContent).toContain('Photo date:');
+    expect(rows[0].textContent).not.toContain('Photo date:');
     expect(button('Identify this wine')?.disabled).toBe(false);
   });
 
@@ -115,8 +115,16 @@ describe('the single wine page',()=>{
     expect(recognitions[0].body.getAll('images')).toHaveLength(2);
     expect(JSON.parse(recognitions[0].body.get('metadata') as string)).toHaveLength(2);
 
-    expect(host!.querySelector('.review h2')?.textContent).toBe('Combined identification');
-    expect(host!.textContent).toContain('identified in 4.2s');
+    expect(host!.querySelector('.review h2')?.textContent).toBe('Identification Results');
+    expect(host!.textContent).toContain('Successfully identified');
+    expect(host!.textContent).not.toContain('4.2s');
+    expect(host!.textContent).not.toContain('Support ID');
+    expect(button('Identification completed')?.disabled).toBe(true);
+    await click(button('Identification completed')!);
+    expect(calls).toHaveLength(1);
+    await pick('new.jpg');
+    expect(button('Identify this wine')?.disabled).toBe(false);
+    await click(button('Identify this wine')!);
     const producer=host!.querySelector('.review input') as HTMLInputElement;
     expect(producer.value).toBe('Domaine Dujac');
   });
@@ -126,7 +134,7 @@ describe('the single wine page',()=>{
     await pick('front.jpg','back.jpg');
     await click(button('Identify this wine')!);
     expect(host!.querySelector('.scan-error')).toBeNull();
-    expect(host!.querySelector('.review h2')?.textContent).toBe('Combined identification');
+    expect(host!.querySelector('.review h2')?.textContent).toBe('Identification Results');
     expect((host!.querySelector('.review input') as HTMLInputElement).value).toBe('Domaine Dujac');
   });
 
@@ -138,5 +146,8 @@ describe('the single wine page',()=>{
     await click(button('Identify this wine')!);
     expect(host!.querySelector('.scan-error')?.textContent).toBe('Gemini is unavailable · Support ID abc');
     expect(host!.querySelector('.review')).toBeNull();
+    expect(host!.querySelector('.scan-error')!.compareDocumentPosition(host!.querySelector('.upload-list')!)).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
+    expect(host!.querySelector('.upload-list')!.textContent).not.toContain('Support ID');
+    expect(button('Identify this wine')?.disabled).toBe(false);
   });
 });
