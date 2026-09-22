@@ -341,7 +341,14 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,enable
   }
   // The tree, not the typist, holds the denomination: showing what it reads back
   // is what tells you a "Chianti Classico" you typed was understood as a DOCG.
-  const denomination=resolvePlace({country:country||null,region:region||null,appellation}).denomination;
+  // Members are spared it — they are not the ones curating the catalogue.
+  const denomination=memberView?null:resolvePlace({country:country||null,region:region||null,appellation}).denomination;
+  // A wine still under review has been read off a label, not filed: any tier it
+  // carries is a reading, so the automatic option stays plain until the wine has
+  // been saved once. On a wine that exists — edited later, or opened from the
+  // cellar — naming the tier is the only way to see what it is filed as, and
+  // that is as true for a member as for an owner.
+  const identifiedNotYetSaved=initial?.recognitionStatus==='review';
   function applyLwin(values:Partial<LwinEditValues>){
     if(values.producer!==undefined)setProducer(values.producer);
     if(values.wineName!==undefined)setWineName(values.wineName);
@@ -354,7 +361,7 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,enable
   const field=(name:string,label:string,type='text',step?:string,required=false)=><label>{label}<input name={name} type={type} step={step} required={required} defaultValue={String(initial?.[name as keyof WineInput]??'')}/></label>;
   const hasGps=initial?.latitude!=null&&initial?.longitude!=null,hasEstimatedPlace=hasGps&&Boolean(initial?.locationName?.trim());
   return <>
-    {referenceWine&&onReferenceUpdated&&<>
+    {!memberView&&referenceWine&&onReferenceUpdated&&<>
       <LwinEditPanel wine={referenceWine} values={{producer,wineName,country,region,classification:classification??'',classificationOverride:cruOverride}} dirty={dirty} disabled={busy} initiallyOpen={referenceInitiallyOpen} canMatch={getAccount()?.role==='owner'} onApply={applyLwin} onBusy={setReferenceBusy} onUpdated={onReferenceUpdated}/>
     </>}
     <form id={id?`wine-edit-form-${id}`:undefined} className="wine-form wine-form-compact" onSubmit={submit} onChange={()=>{setReferenceReview(null);setDirty(true)}}>
@@ -382,16 +389,16 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,enable
     </div>
 
     <div className="wine-compact-row three"><label>Vintage<input name="vintage" type="number" value={vintageInput} onChange={e=>{setVintageInput(e.target.value);if(e.target.value)setVintageKind('vintage');else if(vintageKind==='vintage')setVintageKind('unknown')}}/></label><label>Style<select name="wineStyle" value={wineStyle} onChange={e=>setWineStyle(e.target.value)}><option value="">Unknown</option>{['red','white','rose','sparkling','dessert','fortified','orange','other'].map(x=><option key={x}>{x}</option>)}</select></label>{field('alcoholPercentage','Alcohol %','number','0.1')}</div>
-    <div className="wine-compact-row two"><label>Year status<select value={vintageKind} onChange={e=>setVintageKind(e.target.value)} disabled={Boolean(vintageInput)}><option value="vintage">Vintage</option><option value="non_vintage">Non-vintage</option><option value="multi_vintage">Multi-vintage</option><option value="unknown">Unknown / unreadable</option></select><small>{vintageInput?'A year is entered, so this is a vintage wine.':'NV is different from a label whose vintage simply could not be read.'}</small></label><label>Edition / release<input type="text" value={releaseDesignation} onChange={e=>setReleaseDesignation(e.target.value)} placeholder="e.g. 171ème Édition, MV20"/><small>Use this for a numbered or named release, not as a substitute for a vintage year.</small></label></div>
+    <div className="wine-compact-row two"><label>Year status<select value={vintageKind} onChange={e=>setVintageKind(e.target.value)} disabled={Boolean(vintageInput)}><option value="vintage">Vintage</option><option value="non_vintage">Non-vintage</option><option value="multi_vintage">Multi-vintage</option><option value="unknown">Unknown / unreadable</option></select>{!memberView&&<small className="wine-field-help">{vintageInput?'A year is entered, so this is a vintage wine.':'NV is different from a label whose vintage simply could not be read.'}</small>}</label><label>Edition / release<input type="text" value={releaseDesignation} onChange={e=>setReleaseDesignation(e.target.value)} placeholder="e.g. 171ème Édition, MV20"/><small className="wine-field-help">Use this for a numbered or named release, not as a substitute for a vintage year.</small></label></div>
     <div className="wine-compact-row two"><label>Country<input name="country" value={country} onChange={e=>setCountry(e.target.value)}/></label><label>Region<input name="region" value={region} onChange={e=>setRegion(e.target.value)}/></label></div>
-    <div className="wine-compact-row appellation-row"><label>Appellation<input name="appellation" value={appellation} onChange={e=>setAppellation(e.target.value)}/><small>{denomination?`Recognized as a ${denomination}; no need to type it.`:'The denomination is read from the name, so leave DOC / DOCG / AVA off — but keep IGT or IGP, which tells a zone apart from the region it shares a name with.'}</small></label>
+    <div className="wine-compact-row appellation-row"><label>Appellation<input name="appellation" value={appellation} onChange={e=>setAppellation(e.target.value)}/>{!memberView&&<small className="wine-field-help">{denomination?`Recognized as a ${denomination}; no need to type it.`:'The denomination is read from the name, so leave DOC / DOCG / AVA off — but keep IGT or IGP, which tells a zone apart from the region it shares a name with.'}</small>}</label>
       <label>Cru level<select name="classificationOverride" value={cruOverride} onChange={e=>setCruOverride(e.target.value)}>
-        <option value="">{classification?`${classificationLabel(classification)} (automatic)`:'Auto'}</option>
+        <option value="">{classification&&!identifiedNotYetSaved?`${classificationLabel(classification)} (automatic)`:'Auto - read from label'}</option>
         <option value="grand_cru">Grand Cru</option>
         <option value="premier_cru">Premier Cru</option>
         <option value="village">Village</option>
         <option value="none">Not classified</option>
-      </select><small>{cruOverride?'Set by hand; WineLog will not change it.':classification?`Current: ${classification.replaceAll('_',' ')}. Read from the appellation, label or reference.`:'Read from the appellation and the label.'}</small></label></div>
+      </select>{!memberView&&<small className="wine-field-help">{cruOverride?'Set by hand; WineLog will not change it.':classification?`Current: ${classification.replaceAll('_',' ')}. Read from the appellation, label or reference.`:'Read from the appellation and the label.'}</small>}</label></div>
     {referenceWine&&<WineEnrichedDetails wine={referenceWine}/>}
     {/* Suggestions appear under the field only while a grape is half-typed, so
         the form is no taller than it was until the moment it can help. The list
@@ -402,7 +409,7 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,enable
       {grapeHints.length>0&&<span className="grape-hints" role="group" aria-label="Grape suggestions">
         {grapeHints.map(name=><button type="button" key={name} className="grape-hint" onClick={()=>completeGrape(name)}>{name}</button>)}
       </span>}
-      <small>Percentages are optional. Separate grapes with commas.{!memberView&&<> A grape sold under another name — Pinot Nero, Garnacha — is filed under the one name when you save.</>}</small>
+      <small className="wine-field-help">Percentages are optional. Separate grapes with commas.{!memberView&&<> A grape sold under another name — Pinot Nero, Garnacha — is filed under the one name when you save.</>}</small>
     </label>
 
     {id&&isChampagne(initial??{})&&<ChampagnePhotoBackfill key={id} wineId={id} imageIds={initial?.imageIds??[]} details={sparklingDetails} onApply={suggestions=>{setSparklingDetails(current=>({...current,...missingChampagneDetails(current,suggestions)}));setDirty(true)}}/>}

@@ -9,10 +9,13 @@ globalThis.IS_REACT_ACT_ENVIRONMENT=true;
 
 let root:Root|null=null,host:HTMLDivElement|null=null,saved:Record<string,unknown>|null=null;
 
-async function openForm(initial:Record<string,unknown>){
+async function openForm(initial:Record<string,unknown>,role?:'owner'|'member'){
   saved=null;
-  vi.stubGlobal('fetch',vi.fn(async()=>new Response(JSON.stringify({producers:[],cuvees:[]}),{status:200,headers:{'content-type':'application/json'}})));
+  vi.stubGlobal('fetch',vi.fn(async(url:string)=>String(url).endsWith('/api/me')&&role
+    ?new Response(JSON.stringify({user:{id:role,email:`${role}@example.com`,display_name:role,role,status:'active'}}),{status:200,headers:{'content-type':'application/json'}})
+    :new Response(JSON.stringify({producers:[],cuvees:[]}),{status:200,headers:{'content-type':'application/json'}})));
   vi.resetModules();
+  if(role){const {bootstrapAccount}=await import('../../src/lib/auth/client');await bootstrapAccount()}
   const {WineForm}=await import('../../src/features/wines/WineForm');
   host=document.createElement('div');
   document.body.appendChild(host);
@@ -51,6 +54,9 @@ describe('Setting the cru tier by hand',()=>{
     // not the current answer, or every wine would look hand-set.
     expect(select().value).toBe('');
     expect(helper()).toContain('Read from the appellation');
+    // The automatic option names the tier it derived, or the field would give
+    // no way to tell what the wine is currently filed as.
+    expect(node().querySelector('option')?.textContent).toBe('Village (automatic)');
   });
 
   it('preselects a tier that was set by hand',async()=>{
@@ -108,5 +114,30 @@ describe('Reading the denomination back in the form',()=>{
       field.dispatchEvent(new Event('input',{bubbles:true}));
     });
     expect(appellationHelp()).toContain('DOCG');
+  });
+});
+
+describe('The member view of the same fields',()=>{
+  it('keeps the fields and drops the catalogue diagnostics',async()=>{
+    await openForm({...base,classification:'premier_cru'},'member');
+    expect((host!.querySelector('input[name="appellation"]') as HTMLInputElement).value).toBe(base.appellation);
+    expect(appellationHelp()).toBe('');
+    expect(helper()).toBe('');
+    // The tier a saved wine is filed under is not an owner diagnostic.
+    expect(node().querySelector('option')?.textContent).toBe('Premier Cru (automatic)');
+  });
+});
+
+describe('A wine that has only just been identified',()=>{
+  // The tier read off a label is a guess until the wine is saved, so naming one
+  // on the identification screen would pass a reading off as a filing.
+  for(const role of ['owner','member'] as const)it(`leaves the automatic option plain for an ${role}`,async()=>{
+    await openForm({...base,classification:'premier_cru',recognitionStatus:'review'},role);
+    expect(node().querySelector('option')?.textContent).toBe('Auto - read from label');
+  });
+
+  it('names the tier again once the same wine is edited afterwards',async()=>{
+    await openForm({...base,classification:'premier_cru',recognitionStatus:'complete'});
+    expect(node().querySelector('option')?.textContent).toBe('Premier Cru (automatic)');
   });
 });
