@@ -8,7 +8,8 @@ async function setup(page:Page,role:string,initial:string[]=[]){
   const request=route.request(),path=new URL(request.url()).pathname;
   requests.push(`${request.method()} ${path}`);
   if(path==='/api/me')return route.fulfill({json:{user:{id:'reader',role,email:'reader@example.com',display_name:'Reader',status:'active'}}});
-  if(path==='/api/wines/layout-wine'||path==='/api/shared/wines/layout-wine')return route.fulfill({json:{...wine,identityMatchStatus:'manual',ownerName:'Gary'}});
+  // The share count rides along with the wine, exactly as the worker sends it.
+  if(path==='/api/wines/layout-wine'||path==='/api/shared/wines/layout-wine')return route.fulfill({json:{...wine,identityMatchStatus:'manual',ownerName:'Gary',friendTagCount:recipients.length}});
   if(path==='/api/friends')return route.fulfill({json:{items:[{id:'alice',display_name:'Alice'},{id:'bob',display_name:'Bob'}]}});
   if(path==='/api/wines/layout-wine/shares'){
    if(request.method()==='PUT')recipients=request.postDataJSON().recipientIds;
@@ -30,11 +31,15 @@ async function actionsFit(page:Page){
 
 for(const role of ['owner','member'])for(const width of [320,390,1280])test(`${role}: tag state and action layout survive save, reload and removal at ${width}px`,async({page})=>{
  await page.setViewportSize({width,height:900});
- await setup(page,role);
+ const requests=await setup(page,role);
  await page.goto('/wines/layout-wine');
  const tag=page.getByRole('button',{name:/^Tag friends/});
  await expect(tag).toHaveAccessibleName('Tag friends, not shared');
+ // Opening a wine must not buy that answer with a request of its own.
+ expect(requests.filter(request=>request.includes('/shares'))).toEqual([]);
  await tag.click();
+ // Naming the friends still needs the endpoint, and asks once the sheet opens.
+ await expect.poll(()=>requests.filter(request=>request.includes('/shares'))).not.toEqual([]);
  const sheet=page.getByRole('dialog',{name:'Tag friends',exact:true});
  await expect(sheet.locator('.friend-tag-relationship')).toHaveCount(0);
  await sheet.getByRole('button',{name:'Alice',exact:true}).click();
