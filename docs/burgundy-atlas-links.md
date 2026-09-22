@@ -1,6 +1,6 @@
 # Burgundy Atlas links
 
-Wine details now offer **Explore on Burgundy Atlas** below the identity pills when the recorded appellation matches a mapped Burgundy Grand Cru. The same link appears as **Burgundy Atlas** on the rows of two curated collections, including untasted rows:
+Wine details offer **Explore on Burgundy Atlas** below the identity pills for a mapped Burgundy Grand Cru, or a named Premier Cru whose village appellation can also be identified. The same link appears as **Burgundy Atlas** on the rows of two curated Grand Cru collections, including untasted rows:
 
 - Burgundy Grand Cru Explorer - all 33 rows link
 - Domaine de la Romanée-Conti - 9 of 10 rows link
@@ -17,6 +17,8 @@ Screenshots of the implementation with synthetic example wine and progress data:
 
 <img src="mockups/burgundy-atlas-wine-mobile.png" width="390" alt="Mobile wine detail with Explore on Burgundy Atlas beneath the appellation and Grand Cru pills" />
 
+<img src="mockups/burgundy-atlas-premier-cru-mobile.png" width="390" alt="Mobile wine detail linking Gevrey-Chambertin Les Cazetiers to its Premier Cru Atlas map" />
+
 ![Desktop collection with Atlas links on tasted and untasted crus](mockups/burgundy-atlas-collection-desktop.png)
 
 ## Mapping and matching
@@ -25,25 +27,46 @@ Screenshots of the implementation with synthetic example wine and progress data:
 
 For the Côte d'Or, the mapping uses 32 **wine designation** pages, which focus the named vineyard and provide its terrain context. La Romanée points specifically to the Grand Cru in Vosne-Romanée, excluding its Premier Cru namesakes. Chablis Grand Cru uses its **appellation** page: a bottle naming only that appellation does not identify one of its seven climats. Atlas remains responsible for the mapped data and boundaries.
 
-Matching accepts case, accent and punctuation variations, AOC/AOP markers, Grand Cru prefixes/suffixes and a small explicit alias set. It never searches arbitrary wine-name substrings. A supplied non-French country, incompatible region/subregion, contradictory cru tier or disputed reference suppresses the wine link. A specific, exact Grand Cru appellation can match when broader fields are absent. Village names in the region field are not treated as legal parents of Grand Cru appellations.
+Grand Cru matching accepts case, accent and punctuation variations, AOC/AOP markers, Grand Cru prefixes/suffixes and a small explicit alias set. It never searches arbitrary wine-name substrings. A supplied non-French country, incompatible region/subregion, contradictory cru tier or disputed reference suppresses the wine link. A specific, exact Grand Cru appellation can match when broader fields are absent. Village names in the region field are not treated as legal parents of Grand Cru appellations.
+
+### Named Premier Crus on wine details
+
+`burgundyAtlasPremierCruLinks.json` contains 630 Premier Cru designation records across 29 appellations, selected from the public canonical registry linked by Atlas's place pages and cross-checked against its sitemap. Each destination returned HTTP 200 with the exact canonical URL, name and Premier Cru classification on 2026-09-22. The file stores factual names, published paths and geographic context; no map geometry is copied. The Premier Cru data is imported by wine details, not by the collection page.
+
+Both owner and shared details accept a cru in the wine title, combined appellation, or recorded reference site/parcel. Matching requires the village as well as the cru, and a `premier_cru` classification or an explicit Premier Cru / 1er Cru marker. For example:
+
+- Gevrey-Chambertin + Les Cazetiers links to the Les Cazetiers designation.
+- Meursault + Les Perrières and Puligny-Montrachet + Les Perrières link to different destinations.
+- Clos des Perrières is preserved as the full name, rather than shortened to Perrières.
+- A village alone, an unknown cru, multiple crus, contradictory villages or a disputed reference produces no link.
+
+Wine titles may include producer/vintage text around a complete cru name. Appellation and reference fields must identify a whole place. Case, accents, punctuation, published `ou` alternatives and leading article omission are supported; fuzzy spelling and partial word matching are not. An explicit Premier Cru never falls back to a Grand Cru namesake such as La Romanée.
+
+Coverage deliberately excludes 36 Atlas designation records without a mapped presentation, including Chablis Montée de Tonnerre. Atlas coverage is not the same as a complete inventory of Burgundy Premier Crus. There is no village fallback when the named cru lacks a verified mapped destination.
+
+Refresh and verify the mapping, then review the generated diff:
+
+```sh
+npx vite-node --config vitest.config.ts scripts/sync_burgundy_atlas_premiers.ts
+```
 
 The mapping is shared static frontend data. There are no migrations, database reads, AI calls, embeds or automatic requests to Atlas. Navigation sends only the public Atlas destination; `noopener noreferrer` omits the WineLog referrer and opener.
 
 ## Extending coverage
 
-Premier Cru climats, village fallbacks, producer ranges and internal vineyard pages are follow-up work. Unmapped places show no link in this release. A new collection must be curated - that is, absent from `removed` - before `atlasCollections` may name it. Its rows need not all resolve, but every row that does not must be named in the `unlinkedRows` exception list in `tests/unit/burgundyAtlas.test.ts`, so a row that quietly stops linking fails rather than disappears into a count. A new destination must be selected from Atlas's published records, checked for name, classification and geographic scope, and keyed to WineLog's canonical place identity. Do not generate Atlas IDs or substitute a nearby vineyard. Update `verifiedAt` only after checking the complete mapping again.
+Additional Premier Cru coverage, village fallbacks, further producer ranges and internal vineyard pages remain follow-up work. Unmapped places show no link. A new collection must be curated - that is, absent from `removed` - before `atlasCollections` may name it. Its rows need not all resolve, but every row that does not must be named in the `unlinkedRows` exception list in `tests/unit/burgundyAtlas.test.ts`, so a row that quietly stops linking fails rather than disappears into a count. A new destination must be selected from Atlas's published records and checked for name, classification and geographic scope. Grand Crus use WineLog's canonical place identity; Premier Cru climats retain their published Atlas designation identity and village context. Do not generate Atlas IDs or substitute a nearby vineyard. Update `verifiedAt` only after checking the complete mapping again.
 
 ## Validation
 
-- Focused Vitest checks: matching, complete 33-cru coverage, every claimed collection live and linked bar named exceptions, per-row destinations for the Domaine checklist, name collisions, geography conflicts and wine-detail regressions.
-- Chromium: owner/shared details, all 33 checklist links, preserved tasting links, no background Atlas requests, new-tab behavior and unsupported Premier Cru suppression.
+- Focused Vitest checks: matching, complete 33-cru and 630 Premier Cru destination coverage, every claimed collection live and linked bar named exceptions, per-row destinations for the Domaine checklist, name collisions, geography conflicts and wine-detail regressions.
+- Chromium: owner/shared Grand Cru and Premier Cru details, all 33 checklist links, preserved tasting links, no background Atlas requests, new-tab behavior, recorded vineyard matching and uncertain Premier Cru suppression.
 - Layouts checked at 320, 390 and 1280 pixels; screenshots reviewed for overlap and clipping.
 - TypeScript, production build and lint.
 
 Run the focused checks with:
 
 ```sh
-npx vitest run tests/unit/burgundyAtlas.test.ts tests/unit/wineClassificationDisplay.test.tsx tests/unit/wineDetailOrder.test.ts tests/unit/wineDetailMapping.test.ts
+npx vitest run tests/unit/burgundyAtlas.test.ts tests/unit/burgundyAtlasPremierCru.test.ts tests/unit/wineClassificationDisplay.test.tsx tests/unit/wineDetailOrder.test.ts tests/unit/wineDetailMapping.test.ts
 npx playwright test tests/e2e/burgundy-atlas.spec.ts --project=chromium
 npm run build
 npm run lint

@@ -89,9 +89,44 @@ test('the Domaine checklist links its appellations and leaves the cuvée row alo
   }
 });
 
-test('unsupported Premier Cru names do not acquire a Grand Cru link',async({page})=>{
-  await mockApi(page,{appellation:'Gevrey-Chambertin',classification:'premier_cru',wineName:'Gevrey-Chambertin Les Cazetiers'});
-  await page.goto('/wines/layout-wine');
-  await expect(page.getByRole('heading',{name:'Gevrey-Chambertin Les Cazetiers',exact:true})).toBeVisible();
-  await expect(page.locator('.burgundy-atlas-link')).toHaveCount(0);
+for(const route of ['/wines/layout-wine','/shared/layout-wine']){
+  test(`${route}: a named Premier Cru links to its village-specific Atlas destination`,async({page},testInfo)=>{
+    const atlasRequests:string[]=[];
+    page.on('request',request=>{if(new URL(request.url()).hostname==='burgundyatlas.com')atlasRequests.push(request.url())});
+    await mockApi(page,{appellation:'Gevrey-Chambertin',classification:'premier_cru',wineName:'Gevrey-Chambertin Les Cazetiers'});
+    await page.goto(route);
+    const link=page.getByRole('link',{name:'Explore on Burgundy Atlas: Gevrey-Chambertin — Les Cazetiers (opens in a new tab)',exact:true});
+    const destination='https://burgundyatlas.com/place/ba_designation_4wgzv3yeruhebw2d535r27kjfm/les-cazetiers';
+    await expect(link).toHaveAttribute('href',destination);
+    await expect(link).toHaveAttribute('target','_blank');
+    await expect(link).toHaveAttribute('rel','noopener noreferrer');
+    for(const width of [320,390,1280]){
+      await page.setViewportSize({width,height:900});await expect(link).toBeVisible();
+      expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+      await page.screenshot({path:testInfo.outputPath(`atlas-premier-detail-${width}.png`)});
+    }
+    expect(atlasRequests).toEqual([]);
+    await page.context().route('https://burgundyatlas.com/**',route=>route.fulfill({contentType:'text/html',body:'<h1>Atlas destination</h1>'}));
+    const [popup]=await Promise.all([page.waitForEvent('popup'),link.click()]);
+    await expect(popup).toHaveURL(destination);
+    await expect(page).toHaveURL(new RegExp(`${route}$`));
+  });
+}
+
+test('a recorded vineyard supplies the cru, while uncertain identities remain unlinked',async({page})=>{
+  const examples=[
+    {wineName:'Meursault Premier Cru',referenceSite:'Les Perrières',identityMatchStatus:'matched',linked:true},
+    {wineName:'Meursault Premier Cru',referenceSite:'Les Perrières',identityMatchStatus:'conflict',linked:false},
+    {wineName:'Meursault Premier Cru',referenceSite:null,linked:false},
+    {wineName:'Puligny-Montrachet Les Perrières',referenceSite:null,linked:false},
+    {wineName:'Meursault Unknown Vineyard',referenceSite:null,linked:false},
+  ];
+  for(const {linked,...fields} of examples){
+    await mockApi(page,{appellation:'Meursault',classification:'premier_cru',...fields});
+    await page.goto('/shared/layout-wine');
+    await expect(page.getByRole('heading',{name:fields.wineName,exact:true})).toBeVisible();
+    const link=page.locator('.burgundy-atlas-link');
+    await expect(link).toHaveCount(linked?1:0);
+    if(linked)await expect(link).toHaveAttribute('href','https://burgundyatlas.com/place/ba_designation_3ftvudbzi36k7gndmas6x36rje/perrieres');
+  }
 });
