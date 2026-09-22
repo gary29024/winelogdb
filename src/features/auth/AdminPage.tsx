@@ -58,8 +58,10 @@ export function AdminPage(){
  const researchProcessed=(rolloutStatus?.research.wines.processed??0)+(rolloutStatus?.research.producers.processed??0),researchTotal=(rolloutStatus?.research.wines.total??0)+(rolloutStatus?.research.producers.total??0);
  function changePolicy(action:string,patch:Partial<ActionPolicy>){setPolicies(current=>current.map(item=>item.action===action?{...item,...patch}:item))}
  return <section className="account-page settings-page">
- <PageHeader title="Owner controls" subtitle="Members, AI access and operations." actions={<Link to="/account">Account & friends</Link>}/>
- <SectionNavigation label="Owner sections" items={sections} selected={section} onSelect={selectSection}/>
+ <PageHeader title="Owner controls" subtitle="Members, AI access and operations."/>
+ <div className="settings-layout">
+  <aside><SectionNavigation label="Owner sections" items={sections.map(item=>({...item,count:item.id==='maintenance'?rolloutStatus?.lwinCurrent?.needsReview:undefined}))} selected={section} onSelect={selectSection}/></aside>
+  <div className="settings-content">
  {message&&<p role="status">{message}</p>}
  {loadError&&<p role="alert">{loadError} <button type="button" onClick={()=>void load(true).catch(e=>setLoadError(e.message))}>Retry owner controls</button></p>}
  {!data&&!loadError&&<p role="status">Loading owner controls…</p>}
@@ -68,7 +70,7 @@ export function AdminPage(){
  {observedMonth!==budgetWindow.current&&<p role="alert"><strong>AI is paused for the new month.</strong> In Pilot limits & budgets, set Measurement month to <strong>{budgetWindow.current}</strong>, enter this month’s measured Cloudflare cost (usually 0 at the start of a month), then press Save limits & budgets.</p>}
  {observedMonth===budgetWindow.current&&budgetWindow.days<=3&&<p role="status"><strong>Monthly AI budget check due soon.</strong> At 00:00 UTC on {budgetWindow.next}-01, WineLog will pause AI until Measurement month is changed to <strong>{budgetWindow.next}</strong> and the new month’s measured Cloudflare cost is saved.</p>}
  {Number(config.cloudflareObservedUsd)>=Number(config.cloudflareWarningUsd)&&Number(config.cloudflareWarningUsd)>0&&<p role='alert'>Cloudflare spending has reached your warning amount. Review current usage before more AI work.</p>}
- <div className="settings-content" hidden={!data}>
+ <div hidden={!data}>
  <section hidden={section!=='usage'} aria-label="Usage">
  {data&&<p>Estimated provider AI cost: US${data.aiCost.usd.toFixed(2)} · {data.aiCost.searches} searches. Estimates can lag provider billing.</p>}
  {data&&<section id="member-usage" className="member-usage" aria-labelledby="member-usage-title">
@@ -146,5 +148,5 @@ export function AdminPage(){
 
  </fieldset>
  {!!data?.reviewOperations.length&&<><h2>Operations needing reconciliation</h2><p>These AI operations remain held because completion is uncertain. Reconcile provider status before allowing a duplicate run.</p><ul>{data.reviewOperations.map(op=><li key={op.id}>{op.id} — {op.path}</li>)}</ul></>}
- </section></div></section>;
+ </section></div></div></div></section>;
 }

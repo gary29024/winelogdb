@@ -157,7 +157,7 @@ describe('back to the journal you left',()=>{
       const path=String(url);
       const body=path.includes('/research')?{runs:[]}
         :/\/api\/wines\/w1(\?|$)/.test(path)?{...wine,id:'w1'}
-        :{items:[journalWine],total:1};
+        :{items:[journalWine],total:37};
       return new Response(JSON.stringify(body),{status:200,headers:{'content-type':'application/json'}});
     }));
     vi.resetModules();

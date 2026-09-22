@@ -87,10 +87,9 @@ export function AccountPage(){
     </section>
     <section hidden={section!=='friends'} aria-label="Friends settings">
   <h2>Friends</h2>
-  <p>Accepted friends can reuse each other’s factual research. Personal wines are shared separately.</p>
+  <p className="settings-intro">Accepted friends can reuse each other’s factual research. Personal wines are shared separately.</p>
 {resourceStatus(['friends','requests','code'])}
   <h3>Friend requests{requests.incoming.length?` (${requests.incoming.length})`:''}</h3>
-  <button disabled={busy} onClick={()=>void run(async()=>{},'Friend requests refreshed.')}>Refresh requests</button>
   {loaded.requests&&!requests.incoming.length&&<p>No incoming requests.</p>}
   {requests.incoming.map(item=><article key={item.id} aria-label={`Friend request from ${item.display_name}`}>
    <p>{item.display_name} wants to be your friend.</p><div className="friend-actions">
@@ -98,7 +97,7 @@ export function AccountPage(){
     <button disabled={busy} onClick={()=>void run(()=>apiJson(`/api/friends/requests/${item.id}`,'DELETE'),'Friend request declined.')}>Decline {item.display_name}</button>
    </div>
   </article>)}
-  <h3>Your friends</h3>{loaded.friends&&!friends.length&&<p>No friends yet. Send a request using a friend code above.</p>}
+  <h3>Your friends</h3>{loaded.friends&&!friends.length&&<p>No friends yet. Send a request using a friend code below.</p>}
   <ul className="settings-friends">{friends.map(friend=><li key={friend.id}><strong>{friend.display_name}</strong> <label><input type="checkbox" checked={Boolean(friend.defaultShare)} disabled={busy} onChange={event=>void run(()=>setDefaultFriendShare(friend.id,event.target.checked),event.target.checked?`New wines will be tagged with ${friend.display_name} by default.`:`Default tagging for ${friend.display_name} is off.`)}/> Share new wines by default</label><details><summary>Sharing options</summary> {account?.role==='owner'&&<><button disabled={busy} aria-label={`Share all existing wines with ${friend.display_name}`} onClick={()=>{if(confirm(`Share every wine already in your Journal with ${friend.display_name}?\n\nThis does not change default tagging for future wines. There is currently no bulk undo; reversing this requires untagging this friend from wines individually.`))void shareExisting(friend)}}>Share all existing wines</button>{shareNotice?.friendId===friend.id&&<small role="status"> {shareNotice.message}</small>}</>} <button disabled={busy} onClick={()=>void run(()=>apiJson(`/api/friends/${friend.id}`,'DELETE'),'Friend removed.')}>Remove friend</button></details></li>)}</ul>
   <form onSubmit={e=>{e.preventDefault();void run(async()=>{await apiJson('/api/friends/requests','POST',{code});setCode('')},'Friend request sent. You’ll become friends when they accept.')}}>
    <fieldset><legend>Add a friend</legend>
@@ -117,13 +116,13 @@ export function AccountPage(){
 </details>
     </section>
     <section hidden={section!=='usage'} aria-label="AI usage settings">
-     <h2>AI access</h2>{resourceStatus(['access','usage'])}
+     {resourceStatus(['access','usage'])}
 {loaded.access&&<>  {account?.role==='owner'?<p><strong>Owner AI access</strong> · usage and provider cost are tracked, but member action allowances do not apply.</p>:<section aria-label="AI access">
    <p><strong>Pilot AI access</strong></p>
    <ul>{actions.map(item=><li key={item.action}><strong>{item.label}:</strong> {item.accessMode==='included'?'Included':`${item.remaining??0} of ${item.limit} free successful runs available this week${item.granted?` (${item.granted} extra granted)`:''}${item.pending?` · ${item.pending} in progress`:''}`}</li>)}</ul>
    <small>Only successful new provider work consumes an allowance run. Failed work and cached or friend-reused results do not. Smart Search is included separately and has its own daily usage limit.{resetsAt?` Weekly allowances reset ${new Date(resetsAt).toLocaleString()}.`:''}</small>
   </section>}
-</>}{loaded.usage&&<>  <section className="personal-usage" aria-labelledby="your-usage-title"><h2 id="your-usage-title">Your usage</h2><p>Last {usage.days} days. Provider activity is tracked even for included features.</p>
+</>}{loaded.usage&&<>  <section className="personal-usage" aria-labelledby="your-usage-title"><h3 id="your-usage-title">Your usage</h3><p>Last {usage.days} days. Provider activity is tracked even for included features.</p>
    {usage.empty?<p>No AI usage recorded yet.</p>:<><dl><div><dt>AI runs</dt><dd>{runs}</dd></div></dl><details><summary>Provider activity</summary><dl><div><dt>Provider requests</dt><dd>{providerRequests}</dd></div><div><dt>Smart Search</dt><dd>{smart?.requests??0} requests</dd></div><div><dt>Wines embedded</dt><dd>{smart?.units??0}</dd></div></dl></details></>}
   </section>
 </>}    </section>

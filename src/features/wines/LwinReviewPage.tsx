@@ -35,7 +35,7 @@ export function LwinReviewPage(){
  const back={to:`/admin/lwin-review${params.size?`?${params}`:''}`,label:'Needs review'};
  if(!owner)return <p>Owner access required.</p>;
  return <section className="lwin-review-page">
-  <PageHeader eyebrow="Owner controls" title="Needs review" subtitle="Review LWIN differences one wine at a time." stats={page?[`${page.total} wines remaining`]:[]} actions={<Link to="/admin?section=maintenance">Owner controls</Link>}/>
+  <PageHeader eyebrow="Owner controls" title="Needs review" subtitle="Review LWIN differences one wine at a time." stats={page?.total?[`${page.total} wines remaining`]:[]} actions={<Link to="/admin?section=maintenance">Owner controls</Link>}/>
 
   <div className="lwin-review-toolbar"><button disabled={loading||busy} onClick={()=>void load().catch(e=>setError(e.message))}>Refresh list</button>{cursor&&<Link to="/admin/lwin-review">Back to first wines</Link>}</div>
   {notice&&<p role="status">{notice}</p>}{error&&<p role="alert">{error}</p>}

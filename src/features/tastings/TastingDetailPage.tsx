@@ -169,6 +169,6 @@ export function TastingDetailPage(){
       :<p className="tasting-empty">{open?'No wines yet. Every wine you log while this is open joins it.':'No wines in this tasting. Add them from the journal.'}</p>}
 
     <TastingDocuments tastingId={id} documents={documents} onChange={setDocuments}/>
-    {!editing&&<div className="settings-session"><button type="button" className="danger" onClick={()=>void removeTasting()} disabled={busy}>Delete tasting</button></div>}
+    {!editing&&<div className="page-danger-zone"><button type="button" className="secondary-danger" onClick={()=>void removeTasting()} disabled={busy}>Delete tasting</button></div>}
   </article>;
 }

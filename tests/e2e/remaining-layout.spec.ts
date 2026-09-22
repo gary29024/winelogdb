@@ -116,3 +116,46 @@ test('owner controls recover from an initial load failure',async({page})=>{
  fail=false;await page.getByRole('button',{name:'Retry owner controls'}).click();
  await expect(page.getByRole('button',{name:'Create member invitation'})).toBeVisible();
 });
+
+test('owner budgets and review-count navigation stay contained',async({page})=>{
+ await mock(page);
+ await page.route('**/api/admin/overview',route=>route.fulfill({json:{...overview,actionPolicies:[{action:'recognition',label:'Scan wine',accessMode:'allowance',weeklyLimit:5}]}}));
+ await page.route('**/api/admin/rollout/status',route=>route.fulfill({json:{lwinCurrent:{total:500,automatic:260,manual:0,identityConflicts:240,fieldUpdates:0,needsReview:240,withoutLwin:0,optedOut:0},storage:{state:'not_started',objects:0},research:{state:'not_started',wines:{processed:0,total:0},producers:{processed:0,total:0}},lwin:{state:'not_started',total:0},lwinValidation:{state:'not_started',total:0,reviewItems:[]},lwinAi:{state:'not_started',total:0}}}));
+ await page.goto('/admin?section=access');
+ await expect(page.getByLabel('Total storage (bytes; 0 = unlimited)',{exact:true})).toHaveValue('8589934592');
+ await expect(page.getByRole('button',{name:'Maintenance 240',exact:true})).toBeVisible();
+ await fits(page);
+ const overflow=await page.locator('.section-navigation button').evaluateAll(buttons=>buttons.flatMap(button=>{
+  const bounds=button.getBoundingClientRect();return [...button.children].filter(child=>{const box=child.getBoundingClientRect();return box.left<bounds.left||box.right>bounds.right||box.top<bounds.top||box.bottom>bounds.bottom}).map(child=>child.textContent);
+ }));
+ expect(overflow).toEqual([]);
+ const checkNumbers=async()=>expect(await page.locator('.settings-content input[type=number]:visible').evaluateAll(inputs=>inputs.filter(input=>{
+  const box=input.getBoundingClientRect(),label=input.closest('label')!.getBoundingClientRect(),style=getComputedStyle(input);
+  const canvas=document.createElement('canvas'),context=canvas.getContext('2d')!;context.font=style.font;
+  const textWidth=context.measureText((input as HTMLInputElement).value).width;
+  return box.left<label.left||box.right>label.right||box.width>175||input.clientWidth-parseFloat(style.paddingLeft)-parseFloat(style.paddingRight)<textWidth+18;
+ }).map(input=>input.closest('label')!.textContent))).toEqual([]);
+ await checkNumbers();
+ await page.getByRole('button',{name:'Members',exact:true}).click();
+ await expect(page.getByLabel('Extra successful runs this week')).toBeVisible();
+ await fits(page);await checkNumbers();
+});
+
+for(const total of [36,50,0]){
+ test(`Journal recovers a stale page offset with ${total} wines remaining`,async({page})=>{
+  await mock(page);
+  const expectedOffset=total===50?36:0,requested:number[]=[];
+  await page.route('**/api/journal?**',route=>{
+   const offset=Number(new URL(route.request().url()).searchParams.get('offset'));
+   requested.push(offset);
+   return route.fulfill({json:{items:total>0&&offset===expectedOffset?[wine]:[],total,nextOffset:null}});
+  });
+  await page.goto('/journal?offset=72&country=France');
+  await expect(page).toHaveURL(url=>url.searchParams.get('country')==='France'&&Number(url.searchParams.get('offset'))===expectedOffset);
+  if(total){await expect(page.locator('.journal-card')).toHaveCount(1);await expect(page.getByRole('heading',{name:'Your journal is empty'})).toHaveCount(0)}
+  else await expect(page.getByRole('heading',{name:'No matching wines'})).toBeVisible();
+  expect(requested).toContain(72);await expect.poll(()=>requested).toContain(expectedOffset);
+  await expect(page.getByRole('navigation',{name:'Journal pages'})).toHaveCount(total>36?1:0);
+  if(total>36)await expect(page.getByRole('spinbutton',{name:'Journal page number'})).toHaveValue('2');
+ });
+}

@@ -15,11 +15,11 @@ function Probe(){
   return <b data-testid="search">{location.search}</b>;
 }
 
-async function openJournal(at:string){
+async function openJournal(at:string,total=0){
   requested=[];
   vi.stubGlobal('fetch',vi.fn(async(url:string)=>{
     requested.push(String(url));
-    return new Response(JSON.stringify({items:[],nextOffset:null,total:0}),{status:200,headers:{'content-type':'application/json'}});
+    return new Response(JSON.stringify({items:[],nextOffset:null,total}),{status:200,headers:{'content-type':'application/json'}});
   }));
   vi.resetModules();
   const {LibraryPage}=await import('../../src/features/wines/LibraryPage');
@@ -62,7 +62,7 @@ describe('Journal filter memory',()=>{
 
   it('restores them when you come back to a bare journal link',async()=>{
     window.sessionStorage.setItem(KEY,'country=France&style=red&offset=36');
-    await openJournal('/journal');
+    await openJournal('/journal',72);
     expect(search()).toBe('?country=France&style=red&offset=36');
   });
 
@@ -79,7 +79,7 @@ describe('Journal filter memory',()=>{
     // The search input receives the restored query directly from the URL, so it
     // must not emit a second commit that clears the restored offset.
     window.sessionStorage.setItem(KEY,'query=Dujac&offset=36');
-    await openJournal('/journal');
+    await openJournal('/journal',72);
     await settled(()=>search().includes('offset=36'));
     expect(search()).toContain('offset=36');
     expect(search()).toContain('query=Dujac');
