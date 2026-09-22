@@ -1,3 +1,4 @@
+import { PageHeader } from '../../components/PageHeader';
 import { useEffect,useMemo,useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getJourneyData,type GrapeStat,type JourneyData,type RegionStat,type StyleStat } from './api';
@@ -68,9 +69,10 @@ export function InsightsPage(){
   const widestBand=Math.max(1,...(drinkingAge?.bands.map(band=>band.wines)??[1]));
 
   return <section className="journey-page insights-page">
-    <div className="hero compact journey-hero"><p className="eyebrow">INSIGHTS</p><h1>Learn your palate.</h1><p>Turn your tasting history into patterns you can use when choosing what to drink or buy next.</p></div>
+    <PageHeader title="Insights" subtitle="Turn your tasting history into patterns you can use when choosing what to drink or buy next."/>
 
-    <div className="journey-stat-grid">
+    <nav className="page-jump-links" aria-label="Insight sections"><a href="#insight-overview">Overview</a><a href="#insight-preferences">Preferences</a><a href="#insight-history">History</a></nav>
+    <section id="insight-overview" aria-label="Overview"><div className="journey-stat-grid">
       <article><strong>{summary.totalWines}</strong><span>Wines logged</span></article>
       <article><strong>{summary.favorites}</strong><span>Favorites</span></article>
       <article><strong>{discovery?`${discovery.percent}%`:'—'}</strong><span>Recent bottles new</span></article>
@@ -108,6 +110,7 @@ export function InsightsPage(){
       </section>
     </div>
 
+    </section><section id="insight-preferences" aria-label="Preferences">
     <section className="journey-card"><div className="journey-section-heading"><div><p className="section-label">What earns a heart</p><h2>Your favorites, by the numbers</h2></div><span>{summary.favorites}</span></div>
       {summary.favorites?<>
         <div className="favorite-columns">
@@ -118,33 +121,6 @@ export function InsightsPage(){
         <p className="journey-muted">Ranked by how often you favorite one, not how often you drink one. Anything with fewer than three logged wines is left out.</p>
       </>:<p className="journey-muted">Tap the heart on a wine you would buy again. It takes one tap and it is the signal WineLog leans on hardest.</p>}
     </section>
-
-    <div className="journey-two-column">
-      <section className="journey-card"><div className="journey-section-heading"><div><p className="section-label">Rhythm</p><h2>Your tasting year</h2></div>{cadence.streak>1&&<span>{cadence.streak}-month run</span>}</div>
-        {cadence.months.length?<>
-          <div className="cadence-chart" role="img" aria-label={cadence.months.map(month=>`${monthName(month.month)}: ${month.wines}`).join(', ')}>
-            {cadence.months.map(month=><span className="cadence-bar" key={month.month} title={`${monthName(month.month)}: ${month.wines} wine${month.wines===1?'':'s'}`}>
-              <b>{month.wines}</b>
-              <span className="cadence-track"><span style={{height:`${Math.round(month.wines/busiestMonthBar*100)}%`}}/></span>
-              <small>{month.label}</small>
-            </span>)}
-          </div>
-          <p className="journey-muted">{cadence.busiest
-            ?`${cadence.perMonth.toFixed(1)} wines a month on average · busiest was ${monthName(cadence.busiest.month)} with ${cadence.busiest.wines}.`
-            :'No tastings dated in the last year.'}</p>
-        </>:<p className="journey-muted">Tasting dates build this chart.</p>}
-      </section>
-
-      <section className="journey-card"><div className="journey-section-heading"><div><p className="section-label">Cellar age</p><h2>When you open them</h2></div>{drinkingAge&&<span>{drinkingAge.wines}</span>}</div>
-        {drinkingAge?<>
-          <p className="age-headline"><strong>{drinkingAge.median} years</strong><span>median age at opening · middle half {drinkingAge.typicalFrom}–{drinkingAge.typicalTo} years</span></p>
-          <div className="age-bands">{drinkingAge.bands.map(band=><article key={band.label}>
-            <span className="age-band-bar" aria-hidden="true"><span style={{height:`${Math.round(band.wines/widestBand*100)}%`}}/></span>
-            <small>{band.label}</small><b>{band.wines}</b>
-          </article>)}</div>
-        </>:<p className="journey-muted">Vintages and tasting dates together show how long your bottles wait.</p>}
-      </section>
-    </div>
 
     {cruMix.length>0&&<section className="journey-card"><div className="journey-section-heading"><div><p className="section-label">Cru level</p><h2>How high you drink</h2></div><span>{cruMix.reduce((total,tier)=>total+tier.wines,0)}</span></div>
       <div className="cru-mix">{cruMix.map(tier=><article className={`cru-tier cru-tier-${tier.key}`} key={tier.key}>
@@ -181,9 +157,7 @@ export function InsightsPage(){
       {data.styles.length?<div className="insight-rank-list">{[...data.styles].sort((a,b)=>(b.averageRating??-1)-(a.averageRating??-1)||b.wines-a.wines).map((item,index)=><Link to={journalHref({style:item.style})} key={item.style}><span className="rank-number">{index+1}</span><div><strong className="capitalize">{item.style}</strong><small>{item.wines} wines · {item.ratedWines} rated</small></div><b>{rating(item.averageRating)}</b></Link>)}</div>:<p className="journey-muted">Style insights appear once wines have been identified.</p>}
     </section>}
 
-    <section className="journey-card"><div className="journey-section-heading"><div><p className="section-label">Over time</p><h2>Your tasting history by year</h2></div></div>
-      <div className="year-insight-grid">{data.years.map(item=><article key={item.year}><strong>{item.year}</strong><span>{item.wines} wines</span>{withRatings&&item.ratedWines>0&&<small>{rating(item.averageRating)} average rating</small>}</article>)}</div>
-    </section>
+
 
     <section className="journey-card"><div className="journey-section-heading"><div><p className="section-label">Price</p><h2>What you have recorded</h2></div><span>{summary.pricedWines}</span></div>
       {data.currencies.length?<div className="currency-grid">{data.currencies.map(item=><article key={item.currency}><div><strong>{item.currency}</strong><span>{item.wines} priced wines</span></div><div><b>{money(item.currency,item.averagePrice)}</b><small>{withRatings&&item.averageRating!=null?`${rating(item.averageRating)} avg rating`:`${item.wines} logged`}</small></div></article>)}</div>:<p className="journey-muted">Record purchase or tasting prices to see separate summaries for each currency. WineLog does not mix currencies into a misleading value score.</p>}
@@ -194,5 +168,37 @@ export function InsightsPage(){
     {(!withRatings||!withStructure)&&<p className="insights-gate-note">
       {[!withRatings?'rating':'',!withStructure?'structure':''].filter(Boolean).join(' and ')} insights stay hidden until they cover more of your journal — everything above works without them.
     </p>}
+    </section><section id="insight-history" aria-label="History">
+    <section className="journey-card"><div className="journey-section-heading"><div><p className="section-label">Over time</p><h2>Your tasting history by year</h2></div></div>
+      <div className="year-insight-grid">{data.years.map(item=><article key={item.year}><strong>{item.year}</strong><span>{item.wines} wines</span>{withRatings&&item.ratedWines>0&&<small>{rating(item.averageRating)} average rating</small>}</article>)}</div>
+    </section>
+    <div className="journey-two-column">
+      <section className="journey-card"><div className="journey-section-heading"><div><p className="section-label">Rhythm</p><h2>Your tasting year</h2></div>{cadence.streak>1&&<span>{cadence.streak}-month run</span>}</div>
+        {cadence.months.length?<>
+          <div className="cadence-chart" role="img" aria-label={cadence.months.map(month=>`${monthName(month.month)}: ${month.wines}`).join(', ')}>
+            {cadence.months.map(month=><span className="cadence-bar" key={month.month} title={`${monthName(month.month)}: ${month.wines} wine${month.wines===1?'':'s'}`}>
+              <b>{month.wines}</b>
+              <span className="cadence-track"><span style={{height:`${Math.round(month.wines/busiestMonthBar*100)}%`}}/></span>
+              <small>{month.label}</small>
+            </span>)}
+          </div>
+          <p className="journey-muted">{cadence.busiest
+            ?`${cadence.perMonth.toFixed(1)} wines a month on average · busiest was ${monthName(cadence.busiest.month)} with ${cadence.busiest.wines}.`
+            :'No tastings dated in the last year.'}</p>
+        </>:<p className="journey-muted">Tasting dates build this chart.</p>}
+      </section>
+
+      <section className="journey-card"><div className="journey-section-heading"><div><p className="section-label">Cellar age</p><h2>When you open them</h2></div>{drinkingAge&&<span>{drinkingAge.wines}</span>}</div>
+        {drinkingAge?<>
+          <p className="age-headline"><strong>{drinkingAge.median} years</strong><span>median age at opening · middle half {drinkingAge.typicalFrom}–{drinkingAge.typicalTo} years</span></p>
+          <div className="age-bands">{drinkingAge.bands.map(band=><article key={band.label}>
+            <span className="age-band-bar" aria-hidden="true"><span style={{height:`${Math.round(band.wines/widestBand*100)}%`}}/></span>
+            <small>{band.label}</small><b>{band.wines}</b>
+          </article>)}</div>
+        </>:<p className="journey-muted">Vintages and tasting dates together show how long your bottles wait.</p>}
+      </section>
+    </div>
+
+    </section>
   </section>;
 }

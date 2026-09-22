@@ -1,3 +1,4 @@
+import { PageHeader } from '../../components/PageHeader';
 import { useEffect,useState } from 'react';
 import { Link } from 'react-router-dom';
 import { listProducers } from './api';
@@ -21,13 +22,9 @@ export function ResearchCampaignPage(){
 
   return <section className="producer-page research-campaign-page">
     <Link className="back-pill" to="/producers">← Producer library</Link>
-    <div className="hero compact">
-      <p className="eyebrow">PRODUCERS</p>
-      <h1>Batch Deep Search.</h1>
-      <p>Research producers that have never been researched, a few at a time, in the background. The run keeps going when you close WineLog, and what it costs is shown before anything is queued.</p>
-    </div>
+    <PageHeader title="Batch Deep Search" subtitle="Research producers in the background. Review the cost before starting."/>
     {loading?<p>Loading producers…</p>:<ResearchCampaignPanel unresearchedHint={unresearched} onFinished={()=>{void load();setFinished(count=>count+1)}}/>}
     {!loading&&unresearched===0&&<p className="research-campaign-none">Every producer in the library has been researched. New producers appear here as you add wines.</p>}
-    <ResearchCampaignHistory refreshKey={finished}/>
+    <section className="research-history-section"><h2>Research history</h2><ResearchCampaignHistory refreshKey={finished}/></section>
   </section>;
 }

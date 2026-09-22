@@ -21,7 +21,9 @@
   .page-header-body>h1{font-size:1.72rem}
   .page-header-subtitle{font-size:.92rem}
   .page-header-stats{font-size:.8rem}
-  .page-header-actions>*{flex:1 1 auto;text-align:center}
+  /* Buttons share the row; a bare text link is not stretched across it, which
+     centred it and cost the fixed left edge this header exists to give. */
+  .page-header-actions>button,.page-header-actions>.button{flex:1 1 auto;text-align:center}
 }
 
 /* The Pro has less room beside the photograph than the Pro Max. Scale the

@@ -1,3 +1,4 @@
+import { PageHeader } from '../../components/PageHeader';
 import { useEffect,useMemo,useRef,useState } from 'react';
 import { Link,useParams } from 'react-router-dom';
 import { prepareRecognitionImageWithinBytes } from '../uploads/prepareImage';
@@ -369,8 +370,7 @@ export function TastingSheetPage(){
   const working=Boolean(busy);
   return <article className="tasting-sheet-page">
     <Link className="back-pill" to={`/tastings/${id}`}>← {tasting?.name??'Tasting'}</Link>
-    <div className="hero compact"><p className="eyebrow">WINE LIST</p><h1>Read the printed list.</h1>
-      <p>Photograph each page of the handout and it is saved to this tasting straight away. Reading it is a separate press: WineLog then reads the wines and their prices, matches them against this tasting, and lets you fill the prices in and add anything missing. Each page read is one AI call, so a long list costs more than a short one — and a list you only wanted to keep costs nothing.</p></div>
+    <PageHeader title="Read a wine list" subtitle="Photograph each page of the handout and it is saved to this tasting straight away. Reading it is a separate press: WineLog then reads the wines and their prices, matches them against this tasting, and lets you fill the prices in and add anything missing. Each page read is one AI call, so a long list costs more than a short one — and a list you only wanted to keep costs nothing."/>
 
     <div className="tasting-sheet-actions">
       <button type="button" className={staged.length?'':'primary'} disabled={working} onClick={()=>input.current?.click()}>{busy==='save'?'Saving…':'Photograph the list'}</button>

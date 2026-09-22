@@ -1,3 +1,4 @@
+import { PageHeader } from '../../components/PageHeader';
 import { apiFetch } from '../../lib/auth/client';
 import { useEffect,useMemo,useRef,useState } from 'react';
 import { useNavigate,useSearchParams } from 'react-router-dom';
@@ -145,7 +146,7 @@ export function GroupScanPage(){
   },[active,photo]);
 
   return <section className="group-scan-page">
-    <div className="hero compact"><p className="eyebrow">GROUP PHOTO</p><h1>One photo, several wines.</h1><p>Use this when a single table or lineup photo contains multiple different wines. WineLog detects distinct bottles, creates a crop for each wine, and keeps every result separate for review and logging.</p></div>
+    <PageHeader title="Group photo" subtitle="Use this when a single table or lineup photo contains multiple different wines. WineLog detects distinct bottles, creates a crop for each wine, and keeps every result separate for review and logging."/>
     {!photo?<div className="photo-source-card group-photo-source"><div className="scan-mark"><AppIcon kind="group-photo"/></div><h2>Choose one group photo</h2><p>Best results come from a clear lineup where labels are reasonably visible. Duplicate bottles of the same wine are logged once.</p><button type="button" className="scan-button primary" onClick={()=>input.current?.click()}>Choose group photo</button><input ref={input} className="visually-hidden" type="file" accept="image/*" onChange={e=>void choose(e.target.files?.[0])}/></div>:
     <><div className="group-photo-stage"><img src={photo.preview} alt="Group of wines to identify"/>{items.filter(item=>!item.removed&&item.recognition).map((item,index)=>{const box=item.recognition!.boundingBox;return <button key={item.key} type="button" className={`group-photo-box${item.savedId?' saved':''}${activeKey===item.key?' active':''}`} style={{left:`${box.xMin/10}%`,top:`${box.yMin/10}%`,width:`${(box.xMax-box.xMin)/10}%`,height:`${(box.yMax-box.yMin)/10}%`}} onClick={()=>setActiveKey(item.key)} aria-label={`Review detected wine ${index+1}`}><span>{index+1}</span></button>})}</div><div className="group-scan-actions"><button type="button" className="wide-action primary" disabled={identifying} onClick={()=>void identify()}>{identifying?'Identifying distinct wines…':items.length?'Run recognition again':'Identify wines in this photo'}</button><button type="button" className="rescan-link" disabled={identifying} onClick={()=>input.current?.click()}>Choose different group photo</button><input ref={input} className="visually-hidden" type="file" accept="image/*" onChange={e=>void choose(e.target.files?.[0])}/></div></>}
     {notice&&<p className="producer-notice" role="status">{notice}</p>}{error&&<p className="scan-error" role="alert">{error}</p>}

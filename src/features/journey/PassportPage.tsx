@@ -1,3 +1,4 @@
+import { PageIntro } from '../../components/PageIntro';
 import { useEffect,useMemo,useState } from 'react';
 import { Link } from 'react-router-dom';
 import { WineImage } from '../wines/WineImage';
@@ -70,10 +71,7 @@ export function PassportPage(){
   ];
 
   return <section className="journey-page passport-page">
-    <header className="passport-intro">
-      <h1>Passport</h1>
-      <p>Your tasting journey at a glance.</p>
-    </header>
+    <PageIntro title="Passport" description="Your tasting journey at a glance."/>
 
     <section className="passport-summary-card" aria-labelledby="passport-summary-heading">
       <div className="passport-summary-copy">
@@ -86,8 +84,17 @@ export function PassportPage(){
       <div className="passport-map-wrap"><PassportMap countries={data.countries} regions={data.regions}/></div>
     </section>
 
+      <section className="passport-mini-card">
+        <div className="passport-card-heading"><div><h2>Recent wines</h2></div><Link to="/journal">View all</Link></div>
+        {recent.length?<div className="passport-recent-list">{recent.slice(0,2).map(item=><Link className={item.shared?'shared':undefined} to={item.shared?`/shared/${item.id}`:`/wines/${item.id}`} state={linkFrom({to:'/',label:'Passport'})} key={item.id}>
+          <span className="passport-recent-image">{item.shared&&item.imageUrl?<img src={item.imageUrl} alt={`${item.producer} ${item.wineName}`} loading="lazy" decoding="async"/>:item.imageId?<WineImage imageId={item.imageId} alt={`${item.producer} ${item.wineName}`}/>:<span className="passport-recent-fallback">W</span>}</span>
+          <div className="passport-recent-copy"><strong>{item.wineName}{item.vintage?` ${item.vintage}`:''}</strong><small>{[item.producer,item.region||item.country].filter(Boolean).join(' · ')}</small>{item.shared&&<span className="visually-hidden">{item.sharedBy?`Shared by ${item.sharedBy}`:'Shared with you'}</span>}</div>
+          <span className="passport-recent-date">{tastingDate(item)}</span>
+        </Link>)}</div>:<p className="passport-empty-mini">Your latest tastings will appear here.</p>}
+      </section>
+
     <section className="passport-progress-card">
-      <div className="passport-progress-ring" role="img" aria-label={`${progressPercent}% progress to the next wine milestone`} style={{background:`conic-gradient(#10182d ${progressPercent}%,#e8ecf2 0)`}}><span>{progressPercent}%</span></div>
+      <div className="passport-progress-ring" role="img" aria-label={`${progressPercent}% progress to the next wine milestone`} style={{background:`conic-gradient(var(--ink) ${progressPercent}%,var(--sunken) 0)`}}><span>{progressPercent}%</span></div>
       <div className="passport-progress-copy">
         <p className="section-label">Your wine journey</p>
         <h2>{remaining?`${remaining} wines to your next stamp`:'Next stamp unlocked'}</h2>
@@ -137,14 +144,7 @@ export function PassportPage(){
     </div>
 
     <div className="passport-pair-grid passport-secondary-grid">
-      <section className="passport-mini-card">
-        <div className="passport-card-heading"><div><h2>Recent tastings</h2></div><Link to="/journal">View all</Link></div>
-        {recent.length?<div className="passport-recent-list">{recent.slice(0,2).map(item=><Link className={item.shared?'shared':undefined} to={item.shared?`/shared/${item.id}`:`/wines/${item.id}`} state={linkFrom({to:'/',label:'Passport'})} key={item.id}>
-          <span className="passport-recent-image">{item.shared&&item.imageUrl?<img src={item.imageUrl} alt={`${item.producer} ${item.wineName}`} loading="lazy" decoding="async"/>:item.imageId?<WineImage imageId={item.imageId} alt={`${item.producer} ${item.wineName}`}/>:<span className="passport-recent-fallback">W</span>}</span>
-          <div className="passport-recent-copy"><strong>{item.wineName}{item.vintage?` ${item.vintage}`:''}</strong><small>{[item.producer,item.region||item.country].filter(Boolean).join(' · ')}</small>{item.shared&&<span className="visually-hidden">{item.sharedBy?`Shared by ${item.sharedBy}`:'Shared with you'}</span>}</div>
-          <span className="passport-recent-date">{tastingDate(item)}</span>
-        </Link>)}</div>:<p className="passport-empty-mini">Your latest tastings will appear here.</p>}
-      </section>
+
 
       <section className="passport-mini-card" id="passport-achievements">
         <div className="passport-card-heading"><div><h2>Journey stamps</h2></div><Link to="/achievements">View all</Link></div>

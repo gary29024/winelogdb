@@ -11,7 +11,7 @@ test('owner LWIN panel separates live review counts from run history',async({pag
   if(path==='/api/admin/rollout/status')return route.fulfill({json:status});
   return route.fulfill({json:{items:[],total:0}});
  });
- await page.goto('/admin');
+ await page.goto('/admin?section=maintenance');
  const summary=page.getByRole('region',{name:'Current LWIN status'});
  await expect(summary).toContainText('3 manually confirmed links');
  await expect(summary.getByRole('link',{name:'Needs review now: 2'})).toBeVisible();

@@ -62,7 +62,7 @@ export function JournalSearchInput({value,resetSeq}:Props){
   }
 
   return <div className="journal-search-control">
-    <label className="search">Search<input aria-label="Search wines" type="search" value={draft}
+    <label className="search"><span className="visually-hidden">Search</span><input aria-label="Search wines" type="search" value={draft}
       // Keyboard suggestions can replace text without React detecting a change.
       // Read the DOM value on every input event, including insertReplacementText.
       onInput={event=>change(event.currentTarget.value)}
