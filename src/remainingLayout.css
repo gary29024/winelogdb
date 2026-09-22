@@ -1,6 +1,6 @@
 /* Page families share spacing; identity heroes and Journal cards stay distinct. */
 main>section>.page-header,main>article>.page-header{margin-bottom:var(--s5)}
-.journal-heading{padding:var(--s2) 0 var(--s4)}
+
 .journal-filter-bar{flex-wrap:wrap}.journal-filter-chip{max-width:100%;overflow-wrap:anywhere}
 .journal-viewbar{gap:var(--s3);flex-wrap:wrap}.journal-view-actions,.journal-selection-actions{flex-wrap:wrap}
 .journal-selection-actions{justify-content:flex-start;gap:var(--s2)}

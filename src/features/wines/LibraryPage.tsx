@@ -1,5 +1,5 @@
 import { useModalFocus } from '../../components/useModalFocus';
-import { PageHeader } from '../../components/PageHeader';
+import { PageIntro } from '../../components/PageIntro';
 import { accountStorageKey } from '../../lib/auth/client';
 import { useEffect,useMemo,useRef,useState } from 'react';
 import { pourFamily } from '../../lib/wine/pourFamily';
@@ -302,7 +302,7 @@ export function LibraryPage(){
   if(restoring)return <Navigate to={{pathname:'/journal',search:restoreFilters}} replace/>;
 
   return <section className="journal-page">
-    <PageHeader title="Journal" className="journal-heading"/>
+    <PageIntro title="Journal" description="Search by bottle, place or tasting and keep every drinking experience together."/>
     {/* The tastings list has no way in from anywhere else: it is reachable only
         from a tasting's own page, which itself needs one to be open, and the
         mobile nav is full at five tabs. A tasting is a grouping of journal

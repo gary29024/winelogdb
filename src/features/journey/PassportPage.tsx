@@ -1,3 +1,4 @@
+import { PageIntro } from '../../components/PageIntro';
 import { useEffect,useMemo,useState } from 'react';
 import { Link } from 'react-router-dom';
 import { WineImage } from '../wines/WineImage';
@@ -70,10 +71,7 @@ export function PassportPage(){
   ];
 
   return <section className="journey-page passport-page">
-    <header className="passport-intro">
-      <h1>Passport</h1>
-      <p>Your tasting journey at a glance.</p>
-    </header>
+    <PageIntro title="Passport" description="Your tasting journey at a glance."/>
 
     <section className="passport-summary-card" aria-labelledby="passport-summary-heading">
       <div className="passport-summary-copy">

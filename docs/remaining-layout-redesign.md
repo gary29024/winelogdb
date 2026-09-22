@@ -10,7 +10,7 @@ Owner controls use `?section=members|usage|access|maintenance`. The legacy `/adm
 
 ## Journal
 
-Grid cards remain photo, name, producer, vintage, score and favorite only. No tasting/event, venue, date or shared-by copy is added. Shared-wine color and accessible ownership labels are retained. List view retains its richer metadata. Journal and cellar share a compact header and the existing exclusive scope navigation. Active filters can be removed without opening the disclosure. Page information stays in the pagination control. No-results and empty-journal states are distinct. Batch editing traps focus, handles Escape and restores focus to the trigger.
+Grid cards remain photo, name, producer, vintage, score and favorite only. No tasting/event, venue, date or shared-by copy is added. Shared-wine color and accessible ownership labels are retained. List view retains its richer metadata. Journal uses the same title, description styling and header spacing as Passport through PageIntro, retaining its original search description. The existing exclusive Journal/cellar scope navigation remains. Active filters can be removed without opening the disclosure. Page information stays in the pagination control. No-results and empty-journal states are distinct. Batch editing traps focus, handles Escape and restores focus to the trigger.
 
 ## Other page families
 

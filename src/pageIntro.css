@@ -1,0 +1,8 @@
+.page-intro{padding:4px 0 18px}
+.page-intro h1{margin:0;font-family:'Playfair Display',serif;font-size:clamp(2.1rem,4.4vw,3rem);line-height:1;color:var(--ink)}
+.page-intro p{margin:8px 0 0;color:var(--ink-6);font-size:.96rem}
+@media(max-width:760px){
+  .page-intro{padding:2px 2px 13px}
+  .page-intro h1{font-size:2.35rem}
+  .page-intro p{margin-top:6px;font-size:.86rem}
+}
