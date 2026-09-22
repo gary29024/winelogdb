@@ -2,7 +2,7 @@
 
 Screenshots of the implemented page at a 390 × 844 mobile viewport, using a member account, sample wine data and the no-photo placeholder. The same layout applies to owner accounts and received wines. The reference has been manually confirmed, so the LWIN review controls are hidden.
 
-The mobile page uses a continuous reading surface, larger text, and space between sections, following the comfortable spacing of the supplied reference. Removing separate padded cards saves space without squeezing the text. Type/Alcohol and LWIN7/LWIN11 each share a row. Actions retain accessible touch targets and safe-area spacing.
+The mobile page restores the compact card layout, typography and spacing from commit c72632f. Type/Alcohol and LWIN7/LWIN11 each share a row. Actions retain accessible touch targets and safe-area spacing.
 
 The action row contains Favourite, Tag friends (person icon), Edit tasting, and Wine-Searcher.
 

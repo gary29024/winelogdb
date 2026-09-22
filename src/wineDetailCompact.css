@@ -1,38 +1,35 @@
-/* A continuous reading surface gives the mobile facts room without adding
-   another padded card around every section. Controls retain touch targets. */
+/* Mobile wine details use a compact reading layout. Keep controls large enough
+   to tap, and recover space from the header, card padding and fact-row gaps. */
 @media(max-width:700px){
  body:has(main .wine-detail) .topbar{height:calc(48px + var(--app-safe-top,0px))}
- main:has(.wine-detail){padding-top:8px;background:var(--paper)}
- .wine-detail>.back-pill{display:inline-flex;align-items:center;min-height:40px;margin-bottom:12px;padding:4px 0;border:0;background:transparent;font-size:.86rem}
- .wine-detail .wine-identity{padding:14px;border:0;background:var(--ground);border-radius:10px}
- .wine-detail .wine-identity .page-header{gap:14px}
- .wine-detail .wine-identity .page-header-body>h1{font-size:1.6rem;line-height:1.16}
- .wine-detail .wine-identity .page-header-body>.eyebrow{margin-bottom:6px;font-size:.72rem;letter-spacing:.06em}
- .wine-detail .wine-identity .detail-producer{margin:7px 0 0;font-size:.94rem;line-height:1.4}
- .wine-detail .wine-identity .detail-media{width:80px;gap:5px}
+ main:has(.wine-detail){padding-top:4px}
+ .wine-detail>.back-pill{display:inline-flex;align-items:center;min-height:36px;margin-bottom:4px;padding:4px 2px;border:0;background:transparent;font-size:.8rem}
+ .wine-detail .wine-identity{padding:10px;border-radius:12px}
+ .wine-detail .wine-identity .page-header{gap:10px}
+ .wine-detail .wine-identity .page-header-body>h1{font-size:1.35rem;line-height:1.12}
+ .wine-detail .wine-identity .page-header-body>.eyebrow{margin-bottom:3px;font-size:.64rem;letter-spacing:.08em}
+ .wine-detail .wine-identity .detail-producer{margin:4px 0 0;font-size:.88rem;line-height:1.3}
+ .wine-detail .wine-identity .detail-media{width:72px;gap:3px}
  .wine-detail .wine-identity .detail-bottle,
- .wine-detail .wine-identity .detail-media .detail-photo{height:108px}
+ .wine-detail .wine-identity .detail-media .detail-photo{height:96px}
  .wine-detail .wine-identity .detail-bottle,
- .wine-detail .wine-identity .detail-media .detail-photo-button{width:80px;min-height:0;border-radius:6px}
- .wine-detail .detail-photo-count{font-size:.72rem}
- .wine-detail .wine-identity>.detail-pills{margin-top:14px;gap:8px 12px}
- .wine-detail .detail-pills>span{padding:0;border:0;border-radius:0;background:transparent;font-size:.76rem;line-height:1.5}
- .wine-detail .wine-actions{grid-template-columns:44px 44px repeat(2,minmax(0,1fr));gap:8px;margin-top:12px}
+ .wine-detail .wine-identity .detail-media .detail-photo-button{width:72px;min-height:0;border-radius:8px}
+ .wine-detail .detail-photo-count{font-size:.64rem}
+ .wine-detail .wine-identity>.detail-pills{margin-top:7px;gap:4px 6px}
+ .wine-detail .detail-pills>span{padding:2px 7px;font-size:.67rem}
+ .wine-detail .wine-actions{grid-template-columns:44px 44px repeat(2,minmax(0,1fr));gap:6px;margin-top:6px}
  .wine-detail .wine-actions>button,
- .wine-detail .wine-actions>a{min-height:48px;padding:6px 4px;border-radius:8px;font-size:.78rem;line-height:1.3}
+ .wine-detail .wine-actions>a{min-height:44px;padding:5px 4px;border-radius:8px;font-size:.72rem;line-height:1.2}
  .wine-detail .detail-favorite-label,
  .wine-detail .detail-search-prefix{display:none}
  .wine-detail.shared-wine-detail .wine-actions{grid-template-columns:44px 44px minmax(0,1fr)}
- .wine-detail>.detail-section{margin-top:24px;padding:0;border:0;border-radius:0;background:transparent}
- .wine-detail .detail-section>.section-label{margin-bottom:10px;font-family:'Playfair Display',serif;font-size:1.2rem;line-height:1.3}
- .wine-detail .detail-section>.section-label::after{display:none}
- .wine-detail .section-label .provenance-chip{margin-left:auto;padding:0;border:0;background:transparent}
- .wine-detail dl.detail-facts{margin:0}
- .wine-detail dl.detail-facts>div{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);padding:7px 0;gap:12px;line-height:1.45}
- .wine-detail dl.detail-facts dt{font-size:.82rem;letter-spacing:0;text-transform:none}
- .wine-detail dl.detail-facts dd{font-size:.9rem;text-align:left}
- .wine-detail dl.detail-facts>.detail-fact-paired{display:flex;gap:4px 8px}
- .wine-detail dl.detail-facts>.detail-fact-paired dd{text-align:right}
- .wine-detail .detail-experience-empty{margin:0;line-height:1.5}
- .wine-detail .detail-section .detail-experience-notes{margin:12px 0 0;padding-top:12px;font-family:inherit;font-size:.94rem;line-height:1.55}
+ .wine-detail>.detail-section{margin-top:7px;padding:10px;border-radius:12px}
+ .wine-detail .detail-section>.section-label{margin-bottom:5px;font-size:.9rem}
+ .wine-detail .section-label .provenance-chip{padding:2px 7px}
+ .wine-detail dl.detail-facts{margin:4px 0 0}
+ .wine-detail dl.detail-facts>div{padding:3px 0;line-height:1.4}
+ .wine-detail dl.detail-facts dt{font-size:.7rem;letter-spacing:.02em}
+ .wine-detail dl.detail-facts dd{font-size:.84rem}
+ .wine-detail .detail-experience-empty{margin:4px 0 0}
+ .wine-detail .detail-section .detail-experience-notes{margin:7px 0 0;padding-top:7px;font-size:.94rem;line-height:1.4}
 }

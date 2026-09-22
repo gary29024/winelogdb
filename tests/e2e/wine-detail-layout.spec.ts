@@ -48,6 +48,9 @@ for(const role of ['owner','member'])for(const route of ['/wines/layout-wine','/
    });
    expect(contained).toBe(true);
    if(width<700){
+    const factBounds=(await facts.boundingBox())!;
+    const navBounds=(await page.getByRole('navigation',{name:'Mobile navigation'}).boundingBox())!;
+    expect(factBounds.y+factBounds.height).toBeLessThan(navBounds.y);
     const actions=await page.locator('.wine-actions>button,.wine-actions>a').evaluateAll(items=>items.map(item=>({top:item.getBoundingClientRect().top,height:item.getBoundingClientRect().height})));
     expect(new Set(actions.map(action=>action.top)).size).toBe(1);
     expect(actions.every(action=>action.height>=44)).toBe(true);
