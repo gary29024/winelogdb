@@ -19,3 +19,5 @@
    :hover behind until you touch something else. */
 .journal-scope-tabs button.active,.journal-scope-tabs button.active:hover:not(:disabled){background:var(--ink);color:var(--paper)}
 .wine-sharing-status{flex:1 0 100%;color:var(--ink-6);font-size:.72rem;text-align:center}
+.wine-actions>.detail-share-button{justify-content:center;width:44px;min-height:44px;padding:10px;border-radius:8px}
+.wine-actions>.detail-share-button .app-icon{width:20px;height:20px}

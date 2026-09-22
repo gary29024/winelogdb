@@ -7,7 +7,7 @@ import type { IdentityMatchStatus } from './referenceIdentity';
  * The single definition of what a wine detail page shows, for both the owner's
  * page and a recipient's. Adding or removing a field here changes both, which
  * is the point: the two pages drifted apart field by field until the shared one
- * was missing the denomination, the grape percentages and the As recorded line,
+ * was missing the denomination and the grape percentages,
  * none of which had ever been withheld on purpose.
  *
  * Privacy is enforced by the types rather than by remembering. A recipient is
@@ -72,15 +72,6 @@ export function blendLabels(wine:WineFacts){
  return blend.length?blend.map(part=>`${part.grape}${part.percentage!=null?` ${part.percentage}%`:''}`):grapes;
 }
 
-/**
- * What recognition first read off the label, shown only where it differs from
- * the corrected place - otherwise it is the same line printed twice.
- */
-export function asRecordedLabel(wine:WineFacts){
- const recorded=[wine.recognizedRegion,wine.recognizedAppellation].filter(Boolean).join(' / ');
- return recorded&&recorded!==[wine.region,wine.appellation].filter(Boolean).join(' / ')?recorded:null;
-}
-
 /** A reference site/parcel is useful only when the same words are not already
  * visible in the wine name or the legal place fields. */
 function additionalReferencePlace(value:string|Absent,wine:WineFacts,extra:Array<string|Absent>=[]){
@@ -99,12 +90,11 @@ export function wineFactRows(wine:WineFacts):FactRow[]{
  return present([
   ['Region',denominatedRegion],
   ['Appellation',denominatedAppellation],
-  ['As recorded',asRecordedLabel(wine)],
   ['Release',wine.releaseDesignation],
   ['Reference identity',conflict?'Conflict — stored reference details may not match this wine.':null],
   [referenceLabel('Type'),[wine.colour,wine.productSubtype??wine.productType].filter(Boolean).join(' · ')],
-  ['Grapes / blend',blendLabels(wine).join(', ')],
   ['Alcohol',wine.alcoholPercentage!=null?`${wine.alcoholPercentage}%`:null],
+  ['Grapes / blend',blendLabels(wine).join(', ')],
   [referenceLabel('LWIN site'),site],[referenceLabel('LWIN parcel'),parcel],
   [referenceLabel('LWIN7'),wine.lwin7],[referenceLabel('LWIN11'),wine.lwin11],[referenceLabel('ELID'),wine.elid]
  ]);

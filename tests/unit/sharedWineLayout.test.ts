@@ -118,10 +118,10 @@ describe('a wine detail page carries the styles it renders',()=>{
 
 describe('both wine detail pages read from one field definition',()=>{
   // The two pages drifted field by field until the shared one was missing the
-  // denomination, the grape percentages and the As recorded line. Adding or
+  // denomination and the grape percentages. Adding or
   // removing a row is now one edit that shows up on both.
   it('defines the Wine details and experience rows in a single module',()=>{
-    for(const label of ['Region','Appellation','As recorded','Grapes / blend','Alcohol'])
+    for(const label of ['Region','Appellation','Grapes / blend','Alcohol'])
       expect(fieldDefs,`Wine details should define ${label}`).toContain(`'${label}'`);
     for(const label of ['Your rating','Drinking date','Tasting / event','Venue','Location','Price'])
       expect(fieldDefs,`the experience rows should define ${label}`).toContain(`'${label}'`);

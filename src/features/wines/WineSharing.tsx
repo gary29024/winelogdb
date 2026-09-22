@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { AppIcon } from '../../components/AppIcons';
 import { FriendTagDialog } from './FriendTagDialog';
 import { getWineFriendTags,listFriendTags,setWineFriendTags,type FriendTag } from './friendTags';
 
@@ -22,7 +23,7 @@ export function WineSharing({wineId}:{wineId:string}){
   finally{setBusy(false)}
  }
  return <>
-  <button type="button" className="detail-share-button" onClick={()=>open?setOpen(false):void show()}>Tag friends</button>
+  <button type="button" className="detail-share-button" aria-label="Tag friends" title="Tag friends" aria-haspopup="dialog" onClick={()=>open?setOpen(false):void show()}><AppIcon kind="person-tag"/></button>
   <FriendTagDialog open={open} title="Tag friends" description="Choose friends who can see this wine. Wine identity, details and attached wine photos are shared; each friend keeps their own notes, rating and tasting experience." friends={friends} selected={selected} busy={busy} error={error} onSelectedChange={setSelected} onConfirm={()=>void save()} onClose={()=>setOpen(false)}/>
   {message&&<span className="wine-sharing-status" role="status">{message}</span>}
  </>;

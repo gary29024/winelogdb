@@ -8,7 +8,7 @@ async function mockWine(page:Page,structure:Record<string,string|null>|null){
   const path=new URL(route.request().url()).pathname;
   if(path.startsWith('/api/maturity'))maturityRequests.push(path);
   const data=path==='/api/me'?{user:{id:'reader',email:'reader@example.com',display_name:'Reader',role:'member',status:'active'}}
-   :path==='/api/wines/layout-wine'||path==='/api/shared/wines/layout-wine'?{...wine,tastingStructure:structure,structure}
+   :path==='/api/wines/layout-wine'||path==='/api/shared/wines/layout-wine'?{...wine,recognizedRegion:'Original scanned region',recognizedAppellation:'Original scanned appellation',tastingStructure:structure,structure}
    :path.endsWith('/research')?{runs:[]}
    :{items:[],holdings:[],total:0};
   await route.fulfill({json:data});
@@ -27,6 +27,7 @@ for(const route of ['/wines/layout-wine','/shared/layout-wine']){
    await expect(facts.getByText(value,{exact:true})).toBeVisible();
   }
   await expect(page.getByText('Official reference',{exact:true})).toHaveCount(0);
+  await expect(page.getByText('As recorded',{exact:true})).toHaveCount(0);
   await expect(page.getByText('Structure',{exact:true})).toHaveCount(0);
   await expect(page.getByText('Site / parcel',{exact:true})).toHaveCount(0);
   await expect(page.locator('.vintage-check')).toHaveCount(0);
@@ -36,11 +37,24 @@ for(const route of ['/wines/layout-wine','/shared/layout-wine']){
    await page.setViewportSize({width,height:900});
    await page.evaluate(()=>window.scrollTo(0,0));
    expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+   for(const pair of [['Type','Alcohol'],['LWIN7','LWIN11']]){
+    const boxes=await Promise.all(pair.map(label=>facts.locator('dl > div').filter({has:page.getByText(label,{exact:true})}).boundingBox()));
+    expect(boxes[0]!.y).toBe(boxes[1]!.y);
+    expect(boxes[0]!.x+boxes[0]!.width).toBeLessThan(boxes[1]!.x);
+   }
    const contained=await page.locator('.wine-identity').evaluate(card=>{
     const bounds=card.getBoundingClientRect();
     return [...card.querySelectorAll('.detail-pills>span')].every(pill=>pill.getBoundingClientRect().right<=bounds.right);
    });
    expect(contained).toBe(true);
+   if(width<700){
+    const factBounds=(await facts.boundingBox())!;
+    const navBounds=(await page.getByRole('navigation',{name:'Mobile navigation'}).boundingBox())!;
+    expect(factBounds.y+factBounds.height).toBeLessThan(navBounds.y);
+    const actions=await page.locator('.wine-actions>button,.wine-actions>a').evaluateAll(items=>items.map(item=>({top:item.getBoundingClientRect().top,height:item.getBoundingClientRect().height})));
+    expect(new Set(actions.map(action=>action.top)).size).toBe(1);
+    expect(actions.every(action=>action.height>=44)).toBe(true);
+   }
    await page.screenshot({path:testInfo.outputPath(`wine-detail-${width}.png`),fullPage:true});
   }
   expect(requests).toEqual([]);

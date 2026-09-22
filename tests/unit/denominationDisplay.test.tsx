@@ -78,16 +78,16 @@ describe('The denomination on the wine detail',()=>{
 });
 
 describe('What the label was read as, on the wine detail',()=>{
-  it('is shown only where normalisation moved something',async()=>{
+  it('omits the original scan values when they match',async()=>{
     await render(wine());
     expect(rows()['As recorded']).toBeUndefined();
   });
 
-  it('shows the pair as it arrived when the columns were re-slotted',async()=>{
-    // Region and appellation move between each other, so showing one alone
-    // would read as a mistake rather than a shift.
+  it('shows only the current place when the original scan differs',async()=>{
     await render(wine({country:'United States',region:'Napa Valley',appellation:'Oakville',
       recognizedRegion:'California',recognizedAppellation:'Oakville, Napa Valley'}));
-    expect(rows()['As recorded']).toBe('California / Oakville, Napa Valley');
+    expect(rows()['As recorded']).toBeUndefined();
+    expect(rows()['Region']).toContain('Napa Valley');
+    expect(rows()['Appellation']).toContain('Oakville');
   });
 });
