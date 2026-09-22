@@ -3,6 +3,7 @@ import { burgundyAtlasWinePlace,type BurgundyAtlasPlace } from './burgundyAtlas'
 import { PLACES } from './hierarchy';
 import { placeKey } from './resolve';
 import mapping from './burgundyAtlasPremierCruLinks.json';
+import appellationMapping from './burgundyAtlasAppellationLinks.json';
 
 type Wine=WineFacts&{classification?:string|null};
 const nameKey=(value:string)=>placeKey(value.replace(/œ/g,'oe').replace(/Œ/g,'OE')).replace(/\bst\b/g,'saint');
@@ -57,7 +58,7 @@ function separateVillage(text:string,group:Group){
 
 const regionNames=PLACES.filter(place=>place.id.startsWith('france/burgundy')).flatMap(place=>
   [place.name,...place.aliases].map(name=>({key:nameKey(name),id:place.id})));
-function compatibleRegion(region:string,group:Group){
+function compatibleRegion(region:string,group:{key:string;regionId:string}){
   return !region||region===group.key||regionNames.some(place=>place.key===region&&
     (group.regionId===place.id||group.regionId.startsWith(`${place.id}/`)));
 }
@@ -72,7 +73,7 @@ export function burgundyAtlasPremierCru(wine:Wine):BurgundyAtlasPlace|null{
   // The classification marker matters: several climats include village-level
   // land as well. A bare vineyard name does not establish Premier Cru status.
   if(!namesPremierCru(wine))return null;
-  if(raw.some(value=>/\bgrand\s+cru\b/.test(nameKey(value))||/[/&+]/.test(value)))return null;
+  if(raw.some(value=>/\b(?:grand\s+cru|blend|assemblage|melange|multi(?:ple)? (?:plots|parcelles|climats|vineyards))\b/.test(nameKey(value))||/[/&+]/.test(value)))return null;
   const fields=raw.map(textKey),region=textKey(wine.region??'');
   const destinations:BurgundyAtlasPlace[]=[];
   for(const group of groups){
@@ -102,8 +103,83 @@ export function burgundyAtlasPremierCru(wine:Wine):BurgundyAtlasPlace|null{
   return destinations.length===1?destinations[0]:null;
 }
 
-/** An explicit Premier Cru must never fall back to a Grand Cru namesake such
- * as La Romanée when the stored classification field is absent. */
+const appellations=appellationMapping.groups.map(group=>({...group,key:nameKey(group.appellation),
+  keys:[...new Set([group.appellation,...group.aliases].map(nameKey))]}));
+type Appellation=typeof appellations[number];
+const namedPlaces=[...new Map([
+  ...appellations.flatMap(group=>group.keys.map(key=>({key,id:null as string|null}))),
+  ...PLACES.filter(place=>place.id.startsWith('france/burgundy/')&&place.classification)
+    .flatMap(place=>[place.name,...place.aliases].map(name=>({key:nameKey(name),id:place.id})))
+].map(place=>[place.key,place])).values()];
+function spans(text:string,key:string){
+  return [...text.matchAll(new RegExp(`(?<![a-z0-9])${key}(?![a-z0-9])`,'g'))]
+    .map(match=>({start:match.index!,end:match.index!+match[0].length}));
+}
+function namedPlaceMentions(text:string){
+  const found=namedPlaces.flatMap(place=>spans(text,place.key).map(span=>({...place,...span})));
+  // Beaune inside Savigny-lès-Beaune, or Chablis inside Petit Chablis, is not
+  // evidence for a second appellation.
+  return found.filter(match=>!found.some(other=>other.start<=match.start&&other.end>=match.end&&other.end-other.start>match.end-match.start));
+}
+
+/** Establish the appellation independently of how many plots can be matched.
+ * Failure to find one cru permits a broader link; conflicting geography does not. */
+function wineAppellation(wine:Wine,tier:'village'|'premier_cru'):Appellation|null{
+  if(wine.identityMatchStatus==='conflict'||(wine.classification&&wine.classification!==tier))return null;
+  if(wine.country?.trim()&&nameKey(wine.country)!=='france')return null;
+  const raw=placeFields(wine);
+  if(raw.some(value=>/\bgrand\s+cru\b/.test(nameKey(value))))return null;
+  const fields=raw.map(textKey),region=textKey(wine.region??'');
+  const appAnchors=appellations.flatMap(group=>group.keys.filter(key=>fields[0]===key||fields[0].startsWith(`${key} `))
+    .map(key=>({group,length:key.length}))).sort((a,b)=>b.length-a.length);
+  const recordedAppellation=appAnchors[0]?.group;
+  const candidates=appellations.filter(group=>{
+    // A stored village is authoritative even when its name is also a climat
+    // elsewhere (Blagny, for example). Do not erase it as vineyard text.
+    if(recordedAppellation&&recordedAppellation!==group)return false;
+    if(!compatibleRegion(region,group)&&!group.keys.includes(region))return false;
+    const cruGroup=groups.find(cru=>cru.key===group.key);
+    const context=fields.map(field=>{
+      if(!cruGroup)return field;
+      const villages=group.keys.flatMap(key=>spans(field,key));
+      const crus=matches(field,cruGroup).filter(cru=>!villages.some(village=>
+        village.start<=cru.start&&village.end>=cru.end&&village.end-village.start>cru.end-cru.start));
+      return remainder(field,crus);
+    });
+    const mentions=context.map(namedPlaceMentions);
+    // A subregion alone is not proof of its namesake village appellation.
+    const regionIsAppellation=group.keys.includes(region)&&(tier==='premier_cru'||
+      !PLACES.some(place=>place.tier==='subregion'&&nameKey(place.name)===region));
+    if(!regionIsAppellation&&!mentions.some(names=>names.some(place=>group.keys.includes(place.key))))return false;
+    if(mentions.some(names=>names.some(place=>!group.keys.includes(place.key)&&
+      !(place.id&&(group.regionId===place.id||group.regionId.startsWith(`${place.id}/`))))))return false;
+    // A combined appellation may name one or several plots after the village.
+    // A cru-only appellation field must be fully recognised; arbitrary text
+    // cannot override a conflicting or unrecognised stored appellation.
+    const app=context[0];
+    if(app&&!group.keys.some(key=>app===key||app.startsWith(`${key} `))&&
+      !(cruGroup&&matches(fields[0],cruGroup).length>0&&/^(?:(?:les|le|la|et|and|ou)\s*)*$/.test(app)))return false;
+    return true;
+  });
+  return candidates.length===1?candidates[0]:null;
+}
+
+function appellationLink(group:Appellation,tier:'village'|'premier_cru'):BurgundyAtlasPlace|null{
+  const path=tier==='premier_cru'?group.premierCruPath:group.villagePath;
+  if(!path)return null;
+  return {placeId:path.split('/')[2],name:`${group.appellation}${tier==='premier_cru'?' Premier Cru':''}`,
+    url:`https://burgundyatlas.com${path}`,scope:'appellation'};
+}
+
+/** Preserve the wine's tier when broadening from a named climat to its
+ * appellation. A Premier Cru never falls back to a village or Grand Cru page. */
 export function burgundyAtlasWineDetailPlace(wine:Wine):BurgundyAtlasPlace|null{
-  return namesPremierCru(wine)?burgundyAtlasPremierCru(wine):burgundyAtlasWinePlace(wine);
+  if(namesPremierCru(wine)){
+    const group=wineAppellation(wine,'premier_cru');
+    return group?(burgundyAtlasPremierCru(wine)??appellationLink(group,'premier_cru')):null;
+  }
+  const grand=burgundyAtlasWinePlace(wine);
+  if(grand)return grand;
+  const group=wineAppellation(wine,'village');
+  return group?appellationLink(group,'village'):null;
 }

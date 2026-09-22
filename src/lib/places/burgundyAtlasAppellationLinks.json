@@ -1,0 +1,320 @@
+{
+  "source": "https://burgundyatlas.com/sitemap.xml",
+  "registrySource": "https://burgundyatlas.com/burgundy/registry/place-route-shards/{shard}.json",
+  "registryVersion": "39d9597faf39e11a",
+  "verifiedAt": "2026-09-22",
+  "excludedWithoutMap": [
+    "Côte de Beaune-Villages",
+    "Pouilly-Loché premier cru",
+    "Pouilly-Vinzelles premier cru"
+  ],
+  "groups": [
+    {
+      "appellation": "Aloxe-Corton",
+      "aliases": [],
+      "regionId": "france/burgundy/cote-de-beaune",
+      "villagePath": "/place/ba_appellation_jtcezas6tyaf3zr5algtjdndva/aloxe-corton",
+      "premierCruPath": "/place/ba_appellation_rbwzwlpsgav723g3uxqww2zhsy/aloxe-corton-premier-cru"
+    },
+    {
+      "appellation": "Auxey-Duresses",
+      "aliases": [],
+      "regionId": "france/burgundy/cote-de-beaune",
+      "villagePath": "/place/ba_appellation_7v4bah6wfkrjm36eoq4wdxp3va/auxey-duresses",
+      "premierCruPath": "/place/ba_appellation_wzm75bnr5do3ychf7xphgqtroa/auxey-duresses-premier-cru"
+    },
+    {
+      "appellation": "Beaune",
+      "aliases": [],
+      "regionId": "france/burgundy/cote-de-beaune",
+      "villagePath": "/place/ba_appellation_p62xgdkeodphngkopzpgcx4pcm/beaune",
+      "premierCruPath": "/place/ba_appellation_uaw4r7x6qlqw7fx7vtab5invna/beaune-premier-cru"
+    },
+    {
+      "appellation": "Blagny",
+      "aliases": [
+        "Blagny Côte de Beaune"
+      ],
+      "regionId": "france/burgundy/cote-de-beaune",
+      "villagePath": "/place/ba_appellation_zjylycpqwcqaadji7mvwtyfeva/blagny-ou-blagny-cote-de-beaune",
+      "premierCruPath": "/place/ba_appellation_jqsiyz67aernvfrqnajdne2rry/blagny-premier-cru"
+    },
+    {
+      "appellation": "Bouzeron",
+      "aliases": [],
+      "regionId": "france/burgundy/cote-chalonnaise",
+      "villagePath": "/place/ba_appellation_ac2epfx447ta2h7qzdhwikxddq/bouzeron",
+      "premierCruPath": null
+    },
+    {
+      "appellation": "Chablis",
+      "aliases": [],
+      "regionId": "france/burgundy/chablis",
+      "villagePath": "/place/ba_appellation_33amrcftvaqshlf5ygajsusyrm/chablis",
+      "premierCruPath": "/place/ba_appellation_cicui7m4g4teqmvx2nmg6jsj2m/chablis-premier-cru"
+    },
+    {
+      "appellation": "Chambolle-Musigny",
+      "aliases": [],
+      "regionId": "france/burgundy/cote-de-nuits",
+      "villagePath": "/place/ba_appellation_iqtrttnnp5aewcwqdejrhmjr44/chambolle-musigny",
+      "premierCruPath": "/place/ba_appellation_tcq3z2akko6nesrsxdbh3icr6q/chambolle-musigny-premier-cru"
+    },
+    {
+      "appellation": "Chassagne-Montrachet",
+      "aliases": [],
+      "regionId": "france/burgundy/cote-de-beaune",
+      "villagePath": "/place/ba_appellation_pbpeiigxkz5layi2g2azse3jne/chassagne-montrachet",
+      "premierCruPath": "/place/ba_appellation_dve5z2vugzcurxr3qvusdfusgq/chassagne-montrachet-premier-cru"
+    },
+    {
+      "appellation": "Chorey-lès-Beaune",
+      "aliases": [],
+      "regionId": "france/burgundy/cote-de-beaune",
+      "villagePath": "/place/ba_appellation_fzzqzt2vmwytap7omrsdjq2o2q/chorey-les-beaune",
+      "premierCruPath": null
+    },
+    {
+      "appellation": "Côte de Beaune",
+      "aliases": [],
+      "regionId": "france/burgundy/cote-de-beaune",
+      "villagePath": "/place/ba_appellation_sm6led4zpt3y6q5qg244g7mxvm/cote-de-beaune",
+      "premierCruPath": null
+    },
+    {
+      "appellation": "Côte de Nuits-Villages",
+      "aliases": [
+        "Vins fins de la Côte de Nuits"
+      ],
+      "regionId": "france/burgundy/cote-de-nuits",
+      "villagePath": "/place/ba_appellation_ekstqbuecjupxxrioudee7pwve/cote-de-nuits-villages-ou-vins-fins-de-la-cote-de-nuits",
+      "premierCruPath": null
+    },
+    {
+      "appellation": "Fixin",
+      "aliases": [],
+      "regionId": "france/burgundy/cote-de-nuits",
+      "villagePath": "/place/ba_appellation_vedujb3kx6cnjkf5fmfjbixebi/fixin",
+      "premierCruPath": "/place/ba_appellation_avzny2xpkdum7qfc35a7y45kiu/fixin-premier-cru"
+    },
+    {
+      "appellation": "Gevrey-Chambertin",
+      "aliases": [],
+      "regionId": "france/burgundy/cote-de-nuits",
+      "villagePath": "/place/ba_appellation_g64uidz2xxcyp5snihqquz27ua/gevrey-chambertin",
+      "premierCruPath": "/place/ba_appellation_pctpbfatq7n4udqrooirhplpxq/gevrey-chambertin-premier-cru"
+    },
+    {
+      "appellation": "Givry",
+      "aliases": [],
+      "regionId": "france/burgundy/cote-chalonnaise",
+      "villagePath": "/place/ba_appellation_ugchyp6n6ih7zcpqotgriyvjlu/givry",
+      "premierCruPath": "/place/ba_appellation_qo5hzlkltn3t5qsaq75ztz3v4q/givry-premier-cru"
+    },
+    {
+      "appellation": "Irancy",
+      "aliases": [],
+      "regionId": "france/burgundy",
+      "villagePath": "/place/ba_appellation_ivovbs6qaylo2wjdenlkav6uym/irancy",
+      "premierCruPath": null
+    },
+    {
+      "appellation": "Ladoix",
+      "aliases": [],
+      "regionId": "france/burgundy/cote-de-beaune",
+      "villagePath": "/place/ba_appellation_wvqcdx6z6a6iegimgueqdeppzu/ladoix",
+      "premierCruPath": "/place/ba_appellation_nt52jmfkctcdeu6q5i575utxsa/ladoix-premier-cru"
+    },
+    {
+      "appellation": "Maranges",
+      "aliases": [],
+      "regionId": "france/burgundy/cote-de-beaune",
+      "villagePath": "/place/ba_appellation_cywf3u7s7z3s6w44wodjavur7q/maranges",
+      "premierCruPath": "/place/ba_appellation_kui6mcdbil3z7e5pxatudbjgay/maranges-premier-cru"
+    },
+    {
+      "appellation": "Marsannay",
+      "aliases": [],
+      "regionId": "france/burgundy/cote-de-nuits",
+      "villagePath": "/place/ba_appellation_ouujcxbtbvrt6f4tdyl54mq54a/marsannay",
+      "premierCruPath": null
+    },
+    {
+      "appellation": "Mercurey",
+      "aliases": [],
+      "regionId": "france/burgundy/cote-chalonnaise",
+      "villagePath": "/place/ba_appellation_tz4sirocyjghxf6stxshgebw6y/mercurey",
+      "premierCruPath": "/place/ba_appellation_yrawi56iiu7bvy6jwfgl777u4i/mercurey-premier-cru"
+    },
+    {
+      "appellation": "Meursault",
+      "aliases": [],
+      "regionId": "france/burgundy/cote-de-beaune",
+      "villagePath": "/place/ba_appellation_i5feobqdq556kq7i5jynpzeelu/meursault",
+      "premierCruPath": "/place/ba_appellation_d2dm6decs2nnkxhviyfpoa4bla/meursault-premier-cru"
+    },
+    {
+      "appellation": "Montagny",
+      "aliases": [],
+      "regionId": "france/burgundy/cote-chalonnaise",
+      "villagePath": "/place/ba_appellation_o2eo3g34c5x7qnl2milobx2mym/montagny",
+      "premierCruPath": "/place/ba_appellation_ykhen3vblrhnvimknchdo6ksr4/montagny-premier-cru"
+    },
+    {
+      "appellation": "Monthélie",
+      "aliases": [],
+      "regionId": "france/burgundy/cote-de-beaune",
+      "villagePath": "/place/ba_appellation_joogdez7xviqhby4lshuo4dyrq/monthelie",
+      "premierCruPath": "/place/ba_appellation_q46vflcisldngzwktdatqrjjm4/monthelie-premier-cru"
+    },
+    {
+      "appellation": "Morey-Saint-Denis",
+      "aliases": [],
+      "regionId": "france/burgundy/cote-de-nuits",
+      "villagePath": "/place/ba_appellation_lpi7b5jmy4k3ohwt4n6pssl6pu/morey-saint-denis",
+      "premierCruPath": "/place/ba_appellation_t67q32kaao7ffvypotfh46xvce/morey-saint-denis-premier-cru"
+    },
+    {
+      "appellation": "Nuits-Saint-Georges",
+      "aliases": [],
+      "regionId": "france/burgundy/cote-de-nuits",
+      "villagePath": "/place/ba_appellation_dgeggy2yaufujjzhwm7adp4chq/nuits-saint-georges",
+      "premierCruPath": "/place/ba_appellation_jitr7b2jphxs4mhm4yaz6anace/nuits-saint-georges-premier-cru"
+    },
+    {
+      "appellation": "Pernand-Vergelesses",
+      "aliases": [],
+      "regionId": "france/burgundy/cote-de-beaune",
+      "villagePath": "/place/ba_appellation_xq5v3fwuroxo4rgs7kujhin5j4/pernand-vergelesses",
+      "premierCruPath": "/place/ba_appellation_tvgnh7ep2b3fur5o43udah5ciu/pernand-vergelesses-premier-cru"
+    },
+    {
+      "appellation": "Petit Chablis",
+      "aliases": [],
+      "regionId": "france/burgundy/chablis",
+      "villagePath": "/place/ba_appellation_qm43vwdxg6tlf4jvcqudnhr5ee/petit-chablis",
+      "premierCruPath": null
+    },
+    {
+      "appellation": "Pommard",
+      "aliases": [],
+      "regionId": "france/burgundy/cote-de-beaune",
+      "villagePath": "/place/ba_appellation_i3w2x547p4qiny55xo2ldkzbje/pommard",
+      "premierCruPath": "/place/ba_appellation_fbusv7lhs5hskss2a6k7x7mamm/pommard-premier-cru"
+    },
+    {
+      "appellation": "Pouilly-Fuissé",
+      "aliases": [],
+      "regionId": "france/burgundy/maconnais",
+      "villagePath": "/place/ba_appellation_ewe5hu4k6w4evuarogztpltqqq/pouilly-fuisse",
+      "premierCruPath": "/place/ba_appellation_uo5jf6gmve2kwvghvhgvymfwye/pouilly-fuisse-premier-cru"
+    },
+    {
+      "appellation": "Pouilly-Loché",
+      "aliases": [],
+      "regionId": "france/burgundy/maconnais",
+      "villagePath": "/place/ba_appellation_u3mdeerpu4nxxcecqbb6rb7kmi/pouilly-loche",
+      "premierCruPath": null
+    },
+    {
+      "appellation": "Pouilly-Vinzelles",
+      "aliases": [],
+      "regionId": "france/burgundy/maconnais",
+      "villagePath": "/place/ba_appellation_zaznyrhxva6vi7u5bcqnqjgqci/pouilly-vinzelles",
+      "premierCruPath": null
+    },
+    {
+      "appellation": "Puligny-Montrachet",
+      "aliases": [],
+      "regionId": "france/burgundy/cote-de-beaune",
+      "villagePath": "/place/ba_appellation_zagvrbxthplsuiwysrx2ti2dmm/puligny-montrachet",
+      "premierCruPath": "/place/ba_appellation_3vzif7mzdtdm5x5fll262mllru/puligny-montrachet-premier-cru"
+    },
+    {
+      "appellation": "Rully",
+      "aliases": [],
+      "regionId": "france/burgundy/cote-chalonnaise",
+      "villagePath": "/place/ba_appellation_onwhfoe7abcxucrcimx7b4adki/rully",
+      "premierCruPath": "/place/ba_appellation_kdl4rx7cklifnqrazci46zj5om/rully-premier-cru"
+    },
+    {
+      "appellation": "Saint-Aubin",
+      "aliases": [],
+      "regionId": "france/burgundy/cote-de-beaune",
+      "villagePath": "/place/ba_appellation_s43cs5wo6z2pxgqedp4wb4mh3y/saint-aubin",
+      "premierCruPath": "/place/ba_appellation_ejyrnu66efmwvcymsxlwe2amwy/saint-aubin-premier-cru"
+    },
+    {
+      "appellation": "Saint-Bris",
+      "aliases": [],
+      "regionId": "france/burgundy",
+      "villagePath": "/place/ba_appellation_52sjvqpcdkwjoppu2lrjp244ly/saint-bris",
+      "premierCruPath": null
+    },
+    {
+      "appellation": "Saint-Romain",
+      "aliases": [],
+      "regionId": "france/burgundy/cote-de-beaune",
+      "villagePath": "/place/ba_appellation_nrx2jvxsyus7lymrg4i5emkvwa/saint-romain",
+      "premierCruPath": null
+    },
+    {
+      "appellation": "Saint-Véran",
+      "aliases": [],
+      "regionId": "france/burgundy/maconnais",
+      "villagePath": "/place/ba_appellation_w4yuydglwhl5ufuz63hjyx4bey/saint-veran",
+      "premierCruPath": null
+    },
+    {
+      "appellation": "Santenay",
+      "aliases": [],
+      "regionId": "france/burgundy/cote-de-beaune",
+      "villagePath": "/place/ba_appellation_vcft4pcq4vb5fi3yztrxb6rfxa/santenay",
+      "premierCruPath": "/place/ba_appellation_pl72cxv52kxxajpvkr3tv7tbom/santenay-premier-cru"
+    },
+    {
+      "appellation": "Savigny-lès-Beaune",
+      "aliases": [],
+      "regionId": "france/burgundy/cote-de-beaune",
+      "villagePath": "/place/ba_appellation_b6s25rtthb2gsgcfoce2ehimlq/savigny-les-beaune",
+      "premierCruPath": "/place/ba_appellation_mzkvn4ecm6gdtzshtzxsumaqii/savigny-les-beaune-premier-cru"
+    },
+    {
+      "appellation": "Vézelay",
+      "aliases": [
+        "Bourgogne Vézelay"
+      ],
+      "regionId": "france/burgundy",
+      "villagePath": "/place/ba_appellation_36e3hb2ykd4nuis5t26cg77zfa/vezelay",
+      "premierCruPath": null
+    },
+    {
+      "appellation": "Viré-Clessé",
+      "aliases": [],
+      "regionId": "france/burgundy/maconnais",
+      "villagePath": "/place/ba_appellation_swtawhfo5i54rq56wmklsmnz7y/vire-clesse",
+      "premierCruPath": null
+    },
+    {
+      "appellation": "Volnay",
+      "aliases": [],
+      "regionId": "france/burgundy/cote-de-beaune",
+      "villagePath": "/place/ba_appellation_tu73bflmdxemjgq35t3wacdhr4/volnay",
+      "premierCruPath": "/place/ba_appellation_ddo4swcxigspawdflopzev4zny/volnay-premier-cru"
+    },
+    {
+      "appellation": "Vosne-Romanée",
+      "aliases": [],
+      "regionId": "france/burgundy/cote-de-nuits",
+      "villagePath": "/place/ba_appellation_vop7vouenmomswwyo3lq2ljld4/vosne-romanee",
+      "premierCruPath": "/place/ba_appellation_p5vdcllx5r3igkvsmelyz6g2wi/vosne-romanee-premier-cru"
+    },
+    {
+      "appellation": "Vougeot",
+      "aliases": [],
+      "regionId": "france/burgundy/cote-de-nuits",
+      "villagePath": "/place/ba_appellation_b6v4bg4xbonhjg4jdqfuulqe64/vougeot",
+      "premierCruPath": "/place/ba_appellation_67ra33eh4jum6i6lehmiv62d4i/vougeot-premier-cru"
+    }
+  ]
+}

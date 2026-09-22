@@ -2,7 +2,7 @@ import { PLACES } from './hierarchy';
 import { placeKey } from './resolve';
 import mapping from './burgundyAtlasLinks.json';
 
-export type BurgundyAtlasPlace={placeId:string;name:string;url:string};
+export type BurgundyAtlasPlace={placeId:string;name:string;url:string;scope?:'appellation'};
 type WinePlace={country?:string|null;region?:string|null;appellation?:string|null;classification?:string|null;identityMatchStatus?:string|null};
 
 const burgundyPlaces=PLACES.filter(place=>place.id.startsWith('france/burgundy'));

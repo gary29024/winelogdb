@@ -28,6 +28,9 @@ describe('Premier Cru wine-detail destinations',()=>{
       const result=burgundyAtlasPremierCru({country:'France',region:'Bourgogne',
         appellation:group.appellation,classification:'premier_cru',wineName:`${group.appellation} Premier Cru ${entry.name}`});
       expect(result?.url,`${group.appellation}: ${entry.name}`).toBe(`https://burgundyatlas.com${entry.path}`);
+      expect(burgundyAtlasWineDetailPlace({country:'France',region:'Bourgogne',appellation:group.appellation,
+        classification:'premier_cru',wineName:`${group.appellation} Premier Cru ${entry.name}`})?.url,
+      `${group.appellation}: ${entry.name} must retain its specific destination`).toBe(result?.url);
       expect(result?.placeId).toMatch(/^ba_designation_[a-z2-7]+$/);
       destinations.add(result!.url);
     }
