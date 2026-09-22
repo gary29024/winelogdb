@@ -44,7 +44,7 @@
   --danger:#a52b3e;
   /* Shared bottles are part of your journal, but not copies you own. A quiet
      lilac surface marks that provenance without spending card space on a label. */
-  --shared-wash:#f6f2fa;--shared-line:#ddd3e9;--shared-ink:#654a7c;
+  --shared-wash:#f6f2fa;--shared-line:#ddd3e9;
 
   /* What is in the glass, for the tile shown when a wine has no photo yet.
      Keyed to the pour rather than to status, so sparkling is not green. */
@@ -113,7 +113,7 @@
     --danger:#b3243c;
     /* Shared journal cards need a clearly distinct lilac surface in dark mode;
        the previous wash sat almost on top of --paper and was easy to miss. */
-    --shared-wash:#30243f;--shared-line:#73588c;--shared-ink:#e1c8f3;
+    --shared-wash:#30243f;--shared-line:#73588c;
 
     --pour:#212a3b;--pour-ink:#8f9bb1;
     --pour-red:#2c171d;--pour-red-ink:#f0909f;
@@ -251,7 +251,8 @@ button:disabled{opacity:.55;cursor:default}
 @media(max-width:700px){
  .wine-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
  .wine-actions>button,.wine-actions>a{display:flex;align-items:center;justify-content:center;min-height:44px;width:100%;padding:9px 8px;text-align:center}
- .wine-actions>.wine-sharing-status,.wine-actions>.shared-favorite-error{grid-column:1/-1}
+ /* wineSharing.css places .wine-sharing-status, beside the button that emits it. */
+ .wine-actions>.shared-favorite-error{grid-column:1/-1;order:1}
  .journal-filters .filter-pills:not([hidden]){display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;overflow:visible;padding-right:0;scroll-snap-type:none;-webkit-mask-image:none;mask-image:none}
  .journal-filters .filter-pills label{min-width:0}
  .journal-filters .filter-pills input,.journal-filters .filter-pills select{min-width:0;width:100%;min-height:44px;font-size:16px}

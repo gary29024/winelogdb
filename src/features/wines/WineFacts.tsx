@@ -8,6 +8,7 @@ import { burgundyAtlasWinePlace } from '../../lib/places/burgundyAtlas';
 // how a shared Village pill shipped with no styling at all; owning the import
 // here makes that impossible for any page that renders the pill.
 import '../../wineClassification.css';
+import '../../wineFacts.css';
 
 const classificationLabel:Record<string,string>={grand_cru:'Grand Cru',premier_cru:'Premier Cru',village:'Village'};
 
@@ -32,19 +33,23 @@ export function WineFactPills({wine,extra}:{wine:PillWine;extra?:ReactNode}){
 }
 
 /** A ruled label/value table. One shape for Wine details and Your experience. */
-export function FactList({rows,className}:{rows:FactRow[];className?:string}){
+export function FactList({rows,className,pairedLabels=[]}:{rows:FactRow[];className?:string;pairedLabels?:string[]}){
  if(!rows.length)return null;
  return <dl className={`detail-facts${className?` ${className}`:''}`}>
-  {rows.map(([label,value])=><div key={label}><dt>{label}</dt><dd>{value}</dd></div>)}
+  {rows.map(([label,value])=><div key={label} className={pairedLabels.includes(label)?`detail-fact-paired${pairedLabels.indexOf(label)%2===0?' detail-fact-paired-start':''}`:undefined}><dt>{label}</dt><dd>{value}</dd></div>)}
  </dl>;
 }
 
 /** The Wine details panel. `extra` appends rows only one viewer is entitled to. */
-export function WineDetailsSection({wine,extra=[]}:{wine:Facts;extra?:FactRow[]}){
- const rows=[...wineFactRows(wine),...extra];
+export function WineDetailsSection({wine,extra=[],canEditReference=false}:{wine:Facts;extra?:FactRow[];canEditReference?:boolean}){
+ const rows=[...wineFactRows(wine,{canEditReference}),...extra];
  if(!rows.length)return null;
+ const pairedLabels=wine.identityMatchStatus==='conflict'?[]:[['Type','Alcohol'],['LWIN7','LWIN11']].flatMap(pair=>{
+  const labels=pair.map(name=>rows.find(([label])=>label===name)?.[0]);
+  return labels.every((label):label is string=>Boolean(label))?labels:[];
+ });
  return <section className="detail-section">
   <SectionLabel>Wine details</SectionLabel>
-  <FactList rows={rows}/>
+  <FactList rows={rows} className="detail-wine-facts" pairedLabels={pairedLabels}/>
  </section>;
 }

@@ -4,6 +4,7 @@ import { apiJson } from '../../lib/auth/api';
 import type { SharedWine,SharedWineExperience } from '../../lib/wine/shared';
 import { setWineFavorite } from './api';
 import { AppIcon } from '../../components/AppIcons';
+import { WineSharing } from './WineSharing';
 import { backTargetFromState,JOURNAL_BACK } from './backTarget';
 import { formatDate } from '../../lib/wine/detailFormat';
 import { experienceRows as buildExperienceRows } from '../../lib/wine/detailFields';
@@ -15,6 +16,7 @@ import { structureValueLabel,type TastingStructure,type TastingStructureKey } fr
 import { DeepSources,ResearchText } from './ResearchPresentation';
 import { readOpenDeepFields,researchSections,type DeepField,writeOpenDeepFields } from './researchSections';
 import '../../favorites.css';
+import '../../wineDetailCompact.css';
 // The structure grid and the research panel are wine-detail markup whose rules
 // live in these two sheets. The classification pill's sheet is owned by the
 // component that renders it, so no page can forget it again.
@@ -117,12 +119,12 @@ export function SharedWinesPage(){
    <WineFactPills wine={wine}/>
   </section>
   <div className="wine-actions">
-   <button type="button" className={`detail-favorite-button${wine.favorite?' active':''}`} aria-pressed={wine.favorite} onClick={()=>void toggleFavorite()} disabled={favoriteBusy}><span className="heart" aria-hidden="true"><AppIcon kind={wine.favorite?'heart-filled':'heart'}/></span>{wine.favorite?'Favorite':'Add to favorites'}</button>
-   <a className="detail-wine-searcher-link" href={wineSearcherUrl(wine.producer,wine.wineName,wine.vintage)} target="_blank" rel="noopener noreferrer">Find on Wine-Searcher <span aria-hidden="true">↗</span></a>
+   <button type="button" className={`detail-favorite-button${wine.favorite?' active':''}`} aria-label={wine.favorite?'Favorite':'Add to favorites'} aria-pressed={wine.favorite} onClick={()=>void toggleFavorite()} disabled={favoriteBusy}><span className="heart" aria-hidden="true"><AppIcon kind={wine.favorite?'heart-filled':'heart'}/></span><span className="detail-favorite-label">{wine.favorite?'Favorite':'Add to favorites'}</span></button>
+   <WineSharing key={wine.id} ownerName={wine.ownerName}/>
+   <a className="detail-wine-searcher-link" aria-label="Find on Wine-Searcher" href={wineSearcherUrl(wine.producer,wine.wineName,wine.vintage)} target="_blank" rel="noopener noreferrer"><span><span className="detail-search-prefix">Find on </span>Wine-Searcher</span><span aria-hidden="true">↗</span></a>
    {favoriteError&&<span className="shared-favorite-error" role="alert">{favoriteError}</span>}
   </div>
   <SparklingDetailsCard details={wine.sparklingDetails}/>
-  <div className="shared-source-indicator" role="note"><span>Shared by</span><strong>{wine.ownerName}</strong></div>
   <section className="detail-section experience-panel">
    <SectionLabel origin="yours">Your experience</SectionLabel>
    {!editing?<><FactList rows={experienceRows} className="shared-experience-summary"/>{structureItems.length>0&&<><p className="shared-structure-label">Structure</p><dl className="tasting-structure-summary">{structureItems.map(([label,value])=><div key={label}><dt>{label}</dt><dd>{structureValueLabel[value]??value}</dd></div>)}</dl></>}{wine.tastingNotes?<blockquote className="detail-experience-notes">{wine.tastingNotes}</blockquote>:null}<button type="button" className="shared-experience-edit" onClick={edit}>{hasExperience?'Edit your experience':'Add your experience'}</button></>:<form className="shared-experience-form" onSubmit={saveExperience}>
@@ -165,7 +167,9 @@ export function SharedWinesPage(){
     </section>})}
    </div>}
    <DeepSources sources={wine.deepSearch.sources}/>
-   <small>Research shared by {wine.ownerName} · updated {formatDate(wine.deepSearch.researchedAt.slice(0,10))}</small>
+   {/* Not this reader's research: it came with the bottle, so the line says so
+       without naming the sharer, who is one press away on the tag button. */}
+   <small>Shared research · updated {formatDate(wine.deepSearch.researchedAt.slice(0,10))}</small>
   </section>}
   {selectedPhoto&&<div className="image-lightbox" role="dialog" aria-modal="true" aria-label="Wine photo viewer" onClick={()=>setSelectedPhoto(undefined)}><button type="button" className="lightbox-close" aria-label="Close photo" onClick={()=>setSelectedPhoto(undefined)}>×</button><div className="lightbox-image-wrap" onClick={e=>e.stopPropagation()}><img src={selectedPhoto} alt={`${wine.producer} ${wine.wineName} full-resolution shared photo`} className="lightbox-image"/></div></div>}
  </article>;
