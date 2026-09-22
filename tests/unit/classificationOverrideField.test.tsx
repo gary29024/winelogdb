@@ -123,6 +123,21 @@ describe('The member view of the same fields',()=>{
     expect((host!.querySelector('input[name="appellation"]') as HTMLInputElement).value).toBe(base.appellation);
     expect(appellationHelp()).toBe('');
     expect(helper()).toBe('');
+    // The tier a saved wine is filed under is not an owner diagnostic.
+    expect(node().querySelector('option')?.textContent).toBe('Premier Cru (automatic)');
+  });
+});
+
+describe('A wine that has only just been identified',()=>{
+  // The tier read off a label is a guess until the wine is saved, so naming one
+  // on the identification screen would pass a reading off as a filing.
+  for(const role of ['owner','member'] as const)it(`leaves the automatic option plain for an ${role}`,async()=>{
+    await openForm({...base,classification:'premier_cru',recognitionStatus:'review'},role);
     expect(node().querySelector('option')?.textContent).toBe('Auto - read from label');
+  });
+
+  it('names the tier again once the same wine is edited afterwards',async()=>{
+    await openForm({...base,classification:'premier_cru',recognitionStatus:'complete'});
+    expect(node().querySelector('option')?.textContent).toBe('Premier Cru (automatic)');
   });
 });

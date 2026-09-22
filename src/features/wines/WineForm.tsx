@@ -343,6 +343,12 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,enable
   // is what tells you a "Chianti Classico" you typed was understood as a DOCG.
   // Members are spared it — they are not the ones curating the catalogue.
   const denomination=memberView?null:resolvePlace({country:country||null,region:region||null,appellation}).denomination;
+  // A wine still under review has been read off a label, not filed: any tier it
+  // carries is a reading, so the automatic option stays plain until the wine has
+  // been saved once. On a wine that exists — edited later, or opened from the
+  // cellar — naming the tier is the only way to see what it is filed as, and
+  // that is as true for a member as for an owner.
+  const identifiedNotYetSaved=initial?.recognitionStatus==='review';
   function applyLwin(values:Partial<LwinEditValues>){
     if(values.producer!==undefined)setProducer(values.producer);
     if(values.wineName!==undefined)setWineName(values.wineName);
@@ -387,7 +393,7 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,enable
     <div className="wine-compact-row two"><label>Country<input name="country" value={country} onChange={e=>setCountry(e.target.value)}/></label><label>Region<input name="region" value={region} onChange={e=>setRegion(e.target.value)}/></label></div>
     <div className="wine-compact-row appellation-row"><label>Appellation<input name="appellation" value={appellation} onChange={e=>setAppellation(e.target.value)}/>{!memberView&&<small className="wine-field-help">{denomination?`Recognized as a ${denomination}; no need to type it.`:'The denomination is read from the name, so leave DOC / DOCG / AVA off — but keep IGT or IGP, which tells a zone apart from the region it shares a name with.'}</small>}</label>
       <label>Cru level<select name="classificationOverride" value={cruOverride} onChange={e=>setCruOverride(e.target.value)}>
-        <option value="">{!memberView&&classification?`${classificationLabel(classification)} (automatic)`:'Auto - read from label'}</option>
+        <option value="">{classification&&!identifiedNotYetSaved?`${classificationLabel(classification)} (automatic)`:'Auto - read from label'}</option>
         <option value="grand_cru">Grand Cru</option>
         <option value="premier_cru">Premier Cru</option>
         <option value="village">Village</option>

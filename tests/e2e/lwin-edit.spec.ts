@@ -140,8 +140,9 @@ test('members see the catalogue facts without the matching panel or its controls
  await expect(page.locator('.wine-enriched-details')).toContainText('Côte de Beaune');
  await expect(page.locator('#lwin-match')).toHaveCount(0);
  await expect(page.getByRole('button',{name:/Refresh match|Reject match|Use LWIN/})).toHaveCount(0);
- // The simplified view drops the owner diagnostics from the fields as well.
- await expect(page.locator('select[name=classificationOverride] option:checked')).toHaveText('Auto - read from label');
+ // The simplified view drops the owner diagnostics, but the tier a saved wine
+ // is filed under is not a diagnostic: a member editing it sees it too.
+ await expect(page.locator('select[name=classificationOverride] option:checked')).toHaveText('Premier Cru (automatic)');
  await expect(page.locator('.wine-compact-row.appellation-row small')).toHaveCount(0);
 });
 
