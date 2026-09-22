@@ -9,10 +9,13 @@ globalThis.IS_REACT_ACT_ENVIRONMENT=true;
 
 let root:Root|null=null,host:HTMLDivElement|null=null,saved:Record<string,unknown>|null=null;
 
-async function openForm(initial:Record<string,unknown>){
+async function openForm(initial:Record<string,unknown>,role?:'owner'|'member'){
   saved=null;
-  vi.stubGlobal('fetch',vi.fn(async()=>new Response(JSON.stringify({producers:[],cuvees:[]}),{status:200,headers:{'content-type':'application/json'}})));
+  vi.stubGlobal('fetch',vi.fn(async(url:string)=>String(url).endsWith('/api/me')&&role
+    ?new Response(JSON.stringify({user:{id:role,email:`${role}@example.com`,display_name:role,role,status:'active'}}),{status:200,headers:{'content-type':'application/json'}})
+    :new Response(JSON.stringify({producers:[],cuvees:[]}),{status:200,headers:{'content-type':'application/json'}})));
   vi.resetModules();
+  if(role){const {bootstrapAccount}=await import('../../src/lib/auth/client');await bootstrapAccount()}
   const {WineForm}=await import('../../src/features/wines/WineForm');
   host=document.createElement('div');
   document.body.appendChild(host);
@@ -50,14 +53,16 @@ describe('Setting the cru tier by hand',()=>{
     // The derived tier does not preselect the field: the select records intent,
     // not the current answer, or every wine would look hand-set.
     expect(select().value).toBe('');
-    expect(helper()).toBe('');
-    expect(node().querySelector('option')?.textContent).toBe('Auto - read from label');
+    expect(helper()).toContain('Read from the appellation');
+    // The automatic option names the tier it derived, or the field would give
+    // no way to tell what the wine is currently filed as.
+    expect(node().querySelector('option')?.textContent).toBe('Village (automatic)');
   });
 
   it('preselects a tier that was set by hand',async()=>{
     await openForm({...base,classification:'premier_cru',classificationOverride:'premier_cru'});
     expect(select().value).toBe('premier_cru');
-    expect(helper()).toBe('');
+    expect(helper()).toContain('will not change it');
   });
 
   it('submits the chosen tier',async()=>{
@@ -86,10 +91,38 @@ describe('Setting the cru tier by hand',()=>{
   });
 });
 
-describe('Appellation presentation',()=>{
-  it('keeps the appellation without the confusing optional-field caption',async()=>{
+describe('Reading the denomination back in the form',()=>{
+  it('names the denomination the appellation resolves to',async()=>{
+    // The question the helper answers: was "Chianti Classico" understood as the
+    // DOCG, given the form will not let the term be typed into the field.
+    await openForm({producer:'Fontodi',wineName:'Filetta',country:'Italy',region:'Tuscany',appellation:'Chianti Classico'});
+    expect(appellationHelp()).toContain('DOCG');
+  });
+
+  it('says where the term goes when nothing has resolved yet',async()=>{
+    await openForm({producer:'x',wineName:'y',country:'',region:'',appellation:''});
+    expect(appellationHelp()).toContain('leave DOC / DOCG / AVA off');
+  });
+
+  it('follows what is being typed, not what was saved',async()=>{
     await openForm(base);
+    expect(appellationHelp()).toContain('AOC');
+    await act(async()=>{
+      const field=host!.querySelector('input[name="appellation"]') as HTMLInputElement;
+      const setter=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value')!.set!;
+      setter.call(field,'Barolo');
+      field.dispatchEvent(new Event('input',{bubbles:true}));
+    });
+    expect(appellationHelp()).toContain('DOCG');
+  });
+});
+
+describe('The member view of the same fields',()=>{
+  it('keeps the fields and drops the catalogue diagnostics',async()=>{
+    await openForm({...base,classification:'premier_cru'},'member');
     expect((host!.querySelector('input[name="appellation"]') as HTMLInputElement).value).toBe(base.appellation);
     expect(appellationHelp()).toBe('');
+    expect(helper()).toBe('');
+    expect(node().querySelector('option')?.textContent).toBe('Auto - read from label');
   });
 });
