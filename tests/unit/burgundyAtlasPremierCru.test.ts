@@ -22,9 +22,10 @@ describe('Premier Cru wine-detail destinations',()=>{
     ])expect(burgundyAtlasPremierCru({...wine,...fields})?.url,JSON.stringify(fields)).toBe(cazetiers);
   });
 
-  it('resolves every published mapped record using its complete village and cru name',()=>{
-    const destinations=new Set<string>();
-    for(const group of mapping.groups)for(const entry of group.entries){
+  // Keep full coverage, but give each appellation its own assertion budget and
+  // failure name rather than resolving all 630 plots in one timed test on CI.
+  it.each(mapping.groups)('resolves every mapped plot in $appellation without broadening it',group=>{
+    for(const entry of group.entries){
       const result=burgundyAtlasPremierCru({country:'France',region:'Bourgogne',
         appellation:group.appellation,classification:'premier_cru',wineName:`${group.appellation} Premier Cru ${entry.name}`});
       expect(result?.url,`${group.appellation}: ${entry.name}`).toBe(`https://burgundyatlas.com${entry.path}`);
@@ -32,9 +33,13 @@ describe('Premier Cru wine-detail destinations',()=>{
         classification:'premier_cru',wineName:`${group.appellation} Premier Cru ${entry.name}`})?.url,
       `${group.appellation}: ${entry.name} must retain its specific destination`).toBe(result?.url);
       expect(result?.placeId).toMatch(/^ba_designation_[a-z2-7]+$/);
-      destinations.add(result!.url);
     }
-    expect(destinations.size).toBe(630);
+  });
+
+  it('keeps the complete mapped inventory without duplicate destinations',()=>{
+    const paths=mapping.groups.flatMap(group=>group.entries.map(entry=>entry.path));
+    expect(paths).toHaveLength(630);
+    expect(new Set(paths).size).toBe(630);
     expect(mapping.groups).toHaveLength(29);
     expect(mapping.excludedWithoutMap).toBe(36);
   });
