@@ -75,14 +75,6 @@ describe('The denomination on the wine detail',()=>{
     expect(host!.querySelector('.detail-denomination')).toBeNull();
     expect(rows()['Appellation']).toBe('Wehlener Sonnenuhr');
   });
-});
-
-describe('What the label was read as, on the wine detail',()=>{
-  it('omits the original scan values when they match',async()=>{
-    await render(wine());
-    expect(rows()['As recorded']).toBeUndefined();
-  });
-
   it('shows only the current place when the original scan differs',async()=>{
     await render(wine({country:'United States',region:'Napa Valley',appellation:'Oakville',
       recognizedRegion:'California',recognizedAppellation:'Oakville, Napa Valley'}));

@@ -22,7 +22,7 @@
  .wine-detail .wine-actions>a{min-height:44px;padding:5px 4px;border-radius:8px;font-size:.72rem;line-height:1.2}
  .wine-detail .detail-favorite-label,
  .wine-detail .detail-search-prefix{display:none}
- .wine-detail.shared-wine-detail .wine-actions{grid-template-columns:44px minmax(0,1fr)}
+ .wine-detail.shared-wine-detail .wine-actions{grid-template-columns:44px 44px minmax(0,1fr)}
  .wine-detail>.detail-section{margin-top:7px;padding:10px;border-radius:12px}
  .wine-detail .detail-section>.section-label{margin-bottom:5px;font-size:.9rem}
  .wine-detail .section-label .provenance-chip{padding:2px 7px}

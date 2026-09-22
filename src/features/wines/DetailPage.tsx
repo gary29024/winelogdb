@@ -27,6 +27,7 @@ import { isResearchStale } from '../../lib/research/freshness';
 import { isDeepSearchComplete } from '../../lib/research/completeness';
 import '../../deepSearch.css';
 import '../../favorites.css';
+import '../../wineDetailCompact.css';
 import '../../wineFormCompact.css';
 import '../../groupSource.css';
 import '../../wineClassification.css';
@@ -166,7 +167,7 @@ export function DetailPage(){
       second fixed bar would stack on it for no gain on a desktop. */}
   <div className="wine-actions">
    <button type="button" className={`detail-favorite-button${wine.favorite?' active':''}`} aria-label={wine.favorite?'Favorite':'Add to favorites'} aria-pressed={wine.favorite} onClick={()=>void toggleFavorite()} disabled={favoriteBusy}><span className="heart" aria-hidden="true"><AppIcon kind={wine.favorite?'heart-filled':'heart'}/></span><span className="detail-favorite-label">{wine.favorite?'Favorite':'Add to favorites'}</span></button>
-   <WineSharing wineId={id}/>
+   <WineSharing key={id} wineId={id}/>
    <Link className="button primary" to={`/wines/${id}/edit`}>Edit tasting</Link>
    <a className="detail-wine-searcher-link" aria-label="Find on Wine-Searcher" href={wineSearcherUrl(wine.producer,wine.wineName,wine.vintage)} target="_blank" rel="noopener noreferrer"><span><span className="detail-search-prefix">Find on </span>Wine-Searcher</span><span aria-hidden="true">↗</span></a>
   </div>
@@ -177,7 +178,7 @@ export function DetailPage(){
   {structureItems.length>0&&<section className="detail-section structure-detail-section"><SectionLabel origin="yours">Structure</SectionLabel><dl className="tasting-structure-summary">{structureItems.map(([label,value])=><div key={label}><dt>{label}</dt><dd>{structureValueLabel[value]??value}</dd></div>)}</dl><p className="structure-section-note">Perceived structure; label ABV appears in Wine details.</p></section>}
   <WineDetailsSection wine={wine}/>
   {technicalView&&wine.identityMatchStatus!=='manual'&&<section className="detail-section"><LwinLinkEditor key={wine.id} wine={wine} disabled={Boolean(referenceBusy)} onLink={linkReference} onReject={rejectReference}/>{referenceError&&<p role="alert" className="detail-photo-error">{referenceError}</p>}</section>}
-  {technicalView&&(wine.referenceSuggestions??[]).length>0&&<section className="detail-section lwin-suggestion-panel">
+  {technicalView&&wine.identityMatchStatus!=='manual'&&(wine.referenceSuggestions??[]).length>0&&<section className="detail-section lwin-suggestion-panel">
    <p className="section-label">LWIN suggested updates</p><div className="lwin-review-toolbar"><button disabled={Boolean(referenceBusy)} onClick={()=>void recheckReference()}>Recheck LWIN</button>{technicalView&&<Link to={`/admin/lwin-review?wine=${id}`}>Review all pending wines</Link>}</div>
    <p className="lwin-suggestion-intro">WineLog found a canonical LWIN match but kept your existing populated fields unchanged. Review each difference before using the LWIN value.</p>
    <div className="lwin-suggestion-list">{(wine.referenceSuggestions??[]).map(item=><article className="lwin-suggestion-row" key={item.field}>

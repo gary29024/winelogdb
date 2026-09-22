@@ -7,8 +7,7 @@ import type { IdentityMatchStatus } from './referenceIdentity';
  * The single definition of what a wine detail page shows, for both the owner's
  * page and a recipient's. Adding or removing a field here changes both, which
  * is the point: the two pages drifted apart field by field until the shared one
- * was missing the denomination and the grape percentages,
- * none of which had ever been withheld on purpose.
+ * was missing denomination and grape percentages unintentionally.
  *
  * Privacy is enforced by the types rather than by remembering. A recipient is
  * given SharedWine, which simply has no field for anything private, so a source
@@ -91,7 +90,7 @@ export function wineFactRows(wine:WineFacts):FactRow[]{
   ['Region',denominatedRegion],
   ['Appellation',denominatedAppellation],
   ['Release',wine.releaseDesignation],
-  ['Reference identity',conflict?'Conflict — stored reference details may not match this wine.':null],
+  ['Reference identity',conflict?'Conflict — stored reference details may not match this wine.':wine.identityMatchStatus==='manual'&&!wine.lwin7&&!wine.elid?'Kept without LWIN · automatic matching off':null],
   [referenceLabel('Type'),[wine.colour,wine.productSubtype??wine.productType].filter(Boolean).join(' · ')],
   ['Alcohol',wine.alcoholPercentage!=null?`${wine.alcoholPercentage}%`:null],
   ['Grapes / blend',blendLabels(wine).join(', ')],

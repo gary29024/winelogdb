@@ -230,10 +230,6 @@ button:disabled{opacity:.55;cursor:default}
 .detail dl.detail-facts div{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:6px 0}
 .detail dl.detail-facts dt{flex:none;font-size:.68rem;letter-spacing:.07em}
 .detail dl.detail-facts dd{margin:0;min-width:0;font-size:.86rem;text-align:right;overflow-wrap:anywhere}
-.detail dl.detail-facts.detail-wine-facts{grid-template-columns:repeat(2,minmax(0,1fr));gap:0 16px}
-.detail dl.detail-wine-facts>div{grid-column:1/-1;min-width:0}
-.detail dl.detail-wine-facts>div.detail-fact-paired{grid-column:auto;flex-wrap:wrap;column-gap:8px;row-gap:0}
-.detail dl.detail-wine-facts>div.detail-fact-paired dt{flex-shrink:1}
 .detail-experience-notes{margin:14px 0 0;padding-top:13px;border-top:1px solid var(--line);font-family:'Playfair Display',serif;font-size:1.2rem;line-height:1.38}
 .detail dl.detail-facts+.detail-experience-notes{margin-top:12px}
 .detail-experience-empty{margin:0;color:var(--ink-7);font-size:.82rem}
@@ -255,7 +251,7 @@ button:disabled{opacity:.55;cursor:default}
 @media(max-width:700px){
  .wine-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
  .wine-actions>button,.wine-actions>a{display:flex;align-items:center;justify-content:center;min-height:44px;width:100%;padding:9px 8px;text-align:center}
- .wine-actions>.wine-sharing-status,.wine-actions>.shared-favorite-error{grid-column:1/-1}
+ .wine-actions>.wine-sharing-status,.wine-actions>.shared-favorite-error{grid-column:1/-1;order:1}
  .journal-filters .filter-pills:not([hidden]){display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;overflow:visible;padding-right:0;scroll-snap-type:none;-webkit-mask-image:none;mask-image:none}
  .journal-filters .filter-pills label{min-width:0}
  .journal-filters .filter-pills input,.journal-filters .filter-pills select{min-width:0;width:100%;min-height:44px;font-size:16px}

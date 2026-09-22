@@ -6,6 +6,9 @@ type Props={
   open:boolean;
   title?:string;
   description?:string;
+  relationship?:string;
+  readOnly?:boolean;
+  confirmDisabled?:boolean;
   friends:FriendTag[];
   selected:string[];
   busy?:boolean;
@@ -18,7 +21,7 @@ type Props={
 
 export function FriendTagDialog({
   open,title='Tag friends',description='Choose who can see this wine in Shared with me.',
-  friends,selected,busy=false,error='',confirmLabel='Confirm tags',
+  friends,selected,busy=false,error='',confirmLabel='Confirm tags',relationship,readOnly=false,confirmDisabled=false,
   onSelectedChange,onConfirm,onClose
 }:Props){
   const sheet=useRef<HTMLElement>(null),titleId=useId();
@@ -47,7 +50,9 @@ export function FriendTagDialog({
   };
   return <div className="friend-tag-backdrop" role="presentation" onClick={()=>{if(!busy)onClose()}}>
     <section ref={sheet} tabIndex={-1} className="friend-tag-dialog" role="dialog" aria-modal="true" aria-labelledby={titleId} onClick={event=>event.stopPropagation()}>
+      {relationship&&<p className="friend-tag-relationship">{relationship}</p>}
       <header className="friend-tag-heading"><div><p className="eyebrow">FRIENDS</p><h2 id={titleId}>{title}</h2></div><button type="button" className="friend-tag-close" aria-label="Close" disabled={busy} onClick={onClose}>×</button></header>
+      {!readOnly&&<>
       <p className="friend-tag-description">{description}</p>
       {friends.length?<div className="friend-tag-grid" role="group" aria-label="Friends">
         {friends.map(friend=>{const active=selected.includes(friend.id),atLimit=selected.length>=maxSelected&&!active;return <button type="button" key={friend.id} className={`friend-tag-chip${active?' selected':''}`} aria-pressed={active} disabled={busy||atLimit} onClick={()=>toggle(friend.id)}>
@@ -55,10 +60,11 @@ export function FriendTagDialog({
           <span>{friend.display_name}</span>
           {friend.defaultShare&&<small>Default</small>}
         </button>})}
-      </div>:<p className="friend-tag-empty">Add a friend from Account & friends first.</p>}
+      </div>:!confirmDisabled&&<p className="friend-tag-empty">Add a friend from Account & friends first.</p>}
       {friends.length>0&&<small className="friend-tag-description" role="status">{selected.length} / {maxSelected} selected</small>}
       {error&&<p className="friend-tag-error" role="alert">{error}</p>}
-      <footer className="friend-tag-actions"><button type="button" className="quiet" disabled={busy} onClick={onClose}>Cancel</button><button type="button" className="primary" disabled={busy} onClick={onConfirm}>{busy?'Saving…':confirmLabel}</button></footer>
+      <footer className="friend-tag-actions"><button type="button" className="quiet" disabled={busy} onClick={onClose}>Cancel</button><button type="button" className="primary" disabled={busy||confirmDisabled} onClick={onConfirm}>{busy?'Saving…':confirmLabel}</button></footer>
+      </>}
     </section>
   </div>;
 }

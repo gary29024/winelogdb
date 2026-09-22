@@ -8,7 +8,6 @@ const frame={viewBox:'0 0 24 24',fill:'none',stroke:'currentColor',strokeWidth:1
 
 /** Line-art icon set for the app shell, drawn on the same 24px grid so weights stay even across the nav. */
 export function AppIcon({kind}:{kind:AppIconKey}){
-  if(kind==='person-tag')return <svg {...frame} className="app-icon"><path d="M8.5 5 12 2l3.5 3H19a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z"/><circle cx="12" cy="10.5" r="2.5"/><path d="M7 19v-1a5 5 0 0 1 10 0v1"/></svg>;
   if(kind==='passport')return <svg {...frame} className="app-icon"><path d="M5 4.25A1.75 1.75 0 0 1 6.75 2.5h11.5a1.25 1.25 0 0 1 1.25 1.25v15.5a1.25 1.25 0 0 1-1.25 1.25H6.75A1.75 1.75 0 0 1 5 18.75Z"/><path d="M5 18.75A1.75 1.75 0 0 1 6.75 17h12.75"/><circle cx="12.3" cy="8.6" r="2.6"/><path d="M9.8 13.4h5"/></svg>;
   if(kind==='journal')return <svg {...frame} className="app-icon"><path d="M4 5.25A2.25 2.25 0 0 1 6.25 3H19a1 1 0 0 1 1 1v14.5a1 1 0 0 1-1 1H6.25A2.25 2.25 0 0 0 4 21.75Z"/><path d="M4 5.25v16.5"/><path d="M8.5 7.75h7.5M8.5 11h7.5M8.5 14.25h4.5"/></svg>;
   if(kind==='producers')return <svg {...frame} className="app-icon"><path d="M2.75 20.75h18.5"/><path d="M5 20.75V9.9L12 4.5l7 5.4v10.85"/><path d="M9.6 20.75V15.4h4.8v5.35"/><path d="M8.4 11.6h7.2"/></svg>;
@@ -28,5 +27,6 @@ export function AppIcon({kind}:{kind:AppIconKey}){
   // Researched rather than recorded: a four-point star with two smaller sparks.
   if(kind==='sparkle')return <svg {...frame} className="app-icon"><path d="M11.1 3.4 12.7 8l4.6 1.6-4.6 1.6-1.6 4.6-1.6-4.6L4.9 9.6 9.5 8Z"/><path d="M17.7 14.2l.7 2 2 .7-2 .7-.7 2-.7-2-2-.7 2-.7Z"/></svg>;
   if(kind==='chevron-right')return <svg {...frame} className="app-icon"><path d="m9.6 5.4 6.6 6.6-6.6 6.6"/></svg>;
+  if(kind==='person-tag')return <svg {...frame} className="app-icon"><path d="M8.5 5 12 2l3.5 3H19a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z"/><circle cx="12" cy="10.5" r="2.5"/><path d="M7 19v-1a5 5 0 0 1 10 0v1"/></svg>;
   return <svg {...frame} className="app-icon"><path d="M6.6 6.6l10.8 10.8M17.4 6.6 6.6 17.4"/></svg>;
 }
