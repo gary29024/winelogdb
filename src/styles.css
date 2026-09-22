@@ -44,7 +44,7 @@
   --danger:#a52b3e;
   /* Shared bottles are part of your journal, but not copies you own. A quiet
      lilac surface marks that provenance without spending card space on a label. */
-  --shared-wash:#f6f2fa;--shared-line:#ddd3e9;--shared-ink:#654a7c;
+  --shared-wash:#f6f2fa;--shared-line:#ddd3e9;
 
   /* What is in the glass, for the tile shown when a wine has no photo yet.
      Keyed to the pour rather than to status, so sparkling is not green. */
@@ -113,7 +113,7 @@
     --danger:#b3243c;
     /* Shared journal cards need a clearly distinct lilac surface in dark mode;
        the previous wash sat almost on top of --paper and was easy to miss. */
-    --shared-wash:#30243f;--shared-line:#73588c;--shared-ink:#e1c8f3;
+    --shared-wash:#30243f;--shared-line:#73588c;
 
     --pour:#212a3b;--pour-ink:#8f9bb1;
     --pour-red:#2c171d;--pour-red-ink:#f0909f;

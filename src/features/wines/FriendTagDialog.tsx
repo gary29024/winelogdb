@@ -50,12 +50,15 @@ export function FriendTagDialog({
   };
   return <div className="friend-tag-backdrop" role="presentation" onClick={()=>{if(!busy)onClose()}}>
     <section ref={sheet} tabIndex={-1} className="friend-tag-dialog" role="dialog" aria-modal="true" aria-labelledby={titleId} onClick={event=>event.stopPropagation()}>
-      {relationship&&<p className="friend-tag-relationship">{relationship}</p>}
-      <header className="friend-tag-heading"><div><p className="eyebrow">FRIENDS</p><h2 id={titleId}>{title}</h2></div><button type="button" className="friend-tag-close" aria-label="Close" disabled={busy} onClick={onClose}>×</button></header>
+      <header className="friend-tag-heading"><div><p className="eyebrow">FRIENDS</p><h2 id={titleId}>{title}</h2></div>{!readOnly&&<button type="button" className="friend-tag-close" aria-label="Close" disabled={busy} onClick={onClose}>×</button>}</header>
+      {readOnly&&<>
+        {relationship&&<p className="friend-tag-relationship">{relationship}</p>}
+        <footer className="friend-tag-actions"><button type="button" className="primary" onClick={onClose}>Close</button></footer>
+      </>}
       {!readOnly&&<>
       <p className="friend-tag-description">{description}</p>
       {friends.length?<div className="friend-tag-grid" role="group" aria-label="Friends">
-        {friends.map(friend=>{const active=selected.includes(friend.id),atLimit=selected.length>=maxSelected&&!active;return <button type="button" key={friend.id} className={`friend-tag-chip${active?' selected':''}`} aria-pressed={active} disabled={busy||atLimit} onClick={()=>toggle(friend.id)}>
+        {friends.map(friend=>{const active=selected.includes(friend.id),atLimit=selected.length>=maxSelected&&!active;return <button type="button" key={friend.id} className={`friend-tag-chip${active?' selected':''}`} aria-pressed={active} disabled={busy||confirmDisabled||atLimit} onClick={()=>toggle(friend.id)}>
           <span className="friend-tag-check" aria-hidden="true">{active?'✓':''}</span>
           <span>{friend.display_name}</span>
           {friend.defaultShare&&<small>Default</small>}

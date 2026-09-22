@@ -37,11 +37,9 @@ export function WineSharing({wineId,ownerName}:Props){
   }catch(e){setError((e as Error).message)}
   finally{setBusy(false)}
  }
- const names=tagged.map(id=>friends.find(friend=>friend.id===id)?.display_name??'Unavailable friend');
- const relationship=readOnly?`Shared by ${ownerName}`:loading?'Loading sharing details…':!ready?'Sharing details unavailable.':names.length?`Shared with ${names.join(', ')}`:'Not shared yet';
  return <>
   <button ref={trigger} type="button" className={`detail-share-button${!readOnly&&tagged.length?' active':''}`} aria-label={readOnly?'Sharing details':'Tag friends'} title={readOnly?'Sharing details':'Tag friends'} aria-pressed={readOnly?undefined:tagged.length>0} aria-haspopup="dialog" aria-expanded={open} onClick={()=>open?close():void show()}><AppIcon kind="person-tag"/></button>
-  <FriendTagDialog open={open} title={readOnly?'Sharing':'Tag friends'} relationship={relationship} readOnly={readOnly} confirmDisabled={!ready||loading} description="Choose friends who can see this wine. Wine identity, details and attached wine photos are shared; each friend keeps their own notes, rating and tasting experience." friends={friends} selected={selected} busy={busy} error={error} onSelectedChange={setSelected} onConfirm={()=>void save()} onClose={close}/>
+  <FriendTagDialog open={open} title={readOnly?'Tagged friends':'Tag friends'} relationship={readOnly?`Shared by ${ownerName}`:undefined} readOnly={readOnly} confirmDisabled={!ready||loading} description="Choose friends who can see this wine. Wine identity, details and attached wine photos are shared; each friend keeps their own notes, rating and tasting experience." friends={friends} selected={selected} busy={busy} error={error} onSelectedChange={setSelected} onConfirm={()=>void save()} onClose={close}/>
   {message&&<span className="wine-sharing-status" role="status">{message}</span>}
  </>;
 }

@@ -36,7 +36,7 @@ for(const role of ['owner','member'])for(const width of [320,390,1280])test(`${r
  await expect(tag).toHaveAttribute('aria-pressed','false');
  await tag.click();
  const sheet=page.getByRole('dialog',{name:'Tag friends',exact:true});
- await expect(sheet).toContainText('Not shared yet');
+ await expect(sheet.locator('.friend-tag-relationship')).toHaveCount(0);
  await sheet.getByRole('button',{name:'Alice',exact:true}).click();
  await sheet.getByRole('button',{name:'Bob',exact:true}).click();
  await sheet.getByRole('button',{name:'Confirm tags',exact:true}).click();
@@ -49,10 +49,10 @@ for(const role of ['owner','member'])for(const width of [320,390,1280])test(`${r
  await expect(tag).toHaveAttribute('aria-pressed','true');
  await expect(page.getByText('Shared with Alice, Bob',{exact:true})).toHaveCount(0);
  await tag.click();
- await expect(sheet).toContainText('Shared with Alice, Bob');
- // Unsaved selection changes must not change the saved sharing relationship.
+ await expect(sheet.locator('.friend-tag-relationship')).toHaveCount(0);
+ // Cancelled picker changes must not alter the saved sharing state.
  await sheet.getByRole('button',{name:'Alice',exact:true}).click();
- await expect(sheet).toContainText('Shared with Alice, Bob');
+ await expect(sheet.locator('.friend-tag-relationship')).toHaveCount(0);
  await sheet.getByRole('button',{name:'Cancel',exact:true}).click();
  await expect(tag).toHaveAttribute('aria-pressed','true');
  await tag.click();
@@ -75,8 +75,12 @@ for(const role of ['owner','member'])test(`${role}: recipient sharing sheet name
  const tag=page.getByRole('button',{name:'Sharing details',exact:true});
  await expect(tag).not.toHaveClass(/active/);
  await tag.click();
- const sheet=page.getByRole('dialog',{name:'Sharing',exact:true});
+ const sheet=page.getByRole('dialog',{name:'Tagged friends',exact:true});
  await expect(sheet).toContainText('Shared by Gary');
+ const heading=(await sheet.getByRole('heading',{name:'Tagged friends',exact:true}).boundingBox())!;
+ const relationship=(await sheet.getByText('Shared by Gary',{exact:true}).boundingBox())!;
+ expect(relationship.y).toBeGreaterThanOrEqual(heading.y+heading.height);
+ await expect(sheet.locator('footer').getByRole('button',{name:'Close',exact:true})).toBeVisible();
  await expect(sheet.getByRole('group',{name:'Friends'})).toHaveCount(0);
  await expect(sheet.getByRole('button',{name:'Confirm tags'})).toHaveCount(0);
  await expect(sheet).not.toContainText(/Alice|Bob/);

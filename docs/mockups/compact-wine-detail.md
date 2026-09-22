@@ -1,14 +1,16 @@
-# Compact wine detail preview
+# Wine detail preview
 
-Screenshots of the implemented page at a 390 × 844 mobile viewport, using a member account, sample wine data and the no-photo placeholder. The same compact layout applies to owner accounts. The reference has been manually confirmed, so the LWIN review controls are hidden.
+Screenshots of the implemented page at a 390 × 844 mobile viewport, using a member account, sample wine data and the no-photo placeholder. The same layout applies to owner accounts and received wines. The reference has been manually confirmed, so the LWIN review controls are hidden.
 
-The action row contains Favourite, Tag friends (person icon), Edit tasting, and Wine-Searcher. Type/Alcohol and LWIN7/LWIN11 each share a row. The mobile layout retains 44px action targets and safe-area spacing.
+The mobile page uses a continuous reading surface, larger text, and space between sections, following the comfortable spacing of the supplied reference. Removing separate padded cards saves space without squeezing the text. Type/Alcohol and LWIN7/LWIN11 each share a row. Actions retain accessible touch targets and safe-area spacing.
+
+The action row contains Favourite, Tag friends (person icon), Edit tasting, and Wine-Searcher.
 
 | Light | Dark |
 | --- | --- |
 | ![Light mobile preview](compact-wine-detail-light.png) | ![Dark mobile preview](compact-wine-detail-dark.png) |
 
-The person icon is coloured when your wine has recipients. The saved relationship is shown inside the sheet, independently of unsaved picker changes. For a wine shared with you, the icon stays neutral and opens a read-only sheet naming only the sharer; it never loads the sharer's recipient list.
+The person icon is coloured when your wine has saved recipients. The sharing sheet shows the selected people without repeating a “Shared with” summary. For a wine shared with you, the neutral icon opens a read-only sheet headed “Tagged friends”, followed by “Shared by Gary” and a Close button. It never loads the sharer's recipient list.
 
 | Your wine: sharing sheet | Received wine: sharing sheet |
 | --- | --- |
