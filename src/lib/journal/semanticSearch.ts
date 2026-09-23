@@ -371,6 +371,11 @@ export async function semanticWineIds(env:SemanticEnv,owner:string,query:string,
 
 export async function warmSemanticWineIndex(env:SemanticEnv,owner:string){
   const config=configFor(env);if(!config)return;
+  // Visibility checks already exclude revoked grants from results. Remove their
+  // obsolete vectors too; the existing delete trigger advances the revision.
+  await env.DB.prepare(`DELETE FROM wine_semantic_embeddings WHERE owner_id=? AND model_key=?
+    AND NOT EXISTS(SELECT 1 FROM member_visible_wines v WHERE v.owner_id=wine_semantic_embeddings.owner_id AND v.id=wine_semantic_embeddings.wine_id)`)
+    .bind(owner,config.modelKey).run();
   const runId=crypto.randomUUID();
   let remaining=BACKGROUND_BACKFILL;
   while(remaining>0){

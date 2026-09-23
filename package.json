@@ -12,6 +12,7 @@
     "test:e2e": "playwright test --project=chromium",
     "test:e2e:full": "playwright test",
     "test:e2e:iphone": "playwright test --config=playwright.iphone.config.ts",
+    "test:stack": "playwright test --config=playwright.stack.config.ts",
     "lint": "eslint .",
     "deploy": "npm run build && npm run db:migrate && wrangler deploy",
     "db:migrate:local": "wrangler d1 migrations apply DB --local",
@@ -36,6 +37,8 @@
     "zod": "^4.1.5"
   },
   "devDependencies": {
+    "esbuild": "^0.28.2",
+    "miniflare": "5.20260903.0-alpha",
     "@cloudflare/vite-plugin": "^1.12.3",
     "@cloudflare/workers-types": "^5.20260820.1",
     "@eslint/js": "^9.34.0",

@@ -1,21 +1,13 @@
 import { describe,expect,it } from 'vitest';
 import { realD1 } from './support/realD1';
 import { adoptFriendResearch,buildResearchTargets,loadResearchCache,upsertResearchCache,type CachedResearch,type ResearchScope } from '../../src/lib/research/cache';
+import { producerEntry } from './support/researchFixture';
 
 const wine={producer:'Domaine Dujac',wineName:'Clos de la Roche',vintage:2019,country:'France',region:'Burgundy',appellation:'Clos de la Roche',wineStyle:'red'};
 const seedUser=(sql:ReturnType<typeof realD1>['sql'],id:string,role='member')=>
   sql.exec(`INSERT INTO app_users(id,email,display_name,role) VALUES('${id}','${id}@example.com','${id}','${role}') ON CONFLICT(id) DO UPDATE SET role=excluded.role`);
 const befriend=(sql:ReturnType<typeof realD1>['sql'],a:string,b:string)=>
   sql.exec(`INSERT INTO friendships(user_id,friend_id) VALUES('${a}','${b}'),('${b}','${a}')`);
-
-/** A producer scope good enough to clear the quality gate on the way in and out. */
-function producerEntry(target:CachedResearch['target']):CachedResearch{
-  return {target,
-    payload:{producerDetails:'Domaine Dujac is a Morey-Saint-Denis estate farming its Clos de la Roche holdings biodynamically, with whole-cluster fermentation a house signature across the range.',
-      producerWinemakingPractices:'The domaine ferments with a high proportion of whole clusters, uses gentle extraction and ages in a modest share of new oak, a practice that holds across vintages rather than varying by release.'},
-    sources:[{title:'Domaine Dujac',url:'https://www.dujac.com/'},{title:'BIVB',url:'https://www.bourgogne-wines.com/'}],
-    model:'gemini-3.8-flash',researchedAt:new Date().toISOString()};
-}
 
 describe('friend research is kept, not borrowed',()=>{
   it('survives the friendship ending and stops needing the friendship join',async()=>{

@@ -3,9 +3,9 @@ import app from '../../worker/structureEntry';
 import { createSession } from '../../src/lib/auth/session';
 import { migratedSqliteD1 } from './support/sqliteD1';
 import * as referenceIdentity from '../../src/lib/wine/referenceIdentity';
+import { blank } from './support/wineSaveFixture';
 
 const SECRET='test-secret-value-long-enough-for-hmac';
-const blank={producer:'Test estate',wineName:'Test wine',vintage:2020,country:null,region:null,appellation:null,recognizedRegion:null,recognizedAppellation:null,classification:null,classificationOverride:null,grapes:[],grapeBlend:[],wineStyle:'red',alcoholPercentage:null,tastingNotes:'',rating:null,tastingDate:null,tastingName:null,event:null,venue:null,locationName:null,latitude:null,longitude:null,price:null,currency:null,tags:[],recognitionStatus:'complete',recognitionConfidence:null};
 const rich={...blank,tastingNotes:'Original note',rating:92,tastingDate:'2026-09-01',tastingName:'Original tasting',venue:'Home',tastingStructure:{acidity:'high'}};
 const databases:Array<ReturnType<typeof migratedSqliteD1>>=[];
 function setup(){
@@ -20,6 +20,30 @@ function setup(){
 afterEach(()=>{for(const state of databases.splice(0))state.sqlite.close();vi.restoreAllMocks()});
 
 describe('wine saves through the deployed entrypoint and migrated SQLite',()=>{
+  it.each([false,true])('saves schema-valid omitted optional fields as SQL nulls (multipart=%s)',async multipart=>{
+    const {sqlite,request}=setup(),minimal={producer:'Minimal estate',wineName:'Minimal bottle'};
+    const form=new FormData();form.set('wine',JSON.stringify(minimal));
+    form.append('images',new File([new Uint8Array(2048)],'bottle.jpg',{type:'image/jpeg'}));
+    form.set('dimensions',JSON.stringify([{width:1200,height:1600}]));form.set('metadata',JSON.stringify([{source:'none'}]));
+    const created=await request('POST','/api/wines',multipart?form:minimal,multipart);
+    expect(created.status,await created.clone().text()).toBe(201);
+    const {id}=await created.json() as {id:string};
+    expect(sqlite.prepare('SELECT country,wine_style,rating,price FROM wines WHERE id=?').get(id)).toMatchObject({country:null,wine_style:null,rating:null,price:null});
+    const updated=await request('PUT',`/api/wines/${id}`,{...minimal,wineName:'Corrected minimal bottle'});
+    expect(updated.status,await updated.clone().text()).toBe(200);
+    expect(sqlite.prepare('SELECT wine_name,country,rating FROM wines WHERE id=?').get(id)).toMatchObject({wine_name:'Corrected minimal bottle',country:null,rating:null});
+  });
+
+  it('rejects an unowned partial edit before enrichment or preparing update values',async()=>{
+    const {sqlite,create,request}=setup(),id=await create();
+    const enrich=vi.spyOn(referenceIdentity,'enrichRecognitionReference');
+    const response=await request('PUT',`/api/wines/${id}`,{producer:'Intruder',wineName:'Changed'},false,'someone-else');
+    expect(response.status).toBe(404);
+    expect(enrich).not.toHaveBeenCalled();
+    expect(sqlite.prepare('SELECT producer,wine_name,tasting_notes FROM wines WHERE id=?').get(id)).toMatchObject({producer:'Test estate',wine_name:'Test wine',tasting_notes:'Original note'});
+    expect(sqlite.prepare("SELECT count(*) AS n FROM wine_experiences WHERE owner_id='someone-else'").get()).toMatchObject({n:0});
+  });
+
   it.each([
     {change:{producer:'Correct estate'},lookup:'matched',stored:'matched',expected:'matched'},
     {change:{wineName:'Correct wine'},lookup:'matched',stored:'conflict',expected:'matched'},

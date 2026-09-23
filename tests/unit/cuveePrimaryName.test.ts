@@ -89,6 +89,7 @@ describe('the primary-name checkbox on the wine form',()=>{
 
   async function save(body:Record<string,unknown>){
     const db=createD1Stub(sql=>{
+      if(/SELECT \* FROM wines WHERE owner_id=\? AND id=\?/.test(sql))return {first:{id:'w1',owner_id:'owner',producer:PRODUCER,wine_name:'Feudo di Mezzo'}};
       if(/SELECT wine_name,appellation,wine_style,country FROM wines/.test(sql))
         return {first:{wine_name:'Feudo di Mezzo',appellation:'Etna',wine_style:'red',country:'Italy'}};
       if(/SELECT cuvee_id FROM wines WHERE owner_id=\? AND id=\?/.test(sql))return {first:{cuvee_id:'c1'}};

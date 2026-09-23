@@ -19,6 +19,7 @@ const touches=(stub:ReturnType<typeof createD1Stub>)=>
 
 async function save(method:'POST'|'PUT',body:Record<string,unknown>){
   const stub=createD1Stub(sql=>{
+    if(/SELECT \* FROM wines WHERE owner_id=\? AND id=\?/.test(sql))return {first:{id:'w1',owner_id:'owner',producer:'Domaine Dujac',wine_name:'Morey-Saint-Denis'}};
     if(/SELECT id FROM tastings/.test(sql))return {first:{id:'t1'}};
     if(/SELECT id FROM wine_experiences/.test(sql))return {first:{id:'e1'}};
     return undefined;
