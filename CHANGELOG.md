@@ -2,6 +2,57 @@
 
 All notable WineLogDB changes are summarized here by shipped impact. Each stable release consolidates merged pull requests rather than duplicating the full PR-by-PR history.
 
+## [1.3.0] - 2026-09-23
+
+### Multi-user accounts and friend sharing
+
+- Shipped the invite-only multi-user foundation with Google sign-in, owner/member roles, owner controls, account-scoped wines/research/storage, accepted-friend relationships and selective wine sharing.
+- Reworked sharing into a compact **Tag friends** flow available from wine detail, Journal multi-select and tastings, plus per-friend defaults for automatically tagging newly logged wines.
+- Integrated shared wines directly into the recipient's Journal, Passport, Insights and Wine Collections without copying the source wine into the recipient account; shared wine facts remain read-only while favourites, rating, notes, structure and other recipient experience data stay recipient-owned.
+- Added shared-producer read models and research reuse so a member can recognise and browse a producer already visible through a friend's shared wine without creating duplicate producer identities.
+- Reused the owner's canonical R2 image and persistent thumbnail for shared photos instead of creating per-recipient photo copies, while preserving share authorization checks.
+- Simplified member-facing screens by hiding provider/model/compression details and exposing support IDs for troubleshooting instead.
+
+### Sponsored member AI and model policy
+
+- Replaced pilot credit pricing with the intended sponsored-access policy: member scanning and Smart Search are included, while Wine Deep Search, individual producer research and Vintage Window share a configurable weekly allowance that defaults to **2 user-facing runs per week**.
+- Kept owner usage provider-bill-direct while retaining per-account usage, provider-operation and audit records; owner controls now show member usage, allowances, storage and budget guardrails.
+- Centralized active AI model assignments in one policy module while keeping capability-specific transports for recognition, grounded research, Vintage Intelligence, producer-range extraction and embeddings.
+- Switched the Workers AI text fallback to Qwen3-30B-A3B and hardened Vertex/Gemini queue timeouts so slow provider calls persist explicit failures and can enter the existing recovery path instead of leaving abandoned jobs.
+- Added Smart Search query-result caching and clearer Champagne/Vintage usage attribution, reducing repeat embedding/vector work after returning to the same semantic search.
+
+### LWIN and ELID wine identity
+
+- Added a versioned LWIN/ELID reference layer backed by producer-keyed R2 shards, with only matched external IDs and lightweight sync state stored in D1.
+- Added direct LWIN XLSX/CSV import, deterministic redirect handling for Live/Combined/Deleted records and explicit recognition states for vintage, non-vintage, multi-vintage and unknown wines plus edition/release designations.
+- Added conservative owner-only backfills for existing wines: deterministic matching first, followed by an optional AI-assisted second pass that can only choose from supplied LWIN candidates and must pass strict confidence/canonical-resolution checks.
+- Added resumable backfill checkpoints, leases and recovery, plus reference snapshots that enrich missing wine facts while preserving populated fields, manual decisions, tasting data and other personal information.
+- Added owner review tools for previewing/linking/rejecting LWIN identities and applying producer-name corrections across linked wines without silently merging producer identities.
+- Populated ELIDs from the public registry and made later identity refreshes fill missing verified ELIDs without overwriting stored identifiers or manual rejections.
+
+### Journal, detail pages and navigation
+
+- Completed the Journal, Account & friends and Owner Controls layout redesign with compact page headers, focused settings sections, removable filter chips, clearer empty states and stronger mobile responsiveness.
+- Made Smart Search index and find wines shared to the current member using only recipient-visible wine facts plus that recipient's own notes/score/tasting name; withdrawn shares are removed from semantic candidates.
+- Added dedicated **Cellar** and **Favorites** Journal headers, stable mobile tab positioning, a consistent Filters control and result counts beside Filters.
+- Brought owner and shared wine detail pages onto a shared wine-facts definition, including classification styling, denominations, grape percentages and sparkling release details, while keeping private owner fields outside the shared payload.
+- Fixed Deep Search website attribution when Gemini returns Google Search redirect URLs, moved Champagne production details into the main detail flow and fixed full-screen photo/lightbox bounds on phones.
+
+### Burgundy Atlas and identity-aware exploration
+
+- Added verified Burgundy Atlas links for all 33 Grand Cru appellations and extended them to named Premier Crus, village appellations and safe Premier Cru appellation fallbacks.
+- Added static coverage for 630 Premier Cru plot destinations, 43 village appellations and 29 Premier Cru appellations, with strict geography/tier/identity guards and no runtime Atlas API or AI dependency.
+- Added Atlas links to relevant live collection rows while withholding links for ambiguous, conflicting or unmapped cases instead of guessing.
+
+### Reliability, performance and release integrity
+
+- Hardened Champagne extraction selection/translation, member recognition response contracts, shared wine ordering, producer identity reuse and LWIN matching/review flows based on production testing.
+- Reduced redundant backend reads, reference lookups and queue dispatch, made LWIN AI rollout checkpoint one wine per queue job, and streamlined/parallelized CI while retaining risk-boundary regression coverage.
+- v1.3.0 consolidates all merged product work after v1.2.0 through PR #327, including PR #224 which was intentionally excluded from v1.2.0 and merged afterward.
+- Product baseline before release metadata: `main` at `99edcd4b9c51691bc7c7c178e863a072d1c3906b` (merged PR #327); its CI push run `35876749364` completed successfully.
+- New schema migrations since v1.2.0 are `0061_semantic_query_cache.sql` through `0083_lwin_reference_snapshot.sql` (23 migrations).
+- Production upgrades must use `npm run deploy` so outstanding remote D1 migrations run before the Worker is deployed.
+
 ## [1.2.0] - 2026-09-15
 
 ### Smart Journal search
