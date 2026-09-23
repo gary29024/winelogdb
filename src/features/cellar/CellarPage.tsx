@@ -6,7 +6,7 @@ import '../../cellar.css';
 
 export default function CellarPage(){
   return <section className="journal-page cellar-page">
-    <PageIntro title="Journal" description="Bottles in your cellar."/>
+    <PageIntro title="Cellar" description="Bottles you hold, waiting to be opened."/>
     <div className="journal-scope-row">
       <JournalScopeTabs scope="cellar"/>
       <Link className="journal-tastings-link" to="/tastings">Browse your tastings <span aria-hidden="true">›</span></Link>

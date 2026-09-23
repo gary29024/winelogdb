@@ -2,7 +2,7 @@
 
 
 .cellar-filters .cellar-search{width:100%;padding:var(--s3) var(--s4);border:1px solid var(--line);border-radius:var(--r-md);background:var(--paper);color:var(--ink)}
-.cellar-viewbar{align-items:center}
+.cellar-viewbar{align-items:center;justify-content:flex-end}
 .cellar-add-trigger{white-space:nowrap}
 
 .cellar-list{display:grid;gap:var(--s3)}

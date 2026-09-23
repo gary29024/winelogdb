@@ -32,6 +32,9 @@ it('profiles common reads, cached navigation, recognition and competing dispatch
   const ai=vi.fn(async(_model:string,input:{text:string[]})=>({data:input.text.map(()=>[1,...Array(1023).fill(0)])}));
   const env={DB:d.db,AI:{run:ai}} as never;
   await warmSemanticWineIndex(env,'owner');
+  // The viewer's 72 shared wines are part of their Journal, so they are indexed
+  // too; warm once here so the measured pass below is the already-current case.
+  await warmSemanticWineIndex(env,'viewer');
   await semanticWineIds(env,'owner','floral elegant Burgundy');ai.mockClear();
   await measure('semanticCached',()=>semanticWineIds(env,'owner','floral elegant Burgundy'));
   await measure('semanticWarmClean',()=>warmSemanticWineIndex(env,'viewer'));

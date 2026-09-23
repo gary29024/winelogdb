@@ -9,6 +9,7 @@ import { askableVintage } from '../../lib/maturity/vintageWindow';
 import { maturityVerdict } from '../../lib/maturity/ageing';
 
 const PAGE_SIZE=36;
+const NARROWING_KEYS=['country','style','vintage','location','sort'];
 const SORTS:Array<[string,string]>=[['vintage','Vintage, newest'],['oldestVintage','Vintage, oldest'],['producer','Producer'],['bottles','Most bottles'],['added','Recently added'],['purchased','Recently bought']];
 
 /**
@@ -34,6 +35,9 @@ export function CellarScope(){
   const [editing,setEditing]=useState<CellarHolding|null>(null);
   const [viewingVintage,setViewingVintage]=useState<CellarHolding|null>(null);
   const [reloadSeq,setReloadSeq]=useState(0);
+  // Folded like the Journal's, so all three tabs share one control row and the
+  // count sits beside it. Open on arrival when a link already carries a filter.
+  const [filtersOpen,setFiltersOpen]=useState(()=>NARROWING_KEYS.some(key=>Boolean(params.get(key))));
 
   const offset=Math.max(Number(params.get('offset'))||0,0);
   const query=useMemo(()=>{
@@ -86,10 +90,17 @@ export function CellarScope(){
   }
 
   const totalPages=Math.max(1,Math.ceil(total/PAGE_SIZE)),page=Math.floor(offset/PAGE_SIZE)+1;
+  const narrowingCount=NARROWING_KEYS.filter(key=>Boolean(params.get(key))).length;
   return <>
     <form className="filters journal-filters cellar-filters" onSubmit={event=>event.preventDefault()}>
       <input className="cellar-search" type="search" value={params.get('query')??''} onChange={event=>update('query',event.target.value)} placeholder="Producer, wine or appellation" aria-label="Search your cellar"/>
-      <div className="filter-pills">
+      <div className="journal-filter-bar">
+        <button type="button" className="journal-filter-toggle" aria-expanded={filtersOpen} aria-controls="cellar-filter-fields" onClick={()=>setFiltersOpen(open=>!open)}>
+          Filters{narrowingCount>0&&<b>{narrowingCount}</b>}<span className="journal-filter-chevron" aria-hidden="true"/>
+        </button>
+        <span className="journal-result-count" aria-live="polite">{loading&&!items.length?'Opening the cellar…':`${total} wine${total===1?'':'s'} · ${bottles} bottle${bottles===1?'':'s'}`}</span>
+      </div>
+      <div className="filter-pills" id="cellar-filter-fields" hidden={!filtersOpen}>
         <label>Country<input value={params.get('country')??''} onChange={event=>update('country',event.target.value)} placeholder="Country"/></label>
         <label>Style<select value={params.get('style')??''} onChange={event=>update('style',event.target.value)}><option value="">Style</option>{['red','white','rose','sparkling','dessert','fortified','orange'].map(value=><option key={value}>{value}</option>)}</select></label>
         <label>Vintage<input inputMode="numeric" value={params.get('vintage')??''} onChange={event=>update('vintage',event.target.value)} placeholder="Vintage"/></label>
@@ -99,7 +110,6 @@ export function CellarScope(){
     </form>
 
     <div className="journal-viewbar cellar-viewbar">
-      <span>{loading&&!items.length?'Opening the cellar…':`${total} wine${total===1?'':'s'} · ${bottles} bottle${bottles===1?'':'s'}`}</span>
       <button type="button" className="primary cellar-add-trigger" onClick={()=>setAdding(true)}>Add bottles</button>
     </div>
 
