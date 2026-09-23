@@ -21,6 +21,7 @@ describe('shared producers in the recipient library',()=>{
         INSERT INTO wines(id,owner_id,producer,producer_id,wine_name,vintage,country,region,appellation,wine_style,tasting_date,created_at,updated_at)
           VALUES('wine-alice','alice','Domaine Test','producer-alice','Clos Test',2020,'France','Burgundy','Vosne-Romanée','red','2026-09-01','${stamp}','${stamp}');
         INSERT INTO wine_shares(wine_id,owner_id,recipient_id) VALUES('wine-alice','alice','bob');
+        UPDATE wines SET vintage=NULL,vintage_kind='multi_vintage',release_designation='21-90' WHERE id='wine-alice';
       `);
       const env={DB:db,AUTH_SECRET,APP_URL:'https://x',APP_PASSWORD:'p',GEMINI_API_KEY:'k',
         WINE_IMAGES:{get:async()=>null,put:async()=>({}),delete:async()=>undefined},
@@ -44,7 +45,7 @@ describe('shared producers in the recipient library',()=>{
       expect(detail.status).toBe(200);
       const producer=await detail.json() as {sharedOnly?:boolean;canonicalName:string;tastedWines:Array<{id:string;shared?:boolean}>};
       expect(producer).toMatchObject({sharedOnly:true,canonicalName:'Domaine Test'});
-      expect(producer.tastedWines).toEqual([expect.objectContaining({id:'wine-alice',shared:true})]);
+      expect(producer.tastedWines).toEqual([expect.objectContaining({id:'wine-alice',shared:true,vintage:null,vintageKind:'multi_vintage',releaseDesignation:'21-90'})]);
       expect(Number(sqlite.prepare("SELECT count(*) AS n FROM producers WHERE owner_id='bob'").get()!.n)).toBe(0);
     }finally{sqlite.close()}
   });
@@ -65,6 +66,8 @@ describe('shared producers in the recipient library',()=>{
           ('wine-owned','bob','Domaine Test','producer-bob','Own Cuvée',2021,'France','Burgundy','red','${stamp}','${stamp}'),
           ('wine-shared','alice','Domaine Test','producer-alice','Shared Cuvée',2020,'France','Burgundy','red','${stamp}','${stamp}');
         INSERT INTO wine_shares(wine_id,owner_id,recipient_id) VALUES('wine-shared','alice','bob');
+        UPDATE wines SET vintage=NULL,vintage_kind='multi_vintage',release_designation='21-90' WHERE id='wine-owned';
+        UPDATE wines SET vintage=NULL,vintage_kind='multi_vintage',release_designation='20-90' WHERE id='wine-shared';
       `);
       const env={DB:db,AUTH_SECRET,APP_URL:'https://x',APP_PASSWORD:'p',GEMINI_API_KEY:'k',
         WINE_IMAGES:{get:async()=>null,put:async()=>({}),delete:async()=>undefined},
@@ -79,7 +82,8 @@ describe('shared producers in the recipient library',()=>{
       const detail=await app.fetch(new Request('https://x/api/producers/producer-bob',{headers:auth}),env,context);
       const producer=await detail.json() as {tastedWines:Array<{id:string;shared?:boolean}>};
       expect(new Set(producer.tastedWines.map(wine=>wine.id))).toEqual(new Set(['wine-owned','wine-shared']));
-      expect(producer.tastedWines.find(wine=>wine.id==='wine-shared')?.shared).toBe(true);
+      expect(producer.tastedWines.find(wine=>wine.id==='wine-owned')).toMatchObject({shared:false,vintage:null,vintageKind:'multi_vintage',releaseDesignation:'21-90'});
+      expect(producer.tastedWines.find(wine=>wine.id==='wine-shared')).toMatchObject({shared:true,vintage:null,vintageKind:'multi_vintage',releaseDesignation:'20-90'});
       sqlite.prepare("UPDATE producers SET profile='A profile researched by Alice',winemaking_practices='Whole-cluster varies by cuvée',sources_json='[{\"title\":\"Producer site\",\"url\":\"https://example.com\"}]',researched_at=?,profile_researched_at=? WHERE id='producer-alice'").run(stamp,stamp);
       const inherited=await reusableProducer(db,'bob','producer-bob');
       expect(inherited).toMatchObject({profile:'A profile researched by Alice',winemakingPractices:'Whole-cluster varies by cuvée',researchContributorId:'alice'});

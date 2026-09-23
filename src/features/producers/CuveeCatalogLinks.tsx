@@ -4,7 +4,7 @@ import { cuveeStyleFamily,normalizeCuveeAlias } from '../../lib/cuvees/entities'
 import { changeTastedCuveeCatalogLink,linkTastedCuveeToCatalog,unlinkTastedCuveeFromCatalog,type ProducerDetail,type TastedWine } from './api';
 import '../../cuveeCatalogLinks.css';
 
-export type TastedCuveeGroup={cuveeId:string|null;catalogCuveeId:string|null;name:string;appellation:string|null;wineStyle:string|null;grapes:string[];releaseFamily:boolean;wines:TastedWine[]};
+export type TastedCuveeGroup={key:string;cuveeId:string|null;catalogCuveeId:string|null;name:string;appellation:string|null;wineStyle:string|null;grapes:string[];releaseFamily:boolean;wines:TastedWine[]};
 type CatalogTarget=CatalogPresentationChoice;
 
 const tokens=(value:string)=>new Set(normalizeCuveeAlias(value).split(/\s+/).filter(Boolean).filter(x=>!['grand','premier','cru','village','wine','cuvee'].includes(x)));
@@ -65,7 +65,10 @@ export function CuveeCatalogLinks({producer,group,onChanged}:{producer:ProducerD
   }
 
   if(!choices.length||!group.cuveeId)return null;
-  if(directMatch)return <div className="cuvee-inline-admin" aria-label="Catalog mapping"><span>{group.releaseFamily?'Catalog matched · release family':'Catalog matched'}</span></div>;
+  // The release family carries this read-only status in its heading; repeating
+  // it beside an edition code squeezes the code on narrow screens.
+  if(directMatch&&group.releaseFamily)return null;
+  if(directMatch)return <div className="cuvee-inline-admin" aria-label="Catalog mapping"><span>Catalog matched</span></div>;
   const unresolved=choices.length-linkable.length;
   return <>
     <div className="cuvee-inline-admin" aria-label="Catalog mapping">
