@@ -112,6 +112,20 @@ describe('research survives promotion from names to entity IDs',()=>{
     expect((await loadResearchCache(database.db,'owner',targets)).get('wine_vintage')).toMatchObject({payload,provenance:technicalProvenance});
   });
 
+  it('restores evidence on already-visible producer sections without a producer profile',async()=>{
+    const database=realD1(),targets=buildResearchTargets(wine);
+    seed(database,targets);
+    const evidence=(claim:string)=>({claimCount:1,supportedCount:1,partialCount:0,unsupportedCount:0,uncertaintyCount:0,directSupportRatio:1,claims:[{claim,supportStatus:'supported',sourceTier:'grounded',sources:[{title:'Estate',url:'https://example.com/wine'}]}]});
+    const provenance={version:1,fields:{producerDetails:evidence(payloads.producer.producerDetails),producerWinemakingPractices:evidence(payloads.producer.producerWinemakingPractices)}};
+    const snapshot={...payloads.producer,...payloads.terroir,...payloads.vintage_context,...payloads.wine_vintage,model:'original-model',researchedAt,provenance};
+    expect((await loadResearchCache(database.db,'owner',targets)).get('producer')?.provenance).toBeUndefined();
+    const recovered=await loadWineResearchCache(database.db,'owner',targets,false,snapshot);
+    expect(recovered.get('producer')).toMatchObject({payload:payloads.producer,provenance});
+    await seedResolvedResearch(database.db,'owner',recovered);
+    expect((await loadResearchCache(database.db,'owner',targets)).get('producer')).toMatchObject({payload:payloads.producer,provenance});
+    expect(database.sql.prepare('SELECT count(*) AS n FROM producers').get()!.n).toBe(0);
+  });
+
   it('keeps the selected result’s provenance and contributor through a producer merge and undo',async()=>{
     const database=realD1();
     for(const id of ['source','destination'])database.sql.prepare("INSERT INTO producers(id,owner_id,canonical_name,match_key,created_at,updated_at) VALUES(?,'owner',?,?,?,?)").run(id,id,id,researchedAt,researchedAt);
