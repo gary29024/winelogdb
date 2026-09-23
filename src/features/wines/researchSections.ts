@@ -50,12 +50,28 @@ export function researchSections(deep:ResearchProse|null|undefined):Array<[strin
 
 export function sourceHost(url:string){try{return new URL(url).hostname.toLowerCase().replace(/^www\./,'')}catch{return ''}}
 
+const GROUNDING_REDIRECT_HOST='vertexaisearch.cloud.google.com';
+const isGroundingRedirect=(url:string)=>sourceHost(url)===GROUNDING_REDIRECT_HOST;
+
+/** Gemini's Google Search grounding hands back every link as a redirect on
+ * vertexaisearch.cloud.google.com, with the real publisher's domain in the
+ * title. Grouping by the URL alone put every source under that one host and
+ * read as "12 sources · 1 site". The title is used only when it is a bare
+ * domain; a redirect without one stays unattributed rather than guessed. */
+export function sourceDisplayHost(source:{title:string;url:string}){
+ const host=sourceHost(source.url);
+ if(host!==GROUNDING_REDIRECT_HOST)return host;
+ return source.title?.trim().toLowerCase().match(/^((?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,24})$/)?.[1]?.replace(/^www\./,'')??'';
+}
+
 /** Gemini grounding often gives no page title, so several links on one host all
  * render as the bare hostname. Falling back to the last path segment turns
  * "wine.com / wine.com / wine.com" into three links a reader can tell apart. */
 export function sourceLinkLabel(source:{title:string;url:string},host:string){
  const title=source.title?.trim();
  if(title&&title.toLowerCase().replace(/^www\./,'')!==host)return title;
+ // A redirect's path is an opaque token, never a readable page name.
+ if(isGroundingRedirect(source.url))return host||title||'Source';
  try{
   const segments=new URL(source.url).pathname.split('/').filter(Boolean),last=segments[segments.length-1];
   const decoded=last?decodeURIComponent(last).replace(/\.(?:html?|php|aspx?)$/i,'').replace(/[-_]+/g,' ').trim():'';

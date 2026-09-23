@@ -6,6 +6,7 @@ import { getAccount } from '../../lib/auth/client';
 import { WineSharing } from './WineSharing';
 import { SparklingDetailsCard } from './SparklingDetailsCard';
 import { isChampagne } from '../../lib/wine/champagneExtraction';
+import { hasSparklingDetails } from '../../lib/wine/sparklingDetails';
 import { useEffect,useMemo,useRef,useState } from 'react';
 import { Link,useLocation,useNavigate,useParams } from 'react-router-dom';
 import type { DeepSearchResult } from '../../lib/db/schema';
@@ -171,12 +172,14 @@ export function DetailPage(){
    <Link className="button primary" to={`/wines/${id}/edit`}>Edit tasting</Link>
    <a className="detail-wine-searcher-link" aria-label="Find on Wine-Searcher" href={wineSearcherUrl(wine.producer,wine.wineName,wine.vintage)} target="_blank" rel="noopener noreferrer"><span><span className="detail-search-prefix">Find on </span>Wine-Searcher</span><span aria-hidden="true">↗</span></a>
   </div>
-  <SparklingDetailsCard details={wine.sparklingDetails}/>
-  {isChampagne(wine)&&<Link className="champagne-backfill-link" to={`/wines/${wine.id}/edit#champagne-photos`}>Fill Champagne details from photos</Link>}
   {/* Your experience leads: it is the reason the record exists at all. */}
   <section className="detail-section experience-panel"><SectionLabel origin="yours">Your experience</SectionLabel><FactList rows={experienceRows}/>{wine.tastingNotes&&<blockquote className="detail-experience-notes">{wine.tastingNotes}</blockquote>}{!experienceRows.length&&!wine.tastingNotes&&<p className="detail-experience-empty">No tasting logged for this bottle yet.</p>}</section>
   {structureItems.length>0&&<section className="detail-section structure-detail-section"><SectionLabel origin="yours">Structure</SectionLabel><dl className="tasting-structure-summary">{structureItems.map(([label,value])=><div key={label}><dt>{label}</dt><dd>{structureValueLabel[value]??value}</dd></div>)}</dl><p className="structure-section-note">Perceived structure; label ABV appears in Wine details.</p></section>}
   <WineDetailsSection wine={wine} canEditReference={technicalView}/>
+  {/* Production details are wine facts, so they sit with the wine details. Once
+      filled in, the photo link offers a refresh rather than a first fill. */}
+  <SparklingDetailsCard details={wine.sparklingDetails}/>
+  {isChampagne(wine)&&<Link className="champagne-backfill-link" to={`/wines/${wine.id}/edit#champagne-photos`}>{hasSparklingDetails(wine.sparklingDetails)?'Refresh Champagne details from photos':'Fill Champagne details from photos'}</Link>}
   {technicalView&&wine.identityMatchStatus!=='manual'&&<section className="detail-section"><LwinLinkEditor key={wine.id} wine={wine} disabled={Boolean(referenceBusy)} onLink={linkReference} onReject={rejectReference}/>{referenceError&&<p role="alert" className="detail-photo-error">{referenceError}</p>}</section>}
   {technicalView&&wine.identityMatchStatus!=='manual'&&(wine.referenceSuggestions??[]).length>0&&<section className="detail-section lwin-suggestion-panel">
    <p className="section-label">LWIN suggested updates</p><div className="lwin-review-toolbar"><button disabled={Boolean(referenceBusy)} onClick={()=>void recheckReference()}>Recheck LWIN</button>{technicalView&&<Link to={`/admin/lwin-review?wine=${id}`}>Review all pending wines</Link>}</div>

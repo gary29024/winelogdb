@@ -23,6 +23,7 @@ import '../../producer.css';
 import { startBackoffPoll,type Poller } from '../../lib/polling/backoff';
 import { backTargetFromState,linkFrom,readBackTarget,rememberBackTarget,PRODUCERS_BACK } from '../wines/backTarget';
 import { ElapsedSeconds } from '../../components/ElapsedSeconds';
+import { sourceDisplayHost } from '../wines/researchSections';
 
 const stageLabel:Record<ProducerResearchRun['stage'],string>={preparing:'Queued for research',searching:'Researching in the background',retrying:'Retrying research',parsing:'Checking research result',saving:'Saving producer research',image:'Finding a domaine image',complete:'Research complete',failed:'Research failed'};
 
@@ -113,7 +114,6 @@ function catalogMeta(wine:ProducerDetail['catalog'][number],category:CatalogCate
  const style=String(wine.style??'').trim();add(style&&!verboseCatalogStyle(style)?style:categoryLabels[category]);
  return parts;
 }
-function sourceHost(value:string){try{return new URL(value).hostname.toLowerCase().replace(/^www\./,'')}catch{return ''}}
 
 const suggestionReason:Record<ProducerNameSuggestion['reason'],string>={
   abbreviation:'a longer form of this name',
@@ -412,7 +412,7 @@ export function ProducerDetailPage(){
  // Members have profile-only producer research. Do not leak owner-only range
  // concepts back through counts, stale warnings, correction tools or source copy.
  const visibleSources=rangeAllowed?producer.sources:producer.sources.filter(source=>!/\b(?:wine )?range\b|\bcatalog(?:ue)?\b/i.test(source.title));
- const sourceWebsiteCount=new Set(visibleSources.map(source=>sourceHost(source.url)).filter(Boolean)).size;
+ const sourceWebsiteCount=new Set(visibleSources.map(sourceDisplayHost).filter(Boolean)).size;
  const profileStale=isResearchStale(producer.profileResearchedAt),rangeStale=rangeAllowed&&isResearchStale(producer.researchedAt),staleLabel=profileStale&&rangeStale?'profile & range':profileStale?'profile':rangeStale?'range':'';
  const inheritedResearch=Boolean(producer.researchContributorId&&producer.researchContributorId!==account?.id),hasProducerResearch=Boolean(producer.profile||producer.researchedAt),hasOwnProducerResearch=Boolean(!inheritedResearch&&(producer.profileResearchedAt||producer.researchedAt));
  return <article className="producer-detail"><Link className="back-pill" to={back.to}>← {back.label}</Link>

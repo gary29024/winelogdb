@@ -253,7 +253,7 @@ describe('Deep Search sources',()=>{
     await render();
     const details=host?.querySelector('.deep-sources') as HTMLDetailsElement|null;
     expect(details?.open).toBe(false);
-    expect(details?.querySelector('summary')?.textContent).toBe('4 sources · 3 sites');
+    expect(details?.querySelector('summary')?.textContent).toBe('4 sources · 3 websites');
   });
 
   it('shows nothing when there are no sources at all',async()=>{
