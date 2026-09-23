@@ -6,3 +6,9 @@
   .page-intro h1{font-size:2.35rem}
   .page-intro p{margin-top:6px;font-size:.86rem}
 }
+/* Tasted, In cellar and Favorites each have their own description, and on a
+   phone the longest wraps to two lines while the others fit on one. Reserving
+   two lines keeps the scope tabs underneath in the same place on every tab. */
+@media(max-width:760px){
+  .journal-page .page-intro p{line-height:1.4;min-height:2.8em}
+}

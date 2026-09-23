@@ -231,12 +231,29 @@ export function decodeStoredEmbedding(value:unknown){
   return new Float32Array(copy.buffer);
 }
 
+/**
+ * A member's Journal is their own wines plus the ones friends shared with them
+ * (member_visible_wines), so Smart Search has to index both or a member whose
+ * Journal is mostly shared bottles finds nothing. A shared bottle is embedded
+ * under the recipient's account from what the recipient can see: the wine's
+ * facts plus their own notes, score and tasting name - never the friend's
+ * private notes. Its staleness follows whichever changed last, the source wine
+ * or the recipient's own entry.
+ */
+const semanticSourceRows=`SELECT w.id,w.producer,w.wine_name,w.vintage,w.country,w.region,w.appellation,w.classification,w.grapes_json,w.wine_style,w.tasting_notes,w.rating,w.event,w.venue,w.tags_json,w.updated_at
+    FROM wines w WHERE w.owner_id=?
+    UNION ALL
+    SELECT v.id,v.producer,v.wine_name,v.vintage,v.country,v.region,v.appellation,v.classification,v.grapes_json,v.wine_style,v.tasting_notes,v.rating,v.shared_tasting_name,v.venue,'[]',max(v.updated_at,coalesce(p.updated_at,''))
+    FROM member_visible_wines v
+    LEFT JOIN shared_wine_preferences p ON p.recipient_id=v.owner_id AND p.owner_id=v.source_owner_id AND p.wine_id=v.id
+    WHERE v.owner_id=? AND v.is_shared=1`;
+
 async function staleWineRows(db:D1Database,owner:string,config:EmbeddingConfig,limit:number){
-  const result=await db.prepare(`SELECT w.id,w.producer,w.wine_name,w.vintage,w.country,w.region,w.appellation,w.classification,w.grapes_json,w.wine_style,w.tasting_notes,w.rating,w.event,w.venue,w.tags_json,w.updated_at
-    FROM wines w
-    LEFT JOIN wine_semantic_embeddings e ON e.owner_id=w.owner_id AND e.wine_id=w.id AND e.model_key=?
-    WHERE w.owner_id=? AND (e.wine_id IS NULL OR e.source_updated_at<>w.updated_at)
-    ORDER BY w.updated_at DESC,w.id DESC LIMIT ?`).bind(config.modelKey,owner,limit+1).all<SemanticWineRow>();
+  const result=await db.prepare(`SELECT s.*
+    FROM (${semanticSourceRows}) s
+    LEFT JOIN wine_semantic_embeddings e ON e.owner_id=? AND e.wine_id=s.id AND e.model_key=?
+    WHERE e.wine_id IS NULL OR e.source_updated_at<>s.updated_at
+    ORDER BY s.updated_at DESC,s.id DESC LIMIT ?`).bind(owner,owner,owner,config.modelKey,limit+1).all<SemanticWineRow>();
   return result.results;
 }
 
@@ -315,8 +332,9 @@ async function refreshSemanticIndex(env:SemanticEnv,owner:string,config:Embeddin
 async function currentCandidates(db:D1Database,owner:string,config:EmbeddingConfig){
   const result=await db.prepare(`SELECT e.wine_id,e.embedding,e.dimensions
     FROM wine_semantic_embeddings e
-    JOIN wines w ON w.owner_id=e.owner_id AND w.id=e.wine_id
-    WHERE e.owner_id=? AND e.model_key=? AND e.dimensions=?`).bind(owner,config.modelKey,config.dimensions).all<StoredEmbeddingRow>();
+    WHERE e.owner_id=? AND e.model_key=? AND e.dimensions=?
+      AND (EXISTS (SELECT 1 FROM wines w WHERE w.owner_id=e.owner_id AND w.id=e.wine_id)
+        OR EXISTS (SELECT 1 FROM member_visible_wines v WHERE v.owner_id=e.owner_id AND v.id=e.wine_id AND v.is_shared=1))`).bind(owner,config.modelKey,config.dimensions).all<StoredEmbeddingRow>();
   return result.results.map(row=>({id:row.wine_id,vector:decodeStoredEmbedding(row.embedding)}));
 }
 

@@ -123,6 +123,38 @@ describe('Journal semantic search helpers',()=>{
     expect(run).toHaveBeenCalledTimes(5);
   });
 
+  it('indexes wines friends shared with a member, using only what the member can see',async()=>{
+    const state=migratedSqliteD1();databases.push(state);const {db,sqlite}=state;
+    sqlite.exec(`
+      INSERT INTO app_users(id,email,display_name,role) VALUES('alice','a@example.com','Alice','owner'),('bob','b@example.com','Bob','member');
+      INSERT INTO friendships(user_id,friend_id) VALUES('alice','bob'),('bob','alice');
+      INSERT INTO wines(id,owner_id,producer,wine_name,vintage,country,region,grapes_json,wine_style,tasting_notes,rating,tags_json,created_at,updated_at)
+        VALUES('shared-fleur','alice','Domaine Fleur','Fleur',2019,'France','Burgundy','["Pinot Noir"]','red','alice private notes',95,'[]','2026-01-01','2026-09-03');
+      INSERT INTO wine_shares(wine_id,owner_id,recipient_id) VALUES('shared-fleur','alice','bob');
+    `);
+    const basis=(x:number,y:number)=>[x,y,...Array.from({length:1022},()=>0)];
+    const run=vi.fn(async(_model:string,input:unknown)=>({data:(input as {text:string[]}).text.map(text=>text.includes('Wine: Fleur')||text==='floral elegant Burgundy'?basis(1,0):basis(0,1))}));
+    const env={DB:db,AI:{run}} as never;
+
+    await warmSemanticWineIndex(env,'bob');
+    const documents=run.mock.calls.flatMap(call=>(call[1] as {text:string[]}).text);
+    expect(documents).toHaveLength(1);
+    expect(documents[0]).toContain('Wine: Fleur');
+    // The friend's private notes and score never reach the member's index.
+    expect(documents[0]).not.toContain('alice private notes');
+    expect(documents[0]).not.toContain('95');
+
+    const semantic=await semanticWineIds(env,'bob','floral elegant Burgundy');
+    expect(semantic?.ids).toEqual(['shared-fleur']);
+    const page=await listJournalPage(db,'bob',{query:'floral elegant Burgundy'},semantic?.ids??[],true);
+    expect(page.items.map(item=>item.id)).toEqual(['shared-fleur']);
+
+    // Once the share is withdrawn the stored vector is no longer a candidate.
+    sqlite.prepare("DELETE FROM wine_shares WHERE wine_id='shared-fleur'").run();
+    sqlite.prepare("DELETE FROM wine_semantic_query_cache").run();
+    expect((await semanticWineIds(env,'bob','floral elegant Burgundy'))?.ids).toEqual([]);
+  });
+
   it('does not purge or overwrite newer rankings when an older query finishes late',async()=>{
     const state=migratedSqliteD1();databases.push(state);const {db,sqlite}=state;
     sqlite.exec("INSERT INTO wines(id,owner_id,producer,wine_name,created_at,updated_at) VALUES('w','owner','Producer','Wine','2026-01-01','2026-01-01')");

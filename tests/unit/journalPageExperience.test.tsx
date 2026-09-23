@@ -37,7 +37,7 @@ describe('Journal result navigation',()=>{
       return new Response(JSON.stringify({items:[journalWine()],nextOffset:offset+36<73?offset+36:null,total:73}),{status:200,headers:{'content-type':'application/json'}});
     });
     const page=await render('/journal?query=Austria',fetcher);
-    expect(page.querySelector('.journal-viewbar')?.textContent).toContain('73 matching wines');
+    expect(page.querySelector('.journal-result-count')?.textContent).toContain('73 matching wines');
     // Reset sits with the filters now, not among the list-and-grid controls,
     // which were about layout rather than about what is being shown.
     expect(page.querySelector('.journal-filter-bar .journal-filter-reset')).not.toBeNull();
@@ -53,7 +53,7 @@ describe('Journal result navigation',()=>{
   it('shows a zero result count after a filter finds nothing',async()=>{
     const fetcher=vi.fn(async()=>new Response(JSON.stringify({items:[],nextOffset:null,total:0}),{status:200,headers:{'content-type':'application/json'}}));
     const page=await render('/journal?country=Austria',fetcher);
-    expect(page.querySelector('.journal-viewbar')?.textContent).toContain('0 matching wines');
+    expect(page.querySelector('.journal-result-count')?.textContent).toContain('0 matching wines');
   });
 
   it('keeps an already-loaded photo mounted when selection mode opens',async()=>{
