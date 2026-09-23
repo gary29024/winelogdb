@@ -89,6 +89,7 @@ describe('Producer wine range',()=>{
     expect(grande.querySelector('.tasted-cuvee-title small')?.textContent).toContain('2 releases');
     expect([...grande.querySelectorAll('.tasted-copy strong')].map(node=>node.textContent)).toEqual(['172eme Edition','172ème Édition','171ème Édition']);
     expect([...grande.querySelectorAll('.tasted-copy span')].map(node=>node.textContent?.split(' · ')[0])).toEqual(['MV','MV','NV']);
+    expect(grande.querySelectorAll('.cuvee-inline-admin')).toHaveLength(withCatalog?1:0);
     expect(host!.textContent).toContain('2 cuvées · 4 tastings');
   });
 
@@ -109,7 +110,7 @@ describe('Producer wine range',()=>{
 
   it('groups legacy names and separate fields without requiring a researched catalogue',async()=>{
     await render({...prProducer,tastedWines:[
-      prWine('older',{wineName:'PR 20-90',releaseDesignation:null}),
+      prWine('older',{wineName:'PR20-90',releaseDesignation:null}),
       prWine('newer',{shared:true,cuveeId:null})
     ]});
     expect(host!.querySelectorAll('.tasted-cuvee-group')).toHaveLength(1);
@@ -145,6 +146,28 @@ describe('Producer wine range',()=>{
     expect(host!.querySelectorAll('.tasted-cuvee-group')).toHaveLength(1);
     expect(host!.querySelector('.tasted-cuvee-title small')?.textContent).toContain('2 releases');
     expect([...host!.querySelectorAll('.tasted-copy strong')].map(node=>node.textContent)).toEqual(['21-90','20-90']);
+    const {getProducer}=await import('../../src/features/producers/api');
+    const result=await getProducer('p1');
+    expect(result.catalogCuvees.map(row=>[row.id,row.tastedCount])).toEqual([['pr20',1],['pr21',1]]);
+    expect(result.tastedWines.map(wine=>wine.catalogCuveeId)).toEqual(['pr20','pr21']);
+    expect(result.tastedWines.map(wine=>wine.releaseParentCuveeId)).toEqual(['pr21','pr21']);
+  });
+
+  it('keeps catalogue link actions on their own cuvée when releases share a display group',async()=>{
+    await render({...prProducer,
+      catalog:[{name:'PR 90-20',category:'sparkling',appellation:'Champagne'},{name:'PR 90-21',category:'sparkling',appellation:'Champagne'}],
+      catalogCuvees:[{id:'pr20',canonicalName:'PR 90-20',wineStyle:'sparkling',appellation:'Champagne',tastedCount:1},{id:'pr21',canonicalName:'PR 90-21',wineStyle:'sparkling',appellation:'Champagne',tastedCount:0}],
+      cuveeCatalogLinks:[{id:'link-older',sourceCuveeId:'older',catalogCuveeId:'pr20',sourceName:'PR 90-20',catalogName:'PR 90-20'}],
+      tastedWines:[prWine('older',{cuveeId:'older',catalogCuveeId:'pr20',releaseDesignation:'20-90'}),prWine('newer',{cuveeId:'newer'})]
+    });
+    expect(host!.querySelectorAll('.tasted-cuvee-group')).toHaveLength(1);
+    const rows=[...host!.querySelectorAll('.tasted-row')];
+    expect(rows).toHaveLength(2);
+    expect(rows[0].querySelector('.tasted-copy strong')?.textContent).toBe('21-90');
+    expect(rows[0].querySelector('.cuvee-inline-admin button')).toBeNull();
+    expect(rows[1].querySelector('.tasted-copy strong')?.textContent).toBe('20-90');
+    expect(rows[1].querySelector('.cuvee-inline-admin button')?.textContent).toBe('Change link');
+    expect(rows[1].querySelector('.cuvee-inline-admin')?.textContent).toContain('Unlink');
   });
 
   it('preserves a saved free-text release instead of displaying the code in an older name',async()=>{

@@ -32,8 +32,8 @@ type ReleaseCatalogCandidate={
 const EDITION_SUFFIX=/^(.+?)\s+((\d{1,4})(?:er|e|eme|ème|th|st|nd|rd)?\s+(?:edition|édition))\s*$/i;
 const EDITION_PREFIX=/^(.+?)\s+((?:edition|édition)\s+(?:no\.?\s*)?(\d{1,4}))\s*$/i;
 const MULTI_VINTAGE=/^(.*?)\s*(MV\s*(\d{2,4}))(?=\s|$)(?:\s+(?:brut(?:\s+(?:nature|zero))?|extra\s+brut|zero\s+dosage))?\s*$/i;
-const RESERVE_SPAN=/^(?:(.*?)\s+)?((8\d|9\d)\s*[-–—/]\s*(\d{2}))\s*$/i;
-const REVERSED_RESERVE_SPAN=/^(?:(.*?)\s+)?(([0-7]\d)\s*[-–—/]\s*(8\d|9\d))\s*$/i;
+const RESERVE_SPAN=/^(.*?)\s*(?<!\d)((8\d|9\d)\s*[-–—/]\s*(\d{2}))\s*$/i;
+const REVERSED_RESERVE_SPAN=/^(.*?)\s*(?<!\d)(([0-7]\d)\s*[-–—/]\s*(8\d|9\d))\s*$/i;
 
 function compactDesignation(value:string){return value.replace(/\s+/g,' ').replace(/\s*([-–—/])\s*/g,'$1').trim()}
 
@@ -63,6 +63,9 @@ export function parseCuveeReleaseVariant(value:string,producerNames:string[]=[])
   const forwardSpan=clean.match(RESERVE_SPAN),reserveSpan=forwardSpan??clean.match(REVERSED_RESERVE_SPAN);
   if(reserveSpan){
     const parentName=String(reserveSpan[1]??'').trim(),designation=compactDesignation(String(reserveSpan[2]??''));
+    // Only PR bottles use the reversed ending-year / reserve-start spelling.
+    // A generic "Riserva 12-98" is not evidence of a release family.
+    if(!forwardSpan&&!['pr','pr rose'].includes(normalizeCuveeAlias(parentName)))return null;
     const start=Number(reserveSpan[forwardSpan?3:4]),end=Number(reserveSpan[forwardSpan?4:3]),sequence=start*100+end;
     if(designation&&Number.isInteger(sequence)&&sequence>0)return {kind:'reserve_span',parentName,designation,sequence};
   }

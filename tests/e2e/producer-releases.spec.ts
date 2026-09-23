@@ -11,7 +11,7 @@ for(const viewport of [{width:393,height:852},{width:1280,height:900}]){
    linkedProducers:[],supplementaryContacts:[],catalogDecisions:[],researchHistoryCount:0,sources:[],researchedAt:null,
    tastedWines:[
     {...wine,id:'pr21',cuveeId:'pr',wineName:'PR',vintageKind:'multi_vintage',releaseDesignation:'21-90'},
-    {...wine,id:'pr20',cuveeId:'legacy-pr',wineName:'PR 20-90',vintageKind:'multi_vintage',releaseDesignation:null},
+    {...wine,id:'pr20',cuveeId:'legacy-pr',wineName:'PR20-90',vintageKind:'multi_vintage',releaseDesignation:null},
     {...wine,id:'unknown',cuveeId:'pr',wineName:'PR',vintageKind:'unknown',releaseDesignation:null},
     {...wine,id:'nv',cuveeId:'esprit',wineName:'Esprit Nature',vintageKind:'non_vintage',releaseDesignation:null}
    ]

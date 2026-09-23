@@ -33,9 +33,9 @@ function tastedYearLabel(wine:ProducerDetail['tastedWines'][number]){
  return 'Year unknown';
 }
 
-function tastedReleaseGroupKey(wine:ProducerDetail['tastedWines'][number]){
+function tastedReleaseGroupKey(wine:ProducerDetail['tastedWines'][number],producerNames:string[]){
  if(wine.releaseParentCuveeId)return `release:${wine.releaseParentCuveeId}::${cuveeStyleFamily(wine.wineStyle)||'unknown'}`;
- if(wine.releaseParentName)return `release-name:${cuveeIdentitySignature(wine.releaseParentName,wine.appellation,wine.wineStyle)}`;
+ if(wine.releaseParentName)return `release-name:${cuveeIdentitySignature(wine.releaseParentName,wine.appellation,wine.wineStyle,producerNames)}`;
  return null;
 }
 type CatalogCategory='red'|'white'|'rose'|'sparkling'|'dessert'|'fortified'|'orange'|'other';
@@ -286,7 +286,7 @@ export function ProducerDetailPage(){
   const producerNames=[producer?.canonicalName??'',...producer?.aliases??[]];
   const families=new Map<string,Map<string,ProducerDetail['tastedWines'][number]>>();
   for(const wine of producer?.tastedWines??[]){
-   const key=tastedReleaseGroupKey(wine);if(!key||!wine.releaseParentName)continue;
+   const key=tastedReleaseGroupKey(wine,producerNames);if(!key||!wine.releaseParentName)continue;
    const identity=cuveeIdentitySignature(wine.releaseParentName,wine.appellation,wine.wineStyle,producerNames),candidates=families.get(identity)??new Map();
    candidates.set(key,wine);families.set(identity,candidates);
   }
@@ -295,7 +295,7 @@ export function ProducerDetailPage(){
    // A PR tasting with no known release still belongs beside its PR releases.
    const identity=cuveeIdentitySignature(wine.wineName,wine.appellation,wine.wineStyle,producerNames);
    const candidates=[...families.get(identity)?.entries()??[]].filter(([,family])=>!wine.catalogCuveeId||wine.catalogCuveeId===family.releaseParentCuveeId);
-   const key=tastedReleaseGroupKey(wine)??(candidates.length===1?candidates[0][0]:`${wine.cuveeId??normalizeProducerAlias(wine.wineName)}::${style}`);
+   const key=tastedReleaseGroupKey(wine,producerNames)??(candidates.length===1?candidates[0][0]:`${wine.cuveeId??normalizeProducerAlias(wine.wineName)}::${style}`);
    const list=map.get(key)??[];list.push(wine);map.set(key,list);
   }
   return [...map.entries()].map(([key,wines])=>{
@@ -310,7 +310,8 @@ export function ProducerDetailPage(){
   // where an eye expects them rather than after every unaccented name.
    .sort((a,b)=>a.name.localeCompare(b.name,undefined,{sensitivity:'base'})||(a.wineStyle??'').localeCompare(b.wineStyle??''));
  },[producer]);
- // Count the same cuvée families shown below when the catalogue is not visible.
+ // Members see only their tasting families; owners with a visible catalogue
+ // see the researched wine range and its appellations instead.
  const rangeStats=useMemo(()=>{
   if(!rangeAllowed)return tastedGroups.length?`${tastedGroups.length} tasted`:'';
   if(!catalogRows.length)return '';
@@ -494,7 +495,7 @@ export function ProducerDetailPage(){
    {rangeAllowed&&<ProducerRangeMissing producerId={producer.id} onChanged={reload}/>} 
    {visibleSources.length>0&&<details className="producer-sources"><summary>{visibleSources.length} {rangeAllowed?'profile & range':'research'} reference{visibleSources.length===1?'':'s'}{sourceWebsiteCount?` · ${sourceWebsiteCount} website${sourceWebsiteCount===1?'':'s'}`:''}</summary>{visibleSources.map(s=><a key={s.url} href={s.url} target="_blank" rel="noreferrer">{s.title}</a>)}</details>}{producer.researchedAt&&<small>{technicalView?<>Latest producer research: {producer.researchModel} · </>:<>Research updated </>}{new Date(producer.researchedAt).toLocaleDateString()}{staleLabel&&<> · ⚠ {staleLabel} may be outdated</>}</small>}
   </section>
-  <section className="detail-section"><p className="section-label">{producer.sharedOnly?'Shared wines':'Your tastings'}</p><h2>{tastedGroups.length} cuvée{tastedGroups.length===1?'':'s'} · {producer.tastedWines.length} tasting{producer.tastedWines.length===1?'':'s'}</h2>{tastedGroups.length?<div className="producer-tasted-groups">{tastedGroups.map(group=>{const releaseCount=new Set(group.wines.filter(w=>w.releaseDesignation).map(w=>w.releaseSequence??normalizeCuveeAlias(w.releaseDesignation!))).size,identityMeta=[releaseCount?`${releaseCount} release${releaseCount===1?'':'s'}`:null,group.wineStyle,group.grapes.length?group.grapes.join(' / '):null].filter(Boolean).join(' · '),firstOwned=group.wines.findIndex(item=>!item.shared);return <div className="tasted-cuvee-group" key={group.key}><div className="tasted-cuvee-title"><div><strong>{group.name}</strong>{identityMeta&&<small>{identityMeta}</small>}</div></div><div className="producer-tasted">{group.wines.map((w,index)=>{const release=String(w.releaseDesignation??'').trim(),year=tastedYearLabel(w),subline=[release?year:null,w.appellation,w.region].filter(Boolean).join(' · '),href=w.shared?`/shared/${w.id}`:`/wines/${w.id}`;return <div className="tasted-row tasted-vintage-row" key={w.id}><Link to={href} state={linkFrom({to:`/producers/${producer.id}`,label:producer.canonicalName})} className="tasted-row-link"><div className="tasted-thumb">{w.imageUrl?<img src={w.imageUrl} alt={`${w.wineName} ${release||year} bottle`} className="tasted-thumb-image" loading="lazy" decoding="async"/>:w.imageId?<WineImage imageId={w.imageId} alt={`${w.wineName} ${release||year} bottle`} className="tasted-thumb-image"/>:<span className="tasted-thumb-fallback">W</span>}</div><div className="tasted-copy"><strong>{release||year}</strong><span>{subline}</span></div></Link><div className="tasted-meta">{w.rating!=null&&<strong>{w.rating}</strong>}{w.tastingDate&&<span>{w.tastingDate}</span>}{!w.shared&&index===firstOwned&&<CuveeCatalogLinks producer={producer} group={group} onChanged={reload}/>}</div></div>})}</div></div>})}</div>:<p>No tasting records linked to this producer yet.</p>}
+  <section className="detail-section"><p className="section-label">{producer.sharedOnly?'Shared wines':'Your tastings'}</p><h2>{tastedGroups.length} cuvée{tastedGroups.length===1?'':'s'} · {producer.tastedWines.length} tasting{producer.tastedWines.length===1?'':'s'}</h2>{tastedGroups.length?<div className="producer-tasted-groups">{tastedGroups.map(group=>{const releaseCount=new Set(group.wines.filter(w=>w.releaseDesignation).map(w=>w.releaseSequence??normalizeCuveeAlias(w.releaseDesignation!))).size,identityMeta=[releaseCount?`${releaseCount} release${releaseCount===1?'':'s'}`:null,group.wineStyle,group.grapes.length?group.grapes.join(' / '):null].filter(Boolean).join(' · ');return <div className="tasted-cuvee-group" key={group.key}><div className="tasted-cuvee-title"><div><strong>{group.name}</strong>{identityMeta&&<small>{identityMeta}</small>}</div></div><div className="producer-tasted">{group.wines.map((w,index)=>{const release=String(w.releaseDesignation??'').trim(),year=tastedYearLabel(w),subline=[release?year:null,w.appellation,w.region].filter(Boolean).join(' · '),href=w.shared?`/shared/${w.id}`:`/wines/${w.id}`;return <div className="tasted-row tasted-vintage-row" key={w.id}><Link to={href} state={linkFrom({to:`/producers/${producer.id}`,label:producer.canonicalName})} className="tasted-row-link"><div className="tasted-thumb">{w.imageUrl?<img src={w.imageUrl} alt={`${w.wineName} ${release||year} bottle`} className="tasted-thumb-image" loading="lazy" decoding="async"/>:w.imageId?<WineImage imageId={w.imageId} alt={`${w.wineName} ${release||year} bottle`} className="tasted-thumb-image"/>:<span className="tasted-thumb-fallback">W</span>}</div><div className="tasted-copy"><strong>{release||year}</strong><span>{subline}</span></div></Link><div className="tasted-meta">{w.rating!=null&&<strong>{w.rating}</strong>}{w.tastingDate&&<span>{w.tastingDate}</span>}{!w.shared&&index===group.wines.findIndex(item=>!item.shared&&item.cuveeId===w.cuveeId)&&(index===group.wines.findIndex(item=>!item.shared)||!w.catalogCuveeId||producer.cuveeCatalogLinks.some(link=>link.sourceCuveeId===w.cuveeId))&&<CuveeCatalogLinks producer={producer} group={{...group,cuveeId:w.cuveeId,catalogCuveeId:w.catalogCuveeId,wines:[w]}} onChanged={reload}/>}</div></div>})}</div></div>})}</div>:<p>No tasting records linked to this producer yet.</p>}
   </section>
   {!producer.sharedOnly&&<section className="detail-section producer-identity"><p className="section-label">Identity & aliases</p><h2>Known producer names</h2>
    <div className="primary-name-control"><label>Primary display name<select value={primaryName} onChange={e=>setPrimaryName(e.target.value)}>{producer.aliases.map(alias=><option key={alias} value={alias}>{alias}</option>)}</select></label><button type="button" disabled={savingPrimary||!primaryName||primaryName===producer.canonicalName} onClick={savePrimaryName}>{savingPrimary?'Saving…':'Set primary'}</button></div>

@@ -38,10 +38,9 @@ export const getProducer=(id:string)=>apiFetch(`/api/producers/${id}`,{headers:a
     // Preserve saved releases even without a catalogue match. A conflicting
     // explicit catalogue link must not be regrouped under an inferred family.
     if(!match||!compatible)return {...wine,releaseParentCuveeId:null,releaseParentName:!wine.catalogCuveeId?variant?.parentName||null:null,releaseDesignation,releaseSequence:variant?.sequence??null};
-    if(wine.catalogCuveeId!==match.catalogCuveeId){
-      releaseCounts.set(match.catalogCuveeId,(releaseCounts.get(match.catalogCuveeId)??0)+1);
-      if(wine.catalogCuveeId)releaseCounts.set(wine.catalogCuveeId,(releaseCounts.get(wine.catalogCuveeId)??0)-1);
-    }
+    // A tasting with an explicit catalogue link keeps counting on that row.
+    // Only an unmatched tasting needs adding to the inferred family row.
+    if(!wine.catalogCuveeId)releaseCounts.set(match.catalogCuveeId,(releaseCounts.get(match.catalogCuveeId)??0)+1);
     const releases=releaseNames.get(match.catalogCuveeId)??new Map<number,string>();releases.set(match.variant.sequence,releaseDesignation??match.variant.designation);releaseNames.set(match.catalogCuveeId,releases);
     return {...wine,catalogCuveeId:wine.catalogCuveeId??match.catalogCuveeId,releaseParentCuveeId:match.catalogCuveeId,releaseParentName:match.catalogName,releaseDesignation,releaseSequence:match.variant.sequence};
   });

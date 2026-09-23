@@ -24,6 +24,8 @@ describe('cuvée release variants',()=>{
     expect(parseCuveeReleaseVariant('Fût de Chêne MV20')).toEqual({kind:'multi_vintage',parentName:'Fût de Chêne MV',designation:'MV20',sequence:20});
     expect(parseCuveeReleaseVariant('MV20 Brut')).toEqual({kind:'multi_vintage',parentName:'MV',designation:'MV20',sequence:20});
     expect(parseCuveeReleaseVariant('PR 90-21')).toEqual({kind:'reserve_span',parentName:'PR',designation:'90-21',sequence:9021});
+    expect(parseCuveeReleaseVariant('PR90-21')).toEqual({kind:'reserve_span',parentName:'PR',designation:'90-21',sequence:9021});
+    expect(parseCuveeReleaseVariant('PR21-90')).toEqual({kind:'reserve_span',parentName:'PR',designation:'21-90',sequence:9021});
     expect(parseCuveeReleaseVariant('Solera Ratafia Champenois 90–19')).toEqual({kind:'reserve_span',parentName:'Solera Ratafia Champenois',designation:'90–19',sequence:9019});
   });
 
@@ -39,6 +41,10 @@ describe('cuvée release variants',()=>{
   });
 
   it.each(['PR 2021','PR 20-21','PR 2021-1990','PR 123-90'])('does not guess a reserve span from %s',name=>{
+    expect(parseCuveeReleaseVariant(name)).toBeNull();
+  });
+
+  it.each(['Riserva 12-98','Cuvée 07/89','Other Reserve 21-90','21-90'])('does not treat unrelated reversed numbers as PR releases: %s',name=>{
     expect(parseCuveeReleaseVariant(name)).toBeNull();
   });
 
