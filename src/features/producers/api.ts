@@ -4,10 +4,11 @@ import type { ProducerEntity } from '../../lib/producers/entities';
 import { canonicalCatalogEntries,catalogRowsForPresentation } from '../../lib/cuvees/catalogPresentation';
 import type { CatalogCuveeSummary,CuveeCatalogLink } from '../../lib/cuvees/catalogLinks';
 import type { CatalogDecision,CatalogDecisionKind } from '../../lib/producers/catalogDecisions';
-import { matchCuveeReleaseVariantToCatalog } from '../../lib/cuvees/releaseVariants';
+import { matchCuveeReleaseVariantToCatalog,wineCuveeReleaseVariant } from '../../lib/cuvees/releaseVariants';
+import type { VintageKind } from '../../lib/wine/referenceIdentity';
 
 export type ProducerSummary={id:string;canonicalName:string;homeCountry:string|null;homeRegion:string|null;homeLocality:string|null;tastedCount:number;catalogCount:number;researchedAt:string|null;sharedOnly?:boolean};
-export type TastedWine={id:string;wineName:string;vintage:number|null;appellation:string|null;region:string|null;country:string|null;wineStyle:string|null;grapes:string[];imageId:string|null;imageUrl?:string|null;tastingDate:string|null;rating:number|null;cuveeId:string|null;catalogCuveeId:string|null;shared?:boolean;releaseParentCuveeId?:string|null;releaseParentName?:string|null;releaseDesignation?:string|null;releaseSequence?:number|null};
+export type TastedWine={id:string;wineName:string;vintage:number|null;vintageKind?:VintageKind|null;appellation:string|null;region:string|null;country:string|null;wineStyle:string|null;grapes:string[];imageId:string|null;imageUrl?:string|null;tastingDate:string|null;rating:number|null;cuveeId:string|null;catalogCuveeId:string|null;shared?:boolean;releaseParentCuveeId?:string|null;releaseParentName?:string|null;releaseDesignation?:string|null;releaseSequence?:number|null};
 export type LinkedProducer={mergeId:string;producerId:string;name:string;mergedAt:string};
 export type ManualProducerContactType='email'|'phone'|'website'|'instagram'|'other';
 export type ManualProducerContact={id:string;type:ManualProducerContactType;label:string|null;value:string;note:string|null;createdAt:string;updatedAt:string};
@@ -29,12 +30,20 @@ export const getProducer=(id:string)=>apiFetch(`/api/producers/${id}`,{headers:a
   const catalogCuvees=catalogRowsForPresentation(catalog,producerNames,detail.catalogCuvees);
   const releaseCounts=new Map<string,number>(),releaseNames=new Map<string,Map<number,string>>();
   const tastedWines=detail.tastedWines.map(wine=>{
-    const match=matchCuveeReleaseVariantToCatalog({name:wine.wineName,appellation:wine.appellation,wineStyle:wine.wineStyle},catalogCuvees,producerNames);
-    const compatible=Boolean(match&&(!wine.catalogCuveeId||wine.catalogCuveeId===match.catalogCuveeId));
-    if(!match||!compatible)return {...wine,releaseParentCuveeId:null,releaseParentName:null,releaseDesignation:null,releaseSequence:null};
-    if(!wine.catalogCuveeId)releaseCounts.set(match.catalogCuveeId,(releaseCounts.get(match.catalogCuveeId)??0)+1);
-    const releases=releaseNames.get(match.catalogCuveeId)??new Map<number,string>();releases.set(match.variant.sequence,match.variant.designation);releaseNames.set(match.catalogCuveeId,releases);
-    return {...wine,catalogCuveeId:wine.catalogCuveeId??match.catalogCuveeId,releaseParentCuveeId:match.catalogCuveeId,releaseParentName:match.catalogName,releaseDesignation:match.variant.designation,releaseSequence:match.variant.sequence};
+    const source={name:wine.wineName,releaseDesignation:wine.releaseDesignation,appellation:wine.appellation,wineStyle:wine.wineStyle};
+    const variant=wineCuveeReleaseVariant(source,producerNames),releaseDesignation=wine.releaseDesignation?.trim()||variant?.designation||null;
+    const match=matchCuveeReleaseVariantToCatalog(source,catalogCuvees,producerNames);
+    const linkedRow=catalogCuvees.find(row=>row.id===wine.catalogCuveeId);
+    const compatible=Boolean(match&&(!wine.catalogCuveeId||wine.catalogCuveeId===match.catalogCuveeId||(linkedRow&&matchCuveeReleaseVariantToCatalog(source,[linkedRow],producerNames))));
+    // Preserve saved releases even without a catalogue match. A conflicting
+    // explicit catalogue link must not be regrouped under an inferred family.
+    if(!match||!compatible)return {...wine,releaseParentCuveeId:null,releaseParentName:!wine.catalogCuveeId?variant?.parentName||null:null,releaseDesignation,releaseSequence:variant?.sequence??null};
+    if(wine.catalogCuveeId!==match.catalogCuveeId){
+      releaseCounts.set(match.catalogCuveeId,(releaseCounts.get(match.catalogCuveeId)??0)+1);
+      if(wine.catalogCuveeId)releaseCounts.set(wine.catalogCuveeId,(releaseCounts.get(wine.catalogCuveeId)??0)-1);
+    }
+    const releases=releaseNames.get(match.catalogCuveeId)??new Map<number,string>();releases.set(match.variant.sequence,releaseDesignation??match.variant.designation);releaseNames.set(match.catalogCuveeId,releases);
+    return {...wine,catalogCuveeId:wine.catalogCuveeId??match.catalogCuveeId,releaseParentCuveeId:match.catalogCuveeId,releaseParentName:match.catalogName,releaseDesignation,releaseSequence:match.variant.sequence};
   });
   const catalogWithReleases=catalogCuvees.map(row=>{
     const releases=releaseNames.get(row.id),tastedReleases=releases?[...releases.entries()].sort((a,b)=>b[0]-a[0]).map(([,label])=>label):[];

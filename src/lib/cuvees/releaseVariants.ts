@@ -32,7 +32,8 @@ type ReleaseCatalogCandidate={
 const EDITION_SUFFIX=/^(.+?)\s+((\d{1,4})(?:er|e|eme|ème|th|st|nd|rd)?\s+(?:edition|édition))\s*$/i;
 const EDITION_PREFIX=/^(.+?)\s+((?:edition|édition)\s+(?:no\.?\s*)?(\d{1,4}))\s*$/i;
 const MULTI_VINTAGE=/^(.*?)\s*(MV\s*(\d{2,4}))(?=\s|$)(?:\s+(?:brut(?:\s+(?:nature|zero))?|extra\s+brut|zero\s+dosage))?\s*$/i;
-const RESERVE_SPAN=/^(.*?)\s*((8\d|9\d)\s*[-–—/]\s*(\d{2}))\s*$/i;
+const RESERVE_SPAN=/^(?:(.*?)\s+)?((8\d|9\d)\s*[-–—/]\s*(\d{2}))\s*$/i;
+const REVERSED_RESERVE_SPAN=/^(?:(.*?)\s+)?(([0-7]\d)\s*[-–—/]\s*(8\d|9\d))\s*$/i;
 
 function compactDesignation(value:string){return value.replace(/\s+/g,' ').replace(/\s*([-–—/])\s*/g,'$1').trim()}
 
@@ -59,13 +60,28 @@ export function parseCuveeReleaseVariant(value:string,producerNames:string[]=[])
     const prefix=String(multiVintage[1]??'').trim(),designation=compactDesignation(String(multiVintage[2]??'')),sequence=Number(multiVintage[3]);
     if(designation&&Number.isInteger(sequence)&&sequence>0)return {kind:'multi_vintage',parentName:prefix?`${prefix} MV`:'MV',designation,sequence};
   }
-  const reserveSpan=clean.match(RESERVE_SPAN);
+  const forwardSpan=clean.match(RESERVE_SPAN),reserveSpan=forwardSpan??clean.match(REVERSED_RESERVE_SPAN);
   if(reserveSpan){
     const parentName=String(reserveSpan[1]??'').trim(),designation=compactDesignation(String(reserveSpan[2]??''));
-    const start=Number(reserveSpan[3]),end=Number(reserveSpan[4]),sequence=start*100+end;
+    const start=Number(reserveSpan[forwardSpan?3:4]),end=Number(reserveSpan[forwardSpan?4:3]),sequence=start*100+end;
     if(designation&&Number.isInteger(sequence)&&sequence>0)return {kind:'reserve_span',parentName,designation,sequence};
   }
   return null;
+}
+
+/** Saved release fields take precedence over a release left in an older wine name. */
+export function wineCuveeReleaseVariant(source:{name:string;releaseDesignation?:string|null},producerNames:string[]=[]):CuveeReleaseVariant|null{
+  const named=parseCuveeReleaseVariant(source.name,producerNames),release=source.releaseDesignation?.trim();
+  if(!release)return named;
+  const parent=named?.parentName??stripKnownProducerPrefix(source.name,producerNames).trim();
+  const standalone=parseCuveeReleaseVariant(release,producerNames);
+  if(standalone&&releaseFamilyKey(standalone.parentName,producerNames)===releaseFamilyKey(parent,producerNames))return {...standalone,designation:release};
+  // Fût de Chêne MV + MV20 must not turn into a family called "Fût de Chêne MV MV".
+  const base=standalone?.kind==='multi_vintage'?parent.replace(/\s*\bMV$/i,'').trim():parent;
+  const combined=parseCuveeReleaseVariant(`${base} ${release}`,producerNames);
+  const expectedParent=standalone?.kind==='multi_vintage'?`${base} MV`:base;
+  if(!combined||releaseFamilyKey(combined.parentName,producerNames)!==releaseFamilyKey(expectedParent,producerNames))return null;
+  return {...combined,designation:release};
 }
 
 function compatibleAppellation(a:string|null|undefined,b:string|null|undefined){
@@ -105,11 +121,11 @@ function familyDisplay(candidate:ReleaseCatalogCandidate){
 }
 
 export function matchCuveeReleaseVariantToCatalog(
-  source:{name:string;appellation?:string|null;wineStyle?:string|null},
+  source:{name:string;releaseDesignation?:string|null;appellation?:string|null;wineStyle?:string|null},
   catalogRows:ReleaseCatalogRow[],
   producerNames:string[]=[]
 ):ReleaseCatalogMatch|null{
-  const variant=parseCuveeReleaseVariant(source.name,producerNames);if(!variant)return null;
+  const variant=wineCuveeReleaseVariant(source,producerNames);if(!variant)return null;
   const parentKey=releaseFamilyKey(variant.parentName,producerNames);
   const compatible=catalogRows.filter(row=>compatibleAppellation(source.appellation,row.appellation)&&compatibleStyle(source.wineStyle,row.wineStyle)).map(row=>candidateFor(row,producerNames));
 

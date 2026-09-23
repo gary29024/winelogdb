@@ -24,6 +24,13 @@ const detail={
   researchHistoryCount:0,sources:[],researchModel:null,researchedAt:null
 };
 
+const prWine=(id:string,over:Record<string,unknown>={})=>({
+  id,wineName:'PR',vintage:null,vintageKind:'multi_vintage',releaseDesignation:'21-90',
+  appellation:'Champagne',region:'Champagne',country:'France',wineStyle:'sparkling',grapes:[],
+  cuveeId:`cuvee-${id}`,catalogCuveeId:null,imageId:null,rating:null,tastingDate:null,...over
+});
+const prProducer={canonicalName:'Henri Giraud',aliases:['Henri Giraud'],catalog:[],catalogCuvees:[]};
+
 let root:Root|null=null,host:HTMLDivElement|null=null;
 
 let posted:Array<{url:string;body:unknown}>=[];
@@ -65,6 +72,102 @@ afterEach(()=>{
 });
 
 describe('Producer wine range',()=>{
+  it('shows two saved PR releases under one catalogue cuvée with their MV status',async()=>{
+    await render({...prProducer,
+      catalog:[{name:'PR 90-21',category:'sparkling',appellation:'Champagne'}],
+      catalogCuvees:[{id:'pr',canonicalName:'PR 90-21',wineStyle:'sparkling',appellation:'Champagne',tastedCount:0}],
+      tastedWines:[prWine('older',{releaseDesignation:'20-90'}),prWine('newer')]
+    });
+    expect(host!.querySelectorAll('.tasted-cuvee-group')).toHaveLength(1);
+    expect(host!.querySelector('.tasted-cuvee-title strong')?.textContent).toBe('PR');
+    expect(host!.querySelector('.tasted-cuvee-title small')?.textContent).toContain('2 releases');
+    expect([...host!.querySelectorAll('.tasted-copy strong')].map(node=>node.textContent)).toEqual(['21-90','20-90']);
+    expect([...host!.querySelectorAll('.tasted-copy span')].every(node=>node.textContent?.startsWith('MV ·'))).toBe(true);
+    expect(host!.textContent).toContain('1 cuvée · 2 tastings');
+    expect([...host!.querySelectorAll('.tasted-row-link')].map(node=>node.getAttribute('href'))).toEqual(['/wines/newer','/wines/older']);
+  });
+
+  it('groups legacy names and separate fields without requiring a researched catalogue',async()=>{
+    await render({...prProducer,tastedWines:[
+      prWine('older',{wineName:'PR 20-90',releaseDesignation:null}),
+      prWine('newer',{shared:true,cuveeId:null})
+    ]});
+    expect(host!.querySelectorAll('.tasted-cuvee-group')).toHaveLength(1);
+    expect(host!.querySelector('.tasted-cuvee-title strong')?.textContent).toBe('PR');
+    expect([...host!.querySelectorAll('.tasted-copy strong')].map(node=>node.textContent)).toEqual(['21-90','20-90']);
+    expect(host!.querySelector('.tasted-row-link')?.getAttribute('href')).toBe('/shared/newer');
+  });
+
+  it('counts reversed spellings of the same release once while retaining both tastings',async()=>{
+    await render({...prProducer,tastedWines:[prWine('a'),prWine('b',{releaseDesignation:'90-21'})]});
+    expect(host!.querySelector('.tasted-cuvee-title small')?.textContent).toContain('1 release');
+    expect(host!.querySelectorAll('.tasted-row')).toHaveLength(2);
+  });
+
+  it.each([false,true])('keeps a PR tasting with an unknown release in its family (catalogue: %s)',async withCatalog=>{
+    await render({...prProducer,
+      ...(withCatalog?{
+        catalog:[{name:'PR',category:'sparkling',appellation:'Champagne'}],
+        catalogCuvees:[{id:'pr',canonicalName:'PR',wineStyle:'sparkling',appellation:'Champagne',tastedCount:0}]
+      }:{}),
+      tastedWines:[prWine('unknown',{releaseDesignation:null,vintageKind:'unknown'}),prWine('known')]
+    });
+    expect(host!.querySelectorAll('.tasted-cuvee-group')).toHaveLength(1);
+    expect([...host!.querySelectorAll('.tasted-copy strong')].map(node=>node.textContent)).toEqual(['21-90','Year unknown']);
+  });
+
+  it('groups releases already linked to separate catalogue entries of the same PR family',async()=>{
+    await render({...prProducer,
+      catalog:[{name:'PR 90-20',category:'sparkling',appellation:'Champagne'},{name:'PR 90-21',category:'sparkling',appellation:'Champagne'}],
+      catalogCuvees:[{id:'pr20',canonicalName:'PR 90-20',wineStyle:'sparkling',appellation:'Champagne',tastedCount:1},{id:'pr21',canonicalName:'PR 90-21',wineStyle:'sparkling',appellation:'Champagne',tastedCount:1}],
+      tastedWines:[prWine('a',{catalogCuveeId:'pr20',releaseDesignation:'20-90'}),prWine('b',{catalogCuveeId:'pr21'})]
+    });
+    expect(host!.querySelectorAll('.tasted-cuvee-group')).toHaveLength(1);
+    expect(host!.querySelector('.tasted-cuvee-title small')?.textContent).toContain('2 releases');
+    expect([...host!.querySelectorAll('.tasted-copy strong')].map(node=>node.textContent)).toEqual(['21-90','20-90']);
+  });
+
+  it('preserves a saved free-text release instead of displaying the code in an older name',async()=>{
+    await render({...prProducer,tastedWines:[prWine('a',{wineName:'PR 90-20',releaseDesignation:'Special release'})]});
+    expect(host!.querySelector('.tasted-copy strong')?.textContent).toBe('Special release');
+  });
+
+  it('keeps unnumbered saved releases visible within an existing cuvée',async()=>{
+    await render({...prProducer,tastedWines:[
+      prWine('a',{cuveeId:'pr',releaseDesignation:'Spring release'}),
+      prWine('b',{cuveeId:'pr',releaseDesignation:'Autumn release'})
+    ]});
+    expect(host!.querySelectorAll('.tasted-cuvee-group')).toHaveLength(1);
+    expect(host!.querySelector('.tasted-cuvee-title small')?.textContent).toContain('2 releases');
+    expect([...host!.querySelectorAll('.tasted-copy strong')].map(node=>node.textContent)).toEqual(['Spring release','Autumn release']);
+  });
+
+  it('distinguishes vintage, MV, NV and unknown years instead of labelling every blank year NV',async()=>{
+    await render({...prProducer,tastedWines:[
+      prWine('vintage',{cuveeId:'pr',releaseDesignation:null,vintage:2015,vintageKind:'vintage'}),
+      prWine('mv',{cuveeId:'pr',releaseDesignation:null}),
+      prWine('nv',{cuveeId:'pr',releaseDesignation:null,vintageKind:'non_vintage'}),
+      prWine('unknown',{cuveeId:'pr',releaseDesignation:null,vintageKind:'unknown'}),
+      prWine('legacy',{cuveeId:'pr',releaseDesignation:null,vintageKind:null})
+    ]});
+    expect([...host!.querySelectorAll('.tasted-copy strong')].map(node=>node.textContent)).toEqual(['2015','MV','NV','Year unknown','Year unknown']);
+  });
+
+  it('does not combine release families with different styles or appellations',async()=>{
+    await render({...prProducer,tastedWines:[prWine('a'),prWine('b',{wineStyle:'rose'}),prWine('c',{appellation:'Other appellation'})]});
+    expect(host!.querySelectorAll('.tasted-cuvee-group')).toHaveLength(3);
+  });
+
+  it('preserves an explicit catalogue mapping that conflicts with the inferred PR family',async()=>{
+    await render({...prProducer,
+      catalog:[{name:'PR 90-21',category:'sparkling',appellation:'Champagne'},{name:'Other',category:'sparkling',appellation:'Champagne'}],
+      catalogCuvees:[{id:'pr',canonicalName:'PR 90-21',wineStyle:'sparkling',appellation:'Champagne',tastedCount:0},{id:'other',canonicalName:'Other',wineStyle:'sparkling',appellation:'Champagne',tastedCount:1}],
+      tastedWines:[prWine('a',{catalogCuveeId:'other'}),prWine('b',{releaseDesignation:'20-90'})]
+    });
+    expect(host!.querySelectorAll('.tasted-cuvee-group')).toHaveLength(2);
+    expect([...host!.querySelectorAll('.tasted-copy strong')].map(node=>node.textContent)).toContain('21-90');
+  });
+
   it('opens a shared tasting using the shared wine route',async()=>{
     await render({tastedWines:[{id:'shared-wine',wineName:'Clos de la Roche',vintage:2020,wineStyle:'red',shared:true}]});
     expect(host?.querySelector('.tasted-row-link')?.getAttribute('href')).toBe('/shared/shared-wine');

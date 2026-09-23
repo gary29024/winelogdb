@@ -191,7 +191,7 @@ app.get('/api/producers/:id',async c=>{
     if(!row)return c.json({error:'Producer not found'},404);
     matchKey=String(row.match_key??'');
 
-    const sharedWines=await c.env.DB.prepare(`SELECT v.id,v.wine_name,v.vintage,v.appellation,v.region,v.country,v.wine_style,v.grapes_json,
+    const sharedWines=await c.env.DB.prepare(`SELECT v.id,v.wine_name,v.vintage,source_wine.vintage_kind,source_wine.release_designation,v.appellation,v.region,v.country,v.wine_style,v.grapes_json,
       v.tasting_date,v.rating,v.source_owner_id,
       (SELECT wi.id FROM wine_images wi WHERE wi.owner_id=v.source_owner_id AND wi.wine_id=v.id ORDER BY wi.rowid ASC LIMIT 1) AS image_id
       FROM member_visible_wines v
@@ -202,6 +202,7 @@ app.get('/api/producers/:id',async c=>{
 
     const mapSharedWine=(w:Record<string,unknown>)=>({
       id:String(w.id),cuveeId:null,wineName:String(w.wine_name),vintage:w.vintage==null?null:Number(w.vintage),
+      vintageKind:w.vintage_kind??(w.vintage==null?'unknown':'vintage'),releaseDesignation:w.release_designation??null,
       appellation:w.appellation?String(w.appellation):null,region:w.region?String(w.region):null,country:w.country?String(w.country):null,
       wineStyle:w.wine_style?String(w.wine_style):null,grapes:parseJson<unknown[]>(w.grapes_json,[]).map(String).filter(Boolean),
       imageId:null,
@@ -217,7 +218,7 @@ app.get('/api/producers/:id',async c=>{
 
     const [aliases,wines,history,links,supplementaryContacts,catalogDecisions]=await Promise.all([
       c.env.DB.prepare('SELECT display_alias FROM producer_aliases WHERE owner_id=? AND producer_id=? ORDER BY display_alias COLLATE NOCASE').bind(owner,requested).all<{display_alias:string}>(),
-      c.env.DB.prepare(`SELECT w.id,w.cuvee_id,w.wine_name,w.vintage,w.appellation,w.region,w.country,w.wine_style,w.grapes_json,w.lwin7,w.identity_match_status,w.lwin_reference_json,
+      c.env.DB.prepare(`SELECT w.id,w.cuvee_id,w.wine_name,w.vintage,w.vintage_kind,w.release_designation,w.appellation,w.region,w.country,w.wine_style,w.grapes_json,w.lwin7,w.identity_match_status,w.lwin_reference_json,
         (SELECT wi.id FROM wine_images wi WHERE wi.owner_id=w.owner_id AND wi.wine_id=w.id ORDER BY wi.rowid ASC LIMIT 1) AS image_id,
         coalesce((SELECT we.consumed_at FROM wine_experiences we WHERE we.owner_id=w.owner_id AND we.wine_id=w.id ORDER BY we.created_at DESC LIMIT 1),w.tasting_date) AS tasting_date,
         coalesce((SELECT we.rating FROM wine_experiences we WHERE we.owner_id=w.owner_id AND we.wine_id=w.id ORDER BY we.created_at DESC LIMIT 1),w.rating) AS rating
@@ -231,7 +232,7 @@ app.get('/api/producers/:id',async c=>{
     const entity=mapProducerRow(row),producerNames=[entity.canonicalName,...aliases.results.map(x=>x.display_alias)];
     const references=wines.results.map(reliableLwinReference).filter((reference):reference is LwinReference=>Boolean(reference));
     const correctedCatalog=attachLwinRange(applyCatalogDecisions(entity.catalog,catalogDecisions,producerNames).range,[...new Map(references.map(reference=>[reference.lwin7,reference])).values()],producerNames);
-    const ownWines=wines.results.map(w=>({id:String(w.id),cuveeId:w.cuvee_id?String(w.cuvee_id):null,wineName:String(w.wine_name),vintage:w.vintage==null?null:Number(w.vintage),appellation:w.appellation?String(w.appellation):null,region:w.region?String(w.region):null,country:w.country?String(w.country):null,wineStyle:w.wine_style?String(w.wine_style):null,grapes:parseJson<unknown[]>(w.grapes_json,[]).map(String).filter(Boolean),imageId:w.image_id?String(w.image_id):null,imageUrl:null,tastingDate:w.tasting_date?String(w.tasting_date):null,rating:w.rating==null?null:Number(w.rating),shared:false}));
+    const ownWines=wines.results.map(w=>({id:String(w.id),cuveeId:w.cuvee_id?String(w.cuvee_id):null,wineName:String(w.wine_name),vintage:w.vintage==null?null:Number(w.vintage),vintageKind:w.vintage_kind??(w.vintage==null?'unknown':'vintage'),releaseDesignation:w.release_designation??null,appellation:w.appellation?String(w.appellation):null,region:w.region?String(w.region):null,country:w.country?String(w.country):null,wineStyle:w.wine_style?String(w.wine_style):null,grapes:parseJson<unknown[]>(w.grapes_json,[]).map(String).filter(Boolean),imageId:w.image_id?String(w.image_id):null,imageUrl:null,tastingDate:w.tasting_date?String(w.tasting_date):null,rating:w.rating==null?null:Number(w.rating),shared:false}));
     return c.json({...entity,sharedOnly:false,catalog:correctedCatalog,catalogDecisions,aliases:aliases.results.map(x=>x.display_alias),
       researchHistoryCount:Number(history?.count)||0,linkedProducers:links.results.map(x=>({mergeId:x.id,producerId:x.source_producer_id,name:x.source_canonical_name,mergedAt:x.merged_at})),
       supplementaryContacts,tastedWines:[...ownWines,...sharedWines.results.map(mapSharedWine)]});

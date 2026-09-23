@@ -4,7 +4,7 @@ import { cuveeStyleFamily,normalizeCuveeAlias } from '../../lib/cuvees/entities'
 import { changeTastedCuveeCatalogLink,linkTastedCuveeToCatalog,unlinkTastedCuveeFromCatalog,type ProducerDetail,type TastedWine } from './api';
 import '../../cuveeCatalogLinks.css';
 
-export type TastedCuveeGroup={cuveeId:string|null;catalogCuveeId:string|null;name:string;appellation:string|null;wineStyle:string|null;grapes:string[];releaseFamily:boolean;wines:TastedWine[]};
+export type TastedCuveeGroup={key:string;cuveeId:string|null;catalogCuveeId:string|null;name:string;appellation:string|null;wineStyle:string|null;grapes:string[];releaseFamily:boolean;wines:TastedWine[]};
 type CatalogTarget=CatalogPresentationChoice;
 
 const tokens=(value:string)=>new Set(normalizeCuveeAlias(value).split(/\s+/).filter(Boolean).filter(x=>!['grand','premier','cru','village','wine','cuvee'].includes(x)));

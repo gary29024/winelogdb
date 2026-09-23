@@ -1,5 +1,5 @@
 import { describe,expect,it } from 'vitest';
-import { matchCuveeReleaseVariantToCatalog,parseCuveeReleaseVariant } from '../../src/lib/cuvees/releaseVariants';
+import { matchCuveeReleaseVariantToCatalog,parseCuveeReleaseVariant,wineCuveeReleaseVariant } from '../../src/lib/cuvees/releaseVariants';
 
 const rows=[
   {id:'grande',canonicalName:'Grande Cuvée',appellation:'Champagne',wineStyle:'sparkling'},
@@ -31,6 +31,30 @@ describe('cuvée release variants',()=>{
     expect(parseCuveeReleaseVariant('Vintage 2013')).toBeNull();
     expect(parseCuveeReleaseVariant('Clos du Mesnil 2008')).toBeNull();
     expect(parseCuveeReleaseVariant('Argonne 2015')).toBeNull();
+  });
+
+  it.each(['21-90','21/90','21–90','90-21'])('keeps the printed PR code %s but sorts it as the same release',designation=>{
+    expect(parseCuveeReleaseVariant(`PR ${designation}`)).toEqual({kind:'reserve_span',parentName:'PR',designation,sequence:9021});
+    expect(matchCuveeReleaseVariantToCatalog({name:`PR ${designation}`,appellation:'Champagne',wineStyle:'sparkling'},giraudRows)?.catalogCuveeId).toBe('pr21');
+  });
+
+  it.each(['PR 2021','PR 20-21','PR 2021-1990','PR 123-90'])('does not guess a reserve span from %s',name=>{
+    expect(parseCuveeReleaseVariant(name)).toBeNull();
+  });
+
+  it('uses the separate release field before a release embedded in the name',()=>{
+    expect(wineCuveeReleaseVariant({name:'PR 90-20',releaseDesignation:'21-90'})).toEqual({kind:'reserve_span',parentName:'PR',designation:'21-90',sequence:9021});
+    expect(matchCuveeReleaseVariantToCatalog({name:'PR',releaseDesignation:'21-90',wineStyle:'sparkling'},giraudRows)).toMatchObject({catalogCuveeId:'pr21',variant:{designation:'21-90'}});
+    expect(wineCuveeReleaseVariant({name:'PR',releaseDesignation:'PR 21-90'})).toEqual({kind:'reserve_span',parentName:'PR',designation:'PR 21-90',sequence:9021});
+    expect(wineCuveeReleaseVariant({name:'PR 90-20',releaseDesignation:'Special release'})).toBeNull();
+    expect(wineCuveeReleaseVariant({name:'PR',releaseDesignation:'Other 90-21'})).toBeNull();
+  });
+
+  it('supports separate MV and edition fields without duplicating the family name',()=>{
+    for(const name of ['Fût de Chêne','Fût de Chêne MV','Fût de Chêne MV19']){
+      expect(wineCuveeReleaseVariant({name,releaseDesignation:'MV20'})).toEqual({kind:'multi_vintage',parentName:'Fût de Chêne MV',designation:'MV20',sequence:20});
+    }
+    expect(matchCuveeReleaseVariantToCatalog({name:'Grande Cuvée',releaseDesignation:'171ème Édition'},rows)).toMatchObject({catalogCuveeId:'grande',variant:{designation:'171ème Édition',sequence:171}});
   });
 
   it('removes a known producer prefix before finding the parent cuvée',()=>{

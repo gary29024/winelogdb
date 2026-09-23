@@ -13,7 +13,7 @@ import { normalizeProducerAlias } from '../../lib/producers/entities';
 import { catalogNote,verboseCatalogStyle } from '../../lib/producers/catalogNote';
 import { stripProducerCatalogPrefix } from '../../lib/producers/catalogName';
 import { catalogDecisionKey,catalogDecisionLabel } from '../../lib/producers/catalogDecisions';
-import { cuveeStyleFamily,normalizeCuveeAlias } from '../../lib/cuvees/entities';
+import { cuveeIdentitySignature,cuveeStyleFamily,normalizeCuveeAlias } from '../../lib/cuvees/entities';
 import { CATALOG_HIERARCHY_LABELS,catalogHierarchyLabel,catalogVillageLabel,type CatalogHierarchyLabel } from '../../lib/cuvees/catalogPresentation';
 import { CompositionBar } from '../../components/CompositionBar';
 import { SectionLabel } from '../../components/SectionLabel';
@@ -25,6 +25,19 @@ import { backTargetFromState,linkFrom,readBackTarget,rememberBackTarget,PRODUCER
 import { ElapsedSeconds } from '../../components/ElapsedSeconds';
 
 const stageLabel:Record<ProducerResearchRun['stage'],string>={preparing:'Queued for research',searching:'Researching in the background',retrying:'Retrying research',parsing:'Checking research result',saving:'Saving producer research',image:'Finding a domaine image',complete:'Research complete',failed:'Research failed'};
+
+function tastedYearLabel(wine:ProducerDetail['tastedWines'][number]){
+ if(wine.vintage!=null)return String(wine.vintage);
+ if(wine.vintageKind==='multi_vintage')return 'MV';
+ if(wine.vintageKind==='non_vintage')return 'NV';
+ return 'Year unknown';
+}
+
+function tastedReleaseGroupKey(wine:ProducerDetail['tastedWines'][number]){
+ if(wine.releaseParentCuveeId)return `release:${wine.releaseParentCuveeId}::${cuveeStyleFamily(wine.wineStyle)||'unknown'}`;
+ if(wine.releaseParentName)return `release-name:${cuveeIdentitySignature(wine.releaseParentName,wine.appellation,wine.wineStyle)}`;
+ return null;
+}
 type CatalogCategory='red'|'white'|'rose'|'sparkling'|'dessert'|'fortified'|'orange'|'other';
 const categoryOrder:CatalogCategory[]=['red','white','rose','sparkling','dessert','fortified','orange','other'];
 const categoryLabels:Record<CatalogCategory,string>={red:'Red',white:'White',rose:'Rosé',sparkling:'Sparkling',dessert:'Dessert / sweet',fortified:'Fortified',orange:'Orange',other:'Other'};
@@ -212,28 +225,6 @@ export function ProducerDetailPage(){
   }
   return built;
  },[catalogRows,axis]);
- /**
-  * How big the estate is, before any of it is read. It counts appellations
-  * rather than groups so the line means the same thing on every axis.
-  *
-  * Only where the range itself is shown. The catalogue reaches every viewer's
-  * browser whatever their role, so counting it unconditionally would have put
-  * "18 wines · 12 appellations" above a page that, for a member, then shows no
-  * range at all - the header promising something the page does not deliver.
-  * A member's own tastings are theirs to count, and are on the page.
-  */
- const rangeStats=useMemo(()=>{
-  const tastedCuvees=new Set((producer?.tastedWines??[]).map(wine=>wine.cuveeId??wine.id)).size;
-  if(!rangeAllowed)return tastedCuvees?`${tastedCuvees} tasted`:'';
-  if(!catalogRows.length)return '';
-  const appellations=new Set(catalogRows.map(row=>row.village).filter(name=>name&&name!=='Appellation not stated')).size;
-  const tasted=catalogRows.filter(row=>Boolean(row.identity?.tastedCount)).length;
-  return [
-   `${catalogRows.length} wine${catalogRows.length===1?'':'s'}`,
-   appellations?`${appellations} appellation${appellations===1?'':'s'}`:'',
-   tasted?`${tasted} tasted`:''
-  ].filter(Boolean).join(' · ');
- },[catalogRows,rangeAllowed,producer]);
  const catalogTotals=useMemo(()=>catalogGroups.reduce((totals,group)=>({wines:totals.wines+group.rows.length,tasted:totals.tasted+group.tasted}),{wines:0,tasted:0}),[catalogGroups]);
  // Named by style rather than by the current grouping: which wine survives a
  // merge is a question about the wines, and the answer would otherwise be
@@ -292,11 +283,25 @@ export function ProducerDetailPage(){
  }
  const tastedGroups=useMemo<TastedCuveeGroup[]>(()=>{
   const map=new Map<string,ProducerDetail['tastedWines']>();
-  for(const wine of producer?.tastedWines??[]){const style=cuveeStyleFamily(wine.wineStyle)||'unknown',key=wine.releaseParentCuveeId?`release:${wine.releaseParentCuveeId}::${style}`:`${wine.cuveeId??normalizeProducerAlias(wine.wineName)}::${style}`,list=map.get(key)??[];list.push(wine);map.set(key,list)}
-  return [...map.values()].map(wines=>{
-   const first=wines[0],releaseFamily=Boolean(first?.releaseParentCuveeId),grapes=[...new Set(wines.flatMap(wine=>wine.grapes??[]).map(grape=>grape.trim()).filter(Boolean))];
-   const ordered=[...wines].sort((a,b)=>releaseFamily?(b.releaseSequence??-1)-(a.releaseSequence??-1):(b.vintage??-1)-(a.vintage??-1));
-   return {cuveeId:first?.cuveeId??null,catalogCuveeId:first?.releaseParentCuveeId??first?.catalogCuveeId??null,name:releaseFamily?(first?.releaseParentName??first?.wineName??''):(first?.wineName??''),appellation:first?.appellation??null,wineStyle:first?.wineStyle??null,grapes,releaseFamily,wines:ordered};
+  const producerNames=[producer?.canonicalName??'',...producer?.aliases??[]];
+  const families=new Map<string,Map<string,ProducerDetail['tastedWines'][number]>>();
+  for(const wine of producer?.tastedWines??[]){
+   const key=tastedReleaseGroupKey(wine);if(!key||!wine.releaseParentName)continue;
+   const identity=cuveeIdentitySignature(wine.releaseParentName,wine.appellation,wine.wineStyle,producerNames),candidates=families.get(identity)??new Map();
+   candidates.set(key,wine);families.set(identity,candidates);
+  }
+  for(const wine of producer?.tastedWines??[]){
+   const style=cuveeStyleFamily(wine.wineStyle)||'unknown';
+   // A PR tasting with no known release still belongs beside its PR releases.
+   const identity=cuveeIdentitySignature(wine.wineName,wine.appellation,wine.wineStyle,producerNames);
+   const candidates=[...families.get(identity)?.entries()??[]].filter(([,family])=>!wine.catalogCuveeId||wine.catalogCuveeId===family.releaseParentCuveeId);
+   const key=tastedReleaseGroupKey(wine)??(candidates.length===1?candidates[0][0]:`${wine.cuveeId??normalizeProducerAlias(wine.wineName)}::${style}`);
+   const list=map.get(key)??[];list.push(wine);map.set(key,list);
+  }
+  return [...map.entries()].map(([key,wines])=>{
+   const first=wines.find(wine=>wine.releaseParentName)??wines[0],releaseFamily=wines.some(wine=>Boolean(wine.releaseDesignation)),grapes=[...new Set(wines.flatMap(wine=>wine.grapes??[]).map(grape=>grape.trim()).filter(Boolean))];
+   const ordered=[...wines].sort((a,b)=>(releaseFamily?(b.releaseSequence??-1)-(a.releaseSequence??-1):0)||(b.vintage??-1)-(a.vintage??-1));
+   return {key,cuveeId:wines.find(wine=>!wine.shared)?.cuveeId??null,catalogCuveeId:first?.releaseParentCuveeId??first?.catalogCuveeId??null,name:first?.releaseParentName??first?.wineName??'',appellation:first?.appellation??null,wineStyle:first?.wineStyle??null,grapes,releaseFamily,wines:ordered};
   })
   // Alphabetical, because a cuvee is looked up by name here. The order fell out
   // of when each wine was last drunk, which is the Journal's question, not this
@@ -305,6 +310,18 @@ export function ProducerDetailPage(){
   // where an eye expects them rather than after every unaccented name.
    .sort((a,b)=>a.name.localeCompare(b.name,undefined,{sensitivity:'base'})||(a.wineStyle??'').localeCompare(b.wineStyle??''));
  },[producer]);
+ // Count the same cuvée families shown below when the catalogue is not visible.
+ const rangeStats=useMemo(()=>{
+  if(!rangeAllowed)return tastedGroups.length?`${tastedGroups.length} tasted`:'';
+  if(!catalogRows.length)return '';
+  const appellations=new Set(catalogRows.map(row=>row.village).filter(name=>name&&name!=='Appellation not stated')).size;
+  const tasted=catalogRows.filter(row=>Boolean(row.identity?.tastedCount)).length;
+  return [
+   `${catalogRows.length} wine${catalogRows.length===1?'':'s'}`,
+   appellations?`${appellations} appellation${appellations===1?'':'s'}`:'',
+   tasted?`${tasted} tasted`:''
+  ].filter(Boolean).join(' · ');
+ },[catalogRows,rangeAllowed,tastedGroups.length]);
  useEffect(()=>{
   if(!id||producer?.sharedOnly){setNameSuggestions([]);return}
   let active=true;
@@ -477,7 +494,7 @@ export function ProducerDetailPage(){
    {rangeAllowed&&<ProducerRangeMissing producerId={producer.id} onChanged={reload}/>} 
    {visibleSources.length>0&&<details className="producer-sources"><summary>{visibleSources.length} {rangeAllowed?'profile & range':'research'} reference{visibleSources.length===1?'':'s'}{sourceWebsiteCount?` · ${sourceWebsiteCount} website${sourceWebsiteCount===1?'':'s'}`:''}</summary>{visibleSources.map(s=><a key={s.url} href={s.url} target="_blank" rel="noreferrer">{s.title}</a>)}</details>}{producer.researchedAt&&<small>{technicalView?<>Latest producer research: {producer.researchModel} · </>:<>Research updated </>}{new Date(producer.researchedAt).toLocaleDateString()}{staleLabel&&<> · ⚠ {staleLabel} may be outdated</>}</small>}
   </section>
-  <section className="detail-section"><p className="section-label">{producer.sharedOnly?'Shared wines':'Your tastings'}</p><h2>{tastedGroups.length} cuvée{tastedGroups.length===1?'':'s'} · {producer.tastedWines.length} tasting{producer.tastedWines.length===1?'':'s'}</h2>{tastedGroups.length?<div className="producer-tasted-groups">{tastedGroups.map(group=>{const releaseCount=group.releaseFamily?new Set(group.wines.map(w=>w.releaseDesignation).filter(Boolean)).size:0,identityMeta=[releaseCount?`${releaseCount} release${releaseCount===1?'':'s'}`:null,group.wineStyle,group.grapes.length?group.grapes.join(' / '):null].filter(Boolean).join(' · '),firstOwned=group.wines.findIndex(item=>!item.shared);return <div className="tasted-cuvee-group" key={`${group.catalogCuveeId??group.cuveeId??normalizeProducerAlias(group.name)}-${cuveeStyleFamily(group.wineStyle)||'unknown'}`}><div className="tasted-cuvee-title"><div><strong>{group.name}</strong>{identityMeta&&<small>{identityMeta}</small>}</div></div><div className="producer-tasted">{group.wines.map((w,index)=>{const release=String(w.releaseDesignation??'').trim(),subline=[release?(w.vintage??'NV'):null,w.appellation,w.region].filter(Boolean).join(' · '),href=w.shared?`/shared/${w.id}`:`/wines/${w.id}`;return <div className="tasted-row tasted-vintage-row" key={w.id}><Link to={href} state={linkFrom({to:`/producers/${producer.id}`,label:producer.canonicalName})} className="tasted-row-link"><div className="tasted-thumb">{w.imageUrl?<img src={w.imageUrl} alt={`${w.wineName} ${w.vintage??'NV'} bottle`} className="tasted-thumb-image" loading="lazy" decoding="async"/>:w.imageId?<WineImage imageId={w.imageId} alt={`${w.wineName} ${w.vintage??'NV'} bottle`} className="tasted-thumb-image"/>:<span className="tasted-thumb-fallback">W</span>}</div><div className="tasted-copy"><strong>{release||w.vintage||'NV'}</strong><span>{subline}</span></div></Link><div className="tasted-meta">{w.rating!=null&&<strong>{w.rating}</strong>}{w.tastingDate&&<span>{w.tastingDate}</span>}{!w.shared&&index===firstOwned&&<CuveeCatalogLinks producer={producer} group={group} onChanged={reload}/>}</div></div>})}</div></div>})}</div>:<p>No tasting records linked to this producer yet.</p>}
+  <section className="detail-section"><p className="section-label">{producer.sharedOnly?'Shared wines':'Your tastings'}</p><h2>{tastedGroups.length} cuvée{tastedGroups.length===1?'':'s'} · {producer.tastedWines.length} tasting{producer.tastedWines.length===1?'':'s'}</h2>{tastedGroups.length?<div className="producer-tasted-groups">{tastedGroups.map(group=>{const releaseCount=new Set(group.wines.filter(w=>w.releaseDesignation).map(w=>w.releaseSequence??normalizeCuveeAlias(w.releaseDesignation!))).size,identityMeta=[releaseCount?`${releaseCount} release${releaseCount===1?'':'s'}`:null,group.wineStyle,group.grapes.length?group.grapes.join(' / '):null].filter(Boolean).join(' · '),firstOwned=group.wines.findIndex(item=>!item.shared);return <div className="tasted-cuvee-group" key={group.key}><div className="tasted-cuvee-title"><div><strong>{group.name}</strong>{identityMeta&&<small>{identityMeta}</small>}</div></div><div className="producer-tasted">{group.wines.map((w,index)=>{const release=String(w.releaseDesignation??'').trim(),year=tastedYearLabel(w),subline=[release?year:null,w.appellation,w.region].filter(Boolean).join(' · '),href=w.shared?`/shared/${w.id}`:`/wines/${w.id}`;return <div className="tasted-row tasted-vintage-row" key={w.id}><Link to={href} state={linkFrom({to:`/producers/${producer.id}`,label:producer.canonicalName})} className="tasted-row-link"><div className="tasted-thumb">{w.imageUrl?<img src={w.imageUrl} alt={`${w.wineName} ${release||year} bottle`} className="tasted-thumb-image" loading="lazy" decoding="async"/>:w.imageId?<WineImage imageId={w.imageId} alt={`${w.wineName} ${release||year} bottle`} className="tasted-thumb-image"/>:<span className="tasted-thumb-fallback">W</span>}</div><div className="tasted-copy"><strong>{release||year}</strong><span>{subline}</span></div></Link><div className="tasted-meta">{w.rating!=null&&<strong>{w.rating}</strong>}{w.tastingDate&&<span>{w.tastingDate}</span>}{!w.shared&&index===firstOwned&&<CuveeCatalogLinks producer={producer} group={group} onChanged={reload}/>}</div></div>})}</div></div>})}</div>:<p>No tasting records linked to this producer yet.</p>}
   </section>
   {!producer.sharedOnly&&<section className="detail-section producer-identity"><p className="section-label">Identity & aliases</p><h2>Known producer names</h2>
    <div className="primary-name-control"><label>Primary display name<select value={primaryName} onChange={e=>setPrimaryName(e.target.value)}>{producer.aliases.map(alias=><option key={alias} value={alias}>{alias}</option>)}</select></label><button type="button" disabled={savingPrimary||!primaryName||primaryName===producer.canonicalName} onClick={savePrimaryName}>{savingPrimary?'Saving…':'Set primary'}</button></div>
