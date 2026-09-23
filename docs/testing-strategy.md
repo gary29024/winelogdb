@@ -1,142 +1,37 @@
-# Test policy and suite audit
+# Test strategy
 
-The complete Vitest suite runs on every PR. It is cheap enough to keep authorization, SQL persistence, AI accounting and historical regressions together; import-graph or path filtering cannot reliably select WineLog's cross-cutting contracts. The `tests/unit` directory is historical naming: it also contains component, Worker-handler and SQLite integration tests.
+PR checks follow the changed paths. Pushes to `main`, manual runs, and the Monday 03:17 UTC checkpoint run every Vitest test, every Chromium flow, both iPhone WebKit projects, the production build, all local migrations, and the Worker runtime smoke.
 
-## CI tiers
-
-| Gate | PR | Main push / manual / weekly | Dependencies |
+| PR impact | Vitest | Browser | Platform gate |
 | --- | --- | --- | --- |
-| Lint and build | Lint, TypeScript, production build, all local D1 migrations, Worker smoke | Same | Build precedes runtime smoke; no other job dependency |
-| Unit and integration tests | All Vitest tests, two workers | Same | Independent of quality and browsers |
-| Browser (chromium) | All Chromium flows | Same | Independent test-mode Vite server; no production build needed |
-| Browser (webkit) | Not scheduled | Both iPhone projects | Independent of Chromium and Vitest |
-| Regression and browser tests | Requires unit and browser jobs to succeed | Same, including WebKit | Lightweight aggregate check; no checkout/install/build |
+| Documentation only | None | None | None |
+| Unit test only | Changed tests | None | None |
+| Ordinary application or Worker code | Import-affected tests plus source-reading contracts | Relevant Chromium flows for frontend features | Worker changes run local migrations and runtime smoke |
+| CSS or shared layout | Import-affected tests plus source-reading contracts | Relevant or all Chromium flows, plus both iPhone projects | Only if another changed path requires it |
+| Shared configuration, database, authorization, credits, test support, or broad changes | Full suite | All Chromium and both iPhone projects | Full |
 
-Quality, the complete Vitest suite and browser jobs run independently. Vitest explicitly uses two workers: its default of CPUs minus one leaves a two-core hosted runner with only one. Chromium and WebKit use separate jobs so browser installation and execution no longer extend the unit-test job. Both iPhone projects share the WebKit job's server. A shared composite action keeps Node 24, Bun 1.2.15 and the dependency download cache consistent. TypeScript is part of `npm run build`; CI does not repeat it. Tests remain isolated and independent; no retries conceal failures, and focused `.only` tests fail CI.
+The exact rules and the feature-to-browser-spec mapping live in [`scripts/ci-scope.mjs`](../scripts/ci-scope.mjs), with [policy tests](../scripts/ci-scope.test.mjs). A PR with more than 40 changed files, an unclassified path, or an unreadable/empty diff uses full coverage. New frontend feature directories without a browser mapping use all Chromium flows. A new high-risk path should be added to the full-coverage rules; a new browser flow should be added to the feature mapping when it covers a distinct journey.
 
-Parallel jobs add dependency installations and may increase aggregate runner minutes, but remove the browser work from the unit-test critical path. Measure both elapsed workflow time and aggregate job time; fewer jobs alone does not mean a faster workflow. The aggregate required check fails if the unit job or any browser matrix job fails or is cancelled. Its name stays stable for branch protection.
+Vitest's `--changed` follows static imports. About 59 test files also read application source as text; imports alone can miss those contracts. For application changes, [`scripts/source-text-tests.mjs`](../scripts/source-text-tests.mjs) adds every source-reading test to the affected set. If the resulting selection is empty, CI runs the full Vitest suite. The `tests/unit` name is historical: it includes UI, Worker-handler, SQLite integration, and migration tests. Every unit file is included automatically in the main/checkpoint suite.
 
-The weekly checkpoint runs Monday at 03:17 UTC. Both iPhone widths, owner/member views, safe areas, rotation, contrast and screenshots remain covered there and on main/manual runs. Those layout permutations are the only deferred tier. Chromium account, recognition, identity-review, edit and deletion flows run on every PR. There are no path-based skips, including for documentation changes.
+On the isolated PR branch, the source-reading fallback ran 59 files and 506 tests in 11.65 seconds; the full two-worker suite ran 283 files and 2,575 tests in 58.43 seconds. A real affected run also includes tests found through the import graph. These local Windows timings show the size of the fixed fallback, not a hosted CI latency target.
 
-The required check names are **Lint and build** and **Regression and browser tests**. Repository branch protection, if it requires the former **Affected unit tests** or shard check names, must use the new names when this workflow is adopted. This change does not merge or alter branch protection.
+The browser specs intercept API calls, so backend-only Worker edits use Worker and Vitest checks rather than browser mocks. Frontend features select their relevant Chromium specs; shared app shell, public assets, and unknown feature areas run all Chromium specs. CSS and shared component changes add iPhone WebKit coverage because layout is browser-specific. On checkpoints both iPhone widths, owner/member views, safe areas, rotation, contrast, and screenshots remain covered.
 
-## Counts and classification
+The `Lint and build` and `Regression and browser tests` check names remain stable for branch protection. The final check requires every selected job to pass and tolerates only jobs that the scope plan explicitly omitted. The scope decision appears in the workflow summary. The scoped jobs remain independent so browser installation does not extend the unit-test job.
 
-Baseline: 2026-09-20, commit `f2ba8454e43e1e5a79a0c940b61e9af8588bc3ec`, plus the existing uncommitted recognition-evaluation test. No `AGENTS.md` was present in the repository or its filesystem ancestors. The pre-existing recognition evaluation work was retained.
+The local Worker gate applies all D1 migrations and checks runtime routing with fake OAuth values. It runs for Worker and database changes, all broad-risk changes, and checkpoints. See [Worker runtime and routing release gate](platform-boundary-testing.md) for its limits. No live AI, paid infrastructure, OAuth token exchange, or production data is used.
 
-The PR excludes that separate, uncommitted evaluation work and its 13 tests. Its committed Vitest counts are therefore **2,315 → 2,316**, across **274 → 275 files**. The local audit tables and timings below include those 13 tests on both sides so their comparison remains consistent; the AI category in the PR alone is 35 files, 348 → 346 cases.
+The [September 20 suite audit](testing-strategy-2026-09-20.md) records the full-suite baseline and earlier CI timing. That document describes the previous all-PR policy. Its measured local and hosted durations are historical, not promises for the scoped policy. The selector's six policy cases pass locally; hosted latency and coverage should be checked from the first PR and main runs after this change.
 
-Each file has one primary purpose below. Mixed files also exercise other boundaries: for example, `multiUser.test.ts` includes Queue, R2 and credit contracts. The reporting script emits per-file counts and overlapping SQLite/R2/Queue/source-assertion tags; these labels never control CI selection. The checked-in [baseline inventory](performance/test-suite-baseline.json) records every file.
-
-| Primary purpose | Before files / cases | After files / cases |
-| --- | ---: | ---: |
-| Fast unit / domain rules | 99 / 814 | 99 / 814 |
-| Authorization / multi-user | 12 / 119 | 12 / 119 |
-| D1 persistence / integration | 35 / 306 | 36 / 309 |
-| API / Worker integration and contracts | 27 / 229 | 27 / 229 |
-| AI routing / research / recognition | 36 / 361 | 36 / 359 |
-| UI / component | 45 / 403 | 45 / 403 |
-| Migration / regression | 9 / 22 | 9 / 22 |
-| Source / configuration contracts | 12 / 74 | 12 / 74 |
-| **Vitest total** | **275 / 2,328** | **276 / 2,329** |
-| Chromium browser flows | 5 / 23 | 5 / 24 |
-| iPhone WebKit layouts, two devices | 1 / 16 | 1 / 16 |
-
-There were 58 Vitest files with direct source/file assertions and 44 using the two real-SQLite helpers. Source assertions also occur in behavioral suites, so that count is larger than the source-only category. Historical regression cases are distributed across all categories, not just migration files. R2 and Queue contracts use test doubles for the service boundary; SQLite executes real statements, constraints and transactions. Browser tests intercept APIs and test the frontend contract, not a deployed full-stack service.
-
-## Measured baseline and improvement
-
-Local measurements use Windows, Node 22.22.0, Vitest 3.2.7 and Playwright 1.63.0. CI uses Node 24/Linux. These are observed runs, not latency promises or direct predictions of hosted CI. Vitest timings run from its recorded start to the last test completion; browser timings are Playwright's total reported duration.
-
-| Measurement | Before | After |
-| --- | ---: | ---: |
-| Full Vitest, two workers | 73.51 s | 51.64 s, all 2,329 passing (30% less) |
-| Full Vitest, default local workers | 21.17 s | 17.29 s with randomized file/case ordering |
-| Browser suite | 19.26 s Chromium + 19.93 s iPhone | 21.66 s combined, before adding the edit/delete case |
-| `multiUser` file within full default run | 11.33 s | 1.36 s after fixture change |
-| `tastingPrefill` file within full default run | 8.36 s | 3.84 s after timer change |
-
-The two-worker baseline was reconstructed under `.tmp/test-suite-audit/baseline-checkout` using the original tests/helpers/configuration, current unchanged application sources and the existing evaluation test. Both runs passed. Disabling file isolation was not needed: thread workers reduce process startup overhead while Vitest still isolates each file.
-
-Actual hosted baseline from [main run 35511834996](https://github.com/gary29024/winelogdb/actions/runs/35511834996): lint/build/runtime job 75 s; full-regression jobs 116 s and 86 s, of which test steps used 103 s and 76 s. Local migrations alone cost 30 s. The jobs had no `needs` edges. Aggregate non-skipped job time was 277 s; overall run span including scheduling was 126 s.
-
-[PR run 35511725123](https://github.com/gary29024/winelogdb/actions/runs/35511725123) ran the full suite because its change was high risk: affected-test job 115 s (104 s test step), quality 81 s. Other PRs could skip tests or use a separate Vitest listing followed by execution. Source-file consumers had to be selected separately because they do not appear in the import graph.
-
-### Hosted regression discovered after PR #306
-
-The local speedup did not establish a CI speedup. [The merged run 35515337561](https://github.com/gary29024/winelogdb/actions/runs/35515337561) took **4m45s**, compared with the old main run's **2m06s**. The combined regression job took 278 seconds: 127 seconds for Vitest, then 51 seconds installing browsers, then 81 seconds executing all browser projects, plus setup/reporting. [The next PR run 35520772893](https://github.com/gary29024/winelogdb/actions/runs/35520772893) took 3m09s; its combined job spent 99 seconds in Vitest, then 28 seconds installing Chromium and 40 seconds testing it. The old PR took 1m58s.
-
-The follow-up workflow separates those independent stages and explicitly enables two Vitest workers. All previous test cases and event tiers are preserved; there are no new path skips, retries or reduced assertions. The earlier claim that the CI optimization was complete based on local timings was premature. Hosted follow-up results are recorded in [PR #308](https://github.com/gary29024/winelogdb/pull/308), including runner timing variation. CI uploads per-job JSON inventories, HTML browser reports and failure traces for seven days.
-
-Checkpoint validation also exposed two configuration/lifecycle issues: the existing iPhone configuration merged Chromium back into its project list, so the WebKit job explicitly selects `iPhone*` from the main configuration; and `openBottlePage` only cleaned up before each case, leaving its final render alive at jsdom teardown. That suite now unmounts and flushes React work after every case. No assertion, test count, retry or timeout was changed.
-
-Final validation after adding the browser gap check:
-
-| Command / evidence | Result |
-| --- | --- |
-| Full Vitest, two thread workers | 2,329 passed; 51.64 s |
-| Full Vitest, shuffle seed `20260920` | 2,329 passed; 17.29 s with default local workers |
-| `CI=true npm run test:e2e:full -- --reporter=json` | 40 passed, zero skipped/flaky/unexpected; 36.62 s with two workers |
-| `npm run typecheck` | Passed |
-| `npm run lint` | Passed after the Node imports fix |
-| `npm run build` | Passed, including final TypeScript check and production bundles |
-| `npm run db:migrate:local`, then `node scripts/worker-runtime-smoke.mjs` | All 83 migrations applied; local runtime gate passed |
-| Workflow and composite action YAML parse; `git diff --check` | Passed |
-
-Raw local JSON/logs are under `.tmp/test-suite-audit/`: `baseline.json`, `baseline-two-workers.json`, `threads-two-workers.json`, `final-shuffled.json`, `browser-baseline-elevated.json`, `iphone-baseline.json`, `browser-after.json`, `final-browser.json`, `final-lint.log`, `final-build.log`, `typecheck-after.log`, `migrations.log`, and `worker-smoke-elevated.log`. The baseline-to-final assertion-name audit found only the two documented removals, the coalescing-test rename, and three new fixture cases.
-
-## What changed and why
-
-- Both SQLite adapters now obtain private copies of a database built from all 83 migrations once per invocation. A unique temporary directory is removed at teardown. The template is rebuilt on watch reruns; migration changes trigger the whole suite. No persistent schema cache, shared mutable connection, production data or credentials are used. The adapters retain their existing response shapes and transaction semantics. Migration upgrade tests continue to build their own historical databases.
-- Three fixture contract cases verify isolation of rows and schema across concurrent/later copies, foreign keys, rollback after a failing batch, and successful commits through both adapters. Each case gets a new database, including seed rows and sequence state.
-- `tastingPrefill` and `journalFilterMemory` advance controlled timers through the entire debounce window inside React `act`, including negative assertions. This removes duplicated polling helpers and 900 ms sleeps. It also fixes the journal guard that previously returned early when the restored offset was already present, before a late debounce could clear it.
-- `apiReadWork` releases pending requests explicitly instead of sleeping 5 ms. `backendWorkProfile` holds the first Queue send pending while the competing dispatcher finishes. `vertexBatchConcurrency` explicitly completes tasks out of order and retains the seventh task beyond the six-worker limit. These checks no longer depend on scheduler jitter.
-- The obsolete `PROFILE_EXPECT_BASELINE` branches were removed. Tests always assert the current lower read/write/request budgets; they cannot switch back to accepting duplicate requests. Routine runs no longer write those fixed-name profile files.
-- Exactly two redundant cases were removed: `core`'s numeric 2021 vintage assertion is already covered by `wineSchema`'s numeric/string/whitespace cases, while its separate minimal-valid-payload case remains; `batchRetryPolicy`'s later-poll array was an exact subset of its first backoff case. No historical regression file was deleted and no product assertion was weakened.
-- The browser edit/delete case checks the PUT payload, displayed saved note, cancellation with zero DELETEs and confirmation with exactly one DELETE. Creation, identity review, sharing and recognition flows remain intact.
-- The existing recognition-evaluation download script needed explicit Node `process` and `console` imports for local lint. That separate work, including these imports, is excluded from this PR. No download or live-provider evaluation was run.
-
-## High-risk coverage retained
-
-| Boundary | Representative retained coverage |
-| --- | --- |
-| Authentication, authorization, isolation | `multiUser`, `ownerClaim`, `ownerCutoverCredits`, `accountSwitch`, `memberAiAllowance`, `cellarIsolation`: signed OAuth callbacks, nonce/state replay, origin checks, revoked/suspended sessions, foreign IDs, owner/member permissions |
-| Recognition and batch recognition | `core`, `groupRecognition`, `groupRecognitionHandler`, `batchRecognition`, `batchRecognitionAccounting`, `vertexBatchDeadline`: schema normalization, crop regressions, retries, escalation, persistence and accounting |
-| LWIN and reference identity | `manualWineReference`, `lwinCanonicalEnrichment`, `lwinAiRepair`, `recognitionReferenceTrust`, `wineReferenceReview`, `referenceIdentity`, `referenceResolverR2`, browser LWIN review |
-| D1 and migrations | All numbered migrations on template creation and real local Wrangler; historical migration fixtures; `wineSaveAtomic`, `catalogAtomicRefresh`, `aiUsageIdempotency` |
-| R2 | `wineImageRoutes`, `wineThumbnails`, `referenceR2`, `referenceResolverR2`, `multiUser`: upload cleanup, thumbnail races, ownership and revoked shared-photo access |
-| Queue retry/idempotency | `multiUser`, `backendWorkSafety`, `backendWorkProfile`, `backgroundRollout`, `vintageResearchSurvivesClose`: dispatch leases, failed sends, redelivery, uncertain provider results and terminal records |
-| AI routing/fallback/accounting | `geminiTransport`, `geminiBatch`, `modelHealth`, `groundingModelRouting`, `producerRange*`, `aiUsageLedger`, `aiUsageRunHistory`, `unpricedAiPaths` |
-| Wine create/edit/delete, sharing and tagging | `wineSaveAtomic`, `wineImageRoutes`, `wineTags`, `friendRequests`, `multiUser`, browser wine/LWIN flows: rollback, object cleanup, per-viewer experiences, direct/inherited shares, bulk tags |
-| Producer identity and ranges | `producerEntities`, `producerNameReview`, `producerCatalogRangeOverlay`, `producerRangePhase2Integration`, `cuveeIdentity`, `cuveeCatalogLinks`, browser producer correction |
-
-Known production regression assertions remain, including API SPA interception, multi-bottle crop bounds, schema fallback accounting, stale session responses, foreign shared images, restored journal filters, tasting duplicate-photo choices, and producer identity corrections. Cheap config/CSS/source contracts remain where runtime tests do not establish the same property; the explicit `run_worker_first` check remains necessary because local Wrangler does not emulate deployed asset precedence.
-
-## Remaining cost and limits
-
-The group-recognition handler tests retain their bounded real retry jitter (about four seconds per file), alongside actual request parsing, schema fallback, metering and response handling. A naive fake-clock experiment could run ahead of native FormData/crypto work, so it was not retained; no timeout or retry budget was increased. React page tests retain module resets where session/tasting caches are intentional application state. Those costs buy meaningful isolation and integration coverage.
-
-All 83 migrations still run through local Wrangler at the platform gate (27–30 seconds in the measured hosted jobs); SQLite fixture copies are not a replacement for that check. WebKit layout permutations are expensive and browser-specific, so they run at checkpoints. The 40-second background-research regression already uses fake timers and is retained.
-
-No live AI, OAuth token exchange, paid infrastructure or production data is required. The runtime smoke validates local Worker routing and fake OAuth start/callback behavior; it does not prove deployed Cloudflare asset precedence. Browser APIs and R2/Queue service boundaries remain mocked at the same layers as before. Dependencies remain on the repository's existing Bun/no-committed-lockfile policy; the download cache is not a dependency lock.
-
-## Reproduce and extend
+## Local commands
 
 ```sh
+node --test scripts/ci-scope.test.mjs
 npm test
-npm test -- --maxWorkers=2 --reporter=json --outputFile=.cache/test-reports/vitest.json
-node scripts/test-suite-report.mjs .cache/test-reports/vitest.json
-npm test -- --sequence.shuffle --sequence.seed=20260920
 npm run test:e2e
-npm run test:e2e:iphone
 npm run test:e2e:full
-npm run typecheck
-npm run lint
 npm run build
 npm run db:migrate:local
 node scripts/worker-runtime-smoke.mjs
 ```
-
-Install Chromium and WebKit with `npx playwright install chromium webkit` first; Linux CI also uses `--with-deps`. On Windows, browser and Wrangler launches may require execution outside the filesystem sandbox. The initial sandbox browser run failed with `spawn EPERM`; the subsequent unrestricted runs passed. This is an environment limitation, not a test retry policy.
-
-Prefer domain contracts for pure rules, migrated SQLite for transaction/owner boundaries, and browser tests for actual navigation or layout. Do not add a full browser permutation for a rule already proven below that layer unless it adds a distinct integration risk. New files automatically join the full Vitest suite; purpose tags are for the report only. Keep local-only measurements under `.tmp`/`.cache`, and compare identical worker limits when assessing future changes.
