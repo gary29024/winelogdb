@@ -24,7 +24,7 @@ type SemanticWineRow={
   classification:string|null;grapes_json:string;wine_style:string|null;tasting_notes:string|null;rating:number|null;event:string|null;venue:string|null;tags_json:string;updated_at:string;
 };
 type StoredEmbeddingRow={wine_id:string;embedding:unknown;dimensions:number};
-type SemanticQueryCacheRow={result_ids_json:string;max_results:number};
+type SemanticQueryCacheRow={result_ids_json:string;max_results:number;invisible:number};
 export type SemanticVectorCandidate={id:string;vector:ArrayLike<number>};
 type MeterContext={owner:string;runId:string;targetId:'journal-query'|'journal-index'};
 
@@ -267,11 +267,19 @@ async function cachedSemanticIds(db:D1Database,owner:string,config:EmbeddingConf
   if(!queryKey)return null;
   const cutoff=new Date(Date.now()-QUERY_CACHE_TTL_MS).toISOString();
   try{
-    const row=await db.prepare(`SELECT result_ids_json,max_results
-      FROM wine_semantic_query_cache
-      WHERE owner_id=? AND model_key=? AND query_key=? AND index_revision=? AND updated_at>=?`)
+    // Withdrawing a share or a friendship changes what a member can see without
+    // touching the index revision, so a cached ranking could still name wines
+    // that are gone - and the Journal, filtering them out, would show nothing.
+    // Count those in the same read and treat any as a miss, so the query is
+    // ranked again over the vectors that are still visible.
+    const row=await db.prepare(`SELECT c.result_ids_json,c.max_results,
+        (SELECT count(*) FROM json_each(c.result_ids_json) j
+          WHERE NOT EXISTS (SELECT 1 FROM wines w WHERE w.owner_id=c.owner_id AND w.id=CAST(j.value AS TEXT))
+            AND NOT EXISTS (SELECT 1 FROM member_visible_wines v WHERE v.owner_id=c.owner_id AND v.id=CAST(j.value AS TEXT) AND v.is_shared=1)) AS invisible
+      FROM wine_semantic_query_cache c
+      WHERE c.owner_id=? AND c.model_key=? AND c.query_key=? AND c.index_revision=? AND c.updated_at>=?`)
       .bind(owner,config.modelKey,queryKey,indexRevision,cutoff).first<SemanticQueryCacheRow>();
-    if(!row||Number(row.max_results)<Math.max(1,limit))return null;
+    if(!row||Number(row.max_results)<Math.max(1,limit)||Number(row.invisible)>0)return null;
     const ids=JSON.parse(row.result_ids_json);
     return Array.isArray(ids)&&ids.every(id=>typeof id==='string')?ids.slice(0,Math.max(1,limit)):null;
   }catch(error){

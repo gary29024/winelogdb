@@ -149,10 +149,20 @@ describe('Journal semantic search helpers',()=>{
     const page=await listJournalPage(db,'bob',{query:'floral elegant Burgundy'},semantic?.ids??[],true);
     expect(page.items.map(item=>item.id)).toEqual(['shared-fleur']);
 
-    // Once the share is withdrawn the stored vector is no longer a candidate.
+    // Withdrawing the share leaves the cached ranking in place and the index
+    // revision unchanged. The cache read must notice the revoked wine and rank
+    // again, or the Journal filters the stale IDs out and shows nothing even
+    // though the member's own wine still matches.
+    sqlite.exec(`INSERT INTO wines(id,owner_id,producer,wine_name,vintage,grapes_json,tags_json,created_at,updated_at)
+      VALUES('bob-own','bob','Bob Estate','Own Fleur',2020,'[]','[]','2026-01-02','2026-09-04');`);
+    await warmSemanticWineIndex(env,'bob');
+    const both=await semanticWineIds(env,'bob','floral elegant Burgundy');
+    expect(both?.ids).toEqual(expect.arrayContaining(['shared-fleur','bob-own']));
     sqlite.prepare("DELETE FROM wine_shares WHERE wine_id='shared-fleur'").run();
-    sqlite.prepare("DELETE FROM wine_semantic_query_cache").run();
-    expect((await semanticWineIds(env,'bob','floral elegant Burgundy'))?.ids).toEqual([]);
+    const afterWithdraw=await semanticWineIds(env,'bob','floral elegant Burgundy');
+    expect(afterWithdraw?.ids).toEqual(['bob-own']);
+    const withdrawnPage=await listJournalPage(db,'bob',{query:'floral elegant Burgundy'},afterWithdraw?.ids??[],true);
+    expect(withdrawnPage.items.map(item=>item.id)).toEqual(['bob-own']);
   });
 
   it('does not purge or overwrite newer rankings when an older query finishes late',async()=>{
