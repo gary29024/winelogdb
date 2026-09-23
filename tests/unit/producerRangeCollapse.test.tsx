@@ -89,7 +89,8 @@ describe('Producer wine range',()=>{
     expect(grande.querySelector('.tasted-cuvee-title small')?.textContent).toContain('2 releases');
     expect([...grande.querySelectorAll('.tasted-copy strong')].map(node=>node.textContent)).toEqual(['172eme Edition','172ème Édition','171ème Édition']);
     expect([...grande.querySelectorAll('.tasted-copy span')].map(node=>node.textContent?.split(' · ')[0])).toEqual(['MV','MV','NV']);
-    expect(grande.querySelectorAll('.cuvee-inline-admin')).toHaveLength(withCatalog?1:0);
+    expect(grande.querySelectorAll('.cuvee-inline-admin')).toHaveLength(0);
+    expect(grande.querySelector('.tasted-cuvee-title small')?.textContent?.includes('Catalog matched')).toBe(withCatalog);
     expect(host!.textContent).toContain('2 cuvées · 4 tastings');
   });
 

@@ -65,7 +65,11 @@ for(const viewport of [{width:393,height:852},{width:1280,height:900}]){
   await expect(group).toHaveCount(1);
   await expect(group.locator('.tasted-cuvee-title strong')).toHaveText('Grande Cuvée');
   await expect(group.locator('.tasted-cuvee-title small')).toContainText('2 releases');
+  await expect(group.locator('.tasted-cuvee-title small')).toContainText('Catalog matched');
   await expect(group.locator('.tasted-copy strong')).toHaveText(['172eme Edition','172eme Edition','171ème Édition']);
+  expect(await group.locator('.tasted-copy strong').first().evaluate(element=>{
+   const range=document.createRange();range.selectNodeContents(element);return range.getClientRects().length;
+  })).toBe(1);
   await expect(group.locator('.tasted-row-link').first()).toHaveAttribute('href','/wines/edition172');
   await expect(group.locator('.tasted-copy span').first()).toContainText('MV');
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);

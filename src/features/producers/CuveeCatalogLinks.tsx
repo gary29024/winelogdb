@@ -65,7 +65,10 @@ export function CuveeCatalogLinks({producer,group,onChanged}:{producer:ProducerD
   }
 
   if(!choices.length||!group.cuveeId)return null;
-  if(directMatch)return <div className="cuvee-inline-admin" aria-label="Catalog mapping"><span>{group.releaseFamily?'Catalog matched · release family':'Catalog matched'}</span></div>;
+  // The release family carries this read-only status in its heading; repeating
+  // it beside an edition code squeezes the code on narrow screens.
+  if(directMatch&&group.releaseFamily)return null;
+  if(directMatch)return <div className="cuvee-inline-admin" aria-label="Catalog mapping"><span>Catalog matched</span></div>;
   const unresolved=choices.length-linkable.length;
   return <>
     <div className="cuvee-inline-admin" aria-label="Catalog mapping">
