@@ -27,6 +27,9 @@ main>section>.page-header,main>article>.page-header{margin-bottom:var(--s5)}
 .legal-page{max-width:780px;margin:auto}.legal-card{overflow-wrap:anywhere}.legal-card p{line-height:1.7}
 .login-page{padding:var(--s5)}.google-signin img{max-width:100%;height:auto}
 [role=dialog]{max-width:calc(100vw - 28px)}
+/* Full-screen overlays are dialogs too, but they must cover the whole viewport:
+   capped, they stopped 28px short of the right edge and the photo spilled past it. */
+.image-lightbox[role=dialog],.photo-lightbox[role=dialog],.cuvee-link-backdrop[role=dialog],.journal-batch-backdrop[role=dialog]{max-width:none}
 @media(max-width:700px){
  .insights-page>section[id],.group-review,.batch-review,.review{scroll-margin-top:calc(60px + var(--s2))}
  .passport-page .passport-secondary-grid{grid-template-columns:1fr}

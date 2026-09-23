@@ -176,10 +176,11 @@ export function DetailPage(){
   <section className="detail-section experience-panel"><SectionLabel origin="yours">Your experience</SectionLabel><FactList rows={experienceRows}/>{wine.tastingNotes&&<blockquote className="detail-experience-notes">{wine.tastingNotes}</blockquote>}{!experienceRows.length&&!wine.tastingNotes&&<p className="detail-experience-empty">No tasting logged for this bottle yet.</p>}</section>
   {structureItems.length>0&&<section className="detail-section structure-detail-section"><SectionLabel origin="yours">Structure</SectionLabel><dl className="tasting-structure-summary">{structureItems.map(([label,value])=><div key={label}><dt>{label}</dt><dd>{structureValueLabel[value]??value}</dd></div>)}</dl><p className="structure-section-note">Perceived structure; label ABV appears in Wine details.</p></section>}
   <WineDetailsSection wine={wine} canEditReference={technicalView}/>
-  {/* Production details are wine facts, so they sit with the wine details. Once
-      filled in, the photo link offers a refresh rather than a first fill. */}
+  {/* Production details are wine facts, so they sit with the wine details. The
+      photo link is only a prompt for an empty card; once anything is filled in,
+      the edit form is where the details change. */}
   <SparklingDetailsCard details={wine.sparklingDetails}/>
-  {isChampagne(wine)&&<Link className="champagne-backfill-link" to={`/wines/${wine.id}/edit#champagne-photos`}>{hasSparklingDetails(wine.sparklingDetails)?'Refresh Champagne details from photos':'Fill Champagne details from photos'}</Link>}
+  {isChampagne(wine)&&!hasSparklingDetails(wine.sparklingDetails)&&<Link className="champagne-backfill-link" to={`/wines/${wine.id}/edit#champagne-photos`}>Fill Champagne details from photos</Link>}
   {technicalView&&wine.identityMatchStatus!=='manual'&&<section className="detail-section"><LwinLinkEditor key={wine.id} wine={wine} disabled={Boolean(referenceBusy)} onLink={linkReference} onReject={rejectReference}/>{referenceError&&<p role="alert" className="detail-photo-error">{referenceError}</p>}</section>}
   {technicalView&&wine.identityMatchStatus!=='manual'&&(wine.referenceSuggestions??[]).length>0&&<section className="detail-section lwin-suggestion-panel">
    <p className="section-label">LWIN suggested updates</p><div className="lwin-review-toolbar"><button disabled={Boolean(referenceBusy)} onClick={()=>void recheckReference()}>Recheck LWIN</button>{technicalView&&<Link to={`/admin/lwin-review?wine=${id}`}>Review all pending wines</Link>}</div>
