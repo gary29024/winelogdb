@@ -83,17 +83,16 @@ function additionalReferencePlace(value:string|Absent,wine:WineFacts,extra:Array
 }
 
 /** The Wine details rows, in reading order. Empty fields are dropped. */
-export function wineFactRows(wine:WineFacts):FactRow[]{
+export function wineFactRows(wine:WineFacts,{canEditReference=false}:{canEditReference?:boolean}={}):FactRow[]{
  const {denominatedAppellation,denominatedRegion}=placeLabels(wine),site=additionalReferencePlace(wine.referenceSite,wine),parcel=additionalReferencePlace(wine.referenceParcel,wine,[site]);
  const conflict=wine.identityMatchStatus==='conflict',referenceLabel=(label:string)=>conflict?`${label} (needs review)`:label;
  return present([
   ['Region',denominatedRegion],
   ['Appellation',denominatedAppellation],
   ['Release',wine.releaseDesignation],
-  // A manual decision retires the review panel, so this row is the only place
-  // left that says matching is off - and the only place that can say where to
-  // undo it, now that there is no longer a control below to point at.
-  ['Reference identity',conflict?'Conflict — stored reference details may not match this wine.':wine.identityMatchStatus==='manual'&&!wine.lwin7&&!wine.elid?'Kept without LWIN · automatic matching off · link one in Edit tasting':null],
+  // Everyone can read the decision; only viewers who can edit the reference
+  // should be directed to its controls in Edit tasting.
+  ['Reference identity',conflict?'Conflict — stored reference details may not match this wine.':wine.identityMatchStatus==='manual'&&!wine.lwin7&&!wine.elid?`Kept without LWIN · automatic matching off${canEditReference?' · link one in Edit tasting':''}`:null],
   [referenceLabel('Type'),[wine.colour,wine.productSubtype??wine.productType].filter(Boolean).join(' · ')],
   ['Alcohol',wine.alcoholPercentage!=null?`${wine.alcoholPercentage}%`:null],
   ['Grapes / blend',blendLabels(wine).join(', ')],

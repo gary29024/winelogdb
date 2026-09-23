@@ -1,0 +1,54 @@
+/* Page families share spacing; identity heroes and Journal cards stay distinct. */
+main>section>.page-header,main>article>.page-header{margin-bottom:var(--s5)}
+
+.journal-filter-bar{flex-wrap:wrap}.journal-filter-chip{max-width:100%;overflow-wrap:anywhere}
+.journal-viewbar{gap:var(--s3);flex-wrap:wrap}.journal-view-actions,.journal-selection-actions{flex-wrap:wrap}
+.journal-selection-actions{justify-content:flex-start;gap:var(--s2)}
+/* Anchor navigation borrows the section-navigation pill so a page has one way
+   of showing its parts, not two. */
+.page-jump-links{display:flex;flex-wrap:wrap;gap:var(--s2);margin:0 0 var(--s4)}
+.page-jump-links a{display:inline-flex;align-items:center;min-height:36px;padding:0 var(--s3);border:1px solid var(--line);border-radius:var(--r-sm);color:var(--ink-3);text-decoration:none;font-size:.9rem}
+/* The topbar is sticky at 74px, 60px on a phone - not the 100px guessed here,
+   which left a blank band above every jump target. */
+.insights-page>section[id]{scroll-margin-top:calc(74px + var(--s2));margin-bottom:var(--s5)}
+.passport-page>.passport-mini-card{margin:var(--s4) 0}
+.producer-search{margin-top:var(--s4)}.producer-row{gap:var(--s4)}.producer-row>div{min-width:0;overflow-wrap:anywhere}
+.tasting-actions{gap:var(--s2);flex-wrap:wrap}.tasting-secondary-actions{margin:var(--s4) 0}.tasting-secondary-actions>summary{padding:var(--s3) 0;cursor:pointer;min-height:44px}
+.scan-page>.page-header,.group-scan-page>.page-header,.batch-scan-page>.page-header{max-width:760px}
+.group-review,.batch-review,.review{scroll-margin-top:calc(74px + var(--s2))}
+.group-history,.batch-history{margin-top:var(--s6);padding-top:var(--s5);border-top:1px solid var(--line)}
+.group-result-copy,.batch-item>div,.group-history-card>div{min-width:0;overflow-wrap:anywhere}
+.wine-form fieldset{min-width:0}.wine-form legend{max-width:100%;padding:0 var(--s2)}
+/* main's wineFormCompact pass tightened everything around these, so the
+   section dividers take the 16px step rather than the 24px one. */
+.form-section-heading{margin:var(--s4) 0 var(--s2);font-size:1.2rem}
+.collection-library-heading,.collection-editor-heading{gap:var(--s3)}
+.collection-library-heading>div,.collection-editor-heading>div{min-width:0;overflow-wrap:anywhere}
+.legal-page{max-width:780px;margin:auto}.legal-card{overflow-wrap:anywhere}.legal-card p{line-height:1.7}
+.login-page{padding:var(--s5)}.google-signin img{max-width:100%;height:auto}
+[role=dialog]{max-width:calc(100vw - 28px)}
+/* Full-screen overlays are dialogs too, but they must cover the whole viewport:
+   capped, they stopped 28px short of the right edge and the photo spilled past it. */
+.image-lightbox[role=dialog],.photo-lightbox[role=dialog],.cuvee-link-backdrop[role=dialog],.journal-batch-backdrop[role=dialog]{max-width:none}
+@media(max-width:700px){
+ .insights-page>section[id],.group-review,.batch-review,.review{scroll-margin-top:calc(60px + var(--s2))}
+ .passport-page .passport-secondary-grid{grid-template-columns:1fr}
+ .journal-viewbar{align-items:flex-start}.journal-view-actions{margin-left:0}
+ .journal-selection-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));width:100%}
+ .journal-selection-actions button{min-width:0;white-space:normal;min-height:44px}
+ .producer-counts{flex-wrap:wrap;justify-content:flex-end}
+ .group-result-actions,.group-history-card>div:last-child{display:flex;flex-wrap:wrap;gap:var(--s2)}
+ .tasting-actions>*{min-height:44px}.page-header-actions{flex-wrap:wrap}
+ .collection-editor-hero,.collection-library-heading{flex-wrap:wrap}
+ .login-page{padding:var(--s4)}
+}
+
+/* PR283 asked that a count badge join the existing chip family rather than
+   arrive as a tenth invention; SectionNavigation shipped the markup with no
+   rule behind it, so the number rendered as bare text. */
+.section-count{display:inline-flex;align-items:center;justify-content:center;min-width:20px;height:20px;padding:0 6px;border-radius:var(--r-pill);background:var(--sunken);color:var(--ink-3);font:700 .72rem/1 'DM Sans',sans-serif;font-variant-numeric:tabular-nums}
+[aria-current=page] .section-count{background:var(--paper);color:var(--ink)}
+
+/* A destructive action gets a rule of its own wherever it appears. This was
+   borrowing .settings-session, whose stylesheet only the account pages import. */
+.page-danger-zone{border-top:1px solid var(--line);padding-top:var(--s4);margin-top:var(--s5)}

@@ -1,3 +1,4 @@
+import { PageHeader } from '../../components/PageHeader';
 import { apiFetch } from '../../lib/auth/client';
 import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -70,7 +71,7 @@ export function UploadPage(){
   const photos=items.filter(x=>x.width&&x.height).map(x=>({file:x.file,metadata:x.metadata,width:x.width!,height:x.height!}));
 
   return <section className="scan-page">
-    <div className="hero compact"><p className="eyebrow">SCAN WINE</p><h1>One wine, every useful label.</h1><p>Select the front, back, neck or additional labels together. WineLog reads them as one bottle, then lets you review everything before saving.</p></div>
+    <PageHeader title="Scan a wine" subtitle="Select the front, back, neck or additional labels together. WineLog reads them as one bottle, then lets you review everything before saving."/>
     {items.length===0&&<div className="photo-source-card">
       <div className="scan-mark"><AppIcon kind="scan"/></div>
       <h2>Scan a wine</h2>

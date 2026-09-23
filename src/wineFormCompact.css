@@ -43,11 +43,11 @@
    margin on top of the grid gap. The gap is the spacing now. */
 .wine-form-compact .form-note{margin:2px 0 0}
 .wine-form-compact .wine-form-body>.full-field{margin:0;min-width:0}
-.wine-form-compact .wine-form-body>h2{margin:4px 0 0}
 
-.scan-page .hero.compact{padding:2px 0 8px}
-.scan-page .hero h1{margin:.08em 0}
-.scan-page .hero p:last-child{margin:6px 0 0}
+
+
+
+
 .scan-page .scan-summary{gap:4px;padding:6px 2px 4px}
 .scan-page .upload-list{margin:6px 0}
 .scan-page .upload-list li{margin:6px 0;gap:10px;padding:9px;align-items:center}
@@ -70,7 +70,6 @@
   .wine-form-compact .experience-fields{margin:3px 0;padding:9px 10px}
   .wine-form-compact .structure-disclosure>summary{padding:10px}
   .wine-form-compact .structure-disclosure-body{padding:7px 9px 9px}
-  .scan-page .hero.compact{padding:0 0 6px}
   .scan-page .scan-summary{padding:5px 2px 3px}
   .scan-page .upload-list li{padding:8px;gap:9px}
   .scan-page .upload-list img{width:48px;height:58px}

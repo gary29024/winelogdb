@@ -236,14 +236,15 @@ Or one country:
 npm run elid:sync -- --country=FR --dry-run
 ```
 
-The crawler:
+The crawler uses the public wine sitemaps to discover registered vintage/release URLs, then reads their base-wine and producer pages for names. Base wines without a registered version are not imported. The crawler:
 
 - checks `robots.txt` before proceeding;
 - identifies itself with a WineLogDB user agent;
 - waits between network requests;
 - caches fetched pages locally for seven days;
 - applies page-size safety limits;
-- visits producer/wine registry pages only;
+- visits sitemaps and producer/wine registry pages only;
+- aborts on missing pages or malformed identities, before publishing;
 - stores only the registry fields above.
 
 If robots instructions disallow the relevant paths, it aborts rather than working around them.
@@ -256,7 +257,7 @@ For a full registry refresh:
 npm run elid:sync
 ```
 
-For one country:
+For one country (this replaces the active catalogue with that country's scope; use a full refresh for production coverage):
 
 ```powershell
 npm run elid:sync -- --country=FR
@@ -271,6 +272,8 @@ npm run elid:sync -- --fresh
 A full registry crawl can involve many pages. If it is interrupted, simply rerun it; the local cache means already-fetched pages normally do not need another request.
 
 After all R2 shards upload successfully, `reference/elid/current.json` is switched last and the D1 sync marker is updated.
+
+After importing ELID for the first time, refresh the existing **LWIN backfill** maintenance task. It also fills missing ELIDs on accepted automatic and manual LWIN identities, including current cached LWIN snapshots. Existing ELIDs and explicit rejected-reference choices are preserved. Only a unique producer/wine/vintage or release match is attached; missing or ambiguous registry versions stay blank. Re-running is safe and does not duplicate IDs.
 
 Verify it with:
 

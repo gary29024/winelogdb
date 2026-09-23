@@ -89,9 +89,90 @@ test('the Domaine checklist links its appellations and leaves the cuvée row alo
   }
 });
 
-test('unsupported Premier Cru names do not acquire a Grand Cru link',async({page})=>{
-  await mockApi(page,{appellation:'Gevrey-Chambertin',classification:'premier_cru',wineName:'Gevrey-Chambertin Les Cazetiers'});
-  await page.goto('/wines/layout-wine');
-  await expect(page.getByRole('heading',{name:'Gevrey-Chambertin Les Cazetiers',exact:true})).toBeVisible();
-  await expect(page.locator('.burgundy-atlas-link')).toHaveCount(0);
+for(const route of ['/wines/layout-wine','/shared/layout-wine']){
+  test(`${route}: a named Premier Cru links to its village-specific Atlas destination`,async({page},testInfo)=>{
+    const atlasRequests:string[]=[];
+    page.on('request',request=>{if(new URL(request.url()).hostname==='burgundyatlas.com')atlasRequests.push(request.url())});
+    await mockApi(page,{appellation:'Gevrey-Chambertin',classification:'premier_cru',wineName:'Gevrey-Chambertin Les Cazetiers'});
+    await page.goto(route);
+    const link=page.getByRole('link',{name:'Explore on Burgundy Atlas: Gevrey-Chambertin — Les Cazetiers (opens in a new tab)',exact:true});
+    const destination='https://burgundyatlas.com/place/ba_designation_4wgzv3yeruhebw2d535r27kjfm/les-cazetiers';
+    await expect(link).toHaveAttribute('href',destination);
+    await expect(link).toHaveAttribute('target','_blank');
+    await expect(link).toHaveAttribute('rel','noopener noreferrer');
+    for(const width of [320,390,1280]){
+      await page.setViewportSize({width,height:900});await expect(link).toBeVisible();
+      expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+      await page.screenshot({path:testInfo.outputPath(`atlas-premier-detail-${width}.png`)});
+    }
+    expect(atlasRequests).toEqual([]);
+    await page.context().route('https://burgundyatlas.com/**',route=>route.fulfill({contentType:'text/html',body:'<h1>Atlas destination</h1>'}));
+    const [popup]=await Promise.all([page.waitForEvent('popup'),link.click()]);
+    await expect(popup).toHaveURL(destination);
+    await expect(page).toHaveURL(new RegExp(`${route}$`));
+  });
+}
+
+test('a recorded vineyard supplies the cru, with an appellation fallback when no plot is mapped',async({page})=>{
+  const examples=[
+    {wineName:'Meursault Premier Cru',referenceSite:'Les Perrières',identityMatchStatus:'matched',destination:'plot'},
+    {wineName:'Meursault Premier Cru',referenceSite:'Les Perrières',identityMatchStatus:'conflict',destination:null},
+    {wineName:'Meursault Premier Cru',referenceSite:null,destination:'appellation'},
+    {wineName:'Puligny-Montrachet Les Perrières',referenceSite:null,destination:null},
+    {wineName:'Meursault Unknown Vineyard',referenceSite:null,destination:'appellation'},
+  ];
+  for(const {destination,...fields} of examples){
+    await mockApi(page,{appellation:'Meursault',classification:'premier_cru',wineStyle:'white',colour:'White',grapes:['Chardonnay'],...fields});
+    await page.goto('/shared/layout-wine');
+    await expect(page.getByRole('heading',{name:fields.wineName,exact:true})).toBeVisible();
+    const link=page.locator('.burgundy-atlas-link');
+    await expect(link).toHaveCount(destination?1:0);
+    if(destination)await expect(link).toHaveAttribute('href',destination==='plot'
+      ?'https://burgundyatlas.com/place/ba_designation_3ftvudbzi36k7gndmas6x36rje/perrieres'
+      :'https://burgundyatlas.com/place/ba_appellation_d2dm6decs2nnkxhviyfpoa4bla/meursault-premier-cru');
+  }
 });
+
+for(const route of ['/wines/layout-wine','/shared/layout-wine']){
+  test(`${route}: an unmapped cru needs a recorded tier before an appellation link appears`,async({page})=>{
+    for(const classification of [null,'premier_cru','village']){
+      await mockApi(page,{appellation:'Chablis',wineName:'Chablis Montée de Tonnerre',classification,
+        wineStyle:'white',colour:'White',grapes:['Chardonnay']});
+      await page.goto(route);
+      await expect(page.getByRole('heading',{name:'Chablis Montée de Tonnerre',exact:true})).toBeVisible();
+      const link=page.locator('.burgundy-atlas-link');
+      await expect(link).toHaveCount(classification?1:0);
+      if(classification)await expect(link).toHaveAttribute('href',classification==='premier_cru'
+        ?'https://burgundyatlas.com/place/ba_appellation_cicui7m4g4teqmvx2nmg6jsj2m/chablis-premier-cru'
+        :'https://burgundyatlas.com/place/ba_appellation_33amrcftvaqshlf5ygajsusyrm/chablis');
+    }
+  });
+
+  test(`${route}: village and mixed-plot wines use a clearly labelled appellation link`,async({page},testInfo)=>{
+    const requests:string[]=[];
+    page.on('request',request=>{if(new URL(request.url()).hostname==='burgundyatlas.com')requests.push(request.url())});
+    const examples=[
+      {classification:'village',wineName:'Meursault Les Narvaux',name:'Meursault',path:'ba_appellation_i5feobqdq556kq7i5jynpzeelu/meursault'},
+      {classification:'premier_cru',wineName:'Meursault Premier Cru',name:'Meursault Premier Cru',path:'ba_appellation_d2dm6decs2nnkxhviyfpoa4bla/meursault-premier-cru'},
+      {classification:'premier_cru',wineName:'Meursault Les Perrières / Charmes',name:'Meursault Premier Cru',path:'ba_appellation_d2dm6decs2nnkxhviyfpoa4bla/meursault-premier-cru'},
+    ];
+    for(const {name,path,...fields} of examples){
+      await mockApi(page,{appellation:'Meursault',wineStyle:'white',colour:'White',grapes:['Chardonnay'],...fields});await page.goto(route);
+      const link=page.getByRole('link',{name:`Explore appellation on Burgundy Atlas: ${name} (opens in a new tab)`,exact:true});
+      await expect(link).toHaveText('Explore appellation on Burgundy Atlas↗');
+      await expect(link).toHaveAttribute('href',`https://burgundyatlas.com/place/${path}`);
+      await expect(link).toHaveAttribute('target','_blank');
+      await expect(link).toHaveAttribute('rel','noopener noreferrer');
+      for(const width of [320,390,1280]){
+        await page.setViewportSize({width,height:900});await expect(link).toBeVisible();
+        expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+        await page.screenshot({path:testInfo.outputPath(`atlas-appellation-${fields.classification}-${width}.png`)});
+      }
+    }
+    expect(requests).toEqual([]);
+    await page.context().route('https://burgundyatlas.com/**',route=>route.fulfill({contentType:'text/html',body:'<h1>Appellation destination</h1>'}));
+    const [popup]=await Promise.all([page.waitForEvent('popup'),page.getByRole('link',{name:/Explore appellation on Burgundy Atlas/}).click()]);
+    await expect(popup).toHaveURL(`https://burgundyatlas.com/place/${examples[2].path}`);
+    await expect(page).toHaveURL(new RegExp(`${route}$`));
+  });
+}

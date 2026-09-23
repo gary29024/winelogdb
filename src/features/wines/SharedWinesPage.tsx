@@ -124,7 +124,6 @@ export function SharedWinesPage(){
    <a className="detail-wine-searcher-link" aria-label="Find on Wine-Searcher" href={wineSearcherUrl(wine.producer,wine.wineName,wine.vintage)} target="_blank" rel="noopener noreferrer"><span><span className="detail-search-prefix">Find on </span>Wine-Searcher</span><span aria-hidden="true">↗</span></a>
    {favoriteError&&<span className="shared-favorite-error" role="alert">{favoriteError}</span>}
   </div>
-  <SparklingDetailsCard details={wine.sparklingDetails}/>
   <section className="detail-section experience-panel">
    <SectionLabel origin="yours">Your experience</SectionLabel>
    {!editing?<><FactList rows={experienceRows} className="shared-experience-summary"/>{structureItems.length>0&&<><p className="shared-structure-label">Structure</p><dl className="tasting-structure-summary">{structureItems.map(([label,value])=><div key={label}><dt>{label}</dt><dd>{structureValueLabel[value]??value}</dd></div>)}</dl></>}{wine.tastingNotes?<blockquote className="detail-experience-notes">{wine.tastingNotes}</blockquote>:null}<button type="button" className="shared-experience-edit" onClick={edit}>{hasExperience?'Edit your experience':'Add your experience'}</button></>:<form className="shared-experience-form" onSubmit={saveExperience}>
@@ -150,6 +149,7 @@ export function SharedWinesPage(){
    {notice&&<p className="shared-experience-notice" role="status">{notice}</p>}{error&&<p className="shared-experience-error" role="alert">{error}</p>}
   </section>
   <WineDetailsSection wine={wine}/>
+  <SparklingDetailsCard details={wine.sparklingDetails}/>
   {/* The gallery leaves the header so the photograph is not competing with the
       name; a recipient cannot change these, so there is nothing to manage. */}
   {(wine.photos?.length??0)>1&&<section className="detail-section detail-photos-panel">
@@ -169,7 +169,7 @@ export function SharedWinesPage(){
    <DeepSources sources={wine.deepSearch.sources}/>
    {/* Not this reader's research: it came with the bottle, so the line says so
        without naming the sharer, who is one press away on the tag button. */}
-   <small>Shared, updated {formatDate(wine.deepSearch.researchedAt.slice(0,10))}</small>
+   <small>Shared research · updated {formatDate(wine.deepSearch.researchedAt.slice(0,10))}</small>
   </section>}
   {selectedPhoto&&<div className="image-lightbox" role="dialog" aria-modal="true" aria-label="Wine photo viewer" onClick={()=>setSelectedPhoto(undefined)}><button type="button" className="lightbox-close" aria-label="Close photo" onClick={()=>setSelectedPhoto(undefined)}>×</button><div className="lightbox-image-wrap" onClick={e=>e.stopPropagation()}><img src={selectedPhoto} alt={`${wine.producer} ${wine.wineName} full-resolution shared photo`} className="lightbox-image"/></div></div>}
  </article>;

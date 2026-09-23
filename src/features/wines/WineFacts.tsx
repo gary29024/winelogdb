@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 import { placeLabels,wineFactRows,type FactRow,type WineFacts as Facts } from '../../lib/wine/detailFields';
 import { SectionLabel } from '../../components/SectionLabel';
 import { BurgundyAtlasLink } from '../../components/BurgundyAtlasLink';
-import { burgundyAtlasWinePlace } from '../../lib/places/burgundyAtlas';
+import { burgundyAtlasWineDetailPlace } from '../../lib/places/burgundyAtlasPremierCru';
 // The markup below and the rules it needs travel together. A page used to be
 // able to render .detail-classification while forgetting this import, which is
 // how a shared Village pill shipped with no styling at all; owning the import
@@ -22,7 +22,7 @@ type PillWine=Facts&{classification?:'grand_cru'|'premier_cru'|'village'|null};
 export function WineFactPills({wine,extra}:{wine:PillWine;extra?:ReactNode}){
  const {denomination}=placeLabels(wine);
  const blend=wine.grapeBlend??[],grapes=blend.length?blend.map(part=>part.grape):wine.grapes??[];
- const atlasPlace=burgundyAtlasWinePlace(wine);
+ const atlasPlace=burgundyAtlasWineDetailPlace(wine);
  return <><div className="detail-pills">
   {wine.appellation&&<span>{wine.appellation}{denomination&&<small className="detail-denomination">{denomination}</small>}</span>}
   {!wine.appellation&&wine.region&&denomination&&<span>{wine.region}<small className="detail-denomination">{denomination}</small></span>}
@@ -41,8 +41,8 @@ export function FactList({rows,className,pairedLabels=[]}:{rows:FactRow[];classN
 }
 
 /** The Wine details panel. `extra` appends rows only one viewer is entitled to. */
-export function WineDetailsSection({wine,extra=[]}:{wine:Facts;extra?:FactRow[]}){
- const rows=[...wineFactRows(wine),...extra];
+export function WineDetailsSection({wine,extra=[],canEditReference=false}:{wine:Facts;extra?:FactRow[];canEditReference?:boolean}){
+ const rows=[...wineFactRows(wine,{canEditReference}),...extra];
  if(!rows.length)return null;
  const pairedLabels=wine.identityMatchStatus==='conflict'?[]:[['Type','Alcohol'],['LWIN7','LWIN11']].flatMap(pair=>{
   const labels=pair.map(name=>rows.find(([label])=>label===name)?.[0]);

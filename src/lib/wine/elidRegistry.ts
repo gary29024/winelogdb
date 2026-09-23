@@ -4,7 +4,10 @@ import { isValidElid } from './referenceIdentity';
 export const ELID_WINE_PATH=/^\/wine\/([A-Z]{2}-[A-Z]{3}-[A-Z0-9]{6})(?:-(\d{4}|XXXX|NVXX|N[A-Z0-9]{3})(?:\+[A-Z0-9]{3,4})?)?$/;
 export const ELID_PRODUCER_PATH=/^\/producer\/([A-Z]{2}-[A-Z0-9]{4})$/;
 
-const decode=(text:string)=>text.replace(/&amp;/g,'&').replace(/&quot;/g,'"').replace(/&#39;|&apos;/g,"'").replace(/&lt;/g,'<').replace(/&gt;/g,'>');
+const decode=(text:string)=>text.replace(/&(?:#(x[0-9a-f]+|\d+)|(amp|quot|apos|lt|gt|nbsp));/gi,(entity,numeric:string|undefined,named:string|undefined)=>{
+ if(numeric){const code=Number.parseInt(numeric.replace(/^x/i,''),/^x/i.test(numeric)?16:10);return code>0&&code<=0x10ffff&&!(code>=0xd800&&code<=0xdfff)?String.fromCodePoint(code):entity}
+ return ({amp:'&',quot:'"',apos:"'",lt:'<',gt:'>',nbsp:' '} as Record<string,string>)[named!.toLowerCase()]??entity;
+});
 const plain=(html:string)=>decode(html.replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim());
 
 export function htmlLinks(html:string){
@@ -15,9 +18,17 @@ export function htmlLinks(html:string){
 export function heading(html:string,level=1){
  const match=html.match(new RegExp(`<h${level}\\b[^>]*>([\\s\\S]*?)<\\/h${level}>`,'i'));return match?plain(match[1]):'';
 }
+/** Only same-origin registry URLs; ignore unrelated and malformed sitemap entries. */
+export function sitemapPaths(xml:string){
+ const paths:string[]=[];
+ for(const match of xml.matchAll(/<loc>\s*([^<]+)\s*<\/loc>/gi)){
+  try{const url=new URL(decode(match[1].trim()));if(url.origin==='https://elid.wine'&&!url.search&&!url.hash)paths.push(url.pathname)}catch{/* not a registry URL */}
+ }
+ return [...new Set(paths)];
+}
 export function elidParts(path:string){
  const match=path.match(ELID_WINE_PATH);if(!match)return null;
- return {baseElid:match[1],vintageCode:match[2]??'',elid:match[2]?`${match[1]}-${match[2]}`:null};
+ return {baseElid:match[1],vintageCode:match[2]??'',elid:match[2]?path.slice('/wine/'.length):null};
 }
 export function producerKeyFromName(name:string){return normalizeReferenceText(name)}
 export function validRegistryElid(value:string|null){return isValidElid(value)}

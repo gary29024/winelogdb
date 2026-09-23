@@ -79,7 +79,7 @@ for(const role of ['owner','member'])test(`${role}: recipient sharing sheet name
  await expect(page.locator('.shared-source-indicator')).toHaveCount(0);
  await expect(page.getByText('Shared by Gary',{exact:true})).toHaveCount(0);
  // The page never names the sharer, but it does say the research is inherited.
- await expect(page.getByText(/^Shared, updated /)).toBeVisible();
+ await expect(page.getByText(/^Shared research · updated /)).toBeVisible();
  await expect(page.getByText(/Research shared by/)).toHaveCount(0);
  const tag=page.getByRole('button',{name:'Sharing details',exact:true});
  await expect(tag).not.toHaveClass(/active/);

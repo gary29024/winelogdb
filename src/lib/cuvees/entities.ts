@@ -19,7 +19,7 @@ export type CuveeResolution=CuveeEntity&{
 
 type CatalogWine={name?:unknown;category?:unknown;appellation?:unknown;style?:unknown};
 type CuveeRow={id:string;producer_id:string;canonical_name:string;signature_key:string;appellation:string|null;wine_style:string|null;catalog_backed:number;created_at?:string;display_alias?:string|null;wine_count?:number};
-type ResearchRow={scope:'terroir'|'wine_vintage';cache_key:string;subject_json:string;result_json:string;sources_json:string;model:string;researched_at:string;created_at:string;updated_at:string};
+type ResearchRow={scope:'terroir'|'wine_vintage';cache_key:string;subject_json:string;result_json:string;sources_json:string;provenance_json:string;source_user_id:string|null;model:string;researched_at:string;created_at:string;updated_at:string};
 const parseJson=<T>(value:unknown,fallback:T):T=>{try{return JSON.parse(String(value)) as T}catch{return fallback}};
 const escapeRegExp=(value:string)=>value.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
 
@@ -138,20 +138,22 @@ function mergeSources(a:ResearchSource[],b:ResearchSource[]){
 }
 
 async function moveCuveeResearch(db:D1Database,owner:string,sourceId:string,survivor:CuveeRow){
-  const rows=await db.prepare(`SELECT scope,cache_key,subject_json,result_json,sources_json,model,researched_at,created_at,updated_at
+  const rows=await db.prepare(`SELECT scope,cache_key,subject_json,result_json,sources_json,provenance_json,source_user_id,model,researched_at,created_at,updated_at
     FROM research_cache WHERE owner_id=? AND scope IN ('terroir','wine_vintage') AND json_extract(subject_json,'$.cuveeId')=?`).bind(owner,sourceId).all<ResearchRow>();
   for(const row of rows.results){
     const subject=parseJson<Record<string,string|number|null>>(row.subject_json,{});subject.cuveeId=survivor.id;subject.wineName=survivor.canonical_name;
     const target=buildResearchTargets(subject).find(item=>item.scope===row.scope);if(!target)continue;
-    const existing=await db.prepare(`SELECT scope,cache_key,subject_json,result_json,sources_json,model,researched_at,created_at,updated_at
+    const existing=await db.prepare(`SELECT scope,cache_key,subject_json,result_json,sources_json,provenance_json,source_user_id,model,researched_at,created_at,updated_at
       FROM research_cache WHERE owner_id=? AND scope=? AND cache_key=?`).bind(owner,row.scope,target.cacheKey).first<ResearchRow>();
     const sourceTime=Date.parse(row.researched_at)||0,existingTime=Date.parse(existing?.researched_at??'')||0;
     const newest=existing&&existingTime>sourceTime?existing:row;
     const sources=mergeSources(parseJson<ResearchSource[]>(existing?.sources_json,[]),parseJson<ResearchSource[]>(row.sources_json,[]));
     const now=new Date().toISOString();
-    await db.prepare(`INSERT INTO research_cache(owner_id,scope,cache_key,subject_json,result_json,sources_json,model,researched_at,created_at,updated_at)
-      VALUES(?,?,?,?,?,?,?,?,?,?) ON CONFLICT(owner_id,scope,cache_key) DO UPDATE SET subject_json=excluded.subject_json,result_json=excluded.result_json,sources_json=excluded.sources_json,model=excluded.model,researched_at=excluded.researched_at,updated_at=excluded.updated_at`)
-      .bind(owner,row.scope,target.cacheKey,JSON.stringify(target.subject),newest.result_json,JSON.stringify(sources),newest.model,newest.researched_at,existing?.created_at??row.created_at??now,now).run();
+    // Evidence and attribution belong to the chosen text, including when an
+    // owned result replaces an adopted one and must clear its contributor.
+    await db.prepare(`INSERT INTO research_cache(owner_id,scope,cache_key,subject_json,result_json,sources_json,provenance_json,source_user_id,model,researched_at,created_at,updated_at)
+      VALUES(?,?,?,?,?,?,?,?,?,?,?,?) ON CONFLICT(owner_id,scope,cache_key) DO UPDATE SET subject_json=excluded.subject_json,result_json=excluded.result_json,sources_json=excluded.sources_json,provenance_json=excluded.provenance_json,source_user_id=excluded.source_user_id,model=excluded.model,researched_at=excluded.researched_at,updated_at=excluded.updated_at`)
+      .bind(owner,row.scope,target.cacheKey,JSON.stringify(target.subject),newest.result_json,JSON.stringify(sources),newest.provenance_json,newest.source_user_id,newest.model,newest.researched_at,existing?.created_at??row.created_at??now,now).run();
     if(row.cache_key!==target.cacheKey)await db.prepare('DELETE FROM research_cache WHERE owner_id=? AND scope=? AND cache_key=?').bind(owner,row.scope,row.cache_key).run();
   }
 }
