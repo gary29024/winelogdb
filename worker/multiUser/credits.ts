@@ -1,4 +1,4 @@
-import { buildResearchTargets,loadResearchCache,type ResearchScope } from '../../src/lib/research/cache';
+import { wineRowResearchTargets,loadWineResearchCache,type ResearchScope } from '../../src/lib/research/cache';
 import { unresearchedProducers } from '../../src/lib/producers/researchCampaign';
 import { producerSubjectKey,reusableProducer } from '../../src/lib/research/sharedProducer';
 import { sharedSubjectKeys } from '../../src/lib/research/shared';
@@ -32,7 +32,7 @@ export async function requestFingerprint(request:Request){
  const digest=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes)),b=>b.toString(16).padStart(2,'0')).join('');
  return hash(`${new URL(request.url).pathname}|${request.headers.get('X-WineLog-Recognition-Mode')||'single'}|${request.headers.get('X-WineLog-Continuation')||''}|${digest}`);
 }
-export function wineTargets(row:Record<string,unknown>){return buildResearchTargets({producer:row.producer,producerId:row.producer_id,cuveeId:row.cuvee_id,wineName:row.wine_name,vintage:row.vintage,country:row.country,region:row.region,appellation:row.appellation,wineStyle:row.wine_style})}
+export const wineTargets=wineRowResearchTargets;
 export async function plannedUnits(request:Request,db:D1Database,user:string):Promise<Omit<CreditUnit,'priceId'|'credits'>[]>{
  const path=new URL(request.url).pathname;
  const data=request.headers.get('Content-Type')?.includes('application/json')?await request.clone().json() as Record<string,unknown>:{};
@@ -57,7 +57,7 @@ export async function plannedUnits(request:Request,db:D1Database,user:string):Pr
  const wine=path.match(/^\/api\/wines\/([^/]+)\/deep-search$/);
  if(wine){
   const row=await db.prepare('SELECT * FROM wines WHERE id=? AND owner_id=?').bind(wine[1],user).first<Record<string,unknown>>();if(!row)throw new ApiError(404,'Wine not found');
-  const targets=wineTargets(row),cache=await loadResearchCache(db,user,targets,true),targetFingerprint=await researchInputFingerprint('wine',row);
+  const targets=wineTargets(row),cache=await loadWineResearchCache(db,user,targets,true,row.deep_search_json),targetFingerprint=await researchInputFingerprint('wine',row);
   return targets.filter(t=>data.refresh==='all'||(data.refresh==='vintage'&&['wine_vintage','vintage_context'].includes(t.scope))||!cache.has(t.scope)).map(t=>{
    const shared=sharedSubjectKeys(t),key=shared.keys[0];
    return {...unit(`wine_${t.scope}`,t.scope,wine[1]),scope:t.scope,cacheKey:t.cacheKey,targetFingerprint,researchKey:key?`${t.scope}:${key}`:undefined,notShareable:shared.skipped};
