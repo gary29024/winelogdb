@@ -41,13 +41,15 @@ export function WineSharing({wineId,sharedCount,ownerName}:Props){
   }catch(e){setError((e as Error).message)}
   finally{setBusy(false)}
  }
- /* The colour says "shared" to everyone who can see it, so the name has to carry
+ /* The colour says "tagged" to everyone who can see it, so the name has to carry
     the same fact for everyone who cannot. It goes in the name rather than in
-    aria-pressed: this button opens a sheet, and a wine being shared is not a
-    pressed button. */
+    aria-pressed: this button opens a sheet, and a wine being tagged is not a
+    pressed button. It counts direct tags only - the ones this sheet can change.
+    Sharing a tasting also lets friends see its wines, so "not shared" would be
+    a claim the button cannot back. */
  const label=readOnly?'Sharing details'
-  :tagged?`Tag friends, shared with ${tagged} friend${tagged===1?'':'s'}`
-  :'Tag friends, not shared';
+  :tagged?`Tag friends, ${tagged} friend${tagged===1?'':'s'} tagged`
+  :'Tag friends, no friends tagged';
  return <>
   <button ref={trigger} type="button" className={`detail-share-button${!readOnly&&tagged?' active':''}`} aria-label={label} title={readOnly?'Sharing details':'Tag friends'} aria-haspopup="dialog" aria-expanded={open} onClick={()=>open?close():void show()}><AppIcon kind="person-tag"/></button>
   <FriendTagDialog open={open} title={readOnly?'Tagged friends':'Tag friends'} relationship={readOnly?`Shared by ${ownerName||'a friend'}`:undefined} readOnly={readOnly} confirmDisabled={!ready||loading} loading={loading} description="Choose friends who can see this wine. Wine identity, details and attached wine photos are shared; each friend keeps their own notes, rating and tasting experience." friends={friends} selected={selected} busy={busy} error={error} onSelectedChange={setSelected} onConfirm={()=>void save()} onClose={close}/>

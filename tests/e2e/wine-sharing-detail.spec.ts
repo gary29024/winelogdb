@@ -34,7 +34,7 @@ for(const role of ['owner','member'])for(const width of [320,390,1280])test(`${r
  const requests=await setup(page,role);
  await page.goto('/wines/layout-wine');
  const tag=page.getByRole('button',{name:/^Tag friends/});
- await expect(tag).toHaveAccessibleName('Tag friends, not shared');
+ await expect(tag).toHaveAccessibleName('Tag friends, no friends tagged');
  // Opening a wine must not buy that answer with a request of its own.
  expect(requests.filter(request=>request.includes('/shares'))).toEqual([]);
  await tag.click();
@@ -46,12 +46,12 @@ for(const role of ['owner','member'])for(const width of [320,390,1280])test(`${r
  await sheet.getByRole('button',{name:'Bob',exact:true}).click();
  await sheet.getByRole('button',{name:'Confirm tags',exact:true}).click();
  await expect(sheet).toHaveCount(0);
- await expect(tag).toHaveAccessibleName('Tag friends, shared with 2 friends');
+ await expect(tag).toHaveAccessibleName('Tag friends, 2 friends tagged');
  await expect(tag).toHaveClass(/active/);
  await expect(page.getByRole('status')).toHaveText('Tagged with 2 friends.');
  await actionsFit(page);
  await page.reload();
- await expect(tag).toHaveAccessibleName('Tag friends, shared with 2 friends');
+ await expect(tag).toHaveAccessibleName('Tag friends, 2 friends tagged');
  await expect(page.getByText('Shared with Alice, Bob',{exact:true})).toHaveCount(0);
  await tag.click();
  await expect(sheet.locator('.friend-tag-relationship')).toHaveCount(0);
@@ -59,13 +59,13 @@ for(const role of ['owner','member'])for(const width of [320,390,1280])test(`${r
  await sheet.getByRole('button',{name:'Alice',exact:true}).click();
  await expect(sheet.locator('.friend-tag-relationship')).toHaveCount(0);
  await sheet.getByRole('button',{name:'Cancel',exact:true}).click();
- await expect(tag).toHaveAccessibleName('Tag friends, shared with 2 friends');
+ await expect(tag).toHaveAccessibleName('Tag friends, 2 friends tagged');
  await tag.click();
  await expect(sheet.getByRole('button',{name:'Alice',exact:true})).toHaveAttribute('aria-pressed','true');
  await sheet.getByRole('button',{name:'Alice',exact:true}).click();
  await sheet.getByRole('button',{name:'Bob',exact:true}).click();
  await sheet.getByRole('button',{name:'Confirm tags',exact:true}).click();
- await expect(tag).toHaveAccessibleName('Tag friends, not shared');
+ await expect(tag).toHaveAccessibleName('Tag friends, no friends tagged');
  await expect(tag).not.toHaveClass(/active/);
  await expect(page.getByRole('status')).toHaveText('Friend tags removed.');
  await actionsFit(page);
@@ -103,14 +103,14 @@ test('failed share reads cannot overwrite existing tags',async({page})=>{
  await setup(page,'member',['alice']);
  await page.goto('/wines/layout-wine');
  const tag=page.getByRole('button',{name:/^Tag friends/});
- await expect(tag).toHaveAccessibleName('Tag friends, shared with 1 friend');
+ await expect(tag).toHaveAccessibleName('Tag friends, 1 friend tagged');
  await page.route('**/api/wines/layout-wine/shares',route=>route.fulfill({status:503,json:{error:'Sharing unavailable'}}));
  await tag.click();
  const sheet=page.getByRole('dialog',{name:'Tag friends',exact:true});
  await expect(sheet.getByRole('alert')).toContainText('Sharing unavailable');
  await expect(sheet.getByRole('button',{name:'Confirm tags'})).toBeDisabled();
  await sheet.getByRole('button',{name:'Close',exact:true}).click();
- await expect(tag).toHaveAccessibleName('Tag friends, shared with 1 friend');
+ await expect(tag).toHaveAccessibleName('Tag friends, 1 friend tagged');
 });
 
 // An unread list and an empty one look identical once rendered, so the sheet
