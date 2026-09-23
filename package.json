@@ -19,7 +19,7 @@
     "gi:sync": "vite-node scripts/sync_gi_register.ts",
     "lwin:build-import": "vite-node scripts/import_lwin.ts --dry-run",
     "lwin:import": "vite-node scripts/import_lwin.ts",
-    "elid:sync": "vite-node scripts/sync_elid.ts",
+    "elid:sync": "vite-node --config vitest.config.ts scripts/sync_elid.ts",
     "test:e2e:layout": "playwright test --config playwright.layout.config.ts"
   },
   "dependencies": {

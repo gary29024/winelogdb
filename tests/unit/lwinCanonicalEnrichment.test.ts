@@ -70,6 +70,41 @@ describe('canonical LWIN matching',()=>{
 });
 
 describe('safe reference enrichment',()=>{
+ it.each(['matched','manual'] as const)('backfills an ELID imported after an accepted %s LWIN snapshot',async status=>{
+  const {env,add,row,catalog,database}=setup();add();
+  const initial=await resolveStoredLwin(env.REFERENCE_DATA,row());
+  await lwinEnrichmentStatement(env.DB,row(),initial!)!.run();
+  database.sql.prepare('UPDATE wines SET identity_match_status=?').run(status);
+  const before=row();expect(before.elid).toBeNull();
+  const elid='FR-BGN-EXAM01-2020';
+  catalog.objects['reference/elid/current.json']={provider:'elid',version:'e1',prefix:'elid/e1',shardCount:256,producerIndexKey:'elid/e1/producers.json'};
+  catalog.objects['elid/e1/producers.json']={'domaine example':['FR-EXAM'],example:['FR-EXAM']};
+  catalog.objects[`elid/e1/shard-${referenceShardId('FR-EXAM')}.json`]=[{elid,baseElid:'FR-BGN-EXAM01',producerCode:'FR-EXAM',wineKey:'les cazetiers',vintageCode:'2020'}];
+  // A new request after the absent-manifest cache expires sees the import.
+  vi.useFakeTimers();vi.advanceTimersByTime(61_000);
+  const match=await resolveStoredLwin(env.REFERENCE_DATA,row());
+  expect(match?.elid).toBe(elid);
+  await lwinEnrichmentStatement(env.DB,row(),match!,status==='manual'?'manual':'deterministic')!.run();
+  expect(row()).toMatchObject({elid,identity_match_status:status,lwin7:before.lwin7,producer:before.producer,wine_name:before.wine_name,tasting_notes:before.tasting_notes,rating:before.rating});
+  const reads=catalog.get.mock.calls.length;
+  expect(lwinEnrichmentStatement(env.DB,row(),(await resolveStoredLwin(env.REFERENCE_DATA,row()))!,status==='manual'?'manual':'deterministic')).toBeNull();
+  expect(catalog.get.mock.calls.length).toBe(reads);
+ });
+ it('keeps accepted ELIDs across an LWIN catalogue version refresh without needing ELID availability',async()=>{
+  const {env,add,row,catalog,database}=setup();add();
+  await lwinEnrichmentStatement(env.DB,row(),(await resolveStoredLwin(env.REFERENCE_DATA,row()))!)!.run();
+  const reference=readLwinReference(row().lwin_reference_json)!;
+  database.sql.prepare('UPDATE wines SET elid=?,lwin_reference_json=?').run('FR-BGN-EXAM01-2020',JSON.stringify({...reference,version:'older'}));
+  catalog.get.mockClear();
+  const match=await resolveStoredLwin(env.REFERENCE_DATA,row());
+  expect(match?.elid).toBe('FR-BGN-EXAM01-2020');
+  expect(catalog.get.mock.calls.some(([key])=>key.startsWith('reference/elid/'))).toBe(false);
+ });
+ it('does not backfill an explicitly rejected reference',async()=>{
+  const {env,add,row,database}=setup();add();database.sql.exec("UPDATE wines SET identity_match_status='manual'");
+  expect(await resolveStoredLwin(env.REFERENCE_DATA,row())).toBeNull();
+  expect(row().elid).toBeNull();
+ });
  it('fills blanks, preserves names and conflicts, and makes a second pass a no-op',async()=>{
   const {env,add,row,catalog,database}=setup();add();
   database.sql.exec("UPDATE wines SET country='  ',colour='White',classification_override='none',identity_match_status='manual',lwin7='1000001'");
