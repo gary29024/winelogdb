@@ -10,6 +10,12 @@ describe('research source hosts',()=>{
  it('leaves a redirect unattributed when the title is not a bare domain',()=>{
   expect(sourceDisplayHost({title:'Egly-Ouriet tasting notes',url:redirect})).toBe('');
  });
+ it('does not treat the redirect host filled in as a missing title as a publisher',()=>{
+  // Producer research falls back to the URL hostname when grounding gives no title.
+  const untitled={title:'vertexaisearch.cloud.google.com',url:redirect};
+  expect(sourceDisplayHost(untitled)).toBe('');
+  expect(sourceLinkLabel(untitled,'')).toBe('Source');
+ });
  it('uses the URL host for ordinary links',()=>{
   expect(sourceDisplayHost({title:'anything.com',url:'https://www.jancisrobinson.com/articles/x'})).toBe('jancisrobinson.com');
  });
