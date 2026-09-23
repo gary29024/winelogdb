@@ -37,4 +37,39 @@ for(const viewport of [{width:393,height:852},{width:1280,height:900}]){
   await pr.scrollIntoViewIfNeeded();
   await page.screenshot({path:info.outputPath(`producer-releases-${viewport.width}.png`),fullPage:true});
  });
+
+ test(`Krug Grande Cuvee 172eme Edition groups with other editions at ${viewport.width}px`,async({page},info)=>{
+  await page.setViewportSize(viewport);
+  const wine={vintage:null,vintageKind:'multi_vintage',appellation:'Champagne',region:'Champagne',country:'France',wineStyle:'sparkling',grapes:[],imageId:null,rating:null,tastingDate:null,catalogCuveeId:null};
+  const producer={
+   id:'krug',canonicalName:'Krug',aliases:['Krug'],homeCountry:'France',homeRegion:'Champagne',homeLocality:'Reims',
+   contactSources:[],profile:'',winemakingPractices:'',heroImageAvailable:false,
+   catalog:[{name:'Grande Cuvée',category:'sparkling',appellation:'Champagne'}],
+   catalogCuvees:[{id:'grande',canonicalName:'Grande Cuvée',wineStyle:'sparkling',appellation:'Champagne',tastedCount:0}],
+   cuveeCatalogLinks:[],linkedProducers:[],supplementaryContacts:[],catalogDecisions:[],researchHistoryCount:0,sources:[],researchedAt:null,
+   tastedWines:[
+    {...wine,id:'edition171',cuveeId:'legacy171',wineName:'Grande Cuvee 171ème Édition',releaseDesignation:null},
+    {...wine,id:'edition172',cuveeId:'grande-base',wineName:'Grande Cuvée',releaseDesignation:'172eme Edition'},
+    {...wine,id:'legacy172',cuveeId:'legacy172',wineName:'Krug Grande Cuvee 172eme Edition',releaseDesignation:null}
+   ]
+  };
+  await page.route('**/api/**',async route=>{
+   const path=new URL(route.request().url()).pathname;
+   if(path==='/api/me')return route.fulfill({json:{user:{id:'member',role:'member',email:'member@example.com',display_name:'Member',status:'active'}}});
+   if(path==='/api/producers/krug')return route.fulfill({json:producer});
+   return route.fulfill({json:{items:[],total:0}});
+  });
+  await page.goto('/producers/krug');
+  await expect(page.getByRole('heading',{name:'1 cuvée · 3 tastings'})).toBeVisible();
+  const group=page.locator('.tasted-cuvee-group');
+  await expect(group).toHaveCount(1);
+  await expect(group.locator('.tasted-cuvee-title strong')).toHaveText('Grande Cuvée');
+  await expect(group.locator('.tasted-cuvee-title small')).toContainText('2 releases');
+  await expect(group.locator('.tasted-copy strong')).toHaveText(['172eme Edition','172eme Edition','171ème Édition']);
+  await expect(group.locator('.tasted-row-link').first()).toHaveAttribute('href','/wines/edition172');
+  await expect(group.locator('.tasted-copy span').first()).toContainText('MV');
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+  await group.scrollIntoViewIfNeeded();
+  await page.screenshot({path:info.outputPath(`krug-editions-${viewport.width}.png`),fullPage:true});
+ });
 }

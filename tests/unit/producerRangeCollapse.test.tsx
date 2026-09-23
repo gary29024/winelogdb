@@ -72,6 +72,26 @@ afterEach(()=>{
 });
 
 describe('Producer wine range',()=>{
+  it.each([false,true])('groups Krug 172eme Edition with Grande Cuvée editions (catalogue: %s)',async withCatalog=>{
+    await render({canonicalName:'Krug',aliases:['Krug'],
+      catalog:withCatalog?[{name:'Grande Cuvée',category:'sparkling',appellation:'Champagne'}]:[],
+      catalogCuvees:withCatalog?[{id:'grande',canonicalName:'Grande Cuvée',wineStyle:'sparkling',appellation:'Champagne',tastedCount:0}]:[],
+      tastedWines:[
+        prWine('171',{wineName:'Krug Grande Cuvee 171ème Édition',releaseDesignation:null,vintageKind:'non_vintage'}),
+        prWine('172',{wineName:'Grande Cuvée',releaseDesignation:'172eme Edition'}),
+        prWine('172-accented',{wineName:'Grande Cuvée 172ème Édition',releaseDesignation:null}),
+        prWine('rose',{wineName:'Rosé 28ème Édition',releaseDesignation:null})
+      ]
+    });
+    const groups=[...host!.querySelectorAll('.tasted-cuvee-group')];
+    expect(groups).toHaveLength(2);
+    const grande=groups.find(group=>group.querySelector('.tasted-cuvee-title strong')?.textContent?.match(/^Grande Cuv[eé]e$/))!;
+    expect(grande.querySelector('.tasted-cuvee-title small')?.textContent).toContain('2 releases');
+    expect([...grande.querySelectorAll('.tasted-copy strong')].map(node=>node.textContent)).toEqual(['172eme Edition','172ème Édition','171ème Édition']);
+    expect([...grande.querySelectorAll('.tasted-copy span')].map(node=>node.textContent?.split(' · ')[0])).toEqual(['MV','MV','NV']);
+    expect(host!.textContent).toContain('2 cuvées · 4 tastings');
+  });
+
   it('shows two saved PR releases under one catalogue cuvée with their MV status',async()=>{
     await render({...prProducer,
       catalog:[{name:'PR 90-21',category:'sparkling',appellation:'Champagne'}],

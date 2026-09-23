@@ -57,6 +57,17 @@ describe('cuvée release variants',()=>{
     expect(matchCuveeReleaseVariantToCatalog({name:'Grande Cuvée',releaseDesignation:'171ème Édition'},rows)).toMatchObject({catalogCuveeId:'grande',variant:{designation:'171ème Édition',sequence:171}});
   });
 
+  it.each(['172eme Edition','172ème Édition','172nd Edition'])('matches Krug Grande Cuvée %s from the name or release field',designation=>{
+    for(const source of [
+      {name:`Krug Grande Cuvee ${designation}`},
+      {name:'Grande Cuvée',releaseDesignation:designation},
+      {name:'Grande Cuvée 171ème Édition',releaseDesignation:designation}
+    ]){
+      expect(matchCuveeReleaseVariantToCatalog({...source,appellation:'Champagne',wineStyle:'sparkling'},rows,['Krug']))
+        .toMatchObject({catalogCuveeId:'grande',catalogName:'Grande Cuvée',variant:{kind:'edition',designation,sequence:172}});
+    }
+  });
+
   it('removes a known producer prefix before finding the parent cuvée',()=>{
     expect(parseCuveeReleaseVariant('Krug Grande Cuvée 173ème Édition',['Krug'])).toEqual({kind:'edition',parentName:'Grande Cuvée',designation:'173ème Édition',sequence:173});
     expect(parseCuveeReleaseVariant('Henri Giraud Fût de Chêne MV20',['Henri Giraud'])).toEqual({kind:'multi_vintage',parentName:'Fût de Chêne MV',designation:'MV20',sequence:20});
