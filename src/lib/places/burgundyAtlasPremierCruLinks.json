@@ -1,0 +1,2703 @@
+{
+  "source": "https://burgundyatlas.com/sitemap.xml",
+  "registrySource": "https://burgundyatlas.com/burgundy/registry/place-route-shards/{shard}.json",
+  "registryVersion": "39d9597faf39e11a",
+  "verifiedAt": "2026-09-22",
+  "excludedWithoutMap": 36,
+  "groups": [
+    {
+      "appellation": "Aloxe-Corton",
+      "regionId": "france/burgundy/cote-de-beaune",
+      "entries": [
+        {
+          "name": "Les Petites Folières",
+          "path": "/place/ba_designation_2o2g3w5eq6ybnoh3atze2z5pli/les-petites-folieres"
+        },
+        {
+          "name": "Les Vercots",
+          "path": "/place/ba_designation_2whdwex4cufbtxuikrb3bb7fgm/les-vercots"
+        },
+        {
+          "name": "Clos du Chapitre",
+          "path": "/place/ba_designation_4ks75gjjwjgixhxh2obilspq6i/clos-du-chapitre"
+        },
+        {
+          "name": "Les Moutottes",
+          "path": "/place/ba_designation_5isbiuxqdrbnm2ks23geihnxju/les-moutottes"
+        },
+        {
+          "name": "La Coutière",
+          "path": "/place/ba_designation_6eppiropfmgqmrkhvo2c2giw5a/la-coutiere"
+        },
+        {
+          "name": "La Toppe au Vert",
+          "path": "/place/ba_designation_fyj2byrrlmyyodczthtiqfyss4/la-toppe-au-vert"
+        },
+        {
+          "name": "Les Valozières",
+          "path": "/place/ba_designation_gyufgjwerkcxmigvpkdzvwpomy/les-valozieres"
+        },
+        {
+          "name": "Les Guérets",
+          "path": "/place/ba_designation_kzpezv7e3nxh5fpyxz456rk4za/les-guerets"
+        },
+        {
+          "name": "Les Maréchaudes",
+          "path": "/place/ba_designation_qcye5dxxnyykg6hriwc5n6625a/les-marechaudes"
+        },
+        {
+          "name": "Clos des Maréchaudes",
+          "path": "/place/ba_designation_smjnagpiwwstrdm67ogop72aim/clos-des-marechaudes"
+        },
+        {
+          "name": "La Maréchaude",
+          "path": "/place/ba_designation_tfvxqxxg7cpcfoizspqfxfd4oi/la-marechaude"
+        },
+        {
+          "name": "Les Paulands",
+          "path": "/place/ba_designation_uxgjwdszekdbi7k75oou6xg4ly/les-paulands"
+        },
+        {
+          "name": "Les Chaillots",
+          "path": "/place/ba_designation_y5cjbudkhexralmoxy4mzhs4q4/les-chaillots"
+        },
+        {
+          "name": "Les Fournières",
+          "path": "/place/ba_designation_yiydmy3v7j232hele3xfndhvja/les-fournieres"
+        }
+      ]
+    },
+    {
+      "appellation": "Auxey-Duresses",
+      "regionId": "france/burgundy/cote-de-beaune",
+      "entries": [
+        {
+          "name": "Les Grands Champs",
+          "path": "/place/ba_designation_2rxjh6fdge5cd53dt46hsqskq4/les-grands-champs"
+        },
+        {
+          "name": "La Chapelle",
+          "path": "/place/ba_designation_3tgt6se3sxpdhcneyqbfj225uy/la-chapelle"
+        },
+        {
+          "name": "Climat du Val",
+          "path": "/place/ba_designation_4zqrog4kzmrfkaivackekfznca/climat-du-val"
+        },
+        {
+          "name": "Les Duresses",
+          "path": "/place/ba_designation_6kfyxvkxkpgojvhnc7nuxqpm7e/les-duresses"
+        },
+        {
+          "name": "Les Ecussaux",
+          "path": "/place/ba_designation_cuuw73qhfqu35c7ju2b4jiorya/les-ecussaux"
+        },
+        {
+          "name": "Les Bréterins",
+          "path": "/place/ba_designation_eckm6zifwu2olfgom3rkmfouom/les-breterins"
+        },
+        {
+          "name": "Reugne",
+          "path": "/place/ba_designation_h6k3v4b2brtyzelzuoisizwqai/reugne"
+        },
+        {
+          "name": "Clos du Val",
+          "path": "/place/ba_designation_wmjon7iz7d5zpoj6x5ovopxgty/clos-du-val"
+        },
+        {
+          "name": "Bas des Duresses",
+          "path": "/place/ba_designation_xsx5vidk4hhzyew4xh5dfprmaq/bas-des-duresses"
+        }
+      ]
+    },
+    {
+      "appellation": "Beaune",
+      "regionId": "france/burgundy/cote-de-beaune",
+      "entries": [
+        {
+          "name": "Les Bressandes",
+          "path": "/place/ba_designation_3jb45lcfhjw5fehw4kveibayl4/les-bressandes"
+        },
+        {
+          "name": "Les Boucherottes",
+          "path": "/place/ba_designation_3yscs3tkiaxfq453vx4jip5cpu/les-boucherottes"
+        },
+        {
+          "name": "Les Aigrots",
+          "path": "/place/ba_designation_6aobaswwbktferfzskn5zlqyie/les-aigrots"
+        },
+        {
+          "name": "Clos du Roi",
+          "path": "/place/ba_designation_6cdmiy2uhljzu6n453dqfdir6m/clos-du-roi"
+        },
+        {
+          "name": "En Genêt",
+          "path": "/place/ba_designation_6ul27yeblal7vpry3qhkztkk3m/en-genet"
+        },
+        {
+          "name": "Clos de la Mousse",
+          "path": "/place/ba_designation_6wviw4snyfl52actyjgu3o2feu/clos-de-la-mousse"
+        },
+        {
+          "name": "Montée Rouge",
+          "path": "/place/ba_designation_75z52xcanbwahhf34r4bd5p3ku/montee-rouge"
+        },
+        {
+          "name": "Clos des Ursules",
+          "path": "/place/ba_designation_aepvqkxw7fxgc3ftqvx3z6k4ge/clos-des-ursules"
+        },
+        {
+          "name": "Aux Coucherias",
+          "path": "/place/ba_designation_avfw7yjtjgmohtwvf467zpecza/aux-coucherias"
+        },
+        {
+          "name": "Clos de l'Ecu",
+          "path": "/place/ba_designation_axr5rhhtfjfjhcefzxba2z6mmm/clos-de-l-ecu"
+        },
+        {
+          "name": "Les Montrevenots",
+          "path": "/place/ba_designation_cvtql5inedq6zmauckyrhw642i/les-montrevenots"
+        },
+        {
+          "name": "La Mignotte",
+          "path": "/place/ba_designation_f3jsx77wstm5b4zupjs2w56nfy/la-mignotte"
+        },
+        {
+          "name": "Champs Pimont",
+          "path": "/place/ba_designation_fmhqhmnubphc5gehjyqn7w54ie/champs-pimont"
+        },
+        {
+          "name": "Sur les Grèves",
+          "path": "/place/ba_designation_g7dadx35f5ywussgqygkqab3fa/sur-les-greves"
+        },
+        {
+          "name": "Les Fèves",
+          "path": "/place/ba_designation_gsh7rgpkppwpcwflygdmbzjgwu/les-feves"
+        },
+        {
+          "name": "Les Vignes Franches",
+          "path": "/place/ba_designation_hqtueqpulo7z23fgkmb3nwlope/les-vignes-franches"
+        },
+        {
+          "name": "Le Bas des Teurons",
+          "path": "/place/ba_designation_i7ryjuzczm4ao5mihtnpbu7tni/le-bas-des-teurons"
+        },
+        {
+          "name": "Les Grèves",
+          "path": "/place/ba_designation_iq45rnymkbuyjyz3ub72exwbii/les-greves"
+        },
+        {
+          "name": "Les Teurons",
+          "path": "/place/ba_designation_joyhakvqe6gr3d5yibfxwzxbje/les-teurons"
+        },
+        {
+          "name": "Les Avaux",
+          "path": "/place/ba_designation_ke5pudpdfnycuh6c7qkutunpce/les-avaux"
+        },
+        {
+          "name": "Les Sceaux",
+          "path": "/place/ba_designation_kuhn426x5mzjtjizri2puvyaia/les-sceaux"
+        },
+        {
+          "name": "Sur les Grèves - Clos Saint-Anne",
+          "path": "/place/ba_designation_kvagub2kkstngobc6vkxctyot4/sur-les-greves-clos-saint-anne"
+        },
+        {
+          "name": "Les Toussaints",
+          "path": "/place/ba_designation_lgltlksxl3wfcigmskeaq3kewq/les-toussaints"
+        },
+        {
+          "name": "Clos des Avaux",
+          "path": "/place/ba_designation_mlgcxyzaumbqonohgx3zbyr6vq/clos-des-avaux"
+        },
+        {
+          "name": "A l'Ecu",
+          "path": "/place/ba_designation_mp3byajbrcyzhcbykt46qu22bm/a-l-ecu"
+        },
+        {
+          "name": "Les Reversés",
+          "path": "/place/ba_designation_n32x7gw3lds4ghbsvquom6dusi/les-reverses"
+        },
+        {
+          "name": "Clos de la Feguine",
+          "path": "/place/ba_designation_pjr76cygkrmvju7nwutrgxlhk4/clos-de-la-feguine"
+        },
+        {
+          "name": "Les Sizies",
+          "path": "/place/ba_designation_pjwwsjt7xk35uhxwjkmsqgfas4/les-sizies"
+        },
+        {
+          "name": "Les Perrières",
+          "path": "/place/ba_designation_qfmjv2kaa5xkf4ri6j2rqv2hs4/les-perrieres"
+        },
+        {
+          "name": "Pertuisots",
+          "path": "/place/ba_designation_qlgrjj63vqn3ktuej6d5jor6li/pertuisots"
+        },
+        {
+          "name": "Les Cents Vignes",
+          "path": "/place/ba_designation_r64r3ro3nd7cbc4noovs4klky4/les-cents-vignes"
+        },
+        {
+          "name": "En l'Orme",
+          "path": "/place/ba_designation_s3rlc6e7lvltu7vtrlrowaowvu/en-l-orme"
+        },
+        {
+          "name": "Les Seurey",
+          "path": "/place/ba_designation_v2eztzzz2e6m4xrrlxtj3hp2ey/les-seurey"
+        },
+        {
+          "name": "Le Clos des Mouches",
+          "path": "/place/ba_designation_vqf3w4px4kxjsp6qjgy53oy5ci/le-clos-des-mouches"
+        },
+        {
+          "name": "Belissand",
+          "path": "/place/ba_designation_vuq3jbsa6fsjdunqqzeas3cgoi/belissand"
+        },
+        {
+          "name": "Blanches Fleurs",
+          "path": "/place/ba_designation_vygik5lpgooooy4vnvxweifdau/blanches-fleurs"
+        },
+        {
+          "name": "Clos Saint-Landry",
+          "path": "/place/ba_designation_w3esqsuipd6c2cgmdcejtjqeja/clos-saint-landry"
+        },
+        {
+          "name": "Les Epenotes",
+          "path": "/place/ba_designation_whp6hmxy3dvnmmzgh6vpj2l5vu/les-epenotes"
+        },
+        {
+          "name": "Aux Cras",
+          "path": "/place/ba_designation_whvorjeaw6llkggmg4y2u4lzla/aux-cras"
+        },
+        {
+          "name": "Les Chouacheux",
+          "path": "/place/ba_designation_x54athqlqkcbl43sbztfthbisq/les-chouacheux"
+        },
+        {
+          "name": "Les Tuvilains",
+          "path": "/place/ba_designation_xfpz6xqzns54pksqpnivvpmpdm/les-tuvilains"
+        },
+        {
+          "name": "Les Marconnets",
+          "path": "/place/ba_designation_zmxuew6bmu4sx3jomzdfubouoi/les-marconnets"
+        }
+      ]
+    },
+    {
+      "appellation": "Blagny",
+      "regionId": "france/burgundy/cote-de-beaune",
+      "entries": [
+        {
+          "name": "Sous Blagny",
+          "path": "/place/ba_designation_lpjrtumn5lgdhiucikmz5lqqk4/sous-blagny"
+        },
+        {
+          "name": "La Jeunellotte",
+          "path": "/place/ba_designation_qxmprjkb5mzn6hee5s7m7lk3ki/la-jeunellotte"
+        },
+        {
+          "name": "Sous le Puits",
+          "path": "/place/ba_designation_sfzvm6bugirl4xiwcohefy2fvu/sous-le-puits"
+        },
+        {
+          "name": "La Pièce sous le Bois",
+          "path": "/place/ba_designation_vsni6sa2zmf7s5pa54r77lu75q/la-piece-sous-le-bois"
+        },
+        {
+          "name": "La Garenne ou sur la Garenne",
+          "path": "/place/ba_designation_w5yq5iswpwz2hqcnezmrw6ttcy/la-garenne-ou-sur-la-garenne"
+        },
+        {
+          "name": "Sous le Dos d'Ane",
+          "path": "/place/ba_designation_wp3c2qjljcwdxgnrk2t3qvgraa/sous-le-dos-d-ane"
+        },
+        {
+          "name": "Hameau de Blagny",
+          "path": "/place/ba_designation_yj3tx2azdfqv4z2wfqqoeribmy/hameau-de-blagny"
+        }
+      ]
+    },
+    {
+      "appellation": "Chablis",
+      "regionId": "france/burgundy/chablis",
+      "entries": [
+        {
+          "name": "Mont de Milieu",
+          "path": "/place/ba_designation_37awyaj3gdlrgrm3qghblvxd2e/mont-de-milieu"
+        },
+        {
+          "name": "Vosgros",
+          "path": "/place/ba_designation_6r4df4icjzb6o6nwfcgdxigo5u/vosgros"
+        },
+        {
+          "name": "Côte de Jouan",
+          "path": "/place/ba_designation_7r77dh3wyegpyztgl62uixgd5y/cote-de-jouan"
+        },
+        {
+          "name": "Les Beauregards",
+          "path": "/place/ba_designation_btojvxmlszle4nxseyf5zblptm/les-beauregards"
+        },
+        {
+          "name": "Fourchaume",
+          "path": "/place/ba_designation_cvtx6duz37d3dv7z2sd54wod3i/fourchaume"
+        },
+        {
+          "name": "Vaupulent",
+          "path": "/place/ba_designation_m6pz4j73ohdvtonmjk5c6lz5gm/vaupulent"
+        },
+        {
+          "name": "Les Fourneaux",
+          "path": "/place/ba_designation_nfefo5jxcbwlzdkmjfduxuoqby/les-fourneaux"
+        },
+        {
+          "name": "Chaume de Talvat",
+          "path": "/place/ba_designation_un7vznzftydzjt7rezliumjpvi/chaume-de-talvat"
+        },
+        {
+          "name": "Vaucoupin",
+          "path": "/place/ba_designation_wiea264z5gs5b4cbs67nnnigjq/vaucoupin"
+        },
+        {
+          "name": "Vaugiraut",
+          "path": "/place/ba_designation_wj6npchehk6itux67v6g3h6ota/vaugiraut"
+        }
+      ]
+    },
+    {
+      "appellation": "Chambolle-Musigny",
+      "regionId": "france/burgundy/cote-de-nuits",
+      "entries": [
+        {
+          "name": "Les Combottes",
+          "path": "/place/ba_designation_3vbun7areilhlld7ryjp7jrtqq/les-combottes"
+        },
+        {
+          "name": "Les Chabiots",
+          "path": "/place/ba_designation_4qm7opsow5bzuc2efp7463syyq/les-chabiots"
+        },
+        {
+          "name": "La Combe d'Orveau",
+          "path": "/place/ba_designation_77uxmrsle54rxcystqr7qf2gke/la-combe-d-orveau"
+        },
+        {
+          "name": "Les Gruenchers",
+          "path": "/place/ba_designation_7hk5ajyawnh43mya7xmuexupwu/les-gruenchers"
+        },
+        {
+          "name": "Les Fuées",
+          "path": "/place/ba_designation_b4zrkttc4njjkdjjsi3bynr46a/les-fuees"
+        },
+        {
+          "name": "Les Charmes",
+          "path": "/place/ba_designation_bg2zrnbr7zqcaopchydu2jmgja/les-charmes"
+        },
+        {
+          "name": "Les Groseilles",
+          "path": "/place/ba_designation_cng6ue5sbehaip4oo6w6oss7iu/les-groseilles"
+        },
+        {
+          "name": "Les Amoureuses",
+          "path": "/place/ba_designation_dhwwurdjcolteaz4ejlv5leghy/les-amoureuses"
+        },
+        {
+          "name": "Les Lavrottes",
+          "path": "/place/ba_designation_dmpjlxrfnwgndlxpbl4ieaylxq/les-lavrottes"
+        },
+        {
+          "name": "Les Noirots",
+          "path": "/place/ba_designation_fbmtecoyf4r2wfx3r3kyueobyy/les-noirots"
+        },
+        {
+          "name": "Derrière la Grange",
+          "path": "/place/ba_designation_gbe65bg5dmkufpsw2panzqtire/derriere-la-grange"
+        },
+        {
+          "name": "Les Cras",
+          "path": "/place/ba_designation_ggabpxjywgnhanhwxuwketu5zu/les-cras"
+        },
+        {
+          "name": "Les Sentiers",
+          "path": "/place/ba_designation_hotthefyh7dkfqg4lak5zdzlni/les-sentiers"
+        },
+        {
+          "name": "Aux Echanges",
+          "path": "/place/ba_designation_hpm4bxcsxlmxfcwva4iuljnepi/aux-echanges"
+        },
+        {
+          "name": "Les Carrières",
+          "path": "/place/ba_designation_jleh76ofhqiystbgju7slmpbje/les-carrieres"
+        },
+        {
+          "name": "Les Feusselottes ou Les Feusselotes",
+          "path": "/place/ba_designation_kf3mvdzdzl7k5wtiurs6qsdzh4/les-feusselottes-ou-les-feusselotes"
+        },
+        {
+          "name": "Les Baudes",
+          "path": "/place/ba_designation_qaugcowwoa4rzmqmndha2lnkcy/les-baudes"
+        },
+        {
+          "name": "Les Hauts Doix",
+          "path": "/place/ba_designation_r2yz6ntspuhkonahfckpypfv7y/les-hauts-doix"
+        },
+        {
+          "name": "Les Plantes",
+          "path": "/place/ba_designation_sqmv6qnqpwxelcapaxrojooqwq/les-plantes"
+        },
+        {
+          "name": "Les Chatelots",
+          "path": "/place/ba_designation_vkadb2jpvg2znwlfa3x3huzgiq/les-chatelots"
+        },
+        {
+          "name": "Aux Combottes",
+          "path": "/place/ba_designation_wn2wbg5zmdszhmgodzsf5sm6o4/aux-combottes"
+        },
+        {
+          "name": "Les Borniques",
+          "path": "/place/ba_designation_wvnahcq3np66w3wlkkksvomqg4/les-borniques"
+        },
+        {
+          "name": "Les Véroilles",
+          "path": "/place/ba_designation_wympbx7staeahkwafqhkpvn374/les-veroilles"
+        },
+        {
+          "name": "Aux Beaux Bruns",
+          "path": "/place/ba_designation_xbjmjz2dmjnog3s3fqdwxxwyfa/aux-beaux-bruns"
+        }
+      ]
+    },
+    {
+      "appellation": "Chassagne-Montrachet",
+      "regionId": "france/burgundy/cote-de-beaune",
+      "entries": [
+        {
+          "name": "Les Combards",
+          "path": "/place/ba_designation_23nskx7sjjpkrtd75uofyppyue/les-combards"
+        },
+        {
+          "name": "Les Commes",
+          "path": "/place/ba_designation_25objzs73uc2ej3nehkma6zo6q/les-commes"
+        },
+        {
+          "name": "Ez Crottes",
+          "path": "/place/ba_designation_2voupctuw7rwfur3mxuo5tom5a/ez-crottes"
+        },
+        {
+          "name": "La Grande Borne",
+          "path": "/place/ba_designation_2zzjfz3bimpscq3722r5r3yjji/la-grande-borne"
+        },
+        {
+          "name": "Chassagne",
+          "path": "/place/ba_designation_3mog7jflpnjovthl2omeprn7ta/chassagne"
+        },
+        {
+          "name": "Les Vergers",
+          "path": "/place/ba_designation_3s4xec2sdqmovqc5wsj5efhmgm/les-vergers"
+        },
+        {
+          "name": "Tête du Clos",
+          "path": "/place/ba_designation_4xo73uh2is526udmsldisqahui/tete-du-clos"
+        },
+        {
+          "name": "Les Chaumées",
+          "path": "/place/ba_designation_62tnoyksf5xg7vuwymnulblkxq/les-chaumees"
+        },
+        {
+          "name": "La Maltroie",
+          "path": "/place/ba_designation_63ir2aabzyqbojrz4ndnsvg5ti/la-maltroie"
+        },
+        {
+          "name": "Les Bondues",
+          "path": "/place/ba_designation_653xcrb7dhehfmnbmj2klb5f34/les-bondues"
+        },
+        {
+          "name": "Les Pasquelles",
+          "path": "/place/ba_designation_6cucdnpx4f56v7tb2woccnb7zi/les-pasquelles"
+        },
+        {
+          "name": "Morgeot",
+          "path": "/place/ba_designation_6jvr3e7mb3d4zbue27e52s47ba/morgeot"
+        },
+        {
+          "name": "Vigne Blanche",
+          "path": "/place/ba_designation_6tfmttae7onpwofnipxrhuc4ga/vigne-blanche"
+        },
+        {
+          "name": "La Boudriotte",
+          "path": "/place/ba_designation_7qngkufatizoncnixk5h4fwmpq/la-boudriotte"
+        },
+        {
+          "name": "Les Petits Clos",
+          "path": "/place/ba_designation_ah7chv5yzxfp5zwmrdohb3ui24/les-petits-clos"
+        },
+        {
+          "name": "Dent de Chien",
+          "path": "/place/ba_designation_aiavblagl4inbuvfagitxrigza/dent-de-chien"
+        },
+        {
+          "name": "La Romanée",
+          "path": "/place/ba_designation_aj6qcdt2gmf6kewla6spvfrnva/la-romanee"
+        },
+        {
+          "name": "Francemont",
+          "path": "/place/ba_designation_az4sxkjxrhfazwsxz5taccr6ii/francemont"
+        },
+        {
+          "name": "La Cardeuse",
+          "path": "/place/ba_designation_b2zu4c2ua4ffvqa6cr3qo4thxi/la-cardeuse"
+        },
+        {
+          "name": "Abbaye de Morgeot",
+          "path": "/place/ba_designation_bpa65nnakoqcamnfnbrsrydcke/abbaye-de-morgeot"
+        },
+        {
+          "name": "La Grande Montagne",
+          "path": "/place/ba_designation_egovjyralsdupryv5wos7zr32q/la-grande-montagne"
+        },
+        {
+          "name": "Cailleret",
+          "path": "/place/ba_designation_enlhft2gv4cntaglh2btvk5j3e/cailleret"
+        },
+        {
+          "name": "Bois de Chassagne",
+          "path": "/place/ba_designation_fqwk4vzb77ccllck67htijhldi/bois-de-chassagne"
+        },
+        {
+          "name": "Les Murées",
+          "path": "/place/ba_designation_gvsuvrhuvn2kk23nx5x4ppatjq/les-murees"
+        },
+        {
+          "name": "Chassagne du Clos Saint-Jean",
+          "path": "/place/ba_designation_hfasqxpi3emerxhb5ksjuurcgy/chassagne-du-clos-saint-jean"
+        },
+        {
+          "name": "Les Boirettes",
+          "path": "/place/ba_designation_j6cwtqiwlykuf4osy33llrbflq/les-boirettes"
+        },
+        {
+          "name": "Petingeret",
+          "path": "/place/ba_designation_jbzhsgxadvgznkpwc2uwd7u3tm/petingeret"
+        },
+        {
+          "name": "En Virondot",
+          "path": "/place/ba_designation_jgqvtvijluyybakx3g6o6e3b64/en-virondot"
+        },
+        {
+          "name": "Les Baudines",
+          "path": "/place/ba_designation_jkn6gfsbi5gmwwwzb5sabrewme/les-baudines"
+        },
+        {
+          "name": "Les Chaumes",
+          "path": "/place/ba_designation_jq2bbvumbig2gammeqb3cj3d2u/les-chaumes"
+        },
+        {
+          "name": "Blanchot dessus",
+          "path": "/place/ba_designation_k6smyqrx23c32oa6wpwakpabfe/blanchot-dessus"
+        },
+        {
+          "name": "Les Chenevottes",
+          "path": "/place/ba_designation_kfp3u2dhpxqju6ayxibjtvrgam/les-chenevottes"
+        },
+        {
+          "name": "Les Rebichets",
+          "path": "/place/ba_designation_khfkn5qjqwwzdsrhqj5sy2fdyi/les-rebichets"
+        },
+        {
+          "name": "Champs Jendreau",
+          "path": "/place/ba_designation_lftjkp3wvzn6ye2w64bydqrn7m/champs-jendreau"
+        },
+        {
+          "name": "Ez Crets",
+          "path": "/place/ba_designation_lnnhjh75urpum7aoiobev2nfo4/ez-crets"
+        },
+        {
+          "name": "Les Embazées",
+          "path": "/place/ba_designation_lqcykr2sopdaqnymqr4aelxpym/les-embazees"
+        },
+        {
+          "name": "Les Champs gain",
+          "path": "/place/ba_designation_lytjimtlcs2tmzch4x6ckfxrqu/les-champs-gain"
+        },
+        {
+          "name": "En Cailleret",
+          "path": "/place/ba_designation_mhu7peje7itrfdivd6kpxvkbkq/en-cailleret"
+        },
+        {
+          "name": "Clos Saint-Jean",
+          "path": "/place/ba_designation_mtxpqpzboqfx6xtkbolvedomtu/clos-saint-jean"
+        },
+        {
+          "name": "Les Petites Fairendes",
+          "path": "/place/ba_designation_ofc2piigc57s5lf7lhkwdy72lq/les-petites-fairendes"
+        },
+        {
+          "name": "La Roquemaure",
+          "path": "/place/ba_designation_q35gl55vmgf7mz2lju5aw7crz4/la-roquemaure"
+        },
+        {
+          "name": "Tonton Marcel",
+          "path": "/place/ba_designation_qp75hsbkdegvus535c2eunoisa/tonton-marcel"
+        },
+        {
+          "name": "Clos Chareau",
+          "path": "/place/ba_designation_sfhs44nydqduq22vshaxpk723i/clos-chareau"
+        },
+        {
+          "name": "Vide Bourse",
+          "path": "/place/ba_designation_snsjr5nu6wonexulkiz3owhtkq/vide-bourse"
+        },
+        {
+          "name": "Vigne Derrière",
+          "path": "/place/ba_designation_v224b2ytz4mb4xvgimog2otcq4/vigne-derriere"
+        },
+        {
+          "name": "Les Grandes Ruchottes",
+          "path": "/place/ba_designation_vh4nlycaqlrsotfavdwsulmzpq/les-grandes-ruchottes"
+        },
+        {
+          "name": "Les Macherelles",
+          "path": "/place/ba_designation_vpcaorko327akuxivmihvrtoqe/les-macherelles"
+        },
+        {
+          "name": "Les Fairendes",
+          "path": "/place/ba_designation_vroyfdfs47h7ylv76jtihsewpq/les-fairendes"
+        },
+        {
+          "name": "Clos Pitois",
+          "path": "/place/ba_designation_wqw7ftdzioeg7tbovjud65sehm/clos-pitois"
+        },
+        {
+          "name": "En Remilly",
+          "path": "/place/ba_designation_x55557akbruxxnxa2taxyaxzly/en-remilly"
+        },
+        {
+          "name": "Guerchère",
+          "path": "/place/ba_designation_y3hyysqwcnpaz5uqilqiymrrga/guerchere"
+        },
+        {
+          "name": "Les Brussonnes",
+          "path": "/place/ba_designation_y7qk3phhdezpry5dk576uxm4ei/les-brussonnes"
+        },
+        {
+          "name": "Les Grands Clos",
+          "path": "/place/ba_designation_yu6oca74vizhgdv2wl3n4fka2y/les-grands-clos"
+        },
+        {
+          "name": "Les Places",
+          "path": "/place/ba_designation_yyso4rl7c5dkrot4ns7qbapvu4/les-places"
+        },
+        {
+          "name": "La Chapelle",
+          "path": "/place/ba_designation_zvgflj6egu4fjikfjudlboumxy/la-chapelle"
+        }
+      ]
+    },
+    {
+      "appellation": "Fixin",
+      "regionId": "france/burgundy/cote-de-nuits",
+      "entries": [
+        {
+          "name": "Arvelets",
+          "path": "/place/ba_designation_7ci43vkzaxhnlppxz5d4pbhve4/arvelets"
+        },
+        {
+          "name": "Hervelets",
+          "path": "/place/ba_designation_dp7jpiu2xazft7b7r2gvb5lvqq/hervelets"
+        },
+        {
+          "name": "Clos du Chapitre",
+          "path": "/place/ba_designation_fkn2ctuq6tby4xq37svlsenoom/clos-du-chapitre"
+        },
+        {
+          "name": "Les Meix Bas",
+          "path": "/place/ba_designation_gmyudwnrl64xjzz6nzoyyro5r4/les-meix-bas"
+        },
+        {
+          "name": "Clos de la Perrière",
+          "path": "/place/ba_designation_nqg36xi2obvx5id4ng4yn42hna/clos-de-la-perriere"
+        },
+        {
+          "name": "Clos Napoléon",
+          "path": "/place/ba_designation_xghy5i52fhpmsdz4a37q7tyg6u/clos-napoleon"
+        }
+      ]
+    },
+    {
+      "appellation": "Gevrey-Chambertin",
+      "regionId": "france/burgundy/cote-de-nuits",
+      "entries": [
+        {
+          "name": "Cherbaudes",
+          "path": "/place/ba_designation_3ijnj4s3dodrwkrptamsp4g4sm/cherbaudes"
+        },
+        {
+          "name": "Lavaut Saint-Jacques",
+          "path": "/place/ba_designation_3nmrnbe6rjrkpwfe3lfas4azg4/lavaut-saint-jacques"
+        },
+        {
+          "name": "Champonnet",
+          "path": "/place/ba_designation_4vuu2isf7fcfcvmtugnhunr2uy/champonnet"
+        },
+        {
+          "name": "Les Cazetiers",
+          "path": "/place/ba_designation_4wgzv3yeruhebw2d535r27kjfm/les-cazetiers"
+        },
+        {
+          "name": "Fonteny",
+          "path": "/place/ba_designation_4xzc3aanw2rt237c2wnl2afmoy/fonteny"
+        },
+        {
+          "name": "Petite Chapelle",
+          "path": "/place/ba_designation_6olaljf4olm5acrksajgahewge/petite-chapelle"
+        },
+        {
+          "name": "Clos des Varoilles",
+          "path": "/place/ba_designation_7difbrenu3vqkpwqxax6wq34ei/clos-des-varoilles"
+        },
+        {
+          "name": "Combe au Moine",
+          "path": "/place/ba_designation_dqhinz2imkqj452wsnp4kz7e44/combe-au-moine"
+        },
+        {
+          "name": "Le Clos Saint-Jacques",
+          "path": "/place/ba_designation_dxq2vo5i7fjglod2k3xd2oj2kq/le-clos-saint-jacques"
+        },
+        {
+          "name": "En Ergot",
+          "path": "/place/ba_designation_hux2573esq7z445pyltb3puraq/en-ergot"
+        },
+        {
+          "name": "Craipillot",
+          "path": "/place/ba_designation_hv2z3qjvgcilnysjb3hxphygta/craipillot"
+        },
+        {
+          "name": "Les Corbeaux",
+          "path": "/place/ba_designation_k5roerxts4hwnvgj2zk6ri74aq/les-corbeaux"
+        },
+        {
+          "name": "Issarts",
+          "path": "/place/ba_designation_kjxj4slvyjxb4twnedtqbttkhi/issarts"
+        },
+        {
+          "name": "Clos du Chapitre",
+          "path": "/place/ba_designation_kwujszbfrjutcuvaf3n66znzju/clos-du-chapitre"
+        },
+        {
+          "name": "Les Goulots",
+          "path": "/place/ba_designation_lpk7t2pim2ipupvv4z3ftbe57m/les-goulots"
+        },
+        {
+          "name": "Petits Cazetiers",
+          "path": "/place/ba_designation_maalrngsu3aowh6djkyi5zpede/petits-cazetiers"
+        },
+        {
+          "name": "Estournelles-Saint-Jacques",
+          "path": "/place/ba_designation_mww5fmfgury4kncqa4wuqvtyce/estournelles-saint-jacques"
+        },
+        {
+          "name": "La Bossière",
+          "path": "/place/ba_designation_nzroxacws5bnni4zpndhxf7rba/la-bossiere"
+        },
+        {
+          "name": "Clos Prieur",
+          "path": "/place/ba_designation_ot4ld6jv5c7odyjyqzpwyh7coq/clos-prieur"
+        },
+        {
+          "name": "Champeaux",
+          "path": "/place/ba_designation_pqckafmadulnegpob26um4gcqq/champeaux"
+        },
+        {
+          "name": "Poissenot",
+          "path": "/place/ba_designation_s52nx653tkj2udkebi73ug7flm/poissenot"
+        },
+        {
+          "name": "Au Closeau",
+          "path": "/place/ba_designation_t7wb5opj6ihvqssk7eq3lisxjy/au-closeau"
+        },
+        {
+          "name": "La Romanée",
+          "path": "/place/ba_designation_v5a7upjbkl2tkorz7fkbpzx2kq/la-romanee"
+        },
+        {
+          "name": "La Perrière",
+          "path": "/place/ba_designation_wmlirzuwih657oz5ff6c2nofaa/la-perriere"
+        },
+        {
+          "name": "Aux Combottes",
+          "path": "/place/ba_designation_xundfugpwkztxandkktoru3qu4/aux-combottes"
+        },
+        {
+          "name": "Bel Air",
+          "path": "/place/ba_designation_ztobqbpld2kw2lnjjniohevieu/bel-air"
+        }
+      ]
+    },
+    {
+      "appellation": "Givry",
+      "regionId": "france/burgundy/cote-chalonnaise",
+      "entries": [
+        {
+          "name": "Clos de la Baraude",
+          "path": "/place/ba_designation_2dryhynygyrehflsnhjteek6pm/clos-de-la-baraude"
+        },
+        {
+          "name": "Champ Nalot",
+          "path": "/place/ba_designation_2khani5yufs4sxiyywywsvrtme/champ-nalot"
+        },
+        {
+          "name": "Crémillons",
+          "path": "/place/ba_designation_2sdpjzu3fsmw4lsddo2ueugko4/cremillons"
+        },
+        {
+          "name": "Clos Marceaux",
+          "path": "/place/ba_designation_4qafqi6x73svwjkpjmpcmmxlne/clos-marceaux"
+        },
+        {
+          "name": "Le Petit Prétan",
+          "path": "/place/ba_designation_55hkr6ks7mwkcdvmymwq42sjam/le-petit-pretan"
+        },
+        {
+          "name": "Le Pied de Chaume",
+          "path": "/place/ba_designation_6nf4jyqnvnfeeptidfewmus3ei/le-pied-de-chaume"
+        },
+        {
+          "name": "Les Bois Gautiers",
+          "path": "/place/ba_designation_736nnewxwangj3wsqfwoc3bk5y/les-bois-gautiers"
+        },
+        {
+          "name": "La Brûlée",
+          "path": "/place/ba_designation_aju4ijfywc4juve2suj24polbe/la-brulee"
+        },
+        {
+          "name": "La Grande Berge",
+          "path": "/place/ba_designation_bv5g6v7y43rfjatvoh2ccnkm6m/la-grande-berge"
+        },
+        {
+          "name": "Clos Jus",
+          "path": "/place/ba_designation_c47ril4hjbzsahbbfrqnl2tbfy/clos-jus"
+        },
+        {
+          "name": "Clos du Cellier aux Moines",
+          "path": "/place/ba_designation_cmqk7dv4qpyxtxrgnoebcjzl6y/clos-du-cellier-aux-moines"
+        },
+        {
+          "name": "Le Paradis",
+          "path": "/place/ba_designation_d2gtwqe3gznzihs626dtnxuppe/le-paradis"
+        },
+        {
+          "name": "Clos du Cras long",
+          "path": "/place/ba_designation_dxw3h2hjgwi4m5wsm3day2xjwm/clos-du-cras-long"
+        },
+        {
+          "name": "En Veau",
+          "path": "/place/ba_designation_eauhoz3ahwfaseqftxe4ml6ipm/en-veau"
+        },
+        {
+          "name": "La Petite Berge",
+          "path": "/place/ba_designation_ecd4kgyqwir3g6voybmwsxhz4y/la-petite-berge"
+        },
+        {
+          "name": "Servoisine",
+          "path": "/place/ba_designation_fvlnvsy67owfd7tnqob6vnn3uu/servoisine"
+        },
+        {
+          "name": "Le Pied du Clou",
+          "path": "/place/ba_designation_h3pwijipf3lmmr6h75tjepvdzm/le-pied-du-clou"
+        },
+        {
+          "name": "Les Grands Prétans",
+          "path": "/place/ba_designation_hph7ygdkl4smlrad6ff4avgzgi/les-grands-pretans"
+        },
+        {
+          "name": "A Vigne Rouge",
+          "path": "/place/ba_designation_jra3xvaxqe2kpngr3xx4gfew5i/a-vigne-rouge"
+        },
+        {
+          "name": "Crausot",
+          "path": "/place/ba_designation_jv3lwxdyckunkasaescbns5ndy/crausot"
+        },
+        {
+          "name": "Les Galaffres",
+          "path": "/place/ba_designation_kur3gcwzli2owgrjzteboi7oiq/les-galaffres"
+        },
+        {
+          "name": "Petit Marole",
+          "path": "/place/ba_designation_l2gtrtoqfm5wfug267zfzvt36m/petit-marole"
+        },
+        {
+          "name": "Clos du Vernoy",
+          "path": "/place/ba_designation_nst43gr6zaygtgqk3kjewefsim/clos-du-vernoy"
+        },
+        {
+          "name": "Le Vigron",
+          "path": "/place/ba_designation_nz4q7h4xuq6sgxvwl6pw3vchim/le-vigron"
+        },
+        {
+          "name": "Les Bois Chevaux",
+          "path": "/place/ba_designation_pxrxo6hb6lsbyby2n6zkt3g25i/les-bois-chevaux"
+        },
+        {
+          "name": "Clos Charlé",
+          "path": "/place/ba_designation_ql7d4p4tbk24vro2qwcn2irc7a/clos-charle"
+        },
+        {
+          "name": "Clos-Saint-Paul",
+          "path": "/place/ba_designation_rtkyghctksuru5sms7t7z7mfwy/clos-saint-paul"
+        },
+        {
+          "name": "Clos Salomon",
+          "path": "/place/ba_designation_szkkc6gz6pyze3o5vji6l6cedq/clos-salomon"
+        },
+        {
+          "name": "Clos-Saint-Pierre",
+          "path": "/place/ba_designation_usdmaabw2idgfajcdehzz45moe/clos-saint-pierre"
+        },
+        {
+          "name": "Les Combes",
+          "path": "/place/ba_designation_utdwjnqblrqvuiaklgeeaypjwu/les-combes"
+        },
+        {
+          "name": "Les Grandes Vignes",
+          "path": "/place/ba_designation_vti6cjcth6qdz2ti54mm5luete/les-grandes-vignes"
+        },
+        {
+          "name": "Le Champ Lalot",
+          "path": "/place/ba_designation_wycirhxlbhctdbpjcfhdjhnpni/le-champ-lalot"
+        },
+        {
+          "name": "En Choué",
+          "path": "/place/ba_designation_y2gisualn2dwsxrdgglmzqjque/en-choue"
+        },
+        {
+          "name": "Clos Marole",
+          "path": "/place/ba_designation_yqxfcw7yiygfydsflypi2yv3ti/clos-marole"
+        }
+      ]
+    },
+    {
+      "appellation": "Ladoix",
+      "regionId": "france/burgundy/cote-de-beaune",
+      "entries": [
+        {
+          "name": "Le Clou d'Orge",
+          "path": "/place/ba_designation_bwu4c3a3xo2m4hnuxi3oax3uru/le-clou-d-orge"
+        },
+        {
+          "name": "La Corvée",
+          "path": "/place/ba_designation_c5ewrbbnr6xg2hmlanez25f6iu/la-corvee"
+        },
+        {
+          "name": "Les Buis",
+          "path": "/place/ba_designation_ltnkppgnmqko5uh3s6kkzh7yyu/les-buis"
+        },
+        {
+          "name": "Le Rognet et Corton",
+          "path": "/place/ba_designation_pbpetlupumjm45uun2y7dp6oy4/le-rognet-et-corton"
+        },
+        {
+          "name": "Hautes Mourottes",
+          "path": "/place/ba_designation_pm75yphbijvneav5odt62d3dsm/hautes-mourottes"
+        },
+        {
+          "name": "La Micaude",
+          "path": "/place/ba_designation_s2ce6iqyaqrmczsx6lqbjemkae/la-micaude"
+        },
+        {
+          "name": "Les Joyeuses",
+          "path": "/place/ba_designation_snjtzyjg442wmdn3ga6umdyj6e/les-joyeuses"
+        },
+        {
+          "name": "En Naget",
+          "path": "/place/ba_designation_w2s4rzcd22dgueyszqfolangsy/en-naget"
+        },
+        {
+          "name": "Bois Roussot",
+          "path": "/place/ba_designation_wsjylzpyzps5h5abuc7unxav74/bois-roussot"
+        },
+        {
+          "name": "Les Grêchons et Foutrières",
+          "path": "/place/ba_designation_xpg5ckp746dgnvteqxfxabss5q/les-grechons-et-foutrieres"
+        },
+        {
+          "name": "Basses Mourottes",
+          "path": "/place/ba_designation_xxh333y3h4iio7xexrkolsskne/basses-mourottes"
+        }
+      ]
+    },
+    {
+      "appellation": "Maranges",
+      "regionId": "france/burgundy/cote-de-beaune",
+      "entries": [
+        {
+          "name": "Les Clos Roussots",
+          "path": "/place/ba_designation_7sd7nertzsqttdbt66grhr2j6u/les-clos-roussots"
+        },
+        {
+          "name": "Le Croix Moines",
+          "path": "/place/ba_designation_bnbrrea3ybt4p2xhxdevm6ro34/le-croix-moines"
+        },
+        {
+          "name": "Clos de la Boutière",
+          "path": "/place/ba_designation_hjbqgg2kxh7jnmgtnha2at7yly/clos-de-la-boutiere"
+        },
+        {
+          "name": "La Fussière",
+          "path": "/place/ba_designation_ij6jo72ynljnf3tc4tck6w633q/la-fussiere"
+        },
+        {
+          "name": "Clos de la Fussière",
+          "path": "/place/ba_designation_k7eqkp4p24a6x4t3wz5c4mtj2i/clos-de-la-fussiere"
+        },
+        {
+          "name": "Le Clos des Rois",
+          "path": "/place/ba_designation_t5bouxghovopibgc7wbjyvwl7e/le-clos-des-rois"
+        },
+        {
+          "name": "Le Clos des Loyères",
+          "path": "/place/ba_designation_v5lhwn3gfc5y2luqja3orxruuu/le-clos-des-loyeres"
+        }
+      ]
+    },
+    {
+      "appellation": "Mercurey",
+      "regionId": "france/burgundy/cote-chalonnaise",
+      "entries": [
+        {
+          "name": "Clos du Château de Montaigu",
+          "path": "/place/ba_designation_3rv3sja7haur7j5lgqwtfdgtja/clos-du-chateau-de-montaigu"
+        },
+        {
+          "name": "La Levrière",
+          "path": "/place/ba_designation_45k2toss5gac2qxzynrtsla6fm/la-levriere"
+        },
+        {
+          "name": "Les Fourneaux",
+          "path": "/place/ba_designation_6xutgguojvlqazondmop33fwwm/les-fourneaux"
+        },
+        {
+          "name": "Sazenay",
+          "path": "/place/ba_designation_anv6mllxgso5nzx4r2t4kcnggi/sazenay"
+        },
+        {
+          "name": "La Bondue",
+          "path": "/place/ba_designation_b6ybwpxz2fcrcn3ywyuymedx2m/la-bondue"
+        },
+        {
+          "name": "Clos Tonnerre",
+          "path": "/place/ba_designation_cjow5immpwx3egvix4yha2v7ny/clos-tonnerre"
+        },
+        {
+          "name": "Le Clos du Roy",
+          "path": "/place/ba_designation_d5wsaslh5u743han6xmwagdndm/le-clos-du-roy"
+        },
+        {
+          "name": "Les Crêts",
+          "path": "/place/ba_designation_dxyurarblngjylipffa4cytuaa/les-crets"
+        },
+        {
+          "name": "Clos des Montaigus",
+          "path": "/place/ba_designation_e4qvndje3bveochfrl6up7dsj4/clos-des-montaigus"
+        },
+        {
+          "name": "Le Clos l'Evêque",
+          "path": "/place/ba_designation_ebyazohlcsuoiwmn5z7h4yhk5y/le-clos-l-eveque"
+        },
+        {
+          "name": "Les Champs Martin",
+          "path": "/place/ba_designation_hdirt45mhkykxaqxwc37lfr7iy/les-champs-martin"
+        },
+        {
+          "name": "Clos de Paradis",
+          "path": "/place/ba_designation_hsg3ifwnx6lxgbfgqzpt3cbtj4/clos-de-paradis"
+        },
+        {
+          "name": "Les Puillets",
+          "path": "/place/ba_designation_hvf7tql25ptqavv56wz6p66f3m/les-puillets"
+        },
+        {
+          "name": "Clos Marcilly",
+          "path": "/place/ba_designation_jr4faylbiamvyxaaohf7k6sgp4/clos-marcilly"
+        },
+        {
+          "name": "Griffères",
+          "path": "/place/ba_designation_lkb3ayv27aodyleghjh5fq4ct4/grifferes"
+        },
+        {
+          "name": "Grand Clos Fortoul",
+          "path": "/place/ba_designation_m62yqd4buqcrglax4jw3ocin5e/grand-clos-fortoul"
+        },
+        {
+          "name": "Clos Voyens",
+          "path": "/place/ba_designation_muj3c4tzx4ewg5myes6fmnjuu4/clos-voyens"
+        },
+        {
+          "name": "Clos des Myglands",
+          "path": "/place/ba_designation_og4go7jbshnprshqjxleyhc7tu/clos-des-myglands"
+        },
+        {
+          "name": "La Mission",
+          "path": "/place/ba_designation_pk3siptq64h4nod2dgofjcy254/la-mission"
+        },
+        {
+          "name": "La Chassière",
+          "path": "/place/ba_designation_pxtj7uhgjx5l2j6l6jmawaln3m/la-chassiere"
+        },
+        {
+          "name": "Clos des Barraults",
+          "path": "/place/ba_designation_qqgivnmmuxgsmcdgbydmlrfpgy/clos-des-barraults"
+        },
+        {
+          "name": "Les Croichots",
+          "path": "/place/ba_designation_raneomc25bguedb73rspf6xby4/les-croichots"
+        },
+        {
+          "name": "La Cailloute",
+          "path": "/place/ba_designation_rkjxwj4vqymfuxrnuwgkqjr2wi/la-cailloute"
+        },
+        {
+          "name": "Les Byots",
+          "path": "/place/ba_designation_st2m2wven2lcbab652pgyzfcnu/les-byots"
+        },
+        {
+          "name": "Les Ruelles",
+          "path": "/place/ba_designation_uezon5xgqdmavvkw3rnp554mxu/les-ruelles"
+        },
+        {
+          "name": "Les Saumonts",
+          "path": "/place/ba_designation_uinvfvjho7tvn5uqzd73n2kswu/les-saumonts"
+        },
+        {
+          "name": "Clos des grands Voyens",
+          "path": "/place/ba_designation_uupxzowwectn4xxwddrbsobfii/clos-des-grands-voyens"
+        },
+        {
+          "name": "Les Naugues",
+          "path": "/place/ba_designation_v3y5cqjcyb7stg42k3zcohqk5u/les-naugues"
+        },
+        {
+          "name": "Les Montaigus",
+          "path": "/place/ba_designation_wwwe32e56leyus7ztu7aze3wne/les-montaigus"
+        },
+        {
+          "name": "Les Combins",
+          "path": "/place/ba_designation_xw3zaax6q7hfs52lprop4lcmde/les-combins"
+        },
+        {
+          "name": "Les Vasées",
+          "path": "/place/ba_designation_z7blxazyumnatf7fv7o7sdz3om/les-vasees"
+        },
+        {
+          "name": "Les Velley",
+          "path": "/place/ba_designation_zslernspdawtholidiintpgtgq/les-velley"
+        }
+      ]
+    },
+    {
+      "appellation": "Meursault",
+      "regionId": "france/burgundy/cote-de-beaune",
+      "entries": [
+        {
+          "name": "Les Caillerets",
+          "path": "/place/ba_designation_2e24adk6u4bghg2jiecwfvzxom/les-caillerets"
+        },
+        {
+          "name": "Les Santenots du Milieu",
+          "path": "/place/ba_designation_33gy23zs7732rjssicayc6g6wu/les-santenots-du-milieu"
+        },
+        {
+          "name": "Perrières",
+          "path": "/place/ba_designation_3ftvudbzi36k7gndmas6x36rje/perrieres"
+        },
+        {
+          "name": "Les Gouttes d'Or",
+          "path": "/place/ba_designation_7nelhqhnf3hykkqeercndldhsu/les-gouttes-d-or"
+        },
+        {
+          "name": "Les Bouchères",
+          "path": "/place/ba_designation_cdwrgw6shfjq4gwqf4e3fffkaa/les-boucheres"
+        },
+        {
+          "name": "Les Cras",
+          "path": "/place/ba_designation_daxjktalscac3sqez3pxdtamyu/les-cras"
+        },
+        {
+          "name": "Genevrières",
+          "path": "/place/ba_designation_e6bn6kjgd2tesf654vcdrteysq/genevrieres"
+        },
+        {
+          "name": "Les Ravelles",
+          "path": "/place/ba_designation_exhl2qj7hrinirsucd5uen5rxi/les-ravelles"
+        },
+        {
+          "name": "Les Santenots Blancs",
+          "path": "/place/ba_designation_fsk5bokr6pmekm3o2vstyszygm/les-santenots-blancs"
+        },
+        {
+          "name": "Charmes",
+          "path": "/place/ba_designation_kq3ettmcmt3biypdgogs2ro7hu/charmes"
+        },
+        {
+          "name": "Sous le Dos d'Ane",
+          "path": "/place/ba_designation_mevy7l4llkei3sxazo3u2uwsju/sous-le-dos-d-ane"
+        },
+        {
+          "name": "La Jeunellotte",
+          "path": "/place/ba_designation_nrmujwvv2og6m3n7whulobgq5e/la-jeunellotte"
+        },
+        {
+          "name": "Les Plures",
+          "path": "/place/ba_designation_r27im56d2rxcz2e4yru7y7xdfe/les-plures"
+        },
+        {
+          "name": "Blagny",
+          "path": "/place/ba_designation_svan4jjfpo4w3mp6zswfeznpoa/blagny"
+        },
+        {
+          "name": "La Pièce sous le Bois",
+          "path": "/place/ba_designation_tz6fg2hit2hpdbsdgawofs5gki/la-piece-sous-le-bois"
+        },
+        {
+          "name": "Porusot",
+          "path": "/place/ba_designation_uca44kseq5nuq5cmy45hagy43m/porusot"
+        },
+        {
+          "name": "Clos des Perrières",
+          "path": "/place/ba_designation_v55kd4jx7fvgw3zzdwura4ijte/clos-des-perrieres"
+        },
+        {
+          "name": "Sous Blagny",
+          "path": "/place/ba_designation_vmlsslydk57uat2zvtsasj6gdi/sous-blagny"
+        },
+        {
+          "name": "Le Porusot",
+          "path": "/place/ba_designation_x44yqwhriapybi6opim47o5474/le-porusot"
+        }
+      ]
+    },
+    {
+      "appellation": "Montagny",
+      "regionId": "france/burgundy/cote-chalonnaise",
+      "entries": [
+        {
+          "name": "Les Bouchots",
+          "path": "/place/ba_designation_26rljes4qbxvc2ucg6wolc5xzm/les-bouchots"
+        },
+        {
+          "name": "Montcuchot",
+          "path": "/place/ba_designation_2tstbimuvu3iwcwzyrmtlxhydi/montcuchot"
+        },
+        {
+          "name": "Le Clos Chaudron",
+          "path": "/place/ba_designation_4dhfptekx2dze7atnfdyqcriuy/le-clos-chaudron"
+        },
+        {
+          "name": "Vignes Couland",
+          "path": "/place/ba_designation_4qb5uiqvpjakf35vng2qupsbea/vignes-couland"
+        },
+        {
+          "name": "Les Chaniots",
+          "path": "/place/ba_designation_4wrxpnofj72f5xh6u3hlpb4pbe/les-chaniots"
+        },
+        {
+          "name": "Sous les Feilles",
+          "path": "/place/ba_designation_56usm2g5kjn4cyxxqzqbjssyqy/sous-les-feilles"
+        },
+        {
+          "name": "Les Jardins",
+          "path": "/place/ba_designation_5bf7ceomxfht6clhqabzxbizxy/les-jardins"
+        },
+        {
+          "name": "Les Vignes des Prés",
+          "path": "/place/ba_designation_5esrjxekoctb2rtdvqdwzquy4e/les-vignes-des-pres"
+        },
+        {
+          "name": "Vignes sur le Cloux",
+          "path": "/place/ba_designation_6cpaq3xaxkowhcbhfsyvzfnhym/vignes-sur-le-cloux"
+        },
+        {
+          "name": "Chazelle",
+          "path": "/place/ba_designation_6nnkq7sf7teca3vopijdn3suyy/chazelle"
+        },
+        {
+          "name": "La Grande Pièce",
+          "path": "/place/ba_designation_6o3x7w7akw4k4yzxdyyllhxw6m/la-grande-piece"
+        },
+        {
+          "name": "Les Pidances",
+          "path": "/place/ba_designation_722eg5tvc3cpuomq4qvkacjnxa/les-pidances"
+        },
+        {
+          "name": "La Moullière",
+          "path": "/place/ba_designation_7zrl6hpoiev2yqgtlx2lcwfk24/la-moulliere"
+        },
+        {
+          "name": "Les Las",
+          "path": "/place/ba_designation_aqxnubaqqgy2tbd6fkj5vcy6r4/les-las"
+        },
+        {
+          "name": "Saint-Ytages",
+          "path": "/place/ba_designation_crbmkjcoemsgggaezzolwglpiu/saint-ytages"
+        },
+        {
+          "name": "Les Combes",
+          "path": "/place/ba_designation_cz3slewk2cyxwvv7yimuiyboxy/les-combes"
+        },
+        {
+          "name": "Les Paquiers",
+          "path": "/place/ba_designation_d4tj6dxaywrpkqny5umob5camq/les-paquiers"
+        },
+        {
+          "name": "Les Craboulettes",
+          "path": "/place/ba_designation_ejgahbn4nwezn4gykqtt3remqu/les-craboulettes"
+        },
+        {
+          "name": "Sainte-Morille",
+          "path": "/place/ba_designation_fx7oa7pipdqydhjxza2ip3al7e/sainte-morille"
+        },
+        {
+          "name": "Les Vignes Derrière",
+          "path": "/place/ba_designation_fz252fma7ra6xoaemi44xrwe5m/les-vignes-derriere"
+        },
+        {
+          "name": "Les Macles",
+          "path": "/place/ba_designation_hcc2le5mdrz6l33xgckdchma6a/les-macles"
+        },
+        {
+          "name": "Les Vignes longues",
+          "path": "/place/ba_designation_idsjobifv5e644ukdepoljuqry/les-vignes-longues"
+        },
+        {
+          "name": "Cornevent",
+          "path": "/place/ba_designation_io4qq3cchagrzocekhl3a2i66e/cornevent"
+        },
+        {
+          "name": "Montorge",
+          "path": "/place/ba_designation_jfkpm6xcpull5avewkivf7gvrq/montorge"
+        },
+        {
+          "name": "Les Beaux Champs",
+          "path": "/place/ba_designation_jp3y7trxn6jupwa6swloh4h3ji/les-beaux-champs"
+        },
+        {
+          "name": "Le Vieux Château",
+          "path": "/place/ba_designation_kaf3peu23ky6dk7by4fh3cgc4u/le-vieux-chateau"
+        },
+        {
+          "name": "Les Maroques",
+          "path": "/place/ba_designation_l5eb46fxp6e7ndq2qnmg4nujse/les-maroques"
+        },
+        {
+          "name": "Les Coudrettes",
+          "path": "/place/ba_designation_ldt7nmhepcixi7q23gezfa3g24/les-coudrettes"
+        },
+        {
+          "name": "Les Bonneveaux",
+          "path": "/place/ba_designation_lhaaptbal76ixkgyqzppt6iqhu/les-bonneveaux"
+        },
+        {
+          "name": "Vignes Saint-Pierre",
+          "path": "/place/ba_designation_nkptuwtxoaykwrjyb5tqo2pjle/vignes-saint-pierre"
+        },
+        {
+          "name": "Creux de Beaux Champs",
+          "path": "/place/ba_designation_nl6rjtpzufcbydkmceeuw4jtwq/creux-de-beaux-champs"
+        },
+        {
+          "name": "L'Epaule",
+          "path": "/place/ba_designation_npwsbfm2ckq5tbywvgvwoopi74/l-epaule"
+        },
+        {
+          "name": "Mont Laurent",
+          "path": "/place/ba_designation_nwfadh65gu4ppkezvkgojoipxq/mont-laurent"
+        },
+        {
+          "name": "Les Resses",
+          "path": "/place/ba_designation_odq5gkjbx4gz2iy6std4bhvoqy/les-resses"
+        },
+        {
+          "name": "Les Treuffères",
+          "path": "/place/ba_designation_oft3wtowlvuphkslq645swbcwi/les-treufferes"
+        },
+        {
+          "name": "Le Clouzot",
+          "path": "/place/ba_designation_qmavzp5l3smhhfu26zqypia27a/le-clouzot"
+        },
+        {
+          "name": "Les Coères",
+          "path": "/place/ba_designation_qobvrxdhazozkqdfkbvqtsf26u/les-coeres"
+        },
+        {
+          "name": "Le Cloux",
+          "path": "/place/ba_designation_qq2kkyzetisgw75whcxldu422q/le-cloux"
+        },
+        {
+          "name": "La Condemine du Vieux Château",
+          "path": "/place/ba_designation_qtbnj4qad5qpyei5zlr3kydxgi/la-condemine-du-vieux-chateau"
+        },
+        {
+          "name": "Les Bordes",
+          "path": "/place/ba_designation_rr3dga3zravvj37ybxd3h5r7wq/les-bordes"
+        },
+        {
+          "name": "Les Chaumelottes",
+          "path": "/place/ba_designation_txhtasqx66dj26j67iysvznhwq/les-chaumelottes"
+        },
+        {
+          "name": "Les Garchères",
+          "path": "/place/ba_designation_uehsx2ddfcgodssd2xpq7ubq3i/les-garcheres"
+        },
+        {
+          "name": "Les Platières",
+          "path": "/place/ba_designation_xopzqxn532yjzh2s45ndwtocki/les-platieres"
+        },
+        {
+          "name": "Vigne du soleil",
+          "path": "/place/ba_designation_xtdgwh6m3oc32ktz7b7sxq7w54/vigne-du-soleil"
+        },
+        {
+          "name": "Les Gouresses",
+          "path": "/place/ba_designation_yesal4l4hoh2rgsqmjsljcdc4u/les-gouresses"
+        },
+        {
+          "name": "Les Bassets",
+          "path": "/place/ba_designation_yve5mxuoskbgu3ey7umbjcmva4/les-bassets"
+        },
+        {
+          "name": "Les Burnins",
+          "path": "/place/ba_designation_yw53un6bytklwhncembnyy6y3u/les-burnins"
+        },
+        {
+          "name": "Champ Toizeau",
+          "path": "/place/ba_designation_z6l32kftu2bwpveiap7awig2zy/champ-toizeau"
+        },
+        {
+          "name": "Les Perrières",
+          "path": "/place/ba_designation_zu5jazedrziicpw4ytlpptlcza/les-perrieres"
+        }
+      ]
+    },
+    {
+      "appellation": "Monthélie",
+      "regionId": "france/burgundy/cote-de-beaune",
+      "entries": [
+        {
+          "name": "Clos des Toisières",
+          "path": "/place/ba_designation_25ifdj2lukdjv7afvg2ghowtvy/clos-des-toisieres"
+        },
+        {
+          "name": "Les Vignes Rondes",
+          "path": "/place/ba_designation_4mm6k55zhpwdanwf5d5qgzeocq/les-vignes-rondes"
+        },
+        {
+          "name": "Les Clous",
+          "path": "/place/ba_designation_5hfpemnx6qthjgbxng2cskml3q/les-clous"
+        },
+        {
+          "name": "Le Meix Bataille",
+          "path": "/place/ba_designation_7yih2uuc57wn5scil7g4gbfugy/le-meix-bataille"
+        },
+        {
+          "name": "Le Village",
+          "path": "/place/ba_designation_7yvshcpv3q6sxyvxmmmqx27fj4/le-village"
+        },
+        {
+          "name": "Le Cas Rougeot",
+          "path": "/place/ba_designation_baffshv27igbort3ygudmm2b6q/le-cas-rougeot"
+        },
+        {
+          "name": "Les Riottes",
+          "path": "/place/ba_designation_dpsqdw5c4dsohz254nijvop42a/les-riottes"
+        },
+        {
+          "name": "Les Barbières",
+          "path": "/place/ba_designation_fm4rspullhgsvuzb2jkg5zpqhq/les-barbieres"
+        },
+        {
+          "name": "Le Clou des Chênes",
+          "path": "/place/ba_designation_io6qdpxzucffrgxfitlqxw64ma/le-clou-des-chenes"
+        },
+        {
+          "name": "Sur la Velle",
+          "path": "/place/ba_designation_sxqxgnj2p5ak7qfjhea67vfe54/sur-la-velle"
+        },
+        {
+          "name": "Les Duresses",
+          "path": "/place/ba_designation_tkw6cnylljsttfxcvwbjxi32xe/les-duresses"
+        },
+        {
+          "name": "La Taupine",
+          "path": "/place/ba_designation_vxz4yqyv45cf7ng4lezoo3hwve/la-taupine"
+        },
+        {
+          "name": "Le Clos Gauthey",
+          "path": "/place/ba_designation_wob4zmvacnwodjmnlbeglaua2m/le-clos-gauthey"
+        },
+        {
+          "name": "Le Château Gaillard",
+          "path": "/place/ba_designation_yf7weksmffbivgd5eagm25teye/le-chateau-gaillard"
+        },
+        {
+          "name": "Les Champs Fulliots",
+          "path": "/place/ba_designation_ztmf6sjkrs6qhxrc7md762abt4/les-champs-fulliots"
+        }
+      ]
+    },
+    {
+      "appellation": "Morey-Saint-Denis",
+      "regionId": "france/burgundy/cote-de-nuits",
+      "entries": [
+        {
+          "name": "Côte Rotie",
+          "path": "/place/ba_designation_2cncu3es5tfrjmzrony5fu4rsm/cote-rotie"
+        },
+        {
+          "name": "Les Chenevery",
+          "path": "/place/ba_designation_6j3inhqkjp7mga5k7zgopveozm/les-chenevery"
+        },
+        {
+          "name": "Les Ruchots",
+          "path": "/place/ba_designation_7rnzh2jyygdplfscj2pdyrezse/les-ruchots"
+        },
+        {
+          "name": "La Bussière",
+          "path": "/place/ba_designation_csmk6oe36sovt3mypyak3fgtom/la-bussiere"
+        },
+        {
+          "name": "Les Genavrières",
+          "path": "/place/ba_designation_ejydcsfvpj464jj7ddvlaavrzu/les-genavrieres"
+        },
+        {
+          "name": "Les Gruenchers",
+          "path": "/place/ba_designation_er7gs2voob3w3acaoeazegobye/les-gruenchers"
+        },
+        {
+          "name": "Clos des Ormes",
+          "path": "/place/ba_designation_f2babjzdweuvudtt5oh6ich3c4/clos-des-ormes"
+        },
+        {
+          "name": "Monts Luisants",
+          "path": "/place/ba_designation_gbu476zv5f53fmqmqba7ygoqzq/monts-luisants"
+        },
+        {
+          "name": "Les Chaffots",
+          "path": "/place/ba_designation_ij6l7v7fdz5k5qslzvkqriv32e/les-chaffots"
+        },
+        {
+          "name": "Les Sorbès",
+          "path": "/place/ba_designation_juad4fe57j43ltzq6kipiblz2m/les-sorbes"
+        },
+        {
+          "name": "Les Millandes",
+          "path": "/place/ba_designation_kcmpopuhjm4vfleri4m47choua/les-millandes"
+        },
+        {
+          "name": "Aux Cheseaux",
+          "path": "/place/ba_designation_mwyldz6ukk7rllh6fcxpt36owy/aux-cheseaux"
+        },
+        {
+          "name": "Les Faconnières",
+          "path": "/place/ba_designation_nqicgop25c33wmyz4suiyu3csy/les-faconnieres"
+        },
+        {
+          "name": "Aux Charmes",
+          "path": "/place/ba_designation_od55z33methht3y427gtiaf7ai/aux-charmes"
+        },
+        {
+          "name": "La Riotte",
+          "path": "/place/ba_designation_qb3hslr6pt3ddr4eeh6u5aat4m/la-riotte"
+        },
+        {
+          "name": "Clos Sorbè",
+          "path": "/place/ba_designation_qfqiwrcyvdrlbcunjskrnubtxi/clos-sorbe"
+        },
+        {
+          "name": "Les Blanchards",
+          "path": "/place/ba_designation_sz3zltrhx3igt4hkqjwa2mgpgu/les-blanchards"
+        },
+        {
+          "name": "Les Charrières",
+          "path": "/place/ba_designation_xoya4t45s6sxnbu6qrn5idnrri/les-charrieres"
+        },
+        {
+          "name": "Clos Baulet",
+          "path": "/place/ba_designation_yysophxia3h3vo6hvf34atoeoi/clos-baulet"
+        },
+        {
+          "name": "Le Village",
+          "path": "/place/ba_designation_zyecbka7r7cv3bq7wuelpjjle4/le-village"
+        }
+      ]
+    },
+    {
+      "appellation": "Nuits-Saint-Georges",
+      "regionId": "france/burgundy/cote-de-nuits",
+      "entries": [
+        {
+          "name": "Les Crots",
+          "path": "/place/ba_designation_2mjegpzenqmgrrani2kk3rseri/les-crots"
+        },
+        {
+          "name": "Les Poulettes",
+          "path": "/place/ba_designation_2wc4kmov25cqlxmc6tgqj5xj6a/les-poulettes"
+        },
+        {
+          "name": "Clos Saint-Marc",
+          "path": "/place/ba_designation_36cclmathof7b7gac6b4wm76mq/clos-saint-marc"
+        },
+        {
+          "name": "Aux Chaignots",
+          "path": "/place/ba_designation_3xdqo22of5xf67tcq2p64pa3pu/aux-chaignots"
+        },
+        {
+          "name": "Chaines Carteaux",
+          "path": "/place/ba_designation_4qcfbflffnrkvxr4suuyhvuaiu/chaines-carteaux"
+        },
+        {
+          "name": "Rue de Chaux",
+          "path": "/place/ba_designation_5gq5g3xh3ftq2mvkmgvznmh46m/rue-de-chaux"
+        },
+        {
+          "name": "Les Vaucrains",
+          "path": "/place/ba_designation_b57isspsovwbd3znzxlfgcijny/les-vaucrains"
+        },
+        {
+          "name": "Aux Perdrix",
+          "path": "/place/ba_designation_c3kiqp5jr6zlatp2nntmjcjsbu/aux-perdrix"
+        },
+        {
+          "name": "Aux Vignerondes",
+          "path": "/place/ba_designation_dqir77qggb5jgzrowuj3bhver4/aux-vignerondes"
+        },
+        {
+          "name": "Aux Champs Perdrix",
+          "path": "/place/ba_designation_dvi7vupgqajar7mhrrl63jcepa/aux-champs-perdrix"
+        },
+        {
+          "name": "Clos des Corvées",
+          "path": "/place/ba_designation_el2rpoqqhtgtmiotw4kfsuvkwq/clos-des-corvees"
+        },
+        {
+          "name": "Les Terres Blanches",
+          "path": "/place/ba_designation_et33hr54sgyoihrgnlildnzj24/les-terres-blanches"
+        },
+        {
+          "name": "Clos de la Maréchale",
+          "path": "/place/ba_designation_f5y7slmmjwe6vtmucui4pymw7e/clos-de-la-marechale"
+        },
+        {
+          "name": "Clos des Porrets-Saint-Georges",
+          "path": "/place/ba_designation_fejii3ivjmn5mbs2iefwuaq5wa/clos-des-porrets-saint-georges"
+        },
+        {
+          "name": "Clos Arlot",
+          "path": "/place/ba_designation_fzr6r2cd7l75orwqbkdo7sgkzy/clos-arlot"
+        },
+        {
+          "name": "Les Argillières",
+          "path": "/place/ba_designation_gte6fvtv2fmmbowpj6luuhhcti/les-argillieres"
+        },
+        {
+          "name": "Clos des Forêts Saint-Georges",
+          "path": "/place/ba_designation_hsiewy4l3tldwthsob4eaxszw4/clos-des-forets-saint-georges"
+        },
+        {
+          "name": "Les Procès",
+          "path": "/place/ba_designation_iimcouozxvvogsbfjd2omq6lpi/les-proces"
+        },
+        {
+          "name": "Les Porrets-Saint-Georges",
+          "path": "/place/ba_designation_ke7lmvmkig3gfuro43f43qvwdi/les-porrets-saint-georges"
+        },
+        {
+          "name": "Aux Thorey",
+          "path": "/place/ba_designation_kgsy2y4lniv7p43tvnxkyycgsy/aux-thorey"
+        },
+        {
+          "name": "Aux Cras",
+          "path": "/place/ba_designation_laaorm3l5tcqrti2f3qmmrbvum/aux-cras"
+        },
+        {
+          "name": "Les Damodes",
+          "path": "/place/ba_designation_ldti7m7ba6gh3g4u6deatffkgm/les-damodes"
+        },
+        {
+          "name": "Les Hauts Pruliers",
+          "path": "/place/ba_designation_lfr44uuwnga2r46dldzugge3ja/les-hauts-pruliers"
+        },
+        {
+          "name": "Clos des Grandes Vignes",
+          "path": "/place/ba_designation_locbpdew7nulxcyp26hpjsjaim/clos-des-grandes-vignes"
+        },
+        {
+          "name": "Château Gris",
+          "path": "/place/ba_designation_m334d6ud2tycotqzvhs564zvpu/chateau-gris"
+        },
+        {
+          "name": "Les Chabœufs",
+          "path": "/place/ba_designation_on2do7jtbytuze6s5mzs2lmthi/les-chaboeufs"
+        },
+        {
+          "name": "Les Perrières",
+          "path": "/place/ba_designation_ruvukkvbwb4chqmlhmlf72vx4a/les-perrieres"
+        },
+        {
+          "name": "Les Vallerots",
+          "path": "/place/ba_designation_sm5oz7vzzk5pvsc6pzt4pfq7r4/les-vallerots"
+        },
+        {
+          "name": "Clos des Corvées Pagets",
+          "path": "/place/ba_designation_tanlihkxf5b2mzowef57qjvk4a/clos-des-corvees-pagets"
+        },
+        {
+          "name": "En la Perrière Noblot",
+          "path": "/place/ba_designation_tdxu4ey6fdgryyyyddu53zptqm/en-la-perriere-noblot"
+        },
+        {
+          "name": "Les Pruliers",
+          "path": "/place/ba_designation_ty6kw53gqkqve7w3y66uugysxy/les-pruliers"
+        },
+        {
+          "name": "Les Saints-Georges",
+          "path": "/place/ba_designation_uubmpudvahol4zuc3djz2er7u4/les-saints-georges"
+        },
+        {
+          "name": "Aux Boudots",
+          "path": "/place/ba_designation_uwztsdhwircvvz55j54esicmlq/aux-boudots"
+        },
+        {
+          "name": "Aux Murgers",
+          "path": "/place/ba_designation_v6gargcrtke2zsedcscm7vb6bm/aux-murgers"
+        },
+        {
+          "name": "Les Cailles",
+          "path": "/place/ba_designation_vfhgssrwjfxchiefbjpnlhy22q/les-cailles"
+        },
+        {
+          "name": "Les Didiers",
+          "path": "/place/ba_designation_vmno6bpm6xh7fveksqv5suy3pi/les-didiers"
+        },
+        {
+          "name": "Aux Argillas",
+          "path": "/place/ba_designation_wl334zeunb7jzrtne3u6oekdiu/aux-argillas"
+        },
+        {
+          "name": "Aux Bousselots",
+          "path": "/place/ba_designation_x7knqa7hdpfm45zgep44ij2fam/aux-bousselots"
+        },
+        {
+          "name": "Clos des Argillières",
+          "path": "/place/ba_designation_xfsqc4auzhor4wqbgkldfvy4bu/clos-des-argillieres"
+        },
+        {
+          "name": "La Richemone",
+          "path": "/place/ba_designation_ya3a3rz2e2ovd6jsiaxy4tjc7m/la-richemone"
+        },
+        {
+          "name": "Roncière",
+          "path": "/place/ba_designation_yyohvi4tjoo6v3q7r657ohaap4/ronciere"
+        }
+      ]
+    },
+    {
+      "appellation": "Pernand-Vergelesses",
+      "regionId": "france/burgundy/cote-de-beaune",
+      "entries": [
+        {
+          "name": "Clos Berthet",
+          "path": "/place/ba_designation_etnkpwiy2yotn6e74tmgkbzpie/clos-berthet"
+        },
+        {
+          "name": "Ile des Vergelesses",
+          "path": "/place/ba_designation_nhjeq4rkeogrlwobrk4k3lbt4u/ile-des-vergelesses"
+        },
+        {
+          "name": "Les Fichots",
+          "path": "/place/ba_designation_pc6dm7w3apm4yqgbrq5wyztr3i/les-fichots"
+        },
+        {
+          "name": "En Caradeux",
+          "path": "/place/ba_designation_tjlx3m2n5j6shq5ylwk5hjdiyu/en-caradeux"
+        },
+        {
+          "name": "Creux de la Net",
+          "path": "/place/ba_designation_uino5foohcus7swmo4v5j5erqa/creux-de-la-net"
+        },
+        {
+          "name": "Village de Pernand",
+          "path": "/place/ba_designation_uu2l7qcty2nqbtllf3plcscrjq/village-de-pernand"
+        },
+        {
+          "name": "Vergelesses",
+          "path": "/place/ba_designation_waitz2lvju5atvidvlxxhup7oa/vergelesses"
+        },
+        {
+          "name": "Sous Frétille",
+          "path": "/place/ba_designation_z7sjiannri4mljjzw6mz7vpav4/sous-fretille"
+        }
+      ]
+    },
+    {
+      "appellation": "Pommard",
+      "regionId": "france/burgundy/cote-de-beaune",
+      "entries": [
+        {
+          "name": "Clos des Epeneaux",
+          "path": "/place/ba_designation_246drskpkw5bwarqn3an5sgjwe/clos-des-epeneaux"
+        },
+        {
+          "name": "La Chanière",
+          "path": "/place/ba_designation_2wfyme3n6qr2mpzbe734cj4a4i/la-chaniere"
+        },
+        {
+          "name": "Les Combes Dessus",
+          "path": "/place/ba_designation_3pdplzxutv2fzcmb77j6dvq2ay/les-combes-dessus"
+        },
+        {
+          "name": "Les Charmots",
+          "path": "/place/ba_designation_5m7kwrwvjkf2hz2wabbxwnhfqm/les-charmots"
+        },
+        {
+          "name": "Le Village",
+          "path": "/place/ba_designation_6mhzktt5l2hc5ydixdtgmngheq/le-village"
+        },
+        {
+          "name": "Les Pézerolles",
+          "path": "/place/ba_designation_75id74f2fn4yvol5j52rqrta2e/les-pezerolles"
+        },
+        {
+          "name": "Les Rugiens Hauts",
+          "path": "/place/ba_designation_7cvfwvkc5rgmdal5z476mfmz4a/les-rugiens-hauts"
+        },
+        {
+          "name": "Les Petits Epenots",
+          "path": "/place/ba_designation_a7pvvo5uzpmtultzh6r6fjvqtu/les-petits-epenots"
+        },
+        {
+          "name": "Les Chanlins-Bas",
+          "path": "/place/ba_designation_ab2d5qpztkpcl6bwqu7h3nvjqu/les-chanlins-bas"
+        },
+        {
+          "name": "Les Arvelets",
+          "path": "/place/ba_designation_ap42vguhm6qr3onnewe5kcmbu4/les-arvelets"
+        },
+        {
+          "name": "Clos Blanc",
+          "path": "/place/ba_designation_cpkf7xghuu4sttwigu5udcn3cy/clos-blanc"
+        },
+        {
+          "name": "Les Rugiens Bas",
+          "path": "/place/ba_designation_favsouwy7svfeuj2okdruulvdm/les-rugiens-bas"
+        },
+        {
+          "name": "Les Chaponnières",
+          "path": "/place/ba_designation_jqba2yqmyasogn423ixjxalaie/les-chaponnieres"
+        },
+        {
+          "name": "Derrière Saint-Jean",
+          "path": "/place/ba_designation_jqkrxxfhsfdl5tpajg6myiwgze/derriere-saint-jean"
+        },
+        {
+          "name": "Le Clos Micot",
+          "path": "/place/ba_designation_kekcqnhwynedcnfrkkgs6z5zly/le-clos-micot"
+        },
+        {
+          "name": "En Largillière",
+          "path": "/place/ba_designation_knkts5tjtvuccpx63b2mluy2vm/en-largilliere"
+        },
+        {
+          "name": "Les Grands Epenots",
+          "path": "/place/ba_designation_kob4iggqm5bkf3cpfip6cdumjm/les-grands-epenots"
+        },
+        {
+          "name": "La Platière",
+          "path": "/place/ba_designation_mi2p7y7syf7k7zz6ndxozzngre/la-platiere"
+        },
+        {
+          "name": "La Refène",
+          "path": "/place/ba_designation_mqvtqwzs36dcgigcwwep2jt4ci/la-refene"
+        },
+        {
+          "name": "Clos de Verger",
+          "path": "/place/ba_designation_mtipiohpfsc5cbgjehrnvpfzme/clos-de-verger"
+        },
+        {
+          "name": "Les Jarolières",
+          "path": "/place/ba_designation_nt5ar6vzpytc4haqqas5tjuk4e/les-jarolieres"
+        },
+        {
+          "name": "Les Bertins",
+          "path": "/place/ba_designation_riac7pmhziziak52nzfh457ogy/les-bertins"
+        },
+        {
+          "name": "Les Poutures",
+          "path": "/place/ba_designation_tkz643b6g7wsnkp3lmchbczp4y/les-poutures"
+        },
+        {
+          "name": "Clos de la Commaraine",
+          "path": "/place/ba_designation_uoqlnboakbf77wsxhfxlo6jini/clos-de-la-commaraine"
+        },
+        {
+          "name": "Les Saussilles",
+          "path": "/place/ba_designation_x2befpaizd4mc24a5jtqsark54/les-saussilles"
+        },
+        {
+          "name": "Les Boucherottes",
+          "path": "/place/ba_designation_xa3m3kb4lg4p2owd3jxnkspxza/les-boucherottes"
+        },
+        {
+          "name": "Les Croix Noires",
+          "path": "/place/ba_designation_xizfffbuvhftgpvqxemq7sz7me/les-croix-noires"
+        },
+        {
+          "name": "Les Fremiers",
+          "path": "/place/ba_designation_ygg6ion3vqzcy7fpsyqiiyhjc4/les-fremiers"
+        }
+      ]
+    },
+    {
+      "appellation": "Pouilly-Fuissé",
+      "regionId": "france/burgundy/maconnais",
+      "entries": [
+        {
+          "name": "Vers Cras",
+          "path": "/place/ba_designation_37466ffh2cyviqqoieptnjpwpy/vers-cras"
+        },
+        {
+          "name": "Le Clos Reyssier",
+          "path": "/place/ba_designation_3blpts2grl7vtonjay2e7naxja/le-clos-reyssier"
+        },
+        {
+          "name": "Sur la Roche",
+          "path": "/place/ba_designation_4rykrnyyvnqhwe7wkunm6jwyky/sur-la-roche"
+        },
+        {
+          "name": "Les Perrières",
+          "path": "/place/ba_designation_6uagv56ojvbwm2bggy7xcfhney/les-perrieres"
+        },
+        {
+          "name": "Aux Bouthières",
+          "path": "/place/ba_designation_7g5nqjaizukzalewfoefkmfvhm/aux-bouthieres"
+        },
+        {
+          "name": "La Maréchaude",
+          "path": "/place/ba_designation_e3gzllksp5dg647hde2jrhvbe4/la-marechaude"
+        },
+        {
+          "name": "Les Ménétrières",
+          "path": "/place/ba_designation_eaoysyglypsudwgfbxjwvzxxk4/les-menetrieres"
+        },
+        {
+          "name": "Au Vignerais",
+          "path": "/place/ba_designation_fm6dgnjupi54xi6jmelo7hvqgi/au-vignerais"
+        },
+        {
+          "name": "Les Chevrières",
+          "path": "/place/ba_designation_ghlotas7pgxfn6diacwcrhu52u/les-chevrieres"
+        },
+        {
+          "name": "Le Clos",
+          "path": "/place/ba_designation_iuzgr4se75xynvn5d3pigc63ha/le-clos"
+        },
+        {
+          "name": "Les Reisses",
+          "path": "/place/ba_designation_jh7xqta2cti2knhoteugfq7ozm/les-reisses"
+        },
+        {
+          "name": "En France",
+          "path": "/place/ba_designation_ovwlqfdagwqqgwx2rwwbl4lkui/en-france"
+        },
+        {
+          "name": "Les Crays",
+          "path": "/place/ba_designation_pvlq7dhkij5u6ddebtsfppsc34/les-crays"
+        },
+        {
+          "name": "La Frérie",
+          "path": "/place/ba_designation_sfrq5zujyamxy3n27whrdagv2y/la-frerie"
+        },
+        {
+          "name": "Aux Quarts",
+          "path": "/place/ba_designation_t7k5xxexb2hebeywaqwyeoknha/aux-quarts"
+        },
+        {
+          "name": "En Servy",
+          "path": "/place/ba_designation_uja4jtpahaf7uoeaq5yw4zbcsy/en-servy"
+        },
+        {
+          "name": "Aux Chailloux",
+          "path": "/place/ba_designation_uwwnzffgqgml5qfdjvpr3pihdq/aux-chailloux"
+        },
+        {
+          "name": "Le Clos de Solutré",
+          "path": "/place/ba_designation_v6tbag2job62ixdxtrzqxrke3y/le-clos-de-solutre"
+        },
+        {
+          "name": "Les Vignes Blanches",
+          "path": "/place/ba_designation_vrzhmti6r7agrz5vfslsotumvq/les-vignes-blanches"
+        },
+        {
+          "name": "Le Clos de Monsieur Noly",
+          "path": "/place/ba_designation_xjlrvjzu22iz6r33r4hwqkybwa/le-clos-de-monsieur-noly"
+        },
+        {
+          "name": "Les Brulés",
+          "path": "/place/ba_designation_xycstz7gopq3grtpbansxkskae/les-brules"
+        },
+        {
+          "name": "Pouilly",
+          "path": "/place/ba_designation_zdso36rpmxewhdl2bnzesftt5e/pouilly"
+        }
+      ]
+    },
+    {
+      "appellation": "Puligny-Montrachet",
+      "regionId": "france/burgundy/cote-de-beaune",
+      "entries": [
+        {
+          "name": "Les Pucelles",
+          "path": "/place/ba_designation_bvyhrhlz6cvbwjwlc3vo5fjybq/les-pucelles"
+        },
+        {
+          "name": "Les Referts",
+          "path": "/place/ba_designation_bxjp66lxrnc3pnv3ho5ulgalvu/les-referts"
+        },
+        {
+          "name": "Les Folatières",
+          "path": "/place/ba_designation_dbfzwmec3u4cu74n23tepyvmja/les-folatieres"
+        },
+        {
+          "name": "Clos de la Garenne",
+          "path": "/place/ba_designation_e3olwrihcskj6wqpr7lv5groci/clos-de-la-garenne"
+        },
+        {
+          "name": "Sous le Puits",
+          "path": "/place/ba_designation_gez6umodqrrwn6lh2hbmdnssuu/sous-le-puits"
+        },
+        {
+          "name": "La Truffière",
+          "path": "/place/ba_designation_iepybkh3cdhbp6uszu2f7w3xc4/la-truffiere"
+        },
+        {
+          "name": "Champ Canet",
+          "path": "/place/ba_designation_lvnjngvzxafclm2wmdwy6thksu/champ-canet"
+        },
+        {
+          "name": "La Garenne",
+          "path": "/place/ba_designation_mwuf4lk3jg5vkh6ckwwvhijgwy/la-garenne"
+        },
+        {
+          "name": "Clos de la Mouchère",
+          "path": "/place/ba_designation_nrneul4qk5oini2rckpugozvpa/clos-de-la-mouchere"
+        },
+        {
+          "name": "Clavaillon",
+          "path": "/place/ba_designation_pu7rjbonupngyjrp64emievlz4/clavaillon"
+        },
+        {
+          "name": "Hameau de Blagny",
+          "path": "/place/ba_designation_qkwatpjd47gchtunntqmhanvta/hameau-de-blagny"
+        },
+        {
+          "name": "Les Perrières",
+          "path": "/place/ba_designation_utpllrcbph3n4t67svtsqzu6ui/les-perrieres"
+        },
+        {
+          "name": "Les Chalumaux",
+          "path": "/place/ba_designation_vau27kblicp44rfskk34iviglu/les-chalumaux"
+        },
+        {
+          "name": "Les Demoiselles",
+          "path": "/place/ba_designation_wmrvj44mgnj7fo7oi2ioff4h3y/les-demoiselles"
+        },
+        {
+          "name": "Le Cailleret",
+          "path": "/place/ba_designation_xo2afzco7pagdeykev6ubm6wri/le-cailleret"
+        },
+        {
+          "name": "Les Combettes",
+          "path": "/place/ba_designation_yorhvlbvi33q5j7spqthgdbfha/les-combettes"
+        },
+        {
+          "name": "Champ Gain",
+          "path": "/place/ba_designation_zoa2vjyhplid6xmdsbockthwxq/champ-gain"
+        }
+      ]
+    },
+    {
+      "appellation": "Rully",
+      "regionId": "france/burgundy/cote-chalonnaise",
+      "entries": [
+        {
+          "name": "Le Meix Cadot",
+          "path": "/place/ba_designation_5rjm55o2mo7irfkmjyyvznshty/le-meix-cadot"
+        },
+        {
+          "name": "Clos St Jacques",
+          "path": "/place/ba_designation_5wtekf7rmawi2jjt3ygfg2t6mq/clos-st-jacques"
+        },
+        {
+          "name": "Préaux",
+          "path": "/place/ba_designation_6xdpn2b3o6i5jepnm3uecacjn4/preaux"
+        },
+        {
+          "name": "Le Meix Caillet",
+          "path": "/place/ba_designation_726isve3qlng2tvz3hkm6fbzvq/le-meix-caillet"
+        },
+        {
+          "name": "Vauvry",
+          "path": "/place/ba_designation_7waebdje46v2syuma3zgsuxeui/vauvry"
+        },
+        {
+          "name": "La Fosse",
+          "path": "/place/ba_designation_a4m26yrwsrjh4kexkluquetmj4/la-fosse"
+        },
+        {
+          "name": "Molesme",
+          "path": "/place/ba_designation_chl6rg7izc6gnp7hnvqlbhee3i/molesme"
+        },
+        {
+          "name": "Cloux",
+          "path": "/place/ba_designation_hhm5fv2hygyy6jsgcg7nvu3eoi/cloux"
+        },
+        {
+          "name": "Les Pierres",
+          "path": "/place/ba_designation_hzk4j26ft5pgx4c2fa4qopxw6q/les-pierres"
+        },
+        {
+          "name": "Clos du Chaigne",
+          "path": "/place/ba_designation_itvfniku5zs5eso6g25lkgb4cu/clos-du-chaigne"
+        },
+        {
+          "name": "Montpalais",
+          "path": "/place/ba_designation_ktnu575enlnanoooxn6aadp6cy/montpalais"
+        },
+        {
+          "name": "Grésigny",
+          "path": "/place/ba_designation_l2pfdpez6q5xh565on7f3l3t4u/gresigny"
+        },
+        {
+          "name": "Agneux",
+          "path": "/place/ba_designation_m5z57nrn4aj2yltiyqyrm755pa/agneux"
+        },
+        {
+          "name": "Champs Cloux",
+          "path": "/place/ba_designation_mryc7dspt7w4637mqskiv7bra4/champs-cloux"
+        },
+        {
+          "name": "Pillot",
+          "path": "/place/ba_designation_oacmclrzbraygku547msr7uslu/pillot"
+        },
+        {
+          "name": "Rabourcé",
+          "path": "/place/ba_designation_pmnnd7w6f4oaqcva4atuznzusm/rabource"
+        },
+        {
+          "name": "Raclot",
+          "path": "/place/ba_designation_pyxb34jc3ggq6q6ptqlexqpqum/raclot"
+        },
+        {
+          "name": "Margotés",
+          "path": "/place/ba_designation_q5t2zrgcvjlyta3bswawhtltna/margotes"
+        },
+        {
+          "name": "La Renarde",
+          "path": "/place/ba_designation_qfv7q7s7scvk6oen5tfe465o6q/la-renarde"
+        },
+        {
+          "name": "Chapitre",
+          "path": "/place/ba_designation_rwm2prizqwkyjnynx4rjnqbmza/chapitre"
+        },
+        {
+          "name": "Marissou",
+          "path": "/place/ba_designation_scs5b2far5hszsb7zljxy6qac4/marissou"
+        },
+        {
+          "name": "La Pucelle",
+          "path": "/place/ba_designation_sltctaoseedxdhpau45t2dcq2e/la-pucelle"
+        },
+        {
+          "name": "La Bressande",
+          "path": "/place/ba_designation_zi5qdwagehwuzavzpkwtxycvfe/la-bressande"
+        }
+      ]
+    },
+    {
+      "appellation": "Saint-Aubin",
+      "regionId": "france/burgundy/cote-de-beaune",
+      "entries": [
+        {
+          "name": "En Créot",
+          "path": "/place/ba_designation_2rd5wunmfefj7omyz7yevlwrve/en-creot"
+        },
+        {
+          "name": "Les Combes au Sud",
+          "path": "/place/ba_designation_3bdpy5bautkizdaartiqs5gzbu/les-combes-au-sud"
+        },
+        {
+          "name": "Les Travers de Marinot",
+          "path": "/place/ba_designation_3yma5yvo5wz7r7b4obdl5rbney/les-travers-de-marinot"
+        },
+        {
+          "name": "Es Champs",
+          "path": "/place/ba_designation_4r743fjg2lbp6e6ewwkstwo2iu/es-champs"
+        },
+        {
+          "name": "En Montceau",
+          "path": "/place/ba_designation_5v5bdfng34jgmpeknijxbvg22m/en-montceau"
+        },
+        {
+          "name": "Les Cortons",
+          "path": "/place/ba_designation_ago256twshsilop2643z43rcbe/les-cortons"
+        },
+        {
+          "name": "Les Champlots",
+          "path": "/place/ba_designation_dryyx76kpravxppoyckxd4ihmi/les-champlots"
+        },
+        {
+          "name": "Sur le sentier du Clou",
+          "path": "/place/ba_designation_eflyunncsnjqohnwsvkbwnaxjy/sur-le-sentier-du-clou"
+        },
+        {
+          "name": "Le Bas de Gamay à l'Est",
+          "path": "/place/ba_designation_fvm2c3fmseefahwrbvpajd5uku/le-bas-de-gamay-a-l-est"
+        },
+        {
+          "name": "Marinot",
+          "path": "/place/ba_designation_fy3pipo2jt45nyq5b4cre5mw6m/marinot"
+        },
+        {
+          "name": "En la Ranché",
+          "path": "/place/ba_designation_grk3mfsrfkjk7hcol5ubmcbxmu/en-la-ranche"
+        },
+        {
+          "name": "Derrière Chez Edouard",
+          "path": "/place/ba_designation_hasm6e7tcelrm62bgrj7hjynbe/derriere-chez-edouard"
+        },
+        {
+          "name": "La Chatenière",
+          "path": "/place/ba_designation_hay7hzkmmyvf53jb25wjtftzgy/la-chateniere"
+        },
+        {
+          "name": "Pitangeret",
+          "path": "/place/ba_designation_hfjsuariww6ul4xtir4uby7opa/pitangeret"
+        },
+        {
+          "name": "Sous Roche Dumay",
+          "path": "/place/ba_designation_igr7gwvzr76gwozedgh4ct5cny/sous-roche-dumay"
+        },
+        {
+          "name": "En Vollon à l'Est",
+          "path": "/place/ba_designation_k24rrt2cyaln66lzsazfy2csku/en-vollon-a-l-est"
+        },
+        {
+          "name": "Les Castets",
+          "path": "/place/ba_designation_k7unzzkbrbfbeekt2keyvegoci/les-castets"
+        },
+        {
+          "name": "En Remilly",
+          "path": "/place/ba_designation_kn6i4suntteth6xfuybajf4qyi/en-remilly"
+        },
+        {
+          "name": "Vignes Moingeon",
+          "path": "/place/ba_designation_m2nd562krfjswwwddbvjkwpfai/vignes-moingeon"
+        },
+        {
+          "name": "Le Charmois",
+          "path": "/place/ba_designation_nckguzxav57b4i6dn7ziui4hcy/le-charmois"
+        },
+        {
+          "name": "Derrière la Tour",
+          "path": "/place/ba_designation_pp56p5smlwz5b5xkdgbjsnrxjq/derriere-la-tour"
+        },
+        {
+          "name": "Bas de Vermarain à l'Est",
+          "path": "/place/ba_designation_qhhgsho37cb7tphrbnuytb7inm/bas-de-vermarain-a-l-est"
+        },
+        {
+          "name": "Les Combes",
+          "path": "/place/ba_designation_rwjvybfgqxlpugrjyhorbetkju/les-combes"
+        },
+        {
+          "name": "Les Perrières",
+          "path": "/place/ba_designation_s3pmggiawhn5zo3nnkbzlppfty/les-perrieres"
+        },
+        {
+          "name": "Le Puits",
+          "path": "/place/ba_designation_uewd7rtjjixm5cbvskbozzlx2u/le-puits"
+        },
+        {
+          "name": "Sur Gamay",
+          "path": "/place/ba_designation_uokmq37nf4tcuq4jbiypbi6ovy/sur-gamay"
+        },
+        {
+          "name": "Village",
+          "path": "/place/ba_designation_ur2qxjt6b6vfg7vmkw3fao5s3m/village"
+        },
+        {
+          "name": "Echaille",
+          "path": "/place/ba_designation_vd6a6hi46x77uyhrk2gngta37y/echaille"
+        },
+        {
+          "name": "Les Frionnes",
+          "path": "/place/ba_designation_vicuyw2vuw2cguz4cs2rlk3qnm/les-frionnes"
+        },
+        {
+          "name": "Les Murgers des dents de chien",
+          "path": "/place/ba_designation_wr5wrapz222mtpf34yv5ksdlw4/les-murgers-des-dents-de-chien"
+        }
+      ]
+    },
+    {
+      "appellation": "Santenay",
+      "regionId": "france/burgundy/cote-de-beaune",
+      "entries": [
+        {
+          "name": "La Maladière",
+          "path": "/place/ba_designation_7tkrvieauqkvdg2lieyyg2vwju/la-maladiere"
+        },
+        {
+          "name": "Passetemps",
+          "path": "/place/ba_designation_apydgua5eudsvj3ab3ur23ukoe/passetemps"
+        },
+        {
+          "name": "Beauregard",
+          "path": "/place/ba_designation_db5i4ojk7c5b3rb5tcp27nb244/beauregard"
+        },
+        {
+          "name": "Clos Rousseau",
+          "path": "/place/ba_designation_hffhj26xwaogmadbp5ffbr6hl4/clos-rousseau"
+        },
+        {
+          "name": "Grand Clos Rousseau",
+          "path": "/place/ba_designation_itamvoqloty7lsrpxl354pvrae/grand-clos-rousseau"
+        },
+        {
+          "name": "La Comme",
+          "path": "/place/ba_designation_kkn37dy5p6fhjsymvhlj525ycy/la-comme"
+        },
+        {
+          "name": "Beaurepaire",
+          "path": "/place/ba_designation_msvsw7lskm3s6x262e5co5auci/beaurepaire"
+        },
+        {
+          "name": "Clos Faubard",
+          "path": "/place/ba_designation_mt6ahz4w4r5ypgyqbsrkl3q74m/clos-faubard"
+        },
+        {
+          "name": "Clos des Mouches",
+          "path": "/place/ba_designation_n2bxcynv4xb53iqtvugqz26dn4/clos-des-mouches"
+        },
+        {
+          "name": "Les Gravières",
+          "path": "/place/ba_designation_npz3ejsvlms235eonv5hns37ra/les-gravieres"
+        },
+        {
+          "name": "Clos de Tavannes",
+          "path": "/place/ba_designation_oytfrsi2gtsyfkutenpve4lbb4/clos-de-tavannes"
+        },
+        {
+          "name": "Les Gravières-Clos de Tavannes",
+          "path": "/place/ba_designation_rth7ydfe6pcxjq2nlwjnbfgxdq/les-gravieres-clos-de-tavannes"
+        }
+      ]
+    },
+    {
+      "appellation": "Savigny-lès-Beaune",
+      "regionId": "france/burgundy/cote-de-beaune",
+      "entries": [
+        {
+          "name": "Aux Clous",
+          "path": "/place/ba_designation_5sghgpwct22xyccc7viksv6bja/aux-clous"
+        },
+        {
+          "name": "Aux Gravains",
+          "path": "/place/ba_designation_6hbqeukxyxo7tfnikrmkjeprle/aux-gravains"
+        },
+        {
+          "name": "Les Peuillets",
+          "path": "/place/ba_designation_6xtxv32vh2myacpl7vhqvi5uva/les-peuillets"
+        },
+        {
+          "name": "Basses Vergelesses",
+          "path": "/place/ba_designation_74kplh46tmeqjs2b7wgdxu4yl4/basses-vergelesses"
+        },
+        {
+          "name": "Petits Godeaux",
+          "path": "/place/ba_designation_7docpywq5izp4rpzrbswdfmb4a/petits-godeaux"
+        },
+        {
+          "name": "Les Vergelesses",
+          "path": "/place/ba_designation_a5kmrzaecmwgynsj2w5g4xqs7u/les-vergelesses"
+        },
+        {
+          "name": "Aux Fourneaux",
+          "path": "/place/ba_designation_acabpaa5pkoahjx3wcukzb4dnq/aux-fourneaux"
+        },
+        {
+          "name": "Champ Chevrey",
+          "path": "/place/ba_designation_exeyebitsug452vjyz3dxx22ku/champ-chevrey"
+        },
+        {
+          "name": "Les Jarrons",
+          "path": "/place/ba_designation_gomxg7svzxowqmqpm6j4luspia/les-jarrons"
+        },
+        {
+          "name": "Redrescul",
+          "path": "/place/ba_designation_jns7p6a665im5pop4lhafwxhp4/redrescul"
+        },
+        {
+          "name": "Les Hauts Jarrons",
+          "path": "/place/ba_designation_l43driz6nobnzrpzbmubftm26i/les-hauts-jarrons"
+        },
+        {
+          "name": "Les Hauts Marconnets",
+          "path": "/place/ba_designation_l47eyjcf77bnnhneafpppf3izm/les-hauts-marconnets"
+        },
+        {
+          "name": "Aux Guettes",
+          "path": "/place/ba_designation_lizsfjzjisf3jobglnlfd4crhu/aux-guettes"
+        },
+        {
+          "name": "La Dominode",
+          "path": "/place/ba_designation_mixfgj523rfn7h47rnseflr6vu/la-dominode"
+        },
+        {
+          "name": "Les Lavières",
+          "path": "/place/ba_designation_np7s55gpd5xdvm7avlrw67b2rm/les-lavieres"
+        },
+        {
+          "name": "Les Rouvrettes",
+          "path": "/place/ba_designation_q7tlp7c6h4pufnhdzaj4xmztme/les-rouvrettes"
+        },
+        {
+          "name": "Les Narbantons",
+          "path": "/place/ba_designation_rnr2knwcvbunit4fgyn4lrec4u/les-narbantons"
+        },
+        {
+          "name": "Les Charnières",
+          "path": "/place/ba_designation_s5z4xnm7vcugdegv5mzxnpem2e/les-charnieres"
+        },
+        {
+          "name": "Les Talmettes",
+          "path": "/place/ba_designation_uyttaximer3ssuvyl2xieozhx4/les-talmettes"
+        },
+        {
+          "name": "Bataillère",
+          "path": "/place/ba_designation_vrbh2wxzntaqo25uit7iuqw4ei/bataillere"
+        },
+        {
+          "name": "Les Marconnets",
+          "path": "/place/ba_designation_z5vdfmgrdni4g3hul5pxe3gsgi/les-marconnets"
+        },
+        {
+          "name": "Aux Serpentières",
+          "path": "/place/ba_designation_zxtm3snnrtwoj5elgadcnzmfue/aux-serpentieres"
+        }
+      ]
+    },
+    {
+      "appellation": "Volnay",
+      "regionId": "france/burgundy/cote-de-beaune",
+      "entries": [
+        {
+          "name": "Santenots",
+          "path": "/place/ba_designation_35g5ubjlbibkfi5y7k3ebwfyvm/santenots"
+        },
+        {
+          "name": "En Chevret",
+          "path": "/place/ba_designation_35ust2zzetxvkd2c4yn46frtxi/en-chevret"
+        },
+        {
+          "name": "Clos des Chênes",
+          "path": "/place/ba_designation_4gneh6zdknvhwugcs42b623i5u/clos-des-chenes"
+        },
+        {
+          "name": "Frémiets",
+          "path": "/place/ba_designation_4i7kasxomnlauwposdurz5kzqu/fremiets"
+        },
+        {
+          "name": "Clos de la Cave des Ducs",
+          "path": "/place/ba_designation_4v3xvgyakncgvbam337ujba5qq/clos-de-la-cave-des-ducs"
+        },
+        {
+          "name": "Robardelle",
+          "path": "/place/ba_designation_4ww4y2gtejgmy6asunle2bpmvq/robardelle"
+        },
+        {
+          "name": "Frémiets - Clos de la Rougeotte",
+          "path": "/place/ba_designation_66wph75nuazztrmrl6kkekjx5i/fremiets-clos-de-la-rougeotte"
+        },
+        {
+          "name": "Clos de l'Audignac",
+          "path": "/place/ba_designation_6jsvwah7wwjlzjwkjm2zann3si/clos-de-l-audignac"
+        },
+        {
+          "name": "Le Ronceret",
+          "path": "/place/ba_designation_bx7wd5mf4zv2pspqamgioe2piy/le-ronceret"
+        },
+        {
+          "name": "Le Village",
+          "path": "/place/ba_designation_en5nneqzkhh7hejbdfukwrhama/le-village"
+        },
+        {
+          "name": "Les Lurets",
+          "path": "/place/ba_designation_ey4s3eumni6maozvnirnk5qtp4/les-lurets"
+        },
+        {
+          "name": "Clos de la Rougeotte",
+          "path": "/place/ba_designation_f5qa4nwwpsvcsg7j4gcay5pmf4/clos-de-la-rougeotte"
+        },
+        {
+          "name": "Clos de la Barre",
+          "path": "/place/ba_designation_fxdyqb23f4vkilg2jrsivcjrii/clos-de-la-barre"
+        },
+        {
+          "name": "Clos des Ducs",
+          "path": "/place/ba_designation_hicfauq2v26wtjzyroqxoylevm/clos-des-ducs"
+        },
+        {
+          "name": "Pitures Dessus",
+          "path": "/place/ba_designation_ifpzubfc2telfr4foixbh53kxe/pitures-dessus"
+        },
+        {
+          "name": "Taille Pieds",
+          "path": "/place/ba_designation_ihlufgg6zgf7ctfu2iqfe6ias4/taille-pieds"
+        },
+        {
+          "name": "Carelle sous la Chapelle",
+          "path": "/place/ba_designation_joc2u3hsi7mqam2kqedt7hjrfa/carelle-sous-la-chapelle"
+        },
+        {
+          "name": "Les Caillerets",
+          "path": "/place/ba_designation_nhaxh4wngj6abfex7dcvowttke/les-caillerets"
+        },
+        {
+          "name": "Les Angles",
+          "path": "/place/ba_designation_nvli3plqkbq4sof2a36vszri7i/les-angles"
+        },
+        {
+          "name": "Clos de la Bousse-d'Or",
+          "path": "/place/ba_designation_o5f5ruhdah5cmrbu36h3hszf2q/clos-de-la-bousse-d-or"
+        },
+        {
+          "name": "Les Mitans",
+          "path": "/place/ba_designation_ovrluqoskqmwkm7wavomwaq7su/les-mitans"
+        },
+        {
+          "name": "Clos des 60 ouvrées",
+          "path": "/place/ba_designation_p4cidryel22feenx7m2kfbucc4/clos-des-60-ouvrees"
+        },
+        {
+          "name": "Champans",
+          "path": "/place/ba_designation_ppfluh46s7hrg3j43djidr24fm/champans"
+        },
+        {
+          "name": "La Gigotte",
+          "path": "/place/ba_designation_qdmonpea22m7xfmwyhqgtsbkze/la-gigotte"
+        },
+        {
+          "name": "Clos du Château des Ducs",
+          "path": "/place/ba_designation_w5xckmn6les4o3hbvwrfew5wuu/clos-du-chateau-des-ducs"
+        },
+        {
+          "name": "Lassolle",
+          "path": "/place/ba_designation_w6iluyqz622hlidtw5qorimm2e/lassolle"
+        },
+        {
+          "name": "Les Brouillards",
+          "path": "/place/ba_designation_xv2cglz2k7pzl3kgxn3yr3uxgm/les-brouillards"
+        },
+        {
+          "name": "Clos de la Chapelle",
+          "path": "/place/ba_designation_ykz52oqfom3moxwdkwy2vbrdxq/clos-de-la-chapelle"
+        },
+        {
+          "name": "Clos du Verseuil",
+          "path": "/place/ba_designation_zixa3m7r637bilazb3yqy4mqka/clos-du-verseuil"
+        }
+      ]
+    },
+    {
+      "appellation": "Vosne-Romanée",
+      "regionId": "france/burgundy/cote-de-nuits",
+      "entries": [
+        {
+          "name": "Aux Malconsorts",
+          "path": "/place/ba_designation_4bmzpvbl3vr7n377hzw3kbmfs4/aux-malconsorts"
+        },
+        {
+          "name": "Les Petis Monts",
+          "path": "/place/ba_designation_adoiozca6tlmlljmimdxuqxhfa/les-petis-monts"
+        },
+        {
+          "name": "Aux Brulées",
+          "path": "/place/ba_designation_egpwvqmrjl6ohrszb2dpl4gvdy/aux-brulees"
+        },
+        {
+          "name": "Les Rouges",
+          "path": "/place/ba_designation_f6txe7kdhn6slg76dww5mikh3q/les-rouges"
+        },
+        {
+          "name": "Les Suchots",
+          "path": "/place/ba_designation_gknxejgvbtwlfiny3jskbbuenq/les-suchots"
+        },
+        {
+          "name": "En Orveaux",
+          "path": "/place/ba_designation_himvwgnvqhccukdx2f6w4fslnm/en-orveaux"
+        },
+        {
+          "name": "La Croix Rameau",
+          "path": "/place/ba_designation_kesdypecxv5nw5zozjvc5cn4vq/la-croix-rameau"
+        },
+        {
+          "name": "Les Gaudichots",
+          "path": "/place/ba_designation_mxbp3fjzxfuxjnpg62qqtaakym/les-gaudichots"
+        },
+        {
+          "name": "Cros Parantoux",
+          "path": "/place/ba_designation_nfl6rszkjaq77jg2sfsii5gmna/cros-parantoux"
+        },
+        {
+          "name": "Clos des Réas",
+          "path": "/place/ba_designation_o6zgjci2ktdmuxxny4l3xhqcwi/clos-des-reas"
+        },
+        {
+          "name": "Au-dessus des Malconsorts",
+          "path": "/place/ba_designation_tsjjqvlz4l5qle6asn3iwdiige/au-dessus-des-malconsorts"
+        },
+        {
+          "name": "Les Beaux Monts",
+          "path": "/place/ba_designation_uhlwdedkzhqmaxp46bn6ab3g5q/les-beaux-monts"
+        },
+        {
+          "name": "Les Chaumes",
+          "path": "/place/ba_designation_wk3dy3vujyndzu3m2utefqelhq/les-chaumes"
+        },
+        {
+          "name": "Aux Raignots",
+          "path": "/place/ba_designation_zt3xpzg4ncyuyej62yjs3sbnr4/aux-raignots"
+        }
+      ]
+    },
+    {
+      "appellation": "Vougeot",
+      "regionId": "france/burgundy/cote-de-nuits",
+      "entries": [
+        {
+          "name": "Clos de la Perrière",
+          "path": "/place/ba_designation_354l776ozzlevfgjjzgnwic4bu/clos-de-la-perriere"
+        },
+        {
+          "name": "Le Clos Blanc",
+          "path": "/place/ba_designation_6oavgemifnokdp7nwq6o26c74m/le-clos-blanc"
+        },
+        {
+          "name": "Les Crâs",
+          "path": "/place/ba_designation_dqh3lflfxngjgdldthspgm6sju/les-cras"
+        },
+        {
+          "name": "Les Petits Vougeots",
+          "path": "/place/ba_designation_lqo7b5wz3ryq7keuzga3wi6zou/les-petits-vougeots"
+        }
+      ]
+    }
+  ]
+}
