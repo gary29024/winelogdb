@@ -115,6 +115,28 @@ function spans(text:string,key:string){
   return [...text.matchAll(new RegExp(`(?<![a-z0-9])${key}(?![a-z0-9])`,'g'))]
     .map(match=>({start:match.index!,end:match.index!+match[0].length}));
 }
+// Crus named by the field itself, not the ones nested inside the village's own
+// name: "Chassagne" is a climat, and Chassagne-Montrachet does not name it.
+function crusOutsideVillage(field:string,group:Appellation,cruGroup:Group){
+  const villages=group.keys.flatMap(key=>spans(field,key));
+  return matches(field,cruGroup).filter(cru=>!villages.some(village=>
+    village.start<=cru.start&&village.end>=cru.end&&village.end-village.start>cru.end-cru.start));
+}
+// Chablis Grand Cru is one appellation, so its seven climats are not separate
+// places in the hierarchy. Whole names only, and only inside Chablis.
+const grandCruClimats:Record<string,string[]>={
+  Chablis:['Blanchot','Bougros','Les Clos','Grenouilles','Les Preuses','Preuses','Valmur','Vaudésir','La Moutonne']
+};
+/** Whether a wine without a recorded tier names a Premier or Grand Cru of this
+ * appellation. Only the appellation's own crus count: La Romanée is a Premier
+ * Cru in Gevrey-Chambertin and a Grand Cru in Vosne-Romanée, and Les Perrières
+ * in Meursault says nothing about a wine from another village. */
+function namesHigherTierPlot(fields:string[],group:Appellation){
+  const cruGroup=groups.find(cru=>cru.key===group.key);
+  const climats=(grandCruClimats[group.appellation]??[]).map(nameKey);
+  return fields.some(field=>(cruGroup?crusOutsideVillage(field,group,cruGroup).length>0:false)||
+    climats.some(key=>spans(field,key).length>0));
+}
 function namedPlaceMentions(text:string){
   const found=namedPlaces.flatMap(place=>spans(text,place.key).map(span=>({...place,...span})));
   // Beaune inside Savigny-lès-Beaune, or Chablis inside Petit Chablis, is not
@@ -139,13 +161,7 @@ function wineAppellation(wine:Wine,tier:'village'|'premier_cru'):Appellation|nul
     if(recordedAppellation&&recordedAppellation!==group)return false;
     if(!compatibleRegion(region,group)&&!group.keys.includes(region))return false;
     const cruGroup=groups.find(cru=>cru.key===group.key);
-    const context=fields.map(field=>{
-      if(!cruGroup)return field;
-      const villages=group.keys.flatMap(key=>spans(field,key));
-      const crus=matches(field,cruGroup).filter(cru=>!villages.some(village=>
-        village.start<=cru.start&&village.end>=cru.end&&village.end-village.start>cru.end-cru.start));
-      return remainder(field,crus);
-    });
+    const context=fields.map(field=>cruGroup?remainder(field,crusOutsideVillage(field,group,cruGroup)):field);
     const mentions=context.map(namedPlaceMentions);
     // A subregion alone is not proof of its namesake village appellation.
     const regionIsAppellation=group.keys.includes(region)&&(tier==='premier_cru'||
@@ -161,7 +177,12 @@ function wineAppellation(wine:Wine,tier:'village'|'premier_cru'):Appellation|nul
       !(cruGroup&&matches(fields[0],cruGroup).length>0&&/^(?:(?:les|le|la|et|and|ou)\s*)*$/.test(app)))return false;
     return true;
   });
-  return candidates.length===1?candidates[0]:null;
+  if(candidates.length!==1)return null;
+  // Without a recorded tier, a named Premier or Grand Cru is not a village wine.
+  // Linking the village page would state a tier the record never gave, so the
+  // link is withheld. A recorded village classification stays authoritative.
+  if(tier==='village'&&wine.classification!=='village'&&namesHigherTierPlot(fields,candidates[0]))return null;
+  return candidates[0];
 }
 
 function appellationLink(group:Appellation,tier:'village'|'premier_cru'):BurgundyAtlasPlace|null{

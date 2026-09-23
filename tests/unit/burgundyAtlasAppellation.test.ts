@@ -62,6 +62,38 @@ describe('Atlas appellation fallbacks',()=>{
     expect(result?.scope).toBeUndefined();
   });
 
+  it.each([
+    {appellation:'Vosne-Romanée',wineName:'Vosne-Romanée Les Suchots'},
+    {appellation:'Puligny-Montrachet',wineName:'Puligny-Montrachet Les Pucelles'},
+    {appellation:'Gevrey-Chambertin',wineName:'Gevrey-Chambertin Clos Saint-Jacques'},
+    // Gevrey's own Premier Cru, not the Vosne-Romanée Grand Cru namesake.
+    {appellation:'Gevrey-Chambertin',wineName:'Gevrey-Chambertin La Romanée'},
+    {appellation:'Vosne-Romanée',wineName:'Vosne-Romanée La Romanée'},
+    {appellation:'Meursault',wineName:'Meursault Les Perrières'},
+    {appellation:'Meursault',wineName:'Domaine X',referenceSite:'Charmes'},
+    {appellation:'Chablis',wineName:'Chablis Les Clos'},
+    {appellation:'Chablis',wineName:'Chablis Vaudésir'},
+  ])('withholds the village page when an unclassified wine names a cru of its village: %j',fields=>{
+    expect(burgundyAtlasWineDetailPlace({...wine,classification:null,...fields})).toBeNull();
+  });
+
+  it.each([
+    // Les Perrières is a Premier Cru in Meursault, Puligny and Beaune, not here.
+    {appellation:'Saint-Romain',wineName:'Saint-Romain Les Perrières',url:'saint-romain'},
+    // A Gevrey Premier Cru name says nothing about a Chambolle village wine.
+    {appellation:'Chambolle-Musigny',wineName:'Chambolle-Musigny Cazetiers',url:'chambolle-musigny'},
+    {appellation:'Meursault',wineName:'Meursault Les Narvaux',url:'meursault'},
+    {appellation:'Chablis',wineName:'Chablis Vieilles Vignes',url:'chablis'},
+  ])('only counts crus of the wine’s own village when the tier is unrecorded: %j',({url,...fields})=>{
+    const result=burgundyAtlasWineDetailPlace({...wine,classification:null,...fields});
+    expect(result?.url).toMatch(new RegExp(`/${url}$`));
+    expect(result?.scope).toBe('appellation');
+  });
+
+  it('keeps a recorded village classification authoritative over a cru name',()=>{
+    expect(burgundyAtlasWineDetailPlace({...wine,classification:'village',wineName:'Meursault Les Perrières'})?.url).toBe(village);
+  });
+
   it('broadens an unmapped Chablis climat to Chablis Premier Cru',()=>{
     expect(burgundyAtlasWineDetailPlace({...wine,appellation:'Chablis',wineName:'Chablis Montée de Tonnerre'})?.url)
       .toBe('https://burgundyatlas.com/place/ba_appellation_cicui7m4g4teqmvx2nmg6jsj2m/chablis-premier-cru');
