@@ -134,6 +134,20 @@ test('a recorded vineyard supplies the cru, with an appellation fallback when no
 });
 
 for(const route of ['/wines/layout-wine','/shared/layout-wine']){
+  test(`${route}: an unmapped cru needs a recorded tier before an appellation link appears`,async({page})=>{
+    for(const classification of [null,'premier_cru','village']){
+      await mockApi(page,{appellation:'Chablis',wineName:'Chablis Montée de Tonnerre',classification,
+        wineStyle:'white',colour:'White',grapes:['Chardonnay']});
+      await page.goto(route);
+      await expect(page.getByRole('heading',{name:'Chablis Montée de Tonnerre',exact:true})).toBeVisible();
+      const link=page.locator('.burgundy-atlas-link');
+      await expect(link).toHaveCount(classification?1:0);
+      if(classification)await expect(link).toHaveAttribute('href',classification==='premier_cru'
+        ?'https://burgundyatlas.com/place/ba_appellation_cicui7m4g4teqmvx2nmg6jsj2m/chablis-premier-cru'
+        :'https://burgundyatlas.com/place/ba_appellation_33amrcftvaqshlf5ygajsusyrm/chablis');
+    }
+  });
+
   test(`${route}: village and mixed-plot wines use a clearly labelled appellation link`,async({page},testInfo)=>{
     const requests:string[]=[];
     page.on('request',request=>{if(new URL(request.url()).hostname==='burgundyatlas.com')requests.push(request.url())});

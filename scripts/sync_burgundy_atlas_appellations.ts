@@ -23,6 +23,7 @@ async function pooled<T,R>(items:T[],fetchItem:(item:T)=>Promise<R>):Promise<R[]
 }
 const urls=new Set([...((await read(source)).matchAll(/<loc>(.*?)<\/loc>/g))].map(match=>match[1]));
 const keys=[...new Set([...urls].flatMap(url=>url.match(/\/ba_appellation_([a-z2-7])/)?.[1]??[]))].sort();
+if(keys.length!==32)throw new Error('Unexpected Atlas registry shard set');
 const shards=await pooled(keys,async key=>JSON.parse(await read(`${origin}/burgundy/registry/place-route-shards/${key}.json`)) as Shard);
 if(new Set(shards.map(shard=>shard.registry_version)).size!==1)throw new Error('Registry changed during refresh; retry');
 const routes=shards.flatMap(shard=>Object.values(shard.routes)).filter(route=>route.entity_type==='appellation'&&

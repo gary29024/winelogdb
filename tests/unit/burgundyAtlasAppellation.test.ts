@@ -1,6 +1,8 @@
 import { describe,expect,it } from 'vitest';
-import { burgundyAtlasWineDetailPlace } from '../../src/lib/places/burgundyAtlasPremierCru';
+import { burgundyAtlasPremierCru,burgundyAtlasWineDetailPlace } from '../../src/lib/places/burgundyAtlasPremierCru';
 import mapping from '../../src/lib/places/burgundyAtlasAppellationLinks.json';
+import unmapped from '../../src/lib/places/burgundyAtlasUnmappedPremierCruNames.json';
+import premiers from '../../src/lib/places/burgundyAtlasPremierCruLinks.json';
 
 const village='https://burgundyatlas.com/place/ba_appellation_i5feobqdq556kq7i5jynpzeelu/meursault';
 const premier='https://burgundyatlas.com/place/ba_appellation_d2dm6decs2nnkxhviyfpoa4bla/meursault-premier-cru';
@@ -84,6 +86,8 @@ describe('Atlas appellation fallbacks',()=>{
     {appellation:'Chambolle-Musigny',wineName:'Chambolle-Musigny Cazetiers',url:'chambolle-musigny'},
     {appellation:'Meursault',wineName:'Meursault Les Narvaux',url:'meursault'},
     {appellation:'Chablis',wineName:'Chablis Vieilles Vignes',url:'chablis'},
+    // "Clos" alone is not the complete Chablis Grand Cru name "Les Clos".
+    {appellation:'Chablis',wineName:'Chablis Clos du Domaine',url:'chablis'},
   ])('only counts crus of the wine’s own village when the tier is unrecorded: %j',({url,...fields})=>{
     const result=burgundyAtlasWineDetailPlace({...wine,classification:null,...fields});
     expect(result?.url).toMatch(new RegExp(`/${url}$`));
@@ -97,6 +101,47 @@ describe('Atlas appellation fallbacks',()=>{
   it('broadens an unmapped Chablis climat to Chablis Premier Cru',()=>{
     expect(burgundyAtlasWineDetailPlace({...wine,appellation:'Chablis',wineName:'Chablis Montée de Tonnerre'})?.url)
       .toBe('https://burgundyatlas.com/place/ba_appellation_cicui7m4g4teqmvx2nmg6jsj2m/chablis-premier-cru');
+  });
+
+  it.each(unmapped.groups)('preserves the tier for unmapped $appellation crus',group=>{
+    const appellation=mapping.groups.find(candidate=>candidate.appellation===group.appellation)!;
+    for(const entry of group.entries){
+      const facts={...wine,appellation:group.appellation,wineName:`${group.appellation} ${entry.name}`};
+      for(const classification of [null,undefined]){
+        expect(burgundyAtlasWineDetailPlace({...facts,classification}),entry.name).toBeNull();
+        expect(burgundyAtlasWineDetailPlace({...facts,classification,wineName:entry.name.replace(/^(?:les|le|la) /i,'')}),entry.name).toBeNull();
+        for(const field of ['referenceSite','referenceParcel'] as const)
+          expect(burgundyAtlasWineDetailPlace({...facts,classification,wineName:group.appellation,[field]:entry.name}),entry.name).toBeNull();
+      }
+      // A known tier may use its appellation, but no mapless plot gets a link.
+      expect(burgundyAtlasPremierCru(facts),entry.name).toBeNull();
+      const premierResult=burgundyAtlasWineDetailPlace(facts);
+      if(appellation.premierCruPath)expect(premierResult?.url,entry.name).toBe(`https://burgundyatlas.com${appellation.premierCruPath}`);
+      else expect(premierResult,entry.name).toBeNull();
+      expect(burgundyAtlasWineDetailPlace({...facts,classification:'village'})?.url,entry.name)
+        .toBe(`https://burgundyatlas.com${appellation.villagePath}`);
+      // A same-name vineyard elsewhere must not inherit this cru's tier.
+      expect(burgundyAtlasWineDetailPlace({...facts,classification:null,appellation:'Saint-Romain',wineName:`Saint-Romain ${entry.name}`})?.url,entry.name)
+        .toMatch(/\/saint-romain$/);
+    }
+  });
+
+  it('keeps the reviewed guard names separate from navigable plot coverage',()=>{
+    const entries=unmapped.groups.flatMap(group=>group.entries);
+    expect(entries).toHaveLength(premiers.excludedWithoutMap);
+    expect(new Set(entries.map(entry=>entry.placeId)).size).toBe(entries.length);
+    const mappedIds=new Set(premiers.groups.flatMap(group=>group.entries.map(entry=>entry.path.split('/')[2])));
+    for(const entry of entries){
+      expect(entry.placeId).toMatch(/^ba_designation_[a-z2-7]{26}$/);
+      expect(mappedIds.has(entry.placeId),entry.name).toBe(false);
+    }
+  });
+
+  it('matches whole unmapped names without leaking regex state between wines',()=>{
+    for(let i=0;i<3;i++){
+      expect(burgundyAtlasWineDetailPlace({...wine,classification:null,appellation:'Chablis',wineName:'Chablis Forester'})?.url).toMatch(/\/chablis$/);
+      expect(burgundyAtlasWineDetailPlace({...wine,classification:null,appellation:'Chablis',wineName:'Chablis Forets'})).toBeNull();
+    }
   });
 
   it.each([

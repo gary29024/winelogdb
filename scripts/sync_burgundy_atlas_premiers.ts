@@ -4,6 +4,7 @@
 import { writeFile } from 'node:fs/promises';
 import { PLACES } from '../src/lib/places/hierarchy';
 import { placeKey } from '../src/lib/places/resolve';
+import unmappedNames from '../src/lib/places/burgundyAtlasUnmappedPremierCruNames.json';
 
 const origin='https://burgundyatlas.com';
 const source=`${origin}/sitemap.xml`;
@@ -32,6 +33,13 @@ if(new Set(shards.map(shard=>shard.registry_version)).size!==1)throw new Error('
 const routes=shards.flatMap(shard=>Object.values(shard.routes));
 const premiers=routes.filter(route=>route.entity_type==='designation'&&route.classification_tier==='premier_cru');
 const mapped=premiers.filter(route=>route.preferred?.classification_filter==='premier_cru');
+// Identity-only routes have no village context. Keep the reviewed names and
+// parents in the guard-only file, and stop when new records need that review.
+const reviewedUnmapped=new Map(unmappedNames.groups.flatMap(group=>group.entries.map(entry=>[entry.placeId,entry.name] as const)));
+for(const route of premiers.filter(route=>!mapped.includes(route))){
+  if(reviewedUnmapped.get(route.canonical_path.split('/')[2])!==route.canonical_name)
+    throw new Error(`Review the unmapped Premier Cru name and appellation: ${route.canonical_path}`);
+}
 const groups=new Map<string,{appellation:string;regionId:string;entries:{name:string;path:string}[]}>();
 // These legal appellations have no node in WineLog's current hierarchy. Keep
 // them under a verified existing ancestor without changing that shared tree.

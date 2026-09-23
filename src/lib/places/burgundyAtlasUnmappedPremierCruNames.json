@@ -1,0 +1,184 @@
+{
+  "purpose": "Names that prevent an unclassified cru from falling back to a village link. These records do not enable specific plot links.",
+  "registryVersion": "39d9597faf39e11a",
+  "verifiedAt": "2026-09-23",
+  "groups": [
+    {
+      "appellation": "Chablis",
+      "sources": [
+        "https://extranet.inao.gouv.fr/fichier/CDC-Chablis-250623-PNO.pdf",
+        "https://www.chablis-wines.com/gallery_files/site/25717/25787/73290.pdf"
+      ],
+      "entries": [
+        {
+          "name": "Beauroy",
+          "placeId": "ba_designation_nzckmyzqlsxlq3ton6wj6xlutq"
+        },
+        {
+          "name": "Berdiot",
+          "placeId": "ba_designation_znnue2ngq4pfot4i5mry6c74xy"
+        },
+        {
+          "name": "Beugnons",
+          "placeId": "ba_designation_lb4mt4e4k2nnrad2d5uysx3lxu"
+        },
+        {
+          "name": "Butteaux",
+          "placeId": "ba_designation_sjplnzoqdhczistspfybmvwbvq"
+        },
+        {
+          "name": "Chapelot",
+          "placeId": "ba_designation_v6u2n4ad6v7fxrspgxvgwxosdm"
+        },
+        {
+          "name": "Chatains",
+          "placeId": "ba_designation_zt4e3dfkonp73r7wj2cc3dbesu"
+        },
+        {
+          "name": "Côte de Bréchain",
+          "placeId": "ba_designation_imp2a4x24tfnascytwpbyyg7du"
+        },
+        {
+          "name": "Côte de Cuisy",
+          "placeId": "ba_designation_pqs6fqyjhkov2zq72ra5xnic4q"
+        },
+        {
+          "name": "Côte de Fontenay",
+          "placeId": "ba_designation_ja4mwldopia2u7w3icfu3yncv4"
+        },
+        {
+          "name": "Côte de Léchet",
+          "placeId": "ba_designation_oxjkvg5byhlw5akk4m7vhkb7ry"
+        },
+        {
+          "name": "Côte de Savant",
+          "placeId": "ba_designation_llix4aooqtwoxotkeece5hdc74"
+        },
+        {
+          "name": "Côte de Vaubarousse",
+          "placeId": "ba_designation_ger5vvtszbv7cvxb36nz56ht7a"
+        },
+        {
+          "name": "Côte des Prés-Girots",
+          "placeId": "ba_designation_gq22q3odve5xl7puik4b5k4kgq"
+        },
+        {
+          "name": "Forêts",
+          "placeId": "ba_designation_232lzrp2xeldhekvlmevwjy5hu"
+        },
+        {
+          "name": "L'Homme Mort",
+          "placeId": "ba_designation_ilv4y3yhfphg2rcvfsxeexe57u"
+        },
+        {
+          "name": "les Épinottes",
+          "placeId": "ba_designation_4ie2zzogcwjaojow3kyo67s73y"
+        },
+        {
+          "name": "Les Lys",
+          "placeId": "ba_designation_zbqceqjtar6zbgsqr7qbt52jde"
+        },
+        {
+          "name": "Mélinots",
+          "placeId": "ba_designation_pwdlbzdmua5fst2jlqf3fxtafm"
+        },
+        {
+          "name": "Montée de Tonnerre",
+          "placeId": "ba_designation_ur4gajdglosmrxgmta5vp33noy"
+        },
+        {
+          "name": "Montmains",
+          "placeId": "ba_designation_x2ufbx4iztiamxkvjqoaxinsg4"
+        },
+        {
+          "name": "Morein",
+          "placeId": "ba_designation_beeeumv2amfqpr66gh2djst6cu"
+        },
+        {
+          "name": "Pied d'Aloup",
+          "placeId": "ba_designation_xjmhpz56pi67nsbq67ctw3p7hq"
+        },
+        {
+          "name": "Roncières",
+          "placeId": "ba_designation_kokojr3vpecbdxdefkyufybw7y"
+        },
+        {
+          "name": "Sécher",
+          "placeId": "ba_designation_litsnz2e5m6wpptav4r3wozx6m"
+        },
+        {
+          "name": "Troesmes",
+          "placeId": "ba_designation_iqsjvyzj4u3gf53juz4hnzjtdm"
+        },
+        {
+          "name": "Vaillons",
+          "placeId": "ba_designation_6q4nwtkokmgqdn6uh5rnobkim4"
+        },
+        {
+          "name": "Vau de Vey",
+          "placeId": "ba_designation_oojn6hxcg7cynb3b7aw6jyol7u"
+        },
+        {
+          "name": "Vau Ligneau",
+          "placeId": "ba_designation_qhn7nqrkkoiac4lhswbe5aaesq"
+        },
+        {
+          "name": "Vaulorent",
+          "placeId": "ba_designation_6d7cqmpybpksrfqyvdb3vljhna"
+        },
+        {
+          "name": "Vaux Ragons",
+          "placeId": "ba_designation_fpdiwc6ufzpljyqzhyhqa7aldi"
+        }
+      ]
+    },
+    {
+      "appellation": "Givry",
+      "sources": [
+        "https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/gallery_files/site/321/402/79294/79373.pdf"
+      ],
+      "entries": [
+        {
+          "name": "La Plante",
+          "placeId": "ba_designation_hbuqre7i2yffhzwuz5tdxwvcae"
+        },
+        {
+          "name": "Le Médenchot",
+          "placeId": "ba_designation_toxqrqfgz2d4nh53tv6horulzy"
+        }
+      ]
+    },
+    {
+      "appellation": "Pouilly-Loché",
+      "sources": [
+        "https://www.bourgogne-wines.com/press/gallery_files/site/289/1910/78880.pdf"
+      ],
+      "entries": [
+        {
+          "name": "les Mûres",
+          "placeId": "ba_designation_j5c6xfjvzkdbb3ho5k233hcdgq"
+        }
+      ]
+    },
+    {
+      "appellation": "Pouilly-Vinzelles",
+      "sources": [
+        "https://www.bourgogne-wines.com/press/gallery_files/site/289/1910/78880.pdf"
+      ],
+      "entries": [
+        {
+          "name": "Les Longeays",
+          "placeId": "ba_designation_s2z2mezmdj4ls5gc2y2e2fxncu"
+        },
+        {
+          "name": "Les Pétaux",
+          "placeId": "ba_designation_rx5uwfztpkvc3qrd4qpmgk625i"
+        },
+        {
+          "name": "Les Quarts",
+          "placeId": "ba_designation_efmw72lwqqxnd4vi5ww3atwvnu"
+        }
+      ]
+    }
+  ]
+}

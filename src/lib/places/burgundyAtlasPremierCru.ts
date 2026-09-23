@@ -4,6 +4,7 @@ import { PLACES } from './hierarchy';
 import { placeKey } from './resolve';
 import mapping from './burgundyAtlasPremierCruLinks.json';
 import appellationMapping from './burgundyAtlasAppellationLinks.json';
+import unmappedPremiers from './burgundyAtlasUnmappedPremierCruNames.json';
 
 type Wine=WineFacts&{classification?:string|null};
 const nameKey=(value:string)=>placeKey(value.replace(/œ/g,'oe').replace(/Œ/g,'OE')).replace(/\bst\b/g,'saint');
@@ -11,18 +12,27 @@ const premierMarker=/\b(?:premier(?:s)?\s+cru(?:s)?|1er(?:\s*cru)?|1st\s+cru)\b/
 const textKey=(value:string)=>nameKey(value).replace(premierMarker,' ').replace(/\b(?:aoc|aop)\b/g,' ').replace(/\s+/g,' ').trim();
 const contains=(text:string,phrase:string)=>` ${text} `.includes(` ${phrase} `);
 const withoutArticle=(name:string)=>name.replace(/^(?:les|le|la) /,'');
+// Only static dictionary keys reach this cache, never wine text. Reuse compiled
+// patterns across fields and renders; matchAll keeps their lastIndex untouched.
+const patterns=new Map<string,RegExp>();
+function patternFor(key:string){
+  let pattern=patterns.get(key);
+  if(!pattern){pattern=new RegExp(`(?<![a-z0-9])${key}(?![a-z0-9])`,'g');patterns.set(key,pattern)}
+  return pattern;
+}
 const placeFields=(wine:Wine)=>[wine.appellation,wine.wineName,wine.referenceSite,wine.referenceParcel].map(value=>value?.trim()??'');
 const namesPremierCru=(wine:Wine)=>wine.classification==='premier_cru'||placeFields(wine).some(value=>nameKey(value).match(premierMarker));
 
-const groups=mapping.groups.map(group=>({...group,key:nameKey(group.appellation),entries:group.entries.map(entry=>{
+function nameVariants(name:string){
   // "ou" alternatives are published names, not fuzzy spelling guesses. Article
   // omission is a fallback: an exact "Porusot" beats an alias of "Le Porusot".
-  const names=[entry.name,...entry.name.split(/ ou /i)].map(nameKey);
-  const variants=[...new Set(names)].flatMap(key=>[
+  const names=[name,...name.split(/ ou /i)].map(nameKey);
+  return [...new Set(names)].flatMap(key=>[
     {key,exact:true},...(withoutArticle(key)!==key?[{key:withoutArticle(key),exact:false}]:[])
   ]);
-  return {...entry,variants};
-})}));
+}
+const groups=mapping.groups.map(group=>({...group,key:nameKey(group.appellation),entries:group.entries.map(entry=>
+  ({...entry,variants:nameVariants(entry.name).map(variant=>({...variant,pattern:patternFor(variant.key)}))}))}));
 type Group=typeof groups[number];
 type Entry=Group['entries'][number];
 type Match={entry:Entry;start:number;end:number;exact:boolean};
@@ -30,8 +40,7 @@ type Match={entry:Entry;start:number;end:number;exact:boolean};
 function matches(text:string,group:Group):Match[]{
   const found:Match[]=[];
   for(const entry of group.entries)for(const variant of entry.variants){
-    const pattern=new RegExp(`(?<![a-z0-9])${variant.key}(?![a-z0-9])`,'g');
-    for(const match of text.matchAll(pattern))found.push({entry,start:match.index!,end:match.index!+match[0].length,exact:variant.exact});
+    for(const match of text.matchAll(variant.pattern))found.push({entry,start:match.index!,end:match.index!+match[0].length,exact:variant.exact});
   }
   // A nested name is not another vineyard: Clos des Perrières must not become
   // Perrières. Separate, non-overlapping names remain ambiguous and are refused.
@@ -46,7 +55,7 @@ function remainder(text:string,found:Match[]){
 
 function separateVillage(text:string,group:Group){
   const crus=matches(text,group),characters=[...text];let named=false;
-  for(const match of text.matchAll(new RegExp(`(?<![a-z0-9])${group.key}(?![a-z0-9])`,'g'))){
+  for(const match of text.matchAll(patternFor(group.key))){
     const start=match.index!,end=start+match[0].length;
     // Blagny inside "Sous Blagny" is part of the climat, not evidence of the
     // appellation (the same climat name also exists under Meursault).
@@ -112,7 +121,7 @@ const namedPlaces=[...new Map([
     .flatMap(place=>[place.name,...place.aliases].map(name=>({key:nameKey(name),id:place.id})))
 ].map(place=>[place.key,place])).values()];
 function spans(text:string,key:string){
-  return [...text.matchAll(new RegExp(`(?<![a-z0-9])${key}(?![a-z0-9])`,'g'))]
+  return [...text.matchAll(patternFor(key))]
     .map(match=>({start:match.index!,end:match.index!+match[0].length}));
 }
 // Crus named by the field itself, not the ones nested inside the village's own
@@ -127,13 +136,20 @@ function crusOutsideVillage(field:string,group:Appellation,cruGroup:Group){
 const grandCruClimats:Record<string,string[]>={
   Chablis:['Blanchot','Bougros','Les Clos','Grenouilles','Les Preuses','Preuses','Valmur','Vaudésir','La Moutonne']
 };
+// Identity-only Atlas records cannot supply map links. Their independently
+// reviewed appellation names still prevent a false village-tier assertion.
+const additionalCruKeys=new Map(appellations.map(group=>[group.key,[
+  ...(unmappedPremiers.groups.find(cru=>nameKey(cru.appellation)===group.key)?.entries
+    .flatMap(entry=>nameVariants(entry.name).map(variant=>variant.key))??[]),
+  ...(grandCruClimats[group.appellation]??[]).map(nameKey)
+]]));
 /** Whether a wine without a recorded tier names a Premier or Grand Cru of this
  * appellation. Only the appellation's own crus count: La Romanée is a Premier
  * Cru in Gevrey-Chambertin and a Grand Cru in Vosne-Romanée, and Les Perrières
  * in Meursault says nothing about a wine from another village. */
 function namesHigherTierPlot(fields:string[],group:Appellation){
   const cruGroup=groups.find(cru=>cru.key===group.key);
-  const climats=(grandCruClimats[group.appellation]??[]).map(nameKey);
+  const climats=additionalCruKeys.get(group.key)??[];
   return fields.some(field=>(cruGroup?crusOutsideVillage(field,group,cruGroup).length>0:false)||
     climats.some(key=>spans(field,key).length>0));
 }
