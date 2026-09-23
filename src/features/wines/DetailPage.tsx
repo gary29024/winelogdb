@@ -168,7 +168,7 @@ export function DetailPage(){
       second fixed bar would stack on it for no gain on a desktop. */}
   <div className="wine-actions">
    <button type="button" className={`detail-favorite-button${wine.favorite?' active':''}`} aria-label={wine.favorite?'Favorite':'Add to favorites'} aria-pressed={wine.favorite} onClick={()=>void toggleFavorite()} disabled={favoriteBusy}><span className="heart" aria-hidden="true"><AppIcon kind={wine.favorite?'heart-filled':'heart'}/></span><span className="detail-favorite-label">{wine.favorite?'Favorite':'Add to favorites'}</span></button>
-   <WineSharing key={id} wineId={id}/>
+   <WineSharing key={id} wineId={id} sharedCount={wine.friendTagCount}/>
    <Link className="button primary" to={`/wines/${id}/edit`}>Edit tasting</Link>
    <a className="detail-wine-searcher-link" aria-label="Find on Wine-Searcher" href={wineSearcherUrl(wine.producer,wine.wineName,wine.vintage)} target="_blank" rel="noopener noreferrer"><span><span className="detail-search-prefix">Find on </span>Wine-Searcher</span><span aria-hidden="true">↗</span></a>
   </div>

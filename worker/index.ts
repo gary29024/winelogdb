@@ -103,11 +103,17 @@ app.get('/api/wines',async c=>{
 
 app.get('/api/wines/:id',async c=>{
  const id=c.req.param('id'),owner=c.get('userId');
- const [row,images]=await Promise.all([
+ // The detail page shows whether the bottle is shared, which used to cost a
+ // second round trip per wine opened. It rides along here instead. The count,
+ // not the recipients: naming them is the sharing sheet's job, and it asks
+ // only when someone opens it. wineSelect is shared with the journal list,
+ // where nothing shows this, so the count stays out of it.
+ const [row,images,shares]=await Promise.all([
   c.env.DB.prepare(`${wineSelect} WHERE w.id=? AND w.owner_id=?`).bind(id,owner).first(),
-  c.env.DB.prepare('SELECT id FROM wine_images WHERE wine_id=? AND owner_id=? ORDER BY rowid ASC').bind(id,owner).all<{id:string}>()
+  c.env.DB.prepare('SELECT id FROM wine_images WHERE wine_id=? AND owner_id=? ORDER BY rowid ASC').bind(id,owner).all<{id:string}>(),
+  c.env.DB.prepare('SELECT count(*) AS total FROM wine_shares WHERE wine_id=? AND owner_id=?').bind(id,owner).first<{total:number}>()
  ]);
- return row?c.json(mapWine(row as Record<string,unknown>,images.results.map(x=>x.id))):c.json({error:'Not found'},404)
+ return row?c.json({...mapWine(row as Record<string,unknown>,images.results.map(x=>x.id)),friendTagCount:Number(shares?.total??0)}):c.json({error:'Not found'},404)
 });
 
 app.post('/api/wines/reference-check',async c=>{
