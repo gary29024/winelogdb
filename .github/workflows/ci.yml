@@ -17,36 +17,109 @@ permissions:
   contents: read
 
 jobs:
+  scope:
+    name: Select checks
+    runs-on: ubuntu-latest
+    outputs:
+      quality: ${{ steps.select.outputs.quality }}
+      platform: ${{ steps.select.outputs.platform }}
+      unit: ${{ steps.select.outputs.unit }}
+      sourceReaders: ${{ steps.select.outputs.sourceReaders }}
+      chromium: ${{ steps.select.outputs.chromium }}
+      webkit: ${{ steps.select.outputs.webkit }}
+      specs: ${{ steps.select.outputs.specs }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Verify scope policy
+        run: node --test scripts/ci-scope.test.mjs
+      - name: Select PR impact or full checkpoint
+        id: select
+        shell: bash
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          EVENT_NAME: ${{ github.event_name }}
+        run: |
+          if [ "$EVENT_NAME" = pull_request ]; then
+            if ! git diff --no-renames --name-only -z "$BASE_SHA" HEAD > "$RUNNER_TEMP/changed-files"; then
+              : > "$RUNNER_TEMP/changed-files"
+            fi
+            node scripts/ci-scope.mjs --changed-file "$RUNNER_TEMP/changed-files"
+          else
+            node scripts/ci-scope.mjs --checkpoint
+          fi
+
   quality:
     name: Lint and build
+    needs: scope
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
+        if: needs.scope.outputs.quality == 'true'
       - uses: ./.github/actions/test-setup
+        if: needs.scope.outputs.quality == 'true'
       - name: Lint
+        if: needs.scope.outputs.quality == 'true'
         run: npm run lint
-      # build already runs tsc -b; do not repeat typecheck in another job.
       - name: TypeScript and production build
+        if: needs.scope.outputs.quality == 'true'
         run: npm run build
       - name: Apply local D1 migrations
+        if: needs.scope.outputs.platform == 'true'
         run: npm run db:migrate:local
       - name: Worker runtime smoke
+        if: needs.scope.outputs.platform == 'true'
         run: node scripts/worker-runtime-smoke.mjs
+      - name: Documentation change
+        if: needs.scope.outputs.quality == 'false'
+        run: echo 'No executable files changed.'
 
   unit:
     name: Unit and integration tests
+    needs: scope
+    if: needs.scope.outputs.unit != 'none'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: ./.github/actions/test-setup
-      # Vitest otherwise uses CPUs minus one: only one worker on a two-core
-      # hosted runner. Keep isolation and use both cores, with bounded memory.
-      - name: All unit, component and integration tests
+      - name: Full unit, component and integration suite
+        if: needs.scope.outputs.unit == 'full'
         run: npm test -- --maxWorkers=2 --reporter=default --reporter=json --outputFile=.cache/test-reports/vitest.json
+      - name: Affected tests and source-reading contracts
+        if: needs.scope.outputs.unit == 'changed'
+        shell: bash
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          SOURCE_READERS: ${{ needs.scope.outputs.sourceReaders }}
+        run: |
+          set -euo pipefail
+          selection="$RUNNER_TEMP/selected-tests.txt"
+          npx vitest list tests/unit --changed "$BASE_SHA" --filesOnly > "$selection"
+          if [ "$SOURCE_READERS" = true ]; then
+            node scripts/source-text-tests.mjs >> "$selection"
+          fi
+          sort -u "$selection" -o "$selection"
+          sed -i '/^$/d' "$selection"
+          if [ ! -s "$selection" ]; then
+            echo 'No affected tests resolved; running the full unit suite.'
+            npm test -- --maxWorkers=2 --reporter=default --reporter=json --outputFile=.cache/test-reports/vitest.json
+          else
+            echo "Running $(wc -l < "$selection") affected test files:"
+            cat "$selection"
+            mapfile -t files < "$selection"
+            npx vitest run --maxWorkers=2 --reporter=default --reporter=json --outputFile=.cache/test-reports/vitest.json "${files[@]}"
+          fi
       - name: Test inventory and timing report
-        run: node scripts/test-suite-report.mjs .cache/test-reports/vitest.json > .cache/test-reports/inventory.json
+        if: always()
+        run: |
+          if [ -f .cache/test-reports/vitest.json ]; then
+            node scripts/test-suite-report.mjs .cache/test-reports/vitest.json > .cache/test-reports/inventory.json
+          fi
       - name: Upload unit test reports
         if: always()
         uses: actions/upload-artifact@v4
@@ -57,46 +130,81 @@ jobs:
           include-hidden-files: true
 
   browser:
-    name: Browser (${{ matrix.browser }})
+    name: Browser (chromium)
+    needs: scope
+    if: needs.scope.outputs.chromium != 'none'
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    strategy:
-      fail-fast: false
-      matrix:
-        # PRs keep Chromium; main/manual/weekly runs also keep both iPhone
-        # projects. WebKit installation and execution cannot delay Chromium.
-        browser: ${{ fromJSON(github.event_name == 'pull_request' && '["chromium"]' || '["chromium","webkit"]') }}
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/test-setup
-      - name: Install browser and operating-system libraries
-        run: npx playwright install --with-deps ${{ matrix.browser }}
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
       - name: Chromium flows
-        if: matrix.browser == 'chromium'
+        if: needs.scope.outputs.chromium == 'full'
         run: npm run test:e2e
-      - name: Both iPhone layouts
-        if: matrix.browser == 'webkit'
+      - name: Affected Chromium flows
+        if: needs.scope.outputs.chromium == 'selected'
+        shell: bash
+        env:
+          SPECS: ${{ needs.scope.outputs.specs }}
+        run: |
+          mapfile -t specs < <(node -e 'JSON.parse(process.env.SPECS).forEach(spec => console.log(spec))')
+          test "${#specs[@]}" -gt 0
+          npm run test:e2e -- "${specs[@]}"
+      - name: Upload browser reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-reports-chromium
+          path: |
+            test-results/
+            playwright-report/
+          retention-days: 7
+
+  webkit:
+    name: Browser (webkit)
+    needs: scope
+    if: needs.scope.outputs.webkit == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/test-setup
+      - name: Install WebKit
+        run: npx playwright install --with-deps webkit
+      - name: Both iPhone projects
         run: npm run test:e2e:full -- --project="iPhone*"
       - name: Upload browser reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: browser-reports-${{ matrix.browser }}
+          name: browser-reports-webkit
           path: |
             test-results/
             playwright-report/
           retention-days: 7
 
   regression:
-    # Preserve the required check name while work runs independently above.
     name: Regression and browser tests
     if: always()
-    needs: [unit, browser]
+    needs: [scope, quality, unit, browser, webkit]
     runs-on: ubuntu-latest
     timeout-minutes: 1
     steps:
-      - name: Require every regression job to pass
+      - name: Require every selected check to pass
         env:
+          SCOPE_RESULT: ${{ needs.scope.result }}
+          QUALITY_RESULT: ${{ needs.quality.result }}
+          UNIT_MODE: ${{ needs.scope.outputs.unit }}
           UNIT_RESULT: ${{ needs.unit.result }}
-          BROWSER_RESULT: ${{ needs.browser.result }}
-        run: test "$UNIT_RESULT" = success && test "$BROWSER_RESULT" = success
+          CHROMIUM_MODE: ${{ needs.scope.outputs.chromium }}
+          CHROMIUM_RESULT: ${{ needs.browser.result }}
+          WEBKIT_MODE: ${{ needs.scope.outputs.webkit }}
+          WEBKIT_RESULT: ${{ needs.webkit.result }}
+        run: |
+          test "$SCOPE_RESULT" = success
+          test "$QUALITY_RESULT" = success
+          if [ "$UNIT_MODE" != none ]; then test "$UNIT_RESULT" = success; fi
+          if [ "$CHROMIUM_MODE" != none ]; then test "$CHROMIUM_RESULT" = success; fi
+          if [ "$WEBKIT_MODE" = true ]; then test "$WEBKIT_RESULT" = success; fi
