@@ -4,7 +4,7 @@ import { assertResearchInput,type ProviderAuthorization } from '../credits/provi
 import { deepSearchSchema,type DeepSearchResult } from '../db/schema';
 import { ensureProducerEntity } from '../producers/entities';
 import { parseStructuredJsonText } from '../producers/structuredJson';
-import { adoptFriendResearch,assembleDeepSearch,buildLegacyResearchTargets,buildResearchTargets,fieldsForScope,loadResearchCache,scopeIsComplete,scopeQualityWarnings,scopeRetryFeedback,seedResearchCache,splitDeepSearchResult,upsertResearchCache,type CachedResearch,type ResearchScope,type ResearchSource,type ResearchTarget } from './cache';
+import { adoptFriendResearch,assembleDeepSearch,buildResearchTargets,fieldsForScope,loadResearchCache,loadWineResearchCache,scopeIsComplete,scopeQualityWarnings,scopeRetryFeedback,seedResearchCache,seedResolvedResearch,splitDeepSearchResult,upsertResearchCache,type CachedResearch,type ResearchScope,type ResearchSource,type ResearchTarget } from './cache';
 import { orderModelsByGrounding,recordGroundingObservation } from './modelHealth';
 import { createResearchBatchJob,finishResearchBatchJob,recordResearchSearchQueries,getResearchBatchJob,touchResearchBatchJob } from './batchJobStore';
 import { cancelGeminiBatch } from './cancelResearch';
@@ -74,18 +74,16 @@ async function seedFromLegacy(db:D1Database,owner:string,wine:WineRow,targets:Re
   const entries=splitDeepSearchResult(legacy.data,targets).filter(entry=>!cache.has(entry.target.scope));await Promise.all(entries.map(entry=>seedResearchCache(db,owner,entry)));return entries.length?loadResearchCache(db,owner,targets):cache;
 }
 
-async function bridgePriorCaches(db:D1Database,owner:string,wine:WineRow,stableTargets:ResearchTarget[],cache:Map<ResearchScope,CachedResearch>){
-  if(cache.size===stableTargets.length)return cache;
-  const shapes=[{producer:wine.producer,producerId:wine.producer_id,cuveeId:wine.cuvee_id,wineName:wine.wine_name,vintage:wine.vintage,country:wine.country,region:wine.region,appellation:wine.appellation},
-    {producer:wine.producer,producerId:wine.producer_id,wineName:wine.wine_name,vintage:wine.vintage,country:wine.country,region:wine.region,appellation:wine.appellation},
-    {producer:wine.producer,wineName:wine.wine_name,vintage:wine.vintage,country:wine.country,region:wine.region,appellation:wine.appellation}];
-  // Two axes of drift, not one. The identity shape changed when producer and
-  // cuvee entities arrived, and the key's normalizer changed when non-Latin
-  // names stopped collapsing to the empty string. A wine can have been cached
-  // under either, so both are tried before anything is re-bought.
-  const priorTargetSets=[...shapes.slice(1).map(buildResearchTargets),...shapes.map(buildLegacyResearchTargets)];
-  const additions:CachedResearch[]=[];for(const oldTargets of priorTargetSets){const oldCache=await loadResearchCache(db,owner,oldTargets);for(const target of stableTargets){if(cache.has(target.scope)||additions.some(x=>x.target.scope===target.scope))continue;const old=oldCache.get(target.scope);if(old)additions.push({...old,target})}}
-  if(additions.length){await Promise.all(additions.map(entry=>seedResearchCache(db,owner,entry)));return loadResearchCache(db,owner,stableTargets)}return cache;
+async function bridgePriorCaches(db:D1Database,owner:string,wineId:string,stableTargets:ResearchTarget[],cache:Map<ResearchScope,CachedResearch>){
+  const missing=stableTargets.filter(target=>!cache.has(target.scope));
+  if(!missing.length)return cache;
+  const snapshot=await db.prepare('SELECT deep_search_json FROM wines WHERE owner_id=? AND id=?').bind(owner,wineId).first<ResearchRow>();
+  const recovered=await loadWineResearchCache(db,owner,missing,false,snapshot?.deep_search_json);
+  if(!recovered.size)return cache;
+  // Materialize recovered keys before refresh deletes selected current scopes.
+  // Later execution reads stay strict, so old rows cannot satisfy a refresh.
+  await seedResolvedResearch(db,owner,recovered);
+  return loadResearchCache(db,owner,stableTargets);
 }
 
 function cachedContext(cache:Map<ResearchScope,CachedResearch>){
@@ -103,7 +101,7 @@ async function loadWine(db:D1Database,owner:string,wineId:string,credit?:Provide
 
 async function prepare(env:Env,owner:string,wineId:string,refresh:'none'|'vintage'|'all'){
   const wine=await loadWine(env.DB,owner,wineId,env.CREDIT_CONTEXT);if(!wine)throw new Error('Wine not found');const targets=researchTargets(wine);await seedProducerProfileResearch(env.DB,owner,wine,targets);
-  let cache=await loadResearchCache(env.DB,owner,targets);cache=await bridgePriorCaches(env.DB,owner,wine,targets,cache);cache=await seedFromLegacy(env.DB,owner,wine,targets,cache);
+  let cache=await loadResearchCache(env.DB,owner,targets);cache=await bridgePriorCaches(env.DB,owner,wineId,targets,cache);cache=await seedFromLegacy(env.DB,owner,wine,targets,cache);
   const force=new Set<ResearchScope>(refresh==='all'?targets.map(x=>x.scope):refresh==='vintage'?(['vintage_context','wine_vintage'] as ResearchScope[]):[]);
   if(force.size){for(const target of targets.filter(x=>force.has(x.scope))){await env.DB.prepare('DELETE FROM research_cache WHERE owner_id=? AND scope=? AND cache_key=?').bind(owner,target.scope,target.cacheKey).run();cache.delete(target.scope)}}
   if(env.CREDIT_RESEARCH_SCOPES){const reusable=await loadResearchCache(env.DB,owner,targets,true);for(const target of targets)if(!force.has(target.scope)&&!cache.has(target.scope)&&reusable.has(target.scope))cache.set(target.scope,reusable.get(target.scope)!)}

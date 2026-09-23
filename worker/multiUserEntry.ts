@@ -9,7 +9,7 @@ import { memberActionForRequest,memberAiAccess,memberAiActionAccess,reserveMembe
 import { providerAuthorization } from './multiUser/provider';
 import { claimDelivery,durableQueue,finishDelivery,flushOutbox,maintainJobs,markUncertain,type JobEnvelope } from './multiUser/jobs';
 import { meteredBucket } from './multiUser/storage';
-import { adoptFriendResearch,assembleDeepSearch,loadResearchCache } from '../src/lib/research/cache';
+import { adoptFriendResearch,assembleDeepSearch,loadWineResearchCache } from '../src/lib/research/cache';
 import type { AiRateEnv } from '../src/lib/usage/rates';
 import { processRolloutJob,recoverRollouts,rolloutRoute,type RolloutQueueJob } from './multiUser/rollout';
 import { LWIN_AI_LEASE_SECONDS } from './multiUser/lwinRepair';
@@ -109,11 +109,11 @@ export default {
     // Only the columns that build a cache key. SELECT * pulled deep_search_json
     // - a multi-kilobyte snapshot - on every wine view, to read nine fields.
     const row=await env.DB.prepare('SELECT producer,producer_id,cuvee_id,wine_name,vintage,country,region,appellation,wine_style FROM wines WHERE owner_id=? AND id=?').bind(member.id,wineMatch[1]).first<Record<string,unknown>>();
-    if(row){const targets=wineTargets(row),cache=await loadResearchCache(env.DB,member.id,targets,true);
+    if(row){const data=await response.json() as Record<string,unknown>,targets=wineTargets(row),cache=await loadWineResearchCache(env.DB,member.id,targets,true,data.deepSearch);
      // Showing a friend's research is what makes it the reader's own, so the
      // next view is an indexed lookup and unfriending cannot take it back.
      ctx.waitUntil(adoptFriendResearch(env.DB,member.id,cache));
-     const data=await response.json() as Record<string,unknown>;return json({...data,deepSearch:cache.size?assembleDeepSearch(cache,targets):null})}
+     return json({...data,deepSearch:cache.size?assembleDeepSearch(cache,targets):null})}
    }
    if(request.method!=='GET')ctx.waitUntil(flushOutbox(env.DB,env.RESEARCH_QUEUE));
    return revalidated(response);

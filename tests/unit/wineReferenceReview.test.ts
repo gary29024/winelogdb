@@ -7,6 +7,7 @@ import { lwinReferenceIdentity,referenceShardId } from '../../src/lib/wine/refer
 import { createSession } from '../../src/lib/auth/session';
 import app from '../../worker/index';
 import { ensureWineIdentity } from '../../src/lib/wine/identity';
+import { loadResearchCache,upsertResearchCache,wineRowResearchTargets } from '../../src/lib/research/cache';
 import { ensureAllCuveeLinksForProducer } from '../../src/lib/cuvees/entities';
 import { referenceMatchForProduct } from '../../src/lib/wine/referenceIdentity';
 import { resolveStoredLwin,lwinEnrichmentStatement,type StoredLwinWine } from '../../worker/lwinEnrichment';
@@ -55,6 +56,29 @@ describe('LWIN review repair and queue',()=>{
   await refresh();await refresh();
   expect(row()).toMatchObject({producer:'The Hairy Arm',wine_name:'Heathcote Nebbiolo',lwin7:'2409267',identity_match_status:'matched',reference_suggestions_json:null});
   expect((await queue()).total).toBe(0);
+ });
+ it('preserves owned research when approving a producer rename relinks entities',async()=>{
+  const field='producer';
+  const {database,request,row}=await hairyArm();
+  await ensureWineIdentity(database.db,'owner','w1');
+  const target=wineRowResearchTargets(row()).find(target=>target.scope==='terroir')!;
+  await upsertResearchCache(database.db,'owner',{target,payload:{terroir:'The vineyard has stony soils.'},sources:[{title:'Estate',url:'https://example.com/estate'}],model:'saved-model',researchedAt:'2026-09-13T00:00:00.000Z'});
+  expect((await request('w1/reference-suggestion',{field,action:'apply'},'PUT')).status).toBe(200);
+  const targets=wineRowResearchTargets(row()),next=targets.find(target=>target.scope==='terroir')!;
+  expect(next.cacheKey).not.toBe(target.cacheKey);
+  expect((await loadResearchCache(database.db,'owner',targets)).get('terroir')).toMatchObject({target:next,payload:{terroir:'The vineyard has stony soils.'},model:'saved-model',researchedAt:'2026-09-13T00:00:00.000Z'});
+  expect((await loadResearchCache(database.db,'owner',[target])).size).toBe(1);
+ });
+ it('rejects a rename if the vintage changes while saved research is being read',async()=>{
+  const {database,request,row}=await hairyArm();
+  await ensureWineIdentity(database.db,'owner','w1');
+  const original=row().producer,prepare=database.db.prepare.bind(database.db);
+  database.db.prepare=(sql:string)=>{
+   if(sql.includes('FROM research_cache'))database.sql.exec("UPDATE wines SET vintage=2021,updated_at='changed-during-review' WHERE id='w1'");
+   return prepare(sql);
+  };
+  expect((await request('w1/reference-suggestion',{field:'producer',action:'apply'},'PUT')).status).toBe(409);
+  expect(row()).toMatchObject({producer:original,vintage:2021});
  });
  it.each([false,true])('repairs legacy reviewed-name conflicts only with compatible clues (incompatible: %s)',async incompatible=>{
   const {database,row,request}=await hairyArm();
@@ -130,9 +154,12 @@ describe('LWIN review repair and queue',()=>{
   const original='Grand Cru Grand Vintage',suggested='Grand Vintage Brut Grand Cru';
   database.sql.prepare("UPDATE wines SET producer='Varnier-Fannière',wine_name=?,recognized_wine_name=?,vintage=2015,region='Champagne',appellation='Avize AOC',wine_style='sparkling',lwin7='1560279',lwin11='15602792015',identity_match_status='manual',reference_suggestions_json=?")
    .run(original,original,JSON.stringify([{field:'wineName',label:'Wine name',current:original,suggested}]));
+  database.sql.prepare("UPDATE wines SET lwin_reference_json=? WHERE id='w1'").run(JSON.stringify({source:'lwin',version:'test',lwin7:'1560279',producer:'Varnier-Fannière',wineName:suggested,country:'France',region:'Champagne',subRegion:null,site:null,parcel:null,designation:null,classification:null,colour:'White',productType:'Wine',productSubtype:'Sparkling',vintageConfig:'sequential',firstVintage:null,finalVintage:null,sourceUpdatedAt:null,method:'manual',confidence:null,filled:{},conflicts:[]}));
   await ensureWineIdentity(database.db,'owner','w1');
   const before=database.sql.prepare('SELECT * FROM wines WHERE id=\'w1\'').get()!;
   expect(before.cuvee_id).toBeTruthy();
+  const researchTarget=wineRowResearchTargets(before).find(target=>target.scope==='terroir')!;
+  await upsertResearchCache(database.db,'owner',{target:researchTarget,payload:{terroir:'Chalk soils in the vineyard.'},sources:[{title:'Estate',url:'https://example.com/estate'}],model:'saved-model',researchedAt:'2026-09-13T00:00:00.000Z'});
   const response=await request('w1/reference-suggestion',{field:'wineName',action},'PUT');
   expect(response.status).toBe(200);
   const expected=action==='apply'?suggested:original;
@@ -142,6 +169,8 @@ describe('LWIN review repair and queue',()=>{
    expect(database.sql.prepare('SELECT canonical_name FROM cuvees WHERE id=?').get(wine.cuvee_id)!.canonical_name).toBe(expected);
   };
   check();
+  const savedWine=database.sql.prepare("SELECT * FROM wines WHERE id='w1'").get()!;
+  expect((await loadResearchCache(database.db,'owner',wineRowResearchTargets(savedWine))).get('terroir')?.payload.terroir).toBe('Chalk soils in the vineyard.');
   await ensureWineIdentity(database.db,'owner','w1');
   await ensureAllCuveeLinksForProducer(database.db,'owner',String(before.producer_id));
   check();expect((await queue()).total).toBe(0);

@@ -14,11 +14,11 @@ type ProducerRow={
    */
   profile_researched_at?:string|null;created_at:string;updated_at:string
 };
-type CacheRow={scope:ResearchScope;cache_key:string;subject_json:string;result_json:string;sources_json:string;model:string;researched_at:string;created_at:string;updated_at:string};
+type CacheRow={scope:ResearchScope;cache_key:string;subject_json:string;result_json:string;sources_json:string;provenance_json:string;source_user_id:string|null;model:string;researched_at:string;created_at:string;updated_at:string};
 type AliasRow={normalized_alias:string;display_alias:string};
 type HistoryRow={origin_producer_id:string;origin_name:string;research_type:string;payload_json:string;sources_json:string;model:string|null;researched_at:string|null};
 type MergeRow={id:string;destination_producer_id:string;source_producer_id:string;source_canonical_name:string;source_match_key:string;destination_snapshot_json:string;source_snapshot_json:string;source_aliases_json:string;source_wine_ids_json:string;merged_at:string;undone_at:string|null};
-type ArchivedCache={subjectJson:string;resultJson:string;createdAt:string;updatedAt:string};
+type ArchivedCache={subjectJson:string;resultJson:string;provenanceJson?:string;sourceUserId?:string|null;createdAt:string;updatedAt:string};
 type ArchiveInput={mergeId:string;originId:string;originName:string;type:string;payload:string;sources:string;model:string|null;researchedAt:string|null};
 
 const parseJson=<T>(raw:unknown,fallback:T):T=>{try{return JSON.parse(String(raw)) as T}catch{return fallback}};
@@ -53,7 +53,7 @@ function archiveStatement(db:D1Database,owner:string,destinationId:string,archiv
 
 function producerHasResearch(row:ProducerRow){return Boolean(row.researched_at&&row.profile.trim())}
 const producerSnapshot=(row:ProducerRow)=>JSON.stringify(row);
-const cacheSnapshot=(row:CacheRow)=>JSON.stringify({subjectJson:row.subject_json,resultJson:row.result_json,createdAt:row.created_at,updatedAt:row.updated_at} satisfies ArchivedCache);
+const cacheSnapshot=(row:CacheRow)=>JSON.stringify({subjectJson:row.subject_json,resultJson:row.result_json,provenanceJson:row.provenance_json,sourceUserId:row.source_user_id,createdAt:row.created_at,updatedAt:row.updated_at} satisfies ArchivedCache);
 
 function targetFor(scope:ResearchScope,producer:ProducerRow,subjectJson:string){
   const subject=parseJson<Record<string,unknown>>(subjectJson,{});
@@ -62,9 +62,9 @@ function targetFor(scope:ResearchScope,producer:ProducerRow,subjectJson:string){
 
 function cacheUpsert(db:D1Database,owner:string,target:ReturnType<typeof buildResearchTargets>[number],producer:ProducerRow,archive:HistoryRow,stored:ArchivedCache,now:string){
   const subject={...target.subject,producer:producer.canonical_name,producerId:producer.id};
-  return db.prepare(`INSERT INTO research_cache(owner_id,scope,cache_key,subject_json,result_json,sources_json,model,researched_at,created_at,updated_at)
-    VALUES(?,?,?,?,?,?,?,?,?,?) ON CONFLICT(owner_id,scope,cache_key) DO UPDATE SET subject_json=excluded.subject_json,result_json=excluded.result_json,sources_json=excluded.sources_json,model=excluded.model,researched_at=excluded.researched_at,updated_at=excluded.updated_at`)
-    .bind(owner,target.scope,target.cacheKey,JSON.stringify(subject),stored.resultJson,archive.sources_json,archive.model??'unknown',archive.researched_at??now,stored.createdAt||now,now);
+  return db.prepare(`INSERT INTO research_cache(owner_id,scope,cache_key,subject_json,result_json,sources_json,provenance_json,source_user_id,model,researched_at,created_at,updated_at)
+    VALUES(?,?,?,?,?,?,?,?,?,?,?,?) ON CONFLICT(owner_id,scope,cache_key) DO UPDATE SET subject_json=excluded.subject_json,result_json=excluded.result_json,sources_json=excluded.sources_json,provenance_json=excluded.provenance_json,source_user_id=excluded.source_user_id,model=excluded.model,researched_at=excluded.researched_at,updated_at=excluded.updated_at`)
+    .bind(owner,target.scope,target.cacheKey,JSON.stringify(subject),stored.resultJson,archive.sources_json,stored.provenanceJson??'{}',stored.sourceUserId??null,archive.model??'unknown',archive.researched_at??now,stored.createdAt||now,now);
 }
 
 export async function mergeProducerEntities(db:D1Database,owner:string,destinationId:string,sourceId:string){
@@ -79,7 +79,7 @@ export async function mergeProducerEntities(db:D1Database,owner:string,destinati
     db.prepare('SELECT normalized_alias,display_alias FROM producer_aliases WHERE owner_id=? AND producer_id=?').bind(owner,destinationId).all<AliasRow>(),
     db.prepare('SELECT normalized_alias,display_alias FROM producer_aliases WHERE owner_id=? AND producer_id=?').bind(owner,sourceId).all<AliasRow>(),
     db.prepare('SELECT id FROM wines WHERE owner_id=? AND producer_id=?').bind(owner,sourceId).all<{id:string}>(),
-    db.prepare(`SELECT scope,cache_key,subject_json,result_json,sources_json,model,researched_at,created_at,updated_at
+    db.prepare(`SELECT scope,cache_key,subject_json,result_json,sources_json,provenance_json,source_user_id,model,researched_at,created_at,updated_at
       FROM research_cache WHERE owner_id=? AND scope IN ('producer','terroir','wine_vintage')`).bind(owner).all<CacheRow>()
   ]);
 
@@ -132,8 +132,8 @@ export async function mergeProducerEntities(db:D1Database,owner:string,destinati
     if(active){
       const sources=mergeSources(...group.rows.map(row=>parseJson<Source[]>(row.sources_json,[])));
       const subject={...group.target.subject,producer:destination.canonical_name,producerId:destinationId};
-      statements.push(db.prepare(`INSERT INTO research_cache(owner_id,scope,cache_key,subject_json,result_json,sources_json,model,researched_at,created_at,updated_at)
-        VALUES(?,?,?,?,?,?,?,?,?,?) ON CONFLICT(owner_id,scope,cache_key) DO UPDATE SET subject_json=excluded.subject_json,result_json=excluded.result_json,sources_json=excluded.sources_json,model=excluded.model,researched_at=excluded.researched_at,updated_at=excluded.updated_at`).bind(owner,group.target.scope,group.target.cacheKey,JSON.stringify(subject),active.result_json,JSON.stringify(sources),active.model,active.researched_at,active.created_at||now,now));
+      statements.push(db.prepare(`INSERT INTO research_cache(owner_id,scope,cache_key,subject_json,result_json,sources_json,provenance_json,source_user_id,model,researched_at,created_at,updated_at)
+        VALUES(?,?,?,?,?,?,?,?,?,?,?,?) ON CONFLICT(owner_id,scope,cache_key) DO UPDATE SET subject_json=excluded.subject_json,result_json=excluded.result_json,sources_json=excluded.sources_json,provenance_json=excluded.provenance_json,source_user_id=excluded.source_user_id,model=excluded.model,researched_at=excluded.researched_at,updated_at=excluded.updated_at`).bind(owner,group.target.scope,group.target.cacheKey,JSON.stringify(subject),active.result_json,JSON.stringify(sources),active.provenance_json??'{}',active.source_user_id??null,active.model,active.researched_at,active.created_at||now,now));
     }
     for(const row of group.rows){if(row.cache_key!==group.target.cacheKey)statements.push(db.prepare('DELETE FROM research_cache WHERE owner_id=? AND scope=? AND cache_key=?').bind(owner,row.scope,row.cache_key))}
   }
@@ -169,7 +169,7 @@ export async function unlinkProducerMerge(db:D1Database,owner:string,destination
     db.prepare('SELECT id FROM producers WHERE owner_id=? AND id=?').bind(owner,source.id).first<{id:string}>(),
     db.prepare('SELECT id FROM producers WHERE owner_id=? AND match_key=? AND id<>? LIMIT 1').bind(owner,source.match_key,source.id).first<{id:string}>(),
     db.prepare('SELECT origin_producer_id,origin_name,research_type,payload_json,sources_json,model,researched_at FROM producer_research_history WHERE owner_id=? AND merge_id=?').bind(owner,mergeId).all<HistoryRow>(),
-    db.prepare(`SELECT scope,cache_key,subject_json,result_json,sources_json,model,researched_at,created_at,updated_at FROM research_cache WHERE owner_id=? AND scope IN ('producer','terroir','wine_vintage')`).bind(owner).all<CacheRow>()
+    db.prepare(`SELECT scope,cache_key,subject_json,result_json,sources_json,provenance_json,source_user_id,model,researched_at,created_at,updated_at FROM research_cache WHERE owner_id=? AND scope IN ('producer','terroir','wine_vintage')`).bind(owner).all<CacheRow>()
   ]);
   if(!destination)throw new Error('Canonical producer no longer exists');
   if(currentSource||matchConflict)throw new Error('The original producer identity now conflicts with an existing producer; resolve that producer first');
