@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { File as NativeFile,Blob as NativeBlob } from 'node:buffer';
-import { FormData as NativeFormData } from 'undici';
+import { FormData as NativeFormData,Request as NativeRequest,Response as NativeResponse,Headers as NativeHeaders } from 'undici';
 import { afterEach,beforeEach,expect,it,vi } from 'vitest';
 import { bootstrapAccount,clearSession } from '../../src/lib/auth/client';
 import { getChampagneExtraction,startChampagneExtraction } from '../../src/features/wines/champagneExtractionApi';
@@ -8,7 +8,9 @@ import { prepareRecognitionImageWithinBytes } from '../../src/features/uploads/p
 
 vi.mock('../../src/features/uploads/prepareImage',()=>({prepareRecognitionImageWithinBytes:vi.fn(async(file:File)=>({file}))}));
 const run={requestId:'run-1',status:'queued',details:null,error:null,imageIds:['front','back']};
-beforeEach(()=>{vi.stubGlobal('File',NativeFile);vi.stubGlobal('Blob',NativeBlob);vi.stubGlobal('FormData',NativeFormData)});
+// Use one fetch implementation: Node's bundled Request can reject another
+// Undici version's FormData and stringify it instead of encoding multipart.
+beforeEach(()=>{vi.stubGlobal('File',NativeFile);vi.stubGlobal('Blob',NativeBlob);vi.stubGlobal('FormData',NativeFormData);vi.stubGlobal('Request',NativeRequest);vi.stubGlobal('Response',NativeResponse);vi.stubGlobal('Headers',NativeHeaders)});
 afterEach(()=>{clearSession();vi.useRealTimers();vi.unstubAllGlobals();vi.clearAllMocks();localStorage.clear();sessionStorage.clear()});
 
 it('quotes byte-identical prepared photos and retries with the same operation key',async()=>{
