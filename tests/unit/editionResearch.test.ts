@@ -1,6 +1,8 @@
-import { describe,expect,it } from 'vitest';
+import { afterEach,describe,expect,it,vi } from 'vitest';
 import { buildResearchTargets,loadResearchCache,loadWineResearchCache,wineRowResearchTargets,type ResearchScope,type ResearchTarget } from '../../src/lib/research/cache';
-import { releaseResearchContext } from '../../src/lib/research/batchWineResearch';
+import { releaseResearchContext,startWineBatchResearch } from '../../src/lib/research/batchWineResearch';
+import { migratedSqliteD1 } from './support/sqliteD1';
+import { canReadShared,sharedWineResearch } from '../../worker/multiUser/social';
 import { researchInputFingerprint } from '../../src/lib/credits/provider';
 import { plannedUnits } from '../../worker/multiUser/credits';
 import { realD1 } from './support/realD1';
@@ -88,9 +90,65 @@ describe('what the research is told about a release',()=>{
 });
 
 describe('the credit fingerprint',()=>{
+  it('changes when the base year or disgorgement changes, so a queued run cannot file under another release',async()=>{
+    const row={producer:'Krug',wine_name:'Grande Cuvée',vintage:null,country:'France',region:'Champagne',appellation:'Champagne',wine_style:'sparkling',grapes_json:'[]',grape_blend_json:'[]',release_designation:'171ème Édition'};
+    const at=(details:Record<string,unknown>)=>researchInputFingerprint('wine',{...row,sparkling_details_json:JSON.stringify(details)});
+    expect(await at({baseVintage:2015})).not.toBe(await at({baseVintage:2016}));
+    expect(await at({disgorgement:'Winter 2023'})).not.toBe(await at({disgorgement:'Spring 2024'}));
+    // Dosage and the rest do not choose the research, so editing them does not void a quote.
+    expect(await at({baseVintage:2015,dosageGPerL:6})).toBe(await at({baseVintage:2015,dosageGPerL:3}));
+  });
+
   it('is unchanged for a wine with no edition, so queued runs survive the deploy',async()=>{
     const row={producer:'Krug',wine_name:'Grande Cuvée',vintage:null,country:'France',region:'Champagne',appellation:'Champagne',wine_style:'sparkling',grapes_json:'[]',grape_blend_json:'[]'};
     expect(await researchInputFingerprint('wine',{...row,release_designation:null})).toBe(await researchInputFingerprint('wine',row));
     expect(await researchInputFingerprint('wine',{...row,release_designation:'171ème Édition'})).not.toBe(await researchInputFingerprint('wine',row));
+  });
+});
+
+describe('another bottle’s snapshot',()=>{
+  afterEach(()=>{vi.unstubAllGlobals()});
+  const snapshot=JSON.stringify({summary:'SNAPSHOT_169 Grande Cuvée 169ème Édition, built on 2013.',expectedProfile:'Brioche and citrus.',vintageQuality:'',producerDetails:'Krug is a Reims house founded in 1843, known for barrel fermentation and deep reserve-wine libraries.',producerWinemakingPractices:'The house ferments every parcel separately in small used oak casks and keeps an extensive library of reserve wines.',winemakingTechniques:'The blend composition of this release could not be verified.',terroir:'Chalk soils across the Champagne region, drawn from many villages.',drinkingWindow:'Drinks well on release and can age.',sources:[{title:'Krug',url:'https://www.krug.com/'}],model:'legacy',researchedAt:'2026-09-01T00:00:00.000Z'});
+  function cellar(otherEdition:string|null){
+    const database=realD1();
+    const insert=database.sql.prepare(`INSERT INTO wines(id,owner_id,producer,wine_name,vintage,country,region,appellation,wine_style,release_designation,deep_search_json,deep_search_updated_at,created_at,updated_at) VALUES(?,'owner','Krug','Grande Cuvée',NULL,'France','Champagne','Champagne','sparkling',?,?,?,'now','now')`);
+    insert.run('other',otherEdition,snapshot,'2026-09-01');
+    insert.run('mine','171ème Édition',null,null);
+    vi.stubGlobal('fetch',vi.fn(async()=>{throw new Error('provider blocked in test')}));
+    return database;
+  }
+  const exactFor=(database:ReturnType<typeof realD1>)=>database.sql.prepare("SELECT result_json FROM research_cache WHERE owner_id='owner' AND scope='wine_vintage'").all() as Array<{result_json:string}>;
+
+  it('never fills a different edition’s exact-wine research',async()=>{
+    const database=cellar('169ème Édition');
+    const result=await startWineBatchResearch({DB:database.db,RESEARCH_QUEUE:{send:vi.fn()} as unknown as Queue<unknown>},'owner','mine','run','none');
+    expect(result).not.toMatchObject({cached:true});
+    expect(exactFor(database).some(row=>row.result_json.includes('SNAPSHOT_169'))).toBe(false);
+  });
+
+  it('still seeds a release from generic research recorded with no edition',async()=>{
+    const database=cellar(null);
+    await startWineBatchResearch({DB:database.db,RESEARCH_QUEUE:{send:vi.fn()} as unknown as Queue<unknown>},'owner','mine','run','none');
+    expect(exactFor(database).some(row=>row.result_json.includes('SNAPSHOT_169'))).toBe(true);
+  });
+});
+
+describe('a recipient’s generic research on a shared edition',()=>{
+  it('is on the shared page as well as free in the quote',async()=>{
+    const {db,sqlite}=migratedSqliteD1();
+    try{
+      sqlite.exec(`INSERT INTO app_users(id,email,display_name,role) VALUES('member','m@example.test','Member','member');
+        INSERT INTO friendships(user_id,friend_id) VALUES('member','owner'),('owner','member');
+        INSERT INTO wines(id,owner_id,producer,wine_name,vintage,country,region,appellation,wine_style,release_designation,created_at,updated_at)
+          VALUES('shared','owner','Krug','Grande Cuvée',NULL,'France','Champagne','Champagne','sparkling','171ème Édition','now','now');
+        INSERT INTO wine_shares(wine_id,owner_id,recipient_id) VALUES('shared','owner','member');`);
+      // The member researched the cuvée generically before editions were keyed.
+      const generic=buildResearchTargets({producer:'Krug',wineName:'Grande Cuvée',vintage:null,country:'France',region:'Champagne',appellation:'Champagne',wineStyle:'sparkling'}).find(target=>target.scope==='wine_vintage')!;
+      sqlite.prepare(`INSERT INTO research_cache(owner_id,scope,cache_key,subject_json,result_json,sources_json,provenance_json,model,researched_at,source_user_id,created_at,updated_at) VALUES('member','wine_vintage',?,?,?,?,'{}','m',?,NULL,?,?)`)
+        .run(generic.cacheKey,JSON.stringify(generic.subject),JSON.stringify(exactPayload),JSON.stringify([{title:'Krug',url:'https://www.krug.com/'}]),researchedAt,researchedAt,researchedAt);
+      const request=new Request('https://wine.example/api/wines/shared/deep-search',{method:'POST',headers:{'content-type':'application/json'},body:'{"refresh":"none"}'});
+      expect((await plannedUnits(request,db,'member')).map(unit=>unit.scope)).not.toContain('wine_vintage');
+      expect((await sharedWineResearch(db,'member',(await canReadShared(db,'member','shared'))!))?.summary).toBe(exactPayload.summary);
+    }finally{sqlite.close()}
   });
 });

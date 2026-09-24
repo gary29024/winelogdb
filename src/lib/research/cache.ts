@@ -85,6 +85,17 @@ export const wineRowResearchTargets=(row:Record<string,unknown>)=>{
   return buildResearchTargets({producer:row.producer,producerId:row.producer_id,cuveeId:row.cuvee_id,wineName:row.wine_name,vintage:row.vintage,country:row.country,region:row.region,appellation:row.appellation,wineStyle:row.wine_style,
     releaseDesignation:row.release_designation,baseVintage:sparkling.baseVintage,disgorgement:sparkling.disgorgement});
 };
+/**
+ * The release a wine row identifies, exactly as its research key sees it, or
+ * null for a vintage wine or a non-vintage wine with no release recorded.
+ * Snapshot recovery and the credit fingerprint compare releases with this, so
+ * neither can treat one edition as another.
+ */
+export function researchEditionOfRow(row:Record<string,unknown>){
+  const sparkling=parseJson<Record<string,unknown>>(row.sparkling_details_json,{})??{};
+  const vintage=typeof row.vintage==='number'&&Number.isFinite(row.vintage)?row.vintage:null;
+  return editionOf({releaseDesignation:row.release_designation,baseVintage:sparkling.baseVintage,disgorgement:sparkling.disgorgement},vintage);
+}
 /** Select these alongside a wines row aliased `w` so its research targets know the release. */
 export const RESEARCH_EDITION_COLUMNS="w.release_designation,(SELECT sd.details_json FROM wine_sparkling_details sd WHERE sd.owner_id=w.owner_id AND sd.wine_id=w.id) AS sparkling_details_json";
 /** The same targets keyed the way they were before non-Latin names stopped

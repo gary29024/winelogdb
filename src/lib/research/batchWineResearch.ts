@@ -4,7 +4,7 @@ import { assertResearchInput,type ProviderAuthorization } from '../credits/provi
 import { deepSearchSchema,type DeepSearchResult } from '../db/schema';
 import { ensureProducerEntity } from '../producers/entities';
 import { parseStructuredJsonText } from '../producers/structuredJson';
-import { adoptFriendResearch,assembleDeepSearch,wineRowResearchTargets,fieldsForScope,loadResearchCache,loadWineResearchCache,scopeIsComplete,scopeQualityWarnings,scopeRetryFeedback,seedResearchCache,seedResolvedResearch,splitDeepSearchResult,upsertResearchCache,type CachedResearch,type ResearchScope,type ResearchSource,type ResearchTarget } from './cache';
+import { adoptFriendResearch,assembleDeepSearch,RESEARCH_EDITION_COLUMNS,researchEditionOfRow,wineRowResearchTargets,fieldsForScope,loadResearchCache,loadWineResearchCache,scopeIsComplete,scopeQualityWarnings,scopeRetryFeedback,seedResearchCache,seedResolvedResearch,splitDeepSearchResult,upsertResearchCache,type CachedResearch,type ResearchScope,type ResearchSource,type ResearchTarget } from './cache';
 import { orderModelsByGrounding,recordGroundingObservation } from './modelHealth';
 import { createResearchBatchJob,finishResearchBatchJob,recordResearchSearchQueries,getResearchBatchJob,touchResearchBatchJob } from './batchJobStore';
 import { cancelGeminiBatch } from './cancelResearch';
@@ -95,7 +95,13 @@ async function seedProducerProfileResearch(db:D1Database,owner:string,wine:WineR
 
 async function seedFromLegacy(db:D1Database,owner:string,wine:WineRow,targets:ResearchTarget[],cache:Map<ResearchScope,CachedResearch>){
   if(cache.size===targets.length)return cache;
-  const row=await db.prepare(`SELECT deep_search_json FROM wines WHERE owner_id=? AND producer=? AND wine_name=? AND coalesce(vintage,-1)=coalesce(?,-1) AND coalesce(appellation,'')=coalesce(?,'') AND deep_search_json IS NOT NULL ORDER BY deep_search_updated_at DESC LIMIT 1`).bind(owner,wine.producer,wine.wine_name,wine.vintage,wine.appellation).first<ResearchRow>();
+  const {results}=await db.prepare(`SELECT w.deep_search_json,w.vintage,${RESEARCH_EDITION_COLUMNS} FROM wines w WHERE w.owner_id=? AND w.producer=? AND w.wine_name=? AND coalesce(w.vintage,-1)=coalesce(?,-1) AND coalesce(w.appellation,'')=coalesce(?,'') AND w.deep_search_json IS NOT NULL ORDER BY w.deep_search_updated_at DESC LIMIT 20`).bind(owner,wine.producer,wine.wine_name,wine.vintage,wine.appellation).all<ResearchRow&Record<string,unknown>>();
+  // Another bottle's snapshot only stands in for the same release. A snapshot
+  // with no release recorded is the generic research every edition started
+  // from, and may seed one; a known different edition never may, and an
+  // edition's snapshot never becomes the generic cuvée's.
+  const mine=JSON.stringify(researchEditionOfRow(wine));
+  const row=(results??[]).find(candidate=>{const theirs=researchEditionOfRow(candidate);return JSON.stringify(theirs)===mine||(theirs===null&&mine!=='null')});
   if(!row?.deep_search_json)return cache;const legacy=deepSearchSchema.safeParse(parseJson(row.deep_search_json,null));if(!legacy.success)return cache;
   const entries=splitDeepSearchResult(legacy.data,targets).filter(entry=>!cache.has(entry.target.scope));await Promise.all(entries.map(entry=>seedResearchCache(db,owner,entry)));return entries.length?loadResearchCache(db,owner,targets):cache;
 }

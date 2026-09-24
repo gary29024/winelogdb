@@ -1,4 +1,4 @@
-import { adoptFriendResearch,loadResearchCache,loadWineResearchCache,RESEARCH_EDITION_COLUMNS,wineRowResearchTargets,type CachedResearch,type ResearchScope,type ResearchTarget } from './cache';
+import { adoptFriendResearch,loadWineResearchCache,RESEARCH_EDITION_COLUMNS,wineRowResearchTargets,type CachedResearch,type ResearchScope,type ResearchTarget } from './cache';
 import { resolveExistingProducer } from '../producers/entities';
 import { resolveExistingCuvee } from '../cuvees/entities';
 
@@ -107,7 +107,9 @@ export async function offerToSourceOwner<R extends Record<string,unknown>>(db:D1
 export async function sharedResearchForReader(db:D1Database,reader:string,sourceRow:Record<string,unknown>&{owner_id:unknown;deep_search_json?:unknown}){
   const row=await researchWine(db,reader,{...sourceRow,source_owner_id:String(sourceRow.owner_id)} as IdentityRow&Record<string,unknown>,sourceRow.deep_search_json);
   const targets=wineRowResearchTargets(row);
-  const own=await loadResearchCache(db,reader,targets,true);
+  // The same prior-key recovery the quote uses, so research the quote counts as
+  // already held (a generic non-vintage result, say) is on the page as well.
+  const own=await loadWineResearchCache(db,reader,targets,true);
   const owner=await withSourceResearch(db,reader,row,targets,new Map());
   const cache=new Map(own);
   // The reader's own scope wins when it is newer: a recipient who refreshes the
