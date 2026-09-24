@@ -1,6 +1,6 @@
 import { postGeminiGenerateContent,type GeminiTransportBindings } from '../../../worker/geminiTransport';
 import { AI_MODELS } from '../ai/policy';
-import { durableProvider,type ProviderAuthorization } from '../credits/provider';
+import { durableProvider,providerNeedsReconciliation,type ProviderAuthorization } from '../credits/provider';
 
 export type GeminiBatchRequest={key:string;request:Record<string,unknown>};
 export type GeminiInlineResponse={
@@ -209,6 +209,9 @@ async function executeVertexEntry(env:GatewayRuntimeEnv,model:string,displayName
     }catch(e){
       lastStatus=controller.signal.aborted?408:0;lastError=controller.signal.aborted?`Vertex Flex request timed out after ${timeoutMs/1000} seconds`:(e as Error).message||'Vertex Flex request failed';
       console.warn(JSON.stringify({event:'vertex-flex-attempt',stage:'failed',jobId,requestId,model,...metadata,attempt,failureKind:controller.signal.aborted?'timeout':'transport_or_body_error',elapsedMs:Date.now()-startedAt,timeoutMs}));
+      // A timeout can win the race while the original send is still pending.
+      // Keep its diagnostic and let reconciliation resolve it before any retry.
+      if(await providerNeedsReconciliation(env.CREDIT_CONTEXT))return {metadata:{key:entry.key},error:{message:`Provider completion needs reconciliation: ${lastError}`,status:lastStatus||0}};
       if(attempt===1){retry=true;continue}
       return {metadata:{key:entry.key},error:{message:lastError,status:lastStatus||0}};
     }finally{

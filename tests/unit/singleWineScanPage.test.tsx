@@ -1,5 +1,6 @@
 // @vitest-environment jsdom
 import { act } from 'react';
+import { lwinReferenceFixture } from './support/lwinReferenceFixture';
 import { createRoot,type Root } from 'react-dom/client';
 import { MemoryRouter } from 'react-router-dom';
 import { afterEach,describe,expect,it,vi } from 'vitest';
@@ -136,6 +137,18 @@ describe('the single wine page',()=>{
     expect(host!.querySelector('.scan-error')).toBeNull();
     expect(host!.querySelector('.review h2')?.textContent).toBe('Identification Results');
     expect((host!.querySelector('.review input') as HTMLInputElement).value).toBe('Domaine Dujac');
+  });
+
+  it('reviews a two-label scan with server-added LWIN metadata',async()=>{
+    await render(undefined,{...recognized,lwinReference:lwinReferenceFixture,lwin7:lwinReferenceFixture.lwin7,
+      identityMatchStatus:'matched',identityMatchConfidence:1,creditOperationId:'operation-1',creditSettlement:{status:'complete'}});
+    await pick('front.jpg','back.jpg');
+    await click(button('Identify this wine')!);
+    expect(host!.querySelector('.scan-error')).toBeNull();
+    expect(host!.querySelector('.review h2')?.textContent).toBe('Identification Results');
+    expect((host!.querySelector('.review input') as HTMLInputElement).value).toBe('Domaine Dujac');
+    expect([...host!.querySelectorAll('.upload-list li')].every(row=>row.textContent?.includes('Successfully identified'))).toBe(true);
+    expect(calls).toHaveLength(1);expect(calls[0].body.getAll('images')).toHaveLength(2);
   });
 
   it('says so when recognition fails instead of leaving the page still',async()=>{

@@ -103,6 +103,14 @@ export default {
     if(op)await reconcileOperation(env.DB,op);
    }
    const response=await legacy.fetch(forwarded,scoped,ctx);
+   if(response.ok&&request.method==='GET'&&/^\/api\/wines\/[^/]+\/deep-search-status$/.test(path)){
+    const run=await response.json() as {status:string;requestId:string};
+    // Read the live hold rather than inferring it from an old error message.
+    // A resolved operation must become retryable on the next status check.
+    const held=run.status==='failed'?await env.DB.prepare(`SELECT id FROM credit_operations
+     WHERE user_id=? AND run_id=? AND status IN ('reserved','running','review') LIMIT 1`).bind(member.id,run.requestId).first():null;
+    return json({...run,retryBlocked:Boolean(held)});
+   }
    const producerMatch=path.match(/^\/api\/producers\/([^/]+)$/);
    if(response.ok&&request.method==='GET'&&producerMatch){const shared=await reusableProducer(env.DB,member.id,producerMatch[1]);if(shared)return json({...await response.json() as object,...shared})}
    if(response.ok&&request.method==='GET'&&path==='/api/maturity/vintage'){

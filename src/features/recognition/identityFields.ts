@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { lwinReferenceSchema } from '../../lib/wine/lwinMetadata';
 import { canonicalizeWineFields } from '../../lib/wine/canonicalize';
 import { normalizedVintageKind,type VintageKind } from '../../lib/wine/referenceIdentity';
 import { normalizeRecognitionVintage } from './vintage';
@@ -39,6 +40,7 @@ export const recognitionCommonFields={
 } as const;
 
 export const referenceRecognitionFields={
+ lwinReference:lwinReferenceSchema.nullable().optional(),
  referenceProductKey:nullableRecognitionText,lwin7:nullableRecognitionText,lwin11:nullableRecognitionText,elid:nullableRecognitionText,
  identityMatchStatus:z.enum(['matched','suggested','ambiguous','unmatched','manual','conflict']).nullable().optional(),
  identityMatchConfidence:z.number().min(0).max(1).nullable().optional(),identityMatchCandidates:z.array(z.string().max(32)).nullable().optional(),

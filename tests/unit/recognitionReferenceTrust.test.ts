@@ -1,4 +1,5 @@
 import { afterEach,describe,expect,it,vi } from 'vitest';
+import { lwinReferenceFixture } from './support/lwinReferenceFixture';
 import { referenceRecognitionFields } from '../../src/features/recognition/identityFields';
 import { parseRecognition,recognitionSchema } from '../../src/features/recognition/schema';
 import { parseGroupRecognition,groupRecognitionSchema } from '../../src/features/recognition/groupSchema';
@@ -17,6 +18,7 @@ import { createD1Stub } from './support/d1Stub';
 const AUTH_SECRET='test-secret-value-long-enough-for-hmac';
 const identity={producer:'Maison FANG',wineName:'Cuvée Zéphyr',vintage:2023,confidence:.95};
 const invented={
+ lwinReference:lwinReferenceFixture,
  referenceProductKey:'lwin:3061244',lwin7:'3061244',lwin11:'30612442023',elid:'FR-BRG-FANG01-2023',
  identityMatchStatus:'matched',identityMatchConfidence:1,identityMatchCandidates:['3061244'],
  colour:'White',productType:'Wine',productSubtype:'Still',referenceProducer:'Fang',referenceWineName:'Zephyr',
