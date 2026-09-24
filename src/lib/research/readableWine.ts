@@ -1,4 +1,4 @@
-import { adoptFriendResearch,loadResearchCache,loadWineResearchCache,wineRowResearchTargets,type CachedResearch,type ResearchScope,type ResearchTarget } from './cache';
+import { adoptFriendResearch,loadResearchCache,loadWineResearchCache,RESEARCH_EDITION_COLUMNS,wineRowResearchTargets,type CachedResearch,type ResearchScope,type ResearchTarget } from './cache';
 import { resolveExistingProducer } from '../producers/entities';
 import { resolveExistingCuvee } from '../cuvees/entities';
 
@@ -14,7 +14,7 @@ import { resolveExistingCuvee } from '../cuvees/entities';
  * saved research already covers it.
  */
 export async function readableWine<T extends Record<string,unknown>>(db:D1Database,reader:string,wineId:string,columns='w.*'){
-  return db.prepare(`SELECT ${columns},w.owner_id AS source_owner_id FROM wines w
+  return db.prepare(`SELECT ${columns},${RESEARCH_EDITION_COLUMNS},w.owner_id AS source_owner_id FROM wines w
     WHERE w.id=? AND (w.owner_id=? OR (
       EXISTS(SELECT 1 FROM friendships f WHERE f.user_id=? AND f.friend_id=w.owner_id)
       AND EXISTS(SELECT 1 FROM app_users u WHERE u.id=w.owner_id AND u.status='active')

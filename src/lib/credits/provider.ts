@@ -20,7 +20,10 @@ export const providerAuthorization=(role:string|undefined,reason:string):Provide
   role==='owner'?{exempt:true,reason:'owner'}:{deny:true,reason};
 export function researchInputFingerprint(kind:'wine'|'producer',row:Record<string,unknown>){
  const fields=kind==='producer'?['canonical_name']:['producer','wine_name','vintage','country','region','appellation','wine_style','grapes_json','grape_blend_json'];
- return hash(JSON.stringify(fields.map(field=>row[field]??null)));
+ // A release's edition is part of its research identity. Appended only when
+ // present, so every other wine keeps the fingerprint its queued runs carry.
+ const edition=kind==='wine'&&typeof row.release_designation==='string'&&row.release_designation.trim()?[row.release_designation.trim()]:[];
+ return hash(JSON.stringify([...fields.map(field=>row[field]??null),...edition]));
 }
 /** An accepted quote cannot fund a renamed/replaced subject in a later queue delivery. */
 export async function assertResearchInput(context:ProviderAuthorization|undefined,owner:string,targetId:string,kind:'wine'|'producer',row:Record<string,unknown>){

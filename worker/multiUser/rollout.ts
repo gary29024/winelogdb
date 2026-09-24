@@ -1,6 +1,6 @@
 import { ApiError,json,ownerOnly,stamp,type IdentityEnv,type Member } from './common';
 import { deepSearchSchema } from '../../src/lib/db/schema';
-import { loadResearchCache,splitDeepSearchResult,upsertResearchCache } from '../../src/lib/research/cache';
+import { loadResearchCache,RESEARCH_EDITION_COLUMNS,splitDeepSearchResult,upsertResearchCache } from '../../src/lib/research/cache';
 import { publishResearch } from '../../src/lib/research/shared';
 import { wineTargets } from './credits';
 import { publishProducerResearch } from '../../src/lib/research/sharedProducer';
@@ -132,7 +132,7 @@ async function indexResearchBatch(env:RolloutEnv){
  const refreshing=await readState(env.DB,RESEARCH_REFRESH)==='running';
  if(await readState(env.DB,'research_index')==='complete'&&!refreshing)return {complete:true,processed:0};
  const cursor=await readState(env.DB,'research_cursor');
- const rows=await env.DB.prepare(`SELECT * FROM wines WHERE id>? ORDER BY id LIMIT ${RESEARCH_BATCH}`).bind(cursor).all<Record<string,unknown>>();
+ const rows=await env.DB.prepare(`SELECT w.*,${RESEARCH_EDITION_COLUMNS} FROM wines w WHERE w.id>? ORDER BY w.id LIMIT ${RESEARCH_BATCH}`).bind(cursor).all<Record<string,unknown>>();
  for(const row of rows.results){
   const owner=String(row.owner_id),targets=wineTargets(row),cache=await loadResearchCache(env.DB,owner,targets);
   if(row.producer_id)await publishProducerResearch(env.DB,owner,String(row.producer_id));

@@ -18,7 +18,7 @@ import { previewLoggingReference,resolveLoggingReference } from './wineLoggingRe
 import { normalizeReferenceText } from '../src/lib/wine/referenceCatalog';
 import { appClassification,classificationLabel,referenceSuggestionFields,type ReferenceSuggestion,type ReferenceSuggestionField } from '../src/lib/wine/referenceSuggestions';
 import { ensureWineIdentity } from '../src/lib/wine/identity';
-import { loadWineResearchCache,seedResolvedResearch,wineRowResearchTargets } from '../src/lib/research/cache';
+import { loadWineResearchCache,RESEARCH_EDITION_COLUMNS,seedResolvedResearch,wineRowResearchTargets } from '../src/lib/research/cache';
 import { recheckWineReference } from './wineReferenceReview';
 import { linkWineReference,previewWineReference,rejectWineReference } from './manualWineReference';
 import { applyProducerNameReview,previewProducerNameReview } from './producerNameReview';
@@ -266,7 +266,7 @@ app.put('/api/wines/:id/reference-suggestion',async c=>{
  if(payload?.action!==undefined&&payload.action!=='keep'&&payload.action!=='apply')return c.json({error:'Unknown review action'},400);
  const keep=payload?.action==='keep';
  if(!referenceSuggestionFields.includes(field))return c.json({error:'Unknown LWIN suggestion field'},400);
- const row=await c.env.DB.prepare('SELECT producer,producer_id,cuvee_id,wine_name,vintage,appellation,wine_style,country,region,classification,deep_search_json,lwin7,identity_match_status,lwin_reference_json,reference_suggestions_json,updated_at FROM wines WHERE owner_id=? AND id=?').bind(owner,id).first<Record<string,unknown>>();
+ const row=await c.env.DB.prepare(`SELECT producer,producer_id,cuvee_id,wine_name,vintage,appellation,wine_style,country,region,classification,deep_search_json,lwin7,identity_match_status,lwin_reference_json,reference_suggestions_json,updated_at,${RESEARCH_EDITION_COLUMNS} FROM wines w WHERE w.owner_id=? AND w.id=?`).bind(owner,id).first<Record<string,unknown>>();
  if(!row)return c.json({error:'Not found'},404);
  const suggestions=parseJson<ReferenceSuggestion[]>(row.reference_suggestions_json,[]),suggestion=suggestions.find(item=>item.field===field);
  if(!suggestion)return c.json({error:'That LWIN suggestion is no longer available'},409);
@@ -298,7 +298,7 @@ app.put('/api/wines/:id/reference-suggestion',async c=>{
  if(!result.meta.changes)return c.json({error:'This wine changed. Refresh and review it again.'},409);
  if(!keep&&(field==='producer'||field==='wineName'))await ensureWineIdentity(c.env.DB,owner,id);
  if(savedResearch?.size){
-  const current=await c.env.DB.prepare('SELECT producer,producer_id,cuvee_id,wine_name,vintage,appellation,wine_style,country,region FROM wines WHERE owner_id=? AND id=? AND updated_at=? AND lwin7 IS ? AND lwin_reference_json IS ?')
+  const current=await c.env.DB.prepare(`SELECT producer,producer_id,cuvee_id,wine_name,vintage,appellation,wine_style,country,region,${RESEARCH_EDITION_COLUMNS} FROM wines w WHERE w.owner_id=? AND w.id=? AND w.updated_at=? AND w.lwin7 IS ? AND w.lwin_reference_json IS ?`)
    .bind(owner,id,now,row.lwin7??null,JSON.stringify(reviewedReference)).first<Record<string,unknown>>();
   if(current){
    const targets=wineRowResearchTargets(current);

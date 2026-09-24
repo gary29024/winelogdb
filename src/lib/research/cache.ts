@@ -11,10 +11,12 @@ export type ResearchSource={title:string;url:string};
 /** What the sharing key is built from. Kept apart from `subject`, which is the
  * quality gate's input and is persisted as subject_json, so widening one cannot
  * quietly change the other. */
-export type ResearchIdentity={producer:string;wineName:string;country:string|null;region:string|null;appellation:string|null;wineStyle:string|null;vintage:number|null};
+export type ResearchIdentity={producer:string;wineName:string;country:string|null;region:string|null;appellation:string|null;wineStyle:string|null;vintage:number|null;
+  /** A non-vintage release: its edition name, base year and disgorgement. */
+  releaseDesignation?:string|null;baseVintage?:number|null;disgorgement?:string|null};
 export type ResearchTarget={scope:ResearchScope;cacheKey:string;subject:Record<string,string|number|null>;identity?:ResearchIdentity};
 export type CachedResearch={target:ResearchTarget;payload:Record<string,string>;sources:ResearchSource[];provenance?:DeepSearchProvenance;model:string;researchedAt:string;contributorId?:string};
-export type ResearchWine={producer?:unknown;producerId?:unknown;cuveeId?:unknown;wineName?:unknown;vintage?:unknown;country?:unknown;region?:unknown;appellation?:unknown;wineStyle?:unknown};
+export type ResearchWine={producer?:unknown;producerId?:unknown;cuveeId?:unknown;wineName?:unknown;vintage?:unknown;country?:unknown;region?:unknown;appellation?:unknown;wineStyle?:unknown;releaseDesignation?:unknown;baseVintage?:unknown;disgorgement?:unknown};
 
 type CacheRow={scope:ResearchScope;cache_key:string;subject_json:string;result_json:string;sources_json:string;provenance_json:string;model:string;researched_at:string;source_user_id?:string|null};
 
@@ -36,22 +38,55 @@ const makeKey=(...parts:unknown[])=>JSON.stringify(parts.map(normalized));
 const makeLegacyKey=(...parts:unknown[])=>JSON.stringify(parts.map(legacyNormalized));
 const parseProvenance=(raw:unknown)=>{const parsed=deepSearchProvenanceSchema.safeParse(parseJson(raw,null));return parsed.success?parsed.data:undefined};
 
+/**
+ * What tells one release of a non-vintage wine from another: an edition name
+ * ("171ème Édition", "Iteration 25"), a base year, a disgorgement. Krug 169 and
+ * 171 are different blends, so each gets its own exact-wine research. A wine
+ * with a vintage is already identified by it, and one with none of these keeps
+ * the single generic non-vintage key it always had.
+ */
+function editionOf(wine:ResearchWine,vintage:number|null){
+  if(vintage!=null)return null;
+  const releaseDesignation=text(wine.releaseDesignation)||null,disgorgement=text(wine.disgorgement)||null;
+  const baseVintage=typeof wine.baseVintage==='number'&&Number.isFinite(wine.baseVintage)?wine.baseVintage:null;
+  return releaseDesignation||baseVintage!=null||disgorgement?{releaseDesignation,baseVintage,disgorgement}:null;
+}
+
 function researchTargetsWith(wine:ResearchWine,key:(...parts:unknown[])=>string):ResearchTarget[]{
   const producer=text(wine.producer),producerId=text(wine.producerId),cuveeId=text(wine.cuveeId),wineName=text(wine.wineName),country=text(wine.country),region=text(wine.region),appellation=text(wine.appellation),wineStyle=text(wine.wineStyle);
-  const vintage=typeof wine.vintage==='number'&&Number.isFinite(wine.vintage)?wine.vintage:null;
+  const vintage=typeof wine.vintage==='number'&&Number.isFinite(wine.vintage)?wine.vintage:null,edition=editionOf(wine,vintage);
   const producerIdentity=producerId?`producer:${producerId}`:producer;
   const wineIdentity=cuveeId?`cuvee:${cuveeId}`:wineName;
-  const identity:ResearchIdentity={producer,wineName,country:country||null,region:region||null,appellation:appellation||null,wineStyle:wineStyle||null,vintage};
+  const identity:ResearchIdentity={producer,wineName,country:country||null,region:region||null,appellation:appellation||null,wineStyle:wineStyle||null,vintage,...edition??{}};
   const targets:ResearchTarget[]=[
     {scope:'producer',cacheKey:key(producerIdentity),subject:{producer,producerId:producerId||null},identity},
     {scope:'terroir',cacheKey:key(producerIdentity,wineIdentity,appellation,region,country),subject:{producer,producerId:producerId||null,cuveeId:cuveeId||null,wineName,appellation:appellation||null,region:region||null,country:country||null},identity}
   ];
   if(vintage!=null)targets.push({scope:'vintage_context',cacheKey:key(country,region,appellation,vintage),subject:{country:country||null,region:region||null,appellation:appellation||null,vintage},identity});
-  targets.push({scope:'wine_vintage',cacheKey:key(producerIdentity,wineIdentity,vintage??'NV',appellation,region,country),subject:{producer,producerId:producerId||null,cuveeId:cuveeId||null,wineName,vintage,appellation:appellation||null,region:region||null,country:country||null},identity});
+  // A non-vintage release with a known base year: that year's growing season
+  // shaped the blend, so its regional vintage context is researched too. It is
+  // the same key and subject as that year's vintage context, so research already
+  // held for the year is reused rather than bought again.
+  else if(edition?.baseVintage!=null)targets.push({scope:'vintage_context',cacheKey:key(country,region,appellation,edition.baseVintage),subject:{country:country||null,region:region||null,appellation:appellation||null,vintage:edition.baseVintage},identity:{...identity,vintage:edition.baseVintage}});
+  const exactKey=edition
+    ?key(producerIdentity,wineIdentity,'NV',appellation,region,country,edition.releaseDesignation,edition.baseVintage,edition.disgorgement)
+    :key(producerIdentity,wineIdentity,vintage??'NV',appellation,region,country);
+  targets.push({scope:'wine_vintage',cacheKey:exactKey,subject:{producer,producerId:producerId||null,cuveeId:cuveeId||null,wineName,vintage,appellation:appellation||null,region:region||null,country:country||null,...edition??{}},identity});
   return targets;
 }
 export const buildResearchTargets=(wine:ResearchWine)=>researchTargetsWith(wine,makeKey);
-export const wineRowResearchTargets=(row:Record<string,unknown>)=>buildResearchTargets({producer:row.producer,producerId:row.producer_id,cuveeId:row.cuvee_id,wineName:row.wine_name,vintage:row.vintage,country:row.country,region:row.region,appellation:row.appellation,wineStyle:row.wine_style});
+/**
+ * A wine row's targets. Edition details come from wines.release_designation and
+ * the sparkling details' base year and disgorgement, when the row carries them
+ * (see RESEARCH_EDITION_COLUMNS); a row read without them keys as before.
+ */
+export const wineRowResearchTargets=(row:Record<string,unknown>)=>{
+  const sparkling=parseJson<Record<string,unknown>>(row.sparkling_details_json,{})??{};
+  return buildResearchTargets({producer:row.producer,producerId:row.producer_id,cuveeId:row.cuvee_id,wineName:row.wine_name,vintage:row.vintage,country:row.country,region:row.region,appellation:row.appellation,wineStyle:row.wine_style,
+    releaseDesignation:row.release_designation,baseVintage:sparkling.baseVintage,disgorgement:sparkling.disgorgement});
+};
+/** Select these alongside a wines row aliased `w` so its research targets know the release. */
+export const RESEARCH_EDITION_COLUMNS="w.release_designation,(SELECT sd.details_json FROM wine_sparkling_details sd WHERE sd.owner_id=w.owner_id AND sd.wine_id=w.id) AS sparkling_details_json";
 /** The same targets keyed the way they were before non-Latin names stopped
  * collapsing to the empty string. Read-only: used to recover rows written then. */
 export const buildLegacyResearchTargets=(wine:ResearchWine)=>researchTargetsWith(wine,makeLegacyKey);
@@ -109,7 +144,10 @@ function auditedProvenance(scope:ResearchScope,payload:Record<string,string>,pro
 function priorResearchTargets(target:ResearchTarget){
   if(!target.identity)return [];
   const wine={...target.identity,producerId:target.subject.producerId,cuveeId:target.subject.cuveeId};
-  const shapes=[wine,{...wine,cuveeId:null},{...wine,producerId:null,cuveeId:null}];
+  // Exact-wine research saved before a release's edition was part of its key
+  // stays readable under the generic non-vintage key until it is refreshed.
+  const generic={...wine,releaseDesignation:null,baseVintage:null,disgorgement:null};
+  const shapes=[wine,{...wine,cuveeId:null},{...wine,producerId:null,cuveeId:null},...(editionOf(wine,wine.vintage)?[generic,{...generic,cuveeId:null},{...generic,producerId:null,cuveeId:null}]:[])];
   const candidates=[...shapes.slice(1).flatMap(buildResearchTargets),...shapes.flatMap(buildLegacyResearchTargets)];
   return [...new Map(candidates.filter(item=>item.scope===target.scope&&item.cacheKey!==target.cacheKey).map(item=>[item.cacheKey,item])).values()];
 }
