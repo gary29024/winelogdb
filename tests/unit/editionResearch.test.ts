@@ -126,6 +126,29 @@ describe('another bottle’s snapshot',()=>{
     expect(exactFor(database).some(row=>row.result_json.includes('SNAPSHOT_169'))).toBe(false);
   });
 
+  it('never keeps a bottle’s old edition research after the bottle is edited to another edition',async()=>{
+    const database=realD1();
+    vi.stubGlobal('fetch',vi.fn(async()=>{throw new Error('provider blocked in test')}));
+    // Researched as 169 (the snapshot records it), then corrected to 171.
+    const researched=JSON.stringify({...JSON.parse(snapshot),release:{releaseDesignation:'169ème Édition',baseVintage:null,disgorgement:null}});
+    database.sql.prepare(`INSERT INTO wines(id,owner_id,producer,wine_name,vintage,country,region,appellation,wine_style,release_designation,deep_search_json,deep_search_updated_at,created_at,updated_at) VALUES('mine','owner','Krug','Grande Cuvée',NULL,'France','Champagne','Champagne','sparkling','171ème Édition',?,'2026-09-01','now','now')`).run(researched);
+    const result=await startWineBatchResearch({DB:database.db,RESEARCH_QUEUE:{send:vi.fn()} as unknown as Queue<unknown>},'owner','mine','run','none');
+    expect(result).not.toMatchObject({cached:true});
+    expect(exactFor(database).some(row=>row.result_json.includes('SNAPSHOT_169'))).toBe(false);
+  });
+
+  it('seeds from a snapshot recorded as generic research, whatever its row now says',async()=>{
+    const database=realD1();
+    vi.stubGlobal('fetch',vi.fn(async()=>{throw new Error('provider blocked in test')}));
+    const generic=JSON.stringify({...JSON.parse(snapshot),release:null});
+    database.sql.prepare(`INSERT INTO wines(id,owner_id,producer,wine_name,vintage,country,region,appellation,wine_style,release_designation,deep_search_json,deep_search_updated_at,created_at,updated_at) VALUES('mine','owner','Krug','Grande Cuvée',NULL,'France','Champagne','Champagne','sparkling','171ème Édition',?,'2026-09-01','now','now')`).run(generic);
+    expect(await startWineBatchResearch({DB:database.db,RESEARCH_QUEUE:{send:vi.fn()} as unknown as Queue<unknown>},'owner','mine','run','none')).toMatchObject({ok:true,cached:true});
+    expect(exactFor(database).some(row=>row.result_json.includes('SNAPSHOT_169'))).toBe(true);
+    // The finished snapshot now records the release it stands for.
+    const saved=JSON.parse(String((database.sql.prepare("SELECT deep_search_json FROM wines WHERE id='mine'").get() as {deep_search_json:string}).deep_search_json));
+    expect(saved.release).toEqual({releaseDesignation:'171ème Édition',baseVintage:null,disgorgement:null});
+  });
+
   it('still seeds a release from generic research recorded with no edition',async()=>{
     const database=cellar(null);
     await startWineBatchResearch({DB:database.db,RESEARCH_QUEUE:{send:vi.fn()} as unknown as Queue<unknown>},'owner','mine','run','none');

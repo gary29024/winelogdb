@@ -100,9 +100,15 @@ async function seedFromLegacy(db:D1Database,owner:string,wine:WineRow,targets:Re
   // with no release recorded is the generic research every edition started
   // from, and may seed one; a known different edition never may, and an
   // edition's snapshot never becomes the generic cuvée's.
+  // A snapshot records the release it was researched for, since editing a
+  // bottle keeps its snapshot. One saved before that is judged by its row.
   const mine=JSON.stringify(researchEditionOfRow(wine));
-  const row=(results??[]).find(candidate=>{const theirs=researchEditionOfRow(candidate);return JSON.stringify(theirs)===mine||(theirs===null&&mine!=='null')});
-  if(!row?.deep_search_json)return cache;const legacy=deepSearchSchema.safeParse(parseJson(row.deep_search_json,null));if(!legacy.success)return cache;
+  const legacy=(results??[]).flatMap(candidate=>{
+    const parsed=deepSearchSchema.safeParse(parseJson(candidate.deep_search_json,null));if(!parsed.success)return [];
+    const theirs=JSON.stringify(parsed.data.release!==undefined?parsed.data.release:researchEditionOfRow(candidate));
+    return theirs===mine||(theirs==='null'&&mine!=='null')?[parsed]:[];
+  })[0];
+  if(!legacy)return cache;
   const entries=splitDeepSearchResult(legacy.data,targets).filter(entry=>!cache.has(entry.target.scope));await Promise.all(entries.map(entry=>seedResearchCache(db,owner,entry)));return entries.length?loadResearchCache(db,owner,targets):cache;
 }
 
@@ -177,7 +183,7 @@ async function finalize(env:Env,owner:string,wineId:string,wine:ResearchWineRow<
   // A recipient's run on a shared wine: what they paid for reaches the owner's
   // copy of that wine too, credited to them, never replacing the owner's own.
   await offerToSourceOwner(env.DB,owner,wine,cache);
-  const result=assembleDeepSearch(cache,targets);
+  const result={...assembleDeepSearch(cache,targets),release:researchEditionOfRow(wine)};
   await saveSnapshot(env.DB,owner,wineId,result);return result;
 }
 
