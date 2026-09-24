@@ -37,7 +37,7 @@ beforeEach(async()=>{
     database.sql.prepare('INSERT OR IGNORE INTO credit_wallets(user_id) VALUES(?)').run(user);
     database.sql.prepare('INSERT INTO auth_sessions VALUES(?,?,?)').run(await hash(`${user}-session`),user,seconds()+3600);
     database.sql.prepare("INSERT INTO wines(id,owner_id,producer,wine_name,region,appellation,wine_style,created_at) VALUES(?,?,'Krug','Grande Cuvee','Champagne','Champagne','sparkling',?)").run(`${user}-wine`,user,stamp());
-    for(const suffix of ['front','back'])database.sql.prepare("INSERT INTO wine_images(id,owner_id,wine_id,key,content_type,byte_size,upload_status,created_at) VALUES(?,?,?,?,'image/jpeg',100,'uploaded',?)").run(`${user}-${suffix}`,user,`${user}-wine`,`${user}/${suffix}.jpg`,stamp());
+    for(const suffix of ['front','back'])database.sql.prepare("INSERT INTO wine_images(id,owner_id,wine_id,object_key,content_type,byte_size,width,height,upload_status,created_at) VALUES(?,?,?,?,'image/jpeg',100,1000,1000,'uploaded',?)").run(`${user}-${suffix}`,user,`${user}-wine`,`${user}/${suffix}.jpg`,stamp());
     database.sql.prepare('INSERT INTO wine_sparkling_details(owner_id,wine_id,details_json,updated_at) VALUES(?,?,?,?)').run(user,`${user}-wine`,'{"dosageGPerL":0}',stamp());
   }
   const config={memberLimit:25,memberStorageBytes:100_000_000,totalStorageBytes:8_000_000_000,aiConcurrency:4,aiDailyOperations:100,aiDailyEmbeddingRequests:400,aiMonthlyBudgetUsd:100,aiUnitBudgetUsd:1,cloudflareWarningUsd:5,cloudflareStopUsd:10,cloudflareObservedUsd:0,cloudflareObservedMonth:stamp().slice(0,7),allowOverages:true};
@@ -50,7 +50,7 @@ beforeEach(async()=>{
     get:vi.fn(async(key:string)=>objects.has(key)?{text:async()=>objects.get(key)!}:null),
     delete:vi.fn(async(keys:string|string[])=>{for(const key of typeof keys==='string'?[keys]:keys)objects.delete(key)})
   };
-  environment={DB:database.db,AUTH_SECRET:'a'.repeat(48),APP_URL:origin,GEMINI_API_KEY:'test-key',GEMINI_BACKEND:'vertex-ai-gateway',WINE_IMAGES:bucket,RESEARCH_QUEUE:{send:vi.fn(async(job:Job)=>{delivered.push(job)})},ASSETS:{fetch:vi.fn()},CF_AI_GATEWAY_TOKEN:'token',CF_ACCOUNT_ID:'account',CF_AI_GATEWAY_ID:'gateway',VERTEX_PROJECT_ID:'project',VERTEX_LOCATION:'global'} as unknown as Env;
+  environment={DB:database.db,AUTH_SECRET:'a'.repeat(48),APP_URL:origin,GEMINI_API_KEY:'test-key',WINE_IMAGES:bucket,RESEARCH_QUEUE:{send:vi.fn(async(job:Job)=>{delivered.push(job)})},ASSETS:{fetch:vi.fn()},CF_AI_GATEWAY_TOKEN:'token',AI_GATEWAY_ACCOUNT_ID:'account',AI_GATEWAY_ID:'gateway',VERTEX_PROJECT_ID:'project',VERTEX_REGION:'global'} as unknown as Env;
   provider=vi.fn(async()=>Response.json(reply()));
   vi.mocked(postGeminiGenerateContent).mockImplementation(async(env)=>({provider:'vertex-ai-gateway',response:await durableProvider(env.CREDIT_CONTEXT,'champagne-test-flex',provider)}));
   vi.mocked(createGeminiBatch).mockResolvedValue('batches/champagne');
@@ -205,7 +205,7 @@ describe('Champagne extraction public multi-user pipeline',()=>{
   });
 
   it('passes the operation into native Batch and revives only its poll from a status read',async()=>{
-    delete environment.GEMINI_BACKEND;delete environment.CF_AI_GATEWAY_TOKEN;delete environment.CF_ACCOUNT_ID;delete environment.CF_AI_GATEWAY_ID;delete environment.VERTEX_PROJECT_ID;delete environment.VERTEX_LOCATION;
+    delete environment.CF_AI_GATEWAY_TOKEN;delete environment.AI_GATEWAY_ACCOUNT_ID;delete environment.AI_GATEWAY_ID;delete environment.VERTEX_PROJECT_ID;delete environment.VERTEX_REGION;
     const accepted=await start();await process();expect(currentRun().status).toBe('submitted');
     expect(vi.mocked(createGeminiBatch).mock.calls[0][4]).toMatchObject({operationId:accepted.creditOperationId,namespace:'queue'});
     const old=new Date(Date.now()-21*60_000).toISOString();
