@@ -16,7 +16,7 @@ export type ManualProducerContactInput={type:ManualProducerContactType;label?:st
 export type ProducerCatalogCuvee=CatalogCuveeSummary&{tastedReleases?:string[]};
 export type ProducerDetail=ProducerEntity&{sharedOnly?:boolean;researchContributorId?:string;aliases:string[];tastedWines:TastedWine[];researchHistoryCount:number;linkedProducers:LinkedProducer[];catalogCuvees:ProducerCatalogCuvee[];cuveeCatalogLinks:CuveeCatalogLink[];supplementaryContacts:ManualProducerContact[];catalogDecisions:CatalogDecision[]};
 /** A house whose name contains, or is contained by, the one read off the label. Proposed, never applied. */
-export type ProducerSuggestion={id:string;canonicalName:string;tastedCount:number};
+export type ProducerSuggestion={id:string;canonicalName:string;tastedCount:number;sharedOnly?:boolean};
 export type ProducerResolution={matched:boolean;inputName:string;suggestion?:ProducerSuggestion;producer?:{id:string;canonicalName:string;matchedName:string;matchType:'canonical'|'alias'|'normalized';researchedAt:string|null;catalogCount:number;tastedCount:number;sharedOnly?:boolean}};
 export type ProducerResearchStage='preparing'|'searching'|'retrying'|'parsing'|'saving'|'image'|'complete'|'failed';
 export type ProducerResearchRun={requestId:string;producerId:string;status:'running'|'complete'|'failed';stage:ProducerResearchStage;attempt:number;message:string|null;startedAt:string;updatedAt:string;completedAt:string|null;durationMs:number|null};

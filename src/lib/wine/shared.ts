@@ -13,7 +13,9 @@ import type { SparklingDetails } from './sparklingDetails';
 export type SharedDeepSearch=Pick<DeepSearchResult,
  'summary'|'vintageQuality'|'producerDetails'|'producerWinemakingPractices'
  |'winemakingTechniques'|'terroir'|'drinkingWindow'|'sources'|'researchedAt'>
- &{expectedProfile?:string;oldestResearchedAt?:string};
+ &{expectedProfile?:string;oldestResearchedAt?:string;
+  /** False when only some research scopes exist yet, as on the owner's page. */
+  complete?:boolean};
 
 export type SharedWineExperience={
  tastingNotes:string;

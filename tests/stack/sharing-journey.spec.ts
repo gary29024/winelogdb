@@ -112,7 +112,9 @@ test('owner-to-member sharing through browser, Worker, D1 and R2', async ({ brow
     await member.page.getByLabel('Location', { exact: true }).fill('MEMBER_LOCATION');
     await member.page.getByLabel('Price', { exact: true }).fill('75');
     await member.page.getByLabel('Currency', { exact: true }).fill('eur');
-    await member.page.getByRole('combobox', { name: /^Acidity/ }).selectOption('high');
+    // The recipient uses the owner's tap-to-choose Structure control.
+    await member.page.locator('.structure-disclosure summary').click();
+    await member.page.getByRole('group', { name: 'Acidity', exact: true }).getByRole('button', { name: 'High', exact: true }).click();
     await member.page.getByRole('button', { name: 'Save experience', exact: true }).click();
     await expect(member.page.getByRole('status')).toContainText('Your experience was saved');
     await member.page.getByRole('button', { name: 'Add to favorites', exact: true }).click();

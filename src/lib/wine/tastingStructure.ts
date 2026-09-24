@@ -25,3 +25,17 @@ export function hasTastingStructure(value:TastingStructure|null|undefined){
 export const structureValueLabel:Record<string,string>={
   low:'Low',light:'Light',medium_minus:'M−',medium:'M',medium_plus:'M+',high:'High',pronounced:'Pronounced',full:'Full',short:'Short',long:'Long'
 };
+
+// The six axes in form order, with each scale's labels.
+export const structureFields=[
+  {key:'flavourIntensity',label:'Flavour intensity',options:[['light','Light'],['medium_minus','M−'],['medium','M'],['medium_plus','M+'],['pronounced','Pronounced']]},
+  {key:'acidity',label:'Acidity',options:[['low','Low'],['medium_minus','M−'],['medium','M'],['medium_plus','M+'],['high','High']]},
+  {key:'tannin',label:'Tannin',options:[['low','Low'],['medium_minus','M−'],['medium','M'],['medium_plus','M+'],['high','High']]},
+  {key:'body',label:'Body',options:[['light','Light'],['medium_minus','M−'],['medium','M'],['medium_plus','M+'],['full','Full']]},
+  {key:'finish',label:'Finish',options:[['short','Short'],['medium_minus','M−'],['medium','M'],['medium_plus','M+'],['long','Long']]},
+  {key:'alcohol',label:'Perceived alcohol',options:[['low','Low'],['medium','Medium'],['high','High']]}
+] as const satisfies ReadonlyArray<{key:TastingStructureKey;label:string;options:ReadonlyArray<readonly [string,string]>}>;
+
+/** Toggle one axis: tapping the selected value again clears it. */
+export const toggleStructure=(current:TastingStructure,key:TastingStructureKey,value:string)=>
+  ({...current,[key]:current[key]===value?null:value}) as TastingStructure;

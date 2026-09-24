@@ -12,7 +12,8 @@ import { FactList,WineDetailsSection,WineFactPills } from './WineFacts';
 import { PageHeader } from '../../components/PageHeader';
 import { SectionLabel } from '../../components/SectionLabel';
 import { SparklingDetailsCard } from './SparklingDetailsCard';
-import { structureValueLabel,type TastingStructure,type TastingStructureKey } from '../../lib/wine/tastingStructure';
+import { hasTastingStructure,structureValueLabel,toggleStructure,type TastingStructure } from '../../lib/wine/tastingStructure';
+import { TastingStructureFields } from './TastingStructureFields';
 import { DeepSources,ResearchText } from './ResearchPresentation';
 import { readOpenDeepFields,researchSections,type DeepField,writeOpenDeepFields } from './researchSections';
 import '../../favorites.css';
@@ -37,19 +38,9 @@ const draftFromWine=(wine:SharedWine):Draft=>({
  structure:{...wine.structure}
 });
 const EMPTY_DRAFT:Draft={tastingDate:'',rating:'',tastingName:'',venue:'',locationName:'',currency:'',price:'',tastingNotes:'',structure:{}};
-// The same six axes, in the same order and with the same scales, as the owner's
-// wine form. A recipient records their own perception, not the owner's.
-const structureFields=[
- {key:'flavourIntensity',label:'Flavour intensity',options:[['light','Light'],['medium_minus','M\u2212'],['medium','M'],['medium_plus','M+'],['pronounced','Pronounced']]},
- {key:'acidity',label:'Acidity',options:[['low','Low'],['medium_minus','M\u2212'],['medium','M'],['medium_plus','M+'],['high','High']]},
- {key:'tannin',label:'Tannin',options:[['low','Low'],['medium_minus','M\u2212'],['medium','M'],['medium_plus','M+'],['high','High']]},
- {key:'body',label:'Body',options:[['light','Light'],['medium_minus','M\u2212'],['medium','M'],['medium_plus','M+'],['full','Full']]},
- {key:'finish',label:'Finish',options:[['short','Short'],['medium_minus','M\u2212'],['medium','M'],['medium_plus','M+'],['long','Long']]},
- {key:'alcohol',label:'Perceived alcohol',options:[['low','Low'],['medium','Medium'],['high','High']]}
-] as const;
 
 export function SharedWinesPage(){
- const {id=''}=useParams(),{state}=useLocation(),[wine,setWine]=useState<SharedWine>(),[error,setError]=useState(''),[favoriteError,setFavoriteError]=useState(''),[editing,setEditing]=useState(false),[saving,setSaving]=useState(false),[notice,setNotice]=useState(''),[favoriteBusy,setFavoriteBusy]=useState(false),[selectedPhoto,setSelectedPhoto]=useState<string>(),[draft,setDraft]=useState<Draft>(EMPTY_DRAFT),[openDeepFields,setOpenDeepFields]=useState<Set<DeepField>>(readOpenDeepFields);
+ const {id=''}=useParams(),{state}=useLocation(),[wine,setWine]=useState<SharedWine>(),[error,setError]=useState(''),[favoriteError,setFavoriteError]=useState(''),[editing,setEditing]=useState(false),[saving,setSaving]=useState(false),[notice,setNotice]=useState(''),[favoriteBusy,setFavoriteBusy]=useState(false),[selectedPhoto,setSelectedPhoto]=useState<string>(),[draft,setDraft]=useState<Draft>(EMPTY_DRAFT),[openDeepFields,setOpenDeepFields]=useState<Set<DeepField>>(readOpenDeepFields),[structureOpen,setStructureOpen]=useState(false);
  const back=useMemo(()=>backTargetFromState(state)??JOURNAL_BACK,[state]);
 
  useEffect(()=>{let active=true;setError('');setFavoriteError('');setNotice('');apiJson<SharedWine>(`/api/shared/wines/${id}`).then(item=>{if(active){setWine(item);setDraft(draftFromWine(item))}}).catch(e=>{if(active)setError((e as Error).message)});return()=>{active=false}},[id]);
@@ -66,7 +57,7 @@ export function SharedWinesPage(){
   catch(e){setWine(current=>current?{...current,favorite:!next}:current);setFavoriteError((e as Error).message)}
   finally{setFavoriteBusy(false)}
  }
- function edit(){if(!wine)return;setDraft(draftFromWine(wine));setError('');setNotice('');setEditing(true)}
+ function edit(){if(!wine)return;setDraft(draftFromWine(wine));setStructureOpen(hasTastingStructure(wine.structure));setError('');setNotice('');setEditing(true)}
  async function saveExperience(event:FormEvent){
   event.preventDefault();if(!wine||saving)return;setSaving(true);setError('');setNotice('');
   const experience:SharedWineExperience={
@@ -133,16 +124,8 @@ export function SharedWinesPage(){
     <label>Venue<input type="text" maxLength={500} value={draft.venue} onChange={e=>setDraft({...draft,venue:e.target.value})}/></label>
     <label>Location<input type="text" maxLength={500} value={draft.locationName} onChange={e=>setDraft({...draft,locationName:e.target.value})}/></label>
     <label>Price<div className="shared-price-input"><input type="text" inputMode="text" maxLength={3} placeholder="HKD" aria-label="Currency" value={draft.currency} onChange={e=>setDraft({...draft,currency:e.target.value})}/><input type="number" min="0" step="0.01" placeholder="0" aria-label="Price" value={draft.price} onChange={e=>setDraft({...draft,price:e.target.value})}/></div></label>
-    <fieldset className="shared-structure-fields shared-experience-full">
-     <legend>Structure</legend>
-     <div className="shared-structure-grid">{structureFields.map(field=><label key={field.key}>{field.label}
-      <select value={draft.structure[field.key as TastingStructureKey]??''} onChange={e=>setDraft({...draft,structure:{...draft.structure,[field.key]:e.target.value||null}})}>
-       <option value="">—</option>
-       {field.options.map(([value,label])=><option key={value} value={value}>{label}</option>)}
-      </select>
-     </label>)}</div>
-     <small>Your own perception. The label ABV stays in Wine details.</small>
-    </fieldset>
+    {/* The owner's own control, not a look-alike: same tap targets, scales and order. */}
+    <div className="shared-experience-full"><TastingStructureFields structure={draft.structure} open={structureOpen} onToggle={setStructureOpen} onChoose={(key,value)=>setDraft(current=>({...current,structure:toggleStructure(current.structure,key,value)}))}/></div>
     <label className="shared-experience-full">Sensory notes<textarea rows={4} maxLength={10000} value={draft.tastingNotes} onChange={e=>setDraft({...draft,tastingNotes:e.target.value})}/></label>
     <div className="shared-experience-actions shared-experience-full"><button type="button" className="quiet" disabled={saving} onClick={()=>{setEditing(false);setDraft(draftFromWine(wine))}}>Cancel</button><button type="submit" className="primary" disabled={saving}>{saving?'Saving…':'Save experience'}</button></div>
    </form>}
@@ -157,7 +140,10 @@ export function SharedWinesPage(){
    <div className="detail-gallery" aria-label={`${wine.wineName} photos`}>{wine.photos!.map((photo,index)=><span className="detail-photo-slot" key={photo.id}><button type="button" className="detail-photo-button" onClick={()=>setSelectedPhoto(photo.url)} aria-label={`Open photo ${index+1} of ${wine.photos!.length}`}><img src={photo.url} alt={`${wine.producer} ${wine.wineName} photo ${index+1}`} className="detail-photo" loading="lazy" decoding="async"/></button></span>)}</div>
   </section>}
   {wine.deepSearch&&<section className="detail-section deep-search-panel">
-   <div className="deep-panel-head"><SectionLabel origin="researched">Deep Search</SectionLabel></div>
+   <div className="deep-panel-head"><SectionLabel origin={wine.deepSearch.complete===false?undefined:'researched'}>Deep Search</SectionLabel></div>
+   {/* The owner's page shows research while scopes are still missing, so this
+       page does too, and says so the same way. */}
+   {wine.deepSearch.complete===false&&<p>Partial research is available. The remaining sections appear here once they are researched.</p>}
    <div className="deep-summary"><ResearchText text={wine.deepSearch.summary}/></div>
    {sections.length>0&&<div className="deep-research-sections">
     <div className="deep-sections-head"><span>{sections.length} research section{sections.length===1?'':'s'}</span><button type="button" className="deep-toggle-all" onClick={()=>toggleAllDeepFields(sections.map(([,field])=>field))}>{sections.every(([,field])=>openDeepFields.has(field))?'Collapse all':'Expand all'}</button></div>

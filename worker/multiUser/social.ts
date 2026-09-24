@@ -4,7 +4,9 @@ import { ApiError,body,json,ownerOnly,stamp,type IdentityEnv,type Member } from 
 import { similarFriendProducers } from '../../src/lib/research/similarProducers';
 import { rememberProducerAlias } from '../../src/lib/research/aliasBridge';
 import type { SharedDeepSearch,SharedWine } from '../../src/lib/wine/shared';
-import { deepSearchSchema } from '../../src/lib/db/schema';
+import { deepSearchSchema,type DeepSearchResult } from '../../src/lib/db/schema';
+import { assembleDeepSearch,loadResearchCache,loadWineResearchCache,wineRowResearchTargets } from '../../src/lib/research/cache';
+import { isDeepSearchComplete } from '../../src/lib/research/completeness';
 import { tastingStructureSchema,type TastingStructure } from '../../src/lib/wine/tastingStructure';
 import { hasSparklingDetails,sparklingDetailsSchema,type SparklingDetails } from '../../src/lib/wine/sparklingDetails';
 import { serveWineImageObject } from '../wineImageHandler';
@@ -28,7 +30,7 @@ export function sharedWine(row:Record<string,unknown>):SharedWine{
  }catch{/* Invalid legacy blend falls back to the plain grape names. */}
  const tier=text(row.classification),classification=tier==='grand_cru'||tier==='premier_cru'||tier==='village'?tier:null;
  const lwinReference=reliableLwinReference(row);
- const deepSearch=publishedDeepSearch(row.deep_search_json);
+ const deepSearch=publishedDeepSearch(row.deep_search_json,number(row.vintage));
  return {
   id:text(row.id),ownerName:text(row.display_name),
   producer:text(row.producer),producerId:text(row.viewer_producer_id)||(text(row.producer_id)&&text(row.owner_id)?sharedProducerId(text(row.owner_id),text(row.producer_id)):null),
@@ -57,26 +59,44 @@ export function sharedWine(row:Record<string,unknown>):SharedWine{
  * the fields here makes the JSON the boundary rather than the page's markup, so
  * a new diagnostic added to the schema does not quietly cross accounts.
  */
-export function publishedDeepSearch(raw:unknown):SharedDeepSearch|null{
+function publishDeepSearch(deep:DeepSearchResult,vintage:number|null):SharedDeepSearch{
+ return {
+  summary:deep.summary,
+  ...deep.expectedProfile?{expectedProfile:deep.expectedProfile}:{},
+  vintageQuality:deep.vintageQuality,
+  producerDetails:deep.producerDetails,
+  producerWinemakingPractices:deep.producerWinemakingPractices,
+  winemakingTechniques:deep.winemakingTechniques,
+  terroir:deep.terroir,
+  drinkingWindow:deep.drinkingWindow,
+  sources:deep.sources,
+  researchedAt:deep.researchedAt,
+  ...deep.oldestResearchedAt?{oldestResearchedAt:deep.oldestResearchedAt}:{},
+  complete:isDeepSearchComplete(deep,vintage)
+ };
+}
+export function publishedDeepSearch(raw:unknown,vintage:number|null=null):SharedDeepSearch|null{
  if(typeof raw!=='string'||!raw)return null;
  try{
   const parsed=deepSearchSchema.safeParse(JSON.parse(raw));
-  if(!parsed.success)return null;
-  const deep=parsed.data;
-  return {
-   summary:deep.summary,
-   ...deep.expectedProfile?{expectedProfile:deep.expectedProfile}:{},
-   vintageQuality:deep.vintageQuality,
-   producerDetails:deep.producerDetails,
-   producerWinemakingPractices:deep.producerWinemakingPractices,
-   winemakingTechniques:deep.winemakingTechniques,
-   terroir:deep.terroir,
-   drinkingWindow:deep.drinkingWindow,
-   sources:deep.sources,
-   researchedAt:deep.researchedAt,
-   ...deep.oldestResearchedAt?{oldestResearchedAt:deep.oldestResearchedAt}:{}
-  };
+  return parsed.success?publishDeepSearch(parsed.data,vintage):null;
  }catch{/* Unparseable research is simply not shared. */return null}
+}
+
+/**
+ * What a reader sees on one shared bottle. The owner's page assembles Deep
+ * Search from the owner's saved research scopes, full or partial; a recipient
+ * used to see only a finished snapshot, so a bottle with three of four scopes
+ * researched showed nothing at all. Read the same scopes for this exact wine
+ * from the owner, then fill any gap from the reader's own research. The saved
+ * snapshot remains the fallback for rows that predate the scope cache.
+ */
+export async function sharedWineResearch(db:D1Database,viewer:string,row:Record<string,unknown>):Promise<SharedDeepSearch|null>{
+ const vintage=typeof row.vintage==='number'?row.vintage:null,targets=wineRowResearchTargets(row);
+ const cache=await loadWineResearchCache(db,String(row.owner_id),targets,false,row.deep_search_json);
+ const missing=targets.filter(target=>!cache.has(target.scope));
+ if(missing.length)for(const [scope,entry] of await loadResearchCache(db,viewer,missing))cache.set(scope,entry);
+ return cache.size?publishDeepSearch(assembleDeepSearch(cache,targets),vintage):publishedDeepSearch(row.deep_search_json,vintage);
 }
 
 /**
@@ -347,7 +367,7 @@ export async function socialRoute(request:Request,env:SocialEnv,member:Member,ct
   const owner=String(wine.owner_id);
   const photos=(await env.DB.prepare('SELECT id FROM wine_images WHERE wine_id=? AND owner_id=? ORDER BY rowid')
    .bind(shared[1],owner).all<{id:string}>()).results;
-  return json({...sharedWine(wine),photos:photos.map(photo=>({id:photo.id,url:`/api/shared/wines/${shared[1]}/photos/${photo.id}`}))});
+  return json({...sharedWine(wine),deepSearch:await sharedWineResearch(env.DB,member.id,wine),photos:photos.map(photo=>({id:photo.id,url:`/api/shared/wines/${shared[1]}/photos/${photo.id}`}))});
  }
  return null;
 }

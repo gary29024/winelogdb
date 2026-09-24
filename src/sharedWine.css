@@ -6,11 +6,3 @@
    of their experience rather than in a section of the wine's own. */
 .shared-structure-label{margin:16px 0 0;color:var(--ink-5);font-size:.74rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
 .shared-experience-summary+.shared-structure-label{padding-top:12px;border-top:1px solid var(--line)}
-.shared-structure-fields{margin:4px 0 0;padding:14px;border:1px solid var(--line);border-radius:var(--r-md);background:var(--paper)}
-.shared-structure-fields legend{padding:0 6px;color:var(--ink-5);font-size:.74rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
-.shared-structure-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
-.shared-structure-grid label{display:grid;gap:5px;color:var(--ink-5);font-size:.72rem;font-weight:700}
-.shared-structure-grid select{width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:var(--r-sm);background:var(--paper);color:var(--ink);font:inherit}
-.shared-structure-fields small{display:block;margin-top:10px;color:var(--ink-7);font-size:.7rem}
-@media(max-width:700px){.shared-structure-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.shared-structure-grid select{font-size:16px;min-height:44px}}
-@media(max-width:380px){.shared-structure-grid{grid-template-columns:1fr}}
