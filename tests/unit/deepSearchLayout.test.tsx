@@ -64,9 +64,9 @@ const sharedWine=()=>({
 
 let root:Root|null=null,host:HTMLDivElement|null=null;
 
-async function render(over:Record<string,unknown>={}){
+async function render(over:Record<string,unknown>={},run:Record<string,unknown>|null=null){
   vi.stubGlobal('fetch',vi.fn(async(url:string)=>new Response(
-    JSON.stringify(String(url).includes('/research')?{runs:[]}:wine(over)),
+    JSON.stringify(String(url).includes('/deep-search-status')?run:String(url).includes('/research')?{runs:[]}:wine(over)),
     {status:200,headers:{'content-type':'application/json'}})));
   vi.resetModules();
   const {DetailPage}=await import('../../src/features/wines/DetailPage');
@@ -108,6 +108,21 @@ afterEach(()=>{
 });
 
 describe('Deep Search research sections',()=>{
+  it.each([true,undefined])('keeps a held request visible on reopening and checks status without starting AI (flag %s)',async retryBlocked=>{
+    const run={requestId:'held-request',wineId:'w1',status:'failed',stage:'failed',message:'Provider completion needs reconciliation',retryBlocked};
+    await render({deepSearch:null},run);
+    const panel=host!.querySelector('.deep-search-panel')!;
+    expect(panel.textContent).toContain('Deep Search needs review.');
+    expect(panel.textContent).toContain('Support ID held-request');
+    expect(panel.textContent).not.toContain('Retry Deep Search');
+    expect(panel.querySelector('.deep-error')?.textContent).not.toContain('Close');
+    vi.mocked(fetch).mockResolvedValueOnce(Response.json({...run,retryBlocked:false}));
+    await click(panel.querySelector<HTMLButtonElement>('.deep-error button')!);
+    expect(vi.mocked(fetch).mock.calls.some(([,init])=>init?.method==='POST')).toBe(false);
+    expect(panel.textContent).toContain('Retry Deep Search');
+    expect(panel.textContent).not.toContain('Deep Search needs review.');
+  });
+
   it('reuses vintage-only research and queues missing sections without forcing a refresh',async()=>{
     await render({deepSearch:{...deepSearch,summary:'',producerDetails:'',producerWinemakingPractices:'',
       winemakingTechniques:'',terroir:'',drinkingWindow:''}});

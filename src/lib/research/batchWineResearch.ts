@@ -1,6 +1,6 @@
 import { lwinResearchContext } from '../wine/lwinMetadata';
 import { AI_MODELS } from '../ai/policy';
-import { assertResearchInput,type ProviderAuthorization } from '../credits/provider';
+import { assertResearchInput,providerNeedsReconciliation,type ProviderAuthorization } from '../credits/provider';
 import { deepSearchSchema,type DeepSearchResult } from '../db/schema';
 import { ensureProducerEntity } from '../producers/entities';
 import { parseStructuredJsonText } from '../producers/structuredJson';
@@ -218,6 +218,11 @@ export async function startWineBatchResearch(env:Env,owner:string,wineId:string,
   try{await submitAttempt(env,owner,wineId,requestId,1,prepared.missing);return {ok:true as const,cached:false}}
   catch(e){
     const primaryError=(e as Error).message||`${PRIMARY_MODEL} Batch submission failed`;log('warn',{requestId,wineId,stage:'primary_submit_failed',attempt:1,error:primaryError});
+    if(await providerNeedsReconciliation(env.CREDIT_CONTEXT)){
+      const error=`Provider completion needs reconciliation: ${primaryError}`;
+      await updateWineResearchRun(env.DB,owner,requestId,'failed',error,'failed',1);
+      return {ok:false as const,error};
+    }
     try{await submitAttempt(env,owner,wineId,requestId,2,prepared.missing);return {ok:true as const,cached:false}}
     catch(fallback){const error=`${PRIMARY_MODEL} submission failed (${primaryError}); ${FALLBACK_MODEL} fallback also failed: ${(fallback as Error).message||'unknown error'}`;await updateWineResearchRun(env.DB,owner,requestId,'failed',error,'failed',2).catch(()=>undefined);return {ok:false as const,error}}
   }
@@ -239,6 +244,10 @@ export function nextResearchAttempt(attempt:number,ungrounded:boolean){
 }
 
 async function retryOrFail(env:Env,owner:string,wineId:string,requestId:string,attempt:number,failed:ResearchScope[],errors:string[],feedback:ScopeFeedback={},ungrounded=false,attempted:readonly string[]=[]){
+  if(await providerNeedsReconciliation(env.CREDIT_CONTEXT)){
+    await updateWineResearchRun(env.DB,owner,requestId,'failed',`Provider completion needs reconciliation. Any saved research is kept. ${errors.join('; ')}`,'failed',attempt);
+    return;
+  }
   const next=failed.length?nextResearchAttempt(attempt,ungrounded):null;
   if(next){
     try{await submitAttempt(env,owner,wineId,requestId,next,failed,feedback,attempted);return}

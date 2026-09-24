@@ -14,6 +14,11 @@ export type CreditExemption={exempt:true;reason:string};
  */
 export type CreditDenial={deny:true;reason:string};
 export type ProviderAuthorization=CreditContext|CreditExemption|CreditDenial;
+/** An unresolved send blocks retries and model fallbacks for the whole operation. */
+export async function providerNeedsReconciliation(context?:ProviderAuthorization){
+ if(!context||!('operationId' in context))return false;
+ return Boolean(await context.db.prepare("SELECT id FROM provider_operations WHERE operation_id=? AND state IN ('submitted','uncertain') LIMIT 1").bind(context.operationId).first());
+}
 const exempted=(value?:ProviderAuthorization):value is CreditExemption=>Boolean(value&&'exempt' in value);
 const denied=(value?:ProviderAuthorization):value is CreditDenial=>Boolean(value&&'deny' in value);
 /** The metering decision for a request, made once where the account is known. */

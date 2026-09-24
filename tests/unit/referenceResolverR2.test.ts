@@ -1,4 +1,7 @@
 import { describe,expect,it } from 'vitest';
+import { recognitionSchema } from '../../src/features/recognition/schema';
+import { groupRecognitionSchema } from '../../src/features/recognition/groupSchema';
+import { sheetPageSchema } from '../../src/features/recognition/sheetSchema';
 import { referenceShardId,type ReferenceManifest,type ElidReferenceRecord } from '../../src/lib/wine/referenceCatalog';
 import { enrichRecognitionReference,resolveWineReference } from '../../src/lib/wine/referenceIdentity';
 import type { LwinReferenceProduct } from '../../src/lib/wine/lwinImport';
@@ -40,6 +43,16 @@ function objects(){
 }
 
 describe('R2 wine reference resolver',()=>{
+ it('preserves an actual catalogue enrichment through every recognition response schema',async()=>{
+  const enriched=await enrichRecognitionReference(bucket(objects()),{producer:'Krug',wineName:'Grande Cuvée 171ème Édition',
+   vintage:null,country:'France',region:'Champagne',style:'sparkling',confidence:.98});
+  expect(enriched).toHaveProperty('lwinReference.lwin7','1234567');
+  if(!('lwinReference' in enriched))throw new Error('Expected catalogue enrichment');
+  for(const parsed of [recognitionSchema.parse(enriched),groupRecognitionSchema.parse({wines:[enriched]}).wines[0],sheetPageSchema.parse({wines:[enriched]}).wines[0]]){
+   expect(parsed.lwinReference).toEqual(enriched.lwinReference);
+   expect(parsed.lwin7).toBe('1234567');expect(parsed.identityMatchStatus).toBe('matched');
+  }
+ });
  it('uses structured titles to distinguish Maison and Domaine when both display names omit them',async()=>{
   const data=objects(),shard=referenceShardId('fang');
   const maison={...lwin,productKey:'lwin:3061244',lwin7:'3061244',displayName:'Fang, Cuvee Zephyr',producerTitle:'Maison',producerName:'Fang',producerKey:'fang',wineName:'Cuvee Zephyr',wineKey:'cuvee zephyr'};
