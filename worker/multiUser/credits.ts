@@ -256,7 +256,7 @@ export async function creditRead(request:Request,env:CreditEnv,member:Member):Pr
    await reconcileOperation(env.DB,op); // Reconciliation never submits provider work.
    op=await env.DB.prepare('SELECT * FROM credit_operations WHERE id=? AND user_id=?').bind(match[1],member.id).first<CreditOperation>()??op;
   }
-  return json({id:op.id,status:op.status,reserved:op.reserved,captured:op.captured,result:op.response_json?JSON.parse(op.response_json):null});
+  return json({id:op.id,status:op.status,runId:op.run_id,reserved:op.reserved,captured:op.captured,result:op.response_json?JSON.parse(op.response_json):null});
  }
  return null;
 }

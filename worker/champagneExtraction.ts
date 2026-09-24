@@ -132,10 +132,10 @@ export async function processChampagneExtraction(env:Env,job:ChampagneExtraction
   let cleanInput=row.status==='submitted',retryPolling=false;
   try{
     if(Date.now()-Date.parse(row.created_at)>30*60*60_000)throw new Error('Extraction exceeded the batch waiting period. Please try again.');
-    const wine=await wineFor(env.DB,job.owner,job.wineId);
-    if(!wine||!isChampagne(wine))throw new Error('This wine is no longer classified as Champagne.');
-    await assertChampagneInput(env.CREDIT_CONTEXT,job.owner,job.wineId,job.requestId,wine,JSON.parse(row.image_ids_json) as string[]);
     if(row.status==='submitted'&&row.batch_name){
+      // Native Batch already owns its input and may have incurred a bill. Keep
+      // polling after local edits; complete() meters the result before checking
+      // whether these photos and this wine still permit applying it.
       retryPolling=true;
       const result=await fetchGeminiBatch(env.GEMINI_API_KEY,row.batch_name,{},env.CREDIT_CONTEXT);
       if(!result.ok)throw new Error('Could not read the batch result. Polling will retry.');
@@ -149,6 +149,9 @@ export async function processChampagneExtraction(env:Env,job:ChampagneExtraction
       if(!inline)throw new Error('Gemini returned no matching batch result.');
       await complete(env,row,inline,'batch');
     }else{
+      const wine=await wineFor(env.DB,job.owner,job.wineId);
+      if(!wine||!isChampagne(wine))throw new Error('This wine is no longer classified as Champagne.');
+      await assertChampagneInput(env.CREDIT_CONTEXT,job.owner,job.wineId,job.requestId,wine,JSON.parse(row.image_ids_json) as string[]);
       const claimed=await env.DB.prepare("UPDATE wine_champagne_extractions SET status='running',updated_at=? WHERE request_id=? AND status='queued'").bind(now(),row.request_id).run();
       if(!claimed.meta.changes)return;
       cleanInput=true;

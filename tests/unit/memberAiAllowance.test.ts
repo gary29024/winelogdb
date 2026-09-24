@@ -94,6 +94,6 @@ describe('member AI action access',()=>{
 
  it('reports all configured actions together for the member UI',async()=>{
   const database=setup(),items=await memberAiAccess(database.db,'alice');
-  expect(items.map(item=>item.action)).toEqual(['scan_single','scan_group','scan_batch','scan_sheet','wine_deep_search','producer_research','producer_batch_research','vintage_window']);
+  expect(items.map(item=>item.action)).toEqual(['scan_single','scan_group','scan_batch','scan_sheet','champagne_extraction','wine_deep_search','producer_research','producer_batch_research','vintage_window']);
  });
 });

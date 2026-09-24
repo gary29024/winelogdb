@@ -162,6 +162,50 @@ describe('Champagne extraction public multi-user pipeline',()=>{
     vi.mocked(fetchGeminiBatch).mockResolvedValue({ok:true,state:'JOB_STATE_SUCCEEDED',payload:{},responses:[{metadata:{key:accepted.run.requestId},response:reply()}]});
     await process(poll);expect(operation(accepted.creditOperationId).status).toBe('complete');expect(createGeminiBatch).toHaveBeenCalledTimes(1);expect(provider).not.toHaveBeenCalled();expect(vi.mocked(fetchGeminiBatch).mock.calls[0][3]).toMatchObject({operationId:accepted.creditOperationId});
   });
+  it.each(['deleted photo','changed wine'] as const)('meters a submitted native Batch after a %s without applying its result',async(change)=>{
+    allowance();
+    delete environment.CF_AI_GATEWAY_TOKEN;delete environment.AI_GATEWAY_ACCOUNT_ID;delete environment.AI_GATEWAY_ID;delete environment.VERTEX_PROJECT_ID;delete environment.VERTEX_REGION;
+    const accepted=await start();await process();expect(currentRun().status).toBe('submitted');
+    if(change==='deleted photo')database.sql.prepare("DELETE FROM wine_images WHERE id='member-back'").run();
+    else database.sql.prepare("UPDATE wines SET appellation='Cava' WHERE id='member-wine'").run();
+    vi.mocked(fetchGeminiBatch).mockResolvedValueOnce({ok:true,state:'JOB_STATE_RUNNING',payload:{},responses:[]});
+    await process(await nextPoll());
+    expect(currentRun().status).toBe('submitted');expect(operation(accepted.creditOperationId).status).toBe('running');
+    expect(await access()).toMatchObject({used:0,pending:1,remaining:0});
+    vi.mocked(fetchGeminiBatch).mockResolvedValue({ok:true,state:'JOB_STATE_SUCCEEDED',payload:{},responses:[{metadata:{key:accepted.run.requestId},response:reply()}]});
+    const poll=await nextPoll();await process(poll);await process(poll);
+    expect(fetchGeminiBatch).toHaveBeenCalledTimes(2);expect(createGeminiBatch).toHaveBeenCalledTimes(1);expect(provider).not.toHaveBeenCalled();
+    expect(currentRun()).toMatchObject({status:'failed',result_json:null});expect(operation(accepted.creditOperationId).status).toBe('failed');
+    expect(await access()).toMatchObject({used:0,pending:0,remaining:1});
+    expect(database.sql.prepare('SELECT kind,run_id,tier,prompt_tokens,output_tokens FROM ai_usage_events').all()).toEqual([
+      expect.objectContaining({kind:'champagne_extraction',run_id:accepted.run.requestId,tier:'batch',prompt_tokens:100,output_tokens:30})
+    ]);
+    expect(database.sql.prepare("SELECT details_json FROM wine_sparkling_details WHERE owner_id='member'").get()!.details_json).toBe('{"dosageGPerL":0}');
+  });
+  it('exposes only the accepted operation run while a duplicate submission races photo staging',async()=>{
+    const old=await start();await process();
+    const input=await prepare(),quoted=await input.quoted.json() as Quote,realPut=environment.WINE_IMAGES.put.bind(environment.WINE_IMAGES);
+    let putStarted!:()=>void,releasePut!:()=>void;
+    const started=new Promise<void>(resolve=>{putStarted=resolve}),released=new Promise<void>(resolve=>{releasePut=resolve});
+    vi.mocked(environment.WINE_IMAGES.put).mockImplementationOnce(async(...args)=>{putStarted();await released;return realPut(...args)});
+    const pending=input.execute(quoted.id,'next-run-key');await started;
+    try{
+      const duplicate=await (await input.execute(quoted.id,'next-run-key')).json() as {accepted:boolean;creditOperationId:string;run?:unknown};
+      expect(duplicate.accepted).toBe(true);expect(duplicate.run).toBeUndefined();expect(duplicate.creditOperationId).not.toBe(old.creditOperationId);
+      expect(await (await request(`/api/credits/operations/${duplicate.creditOperationId}`)).json()).toMatchObject({status:'running',runId:null,result:null});
+      expect((await (await request(path())).json() as Accepted).run).toMatchObject({requestId:old.run.requestId,status:'complete'});
+    }finally{releasePut();await pending}
+    const accepted=await (await pending).json() as Accepted;
+    expect(accepted.run.requestId).not.toBe(old.run.requestId);
+    expect(await (await request(`/api/credits/operations/${accepted.creditOperationId}`)).json()).toMatchObject({runId:accepted.run.requestId});
+  });
+  it('retains the bound run for recovery when settlement precedes the saved HTTP response',async()=>{
+    const accepted=await start();await process();
+    database.sql.prepare('UPDATE credit_operations SET response_json=NULL,response_status=NULL WHERE id=?').run(accepted.creditOperationId);
+    const target=`/api/credits/operations/${accepted.creditOperationId}`;
+    expect(await (await request(target)).json()).toMatchObject({status:'complete',runId:accepted.run.requestId,result:null});
+    expect((await request(target,{},'owner')).status).toBe(404);
+  });
   it('allows cleanup after settlement and suspension without permitting unreserved AI',async()=>{
     const accepted=await start();await process();const row=database.sql.prepare("SELECT operation_id,body_json FROM queue_outbox WHERE json_extract(body_json,'$.cleanup')=1").get()!;
     expect(row.operation_id).toBeNull();const cleanup=JSON.parse(String(row.body_json)) as Job;expect(cleanup._creditOperationId).toBeUndefined();
