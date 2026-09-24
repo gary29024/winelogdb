@@ -5,11 +5,14 @@ import { producerSubjectKey,reusableProducer } from '../../src/lib/research/shar
 import { sharedSubjectKeys } from '../../src/lib/research/shared';
 import { producerRangeAllowed } from '../../src/lib/producers/rangeAccess';
 import { readVintageWindow,type VintageSubject } from '../../src/lib/maturity/vintageWindow';
+import { champagneExtractionRoute } from '../../src/lib/ai/reservedRoutes';
+import { champagneInputFingerprint,readChampagnePhotos,readChampagneWine,requireChampagneWine } from '../champagneInput';
 import { workKey,activeFriendWork } from './researchWork';
 import { researchInputFingerprint } from './provider';
 import { ApiError,boundedBytes,hash,json,seconds,settings,stamp,type Member } from './common';
 
-export const CREDIT_ACTIONS=['scan_single','scan_batch','scan_group','scan_sheet','producer_research','producer_profile','wine_producer','wine_terroir','wine_vintage_context','wine_wine_vintage','vintage_window'] as const;
+export { requiresAiReservation as aiRoute } from '../../src/lib/ai/reservedRoutes';
+export const CREDIT_ACTIONS=['scan_single','scan_batch','scan_group','scan_sheet','champagne_extraction','producer_research','producer_profile','wine_producer','wine_terroir','wine_vintage_context','wine_wine_vintage','vintage_window'] as const;
 export type CreditAction=typeof CREDIT_ACTIONS[number];
 export type CreditUnit={id:string;action:CreditAction;priceId:string;credits:number;targetId?:string;targetFingerprint?:string;researchKey?:string;resultId?:string;scope?:ResearchScope;cacheKey?:string;parentOperationId?:string;depth?:number;
  /** Why this scope could not be shared with friends, when it could not. Recorded
@@ -27,7 +30,6 @@ export function publicAiResponse(path:string,data:Record<string,unknown>,op:Cred
  }
  return {...data,creditOperationId:op.id,creditSettlement:data.creditSettlement??creditSummary(op)};
 }
-export function aiRoute(path:string,method:string){return method==='POST'&&(path==='/api/recognition'||/^\/api\/tastings\/[^/]+\/sheet\/parse$/.test(path)||/^\/api\/wines\/[^/]+\/deep-search$/.test(path)||/^\/api\/producers\/[^/]+\/research$/.test(path)||path==='/api/producers/research-batch'||/^\/api\/batch-recognition\/sessions\/[^/]+\/submit$/.test(path)||path==='/api/maturity/vintage')}
 export async function requestFingerprint(request:Request){
  const bytes=await boundedBytes(request.clone().body,16*1024*1024);
  const digest=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes)),b=>b.toString(16).padStart(2,'0')).join('');
@@ -38,6 +40,14 @@ export async function plannedUnits(request:Request,db:D1Database,user:string):Pr
  const path=new URL(request.url).pathname;
  const data=request.headers.get('Content-Type')?.includes('application/json')?await request.clone().json() as Record<string,unknown>:{};
  const unit=(action:CreditAction,id='one',targetId?:string)=>({action,id,targetId});
+ const champagne=champagneExtractionRoute(path);
+ if(champagne){
+  const wineId=decodeURIComponent(champagne[1]),wine=await readChampagneWine(db,user,wineId);
+  requireChampagneWine(wine);
+  const {imageIds}=await readChampagnePhotos(request.clone(),db,user,wineId);
+  // One extraction of one bottle, even when several label photos are selected.
+  return [{...unit('champagne_extraction',wineId,wineId),targetFingerprint:await champagneInputFingerprint(wine,imageIds)}];
+ }
  if(path==='/api/recognition'){
   const form=await request.clone().formData().catch(()=>null),images=form?.getAll('images').filter(x=>typeof x!=='string')??[];
   if(!images.length||images.length>12)throw new ApiError(400,'Choose between 1 and 12 scan images');
@@ -166,11 +176,16 @@ export async function settle(db:D1Database,op:CreditOperation,captured:number,re
 export async function saveOperationResponse(db:D1Database,op:CreditOperation,response:Response){
  const data=await response.clone().json().catch(()=>({error:'Invalid AI response'})) as Record<string,unknown>;
  if(await db.prepare("SELECT id FROM provider_operations WHERE operation_id=? AND state IN ('submitted','uncertain') LIMIT 1").bind(op.id).first()){
-  await db.prepare("UPDATE credit_operations SET status='review',response_json=?,response_status=?,updated_at=? WHERE id=?").bind(JSON.stringify(data),response.status,stamp(),op.id).run();return {...data,creditSettlement:'held_for_reconciliation'};
+  await db.prepare("UPDATE credit_operations SET status='review',response_json=?,response_status=?,updated_at=? WHERE id=? AND status IN ('reserved','running','review')").bind(JSON.stringify(data),response.status,stamp(),op.id).run();
+  const current=await db.prepare('SELECT * FROM credit_operations WHERE id=?').bind(op.id).first<CreditOperation>();
+  return {...data,creditSettlement:current&&['complete','failed'].includes(current.status)?creditSummary(current):'held_for_reconciliation'};
  }
- const runId=String(data.researchRequestId||data.sessionId||(data.campaign as {id?:string}|undefined)?.id||'')||null;
- if(response.status===202){await db.prepare("UPDATE credit_operations SET status='running',response_json=?,response_status=?,run_id=?,updated_at=? WHERE id=?").bind(JSON.stringify(data),202,runId,stamp(),op.id).run()}
- else{
+ const runId=String(data.researchRequestId||data.sessionId||(data.campaign as {id?:string}|undefined)?.id||(data.run as {requestId?:string}|undefined)?.requestId||'')||null;
+ if(response.status===202){
+  // Another request or cron can finish this job before the HTTP response is
+  // saved. Never reopen terminal settlement, clear review, or lose its run ID.
+  await db.prepare("UPDATE credit_operations SET status=CASE WHEN status='review' THEN 'review' ELSE 'running' END,response_json=?,response_status=?,run_id=coalesce(run_id,?),updated_at=? WHERE id=? AND status IN ('reserved','running','review')").bind(JSON.stringify(data),202,runId,stamp(),op.id).run();
+ }else{
   const successful=response.ok&&!data.error;
   await settle(db,op,successful&&data.cached!==true?op.reserved:0,{body:data,status:response.status},successful);
  }
@@ -179,7 +194,7 @@ export async function saveOperationResponse(db:D1Database,op:CreditOperation,res
 export async function reconcileOperation(db:D1Database,op:CreditOperation){
  if(!['running','reserved','review'].includes(op.status))return;
  if(await db.prepare("SELECT id FROM provider_operations WHERE operation_id=? AND state IN ('submitted','uncertain') LIMIT 1").bind(op.id).first()){
-  await db.prepare("UPDATE credit_operations SET status='review',updated_at=? WHERE id=?").bind(stamp(),op.id).run();return;
+  await db.prepare("UPDATE credit_operations SET status='review',updated_at=? WHERE id=? AND status IN ('reserved','running','review')").bind(stamp(),op.id).run();return;
  }
  const dependency=await db.prepare('SELECT * FROM research_followers WHERE operation_id=?').bind(op.id).first<{sponsor_operation_id:string;sponsor_id:string}>();
  if(dependency){
@@ -190,7 +205,22 @@ export async function reconcileOperation(db:D1Database,op:CreditOperation){
  }
  const units=JSON.parse(op.units_json) as CreditUnit[];let terminal=false,captured=0,successfulUnits=0;
  const first=units[0];
- if(op.path.includes('/deep-search')&&op.run_id){
+ if(first?.action==='champagne_extraction'&&op.run_id){
+  const read=()=>db.prepare('SELECT status,created_at,updated_at FROM wine_champagne_extractions WHERE owner_id=? AND wine_id=? AND request_id=?').bind(op.user_id,first.targetId!,op.run_id!).first<{status:string;created_at:string;updated_at:string}>();
+  let run=await read();
+  // Maintenance also releases abandoned runs when the user never reopens the
+  // wine. Never reset them to queued or repeat an uncertain paid submission.
+  const interrupted=run&&['queued','running'].includes(run.status)&&Date.parse(run.updated_at)<Date.now()-15*60_000;
+  const expired=run?.status==='submitted'&&Date.parse(run.created_at)<Date.now()-30*3600_000;
+  if(run&&(interrupted||expired)){
+   await db.prepare("UPDATE wine_champagne_extractions SET status='failed',error=?,updated_at=? WHERE owner_id=? AND wine_id=? AND request_id=? AND status=? AND updated_at=?")
+    .bind(interrupted?'Extraction was interrupted. Please try again.':'Extraction exceeded the batch waiting period. Please try again.',stamp(),op.user_id,first.targetId!,op.run_id,run.status,run.updated_at).run();
+   run=await read();
+  }
+  // Deleting the bottle (or superseding an old run) cannot strand its hold.
+  terminal=!run||['complete','failed'].includes(run.status);
+  successfulUnits=run?.status==='complete'?1:0;captured=successfulUnits?op.reserved:0;
+ }else if(op.path.includes('/deep-search')&&op.run_id){
   const run=await db.prepare('SELECT status FROM wine_research_runs WHERE owner_id=? AND request_id=?').bind(op.user_id,op.run_id).first<{status:string}>();
   const active=await db.prepare("SELECT id FROM research_batch_jobs WHERE owner_id=? AND request_id=? AND status='running' LIMIT 1").bind(op.user_id,op.run_id).first();
   terminal=Boolean(run&&run.status!=='running'&&!active);
@@ -213,7 +243,7 @@ export async function reconcileOperation(db:D1Database,op:CreditOperation){
   }
  }
  if(terminal)await settle(db,op,captured,undefined,successfulUnits>0);
- else if(Date.parse(op.created_at)<Date.now()-48*3600_000)await db.prepare("UPDATE credit_operations SET status='review',updated_at=? WHERE id=? AND status<>'review'").bind(stamp(),op.id).run();
+ else if(Date.parse(op.created_at)<Date.now()-48*3600_000)await db.prepare("UPDATE credit_operations SET status='review',updated_at=? WHERE id=? AND status IN ('reserved','running')").bind(stamp(),op.id).run();
 }
 export async function creditRead(request:Request,env:CreditEnv,member:Member):Promise<Response|null>{
  const path=new URL(request.url).pathname;if(request.method!=='GET')return null;
@@ -222,11 +252,11 @@ export async function creditRead(request:Request,env:CreditEnv,member:Member):Pr
  if(path==='/api/credits/operations')return json({items:(await env.DB.prepare('SELECT id,path,status,reserved,captured,created_at FROM credit_operations WHERE user_id=? ORDER BY created_at DESC LIMIT 50').bind(member.id).all()).results});
  const match=path.match(/^\/api\/credits\/operations\/([^/]+)$/);if(match){
   let op=await env.DB.prepare('SELECT * FROM credit_operations WHERE id=? AND user_id=?').bind(match[1],member.id).first<CreditOperation>();if(!op)throw new ApiError(404,'Operation not found');
-  if(op.units_json==='[]'&&op.status==='running'){
-   await reconcileOperation(env.DB,op); // Inspect the sponsor only; this cannot submit AI work.
+  if((op.units_json==='[]'&&op.status==='running')||champagneExtractionRoute(op.path)){
+   await reconcileOperation(env.DB,op); // Reconciliation never submits provider work.
    op=await env.DB.prepare('SELECT * FROM credit_operations WHERE id=? AND user_id=?').bind(match[1],member.id).first<CreditOperation>()??op;
   }
-  return json({id:op.id,status:op.status,reserved:op.reserved,captured:op.captured,result:op.response_json?JSON.parse(op.response_json):null});
+  return json({id:op.id,status:op.status,runId:op.run_id,reserved:op.reserved,captured:op.captured,result:op.response_json?JSON.parse(op.response_json):null});
  }
  return null;
 }

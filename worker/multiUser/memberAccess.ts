@@ -1,7 +1,8 @@
 import { ApiError,stamp } from './common';
+import { champagneExtractionRoute } from '../../src/lib/ai/reservedRoutes';
 
 export const MEMBER_AI_ACTIONS=[
- 'scan_single','scan_group','scan_batch','scan_sheet','wine_deep_search','producer_research','producer_batch_research','vintage_window'
+ 'scan_single','scan_group','scan_batch','scan_sheet','champagne_extraction','wine_deep_search','producer_research','producer_batch_research','vintage_window'
 ] as const;
 export type MemberAiAction=typeof MEMBER_AI_ACTIONS[number];
 export type MemberAiAccessMode='included'|'allowance';
@@ -13,6 +14,7 @@ export type MemberAiAllowance={
 
 export const MEMBER_AI_LABELS:Record<MemberAiAction,string>={
  scan_single:'Single wine scan',scan_group:'Group photo scan',scan_batch:'Batch scan',scan_sheet:'Tasting sheet scan',
+ champagne_extraction:'Champagne label details extraction',
  wine_deep_search:'Wine Deep Search',producer_research:'Producer research',producer_batch_research:'Batch producer research',vintage_window:'Vintage Window'
 };
 
@@ -21,6 +23,7 @@ export function memberActionForRequest(request:Request):MemberAiAction|null{
  if(path==='/api/recognition')return request.headers.get('X-WineLog-Recognition-Mode')==='group'?'scan_group':'scan_single';
  if(/^\/api\/batch-recognition\/sessions\/[^/]+\/submit$/.test(path))return 'scan_batch';
  if(/^\/api\/tastings\/[^/]+\/sheet\/parse$/.test(path))return 'scan_sheet';
+ if(champagneExtractionRoute(path))return 'champagne_extraction';
  if(/^\/api\/wines\/[^/]+\/deep-search$/.test(path))return 'wine_deep_search';
  if(/^\/api\/producers\/[^/]+\/research$/.test(path))return 'producer_research';
  if(path==='/api/producers/research-batch')return 'producer_batch_research';

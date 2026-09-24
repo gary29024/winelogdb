@@ -2,7 +2,7 @@ import { afterEach,expect,it,vi } from 'vitest';
 import { getChampagneExtraction } from '../../src/features/wines/champagneExtractionApi';
 import { missingChampagneDetails } from '../../src/lib/wine/champagneExtraction';
 
-vi.mock('../../src/lib/auth/client',()=>({authHeaders:()=>({}),clearSession:vi.fn()}));
+vi.mock('../../src/lib/auth/client',()=>({apiFetch:(input:RequestInfo|URL,init?:RequestInit)=>fetch(input,init),authHeaders:()=>({}),clearSession:vi.fn(),getSession:()=>null}));
 afterEach(()=>vi.unstubAllGlobals());
 
 it('accepts future response fields while keeping suggestions safe for the form',async()=>{
