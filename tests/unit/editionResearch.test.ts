@@ -137,6 +137,52 @@ describe('another bottle’s snapshot',()=>{
     expect(exactFor(database).some(row=>row.result_json.includes('SNAPSHOT_169'))).toBe(false);
   });
 
+  // Snapshots saved before releases were recorded carry no release field. The
+  // database stamps them with their old identity whenever a bottle's release changes.
+  function unmarkedBottle(edition:string|null,details:Record<string,unknown>|null=null){
+    const database=realD1();
+    vi.stubGlobal('fetch',vi.fn(async()=>{throw new Error('provider blocked in test')}));
+    database.sql.prepare(`INSERT INTO wines(id,owner_id,producer,wine_name,vintage,country,region,appellation,wine_style,release_designation,created_at,updated_at) VALUES('mine','owner','Krug','Grande Cuvée',NULL,'France','Champagne','Champagne','sparkling',?,'now','now')`).run(edition);
+    if(details)database.sql.prepare("INSERT INTO wine_sparkling_details(owner_id,wine_id,details_json,updated_at) VALUES('owner','mine',?,'now')").run(JSON.stringify(details));
+    // Researched with those details in place, in the format saved before releases were recorded.
+    database.sql.prepare("UPDATE wines SET deep_search_json=?,deep_search_updated_at='2026-09-01' WHERE id='mine'").run(snapshot);
+    return database;
+  }
+  const releaseOf=(database:ReturnType<typeof realD1>)=>JSON.parse(String((database.sql.prepare("SELECT deep_search_json FROM wines WHERE id='mine'").get() as {deep_search_json:string}).deep_search_json)).release;
+  const run=(database:ReturnType<typeof realD1>)=>startWineBatchResearch({DB:database.db,RESEARCH_QUEUE:{send:vi.fn()} as unknown as Queue<unknown>},'owner','mine','run','none');
+
+  it('never keeps an older, unmarked snapshot’s edition after the bottle is edited to another',async()=>{
+    const database=unmarkedBottle('169ème Édition');
+    database.sql.exec("UPDATE wines SET release_designation='171ème Édition' WHERE id='mine'");
+    expect(releaseOf(database)).toEqual({releaseDesignation:'169ème Édition',baseVintage:null,disgorgement:null});
+    expect(await run(database)).not.toMatchObject({cached:true});
+    expect(exactFor(database).some(row=>row.result_json.includes('SNAPSHOT_169'))).toBe(false);
+  });
+
+  it('stamps an unmarked snapshot when the base year or disgorgement changes',async()=>{
+    const database=unmarkedBottle('171ème Édition',{baseVintage:2015});
+    database.sql.exec(`UPDATE wine_sparkling_details SET details_json='{"baseVintage":2016}' WHERE wine_id='mine'`);
+    expect(releaseOf(database)).toEqual({releaseDesignation:'171ème Édition',baseVintage:2015,disgorgement:null});
+    expect(await run(database)).not.toMatchObject({cached:true});
+  });
+
+  it('marks a generic bottle’s snapshot as generic when an edition is first recorded',async()=>{
+    const database=unmarkedBottle(null);
+    database.sql.exec("UPDATE wines SET release_designation='171ème Édition' WHERE id='mine'");
+    expect(releaseOf(database)).toBeNull();
+    // Generic research may stand in until refreshed, as with any generic result.
+    expect(await run(database)).toMatchObject({ok:true,cached:true});
+  });
+
+  it('leaves a snapshot that already records its release alone',async()=>{
+    const database=realD1();
+    const marked=JSON.stringify({...JSON.parse(snapshot),release:{releaseDesignation:'169ème Édition',baseVintage:null,disgorgement:null}});
+    database.sql.prepare(`INSERT INTO wines(id,owner_id,producer,wine_name,vintage,country,region,appellation,wine_style,release_designation,deep_search_json,created_at,updated_at) VALUES('mine','owner','Krug','Grande Cuvée',NULL,'France','Champagne','Champagne','sparkling','169ème Édition',?,'now','now')`).run(marked);
+    database.sql.exec("UPDATE wines SET release_designation='170ème Édition' WHERE id='mine'");
+    database.sql.exec("UPDATE wines SET release_designation='171ème Édition' WHERE id='mine'");
+    expect(releaseOf(database)).toEqual({releaseDesignation:'169ème Édition',baseVintage:null,disgorgement:null});
+  });
+
   it('seeds from a snapshot recorded as generic research, whatever its row now says',async()=>{
     const database=realD1();
     vi.stubGlobal('fetch',vi.fn(async()=>{throw new Error('provider blocked in test')}));
