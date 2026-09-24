@@ -7,7 +7,7 @@ import { adminRoute,deploymentAiCost } from './multiUser/admin';
 import { aiRoute,creditRead,publicAiResponse,quote,reserve,saveOperationResponse,reconcileOperation,wineTargets,settle,type CreditOperation } from './multiUser/credits';
 import { memberActionForRequest,memberAiAccess,memberAiActionAccess,reserveMemberAiAllowance } from './multiUser/memberAccess';
 import { providerAuthorization } from './multiUser/provider';
-import { claimDelivery,durableQueue,finishDelivery,flushOutbox,maintainJobs,markUncertain,type JobEnvelope } from './multiUser/jobs';
+import { claimDelivery,durableQueue,finishDelivery,flushOutbox,isQueueCleanup,maintainJobs,markUncertain,type JobEnvelope } from './multiUser/jobs';
 import { meteredBucket } from './multiUser/storage';
 import { adoptFriendResearch,assembleDeepSearch,loadWineResearchCache,RESEARCH_EDITION_COLUMNS } from '../src/lib/research/cache';
 import type { AiRateEnv } from '../src/lib/usage/rates';
@@ -15,6 +15,7 @@ import { processRolloutJob,recoverRollouts,rolloutRoute,type RolloutQueueJob } f
 import { LWIN_AI_LEASE_SECONDS } from './multiUser/lwinRepair';
 import { reusableProducer } from '../src/lib/research/sharedProducer';
 import { readVintageWindow,type VintageSubject } from '../src/lib/maturity/vintageWindow';
+import { champagneExtractionRoute } from '../src/lib/ai/reservedRoutes';
 
 export type MultiUserEnv=Parameters<typeof legacy.fetch>[1]&IdentityEnv&AiRateEnv;
 type Batch=Parameters<typeof legacy.queue>[0];
@@ -97,6 +98,10 @@ export default {
     }catch(error){await markUncertain(env.DB,operation.id);throw error}
    }
    const forwarded=await internalRequest(request,env,member.id);
+   if(request.method==='GET'&&champagneExtractionRoute(path)){
+    const op=await env.DB.prepare("SELECT * FROM credit_operations WHERE user_id=? AND path=? AND status IN ('reserved','running','review') LIMIT 1").bind(member.id,path).first<CreditOperation>();
+    if(op)await reconcileOperation(env.DB,op);
+   }
    const response=await legacy.fetch(forwarded,scoped,ctx);
    const producerMatch=path.match(/^\/api\/producers\/([^/]+)$/);
    if(response.ok&&request.method==='GET'&&producerMatch){const shared=await reusableProducer(env.DB,member.id,producerMatch[1]);if(shared)return json({...await response.json() as object,...shared})}
@@ -115,7 +120,9 @@ export default {
      ctx.waitUntil(adoptFriendResearch(env.DB,member.id,cache));
      return json({...data,deepSearch:cache.size?assembleDeepSearch(cache,targets):null})}
    }
-   if(request.method!=='GET')ctx.waitUntil(flushOutbox(env.DB,env.RESEARCH_QUEUE));
+   // A Champagne status read may safely revive polling of an existing native
+   // batch. Dispatch that outbox message too, without reserving another action.
+   if(request.method!=='GET'||champagneExtractionRoute(path))ctx.waitUntil(flushOutbox(env.DB,env.RESEARCH_QUEUE));
    return revalidated(response);
   }catch(error){
    if(error instanceof ApiError)return json({error:error.message},error.status);
@@ -128,7 +135,9 @@ export default {
    if(!await claimDelivery(env.DB,id,raw.kind==='admin_rollout'&&raw.rollout==='lwin_ai'?LWIN_AI_LEASE_SECONDS:undefined)){const done=await env.DB.prepare('SELECT done FROM queue_deliveries WHERE id=?').bind(id).first<{done:number}>();if(done?.done)message.ack();else message.retry({delaySeconds:60});continue}
    let retried=false;
    try{
-    const member=await env.DB.prepare("SELECT id,role FROM app_users WHERE id=? AND status='active'").bind(raw.owner||'').first<{id:string;role:string}>();
+    const cleanup=isQueueCleanup(raw as JobEnvelope);
+    // Disabling an account prevents AI work, but must not strand its temporary photos.
+    const member=await env.DB.prepare("SELECT id,role FROM app_users WHERE id=? AND (status='active' OR ?=1)").bind(raw.owner||'',cleanup?1:0).first<{id:string;role:string}>();
     if(!member){message.retry({delaySeconds:300});retried=true;continue}
     if(raw.kind==='admin_rollout'){
      if(member.role!=='owner'){message.ack();continue}
@@ -138,8 +147,8 @@ export default {
     }
     const job=raw as typeof message.body&JobEnvelope;
     const op=job._creditOperationId?await env.DB.prepare('SELECT * FROM credit_operations WHERE id=? AND user_id=?').bind(job._creditOperationId,job.owner!).first<CreditOperation>():null;
-    if(job.kind!=='recognition_batch_cleanup'&&(!op||!['reserved','running','review'].includes(op.status))){message.ack();continue}
-    const scoped={...env,CREDIT_CONTEXT:op?{db:env.DB,operationId:op.id,namespace:'queue'}:providerAuthorization(member.role,`${job.kind??'This job'} reached the provider without a credit operation.`),CREDIT_RESEARCH_SCOPES:op?JSON.parse(op.units_json).flatMap((u:{scope?:string})=>u.scope?[u.scope]:[]):[],WINE_IMAGES:meteredBucket(env.WINE_IMAGES,env.DB,job.owner!,{skipMemberLimit:member.role==='owner'}),RESEARCH_QUEUE:durableQueue(env.RESEARCH_QUEUE,env.DB,op?.id)};
+    if(!cleanup&&(!op||!['reserved','running','review'].includes(op.status))){message.ack();continue}
+    const scoped={...env,CREDIT_CONTEXT:cleanup?{deny:true as const,reason:'Cleanup jobs cannot invoke AI providers.'}:op?{db:env.DB,operationId:op.id,namespace:'queue'}:providerAuthorization(member.role,`${job.kind??'This job'} reached the provider without a credit operation.`),CREDIT_RESEARCH_SCOPES:op?JSON.parse(op.units_json).flatMap((u:{scope?:string})=>u.scope?[u.scope]:[]):[],WINE_IMAGES:meteredBucket(env.WINE_IMAGES,env.DB,job.owner!,{skipMemberLimit:member.role==='owner'}),RESEARCH_QUEUE:durableQueue(env.RESEARCH_QUEUE,env.DB,op?.id)};
     const wrapped={id:message.id,timestamp:message.timestamp,body:message.body,attempts:message.attempts,ack:()=>message.ack(),retry:(options?:QueueRetryOptions)=>{retried=true;message.retry(options)}};
     await legacy.queue({queue:batch.queue,metadata:batch.metadata,messages:[wrapped],ackAll:()=>message.ack(),retryAll:(options?:QueueRetryOptions)=>{retried=true;message.retry(options)}},scoped);
     if(op)await reconcileOperation(env.DB,op);

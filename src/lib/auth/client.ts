@@ -1,3 +1,5 @@
+import { requiresAiReservation as isAi } from '../ai/reservedRoutes';
+
 export type Account={id:string;email:string;display_name:string;role:'owner'|'member';status:string};
 let account:Account|null=null;
 let generation=0;
@@ -25,7 +27,6 @@ type Quote={id:string;total:number;available:number;units:Array<{action:string;c
 export type QuotePrompt={quote:Quote;resolve:(confirmed:boolean)=>void};
 let askQuote:((prompt:QuotePrompt)=>void)|null=null;
 export function registerQuotePrompt(prompt:((prompt:QuotePrompt)=>void)|null){askQuote=prompt}
-const isAi=(path:string,method:string)=>method==='POST'&&(path==='/api/recognition'||/^\/api\/tastings\/[^/]+\/sheet\/parse$/.test(path)||/^\/api\/wines\/[^/]+\/deep-search$/.test(path)||/^\/api\/producers\/[^/]+\/research$/.test(path)||path==='/api/producers/research-batch'||/^\/api\/batch-recognition\/sessions\/[^/]+\/submit$/.test(path)||path==='/api/maturity/vintage');
 export async function apiFetch(input:RequestInfo|URL,init?:RequestInit):Promise<Response>{
  const atStart=generation,identity=getSession();
  const url=typeof input==='string'?new URL(input,location.origin):input instanceof URL?input:new URL(input.url);

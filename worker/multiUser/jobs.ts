@@ -3,12 +3,16 @@ import type { CreditOperation } from './credits';
 import { reconcileOperation,settle } from './credits';
 import { meteredBucket } from './storage';
 
-export type JobEnvelope={owner?:string;kind?:string;requestId?:string;sessionId?:string;campaignId?:string;_creditOperationId?:string;_outboxId?:string};
+export type JobEnvelope={owner?:string;kind?:string;requestId?:string;sessionId?:string;campaignId?:string;cleanup?:boolean;_creditOperationId?:string;_outboxId?:string};
+/** Only these concrete handlers are cleanup-only; an arbitrary cleanup flag is not an AI exemption. */
+export const isQueueCleanup=(job:JobEnvelope)=>job.kind==='recognition_batch_cleanup'||job.kind==='champagne_extraction'&&job.cleanup===true;
 export function durableQueue(queue:Queue<unknown>,db:D1Database,operationId?:string):Queue<unknown>{
  const send=async(value:unknown,options?:QueueSendOptions)=>{
-  const job=value as JobEnvelope;
-  let opId=operationId;
-  if(!opId&&job.kind!=='recognition_batch_cleanup'){
+  const job=value as JobEnvelope,cleanup=isQueueCleanup(job);
+  // Cleanup must survive settlement and never hold credits/budget open. Its
+  // consumer receives an explicit provider denial, including for the owner.
+  let opId=cleanup?undefined:operationId;
+  if(!opId&&!cleanup){
    const op=await db.prepare("SELECT id FROM credit_operations WHERE user_id=? AND run_id=? AND status IN ('reserved','running','review') LIMIT 1").bind(job.owner??'',job.requestId||job.sessionId||job.campaignId||'').first<{id:string}>();opId=op?.id;
    if(!opId)throw new ApiError(402,'Background AI work requires a credit reservation');
   }
@@ -30,9 +34,10 @@ export async function flushOutbox(db:D1Database,queue:Queue<unknown>){
 }
 export async function maintainJobs(db:D1Database,queue:Queue<unknown>,bucket?:R2Bucket){
  // Queue expiry or a DLQ delivery cannot erase the durable dispatch record.
+ // Operation-free cleanup messages need the same recovery as active AI work.
  await db.prepare(`UPDATE queue_outbox SET sent_at=NULL,due_at=? WHERE id IN (
- SELECT o.id FROM queue_outbox o LEFT JOIN queue_deliveries d ON d.id=o.id JOIN credit_operations c ON c.id=o.operation_id
- WHERE o.sent_at<? AND coalesce(d.done,0)=0 AND c.status IN ('running','reserved','review') LIMIT 20)`).bind(seconds(),seconds()-86400).run();
+ SELECT o.id FROM queue_outbox o LEFT JOIN queue_deliveries d ON d.id=o.id LEFT JOIN credit_operations c ON c.id=o.operation_id
+ WHERE o.sent_at<? AND coalesce(d.done,0)=0 AND (o.operation_id IS NULL OR c.status IN ('running','reserved','review')) LIMIT 20)`).bind(seconds(),seconds()-86400).run();
  await flushOutbox(db,queue);
  const rows=await db.prepare("SELECT * FROM credit_operations WHERE status IN ('running','reserved','review') ORDER BY updated_at LIMIT 2").all<CreditOperation>();
  for(const op of rows.results){
