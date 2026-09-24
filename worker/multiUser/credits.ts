@@ -1,4 +1,5 @@
 import { wineRowResearchTargets,loadWineResearchCache,type ResearchScope } from '../../src/lib/research/cache';
+import { readableWine,withSourceResearch } from '../../src/lib/research/readableWine';
 import { unresearchedProducers } from '../../src/lib/producers/researchCampaign';
 import { producerSubjectKey,reusableProducer } from '../../src/lib/research/sharedProducer';
 import { sharedSubjectKeys } from '../../src/lib/research/shared';
@@ -56,8 +57,11 @@ export async function plannedUnits(request:Request,db:D1Database,user:string):Pr
  }
  const wine=path.match(/^\/api\/wines\/([^/]+)\/deep-search$/);
  if(wine){
-  const row=await db.prepare('SELECT * FROM wines WHERE id=? AND owner_id=?').bind(wine[1],user).first<Record<string,unknown>>();if(!row)throw new ApiError(404,'Wine not found');
-  const targets=wineTargets(row),cache=await loadWineResearchCache(db,user,targets,true,row.deep_search_json),targetFingerprint=await researchInputFingerprint('wine',row);
+  // Own or shared with this reader. A recipient pays only for the sections
+  // neither they, a friend's published research, nor the owner already has.
+  const row=await readableWine(db,user,wine[1]);if(!row)throw new ApiError(404,'Wine not found');
+  const refreshing=new Set<ResearchScope>(data.refresh==='all'?wineTargets(row).map(t=>t.scope):data.refresh==='vintage'?['wine_vintage','vintage_context']:[]);
+  const targets=wineTargets(row),cache=await withSourceResearch(db,user,row.source_owner_id,targets,await loadWineResearchCache(db,user,targets,true,row.source_owner_id===user?row.deep_search_json:null),refreshing),targetFingerprint=await researchInputFingerprint('wine',row);
   return targets.filter(t=>data.refresh==='all'||(data.refresh==='vintage'&&['wine_vintage','vintage_context'].includes(t.scope))||!cache.has(t.scope)).map(t=>{
    const shared=sharedSubjectKeys(t),key=shared.keys[0];
    return {...unit(`wine_${t.scope}`,t.scope,wine[1]),scope:t.scope,cacheKey:t.cacheKey,targetFingerprint,researchKey:key?`${t.scope}:${key}`:undefined,notShareable:shared.skipped};

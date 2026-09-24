@@ -1,4 +1,4 @@
-import { useEffect,useMemo,useState,type FormEvent } from 'react';
+import { useCallback,useEffect,useMemo,useState,type FormEvent } from 'react';
 import { Link,useLocation,useParams } from 'react-router-dom';
 import { apiJson } from '../../lib/auth/api';
 import type { SharedWine,SharedWineExperience } from '../../lib/wine/shared';
@@ -15,6 +15,7 @@ import { SparklingDetailsCard } from './SparklingDetailsCard';
 import { hasTastingStructure,structureValueLabel,toggleStructure,type TastingStructure } from '../../lib/wine/tastingStructure';
 import { TastingStructureFields } from './TastingStructureFields';
 import { DeepSources,ResearchText } from './ResearchPresentation';
+import { SharedDeepSearchControls } from './SharedDeepSearchControls';
 import { readOpenDeepFields,researchSections,type DeepField,writeOpenDeepFields } from './researchSections';
 import '../../favorites.css';
 import '../../wineDetailCompact.css';
@@ -44,6 +45,9 @@ export function SharedWinesPage(){
  const back=useMemo(()=>backTargetFromState(state)??JOURNAL_BACK,[state]);
 
  useEffect(()=>{let active=true;setError('');setFavoriteError('');setNotice('');apiJson<SharedWine>(`/api/shared/wines/${id}`).then(item=>{if(active){setWine(item);setDraft(draftFromWine(item))}}).catch(e=>{if(active)setError((e as Error).message)});return()=>{active=false}},[id]);
+ // After the reader's own Deep Search: only the research changes, so an
+ // experience being edited is left alone.
+ const reloadResearch=useCallback(()=>apiJson<SharedWine>(`/api/shared/wines/${id}`).then(item=>setWine(current=>current?{...current,deepSearch:item.deepSearch}:item)),[id]);
 
  // A save confirmation that never leaves stops meaning anything, and on a long
  // detail page it is also the only thing still moving. Retire it on its own.
@@ -139,11 +143,11 @@ export function SharedWinesPage(){
    <SectionLabel>Photos</SectionLabel>
    <div className="detail-gallery" aria-label={`${wine.wineName} photos`}>{wine.photos!.map((photo,index)=><span className="detail-photo-slot" key={photo.id}><button type="button" className="detail-photo-button" onClick={()=>setSelectedPhoto(photo.url)} aria-label={`Open photo ${index+1} of ${wine.photos!.length}`}><img src={photo.url} alt={`${wine.producer} ${wine.wineName} photo ${index+1}`} className="detail-photo" loading="lazy" decoding="async"/></button></span>)}</div>
   </section>}
-  {wine.deepSearch&&<section className="detail-section deep-search-panel">
-   <div className="deep-panel-head"><SectionLabel origin={wine.deepSearch.complete===false?undefined:'researched'}>Deep Search</SectionLabel></div>
+  <section className="detail-section deep-search-panel">
+   <div className="deep-panel-head"><SectionLabel origin={wine.deepSearch&&wine.deepSearch.complete!==false?'researched':undefined}>Deep Search</SectionLabel></div>
    {/* The owner's page shows research while scopes are still missing, so this
        page does too, and says so the same way. */}
-   {wine.deepSearch.complete===false&&<p>Partial research is available. The remaining sections appear here once they are researched.</p>}
+   {wine.deepSearch?<>{wine.deepSearch.complete===false&&<p>Partial research is available. Run Deep Search to research the missing sections while reusing the saved results.</p>}
    <div className="deep-summary"><ResearchText text={wine.deepSearch.summary}/></div>
    {sections.length>0&&<div className="deep-research-sections">
     <div className="deep-sections-head"><span>{sections.length} research section{sections.length===1?'':'s'}</span><button type="button" className="deep-toggle-all" onClick={()=>toggleAllDeepFields(sections.map(([,field])=>field))}>{sections.every(([,field])=>openDeepFields.has(field))?'Collapse all':'Expand all'}</button></div>
@@ -156,7 +160,9 @@ export function SharedWinesPage(){
    {/* Not this reader's research: it came with the bottle, so the line says so
        without naming the sharer, who is one press away on the tag button. */}
    <small>Shared research · updated {formatDate(wine.deepSearch.researchedAt.slice(0,10))}</small>
-  </section>}
+   </>:<p>Enrich this wine with grounded research. WineLog reuses research your friend and you already have whenever the scope matches.</p>}
+   <SharedDeepSearchControls wineId={wine.id} complete={wine.deepSearch?.complete!==false&&Boolean(wine.deepSearch)} onChange={reloadResearch}/>
+  </section>
   {selectedPhoto&&<div className="image-lightbox" role="dialog" aria-modal="true" aria-label="Wine photo viewer" onClick={()=>setSelectedPhoto(undefined)}><button type="button" className="lightbox-close" aria-label="Close photo" onClick={()=>setSelectedPhoto(undefined)}>×</button><div className="lightbox-image-wrap" onClick={e=>e.stopPropagation()}><img src={selectedPhoto} alt={`${wine.producer} ${wine.wineName} full-resolution shared photo`} className="lightbox-image"/></div></div>}
  </article>;
 }

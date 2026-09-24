@@ -88,14 +88,19 @@ export function publishedDeepSearch(raw:unknown,vintage:number|null=null):Shared
  * Search from the owner's saved research scopes, full or partial; a recipient
  * used to see only a finished snapshot, so a bottle with three of four scopes
  * researched showed nothing at all. Read the same scopes for this exact wine
- * from the owner, then fill any gap from the reader's own research. The saved
+ * from the owner, alongside the reader's own research for it. The saved
  * snapshot remains the fallback for rows that predate the scope cache.
  */
 export async function sharedWineResearch(db:D1Database,viewer:string,row:Record<string,unknown>):Promise<SharedDeepSearch|null>{
  const vintage=typeof row.vintage==='number'?row.vintage:null,targets=wineRowResearchTargets(row);
  const cache=await loadWineResearchCache(db,String(row.owner_id),targets,false,row.deep_search_json);
- const missing=targets.filter(target=>!cache.has(target.scope));
- if(missing.length)for(const [scope,entry] of await loadResearchCache(db,viewer,missing))cache.set(scope,entry);
+ // The reader's own scope wins when it is newer: a recipient who refreshes the
+ // vintage on their own credits sees that refresh, not the owner's older one.
+ // The owner's page is unaffected; it keeps the owner's own research first.
+ for(const [scope,entry] of await loadResearchCache(db,viewer,targets)){
+  const current=cache.get(scope);
+  if(!current||Date.parse(entry.researchedAt)>Date.parse(current.researchedAt))cache.set(scope,entry);
+ }
  return cache.size?publishDeepSearch(assembleDeepSearch(cache,targets),vintage):publishedDeepSearch(row.deep_search_json,vintage);
 }
 

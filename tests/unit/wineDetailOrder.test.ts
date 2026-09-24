@@ -53,7 +53,7 @@ describe('the order a wine reads in',()=>{
     // earns the badge; deepSearchLayout tests the rendered complete/partial states.
     expect(owner).toContain("origin={deepComplete?'researched':undefined}");
     // A recipient now sees partial scopes too, under the same rule.
-    expect(shared).toContain("origin={wine.deepSearch.complete===false?undefined:'researched'}");
+    expect(shared).toContain("origin={wine.deepSearch&&wine.deepSearch.complete!==false?'researched':undefined}");
     // Derived stays unmarked: a badge on every section marks nothing.
     const facts=readFileSync('src/features/wines/WineFacts.tsx','utf8');
     expect(facts).toContain('<SectionLabel>Wine details</SectionLabel>');

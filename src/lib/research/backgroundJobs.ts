@@ -1,3 +1,4 @@
+import { readableWine } from './readableWine';
 export type WineResearchStage='queued'|'researching'|'saving'|'complete'|'failed';
 export type WineResearchRun={
   requestId:string;
@@ -43,7 +44,8 @@ export async function getActiveWineResearchRun(db:D1Database,owner:string,wineId
 
 export async function createWineResearchRun(db:D1Database,owner:string,wineId:string,refresh:'none'|'vintage'|'all',requestedId?:string){
   const existing=await getActiveWineResearchRun(db,owner,wineId);if(existing)return {run:existing,created:false};
-  const wine=await db.prepare('SELECT id FROM wines WHERE owner_id=? AND id=?').bind(owner,wineId).first<{id:string}>();
+  // Runs are filed under the reader, who may be researching a shared wine.
+  const wine=await readableWine(db,owner,wineId,'w.id');
   if(!wine)return null;
   const requestId=cleanRequestId(requestedId),stamp=now();
   await db.prepare(`INSERT INTO wine_research_runs(owner_id,request_id,wine_id,status,stage,refresh_mode,attempt,message,started_at,updated_at,completed_at,duration_ms)
