@@ -75,7 +75,7 @@ export function chooseScope(paths, checkpoint = false) {
       continue;
     }
     if (path.startsWith('src/') || path.startsWith('worker/')) unit = 'changed';
-    if (path.startsWith('worker/') || path.startsWith('src/lib/db/')) platform = true;
+    if (path.startsWith('worker/') || path.startsWith('src/lib/db/') || path.startsWith('src/lib/journal/')) platform = true;
     if (path.startsWith('src/features/')) {
       const feature = path.split('/')[2];
       if (browserSpecs[feature]) selectBrowser(browserSpecs[feature]);

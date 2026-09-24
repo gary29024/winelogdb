@@ -237,7 +237,7 @@ export function AddToCellarSheet({onClose,onAdded,holding,onRemove,onVintageRese
         <input value={producer} onChange={event=>setProducer(event.target.value)} placeholder="Domaine, château or estate" autoFocus/>
       </label>
       {suggestion&&<div className="producer-resolution producer-suggestion">
-        <span>Did you mean <strong>{suggestion.canonicalName}</strong>? {suggestion.tastedCount} wine{suggestion.tastedCount===1?'':'s'} logged.</span>
+        <span>Did you mean <strong>{suggestion.canonicalName}</strong>? {suggestion.tastedCount} wine{suggestion.tastedCount===1?'':'s'} {suggestion.sharedOnly?'shared by a friend':'logged'}.</span>
         <button type="button" onClick={()=>{setProducer(suggestion.canonicalName);setAdopted('')}}>Use it</button>
       </div>}
       {producer.trim()&&(resolving

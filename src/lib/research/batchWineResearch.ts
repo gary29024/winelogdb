@@ -14,6 +14,7 @@ import { researchBatchErrorPollDelay,researchBatchFirstPollDelay,researchBatchPo
 import { highRiskTechnicalFailureMessage } from './technicalClaimGate';
 import { auditTechnicalContradictions,technicalContradictionFailureMessage } from './technicalContradictions';
 import { updateWineResearchRun } from './backgroundJobs';
+import { offerToSourceOwner,readableWine,researchWine,withSourceResearch,type ResearchWineRow } from './readableWine';
 import { recordAiUsage,type AnalyticsSink } from '../usage/aiUsage';
 
 type Env={CREDIT_CONTEXT?:ProviderAuthorization;DB:D1Database;GEMINI_API_KEY?:string;RESEARCH_QUEUE:Queue<unknown>;AI_USAGE?:AnalyticsSink;CREDIT_RESEARCH_SCOPES?:string[]};
@@ -92,9 +93,12 @@ function cachedContext(cache:Map<ResearchScope,CachedResearch>){
 }
 
 async function loadWine(db:D1Database,owner:string,wineId:string,credit?:ProviderAuthorization){
-  const wine=await db.prepare('SELECT lwin7,identity_match_status,lwin_reference_json,producer,producer_id,cuvee_id,wine_name,vintage,country,region,appellation,wine_style,grapes_json,grape_blend_json FROM wines WHERE id=? AND owner_id=?').bind(wineId,owner).first<WineRow>();if(!wine)return null;
+  // The reader's own wine, or one shared with them: a recipient may research a
+  // shared bottle on their own credits. Only the owner's row is ever changed.
+  const found=await readableWine<WineRow&{source_snapshot:string|null}>(db,owner,wineId,'w.lwin7,w.identity_match_status,w.lwin_reference_json,w.producer,w.producer_id,w.cuvee_id,w.wine_name,w.vintage,w.country,w.region,w.appellation,w.wine_style,w.grapes_json,w.grape_blend_json,w.deep_search_json AS source_snapshot');if(!found)return null;
+  const wine:ResearchWineRow<WineRow>=await researchWine(db,owner,found,found.source_snapshot);
   await assertResearchInput(credit,owner,wineId,'wine',wine);
-  if(credit)return wine; // Keep the cache identity used by the accepted quote.
+  if(credit||wine.source_owner_id!==owner)return wine; // Keep the cache identity used by the accepted quote; never file a friend's wine under the reader.
   if(!wine.producer_id){const entity=await ensureProducerEntity(db,owner,wine.producer);wine.producer_id=entity.id;await db.prepare('UPDATE wines SET producer_id=? WHERE id=? AND owner_id=?').bind(entity.id,wineId,owner).run()}else await ensureProducerEntity(db,owner,wine.producer);
   return wine;
 }
@@ -105,6 +109,8 @@ async function prepare(env:Env,owner:string,wineId:string,refresh:'none'|'vintag
   const force=new Set<ResearchScope>(refresh==='all'?targets.map(x=>x.scope):refresh==='vintage'?(['vintage_context','wine_vintage'] as ResearchScope[]):[]);
   if(force.size){for(const target of targets.filter(x=>force.has(x.scope))){await env.DB.prepare('DELETE FROM research_cache WHERE owner_id=? AND scope=? AND cache_key=?').bind(owner,target.scope,target.cacheKey).run();cache.delete(target.scope)}}
   if(env.CREDIT_RESEARCH_SCOPES){const reusable=await loadResearchCache(env.DB,owner,targets,true);for(const target of targets)if(!force.has(target.scope)&&!cache.has(target.scope)&&reusable.has(target.scope))cache.set(target.scope,reusable.get(target.scope)!)}
+  // A shared bottle: what the owner already researched is not bought again.
+  cache=await withSourceResearch(env.DB,owner,wine,targets,cache,force);
   const missing=targets.filter(target=>!cache.has(target.scope)).map(target=>target.scope);
   if(env.CREDIT_RESEARCH_SCOPES&&missing.some(scope=>!env.CREDIT_RESEARCH_SCOPES!.includes(scope)))throw new Error('Research access changed; request a new credit quote');
   return {wine,targets,cache,missing};
@@ -132,11 +138,14 @@ async function syncProducerScope(db:D1Database,owner:string,wine:WineRow,entry:C
   await db.prepare(`UPDATE producers SET profile=CASE WHEN trim(coalesce(profile,''))='' THEN ? ELSE profile END,winemaking_practices=CASE WHEN trim(coalesce(winemaking_practices,''))='' THEN ? ELSE winemaking_practices END,updated_at=? WHERE owner_id=? AND id=?`).bind(details,practices,now(),owner,wine.producer_id).run();
 }
 
-async function finalize(env:Env,owner:string,wineId:string,wine:WineRow,targets:ResearchTarget[]){
-  const cache=await loadResearchCache(env.DB,owner,targets,Boolean(env.CREDIT_RESEARCH_SCOPES)),missing=targets.filter(target=>!cache.has(target.scope));if(missing.length)throw new Error(`Deep Search cache is incomplete: ${missing.map(x=>scopeNames[x.scope]).join(', ')}`);
+async function finalize(env:Env,owner:string,wineId:string,wine:ResearchWineRow<WineRow>,targets:ResearchTarget[]){
+  const cache=await withSourceResearch(env.DB,owner,wine,targets,await loadResearchCache(env.DB,owner,targets,Boolean(env.CREDIT_RESEARCH_SCOPES))),missing=targets.filter(target=>!cache.has(target.scope));if(missing.length)throw new Error(`Deep Search cache is incomplete: ${missing.map(x=>scopeNames[x.scope]).join(', ')}`);
   // A friend's scopes are kept rather than re-borrowed on every view: the reader
   // now owns the text, so it survives the friendship ending.
   await adoptFriendResearch(env.DB,owner,cache);
+  // A recipient's run on a shared wine: what they paid for reaches the owner's
+  // copy of that wine too, credited to them, never replacing the owner's own.
+  await offerToSourceOwner(env.DB,owner,wine,cache);
   const result=assembleDeepSearch(cache,targets);
   await saveSnapshot(env.DB,owner,wineId,result);return result;
 }
@@ -147,7 +156,7 @@ async function cancelAttemptBatch(env:Env,requestId:string,wineId:string,attempt
 }
 
 async function submitAttempt(env:Env,owner:string,wineId:string,requestId:string,attempt:number,scopes:ResearchScope[],feedback:ScopeFeedback={},attempted:readonly string[]=[]){
-  const wine=await loadWine(env.DB,owner,wineId,env.CREDIT_CONTEXT);if(!wine)throw new Error('Wine not found');const targets=researchTargets(wine),cache=await loadResearchCache(env.DB,owner,targets),entry=buildRequest(wine,scopes,cache,feedback),model=await chooseResearchModel(env.DB,owner,attempted);let googleName:string|undefined,jobId:string|undefined;
+  const wine=await loadWine(env.DB,owner,wineId,env.CREDIT_CONTEXT);if(!wine)throw new Error('Wine not found');const targets=researchTargets(wine),cache=await withSourceResearch(env.DB,owner,wine,targets,await loadResearchCache(env.DB,owner,targets),new Set(scopes)),entry=buildRequest(wine,scopes,cache,feedback),model=await chooseResearchModel(env.DB,owner,attempted);let googleName:string|undefined,jobId:string|undefined;
   try{
     googleName=await createGeminiBatch(env.GEMINI_API_KEY,model,`winelog-wine-${requestId}-${attempt}`,[entry],env.CREDIT_CONTEXT);
     jobId=await createResearchBatchJob(env.DB,{owner,requestId,targetKind:'wine',targetId:wineId,googleBatchName:googleName,model,attempt,keys:scopes});

@@ -14,7 +14,8 @@ const wine=(over:Record<string,unknown>={})=>({
 });
 
 async function put(body:Record<string,unknown>){
-  const stub=createD1Stub();
+  const stub=createD1Stub(sql=>/SELECT \* FROM wines WHERE owner_id=\? AND id=\?/.test(sql)
+    ?{first:{id:'w1',owner_id:'owner',producer:'Ridge',wine_name:'Monte Bello'}}:undefined);
   const token=await createSession('owner',AUTH_SECRET);
   const res=await app.fetch(new Request('https://x/api/wines/w1',{
     method:'PUT',headers:{'content-type':'application/json',authorization:`Bearer ${token}`},

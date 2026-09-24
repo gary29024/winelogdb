@@ -1,6 +1,8 @@
 import { describe,expect,it } from 'vitest';
 import { suggestExistingProducer } from '../../src/lib/producers/entities';
 import { createD1Stub } from './support/d1Stub';
+import { migratedSqliteD1 } from './support/sqliteD1';
+import { sharedProducerId } from '../../src/lib/producers/sharedRef';
 
 /** The owner's producers, as the one query this reads returns them. */
 const library=(...names:string[])=>createD1Stub(sql=>
@@ -64,5 +66,45 @@ describe('the house you almost certainly meant',()=>{
     const stub=library('Château Margaux');
     await suggestExistingProducer(stub.db,'owner','Château');
     expect(stub.calls).toHaveLength(0);
+  });
+});
+
+describe('a house the reader only knows through a friend',()=>{
+  // A member saving "Domaine Henri Magnien" beside a shared "Henri Magnien" used
+  // to be told "New producer": the hint only read the member's own producers.
+  function sharedLibrary(){
+    const state=migratedSqliteD1(),{sqlite}=state;
+    sqlite.exec(`INSERT INTO app_users(id,email,display_name,role) VALUES('member','m@example.test','Member','member');
+      INSERT INTO friendships(user_id,friend_id) VALUES('member','owner'),('owner','member');
+      INSERT INTO producers(id,owner_id,canonical_name,match_key,created_at,updated_at) VALUES('hm','owner','Henri Magnien','henri magnien','2026-09-01','2026-09-01');
+      INSERT INTO wines(id,owner_id,producer,wine_name,producer_id,created_at,updated_at) VALUES('w1','owner','Henri Magnien','Gevrey-Chambertin','hm','2026-09-01','2026-09-01');
+      INSERT INTO wines(id,owner_id,producer,wine_name,producer_id,created_at,updated_at) VALUES('w2','owner','Henri Magnien','Unshared bottle','hm','2026-09-01','2026-09-01');
+      INSERT INTO wine_shares(wine_id,owner_id,recipient_id) VALUES('w1','owner','member');`);
+    return state;
+  }
+
+  it('proposes the shared producer, marked as a friend’s, counting only visible wines',async()=>{
+    const {db,sqlite}=sharedLibrary();
+    try{
+      expect(await suggestExistingProducer(db,'member','Domaine Henri Magnien'))
+        .toEqual({id:sharedProducerId('owner','hm'),canonicalName:'Henri Magnien',tastedCount:1,sharedOnly:true});
+    }finally{sqlite.close()}
+  });
+
+  it('prefers the reader’s own producer of the same name',async()=>{
+    const {db,sqlite}=sharedLibrary();
+    try{
+      sqlite.exec(`INSERT INTO producers(id,owner_id,canonical_name,match_key,created_at,updated_at) VALUES('mine','member','Henri Magnien','henri magnien','2026-09-02','2026-09-02');`);
+      expect(await suggestExistingProducer(db,'member','Domaine Henri Magnien')).toMatchObject({id:'mine',canonicalName:'Henri Magnien'});
+      expect((await suggestExistingProducer(db,'member','Domaine Henri Magnien'))?.sharedOnly).toBeUndefined();
+    }finally{sqlite.close()}
+  });
+
+  it('forgets the friend’s producer once the share is revoked',async()=>{
+    const {db,sqlite}=sharedLibrary();
+    try{
+      sqlite.exec("DELETE FROM wine_shares WHERE wine_id='w1'");
+      expect(await suggestExistingProducer(db,'member','Domaine Henri Magnien')).toBeNull();
+    }finally{sqlite.close()}
   });
 });

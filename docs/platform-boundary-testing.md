@@ -22,3 +22,13 @@ Before the smoke starts, CI builds the production app and applies all D1 migrati
 The current gate closes that known regression path with the explicit `run_worker_first` configuration invariant plus the local behavioral smoke. A true end-to-end check of Cloudflare's production asset-routing layer would require deploying an isolated preview/version in CI with Cloudflare credentials and testing that preview URL. That is a possible future hardening step, not something the current local gate claims to provide.
 
 The test deliberately uses fake local OAuth values and never contacts the Google token endpoint, so CI needs no production OAuth secret. Together, the static routing invariant and local Worker runtime smoke provide a fast release gate without overstating what local Wrangler can emulate.
+
+## Local sharing journey
+
+The same CI platform tier also installs Chromium and runs `npm run test:stack` after the production build. [`playwright.stack.config.ts`](../playwright.stack.config.ts) keeps this separate from the API-mocked UI suite. The harness applies every migration to fresh isolated local D1, serves the built SPA and production Worker entrypoint through Miniflare, and uses real local R2 and Images bindings. No WineLog API response is mocked.
+
+The journey covers owner save/correction/photo upload/tagging, recipient Journal and Smart Search, recipient-owned experience, source updates and revocation. Persisted-state and HTTP assertions cover a third account, private fields, original and cached-thumbnail authorization, cached search results and independently adopted factual research. The [verification report](sharing-journey-verification.md) records reproduction evidence and final results.
+
+External OAuth and embedding providers are local fixtures: synthetic signed tokens still pass through the production callback verifier and session code, while deterministic vectors establish search visibility and persistence. Unexpected Worker egress is rejected. This does not verify real Google authorization, model quality, production Images quota behavior or deployed routing. No production credentials or authentication bypass are required.
+
+For an isolated run of the existing runtime smoke, apply local migrations with `--persist-to <directory>` and set `WINELOG_SMOKE_PERSIST_TO` to the same absolute directory. The database binding ID must also match the smoke's Wrangler configuration; the sharing harness deliberately uses its own separate database ID.

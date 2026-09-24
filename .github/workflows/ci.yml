@@ -72,6 +72,19 @@ jobs:
       - name: Worker runtime smoke
         if: needs.scope.outputs.platform == 'true'
         run: node scripts/worker-runtime-smoke.mjs
+      - name: Install Chromium for real-stack sharing
+        if: needs.scope.outputs.platform == 'true'
+        run: npx playwright install --with-deps chromium
+      - name: Local browser-to-Worker sharing journey
+        if: needs.scope.outputs.platform == 'true'
+        run: npm run test:stack
+      - name: Upload sharing journey failures
+        if: failure() && needs.scope.outputs.platform == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: sharing-journey-failures
+          path: test-results/
+          retention-days: 7
       - name: Documentation change
         if: needs.scope.outputs.quality == 'false'
         run: echo 'No executable files changed.'

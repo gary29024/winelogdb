@@ -10,7 +10,8 @@ import { grapeSuggestions } from '../../lib/wine/grapes';
 import { resolveProducer,type ProducerResolution } from '../producers/api';
 import { resolveCuvee,type CuveeResolution } from '../cuvees/api';
 import type { GrapeBlendEntry, WineInput } from '../../lib/db/schema';
-import { hasTastingStructure,type TastingStructure,type TastingStructureKey } from '../../lib/wine/tastingStructure';
+import { hasTastingStructure,toggleStructure,type TastingStructure,type TastingStructureKey } from '../../lib/wine/tastingStructure';
+import { TastingStructureFields } from './TastingStructureFields';
 import { emptySparklingDetails,hasSparklingDetails,type SparklingDetails } from '../../lib/wine/sparklingDetails';
 import { refreshActiveTasting,useActiveTasting } from '../tastings/useActiveTasting';
 import { matchTastingWine,type TastingWineMatch } from '../tastings/api';
@@ -35,14 +36,6 @@ function blendText(initial?:Partial<WineInput>){
   return initial?.grapes?.join(', ')??'';
 }
 
-const structureFields=[
-  {key:'flavourIntensity',label:'Flavour intensity',options:[['light','Light'],['medium_minus','M−'],['medium','M'],['medium_plus','M+'],['pronounced','Pronounced']]},
-  {key:'acidity',label:'Acidity',options:[['low','Low'],['medium_minus','M−'],['medium','M'],['medium_plus','M+'],['high','High']]},
-  {key:'tannin',label:'Tannin',options:[['low','Low'],['medium_minus','M−'],['medium','M'],['medium_plus','M+'],['high','High']]},
-  {key:'body',label:'Body',options:[['light','Light'],['medium_minus','M−'],['medium','M'],['medium_plus','M+'],['full','Full']]},
-  {key:'finish',label:'Finish',options:[['short','Short'],['medium_minus','M−'],['medium','M'],['medium_plus','M+'],['long','Long']]},
-  {key:'alcohol',label:'Perceived alcohol',options:[['low','Low'],['medium','Medium'],['high','High']]}
-] as const;
 
 type WineFormInput=WineInput&{tastingStructure?:TastingStructure|null;sparklingDetails?:SparklingDetails|null};
 type LoggingReferencePreview={matched:boolean;needsReview:boolean;producer?:string|null;wineName?:string|null;country?:string|null;region?:string|null;colour?:string|null;productType?:string|null;productSubtype?:string|null;token:string|null};
@@ -233,7 +226,7 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,enable
 
   function chooseStructure(key:TastingStructureKey,value:string){
     setDirty(true);
-    setStructure(current=>({...current,[key]:current[key]===value?null:value}) as TastingStructure);
+    setStructure(current=>toggleStructure(current,key,value));
   }
 
   const placeValue=(value:string|null|undefined)=>value?.trim()||null;
@@ -380,7 +373,7 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,enable
     <div className="producer-field"><label>Producer *<input name="producer" type="text" required value={producer} onChange={e=>setProducer(e.target.value)}/></label>
       {adoptedProducer&&producer===adoptedProducer&&<p className="producer-adopted">Saved under the name your library uses. Type over it to keep what the label said.</p>}
       {suggestion&&<div className="producer-resolution producer-suggestion">
-        <span>Did you mean <strong>{suggestion.canonicalName}</strong>? {suggestion.tastedCount} wine{suggestion.tastedCount===1?'':'s'} logged.</span>
+        <span>Did you mean <strong>{suggestion.canonicalName}</strong>? {suggestion.tastedCount} wine{suggestion.tastedCount===1?'':'s'} {suggestion.sharedOnly?'shared by a friend':'logged'}.</span>
         <button type="button" onClick={()=>{setProducer(suggestion.canonicalName);setAdoptedProducer('');setDirty(true)}}>Use it</button>
       </div>}
       {producer.trim()&&(resolvingProducer?<div className="producer-resolution matched"><span>Checking producer library…</span></div>:matched?<details className="producer-resolution matched compact-resolution"><summary>✓ Existing producer · {matched.canonicalName}</summary><div className="compact-resolution-body"><span>{matched.matchType==='alias'?`Matched via known alias “${matched.matchedName}” → `:''}{matched.canonicalName}</span><small>{matched.tastedCount} tasted{!memberView?` · ${matched.catalogCount} wines in researched range`:''}{matched.researchedAt?' · producer research available':''}{matched.sharedOnly?' · shared by a friend':''}</small><Link to={`/producers/${matched.id}`}>View producer profile</Link></div></details>:<div className="producer-resolution new"><strong>○ New producer</strong><span>No existing producer identity matches this name. A new profile will be created when the wine is saved.</span></div>)}
@@ -432,7 +425,7 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,enable
       {!memberView&&<small>Use “Tasting / event group” to group wines from the same dinner, trip, class or formal tasting. Exact GPS remains attached even if you edit or clear the approximate place name.</small>}
     </fieldset>
 
-    <details className="structure-fields structure-disclosure" open={structureOpen} onToggle={e=>setStructureOpen(e.currentTarget.open)}><summary><span>Structure</span><small>Optional</small></summary><div className="structure-disclosure-body"><small className="structure-helper">Tap the value itself. Tap the selected value again to clear it.</small>{structureFields.map(item=><div className="structure-row" key={item.key}><span>{item.label}</span><div className="structure-options" role="group" aria-label={item.label}>{item.options.map(([value,label])=><button key={value} type="button" className={`structure-option${structure[item.key]===value?' selected':''}`} aria-pressed={structure[item.key]===value} onClick={()=>chooseStructure(item.key,value)}>{label}</button>)}</div></div>)}</div></details>
+    <TastingStructureFields structure={structure} open={structureOpen} onToggle={setStructureOpen} onChoose={chooseStructure}/>
 
     <label className="full-field">Tags (comma separated)<input name="tags" defaultValue={initial?.tags?.join(', ')??''}/>
       {!memberView&&<small>Tags for the place, the grapes and the style follow the wine: correct a field above and the tag it put there is corrected with it. Anything you typed is left alone.</small>}</label>

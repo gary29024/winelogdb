@@ -79,8 +79,10 @@ async function render(over:Record<string,unknown>={}){
   return host;
 }
 
-async function renderShared(){
-  vi.stubGlobal('fetch',vi.fn(async()=>new Response(JSON.stringify(sharedWine()),{status:200,headers:{'content-type':'application/json'}})));
+async function renderShared(over:Record<string,unknown>={}){
+  vi.stubGlobal('fetch',vi.fn(async(url:string)=>String(url).includes('/deep-search-status')
+    ?new Response(JSON.stringify({error:'Research run not found'}),{status:404,headers:{'content-type':'application/json'}})
+    :new Response(JSON.stringify({...sharedWine(),...over}),{status:200,headers:{'content-type':'application/json'}})));
   vi.resetModules();
   const {SharedWinesPage}=await import('../../src/features/wines/SharedWinesPage');
   host=document.createElement('div');
@@ -286,5 +288,30 @@ describe('Shared Deep Search research sections',()=>{
     expect(sectionToggles()[1].getAttribute('aria-expanded')).toBe('true');
     expect(sectionBodies()[1].hidden).toBe(false);
     expect(sectionBodies()[0].hidden).toBe(true);
+  });
+});
+
+describe('Deep Search a recipient runs on a shared wine',()=>{
+  const buttons=()=>[...(host?.querySelectorAll('.deep-search-panel button')??[])].map(button=>button.textContent);
+  it('offers Deep Search for partial research and says the research is partial',async()=>{
+    await renderShared({deepSearch:{...sharedDeepSearch,complete:false}});
+    expect(host?.querySelector('.deep-search-panel')?.textContent).toContain('Partial research is available');
+    expect(buttons()).toContain('Deep Search');
+  });
+  it('offers the vintage refresh once research is complete, as the owner page does',async()=>{
+    await renderShared({deepSearch:{...sharedDeepSearch,complete:true}});
+    expect(buttons()).toContain('Refresh vintage research');
+  });
+  it('offers Deep Search before anyone has researched the wine',async()=>{
+    await renderShared({deepSearch:null});
+    expect(host?.querySelector('.deep-search-panel')?.textContent).toContain('Enrich this wine with grounded research');
+    expect(buttons()).toContain('Deep Search');
+  });
+  it('says the reader pays and the friend sees the result before queueing',async()=>{
+    await renderShared({deepSearch:null});
+    const start=[...host!.querySelectorAll<HTMLButtonElement>('.deep-search-panel button')].find(button=>button.textContent==='Deep Search')!;
+    await click(start);
+    expect(host?.querySelector('.deep-confirm')?.textContent).toContain('uses your own credits');
+    expect(host?.querySelector('.deep-confirm')?.textContent).toContain('your friend can see the result');
   });
 });

@@ -61,3 +61,8 @@ test('worker edits retain local runtime smoke without browser-only API mocks', (
   assert.equal(scope.unit, 'changed');
   assert.equal(scope.chromium, 'none');
 });
+
+test('Journal retrieval changes run the real-stack sharing gate', () => {
+  assert.equal(chooseScope(['src/lib/journal/semanticSearch.ts']).platform, true);
+  assert.equal(chooseScope(['tests/stack/sharing-journey.spec.ts']).platform, true);
+});

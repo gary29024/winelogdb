@@ -1,5 +1,6 @@
 import { canonicalCountryName } from '../wine/canonicalize';
 import { rememberProducerAlias } from '../research/aliasBridge';
+import { sharedProducerId } from './sharedRef';
 
 export type ProducerEntity={
   id:string;
@@ -81,7 +82,7 @@ export function pickProducerHomeCountry(rows:readonly {country:string|null;wines
   return [...tally.entries()].sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0]))[0][0];
 }
 
-export type ProducerSuggestion={id:string;canonicalName:string;tastedCount:number};
+export type ProducerSuggestion={id:string;canonicalName:string;tastedCount:number;sharedOnly?:boolean};
 type ResolutionRow={id:string;canonical_name:string;display_alias?:string|null;researched_at:string|null;catalog_count:number;tasted_count:number};
 const mapResolution=(row:ResolutionRow,matchType:ProducerResolution['matchType']):ProducerResolution=>({
   id:row.id,
@@ -148,16 +149,37 @@ export async function suggestExistingProducer(db:D1Database,owner:string,name:st
   // A bare "Château" belongs to every house that has one; a name that is only
   // generic words carries no signal to contain anything by.
   if(!words.size||[...words].every(word=>GENERIC_PRODUCER_WORDS.has(word)))return null;
-  const {results}=await db.prepare(`SELECT p.id,p.canonical_name,
+  // Producers this reader only knows through friends' shared wines count too:
+  // a member typing "Domaine Henri Magnien" beside a shared "Henri Magnien"
+  // otherwise gets a silent second producer. Saving under the suggested name
+  // then resolves through resolveVisibleSharedProducer, as any shared match does.
+  // Own rows carry a null source owner. Still one read of the producer list.
+  const {results}=await db.prepare(`SELECT NULL AS source_owner_id,p.id,p.canonical_name,
     (SELECT count(*) FROM wines w WHERE w.owner_id=p.owner_id AND w.producer_id=p.id) AS tasted_count
-    FROM producers p WHERE p.owner_id=?`).bind(owner).all<{id:string;canonical_name:string;tasted_count:number}>();
-  const hits=(results??[]).filter(row=>{
-    const stored=producerWords(row.canonical_name);
+    FROM producers p WHERE p.owner_id=?
+    UNION ALL
+    SELECT p.owner_id,p.id,p.canonical_name,count(DISTINCT v.id)
+    FROM member_visible_wines v
+    JOIN wines source_wine ON source_wine.owner_id=v.source_owner_id AND source_wine.id=v.id
+    JOIN producers p ON p.owner_id=source_wine.owner_id AND p.id=source_wine.producer_id
+    WHERE v.owner_id=? AND v.is_shared=1
+    GROUP BY p.owner_id,p.id`).bind(owner,owner).all<{source_owner_id:string|null;id:string;canonical_name:string;tasted_count:number}>();
+  const fits=(canonical:string)=>{
+    const stored=producerWords(canonical);
     if(!stored.size||stored.size===words.size)return false;
     return contains(stored,words)||contains(words,stored);
-  });
-  if(hits.length!==1)return null;
-  return {id:hits[0].id,canonicalName:hits[0].canonical_name,tastedCount:Number(hits[0].tasted_count)||0};
+  };
+  // One house per spelling: the reader's own row outranks a friend's of the
+  // same name, and two friends filing the same name are still one suggestion.
+  const hits=new Map<string,ProducerSuggestion>();
+  const rows=results??[];
+  for(const row of rows)if(!row.source_owner_id&&fits(row.canonical_name)){const key=normalizeProducerAlias(row.canonical_name);if(!hits.has(key))hits.set(key,{id:row.id,canonicalName:row.canonical_name,tastedCount:Number(row.tasted_count)||0})}
+  for(const row of rows)if(row.source_owner_id&&fits(row.canonical_name)){
+    const key=normalizeProducerAlias(row.canonical_name),current=hits.get(key);
+    if(!current)hits.set(key,{id:sharedProducerId(String(row.source_owner_id),String(row.id)),canonicalName:row.canonical_name,tastedCount:Number(row.tasted_count)||0,sharedOnly:true});
+    else if(current.sharedOnly)current.tastedCount+=Number(row.tasted_count)||0;
+  }
+  return hits.size===1?[...hits.values()][0]:null;
 }
 
 /**

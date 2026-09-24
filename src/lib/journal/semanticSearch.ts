@@ -371,6 +371,20 @@ export async function semanticWineIds(env:SemanticEnv,owner:string,query:string,
 
 export async function warmSemanticWineIndex(env:SemanticEnv,owner:string){
   const config=configFor(env);if(!config)return;
+  // Match member_visible_wines access rules with indexed point lookups. Joining
+  // that aggregated view here would materialize all users' grants during a warm.
+  // The existing delete trigger advances the revision only when a row is removed.
+  await env.DB.prepare(`DELETE FROM wine_semantic_embeddings AS e WHERE e.owner_id=? AND e.model_key=?
+    AND NOT EXISTS(SELECT 1 FROM wines w WHERE w.id=e.wine_id AND (
+      w.owner_id=e.owner_id OR (
+        EXISTS(SELECT 1 FROM app_users u WHERE u.id=w.owner_id AND u.status='active')
+        AND EXISTS(SELECT 1 FROM friendships f WHERE f.user_id=e.owner_id AND f.friend_id=w.owner_id)
+        AND (EXISTS(SELECT 1 FROM wine_shares s WHERE s.wine_id=w.id AND s.owner_id=w.owner_id AND s.recipient_id=e.owner_id)
+          OR EXISTS(SELECT 1 FROM wine_experiences we
+            JOIN tasting_shares ts ON ts.tasting_id=we.tasting_id AND ts.owner_id=we.owner_id AND ts.recipient_id=e.owner_id
+            WHERE we.owner_id=w.owner_id AND we.wine_id=w.id))
+      )))`)
+    .bind(owner,config.modelKey).run();
   const runId=crypto.randomUUID();
   let remaining=BACKGROUND_BACKFILL;
   while(remaining>0){

@@ -9,7 +9,7 @@ import { cors } from 'hono/cors';
 import { GoogleGenerativeAI, SchemaType } from '@google/generative-ai';
 import { requireSession } from '../src/lib/auth/session';
 import { createObjectKey } from '../src/lib/r2/keys';
-import { wineInputSchema } from '../src/lib/db/schema';
+import { wineInputSchema,type WineInput } from '../src/lib/db/schema';
 import { dimensionsSchema, validateBatch } from '../src/features/uploads/validation';
 import { parseRecognition } from '../src/features/recognition/schema';
 import { wineSaveStatements } from '../src/lib/db/wineSave';
@@ -42,6 +42,15 @@ app.use('/api/*',async(c,next)=>{
 app.post('/api/auth/login',c=>c.json({error:'Password login has been retired. Use Google login.'},410));
 
 const parseJson=<T>(value:unknown,fallback:T):T=>{try{return JSON.parse(String(value)) as T}catch{return fallback}};
+// Same column order for JSON/multipart INSERT and PUT; absent optional inputs
+// become SQL null only at this binding boundary, never JavaScript undefined.
+function wineRowValues(w:WineInput){
+ return [w.producer,w.wineName,w.vintage,w.country,w.region,w.appellation,
+  w.recognizedRegion,w.recognizedAppellation,w.classification,w.classificationOverride,
+  JSON.stringify(w.grapes),JSON.stringify(w.grapeBlend),w.wineStyle,w.alcoholPercentage,
+  w.tastingNotes,w.rating,w.tastingDate,w.event,w.venue,w.price,w.currency,
+  JSON.stringify(w.tags),w.recognitionStatus,w.recognitionConfidence].map(value=>value??null);
+}
 const normalizeMeta=(meta:PhotoMetadata|undefined)=>{
  const latitude=typeof meta?.latitude==='number'&&meta.latitude>=-90&&meta.latitude<=90?meta.latitude:null;
  const longitude=typeof meta?.longitude==='number'&&meta.longitude>=-180&&meta.longitude<=180?meta.longitude:null;
@@ -127,7 +136,7 @@ app.post('/api/wines',async c=>{
  if(!multipart){
   const parsed=wineInputSchema.safeParse(await c.req.json());if(!parsed.success)return c.json({error:'Invalid wine',issues:parsed.error.issues},400);
   const w=await resolveLoggingReference(c.env.REFERENCE_DATA,parsed.data);
-  const wineStatement=c.env.DB.prepare(`INSERT INTO wines(id,owner_id,producer,wine_name,vintage,country,region,appellation,recognized_region,recognized_appellation,classification,classification_override,grapes_json,grape_blend_json,wine_style,alcohol_percentage,tasting_notes,rating,tasting_date,event,venue,price,currency,tags_json,recognition_status,recognition_confidence,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`).bind(id,owner,w.producer,w.wineName,w.vintage,w.country,w.region,w.appellation,w.recognizedRegion,w.recognizedAppellation,w.classification,w.classificationOverride,JSON.stringify(w.grapes),JSON.stringify(w.grapeBlend),w.wineStyle,w.alcoholPercentage,w.tastingNotes,w.rating,w.tastingDate,w.event,w.venue,w.price,w.currency,JSON.stringify(w.tags),w.recognitionStatus,w.recognitionConfidence,now,now);
+  const wineStatement=c.env.DB.prepare(`INSERT INTO wines(id,owner_id,producer,wine_name,vintage,country,region,appellation,recognized_region,recognized_appellation,classification,classification_override,grapes_json,grape_blend_json,wine_style,alcohol_percentage,tasting_notes,rating,tasting_date,event,venue,price,currency,tags_json,recognition_status,recognition_confidence,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`).bind(id,owner,...wineRowValues(w),now,now);
   try{await c.env.DB.batch([wineStatement,...wineSaveStatements(c.env.DB,owner,id,w)]);return c.json({id},201)}
   catch(error){console.error('wine-save-failed',error);return c.json({error:'Could not save wine. Please retry.'},500)}
  }
@@ -149,7 +158,7 @@ app.post('/api/wines',async c=>{
    await c.env.WINE_IMAGES.put(key,file.stream(),{httpMetadata:{contentType:file.type},customMetadata:{ownerId:owner,wineId:id}});
    uploaded.push({key,imageId,file,dim,meta});
   }
-  const statements=[c.env.DB.prepare(`INSERT INTO wines(id,owner_id,producer,wine_name,vintage,country,region,appellation,recognized_region,recognized_appellation,classification,classification_override,grapes_json,grape_blend_json,wine_style,alcohol_percentage,tasting_notes,rating,tasting_date,event,venue,price,currency,tags_json,recognition_status,recognition_confidence,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`).bind(id,owner,w.producer,w.wineName,w.vintage,w.country,w.region,w.appellation,w.recognizedRegion,w.recognizedAppellation,w.classification,w.classificationOverride,JSON.stringify(w.grapes),JSON.stringify(w.grapeBlend),w.wineStyle,w.alcoholPercentage,w.tastingNotes,w.rating,w.tastingDate,w.event,w.venue,w.price,w.currency,JSON.stringify(w.tags),w.recognitionStatus,w.recognitionConfidence,now,now),...uploaded.map(x=>c.env.DB.prepare(`INSERT INTO wine_images(id,owner_id,wine_id,object_key,content_type,byte_size,width,height,upload_status,recognition_status,captured_at,latitude,longitude,location_name,metadata_source,created_at) VALUES(?,?,?,?,?,?,?,?,'uploaded','complete',?,?,?,?,?,?)`).bind(x.imageId,owner,id,x.key,x.file.type,x.file.size,x.dim.width,x.dim.height,x.meta.capturedAt,x.meta.latitude,x.meta.longitude,w.locationName??null,x.meta.source,now))];
+  const statements=[c.env.DB.prepare(`INSERT INTO wines(id,owner_id,producer,wine_name,vintage,country,region,appellation,recognized_region,recognized_appellation,classification,classification_override,grapes_json,grape_blend_json,wine_style,alcohol_percentage,tasting_notes,rating,tasting_date,event,venue,price,currency,tags_json,recognition_status,recognition_confidence,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`).bind(id,owner,...wineRowValues(w),now,now),...uploaded.map(x=>c.env.DB.prepare(`INSERT INTO wine_images(id,owner_id,wine_id,object_key,content_type,byte_size,width,height,upload_status,recognition_status,captured_at,latitude,longitude,location_name,metadata_source,created_at) VALUES(?,?,?,?,?,?,?,?,'uploaded','complete',?,?,?,?,?,?)`).bind(x.imageId,owner,id,x.key,x.file.type,x.file.size,x.dim.width,x.dim.height,x.meta.capturedAt,x.meta.latitude,x.meta.longitude,w.locationName??null,x.meta.source,now))];
   await c.env.DB.batch([...statements,...wineSaveStatements(c.env.DB,owner,id,w)]);
   return c.json({id,imageIds:uploaded.map(item=>item.imageId)},201);
  }catch(e){
@@ -325,11 +334,15 @@ app.post('/api/wines/:id/reference-review',async c=>{
 
 app.put('/api/wines/:id',async c=>{
  const parsed=wineInputSchema.safeParse(await c.req.json());if(!parsed.success)return c.json({error:'Invalid wine',issues:parsed.error.issues},400);
- const x=await enrichRecognitionReference(c.env.REFERENCE_DATA,parsed.data),id=c.req.param('id'),owner=c.get('userId');
- const wineStatement=c.env.DB.prepare(`UPDATE wines SET producer=?,wine_name=?,vintage=?,country=?,region=?,appellation=?,recognized_region=?,recognized_appellation=?,classification=?,classification_override=?,grapes_json=?,grape_blend_json=?,wine_style=?,alcohol_percentage=?,tasting_notes=?,rating=?,tasting_date=?,event=?,venue=?,price=?,currency=?,tags_json=?,recognition_status=?,recognition_confidence=?,updated_at=? WHERE id=? AND owner_id=?`).bind(x.producer,x.wineName,x.vintage,x.country,x.region,x.appellation,x.recognizedRegion,x.recognizedAppellation,x.classification,x.classificationOverride,JSON.stringify(x.grapes),JSON.stringify(x.grapeBlend),x.wineStyle,x.alcoholPercentage,x.tastingNotes,x.rating,x.tastingDate,x.event,x.venue,x.price,x.currency,JSON.stringify(x.tags),x.recognitionStatus,x.recognitionConfidence,new Date().toISOString(),id,owner);
  try{
+  const id=c.req.param('id'),owner=c.get('userId');
   const previous=await c.env.DB.prepare('SELECT * FROM wines WHERE owner_id=? AND id=?').bind(owner,id).first<StoredReferenceIdentity>();
-  const [res]=await c.env.DB.batch([wineStatement,...wineSaveStatements(c.env.DB,owner,id,x,true,previous??undefined)]);
+  // Refuse another account's wine before enrichment or binding optional update
+  // fields. A valid partial payload must still produce the normal not-found result.
+  if(!previous)return c.json({error:'Not found'},404);
+  const x=await enrichRecognitionReference(c.env.REFERENCE_DATA,parsed.data);
+  const wineStatement=c.env.DB.prepare(`UPDATE wines SET producer=?,wine_name=?,vintage=?,country=?,region=?,appellation=?,recognized_region=?,recognized_appellation=?,classification=?,classification_override=?,grapes_json=?,grape_blend_json=?,wine_style=?,alcohol_percentage=?,tasting_notes=?,rating=?,tasting_date=?,event=?,venue=?,price=?,currency=?,tags_json=?,recognition_status=?,recognition_confidence=?,updated_at=? WHERE id=? AND owner_id=?`).bind(...wineRowValues(x),new Date().toISOString(),id,owner);
+  const [res]=await c.env.DB.batch([wineStatement,...wineSaveStatements(c.env.DB,owner,id,x,true,previous)]);
   if(!res.meta.changes)return c.json({error:'Not found'},404);
   return c.json({ok:true});
  }catch(error){console.error('wine-save-failed',error);return c.json({error:'Could not save wine. Please retry.'},500)}

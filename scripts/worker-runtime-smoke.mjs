@@ -18,6 +18,7 @@ const navigationHeaders={
 };
 const args=[
   'dev','--local','--ip',host,'--port',String(port),
+  ...(process.env.WINELOG_SMOKE_PERSIST_TO?['--persist-to',process.env.WINELOG_SMOKE_PERSIST_TO]:[]),
   '--var',`APP_URL:${origin}`,
   '--var','SUPPORT_EMAIL:support@example.com',
   '--var','GOOGLE_CLIENT_ID:smoke.apps.googleusercontent.com',

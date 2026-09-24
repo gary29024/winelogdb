@@ -66,7 +66,7 @@ it('profiles common reads, cached navigation, recognition and competing dispatch
   metrics.queueSends=send.mock.calls.length;
   expect(metrics).toMatchObject({
    journal:{reads:2,writes:0},researchScopes:{reads:1,writes:0},
-   semanticCached:{reads:2,writes:0},semanticWarmClean:{reads:1,writes:0},cachedAiCalls:0,
+   semanticCached:{reads:2,writes:0},semanticWarmClean:{reads:1,writes:1},cachedAiCalls:0,
    sharedPhoto:{reads:1,writes:0},sharedPhotoR2:1,producer:{reads:11,writes:0},
    groupReferenceR2:2,queueSends:1
   });

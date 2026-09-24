@@ -8,6 +8,82 @@ const databases:Array<ReturnType<typeof migratedSqliteD1>>=[];
 afterEach(()=>{for(const state of databases.splice(0))state.sqlite.close();vi.restoreAllMocks()});
 
 describe('Journal semantic search helpers',()=>{
+  it('prunes with indexed grant checks while preserving overlapping access paths',async()=>{
+    const state=migratedSqliteD1();databases.push(state);const {db,sqlite}=state;
+    sqlite.exec(`INSERT INTO app_users(id,email,display_name,role) VALUES('reader','reader@example.test','Reader','member');
+      INSERT INTO friendships(user_id,friend_id) VALUES('reader','owner');
+      INSERT INTO tastings(id,owner_id,name,created_at,updated_at) VALUES('dinner','owner','Dinner','2026-09-01','2026-09-01');`);
+    for(const id of ['own','direct','tasting','both']){
+      sqlite.prepare('INSERT INTO wines(id,owner_id,producer,wine_name,created_at,updated_at) VALUES(?,?,?,?,?,?)')
+        .run(id,id==='own'?'reader':'owner','Estate',id,'2026-09-01','2026-09-01');
+      if(id==='direct'||id==='both')sqlite.prepare("INSERT INTO wine_shares(wine_id,owner_id,recipient_id) VALUES(?,'owner','reader')").run(id);
+      if(id==='tasting'||id==='both')sqlite.prepare("INSERT INTO wine_experiences(id,owner_id,wine_id,tasting_id,created_at,updated_at) VALUES(?,'owner',?,'dinner','2026-09-01','2026-09-01')").run(id,id);
+    }
+    sqlite.exec("INSERT INTO tasting_shares(tasting_id,owner_id,recipient_id) VALUES('dinner','owner','reader')");
+    const env={DB:db,AI:{run:vi.fn(async(_model:string,input:{text:string[]})=>({data:input.text.map(()=>[1,...Array(1023).fill(0)])}))}} as never;
+    const prepare=vi.spyOn(db,'prepare');
+    const stored=()=>sqlite.prepare("SELECT wine_id FROM wine_semantic_embeddings WHERE owner_id='reader' ORDER BY wine_id").all().map(row=>row.wine_id);
+    await warmSemanticWineIndex(env,'reader');
+    expect(stored()).toEqual(['both','direct','own','tasting']);
+    const cleanup=prepare.mock.calls.find(([sql])=>sql.startsWith('DELETE FROM wine_semantic_embeddings'))![0];
+    const plan=sqlite.prepare(`EXPLAIN QUERY PLAN ${cleanup}`).all('reader','test-model').map(row=>String(row.detail));
+    // Cleanup must not materialize/aggregate every user's grants for each vector.
+    expect(plan.join('\n')).not.toMatch(/MATERIALIZE grants|USE TEMP B-TREE FOR GROUP BY|SCAN (s|ts|we)\b/);
+    sqlite.exec("DELETE FROM wine_shares WHERE wine_id IN ('direct','both')");
+    await warmSemanticWineIndex(env,'reader');
+    expect(stored()).toEqual(['both','own','tasting']);
+    sqlite.exec("DELETE FROM wine_experiences WHERE wine_id='tasting'");
+    await warmSemanticWineIndex(env,'reader');
+    expect(stored()).toEqual(['both','own']);
+    sqlite.exec("DELETE FROM tasting_shares");
+    await warmSemanticWineIndex(env,'reader');
+    expect(stored()).toEqual(['own']);
+    sqlite.exec("INSERT INTO wine_shares(wine_id,owner_id,recipient_id) VALUES('direct','owner','reader')");
+    await warmSemanticWineIndex(env,'reader');
+    expect(stored()).toEqual(['direct','own']);
+    sqlite.exec("UPDATE app_users SET status='suspended' WHERE id='owner'");
+    await warmSemanticWineIndex(env,'reader');
+    expect(stored()).toEqual(['own']);
+    sqlite.exec("UPDATE app_users SET status='active' WHERE id='owner'");
+    await warmSemanticWineIndex(env,'reader');
+    sqlite.exec("DELETE FROM friendships WHERE user_id='reader'");
+    await warmSemanticWineIndex(env,'reader');
+    expect(stored()).toEqual(['own']);
+  });
+
+  it('indexes only the recipient-visible shared experience and removes revoked cached candidates',async()=>{
+    const state=migratedSqliteD1();databases.push(state);const {db,sqlite}=state;
+    sqlite.exec(`INSERT INTO app_users(id,email,display_name,role) VALUES('recipient','r@example.test','Recipient','member');
+      INSERT INTO friendships(user_id,friend_id) VALUES('recipient','owner'),('owner','recipient');
+      INSERT INTO wines(id,owner_id,producer,wine_name,tasting_notes,event,venue,tags_json,created_at,updated_at)
+        VALUES('shared-semantic','owner','Domaine Test','Shared bottle','SOURCE_PRIVATE','SOURCE_EVENT','SOURCE_VENUE','["SOURCE_TAG"]','2026-09-01','2026-09-01');
+      INSERT INTO wine_shares(wine_id,owner_id,recipient_id) VALUES('shared-semantic','owner','recipient');
+      INSERT INTO shared_wine_preferences(recipient_id,owner_id,wine_id,tasting_notes,venue,tasting_name,updated_at)
+        VALUES('recipient','owner','shared-semantic','Reader violets','Reader venue','Reader dinner','2026-09-02');`);
+    const texts:string[]=[];
+    const run=vi.fn(async(_model:string,input:{text:string[]})=>{texts.push(...input.text);return {data:input.text.map(()=>[1,...Array(1023).fill(0)])}});
+    const env={DB:db,AI:{run}} as never;
+    await warmSemanticWineIndex(env,'recipient');
+    expect(texts.join('\n')).toContain('Wine: Shared bottle');
+    expect(texts.join('\n')).toContain('Reader violets');
+    expect(texts.join('\n')).toContain('Reader dinner');
+    expect(texts.join('\n')).not.toContain('SOURCE_');
+    expect((await semanticWineIds(env,'recipient','silky evening wine'))?.ids).toEqual(['shared-semantic']);
+    sqlite.exec("UPDATE shared_wine_preferences SET tasting_notes='Reader changed',updated_at='2026-09-03' WHERE recipient_id='recipient'");
+    await warmSemanticWineIndex(env,'recipient');
+    expect(texts.join('\n')).toContain('Reader changed');
+    sqlite.exec("UPDATE wines SET wine_name='Corrected bottle',updated_at='2026-09-04' WHERE id='shared-semantic'");
+    await warmSemanticWineIndex(env,'recipient');
+    expect(texts.join('\n')).toContain('Wine: Corrected bottle');
+    expect((await semanticWineIds(env,'recipient','silky evening wine'))?.ids).toEqual(['shared-semantic']);
+    const callsBeforeRevocation=run.mock.calls.length;
+    sqlite.exec("DELETE FROM wine_shares WHERE wine_id='shared-semantic'");
+    expect((await semanticWineIds(env,'recipient','silky evening wine'))?.ids).toEqual([]);
+    expect(run).toHaveBeenCalledTimes(callsBeforeRevocation);
+    await warmSemanticWineIndex(env,'recipient');
+    expect(sqlite.prepare("SELECT count(*) AS n FROM wine_semantic_embeddings WHERE owner_id='recipient'").get()).toMatchObject({n:0});
+  });
+
   it('keeps short identity searches on FTS and enables descriptive searches',()=>{
     expect(shouldUseSemanticQuery('Lamarche')).toBe(false);
     expect(shouldUseSemanticQuery('Nicole Lamarche')).toBe(false);

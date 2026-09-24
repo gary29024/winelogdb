@@ -21,6 +21,7 @@ const stored={wine_name:'Testamatta',appellation:'Toscana IGT',wine_style:'red',
 async function edit(body:Record<string,unknown>,before:Record<string,unknown>=stored,
   reply:(sql:string,args:unknown[])=>StubReply|undefined=()=>undefined){
   const stub=createD1Stub((sql,args)=>{
+    if(/SELECT \* FROM wines WHERE owner_id=\? AND id=\?/.test(sql))return {first:{id:'w1',owner_id:'owner',producer:'Bibi Graetz',...before}};
     if(/SELECT wine_name,appellation,wine_style,country FROM wines/.test(sql))return {first:before};
     if(/SELECT producer_id FROM wines/.test(sql))return {first:{producer_id:'p1'}};
     if(/SELECT producer,producer_id,cuvee_id,country FROM wines/.test(sql))return {first:{producer:'Bibi Graetz',producer_id:'p1',cuvee_id:'c1',country:'Italy'}};
