@@ -176,11 +176,16 @@ export async function settle(db:D1Database,op:CreditOperation,captured:number,re
 export async function saveOperationResponse(db:D1Database,op:CreditOperation,response:Response){
  const data=await response.clone().json().catch(()=>({error:'Invalid AI response'})) as Record<string,unknown>;
  if(await db.prepare("SELECT id FROM provider_operations WHERE operation_id=? AND state IN ('submitted','uncertain') LIMIT 1").bind(op.id).first()){
-  await db.prepare("UPDATE credit_operations SET status='review',response_json=?,response_status=?,updated_at=? WHERE id=?").bind(JSON.stringify(data),response.status,stamp(),op.id).run();return {...data,creditSettlement:'held_for_reconciliation'};
+  await db.prepare("UPDATE credit_operations SET status='review',response_json=?,response_status=?,updated_at=? WHERE id=? AND status IN ('reserved','running','review')").bind(JSON.stringify(data),response.status,stamp(),op.id).run();
+  const current=await db.prepare('SELECT * FROM credit_operations WHERE id=?').bind(op.id).first<CreditOperation>();
+  return {...data,creditSettlement:current&&['complete','failed'].includes(current.status)?creditSummary(current):'held_for_reconciliation'};
  }
  const runId=String(data.researchRequestId||data.sessionId||(data.campaign as {id?:string}|undefined)?.id||(data.run as {requestId?:string}|undefined)?.requestId||'')||null;
- if(response.status===202){await db.prepare("UPDATE credit_operations SET status='running',response_json=?,response_status=?,run_id=?,updated_at=? WHERE id=?").bind(JSON.stringify(data),202,runId,stamp(),op.id).run()}
- else{
+ if(response.status===202){
+  // Another request or cron can finish this job before the HTTP response is
+  // saved. Never reopen terminal settlement, clear review, or lose its run ID.
+  await db.prepare("UPDATE credit_operations SET status=CASE WHEN status='review' THEN 'review' ELSE 'running' END,response_json=?,response_status=?,run_id=coalesce(run_id,?),updated_at=? WHERE id=? AND status IN ('reserved','running','review')").bind(JSON.stringify(data),202,runId,stamp(),op.id).run();
+ }else{
   const successful=response.ok&&!data.error;
   await settle(db,op,successful&&data.cached!==true?op.reserved:0,{body:data,status:response.status},successful);
  }
@@ -189,7 +194,7 @@ export async function saveOperationResponse(db:D1Database,op:CreditOperation,res
 export async function reconcileOperation(db:D1Database,op:CreditOperation){
  if(!['running','reserved','review'].includes(op.status))return;
  if(await db.prepare("SELECT id FROM provider_operations WHERE operation_id=? AND state IN ('submitted','uncertain') LIMIT 1").bind(op.id).first()){
-  await db.prepare("UPDATE credit_operations SET status='review',updated_at=? WHERE id=?").bind(stamp(),op.id).run();return;
+  await db.prepare("UPDATE credit_operations SET status='review',updated_at=? WHERE id=? AND status IN ('reserved','running','review')").bind(stamp(),op.id).run();return;
  }
  const dependency=await db.prepare('SELECT * FROM research_followers WHERE operation_id=?').bind(op.id).first<{sponsor_operation_id:string;sponsor_id:string}>();
  if(dependency){
@@ -238,7 +243,7 @@ export async function reconcileOperation(db:D1Database,op:CreditOperation){
   }
  }
  if(terminal)await settle(db,op,captured,undefined,successfulUnits>0);
- else if(Date.parse(op.created_at)<Date.now()-48*3600_000)await db.prepare("UPDATE credit_operations SET status='review',updated_at=? WHERE id=? AND status<>'review'").bind(stamp(),op.id).run();
+ else if(Date.parse(op.created_at)<Date.now()-48*3600_000)await db.prepare("UPDATE credit_operations SET status='review',updated_at=? WHERE id=? AND status IN ('reserved','running')").bind(stamp(),op.id).run();
 }
 export async function creditRead(request:Request,env:CreditEnv,member:Member):Promise<Response|null>{
  const path=new URL(request.url).pathname;if(request.method!=='GET')return null;
