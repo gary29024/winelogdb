@@ -20,6 +20,20 @@ function setup(){
 afterEach(()=>{for(const state of databases.splice(0))state.sqlite.close();vi.restoreAllMocks()});
 
 describe('wine saves through the deployed entrypoint and migrated SQLite',()=>{
+  it('keeps the save error contract when the ownership lookup fails',async()=>{
+    const {db,create,request}=setup(),id=await create();
+    const prepare=db.prepare.bind(db),error=new Error('D1 lookup unavailable');
+    const log=vi.spyOn(console,'error').mockImplementation(()=>{});
+    vi.spyOn(db,'prepare').mockImplementation(sql=>{
+      if(sql==='SELECT * FROM wines WHERE owner_id=? AND id=?')throw error;
+      return prepare(sql);
+    });
+    const response=await request('PUT',`/api/wines/${id}`,blank);
+    expect(response.status).toBe(500);
+    expect(await response.json()).toEqual({error:'Could not save wine. Please retry.'});
+    expect(log).toHaveBeenCalledWith('wine-save-failed',error);
+  });
+
   it.each([false,true])('saves schema-valid omitted optional fields as SQL nulls (multipart=%s)',async multipart=>{
     const {sqlite,request}=setup(),minimal={producer:'Minimal estate',wineName:'Minimal bottle'};
     const form=new FormData();form.set('wine',JSON.stringify(minimal));

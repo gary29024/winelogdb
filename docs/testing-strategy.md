@@ -38,4 +38,4 @@ npm run db:migrate:local
 node scripts/worker-runtime-smoke.mjs
 ```
 
-`test:stack` requires the production build and creates its own fresh migrated database under `.tmp/sharing-journey/`. For an isolated runtime-smoke database, pass `--persist-to <directory>` to the local migration command and set `WINELOG_SMOKE_PERSIST_TO` to the same absolute directory when running the smoke script.
+`test:stack` requires the production build and creates its own fresh migrated database under `.tmp/sharing-journey/`. It loads Wrangler's own Miniflare and config reader, removes its run directory after success, and retains failed runs for debugging. For an isolated runtime-smoke database, pass `--persist-to <directory>` to the local migration command and set `WINELOG_SMOKE_PERSIST_TO` to the same absolute directory when running the smoke script.

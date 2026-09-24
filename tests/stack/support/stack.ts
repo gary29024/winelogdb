@@ -1,22 +1,31 @@
 import { build } from 'esbuild';
-import * as miniflare from 'miniflare';
+import { unstable_readConfig } from 'wrangler';
 import { exportJWK, generateKeyPair, SignJWT } from 'jose';
 import { createHash, randomUUID } from 'node:crypto';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
-import { mkdir, mkdtemp, readFile, readdir, writeFile } from 'node:fs/promises';
-import { resolve, join } from 'node:path';
+import { mkdir, mkdtemp, readdir, realpath, rm, writeFile } from 'node:fs/promises';
+import { basename, dirname, resolve, join } from 'node:path';
+import { createRequire } from 'node:module';
 import type { Browser, Page } from '@playwright/test';
 
 const run = promisify(execFile);
 const clientId = 'local-journey.apps.googleusercontent.com';
 const sha256 = (value: string) => createHash('sha256').update(value).digest('base64url');
+// Resolve from Wrangler, not the project: npm/Bun may install different copies.
+// The journey must use the same Miniflare/workerd as migrations and runtime smoke.
+const require = createRequire(import.meta.url);
+const wranglerRequire = createRequire(require.resolve('wrangler'));
+const miniflare = wranglerRequire('miniflare');
 
 export async function startStack() {
   await mkdir('.tmp/sharing-journey', { recursive: true });
-  const directory = await mkdtemp(resolve('.tmp/sharing-journey/run-'));
-  const production = JSON.parse((await readFile('wrangler.jsonc', 'utf8')).replace(/^\s*\/\/.*$/gm, ''));
-  if (!production.assets.run_worker_first.includes('/api/*')) throw new Error('Missing production API routing invariant');
+  const root = resolve('.tmp/sharing-journey');
+  const directory = await mkdtemp(join(root, 'run-'));
+  const production = unstable_readConfig({ config: resolve('wrangler.jsonc') }, { hideWarnings: true });
+  if (!production.main) throw new Error('Missing production Worker entrypoint');
+  if (!Array.isArray(production.assets?.run_worker_first) || !production.assets.run_worker_first.includes('/api/*')) throw new Error('Missing production API routing invariant');
+  console.log('Local runtime versions:', { wrangler: require('wrangler/package.json').version, miniflare: wranglerRequire('miniflare/package.json').version });
   const config = join(directory, 'wrangler.json');
   const persist = join(directory, 'state');
   await writeFile(config, JSON.stringify({
@@ -78,15 +87,15 @@ export async function startStack() {
       return Response.json({ error: 'Unexpected outbound request blocked by local test' }, { status: 502 });
     },
   };
-  // Wrangler's installed Miniflare v5 exposes an adapter for the documented v4 API.
-  const convert = (miniflare as unknown as { convertV4MiniflareOptions?: (options: unknown) => unknown }).convertV4MiniflareOptions;
-  const mf = new miniflare.Miniflare((convert ? convert(options) : options) as ConstructorParameters<typeof miniflare.Miniflare>[0]);
+  // Miniflare v5 adapts the v4 options; resolve the adapter from the same module.
+  const convert = miniflare.convertV4MiniflareOptions;
+  const mf = new miniflare.Miniflare(convert ? convert(options) : options);
   try {
     origin = (await mf.ready).origin;
     options.port = Number(new URL(origin).port);
     options.bindings.APP_URL = origin;
-    await mf.setOptions((convert ? convert(options) : options) as ConstructorParameters<typeof miniflare.Miniflare>[0]);
-    const db = await mf.getD1Database('DB');
+    await mf.setOptions(convert ? convert(options) : options);
+    const db: D1Database = await mf.getD1Database('DB');
     const migrationCount = (await readdir('src/lib/db/migrations')).filter(file => file.endsWith('.sql')).length;
     const applied = await db.prepare('SELECT count(*) AS n FROM d1_migrations').first('n');
     if (applied !== migrationCount) throw new Error(`D1 migrations: expected ${migrationCount}, got ${applied}`);
@@ -94,7 +103,7 @@ export async function startStack() {
     // The migration defaults to one pilot member. This synthetic isolation
     // fixture needs a recipient and an unrelated member; allowance rules stay intact.
     await db.prepare("UPDATE pilot_settings SET value_json=json_set(value_json,'$.memberLimit',2) WHERE id=1").run();
-    const bucket = await mf.getR2Bucket('WINE_IMAGES');
+    const bucket: R2Bucket = await mf.getR2Bucket('WINE_IMAGES');
     async function signIn(browser: Browser, name: string) {
       const context = await browser.newContext();
       await context.route('**/*', route => new URL(route.request().url()).origin === origin ? route.continue() : route.abort('blockedbyclient'));
@@ -126,7 +135,16 @@ export async function startStack() {
       console.log('Verified signed OAuth session:', name);
       return { page, context, user: me.body.user };
     }
-    return { origin, directory, db, bucket, providerCalls, unexpectedOutbound, signIn, close: () => mf.dispose() };
+    async function close({ preserve = false } = {}) {
+      await mf.dispose();
+      if (preserve) return;
+      // Verify the resolved deletion target stays directly inside this harness's
+      // temp root, including on Windows where a junction can change resolution.
+      const target = await realpath(directory), parent = await realpath(root);
+      if (dirname(target) !== parent || !basename(target).startsWith('run-')) throw new Error(`Unsafe stack cleanup target: ${target}`);
+      await rm(target, { recursive: true, force: true, maxRetries: 3 });
+    }
+    return { origin, directory, db, bucket, providerCalls, unexpectedOutbound, signIn, close };
   } catch (error) { await mf.dispose(); throw error; }
 }
 

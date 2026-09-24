@@ -77,6 +77,19 @@ All checks below passed in the PR worktree. Log paths are relative to that workt
 
 The initial PR-branch stack run found the changed friend-tag accessible label; the corrected selector passed the complete rerun. The original working tree remains intact and its unrelated uncommitted edits are excluded from the PR.
 
+## Review follow-up
+
+Addressed all six inline comments from Claude's review of `ac2643bc`:
+
+- Cleanup now uses indexed base-table checks with the same own-wine, active-source, friendship, direct-share and tasting-share rules as the visibility view. The original query plan scanned `wine_shares`/`tasting_shares` and built a temporary GROUP BY tree; the replacement uses index searches on each table. Cleanup still makes one DELETE attempt per warm; this is a query-plan improvement, not a claim of zero primary operations or measured production billing savings. A new regression covers overlapping grants, experience/tasting-share removal, source suspension and unfriending.
+- Removed the separately pinned Miniflare alpha dependency. The harness resolves Miniflare relative to Wrangler's entrypoint, including nested npm/Bun installations, and logs the actual versions. This run used Wrangler 4.129.0 and its Miniflare 5.20260903.0-alpha; the journey no longer chooses an independent version.
+- Restored the ownership lookup and enrichment inside the save error handler, with a regression for the friendly 500 response and `wine-save-failed` log. Centralized all three wine-row value lists and SQL-null normalization in `wineRowValues`.
+- Replaced ad hoc JSONC stripping with Wrangler's config reader. A disposable config probe passed with inline comments, block comments and trailing commas.
+- Successful stack runs dispose the runtime and remove only their own verified temporary directory. Failed runs retain their state. The passing run's directory `run-OiFuiG` was confirmed absent afterward; earlier diagnostic fixtures remain untouched.
+- Removed the redundant `> 60` migration check; the exact migration-directory/count comparison remains in the harness. Positioned the remaining new dev dependency alphabetically.
+
+Before-fix evidence is in `.tmp/sharing-review-before.log`: both the query-plan regression and ownership-lookup failure test failed. After the changes, 38 focused tests and the complete 285-file/2,622-test suite passed. Build, lint, the full local sharing journey (83 migrations), and runtime smoke also passed. Logs are `.tmp/sharing-review-{focused,unit,build,lint,stack,smoke,query-plan,jsonc}.log`. The prior PR commit's hosted CI was green, including the real stack; hosted results for this follow-up are reported by GitHub separately.
+
 ## Limits
 
 This proves the bounded journey locally with synthetic users and provider responses. It does not prove deployed Cloudflare asset-router precedence, live Google authorization, actual model relevance/quality, provider billing or production Images quota/fallback behavior. Existing unit regressions continue to cover fallback/budget rules. Production `assets.run_worker_first` is checked statically; deployed validation would require a separately authorized preview.

@@ -7,13 +7,13 @@ import { thumbnailObjectKey } from '../../src/lib/r2/thumbnails';
 
 test('owner-to-member sharing through browser, Worker, D1 and R2', async ({ browser }) => {
   const stack = await startStack();
+  let passed = false;
   try {
     const owner = await stack.signIn(browser, 'owner');
     const member = await stack.signIn(browser, 'member');
     const outsider = await stack.signIn(browser, 'outsider');
     expect(owner.user.role).toBe('owner');
     expect(member.user.role).toBe('member');
-    expect(await stack.db.prepare('SELECT count(*) AS n FROM d1_migrations').first('n')).toBeGreaterThan(60);
     const code = (await api(member.page, '/api/friends/code')).body.code;
     expect((await api(owner.page, '/api/friends/requests', 'POST', { code })).status).toBe(201);
     const incoming = (await api(member.page, '/api/friends/requests')).body.incoming;
@@ -192,7 +192,8 @@ test('owner-to-member sharing through browser, Worker, D1 and R2', async ({ brow
     expect(stack.providerCalls.some(call => call.kind === 'embedding')).toBe(true);
     expect(await stack.db.prepare('SELECT count(*) AS n FROM member_ai_action_usage').first('n')).toBe(0);
     expect(stack.unexpectedOutbound).toEqual([]);
-  } finally { await stack.close(); }
+    passed = true;
+  } finally { await stack.close({ preserve: !passed }); }
 });
 
 async function image(page: Page, path: string) {
