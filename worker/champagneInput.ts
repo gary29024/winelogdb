@@ -18,7 +18,7 @@ export async function validateChampagneImageIds(db:D1Database,owner:string,wineI
 }
 
 /** Validate identically when quoting and executing; do not stage photos while quoting. */
-export async function readChampagnePhotos(request:Request,db:D1Database,owner:string,wineId:string){
+export async function readChampagnePhotos(request:Pick<Request,'formData'>,db:D1Database,owner:string,wineId:string){
   try{
     const form=await request.formData(),files=form.getAll('images').filter((item):item is File=>item instanceof File);
     validateBatch(files,{maxFiles:CHAMPAGNE_PHOTO_LIMIT,maxBytes:CHAMPAGNE_PHOTO_BYTES,minDimension:300,maxDimension:2000});
