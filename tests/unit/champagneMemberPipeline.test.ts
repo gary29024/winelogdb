@@ -32,9 +32,10 @@ beforeEach(async()=>{
     database.sql.prepare("INSERT INTO app_users(id,email,display_name,role) VALUES(?,?,?,?) ON CONFLICT(id) DO UPDATE SET role=excluded.role,status='active'").run(user,`${user}@example.com`,user,user==='owner'?'owner':'member');
     database.sql.prepare('INSERT OR IGNORE INTO credit_wallets(user_id) VALUES(?)').run(user);
     database.sql.prepare('INSERT INTO auth_sessions VALUES(?,?,?)').run(await hash(`${user}-session`),user,seconds()+3600);
-    database.sql.prepare("INSERT INTO wines(id,owner_id,producer,wine_name,region,appellation,wine_style,created_at) VALUES(?,?,'Krug','Grande Cuvee','Champagne','Champagne','sparkling',?)").run(`${user}-wine`,user,stamp());
-    for(const suffix of ['front','back'])database.sql.prepare("INSERT INTO wine_images(id,owner_id,wine_id,object_key,content_type,byte_size,upload_status,created_at) VALUES(?,?,?,?,'image/jpeg',100,'uploaded',?)").run(`${user}-${suffix}`,user,`${user}-wine`,`${user}/${suffix}.jpg`,stamp());
-    database.sql.prepare('INSERT INTO wine_sparkling_details(owner_id,wine_id,details_json,updated_at) VALUES(?,?,?,?)').run(user,`${user}-wine`,'{"dosageGPerL":0}',stamp());
+    const createdAt=stamp();
+    database.sql.prepare("INSERT INTO wines(id,owner_id,producer,wine_name,region,appellation,wine_style,created_at,updated_at) VALUES(?,?,'Krug','Grande Cuvee','Champagne','Champagne','sparkling',?,?)").run(`${user}-wine`,user,createdAt,createdAt);
+    for(const suffix of ['front','back'])database.sql.prepare("INSERT INTO wine_images(id,owner_id,wine_id,object_key,content_type,byte_size,width,height,upload_status,created_at) VALUES(?,?,?,?,'image/jpeg',100,1200,1200,'uploaded',?)").run(`${user}-${suffix}`,user,`${user}-wine`,`${user}/${suffix}.jpg`,createdAt);
+    database.sql.prepare('INSERT INTO wine_sparkling_details(owner_id,wine_id,details_json,updated_at) VALUES(?,?,?,?)').run(user,`${user}-wine`,'{"dosageGPerL":0}',createdAt);
   }
   const config={memberLimit:25,memberStorageBytes:100_000_000,totalStorageBytes:8_000_000_000,aiConcurrency:4,aiDailyOperations:100,aiDailyEmbeddingRequests:400,aiMonthlyBudgetUsd:100,aiUnitBudgetUsd:1,cloudflareWarningUsd:5,cloudflareStopUsd:10,cloudflareObservedUsd:0,cloudflareObservedMonth:stamp().slice(0,7),allowOverages:true};
   database.sql.prepare('INSERT INTO pilot_settings(id,value_json) VALUES(1,?) ON CONFLICT(id) DO UPDATE SET value_json=excluded.value_json').run(JSON.stringify(config));
