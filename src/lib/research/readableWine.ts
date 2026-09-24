@@ -1,4 +1,4 @@
-import { adoptFriendResearch,loadResearchCache,loadWineResearchCache,wineRowResearchTargets,type CachedResearch,type ResearchScope,type ResearchTarget } from './cache';
+import { adoptFriendResearch,loadWineResearchCache,RESEARCH_EDITION_COLUMNS,wineRowResearchTargets,type CachedResearch,type ResearchScope,type ResearchTarget } from './cache';
 import { resolveExistingProducer } from '../producers/entities';
 import { resolveExistingCuvee } from '../cuvees/entities';
 
@@ -14,7 +14,7 @@ import { resolveExistingCuvee } from '../cuvees/entities';
  * saved research already covers it.
  */
 export async function readableWine<T extends Record<string,unknown>>(db:D1Database,reader:string,wineId:string,columns='w.*'){
-  return db.prepare(`SELECT ${columns},w.owner_id AS source_owner_id FROM wines w
+  return db.prepare(`SELECT ${columns},${RESEARCH_EDITION_COLUMNS},w.owner_id AS source_owner_id FROM wines w
     WHERE w.id=? AND (w.owner_id=? OR (
       EXISTS(SELECT 1 FROM friendships f WHERE f.user_id=? AND f.friend_id=w.owner_id)
       AND EXISTS(SELECT 1 FROM app_users u WHERE u.id=w.owner_id AND u.status='active')
@@ -107,7 +107,9 @@ export async function offerToSourceOwner<R extends Record<string,unknown>>(db:D1
 export async function sharedResearchForReader(db:D1Database,reader:string,sourceRow:Record<string,unknown>&{owner_id:unknown;deep_search_json?:unknown}){
   const row=await researchWine(db,reader,{...sourceRow,source_owner_id:String(sourceRow.owner_id)} as IdentityRow&Record<string,unknown>,sourceRow.deep_search_json);
   const targets=wineRowResearchTargets(row);
-  const own=await loadResearchCache(db,reader,targets,true);
+  // The same prior-key recovery the quote uses, so research the quote counts as
+  // already held (a generic non-vintage result, say) is on the page as well.
+  const own=await loadWineResearchCache(db,reader,targets,true);
   const owner=await withSourceResearch(db,reader,row,targets,new Map());
   const cache=new Map(own);
   // The reader's own scope wins when it is newer: a recipient who refreshes the

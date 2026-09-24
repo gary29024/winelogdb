@@ -57,7 +57,7 @@ const cacheSnapshot=(row:CacheRow)=>JSON.stringify({subjectJson:row.subject_json
 
 function targetFor(scope:ResearchScope,producer:ProducerRow,subjectJson:string){
   const subject=parseJson<Record<string,unknown>>(subjectJson,{});
-  return buildResearchTargets({producer:producer.canonical_name,producerId:producer.id,wineName:subject.wineName,vintage:subject.vintage,country:subject.country,region:subject.region,appellation:subject.appellation}).find(x=>x.scope===scope)??null;
+  return buildResearchTargets({producer:producer.canonical_name,producerId:producer.id,wineName:subject.wineName,vintage:subject.vintage,country:subject.country,region:subject.region,appellation:subject.appellation,releaseDesignation:subject.releaseDesignation,baseVintage:subject.baseVintage,disgorgement:subject.disgorgement}).find(x=>x.scope===scope)??null;
 }
 
 function cacheUpsert(db:D1Database,owner:string,target:ReturnType<typeof buildResearchTargets>[number],producer:ProducerRow,archive:HistoryRow,stored:ArchivedCache,now:string){

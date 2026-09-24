@@ -113,7 +113,10 @@ export const deepSearchSchema = z.object({
   researchedAt: z.string().datetime(),
   oldestResearchedAt: z.string().datetime().optional(),
   quality:deepSearchQualitySchema.optional(),
-  provenance:deepSearchProvenanceSchema.optional()
+  provenance:deepSearchProvenanceSchema.optional(),
+  /** The non-vintage release this snapshot was researched for; null for a
+   * generic or vintage wine. Absent on snapshots saved before editions. */
+  release:z.object({releaseDesignation:z.string().nullable(),baseVintage:z.number().int().nullable(),disgorgement:z.string().nullable()}).nullable().optional()
 });
 const referenceSuggestionSchema=z.object({field:z.enum(['producer','wineName','country','region','classification']),label:z.string(),current:z.string().nullable(),suggested:z.string(),suggestedValue:z.string().optional()});
 
