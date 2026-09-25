@@ -1566,5 +1566,76 @@
       ]
     }
   ],
-  "overlapNote": "Some Premier Cru names on this map cover overlapping ground. The overview paints that ground once; selecting any name shows its full production boundary."
+  "umbrellas": {
+    "inao-denom-479": [
+      "inao-denom-499"
+    ],
+    "inao-denom-481": [
+      "inao-denom-515",
+      "inao-denom-505"
+    ],
+    "inao-denom-482": [
+      "inao-denom-533",
+      "inao-denom-513"
+    ],
+    "inao-denom-488": [
+      "inao-denom-525",
+      "inao-denom-485",
+      "inao-denom-520"
+    ],
+    "inao-denom-497": [
+      "inao-denom-516",
+      "inao-denom-510",
+      "inao-denom-483",
+      "inao-denom-522",
+      "inao-denom-504"
+    ],
+    "inao-denom-501": [
+      "inao-denom-503",
+      "inao-denom-492",
+      "inao-denom-517",
+      "inao-denom-529"
+    ],
+    "inao-denom-502": [
+      "inao-denom-524",
+      "inao-denom-493"
+    ],
+    "inao-denom-508": [
+      "inao-denom-487",
+      "inao-denom-506",
+      "inao-denom-495",
+      "inao-denom-486",
+      "inao-denom-500",
+      "inao-denom-498"
+    ],
+    "inao-denom-512": [
+      "inao-denom-507",
+      "inao-denom-514"
+    ],
+    "inao-denom-526": [
+      "inao-denom-521",
+      "inao-denom-528"
+    ],
+    "inao-denom-527": [
+      "inao-denom-508",
+      "inao-denom-497",
+      "inao-denom-516",
+      "inao-denom-523",
+      "inao-denom-518",
+      "inao-denom-487",
+      "inao-denom-506",
+      "inao-denom-510",
+      "inao-denom-495",
+      "inao-denom-494",
+      "inao-denom-532",
+      "inao-denom-496",
+      "inao-denom-530",
+      "inao-denom-483",
+      "inao-denom-486",
+      "inao-denom-500",
+      "inao-denom-498",
+      "inao-denom-522",
+      "inao-denom-504"
+    ]
+  }
 }

@@ -193,8 +193,17 @@ the full production geometry is preserved alongside it in the same feature.
 `unionOverviewFills` derives one fill per named tier, excluding higher tiers
 only from the lower tier's overview fill. These live in the GeoJSON foreign
 member `overviewFills`, outside the selectable source `features`. Validity and
-area conservation are checked before writing. `overlapNote` explains overlapping
-Premier Cru names unless the selected feature has its own more specific note.
+area conservation are checked before writing. The generator also records
+`umbrellas`: each Premier Cru lying at least 90% inside a larger one, keyed by
+the wider name (Chassagne's Morgeot covers nineteen named climats; La Grande
+Montagne covers La Romanée). Measured shares are either >= 97% or <= 72%, so the
+threshold avoids borderline cases. The map says what a wider name covers and
+which wider names a cru lies within, after any reviewed note; a cru that overlaps
+nothing gets no note. Partial overlaps (Abbaye de Morgeot and Morgeot; Chassagne
+with Cailleret and La Maltroie; Nuits' Les Argillières and Clos des Argillières)
+are not umbrellas and carry no generated note. Reviewed label spellings also map
+Chassagne's "Les Ruchottes" to Les Grandes Ruchottes and "Les Caillerets" to
+Cailleret; En Cailleret keeps its own identity.
 An appellation in separate parts can configure `areas` (Côte de Nuits-Villages:
 north for Fixin and Brochon, south for Premeaux-Prissey, Comblanchien and
 Corgoloin). The generator assigns every polygon of the village area, by its

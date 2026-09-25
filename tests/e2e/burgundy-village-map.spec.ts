@@ -376,3 +376,19 @@ test('Côte de Nuits-Villages names its two separate parts and zooms to each',as
  await dialog.getByRole('button',{name:'Village view',exact:true}).click();
  await expect(labels.first()).toHaveCSS('visibility','visible');
 });
+
+test('an umbrella Premier Cru says what it covers; a cru that overlaps nothing has no note',async({page})=>{
+ await setup(page,{appellation:'Chassagne-Montrachet',wineName:'Morgeot',classification:'premier_cru',colour:'White',wineStyle:'white'});
+ await page.goto('/wines/layout-wine');await page.getByRole('button',{name:'View village map'}).click();
+ const dialog=page.getByRole('dialog',{name:'Chassagne-Montrachet',exact:true});
+ await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
+ await expect(dialog.locator('.village-map-overlap')).toContainText('Morgeot is a wider Premier Cru name covering 19 named vineyards');
+ await dialog.getByRole('combobox').selectOption({label:'La Romanée'});
+ await expect(dialog.locator('.village-map-overlap')).toHaveText('La Romanée lies within La Grande Montagne, a wider Premier Cru name.');
+ await page.keyboard.press('Escape');
+ await setup(page,{appellation:'Meursault',wineName:'Meursault Charmes',classification:'premier_cru',colour:'White',wineStyle:'white'});
+ await page.goto('/wines/layout-wine');await page.getByRole('button',{name:'View village map'}).click();
+ const meursault=page.getByRole('dialog',{name:'Meursault',exact:true});
+ await expect(meursault.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
+ await expect(meursault.locator('.village-map-overlap')).toHaveCount(0);
+});

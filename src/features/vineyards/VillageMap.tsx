@@ -1,7 +1,7 @@
 import { useEffect,useId,useRef,useState } from 'react';
 import { Map as MapLibreMap,Marker,NavigationControl,ScaleControl,type FilterSpecification,type MapGeoJSONFeature,type StyleSpecification } from 'maplibre-gl';
 import type { Feature,FeatureCollection,Geometry } from 'geojson';
-import { clickOrder,countLabel,joinPlaces,snapshotLabel,type BurgundyVillageMapTarget,type VillageMapCatalogue,type VillageMapFeature } from '../../lib/places/burgundyVillageMap';
+import { clickOrder,countLabel,joinPlaces,snapshotLabel,umbrellaNote,type BurgundyVillageMapTarget,type VillageMapCatalogue,type VillageMapFeature } from '../../lib/places/burgundyVillageMap';
 import { loadVillageMapCatalogue } from '../../lib/places/loadVillageMapCatalogue';
 import { BurgundyAtlasLink } from '../../components/BurgundyAtlasLink';
 import 'maplibre-gl/dist/maplibre-gl.css';
@@ -92,7 +92,8 @@ function VillageMapView({target,catalogue}:{target:BurgundyVillageMapTarget;cata
  const [selectedId,setSelectedId]=useState(target.featureId),[ready,setReady]=useState(false),[error,setError]=useState(''),[baseWarning,setBaseWarning]=useState(false),[attempt,setAttempt]=useState(0);
  const selectedRef=useRef(selectedId),selectionAction=useRef<((id:string)=>void)|null>(null);
  const selected=catalogue.features.find(feature=>feature.id===selectedId)!;
- const selectionNote=catalogue.notes[selected.id]?.note??(selected.kind==='vineyard'&&selected.tier==='premier_cru'?catalogue.overlapNote:undefined);
+ // A reviewed note, then what the cru's umbrella relationships mean for a label.
+ const selectionNotes=[catalogue.notes[selected.id]?.note,umbrellaNote(catalogue,selected.id)].filter(Boolean);
  const vineyardCount=(tier:string)=>catalogue.features.filter(f=>f.kind==='vineyard'&&f.tier===tier).length;
  const hasVineyards=catalogue.features.some(f=>f.kind==='vineyard');
  const selectId=useId(),statusId=useId();
@@ -245,7 +246,7 @@ function VillageMapView({target,catalogue}:{target:BurgundyVillageMapTarget;cata
      <p className={`village-map-eyebrow${selectedId===target.featureId?' is-wine':''}`}>{selectedId===target.featureId?'THIS WINE':'EXPLORING'}</p>
      <h3>{selected.name}</h3><span className={`village-map-tier map-tier-${selected.tier}`}>{tiers[selected.tier]}</span>
      <p className="village-map-description">{selected.kind==='vineyard'?'The highlighted area is the INAO production boundary for this cru.':'Appellation area shown; no single vineyard is identified.'}</p>
-     {selectionNote&&<p className="village-map-overlap">{selectionNote}</p>}
+     {selectionNotes.map(note=><p className="village-map-overlap" key={note}>{note}</p>)}
     </div>
     {selectedId!==target.featureId&&<button type="button" className="village-map-return" onClick={backToWine}>Back to this wine</button>}
     <p className="village-map-hint">{hasVineyards?'Tap a vineyard on the map to explore it.':'The map shows the appellation area across its producing communes.'}</p>

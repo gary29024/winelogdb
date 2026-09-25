@@ -98,6 +98,22 @@ describe('Premier Cru wine-detail destinations',()=>{
     }
   });
 
+  it('accepts the Chassagne label spellings Les Ruchottes and Les Caillerets without touching neighbouring names',()=>{
+    const base={...wine,region:'Côte de Beaune',appellation:'Chassagne-Montrachet'};
+    const ruchottes=burgundyAtlasPremierCru({...base,wineName:'Les Grandes Ruchottes'})!;
+    const cailleret=burgundyAtlasPremierCru({...base,wineName:'Cailleret'})!;
+    const enCailleret=burgundyAtlasPremierCru({...base,wineName:'En Cailleret'})!;
+    for(const wineName of ['Les Ruchottes','Chassagne-Montrachet 1er Cru Les Ruchottes']){
+      expect(burgundyAtlasPremierCru({...base,wineName})?.placeId,wineName).toBe(ruchottes.placeId);
+    }
+    expect(burgundyAtlasPremierCru({...base,wineName:'Les Caillerets'})?.placeId).toBe(cailleret.placeId);
+    // En Cailleret is a separate Premier Cru and keeps its own identity.
+    expect(enCailleret.placeId).not.toBe(cailleret.placeId);
+    // The aliases are scoped to Chassagne: Puligny and Volnay keep their own records.
+    expect(burgundyAtlasPremierCru({...wine,region:'Côte de Beaune',appellation:'Puligny-Montrachet',wineName:'Les Caillerets'})?.placeId).not.toBe(cailleret.placeId);
+    expect(burgundyAtlasPremierCru({...wine,wineName:'Les Ruchottes'})).toBeNull();
+  });
+
   it('accepts the producer spelling Clavoillon only with Puligny and Premier Cru evidence',()=>{
     const base={...wine,region:'Côte de Beaune',appellation:'Puligny-Montrachet'};
     const source=burgundyAtlasPremierCru({...base,wineName:'Clavaillon'})!;

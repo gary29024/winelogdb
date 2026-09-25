@@ -255,8 +255,22 @@ def main():
         url = f"/maps/{village['id']}.{DATE}.geojson"
         manifest = {"id": village["id"], "name": name, "region": village["region"], "communes": village["communes"],
                     "dataUrl": url, "bounds": rounded(vineyard_bounds), "sources": sources, "notes": village["notes"], "features": catalogue}
-        if village.get("overlapNote"):
-            manifest["overlapNote"] = village["overlapNote"]
+        # Umbrella names: a Premier Cru lying at least 90% inside a larger one
+        # (Chassagne's Morgeot covers nineteen named climats). Measured shares in
+        # the pinned snapshot are either >= 97% or <= 72%, so the threshold does
+        # not sit on a borderline case. Partial overlaps are not umbrellas.
+        premiers = [f for f in catalogue if f["kind"] == "vineyard" and f["tier"] == "premier_cru"]
+        umbrellas = {}
+        for outer in premiers:
+            for inner in premiers:
+                if inner is outer or inner["areaHa"] >= outer["areaHa"]:
+                    continue
+                inner_geom, outer_geom = geometries[inner["denominationId"]], geometries[outer["denominationId"]]
+                if inner_geom.intersection(outer_geom).area >= 0.9 * inner_geom.area:
+                    umbrellas.setdefault(outer["id"], []).append(inner)
+        if umbrellas:
+            manifest["umbrellas"] = {outer: [f["id"] for f in sorted(inner, key=lambda f: (-f["areaHa"], f["name"]))]
+                                     for outer, inner in sorted(umbrellas.items())}
         # Separate parts of one appellation (Côte de Nuits-Villages) each get a
         # zoom target: every polygon of the village area is assigned, by its
         # centroid, to exactly one configured group of communes.

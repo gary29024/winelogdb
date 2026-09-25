@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { describe,expect,it } from 'vitest';
-import { clickOrder,countLabel,joinPlaces,snapshotLabel,burgundyVillageMapTarget,type VillageMapCatalogue } from '../../src/lib/places/burgundyVillageMap';
+import { clickOrder,countLabel,joinPlaces,snapshotLabel,umbrellaNote,burgundyVillageMapTarget,type VillageMapCatalogue } from '../../src/lib/places/burgundyVillageMap';
 import catalogue from '../../src/lib/places/burgundyVillageMapCatalogue.json';
 import morey from '../../src/lib/places/moreyVillageMapCatalogue.json';
 import chambolle from '../../src/lib/places/chambolleVillageMapCatalogue.json';
@@ -446,5 +446,34 @@ describe('separate parts of one appellation',()=>{
   expect(areas[0].bounds[1]).toBeGreaterThan(areas[1].bounds[3]);
   // Together they span the whole appellation.
   expect(Math.min(...areas.map(a=>a.bounds[0]))).toBe(west);expect(Math.max(...areas.map(a=>a.bounds[3]))).toBe(north);
+ });
+});
+
+describe('umbrella Premier Cru notes',()=>{
+ const load=(file:string)=>JSON.parse(readFileSync(`src/lib/places/${file}VillageMapCatalogue.json`,'utf8')) as VillageMapCatalogue;
+ const chassagne=load('chassagne'),meursault=load('meursault');
+ const id=(catalogue:VillageMapCatalogue,name:string)=>catalogue.features.find(feature=>feature.name===name)!.id;
+ it('says what a wider name covers, and where a vineyard lies within one',()=>{
+  expect(umbrellaNote(chassagne,id(chassagne,'Morgeot'))).toMatch(/^Morgeot is a wider Premier Cru name covering 19 named vineyards, including /);
+  expect(umbrellaNote(chassagne,id(chassagne,'La Grande Montagne'))).toBe('La Grande Montagne is a wider Premier Cru name covering La Romanée, En Virondot, Les Grandes Ruchottes and Tonton Marcel.');
+  expect(umbrellaNote(chassagne,id(chassagne,'La Romanée'))).toBe('La Romanée lies within La Grande Montagne, a wider Premier Cru name.');
+  // Nested umbrellas name every wider name, the largest first.
+  expect(umbrellaNote(chassagne,id(chassagne,'Les Chaumes'))).toBe('Les Chaumes lies within Morgeot and La Boudriotte, wider Premier Cru names.');
+ });
+ it('adds no note to a cru that overlaps nothing',()=>{
+  for(const name of ['Charmes','Perrières','Genevrières'])expect(umbrellaNote(meursault,id(meursault,name)),name).toBeUndefined();
+  expect(umbrellaNote(chassagne,id(chassagne,'En Cailleret'))).toBeUndefined();
+ });
+ it('only records Premier Crus that exist in the same catalogue, each wider than what it covers',()=>{
+  for(const catalogue of [chassagne,meursault,load('saintAubin')]){
+   const byId=new Map(catalogue.features.map(feature=>[feature.id,feature]));
+   for(const [outer,inner] of Object.entries(catalogue.umbrellas??{})){
+    expect(byId.get(outer)?.tier).toBe('premier_cru');
+    for(const covered of inner){
+     expect(byId.get(covered)?.tier).toBe('premier_cru');
+     expect(byId.get(covered)!.areaHa).toBeLessThan(byId.get(outer)!.areaHa);
+    }
+   }
+  }
  });
 });

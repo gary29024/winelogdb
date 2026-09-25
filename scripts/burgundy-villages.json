@@ -326,8 +326,7 @@
       "colourDenominations": {
         "844": "white",
         "2062": "red"
-      },
-      "overlapNote": "Some Premier Cru names on this map cover overlapping ground. The overview paints that ground once; selecting any name shows its full production boundary."
+      }
     },
     {
       "region": "Côte de Beaune",
@@ -436,8 +435,7 @@
       "premierRange": [
         479,
         533
-      ],
-      "overlapNote": "Some Premier Cru names on this map cover overlapping ground. The overview paints that ground once; selecting any name shows its full production boundary."
+      ]
     },
     {
       "region": "Côte de Beaune",
@@ -480,8 +478,7 @@
       "colourDenominations": {
         "1125": "white",
         "2083": "red"
-      },
-      "overlapNote": "Some Premier Cru names on this map cover overlapping ground. The overview paints that ground once; selecting any name shows its full production boundary."
+      }
     },
     {
       "region": "Côte de Beaune",

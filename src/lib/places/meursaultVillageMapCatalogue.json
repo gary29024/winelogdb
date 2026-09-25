@@ -626,5 +626,13 @@
       ]
     }
   ],
-  "overlapNote": "Some Premier Cru names on this map cover overlapping ground. The overview paints that ground once; selecting any name shows its full production boundary."
+  "umbrellas": {
+    "inao-denom-2373": [
+      "inao-denom-849",
+      "inao-denom-861",
+      "inao-denom-848",
+      "inao-denom-860",
+      "inao-denom-1991"
+    ]
+  }
 }

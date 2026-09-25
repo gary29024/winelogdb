@@ -898,5 +898,37 @@
       ]
     }
   ],
-  "overlapNote": "Some Premier Cru names on this map cover overlapping ground. The overview paints that ground once; selecting any name shows its full production boundary."
+  "umbrellas": {
+    "inao-denom-1132": [
+      "inao-denom-1144"
+    ],
+    "inao-denom-1136": [
+      "inao-denom-1137"
+    ],
+    "inao-denom-1138": [
+      "inao-denom-1133"
+    ],
+    "inao-denom-1141": [
+      "inao-denom-1131"
+    ],
+    "inao-denom-1142": [
+      "inao-denom-1138",
+      "inao-denom-1143",
+      "inao-denom-1150"
+    ],
+    "inao-denom-1145": [
+      "inao-denom-1147",
+      "inao-denom-1135"
+    ],
+    "inao-denom-1152": [
+      "inao-denom-1151"
+    ],
+    "inao-denom-1153": [
+      "inao-denom-1154",
+      "inao-denom-1134",
+      "inao-denom-1148",
+      "inao-denom-1149",
+      "inao-denom-1129"
+    ]
+  }
 }
