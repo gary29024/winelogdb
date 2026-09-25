@@ -257,6 +257,12 @@ with Cailleret and La Maltroie; Nuits' Les Argillières and Clos des Argillière
 are not umbrellas and carry no generated note. Reviewed label spellings also map
 Chassagne's "Les Ruchottes" to Les Grandes Ruchottes and "Les Caillerets" to
 Cailleret; En Cailleret keeps its own identity.
+The registry repeats the umbrellas by match ID, so the wine matcher can read
+a label naming a wider Premier Cru with a cru inside it as the inner cru:
+"Meursault-Blagny Sous le Dos d'Ane" (the label form for Meursault Premier Crus in
+Blagny) is Sous le Dos d'Ane, and "Morgeot Clos Pitois" is Clos Pitois. Two crus
+that do not contain each other stay ambiguous. Château de la Maltroye's spelling
+"La Maltroye" (its Clos du Château de la Maltroye) maps to La Maltroie.
 An appellation in separate parts can configure `areas` (Côte de Nuits-Villages:
 north for Fixin and Brochon, south for Premeaux-Prissey, Comblanchien and
 Corgoloin). The generator assigns every polygon of the village area, by its

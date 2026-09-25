@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs';
+import { readdirSync,readFileSync } from 'node:fs';
 import { describe,expect,it } from 'vitest';
 import { clickOrder,countLabel,joinPlaces,snapshotLabel,umbrellaNote,burgundyVillageMapTarget,type VillageMapCatalogue } from '../../src/lib/places/burgundyVillageMap';
 import catalogue from '../../src/lib/places/burgundyVillageMapCatalogue.json';
@@ -481,5 +481,18 @@ describe('umbrella Premier Cru notes',()=>{
     }
    }
   }
+ });
+});
+
+describe('umbrella identities for the wine matcher',()=>{
+ it('mirror every catalogue umbrella by match ID',()=>{
+  const expected:Record<string,string[]>={};
+  // Every village catalogue, so a new village's umbrellas cannot be missed.
+  for(const file of readdirSync('src/lib/places').filter(name=>name.endsWith('VillageMapCatalogue.json'))){
+   const catalogue=JSON.parse(readFileSync(`src/lib/places/${file}`,'utf8')) as VillageMapCatalogue;
+   const match=new Map(catalogue.features.map(feature=>[feature.id,feature.matchId]));
+   for(const [outer,inner] of Object.entries(catalogue.umbrellas??{}))expected[match.get(outer)!]=inner.map(id=>match.get(id)!);
+  }
+  expect((registry as {umbrellas:Record<string,string[]>}).umbrellas).toEqual(expected);
  });
 });

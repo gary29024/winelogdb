@@ -5,6 +5,7 @@ import { placeKey } from './resolve';
 import mapping from './burgundyAtlasPremierCruLinks.json';
 import appellationMapping from './burgundyAtlasAppellationLinks.json';
 import unmappedPremiers from './burgundyAtlasUnmappedPremierCruNames.json';
+import villageMaps from './burgundyVillageMapRegistry.json';
 
 type Wine=WineFacts&{classification?:string|null};
 const nameKey=(value:string)=>placeKey(value.replace(/œ/g,'oe').replace(/Œ/g,'OE')).replace(/\bst\b/g,'saint');
@@ -47,12 +48,15 @@ const reviewedNameAliases:Record<string,Record<string,string[]>>={
   // Labels write Les Ruchottes (Ramonet) for the only Ruchottes Premier Cru,
   // Les Grandes Ruchottes; and Les Caillerets for Cailleret, the Premier Cru
   // covering Les Combards and Vigne Derrière. En Cailleret keeps its own name.
-  'Chassagne-Montrachet':{'Les Grandes Ruchottes':['Les Ruchottes'],'Cailleret':['Les Caillerets']}
+  // Château de la Maltroye spells its Clos du Château de la Maltroye, within
+  // La Maltroie, with a y.
+  'Chassagne-Montrachet':{'Les Grandes Ruchottes':['Les Ruchottes'],'Cailleret':['Les Caillerets'],'La Maltroie':['La Maltroye']}
 };
 const groups=mapping.groups.map(group=>({...group,key:nameKey(group.appellation),entries:group.entries.map(entry=>
   ({...entry,variants:[entry.name,...(reviewedNameAliases[group.appellation]?.[entry.name]??[])].flatMap(nameVariants)
     .map(variant=>({...variant,pattern:patternFor(variant.key)}))}))}));
 type Group=typeof groups[number];
+const umbrellas:Record<string,string[]>=villageMaps.umbrellas;
 type Entry=Group['entries'][number];
 type Match={entry:Entry;start:number;end:number;exact:boolean};
 
@@ -123,8 +127,13 @@ export function burgundyAtlasPremierCru(wine:Wine):BurgundyAtlasPlace|null{
       if(index===0&&!whole){invalid=true;break}
       if(index===1||whole)for(const match of found)candidates.add(match.entry);
     }
-    if(invalid||candidates.size!==1)continue;
-    const [entry]=candidates;
+    if(invalid)continue;
+    // A label may name a wider Premier Cru with a cru inside it: Meursault-Blagny
+    // Sous le Dos d'Ane, Morgeot Clos Pitois. The wider name gives way to the
+    // inner cru; two unrelated crus stay ambiguous.
+    const named=[...candidates],ids=named.map(entry=>entry.path.split('/')[2]);
+    const [entry,...others]=named.filter((_,index)=>!(umbrellas[ids[index]]??[]).some(inner=>ids.includes(inner)));
+    if(!entry||others.length)continue;
     destinations.push({placeId:entry.path.split('/')[2],name:`${group.appellation} — ${entry.name}`,
       url:`https://burgundyatlas.com${entry.path}`});
   }

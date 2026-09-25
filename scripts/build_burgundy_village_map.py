@@ -359,7 +359,16 @@ def main():
                              "climats": [{"matchId": f"inao-denom-{d}", "name": (name := grouped[d][0][0]["denom"].removeprefix(group["name"] + " ")),
                                           **({"aliases": group["aliases"][name]} if name in group.get("aliases", {}) else {})}
                                          for d in sorted(climat_by_denom) if climat_by_denom[d] is group]}
-                            for group in climat_groups]
+                            for group in climat_groups],
+        # Umbrella Premier Crus by match ID, so the wine matcher can read a label
+        # naming both a wider name and a cru inside it ("Meursault-Blagny Sous le
+        # Dos d'Ane", "Morgeot Clos Pitois") as the inner cru.
+        "umbrellas": dict(sorted({
+            match[outer]: [match[inner] for inner in inners]
+            for _, manifest, _ in outputs
+            for match in [{f["id"]: f["matchId"] for f in manifest["features"]}]
+            for outer, inners in manifest.get("umbrellas", {}).items()
+        }.items()))
     }, compact=True)
 
 
