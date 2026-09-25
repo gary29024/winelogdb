@@ -132,9 +132,44 @@ describe('Deep Search research sections',()=>{
     expect(panel.querySelector('.deep-error')?.textContent).not.toContain('Close');
     vi.mocked(fetch).mockResolvedValueOnce(Response.json({...run,retryBlocked:false}));
     await click(panel.querySelector<HTMLButtonElement>('.deep-error button')!);
-    expect(vi.mocked(fetch).mock.calls.some(([,init])=>init?.method==='POST')).toBe(false);
+    expect(vi.mocked(fetch).mock.calls.filter(([,init])=>init?.method==='POST').map(([url])=>String(url))).toEqual(['/api/wines/w1/deep-search-status?requestId=held-request']);
+    expect(panel.textContent).toContain('The previous request has ended. You can retry Deep Search.');
     expect(panel.textContent).toContain('Retry Deep Search');
     expect(panel.textContent).not.toContain('Deep Search needs review.');
+  });
+
+  it('shows feedback when checking leaves the request held, and keeps errors recoverable',async()=>{
+    await render({deepSearch:null},{requestId:'held',status:'failed',stage:'failed',retryBlocked:true,recoveryDeadline:'2026-09-27T04:00:00.000Z'});
+    const panel=host!.querySelector('.deep-search-panel')!,check=panel.querySelector<HTMLButtonElement>('.deep-error button')!;
+    await click(check);
+    expect(panel.textContent).toContain('Still waiting for a saved result.');expect(panel.textContent).toContain('Checked at');
+    expect(panel.textContent).toContain('You can stop waiting sooner.');expect(panel.textContent).toContain('Stop waiting');
+    vi.mocked(fetch).mockRejectedValueOnce(new Error('Connection unavailable'));
+    await click(check);expect(panel.textContent).toContain('Connection unavailable');expect(check.disabled).toBe(false);
+    expect(panel.textContent).not.toContain('Retry Deep Search');
+  });
+
+  it('stops a held request explicitly and offers retry after re-reading its settled status',async()=>{
+    const run={requestId:'held',status:'failed',stage:'failed',retryBlocked:true};
+    await render({deepSearch:null},run);vi.stubGlobal('confirm',vi.fn(()=>true));
+    const panel=host!.querySelector('.deep-search-panel')!;
+    vi.mocked(fetch).mockResolvedValueOnce(Response.json({ok:true,cancelled:true,alreadyTerminal:false})).mockResolvedValueOnce(Response.json(wine({deepSearch:null}))).mockResolvedValueOnce(Response.json({...run,retryBlocked:false,outcome:'uncertain'}));
+    await click(panel.querySelector<HTMLButtonElement>('.deep-error .secondary-danger')!);
+    expect(confirm).toHaveBeenCalledWith(expect.stringContaining('provider may already have processed'));
+    const posts=vi.mocked(fetch).mock.calls.filter(([,init])=>init?.method==='POST');
+    expect(posts).toHaveLength(1);expect(posts[0][0]).toBe('/api/wines/w1/deep-search-cancel');
+    expect(JSON.parse(String(posts[0][1]?.body))).toEqual({confirmation:'STOP_WAITING_DEEP_SEARCH',requestId:'held'});
+    expect(panel.textContent).toContain('Stopped waiting.');expect(panel.textContent).toContain('Retry Deep Search');
+  });
+
+  it('keeps the hold and controls visible when stopping is declined or rejected',async()=>{
+    await render({deepSearch:null},{requestId:'held',status:'failed',stage:'failed',retryBlocked:true});
+    vi.stubGlobal('confirm',vi.fn(()=>false));
+    const panel=host!.querySelector('.deep-search-panel')!,stop=panel.querySelector<HTMLButtonElement>('.deep-error .secondary-danger')!;
+    await click(stop);expect(vi.mocked(fetch).mock.calls.some(([,init])=>init?.method==='POST')).toBe(false);
+    vi.mocked(confirm).mockReturnValue(true);vi.mocked(fetch).mockResolvedValueOnce(Response.json({error:'Research is still finishing an active step.'},{status:409}));
+    await click(stop);expect(panel.textContent).toContain('Research is still finishing an active step.');expect(stop.disabled).toBe(false);
+    expect(panel.textContent).toContain('Check status');expect(panel.textContent).not.toContain('Retry Deep Search');
   });
 
   it('reuses vintage-only research and queues missing sections without forcing a refresh',async()=>{

@@ -177,15 +177,25 @@ export async function reserve(request:Request,env:CreditEnv,member:Member,observ
  }
  const operation=await env.DB.prepare('SELECT * FROM credit_operations WHERE id=?').bind(id).first<CreditOperation>();if(!operation)throw new ApiError(503,'Could not reserve credits');return {operation,existing:false};
 }
+/**
+ * The capture/release ledger pair that closes a reservation. Every settlement
+ * path writes it through here so the amounts and reasons cannot drift apart.
+ * `gate` makes both rows conditional on a claim made earlier in the same batch.
+ */
+function settlementLedger(db:D1Database,op:CreditOperation,captured:number,gate?:{sql:string;binds:unknown[]}){
+ const amount=Math.min(op.reserved,Math.max(0,captured));
+ return (['capture','release'] as const).map(kind=>db.prepare(`INSERT OR IGNORE INTO credit_ledger(id,user_id,operation_id,kind,amount,actor_id,reason)
+  SELECT ?,?,?,?,?,?,?${gate?` WHERE ${gate.sql}`:''}`)
+  .bind(`${op.id}:${kind}`,op.user_id,op.id,kind,kind==='capture'?amount:op.reserved-amount,op.user_id,kind==='capture'?'Validated AI results saved':'Unused AI reservation',...gate?.binds??[]));
+}
 export async function settle(db:D1Database,op:CreditOperation,captured:number,response?:{body:unknown;status:number},successful?:boolean){
- const amount=Math.min(op.reserved,Math.max(0,captured)),release=op.reserved-amount,now=stamp();
+ const amount=Math.min(op.reserved,Math.max(0,captured)),now=stamp();
  const complete=successful??(amount>0||response?.status===200);
  const finalResponse=response??(op.path.endsWith('/deep-search')&&op.run_id?{body:{researchRequestId:op.run_id,status:complete?'complete':'failed',...complete?{}:{error:'Deep Search did not complete',supportId:op.run_id}},status:complete?200:409}:undefined);
  await db.batch([
   ...(response?.body&&typeof response.body==='object'&&'cached' in response.body&&response.body.cached===true
    ?[db.prepare("DELETE FROM member_ai_action_usage WHERE operation_id=? AND status='pending'").bind(op.id)]:[]),
-  db.prepare("INSERT OR IGNORE INTO credit_ledger(id,user_id,operation_id,kind,amount,actor_id,reason) VALUES(?,?,?,'capture',?,?,?)").bind(`${op.id}:capture`,op.user_id,op.id,amount,op.user_id,'Validated AI results saved'),
-  db.prepare("INSERT OR IGNORE INTO credit_ledger(id,user_id,operation_id,kind,amount,actor_id,reason) VALUES(?,?,?,'release',?,?,?)").bind(`${op.id}:release`,op.user_id,op.id,release,op.user_id,'Unused AI reservation'),
+  ...settlementLedger(db,op,captured),
   db.prepare("UPDATE credit_operations SET captured=(SELECT amount FROM credit_ledger WHERE id=?),status=?,response_json=coalesce(?,response_json),response_status=coalesce(?,response_status),updated_at=? WHERE id=? AND status IN ('reserved','running','review')")
    .bind(`${op.id}:capture`,complete?'complete':'failed',finalResponse?JSON.stringify(finalResponse.body):null,finalResponse?.status??null,now,op.id),
   db.prepare('DELETE FROM research_work WHERE operation_id=?').bind(op.id)
@@ -222,6 +232,40 @@ async function validatedWineUnits(db:D1Database,op:CreditOperation){
   if(await db.prepare('SELECT 1 FROM research_cache WHERE owner_id=? AND scope=? AND cache_key=? AND (source_user_id IS NULL OR source_user_id=owner_id)').bind(op.user_id,unit.scope!,unit.cacheKey!).first())saved.push(unit);
  }
  return saved;
+}
+/** End a held wine request explicitly, retaining receipts and validated results. */
+export async function stopWaitingForWineResearch(db:D1Database,op:CreditOperation){
+ if(!op.path.endsWith('/deep-search'))throw new ApiError(400,'Not a wine research request');
+ if(!['reserved','running','review'].includes(op.status))return {ok:true,cancelled:false,alreadyTerminal:true,requestId:op.run_id??op.id};
+ const units=await validatedWineUnits(db,op),captured=Math.min(op.reserved,units.reduce((sum,unit)=>sum+unit.credits,0));
+ const unresolved=Boolean(await db.prepare("SELECT 1 FROM provider_operations WHERE operation_id=? AND state IN ('submitted','uncertain') LIMIT 1").bind(op.id).first());
+ const message=unresolved?'Stopped waiting for this request. The provider outcome is still unknown. Any saved research is kept.':'Stopped waiting for this request. Any saved research is kept.';
+ const body=JSON.stringify({status:'failed',outcome:unresolved?'uncertain':'interrupted',stoppedWaiting:true,stopId:crypto.randomUUID(),error:message,supportId:op.run_id??op.id,researchRequestId:op.run_id}),now=stamp();
+ // Claim and settle in one transaction. A consumer that already holds a lease
+ // prevents the stop; one claiming later observes the terminal operation.
+ const result=await db.batch([
+  db.prepare(`UPDATE credit_operations SET status=?,captured=?,response_json=?,response_status=409,updated_at=?
+   WHERE id=? AND status IN ('reserved','running','review')
+   AND ((run_id IS NULL AND status='review') OR EXISTS(SELECT 1 FROM wine_research_runs r WHERE r.owner_id=credit_operations.user_id AND r.request_id=credit_operations.run_id AND r.status='failed'))
+   AND NOT EXISTS(SELECT 1 FROM queue_outbox o JOIN queue_deliveries d ON d.id=o.id WHERE o.operation_id=credit_operations.id AND d.done=0 AND d.lease_until>?)`)
+   .bind(units.length?'complete':'failed',captured,body,now,op.id,seconds()),
+  ...settlementLedger(db,op,captured,{sql:'EXISTS(SELECT 1 FROM credit_operations WHERE id=? AND response_json=?)',binds:[op.id,body]}),
+  db.prepare(`UPDATE research_batch_jobs SET status='failed',error=coalesce(error,?),updated_at=?
+   WHERE owner_id=? AND request_id=? AND status='running' AND EXISTS(SELECT 1 FROM credit_operations WHERE id=? AND response_json=?)`).bind(message,now,op.user_id,op.run_id??'',op.id,body),
+  db.prepare(`UPDATE wine_research_runs SET message=coalesce(message,'')||?,updated_at=?,completed_at=coalesce(completed_at,?)
+   WHERE owner_id=? AND request_id=? AND status='failed' AND EXISTS(SELECT 1 FROM credit_operations WHERE id=? AND response_json=?)`)
+   .bind(` · ${message}`,now,now,op.user_id,op.run_id??'',op.id,body),
+  db.prepare('DELETE FROM research_work WHERE operation_id=? AND EXISTS(SELECT 1 FROM credit_operations WHERE id=? AND response_json=?)').bind(op.id,op.id,body)
+ ]);
+ if(!result[0].meta.changes){
+  const current=await db.prepare('SELECT status FROM credit_operations WHERE id=?').bind(op.id).first<{status:string}>();
+  if(current&&['complete','failed'].includes(current.status))return {ok:true,cancelled:false,alreadyTerminal:true,requestId:op.run_id??op.id};
+  throw new ApiError(409,'Research is still finishing an active step. Check status and try stopping again in a few minutes.');
+ }
+ // The provider may still bill for a send whose outcome is unknown, while the
+ // member is released. Log it so the owner can see that unrecovered cost.
+ if(unresolved)console.warn(JSON.stringify({event:'deep_search_stopped_unresolved',operationId:op.id,userId:op.user_id,requestId:op.run_id??op.id,reserved:op.reserved,captured}));
+ return {ok:true,cancelled:true,alreadyTerminal:false,stoppedWaiting:true,requestId:op.run_id??op.id};
 }
 export async function reconcileOperation(db:D1Database,op:CreditOperation){
  if(!['running','reserved','review'].includes(op.status))return;

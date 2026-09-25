@@ -68,7 +68,11 @@ export async function durableProvider(context:ProviderAuthorization|undefined,ke
  try{
   const response=await send(),bytes=await boundedBytes(response.body,1_800_000),body=new TextDecoder().decode(bytes);
   const headers={'Content-Type':response.headers.get('Content-Type')||'application/json'};
-  await db.prepare("UPDATE provider_operations SET state='saved',response_status=?,response_headers=?,response_body=?,updated_at=? WHERE id=?").bind(response.status,JSON.stringify(headers),body,stamp(),id).run();
+  const saved=await db.prepare(`UPDATE provider_operations SET state='saved',response_status=?,response_headers=?,response_body=?,updated_at=? WHERE id=?
+   RETURNING (SELECT status FROM credit_operations WHERE id=provider_operations.operation_id) AS operation_status`).bind(response.status,JSON.stringify(headers),body,stamp(),id).first<{operation_status:string|null}>();
+  // A reply that lands after the operation settled (timed out, or the member
+  // stopped waiting) is kept for diagnosis but never applied or charged.
+  if(saved&&['complete','failed'].includes(saved.operation_status??''))console.warn(JSON.stringify({event:'provider_reply_after_settlement',operationId,namespace:context.namespace,status:response.status}));
   return new Response(body,{status:response.status,headers});
  }catch(error){await db.prepare("UPDATE provider_operations SET state='uncertain',updated_at=? WHERE id=? AND state='submitted'").bind(stamp(),id).run();throw error}
 }

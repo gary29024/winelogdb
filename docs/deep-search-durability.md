@@ -118,6 +118,39 @@ under .tmp/deep-search-* and are not committed.
 
 ## Limits
 
+### Manual recovery and stopping a held request
+
+Passive `GET /api/wines/:id/deep-search-status` reads remain read-only. The
+**Check status** button uses an authenticated, same-origin POST to that endpoint
+to run bounded maintenance for the user's matching operation, then returns its
+fresh run and hold state. It can replay a saved reply, settle an expired hold,
+or leave unresolved work held. It dispatches only that operation's due outbox
+messages and does not create a new research reservation. The UI shows the check
+time and its result even when the hold has not changed, plus the recovery deadline.
+Recovery runs at most once per operation every 15 seconds (`checked_at`); a
+check inside that window returns the current state without repeating the work.
+Cron reconciles up to six open operations per five-minute run.
+
+**Stop waiting** is available on a held failure. Its separate confirmation
+explains that the provider may already have processed the request. The cancel
+endpoint accepts `STOP_WAITING_DEEP_SEARCH` and the exact run/operation ID. It
+atomically closes local recovery, retains provider receipts and prior diagnostics,
+keeps saved research, settles validated own scopes, and releases unused holds.
+A live queue delivery prevents this action until its bounded lease ends; the UI
+shows an actionable conflict and keeps both controls. An abandoned tracked batch
+is closed with the operation. Queued deliveries and late replies cannot restart
+the terminal operation. A new retry is a separate, explicit action.
+Settlement shares the capture/release ledger helper with every other path.
+Stopping while a provider send is unresolved logs `deep_search_stopped_unresolved`,
+and a reply saved after its operation settled logs `provider_reply_after_settlement`,
+so the owner can see provider cost that was not charged to the member.
+
+Regression tests exercise saved-reply recovery, expired and unchanged holds,
+concurrent stops, settlement rollback, partial saved scopes, authorization,
+live-delivery fencing, missing run rows, and the mobile check/stop/reopen flow.
+
+### Distributed execution limits
+
 These tests establish the specified transitions and selected race interleavings,
 not a formal proof of every distributed execution.
 Cloudflare provides [at-least-once delivery](https://developers.cloudflare.com/queues/reference/delivery-guarantees/),

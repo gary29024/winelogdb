@@ -1,13 +1,13 @@
 import legacy from './structureEntry';
 import { SignJWT } from 'jose';
-import { ApiError,json,stamp,type IdentityEnv } from './multiUser/common';
+import { ApiError,json,seconds,stamp,type IdentityEnv } from './multiUser/common';
 import { authenticate,authRoute,verifyOrigin } from './multiUser/auth';
 import { socialRoute } from './multiUser/social';
 import { adminRoute,deploymentAiCost } from './multiUser/admin';
-import { aiRoute,creditRead,publicAiResponse,quote,reserve,saveOperationResponse,reconcileOperation,wineTargets,settle,type CreditOperation } from './multiUser/credits';
+import { aiRoute,creditRead,publicAiResponse,quote,reserve,saveOperationResponse,reconcileOperation,stopWaitingForWineResearch,wineTargets,settle,type CreditOperation } from './multiUser/credits';
 import { memberActionForRequest,memberAiAccess,memberAiActionAccess,reserveMemberAiAllowance } from './multiUser/memberAccess';
 import { providerAuthorization } from './multiUser/provider';
-import { claimDelivery,durableQueue,finishDelivery,flushOutbox,isQueueCleanup,maintainJobs,markUncertain,type JobEnvelope } from './multiUser/jobs';
+import { claimDelivery,durableQueue,finishDelivery,flushOutbox,isQueueCleanup,maintainJobs,maintainOperation,markUncertain,type JobEnvelope } from './multiUser/jobs';
 import { meteredBucket } from './multiUser/storage';
 import { adoptFriendResearch,assembleDeepSearch,loadWineResearchCache,RESEARCH_EDITION_COLUMNS } from '../src/lib/research/cache';
 import type { AiRateEnv } from '../src/lib/usage/rates';
@@ -15,8 +15,12 @@ import { processRolloutJob,recoverRollouts,rolloutRoute,type RolloutQueueJob } f
 import { LWIN_AI_LEASE_SECONDS } from './multiUser/lwinRepair';
 import { reusableProducer } from '../src/lib/research/sharedProducer';
 import { readVintageWindow,type VintageSubject } from '../src/lib/maturity/vintageWindow';
+import { getWineResearchRun } from '../src/lib/research/backgroundJobs';
+import { WINE_RESEARCH_RECOVERY_MS } from '../src/lib/research/recoveryPolicy';
 import { champagneExtractionRoute } from '../src/lib/ai/reservedRoutes';
 
+/** Minimum gap between two explicit Deep Search recovery checks of one operation. */
+const RESEARCH_CHECK_COOLDOWN_SECONDS=15;
 export type MultiUserEnv=Parameters<typeof legacy.fetch>[1]&IdentityEnv&AiRateEnv;
 type Batch=Parameters<typeof legacy.queue>[0];
 function revalidated(response:Response){const headers=new Headers(response.headers);headers.set('Cache-Control','private, no-store');headers.set('Vary','Cookie');headers.set('X-Content-Type-Options','nosniff');return new Response(response.body,{status:response.status,headers})}
@@ -99,18 +103,39 @@ export default {
      return json(publicAiResponse(path,data,operation),response.status);
     }catch(error){await markUncertain(env.DB,operation.id);throw error}
    }
+   if(request.method==='POST'&&/^\/api\/wines\/[^/]+\/deep-search-cancel$/.test(path)){
+    const body=await request.clone().json().catch(()=>null) as {confirmation?:string;requestId?:string}|null;
+    if(body?.confirmation==='STOP_WAITING_DEEP_SEARCH'){
+     if(typeof body.requestId!=='string'||!body.requestId)throw new ApiError(400,'Research request ID required');
+     const op=await env.DB.prepare('SELECT * FROM credit_operations WHERE user_id=? AND path=? AND (run_id=? OR id=?) ORDER BY created_at DESC,rowid DESC LIMIT 1')
+      .bind(member.id,path.replace(/-cancel$/,''),body.requestId,body.requestId).first<CreditOperation>();
+     if(!op)throw new ApiError(404,'Research request not found');
+     return json(await stopWaitingForWineResearch(env.DB,op));
+    }
+   }
    const forwarded=await internalRequest(request,env,member.id);
    if(request.method==='GET'&&champagneExtractionRoute(path)){
     const op=await env.DB.prepare("SELECT * FROM credit_operations WHERE user_id=? AND path=? AND status IN ('reserved','running','review') LIMIT 1").bind(member.id,path).first<CreditOperation>();
     if(op)await reconcileOperation(env.DB,op);
    }
-   const response=await legacy.fetch(forwarded,scoped,ctx);
-   if((response.ok||response.status===404)&&request.method==='GET'&&/^\/api\/wines\/[^/]+\/deep-search-status$/.test(path)){
+   const researchStatus=/^\/api\/wines\/[^/]+\/deep-search-status$/.test(path),checkingResearch=researchStatus&&request.method==='POST';
+   const response=await legacy.fetch(checkingResearch?new Request(forwarded.url,{method:'GET',headers:forwarded.headers}):forwarded,scoped,ctx);
+   if((response.ok||response.status===404)&&(request.method==='GET'||checkingResearch)&&researchStatus){
     let run=response.ok?await response.json() as {status:string;requestId:string;startedAt:string;message?:string|null}:null;
     const requested=new URL(request.url).searchParams.get('requestId')??'';
-    const op=await env.DB.prepare(`SELECT * FROM credit_operations WHERE user_id=? AND path=?
+    let op=await env.DB.prepare(`SELECT * FROM credit_operations WHERE user_id=? AND path=?
      AND (?='' OR run_id=? OR id=?) ORDER BY created_at DESC,rowid DESC LIMIT 1`)
      .bind(member.id,path.replace(/-status$/,''),requested,requested,requested).first<CreditOperation>();
+    // Explicit checks run the same bounded recovery as cron for this operation,
+    // at most once per cooldown; a check inside it just reads the fresh state.
+    // Saved replies replay; uncertain provider sends remain blocked.
+    if(checkingResearch&&op&&['reserved','running','review'].includes(op.status)
+     &&(await env.DB.prepare('UPDATE credit_operations SET checked_at=? WHERE id=? AND coalesce(checked_at,0)<=?').bind(seconds(),op.id,seconds()-RESEARCH_CHECK_COOLDOWN_SECONDS).run()).meta.changes){
+     await maintainOperation(env.DB,op);
+     await flushOutbox(env.DB,env.RESEARCH_QUEUE,op.id);
+     op=await env.DB.prepare('SELECT * FROM credit_operations WHERE id=? AND user_id=?').bind(op.id,member.id).first<CreditOperation>();
+     if(op?.run_id)run=await getWineResearchRun(env.DB,member.id,path.split('/')[3],op.run_id)??run;
+    }
     const active=Boolean(op&&['reserved','running','review'].includes(op.status));
     // Followers and interrupted HTTP starts have an operation but no run row.
     // Restore them from the same durable operation used for submission/replay.
@@ -121,11 +146,12 @@ export default {
     }
     if(!run)return response;
     const linked=op&&(op.run_id===run.requestId||op.id===run.requestId),held=run.status==='failed'&&linked&&active;
-    const outcome=linked&&op.response_json?(JSON.parse(op.response_json) as {outcome?:string}).outcome:undefined;
+    const outcome=linked&&op?.response_json?(JSON.parse(op.response_json) as {outcome?:string}).outcome:undefined;
     const message=member.role==='owner'?run.message:run.status==='failed'
      ?outcome==='uncertain'?'WineLog could not confirm the research outcome. Any saved research is kept.':held?'WineLog is checking the previous research outcome. Any saved research is kept.':'Deep Search did not complete. Any saved research is kept.'
      :run.status==='complete'?'Deep Search complete.':'WineLog is researching this wine in the background.';
-    return json({...run,message,outcome,retryBlocked:Boolean(held)});
+    const recoveryDeadline=held&&op?new Date(Date.parse(op.created_at)+WINE_RESEARCH_RECOVERY_MS).toISOString():undefined;
+    return json({...run,message,outcome,retryBlocked:Boolean(held),recoveryDeadline});
    }
    const producerMatch=path.match(/^\/api\/producers\/([^/]+)$/);
    if(response.ok&&request.method==='GET'&&producerMatch){const shared=await reusableProducer(env.DB,member.id,producerMatch[1]);if(shared)return json({...await response.json() as object,...shared})}
