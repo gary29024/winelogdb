@@ -53,6 +53,8 @@ export async function chooseResearchModel(db:D1Database,owner:string,attempted:r
 }
 const BATCH_KEY='wine-research';
 const now=()=>new Date().toISOString();
+/** Replaying a saved answer cannot restore a deleted subject or missing scopes. */
+class ResearchTerminalError extends Error {}
 const parseJson=<T>(raw:unknown,fallback:T):T=>{try{return JSON.parse(String(raw)) as T}catch{return fallback}};
 const scopeNames:Record<ResearchScope,string>={producer:'producer profile and general practices',terroir:'wine/cru terroir',vintage_context:'appellation/region vintage context',wine_vintage:'exact wine + vintage'};
 const scopeFields:Record<ResearchScope,string>={producer:'producerDetails, producerWinemakingPractices',terroir:'terroir',vintage_context:'vintageQuality',wine_vintage:'summary, expectedProfile, winemakingTechniques, drinkingWindow'};
@@ -141,7 +143,7 @@ async function loadWine(db:D1Database,owner:string,wineId:string,credit?:Provide
 }
 
 async function prepare(env:Env,owner:string,wineId:string,refresh:'none'|'vintage'|'all'){
-  const wine=await loadWine(env.DB,owner,wineId,env.CREDIT_CONTEXT);if(!wine)throw new Error('Wine not found');const targets=researchTargets(wine);await seedProducerProfileResearch(env.DB,owner,wine,targets);
+  const wine=await loadWine(env.DB,owner,wineId,env.CREDIT_CONTEXT);if(!wine)throw new ResearchTerminalError('Wine not found');const targets=researchTargets(wine);await seedProducerProfileResearch(env.DB,owner,wine,targets);
   let cache=await loadResearchCache(env.DB,owner,targets);cache=await bridgePriorCaches(env.DB,owner,wineId,targets,cache);cache=await seedFromLegacy(env.DB,owner,wine,targets,cache);
   const force=new Set<ResearchScope>(refresh==='all'?targets.map(x=>x.scope):refresh==='vintage'?(['vintage_context','wine_vintage'] as ResearchScope[]):[]);
   if(force.size){for(const target of targets.filter(x=>force.has(x.scope))){await env.DB.prepare('DELETE FROM research_cache WHERE owner_id=? AND scope=? AND cache_key=?').bind(owner,target.scope,target.cacheKey).run();cache.delete(target.scope)}}
@@ -176,7 +178,7 @@ async function syncProducerScope(db:D1Database,owner:string,wine:WineRow,entry:C
 }
 
 async function finalize(env:Env,owner:string,wineId:string,wine:ResearchWineRow<WineRow>,targets:ResearchTarget[]){
-  const cache=await withSourceResearch(env.DB,owner,wine,targets,await loadResearchCache(env.DB,owner,targets,Boolean(env.CREDIT_RESEARCH_SCOPES))),missing=targets.filter(target=>!cache.has(target.scope));if(missing.length)throw new Error(`Deep Search cache is incomplete: ${missing.map(x=>scopeNames[x.scope]).join(', ')}`);
+  const cache=await withSourceResearch(env.DB,owner,wine,targets,await loadResearchCache(env.DB,owner,targets,Boolean(env.CREDIT_RESEARCH_SCOPES))),missing=targets.filter(target=>!cache.has(target.scope));if(missing.length)throw new ResearchTerminalError(`Deep Search cache is incomplete: ${missing.map(x=>scopeNames[x.scope]).join(', ')}`);
   // A friend's scopes are kept rather than re-borrowed on every view: the reader
   // now owns the text, so it survives the friendship ending.
   await adoptFriendResearch(env.DB,owner,cache,true).catch(error=>{throw new ResearchPersistenceError(error)});
@@ -193,7 +195,7 @@ async function cancelAttemptBatch(env:Env,requestId:string,wineId:string,attempt
 async function submitAttempt(env:Env,owner:string,wineId:string,requestId:string,attempt:number,scopes:ResearchScope[],feedback:ScopeFeedback={},attempted:readonly string[]=[]){
   const prior=await env.DB.prepare('SELECT id,google_batch_name,model FROM research_batch_jobs WHERE owner_id=? AND request_id=? AND attempt=?')
     .bind(owner,requestId,attempt).first<{id:string;google_batch_name:string;model:string}>();
-  const wine=await loadWine(env.DB,owner,wineId,env.CREDIT_CONTEXT);if(!wine)throw new Error('Wine not found');const targets=researchTargets(wine),cache=await withSourceResearch(env.DB,owner,wine,targets,await loadResearchCache(env.DB,owner,targets),new Set(scopes)),entry=buildRequest(wine,scopes,cache,feedback),model=prior?.model??await chooseResearchModel(env.DB,owner,attempted);let googleName=prior?.google_batch_name,jobId=prior?.id;
+  const wine=await loadWine(env.DB,owner,wineId,env.CREDIT_CONTEXT);if(!wine)throw new ResearchTerminalError('Wine not found');const targets=researchTargets(wine),cache=await withSourceResearch(env.DB,owner,wine,targets,await loadResearchCache(env.DB,owner,targets),new Set(scopes)),entry=buildRequest(wine,scopes,cache,feedback),model=prior?.model??await chooseResearchModel(env.DB,owner,attempted);let googleName=prior?.google_batch_name,jobId=prior?.id;
   try{
     googleName??=await createGeminiBatch(env.GEMINI_API_KEY,model,`winelog-wine-${requestId}-${attempt}`,[entry],env.CREDIT_CONTEXT);
     jobId??=await createResearchBatchJob(env.DB,{owner,requestId,targetKind:'wine',targetId:wineId,googleBatchName:googleName,model,attempt,keys:scopes});
@@ -270,11 +272,27 @@ async function retryOrFail(env:Env,owner:string,wineId:string,requestId:string,a
 }
 
 export async function pollWineBatchResearch(env:Env,owner:string,wineId:string,requestId:string,jobId:string,pollCount:number){
+  try{await applyWineBatchResearch(env,owner,wineId,requestId,jobId,pollCount)}
+  catch(error){
+    if(!(error instanceof ResearchTerminalError))throw error;
+    // Business outcomes finish immediately. A failed terminal write still
+    // propagates so the queue can replay it without buying another model call.
+    const stamp=now();
+    await env.DB.batch([
+      env.DB.prepare("UPDATE research_batch_jobs SET status='failed',error=?,updated_at=? WHERE owner_id=? AND id=? AND NOT EXISTS(SELECT 1 FROM wine_research_runs WHERE owner_id=? AND request_id=? AND status='complete')")
+        .bind(error.message,stamp,owner,jobId,owner,requestId),
+      env.DB.prepare("UPDATE wine_research_runs SET status='failed',stage='failed',message=?,updated_at=?,completed_at=?,duration_ms=max(0,cast(round((julianday(?)-julianday(started_at))*86400000) AS INTEGER)) WHERE owner_id=? AND request_id=? AND status<>'complete'")
+        .bind(error.message,stamp,stamp,stamp,owner,requestId)
+    ]);
+  }
+}
+
+async function applyWineBatchResearch(env:Env,owner:string,wineId:string,requestId:string,jobId:string,pollCount:number){
   const job=await getResearchBatchJob(env.DB,owner,jobId);if(!job)return;
   if(job.status!=='running'){
     // Repair the old split completion boundary using saved scopes only.
     if(job.status==='complete'&&(await getWineResearchRun(env.DB,owner,wineId,requestId))?.status==='running'){
-      const wine=await loadWine(env.DB,owner,wineId,env.CREDIT_CONTEXT);if(!wine)throw new Error('Wine not found');
+      const wine=await loadWine(env.DB,owner,wineId,env.CREDIT_CONTEXT);if(!wine)throw new ResearchTerminalError('Wine not found');
       await finalize(env,owner,wineId,wine,researchTargets(wine));
       await updateWineResearchRun(env.DB,owner,requestId,'complete','Deep Search finalisation recovered from saved research','complete',job.attempt);
     }
@@ -327,7 +345,7 @@ export async function pollWineBatchResearch(env:Env,owner:string,wineId:string,r
     const metadata=groundingMetadata,raw=parseStructuredJsonText(text) as Record<string,unknown>,parsed=deepSearchSchema.safeParse({...raw,sources:sourcesFrom(metadata),model:`${job.model} (batch)`,researchedAt:now()});if(!parsed.success)throw new Error(`Deep Search returned invalid fields: ${parsed.error.issues.map(x=>x.path.join('.')||x.message).join(', ')}`);
     const rawProvenance=buildDeepSearchProvenance(parsed.data,metadata),conflictAudit=auditTechnicalContradictions(parsed.data,rawProvenance),provenance=conflictAudit.provenance,researched:DeepSearchResult={...parsed.data,provenance};
     applying=true;
-    const wine=await loadWine(env.DB,owner,wineId,env.CREDIT_CONTEXT);if(!wine)throw new Error('Wine not found');const targets=researchTargets(wine),entries=splitDeepSearchResult(researched,targets).filter(entry=>scopes.includes(entry.target.scope));failed=scopes.filter(scope=>!entries.some(entry=>entry.target.scope===scope&&scopeIsComplete(scope,entry.payload)));
+    const wine=await loadWine(env.DB,owner,wineId,env.CREDIT_CONTEXT);if(!wine)throw new ResearchTerminalError('Wine not found');const targets=researchTargets(wine),entries=splitDeepSearchResult(researched,targets).filter(entry=>scopes.includes(entry.target.scope));failed=scopes.filter(scope=>!entries.some(entry=>entry.target.scope===scope&&scopeIsComplete(scope,entry.payload)));
     const completeEntries=entries.filter(entry=>scopeIsComplete(entry.target.scope,entry.payload));for(const entry of completeEntries){await upsertResearchCache(env.DB,owner,entry);if(entry.target.scope==='producer')await syncProducerScope(env.DB,owner,wine,entry)}
     if(failed.length){
       // Carry the gate's reasons into the retry: the fallback model is asked to

@@ -65,10 +65,12 @@ export async function maintainJobs(db:D1Database,queue:Queue<unknown>,bucket?:R2
   const winePath=op.path.match(/^\/api\/wines\/([^/]+)\/deep-search$/);
   if((op.status==='reserved'||winePath)&&Date.parse(op.created_at)<Date.now()-15*60_000&&!await db.prepare('SELECT id FROM queue_outbox WHERE operation_id=? LIMIT 1').bind(op.id).first()){
    // HTTP can stop after marking the operation running but before dispatch.
-   // Only expire an operation that has never dispatched or submitted work.
+   // Followers wait for their sponsor without dispatching their own work.
+   // Only expire an operation that has never dispatched, submitted or followed.
    const claimed=await db.prepare(`UPDATE credit_operations SET status='review' WHERE id=? AND status IN ('reserved','running','review')
     AND NOT EXISTS(SELECT 1 FROM queue_outbox WHERE operation_id=?)
-    AND NOT EXISTS(SELECT 1 FROM provider_operations WHERE operation_id=?)`).bind(op.id,op.id,op.id).run();
+    AND NOT EXISTS(SELECT 1 FROM provider_operations WHERE operation_id=?)
+    AND NOT EXISTS(SELECT 1 FROM research_followers WHERE operation_id=?)`).bind(op.id,op.id,op.id,op.id).run();
    if(claimed.meta.changes){
     if(winePath)await db.prepare(`UPDATE wine_research_runs SET status='failed',stage='failed',message='Reservation expired before dispatch',updated_at=?,completed_at=?
      WHERE owner_id=? AND wine_id=? AND started_at>=? AND status='running'`).bind(stamp(),stamp(),op.user_id,winePath[1],op.created_at).run();

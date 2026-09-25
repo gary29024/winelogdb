@@ -288,7 +288,11 @@ export async function createGeminiBatch(apiKey:string|undefined,model:string,dis
   const runtime=gatewayRuntime(apiKey);
   if(runtime){
    try{
-    const id=context&&'operationId' in context?await hash(`vertex-batch:${context.operationId}:${displayName}`):crypto.randomUUID(),stamp=now(),expiresAt=new Date(Date.now()+EMULATED_TTL_MS).toISOString();
+    // Exempt owner work has no operation ID, but still has a run/attempt name.
+    // Keep legacy UUID batches discoverable and fence concurrent new creates.
+    if(context&&'exempt' in context){const prior=await runtime.DB.prepare('SELECT id FROM vertex_batch_emulation_jobs WHERE display_name=? AND length(id)=36 AND expires_at>=? LIMIT 1').bind(displayName,now()).first<{id:string}>();if(prior)return `${EMULATED_PREFIX}${prior.id}`}
+    const identity=context&&'operationId' in context?`${context.operationId}:${displayName}`:context&&'exempt' in context?`exempt:${displayName}`:null;
+    const id=identity?await hash(`vertex-batch:${identity}`):crypto.randomUUID(),stamp=now(),expiresAt=new Date(Date.now()+EMULATED_TTL_MS).toISOString();
     await runtime.DB.prepare('DELETE FROM vertex_batch_emulation_jobs WHERE expires_at<?').bind(stamp).run().catch(()=>undefined);
     await runtime.DB.prepare(`INSERT OR IGNORE INTO vertex_batch_emulation_jobs(id,model,display_name,requests_json,result_json,state,error,created_at,updated_at,expires_at)
       VALUES(?,?,?,?,NULL,'JOB_STATE_PENDING',NULL,?,?,?)`).bind(id,model,displayName,JSON.stringify(entries.map(entry=>({...entry,providerKey:`vertex:${id}:${entry.key}`}))),stamp,stamp,expiresAt).run();

@@ -149,3 +149,17 @@ On this integrated branch, all 293 unit files / 2,751 tests passed, including
 45 persistence/recovery tests. All five Chromium reopen tests passed. Build,
 TypeScript and ESLint checks passed. Earlier audit counts above describe the
 original audit checkout; these are the checks repeated on the PR branch.
+
+## Review follow-up (2026-09-25)
+
+Reproduced and fixed the three review findings: a follower must not expire as
+undispatched work while its sponsor is running; a deleted/unshared bottle or
+incomplete cache is a terminal outcome rather than a persistence retry; exempt
+emulated batches must retain a stable run/attempt identity, including recovery
+of existing UUID batches. Terminal job/run writes are atomic and remain
+retryable when persistence fails. The ordinary queue failure path can terminate
+a run after its configured retries; the review's 48-hour description does not
+apply to every deterministic failure.
+
+Validation after these fixes: 293 unit files / 2,758 tests passed on Node 24,
+including 52 persistence/recovery tests; production build and ESLint passed.

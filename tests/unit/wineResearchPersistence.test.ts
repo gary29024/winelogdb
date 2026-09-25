@@ -97,14 +97,17 @@ async function httpFlow(beforeStart?:()=>void,expectedStatus=202){
 }
 
 describe('member Deep Search through HTTP and the queue',()=>{
- it('restores a persisted friend follower through the member status endpoint',async()=>{
+ it.each([false,true])('keeps a friend follower waiting past 15 minutes until sponsor settlement (success: %s)',async success=>{
   database.sql.exec("UPDATE wines SET vintage=2020; INSERT INTO app_users(id,email,display_name,role) VALUES('bob','bob@example.com','Bob','member'); INSERT INTO credit_wallets(user_id) VALUES('bob'); INSERT INTO friendships(user_id,friend_id) VALUES('alice','bob'),('bob','alice'); INSERT INTO wines(id,owner_id,producer,wine_name,vintage,country,region,wine_style,created_at,updated_at) SELECT 'bob-wine','bob',producer,wine_name,vintage,country,region,wine_style,created_at,updated_at FROM wines WHERE id='krug'");
   const request=()=>new Request('https://wine.example/api/wines/bob-wine/deep-search',{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'}),bob={...member,id:'bob'};
   const q=await quote(request(),env(),bob),req=request();req.headers.set('X-WineLog-Quote',q.id);req.headers.set('Idempotency-Key','sponsor');const sponsor=await reserve(req,env(),bob);
+  await createWineResearchRun(database.db,'bob','bob-wine','none',crypto.randomUUID(),sponsor.operation.id);
   const flow=await httpFlow();
   expect(await flow.status()).toMatchObject({status:'running',waitingForFriend:true,creditOperationId:flow.accepted.creditOperationId});
-  await settle(database.db,sponsor.operation,0,undefined,false);await maintainJobs(database.db,flow.workerEnv.RESEARCH_QUEUE);
-  expect(await flow.status()).toMatchObject({status:'failed',retryBlocked:false});expect(flow.provider).not.toHaveBeenCalled();
+  vi.setSystemTime(Date.now()+16*60_000);await maintainJobs(database.db,flow.workerEnv.RESEARCH_QUEUE);
+  expect(await flow.status()).toMatchObject({status:'running',waitingForFriend:true});
+  await settle(database.db,sponsor.operation,0,undefined,success);await maintainJobs(database.db,flow.workerEnv.RESEARCH_QUEUE);
+  expect(await flow.status()).toMatchObject({status:success?'complete':'failed',retryBlocked:false});expect(flow.provider).not.toHaveBeenCalled();
  });
  it('does not let an expired delivery release its successor lease',async()=>{
   const first=await claimDelivery(database.db,'lease');vi.setSystemTime(Date.now()+601_000);
@@ -148,6 +151,24 @@ describe('member Deep Search through HTTP and the queue',()=>{
   const context={db:database.db,operationId:'one',namespace:'queue'},entries=[{key:'wine-research',request:{contents:[]}}];
   const names=await Promise.all([createGeminiBatch(undefined,'model','same-display-name',entries,context),createGeminiBatch(undefined,'model','same-display-name',entries,context)]);
   expect(names[0]).toBe(names[1]);
+ });
+
+ it('deduplicates exempt batches across concurrent creation and setup recovery',async()=>{
+  const context={exempt:true as const,reason:'owner'},entries=[{key:'wine-research',request:{contents:[]}}];
+  const names=await Promise.all([createGeminiBatch(undefined,'model','exempt-attempt',entries,context),createGeminiBatch(undefined,'model','exempt-attempt',entries,context)]);
+  const provider=vi.fn(async()=>Response.json(payload()));vi.stubGlobal('fetch',provider);
+  await fetchGeminiBatch(undefined,names[0],{},context);
+  const recovered=await createGeminiBatch(undefined,'model','exempt-attempt',entries,context);
+  await fetchGeminiBatch(undefined,recovered,{},context);
+  expect(names[1]).toBe(names[0]);expect(recovered).toBe(names[0]);expect(provider).toHaveBeenCalledOnce();
+ });
+
+ it('reuses a legacy UUID batch when exempt setup is retried after an upgrade',async()=>{
+  const entries=[{key:'wine-research',request:{contents:[]}}];
+  const legacy=await createGeminiBatch(undefined,'model','legacy-exempt-attempt',entries);
+  const recovered=await createGeminiBatch(undefined,'model','legacy-exempt-attempt',entries,{exempt:true,reason:'owner'});
+  expect(recovered).toBe(legacy);
+  expect(database.sql.prepare('SELECT count(*) AS n FROM vertex_batch_emulation_jobs').get()!.n).toBe(1);
  });
 
  it('fences an old lease reader from resetting a newly claimed emulation executor',async()=>{
@@ -408,6 +429,43 @@ describe('Wine Deep Search persistence boundaries',()=>{
   const final=database.sql.prepare('SELECT response_json FROM credit_operations').get()!;
   expect(JSON.parse(String(final.response_json))).toMatchObject({status:'failed',partial:true});
   expect(await memberAiActionAccess(database.db,owner,'wine_deep_search')).toMatchObject({used:1,pending:0});
+ });
+
+ it.each(['deleted','unshared'] as const)('terminates saved-result recovery when the bottle is %s',async mode=>{
+  if(mode==='unshared')database.sql.exec("INSERT INTO app_users(id,email,display_name,role) VALUES('bob','bob@example.com','Bob','member'); INSERT INTO friendships(user_id,friend_id) VALUES('alice','bob'),('bob','alice'); UPDATE wines SET owner_id='bob' WHERE id='krug'; INSERT INTO wine_shares(wine_id,owner_id,recipient_id) VALUES('krug','bob','alice');");
+  const {operation,provider,poll}=await setup();
+  database.sql.exec("CREATE TEMP TRIGGER injected_failure BEFORE INSERT ON research_cache BEGIN SELECT RAISE(ABORT,'injected cache failure'); END");
+  await expect(poll()).rejects.toThrow('injected cache failure');database.sql.exec('DROP TRIGGER injected_failure');
+  database.sql.exec(mode==='deleted'?"DELETE FROM wines WHERE id='krug'":"DELETE FROM wine_shares WHERE wine_id='krug'");
+  await expect(poll()).resolves.toBeUndefined();
+  expect(database.sql.prepare('SELECT status FROM research_batch_jobs').get()!.status).toBe('failed');
+  await reconcileOperation(database.db,{...operation,status:'running',run_id:requestId});
+  expect(database.sql.prepare('SELECT status FROM credit_operations').get()!.status).toBe('failed');
+  expect(await memberAiActionAccess(database.db,owner,'wine_deep_search')).toMatchObject({used:0,pending:0});
+  expect(provider).toHaveBeenCalledOnce();
+ });
+
+ it('terminates incomplete-cache finalisation without buying another model attempt',async()=>{
+  const {operation,provider,poll}=await setup();
+  // The database accepts the write, but a scope is no longer available at finalisation.
+  database.sql.exec("CREATE TEMP TRIGGER remove_scope AFTER INSERT ON research_cache WHEN new.scope='terroir' BEGIN DELETE FROM research_cache WHERE owner_id=new.owner_id AND scope=new.scope AND cache_key=new.cache_key; END");
+  await expect(poll()).resolves.toBeUndefined();
+  expect(await getWineResearchRun(database.db,owner,wineId,requestId)).toMatchObject({status:'failed',message:expect.stringContaining('cache is incomplete')});
+  await reconcileOperation(database.db,{...operation,status:'running',run_id:requestId});
+  expect(database.sql.prepare('SELECT count(*) AS n FROM research_batch_jobs').get()!.n).toBe(1);
+  expect(await memberAiActionAccess(database.db,owner,'wine_deep_search')).toMatchObject({used:1,pending:0});
+  await poll();expect(provider).toHaveBeenCalledOnce();
+ });
+
+ it('retries a failed terminal-state write without partially finishing the run',async()=>{
+  const {provider,poll}=await setup();
+  database.sql.exec("DELETE FROM wines WHERE id='krug'; CREATE TEMP TRIGGER injected_failure BEFORE UPDATE OF status ON wine_research_runs WHEN new.status='failed' BEGIN SELECT RAISE(ABORT,'injected terminal write failure'); END");
+  await expect(poll()).rejects.toThrow('injected terminal write failure');
+  expect(database.sql.prepare('SELECT status FROM research_batch_jobs').get()!.status).toBe('running');
+  database.sql.exec('DROP TRIGGER injected_failure');await poll();
+  expect(await getWineResearchRun(database.db,owner,wineId,requestId)).toMatchObject({status:'failed'});
+  expect(database.sql.prepare('SELECT status FROM research_batch_jobs').get()!.status).toBe('failed');
+  expect(provider).toHaveBeenCalledOnce();
  });
  it('preserves saved scopes when an initial refresh delivery is replayed during finalisation',async()=>{
   const {poll,researchEnv}=await setup('all');
