@@ -27,6 +27,9 @@ for(const route of ['/wines/layout-wine','/shared/layout-wine']){
   await expect(dialog).toBeVisible();await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
   await expect(dialog.getByRole('combobox',{name:'Explore a vineyard'})).toHaveValue('inao-denom-610');
   await expect(dialog.locator('.village-map-selected-label')).toHaveText('Les Cazetiers');
+  // Neighbouring crus are named around the wine's own, even without the street map.
+  await expect(dialog.locator('.village-map-name',{hasText:'Petits Cazetiers'})).toHaveCSS('visibility','visible');
+  await expect(dialog.locator('.village-map-name',{hasText:/^Les Cazetiers$/})).toHaveCSS('visibility','hidden');
   await expect(dialog.getByText('Some street-map details are unavailable.',{exact:false})).toBeVisible();
   for(const width of [320,390,1280]){
    await page.setViewportSize({width,height:900});

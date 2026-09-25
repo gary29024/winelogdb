@@ -7,9 +7,12 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 
 const tiers:Record<string,string>={grand_cru:'Grand Cru',premier_cru:'Premier Cru',village:'Village'};
 const baseStyleUrl='https://tiles.openfreemap.org/styles/liberty';
-const labels={type:'FeatureCollection' as const,features:catalogue.features.filter(f=>f.kind==='vineyard').map(f=>({
- type:'Feature' as const,properties:{id:f.id,name:f.name},geometry:{type:'Point' as const,coordinates:f.labelPoint}
-}))};
+// Name labels are HTML rather than a symbol layer: a symbol layer needs the
+// street map's font server, so with the street map unavailable every name but
+// the selected one vanished. Grand Crus claim space first, then larger crus;
+// a name that would collide with one already placed waits for a closer zoom.
+const labelOrder=catalogue.features.filter(f=>f.kind==='vineyard')
+ .sort((a,b)=>Number(b.tier==='grand_cru')-Number(a.tier==='grand_cru')||b.areaHa-a.areaHa);
 const vineyardCount=(tier:string)=>catalogue.features.filter(f=>f.kind==='vineyard'&&f.tier===tier).length;
 const boundsOf=(b:number[]):[[number,number],[number,number]]=>[[b[0],b[1]],[b[2],b[3]]];
 // The light end of the app's --cru ramp (styles.css), one hue stepped dark to
@@ -22,7 +25,7 @@ const selectionFilter=(id:string):FilterSpecification=>['==',['get','id'],id];
 function mapStyle(data:FeatureCollection,base?:StyleSpecification):StyleSpecification{
  return {
   ...(base??{version:8}),
-  sources:{...base?.sources,'wine-boundaries':{type:'geojson',data},'wine-labels':{type:'geojson',data:labels}},
+  sources:{...base?.sources,'wine-boundaries':{type:'geojson',data}},
   layers:[...(base?.layers??[{id:'paper',type:'background' as const,paint:{'background-color':'#f3f1ec'}}]),
    {id:'commune-outline',type:'line',source:'wine-boundaries',filter:['==',['get','kind'],'commune'],paint:{'line-color':'#7d899c','line-width':1.5,'line-dasharray':[4,3]}},
    {id:'vineyard-fill',type:'fill',source:'wine-boundaries',filter:['!=',['get','kind'],'commune'],layout:{'fill-sort-key':['match',['get','tier'],'village',0,'premier_cru',1,2]},paint:{
@@ -33,9 +36,6 @@ function mapStyle(data:FeatureCollection,base?:StyleSpecification):StyleSpecific
    {id:'selected-fill',type:'fill',source:'wine-boundaries',filter:['==',['get','id'],''],paint:{'fill-color':accent,'fill-opacity':0.55}},
    {id:'selected-casing',type:'line',source:'wine-boundaries',filter:['==',['get','id'],''],paint:{'line-color':'#ffffff','line-width':6}},
    {id:'selected-outline',type:'line',source:'wine-boundaries',filter:['==',['get','id'],''],paint:{'line-color':accent,'line-width':2.5}},
-   ...(base?.glyphs?[{id:'vineyard-labels',type:'symbol' as const,source:'wine-labels',minzoom:13,layout:{
-    'text-field':['get','name'],'text-font':['Noto Sans Regular'],'text-size':12,'text-max-width':10,'text-padding':5},
-    paint:{'text-color':'#10182d','text-halo-color':'#ffffff','text-halo-width':1.5}} as NonNullable<StyleSpecification['layers']>[number]]:[])
   ]
  };
 }
@@ -56,7 +56,7 @@ export default function VillageMap({target}:{target:BurgundyVillageMapTarget}){
 
  useEffect(()=>{
   if(!host.current)return;
-  let disposed=false,map:MapLibreMap|undefined,observer:ResizeObserver|undefined;
+  let disposed=false,map:MapLibreMap|undefined,observer:ResizeObserver|undefined,disposeNames:(()=>void)|undefined;
   const controller=new AbortController();
   const timeout=setTimeout(()=>controller.abort(),20000);
   const baseController=new AbortController();
@@ -81,12 +81,38 @@ export default function VillageMap({target}:{target:BurgundyVillageMapTarget}){
     map.addControl(new ScaleControl({unit:'metric'}),'bottom-left');
     map.getCanvas().setAttribute('aria-label',`${catalogue.name} vineyard map. Use the vineyard selector to explore boundaries.`);
     map.on('error',()=>{if(!disposed)setBaseWarning(true)});
+    // Every cru is also in the accessible list, so these are visual only.
+    const names=labelOrder.map(feature=>{
+     const element=document.createElement('span');element.className=`village-map-name village-map-name-${feature.tier}`;element.textContent=feature.name;
+     const marker=new Marker({element,anchor:'center'}).setLngLat([feature.labelPoint[0],feature.labelPoint[1]]).addTo(map!);
+     element.removeAttribute('tabindex');element.removeAttribute('role');element.setAttribute('aria-hidden','true');
+     return {feature,element,marker};
+    });
+    let frame=0;
+    function placeLabels(){
+     if(!map)return;
+     const {width,height}=map.getContainer().getBoundingClientRect(),placed:DOMRect[]=[];
+     const own=markerRef.current?.getElement().getBoundingClientRect();
+     if(own)placed.push(own);
+     // Names never sit under the buttons, zoom control, scale or credits.
+     map.getContainer().closest('.village-map-main')?.querySelectorAll('.village-map-toolbar button,.maplibregl-ctrl')
+      .forEach(control=>placed.push(control.getBoundingClientRect()));
+     const overlaps=(a:DOMRect)=>placed.some(b=>a.left<b.right+4&&b.left<a.right+4&&a.top<b.bottom+2&&b.top<a.bottom+2);
+     const origin=map.getContainer().getBoundingClientRect();
+     for(const {feature,element} of names){
+      element.style.visibility='visible';
+      const box=element.getBoundingClientRect();
+      const inside=box.left>=origin.left&&box.right<=origin.left+width&&box.top>=origin.top&&box.bottom<=origin.top+height;
+      const show=feature.id!==selectedRef.current&&map.getZoom()>=12.8&&inside&&!overlaps(box);
+      element.style.visibility=show?'visible':'hidden';
+      if(show)placed.push(box);
+     }
+    }
     const select=(id:string)=>{
      if(!map?.getLayer('selected-fill'))return;
      map.setFilter('selected-fill',selectionFilter(id));
      map.setFilter('selected-casing',selectionFilter(id));
      map.setFilter('selected-outline',selectionFilter(id));
-     if(map.getLayer('vineyard-labels'))map.setFilter('vineyard-labels',['!=',['get','id'],id]);
      const feature=catalogue.features.find(f=>f.id===id);
      markerRef.current?.remove();markerRef.current=null;
      if(feature?.kind==='vineyard'){
@@ -94,7 +120,11 @@ export default function VillageMap({target}:{target:BurgundyVillageMapTarget}){
       markerRef.current=new Marker({element,anchor:'bottom',offset:[0,-6]}).setLngLat([feature.labelPoint[0],feature.labelPoint[1]]).addTo(map);
       element.removeAttribute('tabindex');element.removeAttribute('role');element.setAttribute('aria-hidden','true');
      }
+     placeLabels();
     };
+    const schedule=()=>{cancelAnimationFrame(frame);frame=requestAnimationFrame(placeLabels)};
+    map.on('move',schedule);map.on('resize',schedule);
+    disposeNames=()=>{cancelAnimationFrame(frame);names.forEach(name=>name.marker.remove())};
     selectionAction.current=select;
     map.on('style.load',()=>{if(!disposed){select(selectedRef.current);setReady(true)}});
     map.on('click','vineyard-fill',event=>{
@@ -123,7 +153,7 @@ export default function VillageMap({target}:{target:BurgundyVillageMapTarget}){
    finally{clearTimeout(timeout)}
   }
   void start();
-  return()=>{disposed=true;controller.abort();baseController.abort();clearTimeout(timeout);clearTimeout(baseTimeout);observer?.disconnect();markerRef.current?.remove();markerRef.current=null;selectionAction.current=null;mapRef.current=null;map?.remove()};
+  return()=>{disposed=true;controller.abort();baseController.abort();clearTimeout(timeout);clearTimeout(baseTimeout);observer?.disconnect();disposeNames?.();markerRef.current?.remove();markerRef.current=null;selectionAction.current=null;mapRef.current=null;map?.remove()};
  // eslint-disable-next-line react-hooks/exhaustive-deps -- the map is built once per attempt; the target is fixed by the parent's key
  },[attempt]);
 

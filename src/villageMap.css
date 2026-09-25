@@ -1,7 +1,9 @@
 /* The village map. Chrome around the canvas follows the theme tokens; the
-   canvas itself stays a light street map in both themes, so the tier swatches
-   below use the same fixed hexes the map paints (the light end of the --cru
-   ramp) rather than the tokens, which turn end for end in dark mode. */
+   canvas itself stays a light street map in both themes, so each legend swatch
+   is the colour a tier actually shows on the map (its --cru ramp fill over the
+   map's paper), fixed rather than a token: the tokens turn end for end in dark
+   mode and the map does not. Village is the faint wash, so its swatch is an
+   outline. */
 .wine-atlas-context{display:flex;align-items:center;flex-wrap:wrap;gap:4px 18px}
 .wine-village-map-button{display:inline-flex;align-items:center;gap:7px;min-height:44px;padding:0;border:0;background:none;color:var(--wine-ink);font-size:.84rem;font-weight:650;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
 .wine-village-map-button:hover:not(:disabled){border:0;background:none;color:var(--ink)}
@@ -21,16 +23,17 @@
 .village-map-toolbar button:hover:not(:disabled),.village-map-toolbar button:focus-visible{border-color:var(--ink-7);background:var(--ground);color:var(--ink)}
 /* The wine's own cru carries the app accent, the one colour the tier ramp never uses. */
 .village-map-selected-label{max-width:180px;padding:5px 9px;border:1.5px solid var(--wine);border-radius:var(--r-pill,999px);background:var(--paper);color:var(--ink);font:700 12px/1.25 'DM Sans',system-ui,sans-serif;text-align:center;box-shadow:0 2px 9px #0003;pointer-events:none}
+/* Neighbouring cru names. Dark text with a white halo reads on the light map
+   in both themes; the map, not the theme, is their ground. */
+.village-map-name{max-width:120px;color:#10182d;font:600 11px/1.2 'DM Sans',system-ui,sans-serif;text-align:center;text-shadow:0 0 2px #fff,0 0 3px #fff,0 0 4px #fff;pointer-events:none;white-space:normal}
+.village-map-name-grand_cru{font-weight:750;font-size:11.5px;letter-spacing:.01em}
 .village-map-legend{display:flex;flex-wrap:wrap;gap:8px 16px;padding:11px 14px;background:var(--paper);border-top:1px solid var(--line);color:var(--ink-5);font-size:.7rem}
 .village-map-legend span{display:inline-flex;align-items:center;gap:5px}
 .village-map-legend i{display:inline-block;width:12px;height:12px;border:1.5px solid;border-radius:2px}
-.map-swatch-grand_cru{border-color:#543c0c!important;background-image:linear-gradient(#543c0c9e,#543c0c9e)}
-.map-swatch-premier_cru{border-color:#785819!important;background-image:linear-gradient(#78581966,#78581966)}
-.map-swatch-village{border-color:#9c7629!important;background-image:linear-gradient(#9c762926,#9c762926)}
-.map-swatch-selected{border-color:#c51f45!important;background-image:linear-gradient(#c51f458c,#c51f458c)}
-/* A swatch is a sample of the map, and the map stays light: on a dark legend
-   the tints would otherwise sit on near-black and vanish. */
-@media(prefers-color-scheme:dark){.village-map-legend i{background-color:#f3f1ec}}
+.map-swatch-grand_cru{border-color:#543c0c!important;background:#908161}
+.map-swatch-premier_cru{border-color:#785819!important;background:#c2b498}
+.map-swatch-village{border-color:#9c7629!important;background:none}
+.map-swatch-selected{border-color:#c51f45!important;background:#da7e90}
 /* The tier pill matches the classification pill on the wine page itself. */
 .village-map-tier{display:inline-block;padding:3px 10px;border:1px solid var(--warn-line);border-radius:var(--r-pill,999px);background:var(--warn-wash);color:var(--warn);font-size:.72rem;font-weight:650}
 .village-map-tier.map-tier-grand_cru{font-weight:750}
