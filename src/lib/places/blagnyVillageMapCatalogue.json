@@ -1,0 +1,303 @@
+{
+  "id": "blagny",
+  "name": "Blagny",
+  "region": "Côte de Beaune",
+  "communes": [
+    {
+      "id": "21412",
+      "name": "Meursault"
+    },
+    {
+      "id": "21512",
+      "name": "Puligny-Montrachet"
+    }
+  ],
+  "dataUrl": "/maps/blagny.2026-09-21.geojson",
+  "bounds": [
+    4.732255,
+    46.953754,
+    4.748554,
+    46.964524
+  ],
+  "sources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21412/cadastre-21412-communes.json.gz",
+      "sha256": "d90310c4e18c902f7a6fb15f650e1e8027a477ad873f9fb60f7e4825f4e37fbf"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21512/cadastre-21512-communes.json.gz",
+      "sha256": "22b3eebde39036f1663861b8fa13f411391b3bc167e0c783eea381d018caa831"
+    }
+  ],
+  "notes": {
+    "inao-denom-352": {
+      "note": "Blagny is a red-wine appellation across Meursault and Puligny-Montrachet. White wines from this hillside use Meursault or Puligny-Montrachet identities; shared ground does not make the appellations interchangeable."
+    },
+    "inao-denom-353": {
+      "note": "Blagny is a red-wine appellation across Meursault and Puligny-Montrachet. White wines from this hillside use Meursault or Puligny-Montrachet identities; shared ground does not make the appellations interchangeable."
+    },
+    "inao-denom-354": {
+      "note": "Blagny is a red-wine appellation across Meursault and Puligny-Montrachet. White wines from this hillside use Meursault or Puligny-Montrachet identities; shared ground does not make the appellations interchangeable."
+    },
+    "inao-denom-355": {
+      "note": "Blagny is a red-wine appellation across Meursault and Puligny-Montrachet. White wines from this hillside use Meursault or Puligny-Montrachet identities; shared ground does not make the appellations interchangeable."
+    },
+    "inao-denom-356": {
+      "note": "Blagny is a red-wine appellation across Meursault and Puligny-Montrachet. White wines from this hillside use Meursault or Puligny-Montrachet identities; shared ground does not make the appellations interchangeable."
+    },
+    "inao-denom-357": {
+      "note": "Blagny is a red-wine appellation across Meursault and Puligny-Montrachet. White wines from this hillside use Meursault or Puligny-Montrachet identities; shared ground does not make the appellations interchangeable."
+    },
+    "inao-denom-358": {
+      "note": "Blagny is a red-wine appellation across Meursault and Puligny-Montrachet. White wines from this hillside use Meursault or Puligny-Montrachet identities; shared ground does not make the appellations interchangeable."
+    },
+    "inao-denom-359": {
+      "note": "Blagny is a red-wine appellation across Meursault and Puligny-Montrachet. White wines from this hillside use Meursault or Puligny-Montrachet identities; shared ground does not make the appellations interchangeable."
+    },
+    "inao-denom-360": {
+      "note": "Blagny is a red-wine appellation across Meursault and Puligny-Montrachet. White wines from this hillside use Meursault or Puligny-Montrachet identities; shared ground does not make the appellations interchangeable."
+    }
+  },
+  "features": [
+    {
+      "id": "inao-denom-352",
+      "name": "Blagny",
+      "tier": "village",
+      "kind": "appellation",
+      "appellationId": 136,
+      "denominationId": 352,
+      "sourceName": "Blagny ou Blagny Côte de Beaune",
+      "communes": [
+        "21412",
+        "21512"
+      ],
+      "areaHa": 56.15,
+      "matchId": "ba_appellation_zjylycpqwcqaadji7mvwtyfeva",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_zjylycpqwcqaadji7mvwtyfeva/blagny-ou-blagny-cote-de-beaune",
+      "bounds": [
+        4.732255,
+        46.953754,
+        4.748554,
+        46.964524
+      ],
+      "labelPoint": [
+        4.738183,
+        46.959628
+      ]
+    },
+    {
+      "id": "inao-denom-353",
+      "name": "Hameau de Blagny",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 136,
+      "denominationId": 353,
+      "sourceName": "Blagny premier cru Hameau de Blagny",
+      "communes": [
+        "21512"
+      ],
+      "areaHa": 4.25,
+      "matchId": "ba_designation_yj3tx2azdfqv4z2wfqqoeribmy",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_yj3tx2azdfqv4z2wfqqoeribmy/hameau-de-blagny",
+      "bounds": [
+        4.739004,
+        46.956316,
+        4.742999,
+        46.959345
+      ],
+      "labelPoint": [
+        4.740871,
+        46.957821
+      ]
+    },
+    {
+      "id": "inao-denom-354",
+      "name": "La Garenne ou sur la Garenne",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 136,
+      "denominationId": 354,
+      "sourceName": "Blagny premier cru La Garenne ou sur la Garenne",
+      "communes": [
+        "21512"
+      ],
+      "areaHa": 9.92,
+      "matchId": "ba_designation_w5yq5iswpwz2hqcnezmrw6ttcy",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_w5yq5iswpwz2hqcnezmrw6ttcy/la-garenne-ou-sur-la-garenne",
+      "bounds": [
+        4.732255,
+        46.953754,
+        4.740284,
+        46.959375
+      ],
+      "labelPoint": [
+        4.73767,
+        46.956555
+      ]
+    },
+    {
+      "id": "inao-denom-355",
+      "name": "La Jeunellotte",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 136,
+      "denominationId": 355,
+      "sourceName": "Blagny premier cru La Jeunellotte",
+      "communes": [
+        "21412"
+      ],
+      "areaHa": 5.05,
+      "matchId": "ba_designation_qxmprjkb5mzn6hee5s7m7lk3ki",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_qxmprjkb5mzn6hee5s7m7lk3ki/la-jeunellotte",
+      "bounds": [
+        4.737625,
+        46.959428,
+        4.741609,
+        46.962234
+      ],
+      "labelPoint": [
+        4.739973,
+        46.96081
+      ]
+    },
+    {
+      "id": "inao-denom-356",
+      "name": "La Pièce sous le Bois",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 136,
+      "denominationId": 356,
+      "sourceName": "Blagny premier cru La Pièce sous le Bois",
+      "communes": [
+        "21412"
+      ],
+      "areaHa": 11.31,
+      "matchId": "ba_designation_vsni6sa2zmf7s5pa54r77lu75q",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_vsni6sa2zmf7s5pa54r77lu75q/la-piece-sous-le-bois",
+      "bounds": [
+        4.739543,
+        46.960759,
+        4.748554,
+        46.964524
+      ],
+      "labelPoint": [
+        4.744294,
+        46.962644
+      ]
+    },
+    {
+      "id": "inao-denom-357",
+      "name": "Sous Blagny",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 136,
+      "denominationId": 357,
+      "sourceName": "Blagny premier cru Sous Blagny",
+      "communes": [
+        "21412"
+      ],
+      "areaHa": 2.21,
+      "matchId": "ba_designation_lpjrtumn5lgdhiucikmz5lqqk4",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_lpjrtumn5lgdhiucikmz5lqqk4/sous-blagny",
+      "bounds": [
+        4.740969,
+        46.959454,
+        4.745369,
+        46.960898
+      ],
+      "labelPoint": [
+        4.741786,
+        46.960176
+      ]
+    },
+    {
+      "id": "inao-denom-358",
+      "name": "Sous le Dos d'Ane",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 136,
+      "denominationId": 358,
+      "sourceName": "Blagny premier cru Sous le Dos d'Ane",
+      "communes": [
+        "21412"
+      ],
+      "areaHa": 5.21,
+      "matchId": "ba_designation_wp3c2qjljcwdxgnrk2t3qvgraa",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_wp3c2qjljcwdxgnrk2t3qvgraa/sous-le-dos-d-ane",
+      "bounds": [
+        4.74197,
+        46.95943,
+        4.747808,
+        46.962563
+      ],
+      "labelPoint": [
+        4.743777,
+        46.960982
+      ]
+    },
+    {
+      "id": "inao-denom-359",
+      "name": "Sous le Puits",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 136,
+      "denominationId": 359,
+      "sourceName": "Blagny premier cru Sous le Puits",
+      "communes": [
+        "21512"
+      ],
+      "areaHa": 6.83,
+      "matchId": "ba_designation_sfzvm6bugirl4xiwcohefy2fvu",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_sfzvm6bugirl4xiwcohefy2fvu/sous-le-puits",
+      "bounds": [
+        4.734328,
+        46.95796,
+        4.739763,
+        46.960955
+      ],
+      "labelPoint": [
+        4.738095,
+        46.959435
+      ]
+    },
+    {
+      "id": "inao-denom-360",
+      "name": "Blagny Premier Cru",
+      "tier": "premier_cru",
+      "kind": "appellation",
+      "appellationId": 136,
+      "denominationId": 360,
+      "sourceName": "Blagny premier cru",
+      "communes": [
+        "21412",
+        "21512"
+      ],
+      "areaHa": 44.77,
+      "matchId": "ba_appellation_jqsiyz67aernvfrqnajdne2rry",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_jqsiyz67aernvfrqnajdne2rry/blagny-premier-cru",
+      "bounds": [
+        4.732255,
+        46.953754,
+        4.748554,
+        46.964524
+      ],
+      "labelPoint": [
+        4.741988,
+        46.961959
+      ]
+    }
+  ]
+}

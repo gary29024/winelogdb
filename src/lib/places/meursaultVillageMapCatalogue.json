@@ -1,0 +1,638 @@
+{
+  "id": "meursault",
+  "name": "Meursault",
+  "region": "Côte de Beaune",
+  "communes": [
+    {
+      "id": "21412",
+      "name": "Meursault"
+    }
+  ],
+  "dataUrl": "/maps/meursault.2026-09-21.geojson",
+  "bounds": [
+    4.736731,
+    46.955681,
+    4.78588,
+    46.99191
+  ],
+  "sources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21412/cadastre-21412-communes.json.gz",
+      "sha256": "d90310c4e18c902f7a6fb15f650e1e8027a477ad873f9fb60f7e4825f4e37fbf"
+    }
+  ],
+  "notes": {
+    "inao-app-204-village": {
+      "note": "This overview combines the red and white Meursault production areas. Choose a colour to see its own boundary; no single vineyard is identified."
+    },
+    "inao-denom-844": {
+      "note": "This is the published white-wine village area for Meursault. Named village lieux-dits are not mapped individually."
+    },
+    "inao-denom-2062": {
+      "note": "This is the published red-wine village area for Meursault, also named Meursault Côte de Beaune in the source. Named village lieux-dits are not mapped individually."
+    },
+    "inao-denom-2373": {
+      "note": "Meursault Premier Cru Blagny is distinct from the red-wine Blagny appellation. Its published boundary includes several more specific Meursault Premier Crus; selecting any name shows its full production area."
+    }
+  },
+  "features": [
+    {
+      "id": "inao-app-204-village",
+      "name": "Meursault (all colours)",
+      "tier": "village",
+      "kind": "appellation",
+      "appellationId": 204,
+      "denominationId": null,
+      "denominationIds": [
+        844,
+        2062
+      ],
+      "sourceName": "Meursault / Meursault ou Meursault Côte de Beaune",
+      "communes": [
+        "21412"
+      ],
+      "areaHa": 450.48,
+      "matchId": "ba_appellation_i5feobqdq556kq7i5jynpzeelu",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_i5feobqdq556kq7i5jynpzeelu/meursault",
+      "bounds": [
+        4.736731,
+        46.955681,
+        4.78588,
+        46.99191
+      ],
+      "labelPoint": [
+        4.741798,
+        46.96201
+      ]
+    },
+    {
+      "id": "inao-denom-844",
+      "name": "Meursault (white)",
+      "tier": "village",
+      "kind": "appellation",
+      "appellationId": 204,
+      "denominationId": 844,
+      "sourceName": "Meursault",
+      "communes": [
+        "21412"
+      ],
+      "areaHa": 443.42,
+      "matchId": "ba_appellation_i5feobqdq556kq7i5jynpzeelu",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_i5feobqdq556kq7i5jynpzeelu/meursault",
+      "bounds": [
+        4.736731,
+        46.955681,
+        4.78588,
+        46.99191
+      ],
+      "labelPoint": [
+        4.75547,
+        46.961651
+      ]
+    },
+    {
+      "id": "inao-denom-845",
+      "name": "Charmes",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 204,
+      "denominationId": 845,
+      "sourceName": "Meursault premier cru Charmes",
+      "communes": [
+        "21412"
+      ],
+      "areaHa": 31.18,
+      "matchId": "ba_designation_kq3ettmcmt3biypdgogs2ro7hu",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_kq3ettmcmt3biypdgogs2ro7hu/charmes",
+      "bounds": [
+        4.750343,
+        46.956108,
+        4.760603,
+        46.96303
+      ],
+      "labelPoint": [
+        4.754065,
+        46.959765
+      ]
+    },
+    {
+      "id": "inao-denom-846",
+      "name": "Clos des Perrières",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 204,
+      "denominationId": 846,
+      "sourceName": "Meursault premier cru Clos des Perrières",
+      "communes": [
+        "21412"
+      ],
+      "areaHa": 0.94,
+      "matchId": "ba_designation_v55kd4jx7fvgw3zzdwura4ijte",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_v55kd4jx7fvgw3zzdwura4ijte/clos-des-perrieres",
+      "bounds": [
+        4.750244,
+        46.958775,
+        4.751875,
+        46.959993
+      ],
+      "labelPoint": [
+        4.750995,
+        46.959393
+      ]
+    },
+    {
+      "id": "inao-denom-847",
+      "name": "Genevrières",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 204,
+      "denominationId": 847,
+      "sourceName": "Meursault premier cru Genevrières",
+      "communes": [
+        "21412"
+      ],
+      "areaHa": 16.56,
+      "matchId": "ba_designation_e6bn6kjgd2tesf654vcdrteysq",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_e6bn6kjgd2tesf654vcdrteysq/genevrieres",
+      "bounds": [
+        4.753252,
+        46.962376,
+        4.760608,
+        46.967063
+      ],
+      "labelPoint": [
+        4.756228,
+        46.965092
+      ]
+    },
+    {
+      "id": "inao-denom-848",
+      "name": "La Jeunellotte",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 204,
+      "denominationId": 848,
+      "sourceName": "Meursault premier cru La Jeunellotte",
+      "communes": [
+        "21412"
+      ],
+      "areaHa": 5.05,
+      "matchId": "ba_designation_nrmujwvv2og6m3n7whulobgq5e",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_nrmujwvv2og6m3n7whulobgq5e/la-jeunellotte",
+      "bounds": [
+        4.737625,
+        46.959428,
+        4.741609,
+        46.962234
+      ],
+      "labelPoint": [
+        4.739973,
+        46.96081
+      ]
+    },
+    {
+      "id": "inao-denom-849",
+      "name": "La Pièce sous le Bois",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 204,
+      "denominationId": 849,
+      "sourceName": "Meursault premier cru La Pièce sous le Bois",
+      "communes": [
+        "21412"
+      ],
+      "areaHa": 11.31,
+      "matchId": "ba_designation_tz6fg2hit2hpdbsdgawofs5gki",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_tz6fg2hit2hpdbsdgawofs5gki/la-piece-sous-le-bois",
+      "bounds": [
+        4.739543,
+        46.960759,
+        4.748554,
+        46.964524
+      ],
+      "labelPoint": [
+        4.744294,
+        46.962644
+      ]
+    },
+    {
+      "id": "inao-denom-850",
+      "name": "Le Porusot",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 204,
+      "denominationId": 850,
+      "sourceName": "Meursault premier cru Le Porusot",
+      "communes": [
+        "21412"
+      ],
+      "areaHa": 4.36,
+      "matchId": "ba_designation_x44yqwhriapybi6opim47o5474",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_x44yqwhriapybi6opim47o5474/le-porusot",
+      "bounds": [
+        4.758849,
+        46.967721,
+        4.763072,
+        46.970972
+      ],
+      "labelPoint": [
+        4.761032,
+        46.969357
+      ]
+    },
+    {
+      "id": "inao-denom-851",
+      "name": "Les Bouchères",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 204,
+      "denominationId": 851,
+      "sourceName": "Meursault premier cru Les Bouchères",
+      "communes": [
+        "21412"
+      ],
+      "areaHa": 4.17,
+      "matchId": "ba_designation_cdwrgw6shfjq4gwqf4e3fffkaa",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_cdwrgw6shfjq4gwqf4e3fffkaa/les-boucheres",
+      "bounds": [
+        4.757533,
+        46.968096,
+        4.761245,
+        46.971434
+      ],
+      "labelPoint": [
+        4.759456,
+        46.969701
+      ]
+    },
+    {
+      "id": "inao-denom-852",
+      "name": "Les Caillerets",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 204,
+      "denominationId": 852,
+      "sourceName": "Meursault premier cru Les Caillerets",
+      "communes": [
+        "21412"
+      ],
+      "areaHa": 1.03,
+      "matchId": "ba_designation_2e24adk6u4bghg2jiecwfvzxom",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_2e24adk6u4bghg2jiecwfvzxom/les-caillerets",
+      "bounds": [
+        4.773943,
+        46.990465,
+        4.77606,
+        46.99191
+      ],
+      "labelPoint": [
+        4.77501,
+        46.991188
+      ]
+    },
+    {
+      "id": "inao-denom-853",
+      "name": "Les Cras",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 204,
+      "denominationId": 853,
+      "sourceName": "Meursault premier cru Les Cras",
+      "communes": [
+        "21412"
+      ],
+      "areaHa": 3.55,
+      "matchId": "ba_designation_daxjktalscac3sqez3pxdtamyu",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_daxjktalscac3sqez3pxdtamyu/les-cras",
+      "bounds": [
+        4.771282,
+        46.987315,
+        4.774872,
+        46.99017
+      ],
+      "labelPoint": [
+        4.77248,
+        46.988753
+      ]
+    },
+    {
+      "id": "inao-denom-854",
+      "name": "Les Gouttes d'Or",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 204,
+      "denominationId": 854,
+      "sourceName": "Meursault premier cru Les Gouttes d'Or",
+      "communes": [
+        "21412"
+      ],
+      "areaHa": 5.34,
+      "matchId": "ba_designation_7nelhqhnf3hykkqeercndldhsu",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_7nelhqhnf3hykkqeercndldhsu/les-gouttes-d-or",
+      "bounds": [
+        4.759916,
+        46.970718,
+        4.763008,
+        46.974304
+      ],
+      "labelPoint": [
+        4.761438,
+        46.97252
+      ]
+    },
+    {
+      "id": "inao-denom-855",
+      "name": "Les Plures",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 204,
+      "denominationId": 855,
+      "sourceName": "Meursault premier cru Les Plures",
+      "communes": [
+        "21412"
+      ],
+      "areaHa": 10.44,
+      "matchId": "ba_designation_r27im56d2rxcz2e4yru7y7xdfe",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_r27im56d2rxcz2e4yru7y7xdfe/les-plures",
+      "bounds": [
+        4.771174,
+        46.985315,
+        4.776887,
+        46.989903
+      ],
+      "labelPoint": [
+        4.774175,
+        46.987241
+      ]
+    },
+    {
+      "id": "inao-denom-856",
+      "name": "Les Santenots Blancs",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 204,
+      "denominationId": 856,
+      "sourceName": "Meursault premier cru Les Santenots Blancs",
+      "communes": [
+        "21412"
+      ],
+      "areaHa": 2.92,
+      "matchId": "ba_designation_fsk5bokr6pmekm3o2vstyszygm",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_fsk5bokr6pmekm3o2vstyszygm/les-santenots-blancs",
+      "bounds": [
+        4.774638,
+        46.98913,
+        4.778102,
+        46.990952
+      ],
+      "labelPoint": [
+        4.776163,
+        46.990051
+      ]
+    },
+    {
+      "id": "inao-denom-857",
+      "name": "Les Santenots du Milieu",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 204,
+      "denominationId": 857,
+      "sourceName": "Meursault premier cru Les Santenots du Milieu",
+      "communes": [
+        "21412"
+      ],
+      "areaHa": 8.03,
+      "matchId": "ba_designation_33gy23zs7732rjssicayc6g6wu",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_33gy23zs7732rjssicayc6g6wu/les-santenots-du-milieu",
+      "bounds": [
+        4.776367,
+        46.98764,
+        4.781155,
+        46.990922
+      ],
+      "labelPoint": [
+        4.778451,
+        46.989268
+      ]
+    },
+    {
+      "id": "inao-denom-858",
+      "name": "Perrières",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 204,
+      "denominationId": 858,
+      "sourceName": "Meursault premier cru Perrières",
+      "communes": [
+        "21412"
+      ],
+      "areaHa": 13.33,
+      "matchId": "ba_designation_3ftvudbzi36k7gndmas6x36rje",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_3ftvudbzi36k7gndmas6x36rje/perrieres",
+      "bounds": [
+        4.74694,
+        46.957807,
+        4.755105,
+        46.963499
+      ],
+      "labelPoint": [
+        4.75128,
+        46.961488
+      ]
+    },
+    {
+      "id": "inao-denom-859",
+      "name": "Porusot",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 204,
+      "denominationId": 859,
+      "sourceName": "Meursault premier cru Porusot",
+      "communes": [
+        "21412"
+      ],
+      "areaHa": 7.09,
+      "matchId": "ba_designation_uca44kseq5nuq5cmy45hagy43m",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_uca44kseq5nuq5cmy45hagy43m/porusot",
+      "bounds": [
+        4.755441,
+        46.966315,
+        4.762221,
+        46.968808
+      ],
+      "labelPoint": [
+        4.759063,
+        46.967501
+      ]
+    },
+    {
+      "id": "inao-denom-860",
+      "name": "Sous Blagny",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 204,
+      "denominationId": 860,
+      "sourceName": "Meursault premier cru Sous Blagny",
+      "communes": [
+        "21412"
+      ],
+      "areaHa": 2.21,
+      "matchId": "ba_designation_vmlsslydk57uat2zvtsasj6gdi",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_vmlsslydk57uat2zvtsasj6gdi/sous-blagny",
+      "bounds": [
+        4.740969,
+        46.959454,
+        4.745369,
+        46.960898
+      ],
+      "labelPoint": [
+        4.741786,
+        46.960176
+      ]
+    },
+    {
+      "id": "inao-denom-861",
+      "name": "Sous le Dos d'Ane",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 204,
+      "denominationId": 861,
+      "sourceName": "Meursault premier cru Sous le Dos d'Ane",
+      "communes": [
+        "21412"
+      ],
+      "areaHa": 5.21,
+      "matchId": "ba_designation_mevy7l4llkei3sxazo3u2uwsju",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_mevy7l4llkei3sxazo3u2uwsju/sous-le-dos-d-ane",
+      "bounds": [
+        4.74197,
+        46.95943,
+        4.747808,
+        46.962563
+      ],
+      "labelPoint": [
+        4.743777,
+        46.960982
+      ]
+    },
+    {
+      "id": "inao-denom-862",
+      "name": "Meursault Premier Cru",
+      "tier": "premier_cru",
+      "kind": "appellation",
+      "appellationId": 204,
+      "denominationId": 862,
+      "sourceName": "Meursault premier cru",
+      "communes": [
+        "21412"
+      ],
+      "areaHa": 87.56,
+      "matchId": "ba_appellation_d2dm6decs2nnkxhviyfpoa4bla",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_d2dm6decs2nnkxhviyfpoa4bla/meursault-premier-cru",
+      "bounds": [
+        4.74694,
+        46.956108,
+        4.77606,
+        46.99191
+      ],
+      "labelPoint": [
+        4.759245,
+        46.968732
+      ]
+    },
+    {
+      "id": "inao-denom-1991",
+      "name": "Les Ravelles",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 204,
+      "denominationId": 1991,
+      "sourceName": "Meursault premier cru Les Ravelles",
+      "communes": [
+        "21412"
+      ],
+      "areaHa": 1.22,
+      "matchId": "ba_designation_exhl2qj7hrinirsucd5uen5rxi",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_exhl2qj7hrinirsucd5uen5rxi/les-ravelles",
+      "bounds": [
+        4.736731,
+        46.959926,
+        4.738564,
+        46.961383
+      ],
+      "labelPoint": [
+        4.737576,
+        46.960652
+      ]
+    },
+    {
+      "id": "inao-denom-2062",
+      "name": "Meursault (red)",
+      "tier": "village",
+      "kind": "appellation",
+      "appellationId": 204,
+      "denominationId": 2062,
+      "sourceName": "Meursault ou Meursault Côte de Beaune",
+      "communes": [
+        "21412"
+      ],
+      "areaHa": 394.3,
+      "matchId": "ba_appellation_i5feobqdq556kq7i5jynpzeelu",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_i5feobqdq556kq7i5jynpzeelu/meursault",
+      "bounds": [
+        4.74694,
+        46.955681,
+        4.78588,
+        46.99191
+      ],
+      "labelPoint": [
+        4.75547,
+        46.961651
+      ]
+    },
+    {
+      "id": "inao-denom-2373",
+      "name": "Blagny",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 204,
+      "denominationId": 2373,
+      "sourceName": "Meursault premier cru Blagny",
+      "communes": [
+        "21412"
+      ],
+      "areaHa": 25.0,
+      "matchId": "ba_designation_svan4jjfpo4w3mp6zswfeznpoa",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_svan4jjfpo4w3mp6zswfeznpoa/blagny",
+      "bounds": [
+        4.736731,
+        46.959428,
+        4.748554,
+        46.964524
+      ],
+      "labelPoint": [
+        4.741988,
+        46.961959
+      ]
+    }
+  ],
+  "umbrellas": {
+    "inao-denom-2373": [
+      "inao-denom-849",
+      "inao-denom-861",
+      "inao-denom-848",
+      "inao-denom-860",
+      "inao-denom-1991"
+    ]
+  }
+}

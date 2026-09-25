@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { describe,expect,it } from 'vitest';
-import { clickOrder,countLabel,joinPlaces,snapshotLabel,burgundyVillageMapTarget,type VillageMapCatalogue } from '../../src/lib/places/burgundyVillageMap';
+import { clickOrder,countLabel,joinPlaces,snapshotLabel,umbrellaNote,burgundyVillageMapTarget,type VillageMapCatalogue } from '../../src/lib/places/burgundyVillageMap';
 import catalogue from '../../src/lib/places/burgundyVillageMapCatalogue.json';
 import morey from '../../src/lib/places/moreyVillageMapCatalogue.json';
 import chambolle from '../../src/lib/places/chambolleVillageMapCatalogue.json';
@@ -10,6 +10,11 @@ import vougeot from '../../src/lib/places/vougeotVillageMapCatalogue.json';
 import nuits from '../../src/lib/places/nuitsVillageMapCatalogue.json';
 import marsannay from '../../src/lib/places/marsannayVillageMapCatalogue.json';
 import coteNuits from '../../src/lib/places/coteNuitsVillageMapCatalogue.json';
+import meursault from '../../src/lib/places/meursaultVillageMapCatalogue.json';
+import puligny from '../../src/lib/places/pulignyVillageMapCatalogue.json';
+import chassagne from '../../src/lib/places/chassagneVillageMapCatalogue.json';
+import saintAubin from '../../src/lib/places/saintAubinVillageMapCatalogue.json';
+import blagny from '../../src/lib/places/blagnyVillageMapCatalogue.json';
 import registry from '../../src/lib/places/burgundyVillageMapRegistry.json';
 import { loadVillageMapCatalogue } from '../../src/lib/places/loadVillageMapCatalogue';
 import type { FeatureCollection,MultiPolygon,Polygon } from 'geojson';
@@ -17,7 +22,7 @@ import coverage from '../../scripts/burgundy-map-coverage.json';
 import mapConfig from '../../scripts/burgundy-villages.json';
 import appellationLinks from '../../src/lib/places/burgundyAtlasAppellationLinks.json';
 
-const catalogues:VillageMapCatalogue[]=[catalogue,morey,chambolle,vosne,fixin,vougeot,nuits,marsannay,coteNuits];
+const catalogues:VillageMapCatalogue[]=[catalogue,morey,chambolle,vosne,fixin,vougeot,nuits,marsannay,coteNuits,meursault,puligny,chassagne,saintAubin,blagny];
 
 const wine={country:'France',region:'Burgundy',appellation:'Gevrey-Chambertin',wineName:'Les Cazetiers',classification:'premier_cru'};
 
@@ -44,7 +49,7 @@ describe('Gevrey village map identity',()=>{
   expect(burgundyVillageMapTarget({...wine,wineName:'Gevrey-Chambertin',classification:'village'})).toMatchObject({featureId:'inao-denom-589',scope:'appellation'});
  });
  it('withholds conflicts, incompatible geography, unsupported villages and an unproven cru tier',()=>{
-  for(const fields of [{country:'USA'},{region:'Bordeaux'},{appellation:'Meursault'},
+  for(const fields of [{country:'USA'},{region:'Bordeaux'},{appellation:'Pommard'},
    {identityMatchStatus:'conflict' as const},{classification:null},{appellation:'Corton',classification:'grand_cru'}]){
    expect(burgundyVillageMapTarget({...wine,...fields}),JSON.stringify(fields)).toBeNull();
   }
@@ -106,6 +111,11 @@ describe.each([
  {catalogue:fixin,grands:0,premiers:6,broad:'inao-denom-574',village:'inao-denom-566'},
  {catalogue:vougeot,grands:1,premiers:4,broad:'inao-denom-1283',village:'inao-denom-1278'},
  {catalogue:nuits,grands:0,premiers:41,broad:'inao-denom-1016',village:'inao-denom-974'},
+ {catalogue:meursault,grands:0,premiers:19,broad:'inao-denom-862',village:'inao-app-204-village'},
+ {catalogue:puligny,grands:4,premiers:17,broad:'inao-denom-1079',village:'inao-app-219-village'},
+ {catalogue:chassagne,grands:3,premiers:55,broad:'inao-denom-534',village:'inao-denom-478'},
+ {catalogue:saintAubin,grands:0,premiers:30,broad:'inao-denom-1156',village:'inao-app-227-village'},
+ {catalogue:blagny,grands:0,premiers:7,broad:'inao-denom-360',village:'inao-denom-352'},
 ])('$catalogue.name identities and boundaries',({catalogue:c,grands,premiers,broad,village})=>{
  const data=JSON.parse(readFileSync(`public${c.dataUrl}`,'utf8')) as FeatureCollection<Polygon|MultiPolygon>;
  it('resolves every named cru and retains appellation scope for broad wines',()=>{
@@ -116,7 +126,7 @@ describe.each([
    const target=burgundyVillageMapTarget({...base,classification:feature.tier,wineName:feature.name,
     appellation:feature.tier==='grand_cru'?feature.name:c.name});
    expect(target,feature.name).toMatchObject({featureId:feature.id,scope:'vineyard',
-    villageId:feature.denominationId===361?'chambolle-musigny':c.id});
+    villageId:({361:'chambolle-musigny',273:'puligny-montrachet',927:'puligny-montrachet'} as Record<number,string>)[feature.denominationId!]??c.id});
   }
   const blend=c.features.filter(f=>f.kind==='vineyard'&&f.tier==='premier_cru').slice(0,2).map(f=>f.name).join(' et ');
   for(const wineName of [c.name+' Premier Cru','Unknown vineyard',blend]){
@@ -138,7 +148,7 @@ describe.each([
    const rings=feature.geometry.type==='Polygon'?feature.geometry.coordinates:feature.geometry.coordinates.flat();
    for(const ring of rings){
     expect(ring.length).toBeGreaterThanOrEqual(4);expect(ring[0]).toEqual(ring.at(-1));
-    expect(ring.every(([lng,lat])=>lng>4.8&&lng<5.1&&lat>47.0&&lat<47.4)).toBe(true);
+    expect(ring.every(([lng,lat])=>c.region==='Côte de Beaune'?lng>4.65&&lng<4.85&&lat>46.85&&lat<47.05:lng>4.8&&lng<5.1&&lat>47.0&&lat<47.4)).toBe(true);
    }
   }
   for(const feature of c.features){
@@ -155,6 +165,8 @@ describe('village registry',()=>{
   expect(coverage.villages.map(v=>v.name).sort()).toEqual([...appellationLinks.groups.map(g=>g.appellation),'Côte de Beaune-Villages'].sort());
   const nuitsCoverage=coverage.villages.filter(v=>v.region==='Côte de Nuits');
   expect(nuitsCoverage).toHaveLength(9);
+  expect(mapConfig.villages).toHaveLength(14);
+  expect(mapConfig.villages.filter(v=>v.region==='Côte de Beaune')).toHaveLength(5);
   for(const row of nuitsCoverage)expect(mapConfig.villages.some(v=>v.appellationId===row.appellationId&&v.name===row.name)).toBe(true);
   for(const village of mapConfig.villages)expect(coverage.villages.some(row=>row.appellationId===village.appellationId&&row.name===village.name)).toBe(true);
  });
@@ -173,8 +185,8 @@ describe('village registry',()=>{
   expect(burgundyVillageMapTarget({...wine,appellation:'Chambolle-Musigny',wineName:'Les Feusselotes'})?.featureId).toBe('inao-denom-464');
  });
  it('has one target per identity and a working lazy catalogue for every village',async()=>{
-  expect(registry.targets).toHaveLength(175);
-  expect(new Set(registry.targets.map(t=>t.matchId)).size).toBe(175);
+  expect(registry.targets).toHaveLength(318);
+  expect(new Set(registry.targets.map(t=>t.matchId)).size).toBe(318);
   for(const village of registry.villages){
    const c=await loadVillageMapCatalogue(village.id);
    expect(catalogues.find(expected=>expected.id===village.id)).toEqual(c);
@@ -228,6 +240,74 @@ describe('Vosne-Romanée and Flagey-Échezeaux',()=>{
   expect(vosne.features.find(f=>f.id==='inao-denom-1274')).toMatchObject({name:'Les Petits Monts',sourceName:'Vosne-Romanée premier cru Les Petis Monts'});
   expect(burgundyVillageMapTarget({...wine,appellation:'Vosne-Romanée',wineName:'Aux Reignots et Les Petits Monts'}))
    .toMatchObject({featureId:'inao-denom-1277',scope:'appellation'});
+ });
+});
+
+describe('southern Côte de Beaune',()=>{
+ const geometry=(c:VillageMapCatalogue,id:number)=>JSON.parse(readFileSync(`public${c.dataUrl}`,'utf8')).features.find((f:{id:string})=>f.id===`inao-denom-${id}`).geometry;
+ it('keeps both shared Montrachet boundaries identical and defaults to Puligny',()=>{
+  for(const [id,name] of [[927,'Montrachet'],[273,'Bâtard-Montrachet']] as const){
+   expect(geometry(puligny,id)).toEqual(geometry(chassagne,id));
+   const feature=puligny.features.find(f=>f.denominationId===id)!;
+   expect(feature).toEqual(chassagne.features.find(f=>f.denominationId===id));
+   expect(feature.communes).toEqual(['21150','21512']);
+   expect(burgundyVillageMapTarget({...wine,appellation:name,wineName:name,classification:'grand_cru'}))
+    .toMatchObject({villageId:'puligny-montrachet',featureId:`inao-denom-${id}`});
+  }
+  expect(chassagne.features.find(f=>f.denominationId===478)?.communes).toEqual(['21150','71369']);
+  expect(chassagne.communes.find(c=>c.id==='71369')?.name).toBe('Remigny');
+  expect(chassagne.sources.some(s=>s.url.includes('/71/71369/'))).toBe(true);
+ });
+ it('keeps the seven red Blagny identities separate from their white counterparts on the same land',()=>{
+  for(const [red,white,c] of [[353,1067,puligny],[354,1068,puligny],[355,848,meursault],[356,849,meursault],[357,860,meursault],[358,861,meursault],[359,1078,puligny]] as const){
+   const redFeature=blagny.features.find(f=>f.denominationId===red)!;
+   const whiteFeature=c.features.find(f=>f.denominationId===white)!;
+   // Source rings may start at different vertices on the same boundary.
+   expect(redFeature.bounds).toEqual(whiteFeature.bounds);
+   expect(redFeature.areaHa).toBe(whiteFeature.areaHa);
+   expect(redFeature.matchId).not.toBe(whiteFeature.matchId);
+   expect(burgundyVillageMapTarget({...wine,appellation:'Blagny',wineName:redFeature.name,colour:'Red'})?.featureId).toBe(redFeature.id);
+   expect(burgundyVillageMapTarget({...wine,appellation:c.name,wineName:whiteFeature.name,colour:'White'})?.featureId).toBe(whiteFeature.id);
+  }
+  expect(burgundyVillageMapTarget({...wine,appellation:'Meursault',wineName:'Blagny',colour:'White'}))
+   .toMatchObject({villageId:'meursault',featureId:'inao-denom-2373'});
+  const base={...wine,appellation:'Blagny',wineName:'Blagny',classification:'village'};
+  for(const fields of [{colour:'White'},{colour:'Rosé'},{colour:'',wineStyle:'white'}])expect(burgundyVillageMapTarget({...base,...fields})).toBeNull();
+  expect(burgundyVillageMapTarget(base)?.featureId).toBe('inao-denom-352');
+ });
+ it('distinguishes repeated climat names and the reviewed Clavoillon spelling',()=>{
+  for(const [appellation,wineName,id] of [['Chassagne-Montrachet','En Remilly',491],['Saint-Aubin','En Remilly',1132],['Meursault','Perrières',858],['Puligny-Montrachet','Les Perrières',1075],['Saint-Aubin','Les Perrières',1147],['Puligny-Montrachet','Clavoillon',1064]] as const){
+   expect(burgundyVillageMapTarget({...wine,appellation,wineName})?.featureId).toBe(`inao-denom-${id}`);
+  }
+  expect(puligny.features.find(f=>f.denominationId===1064)).toMatchObject({name:'Clavoillon',sourceName:'Puligny-Montrachet premier cru Clavaillon'});
+ });
+ it.each([
+  {c:meursault,white:844,red:2062,app:204},
+  {c:puligny,white:2047,red:1061,app:219},
+  {c:saintAubin,white:1125,red:2083,app:227},
+ ])('$c.name preserves official colour identities and labels its derived combined overview',({c,white,red,app})=>{
+  const base={...wine,appellation:c.name,wineName:c.name,classification:'village'};
+  for(const [fields,id] of [[{colour:'White'},white],[{colour:'Red'},red],[{colour:'',wineStyle:'white'},white],[{colour:null,wineStyle:'red'},red]] as const){
+   expect(burgundyVillageMapTarget({...base,...fields})).toMatchObject({featureId:`inao-denom-${id}`,scope:'appellation'});
+  }
+  for(const fields of [{},{colour:null,wineStyle:'sparkling'}]){
+   expect(burgundyVillageMapTarget({...base,...fields})?.featureId).toBe(`inao-app-${app}-village`);
+  }
+  expect(c.features.find(f=>f.id===`inao-app-${app}-village`)).toMatchObject({denominationId:null,denominationIds:[white,red].sort((a,b)=>a-b),name:`${c.name} (all colours)`});
+ });
+ it('preserves distinct colour geometries in Meursault and equal ones in the Saint-Aubin source',()=>{
+  expect(geometry(meursault,844)).not.toEqual(geometry(meursault,2062));
+  expect(geometry(saintAubin,1125)).toEqual(geometry(saintAubin,2083));
+ });
+ it.each([meursault,puligny,chassagne,saintAubin,blagny])('$name paints tier unions separately from selectable source boundaries',c=>{
+  const data=JSON.parse(readFileSync(`public${c.dataUrl}`,'utf8')) as FeatureCollection<Polygon|MultiPolygon>&{overviewFills:FeatureCollection<Polygon|MultiPolygon>['features']};
+  expect(data.overviewFills).toHaveLength(c.features.some(f=>f.tier==='grand_cru')?2:1);
+  expect(data.overviewFills.map(f=>f.properties?.tier).sort()).toEqual([...new Set(c.features.filter(f=>f.kind==='vineyard').map(f=>f.tier))].sort());
+  for(const f of data.overviewFills){
+   expect(data.features.some(source=>source.id===f.id)).toBe(false);
+   const rings=f.geometry.type==='Polygon'?f.geometry.coordinates:f.geometry.coordinates.flat();
+   expect(rings.every(r=>r.length>=4&&JSON.stringify(r[0])===JSON.stringify(r.at(-1)))).toBe(true);
+  }
  });
 });
 
@@ -366,5 +446,34 @@ describe('separate parts of one appellation',()=>{
   expect(areas[0].bounds[1]).toBeGreaterThan(areas[1].bounds[3]);
   // Together they span the whole appellation.
   expect(Math.min(...areas.map(a=>a.bounds[0]))).toBe(west);expect(Math.max(...areas.map(a=>a.bounds[3]))).toBe(north);
+ });
+});
+
+describe('umbrella Premier Cru notes',()=>{
+ const load=(file:string)=>JSON.parse(readFileSync(`src/lib/places/${file}VillageMapCatalogue.json`,'utf8')) as VillageMapCatalogue;
+ const chassagne=load('chassagne'),meursault=load('meursault');
+ const id=(catalogue:VillageMapCatalogue,name:string)=>catalogue.features.find(feature=>feature.name===name)!.id;
+ it('says what a wider name covers, and where a vineyard lies within one',()=>{
+  expect(umbrellaNote(chassagne,id(chassagne,'Morgeot'))).toMatch(/^Morgeot is a wider Premier Cru name covering 19 named vineyards, including /);
+  expect(umbrellaNote(chassagne,id(chassagne,'La Grande Montagne'))).toBe('La Grande Montagne is a wider Premier Cru name covering La Romanée, En Virondot, Les Grandes Ruchottes and Tonton Marcel.');
+  expect(umbrellaNote(chassagne,id(chassagne,'La Romanée'))).toBe('La Romanée lies within La Grande Montagne, a wider Premier Cru name.');
+  // Nested umbrellas name every wider name, the largest first.
+  expect(umbrellaNote(chassagne,id(chassagne,'Les Chaumes'))).toBe('Les Chaumes lies within Morgeot and La Boudriotte, wider Premier Cru names.');
+ });
+ it('adds no note to a cru that overlaps nothing',()=>{
+  for(const name of ['Charmes','Perrières','Genevrières'])expect(umbrellaNote(meursault,id(meursault,name)),name).toBeUndefined();
+  expect(umbrellaNote(chassagne,id(chassagne,'En Cailleret'))).toBeUndefined();
+ });
+ it('only records Premier Crus that exist in the same catalogue, each wider than what it covers',()=>{
+  for(const catalogue of [chassagne,meursault,load('saintAubin')]){
+   const byId=new Map(catalogue.features.map(feature=>[feature.id,feature]));
+   for(const [outer,inner] of Object.entries(catalogue.umbrellas??{})){
+    expect(byId.get(outer)?.tier).toBe('premier_cru');
+    for(const covered of inner){
+     expect(byId.get(covered)?.tier).toBe('premier_cru');
+     expect(byId.get(covered)!.areaHa).toBeLessThan(byId.get(outer)!.areaHa);
+    }
+   }
+  }
  });
 });

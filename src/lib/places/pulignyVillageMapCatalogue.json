@@ -1,0 +1,695 @@
+{
+  "id": "puligny-montrachet",
+  "name": "Puligny-Montrachet",
+  "region": "Côte de Beaune",
+  "communes": [
+    {
+      "id": "21512",
+      "name": "Puligny-Montrachet"
+    },
+    {
+      "id": "21150",
+      "name": "Chassagne-Montrachet"
+    }
+  ],
+  "dataUrl": "/maps/puligny-montrachet.2026-09-21.geojson",
+  "bounds": [
+    4.732255,
+    46.939385,
+    4.760421,
+    46.960955
+  ],
+  "sources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21512/cadastre-21512-communes.json.gz",
+      "sha256": "22b3eebde39036f1663861b8fa13f411391b3bc167e0c783eea381d018caa831"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21150/cadastre-21150-communes.json.gz",
+      "sha256": "da1efabb947f470ba2f4f200bf345bbd7722093fcb399e8c9a760284b5fb703b"
+    }
+  ],
+  "notes": {
+    "inao-app-219-village": {
+      "note": "This overview combines the red and white Puligny-Montrachet production areas. Choose a colour to see its own boundary; no single vineyard is identified."
+    },
+    "inao-denom-2047": {
+      "note": "This is the published white-wine village area for Puligny-Montrachet. Named village lieux-dits are not mapped individually."
+    },
+    "inao-denom-1061": {
+      "note": "This is the published red-wine village area for Puligny-Montrachet, also named Puligny-Montrachet Côte de Beaune in the source. Named village lieux-dits are not mapped individually."
+    },
+    "inao-denom-273": {
+      "note": "Bâtard-Montrachet spans Puligny-Montrachet and Chassagne-Montrachet. Both maps show its full production boundary; the appellation alone does not identify which commune the wine comes from."
+    },
+    "inao-denom-927": {
+      "note": "Montrachet spans Puligny-Montrachet and Chassagne-Montrachet. Both maps show its full production boundary; the appellation alone does not identify which commune the wine comes from."
+    }
+  },
+  "features": [
+    {
+      "id": "inao-app-219-village",
+      "name": "Puligny-Montrachet (all colours)",
+      "tier": "village",
+      "kind": "appellation",
+      "appellationId": 219,
+      "denominationId": null,
+      "denominationIds": [
+        1061,
+        2047
+      ],
+      "sourceName": "Puligny-Montrachet ou Puligny-Montrachet Côte de Beaune / Puligny-Montrachet",
+      "communes": [
+        "21512"
+      ],
+      "areaHa": 236.75,
+      "matchId": "ba_appellation_zagvrbxthplsuiwysrx2ti2dmm",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_zagvrbxthplsuiwysrx2ti2dmm/puligny-montrachet",
+      "bounds": [
+        4.732255,
+        46.939385,
+        4.760421,
+        46.960955
+      ],
+      "labelPoint": [
+        4.7477,
+        46.941158
+      ]
+    },
+    {
+      "id": "inao-denom-273",
+      "name": "Bâtard-Montrachet",
+      "tier": "grand_cru",
+      "kind": "vineyard",
+      "appellationId": 130,
+      "denominationId": 273,
+      "sourceName": "Bâtard-Montrachet",
+      "communes": [
+        "21150",
+        "21512"
+      ],
+      "areaHa": 11.86,
+      "matchId": "france/burgundy/cote-de-beaune/batard-montrachet",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_dpdm6xw6swoajdjyis5vljhcki/batard-montrachet",
+      "bounds": [
+        4.73676,
+        46.941211,
+        4.742299,
+        46.947237
+      ],
+      "labelPoint": [
+        4.740347,
+        46.94425
+      ]
+    },
+    {
+      "id": "inao-denom-351",
+      "name": "Bienvenues-Bâtard-Montrachet",
+      "tier": "grand_cru",
+      "kind": "vineyard",
+      "appellationId": 135,
+      "denominationId": 351,
+      "sourceName": "Bienvenues-Bâtard-Montrachet",
+      "communes": [
+        "21512"
+      ],
+      "areaHa": 3.69,
+      "matchId": "france/burgundy/cote-de-beaune/bienvenues-batard-montrachet",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_fnoekkpqwxjfrepgy5hysgq22a/bienvenues-batard-montrachet",
+      "bounds": [
+        4.740913,
+        46.944293,
+        4.743672,
+        46.946945
+      ],
+      "labelPoint": [
+        4.742275,
+        46.945621
+      ]
+    },
+    {
+      "id": "inao-denom-539",
+      "name": "Chevalier-Montrachet",
+      "tier": "grand_cru",
+      "kind": "vineyard",
+      "appellationId": 157,
+      "denominationId": 539,
+      "sourceName": "Chevalier-Montrachet",
+      "communes": [
+        "21512"
+      ],
+      "areaHa": 7.6,
+      "matchId": "france/burgundy/cote-de-beaune/chevalier-montrachet",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_vf4273tdipcko2tm4a22awuhge/chevalier-montrachet",
+      "bounds": [
+        4.734561,
+        46.944718,
+        4.740121,
+        46.949335
+      ],
+      "labelPoint": [
+        4.737341,
+        46.94652
+      ]
+    },
+    {
+      "id": "inao-denom-927",
+      "name": "Montrachet",
+      "tier": "grand_cru",
+      "kind": "vineyard",
+      "appellationId": 207,
+      "denominationId": 927,
+      "sourceName": "Montrachet",
+      "communes": [
+        "21150",
+        "21512"
+      ],
+      "areaHa": 7.99,
+      "matchId": "france/burgundy/cote-de-beaune/montrachet",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_zhhadupen4sdhxv3k46igi5ppy/montrachet",
+      "bounds": [
+        4.735214,
+        46.941929,
+        4.740629,
+        46.947557
+      ],
+      "labelPoint": [
+        4.737847,
+        46.944753
+      ]
+    },
+    {
+      "id": "inao-denom-1061",
+      "name": "Puligny-Montrachet (red)",
+      "tier": "village",
+      "kind": "appellation",
+      "appellationId": 219,
+      "denominationId": 1061,
+      "sourceName": "Puligny-Montrachet ou Puligny-Montrachet Côte de Beaune",
+      "communes": [
+        "21512"
+      ],
+      "areaHa": 207.77,
+      "matchId": "ba_appellation_zagvrbxthplsuiwysrx2ti2dmm",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_zagvrbxthplsuiwysrx2ti2dmm/puligny-montrachet",
+      "bounds": [
+        4.733496,
+        46.939385,
+        4.760421,
+        46.960278
+      ],
+      "labelPoint": [
+        4.742732,
+        46.953
+      ]
+    },
+    {
+      "id": "inao-denom-1062",
+      "name": "Champ Canet",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 219,
+      "denominationId": 1062,
+      "sourceName": "Puligny-Montrachet premier cru Champ Canet",
+      "communes": [
+        "21512"
+      ],
+      "areaHa": 4.69,
+      "matchId": "ba_designation_lvnjngvzxafclm2wmdwy6thksu",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_lvnjngvzxafclm2wmdwy6thksu/champ-canet",
+      "bounds": [
+        4.744066,
+        46.955688,
+        4.750131,
+        46.958184
+      ],
+      "labelPoint": [
+        4.748007,
+        46.957019
+      ]
+    },
+    {
+      "id": "inao-denom-1063",
+      "name": "Champ Gain",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 219,
+      "denominationId": 1063,
+      "sourceName": "Puligny-Montrachet premier cru Champ Gain",
+      "communes": [
+        "21512"
+      ],
+      "areaHa": 10.71,
+      "matchId": "ba_designation_zoa2vjyhplid6xmdsbockthwxq",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_zoa2vjyhplid6xmdsbockthwxq/champ-gain",
+      "bounds": [
+        4.733496,
+        46.95207,
+        4.741397,
+        46.95618
+      ],
+      "labelPoint": [
+        4.73698,
+        46.954136
+      ]
+    },
+    {
+      "id": "inao-denom-1064",
+      "name": "Clavoillon",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 219,
+      "denominationId": 1064,
+      "sourceName": "Puligny-Montrachet premier cru Clavaillon",
+      "communes": [
+        "21512"
+      ],
+      "areaHa": 5.57,
+      "matchId": "ba_designation_pu7rjbonupngyjrp64emievlz4",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_pu7rjbonupngyjrp64emievlz4/clavaillon",
+      "bounds": [
+        4.742837,
+        46.949163,
+        4.746887,
+        46.952986
+      ],
+      "labelPoint": [
+        4.744606,
+        46.951065
+      ]
+    },
+    {
+      "id": "inao-denom-1065",
+      "name": "Clos de la Garenne",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 219,
+      "denominationId": 1065,
+      "sourceName": "Puligny-Montrachet premier cru Clos de la Garenne",
+      "communes": [
+        "21512"
+      ],
+      "areaHa": 1.9,
+      "matchId": "ba_designation_e3olwrihcskj6wqpr7lv5groci",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_e3olwrihcskj6wqpr7lv5groci/clos-de-la-garenne",
+      "bounds": [
+        4.744431,
+        46.953089,
+        4.746715,
+        46.955692
+      ],
+      "labelPoint": [
+        4.745309,
+        46.955062
+      ]
+    },
+    {
+      "id": "inao-denom-1066",
+      "name": "Clos de la Mouchère",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 219,
+      "denominationId": 1066,
+      "sourceName": "Puligny-Montrachet premier cru Clos de la Mouchère",
+      "communes": [
+        "21512"
+      ],
+      "areaHa": 3.94,
+      "matchId": "ba_designation_nrneul4qk5oini2rckpugozvpa",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_nrneul4qk5oini2rckpugozvpa/clos-de-la-mouchere",
+      "bounds": [
+        4.745385,
+        46.95205,
+        4.748974,
+        46.954356
+      ],
+      "labelPoint": [
+        4.747051,
+        46.953232
+      ]
+    },
+    {
+      "id": "inao-denom-1067",
+      "name": "Hameau de Blagny",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 219,
+      "denominationId": 1067,
+      "sourceName": "Puligny-Montrachet premier cru Hameau de Blagny",
+      "communes": [
+        "21512"
+      ],
+      "areaHa": 4.25,
+      "matchId": "ba_designation_qkwatpjd47gchtunntqmhanvta",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_qkwatpjd47gchtunntqmhanvta/hameau-de-blagny",
+      "bounds": [
+        4.739004,
+        46.956316,
+        4.742999,
+        46.959345
+      ],
+      "labelPoint": [
+        4.740871,
+        46.957821
+      ]
+    },
+    {
+      "id": "inao-denom-1068",
+      "name": "La Garenne",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 219,
+      "denominationId": 1068,
+      "sourceName": "Puligny-Montrachet premier cru La Garenne",
+      "communes": [
+        "21512"
+      ],
+      "areaHa": 9.92,
+      "matchId": "ba_designation_mwuf4lk3jg5vkh6ckwwvhijgwy",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_mwuf4lk3jg5vkh6ckwwvhijgwy/la-garenne",
+      "bounds": [
+        4.732255,
+        46.953754,
+        4.740284,
+        46.959375
+      ],
+      "labelPoint": [
+        4.73767,
+        46.956555
+      ]
+    },
+    {
+      "id": "inao-denom-1069",
+      "name": "La Truffière",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 219,
+      "denominationId": 1069,
+      "sourceName": "Puligny-Montrachet premier cru La Truffière",
+      "communes": [
+        "21512"
+      ],
+      "areaHa": 2.48,
+      "matchId": "ba_designation_iepybkh3cdhbp6uszu2f7w3xc4",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_iepybkh3cdhbp6uszu2f7w3xc4/la-truffiere",
+      "bounds": [
+        4.740215,
+        46.955558,
+        4.744136,
+        46.957758
+      ],
+      "labelPoint": [
+        4.742759,
+        46.956216
+      ]
+    },
+    {
+      "id": "inao-denom-1070",
+      "name": "Le Cailleret",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 219,
+      "denominationId": 1070,
+      "sourceName": "Puligny-Montrachet premier cru Le Cailleret",
+      "communes": [
+        "21512"
+      ],
+      "areaHa": 3.32,
+      "matchId": "ba_designation_xo2afzco7pagdeykev6ubm6wri",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_xo2afzco7pagdeykev6ubm6wri/le-cailleret",
+      "bounds": [
+        4.739768,
+        46.947596,
+        4.742548,
+        46.950301
+      ],
+      "labelPoint": [
+        4.740971,
+        46.948955
+      ]
+    },
+    {
+      "id": "inao-denom-1071",
+      "name": "Les Chalumaux",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 219,
+      "denominationId": 1071,
+      "sourceName": "Puligny-Montrachet premier cru Les Chalumaux",
+      "communes": [
+        "21512"
+      ],
+      "areaHa": 5.99,
+      "matchId": "ba_designation_vau27kblicp44rfskk34iviglu",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_vau27kblicp44rfskk34iviglu/les-chalumaux",
+      "bounds": [
+        4.741664,
+        46.956873,
+        4.746951,
+        46.960278
+      ],
+      "labelPoint": [
+        4.744555,
+        46.958569
+      ]
+    },
+    {
+      "id": "inao-denom-1072",
+      "name": "Les Combettes",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 219,
+      "denominationId": 1072,
+      "sourceName": "Puligny-Montrachet premier cru Les Combettes",
+      "communes": [
+        "21512"
+      ],
+      "areaHa": 6.77,
+      "matchId": "ba_designation_yorhvlbvi33q5j7spqthgdbfha",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_yorhvlbvi33q5j7spqthgdbfha/les-combettes",
+      "bounds": [
+        4.747018,
+        46.954689,
+        4.752627,
+        46.957753
+      ],
+      "labelPoint": [
+        4.749891,
+        46.956219
+      ]
+    },
+    {
+      "id": "inao-denom-1073",
+      "name": "Les Demoiselles",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 219,
+      "denominationId": 1073,
+      "sourceName": "Puligny-Montrachet premier cru Les Demoiselles",
+      "communes": [
+        "21512"
+      ],
+      "areaHa": 0.61,
+      "matchId": "ba_designation_wmrvj44mgnj7fo7oi2ioff4h3y",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_wmrvj44mgnj7fo7oi2ioff4h3y/les-demoiselles",
+      "bounds": [
+        4.739585,
+        46.947155,
+        4.741038,
+        46.948134
+      ],
+      "labelPoint": [
+        4.740225,
+        46.947677
+      ]
+    },
+    {
+      "id": "inao-denom-1074",
+      "name": "Les Folatières",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 219,
+      "denominationId": 1074,
+      "sourceName": "Puligny-Montrachet premier cru Les Folatières",
+      "communes": [
+        "21512"
+      ],
+      "areaHa": 17.74,
+      "matchId": "ba_designation_dbfzwmec3u4cu74n23tepyvmja",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_dbfzwmec3u4cu74n23tepyvmja/les-folatieres",
+      "bounds": [
+        4.738377,
+        46.949947,
+        4.745272,
+        46.95596
+      ],
+      "labelPoint": [
+        4.741909,
+        46.953
+      ]
+    },
+    {
+      "id": "inao-denom-1075",
+      "name": "Les Perrières",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 219,
+      "denominationId": 1075,
+      "sourceName": "Puligny-Montrachet premier cru Les Perrières",
+      "communes": [
+        "21512"
+      ],
+      "areaHa": 3.53,
+      "matchId": "ba_designation_utpllrcbph3n4t67svtsqzu6ui",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_utpllrcbph3n4t67svtsqzu6ui/les-perrieres",
+      "bounds": [
+        4.74784,
+        46.952948,
+        4.75158,
+        46.955282
+      ],
+      "labelPoint": [
+        4.749879,
+        46.954151
+      ]
+    },
+    {
+      "id": "inao-denom-1076",
+      "name": "Les Pucelles",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 219,
+      "denominationId": 1076,
+      "sourceName": "Puligny-Montrachet premier cru Les Pucelles",
+      "communes": [
+        "21512"
+      ],
+      "areaHa": 6.79,
+      "matchId": "ba_designation_bvyhrhlz6cvbwjwlc3vo5fjybq",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_bvyhrhlz6cvbwjwlc3vo5fjybq/les-pucelles",
+      "bounds": [
+        4.740907,
+        46.946498,
+        4.74463,
+        46.949957
+      ],
+      "labelPoint": [
+        4.743091,
+        46.948261
+      ]
+    },
+    {
+      "id": "inao-denom-1077",
+      "name": "Les Referts",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 219,
+      "denominationId": 1077,
+      "sourceName": "Puligny-Montrachet premier cru Les Referts",
+      "communes": [
+        "21512"
+      ],
+      "areaHa": 5.77,
+      "matchId": "ba_designation_bxjp66lxrnc3pnv3ho5ulgalvu",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_bxjp66lxrnc3pnv3ho5ulgalvu/les-referts",
+      "bounds": [
+        4.750231,
+        46.954097,
+        4.754647,
+        46.957211
+      ],
+      "labelPoint": [
+        4.752505,
+        46.955658
+      ]
+    },
+    {
+      "id": "inao-denom-1078",
+      "name": "Sous le Puits",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 219,
+      "denominationId": 1078,
+      "sourceName": "Puligny-Montrachet premier cru Sous le Puits",
+      "communes": [
+        "21512"
+      ],
+      "areaHa": 6.83,
+      "matchId": "ba_designation_gez6umodqrrwn6lh2hbmdnssuu",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_gez6umodqrrwn6lh2hbmdnssuu/sous-le-puits",
+      "bounds": [
+        4.734328,
+        46.95796,
+        4.739763,
+        46.960955
+      ],
+      "labelPoint": [
+        4.738095,
+        46.959435
+      ]
+    },
+    {
+      "id": "inao-denom-1079",
+      "name": "Puligny-Montrachet Premier Cru",
+      "tier": "premier_cru",
+      "kind": "appellation",
+      "appellationId": 219,
+      "denominationId": 1079,
+      "sourceName": "Puligny-Montrachet premier cru",
+      "communes": [
+        "21512"
+      ],
+      "areaHa": 122.13,
+      "matchId": "ba_appellation_3vzif7mzdtdm5x5fll262mllru",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_3vzif7mzdtdm5x5fll262mllru/puligny-montrachet-premier-cru",
+      "bounds": [
+        4.732255,
+        46.943349,
+        4.754647,
+        46.960955
+      ],
+      "labelPoint": [
+        4.741001,
+        46.95572
+      ]
+    },
+    {
+      "id": "inao-denom-2047",
+      "name": "Puligny-Montrachet (white)",
+      "tier": "village",
+      "kind": "appellation",
+      "appellationId": 219,
+      "denominationId": 2047,
+      "sourceName": "Puligny-Montrachet",
+      "communes": [
+        "21512"
+      ],
+      "areaHa": 236.75,
+      "matchId": "ba_appellation_zagvrbxthplsuiwysrx2ti2dmm",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_zagvrbxthplsuiwysrx2ti2dmm/puligny-montrachet",
+      "bounds": [
+        4.732255,
+        46.939385,
+        4.760421,
+        46.960955
+      ],
+      "labelPoint": [
+        4.741001,
+        46.95572
+      ]
+    }
+  ]
+}

@@ -3,13 +3,15 @@ import { burgundyAtlasWineDetailPlace } from './burgundyAtlasPremierCru';
 import registry from './burgundyVillageMapRegistry.json';
 
 export type VillageMapFeature={
- id:string;name:string;tier:string;kind:string;appellationId:number;denominationId:number;
+ id:string;name:string;tier:string;kind:string;appellationId:number;denominationId:number|null;denominationIds?:number[];
  sourceName:string;communes:string[];areaHa:number;matchId:string;atlasUrl:string;bounds:number[];labelPoint:number[];
 };
 export type VillageMapCatalogue={
  id:string;name:string;region:string;communes:{id:string;name:string}[];dataUrl:string;bounds:number[];
  sources:{name:string;date:string;url:string;sha256:string;license:string}[];
  notes:Record<string,{note:string;paintedBy?:string}>;features:VillageMapFeature[];
+ // Premier Crus lying inside a wider Premier Cru name, keyed by the wider one.
+ umbrellas?:Record<string,string[]>;
  // Separate parts of one appellation, each with its own zoom button and map label.
  areas?:{id:string;label:string;name:string;bounds:number[]}[];
 };
@@ -27,14 +29,15 @@ export function burgundyVillageMapTarget(wine:WineFacts&{classification?:string|
  const target=place?byMatchId.get(place.placeId):undefined;
  const village=target?byVillageId.get(target.villageId):undefined;
  if(!target||!village)return null;
- // The INAO denomination alone does not distinguish Marsannay's colour areas.
- // Choose only with explicit colour evidence; keep an overview when unknown.
+ // Some village appellations have separate colour areas. Choose only with
+ // explicit colour evidence; keep a labelled overview when unknown.
  const colours=('colourTargets' in target?target.colourTargets:undefined) as Record<string,{featureId:string;name:string}>|undefined;
  const normalise=(value:string)=>value.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
  // A recorded colour wins; a red/white/rosé wine style stands in when the
  // colour is blank. Sparkling and other styles say nothing about the area.
  const style=normalise(wine.wineStyle??'');
  const colour=normalise(wine.colour??'')||(['red','white','rose'].includes(style)?style:'');
+ if(colour&&'wineColours' in village&&!(village.wineColours as string[]).includes(colour))return null;
  const namedRose=[wine.appellation,wine.wineName].some(value=>/\bmarsannay\s+rose\b/.test(normalise(value??'')));
  if(colours&&namedRose&&colour&&colour!=='rose')return null;
  const selected=colours?.[colour||(namedRose?'rose':'')]??target;
@@ -74,4 +77,32 @@ export function countLabel(count:number,singular:string,plural:string){
 /** "A & B" for a pair; "A, B, C & D" for more, rather than a chain of ampersands. */
 export function joinPlaces(names:string[]){
  return names.length<=2?names.join(' & '):`${names.slice(0,-1).join(', ')} & ${names[names.length-1]}`;
+}
+
+/** "A", "A and B", "A, B and C" for prose. */
+function sentenceList(names:string[]){
+ return names.length<2?names.join(''):`${names.slice(0,-1).join(', ')} and ${names[names.length-1]}`;
+}
+
+/**
+ * What a Premier Cru's umbrella relationships mean for a label: a wider name
+ * (Chassagne's Morgeot) covers named vineyards, so its wine may come from any
+ * of them; a vineyard inside one lies within that wider name.
+ */
+export function umbrellaNote(catalogue:Pick<VillageMapCatalogue,'features'|'umbrellas'>,featureId:string){
+ const umbrellas=catalogue.umbrellas??{};
+ const byId=new Map(catalogue.features.map(feature=>[feature.id,feature]));
+ const name=(id:string)=>byId.get(id)?.name??id;
+ const sentences:string[]=[];
+ const covered=umbrellas[featureId]??[];
+ if(covered.length){
+  const shown=covered.slice(0,4).map(name);
+  sentences.push(covered.length>4
+   ?`${name(featureId)} is a wider Premier Cru name covering ${covered.length} named vineyards, including ${sentenceList(shown)}.`
+   :`${name(featureId)} is a wider Premier Cru name covering ${sentenceList(shown)}.`);
+ }
+ const within=Object.entries(umbrellas).filter(([,inner])=>inner.includes(featureId)).map(([outer])=>outer)
+  .sort((a,b)=>(byId.get(b)?.areaHa??0)-(byId.get(a)?.areaHa??0));
+ if(within.length)sentences.push(`${name(featureId)} lies within ${sentenceList(within.map(name))}, ${within.length>1?'wider Premier Cru names':'a wider Premier Cru name'}.`);
+ return sentences.join(' ')||undefined;
 }

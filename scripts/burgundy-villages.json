@@ -1,5 +1,5 @@
 {
-  "sharedDefaults": {"361": "chambolle-musigny"},
+  "sharedDefaults": {"361": "chambolle-musigny", "273": "puligny-montrachet", "927": "puligny-montrachet"},
   "villages": [
     {
       "id": "gevrey-chambertin",
@@ -276,6 +276,272 @@
         47.0,
         5.1,
         47.4
+      ]
+    },
+    {
+      "region": "Côte de Beaune",
+      "expectedBounds": [
+        4.65,
+        46.85,
+        4.85,
+        47.05
+      ],
+      "grands": [],
+      "nameCrosswalk": {},
+      "notes": {
+        "inao-app-204-village": {
+          "note": "This overview combines the red and white Meursault production areas. Choose a colour to see its own boundary; no single vineyard is identified."
+        },
+        "inao-denom-844": {
+          "note": "This is the published white-wine village area for Meursault. Named village lieux-dits are not mapped individually."
+        },
+        "inao-denom-2062": {
+          "note": "This is the published red-wine village area for Meursault, also named Meursault Côte de Beaune in the source. Named village lieux-dits are not mapped individually."
+        },
+        "inao-denom-2373": {
+          "note": "Meursault Premier Cru Blagny is distinct from the red-wine Blagny appellation. Its published boundary includes several more specific Meursault Premier Crus; selecting any name shows its full production area."
+        }
+      },
+      "unionOverviewFills": true,
+      "id": "meursault",
+      "name": "Meursault",
+      "appellationId": 204,
+      "villageDenomination": 844,
+      "premierDenomination": 862,
+      "communes": [
+        {
+          "id": "21412",
+          "name": "Meursault"
+        }
+      ],
+      "catalogueFile": "meursaultVillageMapCatalogue.json",
+      "premierRange": [
+        845,
+        861
+      ],
+      "premierDenominations": [
+        1991,
+        2373
+      ],
+      "colourDenominations": {
+        "844": "white",
+        "2062": "red"
+      }
+    },
+    {
+      "region": "Côte de Beaune",
+      "expectedBounds": [
+        4.65,
+        46.85,
+        4.85,
+        47.05
+      ],
+      "grands": [
+        273,
+        351,
+        539,
+        927
+      ],
+      "nameCrosswalk": {},
+      "notes": {
+        "inao-app-219-village": {
+          "note": "This overview combines the red and white Puligny-Montrachet production areas. Choose a colour to see its own boundary; no single vineyard is identified."
+        },
+        "inao-denom-2047": {
+          "note": "This is the published white-wine village area for Puligny-Montrachet. Named village lieux-dits are not mapped individually."
+        },
+        "inao-denom-1061": {
+          "note": "This is the published red-wine village area for Puligny-Montrachet, also named Puligny-Montrachet Côte de Beaune in the source. Named village lieux-dits are not mapped individually."
+        },
+        "inao-denom-273": {
+          "note": "Bâtard-Montrachet spans Puligny-Montrachet and Chassagne-Montrachet. Both maps show its full production boundary; the appellation alone does not identify which commune the wine comes from."
+        },
+        "inao-denom-927": {
+          "note": "Montrachet spans Puligny-Montrachet and Chassagne-Montrachet. Both maps show its full production boundary; the appellation alone does not identify which commune the wine comes from."
+        }
+      },
+      "unionOverviewFills": true,
+      "id": "puligny-montrachet",
+      "name": "Puligny-Montrachet",
+      "appellationId": 219,
+      "villageDenomination": 2047,
+      "premierDenomination": 1079,
+      "communes": [
+        {
+          "id": "21512",
+          "name": "Puligny-Montrachet"
+        },
+        {
+          "id": "21150",
+          "name": "Chassagne-Montrachet"
+        }
+      ],
+      "catalogueFile": "pulignyVillageMapCatalogue.json",
+      "premierRange": [
+        1062,
+        1078
+      ],
+      "colourDenominations": {
+        "2047": "white",
+        "1061": "red"
+      },
+      "displayNames": {
+        "Clavaillon": "Clavoillon"
+      }
+    },
+    {
+      "region": "Côte de Beaune",
+      "expectedBounds": [
+        4.65,
+        46.85,
+        4.85,
+        47.05
+      ],
+      "grands": [
+        273,
+        564,
+        927
+      ],
+      "nameCrosswalk": {},
+      "notes": {
+        "inao-denom-273": {
+          "note": "Bâtard-Montrachet spans Puligny-Montrachet and Chassagne-Montrachet. Both maps show its full production boundary; the appellation alone does not identify which commune the wine comes from."
+        },
+        "inao-denom-927": {
+          "note": "Montrachet spans Puligny-Montrachet and Chassagne-Montrachet. Both maps show its full production boundary; the appellation alone does not identify which commune the wine comes from."
+        }
+      },
+      "unionOverviewFills": true,
+      "id": "chassagne-montrachet",
+      "name": "Chassagne-Montrachet",
+      "appellationId": 154,
+      "villageDenomination": 478,
+      "premierDenomination": 534,
+      "communes": [
+        {
+          "id": "21150",
+          "name": "Chassagne-Montrachet"
+        },
+        {
+          "id": "71369",
+          "name": "Remigny"
+        },
+        {
+          "id": "21512",
+          "name": "Puligny-Montrachet"
+        }
+      ],
+      "catalogueFile": "chassagneVillageMapCatalogue.json",
+      "premierRange": [
+        479,
+        533
+      ]
+    },
+    {
+      "region": "Côte de Beaune",
+      "expectedBounds": [
+        4.65,
+        46.85,
+        4.85,
+        47.05
+      ],
+      "grands": [],
+      "nameCrosswalk": {},
+      "notes": {
+        "inao-app-227-village": {
+          "note": "This overview combines the red and white Saint-Aubin production areas. Choose a colour to see its own boundary; no single vineyard is identified."
+        },
+        "inao-denom-1125": {
+          "note": "This is the published white-wine village area for Saint-Aubin. Named village lieux-dits are not mapped individually."
+        },
+        "inao-denom-2083": {
+          "note": "This is the published red-wine village area for Saint-Aubin, also named Saint-Aubin Côte de Beaune in the source. Named village lieux-dits are not mapped individually."
+        }
+      },
+      "unionOverviewFills": true,
+      "id": "saint-aubin",
+      "name": "Saint-Aubin",
+      "appellationId": 227,
+      "villageDenomination": 1125,
+      "premierDenomination": 1156,
+      "communes": [
+        {
+          "id": "21541",
+          "name": "Saint-Aubin"
+        }
+      ],
+      "catalogueFile": "saintAubinVillageMapCatalogue.json",
+      "premierRange": [
+        1126,
+        1155
+      ],
+      "colourDenominations": {
+        "1125": "white",
+        "2083": "red"
+      }
+    },
+    {
+      "region": "Côte de Beaune",
+      "expectedBounds": [
+        4.65,
+        46.85,
+        4.85,
+        47.05
+      ],
+      "grands": [],
+      "nameCrosswalk": {},
+      "notes": {
+        "inao-denom-352": {
+          "note": "Blagny is a red-wine appellation across Meursault and Puligny-Montrachet. White wines from this hillside use Meursault or Puligny-Montrachet identities; shared ground does not make the appellations interchangeable."
+        },
+        "inao-denom-353": {
+          "note": "Blagny is a red-wine appellation across Meursault and Puligny-Montrachet. White wines from this hillside use Meursault or Puligny-Montrachet identities; shared ground does not make the appellations interchangeable."
+        },
+        "inao-denom-354": {
+          "note": "Blagny is a red-wine appellation across Meursault and Puligny-Montrachet. White wines from this hillside use Meursault or Puligny-Montrachet identities; shared ground does not make the appellations interchangeable."
+        },
+        "inao-denom-355": {
+          "note": "Blagny is a red-wine appellation across Meursault and Puligny-Montrachet. White wines from this hillside use Meursault or Puligny-Montrachet identities; shared ground does not make the appellations interchangeable."
+        },
+        "inao-denom-356": {
+          "note": "Blagny is a red-wine appellation across Meursault and Puligny-Montrachet. White wines from this hillside use Meursault or Puligny-Montrachet identities; shared ground does not make the appellations interchangeable."
+        },
+        "inao-denom-357": {
+          "note": "Blagny is a red-wine appellation across Meursault and Puligny-Montrachet. White wines from this hillside use Meursault or Puligny-Montrachet identities; shared ground does not make the appellations interchangeable."
+        },
+        "inao-denom-358": {
+          "note": "Blagny is a red-wine appellation across Meursault and Puligny-Montrachet. White wines from this hillside use Meursault or Puligny-Montrachet identities; shared ground does not make the appellations interchangeable."
+        },
+        "inao-denom-359": {
+          "note": "Blagny is a red-wine appellation across Meursault and Puligny-Montrachet. White wines from this hillside use Meursault or Puligny-Montrachet identities; shared ground does not make the appellations interchangeable."
+        },
+        "inao-denom-360": {
+          "note": "Blagny is a red-wine appellation across Meursault and Puligny-Montrachet. White wines from this hillside use Meursault or Puligny-Montrachet identities; shared ground does not make the appellations interchangeable."
+        }
+      },
+      "unionOverviewFills": true,
+      "id": "blagny",
+      "name": "Blagny",
+      "appellationId": 136,
+      "villageDenomination": 352,
+      "premierDenomination": 360,
+      "communes": [
+        {
+          "id": "21412",
+          "name": "Meursault"
+        },
+        {
+          "id": "21512",
+          "name": "Puligny-Montrachet"
+        }
+      ],
+      "catalogueFile": "blagnyVillageMapCatalogue.json",
+      "premierRange": [
+        353,
+        359
+      ],
+      "wineColours": [
+        "red"
       ]
     }
   ]

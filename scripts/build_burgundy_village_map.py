@@ -96,11 +96,16 @@ def main():
         premiers = next((g for g in premier_groups if g["appellation"] == name), {"entries": []})
         appellation = next(g for g in appellations if g["appellation"] == name)
         premier_links = {key(e["name"]): e["path"] for e in premiers["entries"]}
+        colour_denominations = {int(d): colour for d, colour in village.get("colourDenominations", {}).items()}
+        village_ids = {village["villageDenomination"]} | colour_denominations.keys()
+        if colour_denominations:
+            assert village["villageDenomination"] in colour_denominations
+            assert sorted(colour_denominations.values()) == ["red", "white"]
         premier_ids = set(village.get("premierDenominations", []))
         if village.get("premierRange"):
             first, last = village["premierRange"]
             premier_ids.update(range(first, last + 1))
-        expected_app = {village["villageDenomination"]} | premier_ids
+        expected_app = village_ids | premier_ids
         if village.get("premierDenomination"):
             expected_app.add(village["premierDenomination"])
         actual_app = {d for d, rows in grouped.items() if rows[0][0]["id_app"] == village["appellationId"]}
@@ -120,8 +125,8 @@ def main():
             geom = transform(to_wgs84, geom_m)
             west, south, east, north = village.get("expectedBounds", [4.9, 47.1, 5.05, 47.3])
             assert west < geom.bounds[0] < geom.bounds[2] < east and south < geom.bounds[1] < geom.bounds[3] < north
-            tier = "grand_cru" if denom_id in village["grands"] else "village" if denom_id == village["villageDenomination"] else "premier_cru"
-            broad = denom_id in (village["villageDenomination"], village.get("premierDenomination"))
+            tier = "grand_cru" if denom_id in village["grands"] else "village" if denom_id in village_ids else "premier_cru"
+            broad = denom_id in village_ids or denom_id == village.get("premierDenomination")
             feature_name = row["denom"].removeprefix(f"{name} premier cru ")
             if broad:
                 feature_name = name + (" Premier Cru" if tier == "premier_cru" else "")
@@ -140,6 +145,8 @@ def main():
             # A shorter name for display where INAO records alternatives in one
             # string; the full INAO name stays in sourceName and the Atlas lookup.
             feature_name = village.get("displayNames", {}).get(feature_name, feature_name)
+            if denom_id in colour_denominations:
+                feature_name = f"{name} ({colour_denominations[denom_id]})"
             feature_id = f"inao-denom-{denom_id}"
             properties = {"id": feature_id, "name": feature_name, "tier": tier, "kind": "appellation" if broad else "vineyard",
                           "appellationId": row["id_app"], "denominationId": denom_id, "sourceName": " / ".join(sorted(source_names)),
@@ -173,11 +180,34 @@ def main():
                     colour_targets = target.setdefault("colourTargets", {})
                     assert colour not in colour_targets
                     colour_targets[colour] = {"featureId": variant_id, "name": variant["name"]}
+            if denom_id in colour_denominations:
+                continue  # Register the colour choices with their combined overview below.
             if match_id in targets:
                 assert targets[match_id]["target"] == target, "A shared identity must refer to the same designation"
                 targets[match_id]["villages"].append(village["id"])
             else:
                 targets[match_id] = {"target": target, "villages": [village["id"]], "denom": denom_id}
+
+        if colour_denominations:
+            members = [f for f in catalogue if f["denominationId"] in colour_denominations]
+            combined_m = unary_union([geometries[d] for d in colour_denominations])
+            combined = transform(to_wgs84, combined_m)
+            feature_id = f"inao-app-{village['appellationId']}-village"
+            properties = {"id": feature_id, "name": f"{name} (all colours)", "tier": "village", "kind": "appellation",
+                          "appellationId": village["appellationId"], "denominationId": None,
+                          "denominationIds": sorted(colour_denominations), "sourceName": " / ".join(f["sourceName"] for f in members),
+                          "communes": sorted({code for f in members for code in f["communes"]}), "areaHa": round(combined_m.area / 10000, 2)}
+            # A derived overview is not a new INAO denomination. Keep every
+            # official colour boundary intact, with its own source ID.
+            features.insert(0, {"type": "Feature", "id": feature_id, "properties": properties, "geometry": geometry_json(combined)})
+            point = combined.representative_point()
+            match_id = appellation["villagePath"].split("/")[2]
+            catalogue.insert(0, {**properties, "matchId": match_id, "atlasUrl": "https://burgundyatlas.com" + appellation["villagePath"],
+                                 "bounds": rounded(combined.bounds), "labelPoint": rounded([point.x, point.y])})
+            assert match_id not in targets
+            targets[match_id] = {"target": {"matchId": match_id, "featureId": feature_id, "name": properties["name"], "scope": "appellation",
+                                           "colourTargets": {colour_denominations[f["denominationId"]]: {"featureId": f["id"], "name": f["name"]} for f in members}},
+                                 "villages": [village["id"]], "denom": None}
 
         by_id = {f["id"]: f for f in catalogue}
         # Some reviewed INAO areas overlap across tiers. Preserve every full
@@ -225,6 +255,22 @@ def main():
         url = f"/maps/{village['id']}.{DATE}.geojson"
         manifest = {"id": village["id"], "name": name, "region": village["region"], "communes": village["communes"],
                     "dataUrl": url, "bounds": rounded(vineyard_bounds), "sources": sources, "notes": village["notes"], "features": catalogue}
+        # Umbrella names: a Premier Cru lying at least 90% inside a larger one
+        # (Chassagne's Morgeot covers nineteen named climats). Measured shares in
+        # the pinned snapshot are either >= 97% or <= 72%, so the threshold does
+        # not sit on a borderline case. Partial overlaps are not umbrellas.
+        premiers = [f for f in catalogue if f["kind"] == "vineyard" and f["tier"] == "premier_cru"]
+        umbrellas = {}
+        for outer in premiers:
+            for inner in premiers:
+                if inner is outer or inner["areaHa"] >= outer["areaHa"]:
+                    continue
+                inner_geom, outer_geom = geometries[inner["denominationId"]], geometries[outer["denominationId"]]
+                if inner_geom.intersection(outer_geom).area >= 0.9 * inner_geom.area:
+                    umbrellas.setdefault(outer["id"], []).append(inner)
+        if umbrellas:
+            manifest["umbrellas"] = {outer: [f["id"] for f in sorted(inner, key=lambda f: (-f["areaHa"], f["name"]))]
+                                     for outer, inner in sorted(umbrellas.items())}
         # Separate parts of one appellation (Côte de Nuits-Villages) each get a
         # zoom target: every polygon of the village area is assigned, by its
         # centroid, to exactly one configured group of communes.
@@ -242,7 +288,26 @@ def main():
                 assert assigned[area["id"]], f"Configured area {area['id']} has no production area"
                 manifest["areas"].append({"id": area["id"], "label": area["label"], "name": area["name"],
                                           "bounds": rounded(unary_union(assigned[area["id"]]).bounds)})
-        outputs.append((village, manifest, {"type": "FeatureCollection", "features": features}))
+        data = {"type": "FeatureCollection", "features": features}
+        if village.get("unionOverviewFills"):
+            assert not village.get("contextExclusions"), "Choose one overview derivation per map"
+            # Several Premier Cru names can cover the same ground. Paint one
+            # union per tier so overlap never darkens into a misleading shade.
+            # Individual boundaries still handle all selection and hit testing.
+            data["overviewFills"] = []
+            higher = None
+            for tier in ("grand_cru", "premier_cru"):
+                ids = [f["denominationId"] for f in catalogue if f["kind"] == "vineyard" and f["tier"] == tier]
+                if not ids:
+                    continue
+                full = unary_union([geometries[d] for d in ids])
+                fill = full.difference(higher) if higher is not None else full
+                assert abs(full.area - fill.area - (full.intersection(higher).area if higher is not None else 0)) < 0.001
+                data["overviewFills"].append({"type": "Feature", "id": f"overview-{tier}",
+                    "properties": {"id": f"overview-{tier}", "kind": "vineyard", "tier": tier},
+                    "geometry": geometry_json(transform(to_wgs84, fill))})
+                higher = unary_union([higher, full]) if higher is not None else full
+        outputs.append((village, manifest, data))
 
     index = []
     for entry in targets.values():
@@ -257,7 +322,7 @@ def main():
         write_json(PLACES / village["catalogueFile"], manifest)
         print(f"Built {village['id']}: {len(manifest['features'])} wine boundaries; {destination.stat().st_size:,} bytes")
     write_json(PLACES / "burgundyVillageMapRegistry.json", {
-        "villages": [{k: v[k] for k in ("id", "name", "region")} for v in villages], "targets": index
+        "villages": [{k: v[k] for k in ("id", "name", "region", "wineColours") if k in v} for v in villages], "targets": index
     }, compact=True)
 
 

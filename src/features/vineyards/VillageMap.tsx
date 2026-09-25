@@ -1,7 +1,7 @@
 import { useEffect,useId,useRef,useState } from 'react';
 import { Map as MapLibreMap,Marker,NavigationControl,ScaleControl,type FilterSpecification,type MapGeoJSONFeature,type StyleSpecification } from 'maplibre-gl';
 import type { Feature,FeatureCollection,Geometry } from 'geojson';
-import { clickOrder,countLabel,joinPlaces,snapshotLabel,type BurgundyVillageMapTarget,type VillageMapCatalogue,type VillageMapFeature } from '../../lib/places/burgundyVillageMap';
+import { clickOrder,countLabel,joinPlaces,snapshotLabel,umbrellaNote,type BurgundyVillageMapTarget,type VillageMapCatalogue,type VillageMapFeature } from '../../lib/places/burgundyVillageMap';
 import { loadVillageMapCatalogue } from '../../lib/places/loadVillageMapCatalogue';
 import { BurgundyAtlasLink } from '../../components/BurgundyAtlasLink';
 import 'maplibre-gl/dist/maplibre-gl.css';
@@ -31,13 +31,14 @@ const selectionFilter=(id:string):FilterSpecification=>['==',['get','id'],id];
 function mapStyle(data:FeatureCollection,catalogue:VillageMapCatalogue,base?:StyleSpecification):StyleSpecification{
  const unpainted=Object.entries(catalogue.notes).filter(([,entry])=>entry.paintedBy).map(([id])=>id);
  const painted:FilterSpecification=['all',['==',['get','kind'],'vineyard'],['!',['in',['get','id'],['literal',unpainted]]]];
- // Reviewed cross-tier overlaps have a separate overview fill geometry. The
- // original production boundaries remain the source for selection and clicks.
- const contextFeatures=data.features.map(feature=>{
+ // Derived overview fills avoid stacking colours over overlapping names.
+ // Original production boundaries remain the source for selection and clicks.
+ const overviewFills=(data as FeatureCollection&{overviewFills?:Feature[]}).overviewFills;
+ const contextFeatures=overviewFills??data.features.map(feature=>{
   const geometry=(feature as Feature<Geometry>&{contextGeometry?:Geometry}).contextGeometry;
   return geometry?{...feature,geometry}:feature;
  });
- const separateContext=contextFeatures.some((feature,index)=>feature!==data.features[index]);
+ const separateContext=Boolean(overviewFills)||contextFeatures.some((feature,index)=>feature!==data.features[index]);
  return {
   ...(base??{version:8}),
   sources:{...base?.sources,'wine-boundaries':{type:'geojson',data},
@@ -91,6 +92,8 @@ function VillageMapView({target,catalogue}:{target:BurgundyVillageMapTarget;cata
  const [selectedId,setSelectedId]=useState(target.featureId),[ready,setReady]=useState(false),[error,setError]=useState(''),[baseWarning,setBaseWarning]=useState(false),[attempt,setAttempt]=useState(0);
  const selectedRef=useRef(selectedId),selectionAction=useRef<((id:string)=>void)|null>(null);
  const selected=catalogue.features.find(feature=>feature.id===selectedId)!;
+ // A reviewed note, then what the cru's umbrella relationships mean for a label.
+ const selectionNotes=[catalogue.notes[selected.id]?.note,umbrellaNote(catalogue,selected.id)].filter(Boolean);
  const vineyardCount=(tier:string)=>catalogue.features.filter(f=>f.kind==='vineyard'&&f.tier===tier).length;
  const hasVineyards=catalogue.features.some(f=>f.kind==='vineyard');
  const selectId=useId(),statusId=useId();
@@ -243,7 +246,7 @@ function VillageMapView({target,catalogue}:{target:BurgundyVillageMapTarget;cata
      <p className={`village-map-eyebrow${selectedId===target.featureId?' is-wine':''}`}>{selectedId===target.featureId?'THIS WINE':'EXPLORING'}</p>
      <h3>{selected.name}</h3><span className={`village-map-tier map-tier-${selected.tier}`}>{tiers[selected.tier]}</span>
      <p className="village-map-description">{selected.kind==='vineyard'?'The highlighted area is the INAO production boundary for this cru.':'Appellation area shown; no single vineyard is identified.'}</p>
-     {catalogue.notes[selected.id]&&<p className="village-map-overlap">{catalogue.notes[selected.id].note}</p>}
+     {selectionNotes.map(note=><p className="village-map-overlap" key={note}>{note}</p>)}
     </div>
     {selectedId!==target.featureId&&<button type="button" className="village-map-return" onClick={backToWine}>Back to this wine</button>}
     <p className="village-map-hint">{hasVineyards?'Tap a vineyard on the map to explore it.':'The map shows the appellation area across its producing communes.'}</p>

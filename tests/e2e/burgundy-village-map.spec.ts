@@ -137,6 +137,11 @@ for(const village of [
  {id:'nuits-saint-georges',name:'Nuits-Saint-Georges',cru:'Clos de la Maréchale',tier:'premier_cru',feature:'inao-denom-989',count:43,catalogue:'nuitsVillageMapCatalogue',explore:'inao-denom-976',label:'Aux Boudots'},
  {id:'marsannay',name:'Marsannay',cru:'Les Longeroies',tier:'village',feature:'inao-denom-806-red-white',count:3,catalogue:'marsannayVillageMapCatalogue',explore:'inao-denom-806-rose',label:'Marsannay Rosé'},
  {id:'cote-de-nuits-villages',name:'Côte de Nuits-Villages',cru:'Le Vaucrain',tier:'village',feature:'inao-denom-557',count:1,catalogue:'coteNuitsVillageMapCatalogue',explore:'inao-denom-557',label:'Côte de Nuits-Villages'},
+ {id:'meursault',name:'Meursault',cru:'Perrières',tier:'premier_cru',feature:'inao-denom-858',count:23,catalogue:'meursaultVillageMapCatalogue',explore:'inao-denom-2373',label:'Blagny'},
+ {id:'puligny-montrachet',name:'Puligny-Montrachet',cru:'Clavoillon',tier:'premier_cru',feature:'inao-denom-1064',count:25,catalogue:'pulignyVillageMapCatalogue',explore:'inao-denom-927',label:'Montrachet'},
+ {id:'chassagne-montrachet',name:'Chassagne-Montrachet',cru:'Morgeot',tier:'premier_cru',feature:'inao-denom-527',count:60,catalogue:'chassagneVillageMapCatalogue',explore:'inao-denom-499',label:'La Chapelle'},
+ {id:'saint-aubin',name:'Saint-Aubin',cru:'En Remilly',tier:'premier_cru',feature:'inao-denom-1132',count:34,catalogue:'saintAubinVillageMapCatalogue',explore:'inao-denom-1144',label:'Les Cortons'},
+ {id:'blagny',name:'Blagny',cru:'La Pièce sous le Bois',tier:'premier_cru',feature:'inao-denom-356',count:9,catalogue:'blagnyVillageMapCatalogue',explore:'inao-denom-353',label:'Hameau de Blagny'},
 ]){
  for(const route of ['/wines/layout-wine','/shared/layout-wine']){
   test(`${village.name} ${route}: opens the correct boundary and keeps its full village context`,async({page},testInfo)=>{
@@ -195,6 +200,49 @@ test('Marsannay preserves colour scope, including unknown colour, wine style and
   await expect(dialog.locator('.village-map-selected-label')).toHaveCount(0);
   await page.keyboard.press('Escape');
  }
+});
+
+for(const village of [
+ {name:'Meursault',white:844,red:2062,app:204},
+ {name:'Puligny-Montrachet',white:2047,red:1061,app:219},
+ {name:'Saint-Aubin',white:1125,red:2083,app:227},
+]){
+ test(`${village.name} colour selects the official area and unknown colour keeps a combined overview`,async({page})=>{
+  for(const fields of [
+   {colour:'White',wineStyle:'white',id:`inao-denom-${village.white}`},
+   {colour:'Red',wineStyle:'red',id:`inao-denom-${village.red}`},
+   {colour:'',wineStyle:'white',id:`inao-denom-${village.white}`},
+   {colour:null,wineStyle:null,id:`inao-app-${village.app}-village`},
+  ]){
+   const {id,...wineFields}=fields;
+   await setup(page,{...wineFields,appellation:village.name,wineName:village.name,classification:'village'});await page.goto('/wines/layout-wine');
+   await page.getByRole('button',{name:'View village map'}).click();
+   const dialog=page.getByRole('dialog',{name:village.name,exact:true});
+   await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
+   await expect(dialog.getByRole('combobox')).toHaveValue(id);
+   await expect(dialog.locator('.village-map-selected-label')).toHaveCount(0);
+   await expect(dialog.getByText('Appellation area shown; no single vineyard is identified.')).toBeVisible();
+   await page.keyboard.press('Escape');
+  }
+ });
+}
+
+for(const grand of [{name:'Montrachet',id:927},{name:'Bâtard-Montrachet',id:273}]){
+ test(`${grand.name} opens its full shared boundary in Puligny`,async({page})=>{
+  await setup(page,{appellation:grand.name,wineName:grand.name,classification:'grand_cru',colour:'White',wineStyle:'white'});
+  await page.goto('/wines/layout-wine');await page.getByRole('button',{name:'View village map'}).click();
+  const dialog=page.getByRole('dialog',{name:'Puligny-Montrachet',exact:true});
+  await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
+  await expect(dialog.getByRole('combobox')).toHaveValue(`inao-denom-${grand.id}`);
+  await expect(dialog.locator('.village-map-overlap')).toContainText('Puligny-Montrachet and Chassagne-Montrachet');
+ });
+}
+
+test('a white Blagny record does not select the red appellation boundary',async({page})=>{
+ await setup(page,{appellation:'Blagny',wineName:'La Pièce sous le Bois',colour:'White',wineStyle:'white'});
+ await page.goto('/wines/layout-wine');
+ await expect(page.getByRole('heading',{name:'La Pièce sous le Bois',exact:true})).toBeVisible();
+ await expect(page.getByRole('button',{name:'View village map'})).toHaveCount(0);
 });
 
 test('new village broad wines keep a light appellation tint without a single-cru label',async({page})=>{
@@ -327,4 +375,20 @@ test('Côte de Nuits-Villages names its two separate parts and zooms to each',as
  await expect(labels.last()).toHaveCSS('visibility','hidden');
  await dialog.getByRole('button',{name:'Village view',exact:true}).click();
  await expect(labels.first()).toHaveCSS('visibility','visible');
+});
+
+test('an umbrella Premier Cru says what it covers; a cru that overlaps nothing has no note',async({page})=>{
+ await setup(page,{appellation:'Chassagne-Montrachet',wineName:'Morgeot',classification:'premier_cru',colour:'White',wineStyle:'white'});
+ await page.goto('/wines/layout-wine');await page.getByRole('button',{name:'View village map'}).click();
+ const dialog=page.getByRole('dialog',{name:'Chassagne-Montrachet',exact:true});
+ await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
+ await expect(dialog.locator('.village-map-overlap')).toContainText('Morgeot is a wider Premier Cru name covering 19 named vineyards');
+ await dialog.getByRole('combobox').selectOption({label:'La Romanée'});
+ await expect(dialog.locator('.village-map-overlap')).toHaveText('La Romanée lies within La Grande Montagne, a wider Premier Cru name.');
+ await page.keyboard.press('Escape');
+ await setup(page,{appellation:'Meursault',wineName:'Meursault Charmes',classification:'premier_cru',colour:'White',wineStyle:'white'});
+ await page.goto('/wines/layout-wine');await page.getByRole('button',{name:'View village map'}).click();
+ const meursault=page.getByRole('dialog',{name:'Meursault',exact:true});
+ await expect(meursault.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
+ await expect(meursault.locator('.village-map-overlap')).toHaveCount(0);
 });
