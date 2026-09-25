@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { describe,expect,it } from 'vitest';
-import { clickOrder,snapshotLabel,burgundyVillageMapTarget,type VillageMapCatalogue } from '../../src/lib/places/burgundyVillageMap';
+import { clickOrder,countLabel,joinPlaces,snapshotLabel,burgundyVillageMapTarget,type VillageMapCatalogue } from '../../src/lib/places/burgundyVillageMap';
 import catalogue from '../../src/lib/places/burgundyVillageMapCatalogue.json';
 import morey from '../../src/lib/places/moreyVillageMapCatalogue.json';
 import chambolle from '../../src/lib/places/chambolleVillageMapCatalogue.json';
@@ -322,5 +322,49 @@ describe('click order on overlapping designations',()=>{
    {id:'inao-denom-477',tier:'grand_cru',areaHa:30.94},
    {id:'inao-denom-809',tier:'grand_cru',areaHa:30.94},
   ])).toEqual(['inao-denom-477','inao-denom-809']);
+ });
+});
+
+describe('side panel wording',()=>{
+ it('counts one cru in the singular',()=>{
+  expect(countLabel(1,'Grand Cru','Grand Crus')).toBe('1 Grand Cru');
+  expect(countLabel(9,'Grand Cru','Grand Crus')).toBe('9 Grand Crus');
+  expect(countLabel(0,'Grand Cru','Grand Crus')).toBe('0 Grand Crus');
+ });
+ it('lists a pair with an ampersand and longer lists with commas',()=>{
+  expect(joinPlaces(['Vougeot'])).toBe('Vougeot');
+  expect(joinPlaces(['Gevrey-Chambertin','Brochon'])).toBe('Gevrey-Chambertin & Brochon');
+  expect(joinPlaces(['Fixin','Brochon','Premeaux-Prissey'])).toBe('Fixin, Brochon & Premeaux-Prissey');
+ });
+});
+
+describe('Marsannay colour evidence',()=>{
+ const marsannay={country:'France',region:'Burgundy',appellation:'Marsannay',wineName:'Marsannay',classification:'village'};
+ it('uses a red, white or rosé wine style when no colour is recorded',()=>{
+  expect(burgundyVillageMapTarget({...marsannay,colour:null,wineStyle:'rose'})?.featureId).toBe('inao-denom-806-rose');
+  expect(burgundyVillageMapTarget({...marsannay,colour:null,wineStyle:'white'})?.featureId).toBe('inao-denom-806-red-white');
+  expect(burgundyVillageMapTarget({...marsannay,colour:null,wineStyle:'sparkling'})?.featureId).toBe('inao-denom-806');
+  expect(burgundyVillageMapTarget({...marsannay,colour:null,wineStyle:null})?.featureId).toBe('inao-denom-806');
+ });
+ it('lets a recorded colour win over the wine style, and still withholds a contradiction',()=>{
+  expect(burgundyVillageMapTarget({...marsannay,colour:'Rosé',wineStyle:'red'})?.featureId).toBe('inao-denom-806-rose');
+  expect(burgundyVillageMapTarget({...marsannay,wineName:'Marsannay Rosé',colour:null,wineStyle:'red'})).toBeNull();
+ });
+});
+
+describe('separate parts of one appellation',()=>{
+ it('splits Côte de Nuits-Villages into a northern and a southern part within its bounds',()=>{
+  const areas=(coteNuits as VillageMapCatalogue).areas!;
+  expect(areas.map(area=>area.id)).toEqual(['north','south']);
+  const [west,south,east,north]=coteNuits.bounds;
+  for(const area of areas){
+   const [w,s,e,n]=area.bounds;
+   expect(w).toBeGreaterThanOrEqual(west);expect(s).toBeGreaterThanOrEqual(south);
+   expect(e).toBeLessThanOrEqual(east);expect(n).toBeLessThanOrEqual(north);
+  }
+  // The two parts are kilometres apart, with the north part wholly north.
+  expect(areas[0].bounds[1]).toBeGreaterThan(areas[1].bounds[3]);
+  // Together they span the whole appellation.
+  expect(Math.min(...areas.map(a=>a.bounds[0]))).toBe(west);expect(Math.max(...areas.map(a=>a.bounds[3]))).toBe(north);
  });
 });

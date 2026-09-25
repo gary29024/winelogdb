@@ -208,12 +208,14 @@ def main():
                 assert uncovered.area < 1, "Only suppress a fill actually covered by another designation"
         vineyard_bounds = unary_union([shape(f["geometry"]) for f in features]).bounds
         sources = [{"name": "INAO", "date": DATE, "url": INAO_URL, "sha256": source_hash, "license": "Licence Ouverte"}]
+        commune_shapes = {}
         for commune in village["communes"]:
             code = commune["id"]
             file = args.source_dir / f"commune-{code}.json.gz"
             data = json.loads(gzip.decompress(file.read_bytes()))
             assert len(data["features"]) == 1 and data["features"][0]["properties"]["id"] == code
             source = data["features"][0]
+            commune_shapes[code] = shape(source["geometry"])
             features.append({"type": "Feature", "id": f"commune-{code}",
                              "properties": {"id": f"commune-{code}", "name": source["properties"]["nom"], "kind": "commune", "tier": "commune"},
                              "geometry": geometry_json(shape(source["geometry"]))})
@@ -223,6 +225,23 @@ def main():
         url = f"/maps/{village['id']}.{DATE}.geojson"
         manifest = {"id": village["id"], "name": name, "region": village["region"], "communes": village["communes"],
                     "dataUrl": url, "bounds": rounded(vineyard_bounds), "sources": sources, "notes": village["notes"], "features": catalogue}
+        # Separate parts of one appellation (Côte de Nuits-Villages) each get a
+        # zoom target: every polygon of the village area is assigned, by its
+        # centroid, to exactly one configured group of communes.
+        if village.get("areas"):
+            whole = transform(to_wgs84, geometries[village["villageDenomination"]])
+            parts = list(whole.geoms) if whole.geom_type == "MultiPolygon" else [whole]
+            assigned = {area["id"]: [] for area in village["areas"]}
+            for part in parts:
+                owners = [area["id"] for area in village["areas"]
+                          if any(commune_shapes[code].contains(part.centroid) for code in area["communes"])]
+                assert len(owners) == 1, "Every part of the area must belong to exactly one configured group"
+                assigned[owners[0]].append(part)
+            manifest["areas"] = []
+            for area in village["areas"]:
+                assert assigned[area["id"]], f"Configured area {area['id']} has no production area"
+                manifest["areas"].append({"id": area["id"], "label": area["label"], "name": area["name"],
+                                          "bounds": rounded(unary_union(assigned[area["id"]]).bounds)})
         outputs.append((village, manifest, {"type": "FeatureCollection", "features": features}))
 
     index = []

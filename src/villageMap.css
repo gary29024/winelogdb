@@ -26,6 +26,9 @@
 /* Neighbouring cru names. Dark text with a white halo reads on the light map
    in both themes; the map, not the theme, is their ground. */
 .village-map-name{max-width:120px;color:#10182d;font:600 11px/1.2 'DM Sans',system-ui,sans-serif;text-align:center;text-shadow:0 0 2px #fff,0 0 3px #fff,0 0 4px #fff;pointer-events:none;white-space:normal}
+/* A separate part of one appellation, named on the overview. Themed like the
+   selected cru's label, which also sits on the light map. */
+.village-map-area-name{max-width:170px;padding:3px 8px;border:1px solid var(--line-strong);border-radius:var(--r-pill,999px);background:var(--paper);color:var(--ink);box-shadow:0 1px 5px #0002;font:700 11.5px/1.25 'DM Sans',system-ui,sans-serif;text-align:center;pointer-events:none}
 .village-map-name-grand_cru{font-weight:750;font-size:11.5px;letter-spacing:.01em}
 .village-map-legend{display:flex;flex-wrap:wrap;gap:8px 16px;padding:11px 14px;background:var(--paper);border-top:1px solid var(--line);color:var(--ink-5);font-size:.7rem}
 .village-map-legend span{display:inline-flex;align-items:center;gap:5px}

@@ -177,12 +177,14 @@ for(const village of [
  }
 }
 
-test('Marsannay preserves colour scope, including unknown colour and named rosé',async({page})=>{
+test('Marsannay preserves colour scope, including unknown colour, wine style and named rosé',async({page})=>{
  for(const fields of [
   {appellation:'Marsannay',colour:'White',id:'inao-denom-806-red-white'},
   {appellation:'Marsannay',colour:'Rosé',id:'inao-denom-806-rose'},
-  {appellation:'Marsannay',colour:null,id:'inao-denom-806'},
-  {appellation:'Marsannay Rosé',colour:null,id:'inao-denom-806-rose'},
+  {appellation:'Marsannay',colour:null,wineStyle:null,id:'inao-denom-806'},
+  {appellation:'Marsannay',colour:null,wineStyle:'rose',id:'inao-denom-806-rose'},
+  {appellation:'Marsannay',colour:null,wineStyle:'sparkling',id:'inao-denom-806'},
+  {appellation:'Marsannay Rosé',colour:null,wineStyle:null,id:'inao-denom-806-rose'},
  ]){
   const {id,...wineFields}=fields;
   await setup(page,{...wineFields,wineName:'Marsannay',classification:'village'});await page.goto('/wines/layout-wine');
@@ -307,4 +309,22 @@ test('a failed village catalogue offers a working reload without downloading bou
  await page.getByRole('button',{name:'View village map'}).click();
  await expect(page.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
  await expect(page.locator('.village-map-selected-label')).toHaveText('Les Ruchots');
+});
+
+test('Côte de Nuits-Villages names its two separate parts and zooms to each',async({page})=>{
+ await setup(page,{appellation:'Côte de Nuits-Villages',wineName:'Côte de Nuits-Villages',classification:'village'});
+ await page.goto('/wines/layout-wine');await page.getByRole('button',{name:'View village map'}).click();
+ const dialog=page.getByRole('dialog',{name:'Côte de Nuits-Villages',exact:true});
+ await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
+ const labels=dialog.locator('.village-map-area-name');
+ await expect(labels).toHaveText(['Fixin & Brochon','Premeaux-Prissey, Comblanchien & Corgoloin']);
+ await expect(labels.first()).toHaveCSS('visibility','visible');
+ await expect(dialog.locator('.village-map-context')).toContainText('Fixin, Brochon, Premeaux-Prissey, Comblanchien & Corgoloin');
+ // Each part is one click away; its name gives way to the vineyards there.
+ await dialog.getByRole('button',{name:'North: Fixin & Brochon'}).click();
+ await expect(labels.first()).toHaveCSS('visibility','hidden');
+ await dialog.getByRole('button',{name:'South: Premeaux-Prissey, Comblanchien & Corgoloin'}).click();
+ await expect(labels.last()).toHaveCSS('visibility','hidden');
+ await dialog.getByRole('button',{name:'Village view',exact:true}).click();
+ await expect(labels.first()).toHaveCSS('visibility','visible');
 });

@@ -34,9 +34,14 @@ function nameVariants(name:string){
 // Reviewed spellings, scoped to the village and the exact registry entry.
 // BIVB spells Les Petits Monts with a second t; the source registry says Petis.
 // Domaine du Comte Liger-Belair documents Reignots and Raignots as alternatives.
+// INAO and the registry write Les Saints-Georges; labels (Henri Gouges, Thibault
+// Liger-Belair) and BIVB write Les Saint-Georges. The village name is removed
+// before crus are sought, so the bare "Saint-Georges" of Nuits-Saint-Georges
+// never reaches this alias.
 // Sources: docs/burgundy-village-map.md. Do not use fuzzy matching for identities.
 const reviewedNameAliases:Record<string,Record<string,string[]>>={
-  'Vosne-Romanée':{'Les Petis Monts':['Les Petits Monts'],'Aux Raignots':['Aux Reignots']}
+  'Vosne-Romanée':{'Les Petis Monts':['Les Petits Monts'],'Aux Raignots':['Aux Reignots']},
+  'Nuits-Saint-Georges':{'Les Saints-Georges':['Les Saint-Georges']}
 };
 const groups=mapping.groups.map(group=>({...group,key:nameKey(group.appellation),entries:group.entries.map(entry=>
   ({...entry,variants:[entry.name,...(reviewedNameAliases[group.appellation]?.[entry.name]??[])].flatMap(nameVariants)

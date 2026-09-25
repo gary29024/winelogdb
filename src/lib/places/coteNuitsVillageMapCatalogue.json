@@ -110,5 +110,29 @@
         47.242849
       ]
     }
+  ],
+  "areas": [
+    {
+      "id": "north",
+      "label": "North",
+      "name": "Fixin & Brochon",
+      "bounds": [
+        4.962321,
+        47.235861,
+        4.983893,
+        47.254274
+      ]
+    },
+    {
+      "id": "south",
+      "label": "South",
+      "name": "Premeaux-Prissey, Comblanchien & Corgoloin",
+      "bounds": [
+        4.894343,
+        47.083552,
+        4.932957,
+        47.110324
+      ]
+    }
   ]
 }

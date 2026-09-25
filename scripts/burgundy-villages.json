@@ -244,6 +244,10 @@
       "name": "Côte de Nuits-Villages",
       "appellationId": 171,
       "villageDenomination": 557,
+      "areas": [
+        {"id": "north", "label": "North", "name": "Fixin & Brochon", "communes": ["21265", "21110"]},
+        {"id": "south", "label": "South", "name": "Premeaux-Prissey, Comblanchien & Corgoloin", "communes": ["21506", "21186", "21194"]}
+      ],
       "communes": [
         {
           "id": "21265",

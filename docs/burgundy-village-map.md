@@ -98,6 +98,10 @@ links; none of its map geometry or assets is copied.
   explicitly documents "Reignots" and "Raignots" as spelling alternatives.
   The wine matcher accepts "Aux Reignots" for Vosne's "Aux Raignots" entry,
   using the existing village and tier checks, without fuzzy matching.
+- Nuits-Saint-Georges' "Les Saints-Georges" (INAO and Atlas spelling) is
+  labelled "Les Saint-Georges" by producers such as Henri Gouges and by BIVB.
+  The matcher accepts that spelling as a reviewed alias. The village name is
+  removed before crus are sought, so "Nuits-Saint-Georges" alone never selects it.
 - [BIVB Fixin reference](https://www.bourgogne-wines.com/nos-vins-nos-terroirs/tous-les-bourgognes/gallery_files/site/321/402/29684/29717.pdf),
   [BIVB Vougeot reference](https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/gallery_files/site/321/402/79294/79832.pdf),
   [INAO Nuits-Saint-Georges](https://www.inao.gouv.fr/produit/nuits-saint-georges-blanc-22191),
@@ -142,6 +146,11 @@ by its designated same-tier fill. It validates all villages before writing outpu
 Reviewed cross-tier `contextExclusions` additionally check tier ordering, remaining
 polygon validity and area conservation. Only derived overview geometry is cut;
 the full production geometry is preserved alongside it in the same feature.
+An appellation in separate parts can configure `areas` (Côte de Nuits-Villages:
+north for Fixin and Brochon, south for Premeaux-Prissey, Comblanchien and
+Corgoloin). The generator assigns every polygon of the village area, by its
+centroid, to exactly one group of communes and records each group's bounds; the
+map names each part on its overview and adds a toolbar button that zooms to it.
 Shared designations are unioned across all source communes, never clipped to a
 village boundary. The original Gevrey GeoJSON remains byte-for-byte unchanged.
 
