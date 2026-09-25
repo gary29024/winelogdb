@@ -1,7 +1,7 @@
 import { useEffect,useId,useRef,useState } from 'react';
 import { Map as MapLibreMap,Marker,NavigationControl,ScaleControl,type FilterSpecification,type MapGeoJSONFeature,type StyleSpecification } from 'maplibre-gl';
 import type { Feature,FeatureCollection,Geometry } from 'geojson';
-import { snapshotLabel,type BurgundyVillageMapTarget,type VillageMapCatalogue,type VillageMapFeature } from '../../lib/places/burgundyVillageMap';
+import { clickOrder,snapshotLabel,type BurgundyVillageMapTarget,type VillageMapCatalogue,type VillageMapFeature } from '../../lib/places/burgundyVillageMap';
 import { loadVillageMapCatalogue } from '../../lib/places/loadVillageMapCatalogue';
 import { BurgundyAtlasLink } from '../../components/BurgundyAtlasLink';
 import 'maplibre-gl/dist/maplibre-gl.css';
@@ -166,11 +166,9 @@ function VillageMapView({target,catalogue}:{target:BurgundyVillageMapTarget;cata
     map.on('style.load',()=>{if(!disposed){select(selectedRef.current);setReady(true)}});
     map.on('click','vineyard-hit',event=>{
      const candidates=(event.features??[]).filter((f:MapGeoJSONFeature)=>f.properties.kind==='vineyard');
-     // Smallest first, so Clos de Bèze is reachable inside Chambertin. A second
-     // click on the same spot steps to the next designation there, which is the
-     // only way to reach Mazoyères: it shares Charmes' geometry exactly.
-     candidates.sort((a,b)=>Number(a.properties.areaHa)-Number(b.properties.areaHa)||String(a.properties.id).localeCompare(String(b.properties.id)));
-     const ids=[...new Set(candidates.map(f=>f.properties.id))];
+     // A second click on the same spot steps to the next designation there,
+     // which is the only way to reach Mazoyères: it shares Charmes' geometry.
+     const ids=clickOrder(candidates.map(f=>f.properties as {id:string;tier:string;areaHa:number}));
      const id=ids[(ids.indexOf(selectedRef.current)+1)%ids.length];
      if(typeof id==='string'&&catalogue.features.some(f=>f.id===id))setSelectedId(id);
     });

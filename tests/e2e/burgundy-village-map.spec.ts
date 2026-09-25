@@ -181,7 +181,7 @@ for(const route of ['/wines/layout-wine','/shared/layout-wine']){
    await expect(dialog.locator('.village-map-overlap')).toContainText('Flagey-Échezeaux');
   }
   await selector.selectOption('inao-denom-1271');
-  await expect(dialog.locator('.village-map-overlap')).toContainText('partly overlaps Échezeaux');
+  await expect(dialog.locator('.village-map-overlap')).toContainText('small corner of its official boundary overlaps Échezeaux');
   for(const width of [320,390,1280]){
    await page.setViewportSize({width,height:900});
    await dialog.getByRole('button',{name:'Village view',exact:true}).click();

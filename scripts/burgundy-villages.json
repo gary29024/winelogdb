@@ -68,9 +68,9 @@
       "displayNames": {"Echezeaux": "Échezeaux", "Grands-Echezeaux": "Grands-Échezeaux", "Les Petis Monts": "Les Petits Monts", "Aux Brulées": "Aux Brûlées"},
       "contextExclusions": {"1269": [565], "1271": [565], "1276": [565]},
       "notes": {
-        "inao-denom-565": {"note": "Échezeaux lies in Flagey-Échezeaux and is distinct from Grands-Échezeaux. Some neighbouring Premier Cru areas overlap it in this INAO snapshot. Overview colours give Grand Cru precedence; selecting a cru shows its full source boundary."},
+        "inao-denom-565": {"note": "Échezeaux lies in Flagey-Échezeaux and is a different Grand Cru from Grands-Échezeaux. Its official boundary overlaps a few neighbouring Premier Crus slightly; the map colours that shared ground as Grand Cru."},
         "inao-denom-645": {"note": "Grands-Échezeaux lies in Flagey-Échezeaux. It is a separate Grand Cru from Échezeaux."},
-        "inao-denom-1271": {"note": "Les Beaux Monts spans Vosne-Romanée and Flagey-Échezeaux. Its published INAO area partly overlaps Échezeaux. The selection shows the full Premier Cru source boundary across both communes; the overlap does not establish a bottle’s origin."}
+        "inao-denom-1271": {"note": "Les Beaux Monts spans Vosne-Romanée and Flagey-Échezeaux. A small corner of its official boundary overlaps Échezeaux, so this highlight includes ground the map otherwise colours as Grand Cru."}
       }
     }
   ]

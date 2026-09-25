@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { describe,expect,it } from 'vitest';
-import { snapshotLabel,burgundyVillageMapTarget,type VillageMapCatalogue } from '../../src/lib/places/burgundyVillageMap';
+import { clickOrder,snapshotLabel,burgundyVillageMapTarget,type VillageMapCatalogue } from '../../src/lib/places/burgundyVillageMap';
 import catalogue from '../../src/lib/places/burgundyVillageMapCatalogue.json';
 import morey from '../../src/lib/places/moreyVillageMapCatalogue.json';
 import chambolle from '../../src/lib/places/chambolleVillageMapCatalogue.json';
@@ -227,5 +227,27 @@ describe('display names',()=>{
   expect(feature.name).toBe('Les Feusselottes');
   expect(feature.sourceName).toBe('Chambolle-Musigny premier cru Les Feusselottes ou Les Feusselotes');
   expect(feature.atlasUrl).toContain('les-feusselottes-ou-les-feusselotes');
+ });
+});
+
+describe('click order on overlapping designations',()=>{
+ it('answers with what the spot is coloured as: a Grand Cru before an overlapping Premier Cru',()=>{
+  expect(clickOrder([
+   {id:'inao-denom-1271',tier:'premier_cru',areaHa:11.99},
+   {id:'inao-denom-565',tier:'grand_cru',areaHa:38.83},
+  ])).toEqual(['inao-denom-565','inao-denom-1271']);
+ });
+ it('keeps the smaller of two Grand Crus first, so Clos de Bèze is reachable inside Chambertin',()=>{
+  expect(clickOrder([
+   {id:'inao-denom-447',tier:'grand_cru',areaHa:28.23},
+   {id:'inao-denom-448',tier:'grand_cru',areaHa:15.35},
+  ])).toEqual(['inao-denom-448','inao-denom-447']);
+ });
+ it('orders identical areas by id and lists each designation once',()=>{
+  expect(clickOrder([
+   {id:'inao-denom-809',tier:'grand_cru',areaHa:30.94},
+   {id:'inao-denom-477',tier:'grand_cru',areaHa:30.94},
+   {id:'inao-denom-809',tier:'grand_cru',areaHa:30.94},
+  ])).toEqual(['inao-denom-477','inao-denom-809']);
  });
 });
