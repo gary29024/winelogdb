@@ -1,0 +1,1233 @@
+{
+  "id": "ladoix",
+  "name": "Ladoix",
+  "region": "Côte de Beaune",
+  "communes": [
+    {
+      "id": "21010",
+      "name": "Aloxe-Corton"
+    },
+    {
+      "id": "21480",
+      "name": "Pernand-Vergelesses"
+    },
+    {
+      "id": "21606",
+      "name": "Ladoix-Serrigny"
+    }
+  ],
+  "dataUrl": "/maps/ladoix.2026-09-21.geojson",
+  "bounds": [
+    4.849853,
+    47.064432,
+    4.897677,
+    47.087199
+  ],
+  "sources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21010/cadastre-21010-communes.json.gz",
+      "sha256": "d26470c5169170fa50b56e06e6d44c642ea677e65a265b1d68709d7217e63dd6"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21480/cadastre-21480-communes.json.gz",
+      "sha256": "1d93b314b9c8bf4dc34a586773614e47b5c4d65552d60bad0650589e032d8693"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21606/cadastre-21606-communes.json.gz",
+      "sha256": "11ae7d378d9bab8317071d5ea78b4d7b029ac0ef44e2fc80ee680e001fd5ed19"
+    }
+  ],
+  "notes": {
+    "inao-denom-549": {
+      "note": "Corton spans Aloxe-Corton, Ladoix-Serrigny and Pernand-Vergelesses. This is the whole Grand Cru: a Corton without a named vineyard on the label could come from anywhere in it. A few named vineyards, such as Faiveley's Clos des Cortons, have no separate boundary here."
+    },
+    "inao-denom-550": {
+      "note": "Corton-Charlemagne is a white-wine Grand Cru spanning all three villages. It overlaps Corton on the map and includes the smaller Charlemagne area, but it is a separate appellation."
+    },
+    "inao-denom-476": {
+      "note": "Charlemagne is a separate white-wine Grand Cru in Aloxe-Corton and Pernand-Vergelesses. It lies within the Corton-Charlemagne area but is not the same appellation."
+    },
+    "inao-app-192-village": {
+      "note": "This overview combines the red and white Ladoix village areas. Choose a colour to see its published boundary; no single vineyard is identified."
+    },
+    "inao-denom-657": {
+      "note": "The white-wine village area for Ladoix. Named village lieux-dits are not mapped individually."
+    },
+    "inao-denom-2059": {
+      "note": "The red-wine village area for Ladoix, also named Ladoix Côte de Beaune in the source. Named village lieux-dits are not mapped individually."
+    },
+    "inao-denom-2348": {
+      "note": "One of the named vineyards within the Corton Grand Cru, not a Grand Cru of its own. Its named boundary is for red wine; a white Corton shows the whole Corton area instead."
+    },
+    "inao-denom-2349": {
+      "note": "One of the named vineyards within the Corton Grand Cru, not a Grand Cru of its own. Its named boundary is for red wine; a white Corton shows the whole Corton area instead."
+    },
+    "inao-denom-2350": {
+      "note": "One of the named vineyards within the Corton Grand Cru, not a Grand Cru of its own. Its named boundary is for red wine; a white Corton shows the whole Corton area instead."
+    },
+    "inao-denom-2351": {
+      "note": "One of the named vineyards within the Corton Grand Cru, not a Grand Cru of its own. Its named boundary is for red wine; a white Corton shows the whole Corton area instead."
+    },
+    "inao-denom-2352": {
+      "note": "One of the named vineyards within the Corton Grand Cru, not a Grand Cru of its own. Its named boundary is for red wine; a white Corton shows the whole Corton area instead."
+    },
+    "inao-denom-2353": {
+      "note": "One of the named vineyards within the Corton Grand Cru, not a Grand Cru of its own. Its named boundary is for red wine; a white Corton shows the whole Corton area instead."
+    },
+    "inao-denom-2354": {
+      "note": "One of the named vineyards within the Corton Grand Cru, not a Grand Cru of its own. Its named boundary is for red wine; a white Corton shows the whole Corton area instead."
+    },
+    "inao-denom-2355": {
+      "note": "One of the named vineyards within the Corton Grand Cru, not a Grand Cru of its own. Its named boundary is for red wine; a white Corton shows the whole Corton area instead."
+    },
+    "inao-denom-2356": {
+      "note": "One of the named vineyards within the Corton Grand Cru, not a Grand Cru of its own. Its named boundary is for red wine; a white Corton shows the whole Corton area instead."
+    },
+    "inao-denom-2357": {
+      "note": "One of the named vineyards within the Corton Grand Cru, not a Grand Cru of its own. Its named boundary is for red wine; a white Corton shows the whole Corton area instead."
+    },
+    "inao-denom-2358": {
+      "note": "One of the named vineyards within the Corton Grand Cru, not a Grand Cru of its own. Its named boundary is for red wine; a white Corton shows the whole Corton area instead."
+    },
+    "inao-denom-2359": {
+      "note": "One of the named vineyards within the Corton Grand Cru, not a Grand Cru of its own. Its named boundary is for red wine; a white Corton shows the whole Corton area instead."
+    },
+    "inao-denom-2360": {
+      "note": "One of the named vineyards within the Corton Grand Cru, not a Grand Cru of its own. Its named boundary is for red wine; a white Corton shows the whole Corton area instead."
+    },
+    "inao-denom-2361": {
+      "note": "One of the named vineyards within the Corton Grand Cru, not a Grand Cru of its own. Its named boundary is for red wine; a white Corton shows the whole Corton area instead."
+    },
+    "inao-denom-2362": {
+      "note": "One of the named vineyards within the Corton Grand Cru, not a Grand Cru of its own. Its named boundary is for red wine; a white Corton shows the whole Corton area instead."
+    },
+    "inao-denom-2363": {
+      "note": "One of the named vineyards within the Corton Grand Cru, not a Grand Cru of its own. Its named boundary is for red wine; a white Corton shows the whole Corton area instead."
+    },
+    "inao-denom-2364": {
+      "note": "One of the named vineyards within the Corton Grand Cru, not a Grand Cru of its own. Its named boundary is for red wine; a white Corton shows the whole Corton area instead."
+    },
+    "inao-denom-2365": {
+      "note": "One of the named vineyards within the Corton Grand Cru, not a Grand Cru of its own. Its named boundary is for red wine; a white Corton shows the whole Corton area instead."
+    },
+    "inao-denom-2366": {
+      "note": "One of the named vineyards within the Corton Grand Cru, not a Grand Cru of its own. Its named boundary is for red wine; a white Corton shows the whole Corton area instead."
+    },
+    "inao-denom-2367": {
+      "note": "One of the named vineyards within the Corton Grand Cru, not a Grand Cru of its own. Its named boundary is for red wine; a white Corton shows the whole Corton area instead."
+    },
+    "inao-denom-2368": {
+      "note": "One of the named vineyards within the Corton Grand Cru, not a Grand Cru of its own. Its named boundary is for red wine; a white Corton shows the whole Corton area instead."
+    },
+    "inao-denom-2369": {
+      "note": "One of the named vineyards within the Corton Grand Cru, not a Grand Cru of its own. Its named boundary is for red wine; a white Corton shows the whole Corton area instead."
+    },
+    "inao-denom-2370": {
+      "note": "One of the named vineyards within the Corton Grand Cru, not a Grand Cru of its own. Its named boundary is for red wine; a white Corton shows the whole Corton area instead."
+    },
+    "inao-denom-2371": {
+      "note": "One of the named vineyards within the Corton Grand Cru, not a Grand Cru of its own. Its named boundary is for red wine; a white Corton shows the whole Corton area instead."
+    }
+  },
+  "features": [
+    {
+      "id": "inao-app-192-village",
+      "name": "Ladoix (all colours)",
+      "tier": "village",
+      "kind": "appellation",
+      "appellationId": 192,
+      "denominationId": null,
+      "denominationIds": [
+        657,
+        2059
+      ],
+      "sourceName": "Ladoix / Ladoix ou Ladoix Côte de Beaune",
+      "communes": [
+        "21606"
+      ],
+      "areaHa": 134.12,
+      "matchId": "ba_appellation_wvqcdx6z6a6iegimgueqdeppzu",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_wvqcdx6z6a6iegimgueqdeppzu/ladoix",
+      "bounds": [
+        4.868234,
+        47.071345,
+        4.897677,
+        47.087199
+      ],
+      "labelPoint": [
+        4.89086,
+        47.08209
+      ]
+    },
+    {
+      "id": "inao-denom-476",
+      "name": "Charlemagne",
+      "tier": "grand_cru",
+      "kind": "vineyard",
+      "appellationId": 152,
+      "denominationId": 476,
+      "sourceName": "Charlemagne",
+      "communes": [
+        "21010",
+        "21480"
+      ],
+      "areaHa": 63.11,
+      "matchId": "france/burgundy/cote-de-beaune/charlemagne",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_67mswu3u5eqcohbudshxp6cfjm/charlemagne",
+      "bounds": [
+        4.849853,
+        47.06814,
+        4.868779,
+        47.079983
+      ],
+      "labelPoint": [
+        4.852476,
+        47.072275
+      ]
+    },
+    {
+      "id": "inao-denom-549",
+      "name": "Corton",
+      "tier": "grand_cru",
+      "kind": "appellation",
+      "appellationId": 165,
+      "denominationId": 549,
+      "sourceName": "Corton",
+      "communes": [
+        "21010",
+        "21480",
+        "21606"
+      ],
+      "areaHa": 160.55,
+      "matchId": "france/burgundy/cote-de-beaune/corton",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_6r4q4giylpk2l7qq7qaex2mqqy/corton",
+      "bounds": [
+        4.849853,
+        47.064432,
+        4.876729,
+        47.081458
+      ],
+      "labelPoint": [
+        4.864312,
+        47.07351
+      ]
+    },
+    {
+      "id": "inao-denom-550",
+      "name": "Corton-Charlemagne",
+      "tier": "grand_cru",
+      "kind": "vineyard",
+      "appellationId": 166,
+      "denominationId": 550,
+      "sourceName": "Corton-Charlemagne",
+      "communes": [
+        "21010",
+        "21480",
+        "21606"
+      ],
+      "areaHa": 71.91,
+      "matchId": "france/burgundy/cote-de-beaune/corton-charlemagne",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_qpkmnbiut2vjvbj5pjmlljsrqi/corton-charlemagne",
+      "bounds": [
+        4.849853,
+        47.06814,
+        4.873151,
+        47.081458
+      ],
+      "labelPoint": [
+        4.852476,
+        47.072275
+      ]
+    },
+    {
+      "id": "inao-denom-657",
+      "name": "Ladoix (white)",
+      "tier": "village",
+      "kind": "appellation",
+      "appellationId": 192,
+      "denominationId": 657,
+      "sourceName": "Ladoix",
+      "communes": [
+        "21606"
+      ],
+      "areaHa": 134.12,
+      "matchId": "ba_appellation_wvqcdx6z6a6iegimgueqdeppzu",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_wvqcdx6z6a6iegimgueqdeppzu/ladoix",
+      "bounds": [
+        4.868234,
+        47.071345,
+        4.897677,
+        47.087199
+      ],
+      "labelPoint": [
+        4.878666,
+        47.083084
+      ]
+    },
+    {
+      "id": "inao-denom-658",
+      "name": "Basses Mourottes",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 192,
+      "denominationId": 658,
+      "sourceName": "Ladoix premier cru Basses Mourottes",
+      "communes": [
+        "21606"
+      ],
+      "areaHa": 1.17,
+      "matchId": "ba_designation_xxh333y3h4iio7xexrkolsskne",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_xxh333y3h4iio7xexrkolsskne/basses-mourottes",
+      "bounds": [
+        4.871919,
+        47.080547,
+        4.873706,
+        47.08211
+      ],
+      "labelPoint": [
+        4.872739,
+        47.081331
+      ]
+    },
+    {
+      "id": "inao-denom-659",
+      "name": "Bois Roussot",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 192,
+      "denominationId": 659,
+      "sourceName": "Ladoix premier cru Bois Roussot",
+      "communes": [
+        "21606"
+      ],
+      "areaHa": 3.35,
+      "matchId": "ba_designation_wsjylzpyzps5h5abuc7unxav74",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_wsjylzpyzps5h5abuc7unxav74/bois-roussot",
+      "bounds": [
+        4.87422,
+        47.078256,
+        4.877543,
+        47.080968
+      ],
+      "labelPoint": [
+        4.876253,
+        47.079614
+      ]
+    },
+    {
+      "id": "inao-denom-660",
+      "name": "Hautes Mourottes",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 192,
+      "denominationId": 660,
+      "sourceName": "Ladoix premier cru Hautes Mourottes",
+      "communes": [
+        "21606"
+      ],
+      "areaHa": 1.19,
+      "matchId": "ba_designation_pm75yphbijvneav5odt62d3dsm",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_pm75yphbijvneav5odt62d3dsm/hautes-mourottes",
+      "bounds": [
+        4.868899,
+        47.079949,
+        4.872158,
+        47.0818
+      ],
+      "labelPoint": [
+        4.869592,
+        47.080314
+      ]
+    },
+    {
+      "id": "inao-denom-661",
+      "name": "La Corvée",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 192,
+      "denominationId": 661,
+      "sourceName": "Ladoix premier cru La Corvée",
+      "communes": [
+        "21606"
+      ],
+      "areaHa": 7.23,
+      "matchId": "ba_designation_c5ewrbbnr6xg2hmlanez25f6iu",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_c5ewrbbnr6xg2hmlanez25f6iu/la-corvee",
+      "bounds": [
+        4.883709,
+        47.081316,
+        4.888864,
+        47.084684
+      ],
+      "labelPoint": [
+        4.886194,
+        47.083012
+      ]
+    },
+    {
+      "id": "inao-denom-662",
+      "name": "La Micaude",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 192,
+      "denominationId": 662,
+      "sourceName": "Ladoix premier cru La Micaude",
+      "communes": [
+        "21606"
+      ],
+      "areaHa": 1.63,
+      "matchId": "ba_designation_s2ce6iqyaqrmczsx6lqbjemkae",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_s2ce6iqyaqrmczsx6lqbjemkae/la-micaude",
+      "bounds": [
+        4.887301,
+        47.081494,
+        4.890094,
+        47.083311
+      ],
+      "labelPoint": [
+        4.888453,
+        47.082345
+      ]
+    },
+    {
+      "id": "inao-denom-663",
+      "name": "Le Clou d'Orge",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 192,
+      "denominationId": 663,
+      "sourceName": "Ladoix premier cru Le Clou d'Orge",
+      "communes": [
+        "21606"
+      ],
+      "areaHa": 1.35,
+      "matchId": "ba_designation_bwu4c3a3xo2m4hnuxi3oax3uru",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_bwu4c3a3xo2m4hnuxi3oax3uru/le-clou-d-orge",
+      "bounds": [
+        4.882495,
+        47.082472,
+        4.884113,
+        47.084175
+      ],
+      "labelPoint": [
+        4.883407,
+        47.083315
+      ]
+    },
+    {
+      "id": "inao-denom-664",
+      "name": "Les Joyeuses",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 192,
+      "denominationId": 664,
+      "sourceName": "Ladoix premier cru Les Joyeuses",
+      "communes": [
+        "21606"
+      ],
+      "areaHa": 0.76,
+      "matchId": "ba_designation_snjtzyjg442wmdn3ga6umdyj6e",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_snjtzyjg442wmdn3ga6umdyj6e/les-joyeuses",
+      "bounds": [
+        4.875611,
+        47.079645,
+        4.877164,
+        47.080684
+      ],
+      "labelPoint": [
+        4.876354,
+        47.080128
+      ]
+    },
+    {
+      "id": "inao-denom-665",
+      "name": "Ladoix Premier Cru",
+      "tier": "premier_cru",
+      "kind": "appellation",
+      "appellationId": 192,
+      "denominationId": 665,
+      "sourceName": "Ladoix premier cru",
+      "communes": [
+        "21606"
+      ],
+      "areaHa": 21.02,
+      "matchId": "ba_appellation_nt52jmfkctcdeu6q5i575utxsa",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_nt52jmfkctcdeu6q5i575utxsa/ladoix-premier-cru",
+      "bounds": [
+        4.868824,
+        47.078985,
+        4.890094,
+        47.086007
+      ],
+      "labelPoint": [
+        4.873713,
+        47.084289
+      ]
+    },
+    {
+      "id": "inao-denom-1987",
+      "name": "En Naget",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 192,
+      "denominationId": 1987,
+      "sourceName": "Ladoix premier cru En Naget",
+      "communes": [
+        "21606"
+      ],
+      "areaHa": 1.76,
+      "matchId": "ba_designation_w2s4rzcd22dgueyszqfolangsy",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_w2s4rzcd22dgueyszqfolangsy/en-naget",
+      "bounds": [
+        4.871363,
+        47.082576,
+        4.873853,
+        47.084158
+      ],
+      "labelPoint": [
+        4.872316,
+        47.083288
+      ]
+    },
+    {
+      "id": "inao-denom-1988",
+      "name": "Le Rognet et Corton",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 192,
+      "denominationId": 1988,
+      "sourceName": "Ladoix premier cru Le Rognet et Corton",
+      "communes": [
+        "21606"
+      ],
+      "areaHa": 0.8,
+      "matchId": "ba_designation_pbpetlupumjm45uun2y7dp6oy4",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_pbpetlupumjm45uun2y7dp6oy4/le-rognet-et-corton",
+      "bounds": [
+        4.868824,
+        47.078985,
+        4.870465,
+        47.080139
+      ],
+      "labelPoint": [
+        4.86974,
+        47.079592
+      ]
+    },
+    {
+      "id": "inao-denom-1989",
+      "name": "Les Buis",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 192,
+      "denominationId": 1989,
+      "sourceName": "Ladoix premier cru Les Buis",
+      "communes": [
+        "21606"
+      ],
+      "areaHa": 1.12,
+      "matchId": "ba_designation_ltnkppgnmqko5uh3s6kkzh7yyu",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_ltnkppgnmqko5uh3s6kkzh7yyu/les-buis",
+      "bounds": [
+        4.886016,
+        47.083213,
+        4.887757,
+        47.084528
+      ],
+      "labelPoint": [
+        4.886935,
+        47.083814
+      ]
+    },
+    {
+      "id": "inao-denom-1990",
+      "name": "Les Grêchons et Foutrières",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 192,
+      "denominationId": 1990,
+      "sourceName": "Ladoix premier cru Les Grêchons et Foutrières",
+      "communes": [
+        "21606"
+      ],
+      "areaHa": 5.87,
+      "matchId": "ba_designation_xpg5ckp746dgnvteqxfxabss5q",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_xpg5ckp746dgnvteqxfxabss5q/les-grechons-et-foutrieres",
+      "bounds": [
+        4.872039,
+        47.082674,
+        4.875819,
+        47.086007
+      ],
+      "labelPoint": [
+        4.873771,
+        47.084342
+      ]
+    },
+    {
+      "id": "inao-denom-2059",
+      "name": "Ladoix (red)",
+      "tier": "village",
+      "kind": "appellation",
+      "appellationId": 192,
+      "denominationId": 2059,
+      "sourceName": "Ladoix ou Ladoix Côte de Beaune",
+      "communes": [
+        "21606"
+      ],
+      "areaHa": 134.12,
+      "matchId": "ba_appellation_wvqcdx6z6a6iegimgueqdeppzu",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_wvqcdx6z6a6iegimgueqdeppzu/ladoix",
+      "bounds": [
+        4.868234,
+        47.071345,
+        4.897677,
+        47.087199
+      ],
+      "labelPoint": [
+        4.878666,
+        47.083084
+      ]
+    },
+    {
+      "id": "inao-denom-2348",
+      "name": "Corton Basses Mourottes",
+      "tier": "grand_cru",
+      "kind": "vineyard",
+      "appellationId": 165,
+      "denominationId": 2348,
+      "sourceName": "Corton Basses Mourottes",
+      "communes": [
+        "21606"
+      ],
+      "areaHa": 0.94,
+      "parentAppellation": "Corton",
+      "matchId": "inao-denom-2348",
+      "atlasUrl": null,
+      "bounds": [
+        4.871477,
+        47.079519,
+        4.873151,
+        47.081121
+      ],
+      "labelPoint": [
+        4.872285,
+        47.080092
+      ]
+    },
+    {
+      "id": "inao-denom-2349",
+      "name": "Corton Clos des Meix",
+      "tier": "grand_cru",
+      "kind": "vineyard",
+      "appellationId": 165,
+      "denominationId": 2349,
+      "sourceName": "Corton Clos des Meix",
+      "communes": [
+        "21010"
+      ],
+      "areaHa": 2.17,
+      "parentAppellation": "Corton",
+      "matchId": "inao-denom-2349",
+      "atlasUrl": null,
+      "bounds": [
+        4.857172,
+        47.064432,
+        4.859333,
+        47.067276
+      ],
+      "labelPoint": [
+        4.85836,
+        47.065851
+      ]
+    },
+    {
+      "id": "inao-denom-2350",
+      "name": "Corton Hautes Mourottes",
+      "tier": "grand_cru",
+      "kind": "vineyard",
+      "appellationId": 165,
+      "denominationId": 2350,
+      "sourceName": "Corton Hautes Mourottes",
+      "communes": [
+        "21606"
+      ],
+      "areaHa": 1.93,
+      "parentAppellation": "Corton",
+      "matchId": "inao-denom-2350",
+      "atlasUrl": null,
+      "bounds": [
+        4.870107,
+        47.079784,
+        4.872096,
+        47.081458
+      ],
+      "labelPoint": [
+        4.871186,
+        47.080617
+      ]
+    },
+    {
+      "id": "inao-denom-2351",
+      "name": "Corton La Toppe au Vert",
+      "tier": "grand_cru",
+      "kind": "vineyard",
+      "appellationId": 165,
+      "denominationId": 2351,
+      "sourceName": "Corton La Toppe au Vert",
+      "communes": [
+        "21606"
+      ],
+      "areaHa": 0.11,
+      "parentAppellation": "Corton",
+      "matchId": "inao-denom-2351",
+      "atlasUrl": null,
+      "bounds": [
+        4.874694,
+        47.074589,
+        4.875302,
+        47.075002
+      ],
+      "labelPoint": [
+        4.875035,
+        47.074816
+      ]
+    },
+    {
+      "id": "inao-denom-2352",
+      "name": "Corton La Vigne au Saint",
+      "tier": "grand_cru",
+      "kind": "vineyard",
+      "appellationId": 165,
+      "denominationId": 2352,
+      "sourceName": "Corton La Vigne au Saint",
+      "communes": [
+        "21010"
+      ],
+      "areaHa": 2.45,
+      "parentAppellation": "Corton",
+      "matchId": "inao-denom-2352",
+      "atlasUrl": null,
+      "bounds": [
+        4.854904,
+        47.065938,
+        4.857814,
+        47.067967
+      ],
+      "labelPoint": [
+        4.856042,
+        47.066943
+      ]
+    },
+    {
+      "id": "inao-denom-2353",
+      "name": "Corton Le Clos du Roi",
+      "tier": "grand_cru",
+      "kind": "vineyard",
+      "appellationId": 165,
+      "denominationId": 2353,
+      "sourceName": "Corton Le Clos du Roi",
+      "communes": [
+        "21010"
+      ],
+      "areaHa": 10.9,
+      "parentAppellation": "Corton",
+      "matchId": "inao-denom-2353",
+      "atlasUrl": null,
+      "bounds": [
+        4.860186,
+        47.070688,
+        4.867071,
+        47.074855
+      ],
+      "labelPoint": [
+        4.863499,
+        47.072932
+      ]
+    },
+    {
+      "id": "inao-denom-2354",
+      "name": "Corton Le Corton",
+      "tier": "grand_cru",
+      "kind": "vineyard",
+      "appellationId": 165,
+      "denominationId": 2354,
+      "sourceName": "Corton Le Corton",
+      "communes": [
+        "21010"
+      ],
+      "areaHa": 11.7,
+      "parentAppellation": "Corton",
+      "matchId": "inao-denom-2354",
+      "atlasUrl": null,
+      "bounds": [
+        4.860529,
+        47.07332,
+        4.868779,
+        47.079983
+      ],
+      "labelPoint": [
+        4.86523,
+        47.076731
+      ]
+    },
+    {
+      "id": "inao-denom-2355",
+      "name": "Corton Le Meix Lallemand",
+      "tier": "grand_cru",
+      "kind": "vineyard",
+      "appellationId": 165,
+      "denominationId": 2355,
+      "sourceName": "Corton Le Meix Lallemand",
+      "communes": [
+        "21010"
+      ],
+      "areaHa": 0.55,
+      "parentAppellation": "Corton",
+      "matchId": "inao-denom-2355",
+      "atlasUrl": null,
+      "bounds": [
+        4.85778,
+        47.066054,
+        4.859028,
+        47.067324
+      ],
+      "labelPoint": [
+        4.858434,
+        47.066682
+      ]
+    },
+    {
+      "id": "inao-denom-2356",
+      "name": "Corton Le Rognet et Corton",
+      "tier": "grand_cru",
+      "kind": "vineyard",
+      "appellationId": 165,
+      "denominationId": 2356,
+      "sourceName": "Corton Le Rognet et Corton",
+      "communes": [
+        "21606"
+      ],
+      "areaHa": 11.8,
+      "parentAppellation": "Corton",
+      "matchId": "inao-denom-2356",
+      "atlasUrl": null,
+      "bounds": [
+        4.869487,
+        47.075068,
+        4.875301,
+        47.079949
+      ],
+      "labelPoint": [
+        4.872015,
+        47.077603
+      ]
+    },
+    {
+      "id": "inao-denom-2357",
+      "name": "Corton Les Bressandes",
+      "tier": "grand_cru",
+      "kind": "vineyard",
+      "appellationId": 165,
+      "denominationId": 2357,
+      "sourceName": "Corton Les Bressandes",
+      "communes": [
+        "21010"
+      ],
+      "areaHa": 17.18,
+      "parentAppellation": "Corton",
+      "matchId": "inao-denom-2357",
+      "atlasUrl": null,
+      "bounds": [
+        4.863339,
+        47.069595,
+        4.872773,
+        47.075683
+      ],
+      "labelPoint": [
+        4.868318,
+        47.072623
+      ]
+    },
+    {
+      "id": "inao-denom-2358",
+      "name": "Corton Les Carrières",
+      "tier": "grand_cru",
+      "kind": "vineyard",
+      "appellationId": 165,
+      "denominationId": 2358,
+      "sourceName": "Corton Les Carrières",
+      "communes": [
+        "21606"
+      ],
+      "areaHa": 0.48,
+      "parentAppellation": "Corton",
+      "matchId": "inao-denom-2358",
+      "atlasUrl": null,
+      "bounds": [
+        4.872138,
+        47.078443,
+        4.874127,
+        47.079532
+      ],
+      "labelPoint": [
+        4.872601,
+        47.079173
+      ]
+    },
+    {
+      "id": "inao-denom-2359",
+      "name": "Corton Les Chaumes",
+      "tier": "grand_cru",
+      "kind": "vineyard",
+      "appellationId": 165,
+      "denominationId": 2359,
+      "sourceName": "Corton Les Chaumes",
+      "communes": [
+        "21010"
+      ],
+      "areaHa": 6.73,
+      "parentAppellation": "Corton",
+      "matchId": "inao-denom-2359",
+      "atlasUrl": null,
+      "bounds": [
+        4.851052,
+        47.067077,
+        4.858744,
+        47.070989
+      ],
+      "labelPoint": [
+        4.855219,
+        47.068611
+      ]
+    },
+    {
+      "id": "inao-denom-2360",
+      "name": "Corton Les Combes",
+      "tier": "grand_cru",
+      "kind": "vineyard",
+      "appellationId": 165,
+      "denominationId": 2360,
+      "sourceName": "Corton Les Combes",
+      "communes": [
+        "21010"
+      ],
+      "areaHa": 1.69,
+      "parentAppellation": "Corton",
+      "matchId": "inao-denom-2360",
+      "atlasUrl": null,
+      "bounds": [
+        4.855895,
+        47.064799,
+        4.858242,
+        47.06704
+      ],
+      "labelPoint": [
+        4.857026,
+        47.065767
+      ]
+    },
+    {
+      "id": "inao-denom-2361",
+      "name": "Corton Les Fiètres",
+      "tier": "grand_cru",
+      "kind": "vineyard",
+      "appellationId": 165,
+      "denominationId": 2361,
+      "sourceName": "Corton Les Fiètres",
+      "communes": [
+        "21010"
+      ],
+      "areaHa": 1.11,
+      "parentAppellation": "Corton",
+      "matchId": "inao-denom-2361",
+      "atlasUrl": null,
+      "bounds": [
+        4.85827,
+        47.066529,
+        4.859972,
+        47.067958
+      ],
+      "labelPoint": [
+        4.859051,
+        47.067225
+      ]
+    },
+    {
+      "id": "inao-denom-2362",
+      "name": "Corton Les Grandes Lolières",
+      "tier": "grand_cru",
+      "kind": "vineyard",
+      "appellationId": 165,
+      "denominationId": 2362,
+      "sourceName": "Corton Les Grandes Lolières",
+      "communes": [
+        "21606"
+      ],
+      "areaHa": 3.04,
+      "parentAppellation": "Corton",
+      "matchId": "inao-denom-2362",
+      "atlasUrl": null,
+      "bounds": [
+        4.873972,
+        47.07552,
+        4.876729,
+        47.077842
+      ],
+      "labelPoint": [
+        4.875391,
+        47.076699
+      ]
+    },
+    {
+      "id": "inao-denom-2363",
+      "name": "Corton Les Grèves",
+      "tier": "grand_cru",
+      "kind": "vineyard",
+      "appellationId": 165,
+      "denominationId": 2363,
+      "sourceName": "Corton Les Grèves",
+      "communes": [
+        "21010"
+      ],
+      "areaHa": 2.33,
+      "parentAppellation": "Corton",
+      "matchId": "inao-denom-2363",
+      "atlasUrl": null,
+      "bounds": [
+        4.86165,
+        47.068388,
+        4.8642,
+        47.070491
+      ],
+      "labelPoint": [
+        4.862948,
+        47.069437
+      ]
+    },
+    {
+      "id": "inao-denom-2364",
+      "name": "Corton Les Languettes",
+      "tier": "grand_cru",
+      "kind": "vineyard",
+      "appellationId": 165,
+      "denominationId": 2364,
+      "sourceName": "Corton Les Languettes",
+      "communes": [
+        "21010"
+      ],
+      "areaHa": 7.25,
+      "parentAppellation": "Corton",
+      "matchId": "inao-denom-2364",
+      "atlasUrl": null,
+      "bounds": [
+        4.856817,
+        47.07053,
+        4.861999,
+        47.073754
+      ],
+      "labelPoint": [
+        4.860117,
+        47.07163
+      ]
+    },
+    {
+      "id": "inao-denom-2365",
+      "name": "Corton Les Maréchaudes",
+      "tier": "grand_cru",
+      "kind": "vineyard",
+      "appellationId": 165,
+      "denominationId": 2365,
+      "sourceName": "Corton Les Maréchaudes",
+      "communes": [
+        "21010"
+      ],
+      "areaHa": 4.4,
+      "parentAppellation": "Corton",
+      "matchId": "inao-denom-2365",
+      "atlasUrl": null,
+      "bounds": [
+        4.869807,
+        47.071668,
+        4.874575,
+        47.07451
+      ],
+      "labelPoint": [
+        4.872438,
+        47.073109
+      ]
+    },
+    {
+      "id": "inao-denom-2366",
+      "name": "Corton Les Moutottes",
+      "tier": "grand_cru",
+      "kind": "vineyard",
+      "appellationId": 165,
+      "denominationId": 2366,
+      "sourceName": "Corton Les Moutottes",
+      "communes": [
+        "21606"
+      ],
+      "areaHa": 0.81,
+      "parentAppellation": "Corton",
+      "matchId": "inao-denom-2366",
+      "atlasUrl": null,
+      "bounds": [
+        4.874102,
+        47.077437,
+        4.875706,
+        47.078524
+      ],
+      "labelPoint": [
+        4.874919,
+        47.077951
+      ]
+    },
+    {
+      "id": "inao-denom-2367",
+      "name": "Corton Les Paulands",
+      "tier": "grand_cru",
+      "kind": "vineyard",
+      "appellationId": 165,
+      "denominationId": 2367,
+      "sourceName": "Corton Les Paulands",
+      "communes": [
+        "21010"
+      ],
+      "areaHa": 1.05,
+      "parentAppellation": "Corton",
+      "matchId": "inao-denom-2367",
+      "atlasUrl": null,
+      "bounds": [
+        4.868791,
+        47.071089,
+        4.870806,
+        47.072213
+      ],
+      "labelPoint": [
+        4.869756,
+        47.07166
+      ]
+    },
+    {
+      "id": "inao-denom-2368",
+      "name": "Corton Les Perrières",
+      "tier": "grand_cru",
+      "kind": "vineyard",
+      "appellationId": 165,
+      "denominationId": 2368,
+      "sourceName": "Corton Les Perrières",
+      "communes": [
+        "21010"
+      ],
+      "areaHa": 10.0,
+      "parentAppellation": "Corton",
+      "matchId": "inao-denom-2368",
+      "atlasUrl": null,
+      "bounds": [
+        4.858775,
+        47.067057,
+        4.863372,
+        47.0718
+      ],
+      "labelPoint": [
+        4.860717,
+        47.069542
+      ]
+    },
+    {
+      "id": "inao-denom-2369",
+      "name": "Corton Les Pougets",
+      "tier": "grand_cru",
+      "kind": "vineyard",
+      "appellationId": 165,
+      "denominationId": 2369,
+      "sourceName": "Corton Les Pougets",
+      "communes": [
+        "21010"
+      ],
+      "areaHa": 9.82,
+      "parentAppellation": "Corton",
+      "matchId": "inao-denom-2369",
+      "atlasUrl": null,
+      "bounds": [
+        4.854368,
+        47.06814,
+        4.859447,
+        47.072742
+      ],
+      "labelPoint": [
+        4.857183,
+        47.070033
+      ]
+    },
+    {
+      "id": "inao-denom-2370",
+      "name": "Corton Les Renardes",
+      "tier": "grand_cru",
+      "kind": "vineyard",
+      "appellationId": 165,
+      "denominationId": 2370,
+      "sourceName": "Corton Les Renardes",
+      "communes": [
+        "21010"
+      ],
+      "areaHa": 14.32,
+      "parentAppellation": "Corton",
+      "matchId": "inao-denom-2370",
+      "atlasUrl": null,
+      "bounds": [
+        4.86488,
+        47.073207,
+        4.871122,
+        47.079731
+      ],
+      "labelPoint": [
+        4.868674,
+        47.076441
+      ]
+    },
+    {
+      "id": "inao-denom-2371",
+      "name": "Corton Les Vergennes",
+      "tier": "grand_cru",
+      "kind": "vineyard",
+      "appellationId": 165,
+      "denominationId": 2371,
+      "sourceName": "Corton Les Vergennes",
+      "communes": [
+        "21606"
+      ],
+      "areaHa": 3.45,
+      "parentAppellation": "Corton",
+      "matchId": "inao-denom-2371",
+      "atlasUrl": null,
+      "bounds": [
+        4.871051,
+        47.073993,
+        4.875153,
+        47.076306
+      ],
+      "labelPoint": [
+        4.871953,
+        47.075523
+      ]
+    }
+  ]
+}

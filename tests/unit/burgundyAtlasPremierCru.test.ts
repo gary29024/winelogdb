@@ -114,6 +114,45 @@ describe('Premier Cru wine-detail destinations',()=>{
     expect(burgundyAtlasPremierCru({...wine,wineName:'Les Ruchottes'})).toBeNull();
   });
 
+  it('reads a label naming a wider Premier Cru with a cru inside it as the inner cru',()=>{
+    const meursault={...wine,region:'Côte de Beaune',appellation:'Meursault',colour:'White'};
+    const chassagne={...wine,region:'Côte de Beaune',appellation:'Chassagne-Montrachet'};
+    const name=(fields:Record<string,unknown>)=>burgundyAtlasPremierCru(fields as typeof wine)?.name;
+    // Meursault-Blagny is the label form for Meursault Premier Crus in Blagny.
+    expect(name({...meursault,wineName:"Meursault-Blagny Sous le Dos d'Ane Premier Cru"})).toBe("Meursault — Sous le Dos d'Ane");
+    expect(name({...meursault,wineName:'Meursault-Blagny La Pièce sous le Bois'})).toBe('Meursault — La Pièce sous le Bois');
+    expect(name({...meursault,wineName:'Meursault-Blagny 1er Cru'})).toBe('Meursault — Blagny');
+    expect(name({...chassagne,wineName:'Chassagne-Montrachet 1er Cru Morgeot Clos Pitois'})).toBe('Chassagne-Montrachet — Clos Pitois');
+    // Nested wider names give way to the innermost cru.
+    expect(name({...chassagne,wineName:'Morgeot La Boudriotte Les Chaumes'})).toBe('Chassagne-Montrachet — Les Chaumes');
+    expect(name({...chassagne,wineName:'Morgeot'})).toBe('Chassagne-Montrachet — Morgeot');
+    // Two crus that do not contain each other stay ambiguous.
+    expect(burgundyAtlasPremierCru({...chassagne,wineName:'Les Chaumes Les Vergers'})).toBeNull();
+  });
+
+  it('treats Aux and Au as articles, while an exact name still wins where both exist',()=>{
+    const nuits={...wine,region:'Côte de Nuits',appellation:'Nuits-Saint-Georges'};
+    const name=(fields:Record<string,unknown>)=>burgundyAtlasPremierCru(fields as typeof wine)?.name;
+    for(const wineName of ['Nuits-Saint-Georges Les Boudots Premier Cru','Boudots','Aux Boudots']){
+      expect(name({...nuits,wineName}),wineName).toBe('Nuits-Saint-Georges — Aux Boudots');
+    }
+    expect(name({...nuits,wineName:'Les Chaignots'})).toBe('Nuits-Saint-Georges — Aux Chaignots');
+    // Chambolle has both Aux Combottes and Les Combottes: each keeps its own
+    // identity, and the bare name stays ambiguous.
+    const chambolle={...wine,appellation:'Chambolle-Musigny'};
+    expect(name({...chambolle,wineName:'Les Combottes'})).toBe('Chambolle-Musigny — Les Combottes');
+    expect(name({...chambolle,wineName:'Aux Combottes'})).toBe('Chambolle-Musigny — Aux Combottes');
+    expect(burgundyAtlasPremierCru({...chambolle,wineName:'Combottes'})).toBeNull();
+  });
+
+  it('accepts Château de la Maltroye\'s spelling of La Maltroie',()=>{
+    const chassagne={...wine,region:'Côte de Beaune',appellation:'Chassagne-Montrachet'};
+    const maltroie=burgundyAtlasPremierCru({...chassagne,wineName:'La Maltroie'})!;
+    for(const wineName of ['La Maltroye','Chassagne-Montrachet 1er Cru Clos du Chateau de la Maltroye Monopole']){
+      expect(burgundyAtlasPremierCru({...chassagne,wineName})?.placeId,wineName).toBe(maltroie.placeId);
+    }
+  });
+
   it('accepts the producer spelling Clavoillon only with Puligny and Premier Cru evidence',()=>{
     const base={...wine,region:'Côte de Beaune',appellation:'Puligny-Montrachet'};
     const source=burgundyAtlasPremierCru({...base,wineName:'Clavaillon'})!;

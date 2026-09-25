@@ -50,7 +50,7 @@ function mapStyle(data:FeatureCollection,catalogue:VillageMapCatalogue,base?:Sty
     'fill-color':['match',['get','tier'],'grand_cru',cru.grand_cru,cru.premier_cru],
     'fill-opacity':['match',['get','tier'],'grand_cru',0.62,0.4]}},
    // Invisible, but every cru - painted or not - answers a click and the cursor.
-   {id:'vineyard-hit',type:'fill',source:'wine-boundaries',filter:['==',['get','kind'],'vineyard'],paint:{'fill-color':'#000000','fill-opacity':0}},
+   {id:'vineyard-hit',type:'fill',source:'wine-boundaries',filter:['any',['==',['get','kind'],'vineyard'],['==',['get','tier'],'grand_cru']],paint:{'fill-color':'#000000','fill-opacity':0}},
    {id:'vineyard-outline',type:'line',source:'wine-boundaries',filter:['==',['get','kind'],'vineyard'],paint:{
     'line-color':['match',['get','tier'],'grand_cru',cru.grand_cru,cru.premier_cru],'line-width':0.8}},
    // A cru is one plot and takes the full highlight. An appellation is
@@ -95,6 +95,8 @@ function VillageMapView({target,catalogue}:{target:BurgundyVillageMapTarget;cata
  // A reviewed note, then what the cru's umbrella relationships mean for a label.
  const selectionNotes=[catalogue.notes[selected.id]?.note,umbrellaNote(catalogue,selected.id)].filter(Boolean);
  const vineyardCount=(tier:string)=>catalogue.features.filter(f=>f.kind==='vineyard'&&f.tier===tier).length;
+ const grandCount=new Set(catalogue.features.filter(f=>f.tier==='grand_cru').map(f=>f.appellationId)).size;
+ const grandClimats=catalogue.features.filter(f=>f.parentAppellation);
  const hasVineyards=catalogue.features.some(f=>f.kind==='vineyard');
  const selectId=useId(),statusId=useId();
  useEffect(()=>{selectedRef.current=selectedId;selectionAction.current?.(selectedId)},[selectedId]);
@@ -194,7 +196,7 @@ function VillageMapView({target,catalogue}:{target:BurgundyVillageMapTarget;cata
     selectionAction.current=select;
     map.on('style.load',()=>{if(!disposed){select(selectedRef.current);setReady(true)}});
     map.on('click','vineyard-hit',event=>{
-     const candidates=(event.features??[]).filter((f:MapGeoJSONFeature)=>f.properties.kind==='vineyard');
+     const candidates=(event.features??[]).filter((f:MapGeoJSONFeature)=>f.properties.kind==='vineyard'||f.properties.tier==='grand_cru');
      // A second click on the same spot steps to the next designation there,
      // which is the only way to reach Mazoyères: it shares Charmes' geometry.
      const ids=clickOrder(candidates.map(f=>f.properties as {id:string;tier:string;areaHa:number}));
@@ -250,8 +252,8 @@ function VillageMapView({target,catalogue}:{target:BurgundyVillageMapTarget;cata
     </div>
     {selectedId!==target.featureId&&<button type="button" className="village-map-return" onClick={backToWine}>Back to this wine</button>}
     <p className="village-map-hint">{hasVineyards?'Tap a vineyard on the map to explore it.':'The map shows the appellation area across its producing communes.'}</p>
-    <p className="village-map-context">{hasVineyards?<>{countLabel(vineyardCount('grand_cru'),'Grand Cru','Grand Crus')} · {countLabel(vineyardCount('premier_cru'),'Premier Cru climat','Premier Cru climats')}</>:'Village appellation area'}<br/>{joinPlaces(catalogue.communes.map(commune=>commune.name))}</p>
-    <BurgundyAtlasLink place={{placeId:selected.matchId,name:selected.name,url:selected.atlasUrl,...(selected.kind==='appellation'?{scope:'appellation' as const}:{})}}/>
+    <p className="village-map-context">{hasVineyards?<>{countLabel(grandCount,'Grand Cru','Grand Crus')}{grandClimats.length>0&&<> · {countLabel(grandClimats.length,'Grand Cru climat','Grand Cru climats')}</>} · {countLabel(vineyardCount('premier_cru'),'Premier Cru climat','Premier Cru climats')}</>:'Village appellation area'}<br/>{joinPlaces(catalogue.communes.map(commune=>commune.name))}</p>
+    <BurgundyAtlasLink place={selected.atlasUrl?{placeId:selected.matchId,name:selected.name,url:selected.atlasUrl,...(selected.kind==='appellation'?{scope:'appellation' as const}:{})}:null}/>
     {baseWarning&&!error&&<p className="village-map-note" role="status">Some street-map details are unavailable. Vineyard boundaries remain available.</p>}
    </aside>
   </div>

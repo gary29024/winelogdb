@@ -1,5 +1,6 @@
 {
-  "sharedDefaults": {"361": "chambolle-musigny", "273": "puligny-montrachet", "927": "puligny-montrachet"},
+  "sharedDefaults": {"361": "chambolle-musigny", "273": "puligny-montrachet", "927": "puligny-montrachet", "476": "aloxe-corton", "549": "aloxe-corton", "550": "aloxe-corton", "2348": "aloxe-corton", "2349": "aloxe-corton", "2350": "aloxe-corton", "2351": "aloxe-corton", "2352": "aloxe-corton", "2353": "aloxe-corton", "2354": "aloxe-corton", "2355": "aloxe-corton", "2356": "aloxe-corton", "2357": "aloxe-corton", "2358": "aloxe-corton", "2359": "aloxe-corton", "2360": "aloxe-corton", "2361": "aloxe-corton", "2362": "aloxe-corton", "2363": "aloxe-corton", "2364": "aloxe-corton", "2365": "aloxe-corton", "2366": "aloxe-corton", "2367": "aloxe-corton", "2368": "aloxe-corton", "2369": "aloxe-corton", "2370": "aloxe-corton", "2371": "aloxe-corton"},
+  "grandCruClimats": [{"name": "Corton", "appellationId": 165, "broadDenomination": 549, "denominationRange": [2348, 2371], "aliases": {"Le Rognet et Corton": ["Le Rognet", "Rognet"]}, "note": "One of the named vineyards within the Corton Grand Cru, not a Grand Cru of its own. Its named boundary is for red wine; a white Corton shows the whole Corton area instead."}],
   "villages": [
     {
       "id": "gevrey-chambertin",
@@ -543,6 +544,263 @@
       "wineColours": [
         "red"
       ]
+    },
+    {
+      "region": "Côte de Beaune",
+      "expectedBounds": [
+        4.8,
+        47.0,
+        4.95,
+        47.15
+      ],
+      "grands": [
+        476,
+        549,
+        550,
+        2348,
+        2349,
+        2350,
+        2351,
+        2352,
+        2353,
+        2354,
+        2355,
+        2356,
+        2357,
+        2358,
+        2359,
+        2360,
+        2361,
+        2362,
+        2363,
+        2364,
+        2365,
+        2366,
+        2367,
+        2368,
+        2369,
+        2370,
+        2371
+      ],
+      "communes": [
+        {
+          "id": "21010",
+          "name": "Aloxe-Corton"
+        },
+        {
+          "id": "21480",
+          "name": "Pernand-Vergelesses"
+        },
+        {
+          "id": "21606",
+          "name": "Ladoix-Serrigny"
+        }
+      ],
+      "nameCrosswalk": {
+        "Les Chaillots blanc": "Les Chaillots"
+      },
+      "notes": {
+        "inao-denom-549": {
+          "note": "Corton spans Aloxe-Corton, Ladoix-Serrigny and Pernand-Vergelesses. This is the whole Grand Cru: a Corton without a named vineyard on the label could come from anywhere in it. A few named vineyards, such as Faiveley's Clos des Cortons, have no separate boundary here."
+        },
+        "inao-denom-550": {
+          "note": "Corton-Charlemagne is a white-wine Grand Cru spanning all three villages. It overlaps Corton on the map and includes the smaller Charlemagne area, but it is a separate appellation."
+        },
+        "inao-denom-476": {
+          "note": "Charlemagne is a separate white-wine Grand Cru in Aloxe-Corton and Pernand-Vergelesses. It lies within the Corton-Charlemagne area but is not the same appellation."
+        },
+        "inao-denom-248": {
+          "note": "Official records call this Les Chaillots blanc, but it produces both red and white wine, so the map calls it Les Chaillots."
+        }
+      },
+      "unionOverviewFills": true,
+      "id": "aloxe-corton",
+      "name": "Aloxe-Corton",
+      "appellationId": 126,
+      "villageDenomination": 242,
+      "premierDenomination": 257,
+      "premierRange": [
+        243,
+        256
+      ],
+      "catalogueFile": "aloxeVillageMapCatalogue.json",
+      "displayNames": {
+        "Les Chaillots blanc": "Les Chaillots"
+      }
+    },
+    {
+      "region": "Côte de Beaune",
+      "expectedBounds": [
+        4.8,
+        47.0,
+        4.95,
+        47.15
+      ],
+      "grands": [
+        476,
+        549,
+        550,
+        2348,
+        2349,
+        2350,
+        2351,
+        2352,
+        2353,
+        2354,
+        2355,
+        2356,
+        2357,
+        2358,
+        2359,
+        2360,
+        2361,
+        2362,
+        2363,
+        2364,
+        2365,
+        2366,
+        2367,
+        2368,
+        2369,
+        2370,
+        2371
+      ],
+      "communes": [
+        {
+          "id": "21010",
+          "name": "Aloxe-Corton"
+        },
+        {
+          "id": "21480",
+          "name": "Pernand-Vergelesses"
+        },
+        {
+          "id": "21606",
+          "name": "Ladoix-Serrigny"
+        }
+      ],
+      "nameCrosswalk": {},
+      "notes": {
+        "inao-denom-549": {
+          "note": "Corton spans Aloxe-Corton, Ladoix-Serrigny and Pernand-Vergelesses. This is the whole Grand Cru: a Corton without a named vineyard on the label could come from anywhere in it. A few named vineyards, such as Faiveley's Clos des Cortons, have no separate boundary here."
+        },
+        "inao-denom-550": {
+          "note": "Corton-Charlemagne is a white-wine Grand Cru spanning all three villages. It overlaps Corton on the map and includes the smaller Charlemagne area, but it is a separate appellation."
+        },
+        "inao-denom-476": {
+          "note": "Charlemagne is a separate white-wine Grand Cru in Aloxe-Corton and Pernand-Vergelesses. It lies within the Corton-Charlemagne area but is not the same appellation."
+        }
+      },
+      "unionOverviewFills": true,
+      "id": "pernand-vergelesses",
+      "name": "Pernand-Vergelesses",
+      "appellationId": 213,
+      "villageDenomination": 1017,
+      "premierDenomination": 1023,
+      "premierRange": [
+        1018,
+        1022
+      ],
+      "premierDenominations": [
+        1984,
+        1985,
+        1986
+      ],
+      "catalogueFile": "pernandVillageMapCatalogue.json"
+    },
+    {
+      "region": "Côte de Beaune",
+      "expectedBounds": [
+        4.8,
+        47.0,
+        4.95,
+        47.15
+      ],
+      "grands": [
+        476,
+        549,
+        550,
+        2348,
+        2349,
+        2350,
+        2351,
+        2352,
+        2353,
+        2354,
+        2355,
+        2356,
+        2357,
+        2358,
+        2359,
+        2360,
+        2361,
+        2362,
+        2363,
+        2364,
+        2365,
+        2366,
+        2367,
+        2368,
+        2369,
+        2370,
+        2371
+      ],
+      "communes": [
+        {
+          "id": "21010",
+          "name": "Aloxe-Corton"
+        },
+        {
+          "id": "21480",
+          "name": "Pernand-Vergelesses"
+        },
+        {
+          "id": "21606",
+          "name": "Ladoix-Serrigny"
+        }
+      ],
+      "nameCrosswalk": {},
+      "notes": {
+        "inao-denom-549": {
+          "note": "Corton spans Aloxe-Corton, Ladoix-Serrigny and Pernand-Vergelesses. This is the whole Grand Cru: a Corton without a named vineyard on the label could come from anywhere in it. A few named vineyards, such as Faiveley's Clos des Cortons, have no separate boundary here."
+        },
+        "inao-denom-550": {
+          "note": "Corton-Charlemagne is a white-wine Grand Cru spanning all three villages. It overlaps Corton on the map and includes the smaller Charlemagne area, but it is a separate appellation."
+        },
+        "inao-denom-476": {
+          "note": "Charlemagne is a separate white-wine Grand Cru in Aloxe-Corton and Pernand-Vergelesses. It lies within the Corton-Charlemagne area but is not the same appellation."
+        },
+        "inao-app-192-village": {
+          "note": "This overview combines the red and white Ladoix village areas. Choose a colour to see its published boundary; no single vineyard is identified."
+        },
+        "inao-denom-657": {
+          "note": "The white-wine village area for Ladoix. Named village lieux-dits are not mapped individually."
+        },
+        "inao-denom-2059": {
+          "note": "The red-wine village area for Ladoix, also named Ladoix Côte de Beaune in the source. Named village lieux-dits are not mapped individually."
+        }
+      },
+      "unionOverviewFills": true,
+      "id": "ladoix",
+      "name": "Ladoix",
+      "appellationId": 192,
+      "villageDenomination": 657,
+      "premierDenomination": 665,
+      "premierRange": [
+        658,
+        664
+      ],
+      "premierDenominations": [
+        1987,
+        1988,
+        1989,
+        1990
+      ],
+      "colourDenominations": {
+        "657": "white",
+        "2059": "red"
+      },
+      "catalogueFile": "ladoixVillageMapCatalogue.json"
     }
   ]
 }

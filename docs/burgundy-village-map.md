@@ -1,9 +1,9 @@
 # Burgundy village maps
 
 Wine details and shared wine details offer **View village map** for mapped
-Côte de Nuits and Côte de Beaune wines across fourteen village appellations,
+Côte de Nuits and Côte de Beaune wines across seventeen village appellations,
 including the Grand Crus of Flagey-Échezeaux, Clos de Vougeot and the Montrachet
-group. The dialog shows neighbouring cru boundaries, highlights
+group, plus Corton, Corton-Charlemagne and Charlemagne. The dialog shows neighbouring cru boundaries, highlights
 the wine's matched INAO designation, and supports selection, pan/zoom, a village
 overview and returning to the wine. The renderer, the selected village's catalogue
 and its geometry load on demand; other village catalogues and boundaries stay unloaded.
@@ -27,11 +27,18 @@ The existing Burgundy Atlas link remains available.
 | Chassagne-Montrachet / Remigny | 3 | 55 | 2 | 60 |
 | Saint-Aubin | 0 | 30 | 4 colour/tier views | 34 |
 | Blagny / Meursault / Puligny-Montrachet | 0 | 7 | 2 | 9 |
+| Aloxe-Corton / Corton hill | 3 appellations + 24 Corton climats | 14 | 2 village/tier areas | 43 |
+| Pernand-Vergelesses / Corton hill | 3 appellations + 24 Corton climats | 8 | 2 village/tier areas | 37 |
+| Ladoix / Corton hill | 3 appellations + 24 Corton climats | 11 | 4 colour/tier views | 42 |
 
-There are 318 distinct wine identities (292 named crus and 26 broad areas),
-plus eight colour-specific views sharing four village appellation identities.
+There are 384 distinct wine identities (351 vineyard targets and 33 broad areas),
+plus ten colour-specific views sharing five village appellation identities.
 Bonnes-Mares, Montrachet and Bâtard-Montrachet each appear in two maps and count
-once in the identity registry. There are 329 wine features across the fourteen maps.
+once in the identity registry. The Corton group's 27 boundaries appear in three
+maps and likewise count once. There are 451 wine features across the seventeen maps.
+Corton itself is a broad Grand Cru appellation target; its 24 named climats are
+separate vineyard targets, not 24 additional Grand Cru appellations. Overall,
+the maps cover 296 named Premier Crus and 32 Grand Cru appellations.
 The [full Burgundy coverage checklist](burgundy-map-coverage.md) tracks all 44
 village appellations and the remaining Grand Cru and regional work.
 
@@ -72,6 +79,23 @@ village appellations and the remaining Grand Cru and regional work.
   (`2373`) is also distinct from the Blagny village appellation (`352`). Explicit
   white/rosé Blagny records do not receive a map target; the app does not guess
   whether they mean Meursault or Puligny.
+- The three Corton maps retain all shared Grand Cru boundaries in full, with
+  Aloxe-Corton as the default navigation context. Corton (`549`) and
+  Corton-Charlemagne (`550`) span all three communes; Charlemagne (`476`)
+  spans Aloxe and Pernand. Charlemagne is a smaller, separate identity inside
+  Corton-Charlemagne, allowing for tiny source-edge discrepancies. Named Corton
+  denominations (`2348`–`2371`) keep their original IDs and geometry.
+- A named Corton wine can select a local INAO climat without an Atlas page.
+  An unnamed, blended, unsupported or explicitly white Corton keeps appellation
+  scope. The current snapshot does not distinguish Corton's red/white broad
+  areas, and lacks separate geometry for some published names, including Clos
+  des Cortons Faiveley and the additional Pernand Corton climats. No Premier Cru
+  geometry is reused to fill those gaps. Wine records still need a Corton
+  appellation anchor; names in other villages do not imply Corton.
+- Aloxe's full appellation includes source land in Pernand and Ladoix. Les
+  Chaillots is displayed without the source suffix "blanc": the denomination's
+  CVI codes include both red and white. Ladoix preserves both official village
+  colour IDs, even though the pinned geometries are equal.
 - Boundaries are INAO production areas, not producer ownership or proof that
   a particular bottle comes from one cadastral parcel.
 - INAO areas overlap intentionally. Chambertin includes Clos de Bèze;
@@ -102,7 +126,8 @@ village appellations and the remaining Grand Cru and regional work.
 Each generated catalogue records source URLs, snapshot dates, SHA-256 hashes,
 INAO appellation and denomination IDs, commune IDs, label points, and extents.
 Atlas contributes only the existing reviewed identity crosswalk and outbound
-links; none of its map geometry or assets is copied.
+links where available; local Corton climat identities use INAO directly. None of
+Atlas's map geometry or assets is copied.
 
 - [INAO open boundary dataset](https://www.data.gouv.fr/datasets/delimitation-parcellaire-des-aoc-viticoles-de-linao):
   21 September 2026, Licence Ouverte. The published data is informational;
@@ -150,12 +175,22 @@ links; none of its map geometry or assets is copied.
   INAO/Atlas "Clavaillon". Source names, denomination IDs and Atlas URLs stay intact;
   the alias still requires Puligny and Premier Cru evidence.
 
-Download the 21 distinct source URLs recorded in the fourteen catalogues into a
+- [BIVB Aloxe-Corton](https://www.bourgogne-wines.com/our-wines-our-terroir/the-bourgogne-winegrowing-region-and-its-appellations/gallery_files/site/321/402/57644/57646.pdf),
+  [BIVB Pernand-Vergelesses](https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/pernand-vergelesses%2C2458%2C9253.html?args=Y29tcF9pZD0yMjc4JmFjdGlvbj12aWV3RmljaGUmaWQ9MzY0Jnw%3D), and
+  [BIVB Ladoix](https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/ladoix%2C2458%2C9253.html?args=Y29tcF9pZD0yMjc4JmFjdGlvbj12aWV3RmljaGUmaWQ9MzI1Jnw%3D):
+  14/8/11 Premier Crus. [INAO Les Chaillots rouge](https://www.inao.gouv.fr/node/2121/printable/print)
+  corroborates the red designation despite the boundary source's "blanc" suffix.
+- [BIVB Corton](https://www.bourgogne-wines.com/our-wines-our-terroir/bourgogne-and-its-appellations/gallery_files/site/321/402/57644/57676.pdf) and
+  [BIVB Corton-Charlemagne / Charlemagne](https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/corton-charlemagne%2C2458%2C9253.html?args=Y29tcF9pZD0yMjc4JmFjdGlvbj12aWV3RmljaGUmaWQ9MjcyJnw%3D):
+  the separate appellations, producing communes, overlap, named Corton climats
+  and the restriction of named Corton designations to red wines.
+
+Download the 24 distinct source URLs recorded in the seventeen catalogues into a
 local temporary directory. Name the INAO archive `inao-2026-09-21.zip` and each
 commune file `commune-{code}.json.gz`. Required commune codes are:
 `21110`, `21133`, `21166`, `21186`, `21194`, `21200`, `21265`, `21267`, `21295`,
 `21390`, `21442`, `21464`, `21506`, `21714`, `21716`, `21412`, `21512`, `21150`,
-`71369`, and `21541`. Then:
+`71369`, `21541`, `21010`, `21480`, and `21606`. Then:
 
 ```sh
 python -m pip install -r scripts/burgundy-map-requirements.txt
@@ -182,6 +217,18 @@ geometry is retained; their derived combined overview has an `inao-app-*-village
 ID, `denominationId: null` and the list of contributing `denominationIds`, so it
 cannot masquerade as a new official denomination. `wineColours` can restrict a
 village's map target where colour conflicts with the appellation (Blagny).
+`grandCruClimats` declares the parent appellation, broad denomination and reviewed
+named denomination range. Import fails if source coverage changes. Named features
+receive local `inao-denom-*` match IDs, `parentAppellation`, and `atlasUrl: null`;
+the dialog omits unavailable outbound links. Broad Corton remains selectable as
+an appellation, including by clicking ground with no separately mapped climat.
+Its `aliases` map a source climat name to reviewed label spellings: INAO's "Le
+Rognet et Corton" is labelled "Corton Rognet" or "Corton Clos Rognet", and its
+"et" would otherwise read as a blend. Another place named in the appellation or
+a reference field withholds the map, as does a name built on Corton itself
+(Corton-Charlemagne, Aloxe-Corton) anywhere; any other place in the wine title
+is usually the producer (Domaine de la Romanée-Conti, Château de Meursault) and
+keeps the map at Corton appellation scope.
 Review regenerated files before publishing an update. Source archives and Python
 dependencies are not shipped with the app.
 
@@ -193,7 +240,13 @@ the full production geometry is preserved alongside it in the same feature.
 `unionOverviewFills` derives one fill per named tier, excluding higher tiers
 only from the lower tier's overview fill. These live in the GeoJSON foreign
 member `overviewFills`, outside the selectable source `features`. Validity and
-area conservation are checked before writing. The generator also records
+area conservation are checked before writing. The Corton overview includes the
+broad Grand Cru area, so gaps in named-climat coverage do not disappear. A nearly
+coincident projected union edge can collapse when converted to geographic
+coordinates. For that display union only, the generator unions the individually
+valid geographic source polygons instead and checks its area back in the source
+CRS within 0.01 m² (observed difference about 0.0031 m² across 160.55 ha).
+Original selectable geometries are unchanged. The generator also records
 `umbrellas`: each Premier Cru lying at least 90% inside a larger one, keyed by
 the wider name (Chassagne's Morgeot covers nineteen named climats; La Grande
 Montagne covers La Romanée). Measured shares are either >= 97% or <= 72%, so the
@@ -204,6 +257,12 @@ with Cailleret and La Maltroie; Nuits' Les Argillières and Clos des Argillière
 are not umbrellas and carry no generated note. Reviewed label spellings also map
 Chassagne's "Les Ruchottes" to Les Grandes Ruchottes and "Les Caillerets" to
 Cailleret; En Cailleret keeps its own identity.
+The registry repeats the umbrellas by match ID, so the wine matcher can read
+a label naming a wider Premier Cru with a cru inside it as the inner cru:
+"Meursault-Blagny Sous le Dos d'Ane" (the label form for Meursault Premier Crus in
+Blagny) is Sous le Dos d'Ane, and "Morgeot Clos Pitois" is Clos Pitois. Two crus
+that do not contain each other stay ambiguous. Château de la Maltroye's spelling
+"La Maltroye" (its Clos du Château de la Maltroye) maps to La Maltroie.
 An appellation in separate parts can configure `areas` (Côte de Nuits-Villages:
 north for Fixin and Brochon, south for Premeaux-Prissey, Comblanchien and
 Corgoloin). The generator assigns every polygon of the village area, by its
@@ -212,11 +271,12 @@ map names each part on its overview and adds a toolbar button that zooms to it.
 Shared designations are unioned across all source communes, never clipped to a
 village boundary. The original Gevrey GeoJSON remains byte-for-byte unchanged.
 
-The fourteen GeoJSON files under `public/maps/` are approximately 673 KB (Gevrey),
+The seventeen GeoJSON files under `public/maps/` are approximately 673 KB (Gevrey),
 290 KB (Morey), 329 KB (Chambolle), 396 KB (Vosne/Flagey), 175 KB (Fixin),
 75 KB (Vougeot), 450 KB (Nuits), 872 KB (Marsannay, including all colour views),
 280 KB (Côte de Nuits-Villages), 992 KB (Meursault), 649 KB (Puligny),
-742 KB (Chassagne), 764 KB (Saint-Aubin) and 142 KB (Blagny), uncompressed.
+742 KB (Chassagne), 764 KB (Saint-Aubin), 142 KB (Blagny), 650 KB (Aloxe),
+527 KB (Pernand) and 611 KB (Ladoix), uncompressed.
 There are no database migrations, research/AI calls, API keys or background Atlas
 requests. Only opening the dialog requests geography and the external base map.
 The browser's public tile requests contain map locations, not wine records.
@@ -235,7 +295,7 @@ Inspect source geometry and mobile layouts before publishing.
 ## Validation
 
 ```sh
-npx vitest run tests/unit/burgundyVillageMap.test.ts tests/unit/burgundyAtlas.test.ts tests/unit/burgundyAtlasPremierCru.test.ts tests/unit/burgundyAtlasAppellation.test.ts
+npx vitest run tests/unit/burgundyVillageMap.test.ts tests/unit/burgundyCortonMap.test.ts tests/unit/burgundyAtlas.test.ts tests/unit/burgundyAtlasPremierCru.test.ts tests/unit/burgundyAtlasAppellation.test.ts
 npx playwright test tests/e2e/burgundy-village-map.spec.ts tests/e2e/burgundy-atlas.spec.ts --project=chromium
 npm run build
 npm run lint
@@ -244,7 +304,7 @@ npm run lint
 Browser coverage uses the real MapLibre renderer with the street map unavailable,
 checking local geometry, selection, owner/shared parity, small-screen layouts,
 load-on-demand, retry, Escape and focus restoration. The source import and unit
-checks cover all 292 distinct named crus, coverage in Brochon, Flagey, Premeaux and Remigny, intentional overlap,
+checks cover all 351 vineyard targets, coverage in Brochon, Flagey, Premeaux and Remigny, intentional overlap,
 identical Bonnes-Mares geometry in both contexts, and village-specific matches for
 repeated names such as Les Gruenchers and La Romanée. They distinguish Échezeaux
 from Grands-Échezeaux and verify reviewed Vosne spelling aliases and broad-area
@@ -255,6 +315,11 @@ Clavoillon's reviewed spelling and the seven Blagny counterparts. An independent
 comparison with the pinned shapefile verified all 151 new wine geometries and
 seven derived overview fills, including matching source areas and commune IDs.
 All nine previously published map datasets remain byte-for-byte unchanged.
+The Corton batch independently verifies all 122 added wine features and six
+overview fills against the pinned source, including matching areas and commune
+IDs. All fourteen earlier maps and catalogues remain unchanged. Tests cover all
+24 local climat identities, broad/white/mixed Corton fallback, repeated names
+across tiers, shared Grand Cru geometry and the absence of invented Atlas URLs.
 Browser tests also exercise delayed successful
 base-style loading and verify that opening a village never requests another map's
 catalogue or geometry.
