@@ -41,7 +41,9 @@ function nameVariants(name:string){
 // Sources: docs/burgundy-village-map.md. Do not use fuzzy matching for identities.
 const reviewedNameAliases:Record<string,Record<string,string[]>>={
   'Vosne-Romanée':{'Les Petis Monts':['Les Petits Monts'],'Aux Raignots':['Aux Reignots']},
-  'Nuits-Saint-Georges':{'Les Saints-Georges':['Les Saint-Georges']}
+  'Nuits-Saint-Georges':{'Les Saints-Georges':['Les Saint-Georges']},
+  // Domaine Leflaive's label spelling; the INAO/Atlas source writes Clavaillon.
+  'Puligny-Montrachet':{'Clavaillon':['Clavoillon']}
 };
 const groups=mapping.groups.map(group=>({...group,key:nameKey(group.appellation),entries:group.entries.map(entry=>
   ({...entry,variants:[entry.name,...(reviewedNameAliases[group.appellation]?.[entry.name]??[])].flatMap(nameVariants)

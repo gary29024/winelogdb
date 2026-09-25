@@ -3,13 +3,14 @@ import { burgundyAtlasWineDetailPlace } from './burgundyAtlasPremierCru';
 import registry from './burgundyVillageMapRegistry.json';
 
 export type VillageMapFeature={
- id:string;name:string;tier:string;kind:string;appellationId:number;denominationId:number;
+ id:string;name:string;tier:string;kind:string;appellationId:number;denominationId:number|null;denominationIds?:number[];
  sourceName:string;communes:string[];areaHa:number;matchId:string;atlasUrl:string;bounds:number[];labelPoint:number[];
 };
 export type VillageMapCatalogue={
  id:string;name:string;region:string;communes:{id:string;name:string}[];dataUrl:string;bounds:number[];
  sources:{name:string;date:string;url:string;sha256:string;license:string}[];
  notes:Record<string,{note:string;paintedBy?:string}>;features:VillageMapFeature[];
+ overlapNote?:string;
  // Separate parts of one appellation, each with its own zoom button and map label.
  areas?:{id:string;label:string;name:string;bounds:number[]}[];
 };
@@ -27,14 +28,15 @@ export function burgundyVillageMapTarget(wine:WineFacts&{classification?:string|
  const target=place?byMatchId.get(place.placeId):undefined;
  const village=target?byVillageId.get(target.villageId):undefined;
  if(!target||!village)return null;
- // The INAO denomination alone does not distinguish Marsannay's colour areas.
- // Choose only with explicit colour evidence; keep an overview when unknown.
+ // Some village appellations have separate colour areas. Choose only with
+ // explicit colour evidence; keep a labelled overview when unknown.
  const colours=('colourTargets' in target?target.colourTargets:undefined) as Record<string,{featureId:string;name:string}>|undefined;
  const normalise=(value:string)=>value.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
  // A recorded colour wins; a red/white/rosé wine style stands in when the
  // colour is blank. Sparkling and other styles say nothing about the area.
  const style=normalise(wine.wineStyle??'');
  const colour=normalise(wine.colour??'')||(['red','white','rose'].includes(style)?style:'');
+ if(colour&&'wineColours' in village&&!(village.wineColours as string[]).includes(colour))return null;
  const namedRose=[wine.appellation,wine.wineName].some(value=>/\bmarsannay\s+rose\b/.test(normalise(value??'')));
  if(colours&&namedRose&&colour&&colour!=='rose')return null;
  const selected=colours?.[colour||(namedRose?'rose':'')]??target;

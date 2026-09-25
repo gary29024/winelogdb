@@ -1,0 +1,902 @@
+{
+  "id": "saint-aubin",
+  "name": "Saint-Aubin",
+  "region": "Côte de Beaune",
+  "communes": [
+    {
+      "id": "21541",
+      "name": "Saint-Aubin"
+    }
+  ],
+  "dataUrl": "/maps/saint-aubin.2026-09-21.geojson",
+  "bounds": [
+    4.687904,
+    46.943341,
+    4.73616,
+    46.961551
+  ],
+  "sources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21541/cadastre-21541-communes.json.gz",
+      "sha256": "f7948c4757dbbee0264aeec3f782fbd1a4ab0d27701bfbe6e5c593f31362b3b9"
+    }
+  ],
+  "notes": {
+    "inao-app-227-village": {
+      "note": "This overview combines the red and white Saint-Aubin production areas. Choose a colour to see its own boundary; no single vineyard is identified."
+    },
+    "inao-denom-1125": {
+      "note": "This is the published white-wine village area for Saint-Aubin. Named village lieux-dits are not mapped individually."
+    },
+    "inao-denom-2083": {
+      "note": "This is the published red-wine village area for Saint-Aubin, also named Saint-Aubin Côte de Beaune in the source. Named village lieux-dits are not mapped individually."
+    }
+  },
+  "features": [
+    {
+      "id": "inao-app-227-village",
+      "name": "Saint-Aubin (all colours)",
+      "tier": "village",
+      "kind": "appellation",
+      "appellationId": 227,
+      "denominationId": null,
+      "denominationIds": [
+        1125,
+        2083
+      ],
+      "sourceName": "Saint-Aubin / Saint-Aubin ou Saint-Aubin Côte de Beaune",
+      "communes": [
+        "21541"
+      ],
+      "areaHa": 238.56,
+      "matchId": "ba_appellation_s43cs5wo6z2pxgqedp4wb4mh3y",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_s43cs5wo6z2pxgqedp4wb4mh3y/saint-aubin",
+      "bounds": [
+        4.687904,
+        46.943341,
+        4.73616,
+        46.961551
+      ],
+      "labelPoint": [
+        4.730515,
+        46.949118
+      ]
+    },
+    {
+      "id": "inao-denom-1125",
+      "name": "Saint-Aubin (white)",
+      "tier": "village",
+      "kind": "appellation",
+      "appellationId": 227,
+      "denominationId": 1125,
+      "sourceName": "Saint-Aubin",
+      "communes": [
+        "21541"
+      ],
+      "areaHa": 238.56,
+      "matchId": "ba_appellation_s43cs5wo6z2pxgqedp4wb4mh3y",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_s43cs5wo6z2pxgqedp4wb4mh3y/saint-aubin",
+      "bounds": [
+        4.687904,
+        46.943341,
+        4.73616,
+        46.961551
+      ],
+      "labelPoint": [
+        4.703211,
+        46.950633
+      ]
+    },
+    {
+      "id": "inao-denom-1126",
+      "name": "Bas de Vermarain à l'Est",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 227,
+      "denominationId": 1126,
+      "sourceName": "Saint-Aubin premier cru Bas de Vermarain à l'Est",
+      "communes": [
+        "21541"
+      ],
+      "areaHa": 3.42,
+      "matchId": "ba_designation_qhhgsho37cb7tphrbnuytb7inm",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_qhhgsho37cb7tphrbnuytb7inm/bas-de-vermarain-a-l-est",
+      "bounds": [
+        4.712582,
+        46.957744,
+        4.717364,
+        46.959907
+      ],
+      "labelPoint": [
+        4.715188,
+        46.958834
+      ]
+    },
+    {
+      "id": "inao-denom-1127",
+      "name": "Derrière Chez Edouard",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 227,
+      "denominationId": 1127,
+      "sourceName": "Saint-Aubin premier cru Derrière Chez Edouard",
+      "communes": [
+        "21541"
+      ],
+      "areaHa": 3.95,
+      "matchId": "ba_designation_hasm6e7tcelrm62bgrj7hjynbe",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_hasm6e7tcelrm62bgrj7hjynbe/derriere-chez-edouard",
+      "bounds": [
+        4.705099,
+        46.949954,
+        4.708991,
+        46.952302
+      ],
+      "labelPoint": [
+        4.706846,
+        46.951126
+      ]
+    },
+    {
+      "id": "inao-denom-1128",
+      "name": "Derrière la Tour",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 227,
+      "denominationId": 1128,
+      "sourceName": "Saint-Aubin premier cru Derrière la Tour",
+      "communes": [
+        "21541"
+      ],
+      "areaHa": 1.97,
+      "matchId": "ba_designation_pp56p5smlwz5b5xkdgbjsnrxjq",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_pp56p5smlwz5b5xkdgbjsnrxjq/derriere-la-tour",
+      "bounds": [
+        4.719122,
+        46.956893,
+        4.721553,
+        46.95848
+      ],
+      "labelPoint": [
+        4.720424,
+        46.95769
+      ]
+    },
+    {
+      "id": "inao-denom-1129",
+      "name": "Echaille",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 227,
+      "denominationId": 1129,
+      "sourceName": "Saint-Aubin premier cru Echaille",
+      "communes": [
+        "21541"
+      ],
+      "areaHa": 1.3,
+      "matchId": "ba_designation_vd6a6hi46x77uyhrk2gngta37y",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_vd6a6hi46x77uyhrk2gngta37y/echaille",
+      "bounds": [
+        4.708121,
+        46.951512,
+        4.710165,
+        46.953001
+      ],
+      "labelPoint": [
+        4.709154,
+        46.952276
+      ]
+    },
+    {
+      "id": "inao-denom-1130",
+      "name": "En Créot",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 227,
+      "denominationId": 1130,
+      "sourceName": "Saint-Aubin premier cru En Créot",
+      "communes": [
+        "21541"
+      ],
+      "areaHa": 2.9,
+      "matchId": "ba_designation_2rd5wunmfefj7omyz7yevlwrve",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_2rd5wunmfefj7omyz7yevlwrve/en-creot",
+      "bounds": [
+        4.71629,
+        46.956974,
+        4.719521,
+        46.958807
+      ],
+      "labelPoint": [
+        4.718014,
+        46.957996
+      ]
+    },
+    {
+      "id": "inao-denom-1131",
+      "name": "En Montceau",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 227,
+      "denominationId": 1131,
+      "sourceName": "Saint-Aubin premier cru En Montceau",
+      "communes": [
+        "21541"
+      ],
+      "areaHa": 3.42,
+      "matchId": "ba_designation_5v5bdfng34jgmpeknijxbvg22m",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_5v5bdfng34jgmpeknijxbvg22m/en-montceau",
+      "bounds": [
+        4.72248,
+        46.95456,
+        4.725694,
+        46.957105
+      ],
+      "labelPoint": [
+        4.72372,
+        46.955827
+      ]
+    },
+    {
+      "id": "inao-denom-1132",
+      "name": "En Remilly",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 227,
+      "denominationId": 1132,
+      "sourceName": "Saint-Aubin premier cru En Remilly",
+      "communes": [
+        "21541"
+      ],
+      "areaHa": 29.53,
+      "matchId": "ba_designation_kn6i4suntteth6xfuybajf4qyi",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_kn6i4suntteth6xfuybajf4qyi/en-remilly",
+      "bounds": [
+        4.725327,
+        46.944185,
+        4.735092,
+        46.951914
+      ],
+      "labelPoint": [
+        4.73137,
+        46.947995
+      ]
+    },
+    {
+      "id": "inao-denom-1133",
+      "name": "En Vollon à l'Est",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 227,
+      "denominationId": 1133,
+      "sourceName": "Saint-Aubin premier cru En Vollon à l'Est",
+      "communes": [
+        "21541"
+      ],
+      "areaHa": 0.41,
+      "matchId": "ba_designation_k24rrt2cyaln66lzsazfy2csku",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_k24rrt2cyaln66lzsazfy2csku/en-vollon-a-l-est",
+      "bounds": [
+        4.721166,
+        46.943456,
+        4.72254,
+        46.94415
+      ],
+      "labelPoint": [
+        4.721942,
+        46.943776
+      ]
+    },
+    {
+      "id": "inao-denom-1134",
+      "name": "En la Ranché",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 227,
+      "denominationId": 1134,
+      "sourceName": "Saint-Aubin premier cru En la Ranché",
+      "communes": [
+        "21541"
+      ],
+      "areaHa": 4.0,
+      "matchId": "ba_designation_grk3mfsrfkjk7hcol5ubmcbxmu",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_grk3mfsrfkjk7hcol5ubmcbxmu/en-la-ranche",
+      "bounds": [
+        4.71185,
+        46.953765,
+        4.715697,
+        46.95643
+      ],
+      "labelPoint": [
+        4.713468,
+        46.955105
+      ]
+    },
+    {
+      "id": "inao-denom-1135",
+      "name": "Es Champs",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 227,
+      "denominationId": 1135,
+      "sourceName": "Saint-Aubin premier cru Es Champs",
+      "communes": [
+        "21541"
+      ],
+      "areaHa": 4.37,
+      "matchId": "ba_designation_4r743fjg2lbp6e6ewwkstwo2iu",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_4r743fjg2lbp6e6ewwkstwo2iu/es-champs",
+      "bounds": [
+        4.714828,
+        46.95362,
+        4.718806,
+        46.95683
+      ],
+      "labelPoint": [
+        4.71731,
+        46.955226
+      ]
+    },
+    {
+      "id": "inao-denom-1136",
+      "name": "La Chatenière",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 227,
+      "denominationId": 1136,
+      "sourceName": "Saint-Aubin premier cru La Chatenière",
+      "communes": [
+        "21541"
+      ],
+      "areaHa": 8.32,
+      "matchId": "ba_designation_hay7hzkmmyvf53jb25wjtftzgy",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_hay7hzkmmyvf53jb25wjtftzgy/la-chateniere",
+      "bounds": [
+        4.721741,
+        46.950553,
+        4.730043,
+        46.955041
+      ],
+      "labelPoint": [
+        4.726236,
+        46.952956
+      ]
+    },
+    {
+      "id": "inao-denom-1137",
+      "name": "Le Bas de Gamay à l'Est",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 227,
+      "denominationId": 1137,
+      "sourceName": "Saint-Aubin premier cru Le Bas de Gamay à l'Est",
+      "communes": [
+        "21541"
+      ],
+      "areaHa": 1.27,
+      "matchId": "ba_designation_fvm2c3fmseefahwrbvpajd5uku",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_fvm2c3fmseefahwrbvpajd5uku/le-bas-de-gamay-a-l-est",
+      "bounds": [
+        4.723847,
+        46.951494,
+        4.726627,
+        46.953375
+      ],
+      "labelPoint": [
+        4.725538,
+        46.952413
+      ]
+    },
+    {
+      "id": "inao-denom-1138",
+      "name": "Le Charmois",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 227,
+      "denominationId": 1138,
+      "sourceName": "Saint-Aubin premier cru Le Charmois",
+      "communes": [
+        "21541"
+      ],
+      "areaHa": 15.0,
+      "matchId": "ba_designation_nckguzxav57b4i6dn7ziui4hcy",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_nckguzxav57b4i6dn7ziui4hcy/le-charmois",
+      "bounds": [
+        4.721166,
+        46.943432,
+        4.728233,
+        46.947629
+      ],
+      "labelPoint": [
+        4.724061,
+        46.945417
+      ]
+    },
+    {
+      "id": "inao-denom-1139",
+      "name": "Le Puits",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 227,
+      "denominationId": 1139,
+      "sourceName": "Saint-Aubin premier cru Le Puits",
+      "communes": [
+        "21541"
+      ],
+      "areaHa": 0.7,
+      "matchId": "ba_designation_uewd7rtjjixm5cbvskbozzlx2u",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_uewd7rtjjixm5cbvskbozzlx2u/le-puits",
+      "bounds": [
+        4.707,
+        46.951994,
+        4.708368,
+        46.953055
+      ],
+      "labelPoint": [
+        4.707678,
+        46.95254
+      ]
+    },
+    {
+      "id": "inao-denom-1140",
+      "name": "Les Castets",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 227,
+      "denominationId": 1140,
+      "sourceName": "Saint-Aubin premier cru Les Castets",
+      "communes": [
+        "21541"
+      ],
+      "areaHa": 5.49,
+      "matchId": "ba_designation_k7unzzkbrbfbeekt2keyvegoci",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_k7unzzkbrbfbeekt2keyvegoci/les-castets",
+      "bounds": [
+        4.702548,
+        46.948439,
+        4.707269,
+        46.950683
+      ],
+      "labelPoint": [
+        4.704972,
+        46.949558
+      ]
+    },
+    {
+      "id": "inao-denom-1141",
+      "name": "Les Champlots",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 227,
+      "denominationId": 1141,
+      "sourceName": "Saint-Aubin premier cru Les Champlots",
+      "communes": [
+        "21541"
+      ],
+      "areaHa": 10.76,
+      "matchId": "ba_designation_dryyx76kpravxppoyckxd4ihmi",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_dryyx76kpravxppoyckxd4ihmi/les-champlots",
+      "bounds": [
+        4.72248,
+        46.95456,
+        4.728272,
+        46.959643
+      ],
+      "labelPoint": [
+        4.72502,
+        46.957188
+      ]
+    },
+    {
+      "id": "inao-denom-1142",
+      "name": "Les Combes",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 227,
+      "denominationId": 1142,
+      "sourceName": "Saint-Aubin premier cru Les Combes",
+      "communes": [
+        "21541"
+      ],
+      "areaHa": 25.79,
+      "matchId": "ba_designation_rwjvybfgqxlpugrjyhorbetkju",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_rwjvybfgqxlpugrjyhorbetkju/les-combes",
+      "bounds": [
+        4.721502,
+        46.943341,
+        4.731675,
+        46.950413
+      ],
+      "labelPoint": [
+        4.727565,
+        46.946835
+      ]
+    },
+    {
+      "id": "inao-denom-1143",
+      "name": "Les Combes au Sud",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 227,
+      "denominationId": 1143,
+      "sourceName": "Saint-Aubin premier cru Les Combes au Sud",
+      "communes": [
+        "21541"
+      ],
+      "areaHa": 7.83,
+      "matchId": "ba_designation_3bdpy5bautkizdaartiqs5gzbu",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_3bdpy5bautkizdaartiqs5gzbu/les-combes-au-sud",
+      "bounds": [
+        4.725011,
+        46.943708,
+        4.731675,
+        46.950413
+      ],
+      "labelPoint": [
+        4.727687,
+        46.947052
+      ]
+    },
+    {
+      "id": "inao-denom-1144",
+      "name": "Les Cortons",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 227,
+      "denominationId": 1144,
+      "sourceName": "Saint-Aubin premier cru Les Cortons",
+      "communes": [
+        "21541"
+      ],
+      "areaHa": 7.68,
+      "matchId": "ba_designation_ago256twshsilop2643z43rcbe",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_ago256twshsilop2643z43rcbe/les-cortons",
+      "bounds": [
+        4.725327,
+        46.947762,
+        4.729946,
+        46.951914
+      ],
+      "labelPoint": [
+        4.727934,
+        46.949874
+      ]
+    },
+    {
+      "id": "inao-denom-1145",
+      "name": "Les Frionnes",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 227,
+      "denominationId": 1145,
+      "sourceName": "Saint-Aubin premier cru Les Frionnes",
+      "communes": [
+        "21541"
+      ],
+      "areaHa": 12.61,
+      "matchId": "ba_designation_vicuyw2vuw2cguz4cs2rlk3qnm",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_vicuyw2vuw2cguz4cs2rlk3qnm/les-frionnes",
+      "bounds": [
+        4.709832,
+        46.950978,
+        4.718806,
+        46.95683
+      ],
+      "labelPoint": [
+        4.714952,
+        46.95391
+      ]
+    },
+    {
+      "id": "inao-denom-1146",
+      "name": "Les Murgers des dents de chien",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 227,
+      "denominationId": 1146,
+      "sourceName": "Saint-Aubin premier cru Les Murgers des dents de chien",
+      "communes": [
+        "21541"
+      ],
+      "areaHa": 15.99,
+      "matchId": "ba_designation_wr5wrapz222mtpf34yv5ksdlw4",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_wr5wrapz222mtpf34yv5ksdlw4/les-murgers-des-dents-de-chien",
+      "bounds": [
+        4.730132,
+        46.948932,
+        4.73616,
+        46.954307
+      ],
+      "labelPoint": [
+        4.733549,
+        46.951638
+      ]
+    },
+    {
+      "id": "inao-denom-1147",
+      "name": "Les Perrières",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 227,
+      "denominationId": 1147,
+      "sourceName": "Saint-Aubin premier cru Les Perrières",
+      "communes": [
+        "21541"
+      ],
+      "areaHa": 5.26,
+      "matchId": "ba_designation_s3pmggiawhn5zo3nnkbzlppfty",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_s3pmggiawhn5zo3nnkbzlppfty/les-perrieres",
+      "bounds": [
+        4.709832,
+        46.950978,
+        4.71441,
+        46.953522
+      ],
+      "labelPoint": [
+        4.712406,
+        46.952225
+      ]
+    },
+    {
+      "id": "inao-denom-1148",
+      "name": "Les Travers de Marinot",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 227,
+      "denominationId": 1148,
+      "sourceName": "Saint-Aubin premier cru Les Travers de Marinot",
+      "communes": [
+        "21541"
+      ],
+      "areaHa": 3.99,
+      "matchId": "ba_designation_3yma5yvo5wz7r7b4obdl5rbney",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_3yma5yvo5wz7r7b4obdl5rbney/les-travers-de-marinot",
+      "bounds": [
+        4.707704,
+        46.952692,
+        4.714237,
+        46.956987
+      ],
+      "labelPoint": [
+        4.711222,
+        46.954871
+      ]
+    },
+    {
+      "id": "inao-denom-1149",
+      "name": "Marinot",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 227,
+      "denominationId": 1149,
+      "sourceName": "Saint-Aubin premier cru Marinot",
+      "communes": [
+        "21541"
+      ],
+      "areaHa": 1.8,
+      "matchId": "ba_designation_fy3pipo2jt45nyq5b4cre5mw6m",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_fy3pipo2jt45nyq5b4cre5mw6m/marinot",
+      "bounds": [
+        4.709056,
+        46.952048,
+        4.711597,
+        46.95381
+      ],
+      "labelPoint": [
+        4.710322,
+        46.952951
+      ]
+    },
+    {
+      "id": "inao-denom-1150",
+      "name": "Pitangeret",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 227,
+      "denominationId": 1150,
+      "sourceName": "Saint-Aubin premier cru Pitangeret",
+      "communes": [
+        "21541"
+      ],
+      "areaHa": 3.38,
+      "matchId": "ba_designation_hfjsuariww6ul4xtir4uby7opa",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_hfjsuariww6ul4xtir4uby7opa/pitangeret",
+      "bounds": [
+        4.726913,
+        46.943341,
+        4.730764,
+        46.945528
+      ],
+      "labelPoint": [
+        4.728278,
+        46.944427
+      ]
+    },
+    {
+      "id": "inao-denom-1151",
+      "name": "Sous Roche Dumay",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 227,
+      "denominationId": 1151,
+      "sourceName": "Saint-Aubin premier cru Sous Roche Dumay",
+      "communes": [
+        "21541"
+      ],
+      "areaHa": 2.21,
+      "matchId": "ba_designation_igr7gwvzr76gwozedgh4ct5cny",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_igr7gwvzr76gwozedgh4ct5cny/sous-roche-dumay",
+      "bounds": [
+        4.728062,
+        46.954483,
+        4.731755,
+        46.955696
+      ],
+      "labelPoint": [
+        4.729621,
+        46.955087
+      ]
+    },
+    {
+      "id": "inao-denom-1152",
+      "name": "Sur Gamay",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 227,
+      "denominationId": 1152,
+      "sourceName": "Saint-Aubin premier cru Sur Gamay",
+      "communes": [
+        "21541"
+      ],
+      "areaHa": 14.73,
+      "matchId": "ba_designation_uokmq37nf4tcuq4jbiypbi6ovy",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_uokmq37nf4tcuq4jbiypbi6ovy/sur-gamay",
+      "bounds": [
+        4.724429,
+        46.950406,
+        4.732431,
+        46.955696
+      ],
+      "labelPoint": [
+        4.730124,
+        46.953503
+      ]
+    },
+    {
+      "id": "inao-denom-1153",
+      "name": "Sur le sentier du Clou",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 227,
+      "denominationId": 1153,
+      "sourceName": "Saint-Aubin premier cru Sur le sentier du Clou",
+      "communes": [
+        "21541"
+      ],
+      "areaHa": 17.97,
+      "matchId": "ba_designation_eflyunncsnjqohnwsvkbwnaxjy",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_eflyunncsnjqohnwsvkbwnaxjy/sur-le-sentier-du-clou",
+      "bounds": [
+        4.707704,
+        46.951512,
+        4.717601,
+        46.957781
+      ],
+      "labelPoint": [
+        4.712274,
+        46.954651
+      ]
+    },
+    {
+      "id": "inao-denom-1154",
+      "name": "Vignes Moingeon",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 227,
+      "denominationId": 1154,
+      "sourceName": "Saint-Aubin premier cru Vignes Moingeon",
+      "communes": [
+        "21541"
+      ],
+      "areaHa": 4.77,
+      "matchId": "ba_designation_m2nd562krfjswwwddbvjkwpfai",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_m2nd562krfjswwwddbvjkwpfai/vignes-moingeon",
+      "bounds": [
+        4.713961,
+        46.954904,
+        4.717601,
+        46.957781
+      ],
+      "labelPoint": [
+        4.716023,
+        46.956349
+      ]
+    },
+    {
+      "id": "inao-denom-1155",
+      "name": "Village",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 227,
+      "denominationId": 1155,
+      "sourceName": "Saint-Aubin premier cru Village",
+      "communes": [
+        "21541"
+      ],
+      "areaHa": 2.83,
+      "matchId": "ba_designation_ur2qxjt6b6vfg7vmkw3fao5s3m",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_ur2qxjt6b6vfg7vmkw3fao5s3m/village",
+      "bounds": [
+        4.706662,
+        46.948352,
+        4.711599,
+        46.951801
+      ],
+      "labelPoint": [
+        4.710366,
+        46.949683
+      ]
+    },
+    {
+      "id": "inao-denom-1156",
+      "name": "Saint-Aubin Premier Cru",
+      "tier": "premier_cru",
+      "kind": "appellation",
+      "appellationId": 227,
+      "denominationId": 1156,
+      "sourceName": "Saint-Aubin premier cru",
+      "communes": [
+        "21541"
+      ],
+      "areaHa": 157.38,
+      "matchId": "ba_appellation_ejyrnu66efmwvcymsxlwe2amwy",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_ejyrnu66efmwvcymsxlwe2amwy/saint-aubin-premier-cru",
+      "bounds": [
+        4.702548,
+        46.943341,
+        4.73616,
+        46.959907
+      ],
+      "labelPoint": [
+        4.731118,
+        46.948814
+      ]
+    },
+    {
+      "id": "inao-denom-2083",
+      "name": "Saint-Aubin (red)",
+      "tier": "village",
+      "kind": "appellation",
+      "appellationId": 227,
+      "denominationId": 2083,
+      "sourceName": "Saint-Aubin ou Saint-Aubin Côte de Beaune",
+      "communes": [
+        "21541"
+      ],
+      "areaHa": 238.56,
+      "matchId": "ba_appellation_s43cs5wo6z2pxgqedp4wb4mh3y",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_s43cs5wo6z2pxgqedp4wb4mh3y/saint-aubin",
+      "bounds": [
+        4.687904,
+        46.943341,
+        4.73616,
+        46.961551
+      ],
+      "labelPoint": [
+        4.703211,
+        46.950633
+      ]
+    }
+  ],
+  "overlapNote": "Some Premier Cru names on this map cover overlapping ground. The overview paints that ground once; selecting any name shows its full production boundary."
+}

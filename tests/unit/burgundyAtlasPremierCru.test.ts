@@ -98,6 +98,18 @@ describe('Premier Cru wine-detail destinations',()=>{
     }
   });
 
+  it('accepts the producer spelling Clavoillon only with Puligny and Premier Cru evidence',()=>{
+    const base={...wine,region:'Côte de Beaune',appellation:'Puligny-Montrachet'};
+    const source=burgundyAtlasPremierCru({...base,wineName:'Clavaillon'})!;
+    expect(source).not.toBeNull();
+    for(const fields of [{wineName:'Clavoillon'},{wineName:'',referenceSite:'Clavoillon'}]){
+      expect(burgundyAtlasPremierCru({...base,...fields})?.placeId).toBe(source.placeId);
+    }
+    expect(burgundyAtlasPremierCru({...wine,wineName:'Clavoillon'})).toBeNull();
+    expect(burgundyAtlasWineDetailPlace({...base,wineName:'Clavoillon',classification:null})).toBeNull();
+    expect(burgundyAtlasWineDetailPlace({...base,wineName:'Clavoillon',identityMatchStatus:'conflict'})).toBeNull();
+  });
+
   it.each([
     {country:'United States'},{region:'Bordeaux'},{region:'Côte de Beaune'},{region:'Unknown'},
     {classification:'village'},{classification:'grand_cru'},{classification:null},

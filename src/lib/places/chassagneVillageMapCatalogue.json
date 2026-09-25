@@ -1,0 +1,1570 @@
+{
+  "id": "chassagne-montrachet",
+  "name": "Chassagne-Montrachet",
+  "region": "Côte de Beaune",
+  "communes": [
+    {
+      "id": "21150",
+      "name": "Chassagne-Montrachet"
+    },
+    {
+      "id": "71369",
+      "name": "Remigny"
+    },
+    {
+      "id": "21512",
+      "name": "Puligny-Montrachet"
+    }
+  ],
+  "dataUrl": "/maps/chassagne-montrachet.2026-09-21.geojson",
+  "bounds": [
+    4.709704,
+    46.919283,
+    4.749404,
+    46.947557
+  ],
+  "sources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21150/cadastre-21150-communes.json.gz",
+      "sha256": "da1efabb947f470ba2f4f200bf345bbd7722093fcb399e8c9a760284b5fb703b"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71369/cadastre-71369-communes.json.gz",
+      "sha256": "c385f514297e9cff61d5ea74d151c1001ca03fa2a5743a7a3b5cd88226e37644"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21512/cadastre-21512-communes.json.gz",
+      "sha256": "22b3eebde39036f1663861b8fa13f411391b3bc167e0c783eea381d018caa831"
+    }
+  ],
+  "notes": {
+    "inao-denom-273": {
+      "note": "Bâtard-Montrachet spans Puligny-Montrachet and Chassagne-Montrachet. Both maps show its full production boundary; the appellation alone does not identify which commune the wine comes from."
+    },
+    "inao-denom-927": {
+      "note": "Montrachet spans Puligny-Montrachet and Chassagne-Montrachet. Both maps show its full production boundary; the appellation alone does not identify which commune the wine comes from."
+    }
+  },
+  "features": [
+    {
+      "id": "inao-denom-273",
+      "name": "Bâtard-Montrachet",
+      "tier": "grand_cru",
+      "kind": "vineyard",
+      "appellationId": 130,
+      "denominationId": 273,
+      "sourceName": "Bâtard-Montrachet",
+      "communes": [
+        "21150",
+        "21512"
+      ],
+      "areaHa": 11.86,
+      "matchId": "france/burgundy/cote-de-beaune/batard-montrachet",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_dpdm6xw6swoajdjyis5vljhcki/batard-montrachet",
+      "bounds": [
+        4.73676,
+        46.941211,
+        4.742299,
+        46.947237
+      ],
+      "labelPoint": [
+        4.740347,
+        46.94425
+      ]
+    },
+    {
+      "id": "inao-denom-478",
+      "name": "Chassagne-Montrachet",
+      "tier": "village",
+      "kind": "appellation",
+      "appellationId": 154,
+      "denominationId": 478,
+      "sourceName": "Chassagne-Montrachet",
+      "communes": [
+        "21150",
+        "71369"
+      ],
+      "areaHa": 354.98,
+      "matchId": "ba_appellation_pbpeiigxkz5layi2g2azse3jne",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_pbpeiigxkz5layi2g2azse3jne/chassagne-montrachet",
+      "bounds": [
+        4.709704,
+        46.919283,
+        4.749404,
+        46.945944
+      ],
+      "labelPoint": [
+        4.728488,
+        46.92384
+      ]
+    },
+    {
+      "id": "inao-denom-479",
+      "name": "Abbaye de Morgeot",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 154,
+      "denominationId": 479,
+      "sourceName": "Chassagne-Montrachet premier cru Abbaye de Morgeot",
+      "communes": [
+        "21150"
+      ],
+      "areaHa": 11.38,
+      "matchId": "ba_designation_bpa65nnakoqcamnfnbrsrydcke",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_bpa65nnakoqcamnfnbrsrydcke/abbaye-de-morgeot",
+      "bounds": [
+        4.718222,
+        46.922153,
+        4.7249,
+        46.926306
+      ],
+      "labelPoint": [
+        4.719851,
+        46.924326
+      ]
+    },
+    {
+      "id": "inao-denom-480",
+      "name": "Blanchot dessus",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 154,
+      "denominationId": 480,
+      "sourceName": "Chassagne-Montrachet premier cru Blanchot dessus",
+      "communes": [
+        "21150"
+      ],
+      "areaHa": 1.17,
+      "matchId": "ba_designation_k6smyqrx23c32oa6wpwakpabfe",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_k6smyqrx23c32oa6wpwakpabfe/blanchot-dessus",
+      "bounds": [
+        4.734626,
+        46.940984,
+        4.736583,
+        46.942262
+      ],
+      "labelPoint": [
+        4.735618,
+        46.941587
+      ]
+    },
+    {
+      "id": "inao-denom-481",
+      "name": "Bois de Chassagne",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 154,
+      "denominationId": 481,
+      "sourceName": "Chassagne-Montrachet premier cru Bois de Chassagne",
+      "communes": [
+        "21150"
+      ],
+      "areaHa": 13.57,
+      "matchId": "ba_designation_fqwk4vzb77ccllck67htijhldi",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_fqwk4vzb77ccllck67htijhldi/bois-de-chassagne",
+      "bounds": [
+        4.709704,
+        46.923254,
+        4.717427,
+        46.927942
+      ],
+      "labelPoint": [
+        4.713785,
+        46.925034
+      ]
+    },
+    {
+      "id": "inao-denom-482",
+      "name": "Cailleret",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 154,
+      "denominationId": 482,
+      "sourceName": "Chassagne-Montrachet premier cru Cailleret",
+      "communes": [
+        "21150"
+      ],
+      "areaHa": 5.58,
+      "matchId": "ba_designation_enlhft2gv4cntaglh2btvk5j3e",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_enlhft2gv4cntaglh2btvk5j3e/cailleret",
+      "bounds": [
+        4.721647,
+        46.932555,
+        4.725913,
+        46.936672
+      ],
+      "labelPoint": [
+        4.723163,
+        46.934082
+      ]
+    },
+    {
+      "id": "inao-denom-483",
+      "name": "Champs Jendreau",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 154,
+      "denominationId": 483,
+      "sourceName": "Chassagne-Montrachet premier cru Champs Jendreau",
+      "communes": [
+        "21150"
+      ],
+      "areaHa": 2.11,
+      "matchId": "ba_designation_lftjkp3wvzn6ye2w64bydqrn7m",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_lftjkp3wvzn6ye2w64bydqrn7m/champs-jendreau",
+      "bounds": [
+        4.725742,
+        46.926509,
+        4.728683,
+        46.92821
+      ],
+      "labelPoint": [
+        4.727443,
+        46.927387
+      ]
+    },
+    {
+      "id": "inao-denom-484",
+      "name": "Chassagne",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 154,
+      "denominationId": 484,
+      "sourceName": "Chassagne-Montrachet premier cru Chassagne",
+      "communes": [
+        "21150"
+      ],
+      "areaHa": 4.07,
+      "matchId": "ba_designation_3mog7jflpnjovthl2omeprn7ta",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_3mog7jflpnjovthl2omeprn7ta/chassagne",
+      "bounds": [
+        4.722313,
+        46.933399,
+        4.730763,
+        46.939521
+      ],
+      "labelPoint": [
+        4.728706,
+        46.936174
+      ]
+    },
+    {
+      "id": "inao-denom-485",
+      "name": "Chassagne du Clos Saint-Jean",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 154,
+      "denominationId": 485,
+      "sourceName": "Chassagne-Montrachet premier cru Chassagne du Clos Saint-Jean",
+      "communes": [
+        "21150"
+      ],
+      "areaHa": 2.01,
+      "matchId": "ba_designation_hfasqxpi3emerxhb5ksjuurcgy",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_hfasqxpi3emerxhb5ksjuurcgy/chassagne-du-clos-saint-jean",
+      "bounds": [
+        4.722834,
+        46.935329,
+        4.7251,
+        46.937172
+      ],
+      "labelPoint": [
+        4.723893,
+        46.93628
+      ]
+    },
+    {
+      "id": "inao-denom-486",
+      "name": "Clos Chareau",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 154,
+      "denominationId": 486,
+      "sourceName": "Chassagne-Montrachet premier cru Clos Chareau",
+      "communes": [
+        "21150"
+      ],
+      "areaHa": 1.99,
+      "matchId": "ba_designation_sfhs44nydqduq22vshaxpk723i",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_sfhs44nydqduq22vshaxpk723i/clos-chareau",
+      "bounds": [
+        4.717805,
+        46.91979,
+        4.720666,
+        46.921553
+      ],
+      "labelPoint": [
+        4.71903,
+        46.920667
+      ]
+    },
+    {
+      "id": "inao-denom-487",
+      "name": "Clos Pitois",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 154,
+      "denominationId": 487,
+      "sourceName": "Chassagne-Montrachet premier cru Clos Pitois",
+      "communes": [
+        "21150"
+      ],
+      "areaHa": 2.97,
+      "matchId": "ba_designation_wqw7ftdzioeg7tbovjud65sehm",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_wqw7ftdzioeg7tbovjud65sehm/clos-pitois",
+      "bounds": [
+        4.714575,
+        46.92165,
+        4.717562,
+        46.924043
+      ],
+      "labelPoint": [
+        4.716363,
+        46.922894
+      ]
+    },
+    {
+      "id": "inao-denom-488",
+      "name": "Clos Saint-Jean",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 154,
+      "denominationId": 488,
+      "sourceName": "Chassagne-Montrachet premier cru Clos Saint-Jean",
+      "communes": [
+        "21150"
+      ],
+      "areaHa": 13.45,
+      "matchId": "ba_designation_mtxpqpzboqfx6xtkbolvedomtu",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_mtxpqpzboqfx6xtkbolvedomtu/clos-saint-jean",
+      "bounds": [
+        4.722834,
+        46.935329,
+        4.728607,
+        46.940368
+      ],
+      "labelPoint": [
+        4.724708,
+        46.937854
+      ]
+    },
+    {
+      "id": "inao-denom-489",
+      "name": "Dent de Chien",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 154,
+      "denominationId": 489,
+      "sourceName": "Chassagne-Montrachet premier cru Dent de Chien",
+      "communes": [
+        "21150"
+      ],
+      "areaHa": 0.57,
+      "matchId": "ba_designation_aiavblagl4inbuvfagitxrigza",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_aiavblagl4inbuvfagitxrigza/dent-de-chien",
+      "bounds": [
+        4.733598,
+        46.942547,
+        4.735805,
+        46.943382
+      ],
+      "labelPoint": [
+        4.735186,
+        46.942961
+      ]
+    },
+    {
+      "id": "inao-denom-490",
+      "name": "En Cailleret",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 154,
+      "denominationId": 490,
+      "sourceName": "Chassagne-Montrachet premier cru En Cailleret",
+      "communes": [
+        "21150"
+      ],
+      "areaHa": 5.11,
+      "matchId": "ba_designation_mhu7peje7itrfdivd6kpxvkbkq",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_mhu7peje7itrfdivd6kpxvkbkq/en-cailleret",
+      "bounds": [
+        4.720646,
+        46.930753,
+        4.724414,
+        46.933386
+      ],
+      "labelPoint": [
+        4.722731,
+        46.932065
+      ]
+    },
+    {
+      "id": "inao-denom-491",
+      "name": "En Remilly",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 154,
+      "denominationId": 491,
+      "sourceName": "Chassagne-Montrachet premier cru En Remilly",
+      "communes": [
+        "21150"
+      ],
+      "areaHa": 1.56,
+      "matchId": "ba_designation_x55557akbruxxnxa2taxyaxzly",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_x55557akbruxxnxa2taxyaxzly/en-remilly",
+      "bounds": [
+        4.733171,
+        46.944844,
+        4.735777,
+        46.945944
+      ],
+      "labelPoint": [
+        4.734556,
+        46.945386
+      ]
+    },
+    {
+      "id": "inao-denom-492",
+      "name": "En Virondot",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 154,
+      "denominationId": 492,
+      "sourceName": "Chassagne-Montrachet premier cru En Virondot",
+      "communes": [
+        "21150"
+      ],
+      "areaHa": 2.27,
+      "matchId": "ba_designation_jgqvtvijluyybakx3g6o6e3b64",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_jgqvtvijluyybakx3g6o6e3b64/en-virondot",
+      "bounds": [
+        4.71845,
+        46.930379,
+        4.720709,
+        46.93232
+      ],
+      "labelPoint": [
+        4.719523,
+        46.93136
+      ]
+    },
+    {
+      "id": "inao-denom-493",
+      "name": "Ez Crets",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 154,
+      "denominationId": 493,
+      "sourceName": "Chassagne-Montrachet premier cru Ez Crets",
+      "communes": [
+        "21150"
+      ],
+      "areaHa": 2.32,
+      "matchId": "ba_designation_lnnhjh75urpum7aoiobev2nfo4",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_lnnhjh75urpum7aoiobev2nfo4/ez-crets",
+      "bounds": [
+        4.727789,
+        46.934598,
+        4.731161,
+        46.936322
+      ],
+      "labelPoint": [
+        4.729531,
+        46.935474
+      ]
+    },
+    {
+      "id": "inao-denom-494",
+      "name": "Ez Crottes",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 154,
+      "denominationId": 494,
+      "sourceName": "Chassagne-Montrachet premier cru Ez Crottes",
+      "communes": [
+        "21150"
+      ],
+      "areaHa": 2.36,
+      "matchId": "ba_designation_2voupctuw7rwfur3mxuo5tom5a",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_2voupctuw7rwfur3mxuo5tom5a/ez-crottes",
+      "bounds": [
+        4.723259,
+        46.92478,
+        4.725921,
+        46.927167
+      ],
+      "labelPoint": [
+        4.724459,
+        46.925972
+      ]
+    },
+    {
+      "id": "inao-denom-495",
+      "name": "Francemont",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 154,
+      "denominationId": 495,
+      "sourceName": "Chassagne-Montrachet premier cru Francemont",
+      "communes": [
+        "21150"
+      ],
+      "areaHa": 2.37,
+      "matchId": "ba_designation_az4sxkjxrhfazwsxz5taccr6ii",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_az4sxkjxrhfazwsxz5taccr6ii/francemont",
+      "bounds": [
+        4.715512,
+        46.92299,
+        4.718575,
+        46.924805
+      ],
+      "labelPoint": [
+        4.717038,
+        46.9239
+      ]
+    },
+    {
+      "id": "inao-denom-496",
+      "name": "Guerchère",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 154,
+      "denominationId": 496,
+      "sourceName": "Chassagne-Montrachet premier cru Guerchère",
+      "communes": [
+        "21150"
+      ],
+      "areaHa": 2.18,
+      "matchId": "ba_designation_y3hyysqwcnpaz5uqilqiymrrga",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_y3hyysqwcnpaz5uqilqiymrrga/guerchere",
+      "bounds": [
+        4.723987,
+        46.924026,
+        4.726597,
+        46.926063
+      ],
+      "labelPoint": [
+        4.725304,
+        46.925045
+      ]
+    },
+    {
+      "id": "inao-denom-497",
+      "name": "La Boudriotte",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 154,
+      "denominationId": 497,
+      "sourceName": "Chassagne-Montrachet premier cru La Boudriotte",
+      "communes": [
+        "21150"
+      ],
+      "areaHa": 15.62,
+      "matchId": "ba_designation_7qngkufatizoncnixk5h4fwmpq",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_7qngkufatizoncnixk5h4fwmpq/la-boudriotte",
+      "bounds": [
+        4.720969,
+        46.925331,
+        4.728683,
+        46.931144
+      ],
+      "labelPoint": [
+        4.726917,
+        46.927007
+      ]
+    },
+    {
+      "id": "inao-denom-498",
+      "name": "La Cardeuse",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 154,
+      "denominationId": 498,
+      "sourceName": "Chassagne-Montrachet premier cru La Cardeuse",
+      "communes": [
+        "21150"
+      ],
+      "areaHa": 0.97,
+      "matchId": "ba_designation_b2zu4c2ua4ffvqa6cr3qo4thxi",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_b2zu4c2ua4ffvqa6cr3qo4thxi/la-cardeuse",
+      "bounds": [
+        4.717545,
+        46.920989,
+        4.721086,
+        46.922572
+      ],
+      "labelPoint": [
+        4.719115,
+        46.921773
+      ]
+    },
+    {
+      "id": "inao-denom-499",
+      "name": "La Chapelle",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 154,
+      "denominationId": 499,
+      "sourceName": "Chassagne-Montrachet premier cru La Chapelle",
+      "communes": [
+        "21150"
+      ],
+      "areaHa": 4.58,
+      "matchId": "ba_designation_zvgflj6egu4fjikfjudlboumxy",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_zvgflj6egu4fjikfjudlboumxy/la-chapelle",
+      "bounds": [
+        4.721525,
+        46.922153,
+        4.7249,
+        46.924952
+      ],
+      "labelPoint": [
+        4.723263,
+        46.923477
+      ]
+    },
+    {
+      "id": "inao-denom-500",
+      "name": "La Grande Borne",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 154,
+      "denominationId": 500,
+      "sourceName": "Chassagne-Montrachet premier cru La Grande Borne",
+      "communes": [
+        "21150"
+      ],
+      "areaHa": 1.74,
+      "matchId": "ba_designation_2zzjfz3bimpscq3722r5r3yjji",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_2zzjfz3bimpscq3722r5r3yjji/la-grande-borne",
+      "bounds": [
+        4.716941,
+        46.920605,
+        4.719174,
+        46.922348
+      ],
+      "labelPoint": [
+        4.718108,
+        46.921497
+      ]
+    },
+    {
+      "id": "inao-denom-501",
+      "name": "La Grande Montagne",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 154,
+      "denominationId": 501,
+      "sourceName": "Chassagne-Montrachet premier cru La Grande Montagne",
+      "communes": [
+        "21150"
+      ],
+      "areaHa": 8.26,
+      "matchId": "ba_designation_egovjyralsdupryv5wos7zr32q",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_egovjyralsdupryv5wos7zr32q/la-grande-montagne",
+      "bounds": [
+        4.715167,
+        46.926814,
+        4.721474,
+        46.934916
+      ],
+      "labelPoint": [
+        4.717153,
+        46.927762
+      ]
+    },
+    {
+      "id": "inao-denom-502",
+      "name": "La Maltroie",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 154,
+      "denominationId": 502,
+      "sourceName": "Chassagne-Montrachet premier cru La Maltroie",
+      "communes": [
+        "21150"
+      ],
+      "areaHa": 11.67,
+      "matchId": "ba_designation_63ir2aabzyqbojrz4ndnsvg5ti",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_63ir2aabzyqbojrz4ndnsvg5ti/la-maltroie",
+      "bounds": [
+        4.725434,
+        46.933453,
+        4.732208,
+        46.939521
+      ],
+      "labelPoint": [
+        4.73075,
+        46.9362
+      ]
+    },
+    {
+      "id": "inao-denom-503",
+      "name": "La Romanée",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 154,
+      "denominationId": 503,
+      "sourceName": "Chassagne-Montrachet premier cru La Romanée",
+      "communes": [
+        "21150"
+      ],
+      "areaHa": 3.36,
+      "matchId": "ba_designation_aj6qcdt2gmf6kewla6spvfrnva",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_aj6qcdt2gmf6kewla6spvfrnva/la-romanee",
+      "bounds": [
+        4.715167,
+        46.926814,
+        4.718975,
+        46.928752
+      ],
+      "labelPoint": [
+        4.717153,
+        46.927762
+      ]
+    },
+    {
+      "id": "inao-denom-504",
+      "name": "La Roquemaure",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 154,
+      "denominationId": 504,
+      "sourceName": "Chassagne-Montrachet premier cru La Roquemaure",
+      "communes": [
+        "21150"
+      ],
+      "areaHa": 0.61,
+      "matchId": "ba_designation_q35gl55vmgf7mz2lju5aw7crz4",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_q35gl55vmgf7mz2lju5aw7crz4/la-roquemaure",
+      "bounds": [
+        4.722293,
+        46.926608,
+        4.723709,
+        46.927706
+      ],
+      "labelPoint": [
+        4.723031,
+        46.927155
+      ]
+    },
+    {
+      "id": "inao-denom-505",
+      "name": "Les Baudines",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 154,
+      "denominationId": 505,
+      "sourceName": "Chassagne-Montrachet premier cru Les Baudines",
+      "communes": [
+        "21150"
+      ],
+      "areaHa": 3.58,
+      "matchId": "ba_designation_jkn6gfsbi5gmwwwzb5sabrewme",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_jkn6gfsbi5gmwwwzb5sabrewme/les-baudines",
+      "bounds": [
+        4.709704,
+        46.924217,
+        4.713417,
+        46.926422
+      ],
+      "labelPoint": [
+        4.711718,
+        46.925321
+      ]
+    },
+    {
+      "id": "inao-denom-506",
+      "name": "Les Boirettes",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 154,
+      "denominationId": 506,
+      "sourceName": "Chassagne-Montrachet premier cru Les Boirettes",
+      "communes": [
+        "21150"
+      ],
+      "areaHa": 2.84,
+      "matchId": "ba_designation_j6cwtqiwlykuf4osy33llrbflq",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_j6cwtqiwlykuf4osy33llrbflq/les-boirettes",
+      "bounds": [
+        4.720074,
+        46.921241,
+        4.722812,
+        46.923702
+      ],
+      "labelPoint": [
+        4.721661,
+        46.922365
+      ]
+    },
+    {
+      "id": "inao-denom-507",
+      "name": "Les Bondues",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 154,
+      "denominationId": 507,
+      "sourceName": "Chassagne-Montrachet premier cru Les Bondues",
+      "communes": [
+        "21150"
+      ],
+      "areaHa": 1.73,
+      "matchId": "ba_designation_653xcrb7dhehfmnbmj2klb5f34",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_653xcrb7dhehfmnbmj2klb5f34/les-bondues",
+      "bounds": [
+        4.73309,
+        46.939975,
+        4.735465,
+        46.941653
+      ],
+      "labelPoint": [
+        4.734144,
+        46.940872
+      ]
+    },
+    {
+      "id": "inao-denom-508",
+      "name": "Les Brussonnes",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 154,
+      "denominationId": 508,
+      "sourceName": "Chassagne-Montrachet premier cru Les Brussonnes",
+      "communes": [
+        "21150"
+      ],
+      "areaHa": 15.79,
+      "matchId": "ba_designation_y7qk3phhdezpry5dk576uxm4ei",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_y7qk3phhdezpry5dk576uxm4ei/les-brussonnes",
+      "bounds": [
+        4.714575,
+        46.91979,
+        4.722812,
+        46.924805
+      ],
+      "labelPoint": [
+        4.718613,
+        46.921753
+      ]
+    },
+    {
+      "id": "inao-denom-509",
+      "name": "Les Champs gain",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 154,
+      "denominationId": 509,
+      "sourceName": "Chassagne-Montrachet premier cru Les Champs gain",
+      "communes": [
+        "21150"
+      ],
+      "areaHa": 4.63,
+      "matchId": "ba_designation_lytjimtlcs2tmzch4x6ckfxrqu",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_lytjimtlcs2tmzch4x6ckfxrqu/les-champs-gain",
+      "bounds": [
+        4.723987,
+        46.930647,
+        4.72772,
+        46.934097
+      ],
+      "labelPoint": [
+        4.725406,
+        46.932376
+      ]
+    },
+    {
+      "id": "inao-denom-510",
+      "name": "Les Chaumes",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 154,
+      "denominationId": 510,
+      "sourceName": "Chassagne-Montrachet premier cru Les Chaumes",
+      "communes": [
+        "21150"
+      ],
+      "areaHa": 2.7,
+      "matchId": "ba_designation_jq2bbvumbig2gammeqb3cj3d2u",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_jq2bbvumbig2gammeqb3cj3d2u/les-chaumes",
+      "bounds": [
+        4.725084,
+        46.925331,
+        4.727901,
+        46.927609
+      ],
+      "labelPoint": [
+        4.72674,
+        46.926488
+      ]
+    },
+    {
+      "id": "inao-denom-511",
+      "name": "Les Chaumées",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 154,
+      "denominationId": 511,
+      "sourceName": "Chassagne-Montrachet premier cru Les Chaumées",
+      "communes": [
+        "21150"
+      ],
+      "areaHa": 7.32,
+      "matchId": "ba_designation_62tnoyksf5xg7vuwymnulblkxq",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_62tnoyksf5xg7vuwymnulblkxq/les-chaumees",
+      "bounds": [
+        4.723076,
+        46.940269,
+        4.727033,
+        46.944194
+      ],
+      "labelPoint": [
+        4.725162,
+        46.942211
+      ]
+    },
+    {
+      "id": "inao-denom-512",
+      "name": "Les Chenevottes",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 154,
+      "denominationId": 512,
+      "sourceName": "Chassagne-Montrachet premier cru Les Chenevottes",
+      "communes": [
+        "21150"
+      ],
+      "areaHa": 11.0,
+      "matchId": "ba_designation_kfp3u2dhpxqju6ayxibjtvrgam",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_kfp3u2dhpxqju6ayxibjtvrgam/les-chenevottes",
+      "bounds": [
+        4.729089,
+        46.939975,
+        4.735465,
+        46.944138
+      ],
+      "labelPoint": [
+        4.732093,
+        46.942037
+      ]
+    },
+    {
+      "id": "inao-denom-513",
+      "name": "Les Combards",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 154,
+      "denominationId": 513,
+      "sourceName": "Chassagne-Montrachet premier cru Les Combards",
+      "communes": [
+        "21150"
+      ],
+      "areaHa": 0.65,
+      "matchId": "ba_designation_23nskx7sjjpkrtd75uofyppyue",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_23nskx7sjjpkrtd75uofyppyue/les-combards",
+      "bounds": [
+        4.721647,
+        46.934894,
+        4.722637,
+        46.936672
+      ],
+      "labelPoint": [
+        4.722318,
+        46.935557
+      ]
+    },
+    {
+      "id": "inao-denom-514",
+      "name": "Les Commes",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 154,
+      "denominationId": 514,
+      "sourceName": "Chassagne-Montrachet premier cru Les Commes",
+      "communes": [
+        "21150"
+      ],
+      "areaHa": 1.04,
+      "matchId": "ba_designation_25objzs73uc2ej3nehkma6zo6q",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_25objzs73uc2ej3nehkma6zo6q/les-commes",
+      "bounds": [
+        4.731167,
+        46.942063,
+        4.734384,
+        46.944138
+      ],
+      "labelPoint": [
+        4.733077,
+        46.943098
+      ]
+    },
+    {
+      "id": "inao-denom-515",
+      "name": "Les Embazées",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 154,
+      "denominationId": 515,
+      "sourceName": "Chassagne-Montrachet premier cru Les Embazées",
+      "communes": [
+        "21150"
+      ],
+      "areaHa": 5.2,
+      "matchId": "ba_designation_lqcykr2sopdaqnymqr4aelxpym",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_lqcykr2sopdaqnymqr4aelxpym/les-embazees",
+      "bounds": [
+        4.712623,
+        46.923254,
+        4.71623,
+        46.926135
+      ],
+      "labelPoint": [
+        4.71462,
+        46.924728
+      ]
+    },
+    {
+      "id": "inao-denom-516",
+      "name": "Les Fairendes",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 154,
+      "denominationId": 516,
+      "sourceName": "Chassagne-Montrachet premier cru Les Fairendes",
+      "communes": [
+        "21150"
+      ],
+      "areaHa": 7.14,
+      "matchId": "ba_designation_vroyfdfs47h7ylv76jtihsewpq",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_vroyfdfs47h7ylv76jtihsewpq/les-fairendes",
+      "bounds": [
+        4.720969,
+        46.927893,
+        4.725279,
+        46.931144
+      ],
+      "labelPoint": [
+        4.723476,
+        46.929474
+      ]
+    },
+    {
+      "id": "inao-denom-517",
+      "name": "Les Grandes Ruchottes",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 154,
+      "denominationId": 517,
+      "sourceName": "Chassagne-Montrachet premier cru Les Grandes Ruchottes",
+      "communes": [
+        "21150"
+      ],
+      "areaHa": 2.13,
+      "matchId": "ba_designation_vh4nlycaqlrsotfavdwsulmzpq",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_vh4nlycaqlrsotfavdwsulmzpq/les-grandes-ruchottes",
+      "bounds": [
+        4.719054,
+        46.928332,
+        4.721474,
+        46.93013
+      ],
+      "labelPoint": [
+        4.72028,
+        46.929228
+      ]
+    },
+    {
+      "id": "inao-denom-518",
+      "name": "Les Grands Clos",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 154,
+      "denominationId": 518,
+      "sourceName": "Chassagne-Montrachet premier cru Les Grands Clos",
+      "communes": [
+        "21150"
+      ],
+      "areaHa": 3.93,
+      "matchId": "ba_designation_yu6oca74vizhgdv2wl3n4fka2y",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_yu6oca74vizhgdv2wl3n4fka2y/les-grands-clos",
+      "bounds": [
+        4.716944,
+        46.924216,
+        4.72051,
+        46.926857
+      ],
+      "labelPoint": [
+        4.718668,
+        46.925575
+      ]
+    },
+    {
+      "id": "inao-denom-519",
+      "name": "Les Macherelles",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 154,
+      "denominationId": 519,
+      "sourceName": "Chassagne-Montrachet premier cru Les Macherelles",
+      "communes": [
+        "21150"
+      ],
+      "areaHa": 5.2,
+      "matchId": "ba_designation_vpcaorko327akuxivmihvrtoqe",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_vpcaorko327akuxivmihvrtoqe/les-macherelles",
+      "bounds": [
+        4.728687,
+        46.938697,
+        4.733001,
+        46.940955
+      ],
+      "labelPoint": [
+        4.730716,
+        46.939833
+      ]
+    },
+    {
+      "id": "inao-denom-520",
+      "name": "Les Murées",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 154,
+      "denominationId": 520,
+      "sourceName": "Chassagne-Montrachet premier cru Les Murées",
+      "communes": [
+        "21150"
+      ],
+      "areaHa": 1.61,
+      "matchId": "ba_designation_gvsuvrhuvn2kk23nx5x4ppatjq",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_gvsuvrhuvn2kk23nx5x4ppatjq/les-murees",
+      "bounds": [
+        4.725095,
+        46.935748,
+        4.727436,
+        46.937236
+      ],
+      "labelPoint": [
+        4.726193,
+        46.936436
+      ]
+    },
+    {
+      "id": "inao-denom-521",
+      "name": "Les Pasquelles",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 154,
+      "denominationId": 521,
+      "sourceName": "Chassagne-Montrachet premier cru Les Pasquelles",
+      "communes": [
+        "21150"
+      ],
+      "areaHa": 2.45,
+      "matchId": "ba_designation_6cucdnpx4f56v7tb2woccnb7zi",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_6cucdnpx4f56v7tb2woccnb7zi/les-pasquelles",
+      "bounds": [
+        4.728437,
+        46.941258,
+        4.731507,
+        46.943893
+      ],
+      "labelPoint": [
+        4.729876,
+        46.942904
+      ]
+    },
+    {
+      "id": "inao-denom-522",
+      "name": "Les Petites Fairendes",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 154,
+      "denominationId": 522,
+      "sourceName": "Chassagne-Montrachet premier cru Les Petites Fairendes",
+      "communes": [
+        "21150"
+      ],
+      "areaHa": 0.82,
+      "matchId": "ba_designation_ofc2piigc57s5lf7lhkwdy72lq",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_ofc2piigc57s5lf7lhkwdy72lq/les-petites-fairendes",
+      "bounds": [
+        4.721593,
+        46.927254,
+        4.723457,
+        46.928318
+      ],
+      "labelPoint": [
+        4.722449,
+        46.927753
+      ]
+    },
+    {
+      "id": "inao-denom-523",
+      "name": "Les Petits Clos",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 154,
+      "denominationId": 523,
+      "sourceName": "Chassagne-Montrachet premier cru Les Petits Clos",
+      "communes": [
+        "21150"
+      ],
+      "areaHa": 5.09,
+      "matchId": "ba_designation_ah7chv5yzxfp5zwmrdohb3ui24",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_ah7chv5yzxfp5zwmrdohb3ui24/les-petits-clos",
+      "bounds": [
+        4.718348,
+        46.926144,
+        4.722597,
+        46.928668
+      ],
+      "labelPoint": [
+        4.720548,
+        46.927376
+      ]
+    },
+    {
+      "id": "inao-denom-524",
+      "name": "Les Places",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 154,
+      "denominationId": 524,
+      "sourceName": "Chassagne-Montrachet premier cru Les Places",
+      "communes": [
+        "21150"
+      ],
+      "areaHa": 2.42,
+      "matchId": "ba_designation_yyso4rl7c5dkrot4ns7qbapvu4",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_yyso4rl7c5dkrot4ns7qbapvu4/les-places",
+      "bounds": [
+        4.729649,
+        46.935707,
+        4.732208,
+        46.937643
+      ],
+      "labelPoint": [
+        4.731053,
+        46.936696
+      ]
+    },
+    {
+      "id": "inao-denom-525",
+      "name": "Les Rebichets",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 154,
+      "denominationId": 525,
+      "sourceName": "Chassagne-Montrachet premier cru Les Rebichets",
+      "communes": [
+        "21150"
+      ],
+      "areaHa": 4.74,
+      "matchId": "ba_designation_khfkn5qjqwwzdsrhqj5sy2fdyi",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_khfkn5qjqwwzdsrhqj5sy2fdyi/les-rebichets",
+      "bounds": [
+        4.725379,
+        46.936421,
+        4.728607,
+        46.940187
+      ],
+      "labelPoint": [
+        4.726917,
+        46.938545
+      ]
+    },
+    {
+      "id": "inao-denom-526",
+      "name": "Les Vergers",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 154,
+      "denominationId": 526,
+      "sourceName": "Chassagne-Montrachet premier cru Les Vergers",
+      "communes": [
+        "21150"
+      ],
+      "areaHa": 9.53,
+      "matchId": "ba_designation_3s4xec2sdqmovqc5wsj5efhmgm",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_3s4xec2sdqmovqc5wsj5efhmgm/les-vergers",
+      "bounds": [
+        4.726375,
+        46.939618,
+        4.731507,
+        46.943893
+      ],
+      "labelPoint": [
+        4.728128,
+        46.941728
+      ]
+    },
+    {
+      "id": "inao-denom-527",
+      "name": "Morgeot",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 154,
+      "denominationId": 527,
+      "sourceName": "Chassagne-Montrachet premier cru Morgeot",
+      "communes": [
+        "21150"
+      ],
+      "areaHa": 56.44,
+      "matchId": "ba_designation_6jvr3e7mb3d4zbue27e52s47ba",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_6jvr3e7mb3d4zbue27e52s47ba/morgeot",
+      "bounds": [
+        4.714575,
+        46.91979,
+        4.728683,
+        46.931144
+      ],
+      "labelPoint": [
+        4.719505,
+        46.922996
+      ]
+    },
+    {
+      "id": "inao-denom-528",
+      "name": "Petingeret",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 154,
+      "denominationId": 528,
+      "sourceName": "Chassagne-Montrachet premier cru Petingeret",
+      "communes": [
+        "21150"
+      ],
+      "areaHa": 1.75,
+      "matchId": "ba_designation_jbzhsgxadvgznkpwc2uwd7u3tm",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_jbzhsgxadvgznkpwc2uwd7u3tm/petingeret",
+      "bounds": [
+        4.726471,
+        46.942603,
+        4.729146,
+        46.943853
+      ],
+      "labelPoint": [
+        4.727777,
+        46.943185
+      ]
+    },
+    {
+      "id": "inao-denom-529",
+      "name": "Tonton Marcel",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 154,
+      "denominationId": 529,
+      "sourceName": "Chassagne-Montrachet premier cru Tonton Marcel",
+      "communes": [
+        "21150"
+      ],
+      "areaHa": 0.5,
+      "matchId": "ba_designation_qp75hsbkdegvus535c2eunoisa",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_qp75hsbkdegvus535c2eunoisa/tonton-marcel",
+      "bounds": [
+        4.717018,
+        46.929214,
+        4.720289,
+        46.934916
+      ],
+      "labelPoint": [
+        4.717396,
+        46.929616
+      ]
+    },
+    {
+      "id": "inao-denom-530",
+      "name": "Tête du Clos",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 154,
+      "denominationId": 530,
+      "sourceName": "Chassagne-Montrachet premier cru Tête du Clos",
+      "communes": [
+        "21150"
+      ],
+      "areaHa": 2.12,
+      "matchId": "ba_designation_4xo73uh2is526udmsldisqahui",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_4xo73uh2is526udmsldisqahui/tete-du-clos",
+      "bounds": [
+        4.716131,
+        46.924499,
+        4.718493,
+        46.926954
+      ],
+      "labelPoint": [
+        4.716883,
+        46.925724
+      ]
+    },
+    {
+      "id": "inao-denom-531",
+      "name": "Vide Bourse",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 154,
+      "denominationId": 531,
+      "sourceName": "Chassagne-Montrachet premier cru Vide Bourse",
+      "communes": [
+        "21150"
+      ],
+      "areaHa": 1.33,
+      "matchId": "ba_designation_snsjr5nu6wonexulkiz3owhtkq",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_snsjr5nu6wonexulkiz3owhtkq/vide-bourse",
+      "bounds": [
+        4.739503,
+        46.941128,
+        4.74209,
+        46.942416
+      ],
+      "labelPoint": [
+        4.741105,
+        46.941767
+      ]
+    },
+    {
+      "id": "inao-denom-532",
+      "name": "Vigne Blanche",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 154,
+      "denominationId": 532,
+      "sourceName": "Chassagne-Montrachet premier cru Vigne Blanche",
+      "communes": [
+        "21150"
+      ],
+      "areaHa": 2.25,
+      "matchId": "ba_designation_6tfmttae7onpwofnipxrhuc4ga",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_6tfmttae7onpwofnipxrhuc4ga/vigne-blanche",
+      "bounds": [
+        4.720894,
+        46.925504,
+        4.723661,
+        46.927199
+      ],
+      "labelPoint": [
+        4.722266,
+        46.926348
+      ]
+    },
+    {
+      "id": "inao-denom-533",
+      "name": "Vigne Derrière",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 154,
+      "denominationId": 533,
+      "sourceName": "Chassagne-Montrachet premier cru Vigne Derrière",
+      "communes": [
+        "21150"
+      ],
+      "areaHa": 3.78,
+      "matchId": "ba_designation_v224b2ytz4mb4xvgimog2otcq4",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_v224b2ytz4mb4xvgimog2otcq4/vigne-derriere",
+      "bounds": [
+        4.721835,
+        46.932555,
+        4.72515,
+        46.935022
+      ],
+      "labelPoint": [
+        4.723559,
+        46.933789
+      ]
+    },
+    {
+      "id": "inao-denom-534",
+      "name": "Chassagne-Montrachet Premier Cru",
+      "tier": "premier_cru",
+      "kind": "appellation",
+      "appellationId": 154,
+      "denominationId": 534,
+      "sourceName": "Chassagne-Montrachet premier cru",
+      "communes": [
+        "21150"
+      ],
+      "areaHa": 172.34,
+      "matchId": "ba_appellation_dve5z2vugzcurxr3qvusdfusgq",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_dve5z2vugzcurxr3qvusdfusgq/chassagne-montrachet-premier-cru",
+      "bounds": [
+        4.709704,
+        46.91979,
+        4.74209,
+        46.945944
+      ],
+      "labelPoint": [
+        4.715624,
+        46.924301
+      ]
+    },
+    {
+      "id": "inao-denom-564",
+      "name": "Criots-Bâtard-Montrachet",
+      "tier": "grand_cru",
+      "kind": "vineyard",
+      "appellationId": 178,
+      "denominationId": 564,
+      "sourceName": "Criots-Bâtard-Montrachet",
+      "communes": [
+        "21150"
+      ],
+      "areaHa": 1.57,
+      "matchId": "france/burgundy/cote-de-beaune/criots-batard-montrachet",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_6wcuojtk6rgtumd3ghanniqguu/criots-batard-montrachet",
+      "bounds": [
+        4.736224,
+        46.940627,
+        4.739405,
+        46.941863
+      ],
+      "labelPoint": [
+        4.737735,
+        46.941247
+      ]
+    },
+    {
+      "id": "inao-denom-927",
+      "name": "Montrachet",
+      "tier": "grand_cru",
+      "kind": "vineyard",
+      "appellationId": 207,
+      "denominationId": 927,
+      "sourceName": "Montrachet",
+      "communes": [
+        "21150",
+        "21512"
+      ],
+      "areaHa": 7.99,
+      "matchId": "france/burgundy/cote-de-beaune/montrachet",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_zhhadupen4sdhxv3k46igi5ppy/montrachet",
+      "bounds": [
+        4.735214,
+        46.941929,
+        4.740629,
+        46.947557
+      ],
+      "labelPoint": [
+        4.737847,
+        46.944753
+      ]
+    }
+  ],
+  "overlapNote": "Some Premier Cru names on this map cover overlapping ground. The overview paints that ground once; selecting any name shows its full production boundary."
+}

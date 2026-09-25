@@ -19,14 +19,14 @@ Beaujolais has its own appellation system and is outside this Bourgogne inventor
 
 ## Village coverage
 
-**9 of 44 village appellations have maps in this branch.** This is not complete
+**14 of 44 village appellations have maps in this branch.** This is not complete
 Burgundy coverage. A mapped appellation can still lack individual village
 lieux-dits; named plot coverage must be assessed separately.
 
 | Region | Mapped | Remaining |
 | --- | ---: | ---: |
 | Côte de Nuits | 9 | 0 |
-| Côte de Beaune | 0 | 20 |
+| Côte de Beaune | 5 | 15 |
 | Côte Chalonnaise | 0 | 5 |
 | Mâconnais | 0 | 5 |
 | Chablis & Grand Auxerrois | 0 | 5 |
@@ -45,11 +45,11 @@ lieux-dits; named plot coverage must be assessed separately.
 
 ### Côte de Beaune — next batches
 
-- [ ] Meursault
-- [ ] Puligny-Montrachet
-- [ ] Chassagne-Montrachet
-- [ ] Saint-Aubin
-- [ ] Blagny
+- [x] Meursault: 19 named Premier Crus and separate red/white village areas
+- [x] Puligny-Montrachet: 17 named Premier Crus, four Grand Crus and red/white village areas
+- [x] Chassagne-Montrachet: Remigny, 55 named Premier Crus and three Grand Crus
+- [x] Saint-Aubin: 30 named Premier Crus and both source colour identities
+- [x] Blagny: seven named Premier Crus across Meursault and Puligny; red identities retained separately
 - [ ] Aloxe-Corton
 - [ ] Pernand-Vergelesses
 - [ ] Ladoix
@@ -66,8 +66,8 @@ lieux-dits; named plot coverage must be assessed separately.
 - [ ] Côte de Beaune
 - [ ] Côte de Beaune-Villages
 
-Start with Meursault/Puligny/Chassagne/Saint-Aubin/Blagny, then the Corton
-communes, then the remaining Côte de Beaune entries. These are batches for
+Next are the Corton communes (Aloxe-Corton, Pernand-Vergelesses and Ladoix),
+then the remaining Côte de Beaune entries. These are batches for
 review, not a reduction in the coverage target.
 
 ### Côte Chalonnaise
@@ -96,11 +96,12 @@ review, not a reduction in the coverage target.
 
 ## Grand Crus and regional coverage
 
-All **24 Côte de Nuits Grand Cru appellations** are mapped, with Bonnes-Mares
-counted once despite appearing in two maps. The remaining nine Bourgogne Grand
-Cru appellations belong in the relevant village batches:
+All **24 Côte de Nuits Grand Cru appellations** and the **five Montrachet Grand
+Crus** are mapped: **29 of 33** Bourgogne Grand Cru appellations. Bonnes-Mares,
+Montrachet and Bâtard-Montrachet each count once despite appearing in two maps.
+The remaining four belong in the relevant village batches:
 
-- [ ] Montrachet, Bâtard-Montrachet, Chevalier-Montrachet,
+- [x] Montrachet, Bâtard-Montrachet, Chevalier-Montrachet,
   Bienvenues-Bâtard-Montrachet and Criots-Bâtard-Montrachet
 - [ ] Corton (including named denominations), Corton-Charlemagne and Charlemagne
 - [ ] Chablis Grand Cru and its seven named climats

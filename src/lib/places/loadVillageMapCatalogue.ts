@@ -10,6 +10,11 @@ const loaders=new Map<string,()=>Promise<{default:VillageMapCatalogue}>>([
  ['nuits-saint-georges',()=>import('./nuitsVillageMapCatalogue.json')],
  ['marsannay',()=>import('./marsannayVillageMapCatalogue.json')],
  ['cote-de-nuits-villages',()=>import('./coteNuitsVillageMapCatalogue.json')],
+ ['meursault',()=>import('./meursaultVillageMapCatalogue.json')],
+ ['puligny-montrachet',()=>import('./pulignyVillageMapCatalogue.json')],
+ ['chassagne-montrachet',()=>import('./chassagneVillageMapCatalogue.json')],
+ ['saint-aubin',()=>import('./saintAubinVillageMapCatalogue.json')],
+ ['blagny',()=>import('./blagnyVillageMapCatalogue.json')],
 ]);
 
 export async function loadVillageMapCatalogue(villageId:string):Promise<VillageMapCatalogue>{
