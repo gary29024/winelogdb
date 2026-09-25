@@ -441,13 +441,21 @@ describe('Wine Deep Search persistence boundaries',()=>{
   let markStarted!:()=>void;const started=new Promise<void>(resolve=>{markStarted=resolve});
   provider.mockImplementationOnce(()=>{markStarted();return new Promise<Response>(resolve=>setTimeout(()=>resolve(new Response('busy',{status:503})),500_000))});
   database.sql.exec("CREATE TEMP TRIGGER injected_failure BEFORE UPDATE OF result_json ON vertex_batch_emulation_jobs WHEN new.state='JOB_STATE_SUCCEEDED' BEGIN SELECT RAISE(ABORT,'injected persistence failure'); END");
+  // Response-body reads and receipt hashing can finish outside the fake timer
+  // turn. Advance each retry only after its backoff has actually been queued.
+  const schedule=setTimeout;let markRetryScheduled!:()=>void;
+  let retryScheduled=new Promise<void>(resolve=>{markRetryScheduled=resolve});
+  vi.spyOn(globalThis,'setTimeout').mockImplementation((handler,delay,...args)=>{
+   const timer=schedule(handler,delay,...args);if(delay===900)markRetryScheduled();return timer;
+  });
   const pending=expect(poll()).rejects.toThrow('injected persistence failure');
-  await started;await vi.advanceTimersByTimeAsync(501_000);await pending;
+  await started;await vi.advanceTimersByTimeAsync(500_000);
+  await retryScheduled;await vi.advanceTimersByTimeAsync(900);await pending;
   expect(provider).toHaveBeenCalledTimes(2);
   database.sql.exec('DROP TRIGGER injected_failure');vi.setSystemTime(Date.now()+13*60_000);
-  let finished=false;const resumed=poll().finally(()=>{finished=true});
-  for(let tick=0;tick<10&&!finished;tick++)await vi.advanceTimersByTimeAsync(1000);
-  await resumed;
+  retryScheduled=new Promise<void>(resolve=>{markRetryScheduled=resolve});
+  const resumed=poll();
+  await retryScheduled;await vi.advanceTimersByTimeAsync(900);await resumed;
   await assertComplete(operation);expect(provider).toHaveBeenCalledTimes(2);
  });
  it('settles research saved by a recipient for a shared bottle',async()=>{
