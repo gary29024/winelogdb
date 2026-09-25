@@ -1,4 +1,4 @@
-import { wineRowResearchTargets,loadWineResearchCache,type ResearchScope } from '../../src/lib/research/cache';
+import { wineRowResearchTargets,loadWineResearchCache,loadResearchCache,type ResearchScope } from '../../src/lib/research/cache';
 import { readableWine,researchWine,withSourceResearch } from '../../src/lib/research/readableWine';
 import { unresearchedProducers } from '../../src/lib/producers/researchCampaign';
 import { producerSubjectKey,reusableProducer } from '../../src/lib/research/sharedProducer';
@@ -10,6 +10,7 @@ import { champagneInputFingerprint,readChampagnePhotos,readChampagneWine,require
 import { workKey,activeFriendWork } from './researchWork';
 import { researchInputFingerprint } from './provider';
 import { ApiError,boundedBytes,hash,json,seconds,settings,stamp,type Member } from './common';
+import { WINE_RESEARCH_RECOVERY_MS } from '../../src/lib/research/recoveryPolicy';
 
 export { requiresAiReservation as aiRoute } from '../../src/lib/ai/reservedRoutes';
 export const CREDIT_ACTIONS=['scan_single','scan_batch','scan_group','scan_sheet','champagne_extraction','producer_research','producer_profile','wine_producer','wine_terroir','wine_vintage_context','wine_wine_vintage','vintage_window'] as const;
@@ -92,12 +93,26 @@ export async function plannedUnits(request:Request,db:D1Database,user:string):Pr
  if(path==='/api/maturity/vintage'){if(data.refresh!==true&&await readVintageWindow(db,user,data as VintageSubject,true))return [];return [unit('vintage_window')]}
  throw new ApiError(400,'Unknown AI action');
 }
+/** Browser request identity survives replacement of an HTTP retry key. */
+async function reusableOperation(request:Request,db:D1Database,user:string,fingerprint:string){
+ const path=new URL(request.url).pathname;
+ if(/^\/api\/wines\/[^/]+\/deep-search$/.test(path)){
+  const body=await request.clone().json() as {requestId?:unknown};
+  if(typeof body.requestId==='string'&&body.requestId){
+   const prior=await db.prepare('SELECT * FROM credit_operations WHERE user_id=? AND path=? AND run_id=? ORDER BY created_at DESC LIMIT 1').bind(user,path,body.requestId).first<CreditOperation>();
+   if(prior){if(prior.fingerprint!==fingerprint)throw new ApiError(409,'Research request ID was used for different work');return prior}
+  }
+ }
+ if(path==='/api/recognition'||path==='/api/maturity/vintage'||path.endsWith('/sheet/parse'))return null;
+ return db.prepare("SELECT * FROM credit_operations WHERE user_id=? AND path=? AND status IN ('reserved','running','review') LIMIT 1").bind(user,path).first<CreditOperation>();
+}
 export async function quote(request:Request,env:CreditEnv,member:Member){
  await settings(env.DB);
  const fingerprint=await requestFingerprint(request);
+ const existing=new URL(request.url).pathname.endsWith('/deep-search')?await reusableOperation(request,env.DB,member.id,fingerprint):null;
  const units:CreditUnit[]=[],prices=new Map<string,{id:string;credits:number}>();
  const sponsor=await activeFriendWork(env.DB,member.id,await workKey(env.DB,member.id,new URL(request.url).pathname,request));
- for(const unit of sponsor?[]:await plannedUnits(request,env.DB,member.id)){
+ for(const unit of existing||sponsor?[]:await plannedUnits(request,env.DB,member.id)){
   // The owner pays provider bills directly and must keep the pre-rollout workflow
   // after cutover. Keep a zero-credit operation for idempotency/auditability, but
   // do not require the owner to invent member prices or grant credits to themself.
@@ -109,7 +124,7 @@ export async function quote(request:Request,env:CreditEnv,member:Member){
  const id=crypto.randomUUID(),total=units.reduce((n,u)=>n+u.credits,0),expires=seconds()+600;
  await env.DB.prepare('INSERT INTO credit_quotes(id,user_id,path,fingerprint,units_json,total,expires_at) VALUES(?,?,?,?,?,?,?)').bind(id,member.id,new URL(request.url).pathname,fingerprint,JSON.stringify(units),total,expires).run();
  const wallet=await env.DB.prepare('SELECT balance,reserved FROM credit_wallets WHERE user_id=?').bind(member.id).first<{balance:number;reserved:number}>();
- return {id,total,units,expiresAt:expires,available:(wallet?.balance??0)-(wallet?.reserved??0),waitingForFriend:Boolean(sponsor)};
+ return {id,total,units,expiresAt:expires,available:(wallet?.balance??0)-(wallet?.reserved??0),waitingForFriend:Boolean(sponsor),existingOperationId:existing?.id};
 }
 async function rejectOverlappingWork(db:D1Database,user:string,units:Array<{researchKey?:string}>){
  const keys=units.flatMap(unit=>unit.researchKey?[unit.researchKey]:[]);if(!keys.length)return;
@@ -123,10 +138,8 @@ export async function reserve(request:Request,env:CreditEnv,member:Member,observ
  const previous=await env.DB.prepare('SELECT * FROM credit_operations WHERE user_id=? AND request_key=?').bind(member.id,key).first<CreditOperation>();
  if(previous){if(previous.fingerprint!==fingerprint)throw new ApiError(409,'Idempotency key was used for different work');return {operation:previous,existing:true}}
  const path=new URL(request.url).pathname;
- if(path!=='/api/recognition'&&path!=='/api/maturity/vintage'&&!path.endsWith('/sheet/parse')){
-  const running=await env.DB.prepare("SELECT * FROM credit_operations WHERE user_id=? AND path=? AND status IN ('reserved','running','review') LIMIT 1").bind(member.id,path).first<CreditOperation>();
-  if(running)return {operation:running,existing:true};
- }
+ const running=await reusableOperation(request,env.DB,member.id,fingerprint);
+ if(running)return {operation:running,existing:true};
  const quoted=await env.DB.prepare('SELECT * FROM credit_quotes WHERE id=? AND user_id=? AND expires_at>?').bind(quoteId,member.id,seconds()).first<{path:string;fingerprint:string;units_json:string;total:number}>();
  if(!quoted||quoted.fingerprint!==fingerprint||quoted.path!==new URL(request.url).pathname)throw new ApiError(409,'Quote expired or request changed; review a new quote');
  const config=await settings(env.DB);
@@ -158,6 +171,8 @@ export async function reserve(request:Request,env:CreditEnv,member:Member,observ
  }catch{
   const raced=await env.DB.prepare('SELECT * FROM credit_operations WHERE user_id=? AND request_key=?').bind(member.id,key).first<CreditOperation>();
   if(raced&&raced.fingerprint===fingerprint)return {operation:raced,existing:true};
+  const running=await reusableOperation(request,env.DB,member.id,fingerprint);
+  if(running)return {operation:running,existing:true};
   throw new ApiError(409,'Insufficient available credits or AI capacity; no work was submitted');
  }
  const operation=await env.DB.prepare('SELECT * FROM credit_operations WHERE id=?').bind(id).first<CreditOperation>();if(!operation)throw new ApiError(503,'Could not reserve credits');return {operation,existing:false};
@@ -165,11 +180,14 @@ export async function reserve(request:Request,env:CreditEnv,member:Member,observ
 export async function settle(db:D1Database,op:CreditOperation,captured:number,response?:{body:unknown;status:number},successful?:boolean){
  const amount=Math.min(op.reserved,Math.max(0,captured)),release=op.reserved-amount,now=stamp();
  const complete=successful??(amount>0||response?.status===200);
+ const finalResponse=response??(op.path.endsWith('/deep-search')&&op.run_id?{body:{researchRequestId:op.run_id,status:complete?'complete':'failed',...complete?{}:{error:'Deep Search did not complete',supportId:op.run_id}},status:complete?200:409}:undefined);
  await db.batch([
+  ...(response?.body&&typeof response.body==='object'&&'cached' in response.body&&response.body.cached===true
+   ?[db.prepare("DELETE FROM member_ai_action_usage WHERE operation_id=? AND status='pending'").bind(op.id)]:[]),
   db.prepare("INSERT OR IGNORE INTO credit_ledger(id,user_id,operation_id,kind,amount,actor_id,reason) VALUES(?,?,?,'capture',?,?,?)").bind(`${op.id}:capture`,op.user_id,op.id,amount,op.user_id,'Validated AI results saved'),
   db.prepare("INSERT OR IGNORE INTO credit_ledger(id,user_id,operation_id,kind,amount,actor_id,reason) VALUES(?,?,?,'release',?,?,?)").bind(`${op.id}:release`,op.user_id,op.id,release,op.user_id,'Unused AI reservation'),
   db.prepare("UPDATE credit_operations SET captured=(SELECT amount FROM credit_ledger WHERE id=?),status=?,response_json=coalesce(?,response_json),response_status=coalesce(?,response_status),updated_at=? WHERE id=? AND status IN ('reserved','running','review')")
-   .bind(`${op.id}:capture`,complete?'complete':'failed',response?JSON.stringify(response.body):null,response?.status??null,now,op.id),
+   .bind(`${op.id}:capture`,complete?'complete':'failed',finalResponse?JSON.stringify(finalResponse.body):null,finalResponse?.status??null,now,op.id),
   db.prepare('DELETE FROM research_work WHERE operation_id=?').bind(op.id)
  ]);
 }
@@ -191,8 +209,43 @@ export async function saveOperationResponse(db:D1Database,op:CreditOperation,res
  }
  const current=await db.prepare('SELECT * FROM credit_operations WHERE id=?').bind(op.id).first<CreditOperation>();return {...data,creditSettlement:creditSummary(current??op)};
 }
+async function validatedWineUnits(db:D1Database,op:CreditOperation){
+ const units=JSON.parse(op.units_json) as CreditUnit[],wineId=units[0]?.targetId;
+ if(!wineId)return [];
+ const found=await readableWine(db,op.user_id,wineId);
+ if(!found)return [];
+ const row=await researchWine(db,op.user_id,found,found.deep_search_json);
+ const cache=await loadResearchCache(db,op.user_id,wineTargets(row)),saved:CreditUnit[]=[];
+ for(const unit of units){
+  const entry=unit.scope&&cache.get(unit.scope);
+  if(!entry||entry.target.cacheKey!==unit.cacheKey||Date.parse(entry.researchedAt)<Date.parse(op.created_at))continue;
+  if(await db.prepare('SELECT 1 FROM research_cache WHERE owner_id=? AND scope=? AND cache_key=? AND (source_user_id IS NULL OR source_user_id=owner_id)').bind(op.user_id,unit.scope!,unit.cacheKey!).first())saved.push(unit);
+ }
+ return saved;
+}
 export async function reconcileOperation(db:D1Database,op:CreditOperation){
  if(!['running','reserved','review'].includes(op.status))return;
+ if(op.path.endsWith('/deep-search')&&Date.parse(op.created_at)<Date.now()-WINE_RESEARCH_RECOVERY_MS
+  &&!await db.prepare("SELECT 1 FROM wine_research_runs WHERE owner_id=? AND request_id=? AND status='complete'").bind(op.user_id,op.run_id??'').first()){
+  // Do not race a still-live queue invocation. The next maintenance pass can
+  // close it after its finite delivery lease; new provider sends are fenced.
+  const live=await db.prepare(`SELECT 1 FROM queue_outbox o JOIN queue_deliveries d ON d.id=o.id
+   WHERE o.operation_id=? AND d.done=0 AND d.lease_until>? LIMIT 1`).bind(op.id,seconds()).first();
+  if(live)return;
+  const unresolved=await db.prepare("SELECT id FROM provider_operations WHERE operation_id=? AND state IN ('submitted','uncertain') LIMIT 1").bind(op.id).first();
+  let captured=0,successfulUnits=0;
+  for(const unit of await validatedWineUnits(db,op)){captured+=unit.credits;successfulUnits++}
+  const supportId=op.run_id??op.id,outcome=unresolved?'uncertain':'interrupted';
+  const message=unresolved?'WineLog could not confirm the research outcome within the recovery window. Any saved research is kept.':'Research recovery did not finish within the recovery window. Any saved research is kept.';
+  // Keep provider rows and the original run diagnostic for owner investigation.
+  if(op.run_id)await db.batch([
+   db.prepare("UPDATE research_batch_jobs SET status='failed',error=coalesce(error,?),updated_at=? WHERE owner_id=? AND request_id=? AND status='running'").bind(message,stamp(),op.user_id,op.run_id),
+   db.prepare("UPDATE wine_research_runs SET status='failed',stage='failed',message=coalesce(message,'')||?,updated_at=?,completed_at=? WHERE owner_id=? AND request_id=? AND status<>'complete'")
+    .bind(` · ${message}`,stamp(),stamp(),op.user_id,op.run_id)
+  ]);
+  await settle(db,op,captured,{body:{status:'failed',outcome,error:message,supportId,researchRequestId:op.run_id},status:409},successfulUnits>0);
+  return;
+ }
  if(await db.prepare("SELECT id FROM provider_operations WHERE operation_id=? AND state IN ('submitted','uncertain') LIMIT 1").bind(op.id).first()){
   await db.prepare("UPDATE credit_operations SET status='review',updated_at=? WHERE id=? AND status IN ('reserved','running','review')").bind(stamp(),op.id).run();return;
  }
@@ -221,10 +274,18 @@ export async function reconcileOperation(db:D1Database,op:CreditOperation){
   terminal=!run||['complete','failed'].includes(run.status);
   successfulUnits=run?.status==='complete'?1:0;captured=successfulUnits?op.reserved:0;
  }else if(op.path.includes('/deep-search')&&op.run_id){
-  const run=await db.prepare('SELECT status FROM wine_research_runs WHERE owner_id=? AND request_id=?').bind(op.user_id,op.run_id).first<{status:string}>();
+  const run=await db.prepare('SELECT status,attempt FROM wine_research_runs WHERE owner_id=? AND request_id=?').bind(op.user_id,op.run_id).first<{status:string;attempt:number}>();
   const active=await db.prepare("SELECT id FROM research_batch_jobs WHERE owner_id=? AND request_id=? AND status='running' LIMIT 1").bind(op.user_id,op.run_id).first();
   terminal=Boolean(run&&run.status!=='running'&&!active);
-  if(terminal)for(const unit of units){if(await db.prepare('SELECT 1 FROM research_cache WHERE owner_id=? AND scope=? AND cache_key=? AND researched_at>=?').bind(op.user_id,unit.scope!,unit.cacheKey!,op.created_at).first()){captured+=unit.credits;successfulUnits++}}
+  if(terminal&&run?.status==='complete'&&run.attempt===0){
+   await settle(db,op,0,{body:{cached:true,status:'complete',researchRequestId:op.run_id},status:200},true);return;
+  }
+  if(terminal)for(const unit of await validatedWineUnits(db,op)){captured+=unit.credits;successfulUnits++}
+  if(terminal){
+   const complete=run?.status==='complete';
+   await settle(db,op,captured,{body:{researchRequestId:op.run_id,status:complete?'complete':'failed',...complete?successfulUnits?{}:{cached:true}:{partial:successfulUnits>0,error:'Deep Search did not complete. Any saved research is kept.',supportId:op.run_id}},status:complete?200:409},complete||successfulUnits>0);
+   return;
+  }
  }else if(first?.action==='scan_batch'){
   const rows=await db.prepare('SELECT id,status,recognition_json FROM batch_recognition_items WHERE owner_id=? AND session_id=?').bind(op.user_id,first.targetId!).all<{id:string;status:string;recognition_json:string|null}>();
   terminal=units.every(u=>rows.results.some(r=>r.id===(u.resultId??u.id)&&!['staged','submitted'].includes(r.status)));

@@ -14,7 +14,7 @@ export type GeminiTransportBindings={
 export type GeminiTransportProvider='vertex-ai-gateway'|'gemini-developer-api';
 export type GeminiServiceTier='standard'|'flex';
 type MetadataValue=string|number|boolean;
-type RequestOptions={serviceTier?:GeminiServiceTier;serverTimeoutSeconds?:number};
+type RequestOptions={serviceTier?:GeminiServiceTier;serverTimeoutSeconds?:number;idempotencyKey?:string};
 
 const gatewayKeys=['CF_AI_GATEWAY_TOKEN','AI_GATEWAY_ACCOUNT_ID','AI_GATEWAY_ID','VERTEX_PROJECT_ID','VERTEX_REGION'] as const;
 const text=(value:unknown)=>typeof value==='string'?value.trim():'';
@@ -62,7 +62,7 @@ function metadataHeader(metadata?:Record<string,MetadataValue>){
 
 export async function postGeminiGenerateContent(env:GeminiTransportBindings,model:string,body:string,signal:AbortSignal,metadata?:Record<string,MetadataValue>,options:RequestOptions={}){
  const provider=resolveGeminiTransport(env);
- const response=await durableProvider(env.CREDIT_CONTEXT,JSON.stringify({model,body,metadata,options}),async()=>(await sendGeminiGenerateContent(env,model,body,signal,metadata,options)).response);
+ const response=await durableProvider(env.CREDIT_CONTEXT,options.idempotencyKey??JSON.stringify({model,body,metadata,options}),async()=>(await sendGeminiGenerateContent(env,model,body,signal,metadata,options)).response);
  return {response,provider};
 }
 async function sendGeminiGenerateContent(

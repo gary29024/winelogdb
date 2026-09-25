@@ -1,6 +1,7 @@
 import { failVintageResearch,processVintageResearch,type VintageResearchMessage } from './vintageResearchJobs';
 import { Hono } from 'hono';
 import { apiErrorHandler } from '../src/lib/credits/primitives';
+import type { ProviderAuthorization } from '../src/lib/credits/provider';
 import app from './cuveeEntry';
 import { AI_MODELS } from '../src/lib/ai/policy';
 import { requireSession } from '../src/lib/auth/session';
@@ -26,7 +27,7 @@ type WineBatchPollJob={kind:'wine_batch_poll';owner:string;wineId:string;request
 type ProducerCampaignTickJob={kind:'producer_campaign_tick';owner:string;campaignId:string};
 type CancelResearchSweepJob={kind:'research_cancel_sweep';owner:string;targetKind:ResearchTargetKind;targetId:string;requestId:string;pass:number};
 type ResearchJob=ProducerJob|ProducerBatchPollJob|ProducerCampaignTickJob|WineJob|WineBatchPollJob|CancelResearchSweepJob|BatchRecognitionJob|VintageResearchMessage|ChampagneExtractionJob;
-type Bindings={CREDIT_PRODUCER_IDS?:string[];DB:D1Database;WINE_IMAGES:R2Bucket;REFERENCE_DATA:R2Bucket;ASSETS:Fetcher;GEMINI_API_KEY?:string;AUTH_SECRET:string;APP_PASSWORD:string;APP_URL:string;MAX_FILE_BYTES?:string;MAX_BATCH_FILES?:string;RESEARCH_QUEUE:Queue<ResearchJob>};
+type Bindings={CREDIT_CONTEXT?:ProviderAuthorization;CREDIT_PRODUCER_IDS?:string[];DB:D1Database;WINE_IMAGES:R2Bucket;REFERENCE_DATA:R2Bucket;ASSETS:Fetcher;GEMINI_API_KEY?:string;AUTH_SECRET:string;APP_PASSWORD:string;APP_URL:string;MAX_FILE_BYTES?:string;MAX_BATCH_FILES?:string;RESEARCH_QUEUE:Queue<ResearchJob>};
 type AppEnv={Bindings:Bindings};
 const router=new Hono<AppEnv>();
 router.onError(apiErrorHandler);
@@ -147,8 +148,9 @@ router.post('/api/producers/:id/research-cancel',async c=>{
 router.post('/api/wines/:id/deep-search',async c=>{
   cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
   const body=await c.req.json().catch(()=>({})) as {confirmation?:string;refresh?:'none'|'vintage'|'all';requestId?:string};if(body.confirmation!=='RUN_DEEP_SEARCH')return c.json({error:'Deep Search requires explicit confirmation'},400);
-  const refresh=body.refresh==='all'||body.refresh==='vintage'?body.refresh:'none',queued=await createWineResearchRun(c.env.DB,owner,c.req.param('id'),refresh,body.requestId);if(!queued)return c.json({error:'Wine not found'},404);
-  if(queued.created){try{await c.env.RESEARCH_QUEUE.send({kind:'wine',owner,wineId:c.req.param('id'),requestId:queued.run.requestId,refresh})}catch(e){const error=(e as Error).message||'Could not queue Deep Search';await updateWineResearchRun(c.env.DB,owner,queued.run.requestId,'failed',error,'failed');return c.json({error,researchRequestId:queued.run.requestId},503)}}
+  const context=c.env.CREDIT_CONTEXT,operationId=context&&'operationId' in context?context.operationId:undefined;
+  const refresh=body.refresh==='all'||body.refresh==='vintage'?body.refresh:'none',queued=await createWineResearchRun(c.env.DB,owner,c.req.param('id'),refresh,body.requestId,operationId);if(!queued)return c.json({error:'Wine not found'},404);
+  if(queued.created&&!operationId){try{await c.env.RESEARCH_QUEUE.send({kind:'wine',owner,wineId:c.req.param('id'),requestId:queued.run.requestId,refresh})}catch(e){const error=(e as Error).message||'Could not queue Deep Search';await updateWineResearchRun(c.env.DB,owner,queued.run.requestId,'failed',error,'failed');return c.json({error,researchRequestId:queued.run.requestId},503)}}
   return c.json({accepted:true,researchRequestId:queued.run.requestId,existing:!queued.created},202);
 });
 

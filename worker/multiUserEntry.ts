@@ -59,6 +59,9 @@ export default {
    if(aiRoute(path,request.method)){
     const cost=await deploymentAiCost(env.DB,env);
     const {operation,existing}=await reserve(request,env,member,cost.usd),operationUnits=JSON.parse(operation.units_json) as Array<{action:string;targetId?:string;scope?:string;parentOperationId?:string}>;
+    // Replays observe the original operation. They cannot reserve a new slot
+    // after its failure released the original allowance.
+    if(existing)return operation.response_json?json(publicAiResponse(path,JSON.parse(operation.response_json) as Record<string,unknown>,operation),operation.response_status??202):json({accepted:true,creditOperationId:operation.id,status:operation.status},202);
     if(member.role==='member'&&operationUnits.length){
      const action=memberActionForRequest(request);if(!action){if(!existing)await settle(env.DB,operation,0,{body:{error:'This AI action has no member access policy'},status:503},false);throw new ApiError(503,'This AI action has no member access policy')}
      // A tasting-sheet continuation is part of the same successful user-facing
@@ -69,7 +72,6 @@ export default {
       if(!claim.allowed){const message=allowanceMessage(claim.access.label,claim.access.resetsAt);if(!existing)await settle(env.DB,operation,0,{body:{error:message},status:429},false);throw new ApiError(429,message)}
      }
     }
-    if(existing)return operation.response_json?json(publicAiResponse(path,JSON.parse(operation.response_json) as Record<string,unknown>,operation),operation.response_status??202):json({accepted:true,creditOperationId:operation.id,status:operation.status},202);
     const following=await env.DB.prepare('SELECT operation_id FROM research_followers WHERE operation_id=?').bind(operation.id).first();
     if(following){await env.DB.prepare("UPDATE credit_operations SET status='running',response_json=?,response_status=202,updated_at=? WHERE id=?").bind(JSON.stringify({accepted:true,waitingForFriend:true}),stamp(),operation.id).run();return json({accepted:true,waitingForFriend:true,creditOperationId:operation.id},202)}
     // Zero reserved credits no longer means "cached": included/allowed work is
@@ -103,13 +105,27 @@ export default {
     if(op)await reconcileOperation(env.DB,op);
    }
    const response=await legacy.fetch(forwarded,scoped,ctx);
-   if(response.ok&&request.method==='GET'&&/^\/api\/wines\/[^/]+\/deep-search-status$/.test(path)){
-    const run=await response.json() as {status:string;requestId:string};
-    // Read the live hold rather than inferring it from an old error message.
-    // A resolved operation must become retryable on the next status check.
-    const held=run.status==='failed'?await env.DB.prepare(`SELECT id FROM credit_operations
-     WHERE user_id=? AND run_id=? AND status IN ('reserved','running','review') LIMIT 1`).bind(member.id,run.requestId).first():null;
-    return json({...run,retryBlocked:Boolean(held)});
+   if((response.ok||response.status===404)&&request.method==='GET'&&/^\/api\/wines\/[^/]+\/deep-search-status$/.test(path)){
+    let run=response.ok?await response.json() as {status:string;requestId:string;startedAt:string;message?:string|null}:null;
+    const requested=new URL(request.url).searchParams.get('requestId')??'';
+    const op=await env.DB.prepare(`SELECT * FROM credit_operations WHERE user_id=? AND path=?
+     AND (?='' OR run_id=? OR id=?) ORDER BY created_at DESC,rowid DESC LIMIT 1`)
+     .bind(member.id,path.replace(/-status$/,''),requested,requested,requested).first<CreditOperation>();
+    const active=Boolean(op&&['reserved','running','review'].includes(op.status));
+    // Followers and interrupted HTTP starts have an operation but no run row.
+    // Restore them from the same durable operation used for submission/replay.
+    if(op&&!op.run_id&&(!run||op.created_at>=run.startedAt)){
+     const following=active&&Boolean(await env.DB.prepare('SELECT operation_id FROM research_followers WHERE operation_id=?').bind(op.id).first());
+     const status=op.status==='review'?'failed':active?'running':op.status;
+     run={requestId:op.id,status,startedAt:op.created_at,...{wineId:path.split('/')[3],stage:status==='running'?'queued':status,refresh:'none',attempt:0,updatedAt:op.updated_at,completedAt:active?null:op.updated_at,durationMs:null,waitingForFriend:following,creditOperationId:op.id}};
+    }
+    if(!run)return response;
+    const linked=op&&(op.run_id===run.requestId||op.id===run.requestId),held=run.status==='failed'&&linked&&active;
+    const outcome=linked&&op.response_json?(JSON.parse(op.response_json) as {outcome?:string}).outcome:undefined;
+    const message=member.role==='owner'?run.message:run.status==='failed'
+     ?outcome==='uncertain'?'WineLog could not confirm the research outcome. Any saved research is kept.':held?'WineLog is checking the previous research outcome. Any saved research is kept.':'Deep Search did not complete. Any saved research is kept.'
+     :run.status==='complete'?'Deep Search complete.':'WineLog is researching this wine in the background.';
+    return json({...run,message,outcome,retryBlocked:Boolean(held)});
    }
    const producerMatch=path.match(/^\/api\/producers\/([^/]+)$/);
    if(response.ok&&request.method==='GET'&&producerMatch){const shared=await reusableProducer(env.DB,member.id,producerMatch[1]);if(shared)return json({...await response.json() as object,...shared})}
@@ -140,28 +156,32 @@ export default {
  async queue(batch:Batch,env:MultiUserEnv){
   for(const message of batch.messages){
    const raw=message.body as (typeof message.body&JobEnvelope)|RolloutQueueJob,id=('_outboxId' in raw&&raw._outboxId)||message.id;
-   if(!await claimDelivery(env.DB,id,raw.kind==='admin_rollout'&&raw.rollout==='lwin_ai'?LWIN_AI_LEASE_SECONDS:undefined)){const done=await env.DB.prepare('SELECT done FROM queue_deliveries WHERE id=?').bind(id).first<{done:number}>();if(done?.done)message.ack();else message.retry({delaySeconds:60});continue}
-   let retried=false;
+   const lease=await claimDelivery(env.DB,id,raw.kind==='admin_rollout'&&raw.rollout==='lwin_ai'?LWIN_AI_LEASE_SECONDS:undefined);
+   if(!lease){const done=await env.DB.prepare('SELECT done FROM queue_deliveries WHERE id=?').bind(id).first<{done:number}>();if(done?.done)message.ack();else message.retry({delaySeconds:60});continue}
+   let retried=false,acknowledged=false;
    try{
     const cleanup=isQueueCleanup(raw as JobEnvelope);
     // Disabling an account prevents AI work, but must not strand its temporary photos.
     const member=await env.DB.prepare("SELECT id,role FROM app_users WHERE id=? AND (status='active' OR ?=1)").bind(raw.owner||'',cleanup?1:0).first<{id:string;role:string}>();
     if(!member){message.retry({delaySeconds:300});retried=true;continue}
     if(raw.kind==='admin_rollout'){
-     if(member.role!=='owner'){message.ack();continue}
+     if(member.role!=='owner'){acknowledged=true;continue}
      const rolloutEnv={...env,CREDIT_CONTEXT:providerAuthorization('owner',`Admin ${raw.rollout} rollout`)};
      const result=await processRolloutJob(rolloutEnv,raw.rollout,raw);
-     if(result.busy||('retryAfterSeconds' in result&&result.retryAfterSeconds)){retried=true;message.retry({delaySeconds:'retryAfterSeconds' in result?result.retryAfterSeconds:60})}else message.ack();continue;
+     if(result.busy||('retryAfterSeconds' in result&&result.retryAfterSeconds)){retried=true;message.retry({delaySeconds:'retryAfterSeconds' in result?result.retryAfterSeconds:60})}else acknowledged=true;continue;
     }
     const job=raw as typeof message.body&JobEnvelope;
     const op=job._creditOperationId?await env.DB.prepare('SELECT * FROM credit_operations WHERE id=? AND user_id=?').bind(job._creditOperationId,job.owner!).first<CreditOperation>():null;
-    if(!cleanup&&(!op||!['reserved','running','review'].includes(op.status))){message.ack();continue}
+    if(!cleanup&&(!op||!['reserved','running','review'].includes(op.status))){acknowledged=true;continue}
     const scoped={...env,CREDIT_CONTEXT:cleanup?{deny:true as const,reason:'Cleanup jobs cannot invoke AI providers.'}:op?{db:env.DB,operationId:op.id,namespace:'queue'}:providerAuthorization(member.role,`${job.kind??'This job'} reached the provider without a credit operation.`),CREDIT_RESEARCH_SCOPES:op?JSON.parse(op.units_json).flatMap((u:{scope?:string})=>u.scope?[u.scope]:[]):[],WINE_IMAGES:meteredBucket(env.WINE_IMAGES,env.DB,job.owner!,{skipMemberLimit:member.role==='owner'}),RESEARCH_QUEUE:durableQueue(env.RESEARCH_QUEUE,env.DB,op?.id)};
-    const wrapped={id:message.id,timestamp:message.timestamp,body:message.body,attempts:message.attempts,ack:()=>message.ack(),retry:(options?:QueueRetryOptions)=>{retried=true;message.retry(options)}};
-    await legacy.queue({queue:batch.queue,metadata:batch.metadata,messages:[wrapped],ackAll:()=>message.ack(),retryAll:(options?:QueueRetryOptions)=>{retried=true;message.retry(options)}},scoped);
+    // An inner consumer only requests acknowledgement. Cloudflare's first
+    // ack/retry decision wins, so acknowledging before settlement would make
+    // the catch block's retry ineffective if reconciliation failed.
+    const wrapped={id:message.id,timestamp:message.timestamp,body:message.body,attempts:message.attempts,ack:()=>{acknowledged=true},retry:(options?:QueueRetryOptions)=>{retried=true;message.retry(options)}};
+    await legacy.queue({queue:batch.queue,metadata:batch.metadata,messages:[wrapped],ackAll:()=>{acknowledged=true},retryAll:(options?:QueueRetryOptions)=>{retried=true;message.retry(options)}},scoped);
     if(op)await reconcileOperation(env.DB,op);
    }catch(error){retried=true;message.retry();console.error(JSON.stringify({event:'multi_user_queue_failed',id,error:String(error)}))}
-   finally{await finishDelivery(env.DB,id,retried)}
+   finally{const finished=await finishDelivery(env.DB,id,retried,lease);if(acknowledged&&!retried){if(finished)message.ack();else message.retry({delaySeconds:60})}}
   }
   await flushOutbox(env.DB,env.RESEARCH_QUEUE);
  },

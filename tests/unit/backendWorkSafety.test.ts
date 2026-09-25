@@ -18,8 +18,8 @@ it('recovers an expired dispatch lease, delays send failures and rejects complet
   expect(d.sql.prepare('SELECT sent_at,attempts FROM queue_outbox').get()).toEqual({sent_at:null,attempts:1});
   await flushOutbox(d.db,queue);expect(send).toHaveBeenCalledTimes(1);
   vi.setSystemTime(Date.now()+61_000);await flushOutbox(d.db,queue);await flushOutbox(d.db,queue);expect(send).toHaveBeenCalledTimes(2);
-  expect(await claimDelivery(d.db,'leased')).toBe(true);expect(await claimDelivery(d.db,'leased')).toBe(false);
-  await finishDelivery(d.db,'leased',false);expect(await claimDelivery(d.db,'leased')).toBe(false);
+  const lease=await claimDelivery(d.db,'leased');expect(lease).toBeGreaterThan(0);expect(await claimDelivery(d.db,'leased')).toBe(false);
+  await finishDelivery(d.db,'leased',false,lease);expect(await claimDelivery(d.db,'leased')).toBe(false);
  }finally{d.close()}
 });
 
