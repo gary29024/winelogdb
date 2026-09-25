@@ -69,6 +69,20 @@ describe('Premier Cru wine-detail destinations',()=>{
     expect(find('Chablis Premier Cru','Fourchaume')?.name).toBe('Chablis — Fourchaume');
   });
 
+  it('resolves reviewed Vosne spellings in wine and reference fields without relaxing tier or village checks',()=>{
+    for(const [alias,source] of [['Les Petits Monts','Les Petis Monts'],['Aux Reignots','Aux Raignots']]){
+      const base={...wine,appellation:'Vosne-Romanée'};
+      const expected=burgundyAtlasPremierCru({...base,wineName:source})!;
+      expect(expected).not.toBeNull();
+      for(const fields of [{wineName:alias},{wineName:'',referenceSite:alias},{wineName:'',appellation:`Vosne-Romanée Premier Cru ${alias}`}]){
+        expect(burgundyAtlasPremierCru({...base,...fields})?.placeId).toBe(expected.placeId);
+      }
+      expect(burgundyAtlasPremierCru({...wine,wineName:alias})).toBeNull();
+      expect(burgundyAtlasWineDetailPlace({...base,wineName:alias,classification:null})).toBeNull();
+      expect(burgundyAtlasWineDetailPlace({...base,wineName:alias,identityMatchStatus:'conflict'})).toBeNull();
+    }
+  });
+
   it.each([
     {country:'United States'},{region:'Bordeaux'},{region:'Côte de Beaune'},{region:'Unknown'},
     {classification:'village'},{classification:'grand_cru'},{classification:null},

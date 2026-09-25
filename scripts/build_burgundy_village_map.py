@@ -148,6 +148,25 @@ def main():
                 targets[match_id] = {"target": target, "villages": [village["id"]], "denom": denom_id}
 
         by_id = {f["id"]: f for f in catalogue}
+        # Some reviewed INAO areas overlap across tiers. Preserve every full
+        # source geometry for selection, hit testing and outlines. Only the
+        # overview fill uses this derived geometry, avoiding stacked colours.
+        by_denom = {f["properties"]["denominationId"]: f for f in features}
+        tier_rank = {"premier_cru": 1, "grand_cru": 2}
+        for lower, higher in village.get("contextExclusions", {}).items():
+            lower = int(lower)
+            feature = by_denom[lower]
+            assert feature["properties"]["kind"] == "vineyard"
+            for upper in higher:
+                assert by_denom[upper]["properties"]["kind"] == "vineyard"
+                assert tier_rank[by_denom[upper]["properties"]["tier"]] > tier_rank[feature["properties"]["tier"]]
+            mask = unary_union([geometries[d] for d in higher])
+            full = geometries[lower]
+            assert full.intersection(mask).area > 0, "Review an exclusion whose overlap disappeared"
+            context = full.difference(mask)
+            assert context.intersection(mask).area < 0.001
+            assert abs(full.area - context.area - full.intersection(mask).area) < 0.001
+            feature["contextGeometry"] = geometry_json(transform(to_wgs84, context))
         for feature_id, note in village["notes"].items():
             assert feature_id in by_id
             if cover_id := note.get("paintedBy"):

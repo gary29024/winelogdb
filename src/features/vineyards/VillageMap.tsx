@@ -1,6 +1,6 @@
 import { useEffect,useId,useRef,useState } from 'react';
 import { Map as MapLibreMap,Marker,NavigationControl,ScaleControl,type FilterSpecification,type MapGeoJSONFeature,type StyleSpecification } from 'maplibre-gl';
-import type { FeatureCollection,Geometry } from 'geojson';
+import type { Feature,FeatureCollection,Geometry } from 'geojson';
 import { snapshotLabel,type BurgundyVillageMapTarget,type VillageMapCatalogue,type VillageMapFeature } from '../../lib/places/burgundyVillageMap';
 import { loadVillageMapCatalogue } from '../../lib/places/loadVillageMapCatalogue';
 import { BurgundyAtlasLink } from '../../components/BurgundyAtlasLink';
@@ -23,13 +23,21 @@ const selectionFilter=(id:string):FilterSpecification=>['==',['get','id'],id];
 function mapStyle(data:FeatureCollection,catalogue:VillageMapCatalogue,base?:StyleSpecification):StyleSpecification{
  const unpainted=Object.entries(catalogue.notes).filter(([,entry])=>entry.paintedBy).map(([id])=>id);
  const painted:FilterSpecification=['all',['==',['get','kind'],'vineyard'],['!',['in',['get','id'],['literal',unpainted]]]];
+ // Reviewed cross-tier overlaps have a separate overview fill geometry. The
+ // original production boundaries remain the source for selection and clicks.
+ const contextFeatures=data.features.map(feature=>{
+  const geometry=(feature as Feature<Geometry>&{contextGeometry?:Geometry}).contextGeometry;
+  return geometry?{...feature,geometry}:feature;
+ });
+ const separateContext=contextFeatures.some((feature,index)=>feature!==data.features[index]);
  return {
   ...(base??{version:8}),
-  sources:{...base?.sources,'wine-boundaries':{type:'geojson',data}},
+  sources:{...base?.sources,'wine-boundaries':{type:'geojson',data},
+   ...(separateContext?{'wine-context':{type:'geojson' as const,data:{...data,features:contextFeatures}}}:{})},
   layers:[...(base?.layers??[{id:'paper',type:'background' as const,paint:{'background-color':'#f3f1ec'}}]),
    {id:'commune-outline',type:'line',source:'wine-boundaries',filter:['==',['get','kind'],'commune'],paint:{'line-color':'#7d899c','line-width':1.5,'line-dasharray':[4,3]}},
    {id:'village-outline',type:'line',source:'wine-boundaries',filter:['all',['==',['get','kind'],'appellation'],['==',['get','tier'],'village']],paint:{'line-color':cru.village,'line-width':1.4}},
-   {id:'vineyard-fill',type:'fill',source:'wine-boundaries',filter:painted,paint:{
+   {id:'vineyard-fill',type:'fill',source:separateContext?'wine-context':'wine-boundaries',filter:painted,paint:{
     'fill-color':['match',['get','tier'],'grand_cru',cru.grand_cru,cru.premier_cru],
     'fill-opacity':['match',['get','tier'],'grand_cru',0.62,0.4]}},
    // Invisible, but every cru - painted or not - answers a click and the cursor.

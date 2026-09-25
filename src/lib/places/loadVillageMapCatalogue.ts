@@ -4,6 +4,7 @@ const loaders=new Map<string,()=>Promise<{default:VillageMapCatalogue}>>([
  ['gevrey-chambertin',()=>import('./burgundyVillageMapCatalogue.json')],
  ['morey-saint-denis',()=>import('./moreyVillageMapCatalogue.json')],
  ['chambolle-musigny',()=>import('./chambolleVillageMapCatalogue.json')],
+ ['vosne-romanee',()=>import('./vosneVillageMapCatalogue.json')],
 ]);
 
 export async function loadVillageMapCatalogue(villageId:string):Promise<VillageMapCatalogue>{

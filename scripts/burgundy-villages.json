@@ -52,6 +52,26 @@
       "notes": {
         "inao-denom-361": {"note": "Bonnes-Mares spans Morey-Saint-Denis and Chambolle-Musigny. Its full production area is shown on both village maps; the wine’s designation alone does not identify which side it comes from."}
       }
+    },
+    {
+      "id": "vosne-romanee",
+      "name": "Vosne-Romanée",
+      "region": "Côte de Nuits",
+      "appellationId": 241,
+      "villageDenomination": 1262,
+      "premierDenomination": 1277,
+      "premierRange": [1263, 1276],
+      "grands": [565, 645, 654, 655, 656, 1083, 1084, 1085],
+      "communes": [{"id": "21714", "name": "Vosne-Romanée"}, {"id": "21267", "name": "Flagey-Échezeaux"}],
+      "catalogueFile": "vosneVillageMapCatalogue.json",
+      "nameCrosswalk": {},
+      "displayNames": {"Echezeaux": "Échezeaux", "Grands-Echezeaux": "Grands-Échezeaux", "Les Petis Monts": "Les Petits Monts", "Aux Brulées": "Aux Brûlées"},
+      "contextExclusions": {"1269": [565], "1271": [565], "1276": [565]},
+      "notes": {
+        "inao-denom-565": {"note": "Échezeaux lies in Flagey-Échezeaux and is distinct from Grands-Échezeaux. Some neighbouring Premier Cru areas overlap it in this INAO snapshot. Overview colours give Grand Cru precedence; selecting a cru shows its full source boundary."},
+        "inao-denom-645": {"note": "Grands-Échezeaux lies in Flagey-Échezeaux. It is a separate Grand Cru from Échezeaux."},
+        "inao-denom-1271": {"note": "Les Beaux Monts spans Vosne-Romanée and Flagey-Échezeaux. Its published INAO area partly overlaps Échezeaux. The selection shows the full Premier Cru source boundary across both communes; the overlap does not establish a bottle’s origin."}
+      }
     }
   ]
 }

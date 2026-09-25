@@ -135,6 +135,8 @@ test('new village broad wines keep a light appellation tint without a single-cru
  for(const fields of [
   {appellation:'Morey-Saint-Denis',wineName:'Morey-Saint-Denis Premier Cru',classification:'premier_cru',id:'inao-denom-949'},
   {appellation:'Chambolle-Musigny',wineName:'Chambolle-Musigny Vieilles Vignes',classification:'village',id:'inao-denom-449'},
+  {appellation:'Vosne-Romanée',wineName:'Vosne-Romanée Premier Cru',classification:'premier_cru',id:'inao-denom-1277'},
+  {appellation:'Vosne-Romanée',wineName:'Vosne-Romanée Vieilles Vignes',classification:'village',id:'inao-denom-1262'},
  ]){
   const {id,...wineFields}=fields;
   await setup(page,wineFields);await page.goto('/wines/layout-wine');
@@ -148,6 +150,63 @@ test('new village broad wines keep a light appellation tint without a single-cru
   await page.keyboard.press('Escape');
  }
 });
+
+for(const route of ['/wines/layout-wine','/shared/layout-wine']){
+ test(`Vosne ${route}: maps label spellings, Flagey crus and cross-commune boundaries`,async({page},testInfo)=>{
+  const requests:string[]=[],errors:string[]=[];
+  page.on('request',request=>requests.push(request.url()));page.on('pageerror',error=>errors.push(error.message));
+  await page.setViewportSize({width:390,height:844});
+  await setup(page,{appellation:'Vosne-Romanée',wineName:'Les Petits Monts'});await page.goto(route);
+  const opener=page.getByRole('button',{name:'View village map'});
+  await expect(opener).toBeVisible();
+  expect(requests.filter(url=>url.includes('/maps/')||url.includes('VillageMapCatalogue.json'))).toEqual([]);
+  await opener.click();
+  const dialog=page.getByRole('dialog',{name:'Vosne-Romanée',exact:true});
+  await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
+  const selector=dialog.getByRole('combobox',{name:'Explore a vineyard'});
+  await expect(selector).toHaveValue('inao-denom-1274');
+  await expect(selector.locator('option')).toHaveCount(24);
+  await expect(dialog.locator('.village-map-selected-label')).toHaveText('Les Petits Monts');
+  await expect(dialog.locator('.village-map-context')).toContainText('8 Grand Crus · 14 Premier Cru climats');
+  await expect(dialog.locator('.village-map-context')).toContainText('Vosne-Romanée & Flagey-Échezeaux');
+  const catalogues=requests.filter(url=>url.includes('VillageMapCatalogue.json'));
+  const boundaries=requests.filter(url=>url.includes('/maps/'));
+  expect(catalogues.length).toBeGreaterThan(0);expect(boundaries.length).toBeGreaterThan(0);
+  expect(catalogues.every(url=>url.includes('vosneVillageMapCatalogue'))).toBe(true);
+  expect(boundaries.every(url=>url.includes('/maps/vosne-romanee.'))).toBe(true);
+  for(const [id,name] of [['inao-denom-565','Échezeaux'],['inao-denom-645','Grands-Échezeaux']]){
+   await selector.selectOption(id);
+   await dialog.getByRole('button',{name:'Zoom to selection'}).click();
+   await expect(dialog.locator('.village-map-selected-label')).toHaveText(name);
+   await expect(dialog.locator('.village-map-overlap')).toContainText('Flagey-Échezeaux');
+  }
+  await selector.selectOption('inao-denom-1271');
+  await expect(dialog.locator('.village-map-overlap')).toContainText('partly overlaps Échezeaux');
+  for(const width of [320,390,1280]){
+   await page.setViewportSize({width,height:900});
+   await dialog.getByRole('button',{name:'Village view',exact:true}).click();
+   expect(await dialog.evaluate(element=>element.scrollWidth<=element.clientWidth)).toBe(true);
+   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+   await page.screenshot({path:testInfo.outputPath(`vosne-map-${width}.png`)});
+  }
+  await dialog.getByRole('button',{name:'Back to this wine'}).click();
+  await expect(selector).toHaveValue('inao-denom-1274');
+  await page.keyboard.press('Escape');await expect(opener).toBeFocused();
+  expect(errors).toEqual([]);
+ });
+}
+
+for(const grand of [{name:'Échezeaux',id:'inao-denom-565'},{name:'Grands Échezeaux',id:'inao-denom-645'}]){
+ test(`${grand.name}: opens its distinct Grand Cru in the Vosne and Flagey map`,async({page})=>{
+  await setup(page,{appellation:grand.name,wineName:grand.name,classification:'grand_cru'});await page.goto('/wines/layout-wine');
+  await page.getByRole('button',{name:'View village map'}).click();
+  const dialog=page.getByRole('dialog',{name:'Vosne-Romanée',exact:true});
+  await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
+  await expect(dialog.getByRole('combobox')).toHaveValue(grand.id);
+  await expect(dialog.locator('.village-map-tier')).toHaveText('Grand Cru');
+  await expect(dialog.locator('.village-map-overlap')).toContainText('Flagey-Échezeaux');
+ });
+}
 
 test('a successful street style arriving later preserves the current village and selection',async({page})=>{
  await setup(page,{appellation:'Morey-Saint-Denis',wineName:'Les Ruchots'});

@@ -31,8 +31,16 @@ function nameVariants(name:string){
     {key,exact:true},...(withoutArticle(key)!==key?[{key:withoutArticle(key),exact:false}]:[])
   ]);
 }
+// Reviewed spellings, scoped to the village and the exact registry entry.
+// BIVB spells Les Petits Monts with a second t; the source registry says Petis.
+// Domaine du Comte Liger-Belair documents Reignots and Raignots as alternatives.
+// Sources: docs/burgundy-village-map.md. Do not use fuzzy matching for identities.
+const reviewedNameAliases:Record<string,Record<string,string[]>>={
+  'Vosne-Romanée':{'Les Petis Monts':['Les Petits Monts'],'Aux Raignots':['Aux Reignots']}
+};
 const groups=mapping.groups.map(group=>({...group,key:nameKey(group.appellation),entries:group.entries.map(entry=>
-  ({...entry,variants:nameVariants(entry.name).map(variant=>({...variant,pattern:patternFor(variant.key)}))}))}));
+  ({...entry,variants:[entry.name,...(reviewedNameAliases[group.appellation]?.[entry.name]??[])].flatMap(nameVariants)
+    .map(variant=>({...variant,pattern:patternFor(variant.key)}))}))}));
 type Group=typeof groups[number];
 type Entry=Group['entries'][number];
 type Match={entry:Entry;start:number;end:number;exact:boolean};

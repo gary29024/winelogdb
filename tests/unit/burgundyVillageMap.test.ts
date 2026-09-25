@@ -4,11 +4,12 @@ import { snapshotLabel,burgundyVillageMapTarget,type VillageMapCatalogue } from 
 import catalogue from '../../src/lib/places/burgundyVillageMapCatalogue.json';
 import morey from '../../src/lib/places/moreyVillageMapCatalogue.json';
 import chambolle from '../../src/lib/places/chambolleVillageMapCatalogue.json';
+import vosne from '../../src/lib/places/vosneVillageMapCatalogue.json';
 import registry from '../../src/lib/places/burgundyVillageMapRegistry.json';
 import { loadVillageMapCatalogue } from '../../src/lib/places/loadVillageMapCatalogue';
 import type { FeatureCollection,MultiPolygon,Polygon } from 'geojson';
 
-const catalogues:VillageMapCatalogue[]=[catalogue,morey,chambolle];
+const catalogues:VillageMapCatalogue[]=[catalogue,morey,chambolle,vosne];
 
 const wine={country:'France',region:'Burgundy',appellation:'Gevrey-Chambertin',wineName:'Les Cazetiers',classification:'premier_cru'};
 
@@ -36,7 +37,7 @@ describe('Gevrey village map identity',()=>{
  });
  it('withholds conflicts, incompatible geography, unsupported villages and an unproven cru tier',()=>{
   for(const fields of [{country:'USA'},{region:'Bordeaux'},{appellation:'Meursault'},
-   {identityMatchStatus:'conflict' as const},{classification:null},{appellation:'La Romanée',classification:'grand_cru'}]){
+   {identityMatchStatus:'conflict' as const},{classification:null},{appellation:'Clos de Vougeot',classification:'grand_cru'}]){
    expect(burgundyVillageMapTarget({...wine,...fields}),JSON.stringify(fields)).toBeNull();
   }
  });
@@ -92,6 +93,7 @@ describe('overlap notes',()=>{
 describe.each([
  {catalogue:morey,grands:5,premiers:20,broad:'inao-denom-949',village:'inao-denom-928'},
  {catalogue:chambolle,grands:2,premiers:24,broad:'inao-denom-474',village:'inao-denom-449'},
+ {catalogue:vosne,grands:8,premiers:14,broad:'inao-denom-1277',village:'inao-denom-1262'},
 ])('$catalogue.name identities and boundaries',({catalogue:c,grands,premiers,broad,village})=>{
  const data=JSON.parse(readFileSync(`public${c.dataUrl}`,'utf8')) as FeatureCollection<Polygon|MultiPolygon>;
  it('resolves every named cru and retains appellation scope for broad wines',()=>{
@@ -104,14 +106,16 @@ describe.each([
    expect(target,feature.name).toMatchObject({featureId:feature.id,scope:'vineyard',
     villageId:feature.denominationId===361?'chambolle-musigny':c.id});
   }
-  for(const wineName of [c.name+' Premier Cru','Unknown vineyard','Les Gruenchers et Les Charmes']){
+  const blend=c.features.filter(f=>f.kind==='vineyard'&&f.tier==='premier_cru').slice(0,2).map(f=>f.name).join(' et ');
+  for(const wineName of [c.name+' Premier Cru','Unknown vineyard',blend]){
    expect(burgundyVillageMapTarget({...base,wineName})).toMatchObject({featureId:broad,villageId:c.id,scope:'appellation'});
   }
   expect(burgundyVillageMapTarget({...base,wineName:c.name,classification:'village'})).toMatchObject({featureId:village,scope:'appellation'});
  });
  it('rejects conflicts and an unproven Premier Cru tier',()=>{
   for(const overrides of [{country:'USA'},{region:'Bordeaux'},{identityMatchStatus:'conflict' as const},{classification:null}]){
-   expect(burgundyVillageMapTarget({...wine,appellation:c.name,wineName:'Les Gruenchers',...overrides})).toBeNull();
+   const wineName=c.features.find(f=>f.kind==='vineyard'&&f.tier==='premier_cru')!.name;
+   expect(burgundyVillageMapTarget({...wine,appellation:c.name,wineName,...overrides})).toBeNull();
   }
  });
  it('publishes exactly the expected wine and commune identities with intact rings',()=>{
@@ -148,8 +152,8 @@ describe('village registry',()=>{
   expect(burgundyVillageMapTarget({...wine,appellation:'Chambolle-Musigny',wineName:'Les Feusselotes'})?.featureId).toBe('inao-denom-464');
  });
  it('has one target per identity and a working lazy catalogue for every village',async()=>{
-  expect(registry.targets).toHaveLength(91);
-  expect(new Set(registry.targets.map(t=>t.matchId)).size).toBe(91);
+  expect(registry.targets).toHaveLength(115);
+  expect(new Set(registry.targets.map(t=>t.matchId)).size).toBe(115);
   for(const village of registry.villages){
    const c=await loadVillageMapCatalogue(village.id);
    expect(catalogues.find(expected=>expected.id===village.id)).toEqual(c);
@@ -158,6 +162,51 @@ describe('village registry',()=>{
    }
   }
   await expect(loadVillageMapCatalogue('unknown-village')).rejects.toThrow('unavailable');
+ });
+});
+
+describe('Vosne-Romanée and Flagey-Échezeaux',()=>{
+ it('keeps full source boundaries alongside the three reviewed overview-only exclusions',()=>{
+  const data=JSON.parse(readFileSync(`public${vosne.dataUrl}`,'utf8')) as {
+   features:Array<{id:string;geometry:Polygon|MultiPolygon;contextGeometry?:Polygon|MultiPolygon}>
+  };
+  const contextFeatures=data.features.filter(f=>f.contextGeometry);
+  expect(contextFeatures.map(f=>f.id).sort()).toEqual(['inao-denom-1269','inao-denom-1271','inao-denom-1276']);
+  for(const feature of contextFeatures){
+   expect(feature.contextGeometry).not.toEqual(feature.geometry);
+   const context=feature.contextGeometry!;
+   const rings=context.type==='Polygon'?context.coordinates:context.coordinates.flat();
+   expect(rings.every(r=>r.length>=4&&r[0][0]===r.at(-1)![0]&&r[0][1]===r.at(-1)![1])).toBe(true);
+  }
+  expect(data.features.find(f=>f.id==='inao-denom-565')?.contextGeometry).toBeUndefined();
+ });
+ it('includes both producing communes without clipping shared Premier Cru or appellation areas',()=>{
+  const byDenom=(id:number)=>vosne.features.find(f=>f.denominationId===id)!;
+  for(const id of [1262,1277,1271])expect(byDenom(id).communes).toEqual(['21267','21714']);
+  for(const id of [565,645,1269,1275])expect(byDenom(id).communes).toEqual(['21267']);
+  for(const id of [654,655,656,1083,1084,1085])expect(byDenom(id).communes).toEqual(['21714']);
+  expect(vosne.communes.map(c=>c.id).sort()).toEqual(['21267','21714']);
+ });
+ it('keeps similarly named Grand Crus and the Gevrey Premier Cru La Romanée separate',()=>{
+  const grand=(appellation:string)=>burgundyVillageMapTarget({...wine,appellation,wineName:appellation,classification:'grand_cru'});
+  expect(grand('Echezeaux')).toMatchObject({villageId:'vosne-romanee',featureId:'inao-denom-565'});
+  expect(grand('Grands Echezeaux')).toMatchObject({villageId:'vosne-romanee',featureId:'inao-denom-645'});
+  expect(grand('La Romanee')?.featureId).toBe('inao-denom-655');
+  expect(grand('Romanee Conti')?.featureId).toBe('inao-denom-1084');
+  expect(grand('Romanee St Vivant')?.featureId).toBe('inao-denom-1085');
+  const gevreyRomanee=catalogue.features.find(f=>f.name==='La Romanée')!;
+  expect(burgundyVillageMapTarget({...wine,wineName:'La Romanée'}))
+   .toMatchObject({villageId:'gevrey-chambertin',featureId:gevreyRomanee.id});
+ });
+ it('accepts reviewed label spellings and preserves the exact source identities',()=>{
+  for(const [wineName,id] of [['Les Petits Monts',1274],['Les Petis Monts',1274],['Aux Reignots',1266],['Aux Raignots',1266],['Aux Brûlées',1264]] as const){
+   const base={...wine,appellation:'Vosne-Romanée',wineName};
+   expect(burgundyVillageMapTarget(base)).toMatchObject({featureId:`inao-denom-${id}`,scope:'vineyard'});
+   expect(burgundyVillageMapTarget({...base,classification:null})).toBeNull();
+  }
+  expect(vosne.features.find(f=>f.id==='inao-denom-1274')).toMatchObject({name:'Les Petits Monts',sourceName:'Vosne-Romanée premier cru Les Petis Monts'});
+  expect(burgundyVillageMapTarget({...wine,appellation:'Vosne-Romanée',wineName:'Aux Reignots et Les Petits Monts'}))
+   .toMatchObject({featureId:'inao-denom-1277',scope:'appellation'});
  });
 });
 
