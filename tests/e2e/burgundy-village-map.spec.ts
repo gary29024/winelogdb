@@ -142,6 +142,9 @@ for(const village of [
  {id:'chassagne-montrachet',name:'Chassagne-Montrachet',cru:'Morgeot',tier:'premier_cru',feature:'inao-denom-527',count:60,catalogue:'chassagneVillageMapCatalogue',explore:'inao-denom-499',label:'La Chapelle'},
  {id:'saint-aubin',name:'Saint-Aubin',cru:'En Remilly',tier:'premier_cru',feature:'inao-denom-1132',count:34,catalogue:'saintAubinVillageMapCatalogue',explore:'inao-denom-1144',label:'Les Cortons'},
  {id:'blagny',name:'Blagny',cru:'La Pièce sous le Bois',tier:'premier_cru',feature:'inao-denom-356',count:9,catalogue:'blagnyVillageMapCatalogue',explore:'inao-denom-353',label:'Hameau de Blagny'},
+ {id:'aloxe-corton',name:'Aloxe-Corton',cru:'Les Chaillots',tier:'premier_cru',feature:'inao-denom-248',count:43,catalogue:'aloxeVillageMapCatalogue',explore:'inao-denom-2357',label:'Corton Les Bressandes'},
+ {id:'pernand-vergelesses',name:'Pernand-Vergelesses',cru:'Ile des Vergelesses',tier:'premier_cru',feature:'inao-denom-1020',count:37,catalogue:'pernandVillageMapCatalogue',explore:'inao-denom-476',label:'Charlemagne'},
+ {id:'ladoix',name:'Ladoix',cru:'Le Rognet et Corton',tier:'premier_cru',feature:'inao-denom-1988',count:42,catalogue:'ladoixVillageMapCatalogue',explore:'inao-denom-2356',label:'Corton Le Rognet et Corton'},
 ]){
  for(const route of ['/wines/layout-wine','/shared/layout-wine']){
   test(`${village.name} ${route}: opens the correct boundary and keeps its full village context`,async({page},testInfo)=>{
@@ -206,6 +209,7 @@ for(const village of [
  {name:'Meursault',white:844,red:2062,app:204},
  {name:'Puligny-Montrachet',white:2047,red:1061,app:219},
  {name:'Saint-Aubin',white:1125,red:2083,app:227},
+ {name:'Ladoix',white:657,red:2059,app:192},
 ]){
  test(`${village.name} colour selects the official area and unknown colour keeps a combined overview`,async({page})=>{
   for(const fields of [
@@ -243,6 +247,54 @@ test('a white Blagny record does not select the red appellation boundary',async(
  await page.goto('/wines/layout-wine');
  await expect(page.getByRole('heading',{name:'La Pièce sous le Bois',exact:true})).toBeVisible();
  await expect(page.getByRole('button',{name:'View village map'})).toHaveCount(0);
+});
+
+for(const route of ['/wines/layout-wine','/shared/layout-wine']){
+ test(`Corton ${route}: named climats retain local identities, while unnamed wines show the appellation`,async({page},testInfo)=>{
+  await setup(page,{appellation:'Corton',wineName:'Corton Les Bressandes',classification:'grand_cru'});
+  await page.goto(route);const opener=page.getByRole('button',{name:'View village map'});await opener.click();
+  const dialog=page.getByRole('dialog',{name:'Aloxe-Corton',exact:true});
+  await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
+  const select=dialog.getByRole('combobox');
+  await expect(select).toHaveValue('inao-denom-2357');
+  await expect(dialog.locator('.village-map-selected-label')).toHaveText('Corton Les Bressandes');
+  await expect(dialog.locator('.village-map-context')).toContainText('3 Grand Crus · 24 Grand Cru climats · 14 Premier Cru climats');
+  await expect(dialog.getByRole('link',{name:/Explore on Burgundy Atlas/})).toHaveCount(0);
+  await select.selectOption('inao-denom-550');
+  await expect(dialog.locator('.village-map-selected-label')).toHaveText('Corton-Charlemagne');
+  await expect(dialog.getByRole('link',{name:/Explore on Burgundy Atlas: Corton-Charlemagne/})).toBeVisible();
+  await select.selectOption('inao-denom-549');
+  await expect(dialog.locator('.village-map-selected-label')).toHaveCount(0);
+  await expect(dialog.getByText('Appellation area shown; no single vineyard is identified.')).toBeVisible();
+  await expect(dialog.getByRole('link',{name:/Explore on Burgundy Atlas: Corton appellation/})).toBeVisible();
+  await dialog.getByRole('button',{name:'Back to this wine'}).click();
+  await expect(select).toHaveValue('inao-denom-2357');
+  for(const width of [320,390,1280]){
+   await page.setViewportSize({width,height:900});
+   await dialog.getByRole('button',{name:'Village view',exact:true}).click();
+   expect(await dialog.evaluate(e=>e.scrollWidth<=e.clientWidth)).toBe(true);
+   await page.screenshot({path:testInfo.outputPath(`corton-climat-${width}.png`)});
+  }
+  await page.keyboard.press('Escape');await expect(opener).toBeFocused();
+ });
+}
+
+test('Corton broad, mixed, unsupported and white records keep appellation scope',async({page})=>{
+ for(const fields of [
+  {wineName:'Corton'},
+  {wineName:'Les Bressandes et Les Renardes'},
+  {wineName:'Clos des Cortons Faiveley'},
+  {wineName:'Les Vergennes',colour:'White',wineStyle:'white'},
+ ]){
+  await setup(page,{appellation:'Corton',classification:'grand_cru',...fields});await page.goto('/wines/layout-wine');
+  await page.getByRole('button',{name:'View village map'}).click();
+  const dialog=page.getByRole('dialog',{name:'Aloxe-Corton',exact:true});
+  await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
+  await expect(dialog.getByRole('combobox')).toHaveValue('inao-denom-549');
+  await expect(dialog.locator('.village-map-selected-label')).toHaveCount(0);
+  await expect(dialog.getByText('Appellation area shown; no single vineyard is identified.')).toBeVisible();
+  await page.keyboard.press('Escape');
+ }
 });
 
 test('new village broad wines keep a light appellation tint without a single-cru label',async({page})=>{
@@ -360,8 +412,11 @@ test('a failed village catalogue offers a working reload without downloading bou
 });
 
 test('Côte de Nuits-Villages names its two separate parts and zooms to each',async({page})=>{
+ // Label visibility switches at a zoom threshold, so use a stable canvas size.
+ await page.setViewportSize({width:1280,height:900});
  await setup(page,{appellation:'Côte de Nuits-Villages',wineName:'Côte de Nuits-Villages',classification:'village'});
- await page.goto('/wines/layout-wine');await page.getByRole('button',{name:'View village map'}).click();
+ await page.goto('/wines/layout-wine');await page.evaluate(()=>document.fonts.ready);
+ await page.getByRole('button',{name:'View village map'}).click();
  const dialog=page.getByRole('dialog',{name:'Côte de Nuits-Villages',exact:true});
  await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
  const labels=dialog.locator('.village-map-area-name');

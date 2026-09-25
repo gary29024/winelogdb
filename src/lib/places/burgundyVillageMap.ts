@@ -1,10 +1,11 @@
 import type { WineFacts } from '../wine/detailFields';
 import { burgundyAtlasWineDetailPlace } from './burgundyAtlasPremierCru';
 import registry from './burgundyVillageMapRegistry.json';
+import { burgundyGrandCruMapIdentity } from './burgundyGrandCruClimats';
 
 export type VillageMapFeature={
  id:string;name:string;tier:string;kind:string;appellationId:number;denominationId:number|null;denominationIds?:number[];
- sourceName:string;communes:string[];areaHa:number;matchId:string;atlasUrl:string;bounds:number[];labelPoint:number[];
+ sourceName:string;communes:string[];areaHa:number;matchId:string;atlasUrl:string|null;bounds:number[];labelPoint:number[];parentAppellation?:string;
 };
 export type VillageMapCatalogue={
  id:string;name:string;region:string;communes:{id:string;name:string}[];dataUrl:string;bounds:number[];
@@ -25,8 +26,10 @@ const byVillageId=new Map(registry.villages.map(village=>[village.id,village]));
 /** Reuse the reviewed geographic/tier conflict checks. INAO identities, not
  * Atlas URLs, select geometry; the catalogue crosswalk is checked at build time. */
 export function burgundyVillageMapTarget(wine:WineFacts&{classification?:string|null;wineStyle?:string|null}):BurgundyVillageMapTarget|null{
- const place=burgundyAtlasWineDetailPlace(wine);
- const target=place?byMatchId.get(place.placeId):undefined;
+ const local=burgundyGrandCruMapIdentity(wine);
+ if(local===null)return null;
+ const matchId=local??burgundyAtlasWineDetailPlace(wine)?.placeId;
+ const target=matchId?byMatchId.get(matchId):undefined;
  const village=target?byVillageId.get(target.villageId):undefined;
  if(!target||!village)return null;
  // Some village appellations have separate colour areas. Choose only with

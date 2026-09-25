@@ -70,6 +70,10 @@ def main():
     appellations = read_json(PLACES / "burgundyAtlasAppellationLinks.json")["groups"]
     app_ids = {v["appellationId"] for v in villages}
     grands = {d for v in villages for d in v["grands"]}
+    climat_groups = config.get("grandCruClimats", [])
+    climat_by_denom = {d: group for group in climat_groups
+                       for d in range(group["denominationRange"][0], group["denominationRange"][1] + 1)}
+    broad_grands = {group["broadDenomination"] for group in climat_groups}
     grouped = {}
     with zipfile.ZipFile(archive) as z:
         # Only extract exact, flat members. Refresh them from the verified archive
@@ -81,6 +85,7 @@ def main():
         crs = CRS.from_wkt(z.read(f"{stem}.prj").decode())
         assert crs.to_epsg() == 2154
     to_wgs84 = Transformer.from_crs(crs, 4326, always_xy=True).transform
+    to_source = Transformer.from_crs(4326, crs, always_xy=True).transform
     with shapefile.Reader(str(args.source_dir / stem), encoding="utf-8") as reader:
         for record in reader.iterRecords():
             row = record.as_dict()
@@ -90,6 +95,10 @@ def main():
     # Union a designation once across ALL communes, never clip it to the
     # village being rendered. Bonnes-Mares must be identical on both maps.
     geometries = {d: unary_union([geom for _, geom in rows]) for d, rows in grouped.items()}
+    for group in climat_groups:
+        expected = {group["broadDenomination"]} | {d for d, owner in climat_by_denom.items() if owner is group}
+        actual = {d for d, rows in grouped.items() if rows[0][0]["id_app"] == group["appellationId"]}
+        assert actual == expected, f"Review Grand Cru climat coverage for {group['name']}"
     outputs, targets = [], {}
     for village in villages:
         name = village["name"]
@@ -126,9 +135,14 @@ def main():
             west, south, east, north = village.get("expectedBounds", [4.9, 47.1, 5.05, 47.3])
             assert west < geom.bounds[0] < geom.bounds[2] < east and south < geom.bounds[1] < geom.bounds[3] < north
             tier = "grand_cru" if denom_id in village["grands"] else "village" if denom_id in village_ids else "premier_cru"
-            broad = denom_id in village_ids or denom_id == village.get("premierDenomination")
+            broad = denom_id in village_ids or denom_id == village.get("premierDenomination") or denom_id in broad_grands
             feature_name = row["denom"].removeprefix(f"{name} premier cru ")
-            if broad:
+            if denom_id in climat_by_denom:
+                # Local INAO identity: a named Grand Cru does not need an Atlas
+                # page, and must never borrow another plot's outbound link.
+                match_id = f"inao-denom-{denom_id}"
+                atlas_path = None
+            elif broad and tier != "grand_cru":
                 feature_name = name + (" Premier Cru" if tier == "premier_cru" else "")
                 atlas_path = appellation["premierCruPath" if tier == "premier_cru" else "villagePath"]
                 match_id = atlas_path.split("/")[2]
@@ -151,11 +165,13 @@ def main():
             properties = {"id": feature_id, "name": feature_name, "tier": tier, "kind": "appellation" if broad else "vineyard",
                           "appellationId": row["id_app"], "denominationId": denom_id, "sourceName": " / ".join(sorted(source_names)),
                           "communes": sorted({r["insee"] for r, _ in rows}), "areaHa": round(geom_m.area / 10000, 2)}
+            if denom_id in climat_by_denom:
+                properties["parentAppellation"] = climat_by_denom[denom_id]["name"]
             assert set(properties["communes"]) <= {c["id"] for c in village["communes"]}
             features.append({"type": "Feature", "id": feature_id, "properties": properties, "geometry": geometry_json(geom)})
             label_geom = max(geom.geoms, key=lambda part: part.area) if geom.geom_type == "MultiPolygon" else geom
             point = label_geom.representative_point()
-            catalogue.append({**properties, "matchId": match_id, "atlasUrl": "https://burgundyatlas.com" + atlas_path,
+            catalogue.append({**properties, "matchId": match_id, "atlasUrl": "https://burgundyatlas.com" + atlas_path if atlas_path else None,
                               "bounds": rounded(geom.bounds), "labelPoint": rounded([point.x, point.y])})
             target = {"matchId": match_id, "featureId": feature_id, "name": feature_name, "scope": properties["kind"]}
             # Marsannay uses one denomination ID for three source labels. Keep
@@ -255,6 +271,8 @@ def main():
         url = f"/maps/{village['id']}.{DATE}.geojson"
         manifest = {"id": village["id"], "name": name, "region": village["region"], "communes": village["communes"],
                     "dataUrl": url, "bounds": rounded(vineyard_bounds), "sources": sources, "notes": village["notes"], "features": catalogue}
+        manifest["notes"] = {**village["notes"], **{f["id"]: {"note": climat_by_denom[f["denominationId"]]["note"]}
+                            for f in catalogue if f["denominationId"] in climat_by_denom}}
         # Umbrella names: a Premier Cru lying at least 90% inside a larger one
         # (Chassagne's Morgeot covers nineteen named climats). Measured shares in
         # the pinned snapshot are either >= 97% or <= 72%, so the threshold does
@@ -296,17 +314,29 @@ def main():
             # Individual boundaries still handle all selection and hit testing.
             data["overviewFills"] = []
             higher = None
+            higher_ids = []
             for tier in ("grand_cru", "premier_cru"):
-                ids = [f["denominationId"] for f in catalogue if f["kind"] == "vineyard" and f["tier"] == tier]
+                ids = [f["denominationId"] for f in catalogue if f["tier"] == tier
+                       and (f["kind"] == "vineyard" or f["denominationId"] in broad_grands)]
                 if not ids:
                     continue
                 full = unary_union([geometries[d] for d in ids])
                 fill = full.difference(higher) if higher is not None else full
                 assert abs(full.area - fill.area - (full.intersection(higher).area if higher is not None else 0)) < 0.001
+                geographic_fill = transform(to_wgs84, fill)
+                if not geographic_fill.is_valid:
+                    # Union intersections can be closer than projection's floating
+                    # point precision (Corton). Rebuild this display-only union
+                    # from the individually valid geographic source boundaries.
+                    geographic_fill = unary_union([transform(to_wgs84, geometries[d]) for d in ids])
+                    if higher_ids:
+                        geographic_fill = geographic_fill.difference(unary_union([transform(to_wgs84, geometries[d]) for d in higher_ids]))
+                    assert abs(transform(to_source, geographic_fill).area - fill.area) < 0.01
                 data["overviewFills"].append({"type": "Feature", "id": f"overview-{tier}",
                     "properties": {"id": f"overview-{tier}", "kind": "vineyard", "tier": tier},
-                    "geometry": geometry_json(transform(to_wgs84, fill))})
+                    "geometry": geometry_json(geographic_fill)})
                 higher = unary_union([higher, full]) if higher is not None else full
+                higher_ids.extend(ids)
         outputs.append((village, manifest, data))
 
     index = []
@@ -322,7 +352,12 @@ def main():
         write_json(PLACES / village["catalogueFile"], manifest)
         print(f"Built {village['id']}: {len(manifest['features'])} wine boundaries; {destination.stat().st_size:,} bytes")
     write_json(PLACES / "burgundyVillageMapRegistry.json", {
-        "villages": [{k: v[k] for k in ("id", "name", "region", "wineColours") if k in v} for v in villages], "targets": index
+        "villages": [{k: v[k] for k in ("id", "name", "region", "wineColours") if k in v} for v in villages], "targets": index,
+        "grandCruClimats": [{"name": group["name"],
+                             "matchId": next(entry["target"]["matchId"] for entry in targets.values() if entry["denom"] == group["broadDenomination"]),
+                             "climats": [{"matchId": f"inao-denom-{d}", "name": grouped[d][0][0]["denom"].removeprefix(group["name"] + " ")}
+                                         for d in sorted(climat_by_denom) if climat_by_denom[d] is group]}
+                            for group in climat_groups]
     }, compact=True)
 
 
