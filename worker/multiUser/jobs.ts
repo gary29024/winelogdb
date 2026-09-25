@@ -41,8 +41,8 @@ export function durableQueue(queue:Queue<unknown>,db:D1Database,operationId?:str
  };
  return new Proxy(queue,{get(target,key){if(key==='send')return send;if(key==='sendBatch')return async(items:Iterable<MessageSendRequest<unknown>>)=>{for(const item of items)await send(item.body,{delaySeconds:item.delaySeconds})};const value=Reflect.get(target,key,target);return typeof value==='function'?value.bind(target):value}});
 }
-export async function flushOutbox(db:D1Database,queue:Queue<unknown>){
- const rows=(await db.prepare('SELECT id,body_json FROM queue_outbox WHERE sent_at IS NULL AND due_at<=? ORDER BY due_at LIMIT 4').bind(seconds()).all<{id:string;body_json:string}>()).results;
+export async function flushOutbox(db:D1Database,queue:Queue<unknown>,operationId?:string){
+ const rows=(await db.prepare('SELECT id,body_json FROM queue_outbox WHERE sent_at IS NULL AND due_at<=? AND (? IS NULL OR operation_id=?) ORDER BY due_at LIMIT 4').bind(seconds(),operationId??null,operationId??null).all<{id:string;body_json:string}>()).results;
  for(const row of rows){
   // Competing HTTP/cron/queue flushes may have read the same rows. Atomically
   // defer this row before sending; a crashed dispatcher becomes eligible again
@@ -53,6 +53,29 @@ export async function flushOutbox(db:D1Database,queue:Queue<unknown>){
   catch{await db.prepare('UPDATE queue_outbox SET attempts=attempts+1,due_at=? WHERE id=? AND sent_at IS NULL').bind(seconds()+60,row.id).run()}
  }
 }
+/** Reconcile one existing operation without reserving or submitting new AI work. */
+export async function maintainOperation(db:D1Database,op:CreditOperation){
+ if(!['reserved','running','review'].includes(op.status))return;
+ if(await recoverSavedWineReply(db,op))return;
+ const winePath=op.path.match(/^\/api\/wines\/([^/]+)\/deep-search$/);
+ if((op.status==='reserved'||winePath)&&Date.parse(op.created_at)<Date.now()-15*60_000&&!await db.prepare('SELECT id FROM queue_outbox WHERE operation_id=? LIMIT 1').bind(op.id).first()){
+  // HTTP can stop after marking the operation running but before dispatch.
+  // Followers wait for their sponsor without dispatching their own work.
+  // Only expire an operation that has never dispatched, submitted or followed.
+  const claimed=await db.prepare(`UPDATE credit_operations SET status='review' WHERE id=? AND status IN ('reserved','running','review')
+   AND NOT EXISTS(SELECT 1 FROM queue_outbox WHERE operation_id=?)
+   AND NOT EXISTS(SELECT 1 FROM provider_operations WHERE operation_id=?)
+   AND NOT EXISTS(SELECT 1 FROM research_followers WHERE operation_id=?)`).bind(op.id,op.id,op.id,op.id).run();
+  if(claimed.meta.changes){
+   if(winePath)await db.prepare(`UPDATE wine_research_runs SET status='failed',stage='failed',message='Reservation expired before dispatch',updated_at=?,completed_at=?
+    WHERE owner_id=? AND wine_id=? AND started_at>=? AND status='running'`).bind(stamp(),stamp(),op.user_id,winePath[1],op.created_at).run();
+   await settle(db,op,0,{body:{error:'Reservation expired before dispatch',supportId:op.run_id??op.id},status:409});
+  }else await reconcileOperation(db,op);
+ }
+ else await reconcileOperation(db,op);
+ await db.prepare("UPDATE credit_operations SET updated_at=? WHERE id=? AND status IN ('running','reserved','review')").bind(stamp(),op.id).run();
+}
+
 export async function maintainJobs(db:D1Database,queue:Queue<unknown>,bucket?:R2Bucket){
  // Queue expiry or a DLQ delivery cannot erase the durable dispatch record.
  // Operation-free cleanup messages need the same recovery as active AI work.
@@ -60,26 +83,7 @@ export async function maintainJobs(db:D1Database,queue:Queue<unknown>,bucket?:R2
  SELECT o.id FROM queue_outbox o LEFT JOIN queue_deliveries d ON d.id=o.id LEFT JOIN credit_operations c ON c.id=o.operation_id
  WHERE o.sent_at<? AND coalesce(d.done,0)=0 AND (o.operation_id IS NULL OR c.status IN ('running','reserved','review')) LIMIT 20)`).bind(seconds(),seconds()-86400).run();
  const rows=await db.prepare("SELECT * FROM credit_operations WHERE status IN ('running','reserved','review') ORDER BY updated_at LIMIT 2").all<CreditOperation>();
- for(const op of rows.results){
-  if(await recoverSavedWineReply(db,op))continue;
-  const winePath=op.path.match(/^\/api\/wines\/([^/]+)\/deep-search$/);
-  if((op.status==='reserved'||winePath)&&Date.parse(op.created_at)<Date.now()-15*60_000&&!await db.prepare('SELECT id FROM queue_outbox WHERE operation_id=? LIMIT 1').bind(op.id).first()){
-   // HTTP can stop after marking the operation running but before dispatch.
-   // Followers wait for their sponsor without dispatching their own work.
-   // Only expire an operation that has never dispatched, submitted or followed.
-   const claimed=await db.prepare(`UPDATE credit_operations SET status='review' WHERE id=? AND status IN ('reserved','running','review')
-    AND NOT EXISTS(SELECT 1 FROM queue_outbox WHERE operation_id=?)
-    AND NOT EXISTS(SELECT 1 FROM provider_operations WHERE operation_id=?)
-    AND NOT EXISTS(SELECT 1 FROM research_followers WHERE operation_id=?)`).bind(op.id,op.id,op.id,op.id).run();
-   if(claimed.meta.changes){
-    if(winePath)await db.prepare(`UPDATE wine_research_runs SET status='failed',stage='failed',message='Reservation expired before dispatch',updated_at=?,completed_at=?
-     WHERE owner_id=? AND wine_id=? AND started_at>=? AND status='running'`).bind(stamp(),stamp(),op.user_id,winePath[1],op.created_at).run();
-    await settle(db,op,0,{body:{error:'Reservation expired before dispatch',supportId:op.run_id??op.id},status:409});
-   }else await reconcileOperation(db,op);
-  }
-  else await reconcileOperation(db,op);
-  await db.prepare("UPDATE credit_operations SET updated_at=? WHERE id=? AND status IN ('running','reserved','review')").bind(stamp(),op.id).run();
- }
+ for(const op of rows.results)await maintainOperation(db,op);
  await flushOutbox(db,queue);
  await db.batch([
   db.prepare('DELETE FROM auth_sessions WHERE token_hash IN (SELECT token_hash FROM auth_sessions WHERE expires_at<? LIMIT 100)').bind(seconds()),

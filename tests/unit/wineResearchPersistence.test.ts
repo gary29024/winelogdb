@@ -79,21 +79,30 @@ async function httpFlow(beforeStart?:()=>void,expectedStatus=202){
  const q=await quoted.json() as {id:string};
  const start=(key=requestId)=>worker.fetch(new Request(`https://wine.example/api/wines/${wineId}/deep-search`,{method:'POST',headers:{...headers,'X-WineLog-Quote':q.id,'Idempotency-Key':key},body}),workerEnv,ctx);
  const requote=()=>worker.fetch(new Request(`https://wine.example/api/credits/quotes?path=/api/wines/${wineId}/deep-search`,{method:'POST',headers,body}),workerEnv,ctx);
+ const retry=async()=>{
+  const requestId=crypto.randomUUID(),body=JSON.stringify({confirmation:'RUN_DEEP_SEARCH',refresh:'none',requestId});
+  const quoted=await worker.fetch(new Request(`https://wine.example/api/credits/quotes?path=/api/wines/${wineId}/deep-search`,{method:'POST',headers,body}),workerEnv,ctx);
+  expect(quoted.status).toBe(200);const q=await quoted.json() as {id:string};
+  const response=await worker.fetch(new Request(`https://wine.example/api/wines/${wineId}/deep-search`,{method:'POST',headers:{...headers,'X-WineLog-Quote':q.id,'Idempotency-Key':requestId},body}),workerEnv,ctx);
+  await Promise.all(background.splice(0));return response;
+ };
  beforeStart?.();
  const response=await start();expect(response.status).toBe(expectedStatus);
  const accepted=await response.json() as {researchRequestId:string;creditOperationId:string};
  await Promise.all(background.splice(0));
  const provider=vi.fn<(url?:unknown,init?:RequestInit)=>Promise<Response>>(async()=>Response.json(payload()));vi.stubGlobal('fetch',provider);
- const status=async()=>{
-  const response=await worker.fetch(new Request(`https://wine.example/api/wines/${wineId}/deep-search-status`,{headers}),workerEnv,ctx);
+ const request=(suffix:string,method='GET',data?:unknown,overrides:Record<string,string>={})=>worker.fetch(new Request(`https://wine.example/api/wines/${wineId}/${suffix}`,{method,headers:{...headers,...overrides},...data?{body:JSON.stringify(data)}:{}}),workerEnv,ctx);
+ const status=async(check=false)=>{
+  const response=await request(`deep-search-status?requestId=${accepted.researchRequestId??accepted.creditOperationId}`,check?'POST':'GET');
   expect(response.status).toBe(200);return response.json();
  };
+ const stop=()=>request('deep-search-cancel','POST',{confirmation:'STOP_WAITING_DEEP_SEARCH',requestId:accepted.researchRequestId??accepted.creditOperationId});
  const consume=async(job=delivered.shift()!,attempts=1)=>{
   expect(job).toBeDefined();const ack=vi.fn(),retry=vi.fn();
   await worker.queue({messages:[{id:crypto.randomUUID(),body:job,attempts,ack,retry}]} as never,workerEnv);
   return {ack,retry,job};
  };
- return {start,requote,accepted,provider,status,consume,delivered,workerEnv,background};
+ return {start,requote,retry,accepted,provider,status,stop,request,consume,delivered,workerEnv,background};
 }
 
 describe('member Deep Search through HTTP and the queue',()=>{
@@ -258,7 +267,7 @@ describe('member Deep Search through HTTP and the queue',()=>{
   expect(flow.provider).toHaveBeenCalledOnce();
  });
 
- it('recovers a late durably saved reply after timeout without a second provider send',async()=>{
+ it.each(['maintenance','check'])('recovers a late durably saved reply via %s without a second provider send',async source=>{
   const flow=await httpFlow();await flow.consume();
   let reply!:(response:Response)=>void;
   let markStarted!:()=>void;const started=new Promise<void>(resolve=>{markStarted=resolve});
@@ -268,12 +277,112 @@ describe('member Deep Search through HTTP and the queue',()=>{
   reply(Response.json(payload()));
   for(let i=0;i<100&&database.sql.prepare('SELECT state FROM provider_operations').get()!.state!=='saved';i++)await Promise.resolve();
   expect(database.sql.prepare('SELECT state FROM provider_operations').get()!.state).toBe('saved');
-  await maintainJobs(database.db,flow.workerEnv.RESEARCH_QUEUE);
+  if(source==='check'){
+   expect(await flow.status(true)).toMatchObject({status:'running',stage:'saving',retryBlocked:false});
+   await flow.status(true);
+  }else await maintainJobs(database.db,flow.workerEnv.RESEARCH_QUEUE);
   expect(flow.delivered).toHaveLength(1);
   await flow.consume();
   expect(await flow.status()).toMatchObject({status:'complete'});
   expect(await memberAiActionAccess(database.db,owner,'wine_deep_search')).toMatchObject({used:1,pending:0});
   expect(flow.provider).toHaveBeenCalledOnce();
+ });
+
+ it('explicit status checks preserve a recent hold and settle an expired one without sending AI',async()=>{
+  const flow=await httpFlow();flow.provider.mockRejectedValue(new Error('connection lost after provider submission'));
+  await flow.consume();await flow.consume();
+  const held={status:'failed',retryBlocked:true,recoveryDeadline:'2026-09-27T04:00:00.000Z'};
+  expect(await flow.status()).toMatchObject(held);expect(await flow.status(true)).toMatchObject(held);
+  expect(await memberAiActionAccess(database.db,owner,'wine_deep_search')).toMatchObject({used:0,pending:1});
+  vi.setSystemTime(Date.now()+49*3600_000);
+  expect(await flow.status()).toMatchObject(held);
+  expect(await flow.status(true)).toMatchObject({status:'failed',retryBlocked:false,outcome:'uncertain'});
+  await flow.status(true);
+  expect(await memberAiActionAccess(database.db,owner,'wine_deep_search')).toMatchObject({used:0,pending:0});
+  expect(database.sql.prepare("SELECT count(*) n FROM credit_ledger WHERE kind='release'").get()!.n).toBe(1);
+  expect(flow.provider).toHaveBeenCalledOnce();
+ });
+
+ it.each([false,true])('stops waiting once, preserves saved scopes and releases the hold (partial: %s)',async partial=>{
+  const flow=await httpFlow();flow.provider.mockRejectedValue(new Error('connection lost after provider submission'));
+  await flow.consume();await flow.consume();
+  if(partial){const entry=splitDeepSearchResult({...answer,sources:[{title:'Krug',url:'https://www.krug.com/'}],model:'fixture',researchedAt:new Date().toISOString()},buildResearchTargets(wine)).find(e=>e.target.scope==='producer')!;await upsertResearchCache(database.db,owner,entry)}
+  const results=await Promise.all([flow.stop(),flow.stop()]);expect(results.map(r=>r.status)).toEqual([200,200]);
+  expect(await flow.status()).toMatchObject({status:'failed',retryBlocked:false,outcome:'uncertain'});
+  expect(await memberAiActionAccess(database.db,owner,'wine_deep_search')).toMatchObject({used:partial?1:0,pending:0});
+  expect((await loadResearchCache(database.db,owner,buildResearchTargets(wine))).size).toBe(partial?1:0);
+  expect(database.sql.prepare("SELECT count(*) n FROM credit_ledger WHERE kind='release'").get()!.n).toBe(1);
+  expect(database.sql.prepare('SELECT state FROM provider_operations').get()!.state).toBe('uncertain');
+  expect(database.sql.prepare('SELECT message FROM wine_research_runs').get()!.message).toContain('connection lost');
+  expect(String(database.sql.prepare('SELECT message FROM wine_research_runs').get()!.message).match(/Stopped waiting/g)).toHaveLength(1);
+  await maintainJobs(database.db,flow.workerEnv.RESEARCH_QUEUE);
+  await flow.consume({owner,kind:'wine_batch_poll',requestId,wineId,_creditOperationId:flow.accepted.creditOperationId});
+  await expect(durableProvider({db:database.db,operationId:flow.accepted.creditOperationId,namespace:'queue'},'new-attempt',flow.provider)).rejects.toThrow();
+  expect(flow.provider).toHaveBeenCalledOnce();expect((await flow.requote()).status).toBe(200);
+  vi.setSystemTime(Date.now()+1000);
+  flow.provider.mockImplementation(async()=>Response.json(payload()));expect((await flow.retry()).status).toBe(202);
+  await flow.consume();await flow.consume();
+  const latest=await flow.request('deep-search-status');expect(await latest.json()).toMatchObject({status:'complete',retryBlocked:false});
+  expect(flow.provider).toHaveBeenCalledTimes(2);
+ });
+
+ it('does not stop waiting while a queue delivery still owns the request',async()=>{
+  const flow=await httpFlow();flow.provider.mockRejectedValue(new Error('connection lost'));
+  await flow.consume();const delivery=await flow.consume();
+  database.sql.prepare('UPDATE queue_deliveries SET done=0,lease_until=? WHERE id=?').run(seconds()+600,String(delivery.job._outboxId));
+  expect((await flow.stop()).status).toBe(409);expect(await flow.status()).toMatchObject({retryBlocked:true});
+  vi.setSystemTime(Date.now()+601_000);
+  expect((await flow.stop()).status).toBe(200);expect(await flow.status()).toMatchObject({retryBlocked:false});
+ });
+
+ it('stops an abandoned tracked batch but rejects stopping a running run',async()=>{
+  const flow=await httpFlow();expect((await flow.stop()).status).toBe(409);
+  flow.provider.mockRejectedValue(new Error('connection lost'));await flow.consume();await flow.consume();
+  database.sql.exec("UPDATE research_batch_jobs SET status='running'");
+  expect((await flow.stop()).status).toBe(200);
+  expect(database.sql.prepare('SELECT status FROM research_batch_jobs').get()!.status).toBe('failed');
+  expect(flow.provider).toHaveBeenCalledOnce();
+ });
+
+ it('does not let another account recover or stop the held request',async()=>{
+  const flow=await httpFlow();flow.provider.mockRejectedValue(new Error('connection lost'));await flow.consume();await flow.consume();
+  database.sql.exec("INSERT INTO app_users(id,email,display_name,role) VALUES('bob','bob@example.com','Bob','member')");
+  await database.db.prepare('INSERT INTO auth_sessions VALUES(?,?,?)').bind(await hash('bob-session'),'bob',seconds()+86400).run();
+  const auth={Cookie:'__Host-winelog=bob-session'};
+  expect((await flow.request(`deep-search-status?requestId=${requestId}`,'POST',undefined,auth)).status).toBe(404);
+  expect((await flow.request('deep-search-cancel','POST',{confirmation:'STOP_WAITING_DEEP_SEARCH',requestId},auth)).status).toBe(404);
+  expect(await flow.status()).toMatchObject({retryBlocked:true});expect(flow.provider).toHaveBeenCalledOnce();
+ });
+
+ it('stops an interrupted owner request even when no research run was committed',async()=>{
+  database.sql.exec("UPDATE app_users SET role='owner' WHERE id='alice'");
+  const flow=await httpFlow(()=>database.sql.exec("CREATE TEMP TRIGGER injected_failure BEFORE UPDATE OF run_id ON credit_operations WHEN new.run_id IS NOT NULL BEGIN SELECT RAISE(ABORT,'injected linkage failure'); END"),500);
+  database.sql.exec('DROP TRIGGER injected_failure');
+  const operation=database.sql.prepare('SELECT id FROM credit_operations').get()!;
+  const response=await flow.request('deep-search-cancel','POST',{confirmation:'STOP_WAITING_DEEP_SEARCH',requestId:operation.id});
+  expect(response.status).toBe(200);
+  const status=await flow.request('deep-search-status');expect(await status.json()).toMatchObject({status:'failed',retryBlocked:false,outcome:'interrupted'});
+  expect(flow.provider).not.toHaveBeenCalled();
+ });
+
+ it('rolls back stopping the request if reservation settlement cannot be persisted',async()=>{
+  const flow=await httpFlow();flow.provider.mockRejectedValue(new Error('connection lost'));
+  await flow.consume();await flow.consume();
+  database.sql.exec("CREATE TEMP TRIGGER injected_failure BEFORE INSERT ON credit_ledger WHEN new.kind='release' BEGIN SELECT RAISE(ABORT,'injected settlement failure'); END");
+  expect((await flow.stop()).status).toBe(500);expect(await flow.status()).toMatchObject({retryBlocked:true});
+  expect(await memberAiActionAccess(database.db,owner,'wine_deep_search')).toMatchObject({used:0,pending:1});
+  database.sql.exec('DROP TRIGGER injected_failure');expect((await flow.stop()).status).toBe(200);
+ });
+
+ it('requires same-origin authenticated, matching requests for explicit recovery and stopping',async()=>{
+  const flow=await httpFlow();flow.provider.mockRejectedValue(new Error('connection lost'));
+  await flow.consume();await flow.consume();vi.setSystemTime(Date.now()+49*3600_000);
+  expect((await flow.request('deep-search-status','POST',undefined,{Origin:'https://elsewhere.example'})).status).toBe(403);
+  expect((await flow.request('deep-search-status','POST',undefined,{Cookie:''})).status).toBe(401);
+  expect((await flow.request('deep-search-status?requestId=wrong','POST')).status).toBe(404);
+  expect((await flow.request('deep-search-cancel','POST',{confirmation:'STOP_WAITING_DEEP_SEARCH',requestId:'wrong'})).status).toBe(404);
+  expect((await flow.request('deep-search-cancel','POST',{confirmation:'STOP_WAITING_DEEP_SEARCH',requestId},{Origin:'https://elsewhere.example'})).status).toBe(403);
+  expect(await flow.status()).toMatchObject({retryBlocked:true});expect(flow.provider).toHaveBeenCalledOnce();
  });
 
  it('rejects a fresh provider submission using a terminal operation context',async()=>{

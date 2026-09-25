@@ -223,6 +223,39 @@ async function validatedWineUnits(db:D1Database,op:CreditOperation){
  }
  return saved;
 }
+/** End a held wine request explicitly, retaining receipts and validated results. */
+export async function stopWaitingForWineResearch(db:D1Database,op:CreditOperation){
+ if(!op.path.endsWith('/deep-search'))throw new ApiError(400,'Not a wine research request');
+ if(!['reserved','running','review'].includes(op.status))return {ok:true,cancelled:false,alreadyTerminal:true,requestId:op.run_id??op.id};
+ const units=await validatedWineUnits(db,op),captured=Math.min(op.reserved,units.reduce((sum,unit)=>sum+unit.credits,0));
+ const unresolved=Boolean(await db.prepare("SELECT 1 FROM provider_operations WHERE operation_id=? AND state IN ('submitted','uncertain') LIMIT 1").bind(op.id).first());
+ const message=unresolved?'Stopped waiting for this request. The provider outcome is still unknown. Any saved research is kept.':'Stopped waiting for this request. Any saved research is kept.';
+ const body=JSON.stringify({status:'failed',outcome:unresolved?'uncertain':'interrupted',stoppedWaiting:true,stopId:crypto.randomUUID(),error:message,supportId:op.run_id??op.id,researchRequestId:op.run_id}),now=stamp();
+ // Claim and settle in one transaction. A consumer that already holds a lease
+ // prevents the stop; one claiming later observes the terminal operation.
+ const result=await db.batch([
+  db.prepare(`UPDATE credit_operations SET status=?,captured=?,response_json=?,response_status=409,updated_at=?
+   WHERE id=? AND status IN ('reserved','running','review')
+   AND (run_id IS NULL AND status='review' OR EXISTS(SELECT 1 FROM wine_research_runs r WHERE r.owner_id=credit_operations.user_id AND r.request_id=credit_operations.run_id AND r.status='failed'))
+   AND NOT EXISTS(SELECT 1 FROM queue_outbox o JOIN queue_deliveries d ON d.id=o.id WHERE o.operation_id=credit_operations.id AND d.done=0 AND d.lease_until>?)`)
+   .bind(units.length?'complete':'failed',captured,body,now,op.id,seconds()),
+  ...(['capture','release'] as const).map(kind=>db.prepare(`INSERT OR IGNORE INTO credit_ledger(id,user_id,operation_id,kind,amount,actor_id,reason)
+   SELECT ?,?,?,?,?,?,? WHERE EXISTS(SELECT 1 FROM credit_operations WHERE id=? AND response_json=?)`)
+   .bind(`${op.id}:${kind}`,op.user_id,op.id,kind,kind==='capture'?captured:op.reserved-captured,op.user_id,kind==='capture'?'Validated AI results saved':'Unused AI reservation',op.id,body)),
+  db.prepare(`UPDATE research_batch_jobs SET status='failed',error=coalesce(error,?),updated_at=?
+   WHERE owner_id=? AND request_id=? AND status='running' AND EXISTS(SELECT 1 FROM credit_operations WHERE id=? AND response_json=?)`).bind(message,now,op.user_id,op.run_id??'',op.id,body),
+  db.prepare(`UPDATE wine_research_runs SET message=coalesce(message,'')||?,updated_at=?,completed_at=coalesce(completed_at,?)
+   WHERE owner_id=? AND request_id=? AND status='failed' AND EXISTS(SELECT 1 FROM credit_operations WHERE id=? AND response_json=?)`)
+   .bind(` · ${message}`,now,now,op.user_id,op.run_id??'',op.id,body),
+  db.prepare('DELETE FROM research_work WHERE operation_id=? AND EXISTS(SELECT 1 FROM credit_operations WHERE id=? AND response_json=?)').bind(op.id,op.id,body)
+ ]);
+ if(!result[0].meta.changes){
+  const current=await db.prepare('SELECT status FROM credit_operations WHERE id=?').bind(op.id).first<{status:string}>();
+  if(current&&['complete','failed'].includes(current.status))return {ok:true,cancelled:false,alreadyTerminal:true,requestId:op.run_id??op.id};
+  throw new ApiError(409,'Research is still finishing an active step. Check status and try stopping again in a few minutes.');
+ }
+ return {ok:true,cancelled:true,alreadyTerminal:false,stoppedWaiting:true,requestId:op.run_id??op.id};
+}
 export async function reconcileOperation(db:D1Database,op:CreditOperation){
  if(!['running','reserved','review'].includes(op.status))return;
  if(op.path.endsWith('/deep-search')&&Date.parse(op.created_at)<Date.now()-WINE_RESEARCH_RECOVERY_MS
