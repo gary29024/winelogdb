@@ -148,7 +148,7 @@ for(const route of ['/wines/layout-wine','/shared/layout-wine']){
     }
   });
 
-  test(`${route}: village and mixed-plot wines use a clearly labelled appellation link`,async({page},testInfo)=>{
+  test(`${route}: village and mixed-plot wines link to the appellation, announced as one`,async({page},testInfo)=>{
     const requests:string[]=[];
     page.on('request',request=>{if(new URL(request.url()).hostname==='burgundyatlas.com')requests.push(request.url())});
     const examples=[
@@ -158,8 +158,8 @@ for(const route of ['/wines/layout-wine','/shared/layout-wine']){
     ];
     for(const {name,path,...fields} of examples){
       await mockApi(page,{appellation:'Meursault',wineStyle:'white',colour:'White',grapes:['Chardonnay'],...fields});await page.goto(route);
-      const link=page.getByRole('link',{name:`Explore appellation on Burgundy Atlas: ${name} (opens in a new tab)`,exact:true});
-      await expect(link).toHaveText('Explore appellation on Burgundy Atlas↗');
+      const link=page.getByRole('link',{name:`Explore on Burgundy Atlas: ${name} appellation (opens in a new tab)`,exact:true});
+      await expect(link).toHaveText('Explore on Burgundy Atlas↗');
       await expect(link).toHaveAttribute('href',`https://burgundyatlas.com/place/${path}`);
       await expect(link).toHaveAttribute('target','_blank');
       await expect(link).toHaveAttribute('rel','noopener noreferrer');
@@ -171,7 +171,7 @@ for(const route of ['/wines/layout-wine','/shared/layout-wine']){
     }
     expect(requests).toEqual([]);
     await page.context().route('https://burgundyatlas.com/**',route=>route.fulfill({contentType:'text/html',body:'<h1>Appellation destination</h1>'}));
-    const [popup]=await Promise.all([page.waitForEvent('popup'),page.getByRole('link',{name:/Explore appellation on Burgundy Atlas/}).click()]);
+    const [popup]=await Promise.all([page.waitForEvent('popup'),page.getByRole('link',{name:/^Explore on Burgundy Atlas: .* appellation/}).click()]);
     await expect(popup).toHaveURL(`https://burgundyatlas.com/place/${examples[2].path}`);
     await expect(page).toHaveURL(new RegExp(`${route}$`));
   });

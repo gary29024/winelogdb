@@ -57,7 +57,7 @@ test('broad Premier Cru context does not claim a specific vineyard',async({page}
  await expect(page.getByRole('combobox')).toHaveValue('inao-denom-616');
  await expect(page.getByText('Appellation area shown; no single vineyard is identified.')).toBeVisible();
  await expect(page.locator('.village-map-selected-label')).toHaveCount(0);
- await expect(page.getByRole('dialog').getByRole('link',{name:/^Explore appellation on Burgundy Atlas/})).toBeVisible();
+ await expect(page.getByRole('dialog').getByRole('link',{name:/^Explore on Burgundy Atlas: Gevrey-Chambertin Premier Cru appellation/})).toBeVisible();
 });
 
 test('failed boundary download can be retried without leaving the wine',async({page})=>{
