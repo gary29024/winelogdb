@@ -42,9 +42,13 @@ function mapStyle(data:FeatureCollection,base?:StyleSpecification):StyleSpecific
    {id:'vineyard-hit',type:'fill',source:'wine-boundaries',filter:['==',['get','kind'],'vineyard'],paint:{'fill-color':'#000000','fill-opacity':0}},
    {id:'vineyard-outline',type:'line',source:'wine-boundaries',filter:['==',['get','kind'],'vineyard'],paint:{
     'line-color':['match',['get','tier'],'grand_cru',cru.grand_cru,cru.premier_cru],'line-width':0.8}},
-   {id:'selected-fill',type:'fill',source:'wine-boundaries',filter:['==',['get','id'],''],paint:{'fill-color':accent,'fill-opacity':0.55}},
-   {id:'selected-casing',type:'line',source:'wine-boundaries',filter:['==',['get','id'],''],paint:{'line-color':'#ffffff','line-width':6}},
-   {id:'selected-outline',type:'line',source:'wine-boundaries',filter:['==',['get','id'],''],paint:{'line-color':accent,'line-width':2.5}},
+   // A cru is one plot and takes the full highlight. An appellation is
+   // hundreds of hectares with every excluded parcel cut out as a hole, so the
+   // same treatment floods the village and rings each hole in red; it gets a
+   // tint the tiers show through, edged by the village outline already drawn.
+   {id:'selected-fill',type:'fill',source:'wine-boundaries',filter:['==',['get','id'],''],paint:{'fill-color':accent,'fill-opacity':['match',['get','kind'],'appellation',0.2,0.55]}},
+   {id:'selected-casing',type:'line',source:'wine-boundaries',filter:['==',['get','id'],''],paint:{'line-color':'#ffffff','line-width':['match',['get','kind'],'appellation',0,6]}},
+   {id:'selected-outline',type:'line',source:'wine-boundaries',filter:['==',['get','id'],''],paint:{'line-color':accent,'line-width':['match',['get','kind'],'appellation',0,2.5]}},
   ]
  };
 }
@@ -180,7 +184,7 @@ export default function VillageMap({target}:{target:BurgundyVillageMapTarget}){
     <div className="village-map-canvas" ref={host} aria-busy={!ready&&!error}/>
     {!ready&&!error&&<p className="village-map-loading" role="status">Loading vineyard boundaries…</p>}
     {error&&<div className="village-map-error" role="alert"><p>{error}</p><button type="button" onClick={()=>{setError('');setReady(false);setBaseWarning(false);setAttempt(value=>value+1)}}>Try again</button></div>}
-    <div className="village-map-legend" aria-label="Map legend"><span><i className="map-swatch-grand_cru"/>Grand Cru</span><span><i className="map-swatch-premier_cru"/>Premier Cru</span><span><i className="map-swatch-village"/>Village appellation</span><span><i className="map-swatch-commune"/>Commune boundary</span><span><i className="map-swatch-selected"/>{selectedId===target.featureId?'This wine':'Selected'}</span></div>
+    <div className="village-map-legend" aria-label="Map legend"><span><i className="map-swatch-grand_cru"/>Grand Cru</span><span><i className="map-swatch-premier_cru"/>Premier Cru</span><span><i className="map-swatch-village"/>Village appellation</span><span><i className="map-swatch-commune"/>Commune boundary</span><span><i className={`map-swatch-selected${selected.kind==='appellation'?' is-area':''}`}/>{selectedId===target.featureId?'This wine':'Selected'}</span></div>
    </div>
    <aside className="village-map-sidebar">
     <label htmlFor={selectId}>Explore a vineyard</label>

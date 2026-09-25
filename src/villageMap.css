@@ -35,6 +35,7 @@
 .map-swatch-village{border-color:#9c7629!important;background:none}
 .map-swatch-commune{border:1.5px dashed #7d899c!important;background:none}
 .map-swatch-selected{border-color:#c51f45!important;background:#da7e90}
+.map-swatch-selected.is-area{border-color:#9c7629!important;background:#c51f4533}
 /* The tier pill matches the classification pill on the wine page itself. */
 .village-map-tier{display:inline-block;padding:3px 10px;border:1px solid var(--warn-line);border-radius:var(--r-pill,999px);background:var(--warn-wash);color:var(--warn);font-size:.72rem;font-weight:650}
 .village-map-tier.map-tier-grand_cru{font-weight:750}
