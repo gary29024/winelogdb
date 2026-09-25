@@ -77,3 +77,111 @@ test('conflicting wine identities do not show a map entry point',async({page})=>
  await expect(page.getByRole('heading',{name:'Les Cazetiers',exact:true})).toBeVisible();
  await expect(page.getByRole('button',{name:'View village map'})).toHaveCount(0);
 });
+
+for(const village of [
+ {id:'morey-saint-denis',name:'Morey-Saint-Denis',cru:'Les Ruchots',featureId:'inao-denom-946',count:27,catalogue:'moreyVillageMapCatalogue'},
+ {id:'chambolle-musigny',name:'Chambolle-Musigny',cru:'Les Amoureuses',featureId:'inao-denom-455',count:28,catalogue:'chambolleVillageMapCatalogue'},
+]){
+ for(const route of ['/wines/layout-wine','/shared/layout-wine']){
+  test(`${village.name} ${route}: loads only its own map and explores shared Bonnes-Mares`,async({page},testInfo)=>{
+   const requests:string[]=[],errors:string[]=[];
+   page.on('request',request=>requests.push(request.url()));page.on('pageerror',error=>errors.push(error.message));
+   await page.setViewportSize({width:390,height:844});
+   await setup(page,{appellation:village.name,wineName:village.cru});await page.goto(route);
+   const opener=page.getByRole('button',{name:'View village map'});
+   await expect(opener).toBeVisible();
+   const mapRequests=()=>requests.filter(url=>url.includes('/maps/')||url.includes('VillageMapCatalogue.json'));
+   expect(mapRequests()).toEqual([]);
+   await opener.click();
+   const dialog=page.getByRole('dialog',{name:village.name,exact:true});
+   await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
+   const selector=dialog.getByRole('combobox',{name:'Explore a vineyard'});
+   await expect(selector).toHaveValue(village.featureId);
+   await expect(selector.locator('option')).toHaveCount(village.count);
+   await expect(dialog.locator('.village-map-selected-label')).toHaveText(village.cru);
+   expect(requests.filter(url=>url.includes('/maps/')).length).toBeGreaterThan(0);
+   expect(requests.filter(url=>url.includes('VillageMapCatalogue.json')).length).toBeGreaterThan(0);
+   expect(requests.filter(url=>url.includes('/maps/')).every(url=>url.includes(`/maps/${village.id}.`))).toBe(true);
+   expect(requests.filter(url=>url.includes('VillageMapCatalogue.json')).every(url=>url.includes(village.catalogue))).toBe(true);
+   await selector.selectOption('inao-denom-361');
+   await expect(dialog.locator('.village-map-selected-label')).toHaveText('Bonnes-Mares');
+   await expect(dialog.locator('.village-map-overlap')).toContainText('full production area is shown on both village maps');
+   await expect(dialog.getByRole('link',{name:/Explore on Burgundy Atlas: Bonnes-Mares/})).toHaveAttribute('href',/\/bonnes-mares$/);
+   for(const width of [320,390,1280]){
+    await page.setViewportSize({width,height:900});
+    await dialog.getByRole('button',{name:'Village view',exact:true}).click();
+    expect(await dialog.evaluate(element=>element.scrollWidth<=element.clientWidth)).toBe(true);
+    expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+    await page.screenshot({path:testInfo.outputPath(`${village.id}-${width}.png`)});
+   }
+   await dialog.getByRole('button',{name:'Back to this wine'}).click();
+   await expect(selector).toHaveValue(village.featureId);
+   await page.keyboard.press('Escape');await expect(dialog).toHaveCount(0);await expect(opener).toBeFocused();
+   expect(errors).toEqual([]);
+  });
+ }
+}
+
+test('Bonnes-Mares opens in Chambolle with both producing communes explained',async({page})=>{
+ await setup(page,{appellation:'Bonnes-Mares',wineName:'Bonnes-Mares',classification:'grand_cru'});
+ await page.goto('/wines/layout-wine');await page.getByRole('button',{name:'View village map'}).click();
+ const dialog=page.getByRole('dialog',{name:'Chambolle-Musigny',exact:true});
+ await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
+ await expect(dialog.getByRole('combobox')).toHaveValue('inao-denom-361');
+ await expect(dialog.locator('.village-map-overlap')).toContainText('does not identify which side');
+});
+
+test('new village broad wines keep a light appellation tint without a single-cru label',async({page})=>{
+ for(const fields of [
+  {appellation:'Morey-Saint-Denis',wineName:'Morey-Saint-Denis Premier Cru',classification:'premier_cru',id:'inao-denom-949'},
+  {appellation:'Chambolle-Musigny',wineName:'Chambolle-Musigny Vieilles Vignes',classification:'village',id:'inao-denom-449'},
+ ]){
+  const {id,...wineFields}=fields;
+  await setup(page,wineFields);await page.goto('/wines/layout-wine');
+  await page.getByRole('button',{name:'View village map'}).click();
+  const dialog=page.getByRole('dialog',{name:fields.appellation,exact:true});
+  await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
+  await expect(dialog.getByRole('combobox')).toHaveValue(id);
+  await expect(dialog.locator('.map-swatch-selected')).toHaveClass(/is-area/);
+  await expect(dialog.locator('.village-map-selected-label')).toHaveCount(0);
+  await expect(dialog.getByText('Appellation area shown; no single vineyard is identified.')).toBeVisible();
+  await page.keyboard.press('Escape');
+ }
+});
+
+test('a successful street style arriving later preserves the current village and selection',async({page})=>{
+ await setup(page,{appellation:'Morey-Saint-Denis',wineName:'Les Ruchots'});
+ let release:()=>void=()=>{};
+ const gate=new Promise<void>(resolve=>{release=resolve});
+ await page.route('https://tiles.openfreemap.org/styles/liberty',async route=>{
+  await gate;
+  await route.fulfill({json:{version:8,sources:{},layers:[{id:'test-streets',type:'background',paint:{'background-color':'#e4ebdf'}}]}});
+ });
+ await page.goto('/wines/layout-wine');await page.getByRole('button',{name:'View village map'}).click();
+ const dialog=page.getByRole('dialog',{name:'Morey-Saint-Denis',exact:true});
+ await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
+ await dialog.getByRole('combobox').selectOption('inao-denom-361');
+ const baseLoaded=page.waitForResponse('https://tiles.openfreemap.org/styles/liberty');
+ release();await baseLoaded;
+ await expect(dialog.locator('.village-map-selected-label')).toHaveText('Bonnes-Mares');
+ await expect(dialog.getByRole('combobox')).toHaveValue('inao-denom-361');
+ await dialog.getByRole('button',{name:'Back to this wine'}).click();
+ await expect(dialog.locator('.village-map-selected-label')).toHaveText('Les Ruchots');
+ await expect(dialog.locator('.village-map-note')).toHaveCount(0);
+});
+
+test('a failed village catalogue offers a working reload without downloading boundaries',async({page})=>{
+ await setup(page,{appellation:'Morey-Saint-Denis',wineName:'Les Ruchots'});
+ let available=false;
+ const boundaries:string[]=[];
+ page.on('request',request=>{if(request.url().includes('/maps/'))boundaries.push(request.url())});
+ await page.route('**/moreyVillageMapCatalogue.json*',route=>available?route.continue():route.fulfill({status:503,body:'Unavailable'}));
+ await page.goto('/wines/layout-wine');await page.getByRole('button',{name:'View village map'}).click();
+ await expect(page.getByRole('alert')).toContainText('The village map could not load');
+ expect(boundaries).toEqual([]);
+ available=true;
+ await page.getByRole('button',{name:'Reload page',exact:true}).click();
+ await page.getByRole('button',{name:'View village map'}).click();
+ await expect(page.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
+ await expect(page.locator('.village-map-selected-label')).toHaveText('Les Ruchots');
+});

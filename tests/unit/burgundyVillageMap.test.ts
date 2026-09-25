@@ -1,8 +1,14 @@
 import { readFileSync } from 'node:fs';
 import { describe,expect,it } from 'vitest';
-import { burgundyVillageMapTarget,gevreyMapCatalogue as catalogue } from '../../src/lib/places/burgundyVillageMap';
+import { snapshotLabel,burgundyVillageMapTarget,type VillageMapCatalogue } from '../../src/lib/places/burgundyVillageMap';
+import catalogue from '../../src/lib/places/burgundyVillageMapCatalogue.json';
+import morey from '../../src/lib/places/moreyVillageMapCatalogue.json';
+import chambolle from '../../src/lib/places/chambolleVillageMapCatalogue.json';
+import registry from '../../src/lib/places/burgundyVillageMapRegistry.json';
+import { loadVillageMapCatalogue } from '../../src/lib/places/loadVillageMapCatalogue';
 import type { FeatureCollection,MultiPolygon,Polygon } from 'geojson';
-import { unpaintedVillageMapIds,villageMapNotes } from '../../src/lib/places/burgundyVillageMapNotes';
+
+const catalogues:VillageMapCatalogue[]=[catalogue,morey,chambolle];
 
 const wine={country:'France',region:'Burgundy',appellation:'Gevrey-Chambertin',wineName:'Les Cazetiers',classification:'premier_cru'};
 
@@ -66,8 +72,10 @@ describe('published village geometry',()=>{
 
 describe('overlap notes',()=>{
  it('only names catalogue crus, and leaves a cru unpainted only where a same-tier fill covers it',()=>{
-  const byId=new Map(catalogue.features.map(f=>[f.id,f]));
-  for(const [id,entry] of Object.entries(villageMapNotes)){
+  const byId=new Map(catalogues.flatMap(c=>c.features).map(f=>[f.id,f]));
+  const notes=Object.assign({},...catalogues.map(c=>c.notes)) as VillageMapCatalogue['notes'];
+  const unpaintedVillageMapIds=Object.entries(notes).filter(([,entry])=>entry.paintedBy).map(([id])=>id);
+  for(const [id,entry] of Object.entries(notes)){
    expect(byId.get(id)?.kind,id).toBe('vineyard');
    if(!entry.paintedBy)continue;
    const cover=byId.get(entry.paintedBy)!;
@@ -78,5 +86,97 @@ describe('overlap notes',()=>{
    expect(cover.areaHa).toBeGreaterThanOrEqual(byId.get(id)!.areaHa);
   }
   expect(unpaintedVillageMapIds.sort()).toEqual(['inao-denom-448','inao-denom-809']);
+ });
+});
+
+describe.each([
+ {catalogue:morey,grands:5,premiers:20,broad:'inao-denom-949',village:'inao-denom-928'},
+ {catalogue:chambolle,grands:2,premiers:24,broad:'inao-denom-474',village:'inao-denom-449'},
+])('$catalogue.name identities and boundaries',({catalogue:c,grands,premiers,broad,village})=>{
+ const data=JSON.parse(readFileSync(`public${c.dataUrl}`,'utf8')) as FeatureCollection<Polygon|MultiPolygon>;
+ it('resolves every named cru and retains appellation scope for broad wines',()=>{
+  const base={...wine,appellation:c.name};
+  expect(c.features.filter(f=>f.tier==='grand_cru')).toHaveLength(grands);
+  expect(c.features.filter(f=>f.kind==='vineyard'&&f.tier==='premier_cru')).toHaveLength(premiers);
+  for(const feature of c.features.filter(f=>f.kind==='vineyard')){
+   const target=burgundyVillageMapTarget({...base,classification:feature.tier,wineName:feature.name,
+    appellation:feature.tier==='grand_cru'?feature.name:c.name});
+   expect(target,feature.name).toMatchObject({featureId:feature.id,scope:'vineyard',
+    villageId:feature.denominationId===361?'chambolle-musigny':c.id});
+  }
+  for(const wineName of [c.name+' Premier Cru','Unknown vineyard','Les Gruenchers et Les Charmes']){
+   expect(burgundyVillageMapTarget({...base,wineName})).toMatchObject({featureId:broad,villageId:c.id,scope:'appellation'});
+  }
+  expect(burgundyVillageMapTarget({...base,wineName:c.name,classification:'village'})).toMatchObject({featureId:village,scope:'appellation'});
+ });
+ it('rejects conflicts and an unproven Premier Cru tier',()=>{
+  for(const overrides of [{country:'USA'},{region:'Bordeaux'},{identityMatchStatus:'conflict' as const},{classification:null}]){
+   expect(burgundyVillageMapTarget({...wine,appellation:c.name,wineName:'Les Gruenchers',...overrides})).toBeNull();
+  }
+ });
+ it('publishes exactly the expected wine and commune identities with intact rings',()=>{
+  const expectedIds=[...c.features.map(f=>f.id),...c.communes.map(commune=>`commune-${commune.id}`)].sort();
+  expect(data.features.map(f=>f.id).sort()).toEqual(expectedIds);
+  for(const feature of data.features){
+   expect(['Polygon','MultiPolygon']).toContain(feature.geometry.type);
+   const rings=feature.geometry.type==='Polygon'?feature.geometry.coordinates:feature.geometry.coordinates.flat();
+   for(const ring of rings){
+    expect(ring.length).toBeGreaterThanOrEqual(4);expect(ring[0]).toEqual(ring.at(-1));
+    expect(ring.every(([lng,lat])=>lng>4.9&&lng<5.05&&lat>47.1&&lat<47.3)).toBe(true);
+   }
+  }
+  for(const feature of c.features){
+   expect(data.features.find(f=>f.id===feature.id)?.properties).toMatchObject({name:feature.name,denominationId:feature.denominationId,communes:feature.communes});
+  }
+  expect(c.sources.every(s=>s.sha256.length===64&&s.license.startsWith('Licence Ouverte'))).toBe(true);
+ });
+});
+
+describe('village registry',()=>{
+ it('keeps shared Bonnes-Mares whole and identical in both village contexts',()=>{
+  const features=[morey,chambolle].map(c=>JSON.parse(readFileSync(`public${c.dataUrl}`,'utf8')).features.find((f:{id:string})=>f.id==='inao-denom-361'));
+  expect(features[0]).toEqual(features[1]);
+  expect(features[0].properties.communes).toEqual(['21133','21442']);
+  expect(morey.features.find(f=>f.id==='inao-denom-361')).toEqual(chambolle.features.find(f=>f.id==='inao-denom-361'));
+  expect(burgundyVillageMapTarget({...wine,appellation:'Bonnes Mares Grand Cru',wineName:'Bonnes-Mares',classification:'grand_cru'}))
+   .toMatchObject({villageId:'chambolle-musigny',featureId:'inao-denom-361'});
+ });
+ it('distinguishes identically named Premier Crus by village',()=>{
+  expect(burgundyVillageMapTarget({...wine,appellation:'Morey-Saint-Denis',wineName:'Les Gruenchers'})?.featureId).toBe('inao-denom-944');
+  expect(burgundyVillageMapTarget({...wine,appellation:'Chambolle-Musigny',wineName:'Les Gruenchers'})?.featureId).toBe('inao-denom-467');
+  expect(burgundyVillageMapTarget({...wine,appellation:'Chambolle-Musigny',wineName:'Les Fuees'})?.featureId).toBe('inao-denom-465');
+  expect(burgundyVillageMapTarget({...wine,appellation:'Chambolle-Musigny',wineName:'Les Feusselotes'})?.featureId).toBe('inao-denom-464');
+ });
+ it('has one target per identity and a working lazy catalogue for every village',async()=>{
+  expect(registry.targets).toHaveLength(91);
+  expect(new Set(registry.targets.map(t=>t.matchId)).size).toBe(91);
+  for(const village of registry.villages){
+   const c=await loadVillageMapCatalogue(village.id);
+   expect(catalogues.find(expected=>expected.id===village.id)).toEqual(c);
+   for(const target of registry.targets.filter(t=>t.villageId===village.id)){
+    expect(c.features.find(f=>f.matchId===target.matchId)).toMatchObject({id:target.featureId,name:target.name,kind:target.scope});
+   }
+  }
+  await expect(loadVillageMapCatalogue('unknown-village')).rejects.toThrow('unavailable');
+ });
+});
+
+describe('source snapshot labels',()=>{
+ it('shows a dated release by day and a monthly snapshot by month alone',()=>{
+  expect(snapshotLabel('2026-09-21')).toBe('21 Sep 2026');
+  expect(snapshotLabel('2026-06-01',true)).toBe('Jun 2026');
+ });
+ it('falls back to the raw value rather than inventing a date',()=>{
+  expect(snapshotLabel('unknown')).toBe('unknown');
+  expect(snapshotLabel(undefined)).toBe('');
+ });
+});
+
+describe('display names',()=>{
+ it('shows one spelling where INAO records alternatives, keeping the source name and Atlas identity',()=>{
+  const feature=chambolle.features.find(f=>f.id==='inao-denom-464')!;
+  expect(feature.name).toBe('Les Feusselottes');
+  expect(feature.sourceName).toBe('Chambolle-Musigny premier cru Les Feusselottes ou Les Feusselotes');
+  expect(feature.atlasUrl).toContain('les-feusselottes-ou-les-feusselotes');
  });
 });

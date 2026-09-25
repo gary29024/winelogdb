@@ -1,20 +1,13 @@
 import { useEffect,useId,useRef,useState } from 'react';
 import { Map as MapLibreMap,Marker,NavigationControl,ScaleControl,type FilterSpecification,type MapGeoJSONFeature,type StyleSpecification } from 'maplibre-gl';
 import type { FeatureCollection,Geometry } from 'geojson';
-import { gevreyMapCatalogue as catalogue,type BurgundyVillageMapTarget,type VillageMapFeature } from '../../lib/places/burgundyVillageMap';
-import { unpaintedVillageMapIds,villageMapNotes } from '../../lib/places/burgundyVillageMapNotes';
+import { snapshotLabel,type BurgundyVillageMapTarget,type VillageMapCatalogue,type VillageMapFeature } from '../../lib/places/burgundyVillageMap';
+import { loadVillageMapCatalogue } from '../../lib/places/loadVillageMapCatalogue';
 import { BurgundyAtlasLink } from '../../components/BurgundyAtlasLink';
 import 'maplibre-gl/dist/maplibre-gl.css';
 
 const tiers:Record<string,string>={grand_cru:'Grand Cru',premier_cru:'Premier Cru',village:'Village'};
 const baseStyleUrl='https://tiles.openfreemap.org/styles/liberty';
-// Name labels are HTML rather than a symbol layer: a symbol layer needs the
-// street map's font server, so with the street map unavailable every name but
-// the selected one vanished. Grand Crus claim space first, then larger crus;
-// a name that would collide with one already placed waits for a closer zoom.
-const labelOrder=catalogue.features.filter(f=>f.kind==='vineyard')
- .sort((a,b)=>Number(b.tier==='grand_cru')-Number(a.tier==='grand_cru')||b.areaHa-a.areaHa);
-const vineyardCount=(tier:string)=>catalogue.features.filter(f=>f.kind==='vineyard'&&f.tier===tier).length;
 const boundsOf=(b:number[]):[[number,number],[number,number]]=>[[b[0],b[1]],[b[2],b[3]]];
 // The light end of the app's --cru ramp (styles.css), one hue stepped dark to
 // light so rank reads without the legend. The map stays light in both themes,
@@ -26,9 +19,10 @@ const groups=[{tier:'grand_cru',label:'Grand Crus'},{tier:'premier_cru',label:'P
 // The village and Premier Cru appellation areas contain every named cru, so as
 // washes they stacked under them and made extra shades; the village area is an
 // outline instead, and the Premier Cru area shows only when selected.
-const painted:FilterSpecification=['all',['==',['get','kind'],'vineyard'],['!',['in',['get','id'],['literal',unpaintedVillageMapIds]]]];
 const selectionFilter=(id:string):FilterSpecification=>['==',['get','id'],id];
-function mapStyle(data:FeatureCollection,base?:StyleSpecification):StyleSpecification{
+function mapStyle(data:FeatureCollection,catalogue:VillageMapCatalogue,base?:StyleSpecification):StyleSpecification{
+ const unpainted=Object.entries(catalogue.notes).filter(([,entry])=>entry.paintedBy).map(([id])=>id);
+ const painted:FilterSpecification=['all',['==',['get','kind'],'vineyard'],['!',['in',['get','id'],['literal',unpainted]]]];
  return {
   ...(base??{version:8}),
   sources:{...base?.sources,'wine-boundaries':{type:'geojson',data}},
@@ -53,17 +47,35 @@ function mapStyle(data:FeatureCollection,base?:StyleSpecification):StyleSpecific
  };
 }
 
-function isBoundaryData(value:unknown):value is FeatureCollection<Geometry>{
+function isBoundaryData(value:unknown,catalogue:VillageMapCatalogue):value is FeatureCollection<Geometry>{
  if(!value||typeof value!=='object'||!('type' in value)||value.type!=='FeatureCollection'||!('features' in value)||!Array.isArray(value.features))return false;
  const features=value.features as Array<{id?:string;geometry?:{type?:string}}>;
  return catalogue.features.every(expected=>features.some(f=>f.id===expected.id&&['Polygon','MultiPolygon'].includes(f.geometry?.type??'')));
 }
 
 export default function VillageMap({target}:{target:BurgundyVillageMapTarget}){
+ const [catalogue,setCatalogue]=useState<VillageMapCatalogue|null>(null),[failed,setFailed]=useState(false);
+ useEffect(()=>{
+  let disposed=false;
+  void loadVillageMapCatalogue(target.villageId).then(value=>{
+   if(!value.features.some(feature=>feature.id===target.featureId))throw new Error('Vineyard is unavailable');
+   if(!disposed)setCatalogue(value);
+  }).catch(()=>{if(!disposed)setFailed(true)});
+  return()=>{disposed=true};
+ },[target.villageId,target.featureId]);
+ // Browsers cache failed module imports. Repeating the same import cannot
+ // reliably recover; a fresh page can. GeoJSON download failures retry below.
+ if(failed)return <div className="village-map-message" role="alert"><p>The village map could not load. Reload the page to try again.</p><button type="button" className="village-map-return" onClick={()=>window.location.reload()}>Reload page</button></div>;
+ if(!catalogue)return <p className="village-map-message" role="status">Loading village map…</p>;
+ return <VillageMapView target={target} catalogue={catalogue}/>;
+}
+
+function VillageMapView({target,catalogue}:{target:BurgundyVillageMapTarget;catalogue:VillageMapCatalogue}){
  const host=useRef<HTMLDivElement>(null),mapRef=useRef<MapLibreMap|null>(null),markerRef=useRef<Marker|null>(null);
  const [selectedId,setSelectedId]=useState(target.featureId),[ready,setReady]=useState(false),[error,setError]=useState(''),[baseWarning,setBaseWarning]=useState(false),[attempt,setAttempt]=useState(0);
  const selectedRef=useRef(selectedId),selectionAction=useRef<((id:string)=>void)|null>(null);
  const selected=catalogue.features.find(feature=>feature.id===selectedId)!;
+ const vineyardCount=(tier:string)=>catalogue.features.filter(f=>f.kind==='vineyard'&&f.tier===tier).length;
  const selectId=useId(),statusId=useId();
  useEffect(()=>{selectedRef.current=selectedId;selectionAction.current?.(selectedId)},[selectedId]);
 
@@ -79,14 +91,14 @@ export default function VillageMap({target}:{target:BurgundyVillageMapTarget}){
     const response=await fetch(catalogue.dataUrl,{signal:controller.signal});
     if(!response.ok)throw new Error('Boundary download failed');
     const data:unknown=await response.json();
-    if(!isBoundaryData(data))throw new Error('Boundary data is incomplete');
+    if(!isBoundaryData(data,catalogue))throw new Error('Boundary data is incomplete');
     clearTimeout(timeout);
     if(disposed||!host.current)return;
     const own=catalogue.features.find(f=>f.id===target.featureId);
     // Open on the wine's own cru - on a phone the village view leaves it a few
     // pixels wide under its label. A broad appellation has no cru to show.
     const opening=target.scope==='vineyard'&&own?{bounds:boundsOf(own.bounds),fitBoundsOptions:{padding:70,maxZoom:15}}:{bounds:boundsOf(catalogue.bounds),fitBoundsOptions:{padding:30}};
-    map=new MapLibreMap({container:host.current,style:mapStyle(data),...opening,
+    map=new MapLibreMap({container:host.current,style:mapStyle(data,catalogue),...opening,
      minZoom:11,maxZoom:18,attributionControl:{compact:true,customAttribution:'Boundaries: INAO · Cadastre Etalab'},
      dragRotate:false,pitchWithRotate:false,touchPitch:false});
     mapRef.current=map;
@@ -94,6 +106,10 @@ export default function VillageMap({target}:{target:BurgundyVillageMapTarget}){
     map.addControl(new ScaleControl({unit:'metric'}),'bottom-left');
     map.getCanvas().setAttribute('aria-label',`${catalogue.name} vineyard map. Use the vineyard selector to explore boundaries.`);
     map.on('error',()=>{if(!disposed)setBaseWarning(true)});
+    // HTML labels work even without the street map's font server. Grand Crus
+    // claim space first, then larger crus; colliding names wait for closer zoom.
+    const labelOrder=catalogue.features.filter(f=>f.kind==='vineyard')
+     .sort((a,b)=>Number(b.tier==='grand_cru')-Number(a.tier==='grand_cru')||b.areaHa-a.areaHa);
     // Every cru is also in the accessible list, so these are visual only.
     const names=labelOrder.map(feature=>{
      const element=document.createElement('span');element.className=`village-map-name village-map-name-${feature.tier}`;element.textContent=feature.name;
@@ -160,7 +176,7 @@ export default function VillageMap({target}:{target:BurgundyVillageMapTarget}){
      if(!baseResponse.ok)throw new Error('Street map unavailable');
      const base=await baseResponse.json() as StyleSpecification;
      if(base.version!==8||!base.sources||!Array.isArray(base.layers))throw new Error('Invalid base map');
-     if(!disposed)map.setStyle(mapStyle(data,base));
+     if(!disposed)map.setStyle(mapStyle(data,catalogue,base));
     }catch{if(!disposed)setBaseWarning(true)}finally{clearTimeout(baseTimeout)}
    }catch{if(!disposed)setError('The map could not load. Check your connection, or try another browser if maps are unavailable on this device.')}
    finally{clearTimeout(timeout)}
@@ -195,15 +211,15 @@ export default function VillageMap({target}:{target:BurgundyVillageMapTarget}){
      <p className={`village-map-eyebrow${selectedId===target.featureId?' is-wine':''}`}>{selectedId===target.featureId?'THIS WINE':'EXPLORING'}</p>
      <h3>{selected.name}</h3><span className={`village-map-tier map-tier-${selected.tier}`}>{tiers[selected.tier]}</span>
      <p className="village-map-description">{selected.kind==='vineyard'?'The highlighted area is the INAO production boundary for this cru.':'Appellation area shown; no single vineyard is identified.'}</p>
-     {villageMapNotes[selected.id]&&<p className="village-map-overlap">{villageMapNotes[selected.id].note}</p>}
+     {catalogue.notes[selected.id]&&<p className="village-map-overlap">{catalogue.notes[selected.id].note}</p>}
     </div>
     {selectedId!==target.featureId&&<button type="button" className="village-map-return" onClick={backToWine}>Back to this wine</button>}
     <p className="village-map-hint">Tap a vineyard on the map to explore it.</p>
-    <p className="village-map-context">{vineyardCount('grand_cru')} Grand Crus · {vineyardCount('premier_cru')} Premier Cru climats<br/>{catalogue.name} & Brochon</p>
+    <p className="village-map-context">{vineyardCount('grand_cru')} Grand Crus · {vineyardCount('premier_cru')} Premier Cru climats<br/>{catalogue.communes.map(commune=>commune.name).join(' & ')}</p>
     <BurgundyAtlasLink place={{placeId:selected.matchId,name:selected.name,url:selected.atlasUrl,...(selected.kind==='appellation'?{scope:'appellation' as const}:{})}}/>
     {baseWarning&&!error&&<p className="village-map-note" role="status">Some street-map details are unavailable. Vineyard boundaries remain available.</p>}
    </aside>
   </div>
-  <footer className="village-map-footer"><p>Wine boundaries: <a href="https://www.data.gouv.fr/datasets/delimitation-parcellaire-des-aoc-viticoles-de-linao" target="_blank" rel="noopener noreferrer">INAO</a> · 21 Sep 2026. Commune outlines: <a href="https://cadastre.data.gouv.fr/datasets/cadastre-etalab" target="_blank" rel="noopener noreferrer">Cadastre Etalab</a> · Jun 2026. Licence Ouverte.</p><p>For geographic context; boundaries do not identify a producer’s holding or establish a bottle’s exact origin.</p></footer>
+  <footer className="village-map-footer"><p>Wine boundaries: <a href="https://www.data.gouv.fr/datasets/delimitation-parcellaire-des-aoc-viticoles-de-linao" target="_blank" rel="noopener noreferrer">INAO</a> · {snapshotLabel(catalogue.sources.find(source=>source.name==='INAO')?.date)}. Commune outlines: <a href="https://cadastre.data.gouv.fr/datasets/cadastre-etalab" target="_blank" rel="noopener noreferrer">Cadastre Etalab</a> · {snapshotLabel(catalogue.sources.find(source=>source.name==='Cadastre Etalab')?.date,true)}. Licence Ouverte.</p><p>For geographic context; boundaries do not identify a producer’s holding or establish a bottle’s exact origin.</p></footer>
  </>;
 }
