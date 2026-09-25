@@ -34,7 +34,7 @@ export type JournalWine={
 export type GroupSourcePhoto={sessionId:string;createdAt:string;capturedAt:string|null};
 export type WineDetail=WineRecord&{favorite:boolean;producerId:string|null;tastingStructure:TastingStructure|null;sparklingDetails:SparklingDetails|null;groupSourcePhotos:GroupSourcePhoto[];friendTagCount:number};
 export type WineResearchStage='queued'|'researching'|'saving'|'complete'|'failed';
-export type WineResearchRun={requestId:string;wineId:string;status:'running'|'complete'|'failed';stage:WineResearchStage;refresh:'none'|'vintage'|'all';attempt:number;message:string|null;startedAt:string;updatedAt:string;completedAt:string|null;durationMs:number|null;retryBlocked?:boolean};
+export type WineResearchRun={requestId:string;wineId:string;status:'running'|'complete'|'failed';stage:WineResearchStage;refresh:'none'|'vintage'|'all';attempt:number;message:string|null;startedAt:string;updatedAt:string;completedAt:string|null;durationMs:number|null;retryBlocked?:boolean;outcome?:'uncertain'|'interrupted';waitingForFriend?:boolean;creditOperationId?:string};
 export type JournalBatchPatch={tastingName?:string|null;venue?:string|null};
 /**
  * holdingId names the cellar line this bottle came out of. It rides as a query

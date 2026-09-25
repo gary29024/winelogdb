@@ -2,6 +2,27 @@ import { ApiError,seconds,stamp } from './common';
 import type { CreditOperation } from './credits';
 import { reconcileOperation,settle } from './credits';
 import { meteredBucket } from './storage';
+import { outboxStatement } from '../../src/lib/credits/outbox';
+import { WINE_RESEARCH_RECOVERY_MS } from '../../src/lib/research/recoveryPolicy';
+
+/** Reuse the outbox and the existing poll handler to apply a late saved reply. */
+async function recoverSavedWineReply(db:D1Database,op:CreditOperation){
+ if(op.status!=='review'||!op.run_id||!op.path.endsWith('/deep-search')||Date.parse(op.created_at)<Date.now()-WINE_RESEARCH_RECOVERY_MS)return false;
+ if(await db.prepare("SELECT id FROM provider_operations WHERE operation_id=? AND state IN ('submitted','uncertain') LIMIT 1").bind(op.id).first())return false;
+ const job=await db.prepare(`SELECT b.id,b.target_id FROM research_batch_jobs b JOIN vertex_batch_emulation_jobs v ON 'vertex-batches/'||v.id=b.google_batch_name
+  WHERE b.owner_id=? AND b.request_id=? AND b.status='failed' AND v.requests_json<>'[]' AND v.state='JOB_STATE_SUCCEEDED'
+  ORDER BY b.attempt DESC LIMIT 1`).bind(op.user_id,op.run_id).first<{id:string;target_id:string}>();
+ if(!job)return false;
+ const id=`wine-recovery:${op.id}:${job.id}`;
+ if(await db.prepare('SELECT id FROM queue_outbox WHERE id=?').bind(id).first())return false;
+ try{await db.batch([
+  outboxStatement(db,{kind:'wine_batch_poll',owner:op.user_id,wineId:job.target_id,requestId:op.run_id,jobId:job.id,pollCount:0},op.id,0,id),
+  db.prepare("UPDATE research_batch_jobs SET status='running',updated_at=? WHERE id=? AND EXISTS(SELECT 1 FROM queue_outbox WHERE id=?)").bind(stamp(),job.id,id),
+  db.prepare("UPDATE wine_research_runs SET status='running',stage='saving',completed_at=NULL,updated_at=? WHERE owner_id=? AND request_id=? AND EXISTS(SELECT 1 FROM queue_outbox WHERE id=?)").bind(stamp(),op.user_id,op.run_id,id),
+  db.prepare("UPDATE credit_operations SET status='running',updated_at=? WHERE id=? AND status='review' AND EXISTS(SELECT 1 FROM queue_outbox WHERE id=?)").bind(stamp(),op.id,id)
+ ])}catch(error){if(!await db.prepare('SELECT id FROM queue_outbox WHERE id=?').bind(id).first())throw error}
+ return true;
+}
 
 export type JobEnvelope={owner?:string;kind?:string;requestId?:string;sessionId?:string;campaignId?:string;cleanup?:boolean;_creditOperationId?:string;_outboxId?:string};
 /** Only these concrete handlers are cleanup-only; an arbitrary cleanup flag is not an AI exemption. */
@@ -16,7 +37,7 @@ export function durableQueue(queue:Queue<unknown>,db:D1Database,operationId?:str
    const op=await db.prepare("SELECT id FROM credit_operations WHERE user_id=? AND run_id=? AND status IN ('reserved','running','review') LIMIT 1").bind(job.owner??'',job.requestId||job.sessionId||job.campaignId||'').first<{id:string}>();opId=op?.id;
    if(!opId)throw new ApiError(402,'Background AI work requires a credit reservation');
   }
-  const id=crypto.randomUUID();await db.prepare('INSERT INTO queue_outbox(id,operation_id,body_json,due_at) VALUES(?,?,?,?)').bind(id,opId??null,JSON.stringify({...job,_creditOperationId:opId,_outboxId:id}),seconds()+Math.max(0,options?.delaySeconds??0)).run();
+  await outboxStatement(db,job,opId,options?.delaySeconds).run();
  };
  return new Proxy(queue,{get(target,key){if(key==='send')return send;if(key==='sendBatch')return async(items:Iterable<MessageSendRequest<unknown>>)=>{for(const item of items)await send(item.body,{delaySeconds:item.delaySeconds})};const value=Reflect.get(target,key,target);return typeof value==='function'?value.bind(target):value}});
 }
@@ -38,15 +59,26 @@ export async function maintainJobs(db:D1Database,queue:Queue<unknown>,bucket?:R2
  await db.prepare(`UPDATE queue_outbox SET sent_at=NULL,due_at=? WHERE id IN (
  SELECT o.id FROM queue_outbox o LEFT JOIN queue_deliveries d ON d.id=o.id LEFT JOIN credit_operations c ON c.id=o.operation_id
  WHERE o.sent_at<? AND coalesce(d.done,0)=0 AND (o.operation_id IS NULL OR c.status IN ('running','reserved','review')) LIMIT 20)`).bind(seconds(),seconds()-86400).run();
- await flushOutbox(db,queue);
  const rows=await db.prepare("SELECT * FROM credit_operations WHERE status IN ('running','reserved','review') ORDER BY updated_at LIMIT 2").all<CreditOperation>();
  for(const op of rows.results){
-  if(op.status==='reserved'&&Date.parse(op.created_at)<Date.now()-15*60_000&&!await db.prepare('SELECT id FROM queue_outbox WHERE operation_id=? LIMIT 1').bind(op.id).first()){
-   const claimed=await db.prepare("UPDATE credit_operations SET status='review' WHERE id=? AND status='reserved'").bind(op.id).run();if(claimed.meta.changes)await settle(db,op,0,{body:{error:'Reservation expired before dispatch'},status:409});
+  if(await recoverSavedWineReply(db,op))continue;
+  const winePath=op.path.match(/^\/api\/wines\/([^/]+)\/deep-search$/);
+  if((op.status==='reserved'||winePath)&&Date.parse(op.created_at)<Date.now()-15*60_000&&!await db.prepare('SELECT id FROM queue_outbox WHERE operation_id=? LIMIT 1').bind(op.id).first()){
+   // HTTP can stop after marking the operation running but before dispatch.
+   // Only expire an operation that has never dispatched or submitted work.
+   const claimed=await db.prepare(`UPDATE credit_operations SET status='review' WHERE id=? AND status IN ('reserved','running','review')
+    AND NOT EXISTS(SELECT 1 FROM queue_outbox WHERE operation_id=?)
+    AND NOT EXISTS(SELECT 1 FROM provider_operations WHERE operation_id=?)`).bind(op.id,op.id,op.id).run();
+   if(claimed.meta.changes){
+    if(winePath)await db.prepare(`UPDATE wine_research_runs SET status='failed',stage='failed',message='Reservation expired before dispatch',updated_at=?,completed_at=?
+     WHERE owner_id=? AND wine_id=? AND started_at>=? AND status='running'`).bind(stamp(),stamp(),op.user_id,winePath[1],op.created_at).run();
+    await settle(db,op,0,{body:{error:'Reservation expired before dispatch',supportId:op.run_id??op.id},status:409});
+   }else await reconcileOperation(db,op);
   }
   else await reconcileOperation(db,op);
   await db.prepare("UPDATE credit_operations SET updated_at=? WHERE id=? AND status IN ('running','reserved','review')").bind(stamp(),op.id).run();
  }
+ await flushOutbox(db,queue);
  await db.batch([
   db.prepare('DELETE FROM auth_sessions WHERE token_hash IN (SELECT token_hash FROM auth_sessions WHERE expires_at<? LIMIT 100)').bind(seconds()),
   db.prepare('DELETE FROM auth_flows WHERE state_hash IN (SELECT state_hash FROM auth_flows WHERE expires_at<? LIMIT 100)').bind(seconds()),
@@ -64,7 +96,8 @@ export async function maintainJobs(db:D1Database,queue:Queue<unknown>,bucket?:R2
  }
 }
 export async function claimDelivery(db:D1Database,id:string,leaseSeconds=600){
- return Boolean((await db.prepare('INSERT INTO queue_deliveries(id,lease_until) VALUES(?,?) ON CONFLICT(id) DO UPDATE SET lease_until=excluded.lease_until WHERE queue_deliveries.done=0 AND queue_deliveries.lease_until<?').bind(id,seconds()+leaseSeconds,seconds()).run()).meta.changes);
+ const leaseUntil=seconds()+leaseSeconds;
+ return (await db.prepare('INSERT INTO queue_deliveries(id,lease_until) VALUES(?,?) ON CONFLICT(id) DO UPDATE SET lease_until=excluded.lease_until WHERE queue_deliveries.done=0 AND queue_deliveries.lease_until<?').bind(id,leaseUntil,seconds()).run()).meta.changes?leaseUntil:false;
 }
-export async function finishDelivery(db:D1Database,id:string,retry:boolean){await db.prepare('UPDATE queue_deliveries SET done=?,lease_until=? WHERE id=?').bind(retry?0:1,retry?0:seconds(),id).run()}
+export async function finishDelivery(db:D1Database,id:string,retry:boolean,leaseUntil:number|false){return Boolean((await db.prepare('UPDATE queue_deliveries SET done=?,lease_until=? WHERE id=? AND done=0 AND lease_until=?').bind(retry?0:1,retry?0:seconds(),id,leaseUntil||-1).run()).meta.changes)}
 export async function markUncertain(db:D1Database,id:string){await db.prepare("UPDATE credit_operations SET status='review',updated_at=? WHERE id=? AND status IN ('reserved','running')").bind(stamp(),id).run()}

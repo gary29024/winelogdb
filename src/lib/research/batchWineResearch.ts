@@ -8,12 +8,12 @@ import { adoptFriendResearch,assembleDeepSearch,RESEARCH_EDITION_COLUMNS,researc
 import { orderModelsByGrounding,recordGroundingObservation } from './modelHealth';
 import { createResearchBatchJob,finishResearchBatchJob,recordResearchSearchQueries,getResearchBatchJob,touchResearchBatchJob } from './batchJobStore';
 import { cancelGeminiBatch } from './cancelResearch';
-import { countSearchQueries,countUsageTokens,createGeminiBatch,describeResponseSchema,fetchGeminiBatch,groundedGenerationConfig,inlineFinishReason,inlineGroundingMetadata,inlineResponseText,isEmulatedGeminiBatchName,isTerminalBatchState,responsesByKey,type GeminiBatchRequest,type GroundingMetadata } from './geminiBatch';
+import { ResearchPersistenceError,countSearchQueries,countUsageTokens,createGeminiBatch,describeResponseSchema,fetchGeminiBatch,groundedGenerationConfig,inlineFinishReason,inlineGroundingMetadata,inlineResponseText,isEmulatedGeminiBatchName,isTerminalBatchState,responsesByKey,type GeminiBatchRequest,type GroundingMetadata } from './geminiBatch';
 import { buildDeepSearchProvenance } from './provenance';
 import { researchBatchErrorPollDelay,researchBatchFirstPollDelay,researchBatchPollDelay,researchBatchStallAction,researchBatchTransientAction } from './batchRetryPolicy';
 import { highRiskTechnicalFailureMessage } from './technicalClaimGate';
 import { auditTechnicalContradictions,technicalContradictionFailureMessage } from './technicalContradictions';
-import { updateWineResearchRun } from './backgroundJobs';
+import { getWineResearchRun,updateWineResearchRun } from './backgroundJobs';
 import { offerToSourceOwner,readableWine,researchWine,withSourceResearch,type ResearchWineRow } from './readableWine';
 import { recordAiUsage,type AnalyticsSink } from '../usage/aiUsage';
 
@@ -179,12 +179,10 @@ async function finalize(env:Env,owner:string,wineId:string,wine:ResearchWineRow<
   const cache=await withSourceResearch(env.DB,owner,wine,targets,await loadResearchCache(env.DB,owner,targets,Boolean(env.CREDIT_RESEARCH_SCOPES))),missing=targets.filter(target=>!cache.has(target.scope));if(missing.length)throw new Error(`Deep Search cache is incomplete: ${missing.map(x=>scopeNames[x.scope]).join(', ')}`);
   // A friend's scopes are kept rather than re-borrowed on every view: the reader
   // now owns the text, so it survives the friendship ending.
-  await adoptFriendResearch(env.DB,owner,cache);
-  // A recipient's run on a shared wine: what they paid for reaches the owner's
-  // copy of that wine too, credited to them, never replacing the owner's own.
+  await adoptFriendResearch(env.DB,owner,cache,true).catch(error=>{throw new ResearchPersistenceError(error)});
   await offerToSourceOwner(env.DB,owner,wine,cache);
   const result={...assembleDeepSearch(cache,targets),release:researchEditionOfRow(wine)};
-  await saveSnapshot(env.DB,owner,wineId,result);return result;
+  await saveSnapshot(env.DB,owner,wineId,result).catch(error=>{throw new ResearchPersistenceError(error)});return result;
 }
 
 async function cancelAttemptBatch(env:Env,requestId:string,wineId:string,attempt:number,googleName:string,reason:string){
@@ -193,10 +191,12 @@ async function cancelAttemptBatch(env:Env,requestId:string,wineId:string,attempt
 }
 
 async function submitAttempt(env:Env,owner:string,wineId:string,requestId:string,attempt:number,scopes:ResearchScope[],feedback:ScopeFeedback={},attempted:readonly string[]=[]){
-  const wine=await loadWine(env.DB,owner,wineId,env.CREDIT_CONTEXT);if(!wine)throw new Error('Wine not found');const targets=researchTargets(wine),cache=await withSourceResearch(env.DB,owner,wine,targets,await loadResearchCache(env.DB,owner,targets),new Set(scopes)),entry=buildRequest(wine,scopes,cache,feedback),model=await chooseResearchModel(env.DB,owner,attempted);let googleName:string|undefined,jobId:string|undefined;
+  const prior=await env.DB.prepare('SELECT id,google_batch_name,model FROM research_batch_jobs WHERE owner_id=? AND request_id=? AND attempt=?')
+    .bind(owner,requestId,attempt).first<{id:string;google_batch_name:string;model:string}>();
+  const wine=await loadWine(env.DB,owner,wineId,env.CREDIT_CONTEXT);if(!wine)throw new Error('Wine not found');const targets=researchTargets(wine),cache=await withSourceResearch(env.DB,owner,wine,targets,await loadResearchCache(env.DB,owner,targets),new Set(scopes)),entry=buildRequest(wine,scopes,cache,feedback),model=prior?.model??await chooseResearchModel(env.DB,owner,attempted);let googleName=prior?.google_batch_name,jobId=prior?.id;
   try{
-    googleName=await createGeminiBatch(env.GEMINI_API_KEY,model,`winelog-wine-${requestId}-${attempt}`,[entry],env.CREDIT_CONTEXT);
-    jobId=await createResearchBatchJob(env.DB,{owner,requestId,targetKind:'wine',targetId:wineId,googleBatchName:googleName,model,attempt,keys:scopes});
+    googleName??=await createGeminiBatch(env.GEMINI_API_KEY,model,`winelog-wine-${requestId}-${attempt}`,[entry],env.CREDIT_CONTEXT);
+    jobId??=await createResearchBatchJob(env.DB,{owner,requestId,targetKind:'wine',targetId:wineId,googleBatchName:googleName,model,attempt,keys:scopes});
     const scopeCount=`${scopes.length} Deep Search scope${scopes.length===1?'':'s'}`;
     await updateWineResearchRun(env.DB,owner,requestId,'researching',
       attempt===1?`Submitted ${scopeCount} to ${model} Batch`
@@ -204,19 +204,26 @@ async function submitAttempt(env:Env,owner:string,wineId:string,requestId:string
       :`Retrying ${scopeCount} on ${model} Batch after an ungrounded answer`,'running',attempt);
     await env.RESEARCH_QUEUE.send({kind:'wine_batch_poll',owner,wineId,requestId,jobId,pollCount:0},{delaySeconds:researchBatchFirstPollDelay(isEmulatedGeminiBatchName(googleName))});log('log',{requestId,wineId,stage:'batch_submitted',attempt,model,scopes,googleName});
   }catch(e){
-    const error=(e as Error).message||'Wine Batch submission failed';
-    if(jobId)await finishResearchBatchJob(env.DB,owner,jobId,'failed',`Batch setup failed: ${error}`).catch(()=>undefined);
-    if(googleName)await cancelAttemptBatch(env,requestId,wineId,attempt,googleName,'submission setup failed');
+    // Once submission exists, local setup must retry that submission. Cancelling
+    // it here erased the only recoverable request and incorrectly chose fallback.
+    if(googleName)throw new ResearchPersistenceError(e);
     throw e;
   }
 }
 
 export async function startWineBatchResearch(env:Env,owner:string,wineId:string,requestId:string,refresh:'none'|'vintage'|'all'){
+  const run=await getWineResearchRun(env.DB,owner,wineId,requestId);
+  if(run?.status==='complete')return {ok:true as const,cached:run.attempt===0};
+  // Replaying the initial delivery must not erase scopes saved by a poll that
+  // has already advanced this run. Resume its latest durable attempt instead.
+  const prior=await env.DB.prepare('SELECT id FROM research_batch_jobs WHERE owner_id=? AND request_id=? ORDER BY attempt DESC LIMIT 1').bind(owner,requestId).first<{id:string}>();
+  if(prior){await env.RESEARCH_QUEUE.send({kind:'wine_batch_poll',owner,wineId,requestId,jobId:prior.id,pollCount:0});return {ok:true as const,cached:false}}
   let prepared:Awaited<ReturnType<typeof prepare>>;
   try{prepared=await prepare(env,owner,wineId,refresh)}catch(e){const error=(e as Error).message||'Could not prepare wine research';await updateWineResearchRun(env.DB,owner,requestId,'failed',error,'failed').catch(()=>undefined);return {ok:false as const,error}}
-  if(!prepared.missing.length){try{await finalize(env,owner,wineId,prepared.wine,prepared.targets);await updateWineResearchRun(env.DB,owner,requestId,'complete','Deep Search already complete from reusable cached research','complete',0);return {ok:true as const,cached:true}}catch(e){const error=(e as Error).message||'Could not finalize cached wine research';await updateWineResearchRun(env.DB,owner,requestId,'failed',error,'failed').catch(()=>undefined);return {ok:false as const,error}}}
+  if(!prepared.missing.length){try{await finalize(env,owner,wineId,prepared.wine,prepared.targets);await updateWineResearchRun(env.DB,owner,requestId,'complete','Deep Search already complete from reusable cached research','complete',0);return {ok:true as const,cached:true}}catch(e){if(e instanceof ResearchPersistenceError)throw e;const error=(e as Error).message||'Could not finalize cached wine research';await updateWineResearchRun(env.DB,owner,requestId,'failed',error,'failed').catch(()=>undefined);return {ok:false as const,error}}}
   try{await submitAttempt(env,owner,wineId,requestId,1,prepared.missing);return {ok:true as const,cached:false}}
   catch(e){
+    if(e instanceof ResearchPersistenceError)throw e;
     const primaryError=(e as Error).message||`${PRIMARY_MODEL} Batch submission failed`;log('warn',{requestId,wineId,stage:'primary_submit_failed',attempt:1,error:primaryError});
     if(await providerNeedsReconciliation(env.CREDIT_CONTEXT)){
       const error=`Provider completion needs reconciliation: ${primaryError}`;
@@ -224,7 +231,7 @@ export async function startWineBatchResearch(env:Env,owner:string,wineId:string,
       return {ok:false as const,error};
     }
     try{await submitAttempt(env,owner,wineId,requestId,2,prepared.missing);return {ok:true as const,cached:false}}
-    catch(fallback){const error=`${PRIMARY_MODEL} submission failed (${primaryError}); ${FALLBACK_MODEL} fallback also failed: ${(fallback as Error).message||'unknown error'}`;await updateWineResearchRun(env.DB,owner,requestId,'failed',error,'failed',2).catch(()=>undefined);return {ok:false as const,error}}
+    catch(fallback){if(fallback instanceof ResearchPersistenceError)throw fallback;const error=`${PRIMARY_MODEL} submission failed (${primaryError}); ${FALLBACK_MODEL} fallback also failed: ${(fallback as Error).message||'unknown error'}`;await updateWineResearchRun(env.DB,owner,requestId,'failed',error,'failed',2).catch(()=>undefined);return {ok:false as const,error}}
   }
 }
 
@@ -252,6 +259,7 @@ async function retryOrFail(env:Env,owner:string,wineId:string,requestId:string,a
   if(next){
     try{await submitAttempt(env,owner,wineId,requestId,next,failed,feedback,attempted);return}
     catch(e){
+      if(e instanceof ResearchPersistenceError)throw e;
       const submitError=(e as Error).message||'Gemini Batch submission failed';
       await updateWineResearchRun(env.DB,owner,requestId,'failed',`Deep Search saved any successful scopes, but the retry for ${failed.map(scope=>scopeNames[scope]).join(', ')} could not be submitted: ${submitError}`,'failed',next);
       log('error',{requestId,wineId,stage:'retry_submit_failed',attempt:next,failed,error:submitError});
@@ -262,7 +270,20 @@ async function retryOrFail(env:Env,owner:string,wineId:string,requestId:string,a
 }
 
 export async function pollWineBatchResearch(env:Env,owner:string,wineId:string,requestId:string,jobId:string,pollCount:number){
-  const job=await getResearchBatchJob(env.DB,owner,jobId);if(!job||job.status!=='running')return;const scopes=job.keys as ResearchScope[],fetched=await fetchGeminiBatch(env.GEMINI_API_KEY,job.googleBatchName,{},env.CREDIT_CONTEXT);
+  const job=await getResearchBatchJob(env.DB,owner,jobId);if(!job)return;
+  if(job.status!=='running'){
+    // Repair the old split completion boundary using saved scopes only.
+    if(job.status==='complete'&&(await getWineResearchRun(env.DB,owner,wineId,requestId))?.status==='running'){
+      const wine=await loadWine(env.DB,owner,wineId,env.CREDIT_CONTEXT);if(!wine)throw new Error('Wine not found');
+      await finalize(env,owner,wineId,wine,researchTargets(wine));
+      await updateWineResearchRun(env.DB,owner,requestId,'complete','Deep Search finalisation recovered from saved research','complete',job.attempt);
+    }
+    // Failed attempt persistence and the next attempt's dispatch are separate
+    // boundaries. While the run is live, replay the saved result to finish the
+    // same transition. A terminal run never buys another attempt.
+    if(job.status==='complete'||(await getWineResearchRun(env.DB,owner,wineId,requestId))?.status!=='running')return;
+  }
+  const scopes=job.keys as ResearchScope[],fetched=await fetchGeminiBatch(env.GEMINI_API_KEY,job.googleBatchName,{},env.CREDIT_CONTEXT);
   if(!fetched.ok){
     if(fetched.status===429||fetched.status>=500){
       const action=researchBatchTransientAction(job.attempt,pollCount);
@@ -275,7 +296,10 @@ export async function pollWineBatchResearch(env:Env,owner:string,wineId:string,r
     await finishResearchBatchJob(env.DB,owner,jobId,'failed',fetched.error);await retryOrFail(env,owner,wineId,requestId,job.attempt,scopes,[fetched.error],{},false,[job.model]);return;
   }
   if(!isTerminalBatchState(fetched.state)){
-    const action=researchBatchStallAction(job.attempt,pollCount);
+    // Emulation has an executor lease, not a remote Batch processing window.
+    // A duplicate poll must wait for that lease; fetchGeminiBatch reclaims it
+    // after expiry and durableProvider replays or holds the original send.
+    const action=isEmulatedGeminiBatchName(job.googleBatchName)?'retry':researchBatchStallAction(job.attempt,pollCount);
     if(action==='retry'){await touchResearchBatchJob(env.DB,owner,jobId);await updateWineResearchRun(env.DB,owner,requestId,'researching',`${job.model} Batch is processing ${scopes.length} Deep Search scope${scopes.length===1?'':'s'}`,'running',job.attempt);await env.RESEARCH_QUEUE.send({kind:'wine_batch_poll',owner,wineId,requestId,jobId,pollCount:pollCount+1},{delaySeconds:researchBatchPollDelay(pollCount)});return}
     const error=`${job.model} Batch did not complete within WineLog's ${job.attempt===1?'primary failover':'fallback'} window (last state ${fetched.state||'unknown'})`;
     await finishResearchBatchJob(env.DB,owner,jobId,'failed',error);await cancelAttemptBatch(env,requestId,wineId,job.attempt,job.googleBatchName,'batch exceeded failover window');
@@ -298,9 +322,11 @@ export async function pollWineBatchResearch(env:Env,owner:string,wineId:string,r
   // Routing learns from this: a model that grounds clears its own cooldown, one
   // that does not is stepped over on the next attempt and the next run.
   await recordGroundingObservation(env.DB,owner,job.model,grounding.chunks>0).catch(()=>undefined);
+  let applying=false;
   try{
     const metadata=groundingMetadata,raw=parseStructuredJsonText(text) as Record<string,unknown>,parsed=deepSearchSchema.safeParse({...raw,sources:sourcesFrom(metadata),model:`${job.model} (batch)`,researchedAt:now()});if(!parsed.success)throw new Error(`Deep Search returned invalid fields: ${parsed.error.issues.map(x=>x.path.join('.')||x.message).join(', ')}`);
     const rawProvenance=buildDeepSearchProvenance(parsed.data,metadata),conflictAudit=auditTechnicalContradictions(parsed.data,rawProvenance),provenance=conflictAudit.provenance,researched:DeepSearchResult={...parsed.data,provenance};
+    applying=true;
     const wine=await loadWine(env.DB,owner,wineId,env.CREDIT_CONTEXT);if(!wine)throw new Error('Wine not found');const targets=researchTargets(wine),entries=splitDeepSearchResult(researched,targets).filter(entry=>scopes.includes(entry.target.scope));failed=scopes.filter(scope=>!entries.some(entry=>entry.target.scope===scope&&scopeIsComplete(scope,entry.payload)));
     const completeEntries=entries.filter(entry=>scopeIsComplete(entry.target.scope,entry.payload));for(const entry of completeEntries){await upsertResearchCache(env.DB,owner,entry);if(entry.target.scope==='producer')await syncProducerScope(env.DB,owner,wine,entry)}
     if(failed.length){
@@ -326,6 +352,9 @@ export async function pollWineBatchResearch(env:Env,owner:string,wineId:string,r
         :conflictError??technicalError??`Gemini response was incomplete or failed the research quality gate for ${failed.map(scope=>scopeNames[scope]).join(', ')} (${[...new Set(warningsByScope.flat())].join(', ')||'no reason recorded'})`];
     }else await finalize(env,owner,wineId,wine,targets);
   }catch(e){
+    // Validation can legitimately choose a model fallback. Failure while
+    // applying a validated answer must instead replay this saved answer.
+    if(applying)throw e;
     const underlying=(e as Error).message,cut=finishReason==='MAX_TOKENS';
     errors=[cut?'Deep Search response ran out of output room before valid JSON completed (MAX_TOKENS)':`${underlying}${finishReason?` (${finishReason})`:''}`];
     if(cut){
@@ -334,7 +363,15 @@ export async function pollWineBatchResearch(env:Env,owner:string,wineId:string,r
     }
     log('warn',{requestId,wineId,stage:'batch_result_failed',attempt:job.attempt,model:job.model,finishReason,textLength:text.length,textPreview:text.slice(0,500),truncated:cut,error:underlying});
   }
-  await finishResearchBatchJob(env.DB,owner,jobId,failed.length?'failed':'complete',failed.length?errors.join('; '):null);
-  if(failed.length){await retryOrFail(env,owner,wineId,requestId,job.attempt,failed,errors,feedback,ungrounded,[job.model]);return}
-  await updateWineResearchRun(env.DB,owner,requestId,'complete','Gemini Batch Deep Search complete with claim evidence and contradiction audit','complete',job.attempt);log('log',{requestId,wineId,stage:'complete',attempt:job.attempt,model:job.model,scopes});
+  if(failed.length){await finishResearchBatchJob(env.DB,owner,jobId,'failed',errors.join('; '));await retryOrFail(env,owner,wineId,requestId,job.attempt,failed,errors,feedback,ungrounded,[job.model]);return}
+  const completedAt=now();
+  // Neither the run nor the job can become terminal without the other. The
+  // operation/allowance settlement is independently replayable by maintenance.
+  await env.DB.batch([
+    env.DB.prepare("UPDATE research_batch_jobs SET status='complete',error=NULL,updated_at=? WHERE owner_id=? AND id=?").bind(completedAt,owner,jobId),
+    env.DB.prepare(`UPDATE wine_research_runs SET status='complete',stage='complete',attempt=?,message=?,updated_at=?,completed_at=?,
+      duration_ms=max(0,cast(round((julianday(?)-julianday(started_at))*86400000) AS INTEGER)) WHERE owner_id=? AND request_id=?`)
+      .bind(job.attempt,'Gemini Batch Deep Search complete with claim evidence and contradiction audit',completedAt,completedAt,completedAt,owner,requestId)
+  ]);
+  log('log',{requestId,wineId,stage:'complete',attempt:job.attempt,model:job.model,scopes});
 }

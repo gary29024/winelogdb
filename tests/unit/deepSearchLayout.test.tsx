@@ -108,6 +108,20 @@ afterEach(()=>{
 });
 
 describe('Deep Search research sections',()=>{
+  it('distinguishes an expired uncertain outcome from a definite failure on reopening',async()=>{
+    await render({deepSearch:null},{requestId:'uncertain-request',wineId:'w1',status:'failed',stage:'failed',outcome:'uncertain',retryBlocked:false});
+    expect(host!.querySelector('.deep-search-panel')!.textContent).toContain('WineLog could not confirm the research outcome.');
+  });
+  it('restores a definite failure after reopening with a safe message and Support ID',async()=>{
+    await render({deepSearch:null},{requestId:'failed-request',wineId:'w1',status:'failed',stage:'failed',message:'Gemini internal diagnostic',retryBlocked:false});
+    const panel=host!.querySelector('.deep-search-panel')!;
+    expect(panel.textContent).toContain('Retry Deep Search');expect(panel.textContent).toContain('Support ID failed-request');expect(panel.textContent).not.toContain('Gemini internal diagnostic');
+  });
+  it('restores a friend follower after reopening without starting a new request',async()=>{
+    await render({deepSearch:null},{requestId:'follow-request',wineId:'w1',status:'running',stage:'queued',waitingForFriend:true,creditOperationId:'follow-operation'});
+    expect(host!.querySelector('.deep-search-panel')!.textContent).toContain('A friend is researching this wine.');
+    expect(vi.mocked(fetch).mock.calls.some(([,init])=>init?.method==='POST')).toBe(false);
+  });
   it.each([true,undefined])('keeps a held request visible on reopening and checks status without starting AI (flag %s)',async retryBlocked=>{
     const run={requestId:'held-request',wineId:'w1',status:'failed',stage:'failed',message:'Provider completion needs reconciliation',retryBlocked};
     await render({deepSearch:null},run);

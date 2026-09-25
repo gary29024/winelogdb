@@ -1,8 +1,12 @@
 import { postGeminiGenerateContent,type GeminiTransportBindings } from '../../../worker/geminiTransport';
 import { AI_MODELS } from '../ai/policy';
 import { durableProvider,providerNeedsReconciliation,type ProviderAuthorization } from '../credits/provider';
+import { hash } from '../credits/primitives';
 
-export type GeminiBatchRequest={key:string;request:Record<string,unknown>};
+export type GeminiBatchRequest={key:string;request:Record<string,unknown>;providerKey?:string};
+export class ResearchPersistenceError extends Error{
+  constructor(cause:unknown){super(cause instanceof Error?cause.message:String(cause));this.name='ResearchPersistenceError'}
+}
 export type GeminiInlineResponse={
   metadata?:{key?:string};
   response?:{candidates?:Array<{content?:{parts?:Array<{text?:string}>};groundingMetadata?:GroundingMetadata;finishReason?:string}>;usageMetadata?:Record<string,unknown>};
@@ -195,7 +199,7 @@ async function executeVertexEntry(env:GatewayRuntimeEnv,model:string,displayName
       // cannot guarantee completion if a transport/body reader ignores signals.
       const outcome=await Promise.race([
         (async()=>{
-          const {response}=await postGeminiGenerateContent(env,model,body,controller.signal,{...metadata,attempt,tier:'flex'},{serviceTier:'flex',serverTimeoutSeconds:Math.max(1,Math.floor(timeoutMs/1000))});
+          const {response}=await postGeminiGenerateContent(env,model,body,controller.signal,{...metadata,attempt,tier:'flex'},{serviceTier:'flex',serverTimeoutSeconds:Math.max(1,Math.floor(timeoutMs/1000)),...(entry.providerKey?{idempotencyKey:`${entry.providerKey}:${attempt}`}:{})});
           if(response.ok)return {payload:await response.json() as GeminiInlineResponse['response'],status:response.status};
           return {status:response.status,error:(await response.text()).replace(/\s+/g,' ').trim().slice(0,700)||`HTTP ${response.status}`};
         })(),
@@ -207,6 +211,7 @@ async function executeVertexEntry(env:GatewayRuntimeEnv,model:string,displayName
       if(attempt===1&&(lastStatus===429||lastStatus>=500)){retry=true;continue}
       return {metadata:{key:entry.key},error:{message:lastError,status:lastStatus}};
     }catch(e){
+      if(env.CREDIT_CONTEXT&&'replayOnly' in env.CREDIT_CONTEXT&&env.CREDIT_CONTEXT.replayOnly)throw e;
       lastStatus=controller.signal.aborted?408:0;lastError=controller.signal.aborted?`Vertex Flex request timed out after ${timeoutMs/1000} seconds`:(e as Error).message||'Vertex Flex request failed';
       console.warn(JSON.stringify({event:'vertex-flex-attempt',stage:'failed',jobId,requestId,model,...metadata,attempt,failureKind:controller.signal.aborted?'timeout':'transport_or_body_error',elapsedMs:Date.now()-startedAt,timeoutMs}));
       // A timeout can win the race while the original send is still pending.
@@ -228,29 +233,46 @@ async function storedVertexBatch(db:D1Database,name:string){
 }
 
 function storedPayload(row:StoredVertexBatch){
-  const payload=parseJson<Record<string,unknown>>(row.result_json,{state:row.state,error:row.error?{message:row.error}:undefined});
+  const payload=parseJson<Record<string,unknown>|null>(row.result_json,null)??{state:row.state,error:row.error?{message:row.error}:undefined};
   if(!payload.state)payload.state=row.state;return payload;
 }
 
 async function executeStoredVertexBatch(env:GatewayRuntimeEnv,name:string,row:StoredVertexBatch){
-  const db=env.DB,id=row.id,stamp=now();
+  const db=env.DB,id=row.id,stamp=new Date(Math.max(Date.now(),Date.parse(row.updated_at)+1)).toISOString();
+  const retainedReply=row.result_json!==null&&row.requests_json!=='[]';
+  const entries=parseJson<GeminiBatchRequest[]>(row.requests_json,[]),context=env.CREDIT_CONTEXT;
+  // Old persisted requests predate stable entry keys. If any receipt exists,
+  // resume them conservatively: a changed transport deadline cannot buy work.
+  const legacyReplay=row.state==='JOB_STATE_RUNNING'&&entries.some(entry=>!entry.providerKey)&&context&&'operationId' in context
+    &&Boolean(await db.prepare('SELECT id FROM provider_operations WHERE operation_id=? LIMIT 1').bind(context.operationId).first());
+  const replayOnly=retainedReply||legacyReplay;
+  if(retainedReply&&isTerminalBatchState(row.state)){
+    const reopened=await db.prepare("UPDATE vertex_batch_emulation_jobs SET state='JOB_STATE_PENDING',updated_at=? WHERE id=? AND state=? AND updated_at=?")
+      .bind(stamp,id,row.state,row.updated_at).run();
+    if(!reopened.meta.changes)return (await storedVertexBatch(db,name))??row;
+    row.state='JOB_STATE_PENDING';row.updated_at=stamp;
+  }
   if(row.state==='JOB_STATE_RUNNING'&&Date.now()-Date.parse(row.updated_at||stamp)>RUNNING_STALE_MS){
-    await db.prepare("UPDATE vertex_batch_emulation_jobs SET state='JOB_STATE_PENDING',updated_at=? WHERE id=? AND state='JOB_STATE_RUNNING'").bind(stamp,id).run();row.state='JOB_STATE_PENDING';
+    const reset=await db.prepare("UPDATE vertex_batch_emulation_jobs SET state='JOB_STATE_PENDING',updated_at=? WHERE id=? AND state='JOB_STATE_RUNNING' AND updated_at=?").bind(stamp,id,row.updated_at).run();
+    if(!reset.meta.changes)return (await storedVertexBatch(db,name))??row;
+    row.state='JOB_STATE_PENDING';row.updated_at=stamp;
   }
   if(row.state!=='JOB_STATE_PENDING')return row;
-  const claimed=await db.prepare("UPDATE vertex_batch_emulation_jobs SET state='JOB_STATE_RUNNING',updated_at=? WHERE id=? AND state='JOB_STATE_PENDING'").bind(stamp,id).run();
+  const claimed=await db.prepare("UPDATE vertex_batch_emulation_jobs SET state='JOB_STATE_RUNNING',updated_at=? WHERE id=? AND state='JOB_STATE_PENDING' AND updated_at=?").bind(stamp,id,row.updated_at).run();
   if(Number(claimed.meta.changes||0)===0)return (await storedVertexBatch(db,name))??row;
-  try{
-    const entries=parseJson<GeminiBatchRequest[]>(row.requests_json,[]);
-    if(!entries.length)throw new Error('Queued Vertex batch has no requests');
-    const deadline=Date.now()+EXECUTION_BUDGET_MS;
-    const responses=await mapLimit(entries,VERTEX_BATCH_CONCURRENCY,(entry)=>executeVertexEntry(env,row.model,row.display_name,entry,deadline,id));
-    const result={state:'JOB_STATE_SUCCEEDED',dest:{inlinedResponses:responses},completedAt:now()};
-    await db.prepare("UPDATE vertex_batch_emulation_jobs SET state='JOB_STATE_SUCCEEDED',requests_json='[]',result_json=?,error=NULL,updated_at=? WHERE id=? AND state='JOB_STATE_RUNNING'").bind(JSON.stringify(result),now(),id).run();
-  }catch(e){
-    const error=(e as Error).message||'Queued Vertex Flex batch failed',result={state:'JOB_STATE_FAILED',error:{message:error}};
-    await db.prepare("UPDATE vertex_batch_emulation_jobs SET state='JOB_STATE_FAILED',requests_json='[]',result_json=?,error=?,updated_at=? WHERE id=? AND state='JOB_STATE_RUNNING'").bind(JSON.stringify(result),error,now(),id).run();
-  }
+  if(!entries.length)throw new Error('Queued Vertex batch has no requests');
+  const deadline=Date.now()+EXECUTION_BUDGET_MS;
+  // A retained terminal request means its reply was uncertain. Recovery is a
+  // read of durable provider receipts only, never permission to send again.
+  const recoveryEnv=replayOnly&&context&&'operationId' in context?{...env,CREDIT_CONTEXT:{...context,replayOnly:true}}:env;
+  const responses=await mapLimit(entries,VERTEX_BATCH_CONCURRENCY,(entry)=>executeVertexEntry(recoveryEnv,row.model,row.display_name,entry,deadline,id));
+  const result={state:'JOB_STATE_SUCCEEDED',dest:{inlinedResponses:responses},completedAt:now()};
+  // Provider errors are values in responses. A local persistence failure must
+  // propagate to the queue, retaining the request and its saved provider reply
+  // for lease recovery rather than destroying them and buying a fallback.
+  const uncertain=await providerNeedsReconciliation(env.CREDIT_CONTEXT);
+  await db.prepare("UPDATE vertex_batch_emulation_jobs SET state='JOB_STATE_SUCCEEDED',requests_json=?,result_json=?,error=NULL,updated_at=? WHERE id=? AND state='JOB_STATE_RUNNING' AND updated_at=?")
+    .bind(uncertain?row.requests_json:'[]',JSON.stringify(result),now(),id,stamp).run();
   return (await storedVertexBatch(db,name))??row;
 }
 
@@ -265,18 +287,30 @@ export async function createGeminiBatch(apiKey:string|undefined,model:string,dis
   if(consumePrimaryBypass(model,displayName))throw new Error(`${PRIMARY_MODEL} Batch bypassed because the primary research model is temporarily in cooldown`);
   const runtime=gatewayRuntime(apiKey);
   if(runtime){
-    if(context){const previous=await runtime.DB.prepare('SELECT id FROM vertex_batch_emulation_jobs WHERE display_name=? LIMIT 1').bind(displayName).first<{id:string}>();if(previous)return `${EMULATED_PREFIX}${previous.id}`}
-    const id=crypto.randomUUID(),stamp=now(),expiresAt=new Date(Date.now()+EMULATED_TTL_MS).toISOString();
+   try{
+    const id=context&&'operationId' in context?await hash(`vertex-batch:${context.operationId}:${displayName}`):crypto.randomUUID(),stamp=now(),expiresAt=new Date(Date.now()+EMULATED_TTL_MS).toISOString();
     await runtime.DB.prepare('DELETE FROM vertex_batch_emulation_jobs WHERE expires_at<?').bind(stamp).run().catch(()=>undefined);
-    await runtime.DB.prepare(`INSERT INTO vertex_batch_emulation_jobs(id,model,display_name,requests_json,result_json,state,error,created_at,updated_at,expires_at)
-      VALUES(?,?,?,?,NULL,'JOB_STATE_PENDING',NULL,?,?,?)`).bind(id,model,displayName,JSON.stringify(entries),stamp,stamp,expiresAt).run();
+    await runtime.DB.prepare(`INSERT OR IGNORE INTO vertex_batch_emulation_jobs(id,model,display_name,requests_json,result_json,state,error,created_at,updated_at,expires_at)
+      VALUES(?,?,?,?,NULL,'JOB_STATE_PENDING',NULL,?,?,?)`).bind(id,model,displayName,JSON.stringify(entries.map(entry=>({...entry,providerKey:`vertex:${id}:${entry.key}`}))),stamp,stamp,expiresAt).run();
     return `${EMULATED_PREFIX}${id}`;
+   }catch(error){throw new ResearchPersistenceError(error)}
   }
   const developerKey=text(apiKey);
   if(!developerKey)throw new Error('No Gemini batch transport is configured');
   const requests=entries.map(entry=>({request:entry.request,metadata:{key:entry.key}}));
   const body=JSON.stringify({batch:{display_name:displayName,input_config:{requests:{requests}}}});
-  const response=await durableProvider(context,`batch:${displayName}:${body}`,()=>fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:batchGenerateContent`,{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':developerKey},body}));
+  const wineAttempt=displayName.startsWith('winelog-wine-');
+  if(wineAttempt&&context&&'operationId' in context){
+    // Adopt a saved create response whose handle never reached the local job
+    // row. This also recovers legacy body-dependent receipts after replanning.
+    const saved=await context.db.prepare("SELECT response_body FROM provider_operations WHERE operation_id=? AND state='saved' AND response_status BETWEEN 200 AND 299 ORDER BY created_at DESC").bind(context.operationId).all<{response_body:string}>();
+    for(const receipt of saved.results){
+      const value=parseJson<{name?:string;metadata?:{name?:string};response?:{name?:string}}>(receipt.response_body,{});
+      const name=[value?.name,value?.metadata?.name,value?.response?.name].find(value=>typeof value==='string'&&value.startsWith('batches/'));
+      if(name&&!await context.db.prepare('SELECT id FROM research_batch_jobs WHERE google_batch_name=? LIMIT 1').bind(name).first())return name;
+    }
+  }
+  const response=await durableProvider(context,wineAttempt?`batch:${displayName}`:`batch:${displayName}:${body}`,()=>fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:batchGenerateContent`,{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':developerKey},body}));
   if(!response.ok)throw new Error(`Gemini Batch API create failed (${response.status}): ${(await response.text().catch(()=>'' )).slice(0,500)}`);
   const created=await response.json() as {name?:string;metadata?:{name?:string};response?:{name?:string}};
   const name=[created.name,created.metadata?.name,created.response?.name].find(value=>value?.startsWith('batches/'));
@@ -288,7 +322,7 @@ export async function fetchGeminiBatch(apiKey:string|undefined,googleBatchName:s
   if(isEmulatedGeminiBatchName(googleBatchName)){
     const runtime=gatewayRuntime(apiKey);if(!runtime)return {ok:false as const,status:503,error:'AI Gateway runtime is unavailable for this queued Vertex batch'};
     let row=await storedVertexBatch(runtime.DB,googleBatchName);if(!row)return {ok:false as const,status:404,error:'Queued Vertex batch not found'};
-    if(options.execute!==false&&!isTerminalBatchState(row.state))row=await executeStoredVertexBatch({...runtime,CREDIT_CONTEXT:context},googleBatchName,row);
+    if(options.execute!==false&&(!isTerminalBatchState(row.state)||(row.requests_json!=='[]'&&!await providerNeedsReconciliation(context))))row=await executeStoredVertexBatch({...runtime,CREDIT_CONTEXT:context},googleBatchName,row);
     const payload=storedPayload(row);return {ok:true as const,payload,state:normalizeBatchState(payload),responses:extractBatchResponses(payload)};
   }
   const developerKey=text(apiKey);
