@@ -73,7 +73,10 @@ python scripts/build_burgundy_village_map.py --source-dir .tmp/burgundy-map
 
 `scripts/burgundy-villages.json` is the reviewed map configuration: appellation
 and denomination IDs, communes, name exceptions, overlap notes and shared-cru
-defaults. The generator verifies the pinned INAO archive hash, refreshes extracted
+defaults. `nameCrosswalk` maps an INAO name to a different Atlas name;
+`displayNames` shortens a name for display where INAO records alternatives in
+one string (Chambolle's "Les Feusselottes ou Les Feusselotes"), while
+`sourceName` and the Atlas lookup keep the full INAO name. The generator verifies the pinned INAO archive hash, refreshes extracted
 members, reprojects INAO EPSG:2154 coordinates to longitude/latitude,
 unions records only within the same denomination, checks polygon validity,
 and fails on unexpected coverage or an unmatched identity. It retains coordinate

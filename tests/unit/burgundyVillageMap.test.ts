@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { describe,expect,it } from 'vitest';
-import { burgundyVillageMapTarget,type VillageMapCatalogue } from '../../src/lib/places/burgundyVillageMap';
+import { snapshotLabel,burgundyVillageMapTarget,type VillageMapCatalogue } from '../../src/lib/places/burgundyVillageMap';
 import catalogue from '../../src/lib/places/burgundyVillageMapCatalogue.json';
 import morey from '../../src/lib/places/moreyVillageMapCatalogue.json';
 import chambolle from '../../src/lib/places/chambolleVillageMapCatalogue.json';
@@ -158,5 +158,25 @@ describe('village registry',()=>{
    }
   }
   await expect(loadVillageMapCatalogue('unknown-village')).rejects.toThrow('unavailable');
+ });
+});
+
+describe('source snapshot labels',()=>{
+ it('shows a dated release by day and a monthly snapshot by month alone',()=>{
+  expect(snapshotLabel('2026-09-21')).toBe('21 Sep 2026');
+  expect(snapshotLabel('2026-06-01',true)).toBe('Jun 2026');
+ });
+ it('falls back to the raw value rather than inventing a date',()=>{
+  expect(snapshotLabel('unknown')).toBe('unknown');
+  expect(snapshotLabel(undefined)).toBe('');
+ });
+});
+
+describe('display names',()=>{
+ it('shows one spelling where INAO records alternatives, keeping the source name and Atlas identity',()=>{
+  const feature=chambolle.features.find(f=>f.id==='inao-denom-464')!;
+  expect(feature.name).toBe('Les Feusselottes');
+  expect(feature.sourceName).toBe('Chambolle-Musigny premier cru Les Feusselottes ou Les Feusselotes');
+  expect(feature.atlasUrl).toContain('les-feusselottes-ou-les-feusselotes');
  });
 });

@@ -28,3 +28,14 @@ export function burgundyVillageMapTarget(wine:WineFacts&{classification?:string|
  return {villageId:village.id,villageName:village.name,region:village.region,featureId:target.featureId,name:target.name,
   scope:target.scope==='vineyard'?'vineyard':'appellation'};
 }
+
+// Source snapshots are ISO dates in the catalogue. INAO publishes a dated
+// release; the Cadastre is a monthly snapshot, so it shows the month alone
+// rather than a day it does not have. Spelled out rather than Intl, whose en-GB
+// "Sept" would differ from the rest of the app.
+const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+export function snapshotLabel(iso:string|undefined,monthOnly=false){
+ const [year,month,day]=(iso??'').split('-').map(Number);
+ if(!year||!month||month>12)return iso??'';
+ return monthOnly?`${months[month-1]} ${year}`:`${day} ${months[month-1]} ${year}`;
+}

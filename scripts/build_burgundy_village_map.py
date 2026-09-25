@@ -127,6 +127,9 @@ def main():
                 atlas_name = village["nameCrosswalk"].get(feature_name, feature_name)
                 atlas_path = premier_links[key(atlas_name)]
                 match_id = atlas_path.split("/")[2]
+            # A shorter name for display where INAO records alternatives in one
+            # string; the full INAO name stays in sourceName and the Atlas lookup.
+            feature_name = village.get("displayNames", {}).get(feature_name, feature_name)
             feature_id = f"inao-denom-{denom_id}"
             properties = {"id": feature_id, "name": feature_name, "tier": tier, "kind": "appellation" if broad else "vineyard",
                           "appellationId": row["id_app"], "denominationId": denom_id, "sourceName": row["denom"],

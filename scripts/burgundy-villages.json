@@ -48,6 +48,7 @@
       "communes": [{"id": "21133", "name": "Chambolle-Musigny"}, {"id": "21442", "name": "Morey-Saint-Denis"}],
       "catalogueFile": "chambolleVillageMapCatalogue.json",
       "nameCrosswalk": {},
+      "displayNames": {"Les Feusselottes ou Les Feusselotes": "Les Feusselottes"},
       "notes": {
         "inao-denom-361": {"note": "Bonnes-Mares spans Morey-Saint-Denis and Chambolle-Musigny. Its full production area is shown on both village maps; the wine’s designation alone does not identify which side it comes from."}
       }
