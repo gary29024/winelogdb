@@ -1,0 +1,56 @@
+{
+  "sharedDefaults": {"361": "chambolle-musigny"},
+  "villages": [
+    {
+      "id": "gevrey-chambertin",
+      "name": "Gevrey-Chambertin",
+      "region": "Côte de Nuits",
+      "appellationId": 182,
+      "villageDenomination": 589,
+      "premierDenomination": 616,
+      "premierRange": [590, 615],
+      "grands": [447, 448, 475, 477, 646, 666, 808, 809, 1086],
+      "communes": [{"id": "21295", "name": "Gevrey-Chambertin"}, {"id": "21110", "name": "Brochon"}],
+      "catalogueFile": "burgundyVillageMapCatalogue.json",
+      "nameCrosswalk": {"Clos Saint-Jacques": "Le Clos Saint-Jacques"},
+      "notes": {
+        "inao-denom-447": {"note": "Chambertin’s production area takes in Clos de Bèze, whose wine may also be labelled Chambertin - so a Chambertin can come from either."},
+        "inao-denom-448": {"note": "Clos de Bèze lies inside Chambertin’s production area, and its wine may also be labelled Chambertin.", "paintedBy": "inao-denom-447"},
+        "inao-denom-477": {"note": "Charmes-Chambertin and Mazoyères-Chambertin share one production area. Mazoyères wine may be labelled Charmes-Chambertin, but not the reverse - so a Charmes can come from either."},
+        "inao-denom-809": {"note": "Mazoyères-Chambertin shares its production area with Charmes-Chambertin, and its wine may be labelled Charmes-Chambertin.", "paintedBy": "inao-denom-477"}
+      }
+    },
+    {
+      "id": "morey-saint-denis",
+      "name": "Morey-Saint-Denis",
+      "region": "Côte de Nuits",
+      "appellationId": 208,
+      "villageDenomination": 928,
+      "premierDenomination": 949,
+      "premierRange": [929, 948],
+      "grands": [361, 544, 545, 547, 548],
+      "communes": [{"id": "21442", "name": "Morey-Saint-Denis"}, {"id": "21133", "name": "Chambolle-Musigny"}],
+      "catalogueFile": "moreyVillageMapCatalogue.json",
+      "nameCrosswalk": {},
+      "notes": {
+        "inao-denom-361": {"note": "Bonnes-Mares spans Morey-Saint-Denis and Chambolle-Musigny. Its full production area is shown on both village maps; the wine’s designation alone does not identify which side it comes from."}
+      }
+    },
+    {
+      "id": "chambolle-musigny",
+      "name": "Chambolle-Musigny",
+      "region": "Côte de Nuits",
+      "appellationId": 150,
+      "villageDenomination": 449,
+      "premierDenomination": 474,
+      "premierRange": [450, 473],
+      "grands": [361, 973],
+      "communes": [{"id": "21133", "name": "Chambolle-Musigny"}, {"id": "21442", "name": "Morey-Saint-Denis"}],
+      "catalogueFile": "chambolleVillageMapCatalogue.json",
+      "nameCrosswalk": {},
+      "notes": {
+        "inao-denom-361": {"note": "Bonnes-Mares spans Morey-Saint-Denis and Chambolle-Musigny. Its full production area is shown on both village maps; the wine’s designation alone does not identify which side it comes from."}
+      }
+    }
+  ]
+}

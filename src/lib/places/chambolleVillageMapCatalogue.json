@@ -1,0 +1,753 @@
+{
+  "id": "chambolle-musigny",
+  "name": "Chambolle-Musigny",
+  "region": "Côte de Nuits",
+  "communes": [
+    {
+      "id": "21133",
+      "name": "Chambolle-Musigny"
+    },
+    {
+      "id": "21442",
+      "name": "Morey-Saint-Denis"
+    }
+  ],
+  "dataUrl": "/maps/chambolle-musigny.2026-09-21.geojson",
+  "bounds": [
+    4.945155,
+    47.173613,
+    4.968275,
+    47.194871
+  ],
+  "sources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21133/cadastre-21133-communes.json.gz",
+      "sha256": "0199186d35a17ecd55cc2e856fa720f28031e4df9f00a29095e6afcdc3d01bb3"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21442/cadastre-21442-communes.json.gz",
+      "sha256": "1d506f62355c351741a87c84e8d4a8ea221f6c38dfc566c61b62792b2c3b8197"
+    }
+  ],
+  "notes": {
+    "inao-denom-361": {
+      "note": "Bonnes-Mares spans Morey-Saint-Denis and Chambolle-Musigny. Its full production area is shown on both village maps; the wine’s designation alone does not identify which side it comes from."
+    }
+  },
+  "features": [
+    {
+      "id": "inao-denom-361",
+      "name": "Bonnes-Mares",
+      "tier": "grand_cru",
+      "kind": "vineyard",
+      "appellationId": 137,
+      "denominationId": 361,
+      "sourceName": "Bonnes-Mares",
+      "communes": [
+        "21133",
+        "21442"
+      ],
+      "areaHa": 15.07,
+      "matchId": "france/burgundy/cote-de-nuits/bonnes-mares",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_ryckoqmksigzefbvw4mib27hna/bonnes-mares",
+      "bounds": [
+        4.954094,
+        47.188967,
+        4.960625,
+        47.194871
+      ],
+      "labelPoint": [
+        4.957917,
+        47.191925
+      ]
+    },
+    {
+      "id": "inao-denom-449",
+      "name": "Chambolle-Musigny",
+      "tier": "village",
+      "kind": "appellation",
+      "appellationId": 150,
+      "denominationId": 449,
+      "sourceName": "Chambolle-Musigny",
+      "communes": [
+        "21133"
+      ],
+      "areaHa": 182.51,
+      "matchId": "ba_appellation_iqtrttnnp5aewcwqdejrhmjr44",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_iqtrttnnp5aewcwqdejrhmjr44/chambolle-musigny",
+      "bounds": [
+        4.945155,
+        47.173613,
+        4.968275,
+        47.194489
+      ],
+      "labelPoint": [
+        4.954765,
+        47.180023
+      ]
+    },
+    {
+      "id": "inao-denom-450",
+      "name": "Aux Beaux Bruns",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 150,
+      "denominationId": 450,
+      "sourceName": "Chambolle-Musigny premier cru Aux Beaux Bruns",
+      "communes": [
+        "21133"
+      ],
+      "areaHa": 1.54,
+      "matchId": "ba_designation_xbjmjz2dmjnog3s3fqdwxxwyfa",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_xbjmjz2dmjnog3s3fqdwxxwyfa/aux-beaux-bruns",
+      "bounds": [
+        4.960231,
+        47.186369,
+        4.961743,
+        47.187889
+      ],
+      "labelPoint": [
+        4.960976,
+        47.187128
+      ]
+    },
+    {
+      "id": "inao-denom-451",
+      "name": "Aux Combottes",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 150,
+      "denominationId": 451,
+      "sourceName": "Chambolle-Musigny premier cru Aux Combottes",
+      "communes": [
+        "21133"
+      ],
+      "areaHa": 0.83,
+      "matchId": "ba_designation_wn2wbg5zmdszhmgodzsf5sm6o4",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_wn2wbg5zmdszhmgodzsf5sm6o4/aux-combottes",
+      "bounds": [
+        4.959799,
+        47.184935,
+        4.961662,
+        47.18618
+      ],
+      "labelPoint": [
+        4.960982,
+        47.185561
+      ]
+    },
+    {
+      "id": "inao-denom-452",
+      "name": "Aux Echanges",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 150,
+      "denominationId": 452,
+      "sourceName": "Chambolle-Musigny premier cru Aux Echanges",
+      "communes": [
+        "21133"
+      ],
+      "areaHa": 0.93,
+      "matchId": "ba_designation_hpm4bxcsxlmxfcwva4iuljnepi",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_hpm4bxcsxlmxfcwva4iuljnepi/aux-echanges",
+      "bounds": [
+        4.960342,
+        47.185559,
+        4.961956,
+        47.186618
+      ],
+      "labelPoint": [
+        4.961202,
+        47.186108
+      ]
+    },
+    {
+      "id": "inao-denom-453",
+      "name": "Derrière la Grange",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 150,
+      "denominationId": 453,
+      "sourceName": "Chambolle-Musigny premier cru Derrière la Grange",
+      "communes": [
+        "21133"
+      ],
+      "areaHa": 0.47,
+      "matchId": "ba_designation_gbe65bg5dmkufpsw2panzqtire",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_gbe65bg5dmkufpsw2panzqtire/derriere-la-grange",
+      "bounds": [
+        4.955776,
+        47.187202,
+        4.957271,
+        47.188225
+      ],
+      "labelPoint": [
+        4.956689,
+        47.187828
+      ]
+    },
+    {
+      "id": "inao-denom-454",
+      "name": "La Combe d'Orveau",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 150,
+      "denominationId": 454,
+      "sourceName": "Chambolle-Musigny premier cru La Combe d'Orveau",
+      "communes": [
+        "21133"
+      ],
+      "areaHa": 2.23,
+      "matchId": "ba_designation_77uxmrsle54rxcystqr7qf2gke",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_77uxmrsle54rxcystqr7qf2gke/la-combe-d-orveau",
+      "bounds": [
+        4.949719,
+        47.17424,
+        4.952423,
+        47.176427
+      ],
+      "labelPoint": [
+        4.951286,
+        47.175334
+      ]
+    },
+    {
+      "id": "inao-denom-455",
+      "name": "Les Amoureuses",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 150,
+      "denominationId": 455,
+      "sourceName": "Chambolle-Musigny premier cru Les Amoureuses",
+      "communes": [
+        "21133"
+      ],
+      "areaHa": 5.28,
+      "matchId": "ba_designation_dhwwurdjcolteaz4ejlv5leghy",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_dhwwurdjcolteaz4ejlv5leghy/les-amoureuses",
+      "bounds": [
+        4.955725,
+        47.178336,
+        4.959631,
+        47.181149
+      ],
+      "labelPoint": [
+        4.957036,
+        47.179766
+      ]
+    },
+    {
+      "id": "inao-denom-456",
+      "name": "Les Baudes",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 150,
+      "denominationId": 456,
+      "sourceName": "Chambolle-Musigny premier cru Les Baudes",
+      "communes": [
+        "21133"
+      ],
+      "areaHa": 3.45,
+      "matchId": "ba_designation_qaugcowwoa4rzmqmndha2lnkcy",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_qaugcowwoa4rzmqmndha2lnkcy/les-baudes",
+      "bounds": [
+        4.957932,
+        47.189171,
+        4.960538,
+        47.192503
+      ],
+      "labelPoint": [
+        4.959401,
+        47.19084
+      ]
+    },
+    {
+      "id": "inao-denom-457",
+      "name": "Les Borniques",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 150,
+      "denominationId": 457,
+      "sourceName": "Chambolle-Musigny premier cru Les Borniques",
+      "communes": [
+        "21133"
+      ],
+      "areaHa": 1.43,
+      "matchId": "ba_designation_wvnahcq3np66w3wlkkksvomqg4",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_wvnahcq3np66w3wlkkksvomqg4/les-borniques",
+      "bounds": [
+        4.954908,
+        47.18012,
+        4.95623,
+        47.182299
+      ],
+      "labelPoint": [
+        4.95553,
+        47.181225
+      ]
+    },
+    {
+      "id": "inao-denom-458",
+      "name": "Les Carrières",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 150,
+      "denominationId": 458,
+      "sourceName": "Chambolle-Musigny premier cru Les Carrières",
+      "communes": [
+        "21133"
+      ],
+      "areaHa": 0.52,
+      "matchId": "ba_designation_jleh76ofhqiystbgju7slmpbje",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_jleh76ofhqiystbgju7slmpbje/les-carrieres",
+      "bounds": [
+        4.956062,
+        47.185907,
+        4.957101,
+        47.186791
+      ],
+      "labelPoint": [
+        4.95661,
+        47.186376
+      ]
+    },
+    {
+      "id": "inao-denom-459",
+      "name": "Les Chabiots",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 150,
+      "denominationId": 459,
+      "sourceName": "Chambolle-Musigny premier cru Les Chabiots",
+      "communes": [
+        "21133"
+      ],
+      "areaHa": 1.51,
+      "matchId": "ba_designation_4qm7opsow5bzuc2efp7463syyq",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_4qm7opsow5bzuc2efp7463syyq/les-chabiots",
+      "bounds": [
+        4.955724,
+        47.180748,
+        4.957689,
+        47.182457
+      ],
+      "labelPoint": [
+        4.956782,
+        47.181628
+      ]
+    },
+    {
+      "id": "inao-denom-460",
+      "name": "Les Charmes",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 150,
+      "denominationId": 460,
+      "sourceName": "Chambolle-Musigny premier cru Les Charmes",
+      "communes": [
+        "21133"
+      ],
+      "areaHa": 9.35,
+      "matchId": "ba_designation_bg2zrnbr7zqcaopchydu2jmgja",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_bg2zrnbr7zqcaopchydu2jmgja/les-charmes",
+      "bounds": [
+        4.957358,
+        47.1805,
+        4.961339,
+        47.185554
+      ],
+      "labelPoint": [
+        4.960125,
+        47.182037
+      ]
+    },
+    {
+      "id": "inao-denom-461",
+      "name": "Les Chatelots",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 150,
+      "denominationId": 461,
+      "sourceName": "Chambolle-Musigny premier cru Les Chatelots",
+      "communes": [
+        "21133"
+      ],
+      "areaHa": 2.98,
+      "matchId": "ba_designation_vkadb2jpvg2znwlfa3x3huzgiq",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_vkadb2jpvg2znwlfa3x3huzgiq/les-chatelots",
+      "bounds": [
+        4.955979,
+        47.184324,
+        4.958709,
+        47.186723
+      ],
+      "labelPoint": [
+        4.957342,
+        47.185678
+      ]
+    },
+    {
+      "id": "inao-denom-462",
+      "name": "Les Combottes",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 150,
+      "denominationId": 462,
+      "sourceName": "Chambolle-Musigny premier cru Les Combottes",
+      "communes": [
+        "21133"
+      ],
+      "areaHa": 0.72,
+      "matchId": "ba_designation_3vbun7areilhlld7ryjp7jrtqq",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_3vbun7areilhlld7ryjp7jrtqq/les-combottes",
+      "bounds": [
+        4.958496,
+        47.185351,
+        4.959755,
+        47.186424
+      ],
+      "labelPoint": [
+        4.959136,
+        47.185894
+      ]
+    },
+    {
+      "id": "inao-denom-463",
+      "name": "Les Cras",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 150,
+      "denominationId": 463,
+      "sourceName": "Chambolle-Musigny premier cru Les Cras",
+      "communes": [
+        "21133"
+      ],
+      "areaHa": 3.41,
+      "matchId": "ba_designation_ggabpxjywgnhanhwxuwketu5zu",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_ggabpxjywgnhanhwxuwketu5zu/les-cras",
+      "bounds": [
+        4.951804,
+        47.186198,
+        4.95577,
+        47.188376
+      ],
+      "labelPoint": [
+        4.954116,
+        47.187282
+      ]
+    },
+    {
+      "id": "inao-denom-464",
+      "name": "Les Feusselottes ou Les Feusselotes",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 150,
+      "denominationId": 464,
+      "sourceName": "Chambolle-Musigny premier cru Les Feusselottes ou Les Feusselotes",
+      "communes": [
+        "21133"
+      ],
+      "areaHa": 4.4,
+      "matchId": "ba_designation_kf3mvdzdzl7k5wtiurs6qsdzh4",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_kf3mvdzdzl7k5wtiurs6qsdzh4/les-feusselottes-ou-les-feusselotes",
+      "bounds": [
+        4.954264,
+        47.18287,
+        4.957716,
+        47.186064
+      ],
+      "labelPoint": [
+        4.956535,
+        47.183831
+      ]
+    },
+    {
+      "id": "inao-denom-465",
+      "name": "Les Fuées",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 150,
+      "denominationId": 465,
+      "sourceName": "Chambolle-Musigny premier cru Les Fuées",
+      "communes": [
+        "21133"
+      ],
+      "areaHa": 4.4,
+      "matchId": "ba_designation_b4zrkttc4njjkdjjsi3bynr46a",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_b4zrkttc4njjkdjjsi3bynr46a/les-fuees",
+      "bounds": [
+        4.953168,
+        47.187598,
+        4.956984,
+        47.190398
+      ],
+      "labelPoint": [
+        4.955957,
+        47.188979
+      ]
+    },
+    {
+      "id": "inao-denom-466",
+      "name": "Les Groseilles",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 150,
+      "denominationId": 466,
+      "sourceName": "Chambolle-Musigny premier cru Les Groseilles",
+      "communes": [
+        "21133"
+      ],
+      "areaHa": 1.35,
+      "matchId": "ba_designation_cng6ue5sbehaip4oo6w6oss7iu",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_cng6ue5sbehaip4oo6w6oss7iu/les-groseilles",
+      "bounds": [
+        4.958538,
+        47.186448,
+        4.96028,
+        47.187892
+      ],
+      "labelPoint": [
+        4.959531,
+        47.187185
+      ]
+    },
+    {
+      "id": "inao-denom-467",
+      "name": "Les Gruenchers",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 150,
+      "denominationId": 467,
+      "sourceName": "Chambolle-Musigny premier cru Les Gruenchers",
+      "communes": [
+        "21133"
+      ],
+      "areaHa": 2.82,
+      "matchId": "ba_designation_7hk5ajyawnh43mya7xmuexupwu",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_7hk5ajyawnh43mya7xmuexupwu/les-gruenchers",
+      "bounds": [
+        4.95592,
+        47.186705,
+        4.959382,
+        47.18861
+      ],
+      "labelPoint": [
+        4.958395,
+        47.18769
+      ]
+    },
+    {
+      "id": "inao-denom-468",
+      "name": "Les Hauts Doix",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 150,
+      "denominationId": 468,
+      "sourceName": "Chambolle-Musigny premier cru Les Hauts Doix",
+      "communes": [
+        "21133"
+      ],
+      "areaHa": 1.74,
+      "matchId": "ba_designation_r2yz6ntspuhkonahfckpypfv7y",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_r2yz6ntspuhkonahfckpypfv7y/les-hauts-doix",
+      "bounds": [
+        4.957312,
+        47.17946,
+        4.959659,
+        47.181677
+      ],
+      "labelPoint": [
+        4.959049,
+        47.18057
+      ]
+    },
+    {
+      "id": "inao-denom-469",
+      "name": "Les Lavrottes",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 150,
+      "denominationId": 469,
+      "sourceName": "Chambolle-Musigny premier cru Les Lavrottes",
+      "communes": [
+        "21133"
+      ],
+      "areaHa": 0.92,
+      "matchId": "ba_designation_dmpjlxrfnwgndlxpbl4ieaylxq",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_dmpjlxrfnwgndlxpbl4ieaylxq/les-lavrottes",
+      "bounds": [
+        4.956815,
+        47.188306,
+        4.958542,
+        47.189784
+      ],
+      "labelPoint": [
+        4.9577,
+        47.189007
+      ]
+    },
+    {
+      "id": "inao-denom-470",
+      "name": "Les Noirots",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 150,
+      "denominationId": 470,
+      "sourceName": "Chambolle-Musigny premier cru Les Noirots",
+      "communes": [
+        "21133"
+      ],
+      "areaHa": 2.87,
+      "matchId": "ba_designation_fbmtecoyf4r2wfx3r3kyueobyy",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_fbmtecoyf4r2wfx3r3kyueobyy/les-noirots",
+      "bounds": [
+        4.957832,
+        47.187686,
+        4.960534,
+        47.190006
+      ],
+      "labelPoint": [
+        4.959828,
+        47.18886
+      ]
+    },
+    {
+      "id": "inao-denom-471",
+      "name": "Les Plantes",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 150,
+      "denominationId": 471,
+      "sourceName": "Chambolle-Musigny premier cru Les Plantes",
+      "communes": [
+        "21133"
+      ],
+      "areaHa": 2.58,
+      "matchId": "ba_designation_sqmv6qnqpwxelcapaxrojooqwq",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_sqmv6qnqpwxelcapaxrojooqwq/les-plantes",
+      "bounds": [
+        4.956684,
+        47.181856,
+        4.96128,
+        47.185509
+      ],
+      "labelPoint": [
+        4.960176,
+        47.184724
+      ]
+    },
+    {
+      "id": "inao-denom-472",
+      "name": "Les Sentiers",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 150,
+      "denominationId": 472,
+      "sourceName": "Chambolle-Musigny premier cru Les Sentiers",
+      "communes": [
+        "21133"
+      ],
+      "areaHa": 4.92,
+      "matchId": "ba_designation_hotthefyh7dkfqg4lak5zdzlni",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_hotthefyh7dkfqg4lak5zdzlni/les-sentiers",
+      "bounds": [
+        4.959796,
+        47.190147,
+        4.962532,
+        47.193255
+      ],
+      "labelPoint": [
+        4.961071,
+        47.191687
+      ]
+    },
+    {
+      "id": "inao-denom-473",
+      "name": "Les Véroilles",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 150,
+      "denominationId": 473,
+      "sourceName": "Chambolle-Musigny premier cru Les Véroilles",
+      "communes": [
+        "21133"
+      ],
+      "areaHa": 0.42,
+      "matchId": "ba_designation_wympbx7staeahkwafqhkpvn374",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_wympbx7staeahkwafqhkpvn374/les-veroilles",
+      "bounds": [
+        4.953366,
+        47.190515,
+        4.954734,
+        47.191111
+      ],
+      "labelPoint": [
+        4.954087,
+        47.190814
+      ]
+    },
+    {
+      "id": "inao-denom-474",
+      "name": "Chambolle-Musigny Premier Cru",
+      "tier": "premier_cru",
+      "kind": "appellation",
+      "appellationId": 150,
+      "denominationId": 474,
+      "sourceName": "Chambolle-Musigny premier cru",
+      "communes": [
+        "21133"
+      ],
+      "areaHa": 85.5,
+      "matchId": "ba_appellation_tcq3z2akko6nesrsxdbh3icr6q",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_tcq3z2akko6nesrsxdbh3icr6q/chambolle-musigny-premier-cru",
+      "bounds": [
+        4.949719,
+        47.17424,
+        4.962532,
+        47.194489
+      ],
+      "labelPoint": [
+        4.957745,
+        47.191647
+      ]
+    },
+    {
+      "id": "inao-denom-973",
+      "name": "Musigny",
+      "tier": "grand_cru",
+      "kind": "vineyard",
+      "appellationId": 211,
+      "denominationId": 973,
+      "sourceName": "Musigny",
+      "communes": [
+        "21133"
+      ],
+      "areaHa": 10.88,
+      "matchId": "france/burgundy/cote-de-nuits/musigny",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_dl3bqc23lnv4cekrnlbxqncodu/musigny",
+      "bounds": [
+        4.951556,
+        47.174332,
+        4.956621,
+        47.180219
+      ],
+      "labelPoint": [
+        4.954562,
+        47.178602
+      ]
+    }
+  ]
+}

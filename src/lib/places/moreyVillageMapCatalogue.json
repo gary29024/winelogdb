@@ -1,0 +1,728 @@
+{
+  "id": "morey-saint-denis",
+  "name": "Morey-Saint-Denis",
+  "region": "Côte de Nuits",
+  "communes": [
+    {
+      "id": "21442",
+      "name": "Morey-Saint-Denis"
+    },
+    {
+      "id": "21133",
+      "name": "Chambolle-Musigny"
+    }
+  ],
+  "dataUrl": "/maps/morey-saint-denis.2026-09-21.geojson",
+  "bounds": [
+    4.954094,
+    47.188967,
+    4.974685,
+    47.207387
+  ],
+  "sources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21442/cadastre-21442-communes.json.gz",
+      "sha256": "1d506f62355c351741a87c84e8d4a8ea221f6c38dfc566c61b62792b2c3b8197"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21133/cadastre-21133-communes.json.gz",
+      "sha256": "0199186d35a17ecd55cc2e856fa720f28031e4df9f00a29095e6afcdc3d01bb3"
+    }
+  ],
+  "notes": {
+    "inao-denom-361": {
+      "note": "Bonnes-Mares spans Morey-Saint-Denis and Chambolle-Musigny. Its full production area is shown on both village maps; the wine’s designation alone does not identify which side it comes from."
+    }
+  },
+  "features": [
+    {
+      "id": "inao-denom-361",
+      "name": "Bonnes-Mares",
+      "tier": "grand_cru",
+      "kind": "vineyard",
+      "appellationId": 137,
+      "denominationId": 361,
+      "sourceName": "Bonnes-Mares",
+      "communes": [
+        "21133",
+        "21442"
+      ],
+      "areaHa": 15.07,
+      "matchId": "france/burgundy/cote-de-nuits/bonnes-mares",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_ryckoqmksigzefbvw4mib27hna/bonnes-mares",
+      "bounds": [
+        4.954094,
+        47.188967,
+        4.960625,
+        47.194871
+      ],
+      "labelPoint": [
+        4.957917,
+        47.191925
+      ]
+    },
+    {
+      "id": "inao-denom-544",
+      "name": "Clos de la Roche",
+      "tier": "grand_cru",
+      "kind": "vineyard",
+      "appellationId": 160,
+      "denominationId": 544,
+      "sourceName": "Clos de la Roche",
+      "communes": [
+        "21442"
+      ],
+      "areaHa": 16.9,
+      "matchId": "france/burgundy/cote-de-nuits/clos-de-la-roche",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_kmupj4aqy75j36dooulinztmwy/clos-de-la-roche",
+      "bounds": [
+        4.959983,
+        47.199419,
+        4.965525,
+        47.207058
+      ],
+      "labelPoint": [
+        4.96346,
+        47.202127
+      ]
+    },
+    {
+      "id": "inao-denom-545",
+      "name": "Clos de Tart",
+      "tier": "grand_cru",
+      "kind": "vineyard",
+      "appellationId": 161,
+      "denominationId": 545,
+      "sourceName": "Clos de Tart",
+      "communes": [
+        "21442"
+      ],
+      "areaHa": 7.5,
+      "matchId": "france/burgundy/cote-de-nuits/clos-de-tart",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_nfkfkgev4ofifyglm2ygx6lrye/clos-de-tart",
+      "bounds": [
+        4.957455,
+        47.194016,
+        4.962025,
+        47.197253
+      ],
+      "labelPoint": [
+        4.959643,
+        47.195635
+      ]
+    },
+    {
+      "id": "inao-denom-547",
+      "name": "Clos des Lambrays",
+      "tier": "grand_cru",
+      "kind": "vineyard",
+      "appellationId": 163,
+      "denominationId": 547,
+      "sourceName": "Clos des Lambrays",
+      "communes": [
+        "21442"
+      ],
+      "areaHa": 8.79,
+      "matchId": "france/burgundy/cote-de-nuits/clos-des-lambrays",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_7cpnisnlraixmgjylefkicuhkq/clos-des-lambrays",
+      "bounds": [
+        4.957133,
+        47.196687,
+        4.962046,
+        47.200237
+      ],
+      "labelPoint": [
+        4.958897,
+        47.198741
+      ]
+    },
+    {
+      "id": "inao-denom-548",
+      "name": "Clos Saint-Denis",
+      "tier": "grand_cru",
+      "kind": "vineyard",
+      "appellationId": 164,
+      "denominationId": 548,
+      "sourceName": "Clos Saint-Denis",
+      "communes": [
+        "21442"
+      ],
+      "areaHa": 6.62,
+      "matchId": "france/burgundy/cote-de-nuits/clos-saint-denis",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_6ryqav6bdz5gbli5pfhr2ocwr4/clos-saint-denis",
+      "bounds": [
+        4.958451,
+        47.199274,
+        4.962372,
+        47.202686
+      ],
+      "labelPoint": [
+        4.961244,
+        47.200987
+      ]
+    },
+    {
+      "id": "inao-denom-928",
+      "name": "Morey-Saint-Denis",
+      "tier": "village",
+      "kind": "appellation",
+      "appellationId": 208,
+      "denominationId": 928,
+      "sourceName": "Morey-Saint-Denis",
+      "communes": [
+        "21442"
+      ],
+      "areaHa": 150.54,
+      "matchId": "ba_appellation_lpi7b5jmy4k3ohwt4n6pssl6pu",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_lpi7b5jmy4k3ohwt4n6pssl6pu/morey-saint-denis",
+      "bounds": [
+        4.954156,
+        47.191659,
+        4.974685,
+        47.207387
+      ],
+      "labelPoint": [
+        4.959826,
+        47.203331
+      ]
+    },
+    {
+      "id": "inao-denom-929",
+      "name": "Aux Charmes",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 208,
+      "denominationId": 929,
+      "sourceName": "Morey-Saint-Denis premier cru Aux Charmes",
+      "communes": [
+        "21442"
+      ],
+      "areaHa": 1.17,
+      "matchId": "ba_designation_od55z33methht3y427gtiaf7ai",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_od55z33methht3y427gtiaf7ai/aux-charmes",
+      "bounds": [
+        4.965403,
+        47.203591,
+        4.967698,
+        47.20459
+      ],
+      "labelPoint": [
+        4.96656,
+        47.204086
+      ]
+    },
+    {
+      "id": "inao-denom-930",
+      "name": "Aux Cheseaux",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 208,
+      "denominationId": 930,
+      "sourceName": "Morey-Saint-Denis premier cru Aux Cheseaux",
+      "communes": [
+        "21442"
+      ],
+      "areaHa": 1.49,
+      "matchId": "ba_designation_mwyldz6ukk7rllh6fcxpt36owy",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_mwyldz6ukk7rllh6fcxpt36owy/aux-cheseaux",
+      "bounds": [
+        4.966526,
+        47.203353,
+        4.969276,
+        47.204577
+      ],
+      "labelPoint": [
+        4.968408,
+        47.203956
+      ]
+    },
+    {
+      "id": "inao-denom-931",
+      "name": "Clos Baulet",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 208,
+      "denominationId": 931,
+      "sourceName": "Morey-Saint-Denis premier cru Clos Baulet",
+      "communes": [
+        "21442"
+      ],
+      "areaHa": 0.87,
+      "matchId": "ba_designation_yysophxia3h3vo6hvf34atoeoi",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_yysophxia3h3vo6hvf34atoeoi/clos-baulet",
+      "bounds": [
+        4.963542,
+        47.197163,
+        4.966715,
+        47.198075
+      ],
+      "labelPoint": [
+        4.96523,
+        47.197603
+      ]
+    },
+    {
+      "id": "inao-denom-932",
+      "name": "Clos Sorbè",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 208,
+      "denominationId": 932,
+      "sourceName": "Morey-Saint-Denis premier cru Clos Sorbè",
+      "communes": [
+        "21442"
+      ],
+      "areaHa": 3.33,
+      "matchId": "ba_designation_qfqiwrcyvdrlbcunjskrnubtxi",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_qfqiwrcyvdrlbcunjskrnubtxi/clos-sorbe",
+      "bounds": [
+        4.962944,
+        47.195831,
+        4.966813,
+        47.197759
+      ],
+      "labelPoint": [
+        4.964901,
+        47.196807
+      ]
+    },
+    {
+      "id": "inao-denom-933",
+      "name": "Clos des Ormes",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 208,
+      "denominationId": 933,
+      "sourceName": "Morey-Saint-Denis premier cru Clos des Ormes",
+      "communes": [
+        "21442"
+      ],
+      "areaHa": 3.15,
+      "matchId": "ba_designation_f2babjzdweuvudtt5oh6ich3c4",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_f2babjzdweuvudtt5oh6ich3c4/clos-des-ormes",
+      "bounds": [
+        4.965157,
+        47.202345,
+        4.968944,
+        47.203921
+      ],
+      "labelPoint": [
+        4.967037,
+        47.203081
+      ]
+    },
+    {
+      "id": "inao-denom-934",
+      "name": "Côte Rotie",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 208,
+      "denominationId": 934,
+      "sourceName": "Morey-Saint-Denis premier cru Côte Rotie",
+      "communes": [
+        "21442"
+      ],
+      "areaHa": 1.23,
+      "matchId": "ba_designation_2cncu3es5tfrjmzrony5fu4rsm",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_2cncu3es5tfrjmzrony5fu4rsm/cote-rotie",
+      "bounds": [
+        4.954758,
+        47.200056,
+        4.958762,
+        47.200828
+      ],
+      "labelPoint": [
+        4.956878,
+        47.200402
+      ]
+    },
+    {
+      "id": "inao-denom-935",
+      "name": "La Bussière",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 208,
+      "denominationId": 935,
+      "sourceName": "Morey-Saint-Denis premier cru La Bussière",
+      "communes": [
+        "21442"
+      ],
+      "areaHa": 2.58,
+      "matchId": "ba_designation_csmk6oe36sovt3mypyak3fgtom",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_csmk6oe36sovt3mypyak3fgtom/la-bussiere",
+      "bounds": [
+        4.962344,
+        47.192321,
+        4.965473,
+        47.193905
+      ],
+      "labelPoint": [
+        4.963885,
+        47.193102
+      ]
+    },
+    {
+      "id": "inao-denom-936",
+      "name": "La Riotte",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 208,
+      "denominationId": 936,
+      "sourceName": "Morey-Saint-Denis premier cru La Riotte",
+      "communes": [
+        "21442"
+      ],
+      "areaHa": 2.46,
+      "matchId": "ba_designation_qb3hslr6pt3ddr4eeh6u5aat4m",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_qb3hslr6pt3ddr4eeh6u5aat4m/la-riotte",
+      "bounds": [
+        4.963209,
+        47.198263,
+        4.968279,
+        47.199707
+      ],
+      "labelPoint": [
+        4.965592,
+        47.199176
+      ]
+    },
+    {
+      "id": "inao-denom-937",
+      "name": "Le Village",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 208,
+      "denominationId": 937,
+      "sourceName": "Morey-Saint-Denis premier cru Le Village",
+      "communes": [
+        "21442"
+      ],
+      "areaHa": 0.84,
+      "matchId": "ba_designation_zyecbka7r7cv3bq7wuelpjjle4",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_zyecbka7r7cv3bq7wuelpjjle4/le-village",
+      "bounds": [
+        4.962121,
+        47.196923,
+        4.964258,
+        47.198958
+      ],
+      "labelPoint": [
+        4.963614,
+        47.198563
+      ]
+    },
+    {
+      "id": "inao-denom-938",
+      "name": "Les Blanchards",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 208,
+      "denominationId": 938,
+      "sourceName": "Morey-Saint-Denis premier cru Les Blanchards",
+      "communes": [
+        "21442"
+      ],
+      "areaHa": 2.0,
+      "matchId": "ba_designation_sz3zltrhx3igt4hkqjwa2mgpgu",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_sz3zltrhx3igt4hkqjwa2mgpgu/les-blanchards",
+      "bounds": [
+        4.963644,
+        47.197475,
+        4.967374,
+        47.19869
+      ],
+      "labelPoint": [
+        4.96531,
+        47.198086
+      ]
+    },
+    {
+      "id": "inao-denom-939",
+      "name": "Les Chaffots",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 208,
+      "denominationId": 939,
+      "sourceName": "Morey-Saint-Denis premier cru Les Chaffots",
+      "communes": [
+        "21442"
+      ],
+      "areaHa": 2.6,
+      "matchId": "ba_designation_ij6l7v7fdz5k5qslzvkqriv32e",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_ij6l7v7fdz5k5qslzvkqriv32e/les-chaffots",
+      "bounds": [
+        4.95829,
+        47.201315,
+        4.960412,
+        47.203128
+      ],
+      "labelPoint": [
+        4.959303,
+        47.202218
+      ]
+    },
+    {
+      "id": "inao-denom-940",
+      "name": "Les Charrières",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 208,
+      "denominationId": 940,
+      "sourceName": "Morey-Saint-Denis premier cru Les Charrières",
+      "communes": [
+        "21442"
+      ],
+      "areaHa": 2.27,
+      "matchId": "ba_designation_xoya4t45s6sxnbu6qrn5idnrri",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_xoya4t45s6sxnbu6qrn5idnrri/les-charrieres",
+      "bounds": [
+        4.964799,
+        47.201422,
+        4.968115,
+        47.202909
+      ],
+      "labelPoint": [
+        4.965962,
+        47.202363
+      ]
+    },
+    {
+      "id": "inao-denom-941",
+      "name": "Les Chenevery",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 208,
+      "denominationId": 941,
+      "sourceName": "Morey-Saint-Denis premier cru Les Chenevery",
+      "communes": [
+        "21442"
+      ],
+      "areaHa": 1.89,
+      "matchId": "ba_designation_6j3inhqkjp7mga5k7zgopveozm",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_6j3inhqkjp7mga5k7zgopveozm/les-chenevery",
+      "bounds": [
+        4.966953,
+        47.199153,
+        4.969023,
+        47.201526
+      ],
+      "labelPoint": [
+        4.96785,
+        47.200339
+      ]
+    },
+    {
+      "id": "inao-denom-942",
+      "name": "Les Faconnières",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 208,
+      "denominationId": 942,
+      "sourceName": "Morey-Saint-Denis premier cru Les Faconnières",
+      "communes": [
+        "21442"
+      ],
+      "areaHa": 1.67,
+      "matchId": "ba_designation_nqicgop25c33wmyz4suiyu3csy",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_nqicgop25c33wmyz4suiyu3csy/les-faconnieres",
+      "bounds": [
+        4.964505,
+        47.200828,
+        4.967731,
+        47.201883
+      ],
+      "labelPoint": [
+        4.966165,
+        47.201288
+      ]
+    },
+    {
+      "id": "inao-denom-943",
+      "name": "Les Genavrières",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 208,
+      "denominationId": 943,
+      "sourceName": "Morey-Saint-Denis premier cru Les Genavrières",
+      "communes": [
+        "21442"
+      ],
+      "areaHa": 1.09,
+      "matchId": "ba_designation_ejydcsfvpj464jj7ddvlaavrzu",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_ejydcsfvpj464jj7ddvlaavrzu/les-genavrieres",
+      "bounds": [
+        4.958318,
+        47.202872,
+        4.960162,
+        47.203979
+      ],
+      "labelPoint": [
+        4.959335,
+        47.203431
+      ]
+    },
+    {
+      "id": "inao-denom-944",
+      "name": "Les Gruenchers",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 208,
+      "denominationId": 944,
+      "sourceName": "Morey-Saint-Denis premier cru Les Gruenchers",
+      "communes": [
+        "21442"
+      ],
+      "areaHa": 0.51,
+      "matchId": "ba_designation_er7gs2voob3w3acaoeazegobye",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_er7gs2voob3w3acaoeazegobye/les-gruenchers",
+      "bounds": [
+        4.964143,
+        47.198332,
+        4.965357,
+        47.199109
+      ],
+      "labelPoint": [
+        4.964781,
+        47.198755
+      ]
+    },
+    {
+      "id": "inao-denom-945",
+      "name": "Les Millandes",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 208,
+      "denominationId": 945,
+      "sourceName": "Morey-Saint-Denis premier cru Les Millandes",
+      "communes": [
+        "21442"
+      ],
+      "areaHa": 4.21,
+      "matchId": "ba_designation_kcmpopuhjm4vfleri4m47choua",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_kcmpopuhjm4vfleri4m47choua/les-millandes",
+      "bounds": [
+        4.963825,
+        47.19928,
+        4.967591,
+        47.201207
+      ],
+      "labelPoint": [
+        4.965672,
+        47.200234
+      ]
+    },
+    {
+      "id": "inao-denom-946",
+      "name": "Les Ruchots",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 208,
+      "denominationId": 946,
+      "sourceName": "Morey-Saint-Denis premier cru Les Ruchots",
+      "communes": [
+        "21442"
+      ],
+      "areaHa": 2.57,
+      "matchId": "ba_designation_7rnzh2jyygdplfscj2pdyrezse",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_7rnzh2jyygdplfscj2pdyrezse/les-ruchots",
+      "bounds": [
+        4.960311,
+        47.192791,
+        4.96302,
+        47.194687
+      ],
+      "labelPoint": [
+        4.961661,
+        47.193739
+      ]
+    },
+    {
+      "id": "inao-denom-947",
+      "name": "Les Sorbès",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 208,
+      "denominationId": 947,
+      "sourceName": "Morey-Saint-Denis premier cru Les Sorbès",
+      "communes": [
+        "21442"
+      ],
+      "areaHa": 2.66,
+      "matchId": "ba_designation_juad4fe57j43ltzq6kipiblz2m",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_juad4fe57j43ltzq6kipiblz2m/les-sorbes",
+      "bounds": [
+        4.96254,
+        47.195107,
+        4.966609,
+        47.196747
+      ],
+      "labelPoint": [
+        4.964511,
+        47.195899
+      ]
+    },
+    {
+      "id": "inao-denom-948",
+      "name": "Monts Luisants",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 208,
+      "denominationId": 948,
+      "sourceName": "Morey-Saint-Denis premier cru Monts Luisants",
+      "communes": [
+        "21442"
+      ],
+      "areaHa": 5.39,
+      "matchId": "ba_designation_gbu476zv5f53fmqmqba7ygoqzq",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_gbu476zv5f53fmqmqba7ygoqzq/monts-luisants",
+      "bounds": [
+        4.958341,
+        47.203665,
+        4.961001,
+        47.207387
+      ],
+      "labelPoint": [
+        4.96001,
+        47.20553
+      ]
+    },
+    {
+      "id": "inao-denom-949",
+      "name": "Morey-Saint-Denis Premier Cru",
+      "tier": "premier_cru",
+      "kind": "appellation",
+      "appellationId": 208,
+      "denominationId": 949,
+      "sourceName": "Morey-Saint-Denis premier cru",
+      "communes": [
+        "21442"
+      ],
+      "areaHa": 85.28,
+      "matchId": "ba_appellation_t67q32kaao7ffvypotfh46xvce",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_t67q32kaao7ffvypotfh46xvce/morey-saint-denis-premier-cru",
+      "bounds": [
+        4.954758,
+        47.192321,
+        4.969276,
+        47.207387
+      ],
+      "labelPoint": [
+        4.959826,
+        47.203331
+      ]
+    }
+  ]
+}

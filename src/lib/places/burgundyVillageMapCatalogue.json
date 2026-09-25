@@ -1,6 +1,17 @@
 {
   "id": "gevrey-chambertin",
   "name": "Gevrey-Chambertin",
+  "region": "Côte de Nuits",
+  "communes": [
+    {
+      "id": "21295",
+      "name": "Gevrey-Chambertin"
+    },
+    {
+      "id": "21110",
+      "name": "Brochon"
+    }
+  ],
   "dataUrl": "/maps/gevrey-chambertin.2026-09-21.geojson",
   "bounds": [
     4.947882,
@@ -31,6 +42,22 @@
       "sha256": "122038a454fcc76ce88d6cffd3ddf9276b5f8a44fbe46fa70a5f50a0f774886e"
     }
   ],
+  "notes": {
+    "inao-denom-447": {
+      "note": "Chambertin’s production area takes in Clos de Bèze, whose wine may also be labelled Chambertin - so a Chambertin can come from either."
+    },
+    "inao-denom-448": {
+      "note": "Clos de Bèze lies inside Chambertin’s production area, and its wine may also be labelled Chambertin.",
+      "paintedBy": "inao-denom-447"
+    },
+    "inao-denom-477": {
+      "note": "Charmes-Chambertin and Mazoyères-Chambertin share one production area. Mazoyères wine may be labelled Charmes-Chambertin, but not the reverse - so a Charmes can come from either."
+    },
+    "inao-denom-809": {
+      "note": "Mazoyères-Chambertin shares its production area with Charmes-Chambertin, and its wine may be labelled Charmes-Chambertin.",
+      "paintedBy": "inao-denom-477"
+    }
+  },
   "features": [
     {
       "id": "inao-denom-447",
