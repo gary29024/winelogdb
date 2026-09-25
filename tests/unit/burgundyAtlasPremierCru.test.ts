@@ -130,6 +130,21 @@ describe('Premier Cru wine-detail destinations',()=>{
     expect(burgundyAtlasPremierCru({...chassagne,wineName:'Les Chaumes Les Vergers'})).toBeNull();
   });
 
+  it('treats Aux and Au as articles, while an exact name still wins where both exist',()=>{
+    const nuits={...wine,region:'Côte de Nuits',appellation:'Nuits-Saint-Georges'};
+    const name=(fields:Record<string,unknown>)=>burgundyAtlasPremierCru(fields as typeof wine)?.name;
+    for(const wineName of ['Nuits-Saint-Georges Les Boudots Premier Cru','Boudots','Aux Boudots']){
+      expect(name({...nuits,wineName}),wineName).toBe('Nuits-Saint-Georges — Aux Boudots');
+    }
+    expect(name({...nuits,wineName:'Les Chaignots'})).toBe('Nuits-Saint-Georges — Aux Chaignots');
+    // Chambolle has both Aux Combottes and Les Combottes: each keeps its own
+    // identity, and the bare name stays ambiguous.
+    const chambolle={...wine,appellation:'Chambolle-Musigny'};
+    expect(name({...chambolle,wineName:'Les Combottes'})).toBe('Chambolle-Musigny — Les Combottes');
+    expect(name({...chambolle,wineName:'Aux Combottes'})).toBe('Chambolle-Musigny — Aux Combottes');
+    expect(burgundyAtlasPremierCru({...chambolle,wineName:'Combottes'})).toBeNull();
+  });
+
   it('accepts Château de la Maltroye\'s spelling of La Maltroie',()=>{
     const chassagne={...wine,region:'Côte de Beaune',appellation:'Chassagne-Montrachet'};
     const maltroie=burgundyAtlasPremierCru({...chassagne,wineName:'La Maltroie'})!;

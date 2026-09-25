@@ -12,7 +12,10 @@ const nameKey=(value:string)=>placeKey(value.replace(/œ/g,'oe').replace(/Œ/g,'
 const premierMarker=/\b(?:premier(?:s)?\s+cru(?:s)?|1er(?:\s*cru)?|1st\s+cru)\b/g;
 const textKey=(value:string)=>nameKey(value).replace(premierMarker,' ').replace(/\b(?:aoc|aop)\b/g,' ').replace(/\s+/g,' ').trim();
 const contains=(text:string,phrase:string)=>` ${text} `.includes(` ${phrase} `);
-const withoutArticle=(name:string)=>name.replace(/^(?:les|le|la) /,'');
+// Aux and Au are articles too: labels write Les Boudots (Jadot) or plain Boudots
+// for Nuits' Aux Boudots. The omission is a non-exact fallback, so where both
+// exist (Chambolle's Aux Combottes and Les Combottes) the exact name still wins.
+const withoutArticle=(name:string)=>name.replace(/^(?:les|le|la|aux|au) /,'');
 // Only static dictionary keys reach this cache, never wine text. Reuse compiled
 // patterns across fields and renders; matchAll keeps their lastIndex untouched.
 const patterns=new Map<string,RegExp>();
