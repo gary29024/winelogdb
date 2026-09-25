@@ -76,13 +76,20 @@ export async function maintainOperation(db:D1Database,op:CreditOperation){
  await db.prepare("UPDATE credit_operations SET updated_at=? WHERE id=? AND status IN ('running','reserved','review')").bind(stamp(),op.id).run();
 }
 
+/**
+ * Open operations reconciled per cron run (every five minutes). A held
+ * operation costs about four indexed D1 queries, so a backlog after a provider
+ * outage clears three times faster than the previous two per run, while each
+ * run stays small. Raise with care: every run also does the cleanup below.
+ */
+export const MAINTAINED_OPERATIONS_PER_RUN=6;
 export async function maintainJobs(db:D1Database,queue:Queue<unknown>,bucket?:R2Bucket){
  // Queue expiry or a DLQ delivery cannot erase the durable dispatch record.
  // Operation-free cleanup messages need the same recovery as active AI work.
  await db.prepare(`UPDATE queue_outbox SET sent_at=NULL,due_at=? WHERE id IN (
  SELECT o.id FROM queue_outbox o LEFT JOIN queue_deliveries d ON d.id=o.id LEFT JOIN credit_operations c ON c.id=o.operation_id
  WHERE o.sent_at<? AND coalesce(d.done,0)=0 AND (o.operation_id IS NULL OR c.status IN ('running','reserved','review')) LIMIT 20)`).bind(seconds(),seconds()-86400).run();
- const rows=await db.prepare("SELECT * FROM credit_operations WHERE status IN ('running','reserved','review') ORDER BY updated_at LIMIT 2").all<CreditOperation>();
+ const rows=await db.prepare("SELECT * FROM credit_operations WHERE status IN ('running','reserved','review') ORDER BY updated_at LIMIT ?").bind(MAINTAINED_OPERATIONS_PER_RUN).all<CreditOperation>();
  for(const op of rows.results)await maintainOperation(db,op);
  await flushOutbox(db,queue);
  await db.batch([

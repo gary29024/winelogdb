@@ -1,6 +1,6 @@
 import legacy from './structureEntry';
 import { SignJWT } from 'jose';
-import { ApiError,json,stamp,type IdentityEnv } from './multiUser/common';
+import { ApiError,json,seconds,stamp,type IdentityEnv } from './multiUser/common';
 import { authenticate,authRoute,verifyOrigin } from './multiUser/auth';
 import { socialRoute } from './multiUser/social';
 import { adminRoute,deploymentAiCost } from './multiUser/admin';
@@ -19,6 +19,8 @@ import { getWineResearchRun } from '../src/lib/research/backgroundJobs';
 import { WINE_RESEARCH_RECOVERY_MS } from '../src/lib/research/recoveryPolicy';
 import { champagneExtractionRoute } from '../src/lib/ai/reservedRoutes';
 
+/** Minimum gap between two explicit Deep Search recovery checks of one operation. */
+const RESEARCH_CHECK_COOLDOWN_SECONDS=15;
 export type MultiUserEnv=Parameters<typeof legacy.fetch>[1]&IdentityEnv&AiRateEnv;
 type Batch=Parameters<typeof legacy.queue>[0];
 function revalidated(response:Response){const headers=new Headers(response.headers);headers.set('Cache-Control','private, no-store');headers.set('Vary','Cookie');headers.set('X-Content-Type-Options','nosniff');return new Response(response.body,{status:response.status,headers})}
@@ -124,9 +126,11 @@ export default {
     let op=await env.DB.prepare(`SELECT * FROM credit_operations WHERE user_id=? AND path=?
      AND (?='' OR run_id=? OR id=?) ORDER BY created_at DESC,rowid DESC LIMIT 1`)
      .bind(member.id,path.replace(/-status$/,''),requested,requested,requested).first<CreditOperation>();
-    if(checkingResearch&&op&&['reserved','running','review'].includes(op.status)){
-     // Explicit checks run the same bounded recovery as cron for this operation.
-     // Saved replies replay; uncertain provider sends remain blocked.
+    // Explicit checks run the same bounded recovery as cron for this operation,
+    // at most once per cooldown; a check inside it just reads the fresh state.
+    // Saved replies replay; uncertain provider sends remain blocked.
+    if(checkingResearch&&op&&['reserved','running','review'].includes(op.status)
+     &&(await env.DB.prepare('UPDATE credit_operations SET checked_at=? WHERE id=? AND coalesce(checked_at,0)<=?').bind(seconds(),op.id,seconds()-RESEARCH_CHECK_COOLDOWN_SECONDS).run()).meta.changes){
      await maintainOperation(env.DB,op);
      await flushOutbox(env.DB,env.RESEARCH_QUEUE,op.id);
      op=await env.DB.prepare('SELECT * FROM credit_operations WHERE id=? AND user_id=?').bind(op.id,member.id).first<CreditOperation>();

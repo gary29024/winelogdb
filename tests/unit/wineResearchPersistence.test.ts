@@ -303,6 +303,38 @@ describe('member Deep Search through HTTP and the queue',()=>{
   expect(flow.provider).toHaveBeenCalledOnce();
  });
 
+ it('runs explicit recovery at most once per cooldown and reads fresh state in between',async()=>{
+  const flow=await httpFlow();flow.provider.mockRejectedValue(new Error('connection lost'));
+  await flow.consume();await flow.consume();
+  const checked=()=>database.sql.prepare('SELECT checked_at,updated_at FROM credit_operations').get()!;
+  await flow.status(true);const first=checked();expect(first.checked_at).toBeTypeOf('number');
+  vi.setSystemTime(Date.now()+5000);
+  expect(await flow.status(true)).toMatchObject({status:'failed',retryBlocked:true});
+  expect(checked()).toEqual(first);
+  vi.setSystemTime(Date.now()+11_000);
+  await flow.status(true);expect(Number(checked().checked_at)).toBeGreaterThan(Number(first.checked_at));
+  expect(flow.provider).toHaveBeenCalledOnce();
+ });
+
+ it('logs, but never applies or charges, a provider reply that lands after the member stopped waiting',async()=>{
+  const warn=vi.spyOn(console,'warn').mockImplementation(()=>undefined);
+  const flow=await httpFlow();await flow.consume();
+  let reply!:(response:Response)=>void;
+  let markStarted!:()=>void;const started=new Promise<void>(resolve=>{markStarted=resolve});
+  flow.provider.mockImplementation(()=>new Promise<Response>(resolve=>{reply=resolve;markStarted()}));
+  const pending=flow.consume();await started;await vi.advanceTimersByTimeAsync(600_001);await pending;
+  expect((await flow.stop()).status).toBe(200);
+  expect(warn.mock.calls.map(([line])=>JSON.parse(String(line)).event)).toContain('deep_search_stopped_unresolved');
+  reply(Response.json(payload()));
+  const events=()=>warn.mock.calls.map(([line])=>JSON.parse(String(line)).event);
+  for(let i=0;i<100&&!events().includes('provider_reply_after_settlement');i++)await Promise.resolve();
+  expect(database.sql.prepare('SELECT state FROM provider_operations').get()!.state).toBe('saved');
+  expect(events()).toContain('provider_reply_after_settlement');
+  await maintainJobs(database.db,flow.workerEnv.RESEARCH_QUEUE);expect(await flow.status(true)).toMatchObject({status:'failed',retryBlocked:false});
+  expect(await memberAiActionAccess(database.db,owner,'wine_deep_search')).toMatchObject({used:0,pending:0});
+  expect(flow.provider).toHaveBeenCalledOnce();warn.mockRestore();
+ });
+
  it.each([false,true])('stops waiting once, preserves saved scopes and releases the hold (partial: %s)',async partial=>{
   const flow=await httpFlow();flow.provider.mockRejectedValue(new Error('connection lost after provider submission'));
   await flow.consume();await flow.consume();
