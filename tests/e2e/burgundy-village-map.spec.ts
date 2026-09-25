@@ -40,6 +40,7 @@ for(const route of ['/wines/layout-wine','/shared/layout-wine']){
   }
   await dialog.getByRole('combobox').selectOption('inao-denom-448');
   await expect(dialog.locator('.village-map-selected-label')).toHaveText('Chambertin-Clos de Bèze');
+  await expect(dialog.locator('.village-map-overlap')).toContainText('may also be labelled Chambertin');
   await dialog.getByRole('button',{name:'Zoom to selection'}).click();
   await dialog.getByRole('button',{name:'Back to this wine'}).click();
   await expect(dialog.getByRole('combobox')).toHaveValue('inao-denom-610');

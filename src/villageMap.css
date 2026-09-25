@@ -15,7 +15,7 @@
 .village-map-header h2{margin:0;font-size:1.55rem;line-height:1.15}
 .village-map-close{display:grid;place-items:center;flex:none;width:44px;height:44px;padding:0;border:1px solid var(--line);border-radius:50%;background:var(--ground);color:var(--ink);font-size:1.7rem;cursor:pointer}
 .village-map-body{display:grid;grid-template-columns:minmax(0,1fr) 280px;min-height:0}
-.village-map-main{position:relative;min-width:0;background:var(--sunken);isolation:isolate}
+.village-map-main{position:relative;min-width:0;background:var(--paper);isolation:isolate}
 .village-map-canvas{height:min(59dvh,580px);min-height:300px;width:100%}
 .village-map-toolbar{position:absolute;z-index:2;left:12px;top:12px;right:55px;display:flex;flex-wrap:wrap;gap:6px}
 .village-map-toolbar button{min-height:38px;padding:7px 11px;border:1px solid var(--line-strong);border-radius:var(--r-sm,7px);background:var(--paper);color:var(--ink-2);font-size:.74rem;font-weight:650;box-shadow:0 1px 5px #0001;cursor:pointer}
@@ -33,6 +33,7 @@
 .map-swatch-grand_cru{border-color:#543c0c!important;background:#908161}
 .map-swatch-premier_cru{border-color:#785819!important;background:#c2b498}
 .map-swatch-village{border-color:#9c7629!important;background:none}
+.map-swatch-commune{border:1.5px dashed #7d899c!important;background:none}
 .map-swatch-selected{border-color:#c51f45!important;background:#da7e90}
 /* The tier pill matches the classification pill on the wine page itself. */
 .village-map-tier{display:inline-block;padding:3px 10px;border:1px solid var(--warn-line);border-radius:var(--r-pill,999px);background:var(--warn-wash);color:var(--warn);font-size:.72rem;font-weight:650}
@@ -43,7 +44,10 @@
 .village-map-sidebar select{width:100%;min-height:44px;border:1px solid var(--line);border-radius:var(--r-sm,7px);padding:8px;background:var(--ground);color:var(--ink);font:inherit;font-size:.8rem}
 .village-map-selection{margin-top:24px}.village-map-selection h3{margin:4px 0 10px;font-size:1.35rem;line-height:1.2;overflow-wrap:anywhere}
 .village-map-selection .village-map-eyebrow.is-wine{color:var(--wine-ink)}
-.village-map-selection>p:last-child,.village-map-context,.village-map-note,.village-map-hint{font-size:.76rem;color:var(--ink-6);line-height:1.5}
+.village-map-description,.village-map-context,.village-map-note,.village-map-hint{font-size:.76rem;color:var(--ink-6);line-height:1.5}
+/* An overlap note changes what a label can mean, so it is set apart from the
+   boundary description rather than read as more fine print. */
+.village-map-overlap{margin:12px 0 0;padding:9px 11px;border-left:3px solid var(--warn-line);border-radius:0 var(--r-sm,7px) var(--r-sm,7px) 0;background:var(--warn-wash);color:var(--ink-3);font-size:.76rem;line-height:1.5}
 .village-map-return{min-height:44px;border:1px solid var(--line);border-radius:var(--r-sm,7px);background:var(--ground);color:var(--wine-ink);padding:7px 12px;font-weight:650;cursor:pointer}
 .village-map-context{border-top:1px solid var(--line);padding-top:16px;margin-top:22px}.village-map-sidebar .burgundy-atlas-link{font-size:.76rem}
 .village-map-footer{padding:12px 20px;border-top:1px solid var(--line);color:var(--ink-6);font-size:.65rem;line-height:1.5}.village-map-footer p{margin:2px 0}.village-map-footer a{color:inherit;text-underline-offset:2px}

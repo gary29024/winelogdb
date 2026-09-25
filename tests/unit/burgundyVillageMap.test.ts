@@ -2,6 +2,7 @@ import { readFileSync } from 'node:fs';
 import { describe,expect,it } from 'vitest';
 import { burgundyVillageMapTarget,gevreyMapCatalogue as catalogue } from '../../src/lib/places/burgundyVillageMap';
 import type { FeatureCollection,MultiPolygon,Polygon } from 'geojson';
+import { unpaintedVillageMapIds,villageMapNotes } from '../../src/lib/places/burgundyVillageMapNotes';
 
 const wine={country:'France',region:'Burgundy',appellation:'Gevrey-Chambertin',wineName:'Les Cazetiers',classification:'premier_cru'};
 
@@ -60,5 +61,22 @@ describe('published village geometry',()=>{
   expect(geometry(477)).toEqual(geometry(809));
   expect(catalogue.features.find(f=>f.denominationId===447)!.areaHa).toBeGreaterThan(catalogue.features.find(f=>f.denominationId===448)!.areaHa);
   expect(catalogue.sources.every(source=>source.sha256.length===64&&source.license.startsWith('Licence Ouverte'))).toBe(true);
+ });
+});
+
+describe('overlap notes',()=>{
+ it('only names catalogue crus, and leaves a cru unpainted only where a same-tier fill covers it',()=>{
+  const byId=new Map(catalogue.features.map(f=>[f.id,f]));
+  for(const [id,entry] of Object.entries(villageMapNotes)){
+   expect(byId.get(id)?.kind,id).toBe('vineyard');
+   if(!entry.paintedBy)continue;
+   const cover=byId.get(entry.paintedBy)!;
+   expect(cover.kind,id).toBe('vineyard');
+   expect(cover.tier,id).toBe(byId.get(id)!.tier);
+   // The cover must itself be painted and at least as large.
+   expect(unpaintedVillageMapIds).not.toContain(cover.id);
+   expect(cover.areaHa).toBeGreaterThanOrEqual(byId.get(id)!.areaHa);
+  }
+  expect(unpaintedVillageMapIds.sort()).toEqual(['inao-denom-448','inao-denom-809']);
  });
 });
