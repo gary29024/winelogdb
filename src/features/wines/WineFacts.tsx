@@ -3,6 +3,8 @@ import { placeLabels,wineFactRows,type FactRow,type WineFacts as Facts } from '.
 import { SectionLabel } from '../../components/SectionLabel';
 import { BurgundyAtlasLink } from '../../components/BurgundyAtlasLink';
 import { burgundyAtlasWineDetailPlace } from '../../lib/places/burgundyAtlasPremierCru';
+import { burgundyVillageMapTarget } from '../../lib/places/burgundyVillageMap';
+import { WineVillageMap } from '../vineyards/WineVillageMap';
 // The markup below and the rules it needs travel together. A page used to be
 // able to render .detail-classification while forgetting this import, which is
 // how a shared Village pill shipped with no styling at all; owning the import
@@ -23,13 +25,14 @@ export function WineFactPills({wine,extra}:{wine:PillWine;extra?:ReactNode}){
  const {denomination}=placeLabels(wine);
  const blend=wine.grapeBlend??[],grapes=blend.length?blend.map(part=>part.grape):wine.grapes??[];
  const atlasPlace=burgundyAtlasWineDetailPlace(wine);
+ const mapTarget=burgundyVillageMapTarget(wine);
  return <><div className="detail-pills">
   {wine.appellation&&<span>{wine.appellation}{denomination&&<small className="detail-denomination">{denomination}</small>}</span>}
   {!wine.appellation&&wine.region&&denomination&&<span>{wine.region}<small className="detail-denomination">{denomination}</small></span>}
   {wine.classification&&<span className={`detail-classification detail-classification-${wine.classification}`}>{classificationLabel[wine.classification]}</span>}
   {grapes.map(grape=><span key={grape}>{grape}</span>)}
   {extra}
- </div>{atlasPlace&&<div className="wine-atlas-context"><BurgundyAtlasLink place={atlasPlace}/></div>}</>;
+ </div>{(atlasPlace||mapTarget)&&<div className="wine-atlas-context">{mapTarget&&<WineVillageMap target={mapTarget}/>}<BurgundyAtlasLink place={atlasPlace}/></div>}</>;
 }
 
 /** A ruled label/value table. One shape for Wine details and Your experience. */

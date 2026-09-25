@@ -1,0 +1,962 @@
+{
+  "id": "gevrey-chambertin",
+  "name": "Gevrey-Chambertin",
+  "dataUrl": "/maps/gevrey-chambertin.2026-09-21.geojson",
+  "bounds": [
+    4.947882,
+    47.204026,
+    4.997689,
+    47.23882
+  ],
+  "sources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21295/cadastre-21295-communes.json.gz",
+      "sha256": "83ba2993416c65e4305ef183d258de1fdd6a80ec9ffd44577918742683ceeb52"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21110/cadastre-21110-communes.json.gz",
+      "sha256": "122038a454fcc76ce88d6cffd3ddf9276b5f8a44fbe46fa70a5f50a0f774886e"
+    }
+  ],
+  "features": [
+    {
+      "id": "inao-denom-447",
+      "name": "Chambertin",
+      "tier": "grand_cru",
+      "kind": "vineyard",
+      "appellationId": 148,
+      "denominationId": 447,
+      "sourceName": "Chambertin",
+      "communes": [
+        "21295"
+      ],
+      "areaHa": 28.23,
+      "matchId": "france/burgundy/cote-de-nuits/chambertin",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_ynrwzabbmfahxtxy3ervwn4vca/chambertin",
+      "bounds": [
+        4.962608,
+        47.209402,
+        4.968301,
+        47.219373
+      ],
+      "labelPoint": [
+        4.965292,
+        47.214359
+      ]
+    },
+    {
+      "id": "inao-denom-448",
+      "name": "Chambertin-Clos de Bèze",
+      "tier": "grand_cru",
+      "kind": "vineyard",
+      "appellationId": 149,
+      "denominationId": 448,
+      "sourceName": "Chambertin-Clos de Bèze",
+      "communes": [
+        "21295"
+      ],
+      "areaHa": 15.35,
+      "matchId": "france/burgundy/cote-de-nuits/chambertin-clos-de-beze",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_nnn6fvl6h7e5mjd5c4jgzlmp3a/chambertin-clos-de-beze",
+      "bounds": [
+        4.963299,
+        47.213767,
+        4.968301,
+        47.219373
+      ],
+      "labelPoint": [
+        4.965993,
+        47.216533
+      ]
+    },
+    {
+      "id": "inao-denom-475",
+      "name": "Chapelle-Chambertin",
+      "tier": "grand_cru",
+      "kind": "vineyard",
+      "appellationId": 151,
+      "denominationId": 475,
+      "sourceName": "Chapelle-Chambertin",
+      "communes": [
+        "21295"
+      ],
+      "areaHa": 5.47,
+      "matchId": "france/burgundy/cote-de-nuits/chapelle-chambertin",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_pifrrhcqfk372zeoyfexkexbuy/chapelle-chambertin",
+      "bounds": [
+        4.967249,
+        47.214558,
+        4.970431,
+        47.218074
+      ],
+      "labelPoint": [
+        4.968813,
+        47.216302
+      ]
+    },
+    {
+      "id": "inao-denom-477",
+      "name": "Charmes-Chambertin",
+      "tier": "grand_cru",
+      "kind": "vineyard",
+      "appellationId": 153,
+      "denominationId": 477,
+      "sourceName": "Charmes-Chambertin",
+      "communes": [
+        "21295"
+      ],
+      "areaHa": 30.94,
+      "matchId": "france/burgundy/cote-de-nuits/charmes-chambertin",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_pymtffnqqpaaz7g35eq2th7pve/charmes-chambertin",
+      "bounds": [
+        4.96525,
+        47.204552,
+        4.971608,
+        47.213707
+      ],
+      "labelPoint": [
+        4.967552,
+        47.209146
+      ]
+    },
+    {
+      "id": "inao-denom-589",
+      "name": "Gevrey-Chambertin",
+      "tier": "village",
+      "kind": "appellation",
+      "appellationId": 182,
+      "denominationId": 589,
+      "sourceName": "Gevrey-Chambertin",
+      "communes": [
+        "21110",
+        "21295"
+      ],
+      "areaHa": 541.07,
+      "matchId": "ba_appellation_g64uidz2xxcyp5snihqquz27ua",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_g64uidz2xxcyp5snihqquz27ua/gevrey-chambertin",
+      "bounds": [
+        4.947882,
+        47.204026,
+        4.997689,
+        47.23882
+      ],
+      "labelPoint": [
+        4.988572,
+        47.231218
+      ]
+    },
+    {
+      "id": "inao-denom-590",
+      "name": "Au Closeau",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 182,
+      "denominationId": 590,
+      "sourceName": "Gevrey-Chambertin premier cru Au Closeau",
+      "communes": [
+        "21295"
+      ],
+      "areaHa": 0.53,
+      "matchId": "ba_designation_t7wb5opj6ihvqssk7eq3lisxjy",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_t7wb5opj6ihvqssk7eq3lisxjy/au-closeau",
+      "bounds": [
+        4.969417,
+        47.220665,
+        4.970462,
+        47.221686
+      ],
+      "labelPoint": [
+        4.969928,
+        47.221205
+      ]
+    },
+    {
+      "id": "inao-denom-591",
+      "name": "Aux Combottes",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 182,
+      "denominationId": 591,
+      "sourceName": "Gevrey-Chambertin premier cru Aux Combottes",
+      "communes": [
+        "21295"
+      ],
+      "areaHa": 4.57,
+      "matchId": "ba_designation_xundfugpwkztxandkktoru3qu4",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_xundfugpwkztxandkktoru3qu4/aux-combottes",
+      "bounds": [
+        4.962506,
+        47.204602,
+        4.965692,
+        47.206748
+      ],
+      "labelPoint": [
+        4.964149,
+        47.205656
+      ]
+    },
+    {
+      "id": "inao-denom-592",
+      "name": "Bel Air",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 182,
+      "denominationId": 592,
+      "sourceName": "Gevrey-Chambertin premier cru Bel Air",
+      "communes": [
+        "21295"
+      ],
+      "areaHa": 2.65,
+      "matchId": "ba_designation_ztobqbpld2kw2lnjjniohevieu",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_ztobqbpld2kw2lnjjniohevieu/bel-air",
+      "bounds": [
+        4.962788,
+        47.21583,
+        4.964493,
+        47.219301
+      ],
+      "labelPoint": [
+        4.963682,
+        47.217998
+      ]
+    },
+    {
+      "id": "inao-denom-593",
+      "name": "Champeaux",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 182,
+      "denominationId": 593,
+      "sourceName": "Gevrey-Chambertin premier cru Champeaux",
+      "communes": [
+        "21295"
+      ],
+      "areaHa": 6.73,
+      "matchId": "ba_designation_pqckafmadulnegpob26um4gcqq",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_pqckafmadulnegpob26um4gcqq/champeaux",
+      "bounds": [
+        4.962308,
+        47.231369,
+        4.965612,
+        47.235784
+      ],
+      "labelPoint": [
+        4.964551,
+        47.233595
+      ]
+    },
+    {
+      "id": "inao-denom-594",
+      "name": "Champonnet",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 182,
+      "denominationId": 594,
+      "sourceName": "Gevrey-Chambertin premier cru Champonnet",
+      "communes": [
+        "21295"
+      ],
+      "areaHa": 3.34,
+      "matchId": "ba_designation_4vuu2isf7fcfcvmtugnhunr2uy",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_4vuu2isf7fcfcvmtugnhunr2uy/champonnet",
+      "bounds": [
+        4.962582,
+        47.222638,
+        4.965314,
+        47.225011
+      ],
+      "labelPoint": [
+        4.963745,
+        47.223814
+      ]
+    },
+    {
+      "id": "inao-denom-595",
+      "name": "Cherbaudes",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 182,
+      "denominationId": 595,
+      "sourceName": "Gevrey-Chambertin premier cru Cherbaudes",
+      "communes": [
+        "21295"
+      ],
+      "areaHa": 2.19,
+      "matchId": "ba_designation_3ijnj4s3dodrwkrptamsp4g4sm",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_3ijnj4s3dodrwkrptamsp4g4sm/cherbaudes",
+      "bounds": [
+        4.968439,
+        47.217616,
+        4.971043,
+        47.219207
+      ],
+      "labelPoint": [
+        4.969699,
+        47.218411
+      ]
+    },
+    {
+      "id": "inao-denom-596",
+      "name": "Clos Prieur",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 182,
+      "denominationId": 596,
+      "sourceName": "Gevrey-Chambertin premier cru Clos Prieur",
+      "communes": [
+        "21295"
+      ],
+      "areaHa": 1.98,
+      "matchId": "ba_designation_ot4ld6jv5c7odyjyqzpwyh7coq",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_ot4ld6jv5c7odyjyqzpwyh7coq/clos-prieur",
+      "bounds": [
+        4.968728,
+        47.218676,
+        4.971339,
+        47.220107
+      ],
+      "labelPoint": [
+        4.970066,
+        47.219394
+      ]
+    },
+    {
+      "id": "inao-denom-597",
+      "name": "Clos Saint-Jacques",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 182,
+      "denominationId": 597,
+      "sourceName": "Gevrey-Chambertin premier cru Clos Saint-Jacques",
+      "communes": [
+        "21295"
+      ],
+      "areaHa": 6.71,
+      "matchId": "ba_designation_dxq2vo5i7fjglod2k3xd2oj2kq",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_dxq2vo5i7fjglod2k3xd2oj2kq/le-clos-saint-jacques",
+      "bounds": [
+        4.95819,
+        47.226291,
+        4.963,
+        47.22983
+      ],
+      "labelPoint": [
+        4.961126,
+        47.22806
+      ]
+    },
+    {
+      "id": "inao-denom-598",
+      "name": "Clos des Varoilles",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 182,
+      "denominationId": 598,
+      "sourceName": "Gevrey-Chambertin premier cru Clos des Varoilles",
+      "communes": [
+        "21295"
+      ],
+      "areaHa": 6.02,
+      "matchId": "ba_designation_7difbrenu3vqkpwqxax6wq34ei",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_7difbrenu3vqkpwqxax6wq34ei/clos-des-varoilles",
+      "bounds": [
+        4.951451,
+        47.2255,
+        4.95776,
+        47.227585
+      ],
+      "labelPoint": [
+        4.953887,
+        47.226537
+      ]
+    },
+    {
+      "id": "inao-denom-599",
+      "name": "Clos du Chapitre",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 182,
+      "denominationId": 599,
+      "sourceName": "Gevrey-Chambertin premier cru Clos du Chapitre",
+      "communes": [
+        "21295"
+      ],
+      "areaHa": 0.98,
+      "matchId": "ba_designation_kwujszbfrjutcuvaf3n66znzju",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_kwujszbfrjutcuvaf3n66znzju/clos-du-chapitre",
+      "bounds": [
+        4.962604,
+        47.226265,
+        4.964951,
+        47.227175
+      ],
+      "labelPoint": [
+        4.963794,
+        47.226719
+      ]
+    },
+    {
+      "id": "inao-denom-600",
+      "name": "Combe au Moine",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 182,
+      "denominationId": 600,
+      "sourceName": "Gevrey-Chambertin premier cru Combe au Moine",
+      "communes": [
+        "21295"
+      ],
+      "areaHa": 4.76,
+      "matchId": "ba_designation_dqhinz2imkqj452wsnp4kz7e44",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_dqhinz2imkqj452wsnp4kz7e44/combe-au-moine",
+      "bounds": [
+        4.95941,
+        47.231276,
+        4.963805,
+        47.233679
+      ],
+      "labelPoint": [
+        4.962159,
+        47.232499
+      ]
+    },
+    {
+      "id": "inao-denom-601",
+      "name": "Craipillot",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 182,
+      "denominationId": 601,
+      "sourceName": "Gevrey-Chambertin premier cru Craipillot",
+      "communes": [
+        "21295"
+      ],
+      "areaHa": 2.76,
+      "matchId": "ba_designation_hv2z3qjvgcilnysjb3hxphygta",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_hv2z3qjvgcilnysjb3hxphygta/craipillot",
+      "bounds": [
+        4.962874,
+        47.224563,
+        4.965725,
+        47.226244
+      ],
+      "labelPoint": [
+        4.96433,
+        47.225403
+      ]
+    },
+    {
+      "id": "inao-denom-602",
+      "name": "En Ergot",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 182,
+      "denominationId": 602,
+      "sourceName": "Gevrey-Chambertin premier cru En Ergot",
+      "communes": [
+        "21295"
+      ],
+      "areaHa": 1.16,
+      "matchId": "ba_designation_hux2573esq7z445pyltb3puraq",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_hux2573esq7z445pyltb3puraq/en-ergot",
+      "bounds": [
+        4.970294,
+        47.214495,
+        4.972379,
+        47.215682
+      ],
+      "labelPoint": [
+        4.971517,
+        47.215081
+      ]
+    },
+    {
+      "id": "inao-denom-603",
+      "name": "Estournelles-Saint-Jacques",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 182,
+      "denominationId": 603,
+      "sourceName": "Gevrey-Chambertin premier cru Estournelles-Saint-Jacques",
+      "communes": [
+        "21295"
+      ],
+      "areaHa": 1.98,
+      "matchId": "ba_designation_mww5fmfgury4kncqa4wuqvtyce",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_mww5fmfgury4kncqa4wuqvtyce/estournelles-saint-jacques",
+      "bounds": [
+        4.956468,
+        47.227091,
+        4.959221,
+        47.228754
+      ],
+      "labelPoint": [
+        4.957824,
+        47.227988
+      ]
+    },
+    {
+      "id": "inao-denom-604",
+      "name": "Fonteny",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 182,
+      "denominationId": 604,
+      "sourceName": "Gevrey-Chambertin premier cru Fonteny",
+      "communes": [
+        "21295"
+      ],
+      "areaHa": 3.73,
+      "matchId": "ba_designation_4xzc3aanw2rt237c2wnl2afmoy",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_4xzc3aanw2rt237c2wnl2afmoy/fonteny",
+      "bounds": [
+        4.964182,
+        47.221643,
+        4.966992,
+        47.224368
+      ],
+      "labelPoint": [
+        4.965445,
+        47.222612
+      ]
+    },
+    {
+      "id": "inao-denom-605",
+      "name": "Issarts",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 182,
+      "denominationId": 605,
+      "sourceName": "Gevrey-Chambertin premier cru Issarts",
+      "communes": [
+        "21295"
+      ],
+      "areaHa": 0.62,
+      "matchId": "ba_designation_kjxj4slvyjxb4twnedtqbttkhi",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_kjxj4slvyjxb4twnedtqbttkhi/issarts",
+      "bounds": [
+        4.963396,
+        47.2213,
+        4.964636,
+        47.222228
+      ],
+      "labelPoint": [
+        4.963987,
+        47.2218
+      ]
+    },
+    {
+      "id": "inao-denom-606",
+      "name": "La Bossière",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 182,
+      "denominationId": 606,
+      "sourceName": "Gevrey-Chambertin premier cru La Bossière",
+      "communes": [
+        "21295"
+      ],
+      "areaHa": 0.45,
+      "matchId": "ba_designation_nzroxacws5bnni4zpndhxf7rba",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_nzroxacws5bnni4zpndhxf7rba/la-bossiere",
+      "bounds": [
+        4.950977,
+        47.225694,
+        4.951888,
+        47.226706
+      ],
+      "labelPoint": [
+        4.951453,
+        47.226195
+      ]
+    },
+    {
+      "id": "inao-denom-607",
+      "name": "La Perrière",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 182,
+      "denominationId": 607,
+      "sourceName": "Gevrey-Chambertin premier cru La Perrière",
+      "communes": [
+        "21295"
+      ],
+      "areaHa": 2.48,
+      "matchId": "ba_designation_wmlirzuwih657oz5ff6c2nofaa",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_wmlirzuwih657oz5ff6c2nofaa/la-perriere",
+      "bounds": [
+        4.969117,
+        47.219661,
+        4.971606,
+        47.221578
+      ],
+      "labelPoint": [
+        4.970365,
+        47.220615
+      ]
+    },
+    {
+      "id": "inao-denom-608",
+      "name": "La Romanée",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 182,
+      "denominationId": 608,
+      "sourceName": "Gevrey-Chambertin premier cru La Romanée",
+      "communes": [
+        "21295"
+      ],
+      "areaHa": 1.07,
+      "matchId": "ba_designation_v5a7upjbkl2tkorz7fkbpzx2kq",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_v5a7upjbkl2tkorz7fkbpzx2kq/la-romanee",
+      "bounds": [
+        4.95112,
+        47.226744,
+        4.953965,
+        47.227576
+      ],
+      "labelPoint": [
+        4.952374,
+        47.227177
+      ]
+    },
+    {
+      "id": "inao-denom-609",
+      "name": "Lavaut Saint-Jacques",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 182,
+      "denominationId": 609,
+      "sourceName": "Gevrey-Chambertin premier cru Lavaut Saint-Jacques",
+      "communes": [
+        "21295"
+      ],
+      "areaHa": 9.56,
+      "matchId": "ba_designation_3nmrnbe6rjrkpwfe3lfas4azg4",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_3nmrnbe6rjrkpwfe3lfas4azg4/lavaut-saint-jacques",
+      "bounds": [
+        4.955698,
+        47.224787,
+        4.962083,
+        47.228019
+      ],
+      "labelPoint": [
+        4.958988,
+        47.226171
+      ]
+    },
+    {
+      "id": "inao-denom-610",
+      "name": "Les Cazetiers",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 182,
+      "denominationId": 610,
+      "sourceName": "Gevrey-Chambertin premier cru Les Cazetiers",
+      "communes": [
+        "21295"
+      ],
+      "areaHa": 9.1,
+      "matchId": "ba_designation_4wgzv3yeruhebw2d535r27kjfm",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_4wgzv3yeruhebw2d535r27kjfm/les-cazetiers",
+      "bounds": [
+        4.959807,
+        47.228288,
+        4.965097,
+        47.231687
+      ],
+      "labelPoint": [
+        4.962028,
+        47.230001
+      ]
+    },
+    {
+      "id": "inao-denom-611",
+      "name": "Les Corbeaux",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 182,
+      "denominationId": 611,
+      "sourceName": "Gevrey-Chambertin premier cru Les Corbeaux",
+      "communes": [
+        "21295"
+      ],
+      "areaHa": 3.22,
+      "matchId": "ba_designation_k5roerxts4hwnvgj2zk6ri74aq",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_k5roerxts4hwnvgj2zk6ri74aq/les-corbeaux",
+      "bounds": [
+        4.966187,
+        47.221746,
+        4.969881,
+        47.223512
+      ],
+      "labelPoint": [
+        4.968163,
+        47.222355
+      ]
+    },
+    {
+      "id": "inao-denom-612",
+      "name": "Les Goulots",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 182,
+      "denominationId": 612,
+      "sourceName": "Gevrey-Chambertin premier cru Les Goulots",
+      "communes": [
+        "21295"
+      ],
+      "areaHa": 1.8,
+      "matchId": "ba_designation_lpk7t2pim2ipupvv4z3ftbe57m",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_lpk7t2pim2ipupvv4z3ftbe57m/les-goulots",
+      "bounds": [
+        4.960742,
+        47.233658,
+        4.962981,
+        47.235106
+      ],
+      "labelPoint": [
+        4.961822,
+        47.234393
+      ]
+    },
+    {
+      "id": "inao-denom-613",
+      "name": "Petite Chapelle",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 182,
+      "denominationId": 613,
+      "sourceName": "Gevrey-Chambertin premier cru Petite Chapelle",
+      "communes": [
+        "21295"
+      ],
+      "areaHa": 4.04,
+      "matchId": "ba_designation_6olaljf4olm5acrksajgahewge",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_6olaljf4olm5acrksajgahewge/petite-chapelle",
+      "bounds": [
+        4.969601,
+        47.2147,
+        4.972544,
+        47.218095
+      ],
+      "labelPoint": [
+        4.970978,
+        47.216383
+      ]
+    },
+    {
+      "id": "inao-denom-614",
+      "name": "Petits Cazetiers",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 182,
+      "denominationId": 614,
+      "sourceName": "Gevrey-Chambertin premier cru Petits Cazetiers",
+      "communes": [
+        "21295"
+      ],
+      "areaHa": 0.94,
+      "matchId": "ba_designation_maalrngsu3aowh6djkyi5zpede",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_maalrngsu3aowh6djkyi5zpede/petits-cazetiers",
+      "bounds": [
+        4.96282,
+        47.230789,
+        4.965096,
+        47.232269
+      ],
+      "labelPoint": [
+        4.963663,
+        47.231512
+      ]
+    },
+    {
+      "id": "inao-denom-615",
+      "name": "Poissenot",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 182,
+      "denominationId": 615,
+      "sourceName": "Gevrey-Chambertin premier cru Poissenot",
+      "communes": [
+        "21295"
+      ],
+      "areaHa": 2.2,
+      "matchId": "ba_designation_s52nx653tkj2udkebi73ug7flm",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_s52nx653tkj2udkebi73ug7flm/poissenot",
+      "bounds": [
+        4.953759,
+        47.226773,
+        4.957144,
+        47.228369
+      ],
+      "labelPoint": [
+        4.955276,
+        47.227831
+      ]
+    },
+    {
+      "id": "inao-denom-616",
+      "name": "Gevrey-Chambertin Premier Cru",
+      "tier": "premier_cru",
+      "kind": "appellation",
+      "appellationId": 182,
+      "denominationId": 616,
+      "sourceName": "Gevrey-Chambertin premier cru",
+      "communes": [
+        "21295"
+      ],
+      "areaHa": 172.72,
+      "matchId": "ba_appellation_pctpbfatq7n4udqrooirhplpxq",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_pctpbfatq7n4udqrooirhplpxq/gevrey-chambertin-premier-cru",
+      "bounds": [
+        4.950977,
+        47.204552,
+        4.972544,
+        47.235784
+      ],
+      "labelPoint": [
+        4.965578,
+        47.215638
+      ]
+    },
+    {
+      "id": "inao-denom-646",
+      "name": "Griotte-Chambertin",
+      "tier": "grand_cru",
+      "kind": "vineyard",
+      "appellationId": 185,
+      "denominationId": 646,
+      "sourceName": "Griotte-Chambertin",
+      "communes": [
+        "21295"
+      ],
+      "areaHa": 2.71,
+      "matchId": "france/burgundy/cote-de-nuits/griotte-chambertin",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_s23i3gbvjeyk5jyuje4aezwdfq/griotte-chambertin",
+      "bounds": [
+        4.967159,
+        47.213309,
+        4.969902,
+        47.21501
+      ],
+      "labelPoint": [
+        4.968594,
+        47.214146
+      ]
+    },
+    {
+      "id": "inao-denom-666",
+      "name": "Latricières-Chambertin",
+      "tier": "grand_cru",
+      "kind": "vineyard",
+      "appellationId": 193,
+      "denominationId": 666,
+      "sourceName": "Latricières-Chambertin",
+      "communes": [
+        "21295"
+      ],
+      "areaHa": 7.36,
+      "matchId": "france/burgundy/cote-de-nuits/latricieres-chambertin",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_j24uvrziqaang62ja6tbbqndgi/latricieres-chambertin",
+      "bounds": [
+        4.961668,
+        47.206312,
+        4.965629,
+        47.209488
+      ],
+      "labelPoint": [
+        4.963866,
+        47.207888
+      ]
+    },
+    {
+      "id": "inao-denom-808",
+      "name": "Mazis-Chambertin",
+      "tier": "grand_cru",
+      "kind": "vineyard",
+      "appellationId": 201,
+      "denominationId": 808,
+      "sourceName": "Mazis-Chambertin",
+      "communes": [
+        "21295"
+      ],
+      "areaHa": 9.12,
+      "matchId": "france/burgundy/cote-de-nuits/mazis-chambertin",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_de5doqosjkd2by5kazy5ewqhrm/mazis-chambertin",
+      "bounds": [
+        4.964407,
+        47.218068,
+        4.969544,
+        47.222043
+      ],
+      "labelPoint": [
+        4.96856,
+        47.220052
+      ]
+    },
+    {
+      "id": "inao-denom-809",
+      "name": "Mazoyères-Chambertin",
+      "tier": "grand_cru",
+      "kind": "vineyard",
+      "appellationId": 202,
+      "denominationId": 809,
+      "sourceName": "Mazoyères-Chambertin",
+      "communes": [
+        "21295"
+      ],
+      "areaHa": 30.94,
+      "matchId": "france/burgundy/cote-de-nuits/mazoyeres-chambertin",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_tmqhwbavn3svuvca46lf7qqppa/mazoyeres-chambertin",
+      "bounds": [
+        4.96525,
+        47.204552,
+        4.971608,
+        47.213707
+      ],
+      "labelPoint": [
+        4.967552,
+        47.209146
+      ]
+    },
+    {
+      "id": "inao-denom-1086",
+      "name": "Ruchottes-Chambertin",
+      "tier": "grand_cru",
+      "kind": "vineyard",
+      "appellationId": 224,
+      "denominationId": 1086,
+      "sourceName": "Ruchottes-Chambertin",
+      "communes": [
+        "21295"
+      ],
+      "areaHa": 3.31,
+      "matchId": "france/burgundy/cote-de-nuits/ruchottes-chambertin",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_mbuvj2yyux737ggy6uhuc75kca/ruchottes-chambertin",
+      "bounds": [
+        4.963291,
+        47.219202,
+        4.966097,
+        47.221868
+      ],
+      "labelPoint": [
+        4.964183,
+        47.220374
+      ]
+    }
+  ]
+}
