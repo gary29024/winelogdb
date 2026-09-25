@@ -3,7 +3,7 @@ import { burgundyAtlasWineDetailPlace } from './burgundyAtlasPremierCru';
 import catalogue from './burgundyVillageMapCatalogue.json';
 
 export type VillageMapFeature=typeof catalogue.features[number];
-export type BurgundyVillageMapTarget={villageId:string;featureId:string;name:string;scope:'vineyard'|'appellation'};
+export type BurgundyVillageMapTarget={villageId:string;villageName:string;featureId:string;name:string;scope:'vineyard'|'appellation'};
 
 const byMatchId=new Map(catalogue.features.map(feature=>[feature.matchId,feature]));
 
@@ -13,7 +13,7 @@ export function burgundyVillageMapTarget(wine:WineFacts&{classification?:string|
  const place=burgundyAtlasWineDetailPlace(wine);
  const feature=place?byMatchId.get(place.placeId):undefined;
  if(!feature)return null;
- return {villageId:catalogue.id,featureId:feature.id,name:feature.name,
+ return {villageId:catalogue.id,villageName:catalogue.name,featureId:feature.id,name:feature.name,
   scope:feature.kind==='vineyard'?'vineyard':'appellation'};
 }
 

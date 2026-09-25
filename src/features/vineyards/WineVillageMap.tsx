@@ -2,7 +2,7 @@ import { Component,lazy,Suspense,useId,useRef,useState,type ReactNode } from 're
 import { createPortal } from 'react-dom';
 import type { BurgundyVillageMapTarget } from '../../lib/places/burgundyVillageMap';
 import { useModalFocus } from '../../components/useModalFocus';
-import './villageMap.css';
+import '../../villageMap.css';
 
 const VillageMap=lazy(()=>import('./VillageMap'));
 
@@ -24,7 +24,7 @@ export function WineVillageMap({target}:{target:BurgundyVillageMapTarget}){
   </button>
   {open&&createPortal(<div className="village-map-backdrop" onClick={event=>{if(event.target===event.currentTarget)setOpen(false)}}>
    <div className="village-map-dialog" ref={dialog} role="dialog" aria-modal="true" aria-labelledby={title} tabIndex={-1}>
-    <header className="village-map-header"><div><p>BURGUNDY · CÔTE DE NUITS</p><h2 id={title}>Gevrey-Chambertin</h2></div><button type="button" className="village-map-close" aria-label="Close village map" onClick={()=>setOpen(false)}>×</button></header>
+    <header className="village-map-header"><div><p>BURGUNDY · CÔTE DE NUITS</p><h2 id={title}>{target.villageName}</h2></div><button type="button" className="village-map-close" aria-label="Close village map" onClick={()=>setOpen(false)}>×</button></header>
     <MapBoundary><Suspense fallback={<p className="village-map-message" role="status">Loading village map…</p>}><VillageMap key={target.featureId} target={target}/></Suspense></MapBoundary>
    </div>
   </div>,document.body)}

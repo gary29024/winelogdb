@@ -10,24 +10,32 @@ const baseStyleUrl='https://tiles.openfreemap.org/styles/liberty';
 const labels={type:'FeatureCollection' as const,features:catalogue.features.filter(f=>f.kind==='vineyard').map(f=>({
  type:'Feature' as const,properties:{id:f.id,name:f.name},geometry:{type:'Point' as const,coordinates:f.labelPoint}
 }))};
+const vineyardCount=(tier:string)=>catalogue.features.filter(f=>f.kind==='vineyard'&&f.tier===tier).length;
+const boundsOf=(b:number[]):[[number,number],[number,number]]=>[[b[0],b[1]],[b[2],b[3]]];
+// The light end of the app's --cru ramp (styles.css), one hue stepped dark to
+// light so rank reads without the legend. The map stays light in both themes,
+// so these are fixed rather than the tokens. The wine's own cru takes the app
+// accent, which the ramp never uses, over a white casing.
+const cru={grand_cru:'#543c0c',premier_cru:'#785819',village:'#9c7629'},accent='#c51f45';
 const groups=[{tier:'grand_cru',label:'Grand Crus'},{tier:'premier_cru',label:'Premier Crus'},{tier:'village',label:'Village appellation'}];
 const selectionFilter=(id:string):FilterSpecification=>['==',['get','id'],id];
 function mapStyle(data:FeatureCollection,base?:StyleSpecification):StyleSpecification{
  return {
   ...(base??{version:8}),
   sources:{...base?.sources,'wine-boundaries':{type:'geojson',data},'wine-labels':{type:'geojson',data:labels}},
-  layers:[...(base?.layers??[{id:'paper',type:'background' as const,paint:{'background-color':'#f1eee5'}}]),
-   {id:'commune-outline',type:'line',source:'wine-boundaries',filter:['==',['get','kind'],'commune'],paint:{'line-color':'#66776b','line-width':1.5,'line-dasharray':[4,3]}},
+  layers:[...(base?.layers??[{id:'paper',type:'background' as const,paint:{'background-color':'#f3f1ec'}}]),
+   {id:'commune-outline',type:'line',source:'wine-boundaries',filter:['==',['get','kind'],'commune'],paint:{'line-color':'#7d899c','line-width':1.5,'line-dasharray':[4,3]}},
    {id:'vineyard-fill',type:'fill',source:'wine-boundaries',filter:['!=',['get','kind'],'commune'],layout:{'fill-sort-key':['match',['get','tier'],'village',0,'premier_cru',1,2]},paint:{
-    'fill-color':['match',['get','tier'],'grand_cru','#853e61','premier_cru','#c09542','#7c9d79'],
-    'fill-opacity':['match',['get','kind'],'appellation',0.12,0.42]}},
+    'fill-color':['match',['get','tier'],'grand_cru',cru.grand_cru,'premier_cru',cru.premier_cru,cru.village],
+    'fill-opacity':['match',['get','kind'],'appellation',0.1,['match',['get','tier'],'grand_cru',0.62,0.4]]}},
    {id:'vineyard-outline',type:'line',source:'wine-boundaries',filter:['!=',['get','kind'],'commune'],paint:{
-    'line-color':['match',['get','tier'],'grand_cru','#753652','premier_cru','#907023','#4f7652'],'line-width':1}},
-   {id:'selected-fill',type:'fill',source:'wine-boundaries',filter:['==',['get','id'],''],paint:{'fill-color':'#ffdd86','fill-opacity':0.7}},
-   {id:'selected-outline',type:'line',source:'wine-boundaries',filter:['==',['get','id'],''],paint:{'line-color':'#442236','line-width':3}},
+    'line-color':['match',['get','tier'],'grand_cru',cru.grand_cru,'premier_cru',cru.premier_cru,cru.village],'line-width':0.8}},
+   {id:'selected-fill',type:'fill',source:'wine-boundaries',filter:['==',['get','id'],''],paint:{'fill-color':accent,'fill-opacity':0.55}},
+   {id:'selected-casing',type:'line',source:'wine-boundaries',filter:['==',['get','id'],''],paint:{'line-color':'#ffffff','line-width':6}},
+   {id:'selected-outline',type:'line',source:'wine-boundaries',filter:['==',['get','id'],''],paint:{'line-color':accent,'line-width':2.5}},
    ...(base?.glyphs?[{id:'vineyard-labels',type:'symbol' as const,source:'wine-labels',minzoom:13,layout:{
     'text-field':['get','name'],'text-font':['Noto Sans Regular'],'text-size':12,'text-max-width':10,'text-padding':5},
-    paint:{'text-color':'#392d30','text-halo-color':'#fffdf6','text-halo-width':1.5}} as NonNullable<StyleSpecification['layers']>[number]]:[])
+    paint:{'text-color':'#10182d','text-halo-color':'#ffffff','text-halo-width':1.5}} as NonNullable<StyleSpecification['layers']>[number]]:[])
   ]
  };
 }
@@ -61,18 +69,22 @@ export default function VillageMap({target}:{target:BurgundyVillageMapTarget}){
     if(!isBoundaryData(data))throw new Error('Boundary data is incomplete');
     clearTimeout(timeout);
     if(disposed||!host.current)return;
-    map=new MapLibreMap({container:host.current,style:mapStyle(data),
-     bounds:[[catalogue.bounds[0],catalogue.bounds[1]],[catalogue.bounds[2],catalogue.bounds[3]]],fitBoundsOptions:{padding:30},
+    const own=catalogue.features.find(f=>f.id===target.featureId);
+    // Open on the wine's own cru - on a phone the village view leaves it a few
+    // pixels wide under its label. A broad appellation has no cru to show.
+    const opening=target.scope==='vineyard'&&own?{bounds:boundsOf(own.bounds),fitBoundsOptions:{padding:70,maxZoom:15}}:{bounds:boundsOf(catalogue.bounds),fitBoundsOptions:{padding:30}};
+    map=new MapLibreMap({container:host.current,style:mapStyle(data),...opening,
      minZoom:11,maxZoom:18,attributionControl:{compact:true,customAttribution:'Boundaries: INAO · Cadastre Etalab'},
      dragRotate:false,pitchWithRotate:false,touchPitch:false});
     mapRef.current=map;
     map.addControl(new NavigationControl({showCompass:false}),'top-right');
     map.addControl(new ScaleControl({unit:'metric'}),'bottom-left');
-    map.getCanvas().setAttribute('aria-label','Gevrey-Chambertin vineyard map. Use the vineyard selector to explore boundaries.');
+    map.getCanvas().setAttribute('aria-label',`${catalogue.name} vineyard map. Use the vineyard selector to explore boundaries.`);
     map.on('error',()=>{if(!disposed)setBaseWarning(true)});
     const select=(id:string)=>{
      if(!map?.getLayer('selected-fill'))return;
      map.setFilter('selected-fill',selectionFilter(id));
+     map.setFilter('selected-casing',selectionFilter(id));
      map.setFilter('selected-outline',selectionFilter(id));
      if(map.getLayer('vineyard-labels'))map.setFilter('vineyard-labels',['!=',['get','id'],id]);
      const feature=catalogue.features.find(f=>f.id===id);
@@ -87,10 +99,12 @@ export default function VillageMap({target}:{target:BurgundyVillageMapTarget}){
     map.on('style.load',()=>{if(!disposed){select(selectedRef.current);setReady(true)}});
     map.on('click','vineyard-fill',event=>{
      const candidates=(event.features??[]).filter((f:MapGeoJSONFeature)=>f.properties.kind==='vineyard');
-     // Smaller overlapping denominations remain selectable, with every legal
-     // identity also available through the accessible list.
-     candidates.sort((a,b)=>Number(a.properties.areaHa)-Number(b.properties.areaHa));
-     const id=candidates[0]?.properties.id;
+     // Smallest first, so Clos de Bèze is reachable inside Chambertin. A second
+     // click on the same spot steps to the next designation there, which is the
+     // only way to reach Mazoyères: it shares Charmes' geometry exactly.
+     candidates.sort((a,b)=>Number(a.properties.areaHa)-Number(b.properties.areaHa)||String(a.properties.id).localeCompare(String(b.properties.id)));
+     const ids=[...new Set(candidates.map(f=>f.properties.id))];
+     const id=ids[(ids.indexOf(selectedRef.current)+1)%ids.length];
      if(typeof id==='string'&&catalogue.features.some(f=>f.id===id))setSelectedId(id);
     });
     map.on('mouseenter','vineyard-fill',()=>{if(map)map.getCanvas().style.cursor='pointer'});
@@ -110,10 +124,16 @@ export default function VillageMap({target}:{target:BurgundyVillageMapTarget}){
   }
   void start();
   return()=>{disposed=true;controller.abort();baseController.abort();clearTimeout(timeout);clearTimeout(baseTimeout);observer?.disconnect();markerRef.current?.remove();markerRef.current=null;selectionAction.current=null;mapRef.current=null;map?.remove()};
+ // eslint-disable-next-line react-hooks/exhaustive-deps -- the map is built once per attempt; the target is fixed by the parent's key
  },[attempt]);
 
- const villageView=()=>mapRef.current?.fitBounds([[catalogue.bounds[0],catalogue.bounds[1]],[catalogue.bounds[2],catalogue.bounds[3]]],{padding:30,duration:0});
- const zoomTo=(feature:VillageMapFeature)=>mapRef.current?.fitBounds([[feature.bounds[0],feature.bounds[1]],[feature.bounds[2],feature.bounds[3]]],{padding:65,maxZoom:16.5,duration:0});
+ const villageView=()=>mapRef.current?.fitBounds(boundsOf(catalogue.bounds),{padding:30,duration:0});
+ const zoomTo=(feature:VillageMapFeature)=>mapRef.current?.fitBounds(boundsOf(feature.bounds),{padding:65,maxZoom:16.5,duration:0});
+ const backToWine=()=>{
+  setSelectedId(target.featureId);
+  const own=catalogue.features.find(f=>f.id===target.featureId);
+  if(target.scope==='vineyard'&&own)mapRef.current?.fitBounds(boundsOf(own.bounds),{padding:70,maxZoom:15,duration:0});else villageView();
+ };
  return <>
   <div className="village-map-body">
    <div className="village-map-main">
@@ -121,7 +141,7 @@ export default function VillageMap({target}:{target:BurgundyVillageMapTarget}){
     <div className="village-map-canvas" ref={host} aria-busy={!ready&&!error}/>
     {!ready&&!error&&<p className="village-map-loading" role="status">Loading vineyard boundaries…</p>}
     {error&&<div className="village-map-error" role="alert"><p>{error}</p><button type="button" onClick={()=>{setError('');setReady(false);setBaseWarning(false);setAttempt(value=>value+1)}}>Try again</button></div>}
-    <div className="village-map-legend" aria-label="Map legend"><span><i className="map-tier-grand_cru"/>Grand Cru</span><span><i className="map-tier-premier_cru"/>Premier Cru</span><span><i className="map-tier-village"/>Village</span><span><i className="map-tier-selected"/>Selected</span></div>
+    <div className="village-map-legend" aria-label="Map legend"><span><i className="map-swatch-grand_cru"/>Grand Cru</span><span><i className="map-swatch-premier_cru"/>Premier Cru</span><span><i className="map-swatch-village"/>Village</span><span><i className="map-swatch-selected"/>{selectedId===target.featureId?'This wine':'Selected'}</span></div>
    </div>
    <aside className="village-map-sidebar">
     <label htmlFor={selectId}>Explore a vineyard</label>
@@ -129,15 +149,16 @@ export default function VillageMap({target}:{target:BurgundyVillageMapTarget}){
      {groups.map(group=><optgroup key={group.tier} label={group.label}>{catalogue.features.filter(f=>f.tier===group.tier).sort((a,b)=>a.name.localeCompare(b.name)).map(feature=><option key={feature.id} value={feature.id}>{feature.name}</option>)}</optgroup>)}
     </select>
     <div className="village-map-selection" id={statusId} aria-live="polite" aria-atomic="true">
-     <p className="village-map-eyebrow">{selectedId===target.featureId?'THIS WINE':'EXPLORING'}</p>
+     <p className={`village-map-eyebrow${selectedId===target.featureId?' is-wine':''}`}>{selectedId===target.featureId?'THIS WINE':'EXPLORING'}</p>
      <h3>{selected.name}</h3><span className={`village-map-tier map-tier-${selected.tier}`}>{tiers[selected.tier]}</span>
      <p>{selected.kind==='vineyard'?'The highlighted area is the INAO production boundary for this cru.':'Appellation area shown; no single vineyard is identified.'}</p>
      {selected.denominationId===447&&<p>Chambertin’s appellation area also includes Clos de Bèze.</p>}
      {[477,809].includes(selected.denominationId)&&<p>Charmes-Chambertin and Mazoyères-Chambertin share the same INAO production area.</p>}
     </div>
-    {selectedId!==target.featureId&&<button type="button" className="village-map-return" onClick={()=>{setSelectedId(target.featureId);villageView()}}>Back to this wine</button>}
-    <p className="village-map-context">9 Grand Crus · 26 Premier Cru climats<br/>Gevrey-Chambertin & Brochon</p>
-    <BurgundyAtlasLink place={{placeId:selected.matchId,name:selected.name,url:selected.atlasUrl}}/>
+    {selectedId!==target.featureId&&<button type="button" className="village-map-return" onClick={backToWine}>Back to this wine</button>}
+    <p className="village-map-hint">Tap a vineyard on the map to explore it.</p>
+    <p className="village-map-context">{vineyardCount('grand_cru')} Grand Crus · {vineyardCount('premier_cru')} Premier Cru climats<br/>{catalogue.name} & Brochon</p>
+    <BurgundyAtlasLink place={{placeId:selected.matchId,name:selected.name,url:selected.atlasUrl,...(selected.kind==='appellation'?{scope:'appellation' as const}:{})}}/>
     {baseWarning&&!error&&<p className="village-map-note" role="status">Some street-map details are unavailable. Vineyard boundaries remain available.</p>}
    </aside>
   </div>
