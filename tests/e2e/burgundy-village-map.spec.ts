@@ -131,6 +131,72 @@ test('Bonnes-Mares opens in Chambolle with both producing communes explained',as
  await expect(dialog.locator('.village-map-overlap')).toContainText('does not identify which side');
 });
 
+for(const village of [
+ {id:'fixin',name:'Fixin',cru:'Les Meix Bas',tier:'premier_cru',feature:'inao-denom-2372',count:8,catalogue:'fixinVillageMapCatalogue',explore:'inao-denom-571',label:'Clos de la Perrière'},
+ {id:'vougeot',name:'Vougeot',cru:'Le Clos Blanc',tier:'premier_cru',feature:'inao-denom-1280',count:7,catalogue:'vougeotVillageMapCatalogue',explore:'inao-denom-546',label:'Clos de Vougeot'},
+ {id:'nuits-saint-georges',name:'Nuits-Saint-Georges',cru:'Clos de la Maréchale',tier:'premier_cru',feature:'inao-denom-989',count:43,catalogue:'nuitsVillageMapCatalogue',explore:'inao-denom-976',label:'Aux Boudots'},
+ {id:'marsannay',name:'Marsannay',cru:'Les Longeroies',tier:'village',feature:'inao-denom-806-red-white',count:3,catalogue:'marsannayVillageMapCatalogue',explore:'inao-denom-806-rose',label:'Marsannay Rosé'},
+ {id:'cote-de-nuits-villages',name:'Côte de Nuits-Villages',cru:'Le Vaucrain',tier:'village',feature:'inao-denom-557',count:1,catalogue:'coteNuitsVillageMapCatalogue',explore:'inao-denom-557',label:'Côte de Nuits-Villages'},
+]){
+ for(const route of ['/wines/layout-wine','/shared/layout-wine']){
+  test(`${village.name} ${route}: opens the correct boundary and keeps its full village context`,async({page},testInfo)=>{
+   const requests:string[]=[],errors:string[]=[];
+   page.on('request',request=>requests.push(request.url()));page.on('pageerror',error=>errors.push(error.message));
+   await page.setViewportSize({width:390,height:844});
+   await setup(page,{appellation:village.name,wineName:village.cru,classification:village.tier});await page.goto(route);
+   const opener=page.getByRole('button',{name:'View village map'});
+   await expect(opener).toBeVisible();
+   expect(requests.filter(url=>url.includes('/maps/')||url.includes('VillageMapCatalogue.json'))).toEqual([]);
+   await opener.click();
+   const dialog=page.getByRole('dialog',{name:village.name,exact:true});
+   await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
+   const selector=dialog.getByRole('combobox');
+   await expect(selector).toHaveValue(village.feature);await expect(selector.locator('option')).toHaveCount(village.count);
+   expect(requests.filter(url=>url.includes('/maps/')).every(url=>url.includes(`/maps/${village.id}.`))).toBe(true);
+   expect(requests.filter(url=>url.includes('VillageMapCatalogue.json')).every(url=>url.includes(village.catalogue))).toBe(true);
+   if(village.tier==='village'){
+    await expect(dialog.getByText('Appellation area shown; no single vineyard is identified.')).toBeVisible();
+    await expect(dialog.locator('.village-map-selected-label')).toHaveCount(0);
+    await expect(dialog.locator('.village-map-hint')).toContainText('appellation area');
+   }else await expect(dialog.locator('.village-map-selected-label')).toHaveText(village.cru);
+   await selector.selectOption(village.explore);
+   await expect(dialog.getByRole('heading',{name:village.label,exact:true,level:3})).toBeVisible();
+   for(const width of [320,390,1280]){
+    await page.setViewportSize({width,height:900});
+    await dialog.getByRole('button',{name:'Village view',exact:true}).click();
+    expect(await dialog.evaluate(element=>element.scrollWidth<=element.clientWidth)).toBe(true);
+    expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+    await page.screenshot({path:testInfo.outputPath(`${village.id}-${width}.png`)});
+   }
+   if(village.explore!==village.feature){
+    await dialog.getByRole('button',{name:'Back to this wine'}).click();await expect(selector).toHaveValue(village.feature);
+   }
+   await page.keyboard.press('Escape');await expect(dialog).toHaveCount(0);await expect(opener).toBeFocused();
+   expect(errors).toEqual([]);
+  });
+ }
+}
+
+test('Marsannay preserves colour scope, including unknown colour, wine style and named rosé',async({page})=>{
+ for(const fields of [
+  {appellation:'Marsannay',colour:'White',id:'inao-denom-806-red-white'},
+  {appellation:'Marsannay',colour:'Rosé',id:'inao-denom-806-rose'},
+  {appellation:'Marsannay',colour:null,wineStyle:null,id:'inao-denom-806'},
+  {appellation:'Marsannay',colour:null,wineStyle:'rose',id:'inao-denom-806-rose'},
+  {appellation:'Marsannay',colour:null,wineStyle:'sparkling',id:'inao-denom-806'},
+  {appellation:'Marsannay Rosé',colour:null,wineStyle:null,id:'inao-denom-806-rose'},
+ ]){
+  const {id,...wineFields}=fields;
+  await setup(page,{...wineFields,wineName:'Marsannay',classification:'village'});await page.goto('/wines/layout-wine');
+  await page.getByRole('button',{name:'View village map'}).click();
+  const dialog=page.getByRole('dialog',{name:'Marsannay',exact:true});
+  await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
+  await expect(dialog.getByRole('combobox')).toHaveValue(id);
+  await expect(dialog.locator('.village-map-selected-label')).toHaveCount(0);
+  await page.keyboard.press('Escape');
+ }
+});
+
 test('new village broad wines keep a light appellation tint without a single-cru label',async({page})=>{
  for(const fields of [
   {appellation:'Morey-Saint-Denis',wineName:'Morey-Saint-Denis Premier Cru',classification:'premier_cru',id:'inao-denom-949'},
@@ -243,4 +309,22 @@ test('a failed village catalogue offers a working reload without downloading bou
  await page.getByRole('button',{name:'View village map'}).click();
  await expect(page.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
  await expect(page.locator('.village-map-selected-label')).toHaveText('Les Ruchots');
+});
+
+test('Côte de Nuits-Villages names its two separate parts and zooms to each',async({page})=>{
+ await setup(page,{appellation:'Côte de Nuits-Villages',wineName:'Côte de Nuits-Villages',classification:'village'});
+ await page.goto('/wines/layout-wine');await page.getByRole('button',{name:'View village map'}).click();
+ const dialog=page.getByRole('dialog',{name:'Côte de Nuits-Villages',exact:true});
+ await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
+ const labels=dialog.locator('.village-map-area-name');
+ await expect(labels).toHaveText(['Fixin & Brochon','Premeaux-Prissey, Comblanchien & Corgoloin']);
+ await expect(labels.first()).toHaveCSS('visibility','visible');
+ await expect(dialog.locator('.village-map-context')).toContainText('Fixin, Brochon, Premeaux-Prissey, Comblanchien & Corgoloin');
+ // Each part is one click away; its name gives way to the vineyards there.
+ await dialog.getByRole('button',{name:'North: Fixin & Brochon'}).click();
+ await expect(labels.first()).toHaveCSS('visibility','hidden');
+ await dialog.getByRole('button',{name:'South: Premeaux-Prissey, Comblanchien & Corgoloin'}).click();
+ await expect(labels.last()).toHaveCSS('visibility','hidden');
+ await dialog.getByRole('button',{name:'Village view',exact:true}).click();
+ await expect(labels.first()).toHaveCSS('visibility','visible');
 });

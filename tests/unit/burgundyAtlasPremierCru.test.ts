@@ -69,6 +69,21 @@ describe('Premier Cru wine-detail destinations',()=>{
     expect(find('Chablis Premier Cru','Fourchaume')?.name).toBe('Chablis — Fourchaume');
   });
 
+  it('resolves the label spelling Les Saint-Georges without capturing the village name or longer Saint-Georges climats',()=>{
+    const base={...wine,appellation:'Nuits-Saint-Georges'};
+    const saints=burgundyAtlasPremierCru({...base,wineName:'Les Saints-Georges'})!;
+    expect(saints.name).toBe('Nuits-Saint-Georges — Les Saints-Georges');
+    for(const wineName of ['Les Saint-Georges','Les Saint Georges','Les St-Georges','Nuits-Saint-Georges 1er Cru Les Saint-Georges']){
+      expect(burgundyAtlasPremierCru({...base,wineName})?.placeId,wineName).toBe(saints.placeId);
+    }
+    // The village's own "Saint-Georges" is removed before crus are sought.
+    expect(burgundyAtlasPremierCru({...base,wineName:'Nuits-Saint-Georges Premier Cru'})).toBeNull();
+    for(const wineName of ['Clos des Porrets-Saint-Georges','Les Porrets-Saint-Georges','Clos des Forêts Saint-Georges']){
+      expect(burgundyAtlasPremierCru({...base,wineName})?.name,wineName).toBe(`Nuits-Saint-Georges — ${wineName}`);
+    }
+    expect(burgundyAtlasPremierCru({...wine,wineName:'Les Saint-Georges'})).toBeNull();
+  });
+
   it('resolves reviewed Vosne spellings in wine and reference fields without relaxing tier or village checks',()=>{
     for(const [alias,source] of [['Les Petits Monts','Les Petis Monts'],['Aux Reignots','Aux Raignots']]){
       const base={...wine,appellation:'Vosne-Romanée'};

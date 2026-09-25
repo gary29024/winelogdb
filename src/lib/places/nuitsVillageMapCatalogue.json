@@ -1,0 +1,1125 @@
+{
+  "id": "nuits-saint-georges",
+  "name": "Nuits-Saint-Georges",
+  "region": "Côte de Nuits",
+  "communes": [
+    {
+      "id": "21464",
+      "name": "Nuits-Saint-Georges"
+    },
+    {
+      "id": "21506",
+      "name": "Premeaux-Prissey"
+    }
+  ],
+  "dataUrl": "/maps/nuits-saint-georges.2026-09-21.geojson",
+  "bounds": [
+    4.922381,
+    47.105859,
+    4.956199,
+    47.158191
+  ],
+  "sources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21464/cadastre-21464-communes.json.gz",
+      "sha256": "ddbf4e40fcac924f04ba627005b9ff7104d8a8745d25a81b5dbc794cfc004081"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21506/cadastre-21506-communes.json.gz",
+      "sha256": "d8c63308fd135c5334eb170cf3678d59426f3ad746b0adfdac821655c9e586ab"
+    }
+  ],
+  "notes": {},
+  "features": [
+    {
+      "id": "inao-denom-974",
+      "name": "Nuits-Saint-Georges",
+      "tier": "village",
+      "kind": "appellation",
+      "appellationId": 212,
+      "denominationId": 974,
+      "sourceName": "Nuits-Saint-Georges",
+      "communes": [
+        "21464",
+        "21506"
+      ],
+      "areaHa": 323.13,
+      "matchId": "ba_appellation_dgeggy2yaufujjzhwm7adp4chq",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_dgeggy2yaufujjzhwm7adp4chq/nuits-saint-georges",
+      "bounds": [
+        4.922381,
+        47.105859,
+        4.956199,
+        47.158191
+      ],
+      "labelPoint": [
+        4.947037,
+        47.151601
+      ]
+    },
+    {
+      "id": "inao-denom-975",
+      "name": "Aux Argillas",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 212,
+      "denominationId": 975,
+      "sourceName": "Nuits-Saint-Georges premier cru Aux Argillas",
+      "communes": [
+        "21464"
+      ],
+      "areaHa": 1.59,
+      "matchId": "ba_designation_wl334zeunb7jzrtne3u6oekdiu",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_wl334zeunb7jzrtne3u6oekdiu/aux-argillas",
+      "bounds": [
+        4.940456,
+        47.145786,
+        4.942793,
+        47.147316
+      ],
+      "labelPoint": [
+        4.941536,
+        47.146517
+      ]
+    },
+    {
+      "id": "inao-denom-976",
+      "name": "Aux Boudots",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 212,
+      "denominationId": 976,
+      "sourceName": "Nuits-Saint-Georges premier cru Aux Boudots",
+      "communes": [
+        "21464"
+      ],
+      "areaHa": 6.4,
+      "matchId": "ba_designation_uwztsdhwircvvz55j54esicmlq",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_uwztsdhwircvvz55j54esicmlq/aux-boudots",
+      "bounds": [
+        4.946347,
+        47.154878,
+        4.950579,
+        47.157515
+      ],
+      "labelPoint": [
+        4.948324,
+        47.156199
+      ]
+    },
+    {
+      "id": "inao-denom-977",
+      "name": "Aux Bousselots",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 212,
+      "denominationId": 977,
+      "sourceName": "Nuits-Saint-Georges premier cru Aux Bousselots",
+      "communes": [
+        "21464"
+      ],
+      "areaHa": 4.23,
+      "matchId": "ba_designation_x7knqa7hdpfm45zgep44ij2fam",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_x7knqa7hdpfm45zgep44ij2fam/aux-bousselots",
+      "bounds": [
+        4.94282,
+        47.145668,
+        4.945891,
+        47.148712
+      ],
+      "labelPoint": [
+        4.944065,
+        47.147174
+      ]
+    },
+    {
+      "id": "inao-denom-978",
+      "name": "Aux Chaignots",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 212,
+      "denominationId": 978,
+      "sourceName": "Nuits-Saint-Georges premier cru Aux Chaignots",
+      "communes": [
+        "21464"
+      ],
+      "areaHa": 5.82,
+      "matchId": "ba_designation_3xdqo22of5xf67tcq2p64pa3pu",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_3xdqo22of5xf67tcq2p64pa3pu/aux-chaignots",
+      "bounds": [
+        4.943081,
+        47.147887,
+        4.946962,
+        47.152719
+      ],
+      "labelPoint": [
+        4.944696,
+        47.150283
+      ]
+    },
+    {
+      "id": "inao-denom-979",
+      "name": "Aux Champs Perdrix",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 212,
+      "denominationId": 979,
+      "sourceName": "Nuits-Saint-Georges premier cru Aux Champs Perdrix",
+      "communes": [
+        "21464"
+      ],
+      "areaHa": 1.35,
+      "matchId": "ba_designation_dvi7vupgqajar7mhrrl63jcepa",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_dvi7vupgqajar7mhrrl63jcepa/aux-champs-perdrix",
+      "bounds": [
+        4.941907,
+        47.149034,
+        4.943674,
+        47.150701
+      ],
+      "labelPoint": [
+        4.94236,
+        47.149864
+      ]
+    },
+    {
+      "id": "inao-denom-980",
+      "name": "Aux Cras",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 212,
+      "denominationId": 980,
+      "sourceName": "Nuits-Saint-Georges premier cru Aux Cras",
+      "communes": [
+        "21464"
+      ],
+      "areaHa": 3.03,
+      "matchId": "ba_designation_laaorm3l5tcqrti2f3qmmrbvum",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_laaorm3l5tcqrti2f3qmmrbvum/aux-cras",
+      "bounds": [
+        4.946335,
+        47.153497,
+        4.949701,
+        47.15551
+      ],
+      "labelPoint": [
+        4.9481,
+        47.154557
+      ]
+    },
+    {
+      "id": "inao-denom-981",
+      "name": "Aux Murgers",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 212,
+      "denominationId": 981,
+      "sourceName": "Nuits-Saint-Georges premier cru Aux Murgers",
+      "communes": [
+        "21464"
+      ],
+      "areaHa": 4.92,
+      "matchId": "ba_designation_v6gargcrtke2zsedcscm7vb6bm",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_v6gargcrtke2zsedcscm7vb6bm/aux-murgers",
+      "bounds": [
+        4.94632,
+        47.150395,
+        4.949458,
+        47.153802
+      ],
+      "labelPoint": [
+        4.947907,
+        47.152098
+      ]
+    },
+    {
+      "id": "inao-denom-982",
+      "name": "Aux Perdrix",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 212,
+      "denominationId": 982,
+      "sourceName": "Nuits-Saint-Georges premier cru Aux Perdrix",
+      "communes": [
+        "21506"
+      ],
+      "areaHa": 3.41,
+      "matchId": "ba_designation_c3kiqp5jr6zlatp2nntmjcjsbu",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_c3kiqp5jr6zlatp2nntmjcjsbu/aux-perdrix",
+      "bounds": [
+        4.931535,
+        47.11493,
+        4.934786,
+        47.117942
+      ],
+      "labelPoint": [
+        4.93337,
+        47.116415
+      ]
+    },
+    {
+      "id": "inao-denom-983",
+      "name": "Aux Thorey",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 212,
+      "denominationId": 983,
+      "sourceName": "Nuits-Saint-Georges premier cru Aux Thorey",
+      "communes": [
+        "21464"
+      ],
+      "areaHa": 5.69,
+      "matchId": "ba_designation_kgsy2y4lniv7p43tvnxkyycgsy",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_kgsy2y4lniv7p43tvnxkyycgsy/aux-thorey",
+      "bounds": [
+        4.93968,
+        47.146411,
+        4.943452,
+        47.14965
+      ],
+      "labelPoint": [
+        4.941682,
+        47.148039
+      ]
+    },
+    {
+      "id": "inao-denom-984",
+      "name": "Aux Vignerondes",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 212,
+      "denominationId": 984,
+      "sourceName": "Nuits-Saint-Georges premier cru Aux Vignerondes",
+      "communes": [
+        "21464"
+      ],
+      "areaHa": 3.89,
+      "matchId": "ba_designation_dqir77qggb5jgzrowuj3bhver4",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_dqir77qggb5jgzrowuj3bhver4/aux-vignerondes",
+      "bounds": [
+        4.944668,
+        47.148542,
+        4.948164,
+        47.151127
+      ],
+      "labelPoint": [
+        4.946445,
+        47.149838
+      ]
+    },
+    {
+      "id": "inao-denom-985",
+      "name": "Chaines Carteaux",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 212,
+      "denominationId": 985,
+      "sourceName": "Nuits-Saint-Georges premier cru Chaines Carteaux",
+      "communes": [
+        "21464"
+      ],
+      "areaHa": 2.52,
+      "matchId": "ba_designation_4qcfbflffnrkvxr4suuyhvuaiu",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_4qcfbflffnrkvxr4suuyhvuaiu/chaines-carteaux",
+      "bounds": [
+        4.933125,
+        47.120364,
+        4.936072,
+        47.122214
+      ],
+      "labelPoint": [
+        4.934982,
+        47.121319
+      ]
+    },
+    {
+      "id": "inao-denom-986",
+      "name": "Château Gris",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 212,
+      "denominationId": 986,
+      "sourceName": "Nuits-Saint-Georges premier cru Château Gris",
+      "communes": [
+        "21464"
+      ],
+      "areaHa": 2.83,
+      "matchId": "ba_designation_m334d6ud2tycotqzvhs564zvpu",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_m334d6ud2tycotqzvhs564zvpu/chateau-gris",
+      "bounds": [
+        4.939295,
+        47.133892,
+        4.941846,
+        47.136308
+      ],
+      "labelPoint": [
+        4.940559,
+        47.13514
+      ]
+    },
+    {
+      "id": "inao-denom-987",
+      "name": "Clos Arlot",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 212,
+      "denominationId": 987,
+      "sourceName": "Nuits-Saint-Georges premier cru Clos Arlot",
+      "communes": [
+        "21506"
+      ],
+      "areaHa": 3.97,
+      "matchId": "ba_designation_fzr6r2cd7l75orwqbkdo7sgkzy",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_fzr6r2cd7l75orwqbkdo7sgkzy/clos-arlot",
+      "bounds": [
+        4.926086,
+        47.108915,
+        4.931326,
+        47.111773
+      ],
+      "labelPoint": [
+        4.929873,
+        47.111018
+      ]
+    },
+    {
+      "id": "inao-denom-988",
+      "name": "Clos Saint-Marc",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 212,
+      "denominationId": 988,
+      "sourceName": "Nuits-Saint-Georges premier cru Clos Saint-Marc",
+      "communes": [
+        "21506"
+      ],
+      "areaHa": 0.92,
+      "matchId": "ba_designation_36cclmathof7b7gac6b4wm76mq",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_36cclmathof7b7gac6b4wm76mq/clos-saint-marc",
+      "bounds": [
+        4.931433,
+        47.112729,
+        4.933113,
+        47.114006
+      ],
+      "labelPoint": [
+        4.932242,
+        47.113359
+      ]
+    },
+    {
+      "id": "inao-denom-989",
+      "name": "Clos de la Maréchale",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 212,
+      "denominationId": 989,
+      "sourceName": "Nuits-Saint-Georges premier cru Clos de la Maréchale",
+      "communes": [
+        "21506"
+      ],
+      "areaHa": 9.61,
+      "matchId": "ba_designation_f5y7slmmjwe6vtmucui4pymw7e",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_f5y7slmmjwe6vtmucui4pymw7e/clos-de-la-marechale",
+      "bounds": [
+        4.922381,
+        47.105859,
+        4.928429,
+        47.10978
+      ],
+      "labelPoint": [
+        4.925248,
+        47.107861
+      ]
+    },
+    {
+      "id": "inao-denom-990",
+      "name": "Clos des Argillières",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 212,
+      "denominationId": 990,
+      "sourceName": "Nuits-Saint-Georges premier cru Clos des Argillières",
+      "communes": [
+        "21506"
+      ],
+      "areaHa": 4.08,
+      "matchId": "ba_designation_xfsqc4auzhor4wqbgkldfvy4bu",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_xfsqc4auzhor4wqbgkldfvy4bu/clos-des-argillieres",
+      "bounds": [
+        4.929799,
+        47.111643,
+        4.932479,
+        47.115375
+      ],
+      "labelPoint": [
+        4.930948,
+        47.113485
+      ]
+    },
+    {
+      "id": "inao-denom-991",
+      "name": "Clos des Corvées",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 212,
+      "denominationId": 991,
+      "sourceName": "Nuits-Saint-Georges premier cru Clos des Corvées",
+      "communes": [
+        "21506"
+      ],
+      "areaHa": 5.2,
+      "matchId": "ba_designation_el2rpoqqhtgtmiotw4kfsuvkwq",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_el2rpoqqhtgtmiotw4kfsuvkwq/clos-des-corvees",
+      "bounds": [
+        4.932646,
+        47.114147,
+        4.93683,
+        47.117326
+      ],
+      "labelPoint": [
+        4.934833,
+        47.11571
+      ]
+    },
+    {
+      "id": "inao-denom-992",
+      "name": "Clos des Corvées Pagets",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 212,
+      "denominationId": 992,
+      "sourceName": "Nuits-Saint-Georges premier cru Clos des Corvées Pagets",
+      "communes": [
+        "21506"
+      ],
+      "areaHa": 1.57,
+      "matchId": "ba_designation_tanlihkxf5b2mzowef57qjvk4a",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_tanlihkxf5b2mzowef57qjvk4a/clos-des-corvees-pagets",
+      "bounds": [
+        4.931646,
+        47.113313,
+        4.934177,
+        47.114815
+      ],
+      "labelPoint": [
+        4.93287,
+        47.114041
+      ]
+    },
+    {
+      "id": "inao-denom-993",
+      "name": "Clos des Forêts Saint-Georges",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 212,
+      "denominationId": 993,
+      "sourceName": "Nuits-Saint-Georges premier cru Clos des Forêts Saint-Georges",
+      "communes": [
+        "21506"
+      ],
+      "areaHa": 7.19,
+      "matchId": "ba_designation_hsiewy4l3tldwthsob4eaxszw4",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_hsiewy4l3tldwthsob4eaxszw4/clos-des-forets-saint-georges",
+      "bounds": [
+        4.933067,
+        47.116468,
+        4.938493,
+        47.119342
+      ],
+      "labelPoint": [
+        4.935801,
+        47.11787
+      ]
+    },
+    {
+      "id": "inao-denom-994",
+      "name": "Clos des Grandes Vignes",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 212,
+      "denominationId": 994,
+      "sourceName": "Nuits-Saint-Georges premier cru Clos des Grandes Vignes",
+      "communes": [
+        "21506"
+      ],
+      "areaHa": 2.19,
+      "matchId": "ba_designation_locbpdew7nulxcyp26hpjsjaim",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_locbpdew7nulxcyp26hpjsjaim/clos-des-grandes-vignes",
+      "bounds": [
+        4.933838,
+        47.11227,
+        4.93686,
+        47.113956
+      ],
+      "labelPoint": [
+        4.93545,
+        47.113131
+      ]
+    },
+    {
+      "id": "inao-denom-995",
+      "name": "Clos des Porrets-Saint-Georges",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 212,
+      "denominationId": 995,
+      "sourceName": "Nuits-Saint-Georges premier cru Clos des Porrets-Saint-Georges",
+      "communes": [
+        "21464"
+      ],
+      "areaHa": 3.57,
+      "matchId": "ba_designation_fejii3ivjmn5mbs2iefwuaq5wa",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_fejii3ivjmn5mbs2iefwuaq5wa/clos-des-porrets-saint-georges",
+      "bounds": [
+        4.939519,
+        47.125797,
+        4.942726,
+        47.12871
+      ],
+      "labelPoint": [
+        4.941001,
+        47.127276
+      ]
+    },
+    {
+      "id": "inao-denom-996",
+      "name": "En la Perrière Noblot",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 212,
+      "denominationId": 996,
+      "sourceName": "Nuits-Saint-Georges premier cru En la Perrière Noblot",
+      "communes": [
+        "21464"
+      ],
+      "areaHa": 0.64,
+      "matchId": "ba_designation_tdxu4ey6fdgryyyyddu53zptqm",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_tdxu4ey6fdgryyyyddu53zptqm/en-la-perriere-noblot",
+      "bounds": [
+        4.94277,
+        47.150197,
+        4.944,
+        47.151304
+      ],
+      "labelPoint": [
+        4.943395,
+        47.150777
+      ]
+    },
+    {
+      "id": "inao-denom-997",
+      "name": "La Richemone",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 212,
+      "denominationId": 997,
+      "sourceName": "Nuits-Saint-Georges premier cru La Richemone",
+      "communes": [
+        "21464"
+      ],
+      "areaHa": 2.23,
+      "matchId": "ba_designation_ya3a3rz2e2ovd6jsiaxy4tjc7m",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_ya3a3rz2e2ovd6jsiaxy4tjc7m/la-richemone",
+      "bounds": [
+        4.946112,
+        47.152422,
+        4.948323,
+        47.154719
+      ],
+      "labelPoint": [
+        4.94718,
+        47.153591
+      ]
+    },
+    {
+      "id": "inao-denom-998",
+      "name": "Les Argillières",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 212,
+      "denominationId": 998,
+      "sourceName": "Nuits-Saint-Georges premier cru Les Argillières",
+      "communes": [
+        "21506"
+      ],
+      "areaHa": 0.24,
+      "matchId": "ba_designation_gte6fvtv2fmmbowpj6luuhhcti",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_gte6fvtv2fmmbowpj6luuhhcti/les-argillieres",
+      "bounds": [
+        4.929682,
+        47.111753,
+        4.932648,
+        47.114931
+      ],
+      "labelPoint": [
+        4.929903,
+        47.112047
+      ]
+    },
+    {
+      "id": "inao-denom-999",
+      "name": "Les Cailles",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 212,
+      "denominationId": 999,
+      "sourceName": "Nuits-Saint-Georges premier cru Les Cailles",
+      "communes": [
+        "21464"
+      ],
+      "areaHa": 3.81,
+      "matchId": "ba_designation_vfhgssrwjfxchiefbjpnlhy22q",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_vfhgssrwjfxchiefbjpnlhy22q/les-cailles",
+      "bounds": [
+        4.936684,
+        47.122859,
+        4.940341,
+        47.125183
+      ],
+      "labelPoint": [
+        4.93861,
+        47.124024
+      ]
+    },
+    {
+      "id": "inao-denom-1000",
+      "name": "Les Chabœufs",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 212,
+      "denominationId": 1000,
+      "sourceName": "Nuits-Saint-Georges premier cru Les Chabœufs",
+      "communes": [
+        "21464"
+      ],
+      "areaHa": 2.81,
+      "matchId": "ba_designation_on2do7jtbytuze6s5mzs2lmthi",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_on2do7jtbytuze6s5mzs2lmthi/les-chaboeufs",
+      "bounds": [
+        4.934151,
+        47.12442,
+        4.938148,
+        47.126081
+      ],
+      "labelPoint": [
+        4.936852,
+        47.125095
+      ]
+    },
+    {
+      "id": "inao-denom-1001",
+      "name": "Les Crots",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 212,
+      "denominationId": 1001,
+      "sourceName": "Nuits-Saint-Georges premier cru Les Crots",
+      "communes": [
+        "21464"
+      ],
+      "areaHa": 1.15,
+      "matchId": "ba_designation_2mjegpzenqmgrrani2kk3rseri",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_2mjegpzenqmgrrani2kk3rseri/les-crots",
+      "bounds": [
+        4.94092,
+        47.131791,
+        4.941785,
+        47.13472
+      ],
+      "labelPoint": [
+        4.941266,
+        47.133144
+      ]
+    },
+    {
+      "id": "inao-denom-1002",
+      "name": "Les Damodes",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 212,
+      "denominationId": 1002,
+      "sourceName": "Nuits-Saint-Georges premier cru Les Damodes",
+      "communes": [
+        "21464"
+      ],
+      "areaHa": 8.82,
+      "matchId": "ba_designation_ldti7m7ba6gh3g4u6deatffkgm",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_ldti7m7ba6gh3g4u6deatffkgm/les-damodes",
+      "bounds": [
+        4.943486,
+        47.150449,
+        4.947009,
+        47.158191
+      ],
+      "labelPoint": [
+        4.945658,
+        47.154328
+      ]
+    },
+    {
+      "id": "inao-denom-1003",
+      "name": "Les Didiers",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 212,
+      "denominationId": 1003,
+      "sourceName": "Nuits-Saint-Georges premier cru Les Didiers",
+      "communes": [
+        "21506"
+      ],
+      "areaHa": 2.41,
+      "matchId": "ba_designation_vmno6bpm6xh7fveksqv5suy3pi",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_vmno6bpm6xh7fveksqv5suy3pi/les-didiers",
+      "bounds": [
+        4.934719,
+        47.118807,
+        4.938113,
+        47.120342
+      ],
+      "labelPoint": [
+        4.93651,
+        47.119571
+      ]
+    },
+    {
+      "id": "inao-denom-1004",
+      "name": "Les Hauts Pruliers",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 212,
+      "denominationId": 1004,
+      "sourceName": "Nuits-Saint-Georges premier cru Les Hauts Pruliers",
+      "communes": [
+        "21464"
+      ],
+      "areaHa": 0.19,
+      "matchId": "ba_designation_lfr44uuwnga2r46dldzugge3ja",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_lfr44uuwnga2r46dldzugge3ja/les-hauts-pruliers",
+      "bounds": [
+        4.940994,
+        47.131158,
+        4.941495,
+        47.131816
+      ],
+      "labelPoint": [
+        4.941321,
+        47.131494
+      ]
+    },
+    {
+      "id": "inao-denom-1005",
+      "name": "Les Perrières",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 212,
+      "denominationId": 1005,
+      "sourceName": "Nuits-Saint-Georges premier cru Les Perrières",
+      "communes": [
+        "21464"
+      ],
+      "areaHa": 3.32,
+      "matchId": "ba_designation_ruvukkvbwb4chqmlhmlf72vx4a",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_ruvukkvbwb4chqmlhmlf72vx4a/les-perrieres",
+      "bounds": [
+        4.93667,
+        47.125263,
+        4.941375,
+        47.12963
+      ],
+      "labelPoint": [
+        4.938389,
+        47.126466
+      ]
+    },
+    {
+      "id": "inao-denom-1006",
+      "name": "Les Porrets-Saint-Georges",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 212,
+      "denominationId": 1006,
+      "sourceName": "Nuits-Saint-Georges premier cru Les Porrets-Saint-Georges",
+      "communes": [
+        "21464"
+      ],
+      "areaHa": 3.53,
+      "matchId": "ba_designation_ke7lmvmkig3gfuro43f43qvwdi",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_ke7lmvmkig3gfuro43f43qvwdi/les-porrets-saint-georges",
+      "bounds": [
+        4.938264,
+        47.124539,
+        4.941362,
+        47.126883
+      ],
+      "labelPoint": [
+        4.939769,
+        47.125671
+      ]
+    },
+    {
+      "id": "inao-denom-1007",
+      "name": "Les Poulettes",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 212,
+      "denominationId": 1007,
+      "sourceName": "Nuits-Saint-Georges premier cru Les Poulettes",
+      "communes": [
+        "21464"
+      ],
+      "areaHa": 2.13,
+      "matchId": "ba_designation_2wc4kmov25cqlxmc6tgqj5xj6a",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_2wc4kmov25cqlxmc6tgqj5xj6a/les-poulettes",
+      "bounds": [
+        4.934659,
+        47.125935,
+        4.938819,
+        47.127916
+      ],
+      "labelPoint": [
+        4.937284,
+        47.126936
+      ]
+    },
+    {
+      "id": "inao-denom-1008",
+      "name": "Les Procès",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 212,
+      "denominationId": 1008,
+      "sourceName": "Nuits-Saint-Georges premier cru Les Procès",
+      "communes": [
+        "21464"
+      ],
+      "areaHa": 1.36,
+      "matchId": "ba_designation_iimcouozxvvogsbfjd2omq6lpi",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_iimcouozxvvogsbfjd2omq6lpi/les-proces",
+      "bounds": [
+        4.941743,
+        47.133783,
+        4.944048,
+        47.134583
+      ],
+      "labelPoint": [
+        4.942891,
+        47.134178
+      ]
+    },
+    {
+      "id": "inao-denom-1009",
+      "name": "Les Pruliers",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 212,
+      "denominationId": 1009,
+      "sourceName": "Nuits-Saint-Georges premier cru Les Pruliers",
+      "communes": [
+        "21464"
+      ],
+      "areaHa": 7.67,
+      "matchId": "ba_designation_ty6kw53gqkqve7w3y66uugysxy",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_ty6kw53gqkqve7w3y66uugysxy/les-pruliers",
+      "bounds": [
+        4.941457,
+        47.129666,
+        4.944163,
+        47.133856
+      ],
+      "labelPoint": [
+        4.942631,
+        47.131772
+      ]
+    },
+    {
+      "id": "inao-denom-1010",
+      "name": "Les Saints-Georges",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 212,
+      "denominationId": 1010,
+      "sourceName": "Nuits-Saint-Georges premier cru Les Saints-Georges",
+      "communes": [
+        "21464"
+      ],
+      "areaHa": 7.48,
+      "matchId": "ba_designation_uubmpudvahol4zuc3djz2er7u4",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_uubmpudvahol4zuc3djz2er7u4/les-saints-georges",
+      "bounds": [
+        4.935603,
+        47.119762,
+        4.939186,
+        47.123517
+      ],
+      "labelPoint": [
+        4.937508,
+        47.121638
+      ]
+    },
+    {
+      "id": "inao-denom-1011",
+      "name": "Les Terres Blanches",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 212,
+      "denominationId": 1011,
+      "sourceName": "Nuits-Saint-Georges premier cru Les Terres Blanches",
+      "communes": [
+        "21506"
+      ],
+      "areaHa": 4.33,
+      "matchId": "ba_designation_et33hr54sgyoihrgnlildnzj24",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_et33hr54sgyoihrgnlildnzj24/les-terres-blanches",
+      "bounds": [
+        4.930813,
+        47.115658,
+        4.935546,
+        47.120669
+      ],
+      "labelPoint": [
+        4.934218,
+        47.119377
+      ]
+    },
+    {
+      "id": "inao-denom-1012",
+      "name": "Les Vallerots",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 212,
+      "denominationId": 1012,
+      "sourceName": "Nuits-Saint-Georges premier cru Les Vallerots",
+      "communes": [
+        "21464"
+      ],
+      "areaHa": 0.88,
+      "matchId": "ba_designation_sm5oz7vzzk5pvsc6pzt4pfq7r4",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_sm5oz7vzzk5pvsc6pzt4pfq7r4/les-vallerots",
+      "bounds": [
+        4.93271,
+        47.125394,
+        4.934876,
+        47.126758
+      ],
+      "labelPoint": [
+        4.933431,
+        47.126324
+      ]
+    },
+    {
+      "id": "inao-denom-1013",
+      "name": "Les Vaucrains",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 212,
+      "denominationId": 1013,
+      "sourceName": "Nuits-Saint-Georges premier cru Les Vaucrains",
+      "communes": [
+        "21464"
+      ],
+      "areaHa": 6.19,
+      "matchId": "ba_designation_b57isspsovwbd3znzxlfgcijny",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_b57isspsovwbd3znzxlfgcijny/les-vaucrains",
+      "bounds": [
+        4.93342,
+        47.121802,
+        4.937681,
+        47.125312
+      ],
+      "labelPoint": [
+        4.935451,
+        47.123428
+      ]
+    },
+    {
+      "id": "inao-denom-1014",
+      "name": "Roncière",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 212,
+      "denominationId": 1014,
+      "sourceName": "Nuits-Saint-Georges premier cru Roncière",
+      "communes": [
+        "21464"
+      ],
+      "areaHa": 2.15,
+      "matchId": "ba_designation_yyohvi4tjoo6v3q7r657ohaap4",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_yyohvi4tjoo6v3q7r657ohaap4/ronciere",
+      "bounds": [
+        4.94069,
+        47.128164,
+        4.943475,
+        47.130011
+      ],
+      "labelPoint": [
+        4.942022,
+        47.129025
+      ]
+    },
+    {
+      "id": "inao-denom-1015",
+      "name": "Rue de Chaux",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 212,
+      "denominationId": 1015,
+      "sourceName": "Nuits-Saint-Georges premier cru Rue de Chaux",
+      "communes": [
+        "21464"
+      ],
+      "areaHa": 2.13,
+      "matchId": "ba_designation_5gq5g3xh3ftq2mvkmgvznmh46m",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_5gq5g3xh3ftq2mvkmgvznmh46m/rue-de-chaux",
+      "bounds": [
+        4.941827,
+        47.134542,
+        4.944348,
+        47.135682
+      ],
+      "labelPoint": [
+        4.943077,
+        47.135085
+      ]
+    },
+    {
+      "id": "inao-denom-1016",
+      "name": "Nuits-Saint-Georges Premier Cru",
+      "tier": "premier_cru",
+      "kind": "appellation",
+      "appellationId": 212,
+      "denominationId": 1016,
+      "sourceName": "Nuits-Saint-Georges premier cru",
+      "communes": [
+        "21464",
+        "21506"
+      ],
+      "areaHa": 147.29,
+      "matchId": "ba_appellation_jitr7b2jphxs4mhm4yaz6anace",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_jitr7b2jphxs4mhm4yaz6anace/nuits-saint-georges-premier-cru",
+      "bounds": [
+        4.922381,
+        47.105859,
+        4.950579,
+        47.158191
+      ],
+      "labelPoint": [
+        4.947037,
+        47.151601
+      ]
+    }
+  ]
+}

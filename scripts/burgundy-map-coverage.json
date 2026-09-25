@@ -1,0 +1,227 @@
+{
+  "scope": "All 44 Bourgogne village appellations; Grand Cru and regional coverage are tracked separately in docs/burgundy-map-coverage.md.",
+  "reviewedAt": "2026-09-25",
+  "source": "https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/bourgogne-an-ideal-location,2458,9253.html?args=Y29tcF9pZD0yMjc4JmFjdGlvbj12aWV3RnVsbExpc3RlJmlkPSZ8",
+  "villages": [
+    {
+      "name": "Chambolle-Musigny",
+      "appellationId": 150,
+      "region": "Côte de Nuits"
+    },
+    {
+      "name": "Côte de Nuits-Villages",
+      "appellationId": 171,
+      "region": "Côte de Nuits"
+    },
+    {
+      "name": "Fixin",
+      "appellationId": 180,
+      "region": "Côte de Nuits"
+    },
+    {
+      "name": "Gevrey-Chambertin",
+      "appellationId": 182,
+      "region": "Côte de Nuits"
+    },
+    {
+      "name": "Marsannay",
+      "appellationId": 199,
+      "region": "Côte de Nuits"
+    },
+    {
+      "name": "Morey-Saint-Denis",
+      "appellationId": 208,
+      "region": "Côte de Nuits"
+    },
+    {
+      "name": "Nuits-Saint-Georges",
+      "appellationId": 212,
+      "region": "Côte de Nuits"
+    },
+    {
+      "name": "Vosne-Romanée",
+      "appellationId": 241,
+      "region": "Côte de Nuits"
+    },
+    {
+      "name": "Vougeot",
+      "appellationId": 242,
+      "region": "Côte de Nuits"
+    },
+    {
+      "name": "Aloxe-Corton",
+      "appellationId": 126,
+      "region": "Côte de Beaune"
+    },
+    {
+      "name": "Auxey-Duresses",
+      "appellationId": 129,
+      "region": "Côte de Beaune"
+    },
+    {
+      "name": "Beaune",
+      "appellationId": 134,
+      "region": "Côte de Beaune"
+    },
+    {
+      "name": "Blagny",
+      "appellationId": 136,
+      "region": "Côte de Beaune"
+    },
+    {
+      "name": "Chassagne-Montrachet",
+      "appellationId": 154,
+      "region": "Côte de Beaune"
+    },
+    {
+      "name": "Chorey-lès-Beaune",
+      "appellationId": 159,
+      "region": "Côte de Beaune"
+    },
+    {
+      "name": "Côte de Beaune",
+      "appellationId": 167,
+      "region": "Côte de Beaune"
+    },
+    {
+      "name": "Côte de Beaune-Villages",
+      "appellationId": 168,
+      "region": "Côte de Beaune"
+    },
+    {
+      "name": "Ladoix",
+      "appellationId": 192,
+      "region": "Côte de Beaune"
+    },
+    {
+      "name": "Maranges",
+      "appellationId": 198,
+      "region": "Côte de Beaune"
+    },
+    {
+      "name": "Meursault",
+      "appellationId": 204,
+      "region": "Côte de Beaune"
+    },
+    {
+      "name": "Monthélie",
+      "appellationId": 206,
+      "region": "Côte de Beaune"
+    },
+    {
+      "name": "Pernand-Vergelesses",
+      "appellationId": 213,
+      "region": "Côte de Beaune"
+    },
+    {
+      "name": "Pommard",
+      "appellationId": 215,
+      "region": "Côte de Beaune"
+    },
+    {
+      "name": "Puligny-Montrachet",
+      "appellationId": 219,
+      "region": "Côte de Beaune"
+    },
+    {
+      "name": "Saint-Aubin",
+      "appellationId": 227,
+      "region": "Côte de Beaune"
+    },
+    {
+      "name": "Saint-Romain",
+      "appellationId": 228,
+      "region": "Côte de Beaune"
+    },
+    {
+      "name": "Santenay",
+      "appellationId": 230,
+      "region": "Côte de Beaune"
+    },
+    {
+      "name": "Savigny-lès-Beaune",
+      "appellationId": 231,
+      "region": "Côte de Beaune"
+    },
+    {
+      "name": "Volnay",
+      "appellationId": 240,
+      "region": "Côte de Beaune"
+    },
+    {
+      "name": "Bouzeron",
+      "appellationId": 245,
+      "region": "Côte Chalonnaise"
+    },
+    {
+      "name": "Givry",
+      "appellationId": 183,
+      "region": "Côte Chalonnaise"
+    },
+    {
+      "name": "Mercurey",
+      "appellationId": 203,
+      "region": "Côte Chalonnaise"
+    },
+    {
+      "name": "Montagny",
+      "appellationId": 205,
+      "region": "Côte Chalonnaise"
+    },
+    {
+      "name": "Rully",
+      "appellationId": 225,
+      "region": "Côte Chalonnaise"
+    },
+    {
+      "name": "Pouilly-Fuissé",
+      "appellationId": 216,
+      "region": "Mâconnais"
+    },
+    {
+      "name": "Pouilly-Loché",
+      "appellationId": 217,
+      "region": "Mâconnais"
+    },
+    {
+      "name": "Pouilly-Vinzelles",
+      "appellationId": 218,
+      "region": "Mâconnais"
+    },
+    {
+      "name": "Saint-Véran",
+      "appellationId": 229,
+      "region": "Mâconnais"
+    },
+    {
+      "name": "Viré-Clessé",
+      "appellationId": 246,
+      "region": "Mâconnais"
+    },
+    {
+      "name": "Chablis",
+      "appellationId": 146,
+      "region": "Chablis & Grand Auxerrois"
+    },
+    {
+      "name": "Irancy",
+      "appellationId": 247,
+      "region": "Chablis & Grand Auxerrois"
+    },
+    {
+      "name": "Petit Chablis",
+      "appellationId": 214,
+      "region": "Chablis & Grand Auxerrois"
+    },
+    {
+      "name": "Saint-Bris",
+      "appellationId": 478,
+      "region": "Chablis & Grand Auxerrois"
+    },
+    {
+      "name": "Vézelay",
+      "appellationId": 1170,
+      "region": "Chablis & Grand Auxerrois"
+    }
+  ]
+}

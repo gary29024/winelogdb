@@ -1,0 +1,255 @@
+{
+  "id": "fixin",
+  "name": "Fixin",
+  "region": "Côte de Nuits",
+  "communes": [
+    {
+      "id": "21265",
+      "name": "Fixin"
+    },
+    {
+      "id": "21110",
+      "name": "Brochon"
+    }
+  ],
+  "dataUrl": "/maps/fixin.2026-09-21.geojson",
+  "bounds": [
+    4.963132,
+    47.235902,
+    4.984533,
+    47.254262
+  ],
+  "sources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21265/cadastre-21265-communes.json.gz",
+      "sha256": "7c72eb58485c2d356318094206763370148706b1962c460ab97ae0203ac37263"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21110/cadastre-21110-communes.json.gz",
+      "sha256": "122038a454fcc76ce88d6cffd3ddf9276b5f8a44fbe46fa70a5f50a0f774886e"
+    }
+  ],
+  "notes": {
+    "inao-denom-571": {
+      "note": "Clos de la Perrière extends across Fixin and Brochon. Its full production boundary is shown across both communes."
+    }
+  },
+  "features": [
+    {
+      "id": "inao-denom-566",
+      "name": "Fixin",
+      "tier": "village",
+      "kind": "appellation",
+      "appellationId": 180,
+      "denominationId": 566,
+      "sourceName": "Fixin",
+      "communes": [
+        "21110",
+        "21265"
+      ],
+      "areaHa": 153.82,
+      "matchId": "ba_appellation_vedujb3kx6cnjkf5fmfjbixebi",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_vedujb3kx6cnjkf5fmfjbixebi/fixin",
+      "bounds": [
+        4.963132,
+        47.235902,
+        4.984533,
+        47.254262
+      ],
+      "labelPoint": [
+        4.967784,
+        47.242892
+      ]
+    },
+    {
+      "id": "inao-denom-569",
+      "name": "Arvelets",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 180,
+      "denominationId": 569,
+      "sourceName": "Fixin premier cru Arvelets",
+      "communes": [
+        "21265"
+      ],
+      "areaHa": 3.33,
+      "matchId": "ba_designation_7ci43vkzaxhnlppxz5d4pbhve4",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_7ci43vkzaxhnlppxz5d4pbhve4/arvelets",
+      "bounds": [
+        4.966434,
+        47.248365,
+        4.97032,
+        47.250049
+      ],
+      "labelPoint": [
+        4.9684,
+        47.2491
+      ]
+    },
+    {
+      "id": "inao-denom-570",
+      "name": "Clos Napoléon",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 180,
+      "denominationId": 570,
+      "sourceName": "Fixin premier cru Clos Napoléon",
+      "communes": [
+        "21265"
+      ],
+      "areaHa": 1.83,
+      "matchId": "ba_designation_xghy5i52fhpmsdz4a37q7tyg6u",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_xghy5i52fhpmsdz4a37q7tyg6u/clos-napoleon",
+      "bounds": [
+        4.96714,
+        47.244902,
+        4.969478,
+        47.246197
+      ],
+      "labelPoint": [
+        4.968331,
+        47.245548
+      ]
+    },
+    {
+      "id": "inao-denom-571",
+      "name": "Clos de la Perrière",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 180,
+      "denominationId": 571,
+      "sourceName": "Fixin premier cru Clos de la Perrière",
+      "communes": [
+        "21110",
+        "21265"
+      ],
+      "areaHa": 5.89,
+      "matchId": "ba_designation_nqg36xi2obvx5id4ng4yn42hna",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_nqg36xi2obvx5id4ng4yn42hna/clos-de-la-perriere",
+      "bounds": [
+        4.96377,
+        47.241497,
+        4.967422,
+        47.245681
+      ],
+      "labelPoint": [
+        4.966663,
+        47.244184
+      ]
+    },
+    {
+      "id": "inao-denom-572",
+      "name": "Clos du Chapitre",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 180,
+      "denominationId": 572,
+      "sourceName": "Fixin premier cru Clos du Chapitre",
+      "communes": [
+        "21265"
+      ],
+      "areaHa": 4.78,
+      "matchId": "ba_designation_fkn2ctuq6tby4xq37svlsenoom",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_fkn2ctuq6tby4xq37svlsenoom/clos-du-chapitre",
+      "bounds": [
+        4.966825,
+        47.242552,
+        4.969922,
+        47.245151
+      ],
+      "labelPoint": [
+        4.968422,
+        47.243829
+      ]
+    },
+    {
+      "id": "inao-denom-573",
+      "name": "Hervelets",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 180,
+      "denominationId": 573,
+      "sourceName": "Fixin premier cru Hervelets",
+      "communes": [
+        "21265"
+      ],
+      "areaHa": 3.72,
+      "matchId": "ba_designation_dp7jpiu2xazft7b7r2gvb5lvqq",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_dp7jpiu2xazft7b7r2gvb5lvqq/hervelets",
+      "bounds": [
+        4.965535,
+        47.247348,
+        4.969696,
+        47.24885
+      ],
+      "labelPoint": [
+        4.96755,
+        47.248106
+      ]
+    },
+    {
+      "id": "inao-denom-574",
+      "name": "Fixin Premier Cru",
+      "tier": "premier_cru",
+      "kind": "appellation",
+      "appellationId": 180,
+      "denominationId": 574,
+      "sourceName": "Fixin premier cru",
+      "communes": [
+        "21110",
+        "21265"
+      ],
+      "areaHa": 20.04,
+      "matchId": "ba_appellation_avzny2xpkdum7qfc35a7y45kiu",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_avzny2xpkdum7qfc35a7y45kiu/fixin-premier-cru",
+      "bounds": [
+        4.96377,
+        47.241497,
+        4.97032,
+        47.250049
+      ],
+      "labelPoint": [
+        4.968271,
+        47.244362
+      ]
+    },
+    {
+      "id": "inao-denom-2372",
+      "name": "Les Meix Bas",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 180,
+      "denominationId": 2372,
+      "sourceName": "Fixin premier cru Les Meix Bas",
+      "communes": [
+        "21265"
+      ],
+      "areaHa": 0.49,
+      "matchId": "ba_designation_gmyudwnrl64xjzz6nzoyyro5r4",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_gmyudwnrl64xjzz6nzoyyro5r4/les-meix-bas",
+      "bounds": [
+        4.96786,
+        47.246681,
+        4.969131,
+        47.247616
+      ],
+      "labelPoint": [
+        4.968482,
+        47.247148
+      ]
+    }
+  ]
+}

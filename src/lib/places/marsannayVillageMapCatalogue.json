@@ -1,0 +1,150 @@
+{
+  "id": "marsannay",
+  "name": "Marsannay",
+  "region": "Côte de Nuits",
+  "communes": [
+    {
+      "id": "21166",
+      "name": "Chenôve"
+    },
+    {
+      "id": "21390",
+      "name": "Marsannay-la-Côte"
+    },
+    {
+      "id": "21200",
+      "name": "Couchey"
+    }
+  ],
+  "dataUrl": "/maps/marsannay.2026-09-21.geojson",
+  "bounds": [
+    4.965427,
+    47.252534,
+    5.00461,
+    47.300119
+  ],
+  "sources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21166/cadastre-21166-communes.json.gz",
+      "sha256": "06a676dd7ae1494bbec4be28297dc3e8c39c85edc9bc761deae80648fbbd4d76"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21390/cadastre-21390-communes.json.gz",
+      "sha256": "72a8dc69495c18bd44b375616cc86674e70191260256b0fb3de947072e2808e0"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21200/cadastre-21200-communes.json.gz",
+      "sha256": "f6fca0026a763e981a3e719608c3baaa835b8391b0d0eaf868fd16c75c1516a1"
+    }
+  ],
+  "notes": {
+    "inao-denom-806": {
+      "note": "This overview combines the published Marsannay areas; red and white wines have a smaller production area than rosé. Choose a colour in the selector to explore its boundary. Named village lieux-dits are not mapped individually."
+    },
+    "inao-denom-806-red-white": {
+      "note": "This is the published production area for red and white Marsannay. Named village lieux-dits are not mapped individually."
+    },
+    "inao-denom-806-rose": {
+      "note": "Marsannay Rosé has a different production boundary from red and white Marsannay. Named village lieux-dits are not mapped individually."
+    }
+  },
+  "features": [
+    {
+      "id": "inao-denom-806",
+      "name": "Marsannay (all colours)",
+      "tier": "village",
+      "kind": "appellation",
+      "appellationId": 199,
+      "denominationId": 806,
+      "sourceName": "Marsannay / Marsannay (rosé) / Marsannay (rouge et blanc)",
+      "communes": [
+        "21166",
+        "21200",
+        "21390"
+      ],
+      "areaHa": 466.11,
+      "matchId": "ba_appellation_ouujcxbtbvrt6f4tdyl54mq54a",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_ouujcxbtbvrt6f4tdyl54mq54a/marsannay",
+      "bounds": [
+        4.965427,
+        47.252534,
+        5.00461,
+        47.300119
+      ],
+      "labelPoint": [
+        4.997808,
+        47.285161
+      ]
+    },
+    {
+      "id": "inao-denom-806-red-white",
+      "name": "Marsannay (red and white)",
+      "tier": "village",
+      "kind": "appellation",
+      "appellationId": 199,
+      "denominationId": 806,
+      "sourceName": "Marsannay (rouge et blanc)",
+      "communes": [
+        "21166",
+        "21200",
+        "21390"
+      ],
+      "areaHa": 368.08,
+      "matchId": "ba_appellation_ouujcxbtbvrt6f4tdyl54mq54a",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_ouujcxbtbvrt6f4tdyl54mq54a/marsannay",
+      "bounds": [
+        4.965427,
+        47.252534,
+        5.00461,
+        47.300119
+      ],
+      "labelPoint": [
+        4.999032,
+        47.275004
+      ]
+    },
+    {
+      "id": "inao-denom-806-rose",
+      "name": "Marsannay Rosé",
+      "tier": "village",
+      "kind": "appellation",
+      "appellationId": 199,
+      "denominationId": 806,
+      "sourceName": "Marsannay (rosé)",
+      "communes": [
+        "21166",
+        "21200",
+        "21390"
+      ],
+      "areaHa": 466.11,
+      "matchId": "ba_appellation_ouujcxbtbvrt6f4tdyl54mq54a",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_ouujcxbtbvrt6f4tdyl54mq54a/marsannay",
+      "bounds": [
+        4.965427,
+        47.252534,
+        5.00461,
+        47.300119
+      ],
+      "labelPoint": [
+        4.999032,
+        47.275004
+      ]
+    }
+  ]
+}

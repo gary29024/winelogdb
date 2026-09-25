@@ -10,6 +10,8 @@ export type VillageMapCatalogue={
  id:string;name:string;region:string;communes:{id:string;name:string}[];dataUrl:string;bounds:number[];
  sources:{name:string;date:string;url:string;sha256:string;license:string}[];
  notes:Record<string,{note:string;paintedBy?:string}>;features:VillageMapFeature[];
+ // Separate parts of one appellation, each with its own zoom button and map label.
+ areas?:{id:string;label:string;name:string;bounds:number[]}[];
 };
 export type BurgundyVillageMapTarget={villageId:string;villageName:string;region:string;featureId:string;name:string;scope:'vineyard'|'appellation'};
 
@@ -20,12 +22,23 @@ const byVillageId=new Map(registry.villages.map(village=>[village.id,village]));
 
 /** Reuse the reviewed geographic/tier conflict checks. INAO identities, not
  * Atlas URLs, select geometry; the catalogue crosswalk is checked at build time. */
-export function burgundyVillageMapTarget(wine:WineFacts&{classification?:string|null}):BurgundyVillageMapTarget|null{
+export function burgundyVillageMapTarget(wine:WineFacts&{classification?:string|null;wineStyle?:string|null}):BurgundyVillageMapTarget|null{
  const place=burgundyAtlasWineDetailPlace(wine);
  const target=place?byMatchId.get(place.placeId):undefined;
  const village=target?byVillageId.get(target.villageId):undefined;
  if(!target||!village)return null;
- return {villageId:village.id,villageName:village.name,region:village.region,featureId:target.featureId,name:target.name,
+ // The INAO denomination alone does not distinguish Marsannay's colour areas.
+ // Choose only with explicit colour evidence; keep an overview when unknown.
+ const colours=('colourTargets' in target?target.colourTargets:undefined) as Record<string,{featureId:string;name:string}>|undefined;
+ const normalise=(value:string)=>value.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
+ // A recorded colour wins; a red/white/rosé wine style stands in when the
+ // colour is blank. Sparkling and other styles say nothing about the area.
+ const style=normalise(wine.wineStyle??'');
+ const colour=normalise(wine.colour??'')||(['red','white','rose'].includes(style)?style:'');
+ const namedRose=[wine.appellation,wine.wineName].some(value=>/\bmarsannay\s+rose\b/.test(normalise(value??'')));
+ if(colours&&namedRose&&colour&&colour!=='rose')return null;
+ const selected=colours?.[colour||(namedRose?'rose':'')]??target;
+ return {villageId:village.id,villageName:village.name,region:village.region,featureId:selected.featureId,name:selected.name,
   scope:target.scope==='vineyard'?'vineyard':'appellation'};
 }
 
@@ -51,4 +64,14 @@ export function clickOrder(candidates:{id:string;tier:string;areaHa:number|strin
  return [...new Set([...candidates]
   .sort((a,b)=>rank(a.tier)-rank(b.tier)||Number(a.areaHa)-Number(b.areaHa)||a.id.localeCompare(b.id))
   .map(candidate=>candidate.id))];
+}
+
+/** "1 Grand Cru", "9 Grand Crus". */
+export function countLabel(count:number,singular:string,plural:string){
+ return `${count} ${count===1?singular:plural}`;
+}
+
+/** "A & B" for a pair; "A, B, C & D" for more, rather than a chain of ampersands. */
+export function joinPlaces(names:string[]){
+ return names.length<=2?names.join(' & '):`${names.slice(0,-1).join(', ')} & ${names[names.length-1]}`;
 }
