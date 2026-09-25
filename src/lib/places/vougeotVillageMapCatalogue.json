@@ -1,0 +1,212 @@
+{
+  "id": "vougeot",
+  "name": "Vougeot",
+  "region": "Côte de Nuits",
+  "communes": [
+    {
+      "id": "21716",
+      "name": "Vougeot"
+    }
+  ],
+  "dataUrl": "/maps/vougeot.2026-09-21.geojson",
+  "bounds": [
+    4.953479,
+    47.167643,
+    4.963406,
+    47.17907
+  ],
+  "sources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21716/cadastre-21716-communes.json.gz",
+      "sha256": "92c0a23d19635c68e9f484b0e2b4a96bcd500c2fcc59775a3205c2abb6c56e30"
+    }
+  ],
+  "notes": {},
+  "features": [
+    {
+      "id": "inao-denom-546",
+      "name": "Clos de Vougeot",
+      "tier": "grand_cru",
+      "kind": "vineyard",
+      "appellationId": 162,
+      "denominationId": 546,
+      "sourceName": "Clos de Vougeot ou Clos Vougeot",
+      "communes": [
+        "21716"
+      ],
+      "areaHa": 51.12,
+      "matchId": "france/burgundy/cote-de-nuits/clos-de-vougeot",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_wwh6jamfifpcw4fpoxpnldystu/clos-de-vougeot-ou-clos-vougeot",
+      "bounds": [
+        4.953479,
+        47.167643,
+        4.963279,
+        47.176446
+      ],
+      "labelPoint": [
+        4.958892,
+        47.172048
+      ]
+    },
+    {
+      "id": "inao-denom-1278",
+      "name": "Vougeot",
+      "tier": "village",
+      "kind": "appellation",
+      "appellationId": 242,
+      "denominationId": 1278,
+      "sourceName": "Vougeot",
+      "communes": [
+        "21716"
+      ],
+      "areaHa": 67.85,
+      "matchId": "ba_appellation_b6v4bg4xbonhjg4jdqfuulqe64",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_b6v4bg4xbonhjg4jdqfuulqe64/vougeot",
+      "bounds": [
+        4.953479,
+        47.167643,
+        4.963406,
+        47.17907
+      ],
+      "labelPoint": [
+        4.958892,
+        47.172048
+      ]
+    },
+    {
+      "id": "inao-denom-1279",
+      "name": "Clos de la Perrière",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 242,
+      "denominationId": 1279,
+      "sourceName": "Vougeot premier cru Clos de la Perrière",
+      "communes": [
+        "21716"
+      ],
+      "areaHa": 2.14,
+      "matchId": "ba_designation_354l776ozzlevfgjjzgnwic4bu",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_354l776ozzlevfgjjzgnwic4bu/clos-de-la-perriere",
+      "bounds": [
+        4.95492,
+        47.176336,
+        4.957658,
+        47.178954
+      ],
+      "labelPoint": [
+        4.95577,
+        47.177643
+      ]
+    },
+    {
+      "id": "inao-denom-1280",
+      "name": "Le Clos Blanc",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 242,
+      "denominationId": 1280,
+      "sourceName": "Vougeot premier cru Le Clos Blanc",
+      "communes": [
+        "21716"
+      ],
+      "areaHa": 2.32,
+      "matchId": "ba_designation_6oavgemifnokdp7nwq6o26c74m",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_6oavgemifnokdp7nwq6o26c74m/le-clos-blanc",
+      "bounds": [
+        4.956675,
+        47.175693,
+        4.960167,
+        47.177318
+      ],
+      "labelPoint": [
+        4.958513,
+        47.176517
+      ]
+    },
+    {
+      "id": "inao-denom-1281",
+      "name": "Les Crâs",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 242,
+      "denominationId": 1281,
+      "sourceName": "Vougeot premier cru Les Crâs",
+      "communes": [
+        "21716"
+      ],
+      "areaHa": 3.81,
+      "matchId": "ba_designation_dqh3lflfxngjgdldthspgm6sju",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_dqh3lflfxngjgdldthspgm6sju/les-cras",
+      "bounds": [
+        4.958884,
+        47.175371,
+        4.962233,
+        47.177613
+      ],
+      "labelPoint": [
+        4.961089,
+        47.176415
+      ]
+    },
+    {
+      "id": "inao-denom-1282",
+      "name": "Les Petits Vougeots",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 242,
+      "denominationId": 1282,
+      "sourceName": "Vougeot premier cru Les Petits Vougeots",
+      "communes": [
+        "21716"
+      ],
+      "areaHa": 5.18,
+      "matchId": "ba_designation_lqo7b5wz3ryq7keuzga3wi6zou",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_lqo7b5wz3ryq7keuzga3wi6zou/les-petits-vougeots",
+      "bounds": [
+        4.956117,
+        47.176623,
+        4.961128,
+        47.178924
+      ],
+      "labelPoint": [
+        4.9579,
+        47.177749
+      ]
+    },
+    {
+      "id": "inao-denom-1283",
+      "name": "Vougeot Premier Cru",
+      "tier": "premier_cru",
+      "kind": "appellation",
+      "appellationId": 242,
+      "denominationId": 1283,
+      "sourceName": "Vougeot premier cru",
+      "communes": [
+        "21716"
+      ],
+      "areaHa": 64.56,
+      "matchId": "ba_appellation_67ra33eh4jum6i6lehmiv62d4i",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_67ra33eh4jum6i6lehmiv62d4i/vougeot-premier-cru",
+      "bounds": [
+        4.953479,
+        47.167643,
+        4.963279,
+        47.178954
+      ],
+      "labelPoint": [
+        4.958892,
+        47.172048
+      ]
+    }
+  ]
+}

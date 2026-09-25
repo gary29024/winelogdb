@@ -25,7 +25,15 @@ export function burgundyVillageMapTarget(wine:WineFacts&{classification?:string|
  const target=place?byMatchId.get(place.placeId):undefined;
  const village=target?byVillageId.get(target.villageId):undefined;
  if(!target||!village)return null;
- return {villageId:village.id,villageName:village.name,region:village.region,featureId:target.featureId,name:target.name,
+ // The INAO denomination alone does not distinguish Marsannay's colour areas.
+ // Choose only with explicit colour evidence; keep an overview when unknown.
+ const colours=('colourTargets' in target?target.colourTargets:undefined) as Record<string,{featureId:string;name:string}>|undefined;
+ const normalise=(value:string)=>value.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
+ const colour=normalise(wine.colour??'');
+ const namedRose=[wine.appellation,wine.wineName].some(value=>/\bmarsannay\s+rose\b/.test(normalise(value??'')));
+ if(colours&&namedRose&&colour&&colour!=='rose')return null;
+ const selected=colours?.[colour||(namedRose?'rose':'')]??target;
+ return {villageId:village.id,villageName:village.name,region:village.region,featureId:selected.featureId,name:selected.name,
   scope:target.scope==='vineyard'?'vineyard':'appellation'};
 }
 

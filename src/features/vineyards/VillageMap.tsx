@@ -9,6 +9,8 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 const tiers:Record<string,string>={grand_cru:'Grand Cru',premier_cru:'Premier Cru',village:'Village'};
 const baseStyleUrl='https://tiles.openfreemap.org/styles/liberty';
 const boundsOf=(b:number[]):[[number,number],[number,number]]=>[[b[0],b[1]],[b[2],b[3]]];
+// Leave room for the toolbar above the northernmost vineyard in long or split areas.
+const overviewFit={padding:{top:80,right:30,bottom:30,left:30}};
 // The light end of the app's --cru ramp (styles.css), one hue stepped dark to
 // light so rank reads without the legend. The map stays light in both themes,
 // so these are fixed rather than the tokens. The wine's own cru takes the app
@@ -84,6 +86,7 @@ function VillageMapView({target,catalogue}:{target:BurgundyVillageMapTarget;cata
  const selectedRef=useRef(selectedId),selectionAction=useRef<((id:string)=>void)|null>(null);
  const selected=catalogue.features.find(feature=>feature.id===selectedId)!;
  const vineyardCount=(tier:string)=>catalogue.features.filter(f=>f.kind==='vineyard'&&f.tier===tier).length;
+ const hasVineyards=catalogue.features.some(f=>f.kind==='vineyard');
  const selectId=useId(),statusId=useId();
  useEffect(()=>{selectedRef.current=selectedId;selectionAction.current?.(selectedId)},[selectedId]);
 
@@ -105,9 +108,9 @@ function VillageMapView({target,catalogue}:{target:BurgundyVillageMapTarget;cata
     const own=catalogue.features.find(f=>f.id===target.featureId);
     // Open on the wine's own cru - on a phone the village view leaves it a few
     // pixels wide under its label. A broad appellation has no cru to show.
-    const opening=target.scope==='vineyard'&&own?{bounds:boundsOf(own.bounds),fitBoundsOptions:{padding:70,maxZoom:15}}:{bounds:boundsOf(catalogue.bounds),fitBoundsOptions:{padding:30}};
+    const opening=target.scope==='vineyard'&&own?{bounds:boundsOf(own.bounds),fitBoundsOptions:{padding:70,maxZoom:15}}:{bounds:boundsOf(catalogue.bounds),fitBoundsOptions:overviewFit};
     map=new MapLibreMap({container:host.current,style:mapStyle(data,catalogue),...opening,
-     minZoom:11,maxZoom:18,attributionControl:{compact:true,customAttribution:'Boundaries: INAO · Cadastre Etalab'},
+     minZoom:9,maxZoom:18,attributionControl:{compact:true,customAttribution:'Boundaries: INAO · Cadastre Etalab'},
      dragRotate:false,pitchWithRotate:false,touchPitch:false});
     mapRef.current=map;
     map.addControl(new NavigationControl({showCompass:false}),'top-right');
@@ -192,7 +195,7 @@ function VillageMapView({target,catalogue}:{target:BurgundyVillageMapTarget;cata
  // eslint-disable-next-line react-hooks/exhaustive-deps -- the map is built once per attempt; the target is fixed by the parent's key
  },[attempt]);
 
- const villageView=()=>mapRef.current?.fitBounds(boundsOf(catalogue.bounds),{padding:30,duration:0});
+ const villageView=()=>mapRef.current?.fitBounds(boundsOf(catalogue.bounds),{...overviewFit,duration:0});
  const zoomTo=(feature:VillageMapFeature)=>mapRef.current?.fitBounds(boundsOf(feature.bounds),{padding:65,maxZoom:16.5,duration:0});
  const backToWine=()=>{
   setSelectedId(target.featureId);
@@ -206,10 +209,10 @@ function VillageMapView({target,catalogue}:{target:BurgundyVillageMapTarget;cata
     <div className="village-map-canvas" ref={host} aria-busy={!ready&&!error}/>
     {!ready&&!error&&<p className="village-map-loading" role="status">Loading vineyard boundaries…</p>}
     {error&&<div className="village-map-error" role="alert"><p>{error}</p><button type="button" onClick={()=>{setError('');setReady(false);setBaseWarning(false);setAttempt(value=>value+1)}}>Try again</button></div>}
-    <div className="village-map-legend" aria-label="Map legend"><span><i className="map-swatch-grand_cru"/>Grand Cru</span><span><i className="map-swatch-premier_cru"/>Premier Cru</span><span><i className="map-swatch-village"/>Village appellation</span><span><i className="map-swatch-commune"/>Commune boundary</span><span><i className={`map-swatch-selected${selected.kind==='appellation'?' is-area':''}`}/>{selectedId===target.featureId?'This wine':'Selected'}</span></div>
+    <div className="village-map-legend" aria-label="Map legend">{vineyardCount('grand_cru')>0&&<span><i className="map-swatch-grand_cru"/>Grand Cru</span>}{vineyardCount('premier_cru')>0&&<span><i className="map-swatch-premier_cru"/>Premier Cru</span>}<span><i className="map-swatch-village"/>Village appellation</span><span><i className="map-swatch-commune"/>Commune boundary</span><span><i className={`map-swatch-selected${selected.kind==='appellation'?' is-area':''}`}/>{selectedId===target.featureId?'This wine':'Selected'}</span></div>
    </div>
    <aside className="village-map-sidebar">
-    <label htmlFor={selectId}>Explore a vineyard</label>
+    <label htmlFor={selectId}>{hasVineyards?'Explore a vineyard':'Explore an area'}</label>
     <select id={selectId} value={selectedId} onChange={event=>setSelectedId(event.target.value)} aria-describedby={statusId}>
      {groups.map(group=><optgroup key={group.tier} label={group.label}>{catalogue.features.filter(f=>f.tier===group.tier).sort((a,b)=>a.name.localeCompare(b.name)).map(feature=><option key={feature.id} value={feature.id}>{feature.name}</option>)}</optgroup>)}
     </select>
@@ -220,8 +223,8 @@ function VillageMapView({target,catalogue}:{target:BurgundyVillageMapTarget;cata
      {catalogue.notes[selected.id]&&<p className="village-map-overlap">{catalogue.notes[selected.id].note}</p>}
     </div>
     {selectedId!==target.featureId&&<button type="button" className="village-map-return" onClick={backToWine}>Back to this wine</button>}
-    <p className="village-map-hint">Tap a vineyard on the map to explore it.</p>
-    <p className="village-map-context">{vineyardCount('grand_cru')} Grand Crus · {vineyardCount('premier_cru')} Premier Cru climats<br/>{catalogue.communes.map(commune=>commune.name).join(' & ')}</p>
+    <p className="village-map-hint">{hasVineyards?'Tap a vineyard on the map to explore it.':'The map shows the appellation area across its producing communes.'}</p>
+    <p className="village-map-context">{hasVineyards?<>{vineyardCount('grand_cru')} Grand Crus · {vineyardCount('premier_cru')} Premier Cru climats</>:'Village appellation area'}<br/>{catalogue.communes.map(commune=>commune.name).join(' & ')}</p>
     <BurgundyAtlasLink place={{placeId:selected.matchId,name:selected.name,url:selected.atlasUrl,...(selected.kind==='appellation'?{scope:'appellation' as const}:{})}}/>
     {baseWarning&&!error&&<p className="village-map-note" role="status">Some street-map details are unavailable. Vineyard boundaries remain available.</p>}
    </aside>

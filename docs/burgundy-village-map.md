@@ -1,8 +1,8 @@
 # Burgundy village maps
 
 Wine details and shared wine details offer **View village map** for mapped
-Gevrey-Chambertin, Morey-Saint-Denis, Chambolle-Musigny and Vosne-Romanée wines,
-including the Grand Crus of Flagey-Échezeaux. The dialog shows neighbouring cru boundaries, highlights
+Côte de Nuits wines across all nine village appellations, including the Grand
+Crus of Flagey-Échezeaux and Clos de Vougeot. The dialog shows neighbouring cru boundaries, highlights
 the wine's matched INAO designation, and supports selection, pan/zoom, a village
 overview and returning to the wine. The renderer, the selected village's catalogue
 and its geometry load on demand; other village catalogues and boundaries stay unloaded.
@@ -16,9 +16,17 @@ The existing Burgundy Atlas link remains available.
 | Morey-Saint-Denis | 5 | 20 | 2 | 27 |
 | Chambolle-Musigny | 2 | 24 | 2 | 28 |
 | Vosne-Romanée / Flagey-Échezeaux | 8 | 14 | 2 | 24 |
+| Fixin / Brochon | 0 | 6 | 2 | 8 |
+| Vougeot | 1 | 4 | 2 | 7 |
+| Nuits-Saint-Georges / Premeaux-Prissey | 0 | 41 | 2 | 43 |
+| Marsannay / Chenôve / Couchey | 0 | 0 | 3 colour views | 3 |
+| Côte de Nuits-Villages (five communes) | 0 | 0 | 1 | 1 |
 
-There are 115 distinct wine identities (107 named crus and eight broad areas).
+There are 175 distinct wine identities (159 named crus and sixteen broad areas),
+plus two colour-specific Marsannay views sharing its appellation identity.
 Bonnes-Mares appears in the Morey and Chambolle maps and counts once in the identity registry.
+The [full Burgundy coverage checklist](burgundy-map-coverage.md) tracks all 44
+village appellations and the remaining Grand Cru and regional work.
 
 - Gevrey-Chambertin and Brochon commune outlines. Gevrey's village appellation
   includes land in Brochon, so the geometry is not clipped to one commune.
@@ -31,6 +39,17 @@ Bonnes-Mares appears in the Morey and Chambolle maps and counts once in the iden
   Grands-Échezeaux retain separate identities and geometry in Flagey. Les Beaux
   Monts and both broad Vosne areas retain their full extent across both communes.
   Flagey's En Orveaux and Les Rouges resolve under the Vosne-Romanée appellation.
+- Fixin retains Clos de la Perrière across Fixin and Brochon. Nuits-Saint-Georges
+  retains all 41 named Premier Crus, including the plots in Premeaux-Prissey.
+  Vougeot keeps its four Premier Crus distinct from the Clos de Vougeot Grand Cru.
+- Marsannay has one source denomination ID (`806`) but three source labels:
+  Marsannay, Marsannay (rouge et blanc), and Marsannay (rosé). The importer
+  preserves their combined overview and separate red/white and rosé unions.
+  Explicit wine colour selects the corresponding area; an unknown colour uses
+  the labelled overview. An explicit Marsannay Rosé name also selects rosé,
+  unless it conflicts with the recorded colour. None identifies a single plot.
+- Côte de Nuits-Villages includes all five source communes and both disconnected
+  production areas. Its map can zoom out far enough to show the whole extent.
 - Boundaries are INAO production areas, not producer ownership or proof that
   a particular bottle comes from one cadastral parcel.
 - INAO areas overlap intentionally. Chambertin includes Clos de Bèze;
@@ -79,17 +98,21 @@ links; none of its map geometry or assets is copied.
   explicitly documents "Reignots" and "Raignots" as spelling alternatives.
   The wine matcher accepts "Aux Reignots" for Vosne's "Aux Raignots" entry,
   using the existing village and tier checks, without fuzzy matching.
+- [BIVB Fixin reference](https://www.bourgogne-wines.com/nos-vins-nos-terroirs/tous-les-bourgognes/gallery_files/site/321/402/29684/29717.pdf),
+  [BIVB Vougeot reference](https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/gallery_files/site/321/402/79294/79832.pdf),
+  [INAO Nuits-Saint-Georges](https://www.inao.gouv.fr/produit/nuits-saint-georges-blanc-22191),
+  [INAO Marsannay](https://www.inao.gouv.fr/produit/marsannay-rouge-16406), and
+  [BIVB Côte de Nuits-Villages](https://www.vins-bourgogne.fr/nos-vins-nos-terroirs/la-bourgogne-et-ses-appellations/gallery_files/site/321/402/57486/57536.pdf):
+  reviewed cru counts and producing communes for the remaining Côte de Nuits maps.
 - [OpenFreeMap](https://openfreemap.org/quick_start/): street-map context, with
   its source attribution retained in MapLibre. Boundaries and selection still
   work if the street-map service is unavailable.
 
-Download the seven distinct source URLs recorded in the four catalogues
-(`burgundyVillageMapCatalogue.json`, `moreyVillageMapCatalogue.json`,
-`chambolleVillageMapCatalogue.json`, and `vosneVillageMapCatalogue.json`)
-into a local temporary directory. Name the
-INAO archive `inao-2026-09-21.zip` and the commune files `commune-21295.json.gz`,
-`commune-21110.json.gz`, `commune-21442.json.gz`, `commune-21133.json.gz`,
-`commune-21714.json.gz`, and `commune-21267.json.gz`. Then:
+Download the sixteen distinct source URLs recorded in the nine catalogues into a
+local temporary directory. Name the INAO archive `inao-2026-09-21.zip` and each
+commune file `commune-{code}.json.gz`. Required commune codes are:
+`21110`, `21133`, `21166`, `21186`, `21194`, `21200`, `21265`, `21267`, `21295`,
+`21390`, `21442`, `21464`, `21506`, `21714`, and `21716`. Then:
 
 ```sh
 python -m pip install -r scripts/burgundy-map-requirements.txt
@@ -106,6 +129,11 @@ members, reprojects INAO EPSG:2154 coordinates to longitude/latitude,
 unions records only within the same denomination, checks polygon validity,
 and fails on unexpected coverage or an unmatched identity. It retains coordinate
 precision and holes; no AI-generated, traced or approximate polygons are used.
+Villages without Premier Crus omit the Premier Cru configuration. Non-contiguous
+Premier Cru IDs use `premierDenominations` (Fixin includes denomination 2372).
+Reviewed `sourceVariants` identify colour-specific source names and selection
+targets. Unrecognised source labels still fail import. `expectedBounds` supplies
+a reviewed geographic sanity envelope where a village extends beyond the pilot.
 Review regenerated files before publishing an update. Source archives and Python
 dependencies are not shipped with the app.
 
@@ -117,8 +145,10 @@ the full production geometry is preserved alongside it in the same feature.
 Shared designations are unioned across all source communes, never clipped to a
 village boundary. The original Gevrey GeoJSON remains byte-for-byte unchanged.
 
-The four GeoJSON files under `public/maps/` are approximately 673 KB (Gevrey),
-290 KB (Morey), 329 KB (Chambolle), and 396 KB (Vosne/Flagey), uncompressed.
+The nine GeoJSON files under `public/maps/` are approximately 673 KB (Gevrey),
+290 KB (Morey), 329 KB (Chambolle), 396 KB (Vosne/Flagey), 175 KB (Fixin),
+75 KB (Vougeot), 450 KB (Nuits), 872 KB (Marsannay, including all colour views),
+and 280 KB (Côte de Nuits-Villages), uncompressed.
 There are no database migrations, research/AI calls, API keys or background Atlas
 requests. Only opening the dialog requests geography and the external base map.
 The browser's public tile requests contain map locations, not wine records.
@@ -146,11 +176,12 @@ npm run lint
 Browser coverage uses the real MapLibre renderer with the street map unavailable,
 checking local geometry, selection, owner/shared parity, small-screen layouts,
 load-on-demand, retry, Escape and focus restoration. The source import and unit
-checks cover all 107 distinct named crus, coverage in Brochon and Flagey, intentional overlap,
+checks cover all 159 distinct named crus, coverage in Brochon, Flagey and Premeaux, intentional overlap,
 identical Bonnes-Mares geometry in both contexts, and village-specific matches for
 repeated names such as Les Gruenchers and La Romanée. They distinguish Échezeaux
 from Grands-Échezeaux and verify reviewed Vosne spelling aliases and broad-area
-fallbacks. Browser tests also exercise delayed successful
+fallbacks, Marsannay colour selection and the split Côte de Nuits-Villages area.
+Browser tests also exercise delayed successful
 base-style loading and verify that opening a village never requests another map's
 catalogue or geometry.
 Boundary download failures offer an in-dialog retry. A failed catalogue module

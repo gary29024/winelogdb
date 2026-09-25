@@ -72,6 +72,207 @@
         "inao-denom-645": {"note": "Grands-Échezeaux lies in Flagey-Échezeaux. It is a separate Grand Cru from Échezeaux."},
         "inao-denom-1271": {"note": "Les Beaux Monts spans Vosne-Romanée and Flagey-Échezeaux. A small corner of its official boundary overlaps Échezeaux, so this highlight includes ground the map otherwise colours as Grand Cru."}
       }
+    },
+    {
+      "region": "Côte de Nuits",
+      "grands": [],
+      "nameCrosswalk": {},
+      "notes": {
+        "inao-denom-571": {
+          "note": "Clos de la Perrière extends across Fixin and Brochon. Its full production boundary is shown across both communes."
+        }
+      },
+      "id": "fixin",
+      "name": "Fixin",
+      "appellationId": 180,
+      "villageDenomination": 566,
+      "communes": [
+        {
+          "id": "21265",
+          "name": "Fixin"
+        },
+        {
+          "id": "21110",
+          "name": "Brochon"
+        }
+      ],
+      "catalogueFile": "fixinVillageMapCatalogue.json",
+      "premierDenomination": 574,
+      "premierDenominations": [
+        569,
+        570,
+        571,
+        572,
+        573,
+        2372
+      ]
+    },
+    {
+      "region": "Côte de Nuits",
+      "grands": [
+        546
+      ],
+      "nameCrosswalk": {},
+      "notes": {},
+      "id": "vougeot",
+      "name": "Vougeot",
+      "appellationId": 242,
+      "villageDenomination": 1278,
+      "communes": [
+        {
+          "id": "21716",
+          "name": "Vougeot"
+        }
+      ],
+      "catalogueFile": "vougeotVillageMapCatalogue.json",
+      "premierDenomination": 1283,
+      "premierRange": [
+        1279,
+        1282
+      ],
+      "displayNames": {
+        "Clos de Vougeot ou Clos Vougeot": "Clos de Vougeot"
+      }
+    },
+    {
+      "region": "Côte de Nuits",
+      "grands": [],
+      "nameCrosswalk": {},
+      "notes": {},
+      "id": "nuits-saint-georges",
+      "name": "Nuits-Saint-Georges",
+      "appellationId": 212,
+      "villageDenomination": 974,
+      "communes": [
+        {
+          "id": "21464",
+          "name": "Nuits-Saint-Georges"
+        },
+        {
+          "id": "21506",
+          "name": "Premeaux-Prissey"
+        }
+      ],
+      "catalogueFile": "nuitsVillageMapCatalogue.json",
+      "premierDenomination": 1016,
+      "premierRange": [
+        975,
+        1015
+      ],
+      "expectedBounds": [
+        4.8,
+        47.0,
+        5.1,
+        47.4
+      ]
+    },
+    {
+      "region": "Côte de Nuits",
+      "grands": [],
+      "nameCrosswalk": {},
+      "notes": {
+        "inao-denom-806": {
+          "note": "This overview combines the published Marsannay areas; red and white wines have a smaller production area than rosé. Choose a colour in the selector to explore its boundary. Named village lieux-dits are not mapped individually."
+        },
+        "inao-denom-806-red-white": {
+          "note": "This is the published production area for red and white Marsannay. Named village lieux-dits are not mapped individually."
+        },
+        "inao-denom-806-rose": {
+          "note": "Marsannay Rosé has a different production boundary from red and white Marsannay. Named village lieux-dits are not mapped individually."
+        }
+      },
+      "id": "marsannay",
+      "name": "Marsannay",
+      "appellationId": 199,
+      "villageDenomination": 806,
+      "communes": [
+        {
+          "id": "21166",
+          "name": "Chenôve"
+        },
+        {
+          "id": "21390",
+          "name": "Marsannay-la-Côte"
+        },
+        {
+          "id": "21200",
+          "name": "Couchey"
+        }
+      ],
+      "catalogueFile": "marsannayVillageMapCatalogue.json",
+      "expectedBounds": [
+        4.8,
+        47.0,
+        5.1,
+        47.4
+      ],
+      "displayNames": {
+        "Marsannay": "Marsannay (all colours)"
+      },
+      "sourceVariants": {
+        "806": [
+          {
+            "suffix": "red-white",
+            "name": "Marsannay (red and white)",
+            "sourceName": "Marsannay (rouge et blanc)",
+            "colours": [
+              "red",
+              "white"
+            ]
+          },
+          {
+            "suffix": "rose",
+            "name": "Marsannay Rosé",
+            "sourceName": "Marsannay (rosé)",
+            "colours": [
+              "rose"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "region": "Côte de Nuits",
+      "grands": [],
+      "nameCrosswalk": {},
+      "notes": {
+        "inao-denom-557": {
+          "note": "This appellation spans five communes in two separate parts of the Côte de Nuits. The full production area is shown; the wine name alone does not identify a village or an individual plot."
+        }
+      },
+      "id": "cote-de-nuits-villages",
+      "name": "Côte de Nuits-Villages",
+      "appellationId": 171,
+      "villageDenomination": 557,
+      "communes": [
+        {
+          "id": "21265",
+          "name": "Fixin"
+        },
+        {
+          "id": "21110",
+          "name": "Brochon"
+        },
+        {
+          "id": "21506",
+          "name": "Premeaux-Prissey"
+        },
+        {
+          "id": "21186",
+          "name": "Comblanchien"
+        },
+        {
+          "id": "21194",
+          "name": "Corgoloin"
+        }
+      ],
+      "catalogueFile": "coteNuitsVillageMapCatalogue.json",
+      "expectedBounds": [
+        4.8,
+        47.0,
+        5.1,
+        47.4
+      ]
     }
   ]
 }

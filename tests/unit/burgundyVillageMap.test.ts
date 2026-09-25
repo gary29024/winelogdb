@@ -5,11 +5,19 @@ import catalogue from '../../src/lib/places/burgundyVillageMapCatalogue.json';
 import morey from '../../src/lib/places/moreyVillageMapCatalogue.json';
 import chambolle from '../../src/lib/places/chambolleVillageMapCatalogue.json';
 import vosne from '../../src/lib/places/vosneVillageMapCatalogue.json';
+import fixin from '../../src/lib/places/fixinVillageMapCatalogue.json';
+import vougeot from '../../src/lib/places/vougeotVillageMapCatalogue.json';
+import nuits from '../../src/lib/places/nuitsVillageMapCatalogue.json';
+import marsannay from '../../src/lib/places/marsannayVillageMapCatalogue.json';
+import coteNuits from '../../src/lib/places/coteNuitsVillageMapCatalogue.json';
 import registry from '../../src/lib/places/burgundyVillageMapRegistry.json';
 import { loadVillageMapCatalogue } from '../../src/lib/places/loadVillageMapCatalogue';
 import type { FeatureCollection,MultiPolygon,Polygon } from 'geojson';
+import coverage from '../../scripts/burgundy-map-coverage.json';
+import mapConfig from '../../scripts/burgundy-villages.json';
+import appellationLinks from '../../src/lib/places/burgundyAtlasAppellationLinks.json';
 
-const catalogues:VillageMapCatalogue[]=[catalogue,morey,chambolle,vosne];
+const catalogues:VillageMapCatalogue[]=[catalogue,morey,chambolle,vosne,fixin,vougeot,nuits,marsannay,coteNuits];
 
 const wine={country:'France',region:'Burgundy',appellation:'Gevrey-Chambertin',wineName:'Les Cazetiers',classification:'premier_cru'};
 
@@ -37,7 +45,7 @@ describe('Gevrey village map identity',()=>{
  });
  it('withholds conflicts, incompatible geography, unsupported villages and an unproven cru tier',()=>{
   for(const fields of [{country:'USA'},{region:'Bordeaux'},{appellation:'Meursault'},
-   {identityMatchStatus:'conflict' as const},{classification:null},{appellation:'Clos de Vougeot',classification:'grand_cru'}]){
+   {identityMatchStatus:'conflict' as const},{classification:null},{appellation:'Corton',classification:'grand_cru'}]){
    expect(burgundyVillageMapTarget({...wine,...fields}),JSON.stringify(fields)).toBeNull();
   }
  });
@@ -77,8 +85,9 @@ describe('overlap notes',()=>{
   const notes=Object.assign({},...catalogues.map(c=>c.notes)) as VillageMapCatalogue['notes'];
   const unpaintedVillageMapIds=Object.entries(notes).filter(([,entry])=>entry.paintedBy).map(([id])=>id);
   for(const [id,entry] of Object.entries(notes)){
-   expect(byId.get(id)?.kind,id).toBe('vineyard');
+   expect(byId.has(id),id).toBe(true);
    if(!entry.paintedBy)continue;
+   expect(byId.get(id)?.kind,id).toBe('vineyard');
    const cover=byId.get(entry.paintedBy)!;
    expect(cover.kind,id).toBe('vineyard');
    expect(cover.tier,id).toBe(byId.get(id)!.tier);
@@ -94,6 +103,9 @@ describe.each([
  {catalogue:morey,grands:5,premiers:20,broad:'inao-denom-949',village:'inao-denom-928'},
  {catalogue:chambolle,grands:2,premiers:24,broad:'inao-denom-474',village:'inao-denom-449'},
  {catalogue:vosne,grands:8,premiers:14,broad:'inao-denom-1277',village:'inao-denom-1262'},
+ {catalogue:fixin,grands:0,premiers:6,broad:'inao-denom-574',village:'inao-denom-566'},
+ {catalogue:vougeot,grands:1,premiers:4,broad:'inao-denom-1283',village:'inao-denom-1278'},
+ {catalogue:nuits,grands:0,premiers:41,broad:'inao-denom-1016',village:'inao-denom-974'},
 ])('$catalogue.name identities and boundaries',({catalogue:c,grands,premiers,broad,village})=>{
  const data=JSON.parse(readFileSync(`public${c.dataUrl}`,'utf8')) as FeatureCollection<Polygon|MultiPolygon>;
  it('resolves every named cru and retains appellation scope for broad wines',()=>{
@@ -126,7 +138,7 @@ describe.each([
    const rings=feature.geometry.type==='Polygon'?feature.geometry.coordinates:feature.geometry.coordinates.flat();
    for(const ring of rings){
     expect(ring.length).toBeGreaterThanOrEqual(4);expect(ring[0]).toEqual(ring.at(-1));
-    expect(ring.every(([lng,lat])=>lng>4.9&&lng<5.05&&lat>47.1&&lat<47.3)).toBe(true);
+    expect(ring.every(([lng,lat])=>lng>4.8&&lng<5.1&&lat>47.0&&lat<47.4)).toBe(true);
    }
   }
   for(const feature of c.features){
@@ -137,6 +149,15 @@ describe.each([
 });
 
 describe('village registry',()=>{
+ it('tracks every Bourgogne village appellation, including those missing from Atlas',()=>{
+  expect(coverage.villages).toHaveLength(44);
+  expect(new Set(coverage.villages.map(v=>v.appellationId)).size).toBe(44);
+  expect(coverage.villages.map(v=>v.name).sort()).toEqual([...appellationLinks.groups.map(g=>g.appellation),'Côte de Beaune-Villages'].sort());
+  const nuitsCoverage=coverage.villages.filter(v=>v.region==='Côte de Nuits');
+  expect(nuitsCoverage).toHaveLength(9);
+  for(const row of nuitsCoverage)expect(mapConfig.villages.some(v=>v.appellationId===row.appellationId&&v.name===row.name)).toBe(true);
+  for(const village of mapConfig.villages)expect(coverage.villages.some(row=>row.appellationId===village.appellationId&&row.name===village.name)).toBe(true);
+ });
  it('keeps shared Bonnes-Mares whole and identical in both village contexts',()=>{
   const features=[morey,chambolle].map(c=>JSON.parse(readFileSync(`public${c.dataUrl}`,'utf8')).features.find((f:{id:string})=>f.id==='inao-denom-361'));
   expect(features[0]).toEqual(features[1]);
@@ -152,8 +173,8 @@ describe('village registry',()=>{
   expect(burgundyVillageMapTarget({...wine,appellation:'Chambolle-Musigny',wineName:'Les Feusselotes'})?.featureId).toBe('inao-denom-464');
  });
  it('has one target per identity and a working lazy catalogue for every village',async()=>{
-  expect(registry.targets).toHaveLength(115);
-  expect(new Set(registry.targets.map(t=>t.matchId)).size).toBe(115);
+  expect(registry.targets).toHaveLength(175);
+  expect(new Set(registry.targets.map(t=>t.matchId)).size).toBe(175);
   for(const village of registry.villages){
    const c=await loadVillageMapCatalogue(village.id);
    expect(catalogues.find(expected=>expected.id===village.id)).toEqual(c);
@@ -218,6 +239,58 @@ describe('source snapshot labels',()=>{
  it('falls back to the raw value rather than inventing a date',()=>{
   expect(snapshotLabel('unknown')).toBe('unknown');
   expect(snapshotLabel(undefined)).toBe('');
+ });
+});
+
+describe('remaining Côte de Nuits appellations',()=>{
+ it('retains both producing communes for Fixin and Nuits, including the southern crus',()=>{
+  expect(fixin.features.find(f=>f.id==='inao-denom-571')?.communes).toEqual(['21110','21265']);
+  expect(nuits.features.find(f=>f.id==='inao-denom-989')?.communes).toEqual(['21506']);
+  expect(nuits.features.find(f=>f.id==='inao-denom-974')?.communes).toEqual(['21464','21506']);
+ });
+ it('distinguishes Clos de la Perrière in Fixin and Vougeot, and the Clos de Vougeot Grand Cru',()=>{
+  for(const [appellation,id] of [['Fixin',571],['Vougeot',1279]] as const){
+   expect(burgundyVillageMapTarget({...wine,appellation,wineName:'Clos de la Perrière'})?.featureId).toBe(`inao-denom-${id}`);
+  }
+  for(const appellation of ['Clos de Vougeot','Clos Vougeot','Clos de Vougeot Grand Cru']){
+   expect(burgundyVillageMapTarget({...wine,appellation,wineName:appellation,classification:'grand_cru'}))
+    .toMatchObject({villageId:'vougeot',featureId:'inao-denom-546'});
+  }
+ });
+ it('selects Marsannay colour boundaries only with explicit evidence, preserving an unknown-colour overview',()=>{
+  const base={...wine,appellation:'Marsannay',wineName:'Les Longeroies',classification:'village'};
+  for(const colour of ['Red','White',' red ']){
+   expect(burgundyVillageMapTarget({...base,colour})).toMatchObject({featureId:'inao-denom-806-red-white',scope:'appellation'});
+  }
+  for(const colour of ['Rosé','Rose','rosé'])expect(burgundyVillageMapTarget({...base,colour})?.featureId).toBe('inao-denom-806-rose');
+  expect(burgundyVillageMapTarget({...base,appellation:'Marsannay Rosé'})?.featureId).toBe('inao-denom-806-rose');
+  expect(burgundyVillageMapTarget({...base,appellation:'Marsannay Rosé',colour:'Red'})).toBeNull();
+  expect(burgundyVillageMapTarget(base)).toMatchObject({featureId:'inao-denom-806',scope:'appellation'});
+  expect(burgundyVillageMapTarget({...base,classification:'premier_cru'})).toBeNull();
+  const redWhite=marsannay.features.find(f=>f.id==='inao-denom-806-red-white')!;
+  const rose=marsannay.features.find(f=>f.id==='inao-denom-806-rose')!;
+  expect(redWhite.sourceName).toBe('Marsannay (rouge et blanc)');
+  expect(rose.sourceName).toBe('Marsannay (rosé)');
+  expect(rose.areaHa-redWhite.areaHa).toBeGreaterThan(90);
+ });
+ it('keeps Côte de Nuits-Villages at appellation scope across all five communes',()=>{
+  for(const appellation of ['Côte de Nuits-Villages','Vins fins de la Côte de Nuits']){
+   expect(burgundyVillageMapTarget({...wine,appellation,wineName:'Le Vaucrain',classification:'village'}))
+    .toMatchObject({villageId:'cote-de-nuits-villages',featureId:'inao-denom-557',scope:'appellation'});
+  }
+  expect(coteNuits.features[0].communes).toEqual(['21110','21186','21194','21265','21506']);
+  expect(coteNuits.bounds[1]).toBeLessThan(47.1);expect(coteNuits.bounds[3]).toBeGreaterThan(47.24);
+ });
+ it.each([marsannay,coteNuits])('publishes intact broad-area polygons for $name',c=>{
+  const data=JSON.parse(readFileSync(`public${c.dataUrl}`,'utf8')) as FeatureCollection<Polygon|MultiPolygon>;
+  expect(data.features.map(f=>f.id).sort()).toEqual([...c.features.map(f=>f.id),...c.communes.map(x=>`commune-${x.id}`)].sort());
+  for(const feature of data.features){
+   const rings=feature.geometry.type==='Polygon'?feature.geometry.coordinates:feature.geometry.coordinates.flat();
+   for(const ring of rings){
+    expect(ring.length).toBeGreaterThanOrEqual(4);expect(ring[0]).toEqual(ring.at(-1));
+    expect(ring.every(([lng,lat])=>lng>4.8&&lng<5.1&&lat>47&&lat<47.4)).toBe(true);
+   }
+  }
  });
 });
 

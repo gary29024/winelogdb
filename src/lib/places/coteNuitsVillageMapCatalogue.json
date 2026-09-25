@@ -1,0 +1,114 @@
+{
+  "id": "cote-de-nuits-villages",
+  "name": "Côte de Nuits-Villages",
+  "region": "Côte de Nuits",
+  "communes": [
+    {
+      "id": "21265",
+      "name": "Fixin"
+    },
+    {
+      "id": "21110",
+      "name": "Brochon"
+    },
+    {
+      "id": "21506",
+      "name": "Premeaux-Prissey"
+    },
+    {
+      "id": "21186",
+      "name": "Comblanchien"
+    },
+    {
+      "id": "21194",
+      "name": "Corgoloin"
+    }
+  ],
+  "dataUrl": "/maps/cote-de-nuits-villages.2026-09-21.geojson",
+  "bounds": [
+    4.894343,
+    47.083552,
+    4.983893,
+    47.254274
+  ],
+  "sources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21265/cadastre-21265-communes.json.gz",
+      "sha256": "7c72eb58485c2d356318094206763370148706b1962c460ab97ae0203ac37263"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21110/cadastre-21110-communes.json.gz",
+      "sha256": "122038a454fcc76ce88d6cffd3ddf9276b5f8a44fbe46fa70a5f50a0f774886e"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21506/cadastre-21506-communes.json.gz",
+      "sha256": "d8c63308fd135c5334eb170cf3678d59426f3ad746b0adfdac821655c9e586ab"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21186/cadastre-21186-communes.json.gz",
+      "sha256": "4ee42792d7af1507c39386e116cd71029286c96b5d145f763924895886ba1de7"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21194/cadastre-21194-communes.json.gz",
+      "sha256": "a5a762ae2e86d7f5593bb594aca2475634e74b2f2b7ea46794b02744504aab27"
+    }
+  ],
+  "notes": {
+    "inao-denom-557": {
+      "note": "This appellation spans five communes in two separate parts of the Côte de Nuits. The full production area is shown; the wine name alone does not identify a village or an individual plot."
+    }
+  },
+  "features": [
+    {
+      "id": "inao-denom-557",
+      "name": "Côte de Nuits-Villages",
+      "tier": "village",
+      "kind": "appellation",
+      "appellationId": 171,
+      "denominationId": 557,
+      "sourceName": "Côte de Nuits-Villages ou Vins fins de la Côte de Nuits",
+      "communes": [
+        "21110",
+        "21186",
+        "21194",
+        "21265",
+        "21506"
+      ],
+      "areaHa": 318.27,
+      "matchId": "ba_appellation_ekstqbuecjupxxrioudee7pwve",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_ekstqbuecjupxxrioudee7pwve/cote-de-nuits-villages-ou-vins-fins-de-la-cote-de-nuits",
+      "bounds": [
+        4.894343,
+        47.083552,
+        4.983893,
+        47.254274
+      ],
+      "labelPoint": [
+        4.968066,
+        47.242849
+      ]
+    }
+  ]
+}

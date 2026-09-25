@@ -93,11 +93,16 @@ def main():
     outputs, targets = [], {}
     for village in villages:
         name = village["name"]
-        premiers = next(g for g in premier_groups if g["appellation"] == name)
+        premiers = next((g for g in premier_groups if g["appellation"] == name), {"entries": []})
         appellation = next(g for g in appellations if g["appellation"] == name)
         premier_links = {key(e["name"]): e["path"] for e in premiers["entries"]}
-        first, last = village["premierRange"]
-        expected_app = {village["villageDenomination"], village["premierDenomination"]} | set(range(first, last + 1))
+        premier_ids = set(village.get("premierDenominations", []))
+        if village.get("premierRange"):
+            first, last = village["premierRange"]
+            premier_ids.update(range(first, last + 1))
+        expected_app = {village["villageDenomination"]} | premier_ids
+        if village.get("premierDenomination"):
+            expected_app.add(village["premierDenomination"])
         actual_app = {d for d, rows in grouped.items() if rows[0][0]["id_app"] == village["appellationId"]}
         assert actual_app == expected_app, f"Review changed source coverage for {name}"
         denominations = set(village["grands"]) | expected_app
@@ -106,12 +111,17 @@ def main():
         for denom_id in sorted(denominations):
             rows = grouped[denom_id]
             row = rows[0][0]
-            assert all(r["denom"] == row["denom"] and r["id_app"] == row["id_app"] for r, _ in rows)
+            variants = village.get("sourceVariants", {}).get(str(denom_id), [])
+            source_names = {r["denom"] for r, _ in rows}
+            expected_names = {v["sourceName"] for v in variants} | {name} if variants else {row["denom"]}
+            assert source_names == expected_names, f"Review source names for {name}: {source_names}"
+            assert all(r["id_app"] == row["id_app"] for r, _ in rows)
             geom_m = geometries[denom_id]
             geom = transform(to_wgs84, geom_m)
-            assert 4.9 < geom.bounds[0] < geom.bounds[2] < 5.05 and 47.1 < geom.bounds[1] < geom.bounds[3] < 47.3
+            west, south, east, north = village.get("expectedBounds", [4.9, 47.1, 5.05, 47.3])
+            assert west < geom.bounds[0] < geom.bounds[2] < east and south < geom.bounds[1] < geom.bounds[3] < north
             tier = "grand_cru" if denom_id in village["grands"] else "village" if denom_id == village["villageDenomination"] else "premier_cru"
-            broad = denom_id in (village["villageDenomination"], village["premierDenomination"])
+            broad = denom_id in (village["villageDenomination"], village.get("premierDenomination"))
             feature_name = row["denom"].removeprefix(f"{name} premier cru ")
             if broad:
                 feature_name = name + (" Premier Cru" if tier == "premier_cru" else "")
@@ -132,7 +142,7 @@ def main():
             feature_name = village.get("displayNames", {}).get(feature_name, feature_name)
             feature_id = f"inao-denom-{denom_id}"
             properties = {"id": feature_id, "name": feature_name, "tier": tier, "kind": "appellation" if broad else "vineyard",
-                          "appellationId": row["id_app"], "denominationId": denom_id, "sourceName": row["denom"],
+                          "appellationId": row["id_app"], "denominationId": denom_id, "sourceName": " / ".join(sorted(source_names)),
                           "communes": sorted({r["insee"] for r, _ in rows}), "areaHa": round(geom_m.area / 10000, 2)}
             assert set(properties["communes"]) <= {c["id"] for c in village["communes"]}
             features.append({"type": "Feature", "id": feature_id, "properties": properties, "geometry": geometry_json(geom)})
@@ -141,6 +151,28 @@ def main():
             catalogue.append({**properties, "matchId": match_id, "atlasUrl": "https://burgundyatlas.com" + atlas_path,
                               "bounds": rounded(geom.bounds), "labelPoint": rounded([point.x, point.y])})
             target = {"matchId": match_id, "featureId": feature_id, "name": feature_name, "scope": properties["kind"]}
+            # Marsannay uses one denomination ID for three source labels. Keep
+            # colour-specific unions as separate broad areas, and the full union
+            # as an explicitly labelled fallback when the wine colour is unknown.
+            for variant in variants:
+                assert broad and tier == "village"
+                variant_rows = [(r, g) for r, g in rows if r["denom"] == variant["sourceName"]]
+                assert variant_rows
+                variant_m = unary_union([g for _, g in variant_rows])
+                variant_geom = transform(to_wgs84, variant_m)
+                variant_id = f"{feature_id}-{variant['suffix']}"
+                variant_properties = {**properties, "id": variant_id, "name": variant["name"],
+                                      "sourceName": variant["sourceName"], "areaHa": round(variant_m.area / 10000, 2),
+                                      "communes": sorted({r["insee"] for r, _ in variant_rows})}
+                features.append({"type": "Feature", "id": variant_id, "properties": variant_properties,
+                                 "geometry": geometry_json(variant_geom)})
+                point = variant_geom.representative_point()
+                catalogue.append({**variant_properties, "matchId": match_id, "atlasUrl": "https://burgundyatlas.com" + atlas_path,
+                                  "bounds": rounded(variant_geom.bounds), "labelPoint": rounded([point.x, point.y])})
+                for colour in variant["colours"]:
+                    colour_targets = target.setdefault("colourTargets", {})
+                    assert colour not in colour_targets
+                    colour_targets[colour] = {"featureId": variant_id, "name": variant["name"]}
             if match_id in targets:
                 assert targets[match_id]["target"] == target, "A shared identity must refer to the same designation"
                 targets[match_id]["villages"].append(village["id"])
@@ -186,7 +218,7 @@ def main():
                              "properties": {"id": f"commune-{code}", "name": source["properties"]["nom"], "kind": "commune", "tier": "commune"},
                              "geometry": geometry_json(shape(source["geometry"]))})
             sources.append({"name": "Cadastre Etalab", "date": CADASTRE_DATE, "license": "Licence Ouverte 2.0",
-                            "url": f"https://cadastre.data.gouv.fr/data/etalab-cadastre/{CADASTRE_DATE}/geojson/communes/21/{code}/cadastre-{code}-communes.json.gz",
+                            "url": f"https://cadastre.data.gouv.fr/data/etalab-cadastre/{CADASTRE_DATE}/geojson/communes/{code[:2]}/{code}/cadastre-{code}-communes.json.gz",
                             "sha256": hashlib.sha256(file.read_bytes()).hexdigest()})
         url = f"/maps/{village['id']}.{DATE}.geojson"
         manifest = {"id": village["id"], "name": name, "region": village["region"], "communes": village["communes"],
