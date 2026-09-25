@@ -1,0 +1,661 @@
+{
+  "id": "vosne-romanee",
+  "name": "Vosne-Romanée",
+  "region": "Côte de Nuits",
+  "communes": [
+    {
+      "id": "21714",
+      "name": "Vosne-Romanée"
+    },
+    {
+      "id": "21267",
+      "name": "Flagey-Échezeaux"
+    }
+  ],
+  "dataUrl": "/maps/vosne-romanee.2026-09-21.geojson",
+  "bounds": [
+    4.941028,
+    47.148461,
+    4.962801,
+    47.174891
+  ],
+  "sources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21714/cadastre-21714-communes.json.gz",
+      "sha256": "6eb11d5360ac38a3cb59194fd143d705e32986fe36ce4387d377cc3cb8e517c3"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21267/cadastre-21267-communes.json.gz",
+      "sha256": "900668aed2a5fcc479cf833d7050d96e9af239ea6aeff7d5ef49bee20a5eaf44"
+    }
+  ],
+  "notes": {
+    "inao-denom-565": {
+      "note": "Échezeaux lies in Flagey-Échezeaux and is a different Grand Cru from Grands-Échezeaux. Its official boundary overlaps a few neighbouring Premier Crus slightly; the map colours that shared ground as Grand Cru."
+    },
+    "inao-denom-645": {
+      "note": "Grands-Échezeaux lies in Flagey-Échezeaux. It is a separate Grand Cru from Échezeaux."
+    },
+    "inao-denom-1271": {
+      "note": "Les Beaux Monts spans Vosne-Romanée and Flagey-Échezeaux. A small corner of its official boundary overlaps Échezeaux, so this highlight includes ground the map otherwise colours as Grand Cru."
+    }
+  },
+  "features": [
+    {
+      "id": "inao-denom-565",
+      "name": "Échezeaux",
+      "tier": "grand_cru",
+      "kind": "vineyard",
+      "appellationId": 179,
+      "denominationId": 565,
+      "sourceName": "Echezeaux",
+      "communes": [
+        "21267"
+      ],
+      "areaHa": 38.83,
+      "matchId": "france/burgundy/cote-de-nuits/echezeaux",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_edgrupe77evaoro5jktsj6m3di/echezeaux",
+      "bounds": [
+        4.945883,
+        47.166573,
+        4.957513,
+        47.174891
+      ],
+      "labelPoint": [
+        4.949617,
+        47.170166
+      ]
+    },
+    {
+      "id": "inao-denom-645",
+      "name": "Grands-Échezeaux",
+      "tier": "grand_cru",
+      "kind": "vineyard",
+      "appellationId": 184,
+      "denominationId": 645,
+      "sourceName": "Grands-Echezeaux",
+      "communes": [
+        "21267"
+      ],
+      "areaHa": 9.07,
+      "matchId": "france/burgundy/cote-de-nuits/grands-echezeaux",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_bwgqchgczwa6u2p5e5kuiowdvy/grands-echezeaux",
+      "bounds": [
+        4.952238,
+        47.168845,
+        4.955658,
+        47.173691
+      ],
+      "labelPoint": [
+        4.953987,
+        47.171003
+      ]
+    },
+    {
+      "id": "inao-denom-654",
+      "name": "La Grande Rue",
+      "tier": "grand_cru",
+      "kind": "vineyard",
+      "appellationId": 189,
+      "denominationId": 654,
+      "sourceName": "La Grande Rue",
+      "communes": [
+        "21714"
+      ],
+      "areaHa": 1.65,
+      "matchId": "france/burgundy/cote-de-nuits/la-grande-rue",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_7sqe44rnxhviy3na33jlr3urr4/la-grande-rue",
+      "bounds": [
+        4.947358,
+        47.160068,
+        4.951724,
+        47.161033
+      ],
+      "labelPoint": [
+        4.950688,
+        47.160548
+      ]
+    },
+    {
+      "id": "inao-denom-655",
+      "name": "La Romanée",
+      "tier": "grand_cru",
+      "kind": "vineyard",
+      "appellationId": 190,
+      "denominationId": 655,
+      "sourceName": "La Romanée",
+      "communes": [
+        "21714"
+      ],
+      "areaHa": 0.84,
+      "matchId": "france/burgundy/cote-de-nuits/la-romanee",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_z4rwjlfbbel4n3rsdrx5iazjca/la-romanee",
+      "bounds": [
+        4.948024,
+        47.161005,
+        4.949177,
+        47.16216
+      ],
+      "labelPoint": [
+        4.948656,
+        47.161627
+      ]
+    },
+    {
+      "id": "inao-denom-656",
+      "name": "La Tâche",
+      "tier": "grand_cru",
+      "kind": "vineyard",
+      "appellationId": 191,
+      "denominationId": 656,
+      "sourceName": "La Tâche",
+      "communes": [
+        "21714"
+      ],
+      "areaHa": 6.05,
+      "matchId": "france/burgundy/cote-de-nuits/la-tache",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_lmb2l6h35mfv6za5q2u3yhhluq/la-tache",
+      "bounds": [
+        4.946873,
+        47.158764,
+        4.952345,
+        47.160742
+      ],
+      "labelPoint": [
+        4.949642,
+        47.159794
+      ]
+    },
+    {
+      "id": "inao-denom-1083",
+      "name": "Richebourg",
+      "tier": "grand_cru",
+      "kind": "vineyard",
+      "appellationId": 221,
+      "denominationId": 1083,
+      "sourceName": "Richebourg",
+      "communes": [
+        "21714"
+      ],
+      "areaHa": 8.03,
+      "matchId": "france/burgundy/cote-de-nuits/richebourg",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_5a7235kipcb2ay4ji2yxvbqlcu/richebourg",
+      "bounds": [
+        4.945675,
+        47.162094,
+        4.95076,
+        47.165434
+      ],
+      "labelPoint": [
+        4.949206,
+        47.164004
+      ]
+    },
+    {
+      "id": "inao-denom-1084",
+      "name": "Romanée-Conti",
+      "tier": "grand_cru",
+      "kind": "vineyard",
+      "appellationId": 222,
+      "denominationId": 1084,
+      "sourceName": "Romanée-Conti",
+      "communes": [
+        "21714"
+      ],
+      "areaHa": 1.81,
+      "matchId": "france/burgundy/cote-de-nuits/romanee-conti",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_ps4pmljcohuy5bihimkoykpaou/romanee-conti",
+      "bounds": [
+        4.94849,
+        47.160983,
+        4.950843,
+        47.162321
+      ],
+      "labelPoint": [
+        4.949995,
+        47.161591
+      ]
+    },
+    {
+      "id": "inao-denom-1085",
+      "name": "Romanée-Saint-Vivant",
+      "tier": "grand_cru",
+      "kind": "vineyard",
+      "appellationId": 223,
+      "denominationId": 1085,
+      "sourceName": "Romanée-Saint-Vivant",
+      "communes": [
+        "21714"
+      ],
+      "areaHa": 9.44,
+      "matchId": "france/burgundy/cote-de-nuits/romanee-saint-vivant",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_76qfzljfgxwkrh6gmsfpf2fzra/romanee-saint-vivant",
+      "bounds": [
+        4.950232,
+        47.160359,
+        4.955079,
+        47.164354
+      ],
+      "labelPoint": [
+        4.952016,
+        47.163139
+      ]
+    },
+    {
+      "id": "inao-denom-1262",
+      "name": "Vosne-Romanée",
+      "tier": "village",
+      "kind": "appellation",
+      "appellationId": 241,
+      "denominationId": 1262,
+      "sourceName": "Vosne-Romanée",
+      "communes": [
+        "21267",
+        "21714"
+      ],
+      "areaHa": 233.89,
+      "matchId": "ba_appellation_vop7vouenmomswwyo3lq2ljld4",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_vop7vouenmomswwyo3lq2ljld4/vosne-romanee",
+      "bounds": [
+        4.941028,
+        47.148461,
+        4.962801,
+        47.174891
+      ],
+      "labelPoint": [
+        4.946808,
+        47.16319
+      ]
+    },
+    {
+      "id": "inao-denom-1263",
+      "name": "Au-dessus des Malconsorts",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 241,
+      "denominationId": 1263,
+      "sourceName": "Vosne-Romanée premier cru Au-dessus des Malconsorts",
+      "communes": [
+        "21714"
+      ],
+      "areaHa": 1.08,
+      "matchId": "ba_designation_tsjjqvlz4l5qle6asn3iwdiige",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_tsjjqvlz4l5qle6asn3iwdiige/au-dessus-des-malconsorts",
+      "bounds": [
+        4.945909,
+        47.158141,
+        4.94766,
+        47.159354
+      ],
+      "labelPoint": [
+        4.946787,
+        47.158773
+      ]
+    },
+    {
+      "id": "inao-denom-1264",
+      "name": "Aux Brûlées",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 241,
+      "denominationId": 1264,
+      "sourceName": "Vosne-Romanée premier cru Aux Brulées",
+      "communes": [
+        "21714"
+      ],
+      "areaHa": 4.62,
+      "matchId": "ba_designation_egpwvqmrjl6ohrszb2dpl4gvdy",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_egpwvqmrjl6ohrszb2dpl4gvdy/aux-brulees",
+      "bounds": [
+        4.942585,
+        47.165092,
+        4.948834,
+        47.166798
+      ],
+      "labelPoint": [
+        4.946578,
+        47.165495
+      ]
+    },
+    {
+      "id": "inao-denom-1265",
+      "name": "Aux Malconsorts",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 241,
+      "denominationId": 1265,
+      "sourceName": "Vosne-Romanée premier cru Aux Malconsorts",
+      "communes": [
+        "21714"
+      ],
+      "areaHa": 5.86,
+      "matchId": "ba_designation_4bmzpvbl3vr7n377hzw3kbmfs4",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_4bmzpvbl3vr7n377hzw3kbmfs4/aux-malconsorts",
+      "bounds": [
+        4.947026,
+        47.156817,
+        4.951901,
+        47.159085
+      ],
+      "labelPoint": [
+        4.949076,
+        47.157851
+      ]
+    },
+    {
+      "id": "inao-denom-1266",
+      "name": "Aux Raignots",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 241,
+      "denominationId": 1266,
+      "sourceName": "Vosne-Romanée premier cru Aux Raignots",
+      "communes": [
+        "21714"
+      ],
+      "areaHa": 1.64,
+      "matchId": "ba_designation_zt3xpzg4ncyuyej62yjs3sbnr4",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_zt3xpzg4ncyuyej62yjs3sbnr4/aux-raignots",
+      "bounds": [
+        4.944295,
+        47.16106,
+        4.948168,
+        47.162155
+      ],
+      "labelPoint": [
+        4.947344,
+        47.16161
+      ]
+    },
+    {
+      "id": "inao-denom-1267",
+      "name": "Cros Parantoux",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 241,
+      "denominationId": 1267,
+      "sourceName": "Vosne-Romanée premier cru Cros Parantoux",
+      "communes": [
+        "21714"
+      ],
+      "areaHa": 1.02,
+      "matchId": "ba_designation_nfl6rszkjaq77jg2sfsii5gmna",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_nfl6rszkjaq77jg2sfsii5gmna/cros-parantoux",
+      "bounds": [
+        4.94548,
+        47.163399,
+        4.947566,
+        47.16445
+      ],
+      "labelPoint": [
+        4.946771,
+        47.163918
+      ]
+    },
+    {
+      "id": "inao-denom-1268",
+      "name": "Clos des Réas",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 241,
+      "denominationId": 1268,
+      "sourceName": "Vosne-Romanée premier cru Clos des Réas",
+      "communes": [
+        "21714"
+      ],
+      "areaHa": 2.12,
+      "matchId": "ba_designation_o6zgjci2ktdmuxxny4l3xhqcwi",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_o6zgjci2ktdmuxxny4l3xhqcwi/clos-des-reas",
+      "bounds": [
+        4.95325,
+        47.155555,
+        4.955791,
+        47.157411
+      ],
+      "labelPoint": [
+        4.954521,
+        47.156487
+      ]
+    },
+    {
+      "id": "inao-denom-1269",
+      "name": "En Orveaux",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 241,
+      "denominationId": 1269,
+      "sourceName": "Vosne-Romanée premier cru En Orveaux",
+      "communes": [
+        "21267"
+      ],
+      "areaHa": 1.9,
+      "matchId": "ba_designation_himvwgnvqhccukdx2f6w4fslnm",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_himvwgnvqhccukdx2f6w4fslnm/en-orveaux",
+      "bounds": [
+        4.945402,
+        47.172059,
+        4.947355,
+        47.173604
+      ],
+      "labelPoint": [
+        4.946434,
+        47.1728
+      ]
+    },
+    {
+      "id": "inao-denom-1270",
+      "name": "La Croix Rameau",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 241,
+      "denominationId": 1270,
+      "sourceName": "Vosne-Romanée premier cru La Croix Rameau",
+      "communes": [
+        "21714"
+      ],
+      "areaHa": 0.6,
+      "matchId": "ba_designation_kesdypecxv5nw5zozjvc5cn4vq",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_kesdypecxv5nw5zozjvc5cn4vq/la-croix-rameau",
+      "bounds": [
+        4.954475,
+        47.162472,
+        4.955651,
+        47.163541
+      ],
+      "labelPoint": [
+        4.955086,
+        47.162981
+      ]
+    },
+    {
+      "id": "inao-denom-1271",
+      "name": "Les Beaux Monts",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 241,
+      "denominationId": 1271,
+      "sourceName": "Vosne-Romanée premier cru Les Beaux Monts",
+      "communes": [
+        "21267",
+        "21714"
+      ],
+      "areaHa": 11.99,
+      "matchId": "ba_designation_uhlwdedkzhqmaxp46bn6ab3g5q",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_uhlwdedkzhqmaxp46bn6ab3g5q/les-beaux-monts",
+      "bounds": [
+        4.943143,
+        47.166029,
+        4.949923,
+        47.169496
+      ],
+      "labelPoint": [
+        4.947704,
+        47.168129
+      ]
+    },
+    {
+      "id": "inao-denom-1272",
+      "name": "Les Chaumes",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 241,
+      "denominationId": 1272,
+      "sourceName": "Vosne-Romanée premier cru Les Chaumes",
+      "communes": [
+        "21714"
+      ],
+      "areaHa": 6.91,
+      "matchId": "ba_designation_wk3dy3vujyndzu3m2utefqelhq",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_wk3dy3vujyndzu3m2utefqelhq/les-chaumes",
+      "bounds": [
+        4.950568,
+        47.156142,
+        4.954728,
+        47.159147
+      ],
+      "labelPoint": [
+        4.952839,
+        47.157611
+      ]
+    },
+    {
+      "id": "inao-denom-1273",
+      "name": "Les Gaudichots",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 241,
+      "denominationId": 1273,
+      "sourceName": "Vosne-Romanée premier cru Les Gaudichots",
+      "communes": [
+        "21714"
+      ],
+      "areaHa": 0.8,
+      "matchId": "ba_designation_mxbp3fjzxfuxjnpg62qqtaakym",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_mxbp3fjzxfuxjnpg62qqtaakym/les-gaudichots",
+      "bounds": [
+        4.945846,
+        47.1588,
+        4.952265,
+        47.160355
+      ],
+      "labelPoint": [
+        4.946617,
+        47.159566
+      ]
+    },
+    {
+      "id": "inao-denom-1274",
+      "name": "Les Petits Monts",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 241,
+      "denominationId": 1274,
+      "sourceName": "Vosne-Romanée premier cru Les Petis Monts",
+      "communes": [
+        "21714"
+      ],
+      "areaHa": 3.72,
+      "matchId": "ba_designation_adoiozca6tlmlljmimdxuqxhfa",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_adoiozca6tlmlljmimdxuqxhfa/les-petis-monts",
+      "bounds": [
+        4.944055,
+        47.16201,
+        4.947993,
+        47.163573
+      ],
+      "labelPoint": [
+        4.946024,
+        47.162859
+      ]
+    },
+    {
+      "id": "inao-denom-1275",
+      "name": "Les Rouges",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 241,
+      "denominationId": 1275,
+      "sourceName": "Vosne-Romanée premier cru Les Rouges",
+      "communes": [
+        "21267"
+      ],
+      "areaHa": 2.62,
+      "matchId": "ba_designation_f6txe7kdhn6slg76dww5mikh3q",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_f6txe7kdhn6slg76dww5mikh3q/les-rouges",
+      "bounds": [
+        4.944646,
+        47.169417,
+        4.947159,
+        47.172047
+      ],
+      "labelPoint": [
+        4.945927,
+        47.170775
+      ]
+    },
+    {
+      "id": "inao-denom-1276",
+      "name": "Les Suchots",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 241,
+      "denominationId": 1276,
+      "sourceName": "Vosne-Romanée premier cru Les Suchots",
+      "communes": [
+        "21714"
+      ],
+      "areaHa": 13.08,
+      "matchId": "ba_designation_gknxejgvbtwlfiny3jskbbuenq",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_gknxejgvbtwlfiny3jskbbuenq/les-suchots",
+      "bounds": [
+        4.948139,
+        47.163595,
+        4.955143,
+        47.166918
+      ],
+      "labelPoint": [
+        4.953399,
+        47.165171
+      ]
+    },
+    {
+      "id": "inao-denom-1277",
+      "name": "Vosne-Romanée Premier Cru",
+      "tier": "premier_cru",
+      "kind": "appellation",
+      "appellationId": 241,
+      "denominationId": 1277,
+      "sourceName": "Vosne-Romanée premier cru",
+      "communes": [
+        "21267",
+        "21714"
+      ],
+      "areaHa": 133.23,
+      "matchId": "ba_appellation_p5vdcllx5r3igkvsmelyz6g2wi",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_p5vdcllx5r3igkvsmelyz6g2wi/vosne-romanee-premier-cru",
+      "bounds": [
+        4.942585,
+        47.155555,
+        4.957513,
+        47.174891
+      ],
+      "labelPoint": [
+        4.953294,
+        47.166454
+      ]
+    }
+  ]
+}

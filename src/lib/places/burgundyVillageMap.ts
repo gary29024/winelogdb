@@ -39,3 +39,16 @@ export function snapshotLabel(iso:string|undefined,monthOnly=false){
  if(!year||!month||month>12)return iso??'';
  return monthOnly?`${months[month-1]} ${year}`:`${day} ${months[month-1]} ${year}`;
 }
+
+/**
+ * The order in which overlapping designations answer clicks on one spot. The
+ * first is what the spot is coloured as: a Grand Cru before a Premier Cru
+ * overlapping it (Échezeaux over a corner of Les Beaux Monts), then the
+ * smallest, so Clos de Bèze is reachable inside Chambertin.
+ */
+export function clickOrder(candidates:{id:string;tier:string;areaHa:number|string}[]){
+ const rank=(tier:string)=>tier==='grand_cru'?0:1;
+ return [...new Set([...candidates]
+  .sort((a,b)=>rank(a.tier)-rank(b.tier)||Number(a.areaHa)-Number(b.areaHa)||a.id.localeCompare(b.id))
+  .map(candidate=>candidate.id))];
+}
