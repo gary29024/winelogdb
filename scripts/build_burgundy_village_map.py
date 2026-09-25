@@ -355,7 +355,9 @@ def main():
         "villages": [{k: v[k] for k in ("id", "name", "region", "wineColours") if k in v} for v in villages], "targets": index,
         "grandCruClimats": [{"name": group["name"],
                              "matchId": next(entry["target"]["matchId"] for entry in targets.values() if entry["denom"] == group["broadDenomination"]),
-                             "climats": [{"matchId": f"inao-denom-{d}", "name": grouped[d][0][0]["denom"].removeprefix(group["name"] + " ")}
+                             # Reviewed label spellings ride along with the source name.
+                             "climats": [{"matchId": f"inao-denom-{d}", "name": (name := grouped[d][0][0]["denom"].removeprefix(group["name"] + " ")),
+                                          **({"aliases": group["aliases"][name]} if name in group.get("aliases", {}) else {})}
                                          for d in sorted(climat_by_denom) if climat_by_denom[d] is group]}
                             for group in climat_groups]
     }, compact=True)

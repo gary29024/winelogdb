@@ -1,6 +1,6 @@
 {
   "sharedDefaults": {"361": "chambolle-musigny", "273": "puligny-montrachet", "927": "puligny-montrachet", "476": "aloxe-corton", "549": "aloxe-corton", "550": "aloxe-corton", "2348": "aloxe-corton", "2349": "aloxe-corton", "2350": "aloxe-corton", "2351": "aloxe-corton", "2352": "aloxe-corton", "2353": "aloxe-corton", "2354": "aloxe-corton", "2355": "aloxe-corton", "2356": "aloxe-corton", "2357": "aloxe-corton", "2358": "aloxe-corton", "2359": "aloxe-corton", "2360": "aloxe-corton", "2361": "aloxe-corton", "2362": "aloxe-corton", "2363": "aloxe-corton", "2364": "aloxe-corton", "2365": "aloxe-corton", "2366": "aloxe-corton", "2367": "aloxe-corton", "2368": "aloxe-corton", "2369": "aloxe-corton", "2370": "aloxe-corton", "2371": "aloxe-corton"},
-  "grandCruClimats": [{"name": "Corton", "appellationId": 165, "broadDenomination": 549, "denominationRange": [2348, 2371], "note": "This is a named climat within the Corton Grand Cru appellation, not a separate Grand Cru appellation. The published named designation is for red wine; a white Corton record keeps the broader appellation view."}],
+  "grandCruClimats": [{"name": "Corton", "appellationId": 165, "broadDenomination": 549, "denominationRange": [2348, 2371], "aliases": {"Le Rognet et Corton": ["Le Rognet", "Rognet"]}, "note": "One of the named vineyards within the Corton Grand Cru, not a Grand Cru of its own. Its named boundary is for red wine; a white Corton shows the whole Corton area instead."}],
   "villages": [
     {
       "id": "gevrey-chambertin",
@@ -601,16 +601,16 @@
       },
       "notes": {
         "inao-denom-549": {
-          "note": "Corton spans Aloxe-Corton, Ladoix-Serrigny and Pernand-Vergelesses. This is the full appellation area; a Corton wine without a matched climat does not identify a single vineyard. The source does not separate its red and white production areas. Some named climats, including Clos des Cortons Faiveley, have no separate boundary in this snapshot."
+          "note": "Corton spans Aloxe-Corton, Ladoix-Serrigny and Pernand-Vergelesses. This is the whole Grand Cru: a Corton without a named vineyard on the label could come from anywhere in it. A few named vineyards, such as Faiveley's Clos des Cortons, have no separate boundary here."
         },
         "inao-denom-550": {
-          "note": "Corton-Charlemagne spans all three communes and includes the smaller Charlemagne area. These white-wine appellations overlap Corton but retain separate identities and full boundaries."
+          "note": "Corton-Charlemagne is a white-wine Grand Cru spanning all three villages. It overlaps Corton on the map and includes the smaller Charlemagne area, but it is a separate appellation."
         },
         "inao-denom-476": {
-          "note": "Charlemagne is a separate white-wine Grand Cru across Aloxe-Corton and Pernand-Vergelesses. Its production area lies within Corton-Charlemagne; the two names do not identify the same boundary."
+          "note": "Charlemagne is a separate white-wine Grand Cru in Aloxe-Corton and Pernand-Vergelesses. It lies within the Corton-Charlemagne area but is not the same appellation."
         },
         "inao-denom-248": {
-          "note": "The source calls this designation Les Chaillots blanc, but its CVI codes include both red and white wines. The map retains that source boundary and uses the climat name Les Chaillots."
+          "note": "Official records call this Les Chaillots blanc, but it produces both red and white wine, so the map calls it Les Chaillots."
         }
       },
       "unionOverviewFills": true,
@@ -682,13 +682,13 @@
       "nameCrosswalk": {},
       "notes": {
         "inao-denom-549": {
-          "note": "Corton spans Aloxe-Corton, Ladoix-Serrigny and Pernand-Vergelesses. This is the full appellation area; a Corton wine without a matched climat does not identify a single vineyard. The source does not separate its red and white production areas. Some named climats, including Clos des Cortons Faiveley, have no separate boundary in this snapshot."
+          "note": "Corton spans Aloxe-Corton, Ladoix-Serrigny and Pernand-Vergelesses. This is the whole Grand Cru: a Corton without a named vineyard on the label could come from anywhere in it. A few named vineyards, such as Faiveley's Clos des Cortons, have no separate boundary here."
         },
         "inao-denom-550": {
-          "note": "Corton-Charlemagne spans all three communes and includes the smaller Charlemagne area. These white-wine appellations overlap Corton but retain separate identities and full boundaries."
+          "note": "Corton-Charlemagne is a white-wine Grand Cru spanning all three villages. It overlaps Corton on the map and includes the smaller Charlemagne area, but it is a separate appellation."
         },
         "inao-denom-476": {
-          "note": "Charlemagne is a separate white-wine Grand Cru across Aloxe-Corton and Pernand-Vergelesses. Its production area lies within Corton-Charlemagne; the two names do not identify the same boundary."
+          "note": "Charlemagne is a separate white-wine Grand Cru in Aloxe-Corton and Pernand-Vergelesses. It lies within the Corton-Charlemagne area but is not the same appellation."
         }
       },
       "unionOverviewFills": true,
@@ -762,13 +762,13 @@
       "nameCrosswalk": {},
       "notes": {
         "inao-denom-549": {
-          "note": "Corton spans Aloxe-Corton, Ladoix-Serrigny and Pernand-Vergelesses. This is the full appellation area; a Corton wine without a matched climat does not identify a single vineyard. The source does not separate its red and white production areas. Some named climats, including Clos des Cortons Faiveley, have no separate boundary in this snapshot."
+          "note": "Corton spans Aloxe-Corton, Ladoix-Serrigny and Pernand-Vergelesses. This is the whole Grand Cru: a Corton without a named vineyard on the label could come from anywhere in it. A few named vineyards, such as Faiveley's Clos des Cortons, have no separate boundary here."
         },
         "inao-denom-550": {
-          "note": "Corton-Charlemagne spans all three communes and includes the smaller Charlemagne area. These white-wine appellations overlap Corton but retain separate identities and full boundaries."
+          "note": "Corton-Charlemagne is a white-wine Grand Cru spanning all three villages. It overlaps Corton on the map and includes the smaller Charlemagne area, but it is a separate appellation."
         },
         "inao-denom-476": {
-          "note": "Charlemagne is a separate white-wine Grand Cru across Aloxe-Corton and Pernand-Vergelesses. Its production area lies within Corton-Charlemagne; the two names do not identify the same boundary."
+          "note": "Charlemagne is a separate white-wine Grand Cru in Aloxe-Corton and Pernand-Vergelesses. It lies within the Corton-Charlemagne area but is not the same appellation."
         },
         "inao-app-192-village": {
           "note": "This overview combines the red and white Ladoix village areas. Choose a colour to see its published boundary; no single vineyard is identified."

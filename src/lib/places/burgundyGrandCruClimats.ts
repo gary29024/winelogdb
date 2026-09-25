@@ -9,8 +9,10 @@ type Wine=WineFacts&{classification?:string|null;wineStyle?:string|null};
 const key=(value:string)=>placeKey(value.replace(/œ/g,'oe'));
 const marker=/\b(?:grand\s+cru|aoc|aop)\b/g;
 const pattern=(name:string)=>new RegExp(`(?<![a-z0-9])${name}(?![a-z0-9])`,'g');
+// Reviewed label spellings (Corton "Rognet" for INAO's "Le Rognet et Corton")
+// match like the source name; without them the source's "et" reads as a blend.
 const groups=registry.grandCruClimats.map(group=>({...group,key:key(group.name),climats:group.climats.map(climat=>({...climat,
- patterns:[...new Set([key(climat.name),key(climat.name).replace(/^(?:les|le|la) /,'')])]
+ patterns:[...new Set([climat.name,...('aliases' in climat?climat.aliases as string[]:[])].flatMap(name=>[key(name),key(name).replace(/^(?:les|le|la) /,'')]))]
   // "Corton" alone never proves the more specific "Le Corton" climat.
   .filter(name=>name!==key(group.name)).map(pattern)
 }))}));
@@ -41,7 +43,15 @@ export function burgundyGrandCruMapIdentity(wine:Wine):string|null|undefined{
   const chars=[...text];
   for(const match of longest){candidates.add(match.id);chars.fill(' ',match.start,match.end)}
   const rest=chars.join('').replace(marker,' ').replace(/\s+/g,' ').trim();
-  if(otherPlaces.some(name=>name!==group.key&&pattern(name).test(rest)))return null;
+  // Another place in the appellation or a reference field contradicts Corton,
+  // as does a name built on Corton itself (Corton-Charlemagne, Aloxe-Corton)
+  // anywhere. Any other place in the title is usually the producer (Domaine de
+  // la Romanée-Conti, Château de Meursault): it withholds the climat, not the map.
+  const others=otherPlaces.filter(name=>name!==group.key&&pattern(name).test(rest));
+  if(others.length){
+   if(index!==1||others.some(name=>pattern(group.key).test(name)))return null;
+   ambiguous=true;
+  }
   const remaining=rest.replace(pattern(group.key),' ').replace(/\s+/g,' ').trim();
   if(/\b(?:et|and|ou|blend|assemblage|melange|multi(?:ple)? (?:plots|parcelles|climats|vineyards))\b/.test(remaining))ambiguous=true;
   // Appellation/reference fields must identify whole places. Producer and

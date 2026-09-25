@@ -222,6 +222,13 @@ named denomination range. Import fails if source coverage changes. Named feature
 receive local `inao-denom-*` match IDs, `parentAppellation`, and `atlasUrl: null`;
 the dialog omits unavailable outbound links. Broad Corton remains selectable as
 an appellation, including by clicking ground with no separately mapped climat.
+Its `aliases` map a source climat name to reviewed label spellings: INAO's "Le
+Rognet et Corton" is labelled "Corton Rognet" or "Corton Clos Rognet", and its
+"et" would otherwise read as a blend. Another place named in the appellation or
+a reference field withholds the map, as does a name built on Corton itself
+(Corton-Charlemagne, Aloxe-Corton) anywhere; any other place in the wine title
+is usually the producer (Domaine de la Romanée-Conti, Château de Meursault) and
+keeps the map at Corton appellation scope.
 Review regenerated files before publishing an update. Source archives and Python
 dependencies are not shipped with the app.
 

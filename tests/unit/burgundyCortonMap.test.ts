@@ -89,3 +89,22 @@ describe('named Corton wine matching',()=>{
   }
  });
 });
+
+describe('Corton label spellings and producer names',()=>{
+ it('reads Rognet as INAO\'s Le Rognet et Corton, whose "et" would otherwise look like a blend',()=>{
+  for(const wineName of ['Corton Rognet','Corton Le Rognet','Corton Clos Rognet','Le Rognet et Corton']){
+   expect(burgundyVillageMapTarget({...wine,wineName})?.featureId,wineName).toBe('inao-denom-2356');
+  }
+  expect(burgundyVillageMapTarget({...wine,wineName:'Corton Rognet et Bressandes'})?.featureId).toBe('inao-denom-549');
+ });
+ it('keeps a map when a producer in the title names another place, at Corton appellation scope',()=>{
+  for(const wineName of ['Domaine de la Romanée-Conti Corton','Château de Meursault Corton Bressandes']){
+   expect(burgundyVillageMapTarget({...wine,wineName}),wineName).toMatchObject({featureId:'inao-denom-549',scope:'appellation'});
+  }
+  // Outside the title, another place still contradicts Corton; and a name built
+  // on Corton itself is another appellation, even in the title.
+  expect(burgundyVillageMapTarget({...wine,referenceSite:'Meursault'})).toBeNull();
+  expect(burgundyVillageMapTarget({...wine,wineName:'Corton-Charlemagne Les Bressandes'})).toBeNull();
+  expect(burgundyVillageMapTarget({...wine,wineName:'Aloxe-Corton Les Bressandes'})).toBeNull();
+ });
+});
