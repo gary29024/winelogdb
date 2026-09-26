@@ -480,6 +480,27 @@ describe('southern Mâcon geographic denominations',()=>{
  ])('does not erase a competing appellation when matching a split site name %j',wine=>{
   expect(burgundyVillageMapTarget({...base,colour:'White',...wine})).toBeNull();
  });
+ // Mâcon villages recur in estate, co-operative and landmark names; only the
+ // village itself, not "Château-Fuissé" or "Cave de Charnay", is label evidence.
+ it.each([
+  {appellation:'Mâcon',wineName:'Château-Fuissé Tête de Cru',producer:'Jean-Jacques Vincent'},
+  {appellation:'Mâcon',wineName:'Château de Fuissé Blanc',producer:'Joseph Drouhin'},
+  {appellation:'Mâcon',wineName:'Domaine de Fuissé Vieilles Vignes'},
+  {appellation:'Mâcon Rouge',wineName:'Cave de Charnay Rouge',producer:'Cave de Charnay-lès-Mâcon',colour:'Red'},
+  {appellation:'Mâcon',wineName:'Roche de Solutré'},
+  {appellation:'Mâcon Blanc',wineName:'Les Vignes de Vergisson'},
+  {appellation:'Mâcon',wineName:'Caves de Loché Blanc'},
+ ])('does not read a village inside an estate or landmark name %j',wine=>{
+  expect(burgundyVillageMapTarget({...base,colour:'White',...wine})?.mapKind).not.toBe('regional');
+ });
+ it.each([
+  {appellation:'Mâcon',wineName:'Fuissé Vieilles Vignes',featureId:'inao-denom-2069'},
+  {appellation:'Mâcon Blanc',wineName:'Vergisson La Roche',featureId:'inao-denom-1736'},
+  {appellation:'Mâcon',wineName:'Château-Fuissé Fuissé',featureId:'inao-denom-2069'},
+  {appellation:'Mâcon Rouge',wineName:'Cave de Charnay Charnay Rouge',featureId:'inao-denom-1721',colour:'Red'},
+ ])('still reads the village when it stands on its own $wineName',({featureId,...wine})=>{
+  expect(burgundyVillageMapTarget({...base,colour:'White',...wine})).toMatchObject({featureId,mapKind:'regional'});
+ });
  it.each(['Pouilly-Fuissé','Pouilly-Loché','Pouilly-Vinzelles','Saint-Véran'])('preserves %s village identity',appellation=>{
   const target=burgundyVillageMapTarget({...base,appellation,colour:'White',classification:'village'});
   expect(target).toMatchObject({villageName:appellation,scope:'appellation'});

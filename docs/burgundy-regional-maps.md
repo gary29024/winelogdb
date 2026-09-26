@@ -461,6 +461,12 @@ name is stripped, so **Mâcon + Pouilly-Fuissé** cannot become Mâcon Fuissé b
 removing the word Fuissé. Colour words on both sides of a split label must agree,
 even when no colour or style is recorded. Cru, region and product guards remain.
 
+A split site name must also stand on its own. Mâcon villages recur in estate,
+co-operative and landmark names, so a village after *de/du/des*, *Château*,
+*Domaine*, *Cave(s)*, *Cellier*, *Maison*, *Clos* or *Roche* (**Château-Fuissé**,
+**Domaine de Fuissé**, **Cave de Charnay**, **Roche de Solutré**) is not treated
+as the denomination; **Mâcon + Fuissé Vieilles Vignes** still selects the map.
+
 - [Les Orfèvres du Vin's brochure](https://www.orfevresduvin.com/img/cms/Acces-rapide/Brochure%20A4%20V2.pdf)
   supplies **Mâcon Charnay Blanc / Rouge**, supporting the shortened Charnay alias.
 - [Robert-Denogent's importer sheet](https://kermitlynch.com/files/DOMAINE%20ROBERT-DENOGENT.pdf)

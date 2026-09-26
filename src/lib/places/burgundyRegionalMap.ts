@@ -26,6 +26,17 @@ const otherRegionals=[...registry.otherAppellations.map(key),...PLACES.filter(pl
  .filter(name=>!groups.some(group=>group.keys.includes(name))&&!['bourgogne rouge','bourgogne blanc'].includes(name))];
 const conflictingNames=[...new Set([...higherNames,...otherRegionals])];
 
+// A village in a producer or landmark name (Château-Fuissé, Domaine de Fuissé,
+// Cave de Charnay, Roche de Solutré) is not the denomination on the label.
+const ownerWords=new Set(['de','du','des','d','chateau','domaine','cave','caves','cellier','maison','clos','roche']);
+const namesPlace=(text:string,name:string)=>{
+ const words=` ${text} `,needle=` ${name} `;
+ for(let at=words.indexOf(needle);at>=0;at=words.indexOf(needle,at+1)){
+  if(!ownerWords.has(words.slice(0,at).trim().split(' ').pop()??''))return true;
+ }
+ return false;
+};
+
 /** Undefined leaves unrelated wines to the village resolver. Null blocks an
  * ambiguous regional label from falling through to nested Beaune/Nuits names.
  * Region alone is context, never evidence for one of these denominations. */
@@ -34,7 +45,7 @@ export function burgundyRegionalMapTarget(wine:Wine):BurgundyVillageMapTarget|nu
  const producer=key(wine.producer??'');
  const wineLabel=producer?` ${fields[1]} `.replaceAll(` ${producer} `,' ').trim():fields[1];
  const plainAppellation=(group:typeof groups[number])=>group.baseKeys.includes(fields[0]);
- const namesSite=(group:typeof groups[number])=>plainAppellation(group)&&group.siteKeys.some(name=>contains(wineLabel,name));
+ const namesSite=(group:typeof groups[number])=>plainAppellation(group)&&group.siteKeys.some(name=>namesPlace(wineLabel,name));
  const candidates=groups.filter(group=>fields.some(text=>group.keys.some(name=>contains(text,name)))||namesSite(group));
  if(!candidates.length)return undefined;
  if(candidates.length!==1||wine.identityMatchStatus==='conflict'||wine.classification)return null;
