@@ -1,6 +1,6 @@
 # Test strategy
 
-PR checks follow the changed paths. Pushes to `main`, manual runs, and the Monday 03:17 UTC checkpoint run every Vitest test, every Chromium flow, both iPhone WebKit projects, the production build, all local migrations, the Worker runtime smoke, and the local browser-to-Worker sharing journey.
+PR checks follow the changed paths. Pushes to `main` run the complete normal Vitest and browser suites, both iPhone WebKit projects, the production build, all local migrations, the Worker runtime smoke, and the local browser-to-Worker sharing journey. The normal Chromium suite uses representative Burgundy map journeys instead of replaying every catalogue permutation. Manual runs and the Monday 03:17 UTC checkpoint additionally set `WINELOG_E2E_EXHAUSTIVE_MAPS=1`, restoring the full Burgundy browser matrix.
 
 | PR impact | Vitest | Browser | Platform gate |
 | --- | --- | --- | --- |
@@ -16,7 +16,7 @@ Vitest's `--changed` follows static imports. About 59 test files also read appli
 
 On the isolated PR branch, the source-reading fallback ran 59 files and 506 tests in 11.65 seconds; the full two-worker suite ran 283 files and 2,575 tests in 58.43 seconds. A real affected run also includes tests found through the import graph. These local Windows timings show the size of the fixed fallback, not a hosted CI latency target.
 
-The `tests/e2e` browser specs intercept API calls. Frontend features select their relevant Chromium specs; shared app shell, public assets, and unknown feature areas run all Chromium specs. CSS and shared component changes add iPhone WebKit coverage because layout is browser-specific. On checkpoints both iPhone widths, owner/member views, safe areas, rotation, contrast, and screenshots remain covered. The separate `tests/stack` sharing journey uses actual browser requests to the production Worker with isolated migrated D1, local R2 and local Images; only external OAuth and embedding providers are fixtures.
+The `tests/e2e` browser specs intercept API calls. Frontend features select their relevant Chromium specs; Burgundy place changes explicitly include the Burgundy map browser smoke. Shared app shell, public assets, and unknown feature areas run all normal Chromium specs. The Burgundy map spec keeps exhaustive village/regional permutations behind `WINELOG_E2E_EXHAUSTIVE_MAPS=1`; ordinary CI runs representative large, single-area, colour-specific, northern and Mâconnais cases while the unit suite continues to validate every registry target, catalogue identity, commune and geometry. CSS and shared component changes add iPhone WebKit coverage because layout is browser-specific. On checkpoints both iPhone widths, owner/member views, safe areas, rotation, contrast, and screenshots remain covered. The separate `tests/stack` sharing journey uses actual browser requests to the production Worker with isolated migrated D1, local R2 and local Images; only external OAuth and embedding providers are fixtures.
 
 The `Lint and build` and `Regression and browser tests` check names remain stable for branch protection. The final check requires every selected job to pass and tolerates only jobs that the scope plan explicitly omitted. The scope decision appears in the workflow summary. The scoped jobs remain independent so browser installation does not extend the unit-test job.
 
@@ -30,6 +30,8 @@ The [September 20 suite audit](testing-strategy-2026-09-20.md) records the full-
 node --test scripts/ci-scope.test.mjs
 npm test
 npm run test:e2e
+# Full Burgundy browser matrix (PowerShell):
+# $env:WINELOG_E2E_EXHAUSTIVE_MAPS='1'; npm run test:e2e -- tests/e2e/burgundy-village-map.spec.ts
 npm run test:e2e:full
 npm run build
 npx playwright install chromium
