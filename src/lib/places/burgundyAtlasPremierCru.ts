@@ -85,7 +85,10 @@ const reviewedNameAliases:Record<string,Record<string,string[]>>={
   // BIVB retains Jean de France in Rully's full climat name and writes
   // Crauzot in Givry; the INAO geometry calls the latter Crausot.
   'Rully':{'Clos du Chaigne':['Clos du Chaigne à Jean de France']},
-  'Givry':{'Crausot':['Crauzot']}
+  // Chamirey, Juillot and Devillard write Clos du Roi; d'Aligny and Chandesais
+  // write Barraude; Thénard writes Cellier aux Moines without Clos du.
+  'Mercurey':{'Le Clos du Roy':['Le Clos du Roi']},
+  'Givry':{'Crausot':['Crauzot'],'Clos de la Baraude':['Clos de la Barraude'],'Clos du Cellier aux Moines':['Cellier aux Moines']}
 };
 const groups=mapping.groups.map(group=>({...group,key:nameKey(group.appellation),entries:[
   ...group.entries.map(entry=>({...entry,matchId:entry.path.split('/')[2]})),

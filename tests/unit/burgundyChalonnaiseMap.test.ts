@@ -24,12 +24,19 @@ describe('Côte Chalonnaise wine labels',()=>{
   ['Givry','Domaine François Lumpp Crausot',640],
   ['Givry','Crauzot',640],
   ['Montagny','Olivier Leflaive Montagny 1er Cru Bonneveaux',877],
+  ['Mercurey','Château de Chamirey Mercurey 1er Cru Clos du Roi',827],
+  ['Mercurey','Le Clos du Roy',827],
+  ['Givry','Vicomte d\'Aligny Givry 1er Cru Clos de la Barraude',626],
+  ['Givry','Clos de la Baraude',626],
+  ['Givry','Domaine Thénard Givry 1er Cru Cellier aux Moines',618],
  ])('%s — %s selects the source boundary',(appellation,wineName,id)=>{
   expect(burgundyVillageMapTarget({...wine,appellation,wineName})).toMatchObject({featureId:`inao-denom-${id}`,scope:'vineyard'});
  });
  it.each([
   ['Rully','Clos du Chaigne à Jean de France',1092,'La Pucelle',1111],
   ['Givry','Crauzot',640,'Clos Salomon',644],
+  ['Givry','Cellier aux Moines',618,'Clos Salomon',644],
+  ['Mercurey','Clos du Roi',827,'Les Croichots',843],
   ['Montagny','Bonneveaux',877,'Les Coères',913],
  ] as const)('accepts whole %s reference names and broadens blends',(appellation,name,id,other,broad)=>{
   const base={...wine,appellation,wineName:''};

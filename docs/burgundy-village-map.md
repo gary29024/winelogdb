@@ -604,6 +604,12 @@ Premier Cru boundaries. All 13 producing communes are retained in full.
   [François Lumpp](https://francoislumpp.com/fr/pinot-noir/) and
   [Joblot's Clos du Cellier aux Moines](https://domaine-joblot.com/wp-content/uploads/2025/12/FT-2023-Clos-du-Cellier-aux-Moines.pdf)
   provide producer regressions. Dracy-le-Fort's Clos Jus remains in the full map.
+  Reviewed label spellings also accept Mercurey's Clos du Roi for “Le Clos du Roy”
+  ([Château de Chamirey](https://www.vivino.com/en/le-chateau-de-chamirey-mercurey-1er-cru-clos-du-roi/w/1459438),
+  [Juillot](https://www.astorwines.com/item/39980)), Givry's Clos de la Barraude
+  for “Clos de la Baraude” ([Vicomte d'Aligny](https://www.vivino.com/en/le-vicomte-d-aligny-givry-1er-cru-clos-de-la-barraude/w/2732648))
+  and Cellier aux Moines for “Clos du Cellier aux Moines”
+  ([Thénard](https://www.cellartracker.com/wine.asp?iWine=4617336)).
 - [BIVB Montagny](https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/montagny%2C2458%2C9253.html?args=Y29tcF9pZD0yMjc4JmFjdGlvbj12aWV3RmljaGUmaWQ9MzUxJnw%3D)
   confirms 49 Premier Crus and white Chardonnay across four communes. Les Coères
   (`886`) spans Montagny-lès-Buxy, Jully-lès-Buxy and Saint-Vallerin. Les Paquiers

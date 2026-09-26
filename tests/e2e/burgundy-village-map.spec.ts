@@ -452,6 +452,8 @@ test('Beaune and Volnay label spellings select the reviewed cru',async({page})=>
   ['Volnay','Caillerets Clos des 60 Ouvrées','inao-denom-1252','Red'],
   ['Beaune','Bouchard Père & Fils Beaune Grèves','inao-denom-334','Red'],
   ['Gevrey-Chambertin','Lavaux Saint-Jacques','inao-denom-609','Red'],
+  ['Mercurey','Clos du Roi','inao-denom-827','Red'],
+  ['Givry','Cellier aux Moines','inao-denom-618','Red'],
  ]){
   await setup(page,{appellation,wineName,colour});await page.goto('/wines/layout-wine');
   await page.getByRole('button',{name:'View village map'}).click();
