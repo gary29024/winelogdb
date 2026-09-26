@@ -89,7 +89,10 @@ def main():
         rows = grouped[config['denominationId']]
         assert {r['id_app'] for r, _ in rows} == {config['appellationId']}
         equivalent_names = config.get('equivalentSourceNames', [])
-        assert {r['denom'] for r, _ in rows} == {config['sourceName'], *equivalent_names}
+        variants = config.get('sourceVariants', [])
+        assert {r['denom'] for r, _ in rows} == {config['sourceName'], *equivalent_names, *(v['name'] for v in variants)}
+        for variant in variants:
+            assert sorted({r['insee'] for r, _ in rows if r['denom'] == variant['name']}) == variant['communes']
         # Fuissé repeats identical white-only geometry under two source labels.
         # Require exact topological equality per commune before treating a
         # reviewed alias as a duplicate; never merge distinct colour areas.
@@ -98,8 +101,7 @@ def main():
                 original = unary_union([g for r, g in rows if r['denom'] == config['sourceName'] and r['insee'] == code])
                 duplicate = unary_union([g for r, g in rows if r['denom'] == name and r['insee'] == code])
                 assert not original.is_empty and original.equals(duplicate)
-        # These reviewed denominations share geometry across their allowed colours. A new
-        # source variant or changed colour code must be reviewed, not merged.
+        # A new source variant or changed colour code must be reviewed.
         assert {r['cvi'] for r, _ in rows} == {config['sourceCvi']}
         assert sorted({r['insee'] for r, _ in rows}) == config['communes']
         colour_codes = {'R': 'red', 'B': 'white', 'S': 'rose'}
@@ -131,6 +133,24 @@ def main():
         features = [dict(type='Feature', id=feature_id, properties=props, geometry=geometry_json(trimmed(whole, (whole_m, to_source), grid)))]
         point = whole.representative_point()
         metadata = dict(**props, matchId=feature_id, atlasUrl=None, bounds=rounded(whole.bounds), labelPoint=rounded([point.x, point.y]))
+        metadata_list, notes = [metadata], {}
+        # These are published source sectors, not complete red/white/rosé
+        # eligibility areas. They remain selectable but never auto-locate a wine.
+        for variant in variants:
+            sector_m = unary_union([g for r, g in rows if r['denom'] == variant['name']])
+            sector = transform(to_wgs84, sector_m)
+            assert sector_m.is_valid and sector.is_valid and not sector.is_empty
+            assert sector_m.symmetric_difference(transform(to_source, sector)).area < 0.01
+            assert sector_m.difference(whole_m).area < 0.01
+            sector_id = feature_id + '-' + variant['id']
+            sector_props = dict(props, id=sector_id, name=variant['label'], sourceName=variant['name'],
+                                communes=variant['communes'], areaHa=round(sector_m.area / 10000, 2))
+            features.append(dict(type='Feature', id=sector_id, properties=sector_props,
+                                 geometry=geometry_json(trimmed(sector, (sector_m, to_source), grid))))
+            sector_point = sector.representative_point()
+            metadata_list.append(dict(**sector_props, matchId=sector_id, atlasUrl=None, bounds=rounded(sector.bounds),
+                                      labelPoint=rounded([sector_point.x, sector_point.y])))
+            notes[sector_id] = dict(note=variant['note'])
         communes, sources = [], [dict(name='INAO', date=DATE, url=INAO_URL, sha256=INAO_SHA256, license='Licence Ouverte')]
         for code in config['communes']:
             path = args.source_dir / f'commune-{code}.json.gz'
@@ -152,8 +172,10 @@ def main():
         communes.sort(key=lambda c: c['name'])
         url = f"/maps/{config['id']}.{DATE}.geojson"
         catalogue = dict(id=config['id'], name=config['name'], region=config['region'], mapKind='regional',
-                         communes=communes, dataUrl=url, bounds=rounded(whole.bounds), sources=sources, notes={}, features=[metadata],
+                         communes=communes, dataUrl=url, bounds=rounded(whole.bounds), sources=sources, notes=notes, features=metadata_list,
                          coverageNote=config.get('coverageNote', 'A geographic denomination within Bourgogne AOC. The highlight shows its full INAO production area; named cuvées and producer holdings have no separate boundaries here.'))
+        if config.get('colourScope'):
+            catalogue['colourScope'] = config['colourScope']
         outputs.extend([(ROOT / 'public' / url.lstrip('/'), dict(type='FeatureCollection', features=features), True),
                         (PLACES / f"{config['id']}MapCatalogue.json", catalogue, False)])
         entry = {key: config[key] for key in ('id', 'name', 'region', 'aliases', 'compatibleRegions', 'wineColours')}

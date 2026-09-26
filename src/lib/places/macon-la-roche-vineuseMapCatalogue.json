@@ -1,0 +1,150 @@
+{
+  "id": "macon-la-roche-vineuse",
+  "name": "Mâcon La Roche-Vineuse",
+  "region": "Mâconnais",
+  "mapKind": "regional",
+  "communes": [
+    {
+      "id": "71126",
+      "name": "Chevagny-les-Chevrières",
+      "bounds": [
+        4.766112,
+        46.323552,
+        4.781173,
+        46.345342
+      ],
+      "labelPoint": [
+        4.777687,
+        46.333491
+      ]
+    },
+    {
+      "id": "71235",
+      "name": "Hurigny",
+      "bounds": [
+        4.780948,
+        46.322194,
+        4.807267,
+        46.365677
+      ],
+      "labelPoint": [
+        4.799411,
+        46.339728
+      ]
+    },
+    {
+      "id": "71371",
+      "name": "La Roche-Vineuse",
+      "bounds": [
+        4.707407,
+        46.333499,
+        4.787801,
+        46.364733
+      ],
+      "labelPoint": [
+        4.738952,
+        46.343756
+      ]
+    }
+  ],
+  "dataUrl": "/maps/macon-la-roche-vineuse.2026-09-21.geojson",
+  "bounds": [
+    4.707407,
+    46.322194,
+    4.807267,
+    46.365677
+  ],
+  "sources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71126/cadastre-71126-communes.json.gz",
+      "sha256": "2ea76617a1aee3067ffa8e1dab796e04ff264e4865666eee8fb6987888f17780"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71235/cadastre-71235-communes.json.gz",
+      "sha256": "6a4ad8f3ba4be07deb0890e40580d3ad86a5d9d54a48a83bc0fd4a5e0a2d96ec"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71371/cadastre-71371-communes.json.gz",
+      "sha256": "e3f6c17cd0de26948e139d413adf820ee3e89fa87810bda592992d7bc324d897"
+    }
+  ],
+  "notes": {
+    "inao-denom-1725-red-only": {
+      "note": "INAO labels this sector “rouge exclusif” (red only). It is not the whole red-wine area. No white or rosé boundary is inferred by subtracting it from the overview."
+    }
+  },
+  "features": [
+    {
+      "id": "inao-denom-1725",
+      "name": "Mâcon La Roche-Vineuse",
+      "tier": "regional",
+      "kind": "appellation",
+      "appellationId": 583,
+      "denominationId": 1725,
+      "sourceName": "Mâcon La Roche-Vineuse",
+      "communes": [
+        "71126",
+        "71235",
+        "71371"
+      ],
+      "areaHa": 863.08,
+      "matchId": "inao-denom-1725",
+      "atlasUrl": null,
+      "bounds": [
+        4.707407,
+        46.322194,
+        4.807267,
+        46.365677
+      ],
+      "labelPoint": [
+        4.738952,
+        46.343756
+      ]
+    },
+    {
+      "id": "inao-denom-1725-red-only",
+      "name": "Mâcon La Roche-Vineuse — red-only sector",
+      "tier": "regional",
+      "kind": "appellation",
+      "appellationId": 583,
+      "denominationId": 1725,
+      "sourceName": "Mâcon La Roche-Vineuse - rouge exclusif",
+      "communes": [
+        "71126",
+        "71235",
+        "71371"
+      ],
+      "areaHa": 70.75,
+      "matchId": "inao-denom-1725-red-only",
+      "atlasUrl": null,
+      "bounds": [
+        4.707407,
+        46.322194,
+        4.807267,
+        46.365677
+      ],
+      "labelPoint": [
+        4.80154,
+        46.344006
+      ]
+    }
+  ],
+  "coverageNote": "A geographic denomination within Mâcon AOC. Named cuvées and producer holdings have no separate boundaries here. This is a denomination overview across wine colours, not a verified white, red or rosé production area.",
+  "colourScope": "overview"
+}

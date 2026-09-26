@@ -1,0 +1,171 @@
+{
+  "id": "macon-milly-lamartine",
+  "name": "Mâcon Milly-Lamartine",
+  "region": "Mâconnais",
+  "mapKind": "regional",
+  "communes": [
+    {
+      "id": "71032",
+      "name": "Berzé-la-Ville",
+      "bounds": [
+        4.684879,
+        46.351028,
+        4.714705,
+        46.383167
+      ],
+      "labelPoint": [
+        4.691931,
+        46.377879
+      ]
+    },
+    {
+      "id": "71031",
+      "name": "Berzé-le-Châtel",
+      "bounds": [
+        4.681192,
+        46.377135,
+        4.694694,
+        46.391653
+      ],
+      "labelPoint": [
+        4.686414,
+        46.38895
+      ]
+    },
+    {
+      "id": "71299",
+      "name": "Milly-Lamartine",
+      "bounds": [
+        4.686774,
+        46.339798,
+        4.711885,
+        46.359017
+      ],
+      "labelPoint": [
+        4.692717,
+        46.355993
+      ]
+    },
+    {
+      "id": "71525",
+      "name": "Sologny",
+      "bounds": [
+        4.669876,
+        46.348955,
+        4.693491,
+        46.387994
+      ],
+      "labelPoint": [
+        4.67888,
+        46.361066
+      ]
+    }
+  ],
+  "dataUrl": "/maps/macon-milly-lamartine.2026-09-21.geojson",
+  "bounds": [
+    4.669876,
+    46.339798,
+    4.714705,
+    46.391653
+  ],
+  "sources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71031/cadastre-71031-communes.json.gz",
+      "sha256": "4b0049f60b40d363504f948f1156b148949548bf767002e3ebde74f02c04f978"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71032/cadastre-71032-communes.json.gz",
+      "sha256": "9cb6cfcc652edf8baf42c2a0f15fd9b635aa7a833a571f3c7a8970294116d35e"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71299/cadastre-71299-communes.json.gz",
+      "sha256": "6d8debe001cf8fa8b33c12008137c84b8faa9a5fa3f98ce67141f9e84c4ed5b4"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71525/cadastre-71525-communes.json.gz",
+      "sha256": "5460665bf22106c3941ce40fd4c6ffe90572ccf3d0e3887b0668b848c8146744"
+    }
+  ],
+  "notes": {
+    "inao-denom-1729-red-only": {
+      "note": "INAO labels this sector “rouge exclusif” (red only). It is not the whole red-wine area. No white or rosé boundary is inferred by subtracting it from the overview."
+    }
+  },
+  "features": [
+    {
+      "id": "inao-denom-1729",
+      "name": "Mâcon Milly-Lamartine",
+      "tier": "regional",
+      "kind": "appellation",
+      "appellationId": 583,
+      "denominationId": 1729,
+      "sourceName": "Mâcon Milly-Lamartine",
+      "communes": [
+        "71031",
+        "71032",
+        "71299",
+        "71525"
+      ],
+      "areaHa": 769.03,
+      "matchId": "inao-denom-1729",
+      "atlasUrl": null,
+      "bounds": [
+        4.669876,
+        46.339798,
+        4.714705,
+        46.391653
+      ],
+      "labelPoint": [
+        4.67888,
+        46.361066
+      ]
+    },
+    {
+      "id": "inao-denom-1729-red-only",
+      "name": "Mâcon Milly-Lamartine — red-only sector",
+      "tier": "regional",
+      "kind": "appellation",
+      "appellationId": 583,
+      "denominationId": 1729,
+      "sourceName": "Mâcon Milly-Lamartine - rouge exclusif",
+      "communes": [
+        "71031",
+        "71299"
+      ],
+      "areaHa": 40.82,
+      "matchId": "inao-denom-1729-red-only",
+      "atlasUrl": null,
+      "bounds": [
+        4.681192,
+        46.34406,
+        4.711885,
+        46.383415
+      ],
+      "labelPoint": [
+        4.705156,
+        46.34855
+      ]
+    }
+  ],
+  "coverageNote": "A geographic denomination within Mâcon AOC. Named cuvées and producer holdings have no separate boundaries here. This is a denomination overview across wine colours, not a verified white, red or rosé production area.",
+  "colourScope": "overview"
+}

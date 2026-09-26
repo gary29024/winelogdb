@@ -1,5 +1,5 @@
 {
-  "reviewedAt": "2026-09-26",
+  "reviewedAt": "2026-09-27",
   "scope": "Seven regional AOCs, their broad denominations, 14 Bourgogne geographic denominations, Mâcon-Villages and 27 named Mâcon geographic denominations. Status concerns boundary maps, not individual plots.",
   "appellations": [
     {
@@ -243,7 +243,7 @@
           "sourceNames": [
             "Mâcon Bussières"
           ],
-          "status": "pending",
+          "status": "mapped",
           "kind": "geographic"
         },
         {
@@ -252,7 +252,7 @@
             "Mâcon Chaintré",
             "Mâcon Chaintré - rouge exclusif"
           ],
-          "status": "pending",
+          "status": "mapped",
           "kind": "geographic"
         },
         {
@@ -302,7 +302,7 @@
             "Mâcon La Roche-Vineuse",
             "Mâcon La Roche-Vineuse - rouge exclusif"
           ],
-          "status": "pending",
+          "status": "mapped",
           "kind": "geographic"
         },
         {
@@ -329,7 +329,7 @@
             "Mâcon Milly-Lamartine",
             "Mâcon Milly-Lamartine - rouge exclusif"
           ],
-          "status": "pending",
+          "status": "mapped",
           "kind": "geographic"
         },
         {
@@ -345,7 +345,7 @@
           "sourceNames": [
             "Mâcon Pierreclos"
           ],
-          "status": "pending",
+          "status": "mapped",
           "kind": "geographic"
         },
         {
@@ -354,7 +354,7 @@
             "Mâcon Prissé",
             "Mâcon Prissé - rouge exclusif"
           ],
-          "status": "pending",
+          "status": "mapped",
           "kind": "geographic"
         },
         {
@@ -371,7 +371,7 @@
           "sourceNames": [
             "Mâcon Serrières"
           ],
-          "status": "pending",
+          "status": "mapped",
           "kind": "geographic"
         },
         {

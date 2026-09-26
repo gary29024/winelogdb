@@ -12,7 +12,7 @@ export type VillageMapFeature={
 export type VillageMapCatalogue={
  id:string;name:string;region:string;mapKind?:string;communes:{id:string;name:string;bounds?:number[];labelPoint?:number[]}[];dataUrl:string;bounds:number[];
  sources:{name:string;date:string;url:string;sha256:string;license:string}[];
- notes:Record<string,{note:string;paintedBy?:string;sameBoundaryAs?:string}>;features:VillageMapFeature[];coverageNote?:string;
+ notes:Record<string,{note:string;paintedBy?:string;sameBoundaryAs?:string}>;features:VillageMapFeature[];coverageNote?:string;colourScope?:string;
  // Premier Crus lying inside a wider Premier Cru name, keyed by the wider one.
  umbrellas?:Record<string,string[]>;
  // Separate parts of one appellation, each with its own zoom button and map label.

@@ -1,7 +1,7 @@
 # Burgundy regional maps
 
-Reviewed 26 September 2026. Maps cover all fourteen geographic denominations
-within Bourgogne AOC in the pinned source, plus seven within Mâcon AOC.
+Reviewed 27 September 2026. Maps cover all fourteen geographic denominations
+within Bourgogne AOC in the pinned source, plus fourteen within Mâcon AOC.
 These remain regional denominations, not new AOCs or village appellations.
 The existing 44 village maps and 33 Grand Cru appellations are unchanged.
 
@@ -28,6 +28,13 @@ The existing 44 village maps and 33 Grand Cru appellations are unchanged.
 | Mâcon Solutré-Pouilly | 583 / 2072 | 1 | White only |
 | Mâcon Vergisson | 583 / 1736 | 1 | White only |
 | Mâcon Vinzelles | 583 / 2074 | 1 | White only |
+| Mâcon Bussières | 583 / 1717 | 1 | Red, white, rosé; overview only |
+| Mâcon Chaintré | 583 / 1719 | 3 | Red, white, rosé; overview only |
+| Mâcon La Roche-Vineuse | 583 / 1725 | 3 | Red, white, rosé; overview only |
+| Mâcon Milly-Lamartine | 583 / 1729 | 4 | Red, white, rosé; overview only |
+| Mâcon Pierreclos | 583 / 1731 | 1 | Red, white, rosé; overview only |
+| Mâcon Prissé | 583 / 1732 | 1 | Red, white, rosé; overview only |
+| Mâcon Serrières | 583 / 1735 | 1 | Red, rosé |
 
 The official BIVB sheets confirm these counts, colours and regional status:
 [Côte d’Or](https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/bourgogne-cote-d-or%2C2458%2C9253.html?args=Y29tcF9pZD0yMjc4JmFjdGlvbj12aWV3RmljaGUmaWQ9Nzc0Jnw%3D),
@@ -42,10 +49,10 @@ Coteaux Bourguignons, Crémant de Bourgogne and Mâcon. The
 [BIVB inventory](https://www.bourgogne-wines.com/professional-access/documents-photos%2C2334%2C9356.html)
 also lists 14 Bourgogne geographic denominations and 27 named Mâcon denominations.
 Together with the seven broad denominations and Mâcon-Villages, these account for
-**49 source denomination IDs: twenty-one mapped, 28 pending**. Alternative source names
+**49 source denomination IDs: twenty-eight mapped, 21 pending**. Alternative source names
 and colour variants sharing an ID do not increase that count.
 
-All seven broad regional areas, Mâcon-Villages and 20 named Mâcon denominations
+All seven broad regional areas, Mâcon-Villages and 13 named Mâcon denominations
 remain pending. Completing the fourteen Bourgogne geographic denominations does
 not complete the broad Bourgogne AOC boundary. Chablis Premier Cru
 source gaps and other named plots remain tracked separately in
@@ -109,7 +116,7 @@ production geometry, not the smaller area actually planted or producing wine.
 
 ## Identity and display
 
-The twenty-one-entry runtime index is separate from the village registry; catalogues
+The twenty-eight-entry runtime index is separate from the village registry; catalogues
 and geometry load only when opening the dialog. Wine matching needs the explicit
 designation in the appellation or wine name. Hautes Côtes aliases may omit
 “Bourgogne”, as may the complete names “Côtes du Couchois” and “Côtes d’Auxerre”. “Côte d’Or” or “Côte
@@ -426,9 +433,8 @@ geometry and identical white CVI codes (`1B370 34, 1B370 35`). Configuration
 records the second label in `equivalentSourceNames`. The builder checks exact
 topological equality per producing commune before accepting such a duplicate.
 Its combined area stays 342.09 ha, with one denomination and one map feature.
-This mechanism cannot silently combine different colour boundaries. Chaintré
-and the other remaining source variants marked `rouge exclusif` still require
-separate review in subsequent batches.
+This mechanism cannot silently combine different colour boundaries. Chaintré and three further `rouge exclusif` source sectors are now reviewed
+separately in the western Mâcon batch below; they are not duplicate boundaries.
 
 Each denomination's complete CVI string is pinned in configuration. Two `B`
 codes still describe one allowed colour; the colour check now compares the set
@@ -483,4 +489,88 @@ Unit tests cover all seven maps, split/full labels, shortened spellings, colours
 the duplicate source identity and nearby Pouilly village identities. Browser
 tests exercise all seven on owner/shared pages in the exhaustive map matrix,
 with a Mâcon overview and split-label journey also in the normal smoke suite.
-Regional progress is **21/49**, including **7/27 named Mâcon denominations**.
+This southern batch brought regional progress to **21/49**, including **7/27 named Mâcon denominations**.
+
+
+## Western Mâcon source review
+
+Reviewed 27 September 2026. Seven further denominations bring the mapped inventory
+to **28/49**, including **14/27 named Mâcon denominations**. This counts denomination
+overviews, not complete colour-specific boundaries or individual vineyards.
+
+| Denomination | Producing communes | Overview (ha) | Published red-only sector (ha) |
+| --- | --- | ---: | ---: |
+| Bussières | Bussières | 213.45 | — |
+| Chaintré | Chaintré, Chânes, Crêches-sur-Saône | 296.38 | 9.58 |
+| La Roche-Vineuse | Chevagny-les-Chevrières, Hurigny, La Roche-Vineuse | 863.08 | 70.75 |
+| Milly-Lamartine | Berzé-la-Ville, Berzé-le-Châtel, Milly-Lamartine, Sologny | 769.03 | 40.82 |
+| Pierreclos | Pierreclos | 132.19 | — |
+| Prissé | Prissé | 628.64 | 94.46 |
+| Serrières | Serrières | 424.25 | — |
+
+The pinned INAO rows and their complete CVI strings are checked against the
+configuration. The [Mâcon specification, sections III and IV](https://www.vins-bourgogne.fr/nos-vins-nos-terroirs/la-bourgogne-et-ses-appellations/gallery_files/site/321/19990/20236.pdf)
+supports these commune lists and allowed colours. BIVB also confirms
+[Milly-Lamartine's four communes](https://www.vins-bourgogne.fr/vins-et-terroirs/la-bourgogne-et-ses-appellations/gallery_files/site/321/402/77490/77692.pdf),
+[Chaintré's three colours](https://www.vins-bourgogne.fr/vins-et-terroirs/la-bourgogne-et-ses-appellations/gallery_files/site/321/402/77490/77680.pdf)
+and [Serrières' red/rosé restriction](https://www.vins-bourgogne.fr/vins-et-terroirs/la-bourgogne-et-ses-appellations/gallery_files/site/321/402/77490/77698.pdf).
+Areas above are source geometry measurements, not planted acreage.
+
+### Colour scope and remaining verification
+
+Four denomination IDs include a separate source name ending `rouge exclusif`.
+These are retained as selectable **red-only sectors**, not silently treated as
+equivalent source labels. Chaintré's sector is in Crêches-sur-Saône;
+La Roche-Vineuse's covers all three producing communes; Milly-Lamartine's covers
+Berzé-la-Ville and Milly-Lamartine; Prissé's is in Prissé. Each sector is checked
+against its exact source name and commune set and stays within the combined
+denomination overview. It does not represent the full area for red wine, and
+neither recorded colour nor label text automatically selects it.
+
+All six new three-colour denominations explicitly show **denomination overview**
+scope. A white wine may open this geographic context, but the dialog does not
+claim the highlight is its white-wine production area. Area exploration has
+separate scope text and a return-to-wine control; commune navigation changes
+the viewport without changing the selected area. Serrières continues to reject
+white wines, even if its name appears in a label or split appellation.
+
+[INAO's 2017 delimitation report, PDF page 57 / printed page 46](https://extranet.inao.gouv.fr/fichier/CNAOV-2017-417-CoteauxBourguignonsBourgogne.pdf)
+describes the relation between named white Mâcon and Mâcon-Villages areas and
+the wider red/rosé system. That general explanation is insufficient to establish
+a current geometry crosswalk: the September 2026 layers do not consistently
+coincide. For example, Bussières' denomination overview is 213.45 ha versus
+146.13 ha for Mâcon-Villages in the same commune. Milly-Lamartine's overview
+minus its red-only sector is 728.21 ha versus 569.54 ha for Mâcon-Villages in its
+four communes. Conversely, Prissé's subtraction exactly equals that layer.
+White-only Solutré-Pouilly, Vergisson and Vinzelles from the previous batch also
+fail a blanket equality check. Therefore **no Mâcon-Villages substitution or
+derived white/rosé area is published**. Reconcile current deposited plans with
+these source layers before claiming complete colour-specific coverage. The
+regional inventory's mapped status must not be read as completion of that work.
+
+### Geometry, labels and validation
+
+All eleven new production features (seven overviews and four sectors) are valid
+without repair. Their pre-snap inverse-projection symmetric differences are
+below **0.000057 m²**. The normal **0.000001°** coordinate grid passes the
+existing 0.005% net-area and sub-2 m² hole/part gates except for Chaintré's small
+red-only sector. Chaintré uses the reviewed **0.0000001°** grid for both features;
+its sector changes net area by +0.4282 m² (0.000447%). No threshold is relaxed.
+Across this batch the maximum absolute post-snap net-area change is 73.570 m²,
+the largest flagged closing hole is 0.2512 m², and no disconnected part is lost.
+
+All **57 generated regional files** reproduce byte-for-byte; all **42 prior
+map/catalogue files** are unchanged. Independent comparisons match each new
+serialized production feature exactly to its source union, projected using the
+archive's `.prj` and snapped at its configured grid. The seven GeoJSON files
+total **1,209,290 bytes / 325,395 bytes gzip**, loaded only when their map opens.
+
+The estate-name guard from #357 is retained and exercised with all seven new
+sites. Reviewed producer examples include [Merlin's La Roche-Vineuse Les Cras
+and Vieilles Vignes](https://merlin-vins.com/fr/) and
+[Lapalus' Mâcon-Pierreclos](https://vinslapalus.com/nos-vins/). These names select
+the denomination overview; the cuvée name and producer never create a plot.
+Tests cover all seven names, accent/hyphen variants, split Mâcon labels,
+colour/style conflicts, producer/reference-only evidence and competing AOCs.
+Browser coverage includes owner/shared pages, lazy loading, 320-pixel layouts,
+desktop views, commune zoom, sector exploration and return-to-wine behaviour.

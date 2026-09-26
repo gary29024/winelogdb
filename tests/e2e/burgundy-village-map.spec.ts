@@ -28,6 +28,7 @@ const regionalMapCases=[
  ['Mâcon Solutré-Pouilly',1,'Solutré-Pouilly','white','Clos des Bertillonnes'],
  ['Mâcon Vergisson',1,'Vergisson','white','Sur la Roche'],
  ['Mâcon Vinzelles',1,'Vinzelles','white','Le Clos de Grand-Père'],
+ ['Mâcon Serrières',1,'Serrières','red','Vieilles Vignes'],
 ] as const;
 const smokeRegionalAppellations=new Set<string>([
  'Bourgogne Côte d’Or',
@@ -84,6 +85,59 @@ for(const route of matrixRoutes)for(const [appellation,count,commune,colour,wine
   // Navigation must neither fetch another map nor restart this download.
   expect([...new Set(downloads)]).toHaveLength(1);
   expect(downloads).toHaveLength(requestsAfterOpen);
+  expect(await dialog.evaluate(el=>el.scrollWidth<=el.clientWidth)).toBe(true);
+  await page.screenshot({path:testInfo.outputPath('regional-overview-320.png')});
+  await page.setViewportSize({width:1280,height:900});
+  await dialog.getByRole('button',{name:'Region view',exact:true}).click();
+  await page.screenshot({path:testInfo.outputPath('regional-overview-desktop.png')});
+  await page.keyboard.press('Escape');
+  await expect(page.getByRole('button',{name:'View regional map'})).toBeFocused();
+ });
+}
+
+const westernMaconCases=[
+ ['Mâcon Bussières','inao-denom-1717',1,'Bussières',false],
+ ['Mâcon Chaintré','inao-denom-1719',3,'Crêches-sur-Saône',true],
+ ['Mâcon La Roche-Vineuse','inao-denom-1725',3,'Hurigny',true],
+ ['Mâcon Milly-Lamartine','inao-denom-1729',4,'Sologny',true],
+ ['Mâcon Pierreclos','inao-denom-1731',1,'Pierreclos',false],
+ ['Mâcon Prissé','inao-denom-1732',1,'Prissé',true],
+] as const;
+for(const route of matrixRoutes)for(const [appellation,featureId,count,commune,hasSector] of westernMaconCases.filter((_,i)=>fullMapMatrix||i===1)){
+ test(`Western Mâcon ${appellation} ${route}: overview and source sector stay distinct`,async({page},testInfo)=>{
+  await page.setViewportSize({width:320,height:900});
+  await setup(page,{appellation,wineName:'Vieilles Vignes',classification:null,colour:'White',wineStyle:'white',region:'Mâconnais'});
+  const downloads:string[]=[];page.on('request',r=>{if(r.url().includes('/maps/'))downloads.push(r.url())});
+  await page.goto(route);expect(downloads).toEqual([]);
+  await page.getByRole('button',{name:'View regional map'}).click();
+  const dialog=page.getByRole('dialog',{name:appellation,exact:true});
+  await expect(dialog.getByRole('button',{name:'Region view',exact:true})).toBeEnabled();
+  await expect(dialog.locator('.village-map-description')).toContainText('no colour-specific area or single vineyard');
+  await expect(dialog.locator('.village-map-context')).toContainText(`${count} commune`);
+  const selector=dialog.getByRole('combobox',{name:'Explore a mapped area'});
+  if(hasSector){
+   await expect(selector).toHaveValue(featureId);
+   await expect(selector.getByRole('option')).toHaveCount(2);
+   await selector.selectOption(featureId+'-red-only');
+   await expect(dialog.locator('.village-map-eyebrow')).toHaveText('EXPLORING');
+   await expect(dialog.locator('.village-map-description')).toContainText('Published red-only sector');
+   await expect(dialog.locator('.village-map-overlap')).toContainText('not the whole red-wine area');
+  }else await expect(selector).toHaveCount(0);
+  if(count>1){
+   const communeSelector=dialog.getByRole('combobox',{name:'Zoom to a commune'});
+   await expect(communeSelector.getByRole('option')).toHaveCount(count+1);
+   await communeSelector.selectOption({label:commune});
+   if(hasSector)await expect(selector).toHaveValue(featureId+'-red-only');
+  }
+  await dialog.getByRole('button',{name:'Region view',exact:true}).click();
+  if(hasSector){
+   await expect(selector).toHaveValue(featureId+'-red-only');
+   await page.screenshot({path:testInfo.outputPath('regional-sector-320.png')});
+   await dialog.getByRole('button',{name:'Back to this wine'}).click();
+   await expect(selector).toHaveValue(featureId);
+   await expect(dialog.locator('.village-map-description')).toContainText('Denomination overview');
+  }
+  expect([...new Set(downloads)]).toHaveLength(1);
   expect(await dialog.evaluate(el=>el.scrollWidth<=el.clientWidth)).toBe(true);
   await page.screenshot({path:testInfo.outputPath('regional-overview-320.png')});
   await page.setViewportSize({width:1280,height:900});
