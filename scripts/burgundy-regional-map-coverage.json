@@ -268,7 +268,7 @@
           "sourceNames": [
             "Mâcon Charnay-lès-Mâcon"
           ],
-          "status": "pending",
+          "status": "mapped",
           "kind": "geographic"
         },
         {
@@ -285,7 +285,7 @@
           "sourceNames": [
             "Mâcon Davayé"
           ],
-          "status": "pending",
+          "status": "mapped",
           "kind": "geographic"
         },
         {
@@ -379,7 +379,7 @@
           "sourceNames": [
             "Mâcon Vergisson"
           ],
-          "status": "pending",
+          "status": "mapped",
           "kind": "geographic"
         },
         {
@@ -396,7 +396,7 @@
             "Mâcon Fuissé",
             "Mâcon Fuissé - blanc exclusif"
           ],
-          "status": "pending",
+          "status": "mapped",
           "kind": "geographic"
         },
         {
@@ -404,7 +404,7 @@
           "sourceNames": [
             "Mâcon Loché"
           ],
-          "status": "pending",
+          "status": "mapped",
           "kind": "geographic"
         },
         {
@@ -420,7 +420,7 @@
           "sourceNames": [
             "Mâcon Solutré-Pouilly"
           ],
-          "status": "pending",
+          "status": "mapped",
           "kind": "geographic"
         },
         {
@@ -436,7 +436,7 @@
           "sourceNames": [
             "Mâcon Vinzelles"
           ],
-          "status": "pending",
+          "status": "mapped",
           "kind": "geographic"
         },
         {

@@ -1,0 +1,74 @@
+{
+  "id": "macon-davaye",
+  "name": "Mâcon Davayé",
+  "region": "Mâconnais",
+  "mapKind": "regional",
+  "communes": [
+    {
+      "id": "71169",
+      "name": "Davayé",
+      "bounds": [
+        4.726547,
+        46.294422,
+        4.764792,
+        46.312917
+      ],
+      "labelPoint": [
+        4.759686,
+        46.297531
+      ]
+    }
+  ],
+  "dataUrl": "/maps/macon-davaye.2026-09-21.geojson",
+  "bounds": [
+    4.726547,
+    46.294422,
+    4.764792,
+    46.312917
+  ],
+  "sources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71169/cadastre-71169-communes.json.gz",
+      "sha256": "250852253e2f5a29989f0d75f0cdcf514adc754b9fee1e3478adacaae605f025"
+    }
+  ],
+  "notes": {},
+  "features": [
+    {
+      "id": "inao-denom-1723",
+      "name": "Mâcon Davayé",
+      "tier": "regional",
+      "kind": "appellation",
+      "appellationId": 583,
+      "denominationId": 1723,
+      "sourceName": "Mâcon Davayé",
+      "communes": [
+        "71169"
+      ],
+      "areaHa": 240.84,
+      "matchId": "inao-denom-1723",
+      "atlasUrl": null,
+      "bounds": [
+        4.726547,
+        46.294422,
+        4.764792,
+        46.312917
+      ],
+      "labelPoint": [
+        4.759686,
+        46.297531
+      ]
+    }
+  ],
+  "coverageNote": "A geographic denomination within Mâcon AOC. The highlight shows its full INAO production area; named cuvées and producer holdings have no separate boundaries here."
+}

@@ -854,7 +854,7 @@ The [PR #349 cadastral audit](chablis-cadastre-audit.md) tests the proposed
 lieu-dit union/intersection against all eight complete source boundaries.
 It fails the publication gate; existing missing/partial safeguards remain.
 
-Regional work now has a [complete inventory and fourteen mapped denominations](burgundy-regional-maps.md).
+Regional work now has a [complete inventory and twenty-one mapped denominations](burgundy-regional-maps.md).
 Next: continue the seven regional AOCs and their remaining geographic denominations,
 while seeking licensed, reviewed geometry for missing Chablis/Givry/Corton names
 and village lieux-dits. The 44/44 village count does not close those gaps.

@@ -88,13 +88,22 @@ def main():
     for config in maps:
         rows = grouped[config['denominationId']]
         assert {r['id_app'] for r, _ in rows} == {config['appellationId']}
-        assert {r['denom'] for r, _ in rows} == {config['sourceName']}
+        equivalent_names = config.get('equivalentSourceNames', [])
+        assert {r['denom'] for r, _ in rows} == {config['sourceName'], *equivalent_names}
+        # Fuissé repeats identical white-only geometry under two source labels.
+        # Require exact topological equality per commune before treating a
+        # reviewed alias as a duplicate; never merge distinct colour areas.
+        for name in equivalent_names:
+            for code in config['communes']:
+                original = unary_union([g for r, g in rows if r['denom'] == config['sourceName'] and r['insee'] == code])
+                duplicate = unary_union([g for r, g in rows if r['denom'] == name and r['insee'] == code])
+                assert not original.is_empty and original.equals(duplicate)
         # These reviewed denominations share geometry across their allowed colours. A new
         # source variant or changed colour code must be reviewed, not merged.
         assert {r['cvi'] for r, _ in rows} == {config['sourceCvi']}
         assert sorted({r['insee'] for r, _ in rows}) == config['communes']
         colour_codes = {'R': 'red', 'B': 'white', 'S': 'rose'}
-        assert sorted(colour_codes[code.strip()[1]] for code in config['sourceCvi'].split(',')) == sorted(config['wineColours'])
+        assert sorted({colour_codes[code.strip()[1]] for code in config['sourceCvi'].split(',')}) == sorted(config['wineColours'])
         whole_m = unary_union([geom for _, geom in rows])
         assert whole_m.is_valid
         whole = transform(to_wgs84, whole_m)
@@ -148,9 +157,10 @@ def main():
         outputs.extend([(ROOT / 'public' / url.lstrip('/'), dict(type='FeatureCollection', features=features), True),
                         (PLACES / f"{config['id']}MapCatalogue.json", catalogue, False)])
         entry = {key: config[key] for key in ('id', 'name', 'region', 'aliases', 'compatibleRegions', 'wineColours')}
-        # Unique site names a plain Bourgogne label may carry as the cuvée name.
-        if 'siteNames' in config:
-            entry['siteNames'] = config['siteNames']
+        # Reviewed site names require the matching base appellation on the wine.
+        for key in ('siteNames', 'baseAppellations'):
+            if key in config:
+                entry[key] = config[key]
         registry.append({**entry, 'featureId': feature_id})
         print(f"{config['name']}: {len(communes)} communes, {props['areaHa']} ha, {len(rows)} source rows; round-trip difference {difference:.8f} m²; grid {grid:g}°")
     # No output is changed until every map and the full inventory validates.

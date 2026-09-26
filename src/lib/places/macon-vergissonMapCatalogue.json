@@ -1,0 +1,74 @@
+{
+  "id": "macon-vergisson",
+  "name": "Mâcon Vergisson",
+  "region": "Mâconnais",
+  "mapKind": "regional",
+  "communes": [
+    {
+      "id": "71567",
+      "name": "Vergisson",
+      "bounds": [
+        4.704039,
+        46.29908,
+        4.729869,
+        46.323923
+      ],
+      "labelPoint": [
+        4.726235,
+        46.312361
+      ]
+    }
+  ],
+  "dataUrl": "/maps/macon-vergisson.2026-09-21.geojson",
+  "bounds": [
+    4.704039,
+    46.29908,
+    4.729869,
+    46.323923
+  ],
+  "sources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71567/cadastre-71567-communes.json.gz",
+      "sha256": "92eea2dcb42c8a03f163c0e5d3d8cdf1b8a3abaf3b5ddf2074117f01e3c395e3"
+    }
+  ],
+  "notes": {},
+  "features": [
+    {
+      "id": "inao-denom-1736",
+      "name": "Mâcon Vergisson",
+      "tier": "regional",
+      "kind": "appellation",
+      "appellationId": 583,
+      "denominationId": 1736,
+      "sourceName": "Mâcon Vergisson",
+      "communes": [
+        "71567"
+      ],
+      "areaHa": 218.95,
+      "matchId": "inao-denom-1736",
+      "atlasUrl": null,
+      "bounds": [
+        4.704039,
+        46.29908,
+        4.729869,
+        46.323923
+      ],
+      "labelPoint": [
+        4.726235,
+        46.312361
+      ]
+    }
+  ],
+  "coverageNote": "A geographic denomination within Mâcon AOC. The highlight shows its full INAO production area; named cuvées and producer holdings have no separate boundaries here."
+}
