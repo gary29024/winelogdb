@@ -856,6 +856,104 @@
       },
       "unionOverviewFills": true,
       "expectedBounds": [4.75, 46.95, 4.9, 47.1]
+    },
+    {
+      "id": "savigny-les-beaune",
+      "name": "Savigny-lès-Beaune",
+      "region": "Côte de Beaune",
+      "appellationId": 231,
+      "villageDenomination": 1173,
+      "colourDenominations": {"1173": "white", "2081": "red"},
+      "premierDenomination": 1196,
+      "premierRange": [1174, 1195],
+      "grands": [],
+      "communes": [{"id": "21590", "name": "Savigny-lès-Beaune"}],
+      "catalogueFile": "savignyVillageMapCatalogue.json",
+      "nameCrosswalk": {},
+      "wineColours": ["red", "white"],
+      "notes": {
+        "inao-denom-1180": {"note": "Bataillère is also labelled Clos de la Bataillère or La Bataillère aux Vergelesses. It has its own boundary, separate from Les Vergelesses on this map."}
+      },
+      "unionOverviewFills": true,
+      "expectedBounds": [4.75, 46.95, 4.9, 47.1]
+    },
+    {
+      "id": "chorey-les-beaune",
+      "name": "Chorey-lès-Beaune",
+      "region": "Côte de Beaune",
+      "appellationId": 159,
+      "villageDenomination": 543,
+      "colourDenominations": {"543": "white", "2049": "red"},
+      "grands": [],
+      "communes": [{"id": "21173", "name": "Chorey-lès-Beaune"}],
+      "catalogueFile": "choreyVillageMapCatalogue.json",
+      "nameCrosswalk": {},
+      "wineColours": ["red", "white"],
+      "notes": {
+        "inao-app-159-village": {"note": "This overview combines Chorey's red and white village areas. Its named vineyards, such as Les Beaumonts, have no separate boundaries here."},
+        "inao-denom-543": {"note": "The white-wine village area for Chorey-lès-Beaune. Named vineyards are not mapped individually."},
+        "inao-denom-2049": {"note": "The red-wine village area for Chorey-lès-Beaune. Named vineyards are not mapped individually."}
+      },
+      "expectedBounds": [4.75, 46.95, 4.9, 47.1]
+    },
+    {
+      "id": "auxey-duresses",
+      "name": "Auxey-Duresses",
+      "region": "Côte de Beaune",
+      "appellationId": 129,
+      "villageDenomination": 262,
+      "colourDenominations": {"262": "white", "2075": "red"},
+      "premierDenomination": 272,
+      "premierRange": [263, 271],
+      "grands": [],
+      "communes": [{"id": "21037", "name": "Auxey-Duresses"}],
+      "catalogueFile": "auxeyVillageMapCatalogue.json",
+      "nameCrosswalk": {},
+      "wineColours": ["red", "white"],
+      "notes": {
+        "inao-denom-266": {"note": "La Chapelle overlaps parts of Reugne and Les Bréterins in the official map. These remain three separate Premier Cru names, each with its full boundary."}
+      },
+      "unionOverviewFills": true,
+      "expectedBounds": [4.65, 46.95, 4.9, 47.1]
+    },
+    {
+      "id": "monthelie",
+      "name": "Monthélie",
+      "region": "Côte de Beaune",
+      "appellationId": 206,
+      "villageDenomination": 914,
+      "premierDenomination": 926,
+      "premierRange": [915, 925],
+      "premierDenominations": [1992, 1993, 1994, 1995],
+      "grands": [],
+      "communes": [{"id": "21428", "name": "Monthélie"}],
+      "catalogueFile": "monthelieVillageMapCatalogue.json",
+      "nameCrosswalk": {},
+      "wineColours": ["red", "white"],
+      "notes": {
+        "inao-denom-921": {"note": "This is the whole Les Champs Fulliots Premier Cru. A wine labelled Clos des Champs Fulliot is shown within this area; the producer's enclosed plot has no separate boundary here."}
+      },
+      "unionOverviewFills": true,
+      "expectedBounds": [4.75, 46.95, 4.9, 47.1]
+    },
+    {
+      "id": "saint-romain",
+      "name": "Saint-Romain",
+      "region": "Côte de Beaune",
+      "appellationId": 228,
+      "villageDenomination": 1157,
+      "colourDenominations": {"1157": "red", "2048": "white"},
+      "grands": [],
+      "communes": [{"id": "21569", "name": "Saint-Romain"}],
+      "catalogueFile": "saintRomainVillageMapCatalogue.json",
+      "nameCrosswalk": {},
+      "wineColours": ["red", "white"],
+      "notes": {
+        "inao-app-228-village": {"note": "Saint-Romain has different red and white village areas. Choose a colour to see its boundary. Named vineyards such as Sous la Velle and Sous Roche are not mapped individually."},
+        "inao-denom-1157": {"note": "The red-wine village area for Saint-Romain. Named vineyards are not mapped individually."},
+        "inao-denom-2048": {"note": "The white-wine village area for Saint-Romain. Named vineyards are not mapped individually."}
+      },
+      "expectedBounds": [4.65, 46.95, 4.9, 47.1]
     }
   ]
 }

@@ -148,6 +148,11 @@ for(const village of [
  {id:'beaune',name:'Beaune',cru:'Le Clos des Mouches',tier:'premier_cru',feature:'inao-denom-325',count:44,catalogue:'beauneVillageMapCatalogue',explore:'inao-denom-349',label:'Sur les Grèves - Clos Saint-Anne'},
  {id:'pommard',name:'Pommard',cru:'Clos des Epeneaux',tier:'premier_cru',feature:'inao-denom-1029',count:30,catalogue:'pommardVillageMapCatalogue',explore:'inao-denom-1051',label:'Les Rugiens Bas'},
  {id:'volnay',name:'Volnay',cru:'Santenots',tier:'premier_cru',feature:'inao-denom-1259',count:31,catalogue:'volnayVillageMapCatalogue',explore:'inao-denom-1237',label:'Clos des Ducs'},
+ {id:'savigny-les-beaune',name:'Savigny-lès-Beaune',cru:'Bataillère',tier:'premier_cru',feature:'inao-denom-1180',count:26,catalogue:'savignyVillageMapCatalogue',explore:'inao-denom-1193',label:'Les Vergelesses'},
+ {id:'chorey-les-beaune',name:'Chorey-lès-Beaune',cru:'Les Beaumonts',tier:'village',feature:'inao-denom-2049',count:3,catalogue:'choreyVillageMapCatalogue',explore:'inao-denom-543',label:'Chorey-lès-Beaune (white)'},
+ {id:'auxey-duresses',name:'Auxey-Duresses',cru:'Clos du Val',tier:'premier_cru',feature:'inao-denom-265',count:13,catalogue:'auxeyVillageMapCatalogue',explore:'inao-denom-266',label:'La Chapelle'},
+ {id:'monthelie',name:'Monthélie',cru:'Les Champs Fulliots',tier:'premier_cru',feature:'inao-denom-921',count:17,catalogue:'monthelieVillageMapCatalogue',explore:'inao-denom-1993',label:'Le Clou des Chênes'},
+ {id:'saint-romain',name:'Saint-Romain',cru:'Sous Roche',tier:'village',feature:'inao-denom-1157',count:3,catalogue:'saintRomainVillageMapCatalogue',explore:'inao-denom-2048',label:'Saint-Romain (white)'},
 ]){
  for(const route of ['/wines/layout-wine','/shared/layout-wine']){
   test(`${village.name} ${route}: opens the correct boundary and keeps its full village context`,async({page},testInfo)=>{
@@ -213,6 +218,10 @@ for(const village of [
  {name:'Puligny-Montrachet',white:2047,red:1061,app:219},
  {name:'Saint-Aubin',white:1125,red:2083,app:227},
  {name:'Ladoix',white:657,red:2059,app:192},
+ {name:'Savigny-lès-Beaune',white:1173,red:2081,app:231},
+ {name:'Chorey-lès-Beaune',white:543,red:2049,app:159},
+ {name:'Auxey-Duresses',white:262,red:2075,app:129},
+ {name:'Saint-Romain',white:2048,red:1157,app:228},
 ]){
  test(`${village.name} colour selects the official area and unknown colour keeps a combined overview`,async({page})=>{
   for(const fields of [
@@ -360,6 +369,39 @@ test('a red Meursault Santenots opens Volnay Santenots with the explanation',asy
  await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
  await expect(dialog.getByRole('combobox')).toHaveValue('inao-denom-1259');
  await expect(dialog.locator('.village-map-overlap')).toContainText('a red wine recorded as Meursault Santenots is shown here');
+});
+
+test('Savigny, Auxey and Monthélie producer spellings select the reviewed cru',async({page})=>{
+ for(const [appellation,wineName,id,selected,note] of [
+  ['Savigny-lès-Beaune','Albert Morot La Bataillère aux Vergelesses Premier Cru','inao-denom-1180','Bataillère','separate from Les Vergelesses'],
+  ['Auxey-Duresses','Les Bretterins','inao-denom-267','Les Bréterins',''],
+  ['Monthélie','MJ Tricot Clos Les Champs Fulliot','inao-denom-921','Les Champs Fulliots','whole Les Champs Fulliots Premier Cru'],
+ ]){
+  await setup(page,{appellation,wineName});await page.goto('/shared/layout-wine');
+  await page.getByRole('button',{name:'View village map'}).click();
+  const dialog=page.getByRole('dialog',{name:appellation,exact:true});
+  await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
+  await expect(dialog.getByRole('combobox')).toHaveValue(id);
+  await expect(dialog.locator('.village-map-selected-label')).toHaveText(selected);
+  if(note)await expect(dialog.locator('.village-map-overlap')).toContainText(note);
+  await page.keyboard.press('Escape');
+ }
+});
+
+test('Chorey and Saint-Romain explain missing plot boundaries and reject a Premier Cru tier',async({page})=>{
+ for(const [appellation,wineName] of [['Chorey-lès-Beaune','Les Beaumonts'],['Saint-Romain','Sous la Velle']]){
+  await setup(page,{appellation,wineName,classification:'village'});await page.goto('/wines/layout-wine');
+  await page.getByRole('button',{name:'View village map'}).click();
+  const dialog=page.getByRole('dialog',{name:appellation,exact:true});
+  await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
+  await expect(dialog.getByRole('combobox').locator('option')).toHaveCount(3);
+  await expect(dialog.locator('.village-map-overlap')).toContainText('Named vineyards are not mapped individually');
+  await expect(dialog.locator('.village-map-selected-label')).toHaveCount(0);
+  await page.keyboard.press('Escape');
+  await setup(page,{appellation,wineName,classification:'premier_cru'});await page.reload();
+  await expect(page.getByRole('heading',{name:wineName,exact:true})).toBeVisible();
+  await expect(page.getByRole('button',{name:'View village map'})).toHaveCount(0);
+ }
 });
 
 test('white Pommard and Volnay records do not select a red-wine map',async({page})=>{

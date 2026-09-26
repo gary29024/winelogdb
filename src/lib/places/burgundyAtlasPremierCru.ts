@@ -63,7 +63,15 @@ const reviewedNameAliases:Record<string,Record<string,string[]>>={
   'Beaune':{'Les Cents Vignes':['Les Cent Vignes'],'Clos des Ursules':['Les Vignes Franches Clos des Ursules'],'Les Epenotes':['Les Epenottes']},
   'Pommard':{'Les Jarolières':['Les Jarollières'],'Les Saussilles':['Les Saucilles']},
   'Volnay':{'Taille Pieds':['Les Taillepieds'],'En Chevret':['Chevret','Les Chevrets'],"Clos de la Bousse-d'Or":["Bousse d'Or"],
-    'Clos des 60 ouvrées':['Les Caillerets Clos des 60 Ouvrées','Clos des 60 Ouvrées En Caillerets','Clos des Soixante Ouvrées','Les Caillerets Clos des Soixante Ouvrées']}
+    'Clos des 60 ouvrées':['Les Caillerets Clos des 60 Ouvrées','Clos des 60 Ouvrées En Caillerets','Clos des Soixante Ouvrées','Les Caillerets Clos des Soixante Ouvrées']},
+  // Morot names Bataillère with Vergelesses on older labels; the two INAO
+  // boundaries are separate. Drouhin and Rapet also write Fournaux.
+  'Savigny-lès-Beaune':{'Bataillère':['Clos de la Bataillère','La Bataillère aux Vergelesses'],'Aux Fourneaux':['Aux Fournaux']},
+  // BIVB and producer labels use Bretterins; INAO writes Bréterins.
+  'Auxey-Duresses':{'Les Bréterins':['Les Bretterins']},
+  // Changarnier writes singular Fulliot. Tricot's clos has no separate INAO
+  // boundary: these names select the whole climat, explained in its map note.
+  'Monthélie':{'Les Champs Fulliots':['Les Champs Fulliot','Clos des Champs Fulliot','Clos des Champs Fulliots','Clos Les Champs Fulliot']}
 };
 const groups=mapping.groups.map(group=>({...group,key:nameKey(group.appellation),entries:group.entries.map(entry=>
   ({...entry,variants:[entry.name,...(reviewedNameAliases[group.appellation]?.[entry.name]??[])].flatMap(nameVariants)

@@ -1,0 +1,466 @@
+{
+  "id": "monthelie",
+  "name": "Monthélie",
+  "region": "Côte de Beaune",
+  "communes": [
+    {
+      "id": "21428",
+      "name": "Monthélie"
+    }
+  ],
+  "dataUrl": "/maps/monthelie.2026-09-21.geojson",
+  "bounds": [
+    4.754338,
+    46.988699,
+    4.775992,
+    47.004851
+  ],
+  "sources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21428/cadastre-21428-communes.json.gz",
+      "sha256": "a5d54eb814b7ca6095c41dd1927389ebe03c95d962e833437ed71ac6920894f8"
+    }
+  ],
+  "notes": {
+    "inao-denom-921": {
+      "note": "This is the whole Les Champs Fulliots Premier Cru. A wine labelled Clos des Champs Fulliot is shown within this area; the producer's enclosed plot has no separate boundary here."
+    }
+  },
+  "features": [
+    {
+      "id": "inao-denom-914",
+      "name": "Monthélie",
+      "tier": "village",
+      "kind": "appellation",
+      "appellationId": 206,
+      "denominationId": 914,
+      "sourceName": "Monthélie",
+      "communes": [
+        "21428"
+      ],
+      "areaHa": 140.58,
+      "matchId": "ba_appellation_joogdez7xviqhby4lshuo4dyrq",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_joogdez7xviqhby4lshuo4dyrq/monthelie",
+      "bounds": [
+        4.754338,
+        46.988699,
+        4.775992,
+        47.004851
+      ],
+      "labelPoint": [
+        4.760409,
+        46.99812
+      ]
+    },
+    {
+      "id": "inao-denom-915",
+      "name": "La Taupine",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 206,
+      "denominationId": 915,
+      "sourceName": "Monthélie premier cru La Taupine",
+      "communes": [
+        "21428"
+      ],
+      "areaHa": 0.93,
+      "matchId": "ba_designation_vxz4yqyv45cf7ng4lezoo3hwve",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_vxz4yqyv45cf7ng4lezoo3hwve/la-taupine",
+      "bounds": [
+        4.769479,
+        46.990608,
+        4.771211,
+        46.992187
+      ],
+      "labelPoint": [
+        4.770053,
+        46.991417
+      ]
+    },
+    {
+      "id": "inao-denom-916",
+      "name": "Le Cas Rougeot",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 206,
+      "denominationId": 916,
+      "sourceName": "Monthélie premier cru Le Cas Rougeot",
+      "communes": [
+        "21428"
+      ],
+      "areaHa": 0.56,
+      "matchId": "ba_designation_baffshv27igbort3ygudmm2b6q",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_baffshv27igbort3ygudmm2b6q/le-cas-rougeot",
+      "bounds": [
+        4.77018,
+        46.992181,
+        4.77163,
+        46.993015
+      ],
+      "labelPoint": [
+        4.770763,
+        46.992604
+      ]
+    },
+    {
+      "id": "inao-denom-917",
+      "name": "Le Château Gaillard",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 206,
+      "denominationId": 917,
+      "sourceName": "Monthélie premier cru Le Château Gaillard",
+      "communes": [
+        "21428"
+      ],
+      "areaHa": 0.5,
+      "matchId": "ba_designation_yf7weksmffbivgd5eagm25teye",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_yf7weksmffbivgd5eagm25teye/le-chateau-gaillard",
+      "bounds": [
+        4.767627,
+        46.991641,
+        4.768718,
+        46.992693
+      ],
+      "labelPoint": [
+        4.7681,
+        46.992197
+      ]
+    },
+    {
+      "id": "inao-denom-918",
+      "name": "Le Clos Gauthey",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 206,
+      "denominationId": 918,
+      "sourceName": "Monthélie premier cru Le Clos Gauthey",
+      "communes": [
+        "21428"
+      ],
+      "areaHa": 1.81,
+      "matchId": "ba_designation_wob4zmvacnwodjmnlbeglaua2m",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_wob4zmvacnwodjmnlbeglaua2m/le-clos-gauthey",
+      "bounds": [
+        4.768134,
+        46.991526,
+        4.770359,
+        46.993244
+      ],
+      "labelPoint": [
+        4.769325,
+        46.992399
+      ]
+    },
+    {
+      "id": "inao-denom-919",
+      "name": "Le Meix Bataille",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 206,
+      "denominationId": 919,
+      "sourceName": "Monthélie premier cru Le Meix Bataille",
+      "communes": [
+        "21428"
+      ],
+      "areaHa": 2.22,
+      "matchId": "ba_designation_7yih2uuc57wn5scil7g4gbfugy",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_7yih2uuc57wn5scil7g4gbfugy/le-meix-bataille",
+      "bounds": [
+        4.767423,
+        46.992972,
+        4.769928,
+        46.995056
+      ],
+      "labelPoint": [
+        4.76845,
+        46.994035
+      ]
+    },
+    {
+      "id": "inao-denom-920",
+      "name": "Le Village",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 206,
+      "denominationId": 920,
+      "sourceName": "Monthélie premier cru Le Village",
+      "communes": [
+        "21428"
+      ],
+      "areaHa": 0.2,
+      "matchId": "ba_designation_7yvshcpv3q6sxyvxmmmqx27fj4",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_7yvshcpv3q6sxyvxmmmqx27fj4/le-village",
+      "bounds": [
+        4.767295,
+        46.991756,
+        4.767901,
+        46.992527
+      ],
+      "labelPoint": [
+        4.767565,
+        46.992189
+      ]
+    },
+    {
+      "id": "inao-denom-921",
+      "name": "Les Champs Fulliots",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 206,
+      "denominationId": 921,
+      "sourceName": "Monthélie premier cru Les Champs Fulliots",
+      "communes": [
+        "21428"
+      ],
+      "areaHa": 7.82,
+      "matchId": "ba_designation_ztmf6sjkrs6qhxrc7md762abt4",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_ztmf6sjkrs6qhxrc7md762abt4/les-champs-fulliots",
+      "bounds": [
+        4.770361,
+        46.990389,
+        4.775992,
+        46.993462
+      ],
+      "labelPoint": [
+        4.773457,
+        46.991936
+      ]
+    },
+    {
+      "id": "inao-denom-922",
+      "name": "Les Duresses",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 206,
+      "denominationId": 922,
+      "sourceName": "Monthélie premier cru Les Duresses",
+      "communes": [
+        "21428"
+      ],
+      "areaHa": 6.6,
+      "matchId": "ba_designation_tkw6cnylljsttfxcvwbjxi32xe",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_tkw6cnylljsttfxcvwbjxi32xe/les-duresses",
+      "bounds": [
+        4.756391,
+        46.990775,
+        4.759775,
+        46.994588
+      ],
+      "labelPoint": [
+        4.758153,
+        46.992958
+      ]
+    },
+    {
+      "id": "inao-denom-923",
+      "name": "Les Riottes",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 206,
+      "denominationId": 923,
+      "sourceName": "Monthélie premier cru Les Riottes",
+      "communes": [
+        "21428"
+      ],
+      "areaHa": 3.97,
+      "matchId": "ba_designation_dpsqdw5c4dsohz254nijvop42a",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_dpsqdw5c4dsohz254nijvop42a/les-riottes",
+      "bounds": [
+        4.767583,
+        46.994319,
+        4.770517,
+        46.996965
+      ],
+      "labelPoint": [
+        4.768764,
+        46.995644
+      ]
+    },
+    {
+      "id": "inao-denom-924",
+      "name": "Les Vignes Rondes",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 206,
+      "denominationId": 924,
+      "sourceName": "Monthélie premier cru Les Vignes Rondes",
+      "communes": [
+        "21428"
+      ],
+      "areaHa": 2.69,
+      "matchId": "ba_designation_4mm6k55zhpwdanwf5d5qgzeocq",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_4mm6k55zhpwdanwf5d5qgzeocq/les-vignes-rondes",
+      "bounds": [
+        4.768771,
+        46.992976,
+        4.771958,
+        46.994393
+      ],
+      "labelPoint": [
+        4.770529,
+        46.993664
+      ]
+    },
+    {
+      "id": "inao-denom-925",
+      "name": "Sur la Velle",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 206,
+      "denominationId": 925,
+      "sourceName": "Monthélie premier cru Sur la Velle",
+      "communes": [
+        "21428"
+      ],
+      "areaHa": 6.14,
+      "matchId": "ba_designation_sxqxgnj2p5ak7qfjhea67vfe54",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_sxqxgnj2p5ak7qfjhea67vfe54/sur-la-velle",
+      "bounds": [
+        4.76975,
+        46.993038,
+        4.774888,
+        46.995569
+      ],
+      "labelPoint": [
+        4.772823,
+        46.994317
+      ]
+    },
+    {
+      "id": "inao-denom-926",
+      "name": "Monthélie Premier Cru",
+      "tier": "premier_cru",
+      "kind": "appellation",
+      "appellationId": 206,
+      "denominationId": 926,
+      "sourceName": "Monthélie premier cru",
+      "communes": [
+        "21428"
+      ],
+      "areaHa": 40.11,
+      "matchId": "ba_appellation_q46vflcisldngzwktdatqrjjm4",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_q46vflcisldngzwktdatqrjjm4/monthelie-premier-cru",
+      "bounds": [
+        4.756391,
+        46.989673,
+        4.775992,
+        46.996965
+      ],
+      "labelPoint": [
+        4.771615,
+        46.994935
+      ]
+    },
+    {
+      "id": "inao-denom-1992",
+      "name": "Clos des Toisières",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 206,
+      "denominationId": 1992,
+      "sourceName": "Monthélie premier cru Clos des Toisières",
+      "communes": [
+        "21428"
+      ],
+      "areaHa": 0.45,
+      "matchId": "ba_designation_25ifdj2lukdjv7afvg2ghowtvy",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_25ifdj2lukdjv7afvg2ghowtvy/clos-des-toisieres",
+      "bounds": [
+        4.771144,
+        46.989673,
+        4.772712,
+        46.990381
+      ],
+      "labelPoint": [
+        4.771683,
+        46.990029
+      ]
+    },
+    {
+      "id": "inao-denom-1993",
+      "name": "Le Clou des Chênes",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 206,
+      "denominationId": 1993,
+      "sourceName": "Monthélie premier cru Le Clou des Chênes",
+      "communes": [
+        "21428"
+      ],
+      "areaHa": 1.63,
+      "matchId": "ba_designation_io6qdpxzucffrgxfitlqxw64ma",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_io6qdpxzucffrgxfitlqxw64ma/le-clou-des-chenes",
+      "bounds": [
+        4.771321,
+        46.995261,
+        4.773567,
+        46.996719
+      ],
+      "labelPoint": [
+        4.772355,
+        46.995995
+      ]
+    },
+    {
+      "id": "inao-denom-1994",
+      "name": "Les Barbières",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 206,
+      "denominationId": 1994,
+      "sourceName": "Monthélie premier cru Les Barbières",
+      "communes": [
+        "21428"
+      ],
+      "areaHa": 1.21,
+      "matchId": "ba_designation_fm4rspullhgsvuzb2jkg5zpqhq",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_fm4rspullhgsvuzb2jkg5zpqhq/les-barbieres",
+      "bounds": [
+        4.769119,
+        46.99498,
+        4.771355,
+        46.996113
+      ],
+      "labelPoint": [
+        4.770488,
+        46.995536
+      ]
+    },
+    {
+      "id": "inao-denom-1995",
+      "name": "Les Clous",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 206,
+      "denominationId": 1995,
+      "sourceName": "Monthélie premier cru Les Clous",
+      "communes": [
+        "21428"
+      ],
+      "areaHa": 3.38,
+      "matchId": "ba_designation_5hfpemnx6qthjgbxng2cskml3q",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_5hfpemnx6qthjgbxng2cskml3q/les-clous",
+      "bounds": [
+        4.758082,
+        46.993791,
+        4.761361,
+        46.995867
+      ],
+      "labelPoint": [
+        4.759621,
+        46.994862
+      ]
+    }
+  ]
+}

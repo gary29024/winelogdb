@@ -1,0 +1,126 @@
+{
+  "id": "chorey-les-beaune",
+  "name": "Chorey-lès-Beaune",
+  "region": "Côte de Beaune",
+  "communes": [
+    {
+      "id": "21173",
+      "name": "Chorey-lès-Beaune"
+    }
+  ],
+  "dataUrl": "/maps/chorey-les-beaune.2026-09-21.geojson",
+  "bounds": [
+    4.847869,
+    47.04059,
+    4.87209,
+    47.062875
+  ],
+  "sources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21173/cadastre-21173-communes.json.gz",
+      "sha256": "993a9dd64cccc45e11910d167107216370018085882d6b06f411243ff5a378b0"
+    }
+  ],
+  "notes": {
+    "inao-app-159-village": {
+      "note": "This overview combines Chorey's red and white village areas. Its named vineyards, such as Les Beaumonts, have no separate boundaries here."
+    },
+    "inao-denom-543": {
+      "note": "The white-wine village area for Chorey-lès-Beaune. Named vineyards are not mapped individually."
+    },
+    "inao-denom-2049": {
+      "note": "The red-wine village area for Chorey-lès-Beaune. Named vineyards are not mapped individually."
+    }
+  },
+  "features": [
+    {
+      "id": "inao-app-159-village",
+      "name": "Chorey-lès-Beaune (all colours)",
+      "tier": "village",
+      "kind": "appellation",
+      "appellationId": 159,
+      "denominationId": null,
+      "denominationIds": [
+        543,
+        2049
+      ],
+      "sourceName": "Chorey-lès-Beaune / Chorey-lès-Beaune ou Chorey-lès-Beaune Côte de Beaune",
+      "communes": [
+        "21173"
+      ],
+      "areaHa": 152.39,
+      "matchId": "ba_appellation_fzzqzt2vmwytap7omrsdjq2o2q",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_fzzqzt2vmwytap7omrsdjq2o2q/chorey-les-beaune",
+      "bounds": [
+        4.847869,
+        47.04059,
+        4.87209,
+        47.062875
+      ],
+      "labelPoint": [
+        4.868052,
+        47.057321
+      ]
+    },
+    {
+      "id": "inao-denom-543",
+      "name": "Chorey-lès-Beaune (white)",
+      "tier": "village",
+      "kind": "appellation",
+      "appellationId": 159,
+      "denominationId": 543,
+      "sourceName": "Chorey-lès-Beaune",
+      "communes": [
+        "21173"
+      ],
+      "areaHa": 152.39,
+      "matchId": "ba_appellation_fzzqzt2vmwytap7omrsdjq2o2q",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_fzzqzt2vmwytap7omrsdjq2o2q/chorey-les-beaune",
+      "bounds": [
+        4.847869,
+        47.04059,
+        4.87209,
+        47.062875
+      ],
+      "labelPoint": [
+        4.866581,
+        47.060133
+      ]
+    },
+    {
+      "id": "inao-denom-2049",
+      "name": "Chorey-lès-Beaune (red)",
+      "tier": "village",
+      "kind": "appellation",
+      "appellationId": 159,
+      "denominationId": 2049,
+      "sourceName": "Chorey-lès-Beaune ou Chorey-lès-Beaune Côte de Beaune",
+      "communes": [
+        "21173"
+      ],
+      "areaHa": 152.39,
+      "matchId": "ba_appellation_fzzqzt2vmwytap7omrsdjq2o2q",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_fzzqzt2vmwytap7omrsdjq2o2q/chorey-les-beaune",
+      "bounds": [
+        4.847869,
+        47.04059,
+        4.87209,
+        47.062875
+      ],
+      "labelPoint": [
+        4.866581,
+        47.060133
+      ]
+    }
+  ]
+}

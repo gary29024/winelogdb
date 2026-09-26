@@ -275,7 +275,7 @@ def main():
                             for f in catalogue if f["denominationId"] in climat_by_denom}}
         # Umbrella names: a Premier Cru lying at least 90% inside a larger one
         # (Chassagne's Morgeot covers nineteen named climats). Measured shares in
-        # the pinned snapshot are either >= 97% or <= 72%, so the threshold does
+        # the pinned snapshot are either >= 97% or <= 82%, so the threshold does
         # not sit on a borderline case. Partial overlaps are not umbrellas.
         premiers = [f for f in catalogue if f["kind"] == "vineyard" and f["tier"] == "premier_cru"]
         umbrellas = {}
