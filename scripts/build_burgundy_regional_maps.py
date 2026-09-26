@@ -147,7 +147,11 @@ def main():
                          coverageNote=config.get('coverageNote', 'A geographic denomination within Bourgogne AOC. The highlight shows its full INAO production area; named cuvées and producer holdings have no separate boundaries here.'))
         outputs.extend([(ROOT / 'public' / url.lstrip('/'), dict(type='FeatureCollection', features=features), True),
                         (PLACES / f"{config['id']}MapCatalogue.json", catalogue, False)])
-        registry.append({**{key: config[key] for key in ('id', 'name', 'region', 'aliases', 'compatibleRegions', 'wineColours')}, 'featureId': feature_id})
+        entry = {key: config[key] for key in ('id', 'name', 'region', 'aliases', 'compatibleRegions', 'wineColours')}
+        # Unique site names a plain Bourgogne label may carry as the cuvée name.
+        if 'siteNames' in config:
+            entry['siteNames'] = config['siteNames']
+        registry.append({**entry, 'featureId': feature_id})
         print(f"{config['name']}: {len(communes)} communes, {props['areaHa']} ha, {len(rows)} source rows; round-trip difference {difference:.8f} m²; grid {grid:g}°")
     # No output is changed until every map and the full inventory validates.
     for path, value, compact in outputs:

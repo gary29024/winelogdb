@@ -241,7 +241,8 @@
       "name": "Bourgogne La Chapelle Notre-Dame",
       "region": "Côte de Beaune",
       "aliases": [
-        "Bourgogne La Chapelle Notre-Dame"
+        "Bourgogne La Chapelle Notre-Dame",
+        "Bourgogne Chapelle Notre-Dame"
       ],
       "compatibleRegions": [
         "Burgundy",
@@ -253,6 +254,10 @@
         "red",
         "white",
         "rose"
+      ],
+      "siteNames": [
+        "La Chapelle Notre-Dame",
+        "Chapelle Notre-Dame"
       ],
       "featureId": "inao-denom-371"
     },
@@ -297,6 +302,12 @@
         "red",
         "white",
         "rose"
+      ],
+      "siteNames": [
+        "Montrecul",
+        "Montre-Cul",
+        "En Montre-Cul",
+        "En Montrecul"
       ],
       "featureId": "inao-denom-373"
     }

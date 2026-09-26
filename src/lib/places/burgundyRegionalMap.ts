@@ -10,7 +10,11 @@ type Wine=WineFacts&{classification?:string|null;wineStyle?:string|null};
 const key=(text:string)=>placeKey(text).replace(/\bste\b/g,'sainte').replace(/\bst\b/g,'saint')
  .replace(/\b(?:aoc|aop|appellation controlee|appellation protegee)\b/g,' ').replace(/\s+/g,' ').trim();
 const contains=(text:string,name:string)=>` ${text} `.includes(` ${name} `);
-const groups=registry.maps.map(group=>({...group,keys:group.aliases.map(key).sort((a,b)=>b.length-a.length),regions:group.compatibleRegions.map(key)}));
+const byLength=(a:string,b:string)=>b.length-a.length;
+const groups=registry.maps.map(group=>({...group,keys:group.aliases.map(key).sort(byLength),regions:group.compatibleRegions.map(key),
+ // Site names unique to one denomination (Montrecul): a plain Bourgogne label
+ // may carry them as the cuvée name instead of in the appellation.
+ siteKeys:((group as {siteNames?:string[]}).siteNames??[]).map(key).sort(byLength)}));
 const higherNames=[...new Set([
  ...villages.villages.map(village=>key(village.name)),
  ...PLACES.filter(place=>place.id.startsWith('france/burgundy/')&&place.classification)
@@ -27,7 +31,9 @@ const genericAppellations=['bourgogne','burgundy','bourgogne rouge','bourgogne b
  * Region alone is context, never evidence for one of these denominations. */
 export function burgundyRegionalMapTarget(wine:Wine):BurgundyVillageMapTarget|null|undefined{
  const fields=[wine.appellation,wine.wineName,wine.referenceSite,wine.referenceParcel].map(value=>key(value??''));
- const candidates=groups.filter(group=>fields.some(text=>group.keys.some(name=>contains(text,name))));
+ const plainBourgogne=genericAppellations.includes(fields[0]);
+ const namesSite=(group:typeof groups[number])=>plainBourgogne&&group.siteKeys.some(name=>contains(fields[1],name));
+ const candidates=groups.filter(group=>fields.some(text=>group.keys.some(name=>contains(text,name)))||namesSite(group));
  if(!candidates.length)return undefined;
  if(candidates.length!==1||wine.identityMatchStatus==='conflict'||wine.classification)return null;
  const group=candidates[0],country=key(wine.country??''),region=key(wine.region??'');
@@ -44,13 +50,14 @@ export function burgundyRegionalMapTarget(wine:Wine):BurgundyVillageMapTarget|nu
  const colour=normaliseColour(key(wine.colour??''))||style;
  if(colour&&!group.wineColours.includes(colour))return null;
  if(style&&colour&&style!==colour)return null;
- const removeDesignation=(text:string)=>group.keys
+ const removeDesignation=(text:string)=>[...group.keys,...(namesSite(group)?group.siteKeys:[])]
   .reduce((value,name)=>` ${value} `.replaceAll(` ${name} `,' ').trim(),text);
  const app=fields[0];
  if(app&&!genericAppellations.includes(app)&&
   (!group.keys.some(name=>contains(app,name))||!['','rouge','blanc','rose','red','white',...(vinGris?['gris','vin gris']:[])].includes(removeDesignation(app))))return null;
- // A cuvée/reference name alone must not infer its regional denomination.
- if(!fields.slice(0,2).some(text=>group.keys.some(name=>contains(text,name))))return null;
+ // A cuvée/reference name alone must not infer its regional denomination,
+ // except a unique site name beside an explicit plain Bourgogne appellation.
+ if(!fields.slice(0,2).some(text=>group.keys.some(name=>contains(text,name)))&&!namesSite(group))return null;
  const producer=key(wine.producer??'');
  const remaining=fields.map((text,index)=>{
   if(index===1&&producer)text=` ${text} `.replaceAll(` ${producer} `,' ').trim();

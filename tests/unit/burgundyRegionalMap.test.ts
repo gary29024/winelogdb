@@ -375,14 +375,27 @@ describe('small Côte d’Or regional denominations',()=>{
  it.each([
   {appellation:'Marsannay',wineName:'Bourgogne Le Chapitre'},
   {appellation:'Bourgogne Le Chapitre',wineName:'Marsannay Le Chapitre'},
-  {appellation:'Bourgogne',wineName:'La Chapelle Notre-Dame',producer:'Jean-Pierre Maldant'},
   {appellation:'Bourgogne',wineName:'Le Chapitre',producer:'Domaine Jean Fournier'},
-  {appellation:'Bourgogne',wineName:'Montrecul',producer:'Derey Frères'},
-  {appellation:'Bourgogne',wineName:'Montre-Cul',region:'Côte d’Or'},
   {appellation:'Bourgogne',referenceParcel:'Bourgogne Montrecul'},
   {appellation:'La Chapelle Notre-Dame'},{appellation:'Le Chapitre'},{appellation:'Montrecul'},
+  {appellation:null,wineName:'Montrecul'},
+  {appellation:'Bourgogne',wineName:'Montrecul',region:'Côte de Beaune'},
+  {appellation:'Bourgogne',wineName:'Montrecul Blanc',colour:'Red'},
+  {appellation:'Bourgogne',wineName:'La Chapelle Notre-Dame Premier Cru'},
  ])('does not infer a denomination from a bare name, producer or conflicting label %j',wine=>{
   expect(burgundyVillageMapTarget({...base,...wine})).toBeNull();
+ });
+ // Unlike Le Chapitre (also a Marsannay and Fixin name), these site names
+ // belong to one denomination, so a plain Bourgogne label may carry them.
+ it.each([
+  {appellation:'Bourgogne',wineName:'La Chapelle Notre-Dame',producer:'Jean-Pierre Maldant',expected:'inao-denom-371'},
+  {appellation:'Bourgogne Rouge',wineName:'Chapelle Notre Dame',expected:'inao-denom-371'},
+  {appellation:'Bourgogne Chapelle Notre-Dame',wineName:'A named cuvée',expected:'inao-denom-371'},
+  {appellation:'Bourgogne',wineName:'Montrecul',producer:'Derey Frères',expected:'inao-denom-373'},
+  {appellation:'Bourgogne',wineName:'Montre-Cul',region:'Côte d’Or',expected:'inao-denom-373'},
+  {appellation:'Burgundy',wineName:'Derey Frères En Montre-Cul Rouge',producer:'Derey Frères',expected:'inao-denom-373'},
+ ])('reads a unique site name beside plain Bourgogne %j',({expected,...wine})=>{
+  expect(burgundyVillageMapTarget({...base,...wine})).toMatchObject({featureId:expected,mapKind:'regional',scope:'appellation'});
  });
  it.each([
   {appellation:'Ladoix',classification:'village'},

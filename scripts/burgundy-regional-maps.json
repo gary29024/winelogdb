@@ -543,13 +543,18 @@
         47.4
       ],
       "aliases": [
-        "Bourgogne La Chapelle Notre-Dame"
+        "Bourgogne La Chapelle Notre-Dame",
+        "Bourgogne Chapelle Notre-Dame"
       ],
       "compatibleRegions": [
         "Burgundy",
         "Bourgogne",
         "Côte d’Or",
         "Côte de Beaune"
+      ],
+      "siteNames": [
+        "La Chapelle Notre-Dame",
+        "Chapelle Notre-Dame"
       ]
     },
     {
@@ -621,6 +626,12 @@
         "Bourgogne",
         "Côte d’Or",
         "Côte de Nuits"
+      ],
+      "siteNames": [
+        "Montrecul",
+        "Montre-Cul",
+        "En Montre-Cul",
+        "En Montrecul"
       ]
     }
   ],

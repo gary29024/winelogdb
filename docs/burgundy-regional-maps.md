@@ -323,6 +323,12 @@ BIVB's **Bourgogne En Montrecul**, resolve to the same denomination, not separat
 plots. La Chapelle Notre-Dame accepts Côte de Beaune context; the other two accept
 Côte de Nuits. All three accept the Côte d’Or département.
 
+Montrecul (and its spellings) and La Chapelle Notre-Dame are site names unique to
+their denominations, so an explicit plain Bourgogne appellation with that site
+as the wine name (appellation “Bourgogne”, wine “Montre-Cul”) also opens the
+map. Le Chapitre is excluded because the name is also a Marsannay wine and
+the Clos du Chapitre premier crus; it needs the full “Bourgogne Le Chapitre”.
+
 ### Le Chapitre appellation transition
 
 INAO still publishes the Bourgogne Le Chapitre denomination and its boundary
