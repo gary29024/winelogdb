@@ -313,3 +313,9 @@ describe('Saône-et-Loire and Yonne as recorded regions',()=>{
   expect(burgundyAtlasWineDetailPlace(wine)).toBeNull();
  });
 });
+
+describe('Saint abbreviations in regional names',()=>{
+ it.each(['Bourgogne Côte St-Jacques','Bourgogne Côte St Jacques','Bourgogne Cote Saint Jacques'])('%s opens Côte Saint-Jacques',appellation=>{
+  expect(burgundyVillageMapTarget({...base,appellation,colour:'Red'})?.featureId).toBe('inao-denom-374');
+ });
+});

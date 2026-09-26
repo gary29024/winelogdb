@@ -6,7 +6,9 @@ import registry from './burgundyRegionalMapRegistry.json';
 import villages from './burgundyVillageMapRegistry.json';
 
 type Wine=WineFacts&{classification?:string|null;wineStyle?:string|null};
-const key=(text:string)=>placeKey(text).replace(/\b(?:aoc|aop|appellation controlee|appellation protegee)\b/g,' ').replace(/\s+/g,' ').trim();
+// "St" abbreviates Saint on labels (Côte St-Jacques), as in the village matcher.
+const key=(text:string)=>placeKey(text).replace(/\bste\b/g,'sainte').replace(/\bst\b/g,'saint')
+ .replace(/\b(?:aoc|aop|appellation controlee|appellation protegee)\b/g,' ').replace(/\s+/g,' ').trim();
 const contains=(text:string,name:string)=>` ${text} `.includes(` ${name} `);
 const groups=registry.maps.map(group=>({...group,keys:group.aliases.map(key).sort((a,b)=>b.length-a.length),regions:group.compatibleRegions.map(key)}));
 const higherNames=[...new Set([
