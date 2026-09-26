@@ -13,6 +13,17 @@ describe('reference catalogue sharding and cache',()=>{
   expect(Object.keys(reads).filter(key=>key.includes('/shard-'))).toHaveLength(3);
   expect(await lwinRowById(b,'9999999',null,{manualPreview:true})).toBeNull();
  });
+ it.each([false,true])('uses a Schloss title alias before the legacy global scan (producer index: %s)',async indexed=>{
+  const reads:Record<string,number>={},shard=referenceShardId('lieser'),row={lwin7:'1248683'};
+  const manifest={prefix:'legacy',shardCount:256,...indexed?{producerIndexKey:'legacy/producers.json'}:{}};
+  const objects:Record<string,unknown>={'reference/lwin/current.json':manifest,[`legacy/shard-${shard}.json`]:[row]};
+  if(indexed)objects['legacy/producers.json']={'lieser':[shard]};
+  const b=bucket(objects,reads);
+  expect(await lwinRowById(b,'1248683','Schloss Lieser',{manualPreview:true})).toEqual(row);
+  const shardReads=Object.keys(reads).filter(key=>key.includes('/shard-'));
+  expect(shardReads).toContain(`legacy/shard-${shard}.json`);
+  expect(shardReads.length).toBeLessThanOrEqual(indexed?1:2);
+ });
  it('does not turn a catalogue read failure into an absent-code result',async()=>{
   const b={get:async(key:string)=>{if(key.endsWith('current.json'))return {text:async()=>JSON.stringify({prefix:'legacy',shardCount:3})};throw new Error('Storage unavailable')}} as unknown as R2Bucket;
   await expect(lwinRowById(b,'2035826',null,{manualPreview:true})).rejects.toThrow('Storage unavailable');
@@ -42,6 +53,8 @@ describe('reference catalogue sharding and cache',()=>{
  it('creates conservative producer lookup aliases without guessing ownership',()=>{
   expect(producerLookupKeys('Champagne Krug')).toEqual(['champagne krug','krug']);
   expect(producerLookupKeys('Ch. Latour')).toEqual(['ch latour','latour']);
+  expect(producerLookupKeys('Schloss Lieser')).toEqual(['schloss lieser','lieser']);
+  expect(producerHouseQualifier('Schloss Lieser')).toBe('schloss');
   expect(producerLookupKeys('Cave de Tain')).toEqual(['cave de tain','de tain']);
   expect(producerLookupKeys('Caves de Tain')).toEqual(['caves de tain','de tain']);
   expect(producerHouseQualifier('Cave de Tain')).toBe('cave');

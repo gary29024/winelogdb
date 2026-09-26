@@ -16,7 +16,7 @@ export function normalizeReferenceText(value:string|null|undefined){
  return (value??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase()
    .replace(/[’'`]/g,'').replace(/&/g,' and ').replace(/[^\p{L}\p{N}]+/gu,' ').trim();
 }
-const GENERIC_PRODUCER_PREFIX=/^(?:domaine|domaines|chateau|ch|champagne|maison|cave|caves|weingut|bodega|bodegas|tenuta|cantina|azienda agricola|marques)\s+/;
+const GENERIC_PRODUCER_PREFIX=/^(?:domaine|domaines|chateau|ch|schloss|champagne|maison|cave|caves|weingut|bodega|bodegas|tenuta|cantina|azienda agricola|marques)\s+/;
 export function producerLookupKeys(value:string|null|undefined){
  const base=normalizeReferenceText(value);if(!base)return [];
  const keys=[base];let stripped=base;
@@ -29,6 +29,7 @@ export function producerHouseQualifier(value:string|null|undefined){
  const first=base.split(' ')[0];
  if(first==='domaine'||first==='domaines')return 'domaine';
  if(first==='chateau'||first==='ch')return 'chateau';
+ if(first==='schloss')return 'schloss';
  if(first==='bodega'||first==='bodegas')return 'bodega';
  if(first==='cave'||first==='caves')return 'cave';
  if(first==='azienda')return 'azienda agricola';
