@@ -18,7 +18,7 @@ export type VillageMapCatalogue={
  areas?:{id:string;label:string;name:string;bounds:number[]}[];
 };
 export type BurgundyVillageMapTarget={villageId:string;villageName:string;region:string;featureId:string;name:string;scope:'vineyard'|'appellation';
- locationContext?:{note:string;sourceUrl:string;selectionId?:string;name?:string;featureIds?:string[]}};
+ locationContext?:{note:string;sourceUrl:string;selectionId?:string;name?:string;featureIds?:string[];approximateOutline?:'la-moutonne'}};
 
 // Only this small identity index joins wine details. Per-village metadata and
 // geometry load when the dialog opens, independently of the other villages.
@@ -67,6 +67,7 @@ export function burgundyVillageMapTarget(wine:MapWine):BurgundyVillageMapTarget|
  return {villageId:village.id,villageName:village.name,region:village.region,featureId:selected.featureId,name:selected.name,
   scope:target.scope==='vineyard'?'vineyard':'appellation',
   ...(producerLocation?{locationContext:{note:producerLocation.note,sourceUrl:producerLocation.sourceUrl,
+   ...(producerLocation.approximateOutline?{approximateOutline:producerLocation.approximateOutline}:{}),
    ...(containing?{selectionId:`location-${producerLocation.id}`,name:producerLocation.names[0],featureIds:containing.map(feature=>feature!.featureId)}:{})}}:{})};
 }
 

@@ -134,9 +134,9 @@ describe('reviewed producer vineyard locations',()=>{
  });
 });
 
-describe('La Moutonne containing climats',()=>{
+describe('La Moutonne producer illustration',()=>{
  const grand={country:'France',region:'Burgundy',appellation:'Chablis Grand Cru',classification:'grand_cru',colour:'White',wineName:'La Moutonne'};
- it('locates the unique monopole in both source climats, with or without producer metadata',()=>{
+ it('locates the unique monopole with its one-off approximation, with or without producer metadata',()=>{
   for(const fields of [{},{wineName:'Moutonne'},{producer:'Domaine Long-Depaquit'},
    {producer:'Albert Bichot',wineName:'Domaine Long-Depaquit La Moutonne Monopole'},
    {wineName:'Albert Bichot Domaine Long-Depaquit Chablis Grand Cru Moutonne 2020'},
@@ -149,8 +149,10 @@ describe('La Moutonne containing climats',()=>{
    const target=burgundyVillageMapTarget(input);
    expect(target,JSON.stringify(fields)).toMatchObject({villageId:'chablis',featureId:'inao-denom-439',locationContext:{
     selectionId:'location-long-depaquit-la-moutonne',name:'La Moutonne',featureIds:['inao-denom-446','inao-denom-444'],
+    approximateOutline:'la-moutonne',
    }});
-   expect(target?.locationContext?.note).toContain('highlighted in full');
+   expect(target?.locationContext?.note).toContain('schematic');
+   expect(target?.locationContext?.note).toContain('larger than the stated holding');
    expect(input).toEqual(before);
   }
  });
@@ -177,10 +179,15 @@ describe('La Moutonne containing climats',()=>{
    {referenceSite:'Meursault'},{wineName:'La Moutonne Premier Cru'},
   ])expect(burgundyVillageMapTarget({...grand,...fields})?.locationContext,JSON.stringify(fields)).toBeUndefined();
  });
- it('uses the existing full INAO climats without adding a monopole polygon',()=>{
+ it('keeps the illustration separate from the official climat catalogue and exclusive to La Moutonne',()=>{
   const entry=producerLocations.find(location=>location.id==='long-depaquit-la-moutonne')!;
   expect(entry.containingMatchIds?.map(id=>chablis.features.find(f=>f.matchId===id)?.name)).toEqual(['Vaudésir','Les Preuses']);
   expect(chablis.features.some(f=>f.name==='La Moutonne')).toBe(false);
+  expect(producerLocations.filter(location=>location.approximateOutline).map(location=>location.id)).toEqual(['long-depaquit-la-moutonne']);
+  expect(burgundyVillageMapTarget(wine)?.locationContext?.approximateOutline).toBeUndefined();
+  for(const feature of chablis.features){
+   expect(burgundyVillageMapTarget({...grand,wineName:feature.name})?.locationContext?.approximateOutline).toBeUndefined();
+  }
   expect(new URL(entry.sourceUrl).hostname).toBe('www.albert-bichot.com');
  });
 });

@@ -221,7 +221,7 @@
       "note": "The broad Premier Cru production area includes land whose named climat boundary is missing or incomplete. No individual vineyard is inferred for those wines."
     },
     "inao-denom-439": {
-      "note": "Chablis Grand Cru is one appellation with seven named climats. La Moutonne spans parts of Vaudésir and Les Preuses; its own boundary is unavailable. Its vineyard location shows both containing climats in full, while this overview shows the whole Grand Cru appellation."
+      "note": "Chablis Grand Cru is one appellation with seven named climats. La Moutonne spans parts of Vaudésir and Les Preuses. Its own official parcel boundary is unavailable; its wine view has a separately labelled approximate producer outline. This overview shows the whole Grand Cru appellation."
     },
     "inao-denom-440": {
       "note": "One of the seven named climats within the Chablis Grand Cru appellation. The highlight shows the whole official climat, not an individual producer’s holding or cuvée subdivision."
@@ -781,7 +781,7 @@
       ]
     }
   ],
-  "coverageNote": "Chablis has 40 Premier Cru climats. This map has eight named boundaries and partial coverage of Fourchaume and Mont de Milieu; 30 named boundaries are unavailable. Wines from missing or partial areas show the broad Premier Cru area. All seven Grand Cru climats are mapped; producer holdings and La Moutonne have no separate boundary.",
+  "coverageNote": "Chablis has 40 Premier Cru climats. This map has eight named boundaries and partial coverage of Fourchaume and Mont de Milieu; 30 named boundaries are unavailable. Wines from missing or partial areas show the broad Premier Cru area. All seven Grand Cru climats are mapped. Producer holdings have no official parcel boundaries here; La Moutonne alone has a separate approximate producer illustration.",
   "umbrellas": {
     "inao-denom-414": [
       "inao-denom-435"

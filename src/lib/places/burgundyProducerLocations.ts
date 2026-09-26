@@ -3,11 +3,13 @@ import { placeKey } from './resolve';
 
 // Reviewed geography, independent of a bottle's classification or vintage.
 // Keep evidence and the containing boundary together; these are not global
-// climat aliases and never identify a producer's precise holding.
+// climat aliases and never identify a producer's precise holding. La Moutonne
+// alone has an explicitly approved, separately labelled producer illustration.
 type ProducerLocation={
  id:string;appellation:string;producers:string[];names:string[];matchId:string;sourceUrl:string;note:string;
  climat?:string;renamedFromVintage?:number;monopole?:boolean;grandCru?:boolean;
  containingMatchIds?:string[];
+ approximateOutline?:'la-moutonne';
  homonym?:{climat:string;producers:string[];sourceUrl:string;producerFieldAliases:string[];producerAliasSourceUrl:string};
 };
 export const producerLocations:ProducerLocation[]=[{
@@ -29,8 +31,9 @@ export const producerLocations:ProducerLocation[]=[{
  names:['La Moutonne','Moutonne'],monopole:true,grandCru:true,
  matchId:'france/burgundy/chablis/chablis-grand-cru',
  containingMatchIds:['inao-denom-446','inao-denom-444'],
+ approximateOutline:'la-moutonne',
  sourceUrl:'https://www.albert-bichot.com/en/domaine-long-depaquit_22.html',
- note:'La Moutonne is Domaine Long-Depaquit’s 2.35 ha monopole, with about 95% in Vaudésir and 5% in Les Preuses. Its own boundary is not available here, so both containing climats are highlighted in full. These are not the monopole’s boundaries, and this map does not change the bottle’s recorded classification.',
+ note:'La Moutonne is Domaine Long-Depaquit’s monopole, reported by the producer as 2.35 ha, with about 95% in Vaudésir and 5% in Les Preuses. The dashed outline follows the producer’s illustrated map. It is schematic, draws larger than the stated holding and cannot be used to measure the parcel. This map does not change the bottle’s recorded classification.',
 }];
 
 const includes=(text:string,key:string)=>` ${text} `.includes(` ${key} `);

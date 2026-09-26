@@ -334,7 +334,10 @@ records alternatives in one string (Chambolle's "Les Feusselottes ou Les Feussel
 members, reprojects INAO EPSG:2154 coordinates to longitude/latitude,
 unions source records within each denomination, checks polygon validity,
 and fails on unexpected coverage or an unmatched identity. It retains coordinate
-precision and holes; no AI-generated, traced or approximate polygons are used.
+precision and holes; no AI-generated, traced or approximate polygons enter the
+official catalogue. The owner-approved [La Moutonne illustration](la-moutonne-approximation.md)
+is the sole exception in the UI: a separate source, labelled approximate, with
+no INAO identity, catalogue entry or change to official geometry/counts.
 
 `incompleteDenominations` marks reviewed partial Premier Cru features. Each must
 have an explanatory note; generated `incompleteTargets` redirects automatic wine
@@ -801,7 +804,7 @@ now have maps; regional AOCs and missing named plots remain separate work.
   so absent named polygons do not erase Premier Cru land from the overview.
 - Grand Cru `439` is a broad appellation; `440–446` are its seven named climats.
   Grand Cru wines open on the shared Grand Cru hillside, including broad wines
-  and La Moutonne's containing-climat location, while named climats keep their
+  and La Moutonne's approximate producer outline, while named climats keep their
   individual highlight.
   “Grand Cru view” returns to that hillside, “Village view” shows all of Chablis,
   and “Zoom to selection” offers a closer look at a single climat. Returning to
@@ -816,13 +819,16 @@ now have maps; regional AOCs and missing named plots remain separate work.
   source Preuses, and Les Vaucopins for Premier Cru Vaucoupin. These exact aliases
   are scoped to their appellation and source identity. The estate also places
   La Moutonne partly in Vaudésir and partly in Les Preuses. A verified Grand Cru
-  La Moutonne now selects both existing climats as a **Vineyard location**, with
-  a producer-sourced note (2.35 ha; approximately 95%/5%) explaining that their
-  full highlights are not its own boundary. The unique monopole name needs no
+  La Moutonne selects a separately sourced approximate producer illustration as
+  a **Vineyard location**, with a dashed outline, explicit schematic limitation
+  and producer attribution. The note distinguishes the producer's published
+  2.35 ha / approximately 95%-5% figures from the larger illustrated shape.
+  This user-approved exception applies only to La Moutonne; see its
+  [reproducible alignment](la-moutonne-approximation.md). The unique monopole name needs no
   producer field; explicit producer conflicts, blends and inconsistent references
   still stay broad. Its distinct UI selection allows exploration of either
-  containing climat or the parent Grand Cru area, then return to both highlights
-  and the hillside view. No catalogue feature or invented geometry is added.
+  containing climat or the parent Grand Cru area, then return to the dashed
+  outline and the hillside view. No official catalogue feature is added.
   A generic “clos” never proves Les Clos.
 - [BIVB's Irancy sheet](https://www.bourgogne-wines.com/our-wines-our-terroir/the-bourgogne-winegrowing-region-and-its-appellations/gallery_files/site/321/402/57644/57686.pdf)
   confirms red wine and Irancy, Cravant and Vincelottes. Cravant is now within
@@ -842,7 +848,7 @@ fills, and all 27 Cadastre outlines and hashes. All 39 prior maps/catalogues and
 their registry targets are unchanged, including the #347 Ferret and Domaine
 Vincent fixes. Browser checks cover all five new maps in owner/shared views at
 320, 390 and 1280 pixels, seven-climat Grand Cru context, local-only links,
-La Moutonne's two containing climats and both explicitly partial Premier Cru features.
+La Moutonne's isolated approximate overlay and both explicitly partial Premier Cru features.
 
 The [PR #349 cadastral audit](chablis-cadastre-audit.md) tests the proposed
 lieu-dit union/intersection against all eight complete source boundaries.

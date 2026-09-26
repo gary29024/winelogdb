@@ -108,15 +108,19 @@ before preparing derived production boundaries with explicit provenance.
 
 This independent location improvement does ship. [Domaine Long-Depaquit](https://www.albert-bichot.com/en/domaine-long-depaquit_22.html)
 describes a 2.35 ha monopole, approximately 95% in Vaudésir and 5% in Les Preuses.
-Both existing INAO climats are highlighted in full under **Vineyard location**,
-with a note distinguishing the containing areas from the monopole itself.
+The owner subsequently authorised a **La Moutonne-only exception**: a separately
+labelled approximate outline from the producer's illustrated map. It replaces
+the full containing-climat highlights in the wine's **Vineyard location** view.
+See the [source, alignment and limitations](la-moutonne-approximation.md).
 The unique name can identify this location without a producer field, after
 Grand Cru geography, tier and colour checks. Conflicting producers, mixed
 climat names and inconsistent reference fields retain broad scope.
 
 An exact La Moutonne boundary still requires documented parcel identifiers and
-licensed cadastral geometry. Do not trace a brochure or publish the two entire
-containing climats as its own polygon. Before adding a parcel union, verify
+licensed cadastral geometry. The approved illustration is not that exact
+boundary and does not relax this audit's publication gate for Premier Crus or
+other holdings. Never publish the two entire containing climats as the monopole.
+Before adding a parcel union, verify
 Grand Cru containment and substantiate the review's precise 2.3520 ha total /
 2.2418 ha Vaudésir / 0.1102 ha Les Preuses measurements with parcel evidence.
 The current UI uses the producer's published rounded figures instead.
