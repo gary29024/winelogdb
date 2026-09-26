@@ -1253,6 +1253,270 @@
           ]
         }
       ]
+    },
+    {
+      "id": "bouzeron",
+      "name": "Bouzeron",
+      "region": "Côte Chalonnaise",
+      "appellationId": 245,
+      "villageDenomination": 1286,
+      "grands": [],
+      "communes": [
+        {
+          "id": "71051",
+          "name": "Bouzeron"
+        },
+        {
+          "id": "71109",
+          "name": "Chassey-le-Camp"
+        }
+      ],
+      "catalogueFile": "bouzeronVillageMapCatalogue.json",
+      "nameCrosswalk": {},
+      "notes": {
+        "inao-denom-1286": {
+          "note": "Bouzeron is a white Aligoté appellation across Bouzeron and Chassey-le-Camp. This map shows the full published production area. Named village lieux-dits and individual producer holdings are not mapped separately."
+        }
+      },
+      "expectedBounds": [
+        4.6,
+        46.6,
+        4.85,
+        46.96
+      ],
+      "wineColours": [
+        "white"
+      ]
+    },
+    {
+      "id": "rully",
+      "name": "Rully",
+      "region": "Côte Chalonnaise",
+      "appellationId": 225,
+      "villageDenomination": 1087,
+      "grands": [],
+      "communes": [
+        {
+          "id": "71378",
+          "name": "Rully"
+        },
+        {
+          "id": "71073",
+          "name": "Chagny"
+        }
+      ],
+      "catalogueFile": "rullyVillageMapCatalogue.json",
+      "nameCrosswalk": {},
+      "notes": {
+        "inao-denom-1087": {
+          "note": "The full published Rully appellation area is shown across its producing communes. Named village lieux-dits and individual producer holdings are not mapped separately."
+        },
+        "inao-denom-1091": {
+          "note": "Clos Saint-Jacques lies in Chagny, within the Rully appellation. It is distinct from the village-level Les Saint-Jacques, which has no separate boundary here."
+        },
+        "inao-denom-1092": {
+          "note": "Clos du Chaigne, also called Clos du Chaigne à Jean de France, lies in Chagny within the Rully appellation."
+        }
+      },
+      "expectedBounds": [
+        4.6,
+        46.6,
+        4.85,
+        46.96
+      ],
+      "wineColours": [
+        "red",
+        "white"
+      ],
+      "premierDenomination": 1111,
+      "premierRange": [
+        1088,
+        1110
+      ],
+      "unionOverviewFills": true,
+      "displayNames": {
+        "Clos St Jacques": "Clos Saint-Jacques"
+      }
+    },
+    {
+      "id": "mercurey",
+      "name": "Mercurey",
+      "region": "Côte Chalonnaise",
+      "appellationId": 203,
+      "villageDenomination": 810,
+      "grands": [],
+      "communes": [
+        {
+          "id": "71294",
+          "name": "Mercurey"
+        },
+        {
+          "id": "71459",
+          "name": "Saint-Martin-sous-Montaigu"
+        }
+      ],
+      "catalogueFile": "mercureyVillageMapCatalogue.json",
+      "nameCrosswalk": {},
+      "notes": {
+        "inao-denom-810": {
+          "note": "The full published Mercurey appellation area is shown across its producing communes. Named village lieux-dits and individual producer holdings are not mapped separately."
+        },
+        "inao-denom-817": {
+          "note": "Clos des Montaigus spans Mercurey and Saint-Martin-sous-Montaigu. Its source boundary contains Clos du Château de Montaigu and partly overlaps Les Montaigus. Each designation retains its own selectable boundary."
+        },
+        "inao-denom-819": {
+          "note": "Clos du Château de Montaigu has its own source designation within Clos des Montaigus. Its name and boundary remain separately selectable."
+        },
+        "inao-denom-835": {
+          "note": "Les Montaigus partly overlaps Clos des Montaigus in the source. Neither contains the other, so a wine naming both keeps the broad Premier Cru view."
+        }
+      },
+      "expectedBounds": [
+        4.6,
+        46.6,
+        4.85,
+        46.96
+      ],
+      "wineColours": [
+        "red",
+        "white"
+      ],
+      "premierDenomination": 843,
+      "premierRange": [
+        811,
+        842
+      ],
+      "unionOverviewFills": true
+    },
+    {
+      "id": "givry",
+      "name": "Givry",
+      "region": "Côte Chalonnaise",
+      "appellationId": 183,
+      "villageDenomination": 617,
+      "grands": [],
+      "communes": [
+        {
+          "id": "71221",
+          "name": "Givry"
+        },
+        {
+          "id": "71182",
+          "name": "Dracy-le-Fort"
+        },
+        {
+          "id": "71241",
+          "name": "Jambles"
+        }
+      ],
+      "catalogueFile": "givryVillageMapCatalogue.json",
+      "nameCrosswalk": {},
+      "notes": {
+        "inao-denom-617": {
+          "note": "The full published Givry appellation area is shown across its producing communes. Named village lieux-dits and individual producer holdings are not mapped separately."
+        },
+        "inao-denom-644": {
+          "note": "This is the broad Givry Premier Cru production area across Givry, Dracy-le-Fort and Jambles. Le Vernoy has no separate boundary in this source and is not replaced by Clos du Vernoy."
+        },
+        "inao-denom-628": {
+          "note": "Clos du Vernoy has its own source boundary. It must not be used as a substitute for Le Vernoy, a different Premier Cru without separate geometry in this snapshot."
+        }
+      },
+      "expectedBounds": [
+        4.6,
+        46.6,
+        4.85,
+        46.96
+      ],
+      "wineColours": [
+        "red",
+        "white"
+      ],
+      "premierDenomination": 644,
+      "premierRange": [
+        618,
+        643
+      ],
+      "premierDenominations": [
+        2324,
+        2325,
+        2326,
+        2327,
+        2328,
+        2329,
+        2330,
+        2331,
+        2332,
+        2334,
+        2335
+      ],
+      "unionOverviewFills": true,
+      "localPremierDenominations": [
+        639,
+        2327,
+        2330
+      ],
+      "unmappedPremierNames": [
+        "Le Vernoy"
+      ],
+      "coverageNote": "37 of Givry’s 38 named Premier Crus have boundaries in this source. Le Vernoy has no separate geometry here; its wines show the broad Premier Cru area. Clos du Vernoy is a different designation and remains separately selectable."
+    },
+    {
+      "id": "montagny",
+      "name": "Montagny",
+      "region": "Côte Chalonnaise",
+      "appellationId": 205,
+      "villageDenomination": 863,
+      "grands": [],
+      "communes": [
+        {
+          "id": "71302",
+          "name": "Montagny-lès-Buxy"
+        },
+        {
+          "id": "71070",
+          "name": "Buxy"
+        },
+        {
+          "id": "71247",
+          "name": "Jully-lès-Buxy"
+        },
+        {
+          "id": "71485",
+          "name": "Saint-Vallerin"
+        }
+      ],
+      "catalogueFile": "montagnyVillageMapCatalogue.json",
+      "nameCrosswalk": {},
+      "notes": {
+        "inao-denom-863": {
+          "note": "Montagny produces white Chardonnay wines only. Its full production area spans Montagny-lès-Buxy, Buxy, Jully-lès-Buxy and Saint-Vallerin. Named village lieux-dits and individual producer holdings are not mapped separately."
+        },
+        "inao-denom-886": {
+          "note": "Les Coères spans Montagny-lès-Buxy, Jully-lès-Buxy and Saint-Vallerin. Its full published boundary is shown across all three communes."
+        },
+        "inao-denom-894": {
+          "note": "Les Paquiers spans Montagny-lès-Buxy and Saint-Vallerin. Its full published boundary is retained."
+        },
+        "inao-denom-898": {
+          "note": "Les Resses spans Montagny-lès-Buxy and Saint-Vallerin. Its full published boundary is retained."
+        }
+      },
+      "expectedBounds": [
+        4.6,
+        46.6,
+        4.85,
+        46.96
+      ],
+      "wineColours": [
+        "white"
+      ],
+      "premierDenomination": 913,
+      "premierRange": [
+        864,
+        912
+      ],
+      "unionOverviewFills": true
     }
   ]
 }

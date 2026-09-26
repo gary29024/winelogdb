@@ -1,0 +1,919 @@
+{
+  "id": "mercurey",
+  "name": "Mercurey",
+  "region": "Côte Chalonnaise",
+  "communes": [
+    {
+      "id": "71294",
+      "name": "Mercurey"
+    },
+    {
+      "id": "71459",
+      "name": "Saint-Martin-sous-Montaigu"
+    }
+  ],
+  "dataUrl": "/maps/mercurey.2026-09-21.geojson",
+  "bounds": [
+    4.689808,
+    46.812041,
+    4.747355,
+    46.859235
+  ],
+  "sources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71294/cadastre-71294-communes.json.gz",
+      "sha256": "ec67f97c904966a7b84455b4ae0d54cf09260b9236a2000923a73732ae1767c3"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71459/cadastre-71459-communes.json.gz",
+      "sha256": "4def2fa0006a8fa919282ff39958695a88186040c43e26042d9a27917e2eb07f"
+    }
+  ],
+  "notes": {
+    "inao-denom-810": {
+      "note": "The full published Mercurey appellation area is shown across its producing communes. Named village lieux-dits and individual producer holdings are not mapped separately."
+    },
+    "inao-denom-817": {
+      "note": "Clos des Montaigus spans Mercurey and Saint-Martin-sous-Montaigu. Its source boundary contains Clos du Château de Montaigu and partly overlaps Les Montaigus. Each designation retains its own selectable boundary."
+    },
+    "inao-denom-819": {
+      "note": "Clos du Château de Montaigu has its own source designation within Clos des Montaigus. Its name and boundary remain separately selectable."
+    },
+    "inao-denom-835": {
+      "note": "Les Montaigus partly overlaps Clos des Montaigus in the source. Neither contains the other, so a wine naming both keeps the broad Premier Cru view."
+    }
+  },
+  "features": [
+    {
+      "id": "inao-denom-810",
+      "name": "Mercurey",
+      "tier": "village",
+      "kind": "appellation",
+      "appellationId": 203,
+      "denominationId": 810,
+      "sourceName": "Mercurey",
+      "communes": [
+        "71294",
+        "71459"
+      ],
+      "areaHa": 790.49,
+      "matchId": "ba_appellation_tz4sirocyjghxf6stxshgebw6y",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_tz4sirocyjghxf6stxshgebw6y/mercurey",
+      "bounds": [
+        4.689808,
+        46.812041,
+        4.747355,
+        46.859235
+      ],
+      "labelPoint": [
+        4.727887,
+        46.850749
+      ]
+    },
+    {
+      "id": "inao-denom-811",
+      "name": "Clos Marcilly",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 203,
+      "denominationId": 811,
+      "sourceName": "Mercurey premier cru Clos Marcilly",
+      "communes": [
+        "71294"
+      ],
+      "areaHa": 7.48,
+      "matchId": "ba_designation_jr4faylbiamvyxaaohf7k6sgp4",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_jr4faylbiamvyxaaohf7k6sgp4/clos-marcilly",
+      "bounds": [
+        4.734547,
+        46.832141,
+        4.739168,
+        46.834841
+      ],
+      "labelPoint": [
+        4.736704,
+        46.833136
+      ]
+    },
+    {
+      "id": "inao-denom-812",
+      "name": "Clos Tonnerre",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 203,
+      "denominationId": 812,
+      "sourceName": "Mercurey premier cru Clos Tonnerre",
+      "communes": [
+        "71294"
+      ],
+      "areaHa": 2.97,
+      "matchId": "ba_designation_cjow5immpwx3egvix4yha2v7ny",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_cjow5immpwx3egvix4yha2v7ny/clos-tonnerre",
+      "bounds": [
+        4.718705,
+        46.837219,
+        4.721824,
+        46.838917
+      ],
+      "labelPoint": [
+        4.7202,
+        46.838115
+      ]
+    },
+    {
+      "id": "inao-denom-813",
+      "name": "Clos Voyens",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 203,
+      "denominationId": 813,
+      "sourceName": "Mercurey premier cru Clos Voyens",
+      "communes": [
+        "71294"
+      ],
+      "areaHa": 2.48,
+      "matchId": "ba_designation_muj3c4tzx4ewg5myes6fmnjuu4",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_muj3c4tzx4ewg5myes6fmnjuu4/clos-voyens",
+      "bounds": [
+        4.727632,
+        46.83786,
+        4.731064,
+        46.839396
+      ],
+      "labelPoint": [
+        4.729338,
+        46.838574
+      ]
+    },
+    {
+      "id": "inao-denom-814",
+      "name": "Clos de Paradis",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 203,
+      "denominationId": 814,
+      "sourceName": "Mercurey premier cru Clos de Paradis",
+      "communes": [
+        "71459"
+      ],
+      "areaHa": 7.5,
+      "matchId": "ba_designation_hsg3ifwnx6lxgbfgqzpt3cbtj4",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_hsg3ifwnx6lxgbfgqzpt3cbtj4/clos-de-paradis",
+      "bounds": [
+        4.710373,
+        46.816252,
+        4.716486,
+        46.82
+      ],
+      "labelPoint": [
+        4.71228,
+        46.818087
+      ]
+    },
+    {
+      "id": "inao-denom-815",
+      "name": "Clos des Barraults",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 203,
+      "denominationId": 815,
+      "sourceName": "Mercurey premier cru Clos des Barraults",
+      "communes": [
+        "71294"
+      ],
+      "areaHa": 4.99,
+      "matchId": "ba_designation_qqgivnmmuxgsmcdgbydmlrfpgy",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_qqgivnmmuxgsmcdgbydmlrfpgy/clos-des-barraults",
+      "bounds": [
+        4.722001,
+        46.839113,
+        4.724937,
+        46.84252
+      ],
+      "labelPoint": [
+        4.723136,
+        46.840786
+      ]
+    },
+    {
+      "id": "inao-denom-816",
+      "name": "Clos des grands Voyens",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 203,
+      "denominationId": 816,
+      "sourceName": "Mercurey premier cru Clos des grands Voyens",
+      "communes": [
+        "71294"
+      ],
+      "areaHa": 4.89,
+      "matchId": "ba_designation_uupxzowwectn4xxwddrbsobfii",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_uupxzowwectn4xxwddrbsobfii/clos-des-grands-voyens",
+      "bounds": [
+        4.727397,
+        46.835955,
+        4.732504,
+        46.837959
+      ],
+      "labelPoint": [
+        4.729175,
+        46.837098
+      ]
+    },
+    {
+      "id": "inao-denom-817",
+      "name": "Clos des Montaigus",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 203,
+      "denominationId": 817,
+      "sourceName": "Mercurey Premier Cru Clos des Montaigus",
+      "communes": [
+        "71294",
+        "71459"
+      ],
+      "areaHa": 5.71,
+      "matchId": "ba_designation_e4qvndje3bveochfrl6up7dsj4",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_e4qvndje3bveochfrl6up7dsj4/clos-des-montaigus",
+      "bounds": [
+        4.712212,
+        46.821062,
+        4.716129,
+        46.827111
+      ],
+      "labelPoint": [
+        4.713526,
+        46.822898
+      ]
+    },
+    {
+      "id": "inao-denom-818",
+      "name": "Clos des Myglands",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 203,
+      "denominationId": 818,
+      "sourceName": "Mercurey premier cru Clos des Myglands",
+      "communes": [
+        "71294"
+      ],
+      "areaHa": 6.31,
+      "matchId": "ba_designation_og4go7jbshnprshqjxleyhc7tu",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_og4go7jbshnprshqjxleyhc7tu/clos-des-myglands",
+      "bounds": [
+        4.736099,
+        46.840931,
+        4.738874,
+        46.84459
+      ],
+      "labelPoint": [
+        4.737548,
+        46.842616
+      ]
+    },
+    {
+      "id": "inao-denom-819",
+      "name": "Clos du Château de Montaigu",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 203,
+      "denominationId": 819,
+      "sourceName": "Mercurey Premier Cru Clos du Château de Montaigu",
+      "communes": [
+        "71294"
+      ],
+      "areaHa": 1.9,
+      "matchId": "ba_designation_3rv3sja7haur7j5lgqwtfdgtja",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_3rv3sja7haur7j5lgqwtfdgtja/clos-du-chateau-de-montaigu",
+      "bounds": [
+        4.712839,
+        46.825287,
+        4.715285,
+        46.827111
+      ],
+      "labelPoint": [
+        4.713975,
+        46.826232
+      ]
+    },
+    {
+      "id": "inao-denom-820",
+      "name": "Grand Clos Fortoul",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 203,
+      "denominationId": 820,
+      "sourceName": "Mercurey premier cru Grand Clos Fortoul",
+      "communes": [
+        "71294"
+      ],
+      "areaHa": 2.49,
+      "matchId": "ba_designation_m62yqd4buqcrglax4jw3ocin5e",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_m62yqd4buqcrglax4jw3ocin5e/grand-clos-fortoul",
+      "bounds": [
+        4.731689,
+        46.834942,
+        4.733951,
+        46.837027
+      ],
+      "labelPoint": [
+        4.732865,
+        46.836129
+      ]
+    },
+    {
+      "id": "inao-denom-821",
+      "name": "Griffères",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 203,
+      "denominationId": 821,
+      "sourceName": "Mercurey premier cru Griffères",
+      "communes": [
+        "71294"
+      ],
+      "areaHa": 0.37,
+      "matchId": "ba_designation_lkb3ayv27aodyleghjh5fq4ct4",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_lkb3ayv27aodyleghjh5fq4ct4/grifferes",
+      "bounds": [
+        4.719053,
+        46.829012,
+        4.720525,
+        46.829634
+      ],
+      "labelPoint": [
+        4.719796,
+        46.829325
+      ]
+    },
+    {
+      "id": "inao-denom-822",
+      "name": "La Bondue",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 203,
+      "denominationId": 822,
+      "sourceName": "Mercurey premier cru La Bondue",
+      "communes": [
+        "71294"
+      ],
+      "areaHa": 4.57,
+      "matchId": "ba_designation_b6ybwpxz2fcrcn3ywyuymedx2m",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_b6ybwpxz2fcrcn3ywyuymedx2m/la-bondue",
+      "bounds": [
+        4.713125,
+        46.832452,
+        4.716409,
+        46.835636
+      ],
+      "labelPoint": [
+        4.714401,
+        46.833441
+      ]
+    },
+    {
+      "id": "inao-denom-823",
+      "name": "La Cailloute",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 203,
+      "denominationId": 823,
+      "sourceName": "Mercurey premier cru La Cailloute",
+      "communes": [
+        "71294"
+      ],
+      "areaHa": 1.73,
+      "matchId": "ba_designation_rkjxwj4vqymfuxrnuwgkqjr2wi",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_rkjxwj4vqymfuxrnuwgkqjr2wi/la-cailloute",
+      "bounds": [
+        4.716518,
+        46.844791,
+        4.718748,
+        46.84603
+      ],
+      "labelPoint": [
+        4.717766,
+        46.845396
+      ]
+    },
+    {
+      "id": "inao-denom-824",
+      "name": "La Chassière",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 203,
+      "denominationId": 824,
+      "sourceName": "Mercurey premier cru La Chassière",
+      "communes": [
+        "71459"
+      ],
+      "areaHa": 4.42,
+      "matchId": "ba_designation_pxtj7uhgjx5l2j6l6jmawaln3m",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_pxtj7uhgjx5l2j6l6jmawaln3m/la-chassiere",
+      "bounds": [
+        4.713961,
+        46.817312,
+        4.718064,
+        46.819933
+      ],
+      "labelPoint": [
+        4.716114,
+        46.818617
+      ]
+    },
+    {
+      "id": "inao-denom-825",
+      "name": "La Levrière",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 203,
+      "denominationId": 825,
+      "sourceName": "Mercurey premier cru La Levrière",
+      "communes": [
+        "71294"
+      ],
+      "areaHa": 1.32,
+      "matchId": "ba_designation_45k2toss5gac2qxzynrtsla6fm",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_45k2toss5gac2qxzynrtsla6fm/la-levriere",
+      "bounds": [
+        4.714428,
+        46.835157,
+        4.716655,
+        46.836583
+      ],
+      "labelPoint": [
+        4.715505,
+        46.835893
+      ]
+    },
+    {
+      "id": "inao-denom-826",
+      "name": "La Mission",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 203,
+      "denominationId": 826,
+      "sourceName": "Mercurey premier cru La Mission",
+      "communes": [
+        "71294"
+      ],
+      "areaHa": 1.92,
+      "matchId": "ba_designation_pk3siptq64h4nod2dgofjcy254",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_pk3siptq64h4nod2dgofjcy254/la-mission",
+      "bounds": [
+        4.721375,
+        46.828055,
+        4.724332,
+        46.829439
+      ],
+      "labelPoint": [
+        4.722755,
+        46.828744
+      ]
+    },
+    {
+      "id": "inao-denom-827",
+      "name": "Le Clos du Roy",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 203,
+      "denominationId": 827,
+      "sourceName": "Mercurey premier cru Le Clos du Roy",
+      "communes": [
+        "71294"
+      ],
+      "areaHa": 10.81,
+      "matchId": "ba_designation_d5wsaslh5u743han6xmwagdndm",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_d5wsaslh5u743han6xmwagdndm/le-clos-du-roy",
+      "bounds": [
+        4.717747,
+        46.825988,
+        4.725628,
+        46.829236
+      ],
+      "labelPoint": [
+        4.722646,
+        46.827594
+      ]
+    },
+    {
+      "id": "inao-denom-828",
+      "name": "Le Clos l'Evêque",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 203,
+      "denominationId": 828,
+      "sourceName": "Mercurey premier cru Le Clos l'Evêque",
+      "communes": [
+        "71294"
+      ],
+      "areaHa": 17.32,
+      "matchId": "ba_designation_ebyazohlcsuoiwmn5z7h4yhk5y",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_ebyazohlcsuoiwmn5z7h4yhk5y/le-clos-l-eveque",
+      "bounds": [
+        4.729994,
+        46.836528,
+        4.736163,
+        46.842472
+      ],
+      "labelPoint": [
+        4.73318,
+        46.839651
+      ]
+    },
+    {
+      "id": "inao-denom-829",
+      "name": "Les Byots",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 203,
+      "denominationId": 829,
+      "sourceName": "Mercurey premier cru Les Byots",
+      "communes": [
+        "71294"
+      ],
+      "areaHa": 2.71,
+      "matchId": "ba_designation_st2m2wven2lcbab652pgyzfcnu",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_st2m2wven2lcbab652pgyzfcnu/les-byots",
+      "bounds": [
+        4.723835,
+        46.835824,
+        4.726673,
+        46.837883
+      ],
+      "labelPoint": [
+        4.725253,
+        46.836908
+      ]
+    },
+    {
+      "id": "inao-denom-830",
+      "name": "Les Champs Martin",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 203,
+      "denominationId": 830,
+      "sourceName": "Mercurey premier cru Les Champs Martin",
+      "communes": [
+        "71294"
+      ],
+      "areaHa": 12.89,
+      "matchId": "ba_designation_hdirt45mhkykxaqxwc37lfr7iy",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_hdirt45mhkykxaqxwc37lfr7iy/les-champs-martin",
+      "bounds": [
+        4.719317,
+        46.839682,
+        4.723716,
+        46.84607
+      ],
+      "labelPoint": [
+        4.722654,
+        46.842872
+      ]
+    },
+    {
+      "id": "inao-denom-831",
+      "name": "Les Combins",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 203,
+      "denominationId": 831,
+      "sourceName": "Mercurey premier cru Les Combins",
+      "communes": [
+        "71294"
+      ],
+      "areaHa": 5.74,
+      "matchId": "ba_designation_xw3zaax6q7hfs52lprop4lcmde",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_xw3zaax6q7hfs52lprop4lcmde/les-combins",
+      "bounds": [
+        4.717838,
+        46.841,
+        4.719908,
+        46.845924
+      ],
+      "labelPoint": [
+        4.718795,
+        46.843475
+      ]
+    },
+    {
+      "id": "inao-denom-832",
+      "name": "Les Croichots",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 203,
+      "denominationId": 832,
+      "sourceName": "Mercurey premier cru Les Croichots",
+      "communes": [
+        "71294"
+      ],
+      "areaHa": 7.06,
+      "matchId": "ba_designation_raneomc25bguedb73rspf6xby4",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_raneomc25bguedb73rspf6xby4/les-croichots",
+      "bounds": [
+        4.715245,
+        46.84151,
+        4.718443,
+        46.846291
+      ],
+      "labelPoint": [
+        4.716711,
+        46.843525
+      ]
+    },
+    {
+      "id": "inao-denom-833",
+      "name": "Les Crêts",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 203,
+      "denominationId": 833,
+      "sourceName": "Mercurey premier cru Les Crêts",
+      "communes": [
+        "71294"
+      ],
+      "areaHa": 3.89,
+      "matchId": "ba_designation_dxyurarblngjylipffa4cytuaa",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_dxyurarblngjylipffa4cytuaa/les-crets",
+      "bounds": [
+        4.724095,
+        46.838246,
+        4.728367,
+        46.840216
+      ],
+      "labelPoint": [
+        4.726256,
+        46.839276
+      ]
+    },
+    {
+      "id": "inao-denom-834",
+      "name": "Les Fourneaux",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 203,
+      "denominationId": 834,
+      "sourceName": "Mercurey premier cru Les Fourneaux",
+      "communes": [
+        "71459"
+      ],
+      "areaHa": 2.8,
+      "matchId": "ba_designation_6xutgguojvlqazondmop33fwwm",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_6xutgguojvlqazondmop33fwwm/les-fourneaux",
+      "bounds": [
+        4.716857,
+        46.81872,
+        4.719766,
+        46.820838
+      ],
+      "labelPoint": [
+        4.71746,
+        46.81979
+      ]
+    },
+    {
+      "id": "inao-denom-835",
+      "name": "Les Montaigus",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 203,
+      "denominationId": 835,
+      "sourceName": "Mercurey premier cru Les Montaigus",
+      "communes": [
+        "71459"
+      ],
+      "areaHa": 7.66,
+      "matchId": "ba_designation_wwwe32e56leyus7ztu7aze3wne",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_wwwe32e56leyus7ztu7aze3wne/les-montaigus",
+      "bounds": [
+        4.712115,
+        46.82003,
+        4.716129,
+        46.823866
+      ],
+      "labelPoint": [
+        4.713526,
+        46.822898
+      ]
+    },
+    {
+      "id": "inao-denom-836",
+      "name": "Les Naugues",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 203,
+      "denominationId": 836,
+      "sourceName": "Mercurey premier cru Les Naugues",
+      "communes": [
+        "71294"
+      ],
+      "areaHa": 4.07,
+      "matchId": "ba_designation_v3y5cqjcyb7stg42k3zcohqk5u",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_v3y5cqjcyb7stg42k3zcohqk5u/les-naugues",
+      "bounds": [
+        4.722136,
+        46.836996,
+        4.72759,
+        46.839336
+      ],
+      "labelPoint": [
+        4.725945,
+        46.838057
+      ]
+    },
+    {
+      "id": "inao-denom-837",
+      "name": "Les Ruelles",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 203,
+      "denominationId": 837,
+      "sourceName": "Mercurey premier cru Les Ruelles",
+      "communes": [
+        "71459"
+      ],
+      "areaHa": 2.53,
+      "matchId": "ba_designation_uezon5xgqdmavvkw3rnp554mxu",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_uezon5xgqdmavvkw3rnp554mxu/les-ruelles",
+      "bounds": [
+        4.718726,
+        46.819968,
+        4.721647,
+        46.821956
+      ],
+      "labelPoint": [
+        4.720256,
+        46.820955
+      ]
+    },
+    {
+      "id": "inao-denom-838",
+      "name": "Les Vasées",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 203,
+      "denominationId": 838,
+      "sourceName": "Mercurey premier cru Les Vasées",
+      "communes": [
+        "71294"
+      ],
+      "areaHa": 3.09,
+      "matchId": "ba_designation_z7blxazyumnatf7fv7o7sdz3om",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_z7blxazyumnatf7fv7o7sdz3om/les-vasees",
+      "bounds": [
+        4.721691,
+        46.836739,
+        4.724656,
+        46.838835
+      ],
+      "labelPoint": [
+        4.723111,
+        46.837668
+      ]
+    },
+    {
+      "id": "inao-denom-839",
+      "name": "Les Velley",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 203,
+      "denominationId": 839,
+      "sourceName": "Mercurey premier cru Les Velley",
+      "communes": [
+        "71294"
+      ],
+      "areaHa": 10.84,
+      "matchId": "ba_designation_zslernspdawtholidiintpgtgq",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_zslernspdawtholidiintpgtgq/les-velley",
+      "bounds": [
+        4.713163,
+        46.823275,
+        4.720046,
+        46.827859
+      ],
+      "labelPoint": [
+        4.715795,
+        46.825573
+      ]
+    },
+    {
+      "id": "inao-denom-840",
+      "name": "Sazenay",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 203,
+      "denominationId": 840,
+      "sourceName": "Mercurey premier cru Sazenay",
+      "communes": [
+        "71294"
+      ],
+      "areaHa": 13.15,
+      "matchId": "ba_designation_anv6mllxgso5nzx4r2t4kcnggi",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_anv6mllxgso5nzx4r2t4kcnggi/sazenay",
+      "bounds": [
+        4.709096,
+        46.830424,
+        4.715218,
+        46.836153
+      ],
+      "labelPoint": [
+        4.711833,
+        46.833313
+      ]
+    },
+    {
+      "id": "inao-denom-841",
+      "name": "Les Puillets",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 203,
+      "denominationId": 841,
+      "sourceName": "Mercurey premier cru Les Puillets",
+      "communes": [
+        "71294"
+      ],
+      "areaHa": 8.52,
+      "matchId": "ba_designation_hvf7tql25ptqavv56wz6p66f3m",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_hvf7tql25ptqavv56wz6p66f3m/les-puillets",
+      "bounds": [
+        4.707083,
+        46.841783,
+        4.71115,
+        46.846169
+      ],
+      "labelPoint": [
+        4.708964,
+        46.844
+      ]
+    },
+    {
+      "id": "inao-denom-842",
+      "name": "Les Saumonts",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 203,
+      "denominationId": 842,
+      "sourceName": "Mercurey premier cru Les Saumonts",
+      "communes": [
+        "71294"
+      ],
+      "areaHa": 4.1,
+      "matchId": "ba_designation_uinvfvjho7tvn5uqzd73n2kswu",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_uinvfvjho7tvn5uqzd73n2kswu/les-saumonts",
+      "bounds": [
+        4.710254,
+        46.845308,
+        4.713889,
+        46.847901
+      ],
+      "labelPoint": [
+        4.712073,
+        46.846973
+      ]
+    },
+    {
+      "id": "inao-denom-843",
+      "name": "Mercurey Premier Cru",
+      "tier": "premier_cru",
+      "kind": "appellation",
+      "appellationId": 203,
+      "denominationId": 843,
+      "sourceName": "Mercurey premier cru",
+      "communes": [
+        "71294",
+        "71459"
+      ],
+      "areaHa": 178.02,
+      "matchId": "ba_appellation_yrawi56iiu7bvy6jwfgl777u4i",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_yrawi56iiu7bvy6jwfgl777u4i/mercurey-premier-cru",
+      "bounds": [
+        4.707083,
+        46.816252,
+        4.739167,
+        46.847901
+      ],
+      "labelPoint": [
+        4.722207,
+        46.840491
+      ]
+    }
+  ],
+  "umbrellas": {
+    "inao-denom-817": [
+      "inao-denom-819"
+    ]
+  }
+}

@@ -205,13 +205,21 @@ for(const village of [
  {id:'maranges',name:'Maranges',cru:'La Fussière',tier:'premier_cru',feature:'inao-denom-800',count:11,catalogue:'marangesVillageMapCatalogue',explore:'inao-denom-799',label:'Clos de la Fussière'},
  {id:'cote-de-beaune',name:'Côte de Beaune',cru:'Joseph Drouhin Côte de Beaune',tier:'village',feature:'inao-denom-551',count:1,catalogue:'coteBeauneVillageMapCatalogue',explore:'inao-denom-551',label:'Côte de Beaune'},
  {id:'cote-de-beaune-villages',name:'Côte de Beaune-Villages',cru:'Joseph Drouhin Côte de Beaune-Villages',tier:'village',feature:'inao-denom-552',count:1,catalogue:'coteBeauneVillagesMapCatalogue',explore:'inao-denom-552',label:'Côte de Beaune-Villages'},
+ {id:'bouzeron',name:'Bouzeron',cru:'Bouzeron',tier:'village',colour:'White',feature:'inao-denom-1286',count:1,catalogue:'bouzeronVillageMapCatalogue',explore:'inao-denom-1286',label:'Bouzeron'},
+ {id:'rully',name:'Rully',cru:'La Pucelle',tier:'premier_cru',feature:'inao-denom-1097',count:25,catalogue:'rullyVillageMapCatalogue',explore:'inao-denom-1091',label:'Clos Saint-Jacques'},
+ {id:'mercurey',name:'Mercurey',cru:'Clos des Myglands',tier:'premier_cru',feature:'inao-denom-818',count:34,catalogue:'mercureyVillageMapCatalogue',explore:'inao-denom-819',label:'Clos du Château de Montaigu'},
+ {id:'givry',name:'Givry',cru:'La Plante',tier:'premier_cru',feature:'inao-denom-639',count:39,catalogue:'givryVillageMapCatalogue',explore:'inao-denom-2327',label:'La Matrosse'},
+ {id:'montagny',name:'Montagny',cru:'Les Coères',tier:'premier_cru',colour:'White',feature:'inao-denom-886',count:51,catalogue:'montagnyVillageMapCatalogue',explore:'inao-denom-894',label:'Les Paquiers'},
 ]){
  for(const route of ['/wines/layout-wine','/shared/layout-wine']){
   test(`${village.name} ${route}: opens the correct boundary and keeps its full village context`,async({page},testInfo)=>{
    const requests:string[]=[],errors:string[]=[];
    page.on('request',request=>requests.push(request.url()));page.on('pageerror',error=>errors.push(error.message));
    await page.setViewportSize({width:390,height:844});
-   await setup(page,{appellation:village.name,wineName:village.cru,classification:village.tier});await page.goto(route);
+   await setup(page,{appellation:village.name,wineName:village.cru,classification:village.tier,
+    ...('colour' in village?{colour:village.colour,wineStyle:'white',grapes:['Chardonnay']}:{}),
+    ...(village.id==='bouzeron'?{grapes:['Aligoté']}:{}),
+   });await page.goto(route);
    const opener=page.getByRole('button',{name:'View village map'});
    await expect(opener).toBeVisible();
    expect(requests.filter(url=>url.includes('/maps/')||url.includes('VillageMapCatalogue.json'))).toEqual([]);
@@ -244,6 +252,42 @@ for(const village of [
   });
  }
 }
+
+test('Givry explains missing source geometry while local named plots remain selectable',async({page},testInfo)=>{
+ await setup(page,{appellation:'Givry',wineName:'Le Vernoy'});await page.goto('/shared/layout-wine');
+ await page.setViewportSize({width:320,height:900});
+ await page.getByRole('button',{name:'View village map'}).click();
+ const dialog=page.getByRole('dialog',{name:'Givry',exact:true});
+ await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
+ await expect(dialog.getByRole('combobox')).toHaveValue('inao-denom-644');
+ await expect(dialog.getByText(/37 of Givry’s 38/)).toBeVisible();
+ await expect(dialog.locator('.village-map-selected-label')).toHaveCount(0);
+ await expect(dialog.getByRole('link',{name:/Explore on Burgundy Atlas: Givry Premier Cru appellation/})).toBeVisible();
+ for(const [id,label] of [['inao-denom-639','La Plante'],['inao-denom-2327','La Matrosse'],['inao-denom-2330','Le Médenchot']]){
+  await dialog.getByRole('combobox').selectOption(id);
+  await expect(dialog.locator('.village-map-selected-label')).toHaveText(label);
+  await expect(dialog.getByRole('link',{name:/Explore on Burgundy Atlas/})).toHaveCount(0);
+ }
+ await page.screenshot({path:testInfo.outputPath('givry-local-and-missing-320.png')});
+ await dialog.getByRole('combobox').selectOption('inao-denom-628');
+ await expect(dialog.locator('.village-map-selected-label')).toHaveText('Clos du Vernoy');
+ await expect(dialog.locator('.village-map-overlap')).toContainText('must not be used as a substitute for Le Vernoy');
+ await dialog.getByRole('button',{name:'Back to this wine'}).click();
+ await expect(dialog.getByRole('combobox')).toHaveValue('inao-denom-644');
+});
+
+test('white-only Chalonnaise appellations reject incompatible colour and Bouzeron Premier Cru',async({page})=>{
+ for(const row of [
+  {appellation:'Bouzeron',classification:'village',colour:'Red'},
+  {appellation:'Montagny',classification:'premier_cru',colour:'Red'},
+  {appellation:'Montagny',classification:'village',colour:'Rosé'},
+  {appellation:'Bouzeron',classification:'premier_cru',colour:'White'},
+ ]){
+  await setup(page,{...row,wineName:row.appellation});await page.goto('/wines/layout-wine');
+  await expect(page.getByRole('heading',{name:row.appellation,exact:true})).toBeVisible();
+  await expect(page.getByRole('button',{name:'View village map'})).toHaveCount(0);
+ }
+});
 
 test('Marsannay preserves colour scope, including unknown colour, wine style and named rosé',async({page})=>{
  for(const fields of [

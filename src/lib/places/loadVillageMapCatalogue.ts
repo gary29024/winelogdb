@@ -30,6 +30,11 @@ const loaders=new Map<string,()=>Promise<{default:VillageMapCatalogue}>>([
  ['maranges',()=>import('./marangesVillageMapCatalogue.json')],
  ['cote-de-beaune',()=>import('./coteBeauneVillageMapCatalogue.json')],
  ['cote-de-beaune-villages',()=>import('./coteBeauneVillagesMapCatalogue.json')],
+ ['bouzeron',()=>import('./bouzeronVillageMapCatalogue.json')],
+ ['rully',()=>import('./rullyVillageMapCatalogue.json')],
+ ['mercurey',()=>import('./mercureyVillageMapCatalogue.json')],
+ ['givry',()=>import('./givryVillageMapCatalogue.json')],
+ ['montagny',()=>import('./montagnyVillageMapCatalogue.json')],
 ]);
 
 export async function loadVillageMapCatalogue(villageId:string):Promise<VillageMapCatalogue>{
