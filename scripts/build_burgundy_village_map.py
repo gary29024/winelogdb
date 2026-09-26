@@ -111,9 +111,13 @@ def main():
             assert village.get("regionId")
         else:
             assert appellation is not None, f"Review local identity for {name}"
+        if village.get("localPremierIdentity"):
+            assert appellation and not appellation["premierCruPath"], f"Review new Atlas Premier Cru page for {name}"
         premier_links = {key(e["name"]): e["path"] for e in premiers["entries"]}
         colour_denominations = {int(d): colour for d, colour in village.get("colourDenominations", {}).items()}
-        village_ids = {village["villageDenomination"]} | colour_denominations.keys()
+        village_areas = {int(d): label for d, label in village.get("villageAreaDenominations", {}).items()}
+        assert not village_areas.keys() & ({village["villageDenomination"]} | colour_denominations.keys())
+        village_ids = {village["villageDenomination"]} | colour_denominations.keys() | village_areas.keys()
         if colour_denominations:
             assert village["villageDenomination"] in colour_denominations
             assert sorted(colour_denominations.values()) == ["red", "white"]
@@ -151,10 +155,16 @@ def main():
                 # page, and must never borrow another plot's outbound link.
                 match_id = f"inao-denom-{denom_id}"
                 atlas_path = None
+            elif denom_id in village_areas:
+                # A source area eligible for a named-climat label is still a
+                # broad designation, not the geometry of any individual plot.
+                feature_name = village_areas[denom_id]
+                atlas_path = None
+                match_id = f"inao-denom-{denom_id}"
             elif broad and tier != "grand_cru":
                 feature_name = name + (" Premier Cru" if tier == "premier_cru" else "")
                 atlas_path = appellation["premierCruPath" if tier == "premier_cru" else "villagePath"] if appellation else None
-                assert atlas_path or village.get("localIdentity"), f"Review missing Atlas tier for {name}"
+                assert atlas_path or village.get("localIdentity") or (tier == "premier_cru" and village.get("localPremierIdentity")), f"Review missing Atlas tier for {name}"
                 match_id = atlas_path.split("/")[2] if atlas_path else f"inao-app-{village['appellationId']}-{tier}"
             elif tier == "grand_cru":
                 entries = [e for e in grand_links if key(e["url"].split("/")[-1]) == key(feature_name)]
@@ -379,10 +389,11 @@ def main():
     write_json(PLACES / "burgundyVillageMapRegistry.json", {
         "villages": [{k: v[k] for k in ("id", "name", "region", "wineColours") if k in v} for v in villages], "targets": index,
         "localAppellations": [{"appellation": v["name"], "aliases": v.get("aliases", []), "regionId": v["regionId"],
-                               "villageMatchId": f"inao-app-{v['appellationId']}-village",
+                               "villageMatchId": f"inao-app-{v['appellationId']}-village" if v.get("localIdentity") else None,
                                "premierCruMatchId": f"inao-app-{v['appellationId']}-premier_cru" if v.get("premierDenomination") else None}
-                              for v in villages if v.get("localIdentity")],
+                              for v in villages if v.get("localIdentity") or v.get("localPremierIdentity")],
         "localPremierCrus": [{"appellation": v["name"],
+                              "regionId": v.get("regionId") or next(a["regionId"] for a in appellations if a["appellation"] == v["name"]),
                               "entries": [{"name": f["name"], "matchId": f["matchId"]} for f in manifest["features"]
                                           if f["denominationId"] in v.get("localPremierDenominations", [])],
                               "unmappedNames": v.get("unmappedPremierNames", [])}

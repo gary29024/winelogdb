@@ -19,7 +19,7 @@ Beaujolais has its own appellation system and is outside this Bourgogne inventor
 
 ## Village coverage
 
-**34 of 44 village appellations have maps in this branch.** This is not complete
+**39 of 44 village appellations have maps in this branch.** This is not complete
 Burgundy coverage. A mapped appellation can still lack individual village
 lieux-dits; named plot coverage must be assessed separately.
 
@@ -28,7 +28,7 @@ lieux-dits; named plot coverage must be assessed separately.
 | Côte de Nuits | 9 | 0 |
 | Côte de Beaune | 20 | 0 |
 | Côte Chalonnaise | 5 | 0 |
-| Mâconnais | 0 | 5 |
+| Mâconnais | 5 | 0 |
 | Chablis & Grand Auxerrois | 0 | 5 |
 
 ### Côte de Nuits — mapped
@@ -66,9 +66,9 @@ lieux-dits; named plot coverage must be assessed separately.
 - [x] Côte de Beaune: its full source area in Beaune, distinct from the subregion and the Beaune appellation
 - [x] Côte de Beaune-Villages: all 16 producing communes, red-only, with a local identity and four area zoom controls
 
-The Côte de Beaune and Côte Chalonnaise village inventories are now mapped.
-Next are the five Mâconnais appellations, followed by Chablis/Grand Auxerrois
-and the regional inventory. Givry still lacks one named Premier Cru boundary.
+The Côte de Beaune, Côte Chalonnaise and Mâconnais village inventories are now mapped.
+Next are Chablis/Grand Auxerrois and the regional inventory. Givry still lacks
+one named Premier Cru boundary.
 Named village lieux-dits remain a separate coverage gap throughout these areas.
 
 ### Côte Chalonnaise — mapped, with a Givry source gap
@@ -79,13 +79,13 @@ Named village lieux-dits remain a separate coverage gap throughout these areas.
 - [x] Givry: 37 of 38 named Premier Crus, with Dracy-le-Fort and Jambles; Le Vernoy has no separate source geometry
 - [x] Montagny: all 49 named Premier Crus across Montagny-lès-Buxy, Buxy, Jully-lès-Buxy and Saint-Vallerin; white only
 
-### Mâconnais
+### Mâconnais — mapped
 
-- [ ] Pouilly-Fuissé
-- [ ] Pouilly-Loché
-- [ ] Pouilly-Vinzelles
-- [ ] Saint-Véran
-- [ ] Viré-Clessé
+- [x] Pouilly-Fuissé: all 22 Premier Crus across Fuissé, Solutré-Pouilly, Vergisson and Chaintré; both broad village source designations retained
+- [x] Pouilly-Loché: Les Mûres and its broad Premier Cru area use local identities; Loché is within the current Mâcon commune
+- [x] Pouilly-Vinzelles: all three Premier Crus use local identities; the producing commune is Vinzelles
+- [x] Saint-Véran: all seven producing communes, with north/south area controls; no individual climat geometry in this source
+- [x] Viré-Clessé: Viré, Clessé, Montbellet and Laizé; full village and named-climat eligibility areas retained, without individual plot boundaries
 
 ### Chablis & Grand Auxerrois
 
@@ -126,8 +126,9 @@ in the source, rather than just the five village AOCs above.
   now uses an explicitly reviewed local appellation identity with no outbound
   Atlas link; it shares the existing geographic and tier conflict checks.
   Givry's La Plante, La Matrosse and Le Médenchot now use local named Premier Cru
-  identities with the same safeguards. Review the known Atlas gaps in
-  Pouilly-Loché/Pouilly-Vinzelles when those batches are assessed.
+  identities with the same safeguards. Pouilly-Loché and Pouilly-Vinzelles now
+  also have local named and broad Premier Cru identities, while keeping their
+  existing Atlas village links. A missing tier page must not hide its boundaries.
 - **Givry is 37 of 38 named Premier Crus.** BIVB lists Le Vernoy separately from
   Clos du Vernoy. The pinned INAO source lacks Le Vernoy geometry. Its wines keep
   the broad Premier Cru view; the gap is visible in every Givry map dialog.
@@ -136,6 +137,14 @@ in the source, rather than just the five village AOCs above.
   denominations under its village appellation; that is not a complete inventory
   of named Premier Cru climats. Verify umbrella names and missing geometries
   against official sources before calling Chablis complete.
+- **A named-climat eligibility area is not one climat.** Pouilly-Fuissé `1056`
+  and Viré-Clessé `1593` describe broader production areas for village wines
+  labelled with a climat. Keep them selectable with clear scope, and never use
+  them as a named plot or promote a village wine to Premier Cru from its name.
+- **Producer names can resemble official climats.** Ferret's Clos de Jeanne
+  belongs to Les Perrières and Tournant de Pouilly to Les Reisses. They select
+  the whole official climat with an explanatory note. Generic clos text and
+  Ferret's historical Le Clos must not select Château Fuissé's separate Le Clos.
 - **Corton named-plot coverage is partial.** All 24 named denominations in the
   pinned source are mapped, alongside the full Corton area. The BIVB inventory
   also names Clos des Cortons Faiveley and additional Pernand climats that lack

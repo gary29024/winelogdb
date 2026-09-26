@@ -1,5 +1,6 @@
 import type { WineFacts } from '../wine/detailFields';
-import { burgundyAtlasWineDetailPlace,burgundyLocalAppellationMapIdentity } from './burgundyAtlasPremierCru';
+import { burgundyAtlasWineDetailPlace,burgundyLocalAppellationMapIdentity,burgundyMapAppellation } from './burgundyAtlasPremierCru';
+import { producerMapLocation } from './burgundyProducerLocations';
 import registry from './burgundyVillageMapRegistry.json';
 import { burgundyGrandCruMapIdentity } from './burgundyGrandCruClimats';
 
@@ -16,7 +17,8 @@ export type VillageMapCatalogue={
  // Separate parts of one appellation, each with its own zoom button and map label.
  areas?:{id:string;label:string;name:string;bounds:number[]}[];
 };
-export type BurgundyVillageMapTarget={villageId:string;villageName:string;region:string;featureId:string;name:string;scope:'vineyard'|'appellation'};
+export type BurgundyVillageMapTarget={villageId:string;villageName:string;region:string;featureId:string;name:string;scope:'vineyard'|'appellation';
+ locationContext?:{note:string;sourceUrl:string}};
 
 // Only this small identity index joins wine details. Per-village metadata and
 // geometry load when the dialog opens, independently of the other villages.
@@ -45,7 +47,9 @@ export function burgundyVillageMapTarget(wine:MapWine):BurgundyVillageMapTarget|
  }
  const local=burgundyGrandCruMapIdentity(wine);
  if(local===null)return null;
- const matchId=local??burgundyLocalAppellationMapIdentity(wine)??burgundyAtlasWineDetailPlace(wine)?.placeId;
+ const candidate=producerMapLocation(wine);
+ const producerLocation=candidate&&burgundyMapAppellation(wine)===candidate.appellation?candidate:null;
+ const matchId=producerLocation?.matchId??local??burgundyLocalAppellationMapIdentity(wine)??burgundyAtlasWineDetailPlace(wine)?.placeId;
  const target=matchId?byMatchId.get(matchId):undefined;
  const village=target?byVillageId.get(target.villageId):undefined;
  if(!target||!village)return null;
@@ -58,7 +62,8 @@ export function burgundyVillageMapTarget(wine:MapWine):BurgundyVillageMapTarget|
  if(colours&&namedRose&&colour&&colour!=='rose')return null;
  const selected=colours?.[colour||(namedRose?'rose':'')]??target;
  return {villageId:village.id,villageName:village.name,region:village.region,featureId:selected.featureId,name:selected.name,
-  scope:target.scope==='vineyard'?'vineyard':'appellation'};
+  scope:target.scope==='vineyard'?'vineyard':'appellation',
+  ...(producerLocation?{locationContext:{note:producerLocation.note,sourceUrl:producerLocation.sourceUrl}}:{})};
 }
 
 // Source snapshots are ISO dates in the catalogue. INAO publishes a dated

@@ -1,0 +1,162 @@
+{
+  "id": "saint-veran",
+  "name": "Saint-Véran",
+  "region": "Mâconnais",
+  "communes": [
+    {
+      "id": "71360",
+      "name": "Prissé"
+    },
+    {
+      "id": "71169",
+      "name": "Davayé"
+    },
+    {
+      "id": "71526",
+      "name": "Solutré-Pouilly"
+    },
+    {
+      "id": "71108",
+      "name": "Chasselas"
+    },
+    {
+      "id": "71258",
+      "name": "Leynes"
+    },
+    {
+      "id": "71084",
+      "name": "Chânes"
+    },
+    {
+      "id": "71487",
+      "name": "Saint-Vérand"
+    }
+  ],
+  "dataUrl": "/maps/saint-veran.2026-09-21.geojson",
+  "bounds": [
+    4.712827,
+    46.247154,
+    4.781885,
+    46.343228
+  ],
+  "sources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71360/cadastre-71360-communes.json.gz",
+      "sha256": "304bf7d6b4c50cb4470f4fbd9f6e70414b3c6d169883a6c9a99f5110f2fa3370"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71169/cadastre-71169-communes.json.gz",
+      "sha256": "250852253e2f5a29989f0d75f0cdcf514adc754b9fee1e3478adacaae605f025"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71526/cadastre-71526-communes.json.gz",
+      "sha256": "148346bb0ddb4de75a177cf962d68f986f572ad9b4e5314bb83d80135f47635b"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71108/cadastre-71108-communes.json.gz",
+      "sha256": "d670c60d03cb90676b6e543f6646c04637656317e45c3f4595abffcf1d82fb18"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71258/cadastre-71258-communes.json.gz",
+      "sha256": "3db2369288b3da68748d1e771b46800a0654900bac76ed64bdf969b5c5e20439"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71084/cadastre-71084-communes.json.gz",
+      "sha256": "b0d746e06b5d10c17401969a4f2db7d4dfa0624620040b7dd690771ee5a305b5"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71487/cadastre-71487-communes.json.gz",
+      "sha256": "02f5a4f892af4317df27ccf48be109a05559eb2acecc1aef7ad969a8b9911f99"
+    }
+  ],
+  "notes": {
+    "inao-denom-1158": {
+      "note": "Saint-Véran has separate northern and southern areas across seven producing communes. Named village climats such as Les Pommards and Les Cras have no separate boundaries in this source. No Premier Cru status is inferred."
+    }
+  },
+  "features": [
+    {
+      "id": "inao-denom-1158",
+      "name": "Saint-Véran",
+      "tier": "village",
+      "kind": "appellation",
+      "appellationId": 229,
+      "denominationId": 1158,
+      "sourceName": "Saint-Véran",
+      "communes": [
+        "71084",
+        "71108",
+        "71169",
+        "71258",
+        "71360",
+        "71487",
+        "71526"
+      ],
+      "areaHa": 865.3,
+      "matchId": "ba_appellation_w4yuydglwhl5ufuz63hjyx4bey",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_w4yuydglwhl5ufuz63hjyx4bey/saint-veran",
+      "bounds": [
+        4.712827,
+        46.247154,
+        4.781885,
+        46.343228
+      ],
+      "labelPoint": [
+        4.777426,
+        46.319083
+      ]
+    }
+  ],
+  "areas": [
+    {
+      "id": "north",
+      "label": "North",
+      "name": "Prissé, Davayé & Solutré-Pouilly",
+      "bounds": [
+        4.718133,
+        46.294422,
+        4.781885,
+        46.343228
+      ]
+    },
+    {
+      "id": "south",
+      "label": "South",
+      "name": "Chasselas, Leynes, Chânes & Saint-Vérand",
+      "bounds": [
+        4.712827,
+        46.247154,
+        4.765537,
+        46.287434
+      ]
+    }
+  ]
+}

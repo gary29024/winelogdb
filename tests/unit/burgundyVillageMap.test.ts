@@ -35,6 +35,11 @@ import rully from '../../src/lib/places/rullyVillageMapCatalogue.json';
 import mercurey from '../../src/lib/places/mercureyVillageMapCatalogue.json';
 import givry from '../../src/lib/places/givryVillageMapCatalogue.json';
 import montagny from '../../src/lib/places/montagnyVillageMapCatalogue.json';
+import pouillyFuisse from '../../src/lib/places/pouillyFuisseVillageMapCatalogue.json';
+import pouillyLoche from '../../src/lib/places/pouillyLocheVillageMapCatalogue.json';
+import pouillyVinzelles from '../../src/lib/places/pouillyVinzellesVillageMapCatalogue.json';
+import saintVeran from '../../src/lib/places/saintVeranVillageMapCatalogue.json';
+import vireClesse from '../../src/lib/places/vireClesseVillageMapCatalogue.json';
 import registry from '../../src/lib/places/burgundyVillageMapRegistry.json';
 import { loadVillageMapCatalogue } from '../../src/lib/places/loadVillageMapCatalogue';
 import type { FeatureCollection,MultiPolygon,Polygon } from 'geojson';
@@ -42,7 +47,7 @@ import coverage from '../../scripts/burgundy-map-coverage.json';
 import mapConfig from '../../scripts/burgundy-villages.json';
 import appellationLinks from '../../src/lib/places/burgundyAtlasAppellationLinks.json';
 
-const catalogues:VillageMapCatalogue[]=[catalogue,morey,chambolle,vosne,fixin,vougeot,nuits,marsannay,coteNuits,meursault,puligny,chassagne,saintAubin,blagny,aloxe,pernand,ladoix,beaune,pommard,volnay,savigny,chorey,auxey,monthelie,saintRomain,santenay,maranges,coteBeaune,coteBeauneVillages,bouzeron,rully,mercurey,givry,montagny];
+const catalogues:VillageMapCatalogue[]=[catalogue,morey,chambolle,vosne,fixin,vougeot,nuits,marsannay,coteNuits,meursault,puligny,chassagne,saintAubin,blagny,aloxe,pernand,ladoix,beaune,pommard,volnay,savigny,chorey,auxey,monthelie,saintRomain,santenay,maranges,coteBeaune,coteBeauneVillages,bouzeron,rully,mercurey,givry,montagny,pouillyFuisse,pouillyLoche,pouillyVinzelles,saintVeran,vireClesse];
 
 const wine={country:'France',region:'Burgundy',appellation:'Gevrey-Chambertin',wineName:'Les Cazetiers',classification:'premier_cru'};
 
@@ -69,7 +74,7 @@ describe('Gevrey village map identity',()=>{
   expect(burgundyVillageMapTarget({...wine,wineName:'Gevrey-Chambertin',classification:'village'})).toMatchObject({featureId:'inao-denom-589',scope:'appellation'});
  });
  it('withholds conflicts, incompatible geography, unsupported villages and an unproven cru tier',()=>{
-  for(const fields of [{country:'USA'},{region:'Bordeaux'},{appellation:'Pouilly-Fuissé'},
+  for(const fields of [{country:'USA'},{region:'Bordeaux'},{appellation:'Irancy'},
    {identityMatchStatus:'conflict' as const},{classification:null},{appellation:'Chablis Grand Cru',classification:'grand_cru'}]){
    expect(burgundyVillageMapTarget({...wine,...fields}),JSON.stringify(fields)).toBeNull();
   }
@@ -151,6 +156,9 @@ describe.each([
  {catalogue:mercurey,grands:0,premiers:32,broad:'inao-denom-843',village:'inao-denom-810'},
  {catalogue:givry,grands:0,premiers:37,broad:'inao-denom-644',village:'inao-denom-617'},
  {catalogue:montagny,grands:0,premiers:49,broad:'inao-denom-913',village:'inao-denom-863'},
+ {catalogue:pouillyFuisse,grands:0,premiers:22,broad:'inao-denom-2865',village:'inao-denom-1055'},
+ {catalogue:pouillyLoche,grands:0,premiers:1,broad:'inao-denom-2931',village:'inao-denom-1057'},
+ {catalogue:pouillyVinzelles,grands:0,premiers:3,broad:'inao-denom-2927',village:'inao-denom-1059'},
 ])('$catalogue.name identities and boundaries',({catalogue:c,grands,premiers,broad,village})=>{
  const data=JSON.parse(readFileSync(`public${c.dataUrl}`,'utf8')) as FeatureCollection<Polygon|MultiPolygon>;
  it('resolves every named cru and retains appellation scope for broad wines',()=>{
@@ -159,11 +167,12 @@ describe.each([
   expect(c.features.filter(f=>f.kind==='vineyard'&&f.tier==='premier_cru')).toHaveLength(premiers);
   for(const feature of c.features.filter(f=>f.kind==='vineyard')){
    const target=burgundyVillageMapTarget({...base,classification:feature.tier,wineName:feature.name,
+    producer:c.id==='pouilly-fuisse'&&feature.name==='Le Clos'?'Château Fuissé':undefined,
     appellation:feature.tier==='grand_cru'?feature.name:c.name});
    expect(target,feature.name).toMatchObject({featureId:feature.id,scope:'vineyard',
     villageId:(mapConfig.sharedDefaults as Record<string,string>)[String(feature.denominationId)]??c.id});
   }
-  const blend=c.features.filter(f=>f.kind==='vineyard'&&f.tier==='premier_cru').slice(0,2).map(f=>f.name).join(' et ');
+  const blend=c.features.filter(f=>f.kind==='vineyard'&&f.tier==='premier_cru').slice(0,2).map(f=>f.name).join(' et ')+(premiers===1?' et another plot':'');
   for(const wineName of [c.name+' Premier Cru','Unknown vineyard',blend]){
    expect(burgundyVillageMapTarget({...base,wineName})).toMatchObject({featureId:broad,villageId:c.id,scope:'appellation'});
   }
@@ -183,7 +192,7 @@ describe.each([
    const rings=feature.geometry.type==='Polygon'?feature.geometry.coordinates:feature.geometry.coordinates.flat();
    for(const ring of rings){
     expect(ring.length).toBeGreaterThanOrEqual(4);expect(ring[0]).toEqual(ring.at(-1));
-    expect(ring.every(([lng,lat])=>c.region==='Côte Chalonnaise'?lng>4.6&&lng<4.85&&lat>46.6&&lat<46.96:c.region==='Côte de Beaune'?lng>4.6&&lng<4.98&&lat>46.85&&lat<47.15:lng>4.8&&lng<5.1&&lat>47.0&&lat<47.4)).toBe(true);
+    expect(ring.every(([lng,lat])=>c.region==='Mâconnais'?lng>4.6&&lng<4.95&&lat>46.15&&lat<46.6:c.region==='Côte Chalonnaise'?lng>4.6&&lng<4.85&&lat>46.6&&lat<46.96:c.region==='Côte de Beaune'?lng>4.6&&lng<4.98&&lat>46.85&&lat<47.15:lng>4.8&&lng<5.1&&lat>47.0&&lat<47.4)).toBe(true);
    }
   }
   for(const feature of c.features){
@@ -200,9 +209,10 @@ describe('village registry',()=>{
   expect(coverage.villages.map(v=>v.name).sort()).toEqual([...appellationLinks.groups.map(g=>g.appellation),'Côte de Beaune-Villages'].sort());
   const nuitsCoverage=coverage.villages.filter(v=>v.region==='Côte de Nuits');
   expect(nuitsCoverage).toHaveLength(9);
-  expect(mapConfig.villages).toHaveLength(34);
+  expect(mapConfig.villages).toHaveLength(39);
   expect(mapConfig.villages.filter(v=>v.region==='Côte de Beaune')).toHaveLength(20);
   expect(mapConfig.villages.filter(v=>v.region==='Côte Chalonnaise')).toHaveLength(5);
+  expect(mapConfig.villages.filter(v=>v.region==='Mâconnais')).toHaveLength(5);
   for(const row of nuitsCoverage)expect(mapConfig.villages.some(v=>v.appellationId===row.appellationId&&v.name===row.name)).toBe(true);
   for(const village of mapConfig.villages)expect(coverage.villages.some(row=>row.appellationId===village.appellationId&&row.name===village.name)).toBe(true);
  });
@@ -221,8 +231,8 @@ describe('village registry',()=>{
   expect(burgundyVillageMapTarget({...wine,appellation:'Chambolle-Musigny',wineName:'Les Feusselotes'})?.featureId).toBe('inao-denom-464');
  });
  it('has one target per identity and a working lazy catalogue for every village',async()=>{
-  expect(registry.targets).toHaveLength(718);
-  expect(new Set(registry.targets.map(t=>t.matchId)).size).toBe(718);
+  expect(registry.targets).toHaveLength(754);
+  expect(new Set(registry.targets.map(t=>t.matchId)).size).toBe(754);
   for(const village of registry.villages){
    const c=await loadVillageMapCatalogue(village.id);
    expect(catalogues.find(expected=>expected.id===village.id)).toEqual(c);
