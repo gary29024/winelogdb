@@ -507,6 +507,208 @@
         "Mâcon Rosé"
       ],
       "featureId": "inao-denom-2074"
+    },
+    {
+      "id": "macon-bussieres",
+      "name": "Mâcon Bussières",
+      "region": "Mâconnais",
+      "aliases": [
+        "Mâcon Bussières"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Mâconnais",
+        "Saône-et-Loire"
+      ],
+      "wineColours": [
+        "red",
+        "white",
+        "rose"
+      ],
+      "siteNames": [
+        "Bussières"
+      ],
+      "baseAppellations": [
+        "Mâcon",
+        "Mâcon Blanc",
+        "Mâcon Rouge",
+        "Mâcon Rosé"
+      ],
+      "featureId": "inao-denom-1717"
+    },
+    {
+      "id": "macon-chaintre",
+      "name": "Mâcon Chaintré",
+      "region": "Mâconnais",
+      "aliases": [
+        "Mâcon Chaintré"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Mâconnais",
+        "Saône-et-Loire"
+      ],
+      "wineColours": [
+        "red",
+        "white",
+        "rose"
+      ],
+      "siteNames": [
+        "Chaintré"
+      ],
+      "baseAppellations": [
+        "Mâcon",
+        "Mâcon Blanc",
+        "Mâcon Rouge",
+        "Mâcon Rosé"
+      ],
+      "featureId": "inao-denom-1719"
+    },
+    {
+      "id": "macon-la-roche-vineuse",
+      "name": "Mâcon La Roche-Vineuse",
+      "region": "Mâconnais",
+      "aliases": [
+        "Mâcon La Roche-Vineuse"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Mâconnais",
+        "Saône-et-Loire"
+      ],
+      "wineColours": [
+        "red",
+        "white",
+        "rose"
+      ],
+      "siteNames": [
+        "La Roche-Vineuse"
+      ],
+      "baseAppellations": [
+        "Mâcon",
+        "Mâcon Blanc",
+        "Mâcon Rouge",
+        "Mâcon Rosé"
+      ],
+      "featureId": "inao-denom-1725"
+    },
+    {
+      "id": "macon-milly-lamartine",
+      "name": "Mâcon Milly-Lamartine",
+      "region": "Mâconnais",
+      "aliases": [
+        "Mâcon Milly-Lamartine"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Mâconnais",
+        "Saône-et-Loire"
+      ],
+      "wineColours": [
+        "red",
+        "white",
+        "rose"
+      ],
+      "siteNames": [
+        "Milly-Lamartine"
+      ],
+      "baseAppellations": [
+        "Mâcon",
+        "Mâcon Blanc",
+        "Mâcon Rouge",
+        "Mâcon Rosé"
+      ],
+      "featureId": "inao-denom-1729"
+    },
+    {
+      "id": "macon-pierreclos",
+      "name": "Mâcon Pierreclos",
+      "region": "Mâconnais",
+      "aliases": [
+        "Mâcon Pierreclos"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Mâconnais",
+        "Saône-et-Loire"
+      ],
+      "wineColours": [
+        "red",
+        "white",
+        "rose"
+      ],
+      "siteNames": [
+        "Pierreclos"
+      ],
+      "baseAppellations": [
+        "Mâcon",
+        "Mâcon Blanc",
+        "Mâcon Rouge",
+        "Mâcon Rosé"
+      ],
+      "featureId": "inao-denom-1731"
+    },
+    {
+      "id": "macon-prisse",
+      "name": "Mâcon Prissé",
+      "region": "Mâconnais",
+      "aliases": [
+        "Mâcon Prissé"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Mâconnais",
+        "Saône-et-Loire"
+      ],
+      "wineColours": [
+        "red",
+        "white",
+        "rose"
+      ],
+      "siteNames": [
+        "Prissé"
+      ],
+      "baseAppellations": [
+        "Mâcon",
+        "Mâcon Blanc",
+        "Mâcon Rouge",
+        "Mâcon Rosé"
+      ],
+      "featureId": "inao-denom-1732"
+    },
+    {
+      "id": "macon-serrieres",
+      "name": "Mâcon Serrières",
+      "region": "Mâconnais",
+      "aliases": [
+        "Mâcon Serrières"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Mâconnais",
+        "Saône-et-Loire"
+      ],
+      "wineColours": [
+        "red",
+        "rose"
+      ],
+      "siteNames": [
+        "Serrières"
+      ],
+      "baseAppellations": [
+        "Mâcon",
+        "Mâcon Blanc",
+        "Mâcon Rouge",
+        "Mâcon Rosé"
+      ],
+      "featureId": "inao-denom-1735"
     }
   ],
   "otherAppellations": [
@@ -525,29 +727,18 @@
     "Mâcon Bray",
     "Mâcon Bray - rouge exclusif",
     "Mâcon Burgy",
-    "Mâcon Bussières",
-    "Mâcon Chaintré",
-    "Mâcon Chaintré - rouge exclusif",
     "Mâcon Chardonnay",
     "Mâcon Cruzille",
     "Mâcon Cruzille - rouge exclusif",
     "Mâcon Igé",
-    "Mâcon La Roche-Vineuse",
-    "Mâcon La Roche-Vineuse - rouge exclusif",
     "Mâcon Lugny",
     "Mâcon Lugny - rouge exclusif",
     "Mâcon Mancey",
     "Mâcon Mancey - rouge exclusif",
-    "Mâcon Milly-Lamartine",
-    "Mâcon Milly-Lamartine - rouge exclusif",
     "Mâcon Montbellet",
-    "Mâcon Pierreclos",
-    "Mâcon Prissé",
-    "Mâcon Prissé - rouge exclusif",
     "Mâcon Péronne",
     "Mâcon Saint-Gengoux-le-National",
     "Mâcon Saint-Gengoux-le-National - rouge exclusif",
-    "Mâcon Serrières",
     "Mâcon Uchizy",
     "Mâcon Verzé",
     "Mâcon Villages",

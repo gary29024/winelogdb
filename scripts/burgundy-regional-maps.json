@@ -924,6 +924,361 @@
         "Saône-et-Loire"
       ],
       "coverageNote": "A geographic denomination within Mâcon AOC. The highlight shows its full INAO production area; named cuvées and producer holdings have no separate boundaries here."
+    },
+    {
+      "id": "macon-bussieres",
+      "name": "Mâcon Bussières",
+      "region": "Mâconnais",
+      "appellationId": 583,
+      "denominationId": 1717,
+      "sourceName": "Mâcon Bussières",
+      "sourceCvi": "1B370 14, 1B370 15, 1R371 18, 1S371 18",
+      "wineColours": [
+        "red",
+        "white",
+        "rose"
+      ],
+      "communes": [
+        "71069"
+      ],
+      "expectedBounds": [
+        4.6,
+        46.2,
+        4.85,
+        46.42
+      ],
+      "aliases": [
+        "Mâcon Bussières"
+      ],
+      "siteNames": [
+        "Bussières"
+      ],
+      "baseAppellations": [
+        "Mâcon",
+        "Mâcon Blanc",
+        "Mâcon Rouge",
+        "Mâcon Rosé"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Mâconnais",
+        "Saône-et-Loire"
+      ],
+      "coverageNote": "A geographic denomination within Mâcon AOC. Named cuvées and producer holdings have no separate boundaries here. This is a denomination overview across wine colours, not a verified white, red or rosé production area.",
+      "colourScope": "overview"
+    },
+    {
+      "id": "macon-chaintre",
+      "name": "Mâcon Chaintré",
+      "region": "Mâconnais",
+      "appellationId": 583,
+      "denominationId": 1719,
+      "sourceName": "Mâcon Chaintré",
+      "sourceCvi": "1B370 16, 1B370 17, 1R371 19, 1S371 19",
+      "wineColours": [
+        "red",
+        "white",
+        "rose"
+      ],
+      "communes": [
+        "71074",
+        "71084",
+        "71150"
+      ],
+      "expectedBounds": [
+        4.6,
+        46.2,
+        4.85,
+        46.42
+      ],
+      "aliases": [
+        "Mâcon Chaintré"
+      ],
+      "siteNames": [
+        "Chaintré"
+      ],
+      "baseAppellations": [
+        "Mâcon",
+        "Mâcon Blanc",
+        "Mâcon Rouge",
+        "Mâcon Rosé"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Mâconnais",
+        "Saône-et-Loire"
+      ],
+      "coverageNote": "A geographic denomination within Mâcon AOC. Named cuvées and producer holdings have no separate boundaries here. This is a denomination overview across wine colours, not a verified white, red or rosé production area.",
+      "sourceVariants": [
+        {
+          "name": "Mâcon Chaintré - rouge exclusif",
+          "communes": [
+            "71150"
+          ],
+          "id": "red-only",
+          "label": "Mâcon Chaintré — red-only sector",
+          "note": "INAO labels this sector “rouge exclusif” (red only). It is not the whole red-wine area. No white or rosé boundary is inferred by subtracting it from the overview."
+        }
+      ],
+      "colourScope": "overview",
+      "coordinateGrid": 1e-07,
+      "precisionNote": "At 1e-6 degrees the red-only sector changes net area by more than 0.005%. The reviewed 1e-7 grid passes the unchanged area and hole/part gates."
+    },
+    {
+      "id": "macon-la-roche-vineuse",
+      "name": "Mâcon La Roche-Vineuse",
+      "region": "Mâconnais",
+      "appellationId": 583,
+      "denominationId": 1725,
+      "sourceName": "Mâcon La Roche-Vineuse",
+      "sourceCvi": "1B370 42, 1B370 43, 1R371 47, 1S371 47",
+      "wineColours": [
+        "red",
+        "white",
+        "rose"
+      ],
+      "communes": [
+        "71126",
+        "71235",
+        "71371"
+      ],
+      "expectedBounds": [
+        4.6,
+        46.2,
+        4.85,
+        46.42
+      ],
+      "aliases": [
+        "Mâcon La Roche-Vineuse"
+      ],
+      "siteNames": [
+        "La Roche-Vineuse"
+      ],
+      "baseAppellations": [
+        "Mâcon",
+        "Mâcon Blanc",
+        "Mâcon Rouge",
+        "Mâcon Rosé"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Mâconnais",
+        "Saône-et-Loire"
+      ],
+      "coverageNote": "A geographic denomination within Mâcon AOC. Named cuvées and producer holdings have no separate boundaries here. This is a denomination overview across wine colours, not a verified white, red or rosé production area.",
+      "sourceVariants": [
+        {
+          "name": "Mâcon La Roche-Vineuse - rouge exclusif",
+          "communes": [
+            "71126",
+            "71235",
+            "71371"
+          ],
+          "id": "red-only",
+          "label": "Mâcon La Roche-Vineuse — red-only sector",
+          "note": "INAO labels this sector “rouge exclusif” (red only). It is not the whole red-wine area. No white or rosé boundary is inferred by subtracting it from the overview."
+        }
+      ],
+      "colourScope": "overview"
+    },
+    {
+      "id": "macon-milly-lamartine",
+      "name": "Mâcon Milly-Lamartine",
+      "region": "Mâconnais",
+      "appellationId": 583,
+      "denominationId": 1729,
+      "sourceName": "Mâcon Milly-Lamartine",
+      "sourceCvi": "1B370 50, 1B370 51, 1R371 62, 1S371 62",
+      "wineColours": [
+        "red",
+        "white",
+        "rose"
+      ],
+      "communes": [
+        "71031",
+        "71032",
+        "71299",
+        "71525"
+      ],
+      "expectedBounds": [
+        4.6,
+        46.2,
+        4.85,
+        46.42
+      ],
+      "aliases": [
+        "Mâcon Milly-Lamartine"
+      ],
+      "siteNames": [
+        "Milly-Lamartine"
+      ],
+      "baseAppellations": [
+        "Mâcon",
+        "Mâcon Blanc",
+        "Mâcon Rouge",
+        "Mâcon Rosé"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Mâconnais",
+        "Saône-et-Loire"
+      ],
+      "coverageNote": "A geographic denomination within Mâcon AOC. Named cuvées and producer holdings have no separate boundaries here. This is a denomination overview across wine colours, not a verified white, red or rosé production area.",
+      "sourceVariants": [
+        {
+          "name": "Mâcon Milly-Lamartine - rouge exclusif",
+          "communes": [
+            "71031",
+            "71299"
+          ],
+          "id": "red-only",
+          "label": "Mâcon Milly-Lamartine — red-only sector",
+          "note": "INAO labels this sector “rouge exclusif” (red only). It is not the whole red-wine area. No white or rosé boundary is inferred by subtracting it from the overview."
+        }
+      ],
+      "colourScope": "overview"
+    },
+    {
+      "id": "macon-pierreclos",
+      "name": "Mâcon Pierreclos",
+      "region": "Mâconnais",
+      "appellationId": 583,
+      "denominationId": 1731,
+      "sourceName": "Mâcon Pierreclos",
+      "sourceCvi": "1B370 56, 1B370 57, 1R371 68, 1S371 68",
+      "wineColours": [
+        "red",
+        "white",
+        "rose"
+      ],
+      "communes": [
+        "71350"
+      ],
+      "expectedBounds": [
+        4.6,
+        46.2,
+        4.85,
+        46.42
+      ],
+      "aliases": [
+        "Mâcon Pierreclos"
+      ],
+      "siteNames": [
+        "Pierreclos"
+      ],
+      "baseAppellations": [
+        "Mâcon",
+        "Mâcon Blanc",
+        "Mâcon Rouge",
+        "Mâcon Rosé"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Mâconnais",
+        "Saône-et-Loire"
+      ],
+      "coverageNote": "A geographic denomination within Mâcon AOC. Named cuvées and producer holdings have no separate boundaries here. This is a denomination overview across wine colours, not a verified white, red or rosé production area.",
+      "colourScope": "overview"
+    },
+    {
+      "id": "macon-prisse",
+      "name": "Mâcon Prissé",
+      "region": "Mâconnais",
+      "appellationId": 583,
+      "denominationId": 1732,
+      "sourceName": "Mâcon Prissé",
+      "sourceCvi": "1B370 58, 1B370 59, 1R371 71, 1S371 71",
+      "wineColours": [
+        "red",
+        "white",
+        "rose"
+      ],
+      "communes": [
+        "71360"
+      ],
+      "expectedBounds": [
+        4.6,
+        46.2,
+        4.85,
+        46.42
+      ],
+      "aliases": [
+        "Mâcon Prissé"
+      ],
+      "siteNames": [
+        "Prissé"
+      ],
+      "baseAppellations": [
+        "Mâcon",
+        "Mâcon Blanc",
+        "Mâcon Rouge",
+        "Mâcon Rosé"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Mâconnais",
+        "Saône-et-Loire"
+      ],
+      "coverageNote": "A geographic denomination within Mâcon AOC. Named cuvées and producer holdings have no separate boundaries here. This is a denomination overview across wine colours, not a verified white, red or rosé production area.",
+      "sourceVariants": [
+        {
+          "name": "Mâcon Prissé - rouge exclusif",
+          "communes": [
+            "71360"
+          ],
+          "id": "red-only",
+          "label": "Mâcon Prissé — red-only sector",
+          "note": "INAO labels this sector “rouge exclusif” (red only). It is not the whole red-wine area. No white or rosé boundary is inferred by subtracting it from the overview."
+        }
+      ],
+      "colourScope": "overview"
+    },
+    {
+      "id": "macon-serrieres",
+      "name": "Mâcon Serrières",
+      "region": "Mâconnais",
+      "appellationId": 583,
+      "denominationId": 1735,
+      "sourceName": "Mâcon Serrières",
+      "sourceCvi": "1R371 83, 1S371 83",
+      "wineColours": [
+        "red",
+        "rose"
+      ],
+      "communes": [
+        "71518"
+      ],
+      "expectedBounds": [
+        4.6,
+        46.2,
+        4.85,
+        46.42
+      ],
+      "aliases": [
+        "Mâcon Serrières"
+      ],
+      "siteNames": [
+        "Serrières"
+      ],
+      "baseAppellations": [
+        "Mâcon",
+        "Mâcon Blanc",
+        "Mâcon Rouge",
+        "Mâcon Rosé"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Mâconnais",
+        "Saône-et-Loire"
+      ],
+      "coverageNote": "A geographic denomination within Mâcon AOC. Named cuvées and producer holdings have no separate boundaries here. Serrières permits red and rosé wines only."
     }
   ],
   "communeNames": {
@@ -989,19 +1344,26 @@
     "21716": "Vougeot",
     "71005": "Aluze",
     "71019": "Barizey",
+    "71031": "Berzé-le-Châtel",
+    "71032": "Berzé-la-Ville",
     "71034": "Bissey-sous-Cruchaud",
     "71037": "Bissy-sur-Fley",
     "71051": "Bouzeron",
+    "71069": "Bussières",
     "71070": "Buxy",
     "71072": "Cersot",
     "71073": "Chagny",
+    "71074": "Chaintré",
     "71078": "Chamilly",
+    "71084": "Chânes",
     "71085": "Change",
     "71105": "Charnay-lès-Mâcon",
     "71109": "Chassey-le-Camp",
     "71122": "Cheilly-lès-Maranges",
     "71124": "Chenôves",
+    "71126": "Chevagny-les-Chevrières",
     "71149": "Couches",
+    "71150": "Crêches-sur-Saône",
     "71151": "Créot",
     "71159": "Culles-les-Roches",
     "71169": "Davayé",
@@ -1015,15 +1377,20 @@
     "71210": "Fuissé",
     "71214": "Genouilly",
     "71221": "Givry",
+    "71235": "Hurigny",
     "71241": "Jambles",
     "71247": "Jully-lès-Buxy",
     "71270": "Mâcon",
     "71292": "Mellecey",
     "71294": "Mercurey",
+    "71299": "Milly-Lamartine",
     "71302": "Montagny-lès-Buxy",
     "71324": "Moroges",
     "71343": "Paris-l'Hôpital",
+    "71350": "Pierreclos",
+    "71360": "Prissé",
     "71369": "Remigny",
+    "71371": "La Roche-Vineuse",
     "71374": "Rosey",
     "71378": "Rully",
     "71392": "Saint-Boil",
@@ -1047,6 +1414,8 @@
     "71501": "Sassangy",
     "71503": "Saules",
     "71515": "Sercy",
+    "71518": "Serrières",
+    "71525": "Sologny",
     "71526": "Solutré-Pouilly",
     "71563": "Vaux-en-Pré",
     "71567": "Vergisson",

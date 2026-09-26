@@ -1,0 +1,104 @@
+{
+  "id": "macon-prisse",
+  "name": "Mâcon Prissé",
+  "region": "Mâconnais",
+  "mapKind": "regional",
+  "communes": [
+    {
+      "id": "71360",
+      "name": "Prissé",
+      "bounds": [
+        4.718132,
+        46.308412,
+        4.781885,
+        46.343974
+      ],
+      "labelPoint": [
+        4.728937,
+        46.320749
+      ]
+    }
+  ],
+  "dataUrl": "/maps/macon-prisse.2026-09-21.geojson",
+  "bounds": [
+    4.718132,
+    46.308412,
+    4.781885,
+    46.343974
+  ],
+  "sources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71360/cadastre-71360-communes.json.gz",
+      "sha256": "304bf7d6b4c50cb4470f4fbd9f6e70414b3c6d169883a6c9a99f5110f2fa3370"
+    }
+  ],
+  "notes": {
+    "inao-denom-1732-red-only": {
+      "note": "INAO labels this sector “rouge exclusif” (red only). It is not the whole red-wine area. No white or rosé boundary is inferred by subtracting it from the overview."
+    }
+  },
+  "features": [
+    {
+      "id": "inao-denom-1732",
+      "name": "Mâcon Prissé",
+      "tier": "regional",
+      "kind": "appellation",
+      "appellationId": 583,
+      "denominationId": 1732,
+      "sourceName": "Mâcon Prissé",
+      "communes": [
+        "71360"
+      ],
+      "areaHa": 628.64,
+      "matchId": "inao-denom-1732",
+      "atlasUrl": null,
+      "bounds": [
+        4.718132,
+        46.308412,
+        4.781885,
+        46.343974
+      ],
+      "labelPoint": [
+        4.728937,
+        46.320749
+      ]
+    },
+    {
+      "id": "inao-denom-1732-red-only",
+      "name": "Mâcon Prissé — red-only sector",
+      "tier": "regional",
+      "kind": "appellation",
+      "appellationId": 583,
+      "denominationId": 1732,
+      "sourceName": "Mâcon Prissé - rouge exclusif",
+      "communes": [
+        "71360"
+      ],
+      "areaHa": 94.46,
+      "matchId": "inao-denom-1732-red-only",
+      "atlasUrl": null,
+      "bounds": [
+        4.726963,
+        46.310471,
+        4.776161,
+        46.343539
+      ],
+      "labelPoint": [
+        4.731294,
+        46.324432
+      ]
+    }
+  ],
+  "coverageNote": "A geographic denomination within Mâcon AOC. Named cuvées and producer holdings have no separate boundaries here. This is a denomination overview across wine colours, not a verified white, red or rosé production area.",
+  "colourScope": "overview"
+}

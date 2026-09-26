@@ -1,0 +1,75 @@
+{
+  "id": "macon-pierreclos",
+  "name": "Mâcon Pierreclos",
+  "region": "Mâconnais",
+  "mapKind": "regional",
+  "communes": [
+    {
+      "id": "71350",
+      "name": "Pierreclos",
+      "bounds": [
+        4.674643,
+        46.318936,
+        4.694989,
+        46.346892
+      ],
+      "labelPoint": [
+        4.680839,
+        46.325681
+      ]
+    }
+  ],
+  "dataUrl": "/maps/macon-pierreclos.2026-09-21.geojson",
+  "bounds": [
+    4.674643,
+    46.318936,
+    4.694989,
+    46.346892
+  ],
+  "sources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71350/cadastre-71350-communes.json.gz",
+      "sha256": "4aa2195abad490df500314b50354d0431b8a23cf893ec0e73a237932f21c67de"
+    }
+  ],
+  "notes": {},
+  "features": [
+    {
+      "id": "inao-denom-1731",
+      "name": "Mâcon Pierreclos",
+      "tier": "regional",
+      "kind": "appellation",
+      "appellationId": 583,
+      "denominationId": 1731,
+      "sourceName": "Mâcon Pierreclos",
+      "communes": [
+        "71350"
+      ],
+      "areaHa": 132.19,
+      "matchId": "inao-denom-1731",
+      "atlasUrl": null,
+      "bounds": [
+        4.674643,
+        46.318936,
+        4.694989,
+        46.346892
+      ],
+      "labelPoint": [
+        4.680839,
+        46.325681
+      ]
+    }
+  ],
+  "coverageNote": "A geographic denomination within Mâcon AOC. Named cuvées and producer holdings have no separate boundaries here. This is a denomination overview across wine colours, not a verified white, red or rosé production area.",
+  "colourScope": "overview"
+}
