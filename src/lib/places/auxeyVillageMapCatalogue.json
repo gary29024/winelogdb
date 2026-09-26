@@ -1,0 +1,375 @@
+{
+  "id": "auxey-duresses",
+  "name": "Auxey-Duresses",
+  "region": "Côte de Beaune",
+  "communes": [
+    {
+      "id": "21037",
+      "name": "Auxey-Duresses"
+    }
+  ],
+  "dataUrl": "/maps/auxey-duresses.2026-09-21.geojson",
+  "bounds": [
+    4.700657,
+    46.979362,
+    4.762202,
+    46.993109
+  ],
+  "sources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21037/cadastre-21037-communes.json.gz",
+      "sha256": "82738e59084efd0b30e19a4deb2b9dd2096fd4db1abaa18c2ae403cee2932115"
+    }
+  ],
+  "notes": {
+    "inao-denom-266": {
+      "note": "La Chapelle overlaps parts of Reugne and Les Bréterins in the official map. These remain three separate Premier Cru names, each with its full boundary. A label naming Les Bréterins or Reugne together with La Chapelle is shown as La Chapelle."
+    }
+  },
+  "features": [
+    {
+      "id": "inao-app-129-village",
+      "name": "Auxey-Duresses (all colours)",
+      "tier": "village",
+      "kind": "appellation",
+      "appellationId": 129,
+      "denominationId": null,
+      "denominationIds": [
+        262,
+        2075
+      ],
+      "sourceName": "Auxey-Duresses / Auxey-Duresses ou Auxey-Duresses Côte de Beaune",
+      "communes": [
+        "21037"
+      ],
+      "areaHa": 172.58,
+      "matchId": "ba_appellation_7v4bah6wfkrjm36eoq4wdxp3va",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_7v4bah6wfkrjm36eoq4wdxp3va/auxey-duresses",
+      "bounds": [
+        4.700657,
+        46.979362,
+        4.762202,
+        46.993109
+      ],
+      "labelPoint": [
+        4.755629,
+        46.984611
+      ]
+    },
+    {
+      "id": "inao-denom-262",
+      "name": "Auxey-Duresses (white)",
+      "tier": "village",
+      "kind": "appellation",
+      "appellationId": 129,
+      "denominationId": 262,
+      "sourceName": "Auxey-Duresses",
+      "communes": [
+        "21037"
+      ],
+      "areaHa": 172.58,
+      "matchId": "ba_appellation_7v4bah6wfkrjm36eoq4wdxp3va",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_7v4bah6wfkrjm36eoq4wdxp3va/auxey-duresses",
+      "bounds": [
+        4.700657,
+        46.979362,
+        4.762202,
+        46.993109
+      ],
+      "labelPoint": [
+        4.708193,
+        46.984609
+      ]
+    },
+    {
+      "id": "inao-denom-263",
+      "name": "Bas des Duresses",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 129,
+      "denominationId": 263,
+      "sourceName": "Auxey-Duresses premier cru Bas des Duresses",
+      "communes": [
+        "21037"
+      ],
+      "areaHa": 2.37,
+      "matchId": "ba_designation_xsx5vidk4hhzyew4xh5dfprmaq",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_xsx5vidk4hhzyew4xh5dfprmaq/bas-des-duresses",
+      "bounds": [
+        4.757024,
+        46.98866,
+        4.75893,
+        46.990911
+      ],
+      "labelPoint": [
+        4.758057,
+        46.989738
+      ]
+    },
+    {
+      "id": "inao-denom-264",
+      "name": "Climat du Val",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 129,
+      "denominationId": 264,
+      "sourceName": "Auxey-Duresses premier cru Climat du Val",
+      "communes": [
+        "21037"
+      ],
+      "areaHa": 9.3,
+      "matchId": "ba_designation_4zqrog4kzmrfkaivackekfznca",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_4zqrog4kzmrfkaivackekfznca/climat-du-val",
+      "bounds": [
+        4.746677,
+        46.988385,
+        4.750881,
+        46.991953
+      ],
+      "labelPoint": [
+        4.748826,
+        46.99014
+      ]
+    },
+    {
+      "id": "inao-denom-265",
+      "name": "Clos du Val",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 129,
+      "denominationId": 265,
+      "sourceName": "Auxey-Duresses premier cru Clos du Val",
+      "communes": [
+        "21037"
+      ],
+      "areaHa": 0.92,
+      "matchId": "ba_designation_wmjon7iz7d5zpoj6x5ovopxgty",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_wmjon7iz7d5zpoj6x5ovopxgty/clos-du-val",
+      "bounds": [
+        4.750079,
+        46.988386,
+        4.750881,
+        46.990765
+      ],
+      "labelPoint": [
+        4.750559,
+        46.989576
+      ]
+    },
+    {
+      "id": "inao-denom-266",
+      "name": "La Chapelle",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 129,
+      "denominationId": 266,
+      "sourceName": "Auxey-Duresses premier cru La Chapelle",
+      "communes": [
+        "21037"
+      ],
+      "areaHa": 1.28,
+      "matchId": "ba_designation_3tgt6se3sxpdhcneyqbfj225uy",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_3tgt6se3sxpdhcneyqbfj225uy/la-chapelle",
+      "bounds": [
+        4.75234,
+        46.987965,
+        4.753727,
+        46.989667
+      ],
+      "labelPoint": [
+        4.752977,
+        46.988881
+      ]
+    },
+    {
+      "id": "inao-denom-267",
+      "name": "Les Bréterins",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 129,
+      "denominationId": 267,
+      "sourceName": "Auxey-Duresses premier cru Les Bréterins",
+      "communes": [
+        "21037"
+      ],
+      "areaHa": 1.93,
+      "matchId": "ba_designation_eckm6zifwu2olfgom3rkmfouom",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_eckm6zifwu2olfgom3rkmfouom/les-breterins",
+      "bounds": [
+        4.75073,
+        46.988053,
+        4.752854,
+        46.989533
+      ],
+      "labelPoint": [
+        4.751727,
+        46.988781
+      ]
+    },
+    {
+      "id": "inao-denom-268",
+      "name": "Les Duresses",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 129,
+      "denominationId": 268,
+      "sourceName": "Auxey-Duresses premier cru Les Duresses",
+      "communes": [
+        "21037"
+      ],
+      "areaHa": 7.94,
+      "matchId": "ba_designation_6kfyxvkxkpgojvhnc7nuxqpm7e",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_6kfyxvkxkpgojvhnc7nuxqpm7e/les-duresses",
+      "bounds": [
+        4.75384,
+        46.988284,
+        4.757936,
+        46.991979
+      ],
+      "labelPoint": [
+        4.755698,
+        46.990143
+      ]
+    },
+    {
+      "id": "inao-denom-269",
+      "name": "Les Ecussaux",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 129,
+      "denominationId": 269,
+      "sourceName": "Auxey-Duresses premier cru Les Ecussaux",
+      "communes": [
+        "21037"
+      ],
+      "areaHa": 3.17,
+      "matchId": "ba_designation_cuuw73qhfqu35c7ju2b4jiorya",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_cuuw73qhfqu35c7ju2b4jiorya/les-ecussaux",
+      "bounds": [
+        4.755627,
+        46.987638,
+        4.762202,
+        46.988722
+      ],
+      "labelPoint": [
+        4.7591,
+        46.988184
+      ]
+    },
+    {
+      "id": "inao-denom-270",
+      "name": "Les Grands Champs",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 129,
+      "denominationId": 270,
+      "sourceName": "Auxey-Duresses premier cru Les Grands Champs",
+      "communes": [
+        "21037"
+      ],
+      "areaHa": 4.05,
+      "matchId": "ba_designation_2rxjh6fdge5cd53dt46hsqskq4",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_2rxjh6fdge5cd53dt46hsqskq4/les-grands-champs",
+      "bounds": [
+        4.750586,
+        46.986999,
+        4.75611,
+        46.988489
+      ],
+      "labelPoint": [
+        4.752298,
+        46.987758
+      ]
+    },
+    {
+      "id": "inao-denom-271",
+      "name": "Reugne",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 129,
+      "denominationId": 271,
+      "sourceName": "Auxey-Duresses premier cru Reugne",
+      "communes": [
+        "21037"
+      ],
+      "areaHa": 3.03,
+      "matchId": "ba_designation_h6k3v4b2brtyzelzuoisizwqai",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_h6k3v4b2brtyzelzuoisizwqai/reugne",
+      "bounds": [
+        4.75255,
+        46.987965,
+        4.755173,
+        46.990253
+      ],
+      "labelPoint": [
+        4.753544,
+        46.989295
+      ]
+    },
+    {
+      "id": "inao-denom-272",
+      "name": "Auxey-Duresses Premier Cru",
+      "tier": "premier_cru",
+      "kind": "appellation",
+      "appellationId": 129,
+      "denominationId": 272,
+      "sourceName": "Auxey-Duresses premier cru",
+      "communes": [
+        "21037"
+      ],
+      "areaHa": 31.78,
+      "matchId": "ba_appellation_wzm75bnr5do3ychf7xphgqtroa",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_wzm75bnr5do3ychf7xphgqtroa/auxey-duresses-premier-cru",
+      "bounds": [
+        4.746677,
+        46.986999,
+        4.762202,
+        46.991979
+      ],
+      "labelPoint": [
+        4.75549,
+        46.989945
+      ]
+    },
+    {
+      "id": "inao-denom-2075",
+      "name": "Auxey-Duresses (red)",
+      "tier": "village",
+      "kind": "appellation",
+      "appellationId": 129,
+      "denominationId": 2075,
+      "sourceName": "Auxey-Duresses ou Auxey-Duresses Côte de Beaune",
+      "communes": [
+        "21037"
+      ],
+      "areaHa": 172.58,
+      "matchId": "ba_appellation_7v4bah6wfkrjm36eoq4wdxp3va",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_7v4bah6wfkrjm36eoq4wdxp3va/auxey-duresses",
+      "bounds": [
+        4.700657,
+        46.979362,
+        4.762202,
+        46.993109
+      ],
+      "labelPoint": [
+        4.708193,
+        46.984609
+      ]
+    }
+  ],
+  "umbrellas": {
+    "inao-denom-264": [
+      "inao-denom-265"
+    ]
+  }
+}

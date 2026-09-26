@@ -21,6 +21,11 @@ const loaders=new Map<string,()=>Promise<{default:VillageMapCatalogue}>>([
  ['beaune',()=>import('./beauneVillageMapCatalogue.json')],
  ['pommard',()=>import('./pommardVillageMapCatalogue.json')],
  ['volnay',()=>import('./volnayVillageMapCatalogue.json')],
+ ['savigny-les-beaune',()=>import('./savignyVillageMapCatalogue.json')],
+ ['chorey-les-beaune',()=>import('./choreyVillageMapCatalogue.json')],
+ ['auxey-duresses',()=>import('./auxeyVillageMapCatalogue.json')],
+ ['monthelie',()=>import('./monthelieVillageMapCatalogue.json')],
+ ['saint-romain',()=>import('./saintRomainVillageMapCatalogue.json')],
 ]);
 
 export async function loadVillageMapCatalogue(villageId:string):Promise<VillageMapCatalogue>{

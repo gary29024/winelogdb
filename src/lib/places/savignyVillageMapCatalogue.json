@@ -1,0 +1,695 @@
+{
+  "id": "savigny-les-beaune",
+  "name": "Savigny-lès-Beaune",
+  "region": "Côte de Beaune",
+  "communes": [
+    {
+      "id": "21590",
+      "name": "Savigny-lès-Beaune"
+    }
+  ],
+  "dataUrl": "/maps/savigny-les-beaune.2026-09-21.geojson",
+  "bounds": [
+    4.803165,
+    47.043578,
+    4.854016,
+    47.072984
+  ],
+  "sources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21590/cadastre-21590-communes.json.gz",
+      "sha256": "566baa7c3692a08d9ee8e5ca7b3be6d47ac4e7a21ecc8d96b94f4f3eb0cb09a9"
+    }
+  ],
+  "notes": {
+    "inao-denom-1180": {
+      "note": "Bataillère is also labelled Clos de la Bataillère or La Bataillère aux Vergelesses. It has its own boundary, separate from Les Vergelesses on this map."
+    }
+  },
+  "features": [
+    {
+      "id": "inao-app-231-village",
+      "name": "Savigny-lès-Beaune (all colours)",
+      "tier": "village",
+      "kind": "appellation",
+      "appellationId": 231,
+      "denominationId": null,
+      "denominationIds": [
+        1173,
+        2081
+      ],
+      "sourceName": "Savigny-lès-Beaune / Savigny-lès-Beaune ou Savigny-lès-Beaune Côte de Beaune",
+      "communes": [
+        "21590"
+      ],
+      "areaHa": 380.72,
+      "matchId": "ba_appellation_b6s25rtthb2gsgcfoce2ehimlq",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_b6s25rtthb2gsgcfoce2ehimlq/savigny-les-beaune",
+      "bounds": [
+        4.803165,
+        47.043578,
+        4.854016,
+        47.072984
+      ],
+      "labelPoint": [
+        4.82739,
+        47.062871
+      ]
+    },
+    {
+      "id": "inao-denom-1173",
+      "name": "Savigny-lès-Beaune (white)",
+      "tier": "village",
+      "kind": "appellation",
+      "appellationId": 231,
+      "denominationId": 1173,
+      "sourceName": "Savigny-lès-Beaune",
+      "communes": [
+        "21590"
+      ],
+      "areaHa": 380.72,
+      "matchId": "ba_appellation_b6s25rtthb2gsgcfoce2ehimlq",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_b6s25rtthb2gsgcfoce2ehimlq/savigny-les-beaune",
+      "bounds": [
+        4.803165,
+        47.043578,
+        4.854016,
+        47.072984
+      ],
+      "labelPoint": [
+        4.835368,
+        47.054556
+      ]
+    },
+    {
+      "id": "inao-denom-1174",
+      "name": "Aux Clous",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 231,
+      "denominationId": 1174,
+      "sourceName": "Savigny-lès-Beaune premier cru Aux Clous",
+      "communes": [
+        "21590"
+      ],
+      "areaHa": 9.97,
+      "matchId": "ba_designation_5sghgpwct22xyccc7viksv6bja",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_5sghgpwct22xyccc7viksv6bja/aux-clous",
+      "bounds": [
+        4.82425,
+        47.061161,
+        4.828006,
+        47.064836
+      ],
+      "labelPoint": [
+        4.826238,
+        47.0632
+      ]
+    },
+    {
+      "id": "inao-denom-1175",
+      "name": "Aux Fourneaux",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 231,
+      "denominationId": 1175,
+      "sourceName": "Savigny-lès-Beaune premier cru Aux Fourneaux",
+      "communes": [
+        "21590"
+      ],
+      "areaHa": 6.22,
+      "matchId": "ba_designation_acabpaa5pkoahjx3wcukzb4dnq",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_acabpaa5pkoahjx3wcukzb4dnq/aux-fourneaux",
+      "bounds": [
+        4.842185,
+        47.059307,
+        4.846143,
+        47.063178
+      ],
+      "labelPoint": [
+        4.844429,
+        47.061637
+      ]
+    },
+    {
+      "id": "inao-denom-1176",
+      "name": "Aux Gravains",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 231,
+      "denominationId": 1176,
+      "sourceName": "Savigny-lès-Beaune premier cru Aux Gravains",
+      "communes": [
+        "21590"
+      ],
+      "areaHa": 6.31,
+      "matchId": "ba_designation_6hbqeukxyxo7tfnikrmkjeprle",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_6hbqeukxyxo7tfnikrmkjeprle/aux-gravains",
+      "bounds": [
+        4.831193,
+        47.061022,
+        4.835542,
+        47.063768
+      ],
+      "labelPoint": [
+        4.833372,
+        47.062401
+      ]
+    },
+    {
+      "id": "inao-denom-1177",
+      "name": "Aux Guettes",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 231,
+      "denominationId": 1177,
+      "sourceName": "Savigny-lès-Beaune premier cru Aux Guettes",
+      "communes": [
+        "21590"
+      ],
+      "areaHa": 14.51,
+      "matchId": "ba_designation_lizsfjzjisf3jobglnlfd4crhu",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_lizsfjzjisf3jobglnlfd4crhu/aux-guettes",
+      "bounds": [
+        4.82034,
+        47.06405,
+        4.831801,
+        47.067225
+      ],
+      "labelPoint": [
+        4.82293,
+        47.065605
+      ]
+    },
+    {
+      "id": "inao-denom-1178",
+      "name": "Aux Serpentières",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 231,
+      "denominationId": 1178,
+      "sourceName": "Savigny-lès-Beaune premier cru Aux Serpentières",
+      "communes": [
+        "21590"
+      ],
+      "areaHa": 12.7,
+      "matchId": "ba_designation_zxtm3snnrtwoj5elgadcnzmfue",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_zxtm3snnrtwoj5elgadcnzmfue/aux-serpentieres",
+      "bounds": [
+        4.827872,
+        47.060935,
+        4.833677,
+        47.064763
+      ],
+      "labelPoint": [
+        4.830191,
+        47.062858
+      ]
+    },
+    {
+      "id": "inao-denom-1179",
+      "name": "Basses Vergelesses",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 231,
+      "denominationId": 1179,
+      "sourceName": "Savigny-lès-Beaune premier cru Basses Vergelesses",
+      "communes": [
+        "21590"
+      ],
+      "areaHa": 1.69,
+      "matchId": "ba_designation_74kplh46tmeqjs2b7wgdxu4yl4",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_74kplh46tmeqjs2b7wgdxu4yl4/basses-vergelesses",
+      "bounds": [
+        4.84177,
+        47.063196,
+        4.843942,
+        47.064856
+      ],
+      "labelPoint": [
+        4.842891,
+        47.063979
+      ]
+    },
+    {
+      "id": "inao-denom-1180",
+      "name": "Bataillère",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 231,
+      "denominationId": 1180,
+      "sourceName": "Savigny-lès-Beaune premier cru Bataillère",
+      "communes": [
+        "21590"
+      ],
+      "areaHa": 1.81,
+      "matchId": "ba_designation_vrbh2wxzntaqo25uit7iuqw4ei",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_vrbh2wxzntaqo25uit7iuqw4ei/bataillere",
+      "bounds": [
+        4.841093,
+        47.064093,
+        4.843123,
+        47.06586
+      ],
+      "labelPoint": [
+        4.842215,
+        47.064992
+      ]
+    },
+    {
+      "id": "inao-denom-1181",
+      "name": "Champ Chevrey",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 231,
+      "denominationId": 1181,
+      "sourceName": "Savigny-lès-Beaune premier cru Champ Chevrey",
+      "communes": [
+        "21590"
+      ],
+      "areaHa": 1.45,
+      "matchId": "ba_designation_exeyebitsug452vjyz3dxx22ku",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_exeyebitsug452vjyz3dxx22ku/champ-chevrey",
+      "bounds": [
+        4.841845,
+        47.059825,
+        4.843731,
+        47.062397
+      ],
+      "labelPoint": [
+        4.842703,
+        47.061096
+      ]
+    },
+    {
+      "id": "inao-denom-1182",
+      "name": "La Dominode",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 231,
+      "denominationId": 1182,
+      "sourceName": "Savigny-lès-Beaune premier cru La Dominode",
+      "communes": [
+        "21590"
+      ],
+      "areaHa": 7.87,
+      "matchId": "ba_designation_mixfgj523rfn7h47rnseflr6vu",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_mixfgj523rfn7h47rnseflr6vu/la-dominode",
+      "bounds": [
+        4.831648,
+        47.051265,
+        4.835982,
+        47.054741
+      ],
+      "labelPoint": [
+        4.833673,
+        47.053016
+      ]
+    },
+    {
+      "id": "inao-denom-1183",
+      "name": "Les Charnières",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 231,
+      "denominationId": 1183,
+      "sourceName": "Savigny-lès-Beaune premier cru Les Charnières",
+      "communes": [
+        "21590"
+      ],
+      "areaHa": 2.04,
+      "matchId": "ba_designation_s5z4xnm7vcugdegv5mzxnpem2e",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_s5z4xnm7vcugdegv5mzxnpem2e/les-charnieres",
+      "bounds": [
+        4.835848,
+        47.062968,
+        4.838158,
+        47.064426
+      ],
+      "labelPoint": [
+        4.837166,
+        47.063504
+      ]
+    },
+    {
+      "id": "inao-denom-1184",
+      "name": "Les Hauts Jarrons",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 231,
+      "denominationId": 1184,
+      "sourceName": "Savigny-lès-Beaune premier cru Les Hauts Jarrons",
+      "communes": [
+        "21590"
+      ],
+      "areaHa": 4.43,
+      "matchId": "ba_designation_l43driz6nobnzrpzbmubftm26i",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_l43driz6nobnzrpzbmubftm26i/les-hauts-jarrons",
+      "bounds": [
+        4.829807,
+        47.05153,
+        4.832673,
+        47.055278
+      ],
+      "labelPoint": [
+        4.831268,
+        47.053386
+      ]
+    },
+    {
+      "id": "inao-denom-1185",
+      "name": "Les Hauts Marconnets",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 231,
+      "denominationId": 1185,
+      "sourceName": "Savigny-lès-Beaune premier cru Les Hauts Marconnets",
+      "communes": [
+        "21590"
+      ],
+      "areaHa": 5.39,
+      "matchId": "ba_designation_l47eyjcf77bnnhneafpppf3izm",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_l47eyjcf77bnnhneafpppf3izm/les-hauts-marconnets",
+      "bounds": [
+        4.830978,
+        47.047828,
+        4.834084,
+        47.051681
+      ],
+      "labelPoint": [
+        4.832696,
+        47.049742
+      ]
+    },
+    {
+      "id": "inao-denom-1186",
+      "name": "Les Jarrons",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 231,
+      "denominationId": 1186,
+      "sourceName": "Savigny-lès-Beaune premier cru Les Jarrons",
+      "communes": [
+        "21590"
+      ],
+      "areaHa": 1.47,
+      "matchId": "ba_designation_gomxg7svzxowqmqpm6j4luspia",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_gomxg7svzxowqmqpm6j4luspia/les-jarrons",
+      "bounds": [
+        4.831219,
+        47.054213,
+        4.833668,
+        47.055554
+      ],
+      "labelPoint": [
+        4.832419,
+        47.054874
+      ]
+    },
+    {
+      "id": "inao-denom-1187",
+      "name": "Les Lavières",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 231,
+      "denominationId": 1187,
+      "sourceName": "Savigny-lès-Beaune premier cru Les Lavières",
+      "communes": [
+        "21590"
+      ],
+      "areaHa": 17.92,
+      "matchId": "ba_designation_np7s55gpd5xdvm7avlrw67b2rm",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_np7s55gpd5xdvm7avlrw67b2rm/les-lavieres",
+      "bounds": [
+        4.834131,
+        47.060203,
+        4.84345,
+        47.064506
+      ],
+      "labelPoint": [
+        4.837472,
+        47.062884
+      ]
+    },
+    {
+      "id": "inao-denom-1188",
+      "name": "Les Marconnets",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 231,
+      "denominationId": 1188,
+      "sourceName": "Savigny-lès-Beaune premier cru Les Marconnets",
+      "communes": [
+        "21590"
+      ],
+      "areaHa": 2.98,
+      "matchId": "ba_designation_z5vdfmgrdni4g3hul5pxe3gsgi",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_z5vdfmgrdni4g3hul5pxe3gsgi/les-marconnets",
+      "bounds": [
+        4.832955,
+        47.049011,
+        4.835707,
+        47.051575
+      ],
+      "labelPoint": [
+        4.834231,
+        47.050395
+      ]
+    },
+    {
+      "id": "inao-denom-1189",
+      "name": "Les Narbantons",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 231,
+      "denominationId": 1189,
+      "sourceName": "Savigny-lès-Beaune premier cru Les Narbantons",
+      "communes": [
+        "21590"
+      ],
+      "areaHa": 9.62,
+      "matchId": "ba_designation_rnr2knwcvbunit4fgyn4lrec4u",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_rnr2knwcvbunit4fgyn4lrec4u/les-narbantons",
+      "bounds": [
+        4.832847,
+        47.051702,
+        4.839063,
+        47.056273
+      ],
+      "labelPoint": [
+        4.834964,
+        47.054886
+      ]
+    },
+    {
+      "id": "inao-denom-1190",
+      "name": "Les Peuillets",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 231,
+      "denominationId": 1190,
+      "sourceName": "Savigny-lès-Beaune premier cru Les Peuillets",
+      "communes": [
+        "21590"
+      ],
+      "areaHa": 15.99,
+      "matchId": "ba_designation_6xtxv32vh2myacpl7vhqvi5uva",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_6xtxv32vh2myacpl7vhqvi5uva/les-peuillets",
+      "bounds": [
+        4.833432,
+        47.046254,
+        4.839125,
+        47.052188
+      ],
+      "labelPoint": [
+        4.836323,
+        47.049199
+      ]
+    },
+    {
+      "id": "inao-denom-1191",
+      "name": "Les Rouvrettes",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 231,
+      "denominationId": 1191,
+      "sourceName": "Savigny-lès-Beaune premier cru Les Rouvrettes",
+      "communes": [
+        "21590"
+      ],
+      "areaHa": 2.67,
+      "matchId": "ba_designation_q7tlp7c6h4pufnhdzaj4xmztme",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_q7tlp7c6h4pufnhdzaj4xmztme/les-rouvrettes",
+      "bounds": [
+        4.82948,
+        47.05496,
+        4.832847,
+        47.057088
+      ],
+      "labelPoint": [
+        4.830994,
+        47.056051
+      ]
+    },
+    {
+      "id": "inao-denom-1192",
+      "name": "Les Talmettes",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 231,
+      "denominationId": 1192,
+      "sourceName": "Savigny-lès-Beaune premier cru Les Talmettes",
+      "communes": [
+        "21590"
+      ],
+      "areaHa": 3.08,
+      "matchId": "ba_designation_uyttaximer3ssuvyl2xieozhx4",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_uyttaximer3ssuvyl2xieozhx4/les-talmettes",
+      "bounds": [
+        4.837799,
+        47.063765,
+        4.839952,
+        47.066171
+      ],
+      "labelPoint": [
+        4.8388,
+        47.065083
+      ]
+    },
+    {
+      "id": "inao-denom-1193",
+      "name": "Les Vergelesses",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 231,
+      "denominationId": 1193,
+      "sourceName": "Savigny-lès-Beaune premier cru Les Vergelesses",
+      "communes": [
+        "21590"
+      ],
+      "areaHa": 15.18,
+      "matchId": "ba_designation_a5kmrzaecmwgynsj2w5g4xqs7u",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_a5kmrzaecmwgynsj2w5g4xqs7u/les-vergelesses",
+      "bounds": [
+        4.839276,
+        47.06387,
+        4.84661,
+        47.070204
+      ],
+      "labelPoint": [
+        4.842421,
+        47.067057
+      ]
+    },
+    {
+      "id": "inao-denom-1194",
+      "name": "Petits Godeaux",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 231,
+      "denominationId": 1194,
+      "sourceName": "Savigny-lès-Beaune premier cru Petits Godeaux",
+      "communes": [
+        "21590"
+      ],
+      "areaHa": 0.69,
+      "matchId": "ba_designation_7docpywq5izp4rpzrbswdfmb4a",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_7docpywq5izp4rpzrbswdfmb4a/petits-godeaux",
+      "bounds": [
+        4.833029,
+        47.063748,
+        4.834344,
+        47.064615
+      ],
+      "labelPoint": [
+        4.833643,
+        47.064184
+      ]
+    },
+    {
+      "id": "inao-denom-1195",
+      "name": "Redrescul",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 231,
+      "denominationId": 1195,
+      "sourceName": "Savigny-lès-Beaune premier cru Redrescul",
+      "communes": [
+        "21590"
+      ],
+      "areaHa": 0.58,
+      "matchId": "ba_designation_jns7p6a665im5pop4lhafwxhp4",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_jns7p6a665im5pop4lhafwxhp4/redrescul",
+      "bounds": [
+        4.82954,
+        47.054974,
+        4.830765,
+        47.055983
+      ],
+      "labelPoint": [
+        4.830116,
+        47.055415
+      ]
+    },
+    {
+      "id": "inao-denom-1196",
+      "name": "Savigny-lès-Beaune Premier Cru",
+      "tier": "premier_cru",
+      "kind": "appellation",
+      "appellationId": 231,
+      "denominationId": 1196,
+      "sourceName": "Savigny-lès-Beaune premier cru",
+      "communes": [
+        "21590"
+      ],
+      "areaHa": 144.55,
+      "matchId": "ba_appellation_mzkvn4ecm6gdtzshtzxsumaqii",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_mzkvn4ecm6gdtzshtzxsumaqii/savigny-les-beaune-premier-cru",
+      "bounds": [
+        4.82034,
+        47.046254,
+        4.84661,
+        47.070204
+      ],
+      "labelPoint": [
+        4.828508,
+        47.062903
+      ]
+    },
+    {
+      "id": "inao-denom-2081",
+      "name": "Savigny-lès-Beaune (red)",
+      "tier": "village",
+      "kind": "appellation",
+      "appellationId": 231,
+      "denominationId": 2081,
+      "sourceName": "Savigny-lès-Beaune ou Savigny-lès-Beaune Côte de Beaune",
+      "communes": [
+        "21590"
+      ],
+      "areaHa": 380.72,
+      "matchId": "ba_appellation_b6s25rtthb2gsgcfoce2ehimlq",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_b6s25rtthb2gsgcfoce2ehimlq/savigny-les-beaune",
+      "bounds": [
+        4.803165,
+        47.043578,
+        4.854016,
+        47.072984
+      ],
+      "labelPoint": [
+        4.835368,
+        47.054556
+      ]
+    }
+  ]
+}

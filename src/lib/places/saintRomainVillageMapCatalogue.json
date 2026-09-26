@@ -1,0 +1,126 @@
+{
+  "id": "saint-romain",
+  "name": "Saint-Romain",
+  "region": "Côte de Beaune",
+  "communes": [
+    {
+      "id": "21569",
+      "name": "Saint-Romain"
+    }
+  ],
+  "dataUrl": "/maps/saint-romain.2026-09-21.geojson",
+  "bounds": [
+    4.710887,
+    46.987467,
+    4.728741,
+    47.00682
+  ],
+  "sources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21569/cadastre-21569-communes.json.gz",
+      "sha256": "d16794b52305866b4ff1f0ae41a72fd4746a056216797dcc517494614644530f"
+    }
+  ],
+  "notes": {
+    "inao-app-228-village": {
+      "note": "Saint-Romain has different red and white village areas. Choose a colour to see its boundary. Named vineyards such as Sous la Velle and Sous Roche are not mapped individually."
+    },
+    "inao-denom-1157": {
+      "note": "The red-wine village area for Saint-Romain. Named vineyards are not mapped individually."
+    },
+    "inao-denom-2048": {
+      "note": "The white-wine village area for Saint-Romain. Named vineyards are not mapped individually."
+    }
+  },
+  "features": [
+    {
+      "id": "inao-app-228-village",
+      "name": "Saint-Romain (all colours)",
+      "tier": "village",
+      "kind": "appellation",
+      "appellationId": 228,
+      "denominationId": null,
+      "denominationIds": [
+        1157,
+        2048
+      ],
+      "sourceName": "Saint-Romain ou Saint-Romain Côte de Beaune / Saint-Romain",
+      "communes": [
+        "21569"
+      ],
+      "areaHa": 148.02,
+      "matchId": "ba_appellation_nrx2jvxsyus7lymrg4i5emkvwa",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_nrx2jvxsyus7lymrg4i5emkvwa/saint-romain",
+      "bounds": [
+        4.710887,
+        46.987467,
+        4.728741,
+        47.00682
+      ],
+      "labelPoint": [
+        4.716932,
+        46.991344
+      ]
+    },
+    {
+      "id": "inao-denom-1157",
+      "name": "Saint-Romain (red)",
+      "tier": "village",
+      "kind": "appellation",
+      "appellationId": 228,
+      "denominationId": 1157,
+      "sourceName": "Saint-Romain ou Saint-Romain Côte de Beaune",
+      "communes": [
+        "21569"
+      ],
+      "areaHa": 143.37,
+      "matchId": "ba_appellation_nrx2jvxsyus7lymrg4i5emkvwa",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_nrx2jvxsyus7lymrg4i5emkvwa/saint-romain",
+      "bounds": [
+        4.710887,
+        46.987477,
+        4.728741,
+        47.00682
+      ],
+      "labelPoint": [
+        4.720437,
+        47.000818
+      ]
+    },
+    {
+      "id": "inao-denom-2048",
+      "name": "Saint-Romain (white)",
+      "tier": "village",
+      "kind": "appellation",
+      "appellationId": 228,
+      "denominationId": 2048,
+      "sourceName": "Saint-Romain",
+      "communes": [
+        "21569"
+      ],
+      "areaHa": 147.05,
+      "matchId": "ba_appellation_nrx2jvxsyus7lymrg4i5emkvwa",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_nrx2jvxsyus7lymrg4i5emkvwa/saint-romain",
+      "bounds": [
+        4.710888,
+        46.987467,
+        4.72874,
+        47.00681
+      ],
+      "labelPoint": [
+        4.720437,
+        47.000808
+      ]
+    }
+  ]
+}

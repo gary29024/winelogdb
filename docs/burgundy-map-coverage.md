@@ -19,14 +19,14 @@ Beaujolais has its own appellation system and is outside this Bourgogne inventor
 
 ## Village coverage
 
-**20 of 44 village appellations have maps in this branch.** This is not complete
+**25 of 44 village appellations have maps in this branch.** This is not complete
 Burgundy coverage. A mapped appellation can still lack individual village
 lieux-dits; named plot coverage must be assessed separately.
 
 | Region | Mapped | Remaining |
 | --- | ---: | ---: |
 | Côte de Nuits | 9 | 0 |
-| Côte de Beaune | 11 | 9 |
+| Côte de Beaune | 16 | 4 |
 | Côte Chalonnaise | 0 | 5 |
 | Mâconnais | 0 | 5 |
 | Chablis & Grand Auxerrois | 0 | 5 |
@@ -56,19 +56,20 @@ lieux-dits; named plot coverage must be assessed separately.
 - [x] Beaune: all 42 named Premier Crus, with red and white source boundaries shared
 - [x] Pommard: all 28 named Premier Crus, including distinct Rugiens Hauts/Bas and Grands/Petits Epenots
 - [x] Volnay: all 29 named Premier Crus, including Santenots in Meursault
-- [ ] Savigny-lès-Beaune
-- [ ] Chorey-lès-Beaune
-- [ ] Auxey-Duresses
-- [ ] Monthélie
-- [ ] Saint-Romain
+- [x] Savigny-lès-Beaune: all 22 named Premier Crus and both village colour identities
+- [x] Chorey-lès-Beaune: both village colour identities; individual lieux-dits remain unmapped
+- [x] Auxey-Duresses: all nine named Premier Crus, both village colour identities and the whole commune including Petit-Auxey and Mélian
+- [x] Monthélie: all 15 named Premier Crus, including the four non-contiguous source IDs
+- [x] Saint-Romain: distinct red and white village areas; individual lieux-dits remain unmapped
 - [ ] Santenay
 - [ ] Maranges
 - [ ] Côte de Beaune
 - [ ] Côte de Beaune-Villages
 
-Next are Savigny-lès-Beaune, Chorey-lès-Beaune, Auxey-Duresses, Monthélie and
-Saint-Romain, followed by Santenay, Maranges and the two Côte de Beaune
-appellations. These are batches for review, not a reduction in the coverage target.
+Next are Santenay, Maranges, Côte de Beaune and Côte de Beaune-Villages, completing
+the Côte de Beaune village inventory. Côte de Beaune-Villages needs a local
+identity because the Atlas crosswalk has no page for it. Then continue through
+the Côte Chalonnaise, Mâconnais, Chablis/Grand Auxerrois and regional inventory.
 
 ### Côte Chalonnaise
 
@@ -149,6 +150,15 @@ in the source, rather than just the five village AOCs above.
   Marsannay or Côte de Nuits-Villages lieux-dit boundaries. Keep the appellation
   view explicit until reviewed, licensed geometry exists. Apply the same rule
   throughout Burgundy, including producer-owned subdivisions and cadastral lines.
+- **Chorey and Saint-Romain have broad maps only.** Les Beaumonts, Sous la Velle,
+  Sous Roche and other named village vineyards are not separate source features.
+  Monthélie's Clos des Champs Fulliot also selects the full Les Champs Fulliots
+  denomination, with a note explaining the missing enclosed-plot boundary.
+- **Check actual producer labels before each PR.** Keep cited regression cases
+  for alternate spellings and compound cru names, alongside exact source names.
+  Distinguish a reviewed compound label (Bataillère aux Vergelesses) from a blend
+  and from geometric containment. Colour and appellation evidence must remain
+  explicit; a producer subdivision must not acquire an invented polygon.
 - **Completion means more than a checkbox.** Verify every expected denomination,
   all producing communes, source provenance, shared boundaries, conservative wine
   matching, owner/shared views, lazy loading and mobile layouts. Document any
