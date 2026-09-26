@@ -112,7 +112,13 @@ village appellations and the remaining Grand Cru and regional work.
   explanation that smaller Volnay subdivisions are unavailable. Meursault's
   Les Santenots Blancs and Les Santenots du Milieu retain their own identities
   and different white-wine boundaries on the Meursault map. Neither substitutes
-  for Volnay's Santenots geometry.
+  for Volnay's Santenots geometry. Those Meursault designations are white only,
+  so a red wine recorded as Meursault Santenots opens Volnay's Santenots, whose
+  note explains why; white or unknown-colour Santenots stays on Meursault.
+- Clos des Ursules (Beaune) and Clos des 60 Ouvrées (Volnay) are Premier Crus
+  in their own right, beside Les Vignes Franches and Les Caillerets rather than
+  inside them. Labels that name both, such as Jadot's Vignes Franches Clos des
+  Ursules or Pousse d'Or's Caillerets Clos des 60 Ouvrées, select the clos.
 - Boundaries are INAO production areas, not producer ownership or proof that
   a particular bottle comes from one cadastral parcel.
 - INAO areas overlap intentionally. Chambertin includes Clos de Bèze;
@@ -211,6 +217,16 @@ Atlas's map geometry or assets is copied.
 - [Louis Latour's Beaune Cent Vignes](https://www.louislatour.com/pdf/en/beaune-1er-cru-les-cent-vignes-151.pdf) and
   [Domaine de Montille's Volnay Les Taillepieds](https://www.demontille.com/fr_FR/wine/volnay-1er-cru-les-taillepieds):
   reviewed label aliases for INAO/Atlas "Les Cents Vignes" and "Taille Pieds".
+- Further reviewed label spellings, each confirmed on producer labels:
+  [Jadot's Vignes Franches Clos des Ursules](https://www.the-buyer.net/people/producer/clos-des-ursules-200-years-jadot),
+  [Pousse d'Or's Caillerets Clos des 60 Ouvrées](https://winedecoded.com.au/product/domaine-de-la-pousse-dor-volnay-1er-cru-caillerets-clos-des-60-ouvrees-2022/)
+  and [Pommard Les Jarollières](https://www.decanter.com/wine-reviews/france/burgundy/domaine-de-la-pousse-dor-pommard-1er-cru-les-jarollieres-9593/),
+  [Domaine Parent's Beaune Les Epenottes](https://domaine-parent.com/products/beaune-1er-cru-les-epenottes)
+  (INAO: Les Epenotes), [Jean-Marc Boillot's Pommard Saucilles](https://www.comptoirdesmillesimes.com/pommard/pommard-1er-cru-2011-saucilles-jm-boillot.html)
+  (INAO: Les Saussilles) and [Henri Boillot's Volnay Les Chevrets](https://www.cellartracker.com/wine.asp?iWine=3147552)
+  (INAO: En Chevret). Pousse d'Or's Clos de la Bousse d'Or may be written
+  Bousse d'Or alone. Red Santenots is Volnay Premier Cru; see
+  [Joseph Drouhin's Volnay-Santenots](https://www.drouhin.com/en_US/wine/volnay-santenots-premier-cru/2019).
   Village and Premier Cru evidence remain required; source names and IDs stay intact.
 
 Download the 27 distinct source URLs recorded in the twenty catalogues into a

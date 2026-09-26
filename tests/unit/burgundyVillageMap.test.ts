@@ -377,8 +377,35 @@ describe('Beaune, Pommard and Volnay',()=>{
    expect(burgundyVillageMapTarget({...wine,appellation,wineName:'',referenceSite:wineName})?.featureId).toBe(`inao-denom-${id}`);
    expect(burgundyVillageMapTarget({...wine,appellation,wineName,classification:'village'})?.scope).toBe('appellation');
   }
+  for(const [appellation,wineName,id] of [
+   ['Beaune','Les Epenottes',332],['Beaune','Epenottes',332],
+   ['Pommard','Les Jarollières',1047],['Pommard','Saucilles',1053],['Pommard','Les Saucilles',1053],
+   ['Volnay','Chevret',1240],['Volnay','Les Chevrets',1240],['Volnay',"Bousse d'Or",1232],
+  ] as const)expect(burgundyVillageMapTarget({...wine,appellation,wineName})?.featureId).toBe(`inao-denom-${id}`);
   expect(beaune.features.find(f=>f.denominationId===330)?.sourceName).toBe('Beaune premier cru Les Cents Vignes');
   expect(volnay.features.find(f=>f.denominationId===1260)?.sourceName).toBe('Volnay premier cru Taille Pieds');
+ });
+ it('selects a walled clos named with the neighbouring cru it was once part of',()=>{
+  for(const [appellation,wineName,id] of [
+   ['Beaune','Vignes Franches Clos des Ursules',319],['Beaune','Les Vignes Franches - Clos des Ursules',319],
+   ['Volnay','Caillerets Clos des 60 Ouvrées',1252],['Volnay','Les Caillerets - Clos des 60 Ouvrées',1252],
+   ['Volnay','Clos des 60 Ouvrées En Caillerets',1252],['Volnay','Clos des Soixante Ouvrées',1252],
+  ] as const)expect(burgundyVillageMapTarget({...wine,appellation,wineName}),wineName).toMatchObject({featureId:`inao-denom-${id}`,scope:'vineyard'});
+  // The neighbours alone still select themselves.
+  expect(burgundyVillageMapTarget({...wine,appellation:'Beaune',wineName:'Vignes Franches'})?.featureId).toBe('inao-denom-345');
+  expect(burgundyVillageMapTarget({...wine,appellation:'Volnay',wineName:'Caillerets'})?.featureId).toBe('inao-denom-1251');
+ });
+ it('shows a red Meursault Santenots on Volnay, and keeps white Santenots on Meursault',()=>{
+  for(const fields of [
+   {appellation:'Meursault',wineName:'Santenots',colour:'Red'},
+   {appellation:'Meursault',wineName:'Les Santenots du Milieu',colour:'Red'},
+   {appellation:'Meursault Premier Cru',wineName:'Santenots',colour:'',wineStyle:'red'},
+  ])expect(burgundyVillageMapTarget({...wine,...fields}),JSON.stringify(fields)).toMatchObject({villageId:'volnay',featureId:'inao-denom-1259'});
+  expect(volnay.notes['inao-denom-1259'].note).toContain('Meursault Santenots is shown here');
+  expect(burgundyVillageMapTarget({...wine,appellation:'Meursault',wineName:'Les Santenots Blancs',colour:'White'})?.featureId).toBe('inao-denom-856');
+  for(const colour of ['White',''])expect(burgundyVillageMapTarget({...wine,appellation:'Meursault',wineName:'Santenots',colour})?.villageId).toBe('meursault');
+  // Other red Meursault stays on the Meursault map.
+  expect(burgundyVillageMapTarget({...wine,appellation:'Meursault',wineName:'Meursault',classification:'village',colour:'Red'})?.villageId).toBe('meursault');
  });
  it('keeps incomplete names and blends broad instead of picking a nearby plot',()=>{
   for(const [appellation,wineName,id] of [

@@ -341,6 +341,8 @@ test('Beaune and Volnay label spellings select the reviewed cru',async({page})=>
  for(const [appellation,wineName,id,colour] of [
   ['Beaune','Les Cent Vignes','inao-denom-330','White'],
   ['Volnay','Les Taillepieds','inao-denom-1260','Red'],
+  ['Beaune','Vignes Franches Clos des Ursules','inao-denom-319','Red'],
+  ['Volnay','Caillerets Clos des 60 Ouvrées','inao-denom-1252','Red'],
  ]){
   await setup(page,{appellation,wineName,colour});await page.goto('/wines/layout-wine');
   await page.getByRole('button',{name:'View village map'}).click();
@@ -349,6 +351,15 @@ test('Beaune and Volnay label spellings select the reviewed cru',async({page})=>
   await expect(dialog.getByRole('combobox')).toHaveValue(id);
   await page.keyboard.press('Escape');
  }
+});
+
+test('a red Meursault Santenots opens Volnay Santenots with the explanation',async({page})=>{
+ await setup(page,{appellation:'Meursault',wineName:'Santenots',colour:'Red'});await page.goto('/wines/layout-wine');
+ await page.getByRole('button',{name:'View village map'}).click();
+ const dialog=page.getByRole('dialog',{name:'Volnay',exact:true});
+ await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
+ await expect(dialog.getByRole('combobox')).toHaveValue('inao-denom-1259');
+ await expect(dialog.locator('.village-map-overlap')).toContainText('a red wine recorded as Meursault Santenots is shown here');
 });
 
 test('white Pommard and Volnay records do not select a red-wine map',async({page})=>{

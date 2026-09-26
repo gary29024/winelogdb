@@ -851,7 +851,7 @@
       "wineColours": ["red"],
       "notes": {
         "inao-denom-1259": {
-          "note": "Santenots lies in Meursault, but its red wines can be labelled Volnay Premier Cru. This map shows the whole Santenots area; smaller plots such as Santenots du Milieu have no separate Volnay boundary here. Meursault's white-wine designations have their own boundaries."
+          "note": "Santenots lies in Meursault, but its red wines are sold as Volnay Premier Cru, so a red wine recorded as Meursault Santenots is shown here. This map shows the whole Santenots area; smaller plots such as Santenots du Milieu have no separate Volnay boundary here. Santenots white wines are Meursault Premier Cru, with their own boundaries on the Meursault map."
         }
       },
       "unionOverviewFills": true,
