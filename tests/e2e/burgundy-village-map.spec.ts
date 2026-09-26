@@ -86,7 +86,7 @@ for(const route of matrixRoutes)for(const [appellation,count,commune,colour,wine
  });
 }
 
-for(const route of ['/wines/layout-wine','/shared/layout-wine'])test(`Le Chapitre appellation transition ${route}`,async({page})=>{
+for(const route of matrixRoutes)test(`Le Chapitre appellation transition ${route}`,async({page})=>{
  await page.setViewportSize({width:320,height:900});
  await setup(page,{appellation:'Bourgogne Le Chapitre',wineName:'Le Chapitre Vieilles Vignes 2018',producer:'Domaine Jean Fournier',classification:null,colour:'Red',wineStyle:'red',region:'Côte d’Or'});
  await page.goto(route);await page.getByRole('button',{name:'View regional map'}).click();
@@ -106,7 +106,7 @@ for(const route of ['/wines/layout-wine','/shared/layout-wine'])test(`Le Chapitr
  await expect(village.getByRole('option',{name:/Le Chapitre/})).toHaveCount(0);
 });
 
-for(const route of ['/wines/layout-wine','/shared/layout-wine'])test(`Regional colour and geography guards ${route}`,async({page})=>{
+for(const route of matrixRoutes)test(`Regional colour and geography guards ${route}`,async({page})=>{
  await page.setViewportSize({width:390,height:844});
  for(const overrides of [
   {appellation:'Bourgogne Côtes du Couchois',colour:'White',wineStyle:'white'},
@@ -121,7 +121,7 @@ for(const route of ['/wines/layout-wine','/shared/layout-wine'])test(`Regional c
   {appellation:'Bourgogne La Chapelle Notre-Dame',region:'Côte de Nuits'},
   {appellation:'Bourgogne Le Chapitre',region:'Côte de Beaune'},
   {appellation:'Bourgogne Montrecul',region:'Yonne'},
- ]){
+ ].filter((_,index)=>fullMapMatrix||[0,2,4,9].includes(index))){
   await setup(page,{classification:null,wineName:'A cuvée',region:'Burgundy',colour:'Red',wineStyle:'red',...overrides});
   await page.goto(route);
   await expect(page.getByRole('heading',{name:'A cuvée',exact:true})).toBeVisible();
@@ -162,7 +162,7 @@ async function grandCruSpan(dialog:Locator){
  });
 }
 
-for(const route of ['/wines/layout-wine','/shared/layout-wine']){
+for(const route of matrixRoutes){
  test(`Chablis Grand Cru ${route}: named climats open on the hillside`,async({page},testInfo)=>{
   await setup(page,{appellation:'Chablis Grand Cru',wineName:'Domaine Long-Depaquit Les Preuses',classification:'grand_cru',colour:'White',wineStyle:'white'});
   await page.setViewportSize({width:320,height:900});await page.goto(route);
@@ -322,7 +322,7 @@ test('Santenay and Maranges use producer spellings and explain coincident bounda
  }
 });
 
-for(const route of ['/wines/layout-wine','/shared/layout-wine']){
+for(const route of matrixRoutes){
  test(`${route}: opens on demand, explores named boundaries, and restores focus`,async({page},testInfo)=>{
   const requests:string[]=[],errors:string[]=[];
   page.on('request',request=>requests.push(request.url()));page.on('pageerror',error=>errors.push(error.message));
@@ -390,7 +390,7 @@ for(const village of [
  {id:'morey-saint-denis',name:'Morey-Saint-Denis',cru:'Les Ruchots',featureId:'inao-denom-946',count:27,catalogue:'moreyVillageMapCatalogue'},
  {id:'chambolle-musigny',name:'Chambolle-Musigny',cru:'Les Amoureuses',featureId:'inao-denom-455',count:28,catalogue:'chambolleVillageMapCatalogue'},
 ]){
- for(const route of ['/wines/layout-wine','/shared/layout-wine']){
+ for(const route of matrixRoutes){
   test(`${village.name} ${route}: loads only its own map and explores shared Bonnes-Mares`,async({page},testInfo)=>{
    const requests:string[]=[],errors:string[]=[];
    page.on('request',request=>requests.push(request.url()));page.on('pageerror',error=>errors.push(error.message));
@@ -535,7 +535,7 @@ for(const village of browserVillageCases){
  }
 }
 
-for(const route of ['/wines/layout-wine','/shared/layout-wine']){
+for(const route of matrixRoutes){
  test(`Ferret vineyard location ${route}: historical names preserve bottle classification`,async({page},testInfo)=>{
   const width=route.startsWith('/shared')?320:1280;
   await page.setViewportSize({width,height:900});
@@ -588,7 +588,7 @@ test('Ferret vineyard location requires unambiguous producer evidence for Le Clo
   {producer:'Domaine Vincent',wineName:'Le Clos',id:'inao-denom-2870'},
   {producer:'Domaine Vincent Cornin',wineName:'Le Clos',id:'inao-denom-2865'},
   {producer:null,wineName:'Domaine Vincent Cornin Pouilly-Fuissé Le Clos',id:'inao-denom-2865'},
- ]){
+ ].filter((_,index)=>fullMapMatrix||[0,3,5].includes(index))){
   await setup(page,{...row,appellation:'Pouilly-Fuissé',colour:'White',wineStyle:'white'});
   await page.goto('/wines/layout-wine');await page.getByRole('button',{name:'View village map'}).click();
   const dialog=page.getByRole('dialog');
@@ -725,7 +725,7 @@ test('Marsannay preserves colour scope, including unknown colour, wine style and
   {appellation:'Marsannay',colour:null,wineStyle:'rose',id:'inao-denom-806-rose'},
   {appellation:'Marsannay',colour:null,wineStyle:'sparkling',id:'inao-denom-806'},
   {appellation:'Marsannay Rosé',colour:null,wineStyle:null,id:'inao-denom-806-rose'},
- ]){
+ ].filter((_,index)=>fullMapMatrix||index<3)){
   const {id,...wineFields}=fields;
   await setup(page,{...wineFields,wineName:'Marsannay',classification:'village'});await page.goto('/wines/layout-wine');
   await page.getByRole('button',{name:'View village map'}).click();
@@ -748,7 +748,7 @@ for(const village of [
  {name:'Saint-Romain',white:2048,red:1157,app:228},
  {name:'Santenay',white:1159,red:2082,app:230},
  {name:'Maranges',white:797,red:2061,app:198},
-]){
+].filter(village=>fullMapMatrix||['Meursault','Chorey-lès-Beaune','Maranges'].includes(village.name))){
  test(`${village.name} colour selects the official area and unknown colour keeps a combined overview`,async({page})=>{
   for(const fields of [
    {colour:'White',wineStyle:'white',id:`inao-denom-${village.white}`},
@@ -787,7 +787,7 @@ test('a white Blagny record does not select the red appellation boundary',async(
  await expect(page.getByRole('button',{name:'View village map'})).toHaveCount(0);
 });
 
-for(const route of ['/wines/layout-wine','/shared/layout-wine']){
+for(const route of matrixRoutes){
  test(`Corton ${route}: named climats retain local identities, while unnamed wines show the appellation`,async({page},testInfo)=>{
   await setup(page,{appellation:'Corton',wineName:'Corton Les Bressandes',classification:'grand_cru'});
   await page.goto(route);const opener=page.getByRole('button',{name:'View village map'});await opener.click();
@@ -844,7 +844,7 @@ test('new village broad wines keep a light appellation tint without a single-cru
   {appellation:'Beaune',wineName:'Les Cent Vignes et Les Bressandes',classification:'premier_cru',id:'inao-denom-350'},
   {appellation:'Pommard',wineName:'Les Rugiens',classification:'premier_cru',id:'inao-denom-1054'},
   {appellation:'Volnay',wineName:'Volnay Vieilles Vignes',classification:'village',id:'inao-denom-1225'},
- ]){
+ ].filter((_,index)=>fullMapMatrix||[0,6].includes(index))){
   const {id,...wineFields}=fields;
   await setup(page,wineFields);await page.goto('/wines/layout-wine');
   await page.getByRole('button',{name:'View village map'}).click();
@@ -883,7 +883,7 @@ test('Beaune and Volnay label spellings select the reviewed cru',async({page})=>
   ['Mercurey','Clos du Roi','inao-denom-827','Red'],
   ['Givry','Cellier aux Moines','inao-denom-618','Red'],
   ['Pouilly-Fuissé','Clos Reyssié','inao-denom-2867','White'],
- ]){
+ ].filter((_,index)=>fullMapMatrix||[0,5,8].includes(index))){
   await setup(page,{appellation,wineName,colour});await page.goto('/wines/layout-wine');
   await page.getByRole('button',{name:'View village map'}).click();
   const dialog=page.getByRole('dialog',{name:appellation,exact:true});
@@ -909,7 +909,7 @@ test('Savigny, Auxey and Monthélie producer spellings select the reviewed cru',
   ['Auxey-Duresses','Les Ecusseaux','inao-denom-269','Les Ecussaux',''],
   ['Auxey-Duresses','Les Bretterins dit La Chapelle','inao-denom-266','La Chapelle','is shown as La Chapelle'],
   ['Monthélie','MJ Tricot Clos Les Champs Fulliot','inao-denom-921','Les Champs Fulliots','whole Les Champs Fulliots Premier Cru'],
- ]){
+ ].filter((_,index)=>fullMapMatrix||[0,1,4].includes(index))){
   await setup(page,{appellation,wineName});await page.goto('/shared/layout-wine');
   await page.getByRole('button',{name:'View village map'}).click();
   const dialog=page.getByRole('dialog',{name:appellation,exact:true});
@@ -945,7 +945,7 @@ test('white Pommard and Volnay records do not select a red-wine map',async({page
  }
 });
 
-for(const route of ['/wines/layout-wine','/shared/layout-wine']){
+for(const route of matrixRoutes){
  test(`Vosne ${route}: maps label spellings, Flagey crus and cross-commune boundaries`,async({page},testInfo)=>{
   const requests:string[]=[],errors:string[]=[];
   page.on('request',request=>requests.push(request.url()));page.on('pageerror',error=>errors.push(error.message));
