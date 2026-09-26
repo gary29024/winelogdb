@@ -98,7 +98,9 @@ const reviewedNameAliases:Record<string,Record<string,string[]>>={
   // full official climat, with a note explaining the missing producer boundary.
   'Pouilly-Fuissé':{'Aux Quarts':['Clos des Quarts'],'Au Vignerais':['Aux Vignerais'],
     'En France':['Clos de France'],'Les Perrières':['Le Clos de Jeanne','La Baudotte'],
-    'Les Reisses':['Tournant de Pouilly']}
+    'Les Reisses':['Tournant de Pouilly'],
+    // Albert Bichot writes Clos Reyssié; INAO and Matisco write Reyssier.
+    'Le Clos Reyssier':['Le Clos Reyssié']}
 };
 // New Premier Cru appellations may have no named Atlas pages at all. Include
 // their reviewed local names in the same matching and ambiguity rules.

@@ -541,6 +541,7 @@ test('Beaune and Volnay label spellings select the reviewed cru',async({page})=>
   ['Gevrey-Chambertin','Lavaux Saint-Jacques','inao-denom-609','Red'],
   ['Mercurey','Clos du Roi','inao-denom-827','Red'],
   ['Givry','Cellier aux Moines','inao-denom-618','Red'],
+  ['Pouilly-Fuissé','Clos Reyssié','inao-denom-2867','White'],
  ]){
   await setup(page,{appellation,wineName,colour});await page.goto('/wines/layout-wine');
   await page.getByRole('button',{name:'View village map'}).click();

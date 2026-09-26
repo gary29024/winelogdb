@@ -25,6 +25,8 @@ describe('Mâconnais Premier Crus and producer names',()=>{
   ['Pouilly-Fuissé','Domaine Ferret Tournant de Pouilly',2874],
   ['Pouilly-Fuissé','Domaine Ferret Pouilly-Fuissé Le Clos de Jeanne',2873],
   ['Pouilly-Fuissé','La Baudotte',2873],
+  ['Pouilly-Fuissé','Albert Bichot Pouilly-Fuissé 1er Cru Clos Reyssié',2867],
+  ['Pouilly-Fuissé','Maison Matisco Le Clos Reyssier',2867],
   ['Pouilly-Loché','Domaine du Clos des Rocs Olivier Giroux Les Mûres',2932],
   ['Pouilly-Vinzelles','Bret Brothers & La Soufrandière Pouilly-Vinzelles Les Quarts Zen',2930],
   ['Pouilly-Vinzelles','Les Pétaux',2928],
@@ -35,6 +37,7 @@ describe('Mâconnais Premier Crus and producer names',()=>{
  it.each([
   ['Le Clos de Jeanne',2873],['Clos de Jeanne',2873],['La Baudotte',2873],
   ['Tournant de Pouilly',2874],['Clos des Quarts',2866],['Aux Vignerais',2877],['Clos de France',2884],
+  ['Clos Reyssié',2867],
  ] as const)('accepts whole reference name %s without promoting a village wine',(name,id)=>{
   const base={...wine,appellation:'Pouilly-Fuissé',wineName:''};
   for(const field of ['referenceSite','referenceParcel'])expect(burgundyVillageMapTarget({...base,[field]:name})?.featureId).toBe(`inao-denom-${id}`);

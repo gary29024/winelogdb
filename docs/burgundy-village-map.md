@@ -705,6 +705,9 @@ Producer label checks go beyond matching the source names:
   an extent note. Ferret's historical “Le Clos” title stays broad when no modern
   name resolves it, preventing a false match to Château Fuissé's Le Clos. Tournant
   de Pouilly never resolves to the separate Pouilly Premier Cru.
+- [Albert Bichot's Clos Reyssié](https://www.albert-bichot.com/en/pouilly-fuisse-1er-cru-clos-reyssie_185)
+  is a reviewed spelling of Le Clos Reyssier, the INAO and
+  [Matisco](https://www.vivino.com/en/maison-matisco-pouilly-fuisse-1er-cru-le-clos-reyssier/w/11725495) form.
 - [Clos des Rocs' Les Mûres](https://www.closdesrocs.fr/vins/pouilly-loche-mures-v6.php)
   and [Bret Brothers / La Soufrandière's 2024 labels](https://www.bretbrothers.com/document/cixk)
   cover local named identities and producer conjunctions. Complete reference
