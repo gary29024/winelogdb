@@ -1,0 +1,787 @@
+{
+  "id": "pommard",
+  "name": "Pommard",
+  "region": "Côte de Beaune",
+  "communes": [
+    {
+      "id": "21492",
+      "name": "Pommard"
+    }
+  ],
+  "dataUrl": "/maps/pommard.2026-09-21.geojson",
+  "bounds": [
+    4.774639,
+    46.99983,
+    4.813696,
+    47.023414
+  ],
+  "sources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21492/cadastre-21492-communes.json.gz",
+      "sha256": "e0221a34ca655de23f59278f2193599c7f02bbeb4d97c37235004d73d174e9b4"
+    }
+  ],
+  "notes": {},
+  "features": [
+    {
+      "id": "inao-denom-1025",
+      "name": "Pommard",
+      "tier": "village",
+      "kind": "appellation",
+      "appellationId": 215,
+      "denominationId": 1025,
+      "sourceName": "Pommard",
+      "communes": [
+        "21492"
+      ],
+      "areaHa": 336.12,
+      "matchId": "ba_appellation_i3w2x547p4qiny55xo2ldkzbje",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_i3w2x547p4qiny55xo2ldkzbje/pommard",
+      "bounds": [
+        4.774639,
+        46.99983,
+        4.813696,
+        47.023414
+      ],
+      "labelPoint": [
+        4.792949,
+        47.01794
+      ]
+    },
+    {
+      "id": "inao-denom-1026",
+      "name": "Clos Blanc",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 215,
+      "denominationId": 1026,
+      "sourceName": "Pommard premier cru Clos Blanc",
+      "communes": [
+        "21492"
+      ],
+      "areaHa": 3.99,
+      "matchId": "ba_designation_cpkf7xghuu4sttwigu5udcn3cy",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_cpkf7xghuu4sttwigu5udcn3cy/clos-blanc",
+      "bounds": [
+        4.797264,
+        47.009645,
+        4.801271,
+        47.011954
+      ],
+      "labelPoint": [
+        4.79946,
+        47.010796
+      ]
+    },
+    {
+      "id": "inao-denom-1027",
+      "name": "Clos de Verger",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 215,
+      "denominationId": 1027,
+      "sourceName": "Pommard premier cru Clos de Verger",
+      "communes": [
+        "21492"
+      ],
+      "areaHa": 2.11,
+      "matchId": "ba_designation_mtipiohpfsc5cbgjehrnvpfzme",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_mtipiohpfsc5cbgjehrnvpfzme/clos-de-verger",
+      "bounds": [
+        4.792158,
+        47.011555,
+        4.795247,
+        47.013031
+      ],
+      "labelPoint": [
+        4.794018,
+        47.012289
+      ]
+    },
+    {
+      "id": "inao-denom-1028",
+      "name": "Clos de la Commaraine",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 215,
+      "denominationId": 1028,
+      "sourceName": "Pommard premier cru Clos de la Commaraine",
+      "communes": [
+        "21492"
+      ],
+      "areaHa": 3.75,
+      "matchId": "ba_designation_uoqlnboakbf77wsxhfxlo6jini",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_uoqlnboakbf77wsxhfxlo6jini/clos-de-la-commaraine",
+      "bounds": [
+        4.79401,
+        47.010458,
+        4.797682,
+        47.012741
+      ],
+      "labelPoint": [
+        4.795662,
+        47.011582
+      ]
+    },
+    {
+      "id": "inao-denom-1029",
+      "name": "Clos des Epeneaux",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 215,
+      "denominationId": 1029,
+      "sourceName": "Pommard premier cru Clos des Epeneaux",
+      "communes": [
+        "21492"
+      ],
+      "areaHa": 5.22,
+      "matchId": "ba_designation_246drskpkw5bwarqn3an5sgjwe",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_246drskpkw5bwarqn3an5sgjwe/clos-des-epeneaux",
+      "bounds": [
+        4.802719,
+        47.011974,
+        4.808896,
+        47.014319
+      ],
+      "labelPoint": [
+        4.805377,
+        47.013151
+      ]
+    },
+    {
+      "id": "inao-denom-1030",
+      "name": "Derrière Saint-Jean",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 215,
+      "denominationId": 1030,
+      "sourceName": "Pommard premier cru Derrière Saint-Jean",
+      "communes": [
+        "21492"
+      ],
+      "areaHa": 0.28,
+      "matchId": "ba_designation_jqkrxxfhsfdl5tpajg6myiwgze",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_jqkrxxfhsfdl5tpajg6myiwgze/derriere-saint-jean",
+      "bounds": [
+        4.793744,
+        47.007896,
+        4.795335,
+        47.00841
+      ],
+      "labelPoint": [
+        4.794112,
+        47.008154
+      ]
+    },
+    {
+      "id": "inao-denom-1031",
+      "name": "En Largillière",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 215,
+      "denominationId": 1031,
+      "sourceName": "Pommard premier cru En Largillière",
+      "communes": [
+        "21492"
+      ],
+      "areaHa": 3.99,
+      "matchId": "ba_designation_knkts5tjtvuccpx63b2mluy2vm",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_knkts5tjtvuccpx63b2mluy2vm/en-largilliere",
+      "bounds": [
+        4.798643,
+        47.012894,
+        4.802392,
+        47.015699
+      ],
+      "labelPoint": [
+        4.800876,
+        47.014295
+      ]
+    },
+    {
+      "id": "inao-denom-1032",
+      "name": "La Chanière",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 215,
+      "denominationId": 1032,
+      "sourceName": "Pommard premier cru La Chanière",
+      "communes": [
+        "21492"
+      ],
+      "areaHa": 2.78,
+      "matchId": "ba_designation_2wfyme3n6qr2mpzbe734cj4a4i",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_2wfyme3n6qr2mpzbe734cj4a4i/la-chaniere",
+      "bounds": [
+        4.785772,
+        47.015766,
+        4.789446,
+        47.018078
+      ],
+      "labelPoint": [
+        4.787816,
+        47.016898
+      ]
+    },
+    {
+      "id": "inao-denom-1033",
+      "name": "La Platière",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 215,
+      "denominationId": 1033,
+      "sourceName": "Pommard premier cru La Platière",
+      "communes": [
+        "21492"
+      ],
+      "areaHa": 2.53,
+      "matchId": "ba_designation_mi2p7y7syf7k7zz6ndxozzngre",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_mi2p7y7syf7k7zz6ndxozzngre/la-platiere",
+      "bounds": [
+        4.788635,
+        47.014886,
+        4.793169,
+        47.017327
+      ],
+      "labelPoint": [
+        4.791788,
+        47.016042
+      ]
+    },
+    {
+      "id": "inao-denom-1034",
+      "name": "La Refène",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 215,
+      "denominationId": 1034,
+      "sourceName": "Pommard premier cru La Refène",
+      "communes": [
+        "21492"
+      ],
+      "areaHa": 2.29,
+      "matchId": "ba_designation_mqvtqwzs36dcgigcwwep2jt4ci",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_mqvtqwzs36dcgigcwwep2jt4ci/la-refene",
+      "bounds": [
+        4.795908,
+        47.010002,
+        4.798487,
+        47.012227
+      ],
+      "labelPoint": [
+        4.79731,
+        47.011137
+      ]
+    },
+    {
+      "id": "inao-denom-1035",
+      "name": "Le Clos Micot",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 215,
+      "denominationId": 1035,
+      "sourceName": "Pommard premier cru Le Clos Micot",
+      "communes": [
+        "21492"
+      ],
+      "areaHa": 2.83,
+      "matchId": "ba_designation_kekcqnhwynedcnfrkkgs6z5zly",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_kekcqnhwynedcnfrkkgs6z5zly/le-clos-micot",
+      "bounds": [
+        4.793565,
+        47.004844,
+        4.7968,
+        47.007088
+      ],
+      "labelPoint": [
+        4.79539,
+        47.005951
+      ]
+    },
+    {
+      "id": "inao-denom-1036",
+      "name": "Le Village",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 215,
+      "denominationId": 1036,
+      "sourceName": "Pommard premier cru Le Village",
+      "communes": [
+        "21492"
+      ],
+      "areaHa": 0.15,
+      "matchId": "ba_designation_6mhzktt5l2hc5ydixdtgmngheq",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_6mhzktt5l2hc5ydixdtgmngheq/le-village",
+      "bounds": [
+        4.793345,
+        47.008117,
+        4.794016,
+        47.008618
+      ],
+      "labelPoint": [
+        4.793697,
+        47.008384
+      ]
+    },
+    {
+      "id": "inao-denom-1037",
+      "name": "Les Arvelets",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 215,
+      "denominationId": 1037,
+      "sourceName": "Pommard premier cru Les Arvelets",
+      "communes": [
+        "21492"
+      ],
+      "areaHa": 8.45,
+      "matchId": "ba_designation_ap42vguhm6qr3onnewe5kcmbu4",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_ap42vguhm6qr3onnewe5kcmbu4/les-arvelets",
+      "bounds": [
+        4.78831,
+        47.012724,
+        4.796007,
+        47.016735
+      ],
+      "labelPoint": [
+        4.791597,
+        47.014755
+      ]
+    },
+    {
+      "id": "inao-denom-1038",
+      "name": "Les Bertins",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 215,
+      "denominationId": 1038,
+      "sourceName": "Pommard premier cru Les Bertins",
+      "communes": [
+        "21492"
+      ],
+      "areaHa": 3.52,
+      "matchId": "ba_designation_riac7pmhziziak52nzfh457ogy",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_riac7pmhziziak52nzfh457ogy/les-bertins",
+      "bounds": [
+        4.790432,
+        47.004004,
+        4.794105,
+        47.006176
+      ],
+      "labelPoint": [
+        4.792124,
+        47.005033
+      ]
+    },
+    {
+      "id": "inao-denom-1039",
+      "name": "Les Boucherottes",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 215,
+      "denominationId": 1039,
+      "sourceName": "Pommard premier cru Les Boucherottes",
+      "communes": [
+        "21492"
+      ],
+      "areaHa": 1.85,
+      "matchId": "ba_designation_xa3m3kb4lg4p2owd3jxnkspxza",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_xa3m3kb4lg4p2owd3jxnkspxza/les-boucherottes",
+      "bounds": [
+        4.806186,
+        47.014894,
+        4.808608,
+        47.016617
+      ],
+      "labelPoint": [
+        4.807181,
+        47.015734
+      ]
+    },
+    {
+      "id": "inao-denom-1040",
+      "name": "Les Chanlins-Bas",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 215,
+      "denominationId": 1040,
+      "sourceName": "Pommard premier cru Les Chanlins-Bas",
+      "communes": [
+        "21492"
+      ],
+      "areaHa": 4.44,
+      "matchId": "ba_designation_ab2d5qpztkpcl6bwqu7h3nvjqu",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_ab2d5qpztkpcl6bwqu7h3nvjqu/les-chanlins-bas",
+      "bounds": [
+        4.783954,
+        47.00486,
+        4.787519,
+        47.007485
+      ],
+      "labelPoint": [
+        4.785705,
+        47.00612
+      ]
+    },
+    {
+      "id": "inao-denom-1041",
+      "name": "Les Chaponnières",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 215,
+      "denominationId": 1041,
+      "sourceName": "Pommard premier cru Les Chaponnières",
+      "communes": [
+        "21492"
+      ],
+      "areaHa": 2.86,
+      "matchId": "ba_designation_jqba2yqmyasogn423ixjxalaie",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_jqba2yqmyasogn423ixjxalaie/les-chaponnieres",
+      "bounds": [
+        4.789913,
+        47.006745,
+        4.793022,
+        47.00954
+      ],
+      "labelPoint": [
+        4.791432,
+        47.008122
+      ]
+    },
+    {
+      "id": "inao-denom-1042",
+      "name": "Les Charmots",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 215,
+      "denominationId": 1042,
+      "sourceName": "Pommard premier cru Les Charmots",
+      "communes": [
+        "21492"
+      ],
+      "areaHa": 9.64,
+      "matchId": "ba_designation_5m7kwrwvjkf2hz2wabbxwnhfqm",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_5m7kwrwvjkf2hz2wabbxwnhfqm/les-charmots",
+      "bounds": [
+        4.792599,
+        47.012345,
+        4.800619,
+        47.015758
+      ],
+      "labelPoint": [
+        4.798486,
+        47.014062
+      ]
+    },
+    {
+      "id": "inao-denom-1043",
+      "name": "Les Combes Dessus",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 215,
+      "denominationId": 1043,
+      "sourceName": "Pommard premier cru Les Combes Dessus",
+      "communes": [
+        "21492"
+      ],
+      "areaHa": 2.76,
+      "matchId": "ba_designation_3pdplzxutv2fzcmb77j6dvq2ay",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_3pdplzxutv2fzcmb77j6dvq2ay/les-combes-dessus",
+      "bounds": [
+        4.790109,
+        47.002511,
+        4.793577,
+        47.004811
+      ],
+      "labelPoint": [
+        4.791787,
+        47.003639
+      ]
+    },
+    {
+      "id": "inao-denom-1044",
+      "name": "Les Croix Noires",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 215,
+      "denominationId": 1044,
+      "sourceName": "Pommard premier cru Les Croix Noires",
+      "communes": [
+        "21492"
+      ],
+      "areaHa": 1.28,
+      "matchId": "ba_designation_xizfffbuvhftgpvqxemq7sz7me",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_xizfffbuvhftgpvqxemq7sz7me/les-croix-noires",
+      "bounds": [
+        4.790026,
+        47.006228,
+        4.792616,
+        47.007643
+      ],
+      "labelPoint": [
+        4.791268,
+        47.006895
+      ]
+    },
+    {
+      "id": "inao-denom-1045",
+      "name": "Les Fremiers",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 215,
+      "denominationId": 1045,
+      "sourceName": "Pommard premier cru Les Fremiers",
+      "communes": [
+        "21492"
+      ],
+      "areaHa": 5.13,
+      "matchId": "ba_designation_ygg6ion3vqzcy7fpsyqiiyhjc4",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_ygg6ion3vqzcy7fpsyqiiyhjc4/les-fremiers",
+      "bounds": [
+        4.788247,
+        47.00339,
+        4.79171,
+        47.006704
+      ],
+      "labelPoint": [
+        4.789757,
+        47.005085
+      ]
+    },
+    {
+      "id": "inao-denom-1046",
+      "name": "Les Grands Epenots",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 215,
+      "denominationId": 1046,
+      "sourceName": "Pommard premier cru Les Grands Epenots",
+      "communes": [
+        "21492"
+      ],
+      "areaHa": 10.13,
+      "matchId": "ba_designation_kob4iggqm5bkf3cpfip6cdumjm",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_kob4iggqm5bkf3cpfip6cdumjm/les-grands-epenots",
+      "bounds": [
+        4.797935,
+        47.010962,
+        4.80611,
+        47.013956
+      ],
+      "labelPoint": [
+        4.801742,
+        47.012453
+      ]
+    },
+    {
+      "id": "inao-denom-1047",
+      "name": "Les Jarolières",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 215,
+      "denominationId": 1047,
+      "sourceName": "Pommard premier cru Les Jarolières",
+      "communes": [
+        "21492"
+      ],
+      "areaHa": 3.25,
+      "matchId": "ba_designation_nt5ar6vzpytc4haqqas5tjuk4e",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_nt5ar6vzpytc4haqqas5tjuk4e/les-jarolieres",
+      "bounds": [
+        4.785969,
+        47.004065,
+        4.789769,
+        47.006566
+      ],
+      "labelPoint": [
+        4.787761,
+        47.005319
+      ]
+    },
+    {
+      "id": "inao-denom-1048",
+      "name": "Les Petits Epenots",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 215,
+      "denominationId": 1048,
+      "sourceName": "Pommard premier cru Les Petits Epenots",
+      "communes": [
+        "21492"
+      ],
+      "areaHa": 15.12,
+      "matchId": "ba_designation_a7pvvo5uzpmtultzh6r6fjvqtu",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_a7pvvo5uzpmtultzh6r6fjvqtu/les-petits-epenots",
+      "bounds": [
+        4.802181,
+        47.012214,
+        4.812767,
+        47.015845
+      ],
+      "labelPoint": [
+        4.809849,
+        47.014046
+      ]
+    },
+    {
+      "id": "inao-denom-1049",
+      "name": "Les Poutures",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 215,
+      "denominationId": 1049,
+      "sourceName": "Pommard premier cru Les Poutures",
+      "communes": [
+        "21492"
+      ],
+      "areaHa": 4.13,
+      "matchId": "ba_designation_tkz643b6g7wsnkp3lmchbczp4y",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_tkz643b6g7wsnkp3lmchbczp4y/les-poutures",
+      "bounds": [
+        4.791671,
+        47.00575,
+        4.795098,
+        47.008255
+      ],
+      "labelPoint": [
+        4.793506,
+        47.007016
+      ]
+    },
+    {
+      "id": "inao-denom-1050",
+      "name": "Les Pézerolles",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 215,
+      "denominationId": 1050,
+      "sourceName": "Pommard premier cru Les Pézerolles",
+      "communes": [
+        "21492"
+      ],
+      "areaHa": 5.9,
+      "matchId": "ba_designation_75id74f2fn4yvol5j52rqrta2e",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_75id74f2fn4yvol5j52rqrta2e/les-pezerolles",
+      "bounds": [
+        4.800189,
+        47.014374,
+        4.804839,
+        47.017546
+      ],
+      "labelPoint": [
+        4.802476,
+        47.015948
+      ]
+    },
+    {
+      "id": "inao-denom-1051",
+      "name": "Les Rugiens Bas",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 215,
+      "denominationId": 1051,
+      "sourceName": "Pommard premier cru Les Rugiens Bas",
+      "communes": [
+        "21492"
+      ],
+      "areaHa": 5.84,
+      "matchId": "ba_designation_favsouwy7svfeuj2okdruulvdm",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_favsouwy7svfeuj2okdruulvdm/les-rugiens-bas",
+      "bounds": [
+        4.786752,
+        47.005393,
+        4.791776,
+        47.009775
+      ],
+      "labelPoint": [
+        4.789319,
+        47.007577
+      ]
+    },
+    {
+      "id": "inao-denom-1052",
+      "name": "Les Rugiens Hauts",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 215,
+      "denominationId": 1052,
+      "sourceName": "Pommard premier cru Les Rugiens Hauts",
+      "communes": [
+        "21492"
+      ],
+      "areaHa": 6.84,
+      "matchId": "ba_designation_7cvfwvkc5rgmdal5z476mfmz4a",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_7cvfwvkc5rgmdal5z476mfmz4a/les-rugiens-hauts",
+      "bounds": [
+        4.78492,
+        47.006594,
+        4.789966,
+        47.009705
+      ],
+      "labelPoint": [
+        4.786722,
+        47.008793
+      ]
+    },
+    {
+      "id": "inao-denom-1053",
+      "name": "Les Saussilles",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 215,
+      "denominationId": 1053,
+      "sourceName": "Pommard premier cru Les Saussilles",
+      "communes": [
+        "21492"
+      ],
+      "areaHa": 3.83,
+      "matchId": "ba_designation_x2befpaizd4mc24a5jtqsark54",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_x2befpaizd4mc24a5jtqsark54/les-saussilles",
+      "bounds": [
+        4.801286,
+        47.015571,
+        4.80612,
+        47.018515
+      ],
+      "labelPoint": [
+        4.803765,
+        47.017058
+      ]
+    },
+    {
+      "id": "inao-denom-1054",
+      "name": "Pommard Premier Cru",
+      "tier": "premier_cru",
+      "kind": "appellation",
+      "appellationId": 215,
+      "denominationId": 1054,
+      "sourceName": "Pommard premier cru",
+      "communes": [
+        "21492"
+      ],
+      "areaHa": 124.91,
+      "matchId": "ba_appellation_fbusv7lhs5hskss2a6k7x7mamm",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_fbusv7lhs5hskss2a6k7x7mamm/pommard-premier-cru",
+      "bounds": [
+        4.783954,
+        47.002511,
+        4.812767,
+        47.018515
+      ],
+      "labelPoint": [
+        4.803625,
+        47.012861
+      ]
+    }
+  ]
+}

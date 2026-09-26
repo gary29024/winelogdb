@@ -801,6 +801,61 @@
         "2059": "red"
       },
       "catalogueFile": "ladoixVillageMapCatalogue.json"
+    },
+    {
+      "id": "beaune",
+      "name": "Beaune",
+      "region": "Côte de Beaune",
+      "appellationId": 134,
+      "villageDenomination": 307,
+      "premierDenomination": 350,
+      "premierRange": [308, 349],
+      "grands": [],
+      "communes": [{"id": "21054", "name": "Beaune"}],
+      "catalogueFile": "beauneVillageMapCatalogue.json",
+      "nameCrosswalk": {},
+      "wineColours": ["red", "white"],
+      "notes": {},
+      "unionOverviewFills": true,
+      "expectedBounds": [4.75, 46.95, 4.9, 47.1]
+    },
+    {
+      "id": "pommard",
+      "name": "Pommard",
+      "region": "Côte de Beaune",
+      "appellationId": 215,
+      "villageDenomination": 1025,
+      "premierDenomination": 1054,
+      "premierRange": [1026, 1053],
+      "grands": [],
+      "communes": [{"id": "21492", "name": "Pommard"}],
+      "catalogueFile": "pommardVillageMapCatalogue.json",
+      "nameCrosswalk": {},
+      "wineColours": ["red"],
+      "notes": {},
+      "unionOverviewFills": true,
+      "expectedBounds": [4.75, 46.95, 4.9, 47.1]
+    },
+    {
+      "id": "volnay",
+      "name": "Volnay",
+      "region": "Côte de Beaune",
+      "appellationId": 240,
+      "villageDenomination": 1225,
+      "premierDenomination": 1261,
+      "premierDenominations": [1226, 1228, 1230, 1231, 1232, 1233, 1234, 1235, 1236, 1237, 1238, 1239, 1240, 1242, 1243, 1244, 1245, 1246, 1247, 1248, 1250, 1251, 1252, 1254, 1255, 1256, 1258, 1259, 1260],
+      "grands": [],
+      "communes": [{"id": "21712", "name": "Volnay"}, {"id": "21412", "name": "Meursault"}],
+      "catalogueFile": "volnayVillageMapCatalogue.json",
+      "nameCrosswalk": {},
+      "wineColours": ["red"],
+      "notes": {
+        "inao-denom-1259": {
+          "note": "Santenots lies in Meursault, but its red wines can be labelled Volnay Premier Cru. This map shows the whole Santenots area; smaller plots such as Santenots du Milieu have no separate Volnay boundary here. Meursault's white-wine designations have their own boundaries."
+        }
+      },
+      "unionOverviewFills": true,
+      "expectedBounds": [4.75, 46.95, 4.9, 47.1]
     }
   ]
 }

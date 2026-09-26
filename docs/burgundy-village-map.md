@@ -1,7 +1,7 @@
 # Burgundy village maps
 
 Wine details and shared wine details offer **View village map** for mapped
-Côte de Nuits and Côte de Beaune wines across seventeen village appellations,
+Côte de Nuits and Côte de Beaune wines across twenty village appellations,
 including the Grand Crus of Flagey-Échezeaux, Clos de Vougeot and the Montrachet
 group, plus Corton, Corton-Charlemagne and Charlemagne. The dialog shows neighbouring cru boundaries, highlights
 the wine's matched INAO designation, and supports selection, pan/zoom, a village
@@ -30,15 +30,18 @@ The existing Burgundy Atlas link remains available.
 | Aloxe-Corton / Corton hill | 3 appellations + 24 Corton climats | 14 | 2 village/tier areas | 43 |
 | Pernand-Vergelesses / Corton hill | 3 appellations + 24 Corton climats | 8 | 2 village/tier areas | 37 |
 | Ladoix / Corton hill | 3 appellations + 24 Corton climats | 11 | 4 colour/tier views | 42 |
+| Beaune | 0 | 42 | 2 | 44 |
+| Pommard | 0 | 28 | 2 | 30 |
+| Volnay / Meursault | 0 | 29 | 2 | 31 |
 
-There are 384 distinct wine identities (351 vineyard targets and 33 broad areas),
+There are 489 distinct wine identities (450 vineyard targets and 39 broad areas),
 plus ten colour-specific views sharing five village appellation identities.
 Bonnes-Mares, Montrachet and Bâtard-Montrachet each appear in two maps and count
 once in the identity registry. The Corton group's 27 boundaries appear in three
-maps and likewise count once. There are 451 wine features across the seventeen maps.
+maps and likewise count once. There are 556 wine features across the twenty maps.
 Corton itself is a broad Grand Cru appellation target; its 24 named climats are
 separate vineyard targets, not 24 additional Grand Cru appellations. Overall,
-the maps cover 296 named Premier Crus and 32 Grand Cru appellations.
+the maps cover 395 named Premier Crus and 32 Grand Cru appellations.
 The [full Burgundy coverage checklist](burgundy-map-coverage.md) tracks all 44
 village appellations and the remaining Grand Cru and regional work.
 
@@ -96,6 +99,20 @@ village appellations and the remaining Grand Cru and regional work.
   Chaillots is displayed without the source suffix "blanc": the denomination's
   CVI codes include both red and white. Ladoix preserves both official village
   colour IDs, even though the pinned geometries are equal.
+- Beaune retains all 42 Premier Cru denominations and one shared red/white
+  production boundary for each. Sur les Grèves contains the smaller Sur les
+  Grèves - Clos Saint-Anne; both remain selectable, and a label naming both
+  selects the smaller designation using the merged umbrella matching rules.
+- Pommard and Volnay retain all 28 and 29 Premier Cru denominations respectively.
+  Both are red-only appellations: explicit white/rosé records do not open their
+  maps. Names such as Pommard Rugiens or Epenots stay at broad Premier Cru scope,
+  because they do not establish which of the separately mapped areas is meant.
+- Volnay includes Meursault's Santenots, with the full 29.01 ha source boundary.
+  A title such as Santenots du Milieu selects that whole named area with an
+  explanation that smaller Volnay subdivisions are unavailable. Meursault's
+  Les Santenots Blancs and Les Santenots du Milieu retain their own identities
+  and different white-wine boundaries on the Meursault map. Neither substitutes
+  for Volnay's Santenots geometry.
 - Boundaries are INAO production areas, not producer ownership or proof that
   a particular bottle comes from one cadastral parcel.
 - INAO areas overlap intentionally. Chambertin includes Clos de Bèze;
@@ -185,12 +202,23 @@ Atlas's map geometry or assets is copied.
   the separate appellations, producing communes, overlap, named Corton climats
   and the restriction of named Corton designations to red wines.
 
-Download the 24 distinct source URLs recorded in the seventeen catalogues into a
+- [BIVB Beaune](https://www.bourgogne-wines.com/our-wines-our-terroir/bourgogne-and-its-appellations/gallery_files/site/321/402/57644/57648.pdf),
+  [INAO Pommard](https://www.inao.gouv.fr/node/495), and
+  [BIVB Volnay](https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/volnay%2C2458%2C9253.html?args=Y29tcF9pZD0yMjc4JmFjdGlvbj12aWV3RmljaGUmaWQ9NDA0Jnw%3D):
+  42/28/29 named Premier Crus, wine colours, and Santenots' producing commune
+  of Meursault. Source CVI codes confirm red/white Beaune and red-only Pommard
+  and Volnay for every denomination in this batch.
+- [Louis Latour's Beaune Cent Vignes](https://www.louislatour.com/pdf/en/beaune-1er-cru-les-cent-vignes-151.pdf) and
+  [Domaine de Montille's Volnay Les Taillepieds](https://www.demontille.com/fr_FR/wine/volnay-1er-cru-les-taillepieds):
+  reviewed label aliases for INAO/Atlas "Les Cents Vignes" and "Taille Pieds".
+  Village and Premier Cru evidence remain required; source names and IDs stay intact.
+
+Download the 27 distinct source URLs recorded in the twenty catalogues into a
 local temporary directory. Name the INAO archive `inao-2026-09-21.zip` and each
 commune file `commune-{code}.json.gz`. Required commune codes are:
 `21110`, `21133`, `21166`, `21186`, `21194`, `21200`, `21265`, `21267`, `21295`,
 `21390`, `21442`, `21464`, `21506`, `21714`, `21716`, `21412`, `21512`, `21150`,
-`71369`, `21541`, `21010`, `21480`, and `21606`. Then:
+`71369`, `21541`, `21010`, `21480`, `21606`, `21054`, `21492`, and `21712`. Then:
 
 ```sh
 python -m pip install -r scripts/burgundy-map-requirements.txt
@@ -216,7 +244,8 @@ a reviewed geographic sanity envelope where a village extends beyond the pilot.
 geometry is retained; their derived combined overview has an `inao-app-*-village`
 ID, `denominationId: null` and the list of contributing `denominationIds`, so it
 cannot masquerade as a new official denomination. `wineColours` can restrict a
-village's map target where colour conflicts with the appellation (Blagny).
+village's map target where colour conflicts with the appellation (for example,
+Blagny, Pommard and Volnay).
 `grandCruClimats` declares the parent appellation, broad denomination and reviewed
 named denomination range. Import fails if source coverage changes. Named features
 receive local `inao-denom-*` match IDs, `parentAppellation`, and `atlasUrl: null`;
@@ -304,7 +333,7 @@ npm run lint
 Browser coverage uses the real MapLibre renderer with the street map unavailable,
 checking local geometry, selection, owner/shared parity, small-screen layouts,
 load-on-demand, retry, Escape and focus restoration. The source import and unit
-checks cover all 351 vineyard targets, coverage in Brochon, Flagey, Premeaux and Remigny, intentional overlap,
+checks cover all 450 vineyard targets, coverage in Brochon, Flagey, Premeaux and Remigny, intentional overlap,
 identical Bonnes-Mares geometry in both contexts, and village-specific matches for
 repeated names such as Les Gruenchers and La Romanée. They distinguish Échezeaux
 from Grands-Échezeaux and verify reviewed Vosne spelling aliases and broad-area
@@ -320,6 +349,14 @@ overview fills against the pinned source, including matching areas and commune
 IDs. All fourteen earlier maps and catalogues remain unchanged. Tests cover all
 24 local climat identities, broad/white/mixed Corton fallback, repeated names
 across tiers, shared Grand Cru geometry and the absence of invented Atlas URLs.
+The Beaune/Pommard/Volnay batch independently verifies 105 added wine geometries
+and three overview fills against the pinned source, including areas, commune IDs,
+colour codes and unchanged Cadastre outlines. All seventeen earlier maps and
+catalogues remain unchanged, and regenerating them reproduces the merged Corton
+aliases, notes and umbrella registry. Tests cover all 99 added Premier Crus,
+Santenots across Meursault, red-only guards, reviewed label aliases, repeated names,
+underspecified Pommard wines and Beaune's umbrella. Owner and shared dialogs are
+checked at 320, 390 and 1280 pixels with lazy loading and no live street map.
 Browser tests also exercise delayed successful
 base-style loading and verify that opening a village never requests another map's
 catalogue or geometry.

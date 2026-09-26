@@ -53,7 +53,10 @@ const reviewedNameAliases:Record<string,Record<string,string[]>>={
   // covering Les Combards and Vigne Derrière. En Cailleret keeps its own name.
   // Château de la Maltroye spells its Clos du Château de la Maltroye, within
   // La Maltroie, with a y.
-  'Chassagne-Montrachet':{'Les Grandes Ruchottes':['Les Ruchottes'],'Cailleret':['Les Caillerets'],'La Maltroie':['La Maltroye']}
+  'Chassagne-Montrachet':{'Les Grandes Ruchottes':['Les Ruchottes'],'Cailleret':['Les Caillerets'],'La Maltroie':['La Maltroye']},
+  // Louis Latour writes Cent Vignes; Domaine de Montille writes Les Taillepieds.
+  'Beaune':{'Les Cents Vignes':['Les Cent Vignes']},
+  'Volnay':{'Taille Pieds':['Les Taillepieds']}
 };
 const groups=mapping.groups.map(group=>({...group,key:nameKey(group.appellation),entries:group.entries.map(entry=>
   ({...entry,variants:[entry.name,...(reviewedNameAliases[group.appellation]?.[entry.name]??[])].flatMap(nameVariants)

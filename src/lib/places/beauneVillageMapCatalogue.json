@@ -1,0 +1,1142 @@
+{
+  "id": "beaune",
+  "name": "Beaune",
+  "region": "Côte de Beaune",
+  "communes": [
+    {
+      "id": "21054",
+      "name": "Beaune"
+    }
+  ],
+  "dataUrl": "/maps/beaune.2026-09-21.geojson",
+  "bounds": [
+    4.793381,
+    47.013324,
+    4.844826,
+    47.050557
+  ],
+  "sources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21054/cadastre-21054-communes.json.gz",
+      "sha256": "9f302ff1a41b632eb87e6fc128d8dfe80d12b653b690b22f38f2b512b26cfee1"
+    }
+  ],
+  "notes": {},
+  "features": [
+    {
+      "id": "inao-denom-307",
+      "name": "Beaune",
+      "tier": "village",
+      "kind": "appellation",
+      "appellationId": 134,
+      "denominationId": 307,
+      "sourceName": "Beaune",
+      "communes": [
+        "21054"
+      ],
+      "areaHa": 473.76,
+      "matchId": "ba_appellation_p62xgdkeodphngkopzpgcx4pcm",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_p62xgdkeodphngkopzpgcx4pcm/beaune",
+      "bounds": [
+        4.793381,
+        47.013324,
+        4.844826,
+        47.050557
+      ],
+      "labelPoint": [
+        4.808016,
+        47.021014
+      ]
+    },
+    {
+      "id": "inao-denom-308",
+      "name": "A l'Ecu",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 134,
+      "denominationId": 308,
+      "sourceName": "Beaune premier cru A l'Ecu",
+      "communes": [
+        "21054"
+      ],
+      "areaHa": 2.32,
+      "matchId": "ba_designation_mp3byajbrcyzhcbykt46qu22bm",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_mp3byajbrcyzhcbykt46qu22bm/a-l-ecu",
+      "bounds": [
+        4.824224,
+        47.042432,
+        4.827064,
+        47.044862
+      ],
+      "labelPoint": [
+        4.825509,
+        47.043655
+      ]
+    },
+    {
+      "id": "inao-denom-309",
+      "name": "Aux Coucherias",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 134,
+      "denominationId": 309,
+      "sourceName": "Beaune premier cru Aux Coucherias",
+      "communes": [
+        "21054"
+      ],
+      "areaHa": 8.75,
+      "matchId": "ba_designation_avfw7yjtjgmohtwvf467zpecza",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_avfw7yjtjgmohtwvf467zpecza/aux-coucherias",
+      "bounds": [
+        4.811709,
+        47.0288,
+        4.817692,
+        47.032476
+      ],
+      "labelPoint": [
+        4.815363,
+        47.030654
+      ]
+    },
+    {
+      "id": "inao-denom-310",
+      "name": "Aux Cras",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 134,
+      "denominationId": 310,
+      "sourceName": "Beaune premier cru Aux Cras",
+      "communes": [
+        "21054"
+      ],
+      "areaHa": 4.99,
+      "matchId": "ba_designation_whvorjeaw6llkggmg4y2u4lzla",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_whvorjeaw6llkggmg4y2u4lzla/aux-cras",
+      "bounds": [
+        4.817509,
+        47.028184,
+        4.8212,
+        47.03103
+      ],
+      "labelPoint": [
+        4.819168,
+        47.029597
+      ]
+    },
+    {
+      "id": "inao-denom-311",
+      "name": "Belissand",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 134,
+      "denominationId": 311,
+      "sourceName": "Beaune premier cru Belissand",
+      "communes": [
+        "21054"
+      ],
+      "areaHa": 4.89,
+      "matchId": "ba_designation_vuq3jbsa6fsjdunqqzeas3cgoi",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_vuq3jbsa6fsjdunqqzeas3cgoi/belissand",
+      "bounds": [
+        4.819711,
+        47.022143,
+        4.824769,
+        47.024417
+      ],
+      "labelPoint": [
+        4.82249,
+        47.023281
+      ]
+    },
+    {
+      "id": "inao-denom-312",
+      "name": "Blanches Fleurs",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 134,
+      "denominationId": 312,
+      "sourceName": "Beaune premier cru Blanches Fleurs",
+      "communes": [
+        "21054"
+      ],
+      "areaHa": 3.09,
+      "matchId": "ba_designation_vygik5lpgooooy4vnvxweifdau",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_vygik5lpgooooy4vnvxweifdau/blanches-fleurs",
+      "bounds": [
+        4.833665,
+        47.044265,
+        4.837264,
+        47.047057
+      ],
+      "labelPoint": [
+        4.835756,
+        47.045683
+      ]
+    },
+    {
+      "id": "inao-denom-313",
+      "name": "Champs Pimont",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 134,
+      "denominationId": 313,
+      "sourceName": "Beaune premier cru Champs Pimont",
+      "communes": [
+        "21054"
+      ],
+      "areaHa": 16.37,
+      "matchId": "ba_designation_fmhqhmnubphc5gehjyqn7w54ie",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_fmhqhmnubphc5gehjyqn7w54ie/champs-pimont",
+      "bounds": [
+        4.806284,
+        47.025878,
+        4.820465,
+        47.028755
+      ],
+      "labelPoint": [
+        4.811936,
+        47.027313
+      ]
+    },
+    {
+      "id": "inao-denom-314",
+      "name": "Clos Saint-Landry",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 134,
+      "denominationId": 314,
+      "sourceName": "Beaune premier cru Clos Saint-Landry",
+      "communes": [
+        "21054"
+      ],
+      "areaHa": 1.97,
+      "matchId": "ba_designation_w3esqsuipd6c2cgmdcejtjqeja",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_w3esqsuipd6c2cgmdcejtjqeja/clos-saint-landry",
+      "bounds": [
+        4.813808,
+        47.021004,
+        4.816512,
+        47.022645
+      ],
+      "labelPoint": [
+        4.815112,
+        47.021808
+      ]
+    },
+    {
+      "id": "inao-denom-315",
+      "name": "Clos de l'Ecu",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 134,
+      "denominationId": 315,
+      "sourceName": "Beaune premier cru Clos de l'Ecu",
+      "communes": [
+        "21054"
+      ],
+      "areaHa": 2.42,
+      "matchId": "ba_designation_axr5rhhtfjfjhcefzxba2z6mmm",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_axr5rhhtfjfjhcefzxba2z6mmm/clos-de-l-ecu",
+      "bounds": [
+        4.821848,
+        47.044131,
+        4.82506,
+        47.045395
+      ],
+      "labelPoint": [
+        4.823566,
+        47.044733
+      ]
+    },
+    {
+      "id": "inao-denom-316",
+      "name": "Clos de la Feguine",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 134,
+      "denominationId": 316,
+      "sourceName": "Beaune premier cru Clos de la Feguine",
+      "communes": [
+        "21054"
+      ],
+      "areaHa": 1.83,
+      "matchId": "ba_designation_pjr76cygkrmvju7nwutrgxlhk4",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_pjr76cygkrmvju7nwutrgxlhk4/clos-de-la-feguine",
+      "bounds": [
+        4.815913,
+        47.029636,
+        4.818512,
+        47.031684
+      ],
+      "labelPoint": [
+        4.81787,
+        47.030648
+      ]
+    },
+    {
+      "id": "inao-denom-317",
+      "name": "Clos de la Mousse",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 134,
+      "denominationId": 317,
+      "sourceName": "Beaune premier cru Clos de la Mousse",
+      "communes": [
+        "21054"
+      ],
+      "areaHa": 3.36,
+      "matchId": "ba_designation_6wviw4snyfl52actyjgu3o2feu",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_6wviw4snyfl52actyjgu3o2feu/clos-de-la-mousse",
+      "bounds": [
+        4.819835,
+        47.024887,
+        4.822627,
+        47.027454
+      ],
+      "labelPoint": [
+        4.821071,
+        47.026228
+      ]
+    },
+    {
+      "id": "inao-denom-318",
+      "name": "Clos des Avaux",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 134,
+      "denominationId": 318,
+      "sourceName": "Beaune premier cru Clos des Avaux",
+      "communes": [
+        "21054"
+      ],
+      "areaHa": 4.18,
+      "matchId": "ba_designation_mlgcxyzaumbqonohgx3zbyr6vq",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_mlgcxyzaumbqonohgx3zbyr6vq/clos-des-avaux",
+      "bounds": [
+        4.814548,
+        47.025234,
+        4.81811,
+        47.02785
+      ],
+      "labelPoint": [
+        4.816422,
+        47.025864
+      ]
+    },
+    {
+      "id": "inao-denom-319",
+      "name": "Clos des Ursules",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 134,
+      "denominationId": 319,
+      "sourceName": "Beaune premier cru Clos des Ursules",
+      "communes": [
+        "21054"
+      ],
+      "areaHa": 1.26,
+      "matchId": "ba_designation_aepvqkxw7fxgc3ftqvx3z6k4ge",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_aepvqkxw7fxgc3ftqvx3z6k4ge/clos-des-ursules",
+      "bounds": [
+        4.810149,
+        47.021418,
+        4.812936,
+        47.022413
+      ],
+      "labelPoint": [
+        4.81167,
+        47.021911
+      ]
+    },
+    {
+      "id": "inao-denom-320",
+      "name": "Clos du Roi",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 134,
+      "denominationId": 320,
+      "sourceName": "Beaune premier cru Clos du Roi",
+      "communes": [
+        "21054"
+      ],
+      "areaHa": 13.27,
+      "matchId": "ba_designation_6cdmiy2uhljzu6n453dqfdir6m",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_6cdmiy2uhljzu6n453dqfdir6m/clos-du-roi",
+      "bounds": [
+        4.830751,
+        47.042411,
+        4.836371,
+        47.047353
+      ],
+      "labelPoint": [
+        4.833558,
+        47.044874
+      ]
+    },
+    {
+      "id": "inao-denom-321",
+      "name": "En Genêt",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 134,
+      "denominationId": 321,
+      "sourceName": "Beaune premier cru En Genêt",
+      "communes": [
+        "21054"
+      ],
+      "areaHa": 4.33,
+      "matchId": "ba_designation_6ul27yeblal7vpry3qhkztkk3m",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_6ul27yeblal7vpry3qhkztkk3m/en-genet",
+      "bounds": [
+        4.827726,
+        47.043198,
+        4.83161,
+        47.04603
+      ],
+      "labelPoint": [
+        4.829643,
+        47.044671
+      ]
+    },
+    {
+      "id": "inao-denom-322",
+      "name": "En l'Orme",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 134,
+      "denominationId": 322,
+      "sourceName": "Beaune premier cru En l'Orme",
+      "communes": [
+        "21054"
+      ],
+      "areaHa": 2.02,
+      "matchId": "ba_designation_s3rlc6e7lvltu7vtrlrowaowvu",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_s3rlc6e7lvltu7vtrlrowaowvu/en-l-orme",
+      "bounds": [
+        4.827211,
+        47.044744,
+        4.829801,
+        47.046557
+      ],
+      "labelPoint": [
+        4.828003,
+        47.045633
+      ]
+    },
+    {
+      "id": "inao-denom-323",
+      "name": "La Mignotte",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 134,
+      "denominationId": 323,
+      "sourceName": "Beaune premier cru La Mignotte",
+      "communes": [
+        "21054"
+      ],
+      "areaHa": 2.42,
+      "matchId": "ba_designation_f3jsx77wstm5b4zupjs2w56nfy",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_f3jsx77wstm5b4zupjs2w56nfy/la-mignotte",
+      "bounds": [
+        4.814351,
+        47.027624,
+        4.818711,
+        47.02885
+      ],
+      "labelPoint": [
+        4.817047,
+        47.028229
+      ]
+    },
+    {
+      "id": "inao-denom-324",
+      "name": "Le Bas des Teurons",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 134,
+      "denominationId": 324,
+      "sourceName": "Beaune premier cru Le Bas des Teurons",
+      "communes": [
+        "21054"
+      ],
+      "areaHa": 6.68,
+      "matchId": "ba_designation_i7ryjuzczm4ao5mihtnpbu7tni",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_i7ryjuzczm4ao5mihtnpbu7tni/le-bas-des-teurons",
+      "bounds": [
+        4.821753,
+        47.029316,
+        4.82666,
+        47.032602
+      ],
+      "labelPoint": [
+        4.825016,
+        47.030961
+      ]
+    },
+    {
+      "id": "inao-denom-325",
+      "name": "Le Clos des Mouches",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 134,
+      "denominationId": 325,
+      "sourceName": "Beaune premier cru Le Clos des Mouches",
+      "communes": [
+        "21054"
+      ],
+      "areaHa": 25.3,
+      "matchId": "ba_designation_vqf3w4px4kxjsp6qjgy53oy5ci",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_vqf3w4px4kxjsp6qjgy53oy5ci/le-clos-des-mouches",
+      "bounds": [
+        4.801954,
+        47.015933,
+        4.810459,
+        47.02199
+      ],
+      "labelPoint": [
+        4.807802,
+        47.018965
+      ]
+    },
+    {
+      "id": "inao-denom-326",
+      "name": "Les Aigrots",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 134,
+      "denominationId": 326,
+      "sourceName": "Beaune premier cru Les Aigrots",
+      "communes": [
+        "21054"
+      ],
+      "areaHa": 18.71,
+      "matchId": "ba_designation_6aobaswwbktferfzskn5zlqyie",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_6aobaswwbktferfzskn5zlqyie/les-aigrots",
+      "bounds": [
+        4.805845,
+        47.021448,
+        4.812829,
+        47.026365
+      ],
+      "labelPoint": [
+        4.810126,
+        47.023737
+      ]
+    },
+    {
+      "id": "inao-denom-327",
+      "name": "Les Avaux",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 134,
+      "denominationId": 327,
+      "sourceName": "Beaune premier cru Les Avaux",
+      "communes": [
+        "21054"
+      ],
+      "areaHa": 11.09,
+      "matchId": "ba_designation_ke5pudpdfnycuh6c7qkutunpce",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_ke5pudpdfnycuh6c7qkutunpce/les-avaux",
+      "bounds": [
+        4.81308,
+        47.022815,
+        4.821579,
+        47.026945
+      ],
+      "labelPoint": [
+        4.818591,
+        47.025295
+      ]
+    },
+    {
+      "id": "inao-denom-328",
+      "name": "Les Boucherottes",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 134,
+      "denominationId": 328,
+      "sourceName": "Beaune premier cru Les Boucherottes",
+      "communes": [
+        "21054"
+      ],
+      "areaHa": 8.55,
+      "matchId": "ba_designation_3yscs3tkiaxfq453vx4jip5cpu",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_3yscs3tkiaxfq453vx4jip5cpu/les-boucherottes",
+      "bounds": [
+        4.808138,
+        47.016208,
+        4.815324,
+        47.019726
+      ],
+      "labelPoint": [
+        4.811284,
+        47.017947
+      ]
+    },
+    {
+      "id": "inao-denom-329",
+      "name": "Les Bressandes",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 134,
+      "denominationId": 329,
+      "sourceName": "Beaune premier cru Les Bressandes",
+      "communes": [
+        "21054"
+      ],
+      "areaHa": 17.18,
+      "matchId": "ba_designation_3jb45lcfhjw5fehw4kveibayl4",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_3jb45lcfhjw5fehw4kveibayl4/les-bressandes",
+      "bounds": [
+        4.820223,
+        47.038374,
+        4.826132,
+        47.0442
+      ],
+      "labelPoint": [
+        4.822655,
+        47.041292
+      ]
+    },
+    {
+      "id": "inao-denom-330",
+      "name": "Les Cents Vignes",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 134,
+      "denominationId": 330,
+      "sourceName": "Beaune premier cru Les Cents Vignes",
+      "communes": [
+        "21054"
+      ],
+      "areaHa": 23.5,
+      "matchId": "ba_designation_r64r3ro3nd7cbc4noovs4klky4",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_r64r3ro3nd7cbc4noovs4klky4/les-cents-vignes",
+      "bounds": [
+        4.8251,
+        47.036089,
+        4.830955,
+        47.043605
+      ],
+      "labelPoint": [
+        4.828394,
+        47.039856
+      ]
+    },
+    {
+      "id": "inao-denom-331",
+      "name": "Les Chouacheux",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 134,
+      "denominationId": 331,
+      "sourceName": "Beaune premier cru Les Chouacheux",
+      "communes": [
+        "21054"
+      ],
+      "areaHa": 5.03,
+      "matchId": "ba_designation_x54athqlqkcbl43sbztfthbisq",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_x54athqlqkcbl43sbztfthbisq/les-chouacheux",
+      "bounds": [
+        4.813441,
+        47.01845,
+        4.816843,
+        47.021399
+      ],
+      "labelPoint": [
+        4.815639,
+        47.019919
+      ]
+    },
+    {
+      "id": "inao-denom-332",
+      "name": "Les Epenotes",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 134,
+      "denominationId": 332,
+      "sourceName": "Beaune premier cru Les Epenotes",
+      "communes": [
+        "21054"
+      ],
+      "areaHa": 7.99,
+      "matchId": "ba_designation_whp6hmxy3dvnmmzgh6vpj2l5vu",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_whp6hmxy3dvnmmzgh6vpj2l5vu/les-epenotes",
+      "bounds": [
+        4.80831,
+        47.013817,
+        4.814092,
+        47.017096
+      ],
+      "labelPoint": [
+        4.811584,
+        47.015431
+      ]
+    },
+    {
+      "id": "inao-denom-333",
+      "name": "Les Fèves",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 134,
+      "denominationId": 333,
+      "sourceName": "Beaune premier cru Les Fèves",
+      "communes": [
+        "21054"
+      ],
+      "areaHa": 4.75,
+      "matchId": "ba_designation_gsh7rgpkppwpcwflygdmbzjgwu",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_gsh7rgpkppwpcwflygdmbzjgwu/les-feves",
+      "bounds": [
+        4.824348,
+        47.040705,
+        4.828146,
+        47.043926
+      ],
+      "labelPoint": [
+        4.82564,
+        47.042347
+      ]
+    },
+    {
+      "id": "inao-denom-334",
+      "name": "Les Grèves",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 134,
+      "denominationId": 334,
+      "sourceName": "Beaune premier cru Les Grèves",
+      "communes": [
+        "21054"
+      ],
+      "areaHa": 31.3,
+      "matchId": "ba_designation_iq45rnymkbuyjyz3ub72exwbii",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_iq45rnymkbuyjyz3ub72exwbii/les-greves",
+      "bounds": [
+        4.819806,
+        47.031903,
+        4.827703,
+        47.038349
+      ],
+      "labelPoint": [
+        4.823758,
+        47.035183
+      ]
+    },
+    {
+      "id": "inao-denom-335",
+      "name": "Les Marconnets",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 134,
+      "denominationId": 335,
+      "sourceName": "Beaune premier cru Les Marconnets",
+      "communes": [
+        "21054"
+      ],
+      "areaHa": 9.37,
+      "matchId": "ba_designation_zmxuew6bmu4sx3jomzdfubouoi",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_zmxuew6bmu4sx3jomzdfubouoi/les-marconnets",
+      "bounds": [
+        4.828194,
+        47.045016,
+        4.833085,
+        47.049411
+      ],
+      "labelPoint": [
+        4.830946,
+        47.047208
+      ]
+    },
+    {
+      "id": "inao-denom-336",
+      "name": "Les Montrevenots",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 134,
+      "denominationId": 336,
+      "sourceName": "Beaune premier cru Les Montrevenots",
+      "communes": [
+        "21054"
+      ],
+      "areaHa": 8.46,
+      "matchId": "ba_designation_cvtql5inedq6zmauckyrhw642i",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_cvtql5inedq6zmauckyrhw642i/les-montrevenots",
+      "bounds": [
+        4.797795,
+        47.018727,
+        4.803691,
+        47.022557
+      ],
+      "labelPoint": [
+        4.800869,
+        47.02064
+      ]
+    },
+    {
+      "id": "inao-denom-337",
+      "name": "Les Perrières",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 134,
+      "denominationId": 337,
+      "sourceName": "Beaune premier cru Les Perrières",
+      "communes": [
+        "21054"
+      ],
+      "areaHa": 3.2,
+      "matchId": "ba_designation_qfmjv2kaa5xkf4ri6j2rqv2hs4",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_qfmjv2kaa5xkf4ri6j2rqv2hs4/les-perrieres",
+      "bounds": [
+        4.825127,
+        47.043637,
+        4.828359,
+        47.046222
+      ],
+      "labelPoint": [
+        4.826558,
+        47.044954
+      ]
+    },
+    {
+      "id": "inao-denom-338",
+      "name": "Les Reversés",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 134,
+      "denominationId": 338,
+      "sourceName": "Beaune premier cru Les Reversés",
+      "communes": [
+        "21054"
+      ],
+      "areaHa": 4.79,
+      "matchId": "ba_designation_n32x7gw3lds4ghbsvquom6dusi",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_n32x7gw3lds4ghbsvquom6dusi/les-reverses",
+      "bounds": [
+        4.821404,
+        47.023872,
+        4.826385,
+        47.026439
+      ],
+      "labelPoint": [
+        4.823981,
+        47.025159
+      ]
+    },
+    {
+      "id": "inao-denom-339",
+      "name": "Les Sceaux",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 134,
+      "denominationId": 339,
+      "sourceName": "Beaune premier cru Les Sceaux",
+      "communes": [
+        "21054"
+      ],
+      "areaHa": 3.15,
+      "matchId": "ba_designation_kuhn426x5mzjtjizri2puvyaia",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_kuhn426x5mzjtjizri2puvyaia/les-sceaux",
+      "bounds": [
+        4.823257,
+        47.023301,
+        4.827085,
+        47.025195
+      ],
+      "labelPoint": [
+        4.824892,
+        47.024251
+      ]
+    },
+    {
+      "id": "inao-denom-340",
+      "name": "Les Seurey",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 134,
+      "denominationId": 340,
+      "sourceName": "Beaune premier cru Les Seurey",
+      "communes": [
+        "21054"
+      ],
+      "areaHa": 1.24,
+      "matchId": "ba_designation_v2eztzzz2e6m4xrrlxtj3hp2ey",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_v2eztzzz2e6m4xrrlxtj3hp2ey/les-seurey",
+      "bounds": [
+        4.818166,
+        47.026048,
+        4.820203,
+        47.027321
+      ],
+      "labelPoint": [
+        4.819376,
+        47.026678
+      ]
+    },
+    {
+      "id": "inao-denom-341",
+      "name": "Les Sizies",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 134,
+      "denominationId": 341,
+      "sourceName": "Beaune premier cru Les Sizies",
+      "communes": [
+        "21054"
+      ],
+      "areaHa": 8.56,
+      "matchId": "ba_designation_pjwwsjt7xk35uhxwjkmsqgfas4",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_pjwwsjt7xk35uhxwjkmsqgfas4/les-sizies",
+      "bounds": [
+        4.811727,
+        47.022298,
+        4.81863,
+        47.025841
+      ],
+      "labelPoint": [
+        4.813733,
+        47.024604
+      ]
+    },
+    {
+      "id": "inao-denom-342",
+      "name": "Les Teurons",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 134,
+      "denominationId": 342,
+      "sourceName": "Beaune premier cru Les Teurons",
+      "communes": [
+        "21054"
+      ],
+      "areaHa": 21.51,
+      "matchId": "ba_designation_joyhakvqe6gr3d5yibfxwzxbje",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_joyhakvqe6gr3d5yibfxwzxbje/les-teurons",
+      "bounds": [
+        4.819162,
+        47.026038,
+        4.827413,
+        47.032368
+      ],
+      "labelPoint": [
+        4.822165,
+        47.028517
+      ]
+    },
+    {
+      "id": "inao-denom-343",
+      "name": "Les Toussaints",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 134,
+      "denominationId": 343,
+      "sourceName": "Beaune premier cru Les Toussaints",
+      "communes": [
+        "21054"
+      ],
+      "areaHa": 6.42,
+      "matchId": "ba_designation_lgltlksxl3wfcigmskeaq3kewq",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_lgltlksxl3wfcigmskeaq3kewq/les-toussaints",
+      "bounds": [
+        4.822587,
+        47.036466,
+        4.827745,
+        47.039492
+      ],
+      "labelPoint": [
+        4.825117,
+        47.037976
+      ]
+    },
+    {
+      "id": "inao-denom-344",
+      "name": "Les Tuvilains",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 134,
+      "denominationId": 344,
+      "sourceName": "Beaune premier cru Les Tuvilains",
+      "communes": [
+        "21054"
+      ],
+      "areaHa": 8.94,
+      "matchId": "ba_designation_xfpz6xqzns54pksqpnivvpmpdm",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_xfpz6xqzns54pksqpnivvpmpdm/les-tuvilains",
+      "bounds": [
+        4.815411,
+        47.020143,
+        4.821535,
+        47.023359
+      ],
+      "labelPoint": [
+        4.819239,
+        47.021414
+      ]
+    },
+    {
+      "id": "inao-denom-345",
+      "name": "Les Vignes Franches",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 134,
+      "denominationId": 345,
+      "sourceName": "Beaune premier cru Les Vignes Franches",
+      "communes": [
+        "21054"
+      ],
+      "areaHa": 8.51,
+      "matchId": "ba_designation_hqtueqpulo7z23fgkmb3nwlope",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_hqtueqpulo7z23fgkmb3nwlope/les-vignes-franches",
+      "bounds": [
+        4.809306,
+        47.018116,
+        4.81449,
+        47.022071
+      ],
+      "labelPoint": [
+        4.812707,
+        47.020428
+      ]
+    },
+    {
+      "id": "inao-denom-346",
+      "name": "Montée Rouge",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 134,
+      "denominationId": 346,
+      "sourceName": "Beaune premier cru Montée Rouge",
+      "communes": [
+        "21054"
+      ],
+      "areaHa": 4.71,
+      "matchId": "ba_designation_75z52xcanbwahhf34r4bd5p3ku",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_75z52xcanbwahhf34r4bd5p3ku/montee-rouge",
+      "bounds": [
+        4.80978,
+        47.02786,
+        4.816054,
+        47.030496
+      ],
+      "labelPoint": [
+        4.813699,
+        47.029459
+      ]
+    },
+    {
+      "id": "inao-denom-347",
+      "name": "Pertuisots",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 134,
+      "denominationId": 347,
+      "sourceName": "Beaune premier cru Pertuisots",
+      "communes": [
+        "21054"
+      ],
+      "areaHa": 5.27,
+      "matchId": "ba_designation_qlgrjj63vqn3ktuej6d5jor6li",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_qlgrjj63vqn3ktuej6d5jor6li/pertuisots",
+      "bounds": [
+        4.811167,
+        47.021652,
+        4.815567,
+        47.024378
+      ],
+      "labelPoint": [
+        4.813693,
+        47.023016
+      ]
+    },
+    {
+      "id": "inao-denom-348",
+      "name": "Sur les Grèves",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 134,
+      "denominationId": 348,
+      "sourceName": "Beaune premier cru Sur les Grèves",
+      "communes": [
+        "21054"
+      ],
+      "areaHa": 3.83,
+      "matchId": "ba_designation_g7dadx35f5ywussgqygkqab3fa",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_g7dadx35f5ywussgqygkqab3fa/sur-les-greves",
+      "bounds": [
+        4.818404,
+        47.031026,
+        4.821171,
+        47.03427
+      ],
+      "labelPoint": [
+        4.819661,
+        47.032663
+      ]
+    },
+    {
+      "id": "inao-denom-349",
+      "name": "Sur les Grèves - Clos Saint-Anne",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 134,
+      "denominationId": 349,
+      "sourceName": "Beaune premier cru Sur les Grèves - Clos Saint-Anne",
+      "communes": [
+        "21054"
+      ],
+      "areaHa": 0.77,
+      "matchId": "ba_designation_kvagub2kkstngobc6vkxctyot4",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_kvagub2kkstngobc6vkxctyot4/sur-les-greves-clos-saint-anne",
+      "bounds": [
+        4.819081,
+        47.033289,
+        4.820559,
+        47.03427
+      ],
+      "labelPoint": [
+        4.819865,
+        47.033799
+      ]
+    },
+    {
+      "id": "inao-denom-350",
+      "name": "Beaune Premier Cru",
+      "tier": "premier_cru",
+      "kind": "appellation",
+      "appellationId": 134,
+      "denominationId": 350,
+      "sourceName": "Beaune premier cru",
+      "communes": [
+        "21054"
+      ],
+      "areaHa": 335.48,
+      "matchId": "ba_appellation_uaw4r7x6qlqw7fx7vtab5invna",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_uaw4r7x6qlqw7fx7vtab5invna/beaune-premier-cru",
+      "bounds": [
+        4.797795,
+        47.013817,
+        4.837264,
+        47.049411
+      ],
+      "labelPoint": [
+        4.808016,
+        47.021014
+      ]
+    }
+  ],
+  "umbrellas": {
+    "inao-denom-348": [
+      "inao-denom-349"
+    ]
+  }
+}

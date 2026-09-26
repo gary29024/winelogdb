@@ -1,0 +1,829 @@
+{
+  "id": "volnay",
+  "name": "Volnay",
+  "region": "Côte de Beaune",
+  "communes": [
+    {
+      "id": "21712",
+      "name": "Volnay"
+    },
+    {
+      "id": "21412",
+      "name": "Meursault"
+    }
+  ],
+  "dataUrl": "/maps/volnay.2026-09-21.geojson",
+  "bounds": [
+    4.771174,
+    46.985315,
+    4.798579,
+    47.006785
+  ],
+  "sources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21712/cadastre-21712-communes.json.gz",
+      "sha256": "9be12c8a8b05a41f8d02d46d6f83276719445a5b93e8567771405876407a85d7"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21412/cadastre-21412-communes.json.gz",
+      "sha256": "d90310c4e18c902f7a6fb15f650e1e8027a477ad873f9fb60f7e4825f4e37fbf"
+    }
+  ],
+  "notes": {
+    "inao-denom-1259": {
+      "note": "Santenots lies in Meursault, but its red wines can be labelled Volnay Premier Cru. This map shows the whole Santenots area; smaller plots such as Santenots du Milieu have no separate Volnay boundary here. Meursault's white-wine designations have their own boundaries."
+    }
+  },
+  "features": [
+    {
+      "id": "inao-denom-1225",
+      "name": "Volnay",
+      "tier": "village",
+      "kind": "appellation",
+      "appellationId": 240,
+      "denominationId": 1225,
+      "sourceName": "Volnay",
+      "communes": [
+        "21412",
+        "21712"
+      ],
+      "areaHa": 241.73,
+      "matchId": "ba_appellation_tu73bflmdxemjgq35t3wacdhr4",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_tu73bflmdxemjgq35t3wacdhr4/volnay",
+      "bounds": [
+        4.771174,
+        46.985315,
+        4.798579,
+        47.006785
+      ],
+      "labelPoint": [
+        4.781586,
+        46.99459
+      ]
+    },
+    {
+      "id": "inao-denom-1226",
+      "name": "Carelle sous la Chapelle",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 240,
+      "denominationId": 1226,
+      "sourceName": "Volnay premier cru Carelle sous la Chapelle",
+      "communes": [
+        "21712"
+      ],
+      "areaHa": 4.98,
+      "matchId": "ba_designation_joc2u3hsi7mqam2kqedt7hjrfa",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_joc2u3hsi7mqam2kqedt7hjrfa/carelle-sous-la-chapelle",
+      "bounds": [
+        4.783732,
+        46.995797,
+        4.787936,
+        46.999393
+      ],
+      "labelPoint": [
+        4.785767,
+        46.997866
+      ]
+    },
+    {
+      "id": "inao-denom-1228",
+      "name": "Champans",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 240,
+      "denominationId": 1228,
+      "sourceName": "Volnay premier cru Champans",
+      "communes": [
+        "21712"
+      ],
+      "areaHa": 11.11,
+      "matchId": "ba_designation_ppfluh46s7hrg3j43djidr24fm",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_ppfluh46s7hrg3j43djidr24fm/champans",
+      "bounds": [
+        4.780216,
+        46.993775,
+        4.785759,
+        46.998442
+      ],
+      "labelPoint": [
+        4.783322,
+        46.996084
+      ]
+    },
+    {
+      "id": "inao-denom-1230",
+      "name": "Clos de l'Audignac",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 240,
+      "denominationId": 1230,
+      "sourceName": "Volnay premier cru Clos de l'Audignac",
+      "communes": [
+        "21712"
+      ],
+      "areaHa": 1.11,
+      "matchId": "ba_designation_6jsvwah7wwjlzjwkjm2zann3si",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_6jsvwah7wwjlzjwkjm2zann3si/clos-de-l-audignac",
+      "bounds": [
+        4.780383,
+        46.998419,
+        4.782602,
+        46.999579
+      ],
+      "labelPoint": [
+        4.781546,
+        46.999006
+      ]
+    },
+    {
+      "id": "inao-denom-1231",
+      "name": "Clos de la Barre",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 240,
+      "denominationId": 1231,
+      "sourceName": "Volnay premier cru Clos de la Barre",
+      "communes": [
+        "21712"
+      ],
+      "areaHa": 1.31,
+      "matchId": "ba_designation_fxdyqb23f4vkilg2jrsivcjrii",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_fxdyqb23f4vkilg2jrsivcjrii/clos-de-la-barre",
+      "bounds": [
+        4.78399,
+        46.999687,
+        4.786114,
+        47.001115
+      ],
+      "labelPoint": [
+        4.78505,
+        47.000401
+      ]
+    },
+    {
+      "id": "inao-denom-1232",
+      "name": "Clos de la Bousse-d'Or",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 240,
+      "denominationId": 1232,
+      "sourceName": "Volnay premier cru Clos de la Bousse-d'Or",
+      "communes": [
+        "21712"
+      ],
+      "areaHa": 2.15,
+      "matchId": "ba_designation_o5f5ruhdah5cmrbu36h3hszf2q",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_o5f5ruhdah5cmrbu36h3hszf2q/clos-de-la-bousse-d-or",
+      "bounds": [
+        4.782166,
+        46.998878,
+        4.784913,
+        47.000854
+      ],
+      "labelPoint": [
+        4.783437,
+        46.999846
+      ]
+    },
+    {
+      "id": "inao-denom-1233",
+      "name": "Clos de la Cave des Ducs",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 240,
+      "denominationId": 1233,
+      "sourceName": "Volnay premier cru Clos de la Cave des Ducs",
+      "communes": [
+        "21712"
+      ],
+      "areaHa": 0.64,
+      "matchId": "ba_designation_4v3xvgyakncgvbam337ujba5qq",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_4v3xvgyakncgvbam337ujba5qq/clos-de-la-cave-des-ducs",
+      "bounds": [
+        4.778764,
+        47.000662,
+        4.779973,
+        47.001707
+      ],
+      "labelPoint": [
+        4.779323,
+        47.001146
+      ]
+    },
+    {
+      "id": "inao-denom-1234",
+      "name": "Clos de la Chapelle",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 240,
+      "denominationId": 1234,
+      "sourceName": "Volnay premier cru Clos de la Chapelle",
+      "communes": [
+        "21712"
+      ],
+      "areaHa": 0.56,
+      "matchId": "ba_designation_ykz52oqfom3moxwdkwy2vbrdxq",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_ykz52oqfom3moxwdkwy2vbrdxq/clos-de-la-chapelle",
+      "bounds": [
+        4.78209,
+        46.998648,
+        4.78405,
+        46.999738
+      ],
+      "labelPoint": [
+        4.783122,
+        46.999167
+      ]
+    },
+    {
+      "id": "inao-denom-1235",
+      "name": "Clos de la Rougeotte",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 240,
+      "denominationId": 1235,
+      "sourceName": "Volnay premier cru Clos de la Rougeotte",
+      "communes": [
+        "21712"
+      ],
+      "areaHa": 0.52,
+      "matchId": "ba_designation_f5qa4nwwpsvcsg7j4gcay5pmf4",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_f5qa4nwwpsvcsg7j4gcay5pmf4/clos-de-la-rougeotte",
+      "bounds": [
+        4.783519,
+        47.001932,
+        4.785458,
+        47.00269
+      ],
+      "labelPoint": [
+        4.784646,
+        47.002276
+      ]
+    },
+    {
+      "id": "inao-denom-1236",
+      "name": "Clos des Chênes",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 240,
+      "denominationId": 1236,
+      "sourceName": "Volnay premier cru Clos des Chênes",
+      "communes": [
+        "21712"
+      ],
+      "areaHa": 15.39,
+      "matchId": "ba_designation_4gneh6zdknvhwugcs42b623i5u",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_4gneh6zdknvhwugcs42b623i5u/clos-des-chenes",
+      "bounds": [
+        4.773463,
+        46.992929,
+        4.780891,
+        46.997815
+      ],
+      "labelPoint": [
+        4.776147,
+        46.995628
+      ]
+    },
+    {
+      "id": "inao-denom-1237",
+      "name": "Clos des Ducs",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 240,
+      "denominationId": 1237,
+      "sourceName": "Volnay premier cru Clos des Ducs",
+      "communes": [
+        "21712"
+      ],
+      "areaHa": 2.4,
+      "matchId": "ba_designation_hicfauq2v26wtjzyroqxoylevm",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_hicfauq2v26wtjzyroqxoylevm/clos-des-ducs",
+      "bounds": [
+        4.77996,
+        47.002145,
+        4.783485,
+        47.00402
+      ],
+      "labelPoint": [
+        4.781291,
+        47.00309
+      ]
+    },
+    {
+      "id": "inao-denom-1238",
+      "name": "Clos du Château des Ducs",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 240,
+      "denominationId": 1238,
+      "sourceName": "Volnay premier cru Clos du Château des Ducs",
+      "communes": [
+        "21712"
+      ],
+      "areaHa": 0.57,
+      "matchId": "ba_designation_w5xckmn6les4o3hbvwrfew5wuu",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_w5xckmn6les4o3hbvwrfew5wuu/clos-du-chateau-des-ducs",
+      "bounds": [
+        4.781228,
+        46.99981,
+        4.782613,
+        47.000798
+      ],
+      "labelPoint": [
+        4.781942,
+        47.000305
+      ]
+    },
+    {
+      "id": "inao-denom-1239",
+      "name": "Clos du Verseuil",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 240,
+      "denominationId": 1239,
+      "sourceName": "Volnay premier cru Clos du Verseuil",
+      "communes": [
+        "21712"
+      ],
+      "areaHa": 0.69,
+      "matchId": "ba_designation_zixa3m7r637bilazb3yqy4mqka",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_zixa3m7r637bilazb3yqy4mqka/clos-du-verseuil",
+      "bounds": [
+        4.782095,
+        46.998048,
+        4.783631,
+        46.999167
+      ],
+      "labelPoint": [
+        4.782917,
+        46.998617
+      ]
+    },
+    {
+      "id": "inao-denom-1240",
+      "name": "En Chevret",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 240,
+      "denominationId": 1240,
+      "sourceName": "Volnay premier cru En Chevret",
+      "communes": [
+        "21712"
+      ],
+      "areaHa": 6.12,
+      "matchId": "ba_designation_35ust2zzetxvkd2c4yn46frtxi",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_35ust2zzetxvkd2c4yn46frtxi/en-chevret",
+      "bounds": [
+        4.779048,
+        46.990724,
+        4.783071,
+        46.993807
+      ],
+      "labelPoint": [
+        4.781372,
+        46.992279
+      ]
+    },
+    {
+      "id": "inao-denom-1242",
+      "name": "Frémiets",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 240,
+      "denominationId": 1242,
+      "sourceName": "Volnay premier cru Frémiets",
+      "communes": [
+        "21712"
+      ],
+      "areaHa": 5.89,
+      "matchId": "ba_designation_4i7kasxomnlauwposdurz5kzqu",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_4i7kasxomnlauwposdurz5kzqu/fremiets",
+      "bounds": [
+        4.784066,
+        47.002543,
+        4.79,
+        47.004786
+      ],
+      "labelPoint": [
+        4.786184,
+        47.00362
+      ]
+    },
+    {
+      "id": "inao-denom-1243",
+      "name": "Frémiets - Clos de la Rougeotte",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 240,
+      "denominationId": 1243,
+      "sourceName": "Volnay premier cru Frémiets - Clos de la Rougeotte",
+      "communes": [
+        "21712"
+      ],
+      "areaHa": 1.52,
+      "matchId": "ba_designation_66wph75nuazztrmrl6kkekjx5i",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_66wph75nuazztrmrl6kkekjx5i/fremiets-clos-de-la-rougeotte",
+      "bounds": [
+        4.783628,
+        47.002181,
+        4.786777,
+        47.003434
+      ],
+      "labelPoint": [
+        4.784843,
+        47.002797
+      ]
+    },
+    {
+      "id": "inao-denom-1244",
+      "name": "La Gigotte",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 240,
+      "denominationId": 1244,
+      "sourceName": "Volnay premier cru La Gigotte",
+      "communes": [
+        "21712"
+      ],
+      "areaHa": 0.54,
+      "matchId": "ba_designation_qdmonpea22m7xfmwyhqgtsbkze",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_qdmonpea22m7xfmwyhqgtsbkze/la-gigotte",
+      "bounds": [
+        4.787412,
+        46.99679,
+        4.788783,
+        46.997667
+      ],
+      "labelPoint": [
+        4.788042,
+        46.997231
+      ]
+    },
+    {
+      "id": "inao-denom-1245",
+      "name": "Lassolle",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 240,
+      "denominationId": 1245,
+      "sourceName": "Volnay premier cru Lassolle",
+      "communes": [
+        "21712"
+      ],
+      "areaHa": 0.22,
+      "matchId": "ba_designation_w6iluyqz622hlidtw5qorimm2e",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_w6iluyqz622hlidtw5qorimm2e/lassolle",
+      "bounds": [
+        4.779464,
+        47.002391,
+        4.780128,
+        47.002963
+      ],
+      "labelPoint": [
+        4.779796,
+        47.002656
+      ]
+    },
+    {
+      "id": "inao-denom-1246",
+      "name": "Le Ronceret",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 240,
+      "denominationId": 1246,
+      "sourceName": "Volnay premier cru Le Ronceret",
+      "communes": [
+        "21712"
+      ],
+      "areaHa": 3.61,
+      "matchId": "ba_designation_bx7wd5mf4zv2pspqamgioe2piy",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_bx7wd5mf4zv2pspqamgioe2piy/le-ronceret",
+      "bounds": [
+        4.783655,
+        46.992986,
+        4.78685,
+        46.99628
+      ],
+      "labelPoint": [
+        4.785239,
+        46.994622
+      ]
+    },
+    {
+      "id": "inao-denom-1247",
+      "name": "Le Village",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 240,
+      "denominationId": 1247,
+      "sourceName": "Volnay premier cru Le Village",
+      "communes": [
+        "21712"
+      ],
+      "areaHa": 3.01,
+      "matchId": "ba_designation_en5nneqzkhh7hejbdfukwrhama",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_en5nneqzkhh7hejbdfukwrhama/le-village",
+      "bounds": [
+        4.778979,
+        46.999509,
+        4.784878,
+        47.002903
+      ],
+      "labelPoint": [
+        4.783695,
+        47.000766
+      ]
+    },
+    {
+      "id": "inao-denom-1248",
+      "name": "Les Angles",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 240,
+      "denominationId": 1248,
+      "sourceName": "Volnay premier cru Les Angles",
+      "communes": [
+        "21712"
+      ],
+      "areaHa": 4.56,
+      "matchId": "ba_designation_nvli3plqkbq4sof2a36vszri7i",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_nvli3plqkbq4sof2a36vszri7i/les-angles",
+      "bounds": [
+        4.78446,
+        47.000372,
+        4.789505,
+        47.002932
+      ],
+      "labelPoint": [
+        4.785907,
+        47.001558
+      ]
+    },
+    {
+      "id": "inao-denom-1250",
+      "name": "Les Brouillards",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 240,
+      "denominationId": 1250,
+      "sourceName": "Volnay premier cru Les Brouillards",
+      "communes": [
+        "21712"
+      ],
+      "areaHa": 5.62,
+      "matchId": "ba_designation_xv2cglz2k7pzl3kgxn3yr3uxgm",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_xv2cglz2k7pzl3kgxn3yr3uxgm/les-brouillards",
+      "bounds": [
+        4.786542,
+        47.000368,
+        4.791418,
+        47.003288
+      ],
+      "labelPoint": [
+        4.7895,
+        47.001805
+      ]
+    },
+    {
+      "id": "inao-denom-1251",
+      "name": "Les Caillerets",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 240,
+      "denominationId": 1251,
+      "sourceName": "Volnay premier cru Les Caillerets",
+      "communes": [
+        "21712"
+      ],
+      "areaHa": 12.1,
+      "matchId": "ba_designation_nhaxh4wngj6abfex7dcvowttke",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_nhaxh4wngj6abfex7dcvowttke/les-caillerets",
+      "bounds": [
+        4.775072,
+        46.990736,
+        4.783669,
+        46.995521
+      ],
+      "labelPoint": [
+        4.782295,
+        46.993527
+      ]
+    },
+    {
+      "id": "inao-denom-1252",
+      "name": "Clos des 60 ouvrées",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 240,
+      "denominationId": 1252,
+      "sourceName": "Volnay premier cru Clos des 60 ouvrées",
+      "communes": [
+        "21712"
+      ],
+      "areaHa": 2.38,
+      "matchId": "ba_designation_p4cidryel22feenx7m2kfbucc4",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_p4cidryel22feenx7m2kfbucc4/clos-des-60-ouvrees",
+      "bounds": [
+        4.775117,
+        46.991221,
+        4.777649,
+        46.993457
+      ],
+      "labelPoint": [
+        4.776344,
+        46.992245
+      ]
+    },
+    {
+      "id": "inao-denom-1254",
+      "name": "Les Lurets",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 240,
+      "denominationId": 1254,
+      "sourceName": "Volnay premier cru Les Lurets",
+      "communes": [
+        "21712"
+      ],
+      "areaHa": 2.07,
+      "matchId": "ba_designation_ey4s3eumni6maozvnirnk5qtp4",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_ey4s3eumni6maozvnirnk5qtp4/les-lurets",
+      "bounds": [
+        4.783074,
+        46.991701,
+        4.785379,
+        46.993667
+      ],
+      "labelPoint": [
+        4.784268,
+        46.992667
+      ]
+    },
+    {
+      "id": "inao-denom-1255",
+      "name": "Les Mitans",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 240,
+      "denominationId": 1255,
+      "sourceName": "Volnay premier cru Les Mitans",
+      "communes": [
+        "21712"
+      ],
+      "areaHa": 8.58,
+      "matchId": "ba_designation_ovrluqoskqmwkm7wavomwaq7su",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_ovrluqoskqmwkm7wavomwaq7su/les-mitans",
+      "bounds": [
+        4.785106,
+        46.997529,
+        4.790538,
+        47.000602
+      ],
+      "labelPoint": [
+        4.787451,
+        46.9989
+      ]
+    },
+    {
+      "id": "inao-denom-1256",
+      "name": "Pitures Dessus",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 240,
+      "denominationId": 1256,
+      "sourceName": "Volnay premier cru Pitures Dessus",
+      "communes": [
+        "21712"
+      ],
+      "areaHa": 6.74,
+      "matchId": "ba_designation_ifpzubfc2telfr4foixbh53kxe",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_ifpzubfc2telfr4foixbh53kxe/pitures-dessus",
+      "bounds": [
+        4.780859,
+        47.002629,
+        4.785974,
+        47.005938
+      ],
+      "labelPoint": [
+        4.783113,
+        47.004292
+      ]
+    },
+    {
+      "id": "inao-denom-1258",
+      "name": "Robardelle",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 240,
+      "denominationId": 1258,
+      "sourceName": "Volnay premier cru Robardelle",
+      "communes": [
+        "21712"
+      ],
+      "areaHa": 2.92,
+      "matchId": "ba_designation_4ww4y2gtejgmy6asunle2bpmvq",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_4ww4y2gtejgmy6asunle2bpmvq/robardelle",
+      "bounds": [
+        4.781729,
+        46.990435,
+        4.784832,
+        46.992746
+      ],
+      "labelPoint": [
+        4.78361,
+        46.991588
+      ]
+    },
+    {
+      "id": "inao-denom-1259",
+      "name": "Santenots",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 240,
+      "denominationId": 1259,
+      "sourceName": "Volnay premier cru Santenots",
+      "communes": [
+        "21412"
+      ],
+      "areaHa": 29.01,
+      "matchId": "ba_designation_35g5ubjlbibkfi5y7k3ebwfyvm",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_35g5ubjlbibkfi5y7k3ebwfyvm/santenots",
+      "bounds": [
+        4.771174,
+        46.985315,
+        4.784499,
+        46.990952
+      ],
+      "labelPoint": [
+        4.774175,
+        46.987241
+      ]
+    },
+    {
+      "id": "inao-denom-1260",
+      "name": "Taille Pieds",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 240,
+      "denominationId": 1260,
+      "sourceName": "Volnay premier cru Taille Pieds",
+      "communes": [
+        "21712"
+      ],
+      "areaHa": 7.16,
+      "matchId": "ba_designation_ihlufgg6zgf7ctfu2iqfe6ias4",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_ihlufgg6zgf7ctfu2iqfe6ias4/taille-pieds",
+      "bounds": [
+        4.777697,
+        46.996105,
+        4.783105,
+        46.999304
+      ],
+      "labelPoint": [
+        4.781347,
+        46.997533
+      ]
+    },
+    {
+      "id": "inao-denom-1261",
+      "name": "Volnay Premier Cru",
+      "tier": "premier_cru",
+      "kind": "appellation",
+      "appellationId": 240,
+      "denominationId": 1261,
+      "sourceName": "Volnay premier cru",
+      "communes": [
+        "21412",
+        "21712"
+      ],
+      "areaHa": 143.3,
+      "matchId": "ba_appellation_ddo4swcxigspawdflopzev4zny",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_ddo4swcxigspawdflopzev4zny/volnay-premier-cru",
+      "bounds": [
+        4.771174,
+        46.985315,
+        4.791418,
+        47.005938
+      ],
+      "labelPoint": [
+        4.781586,
+        46.99459
+      ]
+    }
+  ]
+}
