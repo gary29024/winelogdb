@@ -3,13 +3,14 @@ import { burgundyAtlasWineDetailPlace,burgundyLocalAppellationMapIdentity,burgun
 import { producerMapLocation } from './burgundyProducerLocations';
 import registry from './burgundyVillageMapRegistry.json';
 import { burgundyGrandCruMapIdentity } from './burgundyGrandCruClimats';
+import { burgundyRegionalMapTarget } from './burgundyRegionalMap';
 
 export type VillageMapFeature={
  id:string;name:string;tier:string;kind:string;appellationId:number;denominationId:number|null;denominationIds?:number[];
  sourceName:string;communes:string[];areaHa:number;matchId:string;atlasUrl:string|null;bounds:number[];labelPoint:number[];parentAppellation?:string;coverage?:string;
 };
 export type VillageMapCatalogue={
- id:string;name:string;region:string;communes:{id:string;name:string}[];dataUrl:string;bounds:number[];
+ id:string;name:string;region:string;mapKind?:string;communes:{id:string;name:string;bounds?:number[];labelPoint?:number[]}[];dataUrl:string;bounds:number[];
  sources:{name:string;date:string;url:string;sha256:string;license:string}[];
  notes:Record<string,{note:string;paintedBy?:string;sameBoundaryAs?:string}>;features:VillageMapFeature[];coverageNote?:string;
  // Premier Crus lying inside a wider Premier Cru name, keyed by the wider one.
@@ -17,7 +18,7 @@ export type VillageMapCatalogue={
  // Separate parts of one appellation, each with its own zoom button and map label.
  areas?:{id:string;label:string;name:string;bounds:number[]}[];
 };
-export type BurgundyVillageMapTarget={villageId:string;villageName:string;region:string;featureId:string;name:string;scope:'vineyard'|'appellation';
+export type BurgundyVillageMapTarget={villageId:string;villageName:string;region:string;featureId:string;name:string;scope:'vineyard'|'appellation';mapKind?:'regional';
  locationContext?:{note:string;sourceUrl:string;selectionId?:string;name?:string;featureIds?:string[];approximateOutline?:'la-moutonne'}};
 
 // Only this small identity index joins wine details. Per-village metadata and
@@ -38,6 +39,8 @@ type MapWine=WineFacts&{classification?:string|null;wineStyle?:string|null};
 /** Reuse the reviewed geographic/tier conflict checks. INAO identities, not
  * Atlas URLs, select geometry; the catalogue crosswalk is checked at build time. */
 export function burgundyVillageMapTarget(wine:MapWine):BurgundyVillageMapTarget|null{
+ const regional=burgundyRegionalMapTarget(wine);
+ if(regional!==undefined)return regional;
  // Santenots lies in Meursault, but its red wine is Volnay Premier Cru:
  // Meursault's own Santenots designations are white only. A red wine recorded
  // as Meursault Santenots is shown on Volnay's map, whose note explains this.

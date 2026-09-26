@@ -1,6 +1,60 @@
 import { test,expect,type Locator,type Page } from '@playwright/test';
 import { wine } from './fixtures/layoutWine';
 
+for(const route of ['/wines/layout-wine','/shared/layout-wine'])for(const [appellation,count,commune] of [
+ ['Bourgogne Côte d’Or',40,'Dijon'],
+ ['Bourgogne Hautes Côtes de Nuits',19,'Arcenant'],
+ ['Bourgogne Hautes Côtes de Beaune',29,'Nolay'],
+] as const){
+ test(`Regional map ${appellation} ${route}: full overview, commune navigation and broad scope`,async({page},testInfo)=>{
+  await page.setViewportSize({width:320,height:900});
+  await setup(page,{appellation,wineName:'A named cuvée',classification:null,region:'Burgundy',colour:'White',wineStyle:'white',productType:'Wine',productSubtype:'Still'});
+  const downloads:string[]=[];
+  page.on('request',request=>{if(request.url().includes('/maps/'))downloads.push(request.url())});
+  await page.goto(route);await page.evaluate(()=>document.fonts.ready);
+  expect(downloads).toEqual([]);
+  await page.getByRole('button',{name:'View regional map'}).click();
+  const dialog=page.getByRole('dialog',{name:appellation,exact:true});
+  await expect(dialog.getByRole('button',{name:'Region view',exact:true})).toBeEnabled();
+  const requestsAfterOpen=downloads.length;
+  await expect(dialog.getByRole('combobox',{name:'Zoom to a commune'})).toHaveValue('');
+  await expect(dialog.getByRole('option')).toHaveCount(count+1);
+  await expect(dialog.locator('.village-map-context')).toHaveText(`Regional denomination · ${count} communes`);
+  await expect(dialog.locator('.village-map-tier')).toHaveText('Regional denomination');
+  await expect(dialog.locator('.village-map-description')).toContainText('no single vineyard is identified');
+  await expect(dialog.locator('.village-map-legend')).not.toContainText('Village appellation');
+  await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toHaveCount(0);
+  await expect(dialog.locator('.village-map-selected-label')).toHaveCount(0);
+  // Rendered offline commune markers give an independent viewport check. The
+  // overview must contain every production anchor, including north and south.
+  const positions=()=>dialog.locator('.village-map-commune-name').evaluateAll(elements=>{
+   const canvas=elements[0].closest('.village-map-canvas')!.getBoundingClientRect();
+   return elements.map(element=>{const b=element.getBoundingClientRect();return {x:b.x+b.width/2-canvas.x,y:b.y+b.height/2-canvas.y,width:canvas.width,height:canvas.height}});
+  });
+  await expect.poll(async()=>{
+   const points=await positions();return points.length===count&&points.every(p=>p.x>=0&&p.x<=p.width&&p.y>=0&&p.y<=p.height);
+  }).toBe(true);
+  await dialog.getByRole('combobox').selectOption({label:commune});
+  await expect.poll(async()=>{const points=await positions();return points.some(p=>p.x<0||p.x>p.width||p.y<0||p.y>p.height)}).toBe(true);
+  await expect(dialog.getByRole('heading',{name:appellation,exact:true})).toHaveCount(2);
+  await expect(dialog.locator('.village-map-description')).toContainText('Regional production area shown');
+  await dialog.getByRole('button',{name:'Region view',exact:true}).click();
+  await expect(dialog.getByRole('combobox')).toHaveValue('');
+  await expect.poll(async()=>{const points=await positions();return points.every(p=>p.x>=0&&p.x<=p.width&&p.y>=0&&p.y<=p.height)}).toBe(true);
+  // React StrictMode may abort/retry the initial request in development.
+  // Navigation must neither fetch another map nor restart this download.
+  expect([...new Set(downloads)]).toHaveLength(1);
+  expect(downloads).toHaveLength(requestsAfterOpen);
+  expect(await dialog.evaluate(el=>el.scrollWidth<=el.clientWidth)).toBe(true);
+  await page.screenshot({path:testInfo.outputPath('regional-overview-320.png')});
+  await page.setViewportSize({width:1280,height:900});
+  await dialog.getByRole('button',{name:'Region view',exact:true}).click();
+  await page.screenshot({path:testInfo.outputPath('regional-overview-desktop.png')});
+  await page.keyboard.press('Escape');
+  await expect(page.getByRole('button',{name:'View regional map'})).toBeFocused();
+ });
+}
+
 async function setup(page:Page,overrides:Record<string,unknown>={}){
  await page.route('**/api/**',async route=>{
   const path=new URL(route.request().url()).pathname;

@@ -48,6 +48,7 @@
 .village-map-tier{display:inline-block;padding:3px 10px;border:1px solid var(--warn-line);border-radius:var(--r-pill,999px);background:var(--warn-wash);color:var(--warn);font-size:.72rem;font-weight:650}
 .village-map-tier.map-tier-grand_cru{font-weight:750}
 .village-map-tier.map-tier-village{border-color:var(--line);background:var(--ground);color:var(--ink-6)}
+.village-map-tier.map-tier-regional{border-color:var(--line);background:var(--ground);color:var(--ink-6)}
 .village-map-sidebar{min-width:0;padding:20px;border-left:1px solid var(--line)}
 .village-map-sidebar>label{display:block;margin-bottom:7px;font-size:.72rem;font-weight:700;color:var(--ink-6)}
 .village-map-sidebar select{width:100%;min-height:44px;border:1px solid var(--line);border-radius:var(--r-sm,7px);padding:8px;background:var(--ground);color:var(--ink);font:inherit;font-size:.8rem}

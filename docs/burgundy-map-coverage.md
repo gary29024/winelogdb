@@ -15,7 +15,8 @@ inventory is the denominator, not the current list of supported Atlas pages.
 Reviewed 26 September 2026 against the
 [BIVB appellation list](https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/bourgogne-an-ideal-location,2458,9253.html?args=Y29tcF9pZD0yMjc4JmFjdGlvbj12aWV3RnVsbExpc3RlJmlkPSZ8)
 and the pinned INAO boundary snapshot documented in [the map guide](burgundy-village-map.md).
-Beaujolais has its own appellation system and is outside this Bourgogne inventory.
+Beaujolais's own appellations are outside this inventory. Shared regional AOCs
+retain their full official extent, including any producing communes there.
 
 ## Village coverage
 
@@ -66,8 +67,8 @@ boundaries, Givry lacks Le Vernoy, and village lieux-dits need separate sources.
 - [x] Côte de Beaune: its full source area in Beaune, distinct from the subregion and the Beaune appellation
 - [x] Côte de Beaune-Villages: all 16 producing communes, red-only, with a local identity and four area zoom controls
 
-All five regional village inventories are now mapped. Next is the regional AOC
-inventory, alongside the named-boundary gaps below. A completed village inventory
+All five regional village inventories are now mapped. The regional AOC inventory
+is now tracked separately, alongside the named-boundary gaps below. A completed village inventory
 does not imply that every named plot has geometry.
 
 ### Côte Chalonnaise — mapped, with a Givry source gap
@@ -114,11 +115,22 @@ count once despite appearing in several village maps.
 - [x] Corton (24 named source denominations), Corton-Charlemagne and Charlemagne
 - [x] Chablis Grand Cru and its seven named climats; La Moutonne alone has a dashed, approximate producer outline, separate from official boundaries
 
-Regional coverage remains pending. Track all seven regional AOCs: Bourgogne,
+The reviewed inventory in `scripts/burgundy-regional-map-coverage.json` tracks
+all seven regional AOCs: Bourgogne,
 Bourgogne Aligoté, Bourgogne Mousseux, Bourgogne Passe-tout-grains, Coteaux
 Bourguignons, Crémant de Bourgogne and Mâcon. This includes the Hautes Côtes,
 Couchois, Châtillonnais and northern wine areas; they must not disappear from
-the plan because they lack a village AOC.
+the plan because they lack a village AOC. See the
+[regional map guide](burgundy-regional-maps.md) for sources, matching and reproduction.
+
+- [x] Bourgogne Côte d’Or: all 40 producing communes; red/white
+- [x] Bourgogne Hautes Côtes de Nuits: all 19 communes; red/white/rosé
+- [x] Bourgogne Hautes Côtes de Beaune: all 29 communes; red/white/rosé
+
+These are three geographic denominations within Bourgogne AOC, not three new
+AOCs or village maps. **Three of 49 regional source denominations are mapped.**
+The seven broad regional denominations, 11 other Bourgogne geographic
+denominations, Mâcon-Villages and 27 named Mâcon denominations remain pending.
 
 Within Bourgogne, review all 14 geographic denominations present in the pinned
 snapshot: Chitry, Côte Chalonnaise, Côte d'Or, Côte Saint-Jacques, Côtes d'Auxerre,

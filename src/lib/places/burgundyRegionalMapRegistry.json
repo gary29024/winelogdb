@@ -1,0 +1,132 @@
+{
+  "maps": [
+    {
+      "id": "bourgogne-cote-dor",
+      "name": "Bourgogne Côte d’Or",
+      "region": "Côte d’Or",
+      "aliases": [
+        "Bourgogne Côte d’Or"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Côte d’Or",
+        "Côte d’Or",
+        "Côte de Nuits",
+        "Côte de Beaune"
+      ],
+      "wineColours": [
+        "red",
+        "white"
+      ],
+      "featureId": "inao-denom-2840"
+    },
+    {
+      "id": "bourgogne-hautes-cotes-de-nuits",
+      "name": "Bourgogne Hautes Côtes de Nuits",
+      "region": "Hautes Côtes de Nuits",
+      "aliases": [
+        "Bourgogne Hautes Côtes de Nuits",
+        "Hautes Côtes de Nuits"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Côte d’Or",
+        "Hautes Côtes de Nuits",
+        "Côte de Nuits"
+      ],
+      "wineColours": [
+        "red",
+        "white",
+        "rose"
+      ],
+      "featureId": "inao-denom-364"
+    },
+    {
+      "id": "bourgogne-hautes-cotes-de-beaune",
+      "name": "Bourgogne Hautes Côtes de Beaune",
+      "region": "Hautes Côtes de Beaune",
+      "aliases": [
+        "Bourgogne Hautes Côtes de Beaune",
+        "Hautes Côtes de Beaune"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Côte d’Or",
+        "Hautes Côtes de Beaune",
+        "Côte de Beaune"
+      ],
+      "wineColours": [
+        "red",
+        "white",
+        "rose"
+      ],
+      "featureId": "inao-denom-363"
+    }
+  ],
+  "otherAppellations": [
+    "Bourgogne Aligoté",
+    "Bourgogne Chitry",
+    "Bourgogne Coulanges-la-Vineuse",
+    "Bourgogne Côte Chalonnaise",
+    "Bourgogne Côte Saint-Jacques",
+    "Bourgogne Côtes d'Auxerre",
+    "Bourgogne Côtes du Couchois",
+    "Bourgogne Epineuil",
+    "Bourgogne La Chapelle Notre-Dame",
+    "Bourgogne Le Chapitre",
+    "Bourgogne Montrecul ou Montre-Cul ou En Montre-Cul",
+    "Bourgogne Mousseux",
+    "Bourgogne Passe-tout-grains",
+    "Bourgogne Tonnerre",
+    "Bourgogne aligoté",
+    "Bourgogne mousseux",
+    "Coteaux Bourguignons",
+    "Coteaux Bourguignons ou Bourgogne grand ordinaire ou Bourgogne ordinaire",
+    "Crémant de Bourgogne",
+    "Mâcon",
+    "Mâcon - rouge exclusif",
+    "Mâcon Azé",
+    "Mâcon Azé - rouge exclusif",
+    "Mâcon Bray",
+    "Mâcon Bray - rouge exclusif",
+    "Mâcon Burgy",
+    "Mâcon Bussières",
+    "Mâcon Chaintré",
+    "Mâcon Chaintré - rouge exclusif",
+    "Mâcon Chardonnay",
+    "Mâcon Charnay-lès-Mâcon",
+    "Mâcon Cruzille",
+    "Mâcon Cruzille - rouge exclusif",
+    "Mâcon Davayé",
+    "Mâcon Fuissé",
+    "Mâcon Fuissé - blanc exclusif",
+    "Mâcon Igé",
+    "Mâcon La Roche-Vineuse",
+    "Mâcon La Roche-Vineuse - rouge exclusif",
+    "Mâcon Loché",
+    "Mâcon Lugny",
+    "Mâcon Lugny - rouge exclusif",
+    "Mâcon Mancey",
+    "Mâcon Mancey - rouge exclusif",
+    "Mâcon Milly-Lamartine",
+    "Mâcon Milly-Lamartine - rouge exclusif",
+    "Mâcon Montbellet",
+    "Mâcon Pierreclos",
+    "Mâcon Prissé",
+    "Mâcon Prissé - rouge exclusif",
+    "Mâcon Péronne",
+    "Mâcon Saint-Gengoux-le-National",
+    "Mâcon Saint-Gengoux-le-National - rouge exclusif",
+    "Mâcon Serrières",
+    "Mâcon Solutré-Pouilly",
+    "Mâcon Uchizy",
+    "Mâcon Vergisson",
+    "Mâcon Verzé",
+    "Mâcon Villages",
+    "Mâcon Villages (Blanc)",
+    "Mâcon Vinzelles"
+  ]
+}

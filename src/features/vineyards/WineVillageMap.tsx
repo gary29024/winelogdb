@@ -13,6 +13,7 @@ class MapBoundary extends Component<{children:ReactNode},{failed:boolean}>{
 }
 
 export function WineVillageMap({target}:{target:BurgundyVillageMapTarget}){
+ const mapName=target.mapKind==='regional'?'regional map':'village map';
  const [open,setOpen]=useState(false);
  const dialog=useRef<HTMLDivElement>(null),opener=useRef<HTMLButtonElement>(null);
  const title=useId();
@@ -20,12 +21,12 @@ export function WineVillageMap({target}:{target:BurgundyVillageMapTarget}){
  return <>
   <button type="button" ref={opener} className="wine-village-map-button" onClick={()=>setOpen(true)} aria-haspopup="dialog">
    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><path d="m3 5 6-2 6 2 6-2v16l-6 2-6-2-6 2V5Zm6-2v16m6-14v16"/></svg>
-   View village map
+   View {mapName}
   </button>
   {open&&createPortal(<div className="village-map-backdrop" onClick={event=>{if(event.target===event.currentTarget)setOpen(false)}}>
    <div className="village-map-dialog" ref={dialog} role="dialog" aria-modal="true" aria-labelledby={title} tabIndex={-1}>
-    <header className="village-map-header"><div><p>BURGUNDY · {target.region.toLocaleUpperCase('en')}</p><h2 id={title}>{target.villageName}</h2></div><button type="button" className="village-map-close" aria-label="Close village map" onClick={()=>setOpen(false)}>×</button></header>
-    <MapBoundary><Suspense fallback={<p className="village-map-message" role="status">Loading village map…</p>}><VillageMap key={`${target.villageId}:${target.locationContext?.selectionId??target.featureId}`} target={target}/></Suspense></MapBoundary>
+    <header className="village-map-header"><div><p>BURGUNDY · {target.region.toLocaleUpperCase('en')}</p><h2 id={title}>{target.villageName}</h2></div><button type="button" className="village-map-close" aria-label={`Close ${mapName}`} onClick={()=>setOpen(false)}>×</button></header>
+    <MapBoundary><Suspense fallback={<p className="village-map-message" role="status">Loading {mapName}…</p>}><VillageMap key={`${target.villageId}:${target.locationContext?.selectionId??target.featureId}`} target={target}/></Suspense></MapBoundary>
    </div>
   </div>,document.body)}
  </>;
