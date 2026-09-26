@@ -1,6 +1,6 @@
 {
   "sharedDefaults": {"361": "chambolle-musigny", "273": "puligny-montrachet", "927": "puligny-montrachet", "476": "aloxe-corton", "549": "aloxe-corton", "550": "aloxe-corton", "2348": "aloxe-corton", "2349": "aloxe-corton", "2350": "aloxe-corton", "2351": "aloxe-corton", "2352": "aloxe-corton", "2353": "aloxe-corton", "2354": "aloxe-corton", "2355": "aloxe-corton", "2356": "aloxe-corton", "2357": "aloxe-corton", "2358": "aloxe-corton", "2359": "aloxe-corton", "2360": "aloxe-corton", "2361": "aloxe-corton", "2362": "aloxe-corton", "2363": "aloxe-corton", "2364": "aloxe-corton", "2365": "aloxe-corton", "2366": "aloxe-corton", "2367": "aloxe-corton", "2368": "aloxe-corton", "2369": "aloxe-corton", "2370": "aloxe-corton", "2371": "aloxe-corton"},
-  "grandCruClimats": [{"name": "Corton", "appellationId": 165, "broadDenomination": 549, "denominationRange": [2348, 2371], "aliases": {"Le Rognet et Corton": ["Le Rognet", "Rognet"]}, "note": "One of the named vineyards within the Corton Grand Cru, not a Grand Cru of its own. Its named boundary is for red wine; a white Corton shows the whole Corton area instead."}],
+  "grandCruClimats": [{"name": "Corton", "appellationId": 165, "broadDenomination": 549, "denominationRange": [2348, 2371], "aliases": {"Le Rognet et Corton": ["Le Rognet", "Rognet"]}, "note": "One of the named vineyards within the Corton Grand Cru, not a Grand Cru of its own. Its named boundary is for red wine; a white Corton shows the whole Corton area instead."}, {"name": "Chablis Grand Cru", "appellationId": 147, "broadDenomination": 439, "denominationRange": [440, 446], "namedWineColours": ["white"], "requiresGrandCruEvidence": true, "unmappedNames": ["La Moutonne"], "aliases": {"Preuses": ["Les Preuses"], "Blanchot": ["Les Blanchots"], "Vaudésir": ["Les Vaudésirs"]}, "note": "One of the seven named climats within the Chablis Grand Cru appellation. The highlight shows the whole official climat, not an individual producer’s holding or cuvée subdivision."}],
   "villages": [
     {
       "id": "gevrey-chambertin",
@@ -1815,6 +1815,402 @@
       "villageAreaDenominations": {
         "1593": "Viré-Clessé (named-climat area)"
       }
+    },
+    {
+      "id": "chablis",
+      "name": "Chablis",
+      "region": "Chablis & Grand Auxerrois",
+      "appellationId": 146,
+      "villageDenomination": 397,
+      "grands": [
+        439,
+        440,
+        441,
+        442,
+        443,
+        444,
+        445,
+        446
+      ],
+      "communes": [
+        {
+          "id": "89034",
+          "name": "Beine"
+        },
+        {
+          "id": "89039",
+          "name": "Béru"
+        },
+        {
+          "id": "89068",
+          "name": "Chablis"
+        },
+        {
+          "id": "89081",
+          "name": "La Chapelle-Vaupelteigne"
+        },
+        {
+          "id": "89095",
+          "name": "Chemilly-sur-Serein"
+        },
+        {
+          "id": "89104",
+          "name": "Chichée"
+        },
+        {
+          "id": "89112",
+          "name": "Collan"
+        },
+        {
+          "id": "89123",
+          "name": "Courgis"
+        },
+        {
+          "id": "89168",
+          "name": "Fleys"
+        },
+        {
+          "id": "89175",
+          "name": "Fontenay-près-Chablis"
+        },
+        {
+          "id": "89226",
+          "name": "Lignorelles"
+        },
+        {
+          "id": "89227",
+          "name": "Ligny-le-Châtel"
+        },
+        {
+          "id": "89242",
+          "name": "Maligny"
+        },
+        {
+          "id": "89303",
+          "name": "Poilly-sur-Serein"
+        },
+        {
+          "id": "89315",
+          "name": "Préhy"
+        },
+        {
+          "id": "89477",
+          "name": "Villy"
+        },
+        {
+          "id": "89482",
+          "name": "Viviers"
+        }
+      ],
+      "catalogueFile": "chablisVillageMapCatalogue.json",
+      "nameCrosswalk": {},
+      "notes": {
+        "inao-denom-397": {
+          "note": "The full Chablis production area spans 17 current communes. Fyé, Milly and Poinchy are now part of Chablis."
+        },
+        "inao-denom-414": {
+          "note": "Partial boundary only: the source covers La Chapelle-Vaupelteigne, Fontenay-près-Chablis and Maligny, but omits the Chablis-Poinchy part of Fourchaume. A Fourchaume wine opens on the broad Premier Cru area."
+        },
+        "inao-denom-420": {
+          "note": "Partial boundary only: the source covers the Fleys part of Mont de Milieu, but omits its Fyé part in Chablis. A Mont de Milieu wine opens on the broad Premier Cru area."
+        },
+        "inao-denom-438": {
+          "note": "The broad Premier Cru production area includes land whose named climat boundary is missing or incomplete. No individual vineyard is inferred for those wines."
+        },
+        "inao-denom-439": {
+          "note": "Chablis Grand Cru is one appellation with seven named climats. La Moutonne spans parts of Vaudésir and Les Preuses; its separate boundary is unavailable, so its wines retain this broad Grand Cru view."
+        }
+      },
+      "expectedBounds": [
+        3.5,
+        47.4,
+        4.0,
+        48.0
+      ],
+      "wineColours": [
+        "white"
+      ],
+      "premierDenomination": 438,
+      "premierDenominations": [
+        404,
+        408,
+        414,
+        416,
+        418,
+        420,
+        432,
+        433,
+        435,
+        437
+      ],
+      "overviewDenominations": [438],
+      "incompleteDenominations": [
+        414,
+        420
+      ],
+      "unionOverviewFills": true,
+      "unmappedPremierNames": [
+        "Beauroy",
+        "Berdiot",
+        "Beugnons",
+        "Butteaux",
+        "Chapelot",
+        "Chatains",
+        "Côte de Bréchain",
+        "Côte de Cuisy",
+        "Côte de Fontenay",
+        "Côte de Léchet",
+        "Côte de Savant",
+        "Côte de Vaubarousse",
+        "Côte des Prés-Girots",
+        "Forêts",
+        "L'Homme Mort",
+        "les Épinottes",
+        "Les Lys",
+        "Mélinots",
+        "Montée de Tonnerre",
+        "Montmains",
+        "Morein",
+        "Pied d'Aloup",
+        "Roncières",
+        "Sécher",
+        "Troesmes",
+        "Vaillons",
+        "Vau de Vey",
+        "Vau Ligneau",
+        "Vaulorent",
+        "Vaux Ragons"
+      ],
+      "displayNames": {
+        "Chablis Grand Cru Blanchot": "Blanchot",
+        "Chablis Grand Cru Bougros": "Bougros",
+        "Chablis Grand Cru Grenouilles": "Grenouilles",
+        "Chablis Grand Cru Les Clos": "Les Clos",
+        "Chablis Grand Cru Preuses": "Les Preuses",
+        "Chablis Grand Cru Valmur": "Valmur",
+        "Chablis Grand Cru Vaudésir": "Vaudésir"
+      },
+      "coverageNote": "Chablis has 40 Premier Cru climats. This map has eight named boundaries and partial coverage of Fourchaume and Mont de Milieu; 30 named boundaries are unavailable. Wines from missing or partial areas show the broad Premier Cru area. All seven Grand Cru climats are mapped; producer holdings and La Moutonne have no separate boundary."
+    },
+    {
+      "id": "petit-chablis",
+      "name": "Petit Chablis",
+      "region": "Chablis & Grand Auxerrois",
+      "appellationId": 214,
+      "villageDenomination": 1024,
+      "grands": [],
+      "communes": [
+        {
+          "id": "89034",
+          "name": "Beine"
+        },
+        {
+          "id": "89039",
+          "name": "Béru"
+        },
+        {
+          "id": "89068",
+          "name": "Chablis"
+        },
+        {
+          "id": "89081",
+          "name": "La Chapelle-Vaupelteigne"
+        },
+        {
+          "id": "89095",
+          "name": "Chemilly-sur-Serein"
+        },
+        {
+          "id": "89104",
+          "name": "Chichée"
+        },
+        {
+          "id": "89112",
+          "name": "Collan"
+        },
+        {
+          "id": "89123",
+          "name": "Courgis"
+        },
+        {
+          "id": "89168",
+          "name": "Fleys"
+        },
+        {
+          "id": "89175",
+          "name": "Fontenay-près-Chablis"
+        },
+        {
+          "id": "89226",
+          "name": "Lignorelles"
+        },
+        {
+          "id": "89227",
+          "name": "Ligny-le-Châtel"
+        },
+        {
+          "id": "89242",
+          "name": "Maligny"
+        },
+        {
+          "id": "89303",
+          "name": "Poilly-sur-Serein"
+        },
+        {
+          "id": "89315",
+          "name": "Préhy"
+        },
+        {
+          "id": "89477",
+          "name": "Villy"
+        },
+        {
+          "id": "89482",
+          "name": "Viviers"
+        }
+      ],
+      "catalogueFile": "petitChablisVillageMapCatalogue.json",
+      "nameCrosswalk": {},
+      "notes": {
+        "inao-denom-1024": {
+          "note": "The full Petit Chablis production area spans 17 current communes. Official eligibility areas can overlap other Chablis tiers; no area has been subtracted to make the map disjoint."
+        }
+      },
+      "expectedBounds": [
+        3.5,
+        47.4,
+        4.0,
+        48.0
+      ],
+      "wineColours": [
+        "white"
+      ]
+    },
+    {
+      "id": "irancy",
+      "name": "Irancy",
+      "region": "Chablis & Grand Auxerrois",
+      "appellationId": 247,
+      "villageDenomination": 1288,
+      "grands": [],
+      "communes": [
+        {
+          "id": "89130",
+          "name": "Deux Rivières"
+        },
+        {
+          "id": "89202",
+          "name": "Irancy"
+        },
+        {
+          "id": "89479",
+          "name": "Vincelottes"
+        }
+      ],
+      "catalogueFile": "irancyVillageMapCatalogue.json",
+      "nameCrosswalk": {},
+      "notes": {
+        "inao-denom-1288": {
+          "note": "Irancy is a red-wine appellation across Irancy, Vincelottes and the former commune of Cravant, now part of Deux Rivières. Named vineyards such as Palotte have no separate boundary in this map."
+        }
+      },
+      "expectedBounds": [
+        3.5,
+        47.4,
+        4.0,
+        48.0
+      ],
+      "wineColours": [
+        "red"
+      ]
+    },
+    {
+      "id": "saint-bris",
+      "name": "Saint-Bris",
+      "region": "Chablis & Grand Auxerrois",
+      "appellationId": 478,
+      "villageDenomination": 1597,
+      "grands": [],
+      "communes": [
+        {
+          "id": "89108",
+          "name": "Chitry"
+        },
+        {
+          "id": "89202",
+          "name": "Irancy"
+        },
+        {
+          "id": "89319",
+          "name": "Quenne"
+        },
+        {
+          "id": "89337",
+          "name": "Saint-Bris-le-Vineux"
+        },
+        {
+          "id": "89479",
+          "name": "Vincelottes"
+        }
+      ],
+      "catalogueFile": "saintBrisVillageMapCatalogue.json",
+      "nameCrosswalk": {},
+      "notes": {
+        "inao-denom-1597": {
+          "note": "Saint-Bris is a white-wine appellation across Saint-Bris-le-Vineux, Chitry, Irancy, Quenne and Vincelottes. This is the whole appellation area; named vineyards and producer holdings are not mapped separately."
+        }
+      },
+      "expectedBounds": [
+        3.5,
+        47.4,
+        4.0,
+        48.0
+      ],
+      "wineColours": [
+        "white"
+      ]
+    },
+    {
+      "id": "vezelay",
+      "name": "Vézelay",
+      "region": "Chablis & Grand Auxerrois",
+      "appellationId": 1170,
+      "villageDenomination": 2829,
+      "grands": [],
+      "communes": [
+        {
+          "id": "89021",
+          "name": "Asquins"
+        },
+        {
+          "id": "89364",
+          "name": "Saint-Père"
+        },
+        {
+          "id": "89409",
+          "name": "Tharoiseau"
+        },
+        {
+          "id": "89446",
+          "name": "Vézelay"
+        }
+      ],
+      "catalogueFile": "vezelayVillageMapCatalogue.json",
+      "nameCrosswalk": {},
+      "notes": {
+        "inao-denom-2829": {
+          "note": "Vézelay is a white-wine appellation across Asquins, Saint-Père, Tharoiseau and Vézelay. This is the whole appellation area; individual named vineyards are not mapped separately."
+        }
+      },
+      "expectedBounds": [
+        3.5,
+        47.4,
+        4.0,
+        48.0
+      ],
+      "wineColours": [
+        "white"
+      ]
     }
   ]
 }

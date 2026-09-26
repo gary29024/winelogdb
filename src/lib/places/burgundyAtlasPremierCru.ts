@@ -50,6 +50,8 @@ function nameVariants(name:string){
 // never reaches this alias.
 // Sources: docs/burgundy-village-map.md. Do not use fuzzy matching for identities.
 const reviewedNameAliases:Record<string,Record<string,string[]>>={
+  // Long-Depaquit labels Vaucoupin as Les Vaucopins (see source notes).
+  'Chablis':{'Vaucoupin':['Les Vaucopins']},
   // Armand Rousseau and most labels write Lavaux; INAO writes Lavaut.
   'Gevrey-Chambertin':{'Lavaut Saint-Jacques':['Lavaux Saint-Jacques']},
   'Vosne-Romanée':{'Les Petis Monts':['Les Petits Monts'],'Aux Raignots':['Aux Reignots']},
@@ -257,7 +259,7 @@ function crusOutsideVillage(field:string,group:Appellation,cruGroup:Group){
 // Chablis Grand Cru is one appellation, so its seven climats are not separate
 // places in the hierarchy. Whole names only, and only inside Chablis.
 const grandCruClimats:Record<string,string[]>={
-  Chablis:['Blanchot','Bougros','Les Clos','Grenouilles','Les Preuses','Preuses','Valmur','Vaudésir','La Moutonne']
+  Chablis:['Blanchot','Les Blanchots','Blanchots','Bougros','Les Clos','Grenouilles','Les Preuses','Preuses','Valmur','Vaudésir','Les Vaudésirs','Vaudésirs','La Moutonne','Moutonne']
 };
 // Identity-only Atlas records cannot supply map links. Their independently
 // reviewed appellation names still prevent a false village-tier assertion.

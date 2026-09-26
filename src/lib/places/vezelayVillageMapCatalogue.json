@@ -1,0 +1,102 @@
+{
+  "id": "vezelay",
+  "name": "Vézelay",
+  "region": "Chablis & Grand Auxerrois",
+  "communes": [
+    {
+      "id": "89021",
+      "name": "Asquins"
+    },
+    {
+      "id": "89364",
+      "name": "Saint-Père"
+    },
+    {
+      "id": "89409",
+      "name": "Tharoiseau"
+    },
+    {
+      "id": "89446",
+      "name": "Vézelay"
+    }
+  ],
+  "dataUrl": "/maps/vezelay.2026-09-21.geojson",
+  "bounds": [
+    3.730387,
+    47.443469,
+    3.816236,
+    47.487786
+  ],
+  "sources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/89/89021/cadastre-89021-communes.json.gz",
+      "sha256": "2e934c167d705d68b81d63caa625ba62a381a55662597a5af3e04ec4fdb84041"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/89/89364/cadastre-89364-communes.json.gz",
+      "sha256": "16188e42d797818cdbc86faffb8120de1fae367d3684271ab3b7d8d40b049e47"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/89/89409/cadastre-89409-communes.json.gz",
+      "sha256": "fc1966bd135d1b846de759acf3cf11dea2cd7dee14d9adf359c2104630728f7c"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/89/89446/cadastre-89446-communes.json.gz",
+      "sha256": "f8fb6ab1c6cdc3c2b22453253fab5e88ad26cc155dcd6aad0b344d4b75cb2bb3"
+    }
+  ],
+  "notes": {
+    "inao-denom-2829": {
+      "note": "Vézelay is a white-wine appellation across Asquins, Saint-Père, Tharoiseau and Vézelay. This is the whole appellation area; individual named vineyards are not mapped separately."
+    }
+  },
+  "features": [
+    {
+      "id": "inao-denom-2829",
+      "name": "Vézelay",
+      "tier": "village",
+      "kind": "appellation",
+      "appellationId": 1170,
+      "denominationId": 2829,
+      "sourceName": "Vézelay",
+      "communes": [
+        "89021",
+        "89364",
+        "89409",
+        "89446"
+      ],
+      "areaHa": 258.73,
+      "matchId": "ba_appellation_36e3hb2ykd4nuis5t26cg77zfa",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_36e3hb2ykd4nuis5t26cg77zfa/vezelay",
+      "bounds": [
+        3.730387,
+        47.443469,
+        3.816236,
+        47.487786
+      ],
+      "labelPoint": [
+        3.813518,
+        47.460966
+      ]
+    }
+  ]
+}

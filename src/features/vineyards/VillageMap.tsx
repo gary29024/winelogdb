@@ -245,12 +245,12 @@ function VillageMapView({target,catalogue}:{target:BurgundyVillageMapTarget;cata
    <aside className="village-map-sidebar">
     <label htmlFor={selectId}>{hasVineyards?'Explore a vineyard':'Explore an area'}</label>
     <select id={selectId} value={selectedId} onChange={event=>setSelectedId(event.target.value)} aria-describedby={statusId}>
-     {groups.map(group=><optgroup key={group.tier} label={group.label}>{catalogue.features.filter(f=>f.tier===group.tier).sort((a,b)=>a.name.localeCompare(b.name)).map(feature=><option key={feature.id} value={feature.id}>{feature.name}</option>)}</optgroup>)}
+     {groups.map(group=><optgroup key={group.tier} label={group.label}>{catalogue.features.filter(f=>f.tier===group.tier).sort((a,b)=>a.name.localeCompare(b.name)).map(feature=><option key={feature.id} value={feature.id}>{feature.name}{feature.coverage==='partial'?' (partial boundary)':''}</option>)}</optgroup>)}
     </select>
     <div className="village-map-selection" id={statusId} aria-live="polite" aria-atomic="true">
      <p className={`village-map-eyebrow${selectedId===target.featureId?' is-wine':''}`}>{locationContext?'VINEYARD LOCATION':selectedId===target.featureId?'THIS WINE':'EXPLORING'}</p>
      <h3>{selected.name}</h3><span className={`village-map-tier map-tier-${selected.tier}`}>{locationContext?'Current map: ':''}{tiers[selected.tier]}</span>
-     <p className="village-map-description">{locationContext?'Area containing this wine’s vineyard.':selected.kind==='vineyard'?'The highlighted area is the INAO production boundary for this cru.':'Appellation area shown; no single vineyard is identified.'}</p>
+     <p className="village-map-description">{selected.coverage==='partial'?'Only part of this cru’s boundary is available. The highlight does not show its full extent.':locationContext?'Area containing this wine’s vineyard.':selected.kind==='vineyard'?'The highlighted area is the INAO production boundary for this cru.':'Appellation area shown; no single vineyard is identified.'}</p>
      {locationContext&&<p className="village-map-overlap">{locationContext.note} <a href={locationContext.sourceUrl} target="_blank" rel="noopener noreferrer">Producer’s explanation</a></p>}
      {selectionNotes.map(note=><p className="village-map-overlap" key={note}>{note}</p>)}
     </div>

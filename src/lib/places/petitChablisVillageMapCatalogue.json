@@ -1,0 +1,258 @@
+{
+  "id": "petit-chablis",
+  "name": "Petit Chablis",
+  "region": "Chablis & Grand Auxerrois",
+  "communes": [
+    {
+      "id": "89034",
+      "name": "Beine"
+    },
+    {
+      "id": "89039",
+      "name": "Béru"
+    },
+    {
+      "id": "89068",
+      "name": "Chablis"
+    },
+    {
+      "id": "89081",
+      "name": "La Chapelle-Vaupelteigne"
+    },
+    {
+      "id": "89095",
+      "name": "Chemilly-sur-Serein"
+    },
+    {
+      "id": "89104",
+      "name": "Chichée"
+    },
+    {
+      "id": "89112",
+      "name": "Collan"
+    },
+    {
+      "id": "89123",
+      "name": "Courgis"
+    },
+    {
+      "id": "89168",
+      "name": "Fleys"
+    },
+    {
+      "id": "89175",
+      "name": "Fontenay-près-Chablis"
+    },
+    {
+      "id": "89226",
+      "name": "Lignorelles"
+    },
+    {
+      "id": "89227",
+      "name": "Ligny-le-Châtel"
+    },
+    {
+      "id": "89242",
+      "name": "Maligny"
+    },
+    {
+      "id": "89303",
+      "name": "Poilly-sur-Serein"
+    },
+    {
+      "id": "89315",
+      "name": "Préhy"
+    },
+    {
+      "id": "89477",
+      "name": "Villy"
+    },
+    {
+      "id": "89482",
+      "name": "Viviers"
+    }
+  ],
+  "dataUrl": "/maps/petit-chablis.2026-09-21.geojson",
+  "bounds": [
+    3.691417,
+    47.754265,
+    3.925695,
+    47.897255
+  ],
+  "sources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/89/89034/cadastre-89034-communes.json.gz",
+      "sha256": "347dac50ed49d4456647a4502a2117cd005c368e017f4f4b7f8aadc25ca57bd7"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/89/89039/cadastre-89039-communes.json.gz",
+      "sha256": "46d707cb4668dc3064af1b8e58968b7119fcecc4e3655135ef95adf2bdf0772b"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/89/89068/cadastre-89068-communes.json.gz",
+      "sha256": "b0081275913d1f97555cde8551cf517422312fb79ff486027c258be46ee60dd3"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/89/89081/cadastre-89081-communes.json.gz",
+      "sha256": "887bea7a15b2e18af7d908443e82025e1d95db36778fa01fac5cd8dda8bf47df"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/89/89095/cadastre-89095-communes.json.gz",
+      "sha256": "eab940efb6a450b1341c35835edcfbee50326adb71ab08dc3ccc879079c6ceee"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/89/89104/cadastre-89104-communes.json.gz",
+      "sha256": "7d22cf1552bfbca602ca3ee31fd04bcc8bdcc9108a97f902e16993203c953763"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/89/89112/cadastre-89112-communes.json.gz",
+      "sha256": "853c7180cddec8174b5299bf12646757e5a7eab966b32d75d8b2f9caf761a38b"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/89/89123/cadastre-89123-communes.json.gz",
+      "sha256": "5f0f7a3999c4adec80e77d2b3181dd26c5193bdec34ee11fcb2bd74f61a57137"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/89/89168/cadastre-89168-communes.json.gz",
+      "sha256": "5e55411ab69df363889eee1bac419c291d85ff3e1d5ed60c82c09aa64b52ad60"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/89/89175/cadastre-89175-communes.json.gz",
+      "sha256": "a0dd7c5c8205e92c4c3e219500393c56c989911e3be726085df64390aa5bb38f"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/89/89226/cadastre-89226-communes.json.gz",
+      "sha256": "48bd29d95fd8d77945575a60ee2922608ba6b32ee535d63a9b0eeee8945bcfdf"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/89/89227/cadastre-89227-communes.json.gz",
+      "sha256": "5e938efb5381090635130cf597e0f14872d2ebdc62061e6fbbc6df2b725d060a"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/89/89242/cadastre-89242-communes.json.gz",
+      "sha256": "ea93f2a26e673c706d4f393617ce397799088fb86447b9e91f738c15e1d95427"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/89/89303/cadastre-89303-communes.json.gz",
+      "sha256": "e90eec75baee14aa0a6dd5b7bbcc4ed0bcd752d19de14b21b5d9ee94ff2f0c14"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/89/89315/cadastre-89315-communes.json.gz",
+      "sha256": "5880e2e721d054d9a5407d5625beb355657e8b9896f619c673a7141d032e1397"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/89/89477/cadastre-89477-communes.json.gz",
+      "sha256": "c5b7bb649f07ea471d68fa3873e69311128793efa79d719b3c7baf716fcec327"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/89/89482/cadastre-89482-communes.json.gz",
+      "sha256": "be565a44f02de4f8c662db4fe343800c646ec21c2762e78ca118f02b469fc8a0"
+    }
+  ],
+  "notes": {
+    "inao-denom-1024": {
+      "note": "The full Petit Chablis production area spans 17 current communes. Official eligibility areas can overlap other Chablis tiers; no area has been subtracted to make the map disjoint."
+    }
+  },
+  "features": [
+    {
+      "id": "inao-denom-1024",
+      "name": "Petit Chablis",
+      "tier": "village",
+      "kind": "appellation",
+      "appellationId": 214,
+      "denominationId": 1024,
+      "sourceName": "Petit Chablis",
+      "communes": [
+        "89034",
+        "89039",
+        "89068",
+        "89081",
+        "89095",
+        "89104",
+        "89112",
+        "89123",
+        "89168",
+        "89175",
+        "89226",
+        "89227",
+        "89242",
+        "89303",
+        "89315",
+        "89477",
+        "89482"
+      ],
+      "areaHa": 7027.37,
+      "matchId": "ba_appellation_qm43vwdxg6tlf4jvcqudnhr5ee",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_qm43vwdxg6tlf4jvcqudnhr5ee/petit-chablis",
+      "bounds": [
+        3.691417,
+        47.754265,
+        3.925695,
+        47.897255
+      ],
+      "labelPoint": [
+        3.779107,
+        47.801147
+      ]
+    }
+  ]
+}

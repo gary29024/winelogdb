@@ -6,7 +6,7 @@ import { burgundyGrandCruMapIdentity } from './burgundyGrandCruClimats';
 
 export type VillageMapFeature={
  id:string;name:string;tier:string;kind:string;appellationId:number;denominationId:number|null;denominationIds?:number[];
- sourceName:string;communes:string[];areaHa:number;matchId:string;atlasUrl:string|null;bounds:number[];labelPoint:number[];parentAppellation?:string;
+ sourceName:string;communes:string[];areaHa:number;matchId:string;atlasUrl:string|null;bounds:number[];labelPoint:number[];parentAppellation?:string;coverage?:string;
 };
 export type VillageMapCatalogue={
  id:string;name:string;region:string;communes:{id:string;name:string}[];dataUrl:string;bounds:number[];
@@ -23,6 +23,7 @@ export type BurgundyVillageMapTarget={villageId:string;villageName:string;region
 // Only this small identity index joins wine details. Per-village metadata and
 // geometry load when the dialog opens, independently of the other villages.
 const byMatchId=new Map(registry.targets.map(target=>[target.matchId,target]));
+const incompleteTargets=new Map(registry.incompleteTargets.map(target=>[target.matchId,target.fallbackMatchId]));
 const byVillageId=new Map(registry.villages.map(village=>[village.id,village]));
 
 const normalise=(value:string)=>value.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
@@ -50,7 +51,7 @@ export function burgundyVillageMapTarget(wine:MapWine):BurgundyVillageMapTarget|
  const candidate=producerMapLocation(wine);
  const producerLocation=candidate&&burgundyMapAppellation(wine)===candidate.appellation?candidate:null;
  const matchId=producerLocation?.matchId??local??burgundyLocalAppellationMapIdentity(wine)??burgundyAtlasWineDetailPlace(wine)?.placeId;
- const target=matchId?byMatchId.get(matchId):undefined;
+ const target=matchId?byMatchId.get(incompleteTargets.get(matchId)??matchId):undefined;
  const village=target?byVillageId.get(target.villageId):undefined;
  if(!target||!village)return null;
  // Some village appellations have separate colour areas. Choose only with

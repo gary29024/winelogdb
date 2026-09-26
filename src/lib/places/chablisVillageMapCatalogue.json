@@ -1,0 +1,793 @@
+{
+  "id": "chablis",
+  "name": "Chablis",
+  "region": "Chablis & Grand Auxerrois",
+  "communes": [
+    {
+      "id": "89034",
+      "name": "Beine"
+    },
+    {
+      "id": "89039",
+      "name": "Béru"
+    },
+    {
+      "id": "89068",
+      "name": "Chablis"
+    },
+    {
+      "id": "89081",
+      "name": "La Chapelle-Vaupelteigne"
+    },
+    {
+      "id": "89095",
+      "name": "Chemilly-sur-Serein"
+    },
+    {
+      "id": "89104",
+      "name": "Chichée"
+    },
+    {
+      "id": "89112",
+      "name": "Collan"
+    },
+    {
+      "id": "89123",
+      "name": "Courgis"
+    },
+    {
+      "id": "89168",
+      "name": "Fleys"
+    },
+    {
+      "id": "89175",
+      "name": "Fontenay-près-Chablis"
+    },
+    {
+      "id": "89226",
+      "name": "Lignorelles"
+    },
+    {
+      "id": "89227",
+      "name": "Ligny-le-Châtel"
+    },
+    {
+      "id": "89242",
+      "name": "Maligny"
+    },
+    {
+      "id": "89303",
+      "name": "Poilly-sur-Serein"
+    },
+    {
+      "id": "89315",
+      "name": "Préhy"
+    },
+    {
+      "id": "89477",
+      "name": "Villy"
+    },
+    {
+      "id": "89482",
+      "name": "Viviers"
+    }
+  ],
+  "dataUrl": "/maps/chablis.2026-09-21.geojson",
+  "bounds": [
+    3.691417,
+    47.754265,
+    3.925695,
+    47.897255
+  ],
+  "sources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/89/89034/cadastre-89034-communes.json.gz",
+      "sha256": "347dac50ed49d4456647a4502a2117cd005c368e017f4f4b7f8aadc25ca57bd7"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/89/89039/cadastre-89039-communes.json.gz",
+      "sha256": "46d707cb4668dc3064af1b8e58968b7119fcecc4e3655135ef95adf2bdf0772b"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/89/89068/cadastre-89068-communes.json.gz",
+      "sha256": "b0081275913d1f97555cde8551cf517422312fb79ff486027c258be46ee60dd3"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/89/89081/cadastre-89081-communes.json.gz",
+      "sha256": "887bea7a15b2e18af7d908443e82025e1d95db36778fa01fac5cd8dda8bf47df"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/89/89095/cadastre-89095-communes.json.gz",
+      "sha256": "eab940efb6a450b1341c35835edcfbee50326adb71ab08dc3ccc879079c6ceee"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/89/89104/cadastre-89104-communes.json.gz",
+      "sha256": "7d22cf1552bfbca602ca3ee31fd04bcc8bdcc9108a97f902e16993203c953763"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/89/89112/cadastre-89112-communes.json.gz",
+      "sha256": "853c7180cddec8174b5299bf12646757e5a7eab966b32d75d8b2f9caf761a38b"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/89/89123/cadastre-89123-communes.json.gz",
+      "sha256": "5f0f7a3999c4adec80e77d2b3181dd26c5193bdec34ee11fcb2bd74f61a57137"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/89/89168/cadastre-89168-communes.json.gz",
+      "sha256": "5e55411ab69df363889eee1bac419c291d85ff3e1d5ed60c82c09aa64b52ad60"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/89/89175/cadastre-89175-communes.json.gz",
+      "sha256": "a0dd7c5c8205e92c4c3e219500393c56c989911e3be726085df64390aa5bb38f"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/89/89226/cadastre-89226-communes.json.gz",
+      "sha256": "48bd29d95fd8d77945575a60ee2922608ba6b32ee535d63a9b0eeee8945bcfdf"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/89/89227/cadastre-89227-communes.json.gz",
+      "sha256": "5e938efb5381090635130cf597e0f14872d2ebdc62061e6fbbc6df2b725d060a"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/89/89242/cadastre-89242-communes.json.gz",
+      "sha256": "ea93f2a26e673c706d4f393617ce397799088fb86447b9e91f738c15e1d95427"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/89/89303/cadastre-89303-communes.json.gz",
+      "sha256": "e90eec75baee14aa0a6dd5b7bbcc4ed0bcd752d19de14b21b5d9ee94ff2f0c14"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/89/89315/cadastre-89315-communes.json.gz",
+      "sha256": "5880e2e721d054d9a5407d5625beb355657e8b9896f619c673a7141d032e1397"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/89/89477/cadastre-89477-communes.json.gz",
+      "sha256": "c5b7bb649f07ea471d68fa3873e69311128793efa79d719b3c7baf716fcec327"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/89/89482/cadastre-89482-communes.json.gz",
+      "sha256": "be565a44f02de4f8c662db4fe343800c646ec21c2762e78ca118f02b469fc8a0"
+    }
+  ],
+  "notes": {
+    "inao-denom-397": {
+      "note": "The full Chablis production area spans 17 current communes. Fyé, Milly and Poinchy are now part of Chablis."
+    },
+    "inao-denom-414": {
+      "note": "Partial boundary only: the source covers La Chapelle-Vaupelteigne, Fontenay-près-Chablis and Maligny, but omits the Chablis-Poinchy part of Fourchaume. A Fourchaume wine opens on the broad Premier Cru area."
+    },
+    "inao-denom-420": {
+      "note": "Partial boundary only: the source covers the Fleys part of Mont de Milieu, but omits its Fyé part in Chablis. A Mont de Milieu wine opens on the broad Premier Cru area."
+    },
+    "inao-denom-438": {
+      "note": "The broad Premier Cru production area includes land whose named climat boundary is missing or incomplete. No individual vineyard is inferred for those wines."
+    },
+    "inao-denom-439": {
+      "note": "Chablis Grand Cru is one appellation with seven named climats. La Moutonne spans parts of Vaudésir and Les Preuses; its separate boundary is unavailable, so its wines retain this broad Grand Cru view."
+    },
+    "inao-denom-440": {
+      "note": "One of the seven named climats within the Chablis Grand Cru appellation. The highlight shows the whole official climat, not an individual producer’s holding or cuvée subdivision."
+    },
+    "inao-denom-441": {
+      "note": "One of the seven named climats within the Chablis Grand Cru appellation. The highlight shows the whole official climat, not an individual producer’s holding or cuvée subdivision."
+    },
+    "inao-denom-442": {
+      "note": "One of the seven named climats within the Chablis Grand Cru appellation. The highlight shows the whole official climat, not an individual producer’s holding or cuvée subdivision."
+    },
+    "inao-denom-443": {
+      "note": "One of the seven named climats within the Chablis Grand Cru appellation. The highlight shows the whole official climat, not an individual producer’s holding or cuvée subdivision."
+    },
+    "inao-denom-444": {
+      "note": "One of the seven named climats within the Chablis Grand Cru appellation. The highlight shows the whole official climat, not an individual producer’s holding or cuvée subdivision."
+    },
+    "inao-denom-445": {
+      "note": "One of the seven named climats within the Chablis Grand Cru appellation. The highlight shows the whole official climat, not an individual producer’s holding or cuvée subdivision."
+    },
+    "inao-denom-446": {
+      "note": "One of the seven named climats within the Chablis Grand Cru appellation. The highlight shows the whole official climat, not an individual producer’s holding or cuvée subdivision."
+    }
+  },
+  "features": [
+    {
+      "id": "inao-denom-397",
+      "name": "Chablis",
+      "tier": "village",
+      "kind": "appellation",
+      "appellationId": 146,
+      "denominationId": 397,
+      "sourceName": "Chablis",
+      "communes": [
+        "89034",
+        "89039",
+        "89068",
+        "89081",
+        "89095",
+        "89104",
+        "89112",
+        "89123",
+        "89168",
+        "89175",
+        "89226",
+        "89227",
+        "89242",
+        "89303",
+        "89315",
+        "89477",
+        "89482"
+      ],
+      "areaHa": 5282.4,
+      "matchId": "ba_appellation_33amrcftvaqshlf5ygajsusyrm",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_33amrcftvaqshlf5ygajsusyrm/chablis",
+      "bounds": [
+        3.691417,
+        47.754265,
+        3.925695,
+        47.897255
+      ],
+      "labelPoint": [
+        3.779107,
+        47.801147
+      ]
+    },
+    {
+      "id": "inao-denom-404",
+      "name": "Chaume de Talvat",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 146,
+      "denominationId": 404,
+      "sourceName": "Chablis premier cru Chaume de Talvat",
+      "communes": [
+        "89123"
+      ],
+      "areaHa": 1.14,
+      "matchId": "ba_designation_un7vznzftydzjt7rezliumjpvi",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_un7vznzftydzjt7rezliumjpvi/chaume-de-talvat",
+      "bounds": [
+        3.747143,
+        47.777557,
+        3.751626,
+        47.779496
+      ],
+      "labelPoint": [
+        3.749001,
+        47.778534
+      ]
+    },
+    {
+      "id": "inao-denom-408",
+      "name": "Côte de Jouan",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 146,
+      "denominationId": 408,
+      "sourceName": "Chablis premier cru Côte de Jouan",
+      "communes": [
+        "89123"
+      ],
+      "areaHa": 12.58,
+      "matchId": "ba_designation_7r77dh3wyegpyztgl62uixgd5y",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_7r77dh3wyegpyztgl62uixgd5y/cote-de-jouan",
+      "bounds": [
+        3.746535,
+        47.774925,
+        3.753047,
+        47.779427
+      ],
+      "labelPoint": [
+        3.75001,
+        47.777106
+      ]
+    },
+    {
+      "id": "inao-denom-414",
+      "name": "Fourchaume",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 146,
+      "denominationId": 414,
+      "sourceName": "Chablis premier cru Fourchaume",
+      "communes": [
+        "89081",
+        "89175",
+        "89242"
+      ],
+      "areaHa": 99.43,
+      "coverage": "partial",
+      "matchId": "ba_designation_cvtx6duz37d3dv7z2sd54wod3i",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_cvtx6duz37d3dv7z2sd54wod3i/fourchaume",
+      "bounds": [
+        3.770876,
+        47.832039,
+        3.801909,
+        47.859104
+      ],
+      "labelPoint": [
+        3.775608,
+        47.852202
+      ]
+    },
+    {
+      "id": "inao-denom-416",
+      "name": "Les Beauregards",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 146,
+      "denominationId": 416,
+      "sourceName": "Chablis premier cru Les Beauregards",
+      "communes": [
+        "89123"
+      ],
+      "areaHa": 21.31,
+      "matchId": "ba_designation_btojvxmlszle4nxseyf5zblptm",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_btojvxmlszle4nxseyf5zblptm/les-beauregards",
+      "bounds": [
+        3.739835,
+        47.765535,
+        3.752645,
+        47.770169
+      ],
+      "labelPoint": [
+        3.748713,
+        47.767858
+      ]
+    },
+    {
+      "id": "inao-denom-418",
+      "name": "Les Fourneaux",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 146,
+      "denominationId": 418,
+      "sourceName": "Chablis premier cru Les Fourneaux",
+      "communes": [
+        "89168"
+      ],
+      "areaHa": 35.78,
+      "matchId": "ba_designation_nfefo5jxcbwlzdkmjfduxuoqby",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_nfefo5jxcbwlzdkmjfduxuoqby/les-fourneaux",
+      "bounds": [
+        3.847767,
+        47.815817,
+        3.873868,
+        47.8246
+      ],
+      "labelPoint": [
+        3.864708,
+        47.817452
+      ]
+    },
+    {
+      "id": "inao-denom-420",
+      "name": "Mont de Milieu",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 146,
+      "denominationId": 420,
+      "sourceName": "Chablis premier cru Mont de Milieu",
+      "communes": [
+        "89168"
+      ],
+      "areaHa": 18.16,
+      "coverage": "partial",
+      "matchId": "ba_designation_37awyaj3gdlrgrm3qghblvxd2e",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_37awyaj3gdlrgrm3qghblvxd2e/mont-de-milieu",
+      "bounds": [
+        3.834731,
+        47.809783,
+        3.842196,
+        47.815204
+      ],
+      "labelPoint": [
+        3.838301,
+        47.812504
+      ]
+    },
+    {
+      "id": "inao-denom-432",
+      "name": "Vaucoupin",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 146,
+      "denominationId": 432,
+      "sourceName": "Chablis premier cru Vaucoupin",
+      "communes": [
+        "89104"
+      ],
+      "areaHa": 47.36,
+      "matchId": "ba_designation_wiea264z5gs5b4cbs67nnnigjq",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_wiea264z5gs5b4cbs67nnnigjq/vaucoupin",
+      "bounds": [
+        3.839255,
+        47.799507,
+        3.861856,
+        47.805002
+      ],
+      "labelPoint": [
+        3.846878,
+        47.802254
+      ]
+    },
+    {
+      "id": "inao-denom-433",
+      "name": "Vaugiraut",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 146,
+      "denominationId": 433,
+      "sourceName": "Chablis premier cru Vaugiraut",
+      "communes": [
+        "89104"
+      ],
+      "areaHa": 7.01,
+      "matchId": "ba_designation_wj6npchehk6itux67v6g3h6ota",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_wj6npchehk6itux67v6g3h6ota/vaugiraut",
+      "bounds": [
+        3.806934,
+        47.79212,
+        3.812423,
+        47.795412
+      ],
+      "labelPoint": [
+        3.810219,
+        47.793774
+      ]
+    },
+    {
+      "id": "inao-denom-435",
+      "name": "Vaupulent",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 146,
+      "denominationId": 435,
+      "sourceName": "Chablis premier cru Vaupulent",
+      "communes": [
+        "89081"
+      ],
+      "areaHa": 2.63,
+      "matchId": "ba_designation_m6pz4j73ohdvtonmjk5c6lz5gm",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_m6pz4j73ohdvtonmjk5c6lz5gm/vaupulent",
+      "bounds": [
+        3.7851,
+        47.836374,
+        3.789452,
+        47.838413
+      ],
+      "labelPoint": [
+        3.788205,
+        47.837403
+      ]
+    },
+    {
+      "id": "inao-denom-437",
+      "name": "Vosgros",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 146,
+      "denominationId": 437,
+      "sourceName": "Chablis premier cru Vosgros",
+      "communes": [
+        "89104"
+      ],
+      "areaHa": 22.57,
+      "matchId": "ba_designation_6r4df4icjzb6o6nwfcgdxigo5u",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_6r4df4icjzb6o6nwfcgdxigo5u/vosgros",
+      "bounds": [
+        3.806934,
+        47.788961,
+        3.81804,
+        47.795412
+      ],
+      "labelPoint": [
+        3.81456,
+        47.792189
+      ]
+    },
+    {
+      "id": "inao-denom-438",
+      "name": "Chablis Premier Cru",
+      "tier": "premier_cru",
+      "kind": "appellation",
+      "appellationId": 146,
+      "denominationId": 438,
+      "sourceName": "Chablis premier cru",
+      "communes": [
+        "89034",
+        "89068",
+        "89081",
+        "89104",
+        "89123",
+        "89168",
+        "89175",
+        "89242"
+      ],
+      "areaHa": 932.16,
+      "matchId": "ba_appellation_cicui7m4g4teqmvx2nmg6jsj2m",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_cicui7m4g4teqmvx2nmg6jsj2m/chablis-premier-cru",
+      "bounds": [
+        3.721802,
+        47.765535,
+        3.873868,
+        47.859104
+      ],
+      "labelPoint": [
+        3.773756,
+        47.802195
+      ]
+    },
+    {
+      "id": "inao-denom-439",
+      "name": "Chablis Grand Cru",
+      "tier": "grand_cru",
+      "kind": "appellation",
+      "appellationId": 147,
+      "denominationId": 439,
+      "sourceName": "Chablis Grand Cru",
+      "communes": [
+        "89068"
+      ],
+      "areaHa": 106.65,
+      "matchId": "france/burgundy/chablis/chablis-grand-cru",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_3nnjx5kyyvfo4w2nldfonpaqmq/chablis-grand-cru",
+      "bounds": [
+        3.787894,
+        47.81572,
+        3.81869,
+        47.82839
+      ],
+      "labelPoint": [
+        3.802243,
+        47.825844
+      ]
+    },
+    {
+      "id": "inao-denom-440",
+      "name": "Blanchot",
+      "tier": "grand_cru",
+      "kind": "vineyard",
+      "appellationId": 147,
+      "denominationId": 440,
+      "sourceName": "Chablis Grand Cru Blanchot",
+      "communes": [
+        "89068"
+      ],
+      "areaHa": 13.12,
+      "parentAppellation": "Chablis Grand Cru",
+      "matchId": "inao-denom-440",
+      "atlasUrl": null,
+      "bounds": [
+        3.810116,
+        47.81572,
+        3.81869,
+        47.821831
+      ],
+      "labelPoint": [
+        3.815125,
+        47.818885
+      ]
+    },
+    {
+      "id": "inao-denom-441",
+      "name": "Bougros",
+      "tier": "grand_cru",
+      "kind": "vineyard",
+      "appellationId": 147,
+      "denominationId": 441,
+      "sourceName": "Chablis Grand Cru Bougros",
+      "communes": [
+        "89068"
+      ],
+      "areaHa": 15.87,
+      "parentAppellation": "Chablis Grand Cru",
+      "matchId": "inao-denom-441",
+      "atlasUrl": null,
+      "bounds": [
+        3.787894,
+        47.822781,
+        3.798967,
+        47.826919
+      ],
+      "labelPoint": [
+        3.793168,
+        47.824847
+      ]
+    },
+    {
+      "id": "inao-denom-442",
+      "name": "Grenouilles",
+      "tier": "grand_cru",
+      "kind": "vineyard",
+      "appellationId": 147,
+      "denominationId": 442,
+      "sourceName": "Chablis Grand Cru Grenouilles",
+      "communes": [
+        "89068"
+      ],
+      "areaHa": 9.43,
+      "parentAppellation": "Chablis Grand Cru",
+      "matchId": "inao-denom-442",
+      "atlasUrl": null,
+      "bounds": [
+        3.799015,
+        47.820215,
+        3.804999,
+        47.82389
+      ],
+      "labelPoint": [
+        3.803633,
+        47.822053
+      ]
+    },
+    {
+      "id": "inao-denom-443",
+      "name": "Les Clos",
+      "tier": "grand_cru",
+      "kind": "vineyard",
+      "appellationId": 147,
+      "denominationId": 443,
+      "sourceName": "Chablis Grand Cru Les Clos",
+      "communes": [
+        "89068"
+      ],
+      "areaHa": 29.36,
+      "parentAppellation": "Chablis Grand Cru",
+      "matchId": "inao-denom-443",
+      "atlasUrl": null,
+      "bounds": [
+        3.803818,
+        47.815894,
+        3.814721,
+        47.822055
+      ],
+      "labelPoint": [
+        3.808556,
+        47.818715
+      ]
+    },
+    {
+      "id": "inao-denom-444",
+      "name": "Les Preuses",
+      "tier": "grand_cru",
+      "kind": "vineyard",
+      "appellationId": 147,
+      "denominationId": 444,
+      "sourceName": "Chablis Grand Cru Preuses",
+      "communes": [
+        "89068"
+      ],
+      "areaHa": 11.67,
+      "parentAppellation": "Chablis Grand Cru",
+      "matchId": "inao-denom-444",
+      "atlasUrl": null,
+      "bounds": [
+        3.793803,
+        47.823313,
+        3.799938,
+        47.82839
+      ],
+      "labelPoint": [
+        3.796522,
+        47.82666
+      ]
+    },
+    {
+      "id": "inao-denom-445",
+      "name": "Valmur",
+      "tier": "grand_cru",
+      "kind": "vineyard",
+      "appellationId": 147,
+      "denominationId": 445,
+      "sourceName": "Chablis Grand Cru Valmur",
+      "communes": [
+        "89068"
+      ],
+      "areaHa": 10.78,
+      "parentAppellation": "Chablis Grand Cru",
+      "matchId": "inao-denom-445",
+      "atlasUrl": null,
+      "bounds": [
+        3.804731,
+        47.821223,
+        3.810213,
+        47.825313
+      ],
+      "labelPoint": [
+        3.805836,
+        47.822965
+      ]
+    },
+    {
+      "id": "inao-denom-446",
+      "name": "Vaudésir",
+      "tier": "grand_cru",
+      "kind": "vineyard",
+      "appellationId": 147,
+      "denominationId": 446,
+      "sourceName": "Chablis Grand Cru Vaudésir",
+      "communes": [
+        "89068"
+      ],
+      "areaHa": 16.42,
+      "parentAppellation": "Chablis Grand Cru",
+      "matchId": "inao-denom-446",
+      "atlasUrl": null,
+      "bounds": [
+        3.797374,
+        47.822841,
+        3.80659,
+        47.826764
+      ],
+      "labelPoint": [
+        3.801901,
+        47.825456
+      ]
+    }
+  ],
+  "coverageNote": "Chablis has 40 Premier Cru climats. This map has eight named boundaries and partial coverage of Fourchaume and Mont de Milieu; 30 named boundaries are unavailable. Wines from missing or partial areas show the broad Premier Cru area. All seven Grand Cru climats are mapped; producer holdings and La Moutonne have no separate boundary.",
+  "umbrellas": {
+    "inao-denom-414": [
+      "inao-denom-435"
+    ],
+    "inao-denom-437": [
+      "inao-denom-433"
+    ]
+  }
+}

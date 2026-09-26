@@ -14,6 +14,58 @@ async function setup(page:Page,overrides:Record<string,unknown>={}){
  await page.route('https://tiles.openfreemap.org/**',route=>route.abort());
 }
 
+for(const route of ['/wines/layout-wine','/shared/layout-wine']){
+ test(`Chablis Grand Cru ${route}: named climats and La Moutonne retain their proven scope`,async({page},testInfo)=>{
+  await setup(page,{appellation:'Chablis Grand Cru',wineName:'Domaine Long-Depaquit Les Preuses',classification:'grand_cru',colour:'White',wineStyle:'white'});
+  await page.setViewportSize({width:320,height:900});await page.goto(route);
+  await page.getByRole('button',{name:'View village map'}).click();
+  const dialog=page.getByRole('dialog',{name:'Chablis',exact:true});
+  await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
+  await expect(dialog.getByRole('combobox')).toHaveValue('inao-denom-444');
+  await expect(dialog.locator('.village-map-selected-label')).toHaveText('Les Preuses');
+  await expect(dialog.locator('.village-map-context')).toContainText('1 Grand Cru · 7 Grand Cru climats');
+  await expect(dialog.locator('.village-map-overlap')).toContainText('whole official climat');
+  await expect(dialog.getByRole('link',{name:/Explore on Burgundy Atlas/})).toHaveCount(0);
+  await dialog.getByRole('combobox').selectOption('inao-denom-446');
+  await expect(dialog.locator('.village-map-selected-label')).toHaveText('Vaudésir');
+  await dialog.getByRole('button',{name:'Back to this wine'}).click();
+  await expect(dialog.getByRole('combobox')).toHaveValue('inao-denom-444');
+  expect(await dialog.evaluate(el=>el.scrollWidth<=el.clientWidth)).toBe(true);
+  await page.screenshot({path:testInfo.outputPath('chablis-grand-cru-320.png')});
+  await page.keyboard.press('Escape');
+  await setup(page,{appellation:'Chablis Grand Cru',wineName:'Domaine Long-Depaquit La Moutonne',classification:'grand_cru',colour:'White',wineStyle:'white'});
+  await page.goto(route);await page.getByRole('button',{name:'View village map'}).click();
+  await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
+  await expect(dialog.getByRole('combobox')).toHaveValue('inao-denom-439');
+  await expect(dialog.locator('.village-map-selected-label')).toHaveCount(0);
+  await expect(dialog.locator('.village-map-overlap')).toContainText('spans parts of Vaudésir and Les Preuses');
+  await expect(dialog.getByRole('link',{name:/Explore on Burgundy Atlas/})).toBeVisible();
+ });
+ test(`Chablis Premier Cru ${route}: missing and partial boundaries never locate a wine in an incomplete plot`,async({page},testInfo)=>{
+  await page.setViewportSize({width:320,height:900});
+  for(const wineName of ['Fourchaume','Mont de Milieu','Vaulorent']){
+   await setup(page,{appellation:'Chablis',wineName,colour:'White',wineStyle:'white'});
+   await page.goto(route);await page.getByRole('button',{name:'View village map'}).click();
+   const dialog=page.getByRole('dialog',{name:'Chablis',exact:true});
+   await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
+   await expect(dialog.getByRole('combobox')).toHaveValue('inao-denom-438');
+   await expect(dialog.locator('.village-map-description')).toContainText('no single vineyard');
+   await expect(dialog.locator('.village-map-note').filter({hasText:'40 Premier Cru climats'})).toBeVisible();
+   await expect(dialog.getByRole('option',{name:'Fourchaume (partial boundary)',exact:true})).toHaveCount(1);
+   await dialog.getByRole('combobox').selectOption('inao-denom-414');
+   await expect(dialog.locator('.village-map-description')).toContainText('does not show its full extent');
+   await expect(dialog.locator('.village-map-overlap').first()).toContainText('omits the Chablis-Poinchy part');
+   await dialog.getByRole('combobox').selectOption('inao-denom-420');
+   await expect(dialog.locator('.village-map-overlap')).toContainText('omits its Fyé part');
+   expect(await dialog.evaluate(el=>el.scrollWidth<=el.clientWidth)).toBe(true);
+   if(wineName==='Fourchaume')await page.screenshot({path:testInfo.outputPath('chablis-partial-boundary-320.png')});
+   await dialog.getByRole('button',{name:'Back to this wine'}).click();
+   await expect(dialog.getByRole('combobox')).toHaveValue('inao-denom-438');
+   await page.keyboard.press('Escape');
+  }
+ });
+}
+
 test('Côte de Beaune-Villages has a local map, four area controls and no invented Atlas link',async({page},testInfo)=>{
  await setup(page,{appellation:'Côte de Beaune-Villages',wineName:'Joseph Drouhin Côte de Beaune-Villages',classification:'village'});
  await page.setViewportSize({width:320,height:900});await page.goto('/shared/layout-wine');
@@ -215,6 +267,11 @@ for(const village of [
  {id:'pouilly-vinzelles',name:'Pouilly-Vinzelles',cru:'Les Quarts',tier:'premier_cru',colour:'White',feature:'inao-denom-2930',count:5,catalogue:'pouillyVinzellesVillageMapCatalogue',explore:'inao-denom-2929',label:'Les Longeays'},
  {id:'saint-veran',name:'Saint-Véran',cru:'Les Pommards',tier:'village',colour:'White',feature:'inao-denom-1158',count:1,catalogue:'saintVeranVillageMapCatalogue',explore:'inao-denom-1158',label:'Saint-Véran'},
  {id:'vire-clesse',name:'Viré-Clessé',cru:'Quintaine',tier:'village',colour:'White',feature:'inao-denom-1287',count:2,catalogue:'vireClesseVillageMapCatalogue',explore:'inao-denom-1593',label:'Viré-Clessé (named-climat area)'},
+ {id:'chablis',name:'Chablis',cru:'Vaucoupin',tier:'premier_cru',colour:'White',feature:'inao-denom-432',count:20,catalogue:'chablisVillageMapCatalogue',explore:'inao-denom-443',label:'Les Clos'},
+ {id:'petit-chablis',name:'Petit Chablis',cru:'Petit Chablis',tier:'village',colour:'White',feature:'inao-denom-1024',count:1,catalogue:'petitChablisVillageMapCatalogue',explore:'inao-denom-1024',label:'Petit Chablis'},
+ {id:'irancy',name:'Irancy',cru:'Palotte',tier:'village',feature:'inao-denom-1288',count:1,catalogue:'irancyVillageMapCatalogue',explore:'inao-denom-1288',label:'Irancy'},
+ {id:'saint-bris',name:'Saint-Bris',cru:'Saint-Bris',tier:'village',colour:'White',feature:'inao-denom-1597',count:1,catalogue:'saintBrisVillageMapCatalogue',explore:'inao-denom-1597',label:'Saint-Bris'},
+ {id:'vezelay',name:'Vézelay',cru:'Vézelay',tier:'village',colour:'White',feature:'inao-denom-2829',count:1,catalogue:'vezelayVillageMapCatalogue',explore:'inao-denom-2829',label:'Vézelay'},
 ]){
  for(const route of ['/wines/layout-wine','/shared/layout-wine']){
   test(`${village.name} ${route}: opens the correct boundary and keeps its full village context`,async({page},testInfo)=>{
@@ -224,6 +281,7 @@ for(const village of [
    await setup(page,{appellation:village.name,wineName:village.cru,classification:village.tier,
     ...('colour' in village?{colour:village.colour,wineStyle:'white',grapes:['Chardonnay']}:{}),
     ...(village.id==='bouzeron'?{grapes:['Aligoté']}:{}),
+    ...(village.id==='saint-bris'?{grapes:['Sauvignon Blanc']}:{}),
    });await page.goto(route);
    const opener=page.getByRole('button',{name:'View village map'});
    await expect(opener).toBeVisible();
