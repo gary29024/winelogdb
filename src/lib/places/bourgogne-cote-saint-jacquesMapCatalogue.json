@@ -1,0 +1,74 @@
+{
+  "id": "bourgogne-cote-saint-jacques",
+  "name": "Bourgogne Côte Saint-Jacques",
+  "region": "Jovinien",
+  "mapKind": "regional",
+  "communes": [
+    {
+      "id": "89206",
+      "name": "Joigny",
+      "bounds": [
+        3.382123,
+        47.986021,
+        3.392028,
+        47.989503
+      ],
+      "labelPoint": [
+        3.389326,
+        47.988503
+      ]
+    }
+  ],
+  "dataUrl": "/maps/bourgogne-cote-saint-jacques.2026-09-21.geojson",
+  "bounds": [
+    3.382123,
+    47.986021,
+    3.392028,
+    47.989503
+  ],
+  "sources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/89/89206/cadastre-89206-communes.json.gz",
+      "sha256": "13a12fe1221e4f2ccd7e8cae67e461f3518fc5cd86c35ad66befcedb2d1b5be4"
+    }
+  ],
+  "notes": {},
+  "features": [
+    {
+      "id": "inao-denom-374",
+      "name": "Bourgogne Côte Saint-Jacques",
+      "tier": "regional",
+      "kind": "appellation",
+      "appellationId": 138,
+      "denominationId": 374,
+      "sourceName": "Bourgogne Côte Saint-Jacques",
+      "communes": [
+        "89206"
+      ],
+      "areaHa": 13.29,
+      "matchId": "inao-denom-374",
+      "atlasUrl": null,
+      "bounds": [
+        3.382123,
+        47.986021,
+        3.392028,
+        47.989503
+      ],
+      "labelPoint": [
+        3.389326,
+        47.988503
+      ]
+    }
+  ],
+  "coverageNote": "A geographic denomination within Bourgogne AOC. The highlight shows its full INAO production area; named cuvées and producer holdings have no separate boundaries here."
+}

@@ -1,0 +1,74 @@
+{
+  "id": "bourgogne-chitry",
+  "name": "Bourgogne Chitry",
+  "region": "Auxerrois",
+  "mapKind": "regional",
+  "communes": [
+    {
+      "id": "89108",
+      "name": "Chitry",
+      "bounds": [
+        3.669865,
+        47.74969,
+        3.720397,
+        47.773576
+      ],
+      "labelPoint": [
+        3.691464,
+        47.75441
+      ]
+    }
+  ],
+  "dataUrl": "/maps/bourgogne-chitry.2026-09-21.geojson",
+  "bounds": [
+    3.669865,
+    47.74969,
+    3.720397,
+    47.773576
+  ],
+  "sources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/89/89108/cadastre-89108-communes.json.gz",
+      "sha256": "9bdbdfc02f016b219b994571f2643ce65ce70c5b9b2548c27b06b9232f00693a"
+    }
+  ],
+  "notes": {},
+  "features": [
+    {
+      "id": "inao-denom-367",
+      "name": "Bourgogne Chitry",
+      "tier": "regional",
+      "kind": "appellation",
+      "appellationId": 138,
+      "denominationId": 367,
+      "sourceName": "Bourgogne Chitry",
+      "communes": [
+        "89108"
+      ],
+      "areaHa": 301.17,
+      "matchId": "inao-denom-367",
+      "atlasUrl": null,
+      "bounds": [
+        3.669865,
+        47.74969,
+        3.720397,
+        47.773576
+      ],
+      "labelPoint": [
+        3.691464,
+        47.75441
+      ]
+    }
+  ],
+  "coverageNote": "A geographic denomination within Bourgogne AOC. The highlight shows its full INAO production area; named cuvées and producer holdings have no separate boundaries here."
+}

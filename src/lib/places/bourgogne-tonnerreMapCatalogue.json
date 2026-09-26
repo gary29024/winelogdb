@@ -1,0 +1,184 @@
+{
+  "id": "bourgogne-tonnerre",
+  "name": "Bourgogne Tonnerre",
+  "region": "Tonnerrois",
+  "mapKind": "regional",
+  "communes": [
+    {
+      "id": "89137",
+      "name": "Dannemoine",
+      "bounds": [
+        3.9571,
+        47.886607,
+        3.981025,
+        47.89985
+      ],
+      "labelPoint": [
+        3.960484,
+        47.898282
+      ]
+    },
+    {
+      "id": "89211",
+      "name": "Junay",
+      "bounds": [
+        3.941127,
+        47.874247,
+        3.952956,
+        47.889419
+      ],
+      "labelPoint": [
+        3.951591,
+        47.875277
+      ]
+    },
+    {
+      "id": "89262",
+      "name": "Molosmes",
+      "bounds": [
+        4.002184,
+        47.871346,
+        4.061028,
+        47.892562
+      ],
+      "labelPoint": [
+        4.028502,
+        47.887803
+      ]
+    },
+    {
+      "id": "89418",
+      "name": "Tonnerre",
+      "bounds": [
+        3.918002,
+        47.834577,
+        4.02252,
+        47.875627
+      ],
+      "labelPoint": [
+        3.997701,
+        47.867888
+      ]
+    },
+    {
+      "id": "89447",
+      "name": "Vézinnes",
+      "bounds": [
+        3.933658,
+        47.887368,
+        3.942458,
+        47.899479
+      ],
+      "labelPoint": [
+        3.938485,
+        47.894405
+      ]
+    },
+    {
+      "id": "89153",
+      "name": "Épineuil",
+      "bounds": [
+        3.966286,
+        47.866213,
+        4.004439,
+        47.89266
+      ],
+      "labelPoint": [
+        3.983667,
+        47.886943
+      ]
+    }
+  ],
+  "dataUrl": "/maps/bourgogne-tonnerre.2026-09-21.geojson",
+  "bounds": [
+    3.918002,
+    47.834577,
+    4.061028,
+    47.89985
+  ],
+  "sources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/89/89137/cadastre-89137-communes.json.gz",
+      "sha256": "9552598d2db5a6df11c6ba8d9389a439f7e861c0d0a408e3341e32ae7cee912e"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/89/89153/cadastre-89153-communes.json.gz",
+      "sha256": "2a5bc8bd132f73456fcbed68cdaf470e069979134c291f6b6e6b2560a833c9cc"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/89/89211/cadastre-89211-communes.json.gz",
+      "sha256": "1b354b5c7dc4887af224dfaeff166214685ccf37974415bb12ad8c6ad73b5be5"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/89/89262/cadastre-89262-communes.json.gz",
+      "sha256": "e104bb42cdb413723de03d4a46be302eb8b99501f2bd81a0a36bd4d5355ad9db"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/89/89418/cadastre-89418-communes.json.gz",
+      "sha256": "a111b223712ea1a63e3f4f1aa5a0257bf5f1acc18f7b37ed51246810788afe06"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/89/89447/cadastre-89447-communes.json.gz",
+      "sha256": "b6020cc9afd1d0317868d6dbf966089dea14925993ac6210ae9a6d5766d37538"
+    }
+  ],
+  "notes": {},
+  "features": [
+    {
+      "id": "inao-denom-1751",
+      "name": "Bourgogne Tonnerre",
+      "tier": "regional",
+      "kind": "appellation",
+      "appellationId": 138,
+      "denominationId": 1751,
+      "sourceName": "Bourgogne Tonnerre",
+      "communes": [
+        "89137",
+        "89153",
+        "89211",
+        "89262",
+        "89418",
+        "89447"
+      ],
+      "areaHa": 838.14,
+      "matchId": "inao-denom-1751",
+      "atlasUrl": null,
+      "bounds": [
+        3.918002,
+        47.834577,
+        4.061028,
+        47.89985
+      ],
+      "labelPoint": [
+        4.028502,
+        47.887803
+      ]
+    }
+  ],
+  "coverageNote": "A geographic denomination within Bourgogne AOC. The highlight shows its full INAO production area; named cuvées and producer holdings have no separate boundaries here."
+}

@@ -115,8 +115,8 @@ def main():
         props = dict(id=feature_id, name=config['name'], tier='regional', kind='appellation',
                      appellationId=config['appellationId'], denominationId=config['denominationId'],
                      sourceName=config['sourceName'], communes=config['communes'], areaHa=round(whole_m.area / 10000, 2))
-        # Côte Chalonnaise needs seven decimals: six would close a 2.12 m²
-        # excluded hole. Retain the same area/hole gates at either precision.
+        # Reviewed finer grids preserve Côte Chalonnaise's excluded hole and
+        # Côte Saint-Jacques's small area. Keep the same gates at either precision.
         grid = config.get('coordinateGrid', GRID)
         assert grid in (GRID, 1e-7), 'Review a new precision before publishing'
         features = [dict(type='Feature', id=feature_id, properties=props, geometry=geometry_json(trimmed(whole, (whole_m, to_source), grid)))]

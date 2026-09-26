@@ -105,21 +105,145 @@
         "red"
       ],
       "featureId": "inao-denom-1586"
+    },
+    {
+      "id": "bourgogne-cotes-dauxerre",
+      "name": "Bourgogne Côtes d’Auxerre",
+      "region": "Auxerrois",
+      "aliases": [
+        "Bourgogne Côtes d’Auxerre",
+        "Côtes d’Auxerre"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Yonne",
+        "Grand Auxerrois",
+        "Chablis et Grand Auxerrois",
+        "Auxerrois"
+      ],
+      "wineColours": [
+        "white",
+        "red",
+        "rose"
+      ],
+      "featureId": "inao-denom-366"
+    },
+    {
+      "id": "bourgogne-chitry",
+      "name": "Bourgogne Chitry",
+      "region": "Auxerrois",
+      "aliases": [
+        "Bourgogne Chitry"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Yonne",
+        "Grand Auxerrois",
+        "Chablis et Grand Auxerrois",
+        "Auxerrois"
+      ],
+      "wineColours": [
+        "white",
+        "red",
+        "rose"
+      ],
+      "featureId": "inao-denom-367"
+    },
+    {
+      "id": "bourgogne-coulanges-la-vineuse",
+      "name": "Bourgogne Coulanges-la-Vineuse",
+      "region": "Auxerrois",
+      "aliases": [
+        "Bourgogne Coulanges-la-Vineuse"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Yonne",
+        "Grand Auxerrois",
+        "Chablis et Grand Auxerrois",
+        "Auxerrois"
+      ],
+      "wineColours": [
+        "white",
+        "red",
+        "rose"
+      ],
+      "featureId": "inao-denom-368"
+    },
+    {
+      "id": "bourgogne-epineuil",
+      "name": "Bourgogne Épineuil",
+      "region": "Tonnerrois",
+      "aliases": [
+        "Bourgogne Épineuil"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Yonne",
+        "Grand Auxerrois",
+        "Chablis et Grand Auxerrois",
+        "Tonnerrois"
+      ],
+      "wineColours": [
+        "red",
+        "rose"
+      ],
+      "featureId": "inao-denom-369"
+    },
+    {
+      "id": "bourgogne-cote-saint-jacques",
+      "name": "Bourgogne Côte Saint-Jacques",
+      "region": "Jovinien",
+      "aliases": [
+        "Bourgogne Côte Saint-Jacques"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Yonne",
+        "Grand Auxerrois",
+        "Chablis et Grand Auxerrois",
+        "Jovinien"
+      ],
+      "wineColours": [
+        "white",
+        "red",
+        "rose"
+      ],
+      "featureId": "inao-denom-374"
+    },
+    {
+      "id": "bourgogne-tonnerre",
+      "name": "Bourgogne Tonnerre",
+      "region": "Tonnerrois",
+      "aliases": [
+        "Bourgogne Tonnerre"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Yonne",
+        "Grand Auxerrois",
+        "Chablis et Grand Auxerrois",
+        "Tonnerrois"
+      ],
+      "wineColours": [
+        "white"
+      ],
+      "featureId": "inao-denom-1751"
     }
   ],
   "otherAppellations": [
     "Bourgogne Aligoté",
-    "Bourgogne Chitry",
-    "Bourgogne Coulanges-la-Vineuse",
-    "Bourgogne Côte Saint-Jacques",
-    "Bourgogne Côtes d'Auxerre",
-    "Bourgogne Epineuil",
     "Bourgogne La Chapelle Notre-Dame",
     "Bourgogne Le Chapitre",
     "Bourgogne Montrecul ou Montre-Cul ou En Montre-Cul",
     "Bourgogne Mousseux",
     "Bourgogne Passe-tout-grains",
-    "Bourgogne Tonnerre",
     "Bourgogne aligoté",
     "Bourgogne mousseux",
     "Coteaux Bourguignons",

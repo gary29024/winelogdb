@@ -1,0 +1,206 @@
+{
+  "id": "bourgogne-coulanges-la-vineuse",
+  "name": "Bourgogne Coulanges-la-Vineuse",
+  "region": "Auxerrois",
+  "mapKind": "regional",
+  "communes": [
+    {
+      "id": "89084",
+      "name": "Charentenay",
+      "bounds": [
+        3.524705,
+        47.649045,
+        3.548682,
+        47.657985
+      ],
+      "labelPoint": [
+        3.541183,
+        47.655537
+      ]
+    },
+    {
+      "id": "89118",
+      "name": "Coulanges-la-Vineuse",
+      "bounds": [
+        3.556791,
+        47.679245,
+        3.595757,
+        47.718495
+      ],
+      "labelPoint": [
+        3.569749,
+        47.701336
+      ]
+    },
+    {
+      "id": "89155",
+      "name": "Escolives-Sainte-Camille",
+      "bounds": [
+        3.577272,
+        47.716835,
+        3.597185,
+        47.735687
+      ],
+      "labelPoint": [
+        3.587551,
+        47.734513
+      ]
+    },
+    {
+      "id": "89212",
+      "name": "Jussy",
+      "bounds": [
+        3.566089,
+        47.721161,
+        3.593326,
+        47.728342
+      ],
+      "labelPoint": [
+        3.57256,
+        47.722804
+      ]
+    },
+    {
+      "id": "89256",
+      "name": "Migé",
+      "bounds": [
+        3.529548,
+        47.65967,
+        3.562459,
+        47.682445
+      ],
+      "labelPoint": [
+        3.539656,
+        47.662292
+      ]
+    },
+    {
+      "id": "89270",
+      "name": "Mouffy",
+      "bounds": [
+        3.515174,
+        47.649519,
+        3.52609,
+        47.658302
+      ],
+      "labelPoint": [
+        3.523115,
+        47.653688
+      ]
+    },
+    {
+      "id": "89426",
+      "name": "Val-de-Mercy",
+      "bounds": [
+        3.560973,
+        47.668737,
+        3.605955,
+        47.690065
+      ],
+      "labelPoint": [
+        3.581631,
+        47.677741
+      ]
+    }
+  ],
+  "dataUrl": "/maps/bourgogne-coulanges-la-vineuse.2026-09-21.geojson",
+  "bounds": [
+    3.515174,
+    47.649045,
+    3.605955,
+    47.735687
+  ],
+  "sources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/89/89084/cadastre-89084-communes.json.gz",
+      "sha256": "e3a7a95b4e4b324bdfdbe9b5f690c230da9e13d08e4ac5968ccd0dc390baf053"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/89/89118/cadastre-89118-communes.json.gz",
+      "sha256": "e6459e7764a5ab95e578aeb776979b5ccf8c77b1cef7ccd22f212a07511a8e22"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/89/89155/cadastre-89155-communes.json.gz",
+      "sha256": "f61d4acde18bf27dae15fe34f3c655163d40debbe6bc8123652e4b4702648825"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/89/89212/cadastre-89212-communes.json.gz",
+      "sha256": "516973b217c1cb372333fc07db882f46537ec9d7dcb0500371ff1f42294b8a65"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/89/89256/cadastre-89256-communes.json.gz",
+      "sha256": "bc29d2d46733e73ac20ba1141973c6d341d8787067c2119ec52a672e2b5d6ed2"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/89/89270/cadastre-89270-communes.json.gz",
+      "sha256": "82015e3112630cefce311f59dce3d4aac1754d028c6e0d36c69e5e7d682b80d0"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/89/89426/cadastre-89426-communes.json.gz",
+      "sha256": "b8d35d1f8c9d8c9ee58bccc67001a8dc02c0b18ade5f900ae29b58df93123459"
+    }
+  ],
+  "notes": {},
+  "features": [
+    {
+      "id": "inao-denom-368",
+      "name": "Bourgogne Coulanges-la-Vineuse",
+      "tier": "regional",
+      "kind": "appellation",
+      "appellationId": 138,
+      "denominationId": 368,
+      "sourceName": "Bourgogne Coulanges-la-Vineuse",
+      "communes": [
+        "89084",
+        "89118",
+        "89155",
+        "89212",
+        "89256",
+        "89270",
+        "89426"
+      ],
+      "areaHa": 707.78,
+      "matchId": "inao-denom-368",
+      "atlasUrl": null,
+      "bounds": [
+        3.515174,
+        47.649045,
+        3.605955,
+        47.735687
+      ],
+      "labelPoint": [
+        3.541183,
+        47.655537
+      ]
+    }
+  ],
+  "coverageNote": "A geographic denomination within Bourgogne AOC. The highlight shows its full INAO production area; named cuvées and producer holdings have no separate boundaries here."
+}

@@ -44,7 +44,7 @@
           "sourceNames": [
             "Bourgogne Côtes d'Auxerre"
           ],
-          "status": "pending",
+          "status": "mapped",
           "kind": "geographic"
         },
         {
@@ -52,7 +52,7 @@
           "sourceNames": [
             "Bourgogne Chitry"
           ],
-          "status": "pending",
+          "status": "mapped",
           "kind": "geographic"
         },
         {
@@ -60,7 +60,7 @@
           "sourceNames": [
             "Bourgogne Coulanges-la-Vineuse"
           ],
-          "status": "pending",
+          "status": "mapped",
           "kind": "geographic"
         },
         {
@@ -68,7 +68,7 @@
           "sourceNames": [
             "Bourgogne Epineuil"
           ],
-          "status": "pending",
+          "status": "mapped",
           "kind": "geographic"
         },
         {
@@ -100,7 +100,7 @@
           "sourceNames": [
             "Bourgogne Côte Saint-Jacques"
           ],
-          "status": "pending",
+          "status": "mapped",
           "kind": "geographic"
         },
         {
@@ -116,7 +116,7 @@
           "sourceNames": [
             "Bourgogne Tonnerre"
           ],
-          "status": "pending",
+          "status": "mapped",
           "kind": "geographic"
         },
         {
