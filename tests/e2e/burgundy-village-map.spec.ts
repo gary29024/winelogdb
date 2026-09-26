@@ -2,6 +2,7 @@ import { test,expect,type Locator,type Page } from '@playwright/test';
 import { wine } from './fixtures/layoutWine';
 
 const fullMapMatrix=process.env.WINELOG_E2E_EXHAUSTIVE_MAPS==='1';
+const matrixTest=fullMapMatrix?test:test.skip;
 const allMapRoutes=['/wines/layout-wine','/shared/layout-wine'] as const;
 const matrixRoutes:readonly string[]=fullMapMatrix?allMapRoutes:['/wines/layout-wine'];
 
@@ -24,7 +25,6 @@ const regionalMapCases=[
 const smokeRegionalAppellations=new Set<string>([
  'Bourgogne Côte d’Or',
  'Bourgogne Chitry',
- 'Bourgogne Tonnerre',
 ]);
 const browserRegionalCases=fullMapMatrix?regionalMapCases:regionalMapCases.filter(([appellation])=>smokeRegionalAppellations.has(appellation));
 
@@ -106,7 +106,7 @@ for(const route of matrixRoutes)test(`Le Chapitre appellation transition ${route
  await expect(village.getByRole('option',{name:/Le Chapitre/})).toHaveCount(0);
 });
 
-for(const route of matrixRoutes)test(`Regional colour and geography guards ${route}`,async({page})=>{
+for(const route of matrixRoutes)matrixTest(`Regional colour and geography guards ${route}`,async({page})=>{
  await page.setViewportSize({width:390,height:844});
  for(const overrides of [
   {appellation:'Bourgogne Côtes du Couchois',colour:'White',wineStyle:'white'},
@@ -298,7 +298,7 @@ test('Côte de Beaune-Villages has a local map, four area controls and no invent
  }
 });
 
-test('Santenay and Maranges use producer spellings and explain coincident boundaries',async({page})=>{
+matrixTest('Santenay and Maranges use producer spellings and explain coincident boundaries',async({page})=>{
  for(const row of [
   {appellation:'Santenay',wineName:'Santenay Premier Cru Passe-Temps',id:'inao-denom-1171'},
   {appellation:'Maranges',wineName:'Domaine Monnot-Roche La Croix aux Moines',id:'inao-denom-803'},
@@ -359,7 +359,7 @@ for(const route of matrixRoutes){
  });
 }
 
-test('broad Premier Cru context does not claim a specific vineyard',async({page})=>{
+matrixTest('broad Premier Cru context does not claim a specific vineyard',async({page})=>{
  await setup(page,{wineName:'Gevrey-Chambertin Premier Cru'});await page.goto('/wines/layout-wine');
  await page.getByRole('button',{name:'View village map'}).click();
  await expect(page.getByRole('combobox')).toHaveValue('inao-denom-616');
@@ -380,7 +380,7 @@ test('failed boundary download can be retried without leaving the wine',async({p
  await expect(page).toHaveURL(/\/wines\/layout-wine$/);
 });
 
-test('conflicting wine identities do not show a map entry point',async({page})=>{
+matrixTest('conflicting wine identities do not show a map entry point',async({page})=>{
  await setup(page,{identityMatchStatus:'conflict'});await page.goto('/wines/layout-wine');
  await expect(page.getByRole('heading',{name:'Les Cazetiers',exact:true})).toBeVisible();
  await expect(page.getByRole('button',{name:'View village map'})).toHaveCount(0);
@@ -389,7 +389,7 @@ test('conflicting wine identities do not show a map entry point',async({page})=>
 for(const village of [
  {id:'morey-saint-denis',name:'Morey-Saint-Denis',cru:'Les Ruchots',featureId:'inao-denom-946',count:27,catalogue:'moreyVillageMapCatalogue'},
  {id:'chambolle-musigny',name:'Chambolle-Musigny',cru:'Les Amoureuses',featureId:'inao-denom-455',count:28,catalogue:'chambolleVillageMapCatalogue'},
-]){
+].filter(village=>fullMapMatrix||village.id==='morey-saint-denis')){
  for(const route of matrixRoutes){
   test(`${village.name} ${route}: loads only its own map and explores shared Bonnes-Mares`,async({page},testInfo)=>{
    const requests:string[]=[],errors:string[]=[];
@@ -430,7 +430,7 @@ for(const village of [
  }
 }
 
-test('Bonnes-Mares opens in Chambolle with both producing communes explained',async({page})=>{
+matrixTest('Bonnes-Mares opens in Chambolle with both producing communes explained',async({page})=>{
  await setup(page,{appellation:'Bonnes-Mares',wineName:'Bonnes-Mares',classification:'grand_cru'});
  await page.goto('/wines/layout-wine');await page.getByRole('button',{name:'View village map'}).click();
  const dialog=page.getByRole('dialog',{name:'Chambolle-Musigny',exact:true});
@@ -482,12 +482,9 @@ const villageMapCases=[
  {id:'vezelay',name:'Vézelay',cru:'Vézelay',tier:'village',colour:'White',feature:'inao-denom-2829',count:1,catalogue:'vezelayVillageMapCatalogue',explore:'inao-denom-2829',label:'Vézelay'},
 ] as const;
 const smokeVillageIds=new Set<string>([
- 'nuits-saint-georges',
  'marsannay',
  'meursault',
- 'montagny',
  'pouilly-fuisse',
- 'chablis',
 ]);
 const browserVillageCases=fullMapMatrix?villageMapCases:villageMapCases.filter(village=>smokeVillageIds.has(village.id));
 
@@ -579,7 +576,7 @@ for(const route of matrixRoutes){
  });
 }
 
-test('Ferret vineyard location requires unambiguous producer evidence for Le Clos',async({page})=>{
+matrixTest('Ferret vineyard location requires unambiguous producer evidence for Le Clos',async({page})=>{
  for(const row of [
   {producer:null,wineName:'Le Clos',id:'inao-denom-2865'},
   {producer:'Château Fuissé',wineName:'Domaine Ferret Le Clos',id:'inao-denom-2865'},
@@ -599,7 +596,7 @@ test('Ferret vineyard location requires unambiguous producer evidence for Le Clo
  }
 });
 
-test('Mâconnais local Premier Cru maps keep village Atlas links separate',async({page})=>{
+matrixTest('Mâconnais local Premier Cru maps keep village Atlas links separate',async({page})=>{
  for(const row of [
   {appellation:'Pouilly-Loché',wineName:'Les Mûres',named:'inao-denom-2932',broad:'inao-denom-2931'},
   {appellation:'Pouilly-Vinzelles',wineName:'Les Quarts',named:'inao-denom-2930',broad:'inao-denom-2927'},
@@ -624,7 +621,7 @@ test('Mâconnais local Premier Cru maps keep village Atlas links separate',async
  }
 });
 
-test('Pouilly-Fuissé producer subdivisions select their full official climat',async({page})=>{
+matrixTest('Pouilly-Fuissé producer subdivisions select their full official climat',async({page})=>{
  for(const row of [
   {wineName:'Domaine Ferret Pouilly-Fuissé Le Clos de Jeanne',id:'inao-denom-2873',label:'Les Perrières',note:'producer subdivisions'},
   {wineName:'Domaine Ferret Tournant de Pouilly',id:'inao-denom-2874',label:'Les Reisses',note:'full Les Reisses'},
@@ -641,7 +638,7 @@ test('Pouilly-Fuissé producer subdivisions select their full official climat',a
  }
 });
 
-test('Saint-Véran area controls and Viré-Clessé climat area retain broad scope',async({page},testInfo)=>{
+matrixTest('Saint-Véran area controls and Viré-Clessé climat area retain broad scope',async({page},testInfo)=>{
  await setup(page,{appellation:'Saint-Véran',wineName:'Les Pommards',classification:'village',colour:'White',wineStyle:'white'});
  await page.setViewportSize({width:320,height:900});await page.goto('/shared/layout-wine');
  await page.getByRole('button',{name:'View village map'}).click();
@@ -667,7 +664,7 @@ test('Saint-Véran area controls and Viré-Clessé climat area retain broad scop
  await expect(dialog.getByRole('combobox')).toHaveValue('inao-denom-1287');
 });
 
-test('Mâconnais white-only maps reject colour and unsupported tier conflicts',async({page})=>{
+matrixTest('Mâconnais white-only maps reject colour and unsupported tier conflicts',async({page})=>{
  for(const row of [
   {appellation:'Pouilly-Fuissé',classification:'premier_cru',colour:'Red'},
   {appellation:'Pouilly-Loché',classification:'premier_cru',colour:'Rosé'},
@@ -704,7 +701,7 @@ test('Givry explains missing source geometry while local named plots remain sele
  await expect(dialog.getByRole('combobox')).toHaveValue('inao-denom-644');
 });
 
-test('white-only Chalonnaise appellations reject incompatible colour and Bouzeron Premier Cru',async({page})=>{
+matrixTest('white-only Chalonnaise appellations reject incompatible colour and Bouzeron Premier Cru',async({page})=>{
  for(const row of [
   {appellation:'Bouzeron',classification:'village',colour:'Red'},
   {appellation:'Montagny',classification:'premier_cru',colour:'Red'},
@@ -749,7 +746,7 @@ for(const village of [
  {name:'Santenay',white:1159,red:2082,app:230},
  {name:'Maranges',white:797,red:2061,app:198},
 ].filter(village=>fullMapMatrix||['Meursault','Chorey-lès-Beaune','Maranges'].includes(village.name))){
- test(`${village.name} colour selects the official area and unknown colour keeps a combined overview`,async({page})=>{
+ matrixTest(`${village.name} colour selects the official area and unknown colour keeps a combined overview`,async({page})=>{
   for(const fields of [
    {colour:'White',wineStyle:'white',id:`inao-denom-${village.white}`},
    {colour:'Red',wineStyle:'red',id:`inao-denom-${village.red}`},
@@ -769,7 +766,7 @@ for(const village of [
  });
 }
 
-for(const grand of [{name:'Montrachet',id:927},{name:'Bâtard-Montrachet',id:273}]){
+for(const grand of [{name:'Montrachet',id:927},{name:'Bâtard-Montrachet',id:273}].filter(grand=>fullMapMatrix||grand.name==='Montrachet')){
  test(`${grand.name} opens its full shared boundary in Puligny`,async({page})=>{
   await setup(page,{appellation:grand.name,wineName:grand.name,classification:'grand_cru',colour:'White',wineStyle:'white'});
   await page.goto('/wines/layout-wine');await page.getByRole('button',{name:'View village map'}).click();
@@ -780,7 +777,7 @@ for(const grand of [{name:'Montrachet',id:927},{name:'Bâtard-Montrachet',id:273
  });
 }
 
-test('a white Blagny record does not select the red appellation boundary',async({page})=>{
+matrixTest('a white Blagny record does not select the red appellation boundary',async({page})=>{
  await setup(page,{appellation:'Blagny',wineName:'La Pièce sous le Bois',colour:'White',wineStyle:'white'});
  await page.goto('/wines/layout-wine');
  await expect(page.getByRole('heading',{name:'La Pièce sous le Bois',exact:true})).toBeVisible();
@@ -817,7 +814,7 @@ for(const route of matrixRoutes){
  });
 }
 
-test('Corton broad, mixed, unsupported and white records keep appellation scope',async({page})=>{
+matrixTest('Corton broad, mixed, unsupported and white records keep appellation scope',async({page})=>{
  for(const fields of [
   {wineName:'Corton'},
   {wineName:'Les Bressandes et Les Renardes'},
@@ -872,7 +869,7 @@ test('Volnay Santenots explains Meursault coverage and keeps the whole named are
  await page.screenshot({path:testInfo.outputPath('volnay-santenots-390.png')});
 });
 
-test('Beaune and Volnay label spellings select the reviewed cru',async({page})=>{
+matrixTest('Beaune and Volnay label spellings select the reviewed cru',async({page})=>{
  for(const [appellation,wineName,id,colour] of [
   ['Beaune','Les Cent Vignes','inao-denom-330','White'],
   ['Volnay','Les Taillepieds','inao-denom-1260','Red'],
@@ -893,7 +890,7 @@ test('Beaune and Volnay label spellings select the reviewed cru',async({page})=>
  }
 });
 
-test('a red Meursault Santenots opens Volnay Santenots with the explanation',async({page})=>{
+matrixTest('a red Meursault Santenots opens Volnay Santenots with the explanation',async({page})=>{
  await setup(page,{appellation:'Meursault',wineName:'Santenots',colour:'Red'});await page.goto('/wines/layout-wine');
  await page.getByRole('button',{name:'View village map'}).click();
  const dialog=page.getByRole('dialog',{name:'Volnay',exact:true});
@@ -902,7 +899,7 @@ test('a red Meursault Santenots opens Volnay Santenots with the explanation',asy
  await expect(dialog.locator('.village-map-overlap')).toContainText('a red wine recorded as Meursault Santenots is shown here');
 });
 
-test('Savigny, Auxey and Monthélie producer spellings select the reviewed cru',async({page})=>{
+matrixTest('Savigny, Auxey and Monthélie producer spellings select the reviewed cru',async({page})=>{
  for(const [appellation,wineName,id,selected,note] of [
   ['Savigny-lès-Beaune','Albert Morot La Bataillère aux Vergelesses Premier Cru','inao-denom-1180','Bataillère','separate from Les Vergelesses'],
   ['Auxey-Duresses','Les Bretterins','inao-denom-267','Les Bréterins',''],
@@ -921,7 +918,7 @@ test('Savigny, Auxey and Monthélie producer spellings select the reviewed cru',
  }
 });
 
-test('Chorey and Saint-Romain explain missing plot boundaries and reject a Premier Cru tier',async({page})=>{
+matrixTest('Chorey and Saint-Romain explain missing plot boundaries and reject a Premier Cru tier',async({page})=>{
  for(const [appellation,wineName] of [['Chorey-lès-Beaune','Les Beaumonts'],['Saint-Romain','Sous la Velle']]){
   await setup(page,{appellation,wineName,classification:'village'});await page.goto('/wines/layout-wine');
   await page.getByRole('button',{name:'View village map'}).click();
@@ -937,7 +934,7 @@ test('Chorey and Saint-Romain explain missing plot boundaries and reject a Premi
  }
 });
 
-test('white Pommard and Volnay records do not select a red-wine map',async({page})=>{
+matrixTest('white Pommard and Volnay records do not select a red-wine map',async({page})=>{
  for(const [appellation,wineName] of [['Pommard','Clos Blanc'],['Volnay','Santenots']]){
   await setup(page,{appellation,wineName,colour:'White',wineStyle:'white'});await page.goto('/wines/layout-wine');
   await expect(page.getByRole('heading',{name:wineName,exact:true})).toBeVisible();
@@ -991,7 +988,7 @@ for(const route of matrixRoutes){
 }
 
 for(const grand of [{name:'Échezeaux',id:'inao-denom-565'},{name:'Grands Échezeaux',id:'inao-denom-645'}]){
- test(`${grand.name}: opens its distinct Grand Cru in the Vosne and Flagey map`,async({page})=>{
+ matrixTest(`${grand.name}: opens its distinct Grand Cru in the Vosne and Flagey map`,async({page})=>{
   await setup(page,{appellation:grand.name,wineName:grand.name,classification:'grand_cru'});await page.goto('/wines/layout-wine');
   await page.getByRole('button',{name:'View village map'}).click();
   const dialog=page.getByRole('dialog',{name:'Vosne-Romanée',exact:true});
