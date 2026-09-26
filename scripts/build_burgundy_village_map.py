@@ -121,6 +121,8 @@ def main():
         if village.get("premierRange"):
             first, last = village["premierRange"]
             premier_ids.update(range(first, last + 1))
+        local_premiers = set(village.get("localPremierDenominations", []))
+        assert local_premiers <= premier_ids
         expected_app = village_ids | premier_ids
         if village.get("premierDenomination"):
             expected_app.add(village["premierDenomination"])
@@ -143,7 +145,7 @@ def main():
             assert west < geom.bounds[0] < geom.bounds[2] < east and south < geom.bounds[1] < geom.bounds[3] < north
             tier = "grand_cru" if denom_id in village["grands"] else "village" if denom_id in village_ids else "premier_cru"
             broad = denom_id in village_ids or denom_id == village.get("premierDenomination") or denom_id in broad_grands
-            feature_name = row["denom"].removeprefix(f"{name} premier cru ")
+            feature_name = re.sub(r"^" + re.escape(name) + r" premier cru ", "", row["denom"], flags=re.IGNORECASE)
             if denom_id in climat_by_denom:
                 # Local INAO identity: a named Grand Cru does not need an Atlas
                 # page, and must never borrow another plot's outbound link.
@@ -162,8 +164,13 @@ def main():
                 match_id = entry["placeId"]
             else:
                 atlas_name = village["nameCrosswalk"].get(feature_name, feature_name)
-                atlas_path = premier_links[key(atlas_name)]
-                match_id = atlas_path.split("/")[2]
+                if denom_id in local_premiers:
+                    assert key(atlas_name) not in premier_links, f"Review new Atlas page for {name}: {feature_name}"
+                    atlas_path = None
+                    match_id = f"inao-denom-{denom_id}"
+                else:
+                    atlas_path = premier_links[key(atlas_name)]
+                    match_id = atlas_path.split("/")[2]
             # A shorter name for display where INAO records alternatives in one
             # string; the full INAO name stays in sourceName and the Atlas lookup.
             feature_name = village.get("displayNames", {}).get(feature_name, feature_name)
@@ -287,6 +294,8 @@ def main():
         url = f"/maps/{village['id']}.{DATE}.geojson"
         manifest = {"id": village["id"], "name": name, "region": village["region"], "communes": village["communes"],
                     "dataUrl": url, "bounds": rounded(vineyard_bounds), "sources": sources, "notes": village["notes"], "features": catalogue}
+        if village.get("coverageNote"):
+            manifest["coverageNote"] = village["coverageNote"]
         manifest["notes"] = {**village["notes"], **{f["id"]: {"note": climat_by_denom[f["denominationId"]]["note"]}
                             for f in catalogue if f["denominationId"] in climat_by_denom}}
         # Umbrella names: a Premier Cru lying at least 90% inside a larger one
@@ -373,6 +382,11 @@ def main():
                                "villageMatchId": f"inao-app-{v['appellationId']}-village",
                                "premierCruMatchId": f"inao-app-{v['appellationId']}-premier_cru" if v.get("premierDenomination") else None}
                               for v in villages if v.get("localIdentity")],
+        "localPremierCrus": [{"appellation": v["name"],
+                              "entries": [{"name": f["name"], "matchId": f["matchId"]} for f in manifest["features"]
+                                          if f["denominationId"] in v.get("localPremierDenominations", [])],
+                              "unmappedNames": v.get("unmappedPremierNames", [])}
+                             for v, manifest, _ in outputs if v.get("localPremierDenominations") or v.get("unmappedPremierNames")],
         "grandCruClimats": [{"name": group["name"],
                              "matchId": next(entry["target"]["matchId"] for entry in targets.values() if entry["denom"] == group["broadDenomination"]),
                              # Reviewed label spellings ride along with the source name.

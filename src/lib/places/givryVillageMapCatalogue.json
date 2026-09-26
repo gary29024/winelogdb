@@ -1,0 +1,1049 @@
+{
+  "id": "givry",
+  "name": "Givry",
+  "region": "Côte Chalonnaise",
+  "communes": [
+    {
+      "id": "71221",
+      "name": "Givry"
+    },
+    {
+      "id": "71182",
+      "name": "Dracy-le-Fort"
+    },
+    {
+      "id": "71241",
+      "name": "Jambles"
+    }
+  ],
+  "dataUrl": "/maps/givry.2026-09-21.geojson",
+  "bounds": [
+    4.707865,
+    46.76169,
+    4.754863,
+    46.798423
+  ],
+  "sources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71221/cadastre-71221-communes.json.gz",
+      "sha256": "94a69380cb307016a35df61d0462c6f6ce1986ba6f176c66dec2b595ac3c2218"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71182/cadastre-71182-communes.json.gz",
+      "sha256": "eb604a7d4958439fb8bc953b06ee126edaf9c1f309cf8ee182bd90a2b5c42b77"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71241/cadastre-71241-communes.json.gz",
+      "sha256": "717727d737290892a35b003034380aa30cc24039fee7073e907c9eb590b69dc8"
+    }
+  ],
+  "notes": {
+    "inao-denom-617": {
+      "note": "The full published Givry appellation area is shown across its producing communes. Named village lieux-dits and individual producer holdings are not mapped separately."
+    },
+    "inao-denom-644": {
+      "note": "This is the broad Givry Premier Cru production area across Givry, Dracy-le-Fort and Jambles. Le Vernoy has no separate boundary in this source and is not replaced by Clos du Vernoy."
+    },
+    "inao-denom-628": {
+      "note": "Clos du Vernoy has its own source boundary. It must not be used as a substitute for Le Vernoy, a different Premier Cru without separate geometry in this snapshot."
+    }
+  },
+  "features": [
+    {
+      "id": "inao-denom-617",
+      "name": "Givry",
+      "tier": "village",
+      "kind": "appellation",
+      "appellationId": 183,
+      "denominationId": 617,
+      "sourceName": "Givry",
+      "communes": [
+        "71182",
+        "71221",
+        "71241"
+      ],
+      "areaHa": 368.02,
+      "matchId": "ba_appellation_ugchyp6n6ih7zcpqotgriyvjlu",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_ugchyp6n6ih7zcpqotgriyvjlu/givry",
+      "bounds": [
+        4.707865,
+        46.76169,
+        4.754863,
+        46.798423
+      ],
+      "labelPoint": [
+        4.749266,
+        46.790881
+      ]
+    },
+    {
+      "id": "inao-denom-618",
+      "name": "Clos du Cellier aux Moines",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 183,
+      "denominationId": 618,
+      "sourceName": "Givry premier cru Clos du Cellier aux Moines",
+      "communes": [
+        "71221"
+      ],
+      "areaHa": 13.32,
+      "matchId": "ba_designation_cmqk7dv4qpyxtxrgnoebcjzl6y",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_cmqk7dv4qpyxtxrgnoebcjzl6y/clos-du-cellier-aux-moines",
+      "bounds": [
+        4.736732,
+        46.78775,
+        4.741765,
+        46.793213
+      ],
+      "labelPoint": [
+        4.73913,
+        46.790479
+      ]
+    },
+    {
+      "id": "inao-denom-619",
+      "name": "Clos Charlé",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 183,
+      "denominationId": 619,
+      "sourceName": "Givry premier cru Clos Charlé",
+      "communes": [
+        "71221"
+      ],
+      "areaHa": 4.67,
+      "matchId": "ba_designation_ql7d4p4tbk24vro2qwcn2irc7a",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_ql7d4p4tbk24vro2qwcn2irc7a/clos-charle",
+      "bounds": [
+        4.742232,
+        46.785927,
+        4.746602,
+        46.7891
+      ],
+      "labelPoint": [
+        4.744601,
+        46.787532
+      ]
+    },
+    {
+      "id": "inao-denom-620",
+      "name": "Clos Jus",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 183,
+      "denominationId": 620,
+      "sourceName": "Givry premier cru Clos Jus",
+      "communes": [
+        "71182"
+      ],
+      "areaHa": 6.53,
+      "matchId": "ba_designation_c47ril4hjbzsahbbfrqnl2tbfy",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_c47ril4hjbzsahbbfrqnl2tbfy/clos-jus",
+      "bounds": [
+        4.746743,
+        46.791876,
+        4.750112,
+        46.795768
+      ],
+      "labelPoint": [
+        4.74824,
+        46.793763
+      ]
+    },
+    {
+      "id": "inao-denom-621",
+      "name": "Clos Marceaux",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 183,
+      "denominationId": 621,
+      "sourceName": "Givry premier cru Clos Marceaux",
+      "communes": [
+        "71221"
+      ],
+      "areaHa": 2.95,
+      "matchId": "ba_designation_4qafqi6x73svwjkpjmpcmmxlne",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_4qafqi6x73svwjkpjmpcmmxlne/clos-marceaux",
+      "bounds": [
+        4.724533,
+        46.773099,
+        4.727508,
+        46.775062
+      ],
+      "labelPoint": [
+        4.726021,
+        46.774074
+      ]
+    },
+    {
+      "id": "inao-denom-622",
+      "name": "Clos Marole",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 183,
+      "denominationId": 622,
+      "sourceName": "Givry premier cru Clos Marole",
+      "communes": [
+        "71221"
+      ],
+      "areaHa": 4.5,
+      "matchId": "ba_designation_yqxfcw7yiygfydsflypi2yv3ti",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_yqxfcw7yiygfydsflypi2yv3ti/clos-marole",
+      "bounds": [
+        4.732861,
+        46.785941,
+        4.737779,
+        46.788613
+      ],
+      "labelPoint": [
+        4.735688,
+        46.787308
+      ]
+    },
+    {
+      "id": "inao-denom-623",
+      "name": "Clos-Saint-Paul",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 183,
+      "denominationId": 623,
+      "sourceName": "Givry premier cru Clos-Saint-Paul",
+      "communes": [
+        "71221"
+      ],
+      "areaHa": 2.14,
+      "matchId": "ba_designation_rtkyghctksuru5sms7t7z7mfwy",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_rtkyghctksuru5sms7t7z7mfwy/clos-saint-paul",
+      "bounds": [
+        4.731321,
+        46.78232,
+        4.735004,
+        46.783641
+      ],
+      "labelPoint": [
+        4.733084,
+        46.782956
+      ]
+    },
+    {
+      "id": "inao-denom-624",
+      "name": "Clos-Saint-Pierre",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 183,
+      "denominationId": 624,
+      "sourceName": "Givry premier cru Clos-Saint-Pierre",
+      "communes": [
+        "71221"
+      ],
+      "areaHa": 2.72,
+      "matchId": "ba_designation_usdmaabw2idgfajcdehzz45moe",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_usdmaabw2idgfajcdehzz45moe/clos-saint-pierre",
+      "bounds": [
+        4.72996,
+        46.782686,
+        4.732686,
+        46.785175
+      ],
+      "labelPoint": [
+        4.731368,
+        46.783928
+      ]
+    },
+    {
+      "id": "inao-denom-625",
+      "name": "Clos Salomon",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 183,
+      "denominationId": 625,
+      "sourceName": "Givry premier cru Clos Salomon",
+      "communes": [
+        "71221"
+      ],
+      "areaHa": 6.97,
+      "matchId": "ba_designation_szkkc6gz6pyze3o5vji6l6cedq",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_szkkc6gz6pyze3o5vji6l6cedq/clos-salomon",
+      "bounds": [
+        4.728978,
+        46.779963,
+        4.734131,
+        46.782765
+      ],
+      "labelPoint": [
+        4.73096,
+        46.78135
+      ]
+    },
+    {
+      "id": "inao-denom-626",
+      "name": "Clos de la Baraude",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 183,
+      "denominationId": 626,
+      "sourceName": "Givry premier cru Clos de la Baraude",
+      "communes": [
+        "71221"
+      ],
+      "areaHa": 4.22,
+      "matchId": "ba_designation_2dryhynygyrehflsnhjteek6pm",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_2dryhynygyrehflsnhjteek6pm/clos-de-la-baraude",
+      "bounds": [
+        4.725801,
+        46.777841,
+        4.729284,
+        46.780357
+      ],
+      "labelPoint": [
+        4.727242,
+        46.779089
+      ]
+    },
+    {
+      "id": "inao-denom-627",
+      "name": "Clos du Cras long",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 183,
+      "denominationId": 627,
+      "sourceName": "Givry premier cru Clos du Cras long",
+      "communes": [
+        "71221"
+      ],
+      "areaHa": 2.78,
+      "matchId": "ba_designation_dxw3h2hjgwi4m5wsm3day2xjwm",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_dxw3h2hjgwi4m5wsm3day2xjwm/clos-du-cras-long",
+      "bounds": [
+        4.716043,
+        46.767597,
+        4.719281,
+        46.770548
+      ],
+      "labelPoint": [
+        4.717257,
+        46.769108
+      ]
+    },
+    {
+      "id": "inao-denom-628",
+      "name": "Clos du Vernoy",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 183,
+      "denominationId": 628,
+      "sourceName": "Givry premier cru Clos du Vernoy",
+      "communes": [
+        "71221"
+      ],
+      "areaHa": 0.7,
+      "matchId": "ba_designation_nst43gr6zaygtgqk3kjewefsim",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_nst43gr6zaygtgqk3kjewefsim/clos-du-vernoy",
+      "bounds": [
+        4.721679,
+        46.772763,
+        4.723367,
+        46.773592
+      ],
+      "labelPoint": [
+        4.722519,
+        46.773166
+      ]
+    },
+    {
+      "id": "inao-denom-629",
+      "name": "Les Bois Chevaux",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 183,
+      "denominationId": 629,
+      "sourceName": "Givry premier cru Les Bois Chevaux",
+      "communes": [
+        "71221"
+      ],
+      "areaHa": 12.88,
+      "matchId": "ba_designation_pxrxo6hb6lsbyby2n6zkt3g25i",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_pxrxo6hb6lsbyby2n6zkt3g25i/les-bois-chevaux",
+      "bounds": [
+        4.731428,
+        46.78312,
+        4.737929,
+        46.786964
+      ],
+      "labelPoint": [
+        4.734775,
+        46.785038
+      ]
+    },
+    {
+      "id": "inao-denom-630",
+      "name": "Les Grandes Vignes",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 183,
+      "denominationId": 630,
+      "sourceName": "Givry premier cru Les Grandes Vignes",
+      "communes": [
+        "71221"
+      ],
+      "areaHa": 2.55,
+      "matchId": "ba_designation_vti6cjcth6qdz2ti54mm5luete",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_vti6cjcth6qdz2ti54mm5luete/les-grandes-vignes",
+      "bounds": [
+        4.7253,
+        46.774874,
+        4.728053,
+        46.777523
+      ],
+      "labelPoint": [
+        4.726721,
+        46.776198
+      ]
+    },
+    {
+      "id": "inao-denom-631",
+      "name": "Les Grands Prétans",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 183,
+      "denominationId": 631,
+      "sourceName": "Givry premier cru Les Grands Prétans",
+      "communes": [
+        "71221"
+      ],
+      "areaHa": 6.49,
+      "matchId": "ba_designation_hph7ygdkl4smlrad6ff4avgzgi",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_hph7ygdkl4smlrad6ff4avgzgi/les-grands-pretans",
+      "bounds": [
+        4.730984,
+        46.779791,
+        4.736669,
+        46.78269
+      ],
+      "labelPoint": [
+        4.734075,
+        46.781249
+      ]
+    },
+    {
+      "id": "inao-denom-632",
+      "name": "Petit Marole",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 183,
+      "denominationId": 632,
+      "sourceName": "Givry premier cru Petit Marole",
+      "communes": [
+        "71221"
+      ],
+      "areaHa": 3.07,
+      "matchId": "ba_designation_l2gtrtoqfm5wfug267zfzvt36m",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_l2gtrtoqfm5wfug267zfzvt36m/petit-marole",
+      "bounds": [
+        4.735419,
+        46.786866,
+        4.738822,
+        46.789144
+      ],
+      "labelPoint": [
+        4.737464,
+        46.787992
+      ]
+    },
+    {
+      "id": "inao-denom-633",
+      "name": "Servoisine",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 183,
+      "denominationId": 633,
+      "sourceName": "Givry premier cru Servoisine",
+      "communes": [
+        "71221"
+      ],
+      "areaHa": 7.44,
+      "matchId": "ba_designation_fvlnvsy67owfd7tnqob6vnn3uu",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_fvlnvsy67owfd7tnqob6vnn3uu/servoisine",
+      "bounds": [
+        4.739869,
+        46.786898,
+        4.744095,
+        46.790271
+      ],
+      "labelPoint": [
+        4.742221,
+        46.788556
+      ]
+    },
+    {
+      "id": "inao-denom-634",
+      "name": "Le Petit Prétan",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 183,
+      "denominationId": 634,
+      "sourceName": "Givry premier cru Le Petit Prétan",
+      "communes": [
+        "71221"
+      ],
+      "areaHa": 1.02,
+      "matchId": "ba_designation_55hkr6ks7mwkcdvmymwq42sjam",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_55hkr6ks7mwkcdvmymwq42sjam/le-petit-pretan",
+      "bounds": [
+        4.734638,
+        46.782094,
+        4.737183,
+        46.783225
+      ],
+      "labelPoint": [
+        4.735896,
+        46.782659
+      ]
+    },
+    {
+      "id": "inao-denom-635",
+      "name": "Le Paradis",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 183,
+      "denominationId": 635,
+      "sourceName": "Givry premier cru Le Paradis",
+      "communes": [
+        "71221"
+      ],
+      "areaHa": 0.71,
+      "matchId": "ba_designation_d2gtwqe3gznzihs626dtnxuppe",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_d2gtwqe3gznzihs626dtnxuppe/le-paradis",
+      "bounds": [
+        4.727143,
+        46.776823,
+        4.728944,
+        46.777871
+      ],
+      "labelPoint": [
+        4.728106,
+        46.777339
+      ]
+    },
+    {
+      "id": "inao-denom-636",
+      "name": "Le Vigron",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 183,
+      "denominationId": 636,
+      "sourceName": "Givry premier cru Le Vigron",
+      "communes": [
+        "71221"
+      ],
+      "areaHa": 3.3,
+      "matchId": "ba_designation_nz4q7h4xuq6sgxvwl6pw3vchim",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_nz4q7h4xuq6sgxvwl6pw3vchim/le-vigron",
+      "bounds": [
+        4.720679,
+        46.775715,
+        4.72369,
+        46.777988
+      ],
+      "labelPoint": [
+        4.722311,
+        46.776864
+      ]
+    },
+    {
+      "id": "inao-denom-637",
+      "name": "Les Bois Gautiers",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 183,
+      "denominationId": 637,
+      "sourceName": "Givry premier cru Les Bois Gautiers",
+      "communes": [
+        "71221"
+      ],
+      "areaHa": 7.29,
+      "matchId": "ba_designation_736nnewxwangj3wsqfwoc3bk5y",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_736nnewxwangj3wsqfwoc3bk5y/les-bois-gautiers",
+      "bounds": [
+        4.721106,
+        46.777645,
+        4.72708,
+        46.780438
+      ],
+      "labelPoint": [
+        4.723988,
+        46.779042
+      ]
+    },
+    {
+      "id": "inao-denom-638",
+      "name": "A Vigne Rouge",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 183,
+      "denominationId": 638,
+      "sourceName": "Givry premier cru A Vigne Rouge",
+      "communes": [
+        "71221"
+      ],
+      "areaHa": 2.95,
+      "matchId": "ba_designation_jra3xvaxqe2kpngr3xx4gfew5i",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_jra3xvaxqe2kpngr3xx4gfew5i/a-vigne-rouge",
+      "bounds": [
+        4.723082,
+        46.775705,
+        4.726803,
+        46.777888
+      ],
+      "labelPoint": [
+        4.724159,
+        46.776776
+      ]
+    },
+    {
+      "id": "inao-denom-639",
+      "name": "La Plante",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 183,
+      "denominationId": 639,
+      "sourceName": "Givry premier cru La Plante",
+      "communes": [
+        "71241"
+      ],
+      "areaHa": 3.96,
+      "matchId": "inao-denom-639",
+      "atlasUrl": null,
+      "bounds": [
+        4.709455,
+        46.770518,
+        4.713653,
+        46.773128
+      ],
+      "labelPoint": [
+        4.711184,
+        46.77183
+      ]
+    },
+    {
+      "id": "inao-denom-640",
+      "name": "Crausot",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 183,
+      "denominationId": 640,
+      "sourceName": "Givry premier cru Crausot",
+      "communes": [
+        "71241"
+      ],
+      "areaHa": 5.23,
+      "matchId": "ba_designation_jv3lwxdyckunkasaescbns5ndy",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_jv3lwxdyckunkasaescbns5ndy/crausot",
+      "bounds": [
+        4.710831,
+        46.768972,
+        4.716288,
+        46.771371
+      ],
+      "labelPoint": [
+        4.713506,
+        46.770009
+      ]
+    },
+    {
+      "id": "inao-denom-641",
+      "name": "Crémillons",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 183,
+      "denominationId": 641,
+      "sourceName": "Givry premier cru Crémillons",
+      "communes": [
+        "71221"
+      ],
+      "areaHa": 1.52,
+      "matchId": "ba_designation_2sdpjzu3fsmw4lsddo2ueugko4",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_2sdpjzu3fsmw4lsddo2ueugko4/cremillons",
+      "bounds": [
+        4.71643,
+        46.767296,
+        4.719846,
+        46.770666
+      ],
+      "labelPoint": [
+        4.718352,
+        46.768979
+      ]
+    },
+    {
+      "id": "inao-denom-642",
+      "name": "La Grande Berge",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 183,
+      "denominationId": 642,
+      "sourceName": "Givry premier cru La Grande Berge",
+      "communes": [
+        "71221"
+      ],
+      "areaHa": 13.31,
+      "matchId": "ba_designation_bv5g6v7y43rfjatvoh2ccnkm6m",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_bv5g6v7y43rfjatvoh2ccnkm6m/la-grande-berge",
+      "bounds": [
+        4.715798,
+        46.7694,
+        4.721765,
+        46.774206
+      ],
+      "labelPoint": [
+        4.719387,
+        46.771814
+      ]
+    },
+    {
+      "id": "inao-denom-643",
+      "name": "En Choué",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 183,
+      "denominationId": 643,
+      "sourceName": "Givry premier cru En Choué",
+      "communes": [
+        "71221"
+      ],
+      "areaHa": 8.28,
+      "matchId": "ba_designation_y2gisualn2dwsxrdgglmzqjque",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_y2gisualn2dwsxrdgglmzqjque/en-choue",
+      "bounds": [
+        4.713757,
+        46.777716,
+        4.719411,
+        46.781424
+      ],
+      "labelPoint": [
+        4.716106,
+        46.779538
+      ]
+    },
+    {
+      "id": "inao-denom-644",
+      "name": "Givry Premier Cru",
+      "tier": "premier_cru",
+      "kind": "appellation",
+      "appellationId": 183,
+      "denominationId": 644,
+      "sourceName": "Givry premier cru",
+      "communes": [
+        "71182",
+        "71221",
+        "71241"
+      ],
+      "areaHa": 163.52,
+      "matchId": "ba_appellation_qo5hzlkltn3t5qsaq75ztz3v4q",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_qo5hzlkltn3t5qsaq75ztz3v4q/givry-premier-cru",
+      "bounds": [
+        4.709455,
+        46.767296,
+        4.753272,
+        46.796141
+      ],
+      "labelPoint": [
+        4.7396,
+        46.790041
+      ]
+    },
+    {
+      "id": "inao-denom-2324",
+      "name": "Champ Nalot",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 183,
+      "denominationId": 2324,
+      "sourceName": "Givry premier cru Champ Nalot",
+      "communes": [
+        "71221"
+      ],
+      "areaHa": 3.18,
+      "matchId": "ba_designation_2khani5yufs4sxiyywywsvrtme",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_2khani5yufs4sxiyywywsvrtme/champ-nalot",
+      "bounds": [
+        4.747898,
+        46.790396,
+        4.750939,
+        46.792501
+      ],
+      "labelPoint": [
+        4.749324,
+        46.791441
+      ]
+    },
+    {
+      "id": "inao-denom-2325",
+      "name": "En Veau",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 183,
+      "denominationId": 2325,
+      "sourceName": "Givry premier cru En Veau",
+      "communes": [
+        "71221"
+      ],
+      "areaHa": 4.48,
+      "matchId": "ba_designation_eauhoz3ahwfaseqftxe4ml6ipm",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_eauhoz3ahwfaseqftxe4ml6ipm/en-veau",
+      "bounds": [
+        4.733074,
+        46.788332,
+        4.737087,
+        46.791123
+      ],
+      "labelPoint": [
+        4.735756,
+        46.789656
+      ]
+    },
+    {
+      "id": "inao-denom-2326",
+      "name": "La Brûlée",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 183,
+      "denominationId": 2326,
+      "sourceName": "Givry premier cru La Brûlée",
+      "communes": [
+        "71221"
+      ],
+      "areaHa": 2.36,
+      "matchId": "ba_designation_aju4ijfywc4juve2suj24polbe",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_aju4ijfywc4juve2suj24polbe/la-brulee",
+      "bounds": [
+        4.745745,
+        46.786853,
+        4.748281,
+        46.788952
+      ],
+      "labelPoint": [
+        4.746736,
+        46.787886
+      ]
+    },
+    {
+      "id": "inao-denom-2327",
+      "name": "La Matrosse",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 183,
+      "denominationId": 2327,
+      "sourceName": "Givry premier cru La Matrosse",
+      "communes": [
+        "71241"
+      ],
+      "areaHa": 0.52,
+      "matchId": "inao-denom-2327",
+      "atlasUrl": null,
+      "bounds": [
+        4.709954,
+        46.770198,
+        4.710997,
+        46.771365
+      ],
+      "labelPoint": [
+        4.7105,
+        46.77076
+      ]
+    },
+    {
+      "id": "inao-denom-2328",
+      "name": "La Petite Berge",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 183,
+      "denominationId": 2328,
+      "sourceName": "Givry premier cru La Petite Berge",
+      "communes": [
+        "71221"
+      ],
+      "areaHa": 1.65,
+      "matchId": "ba_designation_ecd4kgyqwir3g6voybmwsxhz4y",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_ecd4kgyqwir3g6voybmwsxhz4y/la-petite-berge",
+      "bounds": [
+        4.719975,
+        46.770744,
+        4.722641,
+        46.772993
+      ],
+      "labelPoint": [
+        4.721087,
+        46.771389
+      ]
+    },
+    {
+      "id": "inao-denom-2329",
+      "name": "Le Champ Lalot",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 183,
+      "denominationId": 2329,
+      "sourceName": "Givry premier cru Le Champ Lalot",
+      "communes": [
+        "71182"
+      ],
+      "areaHa": 8.23,
+      "matchId": "ba_designation_wycirhxlbhctdbpjcfhdjhnpni",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_wycirhxlbhctdbpjcfhdjhnpni/le-champ-lalot",
+      "bounds": [
+        4.748788,
+        46.791989,
+        4.753272,
+        46.796141
+      ],
+      "labelPoint": [
+        4.750973,
+        46.793981
+      ]
+    },
+    {
+      "id": "inao-denom-2330",
+      "name": "Le Médenchot",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 183,
+      "denominationId": 2330,
+      "sourceName": "Givry premier cru Le Médenchot",
+      "communes": [
+        "71241"
+      ],
+      "areaHa": 0.98,
+      "matchId": "inao-denom-2330",
+      "atlasUrl": null,
+      "bounds": [
+        4.714742,
+        46.768097,
+        4.716352,
+        46.769199
+      ],
+      "labelPoint": [
+        4.715545,
+        46.76863
+      ]
+    },
+    {
+      "id": "inao-denom-2331",
+      "name": "Le Pied de Chaume",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 183,
+      "denominationId": 2331,
+      "sourceName": "Givry premier cru Le Pied de Chaume",
+      "communes": [
+        "71221"
+      ],
+      "areaHa": 3.79,
+      "matchId": "ba_designation_6nf4jyqnvnfeeptidfewmus3ei",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_6nf4jyqnvnfeeptidfewmus3ei/le-pied-de-chaume",
+      "bounds": [
+        4.74678,
+        46.788356,
+        4.749844,
+        46.79115
+      ],
+      "labelPoint": [
+        4.748468,
+        46.789737
+      ]
+    },
+    {
+      "id": "inao-denom-2332",
+      "name": "Le Pied du Clou",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 183,
+      "denominationId": 2332,
+      "sourceName": "Givry premier cru Le Pied du Clou",
+      "communes": [
+        "71221"
+      ],
+      "areaHa": 0.87,
+      "matchId": "ba_designation_h3pwijipf3lmmr6h75tjepvdzm",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_h3pwijipf3lmmr6h75tjepvdzm/le-pied-du-clou",
+      "bounds": [
+        4.736639,
+        46.774625,
+        4.738182,
+        46.77573
+      ],
+      "labelPoint": [
+        4.737335,
+        46.775177
+      ]
+    },
+    {
+      "id": "inao-denom-2334",
+      "name": "Les Combes",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 183,
+      "denominationId": 2334,
+      "sourceName": "Givry premier cru Les Combes",
+      "communes": [
+        "71221"
+      ],
+      "areaHa": 1.65,
+      "matchId": "ba_designation_utdwjnqblrqvuiaklgeeaypjwu",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_utdwjnqblrqvuiaklgeeaypjwu/les-combes",
+      "bounds": [
+        4.735133,
+        46.791234,
+        4.73753,
+        46.792745
+      ],
+      "labelPoint": [
+        4.736564,
+        46.79199
+      ]
+    },
+    {
+      "id": "inao-denom-2335",
+      "name": "Les Galaffres",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 183,
+      "denominationId": 2335,
+      "sourceName": "Givry premier cru Les Galaffres",
+      "communes": [
+        "71221"
+      ],
+      "areaHa": 2.94,
+      "matchId": "ba_designation_kur3gcwzli2owgrjzteboi7oiq",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_kur3gcwzli2owgrjzteboi7oiq/les-galaffres",
+      "bounds": [
+        4.713038,
+        46.776755,
+        4.716875,
+        46.779114
+      ],
+      "labelPoint": [
+        4.714566,
+        46.777929
+      ]
+    }
+  ],
+  "coverageNote": "37 of Givry’s 38 named Premier Crus have boundaries in this source. Le Vernoy has no separate geometry here; its wines show the broad Premier Cru area. Clos du Vernoy is a different designation and remains separately selectable."
+}

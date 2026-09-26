@@ -255,6 +255,7 @@ function VillageMapView({target,catalogue}:{target:BurgundyVillageMapTarget;cata
     {selectedId!==target.featureId&&<button type="button" className="village-map-return" onClick={backToWine}>Back to this wine</button>}
     <p className="village-map-hint">{hasVineyards?'Tap a vineyard on the map to explore it.':'The map shows the appellation area across its producing communes.'}</p>
     <p className="village-map-context">{hasVineyards?<>{countLabel(grandCount,'Grand Cru','Grand Crus')}{grandClimats.length>0&&<> · {countLabel(grandClimats.length,'Grand Cru climat','Grand Cru climats')}</>} · {countLabel(vineyardCount('premier_cru'),'Premier Cru climat','Premier Cru climats')}</>:'Village appellation area'}<br/>{joinPlaces(catalogue.communes.map(commune=>commune.name))}</p>
+    {catalogue.coverageNote&&<p className="village-map-note">{catalogue.coverageNote}</p>}
     <BurgundyAtlasLink place={selected.atlasUrl?{placeId:selected.matchId,name:selected.name,url:selected.atlasUrl,...(selected.kind==='appellation'?{scope:'appellation' as const}:{})}:null}/>
     {baseWarning&&!error&&<p className="village-map-note" role="status">Some street-map details are unavailable. Vineyard boundaries remain available.</p>}
    </aside>

@@ -1,0 +1,1368 @@
+{
+  "id": "montagny",
+  "name": "Montagny",
+  "region": "Côte Chalonnaise",
+  "communes": [
+    {
+      "id": "71302",
+      "name": "Montagny-lès-Buxy"
+    },
+    {
+      "id": "71070",
+      "name": "Buxy"
+    },
+    {
+      "id": "71247",
+      "name": "Jully-lès-Buxy"
+    },
+    {
+      "id": "71485",
+      "name": "Saint-Vallerin"
+    }
+  ],
+  "dataUrl": "/maps/montagny.2026-09-21.geojson",
+  "bounds": [
+    4.667365,
+    46.679676,
+    4.697219,
+    46.721278
+  ],
+  "sources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71302/cadastre-71302-communes.json.gz",
+      "sha256": "d5b600e0fbc999b81c307ac09aa64e369beb23f9269d7f2aae984bf75c621d83"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71070/cadastre-71070-communes.json.gz",
+      "sha256": "1b9623c7b1668c527a8c360515773b07899f2efd336cd6aa1b998d28e6b1f626"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71247/cadastre-71247-communes.json.gz",
+      "sha256": "ec959d4cdc55ed89140fd38f6857ccbd965e527e68637e3664c856887083f552"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71485/cadastre-71485-communes.json.gz",
+      "sha256": "f0440338b46b02ef071955e60c76ce58cf3824eacfd59fcbce89a8707169d31e"
+    }
+  ],
+  "notes": {
+    "inao-denom-863": {
+      "note": "Montagny produces white Chardonnay wines only. Its full production area spans Montagny-lès-Buxy, Buxy, Jully-lès-Buxy and Saint-Vallerin. Named village lieux-dits and individual producer holdings are not mapped separately."
+    },
+    "inao-denom-886": {
+      "note": "Les Coères spans Montagny-lès-Buxy, Jully-lès-Buxy and Saint-Vallerin. Its full published boundary is shown across all three communes."
+    },
+    "inao-denom-894": {
+      "note": "Les Paquiers spans Montagny-lès-Buxy and Saint-Vallerin. Its full published boundary is retained."
+    },
+    "inao-denom-898": {
+      "note": "Les Resses spans Montagny-lès-Buxy and Saint-Vallerin. Its full published boundary is retained."
+    }
+  },
+  "features": [
+    {
+      "id": "inao-denom-863",
+      "name": "Montagny",
+      "tier": "village",
+      "kind": "appellation",
+      "appellationId": 205,
+      "denominationId": 863,
+      "sourceName": "Montagny",
+      "communes": [
+        "71070",
+        "71247",
+        "71302",
+        "71485"
+      ],
+      "areaHa": 428.81,
+      "matchId": "ba_appellation_o2eo3g34c5x7qnl2milobx2mym",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_o2eo3g34c5x7qnl2milobx2mym/montagny",
+      "bounds": [
+        4.667365,
+        46.679676,
+        4.697219,
+        46.721278
+      ],
+      "labelPoint": [
+        4.684944,
+        46.716934
+      ]
+    },
+    {
+      "id": "inao-denom-864",
+      "name": "Champ Toizeau",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 205,
+      "denominationId": 864,
+      "sourceName": "Montagny premier cru Champ Toizeau",
+      "communes": [
+        "71302"
+      ],
+      "areaHa": 1.54,
+      "matchId": "ba_designation_z6l32kftu2bwpveiap7awig2zy",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_z6l32kftu2bwpveiap7awig2zy/champ-toizeau",
+      "bounds": [
+        4.675338,
+        46.708183,
+        4.677834,
+        46.710163
+      ],
+      "labelPoint": [
+        4.67631,
+        46.709195
+      ]
+    },
+    {
+      "id": "inao-denom-865",
+      "name": "Chazelle",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 205,
+      "denominationId": 865,
+      "sourceName": "Montagny premier cru Chazelle",
+      "communes": [
+        "71247"
+      ],
+      "areaHa": 2.66,
+      "matchId": "ba_designation_6nnkq7sf7teca3vopijdn3suyy",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_6nnkq7sf7teca3vopijdn3suyy/chazelle",
+      "bounds": [
+        4.679575,
+        46.690879,
+        4.683337,
+        46.692853
+      ],
+      "labelPoint": [
+        4.68168,
+        46.69184
+      ]
+    },
+    {
+      "id": "inao-denom-866",
+      "name": "Cornevent",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 205,
+      "denominationId": 866,
+      "sourceName": "Montagny premier cru Cornevent",
+      "communes": [
+        "71070"
+      ],
+      "areaHa": 3.31,
+      "matchId": "ba_designation_io4qq3cchagrzocekhl3a2i66e",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_io4qq3cchagrzocekhl3a2i66e/cornevent",
+      "bounds": [
+        4.69359,
+        46.718982,
+        4.697219,
+        46.721086
+      ],
+      "labelPoint": [
+        4.695112,
+        46.720033
+      ]
+    },
+    {
+      "id": "inao-denom-867",
+      "name": "Creux de Beaux Champs",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 205,
+      "denominationId": 867,
+      "sourceName": "Montagny premier cru Creux de Beaux Champs",
+      "communes": [
+        "71302"
+      ],
+      "areaHa": 4.48,
+      "matchId": "ba_designation_nl6rjtpzufcbydkmceeuw4jtwq",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_nl6rjtpzufcbydkmceeuw4jtwq/creux-de-beaux-champs",
+      "bounds": [
+        4.674529,
+        46.698659,
+        4.677902,
+        46.701471
+      ],
+      "labelPoint": [
+        4.676145,
+        46.700046
+      ]
+    },
+    {
+      "id": "inao-denom-868",
+      "name": "L'Epaule",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 205,
+      "denominationId": 868,
+      "sourceName": "Montagny premier cru L'Epaule",
+      "communes": [
+        "71302"
+      ],
+      "areaHa": 4.72,
+      "matchId": "ba_designation_npwsbfm2ckq5tbywvgvwoopi74",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_npwsbfm2ckq5tbywvgvwoopi74/l-epaule",
+      "bounds": [
+        4.674707,
+        46.699857,
+        4.67887,
+        46.702728
+      ],
+      "labelPoint": [
+        4.677179,
+        46.701309
+      ]
+    },
+    {
+      "id": "inao-denom-869",
+      "name": "La Condemine du Vieux Château",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 205,
+      "denominationId": 869,
+      "sourceName": "Montagny premier cru La Condemine du Vieux Château",
+      "communes": [
+        "71070"
+      ],
+      "areaHa": 3.25,
+      "matchId": "ba_designation_qtbnj4qad5qpyei5zlr3kydxgi",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_qtbnj4qad5qpyei5zlr3kydxgi/la-condemine-du-vieux-chateau",
+      "bounds": [
+        4.6888,
+        46.715567,
+        4.693365,
+        46.716984
+      ],
+      "labelPoint": [
+        4.69109,
+        46.716305
+      ]
+    },
+    {
+      "id": "inao-denom-870",
+      "name": "La Grande Pièce",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 205,
+      "denominationId": 870,
+      "sourceName": "Montagny premier cru La Grande Pièce",
+      "communes": [
+        "71070"
+      ],
+      "areaHa": 6.83,
+      "matchId": "ba_designation_6o3x7w7akw4k4yzxdyyllhxw6m",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_6o3x7w7akw4k4yzxdyyllhxw6m/la-grande-piece",
+      "bounds": [
+        4.679186,
+        46.714964,
+        4.683995,
+        46.719582
+      ],
+      "labelPoint": [
+        4.681381,
+        46.717278
+      ]
+    },
+    {
+      "id": "inao-denom-871",
+      "name": "La Moullière",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 205,
+      "denominationId": 871,
+      "sourceName": "Montagny premier cru La Moullière",
+      "communes": [
+        "71485"
+      ],
+      "areaHa": 4.02,
+      "matchId": "ba_designation_7zrl6hpoiev2yqgtlx2lcwfk24",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_7zrl6hpoiev2yqgtlx2lcwfk24/la-moulliere",
+      "bounds": [
+        4.67836,
+        46.691052,
+        4.681667,
+        46.693556
+      ],
+      "labelPoint": [
+        4.680155,
+        46.692496
+      ]
+    },
+    {
+      "id": "inao-denom-872",
+      "name": "Le Clos Chaudron",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 205,
+      "denominationId": 872,
+      "sourceName": "Montagny premier cru Le Clos Chaudron",
+      "communes": [
+        "71070"
+      ],
+      "areaHa": 5.28,
+      "matchId": "ba_designation_4dhfptekx2dze7atnfdyqcriuy",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_4dhfptekx2dze7atnfdyqcriuy/le-clos-chaudron",
+      "bounds": [
+        4.677064,
+        46.714833,
+        4.680254,
+        46.718274
+      ],
+      "labelPoint": [
+        4.678953,
+        46.716582
+      ]
+    },
+    {
+      "id": "inao-denom-873",
+      "name": "Le Clouzot",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 205,
+      "denominationId": 873,
+      "sourceName": "Montagny premier cru Le Clouzot",
+      "communes": [
+        "71070"
+      ],
+      "areaHa": 2.41,
+      "matchId": "ba_designation_qmavzp5l3smhhfu26zqypia27a",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_qmavzp5l3smhhfu26zqypia27a/le-clouzot",
+      "bounds": [
+        4.685805,
+        46.715917,
+        4.688985,
+        46.717594
+      ],
+      "labelPoint": [
+        4.686477,
+        46.716769
+      ]
+    },
+    {
+      "id": "inao-denom-874",
+      "name": "Le Vieux Château",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 205,
+      "denominationId": 874,
+      "sourceName": "Montagny premier cru Le Vieux Château",
+      "communes": [
+        "71070"
+      ],
+      "areaHa": 9.1,
+      "matchId": "ba_designation_kaf3peu23ky6dk7by4fh3cgc4u",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_kaf3peu23ky6dk7by4fh3cgc4u/le-vieux-chateau",
+      "bounds": [
+        4.686822,
+        46.716399,
+        4.691741,
+        46.720539
+      ],
+      "labelPoint": [
+        4.688571,
+        46.718474
+      ]
+    },
+    {
+      "id": "inao-denom-875",
+      "name": "Les Bassets",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 205,
+      "denominationId": 875,
+      "sourceName": "Montagny premier cru Les Bassets",
+      "communes": [
+        "71070"
+      ],
+      "areaHa": 6.65,
+      "matchId": "ba_designation_yve5mxuoskbgu3ey7umbjcmva4",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_yve5mxuoskbgu3ey7umbjcmva4/les-bassets",
+      "bounds": [
+        4.686154,
+        46.706127,
+        4.69054,
+        46.709563
+      ],
+      "labelPoint": [
+        4.688812,
+        46.707864
+      ]
+    },
+    {
+      "id": "inao-denom-876",
+      "name": "Les Beaux Champs",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 205,
+      "denominationId": 876,
+      "sourceName": "Montagny premier cru Les Beaux Champs",
+      "communes": [
+        "71302"
+      ],
+      "areaHa": 9.89,
+      "matchId": "ba_designation_jp3y7trxn6jupwa6swloh4h3ji",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_jp3y7trxn6jupwa6swloh4h3ji/les-beaux-champs",
+      "bounds": [
+        4.671086,
+        46.696926,
+        4.675267,
+        46.703457
+      ],
+      "labelPoint": [
+        4.673738,
+        46.700157
+      ]
+    },
+    {
+      "id": "inao-denom-877",
+      "name": "Les Bonneveaux",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 205,
+      "denominationId": 877,
+      "sourceName": "Montagny premier cru Les Bonneveaux",
+      "communes": [
+        "71070"
+      ],
+      "areaHa": 8.52,
+      "matchId": "ba_designation_lhaaptbal76ixkgyqzppt6iqhu",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_lhaaptbal76ixkgyqzppt6iqhu/les-bonneveaux",
+      "bounds": [
+        4.685236,
+        46.70855,
+        4.690247,
+        46.712685
+      ],
+      "labelPoint": [
+        4.688024,
+        46.710597
+      ]
+    },
+    {
+      "id": "inao-denom-878",
+      "name": "Les Bordes",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 205,
+      "denominationId": 878,
+      "sourceName": "Montagny premier cru Les Bordes",
+      "communes": [
+        "71302"
+      ],
+      "areaHa": 1.35,
+      "matchId": "ba_designation_rr3dga3zravvj37ybxd3h5r7wq",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_rr3dga3zravvj37ybxd3h5r7wq/les-bordes",
+      "bounds": [
+        4.676319,
+        46.696051,
+        4.678234,
+        46.697498
+      ],
+      "labelPoint": [
+        4.677404,
+        46.696788
+      ]
+    },
+    {
+      "id": "inao-denom-879",
+      "name": "Les Bouchots",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 205,
+      "denominationId": 879,
+      "sourceName": "Montagny premier cru Les Bouchots",
+      "communes": [
+        "71302"
+      ],
+      "areaHa": 5.16,
+      "matchId": "ba_designation_26rljes4qbxvc2ucg6wolc5xzm",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_26rljes4qbxvc2ucg6wolc5xzm/les-bouchots",
+      "bounds": [
+        4.680036,
+        46.707773,
+        4.684457,
+        46.710341
+      ],
+      "labelPoint": [
+        4.682799,
+        46.709075
+      ]
+    },
+    {
+      "id": "inao-denom-880",
+      "name": "Les Burnins",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 205,
+      "denominationId": 880,
+      "sourceName": "Montagny premier cru Les Burnins",
+      "communes": [
+        "71302"
+      ],
+      "areaHa": 10.25,
+      "matchId": "ba_designation_yw53un6bytklwhncembnyy6y3u",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_yw53un6bytklwhncembnyy6y3u/les-burnins",
+      "bounds": [
+        4.675617,
+        46.704655,
+        4.683563,
+        46.707443
+      ],
+      "labelPoint": [
+        4.679778,
+        46.705848
+      ]
+    },
+    {
+      "id": "inao-denom-881",
+      "name": "Les Chaniots",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 205,
+      "denominationId": 881,
+      "sourceName": "Montagny premier cru Les Chaniots",
+      "communes": [
+        "71247"
+      ],
+      "areaHa": 10.24,
+      "matchId": "ba_designation_4wrxpnofj72f5xh6u3hlpb4pbe",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_4wrxpnofj72f5xh6u3hlpb4pbe/les-chaniots",
+      "bounds": [
+        4.681739,
+        46.69121,
+        4.687427,
+        46.695791
+      ],
+      "labelPoint": [
+        4.684364,
+        46.693482
+      ]
+    },
+    {
+      "id": "inao-denom-882",
+      "name": "Les Chaumelottes",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 205,
+      "denominationId": 882,
+      "sourceName": "Montagny premier cru Les Chaumelottes",
+      "communes": [
+        "71302"
+      ],
+      "areaHa": 1.4,
+      "matchId": "ba_designation_txhtasqx66dj26j67iysvznhwq",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_txhtasqx66dj26j67iysvznhwq/les-chaumelottes",
+      "bounds": [
+        4.674138,
+        46.709335,
+        4.677064,
+        46.711063
+      ],
+      "labelPoint": [
+        4.675607,
+        46.710221
+      ]
+    },
+    {
+      "id": "inao-denom-883",
+      "name": "Le Cloux",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 205,
+      "denominationId": 883,
+      "sourceName": "Montagny premier cru Le Cloux",
+      "communes": [
+        "71302"
+      ],
+      "areaHa": 4.34,
+      "matchId": "ba_designation_qq2kkyzetisgw75whcxldu422q",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_qq2kkyzetisgw75whcxldu422q/le-cloux",
+      "bounds": [
+        4.670021,
+        46.693835,
+        4.674604,
+        46.696009
+      ],
+      "labelPoint": [
+        4.672293,
+        46.694912
+      ]
+    },
+    {
+      "id": "inao-denom-884",
+      "name": "Les Combes",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 205,
+      "denominationId": 884,
+      "sourceName": "Montagny premier cru Les Combes",
+      "communes": [
+        "71302"
+      ],
+      "areaHa": 1.96,
+      "matchId": "ba_designation_cz3slewk2cyxwvv7yimuiyboxy",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_cz3slewk2cyxwvv7yimuiyboxy/les-combes",
+      "bounds": [
+        4.670931,
+        46.709898,
+        4.673591,
+        46.711714
+      ],
+      "labelPoint": [
+        4.671778,
+        46.710599
+      ]
+    },
+    {
+      "id": "inao-denom-885",
+      "name": "Les Coudrettes",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 205,
+      "denominationId": 885,
+      "sourceName": "Montagny premier cru Les Coudrettes",
+      "communes": [
+        "71070"
+      ],
+      "areaHa": 2.62,
+      "matchId": "ba_designation_ldt7nmhepcixi7q23gezfa3g24",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_ldt7nmhepcixi7q23gezfa3g24/les-coudrettes",
+      "bounds": [
+        4.682294,
+        46.716463,
+        4.68529,
+        46.71855
+      ],
+      "labelPoint": [
+        4.684044,
+        46.717499
+      ]
+    },
+    {
+      "id": "inao-denom-886",
+      "name": "Les Coères",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 205,
+      "denominationId": 886,
+      "sourceName": "Montagny premier cru Les Coères",
+      "communes": [
+        "71247",
+        "71302",
+        "71485"
+      ],
+      "areaHa": 29.67,
+      "matchId": "ba_designation_qobvrxdhazozkqdfkbvqtsf26u",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_qobvrxdhazozkqdfkbvqtsf26u/les-coeres",
+      "bounds": [
+        4.680097,
+        46.692824,
+        4.689592,
+        46.700878
+      ],
+      "labelPoint": [
+        4.686326,
+        46.697695
+      ]
+    },
+    {
+      "id": "inao-denom-887",
+      "name": "Les Craboulettes",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 205,
+      "denominationId": 887,
+      "sourceName": "Montagny premier cru Les Craboulettes",
+      "communes": [
+        "71485"
+      ],
+      "areaHa": 2.04,
+      "matchId": "ba_designation_ejgahbn4nwezn4gykqtt3remqu",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_ejgahbn4nwezn4gykqtt3remqu/les-craboulettes",
+      "bounds": [
+        4.67883,
+        46.693749,
+        4.681508,
+        46.695788
+      ],
+      "labelPoint": [
+        4.680241,
+        46.69477
+      ]
+    },
+    {
+      "id": "inao-denom-888",
+      "name": "Les Garchères",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 205,
+      "denominationId": 888,
+      "sourceName": "Montagny premier cru Les Garchères",
+      "communes": [
+        "71302"
+      ],
+      "areaHa": 1.94,
+      "matchId": "ba_designation_uehsx2ddfcgodssd2xpq7ubq3i",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_uehsx2ddfcgodssd2xpq7ubq3i/les-garcheres",
+      "bounds": [
+        4.676061,
+        46.708005,
+        4.678437,
+        46.709357
+      ],
+      "labelPoint": [
+        4.677304,
+        46.708661
+      ]
+    },
+    {
+      "id": "inao-denom-889",
+      "name": "Les Gouresses",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 205,
+      "denominationId": 889,
+      "sourceName": "Montagny premier cru Les Gouresses",
+      "communes": [
+        "71302"
+      ],
+      "areaHa": 2.64,
+      "matchId": "ba_designation_yesal4l4hoh2rgsqmjsljcdc4u",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_yesal4l4hoh2rgsqmjsljcdc4u/les-gouresses",
+      "bounds": [
+        4.67568,
+        46.695086,
+        4.678752,
+        46.696975
+      ],
+      "labelPoint": [
+        4.676776,
+        46.69604
+      ]
+    },
+    {
+      "id": "inao-denom-890",
+      "name": "Les Jardins",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 205,
+      "denominationId": 890,
+      "sourceName": "Montagny premier cru Les Jardins",
+      "communes": [
+        "71302"
+      ],
+      "areaHa": 4.34,
+      "matchId": "ba_designation_5bf7ceomxfht6clhqabzxbizxy",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_5bf7ceomxfht6clhqabzxbizxy/les-jardins",
+      "bounds": [
+        4.678647,
+        46.697122,
+        4.681692,
+        46.699787
+      ],
+      "labelPoint": [
+        4.680285,
+        46.698443
+      ]
+    },
+    {
+      "id": "inao-denom-891",
+      "name": "Les Las",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 205,
+      "denominationId": 891,
+      "sourceName": "Montagny premier cru Les Las",
+      "communes": [
+        "71302"
+      ],
+      "areaHa": 5.41,
+      "matchId": "ba_designation_aqxnubaqqgy2tbd6fkj5vcy6r4",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_aqxnubaqqgy2tbd6fkj5vcy6r4/les-las",
+      "bounds": [
+        4.677802,
+        46.695207,
+        4.682428,
+        46.697477
+      ],
+      "labelPoint": [
+        4.679942,
+        46.69631
+      ]
+    },
+    {
+      "id": "inao-denom-892",
+      "name": "Les Macles",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 205,
+      "denominationId": 892,
+      "sourceName": "Montagny premier cru Les Macles",
+      "communes": [
+        "71302"
+      ],
+      "areaHa": 3.19,
+      "matchId": "ba_designation_hcc2le5mdrz6l33xgckdchma6a",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_hcc2le5mdrz6l33xgckdchma6a/les-macles",
+      "bounds": [
+        4.670922,
+        46.697894,
+        4.673012,
+        46.701112
+      ],
+      "labelPoint": [
+        4.67175,
+        46.699505
+      ]
+    },
+    {
+      "id": "inao-denom-893",
+      "name": "Les Maroques",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 205,
+      "denominationId": 893,
+      "sourceName": "Montagny premier cru Les Maroques",
+      "communes": [
+        "71302"
+      ],
+      "areaHa": 6.18,
+      "matchId": "ba_designation_l5eb46fxp6e7ndq2qnmg4nujse",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_l5eb46fxp6e7ndq2qnmg4nujse/les-maroques",
+      "bounds": [
+        4.671798,
+        46.701182,
+        4.677416,
+        46.704441
+      ],
+      "labelPoint": [
+        4.675748,
+        46.70329
+      ]
+    },
+    {
+      "id": "inao-denom-894",
+      "name": "Les Paquiers",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 205,
+      "denominationId": 894,
+      "sourceName": "Montagny premier cru Les Paquiers",
+      "communes": [
+        "71302",
+        "71485"
+      ],
+      "areaHa": 3.61,
+      "matchId": "ba_designation_d4tj6dxaywrpkqny5umob5camq",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_d4tj6dxaywrpkqny5umob5camq/les-paquiers",
+      "bounds": [
+        4.676912,
+        46.693168,
+        4.679983,
+        46.695091
+      ],
+      "labelPoint": [
+        4.678348,
+        46.694088
+      ]
+    },
+    {
+      "id": "inao-denom-895",
+      "name": "Les Perrières",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 205,
+      "denominationId": 895,
+      "sourceName": "Montagny premier cru Les Perrières",
+      "communes": [
+        "71302"
+      ],
+      "areaHa": 1.41,
+      "matchId": "ba_designation_zu5jazedrziicpw4ytlpptlcza",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_zu5jazedrziicpw4ytlpptlcza/les-perrieres",
+      "bounds": [
+        4.678089,
+        46.703147,
+        4.680156,
+        46.704763
+      ],
+      "labelPoint": [
+        4.679182,
+        46.703928
+      ]
+    },
+    {
+      "id": "inao-denom-896",
+      "name": "Les Pidances",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 205,
+      "denominationId": 896,
+      "sourceName": "Montagny premier cru Les Pidances",
+      "communes": [
+        "71070"
+      ],
+      "areaHa": 8.52,
+      "matchId": "ba_designation_722eg5tvc3cpuomq4qvkacjnxa",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_722eg5tvc3cpuomq4qvkacjnxa/les-pidances",
+      "bounds": [
+        4.683061,
+        46.715994,
+        4.687951,
+        46.720327
+      ],
+      "labelPoint": [
+        4.685992,
+        46.718148
+      ]
+    },
+    {
+      "id": "inao-denom-897",
+      "name": "Les Platières",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 205,
+      "denominationId": 897,
+      "sourceName": "Montagny premier cru Les Platières",
+      "communes": [
+        "71302"
+      ],
+      "areaHa": 5.22,
+      "matchId": "ba_designation_xopzqxn532yjzh2s45ndwtocki",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_xopzqxn532yjzh2s45ndwtocki/les-platieres",
+      "bounds": [
+        4.676753,
+        46.700829,
+        4.681419,
+        46.70335
+      ],
+      "labelPoint": [
+        4.679837,
+        46.702074
+      ]
+    },
+    {
+      "id": "inao-denom-898",
+      "name": "Les Resses",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 205,
+      "denominationId": 898,
+      "sourceName": "Montagny premier cru Les Resses",
+      "communes": [
+        "71302",
+        "71485"
+      ],
+      "areaHa": 1.54,
+      "matchId": "ba_designation_odq5gkjbx4gz2iy6std4bhvoqy",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_odq5gkjbx4gz2iy6std4bhvoqy/les-resses",
+      "bounds": [
+        4.673884,
+        46.693079,
+        4.675535,
+        46.695178
+      ],
+      "labelPoint": [
+        4.674907,
+        46.694143
+      ]
+    },
+    {
+      "id": "inao-denom-899",
+      "name": "Les Treuffères",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 205,
+      "denominationId": 899,
+      "sourceName": "Montagny premier cru Les Treuffères",
+      "communes": [
+        "71302"
+      ],
+      "areaHa": 2.36,
+      "matchId": "ba_designation_oft3wtowlvuphkslq645swbcwi",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_oft3wtowlvuphkslq645swbcwi/les-treufferes",
+      "bounds": [
+        4.680169,
+        46.703593,
+        4.684411,
+        46.70486
+      ],
+      "labelPoint": [
+        4.682577,
+        46.704217
+      ]
+    },
+    {
+      "id": "inao-denom-900",
+      "name": "Les Vignes Derrière",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 205,
+      "denominationId": 900,
+      "sourceName": "Montagny premier cru Les Vignes Derrière",
+      "communes": [
+        "71302"
+      ],
+      "areaHa": 2.73,
+      "matchId": "ba_designation_fz252fma7ra6xoaemi44xrwe5m",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_fz252fma7ra6xoaemi44xrwe5m/les-vignes-derriere",
+      "bounds": [
+        4.672717,
+        46.695086,
+        4.675824,
+        46.697004
+      ],
+      "labelPoint": [
+        4.674269,
+        46.696016
+      ]
+    },
+    {
+      "id": "inao-denom-901",
+      "name": "Les Vignes longues",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 205,
+      "denominationId": 901,
+      "sourceName": "Montagny premier cru Les Vignes longues",
+      "communes": [
+        "71070"
+      ],
+      "areaHa": 10.31,
+      "matchId": "ba_designation_idsjobifv5e644ukdepoljuqry",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_idsjobifv5e644ukdepoljuqry/les-vignes-longues",
+      "bounds": [
+        4.690066,
+        46.716161,
+        4.695902,
+        46.720387
+      ],
+      "labelPoint": [
+        4.692395,
+        46.718285
+      ]
+    },
+    {
+      "id": "inao-denom-902",
+      "name": "Les Vignes des Prés",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 205,
+      "denominationId": 902,
+      "sourceName": "Montagny premier cru Les Vignes des Prés",
+      "communes": [
+        "71070"
+      ],
+      "areaHa": 3.4,
+      "matchId": "ba_designation_5esrjxekoctb2rtdvqdwzquy4e",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_5esrjxekoctb2rtdvqdwzquy4e/les-vignes-des-pres",
+      "bounds": [
+        4.680888,
+        46.715394,
+        4.686274,
+        46.717176
+      ],
+      "labelPoint": [
+        4.682834,
+        46.716247
+      ]
+    },
+    {
+      "id": "inao-denom-903",
+      "name": "Vignes sur le Cloux",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 205,
+      "denominationId": 903,
+      "sourceName": "Montagny premier cru Vignes sur le Cloux",
+      "communes": [
+        "71302"
+      ],
+      "areaHa": 5.45,
+      "matchId": "ba_designation_6cpaq3xaxkowhcbhfsyvzfnhym",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_6cpaq3xaxkowhcbhfsyvzfnhym/vignes-sur-le-cloux",
+      "bounds": [
+        4.674824,
+        46.707042,
+        4.680818,
+        46.709
+      ],
+      "labelPoint": [
+        4.679506,
+        46.70808
+      ]
+    },
+    {
+      "id": "inao-denom-904",
+      "name": "Montcuchot",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 205,
+      "denominationId": 904,
+      "sourceName": "Montagny premier cru Montcuchot",
+      "communes": [
+        "71302"
+      ],
+      "areaHa": 8.89,
+      "matchId": "ba_designation_2tstbimuvu3iwcwzyrmtlxhydi",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_2tstbimuvu3iwcwzyrmtlxhydi/montcuchot",
+      "bounds": [
+        4.681334,
+        46.704283,
+        4.686996,
+        46.709047
+      ],
+      "labelPoint": [
+        4.685377,
+        46.707417
+      ]
+    },
+    {
+      "id": "inao-denom-905",
+      "name": "Mont Laurent",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 205,
+      "denominationId": 905,
+      "sourceName": "Montagny premier cru Mont Laurent",
+      "communes": [
+        "71070"
+      ],
+      "areaHa": 2.22,
+      "matchId": "ba_designation_nwfadh65gu4ppkezvkgojoipxq",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_nwfadh65gu4ppkezvkgojoipxq/mont-laurent",
+      "bounds": [
+        4.685237,
+        46.711164,
+        4.688057,
+        46.712816
+      ],
+      "labelPoint": [
+        4.687062,
+        46.711995
+      ]
+    },
+    {
+      "id": "inao-denom-906",
+      "name": "Montorge",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 205,
+      "denominationId": 906,
+      "sourceName": "Montagny premier cru Montorge",
+      "communes": [
+        "71302"
+      ],
+      "areaHa": 1.43,
+      "matchId": "ba_designation_jfkpm6xcpull5avewkivf7gvrq",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_jfkpm6xcpull5avewkivf7gvrq/montorge",
+      "bounds": [
+        4.675344,
+        46.693773,
+        4.67743,
+        46.695194
+      ],
+      "labelPoint": [
+        4.676418,
+        46.694493
+      ]
+    },
+    {
+      "id": "inao-denom-907",
+      "name": "Sainte-Morille",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 205,
+      "denominationId": 907,
+      "sourceName": "Montagny premier cru Sainte-Morille",
+      "communes": [
+        "71302"
+      ],
+      "areaHa": 3.46,
+      "matchId": "ba_designation_fx7oa7pipdqydhjxza2ip3al7e",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_fx7oa7pipdqydhjxza2ip3al7e/sainte-morille",
+      "bounds": [
+        4.670819,
+        46.695593,
+        4.674317,
+        46.697932
+      ],
+      "labelPoint": [
+        4.672903,
+        46.696779
+      ]
+    },
+    {
+      "id": "inao-denom-908",
+      "name": "Saint-Ytages",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 205,
+      "denominationId": 908,
+      "sourceName": "Montagny premier cru Saint-Ytages",
+      "communes": [
+        "71302"
+      ],
+      "areaHa": 1.42,
+      "matchId": "ba_designation_crbmkjcoemsgggaezzolwglpiu",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_crbmkjcoemsgggaezzolwglpiu/saint-ytages",
+      "bounds": [
+        4.672856,
+        46.709694,
+        4.674911,
+        46.711233
+      ],
+      "labelPoint": [
+        4.673997,
+        46.710446
+      ]
+    },
+    {
+      "id": "inao-denom-909",
+      "name": "Sous les Feilles",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 205,
+      "denominationId": 909,
+      "sourceName": "Montagny premier cru Sous les Feilles",
+      "communes": [
+        "71302"
+      ],
+      "areaHa": 1.17,
+      "matchId": "ba_designation_56usm2g5kjn4cyxxqzqbjssyqy",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_56usm2g5kjn4cyxxqzqbjssyqy/sous-les-feilles",
+      "bounds": [
+        4.670608,
+        46.69601,
+        4.672198,
+        46.698362
+      ],
+      "labelPoint": [
+        4.671506,
+        46.697183
+      ]
+    },
+    {
+      "id": "inao-denom-910",
+      "name": "Vigne du soleil",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 205,
+      "denominationId": 910,
+      "sourceName": "Montagny premier cru Vigne du soleil",
+      "communes": [
+        "71302"
+      ],
+      "areaHa": 4.78,
+      "matchId": "ba_designation_xtdgwh6m3oc32ktz7b7sxq7w54",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_xtdgwh6m3oc32ktz7b7sxq7w54/vigne-du-soleil",
+      "bounds": [
+        4.684217,
+        46.703611,
+        4.687658,
+        46.706157
+      ],
+      "labelPoint": [
+        4.686373,
+        46.704913
+      ]
+    },
+    {
+      "id": "inao-denom-911",
+      "name": "Vignes Couland",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 205,
+      "denominationId": 911,
+      "sourceName": "Montagny premier cru Vignes Couland",
+      "communes": [
+        "71302"
+      ],
+      "areaHa": 1.41,
+      "matchId": "ba_designation_4qb5uiqvpjakf35vng2qupsbea",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_4qb5uiqvpjakf35vng2qupsbea/vignes-couland",
+      "bounds": [
+        4.678222,
+        46.708522,
+        4.680273,
+        46.709775
+      ],
+      "labelPoint": [
+        4.679324,
+        46.709119
+      ]
+    },
+    {
+      "id": "inao-denom-912",
+      "name": "Vignes Saint-Pierre",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 205,
+      "denominationId": 912,
+      "sourceName": "Montagny premier cru Vignes Saint-Pierre",
+      "communes": [
+        "71302"
+      ],
+      "areaHa": 4.14,
+      "matchId": "ba_designation_nkptuwtxoaykwrjyb5tqo2pjle",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_nkptuwtxoaykwrjyb5tqo2pjle/vignes-saint-pierre",
+      "bounds": [
+        4.671805,
+        46.707113,
+        4.675651,
+        46.710515
+      ],
+      "labelPoint": [
+        4.674022,
+        46.708842
+      ]
+    },
+    {
+      "id": "inao-denom-913",
+      "name": "Montagny Premier Cru",
+      "tier": "premier_cru",
+      "kind": "appellation",
+      "appellationId": 205,
+      "denominationId": 913,
+      "sourceName": "Montagny premier cru",
+      "communes": [
+        "71070",
+        "71247",
+        "71302",
+        "71485"
+      ],
+      "areaHa": 243.12,
+      "matchId": "ba_appellation_ykhen3vblrhnvimknchdo6ksr4",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_ykhen3vblrhnvimknchdo6ksr4/montagny-premier-cru",
+      "bounds": [
+        4.670021,
+        46.690879,
+        4.697219,
+        46.721086
+      ],
+      "labelPoint": [
+        4.683634,
+        46.717695
+      ]
+    }
+  ]
+}

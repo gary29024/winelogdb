@@ -1,0 +1,685 @@
+{
+  "id": "rully",
+  "name": "Rully",
+  "region": "Côte Chalonnaise",
+  "communes": [
+    {
+      "id": "71378",
+      "name": "Rully"
+    },
+    {
+      "id": "71073",
+      "name": "Chagny"
+    }
+  ],
+  "dataUrl": "/maps/rully.2026-09-21.geojson",
+  "bounds": [
+    4.70715,
+    46.852618,
+    4.750721,
+    46.899434
+  ],
+  "sources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71378/cadastre-71378-communes.json.gz",
+      "sha256": "53206e3b9d20ca851953f647e2217e2ea4bc572a91a2767c7b1530aa0aefbc19"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71073/cadastre-71073-communes.json.gz",
+      "sha256": "b7d777ea5af5da7c3dff9866361afcf496e6f71c1b8bfc4758e1cd93d1df6667"
+    }
+  ],
+  "notes": {
+    "inao-denom-1087": {
+      "note": "The full published Rully appellation area is shown across its producing communes. Named village lieux-dits and individual producer holdings are not mapped separately."
+    },
+    "inao-denom-1091": {
+      "note": "Clos Saint-Jacques lies in Chagny, within the Rully appellation. It is distinct from the village-level Les Saint-Jacques, which has no separate boundary here."
+    },
+    "inao-denom-1092": {
+      "note": "Clos du Chaigne, also called Clos du Chaigne à Jean de France, lies in Chagny within the Rully appellation."
+    }
+  },
+  "features": [
+    {
+      "id": "inao-denom-1087",
+      "name": "Rully",
+      "tier": "village",
+      "kind": "appellation",
+      "appellationId": 225,
+      "denominationId": 1087,
+      "sourceName": "Rully",
+      "communes": [
+        "71073",
+        "71378"
+      ],
+      "areaHa": 457.63,
+      "matchId": "ba_appellation_onwhfoe7abcxucrcimx7b4adki",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_onwhfoe7abcxucrcimx7b4adki/rully",
+      "bounds": [
+        4.70715,
+        46.852618,
+        4.750721,
+        46.899434
+      ],
+      "labelPoint": [
+        4.717644,
+        46.865798
+      ]
+    },
+    {
+      "id": "inao-denom-1088",
+      "name": "Agneux",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 225,
+      "denominationId": 1088,
+      "sourceName": "Rully premier cru Agneux",
+      "communes": [
+        "71378"
+      ],
+      "areaHa": 0.57,
+      "matchId": "ba_designation_m5z57nrn4aj2yltiyqyrm755pa",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_m5z57nrn4aj2yltiyqyrm755pa/agneux",
+      "bounds": [
+        4.728212,
+        46.871552,
+        4.731274,
+        46.872344
+      ],
+      "labelPoint": [
+        4.728873,
+        46.871961
+      ]
+    },
+    {
+      "id": "inao-denom-1089",
+      "name": "Champs Cloux",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 225,
+      "denominationId": 1089,
+      "sourceName": "Rully premier cru Champs Cloux",
+      "communes": [
+        "71378"
+      ],
+      "areaHa": 5.18,
+      "matchId": "ba_designation_mryc7dspt7w4637mqskiv7bra4",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_mryc7dspt7w4637mqskiv7bra4/champs-cloux",
+      "bounds": [
+        4.736275,
+        46.869386,
+        4.739976,
+        46.87237
+      ],
+      "labelPoint": [
+        4.737814,
+        46.870874
+      ]
+    },
+    {
+      "id": "inao-denom-1090",
+      "name": "Chapitre",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 225,
+      "denominationId": 1090,
+      "sourceName": "Rully premier cru Chapitre",
+      "communes": [
+        "71378"
+      ],
+      "areaHa": 3.79,
+      "matchId": "ba_designation_rwm2prizqwkyjnynx4rjnqbmza",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_rwm2prizqwkyjnynx4rjnqbmza/chapitre",
+      "bounds": [
+        4.734165,
+        46.87464,
+        4.737659,
+        46.877246
+      ],
+      "labelPoint": [
+        4.736027,
+        46.875951
+      ]
+    },
+    {
+      "id": "inao-denom-1091",
+      "name": "Clos Saint-Jacques",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 225,
+      "denominationId": 1091,
+      "sourceName": "Rully premier cru Clos St Jacques",
+      "communes": [
+        "71073"
+      ],
+      "areaHa": 1.88,
+      "matchId": "ba_designation_5wtekf7rmawi2jjt3ygfg2t6mq",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_5wtekf7rmawi2jjt3ygfg2t6mq/clos-st-jacques",
+      "bounds": [
+        4.743081,
+        46.893636,
+        4.745317,
+        46.894821
+      ],
+      "labelPoint": [
+        4.744112,
+        46.894167
+      ]
+    },
+    {
+      "id": "inao-denom-1092",
+      "name": "Clos du Chaigne",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 225,
+      "denominationId": 1092,
+      "sourceName": "Rully premier cru Clos du Chaigne",
+      "communes": [
+        "71073"
+      ],
+      "areaHa": 3.25,
+      "matchId": "ba_designation_itvfniku5zs5eso6g25lkgb4cu",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_itvfniku5zs5eso6g25lkgb4cu/clos-du-chaigne",
+      "bounds": [
+        4.74266,
+        46.889477,
+        4.745037,
+        46.891729
+      ],
+      "labelPoint": [
+        4.74384,
+        46.890561
+      ]
+    },
+    {
+      "id": "inao-denom-1093",
+      "name": "Cloux",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 225,
+      "denominationId": 1093,
+      "sourceName": "Rully premier cru Cloux",
+      "communes": [
+        "71378"
+      ],
+      "areaHa": 10.78,
+      "matchId": "ba_designation_hhm5fv2hygyy6jsgcg7nvu3eoi",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_hhm5fv2hygyy6jsgcg7nvu3eoi/cloux",
+      "bounds": [
+        4.729045,
+        46.874164,
+        4.735896,
+        46.87812
+      ],
+      "labelPoint": [
+        4.731718,
+        46.876142
+      ]
+    },
+    {
+      "id": "inao-denom-1094",
+      "name": "Grésigny",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 225,
+      "denominationId": 1094,
+      "sourceName": "Rully premier cru Grésigny",
+      "communes": [
+        "71378"
+      ],
+      "areaHa": 6.44,
+      "matchId": "ba_designation_l2pfdpez6q5xh565on7f3l3t4u",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_l2pfdpez6q5xh565on7f3l3t4u/gresigny",
+      "bounds": [
+        4.72065,
+        46.859685,
+        4.724884,
+        46.864151
+      ],
+      "labelPoint": [
+        4.722485,
+        46.861981
+      ]
+    },
+    {
+      "id": "inao-denom-1095",
+      "name": "La Bressande",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 225,
+      "denominationId": 1095,
+      "sourceName": "Rully premier cru La Bressande",
+      "communes": [
+        "71378"
+      ],
+      "areaHa": 2.58,
+      "matchId": "ba_designation_zi5qdwagehwuzavzpkwtxycvfe",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_zi5qdwagehwuzavzpkwtxycvfe/la-bressande",
+      "bounds": [
+        4.735672,
+        46.868328,
+        4.738879,
+        46.8699
+      ],
+      "labelPoint": [
+        4.737306,
+        46.869118
+      ]
+    },
+    {
+      "id": "inao-denom-1096",
+      "name": "La Fosse",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 225,
+      "denominationId": 1096,
+      "sourceName": "Rully premier cru La Fosse",
+      "communes": [
+        "71378"
+      ],
+      "areaHa": 3.64,
+      "matchId": "ba_designation_a4m26yrwsrjh4kexkluquetmj4",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_a4m26yrwsrjh4kexkluquetmj4/la-fosse",
+      "bounds": [
+        4.736746,
+        46.876754,
+        4.739317,
+        46.880157
+      ],
+      "labelPoint": [
+        4.737641,
+        46.878427
+      ]
+    },
+    {
+      "id": "inao-denom-1097",
+      "name": "La Pucelle",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 225,
+      "denominationId": 1097,
+      "sourceName": "Rully premier cru La Pucelle",
+      "communes": [
+        "71378"
+      ],
+      "areaHa": 6.72,
+      "matchId": "ba_designation_sltctaoseedxdhpau45t2dcq2e",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_sltctaoseedxdhpau45t2dcq2e/la-pucelle",
+      "bounds": [
+        4.727908,
+        46.864243,
+        4.730396,
+        46.871175
+      ],
+      "labelPoint": [
+        4.729091,
+        46.867705
+      ]
+    },
+    {
+      "id": "inao-denom-1098",
+      "name": "La Renarde",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 225,
+      "denominationId": 1098,
+      "sourceName": "Rully premier cru La Renarde",
+      "communes": [
+        "71378"
+      ],
+      "areaHa": 0.32,
+      "matchId": "ba_designation_qfv7q7s7scvk6oen5tfe465o6q",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_qfv7q7s7scvk6oen5tfe465o6q/la-renarde",
+      "bounds": [
+        4.738843,
+        46.871764,
+        4.740201,
+        46.872443
+      ],
+      "labelPoint": [
+        4.739552,
+        46.872113
+      ]
+    },
+    {
+      "id": "inao-denom-1099",
+      "name": "Les Pierres",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 225,
+      "denominationId": 1099,
+      "sourceName": "Rully premier cru Les Pierres",
+      "communes": [
+        "71378"
+      ],
+      "areaHa": 0.81,
+      "matchId": "ba_designation_hzk4j26ft5pgx4c2fa4qopxw6q",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_hzk4j26ft5pgx4c2fa4qopxw6q/les-pierres",
+      "bounds": [
+        4.729146,
+        46.870986,
+        4.730488,
+        46.872108
+      ],
+      "labelPoint": [
+        4.729713,
+        46.871547
+      ]
+    },
+    {
+      "id": "inao-denom-1100",
+      "name": "Margotés",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 225,
+      "denominationId": 1100,
+      "sourceName": "Rully premier cru Margotés",
+      "communes": [
+        "71378"
+      ],
+      "areaHa": 5.36,
+      "matchId": "ba_designation_q5t2zrgcvjlyta3bswawhtltna",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_q5t2zrgcvjlyta3bswawhtltna/margotes",
+      "bounds": [
+        4.717236,
+        46.857723,
+        4.721286,
+        46.860626
+      ],
+      "labelPoint": [
+        4.719178,
+        46.859215
+      ]
+    },
+    {
+      "id": "inao-denom-1101",
+      "name": "Marissou",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 225,
+      "denominationId": 1101,
+      "sourceName": "Rully premier cru Marissou",
+      "communes": [
+        "71378"
+      ],
+      "areaHa": 7.15,
+      "matchId": "ba_designation_scs5b2far5hszsb7zljxy6qac4",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_scs5b2far5hszsb7zljxy6qac4/marissou",
+      "bounds": [
+        4.738231,
+        46.877585,
+        4.742514,
+        46.881215
+      ],
+      "labelPoint": [
+        4.74034,
+        46.879414
+      ]
+    },
+    {
+      "id": "inao-denom-1102",
+      "name": "Le Meix Cadot",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 225,
+      "denominationId": 1102,
+      "sourceName": "Rully premier cru Le Meix Cadot",
+      "communes": [
+        "71378"
+      ],
+      "areaHa": 7.06,
+      "matchId": "ba_designation_5rjm55o2mo7irfkmjyyvznshty",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_5rjm55o2mo7irfkmjyyvznshty/le-meix-cadot",
+      "bounds": [
+        4.733327,
+        46.863356,
+        4.737074,
+        46.868709
+      ],
+      "labelPoint": [
+        4.734701,
+        46.864999
+      ]
+    },
+    {
+      "id": "inao-denom-1103",
+      "name": "Le Meix Caillet",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 225,
+      "denominationId": 1103,
+      "sourceName": "Rully premier cru Le Meix Caillet",
+      "communes": [
+        "71378"
+      ],
+      "areaHa": 0.6,
+      "matchId": "ba_designation_726isve3qlng2tvz3hkm6fbzvq",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_726isve3qlng2tvz3hkm6fbzvq/le-meix-caillet",
+      "bounds": [
+        4.72752,
+        46.872082,
+        4.728953,
+        46.87284
+      ],
+      "labelPoint": [
+        4.728253,
+        46.872461
+      ]
+    },
+    {
+      "id": "inao-denom-1104",
+      "name": "Molesme",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 225,
+      "denominationId": 1104,
+      "sourceName": "Rully premier cru Molesme",
+      "communes": [
+        "71378"
+      ],
+      "areaHa": 6.8,
+      "matchId": "ba_designation_chl6rg7izc6gnp7hnvqlbhee3i",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_chl6rg7izc6gnp7hnvqlbhee3i/molesme",
+      "bounds": [
+        4.730298,
+        46.870323,
+        4.734336,
+        46.873534
+      ],
+      "labelPoint": [
+        4.732218,
+        46.871949
+      ]
+    },
+    {
+      "id": "inao-denom-1105",
+      "name": "Montpalais",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 225,
+      "denominationId": 1105,
+      "sourceName": "Rully premier cru Montpalais",
+      "communes": [
+        "71378"
+      ],
+      "areaHa": 6.0,
+      "matchId": "ba_designation_ktnu575enlnanoooxn6aadp6cy",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_ktnu575enlnanoooxn6aadp6cy/montpalais",
+      "bounds": [
+        4.726637,
+        46.865646,
+        4.72931,
+        46.871005
+      ],
+      "labelPoint": [
+        4.727965,
+        46.868297
+      ]
+    },
+    {
+      "id": "inao-denom-1106",
+      "name": "Pillot",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 225,
+      "denominationId": 1106,
+      "sourceName": "Rully premier cru Pillot",
+      "communes": [
+        "71378"
+      ],
+      "areaHa": 2.44,
+      "matchId": "ba_designation_oacmclrzbraygku547msr7uslu",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_oacmclrzbraygku547msr7uslu/pillot",
+      "bounds": [
+        4.728518,
+        46.872741,
+        4.731477,
+        46.874646
+      ],
+      "labelPoint": [
+        4.730138,
+        46.873689
+      ]
+    },
+    {
+      "id": "inao-denom-1107",
+      "name": "Préaux",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 225,
+      "denominationId": 1107,
+      "sourceName": "Rully premier cru Préaux",
+      "communes": [
+        "71378"
+      ],
+      "areaHa": 6.75,
+      "matchId": "ba_designation_6xdpn2b3o6i5jepnm3uecacjn4",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_6xdpn2b3o6i5jepnm3uecacjn4/preaux",
+      "bounds": [
+        4.731295,
+        46.872619,
+        4.736351,
+        46.875741
+      ],
+      "labelPoint": [
+        4.733608,
+        46.87419
+      ]
+    },
+    {
+      "id": "inao-denom-1108",
+      "name": "Rabourcé",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 225,
+      "denominationId": 1108,
+      "sourceName": "Rully premier cru Rabourcé",
+      "communes": [
+        "71378"
+      ],
+      "areaHa": 10.32,
+      "matchId": "ba_designation_pmnnd7w6f4oaqcva4atuznzusm",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_pmnnd7w6f4oaqcva4atuznzusm/rabource",
+      "bounds": [
+        4.730353,
+        46.877243,
+        4.736867,
+        46.880795
+      ],
+      "labelPoint": [
+        4.733989,
+        46.879005
+      ]
+    },
+    {
+      "id": "inao-denom-1109",
+      "name": "Raclot",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 225,
+      "denominationId": 1109,
+      "sourceName": "Rully premier cru Raclot",
+      "communes": [
+        "71378"
+      ],
+      "areaHa": 4.72,
+      "matchId": "ba_designation_pyxb34jc3ggq6q6ptqlexqpqum",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_pyxb34jc3ggq6q6ptqlexqpqum/raclot",
+      "bounds": [
+        4.727926,
+        46.874395,
+        4.732117,
+        46.878349
+      ],
+      "labelPoint": [
+        4.730465,
+        46.877195
+      ]
+    },
+    {
+      "id": "inao-denom-1110",
+      "name": "Vauvry",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 225,
+      "denominationId": 1110,
+      "sourceName": "Rully premier cru Vauvry",
+      "communes": [
+        "71378"
+      ],
+      "areaHa": 6.27,
+      "matchId": "ba_designation_7waebdje46v2syuma3zgsuxeui",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_7waebdje46v2syuma3zgsuxeui/vauvry",
+      "bounds": [
+        4.72416,
+        46.862958,
+        4.728272,
+        46.866133
+      ],
+      "labelPoint": [
+        4.726358,
+        46.864552
+      ]
+    },
+    {
+      "id": "inao-denom-1111",
+      "name": "Rully Premier Cru",
+      "tier": "premier_cru",
+      "kind": "appellation",
+      "appellationId": 225,
+      "denominationId": 1111,
+      "sourceName": "Rully premier cru",
+      "communes": [
+        "71073",
+        "71378"
+      ],
+      "areaHa": 109.44,
+      "matchId": "ba_appellation_kdl4rx7cklifnqrazci46zj5om",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_kdl4rx7cklifnqrazci46zj5om/rully-premier-cru",
+      "bounds": [
+        4.717235,
+        46.857723,
+        4.745317,
+        46.894821
+      ],
+      "labelPoint": [
+        4.732542,
+        46.876741
+      ]
+    }
+  ]
+}

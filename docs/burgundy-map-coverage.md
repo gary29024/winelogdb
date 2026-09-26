@@ -19,7 +19,7 @@ Beaujolais has its own appellation system and is outside this Bourgogne inventor
 
 ## Village coverage
 
-**29 of 44 village appellations have maps in this branch.** This is not complete
+**34 of 44 village appellations have maps in this branch.** This is not complete
 Burgundy coverage. A mapped appellation can still lack individual village
 lieux-dits; named plot coverage must be assessed separately.
 
@@ -27,7 +27,7 @@ lieux-dits; named plot coverage must be assessed separately.
 | --- | ---: | ---: |
 | Côte de Nuits | 9 | 0 |
 | Côte de Beaune | 20 | 0 |
-| Côte Chalonnaise | 0 | 5 |
+| Côte Chalonnaise | 5 | 0 |
 | Mâconnais | 0 | 5 |
 | Chablis & Grand Auxerrois | 0 | 5 |
 
@@ -66,18 +66,18 @@ lieux-dits; named plot coverage must be assessed separately.
 - [x] Côte de Beaune: its full source area in Beaune, distinct from the subregion and the Beaune appellation
 - [x] Côte de Beaune-Villages: all 16 producing communes, red-only, with a local identity and four area zoom controls
 
-The Côte de Beaune village inventory is now mapped. Next are the five Côte
-Chalonnaise appellations: Bouzeron, Rully, Mercurey, Givry and Montagny. Then
-continue through the Mâconnais, Chablis/Grand Auxerrois and regional inventory.
+The Côte de Beaune and Côte Chalonnaise village inventories are now mapped.
+Next are the five Mâconnais appellations, followed by Chablis/Grand Auxerrois
+and the regional inventory. Givry still lacks one named Premier Cru boundary.
 Named village lieux-dits remain a separate coverage gap throughout these areas.
 
-### Côte Chalonnaise
+### Côte Chalonnaise — mapped, with a Givry source gap
 
-- [ ] Bouzeron
-- [ ] Rully
-- [ ] Mercurey
-- [ ] Givry
-- [ ] Montagny
+- [x] Bouzeron: Bouzeron and Chassey-le-Camp; white Aligoté, broad area only
+- [x] Rully: all 23 named Premier Crus, including the two in Chagny
+- [x] Mercurey: all 32 named Premier Crus and Saint-Martin-sous-Montaigu
+- [x] Givry: 37 of 38 named Premier Crus, with Dracy-le-Fort and Jambles; Le Vernoy has no separate source geometry
+- [x] Montagny: all 49 named Premier Crus across Montagny-lès-Buxy, Buxy, Jully-lès-Buxy and Saint-Vallerin; white only
 
 ### Mâconnais
 
@@ -124,9 +124,14 @@ in the source, rather than just the five village AOCs above.
 
 - **A boundary must not depend on an Atlas page existing.** Côte de Beaune-Villages
   now uses an explicitly reviewed local appellation identity with no outbound
-  Atlas link; it shares the existing geographic and tier conflict checks. Local
-  named Premier Cru support remains to be added for the known Atlas gaps in
-  Pouilly-Loché/Pouilly-Vinzelles when those batches are reviewed.
+  Atlas link; it shares the existing geographic and tier conflict checks.
+  Givry's La Plante, La Matrosse and Le Médenchot now use local named Premier Cru
+  identities with the same safeguards. Review the known Atlas gaps in
+  Pouilly-Loché/Pouilly-Vinzelles when those batches are assessed.
+- **Givry is 37 of 38 named Premier Crus.** BIVB lists Le Vernoy separately from
+  Clos du Vernoy. The pinned INAO source lacks Le Vernoy geometry. Its wines keep
+  the broad Premier Cru view; the gap is visible in every Givry map dialog.
+  Do not substitute Clos du Vernoy or silently drop Le Vernoy from a blend.
 - **Source counts need review.** The pinned INAO file has only 12 Chablis
   denominations under its village appellation; that is not a complete inventory
   of named Premier Cru climats. Verify umbrella names and missing geometries

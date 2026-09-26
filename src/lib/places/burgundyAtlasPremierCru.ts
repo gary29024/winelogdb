@@ -81,9 +81,22 @@ const reviewedNameAliases:Record<string,Record<string,string[]>>={
   // Mestre writes Passe-Temps; Monnot-Roche writes La Croix aux Moines.
   // Saint Marc uses singular Clos Roussot for INAO's Les Clos Roussots.
   'Santenay':{'Passetemps':['Passe-Temps']},
-  'Maranges':{'Le Croix Moines':['La Croix aux Moines'],'Les Clos Roussots':['Clos Roussot']}
+  'Maranges':{'Le Croix Moines':['La Croix aux Moines'],'Les Clos Roussots':['Clos Roussot']},
+  // BIVB retains Jean de France in Rully's full climat name and writes
+  // Crauzot in Givry; the INAO geometry calls the latter Crausot.
+  'Rully':{'Clos du Chaigne':['Clos du Chaigne à Jean de France']},
+  // Chamirey, Juillot and Devillard write Clos du Roi; d'Aligny and Chandesais
+  // write Barraude; Thénard writes Cellier aux Moines without Clos du.
+  'Mercurey':{'Le Clos du Roy':['Le Clos du Roi']},
+  'Givry':{'Crausot':['Crauzot'],'Clos de la Baraude':['Clos de la Barraude'],'Clos du Cellier aux Moines':['Cellier aux Moines']}
 };
-const groups=mapping.groups.map(group=>({...group,key:nameKey(group.appellation),entries:group.entries.map(entry=>
+const groups=mapping.groups.map(group=>({...group,key:nameKey(group.appellation),entries:[
+  ...group.entries.map(entry=>({...entry,matchId:entry.path.split('/')[2]})),
+  ...(villageMaps.localPremierCrus.find(local=>local.appellation===group.appellation)?.entries??[]).map(entry=>({...entry,path:null})),
+  // A known climat without geometry must participate in ambiguity and tier
+  // checks, so it cannot disappear from a mixed label and select its neighbour.
+  ...(villageMaps.localPremierCrus.find(local=>local.appellation===group.appellation)?.unmappedNames??[]).map(name=>({name,path:null,matchId:null}))
+].map(entry=>
   ({...entry,variants:[entry.name,...(reviewedNameAliases[group.appellation]?.[entry.name]??[])].flatMap(nameVariants)
     .map(variant=>({...variant,pattern:patternFor(variant.key)}))}))}));
 type Group=typeof groups[number];
@@ -138,7 +151,8 @@ function compatibleRegion(region:string,group:{key:string;regionId:string}){
 /** A Premier Cru needs both the named vineyard and its village appellation.
  * Sites with the same name in different villages are separate Atlas records.
  * This is wine-detail matching only; the Grand Cru collection matcher stays exact. */
-export function burgundyAtlasPremierCru(wine:Wine):BurgundyAtlasPlace|null{
+type PremierCruIdentity={placeId:string;name:string;url:string|null};
+function premierCruIdentity(wine:Wine):PremierCruIdentity|null{
   if(wine.identityMatchStatus==='conflict'||(wine.classification&&wine.classification!=='premier_cru'))return null;
   if(wine.country?.trim()&&nameKey(wine.country)!=='france')return null;
   const raw=placeFields(wine);
@@ -150,7 +164,7 @@ export function burgundyAtlasPremierCru(wine:Wine):BurgundyAtlasPlace|null{
   if(raw.some((value,index)=>/\b(?:grand\s+cru|blend|assemblage|melange|multi(?:ple)? (?:plots|parcelles|climats|vineyards))\b/.test(nameKey(value))||
     (index===1?/[/+]/:/[/&+]/).test(value)))return null;
   const fields=raw.map((value,index)=>index===1?titleKey(value):textKey(value)),region=textKey(wine.region??'');
-  const destinations:BurgundyAtlasPlace[]=[];
+  const destinations:PremierCruIdentity[]=[];
   for(const group of groups){
     if(!compatibleRegion(region,group))continue;
     const separated=fields.map(field=>separateVillage(field,group));
@@ -178,13 +192,19 @@ export function burgundyAtlasPremierCru(wine:Wine):BurgundyAtlasPlace|null{
     // A label may name a wider Premier Cru with a cru inside it: Meursault-Blagny
     // Sous le Dos d'Ane, Morgeot Clos Pitois. The wider name gives way to the
     // inner cru; two unrelated crus stay ambiguous.
-    const named=[...candidates],ids=named.map(entry=>entry.path.split('/')[2]);
-    const [entry,...others]=named.filter((_,index)=>!(umbrellas[ids[index]]??[]).some(inner=>ids.includes(inner)));
-    if(!entry||others.length)continue;
-    destinations.push({placeId:entry.path.split('/')[2],name:`${group.appellation} — ${entry.name}`,
-      url:`https://burgundyatlas.com${entry.path}`});
+    const named=[...candidates],ids=named.map(entry=>entry.matchId);
+    const [entry,...others]=named.filter(entry=>!entry.matchId||!(umbrellas[entry.matchId]??[]).some(inner=>ids.includes(inner)));
+    if(!entry?.matchId||others.length)continue;
+    destinations.push({placeId:entry.matchId,name:`${group.appellation} — ${entry.name}`,
+      url:entry.path?`https://burgundyatlas.com${entry.path}`:null});
   }
   return destinations.length===1?destinations[0]:null;
+}
+
+/** A local boundary never manufactures a named Atlas link. */
+export function burgundyAtlasPremierCru(wine:Wine):BurgundyAtlasPlace|null{
+  const match=premierCruIdentity(wine);
+  return match?.url?{...match,url:match.url}:null;
 }
 
 // Local appellations use the same geographic and tier checks as Atlas places,
@@ -288,10 +308,14 @@ function appellationLink(group:Appellation,tier:'village'|'premier_cru'):Burgund
     url:`https://burgundyatlas.com${path}`,scope:'appellation'};
 }
 
-/** Reviewed map-only appellations share all of the wine identity safeguards. */
+/** Local appellations and named crus share all wine identity safeguards. */
 export function burgundyLocalAppellationMapIdentity(wine:Wine):string|null{
   const tier=namesPremierCru(wine)?'premier_cru':'village';
   const group=wineAppellation(wine,tier);
+  if(group&&tier==='premier_cru'){
+    const match=premierCruIdentity(wine);
+    if(match?.url===null)return match.placeId;
+  }
   return group?.[tier==='premier_cru'?'premierCruMatchId':'villageMatchId']??null;
 }
 
