@@ -127,6 +127,8 @@ def main():
             premier_ids.update(range(first, last + 1))
         local_premiers = set(village.get("localPremierDenominations", []))
         assert local_premiers <= premier_ids
+        incomplete = set(village.get("incompleteDenominations", []))
+        assert incomplete <= premier_ids
         expected_app = village_ids | premier_ids
         if village.get("premierDenomination"):
             expected_app.add(village["premierDenomination"])
@@ -192,6 +194,9 @@ def main():
                           "communes": sorted({r["insee"] for r, _ in rows}), "areaHa": round(geom_m.area / 10000, 2)}
             if denom_id in climat_by_denom:
                 properties["parentAppellation"] = climat_by_denom[denom_id]["name"]
+            if denom_id in incomplete:
+                assert feature_id in village["notes"], "Explain each partial boundary"
+                properties["coverage"] = "partial"
             assert set(properties["communes"]) <= {c["id"] for c in village["communes"]}
             features.append({"type": "Feature", "id": feature_id, "properties": properties, "geometry": geometry_json(geom)})
             label_geom = max(geom.geoms, key=lambda part: part.area) if geom.geom_type == "MultiPolygon" else geom
@@ -352,7 +357,8 @@ def main():
             higher_ids = []
             for tier in ("grand_cru", "premier_cru"):
                 ids = [f["denominationId"] for f in catalogue if f["tier"] == tier
-                       and (f["kind"] == "vineyard" or f["denominationId"] in broad_grands)]
+                       and (f["kind"] == "vineyard" or f["denominationId"] in broad_grands
+                            or f["denominationId"] in village.get("overviewDenominations", []))]
                 if not ids:
                     continue
                 full = unary_union([geometries[d] for d in ids])
@@ -399,12 +405,18 @@ def main():
                               "unmappedNames": v.get("unmappedPremierNames", [])}
                              for v, manifest, _ in outputs if v.get("localPremierDenominations") or v.get("unmappedPremierNames")],
         "grandCruClimats": [{"name": group["name"],
+                             **{k: group[k] for k in ("namedWineColours", "requiresGrandCruEvidence", "unmappedNames") if k in group},
                              "matchId": next(entry["target"]["matchId"] for entry in targets.values() if entry["denom"] == group["broadDenomination"]),
                              # Reviewed label spellings ride along with the source name.
                              "climats": [{"matchId": f"inao-denom-{d}", "name": (name := grouped[d][0][0]["denom"].removeprefix(group["name"] + " ")),
                                           **({"aliases": group["aliases"][name]} if name in group.get("aliases", {}) else {})}
                                          for d in sorted(climat_by_denom) if climat_by_denom[d] is group]}
                             for group in climat_groups],
+        # Keep partial source features available for explicitly labelled manual
+        # exploration, but never locate a wine from the whole climat in one part.
+        "incompleteTargets": [{"matchId": f["matchId"],
+                               "fallbackMatchId": next(b["matchId"] for b in manifest["features"] if b["denominationId"] == v["premierDenomination"])}
+                              for v, manifest, _ in outputs for f in manifest["features"] if f.get("coverage") == "partial"],
         # Umbrella Premier Crus by match ID, so the wine matcher can read a label
         # naming both a wider name and a cru inside it ("Meursault-Blagny Sous le
         # Dos d'Ane", "Morgeot Clos Pitois") as the inner cru.

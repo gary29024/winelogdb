@@ -1,0 +1,112 @@
+{
+  "id": "location-long-depaquit-la-moutonne",
+  "name": "La Moutonne",
+  "reviewedOn": "2026-09-26",
+  "source": {
+    "name": "Domaines Albert Bichot · Domaine Long-Depaquit",
+    "url": "https://catalogue.albert-bichot.com/QM1NSF",
+    "imageUrl": "https://cdn.vin.co/_clients_folder/3418PY2MYC/Carte_Marc_de_Moutonne_1719303156.png",
+    "file": "moutonne-producer-second-map.png",
+    "sha256": "9f59e58c4482e99330c0e8860ef5b83c7e039eb027d34f8d3fbb7ee4cf2a4394",
+    "imageSize": [
+      1920,
+      1080
+    ],
+    "rights": "Producer illustration; no open-data licence stated. Original image is not redistributed."
+  },
+  "method": "Manually digitised producer outline; least-squares affine alignment to four reviewed INAO hillside corners/road junctions. No area fitting, clipping or cadastral reconstruction.",
+  "bounds": [
+    3.797304,
+    47.82381,
+    3.80035,
+    47.826347
+  ],
+  "labelPoint": [
+    3.799599,
+    47.826347
+  ],
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [
+          3.797304,
+          47.824856
+        ],
+        [
+          3.799182,
+          47.82381
+        ],
+        [
+          3.79952,
+          47.824089
+        ],
+        [
+          3.799962,
+          47.824223
+        ],
+        [
+          3.799545,
+          47.824806
+        ],
+        [
+          3.799292,
+          47.825386
+        ],
+        [
+          3.800331,
+          47.825398
+        ],
+        [
+          3.80035,
+          47.825936
+        ],
+        [
+          3.799599,
+          47.826347
+        ],
+        [
+          3.798434,
+          47.825871
+        ],
+        [
+          3.798201,
+          47.825481
+        ],
+        [
+          3.798523,
+          47.825295
+        ],
+        [
+          3.798071,
+          47.824875
+        ],
+        [
+          3.797586,
+          47.825101
+        ],
+        [
+          3.797304,
+          47.824856
+        ]
+      ]
+    ]
+  },
+  "diagnostics": {
+    "controlResidualMetres": [
+      13.16,
+      4.18,
+      14.97,
+      5.99
+    ],
+    "controlRmsMetres": 10.61,
+    "illustratedAreaHa": 2.9851,
+    "publishedAreaHa": 2.35,
+    "intersectionPercent": {
+      "444": 3.43,
+      "446": 94.63
+    },
+    "outsideContainingClimatsPercent": 1.94,
+    "caveat": "Control residuals are not an accuracy bound. The schematic is larger than the published holding and includes road gaps; do not measure parcels or infer ownership from it."
+  }
+}

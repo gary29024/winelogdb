@@ -40,6 +40,11 @@ import pouillyLoche from '../../src/lib/places/pouillyLocheVillageMapCatalogue.j
 import pouillyVinzelles from '../../src/lib/places/pouillyVinzellesVillageMapCatalogue.json';
 import saintVeran from '../../src/lib/places/saintVeranVillageMapCatalogue.json';
 import vireClesse from '../../src/lib/places/vireClesseVillageMapCatalogue.json';
+import chablis from '../../src/lib/places/chablisVillageMapCatalogue.json';
+import petitChablis from '../../src/lib/places/petitChablisVillageMapCatalogue.json';
+import irancy from '../../src/lib/places/irancyVillageMapCatalogue.json';
+import saintBris from '../../src/lib/places/saintBrisVillageMapCatalogue.json';
+import vezelay from '../../src/lib/places/vezelayVillageMapCatalogue.json';
 import registry from '../../src/lib/places/burgundyVillageMapRegistry.json';
 import { loadVillageMapCatalogue } from '../../src/lib/places/loadVillageMapCatalogue';
 import type { FeatureCollection,MultiPolygon,Polygon } from 'geojson';
@@ -47,7 +52,7 @@ import coverage from '../../scripts/burgundy-map-coverage.json';
 import mapConfig from '../../scripts/burgundy-villages.json';
 import appellationLinks from '../../src/lib/places/burgundyAtlasAppellationLinks.json';
 
-const catalogues:VillageMapCatalogue[]=[catalogue,morey,chambolle,vosne,fixin,vougeot,nuits,marsannay,coteNuits,meursault,puligny,chassagne,saintAubin,blagny,aloxe,pernand,ladoix,beaune,pommard,volnay,savigny,chorey,auxey,monthelie,saintRomain,santenay,maranges,coteBeaune,coteBeauneVillages,bouzeron,rully,mercurey,givry,montagny,pouillyFuisse,pouillyLoche,pouillyVinzelles,saintVeran,vireClesse];
+const catalogues:VillageMapCatalogue[]=[catalogue,morey,chambolle,vosne,fixin,vougeot,nuits,marsannay,coteNuits,meursault,puligny,chassagne,saintAubin,blagny,aloxe,pernand,ladoix,beaune,pommard,volnay,savigny,chorey,auxey,monthelie,saintRomain,santenay,maranges,coteBeaune,coteBeauneVillages,bouzeron,rully,mercurey,givry,montagny,pouillyFuisse,pouillyLoche,pouillyVinzelles,saintVeran,vireClesse,chablis,petitChablis,irancy,saintBris,vezelay];
 
 const wine={country:'France',region:'Burgundy',appellation:'Gevrey-Chambertin',wineName:'Les Cazetiers',classification:'premier_cru'};
 
@@ -75,7 +80,7 @@ describe('Gevrey village map identity',()=>{
  });
  it('withholds conflicts, incompatible geography, unsupported villages and an unproven cru tier',()=>{
   for(const fields of [{country:'USA'},{region:'Bordeaux'},{appellation:'Irancy'},
-   {identityMatchStatus:'conflict' as const},{classification:null},{appellation:'Chablis Grand Cru',classification:'grand_cru'}]){
+   {identityMatchStatus:'conflict' as const},{classification:null},{appellation:'Chablis Grand Cru',classification:'grand_cru',colour:'Red'}]){
    expect(burgundyVillageMapTarget({...wine,...fields}),JSON.stringify(fields)).toBeNull();
   }
  });
@@ -209,7 +214,8 @@ describe('village registry',()=>{
   expect(coverage.villages.map(v=>v.name).sort()).toEqual([...appellationLinks.groups.map(g=>g.appellation),'Côte de Beaune-Villages'].sort());
   const nuitsCoverage=coverage.villages.filter(v=>v.region==='Côte de Nuits');
   expect(nuitsCoverage).toHaveLength(9);
-  expect(mapConfig.villages).toHaveLength(39);
+  expect(mapConfig.villages).toHaveLength(44);
+  expect(mapConfig.villages.filter(v=>v.region==='Chablis & Grand Auxerrois')).toHaveLength(5);
   expect(mapConfig.villages.filter(v=>v.region==='Côte de Beaune')).toHaveLength(20);
   expect(mapConfig.villages.filter(v=>v.region==='Côte Chalonnaise')).toHaveLength(5);
   expect(mapConfig.villages.filter(v=>v.region==='Mâconnais')).toHaveLength(5);
@@ -231,8 +237,8 @@ describe('village registry',()=>{
   expect(burgundyVillageMapTarget({...wine,appellation:'Chambolle-Musigny',wineName:'Les Feusselotes'})?.featureId).toBe('inao-denom-464');
  });
  it('has one target per identity and a working lazy catalogue for every village',async()=>{
-  expect(registry.targets).toHaveLength(754);
-  expect(new Set(registry.targets.map(t=>t.matchId)).size).toBe(754);
+  expect(registry.targets).toHaveLength(778);
+  expect(new Set(registry.targets.map(t=>t.matchId)).size).toBe(778);
   for(const village of registry.villages){
    const c=await loadVillageMapCatalogue(village.id);
    expect(catalogues.find(expected=>expected.id===village.id)).toEqual(c);

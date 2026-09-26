@@ -12,16 +12,16 @@ map link for it, and verify all nine Côte de Nuits entries have map configurati
 Adding a map requires updating this document and the map configuration; the
 inventory is the denominator, not the current list of supported Atlas pages.
 
-Reviewed 25 September 2026 against the
+Reviewed 26 September 2026 against the
 [BIVB appellation list](https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/bourgogne-an-ideal-location,2458,9253.html?args=Y29tcF9pZD0yMjc4JmFjdGlvbj12aWV3RnVsbExpc3RlJmlkPSZ8)
 and the pinned INAO boundary snapshot documented in [the map guide](burgundy-village-map.md).
 Beaujolais has its own appellation system and is outside this Bourgogne inventory.
 
 ## Village coverage
 
-**39 of 44 village appellations have maps in this branch.** This is not complete
-Burgundy coverage. A mapped appellation can still lack individual village
-lieux-dits; named plot coverage must be assessed separately.
+**All 44 village appellations have maps in this branch.** Named plot and regional
+coverage remain incomplete: Chablis has 30 missing and two partial Premier Cru
+boundaries, Givry lacks Le Vernoy, and village lieux-dits need separate sources.
 
 | Region | Mapped | Remaining |
 | --- | ---: | ---: |
@@ -29,7 +29,7 @@ lieux-dits; named plot coverage must be assessed separately.
 | Côte de Beaune | 20 | 0 |
 | Côte Chalonnaise | 5 | 0 |
 | Mâconnais | 5 | 0 |
-| Chablis & Grand Auxerrois | 0 | 5 |
+| Chablis & Grand Auxerrois | 5 | 0 |
 
 ### Côte de Nuits — mapped
 
@@ -66,10 +66,9 @@ lieux-dits; named plot coverage must be assessed separately.
 - [x] Côte de Beaune: its full source area in Beaune, distinct from the subregion and the Beaune appellation
 - [x] Côte de Beaune-Villages: all 16 producing communes, red-only, with a local identity and four area zoom controls
 
-The Côte de Beaune, Côte Chalonnaise and Mâconnais village inventories are now mapped.
-Next are Chablis/Grand Auxerrois and the regional inventory. Givry still lacks
-one named Premier Cru boundary.
-Named village lieux-dits remain a separate coverage gap throughout these areas.
+All five regional village inventories are now mapped. Next is the regional AOC
+inventory, alongside the named-boundary gaps below. A completed village inventory
+does not imply that every named plot has geometry.
 
 ### Côte Chalonnaise — mapped, with a Givry source gap
 
@@ -87,25 +86,33 @@ Named village lieux-dits remain a separate coverage gap throughout these areas.
 - [x] Saint-Véran: all seven producing communes, with north/south area controls; no individual climat geometry in this source
 - [x] Viré-Clessé: Viré, Clessé, Montbellet and Laizé; full village and named-climat eligibility areas retained, without individual plot boundaries
 
-### Chablis & Grand Auxerrois
+### Chablis & Grand Auxerrois — mapped, with Chablis source gaps
 
-- [ ] Chablis, including its Premier Crus
-- [ ] Petit Chablis
-- [ ] Irancy
-- [ ] Saint-Bris
-- [ ] Vézelay
+- [x] Chablis: all 17 current producing communes; broad village/Premier Cru areas, eight named Premier Cru boundaries and two explicitly partial boundaries
+- [x] Petit Chablis: all 17 current producing communes; broad white-wine area
+- [x] Irancy: Irancy, Vincelottes and Cravant within the current Deux Rivières commune; red only
+- [x] Saint-Bris: Saint-Bris-le-Vineux, Chitry, Irancy, Quenne and Vincelottes; white only
+- [x] Vézelay: Asquins, Saint-Père, Tharoiseau and Vézelay; white only
+
+Chablis has 40 recognised Premier Cru climats. The pinned source supplies ten
+named features, of which Fourchaume and Mont de Milieu omit their Chablis-commune
+portions. Those two features remain available for labelled manual exploration;
+their wines open on the broad Premier Cru area, as do the 30 missing names.
+The full Premier Cru source area supplies the overview colour, including areas
+whose individual climat names lack geometry. Named village plots in the other
+four appellations remain unmapped.
 
 ## Grand Crus and regional coverage
 
 All **24 Côte de Nuits Grand Cru appellations** and the **five Montrachet Grand
-Crus**, plus **Corton, Corton-Charlemagne and Charlemagne**, are mapped:
-**32 of 33** Bourgogne Grand Cru appellations. Shared appellations count once
-despite appearing in several village maps. Chablis Grand Cru remains pending:
+Crus**, plus **Corton, Corton-Charlemagne, Charlemagne and Chablis Grand Cru**,
+are mapped: **33 of 33** Bourgogne Grand Cru appellations. Shared appellations
+count once despite appearing in several village maps.
 
 - [x] Montrachet, Bâtard-Montrachet, Chevalier-Montrachet,
   Bienvenues-Bâtard-Montrachet and Criots-Bâtard-Montrachet
 - [x] Corton (24 named source denominations), Corton-Charlemagne and Charlemagne
-- [ ] Chablis Grand Cru and its seven named climats
+- [x] Chablis Grand Cru and its seven named climats; La Moutonne alone has a dashed, approximate producer outline, separate from official boundaries
 
 Regional coverage remains pending. Track all seven regional AOCs: Bourgogne,
 Bourgogne Aligoté, Bourgogne Mousseux, Bourgogne Passe-tout-grains, Coteaux
@@ -133,10 +140,19 @@ in the source, rather than just the five village AOCs above.
   Clos du Vernoy. The pinned INAO source lacks Le Vernoy geometry. Its wines keep
   the broad Premier Cru view; the gap is visible in every Givry map dialog.
   Do not substitute Clos du Vernoy or silently drop Le Vernoy from a blend.
-- **Source counts need review.** The pinned INAO file has only 12 Chablis
-  denominations under its village appellation; that is not a complete inventory
-  of named Premier Cru climats. Verify umbrella names and missing geometries
-  against official sources before calling Chablis complete.
+- **Chablis named Premier Cru coverage remains partial.** Its 12 village-AOC
+  source denominations comprise two broad areas and ten named features. BIVB
+  recognises 40 climats under 17 flag-bearing names. Fourchaume (`414`) lacks
+  Chablis-Poinchy and Mont de Milieu (`420`) lacks Fyé in Chablis. Neither partial
+  polygon may automatically locate a wine. Missing names also participate in
+  blend checks: “Fourchaume Vaulorent” must not silently select Fourchaume.
+  The [cadastral reconstruction audit](chablis-cadastre-audit.md) failed its
+  benchmark gate, so no derived completion or all-40 crosswalk is published.
+- **Seven Chablis climats are one Grand Cru appellation.** White wine can select
+  a named climat; a recorded village or Premier Cru cannot be promoted by its
+  name. La Moutonne crosses Vaudésir and Les Preuses and has no official parcel
+  geometry here. The owner-approved [one-off producer illustration](la-moutonne-approximation.md)
+  is labelled approximate and kept separate from all official boundaries/counts.
 - **A named-climat eligibility area is not one climat.** Pouilly-Fuissé `1056`
   and Viré-Clessé `1593` describe broader production areas for village wines
   labelled with a climat. Keep them selectable with clear scope, and never use

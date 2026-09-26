@@ -3,6 +3,9 @@ import { Map as MapLibreMap,Marker,NavigationControl,ScaleControl,type FilterSpe
 import type { Feature,FeatureCollection,Geometry } from 'geojson';
 import { clickOrder,countLabel,joinPlaces,snapshotLabel,umbrellaNote,type BurgundyVillageMapTarget,type VillageMapCatalogue,type VillageMapFeature } from '../../lib/places/burgundyVillageMap';
 import { loadVillageMapCatalogue } from '../../lib/places/loadVillageMapCatalogue';
+// Loaded with the map dialog, never part of the wine identity registry. This
+// one approved illustration must not become a source for other holdings.
+import laMoutonne from '../../lib/places/laMoutonneApproximation.json';
 import { BurgundyAtlasLink } from '../../components/BurgundyAtlasLink';
 import 'maplibre-gl/dist/maplibre-gl.css';
 
@@ -27,8 +30,8 @@ const groups=[{tier:'grand_cru',label:'Grand Crus'},{tier:'premier_cru',label:'P
 // The village and Premier Cru appellation areas contain every named cru, so as
 // washes they stacked under them and made extra shades; the village area is an
 // outline instead, and the Premier Cru area shows only when selected.
-const selectionFilter=(id:string):FilterSpecification=>['==',['get','id'],id];
-function mapStyle(data:FeatureCollection,catalogue:VillageMapCatalogue,base?:StyleSpecification):StyleSpecification{
+const selectionFilter=(ids:string[]):FilterSpecification=>['in',['get','id'],['literal',ids]];
+function mapStyle(data:FeatureCollection,catalogue:VillageMapCatalogue,approximate?:Feature,base?:StyleSpecification):StyleSpecification{
  const unpainted=Object.entries(catalogue.notes).filter(([,entry])=>entry.paintedBy).map(([id])=>id);
  const painted:FilterSpecification=['all',['==',['get','kind'],'vineyard'],['!',['in',['get','id'],['literal',unpainted]]]];
  // Derived overview fills avoid stacking colours over overlapping names.
@@ -42,6 +45,7 @@ function mapStyle(data:FeatureCollection,catalogue:VillageMapCatalogue,base?:Sty
  return {
   ...(base??{version:8}),
   sources:{...base?.sources,'wine-boundaries':{type:'geojson',data},
+   ...(approximate?{'producer-illustration':{type:'geojson' as const,data:approximate}}:{}),
    ...(separateContext?{'wine-context':{type:'geojson' as const,data:{...data,features:contextFeatures}}}:{})},
   layers:[...(base?.layers??[{id:'paper',type:'background' as const,paint:{'background-color':'#f3f1ec'}}]),
    {id:'commune-outline',type:'line',source:'wine-boundaries',filter:['==',['get','kind'],'commune'],paint:{'line-color':'#7d899c','line-width':1.5,'line-dasharray':[4,3]}},
@@ -60,6 +64,11 @@ function mapStyle(data:FeatureCollection,catalogue:VillageMapCatalogue,base?:Sty
    {id:'selected-fill',type:'fill',source:'wine-boundaries',filter:['==',['get','id'],''],paint:{'fill-color':accent,'fill-opacity':['match',['get','kind'],'appellation',0.2,0.55]}},
    {id:'selected-casing',type:'line',source:'wine-boundaries',filter:['==',['get','id'],''],paint:{'line-color':'#ffffff','line-width':['match',['get','kind'],'appellation',0,6]}},
    {id:'selected-outline',type:'line',source:'wine-boundaries',filter:['==',['get','id'],''],paint:{'line-color':accent,'line-width':['match',['get','kind'],'appellation',0,2.5]}},
+   ...(approximate?[
+    {id:'approximate-fill',type:'fill' as const,source:'producer-illustration',filter:selectionFilter([]),paint:{'fill-color':accent,'fill-opacity':0.25}},
+    {id:'approximate-casing',type:'line' as const,source:'producer-illustration',filter:selectionFilter([]),paint:{'line-color':'#ffffff','line-width':6,'line-dasharray':[2,2]}},
+    {id:'approximate-outline',type:'line' as const,source:'producer-illustration',filter:selectionFilter([]),paint:{'line-color':accent,'line-width':2.5,'line-dasharray':[3,2]}},
+   ]:[]),
   ]
  };
 }
@@ -72,14 +81,15 @@ function isBoundaryData(value:unknown,catalogue:VillageMapCatalogue):value is Fe
 
 export default function VillageMap({target}:{target:BurgundyVillageMapTarget}){
  const [catalogue,setCatalogue]=useState<VillageMapCatalogue|null>(null),[failed,setFailed]=useState(false);
+ const requiredIds=[target.featureId,...(target.locationContext?.featureIds??[])].join(',');
  useEffect(()=>{
   let disposed=false;
   void loadVillageMapCatalogue(target.villageId).then(value=>{
-   if(!value.features.some(feature=>feature.id===target.featureId))throw new Error('Vineyard is unavailable');
+   if(!requiredIds.split(',').every(id=>value.features.some(feature=>feature.id===id)))throw new Error('Vineyard is unavailable');
    if(!disposed)setCatalogue(value);
   }).catch(()=>{if(!disposed)setFailed(true)});
   return()=>{disposed=true};
- },[target.villageId,target.featureId]);
+ },[target.villageId,requiredIds]);
  // Browsers cache failed module imports. Repeating the same import cannot
  // reliably recover; a fresh page can. GeoJSON download failures retry below.
  if(failed)return <div className="village-map-message" role="alert"><p>The village map could not load. Reload the page to try again.</p><button type="button" className="village-map-return" onClick={()=>window.location.reload()}>Reload page</button></div>;
@@ -88,11 +98,28 @@ export default function VillageMap({target}:{target:BurgundyVillageMapTarget}){
 }
 
 function VillageMapView({target,catalogue}:{target:BurgundyVillageMapTarget;catalogue:VillageMapCatalogue}){
- const host=useRef<HTMLDivElement>(null),mapRef=useRef<MapLibreMap|null>(null),markerRef=useRef<Marker|null>(null);
- const [selectedId,setSelectedId]=useState(target.featureId),[ready,setReady]=useState(false),[error,setError]=useState(''),[baseWarning,setBaseWarning]=useState(false),[attempt,setAttempt]=useState(0);
+ const host=useRef<HTMLDivElement>(null),mapRef=useRef<MapLibreMap|null>(null),markersRef=useRef<Marker[]>([]);
+ // La Moutonne's illustration lives in its own source and selection. Official
+ // climats stay explorable and retain their geometry, counts and attribution.
+ const approximation=catalogue.id==='chablis'&&target.locationContext?.approximateOutline==='la-moutonne'&&target.locationContext.selectionId===laMoutonne.id?laMoutonne:undefined;
+ const approximateFeature:Feature|undefined=approximation?{type:'Feature',id:approximation.id,properties:{id:approximation.id},geometry:approximation.geometry as Geometry}:undefined;
+ const wineSelectionId=target.locationContext?.selectionId??target.featureId;
+ const featureIds=(id:string)=>id===approximation?.id?[]:id===wineSelectionId?target.locationContext?.featureIds??[target.featureId]:[id];
+ const featuresFor=(id:string):VillageMapFeature[]=>id===approximation?.id?[{
+  ...catalogue.features.find(f=>f.id===target.featureId)!,id,name:approximation.name,kind:'location',atlasUrl:null,
+  areaHa:approximation.diagnostics.illustratedAreaHa,bounds:approximation.bounds,labelPoint:approximation.labelPoint,
+ }]:catalogue.features.filter(feature=>featureIds(id).includes(feature.id));
+ const selection=(id:string):VillageMapFeature=>{
+  const features=featuresFor(id);
+  if(features.length===1)return features[0];
+  return {...features[0],id,name:target.locationContext!.name!,kind:'location',atlasUrl:null,
+   bounds:[Math.min(...features.map(f=>f.bounds[0])),Math.min(...features.map(f=>f.bounds[1])),Math.max(...features.map(f=>f.bounds[2])),Math.max(...features.map(f=>f.bounds[3]))]};
+ };
+ const [selectedId,setSelectedId]=useState(wineSelectionId),[ready,setReady]=useState(false),[error,setError]=useState(''),[baseWarning,setBaseWarning]=useState(false),[attempt,setAttempt]=useState(0);
  const selectedRef=useRef(selectedId),selectionAction=useRef<((id:string)=>void)|null>(null);
- const selected=catalogue.features.find(feature=>feature.id===selectedId)!;
- const locationContext=selectedId===target.featureId?target.locationContext:undefined;
+ const selected=selection(selectedId);
+ const locationContext=selectedId===wineSelectionId?target.locationContext:undefined;
+ const showingApproximation=selectedId===approximation?.id;
  // A reviewed note, then what the cru's umbrella relationships mean for a label.
  const selectionNotes=[locationContext?undefined:catalogue.notes[selected.id]?.note,umbrellaNote(catalogue,selected.id)].filter(Boolean);
  // Reviewed alternative designations remain selectable without counting the
@@ -100,8 +127,17 @@ function VillageMapView({target,catalogue}:{target:BurgundyVillageMapTarget;cata
  const vineyardCount=(tier:string)=>catalogue.features.filter(f=>f.kind==='vineyard'&&f.tier===tier&&!catalogue.notes[f.id]?.sameBoundaryAs).length;
  const grandCount=new Set(catalogue.features.filter(f=>f.tier==='grand_cru').map(f=>f.appellationId)).size;
  const grandClimats=catalogue.features.filter(f=>f.parentAppellation);
+ // Chablis's seven Grand Cru climats form one compact hillside inside a much
+ // larger village area. Use that source boundary as their shared context.
+ const grandCruArea=catalogue.id==='chablis'?catalogue.features.find(f=>f.tier==='grand_cru'&&f.kind==='appellation'):undefined;
  const hasVineyards=catalogue.features.some(f=>f.kind==='vineyard');
  const selectId=useId(),statusId=useId();
+ const wineViewport=()=>{
+  const own=catalogue.features.find(f=>f.id===target.featureId);
+  if(own?.tier==='grand_cru'&&grandCruArea)return {bounds:boundsOf(grandCruArea.bounds),fitBoundsOptions:{...overviewFit(host.current),maxZoom:15}};
+  if(target.scope==='vineyard'&&own)return {bounds:boundsOf(own.bounds),fitBoundsOptions:{padding:70,maxZoom:15}};
+  return {bounds:boundsOf(catalogue.bounds),fitBoundsOptions:overviewFit(host.current)};
+ };
  useEffect(()=>{selectedRef.current=selectedId;selectionAction.current?.(selectedId)},[selectedId]);
 
  useEffect(()=>{
@@ -119,12 +155,8 @@ function VillageMapView({target,catalogue}:{target:BurgundyVillageMapTarget;cata
     if(!isBoundaryData(data,catalogue))throw new Error('Boundary data is incomplete');
     clearTimeout(timeout);
     if(disposed||!host.current)return;
-    const own=catalogue.features.find(f=>f.id===target.featureId);
-    // Open on the wine's own cru - on a phone the village view leaves it a few
-    // pixels wide under its label. A broad appellation has no cru to show.
-    const opening=target.scope==='vineyard'&&own?{bounds:boundsOf(own.bounds),fitBoundsOptions:{padding:70,maxZoom:15}}:{bounds:boundsOf(catalogue.bounds),fitBoundsOptions:overviewFit(host.current)};
-    map=new MapLibreMap({container:host.current,style:mapStyle(data,catalogue),...opening,
-     minZoom:9,maxZoom:18,attributionControl:{compact:true,customAttribution:'Boundaries: INAO · Cadastre Etalab'},
+    map=new MapLibreMap({container:host.current,style:mapStyle(data,catalogue,approximateFeature),...wineViewport(),
+     minZoom:9,maxZoom:18,attributionControl:{compact:true,customAttribution:`Boundaries: INAO · Cadastre Etalab${approximation?' · Approximate outline: Albert Bichot':''}`},
      dragRotate:false,pitchWithRotate:false,touchPitch:false});
     mapRef.current=map;
     map.addControl(new NavigationControl({showCompass:false}),'top-right');
@@ -155,8 +187,16 @@ function VillageMapView({target,catalogue}:{target:BurgundyVillageMapTarget;cata
     function placeLabels(){
      if(!map)return;
      const {width,height}=map.getContainer().getBoundingClientRect(),placed:DOMRect[]=[];
-     const own=markerRef.current?.getElement().getBoundingClientRect();
-     if(own)placed.push(own);
+     // Two containing climats can have close label points on a phone. Move
+     // the second label below its point when their selected badges collide.
+     markersRef.current.forEach(marker=>{
+      marker.setOffset([0,-6]);
+      let box=marker.getElement().getBoundingClientRect();
+      if(placed.some(b=>box.left<b.right+4&&b.left<box.right+4&&box.top<b.bottom+2&&b.top<box.bottom+2)){
+       marker.setOffset([0,box.height+6]);box=marker.getElement().getBoundingClientRect();
+      }
+      placed.push(box);
+     });
      // Names never sit under the buttons, zoom control, scale or credits.
      map.getContainer().closest('.village-map-main')?.querySelectorAll('.village-map-toolbar button,.maplibregl-ctrl')
       .forEach(control=>placed.push(control.getBoundingClientRect()));
@@ -174,21 +214,25 @@ function VillageMapView({target,catalogue}:{target:BurgundyVillageMapTarget;cata
       element.style.visibility='visible';
       const box=element.getBoundingClientRect();
       const inside=box.left>=origin.left&&box.right<=origin.left+width&&box.top>=origin.top&&box.bottom<=origin.top+height;
-      const show=feature.id!==selectedRef.current&&map.getZoom()>=12.8&&inside&&!overlaps(box);
+      // The whole Chablis hillside fits a phone just below the usual label
+      // threshold. Keep neighbouring Grand Cru names available at that view.
+      const labelZoom=grandCruArea&&feature.tier==='grand_cru'?12:12.8;
+      const show=!featureIds(selectedRef.current).includes(feature.id)&&map.getZoom()>=labelZoom&&inside&&!overlaps(box);
       element.style.visibility=show?'visible':'hidden';
       if(show)placed.push(box);
      }
     }
     const select=(id:string)=>{
      if(!map?.getLayer('selected-fill'))return;
-     map.setFilter('selected-fill',selectionFilter(id));
-     map.setFilter('selected-casing',selectionFilter(id));
-     map.setFilter('selected-outline',selectionFilter(id));
-     const feature=catalogue.features.find(f=>f.id===id);
-     markerRef.current?.remove();markerRef.current=null;
-     if(feature?.kind==='vineyard'){
-      const element=document.createElement('span');element.className='village-map-selected-label';element.textContent=feature.name;
-      markerRef.current=new Marker({element,anchor:'bottom',offset:[0,-6]}).setLngLat([feature.labelPoint[0],feature.labelPoint[1]]).addTo(map);
+     map.setFilter('selected-fill',selectionFilter(featureIds(id)));
+     map.setFilter('selected-casing',selectionFilter(featureIds(id)));
+     map.setFilter('selected-outline',selectionFilter(featureIds(id)));
+     if(approximation)for(const layer of ['approximate-fill','approximate-casing','approximate-outline'])map.setFilter(layer,selectionFilter(id===approximation.id?[id]:[]));
+     markersRef.current.forEach(marker=>marker.remove());markersRef.current=[];
+     for(const feature of featuresFor(id).filter(f=>f.kind==='vineyard'||f.id===approximation?.id)){
+      const element=document.createElement('span');element.className='village-map-selected-label';element.textContent=feature.name+(id===approximation?.id?' (approx.)':'');
+      if(id===approximation?.id)element.classList.add('is-approximate');
+      markersRef.current.push(new Marker({element,anchor:'bottom',offset:[0,-6]}).setLngLat([feature.labelPoint[0],feature.labelPoint[1]]).addTo(map));
       element.removeAttribute('tabindex');element.removeAttribute('role');element.setAttribute('aria-hidden','true');
      }
      placeLabels();
@@ -216,45 +260,54 @@ function VillageMapView({target,catalogue}:{target:BurgundyVillageMapTarget;cata
      if(!baseResponse.ok)throw new Error('Street map unavailable');
      const base=await baseResponse.json() as StyleSpecification;
      if(base.version!==8||!base.sources||!Array.isArray(base.layers))throw new Error('Invalid base map');
-     if(!disposed)map.setStyle(mapStyle(data,catalogue,base));
+     if(!disposed)map.setStyle(mapStyle(data,catalogue,approximateFeature,base));
     }catch{if(!disposed)setBaseWarning(true)}finally{clearTimeout(baseTimeout)}
    }catch{if(!disposed)setError('The map could not load. Check your connection, or try another browser if maps are unavailable on this device.')}
    finally{clearTimeout(timeout)}
   }
   void start();
-  return()=>{disposed=true;controller.abort();baseController.abort();clearTimeout(timeout);clearTimeout(baseTimeout);observer?.disconnect();disposeNames?.();markerRef.current?.remove();markerRef.current=null;selectionAction.current=null;mapRef.current=null;map?.remove()};
+  return()=>{disposed=true;controller.abort();baseController.abort();clearTimeout(timeout);clearTimeout(baseTimeout);observer?.disconnect();disposeNames?.();markersRef.current.forEach(marker=>marker.remove());markersRef.current=[];selectionAction.current=null;mapRef.current=null;map?.remove()};
  // eslint-disable-next-line react-hooks/exhaustive-deps -- the map is built once per attempt; the target is fixed by the parent's key
  },[attempt]);
 
  const villageView=()=>mapRef.current?.fitBounds(boundsOf(catalogue.bounds),{...overviewFit(host.current),duration:0});
- const zoomTo=(feature:VillageMapFeature)=>mapRef.current?.fitBounds(boundsOf(feature.bounds),{padding:65,maxZoom:16.5,duration:0});
+ const zoomTo=(feature:VillageMapFeature)=>{
+  // The small illustrated plot and its badge must clear both wrapped toolbar
+  // buttons and expanded map credits on a phone.
+  const padding=feature.id===approximation?.id?{...overviewFit(host.current).padding,
+   bottom:Math.max(70,(host.current?.querySelector<HTMLElement>('.maplibregl-ctrl-bottom-right')?.offsetHeight??0)+20),
+  }:65;
+  mapRef.current?.fitBounds(boundsOf(feature.bounds),{padding,maxZoom:16.5,duration:0});
+ };
  const backToWine=()=>{
-  setSelectedId(target.featureId);
-  const own=catalogue.features.find(f=>f.id===target.featureId);
-  if(target.scope==='vineyard'&&own)mapRef.current?.fitBounds(boundsOf(own.bounds),{padding:70,maxZoom:15,duration:0});else villageView();
+  setSelectedId(wineSelectionId);
+  const view=wineViewport();
+  mapRef.current?.fitBounds(view.bounds,{...view.fitBoundsOptions,duration:0});
  };
  return <>
   <div className="village-map-body">
    <div className="village-map-main">
-    <div className="village-map-toolbar"><button type="button" disabled={!ready||Boolean(error)} onClick={villageView}>Village view</button><button type="button" disabled={!ready||Boolean(error)} onClick={()=>zoomTo(selected)}>Zoom to selection</button>{catalogue.areas?.map(area=><button type="button" key={area.id} disabled={!ready||Boolean(error)} aria-label={`${area.label}: ${area.name}`} onClick={()=>mapRef.current?.fitBounds(boundsOf(area.bounds),{padding:50,duration:0})}>{area.label}</button>)}</div>
+    <div className="village-map-toolbar"><button type="button" disabled={!ready||Boolean(error)} onClick={villageView}>Village view</button>{grandCruArea&&<button type="button" disabled={!ready||Boolean(error)} onClick={()=>mapRef.current?.fitBounds(boundsOf(grandCruArea.bounds),{...overviewFit(host.current),maxZoom:15,duration:0})}>Grand Cru view</button>}<button type="button" disabled={!ready||Boolean(error)} onClick={()=>zoomTo(selected)}>Zoom to selection</button>{catalogue.areas?.map(area=><button type="button" key={area.id} disabled={!ready||Boolean(error)} aria-label={`${area.label}: ${area.name}`} onClick={()=>mapRef.current?.fitBounds(boundsOf(area.bounds),{padding:50,duration:0})}>{area.label}</button>)}</div>
     <div className="village-map-canvas" ref={host} aria-busy={!ready&&!error}/>
     {!ready&&!error&&<p className="village-map-loading" role="status">Loading vineyard boundaries…</p>}
     {error&&<div className="village-map-error" role="alert"><p>{error}</p><button type="button" onClick={()=>{setError('');setReady(false);setBaseWarning(false);setAttempt(value=>value+1)}}>Try again</button></div>}
-    <div className="village-map-legend" aria-label="Map legend">{vineyardCount('grand_cru')>0&&<span><i className="map-swatch-grand_cru"/>Grand Cru</span>}{vineyardCount('premier_cru')>0&&<span><i className="map-swatch-premier_cru"/>Premier Cru</span>}<span><i className="map-swatch-village"/>Village appellation</span><span><i className="map-swatch-commune"/>Commune boundary</span><span><i className={`map-swatch-selected${selected.kind==='appellation'?' is-area':''}`}/>{locationContext?'Containing climat':selectedId===target.featureId?'This wine':'Selected'}</span></div>
+    <div className="village-map-legend" aria-label="Map legend">{vineyardCount('grand_cru')>0&&<span><i className="map-swatch-grand_cru"/>Grand Cru</span>}{vineyardCount('premier_cru')>0&&<span><i className="map-swatch-premier_cru"/>Premier Cru</span>}<span><i className="map-swatch-village"/>Village appellation</span><span><i className="map-swatch-commune"/>Commune boundary</span><span><i className={`map-swatch-selected${showingApproximation?' is-approximate':selected.kind==='appellation'?' is-area':''}`}/>{showingApproximation?'Approximate producer outline':locationContext?(featureIds(selectedId).length>1?'Containing climats':'Containing climat'):selectedId===wineSelectionId?'This wine':'Selected'}</span></div>
    </div>
    <aside className="village-map-sidebar">
     <label htmlFor={selectId}>{hasVineyards?'Explore a vineyard':'Explore an area'}</label>
     <select id={selectId} value={selectedId} onChange={event=>setSelectedId(event.target.value)} aria-describedby={statusId}>
-     {groups.map(group=><optgroup key={group.tier} label={group.label}>{catalogue.features.filter(f=>f.tier===group.tier).sort((a,b)=>a.name.localeCompare(b.name)).map(feature=><option key={feature.id} value={feature.id}>{feature.name}</option>)}</optgroup>)}
+     {target.locationContext?.selectionId&&<option value={wineSelectionId}>{target.locationContext.name} — {approximation?'approximate outline':'containing climats'}</option>}
+     {groups.map(group=><optgroup key={group.tier} label={group.label}>{catalogue.features.filter(f=>f.tier===group.tier).sort((a,b)=>a.name.localeCompare(b.name)).map(feature=><option key={feature.id} value={feature.id}>{feature.name}{feature.coverage==='partial'?' (partial boundary)':''}</option>)}</optgroup>)}
     </select>
     <div className="village-map-selection" id={statusId} aria-live="polite" aria-atomic="true">
-     <p className={`village-map-eyebrow${selectedId===target.featureId?' is-wine':''}`}>{locationContext?'VINEYARD LOCATION':selectedId===target.featureId?'THIS WINE':'EXPLORING'}</p>
+     <p className={`village-map-eyebrow${selectedId===wineSelectionId?' is-wine':''}`}>{locationContext?'VINEYARD LOCATION':selectedId===wineSelectionId?'THIS WINE':'EXPLORING'}</p>
      <h3>{selected.name}</h3><span className={`village-map-tier map-tier-${selected.tier}`}>{locationContext?'Current map: ':''}{tiers[selected.tier]}</span>
-     <p className="village-map-description">{locationContext?'Area containing this wine’s vineyard.':selected.kind==='vineyard'?'The highlighted area is the INAO production boundary for this cru.':'Appellation area shown; no single vineyard is identified.'}</p>
+     <p className="village-map-description">{showingApproximation?'Approximate outline from the producer’s map; not an official or surveyed parcel boundary.':selected.coverage==='partial'?'Only part of this cru’s boundary is available. The highlight does not show its full extent.':locationContext?(featureIds(selectedId).length>1?'Areas containing this wine’s vineyard.':'Area containing this wine’s vineyard.'):selected.kind==='vineyard'?'The highlighted area is the INAO production boundary for this cru.':'Appellation area shown; no single vineyard is identified.'}</p>
      {locationContext&&<p className="village-map-overlap">{locationContext.note} <a href={locationContext.sourceUrl} target="_blank" rel="noopener noreferrer">Producer’s explanation</a></p>}
+     {showingApproximation&&<p className="village-map-note"><a href={approximation.source.url} target="_blank" rel="noopener noreferrer">Producer’s source map</a> · Albert Bichot / Domaine Long-Depaquit</p>}
      {selectionNotes.map(note=><p className="village-map-overlap" key={note}>{note}</p>)}
     </div>
-    {selectedId!==target.featureId&&<button type="button" className="village-map-return" onClick={backToWine}>Back to this wine</button>}
+    {selectedId!==wineSelectionId&&<button type="button" className="village-map-return" onClick={backToWine}>Back to this wine</button>}
     <p className="village-map-hint">{hasVineyards?'Tap a vineyard on the map to explore it.':'The map shows the appellation area across its producing communes.'}</p>
     <p className="village-map-context">{hasVineyards?<>{countLabel(grandCount,'Grand Cru','Grand Crus')}{grandClimats.length>0&&<> · {countLabel(grandClimats.length,'Grand Cru climat','Grand Cru climats')}</>} · {countLabel(vineyardCount('premier_cru'),'Premier Cru climat','Premier Cru climats')}</>:'Village appellation area'}<br/>{joinPlaces(catalogue.communes.map(commune=>commune.name))}</p>
     {catalogue.coverageNote&&<p className="village-map-note">{catalogue.coverageNote}</p>}
@@ -262,6 +315,6 @@ function VillageMapView({target,catalogue}:{target:BurgundyVillageMapTarget;cata
     {baseWarning&&!error&&<p className="village-map-note" role="status">Some street-map details are unavailable. Vineyard boundaries remain available.</p>}
    </aside>
   </div>
-  <footer className="village-map-footer"><p>Wine boundaries: <a href="https://www.data.gouv.fr/datasets/delimitation-parcellaire-des-aoc-viticoles-de-linao" target="_blank" rel="noopener noreferrer">INAO</a> · {snapshotLabel(catalogue.sources.find(source=>source.name==='INAO')?.date)}. Commune outlines: <a href="https://cadastre.data.gouv.fr/datasets/cadastre-etalab" target="_blank" rel="noopener noreferrer">Cadastre Etalab</a> · {snapshotLabel(catalogue.sources.find(source=>source.name==='Cadastre Etalab')?.date,true)}. Licence Ouverte.</p><p>For geographic context; boundaries do not identify a producer’s holding or establish a bottle’s exact origin.</p></footer>
+  <footer className="village-map-footer"><p>Official wine boundaries: <a href="https://www.data.gouv.fr/datasets/delimitation-parcellaire-des-aoc-viticoles-de-linao" target="_blank" rel="noopener noreferrer">INAO</a> · {snapshotLabel(catalogue.sources.find(source=>source.name==='INAO')?.date)}. Commune outlines: <a href="https://cadastre.data.gouv.fr/datasets/cadastre-etalab" target="_blank" rel="noopener noreferrer">Cadastre Etalab</a> · {snapshotLabel(catalogue.sources.find(source=>source.name==='Cadastre Etalab')?.date,true)}. Licence Ouverte applies to these official sources.</p>{approximation&&<p>La Moutonne illustration: adapted from <a href={approximation.source.url} target="_blank" rel="noopener noreferrer">Domaines Albert Bichot</a>. Approximate; separate from INAO data and its licence.</p>}<p>For geographic context; boundaries do not establish a bottle’s exact origin or a surveyed producer holding.</p></footer>
  </>;
 }

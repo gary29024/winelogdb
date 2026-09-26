@@ -15,6 +15,9 @@
 .village-map-header h2{margin:0;font-size:1.55rem;line-height:1.15}
 .village-map-close{display:grid;place-items:center;flex:none;width:44px;height:44px;padding:0;border:1px solid var(--line);border-radius:50%;background:var(--ground);color:var(--ink);font-size:1.7rem;cursor:pointer}
 .village-map-body{display:grid;grid-template-columns:minmax(0,1fr) 280px;min-height:0}
+/* Long source notes scroll with the dialog instead of shrinking the grid and
+   letting its content overlap the footer. */
+.village-map-header,.village-map-body,.village-map-footer{flex-shrink:0}
 .village-map-main{position:relative;min-width:0;background:var(--paper);isolation:isolate}
 .village-map-canvas{height:min(59dvh,580px);min-height:300px;width:100%}
 .village-map-toolbar{position:absolute;z-index:2;left:12px;top:12px;right:55px;display:flex;flex-wrap:wrap;gap:6px}
@@ -39,6 +42,8 @@
 .map-swatch-commune{border:1.5px dashed #7d899c!important;background:none}
 .map-swatch-selected{border-color:#c51f45!important;background:#da7e90}
 .map-swatch-selected.is-area{border-color:#9c7629!important;background:#c51f4533}
+.map-swatch-selected.is-approximate{border-style:dashed;background:#c51f4540}
+.village-map-selected-label.is-approximate{border-style:dashed}
 /* The tier pill matches the classification pill on the wine page itself. */
 .village-map-tier{display:inline-block;padding:3px 10px;border:1px solid var(--warn-line);border-radius:var(--r-pill,999px);background:var(--warn-wash);color:var(--warn);font-size:.72rem;font-weight:650}
 .village-map-tier.map-tier-grand_cru{font-weight:750}
@@ -54,7 +59,8 @@
 .village-map-overlap{margin:12px 0 0;padding:9px 11px;border-left:3px solid var(--warn-line);border-radius:0 var(--r-sm,7px) var(--r-sm,7px) 0;background:var(--warn-wash);color:var(--ink-3);font-size:.76rem;line-height:1.5}
 .village-map-return{min-height:44px;border:1px solid var(--line);border-radius:var(--r-sm,7px);background:var(--ground);color:var(--wine-ink);padding:7px 12px;font-weight:650;cursor:pointer}
 .village-map-context{border-top:1px solid var(--line);padding-top:16px;margin-top:22px}.village-map-sidebar .burgundy-atlas-link{font-size:.76rem}
-.village-map-footer{padding:12px 20px;border-top:1px solid var(--line);color:var(--ink-6);font-size:.65rem;line-height:1.5}.village-map-footer p{margin:2px 0}.village-map-footer a{color:inherit;text-underline-offset:2px}
+/* Override the page footer's mobile display:none; map source credits stay readable. */
+.village-map-footer{display:block;padding:12px 20px;border-top:1px solid var(--line);color:var(--ink-6);font-size:.65rem;line-height:1.5}.village-map-footer p{margin:2px 0}.village-map-footer a{color:inherit;text-underline-offset:2px}
 .village-map-message{padding:30px;margin:0}
 .village-map-loading,.village-map-error{position:absolute;inset:65px 20px auto;z-index:3;padding:16px;border:1px solid var(--line-strong);border-radius:var(--r-sm,8px);background:var(--paper);color:var(--ink);font-size:.8rem}
 .village-map-error button{min-height:44px;cursor:pointer}

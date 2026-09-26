@@ -1,0 +1,23 @@
+{
+  "id": "location-long-depaquit-la-moutonne",
+  "name": "La Moutonne",
+  "reviewedOn": "2026-09-26",
+  "source": {
+    "name": "Domaines Albert Bichot · Domaine Long-Depaquit",
+    "url": "https://catalogue.albert-bichot.com/QM1NSF",
+    "imageUrl": "https://cdn.vin.co/_clients_folder/3418PY2MYC/Carte_Marc_de_Moutonne_1719303156.png",
+    "file": "moutonne-producer-second-map.png",
+    "sha256": "9f59e58c4482e99330c0e8860ef5b83c7e039eb027d34f8d3fbb7ee4cf2a4394",
+    "imageSize": [1920, 1080],
+    "rights": "Producer illustration; no open-data licence stated. Original image is not redistributed."
+  },
+  "method": "Manually digitised producer outline; least-squares affine alignment to four reviewed INAO hillside corners/road junctions. No area fitting, clipping or cadastral reconstruction.",
+  "publishedAreaHa": 2.35,
+  "controls": [
+    {"name": "Bougros western tip beside road", "featureId": "inao-denom-441", "pixel": [620, 578], "lambert93": [758953.91, 6747464.61]},
+    {"name": "Bougros / Les Preuses northern road junction", "featureId": "inao-denom-441", "pixel": [719, 520], "lambert93": [759378.86, 6747690.02]},
+    {"name": "Grenouilles western tip at hillside road", "featureId": "inao-denom-442", "pixel": [818, 631], "lambert93": [759788.37, 6747240.95]},
+    {"name": "Blanchot eastern outer corner", "featureId": "inao-denom-440", "pixel": [1184, 670], "lambert93": [761262.71, 6747046.95]}
+  ],
+  "outlinePixels": [[789,575],[794,568],[803,574],[811,562],[805,557],[809,546],[830,532],[844,543],[844,558],[825,559],[830,575],[838,591],[830,595],[824,603],[789,575]]
+}

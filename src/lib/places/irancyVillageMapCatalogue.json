@@ -1,0 +1,90 @@
+{
+  "id": "irancy",
+  "name": "Irancy",
+  "region": "Chablis & Grand Auxerrois",
+  "communes": [
+    {
+      "id": "89130",
+      "name": "Deux Rivières"
+    },
+    {
+      "id": "89202",
+      "name": "Irancy"
+    },
+    {
+      "id": "89479",
+      "name": "Vincelottes"
+    }
+  ],
+  "dataUrl": "/maps/irancy.2026-09-21.geojson",
+  "bounds": [
+    3.641326,
+    47.69863,
+    3.687281,
+    47.72058
+  ],
+  "sources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/89/89130/cadastre-89130-communes.json.gz",
+      "sha256": "a9b38b7f198a19e6e993099e0dc44baa4f3a5eaf193acc1c6b6a86bcb70ea732"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/89/89202/cadastre-89202-communes.json.gz",
+      "sha256": "351b2a1a59ae6ef64fc1182c13d7cf9d518a807ccba48b2ea3f4f090c295718b"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/89/89479/cadastre-89479-communes.json.gz",
+      "sha256": "436c5c282ab048e909cd034ae050466cedf90b1b71726f988c358332e0d1434e"
+    }
+  ],
+  "notes": {
+    "inao-denom-1288": {
+      "note": "Irancy is a red-wine appellation across Irancy, Vincelottes and the former commune of Cravant, now part of Deux Rivières. Named vineyards such as Palotte have no separate boundary in this map."
+    }
+  },
+  "features": [
+    {
+      "id": "inao-denom-1288",
+      "name": "Irancy",
+      "tier": "village",
+      "kind": "appellation",
+      "appellationId": 247,
+      "denominationId": 1288,
+      "sourceName": "Irancy",
+      "communes": [
+        "89130",
+        "89202",
+        "89479"
+      ],
+      "areaHa": 306.16,
+      "matchId": "ba_appellation_ivovbs6qaylo2wjdenlkav6uym",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_ivovbs6qaylo2wjdenlkav6uym/irancy",
+      "bounds": [
+        3.641326,
+        47.69863,
+        3.687281,
+        47.72058
+      ],
+      "labelPoint": [
+        3.679191,
+        47.711804
+      ]
+    }
+  ]
+}

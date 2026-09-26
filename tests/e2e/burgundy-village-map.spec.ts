@@ -1,4 +1,4 @@
-import { test,expect,type Page } from '@playwright/test';
+import { test,expect,type Locator,type Page } from '@playwright/test';
 import { wine } from './fixtures/layoutWine';
 
 async function setup(page:Page,overrides:Record<string,unknown>={}){
@@ -12,6 +12,133 @@ async function setup(page:Page,overrides:Record<string,unknown>={}){
  // Exercise the real WebGL renderer and local geography without a live tile
  // service or network-dependent fonts affecting CI or screenshot stability.
  await page.route('https://tiles.openfreemap.org/**',route=>route.abort());
+}
+
+// The hillside's opposite ends must both fit and span a useful part of the
+// real rendered map, catching a full-village opening or a single-climat crop.
+async function grandCruSpan(dialog:Locator){
+ return dialog.evaluate(el=>{
+  const canvas=el.querySelector('.village-map-canvas')!.getBoundingClientRect();
+  const names=[...el.querySelectorAll('.village-map-name')];
+  const centres=['Bougros','Blanchot'].map(name=>{
+   const box=names.find(node=>node.textContent===name)!.getBoundingClientRect();
+   return {x:(box.left+box.right)/2,y:(box.top+box.bottom)/2};
+  });
+  const inside=centres.every(p=>p.x>canvas.left&&p.x<canvas.right&&p.y>canvas.top&&p.y<canvas.bottom);
+  return inside?Math.abs(centres[1].x-centres[0].x)/canvas.width:0;
+ });
+}
+
+for(const route of ['/wines/layout-wine','/shared/layout-wine']){
+ test(`Chablis Grand Cru ${route}: named climats open on the hillside`,async({page},testInfo)=>{
+  await setup(page,{appellation:'Chablis Grand Cru',wineName:'Domaine Long-Depaquit Les Preuses',classification:'grand_cru',colour:'White',wineStyle:'white'});
+  await page.setViewportSize({width:320,height:900});await page.goto(route);
+  await page.getByRole('button',{name:'View village map'}).click();
+  const dialog=page.getByRole('dialog',{name:'Chablis',exact:true});
+  await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
+  await expect(dialog.getByRole('combobox')).toHaveValue('inao-denom-444');
+  await expect.poll(()=>grandCruSpan(dialog)).toBeGreaterThan(0.35);
+  await expect(dialog.locator('.village-map-name',{hasText:/^Bougros$/})).toHaveCSS('visibility','visible');
+  await expect(dialog.locator('.village-map-selected-label')).toHaveText('Les Preuses');
+  await expect(dialog.locator('.village-map-context')).toContainText('1 Grand Cru · 7 Grand Cru climats');
+  await expect(dialog.getByRole('option',{name:/La Moutonne/})).toHaveCount(0);
+  await expect(dialog.locator('.village-map-legend')).not.toContainText('Approximate producer outline');
+  await expect(dialog.locator('.village-map-overlap')).toContainText('whole official climat');
+  await expect(dialog.getByRole('link',{name:/Explore on Burgundy Atlas/})).toHaveCount(0);
+  await dialog.getByRole('button',{name:'Village view',exact:true}).click();
+  await expect.poll(()=>grandCruSpan(dialog)).toBeLessThan(0.15);
+  await dialog.getByRole('button',{name:'Grand Cru view',exact:true}).click();
+  await expect.poll(()=>grandCruSpan(dialog)).toBeGreaterThan(0.35);
+  await expect(dialog.getByRole('combobox')).toHaveValue('inao-denom-444');
+  await dialog.getByRole('combobox').selectOption('inao-denom-446');
+  await expect(dialog.locator('.village-map-selected-label')).toHaveText('Vaudésir');
+  await dialog.getByRole('button',{name:'Back to this wine'}).click();
+  await expect(dialog.getByRole('combobox')).toHaveValue('inao-denom-444');
+  await expect.poll(()=>grandCruSpan(dialog)).toBeGreaterThan(0.35);
+  expect(await dialog.evaluate(el=>el.scrollWidth<=el.clientWidth)).toBe(true);
+  await dialog.locator('.village-map-toolbar').scrollIntoViewIfNeeded();
+  await page.screenshot({path:testInfo.outputPath('chablis-grand-cru-320.png')});
+ });
+ test(`Chablis Grand Cru ${route}: La Moutonne alone has an approximate producer outline`,async({page},testInfo)=>{
+  await page.setViewportSize({width:320,height:900});
+  await setup(page,{producer:null,appellation:'Chablis Grand Cru',wineName:'Domaine Long-Depaquit La Moutonne',classification:'grand_cru',colour:'White',wineStyle:'white'});
+  await page.goto(route);await page.getByRole('button',{name:'View village map'}).click();
+  const dialog=page.getByRole('dialog',{name:'Chablis',exact:true});
+  await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
+  await expect(dialog.getByRole('combobox')).toHaveValue('location-long-depaquit-la-moutonne');
+  await expect.poll(()=>grandCruSpan(dialog)).toBeGreaterThan(0.35);
+  await expect(dialog.locator('.village-map-selected-label')).toHaveText('La Moutonne (approx.)');
+  await expect(dialog.locator('.village-map-selected-label')).toHaveCSS('border-top-style','dashed');
+  await expect(dialog.locator('.village-map-eyebrow')).toHaveText('VINEYARD LOCATION');
+  await expect(dialog.getByRole('heading',{name:'La Moutonne',exact:true})).toBeVisible();
+  await expect(dialog.locator('.village-map-legend')).toContainText('Approximate producer outline');
+  await expect(dialog.locator('.village-map-description')).toContainText('not an official or surveyed parcel boundary');
+  await expect(dialog.locator('.village-map-overlap')).toContainText('larger than the stated holding');
+  await expect(dialog.getByRole('link',{name:'Producer’s source map'})).toHaveAttribute('href','https://catalogue.albert-bichot.com/QM1NSF');
+  await expect(dialog.locator('.village-map-footer')).toContainText('separate from INAO data and its licence');
+  await expect(dialog.locator('.village-map-footer')).toBeVisible();
+  await expect(dialog.locator('.village-map-context')).toContainText('1 Grand Cru · 7 Grand Cru climats');
+  await expect(dialog.getByRole('link',{name:/Explore on Burgundy Atlas/})).toHaveCount(0);
+  expect(await dialog.evaluate(el=>{
+   const body=el.querySelector('.village-map-body')!.getBoundingClientRect();
+   const sidebar=el.querySelector('.village-map-sidebar')!.getBoundingClientRect();
+   const footer=el.querySelector('.village-map-footer')!.getBoundingClientRect();
+   return body.bottom>=sidebar.bottom&&footer.top>=body.bottom-1;
+  })).toBe(true);
+  await page.screenshot({path:testInfo.outputPath('chablis-moutonne-320.png')});
+  for(const id of ['inao-denom-446','inao-denom-444','inao-denom-439']){
+   await dialog.getByRole('combobox').selectOption(id);
+   await expect(dialog.locator('.village-map-eyebrow')).toHaveText('EXPLORING');
+   await expect(dialog.locator('.village-map-selected-label')).toHaveCount(id==='inao-denom-439'?0:1);
+   await expect(dialog.locator('.village-map-selected-label.is-approximate')).toHaveCount(0);
+   await expect(dialog.locator('.village-map-legend')).not.toContainText('Approximate producer outline');
+   await dialog.getByRole('button',{name:'Village view',exact:true}).click();
+   await dialog.getByRole('button',{name:'Back to this wine'}).click();
+   await expect(dialog.getByRole('combobox')).toHaveValue('location-long-depaquit-la-moutonne');
+   await expect(dialog.locator('.village-map-selected-label')).toHaveText('La Moutonne (approx.)');
+   await expect.poll(()=>grandCruSpan(dialog)).toBeGreaterThan(0.35);
+  }
+  await dialog.getByRole('button',{name:'Zoom to selection',exact:true}).click();
+  await expect(dialog.locator('.village-map-selected-label').first()).toBeInViewport();
+  await expect(dialog.locator('.village-map-selected-label').last()).toBeInViewport();
+  expect(await dialog.evaluate(el=>{
+   const label=el.querySelector('.village-map-selected-label')!.getBoundingClientRect();
+   return [...el.querySelectorAll('.village-map-toolbar button')].every(button=>{
+    const box=button.getBoundingClientRect();
+    return label.right<=box.left||box.right<=label.left||label.bottom<=box.top||box.bottom<=label.top;
+   });
+  })).toBe(true);
+  await dialog.locator('.village-map-toolbar').scrollIntoViewIfNeeded();
+  await page.screenshot({path:testInfo.outputPath('chablis-moutonne-detail-320.png')});
+  await page.setViewportSize({width:1280,height:900});
+  await dialog.getByRole('button',{name:'Grand Cru view',exact:true}).click();
+  await expect.poll(()=>grandCruSpan(dialog)).toBeGreaterThan(0.35);
+  await dialog.locator('.village-map-toolbar').scrollIntoViewIfNeeded();
+  await page.screenshot({path:testInfo.outputPath('chablis-grand-cru-overview-1280.png')});
+ });
+ test(`Chablis Premier Cru ${route}: missing and partial boundaries never locate a wine in an incomplete plot`,async({page},testInfo)=>{
+  await page.setViewportSize({width:320,height:900});
+  for(const wineName of ['Fourchaume','Mont de Milieu','Vaulorent']){
+   await setup(page,{appellation:'Chablis',wineName,colour:'White',wineStyle:'white'});
+   await page.goto(route);await page.getByRole('button',{name:'View village map'}).click();
+   const dialog=page.getByRole('dialog',{name:'Chablis',exact:true});
+   await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
+   await expect(dialog.getByRole('combobox')).toHaveValue('inao-denom-438');
+   await expect(dialog.locator('.village-map-description')).toContainText('no single vineyard');
+   await expect(dialog.locator('.village-map-note').filter({hasText:'40 Premier Cru climats'})).toBeVisible();
+   await expect(dialog.getByRole('option',{name:'Fourchaume (partial boundary)',exact:true})).toHaveCount(1);
+   await dialog.getByRole('combobox').selectOption('inao-denom-414');
+   await expect(dialog.locator('.village-map-description')).toContainText('does not show its full extent');
+   await expect(dialog.locator('.village-map-overlap').first()).toContainText('omits the Chablis-Poinchy part');
+   await dialog.getByRole('combobox').selectOption('inao-denom-420');
+   await expect(dialog.locator('.village-map-overlap')).toContainText('omits its Fyé part');
+   expect(await dialog.evaluate(el=>el.scrollWidth<=el.clientWidth)).toBe(true);
+   if(wineName==='Fourchaume')await page.screenshot({path:testInfo.outputPath('chablis-partial-boundary-320.png')});
+   await dialog.getByRole('button',{name:'Back to this wine'}).click();
+   await expect(dialog.getByRole('combobox')).toHaveValue('inao-denom-438');
+   await page.keyboard.press('Escape');
+  }
+ });
 }
 
 test('Côte de Beaune-Villages has a local map, four area controls and no invented Atlas link',async({page},testInfo)=>{
@@ -215,6 +342,11 @@ for(const village of [
  {id:'pouilly-vinzelles',name:'Pouilly-Vinzelles',cru:'Les Quarts',tier:'premier_cru',colour:'White',feature:'inao-denom-2930',count:5,catalogue:'pouillyVinzellesVillageMapCatalogue',explore:'inao-denom-2929',label:'Les Longeays'},
  {id:'saint-veran',name:'Saint-Véran',cru:'Les Pommards',tier:'village',colour:'White',feature:'inao-denom-1158',count:1,catalogue:'saintVeranVillageMapCatalogue',explore:'inao-denom-1158',label:'Saint-Véran'},
  {id:'vire-clesse',name:'Viré-Clessé',cru:'Quintaine',tier:'village',colour:'White',feature:'inao-denom-1287',count:2,catalogue:'vireClesseVillageMapCatalogue',explore:'inao-denom-1593',label:'Viré-Clessé (named-climat area)'},
+ {id:'chablis',name:'Chablis',cru:'Vaucoupin',tier:'premier_cru',colour:'White',feature:'inao-denom-432',count:20,catalogue:'chablisVillageMapCatalogue',explore:'inao-denom-443',label:'Les Clos'},
+ {id:'petit-chablis',name:'Petit Chablis',cru:'Petit Chablis',tier:'village',colour:'White',feature:'inao-denom-1024',count:1,catalogue:'petitChablisVillageMapCatalogue',explore:'inao-denom-1024',label:'Petit Chablis'},
+ {id:'irancy',name:'Irancy',cru:'Palotte',tier:'village',feature:'inao-denom-1288',count:1,catalogue:'irancyVillageMapCatalogue',explore:'inao-denom-1288',label:'Irancy'},
+ {id:'saint-bris',name:'Saint-Bris',cru:'Saint-Bris',tier:'village',colour:'White',feature:'inao-denom-1597',count:1,catalogue:'saintBrisVillageMapCatalogue',explore:'inao-denom-1597',label:'Saint-Bris'},
+ {id:'vezelay',name:'Vézelay',cru:'Vézelay',tier:'village',colour:'White',feature:'inao-denom-2829',count:1,catalogue:'vezelayVillageMapCatalogue',explore:'inao-denom-2829',label:'Vézelay'},
 ]){
  for(const route of ['/wines/layout-wine','/shared/layout-wine']){
   test(`${village.name} ${route}: opens the correct boundary and keeps its full village context`,async({page},testInfo)=>{
@@ -224,6 +356,7 @@ for(const village of [
    await setup(page,{appellation:village.name,wineName:village.cru,classification:village.tier,
     ...('colour' in village?{colour:village.colour,wineStyle:'white',grapes:['Chardonnay']}:{}),
     ...(village.id==='bouzeron'?{grapes:['Aligoté']}:{}),
+    ...(village.id==='saint-bris'?{grapes:['Sauvignon Blanc']}:{}),
    });await page.goto(route);
    const opener=page.getByRole('button',{name:'View village map'});
    await expect(opener).toBeVisible();

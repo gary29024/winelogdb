@@ -1,0 +1,114 @@
+{
+  "id": "saint-bris",
+  "name": "Saint-Bris",
+  "region": "Chablis & Grand Auxerrois",
+  "communes": [
+    {
+      "id": "89108",
+      "name": "Chitry"
+    },
+    {
+      "id": "89202",
+      "name": "Irancy"
+    },
+    {
+      "id": "89319",
+      "name": "Quenne"
+    },
+    {
+      "id": "89337",
+      "name": "Saint-Bris-le-Vineux"
+    },
+    {
+      "id": "89479",
+      "name": "Vincelottes"
+    }
+  ],
+  "dataUrl": "/maps/saint-bris.2026-09-21.geojson",
+  "bounds": [
+    3.608731,
+    47.718257,
+    3.698192,
+    47.770551
+  ],
+  "sources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/89/89108/cadastre-89108-communes.json.gz",
+      "sha256": "9bdbdfc02f016b219b994571f2643ce65ce70c5b9b2548c27b06b9232f00693a"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/89/89202/cadastre-89202-communes.json.gz",
+      "sha256": "351b2a1a59ae6ef64fc1182c13d7cf9d518a807ccba48b2ea3f4f090c295718b"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/89/89319/cadastre-89319-communes.json.gz",
+      "sha256": "95807ecd001beadd74477eff5b9a42ee7d03fd312ed0328f3cfa25bbb9bb1be1"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/89/89337/cadastre-89337-communes.json.gz",
+      "sha256": "479cbcea03cc4ae81b6b46f99a988de76cb0a2a3c71adea32d6800502778fe73"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/89/89479/cadastre-89479-communes.json.gz",
+      "sha256": "436c5c282ab048e909cd034ae050466cedf90b1b71726f988c358332e0d1434e"
+    }
+  ],
+  "notes": {
+    "inao-denom-1597": {
+      "note": "Saint-Bris is a white-wine appellation across Saint-Bris-le-Vineux, Chitry, Irancy, Quenne and Vincelottes. This is the whole appellation area; named vineyards and producer holdings are not mapped separately."
+    }
+  },
+  "features": [
+    {
+      "id": "inao-denom-1597",
+      "name": "Saint-Bris",
+      "tier": "village",
+      "kind": "appellation",
+      "appellationId": 478,
+      "denominationId": 1597,
+      "sourceName": "Saint-Bris",
+      "communes": [
+        "89108",
+        "89202",
+        "89319",
+        "89337",
+        "89479"
+      ],
+      "areaHa": 924.27,
+      "matchId": "ba_appellation_52sjvqpcdkwjoppu2lrjp244ly",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_52sjvqpcdkwjoppu2lrjp244ly/saint-bris",
+      "bounds": [
+        3.608731,
+        47.718257,
+        3.698192,
+        47.770551
+      ],
+      "labelPoint": [
+        3.615214,
+        47.752391
+      ]
+    }
+  ]
+}

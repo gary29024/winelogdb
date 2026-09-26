@@ -1,0 +1,29 @@
+{
+  "purpose": "Benchmark the PR #349 proposal only. The 2010 consultation tables are not an approved current production crosswalk.",
+  "cdc": {
+    "url": "https://extranet.inao.gouv.fr/fichier/PNOCDCChablis.pdf",
+    "version": "2010-09-16 consultation draft, version 2.2",
+    "file": "chablis-cdc-2010-draft.pdf",
+    "sha256": "7c8caaca9c13e4259b329b8d1ca09b42876cca05c9e15ca44ff7e404aba16cc4"
+  },
+  "cadastreDate": "2026-06-01",
+  "cadastreHashes": {
+    "89068": "c69dbfcb19482d35068e3d0ab53c88c6edf86570d14172d98995d2145e52623e",
+    "89081": "757ae6e4626edf29cd3570ffb30e3641acf6d9d351a6af0a89b5f7620ff82f25",
+    "89104": "ce0d993dc7caa2eb89f86f484b67499be738b3ce2d201204b9ab45172d934092",
+    "89123": "8e9c91985e56264e525e0c175d54ba55d916fa3ff8ebde76a89d9c9165077979",
+    "89168": "0992b5340d3900954a60e472bc7a36dea537f4c02b079b9886a5176b95722d35",
+    "89175": "4204c7f642768507087481bb971bd40c5c89faedfab51b6df794468f5c176339"
+  },
+  "maximumSymmetricDifferenceRatio": 0.01,
+  "benchmarks": [
+    {"denomination": 404, "name": "Chaume de Talvat", "pages": [9], "places": {"89123": ["Chaumes de Talvat"]}},
+    {"denomination": 408, "name": "Côte de Jouan", "pages": [9], "places": {"89123": ["Côte de Jouan"]}},
+    {"denomination": 416, "name": "Les Beauregards", "pages": [9], "places": {"89123": ["Les Beauregards", "Hauts des Chambres du Roi", "Côte de Cuissy", "Les Corvées", "Bec d’Oiseau", "Vallée de Cuissy"]}},
+    {"denomination": 418, "name": "Les Fourneaux", "pages": [8, 9], "places": {"89168": ["Les Fourneaux", "Morein", "Côte des Près Girots", "La Côte", "Sur la Côte"]}},
+    {"denomination": 432, "name": "Vaucoupin", "pages": [8], "places": {"89104": ["Vaucoupins", "Adroit de Vaucopins"]}},
+    {"denomination": 433, "name": "Vaugiraut", "pages": [8], "places": {"89104": ["Vaugiraut"]}},
+    {"denomination": 435, "name": "Vaupulent", "pages": [4], "places": {"89081": ["Vau Pulan"], "89068": ["Les Vaupulans"], "89175": ["La Fourchaume"]}},
+    {"denomination": 437, "name": "Vosgros", "pages": [8], "places": {"89104": ["Vosgros", "Adroit de Vosgros", "Vaugiraut"]}}
+  ]
+}
