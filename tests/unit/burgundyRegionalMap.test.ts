@@ -20,6 +20,9 @@ const cases=[
  ['Bourgogne Épineuil','bourgogne-epineuil','inao-denom-369',1,['Red','Rosé']],
  ['Bourgogne Côte Saint-Jacques','bourgogne-cote-saint-jacques','inao-denom-374',1,['Red','White','Rosé']],
  ['Bourgogne Tonnerre','bourgogne-tonnerre','inao-denom-1751',6,['White']],
+ ['Bourgogne La Chapelle Notre-Dame','bourgogne-la-chapelle-notre-dame','inao-denom-371',1,['Red','White','Rosé']],
+ ['Bourgogne Le Chapitre','bourgogne-le-chapitre','inao-denom-372',1,['Red','White','Rosé']],
+ ['Bourgogne Montrecul','bourgogne-montrecul','inao-denom-373',1,['Red','White','Rosé']],
 ] as const;
 
 describe('regional denominations stay separate from villages and named vineyards',()=>{
@@ -56,8 +59,11 @@ describe('regional denominations stay separate from villages and named vineyards
   const denominations=inventory.appellations.flatMap(a=>a.denominations);
   expect(denominations).toHaveLength(49);
   expect(new Set(denominations.map(d=>d.denominationId)).size).toBe(49);
-  expect(denominations.filter(d=>d.status==='mapped').map(d=>d.denominationId).sort((a,b)=>a-b)).toEqual([363,364,365,366,367,368,369,374,1586,1751,2840]);
+  expect(denominations.filter(d=>d.status==='mapped').map(d=>d.denominationId).sort((a,b)=>a-b)).toEqual([363,364,365,366,367,368,369,371,372,373,374,1586,1751,2840]);
   expect(inventory.appellations.find(a=>a.appellationId===138)!.denominations).toHaveLength(15);
+  const bourgogne=inventory.appellations.find(a=>a.appellationId===138)!.denominations;
+  expect(bourgogne.filter(d=>d.denominationId!==362).every(d=>d.status==='mapped')).toBe(true);
+  expect(bourgogne.find(d=>d.denominationId===362)!.status).toBe('pending');
   expect(inventory.appellations.find(a=>a.appellationId===583)!.denominations).toHaveLength(29);
   expect(villages.villages).toHaveLength(44);
  });
@@ -189,7 +195,7 @@ describe('Yonne regional denominations',()=>{
   expect(target).toMatchObject({featureId:expected,mapKind:'regional',scope:'appellation'});
   expect(target).not.toHaveProperty('locationContext');
  });
- for(const [appellation,,,,allowed] of cases.slice(5)){
+ for(const [appellation,,,,allowed] of cases.slice(5,11)){
   it.each(['Red','White','Rosé'])(`${appellation}: independently checks colour and style %s`,colour=>{
    const style=colour==='Rosé'?'rose':colour.toLowerCase();
    for(const evidence of [{colour},{wineStyle:style},{colour,wineStyle:style}]){
@@ -311,6 +317,94 @@ describe('Saône-et-Loire and Yonne as recorded regions',()=>{
   const wine={...base,region,appellation,classification:'village'};
   expect(burgundyVillageMapTarget(wine)).toBeNull();
   expect(burgundyAtlasWineDetailPlace(wine)).toBeNull();
+ });
+});
+
+describe('small Côte d’Or regional denominations',()=>{
+ it.each([
+  {appellation:'Bourgogne « La Chapelle Notre Dame » AOC',producer:'Jean-Pierre Maldant',wineName:'Bourgogne La Chapelle Notre-Dame',expected:'inao-denom-371'},
+  {appellation:'Bourgogne',producer:'Jean-Pierre Maldant',wineName:'Bourgogne La Chapelle Notre Dame',expected:'inao-denom-371'},
+  {appellation:'Bourgogne Le Chapitre',producer:'Domaine Jean Fournier',wineName:'Bourgogne Le Chapitre Vieilles Vignes 2018',expected:'inao-denom-372'},
+  {appellation:null,producer:'Domaine Jean Fournier',wineName:'Domaine Jean Fournier Bourgogne Le Chapitre Vieilles Vignes',expected:'inao-denom-372'},
+  {appellation:'Bourgogne Montre-Cul',producer:'Derey Frères',wineName:'Montre Cul',expected:'inao-denom-373'},
+ ])('keeps the reviewed producer label $wineName at denomination scope',({expected,...wine})=>{
+  expect(burgundyVillageMapTarget({...base,region:'Côte d’Or',colour:'Red',...wine}))
+   .toMatchObject({featureId:expected,mapKind:'regional',scope:'appellation'});
+ });
+ it.each(['Bourgogne Montrecul','Bourgogne Montre-Cul','Bourgogne En Montre-Cul','Bourgogne En Montrecul',
+  'Bourgogne Montrecul ou Montre-Cul ou En Montre-Cul'])('treats %s as one source denomination',appellation=>{
+  expect(burgundyVillageMapTarget({...base,appellation}))
+   .toMatchObject({featureId:'inao-denom-373',scope:'appellation'});
+ });
+ it.each(['Le Chapitre','Le Chapitre 2019'])('keeps modern Marsannay %s on its village area',wineName=>{
+  const target=burgundyVillageMapTarget({...base,appellation:'Marsannay',producer:'Domaine Jean Fournier',wineName,colour:'Red',classification:'village'});
+  expect(target).toMatchObject({villageName:'Marsannay',featureId:'inao-denom-806-red-white',scope:'appellation'});
+  expect(target).not.toHaveProperty('mapKind');
+ });
+ it('uses the explicit appellation, without guessing a transition from vintage text',()=>{
+  for(const year of [2018,2019]){
+   expect(burgundyVillageMapTarget({...base,appellation:'Bourgogne Le Chapitre',wineName:`Le Chapitre ${year}`}))
+    .toMatchObject({featureId:'inao-denom-372',scope:'appellation'});
+   expect(burgundyVillageMapTarget({...base,appellation:'Bourgogne',wineName:`Le Chapitre ${year}`})).toBeNull();
+  }
+ });
+ it('explains the historic Le Chapitre identity without reusing its boundary for Marsannay',async()=>{
+  const catalogue=await loadVillageMapCatalogue('bourgogne-le-chapitre');
+  expect(catalogue.coverageNote).toContain('Marsannay since the 2019 vintage');
+  expect(catalogue.coverageNote).toContain('not an individual producer holding');
+  expect(catalogue.features).toHaveLength(1);
+  expect(catalogue.features[0].denominationId).toBe(372);
+ });
+ for(const [appellation,id] of cases.slice(11)){
+  it(`${appellation}: accepts its subregion and département, but rejects neighbouring regions`,()=>{
+   const region=id==='bourgogne-la-chapelle-notre-dame'?'Côte de Beaune':'Côte de Nuits';
+   const opposite=region==='Côte de Beaune'?'Côte de Nuits':'Côte de Beaune';
+   for(const allowed of [region,'Côte d’Or'])expect(burgundyVillageMapTarget({...base,appellation,region:allowed})).toMatchObject({villageId:id});
+   for(const rejected of [opposite,'Yonne','Saône-et-Loire'])expect(burgundyVillageMapTarget({...base,appellation,region:rejected})).toBeNull();
+  });
+  it.each([
+   {classification:'village'},{classification:'premier_cru'},{classification:'grand_cru'},
+   {country:'USA'},{identityMatchStatus:'conflict' as const},{productType:'Spirit'},
+   {productSubtype:'Sparkling'},{wineStyle:'sparkling'},{wineName:'Crémant'},
+   {colour:'Red',wineStyle:'white'},{colour:'White',wineName:'Rouge'},
+   {wineName:'Bourgogne Chitry'},{referenceSite:'Marsannay'},
+  ])(`${appellation}: withholds contradictory identity %j`,overrides=>{
+   expect(burgundyVillageMapTarget({...base,appellation,...overrides})).toBeNull();
+  });
+ }
+ it.each([
+  {appellation:'Marsannay',wineName:'Bourgogne Le Chapitre'},
+  {appellation:'Bourgogne Le Chapitre',wineName:'Marsannay Le Chapitre'},
+  {appellation:'Bourgogne',wineName:'Le Chapitre',producer:'Domaine Jean Fournier'},
+  {appellation:'Bourgogne',referenceParcel:'Bourgogne Montrecul'},
+  {appellation:'La Chapelle Notre-Dame'},{appellation:'Le Chapitre'},{appellation:'Montrecul'},
+  {appellation:null,wineName:'Montrecul'},
+  {appellation:'Bourgogne',wineName:'Montrecul',region:'Côte de Beaune'},
+  {appellation:'Bourgogne',wineName:'Montrecul Blanc',colour:'Red'},
+  {appellation:'Bourgogne',wineName:'La Chapelle Notre-Dame Premier Cru'},
+ ])('does not infer a denomination from a bare name, producer or conflicting label %j',wine=>{
+  expect(burgundyVillageMapTarget({...base,...wine})).toBeNull();
+ });
+ // Unlike Le Chapitre (also a Marsannay and Fixin name), these site names
+ // belong to one denomination, so a plain Bourgogne label may carry them.
+ it.each([
+  {appellation:'Bourgogne',wineName:'La Chapelle Notre-Dame',producer:'Jean-Pierre Maldant',expected:'inao-denom-371'},
+  {appellation:'Bourgogne Rouge',wineName:'Chapelle Notre Dame',expected:'inao-denom-371'},
+  {appellation:'Bourgogne Chapelle Notre-Dame',wineName:'A named cuvée',expected:'inao-denom-371'},
+  {appellation:'Bourgogne',wineName:'Montrecul',producer:'Derey Frères',expected:'inao-denom-373'},
+  {appellation:'Bourgogne',wineName:'Montre-Cul',region:'Côte d’Or',expected:'inao-denom-373'},
+  {appellation:'Burgundy',wineName:'Derey Frères En Montre-Cul Rouge',producer:'Derey Frères',expected:'inao-denom-373'},
+ ])('reads a unique site name beside plain Bourgogne %j',({expected,...wine})=>{
+  expect(burgundyVillageMapTarget({...base,...wine})).toMatchObject({featureId:expected,mapKind:'regional',scope:'appellation'});
+ });
+ it.each([
+  {appellation:'Ladoix',classification:'village'},
+  {appellation:'Chapelle-Chambertin',classification:'grand_cru'},
+  {appellation:'Aloxe-Corton',wineName:'Clos du Chapitre',classification:'premier_cru'},
+ ])('preserves the distinct identity $appellation $wineName',wine=>{
+  const target=burgundyVillageMapTarget({...base,...wine});
+  expect(target).not.toBeNull();
+  expect(target).not.toHaveProperty('mapKind');
  });
 });
 

@@ -235,13 +235,85 @@
         "white"
       ],
       "featureId": "inao-denom-1751"
+    },
+    {
+      "id": "bourgogne-la-chapelle-notre-dame",
+      "name": "Bourgogne La Chapelle Notre-Dame",
+      "region": "Côte de Beaune",
+      "aliases": [
+        "Bourgogne La Chapelle Notre-Dame",
+        "Bourgogne Chapelle Notre-Dame"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Côte d’Or",
+        "Côte de Beaune"
+      ],
+      "wineColours": [
+        "red",
+        "white",
+        "rose"
+      ],
+      "siteNames": [
+        "La Chapelle Notre-Dame",
+        "Chapelle Notre-Dame"
+      ],
+      "featureId": "inao-denom-371"
+    },
+    {
+      "id": "bourgogne-le-chapitre",
+      "name": "Bourgogne Le Chapitre",
+      "region": "Côte de Nuits",
+      "aliases": [
+        "Bourgogne Le Chapitre"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Côte d’Or",
+        "Côte de Nuits"
+      ],
+      "wineColours": [
+        "red",
+        "white",
+        "rose"
+      ],
+      "featureId": "inao-denom-372"
+    },
+    {
+      "id": "bourgogne-montrecul",
+      "name": "Bourgogne Montrecul",
+      "region": "Côte de Nuits",
+      "aliases": [
+        "Bourgogne Montrecul",
+        "Bourgogne Montre-Cul",
+        "Bourgogne En Montre-Cul",
+        "Bourgogne En Montrecul",
+        "Bourgogne Montrecul ou Montre-Cul ou En Montre-Cul"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Côte d’Or",
+        "Côte de Nuits"
+      ],
+      "wineColours": [
+        "red",
+        "white",
+        "rose"
+      ],
+      "siteNames": [
+        "Montrecul",
+        "Montre-Cul",
+        "En Montre-Cul",
+        "En Montrecul"
+      ],
+      "featureId": "inao-denom-373"
     }
   ],
   "otherAppellations": [
     "Bourgogne Aligoté",
-    "Bourgogne La Chapelle Notre-Dame",
-    "Bourgogne Le Chapitre",
-    "Bourgogne Montrecul ou Montre-Cul ou En Montre-Cul",
     "Bourgogne Mousseux",
     "Bourgogne Passe-tout-grains",
     "Bourgogne aligoté",

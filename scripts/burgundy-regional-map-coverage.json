@@ -76,7 +76,7 @@
           "sourceNames": [
             "Bourgogne La Chapelle Notre-Dame"
           ],
-          "status": "pending",
+          "status": "mapped",
           "kind": "geographic"
         },
         {
@@ -84,7 +84,7 @@
           "sourceNames": [
             "Bourgogne Le Chapitre"
           ],
-          "status": "pending",
+          "status": "mapped",
           "kind": "geographic"
         },
         {
@@ -92,7 +92,7 @@
           "sourceNames": [
             "Bourgogne Montrecul ou Montre-Cul ou En Montre-Cul"
           ],
-          "status": "pending",
+          "status": "mapped",
           "kind": "geographic"
         },
         {

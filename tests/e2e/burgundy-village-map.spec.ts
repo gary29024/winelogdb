@@ -13,6 +13,9 @@ for(const route of ['/wines/layout-wine','/shared/layout-wine'])for(const [appel
  ['Bourgogne Épineuil',1,'Épineuil','red','L’Âme des Dannots'],
  ['Bourgogne Côte Saint-Jacques',1,'Joigny','rose','Vin Gris'],
  ['Bourgogne Tonnerre',6,'Molosmes','white','Vaumorillon'],
+ ['Bourgogne La Chapelle Notre-Dame',1,'Ladoix-Serrigny','red','Jean-Pierre Maldant'],
+ ['Bourgogne Le Chapitre',1,'Chenôve','red','Vieilles Vignes'],
+ ['Bourgogne Montrecul',1,'Dijon','red','Bourgogne Montre-Cul'],
 ] as const){
  test(`Regional map ${appellation} ${route}: full overview, commune navigation and broad scope`,async({page},testInfo)=>{
   await page.setViewportSize({width:320,height:900});
@@ -71,6 +74,26 @@ for(const route of ['/wines/layout-wine','/shared/layout-wine'])for(const [appel
  });
 }
 
+for(const route of ['/wines/layout-wine','/shared/layout-wine'])test(`Le Chapitre appellation transition ${route}`,async({page})=>{
+ await page.setViewportSize({width:320,height:900});
+ await setup(page,{appellation:'Bourgogne Le Chapitre',wineName:'Le Chapitre Vieilles Vignes 2018',producer:'Domaine Jean Fournier',classification:null,colour:'Red',wineStyle:'red',region:'Côte d’Or'});
+ await page.goto(route);await page.getByRole('button',{name:'View regional map'}).click();
+ const regional=page.getByRole('dialog',{name:'Bourgogne Le Chapitre',exact:true});
+ await expect(regional.getByRole('button',{name:'Region view',exact:true})).toBeEnabled();
+ await expect(regional.locator('.village-map-note').filter({hasText:'Marsannay since the 2019 vintage'})).toBeVisible();
+ await expect(regional.locator('.village-map-description')).toContainText('no single vineyard is identified');
+ await page.keyboard.press('Escape');
+ await setup(page,{appellation:'Marsannay',wineName:'Le Chapitre 2019',producer:'Domaine Jean Fournier',classification:'village',colour:'Red',wineStyle:'red',region:'Côte d’Or'});
+ await page.goto(route);
+ await expect(page.getByRole('button',{name:'View regional map'})).toHaveCount(0);
+ await page.getByRole('button',{name:'View village map'}).click();
+ const village=page.getByRole('dialog',{name:'Marsannay',exact:true});
+ await expect(village.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
+ await expect(village.getByRole('combobox')).toHaveValue('inao-denom-806-red-white');
+ await expect(village.locator('.village-map-description')).toContainText('no single vineyard');
+ await expect(village.getByRole('option',{name:/Le Chapitre/})).toHaveCount(0);
+});
+
 for(const route of ['/wines/layout-wine','/shared/layout-wine'])test(`Regional colour and geography guards ${route}`,async({page})=>{
  await page.setViewportSize({width:390,height:844});
  for(const overrides of [
@@ -83,6 +106,9 @@ for(const route of ['/wines/layout-wine','/shared/layout-wine'])test(`Regional c
   {appellation:'Bourgogne Tonnerre',colour:'Rosé',wineStyle:'rose',region:'Yonne'},
   {appellation:'Bourgogne Tonnerre',colour:'White',wineStyle:'red',region:'Yonne'},
   {appellation:'Bourgogne Chitry',colour:'White',wineStyle:'white',region:'Saône-et-Loire'},
+  {appellation:'Bourgogne La Chapelle Notre-Dame',region:'Côte de Nuits'},
+  {appellation:'Bourgogne Le Chapitre',region:'Côte de Beaune'},
+  {appellation:'Bourgogne Montrecul',region:'Yonne'},
  ]){
   await setup(page,{classification:null,wineName:'A cuvée',region:'Burgundy',colour:'Red',wineStyle:'red',...overrides});
   await page.goto(route);

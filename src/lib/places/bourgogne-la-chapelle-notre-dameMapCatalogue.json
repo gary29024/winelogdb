@@ -1,0 +1,74 @@
+{
+  "id": "bourgogne-la-chapelle-notre-dame",
+  "name": "Bourgogne La Chapelle Notre-Dame",
+  "region": "Côte de Beaune",
+  "mapKind": "regional",
+  "communes": [
+    {
+      "id": "21606",
+      "name": "Ladoix-Serrigny",
+      "bounds": [
+        4.869936,
+        47.065685,
+        4.87338,
+        47.069758
+      ],
+      "labelPoint": [
+        4.87153,
+        47.066682
+      ]
+    }
+  ],
+  "dataUrl": "/maps/bourgogne-la-chapelle-notre-dame.2026-09-21.geojson",
+  "bounds": [
+    4.869936,
+    47.065685,
+    4.87338,
+    47.069758
+  ],
+  "sources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21606/cadastre-21606-communes.json.gz",
+      "sha256": "11ae7d378d9bab8317071d5ea78b4d7b029ac0ef44e2fc80ee680e001fd5ed19"
+    }
+  ],
+  "notes": {},
+  "features": [
+    {
+      "id": "inao-denom-371",
+      "name": "Bourgogne La Chapelle Notre-Dame",
+      "tier": "regional",
+      "kind": "appellation",
+      "appellationId": 138,
+      "denominationId": 371,
+      "sourceName": "Bourgogne La Chapelle Notre-Dame",
+      "communes": [
+        "21606"
+      ],
+      "areaHa": 4.45,
+      "matchId": "inao-denom-371",
+      "atlasUrl": null,
+      "bounds": [
+        4.869936,
+        47.065685,
+        4.87338,
+        47.069758
+      ],
+      "labelPoint": [
+        4.87153,
+        47.066682
+      ]
+    }
+  ],
+  "coverageNote": "A geographic denomination within Bourgogne AOC. The highlight shows its full INAO production area; named cuvées and producer holdings have no separate boundaries here."
+}

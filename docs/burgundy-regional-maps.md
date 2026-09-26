@@ -1,7 +1,7 @@
 # Burgundy regional maps
 
-Reviewed 26 September 2026. Eleven geographic denominations are now mapped
-**within Bourgogne AOC**, not eleven new AOCs or village appellations.
+Reviewed 26 September 2026. All fourteen geographic denominations in the pinned
+source are now mapped **within Bourgogne AOC**, not fourteen new AOCs or village appellations.
 The existing 44 village maps and 33 Grand Cru appellations are unchanged.
 
 | Denomination | INAO appellation / denomination | Producing communes | Allowed still-wine colours |
@@ -17,6 +17,9 @@ The existing 44 village maps and 33 Grand Cru appellations are unchanged.
 | Bourgogne Épineuil | 138 / 369 | 1 | Red, rosé |
 | Bourgogne Côte Saint-Jacques | 138 / 374 | 1 | Red, white, rosé (including vin gris) |
 | Bourgogne Tonnerre | 138 / 1751 | 6 | White only |
+| Bourgogne La Chapelle Notre-Dame | 138 / 371 | 1 | Red, white, rosé |
+| Bourgogne Le Chapitre | 138 / 372 | 1 | Red, white, rosé |
+| Bourgogne Montrecul | 138 / 373 | 1 | Red, white, rosé |
 
 The official BIVB sheets confirm these counts, colours and regional status:
 [Côte d’Or](https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/bourgogne-cote-d-or%2C2458%2C9253.html?args=Y29tcF9pZD0yMjc4JmFjdGlvbj12aWV3RmljaGUmaWQ9Nzc0Jnw%3D),
@@ -31,12 +34,12 @@ Coteaux Bourguignons, Crémant de Bourgogne and Mâcon. The
 [BIVB inventory](https://www.bourgogne-wines.com/professional-access/documents-photos%2C2334%2C9356.html)
 also lists 14 Bourgogne geographic denominations and 27 named Mâcon denominations.
 Together with the seven broad denominations and Mâcon-Villages, these account for
-**49 source denomination IDs: eleven mapped, 38 pending**. Alternative source names
+**49 source denomination IDs: fourteen mapped, 35 pending**. Alternative source names
 and colour variants sharing an ID do not increase that count.
 
-All seven broad regional areas, three other Bourgogne geographic denominations,
-Mâcon-Villages and all 27 named Mâcon denominations remain pending. Mapping eleven
-Bourgogne denominations does not complete the Bourgogne AOC. Chablis Premier Cru
+All seven broad regional areas, Mâcon-Villages and all 27 named Mâcon denominations
+remain pending. Completing the fourteen Bourgogne geographic denominations does
+not complete the broad Bourgogne AOC boundary. Chablis Premier Cru
 source gaps and other named plots remain tracked separately in
 [issue #344](https://github.com/gary29024/winelogdb/issues/344).
 
@@ -98,7 +101,7 @@ production geometry, not the smaller area actually planted or producing wine.
 
 ## Identity and display
 
-The eleven-entry runtime index is separate from the village registry; catalogues
+The fourteen-entry runtime index is separate from the village registry; catalogues
 and geometry load only when opening the dialog. Wine matching needs the explicit
 designation in the appellation or wine name. Hautes Côtes aliases may omit
 “Bourgogne”, as may the complete names “Côtes du Couchois” and “Côtes d’Auxerre”. “Côte d’Or” or “Côte
@@ -296,3 +299,84 @@ Tonnerre and Gevrey Clos Saint-Jacques retain their existing identities. Wines
 with contradictory colour/style, a cru classification, a different département,
 or a second appellation withhold the regional map. No new producer illustration
 or inner plot is added; the La Moutonne exception remains exclusive to that wine.
+
+## La Chapelle Notre-Dame, Le Chapitre and Montrecul source review
+
+The fourth regional batch completes the fourteen Bourgogne geographic
+denominations in the pinned snapshot. These three small areas each have one
+source row, one producing commune and a shared red/white/rosé production boundary.
+The source codes retain all allowed colours even when a producer currently
+offers only red wine. The areas below measure delimited land, not planted acreage.
+
+| Denomination | Source CVI | Commune | Delimited area (ha) |
+| --- | --- | --- | ---: |
+| La Chapelle Notre-Dame (371) | `1B309 04, 1R309 04, 1S309 04` | Ladoix-Serrigny (21606) | 4.45 |
+| Le Chapitre (372) | `1B309 05, 1R309 05, 1S309 05` | Chenôve (21166) | 5.03 |
+| Montrecul (373) | `1B309 06, 1R309 06, 1S309 06` | Dijon (21231) | 15.99 |
+
+The [BIVB La Chapelle Notre-Dame page](https://www.vins-bourgogne.fr/vins-et-terroirs/la-bourgogne-et-ses-appellations/bourgogne-la-chapelle-notre-dame%2C2377%2C9170.html?args=Y29tcF9pZD0yMjA1JmFjdGlvbj12aWV3RmljaGUmaWQ9NDA2Jnw%3D)
+confirms Ladoix-Serrigny and the three colours. The
+[BIVB Montrecul sheet](https://www.vins-bourgogne.fr/nos-vins-nos-terroirs/la-bourgogne-et-ses-appellations/gallery_files/site/321/402/57486/71027.pdf)
+likewise covers Dijon and the three colours. INAO's full source name is
+**Bourgogne Montrecul ou Montre-Cul ou En Montre-Cul**. These spellings, plus
+BIVB's **Bourgogne En Montrecul**, resolve to the same denomination, not separate
+plots. La Chapelle Notre-Dame accepts Côte de Beaune context; the other two accept
+Côte de Nuits. All three accept the Côte d’Or département.
+
+Montrecul (and its spellings) and La Chapelle Notre-Dame are site names unique to
+their denominations, so an explicit plain Bourgogne appellation with that site
+as the wine name (appellation “Bourgogne”, wine “Montre-Cul”) also opens the
+map. Le Chapitre is excluded because the name is also a Marsannay wine and
+the Clos du Chapitre premier crus; it needs the full “Bourgogne Le Chapitre”.
+
+### Le Chapitre appellation transition
+
+INAO still publishes the Bourgogne Le Chapitre denomination and its boundary
+in the pinned snapshot; see also its [red product entry](https://inao.gouv.fr/produit/bourgogne-le-chapitre-rouge-24535).
+[Jean Fournier's producer account](https://domaine-fournier.com/vins/bourgogne-le-chapitre-rouge/)
+describes **Bourgogne Le Chapitre Vieilles Vignes** through 2018, then **Marsannay
+Le Chapitre** from 2019 after reclassification, with young vines from Seloncourt
+also contributing. That modern cuvée must not inherit the older regional outline.
+
+The wine's explicit appellation controls the map. Bourgogne Le Chapitre opens
+denomination 372 with a visible transition note; Marsannay Le Chapitre keeps the
+existing broad Marsannay colour area because individual village lieux-dits lack
+separate geometry. Vintage alone does not choose an appellation. Conflicting
+Marsannay/Bourgogne Le Chapitre evidence withholds the map. No producer holding,
+modern Le Chapitre outline or vintage boundary is inferred.
+
+### Precision and reproduction
+
+La Chapelle Notre-Dame and Montrecul pass the normal **0.000001° grid**:
+net area changes are **−0.752 m² (−0.001688%)** and **−4.288 m² (−0.002682%)**.
+Le Chapitre fails that grid's existing area gate at **+2.857 m² (+0.005683%)**.
+Its reviewed **0.0000001° grid** reduces this to **−0.555 m² (−0.001105%)** and
+retains the small hole that would otherwise close. At their configured precision,
+all three retain every production part and excluded hole. The **0.005% area**
+and **sub-2 m² hole/part** gates are unchanged. Separate pre-snap projection
+round-trip differences are below **0.0000012 m²**; no validity repair is needed.
+
+All **29 generated regional files** reproduce byte-for-byte with the pinned
+dependencies. The **22 map/catalogue files** from earlier batches remain unchanged.
+An independent audit compares the serialized production geometry exactly with
+the source union projected using the archive's `.prj` and snapped at each
+configured grid. New GeoJSON files are **21/14/41 kB** (gzip **6.2/4.2/12.0 kB**),
+in the table's order, and still load on demand. Each dialog opens on its small
+production area and names the single commune without a redundant selector.
+
+### Producer and identity checks
+
+- [Jean-Pierre Maldant's own shop](https://boutique.jeanpierre-maldant.fr/28-tous-les-vins)
+  lists **Bourgogne « la chapelle Notre Dame »** alongside distinct Ladoix,
+  Aloxe-Corton and Corton wines. Only the explicit regional name selects 371.
+- Jean Fournier's old and new Le Chapitre labels exercise the transition above
+  on both owner and shared wine pages.
+- [Derey Frères](https://www.dereyf.com/fr/nos-vins/rouges) lists **Montre Cul**
+  in Dijon. Its stated holding is smaller than the whole INAO denomination;
+  the producer's boundary or acreage does not replace that production area.
+
+Bare cuvée names, producer names and geography never infer these designations.
+Montrecul aliases need the Bourgogne prefix. Ladoix, Chapelle-Chambertin and
+Aloxe-Corton's Clos du Chapitre retain their distinct identities. Regression
+tests also cover allowed colours, inconsistent colour/style, cru tiers, second
+appellations, wrong départements, geometry, lazy loading and mobile/desktop views.
