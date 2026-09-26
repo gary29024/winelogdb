@@ -154,7 +154,12 @@ jobs:
       - name: Install Chromium
         run: npx playwright install --with-deps chromium
       - name: Chromium flows
-        if: needs.scope.outputs.chromium == 'full'
+        if: needs.scope.outputs.chromium == 'full' && github.event_name != 'schedule' && github.event_name != 'workflow_dispatch'
+        run: npm run test:e2e
+      - name: Chromium flows with exhaustive Burgundy maps
+        if: needs.scope.outputs.chromium == 'full' && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
+        env:
+          WINELOG_E2E_EXHAUSTIVE_MAPS: '1'
         run: npm run test:e2e
       - name: Affected Chromium flows
         if: needs.scope.outputs.chromium == 'selected'
