@@ -14,6 +14,54 @@ async function setup(page:Page,overrides:Record<string,unknown>={}){
  await page.route('https://tiles.openfreemap.org/**',route=>route.abort());
 }
 
+test('Côte de Beaune-Villages has a local map, four area controls and no invented Atlas link',async({page},testInfo)=>{
+ await setup(page,{appellation:'Côte de Beaune-Villages',wineName:'Joseph Drouhin Côte de Beaune-Villages',classification:'village'});
+ await page.setViewportSize({width:320,height:900});await page.goto('/shared/layout-wine');
+ await expect(page.getByRole('link',{name:/Explore on Burgundy Atlas/})).toHaveCount(0);
+ await page.getByRole('button',{name:'View village map'}).click();
+ const dialog=page.getByRole('dialog',{name:'Côte de Beaune-Villages',exact:true});
+ await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
+ await expect(dialog.getByRole('combobox')).toHaveValue('inao-denom-552');
+ await expect(dialog.locator('.village-map-overlap')).toContainText('16 producing communes');
+ await expect(dialog.getByRole('link',{name:/Explore on Burgundy Atlas/})).toHaveCount(0);
+ for(const area of ['North','Centre','Montrachet area','South']){
+  await dialog.getByRole('button',{name:new RegExp(`^${area}:`)}).click();
+  await expect(dialog.getByRole('combobox')).toHaveValue('inao-denom-552');
+  expect(await dialog.evaluate(el=>el.scrollWidth<=el.clientWidth)).toBe(true);
+ }
+ await page.screenshot({path:testInfo.outputPath('cote-de-beaune-villages-south-320.png')});
+ await page.keyboard.press('Escape');
+ for(const fields of [{colour:'White',wineStyle:'white'},{colour:'Rosé',wineStyle:'rose'},{classification:'premier_cru'}]){
+  await setup(page,{appellation:'Côte de Beaune-Villages',wineName:'Côte de Beaune-Villages',classification:'village',...fields});await page.goto('/wines/layout-wine');
+  await expect(page.getByRole('heading',{name:'Côte de Beaune-Villages',exact:true})).toBeVisible();
+  await expect(page.getByRole('button',{name:'View village map'})).toHaveCount(0);
+ }
+});
+
+test('Santenay and Maranges use producer spellings and explain coincident boundaries',async({page})=>{
+ for(const row of [
+  {appellation:'Santenay',wineName:'Santenay Premier Cru Passe-Temps',id:'inao-denom-1171'},
+  {appellation:'Maranges',wineName:'Domaine Monnot-Roche La Croix aux Moines',id:'inao-denom-803'},
+  {appellation:'Maranges',wineName:'Domaine Saint Marc Clos Roussot',id:'inao-denom-804'},
+ ]){
+  await setup(page,row);await page.goto('/wines/layout-wine');await page.getByRole('button',{name:'View village map'}).click();
+  const dialog=page.getByRole('dialog');
+  await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
+  await expect(dialog.getByRole('combobox')).toHaveValue(row.id);
+  if(row.appellation==='Santenay'){
+   await expect(dialog.locator('.village-map-context')).toContainText('11 Premier Cru climats');
+   await dialog.getByRole('combobox').selectOption('inao-denom-1170');
+   await expect(dialog.getByRole('heading',{name:'Les Gravières-Clos de Tavannes',exact:true})).toBeVisible();
+   await expect(dialog.locator('.village-map-overlap').first()).toContainText('shares its production boundary with Clos de Tavannes');
+   await dialog.getByRole('combobox').selectOption('inao-denom-1164');
+   await expect(dialog.locator('.village-map-selected-label')).toHaveText('Clos de Tavannes');
+   await dialog.getByRole('button',{name:'Back to this wine'}).click();
+   await expect(dialog.getByRole('combobox')).toHaveValue(row.id);
+  }
+  await page.keyboard.press('Escape');
+ }
+});
+
 for(const route of ['/wines/layout-wine','/shared/layout-wine']){
  test(`${route}: opens on demand, explores named boundaries, and restores focus`,async({page},testInfo)=>{
   const requests:string[]=[],errors:string[]=[];
@@ -153,6 +201,10 @@ for(const village of [
  {id:'auxey-duresses',name:'Auxey-Duresses',cru:'Clos du Val',tier:'premier_cru',feature:'inao-denom-265',count:13,catalogue:'auxeyVillageMapCatalogue',explore:'inao-denom-266',label:'La Chapelle'},
  {id:'monthelie',name:'Monthélie',cru:'Les Champs Fulliots',tier:'premier_cru',feature:'inao-denom-921',count:17,catalogue:'monthelieVillageMapCatalogue',explore:'inao-denom-1993',label:'Le Clou des Chênes'},
  {id:'saint-romain',name:'Saint-Romain',cru:'Sous Roche',tier:'village',feature:'inao-denom-1157',count:3,catalogue:'saintRomainVillageMapCatalogue',explore:'inao-denom-2048',label:'Saint-Romain (white)'},
+ {id:'santenay',name:'Santenay',cru:'Passetemps',tier:'premier_cru',feature:'inao-denom-1171',count:16,catalogue:'santenayVillageMapCatalogue',explore:'inao-denom-1170',label:'Les Gravières-Clos de Tavannes'},
+ {id:'maranges',name:'Maranges',cru:'La Fussière',tier:'premier_cru',feature:'inao-denom-800',count:11,catalogue:'marangesVillageMapCatalogue',explore:'inao-denom-799',label:'Clos de la Fussière'},
+ {id:'cote-de-beaune',name:'Côte de Beaune',cru:'Joseph Drouhin Côte de Beaune',tier:'village',feature:'inao-denom-551',count:1,catalogue:'coteBeauneVillageMapCatalogue',explore:'inao-denom-551',label:'Côte de Beaune'},
+ {id:'cote-de-beaune-villages',name:'Côte de Beaune-Villages',cru:'Joseph Drouhin Côte de Beaune-Villages',tier:'village',feature:'inao-denom-552',count:1,catalogue:'coteBeauneVillagesMapCatalogue',explore:'inao-denom-552',label:'Côte de Beaune-Villages'},
 ]){
  for(const route of ['/wines/layout-wine','/shared/layout-wine']){
   test(`${village.name} ${route}: opens the correct boundary and keeps its full village context`,async({page},testInfo)=>{
@@ -222,6 +274,8 @@ for(const village of [
  {name:'Chorey-lès-Beaune',white:543,red:2049,app:159},
  {name:'Auxey-Duresses',white:262,red:2075,app:129},
  {name:'Saint-Romain',white:2048,red:1157,app:228},
+ {name:'Santenay',white:1159,red:2082,app:230},
+ {name:'Maranges',white:797,red:2061,app:198},
 ]){
  test(`${village.name} colour selects the official area and unknown colour keeps a combined overview`,async({page})=>{
   for(const fields of [
@@ -352,6 +406,8 @@ test('Beaune and Volnay label spellings select the reviewed cru',async({page})=>
   ['Volnay','Les Taillepieds','inao-denom-1260','Red'],
   ['Beaune','Vignes Franches Clos des Ursules','inao-denom-319','Red'],
   ['Volnay','Caillerets Clos des 60 Ouvrées','inao-denom-1252','Red'],
+  ['Beaune','Bouchard Père & Fils Beaune Grèves','inao-denom-334','Red'],
+  ['Gevrey-Chambertin','Lavaux Saint-Jacques','inao-denom-609','Red'],
  ]){
   await setup(page,{appellation,wineName,colour});await page.goto('/wines/layout-wine');
   await page.getByRole('button',{name:'View village map'}).click();

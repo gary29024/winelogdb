@@ -26,6 +26,10 @@ const loaders=new Map<string,()=>Promise<{default:VillageMapCatalogue}>>([
  ['auxey-duresses',()=>import('./auxeyVillageMapCatalogue.json')],
  ['monthelie',()=>import('./monthelieVillageMapCatalogue.json')],
  ['saint-romain',()=>import('./saintRomainVillageMapCatalogue.json')],
+ ['santenay',()=>import('./santenayVillageMapCatalogue.json')],
+ ['maranges',()=>import('./marangesVillageMapCatalogue.json')],
+ ['cote-de-beaune',()=>import('./coteBeauneVillageMapCatalogue.json')],
+ ['cote-de-beaune-villages',()=>import('./coteBeauneVillagesMapCatalogue.json')],
 ]);
 
 export async function loadVillageMapCatalogue(villageId:string):Promise<VillageMapCatalogue>{

@@ -1,17 +1,17 @@
 # Burgundy village maps
 
 Wine details and shared wine details offer **View village map** for mapped
-Côte de Nuits and Côte de Beaune wines across twenty-five village appellations,
+Côte de Nuits and Côte de Beaune wines across twenty-nine village appellations,
 including the Grand Crus of Flagey-Échezeaux, Clos de Vougeot and the Montrachet
 group, plus Corton, Corton-Charlemagne and Charlemagne. The dialog shows neighbouring cru boundaries, highlights
 the wine's matched INAO designation, and supports selection, pan/zoom, a village
 overview and returning to the wine. The renderer, the selected village's catalogue
 and its geometry load on demand; other village catalogues and boundaries stay unloaded.
-The existing Burgundy Atlas link remains available.
+The existing Burgundy Atlas link remains available where Atlas has a page.
 
 ## Coverage and meaning
 
-| Village map | Grand Crus | Named Premier Crus | Broad areas | Wine features |
+| Village map | Grand Crus | Premier Cru source names | Broad areas | Wine features |
 | --- | ---: | ---: | ---: | ---: |
 | Gevrey-Chambertin | 9 | 26 | 2 | 37 |
 | Morey-Saint-Denis | 5 | 20 | 2 | 27 |
@@ -38,15 +38,20 @@ The existing Burgundy Atlas link remains available.
 | Auxey-Duresses | 0 | 9 | 4 colour/tier views | 13 |
 | Monthélie | 0 | 15 | 2 | 17 |
 | Saint-Romain | 0 | 0 | 3 colour views | 3 |
+| Santenay / Remigny | 0 | 12 names for 11 climats | 4 colour/tier views | 16 |
+| Maranges (three communes) | 0 | 7 | 4 colour/tier views | 11 |
+| Côte de Beaune | 0 | 0 | 1 | 1 |
+| Côte de Beaune-Villages (16 communes) | 0 | 0 | 1 | 1 |
 
-There are 543 distinct wine identities (496 vineyard targets and 47 broad areas),
-plus eighteen colour-specific views sharing nine village appellation identities.
+There are 568 distinct wine identities (515 vineyard targets and 53 broad areas),
+plus twenty-two colour-specific views sharing eleven village appellation identities.
 Bonnes-Mares, Montrachet and Bâtard-Montrachet each appear in two maps and count
 once in the identity registry. The Corton group's 27 boundaries appear in three
-maps and likewise count once. There are 618 wine features across the twenty-five maps.
+maps and likewise count once. There are 647 wine features across the twenty-nine maps.
 Corton itself is a broad Grand Cru appellation target; its 24 named climats are
 separate vineyard targets, not 24 additional Grand Cru appellations. Overall,
-the maps cover 441 named Premier Crus and 32 Grand Cru appellations.
+the maps cover 460 named Premier Cru source designations (459 climats after the
+reviewed Santenay alternative name) and 32 Grand Cru appellations.
 The [full Burgundy coverage checklist](burgundy-map-coverage.md) tracks all 44
 village appellations and the remaining Grand Cru and regional work.
 
@@ -284,7 +289,7 @@ Atlas's map geometry or assets is copied.
   Tests exercise these with a recorded appellation; abbreviated "Savigny" alone
   is not a new appellation alias. Cru aliases stay scoped to the full village.
 
-Download the 32 distinct source URLs recorded in the twenty-five catalogues into a
+Download the 36 distinct source URLs recorded in the twenty-nine catalogues into a
 local temporary directory. Name the INAO archive `inao-2026-09-21.zip` and each
 commune file `commune-{code}.json.gz`. Required commune codes are:
 `21110`, `21133`, `21166`, `21186`, `21194`, `21200`, `21265`, `21267`, `21295`,
@@ -307,6 +312,14 @@ members, reprojects INAO EPSG:2154 coordinates to longitude/latitude,
 unions source records within each denomination, checks polygon validity,
 and fails on unexpected coverage or an unmatched identity. It retains coordinate
 precision and holes; no AI-generated, traced or approximate polygons are used.
+An explicitly reviewed `localIdentity` plus `regionId` allows a broad appellation
+without an Atlas page. The generator emits a stable `inao-app-{id}-{tier}` match
+identity and a null Atlas URL. The matcher includes these local groups in the
+same geographic, classification and conflict checks as Atlas appellations.
+It never turns an INAO identity into a fabricated Atlas destination. A newly
+available Atlas crosswalk fails the import for review instead of silently
+changing identity. Named Premier Crus without Atlas pages still need their own
+reviewed crosswalk support in a later batch.
 Villages without Premier Crus omit the Premier Cru configuration. Non-contiguous
 Premier Cru IDs use `premierDenominations` (Fixin includes denomination 2372).
 Reviewed `sourceVariants` identify colour-specific source names and selection
@@ -335,6 +348,11 @@ dependencies are not shipped with the app.
 
 The generator also checks that any designation left unfilled is actually covered
 by its designated same-tier fill. It validates all villages before writing output.
+Reviewed `notes.sameBoundaryAs` marks an alternative climat name: the generator
+requires equal source geometry and matching tiers, and rejects chains. Both
+identities remain selectable; the map's climat count excludes the alternative.
+Equal geometry alone does not create this relationship: two separately named
+crus elsewhere can share an area and still represent distinct designations.
 Reviewed cross-tier `contextExclusions` additionally check tier ordering, remaining
 polygon validity and area conservation. Only derived overview geometry is cut;
 the full production geometry is preserved alongside it in the same feature.
@@ -372,10 +390,10 @@ map names each part on its overview and adds a toolbar button that zooms to it.
 Shared designations are unioned across all source communes, never clipped to a
 village boundary. The original Gevrey GeoJSON remains byte-for-byte unchanged.
 
-The twenty-five GeoJSON files under `public/maps/` range from approximately
-75 KB (Vougeot) to 992 KB (Meursault), uncompressed. This batch adds 719 KB
-(Savigny), 180 KB (Chorey), 366 KB (Auxey), 214 KB (Monthélie) and 358 KB
-(Saint-Romain), each downloaded only when its map is opened.
+The twenty-nine GeoJSON files under `public/maps/` range from approximately
+75 KB (Vougeot) to 2,000 KB (Côte de Beaune-Villages), uncompressed. This batch
+adds 967 KB (Santenay), 644 KB (Maranges), 320 KB (Côte de Beaune) and 2,000 KB
+(Côte de Beaune-Villages), each downloaded only when its map is opened.
 There are no database migrations, research/AI calls, API keys or background Atlas
 requests. Only opening the dialog requests geography and the external base map.
 The browser's public tile requests contain map locations, not wine records.
@@ -407,6 +425,7 @@ maps and catalogues so manually reviewed notes and aliases survive the next batc
 ```sh
 npx vitest run tests/unit/burgundyVillageMap.test.ts tests/unit/burgundyCortonMap.test.ts tests/unit/burgundyAtlas.test.ts tests/unit/burgundyAtlasPremierCru.test.ts tests/unit/burgundyAtlasAppellation.test.ts
 npx vitest run tests/unit/burgundyBeauneNeighboursMap.test.ts
+npx vitest run tests/unit/burgundyBeauneCompletionMap.test.ts
 npx playwright test tests/e2e/burgundy-village-map.spec.ts tests/e2e/burgundy-atlas.spec.ts --project=chromium
 npm run build
 npm run lint
@@ -415,7 +434,7 @@ npm run lint
 Browser coverage uses the real MapLibre renderer with the street map unavailable,
 checking local geometry, selection, owner/shared parity, small-screen layouts,
 load-on-demand, retry, Escape and focus restoration. The source import and unit
-checks cover all 496 vineyard targets, coverage in Brochon, Flagey, Premeaux and Remigny, intentional overlap,
+checks cover all 515 vineyard targets, coverage in Brochon, Flagey, Premeaux and Remigny, intentional overlap,
 identical Bonnes-Mares geometry in both contexts, and village-specific matches for
 repeated names such as Les Gruenchers and La Romanée. They distinguish Échezeaux
 from Grands-Échezeaux and verify reviewed Vosne spelling aliases and broad-area
@@ -446,8 +465,89 @@ All twenty prior maps and catalogues remain unchanged, including the manually
 reviewed Santenots note from #342. Tests cover all 46 new Premier Crus plus real
 producer label forms, complete reference fields, repeated names, colour scope,
 true containment versus partial overlap, and broad-only village wines.
+The Santenay/Maranges/Côte de Beaune/Côte de Beaune-Villages batch independently
+verifies 29 added wine geometries (27 source denominations and two colour unions)
+and two overview fills against INAO, including colour codes, areas and communes.
+All 25 earlier maps, catalogues, registry targets and umbrella relationships
+remain unchanged, including the Auxey spelling/La Chapelle changes from #343.
+Tests cover all 19 new named source identities, local appellation matching without
+an Atlas link, the three different Beaune names, colour and tier conflicts,
+producer spellings, Tavannes equivalence and full cross-commune coverage.
+Owner/shared browser checks cover 320, 390 and 1280 pixels, lazy loading and
+the four Côte de Beaune-Villages zoom controls.
 Browser tests also exercise delayed successful
 base-style loading and verify that opening a village never requests another map's
 catalogue or geometry.
 Boundary download failures offer an in-dialog retry. A failed catalogue module
 offers a page reload, because browsers can cache a failed dynamic import.
+
+## Côte de Beaune completion: source and label review
+
+Reviewed 26 September 2026 against the pinned INAO archive and these primary
+references:
+
+- [BIVB Santenay](https://www.vins-bourgogne.fr/nos-vins-nos-terroirs/la-bourgogne-et-ses-appellations/gallery_files/site/321/402/57486/57572.pdf)
+  lists **11 climats** and both Santenay and Remigny. INAO has 12 named IDs
+  (`1160–1171`): Clos de Tavannes (`1164`) and Les Gravières-Clos de Tavannes
+  (`1170`) have exactly equal geometry, both wholly within Les Gravières (`1169`).
+  Both names remain selectable, with an explanatory note and a displayed count
+  of 11 climats. Clos Rousseau (`1163`) and Grand Clos Rousseau (`1166`) do not
+  overlap and must not be collapsed. White village ID `1159` and red `2082`
+  share geometry across Santenay and Remigny but retain separate identities.
+- [BIVB Maranges](https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/maranges%2C2458%2C9253.html?args=Y29tcF9pZD0yMjc4JmFjdGlvbj12aWV3RmljaGUmaWQ9MzM4Jnw%3D)
+  lists seven Premier Crus and Cheilly-lès-Maranges, Dezize-lès-Maranges and
+  Sampigny-lès-Maranges. La Fussière (`800`) crosses Cheilly/Dezize and contains
+  Clos de la Fussière (`799`); Les Clos Roussots (`804`) crosses Cheilly/Sampigny.
+  White village ID `797` and red `2061` share geometry across all three communes.
+- [BIVB Côte de Beaune](https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/gallery_files/site/321/402/79294/79364.pdf)
+  distinguishes this village appellation in Beaune from Côte de Beaune-Villages.
+  The map retains the full 539.46 ha INAO boundary (`551`), which is an eligible
+  production area, not current planted acreage or the footprint of one cuvée.
+  [Drouhin's Côte de Beaune](https://www.drouhin.com/en_US/wine/cote-de-beaune-rouge/2023)
+  also documents declassified Beaune production. Individual village lieux-dits
+  remain unavailable; no named plot is inferred from this broad area.
+- [INAO Côte de Beaune-Villages](https://www.inao.gouv.fr/node/1799/printable/print)
+  and [BIVB's commune list](https://www.bourgogne-wines.com/our-wines-our-terroir/the-bourgogne-winegrowing-region-and-its-appellations/gallery_files/site/321/402/57644/57678.pdf)
+  corroborate the red-only designation and its 16 producing communes.
+  The pinned `552` boundary is retained across all of them, including the four
+  in Saône-et-Loire; it excludes Beaune, Aloxe-Corton, Pommard and Volnay.
+  [Drouhin's label](https://www.drouhin.com/fr_FR/products/cote-de-beaune-villages-rouge-2022)
+  is a regression case for a map with no Atlas destination. Its label cannot
+  identify which commune supplied the grapes, so four area buttons change only
+  the view, never the wine's broad selection.
+
+Producer spelling cases:
+
+- [Mestre's Passe-Temps](https://www.mestre-pere-et-fils.fr/fr/vins-rouges/8-santenay-passe-temps.html)
+  selects INAO Passetemps (`1171`), including the space-separated spelling.
+- [Monnot-Roche's La Croix aux Moines](https://www.monnot-roche.com/nos-vins/product/127-maranges-1er-cru-la-croix-aux-moines)
+  selects Le Croix Moines (`803`). The source spelling remains visible and the
+  selection note explains the producer spelling.
+- [Saint Marc's Clos Roussot](https://saint-marc.fr/fr/maranges-premier-cru-les-clos-roussots)
+  and [Bichot's Clos Roussots](https://catalogue.albert-bichot.com/LA1BPF)
+  select Les Clos Roussots (`804`). This is distinct from Santenay's Rousseau.
+- [Clair's Clos de Tavannes Sélection](https://www.domaineclair.com/fr/nos-appellations/santenay-1er-cru-68/),
+  [La Pousse d'Or's Clos de Tavannes](https://lapoussedor.fr/),
+  [Jessiaume's Les Gravières in the BIVB selection](https://www.bourgogne-wines.com/press/gallery_files/site/289/1910/74922.pdf)
+  and [Grachet-Duchemin's Clos des Loyères](https://grachetduchemin.com/wp-content/uploads/2023/03/clos-des-loyeres-domainegrachetduchemin-fichetechnique-eng.pdf)
+  exercise ordinary title text and article omissions without merging neighbours.
+
+All accepted spellings also have complete-reference-field and blend tests.
+Producer names in a wine title are not read as blends. Family phrases such as
+Père et Fils, Père & Fils, Frères et Cie and a trailing et Fils are removed from
+the title, and where the title names the village, a conjunction before the
+village belongs to the producer: “Mestre Père et Fils Santenay Passe-Temps”,
+“Bouchard Père & Fils Beaune Grèves” and “Domaine Vincent et Sophie Morey
+Santenay Les Gravières” select their cru. After the village, or in a title that
+does not name it, `et`/`&` still marks a blend and keeps the broad area: “Santenay
+Les Gravières et Clos Genet”, and “Françoise et Denis Clair Clos de Tavannes”,
+whose first-name pair cannot be told from two vineyards. Outside the title, `&`
+still marks a blend. Gevrey's Lavaut Saint-Jacques accepts the label spelling
+[Lavaux Saint-Jacques](https://frederickwildman.com/producers/domaine-armand-rousseau/2022-domaine-armand-rousseau-gevrey-chambertin-1er-cru-lavaux-saint-jacques/)
+(Armand Rousseau).
+
+The #343 review's Cadastre lieux-dits suggestion is retained in the
+[coverage backlog](burgundy-map-coverage.md). It needs a separate source review:
+a cadastral named place does not by itself establish a wine boundary or a
+producer holding. This batch completes the Côte de Beaune **appellation**
+inventory; it does not claim complete village-plot coverage.

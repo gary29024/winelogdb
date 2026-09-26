@@ -1,5 +1,5 @@
 import type { WineFacts } from '../wine/detailFields';
-import { burgundyAtlasWineDetailPlace } from './burgundyAtlasPremierCru';
+import { burgundyAtlasWineDetailPlace,burgundyLocalAppellationMapIdentity } from './burgundyAtlasPremierCru';
 import registry from './burgundyVillageMapRegistry.json';
 import { burgundyGrandCruMapIdentity } from './burgundyGrandCruClimats';
 
@@ -10,7 +10,7 @@ export type VillageMapFeature={
 export type VillageMapCatalogue={
  id:string;name:string;region:string;communes:{id:string;name:string}[];dataUrl:string;bounds:number[];
  sources:{name:string;date:string;url:string;sha256:string;license:string}[];
- notes:Record<string,{note:string;paintedBy?:string}>;features:VillageMapFeature[];
+ notes:Record<string,{note:string;paintedBy?:string;sameBoundaryAs?:string}>;features:VillageMapFeature[];
  // Premier Crus lying inside a wider Premier Cru name, keyed by the wider one.
  umbrellas?:Record<string,string[]>;
  // Separate parts of one appellation, each with its own zoom button and map label.
@@ -45,7 +45,7 @@ export function burgundyVillageMapTarget(wine:MapWine):BurgundyVillageMapTarget|
  }
  const local=burgundyGrandCruMapIdentity(wine);
  if(local===null)return null;
- const matchId=local??burgundyAtlasWineDetailPlace(wine)?.placeId;
+ const matchId=local??burgundyAtlasWineDetailPlace(wine)?.placeId??burgundyLocalAppellationMapIdentity(wine);
  const target=matchId?byMatchId.get(matchId):undefined;
  const village=target?byVillageId.get(target.villageId):undefined;
  if(!target||!village)return null;
