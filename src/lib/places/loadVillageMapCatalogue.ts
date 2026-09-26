@@ -4,6 +4,8 @@ const loaders=new Map<string,()=>Promise<{default:VillageMapCatalogue}>>([
  ['bourgogne-cote-dor',()=>import('./bourgogne-cote-dorMapCatalogue.json')],
  ['bourgogne-hautes-cotes-de-nuits',()=>import('./bourgogne-hautes-cotes-de-nuitsMapCatalogue.json')],
  ['bourgogne-hautes-cotes-de-beaune',()=>import('./bourgogne-hautes-cotes-de-beauneMapCatalogue.json')],
+ ['bourgogne-cote-chalonnaise',()=>import('./bourgogne-cote-chalonnaiseMapCatalogue.json')],
+ ['bourgogne-cotes-du-couchois',()=>import('./bourgogne-cotes-du-couchoisMapCatalogue.json')],
  ['gevrey-chambertin',()=>import('./burgundyVillageMapCatalogue.json')],
  ['morey-saint-denis',()=>import('./moreyVillageMapCatalogue.json')],
  ['chambolle-musigny',()=>import('./chambolleVillageMapCatalogue.json')],

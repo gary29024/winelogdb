@@ -1,0 +1,1020 @@
+{
+  "id": "bourgogne-cote-chalonnaise",
+  "name": "Bourgogne Côte Chalonnaise",
+  "region": "Côte Chalonnaise",
+  "mapKind": "regional",
+  "communes": [
+    {
+      "id": "71005",
+      "name": "Aluze",
+      "bounds": [
+        4.684329,
+        46.835949,
+        4.710299,
+        46.858942
+      ],
+      "labelPoint": [
+        4.693693,
+        46.848389
+      ]
+    },
+    {
+      "id": "71019",
+      "name": "Barizey",
+      "bounds": [
+        4.672229,
+        46.78079,
+        4.687495,
+        46.794835
+      ],
+      "labelPoint": [
+        4.676301,
+        46.792278
+      ]
+    },
+    {
+      "id": "71034",
+      "name": "Bissey-sous-Cruchaud",
+      "bounds": [
+        4.670902,
+        46.718244,
+        4.692656,
+        46.739554
+      ],
+      "labelPoint": [
+        4.681388,
+        46.721859
+      ]
+    },
+    {
+      "id": "71037",
+      "name": "Bissy-sur-Fley",
+      "bounds": [
+        4.616312,
+        46.650714,
+        4.631338,
+        46.669294
+      ],
+      "labelPoint": [
+        4.628648,
+        46.663789
+      ]
+    },
+    {
+      "id": "71051",
+      "name": "Bouzeron",
+      "bounds": [
+        4.717457,
+        46.876732,
+        4.742549,
+        46.903453
+      ],
+      "labelPoint": [
+        4.726748,
+        46.894894
+      ]
+    },
+    {
+      "id": "71070",
+      "name": "Buxy",
+      "bounds": [
+        4.678055,
+        46.700743,
+        4.703656,
+        46.722768
+      ],
+      "labelPoint": [
+        4.680681,
+        46.712797
+      ]
+    },
+    {
+      "id": "71072",
+      "name": "Cersot",
+      "bounds": [
+        4.612511,
+        46.697166,
+        4.656348,
+        46.720685
+      ],
+      "labelPoint": [
+        4.619045,
+        46.708607
+      ]
+    },
+    {
+      "id": "71073",
+      "name": "Chagny",
+      "bounds": [
+        4.732538,
+        46.887514,
+        4.750721,
+        46.90918
+      ],
+      "labelPoint": [
+        4.743098,
+        46.897175
+      ]
+    },
+    {
+      "id": "71078",
+      "name": "Chamilly",
+      "bounds": [
+        4.674932,
+        46.869371,
+        4.690076,
+        46.877334
+      ],
+      "labelPoint": [
+        4.680209,
+        46.872696
+      ]
+    },
+    {
+      "id": "71109",
+      "name": "Chassey-le-Camp",
+      "bounds": [
+        4.686737,
+        46.874089,
+        4.722559,
+        46.904283
+      ],
+      "labelPoint": [
+        4.691654,
+        46.896135
+      ]
+    },
+    {
+      "id": "71124",
+      "name": "Chenôves",
+      "bounds": [
+        4.665164,
+        46.659622,
+        4.684256,
+        46.679252
+      ],
+      "labelPoint": [
+        4.680891,
+        46.670206
+      ]
+    },
+    {
+      "id": "71159",
+      "name": "Culles-les-Roches",
+      "bounds": [
+        4.643136,
+        46.628091,
+        4.679551,
+        46.661945
+      ],
+      "labelPoint": [
+        4.661484,
+        46.652246
+      ]
+    },
+    {
+      "id": "71171",
+      "name": "Dennevy",
+      "bounds": [
+        4.636767,
+        46.860444,
+        4.658708,
+        46.882953
+      ],
+      "labelPoint": [
+        4.653623,
+        46.866067
+      ]
+    },
+    {
+      "id": "71182",
+      "name": "Dracy-le-Fort",
+      "bounds": [
+        4.745527,
+        46.791068,
+        4.755927,
+        46.801655
+      ],
+      "labelPoint": [
+        4.752017,
+        46.794512
+      ]
+    },
+    {
+      "id": "71201",
+      "name": "Fley",
+      "bounds": [
+        4.622453,
+        46.65741,
+        4.652173,
+        46.696275
+      ],
+      "labelPoint": [
+        4.631261,
+        46.690608
+      ]
+    },
+    {
+      "id": "71202",
+      "name": "Fontaines",
+      "bounds": [
+        4.736999,
+        46.838981,
+        4.759786,
+        46.857827
+      ],
+      "labelPoint": [
+        4.743582,
+        46.841208
+      ]
+    },
+    {
+      "id": "71214",
+      "name": "Genouilly",
+      "bounds": [
+        4.583165,
+        46.637844,
+        4.598115,
+        46.649477
+      ],
+      "labelPoint": [
+        4.590574,
+        46.644519
+      ]
+    },
+    {
+      "id": "71221",
+      "name": "Givry",
+      "bounds": [
+        4.70624,
+        46.76169,
+        4.752102,
+        46.794767
+      ],
+      "labelPoint": [
+        4.731589,
+        46.76446
+      ]
+    },
+    {
+      "id": "71241",
+      "name": "Jambles",
+      "bounds": [
+        4.68186,
+        46.768088,
+        4.71588,
+        46.782834
+      ],
+      "labelPoint": [
+        4.700934,
+        46.77351
+      ]
+    },
+    {
+      "id": "71247",
+      "name": "Jully-lès-Buxy",
+      "bounds": [
+        4.679529,
+        46.678504,
+        4.690801,
+        46.699839
+      ],
+      "labelPoint": [
+        4.685945,
+        46.689507
+      ]
+    },
+    {
+      "id": "71292",
+      "name": "Mellecey",
+      "bounds": [
+        4.717494,
+        46.795327,
+        4.754427,
+        46.819587
+      ],
+      "labelPoint": [
+        4.723852,
+        46.814982
+      ]
+    },
+    {
+      "id": "71294",
+      "name": "Mercurey",
+      "bounds": [
+        4.688466,
+        46.818029,
+        4.749641,
+        46.859235
+      ],
+      "labelPoint": [
+        4.722839,
+        46.828698
+      ]
+    },
+    {
+      "id": "71302",
+      "name": "Montagny-lès-Buxy",
+      "bounds": [
+        4.669097,
+        46.693149,
+        4.690128,
+        46.712887
+      ],
+      "labelPoint": [
+        4.679778,
+        46.705848
+      ]
+    },
+    {
+      "id": "71324",
+      "name": "Moroges",
+      "bounds": [
+        4.666478,
+        46.73809,
+        4.69706,
+        46.76497
+      ],
+      "labelPoint": [
+        4.69165,
+        46.757564
+      ]
+    },
+    {
+      "id": "71369",
+      "name": "Remigny",
+      "bounds": [
+        4.717262,
+        46.900485,
+        4.732885,
+        46.910022
+      ],
+      "labelPoint": [
+        4.728735,
+        46.908669
+      ]
+    },
+    {
+      "id": "71374",
+      "name": "Rosey",
+      "bounds": [
+        4.696811,
+        46.741506,
+        4.712166,
+        46.751436
+      ],
+      "labelPoint": [
+        4.702761,
+        46.74889
+      ]
+    },
+    {
+      "id": "71378",
+      "name": "Rully",
+      "bounds": [
+        4.70715,
+        46.852618,
+        4.752217,
+        46.888538
+      ],
+      "labelPoint": [
+        4.74425,
+        46.863475
+      ]
+    },
+    {
+      "id": "71392",
+      "name": "Saint-Boil",
+      "bounds": [
+        4.67848,
+        46.626325,
+        4.694726,
+        46.657661
+      ],
+      "labelPoint": [
+        4.682011,
+        46.643709
+      ]
+    },
+    {
+      "id": "71400",
+      "name": "Saint-Clément-sur-Guye",
+      "bounds": [
+        4.572672,
+        46.610516,
+        4.595605,
+        46.625835
+      ],
+      "labelPoint": [
+        4.585494,
+        46.612721
+      ]
+    },
+    {
+      "id": "71403",
+      "name": "Saint-Denis-de-Vaux",
+      "bounds": [
+        4.685134,
+        46.782788,
+        4.721336,
+        46.804261
+      ],
+      "labelPoint": [
+        4.716022,
+        46.793104
+      ]
+    },
+    {
+      "id": "71404",
+      "name": "Saint-Désert",
+      "bounds": [
+        4.693907,
+        46.747353,
+        4.734169,
+        46.767276
+      ],
+      "labelPoint": [
+        4.730069,
+        46.761804
+      ]
+    },
+    {
+      "id": "71425",
+      "name": "Saint-Gilles",
+      "bounds": [
+        4.65458,
+        46.868606,
+        4.680473,
+        46.885124
+      ],
+      "labelPoint": [
+        4.65988,
+        46.87131
+      ]
+    },
+    {
+      "id": "71430",
+      "name": "Saint-Jean-de-Vaux",
+      "bounds": [
+        4.687905,
+        46.800035,
+        4.703882,
+        46.81597
+      ],
+      "labelPoint": [
+        4.695588,
+        46.80602
+      ]
+    },
+    {
+      "id": "71442",
+      "name": "Saint-Léger-sur-Dheune",
+      "bounds": [
+        4.643272,
+        46.850873,
+        4.66007,
+        46.861283
+      ],
+      "labelPoint": [
+        4.647058,
+        46.857449
+      ]
+    },
+    {
+      "id": "71447",
+      "name": "Saint-Mard-de-Vaux",
+      "bounds": [
+        4.686763,
+        46.805367,
+        4.691288,
+        46.816417
+      ],
+      "labelPoint": [
+        4.689621,
+        46.813846
+      ]
+    },
+    {
+      "id": "71455",
+      "name": "Saint-Martin-du-Tartre",
+      "bounds": [
+        4.594047,
+        46.633469,
+        4.61731,
+        46.653979
+      ],
+      "labelPoint": [
+        4.60107,
+        46.638424
+      ]
+    },
+    {
+      "id": "71459",
+      "name": "Saint-Martin-sous-Montaigu",
+      "bounds": [
+        4.692955,
+        46.80659,
+        4.726286,
+        46.823946
+      ],
+      "labelPoint": [
+        4.703735,
+        46.81442
+      ]
+    },
+    {
+      "id": "71461",
+      "name": "Saint-Maurice-des-Champs",
+      "bounds": [
+        4.616731,
+        46.626379,
+        4.619708,
+        46.628572
+      ],
+      "labelPoint": [
+        4.618643,
+        46.627463
+      ]
+    },
+    {
+      "id": "71485",
+      "name": "Saint-Vallerin",
+      "bounds": [
+        4.65172,
+        46.672983,
+        4.685846,
+        46.69765
+      ],
+      "labelPoint": [
+        4.66165,
+        46.680587
+      ]
+    },
+    {
+      "id": "71498",
+      "name": "Santilly",
+      "bounds": [
+        4.67552,
+        46.613144,
+        4.684728,
+        46.626546
+      ],
+      "labelPoint": [
+        4.680321,
+        46.619857
+      ]
+    },
+    {
+      "id": "71501",
+      "name": "Sassangy",
+      "bounds": [
+        4.637885,
+        46.712568,
+        4.656162,
+        46.732578
+      ],
+      "labelPoint": [
+        4.649182,
+        46.714227
+      ]
+    },
+    {
+      "id": "71503",
+      "name": "Saules",
+      "bounds": [
+        4.662482,
+        46.645409,
+        4.68502,
+        46.6615
+      ],
+      "labelPoint": [
+        4.66845,
+        46.659302
+      ]
+    },
+    {
+      "id": "71515",
+      "name": "Sercy",
+      "bounds": [
+        4.675171,
+        46.604854,
+        4.681821,
+        46.611828
+      ],
+      "labelPoint": [
+        4.679154,
+        46.606677
+      ]
+    },
+    {
+      "id": "71563",
+      "name": "Vaux-en-Pré",
+      "bounds": [
+        4.594857,
+        46.634803,
+        4.60086,
+        46.639239
+      ],
+      "labelPoint": [
+        4.59713,
+        46.637077
+      ]
+    }
+  ],
+  "dataUrl": "/maps/bourgogne-cote-chalonnaise.2026-09-21.geojson",
+  "bounds": [
+    4.572672,
+    46.604854,
+    4.759786,
+    46.910022
+  ],
+  "sources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71005/cadastre-71005-communes.json.gz",
+      "sha256": "0796d8941fd7fc1d684075f5d53c319f5d3c53a1840f730a5732c47bbc965973"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71019/cadastre-71019-communes.json.gz",
+      "sha256": "5cba5c16c7c460578e71177fff0c23cfc5a724819edc066994192bcfbef18dcb"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71034/cadastre-71034-communes.json.gz",
+      "sha256": "2b4ccd38e811b622e3545526015d5cea6c3134bc60523935b3bc93bd3b70345a"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71037/cadastre-71037-communes.json.gz",
+      "sha256": "ba4e2caf99405865c54258d09c8d1b8136bdb2d260fca90c686baa04c0b24174"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71051/cadastre-71051-communes.json.gz",
+      "sha256": "fbcdd4cff38584e6a593131f222d3dac8f061ae24d73f94f44feaf78b8d2d6be"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71070/cadastre-71070-communes.json.gz",
+      "sha256": "1b9623c7b1668c527a8c360515773b07899f2efd336cd6aa1b998d28e6b1f626"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71072/cadastre-71072-communes.json.gz",
+      "sha256": "487466d356e514bbe9415ef2fbcadb23966642bde03081f8c37ffd76b6adaecb"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71073/cadastre-71073-communes.json.gz",
+      "sha256": "b7d777ea5af5da7c3dff9866361afcf496e6f71c1b8bfc4758e1cd93d1df6667"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71078/cadastre-71078-communes.json.gz",
+      "sha256": "c2a65e31761d135d62039b37105b14b1b7026946c373b6a6e3f431cee30ebb16"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71109/cadastre-71109-communes.json.gz",
+      "sha256": "cd656189be8b16fb4979c05db5645f12e223e8c3e46beff08b007518717478ad"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71124/cadastre-71124-communes.json.gz",
+      "sha256": "d2d1bec6249fa1ce4064c77cc2597df47d36ea46ab8163b8bb28aa56a5b3787e"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71159/cadastre-71159-communes.json.gz",
+      "sha256": "0a4d6d33b73fcd9d4e1f18a9da8f6ee9cf33b3020c0b010905fa32a55742f8c6"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71171/cadastre-71171-communes.json.gz",
+      "sha256": "1cbc0c656d9db5463a0f12a11147070cc9413c8cd5bfea81afefa7db2e8f4274"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71182/cadastre-71182-communes.json.gz",
+      "sha256": "eb604a7d4958439fb8bc953b06ee126edaf9c1f309cf8ee182bd90a2b5c42b77"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71201/cadastre-71201-communes.json.gz",
+      "sha256": "7c9b754c49b37983b9e1c5f3c09d7d76c879bb239f6ade29f30e4b68aee1407f"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71202/cadastre-71202-communes.json.gz",
+      "sha256": "39b0d36dbee853eba973f3879b4a772cd79ceb4722fdc45467c1061c91bbd998"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71214/cadastre-71214-communes.json.gz",
+      "sha256": "3efc62b6567cfa40f627fe01fc0c7f335e1ef9a5c3d57e9b3829088f579be32e"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71221/cadastre-71221-communes.json.gz",
+      "sha256": "94a69380cb307016a35df61d0462c6f6ce1986ba6f176c66dec2b595ac3c2218"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71241/cadastre-71241-communes.json.gz",
+      "sha256": "717727d737290892a35b003034380aa30cc24039fee7073e907c9eb590b69dc8"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71247/cadastre-71247-communes.json.gz",
+      "sha256": "ec959d4cdc55ed89140fd38f6857ccbd965e527e68637e3664c856887083f552"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71292/cadastre-71292-communes.json.gz",
+      "sha256": "90552362672bdb18f9d442a556bf21793f998e8845562de51b27802df4810085"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71294/cadastre-71294-communes.json.gz",
+      "sha256": "ec67f97c904966a7b84455b4ae0d54cf09260b9236a2000923a73732ae1767c3"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71302/cadastre-71302-communes.json.gz",
+      "sha256": "d5b600e0fbc999b81c307ac09aa64e369beb23f9269d7f2aae984bf75c621d83"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71324/cadastre-71324-communes.json.gz",
+      "sha256": "996c24fd78b9cfee438312f5ed177119e3a59a771bd9a70f4ef15a356f541f42"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71369/cadastre-71369-communes.json.gz",
+      "sha256": "c385f514297e9cff61d5ea74d151c1001ca03fa2a5743a7a3b5cd88226e37644"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71374/cadastre-71374-communes.json.gz",
+      "sha256": "7e0dc98f155691f70d8572eb42388a1749f3b43cf55e8e82d47b1e9b2158b393"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71378/cadastre-71378-communes.json.gz",
+      "sha256": "53206e3b9d20ca851953f647e2217e2ea4bc572a91a2767c7b1530aa0aefbc19"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71392/cadastre-71392-communes.json.gz",
+      "sha256": "a8385d821f203c5f2243ab40228a46f2ab11481d547c796940857ba1fa3927bc"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71400/cadastre-71400-communes.json.gz",
+      "sha256": "a3786ab0d6369c26bf9c9b4c3830a7099d0c10bc449377a130b9be848b7f2e30"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71403/cadastre-71403-communes.json.gz",
+      "sha256": "751742b88570552213d74dceb2e4620182e20b2904a0e04d2453db5ad747b8bd"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71404/cadastre-71404-communes.json.gz",
+      "sha256": "62a4035c1500b8b2eaa38c32e75ca0329294f8eb5950b9b8a9993e10d79f74dc"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71425/cadastre-71425-communes.json.gz",
+      "sha256": "63ae8814b1cc3528ab9b9059ee3bd33e967446a8d8e282051c014e26faa203b7"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71430/cadastre-71430-communes.json.gz",
+      "sha256": "86731ffb22ff557f5bc59df7afc99568d6598c2140e9922699d2891709afaa40"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71442/cadastre-71442-communes.json.gz",
+      "sha256": "a918e2d6cd30dabf15ee7fa24bcbfcf8b7377427ea7851d8babbbe87b24d309c"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71447/cadastre-71447-communes.json.gz",
+      "sha256": "7a81abd5c9001e9ecfeb26f56862b6d49dc59b22151c4399edf7b6cb61deb0ac"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71455/cadastre-71455-communes.json.gz",
+      "sha256": "904002f6c3fe953bd94ad39f3f32481be94f43c3cc7e9856b6e5be73ef6281dc"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71459/cadastre-71459-communes.json.gz",
+      "sha256": "4def2fa0006a8fa919282ff39958695a88186040c43e26042d9a27917e2eb07f"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71461/cadastre-71461-communes.json.gz",
+      "sha256": "0ee550b09ab846a9d541aa86f60d28b3995e565892f284efe6c9b2aac42a63cd"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71485/cadastre-71485-communes.json.gz",
+      "sha256": "f0440338b46b02ef071955e60c76ce58cf3824eacfd59fcbce89a8707169d31e"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71498/cadastre-71498-communes.json.gz",
+      "sha256": "a783883e0f79b016d03ebe3a99f8037974648ec455271950e31dd72104a8b60a"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71501/cadastre-71501-communes.json.gz",
+      "sha256": "5ba7c17fcb97afc8170fc2c514c3e82aeab32e98055031585dcebda1e4cea415"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71503/cadastre-71503-communes.json.gz",
+      "sha256": "f32eda2ff1706ad0fc3bfde94729f50998bcef29654396a894de79351fa3392f"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71515/cadastre-71515-communes.json.gz",
+      "sha256": "732499907c72a04a0298d597f9439ec673f7a9f274b1cfeaf7cba0193e7284b4"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71563/cadastre-71563-communes.json.gz",
+      "sha256": "ef6ebda3b8eaa254ebfc98cf1f520d93a1e3bd7a5baebb87dd2120570d62350a"
+    }
+  ],
+  "notes": {},
+  "features": [
+    {
+      "id": "inao-denom-365",
+      "name": "Bourgogne Côte Chalonnaise",
+      "tier": "regional",
+      "kind": "appellation",
+      "appellationId": 138,
+      "denominationId": 365,
+      "sourceName": "Bourgogne Côte Chalonnaise",
+      "communes": [
+        "71005",
+        "71019",
+        "71034",
+        "71037",
+        "71051",
+        "71070",
+        "71072",
+        "71073",
+        "71078",
+        "71109",
+        "71124",
+        "71159",
+        "71171",
+        "71182",
+        "71201",
+        "71202",
+        "71214",
+        "71221",
+        "71241",
+        "71247",
+        "71292",
+        "71294",
+        "71302",
+        "71324",
+        "71369",
+        "71374",
+        "71378",
+        "71392",
+        "71400",
+        "71403",
+        "71404",
+        "71425",
+        "71430",
+        "71442",
+        "71447",
+        "71455",
+        "71459",
+        "71461",
+        "71485",
+        "71498",
+        "71501",
+        "71503",
+        "71515",
+        "71563"
+      ],
+      "areaHa": 5838.03,
+      "matchId": "inao-denom-365",
+      "atlasUrl": null,
+      "bounds": [
+        4.572672,
+        46.604854,
+        4.759786,
+        46.910022
+      ],
+      "labelPoint": [
+        4.731589,
+        46.76446
+      ]
+    }
+  ],
+  "coverageNote": "A geographic denomination within Bourgogne AOC. The highlight shows its full INAO production area; named cuvées and producer holdings have no separate boundaries here."
+}

@@ -64,16 +64,55 @@
         "rose"
       ],
       "featureId": "inao-denom-363"
+    },
+    {
+      "id": "bourgogne-cote-chalonnaise",
+      "name": "Bourgogne Côte Chalonnaise",
+      "region": "Côte Chalonnaise",
+      "aliases": [
+        "Bourgogne Côte Chalonnaise"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Saône-et-Loire",
+        "Côte Chalonnaise"
+      ],
+      "wineColours": [
+        "red",
+        "white",
+        "rose"
+      ],
+      "featureId": "inao-denom-365"
+    },
+    {
+      "id": "bourgogne-cotes-du-couchois",
+      "name": "Bourgogne Côtes du Couchois",
+      "region": "Couchois",
+      "aliases": [
+        "Bourgogne Côtes du Couchois",
+        "Côtes du Couchois"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Saône-et-Loire",
+        "Couchois",
+        "Côtes du Couchois",
+        "Côte Chalonnaise"
+      ],
+      "wineColours": [
+        "red"
+      ],
+      "featureId": "inao-denom-1586"
     }
   ],
   "otherAppellations": [
     "Bourgogne Aligoté",
     "Bourgogne Chitry",
     "Bourgogne Coulanges-la-Vineuse",
-    "Bourgogne Côte Chalonnaise",
     "Bourgogne Côte Saint-Jacques",
     "Bourgogne Côtes d'Auxerre",
-    "Bourgogne Côtes du Couchois",
     "Bourgogne Epineuil",
     "Bourgogne La Chapelle Notre-Dame",
     "Bourgogne Le Chapitre",

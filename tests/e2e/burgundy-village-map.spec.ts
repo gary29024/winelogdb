@@ -1,14 +1,16 @@
 import { test,expect,type Locator,type Page } from '@playwright/test';
 import { wine } from './fixtures/layoutWine';
 
-for(const route of ['/wines/layout-wine','/shared/layout-wine'])for(const [appellation,count,commune] of [
- ['Bourgogne Côte d’Or',40,'Dijon'],
- ['Bourgogne Hautes Côtes de Nuits',19,'Arcenant'],
- ['Bourgogne Hautes Côtes de Beaune',29,'Nolay'],
+for(const route of ['/wines/layout-wine','/shared/layout-wine'])for(const [appellation,count,commune,colour,wineName] of [
+ ['Bourgogne Côte d’Or',40,'Dijon','white','A named cuvée'],
+ ['Bourgogne Hautes Côtes de Nuits',19,'Arcenant','white','A named cuvée'],
+ ['Bourgogne Hautes Côtes de Beaune',29,'Nolay','white','A named cuvée'],
+ ['Bourgogne Côte Chalonnaise',44,'Genouilly','white','Buissonnier'],
+ ['Bourgogne Côtes du Couchois',6,'Dracy-lès-Couches','red','Sous le Clos'],
 ] as const){
  test(`Regional map ${appellation} ${route}: full overview, commune navigation and broad scope`,async({page},testInfo)=>{
   await page.setViewportSize({width:320,height:900});
-  await setup(page,{appellation,wineName:'A named cuvée',classification:null,region:'Burgundy',colour:'White',wineStyle:'white',productType:'Wine',productSubtype:'Still'});
+  await setup(page,{appellation,wineName,classification:null,region:'Burgundy',colour,wineStyle:colour,productType:'Wine',productSubtype:'Still'});
   const downloads:string[]=[];
   page.on('request',request=>{if(request.url().includes('/maps/'))downloads.push(request.url())});
   await page.goto(route);await page.evaluate(()=>document.fonts.ready);
@@ -54,6 +56,26 @@ for(const route of ['/wines/layout-wine','/shared/layout-wine'])for(const [appel
   await expect(page.getByRole('button',{name:'View regional map'})).toBeFocused();
  });
 }
+
+for(const route of ['/wines/layout-wine','/shared/layout-wine'])test(`Regional colour and geography guards ${route}`,async({page})=>{
+ await page.setViewportSize({width:390,height:844});
+ for(const overrides of [
+  {appellation:'Bourgogne Côtes du Couchois',colour:'White',wineStyle:'white'},
+  {appellation:'Bourgogne Côtes du Couchois',colour:'Rosé',wineStyle:'rose'},
+  {appellation:'Bourgogne',region:'Côte Chalonnaise'},
+  {appellation:'Bourgogne Côte Chalonnaise',region:'Côte d’Or'},
+ ]){
+  await setup(page,{classification:null,wineName:'A cuvée',region:'Burgundy',colour:'Red',wineStyle:'red',...overrides});
+  await page.goto(route);
+  await expect(page.getByRole('heading',{name:'A cuvée',exact:true})).toBeVisible();
+  await expect(page.getByRole('button',{name:/View (village|regional) map/})).toHaveCount(0);
+ }
+ // The rosé restriction belongs to Couchois, not neighbouring Côte Chalonnaise.
+ await setup(page,{classification:null,wineName:'Rosé',region:'Côte Chalonnaise',appellation:'Bourgogne Côte Chalonnaise',colour:'Rosé',wineStyle:'rose'});
+ await page.goto(route);await page.getByRole('button',{name:'View regional map'}).click();
+ await expect(page.getByRole('button',{name:'Region view',exact:true})).toBeEnabled();
+ await expect(page.locator('.village-map-context')).toHaveText('Regional denomination · 44 communes');
+});
 
 async function setup(page:Page,overrides:Record<string,unknown>={}){
  await page.route('**/api/**',async route=>{
