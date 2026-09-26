@@ -1,0 +1,162 @@
+{
+  "id": "bourgogne-cotes-dauxerre",
+  "name": "Bourgogne Côtes d’Auxerre",
+  "region": "Auxerrois",
+  "mapKind": "regional",
+  "communes": [
+    {
+      "id": "89023",
+      "name": "Augy",
+      "bounds": [
+        3.619385,
+        47.761789,
+        3.637846,
+        47.776182
+      ],
+      "labelPoint": [
+        3.62767,
+        47.765026
+      ]
+    },
+    {
+      "id": "89024",
+      "name": "Auxerre",
+      "bounds": [
+        3.538119,
+        47.741425,
+        3.592392,
+        47.803826
+      ],
+      "labelPoint": [
+        3.579156,
+        47.760659
+      ]
+    },
+    {
+      "id": "89319",
+      "name": "Quenne",
+      "bounds": [
+        3.632767,
+        47.763591,
+        3.666035,
+        47.789081
+      ],
+      "labelPoint": [
+        3.659052,
+        47.786258
+      ]
+    },
+    {
+      "id": "89337",
+      "name": "Saint-Bris-le-Vineux",
+      "bounds": [
+        3.606623,
+        47.720918,
+        3.698514,
+        47.76389
+      ],
+      "labelPoint": [
+        3.617819,
+        47.729106
+      ]
+    },
+    {
+      "id": "89479",
+      "name": "Vincelottes",
+      "bounds": [
+        3.636647,
+        47.704324,
+        3.648839,
+        47.71879
+      ],
+      "labelPoint": [
+        3.645327,
+        47.71714
+      ]
+    }
+  ],
+  "dataUrl": "/maps/bourgogne-cotes-dauxerre.2026-09-21.geojson",
+  "bounds": [
+    3.538119,
+    47.704324,
+    3.698514,
+    47.803826
+  ],
+  "sources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/89/89023/cadastre-89023-communes.json.gz",
+      "sha256": "c0e44bcd06b74e44870a1ebbb0e27cd8e3f50f7e71e7a5d4d6f3ece8b5a9624a"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/89/89024/cadastre-89024-communes.json.gz",
+      "sha256": "b9864148f9b1bb2ff04cae6d350767e741f4cb0ae4d880e79cdd9bedf5efdd49"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/89/89319/cadastre-89319-communes.json.gz",
+      "sha256": "95807ecd001beadd74477eff5b9a42ee7d03fd312ed0328f3cfa25bbb9bb1be1"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/89/89337/cadastre-89337-communes.json.gz",
+      "sha256": "479cbcea03cc4ae81b6b46f99a988de76cb0a2a3c71adea32d6800502778fe73"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/89/89479/cadastre-89479-communes.json.gz",
+      "sha256": "436c5c282ab048e909cd034ae050466cedf90b1b71726f988c358332e0d1434e"
+    }
+  ],
+  "notes": {},
+  "features": [
+    {
+      "id": "inao-denom-366",
+      "name": "Bourgogne Côtes d’Auxerre",
+      "tier": "regional",
+      "kind": "appellation",
+      "appellationId": 138,
+      "denominationId": 366,
+      "sourceName": "Bourgogne Côtes d'Auxerre",
+      "communes": [
+        "89023",
+        "89024",
+        "89319",
+        "89337",
+        "89479"
+      ],
+      "areaHa": 1307.49,
+      "matchId": "inao-denom-366",
+      "atlasUrl": null,
+      "bounds": [
+        3.538119,
+        47.704324,
+        3.698514,
+        47.803826
+      ],
+      "labelPoint": [
+        3.617819,
+        47.729106
+      ]
+    }
+  ],
+  "coverageNote": "A geographic denomination within Bourgogne AOC. The highlight shows its full INAO production area; named cuvées and producer holdings have no separate boundaries here."
+}

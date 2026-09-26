@@ -7,10 +7,16 @@ for(const route of ['/wines/layout-wine','/shared/layout-wine'])for(const [appel
  ['Bourgogne Hautes Côtes de Beaune',29,'Nolay','white','A named cuvée'],
  ['Bourgogne Côte Chalonnaise',44,'Genouilly','white','Buissonnier'],
  ['Bourgogne Côtes du Couchois',6,'Dracy-lès-Couches','red','Sous le Clos'],
+ ['Bourgogne Côtes d’Auxerre',5,'Vincelottes','white','Gondonne'],
+ ['Bourgogne Chitry',1,'Chitry','white','Olympe'],
+ ['Bourgogne Coulanges-la-Vineuse',7,'Charentenay','red','Chanvan'],
+ ['Bourgogne Épineuil',1,'Épineuil','red','L’Âme des Dannots'],
+ ['Bourgogne Côte Saint-Jacques',1,'Joigny','rose','Vin Gris'],
+ ['Bourgogne Tonnerre',6,'Molosmes','white','Vaumorillon'],
 ] as const){
  test(`Regional map ${appellation} ${route}: full overview, commune navigation and broad scope`,async({page},testInfo)=>{
   await page.setViewportSize({width:320,height:900});
-  await setup(page,{appellation,wineName,classification:null,region:'Burgundy',colour,wineStyle:colour,productType:'Wine',productSubtype:'Still'});
+  await setup(page,{appellation,wineName,classification:null,region:['Gondonne','Olympe','Chanvan','L’Âme des Dannots','Vin Gris','Vaumorillon'].includes(wineName)?'Yonne':'Burgundy',colour,wineStyle:colour,productType:'Wine',productSubtype:'Still'});
   const downloads:string[]=[];
   page.on('request',request=>{if(request.url().includes('/maps/'))downloads.push(request.url())});
   await page.goto(route);await page.evaluate(()=>document.fonts.ready);
@@ -19,9 +25,15 @@ for(const route of ['/wines/layout-wine','/shared/layout-wine'])for(const [appel
   const dialog=page.getByRole('dialog',{name:appellation,exact:true});
   await expect(dialog.getByRole('button',{name:'Region view',exact:true})).toBeEnabled();
   const requestsAfterOpen=downloads.length;
-  await expect(dialog.getByRole('combobox',{name:'Zoom to a commune'})).toHaveValue('');
-  await expect(dialog.getByRole('option')).toHaveCount(count+1);
-  await expect(dialog.locator('.village-map-context')).toHaveText(`Regional denomination · ${count} communes`);
+  const selector=dialog.getByRole('combobox',{name:'Zoom to a commune'});
+  if(count>1){
+   await expect(selector).toHaveValue('');
+   await expect(dialog.getByRole('option')).toHaveCount(count+1);
+  }else{
+   await expect(selector).toHaveCount(0);
+   await expect(dialog.locator('.village-map-hint')).toHaveText(`The map shows the full denomination in ${commune}.`);
+  }
+  await expect(dialog.locator('.village-map-context')).toContainText(`Regional denomination · ${count} commune${count===1?'':'s'}`);
   await expect(dialog.locator('.village-map-tier')).toHaveText('Regional denomination');
   await expect(dialog.locator('.village-map-description')).toContainText('no single vineyard is identified');
   await expect(dialog.locator('.village-map-legend')).not.toContainText('Village appellation');
@@ -36,12 +48,14 @@ for(const route of ['/wines/layout-wine','/shared/layout-wine'])for(const [appel
   await expect.poll(async()=>{
    const points=await positions();return points.length===count&&points.every(p=>p.x>=0&&p.x<=p.width&&p.y>=0&&p.y<=p.height);
   }).toBe(true);
-  await dialog.getByRole('combobox').selectOption({label:commune});
-  await expect.poll(async()=>{const points=await positions();return points.some(p=>p.x<0||p.x>p.width||p.y<0||p.y>p.height)}).toBe(true);
+  if(count>1){
+   await selector.selectOption({label:commune});
+   await expect.poll(async()=>{const points=await positions();return points.some(p=>p.x<0||p.x>p.width||p.y<0||p.y>p.height)}).toBe(true);
+  }
   await expect(dialog.getByRole('heading',{name:appellation,exact:true})).toHaveCount(2);
   await expect(dialog.locator('.village-map-description')).toContainText('Regional production area shown');
   await dialog.getByRole('button',{name:'Region view',exact:true}).click();
-  await expect(dialog.getByRole('combobox')).toHaveValue('');
+  if(count>1)await expect(selector).toHaveValue('');
   await expect.poll(async()=>{const points=await positions();return points.every(p=>p.x>=0&&p.x<=p.width&&p.y>=0&&p.y<=p.height)}).toBe(true);
   // React StrictMode may abort/retry the initial request in development.
   // Navigation must neither fetch another map nor restart this download.
@@ -64,6 +78,11 @@ for(const route of ['/wines/layout-wine','/shared/layout-wine'])test(`Regional c
   {appellation:'Bourgogne Côtes du Couchois',colour:'Rosé',wineStyle:'rose'},
   {appellation:'Bourgogne',region:'Côte Chalonnaise'},
   {appellation:'Bourgogne Côte Chalonnaise',region:'Côte d’Or'},
+  {appellation:'Bourgogne Épineuil',colour:'White',wineStyle:'white',region:'Yonne'},
+  {appellation:'Bourgogne Tonnerre',colour:'Red',wineStyle:'red',region:'Yonne'},
+  {appellation:'Bourgogne Tonnerre',colour:'Rosé',wineStyle:'rose',region:'Yonne'},
+  {appellation:'Bourgogne Tonnerre',colour:'White',wineStyle:'red',region:'Yonne'},
+  {appellation:'Bourgogne Chitry',colour:'White',wineStyle:'white',region:'Saône-et-Loire'},
  ]){
   await setup(page,{classification:null,wineName:'A cuvée',region:'Burgundy',colour:'Red',wineStyle:'red',...overrides});
   await page.goto(route);

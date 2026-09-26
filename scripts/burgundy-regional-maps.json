@@ -300,6 +300,225 @@
         "Côtes du Couchois",
         "Côte Chalonnaise"
       ]
+    },
+    {
+      "id": "bourgogne-cotes-dauxerre",
+      "name": "Bourgogne Côtes d’Auxerre",
+      "region": "Auxerrois",
+      "appellationId": 138,
+      "denominationId": 366,
+      "sourceName": "Bourgogne Côtes d'Auxerre",
+      "sourceCvi": "1B316, 1R316, 1S316",
+      "wineColours": [
+        "white",
+        "red",
+        "rose"
+      ],
+      "communes": [
+        "89023",
+        "89024",
+        "89319",
+        "89337",
+        "89479"
+      ],
+      "expectedBounds": [
+        3.2,
+        47.6,
+        4.2,
+        48.1
+      ],
+      "aliases": [
+        "Bourgogne Côtes d’Auxerre",
+        "Côtes d’Auxerre"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Yonne",
+        "Grand Auxerrois",
+        "Chablis et Grand Auxerrois",
+        "Auxerrois"
+      ]
+    },
+    {
+      "id": "bourgogne-chitry",
+      "name": "Bourgogne Chitry",
+      "region": "Auxerrois",
+      "appellationId": 138,
+      "denominationId": 367,
+      "sourceName": "Bourgogne Chitry",
+      "sourceCvi": "1B321, 1R321, 1S321",
+      "wineColours": [
+        "white",
+        "red",
+        "rose"
+      ],
+      "communes": [
+        "89108"
+      ],
+      "expectedBounds": [
+        3.2,
+        47.6,
+        4.2,
+        48.1
+      ],
+      "aliases": [
+        "Bourgogne Chitry"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Yonne",
+        "Grand Auxerrois",
+        "Chablis et Grand Auxerrois",
+        "Auxerrois"
+      ]
+    },
+    {
+      "id": "bourgogne-coulanges-la-vineuse",
+      "name": "Bourgogne Coulanges-la-Vineuse",
+      "region": "Auxerrois",
+      "appellationId": 138,
+      "denominationId": 368,
+      "sourceName": "Bourgogne Coulanges-la-Vineuse",
+      "sourceCvi": "1B356, 1R356, 1S356",
+      "wineColours": [
+        "white",
+        "red",
+        "rose"
+      ],
+      "communes": [
+        "89084",
+        "89118",
+        "89155",
+        "89212",
+        "89256",
+        "89270",
+        "89426"
+      ],
+      "expectedBounds": [
+        3.2,
+        47.6,
+        4.2,
+        48.1
+      ],
+      "aliases": [
+        "Bourgogne Coulanges-la-Vineuse"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Yonne",
+        "Grand Auxerrois",
+        "Chablis et Grand Auxerrois",
+        "Auxerrois"
+      ]
+    },
+    {
+      "id": "bourgogne-epineuil",
+      "name": "Bourgogne Épineuil",
+      "region": "Tonnerrois",
+      "appellationId": 138,
+      "denominationId": 369,
+      "sourceName": "Bourgogne Epineuil",
+      "sourceCvi": "1R357, 1S357",
+      "wineColours": [
+        "red",
+        "rose"
+      ],
+      "communes": [
+        "89153"
+      ],
+      "expectedBounds": [
+        3.2,
+        47.6,
+        4.2,
+        48.1
+      ],
+      "aliases": [
+        "Bourgogne Épineuil"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Yonne",
+        "Grand Auxerrois",
+        "Chablis et Grand Auxerrois",
+        "Tonnerrois"
+      ]
+    },
+    {
+      "id": "bourgogne-cote-saint-jacques",
+      "name": "Bourgogne Côte Saint-Jacques",
+      "region": "Jovinien",
+      "appellationId": 138,
+      "denominationId": 374,
+      "sourceName": "Bourgogne Côte Saint-Jacques",
+      "sourceCvi": "1B355, 1R355, 1S355",
+      "wineColours": [
+        "white",
+        "red",
+        "rose"
+      ],
+      "communes": [
+        "89206"
+      ],
+      "expectedBounds": [
+        3.2,
+        47.6,
+        4.2,
+        48.1
+      ],
+      "aliases": [
+        "Bourgogne Côte Saint-Jacques"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Yonne",
+        "Grand Auxerrois",
+        "Chablis et Grand Auxerrois",
+        "Jovinien"
+      ],
+      "coordinateGrid": 1e-07,
+      "precisionNote": "The default 1e-6 grid changes this 13.294287 ha production area by -0.012462%, exceeding the unchanged 0.005% gate. Use the reviewed 1e-7 grid."
+    },
+    {
+      "id": "bourgogne-tonnerre",
+      "name": "Bourgogne Tonnerre",
+      "region": "Tonnerrois",
+      "appellationId": 138,
+      "denominationId": 1751,
+      "sourceName": "Bourgogne Tonnerre",
+      "sourceCvi": "1B375",
+      "wineColours": [
+        "white"
+      ],
+      "communes": [
+        "89137",
+        "89153",
+        "89211",
+        "89262",
+        "89418",
+        "89447"
+      ],
+      "expectedBounds": [
+        3.2,
+        47.6,
+        4.2,
+        48.1
+      ],
+      "aliases": [
+        "Bourgogne Tonnerre"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Yonne",
+        "Grand Auxerrois",
+        "Chablis et Grand Auxerrois",
+        "Tonnerrois"
+      ]
     }
   ],
   "communeNames": {
@@ -419,10 +638,31 @@
     "71501": "Sassangy",
     "71503": "Saules",
     "71515": "Sercy",
-    "71563": "Vaux-en-Pré"
+    "71563": "Vaux-en-Pré",
+    "89023": "Augy",
+    "89024": "Auxerre",
+    "89084": "Charentenay",
+    "89108": "Chitry",
+    "89118": "Coulanges-la-Vineuse",
+    "89137": "Dannemoine",
+    "89153": "Épineuil",
+    "89155": "Escolives-Sainte-Camille",
+    "89206": "Joigny",
+    "89211": "Junay",
+    "89212": "Jussy",
+    "89256": "Migé",
+    "89262": "Molosmes",
+    "89270": "Mouffy",
+    "89319": "Quenne",
+    "89337": "Saint-Bris-le-Vineux",
+    "89418": "Tonnerre",
+    "89426": "Val-de-Mercy",
+    "89447": "Vézinnes",
+    "89479": "Vincelottes"
   },
   "communeNameSources": [
     "https://geo.api.gouv.fr/communes?codeDepartement=21&fields=nom,code&format=json",
-    "https://geo.api.gouv.fr/communes?codeDepartement=71&fields=nom,code&format=json"
+    "https://geo.api.gouv.fr/communes?codeDepartement=71&fields=nom,code&format=json",
+    "https://geo.api.gouv.fr/communes?codeDepartement=89&fields=nom,code&format=json"
   ]
 }

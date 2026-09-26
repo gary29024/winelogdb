@@ -128,11 +128,21 @@ the plan because they lack a village AOC. See the
 - [x] Bourgogne Hautes Côtes de Beaune: all 29 communes; red/white/rosé
 - [x] Bourgogne Côte Chalonnaise: all 44 communes; red/white/rosé
 - [x] Bourgogne Côtes du Couchois: all six communes; red only
+- [x] Bourgogne Côtes d’Auxerre: all five source communes; red/white/rosé
+- [x] Bourgogne Chitry: Chitry; red/white/rosé
+- [x] Bourgogne Coulanges-la-Vineuse: all seven communes; red/white/rosé
+- [x] Bourgogne Épineuil: Épineuil; red/rosé
+- [x] Bourgogne Côte Saint-Jacques: the delimited hillside in Joigny; red/white/rosé, including vin gris
+- [x] Bourgogne Tonnerre: all six communes, including Épineuil; white only
 
-These are five geographic denominations within Bourgogne AOC, not five new
-AOCs or village maps. **Five of 49 regional source denominations are mapped.**
-The seven broad regional denominations, nine other Bourgogne geographic
+These are eleven geographic denominations within Bourgogne AOC, not eleven new
+AOCs or village maps. **Eleven of 49 regional source denominations are mapped.**
+The seven broad regional denominations, three other Bourgogne geographic
 denominations, Mâcon-Villages and 27 named Mâcon denominations remain pending.
+The three remaining Bourgogne names are La Chapelle Notre-Dame, Le Chapitre
+and Montrecul. The [Yonne source review](burgundy-regional-maps.md#yonne-source-review)
+explains the five-commune Côtes d’Auxerre list and its difference from some
+seven-name promotional lists. It does not add boundaries from those lists.
 
 Within Bourgogne, review all 14 geographic denominations present in the pinned
 snapshot: Chitry, Côte Chalonnaise, Côte d'Or, Côte Saint-Jacques, Côtes d'Auxerre,

@@ -9,16 +9,22 @@ import villages from '../../src/lib/places/burgundyVillageMapRegistry.json';
 
 const base={country:'France',region:'Burgundy',classification:null,productType:'Wine',productSubtype:'Still'};
 const cases=[
- ['Bourgogne Côte d’Or','bourgogne-cote-dor','inao-denom-2840',40],
- ['Bourgogne Hautes Côtes de Nuits','bourgogne-hautes-cotes-de-nuits','inao-denom-364',19],
- ['Bourgogne Hautes Côtes de Beaune','bourgogne-hautes-cotes-de-beaune','inao-denom-363',29],
- ['Bourgogne Côte Chalonnaise','bourgogne-cote-chalonnaise','inao-denom-365',44],
- ['Bourgogne Côtes du Couchois','bourgogne-cotes-du-couchois','inao-denom-1586',6],
+ ['Bourgogne Côte d’Or','bourgogne-cote-dor','inao-denom-2840',40,['Red','White']],
+ ['Bourgogne Hautes Côtes de Nuits','bourgogne-hautes-cotes-de-nuits','inao-denom-364',19,['Red','White','Rosé']],
+ ['Bourgogne Hautes Côtes de Beaune','bourgogne-hautes-cotes-de-beaune','inao-denom-363',29,['Red','White','Rosé']],
+ ['Bourgogne Côte Chalonnaise','bourgogne-cote-chalonnaise','inao-denom-365',44,['Red','White','Rosé']],
+ ['Bourgogne Côtes du Couchois','bourgogne-cotes-du-couchois','inao-denom-1586',6,['Red']],
+ ['Bourgogne Côtes d’Auxerre','bourgogne-cotes-dauxerre','inao-denom-366',5,['Red','White','Rosé']],
+ ['Bourgogne Chitry','bourgogne-chitry','inao-denom-367',1,['Red','White','Rosé']],
+ ['Bourgogne Coulanges-la-Vineuse','bourgogne-coulanges-la-vineuse','inao-denom-368',7,['Red','White','Rosé']],
+ ['Bourgogne Épineuil','bourgogne-epineuil','inao-denom-369',1,['Red','Rosé']],
+ ['Bourgogne Côte Saint-Jacques','bourgogne-cote-saint-jacques','inao-denom-374',1,['Red','White','Rosé']],
+ ['Bourgogne Tonnerre','bourgogne-tonnerre','inao-denom-1751',6,['White']],
 ] as const;
 
 describe('regional denominations stay separate from villages and named vineyards',()=>{
- for(const [name,id,featureId,count] of cases){
-  it.each(featureId==='inao-denom-1586'?['Red',null]:['Red','White',null])(`${name}: accepts allowed colour %s`,colour=>{
+ for(const [name,id,featureId,count,colours] of cases){
+  it.each([...colours,null])(`${name}: accepts allowed colour %s`,colour=>{
    expect(burgundyVillageMapTarget({...base,appellation:name,wineName:'A named cuvée',colour}))
     .toMatchObject({villageId:id,featureId,mapKind:'regional',scope:'appellation'});
   });
@@ -50,7 +56,7 @@ describe('regional denominations stay separate from villages and named vineyards
   const denominations=inventory.appellations.flatMap(a=>a.denominations);
   expect(denominations).toHaveLength(49);
   expect(new Set(denominations.map(d=>d.denominationId)).size).toBe(49);
-  expect(denominations.filter(d=>d.status==='mapped').map(d=>d.denominationId).sort((a,b)=>a-b)).toEqual([363,364,365,1586,2840]);
+  expect(denominations.filter(d=>d.status==='mapped').map(d=>d.denominationId).sort((a,b)=>a-b)).toEqual([363,364,365,366,367,368,369,374,1586,1751,2840]);
   expect(inventory.appellations.find(a=>a.appellationId===138)!.denominations).toHaveLength(15);
   expect(inventory.appellations.find(a=>a.appellationId===583)!.denominations).toHaveLength(29);
   expect(villages.villages).toHaveLength(44);
@@ -159,6 +165,88 @@ describe('Côte Chalonnaise and Couchois regional labels',()=>{
  });
 });
 
+describe('Yonne regional denominations',()=>{
+ it.each([
+  {appellation:'Côtes-d’Auxerre AOC',producer:'Jean-Hugues et Guilhem Goisot',wineName:'Gondonne',colour:'White',expected:'inao-denom-366'},
+  {appellation:'Bourgogne Côtes d’Auxerre',wineName:'Corps de Garde',colour:'Red',expected:'inao-denom-366'},
+  {appellation:'Bourgogne Chitry Blanc',producer:'Olivier Morin',wineName:'Olympe',colour:'White',expected:'inao-denom-367'},
+  {appellation:'Bourgogne Chitry',wineName:'Vau du Puits',colour:'Red',expected:'inao-denom-367'},
+  {appellation:'Bourgogne Coulanges la Vineuse',producer:'Domaine du Clos du Roi',wineName:'Domaine du Clos du Roi Chanvan',colour:'Red',expected:'inao-denom-368'},
+  {appellation:'Bourgogne Coulanges-la-Vineuse',wineName:'Charly',colour:'White',expected:'inao-denom-368'},
+  {appellation:'Bourgogne Epineuil AOP',producer:'Dominique Gruhier',wineName:'L’Âme des Dannots',colour:'Red',expected:'inao-denom-369'},
+  {appellation:'Bourgogne Épineuil Rosé',wineName:'Rosé',colour:'Rosé',expected:'inao-denom-369'},
+  {appellation:'Bourgogne Côte Saint-Jacques',producer:'Alain Vignot',wineName:'Les Ronces',colour:'Red',expected:'inao-denom-374'},
+  {appellation:'Bourgogne Côte Saint-Jacques',wineName:'Pinot Gris',colour:'Rosé',expected:'inao-denom-374'},
+  {appellation:'Bourgogne Côte Saint-Jacques Gris',wineName:'Pinot Gris',colour:'Gris',expected:'inao-denom-374'},
+  {appellation:'Bourgogne Côte Saint-Jacques Vin Gris',wineStyle:'rose',expected:'inao-denom-374'},
+  {appellation:'Bourgogne Côte Saint-Jacques',wineStyle:'vin gris',expected:'inao-denom-374'},
+  // Pinot Gris is also in Vignot's white blend; the grape alone must not imply rosé.
+  {appellation:'Bourgogne Côte Saint-Jacques Blanc',wineName:'Chardonnay Pinot Blanc Pinot Gris',colour:'White',expected:'inao-denom-374'},
+  {appellation:'Bourgogne Tonnerre',producer:'Famille Moutard',wineName:'Vaumorillon',colour:'White',expected:'inao-denom-1751'},
+  {appellation:'Bourgogne Blanc',wineName:'Bourgogne Tonnerre Vaumorillon',colour:'White',expected:'inao-denom-1751'},
+ ])('keeps the reviewed label $appellation $wineName at denomination scope',({expected,...wine})=>{
+  const target=burgundyVillageMapTarget({...base,region:'Yonne',...wine});
+  expect(target).toMatchObject({featureId:expected,mapKind:'regional',scope:'appellation'});
+  expect(target).not.toHaveProperty('locationContext');
+ });
+ for(const [appellation,,,,allowed] of cases.slice(5)){
+  it.each(['Red','White','Rosé'])(`${appellation}: independently checks colour and style %s`,colour=>{
+   const style=colour==='Rosé'?'rose':colour.toLowerCase();
+   for(const evidence of [{colour},{wineStyle:style},{colour,wineStyle:style}]){
+    const target=burgundyVillageMapTarget({...base,appellation,...evidence});
+    if((allowed as readonly string[]).includes(colour))expect(target).toMatchObject({mapKind:'regional'});
+    else expect(target).toBeNull();
+   }
+  });
+  it.each(['Yonne','Grand Auxerrois','Chablis et Grand Auxerrois'])(`${appellation}: accepts compatible region %s`,region=>{
+   expect(burgundyVillageMapTarget({...base,appellation,region})).toMatchObject({mapKind:'regional'});
+  });
+  it.each([
+   {country:'USA'},{region:'Saône-et-Loire'},{region:'Côte d’Or'},{region:'Côte de Nuits'},{region:'Chablis'},
+   {classification:'village'},{classification:'premier_cru'},{classification:'grand_cru'},
+   {wineName:'Chablis'},{wineName:'Bourgogne Aligoté'},{referenceSite:'Irancy'},
+   {referenceParcel:'Bourgogne Côte Chalonnaise'},{productSubtype:'Sparkling'},
+   {identityMatchStatus:'conflict' as const},{colour:'Red',wineStyle:'white'},
+   {colour:'White',wineStyle:'red'},{colour:'White',wineStyle:'rose'},
+  ])(`${appellation}: rejects contradictory evidence %j`,overrides=>{
+   expect(burgundyVillageMapTarget({...base,appellation,...overrides})).toBeNull();
+  });
+ }
+ it.each([
+  {appellation:'Bourgogne Épineuil Blanc'},
+  {appellation:'Bourgogne Épineuil',wineName:'Blanc',colour:'Red'},
+  {appellation:'Bourgogne Tonnerre Rouge'},
+  {appellation:'Bourgogne Tonnerre',wineName:'Rosé',colour:'White'},
+  {appellation:'Bourgogne Tonnerre',wineName:'Bourgogne Épineuil'},
+  {appellation:'Bourgogne Tonnerre',wineName:'Chablis Montée de Tonnerre'},
+  {appellation:'Bourgogne Côte Saint-Jacques Vin Gris',colour:'White'},
+  {appellation:'Bourgogne Côte Saint-Jacques',wineName:'Vin Gris',colour:'Red'},
+  {appellation:'Bourgogne Côte Saint-Jacques',wineName:'Gevrey-Chambertin Clos Saint-Jacques'},
+  {appellation:'Bourgogne Tonnerre',colour:'Gris'},
+  {appellation:'Bourgogne',region:'Yonne',wineName:'Tonnerre'},
+  {appellation:'Bourgogne',region:'Auxerrois',wineName:'Gondonne'},
+  {appellation:'Bourgogne',wineName:'Olympe',producer:'Olivier Morin'},
+  {appellation:'Bourgogne',wineName:'Chanvan',producer:'Domaine du Clos du Roi'},
+  {appellation:'Bourgogne',wineName:'Les Ronces',producer:'Alain Vignot'},
+  {appellation:'Bourgogne',wineName:'Vaumorillon',producer:'Famille Moutard'},
+  {appellation:'Bourgogne',referenceSite:'Bourgogne Chitry'},
+ ])('does not infer colour, tier, a neighbouring denomination or producer holding: %j',wine=>{
+  expect(burgundyVillageMapTarget({...base,...wine})).toBeNull();
+ });
+ it('preserves Chablis Montée de Tonnerre and Gevrey Clos Saint-Jacques',()=>{
+  expect(burgundyVillageMapTarget({...base,region:'Yonne',appellation:'Chablis',wineName:'Montée de Tonnerre',classification:'premier_cru',colour:'White'}))
+   .toMatchObject({villageId:'chablis',scope:'appellation'});
+  expect(burgundyVillageMapTarget({...base,region:'Côte d’Or',appellation:'Gevrey-Chambertin',wineName:'Clos Saint-Jacques',classification:'premier_cru',colour:'Red'}))
+   .toMatchObject({villageId:'gevrey-chambertin',scope:'vineyard'});
+ });
+ it('uses the five source communes for Côtes d’Auxerre and all six for Tonnerre',async()=>{
+  expect((await loadVillageMapCatalogue('bourgogne-cotes-dauxerre')).communes.map(c=>c.name).sort())
+   .toEqual(['Augy','Auxerre','Quenne','Saint-Bris-le-Vineux','Vincelottes']);
+  expect((await loadVillageMapCatalogue('bourgogne-tonnerre')).communes.map(c=>c.id).sort())
+   .toEqual(['89137','89153','89211','89262','89418','89447']);
+ });
+});
+
 function assertGeometry(catalogue:VillageMapCatalogue,data:{features:{properties:{kind:string};geometry:{type:string;coordinates:number[][][][]}}[]}){
  const configured=config.maps.find(map=>map.id===catalogue.id)!;
  for(const feature of data.features){
@@ -170,7 +258,7 @@ function assertGeometry(catalogue:VillageMapCatalogue,data:{features:{properties
    expect(ring.length).toBeGreaterThanOrEqual(4);
    expect(ring[0]).toEqual(ring.at(-1));
    for(const [lon,lat] of ring){
-    if(lon<4.3||lon>5.3||lat<46.5||lat>47.6)throw new Error(`Out-of-region coordinate in ${catalogue.name}`);
+    if(lon<3.2||lon>5.3||lat<46.5||lat>48.1)throw new Error(`Out-of-region coordinate in ${catalogue.name}`);
     if([lon,lat].some(value=>Math.abs(value/grid-Math.round(value/grid))>0.000001))throw new Error(`Coordinate exceeds reviewed precision in ${catalogue.name}`);
    }
   }

@@ -31,17 +31,22 @@ export function burgundyRegionalMapTarget(wine:Wine):BurgundyVillageMapTarget|nu
  const group=candidates[0],country=key(wine.country??''),region=key(wine.region??'');
  if(country&&!['france','fr'].includes(country))return null;
  if(region&&!group.regions.includes(region)&&!group.keys.includes(region))return null;
- const type=key(wine.productType??''),subtype=key(wine.productSubtype??''),style=key(wine.wineStyle??'');
+ // The reviewed Joigny vin gris is rosé. A grape name such as Pinot Gris
+ // alone is not colour evidence (the producer also uses it in white wine).
+ const vinGris=group.featureId==='inao-denom-374';
+ const normaliseColour=(value:string)=>vinGris&&['gris','vin gris'].includes(value)?'rose':value;
+ const type=key(wine.productType??''),subtype=key(wine.productSubtype??''),style=normaliseColour(key(wine.wineStyle??''));
  if(type&&!['wine','still wine'].includes(type))return null;
  if(subtype&&!['still','still wine'].includes(subtype))return null;
  if(style&&!['red','white','rose'].includes(style))return null;
- const colour=key(wine.colour??'')||style;
+ const colour=normaliseColour(key(wine.colour??''))||style;
  if(colour&&!group.wineColours.includes(colour))return null;
+ if(style&&colour&&style!==colour)return null;
  const removeDesignation=(text:string)=>group.keys
   .reduce((value,name)=>` ${value} `.replaceAll(` ${name} `,' ').trim(),text);
  const app=fields[0];
  if(app&&!genericAppellations.includes(app)&&
-  (!group.keys.some(name=>contains(app,name))||!['','rouge','blanc','rose','red','white'].includes(removeDesignation(app))))return null;
+  (!group.keys.some(name=>contains(app,name))||!['','rouge','blanc','rose','red','white',...(vinGris?['gris','vin gris']:[])].includes(removeDesignation(app))))return null;
  // A cuvée/reference name alone must not infer its regional denomination.
  if(!fields.slice(0,2).some(text=>group.keys.some(name=>contains(text,name))))return null;
  const producer=key(wine.producer??'');
@@ -55,6 +60,7 @@ export function burgundyRegionalMapTarget(wine:Wine):BurgundyVillageMapTarget|nu
  // colour/style is absent. Côte d'Or does not include rosé.
  const labelColours=[['rouge','red'],['red','red'],['blanc','white'],['white','white'],['rose','rose']] as const;
  const namedColours=labelColours.filter(([name])=>remaining.slice(0,2).some(text=>contains(text,name))).map(([,value])=>value);
+ if(vinGris&&(['gris','vin gris'].includes(remaining[0])||remaining.slice(0,2).some(text=>contains(text,'vin gris'))))namedColours.push('rose');
  if(namedColours.some(value=>!group.wineColours.includes(value)||(colour&&colour!==value)))return null;
  return {villageId:group.id,villageName:group.name,region:group.region,featureId:group.featureId,name:group.name,scope:'appellation',mapKind:'regional'};
 }
