@@ -1,7 +1,11 @@
 import { test,expect,type Locator,type Page } from '@playwright/test';
 import { wine } from './fixtures/layoutWine';
 
-for(const route of ['/wines/layout-wine','/shared/layout-wine'])for(const [appellation,count,commune,colour,wineName] of [
+const fullMapMatrix=process.env.WINELOG_E2E_EXHAUSTIVE_MAPS==='1';
+const allMapRoutes=['/wines/layout-wine','/shared/layout-wine'] as const;
+const matrixRoutes:readonly string[]=fullMapMatrix?allMapRoutes:['/wines/layout-wine'];
+
+const regionalMapCases=[
  ['Bourgogne Côte d’Or',40,'Dijon','white','A named cuvée'],
  ['Bourgogne Hautes Côtes de Nuits',19,'Arcenant','white','A named cuvée'],
  ['Bourgogne Hautes Côtes de Beaune',29,'Nolay','white','A named cuvée'],
@@ -16,7 +20,15 @@ for(const route of ['/wines/layout-wine','/shared/layout-wine'])for(const [appel
  ['Bourgogne La Chapelle Notre-Dame',1,'Ladoix-Serrigny','red','Jean-Pierre Maldant'],
  ['Bourgogne Le Chapitre',1,'Chenôve','red','Vieilles Vignes'],
  ['Bourgogne Montrecul',1,'Dijon','red','Bourgogne Montre-Cul'],
-] as const){
+] as const;
+const smokeRegionalAppellations=new Set<string>([
+ 'Bourgogne Côte d’Or',
+ 'Bourgogne Chitry',
+ 'Bourgogne Tonnerre',
+]);
+const browserRegionalCases=fullMapMatrix?regionalMapCases:regionalMapCases.filter(([appellation])=>smokeRegionalAppellations.has(appellation));
+
+for(const route of matrixRoutes)for(const [appellation,count,commune,colour,wineName] of browserRegionalCases){
  test(`Regional map ${appellation} ${route}: full overview, commune navigation and broad scope`,async({page},testInfo)=>{
   await page.setViewportSize({width:320,height:900});
   await setup(page,{appellation,wineName,classification:null,region:['Gondonne','Olympe','Chanvan','L’Âme des Dannots','Vin Gris','Vaumorillon'].includes(wineName)?'Yonne':'Burgundy',colour,wineStyle:colour,productType:'Wine',productSubtype:'Still'});
@@ -427,7 +439,7 @@ test('Bonnes-Mares opens in Chambolle with both producing communes explained',as
  await expect(dialog.locator('.village-map-overlap')).toContainText('does not identify which side');
 });
 
-for(const village of [
+const villageMapCases=[
  {id:'fixin',name:'Fixin',cru:'Les Meix Bas',tier:'premier_cru',feature:'inao-denom-2372',count:8,catalogue:'fixinVillageMapCatalogue',explore:'inao-denom-571',label:'Clos de la Perrière'},
  {id:'vougeot',name:'Vougeot',cru:'Le Clos Blanc',tier:'premier_cru',feature:'inao-denom-1280',count:7,catalogue:'vougeotVillageMapCatalogue',explore:'inao-denom-546',label:'Clos de Vougeot'},
  {id:'nuits-saint-georges',name:'Nuits-Saint-Georges',cru:'Clos de la Maréchale',tier:'premier_cru',feature:'inao-denom-989',count:43,catalogue:'nuitsVillageMapCatalogue',explore:'inao-denom-976',label:'Aux Boudots'},
@@ -468,8 +480,19 @@ for(const village of [
  {id:'irancy',name:'Irancy',cru:'Palotte',tier:'village',feature:'inao-denom-1288',count:1,catalogue:'irancyVillageMapCatalogue',explore:'inao-denom-1288',label:'Irancy'},
  {id:'saint-bris',name:'Saint-Bris',cru:'Saint-Bris',tier:'village',colour:'White',feature:'inao-denom-1597',count:1,catalogue:'saintBrisVillageMapCatalogue',explore:'inao-denom-1597',label:'Saint-Bris'},
  {id:'vezelay',name:'Vézelay',cru:'Vézelay',tier:'village',colour:'White',feature:'inao-denom-2829',count:1,catalogue:'vezelayVillageMapCatalogue',explore:'inao-denom-2829',label:'Vézelay'},
-]){
- for(const route of ['/wines/layout-wine','/shared/layout-wine']){
+] as const;
+const smokeVillageIds=new Set<string>([
+ 'nuits-saint-georges',
+ 'marsannay',
+ 'meursault',
+ 'montagny',
+ 'pouilly-fuisse',
+ 'chablis',
+]);
+const browserVillageCases=fullMapMatrix?villageMapCases:villageMapCases.filter(village=>smokeVillageIds.has(village.id));
+
+for(const village of browserVillageCases){
+ for(const route of matrixRoutes){
   test(`${village.name} ${route}: opens the correct boundary and keeps its full village context`,async({page},testInfo)=>{
    const requests:string[]=[],errors:string[]=[];
    page.on('request',request=>requests.push(request.url()));page.on('pageerror',error=>errors.push(error.message));
