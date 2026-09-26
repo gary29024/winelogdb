@@ -6,6 +6,7 @@ import mapping from './burgundyAtlasPremierCruLinks.json';
 import appellationMapping from './burgundyAtlasAppellationLinks.json';
 import unmappedPremiers from './burgundyAtlasUnmappedPremierCruNames.json';
 import villageMaps from './burgundyVillageMapRegistry.json';
+import { producerAllowsClimat } from './burgundyProducerLocations';
 
 type Wine=WineFacts&{classification?:string|null};
 const nameKey=(value:string)=>placeKey(value.replace(/œ/g,'oe').replace(/Œ/g,'OE')).replace(/\bst\b/g,'saint');
@@ -206,11 +207,9 @@ function premierCruIdentity(wine:Wine):PremierCruIdentity|null{
       if(index===1||whole)for(const match of found)candidates.add(match.entry);
     }
     if(invalid)continue;
-    // Ferret historically called its Clos de Jeanne cuvée "Le Clos". It is
-    // not Château Fuissé's separate Le Clos climat. Require an unambiguous
-    // modern name rather than highlighting the wrong producer's vineyard.
-    if(group.key==='pouilly fuisse'&&contains(fields[1],'ferret')&&
-      [...candidates].some(entry=>entry.name==='Le Clos'))continue;
+    // Homonymous producer cuvées cannot establish this official climat.
+    // Their reviewed location is resolved separately, without asserting a tier.
+    if([...candidates].some(entry=>!producerAllowsClimat(wine,group.appellation,entry.name)))continue;
     // A label may name a wider Premier Cru with a cru inside it: Meursault-Blagny
     // Sous le Dos d'Ane, Morgeot Clos Pitois. The wider name gives way to the
     // inner cru; two unrelated crus stay ambiguous.
@@ -286,8 +285,8 @@ function namedPlaceMentions(text:string){
 
 /** Establish the appellation independently of how many plots can be matched.
  * Failure to find one cru permits a broader link; conflicting geography does not. */
-function wineAppellation(wine:Wine,tier:'village'|'premier_cru'):Appellation|null{
-  if(wine.identityMatchStatus==='conflict'||(wine.classification&&wine.classification!==tier))return null;
+function wineAppellation(wine:Wine,tier:'village'|'premier_cru',locationOnly=false):Appellation|null{
+  if(wine.identityMatchStatus==='conflict'||(!locationOnly&&wine.classification&&wine.classification!==tier))return null;
   if(wine.country?.trim()&&nameKey(wine.country)!=='france')return null;
   const raw=placeFields(wine);
   if(raw.some(value=>/\bgrand\s+cru\b/.test(nameKey(value))))return null;
@@ -321,8 +320,14 @@ function wineAppellation(wine:Wine,tier:'village'|'premier_cru'):Appellation|nul
   // Without a recorded tier, a named Premier or Grand Cru is not a village wine.
   // Linking the village page would state a tier the record never gave, so the
   // link is withheld. A recorded village classification stays authoritative.
-  if(tier==='village'&&wine.classification!=='village'&&namesHigherTierPlot(fields,candidates[0]))return null;
+  if(!locationOnly&&tier==='village'&&wine.classification!=='village'&&namesHigherTierPlot(fields,candidates[0]))return null;
   return candidates[0];
+}
+
+/** Geography for source-backed producer locations, never a wine-tier claim. */
+export function burgundyMapAppellation(wine:Wine):string|null{
+  if(wine.classification&&!['village','premier_cru'].includes(wine.classification))return null;
+  return wineAppellation(wine,'village',true)?.appellation??null;
 }
 
 function appellationLink(group:Appellation,tier:'village'|'premier_cru'):BurgundyAtlasPlace|null{

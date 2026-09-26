@@ -49,12 +49,12 @@ describe('Mâconnais Premier Crus and producer names',()=>{
  });
  it('does not mistake generic clos text, village cuvées or Ferret’s old name for Le Clos',()=>{
   for(const wineName of ['Clos des Prouges','Le Clos des Prouges','Le Clos du Moulin','Clos inconnu',
-   'Domaine Ferret Pouilly-Fuissé Le Clos','Ferret Le Clos','Les Crays Clos inconnu']){
+   'Le Clos','Les Crays Clos inconnu']){
    const target=burgundyVillageMapTarget({...wine,appellation:'Pouilly-Fuissé',wineName});
    expect(target?.featureId,wineName).not.toBe('inao-denom-2870');
    if(wineName!=='Les Crays Clos inconnu')expect(target?.featureId,wineName).toBe('inao-denom-2865');
   }
-  expect(burgundyVillageMapTarget({...wine,appellation:'Pouilly-Fuissé',wineName:'Ferret Le Clos',classification:'village'})?.featureId).toBe('inao-denom-1055');
+  expect(burgundyVillageMapTarget({...wine,appellation:'Pouilly-Fuissé',wineName:'Ferret Le Clos',classification:'village'})?.featureId).toBe('inao-denom-2873');
   expect(burgundyVillageMapTarget({...wine,appellation:'Pouilly-Fuissé',wineName:'Pouilly'})?.featureId).toBe('inao-denom-2883');
  });
  it('separates Pouilly appellations, repeated Quarts and Perrières names, and the Loire',()=>{
@@ -103,7 +103,8 @@ describe('local Premier Cru tiers with existing Atlas village links',()=>{
 describe('Mâconnais source areas and producing communes',()=>{
  it.each(catalogues)('$name accepts white or unknown colour and rejects red, rosé and Grand Cru',c=>{
   for(const f of c.features.filter(f=>![1056,1593].includes(f.denominationId))){
-   const base={...wine,appellation:c.name,wineName:f.name,classification:f.tier};
+   const base={...wine,appellation:c.name,wineName:f.name,classification:f.tier,
+    producer:c.id==='pouilly-fuisse'&&f.name==='Le Clos'?'Château Fuissé':undefined};
    for(const fields of [{},{colour:'White'},{colour:null,wineStyle:'white'}])expect(burgundyVillageMapTarget({...base,...fields})?.featureId).toBe(f.id);
    for(const fields of [{colour:'Red'},{colour:'Rosé'},{colour:null,wineStyle:'red'},{classification:'grand_cru'}])expect(burgundyVillageMapTarget({...base,...fields})).toBeNull();
   }

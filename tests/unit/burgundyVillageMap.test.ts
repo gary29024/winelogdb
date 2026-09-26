@@ -167,6 +167,7 @@ describe.each([
   expect(c.features.filter(f=>f.kind==='vineyard'&&f.tier==='premier_cru')).toHaveLength(premiers);
   for(const feature of c.features.filter(f=>f.kind==='vineyard')){
    const target=burgundyVillageMapTarget({...base,classification:feature.tier,wineName:feature.name,
+    producer:c.id==='pouilly-fuisse'&&feature.name==='Le Clos'?'Château Fuissé':undefined,
     appellation:feature.tier==='grand_cru'?feature.name:c.name});
    expect(target,feature.name).toMatchObject({featureId:feature.id,scope:'vineyard',
     villageId:(mapConfig.sharedDefaults as Record<string,string>)[String(feature.denominationId)]??c.id});

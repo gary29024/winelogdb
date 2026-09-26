@@ -702,8 +702,8 @@ Producer label checks go beyond matching the source names:
   and [La Baudotte](https://www.domaine-ferret.com/fr/vin/3/tete-de-cru-quot-les-perrieres-quot)
   within Les Perrières, and [Tournant de Pouilly](https://www.domaine-ferret.com/fr/vin/5/cuvee-hors-classe-quot-tournant-de-pouilly-quot)
   within Les Reisses. These reviewed names select the whole official climat with
-  an extent note. Ferret's historical “Le Clos” title stays broad when no modern
-  name resolves it, preventing a false match to Château Fuissé's Le Clos. Tournant
+  an extent note. Ferret's historical “Le Clos” uses the reviewed producer
+  location catalogue below, independently of bottle classification. Tournant
   de Pouilly never resolves to the separate Pouilly Premier Cru.
 - [Albert Bichot's Clos Reyssié](https://www.albert-bichot.com/en/pouilly-fuisse-1er-cru-clos-reyssie_185)
   is a reviewed spelling of Le Clos Reyssier, the INAO and
@@ -712,6 +712,25 @@ Producer label checks go beyond matching the source names:
   and [Bret Brothers / La Soufrandière's 2024 labels](https://www.bretbrothers.com/document/cixk)
   cover local named identities and producer conjunctions. Complete reference
   fields, blends, village classifications and geography conflicts are tested too.
+
+`burgundyProducerLocations.ts` records source-backed producer cuvée names,
+their containing climat, and the producer of any homonymous official climat.
+Ferret explicitly confirms that Le Clos became Clos de Jeanne from the 2020
+vintage and that the 0.64 ha parcel remained the same. A verified Ferret identity
+with either name selects the full Les Perrières boundary as geographical context,
+including for village wines or records with no classification. The dialog labels
+it “Vineyard location” and “Current map: Premier Cru”, explains the whole-climat
+extent and historical village status, and links directly to the producer's source.
+No wine fields, historical classification, or wine-detail Atlas tier are changed.
+
+The recorded producer must equal a reviewed name; when absent, the wine title
+must begin with one. All appellation, title and reference fields must agree;
+unknown suffixes, blends, conflicting producers and other plots stay broad.
+Shared country, region, appellation, identity and colour guards still apply.
+Bare Le Clos without unambiguous producer evidence no longer selects Château
+Fuissé's climat; that destination requires Château Fuissé evidence. Catalogue
+entries do not create precise producer polygons or globally alias Le Clos to
+Les Perrières. Vintage values are never used to infer or overwrite a wine's tier.
 
 An independent source comparison verifies all 36 projected wine geometries,
 three derived Premier Cru overview fills, areas, colour codes and commune IDs,

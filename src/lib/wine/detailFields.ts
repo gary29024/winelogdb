@@ -21,6 +21,7 @@ import type { IdentityMatchStatus } from './referenceIdentity';
 // normalise before it can ask for its own rows.
 type Absent=null|undefined;
 export type WineFacts={
+ producer?:string|Absent;
  wineName?:string|Absent;
  country?:string|Absent;
  region?:string|Absent;

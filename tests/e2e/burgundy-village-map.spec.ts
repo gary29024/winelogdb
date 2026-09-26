@@ -258,6 +258,67 @@ for(const village of [
  }
 }
 
+for(const route of ['/wines/layout-wine','/shared/layout-wine']){
+ test(`Ferret vineyard location ${route}: historical names preserve bottle classification`,async({page},testInfo)=>{
+  const width=route.startsWith('/shared')?320:1280;
+  await page.setViewportSize({width,height:900});
+  for(const row of [
+   {wineName:'Le Clos',vintage:2018,classification:'village'},
+   {wineName:'Tête de Cru Le Clos',vintage:2019,classification:null},
+   {wineName:'Clos de Jeanne',vintage:2022,classification:'premier_cru'},
+  ]){
+   await setup(page,{...row,producer:'Domaine Ferret',appellation:'Pouilly-Fuissé',region:'Mâconnais',colour:'White',wineStyle:'white'});
+   await page.goto(route);
+   const pill=page.locator('.detail-classification');
+   if(row.classification)await expect(pill).toHaveText(row.classification==='village'?'Village':'Premier Cru');
+   else await expect(pill).toHaveCount(0);
+   const wineAtlas=page.getByRole('link',{name:/Explore on Burgundy Atlas/});
+   if(row.classification==='village')await expect(wineAtlas).toHaveAttribute('aria-label',/Pouilly-Fuissé appellation/);
+   if(!row.classification)await expect(wineAtlas).toHaveCount(0);
+   await page.getByRole('button',{name:'View village map'}).click();
+   const dialog=page.getByRole('dialog',{name:'Pouilly-Fuissé',exact:true});
+   await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
+   await expect(dialog.getByRole('combobox')).toHaveValue('inao-denom-2873');
+   await expect(dialog.locator('.village-map-selected-label')).toHaveText('Les Perrières');
+   await expect(dialog.locator('.village-map-eyebrow')).toHaveText('VINEYARD LOCATION');
+   await expect(dialog.locator('.village-map-tier')).toHaveText('Current map: Premier Cru');
+   await expect(dialog.locator('.village-map-description')).toHaveText('Area containing this wine’s vineyard.');
+   await expect(dialog.locator('.village-map-overlap')).toContainText('whole climat, not Ferret’s 0.64 ha parcel');
+   await expect(dialog.locator('.village-map-overlap')).toContainText('Pre-2020 bottles were village wines');
+   await expect(dialog.getByRole('link',{name:'Producer’s explanation'})).toHaveAttribute('href','https://www.domaine-ferret.com/en/wines/2/tete-de-cru-quot-clos-de-jeanne-quot');
+   await expect(dialog.getByLabel('Map legend')).toContainText('Containing climat');
+   expect(await dialog.evaluate(el=>el.scrollWidth<=el.clientWidth)).toBe(true);
+   if(row.vintage===2018)await page.screenshot({path:testInfo.outputPath(`ferret-historical-${width}.png`),fullPage:true});
+   await dialog.getByRole('combobox').selectOption('inao-denom-2870');
+   await expect(dialog.locator('.village-map-eyebrow')).toHaveText('EXPLORING');
+   await expect(dialog.getByRole('link',{name:'Producer’s explanation'})).toHaveCount(0);
+   await dialog.getByRole('button',{name:'Back to this wine'}).click();
+   await expect(dialog.getByRole('combobox')).toHaveValue('inao-denom-2873');
+   await expect(dialog.getByRole('link',{name:'Producer’s explanation'})).toBeVisible();
+   await page.keyboard.press('Escape');
+   if(row.classification)await expect(pill).toHaveText(row.classification==='village'?'Village':'Premier Cru');
+   else await expect(pill).toHaveCount(0);
+  }
+ });
+}
+
+test('Ferret vineyard location requires unambiguous producer evidence for Le Clos',async({page})=>{
+ for(const row of [
+  {producer:null,wineName:'Le Clos',id:'inao-denom-2865'},
+  {producer:'Château Fuissé',wineName:'Domaine Ferret Le Clos',id:'inao-denom-2865'},
+  {producer:'Domaine Ferret',wineName:'Le Clos et Les Crays',id:'inao-denom-2865'},
+  {producer:'Château Fuissé',wineName:'Le Clos',id:'inao-denom-2870'},
+ ]){
+  await setup(page,{...row,appellation:'Pouilly-Fuissé',colour:'White',wineStyle:'white'});
+  await page.goto('/wines/layout-wine');await page.getByRole('button',{name:'View village map'}).click();
+  const dialog=page.getByRole('dialog');
+  await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
+  await expect(dialog.getByRole('combobox')).toHaveValue(row.id);
+  await expect(dialog.getByRole('link',{name:'Producer’s explanation'})).toHaveCount(0);
+  await page.keyboard.press('Escape');
+ }
+});
+
 test('Mâconnais local Premier Cru maps keep village Atlas links separate',async({page})=>{
  for(const row of [
   {appellation:'Pouilly-Loché',wineName:'Les Mûres',named:'inao-denom-2932',broad:'inao-denom-2931'},

@@ -92,8 +92,9 @@ function VillageMapView({target,catalogue}:{target:BurgundyVillageMapTarget;cata
  const [selectedId,setSelectedId]=useState(target.featureId),[ready,setReady]=useState(false),[error,setError]=useState(''),[baseWarning,setBaseWarning]=useState(false),[attempt,setAttempt]=useState(0);
  const selectedRef=useRef(selectedId),selectionAction=useRef<((id:string)=>void)|null>(null);
  const selected=catalogue.features.find(feature=>feature.id===selectedId)!;
+ const locationContext=selectedId===target.featureId?target.locationContext:undefined;
  // A reviewed note, then what the cru's umbrella relationships mean for a label.
- const selectionNotes=[catalogue.notes[selected.id]?.note,umbrellaNote(catalogue,selected.id)].filter(Boolean);
+ const selectionNotes=[locationContext?undefined:catalogue.notes[selected.id]?.note,umbrellaNote(catalogue,selected.id)].filter(Boolean);
  // Reviewed alternative designations remain selectable without counting the
  // same climat twice (Santenay's two names for Clos de Tavannes).
  const vineyardCount=(tier:string)=>catalogue.features.filter(f=>f.kind==='vineyard'&&f.tier===tier&&!catalogue.notes[f.id]?.sameBoundaryAs).length;
@@ -239,7 +240,7 @@ function VillageMapView({target,catalogue}:{target:BurgundyVillageMapTarget;cata
     <div className="village-map-canvas" ref={host} aria-busy={!ready&&!error}/>
     {!ready&&!error&&<p className="village-map-loading" role="status">Loading vineyard boundaries…</p>}
     {error&&<div className="village-map-error" role="alert"><p>{error}</p><button type="button" onClick={()=>{setError('');setReady(false);setBaseWarning(false);setAttempt(value=>value+1)}}>Try again</button></div>}
-    <div className="village-map-legend" aria-label="Map legend">{vineyardCount('grand_cru')>0&&<span><i className="map-swatch-grand_cru"/>Grand Cru</span>}{vineyardCount('premier_cru')>0&&<span><i className="map-swatch-premier_cru"/>Premier Cru</span>}<span><i className="map-swatch-village"/>Village appellation</span><span><i className="map-swatch-commune"/>Commune boundary</span><span><i className={`map-swatch-selected${selected.kind==='appellation'?' is-area':''}`}/>{selectedId===target.featureId?'This wine':'Selected'}</span></div>
+    <div className="village-map-legend" aria-label="Map legend">{vineyardCount('grand_cru')>0&&<span><i className="map-swatch-grand_cru"/>Grand Cru</span>}{vineyardCount('premier_cru')>0&&<span><i className="map-swatch-premier_cru"/>Premier Cru</span>}<span><i className="map-swatch-village"/>Village appellation</span><span><i className="map-swatch-commune"/>Commune boundary</span><span><i className={`map-swatch-selected${selected.kind==='appellation'?' is-area':''}`}/>{locationContext?'Containing climat':selectedId===target.featureId?'This wine':'Selected'}</span></div>
    </div>
    <aside className="village-map-sidebar">
     <label htmlFor={selectId}>{hasVineyards?'Explore a vineyard':'Explore an area'}</label>
@@ -247,9 +248,10 @@ function VillageMapView({target,catalogue}:{target:BurgundyVillageMapTarget;cata
      {groups.map(group=><optgroup key={group.tier} label={group.label}>{catalogue.features.filter(f=>f.tier===group.tier).sort((a,b)=>a.name.localeCompare(b.name)).map(feature=><option key={feature.id} value={feature.id}>{feature.name}</option>)}</optgroup>)}
     </select>
     <div className="village-map-selection" id={statusId} aria-live="polite" aria-atomic="true">
-     <p className={`village-map-eyebrow${selectedId===target.featureId?' is-wine':''}`}>{selectedId===target.featureId?'THIS WINE':'EXPLORING'}</p>
-     <h3>{selected.name}</h3><span className={`village-map-tier map-tier-${selected.tier}`}>{tiers[selected.tier]}</span>
-     <p className="village-map-description">{selected.kind==='vineyard'?'The highlighted area is the INAO production boundary for this cru.':'Appellation area shown; no single vineyard is identified.'}</p>
+     <p className={`village-map-eyebrow${selectedId===target.featureId?' is-wine':''}`}>{locationContext?'VINEYARD LOCATION':selectedId===target.featureId?'THIS WINE':'EXPLORING'}</p>
+     <h3>{selected.name}</h3><span className={`village-map-tier map-tier-${selected.tier}`}>{locationContext?'Current map: ':''}{tiers[selected.tier]}</span>
+     <p className="village-map-description">{locationContext?'Area containing this wine’s vineyard.':selected.kind==='vineyard'?'The highlighted area is the INAO production boundary for this cru.':'Appellation area shown; no single vineyard is identified.'}</p>
+     {locationContext&&<p className="village-map-overlap">{locationContext.note} <a href={locationContext.sourceUrl} target="_blank" rel="noopener noreferrer">Producer’s explanation</a></p>}
      {selectionNotes.map(note=><p className="village-map-overlap" key={note}>{note}</p>)}
     </div>
     {selectedId!==target.featureId&&<button type="button" className="village-map-return" onClick={backToWine}>Back to this wine</button>}

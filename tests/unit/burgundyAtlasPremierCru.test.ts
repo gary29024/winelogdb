@@ -26,10 +26,11 @@ describe('Premier Cru wine-detail destinations',()=>{
   // failure name rather than resolving all 630 plots in one timed test on CI.
   it.each(mapping.groups)('resolves every mapped plot in $appellation without broadening it',group=>{
     for(const entry of group.entries){
+      const producer=group.appellation==='Pouilly-Fuissé'&&entry.name==='Le Clos'?'Château Fuissé':undefined;
       const result=burgundyAtlasPremierCru({country:'France',region:'Bourgogne',
-        appellation:group.appellation,classification:'premier_cru',wineName:`${group.appellation} Premier Cru ${entry.name}`});
+        producer,appellation:group.appellation,classification:'premier_cru',wineName:`${group.appellation} Premier Cru ${entry.name}`});
       expect(result?.url,`${group.appellation}: ${entry.name}`).toBe(`https://burgundyatlas.com${entry.path}`);
-      expect(burgundyAtlasWineDetailPlace({country:'France',region:'Bourgogne',appellation:group.appellation,
+      expect(burgundyAtlasWineDetailPlace({country:'France',region:'Bourgogne',producer,appellation:group.appellation,
         classification:'premier_cru',wineName:`${group.appellation} Premier Cru ${entry.name}`})?.url,
       `${group.appellation}: ${entry.name} must retain its specific destination`).toBe(result?.url);
       expect(result?.placeId).toMatch(/^ba_designation_[a-z2-7]+$/);
