@@ -519,6 +519,109 @@
         "Chablis et Grand Auxerrois",
         "Tonnerrois"
       ]
+    },
+    {
+      "id": "bourgogne-la-chapelle-notre-dame",
+      "name": "Bourgogne La Chapelle Notre-Dame",
+      "region": "Côte de Beaune",
+      "appellationId": 138,
+      "denominationId": 371,
+      "sourceName": "Bourgogne La Chapelle Notre-Dame",
+      "sourceCvi": "1B309 04, 1R309 04, 1S309 04",
+      "wineColours": [
+        "red",
+        "white",
+        "rose"
+      ],
+      "communes": [
+        "21606"
+      ],
+      "expectedBounds": [
+        4.8,
+        47.0,
+        5.1,
+        47.4
+      ],
+      "aliases": [
+        "Bourgogne La Chapelle Notre-Dame"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Côte d’Or",
+        "Côte de Beaune"
+      ]
+    },
+    {
+      "id": "bourgogne-le-chapitre",
+      "name": "Bourgogne Le Chapitre",
+      "region": "Côte de Nuits",
+      "appellationId": 138,
+      "denominationId": 372,
+      "sourceName": "Bourgogne Le Chapitre",
+      "sourceCvi": "1B309 05, 1R309 05, 1S309 05",
+      "wineColours": [
+        "red",
+        "white",
+        "rose"
+      ],
+      "communes": [
+        "21166"
+      ],
+      "expectedBounds": [
+        4.8,
+        47.0,
+        5.1,
+        47.4
+      ],
+      "aliases": [
+        "Bourgogne Le Chapitre"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Côte d’Or",
+        "Côte de Nuits"
+      ],
+      "coordinateGrid": 1e-07,
+      "precisionNote": "The default 1e-6 grid changes the 5.027724 ha production area by +0.005683%, exceeding the unchanged 0.005% gate. The reviewed 1e-7 grid changes it by -0.001105% and retains every excluded hole and production part.",
+      "coverageNote": "This map covers the Bourgogne Le Chapitre denomination. Some producers have labelled Le Chapitre wines as Marsannay since the 2019 vintage. Follow the appellation on the bottle; the highlight shows the whole regional denomination, not an individual producer holding."
+    },
+    {
+      "id": "bourgogne-montrecul",
+      "name": "Bourgogne Montrecul",
+      "region": "Côte de Nuits",
+      "appellationId": 138,
+      "denominationId": 373,
+      "sourceName": "Bourgogne Montrecul ou Montre-Cul ou En Montre-Cul",
+      "sourceCvi": "1B309 06, 1R309 06, 1S309 06",
+      "wineColours": [
+        "red",
+        "white",
+        "rose"
+      ],
+      "communes": [
+        "21231"
+      ],
+      "expectedBounds": [
+        4.8,
+        47.0,
+        5.1,
+        47.4
+      ],
+      "aliases": [
+        "Bourgogne Montrecul",
+        "Bourgogne Montre-Cul",
+        "Bourgogne En Montre-Cul",
+        "Bourgogne En Montrecul",
+        "Bourgogne Montrecul ou Montre-Cul ou En Montre-Cul"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Côte d’Or",
+        "Côte de Nuits"
+      ]
     }
   ],
   "communeNames": {

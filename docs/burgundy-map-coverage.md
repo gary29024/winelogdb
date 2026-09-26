@@ -134,17 +134,19 @@ the plan because they lack a village AOC. See the
 - [x] Bourgogne Épineuil: Épineuil; red/rosé
 - [x] Bourgogne Côte Saint-Jacques: the delimited hillside in Joigny; red/white/rosé, including vin gris
 - [x] Bourgogne Tonnerre: all six communes, including Épineuil; white only
+- [x] Bourgogne La Chapelle Notre-Dame: Ladoix-Serrigny; red/white/rosé
+- [x] Bourgogne Le Chapitre: Chenôve; red/white/rosé, with an appellation-transition note
+- [x] Bourgogne Montrecul: Dijon; red/white/rosé, including Montre-Cul / En Montre-Cul aliases
 
-These are eleven geographic denominations within Bourgogne AOC, not eleven new
-AOCs or village maps. **Eleven of 49 regional source denominations are mapped.**
-The seven broad regional denominations, three other Bourgogne geographic
-denominations, Mâcon-Villages and 27 named Mâcon denominations remain pending.
-The three remaining Bourgogne names are La Chapelle Notre-Dame, Le Chapitre
-and Montrecul. The [Yonne source review](burgundy-regional-maps.md#yonne-source-review)
+All **14 Bourgogne geographic denominations** in the pinned source now have maps.
+These are denominations within Bourgogne AOC, not new AOCs or village maps.
+**Fourteen of 49 regional source denominations are mapped; 35 remain pending:**
+the seven broad regional denominations, Mâcon-Villages and 27 named Mâcon denominations.
+The [Yonne source review](burgundy-regional-maps.md#yonne-source-review)
 explains the five-commune Côtes d’Auxerre list and its difference from some
 seven-name promotional lists. It does not add boundaries from those lists.
 
-Within Bourgogne, review all 14 geographic denominations present in the pinned
+Within Bourgogne, the completed geographic-denomination inventory covers all 14 names in the pinned
 snapshot: Chitry, Côte Chalonnaise, Côte d'Or, Côte Saint-Jacques, Côtes d'Auxerre,
 Côtes du Couchois, Coulanges-la-Vineuse, Épineuil, Hautes Côtes de Beaune, Hautes
 Côtes de Nuits, La Chapelle Notre-Dame, Le Chapitre, Montrecul and Tonnerre.

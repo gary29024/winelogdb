@@ -115,8 +115,8 @@ def main():
         props = dict(id=feature_id, name=config['name'], tier='regional', kind='appellation',
                      appellationId=config['appellationId'], denominationId=config['denominationId'],
                      sourceName=config['sourceName'], communes=config['communes'], areaHa=round(whole_m.area / 10000, 2))
-        # Reviewed finer grids preserve Côte Chalonnaise's excluded hole and
-        # Côte Saint-Jacques's small area. Keep the same gates at either precision.
+        # Reviewed finer grids preserve excluded holes and small production
+        # areas. Keep the same gates at either precision; see each precisionNote.
         grid = config.get('coordinateGrid', GRID)
         assert grid in (GRID, 1e-7), 'Review a new precision before publishing'
         features = [dict(type='Feature', id=feature_id, properties=props, geometry=geometry_json(trimmed(whole, (whole_m, to_source), grid)))]
@@ -144,7 +144,7 @@ def main():
         url = f"/maps/{config['id']}.{DATE}.geojson"
         catalogue = dict(id=config['id'], name=config['name'], region=config['region'], mapKind='regional',
                          communes=communes, dataUrl=url, bounds=rounded(whole.bounds), sources=sources, notes={}, features=[metadata],
-                         coverageNote='A geographic denomination within Bourgogne AOC. The highlight shows its full INAO production area; named cuvées and producer holdings have no separate boundaries here.')
+                         coverageNote=config.get('coverageNote', 'A geographic denomination within Bourgogne AOC. The highlight shows its full INAO production area; named cuvées and producer holdings have no separate boundaries here.'))
         outputs.extend([(ROOT / 'public' / url.lstrip('/'), dict(type='FeatureCollection', features=features), True),
                         (PLACES / f"{config['id']}MapCatalogue.json", catalogue, False)])
         registry.append({**{key: config[key] for key in ('id', 'name', 'region', 'aliases', 'compatibleRegions', 'wineColours')}, 'featureId': feature_id})
