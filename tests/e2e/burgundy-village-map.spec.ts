@@ -406,6 +406,8 @@ test('Beaune and Volnay label spellings select the reviewed cru',async({page})=>
   ['Volnay','Les Taillepieds','inao-denom-1260','Red'],
   ['Beaune','Vignes Franches Clos des Ursules','inao-denom-319','Red'],
   ['Volnay','Caillerets Clos des 60 Ouvrées','inao-denom-1252','Red'],
+  ['Beaune','Bouchard Père & Fils Beaune Grèves','inao-denom-334','Red'],
+  ['Gevrey-Chambertin','Lavaux Saint-Jacques','inao-denom-609','Red'],
  ]){
   await setup(page,{appellation,wineName,colour});await page.goto('/wines/layout-wine');
   await page.getByRole('button',{name:'View village map'}).click();

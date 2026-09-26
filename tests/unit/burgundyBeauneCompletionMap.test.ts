@@ -54,10 +54,24 @@ describe('Santenay and Maranges producer labels',()=>{
   expect(burgundyVillageMapTarget({...wine,appellation:'Santenay',wineName:'Clos Rousseau et Grand Clos Rousseau'})?.featureId).toBe('inao-denom-1172');
   expect(burgundyVillageMapTarget({...wine,appellation:'Maranges',wineName:'Clos Rousseau'})?.scope).toBe('appellation');
  });
- it('keeps unparsed conjunctions in producer-prefixed titles conservative',()=>{
-  for(const wineName of ['Mestre Père et Fils Santenay Premier Cru Passe-Temps','Françoise et Denis Clair Clos de Tavannes Sélection']){
-   expect(burgundyVillageMapTarget({...wine,appellation:'Santenay',wineName})).toMatchObject({featureId:'inao-denom-1172',scope:'appellation'});
+ it('reads producer names in titles as producers, not blends',()=>{
+  for(const [appellation,wineName,id] of [
+   ['Santenay','Mestre Père et Fils Santenay Premier Cru Passe-Temps',1171],
+   ['Santenay','Domaine Vincent et Sophie Morey Santenay Les Gravières',1169],
+   ['Beaune','Bouchard Père & Fils Beaune Grèves Vigne de l\'Enfant Jésus',334],
+   ['Beaune','Bouchard Père et Fils Grèves',334],
+   ['Beaune','Maison Champy Frères et Cie Beaune Aux Cras',310],
+   ['Meursault','Domaine Pierre Morey et Fils Perrières',858],
+   ['Gevrey-Chambertin','Armand Rousseau Père et Fils Gevrey-Chambertin Lavaux St-Jacques',609],
+  ] as const)expect(burgundyVillageMapTarget({...wine,appellation,wineName}),wineName).toMatchObject({featureId:`inao-denom-${id}`,scope:'vineyard'});
+ });
+ it('keeps blends and unplaced first-name pairs broad',()=>{
+  for(const wineName of ['Santenay Les Gravières et Clos Genet','Les Gravières & Beauregard','Santenay Les Gravières & Beauregard',
+   'Françoise et Denis Clair Clos de Tavannes Sélection']){
+   expect(burgundyVillageMapTarget({...wine,appellation:'Santenay',wineName}),wineName).toMatchObject({featureId:'inao-denom-1172',scope:'appellation'});
   }
+  // An ampersand outside the title still marks a blend.
+  expect(burgundyVillageMapTarget({...wine,appellation:'Santenay',wineName:'',referenceSite:'Les Gravières & Beauregard'})?.featureId).toBe('inao-denom-1172');
  });
  it('retains equal Tavannes boundaries without counting an extra climat',()=>{
   expect(geometry(santenay,1164)).toEqual(geometry(santenay,1170));

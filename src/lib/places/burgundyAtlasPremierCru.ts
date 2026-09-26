@@ -44,6 +44,8 @@ function nameVariants(name:string){
 // never reaches this alias.
 // Sources: docs/burgundy-village-map.md. Do not use fuzzy matching for identities.
 const reviewedNameAliases:Record<string,Record<string,string[]>>={
+  // Armand Rousseau and most labels write Lavaux; INAO writes Lavaut.
+  'Gevrey-Chambertin':{'Lavaut Saint-Jacques':['Lavaux Saint-Jacques']},
   'Vosne-Romanée':{'Les Petis Monts':['Les Petits Monts'],'Aux Raignots':['Aux Reignots']},
   'Nuits-Saint-Georges':{'Les Saints-Georges':['Les Saint-Georges']},
   // Domaine Leflaive's label spelling; the INAO/Atlas source writes Clavaillon.
@@ -106,16 +108,25 @@ function remainder(text:string,found:Match[]){
 }
 
 function separateVillage(text:string,group:Group){
-  const crus=matches(text,group),characters=[...text];let named=false;
+  const crus=matches(text,group),characters=[...text];let named=false,firstEnd=0;
   for(const match of text.matchAll(patternFor(group.key))){
     const start=match.index!,end=start+match[0].length;
     // Blagny inside "Sous Blagny" is part of the climat, not evidence of the
     // appellation (the same climat name also exists under Meursault).
     if(crus.some(cru=>cru.start<=start&&cru.end>=end&&cru.end-cru.start>end-start))continue;
-    characters.fill(' ',start,end);named=true;
+    characters.fill(' ',start,end);if(!named)firstEnd=end;named=true;
   }
-  return {text:characters.join('').replace(/\s+/g,' ').trim(),named};
+  const collapse=(value:string[])=>value.join('').replace(/\s+/g,' ').trim();
+  // What follows the first village name: in a title, the text before it is
+  // producer text.
+  return {text:collapse(characters),named,after:collapse(characters.slice(firstEnd))};
 }
+
+// Producer names are not blends: Bouchard Père & Fils, Mestre Père et Fils,
+// Pierre Morey et Fils.
+// Family phrases leave the title before a conjunction is read as a blend.
+const producerPhrase=/\b(?:pere|mere|freres?|fils|filles?|soeurs?|enfants|cousins?)(?: et (?:fils|filles?|freres?|soeurs?|enfants|cousins?|cie))+\b|\bet (?:cie|fils|filles|freres|soeurs)\b/g;
+const titleKey=(value:string)=>textKey(value.replace(/&/g,' et ')).replace(producerPhrase,' ').replace(/\s+/g,' ').trim();
 
 const regionNames=PLACES.filter(place=>place.id.startsWith('france/burgundy')).flatMap(place=>
   [place.name,...place.aliases].map(name=>({key:nameKey(name),id:place.id})));
@@ -134,8 +145,11 @@ export function burgundyAtlasPremierCru(wine:Wine):BurgundyAtlasPlace|null{
   // The classification marker matters: several climats include village-level
   // land as well. A bare vineyard name does not establish Premier Cru status.
   if(!namesPremierCru(wine))return null;
-  if(raw.some(value=>/\b(?:grand\s+cru|blend|assemblage|melange|multi(?:ple)? (?:plots|parcelles|climats|vineyards))\b/.test(nameKey(value))||/[/&+]/.test(value)))return null;
-  const fields=raw.map(textKey),region=textKey(wine.region??'');
+  // An ampersand in the title is read as "et" below, so a producer's "&" is
+  // judged like any other conjunction; elsewhere it still marks a blend.
+  if(raw.some((value,index)=>/\b(?:grand\s+cru|blend|assemblage|melange|multi(?:ple)? (?:plots|parcelles|climats|vineyards))\b/.test(nameKey(value))||
+    (index===1?/[/+]/:/[/&+]/).test(value)))return null;
+  const fields=raw.map((value,index)=>index===1?titleKey(value):textKey(value)),region=textKey(wine.region??'');
   const destinations:BurgundyAtlasPlace[]=[];
   for(const group of groups){
     if(!compatibleRegion(region,group))continue;
@@ -147,7 +161,11 @@ export function burgundyAtlasPremierCru(wine:Wine):BurgundyAtlasPlace|null{
       // Remove the village before looking for the cru: "Chassagne" is itself
       // a climat and must not match the village name Chassagne-Montrachet.
       const text=separated[index].text,found=matches(text,group),rest=remainder(text,found);
-      if(groups.some(other=>other!==group&&contains(rest,other.key))||/\b(?:et|and|ou)\b/.test(rest)){
+      // In a title that names the village, a conjunction before it belongs to
+      // the producer (Domaine Vincent et Sophie Morey Santenay Les Gravières);
+      // after it, it still marks a blend (Les Gravières et Clos Genet).
+      const {after,named}=separated[index],joined=index===1&&named?remainder(after,matches(after,group)):rest;
+      if(groups.some(other=>other!==group&&contains(rest,other.key))||/\b(?:et|and|ou)\b/.test(joined)){
         invalid=true;break;
       }
       // Appellation and reference fields must name a whole place. Only the

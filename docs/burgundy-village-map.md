@@ -533,10 +533,18 @@ Producer spelling cases:
   exercise ordinary title text and article omissions without merging neighbours.
 
 All accepted spellings also have complete-reference-field and blend tests.
-Unparsed conjunctions remain conservative: full titles prefixed with “Mestre
-Père et Fils” or “Françoise et Denis Clair” keep the broad Premier Cru area.
-Their wine names without that producer prefix select the named cru. No general
-relaxation of the existing `et`/blend guard is included in this batch.
+Producer names in a wine title are not read as blends. Family phrases such as
+Père et Fils, Père & Fils, Frères et Cie and a trailing et Fils are removed from
+the title, and where the title names the village, a conjunction before the
+village belongs to the producer: “Mestre Père et Fils Santenay Passe-Temps”,
+“Bouchard Père & Fils Beaune Grèves” and “Domaine Vincent et Sophie Morey
+Santenay Les Gravières” select their cru. After the village, or in a title that
+does not name it, `et`/`&` still marks a blend and keeps the broad area: “Santenay
+Les Gravières et Clos Genet”, and “Françoise et Denis Clair Clos de Tavannes”,
+whose first-name pair cannot be told from two vineyards. Outside the title, `&`
+still marks a blend. Gevrey's Lavaut Saint-Jacques accepts the label spelling
+[Lavaux Saint-Jacques](https://frederickwildman.com/producers/domaine-armand-rousseau/2022-domaine-armand-rousseau-gevrey-chambertin-1er-cru-lavaux-saint-jacques/)
+(Armand Rousseau).
 
 The #343 review's Cadastre lieux-dits suggestion is retained in the
 [coverage backlog](burgundy-map-coverage.md). It needs a separate source review:
