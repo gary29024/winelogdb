@@ -1,7 +1,7 @@
 # Burgundy village maps
 
 Wine details and shared wine details offer **View village map** for mapped
-Côte de Nuits, Côte de Beaune and Côte Chalonnaise wines across thirty-four village appellations,
+Côte de Nuits, Côte de Beaune, Côte Chalonnaise and Mâconnais wines across thirty-nine village appellations,
 including the Grand Crus of Flagey-Échezeaux, Clos de Vougeot and the Montrachet
 group, plus Corton, Corton-Charlemagne and Charlemagne. The dialog shows neighbouring cru boundaries, highlights
 the wine's matched INAO designation, and supports selection, pan/zoom, a village
@@ -47,15 +47,20 @@ The existing Burgundy Atlas link remains available where Atlas has a page.
 | Mercurey / Saint-Martin-sous-Montaigu | 0 | 32 | 2 | 34 |
 | Givry / Dracy-le-Fort / Jambles | 0 | 37 of 38 climats | 2 | 39 |
 | Montagny (four communes) | 0 | 49 | 2 | 51 |
+| Pouilly-Fuissé (four communes) | 0 | 22 | 3 | 25 |
+| Pouilly-Loché / Mâcon (Loché) | 0 | 1 | 2 | 3 |
+| Pouilly-Vinzelles | 0 | 3 | 2 | 5 |
+| Saint-Véran (seven communes) | 0 | 0 | 1 | 1 |
+| Viré-Clessé (four communes) | 0 | 0 | 2 | 2 |
 
-There are 718 distinct wine identities (656 vineyard targets and 62 broad areas),
+There are 754 distinct wine identities (682 vineyard targets and 72 broad areas),
 plus twenty-two colour-specific views sharing eleven village appellation identities.
 Bonnes-Mares, Montrachet and Bâtard-Montrachet each appear in two maps and count
 once in the identity registry. The Corton group's 27 boundaries appear in three
-maps and likewise count once. There are 797 wine features across the thirty-four maps.
+maps and likewise count once. There are 833 wine features across the thirty-nine maps.
 Corton itself is a broad Grand Cru appellation target; its 24 named climats are
 separate vineyard targets, not 24 additional Grand Cru appellations. Overall,
-the maps cover 601 named Premier Cru source designations (600 climats after the
+the maps cover 627 named Premier Cru source designations (626 climats after the
 reviewed Santenay alternative name) and 32 Grand Cru appellations.
 The [full Burgundy coverage checklist](burgundy-map-coverage.md) tracks all 44
 village appellations and the remaining Grand Cru and regional work.
@@ -294,7 +299,7 @@ Atlas's map geometry or assets is copied.
   Tests exercise these with a recorded appellation; abbreviated "Savigny" alone
   is not a new appellation alias. Cru aliases stay scoped to the full village.
 
-Download the 49 distinct source URLs recorded in the thirty-four catalogues into a
+Download the 65 distinct source URLs recorded in the thirty-nine catalogues into a
 local temporary directory. Name the INAO archive `inao-2026-09-21.zip` and each
 commune file `commune-{code}.json.gz`. Required commune codes are:
 `21110`, `21133`, `21166`, `21186`, `21194`, `21200`, `21265`, `21267`, `21295`,
@@ -302,7 +307,9 @@ commune file `commune-{code}.json.gz`. Required commune codes are:
 `71369`, `21541`, `21010`, `21480`, `21606`, `21054`, `21492`, `21712`, `21590`,
 `21173`, `21037`, `21428`, `21569`, `21582`, `71122`, `71174`, `71496`,
 `71051`, `71070`, `71073`, `71109`, `71182`, `71221`, `71241`, `71247`,
-`71294`, `71302`, `71378`, `71459`, and `71485`. Then:
+`71294`, `71302`, `71378`, `71459`, `71485`, `71074`, `71084`, `71108`, `71135`,
+`71169`, `71210`, `71250`, `71258`, `71270`, `71305`, `71360`, `71487`, `71526`,
+`71567`, `71583`, and `71584`. Then:
 
 ```sh
 python -m pip install -r scripts/burgundy-map-requirements.txt
@@ -397,10 +404,11 @@ map names each part on its overview and adds a toolbar button that zooms to it.
 Shared designations are unioned across all source communes, never clipped to a
 village boundary. The original Gevrey GeoJSON remains byte-for-byte unchanged.
 
-The thirty-four GeoJSON files under `public/maps/` range from approximately
-75 KB (Vougeot) to 2,000 KB (Côte de Beaune-Villages), uncompressed. This batch
-adds 80 KB (Bouzeron), 335 KB (Rully), 519 KB (Mercurey), 740 KB (Givry) and
-787 KB (Montagny), each downloaded only when its map is opened.
+The thirty-nine GeoJSON files under `public/maps/` range from approximately
+59 KB (Pouilly-Vinzelles) to 2,000 KB (Côte de Beaune-Villages), uncompressed.
+This batch adds 1,430 KB (Pouilly-Fuissé), 146 KB (Pouilly-Loché), 59 KB
+(Pouilly-Vinzelles), 602 KB (Saint-Véran) and 719 KB (Viré-Clessé), each
+downloaded only when its map is opened.
 There are no database migrations, research/AI calls, API keys or background Atlas
 requests. Only opening the dialog requests geography and the external base map.
 The browser's public tile requests contain map locations, not wine records.
@@ -424,6 +432,12 @@ climats without source geometry; they participate in tier and ambiguity checks
 but cannot select another vineyard. Givry uses both mechanisms. `coverageNote`
 provides an always-visible explanation of a map's known source gap.
 
+`localPremierIdentity` supports a missing Atlas Premier Cru tier while preserving
+an existing Atlas village link. Local named groups participate in matching even
+when there are no named Atlas paths for that appellation. `villageAreaDenominations`
+preserves additional broad village source designations as selectable local areas;
+they are never matched to an individual plot just because a wine has a climat name.
+
 Review actual producer labels before opening each PR. Include the producer's
 spelling, article omissions, compound names and older labels in regression cases,
 with primary sources recorded above. Exercise complete reference fields as well
@@ -442,6 +456,7 @@ npx vitest run tests/unit/burgundyVillageMap.test.ts tests/unit/burgundyCortonMa
 npx vitest run tests/unit/burgundyBeauneNeighboursMap.test.ts
 npx vitest run tests/unit/burgundyBeauneCompletionMap.test.ts
 npx vitest run tests/unit/burgundyChalonnaiseMap.test.ts
+npx vitest run tests/unit/burgundyMaconnaisMap.test.ts
 npx playwright test tests/e2e/burgundy-village-map.spec.ts tests/e2e/burgundy-atlas.spec.ts --project=chromium
 npm run build
 npm run lint
@@ -450,7 +465,7 @@ npm run lint
 Browser coverage uses the real MapLibre renderer with the street map unavailable,
 checking local geometry, selection, owner/shared parity, small-screen layouts,
 load-on-demand, retry, Escape and focus restoration. The source import and unit
-checks cover all 656 vineyard targets, coverage in Brochon, Flagey, Premeaux and Remigny, intentional overlap,
+checks cover all 682 vineyard targets, coverage in Brochon, Flagey, Premeaux and Remigny, intentional overlap,
 identical Bonnes-Mares geometry in both contexts, and village-specific matches for
 repeated names such as Les Gruenchers and La Romanée. They distinguish Échezeaux
 from Grands-Échezeaux and verify reviewed Vosne spelling aliases and broad-area
@@ -632,5 +647,77 @@ selection, return to the wine, focus restoration and unavailable street tiles.
 Dedicated browser checks verify Givry's local names and visible source gap,
 white-only colour guards and the absence of a Bouzeron Premier Cru map.
 
-Next: Pouilly-Fuissé, Pouilly-Loché, Pouilly-Vinzelles, Saint-Véran and Viré-Clessé,
-with another source/Atlas-gap review before claiming their plot coverage.
+The Mâconnais batch below follows this coverage.
+
+## Mâconnais: source and producer review
+
+Reviewed 26 September 2026. The five maps add 36 source wine designations,
+including 26 named Premier Crus, across 16 distinct producing communes. All five
+appellations are white Chardonnay. Source geometry is retained without clipping.
+
+- [The Pouilly-Fuissé producers' union](https://www.pouilly-fuisse.net/en/)
+  confirms 22 Premier Cru climats since 2020. All 22 have named Atlas paths and
+  INAO geometry (`2866–2887`); Vers Cras (`2876`) crosses Fuissé and Solutré-Pouilly.
+  Source `1056`, “complété par une dénomination de climat”, is an additional broad
+  village area, not a named vineyard. Both it and village `1055` remain selectable;
+  their source geometries differ and are not merged.
+- [The Loché/Vinzelles ODG announcement](https://www.bourgogne-wines.com/press/gallery_files/site/289/1910/78880.pdf)
+  confirms Premier Cru status from vintage 2024: Les Mûres in Pouilly-Loché;
+  Les Longeays, Les Pétaux and Les Quarts in Pouilly-Vinzelles. All four boundaries
+  are in this INAO source, but none has an Atlas map path, nor does either broad
+  Premier Cru tier. They use local INAO identities while village wines keep their
+  existing Atlas village link. Naming a climat does not promote a recorded village
+  wine. The parser requires recorded Premier Cru classification or a tier marker;
+  it does not infer classification from the vintage year.
+- [INAO's Vinzelles delimitation review](https://extranet.inao.gouv.fr/fichier/CNAOV-2016-419-Pouilly-Vinzelles.pdf)
+  confirms the producing area is limited to Vinzelles. [The corresponding Loché review](https://extranet.inao.gouv.fr/fichier/CNAOV-2016-418-Pouilly-Loche.pdf)
+  places Loché within Mâcon. The current Mâcon commune outline is used for context,
+  with the wine-area extent setting the initial map view. Loché's broad Premier
+  Cru `2931` and named Les Mûres `2932` are nearly coincident, with about 1.43 m² of
+  symmetric difference. Both original boundaries remain; an unnamed wine still
+  opens the broad area rather than claiming a plot.
+- [The Saint-Véran specification](https://info.agriculture.gouv.fr/gedei/site/bo-agri/document_administratif-3347bbb6-daf8-46cf-acd2-eadb38e54177/telechargement)
+  and [its producers' union](https://saint-veran-bourgogne.com/) name seven producing
+  communes: Chânes, Chasselas, Davayé, Leynes, Prissé, Saint-Vérand and Solutré-Pouilly.
+  All are present in the source. The northern and southern areas have separate
+  zoom controls. Published village climats, such as Les Pommards, lack individual
+  geometry here; the map keeps village scope and does not invent Premier Crus.
+- [The Viré-Clessé producers' union](https://vireclesse.com/cahier-des-charges-appellation/)
+  confirms Viré, Clessé, Montbellet and Laizé, and distinguishes wines bearing a
+  climat name. Source `1593` is their broad named-climat eligibility area, smaller
+  than full village `1287`; it is selectable but cannot stand in for Quintaine
+  or another individual vineyard. No named plots are supplied for this map.
+
+Producer label checks go beyond matching the source names:
+
+- [Château Fuissé](https://chateau-fuisse.fr/2-7-ha-en-1er-cru-monopole/) identifies
+  Le Clos as its Premier Cru monopole. A bare “clos” is not a sufficient match,
+  nor is “Le Clos” at the start of an unrelated clos name.
+- [Merlin's published labels](https://merlin-vins.com/fr/2020-la-naissance-des-pouilly-fuisse-premiers-crus/)
+  verify Aux Vignerais for Au Vignerais, En France / Clos de France, and Aux Quarts /
+  Clos des Quarts. The last two select the full official climat with a note about
+  the missing producer subdivision. Aux Quarts in Chaintré remains separate from
+  Les Quarts in Pouilly-Vinzelles.
+- Ferret identifies [Clos de Jeanne](https://www.domaine-ferret.com/fr/vin/2/tete-de-cru-quot-clos-de-jeanne-quot)
+  and [La Baudotte](https://www.domaine-ferret.com/fr/vin/3/tete-de-cru-quot-les-perrieres-quot)
+  within Les Perrières, and [Tournant de Pouilly](https://www.domaine-ferret.com/fr/vin/5/cuvee-hors-classe-quot-tournant-de-pouilly-quot)
+  within Les Reisses. These reviewed names select the whole official climat with
+  an extent note. Ferret's historical “Le Clos” title stays broad when no modern
+  name resolves it, preventing a false match to Château Fuissé's Le Clos. Tournant
+  de Pouilly never resolves to the separate Pouilly Premier Cru.
+- [Clos des Rocs' Les Mûres](https://www.closdesrocs.fr/vins/pouilly-loche-mures-v6.php)
+  and [Bret Brothers / La Soufrandière's 2024 labels](https://www.bretbrothers.com/document/cixk)
+  cover local named identities and producer conjunctions. Complete reference
+  fields, blends, village classifications and geography conflicts are tested too.
+
+An independent source comparison verifies all 36 projected wine geometries,
+three derived Premier Cru overview fills, areas, colour codes and commune IDs,
+plus all 16 Cadastre outlines and recorded hashes. All 34 prior maps/catalogues,
+registry targets and existing umbrella relationships are unchanged. The #346
+Clos du Roi, Clos de la Barraude and Cellier aux Moines review fixes are retained.
+Browser coverage includes owner/shared views, lazy loading, selection, return
+to the wine, mobile layouts, local-only Premier Cru links and the two Saint-Véran
+area controls. The full 44-appellation checklist now stands at **39/44**.
+
+Next: Chablis, Petit Chablis, Irancy, Saint-Bris and Vézelay, including a separate
+review of Chablis Premier Cru source gaps and the seven Chablis Grand Cru climats.

@@ -35,6 +35,11 @@ const loaders=new Map<string,()=>Promise<{default:VillageMapCatalogue}>>([
  ['mercurey',()=>import('./mercureyVillageMapCatalogue.json')],
  ['givry',()=>import('./givryVillageMapCatalogue.json')],
  ['montagny',()=>import('./montagnyVillageMapCatalogue.json')],
+ ['pouilly-fuisse',()=>import('./pouillyFuisseVillageMapCatalogue.json')],
+ ['pouilly-loche',()=>import('./pouillyLocheVillageMapCatalogue.json')],
+ ['pouilly-vinzelles',()=>import('./pouillyVinzellesVillageMapCatalogue.json')],
+ ['saint-veran',()=>import('./saintVeranVillageMapCatalogue.json')],
+ ['vire-clesse',()=>import('./vireClesseVillageMapCatalogue.json')],
 ]);
 
 export async function loadVillageMapCatalogue(villageId:string):Promise<VillageMapCatalogue>{

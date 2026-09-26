@@ -1517,6 +1517,304 @@
         912
       ],
       "unionOverviewFills": true
+    },
+    {
+      "id": "pouilly-fuisse",
+      "name": "Pouilly-Fuissé",
+      "region": "Mâconnais",
+      "appellationId": 216,
+      "villageDenomination": 1055,
+      "grands": [],
+      "communes": [
+        {
+          "id": "71210",
+          "name": "Fuissé"
+        },
+        {
+          "id": "71526",
+          "name": "Solutré-Pouilly"
+        },
+        {
+          "id": "71567",
+          "name": "Vergisson"
+        },
+        {
+          "id": "71074",
+          "name": "Chaintré"
+        }
+      ],
+      "catalogueFile": "pouillyFuisseVillageMapCatalogue.json",
+      "nameCrosswalk": {},
+      "notes": {
+        "inao-denom-1055": {
+          "note": "This is the full published Pouilly-Fuissé white-wine appellation area. Individual village lieux-dits and producer holdings are not mapped separately."
+        },
+        "inao-denom-1056": {
+          "note": "This source designation covers the area eligible for a village wine labelled with a climat name. It is a broad area across all four communes, not the boundary of one climat or a Premier Cru."
+        },
+        "inao-denom-2876": {
+          "note": "Vers Cras spans Fuissé and Solutré-Pouilly. Its full Premier Cru production boundary is retained across both communes."
+        },
+        "inao-denom-2866": {
+          "note": "Aux Quarts is the Pouilly-Fuissé Premier Cru in Chaintré, distinct from Les Quarts in Pouilly-Vinzelles. A Clos des Quarts label selects this full climat; the producer's enclosed holding is not mapped separately."
+        },
+        "inao-denom-2865": {
+          "note": "The broad Premier Cru area covers 22 named climats across Fuissé, Solutré-Pouilly, Vergisson and Chaintré. The classification dates from the 2020 vintage; a village wine is not promoted from its plot name alone."
+        },
+        "inao-denom-2873": {
+          "note": "Les Perrières includes Ferret's Clos de Jeanne and La Baudotte. These labels select the full Premier Cru boundary; their producer subdivisions have no separate geometry here. Clos de Jeanne is distinct from Château Fuissé's Le Clos."
+        },
+        "inao-denom-2874": {
+          "note": "Ferret's Tournant de Pouilly lies within Les Reisses. The map shows the full Les Reisses Premier Cru boundary, not the smaller producer parcel or the separate Pouilly climat."
+        },
+        "inao-denom-2884": {
+          "note": "A Clos de France label selects the full En France Premier Cru boundary. The producer's enclosed holding is not mapped separately."
+        },
+        "inao-denom-2870": {
+          "note": "Le Clos is Château Fuissé's Premier Cru monopole. Ferret's historical Le Clos label refers to a different parcel, now called Clos de Jeanne within Les Perrières."
+        }
+      },
+      "expectedBounds": [
+        4.65,
+        46.2,
+        4.9,
+        46.5
+      ],
+      "wineColours": [
+        "white"
+      ],
+      "premierDenomination": 2865,
+      "premierRange": [
+        2866,
+        2887
+      ],
+      "unionOverviewFills": true,
+      "villageAreaDenominations": {
+        "1056": "Pouilly-Fuissé (named-climat area)"
+      }
+    },
+    {
+      "id": "pouilly-loche",
+      "name": "Pouilly-Loché",
+      "region": "Mâconnais",
+      "appellationId": 217,
+      "villageDenomination": 1057,
+      "grands": [],
+      "communes": [
+        {
+          "id": "71270",
+          "name": "Mâcon (Loché)"
+        }
+      ],
+      "catalogueFile": "pouillyLocheVillageMapCatalogue.json",
+      "nameCrosswalk": {},
+      "notes": {
+        "inao-denom-1057": {
+          "note": "The Pouilly-Loché production area lies in Loché, an associated commune of Mâcon. The outline is the current Mâcon commune boundary. Named village plots remain unmapped."
+        },
+        "inao-denom-2931": {
+          "note": "Les Mûres is the only Premier Cru, recognised from the 2024 vintage. Its named boundary and the broad Premier Cru area are almost coincident in this source; an unnamed wine still keeps appellation scope."
+        },
+        "inao-denom-2932": {
+          "note": "Les Mûres is the Pouilly-Loché Premier Cru, recognised from the 2024 vintage. This is the full climat boundary, not a producer holding."
+        }
+      },
+      "expectedBounds": [
+        4.65,
+        46.2,
+        4.9,
+        46.5
+      ],
+      "wineColours": [
+        "white"
+      ],
+      "premierDenomination": 2931,
+      "premierDenominations": [
+        2932
+      ],
+      "localPremierDenominations": [
+        2932
+      ],
+      "localPremierIdentity": true,
+      "regionId": "france/burgundy/maconnais",
+      "unionOverviewFills": true,
+      "displayNames": {
+        "les Mûres": "Les Mûres"
+      }
+    },
+    {
+      "id": "pouilly-vinzelles",
+      "name": "Pouilly-Vinzelles",
+      "region": "Mâconnais",
+      "appellationId": 218,
+      "villageDenomination": 1059,
+      "grands": [],
+      "communes": [
+        {
+          "id": "71583",
+          "name": "Vinzelles"
+        }
+      ],
+      "catalogueFile": "pouillyVinzellesVillageMapCatalogue.json",
+      "nameCrosswalk": {},
+      "notes": {
+        "inao-denom-1059": {
+          "note": "This is the full published Pouilly-Vinzelles white-wine appellation area. Individual village lieux-dits and producer holdings are not mapped separately."
+        },
+        "inao-denom-2927": {
+          "note": "The Premier Cru area covers Les Longeays, Les Pétaux and Les Quarts, recognised from the 2024 vintage. A recorded village wine is not promoted from its plot name alone."
+        },
+        "inao-denom-2930": {
+          "note": "Les Quarts is in Pouilly-Vinzelles. It is distinct from Aux Quarts in Pouilly-Fuissé; the recorded appellation determines the boundary."
+        }
+      },
+      "expectedBounds": [
+        4.65,
+        46.2,
+        4.9,
+        46.5
+      ],
+      "wineColours": [
+        "white"
+      ],
+      "premierDenomination": 2927,
+      "premierRange": [
+        2928,
+        2930
+      ],
+      "localPremierDenominations": [
+        2928,
+        2929,
+        2930
+      ],
+      "localPremierIdentity": true,
+      "regionId": "france/burgundy/maconnais",
+      "unionOverviewFills": true
+    },
+    {
+      "id": "saint-veran",
+      "name": "Saint-Véran",
+      "region": "Mâconnais",
+      "appellationId": 229,
+      "villageDenomination": 1158,
+      "grands": [],
+      "communes": [
+        {
+          "id": "71360",
+          "name": "Prissé"
+        },
+        {
+          "id": "71169",
+          "name": "Davayé"
+        },
+        {
+          "id": "71526",
+          "name": "Solutré-Pouilly"
+        },
+        {
+          "id": "71108",
+          "name": "Chasselas"
+        },
+        {
+          "id": "71258",
+          "name": "Leynes"
+        },
+        {
+          "id": "71084",
+          "name": "Chânes"
+        },
+        {
+          "id": "71487",
+          "name": "Saint-Vérand"
+        }
+      ],
+      "catalogueFile": "saintVeranVillageMapCatalogue.json",
+      "nameCrosswalk": {},
+      "notes": {
+        "inao-denom-1158": {
+          "note": "Saint-Véran has separate northern and southern areas across seven producing communes. Named village climats such as Les Pommards and Les Cras have no separate boundaries in this source. No Premier Cru status is inferred."
+        }
+      },
+      "expectedBounds": [
+        4.65,
+        46.2,
+        4.9,
+        46.5
+      ],
+      "wineColours": [
+        "white"
+      ],
+      "areas": [
+        {
+          "id": "north",
+          "label": "North",
+          "name": "Prissé, Davayé & Solutré-Pouilly",
+          "communes": [
+            "71360",
+            "71169",
+            "71526"
+          ]
+        },
+        {
+          "id": "south",
+          "label": "South",
+          "name": "Chasselas, Leynes, Chânes & Saint-Vérand",
+          "communes": [
+            "71108",
+            "71258",
+            "71084",
+            "71487"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "vire-clesse",
+      "name": "Viré-Clessé",
+      "region": "Mâconnais",
+      "appellationId": 246,
+      "villageDenomination": 1287,
+      "grands": [],
+      "communes": [
+        {
+          "id": "71584",
+          "name": "Viré"
+        },
+        {
+          "id": "71135",
+          "name": "Clessé"
+        },
+        {
+          "id": "71305",
+          "name": "Montbellet"
+        },
+        {
+          "id": "71250",
+          "name": "Laizé"
+        }
+      ],
+      "catalogueFile": "vireClesseVillageMapCatalogue.json",
+      "nameCrosswalk": {},
+      "notes": {
+        "inao-denom-1287": {
+          "note": "This is the full published Viré-Clessé white-wine appellation area. Individual village lieux-dits and producer holdings are not mapped separately."
+        },
+        "inao-denom-1593": {
+          "note": "This is the published area eligible for a Viré-Clessé wine labelled with a climat name. It is smaller than the full appellation area and does not identify a particular vineyard. Individual climats such as Quintaine remain unmapped."
+        }
+      },
+      "expectedBounds": [
+        4.65,
+        46.2,
+        4.9,
+        46.5
+      ],
+      "wineColours": [
+        "white"
+      ],
+      "villageAreaDenominations": {
+        "1593": "Viré-Clessé (named-climat area)"
+      }
     }
   ]
 }

@@ -210,6 +210,11 @@ for(const village of [
  {id:'mercurey',name:'Mercurey',cru:'Clos des Myglands',tier:'premier_cru',feature:'inao-denom-818',count:34,catalogue:'mercureyVillageMapCatalogue',explore:'inao-denom-819',label:'Clos du Château de Montaigu'},
  {id:'givry',name:'Givry',cru:'La Plante',tier:'premier_cru',feature:'inao-denom-639',count:39,catalogue:'givryVillageMapCatalogue',explore:'inao-denom-2327',label:'La Matrosse'},
  {id:'montagny',name:'Montagny',cru:'Les Coères',tier:'premier_cru',colour:'White',feature:'inao-denom-886',count:51,catalogue:'montagnyVillageMapCatalogue',explore:'inao-denom-894',label:'Les Paquiers'},
+ {id:'pouilly-fuisse',name:'Pouilly-Fuissé',cru:'Vers Cras',tier:'premier_cru',colour:'White',feature:'inao-denom-2876',count:25,catalogue:'pouillyFuisseVillageMapCatalogue',explore:'inao-denom-2866',label:'Aux Quarts'},
+ {id:'pouilly-loche',name:'Pouilly-Loché',cru:'Les Mûres',tier:'premier_cru',colour:'White',feature:'inao-denom-2932',count:3,catalogue:'pouillyLocheVillageMapCatalogue',explore:'inao-denom-2931',label:'Pouilly-Loché Premier Cru'},
+ {id:'pouilly-vinzelles',name:'Pouilly-Vinzelles',cru:'Les Quarts',tier:'premier_cru',colour:'White',feature:'inao-denom-2930',count:5,catalogue:'pouillyVinzellesVillageMapCatalogue',explore:'inao-denom-2929',label:'Les Longeays'},
+ {id:'saint-veran',name:'Saint-Véran',cru:'Les Pommards',tier:'village',colour:'White',feature:'inao-denom-1158',count:1,catalogue:'saintVeranVillageMapCatalogue',explore:'inao-denom-1158',label:'Saint-Véran'},
+ {id:'vire-clesse',name:'Viré-Clessé',cru:'Quintaine',tier:'village',colour:'White',feature:'inao-denom-1287',count:2,catalogue:'vireClesseVillageMapCatalogue',explore:'inao-denom-1593',label:'Viré-Clessé (named-climat area)'},
 ]){
  for(const route of ['/wines/layout-wine','/shared/layout-wine']){
   test(`${village.name} ${route}: opens the correct boundary and keeps its full village context`,async({page},testInfo)=>{
@@ -252,6 +257,88 @@ for(const village of [
   });
  }
 }
+
+test('Mâconnais local Premier Cru maps keep village Atlas links separate',async({page})=>{
+ for(const row of [
+  {appellation:'Pouilly-Loché',wineName:'Les Mûres',named:'inao-denom-2932',broad:'inao-denom-2931'},
+  {appellation:'Pouilly-Vinzelles',wineName:'Les Quarts',named:'inao-denom-2930',broad:'inao-denom-2927'},
+ ]){
+  await setup(page,{...row,colour:'White',wineStyle:'white'});await page.goto('/shared/layout-wine');
+  await expect(page.getByRole('link',{name:/Explore on Burgundy Atlas/})).toHaveCount(0);
+  await page.getByRole('button',{name:'View village map'}).click();
+  const dialog=page.getByRole('dialog');
+  await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
+  await expect(dialog.getByRole('combobox')).toHaveValue(row.named);
+  await expect(dialog.getByRole('link',{name:/Explore on Burgundy Atlas/})).toHaveCount(0);
+  await dialog.getByRole('combobox').selectOption(row.broad);
+  await expect(dialog.locator('.village-map-selected-label')).toHaveCount(0);
+  await expect(dialog.getByText('Appellation area shown; no single vineyard is identified.')).toBeVisible();
+  await expect(dialog.getByRole('link',{name:/Explore on Burgundy Atlas/})).toHaveCount(0);
+  await page.keyboard.press('Escape');
+  await setup(page,{...row,colour:'White',wineStyle:'white',classification:'village'});await page.goto('/wines/layout-wine');
+  await expect(page.getByRole('link',{name:/Explore on Burgundy Atlas/})).toHaveCount(1);
+  await page.getByRole('button',{name:'View village map'}).click();
+  await expect(page.getByRole('dialog').locator('.village-map-selected-label')).toHaveCount(0);
+  await page.keyboard.press('Escape');
+ }
+});
+
+test('Pouilly-Fuissé producer subdivisions select their full official climat',async({page})=>{
+ for(const row of [
+  {wineName:'Domaine Ferret Pouilly-Fuissé Le Clos de Jeanne',id:'inao-denom-2873',label:'Les Perrières',note:'producer subdivisions'},
+  {wineName:'Domaine Ferret Tournant de Pouilly',id:'inao-denom-2874',label:'Les Reisses',note:'full Les Reisses'},
+  {wineName:'Château des Quarts Aux Quarts Clos des Quarts',id:'inao-denom-2866',label:'Aux Quarts',note:'full climat'},
+ ]){
+  await setup(page,{appellation:'Pouilly-Fuissé',wineName:row.wineName,colour:'White',wineStyle:'white'});await page.goto('/wines/layout-wine');
+  await page.getByRole('button',{name:'View village map'}).click();
+  const dialog=page.getByRole('dialog');
+  await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
+  await expect(dialog.getByRole('combobox')).toHaveValue(row.id);
+  await expect(dialog.locator('.village-map-selected-label')).toHaveText(row.label);
+  await expect(dialog.locator('.village-map-overlap')).toContainText(row.note);
+  await page.keyboard.press('Escape');
+ }
+});
+
+test('Saint-Véran area controls and Viré-Clessé climat area retain broad scope',async({page},testInfo)=>{
+ await setup(page,{appellation:'Saint-Véran',wineName:'Les Pommards',classification:'village',colour:'White',wineStyle:'white'});
+ await page.setViewportSize({width:320,height:900});await page.goto('/shared/layout-wine');
+ await page.getByRole('button',{name:'View village map'}).click();
+ const dialog=page.getByRole('dialog');
+ await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
+ for(const area of ['North','South']){
+  await dialog.getByRole('button',{name:new RegExp(`^${area}:`)}).click();
+  await expect(dialog.getByRole('combobox')).toHaveValue('inao-denom-1158');
+  await expect(dialog.locator('.village-map-selected-label')).toHaveCount(0);
+  expect(await dialog.evaluate(el=>el.scrollWidth<=el.clientWidth)).toBe(true);
+ }
+ await page.screenshot({path:testInfo.outputPath('saint-veran-south-320.png')});
+ await page.keyboard.press('Escape');
+ await setup(page,{appellation:'Viré-Clessé',wineName:'Quintaine',classification:'village',colour:'White',wineStyle:'white'});await page.goto('/wines/layout-wine');
+ await page.getByRole('button',{name:'View village map'}).click();
+ await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
+ await expect(dialog.getByRole('combobox')).toHaveValue('inao-denom-1287');
+ await dialog.getByRole('combobox').selectOption('inao-denom-1593');
+ await expect(dialog.locator('.village-map-overlap')).toContainText('does not identify a particular vineyard');
+ await expect(dialog.locator('.village-map-selected-label')).toHaveCount(0);
+ await expect(dialog.getByRole('link',{name:/Explore on Burgundy Atlas/})).toHaveCount(0);
+ await dialog.getByRole('button',{name:'Back to this wine'}).click();
+ await expect(dialog.getByRole('combobox')).toHaveValue('inao-denom-1287');
+});
+
+test('Mâconnais white-only maps reject colour and unsupported tier conflicts',async({page})=>{
+ for(const row of [
+  {appellation:'Pouilly-Fuissé',classification:'premier_cru',colour:'Red'},
+  {appellation:'Pouilly-Loché',classification:'premier_cru',colour:'Rosé'},
+  {appellation:'Pouilly-Vinzelles',classification:'premier_cru',colour:'Red'},
+  {appellation:'Saint-Véran',classification:'premier_cru',colour:'White'},
+  {appellation:'Viré-Clessé',classification:'premier_cru',colour:'White'},
+ ]){
+  await setup(page,{...row,wineName:row.appellation});await page.goto('/wines/layout-wine');
+  await expect(page.getByRole('heading',{name:row.appellation,exact:true})).toBeVisible();
+  await expect(page.getByRole('button',{name:'View village map'})).toHaveCount(0);
+ }
+});
 
 test('Givry explains missing source geometry while local named plots remain selectable',async({page},testInfo)=>{
  await setup(page,{appellation:'Givry',wineName:'Le Vernoy'});await page.goto('/shared/layout-wine');

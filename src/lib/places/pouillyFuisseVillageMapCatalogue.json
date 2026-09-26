@@ -1,0 +1,733 @@
+{
+  "id": "pouilly-fuisse",
+  "name": "Pouilly-Fuissé",
+  "region": "Mâconnais",
+  "communes": [
+    {
+      "id": "71210",
+      "name": "Fuissé"
+    },
+    {
+      "id": "71526",
+      "name": "Solutré-Pouilly"
+    },
+    {
+      "id": "71567",
+      "name": "Vergisson"
+    },
+    {
+      "id": "71074",
+      "name": "Chaintré"
+    }
+  ],
+  "dataUrl": "/maps/pouilly-fuisse.2026-09-21.geojson",
+  "bounds": [
+    4.704039,
+    46.252773,
+    4.770638,
+    46.323747
+  ],
+  "sources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71210/cadastre-71210-communes.json.gz",
+      "sha256": "f5ca68b3893747b9050dcd91319fe1f54b333434bf783e009618aef9aab8b4f2"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71526/cadastre-71526-communes.json.gz",
+      "sha256": "148346bb0ddb4de75a177cf962d68f986f572ad9b4e5314bb83d80135f47635b"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71567/cadastre-71567-communes.json.gz",
+      "sha256": "92eea2dcb42c8a03f163c0e5d3d8cdf1b8a3abaf3b5ddf2074117f01e3c395e3"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71074/cadastre-71074-communes.json.gz",
+      "sha256": "d57d6320ff1ec659b73b072604030ba981f836829f98605398e79c4d3f931c0f"
+    }
+  ],
+  "notes": {
+    "inao-denom-1055": {
+      "note": "This is the full published Pouilly-Fuissé white-wine appellation area. Individual village lieux-dits and producer holdings are not mapped separately."
+    },
+    "inao-denom-1056": {
+      "note": "This source designation covers the area eligible for a village wine labelled with a climat name. It is a broad area across all four communes, not the boundary of one climat or a Premier Cru."
+    },
+    "inao-denom-2876": {
+      "note": "Vers Cras spans Fuissé and Solutré-Pouilly. Its full Premier Cru production boundary is retained across both communes."
+    },
+    "inao-denom-2866": {
+      "note": "Aux Quarts is the Pouilly-Fuissé Premier Cru in Chaintré, distinct from Les Quarts in Pouilly-Vinzelles. A Clos des Quarts label selects this full climat; the producer's enclosed holding is not mapped separately."
+    },
+    "inao-denom-2865": {
+      "note": "The broad Premier Cru area covers 22 named climats across Fuissé, Solutré-Pouilly, Vergisson and Chaintré. The classification dates from the 2020 vintage; a village wine is not promoted from its plot name alone."
+    },
+    "inao-denom-2873": {
+      "note": "Les Perrières includes Ferret's Clos de Jeanne and La Baudotte. These labels select the full Premier Cru boundary; their producer subdivisions have no separate geometry here. Clos de Jeanne is distinct from Château Fuissé's Le Clos."
+    },
+    "inao-denom-2874": {
+      "note": "Ferret's Tournant de Pouilly lies within Les Reisses. The map shows the full Les Reisses Premier Cru boundary, not the smaller producer parcel or the separate Pouilly climat."
+    },
+    "inao-denom-2884": {
+      "note": "A Clos de France label selects the full En France Premier Cru boundary. The producer's enclosed holding is not mapped separately."
+    },
+    "inao-denom-2870": {
+      "note": "Le Clos is Château Fuissé's Premier Cru monopole. Ferret's historical Le Clos label refers to a different parcel, now called Clos de Jeanne within Les Perrières."
+    }
+  },
+  "features": [
+    {
+      "id": "inao-denom-1055",
+      "name": "Pouilly-Fuissé",
+      "tier": "village",
+      "kind": "appellation",
+      "appellationId": 216,
+      "denominationId": 1055,
+      "sourceName": "Pouilly-Fuissé",
+      "communes": [
+        "71074",
+        "71210",
+        "71526",
+        "71567"
+      ],
+      "areaHa": 800.94,
+      "matchId": "ba_appellation_ewe5hu4k6w4evuarogztpltqqq",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_ewe5hu4k6w4evuarogztpltqqq/pouilly-fuisse",
+      "bounds": [
+        4.704039,
+        46.252773,
+        4.770638,
+        46.323747
+      ],
+      "labelPoint": [
+        4.714227,
+        46.317103
+      ]
+    },
+    {
+      "id": "inao-denom-1056",
+      "name": "Pouilly-Fuissé (named-climat area)",
+      "tier": "village",
+      "kind": "appellation",
+      "appellationId": 216,
+      "denominationId": 1056,
+      "sourceName": "Pouilly-Fuissé complété par une dénomination de climat",
+      "communes": [
+        "71074",
+        "71210",
+        "71526",
+        "71567"
+      ],
+      "areaHa": 800.93,
+      "matchId": "inao-denom-1056",
+      "atlasUrl": null,
+      "bounds": [
+        4.70404,
+        46.252773,
+        4.770638,
+        46.323747
+      ],
+      "labelPoint": [
+        4.714227,
+        46.317103
+      ]
+    },
+    {
+      "id": "inao-denom-2865",
+      "name": "Pouilly-Fuissé Premier Cru",
+      "tier": "premier_cru",
+      "kind": "appellation",
+      "appellationId": 216,
+      "denominationId": 2865,
+      "sourceName": "Pouilly-Fuissé premier cru",
+      "communes": [
+        "71074",
+        "71210",
+        "71526",
+        "71567"
+      ],
+      "areaHa": 193.48,
+      "matchId": "ba_appellation_uo5jf6gmve2kwvghvhgvymfwye",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_uo5jf6gmve2kwvghvhgvymfwye/pouilly-fuisse-premier-cru",
+      "bounds": [
+        4.712565,
+        46.252984,
+        4.767965,
+        46.313244
+      ],
+      "labelPoint": [
+        4.726043,
+        46.311267
+      ]
+    },
+    {
+      "id": "inao-denom-2866",
+      "name": "Aux Quarts",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 216,
+      "denominationId": 2866,
+      "sourceName": "Pouilly-Fuissé premier cru Aux Quarts",
+      "communes": [
+        "71074"
+      ],
+      "areaHa": 11.22,
+      "matchId": "ba_designation_t7k5xxexb2hebeywaqwyeoknha",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_t7k5xxexb2hebeywaqwyeoknha/aux-quarts",
+      "bounds": [
+        4.759351,
+        46.261121,
+        4.767024,
+        46.265076
+      ],
+      "labelPoint": [
+        4.761593,
+        46.26299
+      ]
+    },
+    {
+      "id": "inao-denom-2867",
+      "name": "Le Clos Reyssier",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 216,
+      "denominationId": 2867,
+      "sourceName": "Pouilly-Fuissé premier cru Le Clos Reyssier",
+      "communes": [
+        "71074"
+      ],
+      "areaHa": 8.68,
+      "matchId": "ba_designation_3blpts2grl7vtonjay2e7naxja",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_3blpts2grl7vtonjay2e7naxja/le-clos-reyssier",
+      "bounds": [
+        4.762012,
+        46.260389,
+        4.767965,
+        46.263976
+      ],
+      "labelPoint": [
+        4.764758,
+        46.262179
+      ]
+    },
+    {
+      "id": "inao-denom-2868",
+      "name": "Le Clos de Monsieur Noly",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 216,
+      "denominationId": 2868,
+      "sourceName": "Pouilly-Fuissé premier cru Le Clos de Monsieur Noly",
+      "communes": [
+        "71074"
+      ],
+      "areaHa": 2.74,
+      "matchId": "ba_designation_xjlrvjzu22iz6r33r4hwqkybwa",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_xjlrvjzu22iz6r33r4hwqkybwa/le-clos-de-monsieur-noly",
+      "bounds": [
+        4.756168,
+        46.262935,
+        4.758912,
+        46.265548
+      ],
+      "labelPoint": [
+        4.757893,
+        46.2644
+      ]
+    },
+    {
+      "id": "inao-denom-2869",
+      "name": "Les Chevrières",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 216,
+      "denominationId": 2869,
+      "sourceName": "Pouilly-Fuissé premier cru Les Chevrières",
+      "communes": [
+        "71074"
+      ],
+      "areaHa": 11.35,
+      "matchId": "ba_designation_ghlotas7pgxfn6diacwcrhu52u",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_ghlotas7pgxfn6diacwcrhu52u/les-chevrieres",
+      "bounds": [
+        4.75656,
+        46.252984,
+        4.761375,
+        46.259369
+      ],
+      "labelPoint": [
+        4.758649,
+        46.255713
+      ]
+    },
+    {
+      "id": "inao-denom-2870",
+      "name": "Le Clos",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 216,
+      "denominationId": 2870,
+      "sourceName": "Pouilly-Fuissé premier cru Le Clos",
+      "communes": [
+        "71210"
+      ],
+      "areaHa": 2.68,
+      "matchId": "ba_designation_iuzgr4se75xynvn5d3pigc63ha",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_iuzgr4se75xynvn5d3pigc63ha/le-clos",
+      "bounds": [
+        4.737862,
+        46.283443,
+        4.741005,
+        46.285012
+      ],
+      "labelPoint": [
+        4.739438,
+        46.284209
+      ]
+    },
+    {
+      "id": "inao-denom-2871",
+      "name": "Les Brulés",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 216,
+      "denominationId": 2871,
+      "sourceName": "Pouilly-Fuissé premier cru Les Brulés",
+      "communes": [
+        "71210"
+      ],
+      "areaHa": 0.83,
+      "matchId": "ba_designation_xycstz7gopq3grtpbansxkskae",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_xycstz7gopq3grtpbansxkskae/les-brules",
+      "bounds": [
+        4.737388,
+        46.285292,
+        4.739158,
+        46.286154
+      ],
+      "labelPoint": [
+        4.738403,
+        46.285724
+      ]
+    },
+    {
+      "id": "inao-denom-2872",
+      "name": "Les Ménétrières",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 216,
+      "denominationId": 2872,
+      "sourceName": "Pouilly-Fuissé premier cru Les Ménétrières",
+      "communes": [
+        "71210"
+      ],
+      "areaHa": 5.22,
+      "matchId": "ba_designation_eaoysyglypsudwgfbxjwvzxxk4",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_eaoysyglypsudwgfbxjwvzxxk4/les-menetrieres",
+      "bounds": [
+        4.737324,
+        46.284897,
+        4.742158,
+        46.286934
+      ],
+      "labelPoint": [
+        4.740538,
+        46.285954
+      ]
+    },
+    {
+      "id": "inao-denom-2873",
+      "name": "Les Perrières",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 216,
+      "denominationId": 2873,
+      "sourceName": "Pouilly-Fuissé premier cru Les Perrières",
+      "communes": [
+        "71210"
+      ],
+      "areaHa": 5.79,
+      "matchId": "ba_designation_6uagv56ojvbwm2bggy7xcfhney",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_6uagv56ojvbwm2bggy7xcfhney/les-perrieres",
+      "bounds": [
+        4.734709,
+        46.277592,
+        4.741958,
+        46.280435
+      ],
+      "labelPoint": [
+        4.738812,
+        46.279228
+      ]
+    },
+    {
+      "id": "inao-denom-2874",
+      "name": "Les Reisses",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 216,
+      "denominationId": 2874,
+      "sourceName": "Pouilly-Fuissé premier cru Les Reisses",
+      "communes": [
+        "71210"
+      ],
+      "areaHa": 4.13,
+      "matchId": "ba_designation_jh7xqta2cti2knhoteugfq7ozm",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_jh7xqta2cti2knhoteugfq7ozm/les-reisses",
+      "bounds": [
+        4.738368,
+        46.286723,
+        4.743391,
+        46.288396
+      ],
+      "labelPoint": [
+        4.740643,
+        46.287454
+      ]
+    },
+    {
+      "id": "inao-denom-2875",
+      "name": "Les Vignes Blanches",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 216,
+      "denominationId": 2875,
+      "sourceName": "Pouilly-Fuissé premier cru Les Vignes Blanches",
+      "communes": [
+        "71210"
+      ],
+      "areaHa": 19.13,
+      "matchId": "ba_designation_vrzhmti6r7agrz5vfslsotumvq",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_vrzhmti6r7agrz5vfslsotumvq/les-vignes-blanches",
+      "bounds": [
+        4.733413,
+        46.279072,
+        4.740065,
+        46.284824
+      ],
+      "labelPoint": [
+        4.737062,
+        46.280339
+      ]
+    },
+    {
+      "id": "inao-denom-2876",
+      "name": "Vers Cras",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 216,
+      "denominationId": 2876,
+      "sourceName": "Pouilly-Fuissé premier cru Vers Cras",
+      "communes": [
+        "71210",
+        "71526"
+      ],
+      "areaHa": 23.19,
+      "matchId": "ba_designation_37466ffh2cyviqqoieptnjpwpy",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_37466ffh2cyviqqoieptnjpwpy/vers-cras",
+      "bounds": [
+        4.74629,
+        46.286058,
+        4.754857,
+        46.292341
+      ],
+      "labelPoint": [
+        4.749553,
+        46.288271
+      ]
+    },
+    {
+      "id": "inao-denom-2877",
+      "name": "Au Vignerais",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 216,
+      "denominationId": 2877,
+      "sourceName": "Pouilly-Fuissé premier cru Au Vignerais",
+      "communes": [
+        "71526"
+      ],
+      "areaHa": 18.67,
+      "matchId": "ba_designation_fm6dgnjupi54xi6jmelo7hvqgi",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_fm6dgnjupi54xi6jmelo7hvqgi/au-vignerais",
+      "bounds": [
+        4.726463,
+        46.296713,
+        4.73641,
+        46.30117
+      ],
+      "labelPoint": [
+        4.733835,
+        46.298528
+      ]
+    },
+    {
+      "id": "inao-denom-2878",
+      "name": "Aux Bouthières",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 216,
+      "denominationId": 2878,
+      "sourceName": "Pouilly-Fuissé premier cru Aux Bouthières",
+      "communes": [
+        "71526"
+      ],
+      "areaHa": 4.86,
+      "matchId": "ba_designation_7g5nqjaizukzalewfoefkmfvhm",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_7g5nqjaizukzalewfoefkmfvhm/aux-bouthieres",
+      "bounds": [
+        4.737488,
+        46.292571,
+        4.742965,
+        46.294925
+      ],
+      "labelPoint": [
+        4.742416,
+        46.29375
+      ]
+    },
+    {
+      "id": "inao-denom-2879",
+      "name": "Aux Chailloux",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 216,
+      "denominationId": 2879,
+      "sourceName": "Pouilly-Fuissé premier cru Aux Chailloux",
+      "communes": [
+        "71526"
+      ],
+      "areaHa": 6.74,
+      "matchId": "ba_designation_uwwnzffgqgml5qfdjvpr3pihdq",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_uwwnzffgqgml5qfdjvpr3pihdq/aux-chailloux",
+      "bounds": [
+        4.74281,
+        46.292832,
+        4.748186,
+        46.295197
+      ],
+      "labelPoint": [
+        4.74545,
+        46.294057
+      ]
+    },
+    {
+      "id": "inao-denom-2880",
+      "name": "En Servy",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 216,
+      "denominationId": 2880,
+      "sourceName": "Pouilly-Fuissé premier cru En Servy",
+      "communes": [
+        "71526"
+      ],
+      "areaHa": 3.99,
+      "matchId": "ba_designation_uja4jtpahaf7uoeaq5yw4zbcsy",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_uja4jtpahaf7uoeaq5yw4zbcsy/en-servy",
+      "bounds": [
+        4.725283,
+        46.296189,
+        4.730249,
+        46.298419
+      ],
+      "labelPoint": [
+        4.727324,
+        46.297891
+      ]
+    },
+    {
+      "id": "inao-denom-2881",
+      "name": "La Frérie",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 216,
+      "denominationId": 2881,
+      "sourceName": "Pouilly-Fuissé premier cru La Frérie",
+      "communes": [
+        "71526"
+      ],
+      "areaHa": 4.08,
+      "matchId": "ba_designation_sfrq5zujyamxy3n27whrdagv2y",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_sfrq5zujyamxy3n27whrdagv2y/la-frerie",
+      "bounds": [
+        4.729605,
+        46.295998,
+        4.733734,
+        46.298279
+      ],
+      "labelPoint": [
+        4.731969,
+        46.296752
+      ]
+    },
+    {
+      "id": "inao-denom-2882",
+      "name": "Le Clos de Solutré",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 216,
+      "denominationId": 2882,
+      "sourceName": "Pouilly-Fuissé premier cru Le Clos de Solutré",
+      "communes": [
+        "71526"
+      ],
+      "areaHa": 4.4,
+      "matchId": "ba_designation_v6tbag2job62ixdxtrzqxrke3y",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_v6tbag2job62ixdxtrzqxrke3y/le-clos-de-solutre",
+      "bounds": [
+        4.722007,
+        46.294338,
+        4.727039,
+        46.29621
+      ],
+      "labelPoint": [
+        4.72377,
+        46.295016
+      ]
+    },
+    {
+      "id": "inao-denom-2883",
+      "name": "Pouilly",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 216,
+      "denominationId": 2883,
+      "sourceName": "Pouilly-Fuissé premier cru Pouilly",
+      "communes": [
+        "71526"
+      ],
+      "areaHa": 19.37,
+      "matchId": "ba_designation_zdso36rpmxewhdl2bnzesftt5e",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_zdso36rpmxewhdl2bnzesftt5e/pouilly",
+      "bounds": [
+        4.734526,
+        46.288154,
+        4.743602,
+        46.293805
+      ],
+      "labelPoint": [
+        4.737051,
+        46.290755
+      ]
+    },
+    {
+      "id": "inao-denom-2884",
+      "name": "En France",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 216,
+      "denominationId": 2884,
+      "sourceName": "Pouilly-Fuissé premier cru En France",
+      "communes": [
+        "71567"
+      ],
+      "areaHa": 1.87,
+      "matchId": "ba_designation_ovwlqfdagwqqgwx2rwwbl4lkui",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_ovwlqfdagwqqgwx2rwwbl4lkui/en-france",
+      "bounds": [
+        4.71258,
+        46.306746,
+        4.714758,
+        46.309127
+      ],
+      "labelPoint": [
+        4.713959,
+        46.308554
+      ]
+    },
+    {
+      "id": "inao-denom-2885",
+      "name": "La Maréchaude",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 216,
+      "denominationId": 2885,
+      "sourceName": "Pouilly-Fuissé premier cru La Maréchaude",
+      "communes": [
+        "71567"
+      ],
+      "areaHa": 9.34,
+      "matchId": "ba_designation_e3gzllksp5dg647hde2jrhvbe4",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_e3gzllksp5dg647hde2jrhvbe4/la-marechaude",
+      "bounds": [
+        4.716637,
+        46.307921,
+        4.725033,
+        46.310528
+      ],
+      "labelPoint": [
+        4.720558,
+        46.309296
+      ]
+    },
+    {
+      "id": "inao-denom-2886",
+      "name": "Les Crays",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 216,
+      "denominationId": 2886,
+      "sourceName": "Pouilly-Fuissé premier cru Les Crays",
+      "communes": [
+        "71567"
+      ],
+      "areaHa": 10.75,
+      "matchId": "ba_designation_pvlq7dhkij5u6ddebtsfppsc34",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_pvlq7dhkij5u6ddebtsfppsc34/les-crays",
+      "bounds": [
+        4.713431,
+        46.309649,
+        4.722042,
+        46.313249
+      ],
+      "labelPoint": [
+        4.718159,
+        46.31145
+      ]
+    },
+    {
+      "id": "inao-denom-2887",
+      "name": "Sur la Roche",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 216,
+      "denominationId": 2887,
+      "sourceName": "Pouilly-Fuissé premier cru Sur la Roche",
+      "communes": [
+        "71567"
+      ],
+      "areaHa": 14.76,
+      "matchId": "ba_designation_4rykrnyyvnqhwe7wkunm6jwyky",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_4rykrnyyvnqhwe7wkunm6jwyky/sur-la-roche",
+      "bounds": [
+        4.72273,
+        46.308567,
+        4.729868,
+        46.313159
+      ],
+      "labelPoint": [
+        4.726044,
+        46.311267
+      ]
+    }
+  ]
+}

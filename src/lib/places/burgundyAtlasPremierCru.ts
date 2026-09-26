@@ -21,7 +21,12 @@ const withoutArticle=(name:string)=>name.replace(/^(?:les|le|la|aux|au) /,'');
 const patterns=new Map<string,RegExp>();
 function patternFor(key:string){
   let pattern=patterns.get(key);
-  if(!pattern){pattern=new RegExp(`(?<![a-z0-9])${key}(?![a-z0-9])`,'g');patterns.set(key,pattern)}
+  if(!pattern){
+    // The complete climat Le Clos must not consume the start of an unrelated
+    // clos name. Reviewed longer names still match their own dictionary entry.
+    const suffix=key==='le clos'?'(?![a-z0-9]| (?:de|des|du|d)\\b)':'(?![a-z0-9])';
+    pattern=new RegExp(`(?<![a-z0-9])${key}${suffix}`,'g');patterns.set(key,pattern);
+  }
   return pattern;
 }
 const placeFields=(wine:Wine)=>[wine.appellation,wine.wineName,wine.referenceSite,wine.referenceParcel].map(value=>value?.trim()??'');
@@ -32,7 +37,7 @@ function nameVariants(name:string){
   // omission is a fallback: an exact "Porusot" beats an alias of "Le Porusot".
   const names=[name,...name.split(/ ou /i)].map(nameKey);
   return [...new Set(names)].flatMap(key=>[
-    {key,exact:true},...(withoutArticle(key)!==key?[{key:withoutArticle(key),exact:false}]:[])
+    {key,exact:true},...(withoutArticle(key)!==key&&withoutArticle(key)!=='clos'?[{key:withoutArticle(key),exact:false}]:[])
   ]);
 }
 // Reviewed spellings, scoped to the village and the exact registry entry.
@@ -88,9 +93,19 @@ const reviewedNameAliases:Record<string,Record<string,string[]>>={
   // Chamirey, Juillot and Devillard write Clos du Roi; d'Aligny and Chandesais
   // write Barraude; Thénard writes Cellier aux Moines without Clos du.
   'Mercurey':{'Le Clos du Roy':['Le Clos du Roi']},
-  'Givry':{'Crausot':['Crauzot'],'Clos de la Baraude':['Clos de la Barraude'],'Clos du Cellier aux Moines':['Cellier aux Moines']}
+  'Givry':{'Crausot':['Crauzot'],'Clos de la Baraude':['Clos de la Barraude'],'Clos du Cellier aux Moines':['Cellier aux Moines']},
+  // Merlin's published label forms and Ferret's named subdivisions. Map the
+  // full official climat, with a note explaining the missing producer boundary.
+  'Pouilly-Fuissé':{'Aux Quarts':['Clos des Quarts'],'Au Vignerais':['Aux Vignerais'],
+    'En France':['Clos de France'],'Les Perrières':['Le Clos de Jeanne','La Baudotte'],
+    'Les Reisses':['Tournant de Pouilly']}
 };
-const groups=mapping.groups.map(group=>({...group,key:nameKey(group.appellation),entries:[
+// New Premier Cru appellations may have no named Atlas pages at all. Include
+// their reviewed local names in the same matching and ambiguity rules.
+const premierGroups=[...mapping.groups,...villageMaps.localPremierCrus
+  .filter(local=>!mapping.groups.some(group=>group.appellation===local.appellation))
+  .map(local=>({appellation:local.appellation,regionId:local.regionId,entries:[]}))];
+const groups=premierGroups.map(group=>({...group,key:nameKey(group.appellation),entries:[
   ...group.entries.map(entry=>({...entry,matchId:entry.path.split('/')[2]})),
   ...(villageMaps.localPremierCrus.find(local=>local.appellation===group.appellation)?.entries??[]).map(entry=>({...entry,path:null})),
   // A known climat without geometry must participate in ambiguity and tier
@@ -189,6 +204,11 @@ function premierCruIdentity(wine:Wine):PremierCruIdentity|null{
       if(index===1||whole)for(const match of found)candidates.add(match.entry);
     }
     if(invalid)continue;
+    // Ferret historically called its Clos de Jeanne cuvée "Le Clos". It is
+    // not Château Fuissé's separate Le Clos climat. Require an unambiguous
+    // modern name rather than highlighting the wrong producer's vineyard.
+    if(group.key==='pouilly fuisse'&&contains(fields[1],'ferret')&&
+      [...candidates].some(entry=>entry.name==='Le Clos'))continue;
     // A label may name a wider Premier Cru with a cru inside it: Meursault-Blagny
     // Sous le Dos d'Ane, Morgeot Clos Pitois. The wider name gives way to the
     // inner cru; two unrelated crus stay ambiguous.
@@ -210,8 +230,10 @@ export function burgundyAtlasPremierCru(wine:Wine):BurgundyAtlasPlace|null{
 // Local appellations use the same geographic and tier checks as Atlas places,
 // but never manufacture an outbound link when Atlas has no corresponding page.
 const appellations=[
-  ...appellationMapping.groups.map(group=>({...group,villageMatchId:null as string|null,premierCruMatchId:null as string|null})),
-  ...villageMaps.localAppellations.map(group=>({...group,villagePath:null,premierCruPath:null}))
+  ...appellationMapping.groups.map(group=>({...group,villageMatchId:null as string|null,
+    premierCruMatchId:villageMaps.localAppellations.find(local=>local.appellation===group.appellation)?.premierCruMatchId??null})),
+  ...villageMaps.localAppellations.filter(local=>!appellationMapping.groups.some(group=>group.appellation===local.appellation))
+    .map(group=>({...group,villagePath:null,premierCruPath:null}))
 ].map(group=>({...group,key:nameKey(group.appellation),
   keys:[...new Set([group.appellation,...group.aliases].map(nameKey))]}));
 type Appellation=typeof appellations[number];

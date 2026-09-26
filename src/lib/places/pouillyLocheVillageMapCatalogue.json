@@ -1,0 +1,122 @@
+{
+  "id": "pouilly-loche",
+  "name": "Pouilly-Loché",
+  "region": "Mâconnais",
+  "communes": [
+    {
+      "id": "71270",
+      "name": "Mâcon (Loché)"
+    }
+  ],
+  "dataUrl": "/maps/pouilly-loche.2026-09-21.geojson",
+  "bounds": [
+    4.75806,
+    46.275283,
+    4.769417,
+    46.282997
+  ],
+  "sources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71270/cadastre-71270-communes.json.gz",
+      "sha256": "7d5b30021adc669461c4af05d4067a2f3f0fc48cf8b3df1d631fc49c1dcf3af0"
+    }
+  ],
+  "notes": {
+    "inao-denom-1057": {
+      "note": "The Pouilly-Loché production area lies in Loché, an associated commune of Mâcon. The outline is the current Mâcon commune boundary. Named village plots remain unmapped."
+    },
+    "inao-denom-2931": {
+      "note": "Les Mûres is the only Premier Cru, recognised from the 2024 vintage. Its named boundary and the broad Premier Cru area are almost coincident in this source; an unnamed wine still keeps appellation scope."
+    },
+    "inao-denom-2932": {
+      "note": "Les Mûres is the Pouilly-Loché Premier Cru, recognised from the 2024 vintage. This is the full climat boundary, not a producer holding."
+    }
+  },
+  "features": [
+    {
+      "id": "inao-denom-1057",
+      "name": "Pouilly-Loché",
+      "tier": "village",
+      "kind": "appellation",
+      "appellationId": 217,
+      "denominationId": 1057,
+      "sourceName": "Pouilly-Loché",
+      "communes": [
+        "71270"
+      ],
+      "areaHa": 35.24,
+      "matchId": "ba_appellation_u3mdeerpu4nxxcecqbb6rb7kmi",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_u3mdeerpu4nxxcecqbb6rb7kmi/pouilly-loche",
+      "bounds": [
+        4.75806,
+        46.275283,
+        4.769417,
+        46.282997
+      ],
+      "labelPoint": [
+        4.762726,
+        46.276481
+      ]
+    },
+    {
+      "id": "inao-denom-2931",
+      "name": "Pouilly-Loché Premier Cru",
+      "tier": "premier_cru",
+      "kind": "appellation",
+      "appellationId": 217,
+      "denominationId": 2931,
+      "sourceName": "Pouilly-Loché premier cru",
+      "communes": [
+        "71270"
+      ],
+      "areaHa": 7.08,
+      "matchId": "inao-app-217-premier_cru",
+      "atlasUrl": null,
+      "bounds": [
+        4.760968,
+        46.275283,
+        4.766684,
+        46.277453
+      ],
+      "labelPoint": [
+        4.764719,
+        46.27637
+      ]
+    },
+    {
+      "id": "inao-denom-2932",
+      "name": "Les Mûres",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 217,
+      "denominationId": 2932,
+      "sourceName": "Pouilly-Loché premier cru les Mûres",
+      "communes": [
+        "71270"
+      ],
+      "areaHa": 7.08,
+      "matchId": "inao-denom-2932",
+      "atlasUrl": null,
+      "bounds": [
+        4.760968,
+        46.275283,
+        4.766684,
+        46.277453
+      ],
+      "labelPoint": [
+        4.764719,
+        46.27637
+      ]
+    }
+  ]
+}
