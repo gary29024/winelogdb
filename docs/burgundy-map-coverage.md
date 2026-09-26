@@ -12,7 +12,7 @@ map link for it, and verify all nine Côte de Nuits entries have map configurati
 Adding a map requires updating this document and the map configuration; the
 inventory is the denominator, not the current list of supported Atlas pages.
 
-Reviewed 26 September 2026 against the
+Reviewed 27 September 2026 against the
 [BIVB appellation list](https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/bourgogne-an-ideal-location,2458,9253.html?args=Y29tcF9pZD0yMjc4JmFjdGlvbj12aWV3RnVsbExpc3RlJmlkPSZ8)
 and the pinned INAO boundary snapshot documented in [the map guide](burgundy-village-map.md).
 Beaujolais's own appellations are outside this inventory. Shared regional AOCs
@@ -140,8 +140,8 @@ the plan because they lack a village AOC. See the
 
 All **14 Bourgogne geographic denominations** in the pinned source now have maps.
 These are denominations within Bourgogne AOC, not new AOCs or village maps.
-**Twenty-one of 49 regional source denominations are mapped; 28 remain pending:**
-the seven broad regional denominations, Mâcon-Villages and 20 named Mâcon denominations.
+**Twenty-eight of 49 regional source denominations are mapped; 21 remain pending:**
+the seven broad regional denominations, Mâcon-Villages and 13 named Mâcon denominations.
 The [Yonne source review](burgundy-regional-maps.md#yonne-source-review)
 explains the five-commune Côtes d’Auxerre list and its difference from some
 seven-name promotional lists. It does not add boundaries from those lists.
@@ -150,7 +150,7 @@ Within Bourgogne, the completed geographic-denomination inventory covers all 14 
 snapshot: Chitry, Côte Chalonnaise, Côte d'Or, Côte Saint-Jacques, Côtes d'Auxerre,
 Côtes du Couchois, Coulanges-la-Vineuse, Épineuil, Hautes Côtes de Beaune, Hautes
 Côtes de Nuits, La Chapelle Notre-Dame, Le Chapitre, Montrecul and Tonnerre.
-Within Mâcon, seven of the 27 named geographic denominations are mapped:
+Within Mâcon, fourteen of the 27 named geographic denominations are mapped:
 
 - [x] Mâcon Charnay-lès-Mâcon: Charnay-lès-Mâcon; red/white/rosé
 - [x] Mâcon Davayé: Davayé; red/white/rosé
@@ -159,13 +159,20 @@ Within Mâcon, seven of the 27 named geographic denominations are mapped:
 - [x] Mâcon Solutré-Pouilly: Solutré-Pouilly; white only
 - [x] Mâcon Vergisson: Vergisson; white only
 - [x] Mâcon Vinzelles: Vinzelles; white only
+- [x] Mâcon Bussières: Bussières; red/white/rosé denomination overview
+- [x] Mâcon Chaintré: Chaintré, Chânes and Crêches-sur-Saône; overview and published red-only sector
+- [x] Mâcon La Roche-Vineuse: Chevagny-les-Chevrières, Hurigny and La Roche-Vineuse; overview and red-only sector
+- [x] Mâcon Milly-Lamartine: Berzé-la-Ville, Berzé-le-Châtel, Milly-Lamartine and Sologny; overview and red-only sector
+- [x] Mâcon Pierreclos: Pierreclos; red/white/rosé denomination overview
+- [x] Mâcon Prissé: Prissé; overview and published red-only sector
+- [x] Mâcon Serrières: Serrières; red/rosé only
 
-The 20 pending named denominations are Azé, Bray, Burgy, Bussières, Chaintré,
-Chardonnay, Cruzille, Igé, La Roche-Vineuse, Lugny, Mancey, Milly-Lamartine,
-Montbellet, Péronne, Pierreclos, Prissé, Saint-Gengoux-le-National, Serrières,
-Uchizy and Verzé. Mâcon and Mâcon-Villages also remain pending. Chaintré belongs
-in the next batch's review of distinct colour areas; it has not been omitted
-because the neighbouring Pouilly-Fuissé village map already exists.
+The 13 pending named denominations are Azé, Bray, Burgy, Chardonnay, Cruzille,
+Igé, Lugny, Mancey, Montbellet, Péronne, Saint-Gengoux-le-National, Uchizy and
+Verzé. Mâcon and Mâcon-Villages also remain pending. The six new three-colour
+maps are explicitly denomination overviews: complete white/red/rosé eligibility
+areas need further verification, as explained in the
+[western Mâcon source review](burgundy-regional-maps.md#western-mâcon-source-review).
 
 ## Source gaps and completion criteria
 
