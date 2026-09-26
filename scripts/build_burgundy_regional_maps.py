@@ -1,8 +1,9 @@
 """Build reviewed regional denominations without changing the village registry.
 
 Uses the same pinned sources and exact source CRS as build_burgundy_village_map.py.
-Published regional geometry is snapped to a 0.000001° grid (about 10 cm), which
-keeps valid topology and roughly halves these large regional files. Downloads are separate; see the regional guide.
+Published regional geometry defaults to a 0.000001° grid (about 10 cm), with a
+reviewed finer grid where necessary to retain holes. This keeps valid topology
+and reduces the large regional files. Downloads are separate; see the regional guide.
 """
 import argparse
 import gzip
@@ -31,9 +32,9 @@ from build_burgundy_village_map import (
 GRID = 1e-6
 
 
-def trimmed(geom, source=None):
-    """Snap to GRID; with the source-CRS geometry, verify nothing material moved."""
-    result = set_precision(geom, GRID)
+def trimmed(geom, source=None, grid=GRID):
+    """Snap to the reviewed grid; verify nothing material moved in source CRS."""
+    result = set_precision(geom, grid)
     assert result.is_valid and not result.is_empty
     if source is not None:
         projected = transform(source[1], result)
@@ -88,7 +89,7 @@ def main():
         rows = grouped[config['denominationId']]
         assert {r['id_app'] for r, _ in rows} == {config['appellationId']}
         assert {r['denom'] for r, _ in rows} == {config['sourceName']}
-        # All three pilots share geometry across their allowed colours. A new
+        # These reviewed denominations share geometry across their allowed colours. A new
         # source variant or changed colour code must be reviewed, not merged.
         assert {r['cvi'] for r, _ in rows} == {config['sourceCvi']}
         assert sorted({r['insee'] for r, _ in rows}) == config['communes']
@@ -114,7 +115,11 @@ def main():
         props = dict(id=feature_id, name=config['name'], tier='regional', kind='appellation',
                      appellationId=config['appellationId'], denominationId=config['denominationId'],
                      sourceName=config['sourceName'], communes=config['communes'], areaHa=round(whole_m.area / 10000, 2))
-        features = [dict(type='Feature', id=feature_id, properties=props, geometry=geometry_json(trimmed(whole, (whole_m, to_source))))]
+        # Côte Chalonnaise needs seven decimals: six would close a 2.12 m²
+        # excluded hole. Retain the same area/hole gates at either precision.
+        grid = config.get('coordinateGrid', GRID)
+        assert grid in (GRID, 1e-7), 'Review a new precision before publishing'
+        features = [dict(type='Feature', id=feature_id, properties=props, geometry=geometry_json(trimmed(whole, (whole_m, to_source), grid)))]
         point = whole.representative_point()
         metadata = dict(**props, matchId=feature_id, atlasUrl=None, bounds=rounded(whole.bounds), labelPoint=rounded([point.x, point.y]))
         communes, sources = [], [dict(name='INAO', date=DATE, url=INAO_URL, sha256=INAO_SHA256, license='Licence Ouverte')]
@@ -143,11 +148,11 @@ def main():
         outputs.extend([(ROOT / 'public' / url.lstrip('/'), dict(type='FeatureCollection', features=features), True),
                         (PLACES / f"{config['id']}MapCatalogue.json", catalogue, False)])
         registry.append({**{key: config[key] for key in ('id', 'name', 'region', 'aliases', 'compatibleRegions', 'wineColours')}, 'featureId': feature_id})
-        print(f"{config['name']}: {len(communes)} communes, {props['areaHa']} ha, {len(rows)} source rows; round-trip difference {difference:.8f} m²")
+        print(f"{config['name']}: {len(communes)} communes, {props['areaHa']} ha, {len(rows)} source rows; round-trip difference {difference:.8f} m²; grid {grid:g}°")
     # No output is changed until every map and the full inventory validates.
     for path, value, compact in outputs:
         write_json(path, value, compact)
-    # Other regional designations can conflict with a pilot label even though
+    # Other regional designations can conflict with a mapped label even though
     # their own maps are pending. Keep their names in the small identity index.
     other_names = {app['name'] for app in inventory if app['appellationId'] != 138}
     other_names.update(name for app in inventory for d in app['denominations']

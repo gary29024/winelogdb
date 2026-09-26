@@ -126,10 +126,12 @@ the plan because they lack a village AOC. See the
 - [x] Bourgogne Côte d’Or: all 40 producing communes; red/white
 - [x] Bourgogne Hautes Côtes de Nuits: all 19 communes; red/white/rosé
 - [x] Bourgogne Hautes Côtes de Beaune: all 29 communes; red/white/rosé
+- [x] Bourgogne Côte Chalonnaise: all 44 communes; red/white/rosé
+- [x] Bourgogne Côtes du Couchois: all six communes; red only
 
-These are three geographic denominations within Bourgogne AOC, not three new
-AOCs or village maps. **Three of 49 regional source denominations are mapped.**
-The seven broad regional denominations, 11 other Bourgogne geographic
+These are five geographic denominations within Bourgogne AOC, not five new
+AOCs or village maps. **Five of 49 regional source denominations are mapped.**
+The seven broad regional denominations, nine other Bourgogne geographic
 denominations, Mâcon-Villages and 27 named Mâcon denominations remain pending.
 
 Within Bourgogne, review all 14 geographic denominations present in the pinned

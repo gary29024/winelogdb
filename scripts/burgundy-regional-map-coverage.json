@@ -36,7 +36,7 @@
           "sourceNames": [
             "Bourgogne Côte Chalonnaise"
           ],
-          "status": "pending",
+          "status": "mapped",
           "kind": "geographic"
         },
         {
@@ -108,7 +108,7 @@
           "sourceNames": [
             "Bourgogne Côtes du Couchois"
           ],
-          "status": "pending",
+          "status": "mapped",
           "kind": "geographic"
         },
         {

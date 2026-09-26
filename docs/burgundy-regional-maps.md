@@ -1,7 +1,7 @@
 # Burgundy regional maps
 
-Reviewed 26 September 2026. This first regional batch maps three geographic
-denominations **within Bourgogne AOC**, not three new AOCs or village appellations.
+Reviewed 26 September 2026. Five geographic denominations are now mapped
+**within Bourgogne AOC**, not five new AOCs or village appellations.
 The existing 44 village maps and 33 Grand Cru appellations are unchanged.
 
 | Denomination | INAO appellation / denomination | Producing communes | Allowed still-wine colours |
@@ -9,6 +9,8 @@ The existing 44 village maps and 33 Grand Cru appellations are unchanged.
 | Bourgogne Côte d’Or | 138 / 2840 | 40 | Red, white |
 | Bourgogne Hautes Côtes de Nuits | 138 / 364 | 19 | Red, white, rosé |
 | Bourgogne Hautes Côtes de Beaune | 138 / 363 | 29 | Red, white, rosé |
+| Bourgogne Côte Chalonnaise | 138 / 365 | 44 | Red, white, rosé |
+| Bourgogne Côtes du Couchois | 138 / 1586 | 6 | Red only |
 
 The official BIVB sheets confirm these counts, colours and regional status:
 [Côte d’Or](https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/bourgogne-cote-d-or%2C2458%2C9253.html?args=Y29tcF9pZD0yMjc4JmFjdGlvbj12aWV3RmljaGUmaWQ9Nzc0Jnw%3D),
@@ -23,11 +25,11 @@ Coteaux Bourguignons, Crémant de Bourgogne and Mâcon. The
 [BIVB inventory](https://www.bourgogne-wines.com/professional-access/documents-photos%2C2334%2C9356.html)
 also lists 14 Bourgogne geographic denominations and 27 named Mâcon denominations.
 Together with the seven broad denominations and Mâcon-Villages, these account for
-**49 source denomination IDs: three mapped, 46 pending**. Alternative source names
+**49 source denomination IDs: five mapped, 44 pending**. Alternative source names
 and colour variants sharing an ID do not increase that count.
 
-All seven broad regional areas, 11 other Bourgogne geographic denominations,
-Mâcon-Villages and all 27 named Mâcon denominations remain pending. Mapping three
+All seven broad regional areas, nine other Bourgogne geographic denominations,
+Mâcon-Villages and all 27 named Mâcon denominations remain pending. Mapping five
 Bourgogne denominations does not complete the Bourgogne AOC. Chablis Premier Cru
 source gaps and other named plots remain tracked separately in
 [issue #344](https://github.com/gary29024/winelogdb/issues/344).
@@ -58,9 +60,10 @@ python -B scripts/build_burgundy_regional_maps.py --source-dir .tmp/burgundy-map
 ```
 
 The builder verifies the full seven-AOC inventory against source names and IDs,
-then verifies each pilot's source name, CVI colour codes and complete commune set.
-There are 40, 19 and 30 source rows respectively; Hautes Côtes de Beaune includes
-two rows for one commune, giving 29 communes. Each pilot has just one source-name
+then verifies each mapped denomination's source name, CVI colour codes and complete commune set.
+The first three maps use 40, 19 and 30 source rows respectively; Hautes Côtes de Beaune includes
+two rows for one commune, giving 29 communes. Côte Chalonnaise uses 44 rows and
+Couchois six, one per commune. Each has just one source-name
 and colour-code variant, so all allowed colours use the same production boundary.
 No geometry is clipped to the existing village maps or to a single department.
 
@@ -74,7 +77,7 @@ below **0.01 m²**. The measured difference for Côte d’Or is **0.00077693 m²
 both Hautes Côtes maps are below 0.00000001 m². A different invalid denomination
 or larger discrepancy fails the build before any output is written.
 
-The published GeoJSON is then snapped to a **0.000001° grid (about 10 cm)** with
+The published GeoJSON normally snaps to a **0.000001° grid (about 10 cm)** with
 GEOS `set_precision`, which keeps topology valid where plain rounding would make
 narrow rings cross. At regional and commune zoom this is invisible, and it cuts
 the files from 5.1/0.9/1.8 MB to 3.0/0.6/1.2 MB (compressed: 1.9/0.3/0.7 MB to
@@ -89,11 +92,12 @@ production geometry, not the smaller area actually planted or producing wine.
 
 ## Identity and display
 
-The three-entry runtime index is separate from the village registry; catalogues
+The five-entry runtime index is separate from the village registry; catalogues
 and geometry load only when opening the dialog. Wine matching needs the explicit
 designation in the appellation or wine name. Hautes Côtes aliases may omit
-“Bourgogne”; “Côte d’Or” alone, a region field or a producer/cuvée alone does not
-identify Bourgogne Côte d’Or. Accents, punctuation and AOC/AOP suffixes normalize.
+“Bourgogne”, as may the complete name “Côtes du Couchois”. “Côte d’Or” or “Côte
+Chalonnaise” alone, a region field or a producer/cuvée alone does not identify its
+regional designation. Accents, punctuation and AOC/AOP suffixes normalize.
 Conflicting countries, regions, appellations, cru tiers, colours and non-still
 products withhold the map rather than falling through to a nested village name.
 No database classification is added: these wines remain unclassified in the
@@ -132,9 +136,67 @@ Saint-Philibert” or “Jardin du Calvaire” is not a new geometry or producer
 
 ## Verification
 
+The source-environment rebuild reproduces all seven files merged in PR #350
+byte-for-byte, including Claude's six-decimal geometry, with the pinned dependency
+versions. Those three map datasets remain unchanged in the second regional batch.
+
 Unit tests cover regional matching, conflicts, colour rules, separation from
 Beaune/Nuits village names, inventory reconciliation, every commune and closed
 geometry rings. Browser tests run the real map renderer with the base map offline
 on owner/shared pages at 320px and desktop widths, verify all production anchors
 fit the initial view, navigate to a commune and back, and check lazy loading and
 keyboard focus return. Existing village/Atlas tests remain regression coverage.
+
+## Côte Chalonnaise and Couchois source review
+
+The [BIVB Côte Chalonnaise sheet](https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/gallery_files/site/321/402/57644/57654.pdf)
+confirms red, white and rosé wines across 44 communes. INAO denomination **365**
+has 44 source rows, all with CVI codes `1B315, 1R315, 1S315`. The whole regional
+boundary is preserved, including the source area in Remigny; it is neither
+clipped to existing village maps nor inferred from the larger commune outlines.
+Its source area is **5,838.03 ha**, the delimited area rather than planted acreage.
+
+The [BIVB Couchois page](https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/bourgogne-cotes-du-couchois,2458,9253.html?args=Y29tcF9pZD0yMjc4JmFjdGlvbj12aWV3RmljaGUmaWQ9MjQwJnw%3D)
+and [INAO commune list](https://www.inao.gouv.fr/node/38303/printable/print) agree
+on Couches, Dracy-lès-Couches, Saint-Jean-de-Trézy, Saint-Maurice-lès-Couches,
+Saint-Pierre-de-Varennes and Saint-Sernin-du-Plain. Denomination **1586** has six
+rows and the red-only code `1R362`; its full source area is **940.21 ha**.
+The growers' [proposal for white wine recognition](https://www.cotesducouchois.com/demande-aoc-vins-blancs-bourgogne/)
+does not supply an approved white designation or boundary. Explicit white/rosé
+colour, style or label wording must therefore withhold this map. BIVB groups
+Couchois under the Côte Chalonnaise wine region; both new maps also accept the
+recorded département Saône-et-Loire. Neither accepts Côte d’Or.
+
+### Precision and retained exclusions
+
+Côte Chalonnaise fails the existing six-decimal hole gate: a **2.118226 m²**
+excluded hole would close, alongside some smaller slivers. Its production feature
+therefore uses the reviewed **0.0000001° grid (about 1 cm)** in configuration.
+The maximum flagged hole is then **0.3063 m²**, no production part disappears,
+and net area changes by **−7.286 m²**. Couchois passes the normal six-decimal grid,
+with a maximum flagged hole of **0.3260 m²**, no disappeared production parts
+and net area change **+88.936 m²**. Both retain the same strict **0.005% area**
+and **sub-2 m² hole/part** gates. Commune outlines retain six decimals.
+The pre-snap projection round-trip check remains separate from these published
+precision checks. No safety threshold is raised to make a map pass.
+
+### Producer label checks
+
+- [Château de Chamilly](https://www.chateaudechamilly.com/les-vins/bourgogne-cote-chalonnaise/?lang=en):
+  Bourgogne Côte Chalonnaise rouge.
+- [Vignerons de Buxy](https://www.vigneronsdebuxy.fr/wp-content/uploads/2020/11/Bourgogne-Cote-Chalonnaise-Chardonnay-Buissonnier.pdf):
+  Bourgogne Côte Chalonnaise Chardonnay **Buissonnier**, a white wine.
+- [Domaine Lacour](https://domaine-lacour.fr/nos-vins/bourgogne-cotes-du-couchois-sous-le-clos/):
+  Bourgogne Côtes-du-Couchois **Sous le Clos**, from Dracy-lès-Couches and
+  Saint-Sernin-du-Plain, with the lieux-dits Promets / Sous le Clos. Its
+  **Cuvée Amphore** also appears in the producer's wine list.
+- [Château de Couches](https://www.chateaudecouches.com/fr_FR/oenotourisme):
+  **Clos Marguerite – À la Folie** is the Couchois Pinot Noir; the same range
+  includes Aligoté and white wines, so the producer or Clos Marguerite name alone
+  cannot identify denomination 1586.
+
+These labels select the whole denomination only when explicit appellation
+evidence agrees. No parcel or producer-specific outline is added. The five
+village appellations in the Côte Chalonnaise retain their existing maps; region
+text alone never converts a Rully, Mercurey, Givry, Montagny or Bouzeron into
+the regional denomination.

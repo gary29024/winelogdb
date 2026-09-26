@@ -1,0 +1,184 @@
+{
+  "id": "bourgogne-cotes-du-couchois",
+  "name": "Bourgogne Côtes du Couchois",
+  "region": "Couchois",
+  "mapKind": "regional",
+  "communes": [
+    {
+      "id": "71149",
+      "name": "Couches",
+      "bounds": [
+        4.545464,
+        46.848917,
+        4.598879,
+        46.881216
+      ],
+      "labelPoint": [
+        4.592393,
+        46.872968
+      ]
+    },
+    {
+      "id": "71183",
+      "name": "Dracy-lès-Couches",
+      "bounds": [
+        4.556721,
+        46.884369,
+        4.593011,
+        46.903247
+      ],
+      "labelPoint": [
+        4.585865,
+        46.887609
+      ]
+    },
+    {
+      "id": "71431",
+      "name": "Saint-Jean-de-Trézy",
+      "bounds": [
+        4.566763,
+        46.84662,
+        4.592793,
+        46.857084
+      ],
+      "labelPoint": [
+        4.586067,
+        46.850061
+      ]
+    },
+    {
+      "id": "71464",
+      "name": "Saint-Maurice-lès-Couches",
+      "bounds": [
+        4.582314,
+        46.873289,
+        4.617327,
+        46.890908
+      ],
+      "labelPoint": [
+        4.608492,
+        46.883396
+      ]
+    },
+    {
+      "id": "71468",
+      "name": "Saint-Pierre-de-Varennes",
+      "bounds": [
+        4.539973,
+        46.852451,
+        4.550975,
+        46.857168
+      ],
+      "labelPoint": [
+        4.543149,
+        46.854851
+      ]
+    },
+    {
+      "id": "71480",
+      "name": "Saint-Sernin-du-Plain",
+      "bounds": [
+        4.590037,
+        46.879277,
+        4.64262,
+        46.915941
+      ],
+      "labelPoint": [
+        4.631314,
+        46.885908
+      ]
+    }
+  ],
+  "dataUrl": "/maps/bourgogne-cotes-du-couchois.2026-09-21.geojson",
+  "bounds": [
+    4.539973,
+    46.84662,
+    4.64262,
+    46.915941
+  ],
+  "sources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71149/cadastre-71149-communes.json.gz",
+      "sha256": "2819548e08eb93b4ec128feb84997be2fe2a44709cedba98b2ab9463d0e4fd3e"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71183/cadastre-71183-communes.json.gz",
+      "sha256": "89894c3f2532f2e4919c3543afd47f515b43b44294a00b1960db7e85bac1d7a0"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71431/cadastre-71431-communes.json.gz",
+      "sha256": "9e2d7aaada215ba2df1c894558e24dc9ff3a11c803a72fe10e28d2a52d2d60b6"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71464/cadastre-71464-communes.json.gz",
+      "sha256": "b35a255ed54df0cf197854cb5e005d854b2bf6d82a24fdd4f0c37c8f1c683726"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71468/cadastre-71468-communes.json.gz",
+      "sha256": "cd8886ef451efb50bcd2575a96d209cc0489dacd1f8a8de0771268620c5baec7"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71480/cadastre-71480-communes.json.gz",
+      "sha256": "809725dde5b4c98120e40d81b4cc0b02c8fe6cf766153308b777dad22c1ee007"
+    }
+  ],
+  "notes": {},
+  "features": [
+    {
+      "id": "inao-denom-1586",
+      "name": "Bourgogne Côtes du Couchois",
+      "tier": "regional",
+      "kind": "appellation",
+      "appellationId": 138,
+      "denominationId": 1586,
+      "sourceName": "Bourgogne Côtes du Couchois",
+      "communes": [
+        "71149",
+        "71183",
+        "71431",
+        "71464",
+        "71468",
+        "71480"
+      ],
+      "areaHa": 940.21,
+      "matchId": "inao-denom-1586",
+      "atlasUrl": null,
+      "bounds": [
+        4.539973,
+        46.84662,
+        4.64262,
+        46.915941
+      ],
+      "labelPoint": [
+        4.631314,
+        46.885908
+      ]
+    }
+  ],
+  "coverageNote": "A geographic denomination within Bourgogne AOC. The highlight shows its full INAO production area; named cuvées and producer holdings have no separate boundaries here."
+}
