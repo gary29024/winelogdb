@@ -1,0 +1,119 @@
+{
+  "id": "macon-peronne",
+  "name": "Mâcon Péronne",
+  "region": "Mâconnais",
+  "mapKind": "regional",
+  "communes": [
+    {
+      "id": "71135",
+      "name": "Clessé",
+      "bounds": [
+        4.803197,
+        46.40327,
+        4.84037,
+        46.437157
+      ],
+      "labelPoint": [
+        4.819438,
+        46.414426
+      ]
+    },
+    {
+      "id": "71345",
+      "name": "Péronne",
+      "bounds": [
+        4.778753,
+        46.427939,
+        4.825519,
+        46.454581
+      ],
+      "labelPoint": [
+        4.815201,
+        46.432939
+      ]
+    },
+    {
+      "id": "71460",
+      "name": "Saint-Maurice-de-Satonnay",
+      "bounds": [
+        4.765326,
+        46.386282,
+        4.80043,
+        46.428784
+      ],
+      "labelPoint": [
+        4.778957,
+        46.411002
+      ]
+    }
+  ],
+  "dataUrl": "/maps/macon-peronne.2026-09-21.geojson",
+  "bounds": [
+    4.765326,
+    46.386282,
+    4.84037,
+    46.454581
+  ],
+  "sources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71135/cadastre-71135-communes.json.gz",
+      "sha256": "e13b5532737071f8ae83570c8f6fb426e22d93d09a27a39fd43b8085ff796866"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71345/cadastre-71345-communes.json.gz",
+      "sha256": "f10512a48c0e38f90d4042365b8c7984b7e7b3301ff704cca730360c1930bfdc"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71460/cadastre-71460-communes.json.gz",
+      "sha256": "11262ab9755bc0c89ce5328a8372715b00d31524eec6a0f77abec8b3c4afe8aa"
+    }
+  ],
+  "notes": {},
+  "features": [
+    {
+      "id": "inao-denom-1730",
+      "name": "Mâcon Péronne",
+      "tier": "regional",
+      "kind": "appellation",
+      "appellationId": 583,
+      "denominationId": 1730,
+      "sourceName": "Mâcon Péronne",
+      "communes": [
+        "71135",
+        "71345",
+        "71460"
+      ],
+      "areaHa": 827.81,
+      "matchId": "inao-denom-1730",
+      "atlasUrl": null,
+      "bounds": [
+        4.765326,
+        46.386282,
+        4.84037,
+        46.454581
+      ],
+      "labelPoint": [
+        4.778957,
+        46.411002
+      ]
+    }
+  ],
+  "coverageNote": "A geographic denomination within Mâcon AOC. Named cuvées and producer holdings have no separate boundaries here. This is a denomination overview across wine colours, not a verified white, red or rosé production area.",
+  "colourScope": "overview"
+}

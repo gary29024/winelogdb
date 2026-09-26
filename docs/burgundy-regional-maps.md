@@ -1,7 +1,7 @@
 # Burgundy regional maps
 
 Reviewed 27 September 2026. Maps cover all fourteen geographic denominations
-within Bourgogne AOC in the pinned source, plus fourteen within Mâcon AOC.
+within Bourgogne AOC in the pinned source, plus twenty-one within Mâcon AOC.
 These remain regional denominations, not new AOCs or village appellations.
 The existing 44 village maps and 33 Grand Cru appellations are unchanged.
 
@@ -35,6 +35,13 @@ The existing 44 village maps and 33 Grand Cru appellations are unchanged.
 | Mâcon Pierreclos | 583 / 1731 | 1 | Red, white, rosé; overview only |
 | Mâcon Prissé | 583 / 1732 | 1 | Red, white, rosé; overview only |
 | Mâcon Serrières | 583 / 1735 | 1 | Red, rosé |
+| Mâcon Azé | 583 / 1712 | 1 | Red, white, rosé; overview only |
+| Mâcon Burgy | 583 / 1715 | 1 | Red, white, rosé; overview only |
+| Mâcon Cruzille | 583 / 1722 | 3 | Red, white, rosé; overview only |
+| Mâcon Igé | 583 / 1724 | 1 | Red, white, rosé; overview only |
+| Mâcon Lugny | 583 / 1726 | 4 | Red, white, rosé; overview only |
+| Mâcon Péronne | 583 / 1730 | 3 | Red, white, rosé; overview only |
+| Mâcon Verzé | 583 / 1737 | 1 | Red, white, rosé; overview only |
 
 The official BIVB sheets confirm these counts, colours and regional status:
 [Côte d’Or](https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/bourgogne-cote-d-or%2C2458%2C9253.html?args=Y29tcF9pZD0yMjc4JmFjdGlvbj12aWV3RmljaGUmaWQ9Nzc0Jnw%3D),
@@ -49,10 +56,10 @@ Coteaux Bourguignons, Crémant de Bourgogne and Mâcon. The
 [BIVB inventory](https://www.bourgogne-wines.com/professional-access/documents-photos%2C2334%2C9356.html)
 also lists 14 Bourgogne geographic denominations and 27 named Mâcon denominations.
 Together with the seven broad denominations and Mâcon-Villages, these account for
-**49 source denomination IDs: twenty-eight mapped, 21 pending**. Alternative source names
+**49 source denomination IDs: thirty-five mapped, 14 pending**. Alternative source names
 and colour variants sharing an ID do not increase that count.
 
-All seven broad regional areas, Mâcon-Villages and 13 named Mâcon denominations
+All seven broad regional areas, Mâcon-Villages and six named Mâcon denominations
 remain pending. Completing the fourteen Bourgogne geographic denominations does
 not complete the broad Bourgogne AOC boundary. Chablis Premier Cru
 source gaps and other named plots remain tracked separately in
@@ -116,7 +123,7 @@ production geometry, not the smaller area actually planted or producing wine.
 
 ## Identity and display
 
-The twenty-eight-entry runtime index is separate from the village registry; catalogues
+The thirty-five-entry runtime index is separate from the village registry; catalogues
 and geometry load only when opening the dialog. Wine matching needs the explicit
 designation in the appellation or wine name. Hautes Côtes aliases may omit
 “Bourgogne”, as may the complete names “Côtes du Couchois” and “Côtes d’Auxerre”. “Côte d’Or” or “Côte
@@ -494,7 +501,7 @@ This southern batch brought regional progress to **21/49**, including **7/27 nam
 
 ## Western Mâcon source review
 
-Reviewed 27 September 2026. Seven further denominations bring the mapped inventory
+Reviewed 27 September 2026. Seven further denominations brought the mapped inventory
 to **28/49**, including **14/27 named Mâcon denominations**. This counts denomination
 overviews, not complete colour-specific boundaries or individual vineyards.
 
@@ -574,3 +581,84 @@ Tests cover all seven names, accent/hyphen variants, split Mâcon labels,
 colour/style conflicts, producer/reference-only evidence and competing AOCs.
 Browser coverage includes owner/shared pages, lazy loading, 320-pixel layouts,
 desktop views, commune zoom, sector exploration and return-to-wine behaviour.
+
+## Central Mâcon source review
+
+Reviewed 27 September 2026. This batch adds Azé, Burgy, Cruzille, Igé, Lugny,
+Péronne and Verzé: **35/49 regional source denominations** and **21/27 named
+Mâcon denominations** now have maps. All seven allow red, white and rosé wine;
+each opens as a denomination overview across colours. Complete colour-specific
+areas and individual cuvée or producer holdings remain unverified.
+
+| Denomination | Producing communes | Overview (ha) | Published red-only sector (ha) |
+| --- | --- | ---: | ---: |
+| Azé | Azé | 495.56 | 36.85 |
+| Burgy | Burgy | 89.67 | — |
+| Cruzille | Cruzille, Grevilly, Martailly-lès-Brancion | 781.76 | 196.55 |
+| Igé | Igé | 530.96 | — |
+| Lugny | Bissy-la-Mâconnaise, Cruzille, Lugny, Saint-Gengoux-de-Scissé | 904.86 | 2.11 |
+| Péronne | Clessé, Péronne, Saint-Maurice-de-Satonnay | 827.81 | — |
+| Verzé | Verzé | 616.17 | — |
+
+The pinned INAO rows, exact CVI strings and commune sets are checked by the
+builder. BIVB sheets confirm [Azé](https://www.vins-bourgogne.fr/vins-et-terroirs/la-bourgogne-et-ses-appellations/gallery_files/site/321/402/77490/77676.pdf),
+[Cruzille](https://www.vins-bourgogne.fr/vins-et-terroirs/la-bourgogne-et-ses-appellations/gallery_files/site/321/402/77490/77683.pdf),
+[Igé](https://www.vins-bourgogne.fr/vins-et-terroirs/la-bourgogne-et-ses-appellations/macon-ige%2C2377%2C9170.html?args=Y29tcF9pZD0yMjA1JmFjdGlvbj12aWV3RmljaGUmaWQ9Nzg1Jnw%3D),
+[Lugny](https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/macon-lugny%2C2458%2C9253.html?args=Y29tcF9pZD0yMjc4JmFjdGlvbj12aWV3RmljaGUmaWQ9ODE1Jnw%3D)
+and [Verzé](https://www.vins-bourgogne.fr/vins-et-terroirs/la-bourgogne-et-ses-appellations/gallery_files/site/321/402/77490/77704.pdf).
+The Union des Producteurs de Vins Mâcon confirms [Burgy](https://www.vins-macon.com/les-macon/macon-burgy/)
+and [Péronne](https://www.vins-macon.com/les-macon/macon-peronne/).
+Areas measure delimited source geometry, not planted acreage.
+
+### Shared communes and colour scope
+
+These seven maps contain fourteen denomination–commune associations across
+thirteen distinct communes. Within Cruzille commune, the source assigns
+**314.55699 ha** to Mâcon Cruzille and **19.47667 ha** to Mâcon Lugny. Their
+source geometries have **zero intersection area**. Each commune zoom therefore
+frames its own denomination's rows, never the whole administrative commune or
+the other denomination's vines. Péronne includes only the delimited part of
+Clessé; a Viré-Clessé wine keeps its village map and cannot become Mâcon Péronne.
+
+Azé's red-only sector lies in Azé, Cruzille's in Cruzille and Martailly-lès-Brancion,
+and Lugny's small sector in Bissy-la-Mâconnaise. They remain selectable source
+features within their overviews. A red wine still opens the overview, since
+`rouge exclusif` does not define the entire red-wine area. No white/rosé boundary
+is derived by subtraction or copied from Mâcon-Villages. The unresolved colour
+crosswalk and display rules from the western batch apply unchanged.
+
+### Producer labels and geometry checks
+
+Reviewed label regressions include [Cave d'Azé's Mâcon-Azé Cuvée Jules Richard](https://www.caveaze.com/produit/macon-aze-blanc-cuvee-jules-richard-2022/)
+and [Mâcon-Péronne](https://www.caveaze.com/en/online-shop/page/2/),
+[Cave de Lugny's Mâcon-Lugny Les Charmes](https://cave-lugny.com/boutique/produit/14/macon-lugny-les-charmes.html)
+and [Mâcon-Cruzille Le Gorfou](https://cave-lugny.com/bourgogne-grand-ecart/),
+and [Leflaive's Mâcon-Verzé Les Chênes](https://www.leflaive.fr/fr_FR/wine/macon-verze-les-chenes).
+The [BIVB-hosted Mâcon competition list](https://www.vins-bourgogne.fr/presse/gallery_files/site/289/1910/74217.pdf)
+also records Les Vignerons d'Igé's Mâcon-Igé Vieilles Vignes and Domaine Olivier
+Fichet's Mâcon-Burgy. Full designations and qualified split labels select only
+the denomination overview. “Cave de Lugny”, “Les Charmes”, “Le Gorfou” and
+“Les Chênes” alone establish neither a denomination nor a plot. The #358
+full-name “Mâcon Roche-Vineuse” alias and strict bare estate-name guard remain.
+
+All ten new production features are valid without repair. The maximum pre-snap
+inverse-projection symmetric difference is **0.00005525 m²**. All pass the normal
+**0.000001°** grid with the existing 0.005% net-area and sub-2 m² hole/part gates.
+The largest absolute net-area change is **49.1171 m²**; the largest relative
+change is **0.003451%**, in Lugny's small sector. Cruzille's overview closes one
+**0.0163 m²** hole and its sector loses one **0.0258 m²** sliver; Verzé closes a
+numerically negligible hole. No threshold is relaxed or geometry repaired.
+
+All **71 generated regional files** reproduce byte-for-byte. All **56 previously
+merged map/catalogue files** and their runtime entries remain unchanged. An
+independent source comparison matches every new production feature exactly to
+its source union after projection with the archive's `.prj` and configured
+snapping. The seven GeoJSON files total **1,779,614 bytes**, loaded on demand.
+Unit checks cover matching, conflicts, commune membership, source-sector scope
+and nearby village precedence. The exhaustive browser matrix covers all seven
+on owner/shared pages, mobile/desktop views, initial commune visibility,
+lazy loading, commune zoom, sector exploration and return to the wine's overview.
+
+The next named Mâcon batch is Bray, Chardonnay, Mancey, Montbellet,
+Saint-Gengoux-le-National and Uchizy. Mâcon-Villages and all seven broad regional
+areas remain pending; missing named plots continue under issue #344.

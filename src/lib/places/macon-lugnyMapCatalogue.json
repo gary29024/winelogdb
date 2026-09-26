@@ -1,0 +1,170 @@
+{
+  "id": "macon-lugny",
+  "name": "Mâcon Lugny",
+  "region": "Mâconnais",
+  "mapKind": "regional",
+  "communes": [
+    {
+      "id": "71035",
+      "name": "Bissy-la-Mâconnaise",
+      "bounds": [
+        4.773518,
+        46.474044,
+        4.79768,
+        46.490052
+      ],
+      "labelPoint": [
+        4.790772,
+        46.47599
+      ]
+    },
+    {
+      "id": "71156",
+      "name": "Cruzille",
+      "bounds": [
+        4.787005,
+        46.483592,
+        4.801142,
+        46.490938
+      ],
+      "labelPoint": [
+        4.797965,
+        46.486531
+      ]
+    },
+    {
+      "id": "71267",
+      "name": "Lugny",
+      "bounds": [
+        4.796123,
+        46.467018,
+        4.836192,
+        46.503117
+      ],
+      "labelPoint": [
+        4.82212,
+        46.47735
+      ]
+    },
+    {
+      "id": "71416",
+      "name": "Saint-Gengoux-de-Scissé",
+      "bounds": [
+        4.762685,
+        46.443386,
+        4.793559,
+        46.478651
+      ],
+      "labelPoint": [
+        4.783597,
+        46.468523
+      ]
+    }
+  ],
+  "dataUrl": "/maps/macon-lugny.2026-09-21.geojson",
+  "bounds": [
+    4.762685,
+    46.443386,
+    4.836192,
+    46.503117
+  ],
+  "sources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71035/cadastre-71035-communes.json.gz",
+      "sha256": "3452cf25c76dc334dd45e76ffac870adf135915e8d83b70c177d09edbe9fa5e9"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71156/cadastre-71156-communes.json.gz",
+      "sha256": "187246bf17f74045124cc9014157b280d98242e840a6a5179d2dcbc060e74a27"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71267/cadastre-71267-communes.json.gz",
+      "sha256": "a2420e689f6bf346af4147b28d588fa0778053c9896a9072c5ac97fbe187bc02"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71416/cadastre-71416-communes.json.gz",
+      "sha256": "9232c77fabe9261440b3a25e97f35abfebb4739d0b3572bdd3f379c82e2d36a4"
+    }
+  ],
+  "notes": {
+    "inao-denom-1726-red-only": {
+      "note": "INAO labels this sector “rouge exclusif” (red only). It is not the whole red-wine area. No white or rosé boundary is inferred by subtracting it from the overview."
+    }
+  },
+  "features": [
+    {
+      "id": "inao-denom-1726",
+      "name": "Mâcon Lugny",
+      "tier": "regional",
+      "kind": "appellation",
+      "appellationId": 583,
+      "denominationId": 1726,
+      "sourceName": "Mâcon Lugny",
+      "communes": [
+        "71035",
+        "71156",
+        "71267",
+        "71416"
+      ],
+      "areaHa": 904.86,
+      "matchId": "inao-denom-1726",
+      "atlasUrl": null,
+      "bounds": [
+        4.762685,
+        46.443386,
+        4.836192,
+        46.503117
+      ],
+      "labelPoint": [
+        4.783597,
+        46.468523
+      ]
+    },
+    {
+      "id": "inao-denom-1726-red-only",
+      "name": "Mâcon Lugny — red-only sector",
+      "tier": "regional",
+      "kind": "appellation",
+      "appellationId": 583,
+      "denominationId": 1726,
+      "sourceName": "Mâcon Lugny - rouge exclusif",
+      "communes": [
+        "71035"
+      ],
+      "areaHa": 2.11,
+      "matchId": "inao-denom-1726-red-only",
+      "atlasUrl": null,
+      "bounds": [
+        4.784732,
+        46.477234,
+        4.787162,
+        46.479353
+      ],
+      "labelPoint": [
+        4.78636,
+        46.478283
+      ]
+    }
+  ],
+  "coverageNote": "A geographic denomination within Mâcon AOC. Named cuvées and producer holdings have no separate boundaries here. This is a denomination overview across wine colours, not a verified white, red or rosé production area.",
+  "colourScope": "overview"
+}

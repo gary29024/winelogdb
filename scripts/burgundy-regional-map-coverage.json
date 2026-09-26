@@ -209,7 +209,7 @@
             "Mâcon Azé",
             "Mâcon Azé - rouge exclusif"
           ],
-          "status": "pending",
+          "status": "mapped",
           "kind": "geographic"
         },
         {
@@ -235,7 +235,7 @@
           "sourceNames": [
             "Mâcon Burgy"
           ],
-          "status": "pending",
+          "status": "mapped",
           "kind": "geographic"
         },
         {
@@ -277,7 +277,7 @@
             "Mâcon Cruzille",
             "Mâcon Cruzille - rouge exclusif"
           ],
-          "status": "pending",
+          "status": "mapped",
           "kind": "geographic"
         },
         {
@@ -293,7 +293,7 @@
           "sourceNames": [
             "Mâcon Igé"
           ],
-          "status": "pending",
+          "status": "mapped",
           "kind": "geographic"
         },
         {
@@ -311,7 +311,7 @@
             "Mâcon Lugny",
             "Mâcon Lugny - rouge exclusif"
           ],
-          "status": "pending",
+          "status": "mapped",
           "kind": "geographic"
         },
         {
@@ -337,7 +337,7 @@
           "sourceNames": [
             "Mâcon Péronne"
           ],
-          "status": "pending",
+          "status": "mapped",
           "kind": "geographic"
         },
         {
@@ -387,7 +387,7 @@
           "sourceNames": [
             "Mâcon Verzé"
           ],
-          "status": "pending",
+          "status": "mapped",
           "kind": "geographic"
         },
         {

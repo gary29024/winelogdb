@@ -1,0 +1,75 @@
+{
+  "id": "macon-burgy",
+  "name": "Mâcon Burgy",
+  "region": "Mâconnais",
+  "mapKind": "regional",
+  "communes": [
+    {
+      "id": "71066",
+      "name": "Burgy",
+      "bounds": [
+        4.828543,
+        46.458539,
+        4.843932,
+        46.475822
+      ],
+      "labelPoint": [
+        4.838822,
+        46.473475
+      ]
+    }
+  ],
+  "dataUrl": "/maps/macon-burgy.2026-09-21.geojson",
+  "bounds": [
+    4.828543,
+    46.458539,
+    4.843932,
+    46.475822
+  ],
+  "sources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71066/cadastre-71066-communes.json.gz",
+      "sha256": "06809557d95385b4110b9153375eca6a91922f929b86a340c78f9eb57c3b9ca8"
+    }
+  ],
+  "notes": {},
+  "features": [
+    {
+      "id": "inao-denom-1715",
+      "name": "Mâcon Burgy",
+      "tier": "regional",
+      "kind": "appellation",
+      "appellationId": 583,
+      "denominationId": 1715,
+      "sourceName": "Mâcon Burgy",
+      "communes": [
+        "71066"
+      ],
+      "areaHa": 89.67,
+      "matchId": "inao-denom-1715",
+      "atlasUrl": null,
+      "bounds": [
+        4.828543,
+        46.458539,
+        4.843932,
+        46.475822
+      ],
+      "labelPoint": [
+        4.838822,
+        46.473475
+      ]
+    }
+  ],
+  "coverageNote": "A geographic denomination within Mâcon AOC. Named cuvées and producer holdings have no separate boundaries here. This is a denomination overview across wine colours, not a verified white, red or rosé production area.",
+  "colourScope": "overview"
+}
