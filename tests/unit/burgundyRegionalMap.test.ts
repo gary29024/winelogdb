@@ -201,3 +201,27 @@ describe('the Côte d’Or département as a recorded region',()=>{
   expect(burgundyAtlasWineDetailPlace(wine)).toBeNull();
  });
 });
+
+describe('Saône-et-Loire and Yonne as recorded regions',()=>{
+ it.each([
+  ['Saône-et-Loire','Mercurey','Clos du Roi','premier_cru','inao-denom-827'],
+  ['Saône et Loire','Pouilly-Fuissé','Les Brulés','premier_cru','inao-denom-2871'],
+  ['Saône-et-Loire','Rully','','village','inao-denom-1087'],
+  ['Saône-et-Loire','Maranges','','village','inao-app-198-village'],
+  ['Yonne','Chablis Grand Cru','Les Clos','grand_cru','inao-denom-443'],
+  ['Yonne','Chablis','','village','inao-denom-397'],
+  ['Yonne','Irancy','','village','inao-denom-1288'],
+  ['Yonne','Saint-Bris','','village','inao-denom-1597'],
+ ] as const)('%s keeps %s %s on its map',(region,appellation,wineName,classification,featureId)=>{
+  const wine={...base,region,appellation,wineName,classification};
+  expect(burgundyVillageMapTarget(wine)?.featureId).toBe(featureId);
+  expect(burgundyAtlasWineDetailPlace(wine)).not.toBeNull();
+ });
+ it.each([
+  ['Saône-et-Loire','Meursault'],['Saône-et-Loire','Chablis'],['Yonne','Gevrey-Chambertin'],['Yonne','Mercurey'],["Côte d'Or",'Mercurey'],
+ ] as const)('%s still conflicts with %s',(region,appellation)=>{
+  const wine={...base,region,appellation,classification:'village'};
+  expect(burgundyVillageMapTarget(wine)).toBeNull();
+  expect(burgundyAtlasWineDetailPlace(wine)).toBeNull();
+ });
+});

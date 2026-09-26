@@ -6,7 +6,7 @@ import mapping from './burgundyAtlasPremierCruLinks.json';
 import appellationMapping from './burgundyAtlasAppellationLinks.json';
 import unmappedPremiers from './burgundyAtlasUnmappedPremierCruNames.json';
 import villageMaps from './burgundyVillageMapRegistry.json';
-import { departmentRegions } from './burgundyDepartments';
+import { departmentAppellations,departmentRegions } from './burgundyDepartments';
 import { producerAllowsClimat } from './burgundyProducerLocations';
 
 type Wine=WineFacts&{classification?:string|null};
@@ -165,8 +165,9 @@ const titleKey=(value:string)=>textKey(value.replace(/&/g,' et ')).replace(produ
 const regionNames=[...PLACES.filter(place=>place.id.startsWith('france/burgundy')).flatMap(place=>
   [place.name,...place.aliases].map(name=>({key:nameKey(name),id:place.id}))),
   ...Object.entries(departmentRegions).flatMap(([key,ids])=>ids.map(id=>({key,id})))];
+const departmentNames=new Map(Object.entries(departmentAppellations).map(([key,names])=>[key,names.map(nameKey)]));
 function compatibleRegion(region:string,group:{key:string;regionId:string}){
-  return !region||region===group.key||regionNames.some(place=>place.key===region&&
+  return !region||region===group.key||!!departmentNames.get(region)?.includes(group.key)||regionNames.some(place=>place.key===region&&
     (group.regionId===place.id||group.regionId.startsWith(`${place.id}/`)));
 }
 

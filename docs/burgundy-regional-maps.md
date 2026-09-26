@@ -107,6 +107,9 @@ A region recorded as the **Côte d’Or** département (the wine canonicaliser s
 “cote dor” this way) is compatible with both the Côte de Nuits and the Côte de
 Beaune, so village, Premier Cru and Grand Cru wines keep their maps and Atlas
 links. It still conflicts with Chablis, the Côte Chalonnaise and the Mâconnais.
+Likewise **Saône-et-Loire** covers the Côte Chalonnaise, the Mâconnais and
+Maranges, and **Yonne** covers Chablis and the Grand Auxerrois villages (Irancy,
+Saint-Bris, Vézelay). A département never matches appellations outside it.
 See `src/lib/places/burgundyDepartments.ts`.
 
 The map opens at the full production extent with a lower minimum zoom than the
