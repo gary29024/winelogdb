@@ -375,6 +375,8 @@ test('Savigny, Auxey and Monthélie producer spellings select the reviewed cru',
  for(const [appellation,wineName,id,selected,note] of [
   ['Savigny-lès-Beaune','Albert Morot La Bataillère aux Vergelesses Premier Cru','inao-denom-1180','Bataillère','separate from Les Vergelesses'],
   ['Auxey-Duresses','Les Bretterins','inao-denom-267','Les Bréterins',''],
+  ['Auxey-Duresses','Les Ecusseaux','inao-denom-269','Les Ecussaux',''],
+  ['Auxey-Duresses','Les Bretterins dit La Chapelle','inao-denom-266','La Chapelle','is shown as La Chapelle'],
   ['Monthélie','MJ Tricot Clos Les Champs Fulliot','inao-denom-921','Les Champs Fulliots','whole Les Champs Fulliots Premier Cru'],
  ]){
   await setup(page,{appellation,wineName});await page.goto('/shared/layout-wine');

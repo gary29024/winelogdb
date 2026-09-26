@@ -36,12 +36,22 @@ describe('producer labels in the next Côte de Beaune villages',()=>{
  ])('%s — %s selects its reviewed source denomination',(appellation,wineName,id)=>{
   expect(burgundyVillageMapTarget({...wine,appellation,wineName})).toMatchObject({featureId:`inao-denom-${id}`,scope:'vineyard'});
  });
+ it('keeps Auxey Premier Cru spellings and La Chapelle labels on their own boundaries',()=>{
+  for(const [wineName,id] of [['Les Écusseaux',269],['Ecusseaux',269],['Les Ecussaux',269],['Les Bréterins dit La Chapelle',266],
+   ['Les Bretterins',267],['Reugne',271],['La Chapelle',266]] as const){
+   expect(burgundyVillageMapTarget({...wine,appellation:'Auxey-Duresses',wineName}),wineName).toMatchObject({featureId:`inao-denom-${id}`,scope:'vineyard'});
+  }
+  expect(auxey.notes['inao-denom-266'].note).toContain('is shown as La Chapelle');
+ });
  it('accepts the complete reviewed names in reference fields and keeps blends broad',()=>{
   for(const [appellation,name,id,other,broad] of [
    ['Savigny-lès-Beaune','Clos de la Bataillère',1180,'Les Lavières',1196],
    ['Savigny-lès-Beaune','La Bataillère aux Vergelesses',1180,'Les Lavières',1196],
    ['Savigny-lès-Beaune','Aux Fournaux',1175,'Les Lavières',1196],
    ['Auxey-Duresses','Les Bretterins',267,'Clos du Val',272],
+   ['Auxey-Duresses','Les Ecusseaux',269,'Clos du Val',272],
+   ['Auxey-Duresses','Les Bretterins La Chapelle',266,'Clos du Val',272],
+   ['Auxey-Duresses','Reugne dit La Chapelle',266,'Clos du Val',272],
    ['Monthélie','Les Champs Fulliot',921,'Sur la Velle',926],
    ['Monthélie','Clos des Champs Fulliot',921,'Sur la Velle',926],
   ] as const){

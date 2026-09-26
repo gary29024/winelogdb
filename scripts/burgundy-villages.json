@@ -911,7 +911,7 @@
       "nameCrosswalk": {},
       "wineColours": ["red", "white"],
       "notes": {
-        "inao-denom-266": {"note": "La Chapelle overlaps parts of Reugne and Les Bréterins in the official map. These remain three separate Premier Cru names, each with its full boundary."}
+        "inao-denom-266": {"note": "La Chapelle overlaps parts of Reugne and Les Bréterins in the official map. These remain three separate Premier Cru names, each with its full boundary. A label naming Les Bréterins or Reugne together with La Chapelle is shown as La Chapelle."}
       },
       "unionOverviewFills": true,
       "expectedBounds": [4.65, 46.95, 4.9, 47.1]

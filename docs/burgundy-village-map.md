@@ -267,6 +267,11 @@ Atlas's map geometry or assets is copied.
   and [Rapet's technical sheet](https://www.bourgogne-wines.com/theme_front/theme_front_16/javascript/vendor/vin-co/pdf/NXAXRF.pdf);
   [Bruno Clair's Les Jarrons](https://www.brunoclair.com/vins/savigny-les-beaune-les-jarrons-1er-cru/);
   [BIVB's Bretterins spelling](https://www.vins-bourgogne.fr/gallery_files/site/321/402/404.pdf);
+  [Lafouge's](https://www.vin-malin.fr/16693-domaine-lafouge-auxey-duresses-1er-cru-les-ecusseaux-rouge-2022.html) and
+  [Buisson's](https://www.vivino.com/US/en/domaine-henri-gilles-buisson-auxey-duresses-1er-cru-les-ecusseaux/w/1996433)
+  Les Ecusseaux (INAO: Les Ecussaux); labels naming Les Bréterins or Reugne with
+  [La Chapelle, formed from parts of both](https://www.wine-searcher.com/regions-auxey-duresses+la+chapelle),
+  select La Chapelle;
   [Changarnier's Champs Fulliot](https://www.domainechangarnier.com/nos-vins/monthelie-1er-cru-champs-fulliot/),
   [Glantenay's label](https://www.georgesglantenay.com/Fiche?designation=premiers_crus&id=5),
   [Dujardin's sheet](https://www.domaine-dujardin.com/mesfichiers/fichiers/270225/Monthelie%20Premier%20Cru%20Les%20Champs%20Fulliots%20Red%20wine.pdf),
