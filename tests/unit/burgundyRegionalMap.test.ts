@@ -587,4 +587,15 @@ describe('western Mâcon overviews and published sectors',()=>{
  ])('preserves denomination scope for the producer label $wineName',({featureId,...fields})=>{
   expect(burgundyVillageMapTarget({...base,...fields})).toMatchObject({featureId,scope:'appellation'});
  });
+ // The full denomination may drop the article; the bare split name may not,
+ // since "Domaine de la Roche-Vineuse" would then read as the denomination.
+ it.each(['Mâcon Roche-Vineuse','Mâcon-Roche Vineuse','Macon Roche-Vineuse Blanc'])('accepts %s without the article',appellation=>{
+  expect(burgundyVillageMapTarget({...base,appellation,colour:'White'})).toMatchObject({featureId:'inao-denom-1725',mapKind:'regional'});
+ });
+ it.each([
+  {appellation:'Mâcon',wineName:'Domaine de la Roche-Vineuse'},
+  {appellation:'Mâcon',wineName:'Roche-Vineuse'},
+ ])('keeps the bare split name strict %j',wine=>{
+  expect(burgundyVillageMapTarget({...base,colour:'White',...wine})?.mapKind).not.toBe('regional');
+ });
 });
