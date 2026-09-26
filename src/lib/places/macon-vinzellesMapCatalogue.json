@@ -1,0 +1,74 @@
+{
+  "id": "macon-vinzelles",
+  "name": "Mâcon Vinzelles",
+  "region": "Mâconnais",
+  "mapKind": "regional",
+  "communes": [
+    {
+      "id": "71583",
+      "name": "Vinzelles",
+      "bounds": [
+        4.767839,
+        46.261995,
+        4.778295,
+        46.276293
+      ],
+      "labelPoint": [
+        4.773424,
+        46.274489
+      ]
+    }
+  ],
+  "dataUrl": "/maps/macon-vinzelles.2026-09-21.geojson",
+  "bounds": [
+    4.767839,
+    46.261995,
+    4.778295,
+    46.276293
+  ],
+  "sources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71583/cadastre-71583-communes.json.gz",
+      "sha256": "fcaf92a37212fa796f50bb900e080958c759349d7388b351f3c5e526ba372a72"
+    }
+  ],
+  "notes": {},
+  "features": [
+    {
+      "id": "inao-denom-2074",
+      "name": "Mâcon Vinzelles",
+      "tier": "regional",
+      "kind": "appellation",
+      "appellationId": 583,
+      "denominationId": 2074,
+      "sourceName": "Mâcon Vinzelles",
+      "communes": [
+        "71583"
+      ],
+      "areaHa": 60.01,
+      "matchId": "inao-denom-2074",
+      "atlasUrl": null,
+      "bounds": [
+        4.767839,
+        46.261995,
+        4.778295,
+        46.276293
+      ],
+      "labelPoint": [
+        4.773424,
+        46.274489
+      ]
+    }
+  ],
+  "coverageNote": "A geographic denomination within Mâcon AOC. The highlight shows its full INAO production area; named cuvées and producer holdings have no separate boundaries here."
+}

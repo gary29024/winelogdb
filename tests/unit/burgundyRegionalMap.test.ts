@@ -23,6 +23,13 @@ const cases=[
  ['Bourgogne La Chapelle Notre-Dame','bourgogne-la-chapelle-notre-dame','inao-denom-371',1,['Red','White','Rosé']],
  ['Bourgogne Le Chapitre','bourgogne-le-chapitre','inao-denom-372',1,['Red','White','Rosé']],
  ['Bourgogne Montrecul','bourgogne-montrecul','inao-denom-373',1,['Red','White','Rosé']],
+ ['Mâcon Charnay-lès-Mâcon','macon-charnay-les-macon','inao-denom-1721',1,['Red','White','Rosé']],
+ ['Mâcon Davayé','macon-davaye','inao-denom-1723',1,['Red','White','Rosé']],
+ ['Mâcon Fuissé','macon-fuisse','inao-denom-2069',1,['White']],
+ ['Mâcon Loché','macon-loche','inao-denom-2070',1,['White']],
+ ['Mâcon Solutré-Pouilly','macon-solutre-pouilly','inao-denom-2072',1,['White']],
+ ['Mâcon Vergisson','macon-vergisson','inao-denom-1736',1,['White']],
+ ['Mâcon Vinzelles','macon-vinzelles','inao-denom-2074',1,['White']],
 ] as const;
 
 describe('regional denominations stay separate from villages and named vineyards',()=>{
@@ -35,7 +42,7 @@ describe('regional denominations stay separate from villages and named vineyards
    const catalogue=await loadVillageMapCatalogue(id);
    expect(catalogue.mapKind).toBe('regional');
    expect(catalogue.features).toHaveLength(1);
-   expect(catalogue.features[0]).toMatchObject({id:featureId,tier:'regional',kind:'appellation',appellationId:138,atlasUrl:null});
+   expect(catalogue.features[0]).toMatchObject({id:featureId,tier:'regional',kind:'appellation',appellationId:name.startsWith('Mâcon')?583:138,atlasUrl:null});
    expect(catalogue.communes).toHaveLength(count);
    expect(catalogue.communes.map(c=>c.id).sort()).toEqual(config.maps.find(m=>m.id===id)!.communes);
    const data=JSON.parse(readFileSync(`public${catalogue.dataUrl}`,'utf8'));
@@ -59,7 +66,7 @@ describe('regional denominations stay separate from villages and named vineyards
   const denominations=inventory.appellations.flatMap(a=>a.denominations);
   expect(denominations).toHaveLength(49);
   expect(new Set(denominations.map(d=>d.denominationId)).size).toBe(49);
-  expect(denominations.filter(d=>d.status==='mapped').map(d=>d.denominationId).sort((a,b)=>a-b)).toEqual([363,364,365,366,367,368,369,371,372,373,374,1586,1751,2840]);
+  expect(denominations.filter(d=>d.status==='mapped').map(d=>d.denominationId).sort((a,b)=>a-b)).toEqual([363,364,365,366,367,368,369,371,372,373,374,1586,1721,1723,1736,1751,2069,2070,2072,2074,2840]);
   expect(inventory.appellations.find(a=>a.appellationId===138)!.denominations).toHaveLength(15);
   const bourgogne=inventory.appellations.find(a=>a.appellationId===138)!.denominations;
   expect(bourgogne.filter(d=>d.denominationId!==362).every(d=>d.status==='mapped')).toBe(true);
@@ -264,7 +271,7 @@ function assertGeometry(catalogue:VillageMapCatalogue,data:{features:{properties
    expect(ring.length).toBeGreaterThanOrEqual(4);
    expect(ring[0]).toEqual(ring.at(-1));
    for(const [lon,lat] of ring){
-    if(lon<3.2||lon>5.3||lat<46.5||lat>48.1)throw new Error(`Out-of-region coordinate in ${catalogue.name}`);
+    if(lon<3.2||lon>5.3||lat<46.2||lat>48.1)throw new Error(`Out-of-region coordinate in ${catalogue.name}`);
     if([lon,lat].some(value=>Math.abs(value/grid-Math.round(value/grid))>0.000001))throw new Error(`Coordinate exceeds reviewed precision in ${catalogue.name}`);
    }
   }
@@ -355,7 +362,7 @@ describe('small Côte d’Or regional denominations',()=>{
   expect(catalogue.features).toHaveLength(1);
   expect(catalogue.features[0].denominationId).toBe(372);
  });
- for(const [appellation,id] of cases.slice(11)){
+ for(const [appellation,id] of cases.slice(11,14)){
   it(`${appellation}: accepts its subregion and département, but rejects neighbouring regions`,()=>{
    const region=id==='bourgogne-la-chapelle-notre-dame'?'Côte de Beaune':'Côte de Nuits';
    const opposite=region==='Côte de Beaune'?'Côte de Nuits':'Côte de Beaune';
@@ -405,6 +412,87 @@ describe('small Côte d’Or regional denominations',()=>{
   const target=burgundyVillageMapTarget({...base,...wine});
   expect(target).not.toBeNull();
   expect(target).not.toHaveProperty('mapKind');
+ });
+});
+
+describe('southern Mâcon geographic denominations',()=>{
+ for(const [appellation,id,featureId,,colours] of cases.slice(14)){
+  const site=appellation.replace('Mâcon ','');
+  it.each(['Burgundy','Bourgogne','Mâconnais','Saône-et-Loire'])(`${appellation}: accepts region %s`,region=>{
+   expect(burgundyVillageMapTarget({...base,appellation,region})).toMatchObject({villageId:id,featureId,mapKind:'regional'});
+  });
+  it.each(['Mâcon','Macon Blanc'])(`${appellation}: accepts a split %s label`,appellation=>{
+   expect(burgundyVillageMapTarget({...base,appellation,wineName:site,colour:'White'})).toMatchObject({featureId,scope:'appellation'});
+  });
+  it(`${appellation}: recognises the full name in the wine field and normalised label spelling`,()=>{
+   for(const app of [null,'Mâcon Blanc'])expect(burgundyVillageMapTarget({...base,appellation:app,wineName:`${appellation} Vieilles Vignes`,colour:'White'})).toMatchObject({featureId});
+   expect(burgundyVillageMapTarget({...base,appellation:appellation.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replaceAll(' ','-')+' AOP'})).toMatchObject({featureId});
+  });
+  it.each(['Red','White','Rosé'])(`${appellation}: checks colour and style independently (%s)`,colour=>{
+   const style=colour==='Rosé'?'rose':colour.toLowerCase();
+   const label=colour==='White'?'Blanc':colour==='Red'?'Rouge':'Rosé';
+   for(const evidence of [{colour},{wineStyle:style},{wineName:label},{appellation:`${appellation} ${label}`}]){
+    const target=burgundyVillageMapTarget({...base,appellation,...evidence});
+    if((colours as readonly string[]).includes(colour))expect(target).toMatchObject({featureId});
+    else expect(target).toBeNull();
+   }
+  });
+  it.each([
+   {region:'Côte d’Or'},{region:'Yonne'},{region:'Côte Chalonnaise'},{region:'Beaujolais'},
+   {country:'USA'},{classification:'village'},{classification:'premier_cru'},{classification:'grand_cru'},
+   {colour:'White',wineStyle:'red'},{colour:'White',wineName:'Rouge'},
+   {productSubtype:'Sparkling'},{productType:'Spirit'},{identityMatchStatus:'conflict' as const},
+   {referenceSite:'Pouilly-Fuissé'},{wineName:'Saint-Véran'},{wineName:'Mâcon Chaintré'},
+   {wineName:'Mâcon-Villages'},{wineName:'Bourgogne Chitry'},
+  ])(`${appellation}: withholds contradictory identity %j`,overrides=>{
+   expect(burgundyVillageMapTarget({...base,appellation,...overrides})).toBeNull();
+  });
+  it(`${appellation}: a commune, producer or reference name alone does not select the map`,()=>{
+   for(const wine of [{appellation:null,wineName:site},{appellation:'Mâcon',referenceSite:site},
+    {appellation:'Mâcon',referenceParcel:appellation},{appellation:'Mâcon',producer:site},
+    {appellation:'Bourgogne',wineName:site},{appellation:'Mâcon-Villages',wineName:site},
+    {appellation:'Pouilly-Fuissé',wineName:site},{appellation:'Bourgogne',wineName:appellation}]){
+    const target=burgundyVillageMapTarget({...base,...wine});
+    expect(target?.mapKind).not.toBe('regional');
+   }
+  });
+ }
+ it.each([
+  {appellation:'Mâcon Charnay Rouge',wineName:'Mâcon Charnay',producer:'Les Orfèvres du Vin',featureId:'inao-denom-1721',colour:'Red'},
+  {appellation:'Mâcon Blanc',wineName:'Charnay',producer:'Les Orfèvres du Vin',featureId:'inao-denom-1721',colour:'White'},
+  {appellation:'Mâcon Fuissé',wineName:'Les Tâches',producer:'Robert-Denogent',featureId:'inao-denom-2069'},
+  {appellation:'Mâcon-Solutré',wineName:'Clos des Bertillonnes',producer:'Robert-Denogent',featureId:'inao-denom-2072'},
+  {appellation:'Mâcon Loché',wineName:'Les Longues Terres',producer:'Marcel Couturier',featureId:'inao-denom-2070'},
+  {appellation:'Mâcon Vinzelles',wineName:'Le Clos de Grand-Père',producer:'La Soufrandière',featureId:'inao-denom-2074'},
+ ])('keeps the named producer wine $wineName at denomination scope',({featureId,...wine})=>{
+  expect(burgundyVillageMapTarget({...base,colour:'White',...wine})).toMatchObject({featureId,scope:'appellation',mapKind:'regional'});
+ });
+ it.each([
+  {appellation:'Mâcon',wineName:'Pouilly-Fuissé'},
+  {appellation:'Mâcon Blanc',wineName:'Pouilly-Loché'},
+  {appellation:'Mâcon',wineName:'Pouilly-Vinzelles'},
+  {appellation:'Mâcon',wineName:'Fuissé Vinzelles'},
+  {appellation:'Mâcon Fuissé',wineName:'Mâcon Vergisson'},
+  {appellation:'Mâcon',wineName:'Loché Mâcon-Villages'},
+  {appellation:'Mâcon',wineName:'Domaine de Fuissé',producer:'Domaine de Fuissé'},
+  {appellation:'Mâcon Davayé Blanc',wineName:'Rouge',colour:null},
+  {appellation:'Mâcon Blanc',wineName:'Charnay Rosé',colour:null},
+ ])('does not erase a competing appellation when matching a split site name %j',wine=>{
+  expect(burgundyVillageMapTarget({...base,colour:'White',...wine})).toBeNull();
+ });
+ it.each(['Pouilly-Fuissé','Pouilly-Loché','Pouilly-Vinzelles','Saint-Véran'])('preserves %s village identity',appellation=>{
+  const target=burgundyVillageMapTarget({...base,appellation,colour:'White',classification:'village'});
+  expect(target).toMatchObject({villageName:appellation,scope:'appellation'});
+  expect(target).not.toHaveProperty('mapKind');
+ });
+ it('counts Fuissé once despite its duplicate source label, and explains Loché’s current commune',async()=>{
+  const fuisse=await loadVillageMapCatalogue('macon-fuisse');
+  expect(fuisse.features).toHaveLength(1);
+  expect(fuisse.features[0]).toMatchObject({denominationId:2069,areaHa:342.09});
+  expect(fuisse.coverageNote).toContain('Mâcon AOC');
+  const loche=await loadVillageMapCatalogue('macon-loche');
+  expect(loche.communes).toMatchObject([{id:'71270',name:'Mâcon'}]);
+  expect(loche.coverageNote).toContain('Loché is within the current commune of Mâcon');
  });
 });
 

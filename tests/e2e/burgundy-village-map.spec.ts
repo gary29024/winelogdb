@@ -21,17 +21,25 @@ const regionalMapCases=[
  ['Bourgogne La Chapelle Notre-Dame',1,'Ladoix-Serrigny','red','Jean-Pierre Maldant'],
  ['Bourgogne Le Chapitre',1,'Chenôve','red','Vieilles Vignes'],
  ['Bourgogne Montrecul',1,'Dijon','red','Bourgogne Montre-Cul'],
+ ['Mâcon Charnay-lès-Mâcon',1,'Charnay-lès-Mâcon','rose','Mâcon Charnay Rosé'],
+ ['Mâcon Davayé',1,'Davayé','red','Mâcon Davayé Rouge'],
+ ['Mâcon Fuissé',1,'Fuissé','white','Les Tâches'],
+ ['Mâcon Loché',1,'Mâcon','white','Les Longues Terres'],
+ ['Mâcon Solutré-Pouilly',1,'Solutré-Pouilly','white','Clos des Bertillonnes'],
+ ['Mâcon Vergisson',1,'Vergisson','white','Sur la Roche'],
+ ['Mâcon Vinzelles',1,'Vinzelles','white','Le Clos de Grand-Père'],
 ] as const;
 const smokeRegionalAppellations=new Set<string>([
  'Bourgogne Côte d’Or',
  'Bourgogne Chitry',
+ 'Mâcon Loché',
 ]);
 const browserRegionalCases=fullMapMatrix?regionalMapCases:regionalMapCases.filter(([appellation])=>smokeRegionalAppellations.has(appellation));
 
 for(const route of matrixRoutes)for(const [appellation,count,commune,colour,wineName] of browserRegionalCases){
  test(`Regional map ${appellation} ${route}: full overview, commune navigation and broad scope`,async({page},testInfo)=>{
   await page.setViewportSize({width:320,height:900});
-  await setup(page,{appellation,wineName,classification:null,region:['Gondonne','Olympe','Chanvan','L’Âme des Dannots','Vin Gris','Vaumorillon'].includes(wineName)?'Yonne':'Burgundy',colour,wineStyle:colour,productType:'Wine',productSubtype:'Still'});
+  await setup(page,{appellation,wineName,classification:null,region:appellation.startsWith('Mâcon')?'Saône-et-Loire':['Gondonne','Olympe','Chanvan','L’Âme des Dannots','Vin Gris','Vaumorillon'].includes(wineName)?'Yonne':'Burgundy',colour,wineStyle:colour,productType:'Wine',productSubtype:'Still'});
   const downloads:string[]=[];
   page.on('request',request=>{if(request.url().includes('/maps/'))downloads.push(request.url())});
   await page.goto(route);await page.evaluate(()=>document.fonts.ready);
@@ -85,6 +93,25 @@ for(const route of matrixRoutes)for(const [appellation,count,commune,colour,wine
   await expect(page.getByRole('button',{name:'View regional map'})).toBeFocused();
  });
 }
+
+for(const route of matrixRoutes)test(`Mâcon split labels preserve denomination and Pouilly identities ${route}`,async({page})=>{
+ await page.setViewportSize({width:320,height:900});
+ for(const [wineName,colour,expected] of [['Fuissé Les Tâches','white','Mâcon Fuissé'],['Charnay Rosé','rose','Mâcon Charnay-lès-Mâcon']] as const){
+  await setup(page,{appellation:'Mâcon',wineName,classification:null,colour,wineStyle:colour,region:'Mâconnais'});
+  await page.goto(route);await page.getByRole('button',{name:'View regional map'}).click();
+  const dialog=page.getByRole('dialog',{name:expected,exact:true});
+  await expect(dialog.getByRole('button',{name:'Region view',exact:true})).toBeEnabled();
+  await expect(dialog.locator('.village-map-note').filter({hasText:'within Mâcon AOC'})).toBeVisible();
+  await expect(dialog.locator('.village-map-description')).toContainText('no single vineyard is identified');
+  await expect(dialog.locator('.village-map-selected-label')).toHaveCount(0);
+  await page.keyboard.press('Escape');
+ }
+ await setup(page,{appellation:'Pouilly-Fuissé',wineName:'Les Tâches',classification:'village',colour:'White',wineStyle:'white',region:'Mâconnais'});
+ await page.goto(route);
+ await expect(page.getByRole('button',{name:'View regional map'})).toHaveCount(0);
+ await page.getByRole('button',{name:'View village map'}).click();
+ await expect(page.getByRole('dialog',{name:'Pouilly-Fuissé',exact:true}).getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
+});
 
 for(const route of matrixRoutes)test(`Le Chapitre appellation transition ${route}`,async({page})=>{
  await page.setViewportSize({width:320,height:900});

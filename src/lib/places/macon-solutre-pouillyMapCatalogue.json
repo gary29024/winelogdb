@@ -1,0 +1,74 @@
+{
+  "id": "macon-solutre-pouilly",
+  "name": "Mâcon Solutré-Pouilly",
+  "region": "Mâconnais",
+  "mapKind": "regional",
+  "communes": [
+    {
+      "id": "71526",
+      "name": "Solutré-Pouilly",
+      "bounds": [
+        4.711833,
+        46.28453,
+        4.760275,
+        46.305761
+      ],
+      "labelPoint": [
+        4.734845,
+        46.295358
+      ]
+    }
+  ],
+  "dataUrl": "/maps/macon-solutre-pouilly.2026-09-21.geojson",
+  "bounds": [
+    4.711833,
+    46.28453,
+    4.760275,
+    46.305761
+  ],
+  "sources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71526/cadastre-71526-communes.json.gz",
+      "sha256": "148346bb0ddb4de75a177cf962d68f986f572ad9b4e5314bb83d80135f47635b"
+    }
+  ],
+  "notes": {},
+  "features": [
+    {
+      "id": "inao-denom-2072",
+      "name": "Mâcon Solutré-Pouilly",
+      "tier": "regional",
+      "kind": "appellation",
+      "appellationId": 583,
+      "denominationId": 2072,
+      "sourceName": "Mâcon Solutré-Pouilly",
+      "communes": [
+        "71526"
+      ],
+      "areaHa": 292.96,
+      "matchId": "inao-denom-2072",
+      "atlasUrl": null,
+      "bounds": [
+        4.711833,
+        46.28453,
+        4.760275,
+        46.305761
+      ],
+      "labelPoint": [
+        4.734845,
+        46.295358
+      ]
+    }
+  ],
+  "coverageNote": "A geographic denomination within Mâcon AOC. The highlight shows its full INAO production area; named cuvées and producer holdings have no separate boundaries here."
+}

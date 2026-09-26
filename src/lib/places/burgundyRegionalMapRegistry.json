@@ -310,6 +310,203 @@
         "En Montrecul"
       ],
       "featureId": "inao-denom-373"
+    },
+    {
+      "id": "macon-charnay-les-macon",
+      "name": "Mâcon Charnay-lès-Mâcon",
+      "region": "Mâconnais",
+      "aliases": [
+        "Mâcon Charnay-lès-Mâcon",
+        "Mâcon Charnay"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Mâconnais",
+        "Saône-et-Loire"
+      ],
+      "wineColours": [
+        "red",
+        "white",
+        "rose"
+      ],
+      "siteNames": [
+        "Charnay-lès-Mâcon",
+        "Charnay"
+      ],
+      "baseAppellations": [
+        "Mâcon",
+        "Mâcon Blanc",
+        "Mâcon Rouge",
+        "Mâcon Rosé"
+      ],
+      "featureId": "inao-denom-1721"
+    },
+    {
+      "id": "macon-davaye",
+      "name": "Mâcon Davayé",
+      "region": "Mâconnais",
+      "aliases": [
+        "Mâcon Davayé"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Mâconnais",
+        "Saône-et-Loire"
+      ],
+      "wineColours": [
+        "red",
+        "white",
+        "rose"
+      ],
+      "siteNames": [
+        "Davayé"
+      ],
+      "baseAppellations": [
+        "Mâcon",
+        "Mâcon Blanc",
+        "Mâcon Rouge",
+        "Mâcon Rosé"
+      ],
+      "featureId": "inao-denom-1723"
+    },
+    {
+      "id": "macon-fuisse",
+      "name": "Mâcon Fuissé",
+      "region": "Mâconnais",
+      "aliases": [
+        "Mâcon Fuissé"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Mâconnais",
+        "Saône-et-Loire"
+      ],
+      "wineColours": [
+        "white"
+      ],
+      "siteNames": [
+        "Fuissé"
+      ],
+      "baseAppellations": [
+        "Mâcon",
+        "Mâcon Blanc",
+        "Mâcon Rouge",
+        "Mâcon Rosé"
+      ],
+      "featureId": "inao-denom-2069"
+    },
+    {
+      "id": "macon-loche",
+      "name": "Mâcon Loché",
+      "region": "Mâconnais",
+      "aliases": [
+        "Mâcon Loché"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Mâconnais",
+        "Saône-et-Loire"
+      ],
+      "wineColours": [
+        "white"
+      ],
+      "siteNames": [
+        "Loché"
+      ],
+      "baseAppellations": [
+        "Mâcon",
+        "Mâcon Blanc",
+        "Mâcon Rouge",
+        "Mâcon Rosé"
+      ],
+      "featureId": "inao-denom-2070"
+    },
+    {
+      "id": "macon-solutre-pouilly",
+      "name": "Mâcon Solutré-Pouilly",
+      "region": "Mâconnais",
+      "aliases": [
+        "Mâcon Solutré-Pouilly",
+        "Mâcon Solutré"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Mâconnais",
+        "Saône-et-Loire"
+      ],
+      "wineColours": [
+        "white"
+      ],
+      "siteNames": [
+        "Solutré-Pouilly",
+        "Solutré"
+      ],
+      "baseAppellations": [
+        "Mâcon",
+        "Mâcon Blanc",
+        "Mâcon Rouge",
+        "Mâcon Rosé"
+      ],
+      "featureId": "inao-denom-2072"
+    },
+    {
+      "id": "macon-vergisson",
+      "name": "Mâcon Vergisson",
+      "region": "Mâconnais",
+      "aliases": [
+        "Mâcon Vergisson"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Mâconnais",
+        "Saône-et-Loire"
+      ],
+      "wineColours": [
+        "white"
+      ],
+      "siteNames": [
+        "Vergisson"
+      ],
+      "baseAppellations": [
+        "Mâcon",
+        "Mâcon Blanc",
+        "Mâcon Rouge",
+        "Mâcon Rosé"
+      ],
+      "featureId": "inao-denom-1736"
+    },
+    {
+      "id": "macon-vinzelles",
+      "name": "Mâcon Vinzelles",
+      "region": "Mâconnais",
+      "aliases": [
+        "Mâcon Vinzelles"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Mâconnais",
+        "Saône-et-Loire"
+      ],
+      "wineColours": [
+        "white"
+      ],
+      "siteNames": [
+        "Vinzelles"
+      ],
+      "baseAppellations": [
+        "Mâcon",
+        "Mâcon Blanc",
+        "Mâcon Rouge",
+        "Mâcon Rosé"
+      ],
+      "featureId": "inao-denom-2074"
     }
   ],
   "otherAppellations": [
@@ -332,16 +529,11 @@
     "Mâcon Chaintré",
     "Mâcon Chaintré - rouge exclusif",
     "Mâcon Chardonnay",
-    "Mâcon Charnay-lès-Mâcon",
     "Mâcon Cruzille",
     "Mâcon Cruzille - rouge exclusif",
-    "Mâcon Davayé",
-    "Mâcon Fuissé",
-    "Mâcon Fuissé - blanc exclusif",
     "Mâcon Igé",
     "Mâcon La Roche-Vineuse",
     "Mâcon La Roche-Vineuse - rouge exclusif",
-    "Mâcon Loché",
     "Mâcon Lugny",
     "Mâcon Lugny - rouge exclusif",
     "Mâcon Mancey",
@@ -356,12 +548,9 @@
     "Mâcon Saint-Gengoux-le-National",
     "Mâcon Saint-Gengoux-le-National - rouge exclusif",
     "Mâcon Serrières",
-    "Mâcon Solutré-Pouilly",
     "Mâcon Uchizy",
-    "Mâcon Vergisson",
     "Mâcon Verzé",
     "Mâcon Villages",
-    "Mâcon Villages (Blanc)",
-    "Mâcon Vinzelles"
+    "Mâcon Villages (Blanc)"
   ]
 }

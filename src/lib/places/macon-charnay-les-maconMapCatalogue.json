@@ -1,0 +1,74 @@
+{
+  "id": "macon-charnay-les-macon",
+  "name": "Mâcon Charnay-lès-Mâcon",
+  "region": "Mâconnais",
+  "mapKind": "regional",
+  "communes": [
+    {
+      "id": "71105",
+      "name": "Charnay-lès-Mâcon",
+      "bounds": [
+        4.757101,
+        46.287915,
+        4.806081,
+        46.326631
+      ],
+      "labelPoint": [
+        4.782799,
+        46.311261
+      ]
+    }
+  ],
+  "dataUrl": "/maps/macon-charnay-les-macon.2026-09-21.geojson",
+  "bounds": [
+    4.757101,
+    46.287915,
+    4.806081,
+    46.326631
+  ],
+  "sources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71105/cadastre-71105-communes.json.gz",
+      "sha256": "5dc5913bba75d49f271212baa2536a6de6370d65d88077aa0a2dcf47acf5139d"
+    }
+  ],
+  "notes": {},
+  "features": [
+    {
+      "id": "inao-denom-1721",
+      "name": "Mâcon Charnay-lès-Mâcon",
+      "tier": "regional",
+      "kind": "appellation",
+      "appellationId": 583,
+      "denominationId": 1721,
+      "sourceName": "Mâcon Charnay-lès-Mâcon",
+      "communes": [
+        "71105"
+      ],
+      "areaHa": 271.09,
+      "matchId": "inao-denom-1721",
+      "atlasUrl": null,
+      "bounds": [
+        4.757101,
+        46.287915,
+        4.806081,
+        46.326631
+      ],
+      "labelPoint": [
+        4.782799,
+        46.311261
+      ]
+    }
+  ],
+  "coverageNote": "A geographic denomination within Mâcon AOC. The highlight shows its full INAO production area; named cuvées and producer holdings have no separate boundaries here."
+}

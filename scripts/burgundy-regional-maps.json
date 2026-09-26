@@ -633,6 +633,297 @@
         "En Montre-Cul",
         "En Montrecul"
       ]
+    },
+    {
+      "id": "macon-charnay-les-macon",
+      "name": "Mâcon Charnay-lès-Mâcon",
+      "region": "Mâconnais",
+      "appellationId": 583,
+      "denominationId": 1721,
+      "sourceName": "Mâcon Charnay-lès-Mâcon",
+      "sourceCvi": "1B370 22, 1B370 23, 1R371 25, 1S371 25",
+      "wineColours": [
+        "red",
+        "white",
+        "rose"
+      ],
+      "communes": [
+        "71105"
+      ],
+      "expectedBounds": [
+        4.65,
+        46.24,
+        4.85,
+        46.35
+      ],
+      "aliases": [
+        "Mâcon Charnay-lès-Mâcon",
+        "Mâcon Charnay"
+      ],
+      "siteNames": [
+        "Charnay-lès-Mâcon",
+        "Charnay"
+      ],
+      "baseAppellations": [
+        "Mâcon",
+        "Mâcon Blanc",
+        "Mâcon Rouge",
+        "Mâcon Rosé"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Mâconnais",
+        "Saône-et-Loire"
+      ],
+      "coverageNote": "A geographic denomination within Mâcon AOC. The highlight shows its full INAO production area; named cuvées and producer holdings have no separate boundaries here."
+    },
+    {
+      "id": "macon-davaye",
+      "name": "Mâcon Davayé",
+      "region": "Mâconnais",
+      "appellationId": 583,
+      "denominationId": 1723,
+      "sourceName": "Mâcon Davayé",
+      "sourceCvi": "1B370 32, 1B370 33, 1R371 35, 1S371 35",
+      "wineColours": [
+        "red",
+        "white",
+        "rose"
+      ],
+      "communes": [
+        "71169"
+      ],
+      "expectedBounds": [
+        4.65,
+        46.24,
+        4.85,
+        46.35
+      ],
+      "aliases": [
+        "Mâcon Davayé"
+      ],
+      "siteNames": [
+        "Davayé"
+      ],
+      "baseAppellations": [
+        "Mâcon",
+        "Mâcon Blanc",
+        "Mâcon Rouge",
+        "Mâcon Rosé"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Mâconnais",
+        "Saône-et-Loire"
+      ],
+      "coverageNote": "A geographic denomination within Mâcon AOC. The highlight shows its full INAO production area; named cuvées and producer holdings have no separate boundaries here."
+    },
+    {
+      "id": "macon-fuisse",
+      "name": "Mâcon Fuissé",
+      "region": "Mâconnais",
+      "appellationId": 583,
+      "denominationId": 2069,
+      "sourceName": "Mâcon Fuissé",
+      "sourceCvi": "1B370 34, 1B370 35",
+      "wineColours": [
+        "white"
+      ],
+      "communes": [
+        "71210"
+      ],
+      "expectedBounds": [
+        4.65,
+        46.24,
+        4.85,
+        46.35
+      ],
+      "aliases": [
+        "Mâcon Fuissé"
+      ],
+      "siteNames": [
+        "Fuissé"
+      ],
+      "baseAppellations": [
+        "Mâcon",
+        "Mâcon Blanc",
+        "Mâcon Rouge",
+        "Mâcon Rosé"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Mâconnais",
+        "Saône-et-Loire"
+      ],
+      "coverageNote": "A geographic denomination within Mâcon AOC. The highlight shows its full INAO production area; named cuvées and producer holdings have no separate boundaries here.",
+      "equivalentSourceNames": [
+        "Mâcon Fuissé - blanc exclusif"
+      ]
+    },
+    {
+      "id": "macon-loche",
+      "name": "Mâcon Loché",
+      "region": "Mâconnais",
+      "appellationId": 583,
+      "denominationId": 2070,
+      "sourceName": "Mâcon Loché",
+      "sourceCvi": "1B370 46, 1B370 47",
+      "wineColours": [
+        "white"
+      ],
+      "communes": [
+        "71270"
+      ],
+      "expectedBounds": [
+        4.65,
+        46.24,
+        4.85,
+        46.35
+      ],
+      "aliases": [
+        "Mâcon Loché"
+      ],
+      "siteNames": [
+        "Loché"
+      ],
+      "baseAppellations": [
+        "Mâcon",
+        "Mâcon Blanc",
+        "Mâcon Rouge",
+        "Mâcon Rosé"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Mâconnais",
+        "Saône-et-Loire"
+      ],
+      "coverageNote": "A geographic denomination within Mâcon AOC. The highlight shows its full INAO production area; named cuvées and producer holdings have no separate boundaries here. Loché is within the current commune of Mâcon; the map opens on the Loché production area."
+    },
+    {
+      "id": "macon-solutre-pouilly",
+      "name": "Mâcon Solutré-Pouilly",
+      "region": "Mâconnais",
+      "appellationId": 583,
+      "denominationId": 2072,
+      "sourceName": "Mâcon Solutré-Pouilly",
+      "sourceCvi": "1B370 64, 1B370 65",
+      "wineColours": [
+        "white"
+      ],
+      "communes": [
+        "71526"
+      ],
+      "expectedBounds": [
+        4.65,
+        46.24,
+        4.85,
+        46.35
+      ],
+      "aliases": [
+        "Mâcon Solutré-Pouilly",
+        "Mâcon Solutré"
+      ],
+      "siteNames": [
+        "Solutré-Pouilly",
+        "Solutré"
+      ],
+      "baseAppellations": [
+        "Mâcon",
+        "Mâcon Blanc",
+        "Mâcon Rouge",
+        "Mâcon Rosé"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Mâconnais",
+        "Saône-et-Loire"
+      ],
+      "coverageNote": "A geographic denomination within Mâcon AOC. The highlight shows its full INAO production area; named cuvées and producer holdings have no separate boundaries here."
+    },
+    {
+      "id": "macon-vergisson",
+      "name": "Mâcon Vergisson",
+      "region": "Mâconnais",
+      "appellationId": 583,
+      "denominationId": 1736,
+      "sourceName": "Mâcon Vergisson",
+      "sourceCvi": "1B370 68, 1B370 69",
+      "wineColours": [
+        "white"
+      ],
+      "communes": [
+        "71567"
+      ],
+      "expectedBounds": [
+        4.65,
+        46.24,
+        4.85,
+        46.35
+      ],
+      "aliases": [
+        "Mâcon Vergisson"
+      ],
+      "siteNames": [
+        "Vergisson"
+      ],
+      "baseAppellations": [
+        "Mâcon",
+        "Mâcon Blanc",
+        "Mâcon Rouge",
+        "Mâcon Rosé"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Mâconnais",
+        "Saône-et-Loire"
+      ],
+      "coverageNote": "A geographic denomination within Mâcon AOC. The highlight shows its full INAO production area; named cuvées and producer holdings have no separate boundaries here."
+    },
+    {
+      "id": "macon-vinzelles",
+      "name": "Mâcon Vinzelles",
+      "region": "Mâconnais",
+      "appellationId": 583,
+      "denominationId": 2074,
+      "sourceName": "Mâcon Vinzelles",
+      "sourceCvi": "1B370 72, 1B370 73",
+      "wineColours": [
+        "white"
+      ],
+      "communes": [
+        "71583"
+      ],
+      "expectedBounds": [
+        4.65,
+        46.24,
+        4.85,
+        46.35
+      ],
+      "aliases": [
+        "Mâcon Vinzelles"
+      ],
+      "siteNames": [
+        "Vinzelles"
+      ],
+      "baseAppellations": [
+        "Mâcon",
+        "Mâcon Blanc",
+        "Mâcon Rouge",
+        "Mâcon Rosé"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Mâconnais",
+        "Saône-et-Loire"
+      ],
+      "coverageNote": "A geographic denomination within Mâcon AOC. The highlight shows its full INAO production area; named cuvées and producer holdings have no separate boundaries here."
     }
   ],
   "communeNames": {
@@ -706,12 +997,14 @@
     "71073": "Chagny",
     "71078": "Chamilly",
     "71085": "Change",
+    "71105": "Charnay-lès-Mâcon",
     "71109": "Chassey-le-Camp",
     "71122": "Cheilly-lès-Maranges",
     "71124": "Chenôves",
     "71149": "Couches",
     "71151": "Créot",
     "71159": "Culles-les-Roches",
+    "71169": "Davayé",
     "71171": "Dennevy",
     "71174": "Dezize-lès-Maranges",
     "71182": "Dracy-le-Fort",
@@ -719,10 +1012,12 @@
     "71188": "Épertully",
     "71201": "Fley",
     "71202": "Fontaines",
+    "71210": "Fuissé",
     "71214": "Genouilly",
     "71221": "Givry",
     "71241": "Jambles",
     "71247": "Jully-lès-Buxy",
+    "71270": "Mâcon",
     "71292": "Mellecey",
     "71294": "Mercurey",
     "71302": "Montagny-lès-Buxy",
@@ -752,7 +1047,10 @@
     "71501": "Sassangy",
     "71503": "Saules",
     "71515": "Sercy",
+    "71526": "Solutré-Pouilly",
     "71563": "Vaux-en-Pré",
+    "71567": "Vergisson",
+    "71583": "Vinzelles",
     "89023": "Augy",
     "89024": "Auxerre",
     "89084": "Charentenay",
