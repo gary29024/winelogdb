@@ -29,6 +29,9 @@ test('small feature and test edits select relevant suites', () => {
   const sharedWine = chooseScope(['src/lib/wine/detailFields.ts']);
   assert.equal(sharedWine.chromium, 'selected');
   assert.ok(sharedWine.specs.includes('tests/e2e/wine-detail-layout.spec.ts'));
+  const places = chooseScope(['src/lib/places/burgundyVillageMap.ts']);
+  assert.equal(places.chromium, 'selected');
+  assert.ok(places.specs.includes('tests/e2e/burgundy-village-map.spec.ts'));
 });
 
 test('layout and browser edits cover their browser projects', () => {

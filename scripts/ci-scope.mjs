@@ -26,7 +26,7 @@ const libraryBrowserSpecs = {
   cellar: browserSpecs.cellar,
   maturity: browserSpecs.maturity,
   images: ['wine-flow', 'wine-detail-layout'],
-  places: ['wine-detail-layout'],
+  places: ['wine-detail-layout', 'burgundy-village-map'],
 };
 
 const full = reason => ({ reason, quality: true, platform: true, unit: 'full', sourceReaders: false, chromium: 'full', webkit: true, specs: [] });
