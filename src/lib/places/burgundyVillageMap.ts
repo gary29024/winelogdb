@@ -18,7 +18,7 @@ export type VillageMapCatalogue={
  areas?:{id:string;label:string;name:string;bounds:number[]}[];
 };
 export type BurgundyVillageMapTarget={villageId:string;villageName:string;region:string;featureId:string;name:string;scope:'vineyard'|'appellation';
- locationContext?:{note:string;sourceUrl:string}};
+ locationContext?:{note:string;sourceUrl:string;selectionId?:string;name?:string;featureIds?:string[]}};
 
 // Only this small identity index joins wine details. Per-village metadata and
 // geometry load when the dialog opens, independently of the other villages.
@@ -49,7 +49,7 @@ export function burgundyVillageMapTarget(wine:MapWine):BurgundyVillageMapTarget|
  const local=burgundyGrandCruMapIdentity(wine);
  if(local===null)return null;
  const candidate=producerMapLocation(wine);
- const producerLocation=candidate&&burgundyMapAppellation(wine)===candidate.appellation?candidate:null;
+ const producerLocation=candidate&&(candidate.grandCru?local===candidate.matchId:burgundyMapAppellation(wine)===candidate.appellation)?candidate:null;
  const matchId=producerLocation?.matchId??local??burgundyLocalAppellationMapIdentity(wine)??burgundyAtlasWineDetailPlace(wine)?.placeId;
  const target=matchId?byMatchId.get(incompleteTargets.get(matchId)??matchId):undefined;
  const village=target?byVillageId.get(target.villageId):undefined;
@@ -62,9 +62,12 @@ export function burgundyVillageMapTarget(wine:MapWine):BurgundyVillageMapTarget|
  const namedRose=[wine.appellation,wine.wineName].some(value=>/\bmarsannay\s+rose\b/.test(normalise(value??'')));
  if(colours&&namedRose&&colour&&colour!=='rose')return null;
  const selected=colours?.[colour||(namedRose?'rose':'')]??target;
+ const containing=producerLocation?.containingMatchIds?.map(id=>byMatchId.get(id));
+ if(containing?.some(feature=>!feature||feature.villageId!==village.id))return null;
  return {villageId:village.id,villageName:village.name,region:village.region,featureId:selected.featureId,name:selected.name,
   scope:target.scope==='vineyard'?'vineyard':'appellation',
-  ...(producerLocation?{locationContext:{note:producerLocation.note,sourceUrl:producerLocation.sourceUrl}}:{})};
+  ...(producerLocation?{locationContext:{note:producerLocation.note,sourceUrl:producerLocation.sourceUrl,
+   ...(containing?{selectionId:`location-${producerLocation.id}`,name:producerLocation.names[0],featureIds:containing.map(feature=>feature!.featureId)}:{})}}:{})};
 }
 
 // Source snapshots are ISO dates in the catalogue. INAO publishes a dated

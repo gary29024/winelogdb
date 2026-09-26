@@ -3,6 +3,7 @@ import { burgundyVillageMapTarget } from '../../src/lib/places/burgundyVillageMa
 import { burgundyAtlasPremierCru,burgundyAtlasWineDetailPlace } from '../../src/lib/places/burgundyAtlasPremierCru';
 import { producerLocations } from '../../src/lib/places/burgundyProducerLocations';
 import fuisse from '../../src/lib/places/pouillyFuisseVillageMapCatalogue.json';
+import chablis from '../../src/lib/places/chablisVillageMapCatalogue.json';
 
 const wine={producer:'Domaine Ferret',country:'France',region:'Mâconnais',appellation:'Pouilly-Fuissé',
  wineName:'Le Clos',vintage:2018,classification:'village',colour:'White'};
@@ -98,7 +99,7 @@ describe('reviewed producer vineyard locations',()=>{
   expect(fuisse.features.find(feature=>feature.matchId===entry.matchId)).toMatchObject({id:'inao-denom-2873',name:entry.climat});
   expect(entry.renamedFromVintage).toBe(2020);
   expect(new URL(entry.sourceUrl).hostname).toBe('www.domaine-ferret.com');
-  expect(new URL(entry.homonym.sourceUrl).hostname).toBe('chateau-fuisse.fr');
+  expect(new URL(entry.homonym!.sourceUrl).hostname).toBe('chateau-fuisse.fr');
  });
  it('accepts the documented Domaine Vincent producer field only for Pouilly-Fuissé Le Clos',()=>{
   const base={...wine,producer:'Domaine Vincent',classification:'premier_cru'};
@@ -130,5 +131,56 @@ describe('reviewed producer vineyard locations',()=>{
   ])expect(burgundyVillageMapTarget({...wine,classification:'premier_cru',...fields})).toMatchObject({featureId:'inao-denom-2865',scope:'appellation'});
   // Cornin's actual longer climat name still selects its own reviewed boundary.
   expect(burgundyVillageMapTarget({...wine,producer:'Domaine Vincent Cornin',wineName:'Le Clos Reyssier',classification:'premier_cru'})?.featureId).toBe('inao-denom-2867');
+ });
+});
+
+describe('La Moutonne containing climats',()=>{
+ const grand={country:'France',region:'Burgundy',appellation:'Chablis Grand Cru',classification:'grand_cru',colour:'White',wineName:'La Moutonne'};
+ it('locates the unique monopole in both source climats, with or without producer metadata',()=>{
+  for(const fields of [{},{wineName:'Moutonne'},{producer:'Domaine Long-Depaquit'},
+   {producer:'Albert Bichot',wineName:'Domaine Long-Depaquit La Moutonne Monopole'},
+   {wineName:'Albert Bichot Domaine Long-Depaquit Chablis Grand Cru Moutonne 2020'},
+   {wineName:'Chablis Grand Cru',referenceSite:'La Moutonne'},
+   {wineName:'',referenceParcel:'La Moutonne'},
+   {appellation:'Chablis Grand Cru La Moutonne',wineName:''},
+   {appellation:'Chablis',wineName:'La Moutonne'},
+   {appellation:'Chablis',classification:null,wineName:'Chablis Grand Cru La Moutonne'}]){
+   const input=Object.freeze({...grand,...fields}),before={...input};
+   const target=burgundyVillageMapTarget(input);
+   expect(target,JSON.stringify(fields)).toMatchObject({villageId:'chablis',featureId:'inao-denom-439',locationContext:{
+    selectionId:'location-long-depaquit-la-moutonne',name:'La Moutonne',featureIds:['inao-denom-446','inao-denom-444'],
+   }});
+   expect(target?.locationContext?.note).toContain('highlighted in full');
+   expect(input).toEqual(before);
+  }
+ });
+ it('never treats blends, unknown names or conflicting producers/references as a location',()=>{
+  for(const fields of [{producer:'Unknown'},{producer:'Domaine Example'},
+   {wineName:'La Moutonne Vaudésir'},{wineName:'La Moutonne Les Preuses'},
+   {wineName:'La Moutonne et Les Clos'},{wineName:'La Moutonne / Les Preuses'},
+   {wineName:'La Moutonne & Vaudésir'},{wineName:'La Moutonne + Valmur'},
+   {wineName:'La Moutonne inconnue'},{wineName:'Some merchant La Moutonne'},
+   {wineName:'Domaine Raveneau La Moutonne',producer:'Albert Bichot'},
+   {referenceSite:'Vaudésir'},{referenceParcel:'Les Preuses'},
+   {referenceSite:'Unknown parcel'},{referenceSite:'Les Clos'},
+  ]){
+   const target=burgundyVillageMapTarget({...grand,...fields});
+   expect(target,JSON.stringify(fields)).toMatchObject({featureId:'inao-denom-439',scope:'appellation'});
+   expect(target?.locationContext).toBeUndefined();
+  }
+ });
+ it('requires verified Grand Cru geography, classification and colour',()=>{
+  for(const fields of [{country:'USA'},{region:'Loire'},{appellation:'Corton'},
+   {appellation:'Petit Chablis'},{classification:'village'},{classification:'premier_cru'},
+   {appellation:'Chablis',classification:null},{identityMatchStatus:'conflict' as const},
+   {colour:'Red'},{colour:'Rosé'},{colour:null,wineStyle:'red'},
+   {referenceSite:'Meursault'},{wineName:'La Moutonne Premier Cru'},
+  ])expect(burgundyVillageMapTarget({...grand,...fields})?.locationContext,JSON.stringify(fields)).toBeUndefined();
+ });
+ it('uses the existing full INAO climats without adding a monopole polygon',()=>{
+  const entry=producerLocations.find(location=>location.id==='long-depaquit-la-moutonne')!;
+  expect(entry.containingMatchIds?.map(id=>chablis.features.find(f=>f.matchId===id)?.name)).toEqual(['Vaudésir','Les Preuses']);
+  expect(chablis.features.some(f=>f.name==='La Moutonne')).toBe(false);
+  expect(new URL(entry.sourceUrl).hostname).toBe('www.albert-bichot.com');
  });
 });

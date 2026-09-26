@@ -112,7 +112,7 @@ count once despite appearing in several village maps.
 - [x] Montrachet, Bâtard-Montrachet, Chevalier-Montrachet,
   Bienvenues-Bâtard-Montrachet and Criots-Bâtard-Montrachet
 - [x] Corton (24 named source denominations), Corton-Charlemagne and Charlemagne
-- [x] Chablis Grand Cru and its seven named climats; La Moutonne has no separate source boundary and retains broad Grand Cru scope
+- [x] Chablis Grand Cru and its seven named climats; La Moutonne shows both containing climats as a vineyard location, without claiming its own boundary
 
 Regional coverage remains pending. Track all seven regional AOCs: Bourgogne,
 Bourgogne Aligoté, Bourgogne Mousseux, Bourgogne Passe-tout-grains, Coteaux
@@ -146,10 +146,13 @@ in the source, rather than just the five village AOCs above.
   Chablis-Poinchy and Mont de Milieu (`420`) lacks Fyé in Chablis. Neither partial
   polygon may automatically locate a wine. Missing names also participate in
   blend checks: “Fourchaume Vaulorent” must not silently select Fourchaume.
+  The [cadastral reconstruction audit](chablis-cadastre-audit.md) failed its
+  benchmark gate, so no derived completion or all-40 crosswalk is published.
 - **Seven Chablis climats are one Grand Cru appellation.** White wine can select
   a named climat; a recorded village or Premier Cru cannot be promoted by its
-  name. La Moutonne crosses Vaudésir and Les Preuses and has no own geometry;
-  do not replace it with either containing climat or their complete union.
+  name. La Moutonne crosses Vaudésir and Les Preuses and has no own geometry.
+  Its reviewed vineyard location highlights both full containing climats with
+  an explicit note; neither is presented as the monopole's actual outline.
 - **A named-climat eligibility area is not one climat.** Pouilly-Fuissé `1056`
   and Viré-Clessé `1593` describe broader production areas for village wines
   labelled with a climat. Keep them selectable with clear scope, and never use

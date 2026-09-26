@@ -30,7 +30,7 @@ async function grandCruSpan(dialog:Locator){
 }
 
 for(const route of ['/wines/layout-wine','/shared/layout-wine']){
- test(`Chablis Grand Cru ${route}: named climats and La Moutonne retain their proven scope`,async({page},testInfo)=>{
+ test(`Chablis Grand Cru ${route}: named climats open on the hillside`,async({page},testInfo)=>{
   await setup(page,{appellation:'Chablis Grand Cru',wineName:'Domaine Long-Depaquit Les Preuses',classification:'grand_cru',colour:'White',wineStyle:'white'});
   await page.setViewportSize({width:320,height:900});await page.goto(route);
   await page.getByRole('button',{name:'View village map'}).click();
@@ -56,15 +56,39 @@ for(const route of ['/wines/layout-wine','/shared/layout-wine']){
   expect(await dialog.evaluate(el=>el.scrollWidth<=el.clientWidth)).toBe(true);
   await dialog.locator('.village-map-toolbar').scrollIntoViewIfNeeded();
   await page.screenshot({path:testInfo.outputPath('chablis-grand-cru-320.png')});
-  await page.keyboard.press('Escape');
-  await setup(page,{appellation:'Chablis Grand Cru',wineName:'Domaine Long-Depaquit La Moutonne',classification:'grand_cru',colour:'White',wineStyle:'white'});
+ });
+ test(`Chablis Grand Cru ${route}: La Moutonne shows both containing climats`,async({page},testInfo)=>{
+  await page.setViewportSize({width:320,height:900});
+  await setup(page,{producer:null,appellation:'Chablis Grand Cru',wineName:'Domaine Long-Depaquit La Moutonne',classification:'grand_cru',colour:'White',wineStyle:'white'});
   await page.goto(route);await page.getByRole('button',{name:'View village map'}).click();
+  const dialog=page.getByRole('dialog',{name:'Chablis',exact:true});
   await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
-  await expect(dialog.getByRole('combobox')).toHaveValue('inao-denom-439');
+  await expect(dialog.getByRole('combobox')).toHaveValue('location-long-depaquit-la-moutonne');
   await expect.poll(()=>grandCruSpan(dialog)).toBeGreaterThan(0.35);
-  await expect(dialog.locator('.village-map-selected-label')).toHaveCount(0);
-  await expect(dialog.locator('.village-map-overlap')).toContainText('spans parts of Vaudésir and Les Preuses');
-  await expect(dialog.getByRole('link',{name:/Explore on Burgundy Atlas/})).toBeVisible();
+  await expect(dialog.locator('.village-map-selected-label')).toHaveText(['Les Preuses','Vaudésir']);
+  await expect.poll(()=>dialog.locator('.village-map-selected-label').evaluateAll(labels=>{
+   const [a,b]=labels.map(label=>label.getBoundingClientRect());
+   return a.right<=b.left||b.right<=a.left||a.bottom<=b.top||b.bottom<=a.top;
+  })).toBe(true);
+  await expect(dialog.locator('.village-map-eyebrow')).toHaveText('VINEYARD LOCATION');
+  await expect(dialog.getByRole('heading',{name:'La Moutonne',exact:true})).toBeVisible();
+  await expect(dialog.locator('.village-map-legend')).toContainText('Containing climats');
+  await expect(dialog.locator('.village-map-overlap')).toContainText('both containing climats are highlighted in full');
+  await expect(dialog.getByRole('link',{name:/Explore on Burgundy Atlas/})).toHaveCount(0);
+  await page.screenshot({path:testInfo.outputPath('chablis-moutonne-320.png')});
+  for(const id of ['inao-denom-446','inao-denom-444','inao-denom-439']){
+   await dialog.getByRole('combobox').selectOption(id);
+   await expect(dialog.locator('.village-map-eyebrow')).toHaveText('EXPLORING');
+   await expect(dialog.locator('.village-map-selected-label')).toHaveCount(id==='inao-denom-439'?0:1);
+   await dialog.getByRole('button',{name:'Village view',exact:true}).click();
+   await dialog.getByRole('button',{name:'Back to this wine'}).click();
+   await expect(dialog.getByRole('combobox')).toHaveValue('location-long-depaquit-la-moutonne');
+   await expect(dialog.locator('.village-map-selected-label')).toHaveText(['Les Preuses','Vaudésir']);
+   await expect.poll(()=>grandCruSpan(dialog)).toBeGreaterThan(0.35);
+  }
+  await dialog.getByRole('button',{name:'Zoom to selection',exact:true}).click();
+  await expect(dialog.locator('.village-map-selected-label').first()).toBeInViewport();
+  await expect(dialog.locator('.village-map-selected-label').last()).toBeInViewport();
   await page.setViewportSize({width:1280,height:900});
   await dialog.getByRole('button',{name:'Grand Cru view',exact:true}).click();
   await expect.poll(()=>grandCruSpan(dialog)).toBeGreaterThan(0.35);

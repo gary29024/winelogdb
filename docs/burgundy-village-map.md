@@ -801,7 +801,8 @@ now have maps; regional AOCs and missing named plots remain separate work.
   so absent named polygons do not erase Premier Cru land from the overview.
 - Grand Cru `439` is a broad appellation; `440–446` are its seven named climats.
   Grand Cru wines open on the shared Grand Cru hillside, including broad wines
-  such as La Moutonne, while named climats keep their individual highlight.
+  and La Moutonne's containing-climat location, while named climats keep their
+  individual highlight.
   “Grand Cru view” returns to that hillside, “Village view” shows all of Chablis,
   and “Zoom to selection” offers a closer look at a single climat. Returning to
   the wine restores its initial framing. Premier Cru and village openings keep
@@ -814,9 +815,15 @@ now have maps; regional AOCs and missing named plots remain separate work.
   verifies Les Blanchots for Blanchot, Les Vaudésirs for Vaudésir, Les Preuses for
   source Preuses, and Les Vaucopins for Premier Cru Vaucoupin. These exact aliases
   are scoped to their appellation and source identity. The estate also places
-  La Moutonne partly in Vaudésir and partly in Les Preuses. With no separate
-  source boundary, La Moutonne remains broad even if a reference names either
-  containing climat. A generic “clos” never proves Les Clos.
+  La Moutonne partly in Vaudésir and partly in Les Preuses. A verified Grand Cru
+  La Moutonne now selects both existing climats as a **Vineyard location**, with
+  a producer-sourced note (2.35 ha; approximately 95%/5%) explaining that their
+  full highlights are not its own boundary. The unique monopole name needs no
+  producer field; explicit producer conflicts, blends and inconsistent references
+  still stay broad. Its distinct UI selection allows exploration of either
+  containing climat or the parent Grand Cru area, then return to both highlights
+  and the hillside view. No catalogue feature or invented geometry is added.
+  A generic “clos” never proves Les Clos.
 - [BIVB's Irancy sheet](https://www.bourgogne-wines.com/our-wines-our-terroir/the-bourgogne-winegrowing-region-and-its-appellations/gallery_files/site/321/402/57644/57686.pdf)
   confirms red wine and Irancy, Cravant and Vincelottes. Cravant is now within
   Deux Rivières (`89130`): the current commune outline includes the merged area,
@@ -835,7 +842,11 @@ fills, and all 27 Cadastre outlines and hashes. All 39 prior maps/catalogues and
 their registry targets are unchanged, including the #347 Ferret and Domaine
 Vincent fixes. Browser checks cover all five new maps in owner/shared views at
 320, 390 and 1280 pixels, seven-climat Grand Cru context, local-only links,
-La Moutonne fallback and both explicitly partial Premier Cru features.
+La Moutonne's two containing climats and both explicitly partial Premier Cru features.
+
+The [PR #349 cadastral audit](chablis-cadastre-audit.md) tests the proposed
+lieu-dit union/intersection against all eight complete source boundaries.
+It fails the publication gate; existing missing/partial safeguards remain.
 
 Next: inventory and map the seven regional AOCs and their geographic denominations,
 while seeking licensed, reviewed geometry for missing Chablis/Givry/Corton names

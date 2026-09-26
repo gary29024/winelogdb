@@ -67,7 +67,7 @@ describe('Chablis Grand Cru',()=>{
    expect(burgundyVillageMapTarget({...grand,wineName:`Domaine Long-Depaquit Chablis Grand Cru ${wineName}`})?.featureId).toBe(`inao-denom-${id}`);
   }
  });
- it.each(['Chablis Grand Cru','La Moutonne','La Moutonne Vaudésir','La Moutonne Les Preuses','Unknown climat','Les Clos et Valmur','Les Clos / unknown','Le Clos','Clos des Hospices'])('keeps broad scope for %s',wineName=>{
+ it.each(['Chablis Grand Cru','La Moutonne Vaudésir','La Moutonne Les Preuses','Unknown climat','Les Clos et Valmur','Les Clos / unknown','Le Clos','Clos des Hospices'])('keeps broad scope for %s',wineName=>{
   expect(burgundyVillageMapTarget({...grand,wineName})).toMatchObject({featureId:'inao-denom-439',scope:'appellation'});
  });
  it('requires Grand Cru evidence and never borrows a climat for another tier',()=>{

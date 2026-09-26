@@ -1918,7 +1918,7 @@
           "note": "The broad Premier Cru production area includes land whose named climat boundary is missing or incomplete. No individual vineyard is inferred for those wines."
         },
         "inao-denom-439": {
-          "note": "Chablis Grand Cru is one appellation with seven named climats. La Moutonne spans parts of Vaudésir and Les Preuses; its separate boundary is unavailable, so its wines retain this broad Grand Cru view."
+          "note": "Chablis Grand Cru is one appellation with seven named climats. La Moutonne spans parts of Vaudésir and Les Preuses; its own boundary is unavailable. Its vineyard location shows both containing climats in full, while this overview shows the whole Grand Cru appellation."
         }
       },
       "expectedBounds": [

@@ -25,7 +25,7 @@ export function WineVillageMap({target}:{target:BurgundyVillageMapTarget}){
   {open&&createPortal(<div className="village-map-backdrop" onClick={event=>{if(event.target===event.currentTarget)setOpen(false)}}>
    <div className="village-map-dialog" ref={dialog} role="dialog" aria-modal="true" aria-labelledby={title} tabIndex={-1}>
     <header className="village-map-header"><div><p>BURGUNDY · {target.region.toLocaleUpperCase('en')}</p><h2 id={title}>{target.villageName}</h2></div><button type="button" className="village-map-close" aria-label="Close village map" onClick={()=>setOpen(false)}>×</button></header>
-    <MapBoundary><Suspense fallback={<p className="village-map-message" role="status">Loading village map…</p>}><VillageMap key={`${target.villageId}:${target.featureId}`} target={target}/></Suspense></MapBoundary>
+    <MapBoundary><Suspense fallback={<p className="village-map-message" role="status">Loading village map…</p>}><VillageMap key={`${target.villageId}:${target.locationContext?.selectionId??target.featureId}`} target={target}/></Suspense></MapBoundary>
    </div>
   </div>,document.body)}
  </>;
