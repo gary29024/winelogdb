@@ -1,0 +1,470 @@
+{
+  "id": "bourgogne-hautes-cotes-de-nuits",
+  "name": "Bourgogne Hautes Côtes de Nuits",
+  "region": "Hautes Côtes de Nuits",
+  "mapKind": "regional",
+  "communes": [
+    {
+      "id": "21017",
+      "name": "Arcenant",
+      "bounds": [
+        4.834543,
+        47.123794,
+        4.87745,
+        47.147338
+      ],
+      "labelPoint": [
+        4.852927,
+        47.139883
+      ]
+    },
+    {
+      "id": "21070",
+      "name": "Bévy",
+      "bounds": [
+        4.844693,
+        47.169499,
+        4.871197,
+        47.184037
+      ],
+      "labelPoint": [
+        4.8581,
+        47.180428
+      ]
+    },
+    {
+      "id": "21133",
+      "name": "Chambolle-Musigny",
+      "bounds": [
+        4.940054,
+        47.180534,
+        4.943635,
+        47.186611
+      ],
+      "labelPoint": [
+        4.941771,
+        47.184674
+      ]
+    },
+    {
+      "id": "21162",
+      "name": "Chaux",
+      "bounds": [
+        4.889016,
+        47.10972,
+        4.92696,
+        47.133978
+      ],
+      "labelPoint": [
+        4.907181,
+        47.113363
+      ]
+    },
+    {
+      "id": "21169",
+      "name": "Chevannes",
+      "bounds": [
+        4.840764,
+        47.152146,
+        4.86408,
+        47.161445
+      ],
+      "labelPoint": [
+        4.849002,
+        47.159449
+      ]
+    },
+    {
+      "id": "21182",
+      "name": "Collonges-lès-Bévy",
+      "bounds": [
+        4.841036,
+        47.164633,
+        4.865677,
+        47.170581
+      ],
+      "labelPoint": [
+        4.845366,
+        47.168219
+      ]
+    },
+    {
+      "id": "21219",
+      "name": "Curtil-Vergy",
+      "bounds": [
+        4.878599,
+        47.166804,
+        4.895397,
+        47.177212
+      ],
+      "labelPoint": [
+        4.881035,
+        47.168789
+      ]
+    },
+    {
+      "id": "21267",
+      "name": "Flagey-Echézeaux",
+      "bounds": [
+        4.937226,
+        47.169337,
+        4.942057,
+        47.172206
+      ],
+      "labelPoint": [
+        4.938815,
+        47.171018
+      ]
+    },
+    {
+      "id": "21254",
+      "name": "L'Étang-Vergy",
+      "bounds": [
+        4.864828,
+        47.172147,
+        4.884762,
+        47.183859
+      ],
+      "labelPoint": [
+        4.872761,
+        47.175352
+      ]
+    },
+    {
+      "id": "21368",
+      "name": "Magny-lès-Villers",
+      "bounds": [
+        4.860035,
+        47.084783,
+        4.9002,
+        47.103264
+      ],
+      "labelPoint": [
+        4.86354,
+        47.102096
+      ]
+    },
+    {
+      "id": "21384",
+      "name": "Marey-lès-Fussey",
+      "bounds": [
+        4.845115,
+        47.120718,
+        4.870669,
+        47.130734
+      ],
+      "labelPoint": [
+        4.853351,
+        47.128966
+      ]
+    },
+    {
+      "id": "21407",
+      "name": "Messanges",
+      "bounds": [
+        4.863917,
+        47.153497,
+        4.879296,
+        47.1743
+      ],
+      "labelPoint": [
+        4.8724,
+        47.170875
+      ]
+    },
+    {
+      "id": "21409",
+      "name": "Meuilley",
+      "bounds": [
+        4.857111,
+        47.131638,
+        4.882672,
+        47.153721
+      ],
+      "labelPoint": [
+        4.87152,
+        47.146976
+      ]
+    },
+    {
+      "id": "21464",
+      "name": "Nuits-Saint-Georges",
+      "bounds": [
+        4.912147,
+        47.123022,
+        4.939412,
+        47.172951
+      ],
+      "labelPoint": [
+        4.927513,
+        47.1539
+      ]
+    },
+    {
+      "id": "21506",
+      "name": "Premeaux-Prissey",
+      "bounds": [
+        4.919134,
+        47.118376,
+        4.929245,
+        47.125007
+      ],
+      "labelPoint": [
+        4.924645,
+        47.121795
+      ]
+    },
+    {
+      "id": "21523",
+      "name": "Reulle-Vergy",
+      "bounds": [
+        4.8897,
+        47.175349,
+        4.898959,
+        47.186535
+      ],
+      "labelPoint": [
+        4.895729,
+        47.1791
+      ]
+    },
+    {
+      "id": "21597",
+      "name": "Segrois",
+      "bounds": [
+        4.889013,
+        47.15444,
+        4.898588,
+        47.166619
+      ],
+      "labelPoint": [
+        4.890272,
+        47.15589
+      ]
+    },
+    {
+      "id": "21688",
+      "name": "Villars-Fontaine",
+      "bounds": [
+        4.88708,
+        47.144177,
+        4.915055,
+        47.155797
+      ],
+      "labelPoint": [
+        4.91107,
+        47.147181
+      ]
+    },
+    {
+      "id": "21698",
+      "name": "Villers-la-Faye",
+      "bounds": [
+        4.861353,
+        47.097106,
+        4.901595,
+        47.118906
+      ],
+      "labelPoint": [
+        4.88877,
+        47.114334
+      ]
+    }
+  ],
+  "dataUrl": "/maps/bourgogne-hautes-cotes-de-nuits.2026-09-21.geojson",
+  "bounds": [
+    4.834543,
+    47.084783,
+    4.943635,
+    47.186611
+  ],
+  "sources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21017/cadastre-21017-communes.json.gz",
+      "sha256": "c3c7d63522d2b0222a0e8248865a5e90fb7d14385ef26bebab6f767a2f7b1da3"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21070/cadastre-21070-communes.json.gz",
+      "sha256": "9f3fd581ab1959688846a8c01586bb5faa52b66dd8d57eb7a2694b00198bfd30"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21133/cadastre-21133-communes.json.gz",
+      "sha256": "0199186d35a17ecd55cc2e856fa720f28031e4df9f00a29095e6afcdc3d01bb3"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21162/cadastre-21162-communes.json.gz",
+      "sha256": "d4e80449f1fc8aa3a241895d9d701e347b53ddad42a6b9fd448e4776d73433de"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21169/cadastre-21169-communes.json.gz",
+      "sha256": "3eab8c3f1af6fff99bedb5f6f4125b4df33b9c6fbb86062fdc51edab0b386011"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21182/cadastre-21182-communes.json.gz",
+      "sha256": "e9420284e96811cbd5650edb0856cece24c246dc271d682b7f960089902433e2"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21219/cadastre-21219-communes.json.gz",
+      "sha256": "fc19625db8ce4ad97ad4964ada43312b3d540a900eb4d1c68a56c09a4676a827"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21254/cadastre-21254-communes.json.gz",
+      "sha256": "4784f08351b84aeac416d0271ba8d9a2dd19434da14f50467a295be48702bfb6"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21267/cadastre-21267-communes.json.gz",
+      "sha256": "900668aed2a5fcc479cf833d7050d96e9af239ea6aeff7d5ef49bee20a5eaf44"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21368/cadastre-21368-communes.json.gz",
+      "sha256": "1542834b6b9c2728ab9e14b781bada90372ae82581a89558c6e85a933ee3b57d"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21384/cadastre-21384-communes.json.gz",
+      "sha256": "5f1fe02c7a648d485abcb1d34ef9aeff28bc2cc42205fb59d1b47feac4255751"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21407/cadastre-21407-communes.json.gz",
+      "sha256": "97db3e4e079936c6f247164d5e8740f62d6812c352ad5f2e1a4d29d8923c68f7"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21409/cadastre-21409-communes.json.gz",
+      "sha256": "18d14f3e774b10e80d81caa4b6aec931da01d346aeb1f4bb60128aeed798a620"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21464/cadastre-21464-communes.json.gz",
+      "sha256": "ddbf4e40fcac924f04ba627005b9ff7104d8a8745d25a81b5dbc794cfc004081"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21506/cadastre-21506-communes.json.gz",
+      "sha256": "d8c63308fd135c5334eb170cf3678d59426f3ad746b0adfdac821655c9e586ab"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21523/cadastre-21523-communes.json.gz",
+      "sha256": "510fe8f310215e84ef3bfe501dac82fd0addda83c0ed1b69ebdadb2694e69fbc"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21597/cadastre-21597-communes.json.gz",
+      "sha256": "fceb9f064cab191a21197d1f01537b714036ca28c845ca0aa4e3dc1bc69e951c"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21688/cadastre-21688-communes.json.gz",
+      "sha256": "960dd1724886c689e6d6a003e598f3c07641e5e98fa883ebeb5491e048b089fa"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21698/cadastre-21698-communes.json.gz",
+      "sha256": "244975e8f7f331cb98c983e48c2b19e39467d1e32db5ccf3dbf2cedd01bfb77b"
+    }
+  ],
+  "notes": {},
+  "features": [
+    {
+      "id": "inao-denom-364",
+      "name": "Bourgogne Hautes Côtes de Nuits",
+      "tier": "regional",
+      "kind": "appellation",
+      "appellationId": 138,
+      "denominationId": 364,
+      "sourceName": "Bourgogne Hautes Côtes de Nuits",
+      "communes": [
+        "21017",
+        "21070",
+        "21133",
+        "21162",
+        "21169",
+        "21182",
+        "21219",
+        "21254",
+        "21267",
+        "21368",
+        "21384",
+        "21407",
+        "21409",
+        "21464",
+        "21506",
+        "21523",
+        "21597",
+        "21688",
+        "21698"
+      ],
+      "areaHa": 1529.8,
+      "matchId": "inao-denom-364",
+      "atlasUrl": null,
+      "bounds": [
+        4.834543,
+        47.084783,
+        4.943635,
+        47.186611
+      ],
+      "labelPoint": [
+        4.923026,
+        47.122675
+      ]
+    }
+  ],
+  "coverageNote": "A geographic denomination within Bourgogne AOC. The highlight shows its full INAO production area; named cuvées and producer holdings have no separate boundaries here."
+}

@@ -1,0 +1,459 @@
+{
+  "reviewedAt": "2026-09-26",
+  "scope": "Seven regional AOCs, their broad denominations, 14 Bourgogne geographic denominations, Mâcon-Villages and 27 named Mâcon geographic denominations. Status concerns boundary maps, not individual plots.",
+  "appellations": [
+    {
+      "name": "Bourgogne",
+      "appellationId": 138,
+      "denominations": [
+        {
+          "denominationId": 362,
+          "sourceNames": [
+            "Bourgogne",
+            "Bourgogne - blanc exclusif"
+          ],
+          "status": "pending",
+          "kind": "broad"
+        },
+        {
+          "denominationId": 363,
+          "sourceNames": [
+            "Bourgogne Hautes Côtes de Beaune"
+          ],
+          "status": "mapped",
+          "kind": "geographic"
+        },
+        {
+          "denominationId": 364,
+          "sourceNames": [
+            "Bourgogne Hautes Côtes de Nuits"
+          ],
+          "status": "mapped",
+          "kind": "geographic"
+        },
+        {
+          "denominationId": 365,
+          "sourceNames": [
+            "Bourgogne Côte Chalonnaise"
+          ],
+          "status": "pending",
+          "kind": "geographic"
+        },
+        {
+          "denominationId": 366,
+          "sourceNames": [
+            "Bourgogne Côtes d'Auxerre"
+          ],
+          "status": "pending",
+          "kind": "geographic"
+        },
+        {
+          "denominationId": 367,
+          "sourceNames": [
+            "Bourgogne Chitry"
+          ],
+          "status": "pending",
+          "kind": "geographic"
+        },
+        {
+          "denominationId": 368,
+          "sourceNames": [
+            "Bourgogne Coulanges-la-Vineuse"
+          ],
+          "status": "pending",
+          "kind": "geographic"
+        },
+        {
+          "denominationId": 369,
+          "sourceNames": [
+            "Bourgogne Epineuil"
+          ],
+          "status": "pending",
+          "kind": "geographic"
+        },
+        {
+          "denominationId": 371,
+          "sourceNames": [
+            "Bourgogne La Chapelle Notre-Dame"
+          ],
+          "status": "pending",
+          "kind": "geographic"
+        },
+        {
+          "denominationId": 372,
+          "sourceNames": [
+            "Bourgogne Le Chapitre"
+          ],
+          "status": "pending",
+          "kind": "geographic"
+        },
+        {
+          "denominationId": 373,
+          "sourceNames": [
+            "Bourgogne Montrecul ou Montre-Cul ou En Montre-Cul"
+          ],
+          "status": "pending",
+          "kind": "geographic"
+        },
+        {
+          "denominationId": 374,
+          "sourceNames": [
+            "Bourgogne Côte Saint-Jacques"
+          ],
+          "status": "pending",
+          "kind": "geographic"
+        },
+        {
+          "denominationId": 1586,
+          "sourceNames": [
+            "Bourgogne Côtes du Couchois"
+          ],
+          "status": "pending",
+          "kind": "geographic"
+        },
+        {
+          "denominationId": 1751,
+          "sourceNames": [
+            "Bourgogne Tonnerre"
+          ],
+          "status": "pending",
+          "kind": "geographic"
+        },
+        {
+          "denominationId": 2840,
+          "sourceNames": [
+            "Bourgogne Côte d'Or"
+          ],
+          "status": "mapped",
+          "kind": "geographic"
+        }
+      ]
+    },
+    {
+      "name": "Bourgogne Aligoté",
+      "appellationId": 140,
+      "denominations": [
+        {
+          "denominationId": 389,
+          "sourceNames": [
+            "Bourgogne aligoté"
+          ],
+          "status": "pending",
+          "kind": "broad"
+        }
+      ]
+    },
+    {
+      "name": "Bourgogne Mousseux",
+      "appellationId": 141,
+      "denominations": [
+        {
+          "denominationId": 391,
+          "sourceNames": [
+            "Bourgogne mousseux"
+          ],
+          "status": "pending",
+          "kind": "broad"
+        }
+      ]
+    },
+    {
+      "name": "Bourgogne Passe-tout-grains",
+      "appellationId": 144,
+      "denominations": [
+        {
+          "denominationId": 394,
+          "sourceNames": [
+            "Bourgogne Passe-tout-grains"
+          ],
+          "status": "pending",
+          "kind": "broad"
+        }
+      ]
+    },
+    {
+      "name": "Coteaux Bourguignons",
+      "appellationId": 1027,
+      "denominations": [
+        {
+          "denominationId": 2338,
+          "sourceNames": [
+            "Coteaux Bourguignons ou Bourgogne grand ordinaire ou Bourgogne ordinaire"
+          ],
+          "status": "pending",
+          "kind": "broad"
+        }
+      ]
+    },
+    {
+      "name": "Crémant de Bourgogne",
+      "appellationId": 175,
+      "denominations": [
+        {
+          "denominationId": 561,
+          "sourceNames": [
+            "Crémant de Bourgogne"
+          ],
+          "status": "pending",
+          "kind": "broad"
+        }
+      ]
+    },
+    {
+      "name": "Mâcon",
+      "appellationId": 583,
+      "denominations": [
+        {
+          "denominationId": 1712,
+          "sourceNames": [
+            "Mâcon Azé",
+            "Mâcon Azé - rouge exclusif"
+          ],
+          "status": "pending",
+          "kind": "geographic"
+        },
+        {
+          "denominationId": 1713,
+          "sourceNames": [
+            "Mâcon",
+            "Mâcon - rouge exclusif"
+          ],
+          "status": "pending",
+          "kind": "broad"
+        },
+        {
+          "denominationId": 1714,
+          "sourceNames": [
+            "Mâcon Bray",
+            "Mâcon Bray - rouge exclusif"
+          ],
+          "status": "pending",
+          "kind": "geographic"
+        },
+        {
+          "denominationId": 1715,
+          "sourceNames": [
+            "Mâcon Burgy"
+          ],
+          "status": "pending",
+          "kind": "geographic"
+        },
+        {
+          "denominationId": 1717,
+          "sourceNames": [
+            "Mâcon Bussières"
+          ],
+          "status": "pending",
+          "kind": "geographic"
+        },
+        {
+          "denominationId": 1719,
+          "sourceNames": [
+            "Mâcon Chaintré",
+            "Mâcon Chaintré - rouge exclusif"
+          ],
+          "status": "pending",
+          "kind": "geographic"
+        },
+        {
+          "denominationId": 1720,
+          "sourceNames": [
+            "Mâcon Chardonnay"
+          ],
+          "status": "pending",
+          "kind": "geographic"
+        },
+        {
+          "denominationId": 1721,
+          "sourceNames": [
+            "Mâcon Charnay-lès-Mâcon"
+          ],
+          "status": "pending",
+          "kind": "geographic"
+        },
+        {
+          "denominationId": 1722,
+          "sourceNames": [
+            "Mâcon Cruzille",
+            "Mâcon Cruzille - rouge exclusif"
+          ],
+          "status": "pending",
+          "kind": "geographic"
+        },
+        {
+          "denominationId": 1723,
+          "sourceNames": [
+            "Mâcon Davayé"
+          ],
+          "status": "pending",
+          "kind": "geographic"
+        },
+        {
+          "denominationId": 1724,
+          "sourceNames": [
+            "Mâcon Igé"
+          ],
+          "status": "pending",
+          "kind": "geographic"
+        },
+        {
+          "denominationId": 1725,
+          "sourceNames": [
+            "Mâcon La Roche-Vineuse",
+            "Mâcon La Roche-Vineuse - rouge exclusif"
+          ],
+          "status": "pending",
+          "kind": "geographic"
+        },
+        {
+          "denominationId": 1726,
+          "sourceNames": [
+            "Mâcon Lugny",
+            "Mâcon Lugny - rouge exclusif"
+          ],
+          "status": "pending",
+          "kind": "geographic"
+        },
+        {
+          "denominationId": 1728,
+          "sourceNames": [
+            "Mâcon Mancey",
+            "Mâcon Mancey - rouge exclusif"
+          ],
+          "status": "pending",
+          "kind": "geographic"
+        },
+        {
+          "denominationId": 1729,
+          "sourceNames": [
+            "Mâcon Milly-Lamartine",
+            "Mâcon Milly-Lamartine - rouge exclusif"
+          ],
+          "status": "pending",
+          "kind": "geographic"
+        },
+        {
+          "denominationId": 1730,
+          "sourceNames": [
+            "Mâcon Péronne"
+          ],
+          "status": "pending",
+          "kind": "geographic"
+        },
+        {
+          "denominationId": 1731,
+          "sourceNames": [
+            "Mâcon Pierreclos"
+          ],
+          "status": "pending",
+          "kind": "geographic"
+        },
+        {
+          "denominationId": 1732,
+          "sourceNames": [
+            "Mâcon Prissé",
+            "Mâcon Prissé - rouge exclusif"
+          ],
+          "status": "pending",
+          "kind": "geographic"
+        },
+        {
+          "denominationId": 1734,
+          "sourceNames": [
+            "Mâcon Saint-Gengoux-le-National",
+            "Mâcon Saint-Gengoux-le-National - rouge exclusif"
+          ],
+          "status": "pending",
+          "kind": "geographic"
+        },
+        {
+          "denominationId": 1735,
+          "sourceNames": [
+            "Mâcon Serrières"
+          ],
+          "status": "pending",
+          "kind": "geographic"
+        },
+        {
+          "denominationId": 1736,
+          "sourceNames": [
+            "Mâcon Vergisson"
+          ],
+          "status": "pending",
+          "kind": "geographic"
+        },
+        {
+          "denominationId": 1737,
+          "sourceNames": [
+            "Mâcon Verzé"
+          ],
+          "status": "pending",
+          "kind": "geographic"
+        },
+        {
+          "denominationId": 2069,
+          "sourceNames": [
+            "Mâcon Fuissé",
+            "Mâcon Fuissé - blanc exclusif"
+          ],
+          "status": "pending",
+          "kind": "geographic"
+        },
+        {
+          "denominationId": 2070,
+          "sourceNames": [
+            "Mâcon Loché"
+          ],
+          "status": "pending",
+          "kind": "geographic"
+        },
+        {
+          "denominationId": 2071,
+          "sourceNames": [
+            "Mâcon Montbellet"
+          ],
+          "status": "pending",
+          "kind": "geographic"
+        },
+        {
+          "denominationId": 2072,
+          "sourceNames": [
+            "Mâcon Solutré-Pouilly"
+          ],
+          "status": "pending",
+          "kind": "geographic"
+        },
+        {
+          "denominationId": 2073,
+          "sourceNames": [
+            "Mâcon Uchizy"
+          ],
+          "status": "pending",
+          "kind": "geographic"
+        },
+        {
+          "denominationId": 2074,
+          "sourceNames": [
+            "Mâcon Vinzelles"
+          ],
+          "status": "pending",
+          "kind": "geographic"
+        },
+        {
+          "denominationId": 2893,
+          "sourceNames": [
+            "Mâcon Villages",
+            "Mâcon Villages (Blanc)"
+          ],
+          "status": "pending",
+          "kind": "macon-villages"
+        }
+      ]
+    }
+  ],
+  "sources": [
+    "https://www.bourgogne-wines.com/professional-access/documents-photos%2C2334%2C9356.html",
+    "https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/bourgogne-an-ideal-location,2458,9253.html?args=Y29tcF9pZD0yMjc4JmFjdGlvbj12aWV3RnVsbExpc3RlJmlkPSZ8",
+    "https://www.data.gouv.fr/datasets/delimitation-parcellaire-des-aoc-viticoles-de-linao"
+  ]
+}
