@@ -100,4 +100,35 @@ describe('reviewed producer vineyard locations',()=>{
   expect(new URL(entry.sourceUrl).hostname).toBe('www.domaine-ferret.com');
   expect(new URL(entry.homonym.sourceUrl).hostname).toBe('chateau-fuisse.fr');
  });
+ it('accepts the documented Domaine Vincent producer field only for Pouilly-Fuissé Le Clos',()=>{
+  const base={...wine,producer:'Domaine Vincent',classification:'premier_cru'};
+  for(const fields of [{},{producer:' DOMAINE VINCENT '},{wineName:'Pouilly-Fuissé 1er Cru Le Clos Monopole'},
+   {wineName:'Pouilly-Fuissé',referenceSite:'Le Clos'}]){
+   const input={...base,...fields};
+   expect(burgundyVillageMapTarget(input)).toMatchObject({featureId:'inao-denom-2870',scope:'vineyard'});
+   expect(burgundyAtlasPremierCru(input)?.name).toBe('Pouilly-Fuissé — Le Clos');
+   expect(burgundyVillageMapTarget(input)?.locationContext).toBeUndefined();
+  }
+  for(const fields of [{wineName:'Le Clos et Les Crays'},{referenceSite:'Les Perrières'},
+   {wineName:'Domaine Ferret Le Clos'},{wineName:'Marie-Antoinette'}]){
+   expect(burgundyVillageMapTarget({...base,...fields})).toMatchObject({featureId:'inao-denom-2865',scope:'appellation'});
+  }
+  const villageWine={...base,classification:'village',vintage:2018};
+  expect(burgundyVillageMapTarget(villageWine)?.featureId).toBe('inao-denom-1055');
+  expect(burgundyVillageMapTarget({...base,classification:null})).toBeNull();
+  for(const fields of [{appellation:'Meursault'},{appellation:'Pouilly-Loché'},{appellation:'Mâcon-Fuissé'},
+   {country:'USA'},{region:'Loire'},{colour:'Red'},{identityMatchStatus:'conflict' as const}]){
+   expect(burgundyVillageMapTarget({...base,...fields})?.featureId).not.toBe('inao-denom-2870');
+  }
+ });
+ it('does not treat Vincent as a surname wildcard or an ambiguous title prefix',()=>{
+  for(const fields of [
+   {producer:'Vincent'},{producer:'Famille Vincent'},{producer:'Domaine Vincent Cornin'},
+   {producer:'Domaine Vincent Girardin'},{producer:'Domaine Vincent et Fils'},
+   {producer:null,wineName:'Domaine Vincent Pouilly-Fuissé Le Clos'},
+   {producer:null,wineName:'Domaine Vincent Cornin Pouilly-Fuissé Le Clos'},
+  ])expect(burgundyVillageMapTarget({...wine,classification:'premier_cru',...fields})).toMatchObject({featureId:'inao-denom-2865',scope:'appellation'});
+  // Cornin's actual longer climat name still selects its own reviewed boundary.
+  expect(burgundyVillageMapTarget({...wine,producer:'Domaine Vincent Cornin',wineName:'Le Clos Reyssier',classification:'premier_cru'})?.featureId).toBe('inao-denom-2867');
+ });
 });

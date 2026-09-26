@@ -12,16 +12,20 @@ export const producerLocations=[{
  sourceUrl:'https://www.domaine-ferret.com/en/wines/2/tete-de-cru-quot-clos-de-jeanne-quot',
  note:'Ferret’s Le Clos, renamed Clos de Jeanne from the 2020 vintage, lies within Les Perrières. The highlighted area covers the whole climat, not Ferret’s 0.64 ha parcel. Pre-2020 bottles were village wines; this map does not change the bottle’s recorded classification.',
  homonym:{climat:'Le Clos',producers:['Château Fuissé','Château de Fuissé'],
-  sourceUrl:'https://chateau-fuisse.fr/2-7-ha-en-1er-cru-monopole/'},
+  sourceUrl:'https://chateau-fuisse.fr/2-7-ha-en-1er-cru-monopole/',
+  // Bernard-Massard lists Pouilly-Fuissé Le Clos under this exact producer.
+  // Never use it as a title prefix: Domaine Vincent Cornin is another estate.
+  producerFieldAliases:['Domaine Vincent'],
+  producerAliasSourceUrl:'https://www.bernard-massard.lu/wp-content/uploads/Tarif_Bernard-Massard_2025_light.pdf#page=33'},
 }];
 
 const includes=(text:string,key:string)=>` ${text} `.includes(` ${key} `);
 const starts=(text:string,key:string)=>text===key||text.startsWith(`${key} `);
-function producerIs(wine:WineFacts,names:string[]){
+function producerIs(wine:WineFacts,names:string[],fieldAliases:string[]=[]){
  const producer=placeKey(wine.producer??''),title=placeKey(wine.wineName??'');
  // A recorded producer is authoritative. Title-only evidence must start with
  // a reviewed whole producer name, not merely contain the surname somewhere.
- return producer?names.some(name=>placeKey(name)===producer):names.some(name=>starts(title,placeKey(name)));
+ return producer?[...names,...fieldAliases].some(name=>placeKey(name)===producer):names.some(name=>starts(title,placeKey(name)));
 }
 function hasOtherProducer(wine:WineFacts,names:string[]){
  const title=placeKey(wine.wineName??'');
@@ -32,7 +36,7 @@ function hasOtherProducer(wine:WineFacts,names:string[]){
  * conflicting evidence must not redirect Ferret's Le Clos to Château Fuissé. */
 export function producerAllowsClimat(wine:WineFacts,appellation:string,climat:string){
  const collision=producerLocations.find(entry=>entry.appellation===appellation&&entry.homonym.climat===climat);
- return !collision||(producerIs(wine,collision.homonym.producers)&&!hasOtherProducer(wine,collision.producers));
+ return !collision||(producerIs(wine,collision.homonym.producers,collision.homonym.producerFieldAliases)&&!hasOtherProducer(wine,collision.producers));
 }
 
 /** Only a complete, reviewed cuvée name with consistent place fields matches.

@@ -732,6 +732,20 @@ Fuissé's climat; that destination requires Château Fuissé evidence. Catalogue
 entries do not create precise producer polygons or globally alias Le Clos to
 Les Perrières. Vintage values are never used to infer or overwrite a wine's tier.
 
+The **Domaine Vincent** follow-up is verified against
+[Bernard-Massard's 2025 catalogue](https://www.bernard-massard.lu/wp-content/uploads/Tarif_Bernard-Massard_2025_light.pdf#page=33)
+(printed page 32, PDF page 33, item A01264): it lists Pouilly-Fuissé Le Clos
+under that exact producer heading. The
+[estate's own wine list](https://chateau-fuisse.fr/nos-vins/) confirms the Vincent
+family and Le Clos monopole, while distinguishing its Famille Vincent range.
+The exact stored producer name Domaine Vincent is therefore accepted only by
+the Pouilly-Fuissé Le Clos homonym guard, with existing tier, geography, blend
+and conflict checks. It is not a global producer alias or a title-prefix match:
+[Domaine Vincent Cornin](https://www.domainevincentcornin.fr/) is another Fuissé
+estate and produces Le Clos Reyssier. Vincent alone, other Vincent producers,
+and producer-less titles starting with Domaine Vincent remain broad. A recorded
+village wine is never promoted by the alias.
+
 An independent source comparison verifies all 36 projected wine geometries,
 three derived Premier Cru overview fills, areas, colour codes and commune IDs,
 plus all 16 Cadastre outlines and recorded hashes. All 34 prior maps/catalogues,

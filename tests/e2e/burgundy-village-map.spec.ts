@@ -308,6 +308,9 @@ test('Ferret vineyard location requires unambiguous producer evidence for Le Clo
   {producer:'Château Fuissé',wineName:'Domaine Ferret Le Clos',id:'inao-denom-2865'},
   {producer:'Domaine Ferret',wineName:'Le Clos et Les Crays',id:'inao-denom-2865'},
   {producer:'Château Fuissé',wineName:'Le Clos',id:'inao-denom-2870'},
+  {producer:'Domaine Vincent',wineName:'Le Clos',id:'inao-denom-2870'},
+  {producer:'Domaine Vincent Cornin',wineName:'Le Clos',id:'inao-denom-2865'},
+  {producer:null,wineName:'Domaine Vincent Cornin Pouilly-Fuissé Le Clos',id:'inao-denom-2865'},
  ]){
   await setup(page,{...row,appellation:'Pouilly-Fuissé',colour:'White',wineStyle:'white'});
   await page.goto('/wines/layout-wine');await page.getByRole('button',{name:'View village map'}).click();
