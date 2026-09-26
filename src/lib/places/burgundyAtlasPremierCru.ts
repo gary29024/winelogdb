@@ -75,7 +75,11 @@ const reviewedNameAliases:Record<string,Record<string,string[]>>={
     'La Chapelle':['Les Bréterins La Chapelle','Les Bretterins La Chapelle','Les Bréterins dit La Chapelle','Les Bretterins dit La Chapelle','Reugne La Chapelle','Reugne dit La Chapelle']},
   // Changarnier writes singular Fulliot. Tricot's clos has no separate INAO
   // boundary: these names select the whole climat, explained in its map note.
-  'Monthélie':{'Les Champs Fulliots':['Les Champs Fulliot','Clos des Champs Fulliot','Clos des Champs Fulliots','Clos Les Champs Fulliot']}
+  'Monthélie':{'Les Champs Fulliots':['Les Champs Fulliot','Clos des Champs Fulliot','Clos des Champs Fulliots','Clos Les Champs Fulliot']},
+  // Mestre writes Passe-Temps; Monnot-Roche writes La Croix aux Moines.
+  // Saint Marc uses singular Clos Roussot for INAO's Les Clos Roussots.
+  'Santenay':{'Passetemps':['Passe-Temps']},
+  'Maranges':{'Le Croix Moines':['La Croix aux Moines'],'Les Clos Roussots':['Clos Roussot']}
 };
 const groups=mapping.groups.map(group=>({...group,key:nameKey(group.appellation),entries:group.entries.map(entry=>
   ({...entry,variants:[entry.name,...(reviewedNameAliases[group.appellation]?.[entry.name]??[])].flatMap(nameVariants)
@@ -165,7 +169,12 @@ export function burgundyAtlasPremierCru(wine:Wine):BurgundyAtlasPlace|null{
   return destinations.length===1?destinations[0]:null;
 }
 
-const appellations=appellationMapping.groups.map(group=>({...group,key:nameKey(group.appellation),
+// Local appellations use the same geographic and tier checks as Atlas places,
+// but never manufacture an outbound link when Atlas has no corresponding page.
+const appellations=[
+  ...appellationMapping.groups.map(group=>({...group,villageMatchId:null as string|null,premierCruMatchId:null as string|null})),
+  ...villageMaps.localAppellations.map(group=>({...group,villagePath:null,premierCruPath:null}))
+].map(group=>({...group,key:nameKey(group.appellation),
   keys:[...new Set([group.appellation,...group.aliases].map(nameKey))]}));
 type Appellation=typeof appellations[number];
 const namedPlaces=[...new Map([
@@ -259,6 +268,13 @@ function appellationLink(group:Appellation,tier:'village'|'premier_cru'):Burgund
   if(!path)return null;
   return {placeId:path.split('/')[2],name:`${group.appellation}${tier==='premier_cru'?' Premier Cru':''}`,
     url:`https://burgundyatlas.com${path}`,scope:'appellation'};
+}
+
+/** Reviewed map-only appellations share all of the wine identity safeguards. */
+export function burgundyLocalAppellationMapIdentity(wine:Wine):string|null{
+  const tier=namesPremierCru(wine)?'premier_cru':'village';
+  const group=wineAppellation(wine,tier);
+  return group?.[tier==='premier_cru'?'premierCruMatchId':'villageMatchId']??null;
 }
 
 /** Preserve the wine's tier when broadening from a named climat to its

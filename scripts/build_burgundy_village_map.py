@@ -103,7 +103,14 @@ def main():
     for village in villages:
         name = village["name"]
         premiers = next((g for g in premier_groups if g["appellation"] == name), {"entries": []})
-        appellation = next(g for g in appellations if g["appellation"] == name)
+        appellation = next((g for g in appellations if g["appellation"] == name), None)
+        # Missing Atlas pages must not block reviewed INAO boundaries. Opt in
+        # explicitly, keeping the outbound link absent and the local ID stable.
+        if village.get("localIdentity"):
+            assert appellation is None, f"Review new Atlas crosswalk for {name}"
+            assert village.get("regionId")
+        else:
+            assert appellation is not None, f"Review local identity for {name}"
         premier_links = {key(e["name"]): e["path"] for e in premiers["entries"]}
         colour_denominations = {int(d): colour for d, colour in village.get("colourDenominations", {}).items()}
         village_ids = {village["villageDenomination"]} | colour_denominations.keys()
@@ -144,8 +151,9 @@ def main():
                 atlas_path = None
             elif broad and tier != "grand_cru":
                 feature_name = name + (" Premier Cru" if tier == "premier_cru" else "")
-                atlas_path = appellation["premierCruPath" if tier == "premier_cru" else "villagePath"]
-                match_id = atlas_path.split("/")[2]
+                atlas_path = appellation["premierCruPath" if tier == "premier_cru" else "villagePath"] if appellation else None
+                assert atlas_path or village.get("localIdentity"), f"Review missing Atlas tier for {name}"
+                match_id = atlas_path.split("/")[2] if atlas_path else f"inao-app-{village['appellationId']}-{tier}"
             elif tier == "grand_cru":
                 entries = [e for e in grand_links if key(e["url"].split("/")[-1]) == key(feature_name)]
                 assert len(entries) == 1, f"Review Grand Cru identity: {feature_name}"
@@ -190,7 +198,7 @@ def main():
                 features.append({"type": "Feature", "id": variant_id, "properties": variant_properties,
                                  "geometry": geometry_json(variant_geom)})
                 point = variant_geom.representative_point()
-                catalogue.append({**variant_properties, "matchId": match_id, "atlasUrl": "https://burgundyatlas.com" + atlas_path,
+                catalogue.append({**variant_properties, "matchId": match_id, "atlasUrl": "https://burgundyatlas.com" + atlas_path if atlas_path else None,
                                   "bounds": rounded(variant_geom.bounds), "labelPoint": rounded([point.x, point.y])})
                 for colour in variant["colours"]:
                     colour_targets = target.setdefault("colourTargets", {})
@@ -217,8 +225,10 @@ def main():
             # official colour boundary intact, with its own source ID.
             features.insert(0, {"type": "Feature", "id": feature_id, "properties": properties, "geometry": geometry_json(combined)})
             point = combined.representative_point()
-            match_id = appellation["villagePath"].split("/")[2]
-            catalogue.insert(0, {**properties, "matchId": match_id, "atlasUrl": "https://burgundyatlas.com" + appellation["villagePath"],
+            atlas_path = appellation["villagePath"] if appellation else None
+            assert atlas_path or village.get("localIdentity"), f"Review missing Atlas village page for {name}"
+            match_id = atlas_path.split("/")[2] if atlas_path else f"inao-app-{village['appellationId']}-village"
+            catalogue.insert(0, {**properties, "matchId": match_id, "atlasUrl": "https://burgundyatlas.com" + atlas_path if atlas_path else None,
                                  "bounds": rounded(combined.bounds), "labelPoint": rounded([point.x, point.y])})
             assert match_id not in targets
             targets[match_id] = {"target": {"matchId": match_id, "featureId": feature_id, "name": properties["name"], "scope": "appellation",
@@ -226,6 +236,12 @@ def main():
                                  "villages": [village["id"]], "denom": None}
 
         by_id = {f["id"]: f for f in catalogue}
+        for feature_id, note in village["notes"].items():
+            if note.get("sameBoundaryAs"):
+                other = note["sameBoundaryAs"]
+                assert other != feature_id and not village["notes"].get(other, {}).get("sameBoundaryAs")
+                assert by_id[feature_id]["tier"] == by_id[other]["tier"]
+                assert geometries[by_id[feature_id]["denominationId"]].equals(geometries[by_id[other]["denominationId"]])
         # Some reviewed INAO areas overlap across tiers. Preserve every full
         # source geometry for selection, hit testing and outlines. Only the
         # overview fill uses this derived geometry, avoiding stacked colours.
@@ -353,6 +369,10 @@ def main():
         print(f"Built {village['id']}: {len(manifest['features'])} wine boundaries; {destination.stat().st_size:,} bytes")
     write_json(PLACES / "burgundyVillageMapRegistry.json", {
         "villages": [{k: v[k] for k in ("id", "name", "region", "wineColours") if k in v} for v in villages], "targets": index,
+        "localAppellations": [{"appellation": v["name"], "aliases": v.get("aliases", []), "regionId": v["regionId"],
+                               "villageMatchId": f"inao-app-{v['appellationId']}-village",
+                               "premierCruMatchId": f"inao-app-{v['appellationId']}-premier_cru" if v.get("premierDenomination") else None}
+                              for v in villages if v.get("localIdentity")],
         "grandCruClimats": [{"name": group["name"],
                              "matchId": next(entry["target"]["matchId"] for entry in targets.values() if entry["denom"] == group["broadDenomination"]),
                              # Reviewed label spellings ride along with the source name.

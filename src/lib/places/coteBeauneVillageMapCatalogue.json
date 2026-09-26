@@ -1,0 +1,66 @@
+{
+  "id": "cote-de-beaune",
+  "name": "Côte de Beaune",
+  "region": "Côte de Beaune",
+  "communes": [
+    {
+      "id": "21054",
+      "name": "Beaune"
+    }
+  ],
+  "dataUrl": "/maps/cote-de-beaune.2026-09-21.geojson",
+  "bounds": [
+    4.793381,
+    47.013324,
+    4.844826,
+    47.051455
+  ],
+  "sources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21054/cadastre-21054-communes.json.gz",
+      "sha256": "9f302ff1a41b632eb87e6fc128d8dfe80d12b653b690b22f38f2b512b26cfee1"
+    }
+  ],
+  "notes": {
+    "inao-denom-551": {
+      "note": "Côte de Beaune is a village appellation within the commune of Beaune, distinct from Beaune and Côte de Beaune-Villages. This map retains its full INAO production boundary, not the area currently planted or a producer’s holding. Named village lieux-dits are not mapped individually."
+    }
+  },
+  "features": [
+    {
+      "id": "inao-denom-551",
+      "name": "Côte de Beaune",
+      "tier": "village",
+      "kind": "appellation",
+      "appellationId": 167,
+      "denominationId": 551,
+      "sourceName": "Côte de Beaune",
+      "communes": [
+        "21054"
+      ],
+      "areaHa": 539.46,
+      "matchId": "ba_appellation_sm6led4zpt3y6q5qg244g7mxvm",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_sm6led4zpt3y6q5qg244g7mxvm/cote-de-beaune",
+      "bounds": [
+        4.793381,
+        47.013324,
+        4.844826,
+        47.051455
+      ],
+      "labelPoint": [
+        4.829804,
+        47.043766
+      ]
+    }
+  ]
+}

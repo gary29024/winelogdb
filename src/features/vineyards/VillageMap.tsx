@@ -94,7 +94,9 @@ function VillageMapView({target,catalogue}:{target:BurgundyVillageMapTarget;cata
  const selected=catalogue.features.find(feature=>feature.id===selectedId)!;
  // A reviewed note, then what the cru's umbrella relationships mean for a label.
  const selectionNotes=[catalogue.notes[selected.id]?.note,umbrellaNote(catalogue,selected.id)].filter(Boolean);
- const vineyardCount=(tier:string)=>catalogue.features.filter(f=>f.kind==='vineyard'&&f.tier===tier).length;
+ // Reviewed alternative designations remain selectable without counting the
+ // same climat twice (Santenay's two names for Clos de Tavannes).
+ const vineyardCount=(tier:string)=>catalogue.features.filter(f=>f.kind==='vineyard'&&f.tier===tier&&!catalogue.notes[f.id]?.sameBoundaryAs).length;
  const grandCount=new Set(catalogue.features.filter(f=>f.tier==='grand_cru').map(f=>f.appellationId)).size;
  const grandClimats=catalogue.features.filter(f=>f.parentAppellation);
  const hasVineyards=catalogue.features.some(f=>f.kind==='vineyard');

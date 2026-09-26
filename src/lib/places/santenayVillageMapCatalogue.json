@@ -1,0 +1,485 @@
+{
+  "id": "santenay",
+  "name": "Santenay",
+  "region": "Côte de Beaune",
+  "communes": [
+    {
+      "id": "21582",
+      "name": "Santenay"
+    },
+    {
+      "id": "71369",
+      "name": "Remigny"
+    }
+  ],
+  "dataUrl": "/maps/santenay.2026-09-21.geojson",
+  "bounds": [
+    4.66396,
+    46.905356,
+    4.722765,
+    46.925631
+  ],
+  "sources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21582/cadastre-21582-communes.json.gz",
+      "sha256": "5e300b0d90ddf8a54aa1bd1255b55201ee2f77113b51f06d38ea75a72885c347"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71369/cadastre-71369-communes.json.gz",
+      "sha256": "c385f514297e9cff61d5ea74d151c1001ca03fa2a5743a7a3b5cd88226e37644"
+    }
+  ],
+  "notes": {
+    "inao-app-230-village": {
+      "note": "This overview combines the published red and white Santenay areas. Choose a colour in the selector to explore its boundary. Named village lieux-dits are not mapped individually."
+    },
+    "inao-denom-1159": {
+      "note": "The published white Santenay production area. Named village lieux-dits are not mapped individually."
+    },
+    "inao-denom-2082": {
+      "note": "The published red Santenay production area, also recorded as Santenay Côte de Beaune in the source. Named village lieux-dits are not mapped individually."
+    },
+    "inao-denom-1164": {
+      "note": "Clos de Tavannes and Les Gravières-Clos de Tavannes have the same production boundary in this source. Both names remain selectable; neither identifies a particular producer’s holding."
+    },
+    "inao-denom-1170": {
+      "note": "Les Gravières-Clos de Tavannes shares its production boundary with Clos de Tavannes. Both are smaller than the full Les Gravières area.",
+      "paintedBy": "inao-denom-1164",
+      "sameBoundaryAs": "inao-denom-1164"
+    },
+    "inao-denom-1163": {
+      "note": "Clos Rousseau and Grand Clos Rousseau are separate source boundaries. This selection shows Clos Rousseau only."
+    },
+    "inao-denom-1166": {
+      "note": "Grand Clos Rousseau is a separate Premier Cru boundary from Clos Rousseau."
+    }
+  },
+  "features": [
+    {
+      "id": "inao-app-230-village",
+      "name": "Santenay (all colours)",
+      "tier": "village",
+      "kind": "appellation",
+      "appellationId": 230,
+      "denominationId": null,
+      "denominationIds": [
+        1159,
+        2082
+      ],
+      "sourceName": "Santenay / Santenay ou Santenay Côte de Beaune",
+      "communes": [
+        "21582",
+        "71369"
+      ],
+      "areaHa": 406.21,
+      "matchId": "ba_appellation_vcft4pcq4vb5fi3yztrxb6rfxa",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_vcft4pcq4vb5fi3yztrxb6rfxa/santenay",
+      "bounds": [
+        4.66396,
+        46.905356,
+        4.722765,
+        46.925631
+      ],
+      "labelPoint": [
+        4.6681,
+        46.913549
+      ]
+    },
+    {
+      "id": "inao-denom-1159",
+      "name": "Santenay (white)",
+      "tier": "village",
+      "kind": "appellation",
+      "appellationId": 230,
+      "denominationId": 1159,
+      "sourceName": "Santenay",
+      "communes": [
+        "21582",
+        "71369"
+      ],
+      "areaHa": 406.21,
+      "matchId": "ba_appellation_vcft4pcq4vb5fi3yztrxb6rfxa",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_vcft4pcq4vb5fi3yztrxb6rfxa/santenay",
+      "bounds": [
+        4.66396,
+        46.905356,
+        4.722765,
+        46.925631
+      ],
+      "labelPoint": [
+        4.710488,
+        46.919856
+      ]
+    },
+    {
+      "id": "inao-denom-1160",
+      "name": "Beauregard",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 230,
+      "denominationId": 1160,
+      "sourceName": "Santenay premier cru Beauregard",
+      "communes": [
+        "21582"
+      ],
+      "areaHa": 18.07,
+      "matchId": "ba_designation_db5i4ojk7c5b3rb5tcp27nb244",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_db5i4ojk7c5b3rb5tcp27nb244/beauregard",
+      "bounds": [
+        4.703863,
+        46.915529,
+        4.71187,
+        46.921706
+      ],
+      "labelPoint": [
+        4.707834,
+        46.91811
+      ]
+    },
+    {
+      "id": "inao-denom-1161",
+      "name": "Beaurepaire",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 230,
+      "denominationId": 1161,
+      "sourceName": "Santenay premier cru Beaurepaire",
+      "communes": [
+        "21582"
+      ],
+      "areaHa": 14.7,
+      "matchId": "ba_designation_msvsw7lskm3s6x262e5co5auci",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_msvsw7lskm3s6x262e5co5auci/beaurepaire",
+      "bounds": [
+        4.692892,
+        46.915123,
+        4.69998,
+        46.91994
+      ],
+      "labelPoint": [
+        4.696024,
+        46.917671
+      ]
+    },
+    {
+      "id": "inao-denom-1162",
+      "name": "Clos Faubard",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 230,
+      "denominationId": 1162,
+      "sourceName": "Santenay premier cru Clos Faubard",
+      "communes": [
+        "21582"
+      ],
+      "areaHa": 3.97,
+      "matchId": "ba_designation_mt6ahz4w4r5ypgyqbsrkl3q74m",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_mt6ahz4w4r5ypgyqbsrkl3q74m/clos-faubard",
+      "bounds": [
+        4.702285,
+        46.916209,
+        4.7061,
+        46.919013
+      ],
+      "labelPoint": [
+        4.703591,
+        46.917545
+      ]
+    },
+    {
+      "id": "inao-denom-1163",
+      "name": "Clos Rousseau",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 230,
+      "denominationId": 1163,
+      "sourceName": "Santenay premier cru Clos Rousseau",
+      "communes": [
+        "21582"
+      ],
+      "areaHa": 15.83,
+      "matchId": "ba_designation_hffhj26xwaogmadbp5ffbr6hl4",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_hffhj26xwaogmadbp5ffbr6hl4/clos-rousseau",
+      "bounds": [
+        4.671789,
+        46.906479,
+        4.68015,
+        46.912902
+      ],
+      "labelPoint": [
+        4.678162,
+        46.911194
+      ]
+    },
+    {
+      "id": "inao-denom-1164",
+      "name": "Clos de Tavannes",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 230,
+      "denominationId": 1164,
+      "sourceName": "Santenay premier cru Clos de Tavannes",
+      "communes": [
+        "21582"
+      ],
+      "areaHa": 5.29,
+      "matchId": "ba_designation_oytfrsi2gtsyfkutenpve4lbb4",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_oytfrsi2gtsyfkutenpve4lbb4/clos-de-tavannes",
+      "bounds": [
+        4.714375,
+        46.918305,
+        4.718509,
+        46.921745
+      ],
+      "labelPoint": [
+        4.716294,
+        46.919849
+      ]
+    },
+    {
+      "id": "inao-denom-1165",
+      "name": "Clos des Mouches",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 230,
+      "denominationId": 1165,
+      "sourceName": "Santenay premier cru Clos des Mouches",
+      "communes": [
+        "21582"
+      ],
+      "areaHa": 2.78,
+      "matchId": "ba_designation_n2bxcynv4xb53iqtvugqz26dn4",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_n2bxcynv4xb53iqtvugqz26dn4/clos-des-mouches",
+      "bounds": [
+        4.702265,
+        46.914934,
+        4.705419,
+        46.916969
+      ],
+      "labelPoint": [
+        4.703041,
+        46.9158
+      ]
+    },
+    {
+      "id": "inao-denom-1166",
+      "name": "Grand Clos Rousseau",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 230,
+      "denominationId": 1166,
+      "sourceName": "Santenay premier cru Grand Clos Rousseau",
+      "communes": [
+        "21582"
+      ],
+      "areaHa": 8.0,
+      "matchId": "ba_designation_itamvoqloty7lsrpxl354pvrae",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_itamvoqloty7lsrpxl354pvrae/grand-clos-rousseau",
+      "bounds": [
+        4.672021,
+        46.910352,
+        4.677297,
+        46.913631
+      ],
+      "labelPoint": [
+        4.675078,
+        46.911449
+      ]
+    },
+    {
+      "id": "inao-denom-1167",
+      "name": "La Comme",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 230,
+      "denominationId": 1167,
+      "sourceName": "Santenay premier cru La Comme",
+      "communes": [
+        "21582"
+      ],
+      "areaHa": 22.04,
+      "matchId": "ba_designation_kkn37dy5p6fhjsymvhlj525ycy",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_kkn37dy5p6fhjsymvhlj525ycy/la-comme",
+      "bounds": [
+        4.708437,
+        46.918331,
+        4.71652,
+        46.924797
+      ],
+      "labelPoint": [
+        4.713004,
+        46.921576
+      ]
+    },
+    {
+      "id": "inao-denom-1168",
+      "name": "La Maladière",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 230,
+      "denominationId": 1168,
+      "sourceName": "Santenay premier cru La Maladière",
+      "communes": [
+        "21582"
+      ],
+      "areaHa": 13.57,
+      "matchId": "ba_designation_7tkrvieauqkvdg2lieyyg2vwju",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_7tkrvieauqkvdg2lieyyg2vwju/la-maladiere",
+      "bounds": [
+        4.686163,
+        46.914202,
+        4.693987,
+        46.917686
+      ],
+      "labelPoint": [
+        4.690769,
+        46.915948
+      ]
+    },
+    {
+      "id": "inao-denom-1169",
+      "name": "Les Gravières",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 230,
+      "denominationId": 1169,
+      "sourceName": "Santenay premier cru Les Gravières",
+      "communes": [
+        "21582"
+      ],
+      "areaHa": 29.47,
+      "matchId": "ba_designation_npz3ejsvlms235eonv5hns37ra",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_npz3ejsvlms235eonv5hns37ra/les-gravieres",
+      "bounds": [
+        4.705158,
+        46.913166,
+        4.718509,
+        46.921745
+      ],
+      "labelPoint": [
+        4.712052,
+        46.917641
+      ]
+    },
+    {
+      "id": "inao-denom-1170",
+      "name": "Les Gravières-Clos de Tavannes",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 230,
+      "denominationId": 1170,
+      "sourceName": "Santenay premier cru Les Gravières-Clos de Tavannes",
+      "communes": [
+        "21582"
+      ],
+      "areaHa": 5.29,
+      "matchId": "ba_designation_rth7ydfe6pcxjq2nlwjnbfgxdq",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_rth7ydfe6pcxjq2nlwjnbfgxdq/les-gravieres-clos-de-tavannes",
+      "bounds": [
+        4.714375,
+        46.918305,
+        4.718509,
+        46.921745
+      ],
+      "labelPoint": [
+        4.716294,
+        46.919849
+      ]
+    },
+    {
+      "id": "inao-denom-1171",
+      "name": "Passetemps",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 230,
+      "denominationId": 1171,
+      "sourceName": "Santenay premier cru Passetemps",
+      "communes": [
+        "21582"
+      ],
+      "areaHa": 11.68,
+      "matchId": "ba_designation_apydgua5eudsvj3ab3ur23ukoe",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_apydgua5eudsvj3ab3ur23ukoe/passetemps",
+      "bounds": [
+        4.698729,
+        46.911898,
+        4.707109,
+        46.915383
+      ],
+      "labelPoint": [
+        4.70398,
+        46.913054
+      ]
+    },
+    {
+      "id": "inao-denom-1172",
+      "name": "Santenay Premier Cru",
+      "tier": "premier_cru",
+      "kind": "appellation",
+      "appellationId": 230,
+      "denominationId": 1172,
+      "sourceName": "Santenay premier cru",
+      "communes": [
+        "21582"
+      ],
+      "areaHa": 139.97,
+      "matchId": "ba_appellation_pl72cxv52kxxajpvkr3tv7tbom",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_pl72cxv52kxxajpvkr3tv7tbom/santenay-premier-cru",
+      "bounds": [
+        4.671789,
+        46.906479,
+        4.718509,
+        46.924797
+      ],
+      "labelPoint": [
+        4.710655,
+        46.919983
+      ]
+    },
+    {
+      "id": "inao-denom-2082",
+      "name": "Santenay (red)",
+      "tier": "village",
+      "kind": "appellation",
+      "appellationId": 230,
+      "denominationId": 2082,
+      "sourceName": "Santenay ou Santenay Côte de Beaune",
+      "communes": [
+        "21582",
+        "71369"
+      ],
+      "areaHa": 406.21,
+      "matchId": "ba_appellation_vcft4pcq4vb5fi3yztrxb6rfxa",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_vcft4pcq4vb5fi3yztrxb6rfxa/santenay",
+      "bounds": [
+        4.66396,
+        46.905356,
+        4.722765,
+        46.925631
+      ],
+      "labelPoint": [
+        4.710488,
+        46.919856
+      ]
+    }
+  ],
+  "umbrellas": {
+    "inao-denom-1169": [
+      "inao-denom-1164",
+      "inao-denom-1170"
+    ]
+  }
+}

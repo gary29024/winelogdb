@@ -19,14 +19,14 @@ Beaujolais has its own appellation system and is outside this Bourgogne inventor
 
 ## Village coverage
 
-**25 of 44 village appellations have maps in this branch.** This is not complete
+**29 of 44 village appellations have maps in this branch.** This is not complete
 Burgundy coverage. A mapped appellation can still lack individual village
 lieux-dits; named plot coverage must be assessed separately.
 
 | Region | Mapped | Remaining |
 | --- | ---: | ---: |
 | Côte de Nuits | 9 | 0 |
-| Côte de Beaune | 16 | 4 |
+| Côte de Beaune | 20 | 0 |
 | Côte Chalonnaise | 0 | 5 |
 | Mâconnais | 0 | 5 |
 | Chablis & Grand Auxerrois | 0 | 5 |
@@ -43,7 +43,7 @@ lieux-dits; named plot coverage must be assessed separately.
 - [x] Marsannay: Chenôve, Marsannay-la-Côte and Couchey; separate red/white and rosé areas
 - [x] Côte de Nuits-Villages: Fixin, Brochon, Premeaux-Prissey, Comblanchien and Corgoloin
 
-### Côte de Beaune — next batches
+### Côte de Beaune — mapped
 
 - [x] Meursault: 19 named Premier Crus and separate red/white village areas
 - [x] Puligny-Montrachet: 17 named Premier Crus, four Grand Crus and red/white village areas
@@ -61,15 +61,15 @@ lieux-dits; named plot coverage must be assessed separately.
 - [x] Auxey-Duresses: all nine named Premier Crus, both village colour identities and the whole commune including Petit-Auxey and Mélian
 - [x] Monthélie: all 15 named Premier Crus, including the four non-contiguous source IDs
 - [x] Saint-Romain: distinct red and white village areas; individual lieux-dits remain unmapped
-- [ ] Santenay
-- [ ] Maranges
-- [ ] Côte de Beaune
-- [ ] Côte de Beaune-Villages
+- [x] Santenay: Remigny, 11 Premier Cru climats under 12 source names, and both village colour identities
+- [x] Maranges: all three producing communes, seven Premier Crus and both village colour identities
+- [x] Côte de Beaune: its full source area in Beaune, distinct from the subregion and the Beaune appellation
+- [x] Côte de Beaune-Villages: all 16 producing communes, red-only, with a local identity and four area zoom controls
 
-Next are Santenay, Maranges, Côte de Beaune and Côte de Beaune-Villages, completing
-the Côte de Beaune village inventory. Côte de Beaune-Villages needs a local
-identity because the Atlas crosswalk has no page for it. Then continue through
-the Côte Chalonnaise, Mâconnais, Chablis/Grand Auxerrois and regional inventory.
+The Côte de Beaune village inventory is now mapped. Next are the five Côte
+Chalonnaise appellations: Bouzeron, Rully, Mercurey, Givry and Montagny. Then
+continue through the Mâconnais, Chablis/Grand Auxerrois and regional inventory.
+Named village lieux-dits remain a separate coverage gap throughout these areas.
 
 ### Côte Chalonnaise
 
@@ -122,10 +122,11 @@ in the source, rather than just the five village AOCs above.
 
 ## Source gaps and completion criteria
 
-- **A boundary must not depend on an Atlas page existing.** The current crosswalk
-  does depend on Atlas identities. Before the affected batches, add reviewed local
-  identities with optional outbound Atlas links. Côte de Beaune-Villages and the
-  Premier Crus of Pouilly-Loché/Pouilly-Vinzelles are known gaps in that crosswalk.
+- **A boundary must not depend on an Atlas page existing.** Côte de Beaune-Villages
+  now uses an explicitly reviewed local appellation identity with no outbound
+  Atlas link; it shares the existing geographic and tier conflict checks. Local
+  named Premier Cru support remains to be added for the known Atlas gaps in
+  Pouilly-Loché/Pouilly-Vinzelles when those batches are reviewed.
 - **Source counts need review.** The pinned INAO file has only 12 Chablis
   denominations under its village appellation; that is not a complete inventory
   of named Premier Cru climats. Verify umbrella names and missing geometries
@@ -159,6 +160,16 @@ in the source, rather than just the five village AOCs above.
   Distinguish a reviewed compound label (Bataillère aux Vergelesses) from a blend
   and from geometric containment. Colour and appellation evidence must remain
   explicit; a producer subdivision must not acquire an invented polygon.
+- **Count climats separately from alternative source names.** Santenay has 11
+  BIVB climats but 12 INAO named entries. Clos de Tavannes and Les Gravières-Clos
+  de Tavannes have equal geometry. Both names remain selectable, while the
+  displayed climat count excludes the reviewed duplicate. Clos Rousseau and
+  Grand Clos Rousseau remain separate boundaries.
+- **Review Cadastre lieux-dits as a possible next source.** The #343 feedback
+  suggested its named-place layer for missing village plots such as Les Beaumonts
+  and Sous le Château. Evaluate geometry, names, licensing and matching against
+  wine references before importing it. A cadastral place is not automatically
+  a wine designation or a producer holding; no such plot boundaries are shipped yet.
 - **Completion means more than a checkbox.** Verify every expected denomination,
   all producing communes, source provenance, shared boundaries, conservative wine
   matching, owner/shared views, lazy loading and mobile layouts. Document any

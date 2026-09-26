@@ -954,6 +954,305 @@
         "inao-denom-2048": {"note": "The white-wine village area for Saint-Romain. Named vineyards are not mapped individually."}
       },
       "expectedBounds": [4.65, 46.95, 4.9, 47.1]
+    },
+    {
+      "id": "santenay",
+      "name": "Santenay",
+      "region": "Côte de Beaune",
+      "appellationId": 230,
+      "villageDenomination": 1159,
+      "grands": [],
+      "communes": [
+        {
+          "id": "21582",
+          "name": "Santenay"
+        },
+        {
+          "id": "71369",
+          "name": "Remigny"
+        }
+      ],
+      "catalogueFile": "santenayVillageMapCatalogue.json",
+      "nameCrosswalk": {},
+      "notes": {
+        "inao-app-230-village": {
+          "note": "This overview combines the published red and white Santenay areas. Choose a colour in the selector to explore its boundary. Named village lieux-dits are not mapped individually."
+        },
+        "inao-denom-1159": {
+          "note": "The published white Santenay production area. Named village lieux-dits are not mapped individually."
+        },
+        "inao-denom-2082": {
+          "note": "The published red Santenay production area, also recorded as Santenay Côte de Beaune in the source. Named village lieux-dits are not mapped individually."
+        },
+        "inao-denom-1164": {
+          "note": "Clos de Tavannes and Les Gravières-Clos de Tavannes have the same production boundary in this source. Both names remain selectable; neither identifies a particular producer’s holding."
+        },
+        "inao-denom-1170": {
+          "note": "Les Gravières-Clos de Tavannes shares its production boundary with Clos de Tavannes. Both are smaller than the full Les Gravières area.",
+          "paintedBy": "inao-denom-1164",
+          "sameBoundaryAs": "inao-denom-1164"
+        },
+        "inao-denom-1163": {
+          "note": "Clos Rousseau and Grand Clos Rousseau are separate source boundaries. This selection shows Clos Rousseau only."
+        },
+        "inao-denom-1166": {
+          "note": "Grand Clos Rousseau is a separate Premier Cru boundary from Clos Rousseau."
+        }
+      },
+      "expectedBounds": [
+        4.6,
+        46.85,
+        5.0,
+        47.15
+      ],
+      "wineColours": [
+        "red",
+        "white"
+      ],
+      "premierDenomination": 1172,
+      "premierRange": [
+        1160,
+        1171
+      ],
+      "colourDenominations": {
+        "1159": "white",
+        "2082": "red"
+      },
+      "unionOverviewFills": true
+    },
+    {
+      "id": "maranges",
+      "name": "Maranges",
+      "region": "Côte de Beaune",
+      "appellationId": 198,
+      "villageDenomination": 797,
+      "grands": [],
+      "communes": [
+        {
+          "id": "71122",
+          "name": "Cheilly-lès-Maranges"
+        },
+        {
+          "id": "71174",
+          "name": "Dezize-lès-Maranges"
+        },
+        {
+          "id": "71496",
+          "name": "Sampigny-lès-Maranges"
+        }
+      ],
+      "catalogueFile": "marangesVillageMapCatalogue.json",
+      "nameCrosswalk": {},
+      "notes": {
+        "inao-app-198-village": {
+          "note": "This overview combines the published red and white Maranges areas. Choose a colour in the selector to explore its boundary. Named village lieux-dits are not mapped individually."
+        },
+        "inao-denom-797": {
+          "note": "The published white Maranges production area. Named village lieux-dits are not mapped individually."
+        },
+        "inao-denom-2061": {
+          "note": "The published red Maranges production area, also recorded as Maranges Côte de Beaune in the source. Named village lieux-dits are not mapped individually."
+        },
+        "inao-denom-800": {
+          "note": "La Fussière spans Cheilly-lès-Maranges and Dezize-lès-Maranges. Its full production area is retained across both communes."
+        },
+        "inao-denom-804": {
+          "note": "Les Clos Roussots spans Cheilly-lès-Maranges and Sampigny-lès-Maranges. Its full production area is retained across both communes."
+        },
+        "inao-denom-803": {
+          "note": "Producer labels also call this cru La Croix aux Moines; the source records it as Le Croix Moines."
+        }
+      },
+      "expectedBounds": [
+        4.6,
+        46.85,
+        5.0,
+        47.15
+      ],
+      "wineColours": [
+        "red",
+        "white"
+      ],
+      "premierDenomination": 805,
+      "premierRange": [
+        798,
+        804
+      ],
+      "colourDenominations": {
+        "797": "white",
+        "2061": "red"
+      },
+      "unionOverviewFills": true
+    },
+    {
+      "id": "cote-de-beaune",
+      "name": "Côte de Beaune",
+      "region": "Côte de Beaune",
+      "appellationId": 167,
+      "villageDenomination": 551,
+      "grands": [],
+      "communes": [
+        {
+          "id": "21054",
+          "name": "Beaune"
+        }
+      ],
+      "catalogueFile": "coteBeauneVillageMapCatalogue.json",
+      "nameCrosswalk": {},
+      "notes": {
+        "inao-denom-551": {
+          "note": "Côte de Beaune is a village appellation within the commune of Beaune, distinct from Beaune and Côte de Beaune-Villages. This map retains its full INAO production boundary, not the area currently planted or a producer’s holding. Named village lieux-dits are not mapped individually."
+        }
+      },
+      "expectedBounds": [
+        4.6,
+        46.85,
+        5.0,
+        47.15
+      ],
+      "wineColours": [
+        "red",
+        "white"
+      ]
+    },
+    {
+      "id": "cote-de-beaune-villages",
+      "name": "Côte de Beaune-Villages",
+      "region": "Côte de Beaune",
+      "appellationId": 168,
+      "villageDenomination": 552,
+      "grands": [],
+      "communes": [
+        {
+          "id": "21037",
+          "name": "Auxey-Duresses"
+        },
+        {
+          "id": "21150",
+          "name": "Chassagne-Montrachet"
+        },
+        {
+          "id": "21173",
+          "name": "Chorey-lès-Beaune"
+        },
+        {
+          "id": "21412",
+          "name": "Meursault"
+        },
+        {
+          "id": "21428",
+          "name": "Monthélie"
+        },
+        {
+          "id": "21480",
+          "name": "Pernand-Vergelesses"
+        },
+        {
+          "id": "21512",
+          "name": "Puligny-Montrachet"
+        },
+        {
+          "id": "21541",
+          "name": "Saint-Aubin"
+        },
+        {
+          "id": "21569",
+          "name": "Saint-Romain"
+        },
+        {
+          "id": "21582",
+          "name": "Santenay"
+        },
+        {
+          "id": "21590",
+          "name": "Savigny-lès-Beaune"
+        },
+        {
+          "id": "21606",
+          "name": "Ladoix-Serrigny"
+        },
+        {
+          "id": "71122",
+          "name": "Cheilly-lès-Maranges"
+        },
+        {
+          "id": "71174",
+          "name": "Dezize-lès-Maranges"
+        },
+        {
+          "id": "71369",
+          "name": "Remigny"
+        },
+        {
+          "id": "71496",
+          "name": "Sampigny-lès-Maranges"
+        }
+      ],
+      "catalogueFile": "coteBeauneVillagesMapCatalogue.json",
+      "nameCrosswalk": {},
+      "notes": {
+        "inao-denom-552": {
+          "note": "This red-wine appellation spans 16 producing communes and may blend wines from several of them. The whole INAO area is shown; the label alone identifies neither a commune nor a vineyard. It is distinct from the Côte de Beaune appellation in Beaune. Named village lieux-dits are not mapped individually."
+        }
+      },
+      "expectedBounds": [
+        4.6,
+        46.85,
+        5.0,
+        47.15
+      ],
+      "wineColours": [
+        "red"
+      ],
+      "localIdentity": true,
+      "regionId": "france/burgundy/cote-de-beaune",
+      "aliases": [],
+      "areas": [
+        {
+          "id": "north",
+          "label": "North",
+          "name": "Ladoix, Pernand, Savigny & Chorey",
+          "communes": [
+            "21606",
+            "21480",
+            "21590",
+            "21173"
+          ]
+        },
+        {
+          "id": "centre",
+          "label": "Centre",
+          "name": "Saint-Romain, Auxey, Monthélie & Meursault",
+          "communes": [
+            "21569",
+            "21037",
+            "21428",
+            "21412"
+          ]
+        },
+        {
+          "id": "montrachet",
+          "label": "Montrachet area",
+          "name": "Saint-Aubin, Puligny & Chassagne",
+          "communes": [
+            "21541",
+            "21512",
+            "21150"
+          ]
+        },
+        {
+          "id": "south",
+          "label": "South",
+          "name": "Santenay, Remigny & Maranges",
+          "communes": [
+            "21582",
+            "71369",
+            "71122",
+            "71174",
+            "71496"
+          ]
+        }
+      ]
     }
   ]
 }

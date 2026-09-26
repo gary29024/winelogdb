@@ -1,0 +1,372 @@
+{
+  "id": "maranges",
+  "name": "Maranges",
+  "region": "Côte de Beaune",
+  "communes": [
+    {
+      "id": "71122",
+      "name": "Cheilly-lès-Maranges"
+    },
+    {
+      "id": "71174",
+      "name": "Dezize-lès-Maranges"
+    },
+    {
+      "id": "71496",
+      "name": "Sampigny-lès-Maranges"
+    }
+  ],
+  "dataUrl": "/maps/maranges.2026-09-21.geojson",
+  "bounds": [
+    4.648202,
+    46.896018,
+    4.683536,
+    46.917182
+  ],
+  "sources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71122/cadastre-71122-communes.json.gz",
+      "sha256": "3f9436338fea55a1b4bf0cc5596f045037c101f5a52ff5b7883c47481168d6ea"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71174/cadastre-71174-communes.json.gz",
+      "sha256": "74a919b3133c9f8e650e75562dacea3781be1cb44343453005f2d240f9cd80b4"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71496/cadastre-71496-communes.json.gz",
+      "sha256": "e66052a6beb93fe1d7dcdcda65c2d7845db0d79d33f686c61cc109209d0b4c6f"
+    }
+  ],
+  "notes": {
+    "inao-app-198-village": {
+      "note": "This overview combines the published red and white Maranges areas. Choose a colour in the selector to explore its boundary. Named village lieux-dits are not mapped individually."
+    },
+    "inao-denom-797": {
+      "note": "The published white Maranges production area. Named village lieux-dits are not mapped individually."
+    },
+    "inao-denom-2061": {
+      "note": "The published red Maranges production area, also recorded as Maranges Côte de Beaune in the source. Named village lieux-dits are not mapped individually."
+    },
+    "inao-denom-800": {
+      "note": "La Fussière spans Cheilly-lès-Maranges and Dezize-lès-Maranges. Its full production area is retained across both communes."
+    },
+    "inao-denom-804": {
+      "note": "Les Clos Roussots spans Cheilly-lès-Maranges and Sampigny-lès-Maranges. Its full production area is retained across both communes."
+    },
+    "inao-denom-803": {
+      "note": "Producer labels also call this cru La Croix aux Moines; the source records it as Le Croix Moines."
+    }
+  },
+  "features": [
+    {
+      "id": "inao-app-198-village",
+      "name": "Maranges (all colours)",
+      "tier": "village",
+      "kind": "appellation",
+      "appellationId": 198,
+      "denominationId": null,
+      "denominationIds": [
+        797,
+        2061
+      ],
+      "sourceName": "Maranges / Maranges ou Maranges Côte de Beaune",
+      "communes": [
+        "71122",
+        "71174",
+        "71496"
+      ],
+      "areaHa": 233.2,
+      "matchId": "ba_appellation_cywf3u7s7z3s6w44wodjavur7q",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_cywf3u7s7z3s6w44wodjavur7q/maranges",
+      "bounds": [
+        4.648202,
+        46.896018,
+        4.683536,
+        46.917182
+      ],
+      "labelPoint": [
+        4.677287,
+        46.903193
+      ]
+    },
+    {
+      "id": "inao-denom-797",
+      "name": "Maranges (white)",
+      "tier": "village",
+      "kind": "appellation",
+      "appellationId": 198,
+      "denominationId": 797,
+      "sourceName": "Maranges",
+      "communes": [
+        "71122",
+        "71174",
+        "71496"
+      ],
+      "areaHa": 233.2,
+      "matchId": "ba_appellation_cywf3u7s7z3s6w44wodjavur7q",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_cywf3u7s7z3s6w44wodjavur7q/maranges",
+      "bounds": [
+        4.648202,
+        46.896018,
+        4.683536,
+        46.917182
+      ],
+      "labelPoint": [
+        4.663155,
+        46.906357
+      ]
+    },
+    {
+      "id": "inao-denom-798",
+      "name": "Clos de la Boutière",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 198,
+      "denominationId": 798,
+      "sourceName": "Maranges premier cru Clos de la Boutière",
+      "communes": [
+        "71122"
+      ],
+      "areaHa": 2.83,
+      "matchId": "ba_designation_hjbqgg2kxh7jnmgtnha2at7yly",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_hjbqgg2kxh7jnmgtnha2at7yly/clos-de-la-boutiere",
+      "bounds": [
+        4.670433,
+        46.905121,
+        4.671887,
+        46.908767
+      ],
+      "labelPoint": [
+        4.671183,
+        46.906877
+      ]
+    },
+    {
+      "id": "inao-denom-799",
+      "name": "Clos de la Fussière",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 198,
+      "denominationId": 799,
+      "sourceName": "Maranges premier cru Clos de la Fussière",
+      "communes": [
+        "71174"
+      ],
+      "areaHa": 0.88,
+      "matchId": "ba_designation_k7eqkp4p24a6x4t3wz5c4mtj2i",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_k7eqkp4p24a6x4t3wz5c4mtj2i/clos-de-la-fussiere",
+      "bounds": [
+        4.665403,
+        46.909004,
+        4.666462,
+        46.910275
+      ],
+      "labelPoint": [
+        4.665915,
+        46.909675
+      ]
+    },
+    {
+      "id": "inao-denom-800",
+      "name": "La Fussière",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 198,
+      "denominationId": 800,
+      "sourceName": "Maranges premier cru La Fussière",
+      "communes": [
+        "71122",
+        "71174"
+      ],
+      "areaHa": 42.59,
+      "matchId": "ba_designation_ij6jo72ynljnf3tc4tck6w633q",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_ij6jo72ynljnf3tc4tck6w633q/la-fussiere",
+      "bounds": [
+        4.655618,
+        46.908711,
+        4.672024,
+        46.913516
+      ],
+      "labelPoint": [
+        4.669191,
+        46.910729
+      ]
+    },
+    {
+      "id": "inao-denom-801",
+      "name": "Le Clos des Loyères",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 198,
+      "denominationId": 801,
+      "sourceName": "Maranges premier cru Le Clos des Loyères",
+      "communes": [
+        "71496"
+      ],
+      "areaHa": 11.37,
+      "matchId": "ba_designation_v5lhwn3gfc5y2luqja3orxruuu",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_v5lhwn3gfc5y2luqja3orxruuu/le-clos-des-loyeres",
+      "bounds": [
+        4.654953,
+        46.905987,
+        4.66291,
+        46.909131
+      ],
+      "labelPoint": [
+        4.660981,
+        46.907588
+      ]
+    },
+    {
+      "id": "inao-denom-802",
+      "name": "Le Clos des Rois",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 198,
+      "denominationId": 802,
+      "sourceName": "Maranges premier cru Le Clos des Rois",
+      "communes": [
+        "71496"
+      ],
+      "areaHa": 7.21,
+      "matchId": "ba_designation_t5bouxghovopibgc7wbjyvwl7e",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_t5bouxghovopibgc7wbjyvwl7e/le-clos-des-rois",
+      "bounds": [
+        4.660887,
+        46.903705,
+        4.666162,
+        46.906581
+      ],
+      "labelPoint": [
+        4.663254,
+        46.905139
+      ]
+    },
+    {
+      "id": "inao-denom-803",
+      "name": "Le Croix Moines",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 198,
+      "denominationId": 803,
+      "sourceName": "Maranges premier cru Le Croix Moines",
+      "communes": [
+        "71174"
+      ],
+      "areaHa": 1.05,
+      "matchId": "ba_designation_bnbrrea3ybt4p2xhxdevm6ro34",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_bnbrrea3ybt4p2xhxdevm6ro34/le-croix-moines",
+      "bounds": [
+        4.658314,
+        46.911829,
+        4.659717,
+        46.913578
+      ],
+      "labelPoint": [
+        4.658919,
+        46.912701
+      ]
+    },
+    {
+      "id": "inao-denom-804",
+      "name": "Les Clos Roussots",
+      "tier": "premier_cru",
+      "kind": "vineyard",
+      "appellationId": 198,
+      "denominationId": 804,
+      "sourceName": "Maranges premier cru Les Clos Roussots",
+      "communes": [
+        "71122",
+        "71496"
+      ],
+      "areaHa": 27.98,
+      "matchId": "ba_designation_7sd7nertzsqttdbt66grhr2j6u",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_designation_7sd7nertzsqttdbt66grhr2j6u/les-clos-roussots",
+      "bounds": [
+        4.661928,
+        46.903634,
+        4.672864,
+        46.909052
+      ],
+      "labelPoint": [
+        4.666568,
+        46.907271
+      ]
+    },
+    {
+      "id": "inao-denom-805",
+      "name": "Maranges Premier Cru",
+      "tier": "premier_cru",
+      "kind": "appellation",
+      "appellationId": 198,
+      "denominationId": 805,
+      "sourceName": "Maranges premier cru",
+      "communes": [
+        "71122",
+        "71174",
+        "71496"
+      ],
+      "areaHa": 93.03,
+      "matchId": "ba_appellation_kui6mcdbil3z7e5pxatudbjgay",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_kui6mcdbil3z7e5pxatudbjgay/maranges-premier-cru",
+      "bounds": [
+        4.654953,
+        46.903634,
+        4.672864,
+        46.913578
+      ],
+      "labelPoint": [
+        4.663155,
+        46.906357
+      ]
+    },
+    {
+      "id": "inao-denom-2061",
+      "name": "Maranges (red)",
+      "tier": "village",
+      "kind": "appellation",
+      "appellationId": 198,
+      "denominationId": 2061,
+      "sourceName": "Maranges ou Maranges Côte de Beaune",
+      "communes": [
+        "71122",
+        "71174",
+        "71496"
+      ],
+      "areaHa": 233.2,
+      "matchId": "ba_appellation_cywf3u7s7z3s6w44wodjavur7q",
+      "atlasUrl": "https://burgundyatlas.com/place/ba_appellation_cywf3u7s7z3s6w44wodjavur7q/maranges",
+      "bounds": [
+        4.648202,
+        46.896018,
+        4.683536,
+        46.917182
+      ],
+      "labelPoint": [
+        4.663155,
+        46.906357
+      ]
+    }
+  ],
+  "umbrellas": {
+    "inao-denom-800": [
+      "inao-denom-799"
+    ]
+  }
+}
