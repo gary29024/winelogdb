@@ -800,6 +800,12 @@ now have maps; regional AOCs and missing named plots remain separate work.
   description. The broad Premier Cru source boundary supplies the overview fill,
   so absent named polygons do not erase Premier Cru land from the overview.
 - Grand Cru `439` is a broad appellation; `440–446` are its seven named climats.
+  Grand Cru wines open on the shared Grand Cru hillside, including broad wines
+  such as La Moutonne, while named climats keep their individual highlight.
+  “Grand Cru view” returns to that hillside, “Village view” shows all of Chablis,
+  and “Zoom to selection” offers a closer look at a single climat. Returning to
+  the wine restores its initial framing. Premier Cru and village openings keep
+  their existing scope.
   The latter use local identities with no fabricated Atlas pages. The matcher
   requires Grand Cru evidence and supports white named Chablis while retaining
   Corton's existing red-only named-climat rule. Recorded tiers and source colour

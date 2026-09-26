@@ -100,8 +100,17 @@ function VillageMapView({target,catalogue}:{target:BurgundyVillageMapTarget;cata
  const vineyardCount=(tier:string)=>catalogue.features.filter(f=>f.kind==='vineyard'&&f.tier===tier&&!catalogue.notes[f.id]?.sameBoundaryAs).length;
  const grandCount=new Set(catalogue.features.filter(f=>f.tier==='grand_cru').map(f=>f.appellationId)).size;
  const grandClimats=catalogue.features.filter(f=>f.parentAppellation);
+ // Chablis's seven Grand Cru climats form one compact hillside inside a much
+ // larger village area. Use that source boundary as their shared context.
+ const grandCruArea=catalogue.id==='chablis'?catalogue.features.find(f=>f.tier==='grand_cru'&&f.kind==='appellation'):undefined;
  const hasVineyards=catalogue.features.some(f=>f.kind==='vineyard');
  const selectId=useId(),statusId=useId();
+ const wineViewport=()=>{
+  const own=catalogue.features.find(f=>f.id===target.featureId);
+  if(own?.tier==='grand_cru'&&grandCruArea)return {bounds:boundsOf(grandCruArea.bounds),fitBoundsOptions:{...overviewFit(host.current),maxZoom:15}};
+  if(target.scope==='vineyard'&&own)return {bounds:boundsOf(own.bounds),fitBoundsOptions:{padding:70,maxZoom:15}};
+  return {bounds:boundsOf(catalogue.bounds),fitBoundsOptions:overviewFit(host.current)};
+ };
  useEffect(()=>{selectedRef.current=selectedId;selectionAction.current?.(selectedId)},[selectedId]);
 
  useEffect(()=>{
@@ -119,11 +128,7 @@ function VillageMapView({target,catalogue}:{target:BurgundyVillageMapTarget;cata
     if(!isBoundaryData(data,catalogue))throw new Error('Boundary data is incomplete');
     clearTimeout(timeout);
     if(disposed||!host.current)return;
-    const own=catalogue.features.find(f=>f.id===target.featureId);
-    // Open on the wine's own cru - on a phone the village view leaves it a few
-    // pixels wide under its label. A broad appellation has no cru to show.
-    const opening=target.scope==='vineyard'&&own?{bounds:boundsOf(own.bounds),fitBoundsOptions:{padding:70,maxZoom:15}}:{bounds:boundsOf(catalogue.bounds),fitBoundsOptions:overviewFit(host.current)};
-    map=new MapLibreMap({container:host.current,style:mapStyle(data,catalogue),...opening,
+    map=new MapLibreMap({container:host.current,style:mapStyle(data,catalogue),...wineViewport(),
      minZoom:9,maxZoom:18,attributionControl:{compact:true,customAttribution:'Boundaries: INAO · Cadastre Etalab'},
      dragRotate:false,pitchWithRotate:false,touchPitch:false});
     mapRef.current=map;
@@ -174,7 +179,10 @@ function VillageMapView({target,catalogue}:{target:BurgundyVillageMapTarget;cata
       element.style.visibility='visible';
       const box=element.getBoundingClientRect();
       const inside=box.left>=origin.left&&box.right<=origin.left+width&&box.top>=origin.top&&box.bottom<=origin.top+height;
-      const show=feature.id!==selectedRef.current&&map.getZoom()>=12.8&&inside&&!overlaps(box);
+      // The whole Chablis hillside fits a phone just below the usual label
+      // threshold. Keep neighbouring Grand Cru names available at that view.
+      const labelZoom=grandCruArea&&feature.tier==='grand_cru'?12:12.8;
+      const show=feature.id!==selectedRef.current&&map.getZoom()>=labelZoom&&inside&&!overlaps(box);
       element.style.visibility=show?'visible':'hidden';
       if(show)placed.push(box);
      }
@@ -230,13 +238,13 @@ function VillageMapView({target,catalogue}:{target:BurgundyVillageMapTarget;cata
  const zoomTo=(feature:VillageMapFeature)=>mapRef.current?.fitBounds(boundsOf(feature.bounds),{padding:65,maxZoom:16.5,duration:0});
  const backToWine=()=>{
   setSelectedId(target.featureId);
-  const own=catalogue.features.find(f=>f.id===target.featureId);
-  if(target.scope==='vineyard'&&own)mapRef.current?.fitBounds(boundsOf(own.bounds),{padding:70,maxZoom:15,duration:0});else villageView();
+  const view=wineViewport();
+  mapRef.current?.fitBounds(view.bounds,{...view.fitBoundsOptions,duration:0});
  };
  return <>
   <div className="village-map-body">
    <div className="village-map-main">
-    <div className="village-map-toolbar"><button type="button" disabled={!ready||Boolean(error)} onClick={villageView}>Village view</button><button type="button" disabled={!ready||Boolean(error)} onClick={()=>zoomTo(selected)}>Zoom to selection</button>{catalogue.areas?.map(area=><button type="button" key={area.id} disabled={!ready||Boolean(error)} aria-label={`${area.label}: ${area.name}`} onClick={()=>mapRef.current?.fitBounds(boundsOf(area.bounds),{padding:50,duration:0})}>{area.label}</button>)}</div>
+    <div className="village-map-toolbar"><button type="button" disabled={!ready||Boolean(error)} onClick={villageView}>Village view</button>{grandCruArea&&<button type="button" disabled={!ready||Boolean(error)} onClick={()=>mapRef.current?.fitBounds(boundsOf(grandCruArea.bounds),{...overviewFit(host.current),maxZoom:15,duration:0})}>Grand Cru view</button>}<button type="button" disabled={!ready||Boolean(error)} onClick={()=>zoomTo(selected)}>Zoom to selection</button>{catalogue.areas?.map(area=><button type="button" key={area.id} disabled={!ready||Boolean(error)} aria-label={`${area.label}: ${area.name}`} onClick={()=>mapRef.current?.fitBounds(boundsOf(area.bounds),{padding:50,duration:0})}>{area.label}</button>)}</div>
     <div className="village-map-canvas" ref={host} aria-busy={!ready&&!error}/>
     {!ready&&!error&&<p className="village-map-loading" role="status">Loading vineyard boundaries…</p>}
     {error&&<div className="village-map-error" role="alert"><p>{error}</p><button type="button" onClick={()=>{setError('');setReady(false);setBaseWarning(false);setAttempt(value=>value+1)}}>Try again</button></div>}

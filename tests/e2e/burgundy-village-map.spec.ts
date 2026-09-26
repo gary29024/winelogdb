@@ -1,4 +1,4 @@
-import { test,expect,type Page } from '@playwright/test';
+import { test,expect,type Locator,type Page } from '@playwright/test';
 import { wine } from './fixtures/layoutWine';
 
 async function setup(page:Page,overrides:Record<string,unknown>={}){
@@ -14,6 +14,21 @@ async function setup(page:Page,overrides:Record<string,unknown>={}){
  await page.route('https://tiles.openfreemap.org/**',route=>route.abort());
 }
 
+// The hillside's opposite ends must both fit and span a useful part of the
+// real rendered map, catching a full-village opening or a single-climat crop.
+async function grandCruSpan(dialog:Locator){
+ return dialog.evaluate(el=>{
+  const canvas=el.querySelector('.village-map-canvas')!.getBoundingClientRect();
+  const names=[...el.querySelectorAll('.village-map-name')];
+  const centres=['Bougros','Blanchot'].map(name=>{
+   const box=names.find(node=>node.textContent===name)!.getBoundingClientRect();
+   return {x:(box.left+box.right)/2,y:(box.top+box.bottom)/2};
+  });
+  const inside=centres.every(p=>p.x>canvas.left&&p.x<canvas.right&&p.y>canvas.top&&p.y<canvas.bottom);
+  return inside?Math.abs(centres[1].x-centres[0].x)/canvas.width:0;
+ });
+}
+
 for(const route of ['/wines/layout-wine','/shared/layout-wine']){
  test(`Chablis Grand Cru ${route}: named climats and La Moutonne retain their proven scope`,async({page},testInfo)=>{
   await setup(page,{appellation:'Chablis Grand Cru',wineName:'Domaine Long-Depaquit Les Preuses',classification:'grand_cru',colour:'White',wineStyle:'white'});
@@ -22,24 +37,38 @@ for(const route of ['/wines/layout-wine','/shared/layout-wine']){
   const dialog=page.getByRole('dialog',{name:'Chablis',exact:true});
   await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
   await expect(dialog.getByRole('combobox')).toHaveValue('inao-denom-444');
+  await expect.poll(()=>grandCruSpan(dialog)).toBeGreaterThan(0.35);
+  await expect(dialog.locator('.village-map-name',{hasText:/^Bougros$/})).toHaveCSS('visibility','visible');
   await expect(dialog.locator('.village-map-selected-label')).toHaveText('Les Preuses');
   await expect(dialog.locator('.village-map-context')).toContainText('1 Grand Cru · 7 Grand Cru climats');
   await expect(dialog.locator('.village-map-overlap')).toContainText('whole official climat');
   await expect(dialog.getByRole('link',{name:/Explore on Burgundy Atlas/})).toHaveCount(0);
+  await dialog.getByRole('button',{name:'Village view',exact:true}).click();
+  await expect.poll(()=>grandCruSpan(dialog)).toBeLessThan(0.15);
+  await dialog.getByRole('button',{name:'Grand Cru view',exact:true}).click();
+  await expect.poll(()=>grandCruSpan(dialog)).toBeGreaterThan(0.35);
+  await expect(dialog.getByRole('combobox')).toHaveValue('inao-denom-444');
   await dialog.getByRole('combobox').selectOption('inao-denom-446');
   await expect(dialog.locator('.village-map-selected-label')).toHaveText('Vaudésir');
   await dialog.getByRole('button',{name:'Back to this wine'}).click();
   await expect(dialog.getByRole('combobox')).toHaveValue('inao-denom-444');
+  await expect.poll(()=>grandCruSpan(dialog)).toBeGreaterThan(0.35);
   expect(await dialog.evaluate(el=>el.scrollWidth<=el.clientWidth)).toBe(true);
+  await dialog.locator('.village-map-toolbar').scrollIntoViewIfNeeded();
   await page.screenshot({path:testInfo.outputPath('chablis-grand-cru-320.png')});
   await page.keyboard.press('Escape');
   await setup(page,{appellation:'Chablis Grand Cru',wineName:'Domaine Long-Depaquit La Moutonne',classification:'grand_cru',colour:'White',wineStyle:'white'});
   await page.goto(route);await page.getByRole('button',{name:'View village map'}).click();
   await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
   await expect(dialog.getByRole('combobox')).toHaveValue('inao-denom-439');
+  await expect.poll(()=>grandCruSpan(dialog)).toBeGreaterThan(0.35);
   await expect(dialog.locator('.village-map-selected-label')).toHaveCount(0);
   await expect(dialog.locator('.village-map-overlap')).toContainText('spans parts of Vaudésir and Les Preuses');
   await expect(dialog.getByRole('link',{name:/Explore on Burgundy Atlas/})).toBeVisible();
+  await page.setViewportSize({width:1280,height:900});
+  await dialog.getByRole('button',{name:'Grand Cru view',exact:true}).click();
+  await expect.poll(()=>grandCruSpan(dialog)).toBeGreaterThan(0.35);
+  await page.screenshot({path:testInfo.outputPath('chablis-grand-cru-overview-1280.png')});
  });
  test(`Chablis Premier Cru ${route}: missing and partial boundaries never locate a wine in an incomplete plot`,async({page},testInfo)=>{
   await page.setViewportSize({width:320,height:900});
