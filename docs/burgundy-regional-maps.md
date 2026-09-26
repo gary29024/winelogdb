@@ -64,8 +64,8 @@ two rows for one commune, giving 29 communes. Each pilot has just one source-nam
 and colour-code variant, so all allowed colours use the same production boundary.
 No geometry is clipped to the existing village maps or to a single department.
 
-The archive's exact `.prj` WKT is used for projection. Full coordinate precision,
-excluded holes and disconnected parts are retained. Côte d’Or's valid source
+The archive's exact `.prj` WKT is used for projection. Excluded holes and
+disconnected parts are retained. Côte d’Or's valid source
 union develops a floating-point self-intersection at a touching ring after
 projection near 4.8632224622, 47.0432220468. `make_valid` repairs only this reviewed
 denomination; no buffer or simplification is used. For every map, inverse
@@ -73,6 +73,16 @@ projection and symmetric difference with the untouched source union must be
 below **0.01 m²**. The measured difference for Côte d’Or is **0.00077693 m²**;
 both Hautes Côtes maps are below 0.00000001 m². A different invalid denomination
 or larger discrepancy fails the build before any output is written.
+
+The published GeoJSON is then snapped to a **0.000001° grid (about 10 cm)** with
+GEOS `set_precision`, which keeps topology valid where plain rounding would make
+narrow rings cross. At regional and commune zoom this is invisible, and it cuts
+the files from 5.1/0.9/1.8 MB to 3.0/0.6/1.2 MB (compressed: 1.9/0.3/0.7 MB to
+0.8/0.16/0.33 MB) for Côte d’Or, Hautes Côtes de Nuits and Hautes Côtes de
+Beaune. The builder fails unless the snapped area stays within 0.005% of the
+source union (measured: +138 m², −224 m² and −4 m², all centimetre edge shifts),
+and only sub-2 m² slivers between source parcels may close or disappear. No real
+parcel or hole is lost. Stated areas below are computed before snapping.
 
 Areas of 8,491.86 ha, 1,529.80 ha and 3,208.87 ha describe the INAO delimited
 production geometry, not the smaller area actually planted or producing wine.
@@ -88,6 +98,12 @@ Conflicting countries, regions, appellations, cru tiers, colours and non-still
 products withhold the map rather than falling through to a nested village name.
 No database classification is added: these wines remain unclassified in the
 existing three-tier cru schema.
+
+A region recorded as the **Côte d’Or** département (the wine canonicaliser stores
+“cote dor” this way) is compatible with both the Côte de Nuits and the Côte de
+Beaune, so village, Premier Cru and Grand Cru wines keep their maps and Atlas
+links. It still conflicts with Chablis, the Côte Chalonnaise and the Mâconnais.
+See `src/lib/places/burgundyDepartments.ts`.
 
 The map opens at the full production extent with a lower minimum zoom than the
 village maps. “Zoom to a commune” frames the source production rows assigned to

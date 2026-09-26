@@ -6,6 +6,7 @@ import mapping from './burgundyAtlasPremierCruLinks.json';
 import appellationMapping from './burgundyAtlasAppellationLinks.json';
 import unmappedPremiers from './burgundyAtlasUnmappedPremierCruNames.json';
 import villageMaps from './burgundyVillageMapRegistry.json';
+import { departmentRegions } from './burgundyDepartments';
 import { producerAllowsClimat } from './burgundyProducerLocations';
 
 type Wine=WineFacts&{classification?:string|null};
@@ -161,8 +162,9 @@ function separateVillage(text:string,group:Group){
 const producerPhrase=/\b(?:pere|mere|freres?|fils|filles?|soeurs?|enfants|cousins?)(?: et (?:fils|filles?|freres?|soeurs?|enfants|cousins?|cie))+\b|\bet (?:cie|fils|filles|freres|soeurs)\b/g;
 const titleKey=(value:string)=>textKey(value.replace(/&/g,' et ')).replace(producerPhrase,' ').replace(/\s+/g,' ').trim();
 
-const regionNames=PLACES.filter(place=>place.id.startsWith('france/burgundy')).flatMap(place=>
-  [place.name,...place.aliases].map(name=>({key:nameKey(name),id:place.id})));
+const regionNames=[...PLACES.filter(place=>place.id.startsWith('france/burgundy')).flatMap(place=>
+  [place.name,...place.aliases].map(name=>({key:nameKey(name),id:place.id}))),
+  ...Object.entries(departmentRegions).flatMap(([key,ids])=>ids.map(id=>({key,id})))];
 function compatibleRegion(region:string,group:{key:string;regionId:string}){
   return !region||region===group.key||regionNames.some(place=>place.key===region&&
     (group.regionId===place.id||group.regionId.startsWith(`${place.id}/`)));

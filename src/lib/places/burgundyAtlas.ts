@@ -1,6 +1,7 @@
 import { PLACES } from './hierarchy';
 import { placeKey } from './resolve';
 import mapping from './burgundyAtlasLinks.json';
+import { departmentRegions } from './burgundyDepartments';
 
 export type BurgundyAtlasPlace={placeId:string;name:string;url:string;scope?:'appellation'};
 type WinePlace={country?:string|null;region?:string|null;appellation?:string|null;classification?:string|null;identityMatchStatus?:string|null};
@@ -11,6 +12,7 @@ for(const place of burgundyPlaces)for(const name of [place.name,...place.aliases
   const key=placeKey(name);
   regionIds.set(key,[...(regionIds.get(key)??[]),place.id]);
 }
+for(const [key,ids] of Object.entries(departmentRegions))regionIds.set(key,[...(regionIds.get(key)??[]),...ids]);
 const placesById=new Map(burgundyPlaces.map(place=>[place.id,place]));
 const byName=new Map<string,BurgundyAtlasPlace>();
 

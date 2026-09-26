@@ -1,7 +1,8 @@
 """Build reviewed regional denominations without changing the village registry.
 
-Uses the same pinned sources, exact source CRS and full-precision polygons as
-build_burgundy_village_map.py. Downloads are separate; see the regional guide.
+Uses the same pinned sources and exact source CRS as build_burgundy_village_map.py.
+Published regional geometry is snapped to a 0.000001° grid (about 10 cm), which
+keeps valid topology and roughly halves these large regional files. Downloads are separate; see the regional guide.
 """
 import argparse
 import gzip
@@ -14,14 +15,37 @@ from pathlib import Path
 
 import shapefile
 from pyproj import CRS, Transformer
-from shapely.geometry import shape
-from shapely import make_valid
+from shapely.geometry import Polygon, shape
+from shapely import get_parts, make_valid, set_precision
 from shapely.ops import transform, unary_union
 
 from build_burgundy_village_map import (
     ROOT, PLACES, DATE, CADASTRE_DATE, INAO_SHA256, INAO_URL,
     read_json, write_json, rounded, geometry_json,
 )
+
+
+# Regional overviews are drawn at hillside-to-commune scale; about 10 cm of
+# coordinate precision is invisible there. set_precision snaps to the grid and
+# keeps topology valid, unlike plain rounding, which can cross narrow rings.
+GRID = 1e-6
+
+
+def trimmed(geom, source=None):
+    """Snap to GRID; with the source-CRS geometry, verify nothing material moved."""
+    result = set_precision(geom, GRID)
+    assert result.is_valid and not result.is_empty
+    if source is not None:
+        projected = transform(source[1], result)
+        # Area moves by under 0.005% (edge shifts of centimetres), and only sub-2 m² slivers between
+        # source parcels may close or vanish. No real parcel or hole is lost.
+        assert abs(projected.area - source[0].area) < 5e-5 * source[0].area
+        closed = [ring for part in get_parts(source[0]) for ring in part.interiors
+                  if projected.contains(Polygon(ring).representative_point())]
+        assert all(Polygon(ring).area < 2 for ring in closed)
+        lost = [part for part in get_parts(source[0]) if not projected.intersects(part.representative_point().buffer(0.3))]
+        assert all(part.area < 2 for part in lost)
+    return result
 
 
 def main():
@@ -90,7 +114,7 @@ def main():
         props = dict(id=feature_id, name=config['name'], tier='regional', kind='appellation',
                      appellationId=config['appellationId'], denominationId=config['denominationId'],
                      sourceName=config['sourceName'], communes=config['communes'], areaHa=round(whole_m.area / 10000, 2))
-        features = [dict(type='Feature', id=feature_id, properties=props, geometry=geometry_json(whole))]
+        features = [dict(type='Feature', id=feature_id, properties=props, geometry=geometry_json(trimmed(whole, (whole_m, to_source))))]
         point = whole.representative_point()
         metadata = dict(**props, matchId=feature_id, atlasUrl=None, bounds=rounded(whole.bounds), labelPoint=rounded([point.x, point.y]))
         communes, sources = [], [dict(name='INAO', date=DATE, url=INAO_URL, sha256=INAO_SHA256, license='Licence Ouverte')]
@@ -107,7 +131,7 @@ def main():
                                  labelPoint=rounded([local_point.x, local_point.y])))
             features.append(dict(type='Feature', id=f'commune-{code}',
                                  properties=dict(id=f'commune-{code}', name=settings['communeNames'][code], kind='commune', tier='commune'),
-                                 geometry=geometry_json(shape(source['geometry']))))
+                                 geometry=geometry_json(trimmed(shape(source['geometry'])))))
             sources.append(dict(name='Cadastre Etalab', date=CADASTRE_DATE, license='Licence Ouverte 2.0',
                                 url=f'https://cadastre.data.gouv.fr/data/etalab-cadastre/{CADASTRE_DATE}/geojson/communes/{code[:2]}/{code}/cadastre-{code}-communes.json.gz',
                                 sha256=hashlib.sha256(path.read_bytes()).hexdigest()))

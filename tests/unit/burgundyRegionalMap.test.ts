@@ -2,6 +2,7 @@ import { describe,it,expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { burgundyVillageMapTarget,type VillageMapCatalogue } from '../../src/lib/places/burgundyVillageMap';
 import { loadVillageMapCatalogue } from '../../src/lib/places/loadVillageMapCatalogue';
+import { burgundyAtlasWineDetailPlace } from '../../src/lib/places/burgundyAtlasPremierCru';
 import inventory from '../../scripts/burgundy-regional-map-coverage.json';
 import config from '../../scripts/burgundy-regional-maps.json';
 import villages from '../../src/lib/places/burgundyVillageMapRegistry.json';
@@ -115,3 +116,28 @@ function assertGeometry(catalogue:VillageMapCatalogue,data:{features:{geometry:{
   }
  }
 }
+
+describe('the Côte d’Or département as a recorded region',()=>{
+ // The wine canonicaliser stores "cote dor" as the region Côte d'Or. It holds
+ // both the Côte de Nuits and the Côte de Beaune, so it must not hide their maps.
+ it.each([
+  ['Gevrey-Chambertin','','village','inao-denom-589'],
+  ['Meursault','Charmes','premier_cru','inao-denom-845'],
+  ['Vosne-Romanée','Les Suchots','premier_cru','inao-denom-1276'],
+  ['Chambertin','','grand_cru','inao-denom-447'],
+  ['Corton','Bressandes','grand_cru','inao-denom-2357'],
+ ] as const)('%s %s keeps its map and Atlas link',(appellation,wineName,classification,featureId)=>{
+  for(const region of ["Côte d'Or",'Côte-d’Or',"Cote d'Or"]){
+   const wine={...base,region,appellation,wineName,classification};
+   expect(burgundyVillageMapTarget(wine)?.featureId,region).toBe(featureId);
+   expect(burgundyAtlasWineDetailPlace(wine),region).not.toBeNull();
+  }
+ });
+ it.each([
+  ['Chablis Grand Cru','Les Clos','grand_cru'],['Chablis','','village'],['Mercurey','','village'],['Pouilly-Fuissé','','village'],
+ ] as const)('%s still conflicts with Côte d’Or',(appellation,wineName,classification)=>{
+  const wine={...base,region:"Côte d'Or",appellation,wineName,classification};
+  expect(burgundyVillageMapTarget(wine)).toBeNull();
+  expect(burgundyAtlasWineDetailPlace(wine)).toBeNull();
+ });
+});
