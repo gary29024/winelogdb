@@ -23,9 +23,26 @@ export type BurgundyVillageMapTarget={villageId:string;villageName:string;region
 const byMatchId=new Map(registry.targets.map(target=>[target.matchId,target]));
 const byVillageId=new Map(registry.villages.map(village=>[village.id,village]));
 
+const normalise=(value:string)=>value.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
+// A recorded colour wins; a red/white/rosé wine style stands in when the
+// colour is blank. Sparkling and other styles say nothing about the area.
+function wineColour(wine:{colour?:string|null;wineStyle?:string|null}){
+ const style=normalise(wine.wineStyle??'');
+ return normalise(wine.colour??'')||(['red','white','rose'].includes(style)?style:'');
+}
+
+type MapWine=WineFacts&{classification?:string|null;wineStyle?:string|null};
 /** Reuse the reviewed geographic/tier conflict checks. INAO identities, not
  * Atlas URLs, select geometry; the catalogue crosswalk is checked at build time. */
-export function burgundyVillageMapTarget(wine:WineFacts&{classification?:string|null;wineStyle?:string|null}):BurgundyVillageMapTarget|null{
+export function burgundyVillageMapTarget(wine:MapWine):BurgundyVillageMapTarget|null{
+ // Santenots lies in Meursault, but its red wine is Volnay Premier Cru:
+ // Meursault's own Santenots designations are white only. A red wine recorded
+ // as Meursault Santenots is shown on Volnay's map, whose note explains this.
+ const fields=['appellation','wineName','referenceSite','referenceParcel'] as const;
+ const text=fields.map(field=>normalise(wine[field]??'')).join(' ');
+ if(wineColour(wine)==='red'&&/\bmeursault\b/.test(text)&&/\bsantenots\b/.test(text)){
+  return burgundyVillageMapTarget({...wine,...Object.fromEntries(fields.map(field=>[field,wine[field]?.replace(/\bmeursault\b/gi,'Volnay')]))});
+ }
  const local=burgundyGrandCruMapIdentity(wine);
  if(local===null)return null;
  const matchId=local??burgundyAtlasWineDetailPlace(wine)?.placeId;
@@ -35,11 +52,7 @@ export function burgundyVillageMapTarget(wine:WineFacts&{classification?:string|
  // Some village appellations have separate colour areas. Choose only with
  // explicit colour evidence; keep a labelled overview when unknown.
  const colours=('colourTargets' in target?target.colourTargets:undefined) as Record<string,{featureId:string;name:string}>|undefined;
- const normalise=(value:string)=>value.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
- // A recorded colour wins; a red/white/rosé wine style stands in when the
- // colour is blank. Sparkling and other styles say nothing about the area.
- const style=normalise(wine.wineStyle??'');
- const colour=normalise(wine.colour??'')||(['red','white','rose'].includes(style)?style:'');
+ const colour=wineColour(wine);
  if(colour&&'wineColours' in village&&!(village.wineColours as string[]).includes(colour))return null;
  const namedRose=[wine.appellation,wine.wineName].some(value=>/\bmarsannay\s+rose\b/.test(normalise(value??'')));
  if(colours&&namedRose&&colour&&colour!=='rose')return null;

@@ -145,6 +145,9 @@ for(const village of [
  {id:'aloxe-corton',name:'Aloxe-Corton',cru:'Les Chaillots',tier:'premier_cru',feature:'inao-denom-248',count:43,catalogue:'aloxeVillageMapCatalogue',explore:'inao-denom-2357',label:'Corton Les Bressandes'},
  {id:'pernand-vergelesses',name:'Pernand-Vergelesses',cru:'Ile des Vergelesses',tier:'premier_cru',feature:'inao-denom-1020',count:37,catalogue:'pernandVillageMapCatalogue',explore:'inao-denom-476',label:'Charlemagne'},
  {id:'ladoix',name:'Ladoix',cru:'Le Rognet et Corton',tier:'premier_cru',feature:'inao-denom-1988',count:42,catalogue:'ladoixVillageMapCatalogue',explore:'inao-denom-2356',label:'Corton Le Rognet et Corton'},
+ {id:'beaune',name:'Beaune',cru:'Le Clos des Mouches',tier:'premier_cru',feature:'inao-denom-325',count:44,catalogue:'beauneVillageMapCatalogue',explore:'inao-denom-349',label:'Sur les Grèves - Clos Saint-Anne'},
+ {id:'pommard',name:'Pommard',cru:'Clos des Epeneaux',tier:'premier_cru',feature:'inao-denom-1029',count:30,catalogue:'pommardVillageMapCatalogue',explore:'inao-denom-1051',label:'Les Rugiens Bas'},
+ {id:'volnay',name:'Volnay',cru:'Santenots',tier:'premier_cru',feature:'inao-denom-1259',count:31,catalogue:'volnayVillageMapCatalogue',explore:'inao-denom-1237',label:'Clos des Ducs'},
 ]){
  for(const route of ['/wines/layout-wine','/shared/layout-wine']){
   test(`${village.name} ${route}: opens the correct boundary and keeps its full village context`,async({page},testInfo)=>{
@@ -303,6 +306,9 @@ test('new village broad wines keep a light appellation tint without a single-cru
   {appellation:'Chambolle-Musigny',wineName:'Chambolle-Musigny Vieilles Vignes',classification:'village',id:'inao-denom-449'},
   {appellation:'Vosne-Romanée',wineName:'Vosne-Romanée Premier Cru',classification:'premier_cru',id:'inao-denom-1277'},
   {appellation:'Vosne-Romanée',wineName:'Vosne-Romanée Vieilles Vignes',classification:'village',id:'inao-denom-1262'},
+  {appellation:'Beaune',wineName:'Les Cent Vignes et Les Bressandes',classification:'premier_cru',id:'inao-denom-350'},
+  {appellation:'Pommard',wineName:'Les Rugiens',classification:'premier_cru',id:'inao-denom-1054'},
+  {appellation:'Volnay',wineName:'Volnay Vieilles Vignes',classification:'village',id:'inao-denom-1225'},
  ]){
   const {id,...wineFields}=fields;
   await setup(page,wineFields);await page.goto('/wines/layout-wine');
@@ -314,6 +320,53 @@ test('new village broad wines keep a light appellation tint without a single-cru
   await expect(dialog.locator('.village-map-selected-label')).toHaveCount(0);
   await expect(dialog.getByText('Appellation area shown; no single vineyard is identified.')).toBeVisible();
   await page.keyboard.press('Escape');
+ }
+});
+
+test('Volnay Santenots explains Meursault coverage and keeps the whole named area',async({page},testInfo)=>{
+ await page.setViewportSize({width:390,height:844});
+ await setup(page,{appellation:'Volnay',wineName:'Santenots du Milieu'});await page.goto('/wines/layout-wine');
+ await page.getByRole('button',{name:'View village map'}).click();
+ const dialog=page.getByRole('dialog',{name:'Volnay',exact:true});
+ await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
+ await expect(dialog.getByRole('combobox')).toHaveValue('inao-denom-1259');
+ await expect(dialog.locator('.village-map-selected-label')).toHaveText('Santenots');
+ await expect(dialog.locator('.village-map-overlap')).toContainText('Santenots lies in Meursault');
+ await expect(dialog.locator('.village-map-overlap')).toContainText('smaller plots such as Santenots du Milieu have no separate Volnay boundary here');
+ await expect(dialog.getByRole('link',{name:/Explore on Burgundy Atlas/})).toHaveAttribute('href',/\/santenots$/);
+ await page.screenshot({path:testInfo.outputPath('volnay-santenots-390.png')});
+});
+
+test('Beaune and Volnay label spellings select the reviewed cru',async({page})=>{
+ for(const [appellation,wineName,id,colour] of [
+  ['Beaune','Les Cent Vignes','inao-denom-330','White'],
+  ['Volnay','Les Taillepieds','inao-denom-1260','Red'],
+  ['Beaune','Vignes Franches Clos des Ursules','inao-denom-319','Red'],
+  ['Volnay','Caillerets Clos des 60 Ouvrées','inao-denom-1252','Red'],
+ ]){
+  await setup(page,{appellation,wineName,colour});await page.goto('/wines/layout-wine');
+  await page.getByRole('button',{name:'View village map'}).click();
+  const dialog=page.getByRole('dialog',{name:appellation,exact:true});
+  await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
+  await expect(dialog.getByRole('combobox')).toHaveValue(id);
+  await page.keyboard.press('Escape');
+ }
+});
+
+test('a red Meursault Santenots opens Volnay Santenots with the explanation',async({page})=>{
+ await setup(page,{appellation:'Meursault',wineName:'Santenots',colour:'Red'});await page.goto('/wines/layout-wine');
+ await page.getByRole('button',{name:'View village map'}).click();
+ const dialog=page.getByRole('dialog',{name:'Volnay',exact:true});
+ await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
+ await expect(dialog.getByRole('combobox')).toHaveValue('inao-denom-1259');
+ await expect(dialog.locator('.village-map-overlap')).toContainText('a red wine recorded as Meursault Santenots is shown here');
+});
+
+test('white Pommard and Volnay records do not select a red-wine map',async({page})=>{
+ for(const [appellation,wineName] of [['Pommard','Clos Blanc'],['Volnay','Santenots']]){
+  await setup(page,{appellation,wineName,colour:'White',wineStyle:'white'});await page.goto('/wines/layout-wine');
+  await expect(page.getByRole('heading',{name:wineName,exact:true})).toBeVisible();
+  await expect(page.getByRole('button',{name:'View village map'})).toHaveCount(0);
  }
 });
 

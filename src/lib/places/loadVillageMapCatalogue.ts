@@ -18,6 +18,9 @@ const loaders=new Map<string,()=>Promise<{default:VillageMapCatalogue}>>([
  ['aloxe-corton',()=>import('./aloxeVillageMapCatalogue.json')],
  ['pernand-vergelesses',()=>import('./pernandVillageMapCatalogue.json')],
  ['ladoix',()=>import('./ladoixVillageMapCatalogue.json')],
+ ['beaune',()=>import('./beauneVillageMapCatalogue.json')],
+ ['pommard',()=>import('./pommardVillageMapCatalogue.json')],
+ ['volnay',()=>import('./volnayVillageMapCatalogue.json')],
 ]);
 
 export async function loadVillageMapCatalogue(villageId:string):Promise<VillageMapCatalogue>{

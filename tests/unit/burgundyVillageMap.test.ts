@@ -18,6 +18,9 @@ import blagny from '../../src/lib/places/blagnyVillageMapCatalogue.json';
 import aloxe from '../../src/lib/places/aloxeVillageMapCatalogue.json';
 import pernand from '../../src/lib/places/pernandVillageMapCatalogue.json';
 import ladoix from '../../src/lib/places/ladoixVillageMapCatalogue.json';
+import beaune from '../../src/lib/places/beauneVillageMapCatalogue.json';
+import pommard from '../../src/lib/places/pommardVillageMapCatalogue.json';
+import volnay from '../../src/lib/places/volnayVillageMapCatalogue.json';
 import registry from '../../src/lib/places/burgundyVillageMapRegistry.json';
 import { loadVillageMapCatalogue } from '../../src/lib/places/loadVillageMapCatalogue';
 import type { FeatureCollection,MultiPolygon,Polygon } from 'geojson';
@@ -25,7 +28,7 @@ import coverage from '../../scripts/burgundy-map-coverage.json';
 import mapConfig from '../../scripts/burgundy-villages.json';
 import appellationLinks from '../../src/lib/places/burgundyAtlasAppellationLinks.json';
 
-const catalogues:VillageMapCatalogue[]=[catalogue,morey,chambolle,vosne,fixin,vougeot,nuits,marsannay,coteNuits,meursault,puligny,chassagne,saintAubin,blagny,aloxe,pernand,ladoix];
+const catalogues:VillageMapCatalogue[]=[catalogue,morey,chambolle,vosne,fixin,vougeot,nuits,marsannay,coteNuits,meursault,puligny,chassagne,saintAubin,blagny,aloxe,pernand,ladoix,beaune,pommard,volnay];
 
 const wine={country:'France',region:'Burgundy',appellation:'Gevrey-Chambertin',wineName:'Les Cazetiers',classification:'premier_cru'};
 
@@ -52,7 +55,7 @@ describe('Gevrey village map identity',()=>{
   expect(burgundyVillageMapTarget({...wine,wineName:'Gevrey-Chambertin',classification:'village'})).toMatchObject({featureId:'inao-denom-589',scope:'appellation'});
  });
  it('withholds conflicts, incompatible geography, unsupported villages and an unproven cru tier',()=>{
-  for(const fields of [{country:'USA'},{region:'Bordeaux'},{appellation:'Pommard'},
+  for(const fields of [{country:'USA'},{region:'Bordeaux'},{appellation:'Savigny-lès-Beaune'},
    {identityMatchStatus:'conflict' as const},{classification:null},{appellation:'Chablis Grand Cru',classification:'grand_cru'}]){
    expect(burgundyVillageMapTarget({...wine,...fields}),JSON.stringify(fields)).toBeNull();
   }
@@ -122,6 +125,9 @@ describe.each([
  {catalogue:aloxe,grands:27,premiers:14,broad:'inao-denom-257',village:'inao-denom-242'},
  {catalogue:pernand,grands:27,premiers:8,broad:'inao-denom-1023',village:'inao-denom-1017'},
  {catalogue:ladoix,grands:27,premiers:11,broad:'inao-denom-665',village:'inao-app-192-village'},
+ {catalogue:beaune,grands:0,premiers:42,broad:'inao-denom-350',village:'inao-denom-307'},
+ {catalogue:pommard,grands:0,premiers:28,broad:'inao-denom-1054',village:'inao-denom-1025'},
+ {catalogue:volnay,grands:0,premiers:29,broad:'inao-denom-1261',village:'inao-denom-1225'},
 ])('$catalogue.name identities and boundaries',({catalogue:c,grands,premiers,broad,village})=>{
  const data=JSON.parse(readFileSync(`public${c.dataUrl}`,'utf8')) as FeatureCollection<Polygon|MultiPolygon>;
  it('resolves every named cru and retains appellation scope for broad wines',()=>{
@@ -171,8 +177,8 @@ describe('village registry',()=>{
   expect(coverage.villages.map(v=>v.name).sort()).toEqual([...appellationLinks.groups.map(g=>g.appellation),'Côte de Beaune-Villages'].sort());
   const nuitsCoverage=coverage.villages.filter(v=>v.region==='Côte de Nuits');
   expect(nuitsCoverage).toHaveLength(9);
-  expect(mapConfig.villages).toHaveLength(17);
-  expect(mapConfig.villages.filter(v=>v.region==='Côte de Beaune')).toHaveLength(8);
+  expect(mapConfig.villages).toHaveLength(20);
+  expect(mapConfig.villages.filter(v=>v.region==='Côte de Beaune')).toHaveLength(11);
   for(const row of nuitsCoverage)expect(mapConfig.villages.some(v=>v.appellationId===row.appellationId&&v.name===row.name)).toBe(true);
   for(const village of mapConfig.villages)expect(coverage.villages.some(row=>row.appellationId===village.appellationId&&row.name===village.name)).toBe(true);
  });
@@ -191,8 +197,8 @@ describe('village registry',()=>{
   expect(burgundyVillageMapTarget({...wine,appellation:'Chambolle-Musigny',wineName:'Les Feusselotes'})?.featureId).toBe('inao-denom-464');
  });
  it('has one target per identity and a working lazy catalogue for every village',async()=>{
-  expect(registry.targets).toHaveLength(384);
-  expect(new Set(registry.targets.map(t=>t.matchId)).size).toBe(384);
+  expect(registry.targets).toHaveLength(489);
+  expect(new Set(registry.targets.map(t=>t.matchId)).size).toBe(489);
   for(const village of registry.villages){
    const c=await loadVillageMapCatalogue(village.id);
    expect(catalogues.find(expected=>expected.id===village.id)).toEqual(c);
@@ -314,6 +320,107 @@ describe('southern Côte de Beaune',()=>{
    const rings=f.geometry.type==='Polygon'?f.geometry.coordinates:f.geometry.coordinates.flat();
    expect(rings.every(r=>r.length>=4&&JSON.stringify(r[0])===JSON.stringify(r.at(-1)))).toBe(true);
   }
+ });
+});
+
+describe('Beaune, Pommard and Volnay',()=>{
+ it('retains Santenots in Meursault within the complete Volnay map',()=>{
+  expect(volnay.communes).toEqual([{id:'21712',name:'Volnay'},{id:'21412',name:'Meursault'}]);
+  expect(volnay.sources.some(source=>source.url.includes('/21/21412/'))).toBe(true);
+  for(const id of [1225,1261])expect(volnay.features.find(f=>f.denominationId===id)?.communes).toEqual(['21412','21712']);
+  const santenots=volnay.features.find(f=>f.denominationId===1259)!;
+  expect(santenots).toMatchObject({communes:['21412'],areaHa:29.01});
+  for(const fields of [
+   {appellation:'Volnay',wineName:'Santenots'},
+   {appellation:'Volnay-Santenots Premier Cru',wineName:''},
+   {appellation:'Volnay',wineName:'Santenots du Milieu'},
+   {appellation:'Volnay',wineName:'',referenceSite:'Santenots'},
+  ])expect(burgundyVillageMapTarget({...wine,...fields,colour:'Red'})).toMatchObject({villageId:'volnay',featureId:santenots.id});
+  expect(volnay.notes['inao-denom-1259'].note).toContain('whole Santenots area');
+  for(const white of meursault.features.filter(f=>f.name.includes('Santenots'))){
+   expect(white.matchId).not.toBe(santenots.matchId);
+   expect(white.bounds).not.toEqual(santenots.bounds);
+   expect(burgundyVillageMapTarget({...wine,appellation:'Meursault',wineName:white.name,colour:'White'}))
+    .toMatchObject({villageId:'meursault',featureId:white.id});
+  }
+ });
+ it.each([pommard,volnay])('$name accepts red or unknown colour but rejects white and rosé at both tiers',c=>{
+  for(const [classification,wineName] of [['village',c.name],['premier_cru',c.features.find(f=>f.kind==='vineyard')!.name]]){
+   const base={...wine,appellation:c.name,classification,wineName};
+   for(const fields of [{colour:'White'},{colour:'Rosé'},{colour:'',wineStyle:'white'},{colour:null,wineStyle:'rosé'}]){
+    expect(burgundyVillageMapTarget({...base,...fields})).toBeNull();
+   }
+   for(const fields of [{},{colour:'Red'},{colour:'',wineStyle:'red'}])expect(burgundyVillageMapTarget({...base,...fields})?.villageId).toBe(c.id);
+  }
+ });
+ it('keeps one Beaune boundary for red and white wines, as in the source',()=>{
+  for(const [classification,wineName,id] of [['village','Beaune',307],['premier_cru','Clos des Mouches',325]] as const){
+   for(const colour of ['Red','White',''])expect(burgundyVillageMapTarget({...wine,appellation:'Beaune',classification,wineName,colour})?.featureId).toBe(`inao-denom-${id}`);
+   expect(burgundyVillageMapTarget({...wine,appellation:'Beaune',classification,wineName,colour:'Rosé'})).toBeNull();
+  }
+ });
+ it('distinguishes repeated cru names and similarly named Pommard plots',()=>{
+  for(const [appellation,wineName,id] of [
+   ['Beaune','Les Boucherottes',328],['Pommard','Les Boucherottes',1039],
+   ['Beaune','Les Bressandes',329],['Pommard','Le Village',1036],['Volnay','Le Village',1247],
+   ['Beaune','Les Epenotes',332],['Pommard','Clos des Epeneaux',1029],
+   ['Pommard','Les Grands Epenots',1046],['Pommard','Les Petits Epenots',1048],
+   ['Pommard','Les Rugiens Bas',1051],['Pommard','Les Rugiens Hauts',1052],
+  ] as const)expect(burgundyVillageMapTarget({...wine,appellation,wineName})?.featureId).toBe(`inao-denom-${id}`);
+ });
+ it('accepts reviewed label spellings without changing source identities',()=>{
+  for(const [appellation,wineName,id] of [
+   ['Beaune','Les Cent Vignes',330],['Beaune','Cent Vignes',330],
+   ['Volnay','Les Taillepieds',1260],['Volnay','Taillepieds',1260],
+  ] as const){
+   expect(burgundyVillageMapTarget({...wine,appellation,wineName})?.featureId).toBe(`inao-denom-${id}`);
+   expect(burgundyVillageMapTarget({...wine,appellation,wineName:'',referenceSite:wineName})?.featureId).toBe(`inao-denom-${id}`);
+   expect(burgundyVillageMapTarget({...wine,appellation,wineName,classification:'village'})?.scope).toBe('appellation');
+  }
+  for(const [appellation,wineName,id] of [
+   ['Beaune','Les Epenottes',332],['Beaune','Epenottes',332],
+   ['Pommard','Les Jarollières',1047],['Pommard','Saucilles',1053],['Pommard','Les Saucilles',1053],
+   ['Volnay','Chevret',1240],['Volnay','Les Chevrets',1240],['Volnay',"Bousse d'Or",1232],
+  ] as const)expect(burgundyVillageMapTarget({...wine,appellation,wineName})?.featureId).toBe(`inao-denom-${id}`);
+  expect(beaune.features.find(f=>f.denominationId===330)?.sourceName).toBe('Beaune premier cru Les Cents Vignes');
+  expect(volnay.features.find(f=>f.denominationId===1260)?.sourceName).toBe('Volnay premier cru Taille Pieds');
+ });
+ it('selects a walled clos named with the neighbouring cru it was once part of',()=>{
+  for(const [appellation,wineName,id] of [
+   ['Beaune','Vignes Franches Clos des Ursules',319],['Beaune','Les Vignes Franches - Clos des Ursules',319],
+   ['Volnay','Caillerets Clos des 60 Ouvrées',1252],['Volnay','Les Caillerets - Clos des 60 Ouvrées',1252],
+   ['Volnay','Clos des 60 Ouvrées En Caillerets',1252],['Volnay','Clos des Soixante Ouvrées',1252],
+  ] as const)expect(burgundyVillageMapTarget({...wine,appellation,wineName}),wineName).toMatchObject({featureId:`inao-denom-${id}`,scope:'vineyard'});
+  // The neighbours alone still select themselves.
+  expect(burgundyVillageMapTarget({...wine,appellation:'Beaune',wineName:'Vignes Franches'})?.featureId).toBe('inao-denom-345');
+  expect(burgundyVillageMapTarget({...wine,appellation:'Volnay',wineName:'Caillerets'})?.featureId).toBe('inao-denom-1251');
+ });
+ it('shows a red Meursault Santenots on Volnay, and keeps white Santenots on Meursault',()=>{
+  for(const fields of [
+   {appellation:'Meursault',wineName:'Santenots',colour:'Red'},
+   {appellation:'Meursault',wineName:'Les Santenots du Milieu',colour:'Red'},
+   {appellation:'Meursault Premier Cru',wineName:'Santenots',colour:'',wineStyle:'red'},
+  ])expect(burgundyVillageMapTarget({...wine,...fields}),JSON.stringify(fields)).toMatchObject({villageId:'volnay',featureId:'inao-denom-1259'});
+  expect(volnay.notes['inao-denom-1259'].note).toContain('Meursault Santenots is shown here');
+  expect(burgundyVillageMapTarget({...wine,appellation:'Meursault',wineName:'Les Santenots Blancs',colour:'White'})?.featureId).toBe('inao-denom-856');
+  for(const colour of ['White',''])expect(burgundyVillageMapTarget({...wine,appellation:'Meursault',wineName:'Santenots',colour})?.villageId).toBe('meursault');
+  // Other red Meursault stays on the Meursault map.
+  expect(burgundyVillageMapTarget({...wine,appellation:'Meursault',wineName:'Meursault',classification:'village',colour:'Red'})?.villageId).toBe('meursault');
+ });
+ it('keeps incomplete names and blends broad instead of picking a nearby plot',()=>{
+  for(const [appellation,wineName,id] of [
+   ['Pommard','Les Rugiens',1054],['Pommard','Les Epenots',1054],
+   ['Pommard','Les Rugiens Bas et Les Rugiens Hauts',1054],
+   ['Beaune','Les Cent Vignes et Les Bressandes',350],
+   ['Volnay','Santenots et Les Taillepieds',1261],
+  ] as const)expect(burgundyVillageMapTarget({...wine,appellation,wineName})).toMatchObject({featureId:`inao-denom-${id}`,scope:'appellation'});
+ });
+ it('carries the merged umbrella matching into Beaune while keeping unrelated names ambiguous',()=>{
+  expect(beaune.umbrellas).toEqual({'inao-denom-348':['inao-denom-349']});
+  expect(umbrellaNote(beaune,'inao-denom-349')).toContain('lies within Sur les Grèves');
+  expect(burgundyVillageMapTarget({...wine,appellation:'Beaune',wineName:'Sur les Grèves',referenceSite:'Sur les Grèves - Clos Saint-Anne'})?.featureId).toBe('inao-denom-349');
+  expect(burgundyVillageMapTarget({...wine,appellation:'Beaune',wineName:'Sur les Grèves',referenceSite:'Les Teurons'}))
+   .toMatchObject({featureId:'inao-denom-350',scope:'appellation'});
  });
 });
 

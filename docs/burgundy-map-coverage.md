@@ -19,14 +19,14 @@ Beaujolais has its own appellation system and is outside this Bourgogne inventor
 
 ## Village coverage
 
-**17 of 44 village appellations have maps in this branch.** This is not complete
+**20 of 44 village appellations have maps in this branch.** This is not complete
 Burgundy coverage. A mapped appellation can still lack individual village
 lieux-dits; named plot coverage must be assessed separately.
 
 | Region | Mapped | Remaining |
 | --- | ---: | ---: |
 | Côte de Nuits | 9 | 0 |
-| Côte de Beaune | 8 | 12 |
+| Côte de Beaune | 11 | 9 |
 | Côte Chalonnaise | 0 | 5 |
 | Mâconnais | 0 | 5 |
 | Chablis & Grand Auxerrois | 0 | 5 |
@@ -53,9 +53,9 @@ lieux-dits; named plot coverage must be assessed separately.
 - [x] Aloxe-Corton: 14 Premier Crus and production areas in all three Corton communes
 - [x] Pernand-Vergelesses: eight Premier Crus and the full shared Corton group
 - [x] Ladoix: 11 Premier Crus, both village colour identities and the full shared Corton group
-- [ ] Beaune
-- [ ] Pommard
-- [ ] Volnay
+- [x] Beaune: all 42 named Premier Crus, with red and white source boundaries shared
+- [x] Pommard: all 28 named Premier Crus, including distinct Rugiens Hauts/Bas and Grands/Petits Epenots
+- [x] Volnay: all 29 named Premier Crus, including Santenots in Meursault
 - [ ] Savigny-lès-Beaune
 - [ ] Chorey-lès-Beaune
 - [ ] Auxey-Duresses
@@ -66,9 +66,9 @@ lieux-dits; named plot coverage must be assessed separately.
 - [ ] Côte de Beaune
 - [ ] Côte de Beaune-Villages
 
-Next are Beaune, Pommard and Volnay, then the remaining Côte de Beaune entries.
-Review Volnay's Santenots coverage across Meursault. These are batches for
-review, not a reduction in the coverage target.
+Next are Savigny-lès-Beaune, Chorey-lès-Beaune, Auxey-Duresses, Monthélie and
+Saint-Romain, followed by Santenay, Maranges and the two Côte de Beaune
+appellations. These are batches for review, not a reduction in the coverage target.
 
 ### Côte Chalonnaise
 
@@ -138,6 +138,13 @@ in the source, rather than just the five village AOCs above.
 - **Colour can change the production area.** Marsannay demonstrates why grouping
   by denomination ID alone is insufficient. Review colour-specific rows and
   alternative source names for each batch; never silently merge them as one plot.
+- **Volnay Santenots is one source denomination.** Its full 29.01 ha boundary
+  lies in Meursault. Smaller Volnay plots such as Santenots du Milieu have no
+  separate denomination in this snapshot. Keep the whole Santenots area and
+  its explanatory note; do not substitute Meursault's white-wine boundaries.
+- **Pommard names can be underspecified.** "Rugiens" does not identify Hauts
+  or Bas, and "Epenots" does not identify Grands or Petits Epenots. These labels
+  keep the broad Premier Cru view until a reviewed combined designation exists.
 - **No invented village plots.** The current snapshot does not give individual
   Marsannay or Côte de Nuits-Villages lieux-dit boundaries. Keep the appellation
   view explicit until reviewed, licensed geometry exists. Apply the same rule

@@ -53,7 +53,17 @@ const reviewedNameAliases:Record<string,Record<string,string[]>>={
   // covering Les Combards and Vigne Derrière. En Cailleret keeps its own name.
   // Château de la Maltroye spells its Clos du Château de la Maltroye, within
   // La Maltroie, with a y.
-  'Chassagne-Montrachet':{'Les Grandes Ruchottes':['Les Ruchottes'],'Cailleret':['Les Caillerets'],'La Maltroie':['La Maltroye']}
+  'Chassagne-Montrachet':{'Les Grandes Ruchottes':['Les Ruchottes'],'Cailleret':['Les Caillerets'],'La Maltroie':['La Maltroye']},
+  // Louis Latour writes Cent Vignes; Domaine de Montille writes Les Taillepieds.
+  // Clos des Ursules (Jadot) and Clos des 60 Ouvrées (Pousse d'Or) are walled
+  // Premier Crus beside Vignes Franches and Caillerets, not inside them, so
+  // labels naming both select the clos as one name rather than two crus.
+  // Labels (Lafon, Parent) write Epenottes; Pousse d'Or writes Jarollières;
+  // Jean-Marc Boillot and Jadot write Saucilles; Henri Boillot writes Chevrets.
+  'Beaune':{'Les Cents Vignes':['Les Cent Vignes'],'Clos des Ursules':['Les Vignes Franches Clos des Ursules'],'Les Epenotes':['Les Epenottes']},
+  'Pommard':{'Les Jarolières':['Les Jarollières'],'Les Saussilles':['Les Saucilles']},
+  'Volnay':{'Taille Pieds':['Les Taillepieds'],'En Chevret':['Chevret','Les Chevrets'],"Clos de la Bousse-d'Or":["Bousse d'Or"],
+    'Clos des 60 ouvrées':['Les Caillerets Clos des 60 Ouvrées','Clos des 60 Ouvrées En Caillerets','Clos des Soixante Ouvrées','Les Caillerets Clos des Soixante Ouvrées']}
 };
 const groups=mapping.groups.map(group=>({...group,key:nameKey(group.appellation),entries:group.entries.map(entry=>
   ({...entry,variants:[entry.name,...(reviewedNameAliases[group.appellation]?.[entry.name]??[])].flatMap(nameVariants)
