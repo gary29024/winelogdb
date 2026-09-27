@@ -185,11 +185,20 @@ without rewriting the original ledger.
 
 ## Budgets and free allowances
 
-Storage allowances apply per member and across the bucket. AI admission checks
+Storage allowances apply per member and across the bucket. Member AI admission checks
 concurrency, daily actions, measured monthly provider usage, and outstanding
 estimated holds. `aiUnitBudgetUsd` must cover the entire unit including expected
 retry/fallback costs and all producer catalogue slices. It is an estimate, not
-a provider-enforced limit. Refresh `cloudflareObservedMonth` and the delayed
+a provider-enforced limit. Owner AI bypasses app-level credit, concurrency, daily,
+monthly-budget and Cloudflare usage gates, including stale measurement months.
+Owner operations retain zero-credit ledger records, research locks, idempotency
+and provider usage accounting; new owner operations do not reserve budget holds.
+Global activity and recorded provider costs still inform member admission.
+Reservation refusals distinguish insufficient credits (402), concurrency/daily
+limits (429), budget gates (503), and overlapping research or reused quotes (409).
+Unexpected database failures are logged and reported separately (503); policy
+refusals write no partial operation, ledger or lock records.
+Refresh `cloudflareObservedMonth` and the delayed
 Cloudflare cost measurement every month. Disabling overages stops new AI when a
 positive Cloudflare cost is recorded; warning/stop amounts do not override hard
 free-plan limits. No setting upgrades a Cloudflare subscription.

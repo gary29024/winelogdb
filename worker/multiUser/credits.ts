@@ -11,6 +11,7 @@ import { workKey,activeFriendWork } from './researchWork';
 import { researchInputFingerprint } from './provider';
 import { ApiError,boundedBytes,hash,json,seconds,settings,stamp,type Member } from './common';
 import { WINE_RESEARCH_RECOVERY_MS } from '../../src/lib/research/recoveryPolicy';
+import { aiAdmission,admissionError,type AdmissionReason } from './aiAdmission';
 
 export { requiresAiReservation as aiRoute } from '../../src/lib/ai/reservedRoutes';
 export const CREDIT_ACTIONS=['scan_single','scan_batch','scan_group','scan_sheet','champagne_extraction','producer_research','producer_profile','wine_producer','wine_terroir','wine_vintage_context','wine_wine_vintage','vintage_window'] as const;
@@ -107,7 +108,7 @@ async function reusableOperation(request:Request,db:D1Database,user:string,finge
  return db.prepare("SELECT * FROM credit_operations WHERE user_id=? AND path=? AND status IN ('reserved','running','review') LIMIT 1").bind(user,path).first<CreditOperation>();
 }
 export async function quote(request:Request,env:CreditEnv,member:Member){
- await settings(env.DB);
+ if(member.role!=='owner')await settings(env.DB);
  const fingerprint=await requestFingerprint(request);
  const existing=new URL(request.url).pathname.endsWith('/deep-search')?await reusableOperation(request,env.DB,member.id,fingerprint):null;
  const units:CreditUnit[]=[],prices=new Map<string,{id:string;credits:number}>();
@@ -128,8 +129,9 @@ export async function quote(request:Request,env:CreditEnv,member:Member){
 }
 async function rejectOverlappingWork(db:D1Database,user:string,units:Array<{researchKey?:string}>){
  const keys=units.flatMap(unit=>unit.researchKey?[unit.researchKey]:[]);if(!keys.length)return;
+ if(await db.prepare('SELECT operation_id FROM research_work WHERE owner_id=? AND subject_key IN (SELECT value FROM json_each(?)) LIMIT 1').bind(user,JSON.stringify(keys)).first())throw admissionError('own_research');
  if(await db.prepare(`SELECT w.operation_id FROM research_work w JOIN friendships f ON f.friend_id=w.owner_id AND f.user_id=?
- WHERE w.subject_key IN (SELECT value FROM json_each(?)) LIMIT 1`).bind(user,JSON.stringify(keys)).first())throw new ApiError(409,'A friend is researching part of this request. Their result will be reused when it finishes; request a new quote then.');
+ WHERE w.subject_key IN (SELECT value FROM json_each(?)) LIMIT 1`).bind(user,JSON.stringify(keys)).first())throw admissionError('friend_research');
 }
 export async function reserve(request:Request,env:CreditEnv,member:Member,observedUsd=0):Promise<{operation:CreditOperation;existing:boolean}>{
  const quoteId=request.headers.get('X-WineLog-Quote'),key=request.headers.get('Idempotency-Key');
@@ -142,38 +144,53 @@ export async function reserve(request:Request,env:CreditEnv,member:Member,observ
  if(running)return {operation:running,existing:true};
  const quoted=await env.DB.prepare('SELECT * FROM credit_quotes WHERE id=? AND user_id=? AND expires_at>?').bind(quoteId,member.id,seconds()).first<{path:string;fingerprint:string;units_json:string;total:number}>();
  if(!quoted||quoted.fingerprint!==fingerprint||quoted.path!==new URL(request.url).pathname)throw new ApiError(409,'Quote expired or request changed; review a new quote');
- const config=await settings(env.DB);
- if(config.cloudflareObservedMonth!==stamp().slice(0,7))throw new ApiError(503,'Owner must update this month’s Cloudflare usage estimate');
- if(config.cloudflareObservedUsd>=config.cloudflareStopUsd||!config.allowOverages&&config.cloudflareObservedUsd>0)throw new ApiError(503,'Cloudflare budget reached');
+ const config=member.role==='owner'?null:await settings(env.DB);
+ if(config){
+  if(config.cloudflareObservedMonth!==stamp().slice(0,7))throw new ApiError(503,'Member AI is paused until the owner updates this month’s Cloudflare usage estimate.');
+  if(config.cloudflareObservedUsd>=config.cloudflareStopUsd)throw new ApiError(503,'The Cloudflare spending limit has been reached. Ask the owner to review the budget; no work was submitted.');
+  if(!config.allowOverages&&config.cloudflareObservedUsd>0)throw new ApiError(503,'Paid Cloudflare usage is disabled and usage has a recorded cost. Ask the owner to review the budget; no work was submitted.');
+ }
  // Keep the accepted tariff, but remove units that became reusable since quoting.
  const subjectKey=await workKey(env.DB,member.id,path,request),sponsor=await activeFriendWork(env.DB,member.id,subjectKey);
  const needed=sponsor?[]:await plannedUnits(request,env.DB,member.id),quotedUnits=JSON.parse(quoted.units_json) as CreditUnit[];
  if(needed.some(u=>!quotedUnits.some(q=>q.id===u.id&&q.action===u.action&&q.cacheKey===u.cacheKey&&q.targetFingerprint===u.targetFingerprint)))throw new ApiError(409,'Work changed; review a new quote');
- const units=quotedUnits.filter(q=>needed.some(u=>u.id===q.id&&u.action===q.action));
- if(!sponsor)await rejectOverlappingWork(env.DB,member.id,units);
+ const units=quotedUnits.filter(q=>needed.some(u=>u.id===q.id&&u.action===q.action)).map(unit=>member.role==='owner'?{...unit,credits:0,priceId:'owner-exempt'}:unit);
  const lockKeys=[...new Set([...(subjectKey?[subjectKey]:[]),...units.flatMap(unit=>unit.researchKey?[unit.researchKey]:[])])];
  const total=units.reduce((n,u)=>n+u.credits,0),id=crypto.randomUUID(),now=stamp();
+ const gate=aiAdmission({user:member.id,path,quoteId,lockKeys,parents:units.flatMap(u=>u.parentOperationId?[u.parentOperationId]:[]),units:units.length,total,now,observedUsd,config});
+ const inserted='EXISTS(SELECT 1 FROM credit_operations WHERE id=?)';
+ let reason:AdmissionReason|null=null;
  try{
-  await env.DB.batch([
+  const result=await env.DB.batch<{reason:AdmissionReason|null}>([
    env.DB.prepare(`INSERT INTO credit_operations(id,user_id,request_key,quote_id,path,fingerprint,units_json,reserved,status,created_at,updated_at,budget_hold_usd)
-    SELECT ?,?,?,?,?,?,?,?,'reserved',?,?,? WHERE
-    (?=0 OR ((SELECT count(*) FROM credit_operations WHERE status IN ('reserved','running','review') AND units_json<>'[]')<? AND
-    (SELECT count(*) FROM credit_operations WHERE created_at>=? AND units_json<>'[]')<? AND
-    coalesce((SELECT sum(budget_hold_usd) FROM credit_operations WHERE status IN ('reserved','running','review')),0)+?+?<=?)) AND
-    (?=1 OR NOT EXISTS(SELECT 1 FROM credit_operations WHERE user_id=? AND path=? AND status IN ('reserved','running','review'))) AND
-    (?=0 OR NOT EXISTS(SELECT 1 FROM research_work w JOIN friendships f ON f.friend_id=w.owner_id AND f.user_id=? WHERE w.subject_key IN (SELECT value FROM json_each(?))))`)
-    .bind(id,member.id,key,quoteId,quoted.path,fingerprint,JSON.stringify(units),total,now,now,units.length*config.aiUnitBudgetUsd,units.length,config.aiConcurrency,now.slice(0,10),config.aiDailyOperations,units.length*config.aiUnitBudgetUsd,observedUsd,config.aiMonthlyBudgetUsd,path==='/api/recognition'||path==='/api/maturity/vintage'||path.endsWith('/sheet/parse')?1:0,member.id,path,units.length,member.id,JSON.stringify(lockKeys)),
-   // Foreign key + wallet CHECK constraints roll the entire batch back on rejection.
-   env.DB.prepare("INSERT INTO credit_ledger(id,user_id,operation_id,kind,amount,actor_id,reason) VALUES(?,?,?,'reserve',?,?,?)").bind(`${id}:reserve`,member.id,id,total,member.id,'AI quote accepted'),
-   ...(sponsor?[env.DB.prepare('INSERT INTO research_followers(operation_id,sponsor_operation_id,sponsor_id) VALUES(?,?,?)').bind(id,sponsor.id,sponsor.user_id)]:units.length>0?lockKeys.map(lockKey=>env.DB.prepare('INSERT INTO research_work(subject_key,operation_id,owner_id) VALUES(?,?,?)').bind(lockKey,id,member.id)):[]),
-   ...units.filter(u=>u.parentOperationId).map(u=>env.DB.prepare('INSERT INTO sheet_continuations(parent_operation_id,operation_id) VALUES(?,?)').bind(u.parentOperationId!,id))
+    SELECT ?,?,?,?,?,?,?,?,'reserved',?,?,? WHERE (${gate.sql}) IS NULL`)
+    .bind(id,member.id,key,quoteId,quoted.path,fingerprint,JSON.stringify(units),total,now,now,units.length*(config?.aiUnitBudgetUsd??0),...gate.binds),
+   // A policy refusal writes nothing. Unexpected constraint/storage failures
+   // still roll back the whole batch, without being called a credit shortage.
+   env.DB.prepare(`INSERT INTO credit_ledger(id,user_id,operation_id,kind,amount,actor_id,reason) SELECT ?,?,?,'reserve',?,?,? WHERE ${inserted}`).bind(`${id}:reserve`,member.id,id,total,member.id,'AI quote accepted',id),
+   ...(sponsor?[env.DB.prepare(`INSERT INTO research_followers(operation_id,sponsor_operation_id,sponsor_id) SELECT ?,?,? WHERE ${inserted}`).bind(id,sponsor.id,sponsor.user_id,id)]:units.length>0?lockKeys.map(lockKey=>env.DB.prepare(`INSERT INTO research_work(subject_key,operation_id,owner_id) SELECT ?,?,? WHERE ${inserted}`).bind(lockKey,id,member.id,id)):[]),
+   ...units.filter(u=>u.parentOperationId).map(u=>env.DB.prepare(`INSERT INTO sheet_continuations(parent_operation_id,operation_id) SELECT ?,? WHERE ${inserted}`).bind(u.parentOperationId!,id,id)),
+   env.DB.prepare(`SELECT (${gate.sql}) AS reason WHERE NOT ${inserted}`).bind(...gate.binds,id)
   ]);
- }catch{
+  reason=result.at(-1)?.results[0]?.reason??null;
+ }catch(error){
+  // The response may have been lost after commit. Recover that operation before
+  // reporting failure; an unavailable database must still produce a DB error.
+  try{
+   const raced=await env.DB.prepare('SELECT * FROM credit_operations WHERE user_id=? AND request_key=?').bind(member.id,key).first<CreditOperation>();
+   if(raced){if(raced.fingerprint!==fingerprint)throw new ApiError(409,'Idempotency key was used for different work');return {operation:raced,existing:true}}
+   const running=await reusableOperation(request,env.DB,member.id,fingerprint);
+   if(running)return {operation:running,existing:true};
+  }catch(recoveryError){if(recoveryError instanceof ApiError)throw recoveryError}
+  console.error(JSON.stringify({event:'ai_reservation_failed',path,userId:member.id,error:error instanceof Error?error.message:String(error)}));
+  throw new ApiError(503,'The AI request could not be saved because of a database error. Please retry.');
+ }
+ if(reason){
   const raced=await env.DB.prepare('SELECT * FROM credit_operations WHERE user_id=? AND request_key=?').bind(member.id,key).first<CreditOperation>();
-  if(raced&&raced.fingerprint===fingerprint)return {operation:raced,existing:true};
+  if(raced){if(raced.fingerprint!==fingerprint)throw new ApiError(409,'Idempotency key was used for different work');return {operation:raced,existing:true}}
   const running=await reusableOperation(request,env.DB,member.id,fingerprint);
   if(running)return {operation:running,existing:true};
-  throw new ApiError(409,'Insufficient available credits or AI capacity; no work was submitted');
+  throw admissionError(reason);
  }
  const operation=await env.DB.prepare('SELECT * FROM credit_operations WHERE id=?').bind(id).first<CreditOperation>();if(!operation)throw new ApiError(503,'Could not reserve credits');return {operation,existing:false};
 }

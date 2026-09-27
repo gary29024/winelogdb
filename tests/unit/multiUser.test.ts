@@ -162,7 +162,7 @@ describe('credit transactions',()=>{
  it('rolls back an overdraft including its operation and reservation ledger entry',async()=>{
   database.sql.exec("UPDATE credit_wallets SET balance=2 WHERE user_id='alice'");
   const q=await quote(request(),env(),member('alice'));
-  await expect(reserve(request('{}',{'X-WineLog-Quote':q.id,'Idempotency-Key':'low'}),env(),member('alice'))).rejects.toMatchObject({status:409});
+  await expect(reserve(request('{}',{'X-WineLog-Quote':q.id,'Idempotency-Key':'low'}),env(),member('alice'))).rejects.toMatchObject({status:402,message:expect.stringContaining('Insufficient available credits.')});
   expect(wallet()).toMatchObject({balance:2,reserved:0});expect(database.sql.prepare('SELECT count(*) AS n FROM credit_operations').get()!.n).toBe(0);
  });
  it('binds quotes to owner and exact request and rejects expiry',async()=>{
@@ -181,7 +181,7 @@ describe('credit transactions',()=>{
   expect(q.total).toBe(0);expect(q.units).toHaveLength(1);expect(q.units[0]).toMatchObject({action:'scan_group',credits:0,priceId:'pilot-free-scan-group'});
  });
  it('includes outstanding work in the provider budget',async()=>{
-  const q=await quote(request(),env(),member('alice'));await expect(reserve(request('{}',{'X-WineLog-Quote':q.id,'Idempotency-Key':'budget'}),env(),member('alice'),100)).rejects.toMatchObject({status:409});
+  const q=await quote(request(),env(),member('alice'));await expect(reserve(request('{}',{'X-WineLog-Quote':q.id,'Idempotency-Key':'budget'}),env(),member('alice'),100)).rejects.toMatchObject({status:503,message:expect.stringContaining('monthly AI budget')});
  });
 });
 describe('shared wines as recipient journal history',()=>{

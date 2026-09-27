@@ -105,12 +105,15 @@ describe('Champagne extraction public multi-user pipeline',()=>{
     expect(quoted.total).toBe(0);expect(quoted.units).toHaveLength(1);expect(quoted.units[0]).toMatchObject({action:'champagne_extraction',credits:0});
     expect(objects.size).toBe(0);expect(delivered).toHaveLength(0);expect(database.sql.prepare('SELECT count(*) AS n FROM credit_operations').get()!.n).toBe(0);expect(provider).not.toHaveBeenCalled();
   });
-  it('runs for an owner with no tariff, wallet top-up or member allowance',async()=>{
-    allowance(0);database.sql.prepare("DELETE FROM credit_prices WHERE action='champagne_extraction'").run();const accepted=await start('owner');
+  it('runs and meters owner work despite exhausted app budgets and no tariff, wallet top-up or member allowance',async()=>{
+    allowance(0);database.sql.prepare("DELETE FROM credit_prices WHERE action='champagne_extraction'").run();
+    database.sql.exec("UPDATE pilot_settings SET value_json=json_set(value_json,'$.aiConcurrency',0,'$.aiDailyOperations',0,'$.aiMonthlyBudgetUsd',0,'$.cloudflareObservedMonth','2000-01','$.cloudflareObservedUsd',100,'$.allowOverages',json('false'))");
+    const accepted=await start('owner');
     expect(operation(accepted.creditOperationId)).toMatchObject({user_id:'owner',reserved:0,run_id:accepted.run.requestId,status:'running'});
     await process();expect(operation(accepted.creditOperationId).status).toBe('complete');expect(provider).toHaveBeenCalledTimes(1);
     expect(database.sql.prepare("SELECT count(*) AS n FROM member_ai_action_usage WHERE user_id='owner'").get()!.n).toBe(0);
     expect(database.sql.prepare("SELECT balance,reserved FROM credit_wallets WHERE user_id='owner'").get()).toMatchObject({balance:0,reserved:0});
+    expect(database.sql.prepare("SELECT count(*) AS n FROM ai_usage_events WHERE owner_id='owner' AND kind='champagne_extraction'").get()!.n).toBe(1);
   });
   it('keeps included member work tracked without consuming an allowance',async()=>{
     const accepted=await start();await process();expect(operation(accepted.creditOperationId)).toMatchObject({status:'complete',reserved:0,captured:0});
@@ -146,7 +149,7 @@ describe('Champagne extraction public multi-user pipeline',()=>{
   });
   it('does not bypass the deployment budget for included actions',async()=>{
     database.sql.prepare("UPDATE pilot_settings SET value_json=json_set(value_json,'$.aiMonthlyBudgetUsd',0.5)").run();const input=await prepare(),q=await input.quoted.json() as Quote;
-    expect((await input.execute(q.id)).status).toBe(409);expect(provider).not.toHaveBeenCalled();expect(delivered).toHaveLength(0);expect(objects.size).toBe(0);
+    const response=await input.execute(q.id);expect(response.status).toBe(503);expect(await response.json()).toMatchObject({error:expect.stringContaining('monthly AI budget')});expect(provider).not.toHaveBeenCalled();expect(delivered).toHaveLength(0);expect(objects.size).toBe(0);
   });
   it('retains the durable outbox on dispatch failure and dispatches the same job later',async()=>{
     vi.mocked(environment.RESEARCH_QUEUE.send).mockRejectedValueOnce(new Error('Queue unavailable'));const accepted=await start();expect(delivered).toHaveLength(0);expect(currentRun().status).toBe('queued');

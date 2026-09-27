@@ -61,8 +61,8 @@ export default {
     return json({...quoted,access:member.role==='owner'?'owner':'reused'});
    }
    if(aiRoute(path,request.method)){
-    const cost=await deploymentAiCost(env.DB,env);
-    const {operation,existing}=await reserve(request,env,member,cost.usd),operationUnits=JSON.parse(operation.units_json) as Array<{action:string;targetId?:string;scope?:string;parentOperationId?:string}>;
+    const observedUsd=member.role==='owner'?0:(await deploymentAiCost(env.DB,env)).usd;
+    const {operation,existing}=await reserve(request,env,member,observedUsd),operationUnits=JSON.parse(operation.units_json) as Array<{action:string;targetId?:string;scope?:string;parentOperationId?:string}>;
     // Replays observe the original operation. They cannot reserve a new slot
     // after its failure released the original allowance.
     if(existing)return operation.response_json?json(publicAiResponse(path,JSON.parse(operation.response_json) as Record<string,unknown>,operation),operation.response_status??202):json({accepted:true,creditOperationId:operation.id,status:operation.status},202);
