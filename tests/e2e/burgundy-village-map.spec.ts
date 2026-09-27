@@ -555,10 +555,10 @@ test('compact Mâcon download retries without fetching the larger GeoJSON',async
  expect(downloads.every(url=>url.endsWith('.pbf.gz'))).toBe(true);
 });
 
-for(const [appellation,id,maxBytes,timeout] of [['Mâcon','macon',1400000,20000],['Bourgogne','bourgogne',3700000,60000]] as const)test(`${appellation} compact map loads over a 1 Mbps connection`,async({page,browserName},testInfo)=>{
+for(const [appellation,id,maxBytes,timeout] of [['Mâcon','macon',1400000,20000],['Bourgogne','bourgogne',3700000,60000],['Bourgogne Aligoté','bourgogne-aligote',3000000,60000]] as const)test(`${appellation} compact map loads over a 1 Mbps connection`,async({page,browserName},testInfo)=>{
  test.skip(browserName!=='chromium','Chromium network throttling');
  test.setTimeout(timeout+25000);
- await setup(page,{appellation,wineName:'Vieilles Vignes',classification:null});
+ await setup(page,{appellation,wineName:'Vieilles Vignes',classification:null,...(id==='bourgogne-aligote'?{colour:'White',wineStyle:'white'}:{})});
  await page.goto('/shared/layout-wine');
  // Warm the code, then close before measuring the boundary transfer. Browser
  // caching is disabled for the throttled load so the complete asset travels.
@@ -580,11 +580,62 @@ for(const [appellation,id,maxBytes,timeout] of [['Mâcon','macon',1400000,20000]
  await network.detach();
 });
 
+for(const route of allMapRoutes)test(`Bourgogne Aligoté ${route}: partial white AOC and commune navigation`,async({page},testInfo)=>{
+ await page.setViewportSize({width:320,height:900});
+ await setup(page,{appellation:'Bourgogne Aligoté',wineName:'Vieilles Vignes',classification:null,colour:'White',wineStyle:'white',region:'Burgundy'});
+ const downloads:string[]=[],errors:string[]=[];
+ page.on('request',r=>{if(r.url().includes('/maps/'))downloads.push(r.url())});
+ page.on('pageerror',error=>errors.push(error.message));
+ await page.goto(route);expect(downloads).toEqual([]);
+ await page.route('**/maps/bourgogne-aligote.*.pbf.gz',route=>route.fulfill({contentType:'application/gzip',path:'public/maps/bourgogne-aligote.2026-09-21.pbf.gz'}));
+ const opener=page.getByRole('button',{name:'View regional map'});
+ await opener.click();
+ const dialog=page.getByRole('dialog',{name:'Bourgogne Aligoté',exact:true});
+ await expect(dialog.getByRole('button',{name:'Region view',exact:true})).toBeEnabled();
+ await expect(dialog.locator('.village-map-description')).toHaveText('Partial appellation overview. The highlight does not show the full appellation; no single vineyard is identified.');
+ await expect(dialog.locator('.village-map-note').filter({hasText:'white-wine production boundaries in 272 communes'})).toBeVisible();
+ await expect(dialog.locator('.village-map-hint')).toContainText('Coverage of this appellation is incomplete');
+ await expect(dialog.getByRole('combobox',{name:'Explore a mapped area'})).toHaveCount(0);
+ const communes=dialog.getByRole('combobox',{name:'Zoom to a commune'});
+ await expect(communes.getByRole('option')).toHaveCount(273);
+ const visibleMarkers=()=>dialog.locator('.village-map-commune-name').evaluateAll(elements=>{
+  const canvas=elements[0]?.closest('.village-map-canvas')?.getBoundingClientRect();
+  if(!canvas)return 0;
+  return elements.filter(el=>{const b=el.getBoundingClientRect();return b.x+b.width/2>=canvas.x&&b.x+b.width/2<=canvas.right&&b.y+b.height/2>=canvas.y&&b.y+b.height/2<=canvas.bottom}).length;
+ });
+ await expect.poll(visibleMarkers).toBe(272);
+ for(const label of ['Joigny','Boncourt-le-Bois','Prissé','Romanèche-Thorins']){
+  await communes.selectOption({label});
+  await expect.poll(visibleMarkers).toBeLessThan(272);
+  await expect(dialog.getByRole('heading',{name:'Bourgogne Aligoté',exact:true})).toHaveCount(2);
+ }
+ await page.screenshot({path:testInfo.outputPath('aligote-320.png')});
+ await dialog.getByRole('button',{name:'Region view',exact:true}).click();
+ await expect.poll(visibleMarkers).toBe(272);
+ expect([...new Set(downloads)]).toHaveLength(1);
+ expect(downloads.every(url=>/\/bourgogne-aligote\.[\d-]+\.pbf\.gz$/.test(url))).toBe(true);
+ expect(await dialog.evaluate(el=>el.scrollWidth<=el.clientWidth)).toBe(true);
+ await page.setViewportSize({width:1280,height:900});
+ await dialog.getByRole('button',{name:'Region view',exact:true}).click();
+ await page.screenshot({path:testInfo.outputPath('aligote-desktop.png')});
+ await page.keyboard.press('Escape');await expect(opener).toBeFocused();
+ for(const colour of ['Red','Rosé']){
+  await setup(page,{appellation:'Bourgogne Aligoté',wineName:'Vieilles Vignes',classification:null,colour,wineStyle:colour==='Red'?'red':'rose'});
+  await page.goto(route);
+  await expect(page.getByRole('heading',{name:'Vieilles Vignes',exact:true})).toBeVisible();
+  await expect(page.getByRole('button',{name:'View regional map'})).toHaveCount(0);
+ }
+ expect(errors).toEqual([]);
+});
+
 for(const route of allMapRoutes)test(`Bourgogne review labels ${route}: Clairet, separate AOCs and region scope`,async({page})=>{
  await page.setViewportSize({width:320,height:900});
  for(const [appellation,wineName,region,colour,expected] of [
   ['Bourgogne Clairet','Montrecul','Côte d’Or','rose','Bourgogne Montrecul'],
   ['Bourgogne','Kimméridgien','Chablis','white','Bourgogne'],
+  ['Bourgogne','Aligoté','Burgundy','white','Bourgogne Aligoté'],
+  ['Bourgogne Blanc Vieilles Vignes','Bourgogne-Aligoté','Burgundy','white','Bourgogne Aligoté'],
+  ['Mâcon Lugny','Chardonnay avec Aligoté','Burgundy','white','Mâcon Lugny'],
  ] as const){
   await setup(page,{appellation,wineName,region,colour,wineStyle:colour,classification:null});
   await page.goto(route);
@@ -596,13 +647,16 @@ for(const route of allMapRoutes)test(`Bourgogne review labels ${route}: Clairet,
   await page.keyboard.press('Escape');
  }
  for(const [appellation,wineName,region,colour] of [
-  ['Bourgogne','Aligoté','Burgundy','white'],
+  ['Bourgogne Rouge Vieilles Vignes','Aligoté','Burgundy','red'],
+  ['Bourgogne Hautes Côtes de Nuits','Aligoté','Burgundy','white'],
+  ['Bourgogne Vieilles Vignes','Aligoté Bouzeron','Burgundy','white'],
   ['Bourgogne','Passe-Tout-Grains','Burgundy','red'],
   ['Bourgogne Clairet','Montrecul','Côte d’Or','red'],
   ['Bourgogne Chitry','Olympe','Chablis','white'],
  ] as const){
   await setup(page,{appellation,wineName,region,colour,wineStyle:colour,classification:null});
   await page.goto(route);
+  await expect(page.getByRole('heading',{name:wineName,exact:true})).toBeVisible();
   await expect(page.getByRole('button',{name:'View regional map'})).toHaveCount(0);
  }
 });

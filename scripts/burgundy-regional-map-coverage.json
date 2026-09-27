@@ -139,8 +139,9 @@
           "sourceNames": [
             "Bourgogne aligoté"
           ],
-          "status": "pending",
-          "kind": "broad"
+          "status": "partial",
+          "kind": "broad",
+          "coverageNote": "All 278 source rows are retained across 272 communes; complete Bourgogne Aligoté AOC coverage is not established by the pinned source."
         }
       ]
     },

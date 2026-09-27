@@ -856,6 +856,8 @@ It fails the publication gate; existing missing/partial safeguards remain.
 
 Regional work now has a [complete inventory and forty-three mapped denominations](burgundy-regional-maps.md),
 including all 29 Mâcon source denominations (27 named areas, Mâcon and Mâcon-Villages).
-Next: complete the six remaining broad regional denominations,
+Broad Bourgogne and Bourgogne Aligoté have explicitly partial source overviews.
+Next: implement the four remaining broad regional denominations and reconcile
+the incomplete source coverage of the two partial overviews,
 while seeking licensed, reviewed geometry for missing Chablis/Givry/Corton names
 and village lieux-dits. The 44/44 village count does not close those gaps.

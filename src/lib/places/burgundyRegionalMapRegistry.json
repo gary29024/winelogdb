@@ -19,6 +19,9 @@
         "red",
         "white"
       ],
+      "conflictingNames": [
+        "Aligoté"
+      ],
       "featureId": "inao-denom-2840"
     },
     {
@@ -40,6 +43,9 @@
         "red",
         "white",
         "rose"
+      ],
+      "conflictingNames": [
+        "Aligoté"
       ],
       "featureId": "inao-denom-364"
     },
@@ -63,6 +69,9 @@
         "white",
         "rose"
       ],
+      "conflictingNames": [
+        "Aligoté"
+      ],
       "featureId": "inao-denom-363"
     },
     {
@@ -82,6 +91,9 @@
         "red",
         "white",
         "rose"
+      ],
+      "conflictingNames": [
+        "Aligoté"
       ],
       "featureId": "inao-denom-365"
     },
@@ -103,6 +115,9 @@
       ],
       "wineColours": [
         "red"
+      ],
+      "conflictingNames": [
+        "Aligoté"
       ],
       "featureId": "inao-denom-1586"
     },
@@ -127,6 +142,9 @@
         "red",
         "rose"
       ],
+      "conflictingNames": [
+        "Aligoté"
+      ],
       "featureId": "inao-denom-366"
     },
     {
@@ -148,6 +166,9 @@
         "white",
         "red",
         "rose"
+      ],
+      "conflictingNames": [
+        "Aligoté"
       ],
       "featureId": "inao-denom-367"
     },
@@ -171,6 +192,9 @@
         "red",
         "rose"
       ],
+      "conflictingNames": [
+        "Aligoté"
+      ],
       "featureId": "inao-denom-368"
     },
     {
@@ -191,6 +215,9 @@
       "wineColours": [
         "red",
         "rose"
+      ],
+      "conflictingNames": [
+        "Aligoté"
       ],
       "featureId": "inao-denom-369"
     },
@@ -214,6 +241,9 @@
         "red",
         "rose"
       ],
+      "conflictingNames": [
+        "Aligoté"
+      ],
       "featureId": "inao-denom-374"
     },
     {
@@ -233,6 +263,9 @@
       ],
       "wineColours": [
         "white"
+      ],
+      "conflictingNames": [
+        "Aligoté"
       ],
       "featureId": "inao-denom-1751"
     },
@@ -259,6 +292,9 @@
         "La Chapelle Notre-Dame",
         "Chapelle Notre-Dame"
       ],
+      "conflictingNames": [
+        "Aligoté"
+      ],
       "featureId": "inao-denom-371"
     },
     {
@@ -278,6 +314,9 @@
         "red",
         "white",
         "rose"
+      ],
+      "conflictingNames": [
+        "Aligoté"
       ],
       "featureId": "inao-denom-372"
     },
@@ -308,6 +347,9 @@
         "Montre-Cul",
         "En Montre-Cul",
         "En Montrecul"
+      ],
+      "conflictingNames": [
+        "Aligoté"
       ],
       "featureId": "inao-denom-373"
     },
@@ -1176,13 +1218,60 @@
       ],
       "broadAppellation": true,
       "featureId": "inao-denom-362"
+    },
+    {
+      "id": "bourgogne-aligote",
+      "name": "Bourgogne Aligoté",
+      "region": "Burgundy",
+      "aliases": [
+        "Bourgogne Aligoté"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Côte d’Or",
+        "Côte de Nuits",
+        "Côte de Beaune",
+        "Hautes Côtes de Nuits",
+        "Hautes Côtes de Beaune",
+        "Côte Chalonnaise",
+        "Mâconnais",
+        "Grand Auxerrois",
+        "Yonne",
+        "Saône-et-Loire",
+        "Chablis",
+        "Chablis et Grand Auxerrois",
+        "Auxerrois"
+      ],
+      "wineColours": [
+        "white"
+      ],
+      "siteNames": [
+        "Aligoté",
+        "Bourgogne-Aligoté"
+      ],
+      "baseAppellations": [
+        "Bourgogne",
+        "Bourgogne Blanc",
+        "Burgundy"
+      ],
+      "conflictingNames": [
+        "Chardonnay",
+        "Pinot Noir",
+        "Gamay",
+        "Passetoutgrain",
+        "Passetoutgrains",
+        "Passe-tout-grain",
+        "Passe-tout-grains"
+      ],
+      "broadAppellation": true,
+      "featureId": "inao-denom-389"
     }
   ],
   "otherAppellations": [
     "Bourgogne Aligoté",
     "Bourgogne Mousseux",
     "Bourgogne Passe-tout-grains",
-    "Bourgogne aligoté",
     "Bourgogne mousseux",
     "Coteaux Bourguignons",
     "Coteaux Bourguignons ou Bourgogne grand ordinaire ou Bourgogne ordinaire",

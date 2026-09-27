@@ -6,6 +6,10 @@ import inventory from '../../scripts/burgundy-regional-map-coverage.json';
 const base={country:'France',region:'Burgundy',classification:null,productType:'Wine',productSubtype:'Still',appellation:'Bourgogne'};
 
 describe('broad Bourgogne source overview',()=>{
+ // Plain Bourgogne cannot be made from Aligoté: naming it is Bourgogne Aligoté.
+ it.each(['Bourgogne Aligoté','Vin de Bourgogne Aligoté'])('reads %s in a plain Bourgogne wine name as Bourgogne Aligoté',wineName=>{
+  expect(burgundyVillageMapTarget({...base,wineName})).toMatchObject({featureId:'inao-denom-389'});
+ });
  it.each(['Bourgogne','Bourgogne AOC','Bourgogne Rouge','Bourgogne Blanc AOP','Bourgogne Rosé','Bourgogne Pinot Noir','Bourgogne Chardonnay'])(
   'opens only the broad overview for %s',appellation=>{
    expect(burgundyVillageMapTarget({...base,appellation,wineName:'Les Graviers'}))
@@ -18,12 +22,12 @@ describe('broad Bourgogne source overview',()=>{
  it.each([
   {appellation:'Burgundy'}, {appellation:null,wineName:'Bourgogne'},
   {appellation:null,referenceSite:'Bourgogne'}, {appellation:null,producer:'Domaine de Bourgogne'},
-  {appellation:'Bourgogne Unknown Place'}, {appellation:'Bourgogne Aligoté'},
+  {appellation:'Bourgogne Unknown Place'},
   {appellation:'Bourgogne Passe-tout-grains'}, {appellation:'Bourgogne Mousseux'},
   {appellation:'Crémant de Bourgogne'}, {appellation:'Coteaux Bourguignons'},
-  {wineName:'Bourgogne Aligoté'}, {referenceSite:'Bourgogne Passe-tout-grains'},
+  {referenceSite:'Bourgogne Passe-tout-grains'},
   {wineName:'Bourgogne Mousseux'}, {wineName:'Bourgogne Grand Ordinaire'},
-  {wineName:'Vin de Bourgogne Aligoté'}, {wineName:'Vin de Bourgogne Ordinaire'},
+  {wineName:'Vin de Bourgogne Ordinaire'},
   {appellation:'Bourgogne Gamay'}, {wineName:'Bourgogne Gamay'}, {referenceSite:'Gamay'},
   {region:'Beaujolais'}, {region:'Rhône'}, {region:'Bordeaux'}, {country:'USA'},
   {colour:'Red',wineStyle:'white'}, {appellation:'Bourgogne Blanc',colour:'Red'},

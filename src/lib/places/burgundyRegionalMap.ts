@@ -37,6 +37,10 @@ const withoutProducer=(label:string,producer:string)=>{
 // village. Black grapes make both red and rosé, so they never pick one.
 const grapeColours:readonly (readonly [string,readonly string[]])[]=[['chardonnay',['white']],['pinot noir',['red','rose']],['gamay',['red','rose']]];
 const withoutGrapes=(text:string)=>grapeColours.reduce((value,[name])=>` ${value} `.replaceAll(` ${name} `,' ').trim(),text);
+// "Vieilles Vignes" (old vines) is a label mention, not part of the denomination,
+// so "Bourgogne Aligoté Vieilles Vignes" in the appellation field still matches.
+const withoutOldVines=(text:string)=>text.replace(/\bvieilles? vignes?\b/g,' ').replace(/\s+/g,' ').trim();
+const withoutLabelTerms=(text:string)=>withoutOldVines(withoutGrapes(text));
 const byLength=(a:string,b:string)=>b.length-a.length;
 // Clairet, like rosé, can precede a denomination recorded in the wine name.
 const bourgogneAppellations=['bourgogne','burgundy','bourgogne rouge','bourgogne blanc','bourgogne rose','bourgogne clairet'];
@@ -79,7 +83,8 @@ export function burgundyRegionalMapTarget(wine:Wine):BurgundyVillageMapTarget|nu
  const fields=[wine.appellation,wine.wineName,wine.referenceSite,wine.referenceParcel].map(value=>key(value??''));
  const producer=key(wine.producer??'');
  const wineLabel=producer?` ${fields[1]} `.replaceAll(` ${producer} `,' ').trim():fields[1];
- const plainAppellation=(group:typeof groups[number])=>group.baseKeys.includes(fields[0]);
+ // Normalise old-vine wording on split bases too, retaining colour/grape words.
+ const plainAppellation=(group:typeof groups[number])=>group.baseKeys.includes(withoutOldVines(fields[0]));
  const joinedLabel=withoutProducer(joinedKey(wine.wineName??''),producer);
  const namesSite=(group:typeof groups[number])=>plainAppellation(group)&&group.joinedSiteKeys.some(name=>namesPlace(joinedLabel,name));
  // Chardonnay is also a grape: only a recorded full appellation establishes
@@ -91,8 +96,11 @@ export function burgundyRegionalMapTarget(wine:Wine):BurgundyVillageMapTarget|nu
  // when no more specific denomination is present, including conflicting ones.
  // Exact suffix validation keeps Mâcon-Villages distinct from Mâcon and avoids
  // turning an unknown "Mâcon <place>" into a broad match.
- const candidates=specific.length?specific:groups.filter(group=>group.broad&&group.keys.some(name=>
-  fields[0]===name||fields[0].startsWith(name+' ')&&['','blanc','white','rouge','red','rose','clairet'].includes(withoutGrapes(fields[0].slice(name.length).trim()))));
+ // A plain Bourgogne label may name the Aligoté grape as the wine: that is
+ // Bourgogne Aligoté, since plain Bourgogne cannot be made from Aligoté.
+ const split=specific.length?[]:groups.filter(group=>group.broad&&namesSite(group));
+ const candidates=specific.length?specific:split.length?split:groups.filter(group=>group.broad&&group.keys.some(name=>
+  fields[0]===name||fields[0].startsWith(name+' ')&&['','blanc','white','rouge','red','rose','clairet'].includes(withoutLabelTerms(fields[0].slice(name.length).trim()))));
  if(!candidates.length)return undefined;
  if(candidates.length!==1||wine.identityMatchStatus==='conflict'||wine.classification)return null;
  const group=candidates[0],country=key(wine.country??''),region=key(wine.region??'');
@@ -103,6 +111,7 @@ export function burgundyRegionalMapTarget(wine:Wine):BurgundyVillageMapTarget|nu
  // Check full pending AOC names before stripping a broad prefix: removing
  // "Bourgogne" must not conceal "Bourgogne Aligoté" in a conflicting label.
  if(group.broad&&fields.some(text=>otherRegionals.some(name=>contains(text,name)&&!group.keys.some(own=>contains(own,name)))))return null;
+ // Reviewed grape conflicts belong to each appellation, not every regional AOC.
  if(fields.some(text=>group.blockedKeys.some(name=>contains(text,name))))return null;
  if(country&&!['france','fr'].includes(country))return null;
  if(region&&!group.regions.includes(region)&&!group.keys.includes(region))return null;
@@ -126,7 +135,7 @@ export function burgundyRegionalMapTarget(wine:Wine):BurgundyVillageMapTarget|nu
   .reduce((value,name)=>` ${value} `.replaceAll(` ${name} `,' ').trim(),text);
  const app=fields[0];
  if(app&&!plainAppellation(group)&&
-  (!group.keys.some(name=>contains(app,name))||!['','rouge','blanc','rose','clairet','red','white',...(vinGris?['gris','vin gris']:[])].includes(withoutGrapes(removeDesignation(app)))))return null;
+  (!group.keys.some(name=>contains(app,name))||!['','rouge','blanc','rose','clairet','red','white',...(vinGris?['gris','vin gris']:[])].includes(withoutLabelTerms(removeDesignation(app)))))return null;
  // A cuvée/reference name alone must not infer its regional denomination,
  // except a reviewed site name beside its explicit base appellation.
  if(!fields.slice(0,2).some(text=>group.keys.some(name=>contains(text,name)))&&!namesSite(group))return null;
