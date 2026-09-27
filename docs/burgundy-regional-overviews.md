@@ -8,6 +8,13 @@ available. Partial-coverage warnings and wine identity rules are unchanged.
 Only those overview labels and, when needed, the selected commune get DOM
 markers; hundreds of hidden markers no longer need repositioning on each move.
 
+Regional overview assets intentionally omit administrative commune outlines.
+The commune selector centres and labels the chosen place while the appellation
+or selected colour sector stays highlighted. This keeps regional orientation
+clear without reintroducing hundreds of dashed borders. A simplified outline
+for only the selected commune is an optional follow-up in #363, subject to
+visual and transfer-size checks; it is not part of this PR.
+
 ## Download comparison
 
 The following sizes are bytes. The earlier broad maps already used gzip Geobuf;
