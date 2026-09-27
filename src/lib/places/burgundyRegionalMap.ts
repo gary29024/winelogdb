@@ -10,6 +10,7 @@ type Wine=WineFacts&{classification?:string|null;wineStyle?:string|null};
 const key=(text:string)=>placeKey(text).replace(/\bste\b/g,'sainte').replace(/\bst\b/g,'saint')
  .replace(/\b(?:aoc|aop|appellation controlee|appellation protegee)\b/g,' ').replace(/\s+/g,' ').trim();
 const contains=(text:string,name:string)=>` ${text} `.includes(` ${name} `);
+const withoutRegionalOrigin=(text:string)=>text.replace(/\b(?:vins? de bourgogne|wine of burgundy)\b/g,'').trim();
 // Hyphens become a marker word so a split village's neighbour stays visible.
 const joined='xjoinedx';
 // Unspaced hyphen, non-breaking hyphen and en dash all join words.
@@ -97,7 +98,10 @@ export function burgundyRegionalMapTarget(wine:Wine):BurgundyVillageMapTarget|nu
  // Strip the broad name only after checking a competing broad identity. A
  // Mâcon-Villages label must not disappear into the generic word "Mâcon".
  if(group.broad&&fields.slice(1).some(text=>groups.some(other=>other.broad&&other.id!==group.id&&
-  other.keys.some(name=>contains(text,name)&&!group.keys.some(own=>contains(own,name))))))return null;
+  other.keys.some(name=>contains(withoutRegionalOrigin(text),name)&&!group.keys.some(own=>contains(own,name))))))return null;
+ // Check full pending AOC names before stripping a broad prefix: removing
+ // "Bourgogne" must not conceal "Bourgogne Aligoté" in a conflicting label.
+ if(group.broad&&fields.some(text=>otherRegionals.some(name=>contains(text,name)&&!group.keys.some(own=>contains(own,name)))))return null;
  if(fields.some(text=>group.blockedKeys.some(name=>contains(text,name))))return null;
  if(country&&!['france','fr'].includes(country))return null;
  if(region&&!group.regions.includes(region)&&!group.keys.includes(region))return null;
@@ -127,6 +131,9 @@ export function burgundyRegionalMapTarget(wine:Wine):BurgundyVillageMapTarget|nu
  if(!fields.slice(0,2).some(text=>group.keys.some(name=>contains(text,name)))&&!namesSite(group))return null;
  const remaining=fields.map((text,index)=>{
   if(index===1&&producer)text=` ${text} `.replaceAll(` ${producer} `,' ').trim();
+  // Remove origin wording only after full denomination/conflict checks, so
+  // "Vin de Bourgogne Aligoté" cannot become an apparently harmless "Aligoté".
+  if(index!==0)text=withoutRegionalOrigin(text);
   return removeDesignation(text);
  });
  if(remaining.some((text,index)=>/\b(?:grands? crus?|premiers? crus?|1ers?|1st cru|cremant|mousseux)\b/.test(text)||

@@ -555,10 +555,10 @@ test('compact Mâcon download retries without fetching the larger GeoJSON',async
  expect(downloads.every(url=>url.endsWith('.pbf.gz'))).toBe(true);
 });
 
-test('Mâcon compact map loads over a 1 Mbps connection',async({page,browserName},testInfo)=>{
+for(const [appellation,id,maxBytes,timeout] of [['Mâcon','macon',1400000,20000],['Bourgogne','bourgogne',3700000,60000]] as const)test(`${appellation} compact map loads over a 1 Mbps connection`,async({page,browserName},testInfo)=>{
  test.skip(browserName!=='chromium','Chromium network throttling');
- test.setTimeout(45000);
- await setup(page,{appellation:'Mâcon',wineName:'Vieilles Vignes',classification:null});
+ test.setTimeout(timeout+25000);
+ await setup(page,{appellation,wineName:'Vieilles Vignes',classification:null});
  await page.goto('/shared/layout-wine');
  // Warm the code, then close before measuring the boundary transfer. Browser
  // caching is disabled for the throttled load so the complete asset travels.
@@ -569,15 +569,62 @@ test('Mâcon compact map loads over a 1 Mbps connection',async({page,browserName
  await network.send('Network.enable');
  await network.send('Network.setCacheDisabled',{cacheDisabled:true});
  await network.send('Network.emulateNetworkConditions',{offline:false,latency:150,downloadThroughput:125000,uploadThroughput:62500});
- const compact=page.waitForResponse(response=>response.url().includes('/maps/macon.')&&response.url().endsWith('.pbf.gz'));
+ const compact=page.waitForResponse(response=>response.url().includes(`/maps/${id}.`)&&response.url().endsWith('.pbf.gz'),{timeout});
  const started=Date.now();
  await page.getByRole('button',{name:'View regional map'}).click();
- await expect(page.getByRole('button',{name:'Region view',exact:true})).toBeEnabled({timeout:20000});
+ await expect(page.getByRole('button',{name:'Region view',exact:true})).toBeEnabled({timeout});
  const response=await compact;
  const sizes=await response.request().sizes();
- expect(sizes.responseBodySize).toBeLessThan(1400000);
+ expect(sizes.responseBodySize).toBeLessThan(maxBytes);
  await testInfo.attach('compact-map-network',{body:JSON.stringify({downloadBytes:sizes.responseBodySize,readyAfterMs:Date.now()-started},null,2),contentType:'application/json'});
  await network.detach();
+});
+
+for(const route of allMapRoutes)test(`Broad Bourgogne ${route}: partial overview and white-only sector`,async({page},testInfo)=>{
+ await page.setViewportSize({width:320,height:900});
+ await setup(page,{appellation:'Bourgogne',wineName:'Les Graviers',classification:null,colour:'White',wineStyle:'white',region:'Burgundy'});
+ const downloads:string[]=[];page.on('request',r=>{if(r.url().includes('/maps/'))downloads.push(r.url())});
+ await page.goto(route);expect(downloads).toEqual([]);
+ // Exercise raw gzip decoding as well as the HTTP-decompressed slow-network case.
+ await page.route('**/maps/bourgogne.*.pbf.gz',route=>route.fulfill({contentType:'application/gzip',path:'public/maps/bourgogne.2026-09-21.pbf.gz'}));
+ await page.getByRole('button',{name:'View regional map'}).click();
+ const dialog=page.getByRole('dialog',{name:'Bourgogne',exact:true});
+ await expect(dialog.getByRole('button',{name:'Region view',exact:true})).toBeEnabled();
+ await expect(dialog.locator('.village-map-description')).toContainText('Partial appellation overview');
+ await expect(dialog.locator('.village-map-note').filter({hasText:'not the complete appellation'})).toBeVisible();
+ await expect(dialog.locator('.village-map-hint')).toContainText('Coverage of this appellation is incomplete');
+ const areas=dialog.getByRole('combobox',{name:'Explore a mapped area'});
+ await expect(areas).toHaveValue('inao-denom-362');
+ await expect(areas.getByRole('option',{name:'Bourgogne (partial boundary)',exact:true})).toHaveCount(1);
+ const communes=dialog.getByRole('combobox',{name:'Zoom to a commune'});
+ await expect(communes.getByRole('option')).toHaveCount(265);
+ const visibleMarkers=()=>dialog.locator('.village-map-commune-name').evaluateAll(elements=>{
+  const canvas=elements[0]?.closest('.village-map-canvas')?.getBoundingClientRect();
+  if(!canvas)return 0;
+  return elements.filter(el=>{const b=el.getBoundingClientRect();return b.x+b.width/2>=canvas.x&&b.x+b.width/2<=canvas.right&&b.y+b.height/2>=canvas.y&&b.y+b.height/2<=canvas.bottom}).length;
+ });
+ await expect.poll(visibleMarkers).toBe(264);
+ for(const label of ['Joigny','Dijon','La Salle']){
+  await communes.selectOption({label});
+  await expect.poll(visibleMarkers).toBeLessThan(264);
+  await expect(areas).toHaveValue('inao-denom-362');
+ }
+ await areas.selectOption('inao-denom-362-white-only');
+ await expect(dialog.locator('.village-map-description')).toContainText('Published white-only sector');
+ await expect(dialog.locator('.village-map-overlap')).toContainText('not the whole white-wine area');
+ await dialog.getByRole('button',{name:'Back to this wine'}).click();
+ await expect(areas).toHaveValue('inao-denom-362');
+ await dialog.getByRole('button',{name:'Region view',exact:true}).click();
+ await expect.poll(visibleMarkers).toBe(264);
+ expect([...new Set(downloads)]).toHaveLength(1);
+ expect(downloads.every(url=>url.endsWith('.pbf.gz'))).toBe(true);
+ expect(await dialog.evaluate(el=>el.scrollWidth<=el.clientWidth)).toBe(true);
+ await page.screenshot({path:testInfo.outputPath('bourgogne-320.png')});
+ await page.setViewportSize({width:1280,height:900});
+ await dialog.getByRole('button',{name:'Region view',exact:true}).click();
+ await page.screenshot({path:testInfo.outputPath('bourgogne-desktop.png')});
+ await page.keyboard.press('Escape');
+ await expect(page.getByRole('button',{name:'View regional map'})).toBeFocused();
 });
 
 matrixTest('conflicting wine identities do not show a map entry point',async({page})=>{

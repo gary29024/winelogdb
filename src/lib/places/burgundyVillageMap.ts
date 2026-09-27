@@ -7,13 +7,15 @@ import { burgundyRegionalMapTarget } from './burgundyRegionalMap';
 
 export type VillageMapFeature={
  id:string;name:string;tier:string;kind:string;appellationId:number;denominationId:number|null;denominationIds?:number[];
- sourceName:string;communes:string[];areaHa:number;matchId:string;atlasUrl:string|null;bounds:number[];labelPoint:number[];parentAppellation?:string;coverage?:string;
+ sourceName:string;communes:string[];areaHa:number;matchId:string;atlasUrl:string|null;bounds:number[];labelPoint:number[];parentAppellation?:string;coverage?:string;sectorColour?:string;
 };
 export type VillageMapCatalogue={
  id:string;name:string;region:string;mapKind?:string;communes:{id:string;name:string;bounds?:number[];labelPoint?:number[]}[];dataUrl:string;bounds:number[];
  sources:{name:string;date:string;url:string;sha256:string;license:string}[];
  // Optional gzip Geobuf copy with exactly the same coordinates as dataUrl.
  geobufUrl?:string;
+ // Large regional maps need time for a complete download on slow connections.
+ downloadTimeoutMs?:number;
  notes:Record<string,{note:string;paintedBy?:string;sameBoundaryAs?:string}>;features:VillageMapFeature[];coverageNote?:string;colourScope?:string;
  // Premier Crus lying inside a wider Premier Cru name, keyed by the wider one.
  umbrellas?:Record<string,string[]>;

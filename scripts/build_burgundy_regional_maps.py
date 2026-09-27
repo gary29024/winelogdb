@@ -14,6 +14,7 @@ import zipfile
 import geobuf
 from collections import defaultdict
 from pathlib import Path
+from math import ceil, hypot
 
 import shapefile
 from pyproj import CRS, Transformer
@@ -53,6 +54,38 @@ def trimmed(geom, source=None, grid=GRID):
 
 def projected_boundary(source, config, forward, backward):
     """Retain reviewed touching rings without weakening the round-trip gate."""
+    if config.get('projectionByPart'):
+        assert config['denominationId'] == 362
+        # Whole-MultiPolygon GEOS segmentize loses source parts here. Reproject
+        # each part separately, adding collinear points only when needed. Keep
+        # the untouched source union as the final round-trip reference.
+        def sampled_ring(ring):
+            points = list(ring.coords)
+            result = []
+            for a, b in zip(points, points[1:]):
+                result.append(a)
+                count = ceil(hypot(b[0] - a[0], b[1] - a[1]) / 20)
+                result.extend((a[0] + (b[0] - a[0]) * i / count,
+                               a[1] + (b[1] - a[1]) * i / count) for i in range(1, count))
+            return result + [points[-1]]
+
+        parts, total_difference = [], 0
+        for part in get_parts(source):
+            projected = make_valid(transform(forward, part))
+            difference = part.symmetric_difference(make_valid(transform(backward, projected))).area
+            if difference > 1e-5:
+                sampled = Polygon(sampled_ring(part.exterior), [sampled_ring(ring) for ring in part.interiors])
+                assert part.symmetric_difference(make_valid(sampled)).area < 0.01
+                projected = make_valid(transform(forward, sampled))
+                difference = part.symmetric_difference(make_valid(transform(backward, projected))).area
+            total_difference += difference
+            parts.extend(p for p in get_parts(projected) if p.geom_type == 'Polygon')
+        assert total_difference < 0.01
+        result = unary_union(parts)
+        assert result.is_valid and not result.is_empty
+        difference = source.symmetric_difference(make_valid(transform(backward, result))).area
+        assert difference < 0.01
+        return result, difference
     sampled = source
     if length := config.get('projectionSegmentLength'):
         assert config['denominationId'] in (1713, 2893) and length == 20
@@ -84,7 +117,7 @@ def main():
     inventory = read_json(ROOT / 'scripts/burgundy-regional-map-coverage.json')['appellations']
     assert len(inventory) == 7
     assert sum(len(app['denominations']) for app in inventory) == 49
-    mapped = {d['denominationId'] for app in inventory for d in app['denominations'] if d['status'] == 'mapped'}
+    mapped = {d['denominationId'] for app in inventory for d in app['denominations'] if d['status'] in ('mapped', 'partial')}
     assert mapped == {m['denominationId'] for m in maps}
     archive = args.source_dir / f'inao-{DATE}.zip'
     assert hashlib.sha256(archive.read_bytes()).hexdigest() == INAO_SHA256
@@ -105,7 +138,25 @@ def main():
             if row['id_app'] in app_ids:
                 actual[row['id_app']][row['id_denom']].add(row['denom'])
             if row['id_denom'] in mapped:
-                grouped[row['id_denom']].append((row, shape(reader.shape(record.oid).__geo_interface__)))
+                source_shape = reader.shape(record.oid)
+                if row['id_denom'] == 362 and row['insee'] == '71494':
+                    # La Salle's 1.1577 m² interior ring touches its shell.
+                    # Pyshp misidentifies it as an orphan exterior, which a
+                    # union would fill. Assign the original oriented rings by
+                    # full geometric containment, without moving any vertex.
+                    assert row['id_aire'] == 1781
+                    rings = [source_shape.points[a:b] for a, b in zip(source_shape.parts, list(source_shape.parts)[1:] + [len(source_shape.points)])]
+                    shells = [Polygon(r) for r in rings if shapefile.signed_area(r) < 0]
+                    holes = [Polygon(r) for r in rings if shapefile.signed_area(r) > 0]
+                    assert len(shells) == 7 and len(holes) == 1
+                    assert abs(holes[0].area - 1.1577) < 1e-6
+                    assert sum(shell.covers(holes[0]) for shell in shells) == 1
+                    geometry = unary_union([Polygon(shell.exterior, [h.exterior for h in holes if shell.covers(h)]) for shell in shells])
+                    assert geometry.is_valid
+                    assert abs(geometry.area + sum(shapefile.signed_area(r) for r in rings)) < 1e-6
+                else:
+                    geometry = shape(source_shape.__geo_interface__)
+                grouped[row['id_denom']].append((row, geometry))
     for app in inventory:
         expected = {d['denominationId']: set(d['sourceNames']) for d in app['denominations']}
         assert actual[app['appellationId']] == expected, f"Review regional inventory: {app['name']}"
@@ -159,7 +210,9 @@ def main():
         # Reviewed finer grids preserve excluded holes and small production
         # areas. Keep the same gates at either precision; see each precisionNote.
         grid = config.get('coordinateGrid', GRID)
-        assert grid in (GRID, 1e-7), 'Review a new precision before publishing'
+        assert grid in (GRID, 1e-7) or (config['denominationId'] == 362 and grid == 1e-9), 'Review a new precision before publishing'
+        if config.get('coverage'):
+            props['coverage'] = config['coverage']
         features = [dict(type='Feature', id=feature_id, properties=props, geometry=geometry_json(trimmed(whole, (whole_m, to_source), grid)))]
         point = whole.representative_point()
         metadata = dict(**props, matchId=feature_id, atlasUrl=None, bounds=rounded(whole.bounds), labelPoint=rounded([point.x, point.y]))
@@ -175,6 +228,9 @@ def main():
             sector_id = feature_id + '-' + variant['id']
             sector_props = dict(props, id=sector_id, name=variant['label'], sourceName=variant['name'],
                                 communes=variant['communes'], areaHa=round(sector_m.area / 10000, 2))
+            sector_props.pop('coverage', None)
+            if variant.get('sectorColour'):
+                sector_props['sectorColour'] = variant['sectorColour']
             features.append(dict(type='Feature', id=sector_id, properties=sector_props,
                                  geometry=geometry_json(trimmed(sector, (sector_m, to_source), grid))))
             sector_point = sector.representative_point()
@@ -206,12 +262,15 @@ def main():
                          coverageNote=config.get('coverageNote', 'A geographic denomination within Bourgogne AOC. The highlight shows its full INAO production area; named cuvées and producer holdings have no separate boundaries here.'))
         if config.get('colourScope'):
             catalogue['colourScope'] = config['colourScope']
+        if config.get('downloadTimeoutMs'):
+            assert config['denominationId'] == 362 and config['downloadTimeoutMs'] == 60000
+            catalogue['downloadTimeoutMs'] = config['downloadTimeoutMs']
         collection = dict(type='FeatureCollection', features=features)
         if config.get('compactDownload'):
             # Transport only: preserve the reviewed grid, every ring and every
             # property. Geobuf's default six decimals would erase narrow holes.
-            assert config['denominationId'] in (1713, 2893)
-            encoded = geobuf.Encoder().encode(collection, precision=7, dim=2)
+            assert config['denominationId'] in (362, 1713, 2893)
+            encoded = geobuf.Encoder().encode(collection, precision=9 if grid == 1e-9 else 7, dim=2)
             canonical = json.loads(json.dumps(collection))  # tuples -> lists
             assert geobuf.decode(encoded) == canonical, 'Compact download changes the map'
             packed = gzip.compress(encoded, compresslevel=9, mtime=0)

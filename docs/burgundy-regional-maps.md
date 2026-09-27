@@ -1,9 +1,96 @@
 # Burgundy regional maps
 
+## Broad Bourgogne source overview
+
+The next rollout adds denomination **362** within Bourgogne AOC **138**, with
+all **295 source rows**: 269 labelled `Bourgogne` and 26 labelled
+`Bourgogne - blanc exclusif`. They cover **264 current commune codes**:
+89 in Côte-d’Or, 138 in Saône-et-Loire and 37 in Yonne. There are no historical
+code aliases in this map. Every commune name is checked against the same French
+government department endpoints listed in the configuration.
+
+This is explicitly **partial coverage**, not a completed Bourgogne AOC map. The
+[BIVB Bourgogne sheets](https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/gallery_files/site/321/402/79294/79301.pdf)
+list 299 producing communes (91/154/54 by the same departments). These totals
+are not a parcel crosswalk: do not infer missing polygons or claim that precisely
+35 current communes lack geometry by simply subtracting the counts. The pinned
+INAO dataset is incomplete, and the broad source code also mentions Gamay
+without supplying a separately verified Gamay area. **Bourgogne Gamay remains
+unavailable.** Full appellation coverage requires an authoritative reconciliation
+and additional parcel geometry; the inventory keeps this denomination `partial`.
+
+The overview union covers **40,415.01 ha** of delimited source geometry, not
+planted or producing vineyard acreage. The white-only sector contains 26 rows
+in 23 communes, covering **1,019.37 ha**. It adds about **1.61 ha** beyond the
+ordinary `Bourgogne` rows. Both source labels are retained. The sector is
+selectable for exploration, never automatically selected for a white bottle:
+it is not a verified complete white-wine area. The overview is likewise not a
+verified red, rosé or white eligibility boundary.
+
+Matching requires `Bourgogne` in the recorded appellation, optionally followed
+by a supported colour or Chardonnay/Pinot Noir. A bare region, producer, cuvée,
+reference field or the English word `Burgundy` does not establish the AOC.
+Existing explicit geographic denominations take precedence; conflicting or
+unsupported names withhold the map. Full competing AOC names are checked before
+removing the generic Bourgogne prefix. Bourgogne Aligoté, Mousseux,
+Passe-tout-grains and the former Grand Ordinaire/Ordinaire names do not fall
+through to this overview. “Vin de Bourgogne” origin wording in a wine name does
+not hide an otherwise valid explicit Mâcon identity. Existing colour, style,
+country, region, cru-tier and conflict guards remain in force.
+
+### Reviewed geometry details
+
+- La Salle (`71494`, source area `1781`) has seven exterior rings and one
+  **1.1577 m²** interior ring touching its exterior. Pyshp treats the hole as an
+  orphan exterior. For this exact reviewed row, the builder instead assigns
+  its unchanged oriented rings by full containment. It requires seven shells,
+  one hole, unique containment, valid output and agreement with the source
+  signed-ring area to within 0.000001 m². This preserves the source exclusion.
+- Reprojecting the whole union directly produces a **0.12406150 m²** inverse
+  difference, failing the unchanged **0.01 m²** gate. GEOS `segmentize` on the
+  whole MultiPolygon also loses source components here and must not be used.
+  The reviewed per-part path keeps every original vertex; only a part exceeding
+  0.00001 m² inverse difference receives collinear points at at most 20 m
+  intervals. Both the sum of per-part differences and the final union must pass
+  the original 0.01 m² gate. The final measured union difference is below
+  0.00000001 m².
+- The seven- and eight-decimal grids fail the existing representative-point
+  exclusion gate on very narrow rings of **31.6532 m²** and **44.9934 m²**.
+  These rings largely remain open, but the sampled interior point moves into
+  the snapped boundary. Rather than weaken that gate, only Bourgogne uses the
+  reviewed **0.000000001° grid**. It passes the same 0.005% area, sub-2 m²
+  hole/part and round-trip checks. All previous maps keep their existing grids.
+
+### Download and verification
+
+The new map reuses compact transport at **nine-decimal precision**, with exact
+Python and JavaScript decoded-coordinate/property equality. Its GeoJSON is
+**18,074,390 bytes**, or **5,820,726 bytes** with gzip level 9; the compact asset
+is **3,603,062 bytes** (about **38% smaller** than gzip GeoJSON). These are local
+measurements. The original GeoJSON remains available for the existing
+older-browser fallback. The map alone has a **60-second bounded download
+timeout**, so the former 20-second limit does not prevent a full transfer on a
+1 Mbps connection; cancellation and explicit retry are unchanged.
+
+Regression coverage checks all communes, separate sector selection, partial
+wording, broad/specific matching, exact decoding, lazy loading, owner/shared
+views at phone/desktop widths, and the complete uncached boundary download at
+1 Mbps with 150 ms latency (code warmed separately): **3,603,062 bytes** transferred
+and **29,639 ms** to map-ready in Chromium. All **4,699 unit tests**, **11 browser
+checks** (Chromium and mobile WebKit), lint and production build pass. The
+WebKit CDP-throttling case is intentionally skipped. A complete regional rebuild
+reproduces every generated output; all earlier maps/catalogues remain unchanged.
+Earlier-map optimisation
+is tracked separately in [issue #363](https://github.com/gary29024/winelogdb/issues/363).
+
+## Existing coverage
+
 Reviewed 27 September 2026. Maps cover all fourteen geographic denominations
 within Bourgogne AOC in the pinned source, plus all twenty-nine Mâcon source denominations:
 the twenty-seven named areas, broad Mâcon and Mâcon-Villages.
 These remain regional denominations, not new AOCs or village appellations.
+Broad Bourgogne additionally has a **partial source overview**, covering the
+264 communes in the pinned data, with a separately explorable white-only sector.
 The existing 44 village maps and 33 Grand Cru appellations are unchanged.
 
 | Denomination | INAO appellation / denomination | Producing communes | Allowed still-wine colours |
@@ -51,6 +138,7 @@ The existing 44 village maps and 33 Grand Cru appellations are unchanged.
 | Mâcon Uchizy | 583 / 2073 | 1 | White only |
 | Mâcon | 583 / 1713 | 88 | Red, white, rosé; overview only |
 | Mâcon-Villages | 583 / 2893 | 80 current | White only |
+| Bourgogne (partial source overview) | 138 / 362 | 264 in source | Red, white, rosé; overview only |
 
 The official BIVB sheets confirm these counts, colours and regional status:
 [Côte d’Or](https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/bourgogne-cote-d-or%2C2458%2C9253.html?args=Y29tcF9pZD0yMjc4JmFjdGlvbj12aWV3RmljaGUmaWQ9Nzc0Jnw%3D),
@@ -65,10 +153,11 @@ Coteaux Bourguignons, Crémant de Bourgogne and Mâcon. The
 [BIVB inventory](https://www.bourgogne-wines.com/professional-access/documents-photos%2C2334%2C9356.html)
 also lists 14 Bourgogne geographic denominations and 27 named Mâcon denominations.
 Together with the seven broad denominations and Mâcon-Villages, these account for
-**49 source denomination IDs: forty-three mapped, six pending**. Alternative source names
+**49 source denomination IDs: forty-three mapped, one partial, five pending**. Alternative source names
 and colour variants sharing an ID do not increase that count.
 
-The six broad regional areas outside Mâcon remain pending: Bourgogne, Bourgogne
+Broad Bourgogne has an explicitly partial source overview. Five broad regional
+areas remain pending: Bourgogne
 Aligoté, Bourgogne Mousseux, Bourgogne Passe-tout-grains, Coteaux Bourguignons and
 Crémant de Bourgogne.
 Completing the fourteen Bourgogne geographic denominations does
@@ -136,7 +225,7 @@ production geometry, not the smaller area actually planted or producing wine.
 
 ## Identity and display
 
-The forty-three-entry runtime index is separate from the village registry; catalogues
+The forty-four-entry runtime index is separate from the village registry; catalogues
 and geometry load only when opening the dialog. Wine matching needs the explicit
 designation in the appellation or wine name. Hautes Côtes aliases may omit
 “Bourgogne”, as may the complete names “Côtes du Couchois” and “Côtes d’Auxerre”. “Côte d’Or” or “Côte
