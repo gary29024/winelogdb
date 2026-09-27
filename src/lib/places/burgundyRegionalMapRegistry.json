@@ -913,6 +913,179 @@
         "Mâcon Rosé"
       ],
       "featureId": "inao-denom-1737"
+    },
+    {
+      "id": "macon-bray",
+      "name": "Mâcon Bray",
+      "region": "Mâconnais",
+      "aliases": [
+        "Mâcon Bray"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Mâconnais",
+        "Saône-et-Loire"
+      ],
+      "wineColours": [
+        "red",
+        "white",
+        "rose"
+      ],
+      "siteNames": [
+        "Bray"
+      ],
+      "baseAppellations": [
+        "Mâcon",
+        "Mâcon Blanc",
+        "Mâcon Rouge",
+        "Mâcon Rosé"
+      ],
+      "featureId": "inao-denom-1714"
+    },
+    {
+      "id": "macon-chardonnay",
+      "name": "Mâcon Chardonnay",
+      "region": "Mâconnais",
+      "aliases": [
+        "Mâcon Chardonnay"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Mâconnais",
+        "Saône-et-Loire"
+      ],
+      "wineColours": [
+        "red",
+        "white",
+        "rose"
+      ],
+      "siteNames": [],
+      "baseAppellations": [
+        "Mâcon",
+        "Mâcon Blanc",
+        "Mâcon Rouge",
+        "Mâcon Rosé"
+      ],
+      "matchAppellationOnly": true,
+      "featureId": "inao-denom-1720"
+    },
+    {
+      "id": "macon-mancey",
+      "name": "Mâcon Mancey",
+      "region": "Mâconnais",
+      "aliases": [
+        "Mâcon Mancey"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Mâconnais",
+        "Saône-et-Loire"
+      ],
+      "wineColours": [
+        "red",
+        "white",
+        "rose"
+      ],
+      "siteNames": [
+        "Mancey"
+      ],
+      "baseAppellations": [
+        "Mâcon",
+        "Mâcon Blanc",
+        "Mâcon Rouge",
+        "Mâcon Rosé"
+      ],
+      "featureId": "inao-denom-1728"
+    },
+    {
+      "id": "macon-montbellet",
+      "name": "Mâcon Montbellet",
+      "region": "Mâconnais",
+      "aliases": [
+        "Mâcon Montbellet"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Mâconnais",
+        "Saône-et-Loire"
+      ],
+      "wineColours": [
+        "white"
+      ],
+      "siteNames": [
+        "Montbellet"
+      ],
+      "baseAppellations": [
+        "Mâcon",
+        "Mâcon Blanc",
+        "Mâcon Rouge",
+        "Mâcon Rosé"
+      ],
+      "featureId": "inao-denom-2071"
+    },
+    {
+      "id": "macon-saint-gengoux-le-national",
+      "name": "Mâcon Saint-Gengoux-le-National",
+      "region": "Mâconnais",
+      "aliases": [
+        "Mâcon Saint-Gengoux-le-National",
+        "Mâcon Saint-Gengoux"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Mâconnais",
+        "Saône-et-Loire"
+      ],
+      "wineColours": [
+        "red",
+        "white",
+        "rose"
+      ],
+      "siteNames": [
+        "Saint-Gengoux-le-National"
+      ],
+      "baseAppellations": [
+        "Mâcon",
+        "Mâcon Blanc",
+        "Mâcon Rouge",
+        "Mâcon Rosé"
+      ],
+      "conflictingNames": [
+        "Saint-Gengoux-de-Scissé"
+      ],
+      "featureId": "inao-denom-1734"
+    },
+    {
+      "id": "macon-uchizy",
+      "name": "Mâcon Uchizy",
+      "region": "Mâconnais",
+      "aliases": [
+        "Mâcon Uchizy"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Mâconnais",
+        "Saône-et-Loire"
+      ],
+      "wineColours": [
+        "white"
+      ],
+      "siteNames": [
+        "Uchizy"
+      ],
+      "baseAppellations": [
+        "Mâcon",
+        "Mâcon Blanc",
+        "Mâcon Rouge",
+        "Mâcon Rosé"
+      ],
+      "featureId": "inao-denom-2073"
     }
   ],
   "otherAppellations": [
@@ -926,15 +1099,6 @@
     "Crémant de Bourgogne",
     "Mâcon",
     "Mâcon - rouge exclusif",
-    "Mâcon Bray",
-    "Mâcon Bray - rouge exclusif",
-    "Mâcon Chardonnay",
-    "Mâcon Mancey",
-    "Mâcon Mancey - rouge exclusif",
-    "Mâcon Montbellet",
-    "Mâcon Saint-Gengoux-le-National",
-    "Mâcon Saint-Gengoux-le-National - rouge exclusif",
-    "Mâcon Uchizy",
     "Mâcon Villages",
     "Mâcon Villages (Blanc)"
   ]

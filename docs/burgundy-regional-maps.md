@@ -1,7 +1,7 @@
 # Burgundy regional maps
 
 Reviewed 27 September 2026. Maps cover all fourteen geographic denominations
-within Bourgogne AOC in the pinned source, plus twenty-one within Mâcon AOC.
+within Bourgogne AOC in the pinned source, plus all twenty-seven named Mâcon denominations.
 These remain regional denominations, not new AOCs or village appellations.
 The existing 44 village maps and 33 Grand Cru appellations are unchanged.
 
@@ -42,6 +42,12 @@ The existing 44 village maps and 33 Grand Cru appellations are unchanged.
 | Mâcon Lugny | 583 / 1726 | 4 | Red, white, rosé; overview only |
 | Mâcon Péronne | 583 / 1730 | 3 | Red, white, rosé; overview only |
 | Mâcon Verzé | 583 / 1737 | 1 | Red, white, rosé; overview only |
+| Mâcon Bray | 583 / 1714 | 4 | Red, white, rosé; overview only |
+| Mâcon Chardonnay | 583 / 1720 | 4 | Red, white, rosé; overview only |
+| Mâcon Mancey | 583 / 1728 | 12 | Red, white, rosé; overview only |
+| Mâcon Montbellet | 583 / 2071 | 1 | White only |
+| Mâcon Saint-Gengoux-le-National | 583 / 1734 | 16 current | Red, white, rosé; overview only |
+| Mâcon Uchizy | 583 / 2073 | 1 | White only |
 
 The official BIVB sheets confirm these counts, colours and regional status:
 [Côte d’Or](https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/bourgogne-cote-d-or%2C2458%2C9253.html?args=Y29tcF9pZD0yMjc4JmFjdGlvbj12aWV3RmljaGUmaWQ9Nzc0Jnw%3D),
@@ -56,11 +62,11 @@ Coteaux Bourguignons, Crémant de Bourgogne and Mâcon. The
 [BIVB inventory](https://www.bourgogne-wines.com/professional-access/documents-photos%2C2334%2C9356.html)
 also lists 14 Bourgogne geographic denominations and 27 named Mâcon denominations.
 Together with the seven broad denominations and Mâcon-Villages, these account for
-**49 source denomination IDs: thirty-five mapped, 14 pending**. Alternative source names
+**49 source denomination IDs: forty-one mapped, eight pending**. Alternative source names
 and colour variants sharing an ID do not increase that count.
 
-All seven broad regional areas, Mâcon-Villages and six named Mâcon denominations
-remain pending. Completing the fourteen Bourgogne geographic denominations does
+All seven broad regional areas and Mâcon-Villages remain pending.
+Completing the fourteen Bourgogne geographic denominations does
 not complete the broad Bourgogne AOC boundary. Chablis Premier Cru
 source gaps and other named plots remain tracked separately in
 [issue #344](https://github.com/gary29024/winelogdb/issues/344).
@@ -101,8 +107,9 @@ No geometry is clipped to the existing village maps or to a single department.
 The archive's exact `.prj` WKT is used for projection. Excluded holes and
 disconnected parts are retained. Côte d’Or's valid source
 union develops a floating-point self-intersection at a touching ring after
-projection near 4.8632224622, 47.0432220468. `make_valid` repairs only this reviewed
-denomination; no buffer or simplification is used. For every map, inverse
+projection near 4.8632224622, 47.0432220468. Mancey has another reviewed projected
+ring issue near 4.8392414160, 46.5649575786, detailed below. `make_valid` repairs
+only these two denominations; no buffer or simplification is used. For every map, inverse
 projection and symmetric difference with the untouched source union must be
 below **0.01 m²**. The measured difference for Côte d’Or is **0.00077693 m²**;
 both Hautes Côtes maps are below 0.00000001 m². A different invalid denomination
@@ -123,7 +130,7 @@ production geometry, not the smaller area actually planted or producing wine.
 
 ## Identity and display
 
-The thirty-five-entry runtime index is separate from the village registry; catalogues
+The forty-one-entry runtime index is separate from the village registry; catalogues
 and geometry load only when opening the dialog. Wine matching needs the explicit
 designation in the appellation or wine name. Hautes Côtes aliases may omit
 “Bourgogne”, as may the complete names “Côtes du Couchois” and “Côtes d’Auxerre”. “Côte d’Or” or “Côte
@@ -484,6 +491,15 @@ co-operative **Cave de Prissé-Sologny-Verzé**, is likewise part of that name.
 Hyphenated site names (**Solutré-Pouilly**, **Charnay-lès-Mâcon**) and
 **Mâcon + Mâcon-Verzé** are unaffected.
 
+A grape name recorded after a full denomination in the appellation field
+(**Mâcon-Lugny Chardonnay**, **Bourgogne Côte d’Or Pinot Noir**, **Mâcon Bray
+Gamay**) limits the wine's possible colours: Chardonnay to white, Pinot Noir and Gamay
+to red or rosé (black grapes never choose between the two). The denomination
+and any recorded colour, style or colour word must allow one of those colours,
+so **Mâcon Fuissé Gamay** and a rosé **Bourgogne Côte d’Or Pinot Noir** withhold
+the map while a rosé **Mâcon Milly-Lamartine Gamay** opens it. **Mâcon Chardonnay** on its own
+remains the village denomination; other grapes such as Aligoté are not read.
+
 - [Les Orfèvres du Vin's brochure](https://www.orfevresduvin.com/img/cms/Acces-rapide/Brochure%20A4%20V2.pdf)
   supplies **Mâcon Charnay Blanc / Rouge**, supporting the shortened Charnay alias.
 - [Robert-Denogent's importer sheet](https://kermitlynch.com/files/DOMAINE%20ROBERT-DENOGENT.pdf)
@@ -663,6 +679,115 @@ and nearby village precedence. The exhaustive browser matrix covers all seven
 on owner/shared pages, mobile/desktop views, initial commune visibility,
 lazy loading, commune zoom, sector exploration and return to the wine's overview.
 
-The next named Mâcon batch is Bray, Chardonnay, Mancey, Montbellet,
+The final named Mâcon batch below adds Bray, Chardonnay, Mancey, Montbellet,
 Saint-Gengoux-le-National and Uchizy. Mâcon-Villages and all seven broad regional
 areas remain pending; missing named plots continue under issue #344.
+
+## Northern Mâcon source review
+
+Reviewed 27 September 2026. The final six named denominations bring coverage to
+**41/49 regional source denominations** and **27/27 named Mâcon denominations**.
+Bray, Chardonnay, Mancey and Saint-Gengoux-le-National open as denomination
+overviews across colours. Montbellet and Uchizy are white-only denominations.
+The unresolved colour crosswalk from the western batch still applies; completing
+this inventory does not establish individual cuvée or producer boundaries.
+
+| Denomination | Producing communes | Overview (ha) | Published red-only sector (ha) |
+| --- | --- | ---: | ---: |
+| Bray | Blanot, Bray, Chissey-lès-Mâcon, Cortambert | 657.70 | 216.96 |
+| Chardonnay | Chardonnay, Ozenay, Plottes, Tournus | 1,012.74 | — |
+| Mancey | Boyer, La Chapelle-sous-Brancion, Étrigny, Jugy, Laives, Mancey, Montceaux-Ragny, Nanton, Royer, Sennecey-le-Grand, Tournus, Vers | 1,505.81 | 285.20 |
+| Montbellet | Montbellet | 103.89 | — |
+| Saint-Gengoux-le-National | 16 current communes, listed below | 1,735.90 | 45.44 |
+| Uchizy | Uchizy | 179.57 | — |
+
+The Union des Producteurs de Vins Mâcon confirms the colours and commune lists
+for [Bray](https://www.vins-macon.com/les-macon/macon-bray/),
+[Chardonnay](https://www.vins-macon.com/les-macon/macon-chardonnay/),
+[Mancey](https://www.vins-macon.com/les-macon/macon-mancey/),
+[Montbellet](https://www.vins-macon.com/les-macon/macon-montbellet/),
+[Saint-Gengoux-le-National](https://www.vins-macon.com/les-macon/macon-saint-gengoux-le-national/)
+and [Uchizy](https://www.vins-macon.com/les-macon/macon-uchizy/).
+Each exact source name and CVI string is pinned in the configuration. Areas are
+measurements of delimited geometry, not planted acreage. Bray's red-only sector
+lies in Blanot and Bray, Mancey's in Étrigny and Mancey, and Saint-Gengoux's in
+Curtil-sous-Burnand. These are explorable sectors, never the whole red-wine area
+or an automatic location for a red bottle.
+
+### Current communes and historical source codes
+
+The six maps cover **38 denomination–commune associations across 37 current
+communes**. Tournus appears in both Chardonnay and Mancey, with distinct source
+areas of **70.98709 ha** and **78.56808 ha** and **zero intersection area**.
+Both maps preserve their own production extent when zooming to Tournus.
+
+Saint-Gengoux-le-National covers Ameugny, Bissy-sous-Uxelles,
+Bonnay-Saint-Ythaire, Bresse-sur-Grosne, Burnand, Champagny-sous-Uxelles, Chapaize,
+Cortevaix, Curtil-sous-Burnand, Lournand, Malay, Saint-Gengoux-le-National,
+Salornay-sur-Guye, Savigny-sur-Grosne, Sigy-le-Châtel and La Vineuse sur Fregande.
+Its promotional list contains 18 historical commune names. The pinned INAO
+overview has 18 rows under 17 commune codes: Massy and La Vineuse already share
+`71582`, while former Saint-Ythaire retains `71492`.
+
+[INSEE records the 2023 merger](https://www.insee.fr/fr/statistiques/2011101?geo=COM-71042)
+of Bonnay (`71042`) and Saint-Ythaire (`71492`) into Bonnay-Saint-Ythaire (`71042`).
+The builder verifies all 17 original source codes before applying the reviewed
+`communeAliases` mapping. It preserves both sets of parcels and shows one current
+commune outline, marker and zoom entry, framing their **299.63624 ha union**.
+No production geometry is clipped, expanded or replaced by that outline.
+
+[La Vineuse sur Fregande's 2017 merger](https://www.insee.fr/fr/statistiques/2011101?geo=COM-71582)
+also includes Donzy-le-National and Vitry-lès-Cluny. Only the denomination's
+source areas corresponding to Massy and La Vineuse are shown. Its current
+administrative outline does not extend wine eligibility to those other parts.
+
+### Chardonnay evidence and producer labels
+
+**Chardonnay is both a grape and a geographic name.** This map requires the full
+denomination in the wine's recorded appellation field (`matchAppellationOnly`).
+“Mâcon” plus a wine name of “Chardonnay” or even “Mâcon Chardonnay” is insufficient;
+a producer, cuvée or reference field cannot resolve that ambiguity. An explicit
+appellation of “Mâcon-Chardonnay” does open the map, with the usual colour, cru,
+geographic and product checks. Another denomination's Chardonnay grape remains
+compatible with its own map. No grape-name split alias is added.
+
+Reviewed labels include [Domaine Duverne's Mâcon-Bray](https://www.domaineduverne.fr/),
+[Domaine des Crêts' Mâcon-Chardonnay En Bout](https://domainedescrets.fr/),
+[Vignerons de Mancey's Les Cadoles and Les Essentielles](https://www.lesvigneronsdemancey.fr/),
+and [Talmard's Montbellet, Uchizy and Chardonnay wines](https://www.cave-talmard.com/nos-vins-our-wines/).
+[Buxy's Saint-Gengoux red](https://www.vigneronsdebuxy.fr/fiches-vins/macon-saint-gengoux-rouge/)
+and [Buissonnier white sheet](https://www.vigneronsdebuxy.fr/wp-content/uploads/2020/11/Macon-Saint-Gengoux-blanc-buissonnier.pdf)
+support the full-name shorthand “Mâcon Saint-Gengoux”, including normalized “St”.
+Bare “Saint-Gengoux” remains ambiguous, and Saint-Gengoux-de-Scissé explicitly
+conflicts with the National denomination. A producer's Buxy, Mancey or Uchizy
+address never selects a map on its own. Claude's #359 producer-removal and Unicode
+hyphen fixes remain in place and their regressions continue to pass.
+
+### Geometry and validation
+
+All nine new source unions are valid. Mancey's overview develops a floating-point
+self-intersection after projection at **4.8392414160, 46.5649575786**. The reviewed
+`make_valid` repair has a pre-snap inverse-projection symmetric difference of
+**0.00162136 m²**, below the unchanged **0.01 m²** gate. Only Mancey and the earlier
+Côte d'Or case may use that repair. The other eight new features need no repair.
+
+Mancey's default grid would close a **2.97336 m²** excluded hole, exceeding the
+existing limit. Its overview and sector therefore use the reviewed **0.0000001°**
+grid; the largest remaining flagged closing hole is **0.219573 m²**. All other
+new maps pass the normal **0.000001°** grid. Across this batch the largest net-area
+change is **87.9789 m²**, the largest relative change **0.003214%**, and the largest
+flagged closing hole **0.486901 m²**. No disconnected part is lost. The existing
+0.005% net-area and sub-2 m² hole/part thresholds remain unchanged.
+
+All **83 generated regional files** reproduce byte-for-byte. All **70 previous
+map/catalogue files** and their runtime entries are unchanged. An independent
+comparison matches every new serialized production feature to its source union,
+reviewed projection repair and configured precision. It also verifies the merged
+Bonnay-Saint-Ythaire navigation extent and Tournus's disjoint source areas.
+The six GeoJSON files total **2,112,963 bytes / 595,056 bytes gzip**, loaded on demand.
+Unit and browser checks cover all six maps, owner/shared pages, commune navigation,
+source sectors, white-only restrictions, producer labels, Chardonnay ambiguity
+and Saint-Gengoux shorthand conflicts.
+
+Next: broad Mâcon and Mâcon-Villages, followed by the six other broad regional
+areas. Named-boundary gaps, including Chablis Premier Cru, remain under issue #344.

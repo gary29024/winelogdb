@@ -1,0 +1,171 @@
+{
+  "id": "macon-bray",
+  "name": "Mâcon Bray",
+  "region": "Mâconnais",
+  "mapKind": "regional",
+  "communes": [
+    {
+      "id": "71039",
+      "name": "Blanot",
+      "bounds": [
+        4.725306,
+        46.463289,
+        4.749477,
+        46.505063
+      ],
+      "labelPoint": [
+        4.740692,
+        46.495163
+      ]
+    },
+    {
+      "id": "71057",
+      "name": "Bray",
+      "bounds": [
+        4.709521,
+        46.486506,
+        4.727905,
+        46.513572
+      ],
+      "labelPoint": [
+        4.720545,
+        46.498624
+      ]
+    },
+    {
+      "id": "71130",
+      "name": "Chissey-lès-Mâcon",
+      "bounds": [
+        4.721151,
+        46.504154,
+        4.749652,
+        46.530267
+      ],
+      "labelPoint": [
+        4.744061,
+        46.528097
+      ]
+    },
+    {
+      "id": "71146",
+      "name": "Cortambert",
+      "bounds": [
+        4.698542,
+        46.449484,
+        4.724741,
+        46.492493
+      ],
+      "labelPoint": [
+        4.71828,
+        46.483673
+      ]
+    }
+  ],
+  "dataUrl": "/maps/macon-bray.2026-09-21.geojson",
+  "bounds": [
+    4.698542,
+    46.449484,
+    4.749652,
+    46.530267
+  ],
+  "sources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71039/cadastre-71039-communes.json.gz",
+      "sha256": "1a915b067b2851d4f08ba4a1291185f3da16e2cfc2854e77f5c6934348e4bdc2"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71057/cadastre-71057-communes.json.gz",
+      "sha256": "72686937c04796ab9562540a7e8122c3d470fe44d2e0cdd8767572bfb7320a2d"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71130/cadastre-71130-communes.json.gz",
+      "sha256": "4e84c05bb2ad5b18cf6f1a274735384927979119dce7490ce573f07833cd20b0"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71146/cadastre-71146-communes.json.gz",
+      "sha256": "c2814378afe42eebf6156d5f2ecf2f17f2a53dd02626248fc63bd1d4855aac4d"
+    }
+  ],
+  "notes": {
+    "inao-denom-1714-red-only": {
+      "note": "INAO labels this sector “rouge exclusif” (red only). It is not the whole red-wine area. No white or rosé boundary is inferred by subtracting it from the overview."
+    }
+  },
+  "features": [
+    {
+      "id": "inao-denom-1714",
+      "name": "Mâcon Bray",
+      "tier": "regional",
+      "kind": "appellation",
+      "appellationId": 583,
+      "denominationId": 1714,
+      "sourceName": "Mâcon Bray",
+      "communes": [
+        "71039",
+        "71057",
+        "71130",
+        "71146"
+      ],
+      "areaHa": 657.7,
+      "matchId": "inao-denom-1714",
+      "atlasUrl": null,
+      "bounds": [
+        4.698542,
+        46.449484,
+        4.749652,
+        46.530267
+      ],
+      "labelPoint": [
+        4.71828,
+        46.483673
+      ]
+    },
+    {
+      "id": "inao-denom-1714-red-only",
+      "name": "Mâcon Bray — red-only sector",
+      "tier": "regional",
+      "kind": "appellation",
+      "appellationId": 583,
+      "denominationId": 1714,
+      "sourceName": "Mâcon Bray - rouge exclusif",
+      "communes": [
+        "71039",
+        "71057"
+      ],
+      "areaHa": 216.96,
+      "matchId": "inao-denom-1714-red-only",
+      "atlasUrl": null,
+      "bounds": [
+        4.709521,
+        46.463289,
+        4.749477,
+        46.513572
+      ],
+      "labelPoint": [
+        4.728369,
+        46.474011
+      ]
+    }
+  ],
+  "coverageNote": "A geographic denomination within Mâcon AOC. Named cuvées and producer holdings have no separate boundaries here. This is a denomination overview across wine colours, not a verified white, red or rosé production area.",
+  "colourScope": "overview"
+}

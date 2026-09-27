@@ -44,6 +44,12 @@ const cases=[
  ['Mâcon Lugny','macon-lugny','inao-denom-1726',4,['Red','White','Rosé']],
  ['Mâcon Péronne','macon-peronne','inao-denom-1730',3,['Red','White','Rosé']],
  ['Mâcon Verzé','macon-verze','inao-denom-1737',1,['Red','White','Rosé']],
+ ['Mâcon Bray','macon-bray','inao-denom-1714',4,['Red','White','Rosé']],
+ ['Mâcon Chardonnay','macon-chardonnay','inao-denom-1720',4,['Red','White','Rosé']],
+ ['Mâcon Mancey','macon-mancey','inao-denom-1728',12,['Red','White','Rosé']],
+ ['Mâcon Montbellet','macon-montbellet','inao-denom-2071',1,['White']],
+ ['Mâcon Saint-Gengoux-le-National','macon-saint-gengoux-le-national','inao-denom-1734',16,['Red','White','Rosé']],
+ ['Mâcon Uchizy','macon-uchizy','inao-denom-2073',1,['White']],
 ] as const;
 
 describe('regional denominations stay separate from villages and named vineyards',()=>{
@@ -81,7 +87,7 @@ describe('regional denominations stay separate from villages and named vineyards
   const denominations=inventory.appellations.flatMap(a=>a.denominations);
   expect(denominations).toHaveLength(49);
   expect(new Set(denominations.map(d=>d.denominationId)).size).toBe(49);
-  expect(denominations.filter(d=>d.status==='mapped').map(d=>d.denominationId).sort((a,b)=>a-b)).toEqual([363,364,365,366,367,368,369,371,372,373,374,1586,1712,1715,1717,1719,1721,1722,1723,1724,1725,1726,1729,1730,1731,1732,1735,1736,1737,1751,2069,2070,2072,2074,2840]);
+  expect(denominations.filter(d=>d.status==='mapped').map(d=>d.denominationId).sort((a,b)=>a-b)).toEqual([363,364,365,366,367,368,369,371,372,373,374,1586,1712,1714,1715,1717,1719,1720,1721,1722,1723,1724,1725,1726,1728,1729,1730,1731,1732,1734,1735,1736,1737,1751,2069,2070,2071,2072,2073,2074,2840]);
   expect(inventory.appellations.find(a=>a.appellationId===138)!.denominations).toHaveLength(15);
   const bourgogne=inventory.appellations.find(a=>a.appellationId===138)!.denominations;
   expect(bourgogne.filter(d=>d.denominationId!==362).every(d=>d.status==='mapped')).toBe(true);
@@ -573,7 +579,7 @@ describe('Saint abbreviations in regional names',()=>{
  });
 });
 
-describe('western and central Mâcon overviews and published sectors',()=>{
+describe('Mâcon overviews and published sectors',()=>{
  for(const [appellation,id,featureId,,colours] of cases.slice(21)){
   const site=appellation.replace('Mâcon ','');
   it.each(['Red','White','Rosé'])(`${appellation}: colour evidence %s never locates a bottle in the red-only sector`,colour=>{
@@ -587,7 +593,9 @@ describe('western and central Mâcon overviews and published sectors',()=>{
   it(`${appellation}: recognises explicit and split labels without inventing a cuvée boundary`,()=>{
    for(const fields of [{appellation:'Mâcon',wineName:`${site} Vieilles Vignes`},{appellation:null,wineName:`${appellation} Vieilles Vignes`},
     {appellation:appellation.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replaceAll(' ','-')+' AOP'}]){
-    expect(burgundyVillageMapTarget({...base,...fields})).toMatchObject({featureId});
+    const target=burgundyVillageMapTarget({...base,...fields});
+    if(id==='macon-chardonnay'&&fields.appellation!==appellation.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replaceAll(' ','-')+' AOP')expect(target?.mapKind).not.toBe('regional');
+    else expect(target).toMatchObject({featureId});
    }
   });
   it(`${appellation}: estate names, references and geography do not establish the denomination`,()=>{
@@ -615,7 +623,10 @@ describe('western and central Mâcon overviews and published sectors',()=>{
     expect(sector.areaHa).toBeLessThan(catalogue.features[0].areaHa);
     expect(catalogue.notes[sector.id].note).toContain('not the whole red-wine area');
    }
-   if(id!=='macon-serrieres'){
+   if(colours.length===1){
+    expect(catalogue.colourScope).toBeUndefined();
+    expect(catalogue.coverageNote).toContain('white wines only');
+   }else if(id!=='macon-serrieres'){
     expect(catalogue.colourScope).toBe('overview');
     expect(catalogue.coverageNote).toContain('not a verified white, red or rosé production area');
    }else expect(catalogue.coverageNote).toContain('red and rosé wines only');
@@ -688,5 +699,108 @@ describe('central Mâcon producer labels and shared communes',()=>{
   const target=burgundyVillageMapTarget({...base,appellation,classification:'village',colour:'White'});
   expect(target).toMatchObject({villageName:appellation,scope:'appellation'});
   expect(target).not.toHaveProperty('mapKind');
+ });
+});
+
+
+describe('final named Mâcon denominations',()=>{
+ it('completes all 27 named Mâcon entries while broad Mâcon and Mâcon-Villages remain pending',()=>{
+  const entries=inventory.appellations.find(a=>a.appellationId===583)!.denominations;
+  expect(entries.filter(d=>d.kind==='geographic')).toHaveLength(27);
+  expect(entries.filter(d=>d.kind==='geographic').every(d=>d.status==='mapped')).toBe(true);
+  expect(entries.filter(d=>d.status==='pending').map(d=>d.denominationId).sort()).toEqual([1713,2893]);
+ });
+ it.each([
+  {appellation:'Mâcon-Bray',wineName:'Mâcon-Bray',producer:'Domaine Duverne',featureId:'inao-denom-1714'},
+  {appellation:'Mâcon-Chardonnay',wineName:'En Bout',producer:'Domaine des Crêts',featureId:'inao-denom-1720'},
+  {appellation:'Mâcon-Mancey',wineName:'Les Cadoles',producer:'Les Vignerons de Mancey',featureId:'inao-denom-1728'},
+  {appellation:'Mâcon-Montbellet',wineName:'Mâcon-Montbellet',producer:'Mallory et Benjamin Talmard',featureId:'inao-denom-2071'},
+  {appellation:'Mâcon Saint Gengoux',wineName:'Buissonnier',producer:'Vignerons de Buxy',featureId:'inao-denom-1734'},
+  {appellation:'Mâcon-Uchizy',wineName:'Mâcon-Uchizy',producer:'Mallory et Benjamin Talmard',featureId:'inao-denom-2073'},
+  {appellation:'Mâcon',wineName:'Mâcon St-Gengoux Rouge',producer:'Vignerons de Buxy',colour:'Red',featureId:'inao-denom-1734'},
+  {appellation:'Mâcon',wineName:'St-Gengoux-le-National Buissonnier',featureId:'inao-denom-1734'},
+  {appellation:'Mâcon',wineName:'Mancey Les Cadoles Chardonnay',producer:'Les Vignerons de Mancey',featureId:'inao-denom-1728'},
+  {appellation:'Mâcon',wineName:'Les Vignerons de Mancey-Royer-Vers Mancey Les Cadoles',producer:'Les Vignerons de Mancey Royer Vers',featureId:'inao-denom-1728'},
+ ])('keeps the reviewed label $wineName at denomination scope',({featureId,...fields})=>{
+  expect(burgundyVillageMapTarget({...base,colour:'White',...fields})).toMatchObject({featureId,scope:'appellation',mapKind:'regional'});
+ });
+ it.each([
+  {appellation:'Mâcon',wineName:'Les Cadoles',producer:'Les Vignerons de Mancey'},
+  {appellation:'Mâcon',wineName:'Les Vignerons de Mancey-Royer-Vers'},
+  {appellation:'Mâcon',wineName:'En Bout',producer:'Domaine des Crêts'},
+  {appellation:'Mâcon',wineName:'Buissonnier',producer:'Vignerons de Buxy'},
+  {appellation:'Mâcon',wineName:'Saint-Gengoux'},
+  {appellation:'Mâcon',wineName:'Saint-Gengoux-de-Scissé'},
+  {appellation:'Mâcon',wineName:'Mâcon St-Gengoux-de-Scissé'},
+  {appellation:'Mâcon Saint-Gengoux',referenceSite:'Saint Gengoux de Scissé'},
+  {appellation:'Mâcon Chardonnay',wineName:'Mâcon Mancey'},
+  {appellation:'Mâcon Montbellet',referenceSite:'Viré-Clessé'},
+  {appellation:'Mâcon',wineName:'Mancey Bray'},
+ ])('withholds producer, place-only and competing identities %j',fields=>{
+  expect(burgundyVillageMapTarget({...base,colour:'White',...fields})?.mapKind).not.toBe('regional');
+ });
+ it.each(['Chardonnay','Chardonnay Vieilles Vignes','Mâcon Chardonnay','Mâcon-Chardonnay En Bout'])(
+  'does not infer the Chardonnay denomination from the wine name %s',wineName=>{
+   for(const appellation of [null,'Mâcon','Mâcon Blanc','Mâcon-Villages'])expect(burgundyVillageMapTarget({...base,appellation,wineName,colour:'White'})?.mapKind).not.toBe('regional');
+  });
+ it.each(['Mâcon Chardonnay','Macon-Chardonnay AOP','Mâcon Chardonnay Rouge'])(
+  'accepts an explicitly recorded Chardonnay appellation %s',appellation=>{
+   expect(burgundyVillageMapTarget({...base,appellation})).toMatchObject({featureId:'inao-denom-1720',scope:'appellation'});
+  });
+ it('does not confuse another denomination with its Chardonnay grape',()=>{
+  for(const [appellation,id] of [['Mâcon Lugny','1726'],['Mâcon Mancey','1728'],['Mâcon Uchizy','2073']]){
+   expect(burgundyVillageMapTarget({...base,appellation,wineName:'Chardonnay',colour:'White'})).toMatchObject({featureId:'inao-denom-'+id});
+  }
+  const chardonnay=config.maps.find(m=>m.id==='macon-chardonnay')!;
+  expect(chardonnay).toMatchObject({matchAppellationOnly:true,siteNames:[]});
+ });
+ it('keeps Tournus source areas separate and combines the two historical Bonnay-Saint-Ythaire codes',async()=>{
+  const chardonnay=await loadVillageMapCatalogue('macon-chardonnay'),mancey=await loadVillageMapCatalogue('macon-mancey'),saint=await loadVillageMapCatalogue('macon-saint-gengoux-le-national');
+  expect(chardonnay.communes.map(c=>c.id).sort()).toEqual(['71100','71338','71353','71543']);
+  expect(chardonnay.communes.find(c=>c.id==='71543')!.bounds).not.toEqual(mancey.communes.find(c=>c.id==='71543')!.bounds);
+  expect(saint.communes.filter(c=>c.id==='71042')).toHaveLength(1);
+  expect(saint.communes.find(c=>c.id==='71042')!.name).toBe('Bonnay-Saint-Ythaire');
+  expect(saint.communes.some(c=>c.id==='71492')).toBe(false);
+  expect(saint.communes.find(c=>c.id==='71582')!.name).toBe('La Vineuse sur Fregande');
+  expect(saint.coverageNote).toContain('La Vineuse and Massy');
+  expect(saint.features.find(f=>f.id==='inao-denom-1734-red-only')!.communes).toEqual(['71164']);
+ });
+});
+
+describe('grape names after a full regional denomination',()=>{
+ it.each([
+  {appellation:'Mâcon-Lugny Chardonnay',featureId:'inao-denom-1726'},
+  {appellation:'Mâcon Fuissé Chardonnay',featureId:'inao-denom-2069'},
+  {appellation:'Mâcon Bray Gamay',featureId:'inao-denom-1714'},
+  {appellation:'Mâcon Bray Rouge Gamay',featureId:'inao-denom-1714'},
+  {appellation:'Bourgogne Côte d’Or Pinot Noir',featureId:'inao-denom-2840'},
+  {appellation:'Bourgogne Hautes Côtes de Nuits Pinot Noir',featureId:'inao-denom-364',colour:'Red'},
+  {appellation:'Bourgogne Tonnerre Chardonnay',featureId:'inao-denom-1751'},
+  {appellation:'Mâcon Chardonnay',featureId:'inao-denom-1720'},
+  // Black grapes make rosé too: they limit the colour but never choose red.
+  {appellation:'Mâcon Milly-Lamartine Gamay',colour:'Rosé',featureId:'inao-denom-1729'},
+  {appellation:'Mâcon Milly-Lamartine Gamay',wineStyle:'Rosé',featureId:'inao-denom-1729'},
+  {appellation:'Mâcon Milly-Lamartine Rosé Gamay',featureId:'inao-denom-1729'},
+  {appellation:'Bourgogne Hautes Côtes de Nuits Pinot Noir',colour:'Rosé',featureId:'inao-denom-364'},
+  {appellation:'Bourgogne Hautes Côtes de Nuits Rosé Pinot Noir',featureId:'inao-denom-364'},
+  {appellation:'Mâcon Bray Gamay',colour:'Red',featureId:'inao-denom-1714'},
+ ])('reads $appellation as the denomination',({featureId,...wine})=>{
+  expect(burgundyVillageMapTarget({...base,wineName:'A named cuvée',...wine})).toMatchObject({featureId,mapKind:'regional'});
+ });
+ it.each([
+  {appellation:'Mâcon-Lugny Chardonnay',colour:'Red'},
+  {appellation:'Mâcon Fuissé Gamay'},
+  {appellation:'Mâcon Bray Blanc Gamay'},
+  {appellation:'Bourgogne Tonnerre Pinot Noir'},
+  {appellation:'Bourgogne Chardonnay'},
+  {appellation:'Mâcon-Villages Chardonnay'},
+  {appellation:'Mâcon Lugny Aligoté'},
+  {appellation:'Bourgogne Côte d’Or Pinot Noir',colour:'Rosé'},
+  {appellation:'Bourgogne Côte d’Or Rosé Pinot Noir'},
+  {appellation:'Mâcon Fuissé Gamay',colour:'White'},
+  {appellation:'Mâcon Lugny Chardonnay',colour:'Rosé'},
+  {appellation:'Mâcon Lugny Gamay',wineStyle:'White'},
+ ])('withholds a contradictory or unmapped grape label %j',wine=>{
+  expect(burgundyVillageMapTarget({...base,wineName:'A named cuvée',...wine})?.mapKind).not.toBe('regional');
  });
 });

@@ -31,9 +31,15 @@ const withoutProducer=(label:string,producer:string)=>{
  }
  return kept.join(' ');
 };
+// Grape names recorded after a full denomination ("Mâcon-Lugny Chardonnay")
+// limit the wine's possible colours; "Mâcon Chardonnay" alone remains the
+// village. Black grapes make both red and rosé, so they never pick one.
+const grapeColours:readonly (readonly [string,readonly string[]])[]=[['chardonnay',['white']],['pinot noir',['red','rose']],['gamay',['red','rose']]];
+const withoutGrapes=(text:string)=>grapeColours.reduce((value,[name])=>` ${value} `.replaceAll(` ${name} `,' ').trim(),text);
 const byLength=(a:string,b:string)=>b.length-a.length;
 const bourgogneAppellations=['bourgogne','burgundy','bourgogne rouge','bourgogne blanc','bourgogne rose'];
 const groups=registry.maps.map(group=>({...group,keys:group.aliases.map(key).sort(byLength),regions:group.compatibleRegions.map(key),
+ blockedKeys:((group as {conflictingNames?:string[]}).conflictingNames??[]).map(key),
  // A split label requires its own base AOC: Mâcon + Fuissé is not Bourgogne + Fuissé.
  baseKeys:((group as {baseAppellations?:string[]}).baseAppellations??bourgogneAppellations).map(key),
  siteKeys:((group as {siteNames?:string[]}).siteNames??[]).map(key).sort(byLength),
@@ -73,10 +79,15 @@ export function burgundyRegionalMapTarget(wine:Wine):BurgundyVillageMapTarget|nu
  const plainAppellation=(group:typeof groups[number])=>group.baseKeys.includes(fields[0]);
  const joinedLabel=withoutProducer(joinedKey(wine.wineName??''),producer);
  const namesSite=(group:typeof groups[number])=>plainAppellation(group)&&group.joinedSiteKeys.some(name=>namesPlace(joinedLabel,name));
- const candidates=groups.filter(group=>fields.some(text=>group.keys.some(name=>contains(text,name)))||namesSite(group));
+ // Chardonnay is also a grape: only a recorded full appellation establishes
+ // that geographic denomination, never a grape description or split label.
+ const candidates=groups.filter(group=>(group as {matchAppellationOnly?:boolean}).matchAppellationOnly
+  ?group.keys.some(name=>contains(fields[0],name))
+  :fields.some(text=>group.keys.some(name=>contains(text,name)))||namesSite(group));
  if(!candidates.length)return undefined;
  if(candidates.length!==1||wine.identityMatchStatus==='conflict'||wine.classification)return null;
  const group=candidates[0],country=key(wine.country??''),region=key(wine.region??'');
+ if(fields.some(text=>group.blockedKeys.some(name=>contains(text,name))))return null;
  if(country&&!['france','fr'].includes(country))return null;
  if(region&&!group.regions.includes(region)&&!group.keys.includes(region))return null;
  // The reviewed Joigny vin gris is rosé. A grape name such as Pinot Gris
@@ -99,7 +110,7 @@ export function burgundyRegionalMapTarget(wine:Wine):BurgundyVillageMapTarget|nu
   .reduce((value,name)=>` ${value} `.replaceAll(` ${name} `,' ').trim(),text);
  const app=fields[0];
  if(app&&!plainAppellation(group)&&
-  (!group.keys.some(name=>contains(app,name))||!['','rouge','blanc','rose','red','white',...(vinGris?['gris','vin gris']:[])].includes(removeDesignation(app))))return null;
+  (!group.keys.some(name=>contains(app,name))||!['','rouge','blanc','rose','red','white',...(vinGris?['gris','vin gris']:[])].includes(withoutGrapes(removeDesignation(app)))))return null;
  // A cuvée/reference name alone must not infer its regional denomination,
  // except a reviewed site name beside its explicit base appellation.
  if(!fields.slice(0,2).some(text=>group.keys.some(name=>contains(text,name)))&&!namesSite(group))return null;
@@ -116,5 +127,10 @@ export function burgundyRegionalMapTarget(wine:Wine):BurgundyVillageMapTarget|nu
  if(vinGris&&(['gris','vin gris'].includes(remaining[0])||remaining.slice(0,2).some(text=>contains(text,'vin gris'))))namedColours.push('rose');
  if(new Set(namedColours).size>1)return null;
  if(namedColours.some(value=>!group.wineColours.includes(value)||(colour&&colour!==value)))return null;
+ // Each grape must allow a colour of the denomination and any explicit colour.
+ const grapes=plainAppellation(group)?[]:grapeColours.filter(([name])=>contains(remaining[0],name)).map(([,allowed])=>allowed);
+ const explicit=colour||namedColours[0];
+ const possible=group.wineColours.filter(value=>grapes.every(allowed=>allowed.includes(value))&&(!explicit||value===explicit));
+ if(grapes.length&&!possible.length)return null;
  return {villageId:group.id,villageName:group.name,region:group.region,featureId:group.featureId,name:group.name,scope:'appellation',mapKind:'regional'};
 }

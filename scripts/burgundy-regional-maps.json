@@ -1622,6 +1622,355 @@
       ],
       "coverageNote": "A geographic denomination within Mâcon AOC. Named cuvées and producer holdings have no separate boundaries here. This is a denomination overview across wine colours, not a verified white, red or rosé production area.",
       "colourScope": "overview"
+    },
+    {
+      "id": "macon-bray",
+      "name": "Mâcon Bray",
+      "region": "Mâconnais",
+      "appellationId": 583,
+      "denominationId": 1714,
+      "sourceName": "Mâcon Bray",
+      "sourceCvi": "1B370 78, 1B370 79, 1R371 14, 1S371 14",
+      "wineColours": [
+        "red",
+        "white",
+        "rose"
+      ],
+      "communes": [
+        "71039",
+        "71057",
+        "71130",
+        "71146"
+      ],
+      "expectedBounds": [
+        4.45,
+        46.35,
+        4.98,
+        46.8
+      ],
+      "aliases": [
+        "Mâcon Bray"
+      ],
+      "siteNames": [
+        "Bray"
+      ],
+      "baseAppellations": [
+        "Mâcon",
+        "Mâcon Blanc",
+        "Mâcon Rouge",
+        "Mâcon Rosé"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Mâconnais",
+        "Saône-et-Loire"
+      ],
+      "coverageNote": "A geographic denomination within Mâcon AOC. Named cuvées and producer holdings have no separate boundaries here. This is a denomination overview across wine colours, not a verified white, red or rosé production area.",
+      "colourScope": "overview",
+      "sourceVariants": [
+        {
+          "name": "Mâcon Bray - rouge exclusif",
+          "communes": [
+            "71039",
+            "71057"
+          ],
+          "id": "red-only",
+          "label": "Mâcon Bray — red-only sector",
+          "note": "INAO labels this sector “rouge exclusif” (red only). It is not the whole red-wine area. No white or rosé boundary is inferred by subtracting it from the overview."
+        }
+      ]
+    },
+    {
+      "id": "macon-chardonnay",
+      "name": "Mâcon Chardonnay",
+      "region": "Mâconnais",
+      "appellationId": 583,
+      "denominationId": 1720,
+      "sourceName": "Mâcon Chardonnay",
+      "sourceCvi": "1B370 20, 1B370 21, 1R371 24, 1S371 24",
+      "wineColours": [
+        "red",
+        "white",
+        "rose"
+      ],
+      "communes": [
+        "71100",
+        "71338",
+        "71353",
+        "71543"
+      ],
+      "expectedBounds": [
+        4.45,
+        46.35,
+        4.98,
+        46.8
+      ],
+      "aliases": [
+        "Mâcon Chardonnay"
+      ],
+      "siteNames": [],
+      "baseAppellations": [
+        "Mâcon",
+        "Mâcon Blanc",
+        "Mâcon Rouge",
+        "Mâcon Rosé"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Mâconnais",
+        "Saône-et-Loire"
+      ],
+      "coverageNote": "A geographic denomination within Mâcon AOC. Named cuvées and producer holdings have no separate boundaries here. This is a denomination overview across wine colours, not a verified white, red or rosé production area.",
+      "colourScope": "overview",
+      "matchAppellationOnly": true
+    },
+    {
+      "id": "macon-mancey",
+      "name": "Mâcon Mancey",
+      "region": "Mâconnais",
+      "appellationId": 583,
+      "denominationId": 1728,
+      "sourceName": "Mâcon Mancey",
+      "sourceCvi": "1B370 80, 1B370 81, 1R371 59, 1S371 59",
+      "wineColours": [
+        "red",
+        "white",
+        "rose"
+      ],
+      "communes": [
+        "71052",
+        "71094",
+        "71193",
+        "71245",
+        "71249",
+        "71274",
+        "71308",
+        "71328",
+        "71377",
+        "71512",
+        "71543",
+        "71572"
+      ],
+      "expectedBounds": [
+        4.45,
+        46.35,
+        4.98,
+        46.8
+      ],
+      "aliases": [
+        "Mâcon Mancey"
+      ],
+      "siteNames": [
+        "Mancey"
+      ],
+      "baseAppellations": [
+        "Mâcon",
+        "Mâcon Blanc",
+        "Mâcon Rouge",
+        "Mâcon Rosé"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Mâconnais",
+        "Saône-et-Loire"
+      ],
+      "coverageNote": "A geographic denomination within Mâcon AOC. Named cuvées and producer holdings have no separate boundaries here. This is a denomination overview across wine colours, not a verified white, red or rosé production area.",
+      "colourScope": "overview",
+      "sourceVariants": [
+        {
+          "name": "Mâcon Mancey - rouge exclusif",
+          "communes": [
+            "71193",
+            "71274"
+          ],
+          "id": "red-only",
+          "label": "Mâcon Mancey — red-only sector",
+          "note": "INAO labels this sector “rouge exclusif” (red only). It is not the whole red-wine area. No white or rosé boundary is inferred by subtracting it from the overview."
+        }
+      ],
+      "coordinateGrid": 1e-07,
+      "precisionNote": "The 1e-6 degree grid fails the unchanged geometry gates (net area 0.000136%, largest closed hole 2.9734 m², largest lost part 0.0000 m²). The reviewed 1e-7 grid passes all area and hole/part gates."
+    },
+    {
+      "id": "macon-montbellet",
+      "name": "Mâcon Montbellet",
+      "region": "Mâconnais",
+      "appellationId": 583,
+      "denominationId": 2071,
+      "sourceName": "Mâcon Montbellet",
+      "sourceCvi": "1B370 52, 1B370 53",
+      "wineColours": [
+        "white"
+      ],
+      "communes": [
+        "71305"
+      ],
+      "expectedBounds": [
+        4.45,
+        46.35,
+        4.98,
+        46.8
+      ],
+      "aliases": [
+        "Mâcon Montbellet"
+      ],
+      "siteNames": [
+        "Montbellet"
+      ],
+      "baseAppellations": [
+        "Mâcon",
+        "Mâcon Blanc",
+        "Mâcon Rouge",
+        "Mâcon Rosé"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Mâconnais",
+        "Saône-et-Loire"
+      ],
+      "coverageNote": "A geographic denomination within Mâcon AOC, for white wines only. The highlight shows its full INAO production area; named cuvées and producer holdings have no separate boundaries here."
+    },
+    {
+      "id": "macon-saint-gengoux-le-national",
+      "name": "Mâcon Saint-Gengoux-le-National",
+      "region": "Mâconnais",
+      "appellationId": 583,
+      "denominationId": 1734,
+      "sourceName": "Mâcon Saint-Gengoux-le-National",
+      "sourceCvi": "1B370 82, 1B370 83, 1R371 75, 1S371 75",
+      "wineColours": [
+        "red",
+        "white",
+        "rose"
+      ],
+      "communes": [
+        "71007",
+        "71036",
+        "71042",
+        "71058",
+        "71067",
+        "71080",
+        "71087",
+        "71147",
+        "71164",
+        "71264",
+        "71272",
+        "71417",
+        "71495",
+        "71507",
+        "71521",
+        "71582"
+      ],
+      "expectedBounds": [
+        4.45,
+        46.35,
+        4.98,
+        46.8
+      ],
+      "aliases": [
+        "Mâcon Saint-Gengoux-le-National",
+        "Mâcon Saint-Gengoux"
+      ],
+      "siteNames": [
+        "Saint-Gengoux-le-National"
+      ],
+      "baseAppellations": [
+        "Mâcon",
+        "Mâcon Blanc",
+        "Mâcon Rouge",
+        "Mâcon Rosé"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Mâconnais",
+        "Saône-et-Loire"
+      ],
+      "coverageNote": "A geographic denomination within Mâcon AOC. Named cuvées and producer holdings have no separate boundaries here. This is a denomination overview across wine colours, not a verified white, red or rosé production area. Bonnay and Saint-Ythaire are shown together as the current commune of Bonnay-Saint-Ythaire. La Vineuse sur Fregande includes only the source areas of La Vineuse and Massy.",
+      "colourScope": "overview",
+      "sourceVariants": [
+        {
+          "name": "Mâcon Saint-Gengoux-le-National - rouge exclusif",
+          "communes": [
+            "71164"
+          ],
+          "id": "red-only",
+          "label": "Mâcon Saint-Gengoux-le-National — red-only sector",
+          "note": "INAO labels this sector “rouge exclusif” (red only). It is not the whole red-wine area. No white or rosé boundary is inferred by subtracting it from the overview."
+        }
+      ],
+      "sourceCommunes": [
+        "71007",
+        "71036",
+        "71042",
+        "71058",
+        "71067",
+        "71080",
+        "71087",
+        "71147",
+        "71164",
+        "71264",
+        "71272",
+        "71417",
+        "71492",
+        "71495",
+        "71507",
+        "71521",
+        "71582"
+      ],
+      "communeAliases": {
+        "71492": "71042"
+      },
+      "communeAliasSources": [
+        "https://www.insee.fr/fr/statistiques/2011101?geo=COM-71042"
+      ],
+      "conflictingNames": [
+        "Saint-Gengoux-de-Scissé"
+      ]
+    },
+    {
+      "id": "macon-uchizy",
+      "name": "Mâcon Uchizy",
+      "region": "Mâconnais",
+      "appellationId": 583,
+      "denominationId": 2073,
+      "sourceName": "Mâcon Uchizy",
+      "sourceCvi": "1B370 66, 1B370 67",
+      "wineColours": [
+        "white"
+      ],
+      "communes": [
+        "71550"
+      ],
+      "expectedBounds": [
+        4.45,
+        46.35,
+        4.98,
+        46.8
+      ],
+      "aliases": [
+        "Mâcon Uchizy"
+      ],
+      "siteNames": [
+        "Uchizy"
+      ],
+      "baseAppellations": [
+        "Mâcon",
+        "Mâcon Blanc",
+        "Mâcon Rouge",
+        "Mâcon Rosé"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Mâconnais",
+        "Saône-et-Loire"
+      ],
+      "coverageNote": "A geographic denomination within Mâcon AOC, for white wines only. The highlight shows its full INAO production area; named cuvées and producer holdings have no separate boundaries here."
     }
   ],
   "communeNames": {
@@ -1686,40 +2035,57 @@
     "21714": "Vosne-Romanée",
     "21716": "Vougeot",
     "71005": "Aluze",
+    "71007": "Ameugny",
     "71016": "Azé",
     "71019": "Barizey",
     "71031": "Berzé-le-Châtel",
     "71032": "Berzé-la-Ville",
     "71034": "Bissey-sous-Cruchaud",
     "71035": "Bissy-la-Mâconnaise",
+    "71036": "Bissy-sous-Uxelles",
     "71037": "Bissy-sur-Fley",
+    "71039": "Blanot",
+    "71042": "Bonnay-Saint-Ythaire",
     "71051": "Bouzeron",
+    "71052": "Boyer",
+    "71057": "Bray",
+    "71058": "Bresse-sur-Grosne",
     "71066": "Burgy",
+    "71067": "Burnand",
     "71069": "Bussières",
     "71070": "Buxy",
     "71072": "Cersot",
     "71073": "Chagny",
     "71074": "Chaintré",
     "71078": "Chamilly",
+    "71080": "Champagny-sous-Uxelles",
     "71084": "Chânes",
     "71085": "Change",
+    "71087": "Chapaize",
+    "71094": "La Chapelle-sous-Brancion",
+    "71100": "Chardonnay",
     "71105": "Charnay-lès-Mâcon",
     "71109": "Chassey-le-Camp",
     "71122": "Cheilly-lès-Maranges",
     "71124": "Chenôves",
     "71126": "Chevagny-les-Chevrières",
+    "71130": "Chissey-lès-Mâcon",
     "71135": "Clessé",
+    "71146": "Cortambert",
+    "71147": "Cortevaix",
     "71149": "Couches",
     "71150": "Crêches-sur-Saône",
     "71151": "Créot",
     "71156": "Cruzille",
     "71159": "Culles-les-Roches",
+    "71164": "Curtil-sous-Burnand",
     "71169": "Davayé",
     "71171": "Dennevy",
     "71174": "Dezize-lès-Maranges",
     "71182": "Dracy-le-Fort",
     "71183": "Dracy-lès-Couches",
     "71188": "Épertully",
+    "71193": "Étrigny",
     "71201": "Fley",
     "71202": "Fontaines",
     "71210": "Fuissé",
@@ -1729,28 +2095,40 @@
     "71235": "Hurigny",
     "71236": "Igé",
     "71241": "Jambles",
+    "71245": "Jugy",
     "71247": "Jully-lès-Buxy",
+    "71249": "Laives",
+    "71264": "Lournand",
     "71267": "Lugny",
     "71270": "Mâcon",
+    "71272": "Malay",
+    "71274": "Mancey",
     "71284": "Martailly-lès-Brancion",
     "71292": "Mellecey",
     "71294": "Mercurey",
     "71299": "Milly-Lamartine",
     "71302": "Montagny-lès-Buxy",
+    "71305": "Montbellet",
+    "71308": "Montceaux-Ragny",
     "71324": "Moroges",
+    "71328": "Nanton",
+    "71338": "Ozenay",
     "71343": "Paris-l'Hôpital",
     "71345": "Péronne",
     "71350": "Pierreclos",
+    "71353": "Plottes",
     "71360": "Prissé",
     "71369": "Remigny",
     "71371": "La Roche-Vineuse",
     "71374": "Rosey",
+    "71377": "Royer",
     "71378": "Rully",
     "71392": "Saint-Boil",
     "71400": "Saint-Clément-sur-Guye",
     "71403": "Saint-Denis-de-Vaux",
     "71404": "Saint-Désert",
     "71416": "Saint-Gengoux-de-Scissé",
+    "71417": "Saint-Gengoux-le-National",
     "71425": "Saint-Gilles",
     "71430": "Saint-Jean-de-Vaux",
     "71431": "Saint-Jean-de-Trézy",
@@ -1764,17 +2142,25 @@
     "71468": "Saint-Pierre-de-Varennes",
     "71480": "Saint-Sernin-du-Plain",
     "71485": "Saint-Vallerin",
+    "71495": "Salornay-sur-Guye",
     "71496": "Sampigny-lès-Maranges",
     "71498": "Santilly",
     "71501": "Sassangy",
     "71503": "Saules",
+    "71507": "Savigny-sur-Grosne",
+    "71512": "Sennecey-le-Grand",
     "71515": "Sercy",
     "71518": "Serrières",
+    "71521": "Sigy-le-Châtel",
     "71525": "Sologny",
     "71526": "Solutré-Pouilly",
+    "71543": "Tournus",
+    "71550": "Uchizy",
     "71563": "Vaux-en-Pré",
     "71567": "Vergisson",
+    "71572": "Vers",
     "71574": "Verzé",
+    "71582": "La Vineuse sur Fregande",
     "71583": "Vinzelles",
     "89023": "Augy",
     "89024": "Auxerre",

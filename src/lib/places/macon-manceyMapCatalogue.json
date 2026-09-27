@@ -1,0 +1,347 @@
+{
+  "id": "macon-mancey",
+  "name": "Mâcon Mancey",
+  "region": "Mâconnais",
+  "mapKind": "regional",
+  "communes": [
+    {
+      "id": "71052",
+      "name": "Boyer",
+      "bounds": [
+        4.869404,
+        46.574195,
+        4.907939,
+        46.599187
+      ],
+      "labelPoint": [
+        4.891126,
+        46.587925
+      ]
+    },
+    {
+      "id": "71245",
+      "name": "Jugy",
+      "bounds": [
+        4.849526,
+        46.591346,
+        4.876046,
+        46.619643
+      ],
+      "labelPoint": [
+        4.866901,
+        46.598752
+      ]
+    },
+    {
+      "id": "71094",
+      "name": "La Chapelle-sous-Brancion",
+      "bounds": [
+        4.784361,
+        46.533769,
+        4.804712,
+        46.571324
+      ],
+      "labelPoint": [
+        4.798786,
+        46.55801
+      ]
+    },
+    {
+      "id": "71249",
+      "name": "Laives",
+      "bounds": [
+        4.845959,
+        46.636922,
+        4.848193,
+        46.63961
+      ],
+      "labelPoint": [
+        4.846813,
+        46.637549
+      ]
+    },
+    {
+      "id": "71274",
+      "name": "Mancey",
+      "bounds": [
+        4.824369,
+        46.552145,
+        4.874757,
+        46.587802
+      ],
+      "labelPoint": [
+        4.839408,
+        46.569935
+      ]
+    },
+    {
+      "id": "71308",
+      "name": "Montceaux-Ragny",
+      "bounds": [
+        4.837245,
+        46.619017,
+        4.846011,
+        46.626585
+      ],
+      "labelPoint": [
+        4.842657,
+        46.622055
+      ]
+    },
+    {
+      "id": "71328",
+      "name": "Nanton",
+      "bounds": [
+        4.810391,
+        46.604792,
+        4.835377,
+        46.635709
+      ],
+      "labelPoint": [
+        4.816271,
+        46.613935
+      ]
+    },
+    {
+      "id": "71377",
+      "name": "Royer",
+      "bounds": [
+        4.802112,
+        46.541433,
+        4.843423,
+        46.566054
+      ],
+      "labelPoint": [
+        4.821659,
+        46.560805
+      ]
+    },
+    {
+      "id": "71512",
+      "name": "Sennecey-le-Grand",
+      "bounds": [
+        4.840652,
+        46.617771,
+        4.861564,
+        46.644086
+      ],
+      "labelPoint": [
+        4.849203,
+        46.630697
+      ]
+    },
+    {
+      "id": "71543",
+      "name": "Tournus",
+      "bounds": [
+        4.871882,
+        46.549976,
+        4.894783,
+        46.56649
+      ],
+      "labelPoint": [
+        4.888627,
+        46.55935
+      ]
+    },
+    {
+      "id": "71572",
+      "name": "Vers",
+      "bounds": [
+        4.8462,
+        46.574093,
+        4.865119,
+        46.591852
+      ],
+      "labelPoint": [
+        4.860842,
+        46.580889
+      ]
+    },
+    {
+      "id": "71193",
+      "name": "Étrigny",
+      "bounds": [
+        4.793926,
+        46.569899,
+        4.818673,
+        46.60632
+      ],
+      "labelPoint": [
+        4.804173,
+        46.584441
+      ]
+    }
+  ],
+  "dataUrl": "/maps/macon-mancey.2026-09-21.geojson",
+  "bounds": [
+    4.784361,
+    46.533769,
+    4.907939,
+    46.644086
+  ],
+  "sources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71052/cadastre-71052-communes.json.gz",
+      "sha256": "7882af8b78bafb9005c409d46d675f6d02c9a310dadf3a6118113f169d6917f8"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71094/cadastre-71094-communes.json.gz",
+      "sha256": "ed97a8ed76320225fc47b003d41ef5f906658803f8ce626f0fc89313bc9b2147"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71193/cadastre-71193-communes.json.gz",
+      "sha256": "b09cf9ec2e3045e9e07fc4aa1da011023da33a83fd8be6b94a4ebb2c4c3227fd"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71245/cadastre-71245-communes.json.gz",
+      "sha256": "de6143aafd0158bd6c7a35ecdfc9d4bb5cb77eb4cb2e0895c4063a87911980af"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71249/cadastre-71249-communes.json.gz",
+      "sha256": "5afc9186e9694fb92678bec59bd37ea337497c0c25c0cdd7754740cfa95104a8"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71274/cadastre-71274-communes.json.gz",
+      "sha256": "6cd9fef32015b476896eb19a3dda2cb910ba8156197fc986c783be4484bba2d9"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71308/cadastre-71308-communes.json.gz",
+      "sha256": "9ec192583b03f0d0afad39873d9d061263812f7732dffe17d071ad0bb240589a"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71328/cadastre-71328-communes.json.gz",
+      "sha256": "6b9b700f9643c1092374b4e1b2a7c6a7f2515220a6b4662a17df226b38ac38c2"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71377/cadastre-71377-communes.json.gz",
+      "sha256": "2cced79b2e8d8b9e09f7a145c99ff2eb45c84b14c8e1ce84b09702ee285ad90c"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71512/cadastre-71512-communes.json.gz",
+      "sha256": "c37c000c2eee4d0815f59202ec2001fe8076b8b76fa2861edd4c3abdeb0e6c17"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71543/cadastre-71543-communes.json.gz",
+      "sha256": "f167bbb4211b85ae30e66b7d14d6d1edfc0aead0c6a97bea042cc15027f7b89f"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71572/cadastre-71572-communes.json.gz",
+      "sha256": "37bfe4286ffc093969b430def902a5e6e3337436c636e6019cbb51dc558002ef"
+    }
+  ],
+  "notes": {
+    "inao-denom-1728-red-only": {
+      "note": "INAO labels this sector “rouge exclusif” (red only). It is not the whole red-wine area. No white or rosé boundary is inferred by subtracting it from the overview."
+    }
+  },
+  "features": [
+    {
+      "id": "inao-denom-1728",
+      "name": "Mâcon Mancey",
+      "tier": "regional",
+      "kind": "appellation",
+      "appellationId": 583,
+      "denominationId": 1728,
+      "sourceName": "Mâcon Mancey",
+      "communes": [
+        "71052",
+        "71094",
+        "71193",
+        "71245",
+        "71249",
+        "71274",
+        "71308",
+        "71328",
+        "71377",
+        "71512",
+        "71543",
+        "71572"
+      ],
+      "areaHa": 1505.81,
+      "matchId": "inao-denom-1728",
+      "atlasUrl": null,
+      "bounds": [
+        4.784361,
+        46.533769,
+        4.907939,
+        46.644086
+      ],
+      "labelPoint": [
+        4.891126,
+        46.587925
+      ]
+    },
+    {
+      "id": "inao-denom-1728-red-only",
+      "name": "Mâcon Mancey — red-only sector",
+      "tier": "regional",
+      "kind": "appellation",
+      "appellationId": 583,
+      "denominationId": 1728,
+      "sourceName": "Mâcon Mancey - rouge exclusif",
+      "communes": [
+        "71193",
+        "71274"
+      ],
+      "areaHa": 285.2,
+      "matchId": "inao-denom-1728-red-only",
+      "atlasUrl": null,
+      "bounds": [
+        4.793926,
+        46.552145,
+        4.874757,
+        46.60632
+      ],
+      "labelPoint": [
+        4.804173,
+        46.584441
+      ]
+    }
+  ],
+  "coverageNote": "A geographic denomination within Mâcon AOC. Named cuvées and producer holdings have no separate boundaries here. This is a denomination overview across wine colours, not a verified white, red or rosé production area.",
+  "colourScope": "overview"
+}
