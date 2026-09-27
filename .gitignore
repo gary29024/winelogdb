@@ -15,3 +15,7 @@ test-results/
 # npm lockfile out of the repository so it cannot pin a different resolution.
 package-lock.json
 bun.lock
+
+# Python map-builder caches
+__pycache__/
+*.py[cod]
