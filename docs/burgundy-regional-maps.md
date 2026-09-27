@@ -1,5 +1,82 @@
 # Burgundy regional maps
 
+## Crémant de Bourgogne source overview
+
+Regional AOC **175**, denomination **561**, uses all **378** September 2026 INAO
+source records (`Crémant de Bourgogne`, CVI `1B361M, 1S361M`, category
+`Vin mousseux "Crémant"`). The **372 communes** comprise 90 in Côte-d’Or,
+77 in Rhône, 152 in Saône-et-Loire and 53 in Yonne. This source includes Rhône,
+unlike the preceding broad regional maps. The **103,005.92 ha** measures the
+delimited source geometry, not planted acreage or the area harvested for
+Crémant in any particular year.
+
+The map is a combined white/rosé sparkling-wine overview. It does not locate a
+named cuvée, holding or colour-specific area. The [BIVB appellation sheet](https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/gallery_files/site/321/402/79294/79367.pdf)
+confirms the regional sparkling identity and four-department scope. Its
+published commune totals use a different geographic inventory; they are not
+a parcel crosswalk and must not be used to manufacture additional boundaries.
+All pinned source records are retained independently of the earlier AOC maps.
+
+The source still assigns both Porte des Pierres Dorées records to **69159**,
+including its Liergues/Pouilly-le-Monial and Jarnioux portions. Navigation and
+the June 2026 Cadastre outline use current **69114**, confirmed by
+[INSEE's current commune record](https://www.insee.fr/fr/statistiques/2011101?geo=COM-69114)
+and the official commune API. The boundary retains both records without clipping
+to the commune outline or borrowing another AOC's geometry.
+
+Matching requires the full recorded appellation, or the full name in a wine
+label beside an explicit compatible Bourgogne base. Bare `Crémant`, region,
+producer or reference fields alone do not establish the AOC. Still products,
+red colour, cru tiers and competing Burgundy/Beaujolais/other Crémant names
+withhold the map. Unknown colour/style can match a recorded full identity.
+
+The [UPECB technical sheet](https://static.cremantbourgogne.fr/document/fiche-sommellerie.pdf)
+distinguishes Blanc de Blancs, Blanc de Noirs and rosé, and lists the permitted
+black and white grape varieties. Both blanc mentions mean white wine; Pinot
+Noir/Gamay do not force a Crémant to red. Reviewed grape-colour overrides apply
+only to this AOC. Dosage terms and the documented Éminent/Grand Éminent and
+Millésimé wording can accompany the denomination; Grand Éminent never becomes
+Grand Cru. Matching is an identity check, not certification of blends, vintage
+requirements or the producer's eligibility for a collective mark.
+
+### Geometry preservation
+
+Five source rows need explicit ring assignment. Marcy (**69126**: 40 shells,
+6 holes), Saint-Étienne-la-Varenne (**69198**: 90/5) and Verzé (**71574**: 27/9)
+contain near-zero-area holes that defeat pyshp's sample-point search.
+Régnié-Durette (**69165**: 135/11) and Prissé (**71360**: 51/69) have holes
+misread as nested exterior rings. Each row is checked against source area ID
+**474**, its exact ring counts and a known hole. Every original hole belongs
+to exactly one fully containing shell; all coordinates and signed area remain
+unchanged. No generic buffer or unreviewed ring deletion is used.
+
+Reprojection repaired with `make_valid` has **0 m²** symmetric difference after
+inverse projection. The **1e-6°** and **1e-7°** grids close exclusions of
+**63.92 m²** and **4.6949 m²**. The reviewed **1e-8°** grid passes the unchanged
+0.005% area and sub-2 m² hole/part gates: **1.74 m²** net area difference,
+only near-zero closed slivers, and no lost polygon parts. Compact encoding
+uses eight decimals and must decode to the exact published GeoJSON.
+
+The GeoJSON is **36,956,969 bytes** (**11,488,999 bytes** with gzip level 9).
+The **6,553,696-byte** compact download is **43% smaller than gzip**, with
+exact decoded coordinate/property equality. It remains a large transfer:
+the Chromium check measured **54.38 seconds at 1 Mbps**, within the existing
+60-second budget. It is downloaded only when opened. Further transport and
+rendering optimisation belongs to [#363](https://github.com/gary29024/winelogdb/issues/363).
+
+Validation: **5,198 unit tests** pass. Chromium and mobile WebKit owner/shared
+journeys cover 320 px layouts, all 372 commune options, Rhône navigation,
+white/rosé identity and conflicting style/colour guards. All **107** generated
+regional outputs are byte-identical across two full builds; all **191** earlier
+map assets and the **48** earlier registry entries remain unchanged.
+
+The coverage inventory now has **44 mapped and five partial denominations,
+with none pending**, across all seven regional AOCs. This completes the pinned
+regional source inventory. Rhône/colour gaps on other maps, Chablis and other
+named-plot gaps remain separate work; see [the coverage inventory](burgundy-map-coverage.md),
+[#344](https://github.com/gary29024/winelogdb/issues/344) and the transport backlog
+in [#363](https://github.com/gary29024/winelogdb/issues/363).
+
 ## Coteaux Bourguignons source overview
 
 Regional AOC **1027**, denomination **2338**, uses all **281** rows of its own
@@ -392,6 +469,7 @@ Broad Bourgogne additionally has a **partial source overview**, covering the
 Bourgogne Aligoté, Bourgogne Passe-tout-grains and Bourgogne Mousseux each have their own
 **partial source overview** across 272 communes.
 Coteaux Bourguignons has a partial overview across 275 communes.
+Crémant de Bourgogne includes all 372 source communes in its white/rosé sparkling overview.
 The existing 44 village maps and 33 Grand Cru appellations are unchanged.
 
 | Denomination | INAO appellation / denomination | Producing communes | Allowed colours/style |
@@ -444,6 +522,7 @@ The existing 44 village maps and 33 Grand Cru appellations are unchanged.
 | Bourgogne Passe-tout-grains (partial source overview) | 144 / 394 | 272 in source | Red, rosé |
 | Bourgogne Mousseux (partial source overview) | 141 / 391 | 272 in source | Red sparkling |
 | Coteaux Bourguignons (partial source overview) | 1027 / 2338 | 275 in source | Red, white, rosé; overview only |
+| Crémant de Bourgogne | 175 / 561 | 372 in source | White, rosé sparkling; overview only |
 
 The official BIVB sheets confirm these counts, colours and regional status:
 [Côte d’Or](https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/bourgogne-cote-d-or%2C2458%2C9253.html?args=Y29tcF9pZD0yMjc4JmFjdGlvbj12aWV3RmljaGUmaWQ9Nzc0Jnw%3D),
@@ -458,12 +537,12 @@ Coteaux Bourguignons, Crémant de Bourgogne and Mâcon. The
 [BIVB inventory](https://www.bourgogne-wines.com/professional-access/documents-photos%2C2334%2C9356.html)
 also lists 14 Bourgogne geographic denominations and 27 named Mâcon denominations.
 Together with the seven broad denominations and Mâcon-Villages, these account for
-**49 source denomination IDs: forty-three mapped, five partial, one pending**. Alternative source names
+**49 source denomination IDs: forty-four mapped, five partial, none pending**. Alternative source names
 and colour variants sharing an ID do not increase that count.
 
 Broad Bourgogne, Bourgogne Aligoté, Bourgogne Passe-tout-grains, Bourgogne Mousseux
 and Coteaux Bourguignons have explicitly partial source overviews.
-Crémant de Bourgogne remains pending.
+Crémant de Bourgogne includes every pinned source record, including Rhône.
 Completing the fourteen Bourgogne geographic denominations does
 not complete the broad Bourgogne AOC boundary. Chablis Premier Cru
 source gaps and other named plots remain tracked separately in

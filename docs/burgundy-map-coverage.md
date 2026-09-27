@@ -12,7 +12,7 @@ map link for it, and verify all nine Côte de Nuits entries have map configurati
 Adding a map requires updating this document and the map configuration; the
 inventory is the denominator, not the current list of supported Atlas pages.
 
-Reviewed 27 September 2026 against the
+Reviewed 28 September 2026 against the
 [BIVB appellation list](https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/bourgogne-an-ideal-location,2458,9253.html?args=Y29tcF9pZD0yMjc4JmFjdGlvbj12aWV3RnVsbExpc3RlJmlkPSZ8)
 and the pinned INAO boundary snapshot documented in [the map guide](burgundy-village-map.md).
 Beaujolais's own appellations are outside this inventory. Shared regional AOCs
@@ -140,8 +140,8 @@ the plan because they lack a village AOC. See the
 
 All **14 Bourgogne geographic denominations** in the pinned source now have maps.
 These are denominations within Bourgogne AOC, not new AOCs or village maps.
-**Of 49 regional source denominations, 43 are mapped, five have partial source
-overviews, and one remains pending.** Broad Bourgogne has an explicitly partial
+**All 49 regional source denominations now have maps: 44 are mapped and five
+have partial source overviews. None remains pending.** Broad Bourgogne has an explicitly partial
 overview of all 295 available source rows in 264 communes, plus its separately
 published white-only sector. This does not complete its appellation or
 colour-specific boundaries; Bourgogne Gamay remains unavailable.
@@ -159,7 +159,12 @@ The Coteaux Bourguignons partial overview retains its own 281 source rows across
 still red, white and rosé identities, including the traditional Bourgogne Grand
 Ordinaire/Bourgogne Ordinaire names. Rhône/Beaujolais boundaries remain absent;
 the combined source geometry cannot identify a colour-specific production area.
-Crémant de Bourgogne is the remaining pending denomination.
+Crémant de Bourgogne retains all 378 source records across 372 communes in
+Côte-d’Or, Rhône, Saône-et-Loire and Yonne. It supports white/rosé sparkling
+wine, including Blanc de Blancs and Blanc de Noirs, as a combined source
+overview. Porte des Pierres Dorées uses current code 69114 while retaining
+both source records under historical code 69159. This finishes the regional
+source inventory, not the missing parcel or colour-specific boundaries below.
 The [Yonne source review](burgundy-regional-maps.md#yonne-source-review)
 explains the five-commune Côtes d’Auxerre list and its difference from some
 seven-name promotional lists. It does not add boundaries from those lists.

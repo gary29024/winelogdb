@@ -96,9 +96,9 @@ def projected_boundary(source, config, forward, backward):
         assert source.symmetric_difference(sampled).area < 0.01
     result = transform(forward, sampled)
     if not result.is_valid:
-        assert config['denominationId'] in (2840, 1728, 1713, 2893, 389, 391, 394, 2338)
+        assert config['denominationId'] in (2840, 1728, 1713, 2893, 389, 391, 394, 2338, 561)
         result = make_valid(result)
-    if config['denominationId'] in (1713, 2893, 2338) and result.geom_type == 'GeometryCollection':
+    if config['denominationId'] in (1713, 2893, 2338, 561) and result.geom_type == 'GeometryCollection':
         # Repaired point-touching rings can leave zero-area lines. Keep every
         # polygon, then check against the untouched source union below.
         result = unary_union([part for part in get_parts(result) if part.geom_type in ('Polygon', 'MultiPolygon')])
@@ -139,18 +139,28 @@ def main():
                 actual[row['id_app']][row['id_denom']].add(row['denom'])
             if row['id_denom'] in mapped:
                 source_shape = reader.shape(record.oid)
-                ring_review = {(362, '71494'): (1781, 7, 1), (389, '71360'): (288, 52, 67), (391, '71360'): (289, 52, 67), (394, '71360'): (290, 52, 67)}
+                ring_review = {
+                    (362, '71494'): (1781, 7, 1, 1.1577),
+                    (389, '71360'): (288, 52, 67, 7.62945),
+                    (391, '71360'): (289, 52, 67, 7.62945),
+                    (394, '71360'): (290, 52, 67, 7.5912795),
+                    (561, '69126'): (474, 40, 6, 0.1815300567),
+                    (561, '69165'): (474, 135, 11, 0.56),
+                    (561, '69198'): (474, 90, 5, 2.28),
+                    (561, '71360'): (474, 51, 69, 7.98),
+                    (561, '71574'): (474, 27, 9, 139.6),
+                }
                 if review := ring_review.get((row['id_denom'], row['insee'])):
-                    # La Salle (Bourgogne) and Prissé (Aligoté / Mousseux / Passe-tout-grains) have a
-                    # touching hole that pyshp misidentifies as an exterior.
+                    # Reviewed touching/nearly degenerate holes either confuse
+                    # pyshp's sample-point search or become exterior rings.
                     # Assign original oriented rings by full containment;
                     # no vertex moves and every exclusion keeps one shell.
                     assert row['id_aire'] == review[0]
                     rings = [source_shape.points[a:b] for a, b in zip(source_shape.parts, list(source_shape.parts)[1:] + [len(source_shape.points)])]
                     shells = [Polygon(r) for r in rings if shapefile.signed_area(r) < 0]
                     holes = [Polygon(r) for r in rings if shapefile.signed_area(r) > 0]
-                    assert (len(shells), len(holes)) == review[1:]
-                    expected_hole_area = {362: 1.1577, 389: 7.62945, 391: 7.62945, 394: 7.5912795}[row['id_denom']]
+                    assert (len(shells), len(holes)) == review[1:3]
+                    expected_hole_area = review[3]
                     assert any(abs(h.area - expected_hole_area) < 1e-6 for h in holes)
                     assert all(sum(shell.covers(h) for shell in shells) == 1 for h in holes)
                     geometry = unary_union([Polygon(shell.exterior, [h.exterior for h in holes if shell.covers(h)]) for shell in shells])
@@ -200,8 +210,9 @@ def main():
         colour_codes = {'R': 'red', 'B': 'white', 'S': 'rose'}
         assert sorted({colour_codes[code.strip()[1]] for code in config['sourceCvi'].split(',')}) == sorted(config['wineColours'])
         if config.get('productStyle'):
-            assert config['denominationId'] == 391 and config['productStyle'] == 'sparkling'
-            assert {r['categorie'] for r, _ in rows} == {'Vin mousseux'}
+            assert config['denominationId'] in (391, 561) and config['productStyle'] == 'sparkling'
+            expected_category = 'Vin mousseux "Crémant"' if config['denominationId'] == 561 else 'Vin mousseux'
+            assert {r['categorie'] for r, _ in rows} == {expected_category}
         whole_m = unary_union([geom for _, geom in rows])
         assert whole_m.is_valid
         whole, difference = projected_boundary(whole_m, config, to_wgs84, to_source)
@@ -215,7 +226,7 @@ def main():
         # Reviewed finer grids preserve excluded holes and small production
         # areas. Keep the same gates at either precision; see each precisionNote.
         grid = config.get('coordinateGrid', GRID)
-        assert grid in (GRID, 1e-7) or (config['denominationId'] == 362 and grid == 1e-9), 'Review a new precision before publishing'
+        assert grid in (GRID, 1e-7) or (config['denominationId'] == 362 and grid == 1e-9) or (config['denominationId'] == 561 and grid == 1e-8), 'Review a new precision before publishing'
         if config.get('coverage'):
             props['coverage'] = config['coverage']
         features = [dict(type='Feature', id=feature_id, properties=props, geometry=geometry_json(trimmed(whole, (whole_m, to_source), grid)))]
@@ -268,14 +279,14 @@ def main():
         if config.get('colourScope'):
             catalogue['colourScope'] = config['colourScope']
         if config.get('downloadTimeoutMs'):
-            assert config['denominationId'] in (362, 389, 391, 394, 1713, 2893, 2338) and config['downloadTimeoutMs'] == 60000
+            assert config['denominationId'] in (362, 389, 391, 394, 561, 1713, 2893, 2338) and config['downloadTimeoutMs'] == 60000
             catalogue['downloadTimeoutMs'] = config['downloadTimeoutMs']
         collection = dict(type='FeatureCollection', features=features)
         if config.get('compactDownload'):
             # Transport only: preserve the reviewed grid, every ring and every
             # property. Geobuf's default six decimals would erase narrow holes.
-            assert config['denominationId'] in (362, 389, 391, 394, 1713, 2893, 2338)
-            encoded = geobuf.Encoder().encode(collection, precision=9 if grid == 1e-9 else 7, dim=2)
+            assert config['denominationId'] in (362, 389, 391, 394, 561, 1713, 2893, 2338)
+            encoded = geobuf.Encoder().encode(collection, precision=9 if grid == 1e-9 else 8 if grid == 1e-8 else 7, dim=2)
             canonical = json.loads(json.dumps(collection))  # tuples -> lists
             assert geobuf.decode(encoded) == canonical, 'Compact download changes the map'
             packed = gzip.compress(encoded, compresslevel=9, mtime=0)
@@ -286,7 +297,7 @@ def main():
                         (PLACES / f"{config['id']}MapCatalogue.json", catalogue, False)])
         entry = {key: config[key] for key in ('id', 'name', 'region', 'aliases', 'compatibleRegions', 'wineColours')}
         # Reviewed site names require the matching base appellation on the wine.
-        for key in ('siteNames', 'baseAppellations', 'matchAppellationOnly', 'conflictingNames', 'accessoryGrapes', 'broadAppellation', 'productStyle', 'additionalGrapes', 'labelMentions'):
+        for key in ('siteNames', 'baseAppellations', 'matchAppellationOnly', 'conflictingNames', 'accessoryGrapes', 'broadAppellation', 'productStyle', 'additionalGrapes', 'labelMentions', 'grapeColourOverrides', 'labelTerms'):
             if key in config:
                 entry[key] = config[key]
         registry.append({**entry, 'featureId': feature_id})

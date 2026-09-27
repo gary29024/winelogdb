@@ -1466,6 +1466,92 @@
         "Nouveau": "white"
       },
       "featureId": "inao-denom-2338"
+    },
+    {
+      "id": "cremant-de-bourgogne",
+      "name": "Crémant de Bourgogne",
+      "region": "Burgundy",
+      "aliases": [
+        "Crémant de Bourgogne"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Côte d’Or",
+        "Côte de Nuits",
+        "Côte de Beaune",
+        "Hautes Côtes de Nuits",
+        "Hautes Côtes de Beaune",
+        "Côte Chalonnaise",
+        "Mâconnais",
+        "Grand Auxerrois",
+        "Yonne",
+        "Saône-et-Loire",
+        "Chablis",
+        "Chablis et Grand Auxerrois",
+        "Auxerrois",
+        "Beaujolais",
+        "Rhône",
+        "Châtillonnais"
+      ],
+      "wineColours": [
+        "white",
+        "rose"
+      ],
+      "siteNames": [
+        "Crémant de Bourgogne",
+        "Crémant-de-Bourgogne"
+      ],
+      "baseAppellations": [
+        "Bourgogne",
+        "Bourgogne Blanc",
+        "Bourgogne Rosé",
+        "Burgundy"
+      ],
+      "accessoryGrapes": [
+        "Aligoté",
+        "Melon de Bourgogne",
+        "Melon",
+        "Sacy",
+        "Pinot Blanc",
+        "Pinot Gris"
+      ],
+      "broadAppellation": true,
+      "productStyle": "sparkling",
+      "labelMentions": {
+        "Blanc de Blancs": "white",
+        "Blanc de Noirs": "white",
+        "Blanc de Blanc": "white",
+        "Blanc de Noir": "white"
+      },
+      "grapeColourOverrides": {
+        "Pinot Noir": [
+          "white",
+          "rose"
+        ],
+        "Chardonnay": [
+          "white",
+          "rose"
+        ],
+        "Gamay Noir à Jus Blanc": [
+          "white",
+          "rose"
+        ],
+        "Gamay Noir": [
+          "white",
+          "rose"
+        ],
+        "Gamay": [
+          "white",
+          "rose"
+        ]
+      },
+      "labelTerms": [
+        "Grand Éminent",
+        "Éminent",
+        "Millésimé"
+      ],
+      "featureId": "inao-denom-561"
     }
   ],
   "otherAppellations": [

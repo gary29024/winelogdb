@@ -591,7 +591,7 @@ for(const [appellation,id] of [['Mâcon','macon'],['Mâcon-Villages','macon-vill
  expect(downloads.every(url=>url.endsWith(`/maps/${id}.2026-09-21.pbf.gz`))).toBe(true);
 });
 
-const compactNetworkCases=[['Mâcon','macon',1400000,60000],['Bourgogne','bourgogne',3700000,60000],['Bourgogne Aligoté','bourgogne-aligote',3000000,60000],['Bourgogne Passe-tout-grains','bourgogne-passe-tout-grains',3000000,60000],['Bourgogne Mousseux','bourgogne-mousseux',3000000,60000],['Coteaux Bourguignons','coteaux-bourguignons',3500000,60000]] as const;
+const compactNetworkCases=[['Mâcon','macon',1400000,60000],['Bourgogne','bourgogne',3700000,60000],['Bourgogne Aligoté','bourgogne-aligote',3000000,60000],['Bourgogne Passe-tout-grains','bourgogne-passe-tout-grains',3000000,60000],['Bourgogne Mousseux','bourgogne-mousseux',3000000,60000],['Coteaux Bourguignons','coteaux-bourguignons',3500000,60000],['Crémant de Bourgogne','cremant-de-bourgogne',6700000,60000]] as const;
 // Exercise the largest actual payload on every run. Byte equality/size checks
 // cover every compact file in unit tests; full throttled transfers run in the
 // scheduled/manual matrix or explicitly for a map being introduced/reviewed.
@@ -600,12 +600,12 @@ const extraNetworkIds=(process.env.WINELOG_E2E_MAP_DOWNLOADS??'').split(',');
 for(const [appellation,id,maxBytes,timeout] of compactNetworkCases.filter(([,id])=>fullMapMatrix||id===largestCompactId||extraNetworkIds.includes(id)))test(`${appellation} compact map loads over a 1 Mbps connection`,async({page,browserName},testInfo)=>{
  test.skip(browserName!=='chromium','Chromium network throttling');
  test.setTimeout(timeout+25000);
- await setup(page,{appellation,wineName:'Vieilles Vignes',classification:null,...(id==='bourgogne-mousseux'?{colour:'Red',wineStyle:'sparkling',productSubtype:'Sparkling'}:id==='bourgogne-aligote'?{colour:'White',wineStyle:'white'}:{colour:'Red',wineStyle:'red'})});
+ await setup(page,{appellation,wineName:'Vieilles Vignes',classification:null,...(['bourgogne-mousseux','cremant-de-bourgogne'].includes(id)?{colour:id==='bourgogne-mousseux'?'Red':'White',wineStyle:'sparkling',productSubtype:'Sparkling'}:id==='bourgogne-aligote'?{colour:'White',wineStyle:'white'}:{colour:'Red',wineStyle:'red'})});
  await page.goto('/shared/layout-wine');
  // Warm the code, then close before measuring the boundary transfer. Browser
  // caching is disabled for the throttled load so the complete asset travels.
  await page.getByRole('button',{name:'View regional map'}).click();
- await expect(page.getByRole('button',{name:'Region view',exact:true})).toBeEnabled();
+ await expect(page.getByRole('button',{name:'Region view',exact:true})).toBeEnabled({timeout:id==='cremant-de-bourgogne'?15000:5000});
  await page.keyboard.press('Escape');
  const network=await page.context().newCDPSession(page);
  await network.send('Network.enable');
@@ -673,6 +673,58 @@ for(const [appellation,id,colour,wineStyle,note,invalidColours,count] of [
   await page.goto(route);
   await expect(page.getByRole('heading',{name:'Vieilles Vignes',exact:true})).toBeVisible();
   await expect(page.getByRole('button',{name:'View regional map'})).toHaveCount(0);
+ }
+ expect(errors).toEqual([]);
+});
+
+for(const route of allMapRoutes)test(`Crémant de Bourgogne ${route}: complete source overview, Rhône navigation and sparkling guards`,async({page},testInfo)=>{
+ const base={appellation:'Crémant de Bourgogne',wineName:'Blanc de Noirs',classification:null,colour:'White',wineStyle:'sparkling',productSubtype:'Sparkling',region:'Burgundy'};
+ await page.setViewportSize({width:320,height:900});await setup(page,base);
+ const downloads:string[]=[],errors:string[]=[];
+ page.on('request',r=>{if(r.url().includes('/maps/'))downloads.push(r.url())});
+ page.on('pageerror',e=>errors.push(e.message));
+ await page.goto(route);expect(downloads).toEqual([]);
+ await page.route('**/maps/cremant-de-bourgogne.*.pbf.gz',route=>route.fulfill({contentType:'application/gzip',path:'public/maps/cremant-de-bourgogne.2026-09-21.pbf.gz'}));
+ const opener=page.getByRole('button',{name:'View regional map'});await opener.click();
+ const dialog=page.getByRole('dialog',{name:'Crémant de Bourgogne',exact:true});
+ await expect(dialog.getByRole('button',{name:'Region view',exact:true})).toBeEnabled({timeout:15000});
+ await expect(dialog.locator('.village-map-description')).toHaveText('Denomination overview across wine colours; no colour-specific area or single vineyard is identified.');
+ await expect(dialog.locator('.village-map-note').filter({hasText:'all 378 records'})).toBeVisible();
+ await expect(dialog.getByRole('combobox',{name:'Explore a mapped area'})).toHaveCount(0);
+ const communes=dialog.getByRole('combobox',{name:'Zoom to a commune'});
+ await expect(communes.getByRole('option')).toHaveCount(373);
+ const visibleMarkers=()=>dialog.locator('.village-map-commune-name').evaluateAll(elements=>{
+  const canvas=elements[0]?.closest('.village-map-canvas')?.getBoundingClientRect();if(!canvas)return 0;
+  return elements.filter(el=>{const b=el.getBoundingClientRect();return b.x+b.width/2>=canvas.x&&b.x+b.width/2<=canvas.right&&b.y+b.height/2>=canvas.y&&b.y+b.height/2<=canvas.bottom}).length;
+ });
+ await expect.poll(visibleMarkers).toBe(372);
+ for(const label of ['Joigny','Belan-sur-Ource','Chablis','Pruzilly','Marcy','Porte des Pierres Dorées']){
+  await communes.selectOption({label});await expect.poll(visibleMarkers).toBeLessThan(372);
+ }
+ await expect(communes).toHaveValue('69114');
+ await page.screenshot({path:testInfo.outputPath('cremant-de-bourgogne-320.png')});
+ await dialog.getByRole('button',{name:'Region view',exact:true}).click();await expect.poll(visibleMarkers).toBe(372);
+ expect([...new Set(downloads)]).toEqual([new URL('/maps/cremant-de-bourgogne.2026-09-21.pbf.gz',page.url()).href]);
+ expect(await dialog.evaluate(el=>el.scrollWidth<=el.clientWidth)).toBe(true);
+ await page.setViewportSize({width:1280,height:900});
+ await dialog.getByRole('button',{name:'Region view',exact:true}).click();
+ await page.screenshot({path:testInfo.outputPath('cremant-de-bourgogne-desktop.png')});
+ await page.keyboard.press('Escape');await expect(opener).toBeFocused();
+ await setup(page,{...base,appellation:'Crémant de Bourgogne Grand Éminent Rosé',wineName:'Les Champs',colour:'Rosé'});
+ await page.goto(route);await opener.click();
+ await expect(dialog.getByRole('button',{name:'Region view',exact:true})).toBeEnabled({timeout:15000});
+ await page.keyboard.press('Escape');
+ // The overlapping suffix "Bourgogne Aligoté" describes the grape here;
+ // an explicitly repeated full AOC remains a conflict.
+ await setup(page,{...base,appellation:'Crémant de Bourgogne Aligoté',wineName:'Vieilles Vignes'});
+ await page.goto(route);
+ await expect(page.getByRole('heading',{name:'Vieilles Vignes',exact:true})).toBeVisible();
+ await expect(opener).toBeVisible();
+ for(const fields of [{colour:'Red'},{wineStyle:'white',productSubtype:'Still'},{wineName:'Bourgogne Mousseux'},{wineName:'Morgon'},{wineName:'Blanc de Noirs',colour:'Rosé'}]){
+  const record={...base,wineName:'Les Champs',...fields};
+  await setup(page,record);await page.goto(route);
+  await expect(page.getByRole('heading',{name:record.wineName,exact:true})).toBeVisible();
+  await expect(opener).toHaveCount(0);
  }
  expect(errors).toEqual([]);
 });

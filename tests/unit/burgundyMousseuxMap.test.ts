@@ -63,8 +63,8 @@ describe('Bourgogne Mousseux red sparkling source overview',()=>{
   for(const appellation of ['Bourgogne Brut','Bourgogne Sec','Bourgogne Rouge Demi-Sec'])expect(burgundyVillageMapTarget({...still,appellation}),appellation).toBeNull();
   expect(burgundyVillageMapTarget({...still,appellation:'Bourgogne Rouge'})).toMatchObject({featureId:'inao-denom-362'});
  });
- it('keeps every existing regional map restricted to still wine',()=>{
-  for(const group of registry.maps.filter(group=>group.id!=='bourgogne-mousseux')){
+ it('keeps regional maps without a reviewed sparkling style restricted to still wine',()=>{
+  for(const group of registry.maps.filter(group=>(group as {productStyle?:string}).productStyle!=='sparkling')){
    expect(burgundyVillageMapTarget({...base,appellation:group.name,colour:null}),group.name).toBeNull();
   }
  });
