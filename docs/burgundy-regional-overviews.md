@@ -22,7 +22,7 @@ These file measurements are separate from browser transfer timings.
 | Bourgogne Aligoté | 2,941,992 | 227,465 | 92.3% |
 | Mâcon | 1,340,715 | 118,746 | 91.1% |
 | Mâcon-Villages | 899,520 | 56,385 | 93.7% |
-| All 49 regional maps | 28,599,899 | 2,056,718 | 92.8% |
+| All 49 regional maps | 28,599,778 | 2,056,718 | 92.8% |
 
 The largest uncompressed overview is 525,461 bytes. Browsers without native
 gzip support use that equivalent binary format. Downloads remain lazy and
@@ -36,7 +36,9 @@ remains in its audit catalogue but is no longer the regional UI's download path.
 GeoJSON files. It does not edit their coordinates, catalogue metadata, source
 builder, or exact source-geometry gates. Source and catalogue hashes are stored
 in `burgundy-regional-overview-report.json`, alongside the derived asset hash,
-sizes and per-feature geometry diagnostics.
+sizes and per-feature geometry diagnostics. Text hashes and gzip-equivalent
+baselines normalise Git checkout line endings to LF for reproducibility across
+Windows and Linux; binary assets are checked byte for byte.
 
 Display generalisation happens in EPSG:2154 metres. A 5 cm grid removes numerical
 slivers, then topology-preserving simplification uses a tolerance based on the

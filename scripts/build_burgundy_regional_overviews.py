@@ -25,7 +25,13 @@ ANCHORS = ['Dijon', 'Beaune', 'Chablis', 'Mâcon', 'Joigny', 'Nuits-Saint-George
 
 
 def write_json(path, value):
-    path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + '\n', encoding='utf8')
+    path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + '\n', encoding='utf8', newline='\n')
+
+
+def source_bytes(path):
+    # Git may check text out as CRLF on Windows. Hash and benchmark canonical
+    # LF bytes so source freshness and generated output agree on every host.
+    return path.read_bytes().replace(b'\r\n', b'\n')
 
 
 def polygonal(geometry):
@@ -103,10 +109,11 @@ def main():
     entries, report, outputs = {}, [], []
     for entry in registry['maps']:
         catalogue_path = PLACES / f"{entry['id']}MapCatalogue.json"
-        catalogue = json.loads(catalogue_path.read_bytes())
+        catalogue_bytes = source_bytes(catalogue_path)
+        catalogue = json.loads(catalogue_bytes)
         source_path = ROOT / 'public' / catalogue['dataUrl'].lstrip('/')
-        source_bytes = source_path.read_bytes()
-        data = json.loads(source_bytes)
+        canonical_bytes = source_bytes(source_path)
+        data = json.loads(canonical_bytes)
         # Commune outlines are navigation metadata, not useful regional detail.
         features = [f for f in data['features'] if f['properties']['kind'] == 'appellation']
         bounds = transform(FORWARD, shape(features[0]['geometry'])).bounds
@@ -141,9 +148,9 @@ def main():
         for suffix, content in [('.pbf', raw), ('.pbf.gz', packed)]:
             outputs.append((ROOT / 'public' / (stem+suffix).lstrip('/'), content))
         previous = ROOT / 'public' / catalogue.get('geobufUrl', '').lstrip('/')
-        before = previous.stat().st_size if catalogue.get('geobufUrl') else len(gzip.compress(source_bytes, compresslevel=9, mtime=0))
-        report.append(dict(id=entry['id'], sourceSha256=hashlib.sha256(source_bytes).hexdigest(),
-                           catalogueSha256=hashlib.sha256(catalogue_path.read_bytes()).hexdigest(),
+        before = previous.stat().st_size if catalogue.get('geobufUrl') else len(gzip.compress(canonical_bytes, compresslevel=9, mtime=0))
+        report.append(dict(id=entry['id'], sourceSha256=hashlib.sha256(canonical_bytes).hexdigest(),
+                           catalogueSha256=hashlib.sha256(catalogue_bytes).hexdigest(),
                            overviewSha256=hashlib.sha256(raw).hexdigest(),
                            maxCommuneAnchorDistanceMetres=round(max(anchor_distances), 4),
                            previousGzipBytes=before, overviewGzipBytes=len(packed), overviewRawBytes=len(raw),

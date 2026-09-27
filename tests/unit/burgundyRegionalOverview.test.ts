@@ -13,6 +13,7 @@ import {loadVillageMapData} from '../../src/lib/places/loadVillageMapData';
 afterEach(()=>vi.unstubAllGlobals());
 const bytes=(url:string)=>readFileSync(`public${url}`);
 const digest=(value:Buffer)=>createHash('sha256').update(value).digest('hex');
+const sourceDigest=(value:Buffer)=>digest(Buffer.from(value.toString('utf8').replace(/\r\n/g,'\n')));
 
 describe('display-only regional overviews',()=>{
  it('covers the complete regional inventory and leaves village maps detailed',async()=>{
@@ -24,8 +25,8 @@ describe('display-only regional overviews',()=>{
   const catalogue=await loadVillageMapCatalogue(id);
   const measurement=report.find(m=>m.id===id)!;
   expect(catalogue.overview).toEqual(overview);
-  expect(digest(bytes(catalogue.dataUrl))).toBe(measurement.sourceSha256);
-  expect(digest(readFileSync(`src/lib/places/${id}MapCatalogue.json`))).toBe(measurement.catalogueSha256);
+  expect(sourceDigest(bytes(catalogue.dataUrl))).toBe(measurement.sourceSha256);
+  expect(sourceDigest(readFileSync(`src/lib/places/${id}MapCatalogue.json`))).toBe(measurement.catalogueSha256);
   const raw=bytes(overview.geobufRawUrl),packed=bytes(overview.geobufUrl);
   expect(digest(raw)).toBe(measurement.overviewSha256);
   expect(digest(raw)).toBe(digest(gunzipSync(packed)));
