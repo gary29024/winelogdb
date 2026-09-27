@@ -821,10 +821,13 @@ rosé wines without claiming complete colour-specific eligibility. The red-only
 sector is available for manual exploration and never automatically locates a
 red bottle. It is not subtracted to invent a white or rosé boundary.
 
-**Mâcon Supérieur**, the former higher-strength grade of the same AOC that was
-discontinued in the 2000s, is an alias of broad Mâcon so older bottles open this
-map; the coverage note says so. It is matched as a recorded appellation only,
-with the same colour, conflict and sparkling guards.
+**Mâcon Supérieur**, the former higher-strength grade of the same AOC, is an
+alias of broad Mâcon so older bottles open this map. The historical description
+and 2005 discontinuation are recorded in [ABC du Vin's Mâcon Supérieur entry](https://www.abcduvin.com/index.php/term/%2C6c53aa9f5fa7aa706e53b0a4abac.xhtml).
+This supports a label alias, not a reconstruction of its historical parcels:
+the coverage note explicitly identifies the **2026 INAO boundary**, rather than
+the boundary for an older bottle's vintage. It is matched as a recorded
+appellation only, with the same colour, conflict and sparkling guards.
 
 Mâcon-Villages has white-only CVI codes `1B370, 1B370 01`. Its
 `Mâcon Villages (Blanc)` row in **Ozenay (71345)** is not a duplicate of the main
@@ -874,6 +877,34 @@ and largest closed slivers below **0.707 m²**. Net area differences are
 **+2.135 m²** for Mâcon, **−8.908 m²** for its red-only sector and **+12.122 m²**
 for Mâcon-Villages, all within the existing 0.005% limit.
 
+### Review of the proposed download-size reduction
+
+PR #361's review suggested topology-preserving Douglas–Peucker simplification
+before snapping to the coarser grid. Checked against the original Lambert-93
+source unions, an acceptable net area alone does not preserve excluded holes.
+Using the builder's repaired, 20 m sampled WGS84 boundaries, followed by
+`simplify(..., preserve_topology=True)` and `set_precision`, gave:
+
+| Simplification tolerance / coordinate grid | Largest closed Mâcon hole | Largest closed Mâcon-Villages hole | Existing hole gate |
+| --- | ---: | ---: | --- |
+| 2e-6° / 1e-6° | 36.1573 m² | 3.1546 m² | Fails both maps |
+| 2e-6° / 1e-7° | 27.6674 m² | 3.1546 m² | Fails both maps |
+| 1e-6° / 1e-7° | 1.3250 m² | 0.7067 m² | Passes |
+
+All three options pass the 0.005% net-area limit for all three production
+features; none loses a polygon part of 2 m² or larger. However, even the gentler
+last option simplifies the overview and red-only sector independently: it
+leaves **73.4518 m²** of the candidate sector outside the candidate overview,
+compared with **0.5909 m²** from the existing coordinate snapping. The source
+sector is entirely contained by the source overview. Per-feature topology
+preservation does not preserve shared edges between features.
+
+The current geometry is retained. A useful follow-up must preserve shared
+edges as well as pass the unchanged round-trip, area, hole and part checks.
+Removing only exactly collinear vertices from the already published geometry
+preserves its shape but saves only about **1%** gzip, so it does not justify
+adding a separate per-map simplification path here.
+
 ### Labels and validation
 
 Broad maps require an explicitly recorded appellation. Mâcon or Mâcon-Villages
@@ -903,6 +934,9 @@ gzip** for Mâcon / Mâcon-Villages. Each loads only when its dialog opens. Test
 cover broad/specific precedence, source provenance, the additional Ozenay area,
 commune navigation, red-only exploration, owner/shared pages and mobile layouts.
 All **87 generated regional files** reproduce byte-for-byte; all **41 prior
-registry entries and 82 prior maps/catalogues** are unchanged. Validation passes
-**4,590 unit tests**, **246 Burgundy Chromium browser checks**, lint and the
-production build.
+registry entries and 82 prior maps/catalogues** are unchanged. After the alias
+review, validation passes **4,603 unit tests** (1,419 regional-map tests),
+**4 affected Chromium checks** covering both maps on owner/shared pages, lint
+and the production build. The initial map batch passed the full **246-check
+Burgundy Chromium matrix**. Rebuilding all 43 regional maps after review passes
+the unchanged geometry gates and changes only Mâcon's coverage note.

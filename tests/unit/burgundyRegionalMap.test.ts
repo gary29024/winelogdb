@@ -895,6 +895,7 @@ describe('Mâcon Supérieur, the former grade of broad Mâcon',()=>{
   {appellation:'Mâcon Supérieur'},
   {appellation:'Macon Superieur Blanc',colour:'White'},
   {appellation:'Mâcon Supérieur Rouge',colour:'Red'},
+  {appellation:'Mâcon Supérieur Rosé Gamay',colour:'Rosé'},
   {appellation:'Mâcon-Supérieur',wineName:'Vieilles Vignes',producer:'Domaine X'},
  ])('opens the broad Mâcon map for %j',wine=>{
   expect(burgundyVillageMapTarget({...base,...wine})).toMatchObject({featureId:'inao-denom-1713',mapKind:'regional',scope:'appellation'});
@@ -903,10 +904,17 @@ describe('Mâcon Supérieur, the former grade of broad Mâcon',()=>{
   {appellation:'Mâcon Supérieur',wineName:'Pouilly-Fuissé'},
   {appellation:'Mâcon Supérieur',productSubtype:'Sparkling'},
   {appellation:'Mâcon-Villages',wineName:'Mâcon Supérieur'},
- ])('withholds a contradictory Mâcon Supérieur record %j',wine=>{
+  {appellation:'Mâcon Supérieur',wineName:'Mâcon-Villages'},
+  {appellation:'Mâcon Supérieur Blanc',colour:'Red'},
+  {wineName:'Mâcon Supérieur'},
+  {referenceSite:'Mâcon Supérieur'},
+ ])('withholds a contradictory or insufficient Mâcon Supérieur record %j',wine=>{
   expect(burgundyVillageMapTarget({...base,...wine})).toBeNull();
  });
- it('explains the former name on the map',async()=>{
-  expect((await loadVillageMapCatalogue('macon')).coverageNote).toContain('Mâcon Supérieur');
+ it('explains that the historical label opens the current source boundary',async()=>{
+  const note=(await loadVillageMapCatalogue('macon')).coverageNote;
+  expect(note).toContain('Mâcon Supérieur');
+  expect(note).toContain('2026 INAO source');
+  expect(note).toContain("not the boundary for an older bottle's vintage");
  });
 });
