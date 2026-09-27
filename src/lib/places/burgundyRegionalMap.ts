@@ -12,7 +12,25 @@ const key=(text:string)=>placeKey(text).replace(/\bste\b/g,'sainte').replace(/\b
 const contains=(text:string,name:string)=>` ${text} `.includes(` ${name} `);
 // Hyphens become a marker word so a split village's neighbour stays visible.
 const joined='xjoinedx';
-const joinedKey=(text:string)=>key(text.replace(/([\p{L}\d])-(?=[\p{L}\d])/gu,`$1 ${joined} `));
+// Unspaced hyphen, non-breaking hyphen and en dash all join words.
+const joinedKey=(text:string)=>key(text.replace(/([\p{L}\d])[-\u2010-\u2013](?=[\p{L}\d])/gu,`$1 ${joined} `));
+// Removes a producer however its words are joined (Prissé-Sologny vs Prissé Sologny).
+const withoutProducer=(label:string,producer:string)=>{
+ const words=label.split(' ').filter(Boolean),name=producer.split(' ').filter(Boolean);
+ if(!name.length)return label;
+ const kept:string[]=[];
+ for(let i=0;i<words.length;){
+  let j=i,k=0;
+  while(j<words.length&&k<name.length){
+   if(words[j]===joined&&k>0){j++;continue;}
+   if(words[j]!==name[k])break;
+   j++;k++;
+  }
+  if(k===name.length){i=j;continue;}
+  kept.push(words[i++]);
+ }
+ return kept.join(' ');
+};
 const byLength=(a:string,b:string)=>b.length-a.length;
 const bourgogneAppellations=['bourgogne','burgundy','bourgogne rouge','bourgogne blanc','bourgogne rose'];
 const groups=registry.maps.map(group=>({...group,keys:group.aliases.map(key).sort(byLength),regions:group.compatibleRegions.map(key),
@@ -53,8 +71,7 @@ export function burgundyRegionalMapTarget(wine:Wine):BurgundyVillageMapTarget|nu
  const producer=key(wine.producer??'');
  const wineLabel=producer?` ${fields[1]} `.replaceAll(` ${producer} `,' ').trim():fields[1];
  const plainAppellation=(group:typeof groups[number])=>group.baseKeys.includes(fields[0]);
- const joinedProducer=joinedKey(wine.producer??''),joinedName=joinedKey(wine.wineName??'');
- const joinedLabel=joinedProducer?` ${joinedName} `.replaceAll(` ${joinedProducer} `,' ').trim():joinedName;
+ const joinedLabel=withoutProducer(joinedKey(wine.wineName??''),producer);
  const namesSite=(group:typeof groups[number])=>plainAppellation(group)&&group.joinedSiteKeys.some(name=>namesPlace(joinedLabel,name));
  const candidates=groups.filter(group=>fields.some(text=>group.keys.some(name=>contains(text,name)))||namesSite(group));
  if(!candidates.length)return undefined;

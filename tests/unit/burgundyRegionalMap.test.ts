@@ -526,6 +526,20 @@ describe('southern Mâcon geographic denominations',()=>{
  ])('does not read a village hyphenated into a longer name %j',wine=>{
   expect(burgundyVillageMapTarget({...base,colour:'White',...wine})?.mapKind).not.toBe('regional');
  });
+ // The producer is removed however its words are joined in the wine name.
+ it.each([
+  'Cave de Prissé Sologny Verzé','Cave de Prissé–Sologny–Verzé','Cave de Prissé\u2011Sologny\u2011Verzé',
+  'Cave de Prissé-Sologny Verzé','Cave de Prissé Sologny-Verzé Rouge',
+ ])('removes the producer Cave de Prissé-Sologny-Verzé written as %s',wineName=>{
+  expect(burgundyVillageMapTarget({...base,appellation:'Mâcon Rouge',colour:'Red',producer:'Cave de Prissé-Sologny-Verzé',wineName})?.mapKind).not.toBe('regional');
+ });
+ it.each([
+  {appellation:'Mâcon',wineName:'Domaine Leflaive Verzé',producer:'Domaine-Leflaive',featureId:'inao-denom-1737'},
+  {appellation:'Mâcon',wineName:'Verzé Les Chênes',producer:'Domaine Leflaive',featureId:'inao-denom-1737'},
+  {appellation:'Mâcon',wineName:'Guillot–Broux Cruzille',producer:'Guillot-Broux',featureId:'inao-denom-1722'},
+ ])('still reads a standalone village after removing the producer $wineName',({featureId,...wine})=>{
+  expect(burgundyVillageMapTarget({...base,colour:'White',...wine})).toMatchObject({featureId,mapKind:'regional'});
+ });
  it.each([
   {appellation:'Mâcon',wineName:'Mâcon-Verzé',featureId:'inao-denom-1737'},
   {appellation:'Mâcon',wineName:'Verzé - Les Chênes',featureId:'inao-denom-1737'},
