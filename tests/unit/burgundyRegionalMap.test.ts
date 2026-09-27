@@ -516,6 +516,27 @@ describe('southern Mâcon geographic denominations',()=>{
  ])('still reads the village when it stands on its own $wineName',({featureId,...wine})=>{
   expect(burgundyVillageMapTarget({...base,colour:'White',...wine})).toMatchObject({featureId,mapKind:'regional'});
  });
+ // A village hyphenated onto a longer proper name, such as the co-operative
+ // Cave de Prissé-Sologny-Verzé, is part of that name, not the denomination.
+ it.each([
+  {appellation:'Mâcon Rouge',wineName:'Cave de Prissé-Sologny-Verzé',colour:'Red'},
+  {appellation:'Mâcon',wineName:'Prissé-Sologny-Verzé Blanc'},
+  {appellation:'Mâcon',wineName:'Les Vignerons Sologny-Verzé'},
+  {appellation:'Mâcon',wineName:'Château-Burgy'},
+ ])('does not read a village hyphenated into a longer name %j',wine=>{
+  expect(burgundyVillageMapTarget({...base,colour:'White',...wine})?.mapKind).not.toBe('regional');
+ });
+ it.each([
+  {appellation:'Mâcon',wineName:'Mâcon-Verzé',featureId:'inao-denom-1737'},
+  {appellation:'Mâcon',wineName:'Verzé - Les Chênes',featureId:'inao-denom-1737'},
+  {appellation:'Mâcon',wineName:'Solutré-Pouilly',featureId:'inao-denom-2072'},
+  {appellation:'Mâcon',wineName:'Solutre Pouilly',featureId:'inao-denom-2072'},
+  {appellation:'Mâcon',wineName:'Charnay-lès-Mâcon',featureId:'inao-denom-1721'},
+  {appellation:'Mâcon',wineName:'La Roche-Vineuse Les Cras',featureId:'inao-denom-1725'},
+  {appellation:'Mâcon',wineName:'Milly-Lamartine',featureId:'inao-denom-1729'},
+ ])('keeps hyphenated site names and denominations working $wineName',({featureId,...wine})=>{
+  expect(burgundyVillageMapTarget({...base,colour:'White',...wine})).toMatchObject({featureId,mapKind:'regional'});
+ });
  it.each(['Pouilly-Fuissé','Pouilly-Loché','Pouilly-Vinzelles','Saint-Véran'])('preserves %s village identity',appellation=>{
   const target=burgundyVillageMapTarget({...base,appellation,colour:'White',classification:'village'});
   expect(target).toMatchObject({villageName:appellation,scope:'appellation'});

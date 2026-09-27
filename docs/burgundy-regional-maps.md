@@ -479,6 +479,10 @@ co-operative and landmark names, so a village after *de/du/des*, *Château*,
 *Domaine*, *Cave(s)*, *Cellier*, *Maison*, *Clos* or *Roche* (**Château-Fuissé**,
 **Domaine de Fuissé**, **Cave de Charnay**, **Roche de Solutré**) is not treated
 as the denomination; **Mâcon + Fuissé Vieilles Vignes** still selects the map.
+A village hyphenated on either side into a longer proper name, such as the
+co-operative **Cave de Prissé-Sologny-Verzé**, is likewise part of that name.
+Hyphenated site names (**Solutré-Pouilly**, **Charnay-lès-Mâcon**) and
+**Mâcon + Mâcon-Verzé** are unaffected.
 
 - [Les Orfèvres du Vin's brochure](https://www.orfevresduvin.com/img/cms/Acces-rapide/Brochure%20A4%20V2.pdf)
   supplies **Mâcon Charnay Blanc / Rouge**, supporting the shortened Charnay alias.
