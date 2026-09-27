@@ -10,12 +10,13 @@ import aligote from '../../src/lib/places/bourgogne-aligoteMapCatalogue.json';
 import passetoutgrains from '../../src/lib/places/bourgogne-passe-tout-grainsMapCatalogue.json';
 import mousseux from '../../src/lib/places/bourgogne-mousseuxMapCatalogue.json';
 import coteaux from '../../src/lib/places/coteaux-bourguignonsMapCatalogue.json';
+import cremant from '../../src/lib/places/cremant-de-bourgogneMapCatalogue.json';
 
 afterEach(()=>vi.unstubAllGlobals());
 const packed=(url:string)=>Uint8Array.from(readFileSync(`public${url}`));
 
 describe('compact boundary downloads',()=>{
- for(const [catalogue,ratio] of [[macon,.6],[villages,.6],[bourgogne,.65],[aligote,.65],[passetoutgrains,.65],[mousseux,.65],[coteaux,.65]] as const){
+ for(const [catalogue,ratio] of [[macon,.6],[villages,.6],[bourgogne,.65],[aligote,.65],[passetoutgrains,.65],[mousseux,.65],[coteaux,.65],[cremant,.65]] as const){
   it(`restores every coordinate and property of ${catalogue.name} within its download budget`,async()=>{
    const raw=readFileSync(`public${catalogue.dataUrl}`),bytes=packed(catalogue.geobufUrl);
    const fetcher=vi.fn(async()=>new Response(bytes));vi.stubGlobal('fetch',fetcher);
@@ -24,7 +25,7 @@ describe('compact boundary downloads',()=>{
    expect(isDeepStrictEqual(actual,JSON.parse(raw.toString()))).toBe(true);
    expect(bytes.byteLength).toBeLessThan(gzipSync(raw).byteLength*ratio);
    expect(fetcher).toHaveBeenCalledExactlyOnceWith(catalogue.geobufUrl,{signal});
-  });
+  },catalogue.id==='cremant-de-bourgogne'?15000:5000);
  }
  it('accepts a compact body already decompressed by the HTTP layer',async()=>{
   const bytes=Uint8Array.from(gunzipSync(packed(macon.geobufUrl)));
@@ -40,6 +41,17 @@ describe('compact boundary downloads',()=>{
   expect(await loadVillageMapData(macon,signal)).toEqual(expected);
   expect(fetcher).toHaveBeenCalledExactlyOnceWith(macon.dataUrl,{signal});
  });
+ it('loads Crémant without native gzip support using its deployable compact fallback',async()=>{
+  vi.stubGlobal('DecompressionStream',undefined);
+  const bytes=packed(cremant.geobufRawUrl);
+  expect(Buffer.from(bytes).equals(gunzipSync(packed(cremant.geobufUrl)))).toBe(true);
+  expect(bytes.byteLength).toBeLessThan(25*1024*1024);
+  const fetcher=vi.fn(async()=>new Response(bytes));vi.stubGlobal('fetch',fetcher);
+  const signal=new AbortController().signal;
+  const actual=await loadVillageMapData(cremant,signal);
+  expect(isDeepStrictEqual(actual,JSON.parse(readFileSync(`public${cremant.dataUrl}`,'utf8')))).toBe(true);
+  expect(fetcher).toHaveBeenCalledExactlyOnceWith(cremant.geobufRawUrl,{signal});
+ },15000);
  it('keeps GeoJSON loading for maps without a compact copy',async()=>{
   const expected={type:'FeatureCollection',features:[]};
   vi.stubGlobal('fetch',vi.fn(async()=>Response.json(expected)));
@@ -65,6 +77,7 @@ describe('compact boundary downloads',()=>{
 
 // Compact downloads are the largest boundary files. Each keeps the 60-second
 // limit so a slow connection cannot abort Mâcon while larger maps still load.
+// Crémant (6.5 MB, about 55 s at 1 Mbps) alone gets 120 seconds of headroom.
 describe('compact map download limits',()=>{
  const dir='src/lib/places';
  const compact=readdirSync(dir).filter(name=>name.endsWith('MapCatalogue.json'))
@@ -73,7 +86,7 @@ describe('compact map download limits',()=>{
  it('covers the Mâcon, Mâcon-Villages and partial Bourgogne maps',()=>{
   expect(compact.map(({catalogue})=>catalogue.id)).toEqual(expect.arrayContaining(['macon','macon-villages','bourgogne','bourgogne-aligote']));
  });
- it.each(compact.map(({name,catalogue})=>[name,catalogue]))('%s allows 60 seconds',(_name,catalogue)=>{
-  expect(catalogue.downloadTimeoutMs).toBe(60000);
+ it.each(compact.map(({name,catalogue})=>[name,catalogue]))('%s allows its reviewed download time',(_name,catalogue)=>{
+  expect(catalogue.downloadTimeoutMs).toBe(catalogue.id==='cremant-de-bourgogne'?120000:60000);
  });
 });

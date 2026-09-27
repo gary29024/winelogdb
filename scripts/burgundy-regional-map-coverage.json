@@ -1,5 +1,5 @@
 {
-  "reviewedAt": "2026-09-27",
+  "reviewedAt": "2026-09-28",
   "scope": "Seven regional AOCs, their broad denominations, 14 Bourgogne geographic denominations, Mâcon-Villages and 27 named Mâcon geographic denominations. Status concerns boundary maps, not individual plots.",
   "appellations": [
     {
@@ -199,8 +199,9 @@
           "sourceNames": [
             "Crémant de Bourgogne"
           ],
-          "status": "pending",
-          "kind": "broad"
+          "status": "mapped",
+          "kind": "broad",
+          "coverageNote": "All 378 source records across 372 current communes are included, including Rhône; this is a combined white/rosé sparkling source overview, not individual plots or separate colour-specific boundaries."
         }
       ]
     },

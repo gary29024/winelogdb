@@ -55,6 +55,8 @@ const bourgogneAppellations=['bourgogne','burgundy','bourgogne rouge','bourgogne
 const groups=registry.maps.map(group=>({...group,keys:group.aliases.map(key).sort(byLength),regions:group.compatibleRegions.map(key),
  sparkling:(group as {productStyle?:string}).productStyle==='sparkling',
  accessoryKeys:((group as {accessoryGrapes?:string[]}).accessoryGrapes??[]).map(key),
+ grapeOverrides:Object.fromEntries(Object.entries((group as {grapeColourOverrides?:Record<string,string[]>}).grapeColourOverrides??{}).map(([name,colours])=>[key(name),colours])),
+ labelTerms:((group as {labelTerms?:string[]}).labelTerms??[]).map(key).sort(byLength),
  additionalGrapes:Object.entries((group as {additionalGrapes?:Record<string,string[]>}).additionalGrapes??{}).map(([name,colours])=>[key(name),colours] as const),
  mentionColours:Object.entries((group as {labelMentions?:Record<string,'red'|'white'|'rose'>}).labelMentions??{}).map(([name,colour])=>[key(name),colour] as const),
  broad:!!(group as {broadAppellation?:boolean}).broadAppellation,
@@ -65,7 +67,7 @@ const groups=registry.maps.map(group=>({...group,keys:group.aliases.map(key).sor
  // Hyphenated site names (Solutré-Pouilly) match written either way.
  joinedSiteKeys:((group as {siteNames?:string[]}).siteNames??[]).flatMap(name=>[key(name),joinedKey(name)])}));
 const withoutLabelTerms=(text:string,group:typeof groups[number])=>{
- const terms=[...group.accessoryKeys,...group.additionalGrapes.map(([name])=>name),...group.mentionColours.map(([name])=>name)];
+ const terms=[...group.accessoryKeys,...group.additionalGrapes.map(([name])=>name),...group.mentionColours.map(([name])=>name),...group.labelTerms];
  const value=withoutOldVines(withoutGrapes(withoutAccessoryGrapes(text,terms)));
  return group.sparkling?withoutDosage(value):value;
 };
@@ -130,13 +132,18 @@ export function burgundyRegionalMapTarget(wine:Wine):BurgundyVillageMapTarget|nu
  if(!candidates.length)return undefined;
  if(candidates.length!==1||wine.identityMatchStatus==='conflict'||wine.classification)return null;
  const group=candidates[0],country=key(wine.country??''),region=key(wine.region??'');
+ // The end of "Crémant de Bourgogne Aligoté" is grape wording, not a
+ // second Bourgogne Aligoté AOC. Remove only complete multiword identities;
+ // a bare Bourgogne/Mâcon prefix must still expose competing denominations.
+ const withoutOwnNamedDesignation=(text:string)=>group.keys.filter(name=>name.includes(' '))
+  .reduce((value,name)=>` ${value} `.replaceAll(` ${name} `,' ').trim(),text);
  // Strip the broad name only after checking a competing broad identity. A
  // Mâcon-Villages label must not disappear into the generic word "Mâcon".
  if(group.broad&&fields.slice(1).some(text=>groups.some(other=>other.broad&&other.id!==group.id&&
-  other.keys.some(name=>contains(withoutRegionalOrigin(text),name)&&!group.keys.some(own=>contains(own,name))))))return null;
+  other.keys.some(name=>contains(withoutRegionalOrigin(withoutOwnNamedDesignation(text)),name)&&!group.keys.some(own=>contains(own,name))))))return null;
  // Check full pending AOC names before stripping a broad prefix: removing
  // "Bourgogne" must not conceal "Bourgogne Aligoté" in a conflicting label.
- if(group.broad&&fields.some(text=>otherRegionals.some(name=>contains(text,name)&&!group.keys.some(own=>contains(own,name)))))return null;
+ if(group.broad&&fields.some(text=>otherRegionals.some(name=>contains(withoutOwnNamedDesignation(text),name)&&!group.keys.some(own=>contains(own,name)))))return null;
  // Reviewed grape conflicts belong to each appellation, not every regional AOC.
  if(fields.some(text=>group.blockedKeys.some(name=>contains(text,name))))return null;
  if(country&&!['france','fr'].includes(country))return null;
@@ -196,7 +203,9 @@ export function burgundyRegionalMapTarget(wine:Wine):BurgundyVillageMapTarget|nu
  if(namedColours.some(value=>!group.wineColours.includes(value)||(colour&&colour!==value)))return null;
  // Principal grape wording constrains colour. Reviewed accessory grapes do
  // not imply a white wine when blended into a red/rosé denomination.
- const grapes=plainAppellation(group)?[]:[...grapeColours,...group.additionalGrapes].filter(([name])=>!group.accessoryKeys.includes(name)&&contains(remaining[0],name)).map(([,allowed])=>allowed);
+ // Crémant can be white from black grapes or rosé from an assemblage. Only
+ // its reviewed overrides change the still-wine grape/colour assumptions.
+ const grapes=plainAppellation(group)?[]:[...grapeColours,...group.additionalGrapes].filter(([name])=>!group.accessoryKeys.includes(name)&&contains(remaining[0],name)).map(([name,allowed])=>group.grapeOverrides[name]??allowed);
  const explicit=colour||namedColours[0];
  const possible=group.wineColours.filter(value=>grapes.every(allowed=>allowed.includes(value))&&(!explicit||value===explicit));
  if(grapes.length&&!possible.length)return null;
