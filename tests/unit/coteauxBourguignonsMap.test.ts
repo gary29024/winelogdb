@@ -73,6 +73,22 @@ describe('Coteaux Bourguignons partial regional overview',()=>{
   }
   expect(burgundyVillageMapTarget({...base,appellation:'Bourgogne',wineName:'Ordinaire'})).toMatchObject({featureId:'inao-denom-362'});
  });
+ it.each(['Beaujolais','Beaujolais-Villages','Brouilly','Côte de Brouilly','Chénas','Chiroubles','Fleurie','Juliénas','Morgon','Moulin-à-Vent','Régnié','Saint-Amour'])(
+  'treats Beaujolais appellation %s as a competing identity',wineName=>{
+   for(const appellation of ['Coteaux Bourguignons','Bourgogne Passe-tout-grains']){
+    expect(burgundyVillageMapTarget({...base,region:'Beaujolais',appellation,colour:'Red',wineName}),appellation).toBeNull();
+    expect(burgundyVillageMapTarget({...base,appellation,colour:'Red',referenceSite:wineName}),appellation).toBeNull();
+   }
+  });
+ it('does not read the Mâconnais commune Saint-Amour-Bellevue as the Beaujolais cru',()=>{
+  expect(burgundyVillageMapTarget({...base,colour:'Red',wineName:'Saint-Amour-Bellevue'})).toMatchObject(target);
+ });
+ it.each(['Coteaux Bourguignons Gamay Noir','Coteaux Bourguignons Rouge Gamay Noir à Jus Blanc','Coteaux Bourguignons Pinot Noir Gamay Noir'])(
+  'reads the full Gamay grape name as red/rosé: %s',appellation=>{
+   expect(burgundyVillageMapTarget({...base,appellation,colour:'Red'})).toMatchObject(target);
+   expect(burgundyVillageMapTarget({...base,appellation,colour:null})).toMatchObject(target);
+   expect(burgundyVillageMapTarget({...base,appellation,colour:'White'})).toBeNull();
+  });
  it('retains all 275 source communes and explains the missing colour and Rhône boundaries',async()=>{
   const catalogue=await loadVillageMapCatalogue('coteaux-bourguignons');
   expect(catalogue.features).toHaveLength(1);

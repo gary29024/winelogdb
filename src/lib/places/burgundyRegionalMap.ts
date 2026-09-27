@@ -35,7 +35,10 @@ const withoutProducer=(label:string,producer:string)=>{
 // Grape names recorded after a full denomination ("Mâcon-Lugny Chardonnay")
 // limit the wine's possible colours; "Mâcon Chardonnay" alone remains the
 // village. Black grapes make both red and rosé, so they never pick one.
-const grapeColours:readonly (readonly [string,readonly string[]])[]=[['chardonnay',['white']],['pinot noir',['red','rose']],['gamay',['red','rose']]];
+// "Gamay Noir (à Jus Blanc)" is the full grape name: its "Noir"/"Blanc" is not
+// a leftover place or a white label. Longer names are removed first.
+const grapeColours:readonly (readonly [string,readonly string[]])[]=[['chardonnay',['white']],['pinot noir',['red','rose']],
+ ['gamay noir a jus blanc',['red','rose']],['gamay noir',['red','rose']],['gamay',['red','rose']]];
 const withoutGrapes=(text:string)=>grapeColours.reduce((value,[name])=>` ${value} `.replaceAll(` ${name} `,' ').trim(),text);
 // "Vieilles Vignes" (old vines) is a label mention, not part of the denomination,
 // so "Bourgogne Aligoté Vieilles Vignes" in the appellation field still matches.
@@ -74,7 +77,16 @@ const higherNames=[...new Set([
 const otherRegionals=[...registry.otherAppellations.map(key),...PLACES.filter(place=>place.id.startsWith('france/burgundy/')&&!place.classification&&place.tier==='appellation')
  .flatMap(place=>[place.name,...place.aliases].map(key))
  .filter(name=>!groups.some(group=>group.keys.includes(name))&&!['bourgogne rouge','bourgogne blanc'].includes(name))];
-const conflictingNames=[...new Set([...higherNames,...otherRegionals,...groups.filter(group=>group.broad).flatMap(group=>group.keys)])];
+// Beaujolais, Beaujolais-Villages and its crus compete with the broad AOCs
+// that extend into the Rhône (Coteaux Bourguignons, Passe-tout-grains).
+// Saint-Amour-Bellevue is also a Mâconnais commune, so only the cru counts.
+const beaujolaisNames=PLACES.filter(place=>place.id==='france/beaujolais'||place.id.startsWith('france/beaujolais/'))
+ .flatMap(place=>[place.name,...place.aliases].map(key));
+const conflictingNames=[...new Set([...higherNames,...otherRegionals,...beaujolaisNames,...groups.filter(group=>group.broad).flatMap(group=>group.keys)])];
+const namesConflict=(text:string)=>{
+ const value=` ${text} `.replaceAll(' saint amour bellevue ',' ').trim();
+ return conflictingNames.some(name=>contains(value,name));
+};
 
 // A village in a producer or landmark name (Château-Fuissé, Domaine de Fuissé,
 // Cave de Charnay, Roche de Solutré) is not the denomination on the label.
@@ -168,13 +180,13 @@ export function burgundyRegionalMapTarget(wine:Wine):BurgundyVillageMapTarget|nu
  });
  if(remaining.some((text,index)=>/\b(?:grands? crus?|premiers? crus?|1ers?|1st cru|cremant)\b/.test(text)||
   (!group.sparkling&&contains(text,'mousseux'))||
-  (!(index===0&&plainAppellation(group))&&conflictingNames.some(name=>contains(text,name)))))return null;
+  (!(index===0&&plainAppellation(group))&&namesConflict(text))))return null;
  // Label colour must also agree with the denomination, even if the explicit
  // colour/style is absent. Côte d'Or does not include rosé.
  // Clairet is the traditional label word for a Bourgogne rosé.
  const labelColours=[['rouge','red'],['red','red'],['blanc','white'],['white','white'],['rose','rose'],['clairet','rose']] as const;
  // Pinot Blanc within a reviewed blend is a grape name, not a white label.
- const colourFields=remaining.slice(0,2).map(text=>withoutAccessoryGrapes(text,group.accessoryKeys));
+ const colourFields=remaining.slice(0,2).map(text=>withoutGrapes(withoutAccessoryGrapes(text,group.accessoryKeys)));
  const namedColours=labelColours.filter(([name])=>colourFields.some(text=>contains(text,name))).map(([,value])=>value);
  // Coteaux Bourguignons Nouveau/Primeur denotes white wine. These reviewed
  // mentions are scoped to its config, not silently accepted on other AOCs.
