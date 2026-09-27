@@ -13,7 +13,7 @@ import {loadVillageMapData} from '../../src/lib/places/loadVillageMapData';
 afterEach(()=>vi.unstubAllGlobals());
 const bytes=(url:string)=>readFileSync(`public${url}`);
 const digest=(value:Buffer)=>createHash('sha256').update(value).digest('hex');
-const sourceDigest=(value:Buffer)=>digest(Buffer.from(value.toString('utf8').replace(/\r\n/g,'\n')));
+const sourceDigest=(value:Buffer)=>createHash('sha256').update(new TextDecoder().decode(value).replace(/\r\n/g,'\n')).digest('hex');
 
 describe('display-only regional overviews',()=>{
  it('covers the complete regional inventory and leaves village maps detailed',async()=>{
