@@ -1086,6 +1086,51 @@
         "Mâcon Rosé"
       ],
       "featureId": "inao-denom-2073"
+    },
+    {
+      "id": "macon",
+      "name": "Mâcon",
+      "region": "Mâconnais",
+      "aliases": [
+        "Mâcon"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Mâconnais",
+        "Saône-et-Loire"
+      ],
+      "wineColours": [
+        "red",
+        "white",
+        "rose"
+      ],
+      "siteNames": [],
+      "baseAppellations": [],
+      "broadAppellation": true,
+      "featureId": "inao-denom-1713"
+    },
+    {
+      "id": "macon-villages",
+      "name": "Mâcon-Villages",
+      "region": "Mâconnais",
+      "aliases": [
+        "Mâcon-Villages",
+        "Mâcon Blanc Villages"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Mâconnais",
+        "Saône-et-Loire"
+      ],
+      "wineColours": [
+        "white"
+      ],
+      "siteNames": [],
+      "baseAppellations": [],
+      "broadAppellation": true,
+      "featureId": "inao-denom-2893"
     }
   ],
   "otherAppellations": [
@@ -1097,9 +1142,6 @@
     "Coteaux Bourguignons",
     "Coteaux Bourguignons ou Bourgogne grand ordinaire ou Bourgogne ordinaire",
     "Crémant de Bourgogne",
-    "Mâcon",
-    "Mâcon - rouge exclusif",
-    "Mâcon Villages",
-    "Mâcon Villages (Blanc)"
+    "Mâcon"
   ]
 }
