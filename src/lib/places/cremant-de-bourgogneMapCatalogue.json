@@ -8234,7 +8234,7 @@
   ],
   "coverageNote": "Crémant de Bourgogne AOC overview: all 378 records in the September 2026 INAO source cover 372 communes across Côte-d’Or, Rhône, Saône-et-Loire and Yonne. This is a combined white and rosé sparkling-wine production overview, not a colour-specific area or a producer holding. Named cuvées have no separate boundaries here; no single vineyard is identified.",
   "colourScope": "overview",
-  "downloadTimeoutMs": 60000,
+  "downloadTimeoutMs": 120000,
   "geobufUrl": "/maps/cremant-de-bourgogne.2026-09-21.pbf.gz",
   "geobufRawUrl": "/maps/cremant-de-bourgogne.2026-09-21.pbf"
 }

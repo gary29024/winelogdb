@@ -591,7 +591,7 @@ for(const [appellation,id] of [['Mâcon','macon'],['Mâcon-Villages','macon-vill
  expect(downloads.every(url=>url.endsWith(`/maps/${id}.2026-09-21.pbf.gz`))).toBe(true);
 });
 
-const compactNetworkCases=[['Mâcon','macon',1400000,60000],['Bourgogne','bourgogne',3700000,60000],['Bourgogne Aligoté','bourgogne-aligote',3000000,60000],['Bourgogne Passe-tout-grains','bourgogne-passe-tout-grains',3000000,60000],['Bourgogne Mousseux','bourgogne-mousseux',3000000,60000],['Coteaux Bourguignons','coteaux-bourguignons',3500000,60000],['Crémant de Bourgogne','cremant-de-bourgogne',6700000,60000]] as const;
+const compactNetworkCases=[['Mâcon','macon',1400000,60000],['Bourgogne','bourgogne',3700000,60000],['Bourgogne Aligoté','bourgogne-aligote',3000000,60000],['Bourgogne Passe-tout-grains','bourgogne-passe-tout-grains',3000000,60000],['Bourgogne Mousseux','bourgogne-mousseux',3000000,60000],['Coteaux Bourguignons','coteaux-bourguignons',3500000,60000],['Crémant de Bourgogne','cremant-de-bourgogne',6700000,120000]] as const;
 // Exercise the largest actual payload on every run. Byte equality/size checks
 // cover every compact file in unit tests; full throttled transfers run in the
 // scheduled/manual matrix or explicitly for a map being introduced/reviewed.

@@ -60,8 +60,10 @@ uses eight decimals and must decode to the exact published GeoJSON.
 The GeoJSON is **36,956,969 bytes** (**11,488,999 bytes** with gzip level 9).
 The **6,553,696-byte** compact download is **43% smaller than gzip**, with
 exact decoded coordinate/property equality. It remains a large transfer:
-the Chromium check measured **54.38 seconds at 1 Mbps**, within the existing
-60-second budget. It is downloaded only when opened. Further transport and
+the Chromium check measured **54.38 seconds at 1 Mbps**. That leaves too little
+margin under the 60-second budget, so this map alone allows **120 seconds**;
+other compact maps keep 60 seconds. As the largest compact map, its throttled
+check still runs on every CI run. It is downloaded only when opened. Further transport and
 rendering optimisation belongs to [#363](https://github.com/gary29024/winelogdb/issues/363).
 
 The reference GeoJSON exceeds Cloudflare's 25 MiB static-asset limit and is

@@ -77,6 +77,7 @@ describe('compact boundary downloads',()=>{
 
 // Compact downloads are the largest boundary files. Each keeps the 60-second
 // limit so a slow connection cannot abort Mâcon while larger maps still load.
+// Crémant (6.5 MB, about 55 s at 1 Mbps) alone gets 120 seconds of headroom.
 describe('compact map download limits',()=>{
  const dir='src/lib/places';
  const compact=readdirSync(dir).filter(name=>name.endsWith('MapCatalogue.json'))
@@ -85,7 +86,7 @@ describe('compact map download limits',()=>{
  it('covers the Mâcon, Mâcon-Villages and partial Bourgogne maps',()=>{
   expect(compact.map(({catalogue})=>catalogue.id)).toEqual(expect.arrayContaining(['macon','macon-villages','bourgogne','bourgogne-aligote']));
  });
- it.each(compact.map(({name,catalogue})=>[name,catalogue]))('%s allows 60 seconds',(_name,catalogue)=>{
-  expect(catalogue.downloadTimeoutMs).toBe(60000);
+ it.each(compact.map(({name,catalogue})=>[name,catalogue]))('%s allows its reviewed download time',(_name,catalogue)=>{
+  expect(catalogue.downloadTimeoutMs).toBe(catalogue.id==='cremant-de-bourgogne'?120000:60000);
  });
 });

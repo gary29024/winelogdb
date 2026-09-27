@@ -93,7 +93,7 @@ describe('Crémant de Bourgogne sparkling source overview',()=>{
   expect(catalogue.coverageNote).toContain('all 378 records');
   expect(catalogue.coverageNote).toContain('not a colour-specific area');
   expect(catalogue.geobufUrl).toBe('/maps/cremant-de-bourgogne.2026-09-21.pbf.gz');
-  expect(catalogue.downloadTimeoutMs).toBe(60000);
+  expect(catalogue.downloadTimeoutMs).toBe(120000);
   const source=config.maps.find(m=>m.id==='cremant-de-bourgogne')!;
   expect(source.sourceCommunes).toHaveLength(372);
   expect(source.communeAliases).toEqual({'69159':'69114'});

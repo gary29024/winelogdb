@@ -279,7 +279,10 @@ def main():
         if config.get('colourScope'):
             catalogue['colourScope'] = config['colourScope']
         if config.get('downloadTimeoutMs'):
-            assert config['denominationId'] in (362, 389, 391, 394, 561, 1713, 2893, 2338) and config['downloadTimeoutMs'] == 60000
+            # Crémant's 6.5 MB compact copy needs about 55 s at 1 Mbps, so it alone
+            # gets 120 s of headroom; the other compact maps keep 60 s.
+            assert config['denominationId'] in (362, 389, 391, 394, 561, 1713, 2893, 2338)
+            assert config['downloadTimeoutMs'] == (120000 if config['denominationId'] == 561 else 60000)
             catalogue['downloadTimeoutMs'] = config['downloadTimeoutMs']
         collection = dict(type='FeatureCollection', features=features)
         if config.get('compactDownload'):
