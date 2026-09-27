@@ -42,6 +42,8 @@ const loaders=new Map<string,()=>Promise<{default:VillageMapCatalogue}>>([
  ['macon-montbellet',()=>import('./macon-montbelletMapCatalogue.json')],
  ['macon-saint-gengoux-le-national',()=>import('./macon-saint-gengoux-le-nationalMapCatalogue.json')],
  ['macon-uchizy',()=>import('./macon-uchizyMapCatalogue.json')],
+ ['macon',()=>import('./maconMapCatalogue.json')],
+ ['macon-villages',()=>import('./macon-villagesMapCatalogue.json')],
  ['gevrey-chambertin',()=>import('./burgundyVillageMapCatalogue.json')],
  ['morey-saint-denis',()=>import('./moreyVillageMapCatalogue.json')],
  ['chambolle-musigny',()=>import('./chambolleVillageMapCatalogue.json')],

@@ -140,8 +140,9 @@ the plan because they lack a village AOC. See the
 
 All **14 Bourgogne geographic denominations** in the pinned source now have maps.
 These are denominations within Bourgogne AOC, not new AOCs or village maps.
-**Forty-one of 49 regional source denominations are mapped; eight remain pending:**
-the seven broad regional denominations and Mâcon-Villages.
+**Forty-three of 49 regional source denominations are mapped; six remain pending:**
+the broad Bourgogne, Bourgogne Aligoté, Bourgogne Mousseux, Bourgogne
+Passe-tout-grains, Coteaux Bourguignons and Crémant de Bourgogne denominations.
 The [Yonne source review](burgundy-regional-maps.md#yonne-source-review)
 explains the five-commune Côtes d’Auxerre list and its difference from some
 seven-name promotional lists. It does not add boundaries from those lists.
@@ -180,8 +181,12 @@ Within Mâcon, all 27 named geographic denominations are mapped:
 - [x] Mâcon Saint-Gengoux-le-National: all 16 current communes, including Bonnay-Saint-Ythaire and the source portions of La Vineuse sur Fregande; overview and red-only sector
 - [x] Mâcon Uchizy: Uchizy; white only
 
-No named Mâcon denomination remains pending. Broad Mâcon and Mâcon-Villages
-remain pending. The seventeen western, central and northern three-colour maps are explicitly denomination
+- [x] Broad Mâcon: all 88 source communes; denomination overview and published red-only sector
+- [x] Mâcon-Villages: all 80 current source communes; white only, including the additional Ozenay source parcels
+
+All 29 Mâcon source denominations now have maps. This does not complete individual
+named plots or colour-specific boundaries. Broad Mâcon and the seventeen western,
+central and northern three-colour maps are explicitly denomination
 overviews: complete white/red/rosé eligibility
 areas need further verification, as explained in the
 [western Mâcon source review](burgundy-regional-maps.md#western-mâcon-source-review).
@@ -192,6 +197,9 @@ The [northern Mâcon source review](burgundy-regional-maps.md#northern-mâcon-so
 documents the final six names, Tournus's separate denomination areas and the
 historic commune codes retained in the source. Completion of the named inventory
 does not establish individual vineyards or complete colour-specific boundaries.
+The [broad Mâcon source review](burgundy-regional-maps.md#broad-mâcon-and-mâcon-villages-source-review)
+documents the two independent source areas, additional Ozenay parcels and
+retained historical commune attribution.
 
 ## Source gaps and completion criteria
 

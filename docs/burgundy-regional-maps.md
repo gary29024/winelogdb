@@ -1,7 +1,8 @@
 # Burgundy regional maps
 
 Reviewed 27 September 2026. Maps cover all fourteen geographic denominations
-within Bourgogne AOC in the pinned source, plus all twenty-seven named Mâcon denominations.
+within Bourgogne AOC in the pinned source, plus all twenty-nine Mâcon source denominations:
+the twenty-seven named areas, broad Mâcon and Mâcon-Villages.
 These remain regional denominations, not new AOCs or village appellations.
 The existing 44 village maps and 33 Grand Cru appellations are unchanged.
 
@@ -48,6 +49,8 @@ The existing 44 village maps and 33 Grand Cru appellations are unchanged.
 | Mâcon Montbellet | 583 / 2071 | 1 | White only |
 | Mâcon Saint-Gengoux-le-National | 583 / 1734 | 16 current | Red, white, rosé; overview only |
 | Mâcon Uchizy | 583 / 2073 | 1 | White only |
+| Mâcon | 583 / 1713 | 88 | Red, white, rosé; overview only |
+| Mâcon-Villages | 583 / 2893 | 80 current | White only |
 
 The official BIVB sheets confirm these counts, colours and regional status:
 [Côte d’Or](https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/bourgogne-cote-d-or%2C2458%2C9253.html?args=Y29tcF9pZD0yMjc4JmFjdGlvbj12aWV3RmljaGUmaWQ9Nzc0Jnw%3D),
@@ -62,10 +65,12 @@ Coteaux Bourguignons, Crémant de Bourgogne and Mâcon. The
 [BIVB inventory](https://www.bourgogne-wines.com/professional-access/documents-photos%2C2334%2C9356.html)
 also lists 14 Bourgogne geographic denominations and 27 named Mâcon denominations.
 Together with the seven broad denominations and Mâcon-Villages, these account for
-**49 source denomination IDs: forty-one mapped, eight pending**. Alternative source names
+**49 source denomination IDs: forty-three mapped, six pending**. Alternative source names
 and colour variants sharing an ID do not increase that count.
 
-All seven broad regional areas and Mâcon-Villages remain pending.
+The six broad regional areas outside Mâcon remain pending: Bourgogne, Bourgogne
+Aligoté, Bourgogne Mousseux, Bourgogne Passe-tout-grains, Coteaux Bourguignons and
+Crémant de Bourgogne.
 Completing the fourteen Bourgogne geographic denominations does
 not complete the broad Bourgogne AOC boundary. Chablis Premier Cru
 source gaps and other named plots remain tracked separately in
@@ -109,7 +114,8 @@ disconnected parts are retained. Côte d’Or's valid source
 union develops a floating-point self-intersection at a touching ring after
 projection near 4.8632224622, 47.0432220468. Mancey has another reviewed projected
 ring issue near 4.8392414160, 46.5649575786, detailed below. `make_valid` repairs
-only these two denominations; no buffer or simplification is used. For every map, inverse
+only reviewed denominations, also including broad Mâcon and Mâcon-Villages as
+described below; no buffer or simplification is used. For every map, inverse
 projection and symmetric difference with the untouched source union must be
 below **0.01 m²**. The measured difference for Côte d’Or is **0.00077693 m²**;
 both Hautes Côtes maps are below 0.00000001 m². A different invalid denomination
@@ -130,7 +136,7 @@ production geometry, not the smaller area actually planted or producing wine.
 
 ## Identity and display
 
-The forty-one-entry runtime index is separate from the village registry; catalogues
+The forty-three-entry runtime index is separate from the village registry; catalogues
 and geometry load only when opening the dialog. Wine matching needs the explicit
 designation in the appellation or wine name. Hautes Côtes aliases may omit
 “Bourgogne”, as may the complete names “Côtes du Couchois” and “Côtes d’Auxerre”. “Côte d’Or” or “Côte
@@ -138,6 +144,9 @@ Chalonnaise” alone, a region field or a producer/cuvée alone does not identif
 regional designation. Accents, punctuation and AOC/AOP suffixes normalize.
 Conflicting countries, regions, appellations, cru tiers, colours and non-still
 products withhold the map rather than falling through to a nested village name.
+Broad Mâcon and Mâcon-Villages require the recorded appellation, with an exact
+reviewed name plus optional colour/grape suffixes. They are considered only when
+no named regional denomination is present, including conflicting candidates.
 Recorded colour and style must agree with one another, as well as the label.
 No database classification is added: these wines remain unclassified in the
 existing three-tier cru schema.
@@ -681,7 +690,8 @@ lazy loading, commune zoom, sector exploration and return to the wine's overview
 
 The final named Mâcon batch below adds Bray, Chardonnay, Mancey, Montbellet,
 Saint-Gengoux-le-National and Uchizy. Mâcon-Villages and all seven broad regional
-areas remain pending; missing named plots continue under issue #344.
+areas were pending at that stage; broad Mâcon and Mâcon-Villages are now covered
+below. Missing named plots continue under issue #344.
 
 ## Northern Mâcon source review
 
@@ -789,5 +799,173 @@ Unit and browser checks cover all six maps, owner/shared pages, commune navigati
 source sectors, white-only restrictions, producer labels, Chardonnay ambiguity
 and Saint-Gengoux shorthand conflicts.
 
-Next: broad Mâcon and Mâcon-Villages, followed by the six other broad regional
-areas. Named-boundary gaps, including Chablis Premier Cru, remain under issue #344.
+That named batch is followed by the broad maps below. Named-boundary gaps,
+including Chablis Premier Cru, remain under issue #344.
+
+## Broad Mâcon and Mâcon-Villages source review
+
+This batch completes **29/29 Mâcon source denominations** and brings regional
+coverage to **43/49**. Both maps remain regional, including Mâcon-Villages despite
+its name. The six other broad regional denominations are next.
+
+| Source denomination | Source rows | Commune navigation | Delimited area |
+| --- | ---: | ---: | ---: |
+| Mâcon (`1713`) | 134 | 88 | 17,704.17 ha |
+| Mâcon red-only sector (same ID) | 43 of those rows | 38 attributed communes | 1,925.15 ha |
+| Mâcon-Villages (`2893`) | 83 | 80 current, from 81 source codes | 12,493.44 ha |
+
+These are delimited production areas, not planted acreage. Broad Mâcon retains
+both `Mâcon` and `Mâcon - rouge exclusif`. Its CVI codes are
+`1B369, 1B369 01, 1R371, 1S371, 1S371 01`; the overview supports red, white and
+rosé wines without claiming complete colour-specific eligibility. The red-only
+sector is available for manual exploration and never automatically locates a
+red bottle. It is not subtracted to invent a white or rosé boundary.
+
+**Mâcon Supérieur**, the former higher-strength grade of the same AOC, is an
+alias of broad Mâcon so older bottles open this map. The historical description
+and 2005 discontinuation are recorded in [ABC du Vin's Mâcon Supérieur entry](https://www.abcduvin.com/index.php/term/%2C6c53aa9f5fa7aa706e53b0a4abac.xhtml).
+This supports a label alias, not a reconstruction of its historical parcels:
+the coverage note explicitly identifies the **2026 INAO boundary**, rather than
+the boundary for an older bottle's vintage. It is matched as a recorded
+appellation only, with the same colour, conflict and sparkling guards.
+
+Mâcon-Villages has white-only CVI codes `1B370, 1B370 01`. Its
+`Mâcon Villages (Blanc)` row in **Ozenay (71345)** is not a duplicate of the main
+label: of its **6.417560 ha**, **5.519245 ha** overlaps the main source union and
+**0.898315 ha** adds production area. `additionalSourceNames` records this reviewed
+same-colour addition separately from exact duplicates and colour sectors. All
+parcels enter the single white-wine feature; it is not a separate vineyard.
+
+The historical **Saint-Ythaire (71492)** rows in Mâcon-Villages share navigation
+with **Bonnay-Saint-Ythaire (71042)**, following the already reviewed commune
+merger. The original 81-code set is verified before conversion to 80 current
+communes. Broad Mâcon already attributes its parcels to 88 current source codes.
+Each commune selector frames its attributed INAO parcels, not an administrative
+clip. The source portions of merged communes are retained without filling their
+entire modern boundaries.
+
+The two official source unions are **not perfectly nested**: Mâcon-Villages has
+**9.136869 ha** outside the broad Mâcon union, while broad Mâcon has **5,219.862306
+ha** outside Mâcon-Villages. Neither is reconstructed from the 27 named maps or
+clipped to the other. Promotional commune counts are not geometry: compare the
+UPVM's [Mâcon](https://www.vins-macon.com/les-macon/macon-vins/) and
+[Mâcon-Villages](https://www.vins-macon.com/les-macon/macon-villages/) lists with
+the exact codes checked in the pinned source configuration.
+
+### Projection and retained detail
+
+These large unions contain touching rings that cross after direct reprojection,
+notably near **4.6938144371, 46.5627511089** and **4.8359237291, 46.5656497372**.
+Repair alone causes about **0.124 m²** round-trip difference for Mâcon-Villages
+and the Mâcon red-only sector, which fails the existing **0.01 m²** gate.
+For these two denomination IDs only, the builder inserts collinear source-CRS
+vertices at a maximum **20 m** interval before reprojection and repairs the
+reviewed touching rings. The inserted vertices do not change the source area;
+zero-area line remnants are omitted after retaining every polygon. All three
+published production features pass the unchanged round-trip gate against the
+untouched source unions (measured **0.00000000 m²**). No buffer is used.
+
+The source reader also reports a nested shell in Mâcon-Villages' La Salle row
+(`id_aire 1831`, commune `71494`). The standard source union dissolves the nested
+polygon; the complete union is valid. No neighbouring appellation geometry is
+used to replace it.
+
+Both files use a **1e-7 degree** grid: the default grid would close excluded
+holes of **36.1573 m²** in Mâcon and **2.9750 m²** in Mâcon-Villages. Independent
+checks of the published files confirm valid geometry, no lost polygon parts,
+and largest closed slivers below **0.707 m²**. Net area differences are
+**+2.135 m²** for Mâcon, **−8.908 m²** for its red-only sector and **+12.122 m²**
+for Mâcon-Villages, all within the existing 0.005% limit.
+
+### Geometry simplification review
+
+PR #361's review suggested topology-preserving Douglas–Peucker simplification
+before snapping to the coarser grid. Checked against the original Lambert-93
+source unions, an acceptable net area alone does not preserve excluded holes.
+Using the builder's repaired, 20 m sampled WGS84 boundaries, followed by
+`simplify(..., preserve_topology=True)` and `set_precision`, gave:
+
+| Simplification tolerance / coordinate grid | Largest closed Mâcon hole | Largest closed Mâcon-Villages hole | Existing hole gate |
+| --- | ---: | ---: | --- |
+| 2e-6° / 1e-6° | 36.1573 m² | 3.1546 m² | Fails both maps |
+| 2e-6° / 1e-7° | 27.6674 m² | 3.1546 m² | Fails both maps |
+| 1e-6° / 1e-7° | 1.3250 m² | 0.7067 m² | Passes |
+
+All three options pass the 0.005% net-area limit for all three production
+features; none loses a polygon part of 2 m² or larger. However, even the gentler
+last option simplifies the overview and red-only sector independently: it
+leaves **73.4518 m²** of the candidate sector outside the candidate overview,
+compared with **0.5909 m²** from the existing coordinate snapping. The source
+sector is entirely contained by the source overview. Per-feature topology
+preservation does not preserve shared edges between features.
+
+The current geometry is retained. Any future geometry simplification must
+preserve shared edges as well as pass the unchanged round-trip, area, hole and part checks.
+Removing only exactly collinear vertices from the already published geometry
+preserves its shape but saves only about **1%** gzip, so it does not justify
+adding a separate per-map simplification path here.
+
+### Compact downloads with unchanged boundaries
+
+The two broad maps instead ship a gzip-compressed [Geobuf](https://github.com/mapbox/geobuf)
+copy alongside their original GeoJSON. Integer coordinate deltas reduce the
+download without removing vertices or changing the reviewed precision. The
+builder explicitly uses **seven decimal places**; the encoder's default six
+would change these maps. Both the Python build and the browser-decoder unit
+tests require exact equality of every decoded coordinate, feature ID and
+property with the published GeoJSON. All holes, parts and shared edges are
+therefore identical to the reviewed maps above.
+
+| Map | Original GeoJSON | Gzipped GeoJSON | Compact download | Reduction vs gzip |
+| --- | ---: | ---: | ---: | ---: |
+| Mâcon | 9,480,434 bytes | 2,741,240 bytes | 1,340,715 bytes | 51.1% |
+| Mâcon-Villages | 6,275,822 bytes | 1,847,934 bytes | 899,520 bytes | 51.3% |
+
+`compactDownload` is enabled only for these two reviewed maps. The same builder
+produces deterministic `.pbf.gz` files (gzip timestamp zero) and records their
+`geobufUrl` in the catalogues. `dataUrl` remains the original GeoJSON for source
+inspection and older browsers without `DecompressionStream`. No coordinate
+rounding or geometry simplification is added to the transport step.
+
+The decoder loads with the map dialog. Downloads still use the existing abort,
+timeout and retry flow, and the decoded result passes the existing feature
+validation before rendering. A failed compact request offers a retry instead
+of silently fetching the much larger GeoJSON. The loader accepts both intact
+gzip files and responses already decompressed by an HTTP `Content-Encoding`
+header. Other maps keep their GeoJSON path.
+
+### Labels and validation
+
+Broad maps require an explicitly recorded appellation. Mâcon or Mâcon-Villages
+in a producer, wine name, reference field or region alone is insufficient.
+Colour/grape suffixes retain the reviewed compatibility rules from #360,
+including Gamay/Pinot Noir rosé support. Mâcon-Villages rejects red and rosé.
+Unknown appended places, conflicting specific denominations and cru claims do
+not fall back to a broad map.
+
+Named maps still take precedence: `Mâcon` plus `Lugny Chardonnay` selects Lugny,
+whereas `Mâcon-Villages` plus that wine name stays Mâcon-Villages. Recorded
+`Mâcon Chardonnay` still selects the Chardonnay denomination. Bare `Chardonnay`
+in the wine name never does: beside recorded Mâcon it now opens the broad Mâcon
+overview. Likewise, producer text such as `Cave de Prissé-Sologny-Verzé` beside
+recorded Mâcon now gets only that broad map, without inferring Prissé or Verzé.
+
+Producer references include [Cave de Lugny's range](https://cave-lugny.com/wp-content/uploads/gamme-vins-site-fr-new-min.pdf)
+(Mâcon Cuvée Ancestrale and Mâcon-Villages AIGAICIA),
+[Drouhin's Mâcon-Villages](https://www.drouhin.com/fr_FR/products/macon-villages-blanc-2022),
+[Jadot's white-only Mâcon-Villages sheet](https://www.louisjadot.com/bo/wp-content/pdf/vins/vin-1667-macon-villages.pdf)
+and its [producer-authored Mâcon Blanc Villages sheet](https://sf9b26283ebaf6cb6.jimcontent.com/download/version/1652531157/module/16321144522/name/macon-blanc-villages%20Louis%20Jadot.pdf)
+for the reviewed alternate word order. These references support labels and
+colour, not replacement boundaries or inferred producer holdings.
+
+Each compact map loads only when its dialog opens. Tests cover broad/specific
+precedence, source provenance, the additional Ozenay area, commune navigation,
+red-only exploration, owner/shared pages and mobile layouts. Transport tests
+compare the complete decoded maps with GeoJSON, exercise raw and HTTP-decoded
+gzip, cancellation, failures, retry and compatibility fallback, and check Mâcon
+over a **1 Mbps / 150 ms latency** connection with cache disabled.
+All **89 generated regional files** (including two compact copies) reproduce
+byte-for-byte. All source GeoJSON files, **41 prior registry entries and 82 prior
+maps/catalogues** remain unchanged; rebuilding all 43 regional maps passes the
+same geometry gates. Compact loading also retains the existing 20-second
+download timeout and does not require any change to the wine matching rules.

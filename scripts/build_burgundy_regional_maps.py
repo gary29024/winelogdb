@@ -11,13 +11,14 @@ import hashlib
 import json
 import shutil
 import zipfile
+import geobuf
 from collections import defaultdict
 from pathlib import Path
 
 import shapefile
 from pyproj import CRS, Transformer
 from shapely.geometry import Polygon, shape
-from shapely import get_parts, make_valid, set_precision
+from shapely import get_parts, make_valid, set_precision, segmentize, prepare
 from shapely.ops import transform, unary_union
 
 from build_burgundy_village_map import (
@@ -38,6 +39,7 @@ def trimmed(geom, source=None, grid=GRID):
     assert result.is_valid and not result.is_empty
     if source is not None:
         projected = transform(source[1], result)
+        prepare(projected)
         # Area moves by under 0.005% (edge shifts of centimetres), and only sub-2 m² slivers between
         # source parcels may close or vanish. No real parcel or hole is lost.
         assert abs(projected.area - source[0].area) < 5e-5 * source[0].area
@@ -47,6 +49,30 @@ def trimmed(geom, source=None, grid=GRID):
         lost = [part for part in get_parts(source[0]) if not projected.intersects(part.representative_point().buffer(0.3))]
         assert all(part.area < 2 for part in lost)
     return result
+
+
+def projected_boundary(source, config, forward, backward):
+    """Retain reviewed touching rings without weakening the round-trip gate."""
+    sampled = source
+    if length := config.get('projectionSegmentLength'):
+        assert config['denominationId'] in (1713, 2893) and length == 20
+        # Collinear source-CRS vertices preserve the original straight edges.
+        # Sampling before reprojection avoids cutting across touching rings on
+        # long edges when the CRS transform curves them. No smoothing/buffering.
+        sampled = segmentize(source, length)
+        assert source.symmetric_difference(sampled).area < 0.01
+    result = transform(forward, sampled)
+    if not result.is_valid:
+        assert config['denominationId'] in (2840, 1728, 1713, 2893)
+        result = make_valid(result)
+    if config['denominationId'] in (1713, 2893) and result.geom_type == 'GeometryCollection':
+        # Repaired point-touching rings can leave zero-area lines. Keep every
+        # polygon, then check against the untouched source union below.
+        result = unary_union([part for part in get_parts(result) if part.geom_type in ('Polygon', 'MultiPolygon')])
+    assert result.is_valid and result.geom_type in ('Polygon', 'MultiPolygon')
+    difference = source.symmetric_difference(make_valid(transform(backward, result))).area
+    assert difference < 0.01
+    return result, difference
 
 
 def main():
@@ -84,7 +110,7 @@ def main():
         expected = {d['denominationId']: set(d['sourceNames']) for d in app['denominations']}
         assert actual[app['appellationId']] == expected, f"Review regional inventory: {app['name']}"
 
-    outputs, registry = [], []
+    outputs, binary_outputs, registry = [], [], []
     for config in maps:
         rows = grouped[config['denominationId']]
         # Retain every source parcel when old commune codes survive a merger.
@@ -98,8 +124,13 @@ def main():
             rows = [(dict(r, insee=aliases.get(r['insee'], r['insee'])), g) for r, g in rows]
         assert {r['id_app'] for r, _ in rows} == {config['appellationId']}
         equivalent_names = config.get('equivalentSourceNames', [])
+        additional_names = config.get('additionalSourceNames', [])
         variants = config.get('sourceVariants', [])
-        assert {r['denom'] for r, _ in rows} == {config['sourceName'], *equivalent_names, *(v['name'] for v in variants)}
+        assert {r['denom'] for r, _ in rows} == {config['sourceName'], *equivalent_names, *(v['name'] for v in additional_names), *(v['name'] for v in variants)}
+        # A reviewed same-colour source label can add parcels, unlike an exact
+        # duplicate (Fuissé) or a separately displayed colour sector.
+        for extra in additional_names:
+            assert sorted({r['insee'] for r, _ in rows if r['denom'] == extra['name']}) == extra['communes']
         for variant in variants:
             assert sorted({r['insee'] for r, _ in rows if r['denom'] == variant['name']}) == variant['communes']
         # Fuissé repeats identical white-only geometry under two source labels.
@@ -117,18 +148,7 @@ def main():
         assert sorted({colour_codes[code.strip()[1]] for code in config['sourceCvi'].split(',')}) == sorted(config['wineColours'])
         whole_m = unary_union([geom for _, geom in rows])
         assert whole_m.is_valid
-        whole = transform(to_wgs84, whole_m)
-        # Côte d'Or and Mancey have point-touching rings that cross at floating
-        # precision after reprojection (Mancey: 4.8392414160, 46.5649575786).
-        # Repair only these reviewed cases, with a
-        # strict source-CRS round-trip area bound; never buffer or
-        # simplify away real parcels or holes.
-        if not whole.is_valid:
-            assert config['denominationId'] in (2840, 1728)
-            whole = make_valid(whole)
-        round_trip = make_valid(transform(to_source, whole))
-        difference = whole_m.symmetric_difference(round_trip).area
-        assert difference < 0.01
+        whole, difference = projected_boundary(whole_m, config, to_wgs84, to_source)
         west, south, east, north = config['expectedBounds']
         assert west < whole.bounds[0] < whole.bounds[2] < east
         assert south < whole.bounds[1] < whole.bounds[3] < north
@@ -148,7 +168,7 @@ def main():
         # eligibility areas. They remain selectable but never auto-locate a wine.
         for variant in variants:
             sector_m = unary_union([g for r, g in rows if r['denom'] == variant['name']])
-            sector = transform(to_wgs84, sector_m)
+            sector, _ = projected_boundary(sector_m, config, to_wgs84, to_source)
             assert sector_m.is_valid and sector.is_valid and not sector.is_empty
             assert sector_m.symmetric_difference(transform(to_source, sector)).area < 0.01
             assert sector_m.difference(whole_m).area < 0.01
@@ -186,11 +206,23 @@ def main():
                          coverageNote=config.get('coverageNote', 'A geographic denomination within Bourgogne AOC. The highlight shows its full INAO production area; named cuvées and producer holdings have no separate boundaries here.'))
         if config.get('colourScope'):
             catalogue['colourScope'] = config['colourScope']
-        outputs.extend([(ROOT / 'public' / url.lstrip('/'), dict(type='FeatureCollection', features=features), True),
+        collection = dict(type='FeatureCollection', features=features)
+        if config.get('compactDownload'):
+            # Transport only: preserve the reviewed grid, every ring and every
+            # property. Geobuf's default six decimals would erase narrow holes.
+            assert config['denominationId'] in (1713, 2893)
+            encoded = geobuf.Encoder().encode(collection, precision=7, dim=2)
+            canonical = json.loads(json.dumps(collection))  # tuples -> lists
+            assert geobuf.decode(encoded) == canonical, 'Compact download changes the map'
+            packed = gzip.compress(encoded, compresslevel=9, mtime=0)
+            assert geobuf.decode(gzip.decompress(packed)) == canonical
+            catalogue['geobufUrl'] = url.removesuffix('.geojson') + '.pbf.gz'
+            binary_outputs.append((ROOT / 'public' / catalogue['geobufUrl'].lstrip('/'), packed))
+        outputs.extend([(ROOT / 'public' / url.lstrip('/'), collection, True),
                         (PLACES / f"{config['id']}MapCatalogue.json", catalogue, False)])
         entry = {key: config[key] for key in ('id', 'name', 'region', 'aliases', 'compatibleRegions', 'wineColours')}
         # Reviewed site names require the matching base appellation on the wine.
-        for key in ('siteNames', 'baseAppellations', 'matchAppellationOnly', 'conflictingNames'):
+        for key in ('siteNames', 'baseAppellations', 'matchAppellationOnly', 'conflictingNames', 'broadAppellation'):
             if key in config:
                 entry[key] = config[key]
         registry.append({**entry, 'featureId': feature_id})
@@ -198,6 +230,8 @@ def main():
     # No output is changed until every map and the full inventory validates.
     for path, value, compact in outputs:
         write_json(path, value, compact)
+    for path, value in binary_outputs:
+        path.write_bytes(value)
     # Other regional designations can conflict with a mapped label even though
     # their own maps are pending. Keep their names in the small identity index.
     other_names = {app['name'] for app in inventory if app['appellationId'] != 138}

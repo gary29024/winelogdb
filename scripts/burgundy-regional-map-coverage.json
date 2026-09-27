@@ -218,7 +218,7 @@
             "Mâcon",
             "Mâcon - rouge exclusif"
           ],
-          "status": "pending",
+          "status": "mapped",
           "kind": "broad"
         },
         {
@@ -445,7 +445,7 @@
             "Mâcon Villages",
             "Mâcon Villages (Blanc)"
           ],
-          "status": "pending",
+          "status": "mapped",
           "kind": "macon-villages"
         }
       ]

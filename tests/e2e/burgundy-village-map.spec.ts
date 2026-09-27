@@ -31,11 +31,13 @@ const regionalMapCases=[
  ['Mâcon Serrières',1,'Serrières','red','Vieilles Vignes'],
  ['Mâcon Montbellet',1,'Montbellet','white','Mâcon-Montbellet'],
  ['Mâcon Uchizy',1,'Uchizy','white','Mâcon-Uchizy'],
+ ['Mâcon-Villages',80,'Ozenay','white','AIGAICIA'],
 ] as const;
 const smokeRegionalAppellations=new Set<string>([
  'Bourgogne Côte d’Or',
  'Bourgogne Chitry',
  'Mâcon Loché',
+ 'Mâcon-Villages',
 ]);
 const browserRegionalCases=fullMapMatrix?regionalMapCases:regionalMapCases.filter(([appellation])=>smokeRegionalAppellations.has(appellation));
 
@@ -115,8 +117,9 @@ const maconOverviewCases=[
  ['Mâcon Chardonnay','inao-denom-1720',4,'Tournus',false],
  ['Mâcon Mancey','inao-denom-1728',12,'Laives',true],
  ['Mâcon Saint-Gengoux-le-National','inao-denom-1734',16,'Bonnay-Saint-Ythaire',true],
+ ['Mâcon','inao-denom-1713',88,'Fleurville',true],
 ] as const;
-for(const route of matrixRoutes)for(const [appellation,featureId,count,commune,hasSector] of maconOverviewCases.filter((_,i)=>fullMapMatrix||i===1||i===10||i===16)){
+for(const route of matrixRoutes)for(const [appellation,featureId,count,commune,hasSector] of maconOverviewCases.filter((_,i)=>fullMapMatrix||i===1||i===10||i===16||i===17)){
  test(`Mâcon overview ${appellation} ${route}: overview and source sector stay distinct`,async({page},testInfo)=>{
   await page.setViewportSize({width:320,height:900});
   await setup(page,{appellation,wineName:'Vieilles Vignes',classification:null,colour:'White',wineStyle:'white',region:'Mâconnais'});
@@ -180,10 +183,14 @@ for(const route of matrixRoutes)test(`Northern Mâcon labels distinguish grapes,
   await expect(dialog.locator('.village-map-description')).toContainText('Denomination overview');
   await page.keyboard.press('Escape');
  }
- for(const wineName of ['Chardonnay','Mâcon Chardonnay','Les Vignerons de Mancey Royer Vers','Mâcon St-Gengoux-de-Scissé']){
+ for(const wineName of ['Chardonnay','Mâcon Chardonnay','Les Vignerons de Mancey Royer Vers']){
   await setup(page,{appellation:'Mâcon',wineName,producer:'Les Vignerons de Mancey-Royer-Vers',colour:'White',wineStyle:'white',classification:null,region:'Mâconnais'});
-  await page.goto(route);await expect(page.getByRole('button',{name:'View regional map'})).toHaveCount(0);
+  await page.goto(route);await page.getByRole('button',{name:'View regional map'}).click();
+  await expect(page.getByRole('dialog',{name:'Mâcon',exact:true}).getByRole('button',{name:'Region view',exact:true})).toBeEnabled();
+  await page.keyboard.press('Escape');
  }
+ await setup(page,{appellation:'Mâcon',wineName:'Mâcon St-Gengoux-de-Scissé',classification:null,region:'Mâconnais'});
+ await page.goto(route);await expect(page.getByRole('button',{name:'View regional map'})).toHaveCount(0);
 });
 
 for(const route of matrixRoutes)test(`Central Mâcon producer labels and village precedence ${route}`,async({page})=>{
@@ -199,10 +206,14 @@ for(const route of matrixRoutes)test(`Central Mâcon producer labels and village
   await expect(dialog.locator('.village-map-description')).toContainText('Denomination overview');
   await page.keyboard.press('Escape');
  }
- for(const wineName of ['Cave de Lugny Les Charmes','Les Charmes','Lugny Cruzille']){
+ for(const wineName of ['Cave de Lugny Les Charmes','Les Charmes']){
   await setup(page,{appellation:'Mâcon',wineName,producer:'Cave de Lugny',colour:'White',wineStyle:'white',classification:null,region:'Mâconnais'});
-  await page.goto(route);await expect(page.getByRole('button',{name:'View regional map'})).toHaveCount(0);
+  await page.goto(route);await page.getByRole('button',{name:'View regional map'}).click();
+  await expect(page.getByRole('dialog',{name:'Mâcon',exact:true}).getByRole('button',{name:'Region view',exact:true})).toBeEnabled();
+  await page.keyboard.press('Escape');
  }
+ await setup(page,{appellation:'Mâcon',wineName:'Lugny Cruzille',classification:null,region:'Mâconnais'});
+ await page.goto(route);await expect(page.getByRole('button',{name:'View regional map'})).toHaveCount(0);
  await setup(page,{appellation:'Viré-Clessé',wineName:'Viré-Clessé',producer:'Cave de Lugny',colour:'White',wineStyle:'white',classification:'village',region:'Mâconnais'});
  await page.goto(route);await expect(page.getByRole('button',{name:'View regional map'})).toHaveCount(0);
  await page.getByRole('button',{name:'View village map'}).click();
@@ -520,6 +531,53 @@ test('failed boundary download can be retried without leaving the wine',async({p
  await expect(page.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
  await expect(page.locator('.village-map-selected-label')).toHaveText('Les Cazetiers');
  await expect(page).toHaveURL(/\/wines\/layout-wine$/);
+});
+
+test('compact Mâcon download retries without fetching the larger GeoJSON',async({page})=>{
+ await setup(page,{appellation:'Mâcon',wineName:'Vieilles Vignes',classification:null});
+ let available=false;
+ const downloads:string[]=[];
+ page.on('request',request=>{if(request.url().includes('/maps/'))downloads.push(request.url())});
+ // Serve raw gzip on success to exercise native decompression too; Vite may
+ // otherwise attach Content-Encoding and let fetch decompress automatically.
+ await page.route('**/maps/macon.*.pbf.gz',route=>available
+  ?route.fulfill({contentType:'application/gzip',path:'public/maps/macon.2026-09-21.pbf.gz'})
+  :route.fulfill({status:503,body:'Unavailable'}));
+ await page.goto('/wines/layout-wine');await page.getByRole('button',{name:'View regional map'}).click();
+ await expect(page.getByRole('alert')).toContainText('The map could not load');
+ const attemptsBeforeRetry=downloads.length; // Development StrictMode may abort an initial request.
+ expect(attemptsBeforeRetry).toBeGreaterThan(0);
+ expect(downloads.every(url=>/\/macon\.[\d-]+\.pbf\.gz$/.test(url))).toBe(true);
+ available=true;
+ await page.getByRole('button',{name:'Try again',exact:true}).click();
+ await expect(page.getByRole('button',{name:'Region view',exact:true})).toBeEnabled();
+ expect(downloads).toHaveLength(attemptsBeforeRetry+1);
+ expect(downloads.every(url=>url.endsWith('.pbf.gz'))).toBe(true);
+});
+
+test('Mâcon compact map loads over a 1 Mbps connection',async({page,browserName},testInfo)=>{
+ test.skip(browserName!=='chromium','Chromium network throttling');
+ test.setTimeout(45000);
+ await setup(page,{appellation:'Mâcon',wineName:'Vieilles Vignes',classification:null});
+ await page.goto('/shared/layout-wine');
+ // Warm the code, then close before measuring the boundary transfer. Browser
+ // caching is disabled for the throttled load so the complete asset travels.
+ await page.getByRole('button',{name:'View regional map'}).click();
+ await expect(page.getByRole('button',{name:'Region view',exact:true})).toBeEnabled();
+ await page.keyboard.press('Escape');
+ const network=await page.context().newCDPSession(page);
+ await network.send('Network.enable');
+ await network.send('Network.setCacheDisabled',{cacheDisabled:true});
+ await network.send('Network.emulateNetworkConditions',{offline:false,latency:150,downloadThroughput:125000,uploadThroughput:62500});
+ const compact=page.waitForResponse(response=>response.url().includes('/maps/macon.')&&response.url().endsWith('.pbf.gz'));
+ const started=Date.now();
+ await page.getByRole('button',{name:'View regional map'}).click();
+ await expect(page.getByRole('button',{name:'Region view',exact:true})).toBeEnabled({timeout:20000});
+ const response=await compact;
+ const sizes=await response.request().sizes();
+ expect(sizes.responseBodySize).toBeLessThan(1400000);
+ await testInfo.attach('compact-map-network',{body:JSON.stringify({downloadBytes:sizes.responseBodySize,readyAfterMs:Date.now()-started},null,2),contentType:'application/json'});
+ await network.detach();
 });
 
 matrixTest('conflicting wine identities do not show a map entry point',async({page})=>{
