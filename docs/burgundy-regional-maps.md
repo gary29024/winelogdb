@@ -51,10 +51,11 @@ Named cuvées retain appellation scope and never identify a holding.
   exact compact download is **2,935,327 bytes** (about **46% smaller**). Python
   and the browser decoder verify coordinate/property equality. Downloads remain
   lazy, cancellable and retryable with the existing 60-second timeout.
-- All **182 previous geometry, transport and catalogue assets** remain unchanged.
-  Earlier-map optimisation stays in [#363](https://github.com/gary29024/winelogdb/issues/363).
+- All previous geometry and transport files remain unchanged. Two existing
+  Mâcon catalogues gain only 60-second timeout metadata; the other **180 prior
+  assets and catalogues** are unchanged. Earlier-map optimisation stays in [#363](https://github.com/gary29024/winelogdb/issues/363).
 
-Validation: **4,922 unit tests**, lint, production build and **18 Chromium/mobile
+Validation: **4,928 unit tests**, lint, production build and **18 Chromium/mobile
 WebKit browser checks** pass. The two CDP-throttling cases are intentionally
 skipped in WebKit. Tests cover owner/shared routes, 320px and desktop layouts,
 all 272 commune choices, partial wording, raw-gzip decoding and label guards.
@@ -64,6 +65,15 @@ boundary rendering remains independently testable. Chromium transfers the full
 latency**, with caching disabled and code warmed separately. All **98 generated
 regional outputs** reproduce byte-for-byte. The existing large lazy-map-chunk
 build warning remains.
+
+The timeout follow-up also gives **Mâcon and Mâcon-Villages 60 seconds**, matching
+the larger compact maps. Four deterministic Chromium/mobile WebKit checks hold
+their requests beyond 20 seconds, verify that stalled requests fail after the
+60-second budget, and recover through the compact-file retry. They advance the
+browser clock rather than sleeping for a minute. The download timer is cleared
+after boundary data is loaded and validated, before MapLibre rendering; the
+throttled browser test's separate map-ready wait also uses 60 seconds. A slow
+render alone is not evidence that the download timer fired.
 
 ## Bourgogne Aligoté source overview
 
@@ -1217,5 +1227,7 @@ over a **1 Mbps / 150 ms latency** connection with cache disabled.
 All **89 generated regional files** (including two compact copies) reproduce
 byte-for-byte. All source GeoJSON files, **41 prior registry entries and 82 prior
 maps/catalogues** remain unchanged; rebuilding all 43 regional maps passes the
-same geometry gates. Compact loading also retains the existing 20-second
-download timeout and does not require any change to the wine matching rules.
+same geometry gates. The original compact rollout used the default 20-second
+download timeout; the reviewed follow-up in #367 raises both Mâcon catalogues
+to 60 seconds and exercises timeout/retry in the browser. Wine matching is
+unchanged by that timeout adjustment.

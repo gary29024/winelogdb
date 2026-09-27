@@ -555,6 +555,38 @@ test('compact Mâcon download retries without fetching the larger GeoJSON',async
  expect(downloads.every(url=>url.endsWith('.pbf.gz'))).toBe(true);
 });
 
+for(const [appellation,id] of [['Mâcon','macon'],['Mâcon-Villages','macon-villages']] as const)test(`${appellation} download survives 20 seconds, times out at 60 seconds, and retries`,async({page})=>{
+ await page.clock.install({time:new Date('2026-09-27T12:00:00Z')});
+ await setup(page,{appellation,wineName:'Vieilles Vignes',classification:null,colour:'White',wineStyle:'white'});
+ let available=false,attempts=0;
+ const downloads:string[]=[];
+ page.on('request',request=>{if(request.url().includes('/maps/'))downloads.push(request.url())});
+ await page.route(`**/maps/${id}.*.pbf.gz`,route=>{
+  attempts++;
+  // Leave the request pending until the dialog aborts it; no real-time sleep.
+  if(available)return route.continue();
+ });
+ await page.goto('/shared/layout-wine');
+ await expect(page.getByRole('heading',{name:'Vieilles Vignes',exact:true})).toBeVisible();
+ await page.getByRole('button',{name:'View regional map'}).click();
+ await expect.poll(()=>attempts).toBeGreaterThan(0);
+ // Let the lazy dialog mount before freezing its download timer.
+ await page.clock.pauseAt(await page.evaluate(()=>Date.now()+1000));
+ const dialog=page.getByRole('dialog',{name:appellation,exact:true});
+ await page.clock.fastForward(21000);
+ await expect(dialog.getByRole('button',{name:'Region view',exact:true})).toBeDisabled();
+ await expect(dialog.getByRole('alert')).toHaveCount(0);
+ await page.clock.fastForward(40000);
+ await expect(dialog.getByRole('alert')).toContainText('The map could not load');
+ const attemptsBeforeRetry=attempts;
+ available=true;
+ await page.clock.resume();
+ await dialog.getByRole('button',{name:'Try again',exact:true}).click();
+ await expect(dialog.getByRole('button',{name:'Region view',exact:true})).toBeEnabled();
+ expect(attempts).toBe(attemptsBeforeRetry+1);
+ expect(downloads.every(url=>url.endsWith(`/maps/${id}.2026-09-21.pbf.gz`))).toBe(true);
+});
+
 for(const [appellation,id,maxBytes,timeout] of [['Mâcon','macon',1400000,60000],['Bourgogne','bourgogne',3700000,60000],['Bourgogne Aligoté','bourgogne-aligote',3000000,60000],['Bourgogne Passe-tout-grains','bourgogne-passe-tout-grains',3000000,60000]] as const)test(`${appellation} compact map loads over a 1 Mbps connection`,async({page,browserName},testInfo)=>{
  test.skip(browserName!=='chromium','Chromium network throttling');
  test.setTimeout(timeout+25000);
