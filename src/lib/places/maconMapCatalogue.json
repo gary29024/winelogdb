@@ -2051,5 +2051,6 @@
     }
   ],
   "coverageNote": "The broad Mâcon AOC denomination, across 88 source communes. This is an overview across wine colours, not a verified white, red or rosé production area. Named Mâcon denominations have separate maps; no single village, vineyard or producer holding is identified. Bottles labelled Mâcon Supérieur, a former higher-strength grade of the same Mâcon AOC, also open this map. The boundary uses the 2026 INAO source, not the boundary for an older bottle's vintage.",
-  "colourScope": "overview"
+  "colourScope": "overview",
+  "geobufUrl": "/maps/macon.2026-09-21.pbf.gz"
 }

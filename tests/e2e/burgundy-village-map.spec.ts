@@ -533,6 +533,53 @@ test('failed boundary download can be retried without leaving the wine',async({p
  await expect(page).toHaveURL(/\/wines\/layout-wine$/);
 });
 
+test('compact Mâcon download retries without fetching the larger GeoJSON',async({page})=>{
+ await setup(page,{appellation:'Mâcon',wineName:'Vieilles Vignes',classification:null});
+ let available=false;
+ const downloads:string[]=[];
+ page.on('request',request=>{if(request.url().includes('/maps/'))downloads.push(request.url())});
+ // Serve raw gzip on success to exercise native decompression too; Vite may
+ // otherwise attach Content-Encoding and let fetch decompress automatically.
+ await page.route('**/maps/macon.*.pbf.gz',route=>available
+  ?route.fulfill({contentType:'application/gzip',path:'public/maps/macon.2026-09-21.pbf.gz'})
+  :route.fulfill({status:503,body:'Unavailable'}));
+ await page.goto('/wines/layout-wine');await page.getByRole('button',{name:'View regional map'}).click();
+ await expect(page.getByRole('alert')).toContainText('The map could not load');
+ const attemptsBeforeRetry=downloads.length; // Development StrictMode may abort an initial request.
+ expect(attemptsBeforeRetry).toBeGreaterThan(0);
+ expect(downloads.every(url=>/\/macon\.[\d-]+\.pbf\.gz$/.test(url))).toBe(true);
+ available=true;
+ await page.getByRole('button',{name:'Try again',exact:true}).click();
+ await expect(page.getByRole('button',{name:'Region view',exact:true})).toBeEnabled();
+ expect(downloads).toHaveLength(attemptsBeforeRetry+1);
+ expect(downloads.every(url=>url.endsWith('.pbf.gz'))).toBe(true);
+});
+
+test('Mâcon compact map loads over a 1 Mbps connection',async({page,browserName},testInfo)=>{
+ test.skip(browserName!=='chromium','Chromium network throttling');
+ test.setTimeout(45000);
+ await setup(page,{appellation:'Mâcon',wineName:'Vieilles Vignes',classification:null});
+ await page.goto('/shared/layout-wine');
+ // Warm the code, then close before measuring the boundary transfer. Browser
+ // caching is disabled for the throttled load so the complete asset travels.
+ await page.getByRole('button',{name:'View regional map'}).click();
+ await expect(page.getByRole('button',{name:'Region view',exact:true})).toBeEnabled();
+ await page.keyboard.press('Escape');
+ const network=await page.context().newCDPSession(page);
+ await network.send('Network.enable');
+ await network.send('Network.setCacheDisabled',{cacheDisabled:true});
+ await network.send('Network.emulateNetworkConditions',{offline:false,latency:150,downloadThroughput:125000,uploadThroughput:62500});
+ const compact=page.waitForResponse(response=>response.url().includes('/maps/macon.')&&response.url().endsWith('.pbf.gz'));
+ const started=Date.now();
+ await page.getByRole('button',{name:'View regional map'}).click();
+ await expect(page.getByRole('button',{name:'Region view',exact:true})).toBeEnabled({timeout:20000});
+ const response=await compact;
+ const sizes=await response.request().sizes();
+ expect(sizes.responseBodySize).toBeLessThan(1400000);
+ await testInfo.attach('compact-map-network',{body:JSON.stringify({downloadBytes:sizes.responseBodySize,readyAfterMs:Date.now()-started},null,2),contentType:'application/json'});
+ await network.detach();
+});
+
 matrixTest('conflicting wine identities do not show a map entry point',async({page})=>{
  await setup(page,{identityMatchStatus:'conflict'});await page.goto('/wines/layout-wine');
  await expect(page.getByRole('heading',{name:'Les Cazetiers',exact:true})).toBeVisible();

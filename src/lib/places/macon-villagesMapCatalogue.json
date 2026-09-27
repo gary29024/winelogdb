@@ -1808,5 +1808,6 @@
       ]
     }
   ],
-  "coverageNote": "Mâcon-Villages is a regional denomination for white wines, not a village appellation. The highlight retains both INAO source labels, including additional white-wine parcels in Ozenay, across 80 current communes. Bonnay and Saint-Ythaire share current commune navigation. No single village, vineyard or producer holding is identified."
+  "coverageNote": "Mâcon-Villages is a regional denomination for white wines, not a village appellation. The highlight retains both INAO source labels, including additional white-wine parcels in Ozenay, across 80 current communes. Bonnay and Saint-Ythaire share current commune navigation. No single village, vineyard or producer holding is identified.",
+  "geobufUrl": "/maps/macon-villages.2026-09-21.pbf.gz"
 }

@@ -11,6 +11,7 @@ import hashlib
 import json
 import shutil
 import zipfile
+import geobuf
 from collections import defaultdict
 from pathlib import Path
 
@@ -109,7 +110,7 @@ def main():
         expected = {d['denominationId']: set(d['sourceNames']) for d in app['denominations']}
         assert actual[app['appellationId']] == expected, f"Review regional inventory: {app['name']}"
 
-    outputs, registry = [], []
+    outputs, binary_outputs, registry = [], [], []
     for config in maps:
         rows = grouped[config['denominationId']]
         # Retain every source parcel when old commune codes survive a merger.
@@ -205,7 +206,19 @@ def main():
                          coverageNote=config.get('coverageNote', 'A geographic denomination within Bourgogne AOC. The highlight shows its full INAO production area; named cuvées and producer holdings have no separate boundaries here.'))
         if config.get('colourScope'):
             catalogue['colourScope'] = config['colourScope']
-        outputs.extend([(ROOT / 'public' / url.lstrip('/'), dict(type='FeatureCollection', features=features), True),
+        collection = dict(type='FeatureCollection', features=features)
+        if config.get('compactDownload'):
+            # Transport only: preserve the reviewed grid, every ring and every
+            # property. Geobuf's default six decimals would erase narrow holes.
+            assert config['denominationId'] in (1713, 2893)
+            encoded = geobuf.Encoder().encode(collection, precision=7, dim=2)
+            canonical = json.loads(json.dumps(collection))  # tuples -> lists
+            assert geobuf.decode(encoded) == canonical, 'Compact download changes the map'
+            packed = gzip.compress(encoded, compresslevel=9, mtime=0)
+            assert geobuf.decode(gzip.decompress(packed)) == canonical
+            catalogue['geobufUrl'] = url.removesuffix('.geojson') + '.pbf.gz'
+            binary_outputs.append((ROOT / 'public' / catalogue['geobufUrl'].lstrip('/'), packed))
+        outputs.extend([(ROOT / 'public' / url.lstrip('/'), collection, True),
                         (PLACES / f"{config['id']}MapCatalogue.json", catalogue, False)])
         entry = {key: config[key] for key in ('id', 'name', 'region', 'aliases', 'compatibleRegions', 'wineColours')}
         # Reviewed site names require the matching base appellation on the wine.
@@ -217,6 +230,8 @@ def main():
     # No output is changed until every map and the full inventory validates.
     for path, value, compact in outputs:
         write_json(path, value, compact)
+    for path, value in binary_outputs:
+        path.write_bytes(value)
     # Other regional designations can conflict with a mapped label even though
     # their own maps are pending. Keep their names in the small identity index.
     other_names = {app['name'] for app in inventory if app['appellationId'] != 138}

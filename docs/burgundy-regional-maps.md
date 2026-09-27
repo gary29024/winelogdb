@@ -877,7 +877,7 @@ and largest closed slivers below **0.707 m²**. Net area differences are
 **+2.135 m²** for Mâcon, **−8.908 m²** for its red-only sector and **+12.122 m²**
 for Mâcon-Villages, all within the existing 0.005% limit.
 
-### Review of the proposed download-size reduction
+### Geometry simplification review
 
 PR #361's review suggested topology-preserving Douglas–Peucker simplification
 before snapping to the coarser grid. Checked against the original Lambert-93
@@ -899,11 +899,40 @@ compared with **0.5909 m²** from the existing coordinate snapping. The source
 sector is entirely contained by the source overview. Per-feature topology
 preservation does not preserve shared edges between features.
 
-The current geometry is retained. A useful follow-up must preserve shared
-edges as well as pass the unchanged round-trip, area, hole and part checks.
+The current geometry is retained. Any future geometry simplification must
+preserve shared edges as well as pass the unchanged round-trip, area, hole and part checks.
 Removing only exactly collinear vertices from the already published geometry
 preserves its shape but saves only about **1%** gzip, so it does not justify
 adding a separate per-map simplification path here.
+
+### Compact downloads with unchanged boundaries
+
+The two broad maps instead ship a gzip-compressed [Geobuf](https://github.com/mapbox/geobuf)
+copy alongside their original GeoJSON. Integer coordinate deltas reduce the
+download without removing vertices or changing the reviewed precision. The
+builder explicitly uses **seven decimal places**; the encoder's default six
+would change these maps. Both the Python build and the browser-decoder unit
+tests require exact equality of every decoded coordinate, feature ID and
+property with the published GeoJSON. All holes, parts and shared edges are
+therefore identical to the reviewed maps above.
+
+| Map | Original GeoJSON | Gzipped GeoJSON | Compact download | Reduction vs gzip |
+| --- | ---: | ---: | ---: | ---: |
+| Mâcon | 9,480,434 bytes | 2,741,240 bytes | 1,340,715 bytes | 51.1% |
+| Mâcon-Villages | 6,275,822 bytes | 1,847,934 bytes | 899,520 bytes | 51.3% |
+
+`compactDownload` is enabled only for these two reviewed maps. The same builder
+produces deterministic `.pbf.gz` files (gzip timestamp zero) and records their
+`geobufUrl` in the catalogues. `dataUrl` remains the original GeoJSON for source
+inspection and older browsers without `DecompressionStream`. No coordinate
+rounding or geometry simplification is added to the transport step.
+
+The decoder loads with the map dialog. Downloads still use the existing abort,
+timeout and retry flow, and the decoded result passes the existing feature
+validation before rendering. A failed compact request offers a retry instead
+of silently fetching the much larger GeoJSON. The loader accepts both intact
+gzip files and responses already decompressed by an HTTP `Content-Encoding`
+header. Other maps keep their GeoJSON path.
 
 ### Labels and validation
 
@@ -929,14 +958,14 @@ and its [producer-authored Mâcon Blanc Villages sheet](https://sf9b26283ebaf6cb
 for the reviewed alternate word order. These references support labels and
 colour, not replacement boundaries or inferred producer holdings.
 
-The new files are **9,480,434 / 6,275,822 bytes**, or **2,741,240 / 1,847,934 bytes
-gzip** for Mâcon / Mâcon-Villages. Each loads only when its dialog opens. Tests
-cover broad/specific precedence, source provenance, the additional Ozenay area,
-commune navigation, red-only exploration, owner/shared pages and mobile layouts.
-All **87 generated regional files** reproduce byte-for-byte; all **41 prior
-registry entries and 82 prior maps/catalogues** are unchanged. After the alias
-review, validation passes **4,603 unit tests** (1,419 regional-map tests),
-**4 affected Chromium checks** covering both maps on owner/shared pages, lint
-and the production build. The initial map batch passed the full **246-check
-Burgundy Chromium matrix**. Rebuilding all 43 regional maps after review passes
-the unchanged geometry gates and changes only Mâcon's coverage note.
+Each compact map loads only when its dialog opens. Tests cover broad/specific
+precedence, source provenance, the additional Ozenay area, commune navigation,
+red-only exploration, owner/shared pages and mobile layouts. Transport tests
+compare the complete decoded maps with GeoJSON, exercise raw and HTTP-decoded
+gzip, cancellation, failures, retry and compatibility fallback, and check Mâcon
+over a **1 Mbps / 150 ms latency** connection with cache disabled.
+All **89 generated regional files** (including two compact copies) reproduce
+byte-for-byte. All source GeoJSON files, **41 prior registry entries and 82 prior
+maps/catalogues** remain unchanged; rebuilding all 43 regional maps passes the
+same geometry gates. Compact loading also retains the existing 20-second
+download timeout and does not require any change to the wine matching rules.

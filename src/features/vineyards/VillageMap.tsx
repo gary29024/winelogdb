@@ -3,6 +3,7 @@ import { Map as MapLibreMap,Marker,NavigationControl,ScaleControl,type FilterSpe
 import type { Feature,FeatureCollection,Geometry } from 'geojson';
 import { clickOrder,countLabel,joinPlaces,snapshotLabel,umbrellaNote,type BurgundyVillageMapTarget,type VillageMapCatalogue,type VillageMapFeature } from '../../lib/places/burgundyVillageMap';
 import { loadVillageMapCatalogue } from '../../lib/places/loadVillageMapCatalogue';
+import { loadVillageMapData } from '../../lib/places/loadVillageMapData';
 // Loaded with the map dialog, never part of the wine identity registry. This
 // one approved illustration must not become a source for other holdings.
 import laMoutonne from '../../lib/places/laMoutonneApproximation.json';
@@ -153,9 +154,7 @@ function VillageMapView({target,catalogue}:{target:BurgundyVillageMapTarget;cata
   let baseTimeout:ReturnType<typeof setTimeout>|undefined;
   async function start(){
    try{
-    const response=await fetch(catalogue.dataUrl,{signal:controller.signal});
-    if(!response.ok)throw new Error('Boundary download failed');
-    const data:unknown=await response.json();
+    const data=await loadVillageMapData(catalogue,controller.signal);
     if(!isBoundaryData(data,catalogue))throw new Error('Boundary data is incomplete');
     clearTimeout(timeout);
     if(disposed||!host.current)return;

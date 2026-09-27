@@ -2085,6 +2085,7 @@
         "Mâcon",
         "Mâcon Supérieur"
       ],
+      "compactDownload": true,
       "siteNames": [],
       "baseAppellations": [],
       "broadAppellation": true,
@@ -2263,6 +2264,7 @@
       ],
       "coordinateGrid": 1e-07,
       "precisionNote": "The default 1e-6 degree grid closes excluded holes larger than 2 m² (36.1573 m² for Mâcon; 2.9750 m² for Mâcon-Villages). The reviewed 1e-7 grid preserves these holes and passes the unchanged area and hole/part gates.",
+      "compactDownload": true,
       "sourceCommunes": [
         "71007",
         "71016",
