@@ -42,7 +42,14 @@ const withoutGrapes=(text:string)=>grapeColours.reduce((value,[name])=>` ${value
 const withoutOldVines=(text:string)=>text.replace(/\bvieilles? vignes?\b/g,' ').replace(/\s+/g,' ').trim();
 const withoutAccessoryGrapes=(text:string,names:readonly string[])=>
  names.reduce((value,name)=>` ${value} `.replaceAll(` ${name} `,' ').trim(),text);
-const withoutLabelTerms=(text:string,accessoryGrapes:readonly string[]=[])=>withoutOldVines(withoutGrapes(withoutAccessoryGrapes(text,accessoryGrapes)));
+// Sweetness (dosage) terms describe a sparkling wine, not a place, so
+// "Bourgogne Mousseux Brut" still names the AOC. Still-wine maps keep "Sec"
+// and similar words as unrecognised text.
+const withoutDosage=(text:string)=>text.replace(/\b(?:brut nature|pas dose|dosage zero|extra brut|brut|extra sec|extra dry|demi sec|sec|doux)\b/g,' ').replace(/\s+/g,' ').trim();
+const withoutLabelTerms=(text:string,accessoryGrapes:readonly string[]=[],sparkling=false)=>{
+ const value=withoutOldVines(withoutGrapes(withoutAccessoryGrapes(text,accessoryGrapes)));
+ return sparkling?withoutDosage(value):value;
+};
 const byLength=(a:string,b:string)=>b.length-a.length;
 // Clairet, like rosé, can precede a denomination recorded in the wine name.
 const bourgogneAppellations=['bourgogne','burgundy','bourgogne rouge','bourgogne blanc','bourgogne rose','bourgogne clairet'];
@@ -104,7 +111,7 @@ export function burgundyRegionalMapTarget(wine:Wine):BurgundyVillageMapTarget|nu
  // Bourgogne + Aligoté or Bourgogne Rouge + Passe-tout-grains.
  const split=specific.length?[]:groups.filter(group=>group.broad&&namesSite(group));
  const candidates=specific.length?specific:split.length?split:groups.filter(group=>group.broad&&group.keys.some(name=>
-  fields[0]===name||fields[0].startsWith(name+' ')&&['','blanc','white','rouge','red','rose','clairet'].includes(withoutLabelTerms(fields[0].slice(name.length).trim(),group.accessoryKeys))));
+  fields[0]===name||fields[0].startsWith(name+' ')&&['','blanc','white','rouge','red','rose','clairet'].includes(withoutLabelTerms(fields[0].slice(name.length).trim(),group.accessoryKeys,group.sparkling))));
  if(!candidates.length)return undefined;
  if(candidates.length!==1||wine.identityMatchStatus==='conflict'||wine.classification)return null;
  const group=candidates[0],country=key(wine.country??''),region=key(wine.region??'');
@@ -143,7 +150,7 @@ export function burgundyRegionalMapTarget(wine:Wine):BurgundyVillageMapTarget|nu
   .reduce((value,name)=>` ${value} `.replaceAll(` ${name} `,' ').trim(),text);
  const app=fields[0];
  if(app&&!plainAppellation(group)&&
-  (!group.keys.some(name=>contains(app,name))||!['','rouge','blanc','rose','clairet','red','white',...(vinGris?['gris','vin gris']:[])].includes(withoutLabelTerms(removeDesignation(app),group.accessoryKeys))))return null;
+  (!group.keys.some(name=>contains(app,name))||!['','rouge','blanc','rose','clairet','red','white',...(vinGris?['gris','vin gris']:[])].includes(withoutLabelTerms(removeDesignation(app),group.accessoryKeys,group.sparkling))))return null;
  // A cuvée/reference name alone must not infer its regional denomination,
  // except a reviewed site name beside its explicit base appellation.
  if(!fields.slice(0,2).some(text=>group.keys.some(name=>contains(text,name)))&&!namesSite(group))return null;

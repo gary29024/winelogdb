@@ -8,7 +8,9 @@ const base={country:'France',region:'Burgundy',classification:null,productType:'
 const target={villageId:'bourgogne-mousseux',featureId:'inao-denom-391',scope:'appellation',mapKind:'regional'};
 
 describe('Bourgogne Mousseux red sparkling source overview',()=>{
- it.each(['Bourgogne Mousseux','Bourgogne-Mousseux AOP','Bourgogne mousseux AOC Rouge','Bourgogne Mousseux Vieilles Vignes'])(
+ it.each(['Bourgogne Mousseux','Bourgogne-Mousseux AOP','Bourgogne mousseux AOC Rouge','Bourgogne Mousseux Vieilles Vignes',
+  'Bourgogne Mousseux Brut','Bourgogne Mousseux Rouge Brut','Bourgogne Mousseux Extra-Brut','Bourgogne Mousseux Brut Nature',
+  'Bourgogne Mousseux Demi-Sec','Bourgogne Mousseux Sec','Bourgogne Mousseux Doux','Bourgogne Mousseux Pas Dosé'])(
   'reads the recorded AOC: %s',appellation=>expect(burgundyVillageMapTarget({...base,appellation})).toMatchObject(target));
  it.each([
   {colour:null},{colour:null,wineStyle:null},{productSubtype:null},{productType:null,productSubtype:null,wineStyle:null},
@@ -42,6 +44,7 @@ describe('Bourgogne Mousseux red sparkling source overview',()=>{
   {appellation:'Bourgogne Blanc',wineName:'Bourgogne Mousseux'},
   {appellation:'Bourgogne Mousseux Unknown Place'},
   {appellation:'Bourgogne Mousseux Blanc'},{appellation:'Bourgogne Mousseux Rosé'},
+  {appellation:'Bourgogne Mousseux Blanc Brut'},{appellation:'Bourgogne Mousseux Brut Unknown Place'},
   {colour:'White'},{colour:'Rosé'},{wineName:'Blanc'},{wineName:'Rosé'},{wineName:'Clairet'},
   {wineName:'Pinot Blanc Blanc'},{wineName:'Bourgogne Aligoté'},
   {wineName:'Crémant de Bourgogne'},{wineName:'Bourgogne Passe-tout-grains'},
@@ -54,6 +57,11 @@ describe('Bourgogne Mousseux red sparkling source overview',()=>{
   {country:'USA'},{region:'Bordeaux'},{identityMatchStatus:'conflict' as const},
  ])('withholds insufficient or conflicting identity: %j',fields=>{
   expect(burgundyVillageMapTarget({...base,...fields})).toBeNull();
+ });
+ it('ignores sweetness terms only on the sparkling map',()=>{
+  const still={country:'France',region:'Burgundy',productType:'Wine',wineStyle:'red'};
+  for(const appellation of ['Bourgogne Brut','Bourgogne Sec','Bourgogne Rouge Demi-Sec'])expect(burgundyVillageMapTarget({...still,appellation}),appellation).toBeNull();
+  expect(burgundyVillageMapTarget({...still,appellation:'Bourgogne Rouge'})).toMatchObject({featureId:'inao-denom-362'});
  });
  it('keeps every existing regional map restricted to still wine',()=>{
   for(const group of registry.maps.filter(group=>group.id!=='bourgogne-mousseux')){
