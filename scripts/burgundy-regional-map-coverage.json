@@ -168,8 +168,9 @@
           "sourceNames": [
             "Bourgogne Passe-tout-grains"
           ],
-          "status": "pending",
-          "kind": "broad"
+          "status": "partial",
+          "kind": "broad",
+          "coverageNote": "All 278 source rows are retained across 272 communes; complete Bourgogne Passe-tout-grains AOC coverage is not established. Rhône/Beaujolais boundaries are absent."
         }
       ]
     },

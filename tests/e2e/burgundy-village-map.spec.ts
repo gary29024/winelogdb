@@ -555,10 +555,42 @@ test('compact Mâcon download retries without fetching the larger GeoJSON',async
  expect(downloads.every(url=>url.endsWith('.pbf.gz'))).toBe(true);
 });
 
-for(const [appellation,id,maxBytes,timeout] of [['Mâcon','macon',1400000,20000],['Bourgogne','bourgogne',3700000,60000],['Bourgogne Aligoté','bourgogne-aligote',3000000,60000]] as const)test(`${appellation} compact map loads over a 1 Mbps connection`,async({page,browserName},testInfo)=>{
+for(const [appellation,id] of [['Mâcon','macon'],['Mâcon-Villages','macon-villages']] as const)test(`${appellation} download survives 20 seconds, times out at 60 seconds, and retries`,async({page})=>{
+ await page.clock.install({time:new Date('2026-09-27T12:00:00Z')});
+ await setup(page,{appellation,wineName:'Vieilles Vignes',classification:null,colour:'White',wineStyle:'white'});
+ let available=false,attempts=0;
+ const downloads:string[]=[];
+ page.on('request',request=>{if(request.url().includes('/maps/'))downloads.push(request.url())});
+ await page.route(`**/maps/${id}.*.pbf.gz`,route=>{
+  attempts++;
+  // Leave the request pending until the dialog aborts it; no real-time sleep.
+  if(available)return route.continue();
+ });
+ await page.goto('/shared/layout-wine');
+ await expect(page.getByRole('heading',{name:'Vieilles Vignes',exact:true})).toBeVisible();
+ await page.getByRole('button',{name:'View regional map'}).click();
+ await expect.poll(()=>attempts).toBeGreaterThan(0);
+ // Let the lazy dialog mount before freezing its download timer.
+ await page.clock.pauseAt(await page.evaluate(()=>Date.now()+1000));
+ const dialog=page.getByRole('dialog',{name:appellation,exact:true});
+ await page.clock.fastForward(21000);
+ await expect(dialog.getByRole('button',{name:'Region view',exact:true})).toBeDisabled();
+ await expect(dialog.getByRole('alert')).toHaveCount(0);
+ await page.clock.fastForward(40000);
+ await expect(dialog.getByRole('alert')).toContainText('The map could not load');
+ const attemptsBeforeRetry=attempts;
+ available=true;
+ await page.clock.resume();
+ await dialog.getByRole('button',{name:'Try again',exact:true}).click();
+ await expect(dialog.getByRole('button',{name:'Region view',exact:true})).toBeEnabled();
+ expect(attempts).toBe(attemptsBeforeRetry+1);
+ expect(downloads.every(url=>url.endsWith(`/maps/${id}.2026-09-21.pbf.gz`))).toBe(true);
+});
+
+for(const [appellation,id,maxBytes,timeout] of [['Mâcon','macon',1400000,60000],['Bourgogne','bourgogne',3700000,60000],['Bourgogne Aligoté','bourgogne-aligote',3000000,60000],['Bourgogne Passe-tout-grains','bourgogne-passe-tout-grains',3000000,60000]] as const)test(`${appellation} compact map loads over a 1 Mbps connection`,async({page,browserName},testInfo)=>{
  test.skip(browserName!=='chromium','Chromium network throttling');
  test.setTimeout(timeout+25000);
- await setup(page,{appellation,wineName:'Vieilles Vignes',classification:null,...(id==='bourgogne-aligote'?{colour:'White',wineStyle:'white'}:{})});
+ await setup(page,{appellation,wineName:'Vieilles Vignes',classification:null,...(id==='bourgogne-aligote'?{colour:'White',wineStyle:'white'}:{colour:'Red',wineStyle:'red'})});
  await page.goto('/shared/layout-wine');
  // Warm the code, then close before measuring the boundary transfer. Browser
  // caching is disabled for the throttled load so the complete asset travels.
@@ -580,20 +612,23 @@ for(const [appellation,id,maxBytes,timeout] of [['Mâcon','macon',1400000,20000]
  await network.detach();
 });
 
-for(const route of allMapRoutes)test(`Bourgogne Aligoté ${route}: partial white AOC and commune navigation`,async({page},testInfo)=>{
+for(const [appellation,id,colour,wineStyle,note,invalidColours] of [
+ ['Bourgogne Aligoté','bourgogne-aligote','White','white','white-wine production boundaries in 272 communes',['Red','Rosé']],
+ ['Bourgogne Passe-tout-grains','bourgogne-passe-tout-grains','Red','red','Rhône/Beaujolais boundaries are missing',['White']],
+] as const)for(const route of allMapRoutes)test(`${appellation} ${route}: partial AOC and commune navigation`,async({page},testInfo)=>{
  await page.setViewportSize({width:320,height:900});
- await setup(page,{appellation:'Bourgogne Aligoté',wineName:'Vieilles Vignes',classification:null,colour:'White',wineStyle:'white',region:'Burgundy'});
+ await setup(page,{appellation,wineName:'Vieilles Vignes',classification:null,colour,wineStyle,region:'Burgundy'});
  const downloads:string[]=[],errors:string[]=[];
  page.on('request',r=>{if(r.url().includes('/maps/'))downloads.push(r.url())});
  page.on('pageerror',error=>errors.push(error.message));
  await page.goto(route);expect(downloads).toEqual([]);
- await page.route('**/maps/bourgogne-aligote.*.pbf.gz',route=>route.fulfill({contentType:'application/gzip',path:'public/maps/bourgogne-aligote.2026-09-21.pbf.gz'}));
+ await page.route(`**/maps/${id}.*.pbf.gz`,route=>route.fulfill({contentType:'application/gzip',path:`public/maps/${id}.2026-09-21.pbf.gz`}));
  const opener=page.getByRole('button',{name:'View regional map'});
  await opener.click();
- const dialog=page.getByRole('dialog',{name:'Bourgogne Aligoté',exact:true});
+ const dialog=page.getByRole('dialog',{name:appellation,exact:true});
  await expect(dialog.getByRole('button',{name:'Region view',exact:true})).toBeEnabled();
  await expect(dialog.locator('.village-map-description')).toHaveText('Partial appellation overview. The highlight does not show the full appellation; no single vineyard is identified.');
- await expect(dialog.locator('.village-map-note').filter({hasText:'white-wine production boundaries in 272 communes'})).toBeVisible();
+ await expect(dialog.locator('.village-map-note').filter({hasText:note})).toBeVisible();
  await expect(dialog.locator('.village-map-hint')).toContainText('Coverage of this appellation is incomplete');
  await expect(dialog.getByRole('combobox',{name:'Explore a mapped area'})).toHaveCount(0);
  const communes=dialog.getByRole('combobox',{name:'Zoom to a commune'});
@@ -607,20 +642,20 @@ for(const route of allMapRoutes)test(`Bourgogne Aligoté ${route}: partial white
  for(const label of ['Joigny','Boncourt-le-Bois','Prissé','Romanèche-Thorins']){
   await communes.selectOption({label});
   await expect.poll(visibleMarkers).toBeLessThan(272);
-  await expect(dialog.getByRole('heading',{name:'Bourgogne Aligoté',exact:true})).toHaveCount(2);
+  await expect(dialog.getByRole('heading',{name:appellation,exact:true})).toHaveCount(2);
  }
- await page.screenshot({path:testInfo.outputPath('aligote-320.png')});
+ await page.screenshot({path:testInfo.outputPath(`${id}-320.png`)});
  await dialog.getByRole('button',{name:'Region view',exact:true}).click();
  await expect.poll(visibleMarkers).toBe(272);
  expect([...new Set(downloads)]).toHaveLength(1);
- expect(downloads.every(url=>/\/bourgogne-aligote\.[\d-]+\.pbf\.gz$/.test(url))).toBe(true);
+ expect(downloads.every(url=>url.endsWith(`/maps/${id}.2026-09-21.pbf.gz`))).toBe(true);
  expect(await dialog.evaluate(el=>el.scrollWidth<=el.clientWidth)).toBe(true);
  await page.setViewportSize({width:1280,height:900});
  await dialog.getByRole('button',{name:'Region view',exact:true}).click();
- await page.screenshot({path:testInfo.outputPath('aligote-desktop.png')});
+ await page.screenshot({path:testInfo.outputPath(`${id}-desktop.png`)});
  await page.keyboard.press('Escape');await expect(opener).toBeFocused();
- for(const colour of ['Red','Rosé']){
-  await setup(page,{appellation:'Bourgogne Aligoté',wineName:'Vieilles Vignes',classification:null,colour,wineStyle:colour==='Red'?'red':'rose'});
+ for(const colour of invalidColours){
+  await setup(page,{appellation,wineName:'Vieilles Vignes',classification:null,colour,wineStyle:colour==='Red'?'red':colour==='White'?'white':'rose'});
   await page.goto(route);
   await expect(page.getByRole('heading',{name:'Vieilles Vignes',exact:true})).toBeVisible();
   await expect(page.getByRole('button',{name:'View regional map'})).toHaveCount(0);
@@ -636,6 +671,8 @@ for(const route of allMapRoutes)test(`Bourgogne review labels ${route}: Clairet,
   ['Bourgogne','Aligoté','Burgundy','white','Bourgogne Aligoté'],
   ['Bourgogne Blanc Vieilles Vignes','Bourgogne-Aligoté','Burgundy','white','Bourgogne Aligoté'],
   ['Mâcon Lugny','Chardonnay avec Aligoté','Burgundy','white','Mâcon Lugny'],
+  ['Bourgogne Rouge','Passe-Tout-Grains','Burgundy','red','Bourgogne Passe-tout-grains'],
+  ['Bourgogne Rosé Vieilles Vignes','Passe-tous-grains','Burgundy','rose','Bourgogne Passe-tout-grains'],
  ] as const){
   await setup(page,{appellation,wineName,region,colour,wineStyle:colour,classification:null});
   await page.goto(route);
@@ -650,7 +687,8 @@ for(const route of allMapRoutes)test(`Bourgogne review labels ${route}: Clairet,
   ['Bourgogne Rouge Vieilles Vignes','Aligoté','Burgundy','red'],
   ['Bourgogne Hautes Côtes de Nuits','Aligoté','Burgundy','white'],
   ['Bourgogne Vieilles Vignes','Aligoté Bouzeron','Burgundy','white'],
-  ['Bourgogne','Passe-Tout-Grains','Burgundy','red'],
+  ['Bourgogne Blanc','Passe-Tout-Grains','Burgundy','white'],
+  ['Mâcon','Passetoutgrains','Burgundy','red'],
   ['Bourgogne Clairet','Montrecul','Côte d’Or','red'],
   ['Bourgogne Chitry','Olympe','Chablis','white'],
  ] as const){

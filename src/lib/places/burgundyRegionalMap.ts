@@ -40,11 +40,14 @@ const withoutGrapes=(text:string)=>grapeColours.reduce((value,[name])=>` ${value
 // "Vieilles Vignes" (old vines) is a label mention, not part of the denomination,
 // so "Bourgogne Aligoté Vieilles Vignes" in the appellation field still matches.
 const withoutOldVines=(text:string)=>text.replace(/\bvieilles? vignes?\b/g,' ').replace(/\s+/g,' ').trim();
-const withoutLabelTerms=(text:string)=>withoutOldVines(withoutGrapes(text));
+const withoutAccessoryGrapes=(text:string,names:readonly string[])=>
+ names.reduce((value,name)=>` ${value} `.replaceAll(` ${name} `,' ').trim(),text);
+const withoutLabelTerms=(text:string,accessoryGrapes:readonly string[]=[])=>withoutOldVines(withoutGrapes(withoutAccessoryGrapes(text,accessoryGrapes)));
 const byLength=(a:string,b:string)=>b.length-a.length;
 // Clairet, like rosé, can precede a denomination recorded in the wine name.
 const bourgogneAppellations=['bourgogne','burgundy','bourgogne rouge','bourgogne blanc','bourgogne rose','bourgogne clairet'];
 const groups=registry.maps.map(group=>({...group,keys:group.aliases.map(key).sort(byLength),regions:group.compatibleRegions.map(key),
+ accessoryKeys:((group as {accessoryGrapes?:string[]}).accessoryGrapes??[]).map(key),
  broad:!!(group as {broadAppellation?:boolean}).broadAppellation,
  blockedKeys:((group as {conflictingNames?:string[]}).conflictingNames??[]).map(key),
  // A split label requires its own base AOC: Mâcon + Fuissé is not Bourgogne + Fuissé.
@@ -96,11 +99,11 @@ export function burgundyRegionalMapTarget(wine:Wine):BurgundyVillageMapTarget|nu
  // when no more specific denomination is present, including conflicting ones.
  // Exact suffix validation keeps Mâcon-Villages distinct from Mâcon and avoids
  // turning an unknown "Mâcon <place>" into a broad match.
- // A plain Bourgogne label may name the Aligoté grape as the wine: that is
- // Bourgogne Aligoté, since plain Bourgogne cannot be made from Aligoté.
+ // Reviewed split labels can establish a separate broad AOC, such as
+ // Bourgogne + Aligoté or Bourgogne Rouge + Passe-tout-grains.
  const split=specific.length?[]:groups.filter(group=>group.broad&&namesSite(group));
  const candidates=specific.length?specific:split.length?split:groups.filter(group=>group.broad&&group.keys.some(name=>
-  fields[0]===name||fields[0].startsWith(name+' ')&&['','blanc','white','rouge','red','rose','clairet'].includes(withoutLabelTerms(fields[0].slice(name.length).trim()))));
+  fields[0]===name||fields[0].startsWith(name+' ')&&['','blanc','white','rouge','red','rose','clairet'].includes(withoutLabelTerms(fields[0].slice(name.length).trim(),group.accessoryKeys))));
  if(!candidates.length)return undefined;
  if(candidates.length!==1||wine.identityMatchStatus==='conflict'||wine.classification)return null;
  const group=candidates[0],country=key(wine.country??''),region=key(wine.region??'');
@@ -135,7 +138,7 @@ export function burgundyRegionalMapTarget(wine:Wine):BurgundyVillageMapTarget|nu
   .reduce((value,name)=>` ${value} `.replaceAll(` ${name} `,' ').trim(),text);
  const app=fields[0];
  if(app&&!plainAppellation(group)&&
-  (!group.keys.some(name=>contains(app,name))||!['','rouge','blanc','rose','clairet','red','white',...(vinGris?['gris','vin gris']:[])].includes(withoutLabelTerms(removeDesignation(app)))))return null;
+  (!group.keys.some(name=>contains(app,name))||!['','rouge','blanc','rose','clairet','red','white',...(vinGris?['gris','vin gris']:[])].includes(withoutLabelTerms(removeDesignation(app),group.accessoryKeys))))return null;
  // A cuvée/reference name alone must not infer its regional denomination,
  // except a reviewed site name beside its explicit base appellation.
  if(!fields.slice(0,2).some(text=>group.keys.some(name=>contains(text,name)))&&!namesSite(group))return null;
@@ -152,12 +155,15 @@ export function burgundyRegionalMapTarget(wine:Wine):BurgundyVillageMapTarget|nu
  // colour/style is absent. Côte d'Or does not include rosé.
  // Clairet is the traditional label word for a Bourgogne rosé.
  const labelColours=[['rouge','red'],['red','red'],['blanc','white'],['white','white'],['rose','rose'],['clairet','rose']] as const;
- const namedColours=labelColours.filter(([name])=>remaining.slice(0,2).some(text=>contains(text,name))).map(([,value])=>value);
+ // Pinot Blanc within a reviewed blend is a grape name, not a white label.
+ const colourFields=remaining.slice(0,2).map(text=>withoutAccessoryGrapes(text,group.accessoryKeys));
+ const namedColours=labelColours.filter(([name])=>colourFields.some(text=>contains(text,name))).map(([,value])=>value);
  if(vinGris&&(['gris','vin gris'].includes(remaining[0])||remaining.slice(0,2).some(text=>contains(text,'vin gris'))))namedColours.push('rose');
  if(new Set(namedColours).size>1)return null;
  if(namedColours.some(value=>!group.wineColours.includes(value)||(colour&&colour!==value)))return null;
- // Each grape must allow a colour of the denomination and any explicit colour.
- const grapes=plainAppellation(group)?[]:grapeColours.filter(([name])=>contains(remaining[0],name)).map(([,allowed])=>allowed);
+ // Principal grape wording constrains colour. Reviewed accessory grapes do
+ // not imply a white wine when blended into a red/rosé denomination.
+ const grapes=plainAppellation(group)?[]:grapeColours.filter(([name])=>!group.accessoryKeys.includes(name)&&contains(remaining[0],name)).map(([,allowed])=>allowed);
  const explicit=colour||namedColours[0];
  const possible=group.wineColours.filter(value=>grapes.every(allowed=>allowed.includes(value))&&(!explicit||value===explicit));
  if(grapes.length&&!possible.length)return null;

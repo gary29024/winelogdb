@@ -1,5 +1,5 @@
 import { afterEach,describe,expect,it,vi } from 'vitest';
-import { readFileSync } from 'node:fs';
+import { readFileSync,readdirSync } from 'node:fs';
 import { gzipSync,gunzipSync } from 'node:zlib';
 import { isDeepStrictEqual } from 'node:util';
 import { loadVillageMapData } from '../../src/lib/places/loadVillageMapData';
@@ -7,12 +7,13 @@ import macon from '../../src/lib/places/maconMapCatalogue.json';
 import villages from '../../src/lib/places/macon-villagesMapCatalogue.json';
 import bourgogne from '../../src/lib/places/bourgogneMapCatalogue.json';
 import aligote from '../../src/lib/places/bourgogne-aligoteMapCatalogue.json';
+import passetoutgrains from '../../src/lib/places/bourgogne-passe-tout-grainsMapCatalogue.json';
 
 afterEach(()=>vi.unstubAllGlobals());
 const packed=(url:string)=>Uint8Array.from(readFileSync(`public${url}`));
 
 describe('compact boundary downloads',()=>{
- for(const [catalogue,ratio] of [[macon,.6],[villages,.6],[bourgogne,.65],[aligote,.65]] as const){
+ for(const [catalogue,ratio] of [[macon,.6],[villages,.6],[bourgogne,.65],[aligote,.65],[passetoutgrains,.65]] as const){
   it(`restores every coordinate and property of ${catalogue.name} within its download budget`,async()=>{
    const raw=readFileSync(`public${catalogue.dataUrl}`),bytes=packed(catalogue.geobufUrl);
    const fetcher=vi.fn(async()=>new Response(bytes));vi.stubGlobal('fetch',fetcher);
@@ -57,5 +58,20 @@ describe('compact boundary downloads',()=>{
    controller.abort();return new Response(packed(macon.geobufUrl));
   }));
   await expect(loadVillageMapData(macon,controller.signal)).rejects.toMatchObject({name:'AbortError'});
+ });
+});
+
+// Compact downloads are the largest boundary files. Each keeps the 60-second
+// limit so a slow connection cannot abort Mâcon while larger maps still load.
+describe('compact map download limits',()=>{
+ const dir='src/lib/places';
+ const compact=readdirSync(dir).filter(name=>name.endsWith('MapCatalogue.json'))
+  .map(name=>({name,catalogue:JSON.parse(readFileSync(`${dir}/${name}`,'utf8'))}))
+  .filter(({catalogue})=>catalogue.geobufUrl);
+ it('covers the Mâcon, Mâcon-Villages and partial Bourgogne maps',()=>{
+  expect(compact.map(({catalogue})=>catalogue.id)).toEqual(expect.arrayContaining(['macon','macon-villages','bourgogne','bourgogne-aligote']));
+ });
+ it.each(compact.map(({name,catalogue})=>[name,catalogue]))('%s allows 60 seconds',(_name,catalogue)=>{
+  expect(catalogue.downloadTimeoutMs).toBe(60000);
  });
 });

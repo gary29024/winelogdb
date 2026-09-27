@@ -96,7 +96,7 @@ def projected_boundary(source, config, forward, backward):
         assert source.symmetric_difference(sampled).area < 0.01
     result = transform(forward, sampled)
     if not result.is_valid:
-        assert config['denominationId'] in (2840, 1728, 1713, 2893, 389)
+        assert config['denominationId'] in (2840, 1728, 1713, 2893, 389, 394)
         result = make_valid(result)
     if config['denominationId'] in (1713, 2893) and result.geom_type == 'GeometryCollection':
         # Repaired point-touching rings can leave zero-area lines. Keep every
@@ -139,9 +139,9 @@ def main():
                 actual[row['id_app']][row['id_denom']].add(row['denom'])
             if row['id_denom'] in mapped:
                 source_shape = reader.shape(record.oid)
-                ring_review = {(362, '71494'): (1781, 7, 1), (389, '71360'): (288, 52, 67)}
+                ring_review = {(362, '71494'): (1781, 7, 1), (389, '71360'): (288, 52, 67), (394, '71360'): (290, 52, 67)}
                 if review := ring_review.get((row['id_denom'], row['insee'])):
-                    # La Salle (Bourgogne) and Prissé (Aligoté) each have a
+                    # La Salle (Bourgogne) and Prissé (Aligoté / Passe-tout-grains) have a
                     # touching hole that pyshp misidentifies as an exterior.
                     # Assign original oriented rings by full containment;
                     # no vertex moves and every exclusion keeps one shell.
@@ -150,7 +150,7 @@ def main():
                     shells = [Polygon(r) for r in rings if shapefile.signed_area(r) < 0]
                     holes = [Polygon(r) for r in rings if shapefile.signed_area(r) > 0]
                     assert (len(shells), len(holes)) == review[1:]
-                    expected_hole_area = 1.1577 if row['id_denom'] == 362 else 7.62945
+                    expected_hole_area = {362: 1.1577, 389: 7.62945, 394: 7.5912795}[row['id_denom']]
                     assert any(abs(h.area - expected_hole_area) < 1e-6 for h in holes)
                     assert all(sum(shell.covers(h) for shell in shells) == 1 for h in holes)
                     geometry = unary_union([Polygon(shell.exterior, [h.exterior for h in holes if shell.covers(h)]) for shell in shells])
@@ -265,13 +265,13 @@ def main():
         if config.get('colourScope'):
             catalogue['colourScope'] = config['colourScope']
         if config.get('downloadTimeoutMs'):
-            assert config['denominationId'] in (362, 389) and config['downloadTimeoutMs'] == 60000
+            assert config['denominationId'] in (362, 389, 394, 1713, 2893) and config['downloadTimeoutMs'] == 60000
             catalogue['downloadTimeoutMs'] = config['downloadTimeoutMs']
         collection = dict(type='FeatureCollection', features=features)
         if config.get('compactDownload'):
             # Transport only: preserve the reviewed grid, every ring and every
             # property. Geobuf's default six decimals would erase narrow holes.
-            assert config['denominationId'] in (362, 389, 1713, 2893)
+            assert config['denominationId'] in (362, 389, 394, 1713, 2893)
             encoded = geobuf.Encoder().encode(collection, precision=9 if grid == 1e-9 else 7, dim=2)
             canonical = json.loads(json.dumps(collection))  # tuples -> lists
             assert geobuf.decode(encoded) == canonical, 'Compact download changes the map'
@@ -283,7 +283,7 @@ def main():
                         (PLACES / f"{config['id']}MapCatalogue.json", catalogue, False)])
         entry = {key: config[key] for key in ('id', 'name', 'region', 'aliases', 'compatibleRegions', 'wineColours')}
         # Reviewed site names require the matching base appellation on the wine.
-        for key in ('siteNames', 'baseAppellations', 'matchAppellationOnly', 'conflictingNames', 'broadAppellation'):
+        for key in ('siteNames', 'baseAppellations', 'matchAppellationOnly', 'conflictingNames', 'accessoryGrapes', 'broadAppellation'):
             if key in config:
                 entry[key] = config[key]
         registry.append({**entry, 'featureId': feature_id})
