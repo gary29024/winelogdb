@@ -34,6 +34,13 @@ def source_bytes(path):
     return path.read_bytes().replace(b'\r\n', b'\n')
 
 
+def portable_gzip(raw):
+    packed = gzip.compress(raw, compresslevel=9, mtime=0)
+    # Python 3.11/3.12 delegates the OS header byte to platform zlib. It is
+    # metadata only; normalise it to "unknown" just as Python 3.13+ does.
+    return packed[:9] + b'\xff' + packed[10:]
+
+
 def polygonal(geometry):
     value = make_valid(geometry, method='structure', keep_collapsed=False)
     if value.geom_type == 'GeometryCollection':
@@ -138,7 +145,7 @@ def main():
         raw = geobuf.Encoder().encode(collection, precision=6, dim=2)
         assert geobuf.decode(raw) == collection
         assert all(shape(f['geometry']).is_valid for f in collection['features'])
-        packed = gzip.compress(raw, compresslevel=9, mtime=0)
+        packed = portable_gzip(raw)
         assert len(packed) < 800000 and len(raw) < 1000000
         stem = catalogue['dataUrl'].removesuffix('.geojson') + '.overview'
         latitude = sum(catalogue['bounds'][1::2])/2
