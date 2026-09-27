@@ -29,6 +29,8 @@ const regionalMapCases=[
  ['Mâcon Vergisson',1,'Vergisson','white','Sur la Roche'],
  ['Mâcon Vinzelles',1,'Vinzelles','white','Le Clos de Grand-Père'],
  ['Mâcon Serrières',1,'Serrières','red','Vieilles Vignes'],
+ ['Mâcon Montbellet',1,'Montbellet','white','Mâcon-Montbellet'],
+ ['Mâcon Uchizy',1,'Uchizy','white','Mâcon-Uchizy'],
 ] as const;
 const smokeRegionalAppellations=new Set<string>([
  'Bourgogne Côte d’Or',
@@ -109,8 +111,12 @@ const maconOverviewCases=[
  ['Mâcon Lugny','inao-denom-1726',4,'Cruzille',true],
  ['Mâcon Péronne','inao-denom-1730',3,'Saint-Maurice-de-Satonnay',false],
  ['Mâcon Verzé','inao-denom-1737',1,'Verzé',false],
+ ['Mâcon Bray','inao-denom-1714',4,'Cortambert',true],
+ ['Mâcon Chardonnay','inao-denom-1720',4,'Tournus',false],
+ ['Mâcon Mancey','inao-denom-1728',12,'Laives',true],
+ ['Mâcon Saint-Gengoux-le-National','inao-denom-1734',16,'Bonnay-Saint-Ythaire',true],
 ] as const;
-for(const route of matrixRoutes)for(const [appellation,featureId,count,commune,hasSector] of maconOverviewCases.filter((_,i)=>fullMapMatrix||i===1||i===10)){
+for(const route of matrixRoutes)for(const [appellation,featureId,count,commune,hasSector] of maconOverviewCases.filter((_,i)=>fullMapMatrix||i===1||i===10||i===16)){
  test(`Mâcon overview ${appellation} ${route}: overview and source sector stay distinct`,async({page},testInfo)=>{
   await page.setViewportSize({width:320,height:900});
   await setup(page,{appellation,wineName:'Vieilles Vignes',classification:null,colour:'White',wineStyle:'white',region:'Mâconnais'});
@@ -159,6 +165,26 @@ for(const route of matrixRoutes)for(const [appellation,featureId,count,commune,h
   await expect(page.getByRole('button',{name:'View regional map'})).toBeFocused();
  });
 }
+
+for(const route of matrixRoutes)test(`Northern Mâcon labels distinguish grapes, estates and denominations ${route}`,async({page})=>{
+ await page.setViewportSize({width:320,height:900});
+ for(const [appellation,wineName,producer,expected] of [
+  ['Mâcon-Chardonnay','En Bout','Domaine des Crêts','Mâcon Chardonnay'],
+  ['Mâcon','Mancey Les Cadoles Chardonnay','Les Vignerons de Mancey','Mâcon Mancey'],
+  ['Mâcon Saint Gengoux','Buissonnier','Vignerons de Buxy','Mâcon Saint-Gengoux-le-National'],
+ ] as const){
+  await setup(page,{appellation,wineName,producer,colour:'White',wineStyle:'white',classification:null,region:'Mâconnais'});
+  await page.goto(route);await page.getByRole('button',{name:'View regional map'}).click();
+  const dialog=page.getByRole('dialog',{name:expected,exact:true});
+  await expect(dialog.getByRole('button',{name:'Region view',exact:true})).toBeEnabled();
+  await expect(dialog.locator('.village-map-description')).toContainText('Denomination overview');
+  await page.keyboard.press('Escape');
+ }
+ for(const wineName of ['Chardonnay','Mâcon Chardonnay','Les Vignerons de Mancey Royer Vers','Mâcon St-Gengoux-de-Scissé']){
+  await setup(page,{appellation:'Mâcon',wineName,producer:'Les Vignerons de Mancey-Royer-Vers',colour:'White',wineStyle:'white',classification:null,region:'Mâconnais'});
+  await page.goto(route);await expect(page.getByRole('button',{name:'View regional map'})).toHaveCount(0);
+ }
+});
 
 for(const route of matrixRoutes)test(`Central Mâcon producer labels and village precedence ${route}`,async({page})=>{
  for(const [appellation,wineName,producer,colour,expected] of [

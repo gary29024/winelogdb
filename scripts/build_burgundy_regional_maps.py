@@ -87,6 +87,15 @@ def main():
     outputs, registry = [], []
     for config in maps:
         rows = grouped[config['denominationId']]
+        # Retain every source parcel when old commune codes survive a merger.
+        # Verify the original code set before grouping navigation under current
+        # communes; no production geometry is clipped to administrative borders.
+        if config.get('communeAliases'):
+            aliases = config['communeAliases']
+            assert sorted({r['insee'] for r, _ in rows}) == config['sourceCommunes']
+            assert set(aliases).issubset(config['sourceCommunes'])
+            assert set(aliases.values()).issubset(config['communes'])
+            rows = [(dict(r, insee=aliases.get(r['insee'], r['insee'])), g) for r, g in rows]
         assert {r['id_app'] for r, _ in rows} == {config['appellationId']}
         equivalent_names = config.get('equivalentSourceNames', [])
         variants = config.get('sourceVariants', [])
@@ -109,12 +118,13 @@ def main():
         whole_m = unary_union([geom for _, geom in rows])
         assert whole_m.is_valid
         whole = transform(to_wgs84, whole_m)
-        # Côte d'Or has a point-touching ring that crosses itself at floating
-        # precision after reprojection. Repair only that reviewed case, with a
+        # Côte d'Or and Mancey have point-touching rings that cross at floating
+        # precision after reprojection (Mancey: 4.8392414160, 46.5649575786).
+        # Repair only these reviewed cases, with a
         # strict source-CRS round-trip area bound; never buffer or
         # simplify away real parcels or holes.
         if not whole.is_valid:
-            assert config['denominationId'] == 2840
+            assert config['denominationId'] in (2840, 1728)
             whole = make_valid(whole)
         round_trip = make_valid(transform(to_source, whole))
         difference = whole_m.symmetric_difference(round_trip).area
@@ -180,7 +190,7 @@ def main():
                         (PLACES / f"{config['id']}MapCatalogue.json", catalogue, False)])
         entry = {key: config[key] for key in ('id', 'name', 'region', 'aliases', 'compatibleRegions', 'wineColours')}
         # Reviewed site names require the matching base appellation on the wine.
-        for key in ('siteNames', 'baseAppellations'):
+        for key in ('siteNames', 'baseAppellations', 'matchAppellationOnly', 'conflictingNames'):
             if key in config:
                 entry[key] = config[key]
         registry.append({**entry, 'featureId': feature_id})

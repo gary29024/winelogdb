@@ -140,8 +140,8 @@ the plan because they lack a village AOC. See the
 
 All **14 Bourgogne geographic denominations** in the pinned source now have maps.
 These are denominations within Bourgogne AOC, not new AOCs or village maps.
-**Thirty-five of 49 regional source denominations are mapped; 14 remain pending:**
-the seven broad regional denominations, Mâcon-Villages and six named Mâcon denominations.
+**Forty-one of 49 regional source denominations are mapped; eight remain pending:**
+the seven broad regional denominations and Mâcon-Villages.
 The [Yonne source review](burgundy-regional-maps.md#yonne-source-review)
 explains the five-commune Côtes d’Auxerre list and its difference from some
 seven-name promotional lists. It does not add boundaries from those lists.
@@ -150,7 +150,7 @@ Within Bourgogne, the completed geographic-denomination inventory covers all 14 
 snapshot: Chitry, Côte Chalonnaise, Côte d'Or, Côte Saint-Jacques, Côtes d'Auxerre,
 Côtes du Couchois, Coulanges-la-Vineuse, Épineuil, Hautes Côtes de Beaune, Hautes
 Côtes de Nuits, La Chapelle Notre-Dame, Le Chapitre, Montrecul and Tonnerre.
-Within Mâcon, twenty-one of the 27 named geographic denominations are mapped:
+Within Mâcon, all 27 named geographic denominations are mapped:
 
 - [x] Mâcon Charnay-lès-Mâcon: Charnay-lès-Mâcon; red/white/rosé
 - [x] Mâcon Davayé: Davayé; red/white/rosé
@@ -173,16 +173,25 @@ Within Mâcon, twenty-one of the 27 named geographic denominations are mapped:
 - [x] Mâcon Lugny: Bissy-la-Mâconnaise, Cruzille, Lugny and Saint-Gengoux-de-Scissé; overview and red-only sector
 - [x] Mâcon Péronne: Clessé, Péronne and Saint-Maurice-de-Satonnay; red/white/rosé denomination overview
 - [x] Mâcon Verzé: Verzé; red/white/rosé denomination overview
+- [x] Mâcon Bray: Blanot, Bray, Chissey-lès-Mâcon and Cortambert; overview and red-only sector
+- [x] Mâcon Chardonnay: Chardonnay, Ozenay, Plottes and Tournus; overview, with explicit appellation evidence required to distinguish the grape
+- [x] Mâcon Mancey: Boyer, La Chapelle-sous-Brancion, Étrigny, Jugy, Laives, Mancey, Montceaux-Ragny, Nanton, Royer, Sennecey-le-Grand, Tournus and Vers; overview and red-only sector
+- [x] Mâcon Montbellet: Montbellet; white only
+- [x] Mâcon Saint-Gengoux-le-National: all 16 current communes, including Bonnay-Saint-Ythaire and the source portions of La Vineuse sur Fregande; overview and red-only sector
+- [x] Mâcon Uchizy: Uchizy; white only
 
-The six pending named denominations are Bray, Chardonnay, Mancey, Montbellet,
-Saint-Gengoux-le-National and Uchizy. Mâcon and Mâcon-Villages also remain pending.
-The thirteen western and central three-colour maps are explicitly denomination
+No named Mâcon denomination remains pending. Broad Mâcon and Mâcon-Villages
+remain pending. The seventeen western, central and northern three-colour maps are explicitly denomination
 overviews: complete white/red/rosé eligibility
 areas need further verification, as explained in the
 [western Mâcon source review](burgundy-regional-maps.md#western-mâcon-source-review).
 The [central Mâcon source review](burgundy-regional-maps.md#central-mâcon-source-review)
 also documents the distinct denomination areas within Cruzille and partial
 commune coverage in Clessé; administrative outlines never replace these boundaries.
+The [northern Mâcon source review](burgundy-regional-maps.md#northern-mâcon-source-review)
+documents the final six names, Tournus's separate denomination areas and the
+historic commune codes retained in the source. Completion of the named inventory
+does not establish individual vineyards or complete colour-specific boundaries.
 
 ## Source gaps and completion criteria
 

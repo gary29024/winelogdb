@@ -34,6 +34,7 @@ const withoutProducer=(label:string,producer:string)=>{
 const byLength=(a:string,b:string)=>b.length-a.length;
 const bourgogneAppellations=['bourgogne','burgundy','bourgogne rouge','bourgogne blanc','bourgogne rose'];
 const groups=registry.maps.map(group=>({...group,keys:group.aliases.map(key).sort(byLength),regions:group.compatibleRegions.map(key),
+ blockedKeys:((group as {conflictingNames?:string[]}).conflictingNames??[]).map(key),
  // A split label requires its own base AOC: Mâcon + Fuissé is not Bourgogne + Fuissé.
  baseKeys:((group as {baseAppellations?:string[]}).baseAppellations??bourgogneAppellations).map(key),
  siteKeys:((group as {siteNames?:string[]}).siteNames??[]).map(key).sort(byLength),
@@ -73,10 +74,15 @@ export function burgundyRegionalMapTarget(wine:Wine):BurgundyVillageMapTarget|nu
  const plainAppellation=(group:typeof groups[number])=>group.baseKeys.includes(fields[0]);
  const joinedLabel=withoutProducer(joinedKey(wine.wineName??''),producer);
  const namesSite=(group:typeof groups[number])=>plainAppellation(group)&&group.joinedSiteKeys.some(name=>namesPlace(joinedLabel,name));
- const candidates=groups.filter(group=>fields.some(text=>group.keys.some(name=>contains(text,name)))||namesSite(group));
+ // Chardonnay is also a grape: only a recorded full appellation establishes
+ // that geographic denomination, never a grape description or split label.
+ const candidates=groups.filter(group=>(group as {matchAppellationOnly?:boolean}).matchAppellationOnly
+  ?group.keys.some(name=>contains(fields[0],name))
+  :fields.some(text=>group.keys.some(name=>contains(text,name)))||namesSite(group));
  if(!candidates.length)return undefined;
  if(candidates.length!==1||wine.identityMatchStatus==='conflict'||wine.classification)return null;
  const group=candidates[0],country=key(wine.country??''),region=key(wine.region??'');
+ if(fields.some(text=>group.blockedKeys.some(name=>contains(text,name))))return null;
  if(country&&!['france','fr'].includes(country))return null;
  if(region&&!group.regions.includes(region)&&!group.keys.includes(region))return null;
  // The reviewed Joigny vin gris is rosé. A grape name such as Pinot Gris

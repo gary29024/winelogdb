@@ -227,7 +227,7 @@
             "Mâcon Bray",
             "Mâcon Bray - rouge exclusif"
           ],
-          "status": "pending",
+          "status": "mapped",
           "kind": "geographic"
         },
         {
@@ -260,7 +260,7 @@
           "sourceNames": [
             "Mâcon Chardonnay"
           ],
-          "status": "pending",
+          "status": "mapped",
           "kind": "geographic"
         },
         {
@@ -320,7 +320,7 @@
             "Mâcon Mancey",
             "Mâcon Mancey - rouge exclusif"
           ],
-          "status": "pending",
+          "status": "mapped",
           "kind": "geographic"
         },
         {
@@ -363,7 +363,7 @@
             "Mâcon Saint-Gengoux-le-National",
             "Mâcon Saint-Gengoux-le-National - rouge exclusif"
           ],
-          "status": "pending",
+          "status": "mapped",
           "kind": "geographic"
         },
         {
@@ -412,7 +412,7 @@
           "sourceNames": [
             "Mâcon Montbellet"
           ],
-          "status": "pending",
+          "status": "mapped",
           "kind": "geographic"
         },
         {
@@ -428,7 +428,7 @@
           "sourceNames": [
             "Mâcon Uchizy"
           ],
-          "status": "pending",
+          "status": "mapped",
           "kind": "geographic"
         },
         {

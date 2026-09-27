@@ -1,0 +1,141 @@
+{
+  "id": "macon-chardonnay",
+  "name": "Mâcon Chardonnay",
+  "region": "Mâconnais",
+  "mapKind": "regional",
+  "communes": [
+    {
+      "id": "71100",
+      "name": "Chardonnay",
+      "bounds": [
+        4.823455,
+        46.4983,
+        4.874724,
+        46.520984
+      ],
+      "labelPoint": [
+        4.860775,
+        46.505711
+      ]
+    },
+    {
+      "id": "71338",
+      "name": "Ozenay",
+      "bounds": [
+        4.815396,
+        46.513127,
+        4.863257,
+        46.551732
+      ],
+      "labelPoint": [
+        4.84129,
+        46.519026
+      ]
+    },
+    {
+      "id": "71353",
+      "name": "Plottes",
+      "bounds": [
+        4.859685,
+        46.516262,
+        4.890758,
+        46.550412
+      ],
+      "labelPoint": [
+        4.86283,
+        46.52712
+      ]
+    },
+    {
+      "id": "71543",
+      "name": "Tournus",
+      "bounds": [
+        4.872666,
+        46.543326,
+        4.895955,
+        46.560251
+      ],
+      "labelPoint": [
+        4.880722,
+        46.551899
+      ]
+    }
+  ],
+  "dataUrl": "/maps/macon-chardonnay.2026-09-21.geojson",
+  "bounds": [
+    4.815396,
+    46.4983,
+    4.895955,
+    46.560251
+  ],
+  "sources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71100/cadastre-71100-communes.json.gz",
+      "sha256": "a7c3f181151bbc48697dd9d321cf414b00a36f31e3246f024daa1ac145736464"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71338/cadastre-71338-communes.json.gz",
+      "sha256": "12a4d3f880f9c3d41a6eddd663c19da8a7e8252e12e9989f90be04152ed3416f"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71353/cadastre-71353-communes.json.gz",
+      "sha256": "e5469847f752870167f4a9b6c27cf643b4caabc06f9202ad37057b10f116a695"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71543/cadastre-71543-communes.json.gz",
+      "sha256": "f167bbb4211b85ae30e66b7d14d6d1edfc0aead0c6a97bea042cc15027f7b89f"
+    }
+  ],
+  "notes": {},
+  "features": [
+    {
+      "id": "inao-denom-1720",
+      "name": "Mâcon Chardonnay",
+      "tier": "regional",
+      "kind": "appellation",
+      "appellationId": 583,
+      "denominationId": 1720,
+      "sourceName": "Mâcon Chardonnay",
+      "communes": [
+        "71100",
+        "71338",
+        "71353",
+        "71543"
+      ],
+      "areaHa": 1012.74,
+      "matchId": "inao-denom-1720",
+      "atlasUrl": null,
+      "bounds": [
+        4.815396,
+        46.4983,
+        4.895955,
+        46.560251
+      ],
+      "labelPoint": [
+        4.860775,
+        46.505711
+      ]
+    }
+  ],
+  "coverageNote": "A geographic denomination within Mâcon AOC. Named cuvées and producer holdings have no separate boundaries here. This is a denomination overview across wine colours, not a verified white, red or rosé production area.",
+  "colourScope": "overview"
+}

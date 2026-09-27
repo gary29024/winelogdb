@@ -1,0 +1,74 @@
+{
+  "id": "macon-montbellet",
+  "name": "Mâcon Montbellet",
+  "region": "Mâconnais",
+  "mapKind": "regional",
+  "communes": [
+    {
+      "id": "71305",
+      "name": "Montbellet",
+      "bounds": [
+        4.843767,
+        46.461119,
+        4.880725,
+        46.491195
+      ],
+      "labelPoint": [
+        4.857221,
+        46.474379
+      ]
+    }
+  ],
+  "dataUrl": "/maps/macon-montbellet.2026-09-21.geojson",
+  "bounds": [
+    4.843767,
+    46.461119,
+    4.880725,
+    46.491195
+  ],
+  "sources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71305/cadastre-71305-communes.json.gz",
+      "sha256": "b04bf3ad6347d4df80f9d58358c76e5ee50188ae554d0ebf27792e41937e46c9"
+    }
+  ],
+  "notes": {},
+  "features": [
+    {
+      "id": "inao-denom-2071",
+      "name": "Mâcon Montbellet",
+      "tier": "regional",
+      "kind": "appellation",
+      "appellationId": 583,
+      "denominationId": 2071,
+      "sourceName": "Mâcon Montbellet",
+      "communes": [
+        "71305"
+      ],
+      "areaHa": 103.89,
+      "matchId": "inao-denom-2071",
+      "atlasUrl": null,
+      "bounds": [
+        4.843767,
+        46.461119,
+        4.880725,
+        46.491195
+      ],
+      "labelPoint": [
+        4.857221,
+        46.474379
+      ]
+    }
+  ],
+  "coverageNote": "A geographic denomination within Mâcon AOC, for white wines only. The highlight shows its full INAO production area; named cuvées and producer holdings have no separate boundaries here."
+}

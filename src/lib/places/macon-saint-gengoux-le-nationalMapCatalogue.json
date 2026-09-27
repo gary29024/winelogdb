@@ -1,0 +1,434 @@
+{
+  "id": "macon-saint-gengoux-le-national",
+  "name": "Mâcon Saint-Gengoux-le-National",
+  "region": "Mâconnais",
+  "mapKind": "regional",
+  "communes": [
+    {
+      "id": "71007",
+      "name": "Ameugny",
+      "bounds": [
+        4.674224,
+        46.517425,
+        4.683864,
+        46.531602
+      ],
+      "labelPoint": [
+        4.6806,
+        46.524465
+      ]
+    },
+    {
+      "id": "71036",
+      "name": "Bissy-sous-Uxelles",
+      "bounds": [
+        4.713036,
+        46.56287,
+        4.719604,
+        46.568873
+      ],
+      "labelPoint": [
+        4.717096,
+        46.564955
+      ]
+    },
+    {
+      "id": "71042",
+      "name": "Bonnay-Saint-Ythaire",
+      "bounds": [
+        4.587357,
+        46.53881,
+        4.650613,
+        46.575607
+      ],
+      "labelPoint": [
+        4.613397,
+        46.552569
+      ]
+    },
+    {
+      "id": "71058",
+      "name": "Bresse-sur-Grosne",
+      "bounds": [
+        4.737824,
+        46.586238,
+        4.743952,
+        46.58968
+      ],
+      "labelPoint": [
+        4.739373,
+        46.587786
+      ]
+    },
+    {
+      "id": "71067",
+      "name": "Burnand",
+      "bounds": [
+        4.623187,
+        46.586331,
+        4.653999,
+        46.614343
+      ],
+      "labelPoint": [
+        4.650928,
+        46.60454
+      ]
+    },
+    {
+      "id": "71080",
+      "name": "Champagny-sous-Uxelles",
+      "bounds": [
+        4.733412,
+        46.575761,
+        4.742428,
+        46.587496
+      ],
+      "labelPoint": [
+        4.736381,
+        46.578321
+      ]
+    },
+    {
+      "id": "71087",
+      "name": "Chapaize",
+      "bounds": [
+        4.701296,
+        46.55226,
+        4.720543,
+        46.566076
+      ],
+      "labelPoint": [
+        4.709555,
+        46.55993
+      ]
+    },
+    {
+      "id": "71147",
+      "name": "Cortevaix",
+      "bounds": [
+        4.629245,
+        46.506628,
+        4.646182,
+        46.53514
+      ],
+      "labelPoint": [
+        4.632588,
+        46.512733
+      ]
+    },
+    {
+      "id": "71164",
+      "name": "Curtil-sous-Burnand",
+      "bounds": [
+        4.610306,
+        46.568353,
+        4.653942,
+        46.596496
+      ],
+      "labelPoint": [
+        4.631088,
+        46.571404
+      ]
+    },
+    {
+      "id": "71582",
+      "name": "La Vineuse sur Fregande",
+      "bounds": [
+        4.576258,
+        46.457917,
+        4.624937,
+        46.499025
+      ],
+      "labelPoint": [
+        4.60154,
+        46.47556
+      ]
+    },
+    {
+      "id": "71264",
+      "name": "Lournand",
+      "bounds": [
+        4.629455,
+        46.449486,
+        4.660286,
+        46.472921
+      ],
+      "labelPoint": [
+        4.634315,
+        46.467305
+      ]
+    },
+    {
+      "id": "71272",
+      "name": "Malay",
+      "bounds": [
+        4.686755,
+        46.555277,
+        4.710512,
+        46.57693
+      ],
+      "labelPoint": [
+        4.694638,
+        46.566376
+      ]
+    },
+    {
+      "id": "71417",
+      "name": "Saint-Gengoux-le-National",
+      "bounds": [
+        4.65335,
+        46.596128,
+        4.678065,
+        46.620857
+      ],
+      "labelPoint": [
+        4.674741,
+        46.612958
+      ]
+    },
+    {
+      "id": "71495",
+      "name": "Salornay-sur-Guye",
+      "bounds": [
+        4.593447,
+        46.507229,
+        4.615248,
+        46.536582
+      ],
+      "labelPoint": [
+        4.60285,
+        46.534161
+      ]
+    },
+    {
+      "id": "71507",
+      "name": "Savigny-sur-Grosne",
+      "bounds": [
+        4.64289,
+        46.565108,
+        4.667391,
+        46.598744
+      ],
+      "labelPoint": [
+        4.651473,
+        46.57114
+      ]
+    },
+    {
+      "id": "71521",
+      "name": "Sigy-le-Châtel",
+      "bounds": [
+        4.577595,
+        46.542798,
+        4.591312,
+        46.561747
+      ],
+      "labelPoint": [
+        4.584014,
+        46.554765
+      ]
+    }
+  ],
+  "dataUrl": "/maps/macon-saint-gengoux-le-national.2026-09-21.geojson",
+  "bounds": [
+    4.576258,
+    46.449486,
+    4.743952,
+    46.620857
+  ],
+  "sources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71007/cadastre-71007-communes.json.gz",
+      "sha256": "48a686c6bc3e453459175e147065d03cbe8c899304c56e9cda1e4eb874e0f4a9"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71036/cadastre-71036-communes.json.gz",
+      "sha256": "3df9471b35c6f1a6a059b8b83dd8724162229c5765adeffed92f328b773fdab7"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71042/cadastre-71042-communes.json.gz",
+      "sha256": "4257c01b80d4b4ed0778f44c1cb5192bbf83e6f72462506fb30b4b3fe142b565"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71058/cadastre-71058-communes.json.gz",
+      "sha256": "93dfa5086836b0da09d2e44678a2a714a12ba3353585ed476a66ce9dc90f9195"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71067/cadastre-71067-communes.json.gz",
+      "sha256": "e6d95de94bdca8db4a20fe24017cf64710f4ada7a8ba1d0b0ad9e600a1dfcab8"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71080/cadastre-71080-communes.json.gz",
+      "sha256": "9ebf3dce90535a6c0950963d83be61f315c5d975a4beb2de1d448618c1aa2088"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71087/cadastre-71087-communes.json.gz",
+      "sha256": "8843c4aa6d6ee9db9b7f0c12ce515b1db0e4c83705e22ec98f3c122ea62763d6"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71147/cadastre-71147-communes.json.gz",
+      "sha256": "f3d34fe0806ca2457f1965ba86a57484aa7a4f5cd66d20a17ef71632caf184e8"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71164/cadastre-71164-communes.json.gz",
+      "sha256": "8d3262915110f29886ff68c8c2c6a8ee526745ae30c252e409461cd073ac4bd6"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71264/cadastre-71264-communes.json.gz",
+      "sha256": "1f270c03dfc0ce9d1106cf31997622f9067d345c1a127f172978c33673bc3955"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71272/cadastre-71272-communes.json.gz",
+      "sha256": "c8da670af74d5ce6c1dfdc4b90f0b484cb2b46ea4ddf7a3668cf44a9aac7e22c"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71417/cadastre-71417-communes.json.gz",
+      "sha256": "68e2bb2f5a8991380e292f1726ad127ce0233795cb360db7fe82c32812295054"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71495/cadastre-71495-communes.json.gz",
+      "sha256": "7a2aaa962fd2b7e1c727c1ad55379113479d1c1c274171447fca895337286fcc"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71507/cadastre-71507-communes.json.gz",
+      "sha256": "88220802eb5ea5a3ca77c43b159855e0aa2ab983187af3dbb3c504967edaf66e"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71521/cadastre-71521-communes.json.gz",
+      "sha256": "4177470c4d56a21899286cdf51305042e1c36d030765bf65488cac07c437a8c3"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71582/cadastre-71582-communes.json.gz",
+      "sha256": "2f14d9045678f45cf109b18c629b41529c4a39f7846c6f860ee6cb208d8cc01e"
+    }
+  ],
+  "notes": {
+    "inao-denom-1734-red-only": {
+      "note": "INAO labels this sector “rouge exclusif” (red only). It is not the whole red-wine area. No white or rosé boundary is inferred by subtracting it from the overview."
+    }
+  },
+  "features": [
+    {
+      "id": "inao-denom-1734",
+      "name": "Mâcon Saint-Gengoux-le-National",
+      "tier": "regional",
+      "kind": "appellation",
+      "appellationId": 583,
+      "denominationId": 1734,
+      "sourceName": "Mâcon Saint-Gengoux-le-National",
+      "communes": [
+        "71007",
+        "71036",
+        "71042",
+        "71058",
+        "71067",
+        "71080",
+        "71087",
+        "71147",
+        "71164",
+        "71264",
+        "71272",
+        "71417",
+        "71495",
+        "71507",
+        "71521",
+        "71582"
+      ],
+      "areaHa": 1735.9,
+      "matchId": "inao-denom-1734",
+      "atlasUrl": null,
+      "bounds": [
+        4.576258,
+        46.449486,
+        4.743952,
+        46.620857
+      ],
+      "labelPoint": [
+        4.651473,
+        46.57114
+      ]
+    },
+    {
+      "id": "inao-denom-1734-red-only",
+      "name": "Mâcon Saint-Gengoux-le-National — red-only sector",
+      "tier": "regional",
+      "kind": "appellation",
+      "appellationId": 583,
+      "denominationId": 1734,
+      "sourceName": "Mâcon Saint-Gengoux-le-National - rouge exclusif",
+      "communes": [
+        "71164"
+      ],
+      "areaHa": 45.44,
+      "matchId": "inao-denom-1734-red-only",
+      "atlasUrl": null,
+      "bounds": [
+        4.610306,
+        46.569461,
+        4.652335,
+        46.583795
+      ],
+      "labelPoint": [
+        4.631088,
+        46.571404
+      ]
+    }
+  ],
+  "coverageNote": "A geographic denomination within Mâcon AOC. Named cuvées and producer holdings have no separate boundaries here. This is a denomination overview across wine colours, not a verified white, red or rosé production area. Bonnay and Saint-Ythaire are shown together as the current commune of Bonnay-Saint-Ythaire. La Vineuse sur Fregande includes only the source areas of La Vineuse and Massy.",
+  "colourScope": "overview"
+}
