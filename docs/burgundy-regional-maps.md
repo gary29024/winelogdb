@@ -821,6 +821,11 @@ rosé wines without claiming complete colour-specific eligibility. The red-only
 sector is available for manual exploration and never automatically locates a
 red bottle. It is not subtracted to invent a white or rosé boundary.
 
+**Mâcon Supérieur**, the former higher-strength grade of the same AOC that was
+discontinued in the 2000s, is an alias of broad Mâcon so older bottles open this
+map; the coverage note says so. It is matched as a recorded appellation only,
+with the same colour, conflict and sparkling guards.
+
 Mâcon-Villages has white-only CVI codes `1B370, 1B370 01`. Its
 `Mâcon Villages (Blanc)` row in **Ozenay (71345)** is not a duplicate of the main
 label: of its **6.417560 ha**, **5.519245 ha** overlaps the main source union and

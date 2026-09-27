@@ -889,3 +889,24 @@ describe('broad Mâcon and Mâcon-Villages',()=>{
   expect(villages.colourScope).toBeUndefined();
  });
 });
+
+describe('Mâcon Supérieur, the former grade of broad Mâcon',()=>{
+ it.each([
+  {appellation:'Mâcon Supérieur'},
+  {appellation:'Macon Superieur Blanc',colour:'White'},
+  {appellation:'Mâcon Supérieur Rouge',colour:'Red'},
+  {appellation:'Mâcon-Supérieur',wineName:'Vieilles Vignes',producer:'Domaine X'},
+ ])('opens the broad Mâcon map for %j',wine=>{
+  expect(burgundyVillageMapTarget({...base,...wine})).toMatchObject({featureId:'inao-denom-1713',mapKind:'regional',scope:'appellation'});
+ });
+ it.each([
+  {appellation:'Mâcon Supérieur',wineName:'Pouilly-Fuissé'},
+  {appellation:'Mâcon Supérieur',productSubtype:'Sparkling'},
+  {appellation:'Mâcon-Villages',wineName:'Mâcon Supérieur'},
+ ])('withholds a contradictory Mâcon Supérieur record %j',wine=>{
+  expect(burgundyVillageMapTarget({...base,...wine})).toBeNull();
+ });
+ it('explains the former name on the map',async()=>{
+  expect((await loadVillageMapCatalogue('macon')).coverageNote).toContain('Mâcon Supérieur');
+ });
+});

@@ -2082,7 +2082,8 @@
         46.7
       ],
       "aliases": [
-        "Mâcon"
+        "Mâcon",
+        "Mâcon Supérieur"
       ],
       "siteNames": [],
       "baseAppellations": [],
@@ -2097,7 +2098,7 @@
       "coordinateGrid": 1e-07,
       "precisionNote": "The default 1e-6 degree grid closes excluded holes larger than 2 m² (36.1573 m² for Mâcon; 2.9750 m² for Mâcon-Villages). The reviewed 1e-7 grid preserves these holes and passes the unchanged area and hole/part gates.",
       "colourScope": "overview",
-      "coverageNote": "The broad Mâcon AOC denomination, across 88 source communes. This is an overview across wine colours, not a verified white, red or rosé production area. Named Mâcon denominations have separate maps; no single village, vineyard or producer holding is identified.",
+      "coverageNote": "The broad Mâcon AOC denomination, across 88 source communes. This is an overview across wine colours, not a verified white, red or rosé production area. Named Mâcon denominations have separate maps; no single village, vineyard or producer holding is identified. Bottles labelled Mâcon Supérieur, a former higher-strength grade of the same Mâcon AOC discontinued in the 2000s, also open this map.",
       "sourceVariants": [
         {
           "name": "Mâcon - rouge exclusif",
