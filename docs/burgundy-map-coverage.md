@@ -140,8 +140,8 @@ the plan because they lack a village AOC. See the
 
 All **14 Bourgogne geographic denominations** in the pinned source now have maps.
 These are denominations within Bourgogne AOC, not new AOCs or village maps.
-**Of 49 regional source denominations, 43 are mapped, four have partial source
-overviews, and two remain pending.** Broad Bourgogne has an explicitly partial
+**Of 49 regional source denominations, 43 are mapped, five have partial source
+overviews, and one remains pending.** Broad Bourgogne has an explicitly partial
 overview of all 295 available source rows in 264 communes, plus its separately
 published white-only sector. This does not complete its appellation or
 colour-specific boundaries; Bourgogne Gamay remains unavailable.
@@ -154,7 +154,12 @@ The Bourgogne Mousseux partial overview retains its own 278 source rows across
 272 communes, with red sparkling matching, compact downloads and a visible
 Rhône/Beaujolais boundary gap. Historic white/rosé Mousseux labels are not mapped
 to this current red-wine source area.
-The two pending denominations are Coteaux Bourguignons and Crémant de Bourgogne.
+The Coteaux Bourguignons partial overview retains its own 281 source rows across
+275 communes, including Chânes, Chasselas and Crêches-sur-Saône. It supports
+still red, white and rosé identities, including the traditional Bourgogne Grand
+Ordinaire/Bourgogne Ordinaire names. Rhône/Beaujolais boundaries remain absent;
+the combined source geometry cannot identify a colour-specific production area.
+Crémant de Bourgogne is the remaining pending denomination.
 The [Yonne source review](burgundy-regional-maps.md#yonne-source-review)
 explains the five-commune Côtes d’Auxerre list and its difference from some
 seven-name promotional lists. It does not add boundaries from those lists.

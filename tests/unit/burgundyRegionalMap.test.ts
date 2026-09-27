@@ -104,8 +104,8 @@ describe('regional denominations stay separate from villages and named vineyards
   const bourgogne=inventory.appellations.find(a=>a.appellationId===138)!.denominations;
   expect(bourgogne.filter(d=>d.denominationId!==362).every(d=>d.status==='mapped')).toBe(true);
   expect(bourgogne.find(d=>d.denominationId===362)!.status).toBe('partial');
-  expect(denominations.filter(d=>d.status==='partial').map(d=>d.denominationId)).toEqual([362,389,391,394]);
-  expect(denominations.filter(d=>d.status==='pending').map(d=>d.denominationId)).toEqual([2338,561]);
+  expect(denominations.filter(d=>d.status==='partial').map(d=>d.denominationId)).toEqual([362,389,391,394,2338]);
+  expect(denominations.filter(d=>d.status==='pending').map(d=>d.denominationId)).toEqual([561]);
   expect(inventory.appellations.find(a=>a.appellationId===583)!.denominations).toHaveLength(29);
   expect(villages.villages).toHaveLength(44);
  });

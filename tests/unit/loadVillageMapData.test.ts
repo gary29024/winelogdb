@@ -9,12 +9,13 @@ import bourgogne from '../../src/lib/places/bourgogneMapCatalogue.json';
 import aligote from '../../src/lib/places/bourgogne-aligoteMapCatalogue.json';
 import passetoutgrains from '../../src/lib/places/bourgogne-passe-tout-grainsMapCatalogue.json';
 import mousseux from '../../src/lib/places/bourgogne-mousseuxMapCatalogue.json';
+import coteaux from '../../src/lib/places/coteaux-bourguignonsMapCatalogue.json';
 
 afterEach(()=>vi.unstubAllGlobals());
 const packed=(url:string)=>Uint8Array.from(readFileSync(`public${url}`));
 
 describe('compact boundary downloads',()=>{
- for(const [catalogue,ratio] of [[macon,.6],[villages,.6],[bourgogne,.65],[aligote,.65],[passetoutgrains,.65],[mousseux,.65]] as const){
+ for(const [catalogue,ratio] of [[macon,.6],[villages,.6],[bourgogne,.65],[aligote,.65],[passetoutgrains,.65],[mousseux,.65],[coteaux,.65]] as const){
   it(`restores every coordinate and property of ${catalogue.name} within its download budget`,async()=>{
    const raw=readFileSync(`public${catalogue.dataUrl}`),bytes=packed(catalogue.geobufUrl);
    const fetcher=vi.fn(async()=>new Response(bytes));vi.stubGlobal('fetch',fetcher);

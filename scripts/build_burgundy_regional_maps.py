@@ -88,7 +88,7 @@ def projected_boundary(source, config, forward, backward):
         return result, difference
     sampled = source
     if length := config.get('projectionSegmentLength'):
-        assert config['denominationId'] in (1713, 2893) and length == 20
+        assert config['denominationId'] in (1713, 2893, 2338) and length == 20
         # Collinear source-CRS vertices preserve the original straight edges.
         # Sampling before reprojection avoids cutting across touching rings on
         # long edges when the CRS transform curves them. No smoothing/buffering.
@@ -96,9 +96,9 @@ def projected_boundary(source, config, forward, backward):
         assert source.symmetric_difference(sampled).area < 0.01
     result = transform(forward, sampled)
     if not result.is_valid:
-        assert config['denominationId'] in (2840, 1728, 1713, 2893, 389, 391, 394)
+        assert config['denominationId'] in (2840, 1728, 1713, 2893, 389, 391, 394, 2338)
         result = make_valid(result)
-    if config['denominationId'] in (1713, 2893) and result.geom_type == 'GeometryCollection':
+    if config['denominationId'] in (1713, 2893, 2338) and result.geom_type == 'GeometryCollection':
         # Repaired point-touching rings can leave zero-area lines. Keep every
         # polygon, then check against the untouched source union below.
         result = unary_union([part for part in get_parts(result) if part.geom_type in ('Polygon', 'MultiPolygon')])
@@ -268,13 +268,13 @@ def main():
         if config.get('colourScope'):
             catalogue['colourScope'] = config['colourScope']
         if config.get('downloadTimeoutMs'):
-            assert config['denominationId'] in (362, 389, 391, 394, 1713, 2893) and config['downloadTimeoutMs'] == 60000
+            assert config['denominationId'] in (362, 389, 391, 394, 1713, 2893, 2338) and config['downloadTimeoutMs'] == 60000
             catalogue['downloadTimeoutMs'] = config['downloadTimeoutMs']
         collection = dict(type='FeatureCollection', features=features)
         if config.get('compactDownload'):
             # Transport only: preserve the reviewed grid, every ring and every
             # property. Geobuf's default six decimals would erase narrow holes.
-            assert config['denominationId'] in (362, 389, 391, 394, 1713, 2893)
+            assert config['denominationId'] in (362, 389, 391, 394, 1713, 2893, 2338)
             encoded = geobuf.Encoder().encode(collection, precision=9 if grid == 1e-9 else 7, dim=2)
             canonical = json.loads(json.dumps(collection))  # tuples -> lists
             assert geobuf.decode(encoded) == canonical, 'Compact download changes the map'
@@ -286,7 +286,7 @@ def main():
                         (PLACES / f"{config['id']}MapCatalogue.json", catalogue, False)])
         entry = {key: config[key] for key in ('id', 'name', 'region', 'aliases', 'compatibleRegions', 'wineColours')}
         # Reviewed site names require the matching base appellation on the wine.
-        for key in ('siteNames', 'baseAppellations', 'matchAppellationOnly', 'conflictingNames', 'accessoryGrapes', 'broadAppellation', 'productStyle'):
+        for key in ('siteNames', 'baseAppellations', 'matchAppellationOnly', 'conflictingNames', 'accessoryGrapes', 'broadAppellation', 'productStyle', 'additionalGrapes', 'labelMentions'):
             if key in config:
                 entry[key] = config[key]
         registry.append({**entry, 'featureId': feature_id})

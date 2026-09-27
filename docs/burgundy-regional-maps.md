@@ -1,5 +1,66 @@
 # Burgundy regional maps
 
+## Coteaux Bourguignons source overview
+
+Regional AOC **1027**, denomination **2338**, uses all **281** rows of its own
+September 2026 INAO source, named `Coteaux Bourguignons ou Bourgogne grand
+ordinaire ou Bourgogne ordinaire` (CVI `1B320, 1B320 02, 1R320, 1S320`). Its
+**275 communes** comprise 90 in Côte-d’Or, 148 in Saône-et-Loire and 37 in Yonne.
+The **55,553.82 ha** measures delimited source geometry, not planted acreage.
+Chânes, Chasselas and Crêches-sur-Saône are included in addition to the 272
+communes in the preceding Mousseux map. Boundaries come from this AOC's own rows;
+commune outlines retain the pinned June 2026 Cadastre source.
+
+Coverage is **partial**. The [current INAO description](https://www.inao.gouv.fr/node/29085/printable/print)
+and [BIVB appellation sheet](https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/gallery_files/site/321/402/79294/79363.pdf)
+include Rhône, but the source has no Rhône rows. The modal visibly identifies
+the missing Rhône/Beaujolais boundaries and the combined red/white/rosé scope.
+Neither commune outlines nor published commune totals establish missing parcel
+boundaries. A red or white wine therefore sees the available appellation
+overview, never a claimed colour-specific area or producer holding.
+
+Matching requires the complete recorded AOC or its traditional `Bourgogne Grand
+Ordinaire` / `Bourgogne Ordinaire` name. The full designation can also appear in
+the wine name beside a recorded Bourgogne base; region, producer and reference
+fields alone cannot infer it. Still red, white and rosé labels are supported;
+sparkling products, cru tiers, competing AOCs and conflicting colours are blocked.
+The [2024 specification entry](https://info.agriculture.gouv.fr/gedei/site/bo-agri/document_administratif-c0994b17-a8d3-43fa-bcf3-e5b7aecd01b3)
+and [INAO's blanc nouveau/primeur product](https://www.inao.gouv.fr/produit/coteaux-bourguignons-ou-bourgogne-grand-ordinaire-ou-bourgogne-ordinaire-blanc-nouveau-ou-0)
+support the white-only `Nouveau` / `Primeur` mentions. These rules are scoped to
+Coteaux Bourguignons, not applied to other regional AOCs.
+
+The BIVB sheet identifies César for red/rosé wine in Yonne and the white grapes.
+The [CAVB-hosted specification, section V](https://www.cavb.fr/wp-content/uploads/2021/11/CDC_Coteaux_Bourguignons_2013.pdf)
+also records the accessory grapes. Reviewed accessory wording, including
+`Melon de Bourgogne`, does not become a competing Bourgogne identity or force
+a blended red wine to white. Full competing AOC names are checked first.
+Identity matching does not certify blend proportions or vintage-specific rules.
+
+### Geometry and transport
+
+- All 281 raw source geometries are valid. Sampling long source edges at
+  **20 metres** preserves the source union exactly and avoids projection-induced
+  ring crossings. Inverse-projection symmetric difference is **0 m²**; the
+  existing **0.01 m²** gate is unchanged.
+- The **1e-7°** grid retains the material exclusion lost at 1e-6°. Net area
+  change is **15.67 m²**, the largest closed sliver is **0.524 m²**, and no
+  polygon parts are lost. The 0.005% area and sub-2 m² hole/part gates pass.
+- GeoJSON is **23,926,337 bytes**; gzip level 9 is **6,992,405 bytes**. The
+  **3,409,607-byte** compact download is **51% smaller than gzip**, with exact
+  coordinate/property equality in both Python and the browser decoder. It loads
+  only when opened and retains cancellation, explicit retry and the 60-second budget.
+- All **188 prior assets/catalogues** and **47 prior registry entries** remain
+  unchanged. Earlier-map optimisation stays in [#363](https://github.com/gary29024/winelogdb/issues/363).
+
+Validation passes **5,088 unit tests**, lint and production build. Chromium and mobile WebKit owner/shared
+journeys, 320px/desktop screenshots, all 275 commune choices, raw-gzip decoding,
+traditional names and colour/primeur conflicts pass. A real 1 Mbps / 150 ms
+transfer receives all **3,409,607 bytes** and reaches map-ready in **28,862 ms**
+with caching disabled and code warmed separately. All **104 generated regional
+outputs** reproduce byte-for-byte. Browser fixtures block external basemaps;
+the CDP throttling case runs only in Chromium.
+The baseline and CI runtime changes are documented in [the testing strategy](testing-strategy.md).
+
 ## Bourgogne Mousseux source overview
 
 Regional AOC **141**, denomination **391**, uses all **278** rows of its own
@@ -328,11 +389,12 @@ the twenty-seven named areas, broad Mâcon and Mâcon-Villages.
 These remain regional denominations, not new AOCs or village appellations.
 Broad Bourgogne additionally has a **partial source overview**, covering the
 264 communes in the pinned data, with a separately explorable white-only sector.
-Bourgogne Aligoté and Bourgogne Passe-tout-grains each have their own
+Bourgogne Aligoté, Bourgogne Passe-tout-grains and Bourgogne Mousseux each have their own
 **partial source overview** across 272 communes.
+Coteaux Bourguignons has a partial overview across 275 communes.
 The existing 44 village maps and 33 Grand Cru appellations are unchanged.
 
-| Denomination | INAO appellation / denomination | Producing communes | Allowed still-wine colours |
+| Denomination | INAO appellation / denomination | Producing communes | Allowed colours/style |
 | --- | --- | ---: | --- |
 | Bourgogne Côte d’Or | 138 / 2840 | 40 | Red, white |
 | Bourgogne Hautes Côtes de Nuits | 138 / 364 | 19 | Red, white, rosé |
@@ -380,6 +442,8 @@ The existing 44 village maps and 33 Grand Cru appellations are unchanged.
 | Bourgogne (partial source overview) | 138 / 362 | 264 in source | Red, white, rosé; overview only |
 | Bourgogne Aligoté (partial source overview) | 140 / 389 | 272 in source | White only |
 | Bourgogne Passe-tout-grains (partial source overview) | 144 / 394 | 272 in source | Red, rosé |
+| Bourgogne Mousseux (partial source overview) | 141 / 391 | 272 in source | Red sparkling |
+| Coteaux Bourguignons (partial source overview) | 1027 / 2338 | 275 in source | Red, white, rosé; overview only |
 
 The official BIVB sheets confirm these counts, colours and regional status:
 [Côte d’Or](https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/bourgogne-cote-d-or%2C2458%2C9253.html?args=Y29tcF9pZD0yMjc4JmFjdGlvbj12aWV3RmljaGUmaWQ9Nzc0Jnw%3D),
@@ -394,12 +458,12 @@ Coteaux Bourguignons, Crémant de Bourgogne and Mâcon. The
 [BIVB inventory](https://www.bourgogne-wines.com/professional-access/documents-photos%2C2334%2C9356.html)
 also lists 14 Bourgogne geographic denominations and 27 named Mâcon denominations.
 Together with the seven broad denominations and Mâcon-Villages, these account for
-**49 source denomination IDs: forty-three mapped, three partial, three pending**. Alternative source names
+**49 source denomination IDs: forty-three mapped, five partial, one pending**. Alternative source names
 and colour variants sharing an ID do not increase that count.
 
-Broad Bourgogne, Bourgogne Aligoté and Bourgogne Passe-tout-grains have
-explicitly partial source overviews. Three broad regional areas remain pending:
-Bourgogne Mousseux, Coteaux Bourguignons and Crémant de Bourgogne.
+Broad Bourgogne, Bourgogne Aligoté, Bourgogne Passe-tout-grains, Bourgogne Mousseux
+and Coteaux Bourguignons have explicitly partial source overviews.
+Crémant de Bourgogne remains pending.
 Completing the fourteen Bourgogne geographic denominations does
 not complete the broad Bourgogne AOC boundary. Chablis Premier Cru
 source gaps and other named plots remain tracked separately in

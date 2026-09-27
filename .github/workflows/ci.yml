@@ -142,12 +142,16 @@ jobs:
           retention-days: 7
           include-hidden-files: true
 
-  browser:
-    name: Browser (chromium)
+  browser_shards:
+    name: Chromium ${{ matrix.shard }}/${{ needs.scope.outputs.chromium == 'full' && 2 || 1 }}
     needs: scope
     if: needs.scope.outputs.chromium != 'none'
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: ${{ fromJSON(needs.scope.outputs.chromium == 'full' && '[1,2]' || '[1]') }}
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/test-setup
@@ -155,12 +159,12 @@ jobs:
         run: npx playwright install --with-deps chromium
       - name: Chromium flows
         if: needs.scope.outputs.chromium == 'full' && github.event_name != 'schedule' && github.event_name != 'workflow_dispatch'
-        run: npm run test:e2e
+        run: npm run test:e2e -- --shard=${{ matrix.shard }}/2
       - name: Chromium flows with exhaustive Burgundy maps
         if: needs.scope.outputs.chromium == 'full' && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
         env:
           WINELOG_E2E_EXHAUSTIVE_MAPS: '1'
-        run: npm run test:e2e
+        run: npm run test:e2e -- --shard=${{ matrix.shard }}/2
       - name: Affected Chromium flows
         if: needs.scope.outputs.chromium == 'selected'
         shell: bash
@@ -174,11 +178,24 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: browser-reports-chromium
+          name: browser-reports-chromium-${{ matrix.shard }}
           path: |
             test-results/
             playwright-report/
           retention-days: 7
+
+  # Preserve the required check name and fail if any shard fails or is cancelled.
+  browser:
+    name: Browser (chromium)
+    needs: [scope, browser_shards]
+    if: always() && needs.scope.outputs.chromium != 'none'
+    runs-on: ubuntu-latest
+    timeout-minutes: 1
+    steps:
+      - name: Require every Chromium shard to pass
+        env:
+          SHARDS_RESULT: ${{ needs.browser_shards.result }}
+        run: test "$SHARDS_RESULT" = success
 
   webkit:
     name: Browser (webkit)
