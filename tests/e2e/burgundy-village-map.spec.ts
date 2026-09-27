@@ -297,6 +297,9 @@ for(const route of matrixRoutes)matrixTest(`Regional colour and geography guards
 async function setup(page:Page,overrides:Record<string,unknown>={}){
  await page.route('**/api/**',async route=>{
   const path=new URL(route.request().url()).pathname;
+  // These fixtures have no active research run. Match the API contract rather
+  // than returning a truthy list response as if it were a research status.
+  if(path.endsWith('/deep-search-status'))return route.fulfill({status:404,json:{error:'No research run'}});
   const body=path==='/api/me'?{user:{id:'reader',email:'reader@example.com',display_name:'Reader',role:'member',status:'active'}}:
    ['/api/wines/layout-wine','/api/shared/wines/layout-wine'].includes(path)?{...wine,appellation:'Gevrey-Chambertin',wineName:'Les Cazetiers',classification:'premier_cru',wineStyle:'red',colour:'Red',grapes:['Pinot Noir'],grapeBlend:[],referenceSite:null,referenceParcel:null,lwin7:null,lwin11:null,elid:null,deepSearch:null,...overrides}:
     path.endsWith('/research')?{runs:[]}:{items:[],holdings:[],total:0};
@@ -708,9 +711,7 @@ for(const route of allMapRoutes)test(`Crémant de Bourgogne ${route}: complete s
  const dialog=page.getByRole('dialog',{name:'Crémant de Bourgogne',exact:true});
  await expect(dialog.getByRole('button',{name:'Region view',exact:true})).toBeEnabled({timeout:15000});
  await expect(dialog.locator('.village-map-description')).toHaveText('Denomination overview across wine colours; no colour-specific area or single vineyard is identified.');
- await dialog.locator('.village-map-source-details summary').click();
  await expect(dialog.locator('.village-map-note').filter({hasText:'all 378 records'})).toBeVisible();
- await dialog.locator('.village-map-source-details summary').click();
  await expect(dialog.locator('.village-map-commune-name')).toHaveCount(8);
  await expect(dialog.locator('.village-map-legend')).toHaveText('Appellation overview');
  await expect(dialog.locator('.village-map-overview-note')).toBeVisible();
