@@ -69,3 +69,7 @@
  .village-map-backdrop{padding:8px}.village-map-dialog{max-height:calc(100dvh - 16px);border-radius:12px}.village-map-header{padding:13px 14px}.village-map-header h2{font-size:1.3rem}
  .village-map-body{grid-template-columns:minmax(0,1fr)}.village-map-canvas{height:45dvh;min-height:280px}.village-map-sidebar{border-left:0;border-top:1px solid var(--line);padding:15px}.village-map-selection{margin-top:16px}.village-map-selection h3{font-size:1.2rem}.village-map-context{margin-top:14px;padding-top:12px}.village-map-footer{padding:11px 15px}
 }
+
+.village-map-overview-note{font-size:.76rem;line-height:1.5;color:var(--ink-6);padding:10px 12px;border-left:2px solid var(--wine-ink);background:var(--paper)}
+
+.village-map-source-details{margin-top:14px;font-size:.76rem;color:var(--ink-6)}.village-map-source-details summary{cursor:pointer;font-weight:600}

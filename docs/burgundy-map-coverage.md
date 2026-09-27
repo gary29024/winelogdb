@@ -138,6 +138,9 @@ the plan because they lack a village AOC. See the
 - [x] Bourgogne Le Chapitre: Chenôve; red/white/rosé, with an appellation-transition note
 - [x] Bourgogne Montrecul: Dijon; red/white/rosé, including Montre-Cul / En Montre-Cul aliases
 
+All regional maps now use [lightweight overview geometry](burgundy-regional-overviews.md)
+for orientation. The detailed source files and coverage inventory are unchanged.
+
 All **14 Bourgogne geographic denominations** in the pinned source now have maps.
 These are denominations within Bourgogne AOC, not new AOCs or village maps.
 **All 49 regional source denominations now have maps: 44 are mapped and five

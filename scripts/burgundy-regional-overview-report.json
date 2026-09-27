@@ -1,0 +1,1017 @@
+[
+  {
+    "id": "bourgogne-cote-dor",
+    "sourceSha256": "86d69e07ac542c3555b666159727fed866d56813e4a23cc64ad208b9627fd687",
+    "catalogueSha256": "1928e72d7cabb2c850d88a3ea0e041ce1e1bd1934edb21489227c0a5ea0c34cd",
+    "overviewSha256": "8b1492cd80f68cfc7f476e2d23415b7294396fdcc891bf78b795f344b456d553",
+    "maxCommuneAnchorDistanceMetres": 0.0,
+    "previousGzipBytes": 841166,
+    "overviewGzipBytes": 42058,
+    "overviewRawBytes": 47532,
+    "features": [
+      {
+        "id": "inao-denom-2840",
+        "toleranceMetres": 30,
+        "smallHoleCutoffM2": 3600,
+        "areaChangePercent": 4.3755,
+        "differencePercent": 8.4684
+      }
+    ]
+  },
+  {
+    "id": "bourgogne-hautes-cotes-de-nuits",
+    "sourceSha256": "7f11b9b1952b2cef3b56de46872e259dace6fb62e676a28cdea632b3e6325693",
+    "catalogueSha256": "158a8fc93b569125f18ff6d2665fb290446a9bee10b42aeb1a281d644bf06bb3",
+    "overviewSha256": "358ce6f4327e935c79d523dd7911642c605f3a2242f20d3b707e013b0c06bbe5",
+    "maxCommuneAnchorDistanceMetres": 0.0,
+    "previousGzipBytes": 164646,
+    "overviewGzipBytes": 11176,
+    "overviewRawBytes": 12576,
+    "features": [
+      {
+        "id": "inao-denom-364",
+        "toleranceMetres": 9.51,
+        "smallHoleCutoffM2": 361.7604,
+        "areaChangePercent": 0.9216,
+        "differencePercent": 3.7101
+      }
+    ]
+  },
+  {
+    "id": "bourgogne-hautes-cotes-de-beaune",
+    "sourceSha256": "20940f6a58ca5a8fbf4df91345a37543f7ce48e981e421763d2a713a9fc551ce",
+    "catalogueSha256": "2aa0efc7dd2149de41b8b902f54f496d785b21ca66002a6259b44ca8ad1a96cf",
+    "overviewSha256": "5430a4334c197e87aca467af0ccd0da931ef643ba5b8ccef7ddf139201dae30a",
+    "maxCommuneAnchorDistanceMetres": 0.0,
+    "previousGzipBytes": 339395,
+    "overviewGzipBytes": 14897,
+    "overviewRawBytes": 16581,
+    "features": [
+      {
+        "id": "inao-denom-363",
+        "toleranceMetres": 27.48,
+        "smallHoleCutoffM2": 3020.6016,
+        "areaChangePercent": 3.2283,
+        "differencePercent": 8.5468
+      }
+    ]
+  },
+  {
+    "id": "bourgogne-cote-chalonnaise",
+    "sourceSha256": "d9e7053eb4284c57226a34bc67ed8fe2c5833f0e0161887d9ad2c323d6cf51f6",
+    "catalogueSha256": "7566caa022f2c63aec6e2d92acf5e63240371263a07b879ce193e41bf883d4d0",
+    "overviewSha256": "32f7a834e4b9710c38d69fd6608b396a48f9ad3a4f467af239f34a86b2c13e16",
+    "maxCommuneAnchorDistanceMetres": 0.0,
+    "previousGzipBytes": 679470,
+    "overviewGzipBytes": 25658,
+    "overviewRawBytes": 28880,
+    "features": [
+      {
+        "id": "inao-denom-365",
+        "toleranceMetres": 28.31,
+        "smallHoleCutoffM2": 3205.8243999999995,
+        "areaChangePercent": 3.416,
+        "differencePercent": 8.1755
+      }
+    ]
+  },
+  {
+    "id": "bourgogne-cotes-du-couchois",
+    "sourceSha256": "392a74a90c637af9dfd0e473530bb887dee9d515d730b788c79e035c783a2d45",
+    "catalogueSha256": "01c880ed63f24dbe260fa6bf71a8b49fda6d4393e2bd744fd81f5ae63da56245",
+    "overviewSha256": "823b9b107a612a1361feb535001dbb149c4da3e5aa53ba59f12302729d1f93ce",
+    "maxCommuneAnchorDistanceMetres": 0.0,
+    "previousGzipBytes": 83684,
+    "overviewGzipBytes": 5955,
+    "overviewRawBytes": 6715,
+    "features": [
+      {
+        "id": "inao-denom-1586",
+        "toleranceMetres": 6.48,
+        "smallHoleCutoffM2": 167.96160000000003,
+        "areaChangePercent": 0.1765,
+        "differencePercent": 1.6896
+      }
+    ]
+  },
+  {
+    "id": "bourgogne-cotes-dauxerre",
+    "sourceSha256": "8377a2b6b5dc77a8939b0a6227d700f23cc1cc098e87719cf930ff09fde3f2a1",
+    "catalogueSha256": "7320e28630066d062d9ed27bda3bb5db8cb2866058927fc9c08bfba28d897add",
+    "overviewSha256": "9ef7011c41093a39949f76507c2096063cbd19794976c7ec003b9657acf7ffd9",
+    "maxCommuneAnchorDistanceMetres": 0.0,
+    "previousGzipBytes": 84318,
+    "overviewGzipBytes": 8164,
+    "overviewRawBytes": 9095,
+    "features": [
+      {
+        "id": "inao-denom-366",
+        "toleranceMetres": 10.04,
+        "smallHoleCutoffM2": 403.2063999999999,
+        "areaChangePercent": 0.9493,
+        "differencePercent": 3.0679
+      }
+    ]
+  },
+  {
+    "id": "bourgogne-chitry",
+    "sourceSha256": "4de7ac238f3659b214949977d26a0f2a6e0b4fa85b45848be3e5c9894447968a",
+    "catalogueSha256": "1bc68bf321c08ff33b433918ea43c0eda5e0b318e480f3003ed92ffce54c9b3a",
+    "overviewSha256": "5017855ae42378f40c037b307e8a3c67b4ed417886cfde14d7b45cd18a3a8ae2",
+    "maxCommuneAnchorDistanceMetres": 0.0,
+    "previousGzipBytes": 9615,
+    "overviewGzipBytes": 1950,
+    "overviewRawBytes": 2128,
+    "features": [
+      {
+        "id": "inao-denom-367",
+        "toleranceMetres": 3.16,
+        "smallHoleCutoffM2": 39.942400000000006,
+        "areaChangePercent": 0.0487,
+        "differencePercent": 0.4334
+      }
+    ]
+  },
+  {
+    "id": "bourgogne-coulanges-la-vineuse",
+    "sourceSha256": "ae70c31e16906638bc3da14b4376a6545beec654e3848eae3f770ecd137f91cb",
+    "catalogueSha256": "007275c07821f535f0400ccc4f233c5ea5e899df7dd0cd6b508dfd579864073b",
+    "overviewSha256": "976515071c1ab6894764f88ac5540fcc41a3cfef5897ddd8ca9dd63cd07aaebb",
+    "maxCommuneAnchorDistanceMetres": 0.0,
+    "previousGzipBytes": 71282,
+    "overviewGzipBytes": 5004,
+    "overviewRawBytes": 5543,
+    "features": [
+      {
+        "id": "inao-denom-368",
+        "toleranceMetres": 8.05,
+        "smallHoleCutoffM2": 259.21000000000004,
+        "areaChangePercent": 0.3873,
+        "differencePercent": 2.6539
+      }
+    ]
+  },
+  {
+    "id": "bourgogne-epineuil",
+    "sourceSha256": "e7c1d0b22d227f967ba0f663c308d561f7a8e6ba5ea9086be4f57e65f80498d3",
+    "catalogueSha256": "5f3563d60397fcb3ddc88f34f9ede88e26d4189d4e963598c9dd2cc6864744b9",
+    "overviewSha256": "854e0e5fb7adfde8881cc46a1bfca671303bb13049104bf0a87a53fef0e7b463",
+    "maxCommuneAnchorDistanceMetres": 0.0,
+    "previousGzipBytes": 20691,
+    "overviewGzipBytes": 3001,
+    "overviewRawBytes": 3260,
+    "features": [
+      {
+        "id": "inao-denom-369",
+        "toleranceMetres": 2.82,
+        "smallHoleCutoffM2": 31.809599999999996,
+        "areaChangePercent": 0.028,
+        "differencePercent": 0.6957
+      }
+    ]
+  },
+  {
+    "id": "bourgogne-cote-saint-jacques",
+    "sourceSha256": "e0253b18fd1b711661e53a2e84a2d6d96846b8d11550f3718b703dcb2e90f483",
+    "catalogueSha256": "c6a8068d142787bfd5c6ea853e8e6558ec99ccb500838215ebf7edf16fe0cb6b",
+    "overviewSha256": "0652e9848bf61964938bb863f4ae3b7b07be198ca30d2155b56ed81c2fc63306",
+    "maxCommuneAnchorDistanceMetres": 0.0,
+    "previousGzipBytes": 6245,
+    "overviewGzipBytes": 481,
+    "overviewRawBytes": 517,
+    "features": [
+      {
+        "id": "inao-denom-374",
+        "toleranceMetres": 2,
+        "smallHoleCutoffM2": 16,
+        "areaChangePercent": 0.0881,
+        "differencePercent": 0.9118
+      }
+    ]
+  },
+  {
+    "id": "bourgogne-tonnerre",
+    "sourceSha256": "a6a16afcf81421642375ae8aef2f0352c097b1a1b9f9bfaaccf245f7cd181cd5",
+    "catalogueSha256": "0de0170035d9feddee9f35698912a9e2188ea2c596fd8da5d6793d1a556e2d12",
+    "overviewSha256": "60d0254c796b370d6c6f2eacbab509e1c8a07cb906dd846d2811625db7fb9c37",
+    "maxCommuneAnchorDistanceMetres": 0.0,
+    "previousGzipBytes": 56905,
+    "overviewGzipBytes": 4416,
+    "overviewRawBytes": 4831,
+    "features": [
+      {
+        "id": "inao-denom-1751",
+        "toleranceMetres": 8.87,
+        "smallHoleCutoffM2": 314.70759999999996,
+        "areaChangePercent": 0.2009,
+        "differencePercent": 2.5793
+      }
+    ]
+  },
+  {
+    "id": "bourgogne-la-chapelle-notre-dame",
+    "sourceSha256": "6ce53b40a13fd251aad4b21738acec674a2771b7fba531aa68f5d22666af1ff4",
+    "catalogueSha256": "a541f3b5fa31ea90114e04fadd786a4f99c6d49510b5dac45532259a8c254db5",
+    "overviewSha256": "3284ade8914a878d980e0a5657f00a7efe1da3aaf6fa08136af10f0fb74a6f43",
+    "maxCommuneAnchorDistanceMetres": 0.0,
+    "previousGzipBytes": 6225,
+    "overviewGzipBytes": 325,
+    "overviewRawBytes": 377,
+    "features": [
+      {
+        "id": "inao-denom-371",
+        "toleranceMetres": 2,
+        "smallHoleCutoffM2": 16,
+        "areaChangePercent": 0.2033,
+        "differencePercent": 1.1061
+      }
+    ]
+  },
+  {
+    "id": "bourgogne-le-chapitre",
+    "sourceSha256": "a0ff4dc60a72d95dc39170993d33976dd523bcb033bba4e221e2c8b2350b815e",
+    "catalogueSha256": "f2146d40d4bd812057b2b88106304354ce6fdd85dfd8fd419daf70768a67e513",
+    "overviewSha256": "1004b57cc1544fb6823ce38e6262221ebf2ee2e6e403f84186e3ca0e70d02ab7",
+    "maxCommuneAnchorDistanceMetres": 0.0,
+    "previousGzipBytes": 4193,
+    "overviewGzipBytes": 434,
+    "overviewRawBytes": 466,
+    "features": [
+      {
+        "id": "inao-denom-372",
+        "toleranceMetres": 2,
+        "smallHoleCutoffM2": 16,
+        "areaChangePercent": 0.6243,
+        "differencePercent": 1.1412
+      }
+    ]
+  },
+  {
+    "id": "bourgogne-montrecul",
+    "sourceSha256": "9d4dd0c67fdcb78e0203589d3730348f55d31ed1d45493cc0f4098e99a8aba68",
+    "catalogueSha256": "6ee22ac5678eea85e83326a5ac1c596ea789bb52ecc2c84f23c87d27bd4fc86e",
+    "overviewSha256": "a0cfff9152d2ed20e6eaaab4ce4797cf475c89c3db3d77d7a27da49557096089",
+    "maxCommuneAnchorDistanceMetres": 0.0,
+    "previousGzipBytes": 12014,
+    "overviewGzipBytes": 446,
+    "overviewRawBytes": 488,
+    "features": [
+      {
+        "id": "inao-denom-373",
+        "toleranceMetres": 2,
+        "smallHoleCutoffM2": 16,
+        "areaChangePercent": 0.4032,
+        "differencePercent": 0.6571
+      }
+    ]
+  },
+  {
+    "id": "macon-charnay-les-macon",
+    "sourceSha256": "44fb5674bd356aefd8ed58022b1784410251df59094b4487ce174ab3067b3749",
+    "catalogueSha256": "f01c87c408a525bfb844ee1d802b99de6dd8c05c43de30636892ae1ddcb2cdc1",
+    "overviewSha256": "53e4e0add8f6644ffac2424e950e3703523c00aa58b0481493d45708e068f61f",
+    "maxCommuneAnchorDistanceMetres": 0.0,
+    "previousGzipBytes": 50918,
+    "overviewGzipBytes": 4265,
+    "overviewRawBytes": 4772,
+    "features": [
+      {
+        "id": "inao-denom-1721",
+        "toleranceMetres": 3.61,
+        "smallHoleCutoffM2": 52.1284,
+        "areaChangePercent": 0.1658,
+        "differencePercent": 1.2813
+      }
+    ]
+  },
+  {
+    "id": "macon-davaye",
+    "sourceSha256": "2a3ba34f8bc235cd224b18e37b6582df4af158961ee853206e874dc30c0fe12e",
+    "catalogueSha256": "ffe76e670648ed2ea6fdf2bb1aa61e9de10bbe5c62d615b5d9c8b9f4dcffa7e5",
+    "overviewSha256": "b129b5b1c645d2bd3654800fa1df11edd346da548c5cb368403cc410f39aca56",
+    "maxCommuneAnchorDistanceMetres": 0.0,
+    "previousGzipBytes": 31211,
+    "overviewGzipBytes": 3820,
+    "overviewRawBytes": 4288,
+    "features": [
+      {
+        "id": "inao-denom-1723",
+        "toleranceMetres": 2.48,
+        "smallHoleCutoffM2": 24.6016,
+        "areaChangePercent": 0.1406,
+        "differencePercent": 0.9412
+      }
+    ]
+  },
+  {
+    "id": "macon-fuisse",
+    "sourceSha256": "7cd63b5150eb03e7b3f1e775af9bfd5fa50405755d0ceb34a2c2eb96c3e69515",
+    "catalogueSha256": "5812c23a0e6ce8da858678560d0146f97a4638ccf71eb81754b9819237172e6e",
+    "overviewSha256": "77831f92a28612fcf8bb9e3ca53de32adc431b14cccc374380dc5df0a4919d73",
+    "maxCommuneAnchorDistanceMetres": 0.0,
+    "previousGzipBytes": 27413,
+    "overviewGzipBytes": 5293,
+    "overviewRawBytes": 5972,
+    "features": [
+      {
+        "id": "inao-denom-2069",
+        "toleranceMetres": 2.68,
+        "smallHoleCutoffM2": 28.729600000000005,
+        "areaChangePercent": 0.1168,
+        "differencePercent": 1.0346
+      }
+    ]
+  },
+  {
+    "id": "macon-loche",
+    "sourceSha256": "f6a74af8c513411b0c497e40b88e9fcef49279be1d87aac89b1eb978bfd35f34",
+    "catalogueSha256": "0041c44d920defa9dd2d5325f92bbf7a0c608e3e16863ecf832a0872e6c239aa",
+    "overviewSha256": "52efd0b1c6a9725bf04d02a06a3b4acca19e5a98f78ba7fd20341790fa586530",
+    "maxCommuneAnchorDistanceMetres": 0.0,
+    "previousGzipBytes": 31686,
+    "overviewGzipBytes": 1864,
+    "overviewRawBytes": 2037,
+    "features": [
+      {
+        "id": "inao-denom-2070",
+        "toleranceMetres": 2,
+        "smallHoleCutoffM2": 16,
+        "areaChangePercent": 0.13,
+        "differencePercent": 0.6142
+      }
+    ]
+  },
+  {
+    "id": "macon-solutre-pouilly",
+    "sourceSha256": "b2b242e3059abea02201d3a970df0007ce28b331e61159c84a1e2f5f8351185e",
+    "catalogueSha256": "7ccbe408dedf65ae6b22ba24523883baba46877bc9aa340721bb1d58c8be6def",
+    "overviewSha256": "05e2f74f3e0856197a45b8f712ed19c14378872a05eab2b7f84bbcebea8ffa1c",
+    "maxCommuneAnchorDistanceMetres": 0.0,
+    "previousGzipBytes": 32071,
+    "overviewGzipBytes": 5630,
+    "overviewRawBytes": 6393,
+    "features": [
+      {
+        "id": "inao-denom-2072",
+        "toleranceMetres": 3.1,
+        "smallHoleCutoffM2": 38.440000000000005,
+        "areaChangePercent": 0.3188,
+        "differencePercent": 1.6289
+      }
+    ]
+  },
+  {
+    "id": "macon-vergisson",
+    "sourceSha256": "90cd12e8cd10346803d6e2cb8d352d426bdae7122418a1a6626803b6d0dcdec0",
+    "catalogueSha256": "ee1c8d2976cb7c96b99d632a3c273ed7ca3c477db870d80839f72d409cdd0673",
+    "overviewSha256": "b9e06013530f2af7dfeeed2ee8a9248d6de6033e6b547091e54525031fc4ddf8",
+    "maxCommuneAnchorDistanceMetres": 0.0,
+    "previousGzipBytes": 21123,
+    "overviewGzipBytes": 4381,
+    "overviewRawBytes": 4966,
+    "features": [
+      {
+        "id": "inao-denom-1736",
+        "toleranceMetres": 2.3,
+        "smallHoleCutoffM2": 21.159999999999997,
+        "areaChangePercent": 0.1251,
+        "differencePercent": 0.9391
+      }
+    ]
+  },
+  {
+    "id": "macon-vinzelles",
+    "sourceSha256": "e13b8b667140279420ad0386840dc9cdc50633067d041ad98c69b003df9b9207",
+    "catalogueSha256": "8659d10f0bd82b2d8800b3a6a8c527ec3d39f4abc8ff17c0e9550126ee14e307",
+    "overviewSha256": "d77252744435348887eee932116fc1695423cbd48961cf7aeb62b81166e80ebc",
+    "maxCommuneAnchorDistanceMetres": 0.0,
+    "previousGzipBytes": 7693,
+    "overviewGzipBytes": 1758,
+    "overviewRawBytes": 1917,
+    "features": [
+      {
+        "id": "inao-denom-2074",
+        "toleranceMetres": 2,
+        "smallHoleCutoffM2": 16,
+        "areaChangePercent": 0.036,
+        "differencePercent": 0.6617
+      }
+    ]
+  },
+  {
+    "id": "macon-bussieres",
+    "sourceSha256": "bff1f6b7a698aed2f4a3f7021dc29b70e65f505607ea875687d2443812a44ea4",
+    "catalogueSha256": "a3d39d1a0f01a31b49bcc038db399c0e1e44977aaba0ca970dab9b838d34f05a",
+    "overviewSha256": "eef7aaf7a90b167b6387f8dae04e2b92e6600a9d2ebb5c1c06d5a9f782c8216c",
+    "maxCommuneAnchorDistanceMetres": 0.0,
+    "previousGzipBytes": 20418,
+    "overviewGzipBytes": 3169,
+    "overviewRawBytes": 3535,
+    "features": [
+      {
+        "id": "inao-denom-1717",
+        "toleranceMetres": 2.38,
+        "smallHoleCutoffM2": 22.6576,
+        "areaChangePercent": 0.2108,
+        "differencePercent": 0.8515
+      }
+    ]
+  },
+  {
+    "id": "macon-chaintre",
+    "sourceSha256": "8226be7aa176d66faa6a4176f84087aa531717b679117c8b373db8d2a5d73cfd",
+    "catalogueSha256": "7e28e7ad3d113281be29e6a63acab39efaf86c7db38e7396a478180908c1f319",
+    "overviewSha256": "28034fbe034d295da3476ec0f329b75f3e6be6943e55ea4ce674f127c211804e",
+    "maxCommuneAnchorDistanceMetres": 0.0,
+    "previousGzipBytes": 38105,
+    "overviewGzipBytes": 4196,
+    "overviewRawBytes": 4833,
+    "features": [
+      {
+        "id": "inao-denom-1719",
+        "toleranceMetres": 2.11,
+        "smallHoleCutoffM2": 17.8084,
+        "areaChangePercent": 0.0152,
+        "differencePercent": 0.5848
+      },
+      {
+        "id": "inao-denom-1719-red-only",
+        "toleranceMetres": 2.11,
+        "smallHoleCutoffM2": 17.8084,
+        "areaChangePercent": 0.101,
+        "differencePercent": 1.1204
+      }
+    ]
+  },
+  {
+    "id": "macon-la-roche-vineuse",
+    "sourceSha256": "be2a9ed4334c4a327aceda971470ab2ef9cb9a841643420bbcff7c18c6143139",
+    "catalogueSha256": "6a228c050554a3c5cf6ab2d1d9e3248f9d03b7d9c1598d5d68a95ef67da79fa4",
+    "overviewSha256": "e25bfc54164f180ee17564ac0636df9138bd07e0e2b76063f8dd536363e2f417",
+    "maxCommuneAnchorDistanceMetres": 0.0,
+    "previousGzipBytes": 68945,
+    "overviewGzipBytes": 8138,
+    "overviewRawBytes": 9610,
+    "features": [
+      {
+        "id": "inao-denom-1725",
+        "toleranceMetres": 6.4,
+        "smallHoleCutoffM2": 163.84000000000003,
+        "areaChangePercent": 0.4649,
+        "differencePercent": 2.2103
+      },
+      {
+        "id": "inao-denom-1725-red-only",
+        "toleranceMetres": 6.4,
+        "smallHoleCutoffM2": 163.84000000000003,
+        "areaChangePercent": 1.4625,
+        "differencePercent": 3.3472
+      }
+    ]
+  },
+  {
+    "id": "macon-milly-lamartine",
+    "sourceSha256": "80c918226cb4df6cf422cfd8cb25a5797fa4f617af22bc28d77e12c2cdbcda1f",
+    "catalogueSha256": "d801b5ae77aad71bd2ff0c4cb17041cc68a33ae22af270baa3c10a23368f0e7d",
+    "overviewSha256": "a84f370e460d25abb3d959a6a419f746cfe2905697310f37fb43bba87af46e68",
+    "maxCommuneAnchorDistanceMetres": 0.0,
+    "previousGzipBytes": 74637,
+    "overviewGzipBytes": 7411,
+    "overviewRawBytes": 8695,
+    "features": [
+      {
+        "id": "inao-denom-1729",
+        "toleranceMetres": 4.79,
+        "smallHoleCutoffM2": 91.7764,
+        "areaChangePercent": 0.2646,
+        "differencePercent": 1.4201
+      },
+      {
+        "id": "inao-denom-1729-red-only",
+        "toleranceMetres": 4.79,
+        "smallHoleCutoffM2": 91.7764,
+        "areaChangePercent": 0.1552,
+        "differencePercent": 2.3577
+      }
+    ]
+  },
+  {
+    "id": "macon-pierreclos",
+    "sourceSha256": "5818f72645a2936706760c489df59aa6fc06637a8082617ec4cd4364949f34f8",
+    "catalogueSha256": "55d16389bfa7abb6fa40039b1f1b0d2cc9c46f72706891769ce4847c82dd76ae",
+    "overviewSha256": "fbde414b9fd9fd07ab76899fe0a1b34d887c57fdff93efa12347621ef5b41723",
+    "maxCommuneAnchorDistanceMetres": 0.0,
+    "previousGzipBytes": 23509,
+    "overviewGzipBytes": 2700,
+    "overviewRawBytes": 3001,
+    "features": [
+      {
+        "id": "inao-denom-1731",
+        "toleranceMetres": 2.59,
+        "smallHoleCutoffM2": 26.832399999999996,
+        "areaChangePercent": 0.2311,
+        "differencePercent": 1.35
+      }
+    ]
+  },
+  {
+    "id": "macon-prisse",
+    "sourceSha256": "5a7fec2d3f4d5c5b56f8155b46bc9077626c90b140860f48051aa94a5c9b1a78",
+    "catalogueSha256": "531a1e6298b64509f566af7bbc547eb34b02cebaae5f0fb6a965e1657153df88",
+    "overviewSha256": "9a3c6a49d4a30fa48bfeaf52c32922b2eaa9afe195f72b80a2baad70d6b6e401",
+    "maxCommuneAnchorDistanceMetres": 0.0,
+    "previousGzipBytes": 66667,
+    "overviewGzipBytes": 5951,
+    "overviewRawBytes": 7272,
+    "features": [
+      {
+        "id": "inao-denom-1732",
+        "toleranceMetres": 4.09,
+        "smallHoleCutoffM2": 66.91239999999999,
+        "areaChangePercent": 0.2508,
+        "differencePercent": 1.3098
+      },
+      {
+        "id": "inao-denom-1732-red-only",
+        "toleranceMetres": 4.09,
+        "smallHoleCutoffM2": 66.91239999999999,
+        "areaChangePercent": 0.2167,
+        "differencePercent": 1.3243
+      }
+    ]
+  },
+  {
+    "id": "macon-serrieres",
+    "sourceSha256": "9d75be7f144007d5d597f34570cecdd84f91f031a856ce8e7a14f3464f0de35f",
+    "catalogueSha256": "eba1553b90b60db4cdcf6df6bda79b0c729cbb627c19cad9c319e4b65f9bfeab",
+    "overviewSha256": "24cc33d8e3043716c814ef6dadd3217135e15efa086b93372bf5088890dc5cbb",
+    "maxCommuneAnchorDistanceMetres": 0.0,
+    "previousGzipBytes": 33114,
+    "overviewGzipBytes": 3845,
+    "overviewRawBytes": 4326,
+    "features": [
+      {
+        "id": "inao-denom-1735",
+        "toleranceMetres": 3.64,
+        "smallHoleCutoffM2": 52.998400000000004,
+        "areaChangePercent": 0.0609,
+        "differencePercent": 1.052
+      }
+    ]
+  },
+  {
+    "id": "macon-aze",
+    "sourceSha256": "49621719c5051f7ae86c65252b74247f1177852c17f24cb980f6b5978463a8bf",
+    "catalogueSha256": "cd4cac725899aeb8caf200e92f129813b5aa728e367c22f4376fff5ce59a1f1c",
+    "overviewSha256": "7ca9bb1230e24269b1d354854956a622e1d06d666c4c3c389d7b522b57ae49d8",
+    "maxCommuneAnchorDistanceMetres": 0.0,
+    "previousGzipBytes": 51179,
+    "overviewGzipBytes": 4899,
+    "overviewRawBytes": 5858,
+    "features": [
+      {
+        "id": "inao-denom-1712",
+        "toleranceMetres": 3.44,
+        "smallHoleCutoffM2": 47.334399999999995,
+        "areaChangePercent": 0.0704,
+        "differencePercent": 1.119
+      },
+      {
+        "id": "inao-denom-1712-red-only",
+        "toleranceMetres": 3.44,
+        "smallHoleCutoffM2": 47.334399999999995,
+        "areaChangePercent": 0.5311,
+        "differencePercent": 1.705
+      }
+    ]
+  },
+  {
+    "id": "macon-burgy",
+    "sourceSha256": "766733235d7b59edf377e8f5dc31882de4c17ab9f6fbb1dc907c287d5d98038c",
+    "catalogueSha256": "8e9bd30281e33e19dc6c7689ba98d4db1da9b5695a2b34544cc2fa2ad28d61ef",
+    "overviewSha256": "a41083952dca1aa75a5fd18179eecad003102ad4acab677b282c610477767cad",
+    "maxCommuneAnchorDistanceMetres": 0.0,
+    "previousGzipBytes": 10223,
+    "overviewGzipBytes": 1513,
+    "overviewRawBytes": 1653,
+    "features": [
+      {
+        "id": "inao-denom-1715",
+        "toleranceMetres": 2,
+        "smallHoleCutoffM2": 16,
+        "areaChangePercent": 0.1219,
+        "differencePercent": 0.6768
+      }
+    ]
+  },
+  {
+    "id": "macon-cruzille",
+    "sourceSha256": "6681d1b23ac88e3810a93ef4fc5f0fec0bb44671e16038cbad3ed9f65b45ff27",
+    "catalogueSha256": "6cd8ea5ba88e197b9dd8cd9b3ad0a8f25a4bd731759c9be1dcebc00c63342006",
+    "overviewSha256": "63d88e5badc075754edcbec1e9a53ab58fa83e1ba725b50cbfe865bd2ade18ca",
+    "maxCommuneAnchorDistanceMetres": 0.0,
+    "previousGzipBytes": 185285,
+    "overviewGzipBytes": 10162,
+    "overviewRawBytes": 12929,
+    "features": [
+      {
+        "id": "inao-denom-1722",
+        "toleranceMetres": 5.68,
+        "smallHoleCutoffM2": 129.0496,
+        "areaChangePercent": 0.4878,
+        "differencePercent": 2.5129
+      },
+      {
+        "id": "inao-denom-1722-red-only",
+        "toleranceMetres": 5.68,
+        "smallHoleCutoffM2": 129.0496,
+        "areaChangePercent": 1.1215,
+        "differencePercent": 3.4498
+      }
+    ]
+  },
+  {
+    "id": "macon-ige",
+    "sourceSha256": "fef849153703c27d6110d10e697a61cbc07b2894c083cce504c300ed1b6b22a9",
+    "catalogueSha256": "620a74d5b32a099d73754e43d4931984900ba15140bd15d6a70e81cdcd8cf7cd",
+    "overviewSha256": "4a23f7c11ba033719d5dfc35f076dd8eb2f5b8286a7ce9b76055ea6a546698bc",
+    "maxCommuneAnchorDistanceMetres": 0.0,
+    "previousGzipBytes": 31500,
+    "overviewGzipBytes": 3334,
+    "overviewRawBytes": 3694,
+    "features": [
+      {
+        "id": "inao-denom-1724",
+        "toleranceMetres": 3.3,
+        "smallHoleCutoffM2": 43.559999999999995,
+        "areaChangePercent": 0.0979,
+        "differencePercent": 0.7133
+      }
+    ]
+  },
+  {
+    "id": "macon-lugny",
+    "sourceSha256": "b82d5d4f8c2eaacbf8d020ed50be15c2e9da62d1b33326f40c822f33d55c7d0a",
+    "catalogueSha256": "27423ee48e18984f375cbb1d0ea33f1ad544930372e68ec503beee8c2b4f1d61",
+    "overviewSha256": "f29dcc96994d15ba6820e1d7dbed040b6224da2f4d4752e601ffbb1bdf886375",
+    "maxCommuneAnchorDistanceMetres": 0.0,
+    "previousGzipBytes": 91438,
+    "overviewGzipBytes": 7476,
+    "overviewRawBytes": 8515,
+    "features": [
+      {
+        "id": "inao-denom-1726",
+        "toleranceMetres": 5.59,
+        "smallHoleCutoffM2": 124.99239999999999,
+        "areaChangePercent": 0.265,
+        "differencePercent": 1.7405
+      },
+      {
+        "id": "inao-denom-1726-red-only",
+        "toleranceMetres": 5.59,
+        "smallHoleCutoffM2": 124.99239999999999,
+        "areaChangePercent": 0.5309,
+        "differencePercent": 2.3252
+      }
+    ]
+  },
+  {
+    "id": "macon-peronne",
+    "sourceSha256": "8e4e860e1d7ebc7d2a28f481bc4f3af6660a789110e6ed98f51a897fa63c9b63",
+    "catalogueSha256": "fe5cbc679ad283aa3630da18ff2ac7e26120bfee4b810c5c9fcce6657473e145",
+    "overviewSha256": "1fe6445c64950ccd5533086dcdac6cab50ad2604b380c0163b953f2fc9c4edbd",
+    "maxCommuneAnchorDistanceMetres": 0.0,
+    "previousGzipBytes": 73471,
+    "overviewGzipBytes": 6411,
+    "overviewRawBytes": 7208,
+    "features": [
+      {
+        "id": "inao-denom-1730",
+        "toleranceMetres": 6.38,
+        "smallHoleCutoffM2": 162.8176,
+        "areaChangePercent": 0.4701,
+        "differencePercent": 1.793
+      }
+    ]
+  },
+  {
+    "id": "macon-verze",
+    "sourceSha256": "c30e4024980ef78373b992838253a8220852999b1e2210c061f126bc2b7df404",
+    "catalogueSha256": "bb9febae54300569d109cff3b1fa3cda5a44dfe049cbd133b62c77f422c74437",
+    "overviewSha256": "e134403bf99acfbb30055e918282045bb2cf749f278c0e62f877628c3798a73e",
+    "maxCommuneAnchorDistanceMetres": 0.0,
+    "previousGzipBytes": 28742,
+    "overviewGzipBytes": 3710,
+    "overviewRawBytes": 4148,
+    "features": [
+      {
+        "id": "inao-denom-1737",
+        "toleranceMetres": 5.33,
+        "smallHoleCutoffM2": 113.6356,
+        "areaChangePercent": 0.0162,
+        "differencePercent": 1.0144
+      }
+    ]
+  },
+  {
+    "id": "macon-bray",
+    "sourceSha256": "b7d263921c673c2c3252d2b726d8b2ac531ba38b4085ebd70fd0cea3c9e5c52f",
+    "catalogueSha256": "01f4038e17a1c798a613f91fef911dc9bbcaa72b4376cb4277b2ed1a5afd40d0",
+    "overviewSha256": "f4fe9225a5d6c87fdb48a0365d2ae26b6463a95dfa64d5dd917a36465c163798",
+    "maxCommuneAnchorDistanceMetres": 0.0,
+    "previousGzipBytes": 98393,
+    "overviewGzipBytes": 6899,
+    "overviewRawBytes": 8939,
+    "features": [
+      {
+        "id": "inao-denom-1714",
+        "toleranceMetres": 7.53,
+        "smallHoleCutoffM2": 226.80360000000002,
+        "areaChangePercent": 0.4424,
+        "differencePercent": 2.2782
+      },
+      {
+        "id": "inao-denom-1714-red-only",
+        "toleranceMetres": 7.53,
+        "smallHoleCutoffM2": 226.80360000000002,
+        "areaChangePercent": 0.5947,
+        "differencePercent": 3.285
+      }
+    ]
+  },
+  {
+    "id": "macon-chardonnay",
+    "sourceSha256": "160ee5fb9c1c92a793fb820ea27d84efe5353640be64f7b18c0836e994800141",
+    "catalogueSha256": "03614de3ac54f1fdf14fc318a00cc123899cb4d596a71aaacec622116c038c10",
+    "overviewSha256": "ec5a42678c739698dad6313d353a05b9129197f04230492f92e26f7fd0abc557",
+    "maxCommuneAnchorDistanceMetres": 0.0,
+    "previousGzipBytes": 106929,
+    "overviewGzipBytes": 7099,
+    "overviewRawBytes": 7973,
+    "features": [
+      {
+        "id": "inao-denom-1720",
+        "toleranceMetres": 5.82,
+        "smallHoleCutoffM2": 135.48960000000002,
+        "areaChangePercent": 0.1831,
+        "differencePercent": 1.7214
+      }
+    ]
+  },
+  {
+    "id": "macon-mancey",
+    "sourceSha256": "8be21e00a2d773629bb7798a45ac03f674627c982ec0650ff7402cf607eccf83",
+    "catalogueSha256": "0ac07636fcbad7b500dff4f45d37d7ab410d8a983c48eb432349910f4d59069e",
+    "overviewSha256": "5ebe9eba149f8282584717e60e9887cd433654e39e6f10e8a956b3cd203facb8",
+    "maxCommuneAnchorDistanceMetres": 0.0,
+    "previousGzipBytes": 206226,
+    "overviewGzipBytes": 11361,
+    "overviewRawBytes": 13949,
+    "features": [
+      {
+        "id": "inao-denom-1728",
+        "toleranceMetres": 10.31,
+        "smallHoleCutoffM2": 425.18440000000004,
+        "areaChangePercent": 0.4807,
+        "differencePercent": 3.1729
+      },
+      {
+        "id": "inao-denom-1728-red-only",
+        "toleranceMetres": 10.31,
+        "smallHoleCutoffM2": 425.18440000000004,
+        "areaChangePercent": 1.2891,
+        "differencePercent": 3.8719
+      }
+    ]
+  },
+  {
+    "id": "macon-montbellet",
+    "sourceSha256": "e1fc63857e65f102ab879ca159590f75941c162afad0019ded2788c780f7a5c6",
+    "catalogueSha256": "0192a29abe81f64141cfbbcd7ff48b557a746aa786a7fd31364718cc88e687b4",
+    "overviewSha256": "d6502d16ce66dbc14f0aa28146b311f6f37256a53a4ebd28751b114263a8169d",
+    "maxCommuneAnchorDistanceMetres": 0.0,
+    "previousGzipBytes": 13593,
+    "overviewGzipBytes": 1676,
+    "overviewRawBytes": 1828,
+    "features": [
+      {
+        "id": "inao-denom-2071",
+        "toleranceMetres": 2.81,
+        "smallHoleCutoffM2": 31.584400000000002,
+        "areaChangePercent": 0.028,
+        "differencePercent": 1.1218
+      }
+    ]
+  },
+  {
+    "id": "macon-saint-gengoux-le-national",
+    "sourceSha256": "f44b9cb4a778fad07d9fd75455c8d32d727d1b9a6f6ec455afcad48397bc6f5c",
+    "catalogueSha256": "2f364c0353c3da5ea3ca4c67291eb54a7a29cd64d6d6546bb970fbc957bdeec9",
+    "overviewSha256": "4030d1c182c129cbf0de68cdc6deca44a45b5dce73ce2b828f36c779a1c8de09",
+    "maxCommuneAnchorDistanceMetres": 0.0,
+    "previousGzipBytes": 156066,
+    "overviewGzipBytes": 7350,
+    "overviewRawBytes": 8378,
+    "features": [
+      {
+        "id": "inao-denom-1734",
+        "toleranceMetres": 15.89,
+        "smallHoleCutoffM2": 1009.9684000000001,
+        "areaChangePercent": 0.818,
+        "differencePercent": 3.7211
+      },
+      {
+        "id": "inao-denom-1734-red-only",
+        "toleranceMetres": 15.89,
+        "smallHoleCutoffM2": 1009.9684000000001,
+        "areaChangePercent": 2.9748,
+        "differencePercent": 5.3037
+      }
+    ]
+  },
+  {
+    "id": "macon-uchizy",
+    "sourceSha256": "f89b083529a5701c20f7e5581a56a92c0a45e6ec8970c42ae178fd6262bfeb93",
+    "catalogueSha256": "97e27e5f9f74f8ce4bc4e352f162b1cc0c0c83d32ede5986a97efa1f665e0dc8",
+    "overviewSha256": "e87c9264f75673c47c80a9e642548ef60e554d5c88937ed6000738fdab5e9edd",
+    "maxCommuneAnchorDistanceMetres": 0.0,
+    "previousGzipBytes": 13849,
+    "overviewGzipBytes": 2307,
+    "overviewRawBytes": 2552,
+    "features": [
+      {
+        "id": "inao-denom-2073",
+        "toleranceMetres": 2.29,
+        "smallHoleCutoffM2": 20.9764,
+        "areaChangePercent": 0.0837,
+        "differencePercent": 0.573
+      }
+    ]
+  },
+  {
+    "id": "macon",
+    "sourceSha256": "9543acda462dbe1843b33d3b3f13125fbd515678e027dfd84376140363b31687",
+    "catalogueSha256": "c88df36ab5c26da6f636b5ccd95846ee5dc0a1948493b6061c1bb0d89e858037",
+    "overviewSha256": "016e0507eefac05b25f7ff8fba689fffef94c963fdb148794cbbbaa7ff612f2d",
+    "maxCommuneAnchorDistanceMetres": 0.0,
+    "previousGzipBytes": 1340715,
+    "overviewGzipBytes": 118746,
+    "overviewRawBytes": 135033,
+    "features": [
+      {
+        "id": "inao-denom-1713",
+        "toleranceMetres": 15.0,
+        "smallHoleCutoffM2": 900.0,
+        "areaChangePercent": 1.3322,
+        "differencePercent": 4.4505
+      },
+      {
+        "id": "inao-denom-1713-red-only",
+        "toleranceMetres": 15.0,
+        "smallHoleCutoffM2": 900.0,
+        "areaChangePercent": 2.6264,
+        "differencePercent": 5.7073
+      }
+    ]
+  },
+  {
+    "id": "macon-villages",
+    "sourceSha256": "4d93c4614aa7accbe640e03495be59b2dcd355e8eef80e114c3b8d1d65612321",
+    "catalogueSha256": "6e78cf2276f8dd1ac84b1ae296369122f08394cd7ad6aca746f758b387edab11",
+    "overviewSha256": "e0102eb077c502c5b5e8471bd9429bafeec51c8bd7effd938e5cbb6743b65db8",
+    "maxCommuneAnchorDistanceMetres": 0.0,
+    "previousGzipBytes": 899520,
+    "overviewGzipBytes": 56385,
+    "overviewRawBytes": 63676,
+    "features": [
+      {
+        "id": "inao-denom-2893",
+        "toleranceMetres": 30,
+        "smallHoleCutoffM2": 3600,
+        "areaChangePercent": 3.2783,
+        "differencePercent": 8.7194
+      }
+    ]
+  },
+  {
+    "id": "bourgogne",
+    "sourceSha256": "86b4eb105e9de9f218a80c4c6561c0d3fe1c5b45e2d36b926029074a1877d74e",
+    "catalogueSha256": "21f43ac7a6821af28db2f25b4c76e808d47e7caadb07ce267184c46fce4130c9",
+    "overviewSha256": "99bcad56ef8eb601a0c3815c00b0aa02156f7be2064458527f48267170d5f1ee",
+    "maxCommuneAnchorDistanceMetres": 0.0,
+    "previousGzipBytes": 3603062,
+    "overviewGzipBytes": 241456,
+    "overviewRawBytes": 274390,
+    "features": [
+      {
+        "id": "inao-denom-362",
+        "toleranceMetres": 15.0,
+        "smallHoleCutoffM2": 900.0,
+        "areaChangePercent": 1.4342,
+        "differencePercent": 4.5764
+      },
+      {
+        "id": "inao-denom-362-white-only",
+        "toleranceMetres": 15.0,
+        "smallHoleCutoffM2": 900.0,
+        "areaChangePercent": 2.8612,
+        "differencePercent": 5.5377
+      }
+    ]
+  },
+  {
+    "id": "bourgogne-aligote",
+    "sourceSha256": "06731dae17659664551faa0c25bec4b9a98cf96fc37c940a4be2a0b338fe017e",
+    "catalogueSha256": "a29e8be0a08a1dd745c54e4d8599913de1e79980156c4bd348e3c523f12bcee7",
+    "overviewSha256": "7e1ca2dabe657268d9d7be3d5740e9e9a226b2aee89341f94aa4320e3510491f",
+    "maxCommuneAnchorDistanceMetres": 0.0,
+    "previousGzipBytes": 2941992,
+    "overviewGzipBytes": 227465,
+    "overviewRawBytes": 256673,
+    "features": [
+      {
+        "id": "inao-denom-389",
+        "toleranceMetres": 30,
+        "smallHoleCutoffM2": 3600,
+        "areaChangePercent": 3.4648,
+        "differencePercent": 8.2613
+      }
+    ]
+  },
+  {
+    "id": "bourgogne-mousseux",
+    "sourceSha256": "57f1a20837f4325b8b1e5970682c8a04aecc4f9796d88449298681d6d01aaec1",
+    "catalogueSha256": "7eb4a5a63cd0e638ac93889081ad07254cec6e01fc87b831a62c895d51adc714",
+    "overviewSha256": "9182b07281d0b039c0cfe8d42bc24b0861fb3041509c2268f97b5ed5c79deac7",
+    "maxCommuneAnchorDistanceMetres": 0.0,
+    "previousGzipBytes": 2941727,
+    "overviewGzipBytes": 227418,
+    "overviewRawBytes": 256637,
+    "features": [
+      {
+        "id": "inao-denom-391",
+        "toleranceMetres": 30,
+        "smallHoleCutoffM2": 3600,
+        "areaChangePercent": 3.4673,
+        "differencePercent": 8.268
+      }
+    ]
+  },
+  {
+    "id": "bourgogne-passe-tout-grains",
+    "sourceSha256": "cc36fb4f4779b0cfb89d1bb581df18268419d9b1f70359b0d860c4ee6559bce1",
+    "catalogueSha256": "af9d98c7d9ebf047373c6ef8c7103d6db0a804aba412b6b2f2a0a77fa996b80d",
+    "overviewSha256": "f3f7fd3ad73fb0aaf4ee7c0b371c89ee86108ec0da31fd18345de104008adc03",
+    "maxCommuneAnchorDistanceMetres": 0.0,
+    "previousGzipBytes": 2935327,
+    "overviewGzipBytes": 227039,
+    "overviewRawBytes": 256191,
+    "features": [
+      {
+        "id": "inao-denom-394",
+        "toleranceMetres": 30,
+        "smallHoleCutoffM2": 3600,
+        "areaChangePercent": 3.448,
+        "differencePercent": 8.2687
+      }
+    ]
+  },
+  {
+    "id": "coteaux-bourguignons",
+    "sourceSha256": "c96a745350d8c1603eb9d536f783491aa9526b4d20bc7db13ed19b870c9ef33b",
+    "catalogueSha256": "79b6e78252ef9551079a7ac8026c99d1e3d99adda782664f5adc017aea3aee15",
+    "overviewSha256": "ae0520ad268f3f754cbb3b3f376a923971a89e0b30313810d65f29f5cc4aee56",
+    "maxCommuneAnchorDistanceMetres": 0.0,
+    "previousGzipBytes": 3409607,
+    "overviewGzipBytes": 233812,
+    "overviewRawBytes": 264100,
+    "features": [
+      {
+        "id": "inao-denom-2338",
+        "toleranceMetres": 30,
+        "smallHoleCutoffM2": 3600,
+        "areaChangePercent": 3.6386,
+        "differencePercent": 8.3918
+      }
+    ]
+  },
+  {
+    "id": "cremant-de-bourgogne",
+    "sourceSha256": "680329a0b7449a31358443459d42eab9b6e3f9e5f78dea2a2af46710590bc553",
+    "catalogueSha256": "e8768121414d60ee3b5a177617e23fcfdfa8af35879dad19fb45a3c8b3e75cd3",
+    "overviewSha256": "4501d54ce99a3b69f423225e90d5e6f48263d95c26738695ef19c7609ab175fc",
+    "maxCommuneAnchorDistanceMetres": 0.0,
+    "previousGzipBytes": 6553696,
+    "overviewGzipBytes": 463814,
+    "overviewRawBytes": 525461,
+    "features": [
+      {
+        "id": "inao-denom-561",
+        "toleranceMetres": 30,
+        "smallHoleCutoffM2": 3600,
+        "areaChangePercent": 3.8026,
+        "differencePercent": 8.2094
+      }
+    ]
+  }
+]

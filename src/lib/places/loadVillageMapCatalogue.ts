@@ -99,5 +99,10 @@ const loaders=new Map<string,()=>Promise<{default:VillageMapCatalogue}>>([
 export async function loadVillageMapCatalogue(villageId:string):Promise<VillageMapCatalogue>{
  const load=loaders.get(villageId);
  if(!load)throw new Error('Village map is unavailable');
- return (await load()).default;
+ const catalogue=(await load()).default;
+ if(catalogue.mapKind!=='regional')return catalogue;
+ const {default:overviews}=await import('./burgundyRegionalOverviewRegistry.json');
+ const overview=overviews[villageId as keyof typeof overviews];
+ if(!overview)throw new Error('Regional overview is unavailable');
+ return {...catalogue,overview};
 }
