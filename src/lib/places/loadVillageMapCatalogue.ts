@@ -2,6 +2,7 @@ import type { VillageMapCatalogue } from './burgundyVillageMap';
 
 const loaders=new Map<string,()=>Promise<{default:VillageMapCatalogue}>>([
  ['bourgogne',()=>import('./bourgogneMapCatalogue.json')],
+ ['bourgogne-mousseux',()=>import('./bourgogne-mousseuxMapCatalogue.json')],
  ['bourgogne-passe-tout-grains',()=>import('./bourgogne-passe-tout-grainsMapCatalogue.json')],
  ['bourgogne-aligote',()=>import('./bourgogne-aligoteMapCatalogue.json')],
  ['bourgogne-cote-dor',()=>import('./bourgogne-cote-dorMapCatalogue.json')],

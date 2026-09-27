@@ -47,6 +47,7 @@ const byLength=(a:string,b:string)=>b.length-a.length;
 // Clairet, like rosé, can precede a denomination recorded in the wine name.
 const bourgogneAppellations=['bourgogne','burgundy','bourgogne rouge','bourgogne blanc','bourgogne rose','bourgogne clairet'];
 const groups=registry.maps.map(group=>({...group,keys:group.aliases.map(key).sort(byLength),regions:group.compatibleRegions.map(key),
+ sparkling:(group as {productStyle?:string}).productStyle==='sparkling',
  accessoryKeys:((group as {accessoryGrapes?:string[]}).accessoryGrapes??[]).map(key),
  broad:!!(group as {broadAppellation?:boolean}).broadAppellation,
  blockedKeys:((group as {conflictingNames?:string[]}).conflictingNames??[]).map(key),
@@ -123,12 +124,16 @@ export function burgundyRegionalMapTarget(wine:Wine):BurgundyVillageMapTarget|nu
  const vinGris=group.featureId==='inao-denom-374';
  const normaliseColour=(value:string)=>vinGris&&['gris','vin gris'].includes(value)?'rose':value;
  const type=key(wine.productType??''),subtype=key(wine.productSubtype??''),style=normaliseColour(key(wine.wineStyle??''));
- if(type&&!['wine','still wine'].includes(type))return null;
- if(subtype&&!['still','still wine'].includes(subtype))return null;
- if(style&&!['red','white','rose'].includes(style))return null;
- const colour=normaliseColour(key(wine.colour??''))||style;
+ // Sparkling is a product style, not a colour. Only explicitly reviewed AOCs
+ // accept it; the app's red/white/rosé styles describe still wines (as in LWIN
+ // matching). Unknown style is allowed when the recorded AOC establishes it.
+ if(type&&!(group.sparkling?['wine','sparkling wine']:['wine','still wine']).includes(type))return null;
+ if(subtype&&!(group.sparkling?['sparkling','sparkling wine']:['still','still wine']).includes(subtype))return null;
+ if(style&&!(group.sparkling?['sparkling']:['red','white','rose']).includes(style))return null;
+ const colourStyle=group.sparkling?'':style;
+ const colour=normaliseColour(key(wine.colour??''))||colourStyle;
  if(colour&&!group.wineColours.includes(colour))return null;
- if(style&&colour&&style!==colour)return null;
+ if(colourStyle&&colour&&colourStyle!==colour)return null;
  const removeFullDesignation=(text:string)=>group.keys
   .reduce((value,name)=>` ${value} `.replaceAll(` ${name} `,' ').trim(),text);
  // Check complete competing names before removing a split site name: stripping
@@ -149,7 +154,8 @@ export function burgundyRegionalMapTarget(wine:Wine):BurgundyVillageMapTarget|nu
   if(index!==0)text=withoutRegionalOrigin(text);
   return removeDesignation(text);
  });
- if(remaining.some((text,index)=>/\b(?:grands? crus?|premiers? crus?|1ers?|1st cru|cremant|mousseux)\b/.test(text)||
+ if(remaining.some((text,index)=>/\b(?:grands? crus?|premiers? crus?|1ers?|1st cru|cremant)\b/.test(text)||
+  (!group.sparkling&&contains(text,'mousseux'))||
   (!(index===0&&plainAppellation(group))&&conflictingNames.some(name=>contains(text,name)))))return null;
  // Label colour must also agree with the denomination, even if the explicit
  // colour/style is absent. Côte d'Or does not include rosé.

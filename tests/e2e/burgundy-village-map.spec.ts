@@ -587,10 +587,10 @@ for(const [appellation,id] of [['Mâcon','macon'],['Mâcon-Villages','macon-vill
  expect(downloads.every(url=>url.endsWith(`/maps/${id}.2026-09-21.pbf.gz`))).toBe(true);
 });
 
-for(const [appellation,id,maxBytes,timeout] of [['Mâcon','macon',1400000,60000],['Bourgogne','bourgogne',3700000,60000],['Bourgogne Aligoté','bourgogne-aligote',3000000,60000],['Bourgogne Passe-tout-grains','bourgogne-passe-tout-grains',3000000,60000]] as const)test(`${appellation} compact map loads over a 1 Mbps connection`,async({page,browserName},testInfo)=>{
+for(const [appellation,id,maxBytes,timeout] of [['Mâcon','macon',1400000,60000],['Bourgogne','bourgogne',3700000,60000],['Bourgogne Aligoté','bourgogne-aligote',3000000,60000],['Bourgogne Passe-tout-grains','bourgogne-passe-tout-grains',3000000,60000],['Bourgogne Mousseux','bourgogne-mousseux',3000000,60000]] as const)test(`${appellation} compact map loads over a 1 Mbps connection`,async({page,browserName},testInfo)=>{
  test.skip(browserName!=='chromium','Chromium network throttling');
  test.setTimeout(timeout+25000);
- await setup(page,{appellation,wineName:'Vieilles Vignes',classification:null,...(id==='bourgogne-aligote'?{colour:'White',wineStyle:'white'}:{colour:'Red',wineStyle:'red'})});
+ await setup(page,{appellation,wineName:'Vieilles Vignes',classification:null,...(id==='bourgogne-mousseux'?{colour:'Red',wineStyle:'sparkling',productSubtype:'Sparkling'}:id==='bourgogne-aligote'?{colour:'White',wineStyle:'white'}:{colour:'Red',wineStyle:'red'})});
  await page.goto('/shared/layout-wine');
  // Warm the code, then close before measuring the boundary transfer. Browser
  // caching is disabled for the throttled load so the complete asset travels.
@@ -615,9 +615,10 @@ for(const [appellation,id,maxBytes,timeout] of [['Mâcon','macon',1400000,60000]
 for(const [appellation,id,colour,wineStyle,note,invalidColours] of [
  ['Bourgogne Aligoté','bourgogne-aligote','White','white','white-wine production boundaries in 272 communes',['Red','Rosé']],
  ['Bourgogne Passe-tout-grains','bourgogne-passe-tout-grains','Red','red','Rhône/Beaujolais boundaries are missing',['White']],
+ ['Bourgogne Mousseux','bourgogne-mousseux','Red','sparkling','red sparkling appellation',['White','Rosé']],
 ] as const)for(const route of allMapRoutes)test(`${appellation} ${route}: partial AOC and commune navigation`,async({page},testInfo)=>{
  await page.setViewportSize({width:320,height:900});
- await setup(page,{appellation,wineName:'Vieilles Vignes',classification:null,colour,wineStyle,region:'Burgundy'});
+ await setup(page,{appellation,wineName:'Vieilles Vignes',classification:null,colour,wineStyle,productSubtype:wineStyle==='sparkling'?'Sparkling':'Still',region:'Burgundy'});
  const downloads:string[]=[],errors:string[]=[];
  page.on('request',r=>{if(r.url().includes('/maps/'))downloads.push(r.url())});
  page.on('pageerror',error=>errors.push(error.message));
@@ -655,12 +656,36 @@ for(const [appellation,id,colour,wineStyle,note,invalidColours] of [
  await page.screenshot({path:testInfo.outputPath(`${id}-desktop.png`)});
  await page.keyboard.press('Escape');await expect(opener).toBeFocused();
  for(const colour of invalidColours){
-  await setup(page,{appellation,wineName:'Vieilles Vignes',classification:null,colour,wineStyle:colour==='Red'?'red':colour==='White'?'white':'rose'});
+  await setup(page,{appellation,wineName:'Vieilles Vignes',classification:null,colour,productSubtype:wineStyle==='sparkling'?'Sparkling':'Still',wineStyle:wineStyle==='sparkling'?'sparkling':colour==='Red'?'red':colour==='White'?'white':'rose'});
   await page.goto(route);
   await expect(page.getByRole('heading',{name:'Vieilles Vignes',exact:true})).toBeVisible();
   await expect(page.getByRole('button',{name:'View regional map'})).toHaveCount(0);
  }
  expect(errors).toEqual([]);
+});
+
+for(const route of allMapRoutes)test(`Bourgogne Mousseux ${route}: sparkling identity guards`,async({page})=>{
+ const base={appellation:'Bourgogne Mousseux',wineName:'Vieilles Vignes',classification:null,colour:'Red',wineStyle:'sparkling',productSubtype:'Sparkling'};
+ // A complete denomination in a split label works. Bare "Mousseux" is only
+ // a wine-style description and must never infer this AOC over Crémant.
+ await setup(page,{...base,appellation:'Bourgogne Rouge',wineName:'Bourgogne-Mousseux'});
+ await page.goto(route);
+ await page.getByRole('button',{name:'View regional map'}).click();
+ await expect(page.getByRole('dialog',{name:'Bourgogne Mousseux',exact:true}).getByRole('button',{name:'Region view',exact:true})).toBeEnabled();
+ await page.keyboard.press('Escape');
+ for(const fields of [
+  {productSubtype:'Still'},{wineStyle:'red'},{appellation:'Crémant de Bourgogne'},
+  {appellation:'Bourgogne',wineName:'Mousseux'},
+  {appellation:'Bourgogne',wineName:'Pinot Noir'},
+  {appellation:'Bourgogne Mousseux',wineName:'Bourgogne Aligoté'},
+  {appellation:'Bourgogne Passe-tout-grains'},
+ ]){
+  const record={...base,...fields};
+  await setup(page,record);await page.goto(route);
+  await expect(page.getByRole('heading',{name:record.wineName,exact:true})).toBeVisible();
+  await expect(page.getByRole('button',{name:'View regional map'})).toHaveCount(0);
+  await expect(page.getByRole('button',{name:'View village map'})).toHaveCount(0);
+ }
 });
 
 for(const route of allMapRoutes)test(`Bourgogne review labels ${route}: Clairet, separate AOCs and region scope`,async({page})=>{
