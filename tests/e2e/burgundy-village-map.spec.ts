@@ -677,6 +677,18 @@ for(const [appellation,id,colour,wineStyle,note,invalidColours,count] of [
  expect(errors).toEqual([]);
 });
 
+test('Crémant de Bourgogne: compact fallback without native gzip support',async({page})=>{
+ await page.addInitScript(()=>Object.defineProperty(globalThis,'DecompressionStream',{value:undefined,configurable:true}));
+ await setup(page,{appellation:'Crémant de Bourgogne',wineName:'Brut',classification:null,colour:'White',wineStyle:'sparkling',productSubtype:'Sparkling'});
+ const downloads:string[]=[];
+ page.on('request',r=>{if(r.url().includes('/maps/'))downloads.push(r.url())});
+ await page.goto('/shared/layout-wine');
+ await page.getByRole('button',{name:'View regional map'}).click();
+ await expect(page.getByRole('button',{name:'Region view',exact:true})).toBeEnabled({timeout:15000});
+ expect([...new Set(downloads)]).toEqual([new URL('/maps/cremant-de-bourgogne.2026-09-21.pbf',page.url()).href]);
+ await expect(page.getByRole('combobox',{name:'Zoom to a commune'}).getByRole('option')).toHaveCount(373);
+});
+
 for(const route of allMapRoutes)test(`Crémant de Bourgogne ${route}: complete source overview, Rhône navigation and sparkling guards`,async({page},testInfo)=>{
  const base={appellation:'Crémant de Bourgogne',wineName:'Blanc de Noirs',classification:null,colour:'White',wineStyle:'sparkling',productSubtype:'Sparkling',region:'Burgundy'};
  await page.setViewportSize({width:320,height:900});await setup(page,base);

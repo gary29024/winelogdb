@@ -64,10 +64,17 @@ the Chromium check measured **54.38 seconds at 1 Mbps**, within the existing
 60-second budget. It is downloaded only when opened. Further transport and
 rendering optimisation belongs to [#363](https://github.com/gary29024/winelogdb/issues/363).
 
-Validation: **5,198 unit tests** pass. Chromium and mobile WebKit owner/shared
+The reference GeoJSON exceeds Cloudflare's 25 MiB static-asset limit and is
+excluded from upload by `public/.assetsignore`; it remains in Git for auditing.
+Browsers without `DecompressionStream` use the **7,361,367-byte** uncompressed
+Geobuf copy instead, preserving exact geometry without requesting the omitted
+GeoJSON. Earlier maps retain their existing fallback paths.
+
+Validation: **5,199 unit tests** pass. Chromium and mobile WebKit owner/shared
 journeys cover 320 px layouts, all 372 commune options, Rhône navigation,
 white/rosé identity and conflicting style/colour guards. All **107** generated
-regional outputs are byte-identical across two full builds; all **191** earlier
+regional outputs are byte-identical across two full builds; the additional raw
+fallback is the exact decompressed compact asset. All **191** earlier
 map assets and the **48** earlier registry entries remain unchanged.
 
 The coverage inventory now has **44 mapped and five partial denominations,

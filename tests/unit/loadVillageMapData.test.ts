@@ -41,6 +41,17 @@ describe('compact boundary downloads',()=>{
   expect(await loadVillageMapData(macon,signal)).toEqual(expected);
   expect(fetcher).toHaveBeenCalledExactlyOnceWith(macon.dataUrl,{signal});
  });
+ it('loads Crémant without native gzip support using its deployable compact fallback',async()=>{
+  vi.stubGlobal('DecompressionStream',undefined);
+  const bytes=packed(cremant.geobufRawUrl);
+  expect(Buffer.from(bytes).equals(gunzipSync(packed(cremant.geobufUrl)))).toBe(true);
+  expect(bytes.byteLength).toBeLessThan(25*1024*1024);
+  const fetcher=vi.fn(async()=>new Response(bytes));vi.stubGlobal('fetch',fetcher);
+  const signal=new AbortController().signal;
+  const actual=await loadVillageMapData(cremant,signal);
+  expect(isDeepStrictEqual(actual,JSON.parse(readFileSync(`public${cremant.dataUrl}`,'utf8')))).toBe(true);
+  expect(fetcher).toHaveBeenCalledExactlyOnceWith(cremant.geobufRawUrl,{signal});
+ },15000);
  it('keeps GeoJSON loading for maps without a compact copy',async()=>{
   const expected={type:'FeatureCollection',features:[]};
   vi.stubGlobal('fetch',vi.fn(async()=>Response.json(expected)));

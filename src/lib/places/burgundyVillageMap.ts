@@ -14,6 +14,7 @@ export type VillageMapCatalogue={
  sources:{name:string;date:string;url:string;sha256:string;license:string}[];
  // Optional gzip Geobuf copy with exactly the same coordinates as dataUrl.
  geobufUrl?:string;
+ geobufRawUrl?:string;
  // Large regional maps need time for a complete download on slow connections.
  downloadTimeoutMs?:number;
  notes:Record<string,{note:string;paintedBy?:string;sameBoundaryAs?:string}>;features:VillageMapFeature[];coverageNote?:string;colourScope?:string;

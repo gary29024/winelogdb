@@ -4988,6 +4988,7 @@
       "colourScope": "overview",
       "downloadTimeoutMs": 60000,
       "coverageNote": "Crémant de Bourgogne AOC overview: all 378 records in the September 2026 INAO source cover 372 communes across Côte-d’Or, Rhône, Saône-et-Loire and Yonne. This is a combined white and rosé sparkling-wine production overview, not a colour-specific area or a producer holding. Named cuvées have no separate boundaries here; no single vineyard is identified.",
+      "rawGeobufFallback": true,
       "precisionNote": "Five reviewed source rows need original oriented-ring reassignment by full containment, with unchanged vertices and signed area. Direct reprojection repaired with make_valid has 0 m² inverse-projection difference. The 1e-6 and 1e-7 grids close exclusions of 63.92 and 4.6949 m². The published 1e-8 grid passes unchanged area/hole/part gates: 1.74 m² net area change, only near-zero closed slivers, no lost parts.",
       "accessoryGrapes": [
         "Aligoté",

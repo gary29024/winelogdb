@@ -293,6 +293,10 @@ def main():
             assert geobuf.decode(gzip.decompress(packed)) == canonical
             catalogue['geobufUrl'] = url.removesuffix('.geojson') + '.pbf.gz'
             binary_outputs.append((ROOT / 'public' / catalogue['geobufUrl'].lstrip('/'), packed))
+            if config.get('rawGeobufFallback'):
+                assert config['denominationId'] == 561
+                catalogue['geobufRawUrl'] = url.removesuffix('.geojson') + '.pbf'
+                binary_outputs.append((ROOT / 'public' / catalogue['geobufRawUrl'].lstrip('/'), encoded))
         outputs.extend([(ROOT / 'public' / url.lstrip('/'), collection, True),
                         (PLACES / f"{config['id']}MapCatalogue.json", catalogue, False)])
         entry = {key: config[key] for key in ('id', 'name', 'region', 'aliases', 'compatibleRegions', 'wineColours')}
