@@ -104,8 +104,8 @@ describe('regional denominations stay separate from villages and named vineyards
   const bourgogne=inventory.appellations.find(a=>a.appellationId===138)!.denominations;
   expect(bourgogne.filter(d=>d.denominationId!==362).every(d=>d.status==='mapped')).toBe(true);
   expect(bourgogne.find(d=>d.denominationId===362)!.status).toBe('partial');
-  expect(denominations.filter(d=>d.status==='partial').map(d=>d.denominationId)).toEqual([362,389]);
-  expect(denominations.filter(d=>d.status==='pending').map(d=>d.denominationId)).toEqual([391,394,2338,561]);
+  expect(denominations.filter(d=>d.status==='partial').map(d=>d.denominationId)).toEqual([362,389,394]);
+  expect(denominations.filter(d=>d.status==='pending').map(d=>d.denominationId)).toEqual([391,2338,561]);
   expect(inventory.appellations.find(a=>a.appellationId===583)!.denominations).toHaveLength(29);
   expect(villages.villages).toHaveLength(44);
  });
@@ -940,7 +940,7 @@ describe('broad Bourgogne review cases',()=>{
   {appellation:'Bourgogne',wineName:'Passetoutgrain'},
   {appellation:'Bourgogne Rouge',wineName:'Passe-Tout-Grains'},
  ])('does not read a separate regional AOC in the wine name as broad Bourgogne %j',wine=>{
-  expect(burgundyVillageMapTarget({...base,colour:'Red',...wine})).toBeNull();
+  expect(burgundyVillageMapTarget({...base,colour:'Red',...wine})).toMatchObject({featureId:'inao-denom-394',mapKind:'regional'});
  });
  it.each(['Chablis','Chablis et Grand Auxerrois','Auxerrois','Yonne'])('accepts a Yonne region recorded as %s',region=>{
   expect(burgundyVillageMapTarget({...base,appellation:'Bourgogne',wineName:'Kimméridgien',producer:'Jean-Marc Brocard',colour:'White',region}))

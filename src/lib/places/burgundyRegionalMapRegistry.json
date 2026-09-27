@@ -1266,6 +1266,80 @@
       ],
       "broadAppellation": true,
       "featureId": "inao-denom-389"
+    },
+    {
+      "id": "bourgogne-passe-tout-grains",
+      "name": "Bourgogne Passe-tout-grains",
+      "region": "Burgundy",
+      "aliases": [
+        "Bourgogne Passe-tout-grains",
+        "Bourgogne Passe-tout-grain",
+        "Bourgogne Passetoutgrains",
+        "Bourgogne Passetoutgrain",
+        "Bourgogne Passe-tous-grains",
+        "Passe-tout-grains",
+        "Passe-tout-grain",
+        "Passetoutgrains",
+        "Passetoutgrain",
+        "Passe-tous-grains"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Côte d’Or",
+        "Côte de Nuits",
+        "Côte de Beaune",
+        "Hautes Côtes de Nuits",
+        "Hautes Côtes de Beaune",
+        "Côte Chalonnaise",
+        "Mâconnais",
+        "Grand Auxerrois",
+        "Yonne",
+        "Saône-et-Loire",
+        "Chablis",
+        "Chablis et Grand Auxerrois",
+        "Auxerrois",
+        "Beaujolais",
+        "Rhône"
+      ],
+      "wineColours": [
+        "red",
+        "rose"
+      ],
+      "siteNames": [
+        "Passe-tout-grains",
+        "Passe-tout-grain",
+        "Passetoutgrains",
+        "Passetoutgrain",
+        "Passe-tous-grains",
+        "Bourgogne Passe-tout-grains",
+        "Bourgogne Passe-tout-grain",
+        "Bourgogne Passetoutgrains",
+        "Bourgogne Passetoutgrain",
+        "Bourgogne Passe-tous-grains",
+        "Bourgogne-Passe-tout-grains",
+        "Bourgogne-Passe-tout-grain",
+        "Bourgogne-Passetoutgrains",
+        "Bourgogne-Passetoutgrain",
+        "Bourgogne-Passe-tous-grains"
+      ],
+      "baseAppellations": [
+        "Bourgogne",
+        "Bourgogne Rouge",
+        "Bourgogne Rosé",
+        "Bourgogne Clairet",
+        "Burgundy"
+      ],
+      "conflictingNames": [
+        "Aligoté"
+      ],
+      "accessoryGrapes": [
+        "Chardonnay",
+        "Pinot Blanc",
+        "Pinot Gris"
+      ],
+      "broadAppellation": true,
+      "featureId": "inao-denom-394"
     }
   ],
   "otherAppellations": [

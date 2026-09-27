@@ -1,5 +1,70 @@
 # Burgundy regional maps
 
+## Bourgogne Passe-tout-grains source overview
+
+This rollout adds regional AOC **144**, denomination **394**, with all **278**
+rows of the September 2026 INAO source (`1R324, 1S324`). Its **272 communes**
+comprise 90 in Côte-d’Or, 145 in Saône-et-Loire and 37 in Yonne. It uses the
+existing pinned June 2026 Cadastre outlines and verified commune names.
+The **54,889.83 ha** measures delimited source geometry, not planted or producing
+vineyard acreage. Its geometry is generated from its own source rows; it is
+not a copy of the nearby Bourgogne or Aligoté boundaries.
+
+Coverage remains **partial**. The [BIVB appellation sheet](https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/gallery_files/site/321/402/79294/79349.pdf)
+confirms still red/rosé wines and lists 299 producing communes (91/154/54).
+Those totals do not establish a current commune-to-parcel crosswalk. The
+[BIVB-hosted approved 2011 specification, section IV](https://www.vins-bourgogne.fr/nos-vins-nos-terroirs/la-bourgogne-et-ses-appellations/gallery_files/site/321/19990/20197.pdf)
+also includes Rhône communes, while this source has no Rhône rows. The map
+explicitly warns that Rhône/Beaujolais boundaries are missing and does not
+invent them from commune outlines. These sources do not prove full coverage
+or a precise count of missing current communes.
+
+Matching supports the full appellation and the distinctive short
+`Passe-tout-grains` / `Passetoutgrains` name, plus the reviewed singular and
+`Passe-tous-grains` spellings. [INAO describes the historical spelling variants](https://www.inao.gouv.fr/node/3394/printable/print),
+and [Domaine Monnot-Roche uses the joined spelling](https://monnot-roche.com/nos-vins/product/130-bourgogne-passetoutgrains).
+Plain/red/rosé/Clairet Bourgogne or Burgundy plus the name in the wine field
+also selects this AOC, including hyphenated and old-vine variants. A Pinot
+Noir/Gamay description alone never infers the appellation. Producer names,
+longer joined proper names and reference fields alone do not establish it.
+
+White colour, sparkling styles, cru tiers and conflicting identities withhold
+the map. The specification's section V lists Chardonnay, Pinot Blanc and Pinot
+Gris as accessory grapes: their names do not turn a recorded Passe-tout-grains
+blend into a white wine. These exceptions are confined to this denomination;
+explicit `Blanc` or white colour still fails. The matcher resolves the recorded
+appellation and does not certify blend proportions or vintage-specific rules.
+Named cuvées retain appellation scope and never identify a holding.
+
+### Geometry and transport
+
+- Prissé source area **290** has **52 shells and 67 holes**. Its orphaned hole
+  measures **7.5912795 m²**, different from Aligoté's nearby exclusion. The
+  builder assigns every original oriented hole to its unique containing shell,
+  preserving all vertices and agreeing with the signed source area within
+  0.000001 m². The exception is pinned to this exact source row and ring counts.
+- The six-decimal grid closes a **176.77 m²** exclusion. The reviewed **1e-7°**
+  grid passes the existing 0.005% area and sub-2 m² hole/part gates. Its net
+  source-area change is **6.47 m²**, and projection round-trip difference is
+  **0.00879471 m²**, below the unchanged **0.01 m²** threshold.
+- GeoJSON is **18,689,572 bytes**, gzip level 9 is **5,485,446 bytes**, and the
+  exact compact download is **2,935,327 bytes** (about **46% smaller**). Python
+  and the browser decoder verify coordinate/property equality. Downloads remain
+  lazy, cancellable and retryable with the existing 60-second timeout.
+- All **182 previous geometry, transport and catalogue assets** remain unchanged.
+  Earlier-map optimisation stays in [#363](https://github.com/gary29024/winelogdb/issues/363).
+
+Validation: **4,922 unit tests**, lint, production build and **18 Chromium/mobile
+WebKit browser checks** pass. The two CDP-throttling cases are intentionally
+skipped in WebKit. Tests cover owner/shared routes, 320px and desktop layouts,
+all 272 commune choices, partial wording, raw-gzip decoding and label guards.
+External basemap requests are deliberately blocked in the browser fixtures so
+boundary rendering remains independently testable. Chromium transfers the full
+**2,935,327 bytes** and reaches map-ready in **24,964 ms at 1 Mbps / 150 ms
+latency**, with caching disabled and code warmed separately. All **98 generated
+regional outputs** reproduce byte-for-byte. The existing large lazy-map-chunk
+build warning remains.
+
 ## Bourgogne Aligoté source overview
 
 The Aligoté rollout adds regional AOC **140**, denomination **389**, independently
@@ -107,8 +172,8 @@ not hide an otherwise valid explicit Mâcon identity. Existing colour, style,
 country, region, cru-tier and conflict guards remain in force.
 
 A split **Bourgogne + “Aligoté”** now selects the separate Aligoté map under
-the guards above. **Bourgogne + “Passetoutgrain(s)”** still withholds the broad
-Bourgogne map, as Gamay already did. Broad Bourgogne can come from both **Chablis** and **Grand Auxerrois**,
+the guards above. **Bourgogne + “Passetoutgrain(s)”** selects its separate AOC map. A Gamay
+mention alone still withholds the broad Bourgogne map. Broad Bourgogne can come from both **Chablis** and **Grand Auxerrois**,
 as the [BIVB regional overview](https://www.bourgogne-wines.com/wine-and-terroir/our-vineyards/chablis-and-the-grand-auxerrois/chablis-and-grand-auxerrois-the-green-gold-of-the-bourgogne-region,2469,9312.html)
 confirms. Broad Bourgogne therefore accepts Chablis, Chablis et Grand Auxerrois
 and Auxerrois region context, although the pinned source has no geometry for the
@@ -184,7 +249,8 @@ the twenty-seven named areas, broad Mâcon and Mâcon-Villages.
 These remain regional denominations, not new AOCs or village appellations.
 Broad Bourgogne additionally has a **partial source overview**, covering the
 264 communes in the pinned data, with a separately explorable white-only sector.
-Bourgogne Aligoté has its own **partial source overview** across 272 communes.
+Bourgogne Aligoté and Bourgogne Passe-tout-grains each have their own
+**partial source overview** across 272 communes.
 The existing 44 village maps and 33 Grand Cru appellations are unchanged.
 
 | Denomination | INAO appellation / denomination | Producing communes | Allowed still-wine colours |
@@ -234,6 +300,7 @@ The existing 44 village maps and 33 Grand Cru appellations are unchanged.
 | Mâcon-Villages | 583 / 2893 | 80 current | White only |
 | Bourgogne (partial source overview) | 138 / 362 | 264 in source | Red, white, rosé; overview only |
 | Bourgogne Aligoté (partial source overview) | 140 / 389 | 272 in source | White only |
+| Bourgogne Passe-tout-grains (partial source overview) | 144 / 394 | 272 in source | Red, rosé |
 
 The official BIVB sheets confirm these counts, colours and regional status:
 [Côte d’Or](https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/bourgogne-cote-d-or%2C2458%2C9253.html?args=Y29tcF9pZD0yMjc4JmFjdGlvbj12aWV3RmljaGUmaWQ9Nzc0Jnw%3D),
@@ -248,13 +315,12 @@ Coteaux Bourguignons, Crémant de Bourgogne and Mâcon. The
 [BIVB inventory](https://www.bourgogne-wines.com/professional-access/documents-photos%2C2334%2C9356.html)
 also lists 14 Bourgogne geographic denominations and 27 named Mâcon denominations.
 Together with the seven broad denominations and Mâcon-Villages, these account for
-**49 source denomination IDs: forty-three mapped, two partial, four pending**. Alternative source names
+**49 source denomination IDs: forty-three mapped, three partial, three pending**. Alternative source names
 and colour variants sharing an ID do not increase that count.
 
-Broad Bourgogne and Bourgogne Aligoté have explicitly partial source overviews.
-Four broad regional areas remain pending: Bourgogne Mousseux,
-Bourgogne Passe-tout-grains, Coteaux Bourguignons and
-Crémant de Bourgogne.
+Broad Bourgogne, Bourgogne Aligoté and Bourgogne Passe-tout-grains have
+explicitly partial source overviews. Three broad regional areas remain pending:
+Bourgogne Mousseux, Coteaux Bourguignons and Crémant de Bourgogne.
 Completing the fourteen Bourgogne geographic denominations does
 not complete the broad Bourgogne AOC boundary. Chablis Premier Cru
 source gaps and other named plots remain tracked separately in

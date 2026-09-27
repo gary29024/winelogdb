@@ -23,7 +23,7 @@ describe('broad Bourgogne source overview',()=>{
   {appellation:'Burgundy'}, {appellation:null,wineName:'Bourgogne'},
   {appellation:null,referenceSite:'Bourgogne'}, {appellation:null,producer:'Domaine de Bourgogne'},
   {appellation:'Bourgogne Unknown Place'},
-  {appellation:'Bourgogne Passe-tout-grains'}, {appellation:'Bourgogne Mousseux'},
+  {appellation:'Bourgogne Mousseux'},
   {appellation:'Crémant de Bourgogne'}, {appellation:'Coteaux Bourguignons'},
   {referenceSite:'Bourgogne Passe-tout-grains'},
   {wineName:'Bourgogne Mousseux'}, {wineName:'Bourgogne Grand Ordinaire'},
