@@ -154,8 +154,9 @@
           "sourceNames": [
             "Bourgogne mousseux"
           ],
-          "status": "pending",
-          "kind": "broad"
+          "status": "partial",
+          "kind": "broad",
+          "coverageNote": "All 278 source rows across 272 communes are mapped. Rhône/Beaujolais boundaries are absent; the current red sparkling AOC remains partially covered."
         }
       ]
     },

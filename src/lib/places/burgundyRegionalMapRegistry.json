@@ -1268,6 +1268,57 @@
       "featureId": "inao-denom-389"
     },
     {
+      "id": "bourgogne-mousseux",
+      "name": "Bourgogne Mousseux",
+      "region": "Burgundy",
+      "aliases": [
+        "Bourgogne Mousseux"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Côte d’Or",
+        "Côte de Nuits",
+        "Côte de Beaune",
+        "Hautes Côtes de Nuits",
+        "Hautes Côtes de Beaune",
+        "Côte Chalonnaise",
+        "Mâconnais",
+        "Grand Auxerrois",
+        "Yonne",
+        "Saône-et-Loire",
+        "Chablis",
+        "Chablis et Grand Auxerrois",
+        "Auxerrois",
+        "Beaujolais",
+        "Rhône"
+      ],
+      "wineColours": [
+        "red"
+      ],
+      "siteNames": [
+        "Bourgogne Mousseux",
+        "Bourgogne-Mousseux"
+      ],
+      "baseAppellations": [
+        "Bourgogne",
+        "Bourgogne Rouge",
+        "Burgundy"
+      ],
+      "accessoryGrapes": [
+        "Aligoté",
+        "Chardonnay",
+        "Gamay de Bouze",
+        "Gamay de Chaudenay",
+        "Melon",
+        "Pinot Blanc",
+        "Pinot Gris"
+      ],
+      "broadAppellation": true,
+      "productStyle": "sparkling",
+      "featureId": "inao-denom-391"
+    },
+    {
       "id": "bourgogne-passe-tout-grains",
       "name": "Bourgogne Passe-tout-grains",
       "region": "Burgundy",
@@ -1346,7 +1397,6 @@
     "Bourgogne Aligoté",
     "Bourgogne Mousseux",
     "Bourgogne Passe-tout-grains",
-    "Bourgogne mousseux",
     "Coteaux Bourguignons",
     "Coteaux Bourguignons ou Bourgogne grand ordinaire ou Bourgogne ordinaire",
     "Crémant de Bourgogne",

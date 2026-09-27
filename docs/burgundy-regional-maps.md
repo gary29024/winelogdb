@@ -1,5 +1,74 @@
 # Burgundy regional maps
 
+## Bourgogne Mousseux source overview
+
+Regional AOC **141**, denomination **391**, uses all **278** rows of its own
+September 2026 INAO source (`Bourgogne mousseux`, CVI `1R320M01`, category
+`Vin mousseux`). The **272 communes** comprise 90 in Côte-d’Or, 145 in
+Saône-et-Loire and 37 in Yonne. The **54,988.55 ha** measures delimited source
+geometry, not planted vineyard acreage. Its boundary is not copied from
+Aligoté or Passe-tout-grains. Commune outlines retain the pinned June 2026
+Cadastre source and the previously verified names.
+
+Coverage is **partial**: the [INAO product description](https://www.inao.gouv.fr/node/1880/printable/print)
+and [BIVB appellation page](https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/bourgogne-mousseux,2458,9253.html?args=Y29tcF9pZD0yMjc4JmFjdGlvbj12aWV3RmljaGUmaWQ9MjMxJnw%3D)
+include Rhône, but the source has no Rhône rows. The map visibly states the
+missing Rhône/Beaujolais boundaries; commune outlines do not replace them.
+Published regional commune totals cannot establish an exact missing-parcel
+crosswalk. BIVB also distinguishes the current red sparkling AOC from historic
+white/rosé Mousseux and from Crémant de Bourgogne. Historic white/rosé labels
+are not mapped to this current red-wine area.
+
+Matching requires a recorded `Bourgogne Mousseux` appellation, or the full
+designation standing independently in the wine name beside a recorded
+`Bourgogne`, `Bourgogne Rouge` or `Burgundy` base. Hyphens, AOC/AOP and old-vine
+wording are normalised. Bare `Mousseux`, sparkling style, region, producer or
+reference fields alone do not establish the AOC. Cuvées retain appellation
+scope and never identify a holding.
+
+Sparkling style and red colour are checked separately. Unknown style/colour
+can match an explicit AOC, but explicit still products, white/rosé colour,
+cru tiers and competing appellations withhold the map. In the app's existing
+style model, `red`, `white` and `rose` denote still-wine styles; a red sparkling
+record uses `wineStyle: sparkling` and `colour: Red`. The sparkling exception
+is configured only for this AOC; all prior regional maps retain their guards.
+
+The [BIVB-hosted approved specification, section V](https://www.vins-bourgogne.fr/nos-vins-nos-terroirs/la-bourgogne-et-ses-appellations/gallery_files/site/321/19990/20196.pdf)
+lists Aligoté, Chardonnay, Gamay de Bouze, Gamay de Chaudenay, Melon, Pinot Blanc
+and Pinot Gris as accessory grapes. Their names do not imply white wine or a
+competing AOC here. Explicit `Blanc` and the full name `Bourgogne Aligoté` still
+conflict. Matching resolves a recorded identity; it does not certify blend
+proportions or vintage-specific rules.
+
+### Geometry and transport
+
+- Prissé source area **289** has **52 shells and 67 holes**, including a
+  **7.62945 m²** touching hole misassigned by pyshp. Original oriented holes
+  are assigned to their unique fully containing shells, without moving any
+  vertex. Exact row identity, ring counts and signed source area are checked.
+- The **1e-7°** grid retains a **176.77 m²** exclusion that the default grid
+  closes. Published geometry passes the unchanged 0.005% area and sub-2 m²
+  hole/part gates: net area change **13.99 m²**, largest closed sliver
+  **0.3063 m²**, no lost polygon parts. Projection round-trip difference is
+  **0.00879471 m²**, below the existing **0.01 m²** limit.
+- GeoJSON is **18,730,576 bytes**, gzip level 9 is **5,497,794 bytes**, and the
+  compact download is **2,941,727 bytes**, about **46% smaller** than gzip.
+  Python and the browser decoder require exact coordinate/property equality.
+  Lazy loading, cancellation, explicit retry and the 60-second budget remain.
+- All **185 prior map assets and catalogues**, plus the **46 existing registry
+  entries**, are unchanged. Earlier-map optimisation remains in
+  [#363](https://github.com/gary29024/winelogdb/issues/363).
+
+Validation: **5,001 unit tests**, lint, production build and **21 browser checks**
+pass. Chromium and mobile WebKit cover owner/shared pages, 320px and desktop
+layouts, all 272 commune choices, raw-gzip loading, partial wording, sparkling
+identity guards and regressions for the prior maps. External basemap requests
+are intentionally blocked in these fixtures. Chromium transfers all
+**2,941,727 bytes** and reaches map-ready in **24,914 ms** at **1 Mbps / 150 ms
+latency**, with caching disabled and code warmed separately. The CDP throttling
+case is intentionally skipped in WebKit. All **101 generated regional outputs**
+reproduce byte-for-byte. The existing large lazy-map-chunk build warning remains.
+
 ## Bourgogne Passe-tout-grains source overview
 
 This rollout adds regional AOC **144**, denomination **394**, with all **278**
