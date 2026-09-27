@@ -29,8 +29,7 @@ describe('Bourgogne Aligoté source overview',()=>{
   {appellation:null,referenceSite:'Bourgogne Aligoté'},
   {appellation:null,referenceParcel:'Bourgogne Aligoté'},
   {appellation:null,producer:'Bourgogne Aligoté'},
-  {appellation:'Aligoté'},{appellation:'Bourgogne',wineName:'Aligoté'},
-  {appellation:'Bourgogne',wineName:'Bourgogne Aligoté'},
+  {appellation:'Aligoté'},
   {appellation:'Bourgogne Aligoté Unknown Place'},
   {appellation:'Bourgogne Aligoté Rouge'},{appellation:'Bourgogne Aligoté Clairet'},
   {appellation:'Bourgogne Aligoté Rosé'},{appellation:'Bourgogne Aligoté Chardonnay'},
@@ -68,4 +67,53 @@ describe('Bourgogne Aligoté source overview',()=>{
   expect(catalogue.downloadTimeoutMs).toBe(60000);
   expect(catalogue.communes.find(c=>c.id==='71372')?.name).toBe('Romanèche-Thorins');
  });
+});
+
+describe('Bourgogne Aligoté review cases',()=>{
+ // Plain Bourgogne cannot be made from Aligoté, so a plain or white Bourgogne
+ // record naming the grape is Bourgogne Aligoté.
+ it.each([
+  {appellation:'Bourgogne',wineName:'Aligoté'},
+  {appellation:'Bourgogne Blanc',wineName:'Aligoté Vieilles Vignes',colour:'White'},
+  {appellation:'Burgundy',wineName:'Aligoté'},
+  {appellation:'Bourgogne',wineName:'Bourgogne Aligoté'},
+  {appellation:'Bourgogne',wineName:'Aligoté',region:'Chablis'},
+ ])('reads a split plain Bourgogne + Aligoté label %j',wine=>{
+  expect(burgundyVillageMapTarget({...base,...wine})).toMatchObject({featureId:'inao-denom-389',mapKind:'regional'});
+ });
+ it.each([
+  {appellation:'Bourgogne',wineName:'Aligoté',colour:'Red'},
+  {appellation:'Bourgogne Rouge',wineName:'Aligoté'},
+  {appellation:'Bourgogne',wineName:'Aligoté Bouzeron'},
+  {appellation:'Bourgogne',wineName:'Aligoté Meursault'},
+  {appellation:'Bourgogne',wineName:'Aligoté Chardonnay'},
+ ])('withholds a contradictory split Aligoté label %j',wine=>{
+  expect(burgundyVillageMapTarget({...base,...wine})).toBeNull();
+ });
+ // No other mapped regional denomination accepts the Aligoté grape.
+ it.each([
+  'Bourgogne Hautes Côtes de Nuits','Bourgogne Hautes Côtes de Beaune','Bourgogne Côte d’Or',
+  'Bourgogne Côte Chalonnaise','Mâcon','Mâcon-Villages','Mâcon Lugny',
+ ])('withholds %s when the wine name says Aligoté',appellation=>{
+  expect(burgundyVillageMapTarget({...base,appellation,wineName:'Aligoté',colour:'White'})).toBeNull();
+ });
+ it('still opens Montrecul-style sites without Aligoté and rejects them with it',()=>{
+  expect(burgundyVillageMapTarget({...base,appellation:'Bourgogne',wineName:'Montrecul',colour:'White'})).toMatchObject({featureId:'inao-denom-373'});
+  expect(burgundyVillageMapTarget({...base,appellation:'Bourgogne',wineName:'Montrecul Aligoté',colour:'White'})).toBeNull();
+ });
+ // Old vines is a label mention, not part of the denomination.
+ it.each([
+  ['Bourgogne Aligoté Vieilles Vignes','inao-denom-389','White'],
+  ['Bourgogne Aligoté Vieille Vigne','inao-denom-389','White'],
+  ['Bourgogne Vieilles Vignes','inao-denom-362','Red'],
+  ['Mâcon-Villages Vieilles Vignes','inao-denom-2893','White'],
+  ['Mâcon Fuissé Vieilles Vignes','inao-denom-2069','White'],
+  ['Bourgogne Hautes Côtes de Nuits Vieilles Vignes','inao-denom-364','Red'],
+ ])('accepts %s in the appellation field',(appellation,featureId,colour)=>{
+  expect(burgundyVillageMapTarget({...base,appellation,colour})).toMatchObject({featureId,mapKind:'regional'});
+ });
+ it.each(['Bourgogne Aligoté Vieilles Vignes Rouge','Bourgogne Vieilles Vignes Premier Cru','Mâcon-Villages Vieilles Vignes Rouge'])(
+  'still withholds contradictions around Vieilles Vignes in %s',appellation=>{
+   expect(burgundyVillageMapTarget({...base,appellation,colour:null})).toBeNull();
+  });
 });

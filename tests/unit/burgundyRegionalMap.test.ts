@@ -937,8 +937,6 @@ describe('broad Bourgogne does not infer a geographic denomination from context'
 
 describe('broad Bourgogne review cases',()=>{
  it.each([
-  {appellation:'Bourgogne',wineName:'Aligoté',colour:'White'},
-  {appellation:'Bourgogne Blanc',wineName:'Aligoté Vieilles Vignes',colour:'White'},
   {appellation:'Bourgogne',wineName:'Passetoutgrain'},
   {appellation:'Bourgogne Rouge',wineName:'Passe-Tout-Grains'},
  ])('does not read a separate regional AOC in the wine name as broad Bourgogne %j',wine=>{

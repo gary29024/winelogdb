@@ -18,10 +18,15 @@ incomplete-coverage warning; neither source rows nor a commune outline are a
 substitute for missing appellation boundaries. Its **54,991.42 ha** is delimited
 source geometry, not the area planted with Aligoté or currently producing wine.
 
-Matching requires the full recorded appellation `Bourgogne Aligoté` (accents,
-hyphens, AOC/AOP and white-colour suffixes are normalised). `Aligoté` by itself,
-`Bourgogne` plus an Aligoté wine name, a producer, region or reference field
-does not establish this separate AOC. Unknown colour remains possible for this
+Matching requires the recorded appellation `Bourgogne Aligoté` (accents,
+hyphens, AOC/AOP, white-colour and `Vieilles Vignes` suffixes are normalised),
+or a split label: a plain `Bourgogne`, `Bourgogne Blanc` or `Burgundy`
+appellation with Aligoté standing on its own in the wine name. Plain Bourgogne
+cannot be made from Aligoté, so that record can only be this AOC; red colour,
+Bouzeron, village or other-grape evidence still withholds it. `Aligoté` by
+itself, a producer, region or reference field does not establish this separate
+AOC. Conversely, no other mapped regional denomination accepts Aligoté, so an
+Aligoté wine name withholds their maps (e.g. Hautes Côtes de Nuits + Aligoté). Unknown colour remains possible for this
 white-only denomination, but explicit red/rosé, Clairet, conflicting grapes,
 sparkling styles and cru tiers are rejected. Bouzeron retains its separate
 village identity. Named cuvées stay at appellation scope.

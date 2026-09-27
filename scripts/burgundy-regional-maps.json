@@ -3019,8 +3019,14 @@
       "aliases": [
         "Bourgogne Aligoté"
       ],
-      "siteNames": [],
-      "baseAppellations": [],
+      "siteNames": [
+        "Aligoté"
+      ],
+      "baseAppellations": [
+        "Bourgogne",
+        "Bourgogne Blanc",
+        "Burgundy"
+      ],
       "broadAppellation": true,
       "compatibleRegions": [
         "Burgundy",

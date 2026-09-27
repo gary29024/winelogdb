@@ -1204,8 +1204,14 @@
       "wineColours": [
         "white"
       ],
-      "siteNames": [],
-      "baseAppellations": [],
+      "siteNames": [
+        "Aligoté"
+      ],
+      "baseAppellations": [
+        "Bourgogne",
+        "Bourgogne Blanc",
+        "Burgundy"
+      ],
       "conflictingNames": [
         "Chardonnay",
         "Pinot Noir",
