@@ -766,3 +766,29 @@ describe('final named Mâcon denominations',()=>{
   expect(saint.features.find(f=>f.id==='inao-denom-1734-red-only')!.communes).toEqual(['71164']);
  });
 });
+
+describe('grape names after a full regional denomination',()=>{
+ it.each([
+  {appellation:'Mâcon-Lugny Chardonnay',featureId:'inao-denom-1726'},
+  {appellation:'Mâcon Fuissé Chardonnay',featureId:'inao-denom-2069'},
+  {appellation:'Mâcon Bray Gamay',featureId:'inao-denom-1714'},
+  {appellation:'Mâcon Bray Rouge Gamay',featureId:'inao-denom-1714'},
+  {appellation:'Bourgogne Côte d’Or Pinot Noir',featureId:'inao-denom-2840'},
+  {appellation:'Bourgogne Hautes Côtes de Nuits Pinot Noir',featureId:'inao-denom-364',colour:'Red'},
+  {appellation:'Bourgogne Tonnerre Chardonnay',featureId:'inao-denom-1751'},
+  {appellation:'Mâcon Chardonnay',featureId:'inao-denom-1720'},
+ ])('reads $appellation as the denomination',({featureId,...wine})=>{
+  expect(burgundyVillageMapTarget({...base,wineName:'A named cuvée',...wine})).toMatchObject({featureId,mapKind:'regional'});
+ });
+ it.each([
+  {appellation:'Mâcon-Lugny Chardonnay',colour:'Red'},
+  {appellation:'Mâcon Fuissé Gamay'},
+  {appellation:'Mâcon Bray Blanc Gamay'},
+  {appellation:'Bourgogne Tonnerre Pinot Noir'},
+  {appellation:'Bourgogne Chardonnay'},
+  {appellation:'Mâcon-Villages Chardonnay'},
+  {appellation:'Mâcon Lugny Aligoté'},
+ ])('withholds a contradictory or unmapped grape label %j',wine=>{
+  expect(burgundyVillageMapTarget({...base,wineName:'A named cuvée',...wine})?.mapKind).not.toBe('regional');
+ });
+});

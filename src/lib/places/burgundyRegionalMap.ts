@@ -31,6 +31,10 @@ const withoutProducer=(label:string,producer:string)=>{
  }
  return kept.join(' ');
 };
+// Grape names recorded after a full denomination ("Mâcon-Lugny Chardonnay")
+// describe the wine's colour; "Mâcon Chardonnay" alone remains the village.
+const grapeColours=[['chardonnay','white'],['pinot noir','red'],['gamay','red']] as const;
+const withoutGrapes=(text:string)=>grapeColours.reduce((value,[name])=>` ${value} `.replaceAll(` ${name} `,' ').trim(),text);
 const byLength=(a:string,b:string)=>b.length-a.length;
 const bourgogneAppellations=['bourgogne','burgundy','bourgogne rouge','bourgogne blanc','bourgogne rose'];
 const groups=registry.maps.map(group=>({...group,keys:group.aliases.map(key).sort(byLength),regions:group.compatibleRegions.map(key),
@@ -105,7 +109,7 @@ export function burgundyRegionalMapTarget(wine:Wine):BurgundyVillageMapTarget|nu
   .reduce((value,name)=>` ${value} `.replaceAll(` ${name} `,' ').trim(),text);
  const app=fields[0];
  if(app&&!plainAppellation(group)&&
-  (!group.keys.some(name=>contains(app,name))||!['','rouge','blanc','rose','red','white',...(vinGris?['gris','vin gris']:[])].includes(removeDesignation(app))))return null;
+  (!group.keys.some(name=>contains(app,name))||!['','rouge','blanc','rose','red','white',...(vinGris?['gris','vin gris']:[])].includes(withoutGrapes(removeDesignation(app)))))return null;
  // A cuvée/reference name alone must not infer its regional denomination,
  // except a reviewed site name beside its explicit base appellation.
  if(!fields.slice(0,2).some(text=>group.keys.some(name=>contains(text,name)))&&!namesSite(group))return null;
@@ -119,6 +123,7 @@ export function burgundyRegionalMapTarget(wine:Wine):BurgundyVillageMapTarget|nu
  // colour/style is absent. Côte d'Or does not include rosé.
  const labelColours=[['rouge','red'],['red','red'],['blanc','white'],['white','white'],['rose','rose']] as const;
  const namedColours=labelColours.filter(([name])=>remaining.slice(0,2).some(text=>contains(text,name))).map(([,value])=>value);
+ if(!plainAppellation(group))namedColours.push(...grapeColours.filter(([name])=>contains(remaining[0],name)).map(([,value])=>value));
  if(vinGris&&(['gris','vin gris'].includes(remaining[0])||remaining.slice(0,2).some(text=>contains(text,'vin gris'))))namedColours.push('rose');
  if(new Set(namedColours).size>1)return null;
  if(namedColours.some(value=>!group.wineColours.includes(value)||(colour&&colour!==value)))return null;

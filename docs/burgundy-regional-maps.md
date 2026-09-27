@@ -491,6 +491,13 @@ co-operative **Cave de Prissé-Sologny-Verzé**, is likewise part of that name.
 Hyphenated site names (**Solutré-Pouilly**, **Charnay-lès-Mâcon**) and
 **Mâcon + Mâcon-Verzé** are unaffected.
 
+A grape name recorded after a full denomination in the appellation field
+(**Mâcon-Lugny Chardonnay**, **Bourgogne Côte d’Or Pinot Noir**, **Mâcon Bray
+Gamay**) is read as colour evidence: Chardonnay as white, Pinot Noir and Gamay
+as red. It must agree with the denomination's colours and any recorded colour,
+so **Mâcon Fuissé Gamay** withholds the map. **Mâcon Chardonnay** on its own
+remains the village denomination; other grapes such as Aligoté are not read.
+
 - [Les Orfèvres du Vin's brochure](https://www.orfevresduvin.com/img/cms/Acces-rapide/Brochure%20A4%20V2.pdf)
   supplies **Mâcon Charnay Blanc / Rouge**, supporting the shortened Charnay alias.
 - [Robert-Denogent's importer sheet](https://kermitlynch.com/files/DOMAINE%20ROBERT-DENOGENT.pdf)
