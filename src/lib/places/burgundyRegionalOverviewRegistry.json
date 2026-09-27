@@ -1,0 +1,630 @@
+{
+  "bourgogne-cote-dor": {
+    "dataUrl": "/maps/bourgogne-cote-dor.2026-09-21.geojson",
+    "geobufUrl": "/maps/bourgogne-cote-dor.2026-09-21.overview.pbf.gz",
+    "geobufRawUrl": "/maps/bourgogne-cote-dor.2026-09-21.overview.pbf",
+    "downloadTimeoutMs": 20000,
+    "maxZoom": 12.4,
+    "labelIds": [
+      "21231",
+      "21054",
+      "21464",
+      "71496",
+      "21295",
+      "21512",
+      "21480",
+      "21569"
+    ]
+  },
+  "bourgogne-hautes-cotes-de-nuits": {
+    "dataUrl": "/maps/bourgogne-hautes-cotes-de-nuits.2026-09-21.geojson",
+    "geobufUrl": "/maps/bourgogne-hautes-cotes-de-nuits.2026-09-21.overview.pbf.gz",
+    "geobufRawUrl": "/maps/bourgogne-hautes-cotes-de-nuits.2026-09-21.overview.pbf",
+    "downloadTimeoutMs": 20000,
+    "maxZoom": 14,
+    "labelIds": [
+      "21464",
+      "21368",
+      "21182",
+      "21523",
+      "21506",
+      "21133",
+      "21017",
+      "21597"
+    ]
+  },
+  "bourgogne-hautes-cotes-de-beaune": {
+    "dataUrl": "/maps/bourgogne-hautes-cotes-de-beaune.2026-09-21.geojson",
+    "geobufUrl": "/maps/bourgogne-hautes-cotes-de-beaune.2026-09-21.overview.pbf.gz",
+    "geobufRawUrl": "/maps/bourgogne-hautes-cotes-de-beaune.2026-09-21.overview.pbf",
+    "downloadTimeoutMs": 20000,
+    "maxZoom": 12.5,
+    "labelIds": [
+      "21054",
+      "71122",
+      "21407",
+      "21412",
+      "21461",
+      "21368",
+      "21401",
+      "21541"
+    ]
+  },
+  "bourgogne-cote-chalonnaise": {
+    "dataUrl": "/maps/bourgogne-cote-chalonnaise.2026-09-21.geojson",
+    "geobufUrl": "/maps/bourgogne-cote-chalonnaise.2026-09-21.overview.pbf.gz",
+    "geobufRawUrl": "/maps/bourgogne-cote-chalonnaise.2026-09-21.overview.pbf",
+    "downloadTimeoutMs": 20000,
+    "maxZoom": 12.5,
+    "labelIds": [
+      "71294",
+      "71221",
+      "71400",
+      "71072",
+      "71369",
+      "71392",
+      "71171",
+      "71019"
+    ]
+  },
+  "bourgogne-cotes-du-couchois": {
+    "dataUrl": "/maps/bourgogne-cotes-du-couchois.2026-09-21.geojson",
+    "geobufUrl": "/maps/bourgogne-cotes-du-couchois.2026-09-21.overview.pbf.gz",
+    "geobufRawUrl": "/maps/bourgogne-cotes-du-couchois.2026-09-21.overview.pbf",
+    "downloadTimeoutMs": 20000,
+    "maxZoom": 14,
+    "labelIds": [
+      "71149",
+      "71468",
+      "71480",
+      "71431",
+      "71183",
+      "71464"
+    ]
+  },
+  "bourgogne-cotes-dauxerre": {
+    "dataUrl": "/maps/bourgogne-cotes-dauxerre.2026-09-21.geojson",
+    "geobufUrl": "/maps/bourgogne-cotes-dauxerre.2026-09-21.overview.pbf.gz",
+    "geobufRawUrl": "/maps/bourgogne-cotes-dauxerre.2026-09-21.overview.pbf",
+    "downloadTimeoutMs": 20000,
+    "maxZoom": 13.9,
+    "labelIds": [
+      "89023",
+      "89479",
+      "89024",
+      "89319",
+      "89337"
+    ]
+  },
+  "bourgogne-chitry": {
+    "dataUrl": "/maps/bourgogne-chitry.2026-09-21.geojson",
+    "geobufUrl": "/maps/bourgogne-chitry.2026-09-21.overview.pbf.gz",
+    "geobufRawUrl": "/maps/bourgogne-chitry.2026-09-21.overview.pbf",
+    "downloadTimeoutMs": 20000,
+    "maxZoom": 14,
+    "labelIds": [
+      "89108"
+    ]
+  },
+  "bourgogne-coulanges-la-vineuse": {
+    "dataUrl": "/maps/bourgogne-coulanges-la-vineuse.2026-09-21.geojson",
+    "geobufUrl": "/maps/bourgogne-coulanges-la-vineuse.2026-09-21.overview.pbf.gz",
+    "geobufRawUrl": "/maps/bourgogne-coulanges-la-vineuse.2026-09-21.overview.pbf",
+    "downloadTimeoutMs": 20000,
+    "maxZoom": 14,
+    "labelIds": [
+      "89084",
+      "89155",
+      "89118",
+      "89426",
+      "89212",
+      "89270",
+      "89256"
+    ]
+  },
+  "bourgogne-epineuil": {
+    "dataUrl": "/maps/bourgogne-epineuil.2026-09-21.geojson",
+    "geobufUrl": "/maps/bourgogne-epineuil.2026-09-21.overview.pbf.gz",
+    "geobufRawUrl": "/maps/bourgogne-epineuil.2026-09-21.overview.pbf",
+    "downloadTimeoutMs": 20000,
+    "maxZoom": 14,
+    "labelIds": [
+      "89153"
+    ]
+  },
+  "bourgogne-cote-saint-jacques": {
+    "dataUrl": "/maps/bourgogne-cote-saint-jacques.2026-09-21.geojson",
+    "geobufUrl": "/maps/bourgogne-cote-saint-jacques.2026-09-21.overview.pbf.gz",
+    "geobufRawUrl": "/maps/bourgogne-cote-saint-jacques.2026-09-21.overview.pbf",
+    "downloadTimeoutMs": 20000,
+    "maxZoom": 14,
+    "labelIds": [
+      "89206"
+    ]
+  },
+  "bourgogne-tonnerre": {
+    "dataUrl": "/maps/bourgogne-tonnerre.2026-09-21.geojson",
+    "geobufUrl": "/maps/bourgogne-tonnerre.2026-09-21.overview.pbf.gz",
+    "geobufRawUrl": "/maps/bourgogne-tonnerre.2026-09-21.overview.pbf",
+    "downloadTimeoutMs": 20000,
+    "maxZoom": 14,
+    "labelIds": [
+      "89418",
+      "89447",
+      "89262",
+      "89153",
+      "89211",
+      "89137"
+    ]
+  },
+  "bourgogne-la-chapelle-notre-dame": {
+    "dataUrl": "/maps/bourgogne-la-chapelle-notre-dame.2026-09-21.geojson",
+    "geobufUrl": "/maps/bourgogne-la-chapelle-notre-dame.2026-09-21.overview.pbf.gz",
+    "geobufRawUrl": "/maps/bourgogne-la-chapelle-notre-dame.2026-09-21.overview.pbf",
+    "downloadTimeoutMs": 20000,
+    "maxZoom": 14,
+    "labelIds": [
+      "21606"
+    ]
+  },
+  "bourgogne-le-chapitre": {
+    "dataUrl": "/maps/bourgogne-le-chapitre.2026-09-21.geojson",
+    "geobufUrl": "/maps/bourgogne-le-chapitre.2026-09-21.overview.pbf.gz",
+    "geobufRawUrl": "/maps/bourgogne-le-chapitre.2026-09-21.overview.pbf",
+    "downloadTimeoutMs": 20000,
+    "maxZoom": 14,
+    "labelIds": [
+      "21166"
+    ]
+  },
+  "bourgogne-montrecul": {
+    "dataUrl": "/maps/bourgogne-montrecul.2026-09-21.geojson",
+    "geobufUrl": "/maps/bourgogne-montrecul.2026-09-21.overview.pbf.gz",
+    "geobufRawUrl": "/maps/bourgogne-montrecul.2026-09-21.overview.pbf",
+    "downloadTimeoutMs": 20000,
+    "maxZoom": 14,
+    "labelIds": [
+      "21231"
+    ]
+  },
+  "macon-charnay-les-macon": {
+    "dataUrl": "/maps/macon-charnay-les-macon.2026-09-21.geojson",
+    "geobufUrl": "/maps/macon-charnay-les-macon.2026-09-21.overview.pbf.gz",
+    "geobufRawUrl": "/maps/macon-charnay-les-macon.2026-09-21.overview.pbf",
+    "downloadTimeoutMs": 20000,
+    "maxZoom": 14,
+    "labelIds": [
+      "71105"
+    ]
+  },
+  "macon-davaye": {
+    "dataUrl": "/maps/macon-davaye.2026-09-21.geojson",
+    "geobufUrl": "/maps/macon-davaye.2026-09-21.overview.pbf.gz",
+    "geobufRawUrl": "/maps/macon-davaye.2026-09-21.overview.pbf",
+    "downloadTimeoutMs": 20000,
+    "maxZoom": 14,
+    "labelIds": [
+      "71169"
+    ]
+  },
+  "macon-fuisse": {
+    "dataUrl": "/maps/macon-fuisse.2026-09-21.geojson",
+    "geobufUrl": "/maps/macon-fuisse.2026-09-21.overview.pbf.gz",
+    "geobufRawUrl": "/maps/macon-fuisse.2026-09-21.overview.pbf",
+    "downloadTimeoutMs": 20000,
+    "maxZoom": 14,
+    "labelIds": [
+      "71210"
+    ]
+  },
+  "macon-loche": {
+    "dataUrl": "/maps/macon-loche.2026-09-21.geojson",
+    "geobufUrl": "/maps/macon-loche.2026-09-21.overview.pbf.gz",
+    "geobufRawUrl": "/maps/macon-loche.2026-09-21.overview.pbf",
+    "downloadTimeoutMs": 20000,
+    "maxZoom": 14,
+    "labelIds": [
+      "71270"
+    ]
+  },
+  "macon-solutre-pouilly": {
+    "dataUrl": "/maps/macon-solutre-pouilly.2026-09-21.geojson",
+    "geobufUrl": "/maps/macon-solutre-pouilly.2026-09-21.overview.pbf.gz",
+    "geobufRawUrl": "/maps/macon-solutre-pouilly.2026-09-21.overview.pbf",
+    "downloadTimeoutMs": 20000,
+    "maxZoom": 14,
+    "labelIds": [
+      "71526"
+    ]
+  },
+  "macon-vergisson": {
+    "dataUrl": "/maps/macon-vergisson.2026-09-21.geojson",
+    "geobufUrl": "/maps/macon-vergisson.2026-09-21.overview.pbf.gz",
+    "geobufRawUrl": "/maps/macon-vergisson.2026-09-21.overview.pbf",
+    "downloadTimeoutMs": 20000,
+    "maxZoom": 14,
+    "labelIds": [
+      "71567"
+    ]
+  },
+  "macon-vinzelles": {
+    "dataUrl": "/maps/macon-vinzelles.2026-09-21.geojson",
+    "geobufUrl": "/maps/macon-vinzelles.2026-09-21.overview.pbf.gz",
+    "geobufRawUrl": "/maps/macon-vinzelles.2026-09-21.overview.pbf",
+    "downloadTimeoutMs": 20000,
+    "maxZoom": 14,
+    "labelIds": [
+      "71583"
+    ]
+  },
+  "macon-bussieres": {
+    "dataUrl": "/maps/macon-bussieres.2026-09-21.geojson",
+    "geobufUrl": "/maps/macon-bussieres.2026-09-21.overview.pbf.gz",
+    "geobufRawUrl": "/maps/macon-bussieres.2026-09-21.overview.pbf",
+    "downloadTimeoutMs": 20000,
+    "maxZoom": 14,
+    "labelIds": [
+      "71069"
+    ]
+  },
+  "macon-chaintre": {
+    "dataUrl": "/maps/macon-chaintre.2026-09-21.geojson",
+    "geobufUrl": "/maps/macon-chaintre.2026-09-21.overview.pbf.gz",
+    "geobufRawUrl": "/maps/macon-chaintre.2026-09-21.overview.pbf",
+    "downloadTimeoutMs": 20000,
+    "maxZoom": 14,
+    "labelIds": [
+      "71074",
+      "71084",
+      "71150"
+    ]
+  },
+  "macon-la-roche-vineuse": {
+    "dataUrl": "/maps/macon-la-roche-vineuse.2026-09-21.geojson",
+    "geobufUrl": "/maps/macon-la-roche-vineuse.2026-09-21.overview.pbf.gz",
+    "geobufRawUrl": "/maps/macon-la-roche-vineuse.2026-09-21.overview.pbf",
+    "downloadTimeoutMs": 20000,
+    "maxZoom": 14,
+    "labelIds": [
+      "71126",
+      "71371",
+      "71235"
+    ]
+  },
+  "macon-milly-lamartine": {
+    "dataUrl": "/maps/macon-milly-lamartine.2026-09-21.geojson",
+    "geobufUrl": "/maps/macon-milly-lamartine.2026-09-21.overview.pbf.gz",
+    "geobufRawUrl": "/maps/macon-milly-lamartine.2026-09-21.overview.pbf",
+    "downloadTimeoutMs": 20000,
+    "maxZoom": 14,
+    "labelIds": [
+      "71032",
+      "71299",
+      "71031",
+      "71525"
+    ]
+  },
+  "macon-pierreclos": {
+    "dataUrl": "/maps/macon-pierreclos.2026-09-21.geojson",
+    "geobufUrl": "/maps/macon-pierreclos.2026-09-21.overview.pbf.gz",
+    "geobufRawUrl": "/maps/macon-pierreclos.2026-09-21.overview.pbf",
+    "downloadTimeoutMs": 20000,
+    "maxZoom": 14,
+    "labelIds": [
+      "71350"
+    ]
+  },
+  "macon-prisse": {
+    "dataUrl": "/maps/macon-prisse.2026-09-21.geojson",
+    "geobufUrl": "/maps/macon-prisse.2026-09-21.overview.pbf.gz",
+    "geobufRawUrl": "/maps/macon-prisse.2026-09-21.overview.pbf",
+    "downloadTimeoutMs": 20000,
+    "maxZoom": 14,
+    "labelIds": [
+      "71360"
+    ]
+  },
+  "macon-serrieres": {
+    "dataUrl": "/maps/macon-serrieres.2026-09-21.geojson",
+    "geobufUrl": "/maps/macon-serrieres.2026-09-21.overview.pbf.gz",
+    "geobufRawUrl": "/maps/macon-serrieres.2026-09-21.overview.pbf",
+    "downloadTimeoutMs": 20000,
+    "maxZoom": 14,
+    "labelIds": [
+      "71518"
+    ]
+  },
+  "macon-aze": {
+    "dataUrl": "/maps/macon-aze.2026-09-21.geojson",
+    "geobufUrl": "/maps/macon-aze.2026-09-21.overview.pbf.gz",
+    "geobufRawUrl": "/maps/macon-aze.2026-09-21.overview.pbf",
+    "downloadTimeoutMs": 20000,
+    "maxZoom": 14,
+    "labelIds": [
+      "71016"
+    ]
+  },
+  "macon-burgy": {
+    "dataUrl": "/maps/macon-burgy.2026-09-21.geojson",
+    "geobufUrl": "/maps/macon-burgy.2026-09-21.overview.pbf.gz",
+    "geobufRawUrl": "/maps/macon-burgy.2026-09-21.overview.pbf",
+    "downloadTimeoutMs": 20000,
+    "maxZoom": 14,
+    "labelIds": [
+      "71066"
+    ]
+  },
+  "macon-cruzille": {
+    "dataUrl": "/maps/macon-cruzille.2026-09-21.geojson",
+    "geobufUrl": "/maps/macon-cruzille.2026-09-21.overview.pbf.gz",
+    "geobufRawUrl": "/maps/macon-cruzille.2026-09-21.overview.pbf",
+    "downloadTimeoutMs": 20000,
+    "maxZoom": 14,
+    "labelIds": [
+      "71156",
+      "71284",
+      "71226"
+    ]
+  },
+  "macon-ige": {
+    "dataUrl": "/maps/macon-ige.2026-09-21.geojson",
+    "geobufUrl": "/maps/macon-ige.2026-09-21.overview.pbf.gz",
+    "geobufRawUrl": "/maps/macon-ige.2026-09-21.overview.pbf",
+    "downloadTimeoutMs": 20000,
+    "maxZoom": 14,
+    "labelIds": [
+      "71236"
+    ]
+  },
+  "macon-lugny": {
+    "dataUrl": "/maps/macon-lugny.2026-09-21.geojson",
+    "geobufUrl": "/maps/macon-lugny.2026-09-21.overview.pbf.gz",
+    "geobufRawUrl": "/maps/macon-lugny.2026-09-21.overview.pbf",
+    "downloadTimeoutMs": 20000,
+    "maxZoom": 14,
+    "labelIds": [
+      "71035",
+      "71267",
+      "71156",
+      "71416"
+    ]
+  },
+  "macon-peronne": {
+    "dataUrl": "/maps/macon-peronne.2026-09-21.geojson",
+    "geobufUrl": "/maps/macon-peronne.2026-09-21.overview.pbf.gz",
+    "geobufRawUrl": "/maps/macon-peronne.2026-09-21.overview.pbf",
+    "downloadTimeoutMs": 20000,
+    "maxZoom": 14,
+    "labelIds": [
+      "71135",
+      "71460",
+      "71345"
+    ]
+  },
+  "macon-verze": {
+    "dataUrl": "/maps/macon-verze.2026-09-21.geojson",
+    "geobufUrl": "/maps/macon-verze.2026-09-21.overview.pbf.gz",
+    "geobufRawUrl": "/maps/macon-verze.2026-09-21.overview.pbf",
+    "downloadTimeoutMs": 20000,
+    "maxZoom": 14,
+    "labelIds": [
+      "71574"
+    ]
+  },
+  "macon-bray": {
+    "dataUrl": "/maps/macon-bray.2026-09-21.geojson",
+    "geobufUrl": "/maps/macon-bray.2026-09-21.overview.pbf.gz",
+    "geobufRawUrl": "/maps/macon-bray.2026-09-21.overview.pbf",
+    "downloadTimeoutMs": 20000,
+    "maxZoom": 14,
+    "labelIds": [
+      "71039",
+      "71130",
+      "71146",
+      "71057"
+    ]
+  },
+  "macon-chardonnay": {
+    "dataUrl": "/maps/macon-chardonnay.2026-09-21.geojson",
+    "geobufUrl": "/maps/macon-chardonnay.2026-09-21.overview.pbf.gz",
+    "geobufRawUrl": "/maps/macon-chardonnay.2026-09-21.overview.pbf",
+    "downloadTimeoutMs": 20000,
+    "maxZoom": 14,
+    "labelIds": [
+      "71543",
+      "71100",
+      "71353",
+      "71338"
+    ]
+  },
+  "macon-mancey": {
+    "dataUrl": "/maps/macon-mancey.2026-09-21.geojson",
+    "geobufUrl": "/maps/macon-mancey.2026-09-21.overview.pbf.gz",
+    "geobufRawUrl": "/maps/macon-mancey.2026-09-21.overview.pbf",
+    "downloadTimeoutMs": 20000,
+    "maxZoom": 13.9,
+    "labelIds": [
+      "71543",
+      "71249",
+      "71094",
+      "71245",
+      "71328",
+      "71274",
+      "71193",
+      "71052"
+    ]
+  },
+  "macon-montbellet": {
+    "dataUrl": "/maps/macon-montbellet.2026-09-21.geojson",
+    "geobufUrl": "/maps/macon-montbellet.2026-09-21.overview.pbf.gz",
+    "geobufRawUrl": "/maps/macon-montbellet.2026-09-21.overview.pbf",
+    "downloadTimeoutMs": 20000,
+    "maxZoom": 14,
+    "labelIds": [
+      "71305"
+    ]
+  },
+  "macon-saint-gengoux-le-national": {
+    "dataUrl": "/maps/macon-saint-gengoux-le-national.2026-09-21.geojson",
+    "geobufUrl": "/maps/macon-saint-gengoux-le-national.2026-09-21.overview.pbf.gz",
+    "geobufRawUrl": "/maps/macon-saint-gengoux-le-national.2026-09-21.overview.pbf",
+    "downloadTimeoutMs": 20000,
+    "maxZoom": 13.3,
+    "labelIds": [
+      "71007",
+      "71417",
+      "71582",
+      "71521",
+      "71080",
+      "71507",
+      "71147",
+      "71272"
+    ]
+  },
+  "macon-uchizy": {
+    "dataUrl": "/maps/macon-uchizy.2026-09-21.geojson",
+    "geobufUrl": "/maps/macon-uchizy.2026-09-21.overview.pbf.gz",
+    "geobufRawUrl": "/maps/macon-uchizy.2026-09-21.overview.pbf",
+    "downloadTimeoutMs": 20000,
+    "maxZoom": 14,
+    "labelIds": [
+      "71550"
+    ]
+  },
+  "macon": {
+    "dataUrl": "/maps/macon.2026-09-21.geojson",
+    "geobufUrl": "/maps/macon.2026-09-21.overview.pbf.gz",
+    "geobufRawUrl": "/maps/macon.2026-09-21.overview.pbf",
+    "downloadTimeoutMs": 20000,
+    "maxZoom": 13.4,
+    "labelIds": [
+      "71270",
+      "71543",
+      "71108",
+      "71582",
+      "71417",
+      "71513",
+      "71031",
+      "71130"
+    ]
+  },
+  "macon-villages": {
+    "dataUrl": "/maps/macon-villages.2026-09-21.geojson",
+    "geobufUrl": "/maps/macon-villages.2026-09-21.overview.pbf.gz",
+    "geobufRawUrl": "/maps/macon-villages.2026-09-21.overview.pbf",
+    "downloadTimeoutMs": 20000,
+    "maxZoom": 12.4,
+    "labelIds": [
+      "71270",
+      "71543",
+      "71108",
+      "71582",
+      "71417",
+      "71513",
+      "71031",
+      "71039"
+    ]
+  },
+  "bourgogne": {
+    "dataUrl": "/maps/bourgogne.2026-09-21.geojson",
+    "geobufUrl": "/maps/bourgogne.2026-09-21.overview.pbf.gz",
+    "geobufRawUrl": "/maps/bourgogne.2026-09-21.overview.pbf",
+    "downloadTimeoutMs": 20000,
+    "maxZoom": 13.4,
+    "labelIds": [
+      "21231",
+      "21054",
+      "71270",
+      "89206",
+      "21464",
+      "71294",
+      "21302",
+      "89409"
+    ]
+  },
+  "bourgogne-aligote": {
+    "dataUrl": "/maps/bourgogne-aligote.2026-09-21.geojson",
+    "geobufUrl": "/maps/bourgogne-aligote.2026-09-21.overview.pbf.gz",
+    "geobufRawUrl": "/maps/bourgogne-aligote.2026-09-21.overview.pbf",
+    "downloadTimeoutMs": 20000,
+    "maxZoom": 12.4,
+    "labelIds": [
+      "21231",
+      "21054",
+      "71270",
+      "89206",
+      "21464",
+      "71294",
+      "21302",
+      "89409"
+    ]
+  },
+  "bourgogne-mousseux": {
+    "dataUrl": "/maps/bourgogne-mousseux.2026-09-21.geojson",
+    "geobufUrl": "/maps/bourgogne-mousseux.2026-09-21.overview.pbf.gz",
+    "geobufRawUrl": "/maps/bourgogne-mousseux.2026-09-21.overview.pbf",
+    "downloadTimeoutMs": 20000,
+    "maxZoom": 12.4,
+    "labelIds": [
+      "21231",
+      "21054",
+      "71270",
+      "89206",
+      "21464",
+      "71294",
+      "21302",
+      "89409"
+    ]
+  },
+  "bourgogne-passe-tout-grains": {
+    "dataUrl": "/maps/bourgogne-passe-tout-grains.2026-09-21.geojson",
+    "geobufUrl": "/maps/bourgogne-passe-tout-grains.2026-09-21.overview.pbf.gz",
+    "geobufRawUrl": "/maps/bourgogne-passe-tout-grains.2026-09-21.overview.pbf",
+    "downloadTimeoutMs": 20000,
+    "maxZoom": 12.4,
+    "labelIds": [
+      "21231",
+      "21054",
+      "71270",
+      "89206",
+      "21464",
+      "71294",
+      "21302",
+      "89409"
+    ]
+  },
+  "coteaux-bourguignons": {
+    "dataUrl": "/maps/coteaux-bourguignons.2026-09-21.geojson",
+    "geobufUrl": "/maps/coteaux-bourguignons.2026-09-21.overview.pbf.gz",
+    "geobufRawUrl": "/maps/coteaux-bourguignons.2026-09-21.overview.pbf",
+    "downloadTimeoutMs": 20000,
+    "maxZoom": 12.4,
+    "labelIds": [
+      "21231",
+      "21054",
+      "71270",
+      "89206",
+      "21464",
+      "71294",
+      "21302",
+      "89409"
+    ]
+  },
+  "cremant-de-bourgogne": {
+    "dataUrl": "/maps/cremant-de-bourgogne.2026-09-21.geojson",
+    "geobufUrl": "/maps/cremant-de-bourgogne.2026-09-21.overview.pbf.gz",
+    "geobufRawUrl": "/maps/cremant-de-bourgogne.2026-09-21.overview.pbf",
+    "downloadTimeoutMs": 20000,
+    "maxZoom": 12.4,
+    "labelIds": [
+      "21231",
+      "21054",
+      "89068",
+      "71270",
+      "89206",
+      "21464",
+      "21109",
+      "69234"
+    ]
+  }
+}

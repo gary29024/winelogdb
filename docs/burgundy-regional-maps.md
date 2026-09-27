@@ -1,5 +1,9 @@
 # Burgundy regional maps
 
+The regional UI now loads [lightweight, generalised overviews](burgundy-regional-overviews.md).
+The source geometry, measurements and historical download details below remain
+the audit record; they are no longer the normal regional map download.
+
 ## Crémant de Bourgogne source overview
 
 Regional AOC **175**, denomination **561**, uses all **378** September 2026 INAO

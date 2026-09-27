@@ -1,5 +1,5 @@
 import { test,expect,type Locator,type Page } from '@playwright/test';
-import {statSync} from 'node:fs';
+import {readFileSync,statSync} from 'node:fs';
 import { wine } from './fixtures/layoutWine';
 
 const fullMapMatrix=process.env.WINELOG_E2E_EXHAUSTIVE_MAPS==='1';
@@ -66,6 +66,9 @@ for(const route of matrixRoutes)for(const [appellation,count,commune,colour,wine
   await expect(dialog.locator('.village-map-tier')).toHaveText('Regional denomination');
   await expect(dialog.locator('.village-map-description')).toContainText('no single vineyard is identified');
   await expect(dialog.locator('.village-map-legend')).not.toContainText('Village appellation');
+  await expect(dialog.locator('.village-map-legend')).toHaveText('Appellation overview');
+  await expect(dialog.locator('.village-map-overview-note')).toContainText('Small boundary details are omitted');
+  await expect.poll(()=>dialog.locator('.village-map-commune-name:visible').count()).toBeLessThanOrEqual(8);
   await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toHaveCount(0);
   await expect(dialog.locator('.village-map-selected-label')).toHaveCount(0);
   // Rendered offline commune markers give an independent viewport check. The
@@ -75,7 +78,7 @@ for(const route of matrixRoutes)for(const [appellation,count,commune,colour,wine
    return elements.map(element=>{const b=element.getBoundingClientRect();return {x:b.x+b.width/2-canvas.x,y:b.y+b.height/2-canvas.y,width:canvas.width,height:canvas.height}});
   });
   await expect.poll(async()=>{
-   const points=await positions();return points.length===count&&points.every(p=>p.x>=0&&p.x<=p.width&&p.y>=0&&p.y<=p.height);
+   const points=await positions();return points.length===Math.min(count,8)&&points.every(p=>p.x>=0&&p.x<=p.width&&p.y>=0&&p.y<=p.height);
   }).toBe(true);
   if(count>1){
    await selector.selectOption({label:commune});
@@ -135,7 +138,7 @@ for(const route of matrixRoutes)for(const [appellation,featureId,count,commune,h
    const canvas=elements[0]?.closest('.village-map-canvas')?.getBoundingClientRect();
    if(!canvas)return 0;
    return elements.filter(el=>{const b=el.getBoundingClientRect();return b.x+b.width/2>=canvas.x&&b.x+b.width/2<=canvas.right&&b.y+b.height/2>=canvas.y&&b.y+b.height/2<=canvas.bottom}).length;
-  })).toBe(count);
+  })).toBe(Math.min(count,8));
   const selector=dialog.getByRole('combobox',{name:'Explore a mapped area'});
   if(hasSector){
    await expect(selector).toHaveValue(featureId);
@@ -294,6 +297,9 @@ for(const route of matrixRoutes)matrixTest(`Regional colour and geography guards
 async function setup(page:Page,overrides:Record<string,unknown>={}){
  await page.route('**/api/**',async route=>{
   const path=new URL(route.request().url()).pathname;
+  // These fixtures have no active research run. Match the API contract rather
+  // than returning a truthy list response as if it were a research status.
+  if(path.endsWith('/deep-search-status'))return route.fulfill({status:404,json:{error:'No research run'}});
   const body=path==='/api/me'?{user:{id:'reader',email:'reader@example.com',display_name:'Reader',role:'member',status:'active'}}:
    ['/api/wines/layout-wine','/api/shared/wines/layout-wine'].includes(path)?{...wine,appellation:'Gevrey-Chambertin',wineName:'Les Cazetiers',classification:'premier_cru',wineStyle:'red',colour:'Red',grapes:['Pinot Noir'],grapeBlend:[],referenceSite:null,referenceParcel:null,lwin7:null,lwin11:null,elid:null,deepSearch:null,...overrides}:
     path.endsWith('/research')?{runs:[]}:{items:[],holdings:[],total:0};
@@ -545,13 +551,13 @@ test('compact Mâcon download retries without fetching the larger GeoJSON',async
  // Serve raw gzip on success to exercise native decompression too; Vite may
  // otherwise attach Content-Encoding and let fetch decompress automatically.
  await page.route('**/maps/macon.*.pbf.gz',route=>available
-  ?route.fulfill({contentType:'application/gzip',path:'public/maps/macon.2026-09-21.pbf.gz'})
+  ?route.fulfill({contentType:'application/gzip',path:'public/maps/macon.2026-09-21.overview.pbf.gz'})
   :route.fulfill({status:503,body:'Unavailable'}));
  await page.goto('/wines/layout-wine');await page.getByRole('button',{name:'View regional map'}).click();
  await expect(page.getByRole('alert')).toContainText('The map could not load');
  const attemptsBeforeRetry=downloads.length; // Development StrictMode may abort an initial request.
  expect(attemptsBeforeRetry).toBeGreaterThan(0);
- expect(downloads.every(url=>/\/macon\.[\d-]+\.pbf\.gz$/.test(url))).toBe(true);
+ expect(downloads.every(url=>/\/macon\.[\d-]+\.overview\.pbf\.gz$/.test(url))).toBe(true);
  available=true;
  await page.getByRole('button',{name:'Try again',exact:true}).click();
  await expect(page.getByRole('button',{name:'Region view',exact:true})).toBeEnabled();
@@ -559,7 +565,7 @@ test('compact Mâcon download retries without fetching the larger GeoJSON',async
  expect(downloads.every(url=>url.endsWith('.pbf.gz'))).toBe(true);
 });
 
-for(const [appellation,id] of [['Mâcon','macon'],['Mâcon-Villages','macon-villages']] as const)test(`${appellation} download survives 20 seconds, times out at 60 seconds, and retries`,async({page})=>{
+for(const [appellation,id] of [['Mâcon','macon'],['Mâcon-Villages','macon-villages']] as const)test(`${appellation} overview download survives 15 seconds, times out at 20 seconds, and retries`,async({page})=>{
  await page.clock.install({time:new Date('2026-09-27T12:00:00Z')});
  await setup(page,{appellation,wineName:'Vieilles Vignes',classification:null,colour:'White',wineStyle:'white'});
  let available=false,attempts=0;
@@ -577,10 +583,10 @@ for(const [appellation,id] of [['Mâcon','macon'],['Mâcon-Villages','macon-vill
  // Let the lazy dialog mount before freezing its download timer.
  await page.clock.pauseAt(await page.evaluate(()=>Date.now()+1000));
  const dialog=page.getByRole('dialog',{name:appellation,exact:true});
- await page.clock.fastForward(21000);
+ await page.clock.fastForward(15000);
  await expect(dialog.getByRole('button',{name:'Region view',exact:true})).toBeDisabled();
  await expect(dialog.getByRole('alert')).toHaveCount(0);
- await page.clock.fastForward(40000);
+ await page.clock.fastForward(6000);
  await expect(dialog.getByRole('alert')).toContainText('The map could not load');
  const attemptsBeforeRetry=attempts;
  available=true;
@@ -588,19 +594,23 @@ for(const [appellation,id] of [['Mâcon','macon'],['Mâcon-Villages','macon-vill
  await dialog.getByRole('button',{name:'Try again',exact:true}).click();
  await expect(dialog.getByRole('button',{name:'Region view',exact:true})).toBeEnabled();
  expect(attempts).toBe(attemptsBeforeRetry+1);
- expect(downloads.every(url=>url.endsWith(`/maps/${id}.2026-09-21.pbf.gz`))).toBe(true);
+ expect(downloads.every(url=>url.endsWith(`/maps/${id}.2026-09-21.overview.pbf.gz`))).toBe(true);
 });
 
-const compactNetworkCases=[['Mâcon','macon',1400000,60000],['Bourgogne','bourgogne',3700000,60000],['Bourgogne Aligoté','bourgogne-aligote',3000000,60000],['Bourgogne Passe-tout-grains','bourgogne-passe-tout-grains',3000000,60000],['Bourgogne Mousseux','bourgogne-mousseux',3000000,60000],['Coteaux Bourguignons','coteaux-bourguignons',3500000,60000],['Crémant de Bourgogne','cremant-de-bourgogne',6700000,120000]] as const;
+const regionalMaps=JSON.parse(readFileSync('src/lib/places/burgundyRegionalMapRegistry.json','utf8')) as {maps:{id:string;name:string;wineColours:string[];productStyle?:string}[]};
+const compactNetworkCases=regionalMaps.maps.map(m=>[m.name,m.id,800000,20000] as const);
 // Exercise the largest actual payload on every run. Byte equality/size checks
-// cover every compact file in unit tests; full throttled transfers run in the
+// cover every overview in unit tests; full throttled transfers run in the
 // scheduled/manual matrix or explicitly for a map being introduced/reviewed.
-const largestCompactId=[...compactNetworkCases].sort((a,b)=>statSync(`public/maps/${b[1]}.2026-09-21.pbf.gz`).size-statSync(`public/maps/${a[1]}.2026-09-21.pbf.gz`).size)[0][1];
+const largestCompactId=[...compactNetworkCases].sort((a,b)=>statSync(`public/maps/${b[1]}.2026-09-21.overview.pbf.gz`).size-statSync(`public/maps/${a[1]}.2026-09-21.overview.pbf.gz`).size)[0][1];
 const extraNetworkIds=(process.env.WINELOG_E2E_MAP_DOWNLOADS??'').split(',');
 for(const [appellation,id,maxBytes,timeout] of compactNetworkCases.filter(([,id])=>fullMapMatrix||id===largestCompactId||extraNetworkIds.includes(id)))test(`${appellation} compact map loads over a 1 Mbps connection`,async({page,browserName},testInfo)=>{
  test.skip(browserName!=='chromium','Chromium network throttling');
  test.setTimeout(timeout+25000);
- await setup(page,{appellation,wineName:'Vieilles Vignes',classification:null,...(['bourgogne-mousseux','cremant-de-bourgogne'].includes(id)?{colour:id==='bourgogne-mousseux'?'Red':'White',wineStyle:'sparkling',productSubtype:'Sparkling'}:id==='bourgogne-aligote'?{colour:'White',wineStyle:'white'}:{colour:'Red',wineStyle:'red'})});
+ const definition=regionalMaps.maps.find(m=>m.id===id)!;
+ const sparkling='productStyle' in definition&&definition.productStyle==='sparkling';
+ const colour=definition.wineColours[0];
+ await setup(page,{appellation,wineName:'Vieilles Vignes',classification:null,colour,wineStyle:sparkling?'sparkling':colour,productSubtype:sparkling?'Sparkling':'Still'});
  await page.goto('/shared/layout-wine');
  // Warm the code, then close before measuring the boundary transfer. Browser
  // caching is disabled for the throttled load so the complete asset travels.
@@ -634,7 +644,7 @@ for(const [appellation,id,colour,wineStyle,note,invalidColours,count] of [
  page.on('request',r=>{if(r.url().includes('/maps/'))downloads.push(r.url())});
  page.on('pageerror',error=>errors.push(error.message));
  await page.goto(route);expect(downloads).toEqual([]);
- await page.route(`**/maps/${id}.*.pbf.gz`,route=>route.fulfill({contentType:'application/gzip',path:`public/maps/${id}.2026-09-21.pbf.gz`}));
+ await page.route(`**/maps/${id}.*.pbf.gz`,route=>route.fulfill({contentType:'application/gzip',path:`public/maps/${id}.2026-09-21.overview.pbf.gz`}));
  const opener=page.getByRole('button',{name:'View regional map'});
  await opener.click();
  const dialog=page.getByRole('dialog',{name:appellation,exact:true});
@@ -652,17 +662,17 @@ for(const [appellation,id,colour,wineStyle,note,invalidColours,count] of [
   if(!canvas)return 0;
   return elements.filter(el=>{const b=el.getBoundingClientRect();return b.x+b.width/2>=canvas.x&&b.x+b.width/2<=canvas.right&&b.y+b.height/2>=canvas.y&&b.y+b.height/2<=canvas.bottom}).length;
  });
- await expect.poll(visibleMarkers).toBe(count);
+ await expect.poll(visibleMarkers).toBe(Math.min(count,8));
  for(const label of (id==='coteaux-bourguignons'?['Joigny','Chânes','Chasselas','Crêches-sur-Saône','Romanèche-Thorins']:['Joigny','Boncourt-le-Bois','Prissé','Romanèche-Thorins'])){
   await communes.selectOption({label});
-  await expect.poll(visibleMarkers).toBeLessThan(count);
+  await expect.poll(visibleMarkers).toBeLessThan(Math.min(count,8));
   await expect(dialog.getByRole('heading',{name:appellation,exact:true})).toHaveCount(2);
  }
  await page.screenshot({path:testInfo.outputPath(`${id}-320.png`)});
  await dialog.getByRole('button',{name:'Region view',exact:true}).click();
- await expect.poll(visibleMarkers).toBe(count);
+ await expect.poll(visibleMarkers).toBe(Math.min(count,8));
  expect([...new Set(downloads)]).toHaveLength(1);
- expect(downloads.every(url=>url.endsWith(`/maps/${id}.2026-09-21.pbf.gz`))).toBe(true);
+ expect(downloads.every(url=>url.endsWith(`/maps/${id}.2026-09-21.overview.pbf.gz`))).toBe(true);
  expect(await dialog.evaluate(el=>el.scrollWidth<=el.clientWidth)).toBe(true);
  await page.setViewportSize({width:1280,height:900});
  await dialog.getByRole('button',{name:'Region view',exact:true}).click();
@@ -685,7 +695,7 @@ test('Crémant de Bourgogne: compact fallback without native gzip support',async
  await page.goto('/shared/layout-wine');
  await page.getByRole('button',{name:'View regional map'}).click();
  await expect(page.getByRole('button',{name:'Region view',exact:true})).toBeEnabled({timeout:15000});
- expect([...new Set(downloads)]).toEqual([new URL('/maps/cremant-de-bourgogne.2026-09-21.pbf',page.url()).href]);
+ expect([...new Set(downloads)]).toEqual([new URL('/maps/cremant-de-bourgogne.2026-09-21.overview.pbf',page.url()).href]);
  await expect(page.getByRole('combobox',{name:'Zoom to a commune'}).getByRole('option')).toHaveCount(373);
 });
 
@@ -696,12 +706,16 @@ for(const route of allMapRoutes)test(`Crémant de Bourgogne ${route}: complete s
  page.on('request',r=>{if(r.url().includes('/maps/'))downloads.push(r.url())});
  page.on('pageerror',e=>errors.push(e.message));
  await page.goto(route);expect(downloads).toEqual([]);
- await page.route('**/maps/cremant-de-bourgogne.*.pbf.gz',route=>route.fulfill({contentType:'application/gzip',path:'public/maps/cremant-de-bourgogne.2026-09-21.pbf.gz'}));
+ await page.route('**/maps/cremant-de-bourgogne.*.pbf.gz',route=>route.fulfill({contentType:'application/gzip',path:'public/maps/cremant-de-bourgogne.2026-09-21.overview.pbf.gz'}));
  const opener=page.getByRole('button',{name:'View regional map'});await opener.click();
  const dialog=page.getByRole('dialog',{name:'Crémant de Bourgogne',exact:true});
  await expect(dialog.getByRole('button',{name:'Region view',exact:true})).toBeEnabled({timeout:15000});
  await expect(dialog.locator('.village-map-description')).toHaveText('Denomination overview across wine colours; no colour-specific area or single vineyard is identified.');
  await expect(dialog.locator('.village-map-note').filter({hasText:'all 378 records'})).toBeVisible();
+ await expect(dialog.locator('.village-map-commune-name')).toHaveCount(8);
+ await expect(dialog.locator('.village-map-legend')).toHaveText('Appellation overview');
+ await expect(dialog.locator('.village-map-overview-note')).toBeVisible();
+ await expect.poll(()=>dialog.locator('.village-map-commune-name:visible').count()).toBeLessThanOrEqual(8);
  await expect(dialog.getByRole('combobox',{name:'Explore a mapped area'})).toHaveCount(0);
  const communes=dialog.getByRole('combobox',{name:'Zoom to a commune'});
  await expect(communes.getByRole('option')).toHaveCount(373);
@@ -709,14 +723,14 @@ for(const route of allMapRoutes)test(`Crémant de Bourgogne ${route}: complete s
   const canvas=elements[0]?.closest('.village-map-canvas')?.getBoundingClientRect();if(!canvas)return 0;
   return elements.filter(el=>{const b=el.getBoundingClientRect();return b.x+b.width/2>=canvas.x&&b.x+b.width/2<=canvas.right&&b.y+b.height/2>=canvas.y&&b.y+b.height/2<=canvas.bottom}).length;
  });
- await expect.poll(visibleMarkers).toBe(372);
+ await expect.poll(visibleMarkers).toBe(8);
  for(const label of ['Joigny','Belan-sur-Ource','Chablis','Pruzilly','Marcy','Porte des Pierres Dorées']){
-  await communes.selectOption({label});await expect.poll(visibleMarkers).toBeLessThan(372);
+  await communes.selectOption({label});await expect.poll(visibleMarkers).toBeLessThan(8);
  }
  await expect(communes).toHaveValue('69114');
  await page.screenshot({path:testInfo.outputPath('cremant-de-bourgogne-320.png')});
- await dialog.getByRole('button',{name:'Region view',exact:true}).click();await expect.poll(visibleMarkers).toBe(372);
- expect([...new Set(downloads)]).toEqual([new URL('/maps/cremant-de-bourgogne.2026-09-21.pbf.gz',page.url()).href]);
+ await dialog.getByRole('button',{name:'Region view',exact:true}).click();await expect.poll(visibleMarkers).toBe(8);
+ expect([...new Set(downloads)]).toEqual([new URL('/maps/cremant-de-bourgogne.2026-09-21.overview.pbf.gz',page.url()).href]);
  expect(await dialog.evaluate(el=>el.scrollWidth<=el.clientWidth)).toBe(true);
  await page.setViewportSize({width:1280,height:900});
  await dialog.getByRole('button',{name:'Region view',exact:true}).click();
@@ -828,7 +842,7 @@ for(const route of allMapRoutes)test(`Broad Bourgogne ${route}: partial overview
  const downloads:string[]=[];page.on('request',r=>{if(r.url().includes('/maps/'))downloads.push(r.url())});
  await page.goto(route);expect(downloads).toEqual([]);
  // Exercise raw gzip decoding as well as the HTTP-decompressed slow-network case.
- await page.route('**/maps/bourgogne.*.pbf.gz',route=>route.fulfill({contentType:'application/gzip',path:'public/maps/bourgogne.2026-09-21.pbf.gz'}));
+ await page.route('**/maps/bourgogne.*.pbf.gz',route=>route.fulfill({contentType:'application/gzip',path:'public/maps/bourgogne.2026-09-21.overview.pbf.gz'}));
  await page.getByRole('button',{name:'View regional map'}).click();
  const dialog=page.getByRole('dialog',{name:'Bourgogne',exact:true});
  await expect(dialog.getByRole('button',{name:'Region view',exact:true})).toBeEnabled();
@@ -845,10 +859,10 @@ for(const route of allMapRoutes)test(`Broad Bourgogne ${route}: partial overview
   if(!canvas)return 0;
   return elements.filter(el=>{const b=el.getBoundingClientRect();return b.x+b.width/2>=canvas.x&&b.x+b.width/2<=canvas.right&&b.y+b.height/2>=canvas.y&&b.y+b.height/2<=canvas.bottom}).length;
  });
- await expect.poll(visibleMarkers).toBe(264);
+ await expect.poll(visibleMarkers).toBe(8);
  for(const label of ['Joigny','Dijon','La Salle']){
   await communes.selectOption({label});
-  await expect.poll(visibleMarkers).toBeLessThan(264);
+  await expect.poll(visibleMarkers).toBeLessThan(8);
   await expect(areas).toHaveValue('inao-denom-362');
  }
  await areas.selectOption('inao-denom-362-white-only');
@@ -857,7 +871,7 @@ for(const route of allMapRoutes)test(`Broad Bourgogne ${route}: partial overview
  await dialog.getByRole('button',{name:'Back to this wine'}).click();
  await expect(areas).toHaveValue('inao-denom-362');
  await dialog.getByRole('button',{name:'Region view',exact:true}).click();
- await expect.poll(visibleMarkers).toBe(264);
+ await expect.poll(visibleMarkers).toBe(8);
  expect([...new Set(downloads)]).toHaveLength(1);
  expect(downloads.every(url=>url.endsWith('.pbf.gz'))).toBe(true);
  expect(await dialog.evaluate(el=>el.scrollWidth<=el.clientWidth)).toBe(true);
