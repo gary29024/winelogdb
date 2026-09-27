@@ -1152,7 +1152,10 @@
         "Mâconnais",
         "Grand Auxerrois",
         "Yonne",
-        "Saône-et-Loire"
+        "Saône-et-Loire",
+        "Chablis",
+        "Chablis et Grand Auxerrois",
+        "Auxerrois"
       ],
       "wineColours": [
         "red",
@@ -1164,7 +1167,12 @@
       "conflictingNames": [
         "Gamay",
         "Bourgogne Grand Ordinaire",
-        "Bourgogne Ordinaire"
+        "Bourgogne Ordinaire",
+        "Aligoté",
+        "Passetoutgrain",
+        "Passetoutgrains",
+        "Passe-tout-grain",
+        "Passe-tout-grains"
       ],
       "broadAppellation": true,
       "featureId": "inao-denom-362"

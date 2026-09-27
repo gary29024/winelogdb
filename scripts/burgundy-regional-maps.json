@@ -2667,12 +2667,20 @@
         "Mâconnais",
         "Grand Auxerrois",
         "Yonne",
-        "Saône-et-Loire"
+        "Saône-et-Loire",
+        "Chablis",
+        "Chablis et Grand Auxerrois",
+        "Auxerrois"
       ],
       "conflictingNames": [
         "Gamay",
         "Bourgogne Grand Ordinaire",
-        "Bourgogne Ordinaire"
+        "Bourgogne Ordinaire",
+        "Aligoté",
+        "Passetoutgrain",
+        "Passetoutgrains",
+        "Passe-tout-grain",
+        "Passe-tout-grains"
       ],
       "coordinateGrid": 1e-09,
       "compactDownload": true,

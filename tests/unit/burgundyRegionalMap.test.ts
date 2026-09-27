@@ -260,10 +260,13 @@ describe('Yonne regional denominations',()=>{
   {appellation:'Bourgogne Côte Saint-Jacques',wineName:'Vin Gris',colour:'Red'},
   {appellation:'Bourgogne Côte Saint-Jacques',wineName:'Gevrey-Chambertin Clos Saint-Jacques'},
   {appellation:'Bourgogne Tonnerre',colour:'Gris'},
-  {appellation:'Bourgogne',region:'Auxerrois',wineName:'Gondonne'},
   {appellation:'Bourgogne',referenceSite:'Bourgogne Chitry'},
  ])('does not infer colour, tier, a neighbouring denomination or producer holding: %j',wine=>{
   expect(burgundyVillageMapTarget({...base,...wine})).toBeNull();
+ });
+ it('keeps an Auxerrois cuvée at broad Bourgogne rather than inferring Côtes d’Auxerre',()=>{
+  expect(burgundyVillageMapTarget({...base,appellation:'Bourgogne',region:'Auxerrois',wineName:'Gondonne'}))
+   .toMatchObject({villageId:'bourgogne',featureId:'inao-denom-362'});
  });
  it('preserves Chablis Montée de Tonnerre and Gevrey Clos Saint-Jacques',()=>{
   expect(burgundyVillageMapTarget({...base,region:'Yonne',appellation:'Chablis',wineName:'Montée de Tonnerre',classification:'premier_cru',colour:'White'}))
@@ -925,5 +928,37 @@ describe('broad Bourgogne does not infer a geographic denomination from context'
   {appellation:'Bourgogne Chardonnay'},
  ])('retains broad scope for %j',wine=>{
   expect(burgundyVillageMapTarget({...base,...wine})).toMatchObject({featureId:'inao-denom-362',scope:'appellation'});
+ });
+});
+
+describe('broad Bourgogne review cases',()=>{
+ it.each([
+  {appellation:'Bourgogne',wineName:'Aligoté',colour:'White'},
+  {appellation:'Bourgogne Blanc',wineName:'Aligoté Vieilles Vignes',colour:'White'},
+  {appellation:'Bourgogne',wineName:'Passetoutgrain'},
+  {appellation:'Bourgogne Rouge',wineName:'Passe-Tout-Grains'},
+ ])('does not read a separate regional AOC in the wine name as broad Bourgogne %j',wine=>{
+  expect(burgundyVillageMapTarget({...base,colour:'Red',...wine})).toBeNull();
+ });
+ it.each(['Chablis','Chablis et Grand Auxerrois','Auxerrois','Yonne'])('accepts a Yonne region recorded as %s',region=>{
+  expect(burgundyVillageMapTarget({...base,appellation:'Bourgogne',wineName:'Kimméridgien',producer:'Jean-Marc Brocard',colour:'White',region}))
+   .toMatchObject({featureId:'inao-denom-362',mapKind:'regional'});
+ });
+ it('still withholds a Chablis-region Bourgogne that names Chablis itself',()=>{
+  expect(burgundyVillageMapTarget({...base,appellation:'Bourgogne',wineName:'Chablis',colour:'White',region:'Chablis'})).toBeNull();
+ });
+ it.each([
+  {appellation:'Bourgogne Clairet',colour:'Rosé',featureId:'inao-denom-362'},
+  {appellation:'Bourgogne Clairet',featureId:'inao-denom-362'},
+  {appellation:'Bourgogne Hautes Côtes de Nuits Clairet',featureId:'inao-denom-364'},
+ ])('reads Clairet as rosé in $appellation',({featureId,...wine})=>{
+  expect(burgundyVillageMapTarget({...base,colour:null,...wine})).toMatchObject({featureId,mapKind:'regional'});
+ });
+ it.each([
+  {appellation:'Bourgogne Clairet',colour:'Red'},
+  {appellation:'Bourgogne Côte d’Or Clairet'},
+  {appellation:'Bourgogne Tonnerre Clairet'},
+ ])('withholds Clairet where rosé is not allowed or contradicted %j',wine=>{
+  expect(burgundyVillageMapTarget({...base,colour:null,...wine})).toBeNull();
  });
 });

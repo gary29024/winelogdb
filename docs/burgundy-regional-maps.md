@@ -38,6 +38,14 @@ through to this overview. “Vin de Bourgogne” origin wording in a wine name d
 not hide an otherwise valid explicit Mâcon identity. Existing colour, style,
 country, region, cru-tier and conflict guards remain in force.
 
+The same applies when those AOCs appear only in the wine name: **Bourgogne +
+“Aligoté”** or **Bourgogne + “Passetoutgrain(s)”** withholds the map, as Gamay
+already did. Yonne bottles may record the app's **Chablis** subregion (or
+Chablis et Grand Auxerrois / Auxerrois) as their region; these are accepted like
+Yonne and Grand Auxerrois, although the pinned source has no geometry for the
+Chablis commune itself. **Clairet**, the traditional Bourgogne rosé label word,
+counts as rosé wherever a regional denomination allows rosé.
+
 ### Reviewed geometry details
 
 - La Salle (`71494`, source area `1781`) has seven exterior rings and one
