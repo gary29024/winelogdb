@@ -12,8 +12,9 @@
             "Bourgogne",
             "Bourgogne - blanc exclusif"
           ],
-          "status": "pending",
-          "kind": "broad"
+          "status": "partial",
+          "kind": "broad",
+          "coverageNote": "All 295 rows of denomination 362 are retained across 264 communes; the source does not establish complete Bourgogne AOC or colour-specific coverage. Bourgogne Gamay remains unavailable."
         },
         {
           "denominationId": 363,

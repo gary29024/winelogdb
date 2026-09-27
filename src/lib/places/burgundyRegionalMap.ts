@@ -10,6 +10,7 @@ type Wine=WineFacts&{classification?:string|null;wineStyle?:string|null};
 const key=(text:string)=>placeKey(text).replace(/\bste\b/g,'sainte').replace(/\bst\b/g,'saint')
  .replace(/\b(?:aoc|aop|appellation controlee|appellation protegee)\b/g,' ').replace(/\s+/g,' ').trim();
 const contains=(text:string,name:string)=>` ${text} `.includes(` ${name} `);
+const withoutRegionalOrigin=(text:string)=>text.replace(/\b(?:vins? de bourgogne|wine of burgundy)\b/g,'').trim();
 // Hyphens become a marker word so a split village's neighbour stays visible.
 const joined='xjoinedx';
 // Unspaced hyphen, non-breaking hyphen and en dash all join words.
@@ -37,7 +38,8 @@ const withoutProducer=(label:string,producer:string)=>{
 const grapeColours:readonly (readonly [string,readonly string[]])[]=[['chardonnay',['white']],['pinot noir',['red','rose']],['gamay',['red','rose']]];
 const withoutGrapes=(text:string)=>grapeColours.reduce((value,[name])=>` ${value} `.replaceAll(` ${name} `,' ').trim(),text);
 const byLength=(a:string,b:string)=>b.length-a.length;
-const bourgogneAppellations=['bourgogne','burgundy','bourgogne rouge','bourgogne blanc','bourgogne rose'];
+// Clairet, like rosé, can precede a denomination recorded in the wine name.
+const bourgogneAppellations=['bourgogne','burgundy','bourgogne rouge','bourgogne blanc','bourgogne rose','bourgogne clairet'];
 const groups=registry.maps.map(group=>({...group,keys:group.aliases.map(key).sort(byLength),regions:group.compatibleRegions.map(key),
  broad:!!(group as {broadAppellation?:boolean}).broadAppellation,
  blockedKeys:((group as {conflictingNames?:string[]}).conflictingNames??[]).map(key),
@@ -90,14 +92,17 @@ export function burgundyRegionalMapTarget(wine:Wine):BurgundyVillageMapTarget|nu
  // Exact suffix validation keeps Mâcon-Villages distinct from Mâcon and avoids
  // turning an unknown "Mâcon <place>" into a broad match.
  const candidates=specific.length?specific:groups.filter(group=>group.broad&&group.keys.some(name=>
-  fields[0]===name||fields[0].startsWith(name+' ')&&['','blanc','white','rouge','red','rose'].includes(withoutGrapes(fields[0].slice(name.length).trim()))));
+  fields[0]===name||fields[0].startsWith(name+' ')&&['','blanc','white','rouge','red','rose','clairet'].includes(withoutGrapes(fields[0].slice(name.length).trim()))));
  if(!candidates.length)return undefined;
  if(candidates.length!==1||wine.identityMatchStatus==='conflict'||wine.classification)return null;
  const group=candidates[0],country=key(wine.country??''),region=key(wine.region??'');
  // Strip the broad name only after checking a competing broad identity. A
  // Mâcon-Villages label must not disappear into the generic word "Mâcon".
  if(group.broad&&fields.slice(1).some(text=>groups.some(other=>other.broad&&other.id!==group.id&&
-  other.keys.some(name=>contains(text,name)&&!group.keys.some(own=>contains(own,name))))))return null;
+  other.keys.some(name=>contains(withoutRegionalOrigin(text),name)&&!group.keys.some(own=>contains(own,name))))))return null;
+ // Check full pending AOC names before stripping a broad prefix: removing
+ // "Bourgogne" must not conceal "Bourgogne Aligoté" in a conflicting label.
+ if(group.broad&&fields.some(text=>otherRegionals.some(name=>contains(text,name)&&!group.keys.some(own=>contains(own,name)))))return null;
  if(fields.some(text=>group.blockedKeys.some(name=>contains(text,name))))return null;
  if(country&&!['france','fr'].includes(country))return null;
  if(region&&!group.regions.includes(region)&&!group.keys.includes(region))return null;
@@ -121,19 +126,23 @@ export function burgundyRegionalMapTarget(wine:Wine):BurgundyVillageMapTarget|nu
   .reduce((value,name)=>` ${value} `.replaceAll(` ${name} `,' ').trim(),text);
  const app=fields[0];
  if(app&&!plainAppellation(group)&&
-  (!group.keys.some(name=>contains(app,name))||!['','rouge','blanc','rose','red','white',...(vinGris?['gris','vin gris']:[])].includes(withoutGrapes(removeDesignation(app)))))return null;
+  (!group.keys.some(name=>contains(app,name))||!['','rouge','blanc','rose','clairet','red','white',...(vinGris?['gris','vin gris']:[])].includes(withoutGrapes(removeDesignation(app)))))return null;
  // A cuvée/reference name alone must not infer its regional denomination,
  // except a reviewed site name beside its explicit base appellation.
  if(!fields.slice(0,2).some(text=>group.keys.some(name=>contains(text,name)))&&!namesSite(group))return null;
  const remaining=fields.map((text,index)=>{
   if(index===1&&producer)text=` ${text} `.replaceAll(` ${producer} `,' ').trim();
+  // Remove origin wording only after full denomination/conflict checks, so
+  // "Vin de Bourgogne Aligoté" cannot become an apparently harmless "Aligoté".
+  if(index!==0)text=withoutRegionalOrigin(text);
   return removeDesignation(text);
  });
  if(remaining.some((text,index)=>/\b(?:grands? crus?|premiers? crus?|1ers?|1st cru|cremant|mousseux)\b/.test(text)||
   (!(index===0&&plainAppellation(group))&&conflictingNames.some(name=>contains(text,name)))))return null;
  // Label colour must also agree with the denomination, even if the explicit
  // colour/style is absent. Côte d'Or does not include rosé.
- const labelColours=[['rouge','red'],['red','red'],['blanc','white'],['white','white'],['rose','rose']] as const;
+ // Clairet is the traditional label word for a Bourgogne rosé.
+ const labelColours=[['rouge','red'],['red','red'],['blanc','white'],['white','white'],['rose','rose'],['clairet','rose']] as const;
  const namedColours=labelColours.filter(([name])=>remaining.slice(0,2).some(text=>contains(text,name))).map(([,value])=>value);
  if(vinGris&&(['gris','vin gris'].includes(remaining[0])||remaining.slice(0,2).some(text=>contains(text,'vin gris'))))namedColours.push('rose');
  if(new Set(namedColours).size>1)return null;

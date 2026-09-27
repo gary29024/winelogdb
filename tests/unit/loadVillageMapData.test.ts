@@ -5,19 +5,20 @@ import { isDeepStrictEqual } from 'node:util';
 import { loadVillageMapData } from '../../src/lib/places/loadVillageMapData';
 import macon from '../../src/lib/places/maconMapCatalogue.json';
 import villages from '../../src/lib/places/macon-villagesMapCatalogue.json';
+import bourgogne from '../../src/lib/places/bourgogneMapCatalogue.json';
 
 afterEach(()=>vi.unstubAllGlobals());
 const packed=(url:string)=>Uint8Array.from(readFileSync(`public${url}`));
 
 describe('compact boundary downloads',()=>{
- for(const catalogue of [macon,villages]){
-  it(`restores every coordinate and property of ${catalogue.name} at under 60% of gzipped GeoJSON size`,async()=>{
+ for(const [catalogue,ratio] of [[macon,.6],[villages,.6],[bourgogne,.65]] as const){
+  it(`restores every coordinate and property of ${catalogue.name} within its download budget`,async()=>{
    const raw=readFileSync(`public${catalogue.dataUrl}`),bytes=packed(catalogue.geobufUrl);
    const fetcher=vi.fn(async()=>new Response(bytes));vi.stubGlobal('fetch',fetcher);
    const signal=new AbortController().signal;
    const actual=await loadVillageMapData(catalogue,signal);
    expect(isDeepStrictEqual(actual,JSON.parse(raw.toString()))).toBe(true);
-   expect(bytes.byteLength).toBeLessThan(gzipSync(raw).byteLength*.6);
+   expect(bytes.byteLength).toBeLessThan(gzipSync(raw).byteLength*ratio);
    expect(fetcher).toHaveBeenCalledExactlyOnceWith(catalogue.geobufUrl,{signal});
   });
  }

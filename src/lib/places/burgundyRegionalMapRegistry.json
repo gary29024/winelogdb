@@ -1132,6 +1132,50 @@
       "baseAppellations": [],
       "broadAppellation": true,
       "featureId": "inao-denom-2893"
+    },
+    {
+      "id": "bourgogne",
+      "name": "Bourgogne",
+      "region": "Burgundy",
+      "aliases": [
+        "Bourgogne"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Côte d’Or",
+        "Côte de Nuits",
+        "Côte de Beaune",
+        "Hautes Côtes de Nuits",
+        "Hautes Côtes de Beaune",
+        "Côte Chalonnaise",
+        "Mâconnais",
+        "Grand Auxerrois",
+        "Yonne",
+        "Saône-et-Loire",
+        "Chablis",
+        "Chablis et Grand Auxerrois",
+        "Auxerrois"
+      ],
+      "wineColours": [
+        "red",
+        "white",
+        "rose"
+      ],
+      "siteNames": [],
+      "baseAppellations": [],
+      "conflictingNames": [
+        "Gamay",
+        "Bourgogne Grand Ordinaire",
+        "Bourgogne Ordinaire",
+        "Aligoté",
+        "Passetoutgrain",
+        "Passetoutgrains",
+        "Passe-tout-grain",
+        "Passe-tout-grains"
+      ],
+      "broadAppellation": true,
+      "featureId": "inao-denom-362"
     }
   ],
   "otherAppellations": [

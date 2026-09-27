@@ -12,7 +12,7 @@ const base={country:'France',region:'Burgundy',classification:null,productType:'
 // existing producer/reference safeguards must still never infer a named place.
 function expectNoNamedMacon(wine:Parameters<typeof burgundyVillageMapTarget>[0]){
  const target=burgundyVillageMapTarget(wine);
- if(target?.mapKind==='regional')expect(['macon','macon-villages']).toContain(target.villageId);
+ if(target?.mapKind==='regional')expect(['macon','macon-villages','bourgogne']).toContain(target.villageId);
 }
 const cases=[
  ['Bourgogne Côte d’Or','bourgogne-cote-dor','inao-denom-2840',40,['Red','White']],
@@ -58,6 +58,7 @@ const cases=[
  ['Mâcon Uchizy','macon-uchizy','inao-denom-2073',1,['White']],
 ] as const;
 const broadCases=[
+ ['Bourgogne','bourgogne','inao-denom-362',264,['Red','White','Rosé']],
  ['Mâcon','macon','inao-denom-1713',88,['Red','White','Rosé']],
  ['Mâcon-Villages','macon-villages','inao-denom-2893',80,['White']],
 ] as const;
@@ -101,7 +102,7 @@ describe('regional denominations stay separate from villages and named vineyards
   expect(inventory.appellations.find(a=>a.appellationId===138)!.denominations).toHaveLength(15);
   const bourgogne=inventory.appellations.find(a=>a.appellationId===138)!.denominations;
   expect(bourgogne.filter(d=>d.denominationId!==362).every(d=>d.status==='mapped')).toBe(true);
-  expect(bourgogne.find(d=>d.denominationId===362)!.status).toBe('pending');
+  expect(bourgogne.find(d=>d.denominationId===362)!.status).toBe('partial');
   expect(inventory.appellations.find(a=>a.appellationId===583)!.denominations).toHaveLength(29);
   expect(villages.villages).toHaveLength(44);
  });
@@ -137,11 +138,7 @@ describe('regional denominations stay separate from villages and named vineyards
   expect(burgundyVillageMapTarget({...base,appellation:'Bourgogne Hautes Côtes de Nuits',wineName:'Hautes Côtes de Nuits',...overrides})).toBeNull();
  });
  it.each([
-  {appellation:'Bourgogne',region:'Côte d’Or'},
-  {appellation:'Bourgogne',region:'Hautes Côtes de Nuits'},
   {appellation:'Bourgogne',referenceSite:'Hautes Côtes de Nuits'},
-  {appellation:'Bourgogne',wineName:'Clos Saint-Philibert'},
-  {appellation:'Bourgogne',wineName:'Cuvée Marine',producer:'Anne Gros'},
   {appellation:'Bourgogne Côte d’Or',colour:'Rosé'},
   {appellation:'Bourgogne Côte d’Or',wineName:'Rosé'},
   {appellation:'Bourgogne Côte d’Or',wineStyle:'rose'},
@@ -193,12 +190,8 @@ describe('Côte Chalonnaise and Couchois regional labels',()=>{
   });
  }
  it.each([
-  {appellation:'Bourgogne',region:'Côte Chalonnaise'},
   {appellation:'Bourgogne',region:'Couchois'},
   {appellation:'Bourgogne',region:'Côtes du Couchois'},
-  {appellation:'Bourgogne',wineName:'Côte Chalonnaise'},
-  {appellation:'Bourgogne',wineName:'Sous le Clos',producer:'Domaine Lacour'},
-  {appellation:'Bourgogne',wineName:'Clos Marguerite À la Folie',producer:'Château de Couches'},
   {appellation:'Bourgogne',referenceParcel:'Bourgogne Côtes du Couchois'},
  ])('does not infer a regional denomination from geography or a cuvée %j',wine=>{
   expect(burgundyVillageMapTarget({...base,...wine})).toBeNull();
@@ -267,15 +260,13 @@ describe('Yonne regional denominations',()=>{
   {appellation:'Bourgogne Côte Saint-Jacques',wineName:'Vin Gris',colour:'Red'},
   {appellation:'Bourgogne Côte Saint-Jacques',wineName:'Gevrey-Chambertin Clos Saint-Jacques'},
   {appellation:'Bourgogne Tonnerre',colour:'Gris'},
-  {appellation:'Bourgogne',region:'Yonne',wineName:'Tonnerre'},
-  {appellation:'Bourgogne',region:'Auxerrois',wineName:'Gondonne'},
-  {appellation:'Bourgogne',wineName:'Olympe',producer:'Olivier Morin'},
-  {appellation:'Bourgogne',wineName:'Chanvan',producer:'Domaine du Clos du Roi'},
-  {appellation:'Bourgogne',wineName:'Les Ronces',producer:'Alain Vignot'},
-  {appellation:'Bourgogne',wineName:'Vaumorillon',producer:'Famille Moutard'},
   {appellation:'Bourgogne',referenceSite:'Bourgogne Chitry'},
  ])('does not infer colour, tier, a neighbouring denomination or producer holding: %j',wine=>{
   expect(burgundyVillageMapTarget({...base,...wine})).toBeNull();
+ });
+ it('keeps an Auxerrois cuvée at broad Bourgogne rather than inferring Côtes d’Auxerre',()=>{
+  expect(burgundyVillageMapTarget({...base,appellation:'Bourgogne',region:'Auxerrois',wineName:'Gondonne'}))
+   .toMatchObject({villageId:'bourgogne',featureId:'inao-denom-362'});
  });
  it('preserves Chablis Montée de Tonnerre and Gevrey Clos Saint-Jacques',()=>{
   expect(burgundyVillageMapTarget({...base,region:'Yonne',appellation:'Chablis',wineName:'Montée de Tonnerre',classification:'premier_cru',colour:'White'}))
@@ -303,7 +294,7 @@ function assertGeometry(catalogue:VillageMapCatalogue,data:{features:{properties
    expect(ring[0]).toEqual(ring.at(-1));
    for(const [lon,lat] of ring){
     if(lon<3.2||lon>5.3||lat<46.2||lat>48.1)throw new Error(`Out-of-region coordinate in ${catalogue.name}`);
-    if([lon,lat].some(value=>Math.abs(value/grid-Math.round(value/grid))>0.000001))throw new Error(`Coordinate exceeds reviewed precision in ${catalogue.name}`);
+    if([lon,lat].some(value=>Math.abs(value-Math.round(value/grid)*grid)>Number.EPSILON*Math.abs(value)*2))throw new Error(`Coordinate exceeds reviewed precision in ${catalogue.name}`);
    }
   }
  }
@@ -383,7 +374,7 @@ describe('small Côte d’Or regional denominations',()=>{
   for(const year of [2018,2019]){
    expect(burgundyVillageMapTarget({...base,appellation:'Bourgogne Le Chapitre',wineName:`Le Chapitre ${year}`}))
     .toMatchObject({featureId:'inao-denom-372',scope:'appellation'});
-   expect(burgundyVillageMapTarget({...base,appellation:'Bourgogne',wineName:`Le Chapitre ${year}`})).toBeNull();
+   expect(burgundyVillageMapTarget({...base,appellation:'Bourgogne',wineName:`Le Chapitre ${year}`})).toMatchObject({featureId:'inao-denom-362',scope:'appellation'});
   }
  });
  it('explains the historic Le Chapitre identity without reusing its boundary for Marsannay',async()=>{
@@ -413,7 +404,6 @@ describe('small Côte d’Or regional denominations',()=>{
  it.each([
   {appellation:'Marsannay',wineName:'Bourgogne Le Chapitre'},
   {appellation:'Bourgogne Le Chapitre',wineName:'Marsannay Le Chapitre'},
-  {appellation:'Bourgogne',wineName:'Le Chapitre',producer:'Domaine Jean Fournier'},
   {appellation:'Bourgogne',referenceParcel:'Bourgogne Montrecul'},
   {appellation:'La Chapelle Notre-Dame'},{appellation:'Le Chapitre'},{appellation:'Montrecul'},
   {appellation:null,wineName:'Montrecul'},
@@ -484,7 +474,7 @@ describe('southern Mâcon geographic denominations',()=>{
     {appellation:'Bourgogne',wineName:site},{appellation:'Mâcon-Villages',wineName:site},
     {appellation:'Pouilly-Fuissé',wineName:site},{appellation:'Bourgogne',wineName:appellation}]){
     const target=burgundyVillageMapTarget({...base,...wine});
-    if(target?.mapKind==='regional')expect(['macon','macon-villages']).toContain(target.villageId);
+    if(target?.mapKind==='regional')expect(['macon','macon-villages','bourgogne']).toContain(target.villageId);
    }
   });
  }
@@ -802,7 +792,6 @@ describe('grape names after a full regional denomination',()=>{
   {appellation:'Mâcon Fuissé Gamay'},
   {appellation:'Mâcon Bray Blanc Gamay'},
   {appellation:'Bourgogne Tonnerre Pinot Noir'},
-  {appellation:'Bourgogne Chardonnay'},
   {appellation:'Mâcon Lugny Aligoté'},
   {appellation:'Bourgogne Côte d’Or Pinot Noir',colour:'Rosé'},
   {appellation:'Bourgogne Côte d’Or Rosé Pinot Noir'},
@@ -916,5 +905,85 @@ describe('Mâcon Supérieur, the former grade of broad Mâcon',()=>{
   expect(note).toContain('Mâcon Supérieur');
   expect(note).toContain('2026 INAO source');
   expect(note).toContain("not the boundary for an older bottle's vintage");
+ });
+});
+
+
+describe('broad Bourgogne does not infer a geographic denomination from context',()=>{
+ it.each([
+  {appellation:'Bourgogne',region:'Côte d’Or'},
+  {appellation:'Bourgogne',region:'Hautes Côtes de Nuits'},
+  {appellation:'Bourgogne',wineName:'Clos Saint-Philibert'},
+  {appellation:'Bourgogne',wineName:'Cuvée Marine',producer:'Anne Gros'},
+  {appellation:'Bourgogne',region:'Côte Chalonnaise'},
+  {appellation:'Bourgogne',wineName:'Côte Chalonnaise'},
+  {appellation:'Bourgogne',wineName:'Sous le Clos',producer:'Domaine Lacour'},
+  {appellation:'Bourgogne',wineName:'Clos Marguerite À la Folie',producer:'Château de Couches'},
+  {appellation:'Bourgogne',region:'Yonne',wineName:'Tonnerre'},
+  {appellation:'Bourgogne',wineName:'Olympe',producer:'Olivier Morin'},
+  {appellation:'Bourgogne',wineName:'Chanvan',producer:'Domaine du Clos du Roi'},
+  {appellation:'Bourgogne',wineName:'Les Ronces',producer:'Alain Vignot'},
+  {appellation:'Bourgogne',wineName:'Vaumorillon',producer:'Famille Moutard'},
+  {appellation:'Bourgogne',wineName:'Le Chapitre',producer:'Domaine Jean Fournier'},
+  {appellation:'Bourgogne Chardonnay'},
+ ])('retains broad scope for %j',wine=>{
+  expect(burgundyVillageMapTarget({...base,...wine})).toMatchObject({featureId:'inao-denom-362',scope:'appellation'});
+ });
+});
+
+describe('broad Bourgogne review cases',()=>{
+ it.each([
+  {appellation:'Bourgogne',wineName:'Aligoté',colour:'White'},
+  {appellation:'Bourgogne Blanc',wineName:'Aligoté Vieilles Vignes',colour:'White'},
+  {appellation:'Bourgogne',wineName:'Passetoutgrain'},
+  {appellation:'Bourgogne Rouge',wineName:'Passe-Tout-Grains'},
+ ])('does not read a separate regional AOC in the wine name as broad Bourgogne %j',wine=>{
+  expect(burgundyVillageMapTarget({...base,colour:'Red',...wine})).toBeNull();
+ });
+ it.each(['Chablis','Chablis et Grand Auxerrois','Auxerrois','Yonne'])('accepts a Yonne region recorded as %s',region=>{
+  expect(burgundyVillageMapTarget({...base,appellation:'Bourgogne',wineName:'Kimméridgien',producer:'Jean-Marc Brocard',colour:'White',region}))
+   .toMatchObject({featureId:'inao-denom-362',mapKind:'regional'});
+ });
+ it('still withholds a Chablis-region Bourgogne that names Chablis itself',()=>{
+  expect(burgundyVillageMapTarget({...base,appellation:'Bourgogne',wineName:'Chablis',colour:'White',region:'Chablis'})).toBeNull();
+ });
+ it.each([
+  {appellation:'Bourgogne Clairet',colour:'Rosé',featureId:'inao-denom-362'},
+  {appellation:'Bourgogne Clairet',featureId:'inao-denom-362'},
+  {appellation:'Bourgogne Hautes Côtes de Nuits Clairet',featureId:'inao-denom-364'},
+ ])('reads Clairet as rosé in $appellation',({featureId,...wine})=>{
+  expect(burgundyVillageMapTarget({...base,colour:null,...wine})).toMatchObject({featureId,mapKind:'regional'});
+ });
+ it.each([
+  {appellation:'Bourgogne Clairet',colour:'Red'},
+  {appellation:'Bourgogne Côte d’Or Clairet'},
+  {appellation:'Bourgogne Tonnerre Clairet'},
+ ])('withholds Clairet where rosé is not allowed or contradicted %j',wine=>{
+  expect(burgundyVillageMapTarget({...base,colour:null,...wine})).toBeNull();
+ });
+ it.each([
+  ['Bourgogne Hautes Côtes de Nuits','inao-denom-364'],
+  ['Bourgogne Chitry','inao-denom-367'],
+  ['Montrecul','inao-denom-373'],
+  ['La Chapelle Notre-Dame','inao-denom-371'],
+ ])('keeps a split Clairet label on its specific denomination: %s',(wineName,featureId)=>{
+  expect(burgundyVillageMapTarget({...base,appellation:'Bourgogne Clairet',wineName,colour:'Rosé'}))
+   .toMatchObject({featureId,scope:'appellation',mapKind:'regional'});
+ });
+ it.each([
+  {wineName:'Bourgogne Côte d’Or'}, {wineName:'Bourgogne Tonnerre'},
+  {wineName:'Bourgogne Côtes du Couchois'}, {wineName:'Montrecul',colour:'Red'},
+  {wineName:'Bourgogne Chitry',wineStyle:'white'},
+  {wineName:'Montrecul La Chapelle Notre-Dame'},
+ ])('keeps split Clairet colour and identity guards %j',wine=>{
+  expect(burgundyVillageMapTarget({...base,appellation:'Bourgogne Clairet',...wine})).toBeNull();
+ });
+ it('keeps the six Grand Auxerrois denominations distinct from the Chablis subregion',()=>{
+  for(const [appellation] of cases.slice(5,11)){
+   expect(burgundyVillageMapTarget({...base,appellation,region:'Chablis'})).toBeNull();
+   expect(burgundyVillageMapTarget({...base,appellation,region:'Chablis et Grand Auxerrois'}))
+    .toMatchObject({villageName:appellation,mapKind:'regional'});
+  }
+  expect(burgundyVillageMapTarget({...base,appellation:null,region:'Chablis et Grand Auxerrois'})).toBeNull();
  });
 });
