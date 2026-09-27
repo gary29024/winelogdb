@@ -580,6 +580,33 @@ for(const [appellation,id,maxBytes,timeout] of [['Mâcon','macon',1400000,20000]
  await network.detach();
 });
 
+for(const route of allMapRoutes)test(`Bourgogne review labels ${route}: Clairet, separate AOCs and region scope`,async({page})=>{
+ await page.setViewportSize({width:320,height:900});
+ for(const [appellation,wineName,region,colour,expected] of [
+  ['Bourgogne Clairet','Montrecul','Côte d’Or','rose','Bourgogne Montrecul'],
+  ['Bourgogne','Kimméridgien','Chablis','white','Bourgogne'],
+ ] as const){
+  await setup(page,{appellation,wineName,region,colour,wineStyle:colour,classification:null});
+  await page.goto(route);
+  await page.getByRole('button',{name:'View regional map'}).click();
+  const dialog=page.getByRole('dialog',{name:expected,exact:true});
+  await expect(dialog.getByRole('button',{name:'Region view',exact:true})).toBeEnabled();
+  await expect(dialog.getByRole('heading',{name:expected,exact:true})).toHaveCount(2);
+  if(expected==='Bourgogne')await expect(dialog.locator('.village-map-description')).toContainText('Partial appellation overview');
+  await page.keyboard.press('Escape');
+ }
+ for(const [appellation,wineName,region,colour] of [
+  ['Bourgogne','Aligoté','Burgundy','white'],
+  ['Bourgogne','Passe-Tout-Grains','Burgundy','red'],
+  ['Bourgogne Clairet','Montrecul','Côte d’Or','red'],
+  ['Bourgogne Chitry','Olympe','Chablis','white'],
+ ] as const){
+  await setup(page,{appellation,wineName,region,colour,wineStyle:colour,classification:null});
+  await page.goto(route);
+  await expect(page.getByRole('button',{name:'View regional map'})).toHaveCount(0);
+ }
+});
+
 for(const route of allMapRoutes)test(`Broad Bourgogne ${route}: partial overview and white-only sector`,async({page},testInfo)=>{
  await page.setViewportSize({width:320,height:900});
  await setup(page,{appellation:'Bourgogne',wineName:'Les Graviers',classification:null,colour:'White',wineStyle:'white',region:'Burgundy'});

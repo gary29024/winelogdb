@@ -961,4 +961,29 @@ describe('broad Bourgogne review cases',()=>{
  ])('withholds Clairet where rosé is not allowed or contradicted %j',wine=>{
   expect(burgundyVillageMapTarget({...base,colour:null,...wine})).toBeNull();
  });
+ it.each([
+  ['Bourgogne Hautes Côtes de Nuits','inao-denom-364'],
+  ['Bourgogne Chitry','inao-denom-367'],
+  ['Montrecul','inao-denom-373'],
+  ['La Chapelle Notre-Dame','inao-denom-371'],
+ ])('keeps a split Clairet label on its specific denomination: %s',(wineName,featureId)=>{
+  expect(burgundyVillageMapTarget({...base,appellation:'Bourgogne Clairet',wineName,colour:'Rosé'}))
+   .toMatchObject({featureId,scope:'appellation',mapKind:'regional'});
+ });
+ it.each([
+  {wineName:'Bourgogne Côte d’Or'}, {wineName:'Bourgogne Tonnerre'},
+  {wineName:'Bourgogne Côtes du Couchois'}, {wineName:'Montrecul',colour:'Red'},
+  {wineName:'Bourgogne Chitry',wineStyle:'white'},
+  {wineName:'Montrecul La Chapelle Notre-Dame'},
+ ])('keeps split Clairet colour and identity guards %j',wine=>{
+  expect(burgundyVillageMapTarget({...base,appellation:'Bourgogne Clairet',...wine})).toBeNull();
+ });
+ it('keeps the six Grand Auxerrois denominations distinct from the Chablis subregion',()=>{
+  for(const [appellation] of cases.slice(5,11)){
+   expect(burgundyVillageMapTarget({...base,appellation,region:'Chablis'})).toBeNull();
+   expect(burgundyVillageMapTarget({...base,appellation,region:'Chablis et Grand Auxerrois'}))
+    .toMatchObject({villageName:appellation,mapKind:'regional'});
+  }
+  expect(burgundyVillageMapTarget({...base,appellation:null,region:'Chablis et Grand Auxerrois'})).toBeNull();
+ });
 });

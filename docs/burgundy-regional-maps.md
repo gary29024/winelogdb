@@ -40,11 +40,22 @@ country, region, cru-tier and conflict guards remain in force.
 
 The same applies when those AOCs appear only in the wine name: **Bourgogne +
 “Aligoté”** or **Bourgogne + “Passetoutgrain(s)”** withholds the map, as Gamay
-already did. Yonne bottles may record the app's **Chablis** subregion (or
-Chablis et Grand Auxerrois / Auxerrois) as their region; these are accepted like
-Yonne and Grand Auxerrois, although the pinned source has no geometry for the
-Chablis commune itself. **Clairet**, the traditional Bourgogne rosé label word,
-counts as rosé wherever a regional denomination allows rosé.
+already did. Broad Bourgogne can come from both **Chablis** and **Grand Auxerrois**,
+as the [BIVB regional overview](https://www.bourgogne-wines.com/wine-and-terroir/our-vineyards/chablis-and-the-grand-auxerrois/chablis-and-grand-auxerrois-the-green-gold-of-the-bourgogne-region,2469,9312.html)
+confirms. Broad Bourgogne therefore accepts Chablis, Chablis et Grand Auxerrois
+and Auxerrois region context, although the pinned source has no geometry for the
+Chablis commune itself. This does **not** make Chablis an alias for all Yonne:
+the hierarchy places Grand Auxerrois village AOCs beside Chablis, and BIVB
+distinguishes the six Grand Auxerrois geographic denominations. Those six keep
+their existing Yonne/Grand Auxerrois/combined-region compatibility and continue
+to reject the narrower Chablis region. A region alone never identifies an AOC.
+
+**Clairet** is a rosé label word, also reflected in
+[INAO's denomination names](https://www.inao.gouv.fr/produit/bourgogne-le-chapitre-clairet-ou-rose-24534).
+It still has to agree with the denomination and recorded colour/style. A split
+record such as appellation `Bourgogne Clairet` plus wine name `Montrecul` must
+select the reviewed Montrecul denomination just as `Bourgogne Rosé` does;
+two competing named denominations still withhold the map.
 
 ### Reviewed geometry details
 
@@ -84,10 +95,16 @@ Regression coverage checks all communes, separate sector selection, partial
 wording, broad/specific matching, exact decoding, lazy loading, owner/shared
 views at phone/desktop widths, and the complete uncached boundary download at
 1 Mbps with 150 ms latency (code warmed separately): **3,603,062 bytes** transferred
-and **29,639 ms** to map-ready in Chromium. All **4,699 unit tests**, **11 browser
-checks** (Chromium and mobile WebKit), lint and production build pass. The
+and **29,639 ms** to map-ready in Chromium. Initial rollout validation passed
+**4,699 unit tests**, **11 browser checks** (Chromium and mobile WebKit), lint
+and production build. The
 WebKit CDP-throttling case is intentionally skipped. A complete regional rebuild
 reproduces every generated output; all earlier maps/catalogues remain unchanged.
+Review follow-up validation passes **4,725 unit tests**, **8 targeted browser
+checks** (owner/shared routes in Chromium and mobile WebKit), lint and production
+build. The new cases cover split Clairet labels, separate AOCs and region scope;
+five split-label regressions fail before the matching fix. A fresh source rebuild
+leaves all **180 generated files** byte-for-byte unchanged.
 Earlier-map optimisation
 is tracked separately in [issue #363](https://github.com/gary29024/winelogdb/issues/363).
 

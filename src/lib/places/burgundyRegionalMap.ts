@@ -38,7 +38,8 @@ const withoutProducer=(label:string,producer:string)=>{
 const grapeColours:readonly (readonly [string,readonly string[]])[]=[['chardonnay',['white']],['pinot noir',['red','rose']],['gamay',['red','rose']]];
 const withoutGrapes=(text:string)=>grapeColours.reduce((value,[name])=>` ${value} `.replaceAll(` ${name} `,' ').trim(),text);
 const byLength=(a:string,b:string)=>b.length-a.length;
-const bourgogneAppellations=['bourgogne','burgundy','bourgogne rouge','bourgogne blanc','bourgogne rose'];
+// Clairet, like rosé, can precede a denomination recorded in the wine name.
+const bourgogneAppellations=['bourgogne','burgundy','bourgogne rouge','bourgogne blanc','bourgogne rose','bourgogne clairet'];
 const groups=registry.maps.map(group=>({...group,keys:group.aliases.map(key).sort(byLength),regions:group.compatibleRegions.map(key),
  broad:!!(group as {broadAppellation?:boolean}).broadAppellation,
  blockedKeys:((group as {conflictingNames?:string[]}).conflictingNames??[]).map(key),
