@@ -10,12 +10,35 @@ type Wine=WineFacts&{classification?:string|null;wineStyle?:string|null};
 const key=(text:string)=>placeKey(text).replace(/\bste\b/g,'sainte').replace(/\bst\b/g,'saint')
  .replace(/\b(?:aoc|aop|appellation controlee|appellation protegee)\b/g,' ').replace(/\s+/g,' ').trim();
 const contains=(text:string,name:string)=>` ${text} `.includes(` ${name} `);
+// Hyphens become a marker word so a split village's neighbour stays visible.
+const joined='xjoinedx';
+// Unspaced hyphen, non-breaking hyphen and en dash all join words.
+const joinedKey=(text:string)=>key(text.replace(/([\p{L}\d])[-\u2010-\u2013](?=[\p{L}\d])/gu,`$1 ${joined} `));
+// Removes a producer however its words are joined (Prissé-Sologny vs Prissé Sologny).
+const withoutProducer=(label:string,producer:string)=>{
+ const words=label.split(' ').filter(Boolean),name=producer.split(' ').filter(Boolean);
+ if(!name.length)return label;
+ const kept:string[]=[];
+ for(let i=0;i<words.length;){
+  let j=i,k=0;
+  while(j<words.length&&k<name.length){
+   if(words[j]===joined&&k>0){j++;continue;}
+   if(words[j]!==name[k])break;
+   j++;k++;
+  }
+  if(k===name.length){i=j;continue;}
+  kept.push(words[i++]);
+ }
+ return kept.join(' ');
+};
 const byLength=(a:string,b:string)=>b.length-a.length;
 const bourgogneAppellations=['bourgogne','burgundy','bourgogne rouge','bourgogne blanc','bourgogne rose'];
 const groups=registry.maps.map(group=>({...group,keys:group.aliases.map(key).sort(byLength),regions:group.compatibleRegions.map(key),
  // A split label requires its own base AOC: Mâcon + Fuissé is not Bourgogne + Fuissé.
  baseKeys:((group as {baseAppellations?:string[]}).baseAppellations??bourgogneAppellations).map(key),
- siteKeys:((group as {siteNames?:string[]}).siteNames??[]).map(key).sort(byLength)}));
+ siteKeys:((group as {siteNames?:string[]}).siteNames??[]).map(key).sort(byLength),
+ // Hyphenated site names (Solutré-Pouilly) match written either way.
+ joinedSiteKeys:((group as {siteNames?:string[]}).siteNames??[]).flatMap(name=>[key(name),joinedKey(name)])}));
 const higherNames=[...new Set([
  ...villages.villages.map(village=>key(village.name)),
  ...PLACES.filter(place=>place.id.startsWith('france/burgundy/')&&place.classification)
@@ -28,11 +51,14 @@ const conflictingNames=[...new Set([...higherNames,...otherRegionals])];
 
 // A village in a producer or landmark name (Château-Fuissé, Domaine de Fuissé,
 // Cave de Charnay, Roche de Solutré) is not the denomination on the label.
-const ownerWords=new Set(['de','du','des','d','chateau','domaine','cave','caves','cellier','maison','clos','roche']);
+// Nor is one hyphenated, on either side, into a longer proper name
+// (Cave de Prissé-Sologny-Verzé).
+const ownerWords=new Set(['de','du','des','d','chateau','domaine','cave','caves','cellier','maison','clos','roche',joined]);
 const namesPlace=(text:string,name:string)=>{
  const words=` ${text} `,needle=` ${name} `;
  for(let at=words.indexOf(needle);at>=0;at=words.indexOf(needle,at+1)){
-  if(!ownerWords.has(words.slice(0,at).trim().split(' ').pop()??''))return true;
+  const before=words.slice(0,at).trim().split(' ').pop()??'',after=words.slice(at+needle.length).split(' ')[0];
+  if(!ownerWords.has(before)&&after!==joined)return true;
  }
  return false;
 };
@@ -45,7 +71,8 @@ export function burgundyRegionalMapTarget(wine:Wine):BurgundyVillageMapTarget|nu
  const producer=key(wine.producer??'');
  const wineLabel=producer?` ${fields[1]} `.replaceAll(` ${producer} `,' ').trim():fields[1];
  const plainAppellation=(group:typeof groups[number])=>group.baseKeys.includes(fields[0]);
- const namesSite=(group:typeof groups[number])=>plainAppellation(group)&&group.siteKeys.some(name=>namesPlace(wineLabel,name));
+ const joinedLabel=withoutProducer(joinedKey(wine.wineName??''),producer);
+ const namesSite=(group:typeof groups[number])=>plainAppellation(group)&&group.joinedSiteKeys.some(name=>namesPlace(joinedLabel,name));
  const candidates=groups.filter(group=>fields.some(text=>group.keys.some(name=>contains(text,name)))||namesSite(group));
  if(!candidates.length)return undefined;
  if(candidates.length!==1||wine.identityMatchStatus==='conflict'||wine.classification)return null;

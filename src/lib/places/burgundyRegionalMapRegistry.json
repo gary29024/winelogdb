@@ -710,6 +710,209 @@
         "Mâcon Rosé"
       ],
       "featureId": "inao-denom-1735"
+    },
+    {
+      "id": "macon-aze",
+      "name": "Mâcon Azé",
+      "region": "Mâconnais",
+      "aliases": [
+        "Mâcon Azé"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Mâconnais",
+        "Saône-et-Loire"
+      ],
+      "wineColours": [
+        "red",
+        "white",
+        "rose"
+      ],
+      "siteNames": [
+        "Azé"
+      ],
+      "baseAppellations": [
+        "Mâcon",
+        "Mâcon Blanc",
+        "Mâcon Rouge",
+        "Mâcon Rosé"
+      ],
+      "featureId": "inao-denom-1712"
+    },
+    {
+      "id": "macon-burgy",
+      "name": "Mâcon Burgy",
+      "region": "Mâconnais",
+      "aliases": [
+        "Mâcon Burgy"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Mâconnais",
+        "Saône-et-Loire"
+      ],
+      "wineColours": [
+        "red",
+        "white",
+        "rose"
+      ],
+      "siteNames": [
+        "Burgy"
+      ],
+      "baseAppellations": [
+        "Mâcon",
+        "Mâcon Blanc",
+        "Mâcon Rouge",
+        "Mâcon Rosé"
+      ],
+      "featureId": "inao-denom-1715"
+    },
+    {
+      "id": "macon-cruzille",
+      "name": "Mâcon Cruzille",
+      "region": "Mâconnais",
+      "aliases": [
+        "Mâcon Cruzille"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Mâconnais",
+        "Saône-et-Loire"
+      ],
+      "wineColours": [
+        "red",
+        "white",
+        "rose"
+      ],
+      "siteNames": [
+        "Cruzille"
+      ],
+      "baseAppellations": [
+        "Mâcon",
+        "Mâcon Blanc",
+        "Mâcon Rouge",
+        "Mâcon Rosé"
+      ],
+      "featureId": "inao-denom-1722"
+    },
+    {
+      "id": "macon-ige",
+      "name": "Mâcon Igé",
+      "region": "Mâconnais",
+      "aliases": [
+        "Mâcon Igé"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Mâconnais",
+        "Saône-et-Loire"
+      ],
+      "wineColours": [
+        "red",
+        "white",
+        "rose"
+      ],
+      "siteNames": [
+        "Igé"
+      ],
+      "baseAppellations": [
+        "Mâcon",
+        "Mâcon Blanc",
+        "Mâcon Rouge",
+        "Mâcon Rosé"
+      ],
+      "featureId": "inao-denom-1724"
+    },
+    {
+      "id": "macon-lugny",
+      "name": "Mâcon Lugny",
+      "region": "Mâconnais",
+      "aliases": [
+        "Mâcon Lugny"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Mâconnais",
+        "Saône-et-Loire"
+      ],
+      "wineColours": [
+        "red",
+        "white",
+        "rose"
+      ],
+      "siteNames": [
+        "Lugny"
+      ],
+      "baseAppellations": [
+        "Mâcon",
+        "Mâcon Blanc",
+        "Mâcon Rouge",
+        "Mâcon Rosé"
+      ],
+      "featureId": "inao-denom-1726"
+    },
+    {
+      "id": "macon-peronne",
+      "name": "Mâcon Péronne",
+      "region": "Mâconnais",
+      "aliases": [
+        "Mâcon Péronne"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Mâconnais",
+        "Saône-et-Loire"
+      ],
+      "wineColours": [
+        "red",
+        "white",
+        "rose"
+      ],
+      "siteNames": [
+        "Péronne"
+      ],
+      "baseAppellations": [
+        "Mâcon",
+        "Mâcon Blanc",
+        "Mâcon Rouge",
+        "Mâcon Rosé"
+      ],
+      "featureId": "inao-denom-1730"
+    },
+    {
+      "id": "macon-verze",
+      "name": "Mâcon Verzé",
+      "region": "Mâconnais",
+      "aliases": [
+        "Mâcon Verzé"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Mâconnais",
+        "Saône-et-Loire"
+      ],
+      "wineColours": [
+        "red",
+        "white",
+        "rose"
+      ],
+      "siteNames": [
+        "Verzé"
+      ],
+      "baseAppellations": [
+        "Mâcon",
+        "Mâcon Blanc",
+        "Mâcon Rouge",
+        "Mâcon Rosé"
+      ],
+      "featureId": "inao-denom-1737"
     }
   ],
   "otherAppellations": [
@@ -723,25 +926,15 @@
     "Crémant de Bourgogne",
     "Mâcon",
     "Mâcon - rouge exclusif",
-    "Mâcon Azé",
-    "Mâcon Azé - rouge exclusif",
     "Mâcon Bray",
     "Mâcon Bray - rouge exclusif",
-    "Mâcon Burgy",
     "Mâcon Chardonnay",
-    "Mâcon Cruzille",
-    "Mâcon Cruzille - rouge exclusif",
-    "Mâcon Igé",
-    "Mâcon Lugny",
-    "Mâcon Lugny - rouge exclusif",
     "Mâcon Mancey",
     "Mâcon Mancey - rouge exclusif",
     "Mâcon Montbellet",
-    "Mâcon Péronne",
     "Mâcon Saint-Gengoux-le-National",
     "Mâcon Saint-Gengoux-le-National - rouge exclusif",
     "Mâcon Uchizy",
-    "Mâcon Verzé",
     "Mâcon Villages",
     "Mâcon Villages (Blanc)"
   ]

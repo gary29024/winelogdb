@@ -1,0 +1,149 @@
+{
+  "id": "macon-cruzille",
+  "name": "Mâcon Cruzille",
+  "region": "Mâconnais",
+  "mapKind": "regional",
+  "communes": [
+    {
+      "id": "71156",
+      "name": "Cruzille",
+      "bounds": [
+        4.780163,
+        46.485319,
+        4.811229,
+        46.533349
+      ],
+      "labelPoint": [
+        4.805511,
+        46.506074
+      ]
+    },
+    {
+      "id": "71226",
+      "name": "Grevilly",
+      "bounds": [
+        4.807765,
+        46.502093,
+        4.831447,
+        46.526629
+      ],
+      "labelPoint": [
+        4.810831,
+        46.514529
+      ]
+    },
+    {
+      "id": "71284",
+      "name": "Martailly-lès-Brancion",
+      "bounds": [
+        4.780757,
+        46.517008,
+        4.817068,
+        46.546731
+      ],
+      "labelPoint": [
+        4.808736,
+        46.520291
+      ]
+    }
+  ],
+  "dataUrl": "/maps/macon-cruzille.2026-09-21.geojson",
+  "bounds": [
+    4.780163,
+    46.485319,
+    4.831447,
+    46.546731
+  ],
+  "sources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71156/cadastre-71156-communes.json.gz",
+      "sha256": "187246bf17f74045124cc9014157b280d98242e840a6a5179d2dcbc060e74a27"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71226/cadastre-71226-communes.json.gz",
+      "sha256": "3db07cb4e33faab9272d675adc415df3935cb242674ad820cc432515875e6bda"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71284/cadastre-71284-communes.json.gz",
+      "sha256": "075f8d8a4cfcb99885abfd0d1580b5e6801c008fa229f49516ec3a6b77ea5a94"
+    }
+  ],
+  "notes": {
+    "inao-denom-1722-red-only": {
+      "note": "INAO labels this sector “rouge exclusif” (red only). It is not the whole red-wine area. No white or rosé boundary is inferred by subtracting it from the overview."
+    }
+  },
+  "features": [
+    {
+      "id": "inao-denom-1722",
+      "name": "Mâcon Cruzille",
+      "tier": "regional",
+      "kind": "appellation",
+      "appellationId": 583,
+      "denominationId": 1722,
+      "sourceName": "Mâcon Cruzille",
+      "communes": [
+        "71156",
+        "71226",
+        "71284"
+      ],
+      "areaHa": 781.76,
+      "matchId": "inao-denom-1722",
+      "atlasUrl": null,
+      "bounds": [
+        4.780163,
+        46.485319,
+        4.831447,
+        46.546731
+      ],
+      "labelPoint": [
+        4.805511,
+        46.506074
+      ]
+    },
+    {
+      "id": "inao-denom-1722-red-only",
+      "name": "Mâcon Cruzille — red-only sector",
+      "tier": "regional",
+      "kind": "appellation",
+      "appellationId": 583,
+      "denominationId": 1722,
+      "sourceName": "Mâcon Cruzille - rouge exclusif",
+      "communes": [
+        "71156",
+        "71284"
+      ],
+      "areaHa": 196.55,
+      "matchId": "inao-denom-1722-red-only",
+      "atlasUrl": null,
+      "bounds": [
+        4.780163,
+        46.489204,
+        4.815846,
+        46.546731
+      ],
+      "labelPoint": [
+        4.797965,
+        46.529024
+      ]
+    }
+  ],
+  "coverageNote": "A geographic denomination within Mâcon AOC. Named cuvées and producer holdings have no separate boundaries here. This is a denomination overview across wine colours, not a verified white, red or rosé production area.",
+  "colourScope": "overview"
+}

@@ -95,16 +95,23 @@ for(const route of matrixRoutes)for(const [appellation,count,commune,colour,wine
  });
 }
 
-const westernMaconCases=[
+const maconOverviewCases=[
  ['Mâcon Bussières','inao-denom-1717',1,'Bussières',false],
  ['Mâcon Chaintré','inao-denom-1719',3,'Crêches-sur-Saône',true],
  ['Mâcon La Roche-Vineuse','inao-denom-1725',3,'Hurigny',true],
  ['Mâcon Milly-Lamartine','inao-denom-1729',4,'Sologny',true],
  ['Mâcon Pierreclos','inao-denom-1731',1,'Pierreclos',false],
  ['Mâcon Prissé','inao-denom-1732',1,'Prissé',true],
+ ['Mâcon Azé','inao-denom-1712',1,'Azé',true],
+ ['Mâcon Burgy','inao-denom-1715',1,'Burgy',false],
+ ['Mâcon Cruzille','inao-denom-1722',3,'Grevilly',true],
+ ['Mâcon Igé','inao-denom-1724',1,'Igé',false],
+ ['Mâcon Lugny','inao-denom-1726',4,'Cruzille',true],
+ ['Mâcon Péronne','inao-denom-1730',3,'Saint-Maurice-de-Satonnay',false],
+ ['Mâcon Verzé','inao-denom-1737',1,'Verzé',false],
 ] as const;
-for(const route of matrixRoutes)for(const [appellation,featureId,count,commune,hasSector] of westernMaconCases.filter((_,i)=>fullMapMatrix||i===1)){
- test(`Western Mâcon ${appellation} ${route}: overview and source sector stay distinct`,async({page},testInfo)=>{
+for(const route of matrixRoutes)for(const [appellation,featureId,count,commune,hasSector] of maconOverviewCases.filter((_,i)=>fullMapMatrix||i===1||i===10)){
+ test(`Mâcon overview ${appellation} ${route}: overview and source sector stay distinct`,async({page},testInfo)=>{
   await page.setViewportSize({width:320,height:900});
   await setup(page,{appellation,wineName:'Vieilles Vignes',classification:null,colour:'White',wineStyle:'white',region:'Mâconnais'});
   const downloads:string[]=[];page.on('request',r=>{if(r.url().includes('/maps/'))downloads.push(r.url())});
@@ -114,6 +121,11 @@ for(const route of matrixRoutes)for(const [appellation,featureId,count,commune,h
   await expect(dialog.getByRole('button',{name:'Region view',exact:true})).toBeEnabled();
   await expect(dialog.locator('.village-map-description')).toContainText('no colour-specific area or single vineyard');
   await expect(dialog.locator('.village-map-context')).toContainText(`${count} commune`);
+  await expect.poll(()=>dialog.locator('.village-map-commune-name').evaluateAll(elements=>{
+   const canvas=elements[0]?.closest('.village-map-canvas')?.getBoundingClientRect();
+   if(!canvas)return 0;
+   return elements.filter(el=>{const b=el.getBoundingClientRect();return b.x+b.width/2>=canvas.x&&b.x+b.width/2<=canvas.right&&b.y+b.height/2>=canvas.y&&b.y+b.height/2<=canvas.bottom}).length;
+  })).toBe(count);
   const selector=dialog.getByRole('combobox',{name:'Explore a mapped area'});
   if(hasSector){
    await expect(selector).toHaveValue(featureId);
@@ -147,6 +159,29 @@ for(const route of matrixRoutes)for(const [appellation,featureId,count,commune,h
   await expect(page.getByRole('button',{name:'View regional map'})).toBeFocused();
  });
 }
+
+for(const route of matrixRoutes)test(`Central Mâcon producer labels and village precedence ${route}`,async({page})=>{
+ for(const [appellation,wineName,producer,colour,expected] of [
+  ['Mâcon','Lugny Les Charmes','Cave de Lugny','White','Mâcon Lugny'],
+  ['Mâcon-Cruzille','Le Gorfou','Cave de Lugny','Red','Mâcon Cruzille'],
+  ['Mâcon','Verzé Les Chênes','Domaines Leflaive','White','Mâcon Verzé'],
+ ] as const){
+  await setup(page,{appellation,wineName,producer,colour,wineStyle:colour.toLowerCase(),classification:null,region:'Mâconnais'});
+  await page.goto(route);await page.getByRole('button',{name:'View regional map'}).click();
+  const dialog=page.getByRole('dialog',{name:expected,exact:true});
+  await expect(dialog.getByRole('button',{name:'Region view',exact:true})).toBeEnabled();
+  await expect(dialog.locator('.village-map-description')).toContainText('Denomination overview');
+  await page.keyboard.press('Escape');
+ }
+ for(const wineName of ['Cave de Lugny Les Charmes','Les Charmes','Lugny Cruzille']){
+  await setup(page,{appellation:'Mâcon',wineName,producer:'Cave de Lugny',colour:'White',wineStyle:'white',classification:null,region:'Mâconnais'});
+  await page.goto(route);await expect(page.getByRole('button',{name:'View regional map'})).toHaveCount(0);
+ }
+ await setup(page,{appellation:'Viré-Clessé',wineName:'Viré-Clessé',producer:'Cave de Lugny',colour:'White',wineStyle:'white',classification:'village',region:'Mâconnais'});
+ await page.goto(route);await expect(page.getByRole('button',{name:'View regional map'})).toHaveCount(0);
+ await page.getByRole('button',{name:'View village map'}).click();
+ await expect(page.getByRole('dialog',{name:'Viré-Clessé',exact:true}).getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
+});
 
 for(const route of matrixRoutes)test(`Mâcon split labels preserve denomination and Pouilly identities ${route}`,async({page})=>{
  await page.setViewportSize({width:320,height:900});
