@@ -59,6 +59,7 @@ const cases=[
 ] as const;
 const broadCases=[
  ['Bourgogne','bourgogne','inao-denom-362',264,['Red','White','Rosé']],
+ ['Bourgogne Aligoté','bourgogne-aligote','inao-denom-389',272,['White']],
  ['Mâcon','macon','inao-denom-1713',88,['Red','White','Rosé']],
  ['Mâcon-Villages','macon-villages','inao-denom-2893',80,['White']],
 ] as const;
@@ -74,7 +75,7 @@ describe('regional denominations stay separate from villages and named vineyards
    expect(catalogue.mapKind).toBe('regional');
    const variants=config.maps.find(m=>m.id===id)!.sourceVariants??[];
    expect(catalogue.features).toHaveLength(1+variants.length);
-   expect(catalogue.features[0]).toMatchObject({id:featureId,tier:'regional',kind:'appellation',appellationId:name.startsWith('Mâcon')?583:138,atlasUrl:null});
+   expect(catalogue.features[0]).toMatchObject({id:featureId,tier:'regional',kind:'appellation',appellationId:config.maps.find(m=>m.id===id)!.appellationId,atlasUrl:null});
    expect(catalogue.communes).toHaveLength(count);
    expect(catalogue.communes.map(c=>c.id).sort()).toEqual(config.maps.find(m=>m.id===id)!.communes);
    const data=JSON.parse(readFileSync(`public${catalogue.dataUrl}`,'utf8'));
@@ -103,6 +104,8 @@ describe('regional denominations stay separate from villages and named vineyards
   const bourgogne=inventory.appellations.find(a=>a.appellationId===138)!.denominations;
   expect(bourgogne.filter(d=>d.denominationId!==362).every(d=>d.status==='mapped')).toBe(true);
   expect(bourgogne.find(d=>d.denominationId===362)!.status).toBe('partial');
+  expect(denominations.filter(d=>d.status==='partial').map(d=>d.denominationId)).toEqual([362,389]);
+  expect(denominations.filter(d=>d.status==='pending').map(d=>d.denominationId)).toEqual([391,394,2338,561]);
   expect(inventory.appellations.find(a=>a.appellationId===583)!.denominations).toHaveLength(29);
   expect(villages.villages).toHaveLength(44);
  });
@@ -293,7 +296,8 @@ function assertGeometry(catalogue:VillageMapCatalogue,data:{features:{properties
    expect(ring.length).toBeGreaterThanOrEqual(4);
    expect(ring[0]).toEqual(ring.at(-1));
    for(const [lon,lat] of ring){
-    if(lon<3.2||lon>5.3||lat<46.2||lat>48.1)throw new Error(`Out-of-region coordinate in ${catalogue.name}`);
+    // Aligoté extends south to Romanèche-Thorins (46.17°) in the pinned source.
+    if(lon<3.2||lon>5.3||lat<(catalogue.id==='bourgogne-aligote'?46.1:46.2)||lat>48.1)throw new Error(`Out-of-region coordinate in ${catalogue.name}`);
     if([lon,lat].some(value=>Math.abs(value-Math.round(value/grid)*grid)>Number.EPSILON*Math.abs(value)*2))throw new Error(`Coordinate exceeds reviewed precision in ${catalogue.name}`);
    }
   }

@@ -140,12 +140,14 @@ the plan because they lack a village AOC. See the
 
 All **14 Bourgogne geographic denominations** in the pinned source now have maps.
 These are denominations within Bourgogne AOC, not new AOCs or village maps.
-**Of 49 regional source denominations, 43 are mapped, one has a partial source
-overview, and five remain pending.** Broad Bourgogne now has an explicitly partial
+**Of 49 regional source denominations, 43 are mapped, two have partial source
+overviews, and four remain pending.** Broad Bourgogne has an explicitly partial
 overview of all 295 available source rows in 264 communes, plus its separately
 published white-only sector. This does not complete its appellation or
 colour-specific boundaries; Bourgogne Gamay remains unavailable.
-The five pending denominations are Bourgogne Aligoté, Bourgogne Mousseux, Bourgogne
+The Bourgogne Aligoté partial overview retains all 278 available source rows
+across 272 communes, with white-only matching and compact downloads.
+The four pending denominations are Bourgogne Mousseux, Bourgogne
 Passe-tout-grains, Coteaux Bourguignons and Crémant de Bourgogne denominations.
 The [Yonne source review](burgundy-regional-maps.md#yonne-source-review)
 explains the five-commune Côtes d’Auxerre list and its difference from some

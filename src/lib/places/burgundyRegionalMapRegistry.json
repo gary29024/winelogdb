@@ -1176,13 +1176,53 @@
       ],
       "broadAppellation": true,
       "featureId": "inao-denom-362"
+    },
+    {
+      "id": "bourgogne-aligote",
+      "name": "Bourgogne Aligoté",
+      "region": "Burgundy",
+      "aliases": [
+        "Bourgogne Aligoté"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Côte d’Or",
+        "Côte de Nuits",
+        "Côte de Beaune",
+        "Hautes Côtes de Nuits",
+        "Hautes Côtes de Beaune",
+        "Côte Chalonnaise",
+        "Mâconnais",
+        "Grand Auxerrois",
+        "Yonne",
+        "Saône-et-Loire",
+        "Chablis",
+        "Chablis et Grand Auxerrois",
+        "Auxerrois"
+      ],
+      "wineColours": [
+        "white"
+      ],
+      "siteNames": [],
+      "baseAppellations": [],
+      "conflictingNames": [
+        "Chardonnay",
+        "Pinot Noir",
+        "Gamay",
+        "Passetoutgrain",
+        "Passetoutgrains",
+        "Passe-tout-grain",
+        "Passe-tout-grains"
+      ],
+      "broadAppellation": true,
+      "featureId": "inao-denom-389"
     }
   ],
   "otherAppellations": [
     "Bourgogne Aligoté",
     "Bourgogne Mousseux",
     "Bourgogne Passe-tout-grains",
-    "Bourgogne aligoté",
     "Bourgogne mousseux",
     "Coteaux Bourguignons",
     "Coteaux Bourguignons ou Bourgogne grand ordinaire ou Bourgogne ordinaire",

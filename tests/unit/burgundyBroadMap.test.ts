@@ -18,7 +18,7 @@ describe('broad Bourgogne source overview',()=>{
  it.each([
   {appellation:'Burgundy'}, {appellation:null,wineName:'Bourgogne'},
   {appellation:null,referenceSite:'Bourgogne'}, {appellation:null,producer:'Domaine de Bourgogne'},
-  {appellation:'Bourgogne Unknown Place'}, {appellation:'Bourgogne Aligoté'},
+  {appellation:'Bourgogne Unknown Place'},
   {appellation:'Bourgogne Passe-tout-grains'}, {appellation:'Bourgogne Mousseux'},
   {appellation:'Crémant de Bourgogne'}, {appellation:'Coteaux Bourguignons'},
   {wineName:'Bourgogne Aligoté'}, {referenceSite:'Bourgogne Passe-tout-grains'},
