@@ -555,7 +555,7 @@ test('compact Mâcon download retries without fetching the larger GeoJSON',async
  expect(downloads.every(url=>url.endsWith('.pbf.gz'))).toBe(true);
 });
 
-for(const [appellation,id,maxBytes,timeout] of [['Mâcon','macon',1400000,20000],['Bourgogne','bourgogne',3700000,60000],['Bourgogne Aligoté','bourgogne-aligote',3000000,60000],['Bourgogne Passe-tout-grains','bourgogne-passe-tout-grains',3000000,60000]] as const)test(`${appellation} compact map loads over a 1 Mbps connection`,async({page,browserName},testInfo)=>{
+for(const [appellation,id,maxBytes,timeout] of [['Mâcon','macon',1400000,60000],['Bourgogne','bourgogne',3700000,60000],['Bourgogne Aligoté','bourgogne-aligote',3000000,60000],['Bourgogne Passe-tout-grains','bourgogne-passe-tout-grains',3000000,60000]] as const)test(`${appellation} compact map loads over a 1 Mbps connection`,async({page,browserName},testInfo)=>{
  test.skip(browserName!=='chromium','Chromium network throttling');
  test.setTimeout(timeout+25000);
  await setup(page,{appellation,wineName:'Vieilles Vignes',classification:null,...(id==='bourgogne-aligote'?{colour:'White',wineStyle:'white'}:{colour:'Red',wineStyle:'red'})});

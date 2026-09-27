@@ -265,7 +265,7 @@ def main():
         if config.get('colourScope'):
             catalogue['colourScope'] = config['colourScope']
         if config.get('downloadTimeoutMs'):
-            assert config['denominationId'] in (362, 389, 394) and config['downloadTimeoutMs'] == 60000
+            assert config['denominationId'] in (362, 389, 394, 1713, 2893) and config['downloadTimeoutMs'] == 60000
             catalogue['downloadTimeoutMs'] = config['downloadTimeoutMs']
         collection = dict(type='FeatureCollection', features=features)
         if config.get('compactDownload'):

@@ -2189,7 +2189,8 @@
           "label": "Mâcon — red-only sector",
           "note": "INAO labels this sector “rouge exclusif” (red only). It is not the whole red-wine area. No white or rosé boundary is inferred by subtracting it from the overview."
         }
-      ]
+      ],
+      "downloadTimeoutMs": 60000
     },
     {
       "id": "macon-villages",
@@ -2404,7 +2405,8 @@
       "coverageNote": "Mâcon-Villages is a regional denomination for white wines, not a village appellation. The highlight retains both INAO source labels, including additional white-wine parcels in Ozenay, across 80 current communes. Bonnay and Saint-Ythaire share current commune navigation. No single village, vineyard or producer holding is identified.",
       "communeAliasSources": [
         "https://www.insee.fr/fr/statistiques/2011101?geo=COM-71042"
-      ]
+      ],
+      "downloadTimeoutMs": 60000
     },
     {
       "id": "bourgogne",

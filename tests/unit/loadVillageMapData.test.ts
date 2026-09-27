@@ -1,5 +1,5 @@
 import { afterEach,describe,expect,it,vi } from 'vitest';
-import { readFileSync } from 'node:fs';
+import { readFileSync,readdirSync } from 'node:fs';
 import { gzipSync,gunzipSync } from 'node:zlib';
 import { isDeepStrictEqual } from 'node:util';
 import { loadVillageMapData } from '../../src/lib/places/loadVillageMapData';
@@ -58,5 +58,20 @@ describe('compact boundary downloads',()=>{
    controller.abort();return new Response(packed(macon.geobufUrl));
   }));
   await expect(loadVillageMapData(macon,controller.signal)).rejects.toMatchObject({name:'AbortError'});
+ });
+});
+
+// Compact downloads are the largest boundary files. Each keeps the 60-second
+// limit so a slow connection cannot abort Mâcon while larger maps still load.
+describe('compact map download limits',()=>{
+ const dir='src/lib/places';
+ const compact=readdirSync(dir).filter(name=>name.endsWith('MapCatalogue.json'))
+  .map(name=>({name,catalogue:JSON.parse(readFileSync(`${dir}/${name}`,'utf8'))}))
+  .filter(({catalogue})=>catalogue.geobufUrl);
+ it('covers the Mâcon, Mâcon-Villages and partial Bourgogne maps',()=>{
+  expect(compact.map(({catalogue})=>catalogue.id)).toEqual(expect.arrayContaining(['macon','macon-villages','bourgogne','bourgogne-aligote']));
+ });
+ it.each(compact.map(({name,catalogue})=>[name,catalogue]))('%s allows 60 seconds',(_name,catalogue)=>{
+  expect(catalogue.downloadTimeoutMs).toBe(60000);
  });
 });
