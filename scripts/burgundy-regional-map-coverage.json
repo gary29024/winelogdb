@@ -184,8 +184,9 @@
           "sourceNames": [
             "Coteaux Bourguignons ou Bourgogne grand ordinaire ou Bourgogne ordinaire"
           ],
-          "status": "pending",
-          "kind": "broad"
+          "status": "partial",
+          "kind": "broad",
+          "coverageNote": "All 281 source rows are retained across 275 communes. Rhône/Beaujolais boundaries are absent; complete appellation and colour-specific coverage is not established."
         }
       ]
     },

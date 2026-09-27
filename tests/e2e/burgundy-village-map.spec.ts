@@ -1,4 +1,5 @@
 import { test,expect,type Locator,type Page } from '@playwright/test';
+import {statSync} from 'node:fs';
 import { wine } from './fixtures/layoutWine';
 
 const fullMapMatrix=process.env.WINELOG_E2E_EXHAUSTIVE_MAPS==='1';
@@ -169,7 +170,10 @@ for(const route of matrixRoutes)for(const [appellation,featureId,count,commune,h
  });
 }
 
-for(const route of matrixRoutes)test(`Northern Mâcon labels distinguish grapes, estates and denominations ${route}`,async({page})=>{
+// Label permutations are also exercised in burgundyRegionalMap.test.ts. Keep
+// these repeated map renders in the exhaustive suite; the normal suite still
+// covers split labels, village precedence and the Mâcon overview controls.
+for(const route of matrixRoutes)matrixTest(`Northern Mâcon labels distinguish grapes, estates and denominations ${route}`,async({page})=>{
  await page.setViewportSize({width:320,height:900});
  for(const [appellation,wineName,producer,expected] of [
   ['Mâcon-Chardonnay','En Bout','Domaine des Crêts','Mâcon Chardonnay'],
@@ -193,7 +197,7 @@ for(const route of matrixRoutes)test(`Northern Mâcon labels distinguish grapes,
  await page.goto(route);await expect(page.getByRole('button',{name:'View regional map'})).toHaveCount(0);
 });
 
-for(const route of matrixRoutes)test(`Central Mâcon producer labels and village precedence ${route}`,async({page})=>{
+for(const route of matrixRoutes)matrixTest(`Central Mâcon producer labels and village precedence ${route}`,async({page})=>{
  for(const [appellation,wineName,producer,colour,expected] of [
   ['Mâcon','Lugny Les Charmes','Cave de Lugny','White','Mâcon Lugny'],
   ['Mâcon-Cruzille','Le Gorfou','Cave de Lugny','Red','Mâcon Cruzille'],
@@ -587,7 +591,13 @@ for(const [appellation,id] of [['Mâcon','macon'],['Mâcon-Villages','macon-vill
  expect(downloads.every(url=>url.endsWith(`/maps/${id}.2026-09-21.pbf.gz`))).toBe(true);
 });
 
-for(const [appellation,id,maxBytes,timeout] of [['Mâcon','macon',1400000,60000],['Bourgogne','bourgogne',3700000,60000],['Bourgogne Aligoté','bourgogne-aligote',3000000,60000],['Bourgogne Passe-tout-grains','bourgogne-passe-tout-grains',3000000,60000],['Bourgogne Mousseux','bourgogne-mousseux',3000000,60000]] as const)test(`${appellation} compact map loads over a 1 Mbps connection`,async({page,browserName},testInfo)=>{
+const compactNetworkCases=[['Mâcon','macon',1400000,60000],['Bourgogne','bourgogne',3700000,60000],['Bourgogne Aligoté','bourgogne-aligote',3000000,60000],['Bourgogne Passe-tout-grains','bourgogne-passe-tout-grains',3000000,60000],['Bourgogne Mousseux','bourgogne-mousseux',3000000,60000],['Coteaux Bourguignons','coteaux-bourguignons',3500000,60000]] as const;
+// Exercise the largest actual payload on every run. Byte equality/size checks
+// cover every compact file in unit tests; full throttled transfers run in the
+// scheduled/manual matrix or explicitly for a map being introduced/reviewed.
+const largestCompactId=[...compactNetworkCases].sort((a,b)=>statSync(`public/maps/${b[1]}.2026-09-21.pbf.gz`).size-statSync(`public/maps/${a[1]}.2026-09-21.pbf.gz`).size)[0][1];
+const extraNetworkIds=(process.env.WINELOG_E2E_MAP_DOWNLOADS??'').split(',');
+for(const [appellation,id,maxBytes,timeout] of compactNetworkCases.filter(([,id])=>fullMapMatrix||id===largestCompactId||extraNetworkIds.includes(id)))test(`${appellation} compact map loads over a 1 Mbps connection`,async({page,browserName},testInfo)=>{
  test.skip(browserName!=='chromium','Chromium network throttling');
  test.setTimeout(timeout+25000);
  await setup(page,{appellation,wineName:'Vieilles Vignes',classification:null,...(id==='bourgogne-mousseux'?{colour:'Red',wineStyle:'sparkling',productSubtype:'Sparkling'}:id==='bourgogne-aligote'?{colour:'White',wineStyle:'white'}:{colour:'Red',wineStyle:'red'})});
@@ -612,10 +622,11 @@ for(const [appellation,id,maxBytes,timeout] of [['Mâcon','macon',1400000,60000]
  await network.detach();
 });
 
-for(const [appellation,id,colour,wineStyle,note,invalidColours] of [
- ['Bourgogne Aligoté','bourgogne-aligote','White','white','white-wine production boundaries in 272 communes',['Red','Rosé']],
- ['Bourgogne Passe-tout-grains','bourgogne-passe-tout-grains','Red','red','Rhône/Beaujolais boundaries are missing',['White']],
- ['Bourgogne Mousseux','bourgogne-mousseux','Red','sparkling','red sparkling appellation',['White','Rosé']],
+for(const [appellation,id,colour,wineStyle,note,invalidColours,count] of [
+ ['Bourgogne Aligoté','bourgogne-aligote','White','white','white-wine production boundaries in 272 communes',['Red','Rosé'],272],
+ ['Bourgogne Passe-tout-grains','bourgogne-passe-tout-grains','Red','red','Rhône/Beaujolais boundaries are missing',['White'],272],
+ ['Bourgogne Mousseux','bourgogne-mousseux','Red','sparkling','red sparkling appellation',['White','Rosé'],272],
+ ['Coteaux Bourguignons','coteaux-bourguignons','Red','red','Rhône/Beaujolais boundaries are missing',[],275],
 ] as const)for(const route of allMapRoutes)test(`${appellation} ${route}: partial AOC and commune navigation`,async({page},testInfo)=>{
  await page.setViewportSize({width:320,height:900});
  await setup(page,{appellation,wineName:'Vieilles Vignes',classification:null,colour,wineStyle,productSubtype:wineStyle==='sparkling'?'Sparkling':'Still',region:'Burgundy'});
@@ -628,26 +639,28 @@ for(const [appellation,id,colour,wineStyle,note,invalidColours] of [
  await opener.click();
  const dialog=page.getByRole('dialog',{name:appellation,exact:true});
  await expect(dialog.getByRole('button',{name:'Region view',exact:true})).toBeEnabled();
- await expect(dialog.locator('.village-map-description')).toHaveText('Partial appellation overview. The highlight does not show the full appellation; no single vineyard is identified.');
+ await expect(dialog.locator('.village-map-description')).toHaveText(id==='coteaux-bourguignons'
+  ? 'Partial appellation overview across wine colours. The highlight does not show the full appellation or a colour-specific area; no single vineyard is identified.'
+  : 'Partial appellation overview. The highlight does not show the full appellation; no single vineyard is identified.');
  await expect(dialog.locator('.village-map-note').filter({hasText:note})).toBeVisible();
  await expect(dialog.locator('.village-map-hint')).toContainText('Coverage of this appellation is incomplete');
  await expect(dialog.getByRole('combobox',{name:'Explore a mapped area'})).toHaveCount(0);
  const communes=dialog.getByRole('combobox',{name:'Zoom to a commune'});
- await expect(communes.getByRole('option')).toHaveCount(273);
+ await expect(communes.getByRole('option')).toHaveCount(count+1);
  const visibleMarkers=()=>dialog.locator('.village-map-commune-name').evaluateAll(elements=>{
   const canvas=elements[0]?.closest('.village-map-canvas')?.getBoundingClientRect();
   if(!canvas)return 0;
   return elements.filter(el=>{const b=el.getBoundingClientRect();return b.x+b.width/2>=canvas.x&&b.x+b.width/2<=canvas.right&&b.y+b.height/2>=canvas.y&&b.y+b.height/2<=canvas.bottom}).length;
  });
- await expect.poll(visibleMarkers).toBe(272);
- for(const label of ['Joigny','Boncourt-le-Bois','Prissé','Romanèche-Thorins']){
+ await expect.poll(visibleMarkers).toBe(count);
+ for(const label of (id==='coteaux-bourguignons'?['Joigny','Chânes','Chasselas','Crêches-sur-Saône','Romanèche-Thorins']:['Joigny','Boncourt-le-Bois','Prissé','Romanèche-Thorins'])){
   await communes.selectOption({label});
-  await expect.poll(visibleMarkers).toBeLessThan(272);
+  await expect.poll(visibleMarkers).toBeLessThan(count);
   await expect(dialog.getByRole('heading',{name:appellation,exact:true})).toHaveCount(2);
  }
  await page.screenshot({path:testInfo.outputPath(`${id}-320.png`)});
  await dialog.getByRole('button',{name:'Region view',exact:true}).click();
- await expect.poll(visibleMarkers).toBe(272);
+ await expect.poll(visibleMarkers).toBe(count);
  expect([...new Set(downloads)]).toHaveLength(1);
  expect(downloads.every(url=>url.endsWith(`/maps/${id}.2026-09-21.pbf.gz`))).toBe(true);
  expect(await dialog.evaluate(el=>el.scrollWidth<=el.clientWidth)).toBe(true);
@@ -662,6 +675,27 @@ for(const [appellation,id,colour,wineStyle,note,invalidColours] of [
   await expect(page.getByRole('button',{name:'View regional map'})).toHaveCount(0);
  }
  expect(errors).toEqual([]);
+});
+
+for(const route of allMapRoutes)test(`Coteaux Bourguignons ${route}: traditional names, colours and primeur guards`,async({page})=>{
+ for(const [appellation,colour,wineStyle] of [['Bourgogne Grand Ordinaire','Rosé','rose'],['Coteaux Bourguignons Blanc Primeur','White','white']] as const){
+  await setup(page,{appellation,colour,wineStyle,wineName:'Les Champs',classification:null});
+  await page.goto(route);await page.getByRole('button',{name:'View regional map'}).click();
+  const dialog=page.getByRole('dialog',{name:'Coteaux Bourguignons',exact:true});
+  await expect(dialog.getByRole('button',{name:'Region view',exact:true})).toBeEnabled({timeout:10000});
+  await expect(dialog.locator('.village-map-description')).toContainText('Partial appellation overview');
+  await page.keyboard.press('Escape');
+ }
+ for(const fields of [
+  {appellation:'Coteaux Bourguignons Nouveau',colour:'Red',wineStyle:'red'},
+  {appellation:'Coteaux Bourguignons',colour:'Red',wineStyle:'sparkling',productSubtype:'Sparkling'},
+  {appellation:'Coteaux Bourguignons',wineName:'Bourgogne Aligoté',colour:'White',wineStyle:'white'},
+ ]){
+  const record={wineName:'Les Champs',classification:null,...fields};
+  await setup(page,record);await page.goto(route);
+  await expect(page.getByRole('heading',{name:record.wineName,exact:true})).toBeVisible();
+  await expect(page.getByRole('button',{name:'View regional map'})).toHaveCount(0);
+ }
 });
 
 for(const route of allMapRoutes)test(`Bourgogne Mousseux ${route}: sparkling identity guards`,async({page})=>{
@@ -690,7 +724,7 @@ for(const route of allMapRoutes)test(`Bourgogne Mousseux ${route}: sparkling ide
 
 for(const route of allMapRoutes)test(`Bourgogne review labels ${route}: Clairet, separate AOCs and region scope`,async({page})=>{
  await page.setViewportSize({width:320,height:900});
- for(const [appellation,wineName,region,colour,expected] of [
+ for(const [appellation,wineName,region,colour,expected] of ([
   ['Bourgogne Clairet','Montrecul','Côte d’Or','rose','Bourgogne Montrecul'],
   ['Bourgogne','Kimméridgien','Chablis','white','Bourgogne'],
   ['Bourgogne','Aligoté','Burgundy','white','Bourgogne Aligoté'],
@@ -698,7 +732,7 @@ for(const route of allMapRoutes)test(`Bourgogne review labels ${route}: Clairet,
   ['Mâcon Lugny','Chardonnay avec Aligoté','Burgundy','white','Mâcon Lugny'],
   ['Bourgogne Rouge','Passe-Tout-Grains','Burgundy','red','Bourgogne Passe-tout-grains'],
   ['Bourgogne Rosé Vieilles Vignes','Passe-tous-grains','Burgundy','rose','Bourgogne Passe-tout-grains'],
- ] as const){
+ ] as const).filter((_,index)=>fullMapMatrix||[0,2,5].includes(index))){
   await setup(page,{appellation,wineName,region,colour,wineStyle:colour,classification:null});
   await page.goto(route);
   await page.getByRole('button',{name:'View regional map'}).click();

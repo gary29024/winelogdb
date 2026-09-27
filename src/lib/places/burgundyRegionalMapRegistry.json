@@ -1391,6 +1391,81 @@
       ],
       "broadAppellation": true,
       "featureId": "inao-denom-394"
+    },
+    {
+      "id": "coteaux-bourguignons",
+      "name": "Coteaux Bourguignons",
+      "region": "Burgundy",
+      "aliases": [
+        "Coteaux Bourguignons",
+        "Bourgogne Grand Ordinaire",
+        "Bourgogne Ordinaire"
+      ],
+      "compatibleRegions": [
+        "Burgundy",
+        "Bourgogne",
+        "Côte d’Or",
+        "Côte de Nuits",
+        "Côte de Beaune",
+        "Hautes Côtes de Nuits",
+        "Hautes Côtes de Beaune",
+        "Côte Chalonnaise",
+        "Mâconnais",
+        "Grand Auxerrois",
+        "Yonne",
+        "Saône-et-Loire",
+        "Chablis",
+        "Chablis et Grand Auxerrois",
+        "Auxerrois",
+        "Beaujolais",
+        "Rhône",
+        "Châtillonnais"
+      ],
+      "wineColours": [
+        "red",
+        "white",
+        "rose"
+      ],
+      "siteNames": [
+        "Coteaux Bourguignons",
+        "Bourgogne Grand Ordinaire",
+        "Bourgogne Ordinaire",
+        "Coteaux-Bourguignons",
+        "Bourgogne-Grand-Ordinaire",
+        "Bourgogne-Ordinaire",
+        "Vin de Bourgogne Grand Ordinaire",
+        "Vin de Bourgogne Ordinaire"
+      ],
+      "baseAppellations": [
+        "Bourgogne",
+        "Bourgogne Rouge",
+        "Bourgogne Blanc",
+        "Bourgogne Rosé",
+        "Bourgogne Clairet",
+        "Burgundy"
+      ],
+      "accessoryGrapes": [
+        "Aligoté",
+        "Chardonnay",
+        "Gamay de Bouze",
+        "Gamay de Chaudenay",
+        "Melon de Bourgogne",
+        "Melon",
+        "Pinot Blanc",
+        "Pinot Gris"
+      ],
+      "broadAppellation": true,
+      "additionalGrapes": {
+        "César": [
+          "red",
+          "rose"
+        ]
+      },
+      "labelMentions": {
+        "Primeur": "white",
+        "Nouveau": "white"
+      },
+      "featureId": "inao-denom-2338"
     }
   ],
   "otherAppellations": [
@@ -1398,7 +1473,6 @@
     "Bourgogne Mousseux",
     "Bourgogne Passe-tout-grains",
     "Coteaux Bourguignons",
-    "Coteaux Bourguignons ou Bourgogne grand ordinaire ou Bourgogne ordinaire",
     "Crémant de Bourgogne",
     "Mâcon"
   ]
