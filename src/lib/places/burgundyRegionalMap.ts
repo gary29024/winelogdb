@@ -32,8 +32,9 @@ const withoutProducer=(label:string,producer:string)=>{
  return kept.join(' ');
 };
 // Grape names recorded after a full denomination ("Mâcon-Lugny Chardonnay")
-// describe the wine's colour; "Mâcon Chardonnay" alone remains the village.
-const grapeColours=[['chardonnay','white'],['pinot noir','red'],['gamay','red']] as const;
+// limit the wine's possible colours; "Mâcon Chardonnay" alone remains the
+// village. Black grapes make both red and rosé, so they never pick one.
+const grapeColours:readonly (readonly [string,readonly string[]])[]=[['chardonnay',['white']],['pinot noir',['red','rose']],['gamay',['red','rose']]];
 const withoutGrapes=(text:string)=>grapeColours.reduce((value,[name])=>` ${value} `.replaceAll(` ${name} `,' ').trim(),text);
 const byLength=(a:string,b:string)=>b.length-a.length;
 const bourgogneAppellations=['bourgogne','burgundy','bourgogne rouge','bourgogne blanc','bourgogne rose'];
@@ -123,9 +124,13 @@ export function burgundyRegionalMapTarget(wine:Wine):BurgundyVillageMapTarget|nu
  // colour/style is absent. Côte d'Or does not include rosé.
  const labelColours=[['rouge','red'],['red','red'],['blanc','white'],['white','white'],['rose','rose']] as const;
  const namedColours=labelColours.filter(([name])=>remaining.slice(0,2).some(text=>contains(text,name))).map(([,value])=>value);
- if(!plainAppellation(group))namedColours.push(...grapeColours.filter(([name])=>contains(remaining[0],name)).map(([,value])=>value));
  if(vinGris&&(['gris','vin gris'].includes(remaining[0])||remaining.slice(0,2).some(text=>contains(text,'vin gris'))))namedColours.push('rose');
  if(new Set(namedColours).size>1)return null;
  if(namedColours.some(value=>!group.wineColours.includes(value)||(colour&&colour!==value)))return null;
+ // Each grape must allow a colour of the denomination and any explicit colour.
+ const grapes=plainAppellation(group)?[]:grapeColours.filter(([name])=>contains(remaining[0],name)).map(([,allowed])=>allowed);
+ const explicit=colour||namedColours[0];
+ const possible=group.wineColours.filter(value=>grapes.every(allowed=>allowed.includes(value))&&(!explicit||value===explicit));
+ if(grapes.length&&!possible.length)return null;
  return {villageId:group.id,villageName:group.name,region:group.region,featureId:group.featureId,name:group.name,scope:'appellation',mapKind:'regional'};
 }

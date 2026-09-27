@@ -493,9 +493,11 @@ Hyphenated site names (**Solutré-Pouilly**, **Charnay-lès-Mâcon**) and
 
 A grape name recorded after a full denomination in the appellation field
 (**Mâcon-Lugny Chardonnay**, **Bourgogne Côte d’Or Pinot Noir**, **Mâcon Bray
-Gamay**) is read as colour evidence: Chardonnay as white, Pinot Noir and Gamay
-as red. It must agree with the denomination's colours and any recorded colour,
-so **Mâcon Fuissé Gamay** withholds the map. **Mâcon Chardonnay** on its own
+Gamay**) limits the wine's possible colours: Chardonnay to white, Pinot Noir and Gamay
+to red or rosé (black grapes never choose between the two). The denomination
+and any recorded colour, style or colour word must allow one of those colours,
+so **Mâcon Fuissé Gamay** and a rosé **Bourgogne Côte d’Or Pinot Noir** withhold
+the map while a rosé **Mâcon Milly-Lamartine Gamay** opens it. **Mâcon Chardonnay** on its own
 remains the village denomination; other grapes such as Aligoté are not read.
 
 - [Les Orfèvres du Vin's brochure](https://www.orfevresduvin.com/img/cms/Acces-rapide/Brochure%20A4%20V2.pdf)

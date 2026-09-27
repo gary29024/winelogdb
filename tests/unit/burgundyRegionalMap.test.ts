@@ -777,6 +777,13 @@ describe('grape names after a full regional denomination',()=>{
   {appellation:'Bourgogne Hautes Côtes de Nuits Pinot Noir',featureId:'inao-denom-364',colour:'Red'},
   {appellation:'Bourgogne Tonnerre Chardonnay',featureId:'inao-denom-1751'},
   {appellation:'Mâcon Chardonnay',featureId:'inao-denom-1720'},
+  // Black grapes make rosé too: they limit the colour but never choose red.
+  {appellation:'Mâcon Milly-Lamartine Gamay',colour:'Rosé',featureId:'inao-denom-1729'},
+  {appellation:'Mâcon Milly-Lamartine Gamay',wineStyle:'Rosé',featureId:'inao-denom-1729'},
+  {appellation:'Mâcon Milly-Lamartine Rosé Gamay',featureId:'inao-denom-1729'},
+  {appellation:'Bourgogne Hautes Côtes de Nuits Pinot Noir',colour:'Rosé',featureId:'inao-denom-364'},
+  {appellation:'Bourgogne Hautes Côtes de Nuits Rosé Pinot Noir',featureId:'inao-denom-364'},
+  {appellation:'Mâcon Bray Gamay',colour:'Red',featureId:'inao-denom-1714'},
  ])('reads $appellation as the denomination',({featureId,...wine})=>{
   expect(burgundyVillageMapTarget({...base,wineName:'A named cuvée',...wine})).toMatchObject({featureId,mapKind:'regional'});
  });
@@ -788,6 +795,11 @@ describe('grape names after a full regional denomination',()=>{
   {appellation:'Bourgogne Chardonnay'},
   {appellation:'Mâcon-Villages Chardonnay'},
   {appellation:'Mâcon Lugny Aligoté'},
+  {appellation:'Bourgogne Côte d’Or Pinot Noir',colour:'Rosé'},
+  {appellation:'Bourgogne Côte d’Or Rosé Pinot Noir'},
+  {appellation:'Mâcon Fuissé Gamay',colour:'White'},
+  {appellation:'Mâcon Lugny Chardonnay',colour:'Rosé'},
+  {appellation:'Mâcon Lugny Gamay',wineStyle:'White'},
  ])('withholds a contradictory or unmapped grape label %j',wine=>{
   expect(burgundyVillageMapTarget({...base,wineName:'A named cuvée',...wine})?.mapKind).not.toBe('regional');
  });
