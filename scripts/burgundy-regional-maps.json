@@ -70,6 +70,9 @@
         "Côte d’Or",
         "Côte de Nuits",
         "Côte de Beaune"
+      ],
+      "conflictingNames": [
+        "Aligoté"
       ]
     },
     {
@@ -122,6 +125,9 @@
         "Côte d’Or",
         "Hautes Côtes de Nuits",
         "Côte de Nuits"
+      ],
+      "conflictingNames": [
+        "Aligoté"
       ]
     },
     {
@@ -184,6 +190,9 @@
         "Côte d’Or",
         "Hautes Côtes de Beaune",
         "Côte de Beaune"
+      ],
+      "conflictingNames": [
+        "Aligoté"
       ]
     },
     {
@@ -261,7 +270,10 @@
         "Côte Chalonnaise"
       ],
       "coordinateGrid": 1e-07,
-      "precisionNote": "The default 1e-6 degree grid closes a 2.118226 m² excluded hole. Use 1e-7 to pass the unchanged sub-2 m² hole/part gates; the largest flagged hole is then 0.3063 m²."
+      "precisionNote": "The default 1e-6 degree grid closes a 2.118226 m² excluded hole. Use 1e-7 to pass the unchanged sub-2 m² hole/part gates; the largest flagged hole is then 0.3063 m².",
+      "conflictingNames": [
+        "Aligoté"
+      ]
     },
     {
       "id": "bourgogne-cotes-du-couchois",
@@ -299,6 +311,9 @@
         "Couchois",
         "Côtes du Couchois",
         "Côte Chalonnaise"
+      ],
+      "conflictingNames": [
+        "Aligoté"
       ]
     },
     {
@@ -338,6 +353,9 @@
         "Grand Auxerrois",
         "Chablis et Grand Auxerrois",
         "Auxerrois"
+      ],
+      "conflictingNames": [
+        "Aligoté"
       ]
     },
     {
@@ -372,6 +390,9 @@
         "Grand Auxerrois",
         "Chablis et Grand Auxerrois",
         "Auxerrois"
+      ],
+      "conflictingNames": [
+        "Aligoté"
       ]
     },
     {
@@ -412,6 +433,9 @@
         "Grand Auxerrois",
         "Chablis et Grand Auxerrois",
         "Auxerrois"
+      ],
+      "conflictingNames": [
+        "Aligoté"
       ]
     },
     {
@@ -445,6 +469,9 @@
         "Grand Auxerrois",
         "Chablis et Grand Auxerrois",
         "Tonnerrois"
+      ],
+      "conflictingNames": [
+        "Aligoté"
       ]
     },
     {
@@ -481,7 +508,10 @@
         "Jovinien"
       ],
       "coordinateGrid": 1e-07,
-      "precisionNote": "The default 1e-6 grid changes this 13.294287 ha production area by -0.012462%, exceeding the unchanged 0.005% gate. Use the reviewed 1e-7 grid."
+      "precisionNote": "The default 1e-6 grid changes this 13.294287 ha production area by -0.012462%, exceeding the unchanged 0.005% gate. Use the reviewed 1e-7 grid.",
+      "conflictingNames": [
+        "Aligoté"
+      ]
     },
     {
       "id": "bourgogne-tonnerre",
@@ -518,6 +548,9 @@
         "Grand Auxerrois",
         "Chablis et Grand Auxerrois",
         "Tonnerrois"
+      ],
+      "conflictingNames": [
+        "Aligoté"
       ]
     },
     {
@@ -555,6 +588,9 @@
       "siteNames": [
         "La Chapelle Notre-Dame",
         "Chapelle Notre-Dame"
+      ],
+      "conflictingNames": [
+        "Aligoté"
       ]
     },
     {
@@ -590,7 +626,10 @@
       ],
       "coordinateGrid": 1e-07,
       "precisionNote": "The default 1e-6 grid changes the 5.027724 ha production area by +0.005683%, exceeding the unchanged 0.005% gate. The reviewed 1e-7 grid changes it by -0.001105% and retains every excluded hole and production part.",
-      "coverageNote": "This map covers the Bourgogne Le Chapitre denomination. Some producers have labelled Le Chapitre wines as Marsannay since the 2019 vintage. Follow the appellation on the bottle; the highlight shows the whole regional denomination, not an individual producer holding."
+      "coverageNote": "This map covers the Bourgogne Le Chapitre denomination. Some producers have labelled Le Chapitre wines as Marsannay since the 2019 vintage. Follow the appellation on the bottle; the highlight shows the whole regional denomination, not an individual producer holding.",
+      "conflictingNames": [
+        "Aligoté"
+      ]
     },
     {
       "id": "bourgogne-montrecul",
@@ -632,6 +671,9 @@
         "Montre-Cul",
         "En Montre-Cul",
         "En Montrecul"
+      ],
+      "conflictingNames": [
+        "Aligoté"
       ]
     },
     {
@@ -3020,7 +3062,8 @@
         "Bourgogne Aligoté"
       ],
       "siteNames": [
-        "Aligoté"
+        "Aligoté",
+        "Bourgogne-Aligoté"
       ],
       "baseAppellations": [
         "Bourgogne",

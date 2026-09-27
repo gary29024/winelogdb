@@ -39,10 +39,8 @@ const grapeColours:readonly (readonly [string,readonly string[]])[]=[['chardonna
 const withoutGrapes=(text:string)=>grapeColours.reduce((value,[name])=>` ${value} `.replaceAll(` ${name} `,' ').trim(),text);
 // "Vieilles Vignes" (old vines) is a label mention, not part of the denomination,
 // so "Bourgogne Aligoté Vieilles Vignes" in the appellation field still matches.
-const withoutLabelTerms=(text:string)=>withoutGrapes(text).replace(/\bvieilles? vignes?\b/g,' ').replace(/\s+/g,' ').trim();
-// Aligoté is its own AOC among the mapped regional denominations: no other
-// regional map accepts it, so naming the grape contradicts them.
-const aligote='aligote',aligoteId='bourgogne-aligote';
+const withoutOldVines=(text:string)=>text.replace(/\bvieilles? vignes?\b/g,' ').replace(/\s+/g,' ').trim();
+const withoutLabelTerms=(text:string)=>withoutOldVines(withoutGrapes(text));
 const byLength=(a:string,b:string)=>b.length-a.length;
 // Clairet, like rosé, can precede a denomination recorded in the wine name.
 const bourgogneAppellations=['bourgogne','burgundy','bourgogne rouge','bourgogne blanc','bourgogne rose','bourgogne clairet'];
@@ -85,7 +83,8 @@ export function burgundyRegionalMapTarget(wine:Wine):BurgundyVillageMapTarget|nu
  const fields=[wine.appellation,wine.wineName,wine.referenceSite,wine.referenceParcel].map(value=>key(value??''));
  const producer=key(wine.producer??'');
  const wineLabel=producer?` ${fields[1]} `.replaceAll(` ${producer} `,' ').trim():fields[1];
- const plainAppellation=(group:typeof groups[number])=>group.baseKeys.includes(fields[0]);
+ // Normalise old-vine wording on split bases too, retaining colour/grape words.
+ const plainAppellation=(group:typeof groups[number])=>group.baseKeys.includes(withoutOldVines(fields[0]));
  const joinedLabel=withoutProducer(joinedKey(wine.wineName??''),producer);
  const namesSite=(group:typeof groups[number])=>plainAppellation(group)&&group.joinedSiteKeys.some(name=>namesPlace(joinedLabel,name));
  // Chardonnay is also a grape: only a recorded full appellation establishes
@@ -112,8 +111,8 @@ export function burgundyRegionalMapTarget(wine:Wine):BurgundyVillageMapTarget|nu
  // Check full pending AOC names before stripping a broad prefix: removing
  // "Bourgogne" must not conceal "Bourgogne Aligoté" in a conflicting label.
  if(group.broad&&fields.some(text=>otherRegionals.some(name=>contains(text,name)&&!group.keys.some(own=>contains(own,name)))))return null;
+ // Reviewed grape conflicts belong to each appellation, not every regional AOC.
  if(fields.some(text=>group.blockedKeys.some(name=>contains(text,name))))return null;
- if(group.id!==aligoteId&&fields.some(text=>contains(text,aligote)))return null;
  if(country&&!['france','fr'].includes(country))return null;
  if(region&&!group.regions.includes(region)&&!group.keys.includes(region))return null;
  // The reviewed Joigny vin gris is rosé. A grape name such as Pinot Gris

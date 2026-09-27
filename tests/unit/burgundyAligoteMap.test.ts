@@ -78,6 +78,10 @@ describe('Bourgogne Aligoté review cases',()=>{
   {appellation:'Burgundy',wineName:'Aligoté'},
   {appellation:'Bourgogne',wineName:'Bourgogne Aligoté'},
   {appellation:'Bourgogne',wineName:'Aligoté',region:'Chablis'},
+  {appellation:'Bourgogne',wineName:'Bourgogne-Aligoté'},
+  {appellation:'Bourgogne Blanc',wineName:'Bourgogne-Aligoté Vieilles Vignes'},
+  {appellation:'Bourgogne Vieilles Vignes',wineName:'Aligoté'},
+  {appellation:'Bourgogne Blanc Vieille Vigne',wineName:'Bourgogne-Aligoté'},
  ])('reads a split plain Bourgogne + Aligoté label %j',wine=>{
   expect(burgundyVillageMapTarget({...base,...wine})).toMatchObject({featureId:'inao-denom-389',mapKind:'regional'});
  });
@@ -87,19 +91,51 @@ describe('Bourgogne Aligoté review cases',()=>{
   {appellation:'Bourgogne',wineName:'Aligoté Bouzeron'},
   {appellation:'Bourgogne',wineName:'Aligoté Meursault'},
   {appellation:'Bourgogne',wineName:'Aligoté Chardonnay'},
+  {appellation:'Bourgogne Rouge Vieilles Vignes',wineName:'Aligoté'},
+  {appellation:'Bourgogne Rosé Vieilles Vignes',wineName:'Aligoté'},
+  {appellation:'Bourgogne Clairet Vieilles Vignes',wineName:'Aligoté'},
+  {appellation:'Bourgogne Chardonnay Vieilles Vignes',wineName:'Aligoté'},
+  {appellation:'Bourgogne Vieilles Vignes Premier Cru',wineName:'Aligoté'},
+  {appellation:'Bourgogne Vieilles Vignes',wineName:'Aligoté Bouzeron'},
+  {appellation:'Bourgogne Vieilles Vignes',wineName:'Domaine de Bourgogne-Aligoté',producer:'Domaine de Bourgogne-Aligoté'},
+  {appellation:'Bourgogne',wineName:'Domaine de Bourgogne-Aligoté'},
+  {appellation:'Bourgogne',wineName:'Bourgogne-Aligoté-Something'},
  ])('withholds a contradictory split Aligoté label %j',wine=>{
   expect(burgundyVillageMapTarget({...base,...wine})).toBeNull();
  });
- // No other mapped regional denomination accepts the Aligoté grape.
+ // The reviewed Bourgogne AOC 138 denominations exclude Aligoté.
  it.each([
-  'Bourgogne Hautes Côtes de Nuits','Bourgogne Hautes Côtes de Beaune','Bourgogne Côte d’Or',
-  'Bourgogne Côte Chalonnaise','Mâcon','Mâcon-Villages','Mâcon Lugny',
- ])('withholds %s when the wine name says Aligoté',appellation=>{
-  expect(burgundyVillageMapTarget({...base,appellation,wineName:'Aligoté',colour:'White'})).toBeNull();
+  ['Bourgogne Hautes Côtes de Nuits','White'],['Bourgogne Hautes Côtes de Beaune','White'],
+  ['Bourgogne Côte d’Or','White'],['Bourgogne Côte Chalonnaise','White'],
+  ['Bourgogne Chitry','White'],['Bourgogne Coulanges-la-Vineuse','White'],
+  ['Bourgogne Côte Saint-Jacques','White'],['Bourgogne Côtes du Couchois','Red'],
+  ['Bourgogne Épineuil','Red'],['Bourgogne La Chapelle Notre-Dame','White'],
+  ['Bourgogne Le Chapitre','White'],['Bourgogne Montrecul','White'],['Bourgogne Tonnerre','White'],
+ ])('withholds %s when the wine name says Aligoté',(appellation,colour)=>{
+  expect(burgundyVillageMapTarget({...base,appellation,wineName:'Vieilles Vignes',colour}))
+   .toMatchObject({mapKind:'regional'});
+  expect(burgundyVillageMapTarget({...base,appellation,wineName:'Aligoté',colour})).toBeNull();
+ });
+ // Keep an explicit Mâcon identity when a label mentions a grape blend.
+ // Resolving a recorded AOC does not certify its grape proportions or vintage.
+ it.each([
+  ['Mâcon','inao-denom-1713'],
+  ['Mâcon-Villages','inao-denom-2893'],
+  ['Mâcon Lugny','inao-denom-1726'],
+ ])('does not impose Bourgogne grape exclusions on %s',(appellation,featureId)=>{
+  expect(burgundyVillageMapTarget({...base,appellation,wineName:'Chardonnay avec Aligoté',colour:'White'}))
+   .toMatchObject({featureId,mapKind:'regional'});
+  expect(burgundyVillageMapTarget({...base,appellation,wineName:'Bourgogne Aligoté',colour:'White'})).toBeNull();
  });
  it('still opens Montrecul-style sites without Aligoté and rejects them with it',()=>{
   expect(burgundyVillageMapTarget({...base,appellation:'Bourgogne',wineName:'Montrecul',colour:'White'})).toMatchObject({featureId:'inao-denom-373'});
   expect(burgundyVillageMapTarget({...base,appellation:'Bourgogne',wineName:'Montrecul Aligoté',colour:'White'})).toBeNull();
+ });
+ it.each([
+  ['Bourgogne Vieilles Vignes','Montrecul','inao-denom-373'],
+  ['Mâcon Blanc Vieilles Vignes','Lugny','inao-denom-1726'],
+ ])('normalises old-vine wording on a split base: %s + %s',(appellation,wineName,featureId)=>{
+  expect(burgundyVillageMapTarget({...base,appellation,wineName,colour:'White'})).toMatchObject({featureId});
  });
  // Old vines is a label mention, not part of the denomination.
  it.each([

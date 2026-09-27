@@ -621,7 +621,9 @@ for(const route of allMapRoutes)test(`Bourgogne Aligoté ${route}: partial white
  await page.keyboard.press('Escape');await expect(opener).toBeFocused();
  for(const colour of ['Red','Rosé']){
   await setup(page,{appellation:'Bourgogne Aligoté',wineName:'Vieilles Vignes',classification:null,colour,wineStyle:colour==='Red'?'red':'rose'});
-  await page.goto(route);await expect(page.getByRole('button',{name:'View regional map'})).toHaveCount(0);
+  await page.goto(route);
+  await expect(page.getByRole('heading',{name:'Vieilles Vignes',exact:true})).toBeVisible();
+  await expect(page.getByRole('button',{name:'View regional map'})).toHaveCount(0);
  }
  expect(errors).toEqual([]);
 });
@@ -631,6 +633,9 @@ for(const route of allMapRoutes)test(`Bourgogne review labels ${route}: Clairet,
  for(const [appellation,wineName,region,colour,expected] of [
   ['Bourgogne Clairet','Montrecul','Côte d’Or','rose','Bourgogne Montrecul'],
   ['Bourgogne','Kimméridgien','Chablis','white','Bourgogne'],
+  ['Bourgogne','Aligoté','Burgundy','white','Bourgogne Aligoté'],
+  ['Bourgogne Blanc Vieilles Vignes','Bourgogne-Aligoté','Burgundy','white','Bourgogne Aligoté'],
+  ['Mâcon Lugny','Chardonnay avec Aligoté','Burgundy','white','Mâcon Lugny'],
  ] as const){
   await setup(page,{appellation,wineName,region,colour,wineStyle:colour,classification:null});
   await page.goto(route);
@@ -642,13 +647,16 @@ for(const route of allMapRoutes)test(`Bourgogne review labels ${route}: Clairet,
   await page.keyboard.press('Escape');
  }
  for(const [appellation,wineName,region,colour] of [
-  ['Bourgogne','Aligoté','Burgundy','white'],
+  ['Bourgogne Rouge Vieilles Vignes','Aligoté','Burgundy','red'],
+  ['Bourgogne Hautes Côtes de Nuits','Aligoté','Burgundy','white'],
+  ['Bourgogne Vieilles Vignes','Aligoté Bouzeron','Burgundy','white'],
   ['Bourgogne','Passe-Tout-Grains','Burgundy','red'],
   ['Bourgogne Clairet','Montrecul','Côte d’Or','red'],
   ['Bourgogne Chitry','Olympe','Chablis','white'],
  ] as const){
   await setup(page,{appellation,wineName,region,colour,wineStyle:colour,classification:null});
   await page.goto(route);
+  await expect(page.getByRole('heading',{name:wineName,exact:true})).toBeVisible();
   await expect(page.getByRole('button',{name:'View regional map'})).toHaveCount(0);
  }
 });

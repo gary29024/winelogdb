@@ -20,16 +20,24 @@ source geometry, not the area planted with Aligoté or currently producing wine.
 
 Matching requires the recorded appellation `Bourgogne Aligoté` (accents,
 hyphens, AOC/AOP, white-colour and `Vieilles Vignes` suffixes are normalised),
-or a split label: a plain `Bourgogne`, `Bourgogne Blanc` or `Burgundy`
-appellation with Aligoté standing on its own in the wine name. Plain Bourgogne
-cannot be made from Aligoté, so that record can only be this AOC; red colour,
-Bouzeron, village or other-grape evidence still withholds it. `Aligoté` by
+or a split label: a `Bourgogne`, `Bourgogne Blanc` or `Burgundy` appellation
+with `Aligoté` or `Bourgogne-Aligoté` standing on its own in the wine name.
+Old-vine wording is also accepted on the split base. Producer names and longer
+hyphenated proper names do not establish a denomination. Red colour, Bouzeron,
+village or other-grape evidence still withholds the Aligoté map. `Aligoté` by
 itself, a producer, region or reference field does not establish this separate
-AOC. Conversely, no other mapped regional denomination accepts Aligoté, so an
-Aligoté wine name withholds their maps (e.g. Hautes Côtes de Nuits + Aligoté). Unknown colour remains possible for this
-white-only denomination, but explicit red/rosé, Clairet, conflicting grapes,
-sparkling styles and cru tiers are rejected. Bouzeron retains its separate
-village identity. Named cuvées stay at appellation scope.
+AOC. Unknown colour remains possible for this white-only denomination, but
+explicit red/rosé, Clairet, conflicting grapes, sparkling styles and cru tiers
+are rejected. Bouzeron retains its separate village identity. Named cuvées stay
+at appellation scope.
+
+Aligoté conflicts are configured for the reviewed **Bourgogne AOC 138** maps,
+whose [January 2026 specification, section V](https://info.agriculture.gouv.fr/boagri/document_administratif-e6cb8ffc-217c-492d-be27-6748e8f050db/telechargement)
+does not list that grape. They are not a global rule for every regional AOC.
+An explicit Mâcon identity with a grape-blend mention retains its existing map;
+a competing full `Bourgogne Aligoté` identity still withholds it. This matcher
+resolves the recorded appellation, not regulatory compliance with blend
+proportions or rules for a particular vintage.
 
 ### Geometry and transport
 
@@ -51,7 +59,7 @@ village identity. Named cuvées stay at appellation scope.
 - The builder leaves all **179 previous map assets and catalogues** byte-for-byte
   unchanged. Earlier-map optimisation remains in [#363](https://github.com/gary29024/winelogdb/issues/363).
 
-Validation passes **4,794 unit tests**, **13 browser checks** (Chromium and mobile
+Validation passes **4,841 unit tests**, **13 browser checks** (Chromium and mobile
 WebKit), lint and production build. The browser checks cover owner/shared routes,
 320px and desktop layouts, all 272 commune choices, north-to-south navigation,
 white-only matching, partial wording, lazy loading and broad Bourgogne regression
@@ -98,9 +106,9 @@ through to this overview. “Vin de Bourgogne” origin wording in a wine name d
 not hide an otherwise valid explicit Mâcon identity. Existing colour, style,
 country, region, cru-tier and conflict guards remain in force.
 
-The same applies when those AOCs appear only in the wine name: **Bourgogne +
-“Aligoté”** or **Bourgogne + “Passetoutgrain(s)”** withholds the map, as Gamay
-already did. Broad Bourgogne can come from both **Chablis** and **Grand Auxerrois**,
+A split **Bourgogne + “Aligoté”** now selects the separate Aligoté map under
+the guards above. **Bourgogne + “Passetoutgrain(s)”** still withholds the broad
+Bourgogne map, as Gamay already did. Broad Bourgogne can come from both **Chablis** and **Grand Auxerrois**,
 as the [BIVB regional overview](https://www.bourgogne-wines.com/wine-and-terroir/our-vineyards/chablis-and-the-grand-auxerrois/chablis-and-grand-auxerrois-the-green-gold-of-the-bourgogne-region,2469,9312.html)
 confirms. Broad Bourgogne therefore accepts Chablis, Chablis et Grand Auxerrois
 and Auxerrois region context, although the pinned source has no geometry for the
