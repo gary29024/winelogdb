@@ -28,7 +28,7 @@ class FarmingResearchTests(unittest.TestCase):
         self.assertEqual(rows['212670000D0177']['researchStatus'], 'historical-application')
         self.assertEqual(rows['212670000D0178']['researchStatus'], 'historical-application')
         self.assertTrue(all(p['currentFarmer'] is None and p['verifiedAsOf'] is None for p in rows.values()))
-        self.assertEqual(sum(p['researchDepth'] == 'inventory-only' for p in rows.values()), 155)
+        self.assertEqual(sum(p['researchDepth'] == 'inventory-only' for p in rows.values()), 136)
 
     def test_snapshot_drift_fails_before_join(self):
         with self.assertRaisesRegex(ValueError, 'snapshot hash'):
@@ -86,6 +86,31 @@ class FarmingResearchTests(unittest.TestCase):
         curation = copy.deepcopy(self.curation)
         curation['historyFindings'][0]['parcelIds'] = ['212670000D0093']
         with self.assertRaisesRegex(ValueError, 'outside research cru'):
+            self.build(curation)
+
+
+    def test_administrative_events_reach_split_parcels_only_through_lineage(self):
+        rows = {p['reference']: p for p in self.build()['parcels']}
+        self.assertEqual(rows['D 0665']['researchStatus'], 'historical-authorisation')
+        self.assertEqual(rows['D 0667']['researchStatus'], 'holder-lead')  # same holder, not in the decision
+        self.assertEqual(rows['D 0831']['candidateLeads'][0]['basis'], 'historical-application on predecessor D0774')
+        curation = copy.deepcopy(self.curation)
+        event = next(e for e in curation['exactParcelEvents'] if 'predecessorReferences' in e)
+        event['predecessorReferences'] = {'212670000D0774': ['212670000D0832']}  # a successor of D0775 instead
+        with self.assertRaisesRegex(ValueError, 'without matching cadastral lineage'):
+            self.build(curation)
+
+    def test_external_research_is_cited_and_never_a_farmer(self):
+        rows = {p['reference']: p for p in self.build()['parcels']}
+        self.assertIn('wh-d0510', rows['D 0510']['externalResearchIds'])
+        self.assertIsNone(rows['D 0510']['currentFarmer'])
+        curation = copy.deepcopy(self.curation)
+        curation['externalResearch'][0]['currentFarmer'] = 'Hospices de Beaune'
+        with self.assertRaisesRegex(ValueError, 'cannot establish current farming'):
+            self.build(curation)
+        curation = copy.deepcopy(self.curation)
+        curation['externalResearch'][0]['sourceIds'] = []
+        with self.assertRaisesRegex(ValueError, 'Unknown external research source'):
             self.build(curation)
 
 

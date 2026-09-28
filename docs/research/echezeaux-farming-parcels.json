@@ -27,9 +27,10 @@
     "recordedHolders": 36,
     "withRecordedRights": 119,
     "withoutMatchedRights": 157,
-    "holderLead": 100,
-    "historicalApplication": 2,
-    "unresolved": 174,
+    "holderLead": 109,
+    "historicalApplication": 10,
+    "historicalAuthorisation": 2,
+    "unresolved": 155,
     "currentFarmerConfirmed": 0,
     "withRightsChangeSince2019": 76,
     "withCadastralPredecessor": 36
@@ -45,6 +46,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -87,6 +89,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [
         {
           "from": "2019-01-01",
@@ -120,6 +123,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -162,6 +166,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [
         {
           "from": "2019-01-01",
@@ -216,6 +221,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [
         {
           "from": "2019-01-01",
@@ -270,6 +276,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [
         {
           "from": "2019-01-01",
@@ -324,6 +331,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [
         {
           "from": "2019-01-01",
@@ -378,6 +386,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [
         {
           "from": "2019-01-01",
@@ -411,6 +420,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -454,6 +464,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [
         {
           "from": "2024-01-01",
@@ -487,6 +498,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -508,6 +520,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -550,6 +563,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -571,6 +585,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -592,6 +607,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -613,6 +629,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -655,6 +672,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -697,6 +715,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -739,6 +758,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -781,6 +801,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -823,6 +844,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -844,6 +866,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -886,6 +909,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [
         {
           "from": "2024-01-01",
@@ -940,6 +964,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [
         {
           "from": "2024-01-01",
@@ -973,6 +998,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -994,6 +1020,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -1015,6 +1042,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -1036,6 +1064,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -1057,6 +1086,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -1078,6 +1108,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -1099,6 +1130,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -1142,6 +1174,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [
         {
           "from": "2024-01-01",
@@ -1175,6 +1208,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -1218,6 +1252,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [
         {
           "from": "2024-01-01",
@@ -1273,6 +1308,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [
         {
           "from": "2024-01-01",
@@ -1327,6 +1363,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [
         {
           "from": "2023-01-01",
@@ -1360,6 +1397,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -1381,6 +1419,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -1402,6 +1441,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -1423,6 +1463,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -1444,6 +1485,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -1465,6 +1507,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -1507,6 +1550,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [
         {
           "from": "2019-01-01",
@@ -1572,6 +1616,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [
         {
           "from": "2019-01-01",
@@ -1616,6 +1661,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -1637,6 +1683,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -1678,9 +1725,11 @@
           "documentDate": "2022-11-24",
           "outcome": "unconfirmed",
           "currentFarmer": null,
-          "unresolvedPrintedReference": "D01776"
+          "unresolvedPrintedReference": "D01776",
+          "summary": "Dossier 2022-204, complete at 21/10/2022, 1.5050 ha across Vosne-Romanée and Flagey-Échezeaux; the receipt does not authorise cultivation. Geometry of D0177/D0178 is unchanged since January 2022. Printed D01776 is unresolved."
         }
       ],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -1724,9 +1773,11 @@
           "documentDate": "2022-11-24",
           "outcome": "unconfirmed",
           "currentFarmer": null,
-          "unresolvedPrintedReference": "D01776"
+          "unresolvedPrintedReference": "D01776",
+          "summary": "Dossier 2022-204, complete at 21/10/2022, 1.5050 ha across Vosne-Romanée and Flagey-Échezeaux; the receipt does not authorise cultivation. Geometry of D0177/D0178 is unchanged since January 2022. Printed D01776 is unresolved."
         }
       ],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -1748,18 +1799,48 @@
       "recordedRights": [],
       "recordMatch": "unknown",
       "holderResearchIds": [],
-      "candidateLeads": [],
-      "historicalEvents": [],
+      "candidateLeads": [
+        {
+          "name": "SAS Domaine AF Gros (Pommard)",
+          "basis": "historical-application",
+          "sourceIds": [
+            "raa-2022-143"
+          ]
+        }
+      ],
+      "historicalEvents": [
+        {
+          "parcelIds": [
+            "212670000D0181"
+          ],
+          "predecessorReferences": {
+            "212670000D0775": [
+              "212670000D0832",
+              "212670000D0833",
+              "212670000D0834"
+            ]
+          },
+          "sourceId": "raa-2022-143",
+          "kind": "historical-application",
+          "applicant": "SAS Domaine AF Gros (Pommard)",
+          "previousOperator": "Domaine Gros Frère et Sœur",
+          "documentDate": "2022-06-30",
+          "outcome": "unconfirmed",
+          "currentFarmer": null,
+          "summary": "Dossier 2022-113, filed 23/05/2022, with Vougeot A523/A524; 1.0719 ha in total. Both Flagey references are in Les Loächausses. The receipt states it does not authorise cultivation. D0775 was divided after January 2024."
+        }
+      ],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
-      "researchStatus": "unresolved",
-      "researchDepth": "inventory-only",
+      "researchStatus": "historical-application",
+      "researchDepth": "exact-reference-event-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
-      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+      "nextEvidenceNeeded": "Resolve application outcome, actual operation and cadastral continuity."
     },
     {
       "parcelId": "212670000D0183",
@@ -1792,6 +1873,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [
         {
           "from": "2020-01-01",
@@ -1823,18 +1905,48 @@
       "recordedRights": [],
       "recordMatch": "unknown",
       "holderResearchIds": [],
-      "candidateLeads": [],
-      "historicalEvents": [],
+      "candidateLeads": [
+        {
+          "name": "SARL Domaine Michel Gros",
+          "basis": "historical-application",
+          "sourceIds": [
+            "raa-2022-101"
+          ]
+        }
+      ],
+      "historicalEvents": [
+        {
+          "parcelIds": [
+            "212670000D0184",
+            "212670000D0558"
+          ],
+          "predecessorReferences": {
+            "212670000D0774": [
+              "212670000D0830",
+              "212670000D0831"
+            ]
+          },
+          "sourceId": "raa-2022-101",
+          "kind": "historical-application",
+          "applicant": "SARL Domaine Michel Gros",
+          "previousOperator": "SCE Gros frère et sœur",
+          "documentDate": "2022-04-04",
+          "outcome": "unconfirmed",
+          "currentFarmer": null,
+          "summary": "Dossier 2022-053, filed 07/03/2022, complete 28/03/2022; 0.7903 ha across Vosne-Romanée and Flagey-Échezeaux, all three Flagey references in Les Loächausses. The receipt is not an authorisation. D0774 was divided after January 2024."
+        }
+      ],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
-      "researchStatus": "unresolved",
-      "researchDepth": "inventory-only",
+      "researchStatus": "historical-application",
+      "researchDepth": "exact-reference-event-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
-      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+      "nextEvidenceNeeded": "Resolve application outcome, actual operation and cadastral continuity."
     },
     {
       "parcelId": "212670000D0189",
@@ -1844,14 +1956,25 @@
       "recordedRights": [],
       "recordMatch": "unknown",
       "holderResearchIds": [],
-      "candidateLeads": [],
+      "candidateLeads": [
+        {
+          "name": "Domaine Cécile Tremblay",
+          "basis": "critic-attribution-area-reconstructed",
+          "sourceIds": [
+            "winehog-dessus"
+          ]
+        }
+      ],
       "historicalEvents": [],
+      "externalResearchIds": [
+        "wh-dessus-tremblay"
+      ],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
-      "researchStatus": "unresolved",
-      "researchDepth": "inventory-only",
+      "researchStatus": "holder-lead",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -1865,14 +1988,25 @@
       "recordedRights": [],
       "recordMatch": "unknown",
       "holderResearchIds": [],
-      "candidateLeads": [],
+      "candidateLeads": [
+        {
+          "name": "Domaine Cécile Tremblay",
+          "basis": "critic-attribution-area-reconstructed",
+          "sourceIds": [
+            "winehog-dessus"
+          ]
+        }
+      ],
       "historicalEvents": [],
+      "externalResearchIds": [
+        "wh-dessus-tremblay"
+      ],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
-      "researchStatus": "unresolved",
-      "researchDepth": "inventory-only",
+      "researchStatus": "holder-lead",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -1909,6 +2043,9 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [
+        "wh-dessus-noellat"
+      ],
       "rightsChanges": [
         {
           "from": "2019-01-01",
@@ -1926,7 +2063,7 @@
       "predecessorIds": [],
       "historyFindingIds": [],
       "researchStatus": "holder-lead",
-      "researchDepth": "holder-group-triage",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -1963,6 +2100,9 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [
+        "wh-dessus-noellat"
+      ],
       "rightsChanges": [
         {
           "from": "2019-01-01",
@@ -1980,7 +2120,7 @@
       "predecessorIds": [],
       "historyFindingIds": [],
       "researchStatus": "holder-lead",
-      "researchDepth": "holder-group-triage",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -2017,6 +2157,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [
         {
           "from": "2019-01-01",
@@ -2085,6 +2226,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -2106,6 +2248,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -2127,6 +2270,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -2148,6 +2292,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -2190,6 +2335,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [
         {
           "from": "2023-01-01",
@@ -2244,6 +2390,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -2265,6 +2412,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -2309,6 +2457,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [
         {
           "from": "2023-01-01",
@@ -2365,6 +2514,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [
         {
           "from": "2023-01-01",
@@ -2421,6 +2571,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [
         {
           "from": "2023-01-01",
@@ -2477,6 +2628,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [
         {
           "from": "2023-01-01",
@@ -2533,6 +2685,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [
         {
           "from": "2023-01-01",
@@ -2566,6 +2719,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -2587,6 +2741,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -2608,6 +2763,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -2629,6 +2785,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -2650,6 +2807,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -2692,6 +2850,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -2713,6 +2872,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -2755,6 +2915,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -2788,6 +2949,7 @@
       ],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [
         {
           "from": "2022-01-01",
@@ -2833,6 +2995,7 @@
       ],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [
         {
           "from": "2024-01-01",
@@ -2878,6 +3041,7 @@
       ],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [
         {
           "from": "2024-01-01",
@@ -2932,6 +3096,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [
         {
           "from": "2019-01-01",
@@ -2978,6 +3143,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -3021,6 +3187,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [
         {
           "from": "2019-01-01",
@@ -3075,6 +3242,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [
         {
           "from": "2019-01-01",
@@ -3108,6 +3276,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -3151,6 +3320,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [
         {
           "from": "2019-01-01",
@@ -3184,6 +3354,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -3226,6 +3397,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [
         {
           "from": "2019-01-01",
@@ -3259,6 +3431,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -3301,6 +3474,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [
         {
           "from": "2023-01-01",
@@ -3334,6 +3508,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -3355,6 +3530,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -3376,6 +3552,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -3397,6 +3574,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -3418,6 +3596,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -3439,6 +3618,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -3460,6 +3640,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -3481,6 +3662,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -3502,6 +3684,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -3523,6 +3706,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -3565,6 +3749,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [
         {
           "from": "2023-01-01",
@@ -3598,6 +3783,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -3641,6 +3827,9 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [
+        "wh-berthaut-gerbet"
+      ],
       "rightsChanges": [
         {
           "from": "2020-01-01",
@@ -3658,7 +3847,7 @@
       "predecessorIds": [],
       "historyFindingIds": [],
       "researchStatus": "holder-lead",
-      "researchDepth": "holder-group-triage",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -3674,6 +3863,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -3717,6 +3907,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -3738,6 +3929,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -3759,6 +3951,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -3780,6 +3973,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -3822,6 +4016,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -3865,6 +4060,9 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [
+        "wh-berthaut-gerbet"
+      ],
       "rightsChanges": [
         {
           "from": "2020-01-01",
@@ -3882,7 +4080,7 @@
       "predecessorIds": [],
       "historyFindingIds": [],
       "researchStatus": "holder-lead",
-      "researchDepth": "holder-group-triage",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -3898,6 +4096,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -3938,15 +4137,26 @@
             "hospices",
             "hospices-catalogue"
           ]
+        },
+        {
+          "name": "Hospices de Beaune (owner)",
+          "basis": "critic-named-cadastral-reference",
+          "sourceIds": [
+            "winehog-dessus",
+            "winehog-hospices"
+          ]
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [
+        "wh-d0510"
+      ],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
       "researchStatus": "holder-lead",
-      "researchDepth": "holder-group-triage",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -3983,6 +4193,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [
         {
           "from": "2024-01-01",
@@ -4037,6 +4248,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [
         {
           "from": "2024-01-01",
@@ -4070,6 +4282,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -4112,6 +4325,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [
         {
           "from": "2019-01-01",
@@ -4156,6 +4370,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -4198,6 +4413,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -4240,6 +4456,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -4282,6 +4499,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -4324,6 +4542,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -4345,6 +4564,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -4364,18 +4584,48 @@
       "recordedRights": [],
       "recordMatch": "unknown",
       "holderResearchIds": [],
-      "candidateLeads": [],
-      "historicalEvents": [],
+      "candidateLeads": [
+        {
+          "name": "SARL Domaine Michel Gros",
+          "basis": "historical-application",
+          "sourceIds": [
+            "raa-2022-101"
+          ]
+        }
+      ],
+      "historicalEvents": [
+        {
+          "parcelIds": [
+            "212670000D0184",
+            "212670000D0558"
+          ],
+          "predecessorReferences": {
+            "212670000D0774": [
+              "212670000D0830",
+              "212670000D0831"
+            ]
+          },
+          "sourceId": "raa-2022-101",
+          "kind": "historical-application",
+          "applicant": "SARL Domaine Michel Gros",
+          "previousOperator": "SCE Gros frère et sœur",
+          "documentDate": "2022-04-04",
+          "outcome": "unconfirmed",
+          "currentFarmer": null,
+          "summary": "Dossier 2022-053, filed 07/03/2022, complete 28/03/2022; 0.7903 ha across Vosne-Romanée and Flagey-Échezeaux, all three Flagey references in Les Loächausses. The receipt is not an authorisation. D0774 was divided after January 2024."
+        }
+      ],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
-      "researchStatus": "unresolved",
-      "researchDepth": "inventory-only",
+      "researchStatus": "historical-application",
+      "researchDepth": "exact-reference-event-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
-      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+      "nextEvidenceNeeded": "Resolve application outcome, actual operation and cadastral continuity."
     },
     {
       "parcelId": "212670000D0563",
@@ -4387,6 +4637,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -4408,6 +4659,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -4429,6 +4681,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -4471,6 +4724,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -4513,6 +4767,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -4555,6 +4810,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -4597,6 +4853,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [
         {
           "from": "2019-01-01",
@@ -4664,6 +4921,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [
         {
           "from": "2019-01-01",
@@ -4731,6 +4989,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [
         {
           "from": "2019-01-01",
@@ -4798,6 +5057,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [
         {
           "from": "2019-01-01",
@@ -4844,6 +5104,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -4865,6 +5126,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -4907,6 +5169,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [
         {
           "from": "2019-01-01",
@@ -4974,6 +5237,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [
         {
           "from": "2019-01-01",
@@ -5020,6 +5284,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -5041,6 +5306,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -5062,6 +5328,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -5083,6 +5350,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -5104,6 +5372,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -5125,6 +5394,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -5144,14 +5414,25 @@
       "recordedRights": [],
       "recordMatch": "unknown",
       "holderResearchIds": [],
-      "candidateLeads": [],
+      "candidateLeads": [
+        {
+          "name": "Domaine des Perdrix",
+          "basis": "critic-attribution-area-reconstructed",
+          "sourceIds": [
+            "winehog-dessus"
+          ]
+        }
+      ],
       "historicalEvents": [],
+      "externalResearchIds": [
+        "wh-dessus-perdrix"
+      ],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
-      "researchStatus": "unresolved",
-      "researchDepth": "inventory-only",
+      "researchStatus": "holder-lead",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -5165,14 +5446,25 @@
       "recordedRights": [],
       "recordMatch": "unknown",
       "holderResearchIds": [],
-      "candidateLeads": [],
+      "candidateLeads": [
+        {
+          "name": "Domaine des Perdrix",
+          "basis": "critic-attribution-area-reconstructed",
+          "sourceIds": [
+            "winehog-dessus"
+          ]
+        }
+      ],
       "historicalEvents": [],
+      "externalResearchIds": [
+        "wh-dessus-perdrix"
+      ],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
-      "researchStatus": "unresolved",
-      "researchDepth": "inventory-only",
+      "researchStatus": "holder-lead",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -5209,6 +5501,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [
         {
           "from": "2019-01-01",
@@ -5263,6 +5556,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [
         {
           "from": "2019-01-01",
@@ -5296,6 +5590,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -5317,6 +5612,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -5338,6 +5634,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -5381,6 +5678,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -5402,6 +5700,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -5441,15 +5740,26 @@
           "sourceIds": [
             "hoffmann"
           ]
+        },
+        {
+          "name": "Domaine Jayer-Gilles / Hoffmann-Jayer",
+          "basis": "critic-named-cadastral-reference",
+          "sourceIds": [
+            "winehog-jayer-gilles",
+            "winehog-dessus"
+          ]
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [
+        "wh-d0631"
+      ],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
       "researchStatus": "holder-lead",
-      "researchDepth": "holder-group-triage",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -5463,14 +5773,26 @@
       "recordedRights": [],
       "recordMatch": "unknown",
       "holderResearchIds": [],
-      "candidateLeads": [],
+      "candidateLeads": [
+        {
+          "name": "Niquet-Jayer family (owner)",
+          "basis": "critic-named-cadastral-reference",
+          "sourceIds": [
+            "winehog-jayer-gilles",
+            "winehog-dessus"
+          ]
+        }
+      ],
       "historicalEvents": [],
+      "externalResearchIds": [
+        "wh-d0632"
+      ],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
-      "researchStatus": "unresolved",
-      "researchDepth": "inventory-only",
+      "researchStatus": "holder-lead",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -5498,6 +5820,7 @@
       ],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [
         {
           "from": "2024-01-01",
@@ -5543,6 +5866,7 @@
       ],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [
         {
           "from": "2019-01-01",
@@ -5588,6 +5912,7 @@
       ],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [
         {
           "from": "2024-01-01",
@@ -5621,6 +5946,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -5663,6 +5989,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -5707,6 +6034,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [
         {
           "from": "2022-01-01",
@@ -5763,6 +6091,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [
         {
           "from": "2022-01-01",
@@ -5819,6 +6148,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [
         {
           "from": "2022-01-01",
@@ -5852,6 +6182,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -5885,6 +6216,7 @@
       ],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [
         {
           "from": "2019-01-01",
@@ -5930,6 +6262,7 @@
       ],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [
         {
           "from": "2019-01-01",
@@ -5975,6 +6308,7 @@
       ],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [
         {
           "from": "2019-01-01",
@@ -6030,6 +6364,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [
         {
           "from": "2019-01-01",
@@ -6084,6 +6419,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [
         {
           "from": "2019-01-01",
@@ -6136,19 +6472,42 @@
             "rion",
             "rion-succession"
           ]
+        },
+        {
+          "name": "SAS Domaine RC Les Grandes Vignes (Quincey)",
+          "basis": "authorisation",
+          "sourceIds": [
+            "raa-2022-084"
+          ]
         }
       ],
-      "historicalEvents": [],
+      "historicalEvents": [
+        {
+          "parcelIds": [
+            "212670000D0665",
+            "212670000D0666"
+          ],
+          "sourceId": "raa-2022-084",
+          "kind": "authorisation",
+          "applicant": "SAS Domaine RC Les Grandes Vignes (Quincey)",
+          "previousOperator": "Domaine Daniel Rion et Fils",
+          "documentDate": "2022-07-04",
+          "outcome": "authorised",
+          "currentFarmer": null,
+          "summary": "Application filed 11/01/2022, complete 01/03/2022, CDOA opinion 25/05/2022; the same decision refuses Vosne-Romanée AB references to this applicant. Article 2 lists four communes without assigning each row; the section D rows are taken as Flagey-Échezeaux because the cédant holds these references there. D0665 is printed at 0.1157 ha, its cadastral area; D0666 at 0.0799 ha against 0.1157 ha, so its scope is unresolved. D0667, held by the same right holder, is not in the decision. Whether the applicant is connected to Domaine Jean-Charles Rion is not established."
+        }
+      ],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
-      "researchStatus": "holder-lead",
-      "researchDepth": "holder-group-triage",
+      "researchStatus": "historical-authorisation",
+      "researchDepth": "exact-reference-event-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
-      "nextEvidenceNeeded": "Obtain dated parcel-specific operation evidence and scope."
+      "nextEvidenceNeeded": "Confirm actual operation, scope and continuation since the decision."
     },
     {
       "parcelId": "212670000D0666",
@@ -6179,19 +6538,42 @@
             "rion",
             "rion-succession"
           ]
+        },
+        {
+          "name": "SAS Domaine RC Les Grandes Vignes (Quincey)",
+          "basis": "authorisation",
+          "sourceIds": [
+            "raa-2022-084"
+          ]
         }
       ],
-      "historicalEvents": [],
+      "historicalEvents": [
+        {
+          "parcelIds": [
+            "212670000D0665",
+            "212670000D0666"
+          ],
+          "sourceId": "raa-2022-084",
+          "kind": "authorisation",
+          "applicant": "SAS Domaine RC Les Grandes Vignes (Quincey)",
+          "previousOperator": "Domaine Daniel Rion et Fils",
+          "documentDate": "2022-07-04",
+          "outcome": "authorised",
+          "currentFarmer": null,
+          "summary": "Application filed 11/01/2022, complete 01/03/2022, CDOA opinion 25/05/2022; the same decision refuses Vosne-Romanée AB references to this applicant. Article 2 lists four communes without assigning each row; the section D rows are taken as Flagey-Échezeaux because the cédant holds these references there. D0665 is printed at 0.1157 ha, its cadastral area; D0666 at 0.0799 ha against 0.1157 ha, so its scope is unresolved. D0667, held by the same right holder, is not in the decision. Whether the applicant is connected to Domaine Jean-Charles Rion is not established."
+        }
+      ],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
-      "researchStatus": "holder-lead",
-      "researchDepth": "holder-group-triage",
+      "researchStatus": "historical-authorisation",
+      "researchDepth": "exact-reference-event-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
-      "nextEvidenceNeeded": "Obtain dated parcel-specific operation evidence and scope."
+      "nextEvidenceNeeded": "Confirm actual operation, scope and continuation since the decision."
     },
     {
       "parcelId": "212670000D0667",
@@ -6225,6 +6607,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -6244,14 +6627,25 @@
       "recordedRights": [],
       "recordMatch": "unknown",
       "holderResearchIds": [],
-      "candidateLeads": [],
+      "candidateLeads": [
+        {
+          "name": "Domaine Mongeard-Mugneret",
+          "basis": "critic-attribution-area-reconstructed",
+          "sourceIds": [
+            "winehog-dessus"
+          ]
+        }
+      ],
       "historicalEvents": [],
+      "externalResearchIds": [
+        "wh-dessus-mongeard"
+      ],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
-      "researchStatus": "unresolved",
-      "researchDepth": "inventory-only",
+      "researchStatus": "holder-lead",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -6265,14 +6659,25 @@
       "recordedRights": [],
       "recordMatch": "unknown",
       "holderResearchIds": [],
-      "candidateLeads": [],
+      "candidateLeads": [
+        {
+          "name": "Domaine Mongeard-Mugneret",
+          "basis": "critic-attribution-area-reconstructed",
+          "sourceIds": [
+            "winehog-dessus"
+          ]
+        }
+      ],
       "historicalEvents": [],
+      "externalResearchIds": [
+        "wh-dessus-mongeard"
+      ],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
-      "researchStatus": "unresolved",
-      "researchDepth": "inventory-only",
+      "researchStatus": "holder-lead",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -6286,14 +6691,25 @@
       "recordedRights": [],
       "recordMatch": "unknown",
       "holderResearchIds": [],
-      "candidateLeads": [],
+      "candidateLeads": [
+        {
+          "name": "Domaine Mongeard-Mugneret",
+          "basis": "critic-attribution-area-reconstructed",
+          "sourceIds": [
+            "winehog-dessus"
+          ]
+        }
+      ],
       "historicalEvents": [],
+      "externalResearchIds": [
+        "wh-dessus-mongeard"
+      ],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
-      "researchStatus": "unresolved",
-      "researchDepth": "inventory-only",
+      "researchStatus": "holder-lead",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -6330,6 +6746,9 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [
+        "wh-dessus-noellat"
+      ],
       "rightsChanges": [
         {
           "from": "2019-01-01",
@@ -6360,7 +6779,7 @@
         "mongeard-d0673"
       ],
       "researchStatus": "holder-lead",
-      "researchDepth": "holder-group-triage",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -6397,12 +6816,15 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [
+        "wh-dessus-noellat"
+      ],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
       "researchStatus": "holder-lead",
-      "researchDepth": "holder-group-triage",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -6440,6 +6862,10 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [
+        "wh-dessus-noellat",
+        "wh-liger-belair-2020"
+      ],
       "rightsChanges": [
         {
           "from": "2019-01-01",
@@ -6481,7 +6907,7 @@
         "mongeard-d0673"
       ],
       "researchStatus": "holder-lead",
-      "researchDepth": "holder-group-triage",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -6519,6 +6945,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -6562,6 +6989,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -6605,6 +7033,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -6648,6 +7077,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -6669,6 +7099,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -6690,6 +7121,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -6711,6 +7143,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -6732,6 +7165,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -6753,6 +7187,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -6774,6 +7209,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -6795,6 +7231,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -6837,6 +7274,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -6858,6 +7296,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -6900,6 +7339,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [
         {
           "from": "2020-01-01",
@@ -6945,6 +7385,7 @@
       ],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [
         {
           "from": "2019-01-01",
@@ -6990,6 +7431,7 @@
       ],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [
         {
           "from": "2019-01-01",
@@ -7023,6 +7465,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -7044,6 +7487,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -7065,6 +7509,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -7086,6 +7531,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -7107,6 +7553,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -7128,6 +7575,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -7149,6 +7597,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -7170,6 +7619,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -7191,6 +7641,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -7212,6 +7663,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -7233,6 +7685,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -7254,6 +7707,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -7275,6 +7729,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -7296,6 +7751,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -7338,6 +7794,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -7381,6 +7838,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -7424,6 +7882,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -7467,6 +7926,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -7510,6 +7970,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -7552,6 +8013,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [
         {
           "from": "2019-01-01",
@@ -7619,6 +8081,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [
         {
           "from": "2019-01-01",
@@ -7686,6 +8149,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [
         {
           "from": "2019-01-01",
@@ -7753,6 +8217,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -7795,6 +8260,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [
         {
           "from": "2020-01-01",
@@ -7828,6 +8294,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -7849,6 +8316,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [
@@ -7872,6 +8340,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -7914,6 +8383,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [
         {
           "from": "2019-01-01",
@@ -7960,6 +8430,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -7979,14 +8450,26 @@
       "recordedRights": [],
       "recordMatch": "unknown",
       "holderResearchIds": [],
-      "candidateLeads": [],
+      "candidateLeads": [
+        {
+          "name": "Domaine Jean-Marc Millot",
+          "basis": "critic-attribution-area-reconstructed",
+          "sourceIds": [
+            "winehog-dessus",
+            "winehog-millot"
+          ]
+        }
+      ],
       "historicalEvents": [],
+      "externalResearchIds": [
+        "wh-dessus-millot"
+      ],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
-      "researchStatus": "unresolved",
-      "researchDepth": "inventory-only",
+      "researchStatus": "holder-lead",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -8000,14 +8483,26 @@
       "recordedRights": [],
       "recordMatch": "unknown",
       "holderResearchIds": [],
-      "candidateLeads": [],
+      "candidateLeads": [
+        {
+          "name": "Domaine Jean-Marc Millot",
+          "basis": "critic-attribution-area-reconstructed",
+          "sourceIds": [
+            "winehog-dessus",
+            "winehog-millot"
+          ]
+        }
+      ],
       "historicalEvents": [],
+      "externalResearchIds": [
+        "wh-dessus-millot"
+      ],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
-      "researchStatus": "unresolved",
-      "researchDepth": "inventory-only",
+      "researchStatus": "holder-lead",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -8021,14 +8516,26 @@
       "recordedRights": [],
       "recordMatch": "unknown",
       "holderResearchIds": [],
-      "candidateLeads": [],
+      "candidateLeads": [
+        {
+          "name": "Domaine Jean-Marc Millot",
+          "basis": "critic-attribution-area-reconstructed",
+          "sourceIds": [
+            "winehog-dessus",
+            "winehog-millot"
+          ]
+        }
+      ],
       "historicalEvents": [],
+      "externalResearchIds": [
+        "wh-dessus-millot"
+      ],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
-      "researchStatus": "unresolved",
-      "researchDepth": "inventory-only",
+      "researchStatus": "holder-lead",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -8044,6 +8551,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -8065,6 +8573,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -8086,6 +8595,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -8128,6 +8638,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -8149,6 +8660,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -8170,6 +8682,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -8212,6 +8725,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -8233,6 +8747,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -8254,6 +8769,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -8275,6 +8791,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -8296,6 +8813,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -8329,6 +8847,7 @@
       ],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -8362,6 +8881,7 @@
       ],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -8395,6 +8915,7 @@
       ],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [
         {
           "from": "2022-01-01",
@@ -8430,6 +8951,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -8451,6 +8973,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -8493,6 +9016,7 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
@@ -8536,6 +9060,9 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [
+        "wh-berthaut-gerbet"
+      ],
       "rightsChanges": [
         {
           "from": "2020-01-01",
@@ -8555,7 +9082,7 @@
       ],
       "historyFindingIds": [],
       "researchStatus": "holder-lead",
-      "researchDepth": "holder-group-triage",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -8571,6 +9098,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2020-01-01",
       "predecessorIds": [
@@ -8596,6 +9124,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2023-01-01",
       "predecessorIds": [
@@ -8621,6 +9150,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2023-01-01",
       "predecessorIds": [
@@ -8646,6 +9176,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2023-01-01",
       "predecessorIds": [
@@ -8671,6 +9202,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2023-01-01",
       "predecessorIds": [
@@ -8696,6 +9228,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2023-01-01",
       "predecessorIds": [
@@ -8721,6 +9254,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2023-01-01",
       "predecessorIds": [
@@ -8744,8 +9278,39 @@
       "recordedRights": [],
       "recordMatch": "unknown",
       "holderResearchIds": [],
-      "candidateLeads": [],
-      "historicalEvents": [],
+      "candidateLeads": [
+        {
+          "name": "SARL Domaine Michel Gros",
+          "basis": "historical-application on predecessor D0774",
+          "sourceIds": [
+            "raa-2022-101"
+          ]
+        }
+      ],
+      "historicalEvents": [
+        {
+          "parcelIds": [
+            "212670000D0184",
+            "212670000D0558"
+          ],
+          "predecessorReferences": {
+            "212670000D0774": [
+              "212670000D0830",
+              "212670000D0831"
+            ]
+          },
+          "sourceId": "raa-2022-101",
+          "kind": "historical-application",
+          "applicant": "SARL Domaine Michel Gros",
+          "previousOperator": "SCE Gros frère et sœur",
+          "documentDate": "2022-04-04",
+          "outcome": "unconfirmed",
+          "currentFarmer": null,
+          "summary": "Dossier 2022-053, filed 07/03/2022, complete 28/03/2022; 0.7903 ha across Vosne-Romanée and Flagey-Échezeaux, all three Flagey references in Les Loächausses. The receipt is not an authorisation. D0774 was divided after January 2024.",
+          "viaPredecessor": "212670000D0774"
+        }
+      ],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2025-01-01",
       "predecessorIds": [
@@ -8754,12 +9319,12 @@
       "historyFindingIds": [
         "private-splits"
       ],
-      "researchStatus": "unresolved",
-      "researchDepth": "inventory-only",
+      "researchStatus": "historical-application",
+      "researchDepth": "exact-reference-event-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
-      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+      "nextEvidenceNeeded": "Resolve application outcome, actual operation and cadastral continuity."
     },
     {
       "parcelId": "212670000D0831",
@@ -8769,8 +9334,39 @@
       "recordedRights": [],
       "recordMatch": "unknown",
       "holderResearchIds": [],
-      "candidateLeads": [],
-      "historicalEvents": [],
+      "candidateLeads": [
+        {
+          "name": "SARL Domaine Michel Gros",
+          "basis": "historical-application on predecessor D0774",
+          "sourceIds": [
+            "raa-2022-101"
+          ]
+        }
+      ],
+      "historicalEvents": [
+        {
+          "parcelIds": [
+            "212670000D0184",
+            "212670000D0558"
+          ],
+          "predecessorReferences": {
+            "212670000D0774": [
+              "212670000D0830",
+              "212670000D0831"
+            ]
+          },
+          "sourceId": "raa-2022-101",
+          "kind": "historical-application",
+          "applicant": "SARL Domaine Michel Gros",
+          "previousOperator": "SCE Gros frère et sœur",
+          "documentDate": "2022-04-04",
+          "outcome": "unconfirmed",
+          "currentFarmer": null,
+          "summary": "Dossier 2022-053, filed 07/03/2022, complete 28/03/2022; 0.7903 ha across Vosne-Romanée and Flagey-Échezeaux, all three Flagey references in Les Loächausses. The receipt is not an authorisation. D0774 was divided after January 2024.",
+          "viaPredecessor": "212670000D0774"
+        }
+      ],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2025-01-01",
       "predecessorIds": [
@@ -8779,12 +9375,12 @@
       "historyFindingIds": [
         "private-splits"
       ],
-      "researchStatus": "unresolved",
-      "researchDepth": "inventory-only",
+      "researchStatus": "historical-application",
+      "researchDepth": "exact-reference-event-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
-      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+      "nextEvidenceNeeded": "Resolve application outcome, actual operation and cadastral continuity."
     },
     {
       "parcelId": "212670000D0832",
@@ -8794,8 +9390,39 @@
       "recordedRights": [],
       "recordMatch": "unknown",
       "holderResearchIds": [],
-      "candidateLeads": [],
-      "historicalEvents": [],
+      "candidateLeads": [
+        {
+          "name": "SAS Domaine AF Gros (Pommard)",
+          "basis": "historical-application on predecessor D0775",
+          "sourceIds": [
+            "raa-2022-143"
+          ]
+        }
+      ],
+      "historicalEvents": [
+        {
+          "parcelIds": [
+            "212670000D0181"
+          ],
+          "predecessorReferences": {
+            "212670000D0775": [
+              "212670000D0832",
+              "212670000D0833",
+              "212670000D0834"
+            ]
+          },
+          "sourceId": "raa-2022-143",
+          "kind": "historical-application",
+          "applicant": "SAS Domaine AF Gros (Pommard)",
+          "previousOperator": "Domaine Gros Frère et Sœur",
+          "documentDate": "2022-06-30",
+          "outcome": "unconfirmed",
+          "currentFarmer": null,
+          "summary": "Dossier 2022-113, filed 23/05/2022, with Vougeot A523/A524; 1.0719 ha in total. Both Flagey references are in Les Loächausses. The receipt states it does not authorise cultivation. D0775 was divided after January 2024.",
+          "viaPredecessor": "212670000D0775"
+        }
+      ],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2025-01-01",
       "predecessorIds": [
@@ -8804,12 +9431,12 @@
       "historyFindingIds": [
         "private-splits"
       ],
-      "researchStatus": "unresolved",
-      "researchDepth": "inventory-only",
+      "researchStatus": "historical-application",
+      "researchDepth": "exact-reference-event-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
-      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+      "nextEvidenceNeeded": "Resolve application outcome, actual operation and cadastral continuity."
     },
     {
       "parcelId": "212670000D0833",
@@ -8819,8 +9446,39 @@
       "recordedRights": [],
       "recordMatch": "unknown",
       "holderResearchIds": [],
-      "candidateLeads": [],
-      "historicalEvents": [],
+      "candidateLeads": [
+        {
+          "name": "SAS Domaine AF Gros (Pommard)",
+          "basis": "historical-application on predecessor D0775",
+          "sourceIds": [
+            "raa-2022-143"
+          ]
+        }
+      ],
+      "historicalEvents": [
+        {
+          "parcelIds": [
+            "212670000D0181"
+          ],
+          "predecessorReferences": {
+            "212670000D0775": [
+              "212670000D0832",
+              "212670000D0833",
+              "212670000D0834"
+            ]
+          },
+          "sourceId": "raa-2022-143",
+          "kind": "historical-application",
+          "applicant": "SAS Domaine AF Gros (Pommard)",
+          "previousOperator": "Domaine Gros Frère et Sœur",
+          "documentDate": "2022-06-30",
+          "outcome": "unconfirmed",
+          "currentFarmer": null,
+          "summary": "Dossier 2022-113, filed 23/05/2022, with Vougeot A523/A524; 1.0719 ha in total. Both Flagey references are in Les Loächausses. The receipt states it does not authorise cultivation. D0775 was divided after January 2024.",
+          "viaPredecessor": "212670000D0775"
+        }
+      ],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2025-01-01",
       "predecessorIds": [
@@ -8829,12 +9487,12 @@
       "historyFindingIds": [
         "private-splits"
       ],
-      "researchStatus": "unresolved",
-      "researchDepth": "inventory-only",
+      "researchStatus": "historical-application",
+      "researchDepth": "exact-reference-event-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
-      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+      "nextEvidenceNeeded": "Resolve application outcome, actual operation and cadastral continuity."
     },
     {
       "parcelId": "212670000D0834",
@@ -8844,8 +9502,39 @@
       "recordedRights": [],
       "recordMatch": "unknown",
       "holderResearchIds": [],
-      "candidateLeads": [],
-      "historicalEvents": [],
+      "candidateLeads": [
+        {
+          "name": "SAS Domaine AF Gros (Pommard)",
+          "basis": "historical-application on predecessor D0775",
+          "sourceIds": [
+            "raa-2022-143"
+          ]
+        }
+      ],
+      "historicalEvents": [
+        {
+          "parcelIds": [
+            "212670000D0181"
+          ],
+          "predecessorReferences": {
+            "212670000D0775": [
+              "212670000D0832",
+              "212670000D0833",
+              "212670000D0834"
+            ]
+          },
+          "sourceId": "raa-2022-143",
+          "kind": "historical-application",
+          "applicant": "SAS Domaine AF Gros (Pommard)",
+          "previousOperator": "Domaine Gros Frère et Sœur",
+          "documentDate": "2022-06-30",
+          "outcome": "unconfirmed",
+          "currentFarmer": null,
+          "summary": "Dossier 2022-113, filed 23/05/2022, with Vougeot A523/A524; 1.0719 ha in total. Both Flagey references are in Les Loächausses. The receipt states it does not authorise cultivation. D0775 was divided after January 2024.",
+          "viaPredecessor": "212670000D0775"
+        }
+      ],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2025-01-01",
       "predecessorIds": [
@@ -8854,12 +9543,12 @@
       "historyFindingIds": [
         "private-splits"
       ],
-      "researchStatus": "unresolved",
-      "researchDepth": "inventory-only",
+      "researchStatus": "historical-application",
+      "researchDepth": "exact-reference-event-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
-      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+      "nextEvidenceNeeded": "Resolve application outcome, actual operation and cadastral continuity."
     },
     {
       "parcelId": "212670000D0835",
@@ -8871,6 +9560,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2025-01-01",
       "predecessorIds": [
@@ -8896,6 +9586,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2025-01-01",
       "predecessorIds": [
@@ -8921,6 +9612,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2023-01-01",
       "predecessorIds": [
@@ -8946,6 +9638,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2023-01-01",
       "predecessorIds": [
@@ -8971,6 +9664,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2024-01-01",
       "predecessorIds": [
@@ -8996,6 +9690,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2024-01-01",
       "predecessorIds": [
@@ -9021,6 +9716,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2025-01-01",
       "predecessorIds": [
@@ -9046,6 +9742,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2025-01-01",
       "predecessorIds": [
@@ -9083,6 +9780,7 @@
       ],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [
         {
           "from": "2024-01-01",
@@ -9130,6 +9828,7 @@
       ],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [
         {
           "from": "2024-01-01",
@@ -9177,6 +9876,7 @@
       ],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [
         {
           "from": "2024-01-01",
@@ -9224,6 +9924,7 @@
       ],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [
         {
           "from": "2024-01-01",
@@ -9271,6 +9972,7 @@
       ],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [
         {
           "from": "2024-01-01",
@@ -9306,6 +10008,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2025-01-01",
       "predecessorIds": [
@@ -9331,6 +10034,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2025-01-01",
       "predecessorIds": [
@@ -9356,6 +10060,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2026-06-01",
       "predecessorIds": [
@@ -9382,6 +10087,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2026-06-01",
       "predecessorIds": [
@@ -9408,6 +10114,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2026-06-01",
       "predecessorIds": [
@@ -9434,6 +10141,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2026-06-01",
       "predecessorIds": [
@@ -9460,6 +10168,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2026-06-01",
       "predecessorIds": [
@@ -9486,6 +10195,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2026-06-01",
       "predecessorIds": [
@@ -9512,6 +10222,7 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2026-06-01",
       "predecessorIds": [

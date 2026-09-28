@@ -22,6 +22,10 @@ def require(condition, message):
         raise ValueError(message)
 
 
+EVENT_KINDS = {'historical-application', 'authorisation'}
+EXTERNAL_BASES = {'critic-named-cadastral-reference', 'critic-attribution-area-reconstructed', 'critic-holding-description'}
+
+
 def build_register(manifest, asset, curation, history):
     # Git autocrlf changes the final newline in a Windows checkout. Match the
     # canonical LF bytes hashed by build_echezeaux_parcels.py, without reserialising.
@@ -52,37 +56,60 @@ def build_register(manifest, asset, curation, history):
         require(finding['parcelIds'] and set(finding['parcelIds']) <= ids, 'History finding outside research cru')
         require(finding['sourceIds'] and set(finding['sourceIds']) <= sources.keys(), 'Unknown history finding source')
         require(finding.get('currentFarmer') is None, 'Rights history cannot establish current farming')
+    successors = {r['parcelId']: {s['parcelId'] for s in r['successors']} for r in history['retiredParcels']}
     for event in curation['exactParcelEvents']:
         require(set(event['parcelIds']) <= ids, 'Event reference outside research cru')
         require(event['sourceId'] in sources, 'Unknown event source')
+        require(event['kind'] in EVENT_KINDS, f"Unknown event kind: {event['kind']}")
         require(event['currentFarmer'] is None, 'Historical event cannot establish current farming')
+        # A retired reference named in a notice reaches today's parcels only through recorded lineage.
+        for retired, current in event.get('predecessorReferences', {}).items():
+            require(retired in successors and set(current) <= successors[retired] & ids,
+                    'Predecessor reference without matching cadastral lineage')
+    for item in curation['externalResearch']:
+        require(set(item['parcelIds']) <= ids, 'External research outside research cru')
+        require(item['sourceIds'] and set(item['sourceIds']) <= sources.keys(), 'Unknown external research source')
+        require(item['basis'] in EXTERNAL_BASES, f"Unknown external research basis: {item['basis']}")
+        require(item.get('currentFarmer') is None, 'External research cannot establish current farming')
     rows = []
     for p in parcels:
         holder_ids = sorted({r['holderId'] for r in p['recordedRights']})
         events = [e for e in curation['exactParcelEvents'] if p['id'] in e['parcelIds']]
+        inherited = [(e, retired) for e in curation['exactParcelEvents']
+                     for retired, current in e.get('predecessorReferences', {}).items() if p['id'] in current]
+        external = [x for x in curation['externalResearch'] if p['id'] in x['parcelIds']]
         leads = [{'name': name, 'holderId': hid, 'basis': holders[hid]['basis'],
                   'sourceIds': holders[hid]['sourceIds']}
                  for hid in holder_ids for name in holders[hid]['candidateNames']]
-        event_leads = [{'name': e['applicant'], 'basis': e['kind'], 'sourceIds': [e['sourceId']]}
-                       for e in events]
+        event_leads = [{'name': e['applicant'], 'basis': e['kind'], 'sourceIds': [e['sourceId']]} for e in events]
+        event_leads += [{'name': e['applicant'], 'basis': f"{e['kind']} on predecessor {r[8:10].lstrip('0')}{r[10:]}",
+                         'sourceIds': [e['sourceId']]} for e, r in inherited]
+        external_leads = [{'name': x['producer'], 'basis': x['basis'], 'sourceIds': x['sourceIds']}
+                          for x in external if x.get('producer')]
         rows.append({
             'parcelId': p['id'], 'reference': p['reference'], 'commune': p['commune'],
             'cruOverlapM2': next(o['areaM2'] for o in p['overlaps'] if o['parentFeatureId'] == parent),
             'recordedRights': p['recordedRights'], 'recordMatch': p['recordMatch'],
-            'holderResearchIds': holder_ids, 'candidateLeads': leads + event_leads,
-            'historicalEvents': events,
+            'holderResearchIds': holder_ids, 'candidateLeads': leads + event_leads + external_leads,
+            'historicalEvents': events + [{**e, 'viaPredecessor': r} for e, r in inherited],
+            'externalResearchIds': [x['id'] for x in external],
             # Dated legal-entity rights since 2019 and cadastral splits: context for who to ask, not farming.
             'rightsChanges': [{k: c[k] for k in ('from', 'to', 'kind', 'before', 'after')}
                               for c in lineage[p['id']]['rightsChanges']],
             'cadastreFirstSeen': lineage[p['id']]['firstSeenCadastre'],
             'predecessorIds': lineage[p['id']]['predecessorIds'],
             'historyFindingIds': [f['id'] for f in curation['historyFindings'] if p['id'] in f['parcelIds']],
-            'researchStatus': ('historical-application' if events else 'holder-lead' if leads else 'unresolved'),
-            'researchDepth': ('exact-reference-event-reviewed' if events else
+            'researchStatus': ('historical-authorisation' if any(e['kind'] == 'authorisation' for e in events) else
+                               'historical-application' if events or inherited else
+                               'holder-lead' if leads or external_leads else 'unresolved'),
+            'researchDepth': ('exact-reference-event-reviewed' if events or inherited else
+                              'external-research-reviewed' if external else
                               'holder-group-triage' if holder_ids else 'inventory-only'),
             'currentFarmer': None, 'verifiedAsOf': None, 'operationScope': 'unconfirmed',
-            'nextEvidenceNeeded': ('Resolve application outcome, actual operation and cadastral continuity.'
-                                   if events else 'Obtain dated parcel-specific operation evidence and scope.'
+            'nextEvidenceNeeded': ('Confirm actual operation, scope and continuation since the decision.'
+                                   if any(e['kind'] == 'authorisation' for e in events) else
+                                   'Resolve application outcome, actual operation and cadastral continuity.'
+                                   if events or inherited else 'Obtain dated parcel-specific operation evidence and scope.'
                                    if leads else 'Identify operator through a shareable parcel-specific record; do not infer from neighbours.'),
         })
     statuses = Counter(r['researchStatus'] for r in rows)
@@ -98,6 +125,7 @@ def build_register(manifest, asset, curation, history):
                    'withRecordedRights': sum(bool(r['recordedRights']) for r in rows),
                    'withoutMatchedRights': sum(not r['recordedRights'] for r in rows),
                    'holderLead': statuses['holder-lead'], 'historicalApplication': statuses['historical-application'],
+                   'historicalAuthorisation': statuses['historical-authorisation'],
                    'unresolved': statuses['unresolved'], 'currentFarmerConfirmed': 0,
                    'withRightsChangeSince2019': sum(bool(r['rightsChanges']) for r in rows),
                    'withCadastralPredecessor': sum(bool(r['predecessorIds']) for r in rows)},
@@ -152,12 +180,31 @@ def render_report(register, curation, history):
         holders = ', '.join(f"[{h}](#holder-{h.lower()})" for h in r['holderResearchIds']) or 'None'
         leads = '; '.join(f"{c['name']} ({c['basis']})" for c in r['candidateLeads']) or 'Unresolved'
         lines.append(f"| {cell(r['reference'])} | {r['cruOverlapM2']:.2f} | {holders} | {cell(leads)} | Unconfirmed |")
-    lines += ['', '## Exact-reference historical event', '',
-              'D 0177 and D 0178: Anne Gros application received 24 November 2022, dossier 2022-204, '
-              'previous operator Domaine Gros Frère et Sœur. The receipt does not authorise cultivation. '
-              'Outcome, actual current operation and cadastral continuity remain unconfirmed. Printed D01776 is unresolved. '
-              'D0093 belongs to Grands-Échezeaux and is outside this register. '
-              f"[Official receipt, pages 74–75]({sources['anne-application']['url']}).", '']
+    rows_by_id = {r['parcelId']: r for r in register['parcels']}
+    ref = lambda pid: rows_by_id[pid]['reference'] if pid in rows_by_id else f"{pid[8:10].lstrip('0')} {pid[10:]}"
+    lines += ['', '## Exact-reference administrative events', '',
+              'Farm-structure notices published by the Côte-d\'Or DDT name the applicant, the previous operator and the '
+              'cadastral references. A receipt of a complete application explicitly does not authorise cultivation; an '
+              'authorisation is a dated decision, not proof of actual or current operation. References were read from the '
+              'page image. Grands-Échezeaux references (such as D0093) are outside this register.', '']
+    for e in sorted(curation['exactParcelEvents'], key=lambda e: e['documentDate']):
+        refs = ', '.join(ref(i) for i in e['parcelIds'])
+        via = '; '.join(f"{ref(r)} (retired) → {', '.join(ref(c) for c in cs)}"
+                        for r, cs in e.get('predecessorReferences', {}).items())
+        label = 'Authorisation decision' if e['kind'] == 'authorisation' else 'Application received'
+        lines.append(f"- **{e['documentDate']} — {cell(e['applicant'])}.** {label}; previous operator "
+                     f"{cell(e['previousOperator'])}. Parcels: {refs}" + (f"; via lineage: {via}" if via else '') +
+                     f". {e['summary']} [{cell(sources[e['sourceId']]['title'])}]({sources[e['sourceId']]['url']}).")
+    lines += ['', '## Independent research', '',
+              'Published vineyard research can name cadastral references or describe holdings. It is dated secondary '
+              'evidence of ownership or production, cross-checked here against the recorded rights; it never establishes '
+              'current farming. "Area-reconstructed" rows are this register\'s inference: the published area equals an exact '
+              'sum of parcel areas, which the source itself does not state.', '']
+    for x in curation['externalResearch']:
+        refs = ', '.join(ref(i) for i in x['parcelIds']) or 'no cadastral reference'
+        cited = ', '.join(f"[{cell(sources[s]['title'])}]({sources[s]['url']})" for s in x['sourceIds'])
+        lines.append(f"- **{cell(x['title'])}** ({refs}; {x['basis']}). {x['finding']} Sources: {cited}.")
+    lines.append('')
     lines += render_history(register, curation, history, sources)
     lines += ['## Source log', '',
               'Publication/document dates and vintage seasons are separate fields in the curation. An undated page, '

@@ -45,6 +45,20 @@ The pilot used one rights file (1 January 2025). The same DGFiP legal-entity fil
 
 The legal-entity files never list private individuals, so most of the 157 unmatched parcels are best explained by private ownership rather than missing research. A rights change is ownership evidence only; it does not date or establish farming. The generated register lists every change and lineage row.
 
+### Farm-structure notices 2019–2026: the Gros division and the Rion decision
+
+The Côte-d'Or DDT publishes receipts, authorisations and refusals under the farm-structure rules in the regional *recueils des actes administratifs*. These are the only public documents that name an applicant, the previous operator and exact cadastral references. Every Côte-d'Or DDT notice in the regional bulletins for 2019–2026 was read (about 1,280 bulletins; contents list first, then OCR of the listed acts), and every Flagey-Échezeaux match was checked against the page image. The notice index is kept as a separate, reusable dataset for other grand crus.
+
+- **Rion (Les Treux):** a decision of 4 July 2022 authorises **SAS Domaine RC Les Grandes Vignes** (Quincey) to farm **D0665 and D0666**, taken over from Domaine Daniel Rion et Fils. This is the only explicit authorisation found for an Échezeaux parcel. D0666's printed area (0.0799 ha) is smaller than the parcel (0.1157 ha), and D0667, held by the same right holder, is not in the decision. The link between the applicant and Domaine Jean-Charles Rion is not established.
+- **Gros Frère et Sœur (Les Loächausses):** in 2022 the former estate's parcels were the subject of three applications naming it as previous operator: **Michel Gros** (D0184, D0558, D0774), **AF Gros** (D0181, D0775) and **Anne Gros** (D0177, D0178, Grands-Échezeaux D0093). D0774 and D0775 were later divided; their current successors inherit the application only through the recorded lineage. Receipts are not authorisations, and no decision on these applications was located.
+- Farm-structure notices appear regularly in the regional bulletins only from 2021. Earlier decisions were probably published in the Côte-d'Or departmental bulletins, which were not searched.
+
+### Independent research: Winehog
+
+[Winehog's Flagey-Échezeaux vineyard articles](https://winehog.org/vineyards/flagey-echezeaux-vineyard-articles/) (Steen Öhman) map holdings by climat. Only publicly readable content was used; Premium articles contributed their public preview only. Three plots are named by cadastral number and all agree with the recorded rights: **D0510** (Hospices de Beaune, Cuvée Jean-Luc Bissey, donated 2011), **D0631** (Jayer-Gilles; recorded holder Domaine Hoffmann-Jayer) and **D0632** (Niquet-Jayer; no company record, consistent with private owners).
+
+Winehog's 2014 Échezeaux du Dessus areas also equal exact sums of current parcels: Perdrix = D0620 + D0621, Millot = D0798–D0800, Tremblay = D0189 + D0190, Mongeard = D0668–D0670. These parcel sets are this register's reconstruction, recorded as weak leads. The Michel Noëllat area matches D0191, D0192 and D0671–D0673, which conflicts with Mongeard and Bouchon Pourpre rights and is left unresolved. Winehog's 2020 report that Liger-Belair added an Échezeaux du Dessus plot is compatible with, but does not identify, D0673's 2024 transfer to Bouchon Pourpre.
+
 ### Nicole Lamarche: three exact candidate parcels
 
 The pinned DGFiP file records `NICOLE LAMARCHE`, SIREN **397738634**, right code `P` (ownership), on these parcels as of **1 January 2025**:
