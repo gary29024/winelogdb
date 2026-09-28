@@ -1585,8 +1585,23 @@ const detailedDownloadCases=[
  ['Côte de Beaune-Villages','cote-de-beaune-villages','Red','Côte de Beaune'],
  ['Petit Chablis','petit-chablis','White','Chablis'],
  ['Pouilly-Fuissé','pouilly-fuisse','White','Mâconnais'],
+ ['Meursault','meursault','White','Côte de Beaune'],
+ ['Santenay','santenay','Red','Côte de Beaune'],
+ ['Marsannay','marsannay','Red','Côte de Nuits'],
+ ['Beaune','beaune','Red','Côte de Beaune'],
+ ['Montagny','montagny','White','Côte Chalonnaise'],
+ ['Saint-Aubin','saint-aubin','White','Côte de Beaune'],
+ ['Savigny-lès-Beaune','savigny-les-beaune','Red','Côte de Beaune'],
+ ['Viré-Clessé','vire-clesse','White','Mâconnais'],
+ ['Givry','givry','Red','Côte Chalonnaise'],
+ ['Chassagne-Montrachet','chassagne-montrachet','White','Côte de Beaune'],
 ] as const;
-for(const [appellation,id,colour,region] of detailedDownloadCases)for(const route of allMapRoutes){
+// Keep the pilot's cases and the largest new gzip/Brotli cases in routine CI.
+// Every asset still has exact unit/runtime checks; scheduled/manual CI expands
+// both the HTTP-decoded journeys and network checks to the entire registry.
+const routineDetailedIds=new Set<string>(['chablis','cote-de-beaune-villages','petit-chablis','pouilly-fuisse','meursault','montagny']);
+if(Object.keys(losslessMaps).some(id=>!detailedDownloadCases.some(([,caseId])=>caseId===id)))throw new Error('Missing lossless map browser case');
+for(const [appellation,id,colour,region] of detailedDownloadCases.filter(([,id])=>fullMapMatrix||routineDetailedIds.has(id)))for(const route of allMapRoutes){
  test(`Lossless detailed ${appellation} ${route}: exact HTTP-decoded map`,async({page})=>{
   await setup(page,{appellation,region,colour,wineStyle:colour.toLowerCase(),wineName:'Vieilles Vignes',classification:null});
   const downloads:string[]=[];page.on('request',r=>{if(r.url().includes('/maps/'))downloads.push(r.url())});

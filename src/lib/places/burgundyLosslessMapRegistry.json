@@ -1,11 +1,35 @@
 {
+  "beaune": {
+    "brotliJsonUrl": "/maps/lossless/beaune.2026-09-21.lossless-7d9639acbadf.geojson.br",
+    "gzipJsonUrl": "/maps/lossless/beaune.2026-09-21.lossless-d298d746930a.geojson.gz"
+  },
   "chablis": {
     "brotliJsonUrl": "/maps/lossless/chablis.2026-09-21.lossless-29d13c5661ee.geojson.br",
     "gzipJsonUrl": "/maps/lossless/chablis.2026-09-21.lossless-5519b55d8f1a.geojson.gz"
   },
+  "chassagne-montrachet": {
+    "brotliJsonUrl": "/maps/lossless/chassagne-montrachet.2026-09-21.lossless-7d1b37e2e007.geojson.br",
+    "gzipJsonUrl": "/maps/lossless/chassagne-montrachet.2026-09-21.lossless-29900096710f.geojson.gz"
+  },
   "cote-de-beaune-villages": {
     "brotliJsonUrl": "/maps/lossless/cote-de-beaune-villages.2026-09-21.lossless-6d2676ca72a2.geojson.br",
     "gzipJsonUrl": "/maps/lossless/cote-de-beaune-villages.2026-09-21.lossless-7e6096958085.geojson.gz"
+  },
+  "givry": {
+    "brotliJsonUrl": "/maps/lossless/givry.2026-09-21.lossless-473025687d0e.geojson.br",
+    "gzipJsonUrl": "/maps/lossless/givry.2026-09-21.lossless-40773f954713.geojson.gz"
+  },
+  "marsannay": {
+    "brotliJsonUrl": "/maps/lossless/marsannay.2026-09-21.lossless-1b1fb9f101eb.geojson.br",
+    "gzipJsonUrl": "/maps/lossless/marsannay.2026-09-21.lossless-958e05c1aad7.geojson.gz"
+  },
+  "meursault": {
+    "brotliJsonUrl": "/maps/lossless/meursault.2026-09-21.lossless-7ed5ec16bed1.geojson.br",
+    "gzipJsonUrl": "/maps/lossless/meursault.2026-09-21.lossless-de92430f8af5.geojson.gz"
+  },
+  "montagny": {
+    "brotliJsonUrl": "/maps/lossless/montagny.2026-09-21.lossless-1bb974c4250f.geojson.br",
+    "gzipJsonUrl": "/maps/lossless/montagny.2026-09-21.lossless-e64123843e53.geojson.gz"
   },
   "petit-chablis": {
     "brotliJsonUrl": "/maps/lossless/petit-chablis.2026-09-21.lossless-8cb55634396f.geojson.br",
@@ -14,5 +38,21 @@
   "pouilly-fuisse": {
     "brotliJsonUrl": "/maps/lossless/pouilly-fuisse.2026-09-21.lossless-fbb08177b000.geojson.br",
     "gzipJsonUrl": "/maps/lossless/pouilly-fuisse.2026-09-21.lossless-72003feb03cf.geojson.gz"
+  },
+  "saint-aubin": {
+    "brotliJsonUrl": "/maps/lossless/saint-aubin.2026-09-21.lossless-9f1347a51d81.geojson.br",
+    "gzipJsonUrl": "/maps/lossless/saint-aubin.2026-09-21.lossless-f9eb64d76b66.geojson.gz"
+  },
+  "santenay": {
+    "brotliJsonUrl": "/maps/lossless/santenay.2026-09-21.lossless-cd2653ad18e0.geojson.br",
+    "gzipJsonUrl": "/maps/lossless/santenay.2026-09-21.lossless-cccd5b472b17.geojson.gz"
+  },
+  "savigny-les-beaune": {
+    "brotliJsonUrl": "/maps/lossless/savigny-les-beaune.2026-09-21.lossless-4f1e1decad29.geojson.br",
+    "gzipJsonUrl": "/maps/lossless/savigny-les-beaune.2026-09-21.lossless-0adfb2030be1.geojson.gz"
+  },
+  "vire-clesse": {
+    "brotliJsonUrl": "/maps/lossless/vire-clesse.2026-09-21.lossless-12a20219cabf.geojson.br",
+    "gzipJsonUrl": "/maps/lossless/vire-clesse.2026-09-21.lossless-e90762ccad06.geojson.gz"
   }
 }

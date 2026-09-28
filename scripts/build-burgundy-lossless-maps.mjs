@@ -8,7 +8,11 @@ import {Buffer} from 'node:buffer';
 import process from 'node:process';
 
 const root=fileURLToPath(new URL('../',import.meta.url));
-const selected=new Set(['chablis','cote-de-beaune-villages','petit-chablis','pouilly-fuisse']);
+const selected=new Set([
+ 'chablis','cote-de-beaune-villages','petit-chablis','pouilly-fuisse',
+ 'meursault','santenay','marsannay','beaune','montagny','saint-aubin',
+ 'savigny-les-beaune','vire-clesse','givry','chassagne-montrachet',
+]);
 const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
 const readText=path=>Buffer.from(readFileSync(root+path,'utf8').replaceAll('\r\n','\n'));
 const json=value=>JSON.stringify(value,null,2)+'\n';
