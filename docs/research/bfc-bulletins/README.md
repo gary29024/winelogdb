@@ -7,9 +7,9 @@ A reusable index of every Côte-d'Or DDT notice in the Bourgogne-Franche-Comté 
 | File | What it holds | Edited by |
 | --- | --- | --- |
 | `links-YYYY.txt` | Every bulletin PDF link for the year, from the prefecture's listing page | Hand (see *Adding a year*) |
-| `coverage.json` | Every bulletin checked: hash, page count, whether its contents list was read, how many Côte-d'Or notices it holds, failed downloads | Generated |
+| `coverage.json` | Every bulletin in the link lists, with hash, page count, Côte-d'Or notice count, failed pages and a status: `contents-read`, `full-ocr-no-contents`, `extraction-incomplete`, `download-failed` or `not-scanned` | Generated |
 | `notices.json` | One row per Côte-d'Or DDT notice: bulletin and pages, act ID and date, applicant, a title-derived kind, and OCR hints (communes mentioned, parcel references) | Generated |
-| `notice-text.jsonl.gz` | The text of each notice's pages (text layer or OCR), one JSON line per notice | Generated |
+| `notice-text.jsonl.gz` | Each notice's page text with a per-page extraction status (`text-layer`, `ocr`, or `failed:<step>`), one JSON line per notice. A blank separator page is extracted and empty; a failed page is labelled | Generated |
 | `reviewed-parcels.json` | Parcel references read from a notice **and checked against the page image** | Hand, validated by the builder |
 | `cote-dor-communes.json` | INSEE code → DGFiP commune name, used to detect commune mentions | Generated once from the pinned DGFiP 2025 file |
 
@@ -19,7 +19,9 @@ All 1,277 regional bulletins for 2019–2026 (to the end of September 2026) were
 
 ## How it was built
 
-Each bulletin starts with a machine-readable contents list naming the issuing service, the act and its page. [`scripts/scan_bfc_bulletins.py`](../../../scripts/scan_bfc_bulletins.py) downloads each PDF, reads the contents list, and reads only the acts listed under the Côte-d'Or DDT (OCR at 110 dpi for scanned pages). A bulletin without a readable contents list is read in full. [`scripts/build_bfc_bulletin_index.py`](../../../scripts/build_bfc_bulletin_index.py) turns the scan cache into the generated files; `--check` validates the committed files without the cache.
+Each bulletin starts with a machine-readable contents list naming the issuing service, the act and its page. [`scripts/scan_bfc_bulletins.py`](../../../scripts/scan_bfc_bulletins.py) downloads each PDF, reads the contents list, and reads only the acts listed under the Côte-d'Or DDT (OCR at 110 dpi for scanned pages). A bulletin without a readable contents list is read in full. Every extraction step's exit status is checked. A page whose OCR fails is recorded as `failed:<step>`, keeping any text-layer output, and its bulletin is marked incomplete and retried on the next run, so a failure can never pass as "no match". Downloads run one at a time per host, paced by `--min-interval` and backing off on throttling (HTTP 429/503 with `Retry-After`, HTTP/2 `ENHANCE_YOUR_CALM`); OCR runs in parallel. PDFs of bulletins with Côte-d'Or notices or failed pages are kept in `.tmp/bfc-bulletins/pdf/` (outside Git) for visual review and re-OCR; others are deleted unless `--keep-all-pdfs` is given.
+
+[`scripts/build_bfc_bulletin_index.py`](../../../scripts/build_bfc_bulletin_index.py) reconciles the link lists with the scan cache and writes the generated files. `--check` runs offline and verifies that every listed URL has a coverage status, the summary counts, that each notice belongs to a read bulletin and has every page with a status, and that reviewed parcels cite their notice's act ID and date.
 
 ## Using it for another cru
 
@@ -43,4 +45,4 @@ python scripts/scan_bfc_bulletins.py docs/research/bfc-bulletins/links-YYYY.txt 
 python scripts/build_bfc_bulletin_index.py
 ```
 
-A bulletin whose download fails is recorded as `download-failed`; rerunning the scan retries it and resumes partial downloads.
+A bulletin whose download fails is recorded as `download-failed` with its attempt count, and one with failed pages as `extraction-incomplete`; rerunning the scan retries both and resumes partial downloads. For a throttled host such as the Côte-d'Or departmental site, add `--min-interval 150`.
