@@ -688,6 +688,16 @@
       "reviewedAt": "2026-09-28",
       "finding": "Public preview: Grivot is a major owner in Les Cruots ou Vignes Blanches, with plots inherited through the Jayer family. Remainder is Premium content, not read.",
       "access": "preview-only"
+    },
+    {
+      "id": "raa-2026-067",
+      "title": "BFC bulletin 2026-067: order 2026-739 (BFC-2026-04-07-00015) suspending the SCEA Domaine du Comte Liger-Belair application",
+      "url": "https://www.prefectures-regions.gouv.fr/bourgogne-franche-comte/irecontenu/telechargement/137449/1004181/file/recueil-bfc-2026-067-recueil-des-actes-administratifs-nominatifs.pdf#page=28",
+      "type": "government-decision",
+      "documentDate": "2026-04-07",
+      "reviewedAt": "2026-09-28",
+      "access": "read",
+      "finding": "Suspends for eight months from publication (29 April 2026) the instruction of an application registered 11/12/2025 and complete 06/01/2026, for excessive enlargement. Pages 28–30 read from the image."
     }
   ],
   "holders": [
@@ -946,10 +956,11 @@
         "Domaine Jean Tardy et Fils"
       ],
       "basis": "bottler-only-lead",
-      "finding": "GFA holds Les Treux. An auction lists a 2019 Bouchy bottle with Tardy bottling; this is not evidence Tardy farmed these five parcels, then or now.",
+      "finding": "GFA holds Les Treux. An auction lists a 2019 Bouchy bottle with Tardy bottling; this is not evidence Tardy farmed these five parcels, then or now. In December 2025 SCEA Domaine du Comte Liger-Belair applied to farm all five parcels; the application was suspended in April 2026.",
       "sourceIds": [
         "bouchy",
-        "bouchy-tardy"
+        "bouchy-tardy",
+        "raa-2026-067"
       ],
       "parcelOperationConfirmed": false
     },
@@ -1107,10 +1118,11 @@
         "Domaine du Comte Liger-Belair"
       ],
       "basis": "management-only-lead",
-      "finding": "Bouchon Pourpre's link to Comte Liger-Belair is corporate. No accepted lease or exact-parcel current-operation evidence for D0673.",
+      "finding": "Bouchon Pourpre's link to Comte Liger-Belair is corporate. No accepted lease or exact-parcel current-operation evidence for D0673. SCEA Domaine du Comte Liger-Belair applied to farm D0673 in December 2025; instruction was suspended in April 2026, so no authorisation existed at that date.",
       "sourceIds": [
         "bouchon",
-        "liger"
+        "liger",
+        "raa-2026-067"
       ],
       "parcelOperationConfirmed": false
     },
@@ -1194,13 +1206,31 @@
       "outcome": "unconfirmed",
       "currentFarmer": null,
       "summary": "Dossier 2022-113, filed 23/05/2022, with Vougeot A523/A524; 1.0719 ha in total. Both Flagey references are in Les Loächausses. The receipt states it does not authorise cultivation. D0775 was divided after January 2024."
+    },
+    {
+      "parcelIds": [
+        "212670000D0628",
+        "212670000D0673",
+        "212670000D0764",
+        "212670000D0765",
+        "212670000D0766",
+        "212670000D0767"
+      ],
+      "sourceId": "raa-2026-067",
+      "kind": "suspended-application",
+      "applicant": "SCEA Domaine du Comte Liger-Belair (Vosne-Romanée)",
+      "previousOperator": "Not stated",
+      "documentDate": "2026-04-07",
+      "outcome": "instruction suspended for eight months from 29 April 2026",
+      "currentFarmer": null,
+      "summary": "The application covers 4.3080 ha in Flagey-Échezeaux, Boncourt-le-Bois, Vosne-Romanée and Vougeot belonging to SAS Bouchon Pourpre, GFA Domaine Bouchy et Amis, SCEA Nathalie Pacareau Lamarche and Mme Geneviève Lamarche; it also names Grands-Échezeaux D615 and D616. The region found the enlargement excessive and suspended the instruction, during which anyone may apply for the same land. As of the order, the applicant was not authorised to farm these parcels."
     }
   ],
   "accessGaps": [
     "CVI records require cooperation from authorised holders; no private records accessed.",
     "Public CartoBio polygons omit operator identity.",
     "HOR Vignobles and Coudray PDF full text/render unavailable; indexed excerpts retained only as leads.",
-    "Regional bulletins 2019–2026 were read for Côte-d'Or DDT notices (2026 up to the scan date). Farm-structure notices appear there regularly only from 2021; earlier notices, likely in the Côte-d'Or departmental bulletins, were not searched. The DDT notice page and cote-dor.gouv.fr refused automated access.",
+    "Regional bulletins 2019–2026 were read for Côte-d'Or DDT notices (2026 to the end of September). Farm-structure notices appear there regularly only from 2021; earlier notices, likely in the Côte-d'Or departmental bulletins, were not searched. The DDT notice page and cote-dor.gouv.fr refused automated access.",
     "Cadastral lineage covers the 2019–2026 vintages only; earlier divisions are not traced.",
     "Winehog Premium articles were not read beyond their public previews."
   ],

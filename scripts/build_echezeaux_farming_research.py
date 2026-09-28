@@ -22,7 +22,8 @@ def require(condition, message):
         raise ValueError(message)
 
 
-EVENT_KINDS = {'historical-application', 'authorisation'}
+EVENT_KINDS = {'historical-application': 'Application received', 'authorisation': 'Authorisation decision',
+               'suspended-application': 'Application suspended'}
 EXTERNAL_BASES = {'critic-named-cadastral-reference', 'critic-attribution-area-reconstructed', 'critic-holding-description'}
 
 
@@ -108,6 +109,8 @@ def build_register(manifest, asset, curation, history):
             'currentFarmer': None, 'verifiedAsOf': None, 'operationScope': 'unconfirmed',
             'nextEvidenceNeeded': ('Confirm actual operation, scope and continuation since the decision.'
                                    if any(e['kind'] == 'authorisation' for e in events) else
+                                   'Check the decision after the suspension ends, and who farms meanwhile.'
+                                   if any(e['kind'] == 'suspended-application' for e in events) else
                                    'Resolve application outcome, actual operation and cadastral continuity.'
                                    if events or inherited else 'Obtain dated parcel-specific operation evidence and scope.'
                                    if leads else 'Identify operator through a shareable parcel-specific record; do not infer from neighbours.'),
@@ -191,7 +194,7 @@ def render_report(register, curation, history):
         refs = ', '.join(ref(i) for i in e['parcelIds'])
         via = '; '.join(f"{ref(r)} (retired) → {', '.join(ref(c) for c in cs)}"
                         for r, cs in e.get('predecessorReferences', {}).items())
-        label = 'Authorisation decision' if e['kind'] == 'authorisation' else 'Application received'
+        label = EVENT_KINDS[e['kind']]
         lines.append(f"- **{e['documentDate']} — {cell(e['applicant'])}.** {label}; previous operator "
                      f"{cell(e['previousOperator'])}. Parcels: {refs}" + (f"; via lineage: {via}" if via else '') +
                      f". {e['summary']} [{cell(sources[e['sourceId']]['title'])}]({sources[e['sourceId']]['url']}).")

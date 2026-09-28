@@ -6,7 +6,7 @@ Reviewed 2026-09-28; target season 2026.
 
 All 276 mapped Échezeaux parcels inventoried; all 36 recorded right-holder groups triaged. Not an exhaustive search of every cadastral reference or inaccessible archive.
 
-Of 276 mapped parcels, 119 have recorded rights and 157 have no matched right holder. All 36 holder groups were triaged. 109 parcels have holder-derived research leads, 10 have an exact-reference historical application, and 155 remain without a named candidate. These are mutually exclusive research categories, not farmer counts.
+Of 276 mapped parcels, 119 have recorded rights and 157 have no matched right holder. All 36 holder groups were triaged. 103 parcels have holder-derived research leads, 16 have an exact-reference historical application, and 155 remain without a named candidate. These are mutually exclusive research categories, not farmer counts.
 
 136 parcels have inventory records only, not individual source investigations. Historical application references can also lack matched rights.
 
@@ -278,9 +278,9 @@ Parcels (5): D 0628, D 0764, D 0765, D 0766, D 0767.
 
 **Candidate to investigate:** Domaine Jean Tardy et Fils. **Basis:** bottler-only-lead. **Current farming:** unconfirmed.
 
-GFA holds Les Treux. An auction lists a 2019 Bouchy bottle with Tardy bottling; this is not evidence Tardy farmed these five parcels, then or now.
+GFA holds Les Treux. An auction lists a 2019 Bouchy bottle with Tardy bottling; this is not evidence Tardy farmed these five parcels, then or now. In December 2025 SCEA Domaine du Comte Liger-Belair applied to farm all five parcels; the application was suspended in April 2026.
 
-Sources: [Domaine Bouchy et Amis company record](https://www.societe.com/societe/domaine-bouchy-et-amis-391735321.html), [Auction listing of Bouchy et Amis bottle](https://docs.prod-indb.io/2024/10/18/095407_422133942_62d89bde55d70b4033a24fcf7d957024.pdf).
+Sources: [Domaine Bouchy et Amis company record](https://www.societe.com/societe/domaine-bouchy-et-amis-391735321.html), [Auction listing of Bouchy et Amis bottle](https://docs.prod-indb.io/2024/10/18/095407_422133942_62d89bde55d70b4033a24fcf7d957024.pdf), [BFC bulletin 2026-067: order 2026-739 (BFC-2026-04-07-00015) suspending the SCEA Domaine du Comte Liger-Belair application](https://www.prefectures-regions.gouv.fr/bourgogne-franche-comte/irecontenu/telechargement/137449/1004181/file/recueil-bfc-2026-067-recueil-des-actes-administratifs-nominatifs.pdf#page=28).
 
 <a id="holder-778230359"></a>
 
@@ -434,9 +434,9 @@ Parcels (1): D 0673.
 
 **Candidate to investigate:** Domaine du Comte Liger-Belair. **Basis:** management-only-lead. **Current farming:** unconfirmed.
 
-Bouchon Pourpre's link to Comte Liger-Belair is corporate. No accepted lease or exact-parcel current-operation evidence for D0673.
+Bouchon Pourpre's link to Comte Liger-Belair is corporate. No accepted lease or exact-parcel current-operation evidence for D0673. SCEA Domaine du Comte Liger-Belair applied to farm D0673 in December 2025; instruction was suspended in April 2026, so no authorisation existed at that date.
 
-Sources: [Bouchon Pourpre company record](https://www.pappers.fr/entreprise/bouchon-pourpre-880909346), [Comte Liger-Belair: climats](https://www.liger-belair.fr/en/our-climats/).
+Sources: [Bouchon Pourpre company record](https://www.pappers.fr/entreprise/bouchon-pourpre-880909346), [Comte Liger-Belair: climats](https://www.liger-belair.fr/en/our-climats/), [BFC bulletin 2026-067: order 2026-739 (BFC-2026-04-07-00015) suspending the SCEA Domaine du Comte Liger-Belair application](https://www.prefectures-regions.gouv.fr/bourgogne-franche-comte/irecontenu/telechargement/137449/1004181/file/recueil-bfc-2026-067-recueil-des-actes-administratifs-nominatifs.pdf#page=28).
 
 <a id="holder-798977476"></a>
 
@@ -605,7 +605,7 @@ All references are in commune 21267 (Flagey-Échezeaux). Full IDs and evidence l
 | D 0625 | 719.60 | None | Unresolved | Unconfirmed |
 | D 0626 | 2363.37 | None | Unresolved | Unconfirmed |
 | D 0627 | 154.92 | None | Unresolved | Unconfirmed |
-| D 0628 | 245.66 | [391735321](#holder-391735321) | Domaine Jean Tardy et Fils (bottler-only-lead) | Unconfirmed |
+| D 0628 | 245.66 | [391735321](#holder-391735321) | Domaine Jean Tardy et Fils (bottler-only-lead); SCEA Domaine du Comte Liger-Belair (Vosne-Romanée) (suspended-application) | Unconfirmed |
 | D 0629 | 394.39 | None | Unresolved | Unconfirmed |
 | D 0631 | 5417.97 | [383925674](#holder-383925674) | Domaine Hoffmann-Jayer (estate-context); Domaine Jayer-Gilles / Hoffmann-Jayer (critic-named-cadastral-reference) | Unconfirmed |
 | D 0632 | 5162.31 | None | Niquet-Jayer family (owner) (critic-named-cadastral-reference) | Unconfirmed |
@@ -631,7 +631,7 @@ All references are in commune 21267 (Flagey-Échezeaux). Full IDs and evidence l
 | D 0670 | 1118.48 | None | Domaine Mongeard-Mugneret (critic-attribution-area-reconstructed) | Unconfirmed |
 | D 0671 | 1023.36 | [303514681](#holder-303514681) | Domaine Mongeard-Mugneret (estate-context) | Unconfirmed |
 | D 0672 | 1076.38 | [303514681](#holder-303514681) | Domaine Mongeard-Mugneret (estate-context) | Unconfirmed |
-| D 0673 | 1059.85 | [880909346](#holder-880909346) | Domaine du Comte Liger-Belair (management-only-lead) | Unconfirmed |
+| D 0673 | 1059.85 | [880909346](#holder-880909346) | Domaine du Comte Liger-Belair (management-only-lead); SCEA Domaine du Comte Liger-Belair (Vosne-Romanée) (suspended-application) | Unconfirmed |
 | D 0674 | 1703.58 | [382058188](#holder-382058188) | Domaine David Duband (reported-operator-relationship) | Unconfirmed |
 | D 0675 | 1443.35 | [382058188](#holder-382058188) | Domaine David Duband (reported-operator-relationship) | Unconfirmed |
 | D 0676 | 271.01 | [382058188](#holder-382058188) | Domaine David Duband (reported-operator-relationship) | Unconfirmed |
@@ -663,10 +663,10 @@ All references are in commune 21267 (Flagey-Échezeaux). Full IDs and evidence l
 | D 0746 | 220.73 | None | Unresolved | Unconfirmed |
 | D 0747 | 1763.77 | None | Unresolved | Unconfirmed |
 | D 0760 | 9762.30 | [036380046](#holder-036380046) | Domaine du Clos Frantin / Albert Bichot (estate-context) | Unconfirmed |
-| D 0764 | 990.12 | [391735321](#holder-391735321) | Domaine Jean Tardy et Fils (bottler-only-lead) | Unconfirmed |
-| D 0765 | 1761.03 | [391735321](#holder-391735321) | Domaine Jean Tardy et Fils (bottler-only-lead) | Unconfirmed |
-| D 0766 | 226.05 | [391735321](#holder-391735321) | Domaine Jean Tardy et Fils (bottler-only-lead) | Unconfirmed |
-| D 0767 | 269.84 | [391735321](#holder-391735321) | Domaine Jean Tardy et Fils (bottler-only-lead) | Unconfirmed |
+| D 0764 | 990.12 | [391735321](#holder-391735321) | Domaine Jean Tardy et Fils (bottler-only-lead); SCEA Domaine du Comte Liger-Belair (Vosne-Romanée) (suspended-application) | Unconfirmed |
+| D 0765 | 1761.03 | [391735321](#holder-391735321) | Domaine Jean Tardy et Fils (bottler-only-lead); SCEA Domaine du Comte Liger-Belair (Vosne-Romanée) (suspended-application) | Unconfirmed |
+| D 0766 | 226.05 | [391735321](#holder-391735321) | Domaine Jean Tardy et Fils (bottler-only-lead); SCEA Domaine du Comte Liger-Belair (Vosne-Romanée) (suspended-application) | Unconfirmed |
+| D 0767 | 269.84 | [391735321](#holder-391735321) | Domaine Jean Tardy et Fils (bottler-only-lead); SCEA Domaine du Comte Liger-Belair (Vosne-Romanée) (suspended-application) | Unconfirmed |
 | D 0768 | 3976.76 | [778269407](#holder-778269407) | Domaine de la Romanée-Conti (estate-context) | Unconfirmed |
 | D 0769 | 233.14 | [778269407](#holder-778269407) | Domaine de la Romanée-Conti (estate-context) | Unconfirmed |
 | D 0770 | 40.74 | [778269407](#holder-778269407) | Domaine de la Romanée-Conti (estate-context) | Unconfirmed |
@@ -741,6 +741,7 @@ Farm-structure notices published by the Côte-d'Or DDT name the applicant, the p
 - **2022-06-30 — SAS Domaine AF Gros (Pommard).** Application received; previous operator Domaine Gros Frère et Sœur. Parcels: D 0181; via lineage: D 0775 (retired) → D 0832, D 0833, D 0834. Dossier 2022-113, filed 23/05/2022, with Vougeot A523/A524; 1.0719 ha in total. Both Flagey references are in Les Loächausses. The receipt states it does not authorise cultivation. D0775 was divided after January 2024. [BFC bulletin 2022-143: receipt BFC-2022-06-30-00012, SAS Domaine AF Gros](https://www.prefectures-regions.gouv.fr/bourgogne-franche-comte/irecontenu/telechargement/100728/641113/file/recueil-bfc-2022-143-recueil-des-actes-administratifs-special.pdf#page=88).
 - **2022-07-04 — SAS Domaine RC Les Grandes Vignes (Quincey).** Authorisation decision; previous operator Domaine Daniel Rion et Fils. Parcels: D 0665, D 0666. Application filed 11/01/2022, complete 01/03/2022, CDOA opinion 25/05/2022; the same decision refuses Vosne-Romanée AB references to this applicant. Article 2 lists four communes without assigning each row; the section D rows are taken as Flagey-Échezeaux because the cédant holds these references there. D0665 is printed at 0.1157 ha, its cadastral area; D0666 at 0.0799 ha against 0.1157 ha, so its scope is unresolved. D0667, held by the same right holder, is not in the decision. Whether the applicant is connected to Domaine Jean-Charles Rion is not established. [BFC bulletin 2022-084: decision BFC-2022-07-04-00011, SAS Domaine RC Les Grandes Vignes](https://www.prefectures-regions.gouv.fr/bourgogne-franche-comte/irecontenu/telechargement/97177/620257/file/recueil-bfc-2022-084-recueil-des-actes-administratifs-1.pdf#page=172).
 - **2022-11-24 — Anne Gros.** Application received; previous operator Domaine Gros Frère et Sœur. Parcels: D 0177, D 0178. Dossier 2022-204, complete at 21/10/2022, 1.5050 ha across Vosne-Romanée and Flagey-Échezeaux; the receipt does not authorise cultivation. Geometry of D0177/D0178 is unchanged since January 2022. Printed D01776 is unresolved. [DDT: Anne Gros application receipt, pp. 74–75](https://www.prefectures-regions.gouv.fr/irecontenu/telechargement/106030/671617/file/recueil-bfc-2023-055-recueil-des-actes-administratifs-special.pdf#page=74).
+- **2026-04-07 — SCEA Domaine du Comte Liger-Belair (Vosne-Romanée).** Application suspended; previous operator Not stated. Parcels: D 0628, D 0673, D 0764, D 0765, D 0766, D 0767. The application covers 4.3080 ha in Flagey-Échezeaux, Boncourt-le-Bois, Vosne-Romanée and Vougeot belonging to SAS Bouchon Pourpre, GFA Domaine Bouchy et Amis, SCEA Nathalie Pacareau Lamarche and Mme Geneviève Lamarche; it also names Grands-Échezeaux D615 and D616. The region found the enlargement excessive and suspended the instruction, during which anyone may apply for the same land. As of the order, the applicant was not authorised to farm these parcels. [BFC bulletin 2026-067: order 2026-739 (BFC-2026-04-07-00015) suspending the SCEA Domaine du Comte Liger-Belair application](https://www.prefectures-regions.gouv.fr/bourgogne-franche-comte/irecontenu/telechargement/137449/1004181/file/recueil-bfc-2026-067-recueil-des-actes-administratifs-nominatifs.pdf#page=28).
 
 ## Independent research
 
@@ -906,13 +907,14 @@ Publication/document dates and vintage seasons are separate fields in the curati
 - **winehog-millot** — [Winehog: Terroir View – Jean-Marc Millot Echezeaux "Cuvée 1949"](https://winehog.org/terroir-view-jean-marc-millot-echezeaux-37123/). critic-research; preview-only; document date 2019-01-04. Public preview: the cuvée comes from very old vines in Échezeaux du Dessus. Remainder is Premium content, not read.
 - **winehog-berthaut-gerbet** — [Winehog: Terroir View – Berthaut-Gerbet Echezeaux](https://winehog.org/terroir-view-berthaut-gerbet-echezeaux-2-2-37319/). critic-research; preview-only; document date 2019-03-13. Public preview: Amélie Berthaut took over the old Gerbet holdings; Échezeaux holdings enlarged from the 2018 vintage. Remainder is Premium content, not read.
 - **winehog-grivot** — [Winehog: Terroir Insight – Domaine Jean Grivot Echezeaux](https://winehog.org/terroir-insight-domaine-jean-grivot-echezeaux-37550/). critic-research; preview-only; document date 2019-05-11. Public preview: Grivot is a major owner in Les Cruots ou Vignes Blanches, with plots inherited through the Jayer family. Remainder is Premium content, not read.
+- **raa-2026-067** — [BFC bulletin 2026-067: order 2026-739 (BFC-2026-04-07-00015) suspending the SCEA Domaine du Comte Liger-Belair application](https://www.prefectures-regions.gouv.fr/bourgogne-franche-comte/irecontenu/telechargement/137449/1004181/file/recueil-bfc-2026-067-recueil-des-actes-administratifs-nominatifs.pdf#page=28). government-decision; read; document date 2026-04-07. Suspends for eight months from publication (29 April 2026) the instruction of an application registered 11/12/2025 and complete 06/01/2026, for excessive enlargement. Pages 28–30 read from the image.
 
 ## Remaining evidence and access gaps
 
 - CVI records require cooperation from authorised holders; no private records accessed.
 - Public CartoBio polygons omit operator identity.
 - HOR Vignobles and Coudray PDF full text/render unavailable; indexed excerpts retained only as leads.
-- Regional bulletins 2019–2026 were read for Côte-d'Or DDT notices (2026 up to the scan date). Farm-structure notices appear there regularly only from 2021; earlier notices, likely in the Côte-d'Or departmental bulletins, were not searched. The DDT notice page and cote-dor.gouv.fr refused automated access.
+- Regional bulletins 2019–2026 were read for Côte-d'Or DDT notices (2026 to the end of September). Farm-structure notices appear there regularly only from 2021; earlier notices, likely in the Côte-d'Or departmental bulletins, were not searched. The DDT notice page and cote-dor.gouv.fr refused automated access.
 - Cadastral lineage covers the 2019–2026 vintages only; earlier divisions are not traced.
 - Winehog Premium articles were not read beyond their public previews.
 

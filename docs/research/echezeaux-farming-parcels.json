@@ -27,8 +27,8 @@
     "recordedHolders": 36,
     "withRecordedRights": 119,
     "withoutMatchedRights": 157,
-    "holderLead": 109,
-    "historicalApplication": 10,
+    "holderLead": 103,
+    "historicalApplication": 16,
     "historicalAuthorisation": 2,
     "unresolved": 155,
     "currentFarmerConfirmed": 0,
@@ -5673,22 +5673,49 @@
           "basis": "bottler-only-lead",
           "sourceIds": [
             "bouchy",
-            "bouchy-tardy"
+            "bouchy-tardy",
+            "raa-2026-067"
+          ]
+        },
+        {
+          "name": "SCEA Domaine du Comte Liger-Belair (Vosne-Romanée)",
+          "basis": "suspended-application",
+          "sourceIds": [
+            "raa-2026-067"
           ]
         }
       ],
-      "historicalEvents": [],
+      "historicalEvents": [
+        {
+          "parcelIds": [
+            "212670000D0628",
+            "212670000D0673",
+            "212670000D0764",
+            "212670000D0765",
+            "212670000D0766",
+            "212670000D0767"
+          ],
+          "sourceId": "raa-2026-067",
+          "kind": "suspended-application",
+          "applicant": "SCEA Domaine du Comte Liger-Belair (Vosne-Romanée)",
+          "previousOperator": "Not stated",
+          "documentDate": "2026-04-07",
+          "outcome": "instruction suspended for eight months from 29 April 2026",
+          "currentFarmer": null,
+          "summary": "The application covers 4.3080 ha in Flagey-Échezeaux, Boncourt-le-Bois, Vosne-Romanée and Vougeot belonging to SAS Bouchon Pourpre, GFA Domaine Bouchy et Amis, SCEA Nathalie Pacareau Lamarche and Mme Geneviève Lamarche; it also names Grands-Échezeaux D615 and D616. The region found the enlargement excessive and suspended the instruction, during which anyone may apply for the same land. As of the order, the applicant was not authorised to farm these parcels."
+        }
+      ],
       "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
-      "researchStatus": "holder-lead",
-      "researchDepth": "holder-group-triage",
+      "researchStatus": "historical-application",
+      "researchDepth": "exact-reference-event-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
-      "nextEvidenceNeeded": "Obtain dated parcel-specific operation evidence and scope."
+      "nextEvidenceNeeded": "Check the decision after the suspension ends, and who farms meanwhile."
     },
     {
       "parcelId": "212670000D0629",
@@ -6857,11 +6884,38 @@
           "basis": "management-only-lead",
           "sourceIds": [
             "bouchon",
-            "liger"
+            "liger",
+            "raa-2026-067"
+          ]
+        },
+        {
+          "name": "SCEA Domaine du Comte Liger-Belair (Vosne-Romanée)",
+          "basis": "suspended-application",
+          "sourceIds": [
+            "raa-2026-067"
           ]
         }
       ],
-      "historicalEvents": [],
+      "historicalEvents": [
+        {
+          "parcelIds": [
+            "212670000D0628",
+            "212670000D0673",
+            "212670000D0764",
+            "212670000D0765",
+            "212670000D0766",
+            "212670000D0767"
+          ],
+          "sourceId": "raa-2026-067",
+          "kind": "suspended-application",
+          "applicant": "SCEA Domaine du Comte Liger-Belair (Vosne-Romanée)",
+          "previousOperator": "Not stated",
+          "documentDate": "2026-04-07",
+          "outcome": "instruction suspended for eight months from 29 April 2026",
+          "currentFarmer": null,
+          "summary": "The application covers 4.3080 ha in Flagey-Échezeaux, Boncourt-le-Bois, Vosne-Romanée and Vougeot belonging to SAS Bouchon Pourpre, GFA Domaine Bouchy et Amis, SCEA Nathalie Pacareau Lamarche and Mme Geneviève Lamarche; it also names Grands-Échezeaux D615 and D616. The region found the enlargement excessive and suspended the instruction, during which anyone may apply for the same land. As of the order, the applicant was not authorised to farm these parcels."
+        }
+      ],
       "externalResearchIds": [
         "wh-dessus-noellat",
         "wh-liger-belair-2020"
@@ -6906,12 +6960,12 @@
       "historyFindingIds": [
         "mongeard-d0673"
       ],
-      "researchStatus": "holder-lead",
-      "researchDepth": "external-research-reviewed",
+      "researchStatus": "historical-application",
+      "researchDepth": "exact-reference-event-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
-      "nextEvidenceNeeded": "Obtain dated parcel-specific operation evidence and scope."
+      "nextEvidenceNeeded": "Check the decision after the suspension ends, and who farms meanwhile."
     },
     {
       "parcelId": "212670000D0674",
@@ -7833,22 +7887,49 @@
           "basis": "bottler-only-lead",
           "sourceIds": [
             "bouchy",
-            "bouchy-tardy"
+            "bouchy-tardy",
+            "raa-2026-067"
+          ]
+        },
+        {
+          "name": "SCEA Domaine du Comte Liger-Belair (Vosne-Romanée)",
+          "basis": "suspended-application",
+          "sourceIds": [
+            "raa-2026-067"
           ]
         }
       ],
-      "historicalEvents": [],
+      "historicalEvents": [
+        {
+          "parcelIds": [
+            "212670000D0628",
+            "212670000D0673",
+            "212670000D0764",
+            "212670000D0765",
+            "212670000D0766",
+            "212670000D0767"
+          ],
+          "sourceId": "raa-2026-067",
+          "kind": "suspended-application",
+          "applicant": "SCEA Domaine du Comte Liger-Belair (Vosne-Romanée)",
+          "previousOperator": "Not stated",
+          "documentDate": "2026-04-07",
+          "outcome": "instruction suspended for eight months from 29 April 2026",
+          "currentFarmer": null,
+          "summary": "The application covers 4.3080 ha in Flagey-Échezeaux, Boncourt-le-Bois, Vosne-Romanée and Vougeot belonging to SAS Bouchon Pourpre, GFA Domaine Bouchy et Amis, SCEA Nathalie Pacareau Lamarche and Mme Geneviève Lamarche; it also names Grands-Échezeaux D615 and D616. The region found the enlargement excessive and suspended the instruction, during which anyone may apply for the same land. As of the order, the applicant was not authorised to farm these parcels."
+        }
+      ],
       "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
-      "researchStatus": "holder-lead",
-      "researchDepth": "holder-group-triage",
+      "researchStatus": "historical-application",
+      "researchDepth": "exact-reference-event-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
-      "nextEvidenceNeeded": "Obtain dated parcel-specific operation evidence and scope."
+      "nextEvidenceNeeded": "Check the decision after the suspension ends, and who farms meanwhile."
     },
     {
       "parcelId": "212670000D0765",
@@ -7877,22 +7958,49 @@
           "basis": "bottler-only-lead",
           "sourceIds": [
             "bouchy",
-            "bouchy-tardy"
+            "bouchy-tardy",
+            "raa-2026-067"
+          ]
+        },
+        {
+          "name": "SCEA Domaine du Comte Liger-Belair (Vosne-Romanée)",
+          "basis": "suspended-application",
+          "sourceIds": [
+            "raa-2026-067"
           ]
         }
       ],
-      "historicalEvents": [],
+      "historicalEvents": [
+        {
+          "parcelIds": [
+            "212670000D0628",
+            "212670000D0673",
+            "212670000D0764",
+            "212670000D0765",
+            "212670000D0766",
+            "212670000D0767"
+          ],
+          "sourceId": "raa-2026-067",
+          "kind": "suspended-application",
+          "applicant": "SCEA Domaine du Comte Liger-Belair (Vosne-Romanée)",
+          "previousOperator": "Not stated",
+          "documentDate": "2026-04-07",
+          "outcome": "instruction suspended for eight months from 29 April 2026",
+          "currentFarmer": null,
+          "summary": "The application covers 4.3080 ha in Flagey-Échezeaux, Boncourt-le-Bois, Vosne-Romanée and Vougeot belonging to SAS Bouchon Pourpre, GFA Domaine Bouchy et Amis, SCEA Nathalie Pacareau Lamarche and Mme Geneviève Lamarche; it also names Grands-Échezeaux D615 and D616. The region found the enlargement excessive and suspended the instruction, during which anyone may apply for the same land. As of the order, the applicant was not authorised to farm these parcels."
+        }
+      ],
       "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
-      "researchStatus": "holder-lead",
-      "researchDepth": "holder-group-triage",
+      "researchStatus": "historical-application",
+      "researchDepth": "exact-reference-event-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
-      "nextEvidenceNeeded": "Obtain dated parcel-specific operation evidence and scope."
+      "nextEvidenceNeeded": "Check the decision after the suspension ends, and who farms meanwhile."
     },
     {
       "parcelId": "212670000D0766",
@@ -7921,22 +8029,49 @@
           "basis": "bottler-only-lead",
           "sourceIds": [
             "bouchy",
-            "bouchy-tardy"
+            "bouchy-tardy",
+            "raa-2026-067"
+          ]
+        },
+        {
+          "name": "SCEA Domaine du Comte Liger-Belair (Vosne-Romanée)",
+          "basis": "suspended-application",
+          "sourceIds": [
+            "raa-2026-067"
           ]
         }
       ],
-      "historicalEvents": [],
+      "historicalEvents": [
+        {
+          "parcelIds": [
+            "212670000D0628",
+            "212670000D0673",
+            "212670000D0764",
+            "212670000D0765",
+            "212670000D0766",
+            "212670000D0767"
+          ],
+          "sourceId": "raa-2026-067",
+          "kind": "suspended-application",
+          "applicant": "SCEA Domaine du Comte Liger-Belair (Vosne-Romanée)",
+          "previousOperator": "Not stated",
+          "documentDate": "2026-04-07",
+          "outcome": "instruction suspended for eight months from 29 April 2026",
+          "currentFarmer": null,
+          "summary": "The application covers 4.3080 ha in Flagey-Échezeaux, Boncourt-le-Bois, Vosne-Romanée and Vougeot belonging to SAS Bouchon Pourpre, GFA Domaine Bouchy et Amis, SCEA Nathalie Pacareau Lamarche and Mme Geneviève Lamarche; it also names Grands-Échezeaux D615 and D616. The region found the enlargement excessive and suspended the instruction, during which anyone may apply for the same land. As of the order, the applicant was not authorised to farm these parcels."
+        }
+      ],
       "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
-      "researchStatus": "holder-lead",
-      "researchDepth": "holder-group-triage",
+      "researchStatus": "historical-application",
+      "researchDepth": "exact-reference-event-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
-      "nextEvidenceNeeded": "Obtain dated parcel-specific operation evidence and scope."
+      "nextEvidenceNeeded": "Check the decision after the suspension ends, and who farms meanwhile."
     },
     {
       "parcelId": "212670000D0767",
@@ -7965,22 +8100,49 @@
           "basis": "bottler-only-lead",
           "sourceIds": [
             "bouchy",
-            "bouchy-tardy"
+            "bouchy-tardy",
+            "raa-2026-067"
+          ]
+        },
+        {
+          "name": "SCEA Domaine du Comte Liger-Belair (Vosne-Romanée)",
+          "basis": "suspended-application",
+          "sourceIds": [
+            "raa-2026-067"
           ]
         }
       ],
-      "historicalEvents": [],
+      "historicalEvents": [
+        {
+          "parcelIds": [
+            "212670000D0628",
+            "212670000D0673",
+            "212670000D0764",
+            "212670000D0765",
+            "212670000D0766",
+            "212670000D0767"
+          ],
+          "sourceId": "raa-2026-067",
+          "kind": "suspended-application",
+          "applicant": "SCEA Domaine du Comte Liger-Belair (Vosne-Romanée)",
+          "previousOperator": "Not stated",
+          "documentDate": "2026-04-07",
+          "outcome": "instruction suspended for eight months from 29 April 2026",
+          "currentFarmer": null,
+          "summary": "The application covers 4.3080 ha in Flagey-Échezeaux, Boncourt-le-Bois, Vosne-Romanée and Vougeot belonging to SAS Bouchon Pourpre, GFA Domaine Bouchy et Amis, SCEA Nathalie Pacareau Lamarche and Mme Geneviève Lamarche; it also names Grands-Échezeaux D615 and D616. The region found the enlargement excessive and suspended the instruction, during which anyone may apply for the same land. As of the order, the applicant was not authorised to farm these parcels."
+        }
+      ],
       "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
-      "researchStatus": "holder-lead",
-      "researchDepth": "holder-group-triage",
+      "researchStatus": "historical-application",
+      "researchDepth": "exact-reference-event-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
-      "nextEvidenceNeeded": "Obtain dated parcel-specific operation evidence and scope."
+      "nextEvidenceNeeded": "Check the decision after the suspension ends, and who farms meanwhile."
     },
     {
       "parcelId": "212670000D0768",
