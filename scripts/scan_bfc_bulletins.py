@@ -31,10 +31,12 @@ import time
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from urllib.parse import urlparse
+from bulletin_archive import Archive, Deferred, atomic_json, read_links
 
 ROOT = Path(__file__).resolve().parents[1]
 CACHE = ROOT / '.tmp/bfc-bulletins'
 SCHEMA = 2
+EXTRACTION_VERSION = 'poppler-tesseract-fra-110dpi-psm3-v1'
 SECTION = re.compile(r"territoires de la C[ôo]te.d.Or", re.I)
 ENTRY_END = re.compile(r"\((\d+)\s*pages?\)\s*Page\s*(\d+)\s*$", re.I)
 SECTION_HINT = re.compile(r'/|Direction|DRAAF|DREAL|ARS|Préfecture|Rectorat|DDT|DDETS')
@@ -52,7 +54,11 @@ def bulletin_id(url):
 
 
 def pdf_text(pdf, first, last):
-    result = run(['pdftotext', '-f', str(first), '-l', str(last), '-layout', pdf, '-'], capture_output=True, text=True)
+    try:
+        result = run(['pdftotext', '-f', str(first), '-l', str(last), '-layout', pdf, '-'],
+                     capture_output=True, text=True, encoding='utf-8', errors='replace')
+    except FileNotFoundError:
+        return None
     return result.stdout if result.returncode == 0 else None
 
 
@@ -63,12 +69,19 @@ def page_text(pdf, page):
         return layer, 'text-layer'
     with tempfile.TemporaryDirectory() as tmp:
         stem = os.path.join(tmp, 'page')
-        image = run(['pdftoppm', '-f', str(page), '-l', str(page), '-r', '110', '-gray', '-png', '-singlefile', pdf, stem],
-                    capture_output=True, text=True)
+        try:
+            image = run(['pdftoppm', '-f', str(page), '-l', str(page), '-r', '110', '-gray', '-png', '-singlefile', pdf, stem],
+                        capture_output=True, text=True)
+        except FileNotFoundError:
+            return layer or '', 'failed:pdftoppm-unavailable'
         if image.returncode or not os.path.exists(stem + '.png'):
             return layer or '', 'failed:pdftoppm'
-        ocr = run(['tesseract', stem + '.png', '-', '-l', 'fra', '--psm', '3'], capture_output=True, text=True,
-                  env={**os.environ, 'OMP_THREAD_LIMIT': '1'})
+        try:
+            ocr = run(['tesseract', stem + '.png', '-', '-l', 'fra', '--psm', '3'], capture_output=True, text=True,
+                      encoding='utf-8', errors='replace',
+                      env={**os.environ, 'OMP_THREAD_LIMIT': '1'})
+        except FileNotFoundError:
+            return layer or '', 'failed:tesseract-unavailable'
     if ocr.returncode:
         return layer or '', 'failed:tesseract'
     return ocr.stdout, 'ocr' if layer is not None else 'ocr-no-text-layer'
@@ -124,10 +137,12 @@ class Downloader:
             wait = self.ready.get(host, 0) - self.clock()
             if wait > 0:
                 self.sleep(wait)
-            with tempfile.NamedTemporaryFile() as headers:
-                result = run(['curl', '-sSL', '-m', '900', '-C', '-', '-D', headers.name, '-w', '%{http_code}',
+            with tempfile.TemporaryDirectory() as temporary:
+                headers = Path(temporary) / 'headers.txt'
+                headers.touch()
+                result = run(['curl', '-sSL', '-m', '900', '-C', '-', '-D', str(headers), '-w', '%{http_code}',
                               '-o', str(dest), url], capture_output=True, text=True)
-                header_text = Path(headers.name).read_text(errors='ignore')
+                header_text = headers.read_text(errors='ignore')
             status = int(result.stdout.strip() or 0) if result.stdout.strip().isdigit() else 0
             self.ready[host] = self.clock() + self.min_interval
             if result.returncode == 0 and status in (200, 206):
@@ -141,13 +156,16 @@ class Downloader:
         return f'{error} after {self.attempts} attempts'
 
 
-def process(url, pdf, keep_all):
-    pages_info = run(['pdfinfo', str(pdf)], capture_output=True, text=True)
+def process(url, pdf, keep_all, previous=None, full_text=False):
+    try:
+        pages_info = run(['pdfinfo', str(pdf)], capture_output=True, text=True)
+    except FileNotFoundError:
+        return {'url': url, 'error': 'pdfinfo unavailable', 'schemaVersion': SCHEMA}
     count = re.search(r'Pages:\s+(\d+)', pages_info.stdout)
     if pages_info.returncode or not count:
         return {'url': url, 'error': 'pdfinfo failed', 'schemaVersion': SCHEMA}
     pages = int(count.group(1))
-    entries = contents(str(pdf), pages)
+    entries = [] if full_text else contents(str(pdf), pages)
     targets = [e for e in entries or [] if SECTION.search(e['section'])]
     wanted = []
     for entry in targets:
@@ -157,11 +175,20 @@ def process(url, pdf, keep_all):
     if fallback:  # unreadable or empty contents: read everything rather than skip the bulletin
         wanted = range(1, pages + 1)
     text, status = {}, {}
+    sha = hashlib.sha256(pdf.read_bytes()).hexdigest()
+    previous = previous or {}
+    reusable = previous.get('sha256') == sha and previous.get('extractionVersion') == EXTRACTION_VERSION
     for page in wanted:
         if page not in text:  # overlapping acts share pages; extract each once
-            text[page], status[page] = page_text(str(pdf), page)
+            key = str(page)
+            old_status = previous.get('pageStatus', {}).get(key)
+            if reusable and old_status in ('text-layer', 'ocr', 'ocr-no-text-layer') and key in previous.get('text', {}):
+                text[page], status[page] = previous['text'][key], old_status
+            else:
+                text[page], status[page] = page_text(str(pdf), page)
     failed = sorted(p for p, s in status.items() if s.startswith('failed'))
-    record = {'schemaVersion': SCHEMA, 'url': url, 'sha256': hashlib.sha256(pdf.read_bytes()).hexdigest(),
+    record = {'schemaVersion': SCHEMA, 'url': url, 'sha256': sha, 'extractionVersion': EXTRACTION_VERSION,
+              'scanMode': 'full-text' if full_text else 'cote-dor-ddt',
               'pages': pages, 'contentsStatus': 'unreadable' if entries is None else 'read', 'tocEntries': len(entries or []),
               'coteDorEntries': targets, 'fallbackFullScan': fallback, 'failedPages': failed,
               'text': {str(k): v for k, v in sorted(text.items())}, 'pageStatus': {str(k): v for k, v in sorted(status.items())}}
@@ -170,7 +197,12 @@ def process(url, pdf, keep_all):
     return record
 
 
-def scan(urls, jobs=4, min_interval=0.0, keep_all=False, downloader=None):
+def scan(urls, jobs=4, min_interval=3.0, keep_all=False, downloader=None,
+         archive_dir=None, offline=False, full_text=False, reextract=False):
+    if jobs < 1 or min_interval < 0:
+        raise ValueError('jobs must be positive and min_interval non-negative')
+    if (offline or full_text) and archive_dir is None:
+        raise ValueError('--offline and --full-text require --archive-dir')
     records, pdfs = CACHE / 'records', CACHE / 'pdf'
     records.mkdir(parents=True, exist_ok=True)
     pdfs.mkdir(parents=True, exist_ok=True)
@@ -178,13 +210,30 @@ def scan(urls, jobs=4, min_interval=0.0, keep_all=False, downloader=None):
     pending = []
     with ThreadPoolExecutor(jobs) as pool:
         for url in urls:
-            name = bulletin_id(url)
+            name = 'pdf-' + hashlib.sha256(url.encode()).hexdigest() if full_text else bulletin_id(url)
             path = records / f'{name}.json'
             record = json.loads(path.read_text(encoding='utf-8')) if path.exists() else None
-            if complete(record) or legacy_complete(record):
+            if record and record.get('url') != url:
+                raise ValueError(f'Conflicting URLs for scan record {name}')
+            if not reextract and (complete(record) or legacy_complete(record)):
+                if archive_dir and complete(record):
+                    with Archive(archive_dir) as archive:
+                        if archive.local_pdf(url):
+                            archive.index_scan(record)
                 continue
             pdf = pdfs / f'{name}.pdf'
-            if not (pdf.exists() and record and record.get('sha256') == hashlib.sha256(pdf.read_bytes()).hexdigest()):
+            if archive_dir:
+                with Archive(archive_dir) as archive:
+                    pdf = archive.local_pdf(url)
+                    if pdf is None and not offline:
+                        try:
+                            pdf = archive.fetch_one(url, min_interval=min_interval)
+                        except Deferred:
+                            pass
+                if pdf is None:
+                    atomic_json(path, {'url': url, 'error': 'PDF not archived; acquisition pending (see archive status)'})
+                    continue
+            elif not (pdf.exists() and record and record.get('sha256') == hashlib.sha256(pdf.read_bytes()).hexdigest()):
                 error = downloader.fetch(url, pdf)
                 if error:
                     attempts = (record or {}).get('attempts', 0) + 1
@@ -192,8 +241,13 @@ def scan(urls, jobs=4, min_interval=0.0, keep_all=False, downloader=None):
                                                 'lastAttempt': time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())}),
                                     encoding='utf-8')
                     continue
-            pending.append(pool.submit(lambda u=url, p=pdf, out=path: out.write_text(
-                json.dumps(process(u, p, keep_all), ensure_ascii=False), encoding='utf-8')))
+            def extract(u=url, p=pdf, out=path, old=record):
+                result = process(u, p, keep_all or bool(archive_dir), None if reextract else old, full_text)
+                atomic_json(out, result)
+                if archive_dir:
+                    with Archive(archive_dir) as archive:
+                        archive.index_scan(result)
+            pending.append(pool.submit(extract))
         for future in pending:
             future.result()
     incomplete = [p.stem for p in records.glob('*.json')
@@ -205,11 +259,20 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument('link_lists', nargs='+', type=Path)
     parser.add_argument('--jobs', type=int, default=4, help='parallel OCR workers')
-    parser.add_argument('--min-interval', type=float, default=0.0, help='seconds between downloads from one host')
+    parser.add_argument('--min-interval', type=float, default=3.0, help='seconds between downloads from one host')
     parser.add_argument('--keep-all-pdfs', action='store_true')
+    parser.add_argument('--archive-dir', type=Path, help='shared persistent archive; recommended for acquisition')
+    parser.add_argument('--cache-dir', type=Path, help='scan records directory (outside Git)')
+    parser.add_argument('--offline', action='store_true', help='only extract PDFs already in the archive')
+    parser.add_argument('--full-text', action='store_true', help='read every page; use for departmental PDFs')
+    parser.add_argument('--reextract', action='store_true', help='deliberately replace cached page extraction')
     args = parser.parse_args()
-    urls = [u.strip() for path in args.link_lists for u in path.read_text(encoding='utf-8').splitlines() if u.strip()]
-    incomplete = scan(urls, args.jobs, args.min_interval, args.keep_all_pdfs)
+    global CACHE
+    if args.cache_dir:
+        CACHE = args.cache_dir
+    urls = read_links(args.link_lists)
+    incomplete = scan(urls, args.jobs, args.min_interval, args.keep_all_pdfs, archive_dir=args.archive_dir,
+                      offline=args.offline, full_text=args.full_text, reextract=args.reextract)
     print(f'{len(urls)} bulletins requested; {len(incomplete)} incomplete (rerun to retry): {sorted(incomplete)}')
 
 

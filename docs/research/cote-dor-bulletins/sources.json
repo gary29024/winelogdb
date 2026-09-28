@@ -1,0 +1,85 @@
+{
+  "scope": "Côte-d'Or departmental administrative bulletins, 2016–2020; distinct from the BFC regional archive",
+  "years": [
+    {
+      "year": 2016,
+      "url": "https://www.cote-dor.gouv.fr/Publications/Recueils-des-Actes-Administratifs/Recueils-des-actes-administratifs-des-annees-anterieures/Recueils-des-actes-administratifs-2016",
+      "manifestFile": "links-2016.txt",
+      "manifestSha256": "cfc5a2ba7f2ea3c3f701b3f775073519f21dd0a78bf01f832444257721897ff4",
+      "listingSha256": "24f7ebc5e1a90430c6a5babfd3a3cde0656830524d6b9e6ef09c9f94fff7626c",
+      "capturedAt": "2026-09-28T16:55:56.919844+00:00",
+      "pdfCount": 61
+    },
+    {
+      "year": 2017,
+      "url": "https://www.cote-dor.gouv.fr/Publications/Recueils-des-Actes-Administratifs/Recueils-des-actes-administratifs-des-annees-anterieures/Recueils-des-actes-administratifs-2017",
+      "manifestFile": "links-2017.txt",
+      "manifestSha256": "a570e3b9a39fcd9572fa130dfa59b0f10660e395f8aad1c0f8db5c4de749c6b9",
+      "listingSha256": "87aa257441a129845fcc9d0fc3d3ee3efc63a540813b1209087cbb6bd882ed96",
+      "capturedAt": "2026-09-28T16:55:33.016066+00:00",
+      "pdfCount": 63
+    },
+    {
+      "year": 2018,
+      "url": "https://www.cote-dor.gouv.fr/Publications/Recueils-des-Actes-Administratifs/Recueils-des-actes-administratifs-des-annees-anterieures/Recueils-des-actes-administratifs-2018",
+      "manifestFile": "links-2018.txt",
+      "manifestSha256": "5602c093e8726a24727e70784ef99f42109bbe578289d2b2a5291c991c7437c7",
+      "listingSha256": "54bd47a1f65a7ba18e6b320a59f84ec7b8e91c21b8a44cc1bb49996041a57b32",
+      "capturedAt": "2026-09-28T16:55:40.201853+00:00",
+      "pdfCount": 73,
+      "alternateLinks": [
+        {
+          "url": "https://transnum-nextcloud.ac-dijon.fr/nextcloud/index.php/s/MzZReaq4Nc3w55i",
+          "title": "RAA n° 28 du 03 mai 2018"
+        },
+        {
+          "url": "https://transnum-nextcloud.ac-dijon.fr/nextcloud/index.php/s/M2zXpnwGxSCMJAD",
+          "title": "RAA n° 07 du 16 janvier 2018"
+        },
+        {
+          "url": "https://transnum-nextcloud.ac-dijon.fr/nextcloud/index.php/s/M8DccqBTPCXMpsJ",
+          "title": "RAA n° 06 du 16 janvier 2018"
+        },
+        {
+          "url": "https://transnum-nextcloud.ac-dijon.fr/nextcloud/index.php/s/XxMDojoZr578967",
+          "title": "RAA n° 05 du 16 janvier 2018"
+        },
+        {
+          "url": "https://transnum-nextcloud.ac-dijon.fr/nextcloud/index.php/s/NPS3iByHr8jgs6w",
+          "title": "RAA n° 04 du 16 janvier 2018"
+        }
+      ],
+      "alternateHostCheck": {
+        "checkedAt": "2026-09-29",
+        "result": "transnum-nextcloud.ac-dijon.fr failed DNS resolution (getaddrinfo) from this environment"
+      }
+    },
+    {
+      "year": 2019,
+      "url": "https://www.cote-dor.gouv.fr/Publications/Recueils-des-Actes-Administratifs/Recueils-des-actes-administratifs-des-annees-anterieures/Recueils-des-actes-administratifs-2019",
+      "knownPublicationGaps": [
+        {
+          "bulletinNumbers": [
+            26,
+            72
+          ],
+          "basis": "The official annual listing states these bulletins do not exist because of a technical problem; observed in the search-index copy on 2026-09-29."
+        }
+      ],
+      "manifestFile": "links-2019.txt",
+      "manifestSha256": "c45ff2c3bc3fdd469338aa81c1c2de5f8de7cc6701d265bf11b2b27205e412fe",
+      "listingSha256": "0b4733272882d75b8f03cdf9ec660abbaee982057404eeb26f865c359bf060ff",
+      "capturedAt": "2026-09-28T16:55:45.939435+00:00",
+      "pdfCount": 78
+    },
+    {
+      "year": 2020,
+      "url": "https://www.cote-dor.gouv.fr/Publications/Recueils-des-Actes-Administratifs/Recueils-des-actes-administratifs-des-annees-anterieures/Recueils-des-actes-administratifs-2020",
+      "manifestFile": "links-2020.txt",
+      "manifestSha256": "e12dec83176813fbf84874b81a18d9727f2fff8f956800aa82309e3ab26501af",
+      "listingSha256": "76624df38d3fe9345f1cac3aeca2c76ef55fbcff31e379b3fc95df40ba63d241",
+      "capturedAt": "2026-09-28T16:55:51.419261+00:00",
+      "pdfCount": 97
+    }
+  ]
+}
