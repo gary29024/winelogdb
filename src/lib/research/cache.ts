@@ -2,7 +2,7 @@ import { AI_MODELS } from '../ai/policy';
 import { deepSearchProvenanceSchema,deepSearchSchema,type DeepSearchProvenance,type DeepSearchResult } from '../db/schema';
 import { assessResearchScope,buildDeepResearchQuality,legacyOptionalFieldMissing } from './qualityGate';
 import { highRiskTechnicalScopePasses } from './technicalClaimGate';
-import { auditTechnicalContradictions,disputedTechnicalClaimCount,technicalContradictionScopePasses } from './technicalContradictions';
+import { auditTechnicalContradictions,technicalContradictionScopePasses } from './technicalContradictions';
 import { friendResearchBatch,publishResearch } from './shared';
 
 export const researchScopes=['producer','terroir','vintage_context','wine_vintage'] as const;
@@ -285,6 +285,6 @@ export function assembleDeepSearch(cache:Map<ResearchScope,CachedResearch>,targe
   const oldestResearchedAt=timestamps.length?new Date(Math.min(...timestamps)).toISOString():undefined;
   const latestEntry=[...entries].sort((a,b)=>Date.parse(b.researchedAt)-Date.parse(a.researchedAt))[0];
   const provenanceFields:DeepSearchProvenance['fields']={};for(const entry of entries)if(entry.provenance)Object.assign(provenanceFields,entry.provenance.fields);const provenance=Object.keys(provenanceFields).length?{version:1 as const,fields:provenanceFields}:undefined;
-  const baseQuality=buildDeepResearchQuality(entries.map(entry=>({scope:entry.target.scope,payload:entry.payload,subject:entry.target.subject,sources:entry.sources}))),disputedCount=disputedTechnicalClaimCount(provenance),quality=disputedCount?{...baseQuality,status:'mixed' as const,scoreNote:undefined,warnings:[...new Set([...baseQuality.warnings,'cross-source-technical-conflict'])].slice(0,20)}:baseQuality;
+  const quality=buildDeepResearchQuality(entries.map(entry=>({scope:entry.target.scope,payload:entry.payload,subject:entry.target.subject,sources:entry.sources,provenance:entry.provenance})));
   return {summary:payload('wine_vintage').summary??'',expectedProfile:payload('wine_vintage').expectedProfile??'',vintageQuality:payload('vintage_context').vintageQuality??'',producerDetails:payload('producer').producerDetails??'',producerWinemakingPractices:payload('producer').producerWinemakingPractices??'',winemakingTechniques:payload('wine_vintage').winemakingTechniques??'',terroir:payload('terroir').terroir??'',drinkingWindow:payload('wine_vintage').drinkingWindow??'',sources,model:latestEntry?.model??AI_MODELS.groundedResearchPrimary,researchedAt,oldestResearchedAt,quality,provenance};
 }

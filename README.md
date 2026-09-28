@@ -60,7 +60,7 @@ The migration creates owner/filter/sort indexes and an FTS5 table for producer, 
 
 Research is cached per scope and every scope passes a quality gate on write and
 again on read, so a cached entry that no longer meets the bar is re-researched
-rather than served. Four things keep that gate honest.
+rather than served. These rules keep that gate honest.
 
 - **Vintage references.** A field is rejected only when it asserts a year that
   is not the requested vintage. Years introduced as history or comparison
@@ -73,6 +73,10 @@ rather than served. Four things keep that gate honest.
   `mixed` however good its sources were.
 - **Retries carry the reason.** When the gate rejects a scope, the fallback
   attempt is told what was wrong instead of re-sending an identical prompt.
+- **Source disagreements are findings.** Conflicting grounded technical values
+  are preserved with their citations and marked as disputed. They lower the
+  affected field's confidence score and the overall score without buying another
+  research attempt. Disclosures do not waive grounding or vintage checks.
 - **One implementation each.** `batchWineResearch.ts` and `batchResearch.ts` are
   the only wine and producer researchers. Three earlier generations sat behind
   shadowed routes where they could neither run nor be noticed; a test now pins
