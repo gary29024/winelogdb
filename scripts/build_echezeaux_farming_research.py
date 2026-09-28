@@ -14,6 +14,7 @@ CURATION = ROOT / 'docs/research/echezeaux-farming-curation.json'
 MANIFEST = ROOT / 'src/lib/places/echezeauxParcelManifest.json'
 OUTPUT = ROOT / 'docs/research/echezeaux-farming-parcels.json'
 REPORT = ROOT / 'docs/echezeaux-farming-parcel-register.md'
+HISTORY = ROOT / 'docs/research/echezeaux-rights-history.json'
 
 
 def require(condition, message):
@@ -21,7 +22,7 @@ def require(condition, message):
         raise ValueError(message)
 
 
-def build_register(manifest, asset, curation):
+def build_register(manifest, asset, curation, history):
     # Git autocrlf changes the final newline in a Windows checkout. Match the
     # canonical LF bytes hashed by build_echezeaux_parcels.py, without reserialising.
     asset = asset.replace(b'\r\n', b'\n')
@@ -43,6 +44,14 @@ def build_register(manifest, asset, curation):
         require(h['parcelOperationConfirmed'] is False, 'Lead register cannot publish confirmed operation')
         require(set(h['sourceIds']) <= sources.keys(), 'Unknown holder source')
         require(not h['candidateNames'] or h['sourceIds'], 'Candidate requires a cited research source')
+    require(history['inputs']['parcelSnapshotSha256'] == manifest['sha256'] and history['parentFeatureId'] == parent,
+            'Rights history built from another snapshot')
+    lineage = {r['parcelId']: r for r in history['parcels']}
+    require(set(lineage) == ids, 'Rights history must cover every and only mapped parcel')
+    for finding in curation['historyFindings']:
+        require(finding['parcelIds'] and set(finding['parcelIds']) <= ids, 'History finding outside research cru')
+        require(finding['sourceIds'] and set(finding['sourceIds']) <= sources.keys(), 'Unknown history finding source')
+        require(finding.get('currentFarmer') is None, 'Rights history cannot establish current farming')
     for event in curation['exactParcelEvents']:
         require(set(event['parcelIds']) <= ids, 'Event reference outside research cru')
         require(event['sourceId'] in sources, 'Unknown event source')
@@ -62,6 +71,12 @@ def build_register(manifest, asset, curation):
             'recordedRights': p['recordedRights'], 'recordMatch': p['recordMatch'],
             'holderResearchIds': holder_ids, 'candidateLeads': leads + event_leads,
             'historicalEvents': events,
+            # Dated legal-entity rights since 2019 and cadastral splits: context for who to ask, not farming.
+            'rightsChanges': [{k: c[k] for k in ('from', 'to', 'kind', 'before', 'after')}
+                              for c in lineage[p['id']]['rightsChanges']],
+            'cadastreFirstSeen': lineage[p['id']]['firstSeenCadastre'],
+            'predecessorIds': lineage[p['id']]['predecessorIds'],
+            'historyFindingIds': [f['id'] for f in curation['historyFindings'] if p['id'] in f['parcelIds']],
             'researchStatus': ('historical-application' if events else 'holder-lead' if leads else 'unresolved'),
             'researchDepth': ('exact-reference-event-reviewed' if events else
                               'holder-group-triage' if holder_ids else 'inventory-only'),
@@ -76,12 +91,16 @@ def build_register(manifest, asset, curation):
         'status': curation['status'], 'scope': curation['scope'], 'parentFeatureId': parent,
         'inputs': {'curation': 'docs/research/echezeaux-farming-curation.json',
                    'dataUrl': manifest['dataUrl'], 'sha256': manifest['sha256'],
-                   'cadastreDate': manifest['cadastreDate'], 'rightsAsOf': manifest['rightsAsOf']},
+                   'cadastreDate': manifest['cadastreDate'], 'rightsAsOf': manifest['rightsAsOf'],
+                   'rightsHistory': 'docs/research/echezeaux-rights-history.json',
+                   'rightsHistoryYears': [r['asOf'] for r in history['inputs']['rights']]},
         'counts': {'parcels': len(rows), 'recordedHolders': len(holders),
                    'withRecordedRights': sum(bool(r['recordedRights']) for r in rows),
                    'withoutMatchedRights': sum(not r['recordedRights'] for r in rows),
                    'holderLead': statuses['holder-lead'], 'historicalApplication': statuses['historical-application'],
-                   'unresolved': statuses['unresolved'], 'currentFarmerConfirmed': 0},
+                   'unresolved': statuses['unresolved'], 'currentFarmerConfirmed': 0,
+                   'withRightsChangeSince2019': sum(bool(r['rightsChanges']) for r in rows),
+                   'withCadastralPredecessor': sum(bool(r['predecessorIds']) for r in rows)},
         'parcels': rows,
     }
 
@@ -90,7 +109,7 @@ def cell(value):
     return str(value).replace('|', '\\|').replace('\n', ' ')
 
 
-def render_report(register, curation):
+def render_report(register, curation, history):
     counts = register['counts']
     sources = {s['id']: s for s in curation['sources']}
     lines = [
@@ -138,8 +157,9 @@ def render_report(register, curation):
               'previous operator Domaine Gros Frère et Sœur. The receipt does not authorise cultivation. '
               'Outcome, actual current operation and cadastral continuity remain unconfirmed. Printed D01776 is unresolved. '
               'D0093 belongs to Grands-Échezeaux and is outside this register. '
-              f"[Official receipt, pages 74–75]({sources['anne-application']['url']}).", '',
-              '## Source log', '',
+              f"[Official receipt, pages 74–75]({sources['anne-application']['url']}).", '']
+    lines += render_history(register, curation, history, sources)
+    lines += ['## Source log', '',
               'Publication/document dates and vintage seasons are separate fields in the curation. An undated page, '
               'recent upload or review date does not establish operation in the target season.', '']
     for s in curation['sources']:
@@ -158,16 +178,66 @@ def render_report(register, curation):
     return '\n'.join(lines)
 
 
+CHANGE_LABELS = {
+    'record-appeared': 'First company record on an existing parcel',
+    'new-parcel-reference': 'Record on a newly created parcel reference',
+    'record-disappeared': 'Company record ended',
+    'same-holder-renamed': 'Same SIREN, new name',
+    'right-type-changed': 'Same holder, different right',
+    'unprovable-identifier-change': 'Identifier changed; earlier record had no SIREN',
+    'holder-changed': 'Different SIREN',
+}
+
+
+def render_history(register, curation, history, sources):
+    counts, rows = history['counts'], {r['parcelId']: r for r in register['parcels']}
+    years = register['inputs']['rightsHistoryYears']
+    lines = ['## Rights history and parcel lineage', '',
+             f"The legal-entity rights files for 1 January {years[0][:4]}–{years[-1][:4]} were compared with the pinned "
+             f"{register['inputs']['rightsAsOf']} snapshot, and Etalab cadastre vintages from {history['inputs']['cadastre'][0]['date']} "
+             f"with the {register['inputs']['cadastreDate']} geometry. {counts['withAnyRightsChange']} of {counts['parcels']} parcels had "
+             f"a recorded-rights change; {counts['createdSinceFirstVintage']} current references did not exist in the first vintage, and "
+             f"{counts['retiredReferences']} retired references overlapped the cru. "
+             'Only company-type holders appear: a first record can be a purchase, a transfer from private owners into a family company, '
+             'or a new reference after a split. Continuity is proved only by an unchanged SIREN. None of this is farming evidence. '
+             '[Full yearly records and lineage](research/echezeaux-rights-history.json), rebuilt by '
+             '`python scripts/build_echezeaux_rights_history.py`.', '',
+             '**Reviewed findings**', '']
+    for f in curation['historyFindings']:
+        refs = ', '.join(rows[i]['reference'] for i in f['parcelIds'])
+        cited = ', '.join(f"[{cell(sources[s]['title'])}]({sources[s]['url']})" for s in f['sourceIds'])
+        lines.append(f"- **{cell(f['title'])}** ({refs}). {f['finding']} Sources: {cited}.")
+    grouped = {}
+    for r in register['parcels']:
+        for c in r['rightsChanges']:
+            key = (c['from'], c['to'], c['kind'], ' / '.join(c['before']) or '—', ' / '.join(c['after']) or '—')
+            grouped.setdefault(key, []).append(r['reference'])
+    lines += ['', '**Every recorded change**', '', '| Parcels | Between | Change | Before | After |', '| --- | --- | --- | --- | --- |']
+    for (start, end, kind, before, after), refs in sorted(grouped.items()):
+        lines.append(f"| {', '.join(refs)} | {start[:4]} → {end[:4]} | {CHANGE_LABELS[kind]} | {cell(before)} | {cell(after)} |")
+    lines += ['', '**Retired references and their current successors**', '',
+              'Successors are current parcels sharing more than 1 m² with the retired geometry. '
+              'This is a spatial comparison, not a division act; verify before carrying any evidence across.', '',
+              '| Retired reference | Last vintage | Current successors | Company records before retirement |',
+              '| --- | --- | --- | --- |']
+    for p in history['retiredParcels']:
+        successors = ', '.join(rows[s['parcelId']]['reference'] if s['parcelId'] in rows else s['parcelId'] for s in p['successors'])
+        names = sorted({r['name'] for h in p['rightsHistory'] for r in h['records']})
+        lines.append(f"| {p['reference']} | {p['lastSeenCadastre']} | {successors} | {cell(' / '.join(names)) or 'None'} |")
+    return lines + ['']
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--check', action='store_true')
     args = parser.parse_args()
     manifest = json.loads(MANIFEST.read_text(encoding='utf-8'))
     curation = json.loads(CURATION.read_text(encoding='utf-8'))
+    history = json.loads(HISTORY.read_text(encoding='utf-8'))
     asset = (ROOT / 'public' / manifest['dataUrl'].lstrip('/')).read_bytes()
-    register = build_register(manifest, asset, curation)
+    register = build_register(manifest, asset, curation, history)
     outputs = {OUTPUT: json.dumps(register, ensure_ascii=False, indent=2) + '\n',
-               REPORT: render_report(register, curation)}
+               REPORT: render_report(register, curation, history)}
     for path, content in outputs.items():
         if args.check:
             require(path.exists() and path.read_text(encoding='utf-8') == content, f'Stale output: {path}')

@@ -737,6 +737,81 @@ All references are in commune 21267 (Flagey-Échezeaux). Full IDs and evidence l
 
 D 0177 and D 0178: Anne Gros application received 24 November 2022, dossier 2022-204, previous operator Domaine Gros Frère et Sœur. The receipt does not authorise cultivation. Outcome, actual current operation and cadastral continuity remain unconfirmed. Printed D01776 is unresolved. D0093 belongs to Grands-Échezeaux and is outside this register. [Official receipt, pages 74–75](https://www.prefectures-regions.gouv.fr/irecontenu/telechargement/106030/671617/file/recueil-bfc-2023-055-recueil-des-actes-administratifs-special.pdf#page=74).
 
+## Rights history and parcel lineage
+
+The legal-entity rights files for 1 January 2019–2025 were compared with the pinned 2025-01-01 snapshot, and Etalab cadastre vintages from 2019-01-01 with the 2026-06-01 geometry. 76 of 276 parcels had a recorded-rights change; 35 current references did not exist in the first vintage, and 13 retired references overlapped the cru. Only company-type holders appear: a first record can be a purchase, a transfer from private owners into a family company, or a new reference after a split. Continuity is proved only by an unchanged SIREN. None of this is farming evidence. [Full yearly records and lineage](research/echezeaux-rights-history.json), rebuilt by `python scripts/build_echezeaux_rights_history.py`.
+
+**Reviewed findings**
+
+- **Nicole Lamarche entity was named after Domaine François Lamarche** (D 0168, D 0169, D 0519). SIREN 397738634 is recorded as FONCIER VITI DOM FRANCOIS LAMARCHE on 1 January 2020 and 2021 and as NICOLE LAMARCHE from 2022. The unchanged SIREN proves one renamed legal entity, which strengthens the identity link to the Lamarche domaine. There was no company record in 2019. Farming of the three parcels remains unconfirmed. Sources: [DGFiP legal-entity parcel files, situations at 1 January 2019–2024](https://data.economie.gouv.fr/explore/dataset/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/), [Official company search: Nicole Lamarche](https://recherche-entreprises.api.gouv.fr/search?q=397738634).
+- **Anne Gros company rights begin in 2021** (D 0183, D 0709). ANNE GROS (SIREN 348024928) first appears on 1 January 2021; both references existed in 2019 without a company record. This dates recorded rights, not an operating start. Sources: [DGFiP legal-entity parcel files, situations at 1 January 2019–2024](https://data.economie.gouv.fr/explore/dataset/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/), [Etalab cadastre vintages, Flagey-Échezeaux, 2019–2025](https://files.data.gouv.fr/cadastre/etalab-cadastre/).
+- **2022 application references match today's geometry** (D 0177, D 0178). Geometry and recorded area of D0177 and D0178 (and Grands-Échezeaux D0093) are identical in the 1 January 2022 vintage and today, so the printed references in the November 2022 receipt denote today's parcels. Neither Échezeaux reference has a company record in any year 2019–2025, consistent with private ownership. The application's outcome and actual operation remain unconfirmed; D01776 appears in no vintage. Sources: [Etalab cadastre vintages, Flagey-Échezeaux, 2019–2025](https://files.data.gouv.fr/cadastre/etalab-cadastre/), [DGFiP legal-entity parcel files, situations at 1 January 2019–2024](https://data.economie.gouv.fr/explore/dataset/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/), [DDT: Anne Gros application receipt, pp. 74–75](https://www.prefectures-regions.gouv.fr/irecontenu/telechargement/106030/671617/file/recueil-bfc-2023-055-recueil-des-actes-administratifs-special.pdf#page=74).
+- **D0673 left Mongeard-Mugneret during 2024** (D 0671, D 0673). Both references were held by ASSURANCES DU CREDIT MUTUEL VIE until 2020 and by DOMAINE MONGEARD MUGNERET (SIREN 303514681) from 2021. On 1 January 2025 D0673 is held by BOUCHON POURPRE (SIREN 880909346). A Mongeard lead for D0673 rests on rights that ended during 2024. Sources: [DGFiP legal-entity parcel files, situations at 1 January 2019–2024](https://data.economie.gouv.fr/explore/dataset/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/), [Bouchon Pourpre company record](https://www.pappers.fr/entreprise/bouchon-pourpre-880909346).
+- **Capitain parcels moved to Capitain-Gagnerot in 2020** (D 0326, D 0579, D 0581, D 0583, D 0584, D 0587, D 0588). GFA DOMAINE FRANCOIS CAPITAIN ET FILS (SIREN 339012320) through 2020, SARL CAPITAIN GAGNEROT (SIREN 515620466) from 2021. A different SIREN means a transfer between entities. Family-name continuity supports the existing lead without proving farming. Sources: [DGFiP legal-entity parcel files, situations at 1 January 2019–2024](https://data.economie.gouv.fr/explore/dataset/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/), [Capitain-Gagnerot: Échezeaux](https://www.capitain-gagnerot.com/en/echezeaux-grand-cru/).
+- **Clerget parcel moved into the domaine company in 2023** (D 0796). GFV CHRISTIAN ET ISABELLE CLERGET (SIREN 430384354) through 2023, SCEV DU DOMAINE CHRISTIAN CLERGET (SIREN 431340140) from 2024. Ownership by the domaine company is closer to the operator, but it is not a lease or operation record. Sources: [DGFiP legal-entity parcel files, situations at 1 January 2019–2024](https://data.economie.gouv.fr/explore/dataset/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/), [Christian Clerget: En Orveaux sheet](https://static.domaine-christianclerget.fr/media/vins/14/pages-de-ft-echezeaux-en.pdf).
+- **HOR Vignobles transfer to SCI Les Climats dated to 2022** (D 0815). D0815 passes from HOR VIGNOBLES to SCI LES CLIMATS between the 2022 and 2023 files, while D0813 and D0814 stay with HOR. This places the En Orveaux transfer suggested by the indexed HOR filing on D0815. The farmer remains unresolved. Sources: [DGFiP legal-entity parcel files, situations at 1 January 2019–2024](https://data.economie.gouv.fr/explore/dataset/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/), [HOR Vignobles 2021 filing](https://www.pappers.fr/entreprise/hor-vignobles-821877008/documents/HOR%20VIGNOBLES%20-%20Statuts%20mis%20%C3%A0%20jour%2008-10-2021.pdf).
+- **Traversins rights start on 1 January 2024** (D 0295, D 0296, D 0297, D 0298, D 0299). No company record through 2023; TRAVERSINS (SIREN 911887461) from 1 January 2024. The timing matches the 2023 report of additional Champs Traversins vines. That strengthens the lead's timing, not its parcel scope or farming. Sources: [DGFiP legal-entity parcel files, situations at 1 January 2019–2024](https://data.economie.gouv.fr/explore/dataset/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/), [SAS Traversins: 2023 statutes](https://www.pappers.fr/entreprise/sas-traversins-911887461/documents/SAS%20TRAVERSINS%20-%20Statuts%20mis%20%C3%A0%20jour%2023-02-2023.pdf), [Old Vine Notes: 2023 estate visit with Georges Roumier](https://oldvinenotes.com/2024/12/30/2023-a-large-crop-of-variable-reds-and-somewhat-better-whites/).
+- **U22079769 is an undivided-ownership placeholder for former D0143** (D 0898, D 0899, D 0900, D 0901, D 0902). PROPRIETAIRES DU BND 267 D0143 held D0143 from 2019 to 2024. The 2025 cadastre divides D0143 into these five references and the same record follows. It denotes co-owners of undivided property, not a company to identify; ask the owners directly. Sources: [DGFiP legal-entity parcel files, situations at 1 January 2019–2024](https://data.economie.gouv.fr/explore/dataset/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/), [Etalab cadastre vintages, Flagey-Échezeaux, 2019–2025](https://files.data.gouv.fr/cadastre/etalab-cadastre/).
+- **Family land companies first recorded in 2025** (D 0128, D 0154, D 0156, D 0157, D 0316, D 0323, D 0633, D 0636, D 0144, D 0145, D 0511, D 0512). GFA FAMILLE FOREY BJ, GROUPEMENT FONCIER VITICOLE DE ORVEAUX and LES CRUOTS first appear on 1 January 2025 on references that existed earlier without a company record. This is consistent with family land moving into land-holding companies during 2024. Their U-numbers carry no SIREN, so names remain leads only. Sources: [DGFiP legal-entity parcel files, situations at 1 January 2019–2024](https://data.economie.gouv.fr/explore/dataset/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/), [Official company search: GFA FAMILLE FOREY BJ](https://recherche-entreprises.api.gouv.fr/search?q=GFA%20FAMILLE%20FOREY%20BJ&per_page=5), [ORVEAUX company record](https://www.pappers.fr/entreprise/orveaux-984543470), [LES CRUOTS company record](https://www.pappers.fr/entreprise/les-cruots-930915806).
+- **Other first company records, 2023–2024** (D 0161, D 0203, D 0313, D 0340). DOMAINE ARNOUX - LACHAUX (D0161), EARL DOMAINE FAIVRE (D0203) and DOMAINE D'EUGENIE (D0340) first appear on 1 January 2024, ORIGINE (D0313) on 1 January 2023. These are recent acquisitions or transfers into a company; ask for the deed or lease date together with operation evidence. Sources: [DGFiP legal-entity parcel files, situations at 1 January 2019–2024](https://data.economie.gouv.fr/explore/dataset/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/).
+- **Romanée-Conti record reformatted, parcels unchanged** (D 0194, D 0768, D 0769, D 0770). The same four references move from a MAJIC-only record (2019) through a provisional U-number (2020) to SIREN 778269407 (2021), as SC DOM DE LA ROMANEE CONTI becomes DOMAINE DE LA ROMANEE CONTI. This is consistent with reformatting rather than a sale, but the file alone cannot prove identity. Sources: [DGFiP legal-entity parcel files, situations at 1 January 2019–2024](https://data.economie.gouv.fr/explore/dataset/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/), [Domaine de la Romanée-Conti: Échezeaux](https://www.romanee-conti.fr/fr/9-grand-crus/2/echezeaux).
+- **Split parcels with no company record in any year** (D 0822, D 0824, D 0825, D 0826, D 0827, D 0828, D 0829, D 0830, D 0831, D 0832, D 0833, D 0834, D 0835, D 0836, D 0841, D 0842, D 0843, D 0844, D 0871, D 0872, D 0903, D 0904, D 0905, D 0906, D 0907, D 0908, D 0909, D 0910, D 0911). These references were created by dividing earlier parcels after 2019. Neither they nor their predecessors carry a company record in any year, which points to private owners. The legal-entity files cannot identify them; only owners, notaries or shared CVI extracts can. Sources: [Etalab cadastre vintages, Flagey-Échezeaux, 2019–2025](https://files.data.gouv.fr/cadastre/etalab-cadastre/), [DGFiP legal-entity parcel files, situations at 1 January 2019–2024](https://data.economie.gouv.fr/explore/dataset/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/).
+
+**Every recorded change**
+
+| Parcels | Between | Change | Before | After |
+| --- | --- | --- | --- | --- |
+| D 0168, D 0169, D 0519 | 2019 → 2020 | First company record on an existing parcel | — | FONCIER VITI DOM FRANCOIS LAMARCHE |
+| D 0796 | 2019 → 2020 | Same SIREN, new name | CHRISTIAN ET ISABELLE CLERGET | GFV CHRISTIAN ET ISABELLE CLERGET |
+| D 0331, D 0335, D 0653 | 2019 → 2020 | Same SIREN, new name | CVVB | CONSORTIUM VITICOLE VINICOLE BOURGOGNE |
+| D 0326, D 0579, D 0581, D 0583, D 0584, D 0587, D 0588 | 2019 → 2020 | Same SIREN, new name | DOMAINE FRANCOIS CAPITAIN ET FILS | GFA DOMAINE FRANCOIS CAPITAIN ET FILS |
+| D 0117, D 0119, D 0120, D 0121, D 0122, D 0123, D 0191, D 0192, D 0332, D 0338, D 0622, D 0623, D 0654 | 2019 → 2020 | Same SIREN, new name | MONGEARD MUGNERET ET FILS | GFA MONGEARD MUGNERET ET FILS |
+| D 0671, D 0673 | 2019 → 2020 | Identifier changed; earlier record had no SIREN | ASSURANCES DU CREDIT MUTUEL VIE | ASSURANCES DU CREDIT MUTUEL VIE |
+| D 0635, D 0714, D 0719 | 2019 → 2020 | Identifier changed; earlier record had no SIREN | GFA HERITIERS COUDRAY | GFA HERITIERS COUDRAY |
+| D 0650, D 0651, D 0652 | 2019 → 2020 | Identifier changed; earlier record had no SIREN | GFV GRANDS CRUS INVESTISSEMENT | GFV GRANDS CRUS INVESTISSEMENT |
+| D 0194, D 0768, D 0769, D 0770 | 2019 → 2020 | Identifier changed; earlier record had no SIREN | SC DOM DE LA ROMANEE CONTI | SC DOM DE LA ROMANEE CONTI |
+| D 0326, D 0579, D 0581, D 0583, D 0584, D 0587, D 0588 | 2020 → 2021 | Different SIREN | GFA DOMAINE FRANCOIS CAPITAIN ET FILS | SARL CAPITAIN GAGNEROT |
+| D 0183, D 0709 | 2020 → 2021 | First company record on an existing parcel | — | ANNE GROS |
+| D 0773 | 2020 → 2021 | Same SIREN, new name | DOMAINE J PRIEUR | SCEA DOMAINE JACQUES PRIEUR |
+| D 0360, D 0508, D 0821 | 2020 → 2021 | Same SIREN, new name | GERBET SIRUGUE | GFA DOMAINE GERBET SIRUGUE |
+| D 0671, D 0673 | 2020 → 2021 | Identifier changed; earlier record had no SIREN | ASSURANCES DU CREDIT MUTUEL VIE | DOMAINE MONGEARD MUGNERET |
+| D 0194, D 0768, D 0769, D 0770 | 2020 → 2021 | Identifier changed; earlier record had no SIREN | SC DOM DE LA ROMANEE CONTI | DOMAINE DE LA ROMANEE CONTI |
+| D 0168, D 0169, D 0519 | 2021 → 2022 | Same SIREN, new name | FONCIER VITI DOM FRANCOIS LAMARCHE | NICOLE LAMARCHE |
+| D 0815 | 2022 → 2023 | Different SIREN | HOR VIGNOBLES | SCI LES CLIMATS |
+| D 0313 | 2022 → 2023 | First company record on an existing parcel | — | ORIGINE |
+| D 0645, D 0646, D 0647 | 2022 → 2023 | Same SIREN, new name | LES BONNES PENTES | GFA LES BONNES PENTES |
+| D 0796 | 2023 → 2024 | Different SIREN | GFV CHRISTIAN ET ISABELLE CLERGET | SCEV DU DOMAINE CHRISTIAN CLERGET |
+| D 0161 | 2023 → 2024 | First company record on an existing parcel | — | DOMAINE ARNOUX - LACHAUX |
+| D 0340 | 2023 → 2024 | First company record on an existing parcel | — | DOMAINE D'EUGENIE |
+| D 0203 | 2023 → 2024 | First company record on an existing parcel | — | EARL DOMAINE FAIVRE |
+| D 0295, D 0296, D 0297, D 0298, D 0299 | 2023 → 2024 | First company record on an existing parcel | — | TRAVERSINS |
+| D 0352 | 2023 → 2024 | Same SIREN, new name | DOMAINE DEUGENIE | DOMAINE D'EUGENIE |
+| D 0673 | 2024 → 2025 | Different SIREN | DOMAINE MONGEARD MUGNERET | BOUCHON POURPRE |
+| D 0898, D 0899, D 0900, D 0901, D 0902 | 2024 → 2025 | Record on a newly created parcel reference | — | PROPRIETAIRES DU BND 267 D0143 |
+| D 0128, D 0154, D 0156, D 0157 | 2024 → 2025 | First company record on an existing parcel | — | GFA FAMILLE FOREY BJ |
+| D 0316, D 0323, D 0633, D 0636 | 2024 → 2025 | First company record on an existing parcel | — | GROUPEMENT FONCIER VITICOLE DE ORVEAUX |
+| D 0144, D 0145, D 0511, D 0512 | 2024 → 2025 | First company record on an existing parcel | — | LES CRUOTS |
+
+**Retired references and their current successors**
+
+Successors are current parcels sharing more than 1 m² with the retired geometry. This is a spatial comparison, not a division act; verify before carrying any evidence across.
+
+| Retired reference | Last vintage | Current successors | Company records before retirement |
+| --- | --- | --- | --- |
+| D 0143 | 2024-01-01 | D 0898, D 0899, D 0900, D 0901, D 0902 | PROPRIETAIRES DU BND 267 D0143 |
+| D 0160 | 2022-01-01 | D 0841, D 0842 | None |
+| D 0300 | 2019-01-01 | D 0821, D 0822 | None |
+| D 0708 | 2024-01-01 | D 0871, D 0872, D 0905, D 0906, D 0907, D 0908, D 0909, D 0910, D 0911 | None |
+| D 0759 | 2022-01-01 | D 0824, D 0825 | None |
+| D 0772 | 2023-01-01 | D 0843, D 0844 | None |
+| D 0774 | 2024-01-01 | D 0830, D 0831 | None |
+| D 0775 | 2024-01-01 | D 0832, D 0833, D 0834 | None |
+| D 0776 | 2024-01-01 | D 0835, D 0836 | None |
+| D 0787 | 2024-01-01 | D 0903, D 0904 | None |
+| D 0792 | 2022-01-01 | D 0793, D 0826, D 0827 | None |
+| D 0794 | 2022-01-01 | D 0828, D 0829 | None |
+| D 0873 | 2025-01-01 | D 0905, D 0906, D 0907, D 0908, D 0909, D 0910, D 0911 | None |
+
 ## Source log
 
 Publication/document dates and vintage seasons are separate fields in the curation. An undated page, recent upload or review date does not establish operation in the target season.
@@ -795,6 +870,8 @@ Publication/document dates and vintage seasons are separate fields in the curati
 - **grands-crus-identity** — [Official company search: GRANDS CRUS INVESTISSEMENT](https://recherche-entreprises.api.gouv.fr/search?q=GRANDS%20CRUS%20INVESTISSEMENT&per_page=5). registry; read; document date not established. Name search returns several similarly named entities. None establishes the identity of U18178179 or its current tenant.
 - **orveaux-search** — [Official company search: GROUPEMENT FONCIER VITICOLE DE ORVEAUX](https://recherche-entreprises.api.gouv.fr/search?q=GROUPEMENT%20FONCIER%20VITICOLE%20DE%20ORVEAUX&per_page=5). registry; read; document date not established. This name query returned no results. That does not establish that the holder does not exist; identity remains unresolved.
 - **roumier-2023-visit** — [Old Vine Notes: 2023 estate visit with Georges Roumier](https://oldvinenotes.com/2024/12/30/2023-a-large-crop-of-variable-reds-and-somewhat-better-whites/). estate-visit-report; read; document date 2024-12-30; evidence season 2023. Reports an additional acquisition and Échezeaux combining Champs Traversins and En Orveaux. No cadastral references, legal-entity lease or 2026 operation confirmation.
+- **dgfip-history** — [DGFiP legal-entity parcel files, situations at 1 January 2019–2024](https://data.economie.gouv.fr/explore/dataset/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/). registry-dataset; read; document date not established. Côte-d'Or members for each year were read by HTTP range and hash-pinned in scripts/echezeaux-rights-history.json. They date company-type rights on each reference; they omit private individuals and say nothing about farming.
+- **cadastre-history** — [Etalab cadastre vintages, Flagey-Échezeaux, 2019–2025](https://files.data.gouv.fr/cadastre/etalab-cadastre/). geometry; read; document date not established. Seven hash-pinned vintages were compared with the 2026-06-01 geometry to find new references, retired references and spatial successors. Overlap is not a documented division act.
 
 ## Remaining evidence and access gaps
 

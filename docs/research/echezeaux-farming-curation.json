@@ -558,6 +558,26 @@
       "reviewedAt": "2026-09-28",
       "finding": "Reports an additional acquisition and Échezeaux combining Champs Traversins and En Orveaux. No cadastral references, legal-entity lease or 2026 operation confirmation.",
       "access": "read"
+    },
+    {
+      "id": "dgfip-history",
+      "title": "DGFiP legal-entity parcel files, situations at 1 January 2019–2024",
+      "url": "https://data.economie.gouv.fr/explore/dataset/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/",
+      "type": "registry-dataset",
+      "documentDate": null,
+      "reviewedAt": "2026-09-28",
+      "finding": "Côte-d'Or members for each year were read by HTTP range and hash-pinned in scripts/echezeaux-rights-history.json. They date company-type rights on each reference; they omit private individuals and say nothing about farming.",
+      "access": "read"
+    },
+    {
+      "id": "cadastre-history",
+      "title": "Etalab cadastre vintages, Flagey-Échezeaux, 2019–2025",
+      "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/",
+      "type": "geometry",
+      "documentDate": null,
+      "reviewedAt": "2026-09-28",
+      "finding": "Seven hash-pinned vintages were compared with the 2026-06-01 geometry to find new references, retired references and spatial successors. Overlap is not a documented division act.",
+      "access": "read"
     }
   ],
   "holders": [
@@ -1016,5 +1036,230 @@
     "CVI records require cooperation from authorised holders; no private records accessed.",
     "Public CartoBio polygons omit operator identity.",
     "HOR Vignobles and Coudray PDF full text/render unavailable; indexed excerpts retained only as leads."
+  ],
+  "historyFindings": [
+    {
+      "id": "lamarche-rename",
+      "title": "Nicole Lamarche entity was named after Domaine François Lamarche",
+      "parcelIds": [
+        "212670000D0168",
+        "212670000D0169",
+        "212670000D0519"
+      ],
+      "sourceIds": [
+        "dgfip-history",
+        "nicole"
+      ],
+      "finding": "SIREN 397738634 is recorded as FONCIER VITI DOM FRANCOIS LAMARCHE on 1 January 2020 and 2021 and as NICOLE LAMARCHE from 2022. The unchanged SIREN proves one renamed legal entity, which strengthens the identity link to the Lamarche domaine. There was no company record in 2019. Farming of the three parcels remains unconfirmed."
+    },
+    {
+      "id": "anne-gros-rights",
+      "title": "Anne Gros company rights begin in 2021",
+      "parcelIds": [
+        "212670000D0183",
+        "212670000D0709"
+      ],
+      "sourceIds": [
+        "dgfip-history",
+        "cadastre-history"
+      ],
+      "finding": "ANNE GROS (SIREN 348024928) first appears on 1 January 2021; both references existed in 2019 without a company record. This dates recorded rights, not an operating start."
+    },
+    {
+      "id": "anne-application-continuity",
+      "title": "2022 application references match today's geometry",
+      "parcelIds": [
+        "212670000D0177",
+        "212670000D0178"
+      ],
+      "sourceIds": [
+        "cadastre-history",
+        "dgfip-history",
+        "anne-application"
+      ],
+      "finding": "Geometry and recorded area of D0177 and D0178 (and Grands-Échezeaux D0093) are identical in the 1 January 2022 vintage and today, so the printed references in the November 2022 receipt denote today's parcels. Neither Échezeaux reference has a company record in any year 2019–2025, consistent with private ownership. The application's outcome and actual operation remain unconfirmed; D01776 appears in no vintage."
+    },
+    {
+      "id": "mongeard-d0673",
+      "title": "D0673 left Mongeard-Mugneret during 2024",
+      "parcelIds": [
+        "212670000D0671",
+        "212670000D0673"
+      ],
+      "sourceIds": [
+        "dgfip-history",
+        "bouchon"
+      ],
+      "finding": "Both references were held by ASSURANCES DU CREDIT MUTUEL VIE until 2020 and by DOMAINE MONGEARD MUGNERET (SIREN 303514681) from 2021. On 1 January 2025 D0673 is held by BOUCHON POURPRE (SIREN 880909346). A Mongeard lead for D0673 rests on rights that ended during 2024."
+    },
+    {
+      "id": "capitain-transfer",
+      "title": "Capitain parcels moved to Capitain-Gagnerot in 2020",
+      "parcelIds": [
+        "212670000D0326",
+        "212670000D0579",
+        "212670000D0581",
+        "212670000D0583",
+        "212670000D0584",
+        "212670000D0587",
+        "212670000D0588"
+      ],
+      "sourceIds": [
+        "dgfip-history",
+        "capitain"
+      ],
+      "finding": "GFA DOMAINE FRANCOIS CAPITAIN ET FILS (SIREN 339012320) through 2020, SARL CAPITAIN GAGNEROT (SIREN 515620466) from 2021. A different SIREN means a transfer between entities. Family-name continuity supports the existing lead without proving farming."
+    },
+    {
+      "id": "clerget-transfer",
+      "title": "Clerget parcel moved into the domaine company in 2023",
+      "parcelIds": [
+        "212670000D0796"
+      ],
+      "sourceIds": [
+        "dgfip-history",
+        "clerget"
+      ],
+      "finding": "GFV CHRISTIAN ET ISABELLE CLERGET (SIREN 430384354) through 2023, SCEV DU DOMAINE CHRISTIAN CLERGET (SIREN 431340140) from 2024. Ownership by the domaine company is closer to the operator, but it is not a lease or operation record."
+    },
+    {
+      "id": "hor-climats",
+      "title": "HOR Vignobles transfer to SCI Les Climats dated to 2022",
+      "parcelIds": [
+        "212670000D0815"
+      ],
+      "sourceIds": [
+        "dgfip-history",
+        "hor-filing"
+      ],
+      "finding": "D0815 passes from HOR VIGNOBLES to SCI LES CLIMATS between the 2022 and 2023 files, while D0813 and D0814 stay with HOR. This places the En Orveaux transfer suggested by the indexed HOR filing on D0815. The farmer remains unresolved."
+    },
+    {
+      "id": "traversins-timing",
+      "title": "Traversins rights start on 1 January 2024",
+      "parcelIds": [
+        "212670000D0295",
+        "212670000D0296",
+        "212670000D0297",
+        "212670000D0298",
+        "212670000D0299"
+      ],
+      "sourceIds": [
+        "dgfip-history",
+        "traversins",
+        "roumier-2023-visit"
+      ],
+      "finding": "No company record through 2023; TRAVERSINS (SIREN 911887461) from 1 January 2024. The timing matches the 2023 report of additional Champs Traversins vines. That strengthens the lead's timing, not its parcel scope or farming."
+    },
+    {
+      "id": "bnd-d0143",
+      "title": "U22079769 is an undivided-ownership placeholder for former D0143",
+      "parcelIds": [
+        "212670000D0898",
+        "212670000D0899",
+        "212670000D0900",
+        "212670000D0901",
+        "212670000D0902"
+      ],
+      "sourceIds": [
+        "dgfip-history",
+        "cadastre-history"
+      ],
+      "finding": "PROPRIETAIRES DU BND 267 D0143 held D0143 from 2019 to 2024. The 2025 cadastre divides D0143 into these five references and the same record follows. It denotes co-owners of undivided property, not a company to identify; ask the owners directly."
+    },
+    {
+      "id": "family-companies-2024",
+      "title": "Family land companies first recorded in 2025",
+      "parcelIds": [
+        "212670000D0128",
+        "212670000D0154",
+        "212670000D0156",
+        "212670000D0157",
+        "212670000D0316",
+        "212670000D0323",
+        "212670000D0633",
+        "212670000D0636",
+        "212670000D0144",
+        "212670000D0145",
+        "212670000D0511",
+        "212670000D0512"
+      ],
+      "sourceIds": [
+        "dgfip-history",
+        "forey-identity",
+        "orveaux-identity",
+        "cruots"
+      ],
+      "finding": "GFA FAMILLE FOREY BJ, GROUPEMENT FONCIER VITICOLE DE ORVEAUX and LES CRUOTS first appear on 1 January 2025 on references that existed earlier without a company record. This is consistent with family land moving into land-holding companies during 2024. Their U-numbers carry no SIREN, so names remain leads only."
+    },
+    {
+      "id": "recent-company-records",
+      "title": "Other first company records, 2023–2024",
+      "parcelIds": [
+        "212670000D0161",
+        "212670000D0203",
+        "212670000D0313",
+        "212670000D0340"
+      ],
+      "sourceIds": [
+        "dgfip-history"
+      ],
+      "finding": "DOMAINE ARNOUX - LACHAUX (D0161), EARL DOMAINE FAIVRE (D0203) and DOMAINE D'EUGENIE (D0340) first appear on 1 January 2024, ORIGINE (D0313) on 1 January 2023. These are recent acquisitions or transfers into a company; ask for the deed or lease date together with operation evidence."
+    },
+    {
+      "id": "drc-identifier",
+      "title": "Romanée-Conti record reformatted, parcels unchanged",
+      "parcelIds": [
+        "212670000D0194",
+        "212670000D0768",
+        "212670000D0769",
+        "212670000D0770"
+      ],
+      "sourceIds": [
+        "dgfip-history",
+        "drc"
+      ],
+      "finding": "The same four references move from a MAJIC-only record (2019) through a provisional U-number (2020) to SIREN 778269407 (2021), as SC DOM DE LA ROMANEE CONTI becomes DOMAINE DE LA ROMANEE CONTI. This is consistent with reformatting rather than a sale, but the file alone cannot prove identity."
+    },
+    {
+      "id": "private-splits",
+      "title": "Split parcels with no company record in any year",
+      "parcelIds": [
+        "212670000D0822",
+        "212670000D0824",
+        "212670000D0825",
+        "212670000D0826",
+        "212670000D0827",
+        "212670000D0828",
+        "212670000D0829",
+        "212670000D0830",
+        "212670000D0831",
+        "212670000D0832",
+        "212670000D0833",
+        "212670000D0834",
+        "212670000D0835",
+        "212670000D0836",
+        "212670000D0841",
+        "212670000D0842",
+        "212670000D0843",
+        "212670000D0844",
+        "212670000D0871",
+        "212670000D0872",
+        "212670000D0903",
+        "212670000D0904",
+        "212670000D0905",
+        "212670000D0906",
+        "212670000D0907",
+        "212670000D0908",
+        "212670000D0909",
+        "212670000D0910",
+        "212670000D0911"
+      ],
+      "sourceIds": [
+        "cadastre-history",
+        "dgfip-history"
+      ],
+      "finding": "These references were created by dividing earlier parcels after 2019. Neither they nor their predecessors carry a company record in any year, which points to private owners. The legal-entity files cannot identify them; only owners, notaries or shared CVI extracts can."
+    }
   ]
 }

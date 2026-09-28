@@ -25,7 +25,25 @@ Useful findings beyond the original examples:
 
 The DDT notice index and several full filings could not be retrieved. Public CartoBio parcels are anonymised; a spatial join cannot supply the missing farmer names. No private CVI records were accessed and no outreach was sent. Completing the farmer census requires further exact-reference documents or dated, shareable confirmations of actual operation. The register provides the parcel lists for those requests, including holders whose identities remain unresolved.
 
-Reproduce with `python scripts/build_echezeaux_farming_research.py`; verify with `--check`. The builder checks the pinned parcel hash (normalising Windows checkout line endings), exact holder coverage and source references. It rejects attempts to convert this lead register into confirmed-operation data. [Curation](research/echezeaux-farming-curation.json) and the [generated per-parcel JSON](research/echezeaux-farming-parcels.json) are documentation artifacts; they are not shipped as an app farming overlay.
+Reproduce with `python scripts/build_echezeaux_farming_research.py`; verify with `--check`. Rebuild the rights history first when its inputs change: `python scripts/build_echezeaux_rights_history.py --source-dir .tmp/echezeaux-sources --download` (needs `scripts/burgundy-map-requirements.txt`). The builder checks the pinned parcel hash (normalising Windows checkout line endings), exact holder coverage and source references. It rejects attempts to convert this lead register into confirmed-operation data. [Curation](research/echezeaux-farming-curation.json) and the [generated per-parcel JSON](research/echezeaux-farming-parcels.json) are documentation artifacts; they are not shipped as an app farming overlay.
+
+### Rights history 2019–2025 and parcel lineage
+
+The pilot used one rights file (1 January 2025). The same DGFiP legal-entity files exist for **1 January 2019–2024**, and Etalab publishes older cadastre vintages. Comparing them shows **when** each company record began, changed or ended, and which of today's references came from dividing an older parcel. [`scripts/build_echezeaux_rights_history.py`](../scripts/build_echezeaux_rights_history.py) reads only the Côte-d'Or member of each yearly archive by HTTP range, verifies every pinned hash and writes [the yearly records and lineage](research/echezeaux-rights-history.json). The register builder refuses a history built from a different parcel snapshot.
+
+**76 of 276 parcels** had a recorded-rights change since 2019. **35 current references** did not exist in the 2019 vintage; **13 retired references** overlapped the cru, and 36 current parcels have a spatial predecessor. Results that change the research:
+
+- **Nicole Lamarche:** SIREN 397738634 was recorded as **FONCIER VITI DOM FRANCOIS LAMARCHE** in 2020–2021 and as NICOLE LAMARCHE from 2022. Same SIREN, so one renamed legal entity; this strengthens the identity link to the Lamarche domaine for D0168, D0169 and D0519.
+- **Anne Gros application:** D0177, D0178 and Grands-Échezeaux D0093 have identical geometry and area in the January 2022 vintage and today, so the receipt's printed references denote today's parcels. D0177/D0178 never carry a company record (consistent with private owners). No vintage contains a D1776. Anne Gros's company rights on D0183/D0709 begin on 1 January 2021.
+- **D0673 left Mongeard-Mugneret during 2024:** held by Assurances du Crédit Mutuel Vie until 2020, Domaine Mongeard Mugneret 2021–2024, then **Bouchon Pourpre** in 2025.
+- **HOR Vignobles → SCI Les Climats:** D0815 changes holder between the 2022 and 2023 files while D0813/D0814 stay with HOR. This places the transfer seen only in an indexed filing excerpt on an exact reference.
+- **Traversins** rights begin on 1 January 2024, matching the 2023 report of additional Roumier vines in Champs Traversins (timing only, not scope).
+- **Capitain → Capitain-Gagnerot (2020)** and **Clerget GFV → SCEV du Domaine Christian Clerget (2023)** are transfers between different SIRENs, not renames.
+- **U22079769 is not a company:** "Propriétaires du BND 267 D0143" is the undivided-ownership record of former D0143, which the 2025 cadastre divided into D0898–D0902.
+- **New family land companies:** Forey, Orveaux and Les Cruots groups first appear in 2025 on references that existed without a company record, consistent with family land moving into GFA/GFV structures during 2024.
+- **29 split references** (for example former D0708 → D0871/D0872 and D0905–D0911) have no company record in any year: private owners, whom these files cannot identify.
+
+The legal-entity files never list private individuals, so most of the 157 unmatched parcels are best explained by private ownership rather than missing research. A rights change is ownership evidence only; it does not date or establish farming. The generated register lists every change and lineage row.
 
 ### Nicole Lamarche: three exact candidate parcels
 
