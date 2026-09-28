@@ -59,7 +59,7 @@ function union(features:ParcelFeature[]):[[number,number],[number,number]]|null{
 const swatches:Record<ParcelLegendKey,[string,string]>={
  recorded:['map-swatch-parcel','Recorded rights'],unrecorded:['map-swatch-parcel-unrecorded','No matched rights'],
  owner:['map-swatch-parcel-owner','Chosen right holder'],verified:['map-swatch-parcel-producer','Producer · verified'],
- possible:['map-swatch-parcel-possible','Producer · possible'],selected:['map-swatch-parcel-selected','Selected parcel'],
+ possible:['map-swatch-parcel-possible','Producer · possible (unverified)'],selected:['map-swatch-parcel-selected','Selected parcel'],
 };
 /** Parcel keys join the map's single legend while the layer is on. */
 export function ParcelLegend({keys}:{keys:ParcelLegendKey[]}){
@@ -226,7 +226,7 @@ export function GrandCruParcels({map,parentId,producer,onLegend}:{map:MapLibreMa
       <dt>Recorded rights</dt><dd>{rights.length?rights.map(r=><div key={`${r.holderId}:${r.rightCode}`}>{ownerName(r.name)} · {r.rightLabel}</div>):'No matched rights record'}</dd>
       <dt>Current farming domaine</dt><dd>Not established by this rights snapshot</dd>
       <dt>Area</dt><dd>{ha(selected.properties.cadastreAreaM2)}{overlap&&overlap.parcelPercent<99?` · ${Math.round(overlap.parcelPercent)}% inside ${name}`:''}</dd>
-      {selectedMatch==='possible'&&<><dt>Producer</dt><dd className="is-wine">Possible match, unverified</dd></>}
+      {selectedMatch==='possible'&&<><dt>Producer</dt><dd className="is-possible">Possible match, unverified</dd></>}
      </dl>
      {research&&<div className="village-map-farming-research">
       <strong>Historical farming application · outcome unconfirmed</strong>

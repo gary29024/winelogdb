@@ -127,6 +127,11 @@ describe('Cadastral parcel controls',()=>{
   fireEvent.click(screen.getByRole('button',{name:'Show possible matches on map'}));
   expect(map.fitBounds).toHaveBeenCalled();
   expect(screen.queryByText('Verified parcel links')).toBeNull();
+  // A selected possible parcel keeps the blue vocabulary; wine red is reserved for verified producers.
+  fireEvent.change(screen.getByLabelText('Cadastral parcel'),{target:{value:'212670000D0168'}});
+  const detail=screen.getByText('Possible match, unverified');
+  expect(detail.classList.contains('is-possible')).toBe(true);
+  expect(detail.classList.contains('is-wine')).toBe(false);
  });
  it('keeps each parcel’s dated operator evidence when a right holder is selected, with unverified parcels still distinct',async()=>{
   const sample=structuredClone(data);
