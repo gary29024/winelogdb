@@ -6,9 +6,9 @@ Reviewed 2026-09-28; target season 2026.
 
 All 276 mapped Échezeaux parcels inventoried; all 36 recorded right-holder groups triaged. Not an exhaustive search of every cadastral reference or inaccessible archive.
 
-Of 276 mapped parcels, 119 have recorded rights and 157 have no matched right holder. All 36 holder groups were triaged. 103 parcels have holder-derived research leads, 16 have an exact-reference historical application, and 155 remain without a named candidate. These are mutually exclusive research categories, not farmer counts.
+Of 276 mapped parcels, 119 have recorded rights and 157 have no matched right holder. All 36 holder groups were triaged. 112 parcels have holder-derived research leads, 16 have an exact-reference historical application, and 146 remain without a named candidate. These are mutually exclusive research categories, not farmer counts.
 
-136 parcels have inventory records only, not individual source investigations. Historical application references can also lack matched rights.
+127 parcels have inventory records only, not individual source investigations. Historical application references can also lack matched rights.
 
 Candidate names below are hypotheses. Their basis ranges from estate context to a weak company-name or bottler connection. No confidence percentage is assigned; the stated evidence must be checked before accepting any relationship.
 
@@ -500,8 +500,8 @@ All references are in commune 21267 (Flagey-Échezeaux). Full IDs and evidence l
 | D 0167 | 278.04 | None | Unresolved | Unconfirmed |
 | D 0168 | 664.44 | [397738634](#holder-397738634) | Domaine Nicole Lamarche (identity-only) | Unconfirmed |
 | D 0169 | 5806.96 | [397738634](#holder-397738634) | Domaine Nicole Lamarche (identity-only) | Unconfirmed |
-| D 0172 | 5378.66 | None | Unresolved | Unconfirmed |
-| D 0176 | 366.86 | None | Unresolved | Unconfirmed |
+| D 0172 | 5378.66 | None | Domaine Jean Grivot (critic-named-cadastral-reference) | Unconfirmed |
+| D 0176 | 366.86 | None | Domaine Jean Grivot (critic-named-cadastral-reference) | Unconfirmed |
 | D 0177 | 264.81 | None | Anne Gros (historical-application) | Unconfirmed |
 | D 0178 | 3462.16 | None | Anne Gros (historical-application) | Unconfirmed |
 | D 0181 | 365.44 | None | SAS Domaine AF Gros (Pommard) (historical-application) | Unconfirmed |
@@ -592,12 +592,12 @@ All references are in commune 21267 (Flagey-Échezeaux). Full IDs and evidence l
 | D 0586 | 468.70 | None | Unresolved | Unconfirmed |
 | D 0587 | 703.95 | [515620466](#holder-515620466) | Domaine Capitain-Gagnerot (estate-context) | Unconfirmed |
 | D 0588 | 55.93 | [515620466](#holder-515620466) | Domaine Capitain-Gagnerot (estate-context) | Unconfirmed |
-| D 0590 | 430.25 | None | Unresolved | Unconfirmed |
+| D 0590 | 430.25 | None | Domaine Jean Grivot (critic-named-cadastral-reference) | Unconfirmed |
 | D 0591 | 53.77 | None | Unresolved | Unconfirmed |
 | D 0592 | 1057.73 | None | Unresolved | Unconfirmed |
-| D 0593 | 58.38 | None | Unresolved | Unconfirmed |
+| D 0593 | 58.38 | None | Domaine Jean Grivot (critic-named-cadastral-reference) | Unconfirmed |
 | D 0595 | 125.01 | None | Unresolved | Unconfirmed |
-| D 0599 | 81.85 | None | Unresolved | Unconfirmed |
+| D 0599 | 81.85 | None | Domaine Jean Grivot (critic-named-cadastral-reference) | Unconfirmed |
 | D 0620 | 4335.65 | None | Domaine des Perdrix (critic-attribution-area-reconstructed) | Unconfirmed |
 | D 0621 | 4426.96 | None | Domaine des Perdrix (critic-attribution-area-reconstructed) | Unconfirmed |
 | D 0622 | 122.91 | [778269498](#holder-778269498) | Domaine Mongeard-Mugneret (estate-context) | Unconfirmed |
@@ -701,10 +701,10 @@ All references are in commune 21267 (Flagey-Échezeaux). Full IDs and evidence l
 | D 0822 | 457.83 | None | Unresolved | Unconfirmed |
 | D 0824 | 521.48 | None | Unresolved | Unconfirmed |
 | D 0825 | 218.26 | None | Unresolved | Unconfirmed |
-| D 0826 | 1053.72 | None | Unresolved | Unconfirmed |
-| D 0827 | 1067.09 | None | Unresolved | Unconfirmed |
-| D 0828 | 102.88 | None | Unresolved | Unconfirmed |
-| D 0829 | 90.63 | None | Unresolved | Unconfirmed |
+| D 0826 | 1053.72 | None | Domaine Jean Grivot (critic-named-cadastral-reference) | Unconfirmed |
+| D 0827 | 1067.09 | None | Domaine Jean Grivot (critic-named-cadastral-reference) | Unconfirmed |
+| D 0828 | 102.88 | None | Domaine Jean Grivot (critic-named-cadastral-reference) | Unconfirmed |
+| D 0829 | 90.63 | None | Domaine Jean Grivot (critic-named-cadastral-reference) | Unconfirmed |
 | D 0830 | 159.25 | None | SARL Domaine Michel Gros (historical-application on predecessor D0774) | Unconfirmed |
 | D 0831 | 2602.23 | None | SARL Domaine Michel Gros (historical-application on predecessor D0774) | Unconfirmed |
 | D 0832 | 177.40 | None | SAS Domaine AF Gros (Pommard) (historical-application on predecessor D0775) | Unconfirmed |
@@ -759,7 +759,8 @@ Published vineyard research can name cadastral references or describe holdings. 
 - **Liger-Belair Échezeaux holdings before 2020** (no cadastral reference; critic-holding-description). Six plots totalling 0.6157 ha: two in Les Cruots ou Vignes Blanches (0.3299 ha), Champs Traversins and Clos Saint-Denis. No cadastral references; a research target for those climats. Sources: [Winehog: Terroir Insight – Domaine du Comte Liger-Belair Echezeaux, new plot](https://winehog.org/terroir-insight-domaine-du-comte-liger-belair-echezeaux-2-40616/).
 - **Les Loächausses: former Gros Frère et Sœur monopole** (no cadastral reference; critic-holding-description). Winehog (2011) describes Les Loächausses as formerly a Gros Frère et Sœur monopole and lists Gros Frère et Sœur and Anne Gros there. The 2022 applications by Michel Gros and AF Gros cover D0181, D0184, D0558, D0774 and D0775 in Les Loächausses, and ANNE GROS holds D0183/D0709 there from 2021, consistent with a division of that holding. Sources: [Winehog: Echezeaux – Grand cru standard?](https://winehog.org/echezeaux-grand-cru-standard-584/), [BFC bulletin 2022-101: receipt BFC-2022-04-04-00033, SARL Domaine Michel Gros](https://www.prefectures-regions.gouv.fr/bourgogne-franche-comte/irecontenu/telechargement/97791/623936/file/recueil-bfc-2022-101-recueil-des-actes-administratifs-special.pdf#page=351), [BFC bulletin 2022-143: receipt BFC-2022-06-30-00012, SAS Domaine AF Gros](https://www.prefectures-regions.gouv.fr/bourgogne-franche-comte/irecontenu/telechargement/100728/641113/file/recueil-bfc-2022-143-recueil-des-actes-administratifs-special.pdf#page=88).
 - **Berthaut-Gerbet enlarged its Échezeaux from 2018** (D 0360, D 0508, D 0821; critic-holding-description). Winehog says Amélie Berthaut took over the old Gerbet holdings and enlarged the Échezeaux from the 2018 vintage. These are the Gerbet Sirugue GFA references; the article preview does not say which parcels are farmed. Sources: [Winehog: Terroir View – Berthaut-Gerbet Echezeaux](https://winehog.org/terroir-view-berthaut-gerbet-echezeaux-2-2-37319/).
-- **Grivot in Les Cruots ou Vignes Blanches** (no cadastral reference; critic-holding-description). Winehog names Domaine Jean Grivot as a major owner in Les Cruots ou Vignes Blanches, with plots inherited through the Jayer family. No cadastral references in the public preview. Sources: [Winehog: Terroir Insight – Domaine Jean Grivot Echezeaux](https://winehog.org/terroir-insight-domaine-jean-grivot-echezeaux-37550/).
+- **Domaine Jean Grivot: seven named Échezeaux plots** (D 0172, D 0176, D 0599, D 0826, D 0827, D 0828, D 0829, D 0590, D 0593; critic-named-cadastral-reference). Winehog (May 2019) names cadastre 172, 176, 792, 794 and 599 in Les Cruots ou Vignes Blanches and 590, 593 in Champs Traversins as the source of the Grivot Échezeaux. Published areas equal the cadastral sums exactly (7 970 m² and 490 m²). D0792 and D0794 were divided during 2022; their successors D0826/D0827 and D0828/D0829 are listed here through recorded lineage. None of the plots has a company record in any year 2019–2025, consistent with private family ownership. The article describes farming for the Grivot Échezeaux as of 2019, not a dated current lease. Sources: [Winehog: Terroir Insight – Domaine Jean Grivot Echezeaux](https://winehog.org/terroir-insight-domaine-jean-grivot-echezeaux-37550/).
+- **Lamadon holdings divided in 2006** (D 0826, D 0827, D 0828, D 0829, D 0590, D 0593; critic-holding-description). Winehog reports that the Lamadon family stopped production in 2006 and divided its plots between Louis-Michel Liger-Belair (métayage), the Lamarche family and the Grivot family; Grivot received 792/794 and presumably 590/593. The Liger-Belair and Lamarche shares are not identified by cadastral number. Sources: [Winehog: Terroir Insight – Domaine Jean Grivot Echezeaux](https://winehog.org/terroir-insight-domaine-jean-grivot-echezeaux-37550/).
 
 ## Rights history and parcel lineage
 
@@ -906,7 +907,7 @@ Publication/document dates and vintage seasons are separate fields in the curati
 - **winehog-liger-belair** — [Winehog: Terroir Insight – Domaine du Comte Liger-Belair Echezeaux, new plot](https://winehog.org/terroir-insight-domaine-du-comte-liger-belair-echezeaux-2-40616/). critic-research; read; document date 2020-04-27. Six plots (0.6157 ha) in Cruots ou Vignes Blanches, Champs Traversins and Clos Saint-Denis, plus an Échezeaux du Dessus plot added from 2020. No cadastral references.
 - **winehog-millot** — [Winehog: Terroir View – Jean-Marc Millot Echezeaux "Cuvée 1949"](https://winehog.org/terroir-view-jean-marc-millot-echezeaux-37123/). critic-research; preview-only; document date 2019-01-04. Public preview: the cuvée comes from very old vines in Échezeaux du Dessus. Remainder is Premium content, not read.
 - **winehog-berthaut-gerbet** — [Winehog: Terroir View – Berthaut-Gerbet Echezeaux](https://winehog.org/terroir-view-berthaut-gerbet-echezeaux-2-2-37319/). critic-research; preview-only; document date 2019-03-13. Public preview: Amélie Berthaut took over the old Gerbet holdings; Échezeaux holdings enlarged from the 2018 vintage. Remainder is Premium content, not read.
-- **winehog-grivot** — [Winehog: Terroir Insight – Domaine Jean Grivot Echezeaux](https://winehog.org/terroir-insight-domaine-jean-grivot-echezeaux-37550/). critic-research; preview-only; document date 2019-05-11. Public preview: Grivot is a major owner in Les Cruots ou Vignes Blanches, with plots inherited through the Jayer family. Remainder is Premium content, not read.
+- **winehog-grivot** — [Winehog: Terroir Insight – Domaine Jean Grivot Echezeaux](https://winehog.org/terroir-insight-domaine-jean-grivot-echezeaux-37550/). critic-research; premium-supplied-by-repository-owner; document date 2019-05-11. Premium article supplied by the repository owner; only facts are recorded. Grivot Échezeaux from seven plots, 0.8460 ha: Les Cruots ou Vignes Blanches 172, 176, 792, 794, 599 (0.7970 ha) and Champs Traversins 590, 593 (0.0490 ha). 172/176 presumably via the Jayer family; 792/794 and presumably 590/593 from the Lamadon holdings divided in 2006 between Liger-Belair (métayage), the Lamarche family and the Grivot family.
 - **raa-2026-067** — [BFC bulletin 2026-067: order 2026-739 (BFC-2026-04-07-00015) suspending the SCEA Domaine du Comte Liger-Belair application](https://www.prefectures-regions.gouv.fr/bourgogne-franche-comte/irecontenu/telechargement/137449/1004181/file/recueil-bfc-2026-067-recueil-des-actes-administratifs-nominatifs.pdf#page=28). government-decision; read; document date 2026-04-07. Suspends for eight months from publication (29 April 2026) the instruction of an application registered 11/12/2025 and complete 06/01/2026, for excessive enlargement. Pages 28–30 read from the image.
 
 ## Remaining evidence and access gaps

@@ -27,10 +27,10 @@
     "recordedHolders": 36,
     "withRecordedRights": 119,
     "withoutMatchedRights": 157,
-    "holderLead": 103,
+    "holderLead": 112,
     "historicalApplication": 16,
     "historicalAuthorisation": 2,
-    "unresolved": 155,
+    "unresolved": 146,
     "currentFarmerConfirmed": 0,
     "withRightsChangeSince2019": 76,
     "withCadastralPredecessor": 36
@@ -1659,15 +1659,25 @@
       "recordedRights": [],
       "recordMatch": "unknown",
       "holderResearchIds": [],
-      "candidateLeads": [],
+      "candidateLeads": [
+        {
+          "name": "Domaine Jean Grivot",
+          "basis": "critic-named-cadastral-reference",
+          "sourceIds": [
+            "winehog-grivot"
+          ]
+        }
+      ],
       "historicalEvents": [],
-      "externalResearchIds": [],
+      "externalResearchIds": [
+        "wh-grivot"
+      ],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
-      "researchStatus": "unresolved",
-      "researchDepth": "inventory-only",
+      "researchStatus": "holder-lead",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -1681,15 +1691,25 @@
       "recordedRights": [],
       "recordMatch": "unknown",
       "holderResearchIds": [],
-      "candidateLeads": [],
+      "candidateLeads": [
+        {
+          "name": "Domaine Jean Grivot",
+          "basis": "critic-named-cadastral-reference",
+          "sourceIds": [
+            "winehog-grivot"
+          ]
+        }
+      ],
       "historicalEvents": [],
-      "externalResearchIds": [],
+      "externalResearchIds": [
+        "wh-grivot"
+      ],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
-      "researchStatus": "unresolved",
-      "researchDepth": "inventory-only",
+      "researchStatus": "holder-lead",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -5282,15 +5302,26 @@
       "recordedRights": [],
       "recordMatch": "unknown",
       "holderResearchIds": [],
-      "candidateLeads": [],
+      "candidateLeads": [
+        {
+          "name": "Domaine Jean Grivot",
+          "basis": "critic-named-cadastral-reference",
+          "sourceIds": [
+            "winehog-grivot"
+          ]
+        }
+      ],
       "historicalEvents": [],
-      "externalResearchIds": [],
+      "externalResearchIds": [
+        "wh-grivot",
+        "wh-lamadon-2006"
+      ],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
-      "researchStatus": "unresolved",
-      "researchDepth": "inventory-only",
+      "researchStatus": "holder-lead",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -5348,15 +5379,26 @@
       "recordedRights": [],
       "recordMatch": "unknown",
       "holderResearchIds": [],
-      "candidateLeads": [],
+      "candidateLeads": [
+        {
+          "name": "Domaine Jean Grivot",
+          "basis": "critic-named-cadastral-reference",
+          "sourceIds": [
+            "winehog-grivot"
+          ]
+        }
+      ],
       "historicalEvents": [],
-      "externalResearchIds": [],
+      "externalResearchIds": [
+        "wh-grivot",
+        "wh-lamadon-2006"
+      ],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
-      "researchStatus": "unresolved",
-      "researchDepth": "inventory-only",
+      "researchStatus": "holder-lead",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -5392,15 +5434,25 @@
       "recordedRights": [],
       "recordMatch": "unknown",
       "holderResearchIds": [],
-      "candidateLeads": [],
+      "candidateLeads": [
+        {
+          "name": "Domaine Jean Grivot",
+          "basis": "critic-named-cadastral-reference",
+          "sourceIds": [
+            "winehog-grivot"
+          ]
+        }
+      ],
       "historicalEvents": [],
-      "externalResearchIds": [],
+      "externalResearchIds": [
+        "wh-grivot"
+      ],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
-      "researchStatus": "unresolved",
-      "researchDepth": "inventory-only",
+      "researchStatus": "holder-lead",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -9336,9 +9388,20 @@
       "recordedRights": [],
       "recordMatch": "unknown",
       "holderResearchIds": [],
-      "candidateLeads": [],
+      "candidateLeads": [
+        {
+          "name": "Domaine Jean Grivot",
+          "basis": "critic-named-cadastral-reference",
+          "sourceIds": [
+            "winehog-grivot"
+          ]
+        }
+      ],
       "historicalEvents": [],
-      "externalResearchIds": [],
+      "externalResearchIds": [
+        "wh-grivot",
+        "wh-lamadon-2006"
+      ],
       "rightsChanges": [],
       "cadastreFirstSeen": "2023-01-01",
       "predecessorIds": [
@@ -9347,8 +9410,8 @@
       "historyFindingIds": [
         "private-splits"
       ],
-      "researchStatus": "unresolved",
-      "researchDepth": "inventory-only",
+      "researchStatus": "holder-lead",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -9362,9 +9425,20 @@
       "recordedRights": [],
       "recordMatch": "unknown",
       "holderResearchIds": [],
-      "candidateLeads": [],
+      "candidateLeads": [
+        {
+          "name": "Domaine Jean Grivot",
+          "basis": "critic-named-cadastral-reference",
+          "sourceIds": [
+            "winehog-grivot"
+          ]
+        }
+      ],
       "historicalEvents": [],
-      "externalResearchIds": [],
+      "externalResearchIds": [
+        "wh-grivot",
+        "wh-lamadon-2006"
+      ],
       "rightsChanges": [],
       "cadastreFirstSeen": "2023-01-01",
       "predecessorIds": [
@@ -9373,8 +9447,8 @@
       "historyFindingIds": [
         "private-splits"
       ],
-      "researchStatus": "unresolved",
-      "researchDepth": "inventory-only",
+      "researchStatus": "holder-lead",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -9388,9 +9462,20 @@
       "recordedRights": [],
       "recordMatch": "unknown",
       "holderResearchIds": [],
-      "candidateLeads": [],
+      "candidateLeads": [
+        {
+          "name": "Domaine Jean Grivot",
+          "basis": "critic-named-cadastral-reference",
+          "sourceIds": [
+            "winehog-grivot"
+          ]
+        }
+      ],
       "historicalEvents": [],
-      "externalResearchIds": [],
+      "externalResearchIds": [
+        "wh-grivot",
+        "wh-lamadon-2006"
+      ],
       "rightsChanges": [],
       "cadastreFirstSeen": "2023-01-01",
       "predecessorIds": [
@@ -9399,8 +9484,8 @@
       "historyFindingIds": [
         "private-splits"
       ],
-      "researchStatus": "unresolved",
-      "researchDepth": "inventory-only",
+      "researchStatus": "holder-lead",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -9414,9 +9499,20 @@
       "recordedRights": [],
       "recordMatch": "unknown",
       "holderResearchIds": [],
-      "candidateLeads": [],
+      "candidateLeads": [
+        {
+          "name": "Domaine Jean Grivot",
+          "basis": "critic-named-cadastral-reference",
+          "sourceIds": [
+            "winehog-grivot"
+          ]
+        }
+      ],
       "historicalEvents": [],
-      "externalResearchIds": [],
+      "externalResearchIds": [
+        "wh-grivot",
+        "wh-lamadon-2006"
+      ],
       "rightsChanges": [],
       "cadastreFirstSeen": "2023-01-01",
       "predecessorIds": [
@@ -9425,8 +9521,8 @@
       "historyFindingIds": [
         "private-splits"
       ],
-      "researchStatus": "unresolved",
-      "researchDepth": "inventory-only",
+      "researchStatus": "holder-lead",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",

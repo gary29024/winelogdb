@@ -686,8 +686,8 @@
       "type": "critic-research",
       "documentDate": "2019-05-11",
       "reviewedAt": "2026-09-28",
-      "finding": "Public preview: Grivot is a major owner in Les Cruots ou Vignes Blanches, with plots inherited through the Jayer family. Remainder is Premium content, not read.",
-      "access": "preview-only"
+      "finding": "Premium article supplied by the repository owner; only facts are recorded. Grivot Échezeaux from seven plots, 0.8460 ha: Les Cruots ou Vignes Blanches 172, 176, 792, 794, 599 (0.7970 ha) and Champs Traversins 590, 593 (0.0490 ha). 172/176 presumably via the Jayer family; 792/794 and presumably 590/593 from the Lamadon holdings divided in 2006 between Liger-Belair (métayage), the Lamarche family and the Grivot family.",
+      "access": "premium-supplied-by-repository-owner"
     },
     {
       "id": "raa-2026-067",
@@ -1628,10 +1628,38 @@
     },
     {
       "id": "wh-grivot",
-      "title": "Grivot in Les Cruots ou Vignes Blanches",
-      "parcelIds": [],
+      "title": "Domaine Jean Grivot: seven named Échezeaux plots",
+      "producer": "Domaine Jean Grivot",
+      "parcelIds": [
+        "212670000D0172",
+        "212670000D0176",
+        "212670000D0599",
+        "212670000D0826",
+        "212670000D0827",
+        "212670000D0828",
+        "212670000D0829",
+        "212670000D0590",
+        "212670000D0593"
+      ],
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog (May 2019) names cadastre 172, 176, 792, 794 and 599 in Les Cruots ou Vignes Blanches and 590, 593 in Champs Traversins as the source of the Grivot Échezeaux. Published areas equal the cadastral sums exactly (7 970 m² and 490 m²). D0792 and D0794 were divided during 2022; their successors D0826/D0827 and D0828/D0829 are listed here through recorded lineage. None of the plots has a company record in any year 2019–2025, consistent with private family ownership. The article describes farming for the Grivot Échezeaux as of 2019, not a dated current lease.",
+      "sourceIds": [
+        "winehog-grivot"
+      ]
+    },
+    {
+      "id": "wh-lamadon-2006",
+      "title": "Lamadon holdings divided in 2006",
+      "parcelIds": [
+        "212670000D0826",
+        "212670000D0827",
+        "212670000D0828",
+        "212670000D0829",
+        "212670000D0590",
+        "212670000D0593"
+      ],
       "basis": "critic-holding-description",
-      "finding": "Winehog names Domaine Jean Grivot as a major owner in Les Cruots ou Vignes Blanches, with plots inherited through the Jayer family. No cadastral references in the public preview.",
+      "finding": "Winehog reports that the Lamadon family stopped production in 2006 and divided its plots between Louis-Michel Liger-Belair (métayage), the Lamarche family and the Grivot family; Grivot received 792/794 and presumably 590/593. The Liger-Belair and Lamarche shares are not identified by cadastral number.",
       "sourceIds": [
         "winehog-grivot"
       ]
