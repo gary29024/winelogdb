@@ -28,6 +28,19 @@ const plural=(n:number,one:string,many=`${one}s`)=>`${n} ${n===1?one:many}`;
 
 const overlapIn=(f:ParcelFeature,parentId:string)=>f.properties.overlaps.find(o=>o.parentFeatureId===parentId);
 const producerIs=(link:DomaineLink,producer:string)=>link.status==='verified'&&Boolean(placeKey(producer))&&link.producerNames.some(name=>placeKey(name)===placeKey(producer));
+function rightHolders(parcels:ParcelFeature[],parentId:string){
+ const byHolder=new Map<string,{id:string;name:string;areaM2:number;count:number}>();
+ for(const f of parcels){
+  const seen=new Set<string>();
+  for(const r of f.properties.recordedRights){
+   if(seen.has(r.holderId))continue;
+   seen.add(r.holderId);
+   const entry=byHolder.get(r.holderId)??{id:r.holderId,name:r.name,areaM2:0,count:0};
+   entry.areaM2+=overlapIn(f,parentId)?.areaM2??0;entry.count++;byHolder.set(r.holderId,entry);
+  }
+ }
+ return [...byHolder.values()].sort((a,b)=>b.areaM2-a.areaM2||a.name.localeCompare(b.name));
+}
 
 function hatch(){
  const size=8,data=new Uint8Array(size*size*4);
@@ -42,8 +55,8 @@ function union(features:ParcelFeature[]):[[number,number],[number,number]]|null{
 }
 
 const swatches:Record<ParcelLegendKey,[string,string]>={
- recorded:['map-swatch-parcel','Owner on record'],unrecorded:['map-swatch-parcel-unrecorded','No public record'],
- owner:['map-swatch-parcel-owner','Chosen owner'],verified:['map-swatch-parcel-producer','Producer · verified'],
+ recorded:['map-swatch-parcel','Recorded rights'],unrecorded:['map-swatch-parcel-unrecorded','No matched rights'],
+ owner:['map-swatch-parcel-owner','Chosen right holder'],verified:['map-swatch-parcel-producer','Producer · verified'],
  possible:['map-swatch-parcel-possible','Producer · possible'],selected:['map-swatch-parcel-selected','Selected parcel'],
 };
 /** Parcel keys join the map's single legend while the layer is on. */
@@ -73,20 +86,12 @@ export function GrandCruParcels({map,parentId,producer,onLegend}:{map:MapLibreMa
  const name=parentId==='inao-denom-565'?'Échezeaux':'Grands-Échezeaux';
  const overlapOf=(f:ParcelFeature)=>overlapIn(f,parentId);
  const parcels=useMemo(()=>data?.features.filter(f=>f.properties.overlaps.some(o=>o.parentFeatureId===parentId))??[],[data,parentId]);
- const owners=useMemo(()=>{
-  const byHolder=new Map<string,{id:string;name:string;areaM2:number;count:number}>();
-  for(const f of parcels)for(const r of f.properties.recordedRights){
-   const entry=byHolder.get(r.holderId)??{id:r.holderId,name:r.name,areaM2:0,count:0};
-   entry.areaM2+=overlapIn(f,parentId)?.areaM2??0;entry.count++;byHolder.set(r.holderId,entry);
-  }
-  return [...byHolder.values()].sort((a,b)=>b.areaM2-a.areaM2||a.name.localeCompare(b.name));
- },[parcels,parentId]);
+ const owners=useMemo(()=>rightHolders(parcels,parentId),[parcels,parentId]);
  const wineProducer=producer?.trim()??'';
  const verified=useMemo(()=>parcels.filter(f=>f.properties.domaineLinks.some(l=>producerIs(l,wineProducer))),[parcels,wineProducer]);
- const verifiedLink=verified[0]?.properties.domaineLinks.find(l=>producerIs(l,wineProducer));
  // Possible matches come from the wine's own producer field, are off by
  // default and never enter the verified style or wording.
- const possibleOwners=useMemo(()=>wineProducer?owners.filter(o=>possibleOwnerMatch(wineProducer,o.name)&&!verified.some(f=>f.properties.recordedRights.some(r=>r.holderId===o.id))):[],[owners,wineProducer,verified]);
+ const possibleOwners=useMemo(()=>wineProducer?rightHolders(parcels.filter(f=>!verified.includes(f)),parentId).filter(o=>possibleOwnerMatch(wineProducer,o.name)):[],[parcels,parentId,wineProducer,verified]);
  const possible=useMemo(()=>{
   const ids=new Set(possibleOwners.map(o=>o.id));
   return parcels.filter(f=>!verified.includes(f)&&f.properties.recordedRights.some(r=>ids.has(r.holderId)));
@@ -165,29 +170,29 @@ export function GrandCruParcels({map,parentId,producer,onLegend}:{map:MapLibreMa
  const recorded=parcels.filter(f=>f.properties.recordedRights.length);
  const areaOf=(list:ParcelFeature[])=>list.reduce((sum,f)=>sum+(overlapOf(f)?.areaM2??0),0);
  const totalArea=areaOf(parcels),recordedArea=areaOf(recorded);
- const listed=owners.filter(o=>!possibleOwners.some(p=>p.id===o.id)||!showPossible);
+ const listed=owners;
  const needle=placeKey(query);
  const shown=allOwners?listed.filter(o=>!needle||placeKey(o.name).includes(needle)):listed.slice(0,6);
  const largest=listed[0]?.areaM2||1;
  const rights=selected?.properties.recordedRights??[];
  const overlap=selected&&overlapOf(selected);
  const selectedMatch=selected?matches.get(selected.properties.id)??'':'';
- return <section className="village-map-parcels" aria-label="Parcel owners">
+ return <section className="village-map-parcels" aria-label="Parcel rights">
   <label className="village-map-parcel-toggle" htmlFor={switchId}>
-   <span>Parcel owners<small> · {name}</small></span>
+   <span>Parcel rights<small> · {name}</small></span>
    <input id={switchId} type="checkbox" role="switch" checked={show} disabled={!map} onChange={event=>{setShow(event.target.checked);setError(false);setOwner('');setSelectedId('')}}/>
   </label>
-  {!show&&<p className="village-map-note">See who is on record as owning each plot of {name}.</p>}
+  <p className="village-map-note">Legal-entity rights recorded on 1 January 2025. These do not establish who currently farms the vines.</p>
   {show&&<>
    {!data&&!error&&<p className="village-map-note" role="status">Loading cadastral parcels…</p>}
    {error&&<div className="village-map-parcel-error" role="alert"><p>Parcel data could not load. The cru map remains available.</p><button type="button" onClick={()=>{setError(false);setAttempt(a=>a+1)}}>Retry parcels</button></div>}
    {data&&<>
-    {verifiedLink&&<div className="village-map-producer">
+    {verified.length>0&&<div className="village-map-producer">
      <p className="village-map-eyebrow is-wine">THIS WINE’S PRODUCER</p>
-     <strong>{verifiedLink.name}</strong>
+     <strong>{wineProducer}</strong>
      <span className="village-map-producer-meta">{plural(verified.length,'parcel')} · {ha(areaOf(verified))} in {name}</span>
-     <span className="village-map-badge is-verified">Verified link · {verifiedLink.effectiveDate}</span>
-     <span className="village-map-note">{verifiedLink.evidence.map((e,i)=><span key={e.url}>{i>0&&' · '}<a href={e.url} target="_blank" rel="noopener noreferrer">{e.note}</a></span>)}</span>
+     <span className="village-map-badge is-verified">Verified parcel links</span>
+     <span className="village-map-note">Select a parcel for its farming evidence and effective date.</span>
      <button type="button" className="village-map-link-button" onClick={()=>{setOwner('');setSelectedId('');fit(union(verified))}}>Show on map</button>
     </div>}
     {possibleOwners.length>0&&<>
@@ -195,41 +200,45 @@ export function GrandCruParcels({map,parentId,producer,onLegend}:{map:MapLibreMa
      {showPossible&&<div className="village-map-producer is-possible">
       <span className="village-map-badge is-possible">Possible match · name only</span>
       {possibleOwners.map(o=><span key={o.id}><strong>{ownerName(o.name)}</strong><br/><span className="village-map-producer-meta">{plural(o.count,'parcel')} · {ha(o.areaM2)}</span></span>)}
-      <p className="village-map-note">These owners’ names resemble the producer’s. Nobody has confirmed that {wineProducer} farms these vines.</p>
+      <p className="village-map-note">These recorded right holders’ names resemble the producer’s. This dataset has no verified evidence that {wineProducer} farms these parcels.</p>
      </div>}
     </>}
     <div className="village-map-parcel-share">
      <span><strong>{parcels.length}</strong> parcels in {name}</span>
-     <span className="village-map-parcel-bar" role="img" aria-label={`${Math.round(recordedArea/totalArea*100)}% of the parcel area has an owner on record`}><b style={{width:`${recordedArea/totalArea*100}%`}}/></span>
-     <span className="village-map-parcel-key"><span>{recorded.length} with an owner on record · {ha(recordedArea)}</span><span>{parcels.length-recorded.length} not public</span></span>
+     <span className="village-map-parcel-bar" role="img" aria-label={`${Math.round(recordedArea/totalArea*100)}% of the parcel area has recorded rights`}><b style={{width:`${recordedArea/totalArea*100}%`}}/></span>
+     <span className="village-map-parcel-key"><span>{recorded.length} with recorded rights · {ha(recordedArea)}</span><span>{parcels.length-recorded.length} without a matched record</span></span>
     </div>
     {selected&&<div className="village-map-parcel-details" aria-live="polite">
      <div className="village-map-parcel-head"><h4>Parcel {selected.properties.reference}</h4><button type="button" className="village-map-link-button" onClick={()=>setSelectedId('')}>Clear</button></div>
      <dl>
-      <dt>Owner</dt><dd>{rights.length?rights.map(r=>ownerName(r.name)).join(', '):'Not in public records'}</dd>
+      <dt>Recorded rights</dt><dd>{rights.length?rights.map(r=><div key={`${r.holderId}:${r.rightCode}`}>{ownerName(r.name)} · {r.rightLabel}</div>):'No matched rights record'}</dd>
       <dt>Area</dt><dd>{ha(selected.properties.cadastreAreaM2)}{overlap&&overlap.parcelPercent<99?` · ${Math.round(overlap.parcelPercent)}% inside ${name}`:''}</dd>
-      {selectedMatch==='verified'&&verifiedLink&&<><dt>Producer</dt><dd className="is-wine">{verifiedLink.name} · verified</dd></>}
       {selectedMatch==='possible'&&<><dt>Producer</dt><dd className="is-wine">Possible match, unverified</dd></>}
      </dl>
+     {selected.properties.domaineLinks.map((link,index)=><div key={`${link.producerId}:${index}`} className="village-map-note">
+      <strong>{link.name}</strong> · {link.status==='verified'?'Verified operator':'Proposed operator (unverified)'} · effective {link.effectiveDate}
+      <div>{link.evidence.map((e,i)=><span key={`${e.url}:${i}`}>{i>0&&' · '}<a href={e.url} target="_blank" rel="noopener noreferrer">{e.note}</a></span>)}</div>
+     </div>)}
      {selected.properties.recordMatch==='area-mismatch'&&<p className="village-map-overlap">The parcel reference matches, but its recorded area differs between snapshots. These historical rights must not be treated as a verified current holding.</p>}
      {rights.length?<details><summary>Record details</summary>
       <ul>{rights.map(r=><li key={`${r.holderId}:${r.rightCode}`}>{r.name} · {r.rightCode} — {r.rightLabel} · {r.legalFormLabel}<br/>{r.siren?`SIREN ${r.siren}`:`DGFiP identifier ${r.holderId} (not a SIREN)`}</li>)}</ul>
       <p>Cadastral reference {selected.properties.id}. Rights recorded as of 1 January 2025. Recorded parcel area {selected.properties.cadastreAreaM2.toLocaleString('en')} m²; {name} overlap {Math.round(overlap?.areaM2??0).toLocaleString('en')} m² ({overlap?.parcelPercent.toFixed(1)}% of its mapped geometry).</p>
-     </details>:<p className="village-map-note">Private owners aren’t published, so an empty record doesn’t mean the parcel has no owner.</p>}
+     </details>:<p className="village-map-note">No matching published legal-entity record was found. Coverage exclusions and parcel changes can leave gaps; this doesn’t mean the parcel has no owner.</p>}
     </div>}
     <div>
-     <p className="village-map-parcel-label" id={ownersId}>Largest owners on record</p>
-     {allOwners&&<><label className="visually-hidden" htmlFor={searchId}>Search owners</label><input id={searchId} type="search" placeholder="Search owners" value={query} onChange={event=>setQuery(event.target.value)}/></>}
+     <p className="village-map-parcel-label" id={ownersId}>Recorded right holders by mapped area</p>
+     <p className="village-map-note">A parcel can have several right holders. Areas show parcel coverage, not ownership shares.</p>
+     {allOwners&&<><label className="visually-hidden" htmlFor={searchId}>Search right holders</label><input id={searchId} type="search" placeholder="Search right holders" value={query} onChange={event=>setQuery(event.target.value)}/></>}
      <ul className="village-map-owners" aria-labelledby={ownersId}>{shown.map(o=><li key={o.id}><button type="button" aria-pressed={owner===o.id} onClick={()=>chooseOwner(o.id)}>
       <span>{ownerName(o.name)}</span><span className="village-map-owner-qty">{ha(o.areaM2)} · {o.count}</span><span className="village-map-owner-bar" aria-hidden="true"><b style={{width:`${o.areaM2/largest*100}%`}}/></span>
      </button></li>)}</ul>
-     {listed.length>6&&<button type="button" className="village-map-link-button" onClick={()=>{setAllOwners(!allOwners);setQuery('')}}>{allOwners?'Show fewer':`Show all ${listed.length} owners`}</button>}
+     {listed.length>6&&<button type="button" className="village-map-link-button" onClick={()=>{setAllOwners(!allOwners);setQuery('')}}>{allOwners?'Show fewer':`Show all ${listed.length} right holders`}</button>}
     </div>
     <details className="village-map-parcel-finder"><summary>Find a parcel by cadastral reference</summary>
      <label htmlFor={parcelId}>Cadastral parcel</label>
-     <select id={parcelId} value={selectedId} onChange={e=>selectParcel(e.target.value)}><option value="">Choose from {parcels.length} parcels</option>{parcels.map(f=><option key={f.properties.id} value={f.properties.id}>{f.properties.reference} · {f.properties.recordedRights.length?f.properties.recordedRights.map(r=>ownerName(r.name)).join(', '):'not in public records'}</option>)}</select>
+     <select id={parcelId} value={selectedId} onChange={e=>selectParcel(e.target.value)}><option value="">Choose from {parcels.length} parcels</option>{parcels.map(f=><option key={f.properties.id} value={f.properties.id}>{f.properties.reference} · {f.properties.recordedRights.length?[...new Set(f.properties.recordedRights.map(r=>ownerName(r.name)))].join(', '):'no matched rights record'}</option>)}</select>
     </details>
-    <p className="village-map-note">An owner on record isn’t necessarily who farms the vines or made this bottle.</p>
+    <p className="village-map-note">Recorded rights and name matches do not establish who farms the vines or made this bottle.</p>
     <details><summary>About this data</summary>
      <p><a href={manifest.sourceUrl} target="_blank" rel="noopener noreferrer">Cadastre Etalab</a>, June 2026, and <a href={manifest.rightsUrl} target="_blank" rel="noopener noreferrer">DGFiP legal-entity rights</a> as of 1 January 2025, both Licence Ouverte 2.0. Private individuals and some businesses are not published. Full parcel outlines can extend past the cru boundary. Parcel IDs can change between snapshots.</p>
     </details>
