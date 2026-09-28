@@ -1,0 +1,181 @@
+{
+  "sources": {
+    "commune": "21267",
+    "cadastreDate": "2026-06-01",
+    "cadastreUrl": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21267/cadastre-21267-parcelles.json.gz",
+    "cadastreSha256": "8216b73437a1f789e4b5547176a7f35b74aa0d49829383f922a7efe5be2155e1",
+    "rightsAsOf": "2025-01-01",
+    "rightsReleaseChecked": "2026-09-28",
+    "rightsUrl": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip",
+    "rightsMember": "PM_25_NB_210.csv",
+    "rightsMemberSha256": "30e273045f2bf4ec236aa88b3bb6a69d2cf2684ed91fdeb1f97a02630f440d17",
+    "rightsMemberCrc32": 3267936763,
+    "schemaUrl": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_des_personnes_morales_descriptif_2025_odt",
+    "schemaSha256": "0debcb321d92807b4d0919ff6857510b88353b0cc52b330fe4c001a3d932a9fd",
+    "parentFeatureIds": [
+      "inao-denom-565",
+      "inao-denom-645"
+    ],
+    "minimumOverlapM2": 1,
+    "domaineLinks": []
+  },
+  "parentSourceSha256": "ffc8dc992ed4415f9104adcff45a71d6b95284f996d36b66a08f24b0038db879",
+  "dataUrl": "/maps/echezeaux-parcels.2026-06-01.52a1fa3ce2df.geojson",
+  "sha256": "52a1fa3ce2df1a479b0da94f110efad7acd7e1ed90f2c8a066a555f8dd826040",
+  "cadastreDate": "2026-06-01",
+  "rightsAsOf": "2025-01-01",
+  "sourceUrl": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21267/cadastre-21267-parcelles.json.gz",
+  "rightsUrl": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip",
+  "schemaUrl": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_des_personnes_morales_descriptif_2025_odt",
+  "parentFeatureIds": [
+    "inao-denom-565",
+    "inao-denom-645"
+  ],
+  "minimumOverlapM2": 1,
+  "counts": {
+    "parcels": 308,
+    "withRecordedRights": 138,
+    "rightRecords": 138,
+    "unknownRights": 170,
+    "areaMismatches": 0,
+    "multipleRights": 0,
+    "verifiedDomaineLinks": 0,
+    "proposedDomaineLinks": 0
+  },
+  "bytes": 239882,
+  "gzipEquivalentBytes": 35324,
+  "matchedFiscalRows": 141,
+  "excludedBoundaryContacts": [
+    {
+      "parcelId": "212670000D0236",
+      "parentFeatureId": "inao-denom-565",
+      "overlapM2": 0.059256230589042336
+    },
+    {
+      "parcelId": "212670000D0235",
+      "parentFeatureId": "inao-denom-565",
+      "overlapM2": 0.0042624291130247466
+    },
+    {
+      "parcelId": "212670000D0230",
+      "parentFeatureId": "inao-denom-565",
+      "overlapM2": 0.014739855969778531
+    },
+    {
+      "parcelId": "212670000D0229",
+      "parentFeatureId": "inao-denom-565",
+      "overlapM2": 0.014757824319879067
+    },
+    {
+      "parcelId": "212670000D0524",
+      "parentFeatureId": "inao-denom-565",
+      "overlapM2": 0.006189534144259222
+    },
+    {
+      "parcelId": "212670000D0517",
+      "parentFeatureId": "inao-denom-565",
+      "overlapM2": 0.04701549840517594
+    },
+    {
+      "parcelId": "212670000D0228",
+      "parentFeatureId": "inao-denom-565",
+      "overlapM2": 0.00033218554497867745
+    },
+    {
+      "parcelId": "212670000D0218",
+      "parentFeatureId": "inao-denom-565",
+      "overlapM2": 0.016008438463367726
+    },
+    {
+      "parcelId": "212670000D0522",
+      "parentFeatureId": "inao-denom-565",
+      "overlapM2": 0.016359535454260245
+    },
+    {
+      "parcelId": "212670000D0288",
+      "parentFeatureId": "inao-denom-565",
+      "overlapM2": 0.0015426733045539195
+    },
+    {
+      "parcelId": "212670000D0523",
+      "parentFeatureId": "inao-denom-565",
+      "overlapM2": 0.0023483556141014558
+    },
+    {
+      "parcelId": "212670000D0356",
+      "parentFeatureId": "inao-denom-565",
+      "overlapM2": 0.07821426172151769
+    },
+    {
+      "parcelId": "212670000D0289",
+      "parentFeatureId": "inao-denom-565",
+      "overlapM2": 0.06565834157326302
+    },
+    {
+      "parcelId": "212670000D0287",
+      "parentFeatureId": "inao-denom-565",
+      "overlapM2": 0.0015285043163501834
+    },
+    {
+      "parcelId": "212670000D0286",
+      "parentFeatureId": "inao-denom-565",
+      "overlapM2": 0.0012540051930608471
+    },
+    {
+      "parcelId": "212670000D0285",
+      "parentFeatureId": "inao-denom-565",
+      "overlapM2": 0.0005912991872782376
+    },
+    {
+      "parcelId": "212670000D0281",
+      "parentFeatureId": "inao-denom-565",
+      "overlapM2": 3.4829043274032905e-06
+    },
+    {
+      "parcelId": "212670000D0278",
+      "parentFeatureId": "inao-denom-565",
+      "overlapM2": 0.047528689498909114
+    },
+    {
+      "parcelId": "212670000D0277",
+      "parentFeatureId": "inao-denom-565",
+      "overlapM2": 0.0015457469452765623
+    },
+    {
+      "parcelId": "212670000D0270",
+      "parentFeatureId": "inao-denom-565",
+      "overlapM2": 0.018896260998368823
+    },
+    {
+      "parcelId": "212670000D0691",
+      "parentFeatureId": "inao-denom-565",
+      "overlapM2": 0.010253194499948331
+    },
+    {
+      "parcelId": "212670000D0847",
+      "parentFeatureId": "inao-denom-565",
+      "overlapM2": 0.019248694399069375
+    },
+    {
+      "parcelId": "212670000D0848",
+      "parentFeatureId": "inao-denom-565",
+      "overlapM2": 0.011490074865245163
+    },
+    {
+      "parcelId": "212670000D0366",
+      "parentFeatureId": "inao-denom-565",
+      "overlapM2": 0.10194196572447822
+    }
+  ],
+  "communeRecordsWithoutCurrentGeometry": [],
+  "byCru": {
+    "inao-denom-565": {
+      "parcels": 276,
+      "areaHa": 38.82478991
+    },
+    "inao-denom-645": {
+      "parcels": 32,
+      "areaHa": 9.07041496
+    }
+  }
+}

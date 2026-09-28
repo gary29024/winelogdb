@@ -1,0 +1,24 @@
+{
+  "dataUrl": "/maps/echezeaux-parcels.2026-06-01.52a1fa3ce2df.geojson",
+  "sha256": "52a1fa3ce2df1a479b0da94f110efad7acd7e1ed90f2c8a066a555f8dd826040",
+  "cadastreDate": "2026-06-01",
+  "rightsAsOf": "2025-01-01",
+  "sourceUrl": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21267/cadastre-21267-parcelles.json.gz",
+  "rightsUrl": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip",
+  "schemaUrl": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_des_personnes_morales_descriptif_2025_odt",
+  "parentFeatureIds": [
+    "inao-denom-565",
+    "inao-denom-645"
+  ],
+  "minimumOverlapM2": 1,
+  "counts": {
+    "parcels": 308,
+    "withRecordedRights": 138,
+    "rightRecords": 138,
+    "unknownRights": 170,
+    "areaMismatches": 0,
+    "multipleRights": 0,
+    "verifiedDomaineLinks": 0,
+    "proposedDomaineLinks": 0
+  }
+}

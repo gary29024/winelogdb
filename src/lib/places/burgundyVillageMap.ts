@@ -4,10 +4,11 @@ import { producerMapLocation } from './burgundyProducerLocations';
 import registry from './burgundyVillageMapRegistry.json';
 import { burgundyGrandCruMapIdentity } from './burgundyGrandCruClimats';
 import { burgundyRegionalMapTarget } from './burgundyRegionalMap';
+import { echezeauxNamedPlotIdentity } from './echezeauxNamedPlots';
 
 export type VillageMapFeature={
  id:string;name:string;tier:string;kind:string;appellationId:number;denominationId:number|null;denominationIds?:number[];
- sourceName:string;communes:string[];areaHa:number;matchId:string;atlasUrl:string|null;bounds:number[];labelPoint:number[];parentAppellation?:string;coverage?:string;sectorColour?:string;
+ sourceName:string;communes:string[];areaHa:number;matchId:string;atlasUrl:string|null;bounds:number[];labelPoint:number[];parentAppellation?:string;parentFeatureId?:string;coverage?:string;sectorColour?:string;
 };
 export type VillageMapCatalogue={
  id:string;name:string;region:string;mapKind?:string;communes:{id:string;name:string;bounds?:number[];labelPoint?:number[]}[];dataUrl:string;bounds:number[];
@@ -22,13 +23,14 @@ export type VillageMapCatalogue={
  overview?:{dataUrl:string;geobufUrl:string;geobufRawUrl:string;downloadTimeoutMs:number;maxZoom:number;labelIds:string[]};
  // Large regional maps need time for a complete download on slow connections.
  downloadTimeoutMs?:number;
+ namedPlots?:{dataUrl:string;parentFeatureId:string;source:{name:string;date:string;url:string;sha256:string;license:string};coverageNote:string};
  notes:Record<string,{note:string;paintedBy?:string;sameBoundaryAs?:string}>;features:VillageMapFeature[];coverageNote?:string;colourScope?:string;
  // Premier Crus lying inside a wider Premier Cru name, keyed by the wider one.
  umbrellas?:Record<string,string[]>;
  // Separate parts of one appellation, each with its own zoom button and map label.
  areas?:{id:string;label:string;name:string;bounds:number[]}[];
 };
-export type BurgundyVillageMapTarget={villageId:string;villageName:string;region:string;featureId:string;name:string;scope:'vineyard'|'appellation';mapKind?:'regional';
+export type BurgundyVillageMapTarget={villageId:string;villageName:string;region:string;featureId:string;name:string;scope:'vineyard'|'appellation';mapKind?:'regional';namedPlotId?:string;
  locationContext?:{note:string;sourceUrl:string;selectionId?:string;name?:string;featureIds?:string[];approximateOutline?:'la-moutonne'}};
 
 // Only this small identity index joins wine details. Per-village metadata and
@@ -59,7 +61,8 @@ export function burgundyVillageMapTarget(wine:MapWine):BurgundyVillageMapTarget|
  if(wineColour(wine)==='red'&&/\bmeursault\b/.test(text)&&/\bsantenots\b/.test(text)){
   return burgundyVillageMapTarget({...wine,...Object.fromEntries(fields.map(field=>[field,wine[field]?.replace(/\bmeursault\b/gi,'Volnay')]))});
  }
- const local=burgundyGrandCruMapIdentity(wine);
+ const namedPlot=echezeauxNamedPlotIdentity(wine);
+ const local=namedPlot===undefined?burgundyGrandCruMapIdentity(wine):namedPlot?.matchId??null;
  if(local===null)return null;
  const candidate=producerMapLocation(wine);
  const producerLocation=candidate&&(candidate.grandCru?local===candidate.matchId:burgundyMapAppellation(wine)===candidate.appellation)?candidate:null;
@@ -78,6 +81,7 @@ export function burgundyVillageMapTarget(wine:MapWine):BurgundyVillageMapTarget|
  const containing=producerLocation?.containingMatchIds?.map(id=>byMatchId.get(id));
  if(containing?.some(feature=>!feature||feature.villageId!==village.id))return null;
  return {villageId:village.id,villageName:village.name,region:village.region,featureId:selected.featureId,name:selected.name,
+  ...(namedPlot?.plotId?{namedPlotId:namedPlot.plotId}:{}),
   scope:target.scope==='vineyard'?'vineyard':'appellation',
   ...(producerLocation?{locationContext:{note:producerLocation.note,sourceUrl:producerLocation.sourceUrl,
    ...(producerLocation.approximateOutline?{approximateOutline:producerLocation.approximateOutline}:{}),

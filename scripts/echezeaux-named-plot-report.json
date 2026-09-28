@@ -1,0 +1,122 @@
+{
+  "method": "Exact reviewed cadastral names intersected with the unchanged INAO Échezeaux boundary in WGS84; metric diagnostics in EPSG:2154.",
+  "source": {
+    "name": "Cadastre Etalab lieux-dits",
+    "date": "2026-06-01",
+    "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21267/cadastre-21267-lieux_dits.json.gz",
+    "sha256": "39872310633312c1e4ee3b886c053932016f3d4443118646f5af0f7f8ef60e0f",
+    "license": "Licence Ouverte 2.0"
+  },
+  "nameSourceUrl": "https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/echezeaux,2458,9253.html?args=Y29tcF9pZD0yMjc4JmFjdGlvbj12aWV3RmljaGUmaWQ9MzA2Jnw%3D",
+  "nameSourceChecked": "2026-09-28",
+  "parentSourceSha256": "ffc8dc992ed4415f9104adcff45a71d6b95284f996d36b66a08f24b0038db879",
+  "parentSources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21714/cadastre-21714-communes.json.gz",
+      "sha256": "6eb11d5360ac38a3cb59194fd143d705e32986fe36ce4387d377cc3cb8e517c3"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21267/cadastre-21267-communes.json.gz",
+      "sha256": "900668aed2a5fcc479cf833d7050d96e9af239ea6aeff7d5ef49bee20a5eaf44"
+    }
+  ],
+  "dataUrl": "/maps/echezeaux-named-plots.2026-06-01.ec9f1b0809d5.geojson",
+  "sha256": "ec9f1b0809d52c82c1226e24df213d9ada1e62341c5e35995847ca3b737aeee8",
+  "bytes": 37133,
+  "gzipEquivalentBytes": 12207,
+  "parentHa": 38.82566020002819,
+  "mappedHa": 33.589539059393275,
+  "unmappedHa": 5.236121204412333,
+  "plots": [
+    {
+      "id": "echezeaux-plot-clos-saint-denis",
+      "sourceHa": 1.7337755648379727,
+      "clippedHa": 1.6866967944924152,
+      "parts": 4,
+      "holes": 0
+    },
+    {
+      "id": "echezeaux-plot-echezeaux-du-dessus",
+      "sourceHa": 4.64444250500026,
+      "clippedHa": 4.516110466573335,
+      "parts": 4,
+      "holes": 0
+    },
+    {
+      "id": "echezeaux-plot-en-orveaux",
+      "sourceHa": 10.057005505825881,
+      "clippedHa": 8.011794141338818,
+      "parts": 4,
+      "holes": 0
+    },
+    {
+      "id": "echezeaux-plot-les-beaux-monts-bas",
+      "sourceHa": 6.458667021907209,
+      "clippedHa": 0.789088039716576,
+      "parts": 11,
+      "holes": 0
+    },
+    {
+      "id": "echezeaux-plot-les-champs-traversins",
+      "sourceHa": 3.682669872753713,
+      "clippedHa": 3.572980240896916,
+      "parts": 6,
+      "holes": 0
+    },
+    {
+      "id": "echezeaux-plot-les-cruots-ou-vignes-blanches",
+      "sourceHa": 3.2196426744767455,
+      "clippedHa": 3.204981883665343,
+      "parts": 2,
+      "holes": 0
+    },
+    {
+      "id": "echezeaux-plot-les-loachausses",
+      "sourceHa": 2.648126990402722,
+      "clippedHa": 2.512374776131396,
+      "parts": 4,
+      "holes": 0
+    },
+    {
+      "id": "echezeaux-plot-les-quartiers-de-nuits",
+      "sourceHa": 2.649011397156209,
+      "clippedHa": 1.1484055649882319,
+      "parts": 1,
+      "holes": 0
+    },
+    {
+      "id": "echezeaux-plot-les-rouges-du-bas",
+      "sourceHa": 3.1898674132696714,
+      "clippedHa": 3.078051575940894,
+      "parts": 1,
+      "holes": 0
+    },
+    {
+      "id": "echezeaux-plot-les-treux",
+      "sourceHa": 5.17771535665251,
+      "clippedHa": 5.0690555756493465,
+      "parts": 6,
+      "holes": 0
+    }
+  ],
+  "unresolved": [
+    {
+      "name": "Les Poulaillères",
+      "sourceCandidate": "LES POULA",
+      "reason": "The cadastral name differs; no verified crosswalk has been found. Do not infer this identity from proximity or complete the cru by filling the gap."
+    }
+  ]
+}
