@@ -1,3 +1,5 @@
+import type { DeepSearchProvenance } from '../db/schema';
+
 export type ResearchScopeQualityName='producer'|'terroir'|'vintage_context'|'wine_vintage';
 export type DeepResearchField='summary'|'expectedProfile'|'vintageQuality'|'producerDetails'|'producerWinemakingPractices'|'winemakingTechniques'|'terroir'|'drinkingWindow';
 export type ResearchFieldStatus='verified'|'not_found'|'conflicting'|'not_applicable';
@@ -6,6 +8,11 @@ export type ResearchSourceLike={title:string;url:string};
 export type ResearchSubjectLike=Record<string,string|number|null>;
 export type ResearchFieldQuality={status:ResearchFieldStatus;sourceTier:ResearchSourceTier;score:number;warnings:string[]};
 export type DeepResearchQuality={status:'verified'|'mixed'|'limited';score:number;sourceTier:ResearchSourceTier;warnings:string[];scoreNote?:string;fields:Partial<Record<DeepResearchField,ResearchFieldQuality>>};
+
+function explicitStatusScore(status:Exclude<ResearchFieldStatus,'verified'>,tier:ResearchSourceTier){
+  const base=status==='not_applicable'?92:status==='not_found'?78:68;
+  return Math.min(100,base+(tier==='authoritative'?4:tier==='specialist'?2:0));
+}
 
 const SCOPE_FIELDS:Record<ResearchScopeQualityName,DeepResearchField[]>={
   producer:['producerDetails','producerWinemakingPractices'],
@@ -91,7 +98,7 @@ export function bestResearchSourceTier(sources:ResearchSourceLike[]):ResearchSou
 }
 
 function firstText(value:string){return value.trim().slice(0,260).toLowerCase()}
-export function explicitResearchStatus(value:string):ResearchFieldStatus|null{
+export function explicitResearchStatus(value:string):Exclude<ResearchFieldStatus,'verified'>|null{
   const text=firstText(value);if(!text)return null;
   if(/\bnot applicable\b|\bdoes not apply\b/.test(text))return 'not_applicable';
   if(/\bconflicting\b|\bsources? (?:disagree|conflict)\b|\bcannot reconcile\b|\binconsistent sources?\b/.test(text))return 'conflicting';
@@ -149,8 +156,7 @@ export function assessResearchField(field:DeepResearchField,value:string,subject
   if(!text)return {status:'verified',sourceTier:tier,score:0,warnings:['missing-field'],pass:false};
   const explicit=explicitResearchStatus(text);
   if(explicit){
-    const base=explicit==='not_applicable'?92:explicit==='not_found'?78:68;
-    return {status:explicit,sourceTier:tier,score:Math.min(100,base+(tier==='authoritative'?4:tier==='specialist'?2:0)),warnings,pass:true};
+    return {status:explicit,sourceTier:tier,score:explicitStatusScore(explicit,tier),warnings,pass:true};
   }
   if(tier==='none')warnings.push('no-grounding-source');
   if(vintageMismatch(field,text,subject))warnings.push('wrong-vintage-reference');
@@ -173,10 +179,19 @@ export function assessResearchScope(scope:ResearchScopeQualityName,payload:Recor
   return {pass:fields.every(([,quality])=>quality.pass),fields:Object.fromEntries(fields) as Partial<Record<DeepResearchField,ResearchFieldQuality>>,warnings};
 }
 
-export function buildDeepResearchQuality(entries:Array<{scope:ResearchScopeQualityName;payload:Record<string,string>;subject:ResearchSubjectLike;sources:ResearchSourceLike[]}>):DeepResearchQuality{
+export function buildDeepResearchQuality(entries:Array<{scope:ResearchScopeQualityName;payload:Record<string,string>;subject:ResearchSubjectLike;sources:ResearchSourceLike[];provenance?:DeepSearchProvenance}>):DeepResearchQuality{
   const fields:Partial<Record<DeepResearchField,ResearchFieldQuality>>={},warnings:string[]=[];let tier:ResearchSourceTier='none';
   for(const entry of entries){
-    const assessed=assessResearchScope(entry.scope,entry.payload,entry.subject,entry.sources);Object.assign(fields,assessed.fields);warnings.push(...assessed.warnings);
+    const assessed=assessResearchScope(entry.scope,entry.payload,entry.subject,entry.sources);
+    for(const field of SCOPE_FIELDS[entry.scope]){
+      const quality=assessed.fields[field];if(!quality)continue;
+      // Disagreement is a completed research finding. Score it using the same
+      // confidence ceiling as an explicit conflict in prose, regardless of
+      // where the disclosure appears or whether the field has room for it.
+      const disputed=quality.status==='conflicting'||entry.provenance?.fields[field]?.claims.some(claim=>claim.supportStatus==='conflicting');
+      fields[field]=disputed?{...quality,status:'conflicting',score:Math.min(quality.score,explicitStatusScore('conflicting',quality.sourceTier)),warnings:[...new Set([...quality.warnings,'cross-source-technical-conflict'])]}:quality;
+      warnings.push(...fields[field]!.warnings);
+    }
     const entryTier=bestResearchSourceTier(entry.sources);if(TIER_RANK[entryTier]>TIER_RANK[tier])tier=entryTier;
   }
   const values=Object.values(fields),score=values.length?Math.round(values.reduce((sum,item)=>sum+item.score,0)/values.length):0;

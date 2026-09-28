@@ -12,7 +12,7 @@ import { ResearchPersistenceError,countSearchQueries,countUsageTokens,createGemi
 import { buildDeepSearchProvenance } from './provenance';
 import { researchBatchErrorPollDelay,researchBatchFirstPollDelay,researchBatchPollDelay,researchBatchStallAction,researchBatchTransientAction } from './batchRetryPolicy';
 import { highRiskTechnicalFailureMessage } from './technicalClaimGate';
-import { auditTechnicalContradictions,technicalContradictionFailureMessage } from './technicalContradictions';
+import { discloseTechnicalContradictions,technicalContradictionFailureMessage } from './technicalContradictions';
 import { getWineResearchRun,updateWineResearchRun } from './backgroundJobs';
 import { offerToSourceOwner,readableWine,researchWine,withSourceResearch,type ResearchWineRow } from './readableWine';
 import { recordAiUsage,type AnalyticsSink } from '../usage/aiUsage';
@@ -343,9 +343,17 @@ async function applyWineBatchResearch(env:Env,owner:string,wineId:string,request
   let applying=false;
   try{
     const metadata=groundingMetadata,raw=parseStructuredJsonText(text) as Record<string,unknown>,parsed=deepSearchSchema.safeParse({...raw,sources:sourcesFrom(metadata),model:`${job.model} (batch)`,researchedAt:now()});if(!parsed.success)throw new Error(`Deep Search returned invalid fields: ${parsed.error.issues.map(x=>x.path.join('.')||x.message).join(', ')}`);
-    const rawProvenance=buildDeepSearchProvenance(parsed.data,metadata),conflictAudit=auditTechnicalContradictions(parsed.data,rawProvenance),provenance=conflictAudit.provenance,researched:DeepSearchResult={...parsed.data,provenance};
+    const rawProvenance=buildDeepSearchProvenance(parsed.data,metadata);
     applying=true;
-    const wine=await loadWine(env.DB,owner,wineId,env.CREDIT_CONTEXT);if(!wine)throw new ResearchTerminalError('Wine not found');const targets=researchTargets(wine),entries=splitDeepSearchResult(researched,targets).filter(entry=>scopes.includes(entry.target.scope));failed=scopes.filter(scope=>!entries.some(entry=>entry.target.scope===scope&&scopeIsComplete(scope,entry.payload)));
+    const wine=await loadWine(env.DB,owner,wineId,env.CREDIT_CONTEXT);if(!wine)throw new ResearchTerminalError('Wine not found');const targets=researchTargets(wine);
+    const exactTarget=targets.find(target=>target.scope==='wine_vintage'),exactRaw=Object.fromEntries(fieldsForScope('wine_vintage').map(field=>[field,parsed.data[field]??'']));
+    // A disclosure is completion of otherwise valid research. Validate the
+    // original text first so an appended uncertainty notice cannot mask a
+    // wrong-vintage, missing-field or ungrounded-answer rejection.
+    const disclosed=scopes.includes('wine_vintage')&&exactTarget&&scopeQualityWarnings('wine_vintage',exactRaw,exactTarget,parsed.data.sources).length===0
+      ?discloseTechnicalContradictions(parsed.data,rawProvenance):{payload:parsed.data,provenance:rawProvenance};
+    const provenance=disclosed.provenance,researched:DeepSearchResult={...disclosed.payload,provenance};
+    const entries=splitDeepSearchResult(researched,targets).filter(entry=>scopes.includes(entry.target.scope));failed=scopes.filter(scope=>!entries.some(entry=>entry.target.scope===scope&&scopeIsComplete(scope,entry.payload)));
     const completeEntries=entries.filter(entry=>scopeIsComplete(entry.target.scope,entry.payload));for(const entry of completeEntries){await upsertResearchCache(env.DB,owner,entry);if(entry.target.scope==='producer')await syncProducerScope(env.DB,owner,wine,entry)}
     if(failed.length){
       // Carry the gate's reasons into the retry: the fallback model is asked to

@@ -10,6 +10,9 @@ import worker from '../../worker/multiUserEntry';
 import {hash,seconds} from '../../worker/multiUser/common';
 import {claimDelivery,finishDelivery,flushOutbox,maintainJobs} from '../../worker/multiUser/jobs';
 import {durableProvider} from '../../src/lib/credits/provider';
+import {deepSearchSchema} from '../../src/lib/db/schema';
+import {buildDeepSearchProvenance} from '../../src/lib/research/provenance';
+import {auditTechnicalContradictions} from '../../src/lib/research/technicalContradictions';
 
 let database:ReturnType<typeof realD1>;
 const requestId='11155b35-cb71-48b4-aaca-40d8f52bd9e0';
@@ -106,6 +109,42 @@ async function httpFlow(beforeStart?:()=>void,expectedStatus=202){
 }
 
 describe('member Deep Search through HTTP and the queue',()=>{
+ it.each([{wrongVintage:false,fullSection:false},{wrongVintage:false,fullSection:true},{wrongVintage:true,fullSection:false}])('handles the Massolino dispute (wrong vintage: $wrongVintage, full section: $fullSection)',async({wrongVintage,fullSection})=>{
+  database.sql.exec("UPDATE wines SET producer='Massolino',wine_name='Langhe Riesling',vintage=2021,country='Italy',region='Piedmont',appellation='Langhe DOC',wine_style='white',grapes_json='[\"Riesling\"]'");
+  // Synthetic grounded reply reproducing the reported 9/10-month failure;
+  // deliberately distinct wording keeps the citation matcher source-specific.
+  const a=`The ${wrongVintage?2020:2021} Riesling undergoes stainless-steel fermentation before 9 months of fine lees ageing to build texture and complexity.`,b='Following fermentation, maturation on lees lasted 10 months with periodic stirring according to the importer.';
+  const techniques=`${a}\n${b}`,context='The long technical note also describes the general cellar context. '.repeat(80);
+  const research={...answer,summary:'Massolino Langhe Riesling from Piedmont.',vintageQuality:'The 2021 growing season and harvest were documented in Piedmont.',winemakingTechniques:fullSection?`${techniques}\n${context}`.slice(0,5000).trim():techniques};
+  const metadata={groundingChunks:[{web:{title:'Producer sheet',uri:'https://producer.example/riesling'}},{web:{title:'Importer sheet',uri:'https://importer.example/riesling'}}],groundingSupports:[{segment:{text:a},groundingChunkIndices:[0]},{segment:{text:b},groundingChunkIndices:[1]}]};
+  const audit=auditTechnicalContradictions(research,buildDeepSearchProvenance(research,metadata));
+  expect(audit.unacknowledged.map(item=>item.metric)).toEqual(['lees_duration']);
+  const flow=await httpFlow();flow.provider.mockImplementation(async()=>Response.json({candidates:[{content:{parts:[{text:JSON.stringify(research)}]},finishReason:'STOP',groundingMetadata:metadata}]}));
+  await flow.consume();const delivery=await flow.consume();expect(delivery.ack).toHaveBeenCalledOnce();
+  expect(flow.provider).toHaveBeenCalledOnce();
+  if(wrongVintage){
+   expect(await flow.status()).toMatchObject({status:'running',attempt:2});
+   expect(database.sql.prepare("SELECT count(*) AS n FROM research_cache WHERE scope='wine_vintage'").get()!.n).toBe(0);
+   return;
+  }
+  expect(await flow.status()).toMatchObject({status:'complete',attempt:1});
+  expect(flow.delivered).toHaveLength(0);
+  const saved=deepSearchSchema.parse(JSON.parse(String(database.sql.prepare('SELECT deep_search_json FROM wines WHERE id=?').get(wineId)!.deep_search_json)));
+  if(fullSection)expect(saved.winemakingTechniques).toBe(research.winemakingTechniques);
+  else expect(saved.winemakingTechniques).toContain(`${a}\n${b}\nSources disagree on time on lees: 9 months vs 10 months`);
+  expect(saved.quality).toMatchObject({status:'mixed',warnings:['cross-source-technical-conflict']});
+  expect(saved.quality?.fields.winemakingTechniques).toMatchObject({status:'conflicting',score:68});
+  expect(saved.quality!.score).toBeLessThan(saved.quality!.fields.summary!.score);
+  expect(saved.provenance?.fields.winemakingTechniques?.claims.slice(0,2)).toMatchObject([
+   {claim:a,supportStatus:'conflicting',sources:[{url:'https://producer.example/riesling'}]},
+   {claim:b,supportStatus:'conflicting',sources:[{url:'https://importer.example/riesling'}]}
+  ]);
+  const targets=buildResearchTargets({producer:'Massolino',wineName:'Langhe Riesling',vintage:2021,country:'Italy',region:'Piedmont',appellation:'Langhe DOC'});
+  expect((await loadResearchCache(database.db,owner,targets)).get('wine_vintage')?.payload.winemakingTechniques).toBe(saved.winemakingTechniques);
+  await flow.consume(delivery.job,2);expect(flow.provider).toHaveBeenCalledOnce();
+  expect(await memberAiActionAccess(database.db,owner,'wine_deep_search')).toMatchObject({used:1,pending:0});
+ });
+
  it.each([false,true])('keeps a friend follower waiting past 15 minutes until sponsor settlement (success: %s)',async success=>{
   database.sql.exec("UPDATE wines SET vintage=2020; INSERT INTO app_users(id,email,display_name,role) VALUES('bob','bob@example.com','Bob','member'); INSERT INTO credit_wallets(user_id) VALUES('bob'); INSERT INTO friendships(user_id,friend_id) VALUES('alice','bob'),('bob','alice'); INSERT INTO wines(id,owner_id,producer,wine_name,vintage,country,region,wine_style,created_at,updated_at) SELECT 'bob-wine','bob',producer,wine_name,vintage,country,region,wine_style,created_at,updated_at FROM wines WHERE id='krug'");
   const request=()=>new Request('https://wine.example/api/wines/bob-wine/deep-search',{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'}),bob={...member,id:'bob'};

@@ -1,5 +1,6 @@
 import { describe,expect,it } from 'vitest';
 import { bestResearchSourceTier,buildDeepResearchQuality,distinctSourceHosts,SOURCE_CONFIDENCE_EXPLANATION } from '../../src/lib/research/qualityGate';
+import { summarizeFieldProvenance } from '../../src/lib/research/provenance';
 
 const source=(url:string,title=url)=>({title,url});
 const redirect=(title:string,id:string)=>source(`https://vertexaisearch.cloud.google.com/grounding-api-redirect/${id}`,title);
@@ -86,5 +87,39 @@ describe('Deep Search confidence explanation',()=>{
 
     expect(quality.warnings).toContain('no-grounding-source');
     expect(quality.scoreNote).toBeUndefined();
+  });
+
+  it.each(['first','last','evidence only'])('scores disputed evidence consistently when the disclosure is %s',position=>{
+    const sources=[source('https://decanter.com/technical-sheet')];
+    const prose='The technical note describes the cellar process and its effect on wine texture. '.repeat(5);
+    const disclosure='Sources disagree on time on lees: 9 months vs 10 months.';
+    const payload={summary:'An exact wine summary.',expectedProfile:'Citrus, bright acidity and a persistent finish.',drinkingWindow:'Drink now or cellar further.',winemakingTechniques:position==='first'?`${disclosure}\n${prose}`:position==='last'?`${prose}\n${disclosure}`:prose};
+    const base={scope:'wine_vintage' as const,payload,subject:{vintage:2021},sources};
+    const provenance={version:1 as const,fields:{winemakingTechniques:summarizeFieldProvenance([
+      {claim:'The wine spent 9 months on lees.',supportStatus:'conflicting',sourceTier:'specialist',sources},
+      {claim:'The wine spent 10 months on lees.',supportStatus:'conflicting',sourceTier:'grounded',sources:[source('https://importer.example/wine')]}
+    ])}};
+    const quality=buildDeepResearchQuality([{...base,provenance}]);
+    expect(quality.fields.winemakingTechniques).toMatchObject({status:'conflicting',score:70,warnings:['cross-source-technical-conflict']});
+    expect(quality.fields.summary).toMatchObject({status:'verified',score:90});
+    expect(quality).toMatchObject({status:'mixed',score:85,warnings:['cross-source-technical-conflict']});
+    expect(quality.score).toBeLessThan(buildDeepResearchQuality([{...base,payload:{...payload,winemakingTechniques:prose}}]).score);
+    expect(quality.scoreNote).toBeUndefined();
+  });
+
+  it('also includes an explicit source disagreement in confidence without stored claim evidence',()=>{
+    const sources=[source('https://decanter.com/technical-sheet')];
+    const payload={summary:'An exact wine summary.',expectedProfile:'Citrus and bright acidity.',drinkingWindow:'Ready to drink.',winemakingTechniques:'Sources disagree on the time on lees.'};
+    const quality=buildDeepResearchQuality([{scope:'wine_vintage',payload,subject:{},sources}]);
+    expect(quality).toMatchObject({status:'mixed',score:85,warnings:['cross-source-technical-conflict']});
+    expect(quality.fields.winemakingTechniques).toMatchObject({status:'conflicting',score:70});
+  });
+
+  it('never raises a limited confidence score when disputed evidence is present',()=>{
+    const data={...entry([]),provenance:{version:1 as const,fields:{terroir:summarizeFieldProvenance([{claim:'Sources disagree about the site.',supportStatus:'conflicting',sourceTier:'none',sources:[]}])}}};
+    const quality=buildDeepResearchQuality([data]);
+    expect(quality.status).toBe('limited');
+    expect(quality.score).toBe(buildDeepResearchQuality([{...data,provenance:undefined}]).score);
+    expect(quality.warnings).toContain('cross-source-technical-conflict');
   });
 });
