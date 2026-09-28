@@ -1,0 +1,65 @@
+{
+  "parentMatchId": "france/burgundy/cote-de-nuits/echezeaux",
+  "plots": [
+    {
+      "id": "echezeaux-plot-clos-saint-denis",
+      "name": "Clos Saint-Denis",
+      "aliases": [
+        "Clos St Denis"
+      ]
+    },
+    {
+      "id": "echezeaux-plot-echezeaux-du-dessus",
+      "name": "Échezeaux du Dessus",
+      "aliases": [
+        "Les Échezeaux du Dessus"
+      ]
+    },
+    {
+      "id": "echezeaux-plot-en-orveaux",
+      "name": "En Orveaux",
+      "aliases": []
+    },
+    {
+      "id": "echezeaux-plot-les-beaux-monts-bas",
+      "name": "Les Beaux Monts Bas",
+      "aliases": []
+    },
+    {
+      "id": "echezeaux-plot-les-champs-traversins",
+      "name": "Les Champs Traversins",
+      "aliases": [
+        "Champs Traversins"
+      ]
+    },
+    {
+      "id": "echezeaux-plot-les-cruots-ou-vignes-blanches",
+      "name": "Les Cruots ou Vignes Blanches",
+      "aliases": [
+        "Les Cruots",
+        "Vignes Blanches",
+        "Les Vignes Blanches"
+      ]
+    },
+    {
+      "id": "echezeaux-plot-les-loachausses",
+      "name": "Les Loächausses",
+      "aliases": []
+    },
+    {
+      "id": "echezeaux-plot-les-quartiers-de-nuits",
+      "name": "Les Quartiers de Nuits",
+      "aliases": []
+    },
+    {
+      "id": "echezeaux-plot-les-rouges-du-bas",
+      "name": "Les Rouges du Bas",
+      "aliases": []
+    },
+    {
+      "id": "echezeaux-plot-les-treux",
+      "name": "Les Treux",
+      "aliases": []
+    }
+  ]
+}

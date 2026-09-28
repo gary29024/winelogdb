@@ -102,6 +102,11 @@ export async function loadVillageMapCatalogue(villageId:string):Promise<VillageM
  const catalogue=(await load()).default;
  if(catalogue.mapKind!=='regional'){
   const {default:lossless}=await import('./burgundyLosslessMapRegistry.json');
+  if(villageId==='vosne-romanee'){
+   const {default:named}=await import('./echezeauxNamedPlotCatalogue.json');
+   const {features,...namedPlots}=named;
+   return {...catalogue,...lossless[villageId as keyof typeof lossless],namedPlots,features:[...catalogue.features,...features]};
+  }
   return {...catalogue,...lossless[villageId as keyof typeof lossless]};
  }
  const {default:overviews}=await import('./burgundyRegionalOverviewRegistry.json');

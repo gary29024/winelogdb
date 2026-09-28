@@ -9,6 +9,67 @@ const matrixTest=fullMapMatrix?test:test.skip;
 const allMapRoutes=['/wines/layout-wine','/shared/layout-wine'] as const;
 const matrixRoutes:readonly string[]=fullMapMatrix?allMapRoutes:['/wines/layout-wine'];
 
+for(const route of allMapRoutes){
+ test(`Échezeaux pilot ${route}: named areas, parcels and dated rights stay distinct`,async({page},testInfo)=>{
+  await page.setViewportSize({width:390,height:844});
+  await setup(page,{appellation:'Échezeaux',wineName:'Échezeaux Les Treux',classification:'grand_cru'});
+  const requests:string[]=[];page.on('request',r=>{if(r.url().includes('/maps/'))requests.push(r.url())});
+  await page.goto(route);
+  expect(requests).toEqual([]);
+  await page.getByRole('button',{name:'View village map'}).click();
+  const dialog=page.getByRole('dialog',{name:'Vosne-Romanée',exact:true});
+  await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
+  const vineyard=dialog.getByRole('combobox',{name:'Explore a vineyard'});
+  await expect(vineyard).toHaveValue('echezeaux-plot-les-treux');
+  await expect(dialog.locator('.village-map-tier')).toHaveText('Named area · Échezeaux Grand Cru');
+  await expect(dialog.locator('.village-map-description')).toContainText('not a separately delimited cru');
+  await expect(dialog.locator('.village-map-context')).toContainText('8 Grand Crus');
+  await expect(dialog.locator('.village-map-note')).toContainText(['Échezeaux pilot: 10']);
+  expect(requests.some(url=>url.includes('echezeaux-named-plots.'))).toBe(true);
+  expect(requests.some(url=>url.includes('echezeaux-parcels.'))).toBe(false);
+  const toggle=dialog.getByRole('checkbox',{name:'Show parcels · Échezeaux'});
+  await toggle.check();
+  const holder=dialog.getByRole('combobox',{name:'Recorded right holder'});
+  await expect(holder).toBeVisible();
+  const parcel=dialog.getByRole('combobox',{name:'Explore a cadastral parcel'});
+  await expect(parcel.getByRole('option')).toHaveCount(277);
+  expect(requests.some(url=>url.includes('echezeaux-parcels.'))).toBe(true);
+  await holder.selectOption({label:'DOMAINE DE LA ROMANEE CONTI'});
+  const known=await parcel.locator('option').nth(1).getAttribute('value');
+  await parcel.selectOption(known!);
+  await expect(dialog.locator('.village-map-parcel-details')).toContainText('Recorded rights as of 1 January 2025');
+  await expect(dialog.locator('.village-map-parcel-details')).toContainText('DOMAINE DE LA ROMANEE CONTI');
+  await expect(dialog.locator('.village-map-parcel-details')).toContainText('Farming domaine: not verified');
+  await page.screenshot({path:testInfo.outputPath('echezeaux-recorded-rights-mobile.png')});
+  await holder.selectOption('unknown');
+  const unknown=await parcel.locator('option').nth(1).getAttribute('value');
+  await parcel.selectOption(unknown!);
+  await expect(dialog.locator('.village-map-parcel-details')).toContainText('does not establish that the parcel has no owner');
+  await toggle.uncheck();await expect(holder).toHaveCount(0);
+  await vineyard.selectOption('inao-denom-645');
+  await expect(dialog.locator('.village-map-description')).toContainText('INAO production boundary');
+  await dialog.getByRole('checkbox',{name:'Show parcels · Grands-Échezeaux'}).check();
+  await expect(dialog.getByRole('combobox',{name:'Explore a cadastral parcel'}).getByRole('option')).toHaveCount(33);
+  await page.setViewportSize({width:1280,height:900});
+  await page.screenshot({path:testInfo.outputPath('grands-echezeaux-parcels-desktop.png')});
+  await page.keyboard.press('Escape');await expect(page.getByRole('button',{name:'View village map'})).toBeFocused();
+ });
+}
+
+test('Échezeaux pilot: missing parcel data does not hide the cru and can be retried',async({page})=>{
+ await setup(page,{appellation:'Échezeaux',wineName:'Les Poulaillères',classification:'grand_cru'});
+ let fail=true;await page.route('**/maps/echezeaux-parcels.*',route=>fail?route.fulfill({status:503}):route.continue());
+ await page.goto('/wines/layout-wine');await page.getByRole('button',{name:'View village map'}).click();
+ const dialog=page.getByRole('dialog',{name:'Vosne-Romanée',exact:true});
+ await expect(dialog.getByRole('combobox',{name:'Explore a vineyard'})).toHaveValue('inao-denom-565');
+ await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
+ await dialog.getByRole('checkbox',{name:'Show parcels · Échezeaux'}).check();
+ await expect(dialog.getByRole('alert')).toContainText('The cru map remains available');
+ await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
+ fail=false;await dialog.getByRole('button',{name:'Retry parcels'}).click();
+ await expect(dialog.getByRole('combobox',{name:'Recorded right holder'})).toBeVisible();
+});
+
 const regionalMapCases=[
  ['Bourgogne Côte d’Or',40,'Dijon','white','A named cuvée'],
  ['Bourgogne Hautes Côtes de Nuits',19,'Arcenant','white','A named cuvée'],

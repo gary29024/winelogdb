@@ -1,0 +1,284 @@
+{
+  "dataUrl": "/maps/echezeaux-named-plots.2026-06-01.ec9f1b0809d5.geojson",
+  "parentFeatureId": "inao-denom-565",
+  "source": {
+    "name": "Cadastre Etalab lieux-dits",
+    "date": "2026-06-01",
+    "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21267/cadastre-21267-lieux_dits.json.gz",
+    "sha256": "39872310633312c1e4ee3b886c053932016f3d4443118646f5af0f7f8ef60e0f",
+    "license": "Licence Ouverte 2.0"
+  },
+  "coverageNote": "Échezeaux pilot: 10 cadastral named areas are mapped. Les Poulaillères remains unverified because the cadastral source says “LES POULA”. Cadastral areas are not separate INAO cru boundaries or producer holdings.",
+  "features": [
+    {
+      "id": "echezeaux-plot-clos-saint-denis",
+      "name": "Clos Saint-Denis",
+      "kind": "named_plot",
+      "tier": "grand_cru",
+      "appellationId": 179,
+      "denominationId": null,
+      "parentFeatureId": "inao-denom-565",
+      "parentAppellation": "Échezeaux",
+      "sourceName": "CLOS SAINT-DENIS",
+      "communes": [
+        "21267"
+      ],
+      "areaHa": 1.686697,
+      "matchId": "",
+      "atlasUrl": null,
+      "bounds": [
+        4.951665339579989,
+        47.166586216022885,
+        4.955082653610809,
+        47.16745949589398
+      ],
+      "labelPoint": [
+        4.953391776132671,
+        47.166982660163825
+      ]
+    },
+    {
+      "id": "echezeaux-plot-echezeaux-du-dessus",
+      "name": "Échezeaux du Dessus",
+      "kind": "named_plot",
+      "tier": "grand_cru",
+      "appellationId": 179,
+      "denominationId": null,
+      "parentFeatureId": "inao-denom-565",
+      "parentAppellation": "Échezeaux",
+      "sourceName": "ECHEZEAUX DU DESSUS",
+      "communes": [
+        "21267"
+      ],
+      "areaHa": 4.51611,
+      "matchId": "",
+      "atlasUrl": null,
+      "bounds": [
+        4.9488042,
+        47.1692764,
+        4.952661498334649,
+        47.171067975232006
+      ],
+      "labelPoint": [
+        4.9506671206596415,
+        47.170162169572436
+      ]
+    },
+    {
+      "id": "echezeaux-plot-en-orveaux",
+      "name": "En Orveaux",
+      "kind": "named_plot",
+      "tier": "grand_cru",
+      "appellationId": 179,
+      "denominationId": null,
+      "parentFeatureId": "inao-denom-565",
+      "parentAppellation": "Échezeaux",
+      "sourceName": "EN ORVEAUX",
+      "communes": [
+        "21267"
+      ],
+      "areaHa": 8.011794,
+      "matchId": "",
+      "atlasUrl": null,
+      "bounds": [
+        4.9471114370150815,
+        47.1721867,
+        4.953491027451569,
+        47.1748909
+      ],
+      "labelPoint": [
+        4.950735105397923,
+        47.17395937450152
+      ]
+    },
+    {
+      "id": "echezeaux-plot-les-beaux-monts-bas",
+      "name": "Les Beaux Monts Bas",
+      "kind": "named_plot",
+      "tier": "grand_cru",
+      "appellationId": 179,
+      "denominationId": null,
+      "parentFeatureId": "inao-denom-565",
+      "parentAppellation": "Échezeaux",
+      "sourceName": "LES BEAUX-MONTS BAS",
+      "communes": [
+        "21267"
+      ],
+      "areaHa": 0.789088,
+      "matchId": "",
+      "atlasUrl": null,
+      "bounds": [
+        4.948367495811451,
+        47.16705235997505,
+        4.9499232,
+        47.1693019853823
+      ],
+      "labelPoint": [
+        4.949461797517027,
+        47.16869067854306
+      ]
+    },
+    {
+      "id": "echezeaux-plot-les-champs-traversins",
+      "name": "Les Champs Traversins",
+      "kind": "named_plot",
+      "tier": "grand_cru",
+      "appellationId": 179,
+      "denominationId": null,
+      "parentFeatureId": "inao-denom-565",
+      "parentAppellation": "Échezeaux",
+      "sourceName": "LES CHAMPS TRAVERSINS",
+      "communes": [
+        "21267"
+      ],
+      "areaHa": 3.57298,
+      "matchId": "",
+      "atlasUrl": null,
+      "bounds": [
+        4.9465832,
+        47.17040133446161,
+        4.9501988,
+        47.1723255
+      ],
+      "labelPoint": [
+        4.947631541103925,
+        47.171372990175286
+      ]
+    },
+    {
+      "id": "echezeaux-plot-les-cruots-ou-vignes-blanches",
+      "name": "Les Cruots ou Vignes Blanches",
+      "kind": "named_plot",
+      "tier": "grand_cru",
+      "appellationId": 179,
+      "denominationId": null,
+      "parentFeatureId": "inao-denom-565",
+      "parentAppellation": "Échezeaux",
+      "sourceName": "LES CRUOTS OU VIGNES BLANCHES",
+      "communes": [
+        "21267"
+      ],
+      "areaHa": 3.204982,
+      "matchId": "",
+      "atlasUrl": null,
+      "bounds": [
+        4.948311077961577,
+        47.166573341980666,
+        4.951716091698734,
+        47.168113660169226
+      ],
+      "labelPoint": [
+        4.95025948108687,
+        47.16733083477936
+      ]
+    },
+    {
+      "id": "echezeaux-plot-les-loachausses",
+      "name": "Les Loächausses",
+      "kind": "named_plot",
+      "tier": "grand_cru",
+      "appellationId": 179,
+      "denominationId": null,
+      "parentFeatureId": "inao-denom-565",
+      "parentAppellation": "Échezeaux",
+      "sourceName": "LES LOÄCHAUSSES",
+      "communes": [
+        "21267"
+      ],
+      "areaHa": 2.512375,
+      "matchId": "",
+      "atlasUrl": null,
+      "bounds": [
+        4.9497076,
+        47.16777263086132,
+        4.95217759095513,
+        47.169383
+      ],
+      "labelPoint": [
+        4.95093548754363,
+        47.16865554686767
+      ]
+    },
+    {
+      "id": "echezeaux-plot-les-quartiers-de-nuits",
+      "name": "Les Quartiers de Nuits",
+      "kind": "named_plot",
+      "tier": "grand_cru",
+      "appellationId": 179,
+      "denominationId": null,
+      "parentFeatureId": "inao-denom-565",
+      "parentAppellation": "Échezeaux",
+      "sourceName": "LES QUARTIERS DE NUITS",
+      "communes": [
+        "21267"
+      ],
+      "areaHa": 1.148406,
+      "matchId": "",
+      "atlasUrl": null,
+      "bounds": [
+        4.9553612205323825,
+        47.167827270324366,
+        4.9575129570514616,
+        47.1687879761798
+      ],
+      "labelPoint": [
+        4.956477008853668,
+        47.16834239238666
+      ]
+    },
+    {
+      "id": "echezeaux-plot-les-rouges-du-bas",
+      "name": "Les Rouges du Bas",
+      "kind": "named_plot",
+      "tier": "grand_cru",
+      "appellationId": 179,
+      "denominationId": null,
+      "parentFeatureId": "inao-denom-565",
+      "parentAppellation": "Échezeaux",
+      "sourceName": "LES ROUGES DU BAS",
+      "communes": [
+        "21267"
+      ],
+      "areaHa": 3.078052,
+      "matchId": "",
+      "atlasUrl": null,
+      "bounds": [
+        4.945882737944854,
+        47.16936394188522,
+        4.9499973,
+        47.1710815
+      ],
+      "labelPoint": [
+        4.94786360194644,
+        47.17022509882544
+      ]
+    },
+    {
+      "id": "echezeaux-plot-les-treux",
+      "name": "Les Treux",
+      "kind": "named_plot",
+      "tier": "grand_cru",
+      "appellationId": 179,
+      "denominationId": null,
+      "parentFeatureId": "inao-denom-565",
+      "parentAppellation": "Échezeaux",
+      "sourceName": "LES TREUX",
+      "communes": [
+        "21267"
+      ],
+      "areaHa": 5.069056,
+      "matchId": "",
+      "atlasUrl": null,
+      "bounds": [
+        4.9516961,
+        47.16709409828293,
+        4.955489934928691,
+        47.1692751687595
+      ],
+      "labelPoint": [
+        4.953621639715321,
+        47.16817289484693
+      ]
+    }
+  ]
+}

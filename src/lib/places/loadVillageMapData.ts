@@ -3,7 +3,15 @@ import Pbf from 'pbf';
 import type { VillageMapCatalogue } from './burgundyVillageMap';
 
 /** Loaded with the map dialog. Compact transport never simplifies a boundary. */
-export async function loadVillageMapData(catalogue:Pick<VillageMapCatalogue,'dataUrl'|'geobufUrl'|'geobufRawUrl'|'brotliJsonUrl'|'gzipJsonUrl'>,signal:AbortSignal):Promise<unknown>{
+export async function loadVillageMapData(catalogue:Pick<VillageMapCatalogue,'dataUrl'|'geobufUrl'|'geobufRawUrl'|'brotliJsonUrl'|'gzipJsonUrl'|'namedPlots'>,signal:AbortSignal):Promise<unknown>{
+ if(catalogue.namedPlots){
+  const {namedPlots,...canonical}=catalogue;
+  const [data,plots]=await Promise.all([loadVillageMapData(canonical,signal),loadVillageMapData({dataUrl:namedPlots.dataUrl},signal)]);
+  const collection=(value:unknown):value is {type:'FeatureCollection';features:unknown[]}=>!!value&&typeof value==='object'&&'type' in value&&value.type==='FeatureCollection'&&'features' in value&&Array.isArray(value.features);
+  if(!collection(data)||!collection(plots))throw new Error('Named plot download is invalid');
+  signal.throwIfAborted();
+  return {...data,features:[...data.features,...plots.features]};
+ }
  // Retain the existing conservative legacy path. Modern browsers decode
  // Content-Encoding: br at the HTTP layer; no JS Brotli decoder is needed.
  const compressedJsonUrl=typeof DecompressionStream==='function'?catalogue.brotliJsonUrl??catalogue.gzipJsonUrl:catalogue.gzipJsonUrl;

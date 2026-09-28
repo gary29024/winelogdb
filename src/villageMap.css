@@ -40,6 +40,16 @@
 .map-swatch-premier_cru{border-color:#785819!important;background:#c2b498}
 .map-swatch-village{border-color:#9c7629!important;background:none}
 .map-swatch-commune{border:1.5px dashed #7d899c!important;background:none}
+.map-swatch-named-plot{border:1.5px dashed #65533f!important;background:none}
+.map-swatch-parcel{border-color:#24646b!important;background:none}
+.map-swatch-parcel-selected{border:2.5px solid #136fba!important;background:none}
+.village-map-parcels .village-map-legend{padding:8px 0;border:0}
+.village-map-parcels{border-top:1px solid var(--line);margin-top:18px;padding-top:14px}
+.village-map-parcels label{display:block;margin:12px 0 6px;font-size:.76rem;color:var(--ink-5)}
+.village-map-parcels .village-map-parcel-toggle{display:flex;align-items:center;gap:8px;min-height:44px;font-weight:650}
+.village-map-parcel-toggle input{width:18px;height:18px;flex:none}
+.village-map-parcel-details{font-size:.76rem;line-height:1.5;overflow-wrap:anywhere}
+.village-map-parcel-details h4{margin-bottom:8px}.village-map-parcel-details ul{padding-left:18px}
 .map-swatch-selected{border-color:#c51f45!important;background:#da7e90}
 .map-swatch-selected.is-area{border-color:#9c7629!important;background:#c51f4533}
 .map-swatch-selected.is-approximate{border-style:dashed;background:#c51f4540}

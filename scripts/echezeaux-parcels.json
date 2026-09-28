@@ -1,0 +1,17 @@
+{
+  "commune": "21267",
+  "cadastreDate": "2026-06-01",
+  "cadastreUrl": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21267/cadastre-21267-parcelles.json.gz",
+  "cadastreSha256": "8216b73437a1f789e4b5547176a7f35b74aa0d49829383f922a7efe5be2155e1",
+  "rightsAsOf": "2025-01-01",
+  "rightsReleaseChecked": "2026-09-28",
+  "rightsUrl": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip",
+  "rightsMember": "PM_25_NB_210.csv",
+  "rightsMemberSha256": "30e273045f2bf4ec236aa88b3bb6a69d2cf2684ed91fdeb1f97a02630f440d17",
+  "rightsMemberCrc32": 3267936763,
+  "schemaUrl": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_des_personnes_morales_descriptif_2025_odt",
+  "schemaSha256": "0debcb321d92807b4d0919ff6857510b88353b0cc52b330fe4c001a3d932a9fd",
+  "parentFeatureIds": ["inao-denom-565", "inao-denom-645"],
+  "minimumOverlapM2": 1,
+  "domaineLinks": []
+}
