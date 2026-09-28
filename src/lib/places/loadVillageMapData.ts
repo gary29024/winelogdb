@@ -3,15 +3,22 @@ import Pbf from 'pbf';
 import type { VillageMapCatalogue } from './burgundyVillageMap';
 
 /** Loaded with the map dialog. Compact transport never simplifies a boundary. */
-export async function loadVillageMapData(catalogue:Pick<VillageMapCatalogue,'dataUrl'|'geobufUrl'|'geobufRawUrl'>,signal:AbortSignal):Promise<unknown>{
+export async function loadVillageMapData(catalogue:Pick<VillageMapCatalogue,'dataUrl'|'geobufUrl'|'geobufRawUrl'|'brotliJsonUrl'|'gzipJsonUrl'>,signal:AbortSignal):Promise<unknown>{
+ // Retain the existing conservative legacy path. Modern browsers decode
+ // Content-Encoding: br at the HTTP layer; no JS Brotli decoder is needed.
+ const compressedJsonUrl=typeof DecompressionStream==='function'?catalogue.brotliJsonUrl??catalogue.gzipJsonUrl:catalogue.gzipJsonUrl;
  const compactUrl=typeof DecompressionStream==='function'?catalogue.geobufUrl??catalogue.geobufRawUrl:catalogue.geobufRawUrl;
  // Older browsers use an uncompressed compact copy when the GeoJSON exceeds
  // the hosting asset limit; other maps retain their original GeoJSON path.
  // Network/decode failures use the dialog's retry, never a second, larger
  // download on a slow connection.
- const response=await fetch(compactUrl??catalogue.dataUrl,{signal});
+ const response=await fetch(compressedJsonUrl??compactUrl??catalogue.dataUrl,{signal});
  if(!response.ok)throw new Error('Boundary download failed');
- if(!compactUrl)return response.json();
+ if(compressedJsonUrl||!compactUrl){
+  const data=await response.json();
+  signal.throwIfAborted();
+  return data;
+ }
  let bytes=new Uint8Array(await response.arrayBuffer());
  // Static .gz assets normally arrive intact. If a host supplies Content-Encoding,
  // fetch may already have decompressed them; inspect bytes to avoid doing it twice.

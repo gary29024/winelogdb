@@ -15,7 +15,7 @@
     "binding": "ASSETS",
     "directory": "./dist",
     "not_found_handling": "single-page-application",
-    "run_worker_first": ["/api/*"]
+    "run_worker_first": ["/api/*", "/maps/lossless/*"]
   },
   // Journal semantic search and Producer Range fallback use Workers AI. Range
   // extraction prefers Z.AI GLM-4.7-Flash through AI Gateway BYOK, then the

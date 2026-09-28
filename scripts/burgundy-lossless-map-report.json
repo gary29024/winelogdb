@@ -1,0 +1,467 @@
+{
+  "node": "22.22.0",
+  "brotli": "1.1.0",
+  "gzip": "1.3.1-470d3a2",
+  "maps": [
+    {
+      "id": "aloxe-corton",
+      "name": "Aloxe-Corton",
+      "catalogue": "aloxeVillageMapCatalogue.json",
+      "dataUrl": "/maps/aloxe-corton.2026-09-21.geojson",
+      "sourceSha256": "c47c0bfccb1d0b5a490e06efcaa15e90764b3628a4271536ed7f84bfcae461b6",
+      "catalogueSha256": "7efd1954547e3a8b1cdf6fbfdb5dd69208c341ecd96261b5eb76eeba8dcfb963",
+      "sourceBytes": 649553,
+      "gzipEquivalentBytes": 235111
+    },
+    {
+      "id": "auxey-duresses",
+      "name": "Auxey-Duresses",
+      "catalogue": "auxeyVillageMapCatalogue.json",
+      "dataUrl": "/maps/auxey-duresses.2026-09-21.geojson",
+      "sourceSha256": "ac9d70be168959a6d6be55b1d9d43fef536b8dbd70200c8fd798cb1315c12c0b",
+      "catalogueSha256": "343fc12c5268dca1791be103b1fd59aace32de5036c4f63c649e3d67f020c0dd",
+      "sourceBytes": 365694,
+      "gzipEquivalentBytes": 126889
+    },
+    {
+      "id": "beaune",
+      "name": "Beaune",
+      "catalogue": "beauneVillageMapCatalogue.json",
+      "dataUrl": "/maps/beaune.2026-09-21.geojson",
+      "sourceSha256": "0e1d79c082e793d6e6191a22730144db8ae0c86ade4d80da2f1323f3d4fa001e",
+      "catalogueSha256": "eb8ec6b4700154b5e21dfd001265b0d2ae875bd2ecb2356f8fa84a3caa041628",
+      "sourceBytes": 860567,
+      "gzipEquivalentBytes": 319361
+    },
+    {
+      "id": "blagny",
+      "name": "Blagny",
+      "catalogue": "blagnyVillageMapCatalogue.json",
+      "dataUrl": "/maps/blagny.2026-09-21.geojson",
+      "sourceSha256": "137615402e4e101efd352c6858bc7daa95b39c243c0e4af3f4eee79c7288e102",
+      "catalogueSha256": "05a22888b6543aa51ff405cb1d634a503714d50fc51de36d37222945d2cf0d28",
+      "sourceBytes": 142043,
+      "gzipEquivalentBytes": 40744
+    },
+    {
+      "id": "bouzeron",
+      "name": "Bouzeron",
+      "catalogue": "bouzeronVillageMapCatalogue.json",
+      "dataUrl": "/maps/bouzeron.2026-09-21.geojson",
+      "sourceSha256": "0ff315c93b69a6d81a6c7e14bb407a5c416821fbe24bb78c71e8d62b1b1a9c99",
+      "catalogueSha256": "aaed3d59dc41ce861bde64fd984df1eea1eecc4f79889ad11da6ffa2801bda95",
+      "sourceBytes": 80077,
+      "gzipEquivalentBytes": 29996
+    },
+    {
+      "id": "gevrey-chambertin",
+      "name": "Gevrey-Chambertin",
+      "catalogue": "burgundyVillageMapCatalogue.json",
+      "dataUrl": "/maps/gevrey-chambertin.2026-09-21.geojson",
+      "sourceSha256": "658f005ae705d812ee77d2587538f9a0e8767f3f2a093c008dcf3277bbc898a4",
+      "catalogueSha256": "788641e3b70481beb727bcfcc17e5664fb0bc9e5791f79b562a865e14906beea",
+      "sourceBytes": 673052,
+      "gzipEquivalentBytes": 245474
+    },
+    {
+      "id": "chablis",
+      "name": "Chablis",
+      "catalogue": "chablisVillageMapCatalogue.json",
+      "dataUrl": "/maps/chablis.2026-09-21.geojson",
+      "sourceSha256": "1fd3f267b1e6bd3be7711eff180b5ddb7d20816a27cf538304caad0f4fe08aaf",
+      "catalogueSha256": "6affec238541b411d07fb74c30f9a859f5d7526ea85f6209b0d577b3ff4fcf4f",
+      "sourceBytes": 2390645,
+      "gzipEquivalentBytes": 886926,
+      "brotliJsonUrl": "/maps/lossless/chablis.2026-09-21.lossless-29d13c5661ee.geojson.br",
+      "compressedSha256": "29d13c5661eea04cadc5dde893267fb03df90575b7b64a8b6375a991093441db",
+      "brotliBytes": 497626,
+      "gzipJsonUrl": "/maps/lossless/chablis.2026-09-21.lossless-5519b55d8f1a.geojson.gz",
+      "gzipSha256": "5519b55d8f1af3dd003efbbf798a2a537f01730518ddaafe6a9420a63f417720"
+    },
+    {
+      "id": "chambolle-musigny",
+      "name": "Chambolle-Musigny",
+      "catalogue": "chambolleVillageMapCatalogue.json",
+      "dataUrl": "/maps/chambolle-musigny.2026-09-21.geojson",
+      "sourceSha256": "d92753abee9b775b57c935391b49c9659b0351293ce6146c22da53b6e21feed9",
+      "catalogueSha256": "ad043c69f963b9bf8dffeae257674665be988f1c032cbf5266852de8614be01b",
+      "sourceBytes": 328838,
+      "gzipEquivalentBytes": 118397
+    },
+    {
+      "id": "chassagne-montrachet",
+      "name": "Chassagne-Montrachet",
+      "catalogue": "chassagneVillageMapCatalogue.json",
+      "dataUrl": "/maps/chassagne-montrachet.2026-09-21.geojson",
+      "sourceSha256": "2632c7e482f59155c66de64c69db095397c7ce2c256931406fdacc5cfbf2191d",
+      "catalogueSha256": "bb08d20b67d68bbaa3b666d9d4313cc2bbf33577b230bcf7fac128954317e59f",
+      "sourceBytes": 742174,
+      "gzipEquivalentBytes": 263189
+    },
+    {
+      "id": "chorey-les-beaune",
+      "name": "Chorey-lès-Beaune",
+      "catalogue": "choreyVillageMapCatalogue.json",
+      "dataUrl": "/maps/chorey-les-beaune.2026-09-21.geojson",
+      "sourceSha256": "d4f086bd80ea59066c091971106da8ab70ac7da22b82efb59264f9f13d49d0fc",
+      "catalogueSha256": "5f1280bc5929fe898e18faf7414936eb67c14002bdb75002e0d58b8bcefa50e6",
+      "sourceBytes": 180288,
+      "gzipEquivalentBytes": 69353
+    },
+    {
+      "id": "cote-de-beaune",
+      "name": "Côte de Beaune",
+      "catalogue": "coteBeauneVillageMapCatalogue.json",
+      "dataUrl": "/maps/cote-de-beaune.2026-09-21.geojson",
+      "sourceSha256": "969a813585b575855153e3543ea48053433a2ab929a83d89fd6b40bfb8783ee9",
+      "catalogueSha256": "236af701c7e8a296528adef0cc65b7c07661644a39b3fe1c2e6e4d389150722e",
+      "sourceBytes": 319898,
+      "gzipEquivalentBytes": 120183
+    },
+    {
+      "id": "cote-de-beaune-villages",
+      "name": "Côte de Beaune-Villages",
+      "catalogue": "coteBeauneVillagesMapCatalogue.json",
+      "dataUrl": "/maps/cote-de-beaune-villages.2026-09-21.geojson",
+      "sourceSha256": "ff894c8ef307ce895bbb082f1daf3b4946dae3ebfb98b60e5aa021ced801d459",
+      "catalogueSha256": "c29200a504a9cd2ea6f121ff5660bec4337d413421771bf5737ee8b7e45734be",
+      "sourceBytes": 2000145,
+      "gzipEquivalentBytes": 745474,
+      "brotliJsonUrl": "/maps/lossless/cote-de-beaune-villages.2026-09-21.lossless-6d2676ca72a2.geojson.br",
+      "compressedSha256": "6d2676ca72a207a591d11b3e865548c3e504636af4cccb75ab98dedcfb4cb377",
+      "brotliBytes": 564905,
+      "gzipJsonUrl": "/maps/lossless/cote-de-beaune-villages.2026-09-21.lossless-7e6096958085.geojson.gz",
+      "gzipSha256": "7e60969580858f55fd29b78c91be4f4255f1dfe7e227e8dac69fb9600097af00"
+    },
+    {
+      "id": "cote-de-nuits-villages",
+      "name": "Côte de Nuits-Villages",
+      "catalogue": "coteNuitsVillageMapCatalogue.json",
+      "dataUrl": "/maps/cote-de-nuits-villages.2026-09-21.geojson",
+      "sourceSha256": "8a36fe3c13a4cd3096db6e12e446dab8fac43470a9006302390f3c81324413a9",
+      "catalogueSha256": "f675e58f3dfd0d7b1dbbea9247cb8b4c86008341329fd6ccf0afe48de15ea0a9",
+      "sourceBytes": 280125,
+      "gzipEquivalentBytes": 101388
+    },
+    {
+      "id": "fixin",
+      "name": "Fixin",
+      "catalogue": "fixinVillageMapCatalogue.json",
+      "dataUrl": "/maps/fixin.2026-09-21.geojson",
+      "sourceSha256": "930f14ba38920a2d1bb613e118a1640bfa3cd9aa8a945d3a83e543a451079028",
+      "catalogueSha256": "6a3284ef62765784d96233f5a303324e942fe6031ff6b100b5529862c03ed552",
+      "sourceBytes": 174833,
+      "gzipEquivalentBytes": 58707
+    },
+    {
+      "id": "givry",
+      "name": "Givry",
+      "catalogue": "givryVillageMapCatalogue.json",
+      "dataUrl": "/maps/givry.2026-09-21.geojson",
+      "sourceSha256": "41397b1511bcc90156f5fe986b3464dca265a8d1f17637b7efe85caebef90576",
+      "catalogueSha256": "adefe884cdbacf76a613d6dd9afc2adba708d2a47e80fe35710270c3efacc1bf",
+      "sourceBytes": 740101,
+      "gzipEquivalentBytes": 265703
+    },
+    {
+      "id": "irancy",
+      "name": "Irancy",
+      "catalogue": "irancyVillageMapCatalogue.json",
+      "dataUrl": "/maps/irancy.2026-09-21.geojson",
+      "sourceSha256": "2ebdb267c45ba4532aa6b56740a4d5f70dbe8eb52889b68cf03cb394c2b8462f",
+      "catalogueSha256": "0e4f9eb465aeacaca992a9dc7efd5a56488e2aede47fb8b1d173ca09d353ea52",
+      "sourceBytes": 322185,
+      "gzipEquivalentBytes": 119655
+    },
+    {
+      "id": "ladoix",
+      "name": "Ladoix",
+      "catalogue": "ladoixVillageMapCatalogue.json",
+      "dataUrl": "/maps/ladoix.2026-09-21.geojson",
+      "sourceSha256": "91bdf98f6339f7201209500e3daa0a03fdf259ac362f1a9fddd2bb3a6c7639a1",
+      "catalogueSha256": "fc367ce397af49e9fa0b12652eac7e8a5678c5753358fc4796028ca2b3771592",
+      "sourceBytes": 611165,
+      "gzipEquivalentBytes": 219951
+    },
+    {
+      "id": "maranges",
+      "name": "Maranges",
+      "catalogue": "marangesVillageMapCatalogue.json",
+      "dataUrl": "/maps/maranges.2026-09-21.geojson",
+      "sourceSha256": "2d428b791a4642d6652a7688d699a969b61770b32ed3f16d742b85888198ccb6",
+      "catalogueSha256": "310515a0ec0e17c789c68483305918c77fbe485e69361e50685be3ce6bc630de",
+      "sourceBytes": 644039,
+      "gzipEquivalentBytes": 234401
+    },
+    {
+      "id": "marsannay",
+      "name": "Marsannay",
+      "catalogue": "marsannayVillageMapCatalogue.json",
+      "dataUrl": "/maps/marsannay.2026-09-21.geojson",
+      "sourceSha256": "71b44fdc00383a27471f31b955c9659d20981d734d49d3d466740b6ac11fd011",
+      "catalogueSha256": "e8508d2276e6b2d3c92da24df7e9150612db18912b36ee8114606454f702e510",
+      "sourceBytes": 872497,
+      "gzipEquivalentBytes": 329123
+    },
+    {
+      "id": "mercurey",
+      "name": "Mercurey",
+      "catalogue": "mercureyVillageMapCatalogue.json",
+      "dataUrl": "/maps/mercurey.2026-09-21.geojson",
+      "sourceSha256": "d1915c3ba322a4777968b0157fad0a32c91da386d476e376683f2586f974632b",
+      "catalogueSha256": "c3e8440295781165d726fca31092b4d644b5da1ecacb99e76e25e98c968b65cb",
+      "sourceBytes": 518934,
+      "gzipEquivalentBytes": 192319
+    },
+    {
+      "id": "meursault",
+      "name": "Meursault",
+      "catalogue": "meursaultVillageMapCatalogue.json",
+      "dataUrl": "/maps/meursault.2026-09-21.geojson",
+      "sourceSha256": "f4fb92bccc5cbc7baec966d3b1c27a900ce1facf43f5f0f79225d3a0c311dd01",
+      "catalogueSha256": "77c5b98603863df731aca7db7884d2d130e4b0b29bf650849e397450e3e770e1",
+      "sourceBytes": 991883,
+      "gzipEquivalentBytes": 373359
+    },
+    {
+      "id": "montagny",
+      "name": "Montagny",
+      "catalogue": "montagnyVillageMapCatalogue.json",
+      "dataUrl": "/maps/montagny.2026-09-21.geojson",
+      "sourceSha256": "85655f1c1b9a02863fd1c71c1cb2321e080156005cfbb305ed4295f28b8c8e77",
+      "catalogueSha256": "7ff25b4811fd821f464cb4a45ecf5c31d872f42edab01a79d30f8ee81bdd601d",
+      "sourceBytes": 786748,
+      "gzipEquivalentBytes": 286452
+    },
+    {
+      "id": "monthelie",
+      "name": "Monthélie",
+      "catalogue": "monthelieVillageMapCatalogue.json",
+      "dataUrl": "/maps/monthelie.2026-09-21.geojson",
+      "sourceSha256": "d9974f0bc6629f40d0cb94c56b1cfb891ab89f31d193ce1304b54440f5b6709d",
+      "catalogueSha256": "70996be93c018484707ea8b1bd7442781a163ee87fe549f4c1eefe83ebfee95e",
+      "sourceBytes": 214327,
+      "gzipEquivalentBytes": 67561
+    },
+    {
+      "id": "morey-saint-denis",
+      "name": "Morey-Saint-Denis",
+      "catalogue": "moreyVillageMapCatalogue.json",
+      "dataUrl": "/maps/morey-saint-denis.2026-09-21.geojson",
+      "sourceSha256": "1c35df97d71e231b9baa0ff07c5763293eb71e1976a425806ac5968fe8f84325",
+      "catalogueSha256": "86d0e996cce9df607504c3b8800d2c999d98f966990601ce6804be35b7172d89",
+      "sourceBytes": 290020,
+      "gzipEquivalentBytes": 102379
+    },
+    {
+      "id": "nuits-saint-georges",
+      "name": "Nuits-Saint-Georges",
+      "catalogue": "nuitsVillageMapCatalogue.json",
+      "dataUrl": "/maps/nuits-saint-georges.2026-09-21.geojson",
+      "sourceSha256": "bd7549e0de13a5d33bb4beb2df0e7b539fb74d87ad9623afca946b7119eb39a1",
+      "catalogueSha256": "6925986d4a039e4dcbe02125e5aeebec59c5c893b357fd3d057f91078a497847",
+      "sourceBytes": 449705,
+      "gzipEquivalentBytes": 159063
+    },
+    {
+      "id": "pernand-vergelesses",
+      "name": "Pernand-Vergelesses",
+      "catalogue": "pernandVillageMapCatalogue.json",
+      "dataUrl": "/maps/pernand-vergelesses.2026-09-21.geojson",
+      "sourceSha256": "d9cf213f41c4da990369ec31c2ba761a5d7b031230d5c3076fc0a1b0a7e47158",
+      "catalogueSha256": "f4d22af5ec4fff780f2f22c45d9b1525fd1e6f4076df525e6f76c52cae8dfe02",
+      "sourceBytes": 527389,
+      "gzipEquivalentBytes": 185444
+    },
+    {
+      "id": "petit-chablis",
+      "name": "Petit Chablis",
+      "catalogue": "petitChablisVillageMapCatalogue.json",
+      "dataUrl": "/maps/petit-chablis.2026-09-21.geojson",
+      "sourceSha256": "e1065d9d3d16ed3dadbe7cf44e5253d2fc678564f12265a152dab1700af58daa",
+      "catalogueSha256": "8c8326d7ed849085de33a8738d1004f71cce5545f205e1131eae020bf2099e98",
+      "sourceBytes": 1791410,
+      "gzipEquivalentBytes": 668482,
+      "brotliJsonUrl": "/maps/lossless/petit-chablis.2026-09-21.lossless-8cb55634396f.geojson.br",
+      "compressedSha256": "8cb55634396ff986b0c34e5d658e1cb87298b3b0f869a67746b2a8add10508e4",
+      "brotliBytes": 495765,
+      "gzipJsonUrl": "/maps/lossless/petit-chablis.2026-09-21.lossless-f8067a2adf46.geojson.gz",
+      "gzipSha256": "f8067a2adf462c96cd79f6fa107178e6b232c1360a87796023aa477d8414b0ed"
+    },
+    {
+      "id": "pommard",
+      "name": "Pommard",
+      "catalogue": "pommardVillageMapCatalogue.json",
+      "dataUrl": "/maps/pommard.2026-09-21.geojson",
+      "sourceSha256": "18a7a80a307e7cfabedaa14af209c5af761eba4c4a9ab0f16f170927ab27b4de",
+      "catalogueSha256": "ddadb19eb244c1fddf742e7beb6ffd8f64b8b81b920658b53b632c9aa3b13681",
+      "sourceBytes": 483385,
+      "gzipEquivalentBytes": 177409
+    },
+    {
+      "id": "pouilly-fuisse",
+      "name": "Pouilly-Fuissé",
+      "catalogue": "pouillyFuisseVillageMapCatalogue.json",
+      "dataUrl": "/maps/pouilly-fuisse.2026-09-21.geojson",
+      "sourceSha256": "ca250e0a756d1242fec97a8fb93a0af92d02b75a887d6330a5b56066703248c2",
+      "catalogueSha256": "9d331aea98bc254dea01f5eb3e5d4609662a5c23e7dcae14e49683ebdc4589e4",
+      "sourceBytes": 1430315,
+      "gzipEquivalentBytes": 539081,
+      "brotliJsonUrl": "/maps/lossless/pouilly-fuisse.2026-09-21.lossless-fbb08177b000.geojson.br",
+      "compressedSha256": "fbb08177b000d0d231a569a48d2e7841f78e776bffc9601045eb0792adac30cb",
+      "brotliBytes": 337462,
+      "gzipJsonUrl": "/maps/lossless/pouilly-fuisse.2026-09-21.lossless-72003feb03cf.geojson.gz",
+      "gzipSha256": "72003feb03cf1d0e43c81dc6aa3135468a4a9c62ffe57afa629361a0e04edb7e"
+    },
+    {
+      "id": "pouilly-loche",
+      "name": "Pouilly-Loché",
+      "catalogue": "pouillyLocheVillageMapCatalogue.json",
+      "dataUrl": "/maps/pouilly-loche.2026-09-21.geojson",
+      "sourceSha256": "593aaf1b23a62e4883d7246807a0e61f7b66603186e5b4f1a487a21020475275",
+      "catalogueSha256": "f1ff430263e9e2d47e930dd2751a55228644901d6918e21417fd797157dbe1b6",
+      "sourceBytes": 145530,
+      "gzipEquivalentBytes": 46095
+    },
+    {
+      "id": "pouilly-vinzelles",
+      "name": "Pouilly-Vinzelles",
+      "catalogue": "pouillyVinzellesVillageMapCatalogue.json",
+      "dataUrl": "/maps/pouilly-vinzelles.2026-09-21.geojson",
+      "sourceSha256": "a6e5e59bad890ffcf35149a6390f22ecda53d97e7f48d68d566877f1fcf5caf0",
+      "catalogueSha256": "01b183862d3f9193a154b6c2f80b48273ef56ceb85acf5ccf2f1f9bc33a45f9f",
+      "sourceBytes": 59340,
+      "gzipEquivalentBytes": 15595
+    },
+    {
+      "id": "puligny-montrachet",
+      "name": "Puligny-Montrachet",
+      "catalogue": "pulignyVillageMapCatalogue.json",
+      "dataUrl": "/maps/puligny-montrachet.2026-09-21.geojson",
+      "sourceSha256": "0051a97b96cdb8c6c5d694a390c1d92bce65c6d1e20277b53739903b57ebe868",
+      "catalogueSha256": "79f62a752ec691fe74b992c665283f5b15498302f0a0e9d1c9cdd0dd3383ad29",
+      "sourceBytes": 648762,
+      "gzipEquivalentBytes": 237317
+    },
+    {
+      "id": "rully",
+      "name": "Rully",
+      "catalogue": "rullyVillageMapCatalogue.json",
+      "dataUrl": "/maps/rully.2026-09-21.geojson",
+      "sourceSha256": "0399e430056c1d037acf02a5ce73d2835c05656a4600ece710bf867d830068d1",
+      "catalogueSha256": "6e41e638cbabad67bfb5480422aadbb44f75d5884e2b9c61a012e71b5c995e6e",
+      "sourceBytes": 334684,
+      "gzipEquivalentBytes": 124351
+    },
+    {
+      "id": "saint-aubin",
+      "name": "Saint-Aubin",
+      "catalogue": "saintAubinVillageMapCatalogue.json",
+      "dataUrl": "/maps/saint-aubin.2026-09-21.geojson",
+      "sourceSha256": "313bd25d1669d3c9c65f40a7e779abc22bab5da5b927d0e03a9713c22386a25d",
+      "catalogueSha256": "859b6ec45eb5c0734a0b940b4d2cf1b55d9325afb1d2e60d430d4b8d160f5e8f",
+      "sourceBytes": 764178,
+      "gzipEquivalentBytes": 277590
+    },
+    {
+      "id": "saint-bris",
+      "name": "Saint-Bris",
+      "catalogue": "saintBrisVillageMapCatalogue.json",
+      "dataUrl": "/maps/saint-bris.2026-09-21.geojson",
+      "sourceSha256": "e1db76283b2489b07f003c87650f39ed1102fdf19b9ecd837580261bc96020f3",
+      "catalogueSha256": "79c29101b864ba1f253e5305358446b11d92e2c5fea3f331d66fde382a826d01",
+      "sourceBytes": 257088,
+      "gzipEquivalentBytes": 94432
+    },
+    {
+      "id": "saint-romain",
+      "name": "Saint-Romain",
+      "catalogue": "saintRomainVillageMapCatalogue.json",
+      "dataUrl": "/maps/saint-romain.2026-09-21.geojson",
+      "sourceSha256": "9de6762312fcc5e39a62339bcacf84baaf2d3f89001e9b35c34d73bab277927e",
+      "catalogueSha256": "a13e19c0e0eba2dc4b2ec80db8a4ffaae01d9f5cc2be562a0d39e76ad02a1bff",
+      "sourceBytes": 357954,
+      "gzipEquivalentBytes": 134516
+    },
+    {
+      "id": "saint-veran",
+      "name": "Saint-Véran",
+      "catalogue": "saintVeranVillageMapCatalogue.json",
+      "dataUrl": "/maps/saint-veran.2026-09-21.geojson",
+      "sourceSha256": "cc5b3b40a8ec1fc0a42ccaeba67560eec11e7c3a5d230bd62f7fae8e4f086634",
+      "catalogueSha256": "d5a84fca570f34aa5929fe1a90a05288eaf2a45fa46b6e61023635016769e125",
+      "sourceBytes": 601909,
+      "gzipEquivalentBytes": 221607
+    },
+    {
+      "id": "santenay",
+      "name": "Santenay",
+      "catalogue": "santenayVillageMapCatalogue.json",
+      "dataUrl": "/maps/santenay.2026-09-21.geojson",
+      "sourceSha256": "4ba909759443cc299024df80559c9a3d938c1b65ae891eaaeb6acebee5c5a003",
+      "catalogueSha256": "977222ab25e6cc95357c477d8e0a35cc5508b9af60445f4faf30e9e046a04bd2",
+      "sourceBytes": 966834,
+      "gzipEquivalentBytes": 362157
+    },
+    {
+      "id": "savigny-les-beaune",
+      "name": "Savigny-lès-Beaune",
+      "catalogue": "savignyVillageMapCatalogue.json",
+      "dataUrl": "/maps/savigny-les-beaune.2026-09-21.geojson",
+      "sourceSha256": "13ed9bd4b9e1859dcc2db947da179ec5902c94592ef8dbd4ba4cea8938c369da",
+      "catalogueSha256": "dcaeafbedc55aa7762a37d61b14c1d82870986a065c9e6b788e33bf2a91e6a80",
+      "sourceBytes": 719478,
+      "gzipEquivalentBytes": 268553
+    },
+    {
+      "id": "vezelay",
+      "name": "Vézelay",
+      "catalogue": "vezelayVillageMapCatalogue.json",
+      "dataUrl": "/maps/vezelay.2026-09-21.geojson",
+      "sourceSha256": "2b8f6f3d80d38993692844c98f691c8b76e12525e2182c7cfc57afa780cf5911",
+      "catalogueSha256": "263362f105fbe8cf0c5ef51201e24af7cd9ff27993f76d14206f20bd140bc2de",
+      "sourceBytes": 176295,
+      "gzipEquivalentBytes": 63367
+    },
+    {
+      "id": "vire-clesse",
+      "name": "Viré-Clessé",
+      "catalogue": "vireClesseVillageMapCatalogue.json",
+      "dataUrl": "/maps/vire-clesse.2026-09-21.geojson",
+      "sourceSha256": "0e895d2540fb5bb7d45914943afa20ec0234b96352a2fb0e31b4446233518b64",
+      "catalogueSha256": "c78b091ec548fc8673b5509a66ef1e75b1ff7dba85ceda545e9ed46c318e0281",
+      "sourceBytes": 718547,
+      "gzipEquivalentBytes": 268272
+    },
+    {
+      "id": "volnay",
+      "name": "Volnay",
+      "catalogue": "volnayVillageMapCatalogue.json",
+      "dataUrl": "/maps/volnay.2026-09-21.geojson",
+      "sourceSha256": "d654cc111cb500a5609a8c3537e37273f7d590c8444bcc2585124f11263f39dd",
+      "catalogueSha256": "3f9fb3a5e55cfb14da60715c24d89c2295b3783ff7059af9a88d1bf6ef0ef74d",
+      "sourceBytes": 481995,
+      "gzipEquivalentBytes": 173063
+    },
+    {
+      "id": "vosne-romanee",
+      "name": "Vosne-Romanée",
+      "catalogue": "vosneVillageMapCatalogue.json",
+      "dataUrl": "/maps/vosne-romanee.2026-09-21.geojson",
+      "sourceSha256": "ffc8dc992ed4415f9104adcff45a71d6b95284f996d36b66a08f24b0038db879",
+      "catalogueSha256": "2149623c3bd32b1bec02735d4eb44d03d8efe58186dba39934b0d49df32a2ff8",
+      "sourceBytes": 395810,
+      "gzipEquivalentBytes": 136522
+    },
+    {
+      "id": "vougeot",
+      "name": "Vougeot",
+      "catalogue": "vougeotVillageMapCatalogue.json",
+      "dataUrl": "/maps/vougeot.2026-09-21.geojson",
+      "sourceSha256": "452bfc2ca94f0dd3a18c1058686d0ef4dceaa9339c3728f620e0022ff4a899fb",
+      "catalogueSha256": "762cc55f7f50190cfa1972bd823f6320176d97ddb943e9d972e6e6639a2243c6",
+      "sourceBytes": 75062,
+      "gzipEquivalentBytes": 16530
+    }
+  ]
+}

@@ -2,6 +2,8 @@ import { spawn } from 'node:child_process';
 import { once } from 'node:events';
 import { readFileSync } from 'node:fs';
 import process from 'node:process';
+import {createHash} from 'node:crypto';
+import {request as rawRequest} from 'undici';
 import { setTimeout as sleep } from 'node:timers/promises';
 import { fileURLToPath } from 'node:url';
 
@@ -33,6 +35,7 @@ function stripJsonc(source){
 function assertWorkerFirstConfig(){
   const config=JSON.parse(stripJsonc(readFileSync('wrangler.jsonc','utf8')));
   const runWorkerFirst=config.assets?.run_worker_first;
+  if(!Array.isArray(runWorkerFirst)||!runWorkerFirst.includes('/maps/lossless/*'))throw new Error('Lossless maps must run through the manual-encoding Worker handler.');
   if(!Array.isArray(runWorkerFirst)||!runWorkerFirst.includes('/api/*')){
     throw new Error('wrangler.jsonc must keep assets.run_worker_first containing /api/* so deployed SPA assets cannot intercept API navigation.');
   }
@@ -151,6 +154,34 @@ try{
   expect(login.status===200,`SPA /login: expected 200, got ${login.status}`);
   expect((login.headers.get('content-type')||'').includes('text/html'),'SPA /login did not return HTML');
 
+  // Precompressed GeoJSON must be decoded by the real HTTP stack. A missing
+  // Content-Encoding header would pass a file-size check but break every map.
+  const mapReport=JSON.parse(readFileSync('scripts/burgundy-lossless-map-report.json','utf8'));
+  for(const map of mapReport.maps.filter(map=>map.brotliJsonUrl)){
+    for(const [url,encoding] of [[map.brotliJsonUrl,'br'],[map.gzipJsonUrl,'gzip']]){
+      const response=await request(url,{headers:{'Accept-Encoding':encoding}});
+      expect(response.status===200,`${map.id}: compressed asset unavailable`);
+      expect(response.headers.get('content-encoding')===encoding,`${map.id}: missing ${encoding} HTTP encoding`);
+      expect(response.headers.get('content-type')?.includes('application/geo+json'),`${map.id}: incorrect GeoJSON content type`);
+      expect(response.headers.get('cache-control')?.includes('immutable'),`${map.id}: fingerprinted asset is not immutable`);
+      const bytes=new Uint8Array(await response.arrayBuffer());
+      // undici.request retains wire bytes, unlike fetch's automatic decode.
+      const wire=await rawRequest(`${origin}${url}`,{headers:{'accept-encoding':encoding},headersTimeout:5000,bodyTimeout:5000});
+      const encoded=new Uint8Array(await wire.body.arrayBuffer());
+      expect(wire.statusCode===200&&encoded.length===(encoding==='br'?map.brotliBytes:map.gzipEquivalentBytes),`${map.id}: unexpected compressed transfer size`);
+      expect(createHash('sha256').update(encoded).digest('hex')===(encoding==='br'?map.compressedSha256:map.gzipSha256),`${map.id}: runtime changed the compressed bytes`);
+      expect(createHash('sha256').update(bytes).digest('hex')===map.sourceSha256,`${map.id}: HTTP decoding changed the canonical GeoJSON (${bytes.length} bytes, prefix ${Array.from(bytes.slice(0,12))})`);
+    }
+  }
+
+  const mapUrl=mapReport.maps.find(map=>map.brotliJsonUrl).brotliJsonUrl;
+  const head=await request(mapUrl,{method:'HEAD',headers:{'Accept-Encoding':'br'}});
+  expect(head.status===200&&head.headers.get('content-encoding')==='br','Compressed map HEAD failed');
+  expect(Boolean(head.headers.get('etag')),'Compressed map has no ETag');
+  const cached=await request(mapUrl,{headers:{'Accept-Encoding':'br','If-None-Match':head.headers.get('etag')}});
+  expect(cached.status===304,'Compressed map conditional revalidation failed');
+  const missing=await request('/maps/lossless/missing.geojson.br');
+  expect(missing.status===404&&await missing.text()==='','Unknown lossless map fell through to the SPA');
   globalThis.console.log('Worker runtime smoke passed.');
 }catch(error){
   exitCode=1;

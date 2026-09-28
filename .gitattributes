@@ -1,3 +1,5 @@
 # Geobuf is binary even when its opening bytes happen to look like text.
 public/maps/*.pbf binary
 public/maps/*.pbf.gz binary
+public/maps/lossless/*.geojson.br binary
+public/maps/lossless/*.geojson.gz binary

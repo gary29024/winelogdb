@@ -2,6 +2,7 @@ import { readdirSync,readFileSync } from 'node:fs';
 import { describe,expect,it } from 'vitest';
 import { clickOrder,countLabel,joinPlaces,snapshotLabel,umbrellaNote,burgundyVillageMapTarget,type VillageMapCatalogue } from '../../src/lib/places/burgundyVillageMap';
 import catalogue from '../../src/lib/places/burgundyVillageMapCatalogue.json';
+import losslessMaps from '../../src/lib/places/burgundyLosslessMapRegistry.json';
 import morey from '../../src/lib/places/moreyVillageMapCatalogue.json';
 import chambolle from '../../src/lib/places/chambolleVillageMapCatalogue.json';
 import vosne from '../../src/lib/places/vosneVillageMapCatalogue.json';
@@ -241,7 +242,7 @@ describe('village registry',()=>{
   expect(new Set(registry.targets.map(t=>t.matchId)).size).toBe(778);
   for(const village of registry.villages){
    const c=await loadVillageMapCatalogue(village.id);
-   expect(catalogues.find(expected=>expected.id===village.id)).toEqual(c);
+   expect(c).toEqual({...catalogues.find(expected=>expected.id===village.id),...losslessMaps[village.id as keyof typeof losslessMaps]});
    for(const target of registry.targets.filter(t=>t.villageId===village.id)){
     expect(c.features.find(f=>f.matchId===target.matchId)).toMatchObject({id:target.featureId,name:target.name,kind:target.scope});
    }
