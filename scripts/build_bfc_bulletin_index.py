@@ -28,6 +28,7 @@ OUT = ROOT / 'docs/research/bfc-bulletins'
 BULLETIN = re.compile(r'recueil-bfc-(\d{4})-(\d{3})')
 ACT = re.compile(r'BFC-(\d{4})-(\d{2})-(\d{2})-\d{5}')
 KINDS = [  # First match wins; derived from the contents title only.
+    ('suspension', re.compile(r'\bsusp', re.I)),
     ('implicit-authorisation', re.compile(r'implicite|tacite', re.I)),
     ('partial-decision', re.compile(r'partielle|refus et autoris', re.I)),
     ('refusal', re.compile(r'refus', re.I)),
@@ -91,7 +92,12 @@ def build(cache_dir, communes):
                          'pages': record['pages'], 'contentsEntries': record['tocEntries'],
                          'coteDorNotices': len(record['coteDorEntries']),
                          'status': 'full-ocr-no-contents' if record['fallbackFullScan'] else 'contents-read'})
-        for entry in record['coteDorEntries']:
+        entries = record['coteDorEntries']
+        if record['fallbackFullScan']:
+            # No readable contents list: keep the whole bulletin as one notice so its text stays searchable.
+            entries = [{'section': 'Whole bulletin (no readable contents list)', 'title': '', 'page': 1,
+                        'pages': record['pages'] - 2}]
+        for entry in entries:
             act = ACT.search(entry['title'])
             last = min(record['pages'], entry['page'] + entry['pages'] + 1)
             pages = {p: record['text'][str(p)] for p in range(entry['page'], last + 1) if str(p) in record['text']}
@@ -109,7 +115,8 @@ def build(cache_dir, communes):
             texts.append({'id': notice_id, 'pages': {str(p): t for p, t in pages.items()}})
     coverage.sort(key=lambda c: c['bulletin'])
     notices.sort(key=lambda n: (n['bulletin'], n['firstPage']))
-    texts.sort(key=lambda t: t['id'])
+    order = {n['id']: i for i, n in enumerate(notices)}
+    texts.sort(key=lambda t: order[t['id']])  # same order as notices.json
     require(len({n['id'] for n in notices}) == len(notices), 'Duplicate notice id')
     return coverage, notices, texts
 

@@ -5,7 +5,8 @@
   "authorised": "Explicit authorisation decision; actual operation still needs confirming.",
   "refused": "Explicit refusal.",
   "implicit-authorisation": "Published implicit authorisation after the instruction period.",
-  "not-subject-to-authorisation": "Administration states no prior authorisation is needed; the applicant still needs a right of use."
+  "not-subject-to-authorisation": "Administration states no prior authorisation is needed; the applicant still needs a right of use.",
+  "application-suspended": "Instruction of the application suspended (for example for excessive enlargement); no authorisation during the suspension."
  },
  "parcels": [
   {
@@ -199,6 +200,121 @@
    "areaHa": null,
    "reviewMethod": "Visual check of the page image at 300 dpi",
    "reviewedAt": "2026-09-28"
+  },
+  {
+   "noticeId": "bfc-2026-067:p27",
+   "actId": "BFC-2026-04-07-00015",
+   "documentDate": "2026-04-07",
+   "applicant": "SCEA DOMAINE DU COMTE LIGER-BELAIR (Vosne-Romanée)",
+   "previousOperator": null,
+   "communeCode": "21267",
+   "status": "application-suspended",
+   "areaHa": null,
+   "reviewMethod": "Visual check of the page image at 200 dpi",
+   "reviewedAt": "2026-09-28",
+   "printedReference": "D673",
+   "reference": "D0673",
+   "note": "Order 2026-739, suspended for eight months from publication on 29 April 2026. Owners named: SAS Bouchon Pourpre, GFA Domaine Bouchy et Amis, SCEA Nathalie Pacareau Lamarche, Mme Geneviève Lamarche; the order does not assign owners to parcels."
+  },
+  {
+   "noticeId": "bfc-2026-067:p27",
+   "actId": "BFC-2026-04-07-00015",
+   "documentDate": "2026-04-07",
+   "applicant": "SCEA DOMAINE DU COMTE LIGER-BELAIR (Vosne-Romanée)",
+   "previousOperator": null,
+   "communeCode": "21267",
+   "status": "application-suspended",
+   "areaHa": null,
+   "reviewMethod": "Visual check of the page image at 200 dpi",
+   "reviewedAt": "2026-09-28",
+   "printedReference": "D628",
+   "reference": "D0628"
+  },
+  {
+   "noticeId": "bfc-2026-067:p27",
+   "actId": "BFC-2026-04-07-00015",
+   "documentDate": "2026-04-07",
+   "applicant": "SCEA DOMAINE DU COMTE LIGER-BELAIR (Vosne-Romanée)",
+   "previousOperator": null,
+   "communeCode": "21267",
+   "status": "application-suspended",
+   "areaHa": null,
+   "reviewMethod": "Visual check of the page image at 200 dpi",
+   "reviewedAt": "2026-09-28",
+   "printedReference": "D764",
+   "reference": "D0764"
+  },
+  {
+   "noticeId": "bfc-2026-067:p27",
+   "actId": "BFC-2026-04-07-00015",
+   "documentDate": "2026-04-07",
+   "applicant": "SCEA DOMAINE DU COMTE LIGER-BELAIR (Vosne-Romanée)",
+   "previousOperator": null,
+   "communeCode": "21267",
+   "status": "application-suspended",
+   "areaHa": null,
+   "reviewMethod": "Visual check of the page image at 200 dpi",
+   "reviewedAt": "2026-09-28",
+   "printedReference": "D765",
+   "reference": "D0765"
+  },
+  {
+   "noticeId": "bfc-2026-067:p27",
+   "actId": "BFC-2026-04-07-00015",
+   "documentDate": "2026-04-07",
+   "applicant": "SCEA DOMAINE DU COMTE LIGER-BELAIR (Vosne-Romanée)",
+   "previousOperator": null,
+   "communeCode": "21267",
+   "status": "application-suspended",
+   "areaHa": null,
+   "reviewMethod": "Visual check of the page image at 200 dpi",
+   "reviewedAt": "2026-09-28",
+   "printedReference": "D766",
+   "reference": "D0766"
+  },
+  {
+   "noticeId": "bfc-2026-067:p27",
+   "actId": "BFC-2026-04-07-00015",
+   "documentDate": "2026-04-07",
+   "applicant": "SCEA DOMAINE DU COMTE LIGER-BELAIR (Vosne-Romanée)",
+   "previousOperator": null,
+   "communeCode": "21267",
+   "status": "application-suspended",
+   "areaHa": null,
+   "reviewMethod": "Visual check of the page image at 200 dpi",
+   "reviewedAt": "2026-09-28",
+   "printedReference": "D767",
+   "reference": "D0767"
+  },
+  {
+   "noticeId": "bfc-2026-067:p27",
+   "actId": "BFC-2026-04-07-00015",
+   "documentDate": "2026-04-07",
+   "applicant": "SCEA DOMAINE DU COMTE LIGER-BELAIR (Vosne-Romanée)",
+   "previousOperator": null,
+   "communeCode": "21267",
+   "status": "application-suspended",
+   "areaHa": null,
+   "reviewMethod": "Visual check of the page image at 200 dpi",
+   "reviewedAt": "2026-09-28",
+   "printedReference": "D615",
+   "reference": "D0615",
+   "note": "Grands-Échezeaux."
+  },
+  {
+   "noticeId": "bfc-2026-067:p27",
+   "actId": "BFC-2026-04-07-00015",
+   "documentDate": "2026-04-07",
+   "applicant": "SCEA DOMAINE DU COMTE LIGER-BELAIR (Vosne-Romanée)",
+   "previousOperator": null,
+   "communeCode": "21267",
+   "status": "application-suspended",
+   "areaHa": null,
+   "reviewMethod": "Visual check of the page image at 200 dpi",
+   "reviewedAt": "2026-09-28",
+   "printedReference": "D616",
+   "reference": "D0616",
+   "note": "Grands-Échezeaux."
   }
  ]
 }

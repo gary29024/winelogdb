@@ -29,6 +29,7 @@ class TitleTests(unittest.TestCase):
         self.assertEqual(kind('BFC-2022-07-04-00011 - 220704 21 partielle SAS DOMAINE RC LES GRANDES VIGNES-1'),
                          'partial-decision')
         self.assertEqual(kind('BFC-2022-11-18-00065 - 221118 21 ns COUDRAY JJACQUES'), 'not-subject-to-authorisation')
+        self.assertEqual(kind('BFC-2026-04-07-00015 - AP susp instruc'), 'suspension')
         self.assertEqual(kind('BFC-2023-01-12-00009 - Autorisation IMPLICITE d\'exploiter - EARL X'), 'implicit-authorisation')
 
     def test_applicant_strips_filing_codes(self):

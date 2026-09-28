@@ -13,6 +13,10 @@ A reusable index of every Côte-d'Or DDT notice in the Bourgogne-Franche-Comté 
 | `reviewed-parcels.json` | Parcel references read from a notice **and checked against the page image** | Hand, validated by the builder |
 | `cote-dor-communes.json` | INSEE code → DGFiP commune name, used to detect commune mentions | Generated once from the pinned DGFiP 2025 file |
 
+## Contents
+
+All 1,277 regional bulletins for 2019–2026 (to the end of September 2026) were checked; none failed to download. 268 contain Côte-d'Or DDT notices, 1,411 in total, of which about 1,120 concern farm structures. Farm-structure notices appear regularly only from 2021; earlier ones were probably published in the Côte-d'Or departmental bulletins, which are not included. One bulletin (bfc-2019-052) has no readable contents list; it was read in full and is kept as a single whole-bulletin entry.
+
 ## How it was built
 
 Each bulletin starts with a machine-readable contents list naming the issuing service, the act and its page. [`scripts/scan_bfc_bulletins.py`](../../../scripts/scan_bfc_bulletins.py) downloads each PDF, reads the contents list, and reads only the acts listed under the Côte-d'Or DDT (OCR at 110 dpi for scanned pages). A bulletin without a readable contents list is read in full. [`scripts/build_bfc_bulletin_index.py`](../../../scripts/build_bfc_bulletin_index.py) turns the scan cache into the generated files; `--check` validates the committed files without the cache.
@@ -27,7 +31,7 @@ Each bulletin starts with a machine-readable contents list naming the issuing se
 
 - **An application or decision is not farming.** A receipt of a complete application explicitly does not authorise cultivation; an authorisation still needs confirmation of actual operation, and the notices say nothing about later seasons.
 - **Coverage.** Only the regional bulletins, only acts filed under the Côte-d'Or DDT. Decisions published elsewhere (departmental bulletins, notices posted in town halls) are not included. Operations that need no authorisation often leave no notice at all.
-- **OCR hints.** `communesMentioned` also catches addresses (every DDT letter mentions Dijon) and `referenceHints` includes misreadings. Treat both as search aids.
+- **OCR hints.** `communesMentioned` also catches addresses (every DDT letter mentions Dijon) and misses misread names ("FLAGEV-ECHEZEAUX"); `referenceHints` only covers references printed after a commune name or in area tables, and includes misreadings. Treat both as search aids and search the full text as well, allowing for OCR variants.
 - **Scope of an authorisation.** Some decisions list several communes without assigning each parcel row, and printed areas can differ from the cadastral area (partial parcels or errors). Record the ambiguity; do not resolve it by guesswork.
 
 ## Adding a year
