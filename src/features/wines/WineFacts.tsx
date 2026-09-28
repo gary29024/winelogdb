@@ -32,7 +32,7 @@ export function WineFactPills({wine,extra}:{wine:PillWine;extra?:ReactNode}){
   {wine.classification&&<span className={`detail-classification detail-classification-${wine.classification}`}>{classificationLabel[wine.classification]}</span>}
   {grapes.map(grape=><span key={grape}>{grape}</span>)}
   {extra}
- </div>{(atlasPlace||mapTarget)&&<div className="wine-atlas-context">{mapTarget&&<WineVillageMap target={mapTarget}/>}<BurgundyAtlasLink place={atlasPlace}/></div>}</>;
+ </div>{(atlasPlace||mapTarget)&&<div className="wine-atlas-context">{mapTarget&&<WineVillageMap target={mapTarget} producer={wine.producer}/>}<BurgundyAtlasLink place={atlasPlace}/></div>}</>;
 }
 
 /** A ruled label/value table. One shape for Wine details and Your experience. */

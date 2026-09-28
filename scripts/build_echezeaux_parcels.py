@@ -125,9 +125,12 @@ def main():
         p['recordAreasM2'].sort()
         p['recordMatch'] = record_match(p)
         # No legal-name heuristic is allowed to create a farming relationship.
+        # producerNames are reviewed spellings of a wine's producer field; the
+        # UI joins on them because producer records are per-user.
         p['domaineLinks'] = [link for link in config['domaineLinks'] if p['id'] in link['parcelIds']]
         for link in p['domaineLinks']:
             assert link['status'] in ('verified', 'proposed') and link['evidence'] and link['effectiveDate']
+            assert link['producerNames'] and all(isinstance(name, str) and name.strip() for name in link['producerNames'])
             if link['status'] == 'verified':
                 assert link['producerId'] and link['role'] == 'operator' and p['recordMatch'] != 'area-mismatch'
     result = {'type': 'FeatureCollection', 'features': [selected[id] for id in sorted(selected)]}

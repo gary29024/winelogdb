@@ -27,34 +27,72 @@ for(const route of allMapRoutes){
   await expect(dialog.locator('.village-map-note')).toContainText(['Échezeaux pilot: 10']);
   expect(requests.some(url=>url.includes('echezeaux-named-plots.'))).toBe(true);
   expect(requests.some(url=>url.includes('echezeaux-parcels.'))).toBe(false);
-  const toggle=dialog.getByRole('checkbox',{name:'Show parcels · Échezeaux'});
+  const toggle=dialog.getByRole('switch',{name:'Parcel owners · Échezeaux'});
   await toggle.check();
-  const holder=dialog.getByRole('combobox',{name:'Recorded right holder'});
-  await expect(holder).toBeVisible();
-  const parcel=dialog.getByRole('combobox',{name:'Explore a cadastral parcel'});
+  const owners=dialog.getByRole('list',{name:'Largest owners on record'});
+  await expect(owners.getByRole('button')).toHaveCount(6);
+  // The reference finder stays folded; it is the keyboard route to any parcel.
+  await dialog.getByText('Find a parcel by cadastral reference').click();
+  const parcel=dialog.getByRole('combobox',{name:'Cadastral parcel'});
   await expect(parcel.getByRole('option')).toHaveCount(277);
   expect(requests.some(url=>url.includes('echezeaux-parcels.'))).toBe(true);
-  await holder.selectOption({label:'DOMAINE DE LA ROMANEE CONTI'});
-  const known=await parcel.locator('option').nth(1).getAttribute('value');
+  // One legend: the parcel keys join the cru keys under the map.
+  await expect(dialog.getByLabel('Map legend')).toContainText('No public record');
+  await expect(dialog.getByRole('button',{name:/Domaine de la Romanee Conti/})).toHaveAttribute('aria-pressed','false');
+  await dialog.getByRole('button',{name:/Domaine de la Romanee Conti/}).click();
+  await expect(dialog.getByRole('button',{name:/Domaine de la Romanee Conti/})).toHaveAttribute('aria-pressed','true');
+  await expect(dialog.getByLabel('Map legend')).toContainText('Chosen owner');
+  const known=await parcel.locator('option',{hasText:'Domaine de la Romanee Conti'}).first().getAttribute('value');
   await parcel.selectOption(known!);
-  await expect(dialog.locator('.village-map-parcel-details')).toContainText('Recorded rights as of 1 January 2025');
-  await expect(dialog.locator('.village-map-parcel-details')).toContainText('DOMAINE DE LA ROMANEE CONTI');
-  await expect(dialog.locator('.village-map-parcel-details')).toContainText('Farming domaine: not verified');
+  const details=dialog.locator('.village-map-parcel-details');
+  await expect(details).toContainText('Domaine de la Romanee Conti');
+  await expect(details.getByText('SIREN',{exact:false})).toBeHidden();
+  await details.getByText('Record details').click();
+  await expect(details).toContainText('Rights recorded as of 1 January 2025');
   await page.screenshot({path:testInfo.outputPath('echezeaux-recorded-rights-mobile.png')});
-  await holder.selectOption('unknown');
-  const unknown=await parcel.locator('option').nth(1).getAttribute('value');
+  const unknown=await parcel.locator('option',{hasText:'not in public records'}).first().getAttribute('value');
   await parcel.selectOption(unknown!);
-  await expect(dialog.locator('.village-map-parcel-details')).toContainText('does not establish that the parcel has no owner');
-  await toggle.uncheck();await expect(holder).toHaveCount(0);
+  await expect(details).toContainText('doesn’t mean the parcel has no owner');
+  await toggle.uncheck();await expect(owners).toHaveCount(0);
+  await expect(dialog.getByLabel('Map legend')).not.toContainText('No public record');
   await vineyard.selectOption('inao-denom-645');
   await expect(dialog.locator('.village-map-description')).toContainText('INAO production boundary');
-  await dialog.getByRole('checkbox',{name:'Show parcels · Grands-Échezeaux'}).check();
-  await expect(dialog.getByRole('combobox',{name:'Explore a cadastral parcel'}).getByRole('option')).toHaveCount(33);
+  await dialog.getByRole('switch',{name:'Parcel owners · Grands-Échezeaux'}).check();
+  await dialog.getByText('Find a parcel by cadastral reference').click();
+  await expect(dialog.getByRole('combobox',{name:'Cadastral parcel'}).getByRole('option')).toHaveCount(33);
   await page.setViewportSize({width:1280,height:900});
   await page.screenshot({path:testInfo.outputPath('grands-echezeaux-parcels-desktop.png')});
   await page.keyboard.press('Escape');await expect(page.getByRole('button',{name:'View village map'})).toBeFocused();
  });
 }
+
+test('Échezeaux pilot: a verified producer link and opt-in name matches',async({page},testInfo)=>{
+ await setup(page,{appellation:'Échezeaux',wineName:'Échezeaux',classification:'grand_cru',producer:'Domaine Mongeard-Mugneret'});
+ // No verified links are published yet, so this adds one to a copy of the real data.
+ await page.route('**/maps/echezeaux-parcels.*',async route=>{
+  const data=await (await route.fetch()).json() as {features:{properties:{recordedRights:{name:string}[];domaineLinks:unknown[]}}[]};
+  for(const f of data.features)if(f.properties.recordedRights.some(r=>r.name==='DOMAINE MONGEARD MUGNERET'))f.properties.domaineLinks.push({status:'verified',
+   name:'Domaine Mongeard-Mugneret',producerId:'mongeard-mugneret',producerNames:['Domaine Mongeard-Mugneret'],role:'operator',effectiveDate:'2025-01-01',
+   evidence:[{url:'https://example.test/evidence',note:'Test evidence'}]});
+  await route.fulfill({json:data});
+ });
+ await page.setViewportSize({width:1280,height:900});
+ await page.goto('/wines/layout-wine');await page.getByRole('button',{name:'View village map'}).click();
+ const dialog=page.getByRole('dialog',{name:'Vosne-Romanée',exact:true});
+ await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
+ await dialog.getByRole('switch',{name:'Parcel owners · Échezeaux'}).check();
+ const card=dialog.locator('.village-map-producer').first();
+ await expect(card).toContainText('THIS WINE’S PRODUCER');
+ await expect(card).toContainText('Verified link');
+ await expect(dialog.getByLabel('Map legend')).toContainText('Producer · verified');
+ const possible=dialog.getByRole('checkbox',{name:/Show possible matches/});
+ await expect(possible).not.toBeChecked();
+ await expect(dialog.getByText('Possible match · name only')).toHaveCount(0);
+ await possible.check();
+ await expect(dialog.locator('.village-map-producer.is-possible')).toContainText('GFA Mongeard Mugneret et Fils');
+ await expect(dialog.getByLabel('Map legend')).toContainText('Producer · possible');
+ await page.screenshot({path:testInfo.outputPath('echezeaux-producer-desktop.png')});
+});
 
 test('Échezeaux pilot: missing parcel data does not hide the cru and can be retried',async({page})=>{
  await setup(page,{appellation:'Échezeaux',wineName:'Les Poulaillères',classification:'grand_cru'});
@@ -63,11 +101,11 @@ test('Échezeaux pilot: missing parcel data does not hide the cru and can be ret
  const dialog=page.getByRole('dialog',{name:'Vosne-Romanée',exact:true});
  await expect(dialog.getByRole('combobox',{name:'Explore a vineyard'})).toHaveValue('inao-denom-565');
  await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
- await dialog.getByRole('checkbox',{name:'Show parcels · Échezeaux'}).check();
+ await dialog.getByRole('switch',{name:'Parcel owners · Échezeaux'}).check();
  await expect(dialog.getByRole('alert')).toContainText('The cru map remains available');
  await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
  fail=false;await dialog.getByRole('button',{name:'Retry parcels'}).click();
- await expect(dialog.getByRole('combobox',{name:'Recorded right holder'})).toBeVisible();
+ await expect(dialog.getByRole('list',{name:'Largest owners on record'})).toBeVisible();
 });
 
 const regionalMapCases=[

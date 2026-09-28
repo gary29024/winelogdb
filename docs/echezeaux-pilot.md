@@ -67,16 +67,47 @@ Identifiers beginning with `U` are DGFiP substitute identifiers, **not SIRENs**.
 Missing published rights do not establish an ownerless parcel. Private persons,
 sole traders and some single-member companies are outside this publication.
 
-An operator link requires a reviewed stable producer ID, effective date and
-parcel-specific evidence. A legal entity's name or SIREN alone does not prove
-who farms that land. Proposed links never enter the verified-domain filter.
-No such links are populated in this pilot; researching them remains in #364.
+An operator link requires a reviewed stable producer ID, the reviewed spellings
+of the producer field it applies to (`producerNames`), an effective date and
+parcel-specific evidence. Producer records are per-user, so the map joins a
+wine to a link by its producer field, as `burgundyProducerLocations` does. A
+legal entity's name or SIREN alone does not prove who farms that land. Proposed
+links never take the verified style or wording. No such links are populated in
+this pilot; researching them remains in #364.
+
+## Parcel owner panel
+
+The **Parcel owners** switch sits directly under the vineyard card. Its keys
+join the map's single legend, using the map's existing vocabulary:
+
+| Mark | Meaning |
+| --- | --- |
+| Fine ink outline | Parcel with a published legal-entity owner |
+| Grey hatching | No published record (not proof of no owner) |
+| Deep ochre fill | Parcels of the owner chosen from the list; others dim |
+| Crimson fill | This wine's producer, **verified** link only |
+| Dashed crimson outline | **Possible** match by name only, off by default |
+| Ink outline with white casing | Selected parcel |
+
+A share bar and a ranked owner list (overlap area and parcel count) replace the
+holder and parcel dropdowns; a cadastral-reference finder remains for keyboard
+use. Right codes, SIRENs and sources sit behind *Record details* and *About
+this data*. Selecting a parcel or owner animates to it, capped at zoom 17, and
+does not animate when reduced motion is requested.
+
+**Possible matches** are an explicit, opt-in reading aid. They appear only when
+the wine has a producer field and every distinctive word of it (ignoring legal
+forms and words such as *domaine*, *fils* or *GFA*) occurs in a published
+owner's name, with at least two such words or one of six letters or more. They
+are labelled “Possible match · name only”, are never shown as the operator, and
+never alter the bottle's map identity. Producer names alone still never select
+holdings or named areas.
 
 ## Loading and size
 
 The ten-name identity index participates in wine matching. Catalogue metadata
 and geometry load only when the map opens. Parcel geometry and rights load only
-after **Show parcels** is switched on; failed parcel downloads have their own
+after **Parcel owners** is switched on; failed parcel downloads have their own
 retry and do not remove the cru map.
 
 | Additional asset | Uncompressed bytes | Gzip-equivalent bytes |
