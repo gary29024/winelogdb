@@ -6,6 +6,8 @@ import type {Map as MapLibreMap} from 'maplibre-gl';
 import {GrandCruParcels,type Parcels} from '../../src/features/vineyards/GrandCruParcels';
 import {ownerName,possibleOwnerMatch} from '../../src/lib/places/echezeauxParcelOwners';
 import manifest from '../../src/lib/places/echezeauxParcelManifest.json';
+import research from '../../src/lib/places/echezeauxFarmingResearch.json';
+vi.mock('../../src/features/vineyards/parcelProducerApi',()=>({listParcelProducerLinks:vi.fn(async()=>({items:[]}))}));
 
 const data=JSON.parse(readFileSync('public'+manifest.dataUrl,'utf8')) as Parcels;
 function mapStub(){
@@ -18,6 +20,22 @@ const inEchezeaux=(f:Parcels['features'][number])=>f.properties.overlaps.some(o=
 const holds=(f:Parcels['features'][number],name:string)=>f.properties.recordedRights.some(r=>r.name===name);
 afterEach(()=>{cleanup();vi.unstubAllGlobals()});
 describe('Cadastral parcel controls',()=>{
+ it('shows a historical application only on its exact parcels without promoting it to a farming link',async()=>{
+  vi.stubGlobal('fetch',vi.fn(async()=>Response.json(data)));
+  const onLegend=vi.fn();
+  render(<GrandCruParcels map={mapStub() as unknown as MapLibreMap} parentId="inao-denom-565" producer="Anne Gros" onLegend={onLegend}/>);
+  fireEvent.click(screen.getByRole('switch'));
+  fireEvent.change(await screen.findByLabelText('Cadastral parcel'),{target:{value:'212670000D0177'}});
+  expect(screen.getByText('Historical farming application · outcome unconfirmed')).toBeTruthy();
+  expect(screen.getByText('No matched rights record')).toBeTruthy();
+  expect(screen.getByRole('link',{name:/Application 2022-204/}).getAttribute('href')).toBe(`${research.source.url}#page=74`);
+  expect(screen.queryByText('Verified parcel links')).toBeNull();
+  expect(onLegend).toHaveBeenLastCalledWith(['recorded','unrecorded','selected']);
+  fireEvent.change(screen.getByLabelText('Cadastral parcel'),{target:{value:'212670000D0168'}});
+  expect(screen.queryByText('Historical farming application · outcome unconfirmed')).toBeNull();
+  for(const parcel of research.parcels)expect(data.features.some(f=>f.properties.id===parcel.parcelId)).toBe(true);
+  expect(research.unresolvedReferences).toEqual(['D01776']);
+ });
  it('downloads only on request, keeps record details folded, preserves both rights and cleans up the overlay',async()=>{
   const sample=structuredClone(data),feature=sample.features.find(f=>f.properties.recordedRights.length&&inEchezeaux(f))!;
   const holder=feature.properties.recordedRights[0];
@@ -93,6 +111,22 @@ describe('Cadastral parcel controls',()=>{
   // The verified right holder is never repeated as a mere possibility.
   expect(within(possibleCard).queryByText('Domaine Mongeard Mugneret')).toBeNull();
   expect(onLegend).toHaveBeenLastCalledWith(['recorded','unrecorded','verified','possible']);
+ });
+ it('makes possible parcels visibly blue and zooms to them without asserting farming',async()=>{
+  vi.stubGlobal('fetch',vi.fn(async()=>Response.json(data)));
+  const map=mapStub();
+  render(<GrandCruParcels map={map as unknown as MapLibreMap} parentId="inao-denom-565" producer="Domaine Nicole Lamarche"/>);
+  fireEvent.click(screen.getByRole('switch'));
+  fireEvent.click(await screen.findByLabelText(/Show possible matches/));
+  expect(screen.getByText('3 parcels · 1.10 ha')).toBeTruthy();
+  expect(screen.getByRole('button',{name:'Link Nicole Lamarche to an app producer'})).toBeTruthy();
+  const fill=map.addLayer.mock.calls.map(([layer])=>layer).find(layer=>layer.id==='cadastral-parcel-possible');
+  const line=map.addLayer.mock.calls.map(([layer])=>layer).find(layer=>layer.id==='cadastral-parcel-possible-line');
+  expect(fill.paint).toEqual({'fill-color':'#0067b1','fill-opacity':0.58});
+  expect(line.paint['line-dasharray']).toEqual([2,1.5]);
+  fireEvent.click(screen.getByRole('button',{name:'Show possible matches on map'}));
+  expect(map.fitBounds).toHaveBeenCalled();
+  expect(screen.queryByText('Verified parcel links')).toBeNull();
  });
  it('keeps each parcel’s dated operator evidence when a right holder is selected, with unverified parcels still distinct',async()=>{
   const sample=structuredClone(data);

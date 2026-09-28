@@ -19,7 +19,7 @@
    letting its content overlap the footer. */
 .village-map-header,.village-map-body,.village-map-footer{flex-shrink:0}
 .village-map-main{position:relative;min-width:0;background:var(--paper);isolation:isolate}
-.village-map-canvas{height:min(59dvh,580px);min-height:300px;width:100%}
+.village-map-canvas{height:min(59dvh,580px);min-height:300px;width:100%;scroll-margin-top:90px}
 .village-map-toolbar{position:absolute;z-index:2;left:12px;top:12px;right:55px;display:flex;flex-wrap:wrap;gap:6px}
 .village-map-toolbar button{min-height:38px;padding:7px 11px;border:1px solid var(--line-strong);border-radius:var(--r-sm,7px);background:var(--paper);color:var(--ink-2);font-size:.74rem;font-weight:650;box-shadow:0 1px 5px #0001;cursor:pointer}
 .village-map-toolbar button:disabled{opacity:.6;cursor:default}
@@ -46,7 +46,7 @@
 .map-swatch-parcel-unrecorded{border-color:#26324a8c!important;background:repeating-linear-gradient(45deg,#59698373 0 1.5px,transparent 1.5px 4px)}
 .map-swatch-parcel-owner{border-color:#8a5a12!important;background:#8a5a12bf}
 .map-swatch-parcel-producer{border-color:#c51f45!important;background:#c51f45b8}
-.map-swatch-parcel-possible{border:1.5px dashed #c51f45!important;background:#c51f451f}
+.map-swatch-parcel-possible{border:2px dashed #003e73!important;background:#0067b194}
 .map-swatch-parcel-selected{border:2.5px solid #10182d!important;background:none}
 .village-map-legend-divider{width:1px;height:14px;background:var(--line)}
 .village-map-parcels{display:grid;gap:12px;border-top:1px solid var(--line);margin-top:18px;padding-top:14px;font-size:.76rem}
@@ -61,13 +61,24 @@
 .village-map-parcel-check input{width:17px;height:17px;flex:none}
 .village-map-parcel-error p{margin:0 0 8px}.village-map-parcel-error button{min-height:44px;cursor:pointer}
 .village-map-producer{display:grid;gap:5px;padding:11px 12px;border:1.5px solid var(--wine);border-radius:var(--r-sm,7px);background:color-mix(in srgb,var(--wine) 8%,transparent);overflow-wrap:anywhere}
-.village-map-producer.is-possible{border-style:dashed;background:none}
+.village-map-producer.is-possible{--parcel-match-text:#0067b1;border:2px dashed #0067b1;background:color-mix(in srgb,#0067b1 9%,var(--ground))}
+.village-map-producer.is-possible .village-map-link-button,.village-map-producer.is-possible .village-map-link-button:hover:not(:disabled){display:block;color:var(--parcel-match-text);min-height:44px}
+.village-map-farming-research{padding:10px;border-left:3px solid var(--line-strong);background:var(--ground);color:var(--ink-3)}
+.village-map-farming-research p{margin:6px 0}
 .village-map-producer .village-map-eyebrow{margin:0}
 .village-map-producer strong{font-size:.86rem;color:var(--ink)}
 .village-map-producer-meta{color:var(--ink-5);font-variant-numeric:tabular-nums}
 .village-map-badge{justify-self:start;padding:2px 8px;border-radius:999px;font-size:.66rem;font-weight:750;letter-spacing:.03em}
 .village-map-badge.is-verified{background:var(--good-wash,#eef6f0);color:var(--good,#2f6b3f)}
-.village-map-badge.is-possible{border:1px solid var(--warn-line);background:var(--warn-wash);color:var(--warn)}
+.village-map-badge.is-possible{border:1px solid #0067b1;background:color-mix(in srgb,#0067b1 10%,var(--ground));color:var(--parcel-match-text)}
+@media(prefers-color-scheme:dark){.village-map-producer.is-possible{--parcel-match-text:#8bcbff}}
+.village-map-badge.is-manual{border:1px solid var(--line);background:var(--ground);color:var(--ink-3)}
+.village-map-producer-links:empty{display:none}
+.village-map-producer-links,.village-map-linked-producer,.village-map-link-editor{display:grid;gap:8px;min-width:0;overflow-wrap:anywhere}
+.village-map-linked-producer,.village-map-link-editor{border:1px solid var(--line);border-radius:7px;padding:12px;background:var(--ground)}
+.village-map-link-editor select{width:100%;min-width:0;min-height:44px;font:inherit}
+.village-map-link-actions{display:flex;flex-wrap:wrap;gap:8px}
+.village-map-link-actions button,.village-map-producer-links button{min-height:44px;white-space:normal;font:inherit}
 .village-map-link-button{justify-self:start;min-height:32px;padding:0;border:0;background:none;color:var(--wine-ink);font:inherit;font-size:.74rem;text-decoration:underline;text-underline-offset:2px;cursor:pointer}
 .village-map-link-button:hover:not(:disabled){border:0;background:none;color:var(--wine)}
 .village-map-parcel-share{display:grid;gap:5px}
