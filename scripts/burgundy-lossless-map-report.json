@@ -31,7 +31,12 @@
       "sourceSha256": "0e1d79c082e793d6e6191a22730144db8ae0c86ade4d80da2f1323f3d4fa001e",
       "catalogueSha256": "eb8ec6b4700154b5e21dfd001265b0d2ae875bd2ecb2356f8fa84a3caa041628",
       "sourceBytes": 860567,
-      "gzipEquivalentBytes": 319361
+      "gzipEquivalentBytes": 319361,
+      "brotliJsonUrl": "/maps/lossless/beaune.2026-09-21.lossless-7d9639acbadf.geojson.br",
+      "compressedSha256": "7d9639acbadfd600fc58807e983d51ae38792f1cc0c7d4d7f861a5ab0a7cea4b",
+      "brotliBytes": 93030,
+      "gzipJsonUrl": "/maps/lossless/beaune.2026-09-21.lossless-d298d746930a.geojson.gz",
+      "gzipSha256": "d298d746930ae2f64790fcdb7add0d02432c81f59ca7e289b5aadc919cdf1d4b"
     },
     {
       "id": "blagny",
@@ -96,7 +101,12 @@
       "sourceSha256": "2632c7e482f59155c66de64c69db095397c7ce2c256931406fdacc5cfbf2191d",
       "catalogueSha256": "bb08d20b67d68bbaa3b666d9d4313cc2bbf33577b230bcf7fac128954317e59f",
       "sourceBytes": 742174,
-      "gzipEquivalentBytes": 263189
+      "gzipEquivalentBytes": 263189,
+      "brotliJsonUrl": "/maps/lossless/chassagne-montrachet.2026-09-21.lossless-7d1b37e2e007.geojson.br",
+      "compressedSha256": "7d1b37e2e007642609e9319240480c3194ae7b9670a861a9ac4402ff7ce159ed",
+      "brotliBytes": 81508,
+      "gzipJsonUrl": "/maps/lossless/chassagne-montrachet.2026-09-21.lossless-29900096710f.geojson.gz",
+      "gzipSha256": "29900096710f77079acb3fdcab2071c0149d775a9dda8f7a9ef842caa1e0aba1"
     },
     {
       "id": "chorey-les-beaune",
@@ -161,7 +171,12 @@
       "sourceSha256": "41397b1511bcc90156f5fe986b3464dca265a8d1f17637b7efe85caebef90576",
       "catalogueSha256": "adefe884cdbacf76a613d6dd9afc2adba708d2a47e80fe35710270c3efacc1bf",
       "sourceBytes": 740101,
-      "gzipEquivalentBytes": 265703
+      "gzipEquivalentBytes": 265703,
+      "brotliJsonUrl": "/maps/lossless/givry.2026-09-21.lossless-473025687d0e.geojson.br",
+      "compressedSha256": "473025687d0eb1c4822f2390e0e1deffbcfa2f866c4cd2203b1e1064accb0819",
+      "brotliBytes": 131654,
+      "gzipJsonUrl": "/maps/lossless/givry.2026-09-21.lossless-40773f954713.geojson.gz",
+      "gzipSha256": "40773f9547136ce9277d847b5a2e4b14eaff1468a2ca7c896350fe8942a5ddc1"
     },
     {
       "id": "irancy",
@@ -201,7 +216,12 @@
       "sourceSha256": "71b44fdc00383a27471f31b955c9659d20981d734d49d3d466740b6ac11fd011",
       "catalogueSha256": "e8508d2276e6b2d3c92da24df7e9150612db18912b36ee8114606454f702e510",
       "sourceBytes": 872497,
-      "gzipEquivalentBytes": 329123
+      "gzipEquivalentBytes": 329123,
+      "brotliJsonUrl": "/maps/lossless/marsannay.2026-09-21.lossless-1b1fb9f101eb.geojson.br",
+      "compressedSha256": "1b1fb9f101eba1178751be018d184a2517aebc1bcec9561740b655af1570e204",
+      "brotliBytes": 98920,
+      "gzipJsonUrl": "/maps/lossless/marsannay.2026-09-21.lossless-958e05c1aad7.geojson.gz",
+      "gzipSha256": "958e05c1aad7d8caa3456dcde62174819ba4d270536a7146f761a6867a647b1e"
     },
     {
       "id": "mercurey",
@@ -221,7 +241,12 @@
       "sourceSha256": "f4fb92bccc5cbc7baec966d3b1c27a900ce1facf43f5f0f79225d3a0c311dd01",
       "catalogueSha256": "77c5b98603863df731aca7db7884d2d130e4b0b29bf650849e397450e3e770e1",
       "sourceBytes": 991883,
-      "gzipEquivalentBytes": 373359
+      "gzipEquivalentBytes": 373359,
+      "brotliJsonUrl": "/maps/lossless/meursault.2026-09-21.lossless-7ed5ec16bed1.geojson.br",
+      "compressedSha256": "7ed5ec16bed1aa683f181f37b365d885189e96fd87154fc07aa0a1e73ad1d66a",
+      "brotliBytes": 86492,
+      "gzipJsonUrl": "/maps/lossless/meursault.2026-09-21.lossless-de92430f8af5.geojson.gz",
+      "gzipSha256": "de92430f8af5b2e08d1b08e4b3dc5c3828a4c7804a9960b1dc87253f6817b94f"
     },
     {
       "id": "montagny",
@@ -231,7 +256,12 @@
       "sourceSha256": "85655f1c1b9a02863fd1c71c1cb2321e080156005cfbb305ed4295f28b8c8e77",
       "catalogueSha256": "7ff25b4811fd821f464cb4a45ecf5c31d872f42edab01a79d30f8ee81bdd601d",
       "sourceBytes": 786748,
-      "gzipEquivalentBytes": 286452
+      "gzipEquivalentBytes": 286452,
+      "brotliJsonUrl": "/maps/lossless/montagny.2026-09-21.lossless-1bb974c4250f.geojson.br",
+      "compressedSha256": "1bb974c4250f1bce67d5b6c025b5f77939c5949e57319b457a1b2a51ec10353e",
+      "brotliBytes": 133156,
+      "gzipJsonUrl": "/maps/lossless/montagny.2026-09-21.lossless-e64123843e53.geojson.gz",
+      "gzipSha256": "e64123843e53d1ff3b4416aee72a8ee89498c437bbd9e4e0e66bba97bb5266d8"
     },
     {
       "id": "monthelie",
@@ -361,7 +391,12 @@
       "sourceSha256": "313bd25d1669d3c9c65f40a7e779abc22bab5da5b927d0e03a9713c22386a25d",
       "catalogueSha256": "859b6ec45eb5c0734a0b940b4d2cf1b55d9325afb1d2e60d430d4b8d160f5e8f",
       "sourceBytes": 764178,
-      "gzipEquivalentBytes": 277590
+      "gzipEquivalentBytes": 277590,
+      "brotliJsonUrl": "/maps/lossless/saint-aubin.2026-09-21.lossless-9f1347a51d81.geojson.br",
+      "compressedSha256": "9f1347a51d81a2ccef35595b6d828abaf9bb7a4a35b5654ed16b4e3c6d013512",
+      "brotliBytes": 56377,
+      "gzipJsonUrl": "/maps/lossless/saint-aubin.2026-09-21.lossless-f9eb64d76b66.geojson.gz",
+      "gzipSha256": "f9eb64d76b660b2b11c24e26476d97523c7740cea962079be22ce53cf8619699"
     },
     {
       "id": "saint-bris",
@@ -401,7 +436,12 @@
       "sourceSha256": "4ba909759443cc299024df80559c9a3d938c1b65ae891eaaeb6acebee5c5a003",
       "catalogueSha256": "977222ab25e6cc95357c477d8e0a35cc5508b9af60445f4faf30e9e046a04bd2",
       "sourceBytes": 966834,
-      "gzipEquivalentBytes": 362157
+      "gzipEquivalentBytes": 362157,
+      "brotliJsonUrl": "/maps/lossless/santenay.2026-09-21.lossless-cd2653ad18e0.geojson.br",
+      "compressedSha256": "cd2653ad18e00db18d0522b19cde76523e31f24bfa411d200a3e7b5922eb5fdb",
+      "brotliBytes": 83307,
+      "gzipJsonUrl": "/maps/lossless/santenay.2026-09-21.lossless-cccd5b472b17.geojson.gz",
+      "gzipSha256": "cccd5b472b17b503511b13944c75c8f36aa391a3d701cb537db12d3adbbfa82e"
     },
     {
       "id": "savigny-les-beaune",
@@ -411,7 +451,12 @@
       "sourceSha256": "13ed9bd4b9e1859dcc2db947da179ec5902c94592ef8dbd4ba4cea8938c369da",
       "catalogueSha256": "dcaeafbedc55aa7762a37d61b14c1d82870986a065c9e6b788e33bf2a91e6a80",
       "sourceBytes": 719478,
-      "gzipEquivalentBytes": 268553
+      "gzipEquivalentBytes": 268553,
+      "brotliJsonUrl": "/maps/lossless/savigny-les-beaune.2026-09-21.lossless-4f1e1decad29.geojson.br",
+      "compressedSha256": "4f1e1decad296fd1027dde37055e698580fe81f52cfe20cdc5f497ae10703072",
+      "brotliBytes": 58373,
+      "gzipJsonUrl": "/maps/lossless/savigny-les-beaune.2026-09-21.lossless-0adfb2030be1.geojson.gz",
+      "gzipSha256": "0adfb2030be13a9e6344c7363bed7d5554049aa700c92bea8801af13cbcede93"
     },
     {
       "id": "vezelay",
@@ -431,7 +476,12 @@
       "sourceSha256": "0e895d2540fb5bb7d45914943afa20ec0234b96352a2fb0e31b4446233518b64",
       "catalogueSha256": "c78b091ec548fc8673b5509a66ef1e75b1ff7dba85ceda545e9ed46c318e0281",
       "sourceBytes": 718547,
-      "gzipEquivalentBytes": 268272
+      "gzipEquivalentBytes": 268272,
+      "brotliJsonUrl": "/maps/lossless/vire-clesse.2026-09-21.lossless-12a20219cabf.geojson.br",
+      "compressedSha256": "12a20219cabfb775913ff205711ca6fe40f537d834a07c5d647831720a470d34",
+      "brotliBytes": 109149,
+      "gzipJsonUrl": "/maps/lossless/vire-clesse.2026-09-21.lossless-e90762ccad06.geojson.gz",
+      "gzipSha256": "e90762ccad06c2475ddf6fb3df5d52920c2da4e563574d31f2cbcccb426a63dc"
     },
     {
       "id": "volnay",
