@@ -10,17 +10,30 @@
     "dataUrl": "/maps/echezeaux-parcels.2026-06-01.52a1fa3ce2df.geojson",
     "sha256": "52a1fa3ce2df1a479b0da94f110efad7acd7e1ed90f2c8a066a555f8dd826040",
     "cadastreDate": "2026-06-01",
-    "rightsAsOf": "2025-01-01"
+    "rightsAsOf": "2025-01-01",
+    "rightsHistory": "docs/research/echezeaux-rights-history.json",
+    "rightsHistoryYears": [
+      "2019-01-01",
+      "2020-01-01",
+      "2021-01-01",
+      "2022-01-01",
+      "2023-01-01",
+      "2024-01-01",
+      "2025-01-01"
+    ]
   },
   "counts": {
     "parcels": 276,
     "recordedHolders": 36,
     "withRecordedRights": 119,
     "withoutMatchedRights": 157,
-    "holderLead": 100,
-    "historicalApplication": 2,
-    "unresolved": 174,
-    "currentFarmerConfirmed": 0
+    "holderLead": 115,
+    "historicalApplication": 16,
+    "historicalAuthorisation": 2,
+    "unresolved": 143,
+    "currentFarmerConfirmed": 0,
+    "withRightsChangeSince2019": 76,
+    "withCadastralPredecessor": 35
   },
   "parcels": [
     {
@@ -33,6 +46,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -71,6 +89,23 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [
+        {
+          "from": "2019-01-01",
+          "to": "2020-01-01",
+          "kind": "same-holder-renamed",
+          "before": [
+            "MONGEARD MUGNERET ET FILS"
+          ],
+          "after": [
+            "GFA MONGEARD MUGNERET ET FILS"
+          ]
+        }
+      ],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -88,6 +123,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -126,6 +166,23 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [
+        {
+          "from": "2019-01-01",
+          "to": "2020-01-01",
+          "kind": "same-holder-renamed",
+          "before": [
+            "MONGEARD MUGNERET ET FILS"
+          ],
+          "after": [
+            "GFA MONGEARD MUGNERET ET FILS"
+          ]
+        }
+      ],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -164,6 +221,23 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [
+        {
+          "from": "2019-01-01",
+          "to": "2020-01-01",
+          "kind": "same-holder-renamed",
+          "before": [
+            "MONGEARD MUGNERET ET FILS"
+          ],
+          "after": [
+            "GFA MONGEARD MUGNERET ET FILS"
+          ]
+        }
+      ],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -202,6 +276,23 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [
+        {
+          "from": "2019-01-01",
+          "to": "2020-01-01",
+          "kind": "same-holder-renamed",
+          "before": [
+            "MONGEARD MUGNERET ET FILS"
+          ],
+          "after": [
+            "GFA MONGEARD MUGNERET ET FILS"
+          ]
+        }
+      ],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -240,6 +331,23 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [
+        {
+          "from": "2019-01-01",
+          "to": "2020-01-01",
+          "kind": "same-holder-renamed",
+          "before": [
+            "MONGEARD MUGNERET ET FILS"
+          ],
+          "after": [
+            "GFA MONGEARD MUGNERET ET FILS"
+          ]
+        }
+      ],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -278,6 +386,23 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [
+        {
+          "from": "2019-01-01",
+          "to": "2020-01-01",
+          "kind": "same-holder-renamed",
+          "before": [
+            "MONGEARD MUGNERET ET FILS"
+          ],
+          "after": [
+            "GFA MONGEARD MUGNERET ET FILS"
+          ]
+        }
+      ],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -295,6 +420,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -334,6 +464,23 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [
+        {
+          "from": "2024-01-01",
+          "to": "2025-01-01",
+          "kind": "record-appeared",
+          "before": [],
+          "after": [
+            "GFA FAMILLE FOREY BJ"
+          ]
+        }
+      ],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [
+        "family-companies-2024"
+      ],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -351,6 +498,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -368,6 +520,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -406,6 +563,11 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -423,6 +585,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -440,6 +607,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -457,6 +629,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -495,6 +672,11 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -533,6 +715,11 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -571,6 +758,11 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -609,6 +801,11 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -647,6 +844,11 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -664,6 +866,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -702,6 +909,23 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [
+        {
+          "from": "2024-01-01",
+          "to": "2025-01-01",
+          "kind": "record-appeared",
+          "before": [],
+          "after": [
+            "LES CRUOTS"
+          ]
+        }
+      ],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [
+        "family-companies-2024"
+      ],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -740,6 +964,23 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [
+        {
+          "from": "2024-01-01",
+          "to": "2025-01-01",
+          "kind": "record-appeared",
+          "before": [],
+          "after": [
+            "LES CRUOTS"
+          ]
+        }
+      ],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [
+        "family-companies-2024"
+      ],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -757,6 +998,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -774,6 +1020,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -791,6 +1042,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -808,6 +1064,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -825,6 +1086,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -842,6 +1108,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -859,6 +1130,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -898,6 +1174,23 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [
+        {
+          "from": "2024-01-01",
+          "to": "2025-01-01",
+          "kind": "record-appeared",
+          "before": [],
+          "after": [
+            "GFA FAMILLE FOREY BJ"
+          ]
+        }
+      ],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [
+        "family-companies-2024"
+      ],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -915,6 +1208,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -954,6 +1252,23 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [
+        {
+          "from": "2024-01-01",
+          "to": "2025-01-01",
+          "kind": "record-appeared",
+          "before": [],
+          "after": [
+            "GFA FAMILLE FOREY BJ"
+          ]
+        }
+      ],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [
+        "family-companies-2024"
+      ],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -993,6 +1308,23 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [
+        {
+          "from": "2024-01-01",
+          "to": "2025-01-01",
+          "kind": "record-appeared",
+          "before": [],
+          "after": [
+            "GFA FAMILLE FOREY BJ"
+          ]
+        }
+      ],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [
+        "family-companies-2024"
+      ],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -1031,6 +1363,23 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [
+        {
+          "from": "2023-01-01",
+          "to": "2024-01-01",
+          "kind": "record-appeared",
+          "before": [],
+          "after": [
+            "DOMAINE ARNOUX - LACHAUX"
+          ]
+        }
+      ],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [
+        "recent-company-records"
+      ],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -1048,6 +1397,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -1065,6 +1419,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -1082,6 +1441,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -1099,6 +1463,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -1116,6 +1485,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -1133,6 +1507,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -1171,6 +1550,34 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [
+        {
+          "from": "2019-01-01",
+          "to": "2020-01-01",
+          "kind": "record-appeared",
+          "before": [],
+          "after": [
+            "FONCIER VITI DOM FRANCOIS LAMARCHE"
+          ]
+        },
+        {
+          "from": "2021-01-01",
+          "to": "2022-01-01",
+          "kind": "same-holder-renamed",
+          "before": [
+            "FONCIER VITI DOM FRANCOIS LAMARCHE"
+          ],
+          "after": [
+            "NICOLE LAMARCHE"
+          ]
+        }
+      ],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [
+        "lamarche-rename"
+      ],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -1209,6 +1616,34 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [
+        {
+          "from": "2019-01-01",
+          "to": "2020-01-01",
+          "kind": "record-appeared",
+          "before": [],
+          "after": [
+            "FONCIER VITI DOM FRANCOIS LAMARCHE"
+          ]
+        },
+        {
+          "from": "2021-01-01",
+          "to": "2022-01-01",
+          "kind": "same-holder-renamed",
+          "before": [
+            "FONCIER VITI DOM FRANCOIS LAMARCHE"
+          ],
+          "after": [
+            "NICOLE LAMARCHE"
+          ]
+        }
+      ],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [
+        "lamarche-rename"
+      ],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -1224,10 +1659,25 @@
       "recordedRights": [],
       "recordMatch": "unknown",
       "holderResearchIds": [],
-      "candidateLeads": [],
+      "candidateLeads": [
+        {
+          "name": "Domaine Jean Grivot",
+          "basis": "critic-named-cadastral-reference",
+          "sourceIds": [
+            "winehog-grivot"
+          ]
+        }
+      ],
       "historicalEvents": [],
-      "researchStatus": "unresolved",
-      "researchDepth": "inventory-only",
+      "externalResearchIds": [
+        "wh-grivot"
+      ],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "researchStatus": "holder-lead",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -1241,10 +1691,25 @@
       "recordedRights": [],
       "recordMatch": "unknown",
       "holderResearchIds": [],
-      "candidateLeads": [],
+      "candidateLeads": [
+        {
+          "name": "Domaine Jean Grivot",
+          "basis": "critic-named-cadastral-reference",
+          "sourceIds": [
+            "winehog-grivot"
+          ]
+        }
+      ],
       "historicalEvents": [],
-      "researchStatus": "unresolved",
-      "researchDepth": "inventory-only",
+      "externalResearchIds": [
+        "wh-grivot"
+      ],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "researchStatus": "holder-lead",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -1280,8 +1745,16 @@
           "documentDate": "2022-11-24",
           "outcome": "unconfirmed",
           "currentFarmer": null,
-          "unresolvedPrintedReference": "D01776"
+          "unresolvedPrintedReference": "D01776",
+          "summary": "Dossier 2022-204, complete at 21/10/2022, 1.5050 ha across Vosne-Romanée and Flagey-Échezeaux; the receipt does not authorise cultivation. Geometry of D0177/D0178 is unchanged since January 2022. Printed D01776 is unresolved."
         }
+      ],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [
+        "anne-application-continuity"
       ],
       "researchStatus": "historical-application",
       "researchDepth": "exact-reference-event-reviewed",
@@ -1320,8 +1793,16 @@
           "documentDate": "2022-11-24",
           "outcome": "unconfirmed",
           "currentFarmer": null,
-          "unresolvedPrintedReference": "D01776"
+          "unresolvedPrintedReference": "D01776",
+          "summary": "Dossier 2022-204, complete at 21/10/2022, 1.5050 ha across Vosne-Romanée and Flagey-Échezeaux; the receipt does not authorise cultivation. Geometry of D0177/D0178 is unchanged since January 2022. Printed D01776 is unresolved."
         }
+      ],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [
+        "anne-application-continuity"
       ],
       "researchStatus": "historical-application",
       "researchDepth": "exact-reference-event-reviewed",
@@ -1338,14 +1819,48 @@
       "recordedRights": [],
       "recordMatch": "unknown",
       "holderResearchIds": [],
-      "candidateLeads": [],
-      "historicalEvents": [],
-      "researchStatus": "unresolved",
-      "researchDepth": "inventory-only",
+      "candidateLeads": [
+        {
+          "name": "SAS Domaine AF Gros (Pommard)",
+          "basis": "historical-application",
+          "sourceIds": [
+            "raa-2022-143"
+          ]
+        }
+      ],
+      "historicalEvents": [
+        {
+          "parcelIds": [
+            "212670000D0181"
+          ],
+          "predecessorReferences": {
+            "212670000D0775": [
+              "212670000D0832",
+              "212670000D0833",
+              "212670000D0834"
+            ]
+          },
+          "sourceId": "raa-2022-143",
+          "kind": "historical-application",
+          "applicant": "SAS Domaine AF Gros (Pommard)",
+          "previousOperator": "Domaine Gros Frère et Sœur",
+          "documentDate": "2022-06-30",
+          "outcome": "unconfirmed",
+          "currentFarmer": null,
+          "summary": "Dossier 2022-113, filed 23/05/2022, with Vougeot A523/A524; 1.0719 ha in total. Both Flagey references are in Les Loächausses. The receipt states it does not authorise cultivation. D0775 was divided after January 2024."
+        }
+      ],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "researchStatus": "historical-application",
+      "researchDepth": "exact-reference-event-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
-      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+      "nextEvidenceNeeded": "Resolve application outcome, actual operation and cadastral continuity."
     },
     {
       "parcelId": "212670000D0183",
@@ -1378,6 +1893,23 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [
+        {
+          "from": "2020-01-01",
+          "to": "2021-01-01",
+          "kind": "record-appeared",
+          "before": [],
+          "after": [
+            "ANNE GROS"
+          ]
+        }
+      ],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [
+        "anne-gros-rights"
+      ],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -1393,14 +1925,48 @@
       "recordedRights": [],
       "recordMatch": "unknown",
       "holderResearchIds": [],
-      "candidateLeads": [],
-      "historicalEvents": [],
-      "researchStatus": "unresolved",
-      "researchDepth": "inventory-only",
+      "candidateLeads": [
+        {
+          "name": "SARL Domaine Michel Gros",
+          "basis": "historical-application",
+          "sourceIds": [
+            "raa-2022-101"
+          ]
+        }
+      ],
+      "historicalEvents": [
+        {
+          "parcelIds": [
+            "212670000D0184",
+            "212670000D0558"
+          ],
+          "predecessorReferences": {
+            "212670000D0774": [
+              "212670000D0830",
+              "212670000D0831"
+            ]
+          },
+          "sourceId": "raa-2022-101",
+          "kind": "historical-application",
+          "applicant": "SARL Domaine Michel Gros",
+          "previousOperator": "SCE Gros frère et sœur",
+          "documentDate": "2022-04-04",
+          "outcome": "unconfirmed",
+          "currentFarmer": null,
+          "summary": "Dossier 2022-053, filed 07/03/2022, complete 28/03/2022; 0.7903 ha across Vosne-Romanée and Flagey-Échezeaux, all three Flagey references in Les Loächausses. The receipt is not an authorisation. D0774 was divided after January 2024."
+        }
+      ],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "researchStatus": "historical-application",
+      "researchDepth": "exact-reference-event-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
-      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+      "nextEvidenceNeeded": "Resolve application outcome, actual operation and cadastral continuity."
     },
     {
       "parcelId": "212670000D0189",
@@ -1410,10 +1976,25 @@
       "recordedRights": [],
       "recordMatch": "unknown",
       "holderResearchIds": [],
-      "candidateLeads": [],
+      "candidateLeads": [
+        {
+          "name": "Domaine Cécile Tremblay",
+          "basis": "critic-attribution-area-reconstructed",
+          "sourceIds": [
+            "winehog-dessus"
+          ]
+        }
+      ],
       "historicalEvents": [],
-      "researchStatus": "unresolved",
-      "researchDepth": "inventory-only",
+      "externalResearchIds": [
+        "wh-dessus-tremblay"
+      ],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "researchStatus": "holder-lead",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -1427,10 +2008,25 @@
       "recordedRights": [],
       "recordMatch": "unknown",
       "holderResearchIds": [],
-      "candidateLeads": [],
+      "candidateLeads": [
+        {
+          "name": "Domaine Cécile Tremblay",
+          "basis": "critic-attribution-area-reconstructed",
+          "sourceIds": [
+            "winehog-dessus"
+          ]
+        }
+      ],
       "historicalEvents": [],
-      "researchStatus": "unresolved",
-      "researchDepth": "inventory-only",
+      "externalResearchIds": [
+        "wh-dessus-tremblay"
+      ],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "researchStatus": "holder-lead",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -1467,8 +2063,27 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [
+        "wh-dessus-noellat"
+      ],
+      "rightsChanges": [
+        {
+          "from": "2019-01-01",
+          "to": "2020-01-01",
+          "kind": "same-holder-renamed",
+          "before": [
+            "MONGEARD MUGNERET ET FILS"
+          ],
+          "after": [
+            "GFA MONGEARD MUGNERET ET FILS"
+          ]
+        }
+      ],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "holder-lead",
-      "researchDepth": "holder-group-triage",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -1505,8 +2120,27 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [
+        "wh-dessus-noellat"
+      ],
+      "rightsChanges": [
+        {
+          "from": "2019-01-01",
+          "to": "2020-01-01",
+          "kind": "same-holder-renamed",
+          "before": [
+            "MONGEARD MUGNERET ET FILS"
+          ],
+          "after": [
+            "GFA MONGEARD MUGNERET ET FILS"
+          ]
+        }
+      ],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "holder-lead",
-      "researchDepth": "holder-group-triage",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -1543,6 +2177,36 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [
+        {
+          "from": "2019-01-01",
+          "to": "2020-01-01",
+          "kind": "unprovable-identifier-change",
+          "before": [
+            "SC DOM DE LA ROMANEE CONTI"
+          ],
+          "after": [
+            "SC DOM DE LA ROMANEE CONTI"
+          ]
+        },
+        {
+          "from": "2020-01-01",
+          "to": "2021-01-01",
+          "kind": "unprovable-identifier-change",
+          "before": [
+            "SC DOM DE LA ROMANEE CONTI"
+          ],
+          "after": [
+            "DOMAINE DE LA ROMANEE CONTI"
+          ]
+        }
+      ],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [
+        "drc-identifier"
+      ],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -1582,6 +2246,11 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -1599,6 +2268,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -1616,6 +2290,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -1633,6 +2312,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -1671,6 +2355,23 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [
+        {
+          "from": "2023-01-01",
+          "to": "2024-01-01",
+          "kind": "record-appeared",
+          "before": [],
+          "after": [
+            "EARL DOMAINE FAIVRE"
+          ]
+        }
+      ],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [
+        "recent-company-records"
+      ],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -1709,6 +2410,11 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -1726,6 +2432,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -1766,6 +2477,23 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [
+        {
+          "from": "2023-01-01",
+          "to": "2024-01-01",
+          "kind": "record-appeared",
+          "before": [],
+          "after": [
+            "TRAVERSINS"
+          ]
+        }
+      ],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [
+        "traversins-timing"
+      ],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -1806,6 +2534,23 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [
+        {
+          "from": "2023-01-01",
+          "to": "2024-01-01",
+          "kind": "record-appeared",
+          "before": [],
+          "after": [
+            "TRAVERSINS"
+          ]
+        }
+      ],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [
+        "traversins-timing"
+      ],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -1846,6 +2591,23 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [
+        {
+          "from": "2023-01-01",
+          "to": "2024-01-01",
+          "kind": "record-appeared",
+          "before": [],
+          "after": [
+            "TRAVERSINS"
+          ]
+        }
+      ],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [
+        "traversins-timing"
+      ],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -1886,6 +2648,23 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [
+        {
+          "from": "2023-01-01",
+          "to": "2024-01-01",
+          "kind": "record-appeared",
+          "before": [],
+          "after": [
+            "TRAVERSINS"
+          ]
+        }
+      ],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [
+        "traversins-timing"
+      ],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -1926,6 +2705,23 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [
+        {
+          "from": "2023-01-01",
+          "to": "2024-01-01",
+          "kind": "record-appeared",
+          "before": [],
+          "after": [
+            "TRAVERSINS"
+          ]
+        }
+      ],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [
+        "traversins-timing"
+      ],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -1943,6 +2739,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -1960,6 +2761,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -1977,6 +2783,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -1994,6 +2805,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -2011,6 +2827,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -2049,6 +2870,11 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -2066,6 +2892,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -2104,6 +2935,11 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -2133,6 +2969,23 @@
       ],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [
+        {
+          "from": "2022-01-01",
+          "to": "2023-01-01",
+          "kind": "record-appeared",
+          "before": [],
+          "after": [
+            "ORIGINE"
+          ]
+        }
+      ],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [
+        "recent-company-records"
+      ],
       "researchStatus": "unresolved",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -2162,6 +3015,23 @@
       ],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [
+        {
+          "from": "2024-01-01",
+          "to": "2025-01-01",
+          "kind": "record-appeared",
+          "before": [],
+          "after": [
+            "GROUPEMENT FONCIER VITICOLE DE ORVEAUX"
+          ]
+        }
+      ],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [
+        "family-companies-2024"
+      ],
       "researchStatus": "unresolved",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -2191,6 +3061,23 @@
       ],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [
+        {
+          "from": "2024-01-01",
+          "to": "2025-01-01",
+          "kind": "record-appeared",
+          "before": [],
+          "after": [
+            "GROUPEMENT FONCIER VITICOLE DE ORVEAUX"
+          ]
+        }
+      ],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [
+        "family-companies-2024"
+      ],
       "researchStatus": "unresolved",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -2229,6 +3116,36 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [
+        {
+          "from": "2019-01-01",
+          "to": "2020-01-01",
+          "kind": "same-holder-renamed",
+          "before": [
+            "DOMAINE FRANCOIS CAPITAIN ET FILS"
+          ],
+          "after": [
+            "GFA DOMAINE FRANCOIS CAPITAIN ET FILS"
+          ]
+        },
+        {
+          "from": "2020-01-01",
+          "to": "2021-01-01",
+          "kind": "holder-changed",
+          "before": [
+            "GFA DOMAINE FRANCOIS CAPITAIN ET FILS"
+          ],
+          "after": [
+            "SARL CAPITAIN GAGNEROT"
+          ]
+        }
+      ],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [
+        "capitain-transfer"
+      ],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -2246,6 +3163,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -2285,6 +3207,23 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [
+        {
+          "from": "2019-01-01",
+          "to": "2020-01-01",
+          "kind": "same-holder-renamed",
+          "before": [
+            "CVVB"
+          ],
+          "after": [
+            "CONSORTIUM VITICOLE VINICOLE BOURGOGNE"
+          ]
+        }
+      ],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -2323,6 +3262,23 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [
+        {
+          "from": "2019-01-01",
+          "to": "2020-01-01",
+          "kind": "same-holder-renamed",
+          "before": [
+            "MONGEARD MUGNERET ET FILS"
+          ],
+          "after": [
+            "GFA MONGEARD MUGNERET ET FILS"
+          ]
+        }
+      ],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -2340,6 +3296,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -2379,6 +3340,23 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [
+        {
+          "from": "2019-01-01",
+          "to": "2020-01-01",
+          "kind": "same-holder-renamed",
+          "before": [
+            "CVVB"
+          ],
+          "after": [
+            "CONSORTIUM VITICOLE VINICOLE BOURGOGNE"
+          ]
+        }
+      ],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -2396,6 +3374,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -2434,6 +3417,23 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [
+        {
+          "from": "2019-01-01",
+          "to": "2020-01-01",
+          "kind": "same-holder-renamed",
+          "before": [
+            "MONGEARD MUGNERET ET FILS"
+          ],
+          "after": [
+            "GFA MONGEARD MUGNERET ET FILS"
+          ]
+        }
+      ],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -2451,6 +3451,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -2489,6 +3494,23 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [
+        {
+          "from": "2023-01-01",
+          "to": "2024-01-01",
+          "kind": "record-appeared",
+          "before": [],
+          "after": [
+            "DOMAINE D'EUGENIE"
+          ]
+        }
+      ],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [
+        "recent-company-records"
+      ],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -2506,6 +3528,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -2523,6 +3550,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -2540,6 +3572,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -2557,6 +3594,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -2574,6 +3616,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -2591,6 +3638,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -2608,6 +3660,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -2625,6 +3682,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -2642,6 +3704,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -2659,6 +3726,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -2697,6 +3769,23 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [
+        {
+          "from": "2023-01-01",
+          "to": "2024-01-01",
+          "kind": "same-holder-renamed",
+          "before": [
+            "DOMAINE DEUGENIE"
+          ],
+          "after": [
+            "DOMAINE D'EUGENIE"
+          ]
+        }
+      ],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -2714,6 +3803,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -2748,13 +3842,40 @@
           "basis": "partial-succession-lead",
           "sourceIds": [
             "gerbet",
-            "berthaut"
+            "berthaut",
+            "winehog-berthaut-gerbet"
+          ]
+        },
+        {
+          "name": "Domaine Berthaut-Gerbet",
+          "basis": "critic-named-cadastral-reference",
+          "sourceIds": [
+            "winehog-berthaut-gerbet"
           ]
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [
+        "wh-berthaut-gerbet"
+      ],
+      "rightsChanges": [
+        {
+          "from": "2020-01-01",
+          "to": "2021-01-01",
+          "kind": "same-holder-renamed",
+          "before": [
+            "GERBET SIRUGUE"
+          ],
+          "after": [
+            "GFA DOMAINE GERBET SIRUGUE"
+          ]
+        }
+      ],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "holder-lead",
-      "researchDepth": "holder-group-triage",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -2770,6 +3891,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -2809,6 +3935,11 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -2826,6 +3957,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -2843,6 +3979,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -2860,6 +4001,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -2898,6 +4044,11 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -2932,13 +4083,40 @@
           "basis": "partial-succession-lead",
           "sourceIds": [
             "gerbet",
-            "berthaut"
+            "berthaut",
+            "winehog-berthaut-gerbet"
+          ]
+        },
+        {
+          "name": "Domaine Berthaut-Gerbet",
+          "basis": "critic-named-cadastral-reference",
+          "sourceIds": [
+            "winehog-berthaut-gerbet"
           ]
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [
+        "wh-berthaut-gerbet"
+      ],
+      "rightsChanges": [
+        {
+          "from": "2020-01-01",
+          "to": "2021-01-01",
+          "kind": "same-holder-renamed",
+          "before": [
+            "GERBET SIRUGUE"
+          ],
+          "after": [
+            "GFA DOMAINE GERBET SIRUGUE"
+          ]
+        }
+      ],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "holder-lead",
-      "researchDepth": "holder-group-triage",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -2954,6 +4132,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -2990,11 +4173,26 @@
             "hospices",
             "hospices-catalogue"
           ]
+        },
+        {
+          "name": "Hospices de Beaune (owner)",
+          "basis": "critic-named-cadastral-reference",
+          "sourceIds": [
+            "winehog-dessus",
+            "winehog-hospices"
+          ]
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [
+        "wh-d0510"
+      ],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "holder-lead",
-      "researchDepth": "holder-group-triage",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -3031,6 +4229,23 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [
+        {
+          "from": "2024-01-01",
+          "to": "2025-01-01",
+          "kind": "record-appeared",
+          "before": [],
+          "after": [
+            "LES CRUOTS"
+          ]
+        }
+      ],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [
+        "family-companies-2024"
+      ],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -3069,6 +4284,23 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [
+        {
+          "from": "2024-01-01",
+          "to": "2025-01-01",
+          "kind": "record-appeared",
+          "before": [],
+          "after": [
+            "LES CRUOTS"
+          ]
+        }
+      ],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [
+        "family-companies-2024"
+      ],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -3086,6 +4318,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -3124,6 +4361,34 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [
+        {
+          "from": "2019-01-01",
+          "to": "2020-01-01",
+          "kind": "record-appeared",
+          "before": [],
+          "after": [
+            "FONCIER VITI DOM FRANCOIS LAMARCHE"
+          ]
+        },
+        {
+          "from": "2021-01-01",
+          "to": "2022-01-01",
+          "kind": "same-holder-renamed",
+          "before": [
+            "FONCIER VITI DOM FRANCOIS LAMARCHE"
+          ],
+          "after": [
+            "NICOLE LAMARCHE"
+          ]
+        }
+      ],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [
+        "lamarche-rename"
+      ],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -3141,6 +4406,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -3179,6 +4449,11 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -3217,6 +4492,11 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -3255,6 +4535,11 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -3293,6 +4578,11 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -3310,6 +4600,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -3325,14 +4620,48 @@
       "recordedRights": [],
       "recordMatch": "unknown",
       "holderResearchIds": [],
-      "candidateLeads": [],
-      "historicalEvents": [],
-      "researchStatus": "unresolved",
-      "researchDepth": "inventory-only",
+      "candidateLeads": [
+        {
+          "name": "SARL Domaine Michel Gros",
+          "basis": "historical-application",
+          "sourceIds": [
+            "raa-2022-101"
+          ]
+        }
+      ],
+      "historicalEvents": [
+        {
+          "parcelIds": [
+            "212670000D0184",
+            "212670000D0558"
+          ],
+          "predecessorReferences": {
+            "212670000D0774": [
+              "212670000D0830",
+              "212670000D0831"
+            ]
+          },
+          "sourceId": "raa-2022-101",
+          "kind": "historical-application",
+          "applicant": "SARL Domaine Michel Gros",
+          "previousOperator": "SCE Gros frère et sœur",
+          "documentDate": "2022-04-04",
+          "outcome": "unconfirmed",
+          "currentFarmer": null,
+          "summary": "Dossier 2022-053, filed 07/03/2022, complete 28/03/2022; 0.7903 ha across Vosne-Romanée and Flagey-Échezeaux, all three Flagey references in Les Loächausses. The receipt is not an authorisation. D0774 was divided after January 2024."
+        }
+      ],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "researchStatus": "historical-application",
+      "researchDepth": "exact-reference-event-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
-      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+      "nextEvidenceNeeded": "Resolve application outcome, actual operation and cadastral continuity."
     },
     {
       "parcelId": "212670000D0563",
@@ -3344,6 +4673,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -3361,6 +4695,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -3378,6 +4717,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -3416,6 +4760,11 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -3454,6 +4803,11 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -3492,6 +4846,11 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -3530,6 +4889,36 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [
+        {
+          "from": "2019-01-01",
+          "to": "2020-01-01",
+          "kind": "same-holder-renamed",
+          "before": [
+            "DOMAINE FRANCOIS CAPITAIN ET FILS"
+          ],
+          "after": [
+            "GFA DOMAINE FRANCOIS CAPITAIN ET FILS"
+          ]
+        },
+        {
+          "from": "2020-01-01",
+          "to": "2021-01-01",
+          "kind": "holder-changed",
+          "before": [
+            "GFA DOMAINE FRANCOIS CAPITAIN ET FILS"
+          ],
+          "after": [
+            "SARL CAPITAIN GAGNEROT"
+          ]
+        }
+      ],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [
+        "capitain-transfer"
+      ],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -3568,6 +4957,36 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [
+        {
+          "from": "2019-01-01",
+          "to": "2020-01-01",
+          "kind": "same-holder-renamed",
+          "before": [
+            "DOMAINE FRANCOIS CAPITAIN ET FILS"
+          ],
+          "after": [
+            "GFA DOMAINE FRANCOIS CAPITAIN ET FILS"
+          ]
+        },
+        {
+          "from": "2020-01-01",
+          "to": "2021-01-01",
+          "kind": "holder-changed",
+          "before": [
+            "GFA DOMAINE FRANCOIS CAPITAIN ET FILS"
+          ],
+          "after": [
+            "SARL CAPITAIN GAGNEROT"
+          ]
+        }
+      ],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [
+        "capitain-transfer"
+      ],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -3606,6 +5025,36 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [
+        {
+          "from": "2019-01-01",
+          "to": "2020-01-01",
+          "kind": "same-holder-renamed",
+          "before": [
+            "DOMAINE FRANCOIS CAPITAIN ET FILS"
+          ],
+          "after": [
+            "GFA DOMAINE FRANCOIS CAPITAIN ET FILS"
+          ]
+        },
+        {
+          "from": "2020-01-01",
+          "to": "2021-01-01",
+          "kind": "holder-changed",
+          "before": [
+            "GFA DOMAINE FRANCOIS CAPITAIN ET FILS"
+          ],
+          "after": [
+            "SARL CAPITAIN GAGNEROT"
+          ]
+        }
+      ],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [
+        "capitain-transfer"
+      ],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -3644,6 +5093,36 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [
+        {
+          "from": "2019-01-01",
+          "to": "2020-01-01",
+          "kind": "same-holder-renamed",
+          "before": [
+            "DOMAINE FRANCOIS CAPITAIN ET FILS"
+          ],
+          "after": [
+            "GFA DOMAINE FRANCOIS CAPITAIN ET FILS"
+          ]
+        },
+        {
+          "from": "2020-01-01",
+          "to": "2021-01-01",
+          "kind": "holder-changed",
+          "before": [
+            "GFA DOMAINE FRANCOIS CAPITAIN ET FILS"
+          ],
+          "after": [
+            "SARL CAPITAIN GAGNEROT"
+          ]
+        }
+      ],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [
+        "capitain-transfer"
+      ],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -3661,6 +5140,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -3678,6 +5162,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -3716,6 +5205,36 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [
+        {
+          "from": "2019-01-01",
+          "to": "2020-01-01",
+          "kind": "same-holder-renamed",
+          "before": [
+            "DOMAINE FRANCOIS CAPITAIN ET FILS"
+          ],
+          "after": [
+            "GFA DOMAINE FRANCOIS CAPITAIN ET FILS"
+          ]
+        },
+        {
+          "from": "2020-01-01",
+          "to": "2021-01-01",
+          "kind": "holder-changed",
+          "before": [
+            "GFA DOMAINE FRANCOIS CAPITAIN ET FILS"
+          ],
+          "after": [
+            "SARL CAPITAIN GAGNEROT"
+          ]
+        }
+      ],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [
+        "capitain-transfer"
+      ],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -3754,6 +5273,36 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [
+        {
+          "from": "2019-01-01",
+          "to": "2020-01-01",
+          "kind": "same-holder-renamed",
+          "before": [
+            "DOMAINE FRANCOIS CAPITAIN ET FILS"
+          ],
+          "after": [
+            "GFA DOMAINE FRANCOIS CAPITAIN ET FILS"
+          ]
+        },
+        {
+          "from": "2020-01-01",
+          "to": "2021-01-01",
+          "kind": "holder-changed",
+          "before": [
+            "GFA DOMAINE FRANCOIS CAPITAIN ET FILS"
+          ],
+          "after": [
+            "SARL CAPITAIN GAGNEROT"
+          ]
+        }
+      ],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [
+        "capitain-transfer"
+      ],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -3769,10 +5318,26 @@
       "recordedRights": [],
       "recordMatch": "unknown",
       "holderResearchIds": [],
-      "candidateLeads": [],
+      "candidateLeads": [
+        {
+          "name": "Domaine Jean Grivot",
+          "basis": "critic-named-cadastral-reference",
+          "sourceIds": [
+            "winehog-grivot"
+          ]
+        }
+      ],
       "historicalEvents": [],
-      "researchStatus": "unresolved",
-      "researchDepth": "inventory-only",
+      "externalResearchIds": [
+        "wh-grivot",
+        "wh-lamadon-2006"
+      ],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "researchStatus": "holder-lead",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -3788,6 +5353,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -3805,6 +5375,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -3820,10 +5395,26 @@
       "recordedRights": [],
       "recordMatch": "unknown",
       "holderResearchIds": [],
-      "candidateLeads": [],
+      "candidateLeads": [
+        {
+          "name": "Domaine Jean Grivot",
+          "basis": "critic-named-cadastral-reference",
+          "sourceIds": [
+            "winehog-grivot"
+          ]
+        }
+      ],
       "historicalEvents": [],
-      "researchStatus": "unresolved",
-      "researchDepth": "inventory-only",
+      "externalResearchIds": [
+        "wh-grivot",
+        "wh-lamadon-2006"
+      ],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "researchStatus": "holder-lead",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -3839,6 +5430,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -3854,10 +5450,25 @@
       "recordedRights": [],
       "recordMatch": "unknown",
       "holderResearchIds": [],
-      "candidateLeads": [],
+      "candidateLeads": [
+        {
+          "name": "Domaine Jean Grivot",
+          "basis": "critic-named-cadastral-reference",
+          "sourceIds": [
+            "winehog-grivot"
+          ]
+        }
+      ],
       "historicalEvents": [],
-      "researchStatus": "unresolved",
-      "researchDepth": "inventory-only",
+      "externalResearchIds": [
+        "wh-grivot"
+      ],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "researchStatus": "holder-lead",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -3871,10 +5482,25 @@
       "recordedRights": [],
       "recordMatch": "unknown",
       "holderResearchIds": [],
-      "candidateLeads": [],
+      "candidateLeads": [
+        {
+          "name": "Domaine des Perdrix",
+          "basis": "critic-attribution-area-reconstructed",
+          "sourceIds": [
+            "winehog-dessus"
+          ]
+        }
+      ],
       "historicalEvents": [],
-      "researchStatus": "unresolved",
-      "researchDepth": "inventory-only",
+      "externalResearchIds": [
+        "wh-dessus-perdrix"
+      ],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "researchStatus": "holder-lead",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -3888,10 +5514,25 @@
       "recordedRights": [],
       "recordMatch": "unknown",
       "holderResearchIds": [],
-      "candidateLeads": [],
+      "candidateLeads": [
+        {
+          "name": "Domaine des Perdrix",
+          "basis": "critic-attribution-area-reconstructed",
+          "sourceIds": [
+            "winehog-dessus"
+          ]
+        }
+      ],
       "historicalEvents": [],
-      "researchStatus": "unresolved",
-      "researchDepth": "inventory-only",
+      "externalResearchIds": [
+        "wh-dessus-perdrix"
+      ],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "researchStatus": "holder-lead",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -3928,6 +5569,23 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [
+        {
+          "from": "2019-01-01",
+          "to": "2020-01-01",
+          "kind": "same-holder-renamed",
+          "before": [
+            "MONGEARD MUGNERET ET FILS"
+          ],
+          "after": [
+            "GFA MONGEARD MUGNERET ET FILS"
+          ]
+        }
+      ],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -3966,6 +5624,23 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [
+        {
+          "from": "2019-01-01",
+          "to": "2020-01-01",
+          "kind": "same-holder-renamed",
+          "before": [
+            "MONGEARD MUGNERET ET FILS"
+          ],
+          "after": [
+            "GFA MONGEARD MUGNERET ET FILS"
+          ]
+        }
+      ],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -3983,6 +5658,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -4000,6 +5680,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -4017,6 +5702,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -4051,17 +5741,49 @@
           "basis": "bottler-only-lead",
           "sourceIds": [
             "bouchy",
-            "bouchy-tardy"
+            "bouchy-tardy",
+            "raa-2026-067"
+          ]
+        },
+        {
+          "name": "SCEA Domaine du Comte Liger-Belair (Vosne-Romanée)",
+          "basis": "suspended-application",
+          "sourceIds": [
+            "raa-2026-067"
           ]
         }
       ],
-      "historicalEvents": [],
-      "researchStatus": "holder-lead",
-      "researchDepth": "holder-group-triage",
+      "historicalEvents": [
+        {
+          "parcelIds": [
+            "212670000D0628",
+            "212670000D0673",
+            "212670000D0764",
+            "212670000D0765",
+            "212670000D0766",
+            "212670000D0767"
+          ],
+          "sourceId": "raa-2026-067",
+          "kind": "suspended-application",
+          "applicant": "SCEA Domaine du Comte Liger-Belair (Vosne-Romanée)",
+          "previousOperator": "Not stated",
+          "documentDate": "2026-04-07",
+          "outcome": "instruction suspended for eight months from 29 April 2026",
+          "currentFarmer": null,
+          "summary": "The application covers 4.3080 ha in Flagey-Échezeaux, Boncourt-le-Bois, Vosne-Romanée and Vougeot belonging to SAS Bouchon Pourpre, GFA Domaine Bouchy et Amis, SCEA Nathalie Pacareau Lamarche and Mme Geneviève Lamarche; it also names Grands-Échezeaux D615 and D616. The region found the enlargement excessive and suspended the instruction, during which anyone may apply for the same land. As of the order, the applicant was not authorised to farm these parcels."
+        }
+      ],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "researchStatus": "historical-application",
+      "researchDepth": "exact-reference-event-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
-      "nextEvidenceNeeded": "Obtain dated parcel-specific operation evidence and scope."
+      "nextEvidenceNeeded": "Check the decision after the suspension ends, and who farms meanwhile."
     },
     {
       "parcelId": "212670000D0629",
@@ -4073,6 +5795,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -4108,11 +5835,26 @@
           "sourceIds": [
             "hoffmann"
           ]
+        },
+        {
+          "name": "Domaine Jayer-Gilles / Hoffmann-Jayer",
+          "basis": "critic-named-cadastral-reference",
+          "sourceIds": [
+            "winehog-jayer-gilles",
+            "winehog-dessus"
+          ]
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [
+        "wh-d0631"
+      ],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "holder-lead",
-      "researchDepth": "holder-group-triage",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -4126,10 +5868,26 @@
       "recordedRights": [],
       "recordMatch": "unknown",
       "holderResearchIds": [],
-      "candidateLeads": [],
+      "candidateLeads": [
+        {
+          "name": "Niquet-Jayer family (owner)",
+          "basis": "critic-named-cadastral-reference",
+          "sourceIds": [
+            "winehog-jayer-gilles",
+            "winehog-dessus"
+          ]
+        }
+      ],
       "historicalEvents": [],
-      "researchStatus": "unresolved",
-      "researchDepth": "inventory-only",
+      "externalResearchIds": [
+        "wh-d0632"
+      ],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "researchStatus": "holder-lead",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -4157,6 +5915,23 @@
       ],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [
+        {
+          "from": "2024-01-01",
+          "to": "2025-01-01",
+          "kind": "record-appeared",
+          "before": [],
+          "after": [
+            "GROUPEMENT FONCIER VITICOLE DE ORVEAUX"
+          ]
+        }
+      ],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [
+        "family-companies-2024"
+      ],
       "researchStatus": "unresolved",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -4186,6 +5961,23 @@
       ],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [
+        {
+          "from": "2019-01-01",
+          "to": "2020-01-01",
+          "kind": "unprovable-identifier-change",
+          "before": [
+            "GFA HERITIERS COUDRAY"
+          ],
+          "after": [
+            "GFA HERITIERS COUDRAY"
+          ]
+        }
+      ],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -4215,6 +6007,23 @@
       ],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [
+        {
+          "from": "2024-01-01",
+          "to": "2025-01-01",
+          "kind": "record-appeared",
+          "before": [],
+          "after": [
+            "GROUPEMENT FONCIER VITICOLE DE ORVEAUX"
+          ]
+        }
+      ],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [
+        "family-companies-2024"
+      ],
       "researchStatus": "unresolved",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -4232,6 +6041,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -4270,6 +6084,11 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -4310,6 +6129,23 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [
+        {
+          "from": "2022-01-01",
+          "to": "2023-01-01",
+          "kind": "same-holder-renamed",
+          "before": [
+            "LES BONNES PENTES"
+          ],
+          "after": [
+            "GFA LES BONNES PENTES"
+          ]
+        }
+      ],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -4350,6 +6186,23 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [
+        {
+          "from": "2022-01-01",
+          "to": "2023-01-01",
+          "kind": "same-holder-renamed",
+          "before": [
+            "LES BONNES PENTES"
+          ],
+          "after": [
+            "GFA LES BONNES PENTES"
+          ]
+        }
+      ],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -4390,6 +6243,23 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [
+        {
+          "from": "2022-01-01",
+          "to": "2023-01-01",
+          "kind": "same-holder-renamed",
+          "before": [
+            "LES BONNES PENTES"
+          ],
+          "after": [
+            "GFA LES BONNES PENTES"
+          ]
+        }
+      ],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -4407,6 +6277,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -4436,6 +6311,23 @@
       ],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [
+        {
+          "from": "2019-01-01",
+          "to": "2020-01-01",
+          "kind": "unprovable-identifier-change",
+          "before": [
+            "GFV GRANDS CRUS INVESTISSEMENT"
+          ],
+          "after": [
+            "GFV GRANDS CRUS INVESTISSEMENT"
+          ]
+        }
+      ],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -4465,6 +6357,23 @@
       ],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [
+        {
+          "from": "2019-01-01",
+          "to": "2020-01-01",
+          "kind": "unprovable-identifier-change",
+          "before": [
+            "GFV GRANDS CRUS INVESTISSEMENT"
+          ],
+          "after": [
+            "GFV GRANDS CRUS INVESTISSEMENT"
+          ]
+        }
+      ],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -4494,6 +6403,23 @@
       ],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [
+        {
+          "from": "2019-01-01",
+          "to": "2020-01-01",
+          "kind": "unprovable-identifier-change",
+          "before": [
+            "GFV GRANDS CRUS INVESTISSEMENT"
+          ],
+          "after": [
+            "GFV GRANDS CRUS INVESTISSEMENT"
+          ]
+        }
+      ],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -4533,6 +6459,23 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [
+        {
+          "from": "2019-01-01",
+          "to": "2020-01-01",
+          "kind": "same-holder-renamed",
+          "before": [
+            "CVVB"
+          ],
+          "after": [
+            "CONSORTIUM VITICOLE VINICOLE BOURGOGNE"
+          ]
+        }
+      ],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -4571,6 +6514,23 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [
+        {
+          "from": "2019-01-01",
+          "to": "2020-01-01",
+          "kind": "same-holder-renamed",
+          "before": [
+            "MONGEARD MUGNERET ET FILS"
+          ],
+          "after": [
+            "GFA MONGEARD MUGNERET ET FILS"
+          ]
+        }
+      ],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -4607,15 +6567,42 @@
             "rion",
             "rion-succession"
           ]
+        },
+        {
+          "name": "SAS Domaine RC Les Grandes Vignes (Quincey)",
+          "basis": "authorisation",
+          "sourceIds": [
+            "raa-2022-084"
+          ]
         }
       ],
-      "historicalEvents": [],
-      "researchStatus": "holder-lead",
-      "researchDepth": "holder-group-triage",
+      "historicalEvents": [
+        {
+          "parcelIds": [
+            "212670000D0665",
+            "212670000D0666"
+          ],
+          "sourceId": "raa-2022-084",
+          "kind": "authorisation",
+          "applicant": "SAS Domaine RC Les Grandes Vignes (Quincey)",
+          "previousOperator": "Domaine Daniel Rion et Fils",
+          "documentDate": "2022-07-04",
+          "outcome": "authorised",
+          "currentFarmer": null,
+          "summary": "Application filed 11/01/2022, complete 01/03/2022, CDOA opinion 25/05/2022; the same decision refuses Vosne-Romanée AB references to this applicant. Article 2 lists four communes without assigning each row; the section D rows are taken as Flagey-Échezeaux because the cédant holds these references there. D0665 is printed at 0.1157 ha, its cadastral area; D0666 at 0.0799 ha against 0.1157 ha, so its scope is unresolved. D0667, held by the same right holder, is not in the decision. Whether the applicant is connected to Domaine Jean-Charles Rion is not established."
+        }
+      ],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "researchStatus": "historical-authorisation",
+      "researchDepth": "exact-reference-event-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
-      "nextEvidenceNeeded": "Obtain dated parcel-specific operation evidence and scope."
+      "nextEvidenceNeeded": "Confirm actual operation, scope and continuation since the decision."
     },
     {
       "parcelId": "212670000D0666",
@@ -4646,15 +6633,42 @@
             "rion",
             "rion-succession"
           ]
+        },
+        {
+          "name": "SAS Domaine RC Les Grandes Vignes (Quincey)",
+          "basis": "authorisation",
+          "sourceIds": [
+            "raa-2022-084"
+          ]
         }
       ],
-      "historicalEvents": [],
-      "researchStatus": "holder-lead",
-      "researchDepth": "holder-group-triage",
+      "historicalEvents": [
+        {
+          "parcelIds": [
+            "212670000D0665",
+            "212670000D0666"
+          ],
+          "sourceId": "raa-2022-084",
+          "kind": "authorisation",
+          "applicant": "SAS Domaine RC Les Grandes Vignes (Quincey)",
+          "previousOperator": "Domaine Daniel Rion et Fils",
+          "documentDate": "2022-07-04",
+          "outcome": "authorised",
+          "currentFarmer": null,
+          "summary": "Application filed 11/01/2022, complete 01/03/2022, CDOA opinion 25/05/2022; the same decision refuses Vosne-Romanée AB references to this applicant. Article 2 lists four communes without assigning each row; the section D rows are taken as Flagey-Échezeaux because the cédant holds these references there. D0665 is printed at 0.1157 ha, its cadastral area; D0666 at 0.0799 ha against 0.1157 ha, so its scope is unresolved. D0667, held by the same right holder, is not in the decision. Whether the applicant is connected to Domaine Jean-Charles Rion is not established."
+        }
+      ],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "researchStatus": "historical-authorisation",
+      "researchDepth": "exact-reference-event-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
-      "nextEvidenceNeeded": "Obtain dated parcel-specific operation evidence and scope."
+      "nextEvidenceNeeded": "Confirm actual operation, scope and continuation since the decision."
     },
     {
       "parcelId": "212670000D0667",
@@ -4688,6 +6702,11 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -4703,10 +6722,25 @@
       "recordedRights": [],
       "recordMatch": "unknown",
       "holderResearchIds": [],
-      "candidateLeads": [],
+      "candidateLeads": [
+        {
+          "name": "Domaine Mongeard-Mugneret",
+          "basis": "critic-attribution-area-reconstructed",
+          "sourceIds": [
+            "winehog-dessus"
+          ]
+        }
+      ],
       "historicalEvents": [],
-      "researchStatus": "unresolved",
-      "researchDepth": "inventory-only",
+      "externalResearchIds": [
+        "wh-dessus-mongeard"
+      ],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "researchStatus": "holder-lead",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -4720,10 +6754,25 @@
       "recordedRights": [],
       "recordMatch": "unknown",
       "holderResearchIds": [],
-      "candidateLeads": [],
+      "candidateLeads": [
+        {
+          "name": "Domaine Mongeard-Mugneret",
+          "basis": "critic-attribution-area-reconstructed",
+          "sourceIds": [
+            "winehog-dessus"
+          ]
+        }
+      ],
       "historicalEvents": [],
-      "researchStatus": "unresolved",
-      "researchDepth": "inventory-only",
+      "externalResearchIds": [
+        "wh-dessus-mongeard"
+      ],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "researchStatus": "holder-lead",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -4737,10 +6786,25 @@
       "recordedRights": [],
       "recordMatch": "unknown",
       "holderResearchIds": [],
-      "candidateLeads": [],
+      "candidateLeads": [
+        {
+          "name": "Domaine Mongeard-Mugneret",
+          "basis": "critic-attribution-area-reconstructed",
+          "sourceIds": [
+            "winehog-dessus"
+          ]
+        }
+      ],
       "historicalEvents": [],
-      "researchStatus": "unresolved",
-      "researchDepth": "inventory-only",
+      "externalResearchIds": [
+        "wh-dessus-mongeard"
+      ],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "researchStatus": "holder-lead",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -4777,8 +6841,40 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [
+        "wh-dessus-noellat"
+      ],
+      "rightsChanges": [
+        {
+          "from": "2019-01-01",
+          "to": "2020-01-01",
+          "kind": "unprovable-identifier-change",
+          "before": [
+            "ASSURANCES DU CREDIT MUTUEL VIE"
+          ],
+          "after": [
+            "ASSURANCES DU CREDIT MUTUEL VIE"
+          ]
+        },
+        {
+          "from": "2020-01-01",
+          "to": "2021-01-01",
+          "kind": "unprovable-identifier-change",
+          "before": [
+            "ASSURANCES DU CREDIT MUTUEL VIE"
+          ],
+          "after": [
+            "DOMAINE MONGEARD MUGNERET"
+          ]
+        }
+      ],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [
+        "mongeard-d0673"
+      ],
       "researchStatus": "holder-lead",
-      "researchDepth": "holder-group-triage",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -4815,8 +6911,15 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [
+        "wh-dessus-noellat"
+      ],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "holder-lead",
-      "researchDepth": "holder-group-triage",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -4849,17 +6952,88 @@
           "basis": "management-only-lead",
           "sourceIds": [
             "bouchon",
-            "liger"
+            "liger",
+            "raa-2026-067"
+          ]
+        },
+        {
+          "name": "SCEA Domaine du Comte Liger-Belair (Vosne-Romanée)",
+          "basis": "suspended-application",
+          "sourceIds": [
+            "raa-2026-067"
           ]
         }
       ],
-      "historicalEvents": [],
-      "researchStatus": "holder-lead",
-      "researchDepth": "holder-group-triage",
+      "historicalEvents": [
+        {
+          "parcelIds": [
+            "212670000D0628",
+            "212670000D0673",
+            "212670000D0764",
+            "212670000D0765",
+            "212670000D0766",
+            "212670000D0767"
+          ],
+          "sourceId": "raa-2026-067",
+          "kind": "suspended-application",
+          "applicant": "SCEA Domaine du Comte Liger-Belair (Vosne-Romanée)",
+          "previousOperator": "Not stated",
+          "documentDate": "2026-04-07",
+          "outcome": "instruction suspended for eight months from 29 April 2026",
+          "currentFarmer": null,
+          "summary": "The application covers 4.3080 ha in Flagey-Échezeaux, Boncourt-le-Bois, Vosne-Romanée and Vougeot belonging to SAS Bouchon Pourpre, GFA Domaine Bouchy et Amis, SCEA Nathalie Pacareau Lamarche and Mme Geneviève Lamarche; it also names Grands-Échezeaux D615 and D616. The region found the enlargement excessive and suspended the instruction, during which anyone may apply for the same land. As of the order, the applicant was not authorised to farm these parcels."
+        }
+      ],
+      "externalResearchIds": [
+        "wh-dessus-noellat",
+        "wh-liger-belair-2020"
+      ],
+      "rightsChanges": [
+        {
+          "from": "2019-01-01",
+          "to": "2020-01-01",
+          "kind": "unprovable-identifier-change",
+          "before": [
+            "ASSURANCES DU CREDIT MUTUEL VIE"
+          ],
+          "after": [
+            "ASSURANCES DU CREDIT MUTUEL VIE"
+          ]
+        },
+        {
+          "from": "2020-01-01",
+          "to": "2021-01-01",
+          "kind": "unprovable-identifier-change",
+          "before": [
+            "ASSURANCES DU CREDIT MUTUEL VIE"
+          ],
+          "after": [
+            "DOMAINE MONGEARD MUGNERET"
+          ]
+        },
+        {
+          "from": "2024-01-01",
+          "to": "2025-01-01",
+          "kind": "holder-changed",
+          "before": [
+            "DOMAINE MONGEARD MUGNERET"
+          ],
+          "after": [
+            "BOUCHON POURPRE"
+          ]
+        }
+      ],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [
+        "mongeard-d0673"
+      ],
+      "researchStatus": "historical-application",
+      "researchDepth": "exact-reference-event-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
-      "nextEvidenceNeeded": "Obtain dated parcel-specific operation evidence and scope."
+      "nextEvidenceNeeded": "Check the decision after the suspension ends, and who farms meanwhile."
     },
     {
       "parcelId": "212670000D0674",
@@ -4888,11 +7062,17 @@
           "basis": "reported-operator-relationship",
           "sourceIds": [
             "feuillet",
-            "duband-wine"
+            "duband-wine",
+            "winehog-arnoux-lachaux"
           ]
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -4927,11 +7107,17 @@
           "basis": "reported-operator-relationship",
           "sourceIds": [
             "feuillet",
-            "duband-wine"
+            "duband-wine",
+            "winehog-arnoux-lachaux"
           ]
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -4966,11 +7152,17 @@
           "basis": "reported-operator-relationship",
           "sourceIds": [
             "feuillet",
-            "duband-wine"
+            "duband-wine",
+            "winehog-arnoux-lachaux"
           ]
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -5005,13 +7197,28 @@
           "basis": "reported-operator-relationship",
           "sourceIds": [
             "feuillet",
-            "duband-wine"
+            "duband-wine",
+            "winehog-arnoux-lachaux"
+          ]
+        },
+        {
+          "name": "Domaine Arnoux-Lachaux",
+          "basis": "critic-named-cadastral-reference",
+          "sourceIds": [
+            "winehog-arnoux-lachaux"
           ]
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [
+        "wh-arnoux-lachaux"
+      ],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "holder-lead",
-      "researchDepth": "holder-group-triage",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -5027,6 +7234,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -5044,6 +7256,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -5061,6 +7278,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -5078,6 +7300,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -5095,6 +7322,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -5112,6 +7344,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -5129,6 +7366,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -5167,6 +7409,11 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -5184,6 +7431,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -5222,6 +7474,23 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [
+        {
+          "from": "2020-01-01",
+          "to": "2021-01-01",
+          "kind": "record-appeared",
+          "before": [],
+          "after": [
+            "ANNE GROS"
+          ]
+        }
+      ],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [
+        "anne-gros-rights"
+      ],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -5251,6 +7520,23 @@
       ],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [
+        {
+          "from": "2019-01-01",
+          "to": "2020-01-01",
+          "kind": "unprovable-identifier-change",
+          "before": [
+            "GFA HERITIERS COUDRAY"
+          ],
+          "after": [
+            "GFA HERITIERS COUDRAY"
+          ]
+        }
+      ],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -5280,6 +7566,23 @@
       ],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [
+        {
+          "from": "2019-01-01",
+          "to": "2020-01-01",
+          "kind": "unprovable-identifier-change",
+          "before": [
+            "GFA HERITIERS COUDRAY"
+          ],
+          "after": [
+            "GFA HERITIERS COUDRAY"
+          ]
+        }
+      ],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -5297,6 +7600,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -5314,6 +7622,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -5331,6 +7644,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -5348,6 +7666,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -5365,6 +7688,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -5382,6 +7710,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -5399,6 +7732,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -5416,6 +7754,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -5433,6 +7776,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -5450,6 +7798,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -5467,6 +7820,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -5484,6 +7842,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -5501,6 +7864,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -5518,6 +7886,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -5556,6 +7929,11 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -5590,17 +7968,49 @@
           "basis": "bottler-only-lead",
           "sourceIds": [
             "bouchy",
-            "bouchy-tardy"
+            "bouchy-tardy",
+            "raa-2026-067"
+          ]
+        },
+        {
+          "name": "SCEA Domaine du Comte Liger-Belair (Vosne-Romanée)",
+          "basis": "suspended-application",
+          "sourceIds": [
+            "raa-2026-067"
           ]
         }
       ],
-      "historicalEvents": [],
-      "researchStatus": "holder-lead",
-      "researchDepth": "holder-group-triage",
+      "historicalEvents": [
+        {
+          "parcelIds": [
+            "212670000D0628",
+            "212670000D0673",
+            "212670000D0764",
+            "212670000D0765",
+            "212670000D0766",
+            "212670000D0767"
+          ],
+          "sourceId": "raa-2026-067",
+          "kind": "suspended-application",
+          "applicant": "SCEA Domaine du Comte Liger-Belair (Vosne-Romanée)",
+          "previousOperator": "Not stated",
+          "documentDate": "2026-04-07",
+          "outcome": "instruction suspended for eight months from 29 April 2026",
+          "currentFarmer": null,
+          "summary": "The application covers 4.3080 ha in Flagey-Échezeaux, Boncourt-le-Bois, Vosne-Romanée and Vougeot belonging to SAS Bouchon Pourpre, GFA Domaine Bouchy et Amis, SCEA Nathalie Pacareau Lamarche and Mme Geneviève Lamarche; it also names Grands-Échezeaux D615 and D616. The region found the enlargement excessive and suspended the instruction, during which anyone may apply for the same land. As of the order, the applicant was not authorised to farm these parcels."
+        }
+      ],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "researchStatus": "historical-application",
+      "researchDepth": "exact-reference-event-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
-      "nextEvidenceNeeded": "Obtain dated parcel-specific operation evidence and scope."
+      "nextEvidenceNeeded": "Check the decision after the suspension ends, and who farms meanwhile."
     },
     {
       "parcelId": "212670000D0765",
@@ -5629,17 +8039,49 @@
           "basis": "bottler-only-lead",
           "sourceIds": [
             "bouchy",
-            "bouchy-tardy"
+            "bouchy-tardy",
+            "raa-2026-067"
+          ]
+        },
+        {
+          "name": "SCEA Domaine du Comte Liger-Belair (Vosne-Romanée)",
+          "basis": "suspended-application",
+          "sourceIds": [
+            "raa-2026-067"
           ]
         }
       ],
-      "historicalEvents": [],
-      "researchStatus": "holder-lead",
-      "researchDepth": "holder-group-triage",
+      "historicalEvents": [
+        {
+          "parcelIds": [
+            "212670000D0628",
+            "212670000D0673",
+            "212670000D0764",
+            "212670000D0765",
+            "212670000D0766",
+            "212670000D0767"
+          ],
+          "sourceId": "raa-2026-067",
+          "kind": "suspended-application",
+          "applicant": "SCEA Domaine du Comte Liger-Belair (Vosne-Romanée)",
+          "previousOperator": "Not stated",
+          "documentDate": "2026-04-07",
+          "outcome": "instruction suspended for eight months from 29 April 2026",
+          "currentFarmer": null,
+          "summary": "The application covers 4.3080 ha in Flagey-Échezeaux, Boncourt-le-Bois, Vosne-Romanée and Vougeot belonging to SAS Bouchon Pourpre, GFA Domaine Bouchy et Amis, SCEA Nathalie Pacareau Lamarche and Mme Geneviève Lamarche; it also names Grands-Échezeaux D615 and D616. The region found the enlargement excessive and suspended the instruction, during which anyone may apply for the same land. As of the order, the applicant was not authorised to farm these parcels."
+        }
+      ],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "researchStatus": "historical-application",
+      "researchDepth": "exact-reference-event-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
-      "nextEvidenceNeeded": "Obtain dated parcel-specific operation evidence and scope."
+      "nextEvidenceNeeded": "Check the decision after the suspension ends, and who farms meanwhile."
     },
     {
       "parcelId": "212670000D0766",
@@ -5668,17 +8110,49 @@
           "basis": "bottler-only-lead",
           "sourceIds": [
             "bouchy",
-            "bouchy-tardy"
+            "bouchy-tardy",
+            "raa-2026-067"
+          ]
+        },
+        {
+          "name": "SCEA Domaine du Comte Liger-Belair (Vosne-Romanée)",
+          "basis": "suspended-application",
+          "sourceIds": [
+            "raa-2026-067"
           ]
         }
       ],
-      "historicalEvents": [],
-      "researchStatus": "holder-lead",
-      "researchDepth": "holder-group-triage",
+      "historicalEvents": [
+        {
+          "parcelIds": [
+            "212670000D0628",
+            "212670000D0673",
+            "212670000D0764",
+            "212670000D0765",
+            "212670000D0766",
+            "212670000D0767"
+          ],
+          "sourceId": "raa-2026-067",
+          "kind": "suspended-application",
+          "applicant": "SCEA Domaine du Comte Liger-Belair (Vosne-Romanée)",
+          "previousOperator": "Not stated",
+          "documentDate": "2026-04-07",
+          "outcome": "instruction suspended for eight months from 29 April 2026",
+          "currentFarmer": null,
+          "summary": "The application covers 4.3080 ha in Flagey-Échezeaux, Boncourt-le-Bois, Vosne-Romanée and Vougeot belonging to SAS Bouchon Pourpre, GFA Domaine Bouchy et Amis, SCEA Nathalie Pacareau Lamarche and Mme Geneviève Lamarche; it also names Grands-Échezeaux D615 and D616. The region found the enlargement excessive and suspended the instruction, during which anyone may apply for the same land. As of the order, the applicant was not authorised to farm these parcels."
+        }
+      ],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "researchStatus": "historical-application",
+      "researchDepth": "exact-reference-event-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
-      "nextEvidenceNeeded": "Obtain dated parcel-specific operation evidence and scope."
+      "nextEvidenceNeeded": "Check the decision after the suspension ends, and who farms meanwhile."
     },
     {
       "parcelId": "212670000D0767",
@@ -5707,17 +8181,49 @@
           "basis": "bottler-only-lead",
           "sourceIds": [
             "bouchy",
-            "bouchy-tardy"
+            "bouchy-tardy",
+            "raa-2026-067"
+          ]
+        },
+        {
+          "name": "SCEA Domaine du Comte Liger-Belair (Vosne-Romanée)",
+          "basis": "suspended-application",
+          "sourceIds": [
+            "raa-2026-067"
           ]
         }
       ],
-      "historicalEvents": [],
-      "researchStatus": "holder-lead",
-      "researchDepth": "holder-group-triage",
+      "historicalEvents": [
+        {
+          "parcelIds": [
+            "212670000D0628",
+            "212670000D0673",
+            "212670000D0764",
+            "212670000D0765",
+            "212670000D0766",
+            "212670000D0767"
+          ],
+          "sourceId": "raa-2026-067",
+          "kind": "suspended-application",
+          "applicant": "SCEA Domaine du Comte Liger-Belair (Vosne-Romanée)",
+          "previousOperator": "Not stated",
+          "documentDate": "2026-04-07",
+          "outcome": "instruction suspended for eight months from 29 April 2026",
+          "currentFarmer": null,
+          "summary": "The application covers 4.3080 ha in Flagey-Échezeaux, Boncourt-le-Bois, Vosne-Romanée and Vougeot belonging to SAS Bouchon Pourpre, GFA Domaine Bouchy et Amis, SCEA Nathalie Pacareau Lamarche and Mme Geneviève Lamarche; it also names Grands-Échezeaux D615 and D616. The region found the enlargement excessive and suspended the instruction, during which anyone may apply for the same land. As of the order, the applicant was not authorised to farm these parcels."
+        }
+      ],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "researchStatus": "historical-application",
+      "researchDepth": "exact-reference-event-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
-      "nextEvidenceNeeded": "Obtain dated parcel-specific operation evidence and scope."
+      "nextEvidenceNeeded": "Check the decision after the suspension ends, and who farms meanwhile."
     },
     {
       "parcelId": "212670000D0768",
@@ -5750,6 +8256,36 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [
+        {
+          "from": "2019-01-01",
+          "to": "2020-01-01",
+          "kind": "unprovable-identifier-change",
+          "before": [
+            "SC DOM DE LA ROMANEE CONTI"
+          ],
+          "after": [
+            "SC DOM DE LA ROMANEE CONTI"
+          ]
+        },
+        {
+          "from": "2020-01-01",
+          "to": "2021-01-01",
+          "kind": "unprovable-identifier-change",
+          "before": [
+            "SC DOM DE LA ROMANEE CONTI"
+          ],
+          "after": [
+            "DOMAINE DE LA ROMANEE CONTI"
+          ]
+        }
+      ],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [
+        "drc-identifier"
+      ],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -5788,6 +8324,36 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [
+        {
+          "from": "2019-01-01",
+          "to": "2020-01-01",
+          "kind": "unprovable-identifier-change",
+          "before": [
+            "SC DOM DE LA ROMANEE CONTI"
+          ],
+          "after": [
+            "SC DOM DE LA ROMANEE CONTI"
+          ]
+        },
+        {
+          "from": "2020-01-01",
+          "to": "2021-01-01",
+          "kind": "unprovable-identifier-change",
+          "before": [
+            "SC DOM DE LA ROMANEE CONTI"
+          ],
+          "after": [
+            "DOMAINE DE LA ROMANEE CONTI"
+          ]
+        }
+      ],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [
+        "drc-identifier"
+      ],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -5826,6 +8392,36 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [
+        {
+          "from": "2019-01-01",
+          "to": "2020-01-01",
+          "kind": "unprovable-identifier-change",
+          "before": [
+            "SC DOM DE LA ROMANEE CONTI"
+          ],
+          "after": [
+            "SC DOM DE LA ROMANEE CONTI"
+          ]
+        },
+        {
+          "from": "2020-01-01",
+          "to": "2021-01-01",
+          "kind": "unprovable-identifier-change",
+          "before": [
+            "SC DOM DE LA ROMANEE CONTI"
+          ],
+          "after": [
+            "DOMAINE DE LA ROMANEE CONTI"
+          ]
+        }
+      ],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [
+        "drc-identifier"
+      ],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -5864,6 +8460,11 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -5902,6 +8503,23 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [
+        {
+          "from": "2020-01-01",
+          "to": "2021-01-01",
+          "kind": "same-holder-renamed",
+          "before": [
+            "DOMAINE J PRIEUR"
+          ],
+          "after": [
+            "SCEA DOMAINE JACQUES PRIEUR"
+          ]
+        }
+      ],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -5919,6 +8537,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -5936,6 +8559,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -5953,6 +8581,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -5991,6 +8624,36 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [
+        {
+          "from": "2019-01-01",
+          "to": "2020-01-01",
+          "kind": "same-holder-renamed",
+          "before": [
+            "CHRISTIAN ET ISABELLE CLERGET"
+          ],
+          "after": [
+            "GFV CHRISTIAN ET ISABELLE CLERGET"
+          ]
+        },
+        {
+          "from": "2023-01-01",
+          "to": "2024-01-01",
+          "kind": "holder-changed",
+          "before": [
+            "GFV CHRISTIAN ET ISABELLE CLERGET"
+          ],
+          "after": [
+            "SCEV DU DOMAINE CHRISTIAN CLERGET"
+          ]
+        }
+      ],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [
+        "clerget-transfer"
+      ],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -6008,6 +8671,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -6023,10 +8691,26 @@
       "recordedRights": [],
       "recordMatch": "unknown",
       "holderResearchIds": [],
-      "candidateLeads": [],
+      "candidateLeads": [
+        {
+          "name": "Domaine Jean-Marc Millot",
+          "basis": "critic-named-cadastral-reference",
+          "sourceIds": [
+            "winehog-millot",
+            "winehog-dessus"
+          ]
+        }
+      ],
       "historicalEvents": [],
-      "researchStatus": "unresolved",
-      "researchDepth": "inventory-only",
+      "externalResearchIds": [
+        "wh-dessus-millot"
+      ],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "researchStatus": "holder-lead",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -6040,10 +8724,26 @@
       "recordedRights": [],
       "recordMatch": "unknown",
       "holderResearchIds": [],
-      "candidateLeads": [],
+      "candidateLeads": [
+        {
+          "name": "Domaine Jean-Marc Millot",
+          "basis": "critic-named-cadastral-reference",
+          "sourceIds": [
+            "winehog-millot",
+            "winehog-dessus"
+          ]
+        }
+      ],
       "historicalEvents": [],
-      "researchStatus": "unresolved",
-      "researchDepth": "inventory-only",
+      "externalResearchIds": [
+        "wh-dessus-millot"
+      ],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "researchStatus": "holder-lead",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -6057,10 +8757,26 @@
       "recordedRights": [],
       "recordMatch": "unknown",
       "holderResearchIds": [],
-      "candidateLeads": [],
+      "candidateLeads": [
+        {
+          "name": "Domaine Jean-Marc Millot",
+          "basis": "critic-named-cadastral-reference",
+          "sourceIds": [
+            "winehog-millot",
+            "winehog-dessus"
+          ]
+        }
+      ],
       "historicalEvents": [],
-      "researchStatus": "unresolved",
-      "researchDepth": "inventory-only",
+      "externalResearchIds": [
+        "wh-dessus-millot"
+      ],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "researchStatus": "holder-lead",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -6076,6 +8792,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -6093,6 +8814,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -6110,6 +8836,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -6148,6 +8879,11 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -6165,6 +8901,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -6182,6 +8923,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -6220,6 +8966,11 @@
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -6237,6 +8988,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -6254,6 +9010,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -6271,6 +9032,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -6288,6 +9054,11 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -6317,6 +9088,11 @@
       ],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -6346,6 +9122,11 @@
       ],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -6375,6 +9156,25 @@
       ],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [
+        {
+          "from": "2022-01-01",
+          "to": "2023-01-01",
+          "kind": "holder-changed",
+          "before": [
+            "HOR VIGNOBLES"
+          ],
+          "after": [
+            "SCI LES CLIMATS"
+          ]
+        }
+      ],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [
+        "hor-climats"
+      ],
       "researchStatus": "unresolved",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -6390,10 +9190,25 @@
       "recordedRights": [],
       "recordMatch": "unknown",
       "holderResearchIds": [],
-      "candidateLeads": [],
+      "candidateLeads": [
+        {
+          "name": "Domaine Arnoux-Lachaux",
+          "basis": "critic-named-cadastral-reference",
+          "sourceIds": [
+            "winehog-arnoux-lachaux"
+          ]
+        }
+      ],
       "historicalEvents": [],
-      "researchStatus": "unresolved",
-      "researchDepth": "inventory-only",
+      "externalResearchIds": [
+        "wh-arnoux-lachaux"
+      ],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "researchStatus": "holder-lead",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -6407,10 +9222,25 @@
       "recordedRights": [],
       "recordMatch": "unknown",
       "holderResearchIds": [],
-      "candidateLeads": [],
+      "candidateLeads": [
+        {
+          "name": "Domaine Arnoux-Lachaux",
+          "basis": "critic-named-cadastral-reference",
+          "sourceIds": [
+            "winehog-arnoux-lachaux"
+          ]
+        }
+      ],
       "historicalEvents": [],
-      "researchStatus": "unresolved",
-      "researchDepth": "inventory-only",
+      "externalResearchIds": [
+        "wh-arnoux-lachaux"
+      ],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "researchStatus": "holder-lead",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -6444,11 +9274,25 @@
           "sourceIds": [
             "arnoux"
           ]
+        },
+        {
+          "name": "Domaine Arnoux-Lachaux",
+          "basis": "critic-named-cadastral-reference",
+          "sourceIds": [
+            "winehog-arnoux-lachaux"
+          ]
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [
+        "wh-arnoux-lachaux"
+      ],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
       "researchStatus": "holder-lead",
-      "researchDepth": "holder-group-triage",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -6481,13 +9325,42 @@
           "basis": "partial-succession-lead",
           "sourceIds": [
             "gerbet",
-            "berthaut"
+            "berthaut",
+            "winehog-berthaut-gerbet"
+          ]
+        },
+        {
+          "name": "Domaine Berthaut-Gerbet",
+          "basis": "critic-named-cadastral-reference",
+          "sourceIds": [
+            "winehog-berthaut-gerbet"
           ]
         }
       ],
       "historicalEvents": [],
+      "externalResearchIds": [
+        "wh-berthaut-gerbet"
+      ],
+      "rightsChanges": [
+        {
+          "from": "2020-01-01",
+          "to": "2021-01-01",
+          "kind": "same-holder-renamed",
+          "before": [
+            "GERBET SIRUGUE"
+          ],
+          "after": [
+            "GFA DOMAINE GERBET SIRUGUE"
+          ]
+        }
+      ],
+      "cadastreFirstSeen": "2020-01-01",
+      "predecessorIds": [
+        "212670000D0300"
+      ],
+      "historyFindingIds": [],
       "researchStatus": "holder-lead",
-      "researchDepth": "holder-group-triage",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -6501,10 +9374,29 @@
       "recordedRights": [],
       "recordMatch": "unknown",
       "holderResearchIds": [],
-      "candidateLeads": [],
+      "candidateLeads": [
+        {
+          "name": "Domaine Berthaut-Gerbet",
+          "basis": "critic-named-cadastral-reference",
+          "sourceIds": [
+            "winehog-berthaut-gerbet"
+          ]
+        }
+      ],
       "historicalEvents": [],
-      "researchStatus": "unresolved",
-      "researchDepth": "inventory-only",
+      "externalResearchIds": [
+        "wh-berthaut-gerbet"
+      ],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2020-01-01",
+      "predecessorIds": [
+        "212670000D0300"
+      ],
+      "historyFindingIds": [
+        "private-splits"
+      ],
+      "researchStatus": "holder-lead",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -6520,6 +9412,15 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2023-01-01",
+      "predecessorIds": [
+        "212670000D0759"
+      ],
+      "historyFindingIds": [
+        "private-splits"
+      ],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -6537,6 +9438,15 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2023-01-01",
+      "predecessorIds": [
+        "212670000D0759"
+      ],
+      "historyFindingIds": [
+        "private-splits"
+      ],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -6552,10 +9462,30 @@
       "recordedRights": [],
       "recordMatch": "unknown",
       "holderResearchIds": [],
-      "candidateLeads": [],
+      "candidateLeads": [
+        {
+          "name": "Domaine Jean Grivot",
+          "basis": "critic-named-cadastral-reference on predecessor D0792",
+          "sourceIds": [
+            "winehog-grivot"
+          ]
+        }
+      ],
       "historicalEvents": [],
-      "researchStatus": "unresolved",
-      "researchDepth": "inventory-only",
+      "externalResearchIds": [
+        "wh-grivot",
+        "wh-lamadon-2006"
+      ],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2023-01-01",
+      "predecessorIds": [
+        "212670000D0792"
+      ],
+      "historyFindingIds": [
+        "private-splits"
+      ],
+      "researchStatus": "holder-lead",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -6569,10 +9499,30 @@
       "recordedRights": [],
       "recordMatch": "unknown",
       "holderResearchIds": [],
-      "candidateLeads": [],
+      "candidateLeads": [
+        {
+          "name": "Domaine Jean Grivot",
+          "basis": "critic-named-cadastral-reference on predecessor D0792",
+          "sourceIds": [
+            "winehog-grivot"
+          ]
+        }
+      ],
       "historicalEvents": [],
-      "researchStatus": "unresolved",
-      "researchDepth": "inventory-only",
+      "externalResearchIds": [
+        "wh-grivot",
+        "wh-lamadon-2006"
+      ],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2023-01-01",
+      "predecessorIds": [
+        "212670000D0792"
+      ],
+      "historyFindingIds": [
+        "private-splits"
+      ],
+      "researchStatus": "holder-lead",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -6586,10 +9536,30 @@
       "recordedRights": [],
       "recordMatch": "unknown",
       "holderResearchIds": [],
-      "candidateLeads": [],
+      "candidateLeads": [
+        {
+          "name": "Domaine Jean Grivot",
+          "basis": "critic-named-cadastral-reference on predecessor D0794",
+          "sourceIds": [
+            "winehog-grivot"
+          ]
+        }
+      ],
       "historicalEvents": [],
-      "researchStatus": "unresolved",
-      "researchDepth": "inventory-only",
+      "externalResearchIds": [
+        "wh-grivot",
+        "wh-lamadon-2006"
+      ],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2023-01-01",
+      "predecessorIds": [
+        "212670000D0794"
+      ],
+      "historyFindingIds": [
+        "private-splits"
+      ],
+      "researchStatus": "holder-lead",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -6603,10 +9573,30 @@
       "recordedRights": [],
       "recordMatch": "unknown",
       "holderResearchIds": [],
-      "candidateLeads": [],
+      "candidateLeads": [
+        {
+          "name": "Domaine Jean Grivot",
+          "basis": "critic-named-cadastral-reference on predecessor D0794",
+          "sourceIds": [
+            "winehog-grivot"
+          ]
+        }
+      ],
       "historicalEvents": [],
-      "researchStatus": "unresolved",
-      "researchDepth": "inventory-only",
+      "externalResearchIds": [
+        "wh-grivot",
+        "wh-lamadon-2006"
+      ],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2023-01-01",
+      "predecessorIds": [
+        "212670000D0794"
+      ],
+      "historyFindingIds": [
+        "private-splits"
+      ],
+      "researchStatus": "holder-lead",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -6620,14 +9610,53 @@
       "recordedRights": [],
       "recordMatch": "unknown",
       "holderResearchIds": [],
-      "candidateLeads": [],
-      "historicalEvents": [],
-      "researchStatus": "unresolved",
-      "researchDepth": "inventory-only",
+      "candidateLeads": [
+        {
+          "name": "SARL Domaine Michel Gros",
+          "basis": "historical-application on predecessor D0774",
+          "sourceIds": [
+            "raa-2022-101"
+          ]
+        }
+      ],
+      "historicalEvents": [
+        {
+          "parcelIds": [
+            "212670000D0184",
+            "212670000D0558"
+          ],
+          "predecessorReferences": {
+            "212670000D0774": [
+              "212670000D0830",
+              "212670000D0831"
+            ]
+          },
+          "sourceId": "raa-2022-101",
+          "kind": "historical-application",
+          "applicant": "SARL Domaine Michel Gros",
+          "previousOperator": "SCE Gros frère et sœur",
+          "documentDate": "2022-04-04",
+          "outcome": "unconfirmed",
+          "currentFarmer": null,
+          "summary": "Dossier 2022-053, filed 07/03/2022, complete 28/03/2022; 0.7903 ha across Vosne-Romanée and Flagey-Échezeaux, all three Flagey references in Les Loächausses. The receipt is not an authorisation. D0774 was divided after January 2024.",
+          "viaPredecessor": "212670000D0774"
+        }
+      ],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2025-01-01",
+      "predecessorIds": [
+        "212670000D0774"
+      ],
+      "historyFindingIds": [
+        "private-splits"
+      ],
+      "researchStatus": "historical-application",
+      "researchDepth": "exact-reference-event-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
-      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+      "nextEvidenceNeeded": "Resolve application outcome, actual operation and cadastral continuity."
     },
     {
       "parcelId": "212670000D0831",
@@ -6637,14 +9666,53 @@
       "recordedRights": [],
       "recordMatch": "unknown",
       "holderResearchIds": [],
-      "candidateLeads": [],
-      "historicalEvents": [],
-      "researchStatus": "unresolved",
-      "researchDepth": "inventory-only",
+      "candidateLeads": [
+        {
+          "name": "SARL Domaine Michel Gros",
+          "basis": "historical-application on predecessor D0774",
+          "sourceIds": [
+            "raa-2022-101"
+          ]
+        }
+      ],
+      "historicalEvents": [
+        {
+          "parcelIds": [
+            "212670000D0184",
+            "212670000D0558"
+          ],
+          "predecessorReferences": {
+            "212670000D0774": [
+              "212670000D0830",
+              "212670000D0831"
+            ]
+          },
+          "sourceId": "raa-2022-101",
+          "kind": "historical-application",
+          "applicant": "SARL Domaine Michel Gros",
+          "previousOperator": "SCE Gros frère et sœur",
+          "documentDate": "2022-04-04",
+          "outcome": "unconfirmed",
+          "currentFarmer": null,
+          "summary": "Dossier 2022-053, filed 07/03/2022, complete 28/03/2022; 0.7903 ha across Vosne-Romanée and Flagey-Échezeaux, all three Flagey references in Les Loächausses. The receipt is not an authorisation. D0774 was divided after January 2024.",
+          "viaPredecessor": "212670000D0774"
+        }
+      ],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2025-01-01",
+      "predecessorIds": [
+        "212670000D0774"
+      ],
+      "historyFindingIds": [
+        "private-splits"
+      ],
+      "researchStatus": "historical-application",
+      "researchDepth": "exact-reference-event-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
-      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+      "nextEvidenceNeeded": "Resolve application outcome, actual operation and cadastral continuity."
     },
     {
       "parcelId": "212670000D0832",
@@ -6654,14 +9722,53 @@
       "recordedRights": [],
       "recordMatch": "unknown",
       "holderResearchIds": [],
-      "candidateLeads": [],
-      "historicalEvents": [],
-      "researchStatus": "unresolved",
-      "researchDepth": "inventory-only",
+      "candidateLeads": [
+        {
+          "name": "SAS Domaine AF Gros (Pommard)",
+          "basis": "historical-application on predecessor D0775",
+          "sourceIds": [
+            "raa-2022-143"
+          ]
+        }
+      ],
+      "historicalEvents": [
+        {
+          "parcelIds": [
+            "212670000D0181"
+          ],
+          "predecessorReferences": {
+            "212670000D0775": [
+              "212670000D0832",
+              "212670000D0833",
+              "212670000D0834"
+            ]
+          },
+          "sourceId": "raa-2022-143",
+          "kind": "historical-application",
+          "applicant": "SAS Domaine AF Gros (Pommard)",
+          "previousOperator": "Domaine Gros Frère et Sœur",
+          "documentDate": "2022-06-30",
+          "outcome": "unconfirmed",
+          "currentFarmer": null,
+          "summary": "Dossier 2022-113, filed 23/05/2022, with Vougeot A523/A524; 1.0719 ha in total. Both Flagey references are in Les Loächausses. The receipt states it does not authorise cultivation. D0775 was divided after January 2024.",
+          "viaPredecessor": "212670000D0775"
+        }
+      ],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2025-01-01",
+      "predecessorIds": [
+        "212670000D0775"
+      ],
+      "historyFindingIds": [
+        "private-splits"
+      ],
+      "researchStatus": "historical-application",
+      "researchDepth": "exact-reference-event-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
-      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+      "nextEvidenceNeeded": "Resolve application outcome, actual operation and cadastral continuity."
     },
     {
       "parcelId": "212670000D0833",
@@ -6671,14 +9778,53 @@
       "recordedRights": [],
       "recordMatch": "unknown",
       "holderResearchIds": [],
-      "candidateLeads": [],
-      "historicalEvents": [],
-      "researchStatus": "unresolved",
-      "researchDepth": "inventory-only",
+      "candidateLeads": [
+        {
+          "name": "SAS Domaine AF Gros (Pommard)",
+          "basis": "historical-application on predecessor D0775",
+          "sourceIds": [
+            "raa-2022-143"
+          ]
+        }
+      ],
+      "historicalEvents": [
+        {
+          "parcelIds": [
+            "212670000D0181"
+          ],
+          "predecessorReferences": {
+            "212670000D0775": [
+              "212670000D0832",
+              "212670000D0833",
+              "212670000D0834"
+            ]
+          },
+          "sourceId": "raa-2022-143",
+          "kind": "historical-application",
+          "applicant": "SAS Domaine AF Gros (Pommard)",
+          "previousOperator": "Domaine Gros Frère et Sœur",
+          "documentDate": "2022-06-30",
+          "outcome": "unconfirmed",
+          "currentFarmer": null,
+          "summary": "Dossier 2022-113, filed 23/05/2022, with Vougeot A523/A524; 1.0719 ha in total. Both Flagey references are in Les Loächausses. The receipt states it does not authorise cultivation. D0775 was divided after January 2024.",
+          "viaPredecessor": "212670000D0775"
+        }
+      ],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2025-01-01",
+      "predecessorIds": [
+        "212670000D0775"
+      ],
+      "historyFindingIds": [
+        "private-splits"
+      ],
+      "researchStatus": "historical-application",
+      "researchDepth": "exact-reference-event-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
-      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+      "nextEvidenceNeeded": "Resolve application outcome, actual operation and cadastral continuity."
     },
     {
       "parcelId": "212670000D0834",
@@ -6688,14 +9834,53 @@
       "recordedRights": [],
       "recordMatch": "unknown",
       "holderResearchIds": [],
-      "candidateLeads": [],
-      "historicalEvents": [],
-      "researchStatus": "unresolved",
-      "researchDepth": "inventory-only",
+      "candidateLeads": [
+        {
+          "name": "SAS Domaine AF Gros (Pommard)",
+          "basis": "historical-application on predecessor D0775",
+          "sourceIds": [
+            "raa-2022-143"
+          ]
+        }
+      ],
+      "historicalEvents": [
+        {
+          "parcelIds": [
+            "212670000D0181"
+          ],
+          "predecessorReferences": {
+            "212670000D0775": [
+              "212670000D0832",
+              "212670000D0833",
+              "212670000D0834"
+            ]
+          },
+          "sourceId": "raa-2022-143",
+          "kind": "historical-application",
+          "applicant": "SAS Domaine AF Gros (Pommard)",
+          "previousOperator": "Domaine Gros Frère et Sœur",
+          "documentDate": "2022-06-30",
+          "outcome": "unconfirmed",
+          "currentFarmer": null,
+          "summary": "Dossier 2022-113, filed 23/05/2022, with Vougeot A523/A524; 1.0719 ha in total. Both Flagey references are in Les Loächausses. The receipt states it does not authorise cultivation. D0775 was divided after January 2024.",
+          "viaPredecessor": "212670000D0775"
+        }
+      ],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2025-01-01",
+      "predecessorIds": [
+        "212670000D0775"
+      ],
+      "historyFindingIds": [
+        "private-splits"
+      ],
+      "researchStatus": "historical-application",
+      "researchDepth": "exact-reference-event-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
-      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+      "nextEvidenceNeeded": "Resolve application outcome, actual operation and cadastral continuity."
     },
     {
       "parcelId": "212670000D0835",
@@ -6707,6 +9892,15 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2025-01-01",
+      "predecessorIds": [
+        "212670000D0776"
+      ],
+      "historyFindingIds": [
+        "private-splits"
+      ],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -6724,6 +9918,15 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2025-01-01",
+      "predecessorIds": [
+        "212670000D0776"
+      ],
+      "historyFindingIds": [
+        "private-splits"
+      ],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -6741,6 +9944,15 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2023-01-01",
+      "predecessorIds": [
+        "212670000D0160"
+      ],
+      "historyFindingIds": [
+        "private-splits"
+      ],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -6758,6 +9970,15 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2023-01-01",
+      "predecessorIds": [
+        "212670000D0160"
+      ],
+      "historyFindingIds": [
+        "private-splits"
+      ],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -6775,6 +9996,15 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2024-01-01",
+      "predecessorIds": [
+        "212670000D0772"
+      ],
+      "historyFindingIds": [
+        "private-splits"
+      ],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -6792,6 +10022,15 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2024-01-01",
+      "predecessorIds": [
+        "212670000D0772"
+      ],
+      "historyFindingIds": [
+        "private-splits"
+      ],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -6809,6 +10048,15 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2025-01-01",
+      "predecessorIds": [
+        "212670000D0708"
+      ],
+      "historyFindingIds": [
+        "private-splits"
+      ],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -6826,6 +10074,15 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2025-01-01",
+      "predecessorIds": [
+        "212670000D0708"
+      ],
+      "historyFindingIds": [
+        "private-splits"
+      ],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -6855,6 +10112,25 @@
       ],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [
+        {
+          "from": "2024-01-01",
+          "to": "2025-01-01",
+          "kind": "new-parcel-reference",
+          "before": [],
+          "after": [
+            "PROPRIETAIRES DU BND 267 D0143"
+          ]
+        }
+      ],
+      "cadastreFirstSeen": "2025-01-01",
+      "predecessorIds": [
+        "212670000D0143"
+      ],
+      "historyFindingIds": [
+        "bnd-d0143"
+      ],
       "researchStatus": "unresolved",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -6884,6 +10160,25 @@
       ],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [
+        {
+          "from": "2024-01-01",
+          "to": "2025-01-01",
+          "kind": "new-parcel-reference",
+          "before": [],
+          "after": [
+            "PROPRIETAIRES DU BND 267 D0143"
+          ]
+        }
+      ],
+      "cadastreFirstSeen": "2025-01-01",
+      "predecessorIds": [
+        "212670000D0143"
+      ],
+      "historyFindingIds": [
+        "bnd-d0143"
+      ],
       "researchStatus": "unresolved",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -6913,6 +10208,25 @@
       ],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [
+        {
+          "from": "2024-01-01",
+          "to": "2025-01-01",
+          "kind": "new-parcel-reference",
+          "before": [],
+          "after": [
+            "PROPRIETAIRES DU BND 267 D0143"
+          ]
+        }
+      ],
+      "cadastreFirstSeen": "2025-01-01",
+      "predecessorIds": [
+        "212670000D0143"
+      ],
+      "historyFindingIds": [
+        "bnd-d0143"
+      ],
       "researchStatus": "unresolved",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -6942,6 +10256,25 @@
       ],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [
+        {
+          "from": "2024-01-01",
+          "to": "2025-01-01",
+          "kind": "new-parcel-reference",
+          "before": [],
+          "after": [
+            "PROPRIETAIRES DU BND 267 D0143"
+          ]
+        }
+      ],
+      "cadastreFirstSeen": "2025-01-01",
+      "predecessorIds": [
+        "212670000D0143"
+      ],
+      "historyFindingIds": [
+        "bnd-d0143"
+      ],
       "researchStatus": "unresolved",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -6971,6 +10304,25 @@
       ],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [
+        {
+          "from": "2024-01-01",
+          "to": "2025-01-01",
+          "kind": "new-parcel-reference",
+          "before": [],
+          "after": [
+            "PROPRIETAIRES DU BND 267 D0143"
+          ]
+        }
+      ],
+      "cadastreFirstSeen": "2025-01-01",
+      "predecessorIds": [
+        "212670000D0143"
+      ],
+      "historyFindingIds": [
+        "bnd-d0143"
+      ],
       "researchStatus": "unresolved",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -6988,6 +10340,15 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2025-01-01",
+      "predecessorIds": [
+        "212670000D0787"
+      ],
+      "historyFindingIds": [
+        "private-splits"
+      ],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -7005,6 +10366,15 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2025-01-01",
+      "predecessorIds": [
+        "212670000D0787"
+      ],
+      "historyFindingIds": [
+        "private-splits"
+      ],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -7022,6 +10392,15 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2026-06-01",
+      "predecessorIds": [
+        "212670000D0873"
+      ],
+      "historyFindingIds": [
+        "private-splits"
+      ],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -7039,6 +10418,15 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2026-06-01",
+      "predecessorIds": [
+        "212670000D0873"
+      ],
+      "historyFindingIds": [
+        "private-splits"
+      ],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -7056,6 +10444,15 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2026-06-01",
+      "predecessorIds": [
+        "212670000D0873"
+      ],
+      "historyFindingIds": [
+        "private-splits"
+      ],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -7073,6 +10470,15 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2026-06-01",
+      "predecessorIds": [
+        "212670000D0873"
+      ],
+      "historyFindingIds": [
+        "private-splits"
+      ],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -7090,6 +10496,15 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2026-06-01",
+      "predecessorIds": [
+        "212670000D0873"
+      ],
+      "historyFindingIds": [
+        "private-splits"
+      ],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -7107,6 +10522,15 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2026-06-01",
+      "predecessorIds": [
+        "212670000D0873"
+      ],
+      "historyFindingIds": [
+        "private-splits"
+      ],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,
@@ -7124,6 +10548,15 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
+      "externalResearchIds": [],
+      "rightsChanges": [],
+      "cadastreFirstSeen": "2026-06-01",
+      "predecessorIds": [
+        "212670000D0873"
+      ],
+      "historyFindingIds": [
+        "private-splits"
+      ],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
       "currentFarmer": null,

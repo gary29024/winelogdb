@@ -558,6 +558,156 @@
       "reviewedAt": "2026-09-28",
       "finding": "Reports an additional acquisition and Échezeaux combining Champs Traversins and En Orveaux. No cadastral references, legal-entity lease or 2026 operation confirmation.",
       "access": "read"
+    },
+    {
+      "id": "dgfip-history",
+      "title": "DGFiP legal-entity parcel files, situations at 1 January 2019–2024",
+      "url": "https://data.economie.gouv.fr/explore/dataset/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/",
+      "type": "registry-dataset",
+      "documentDate": null,
+      "reviewedAt": "2026-09-28",
+      "finding": "Côte-d'Or members for each year were read by HTTP range and hash-pinned in scripts/echezeaux-rights-history.json. They date company-type rights on each reference; they omit private individuals and say nothing about farming.",
+      "access": "read"
+    },
+    {
+      "id": "cadastre-history",
+      "title": "Etalab cadastre vintages, Flagey-Échezeaux, 2019–2025",
+      "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/",
+      "type": "geometry",
+      "documentDate": null,
+      "reviewedAt": "2026-09-28",
+      "finding": "Seven hash-pinned vintages were compared with the 2026-06-01 geometry to find new references, retired references and spatial successors. Overlap is not a documented division act.",
+      "access": "read"
+    },
+    {
+      "id": "raa-2022-084",
+      "title": "BFC bulletin 2022-084: decision BFC-2022-07-04-00011, SAS Domaine RC Les Grandes Vignes",
+      "url": "https://www.prefectures-regions.gouv.fr/bourgogne-franche-comte/irecontenu/telechargement/97177/620257/file/recueil-bfc-2022-084-recueil-des-actes-administratifs-1.pdf#page=172",
+      "type": "government-decision",
+      "documentDate": "2022-07-04",
+      "reviewedAt": "2026-09-28",
+      "finding": "Partial refusal and authorisation to farm; cédant Domaine Daniel Rion et Fils. Pages 172–175 read from the image. Republished in bulletin 2022-154 as BFC-2022-07-04-00018.",
+      "access": "read"
+    },
+    {
+      "id": "raa-2022-101",
+      "title": "BFC bulletin 2022-101: receipt BFC-2022-04-04-00033, SARL Domaine Michel Gros",
+      "url": "https://www.prefectures-regions.gouv.fr/bourgogne-franche-comte/irecontenu/telechargement/97791/623936/file/recueil-bfc-2022-101-recueil-des-actes-administratifs-special.pdf#page=351",
+      "type": "government-receipt",
+      "documentDate": "2022-04-04",
+      "reviewedAt": "2026-09-28",
+      "finding": "Receipt of a complete application, dossier 2022-053; previous operator SCE Gros frère et sœur. Page 351 read from the image.",
+      "access": "read"
+    },
+    {
+      "id": "raa-2022-143",
+      "title": "BFC bulletin 2022-143: receipt BFC-2022-06-30-00012, SAS Domaine AF Gros",
+      "url": "https://www.prefectures-regions.gouv.fr/bourgogne-franche-comte/irecontenu/telechargement/100728/641113/file/recueil-bfc-2022-143-recueil-des-actes-administratifs-special.pdf#page=88",
+      "type": "government-receipt",
+      "documentDate": "2022-06-30",
+      "reviewedAt": "2026-09-28",
+      "finding": "Receipt of a complete application, dossier 2022-113; previous operator Domaine Gros Frère et Sœur. Page 88 read from the image.",
+      "access": "read"
+    },
+    {
+      "id": "winehog-overview",
+      "title": "Winehog: Echezeaux – Grand cru standard?",
+      "url": "https://winehog.org/echezeaux-grand-cru-standard-584/",
+      "type": "critic-research",
+      "documentDate": "2011-07-15",
+      "reviewedAt": "2026-09-28",
+      "finding": "Producer list per climat, marked by the author as needing an update. Describes Les Loächausses as formerly a Gros Frère et Sœur monopole. No cadastral references.",
+      "access": "read"
+    },
+    {
+      "id": "winehog-dessus",
+      "title": "Winehog: Echézeaux du Dessus – the heart of Echézeaux",
+      "url": "https://winehog.org/echezeaux-du-dessus-heart-echezeaux-20883/",
+      "type": "critic-research",
+      "documentDate": "2014-08-31",
+      "reviewedAt": "2026-09-28",
+      "finding": "Ownership mapping of Échezeaux du Dessus with areas, each marked confirmed or not confirmed, and a cadastre extract for D510.",
+      "access": "read"
+    },
+    {
+      "id": "winehog-jayer-gilles",
+      "title": "Winehog: Terroir insight – Jayer-Gilles Echezeaux du Dessus",
+      "url": "https://winehog.org/terroir-insight-jayer-gilles-echezeaux-du-dessus-20812/",
+      "type": "critic-research",
+      "documentDate": "2014-08-22",
+      "reviewedAt": "2026-09-28",
+      "finding": "Names cadastre no 631 (Jayer-Gilles) and 632 (Niquet-Jayer), held by the Jayer family since 1933.",
+      "access": "read"
+    },
+    {
+      "id": "winehog-hospices",
+      "title": "Winehog: Terroir View – Hospice de Beaune, Echezeaux du Dessus \"Jean-Luc Bissey\"",
+      "url": "https://winehog.org/terroir-view-hospice-de-beaune-echezeaux-2-37522/",
+      "type": "critic-research",
+      "documentDate": "2019-05-06",
+      "reviewedAt": "2026-09-28",
+      "finding": "Plot 510 donated to the Hospices in 2011; Mongeard-Mugneret made its Échezeaux Vieilles Vignes from it until 2011.",
+      "access": "read"
+    },
+    {
+      "id": "winehog-liger-belair",
+      "title": "Winehog: Terroir Insight – Domaine du Comte Liger-Belair Echezeaux, new plot",
+      "url": "https://winehog.org/terroir-insight-domaine-du-comte-liger-belair-echezeaux-2-40616/",
+      "type": "critic-research",
+      "documentDate": "2020-04-27",
+      "reviewedAt": "2026-09-28",
+      "finding": "Six plots (0.6157 ha) in Cruots ou Vignes Blanches, Champs Traversins and Clos Saint-Denis, plus an Échezeaux du Dessus plot added from 2020. No cadastral references.",
+      "access": "read"
+    },
+    {
+      "id": "winehog-millot",
+      "title": "Winehog: Terroir View – Jean-Marc Millot Echezeaux \"Cuvée 1949\"",
+      "url": "https://winehog.org/terroir-view-jean-marc-millot-echezeaux-37123/",
+      "type": "critic-research",
+      "documentDate": "2019-01-04",
+      "reviewedAt": "2026-09-28",
+      "finding": "Premium article supplied by the repository owner; only facts are recorded. Millot owns 0.5981 ha of Échezeaux du Dessus, plots 798, 799 and 800, from the Gouroux family of his wife; a 1986 court case against Mongeard-Mugneret gave Millot the right to vinify them. Cuvée 1949 (from 2017) comes from part of 798/799.",
+      "access": "premium-supplied-by-repository-owner"
+    },
+    {
+      "id": "winehog-berthaut-gerbet",
+      "title": "Winehog: Terroir View – Berthaut-Gerbet Echezeaux",
+      "url": "https://winehog.org/terroir-view-berthaut-gerbet-echezeaux-2-2-37319/",
+      "type": "critic-research",
+      "documentDate": "2019-03-13",
+      "reviewedAt": "2026-09-28",
+      "finding": "Premium article supplied by the repository owner; only facts are recorded. From the 2018 vintage 0.2126 ha: Les Quartiers de Nuits 360 (0.0975 ha), part of Les Treux 508 (0.0276 ha; the rest presumably rented by another domaine) and Champs Traversins 821, 822 (0.0875 ha, from 2018). Amélie Berthaut took over two thirds of the Domaine Gerbet vineyards; first Échezeaux vintage 2013.",
+      "access": "premium-supplied-by-repository-owner"
+    },
+    {
+      "id": "winehog-grivot",
+      "title": "Winehog: Terroir Insight – Domaine Jean Grivot Echezeaux",
+      "url": "https://winehog.org/terroir-insight-domaine-jean-grivot-echezeaux-37550/",
+      "type": "critic-research",
+      "documentDate": "2019-05-11",
+      "reviewedAt": "2026-09-28",
+      "finding": "Premium article supplied by the repository owner; only facts are recorded. Grivot Échezeaux from seven plots, 0.8460 ha: Les Cruots ou Vignes Blanches 172, 176, 792, 794, 599 (0.7970 ha) and Champs Traversins 590, 593 (0.0490 ha). 172/176 presumably via the Jayer family; 792/794 and presumably 590/593 from the Lamadon holdings divided in 2006 between Liger-Belair (métayage), the Lamarche family and the Grivot family.",
+      "access": "premium-supplied-by-repository-owner"
+    },
+    {
+      "id": "raa-2026-067",
+      "title": "BFC bulletin 2026-067: order 2026-739 (BFC-2026-04-07-00015) suspending the SCEA Domaine du Comte Liger-Belair application",
+      "url": "https://www.prefectures-regions.gouv.fr/bourgogne-franche-comte/irecontenu/telechargement/137449/1004181/file/recueil-bfc-2026-067-recueil-des-actes-administratifs-nominatifs.pdf#page=28",
+      "type": "government-decision",
+      "documentDate": "2026-04-07",
+      "reviewedAt": "2026-09-28",
+      "access": "read",
+      "finding": "Suspends for eight months from publication (29 April 2026) the instruction of an application registered 11/12/2025 and complete 06/01/2026, for excessive enlargement. Pages 28–30 read from the image."
+    },
+    {
+      "id": "winehog-arnoux-lachaux",
+      "title": "Winehog: Terroir View – Domaine Arnoux-Lachaux, Echezeaux",
+      "url": "https://winehog.org/terroir-view-arnoux-lachaux-echezeaux-37470/",
+      "type": "critic-research",
+      "documentDate": "2019-05-04",
+      "reviewedAt": "2026-09-28",
+      "access": "premium-supplied-by-repository-owner",
+      "finding": "Premium article supplied by the repository owner; only facts are recorded. Four plots in Les Rouges du Bas, 0.6204 ha: former cadastre 206, now 818, 819 and 820 (0.4535 ha), and 677 (0.1669 ha). Échezeaux produced since the late 1970s."
     }
   ],
   "holders": [
@@ -700,10 +850,11 @@
         "Domaine David Duband"
       ],
       "basis": "reported-operator-relationship",
-      "finding": "A report hosted by Duband describes Feuillet entrusting vineyards to him; Duband also lists Échezeaux. The relationship is a useful operator lead but neither source names the four cadastral references.",
+      "finding": "A report hosted by Duband describes Feuillet entrusting vineyards to him; Duband also lists Échezeaux. The relationship is a useful operator lead but neither source names the four cadastral references. Winehog (2019) lists D0677 among Arnoux-Lachaux's Échezeaux plots, which conflicts with a Duband lead for that parcel.",
       "sourceIds": [
         "feuillet",
-        "duband-wine"
+        "duband-wine",
+        "winehog-arnoux-lachaux"
       ],
       "parcelOperationConfirmed": false
     },
@@ -816,10 +967,11 @@
         "Domaine Jean Tardy et Fils"
       ],
       "basis": "bottler-only-lead",
-      "finding": "GFA holds Les Treux. An auction lists a 2019 Bouchy bottle with Tardy bottling; this is not evidence Tardy farmed these five parcels, then or now.",
+      "finding": "GFA holds Les Treux. An auction lists a 2019 Bouchy bottle with Tardy bottling; this is not evidence Tardy farmed these five parcels, then or now. In December 2025 SCEA Domaine du Comte Liger-Belair applied to farm all five parcels; the application was suspended in April 2026.",
       "sourceIds": [
         "bouchy",
-        "bouchy-tardy"
+        "bouchy-tardy",
+        "raa-2026-067"
       ],
       "parcelOperationConfirmed": false
     },
@@ -917,10 +1069,11 @@
         "Domaine Berthaut-Gerbet"
       ],
       "basis": "partial-succession-lead",
-      "finding": "Estate history explicitly says only PART of the Gerbet vines joined Berthaut-Gerbet. Which of D0360/D0508/D0821, if any, is farmed by this domaine needs confirmation.",
+      "finding": "Estate history explicitly says only PART of the Gerbet vines joined Berthaut-Gerbet. Which of D0360/D0508/D0821, if any, is farmed by this domaine needs confirmation. Winehog (2019) names D0360, D0821 and part of D0508 as Berthaut-Gerbet plots; the remainder of D0508 is presumably farmed by another domaine.",
       "sourceIds": [
         "gerbet",
-        "berthaut"
+        "berthaut",
+        "winehog-berthaut-gerbet"
       ],
       "parcelOperationConfirmed": false
     },
@@ -977,10 +1130,11 @@
         "Domaine du Comte Liger-Belair"
       ],
       "basis": "management-only-lead",
-      "finding": "Bouchon Pourpre's link to Comte Liger-Belair is corporate. No accepted lease or exact-parcel current-operation evidence for D0673.",
+      "finding": "Bouchon Pourpre's link to Comte Liger-Belair is corporate. No accepted lease or exact-parcel current-operation evidence for D0673. SCEA Domaine du Comte Liger-Belair applied to farm D0673 in December 2025; instruction was suspended in April 2026, so no authorisation existed at that date.",
       "sourceIds": [
         "bouchon",
-        "liger"
+        "liger",
+        "raa-2026-067"
       ],
       "parcelOperationConfirmed": false
     },
@@ -1008,13 +1162,591 @@
       "documentDate": "2022-11-24",
       "outcome": "unconfirmed",
       "currentFarmer": null,
-      "unresolvedPrintedReference": "D01776"
+      "unresolvedPrintedReference": "D01776",
+      "summary": "Dossier 2022-204, complete at 21/10/2022, 1.5050 ha across Vosne-Romanée and Flagey-Échezeaux; the receipt does not authorise cultivation. Geometry of D0177/D0178 is unchanged since January 2022. Printed D01776 is unresolved."
+    },
+    {
+      "parcelIds": [
+        "212670000D0665",
+        "212670000D0666"
+      ],
+      "sourceId": "raa-2022-084",
+      "kind": "authorisation",
+      "applicant": "SAS Domaine RC Les Grandes Vignes (Quincey)",
+      "previousOperator": "Domaine Daniel Rion et Fils",
+      "documentDate": "2022-07-04",
+      "outcome": "authorised",
+      "currentFarmer": null,
+      "summary": "Application filed 11/01/2022, complete 01/03/2022, CDOA opinion 25/05/2022; the same decision refuses Vosne-Romanée AB references to this applicant. Article 2 lists four communes without assigning each row; the section D rows are taken as Flagey-Échezeaux because the cédant holds these references there. D0665 is printed at 0.1157 ha, its cadastral area; D0666 at 0.0799 ha against 0.1157 ha, so its scope is unresolved. D0667, held by the same right holder, is not in the decision. Whether the applicant is connected to Domaine Jean-Charles Rion is not established."
+    },
+    {
+      "parcelIds": [
+        "212670000D0184",
+        "212670000D0558"
+      ],
+      "predecessorReferences": {
+        "212670000D0774": [
+          "212670000D0830",
+          "212670000D0831"
+        ]
+      },
+      "sourceId": "raa-2022-101",
+      "kind": "historical-application",
+      "applicant": "SARL Domaine Michel Gros",
+      "previousOperator": "SCE Gros frère et sœur",
+      "documentDate": "2022-04-04",
+      "outcome": "unconfirmed",
+      "currentFarmer": null,
+      "summary": "Dossier 2022-053, filed 07/03/2022, complete 28/03/2022; 0.7903 ha across Vosne-Romanée and Flagey-Échezeaux, all three Flagey references in Les Loächausses. The receipt is not an authorisation. D0774 was divided after January 2024."
+    },
+    {
+      "parcelIds": [
+        "212670000D0181"
+      ],
+      "predecessorReferences": {
+        "212670000D0775": [
+          "212670000D0832",
+          "212670000D0833",
+          "212670000D0834"
+        ]
+      },
+      "sourceId": "raa-2022-143",
+      "kind": "historical-application",
+      "applicant": "SAS Domaine AF Gros (Pommard)",
+      "previousOperator": "Domaine Gros Frère et Sœur",
+      "documentDate": "2022-06-30",
+      "outcome": "unconfirmed",
+      "currentFarmer": null,
+      "summary": "Dossier 2022-113, filed 23/05/2022, with Vougeot A523/A524; 1.0719 ha in total. Both Flagey references are in Les Loächausses. The receipt states it does not authorise cultivation. D0775 was divided after January 2024."
+    },
+    {
+      "parcelIds": [
+        "212670000D0628",
+        "212670000D0673",
+        "212670000D0764",
+        "212670000D0765",
+        "212670000D0766",
+        "212670000D0767"
+      ],
+      "sourceId": "raa-2026-067",
+      "kind": "suspended-application",
+      "applicant": "SCEA Domaine du Comte Liger-Belair (Vosne-Romanée)",
+      "previousOperator": "Not stated",
+      "documentDate": "2026-04-07",
+      "outcome": "instruction suspended for eight months from 29 April 2026",
+      "currentFarmer": null,
+      "summary": "The application covers 4.3080 ha in Flagey-Échezeaux, Boncourt-le-Bois, Vosne-Romanée and Vougeot belonging to SAS Bouchon Pourpre, GFA Domaine Bouchy et Amis, SCEA Nathalie Pacareau Lamarche and Mme Geneviève Lamarche; it also names Grands-Échezeaux D615 and D616. The region found the enlargement excessive and suspended the instruction, during which anyone may apply for the same land. As of the order, the applicant was not authorised to farm these parcels."
     }
   ],
   "accessGaps": [
-    "DDT notice index unavailable; no exhaustive archive or cadastral-history review.",
     "CVI records require cooperation from authorised holders; no private records accessed.",
     "Public CartoBio polygons omit operator identity.",
-    "HOR Vignobles and Coudray PDF full text/render unavailable; indexed excerpts retained only as leads."
+    "HOR Vignobles and Coudray PDF full text/render unavailable; indexed excerpts retained only as leads.",
+    "Regional bulletins 2019–2026 were read for Côte-d'Or DDT notices (2026 to the end of September). Farm-structure notices appear there regularly only from 2021; earlier notices, likely in the Côte-d'Or departmental bulletins, were not searched, so \"no decision found\" means none in the searched corpus. The DDT notice page and cote-dor.gouv.fr refused automated access.",
+    "Cadastral lineage covers the 2019–2026 vintages only; earlier divisions are not traced.",
+    "Winehog Premium articles were read only where supplied by the repository owner (Grivot, Arnoux-Lachaux, Millot, Berthaut-Gerbet); the Grands-Échezeaux articles and others only as public previews."
+  ],
+  "historyFindings": [
+    {
+      "id": "lamarche-rename",
+      "title": "Nicole Lamarche entity was named after Domaine François Lamarche",
+      "parcelIds": [
+        "212670000D0168",
+        "212670000D0169",
+        "212670000D0519"
+      ],
+      "sourceIds": [
+        "dgfip-history",
+        "nicole"
+      ],
+      "finding": "SIREN 397738634 is recorded as FONCIER VITI DOM FRANCOIS LAMARCHE on 1 January 2020 and 2021 and as NICOLE LAMARCHE from 2022. The unchanged SIREN proves one renamed legal entity, which strengthens the identity link to the Lamarche domaine. There was no company record in 2019. Farming of the three parcels remains unconfirmed."
+    },
+    {
+      "id": "anne-gros-rights",
+      "title": "Anne Gros company rights begin in 2021",
+      "parcelIds": [
+        "212670000D0183",
+        "212670000D0709"
+      ],
+      "sourceIds": [
+        "dgfip-history",
+        "cadastre-history"
+      ],
+      "finding": "ANNE GROS (SIREN 348024928) first appears on 1 January 2021; both references existed in 2019 without a company record. This dates recorded rights, not an operating start."
+    },
+    {
+      "id": "anne-application-continuity",
+      "title": "2022 application references match today's geometry",
+      "parcelIds": [
+        "212670000D0177",
+        "212670000D0178"
+      ],
+      "sourceIds": [
+        "cadastre-history",
+        "dgfip-history",
+        "anne-application"
+      ],
+      "finding": "Geometry and recorded area of D0177 and D0178 (and Grands-Échezeaux D0093) are identical in the 1 January 2022 vintage and today, so the printed references in the November 2022 receipt denote today's parcels. Neither Échezeaux reference has a company record in any year 2019–2025, consistent with private ownership. The application's outcome and actual operation remain unconfirmed; D01776 appears in no vintage."
+    },
+    {
+      "id": "mongeard-d0673",
+      "title": "D0673 left Mongeard-Mugneret during 2024",
+      "parcelIds": [
+        "212670000D0671",
+        "212670000D0673"
+      ],
+      "sourceIds": [
+        "dgfip-history",
+        "bouchon"
+      ],
+      "finding": "Both references were held by ASSURANCES DU CREDIT MUTUEL VIE until 2020 and by DOMAINE MONGEARD MUGNERET (SIREN 303514681) from 2021. On 1 January 2025 D0673 is held by BOUCHON POURPRE (SIREN 880909346). A Mongeard lead for D0673 rests on rights that ended during 2024."
+    },
+    {
+      "id": "capitain-transfer",
+      "title": "Capitain parcels moved to Capitain-Gagnerot in 2020",
+      "parcelIds": [
+        "212670000D0326",
+        "212670000D0579",
+        "212670000D0581",
+        "212670000D0583",
+        "212670000D0584",
+        "212670000D0587",
+        "212670000D0588"
+      ],
+      "sourceIds": [
+        "dgfip-history",
+        "capitain"
+      ],
+      "finding": "GFA DOMAINE FRANCOIS CAPITAIN ET FILS (SIREN 339012320) through 2020, SARL CAPITAIN GAGNEROT (SIREN 515620466) from 2021. A different SIREN means a transfer between entities. Family-name continuity supports the existing lead without proving farming."
+    },
+    {
+      "id": "clerget-transfer",
+      "title": "Clerget parcel moved into the domaine company in 2023",
+      "parcelIds": [
+        "212670000D0796"
+      ],
+      "sourceIds": [
+        "dgfip-history",
+        "clerget"
+      ],
+      "finding": "GFV CHRISTIAN ET ISABELLE CLERGET (SIREN 430384354) through 2023, SCEV DU DOMAINE CHRISTIAN CLERGET (SIREN 431340140) from 2024. Ownership by the domaine company is closer to the operator, but it is not a lease or operation record."
+    },
+    {
+      "id": "hor-climats",
+      "title": "HOR Vignobles transfer to SCI Les Climats dated to 2022",
+      "parcelIds": [
+        "212670000D0815"
+      ],
+      "sourceIds": [
+        "dgfip-history",
+        "hor-filing"
+      ],
+      "finding": "D0815 passes from HOR VIGNOBLES to SCI LES CLIMATS between the 2022 and 2023 files, while D0813 and D0814 stay with HOR. This places the En Orveaux transfer suggested by the indexed HOR filing on D0815. The farmer remains unresolved."
+    },
+    {
+      "id": "traversins-timing",
+      "title": "Traversins rights start on 1 January 2024",
+      "parcelIds": [
+        "212670000D0295",
+        "212670000D0296",
+        "212670000D0297",
+        "212670000D0298",
+        "212670000D0299"
+      ],
+      "sourceIds": [
+        "dgfip-history",
+        "traversins",
+        "roumier-2023-visit"
+      ],
+      "finding": "No company record through 2023; TRAVERSINS (SIREN 911887461) from 1 January 2024. The timing matches the 2023 report of additional Champs Traversins vines. That strengthens the lead's timing, not its parcel scope or farming."
+    },
+    {
+      "id": "bnd-d0143",
+      "title": "U22079769 is an undivided-ownership placeholder for former D0143",
+      "parcelIds": [
+        "212670000D0898",
+        "212670000D0899",
+        "212670000D0900",
+        "212670000D0901",
+        "212670000D0902"
+      ],
+      "sourceIds": [
+        "dgfip-history",
+        "cadastre-history"
+      ],
+      "finding": "PROPRIETAIRES DU BND 267 D0143 held D0143 from 2019 to 2024. The 2025 cadastre divides D0143 into these five references and the same record follows. It denotes co-owners of undivided property, not a company to identify; ask the owners directly."
+    },
+    {
+      "id": "family-companies-2024",
+      "title": "Family land companies first recorded in 2025",
+      "parcelIds": [
+        "212670000D0128",
+        "212670000D0154",
+        "212670000D0156",
+        "212670000D0157",
+        "212670000D0316",
+        "212670000D0323",
+        "212670000D0633",
+        "212670000D0636",
+        "212670000D0144",
+        "212670000D0145",
+        "212670000D0511",
+        "212670000D0512"
+      ],
+      "sourceIds": [
+        "dgfip-history",
+        "forey-identity",
+        "orveaux-identity",
+        "cruots"
+      ],
+      "finding": "GFA FAMILLE FOREY BJ, GROUPEMENT FONCIER VITICOLE DE ORVEAUX and LES CRUOTS first appear on 1 January 2025 on references that existed earlier without a company record. This is consistent with family land moving into land-holding companies during 2024. Their U-numbers carry no SIREN, so names remain leads only."
+    },
+    {
+      "id": "recent-company-records",
+      "title": "Other first company records, 2023–2024",
+      "parcelIds": [
+        "212670000D0161",
+        "212670000D0203",
+        "212670000D0313",
+        "212670000D0340"
+      ],
+      "sourceIds": [
+        "dgfip-history"
+      ],
+      "finding": "DOMAINE ARNOUX - LACHAUX (D0161), EARL DOMAINE FAIVRE (D0203) and DOMAINE D'EUGENIE (D0340) first appear on 1 January 2024, ORIGINE (D0313) on 1 January 2023. These are recent acquisitions or transfers into a company; ask for the deed or lease date together with operation evidence."
+    },
+    {
+      "id": "drc-identifier",
+      "title": "Romanée-Conti record reformatted, parcels unchanged",
+      "parcelIds": [
+        "212670000D0194",
+        "212670000D0768",
+        "212670000D0769",
+        "212670000D0770"
+      ],
+      "sourceIds": [
+        "dgfip-history",
+        "drc"
+      ],
+      "finding": "The same four references move from a MAJIC-only record (2019) through a provisional U-number (2020) to SIREN 778269407 (2021), as SC DOM DE LA ROMANEE CONTI becomes DOMAINE DE LA ROMANEE CONTI. This is consistent with reformatting rather than a sale, but the file alone cannot prove identity."
+    },
+    {
+      "id": "private-splits",
+      "title": "Split parcels with no company record in any year",
+      "parcelIds": [
+        "212670000D0822",
+        "212670000D0824",
+        "212670000D0825",
+        "212670000D0826",
+        "212670000D0827",
+        "212670000D0828",
+        "212670000D0829",
+        "212670000D0830",
+        "212670000D0831",
+        "212670000D0832",
+        "212670000D0833",
+        "212670000D0834",
+        "212670000D0835",
+        "212670000D0836",
+        "212670000D0841",
+        "212670000D0842",
+        "212670000D0843",
+        "212670000D0844",
+        "212670000D0871",
+        "212670000D0872",
+        "212670000D0903",
+        "212670000D0904",
+        "212670000D0905",
+        "212670000D0906",
+        "212670000D0907",
+        "212670000D0908",
+        "212670000D0909",
+        "212670000D0910",
+        "212670000D0911"
+      ],
+      "sourceIds": [
+        "cadastre-history",
+        "dgfip-history"
+      ],
+      "finding": "These references were created by dividing earlier parcels after 2019. Neither they nor their predecessors carry a company record in any year, which points to private owners. The legal-entity files cannot identify them; only owners, notaries or shared CVI extracts can."
+    }
+  ],
+  "externalResearch": [
+    {
+      "id": "wh-d0510",
+      "title": "Hospices de Beaune, Cuvée Jean-Luc Bissey",
+      "parcelIds": [
+        "212670000D0510"
+      ],
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog reproduces the cadastre entry \"000 D 510, 4 380 m², Les Echezeaux du Dessus\" and reports the 2011 donation to the Hospices by Jean-Luc Bissey, with Mongeard-Mugneret producing from it until 2011. Consistent with the 2019–2025 rights (HOSPICES CIVILS DE BEAUNE). Who cultivates for the Hospices is not stated.",
+      "sourceIds": [
+        "winehog-dessus",
+        "winehog-hospices"
+      ],
+      "producer": "Hospices de Beaune (owner)",
+      "printedReferences": [
+        "510"
+      ]
+    },
+    {
+      "id": "wh-d0631",
+      "title": "Jayer-Gilles plot, cadastre no 631",
+      "parcelIds": [
+        "212670000D0631"
+      ],
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog names cadastre 631 as the Jayer-Gilles Échezeaux du Dessus plot, 0.5361 ha, in the Jayer family since 1933. Rights 2019–2025 record DOMAINE HOFFMANN-JAYER on D0631 (5 361 m²), consistent with the published area.",
+      "sourceIds": [
+        "winehog-jayer-gilles",
+        "winehog-dessus"
+      ],
+      "producer": "Domaine Jayer-Gilles / Hoffmann-Jayer",
+      "printedReferences": [
+        "631"
+      ]
+    },
+    {
+      "id": "wh-d0632",
+      "title": "Niquet-Jayer plot, cadastre no 632",
+      "parcelIds": [
+        "212670000D0632"
+      ],
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog names cadastre 632 as Niquet-Jayer's 0.5285 ha, with no own bottling after 2003 and the wine \"now produced by or sold to a négociant\". D0632 has no company record in any year 2019–2025, consistent with private family ownership. The négociant or farmer is not named.",
+      "sourceIds": [
+        "winehog-jayer-gilles",
+        "winehog-dessus"
+      ],
+      "producer": "Niquet-Jayer family (owner)",
+      "printedReferences": [
+        "632"
+      ]
+    },
+    {
+      "id": "wh-dessus-perdrix",
+      "title": "Domaine des Perdrix, Échezeaux du Dessus",
+      "parcelIds": [
+        "212670000D0620",
+        "212670000D0621"
+      ],
+      "basis": "critic-attribution-area-reconstructed",
+      "finding": "Winehog 2014 area; the parcel set is reconstructed by this register because the published area equals their exact cadastral sum. Winehog lists 0.8730 ha, marked not confirmed; D0620 and D0621 total 8 730 m² and carry no company record.",
+      "sourceIds": [
+        "winehog-dessus"
+      ],
+      "producer": "Domaine des Perdrix"
+    },
+    {
+      "id": "wh-dessus-millot",
+      "title": "Jean-Marc Millot: three named plots in Échezeaux du Dessus",
+      "parcelIds": [
+        "212670000D0798",
+        "212670000D0799",
+        "212670000D0800"
+      ],
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog (January 2019) names cadastre 798, 799 and 800, 0.5981 ha, owned through the Gouroux family; the areas equal the cadastral sum exactly and confirm the earlier area reconstruction. None has a company record, consistent with private family ownership. A 1986 court case against Mongeard-Mugneret gave Millot the right to vinify these plots, so Mongeard had farmed them before. Cuvée 1949, from 2017, comes from part of D0798/D0799.",
+      "sourceIds": [
+        "winehog-millot",
+        "winehog-dessus"
+      ],
+      "producer": "Domaine Jean-Marc Millot",
+      "printedReferences": [
+        "798",
+        "799",
+        "800"
+      ]
+    },
+    {
+      "id": "wh-dessus-tremblay",
+      "title": "Cécile Tremblay, Échezeaux du Dessus",
+      "parcelIds": [
+        "212670000D0189",
+        "212670000D0190"
+      ],
+      "basis": "critic-attribution-area-reconstructed",
+      "finding": "Winehog 2014 area; the parcel set is reconstructed by this register because the published area equals their exact cadastral sum. Winehog lists 0.1775 ha, not confirmed, from the Jayer family share sharecropped until 2002; D0189 and D0190 total 1 775 m² and carry no company record.",
+      "sourceIds": [
+        "winehog-dessus"
+      ],
+      "producer": "Domaine Cécile Tremblay"
+    },
+    {
+      "id": "wh-dessus-mongeard",
+      "title": "Mongeard-Mugneret, Échezeaux du Dessus",
+      "parcelIds": [
+        "212670000D0668",
+        "212670000D0669",
+        "212670000D0670"
+      ],
+      "basis": "critic-attribution-area-reconstructed",
+      "finding": "Winehog 2014 area; the parcel set is reconstructed by this register because the published area equals their exact cadastral sum. Winehog lists 0.3300 ha, not confirmed; D0668–D0670 total 3 300 m² and carry no company record.",
+      "sourceIds": [
+        "winehog-dessus"
+      ],
+      "producer": "Domaine Mongeard-Mugneret"
+    },
+    {
+      "id": "wh-dessus-noellat",
+      "title": "Michel Noëllat, Échezeaux du Dessus — conflicts with recorded rights",
+      "parcelIds": [
+        "212670000D0191",
+        "212670000D0192",
+        "212670000D0671",
+        "212670000D0672",
+        "212670000D0673"
+      ],
+      "basis": "critic-attribution-area-reconstructed",
+      "finding": "Winehog 2014 area; the parcel set is reconstructed by this register because the published area equals their exact cadastral sum. Winehog lists 0.5097 ha, not confirmed; these five references total 5 097 m². The recorded rights conflict: D0191/D0192 are held by GFA Mongeard Mugneret from 2019, D0671–D0673 by Mongeard companies (D0671/D0673 after Crédit Mutuel until 2020) and D0673 by Bouchon Pourpre from 2025. Treat the 2014 attribution as unresolved.",
+      "sourceIds": [
+        "winehog-dessus"
+      ]
+    },
+    {
+      "id": "wh-liger-belair-2020",
+      "title": "Liger-Belair added an Échezeaux du Dessus plot from 2020",
+      "parcelIds": [
+        "212670000D0673"
+      ],
+      "basis": "critic-holding-description",
+      "finding": "Winehog reports a new Échezeaux du Dessus plot from the 2020 vintage without its location. D0673, in Échezeaux du Dessus, passed from Mongeard to Bouchon Pourpre (a company connected with Comte Liger-Belair) during 2024. The dates are compatible but do not identify the plot.",
+      "sourceIds": [
+        "winehog-liger-belair",
+        "bouchon"
+      ]
+    },
+    {
+      "id": "wh-liger-belair-holdings",
+      "title": "Liger-Belair Échezeaux holdings before 2020",
+      "parcelIds": [],
+      "basis": "critic-holding-description",
+      "finding": "Six plots totalling 0.6157 ha: two in Les Cruots ou Vignes Blanches (0.3299 ha), Champs Traversins and Clos Saint-Denis. No cadastral references; a research target for those climats.",
+      "sourceIds": [
+        "winehog-liger-belair"
+      ]
+    },
+    {
+      "id": "wh-loachausses",
+      "title": "Les Loächausses: former Gros Frère et Sœur monopole",
+      "parcelIds": [],
+      "basis": "critic-holding-description",
+      "finding": "Winehog (2011) describes Les Loächausses as formerly a Gros Frère et Sœur monopole and lists Gros Frère et Sœur and Anne Gros there. The 2022 applications by Michel Gros and AF Gros cover D0181, D0184, D0558, D0774 and D0775 in Les Loächausses, and ANNE GROS holds D0183/D0709 there from 2021, consistent with a division of that holding.",
+      "sourceIds": [
+        "winehog-overview",
+        "raa-2022-101",
+        "raa-2022-143"
+      ]
+    },
+    {
+      "id": "wh-berthaut-gerbet",
+      "title": "Berthaut-Gerbet: four named plots, one only in part",
+      "parcelIds": [
+        "212670000D0360",
+        "212670000D0508",
+        "212670000D0821",
+        "212670000D0822"
+      ],
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog (March 2019) names 360 in Les Quartiers de Nuits (0.0975 ha), part of 508 in Les Treux (0.0276 ha) and, from the 2018 vintage, 821 and 822 in Champs Traversins (0.0875 ha), 0.2126 ha in total. D0360 and D0821 + D0822 equal their cadastral areas exactly. D0508 is 901 m², so about 625 m² of a parcel held by the Gerbet Sirugue GFA is presumably farmed by another, unnamed domaine. D0360, D0508 and D0821 are held by GFA Domaine Gerbet Sirugue; D0822, divided with D0821 from former D0300 in 2019, has no company record. Amélie Berthaut took over two thirds of the Gerbet vineyards.",
+      "sourceIds": [
+        "winehog-berthaut-gerbet"
+      ],
+      "producer": "Domaine Berthaut-Gerbet",
+      "printedReferences": [
+        "360",
+        "508",
+        "821",
+        "822"
+      ]
+    },
+    {
+      "id": "wh-grivot",
+      "title": "Domaine Jean Grivot: seven named Échezeaux plots",
+      "producer": "Domaine Jean Grivot",
+      "parcelIds": [
+        "212670000D0172",
+        "212670000D0176",
+        "212670000D0599",
+        "212670000D0590",
+        "212670000D0593"
+      ],
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog (May 2019) names cadastre 172, 176, 792, 794 and 599 in Les Cruots ou Vignes Blanches and 590, 593 in Champs Traversins as the source of the Grivot Échezeaux. Published areas equal the cadastral sums exactly (7 970 m² and 490 m²). D0792 and D0794 were divided during 2022; their evidence reaches D0826/D0827 and D0828/D0829 only through accepted lineage, and those rows are labelled as inherited. None of the plots has a company record in any year 2019–2025, consistent with private family ownership. The article describes farming for the Grivot Échezeaux as of 2019, not a dated current lease.",
+      "sourceIds": [
+        "winehog-grivot"
+      ],
+      "printedReferences": [
+        "172",
+        "176",
+        "792",
+        "794",
+        "599",
+        "590",
+        "593"
+      ],
+      "predecessorReferences": {
+        "212670000D0792": [
+          "212670000D0826",
+          "212670000D0827"
+        ],
+        "212670000D0794": [
+          "212670000D0828",
+          "212670000D0829"
+        ]
+      }
+    },
+    {
+      "id": "wh-lamadon-2006",
+      "title": "Lamadon holdings divided in 2006",
+      "parcelIds": [
+        "212670000D0590",
+        "212670000D0593"
+      ],
+      "basis": "critic-holding-description",
+      "finding": "Winehog reports that the Lamadon family stopped production in 2006 and divided its plots between Louis-Michel Liger-Belair (métayage), the Lamarche family and the Grivot family; Grivot received 792/794 and presumably 590/593. The Liger-Belair and Lamarche shares are not identified by cadastral number.",
+      "sourceIds": [
+        "winehog-grivot"
+      ],
+      "printedReferences": [
+        "792",
+        "794",
+        "590",
+        "593"
+      ],
+      "predecessorReferences": {
+        "212670000D0792": [
+          "212670000D0826",
+          "212670000D0827"
+        ],
+        "212670000D0794": [
+          "212670000D0828",
+          "212670000D0829"
+        ]
+      }
+    },
+    {
+      "id": "wh-arnoux-lachaux",
+      "title": "Domaine Arnoux-Lachaux: four named plots in Les Rouges du Bas",
+      "producer": "Domaine Arnoux-Lachaux",
+      "parcelIds": [
+        "212670000D0818",
+        "212670000D0819",
+        "212670000D0820",
+        "212670000D0677"
+      ],
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog (May 2019) names cadastre 818, 819, 820 (formerly 206; 0.4535 ha) and 677 (0.1669 ha); the published areas equal the cadastral areas exactly. Rights agree for D0820 (DOMAINE ARNOUX - LACHAUX); D0818/D0819 have no company record. D0677 is recorded to FRANCOIS FEUILLET, so the article implies that Arnoux-Lachaux farmed a Feuillet-owned parcel in 2019. That conflicts with the holder-level Duband lead for D0677; both remain unconfirmed. Former reference 206 predates the 2019 cadastre vintage and is not traced. D0161, held by Arnoux-Lachaux from 2024, is not in the 2019 article.",
+      "sourceIds": [
+        "winehog-arnoux-lachaux"
+      ],
+      "printedReferences": [
+        "818",
+        "819",
+        "820",
+        "677",
+        "206"
+      ]
+    }
   ]
 }
