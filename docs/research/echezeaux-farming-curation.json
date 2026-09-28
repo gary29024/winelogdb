@@ -1,0 +1,1020 @@
+{
+  "schemaVersion": 1,
+  "reviewedAt": "2026-09-28",
+  "parentFeatureId": "inao-denom-565",
+  "targetSeason": "2026",
+  "status": "current-farmer-identification-incomplete",
+  "scope": "All 276 mapped Échezeaux parcels inventoried; all 36 recorded right-holder groups triaged. Not an exhaustive search of every cadastral reference or inaccessible archive.",
+  "rules": [
+    "Candidate names are research hypotheses, never verified farmers.",
+    "Rights as of 2025-01-01, modern cadastral geometry and estate descriptions are different evidence.",
+    "A reviewed-at date or webpage crawl date is not a farming date.",
+    "Unmatched rights do not mean no owner or no farmer.",
+    "A cru intersection does not establish that the whole cadastral parcel is planted or farmed.",
+    "No automatic assignment from area, adjacency, named area, wine bottler, manager or similar company name."
+  ],
+  "sources": [
+    {
+      "id": "drc",
+      "title": "Domaine de la Romanée-Conti: Échezeaux",
+      "url": "https://www.romanee-conti.fr/fr/9-grand-crus/2/echezeaux",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-09-28",
+      "finding": "States 4.6737 ha; no cadastral references or dated current-operation attestation.",
+      "access": "read"
+    },
+    {
+      "id": "mongeard",
+      "title": "Mongeard-Mugneret: Échezeaux",
+      "url": "https://mongeard.com/fr/vin/echezeaux-grand-cru/",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-09-28",
+      "finding": "Lists 1.7241 ha in production, while its narrative describes a 1.6210 ha Échezeaux du Dessus plot. No cadastral references; do not resolve differing area scopes by assigning nearby parcels.",
+      "access": "read"
+    },
+    {
+      "id": "mugneret",
+      "title": "Mugneret-Gibourg: Échezeaux",
+      "url": "https://www.mugneret-gibourg.com/fr/vin/9/echezeaux-grand-cru",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-09-28",
+      "finding": "Names Les Rouges du Bas and Les Quartiers de Nuits; no cadastral IDs.",
+      "access": "read"
+    },
+    {
+      "id": "mugneret2017",
+      "title": "Mugneret-Gibourg: 2017 vintage",
+      "url": "https://www.mugneret-gibourg.com/fr/millesimes/47/millesime-2017",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-09-28",
+      "finding": "Reports the first harvest of vines previously in métayage with Fabrice Vigot, including Échezeaux. Does not enumerate transferred cadastral parcels.",
+      "access": "read",
+      "evidenceSeason": "2017"
+    },
+    {
+      "id": "nicole",
+      "title": "Official company search: Nicole Lamarche",
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=397738634",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-09-28",
+      "finding": "Confirms the legal identity and active status, not farming.",
+      "access": "read"
+    },
+    {
+      "id": "bichot",
+      "title": "Albert Bichot: Clos Frantin Échezeaux sheet",
+      "url": "https://albertbichotusa.com/wp-content/uploads/2023/10/Echezeaux_Grand_Cru_domaine_du_clos_frantin_GB.pdf",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-09-28",
+      "finding": "Describes a 1 ha holding in Les Champs Traversins. No cadastral IDs or current operation date.",
+      "access": "read"
+    },
+    {
+      "id": "eugenie",
+      "title": "Domaine d'Eugénie: wines",
+      "url": "https://domaine-eugenie.com/les-vins",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-09-28",
+      "finding": "Describes 0.94 ha in Combe d'Orveaux, vineyard practices and a location map. No cadastral IDs.",
+      "access": "read"
+    },
+    {
+      "id": "faiveley",
+      "title": "Faiveley: Échezeaux En Orveaux",
+      "url": "https://domaine-faiveley.com/fiche-vin/echezeaux-en-orveaux-grand-cru/",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-09-28",
+      "finding": "Describes 0.8335 ha En Orveaux. No exact cadastral IDs.",
+      "access": "read"
+    },
+    {
+      "id": "faiveley-identity",
+      "title": "Faiveley: legal identity",
+      "url": "https://domaine-faiveley.com/mentions-legales/",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-09-28",
+      "finding": "Explicitly identifies SAS CVVB, RCS Dijon 775567928. This resolves the brand/entity identity, not the current operator of each parcel.",
+      "access": "read"
+    },
+    {
+      "id": "anne",
+      "title": "Anne Gros: Échezeaux",
+      "url": "https://www.anne-gros.com/products-category/echezeaux/",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-09-28",
+      "finding": "Describes 0.76 ha Les Loachausses and return in 2007 after a 25-year lease; no cadastral IDs.",
+      "access": "read"
+    },
+    {
+      "id": "anne-application",
+      "title": "DDT: Anne Gros application receipt, pp. 74–75",
+      "url": "https://www.prefectures-regions.gouv.fr/irecontenu/telechargement/106030/671617/file/recueil-bfc-2023-055-recueil-des-actes-administratifs-special.pdf#page=74",
+      "type": "government-event",
+      "documentDate": "2022-11-24",
+      "reviewedAt": "2026-09-28",
+      "finding": "Dossier 2022-204 names previous operator Gros Frère et Sœur and applicant Anne Gros. D0177/D0178 join Échezeaux exactly; outcome and actual current operation unconfirmed.",
+      "access": "read"
+    },
+    {
+      "id": "dujac",
+      "title": "Dujac: Échezeaux sheet",
+      "url": "https://www.dujac.com/en/pdf/7-echezeaux-grand-cru.pdf",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-09-28",
+      "finding": "Describes 68 ares 72 ca and vineyard setting. No cadastral reference.",
+      "access": "read"
+    },
+    {
+      "id": "hoffmann",
+      "title": "Hoffmann-Jayer: Échezeaux du Dessus",
+      "url": "https://www.hoffmann-jayer.com/fr/vin/8/echezeaux-grand-cru",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-09-28",
+      "finding": "Describes 0.53 ha and cultivation. No cadastral IDs; description/area need parcel-level confirmation.",
+      "access": "read"
+    },
+    {
+      "id": "orveaux-identity",
+      "title": "ORVEAUX company record",
+      "url": "https://www.pappers.fr/entreprise/orveaux-984543470",
+      "type": "registry-aggregator",
+      "documentDate": null,
+      "reviewedAt": "2026-09-28",
+      "finding": "Shows a similarly named GFV with Drouhin management, formed 2024. Its identity has NOT been joined to DGFiP holder U32852627; no farmer inferred.",
+      "access": "read"
+    },
+    {
+      "id": "feuillet",
+      "title": "Duband-hosted report on François Feuillet vines",
+      "url": "https://www.domaine-duband.com/f/news/received-our-3rd-star-5.pdf",
+      "type": "estate-hosted-press",
+      "documentDate": null,
+      "reviewedAt": "2026-09-28",
+      "finding": "Reports Feuillet entrusted his vines to David Duband. No cadastral IDs; report is historical despite a recent search crawl.",
+      "access": "read"
+    },
+    {
+      "id": "duband-wine",
+      "title": "David Duband: Échezeaux",
+      "url": "https://www.domaine-duband.com/fr/vins/18/echezeaux-grand-cru",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-09-28",
+      "finding": "Shows Échezeaux production, not an exact farmer-to-parcel join.",
+      "access": "read"
+    },
+    {
+      "id": "arnoux",
+      "title": "Arnoux-Lachaux: appellations",
+      "url": "https://www.arnoux-lachaux.com/",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-09-28",
+      "finding": "Lists Échezeaux in Flagey. No exact cadastral references or dated farmer confirmation.",
+      "access": "read"
+    },
+    {
+      "id": "confuron",
+      "title": "RVF: Jack Confuron-Cotetidot",
+      "url": "https://www.larvf.com/%2Cdomaine-jack-confuron-cotetidot%2C10595%2C400815.asp",
+      "type": "press",
+      "documentDate": null,
+      "reviewedAt": "2026-09-28",
+      "finding": "Connects the domaine name with Jack Confuron and lists Échezeaux. Secondary context, not current parcel-operation proof.",
+      "access": "read"
+    },
+    {
+      "id": "hospices",
+      "title": "Hospices de Beaune: cuvées",
+      "url": "https://domaine.hospices-de-beaune.com/nos-cuvees",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-09-28",
+      "finding": "Lists Échezeaux Jean-Luc Bissey.",
+      "access": "read"
+    },
+    {
+      "id": "hospices-catalogue",
+      "title": "Hospices de Beaune: 161st auction catalogue",
+      "url": "https://domaine.hospices-de-beaune.com/sites/domainebeaune/files/2022-05/Catalogue%20-%20161eme%20vente%20des%20vins%20des%20Hospices%20de%20Beaune.pdf",
+      "type": "estate",
+      "documentDate": "2021",
+      "reviewedAt": "2026-09-28",
+      "finding": "Records the 2011 Bissey donation in Les Échezeaux du Dessus; no cadastral ID in the reviewed cuvée entry.",
+      "access": "read"
+    },
+    {
+      "id": "coudray",
+      "title": "GFA Héritiers Coudray 2024 statutes",
+      "url": "https://www.pappers.fr/entreprise/gfa-heritiers-coudray-477938294/documents/GFA%20HERITIERS%20COUDRAY%20-%20Copie%20des%20statuts%20mis%20%C3%A0%20jour%2015-11-2024.pdf",
+      "type": "company-filing",
+      "documentDate": "2024-11-15",
+      "reviewedAt": "2026-09-28",
+      "finding": "Indexed excerpt concerns other communes. Full PDF text/render could not be inspected; not used to assign any operator.",
+      "access": "indexed-excerpt-only"
+    },
+    {
+      "id": "cruots",
+      "title": "LES CRUOTS company record",
+      "url": "https://www.pappers.fr/entreprise/les-cruots-930915806",
+      "type": "registry-aggregator",
+      "documentDate": null,
+      "reviewedAt": "2026-09-28",
+      "finding": "Lists a GFA created 2024 with Rouget connections and long-term leasing object. Same-name identity with U33046436 remains unverified; no parcel-specific lease reviewed.",
+      "access": "read"
+    },
+    {
+      "id": "prieur",
+      "title": "Jacques Prieur: Échezeaux 2023 sheet",
+      "url": "https://www.prieur.com/pdf/fr/echezeaux-2023-683.pdf",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-09-28",
+      "finding": "Describes 2023 harvest and Champs Traversins, tasting dated May 2025. No cadastral ID.",
+      "access": "read",
+      "evidenceSeason": "2023"
+    },
+    {
+      "id": "rion",
+      "title": "Jean-Charles Rion: domaine",
+      "url": "https://www.domaine-jean-charles-rion.fr/",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-09-28",
+      "finding": "Describes expanded family vineyard and Échezeaux following the August 2023 move. No exact parcel transfer list.",
+      "access": "read"
+    },
+    {
+      "id": "rion-succession",
+      "title": "Jean-Charles Rion / Daniel Rion succession",
+      "url": "https://www.chaisdoeuvre.fr/products/echezeaux-grand-cru-vi01202",
+      "type": "merchant",
+      "documentDate": null,
+      "reviewedAt": "2026-09-28",
+      "finding": "Describes succession from Daniel Rion and receipt of historic crus. The page includes older wines and mixed historical dates; confirm exact transfer and season.",
+      "access": "read"
+    },
+    {
+      "id": "bouchy",
+      "title": "Domaine Bouchy et Amis company record",
+      "url": "https://www.societe.com/societe/domaine-bouchy-et-amis-391735321.html",
+      "type": "registry-aggregator",
+      "documentDate": null,
+      "reviewedAt": "2026-09-28",
+      "finding": "GFA purpose concerns Les Treux; it is a landholding entity. No lease naming today's farmer.",
+      "access": "read"
+    },
+    {
+      "id": "bouchy-tardy",
+      "title": "Auction listing of Bouchy et Amis bottle",
+      "url": "https://docs.prod-indb.io/2024/10/18/095407_422133942_62d89bde55d70b4033a24fcf7d957024.pdf",
+      "type": "auction",
+      "documentDate": null,
+      "reviewedAt": "2026-09-28",
+      "finding": "Lists a 2019 Bouchy et Amis Échezeaux bottled by Tardy et Fils. Bottling is not farming; only a weak lead.",
+      "access": "read",
+      "evidenceSeason": "2019"
+    },
+    {
+      "id": "clair",
+      "title": "Louis Jadot importer: domaine holdings",
+      "url": "https://www.kobrandwineandspirits.com/wp-content/uploads/2024/03/ljb_bk_barrel_tasting_wines_58g_1223r6SPG.pdf",
+      "type": "importer",
+      "documentDate": "2024",
+      "reviewedAt": "2026-09-28",
+      "finding": "Describes Jadot Échezeaux holdings. Does not explicitly join Clair-Daü's two modern cadastral IDs.",
+      "access": "read"
+    },
+    {
+      "id": "hor-filing",
+      "title": "HOR Vignobles 2021 filing",
+      "url": "https://www.pappers.fr/entreprise/hor-vignobles-821877008/documents/HOR%20VIGNOBLES%20-%20Statuts%20mis%20%C3%A0%20jour%2008-10-2021.pdf",
+      "type": "company-filing",
+      "documentDate": "2021-10-08",
+      "reviewedAt": "2026-09-28",
+      "finding": "Indexed excerpt describes a Flagey En Orveaux transfer involving SCI Les Climats. Full PDF could not be retrieved/rendered; no exact reference or lease accepted.",
+      "access": "indexed-excerpt-only"
+    },
+    {
+      "id": "hor-accounts",
+      "title": "HOR Vignobles 2024 accounts",
+      "url": "https://www.pappers.fr/entreprise/hor-vignobles-821877008/comptes/HOR%20VIGNOBLES%20-%20Comptes%20sociaux%202024%2022-11-2024.pdf",
+      "type": "company-filing",
+      "documentDate": "2024-06-30",
+      "reviewedAt": "2026-09-28",
+      "finding": "Indexed fixed-assets excerpt lists 0.3417 ha Échezeaux acquired 2016. Not operator evidence, and full document not reviewed.",
+      "access": "indexed-excerpt-only"
+    },
+    {
+      "id": "bonnes",
+      "title": "GFA Les Bonnes Pentes company record",
+      "url": "https://www.pappers.fr/entreprise/gfa-les-bonnes-pentes-423789452",
+      "type": "registry-aggregator",
+      "documentDate": null,
+      "reviewedAt": "2026-09-28",
+      "finding": "Identifies Claire Naudin as manager. The auto-generated related-company graph is not evidence of a lease.",
+      "access": "read"
+    },
+    {
+      "id": "naudin",
+      "title": "Naudin-Ferrand: vineyard and vintages",
+      "url": "https://naudin-ferrand.fr/nos-vins/",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-09-28",
+      "finding": "Describes domaine Échezeaux and the 2022 harvest. No cadastral IDs.",
+      "access": "read"
+    },
+    {
+      "id": "naudin-sheet",
+      "title": "Naudin-Ferrand: Échezeaux 2019 sheet",
+      "url": "https://naudin-ferrand.fr/wp-content/uploads/2026/02/ECHEZEAUX-19.pdf",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-09-28",
+      "finding": "Describes 34 ares 10 ca in Les Rouges du Bas for vintage 2019. The 2026 upload path is not a 2026 operation date.",
+      "access": "read",
+      "evidenceSeason": "2019"
+    },
+    {
+      "id": "capitain",
+      "title": "Capitain-Gagnerot: Échezeaux",
+      "url": "https://www.capitain-gagnerot.com/en/echezeaux-grand-cru/",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-09-28",
+      "finding": "Describes the wine and hand harvest. No exact cadastral references.",
+      "access": "read"
+    },
+    {
+      "id": "forey",
+      "title": "Forey importer: holdings",
+      "url": "https://www.gibsonfamilygrp.com/domaineforey",
+      "type": "importer",
+      "documentDate": null,
+      "reviewedAt": "2026-09-28",
+      "finding": "Names Forey vines in Clos Saint-Denis and Les Treux. The GFA-to-operating-estate identity and exact parcel scope need confirmation.",
+      "access": "read"
+    },
+    {
+      "id": "noellat",
+      "title": "Michel Noëllat: Échezeaux",
+      "url": "https://domaine-michel-noellat.com/vin/echezeaux-grand-cru/",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-09-28",
+      "finding": "Confirms the cuvée but no exact cadastral join.",
+      "access": "read"
+    },
+    {
+      "id": "traversins",
+      "title": "SAS Traversins: 2023 statutes",
+      "url": "https://www.pappers.fr/entreprise/sas-traversins-911887461/documents/SAS%20TRAVERSINS%20-%20Statuts%20mis%20%C3%A0%20jour%2023-02-2023.pdf",
+      "type": "company-filing",
+      "documentDate": "2023-02-23",
+      "reviewedAt": "2026-09-28",
+      "finding": "Public filing and company record connect Traversins with Christophe Roumier. No Flagey reference or lease found in extracted filing text.",
+      "access": "read"
+    },
+    {
+      "id": "traversins-record",
+      "title": "SAS Traversins company record",
+      "url": "https://www.pappers.fr/entreprise/sas-traversins-911887461",
+      "type": "registry-aggregator",
+      "documentDate": null,
+      "reviewedAt": "2026-09-28",
+      "finding": "Lists Christophe Roumier as president. Management is not a parcel-operation relationship.",
+      "access": "read"
+    },
+    {
+      "id": "gerbet",
+      "title": "GFA Domaine Gerbet Sirugue company record",
+      "url": "https://www.pappers.fr/entreprise/gfa-domaine-gerbet-sirugue-326603305",
+      "type": "registry-aggregator",
+      "documentDate": null,
+      "reviewedAt": "2026-09-28",
+      "finding": "Shows Berthaut/Gerbet connections; no parcel-specific lease reviewed.",
+      "access": "read"
+    },
+    {
+      "id": "berthaut",
+      "title": "Berthaut-Gerbet: estate history",
+      "url": "https://www.berthaut-gerbet.com/",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-09-28",
+      "finding": "States the domaine combined all Berthaut vines with PART of Gerbet's vines in 2013. Cannot assign every Gerbet parcel from this statement.",
+      "access": "read"
+    },
+    {
+      "id": "clerget",
+      "title": "Christian Clerget: En Orveaux sheet",
+      "url": "https://static.domaine-christianclerget.fr/media/vins/14/pages-de-ft-echezeaux-en.pdf",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-09-28",
+      "finding": "States 1.09 ha En Orveaux with cultivation details. Much larger than the 0.22 ha recorded under this holder: do not fill the gap with nearby unknown parcels.",
+      "access": "read"
+    },
+    {
+      "id": "faivre",
+      "title": "Domaine Faivre company history",
+      "url": "https://entreprises.lefigaro.fr/earl-denis-thomas-21/entreprise-380128777",
+      "type": "legal-notice-republisher",
+      "documentDate": "2023",
+      "reviewedAt": "2026-09-28",
+      "finding": "Records 2023 renaming from EARL Denis Thomas to Domaine Faivre. Corporate continuity is not proof of operation of D0203.",
+      "access": "read"
+    },
+    {
+      "id": "origine",
+      "title": "Official company search: LC, formerly Origine",
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=883067134&per_page=5",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-09-28",
+      "finding": "Current legal name LC for SIREN 883067134; the 2025 rights snapshot uses ORIGINE. No operator identified.",
+      "access": "read"
+    },
+    {
+      "id": "origine-rename",
+      "title": "Origine to LC legal notice",
+      "url": "https://entreprises.lefigaro.fr/origine-75/entreprise-883067134",
+      "type": "legal-notice-republisher",
+      "documentDate": "2025-05-23",
+      "reviewedAt": "2026-09-28",
+      "finding": "Records the rename effective 23 May 2025. Does not identify the farmer of D0313.",
+      "access": "read"
+    },
+    {
+      "id": "bouchon",
+      "title": "Bouchon Pourpre company record",
+      "url": "https://www.pappers.fr/entreprise/bouchon-pourpre-880909346",
+      "type": "registry-aggregator",
+      "documentDate": null,
+      "reviewedAt": "2026-09-28",
+      "finding": "Connects the company with Comte Liger-Belair. Management/shareholding is not proof of farming D0673.",
+      "access": "read"
+    },
+    {
+      "id": "liger",
+      "title": "Comte Liger-Belair: climats",
+      "url": "https://www.liger-belair.fr/en/our-climats/",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-09-28",
+      "finding": "Describes 0.6157 ha across Cruots/Vignes Blanches, Champs Traversins and Clos Saint-Denis, with vine ages stated as of 2017. No cadastral references or accepted current-operation link to D0673.",
+      "access": "read"
+    },
+    {
+      "id": "cartobio",
+      "title": "Open CartoBio parcel dataset",
+      "url": "https://www.data.gouv.fr/datasets/parcelles-certifiees-en-agriculture-biologique-sur-cartobio?page=2",
+      "type": "government-dataset",
+      "documentDate": null,
+      "reviewedAt": "2026-09-28",
+      "finding": "The public parcel export is anonymised and omits the cultivating entity; cannot identify farmers by spatial intersection.",
+      "access": "read"
+    },
+    {
+      "id": "cvi",
+      "title": "Douane: exploitation fiche de compte",
+      "url": "https://www.douane.gouv.fr/service-en-ligne/exploitation-viti-vinicole-fiche-de-compte",
+      "type": "government-service",
+      "documentDate": null,
+      "reviewedAt": "2026-09-28",
+      "finding": "Authorised account holders can access their exploitation parcel records and exports. Not a public bulk operator lookup.",
+      "access": "read"
+    },
+    {
+      "id": "ddt-notices",
+      "title": "Côte-d'Or: agricultural-operation application notices",
+      "url": "https://www.cote-dor.gouv.fr/Actions-de-l-Etat/Agriculture.-foret-et-developpement-rural/Agriculture/Exploitations-agricoles-foncier-controle-des-structures/Controle-des-structures/Publicite-des-demandes-d-autorisation-d-exploiter",
+      "type": "government-index",
+      "documentDate": null,
+      "reviewedAt": "2026-09-28",
+      "finding": "Web and direct HTTPS retrieval failed. The notice archive was not exhaustively searched; unavailable is not evidence of no change.",
+      "access": "unavailable"
+    },
+    {
+      "id": "coudray-identity",
+      "title": "Official company search: GFA HERITIERS COUDRAY",
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=GFA%20HERITIERS%20COUDRAY&per_page=5",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-09-28",
+      "finding": "Name search returns GFA Héritiers Coudray, SIREN 477938294; no crosswalk to the DGFiP U-prefixed identifier or operating lease.",
+      "access": "read"
+    },
+    {
+      "id": "forey-identity",
+      "title": "Official company search: GFA FAMILLE FOREY BJ",
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=GFA%20FAMILLE%20FOREY%20BJ&per_page=5",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-09-28",
+      "finding": "Name search returns GFA FAMILLE FOREY BJ, SIREN 937826790; no crosswalk to the DGFiP U-prefixed identifier or operating lease.",
+      "access": "read"
+    },
+    {
+      "id": "grands-crus-identity",
+      "title": "Official company search: GRANDS CRUS INVESTISSEMENT",
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=GRANDS%20CRUS%20INVESTISSEMENT&per_page=5",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-09-28",
+      "finding": "Name search returns several similarly named entities. None establishes the identity of U18178179 or its current tenant.",
+      "access": "read"
+    },
+    {
+      "id": "orveaux-search",
+      "title": "Official company search: GROUPEMENT FONCIER VITICOLE DE ORVEAUX",
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=GROUPEMENT%20FONCIER%20VITICOLE%20DE%20ORVEAUX&per_page=5",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-09-28",
+      "finding": "This name query returned no results. That does not establish that the holder does not exist; identity remains unresolved.",
+      "access": "read"
+    },
+    {
+      "id": "roumier-2023-visit",
+      "title": "Old Vine Notes: 2023 estate visit with Georges Roumier",
+      "url": "https://oldvinenotes.com/2024/12/30/2023-a-large-crop-of-variable-reds-and-somewhat-better-whites/",
+      "type": "estate-visit-report",
+      "documentDate": "2024-12-30",
+      "evidenceSeason": "2023",
+      "reviewedAt": "2026-09-28",
+      "finding": "Reports an additional acquisition and Échezeaux combining Champs Traversins and En Orveaux. No cadastral references, legal-entity lease or 2026 operation confirmation.",
+      "access": "read"
+    }
+  ],
+  "holders": [
+    {
+      "holderId": "778269407",
+      "candidateNames": [
+        "Domaine de la Romanée-Conti"
+      ],
+      "basis": "estate-context",
+      "finding": "The estate's Échezeaux area is consistent with this holder group. Identity, acreage and appellation together support a candidate; no current parcel-by-parcel operation statement was found.",
+      "sourceIds": [
+        "drc"
+      ],
+      "parcelOperationConfirmed": false
+    },
+    {
+      "holderId": "778269498",
+      "candidateNames": [
+        "Domaine Mongeard-Mugneret"
+      ],
+      "basis": "estate-context",
+      "finding": "The GFA is a landholder. The estate produces Échezeaux, but no reviewed lease establishes the operator of each GFA parcel.",
+      "sourceIds": [
+        "mongeard"
+      ],
+      "parcelOperationConfirmed": false
+    },
+    {
+      "holderId": "513459719",
+      "candidateNames": [
+        "Domaine Georges Mugneret-Gibourg"
+      ],
+      "basis": "estate-context",
+      "finding": "The estate names two vineyard areas and documents a 2017 métayage change. Its two cadastral parcels still require exact-reference and current-season confirmation.",
+      "sourceIds": [
+        "mugneret",
+        "mugneret2017"
+      ],
+      "parcelOperationConfirmed": false
+    },
+    {
+      "holderId": "397738634",
+      "candidateNames": [
+        "Domaine Nicole Lamarche"
+      ],
+      "basis": "identity-only",
+      "finding": "Official registry corroborates the exact legal entity. Website retrieval failed; no current farming claim covers D0168, D0169 and D0519.",
+      "sourceIds": [
+        "nicole"
+      ],
+      "parcelOperationConfirmed": false
+    },
+    {
+      "holderId": "036380046",
+      "candidateNames": [
+        "Domaine du Clos Frantin / Albert Bichot"
+      ],
+      "basis": "estate-context",
+      "finding": "The producer describes an approximately 1 ha Champs Traversins plot. D0760 is a candidate via Bichot recorded rights; acreage alone is not a cadastral join.",
+      "sourceIds": [
+        "bichot"
+      ],
+      "parcelOperationConfirmed": false
+    },
+    {
+      "holderId": "326533213",
+      "candidateNames": [
+        "Domaine d'Eugénie"
+      ],
+      "basis": "estate-context",
+      "finding": "Estate description of 0.94 ha in Combe d'Orveaux corroborates vineyard context, not the exact current operation of D0340/D0352.",
+      "sourceIds": [
+        "eugenie"
+      ],
+      "parcelOperationConfirmed": false
+    },
+    {
+      "holderId": "775567928",
+      "candidateNames": [
+        "Domaine Faiveley"
+      ],
+      "basis": "brand-identity-confirmed",
+      "finding": "Faiveley's own legal notice explicitly gives SIREN 775567928 (CVVB). Its En Orveaux wine sheet supplies vineyard context. Exact current operation of the three recorded parcels remains unconfirmed.",
+      "sourceIds": [
+        "faiveley-identity",
+        "faiveley"
+      ],
+      "parcelOperationConfirmed": false
+    },
+    {
+      "holderId": "348024928",
+      "candidateNames": [
+        "Domaine Anne Gros"
+      ],
+      "basis": "estate-context",
+      "finding": "The estate describes 0.76 ha Les Loachausses. D0183/D0709 are rights-based candidates, distinct from D0177/D0178 in the 2022 application.",
+      "sourceIds": [
+        "anne"
+      ],
+      "parcelOperationConfirmed": false
+    },
+    {
+      "holderId": "322396185",
+      "candidateNames": [
+        "Domaine Dujac"
+      ],
+      "basis": "estate-context",
+      "finding": "The GFA is a landholding entity. Dujac's 0.6872 ha sheet supports an estate-level candidate; no exact lease or operation statement for D0306 reviewed.",
+      "sourceIds": [
+        "dujac"
+      ],
+      "parcelOperationConfirmed": false
+    },
+    {
+      "holderId": "383925674",
+      "candidateNames": [
+        "Domaine Hoffmann-Jayer"
+      ],
+      "basis": "estate-context",
+      "finding": "The estate describes 0.53 ha Échezeaux du Dessus. Its precise scope, mapped area difference and current season remain to be checked.",
+      "sourceIds": [
+        "hoffmann"
+      ],
+      "parcelOperationConfirmed": false
+    },
+    {
+      "holderId": "U32852627",
+      "candidateNames": [],
+      "basis": "identity-unresolved",
+      "finding": "A similarly named ORVEAUX GFV has Drouhin connections, but its SIREN was not joined to this DGFiP holder. Do not assign Drouhin or treat company managers as farmers.",
+      "sourceIds": [
+        "orveaux-identity",
+        "orveaux-search"
+      ],
+      "parcelOperationConfirmed": false
+    },
+    {
+      "holderId": "382058188",
+      "candidateNames": [
+        "Domaine David Duband"
+      ],
+      "basis": "reported-operator-relationship",
+      "finding": "A report hosted by Duband describes Feuillet entrusting vineyards to him; Duband also lists Échezeaux. The relationship is a useful operator lead but neither source names the four cadastral references.",
+      "sourceIds": [
+        "feuillet",
+        "duband-wine"
+      ],
+      "parcelOperationConfirmed": false
+    },
+    {
+      "holderId": "328972344",
+      "candidateNames": [
+        "Domaine Arnoux-Lachaux"
+      ],
+      "basis": "estate-context",
+      "finding": "Estate website lists Échezeaux. Current legal operating entity and parcel-specific farming remain to be established.",
+      "sourceIds": [
+        "arnoux"
+      ],
+      "parcelOperationConfirmed": false
+    },
+    {
+      "holderId": "U22079769",
+      "candidateNames": [],
+      "basis": "unresolved",
+      "finding": "BND-labelled right-holder record does not name a farmer. No operator or documented predecessor/successor chain for these five modern references was located.",
+      "sourceIds": [],
+      "parcelOperationConfirmed": false
+    },
+    {
+      "holderId": "348334384",
+      "candidateNames": [
+        "Domaine Confuron-Cotetidot"
+      ],
+      "basis": "secondary-estate-context",
+      "finding": "Secondary producer source connects Jack Confuron with Confuron-Cotetidot and Échezeaux. Requires primary legal-entity and exact-parcel farming confirmation.",
+      "sourceIds": [
+        "confuron"
+      ],
+      "parcelOperationConfirmed": false
+    },
+    {
+      "holderId": "U18178179",
+      "candidateNames": [],
+      "basis": "identity-unresolved",
+      "finding": "Name search returned similarly named investment companies, not a demonstrated identity or lease for this GFV. No farmer assigned.",
+      "sourceIds": [
+        "grands-crus-identity"
+      ],
+      "parcelOperationConfirmed": false
+    },
+    {
+      "holderId": "200047827",
+      "candidateNames": [
+        "Domaine des Hospices de Beaune"
+      ],
+      "basis": "estate-context",
+      "finding": "Estate cuvée list and historical auction catalogue support the Bissey Échezeaux holding. An auction buyer or élevage house must not replace the farming domaine; D0510 still needs exact dated confirmation.",
+      "sourceIds": [
+        "hospices",
+        "hospices-catalogue"
+      ],
+      "parcelOperationConfirmed": false
+    },
+    {
+      "holderId": "U22264880",
+      "candidateNames": [],
+      "basis": "identity-unresolved",
+      "finding": "Official name search found GFA Héritiers Coudray SIREN 477938294. The U-prefixed holder crosswalk and Échezeaux tenant remain unverified; inaccessible filing was not treated as proof.",
+      "sourceIds": [
+        "coudray",
+        "coudray-identity"
+      ],
+      "parcelOperationConfirmed": false
+    },
+    {
+      "holderId": "U33046436",
+      "candidateNames": [
+        "Domaine Emmanuel Rouget"
+      ],
+      "basis": "weak-identity-lead",
+      "finding": "The similarly named LES CRUOTS GFA has Rouget connections. Both the DGFiP-holder identity and its tenant are unverified. This is a research lead only, not a farmer assignment.",
+      "sourceIds": [
+        "cruots"
+      ],
+      "parcelOperationConfirmed": false
+    },
+    {
+      "holderId": "778233098",
+      "candidateNames": [
+        "Domaine Jacques Prieur"
+      ],
+      "basis": "estate-context",
+      "finding": "The producer's 2023 sheet describes Champs Traversins and harvest. No cadastral reference identifies D0773 or confirms the current season.",
+      "sourceIds": [
+        "prieur"
+      ],
+      "parcelOperationConfirmed": false
+    },
+    {
+      "holderId": "379998115",
+      "candidateNames": [
+        "Domaine Jean-Charles Rion"
+      ],
+      "basis": "succession-lead",
+      "finding": "Current estate history and secondary succession account suggest Jean-Charles Rion following Daniel Rion. Need transfer/lease covering D0665/D0666/D0667; do not copy the old holder name into current farmer.",
+      "sourceIds": [
+        "rion",
+        "rion-succession"
+      ],
+      "parcelOperationConfirmed": false
+    },
+    {
+      "holderId": "391735321",
+      "candidateNames": [
+        "Domaine Jean Tardy et Fils"
+      ],
+      "basis": "bottler-only-lead",
+      "finding": "GFA holds Les Treux. An auction lists a 2019 Bouchy bottle with Tardy bottling; this is not evidence Tardy farmed these five parcels, then or now.",
+      "sourceIds": [
+        "bouchy",
+        "bouchy-tardy"
+      ],
+      "parcelOperationConfirmed": false
+    },
+    {
+      "holderId": "778230359",
+      "candidateNames": [
+        "Domaine Louis Jadot"
+      ],
+      "basis": "secondary-estate-context",
+      "finding": "Jadot importer describes Échezeaux holdings. Corporate/holding history is a lead, with no accepted cadastral operation crosswalk for D0638/D0771.",
+      "sourceIds": [
+        "clair"
+      ],
+      "parcelOperationConfirmed": false
+    },
+    {
+      "holderId": "821877008",
+      "candidateNames": [],
+      "basis": "unresolved",
+      "finding": "HOR accounts describe owned Échezeaux assets, while an indexed filing concerns SCI Les Climats. Full filing/lease could not be reviewed; no farmer inferred from asset ownership or acreage.",
+      "sourceIds": [
+        "hor-filing",
+        "hor-accounts"
+      ],
+      "parcelOperationConfirmed": false
+    },
+    {
+      "holderId": "423789452",
+      "candidateNames": [
+        "Domaine Henri Naudin-Ferrand"
+      ],
+      "basis": "management-and-estate-context",
+      "finding": "Claire Naudin's management of the GFA and the estate's Les Rouges du Bas sheet support a lead. No parcel-specific lease reviewed; 2019 sheet and 2022 harvest do not establish 2026 farming.",
+      "sourceIds": [
+        "bonnes",
+        "naudin",
+        "naudin-sheet"
+      ],
+      "parcelOperationConfirmed": false
+    },
+    {
+      "holderId": "515620466",
+      "candidateNames": [
+        "Domaine Capitain-Gagnerot"
+      ],
+      "basis": "estate-context",
+      "finding": "Estate sheet describes Échezeaux production; exact cadastral holdings and current season unconfirmed.",
+      "sourceIds": [
+        "capitain"
+      ],
+      "parcelOperationConfirmed": false
+    },
+    {
+      "holderId": "U33360620",
+      "candidateNames": [
+        "Domaine Forey Père et Fils"
+      ],
+      "basis": "weak-identity-lead",
+      "finding": "Official name search found the GFA, while an importer describes Forey holdings in Clos Saint-Denis and Les Treux. Neither establishes the U-prefixed identity crosswalk or farmer of the four references.",
+      "sourceIds": [
+        "forey",
+        "forey-identity"
+      ],
+      "parcelOperationConfirmed": false
+    },
+    {
+      "holderId": "353847510",
+      "candidateNames": [
+        "Domaine Michel Noëllat"
+      ],
+      "basis": "estate-context",
+      "finding": "Estate lists Échezeaux; GFA holding is not an operating relationship. The broader estate holding must not be reconstructed by filling nearby unknown parcels.",
+      "sourceIds": [
+        "noellat"
+      ],
+      "parcelOperationConfirmed": false
+    },
+    {
+      "holderId": "911887461",
+      "candidateNames": [
+        "Domaine Georges Roumier"
+      ],
+      "basis": "management-and-reported-estate-context",
+      "finding": "Traversins has Christophe Roumier as president; a 2023 estate-visit report describes additional Champs Traversins vines. Neither identifies these five cadastral parcels or a 2026 operating lease. Reviewed company filing text did not establish a Flagey lease or parcel operation.",
+      "sourceIds": [
+        "traversins",
+        "traversins-record",
+        "roumier-2023-visit"
+      ],
+      "parcelOperationConfirmed": false
+    },
+    {
+      "holderId": "326603305",
+      "candidateNames": [
+        "Domaine Berthaut-Gerbet"
+      ],
+      "basis": "partial-succession-lead",
+      "finding": "Estate history explicitly says only PART of the Gerbet vines joined Berthaut-Gerbet. Which of D0360/D0508/D0821, if any, is farmed by this domaine needs confirmation.",
+      "sourceIds": [
+        "gerbet",
+        "berthaut"
+      ],
+      "parcelOperationConfirmed": false
+    },
+    {
+      "holderId": "431340140",
+      "candidateNames": [
+        "Domaine Christian Clerget"
+      ],
+      "basis": "estate-context",
+      "finding": "Estate sheet describes farming 1.09 ha En Orveaux, versus approximately 0.22 ha in this rights group. That mismatch flags incomplete coverage; no additional parcels assigned by area or proximity.",
+      "sourceIds": [
+        "clerget"
+      ],
+      "parcelOperationConfirmed": false
+    },
+    {
+      "holderId": "303514681",
+      "candidateNames": [
+        "Domaine Mongeard-Mugneret"
+      ],
+      "basis": "estate-context",
+      "finding": "Same-name operating estate is a candidate, but not proof of current farming of these two references. Kept separate from the GFA.",
+      "sourceIds": [
+        "mongeard"
+      ],
+      "parcelOperationConfirmed": false
+    },
+    {
+      "holderId": "380128777",
+      "candidateNames": [
+        "EARL Domaine Faivre"
+      ],
+      "basis": "identity-only",
+      "finding": "Legal notice records continuity from EARL Denis Thomas after a 2023 rename. Current farmer of D0203 remains unconfirmed.",
+      "sourceIds": [
+        "faivre"
+      ],
+      "parcelOperationConfirmed": false
+    },
+    {
+      "holderId": "883067134",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "finding": "Official API now returns LC for the same SIREN as ORIGINE. This corrects identity research but does not establish today's farmer of D0313.",
+      "sourceIds": [
+        "origine",
+        "origine-rename"
+      ],
+      "parcelOperationConfirmed": false
+    },
+    {
+      "holderId": "880909346",
+      "candidateNames": [
+        "Domaine du Comte Liger-Belair"
+      ],
+      "basis": "management-only-lead",
+      "finding": "Bouchon Pourpre's link to Comte Liger-Belair is corporate. No accepted lease or exact-parcel current-operation evidence for D0673.",
+      "sourceIds": [
+        "bouchon",
+        "liger"
+      ],
+      "parcelOperationConfirmed": false
+    },
+    {
+      "holderId": "798977476",
+      "candidateNames": [],
+      "basis": "unresolved",
+      "finding": "Indexed 2021 filing describes an En Orveaux asset transfer involving SCI Les Climats. Full reference and lease not reviewed. Ownership transfer is not farming evidence.",
+      "sourceIds": [
+        "hor-filing"
+      ],
+      "parcelOperationConfirmed": false
+    }
+  ],
+  "exactParcelEvents": [
+    {
+      "parcelIds": [
+        "212670000D0177",
+        "212670000D0178"
+      ],
+      "sourceId": "anne-application",
+      "kind": "historical-application",
+      "applicant": "Anne Gros",
+      "previousOperator": "Domaine Gros Frère et Sœur",
+      "documentDate": "2022-11-24",
+      "outcome": "unconfirmed",
+      "currentFarmer": null,
+      "unresolvedPrintedReference": "D01776"
+    }
+  ],
+  "accessGaps": [
+    "DDT notice index unavailable; no exhaustive archive or cadastral-history review.",
+    "CVI records require cooperation from authorised holders; no private records accessed.",
+    "Public CartoBio polygons omit operator identity.",
+    "HOR Vignobles and Coudray PDF full text/render unavailable; indexed excerpts retained only as leads."
+  ]
+}

@@ -8,6 +8,25 @@ A cadastral parcel can be joined to a dated legal right holder. Today's farmer n
 
 Échezeaux has **276 parcels, 119 with recorded rights and 157 without a matched record**. Records cover **21.54 ha** of mapped cru overlap. **Zero parcel-specific current operators are verified.** Two Échezeaux parcels now have a reviewed historical application lead; another lies in Grands-Échezeaux. None enters `domaineLinks` or verified colouring.
 
+### Expanded investigation: every mapped Échezeaux parcel
+
+The [parcel research register](echezeaux-farming-parcel-register.md) now inventories **all 276 parcels** and records investigations for **all 36 right-holder groups**, with a source log of **54 records**. The log distinguishes inspected sources, indexed excerpts and unavailable material. This is not an exhaustive search of every cadastral reference: **155 parcels have inventory records only**.
+
+The resulting categories are **100 parcels with holder-derived candidate leads**, **two with exact-reference historical applications**, and **174 without a named candidate**. All current-farmer fields remain unconfirmed. Candidate strength varies; a management connection or bottler name is much weaker than an independently described operating relationship. The register states the basis for each lead instead of treating all names as equally plausible farmers.
+
+Useful findings beyond the original examples:
+
+- **CVVB → Faiveley:** the domaine's own legal notice gives SIREN **775567928**, resolving the brand/entity identity for D0331, D0335 and D0653. Its Échezeaux sheet provides estate context, but no exact operating-parcel list. [Legal notice](https://domaine-faiveley.com/mentions-legales/), [wine sheet](https://domaine-faiveley.com/fiche-vin/echezeaux-en-orveaux-grand-cru/).
+- **François Feuillet → David Duband:** a report hosted by Duband describes entrusted vines. D0674–D0677 are the holder's research targets, not confirmed current Duband parcels. [Hosted report](https://www.domaine-duband.com/f/news/received-our-3rd-star-5.pdf).
+- **Daniel Rion → Jean-Charles Rion:** the latter's site describes the expanded family vineyard and Échezeaux following its 2023 move. D0665–D0667 need an exact succession/lease crosswalk; keeping the old holder name as today's farmer would miss this lead. [Estate history](https://www.domaine-jean-charles-rion.fr/).
+- **Traversins → Georges Roumier:** company management and a report of added Champs Traversins vines support further investigation of D0295–D0299. Neither source proves that those exact parcels are operated by the domaine. [Company record](https://www.pappers.fr/entreprise/sas-traversins-911887461), [2023 estate visit report](https://oldvinenotes.com/2024/12/30/2023-a-large-crop-of-variable-reds-and-somewhat-better-whites/).
+- **Gerbet Sirugue → Berthaut-Gerbet:** the estate history explicitly describes taking over only part of the Gerbet vines. Do not assign all three recorded parcels from this succession alone. [Estate history](https://www.berthaut-gerbet.com/).
+- **ORIGINE → LC:** an official same-SIREN lookup resolves a changed legal name, but no current farmer for D0313. This is an identity correction, not a new operation claim. [Official lookup](https://recherche-entreprises.api.gouv.fr/search?q=883067134&per_page=5).
+
+The DDT notice index and several full filings could not be retrieved. Public CartoBio parcels are anonymised; a spatial join cannot supply the missing farmer names. No private CVI records were accessed and no outreach was sent. Completing the farmer census requires further exact-reference documents or dated, shareable confirmations of actual operation. The register provides the parcel lists for those requests, including holders whose identities remain unresolved.
+
+Reproduce with `python scripts/build_echezeaux_farming_research.py`; verify with `--check`. The builder checks the pinned parcel hash (normalising Windows checkout line endings), exact holder coverage and source references. It rejects attempts to convert this lead register into confirmed-operation data. [Curation](research/echezeaux-farming-curation.json) and the [generated per-parcel JSON](research/echezeaux-farming-parcels.json) are documentation artifacts; they are not shipped as an app farming overlay.
+
 ### Nicole Lamarche: three exact candidate parcels
 
 The pinned DGFiP file records `NICOLE LAMARCHE`, SIREN **397738634**, right code `P` (ownership), on these parcels as of **1 January 2025**:
