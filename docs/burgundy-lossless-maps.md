@@ -70,3 +70,8 @@ exact asset transfer size and readiness within 20 seconds. The exhaustive map
 flag expands that check to all four maps in both formats. Plain Vite's test-only
 middleware mirrors delivery headers; the separate Worker smoke test exercises
 Cloudflare's actual encoding behaviour.
+
+The local Chromium run on 28 September 2026 measured 4,974 ms for Côte de
+Beaune-Villages Brotli (564,905 transferred bytes) and 7,529 ms for Chablis gzip
+(886,926 bytes), under that code-warm 1 Mbps / 150 ms profile. These are local
+measurements, not production or full-cold timings.

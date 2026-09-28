@@ -1012,7 +1012,9 @@ for(const village of browserVillageCases){
    await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
    const selector=dialog.getByRole('combobox');
    await expect(selector).toHaveValue(village.feature);await expect(selector.locator('option')).toHaveCount(village.count);
-   expect(requests.filter(url=>url.includes('/maps/')).every(url=>url.includes(`/maps/${village.id}.`))).toBe(true);
+   const mapDownloads=requests.filter(url=>url.includes('/maps/')),compressedUrl=losslessMaps[village.id]?.brotliJsonUrl;
+   expect(mapDownloads.length).toBeGreaterThan(0);
+   expect(mapDownloads.every(url=>compressedUrl?url.endsWith(compressedUrl):url.includes(`/maps/${village.id}.`))).toBe(true);
    expect(requests.filter(url=>url.includes('VillageMapCatalogue.json')).every(url=>url.includes(village.catalogue))).toBe(true);
    if(village.tier==='village'){
     await expect(dialog.getByText('Appellation area shown; no single vineyard is identified.')).toBeVisible();
